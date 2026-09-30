@@ -1,43 +1,53 @@
-# 内容安全与合规
+# 安全防护
 
-内容安全与合规是百炼平台面向生成式AI应用的核心横切能力，指通过多模态输入检测、可控输出拦截、策略化风险治理及全链路审计追溯等机制，确保模型交互内容符合国家监管要求（如《生成式人工智能服务管理暂行办法》）、企业安全策略与数据隐私规范。该能力默认启用、深度集成于调用链路，无需修改业务逻辑即可提供端到端防护。
+安全防护是百炼平台内生、分层、可编程的主动式安全能力体系，覆盖 Agent 全生命周期的关键资产（提示词、内容、工具调用、知识、记忆、代码依赖等），通过「量·发现与盘点—挡·拦截与防护—记·审计与留痕」闭环实现风险可知、可防、可溯。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **模型推理调用**：对文本、图像、音频等多模态输入自动执行涉黄、涉政、暴恐、广告、隐私信息（如身份证号、手机号）识别；对输出内容实时拦截越狱指令、有害生成、事实性错误及敏感信息泄露。防护强度可按需配置（基础/严格/自定义），并支持按请求粒度开关。
-- **Agent 应用运行时**：在工具调用环节实施资产级防护，例如限制仅允许调用白名单内的插件、禁用高危函数（如 `os.system`）、校验工具参数合法性，防止 Agent 被诱导执行恶意操作。
-- **私有化与高敏场景**：结合传输加密（AES+RSA 混合加密）、私网访问（PrivateLink）、安全存储空间等能力，实现“内容不出域、风险不外溢”的闭环管控，满足金融、政务等强合规场景要求。
-- **安全运营与审计**：通过统一审计日志（含原始输入/输出、拦截原因、策略ID、时间戳）和 Security API，支持构建合规看板、自动化告警响应、定期导出报告，满足等保、GDPR 或行业审计要求。
+安全防护不是单一功能，而是按场景深度集成的默认能力与可扩展的高级能力组合：
+
+- **Flow Agent**：输入/输出内容自动检测（含提示词注入、模型响应越界），无需配置即生效；支持通过 `X-DashScope-DataInspection` 请求头增强检测粒度。
+- **Managed Agent**：运行时沙箱隔离 + 工具调用拦截（如 `bash` 命令白名单/审批）+ 凭证隔离 + Session 生命周期治理，所有行为受 Agent 身份绑定管控。
+- **RAG**：知识库上传时预扫描（恶意文件、敏感信息）+ 检索内容实时检测（防止知识投毒），检测结果影响召回片段可用性。
+- **Memory**：读写记忆内容前强制安全检测，阻断高风险记忆写入或污染性记忆读取。
+- **Store（MCP/Skill）**：对上传的 Skill ZIP 包、MCP 插件进行静态代码扫描（含依赖漏洞、恶意[函数调用](function-calling.md)），未通过扫描无法挂载。
+- **模型调用层**：通过传输加密（AES+RSA）、私网访问（PrivateLink 或安全存储业务空间）、AI 安全护栏（输入/输出 CIP 检测）提供基础设施级防护。
+
+> ⚠️ 注意：默认防护自动启用，但若已通过自建内容安全审批流程，则对应项在控制台显示为“关闭”；此时仍可通过高级防护独立开启内容安全策略。
 
 ## 关键参数和配置
 
-| 参数名 | 位置 | 类型 | 默认值 | 说明 |
-|--------|------|------|--------|------|
-| `safety_check` | API 请求体（同级于 `input` / `messages`） | boolean | `true` | 启用/禁用实时安全检测；生产环境强制为 `true`，设为 `false` 将被忽略 |
-| `safety_level` | API 请求体 | string | `"basic"` | 防护强度：`"basic"`（默认规则）、`"strict"`（增强规则）、`"custom"`（需配合 `safety_policy_id`） |
-| `safety_policy_id` | API 请求体 | string | — | 引用预置或自定义策略 ID；一个请求仅支持指定一个策略，复合策略需提前在控制台创建 |
-| `audit_enabled` | API 请求体 | boolean | `false` | 开启后记录完整请求/响应及拦截详情，用于审计追溯；日志保留 90 天 |
-| `X-DashScope-DataInspection` | HTTP Header | JSON string | — | 启用 AI 安全护栏（独立于 `safety_check`），格式如 `'{"input":"cip","output":"cip"}'`，支持细粒度开关 |
-
-> ✅ **提示**：  
-> - 控制台中可在「应用设置 → 安全策略」为整个应用或单个 Agent 绑定策略，策略将自动注入所有 API 调用；  
-> - CLI 可通过 `bailian security enable --level strict --policy <id>` 快速启用；  
-> - 安全策略本身（含规则组合、风险域分类如 `model_interaction`、`runtime_tool`）需在 [安全策略管理](../../raw/application-user-guide/security-guide/section-adv/policy.md) 中配置。
+| 参数 | 说明 | 开发者操作要点 |
+|------|------|----------------|
+| **防御席位（Defense Seat）** | 一个启用高级防护且处于运行中的 Agent 实例；仅运行时计费 | 无需代码配置，控制台开通高级防护后，Agent 发布即占用席位；停用或下线可释放 |
+| **Credit 额度** | 每席位每日 300 Credits（1 Credit ≈ 100 tokens），超限按 0.0015 元/Credit 计费 | 无 API 控制开关；可通过 CLI `bl agents security overview` 监控消耗趋势 |
+| **风险等级（high/medium/low）** | 由风险置信度与危害程度联合判定，用于告警分级与处置优先级 | 告警接口（`/agent_logs`）支持 `--risk-level high` 过滤，推荐在自动化巡检中优先处理 high 级别事件 |
+| `X-DashScope-DataInspection` | HTTP Header，启用输入/输出内容安全检测 | 值为 JSON 字符串，如 `'{"input":"cip","output":"cip"}'`；适用于所有 DashScope 文本/图像模型调用 |
+| `enable_encryption=True` | SDK 参数（Python/Java），启用端到端 AES-256 加密传输 | 自动获取公钥、生成密钥、加密封装；敏感数据场景必开，无需手动管理密钥 |
+| `prompt_attack`, `rag_poisoning` 等策略名 | `/policies` 接口返回的 11 条策略标识符 | 高级防护策略全局生效，修改前需评估影响；`baseline_check` 和 `vulnerability_scan` 为免费策略，始终启用 |
 
 ## 面向开发者，简洁实用
 
-- **快速启用**：只需在 API 请求中添加 `"safety_level": "strict"`，即刻获得增强防护，无需改模型代码或重写逻辑。  
-- **调试建议**：开发阶段开启 `audit_enabled: true`，结合 `RequestId` 查看拦截详情；若需临时绕过（仅限测试环境），显式传 `"safety_check": false`。  
-- **多模态注意**：图像/音频检测延迟略高（+150–300ms），高并发场景请预留缓冲；确保上传文件格式合法（如 `.pdf` 必须小写后缀）。  
-- **合规落地**：导出审计日志（调用 `/v1/audit/export`）或接入 Security API（如 `/agent_logs` 查询告警），可一键生成监管所需报告。  
-- **避坑提醒**：`safety_policy_id` 不支持多个 ID 并列；`/export_agent_logs` 的 `params` 字段必须是 JSON **字符串**（如 `"{\"risk_level\":\"high\"}"`），不是对象。
+- ✅ **快速启用**：默认防护零配置；高级防护只需控制台一键开通（限时免费），CLI 或 API 可立即查询状态。
+- ✅ **精准控制**：  
+  - 内容安全：用 `X-DashScope-DataInspection` 按需开启/关闭某次请求的检测；  
+  - 传输安全：SDK 一行代码 `enable_encryption=True` 即完成加密接入；  
+  - 私网访问：标准场景配 PrivateLink 终端节点，强合规场景选安全存储业务空间。
+- ✅ **可观测可集成**：  
+  - 所有安全事件通过 `/agent_logs`（告警列表）和 `/agent_logs/{alert_id}`（完整上下文）API 暴露；  
+  - 支持导出（`/export_agent_logs`）对接 SIEM 或内部审计系统；  
+  - CLI 命令 `bl agents security alerts --risk-level high` 可嵌入 CI/CD 流水线做发布前检查。
+- ❌ **注意边界**：高级防护当前**仅提供风险监测与告警，不支持自动拦截或阻断**；如需阻断逻辑，需在应用层基于告警结果自行实现熔断或降级。
+
+> 💡 提示：安全策略对账号下**全部 Agent 全局生效**，不区分业务空间。生产环境修改前，请先在测试账号验证策略效果。
 
 ## 关联主题页
 
 - [security guide](../guides/security-guide.md)
 - [security api guide](../api/security-api-guide.md)
 - [security and compliance](../guides/security-and-compliance.md)
-- [application support](../guides/application-support.md)
-- [model monitoring](../guides/model-monitoring.md)
+- [llm application](../guides/llm-application.md)
+- [application call](../api/application-call.md)
+- [managed agents](../guides/managed-agents.md)
 
 

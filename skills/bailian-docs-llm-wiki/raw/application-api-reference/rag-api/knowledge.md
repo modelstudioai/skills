@@ -12,7 +12,7 @@
 
 路径
 
-[知识检索](raw/application-user-guide/knowledge-base/service/rag-knowledge-retrieval.md)
+[知识检索](raw/application-user-guide/knowledge-base/rag-knowledge-retrieval.md)
 
 跨多个知识库执行联合语义检索，返回按相关性排序的切片。
 

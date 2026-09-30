@@ -50,7 +50,7 @@
         
 7.  **知识库的创建**
     
-    点击**创建新知识库**按钮，跳转到知识库创建的页面中，具体操作可参考[创建和使用知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0461133771/p1059090.png)![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0461133771/p1059088.png)
+    点击**创建新知识库**按钮，跳转到知识库创建的页面中，具体操作可参考[创建和使用知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0461133771/p1059090.png)![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0461133771/p1059088.png)
     
     **说明**目前伶鹊CCAI-AIO产品所绑定的知识库仅支持文档搜索、数据查询、图片问答，不支持音视频搜索。
     

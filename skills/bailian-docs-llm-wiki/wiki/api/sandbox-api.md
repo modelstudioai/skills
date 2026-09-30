@@ -1,40 +1,34 @@
-# [sandbox](../guides/sandbox.md) api
+# sandbox api
 
-[sandbox](../guides/sandbox.md) api 是百炼平台提供的用于动态创建、管理和销毁隔离计算环境的 RESTful 接口，适用于模型调试、代码执行、安全沙箱等场景。它支持按需启动预置或自定义环境，并提供标准 HTTP 接口进行生命周期控制。所有调用需通过 API Key 认证，且受配额与权限策略约束。
+sandbox api 是百炼平台提供的用于安全隔离环境（沙箱）中运行代码、调试模型或执行临时计算任务的 RESTful 接口集合。它支持按需创建、管理及销毁独立沙箱实例，并可绑定预置模板或自定义运行时配置。该 API 主要面向需要动态执行不可信代码、模型推理验证或轻量级函数计算的开发者场景。
 
 ## 支持的模型/功能
 
-- 支持基于官方镜像（如 `qwen2.5-7b`, `llama3-8b`）和用户上传 Docker 镜像启动沙箱实例  
-- 提供三种核心能力：**实例管理**（创建/查询/终止）、**模版管理**（CRUD 模板配置）、**交互式执行**（stdin/stdout 实时流式通信）  
-- 沙箱内默认启用网络代理（仅限白名单域名），并支持挂载加密密钥、临时存储卷等扩展能力  
-详见 [Sandbox](../../raw/application-api-reference/sandbox-api.md) 中的功能概览。
+sandbox api 本身不直接提供模型推理能力，但支持在沙箱实例中加载并运行百炼平台已接入的模型（如 Qwen 系列、Qwen-VL、Qwen2-Audio 等），前提是对应模型已发布为可调用的 `model` 类型服务且具备沙箱兼容运行时。此外，沙箱支持 Python 3.9+ 运行时、基础网络访问（需显式开启）、文件上传/下载及标准输出捕获。所有可用模板均定义在 [模版管理](../../raw/application-api-reference/sandbox-api/sandbox-api-templates.md) 文档中，包括 `python39-cpu`、`qwen2-7b-instruct-gpu` 等典型配置。
 
 ## 关键参数
 
-| 参数 | 类型 | 必填 | 说明 |
-|------|------|------|------|
-| `template_id` | string | 是 | 模板唯一标识；若未提供则使用默认模板，详见 [模版管理](../../raw/application-api-reference/sandbox-api/sandbox-api-templates.md) |
-| `timeout_seconds` | integer | 否 | 实例最大存活时间（60–3600 秒），超时后自动销毁；默认 600 |
-| `env` | object | 否 | 环境变量键值对（key 须为 ASCII 字符，value 长度 ≤ 4096 字节） |
-| `stdin` | string | 否 | 初始输入内容（仅对支持交互的镜像生效） |
+- `template_id`（必填）：指定沙箱启动所用模板 ID，取值需来自 [模版管理](../../raw/application-api-reference/sandbox-api/sandbox-api-templates.md) 列表；
+- `timeout`（可选，默认 60s）：沙箱实例最大存活时间（秒），超时后自动销毁；
+- `enable_network`（布尔，默认 `false`）：是否允许沙箱内访问公网，启用需额外申请白名单权限；
+- `code`（可选）：待执行的 Python 源码字符串，若未提供则需通过 `/instances/{id}/upload` 接口后续上传；
+- `env`（可选）：环境变量字典，如 `{"MODEL_NAME": "qwen2-7b"}`，部分模板对此有硬性要求。
 
-> **注意**：`timeout_seconds` 在 [实例管理](../../raw/application-api-reference/sandbox-api/sandbox-api-instances.md) 中明确要求最小值为 60，但部分旧版 SDK 示例中误设为 30，该值将被服务端强制修正为 60。
+> **注意**：原始文档 [API 总览与认证](../../raw/application-api-reference/sandbox-api/sandbox-api-overview.md) 中提及 `runtime_version` 参数，但该字段已在 v2.3.0 后废弃，实际请求中传入将被忽略；请以 `template_id` 为准进行运行时选择。
 
 ## 使用方式
 
-1. **认证**：在 `Authorization` Header 中传入 `Bearer <api_key>`  
-2. **创建实例**：`POST /v1/sandboxes`，请求体含 `template_id` 和可选参数  
-3. **获取输出**：轮询 `GET /v1/sandboxes/{id}/status` 或监听 SSE `/v1/sandboxes/{id}/events`  
-4. **终止实例**：`DELETE /v1/sandboxes/{id}`（立即释放资源）  
-完整流程与示例见 [API 总览与认证](../../raw/application-api-reference/sandbox-api/sandbox-api-overview.md)。
+1. **认证**：使用 Bearer Token 认证，Token 需通过百炼控制台「API 密钥」生成，并具备 `sandbox:instances:create` 权限；
+2. **创建实例**：`POST /v1/sandbox/instances`，传入 JSON body（含 `template_id` 等参数），成功返回 `instance_id` 和 `endpoint`；
+3. **执行代码**：向 `POST {endpoint}/run` 提交 `code` 或引用已上传文件，响应含 `stdout`、`stderr`、`exit_code` 及执行耗时；
+4. **清理资源**：调用 `DELETE /v1/sandbox/instances/{id}` 显式销毁，否则依赖 `timeout` 自动回收。完整流程示例见 [API 总览与认证](../../raw/application-api-reference/sandbox-api/sandbox-api-overview.md)。
 
 ## 限制和注意事项
 
-- 单账号并发沙箱实例数上限为 5（企业版可提升），超出时返回 `429 Too Many Requests`  
-- 所有沙箱实例默认无持久化存储，重启即丢失数据；如需保留，须显式配置 `volume_mounts`  
-- 不支持 GPU 直通，CUDA 程序需使用 CPU fallback 模式运行  
-- 模板更新后，已创建的实例**不会自动继承变更**，需手动重建  
-请务必参考 [实例管理](../../raw/application-api-reference/sandbox-api/sandbox-api-instances.md) 中的错误码表与重试建议。
+- 单实例最大内存 4GB，GPU 实例仅限企业版配额用户申请；
+- 沙箱内禁止 fork 进程、加载内核模块、访问 `/proc` 或 `/sys` 等敏感路径；
+- 所有实例默认无持久存储，文件需通过 `/upload` 和 `/download` 接口显式传输；
+- 模板更新不会影响已创建实例，但新实例将继承模板最新定义 —— 模板版本兼容性说明详见 [模版管理](../../raw/application-api-reference/sandbox-api/sandbox-api-templates.md)。
 
 ## 来源文档
 

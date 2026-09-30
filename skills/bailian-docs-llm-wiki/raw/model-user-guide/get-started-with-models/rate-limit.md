@@ -9,32 +9,6 @@
 
 **说明**部分模型，如 qwen3.8-max、qwen3.8-flash 采用 [动态限流（新）](raw/model-user-guide/get-started-with-models/quota-management.md)的方式，根据百炼月消费档位进行软限流。
 
-## 请求体大小限制
-
-通过API发送请求时，网关对请求体（Request Body）大小有以下限制：
-
-请求类型
-
-限制
-
-不含Base64的请求
-
-请求体最大16 MiB
-
-含Base64的请求（Anthropic协议）
-
-单个Base64内容最大32 MiB
-
-含Base64的请求（其他协议）
-
-单个Base64内容最大20 MiB
-
-含Base64的请求（整体请求体）
-
-最大64 MiB
-
-**说明**含Base64的请求在服务端解码后，整体请求体大小仍不得超过16 MiB。超过限制时，请求将被网关拒绝并返回HTTP 413错误。
-
 ## FAQ
 
 ### 为什么触发限流？

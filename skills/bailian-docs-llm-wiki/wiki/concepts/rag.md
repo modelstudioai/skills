@@ -1,60 +1,57 @@
 # 检索增强生成
 
-检索增强生成（Retrieval-Augmented Generation，RAG）是一种将大语言模型（LLM）与外部知识源动态结合的技术范式：在生成回答前，先从结构化或非结构化知识库中检索相关片段，再将检索结果与用户查询一并输入模型，从而提升回答的准确性、时效性与可溯源性。它有效缓解了大模型幻觉、知识陈旧和领域适配难等问题，是百炼平台构建可信企业级 AI 应用的核心技术底座。
+检索增强生成（Retrieval-Augmented Generation，简称 RAG）是一种将大语言模型（LLM）的生成能力与外部知识源的精准检索能力相结合的技术范式。它通过在模型推理前动态检索相关知识片段，并将其作为上下文注入提示（[prompt](../guides/prompt.md)），显著提升回答的事实准确性、领域专业性与可溯源性，同时降低幻觉风险。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-RAG 在百炼中不是单一功能，而是贯穿多个层级的**可组合能力体系**，开发者可根据需求选择不同抽象粒度：
+RAG 在百炼平台不是单一功能，而是贯穿多个产品层级的**核心增强机制**，开发者可根据需求选择不同抽象层级的实现方式：
 
-- **开箱即用的知识库服务（推荐新手/业务快速上线）**  
-  通过控制台或 RAG API 创建 `knowledge_base`，上传 PDF/Word/Excel/Markdown 等文档，平台自动完成解析、语义切片、向量化与索引构建。调用 `/v1/knowledge_bases/{kb_id}/qa` 即可获得流式、带引用的问答结果。适用于智能客服、内部知识助手等场景。
+- **零代码应用层**：在「知识库问答应用」或「智能体应用（Agent 2.0）」中，只需绑定已创建的知识库，开启 `enable_search` 开关，平台自动完成检索→重排→融合→生成全流程，无需编写任何 RAG 逻辑。
+- **低代码工作流层**：在 Workflow 中拖入「知识库节点」，可显式配置 `topK`（召回片段数）、知识库描述（影响触发准确性）、检索策略（如 `hybrid` 混合检索），并与其他节点（如条件判断、[函数调用](function-calling.md)）组合编排复杂 RAG 流程。
+- **API 集成层**：通过 RAG API 直接调用 `/api/v1/indices/knowledge/search`（纯检索）或 `/api/v2/apps/knowledge/chat`（检索+生成），传入 `agent_id` 控制具体知识库与策略，适用于需要细粒度控制或与自有系统深度集成的场景。
+- **框架开发层**：使用 LlamaIndex 或 Spring AI Alibaba 等官方适配器，通过 `DashScopeCloudRetriever` 或 `DashScopeEmbedding` 等组件，在本地代码中构建端到端 RAG 流水线，支持自定义切分、向量化与重排（注意：云端托管知识库 `DashScopeCloudIndex` 不支持自定义切分与 embedding 模型）。
 
-- **应用层 RAG 增强（低代码集成）**  
-  在百炼「智能体应用」中绑定已创建的知识库，并配置调用策略（`必定调用` 或 `按需调用`）。无需修改代码，即可为网站悬浮窗、微信公众号、企业微信机器人等渠道的对话自动注入私域知识，实现“模型能力 + 业务知识”的无缝融合。
-
-- **框架级自定义 RAG（面向开发者深度控制）**  
-  通过 LlamaIndex 或 Spring AI Alibaba 集成 `DashScopeCloudIndex` / `DashScopeCloudRetriever`，灵活组合：  
-  - 文档解析（`DashScopeParse` 支持版面分析与表格识别）  
-  - 切分策略（`DashScopeJsonNodeParser` 按中文标点/换行智能分段）  
-  - 混合召回（向量 + 关键词双通道，`dense_similarity_top_k` + `sparse_similarity_top_k`）  
-  - 重排序（`DashScopeRerank` 使用 `gte-rerank-hybrid` 提升 Top-K 相关性）  
-  适合需要定制切分逻辑、多源异构数据融合或本地索引管理的高级场景。
-
-- **跨模态 RAG 扩展（前沿探索）**  
-  百炼支持 `image`、`multimedia` 类型知识库，配合 `qwen3-vl-embedding` 等多模态嵌入模型，可实现图文混合检索、音视频内容问答等创新用例，已在文档转视频、视觉问答等场景落地验证。
+> ✅ 统一前提：所有 RAG 能力均依赖**已发布且状态为 `active` 的知识库**，且所用大模型必须具备 `rag` 能力标识（如 `qwen-max`、`qwen-plus`、`Qwen3.5-Plus`）。
 
 ## 关键参数和配置
 
-| 参数名 | 所属模块 | 说明 | 典型值 | 注意事项 |
-|--------|----------|------|--------|----------|
-| `knowledge_base_id` | 知识库 API / 应用配置 | 知识库唯一标识 | `"kb-xxx"` | 必填；需确保与 API Key 同属一个 `workspace_id` |
-| `retrieval_strategy` | 知识库 API | 检索模式 | `"hybrid"`（默认）、`"vector_only"`、`"keyword_only"` | `hybrid` 同时触发向量与关键词召回，精度更高但延迟略增 |
-| `top_k` / `dense_similarity_top_k` / `sparse_similarity_top_k` | 知识库 API / LlamaIndex | 返回最相关片段数 | `3`（API 默认）、`100`（LlamaIndex 默认） | 过高易引入噪声，建议 `3–10` 用于问答，`50–100` 用于重排序前召回 |
-| `enable_rerank` / `enable_reranking` | 知识库 API / LlamaIndex | 是否启用语义重排序 | `true`（默认） | 强烈建议开启，`gte-rerank-hybrid` 在中文检索任务上效果最优 |
-| `stream` | 知识库问答 API | 是否流式返回响应 | `true`（推荐） | 仅 `/v1/knowledge_bases/{kb_id}/qa` 支持；流式可降低首字延迟，便于前端渲染 |
-| `model_id` / `model_name` | 全局 | 生成模型与嵌入模型选择 | `"qwen-plus"`、`"text-embedding-v3"` | 生成模型影响回答质量，嵌入模型直接影响检索召回率；`text-embedding-v3` 在 CMTEB 检索基准上达 73.23 分 |
+以下参数直接影响 RAG 效果，需根据业务场景合理设置：
 
-> ⚠️ 注意：所有 RAG 调用均依赖 `workspace_id` 隔离，务必确保 API Key、知识库、Agent、应用均在同一业务空间下；跨区域调用需匹配 Endpoint 地域（如 `cn-beijing.maas.aliyuncs.com`）。
+| 参数名 | 所属层级 | 说明 | 推荐值 | 注意事项 |
+|---------|-----------|------|----------|------------|
+| `retrieval_config.top_k` / `topK` | 知识库/API/Workflow | 单次检索返回的最相关切片数量 | `3–10` | 过小易遗漏关键信息；过大增加噪声与 token 开销；多知识库并行时按库分别计数 |
+| `retrieval_config.strategy` | 知识库/API | 检索策略 | `"hybrid"`（默认） | 支持 `"hybrid"`（BM25 + 向量混合）、`"vector_only"`、`"bm25_only"`；混合策略通常效果更鲁棒 |
+| `qa_config.model_id` | 知识库/API/应用配置 | 执行最终生成的大模型 ID | `"qwen-plus"`（平衡型） | 必须是平台开通且带 `rag` 标识的模型；`qwen-turbo` 适合低延迟场景，`qwen-max` 适合高精度长文本 |
+| `enable_reranking` + `rerank_top_n` | Frameworks/API | 是否启用重排序模型（如 `gte-rerank`）对初检结果二次打分 | `true`, `5` | 重排可显著提升 top1 准确率，但增加约 200–500ms 延迟；`rerank_min_score` 可过滤低置信结果 |
+| `stream` / `incremental_output` | API/SDK | 是否启用流式响应 | `true`, `true` | `incremental_output=True` 时客户端仅接收新增 token，避免重复渲染，推荐用于 Web/APP 实时交互 |
+
+> ⚠️ 重要约束：  
+> - 知识库切片单条长度上限为 **8192 tokens**（超长将被截断，不报错）；  
+> - 所有上传文档仅存储于用户专属租户空间，**不用于模型训练**，符合企业数据合规要求；  
+> - 不支持跨知识库联合检索；如需多源融合，须在应用层聚合或预先合并知识库。
 
 ## 面向开发者，简洁实用
 
-- **起步最快**：控制台新建知识库 → 上传文件 → 等待状态变 `active` → 调用 `/qa` 接口，5 分钟验证效果。  
-- **调试必做**：用控制台 [Playground](../../raw/application-user-guide/knowledge-base/playground.md) 实时测试检索质量，观察 `retrieved_chunks` 内容是否相关、是否覆盖关键信息。  
-- **性能优化**：若延迟敏感，可设 `retrieval_strategy=vector_only` + `enable_rerank=false`，牺牲少量精度换取更快响应；生产环境建议保留 `hybrid` + `rerank` 组合。  
-- **避坑提示**：  
-  - PDF 必须是文本型（非扫描图），否则需 OCR 预处理；  
-  - 单文档切片超 10,000 片会被截断，大文档请提前分卷；  
-  - 知识库更新后索引约 1–2 分钟生效，勿立即重试；  
-  - Agent 必须「发布」后才能调用 `/knowledge/search` 或 `/chat`，未发布返回 `Agent 未发布` 错误。  
+- **快速验证**：用控制台 Playground 上传一份 PDF，执行一次检索+问答，5 分钟内确认 RAG 效果是否符合预期。  
+- **调试技巧**：若问答结果不准，优先检查 `RequestId` 并提交工单；同时复制检索返回的 `chunk_ids` 和原文片段，比对是否召回了正确依据。  
+- **性能优化**：  
+  - 对响应延迟敏感的场景（如微信公众号），选用 `qwen-turbo` + `topK=3` + `enable_reranking=false`；  
+  - 对准确性要求高的场景（如合同审查），选用 `qwen-max` + `topK=5` + `enable_reranking=true` + `rerank_top_n=3`；  
+- **避坑提醒**：  
+  - API 参数命名不一致（如 `index_id` vs `indexId`），务必严格按各接口文档传参；  
+  - 文件上传时 `sizeBytes` 必须为字符串（如 `"1048576"`），传数字会失败；  
+  - `AgentKey`（业务空间标识）必须与 `App ID`、`API Key` 同属一个 workspace，否则鉴权失败。  
 
-RAG 的本质是让大模型“有据可依”。在百炼，你只需聚焦业务知识本身——解析、索引、检索、生成，全部交由平台可靠执行。
+RAG 是百炼平台连接私有知识与大模型智能的“神经突触”。善用它，即可让通用大模型瞬间成为你业务领域的专家。
 
 ## 关联主题页
 
-- [knowledge base](../guides/knowledge-base.md)
 - [rag api](../api/rag-api.md)
-- [frameworks](../api/frameworks.md)
+- [start using](../guides/start-using.md)
+- [llm application](../guides/llm-application.md)
+- [knowledge base](../guides/knowledge-base.md)
 - [application use cases](../guides/application-use-cases.md)
-- [use cases](../guides/use-cases.md)
+- [application support](../guides/application-support.md)
+- [frameworks](../api/frameworks.md)
 
 
