@@ -1,36 +1,60 @@
 # getting started [overview](overview.md)
 
-ParseX 是面向开发者和 Agent 应用的文档智能平台，提供文档解析（Parse）与信息抽取（Extract）两类核心能力，将非结构化文档、图片、音视频等材料转化为可编程处理的内容或结构化字段。开发者可根据任务目标选择合适的能力路径，并通过配置复用降低集成成本。本文档为快速上手的概览指引，覆盖能力边界、关键参数、调用方式及常见约束。
+ParseX 提供文档解析（Parse）与字段抽取（Extract）两类核心能力，面向开发者提供结构化内容生成与业务数据提取服务。本文档概述其支持模型/功能边界、关键参数定义、集成方式选择及生产环境必须关注的限制与注意事项，帮助开发者快速建立端到端集成路径。所有能力均通过异步任务模型交付，需配合 `biz_id` 轮询获取最终结果。
 
 ## 支持的模型/功能
 
-- **Parse 文档解析**：支持 PDF、Word、Excel、PPT、图片（含扫描件）、音频、视频等格式；输出包括正文文本、语义分段、表格结构、图像描述、音视频时间戳对齐内容等。适用于需理解上下文、构建检索库或生成摘要的场景。  
-- **Extract 信息抽取**：基于用户定义的字段 Schema（如 `contract_amount: number`, `sign_date: date`），从图文材料中提取结构化结果，并附带原文定位（page、bbox、text snippet）。字段定义支持正则、语义匹配、多模态联合判断等多种策略。  
-- 两种能力可组合使用：例如先用 Parse 获取高质量图文解析结果，再作为 Extract 的输入源，提升抽取准确率与稳定性。详见 [产品概览](../../raw/application-user-guide/getting-started-overview.md) 中的“标准工作流”部分。
+ParseX 不提供通用大语言模型调用接口，而是封装了针对多模态文档理解的专用处理模型，分为两类能力：
+
+- **文档解析（Parse）**：支持图文（PDF/Office/图片/HTML/EPUB等）、音频（MP3/WAV/FLAC等）、视频（MP4/MKV等）三类输入，输出结构化内容（如 Markdown/JSON）、时间线、剧情分段与摘要。详见[文档解析概览](../../raw/application-user-guide/getting-started-overview/overview.md)。
+- **字段抽取（Extract）**：仅支持图文输入（含本地上传或复用 Parse 生成的图文 `ParseResult`），按用户定义的 JSON Schema 抽取强类型业务字段，并返回字段值、状态（`missing`/`inferred`/`conflict`/`success`）及原文 Citation。**不支持音频、视频及其 ParseResult 复用**，该限制在[常见问题](../../raw/application-user-guide/getting-started-overview/settings-configurations/faq.md)中明确强调。
+
+> **注意**：文档 10 和文档 11 均提及 Agent Skill 接入，但文档 12 明确指出“当前可用资料未提供可公开确认的 Skill 正式名称、发布地址、安装命令……本页不虚构可安装的 Skill”，且所有 Skill 必须绑定已验证的 `config_id`，不可动态覆盖配置。因此，Skill 尚未进入稳定可用阶段，生产集成应以 REST API 为准。
 
 ## 关键参数
 
-- `task_type`：必填，取值为 `"parse"` 或 `"extract"`，决定底层执行路径。  
-- `file_url` 或 `file_bytes`：原始文件输入方式，推荐使用预签名 URL（`file_url`）以避免请求体过大；音视频需确保可公开访问且支持流式读取。  
-- `config_id`（仅 Extract）：指向已保存的字段配置 ID；首次调试建议使用 `config_definition` 直接内联定义字段 Schema，避免配置未同步导致结果偏差。  
-- `parse_options`（仅 Parse）：可选控制解析粒度，如 `enable_ocr: true`（默认启用）、`enable_table_recognition: true`、`max_pages: 50` 等。完整参数见 [Parse 文档解析](../../raw/application-user-guide/getting-started-overview/overview.md)。  
-- > **注意**：`max_pages` 在 `parse_options` 中单位为页，但在某些旧版 SDK 示例中被误标为“字符数”，请以 [Parse 文档解析](../../raw/application-user-guide/getting-started-overview/overview.md) 定义为准。
+核心参数围绕任务提交、配置复用与结果控制展开：
+
+- **`config_id`**：保存的解析或抽取配置唯一标识，用于复用已验证的设置。必须与能力类型（Parse/Extract）匹配，且属于当前 Workspace。使用时禁止同时传入内联参数（如 `processing` 或 `schema`），否则触发 `ConfigInlineConflict` 错误（见[REST API 接入](../../raw/application-user-guide/getting-started-overview/integration-overview/rest-api.md)）。
+- **`biz_id`**：每次任务提交返回的异步业务 ID，用于轮询结果。客户端必须持久化该值，不可丢弃或替换。
+- **`schema`（Extract 专用）**：必传 JSON Schema，定义字段名、类型（`string`/`integer`/`number`/`boolean`/`object`/`array`）、嵌套结构及说明。最大嵌套深度为 6 层，叶子字段数 ≤ 100，序列化后 UTF-8 ≤ 600 KB（见[Schema规则参考](../../raw/application-user-guide/getting-started-overview/extract-overview/extract-schema.md)）。不支持 `format`、`pattern` 等校验关键字，格式约束需写入 `description`。
+- **`output.oss_config`（OSS 托管）**：启用客户自有 OSS 存储时必填，包含 `bucket`、`endpoint`、`access_key_id`、`access_key_secret` 及可选 `security_token`（STS 临时凭证）。**不支持角色信任，必须由客户端主动传入有效凭证**（见[OSS 托管使用](../../raw/application-user-guide/getting-started-overview/integration-overview/parse-x-oss-integration.md)）。
 
 ## 使用方式
 
-1. **控制台验证优先**：在百炼控制台「ParseX」模块上传样本文件，选择 Parse 或 Extract 模式，实时查看结构化输出与可视化溯源（如表格还原、字段高亮）。这是调试字段定义与解析效果的最高效方式。  
-2. **API 集成**：调用 `/v1/parse` 或 `/v1/extract` 接口，按需传入参数。推荐使用官方 SDK（Python/Java/Go），自动处理鉴权、重试与 multipart 上传。  
-3. **配置复用**：控制台中保存的配置可通过 `config_id` 复用；生产环境应避免硬编码 `config_definition`，防止字段变更时服务不可控。配置管理逻辑详见 [Extract 信息提取](../../raw/application-user-guide/getting-started-overview/extract-overview.md)。
+开发者可通过两种正式渠道接入：
+
+- **REST API（推荐）**：面向后端服务与工作流编排，使用 DashScope 鉴权（`Authorization: Bearer <DASHSCOPE_API_KEY>`）。Base URL 为 `https://{workspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/parse-x`。完整流程为：① 提交 `/parse/submit` 或 `/extract/submit` → ② 保存响应中的 `biz_id` → ③ 轮询 `/parse/result` 或 `/extract/result` 直至 `data.status` 为 `success` 或 `failed`。轮询需实现退避策略，避免高频请求（见[REST API 接入](../../raw/application-user-guide/getting-started-overview/integration-overview/rest-api.md)）。
+- **控制台体验与配置管理**：用于快速验证、调试与配置沉淀。所有能力均需先在控制台完成样本运行、结果核验，再通过「保存配置」生成 `config_id`，该 ID 是 API 集成的稳定基础。配置保存后，历史任务仍保留快照，编辑配置不影响已运行任务（见[配置](../../raw/application-user-guide/getting-started-overview/settings-configurations.md)）。
 
 ## 限制和注意事项
 
-- 单文件大小上限：Parse 为 200 MB，Extract 为 50 MB（因依赖解析前置结果，实际建议 ≤20 MB 以保障响应延迟 <15s）。  
-- 音视频时长限制：单文件 ≤ 2 小时；超长视频建议按场景切分后并行处理。  
-- 字段抽取可靠性依赖输入质量：扫描件 OCR 错误率 >15% 时，Extract 准确率显著下降；建议 Parse 阶段开启 `enable_ocr_correction: true`（需对应模型版本支持）。  
-- > **注意**：文档中“面向 Agent 的典型场景”表格所列“应用如何继续使用”属于参考性业务逻辑，不构成 ParseX 的功能承诺；具体下游处理（如规则核验、历史比对）需由开发者自行实现，详见 [产品概览](../../raw/application-user-guide/getting-started-overview.md)。
+- **文件大小与格式**：控制台体验页单文件上限为 200 MB（文档/图片/音频/视频均适用），而 API 支持更大体积（如视频 10 GB）。Extract 仅支持图文格式，明确不支持音频/视频（见[支持的文件与限制](../../raw/application-user-guide/getting-started-overview/settings-configurations/supported-files-and-limits.md)）。
+- **异步任务生命周期**：ParseResult 默认保留 7 天，超期后无法被 Extract 复用；任务记录仅保留最近 7 天，需及时归档关键 `biz_id`（见[任务记录](../../raw/application-user-guide/getting-started-overview/settings-configurations/tasks.md)）。
+- **计量与免费额度**：图文按页计费（解析 ¥0.02/页，抽取 ¥0.04–¥0.06/页），音视频按秒计费。首次开通赠送 3,000 页图文解析/抽取额度、100 小时音视频解析额度，**额度不按月重置，用尽即按量计费**（见[计量与计费](../../raw/application-user-guide/getting-started-overview/settings-configurations/pricing.md)）。
+- **安全性要求**：API Key 必须安全存储于服务端或密钥管理系统，严禁硬编码于前端、日志或仓库中；OSS 凭证同理，需动态获取并确保 STS Token 有效期覆盖任务周期。
 
 ## 来源文档
 
-- [产品概览](../../raw/application-user-guide/getting-started-overview.md)
+- [快速开始](../../raw/application-user-guide/getting-started-overview/quickstart.md)
+- [文档解析概览](../../raw/application-user-guide/getting-started-overview/overview.md)
+- [使用文档解析控制台](../../raw/application-user-guide/getting-started-overview/overview/playground-parse.md)
+- [配置文档解析](../../raw/application-user-guide/getting-started-overview/overview/configuration.md)
+- [获取文档解析结果](../../raw/application-user-guide/getting-started-overview/overview/results-and-best-practices.md)
+- [字段抽取概览](../../raw/application-user-guide/getting-started-overview/extract-overview.md)
+- [使用字段抽取控制台](../../raw/application-user-guide/getting-started-overview/extract-overview/playground-extract.md)
+- [Schema规则参考](../../raw/application-user-guide/getting-started-overview/extract-overview/extract-schema.md)
+- [获取字段抽取结果](../../raw/application-user-guide/getting-started-overview/extract-overview/extract-results.md)
+- [服务渠道](../../raw/application-user-guide/getting-started-overview/integration-overview.md)
+- [REST API 接入](../../raw/application-user-guide/getting-started-overview/integration-overview/rest-api.md)
+- [Skill 接入要求](../../raw/application-user-guide/getting-started-overview/integration-overview/integration-skill.md)
+- [OSS 托管使用](../../raw/application-user-guide/getting-started-overview/integration-overview/parse-x-oss-integration.md)
+- [配置](../../raw/application-user-guide/getting-started-overview/settings-configurations.md)
+- [任务记录](../../raw/application-user-guide/getting-started-overview/settings-configurations/tasks.md)
+- [用量](../../raw/application-user-guide/getting-started-overview/settings-configurations/usage.md)
+- [支持的文件与限制](../../raw/application-user-guide/getting-started-overview/settings-configurations/supported-files-and-limits.md)
+- [配置字段抽取](../../raw/application-user-guide/getting-started-overview/extract-overview/extract-configuration.md)
+- [常见问题](../../raw/application-user-guide/getting-started-overview/settings-configurations/faq.md)
+- [计量与计费](../../raw/application-user-guide/getting-started-overview/settings-configurations/pricing.md)
 
 

@@ -1,54 +1,87 @@
 # 异步处理
 
-异步处理是百炼平台对长耗时 AI 任务（如图像/视频/3D生成、音视频解析、字段抽取等）采用的核心调用范式：客户端发起请求后立即返回任务标识（如 `task_id` 或 `biz_id`），不阻塞等待结果；后续通过轮询或事件通知方式获取最终输出。该模式显著提升系统吞吐与资源利用率，是生产环境中处理高延迟、高计算开销任务的标准实践。
+异步处理是百炼平台对耗时较长的 AI 任务（如视频生成、3D 建模、大文件解析与翻译等）所采用的标准执行模式：客户端提交任务后立即获得唯一任务标识（`task_id` 或 `biz_id`），服务端在后台异步执行，客户端通过轮询或事件回调方式获取最终结果。该模式解耦请求与响应，保障系统稳定性与高并发能力，避免 HTTP 连接超时和资源阻塞。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-异步处理在百炼平台覆盖多个关键能力域，统一遵循“提交任务 → 获取标识 → 获取结果”三阶段流程，但具体实现和适配细节因场景而异：
+异步处理是以下六类核心能力的**统一交互范式**，适用于所有计算密集型、I/O 延迟高或结果生成周期不可预测的任务：
 
-- **多模态生成类**（图像、视频、3D）：  
-  所有万相（WanX）、爱诗（PixVerse）、HappyHorse、Kling、Vidu 及 Tripo 等长耗时模型均**强制异步**。例如调用 `wan2.7-image-pro` 文生图或 `Tripo/Tripo-H3.1` 单图生3D 时，必须在请求头中显式设置 `X-DashScope-Async: enable`，否则直接报错。创建成功后返回 `task_id`，用于后续查询。
+- **视频生成（Video Generation）**：所有文生/图生/参考生视频、数字人驱动、风格重绘等均强制异步。必须携带请求头 `X-DashScope-Async: enable`，否则返回明确错误 `"current user api does not support synchronous calls"`；任务 ID 有效期为 24 小时。
+- **3D 模型生成（3D Generation）**：Tripo 模型仅支持异步调用，且严格限定于华北2（北京）地域；任务创建后需轮询 `/api/v1/tasks/{task_id}`，状态流转为 `PENDING → RUNNING → SUCCEEDED/FAILED`。
+- **文档与音视频解析（ParseX）**：所有 Parse（解析）与 Extract（字段抽取）任务均基于 `biz_id` 实现异步交付；解析结果默认保留 30 天，复用解析结果进行抽取时须在 7 天内完成。
+- **通用模型 API（More About Models）**：图像生成（如 `wanx2.1-t2i-turbo`）、语音转写（如 `paraformer-16k-1`）等长耗时模型明确归类为“异步模型”，支持轮询查询与事件驱动两种结果获取方式。
+- **多模态翻译（Qwen-MT-Uni）**：同步模式仅限文本、小图、短音频（≤30 秒）；大文档（≤200 页）、长音频（3 秒–60 分钟）必须启用异步模式，通过 `X-DashScope-Async: enable` 触发。
+- **跨能力统一抽象**：无论底层是视频渲染、神经辐射场重建还是大模型推理，平台对外暴露一致的异步生命周期：提交 → 等待 → 查询/通知 → 获取输出（含 `output.results`、`pbr_model_url`、`TranslatedFileUrl` 等结构化结果）。
 
-- **结构化解析与抽取类**（ParseX）：  
-  文档解析（PDF/Word/PPT/图片）、音视频解析（MP4/AVI/音频）及基于 Schema 的字段抽取，全部采用异步模式。提交 `/parse/submit` 或 `/extract/submit` 后返回 `biz_id`，通过 `/parse/result` 或 `/extract/result` 轮询状态。注意：音视频无法直接用于抽取，需先解析为文本再复用其 `biz_id`。
-
-- **语音与专业工具类**：  
-  语音转写（`paraformer-16k-1`）、数字人驱动（`wan2.2-s2v`, `EMO`, `LivePortrait`）、视频编辑、风格重绘等能力，同样归入异步任务体系，统一由 `/api/v1/tasks/{task_id}` 接口管理生命周期。
-
-- **同步 vs 异步的边界清晰**：  
-  平台按模型类型和预期耗时自动划分——`qwen-plus`、`qwen-vl-plus` 等轻量文本模型默认同步；而所有图像/视频/3D/语音/解析类任务，无论是否标为“turbo”，只要平均响应超 30 秒，即强制异步。开发者无需自行判断，只需依据[各模型文档](../../raw/model-api-reference/)明确标注的调用模式选择对应 SDK 方法或 HTTP 头配置。
+> ✅ 共同特征：  
+> - 所有异步接口均返回唯一任务标识（`task_id` 或 `biz_id`），**不可重复提交相同标识**；  
+> - 任务状态查询接口统一为 `GET /api/v1/tasks/{id}`（模型类）或 `GET /parse/result?biz_id=xxx`（ParseX 类）；  
+> - 结果 URL（如视频地址、GLB 文件、翻译后 PDF）均为临时链接，有效期通常为 2 小时，需及时下载或持久化。
 
 ## 关键参数和配置
 
-| 参数 | 说明 | 典型值/约束 | 使用场景 |
-|------|------|-------------|----------|
-| `task_id` / `biz_id` | 异步任务唯一标识符，全局唯一、大小写敏感，有效期通常为 **24 小时**（部分服务如 ParseX 解析结果保留 30 天） | UUID 格式字符串（如 `task-abc123def456`） | 所有异步任务查询、取消、结果拉取的必需凭证 |
-| `X-DashScope-Async` | HTTP 请求头，**强制启用异步模式的开关**。缺失或值非 `"enable"` 将导致调用失败 | `"enable"`（字符串，区分大小写） | 图像、视频、3D、部分语音模型的 POST 创建请求必填 |
-| `expire_in_seconds` | 临时 API Key 有效期（秒），用于前端直传等不可信环境 | `[1, 1800]`，默认 `60` | 生成临时凭证时指定，与异步任务本身无关，但常配合文件上传流程使用 |
-| 轮询间隔与频次 | 避免触发限流的关键实践参数 | 建议 ≥15 秒；单账号 QPS ≤20（含批量查询 `/api/v1/tasks`） | 所有轮询场景，尤其在高并发批量任务中需主动退避 |
-| 回调配置（EventBridge） | 替代轮询的事件驱动方案，需提前在阿里云控制台配置 | HTTP Endpoint（支持 HTTPS）或 RocketMQ Topic | 推荐用于生产级任务编排，规避轮询资源消耗与限流风险 |
+| 参数 / 配置 | 作用 | 是否必需 | 说明 |
+|-------------|------|----------|------|
+| `X-DashScope-Async: enable` | 启用异步模式的开关请求头 | ✅ 所有异步模型调用必填 | 缺失将直接报错；不区分大小写，但值必须为 `enable`（非 `true`/`1`） |
+| `task_id` / `biz_id` | 异步任务唯一标识符 | ✅ 轮询时必填 | UUID 格式字符串；`task_id` 用于模型类 API（如视频、3D），`biz_id` 用于 ParseX 类 API；两者命名空间隔离，不可混用 |
+| 轮询间隔策略 | 控制查询频率，避免触发限流 | ⚠️ 强烈建议 | 基础轮询建议 ≥15 秒；生产环境推荐指数退避（如 1s → 2s → 4s → 8s）；高频轮询请改用事件回调 |
+| 事件回调（EventBridge） | 替代轮询的低开销方案 | ❌ 可选 | 配置 HTTP 回调 URL 或 RocketMQ 主题，接收 `dashscope:System:AsyncTaskFinish` 事件；规避 QPS 限制与连接管理复杂度 |
+| 地域一致性 | 异步任务执行与查询的地域约束 | ✅ 强制要求 | API Key、Endpoint、模型开通地域三者必须完全一致；跨地域调用将失败（如北京 Key 调用新加坡 Endpoint） |
 
-> ⚠️ 注意：异步任务结果中的下载链接（如 `pbr_model_url`、`rendered_image_url`、`output_file_url`）通常**有效期仅 2 小时**，请务必及时保存至自有存储。
+> 💡 提示：  
+> - 所有异步任务默认保留期为 **24 小时**（个别服务如 ParseX 解析结果为 30 天），超期后 `GET /api/v1/tasks/{id}` 返回 `task_status: "UNKNOWN"`，无法恢复；  
+> - 不要自行拼接或缓存任务查询 URL，应始终使用响应体中返回的完整 `task_id` 和标准路径；  
+> - 错误响应中 `request_id` 是排查问题的关键线索，务必记录并关联日志。
 
 ## 面向开发者，简洁实用
 
-- ✅ **必做**：调用异步模型前，确认模型文档是否标注“异步”或要求 `X-DashScope-Async: enable`；创建请求后立即持久化 `task_id`/`biz_id`，勿依赖内存缓存。
-- ✅ **推荐**：优先采用 [EventBridge 事件回调](https://help.aliyun.com/zh/eventbridge/product-overview/what-is-eventbridge) 接收 `dashscope:System:AsyncTaskFinish` 事件，而非轮询——降低客户端复杂度与服务端压力。
-- ✅ **避坑**：  
-  - 不要高频轮询（<15 秒间隔）；  
-  - 不要复用过期的 `task_id`（24h 后状态变为 `UNKNOWN`）；  
-  - 文件上传时指定的 `model_name` 必须与后续调用模型**完全一致**；  
-  - 异步任务结果链接（URL）需在 2 小时内下载，过期不可恢复。
-- ✅ **调试技巧**：使用 `curl -v` 或 Postman 查看响应头 `X-Request-ID` 和状态码（如 `409 ResultNotReady` 表示仍在处理），结合 [错误码文档](../../raw/application-api-reference/api-overview/errors.md) 快速定位问题。
+- **第一步：确认是否需要异步**  
+  查阅对应模型文档 —— 若描述中出现“异步调用”、“轮询获取结果”、“`X-DashScope-Async`”或“任务 ID”，即必须走异步流程。
 
-异步不是“更慢”，而是“更稳、更可扩展”。合理运用，即可支撑每秒数百任务的稳定调度。
+- **第二步：构造请求**  
+  ```bash
+  curl -X POST 'https://{WorkspaceId}.{region}.maas.aliyuncs.com/.../submit' \
+    -H 'Authorization: Bearer sk-xxx' \
+    -H 'Content-Type: application/json' \
+    -H 'X-DashScope-Async: enable' \  # ← 关键！漏掉即失败
+    -d '{"model": "...", "input": {...}}'
+  ```
+  成功响应必含 `"task_id"` 或 `"biz_id"` 字段。
+
+- **第三步：安全轮询或配置回调**  
+  - ✅ 推荐：实现带退避的轮询（Python 示例）：
+    ```python
+    import time, random
+    task_id = response["task_id"]
+    for i in range(10):  # 最多尝试10次
+        res = requests.get(f"https://.../api/v1/tasks/{task_id}", headers=headers)
+        if res.json().get("task_status") == "SUCCEEDED":
+            print(res.json()["output"]["results"])
+            break
+        time.sleep(min(2 ** i + random.uniform(0, 1), 30))  # 指数退避，上限30秒
+    ```
+  - ✅ 生产首选：配置 EventBridge HTTP 回调，收到 `AsyncTaskFinish` 事件后主动拉取结果，彻底消除轮询开销。
+
+- **第四步：处理结果与清理**  
+  - 解析 `output.results` 中的结构化数据（如 `video_url`, `pbr_model_url`, `TranslatedFileUrl`）；  
+  - 所有临时 URL 有效期仅 **2 小时**，请立即下载或转存至自有存储；  
+  - 记录 `task_id` + `request_id` 用于审计与问题定位；  
+  - 无需手动“删除”任务 —— 到期自动清理。
+
+> 🚫 避坑指南：  
+> - 不要省略 `X-DashScope-Async: enable`；  
+> - 不要跨地域混用 API Key 与 Endpoint；  
+> - 不要高频轮询（>20 QPS），会触发限流；  
+> - 不要假设 `task_id` 永久有效 —— 24 小时后失效；  
+> - 不要尝试用同步接口（如 `/chat/completions`）调用异步模型 —— 协议不兼容。
 
 ## 关联主题页
 
-- [more about models](../api/more-about-models.md)
 - [video generation api](../api/video-generation-api.md)
 - [3d generation](../api/3d-generation.md)
+- [getting started overview](../guides/getting-started-overview.md)
 - [api overview](../api/api-overview.md)
-- [image generation](../api/image-generation.md)
+- [more about models](../api/more-about-models.md)
+- [qwen mt translation models](../api/qwen-mt-translation-models.md)
 
 

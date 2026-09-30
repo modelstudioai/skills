@@ -3252,8 +3252,9 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
     
     -   以公网URL传入时：Qwen3.8系列、Qwen3.7系列、Qwen3.6系列、Qwen3.5系列、Qwen3-VL系列单个图像不超过 `20MB`，其他模型单个图像不超过`10MB`
     -   以本地路径传入时：单个图像不超过`10MB`
-    -   以 Base64 编码传入时（OpenAI 兼容接口或DashScope）：Qwen3.8系列、Qwen3.7系列、Qwen3.6系列、Qwen3.5、Qwen3-VL系列编码前的原始图像文件不超过 `20MB`，其他模型不超过`10MB`；且编码后的 Data URI 字符串不超过 `20MB`。
-    -   以 Base64 编码传入时（Anthropic 兼容接口）：受**请求体整体不超过**`6MB` 的限制，**多张图像**时需共享此额度。
+    -   以 Base64 编码传入时：Qwen3.8系列、Qwen3.7系列、Qwen3.6系列、Qwen3.5、Qwen3-VL系列编码前的原始图像文件不超过 `20MB`，其他模型不超过 `10MB`；且编码后的 Data URI 字符串在 OpenAI 兼容接口与 DashScope 不超过 `20MB`，在 Anthropic 兼容接口不超过 `32MB`。
+    
+    此外，所有接口的请求体整体大小均不得超过 `64MB`，多张图像时需共享此整体额度。
     
     上述限制取决于所选模型，不支持通过购买高级套餐或升级模型版本提升。
     

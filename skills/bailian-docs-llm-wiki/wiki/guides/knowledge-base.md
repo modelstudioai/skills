@@ -1,40 +1,45 @@
 # knowledge base
 
-百炼平台的 knowledge base 是面向企业级场景的 RAG（[检索增强生成](../concepts/rag.md)）服务，支持私有文档的自动解析、切片、向量化与索引构建，并提供多路召回检索和基于大模型的流式问答能力。开发者可通过控制台或 API 快速接入，将结构化/非结构化数据转化为可调用的知识服务。该能力深度集成于百炼应用层与 API 层，是构建智能客服、内部知识助手等场景的核心基础设施。
+百炼平台的知识库（Knowledge Base）是面向企业级 RAG 应用的核心基础设施，支持私有文档的自动解析、切片、向量化与索引，并提供多路召回检索与大模型驱动的流式问答能力。它可通过控制台或 API 快速接入结构化/非结构化数据源，实现知识服务与业务系统的深度集成。该能力在 [RAG 简介](../../raw/application-user-guide/knowledge-base.md) 中被定义为“企业级知识库与检索服务”。
 
-## 支持的模型与功能
+## 支持的模型/功能
 
-- **默认模型**：知识检索与问答均默认使用 `qwen-max` 或 `qwen-plus`（具体以控制台当前配置为准），支持通过 `model_id` 参数显式指定其他已开通的百炼大模型（如 `qwen-turbo`）。  
-- **核心功能**：包括文档自动解析（PDF/Word/Excel/TXT/Markdown 等）、语义切片（支持按段落、标题、固定 token 长度等策略）、向量索引（默认使用百炼内置向量引擎）、多路召回（关键词 + 向量 + 重排序）、Agentic 多轮检索（[RAG 简介](../../raw/application-user-guide/knowledge-base.md) 中提及）及流式问答响应。  
-- **扩展能力**：支持从 OSS、MySQL、表格文件等多种数据源批量导入（参见 [数据集](../../raw/application-user-guide/knowledge-base/data-connection-overview/data-connection.md)），并可通过 Skill 封装为低代码可复用组件。
+- **内置模型支持**：知识库默认使用百炼平台托管的向量模型（如 `text-embedding-v1`）完成向量化；问答阶段可自由指定任意已开通的 LLM（如 `qwen-max`、`qwen-plus`），需确保模型具备 `rag` 能力标识。
+- **核心功能**：
+  - 多源数据接入（文件上传、MySQL、OSS、表格等），详见 [数据集](../../raw/application-user-guide/knowledge-base/data-connection-overview/data-connection.md)；
+  - 自动解析（PDF/Word/Excel/PPT/TXT/Markdown 等格式）与语义切片（支持按段落、标题、固定 token 长度等策略）；
+  - 多路召回（BM25 + 向量混合检索）、Agentic 多轮重写与重检；
+  - 流式问答（SSE 响应）、引用溯源（返回匹配切片 ID 与原文片段）；
+  - 全生命周期管理（知识库创建、文档增删、切片状态查询、索引重建）。
+
+> **注意**：部分旧版文档提及“仅支持 qwen-turbo 用于问答”，该描述已过时；当前所有具备 `rag` 能力的模型均可用于知识问答，以 [RAG API 参考](../../raw/application-api-reference/rag-api/rag-api-overview.md) 中 `qa` 接口的 `model_id` 参数允许值为准。
 
 ## 关键参数
 
-- `knowledge_base_id`：知识库唯一标识，创建后由平台分配，必填。  
-- `query`：检索或问答请求中的用户输入文本，最大长度 2048 字符。  
-- `top_k`：单次检索返回的最相关切片数，默认 3，取值范围 1–50。  
-- `enable_rerank`：是否启用重排序（默认 `true`），影响召回精度与延迟。  
-- `stream`：问答接口中控制是否流式返回（`true`/`false`），仅对 `/v1/knowledge_bases/{kb_id}/qa` 生效。  
-- `retrieval_strategy`：可选 `hybrid`（默认，混合召回）、`vector_only` 或 `keyword_only`，详见 [知识检索](../../raw/application-user-guide/knowledge-base/service/rag-knowledge-retrieval.md)。
+| 参数 | 说明 | 示例值 | 来源 |
+|------|------|--------|------|
+| `knowledge_base_id` | 知识库唯一标识符，创建后生成 | `kb-xxx` | [创建知识库](../../raw/application-user-guide/knowledge-base/rag-knowledge-base.md) |
+| `retrieval_config.top_k` | 单次检索返回的最相关切片数 | `3` | [知识检索](../../raw/application-user-guide/knowledge-base/rag-knowledge-retrieval.md) |
+| `retrieval_config.strategy` | 检索策略，支持 `hybrid`（默认）、`vector_only`、`bm25_only` | `"hybrid"` | [知识检索](../../raw/application-user-guide/knowledge-base/rag-knowledge-retrieval.md) |
+| `qa_config.stream` | 是否启用流式响应 | `true` | [知识问答](../../raw/application-user-guide/knowledge-base/service/rag-knowledge-qa.md) |
+| `qa_config.model_id` | 指定问答所用大模型 ID | `"qwen-max"` | [RAG API 参考](../../raw/application-api-reference/rag-api/rag-api-overview.md) |
 
 ## 使用方式
 
-1. **创建知识库**：在控制台选择「知识库」→「新建」，上传文件或配置数据源，设置解析与切片策略（[创建知识库](../../raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)）；  
-2. **等待构建完成**：状态变为 `active` 后即可调用；  
-3. **调用 API**：  
-   - 检索：`POST /v1/knowledge_bases/{kb_id}/retrieve`  
-   - 问答：`POST /v1/knowledge_bases/{kb_id}/qa`  
-   接口定义与示例见 [RAG API 参考](../../raw/application-api-reference/rag-api/rag-api-overview.md)；  
-4. **调试验证**：使用控制台 [Playground](../../raw/application-user-guide/knowledge-base/playground.md) 实时测试效果。
+1. **控制台快速验证**：通过 [Playground](../../raw/application-user-guide/knowledge-base/playground.md) 直接上传文档、执行检索与问答，无需编码；
+2. **API 集成**：
+   - 创建知识库 → 上传文档 → 等待 `status=active`（索引就绪）；
+   - 调用 `/v1/knowledge_bases/{kb_id}/retrieve` 进行检索；
+   - 调用 `/v1/knowledge_bases/{kb_id}/qa` 发起问答（支持 `stream=true`）；
+3. **高级集成**：通过 MCP 协议对接 Agent 框架，或使用 CLI 批量管理知识库（参见 [应用集成](../../raw/application-user-guide/knowledge-base/integration/channels.md)）。
 
 ## 限制和注意事项
 
-- 单个知识库最大支持 100 万切片；单文档解析后切片数上限为 10,000（超限将截断）；  
-- PDF 解析不支持加密文档及扫描版图片型 PDF（需 OCR 预处理）；  
-- 向量索引更新非实时：新增/删除文档后，需等待约 1–2 分钟生效；  
-- > **注意**：[RAG 简介](../../raw/application-user-guide/knowledge-base.md) 中称“上传后自动完成解析、切片、向量化与索引”，但实际切片策略（如是否启用标题感知切分）需在创建知识库时显式配置，未配置则使用平台默认策略——此细节在 [创建知识库](../../raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md) 中明确说明，前者表述易引发误解；  
-- > **注意**：[RAG API 参考](../../raw/application-api-reference/rag-api/rag-api-overview.md) 中部分字段（如 `retrieval_strategy` 的枚举值）与最新控制台实际支持存在滞后，建议以 OpenAPI Spec 返回的 `enum` 值为准；  
-- 跨区域知识库调用需确保 API Endpoint 与知识库所在地域一致，否则返回 `404`。
+- 单个知识库最大文档数：50,000；单文档最大体积：100 MB（PDF/Word 类）或 50 MB（其他格式）；
+- 切片后单条文本长度上限：8192 tokens（超出将被截断，不报错）；
+- 索引重建期间（如修改切片策略后）知识库不可用于检索/问答；
+- 所有上传内容仅存储于用户专属租户空间，不用于模型训练——该隐私承诺在 [RAG 简介](../../raw/application-user-guide/knowledge-base.md) 中明确声明；
+- 不支持跨知识库联合检索；如需多源融合，须预先合并为单一知识库或在应用层聚合结果。
 
 ## 来源文档
 

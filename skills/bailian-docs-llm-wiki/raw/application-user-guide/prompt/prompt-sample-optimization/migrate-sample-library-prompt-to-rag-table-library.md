@@ -19,7 +19,7 @@
 
 ### 步骤 2：创建 RAG 表格库并导入数据
 
-> 相关文档：[创建和使用知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)。
+> 相关文档：[创建和使用知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
 
 1.  **填写基础信息**
     

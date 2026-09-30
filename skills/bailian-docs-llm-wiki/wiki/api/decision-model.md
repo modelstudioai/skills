@@ -1,48 +1,52 @@
 # decision model
 
-decision model 是百炼平台专为结构化决策任务设计的轻量级模型，一次前向推理即可同步输出分类、是非判断、有序评分及其概率分布与置信度，**不生成自由文本**。适用于工单分流、内容审核、智能体路由、规则校验等低延迟、高并发的确定性决策场景。其接口协议为 TypeSafe System One，通过 `POST /compatible-mode/v1/systemone` 调用，详见 [决策模型 API](../../raw/model-api-reference/decision-model/decision-model-api.md)。
+decision model 是百炼平台专为结构化决策任务设计的轻量级推理模型，不生成文本，仅输出分类、是非判断、有序评分及其概率分布与置信度。适用于工单分流、内容审核、智能体路由、结果校验等低延迟、高并发的确定性决策场景。其核心能力基于 [决策模型 API](../../raw/model-api-reference/decision-model/decision-model-api.md) 定义，调用方式统一为 `POST /compatible-mode/v1/systemone`。
 
 ## 支持的模型与功能
 
-- 当前唯一支持的模型为 `decision-model-preview`（预览版），暂无其他别名或历史版本。
+- 当前唯一可用模型：`decision-model-preview`（预览版），无其他别名或历史版本。
 - 支持三类结构化问题：
-  - `choice`：多选一决策（如“派单团队”），返回选中项、各选项概率及整体置信度；
-  - `noul`（yes/no/uncertain/likely）：是非二元判断，返回 P(yes) 概率值（0.0–1.0）；
-  - `score`：有序量表打分（如严重度 1–4 级），返回加权期望分（可为浮点数）、各级概率及置信度。
-- 所有问题可批量提交（单次请求支持多个 `questions`），模型统一前向计算并原子化返回全部结果，避免多次调用开销。
+  - `choice`：多选一判定（如“派单团队”），返回选中项、各选项概率及置信度；
+  - `noul`：是非判断（yes/no），返回 `P(yes)` 概率值（浮点数，0.0–1.0）；
+  - `score`：有序量表评分（如严重度 1–4 级），返回加权期望分（可为小数）、各级概率及置信度。
+- 所有类型均**不生成任何自由文本**，输出严格结构化，延迟与成本与输出长度无关，详见 [决策模型 API](../../raw/model-api-reference/decision-model/decision-model-api.md)。
 
 ## 关键参数
 
-| 字段 | 类型 | 必填 | 说明 |
-|------|------|------|------|
-| `model` | `String` | ✅ | 固定为 `"decision-model-preview"` |
-| `state` | `String` / `Object` / `Array` | ✅ | 待决策的原始上下文，将被序列化后送入模型；超长（>65536 token）会被截断或拒绝 |
-| `questions` | `Object` | ✅ | 键为自定义 question ID，值为问题对象；每个问题必须含 `type` 字段 |
-| `questions.*.type` | `String` | ✅ | 取值为 `"choice"` / `"noul"` / `"score"` |
-| `questions.*.criteria` | `Object` / `Array` | ⚠️ 条件必填 | `choice`: 选项名→描述映射（建议含 `"other"` 兜底）；`noul`: 可选 `{"true": "...", "false": "..."}`；`score`: 从低到高的等级描述数组（2–255 项，推荐 3–7 级） |
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `model` | Body | `String` | ✓ | 固定为 `"decision-model-preview"` |
+| `state` | Body | `String` / `Object` / `Array` | ✓ | 待决策的原始上下文（如工单 JSON、对话文本），超长（>65536 token）将被截断或拒绝 |
+| `questions` | Body | `Object` | ✓ | 键为自定义 question_id，值为问题对象；支持 ≤16 个问题（建议值，见 [决策模型 API](../../raw/model-api-reference/decision-model/decision-model-api.md)） |
+| `type`（question 内） | Body | `String` | ✓ | 取值 `"choice"` / `"noul"` / `"score"` |
+| `criteria`（question 内） | Body | `Object` / `Array` | 条件必填 | `choice`: `{key: desc}` 映射（≤255 项）；`noul`: 可选 `{"true": "...", "false": "..."}`；`score`: 描述数组（2–255 级，**强烈建议 3–7 级**） |
 
-> **注意**：文档中 `score` 等级数量限制在“2–255”与“2–10”两处表述不一致（见 [决策模型 API](../../raw/model-api-reference/decision-model/decision-model-api.md) “接口限制与建议”节），实际服务端校验上限为 **255**，但业务推荐使用 3–7 级以保障判别清晰性。
+> **注意**：文档中 `score` 等级上限标注为“2–255”，但实际性能与可解释性在 3–7 级时最优；超出 7 级易导致概率分布扁平、置信度下降，该建议来自 [决策模型 API](../../raw/model-api-reference/decision-model/decision-model-api.md) 的实践指引，非硬性限制。
 
 ## 使用方式
 
-1. **认证**：设置环境变量 `DASHSCOPE_API_KEY`，Header 中传 `Authorization: Bearer $DASHSCOPE_API_KEY`；
-2. **Endpoint**：按地域选择对应域名，例如华北2（北京）为 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/systemone`；
-3. **SDK 推荐**：使用 `typesafe-sdk`（`pip install typesafe-sdk`），自动处理路径拼接与响应解析，示例见 [决策模型 API](../../raw/model-api-reference/decision-model/decision-model-api.md)；
-4. **关键实践**：
-   - `state` 建议结构化（如 JSON 对象），比纯文本更易对齐语义；
-   - `choice` 的 `criteria` 应覆盖常见选项，避免模型被迫归入 `other` 降低准确率；
-   - 单次请求问题数建议 ≤16，延迟随问题数近线性增长。
+- **协议与端点**：`POST https://{WorkspaceId}.{region}.maas.aliyuncs.com/compatible-mode/v1/systemone`  
+  地域支持：华北2（北京）、新加坡（具体域名见 [决策模型 API](../../raw/model-api-reference/decision-model/decision-model-api.md)）。
+- **认证**：Header 中 `Authorization: Bearer $DASHSCOPE_API_KEY`，API Key 需提前配置为环境变量。
+- **SDK 推荐**：使用 `typesafe-sdk`（`pip install typesafe-sdk`），自动处理路径拼接与响应解析：
+  ```python
+  from typesafe_sdk import TypeSafeClient
+  client = TypeSafeClient(
+      api_key=os.environ["DASHSCOPE_API_KEY"],
+      base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode"
+  )
+  result = client.system_one(model="decision-model-preview", state=..., questions={...})
+  ```
 
 ## 限制和注意事项
 
-- **上下文长度**：硬上限 65536 token，超长 `state` 将被截断或直接报错（HTTP 400）；
-- **问题规模**：
-  - 单个 `choice` 问题最多支持 255 个选项；
-  - 单个 `score` 问题最多支持 255 级（但推荐 3–7 级）；
-  - `questions` 总数无硬限制，但 ≥16 时延迟显著上升；
-- **输出特性**：严格不生成任何文本（无 `text` / `output` 字段），仅返回结构化答案（`answers`）、`confidence`、`probabilities` 等；
-- **错误排查**：失败时返回标准错误码，详细说明请查阅 [错误信息](../../raw/model-api-reference/preparations/error-code.md)；
-- **地域一致性**：`base_url` 域名中的地域必须与 Workspace 所属地域一致，否则返回 403 或 404 —— 此约束在 [决策模型 API](../../raw/model-api-reference/decision-model/decision-model-api.md) 中未显式强调，但实测验证必需。
+- **上下文长度**：最大 65536 token，超长 `state` 将被截断（非报错），影响决策准确性。
+- **问题规模**：单次请求建议 ≤16 个问题；实测延迟随问题数近线性增长。
+- **选项与等级约束**：
+  - `choice` 最多 255 个选项；
+  - `score` 等级数建议 3–7 级（文档明确提示“建议 3–7 级且每级可清晰区分”）；
+- **无流式响应**：仅支持同步一次性返回，不支持 `stream=true`。
+- **错误处理**：失败时返回标准错误码，详细说明见 [错误信息](../../raw/model-api-reference/preparations/error-code.md)（该路径为 raw 文档引用，非本文档维护）。
 
 ## 来源文档
 

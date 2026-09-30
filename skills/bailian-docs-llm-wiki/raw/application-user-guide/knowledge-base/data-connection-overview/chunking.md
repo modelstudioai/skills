@@ -102,4 +102,4 @@ FAQ 文档
 -   [更新切片](raw/application-api-reference/rag-api/rag-api-chunks/rag-api-update-chunk.md)
 -   [删除切片](raw/application-api-reference/rag-api/rag-api-chunks/rag-api-delete-chunk.md)
 
-**重要**切片与向量化配置好后，创建[知识检索服务](raw/application-user-guide/knowledge-base/service/rag-knowledge-retrieval.md)开始联合检索。
+**重要**切片与向量化配置好后，创建[知识检索服务](raw/application-user-guide/knowledge-base/rag-knowledge-retrieval.md)开始联合检索。

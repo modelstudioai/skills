@@ -304,6 +304,8 @@ Function Calling
 
 本文仅展示模型调用原价，不包含限时优惠等活动信息，请前往[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)查看活动优惠。
 
+忙时为北京时间 8:00 - 22:00，其余时段为闲时。
+
 #### 华北2（北京）
 
 计费项
