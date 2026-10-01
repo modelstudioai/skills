@@ -1,42 +1,49 @@
 # 流式输出
 
-流式输出（Streaming Output）是百炼平台提供的一种实时响应机制，指模型推理结果以增量、分块的方式持续返回给客户端，而非等待整个响应生成完毕后一次性返回。该机制显著降低端到端延迟，提升用户交互体验，尤其适用于长文本生成、语音合成、实时对话等对响应速度敏感的场景。
+流式输出（Streaming Output）是百炼平台提供的一种响应模式，允许模型在生成过程中**逐块（chunk）返回结果**，而非等待全部内容完成后再一次性返回。它显著降低端到端延迟，提升用户感知的响应实时性，是构建交互式 AI 应用（如聊天界面、语音助手、实时翻译）的核心能力。
 
-## 在百炼平台的不同场景中，这个概念如何使用
+## 在百炼平台的不同场景中如何使用
 
-- **应用调用（Application Call）**：通过 DashScope 原生 API 或 OpenAI 兼容 Responses API 调用智能体或工作流时，设置 `stream=true` 即可启用流式输出。服务端按 SSE（Server-Sent Events）协议推送 `data:` 格式事件，每条事件包含一个响应片段（如 `text_delta`）。注意：Responses API 的异步模式（`background=true`）不支持流式输出。
+流式输出在以下三类核心调用路径中统一支持，但协议与事件形态不同：
 
-- **RAG 知识问答**：在 `/api/v2/apps/knowledge/chat` 接口中，流式输出为默认行为（无需额外参数），响应以 SSE 格式逐块返回语义化答案片段，便于前端实现打字机效果或实时渲染。
+- **标准模型 API（`/api/v1/services/aigc/text-generation/generation`）**：通过 `stream=true` 启用，服务端以 `text/event-stream` 格式返回多个 `data: {...}` 事件，每个事件含一个 `delta` 字段（增量文本）和可选的 `finish_reason`。适用于 Qwen 系列文本模型（如 `qwen-max`）的通用文本生成。
 
-- **实时多模态 API（Omni Realtime / Realtime API）**：基于 WebSocket 的实时接口天然支持流式输出。服务端持续推送结构化事件（如 `response.text.delta`、`response.audio.delta`、`conversation.item.created`），实现文本与音频的毫秒级同步输出，适用于语音助手、智能客服等低延迟交互场景。
+- **应用调用 API（`/api/v1/apps/{APP_ID}/completion` 或 `/api/v2/apps/agent/{APP_ID}/compatible-mode/v1/responses`）**：同样通过 `stream=true` 参数启用。智能体（Agent）或工作流（Workflow）的中间步骤（如工具调用、RAG 检索、思考过程）可被拆分为独立事件流，支持 `enable_thinking` 时返回结构化思考片段。
 
-- **应用组件 API（Application Component API）**：调用 `/v1/applications/{app_id}/chat` 时，需显式设置请求头 `Accept: text/event-stream` 并确保客户端能解析 SSE 流；响应体为标准 `data: {...}\n\n` 格式，每个 chunk 包含 `delta` 字段（文本增量）和 `finish_reason` 字段（流结束标识）。
+- **Realtime API（WebSocket 协议）**：原生流式设计，无需显式 `stream` 参数。客户端通过监听 `output.text.delta`、`output.audio.chunk`、`output.tool_call` 等细粒度事件实时消费输出，支持毫秒级响应与双向控制（如 `interrupt` 中断）。
 
-- **开发工具集成（CLI/IDE 插件等）**：当使用 OpenAI 兼容协议接入百炼（如通过 Cursor、Cherry Studio 或自建 SDK）时，只要底层请求携带 `stream=true` 且客户端正确处理 SSE 或 chunked transfer encoding，即可获得流式响应——无需修改业务逻辑，兼容主流 AI 工具链。
+> ✅ 统一行为：所有场景下，流式响应末尾均以 `data: [DONE]` 标识结束；若启用 `stream_options.include_usage=true`（仅限模型 API），则在 `[DONE]` 前插入含 `usage` 字段的最终事件。
 
 ## 关键参数和配置
 
-- `stream`: 布尔类型，全局开关。所有支持流式的 API 均通过此参数启用（默认 `false`）。  
-- `Accept` 请求头：对于 RESTful 流式接口（如 Application Component API），必须设置为 `text/event-stream`。  
-- 响应格式：统一遵循 SSE 规范，每条消息以 `data:` 开头，JSON 内容需合法转义；末尾以双换行符 `\n\n` 分隔。典型字段包括：
-  - `delta`: 当前文本增量（字符串）
-  - `role`: 消息角色（通常为 `"assistant"`）
-  - `finish_reason`: 结束原因（`"stop"`、`"length"`、`"tool_calls"` 等）
-  - `index`: 消息序号（用于多候选响应排序）
-- 注意事项：
-  - 流式模式下不返回完整 `usage` 统计，需在流结束后的最终 chunk 中提取；
-  - 若请求中同时指定 `stream=true` 和 `background=true`（Responses API），后者优先，流式将被禁用；
-  - WebSocket 类接口（Omni/Realtime）无需 `stream` 参数，其流式行为由协议本身保证。
+| 参数 | 类型 | 作用域 | 说明 |
+|------|------|--------|------|
+| `stream` | `boolean` | 全部 RESTful API（模型、应用） | 必须设为 `true` 才启用流式；默认 `false`（同步阻塞模式） |
+| `stream_options.include_usage` | `boolean` | 仅模型 API（`text-generation`） | 设为 `true` 时，在流式结束前返回 token 使用统计（`prompt_tokens`/`completion_tokens`）；会增加约 100ms 延迟 |
+| `enable_thinking` / `has_thoughts` | `boolean` | 应用调用 API（智能体） | 配合 `stream=true`，使模型思考过程作为独立流式事件返回，便于前端渲染“思考中”状态 |
+| `flow_stream_mode` | `string` | 工作流应用（控制台配置 + API） | 控制流式切分粒度（如 `message_format_plus`），需在控制台流程节点开启流式开关后生效 |
 
-面向开发者，请始终校验响应 Content-Type、正确处理 SSE 解析边界，并在客户端实现超时重连与错误恢复逻辑。
+⚠️ 注意：
+- Realtime API 不使用 `stream` 参数，其流式能力由 WebSocket 协议和事件模型天然承载；
+- `stream=true` 与异步调用（`background=true`）互斥：二者不可同时启用；
+- 流式响应不支持 `response_format.type="json_object"`（JSON Schema 强约束需完整上下文校验，暂不兼容流式）。
+
+## 面向开发者：简洁实用建议
+
+- **必做**：始终检查 HTTP 响应头 `Content-Type: text/event-stream`，并按 SSE（Server-Sent Events）协议解析 `data:` 行；
+- **推荐**：前端使用 `ReadableStream` + `TextDecoderStream` 处理流数据，避免手动拼接 `delta` 导致乱码；
+- **调试**：用 `curl -N` 或 Postman 的 “Stream response” 开关验证流式行为，观察是否持续收到多条 `data:` 事件；
+- **容错**：监听 `error` 事件并实现重连逻辑（尤其 WebSocket 场景），Realtime API 提供 `session_id` 复用机制恢复上下文；
+- **性能**：高吞吐场景慎用 `stream_options.include_usage=true`；如需计费统计，建议聚合日志中的 `x-dashscope-usage` 响应头（含 token 数）。
+
+流式输出不是“高级选项”，而是生产环境的**默认推荐模式**——它让 AI 响应从“等待”变为“渐进呈现”，是用户体验升级的关键杠杆。
 
 ## 关联主题页
 
-- [rag api](../api/rag-api.md)
+- [get started with models](../guides/get-started-with-models.md)
 - [application call](../api/application-call.md)
 - [omni realtime api](../api/omni-realtime-api.md)
 - [realtime api user guide](../api/realtime-api-user-guide.md)
-- [application component api reference](../api/application-component-api-reference.md)
-- [use chat client or development tool](../guides/use-chat-client-or-development-tool.md)
+- [release notes](../guides/release-notes.md)
 
 

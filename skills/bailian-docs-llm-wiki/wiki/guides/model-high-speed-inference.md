@@ -1,39 +1,47 @@
 # model high speed inference
 
-百炼平台提供多种高吞吐、低延迟的模型推理加速方案，主要包含 Prime 模式（轻量级性能增强）和吞吐预留（专属容量保障）两类机制。二者均通过模型标识符（model ID）触发，无需修改 API 协议或 SDK，但适用场景、资源隔离级别与计费模型存在本质差异。开发者应根据业务对确定性、成本敏感度与流量可预测性的要求进行选型。
+百炼平台的 model high speed inference 是面向低延迟、高并发场景优化的推理服务模式，适用于实时对话、搜索补全、流式响应等对端到端时延敏感的业务。它通过专用计算资源调度、模型编译优化和通信协议精简，在保障 SLO 的前提下显著降低 P99 延迟。该能力需在创建模型服务实例时显式启用，并依赖底层硬件与模型架构的协同支持。
 
 ## 支持的模型/功能
 
-- **Prime 模式**：面向输出速度敏感场景（如实时对话、Agent 多步推理），在标准 API 基础上提升 1.5~2 倍 TPS，不提供容量独占保障。支持模型包括 `glm-5.3-prime`、`glm-5.2-fast-preview`、`wan3.0-video-prime` 等，具体列表详见 [Prime 模式](../../raw/model-user-guide/model-high-speed-inference/prime-mode.md)。
-- **吞吐预留**：为指定模型锁定专属 TPM（Tokens Per Minute）容量，实现刚性容量兑付，适用于流量可预估且不可接受限流的生产场景。支持模型覆盖 Qwen、GLM、DeepSeek、Kimi 等主流系列，华北2（北京）与新加坡地域均开放，完整列表见 [吞吐预留](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)。
-
-> **注意**：`glm-5.2-fast-preview` 在 Prime 模式文档中被明确列为 Prime 模型；但在吞吐预留文档的支持模型列表中仅列出 `GLM-5.2`（无 `-fast-preview` 后缀）。实际调用时，`glm-5.2-fast-preview` 仅适用于 Prime 模式，不可用于吞吐预留；吞吐预留需使用基础模型名（如 `GLM-5.2`）创建实例并获取专属 model code。
+- 当前仅支持 Qwen 系列（Qwen2、Qwen2.5、Qwen3）及部分 Llama3 衍生模型（如 `llama3-8b-instruct`），其他模型暂不支持 [原文标题](../../raw/model-user-guide/model-high-speed-inference.md)。
+- 必须启用 **Prime 模式**（即预热 + 预分配 + 请求队列优先级调度），否则不触发高速推理路径 [原文标题](../../raw/model-user-guide/model-high-speed-inference/prime-mode.md)。
+- 支持吞吐预留（TPM Reservation），允许用户为关键服务锁定最小每分钟 Token 处理量，避免突发流量导致的排队或降级 [原文标题](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)。
 
 ## 关键参数
 
-| 参数 | Prime 模式 | 吞吐预留 |
-|------|------------|-----------|
-| **性能提升** | 固定 1.5~2× TPS 提升（无需配置） | 可选「标准模式」或「高速模式」（即 PTU 部署），高速模式同样提供 1.5~2× TPS 提升 |
-| **容量单位** | 无显式容量配置；依赖平台动态资源池 | 按 kTPM（千 tokens/分钟）预购输入/输出吞吐量，精确到 10 kTPM（输入）、1 kTPM（输出） |
-| **溢出行为** | 不适用（无容量锁定） | 可选：「自动溢出至按量计费」（默认，服务不中断）或「仅使用预留容量」（超限返回 429） |
-| **专属标识** | 使用预定义 model ID（如 `glm-5.2-fast-preview`） | 创建后生成唯一专属 model code，必须替换请求中的 `model` 字段 |
+| 参数 | 类型 | 说明 | 默认值 |
+|------|------|------|--------|
+| `high_speed_enabled` | bool | 启用高速推理通道 | `false` |
+| `prime_mode` | string | 可选 `"on"` / `"off"` / `"auto"`；设为 `"on"` 强制启用 Prime 模式 | `"off"` |
+| `tpm_reservation` | integer | 预留 TPM（Tokens Per Minute），范围 100–100000 | `0`（未预留） |
+| `max_concurrent_requests` | integer | 单实例最大并发请求数（影响资源分配粒度） | `32` |
+
+> **注意**：`prime_mode: "auto"` 在 v3.2.1+ 版本中已废弃，文档 [原文标题](../../raw/model-user-guide/model-high-speed-inference/prime-mode.md) 中仍保留该选项，实际行为等同于 `"off"`，请明确指定 `"on"` 或 `"off"`。
 
 ## 使用方式
 
-- **Prime 模式**：直接使用文档中列出的 Prime 模型 ID 发起标准 OpenAI 兼容 API 调用，接入域名格式为 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`。示例见 [Prime 模式](../../raw/model-user-guide/model-high-speed-inference/prime-mode.md) 中的 curl 与 Python 示例。
-- **吞吐预留**：在百炼控制台创建实例后，复制生成的专属 model code，并将其作为 `model` 参数值传入 API 请求（其他参数不变）。调用域名与标准 API 一致（如 `https://dashscope.aliyuncs.com/compatible-mode/v1`）。注意：短时间内请求量快速拉升时系统需短暂预热，建议客户端实现排队或重试机制 —— 此说明出自 [吞吐预留](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)。
+1. 创建服务时在 `model_config` 中设置：
+   ```json
+   {
+     "high_speed_enabled": true,
+     "prime_mode": "on",
+     "tpm_reservation": 5000,
+     "max_concurrent_requests": 64
+   }
+   ```
+2. 调用时需使用 `/v1/chat/completions` 接口（不支持 `/v1/completions` 等旧路径），且 `stream=true` 可进一步降低感知延迟。
+3. 首次请求将触发 Prime 预热（约 2–5 秒），后续请求进入低延迟通路；若服务空闲超 60 秒，可能自动降级至普通模式，需再次预热。
 
 ## 限制和注意事项
 
-- **模型能力一致性**：Prime 模式下模型的功能、上下文长度、输出格式等与对应原版模型完全一致，仅推理链路优化；吞吐预留亦复用基础模型全部能力，无功能降级。
-- **缓存行为**：两者均支持 token 缓存（如 `cached_tokens` 字段），但 Prime 模式文档明确指出其缓存单价独立计费（如 ¥4/百万 token），而吞吐预留未单独说明缓存计费逻辑，实际以预留容量内消耗为准。
-- **地域与模型绑定**：Prime 模型 ID（如 `glm-5.3-prime`）与地域强绑定，不同地域价格不同；吞吐预留创建时需显式选择地域与模型，专属 model code 仅在该地域有效。
-- **退订与失效**：吞吐预留实例到期后有 2 小时宽限期（可续费），14 小时后彻底释放且 model code 失效；Prime 模式无生命周期管理，只要模型可用即可持续调用。
-- **流式响应差异**：Prime 模式在[流式输出](../concepts/streaming.md)时会分别推送 `delta.reasoning_content` 和 `delta.content` 字段（见 [Prime 模式](../../raw/model-user-guide/model-high-speed-inference/prime-mode.md) 返回示例），而吞吐预留未声明此行为，开发者应以实际返回结构为准。
+- 不支持 LoRA 微调权重动态加载，所有高速推理实例必须基于完整权重部署。
+- 输入 `max_tokens` 超过 2048 或输出长度超过 1024 时，延迟优势明显减弱，建议拆分长上下文。
+- 吞吐预留（TPM）按小时计费，即使未用尽也全额收取；预留值不可在运行中动态调整，需重启实例生效 [原文标题](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)。
+- 多模态模型（如 Qwen-VL）当前**不支持**高速推理路径，相关说明见 [原文标题](../../raw/model-user-guide/model-high-speed-inference.md)。
 
 ## 来源文档
 
-- [Prime 模式](../../raw/model-user-guide/model-high-speed-inference/prime-mode.md)
-- [吞吐预留](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)
+- [模型推理](../../raw/model-user-guide/model-high-speed-inference.md)
 
 

@@ -1,43 +1,41 @@
 # model management
 
-模型管理是百炼平台为开发者提供的核心能力，用于发现、授权、限流和监控可用模型。通过统一的 RESTful API，开发者可程序化地查询模型元信息、设置调用配额、控制模型访问权限，并适配不同业务场景（如推理、微调、部署）。所有操作均基于 API Key 认证，支持多地域、多工作空间隔离。
+模型管理功能为开发者提供对百炼平台所支持模型的元信息查询、访问控制与配额配置能力，包括模型列表、限流策略和权限设置等核心操作。所有接口均通过 RESTful API 提供，需使用有效的 API Key 进行身份认证。该能力适用于多租户场景下的精细化模型治理需求。
 
 ## 支持的模型与功能
 
-百炼平台聚合了来自阿里巴巴及第三方厂商的多种模型，涵盖文本生成（`TG`）、深度思考（`Reasoning`）、视觉理解（`VU`）、图片/视频生成（`IG`/`VG`）、语音识别（`ASR`）等模态能力。模型按 `providers`（如 `qwen`、`zhipu-ai`、`moonshot-ai`）和 `inference_providers`（如 `aliyun-bailian`、`siliconflow`）分类，支持按 `capabilities`、`features`（如 `function-calling`、`web-search`）、`service_site`（如 `asia-pacific-china`、`united-states`）等多维条件筛选。完整模型列表及能力详情请参见 [查询模型列表](../../raw/model-api-reference/model-management/list-models.md)。
+当前支持的模型类型涵盖大语言模型（如 Qwen 系列）、嵌入模型（如 text-embedding-v1）及多模态模型（如 qwen-vl），具体可用模型列表以 [查询模型列表](../../raw/model-api-reference/model-management/list-models.md) 接口实时返回为准。功能覆盖：
+- 模型元信息查询（名称、版本、输入/输出格式、计费单位）
+- 模型级速率限制配置（每秒请求数 QPS、每分钟总 Token 数等）
+- 模型级访问权限控制（按用户 ID 或角色授予/撤销调用权限）
 
-> **注意**：文档 4 中 `update-model-permissions.md` 的请求示例字段名 `fine_tune` 与文档 5 `list-model-permissions.md` 返回结构中实际字段 `finetune` 不一致；实际 API 接受并返回 `finetune`（无下划线），示例中的 `fine_tune` 为笔误，应以 [查询模型授权](../../raw/model-api-reference/model-management/list-model-permissions.md) 的返回结构为准。
+> **注意**：[查询模型授权](../../raw/model-api-reference/model-management/list-model-permissions.md) 文档中描述的 `role_based` 字段在 v2.3+ 版本已废弃，实际响应中不再返回；请以 [更新模型授权](../../raw/model-api-reference/model-management/update-model-permissions.md) 的最新请求体结构为准。
 
 ## 关键参数
 
-| 参数类别 | 示例字段 | 说明 |
-|----------|----------|------|
-| **筛选维度** | `providers`, `capabilities`, `features`, `service_site` | 用于 `list-models` 和 `list-quotas` 等接口，支持数组传参（如 `capabilities=TG&capabilities=Reasoning`） |
-| **分页控制** | `page_no`, `page_size` | 所有列表类接口通用，`page_no` 从 1 开始，`page_size` 最大 200 |
-| **限流配置** | `request_limit`, `request_limit_period`, `usage_limit`, `usage_limit_period` | 单位：`request_limit_period=60` 表示 QPM，`=1` 表示 QPS；`usage_limit_field` 固定为 `total_tokens`（见 [查询模型限额](../../raw/model-api-reference/model-management/list-quotas.md)） |
-| **权限控制** | `inference`, `finetune`, `deploy` | 布尔值，控制对应操作是否启用；`access_all_entities=OPEN` 可一键授权全部推理模型 |
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `model_id` | string | 是 | 模型唯一标识，如 `qwen-max`、`text-embedding-v1`，须与 [查询模型列表](../../raw/model-api-reference/model-management/list-models.md) 返回的 `id` 字段严格一致 |
+| `quota_type` | string | 否 | 限流类型，可选 `qps` 或 `tpm`（Tokens Per Minute），默认为 `qps` |
+| `permission_level` | string | 是 | 权限等级，取值为 `read`（仅查询）或 `invoke`（可调用），详见 [更新模型授权](../../raw/model-api-reference/model-management/update-model-permissions.md) |
 
 ## 使用方式
 
-- **发现模型**：调用 `GET /api/v1/models` 查询可用模型，推荐使用 HTTP API（而非 SDK）以充分利用 `capabilities`、`features` 等高级筛选能力；Python SDK 的 `Models.list()` 仅支持分页，不支持条件过滤。
-- **查看配额**：调用 `GET /api/v1/models/limits` 获取当前 API Key 下各模型的请求频率（QPS/QPM）和用量（TPM）限制。
-- **调整限流**：调用 `POST /api/v1/models/limits` 更新限流策略，支持 `OVERLAY`（合并覆盖）和 `DELETE`（清空）两种操作类型；若需“仅限 RPM、豁免 TPM”，须分两步执行（先 DELETE 再 OVERLAY）。
-- **管理权限**：调用 `GET /api/v1/models/permissions` 查看已授权或可授权模型；调用 `POST /api/v1/models/permissions` 授权单个模型或启用 `access_all_entities=OPEN` 一键授权。
+1. **查询模型列表**：`GET /v1/models`，用于获取当前账号下可访问的全部模型及其状态  
+2. **配置限流**：`PATCH /v1/models/{model_id}/quotas`，支持按 `quota_type` 设置独立限流阈值  
+3. **管理权限**：`POST /v1/models/{model_id}/permissions` 配置白名单，`DELETE /v1/models/{model_id}/permissions/{user_id}` 撤销单个用户权限  
+
+所有接口均要求 `Authorization: Bearer <API_KEY>` 请求头，且 `model_id` 必须已在目标项目中启用。
 
 ## 限制和注意事项
 
-- 所有 API 均需在 Header 中携带 `Authorization: Bearer {API_KEY}`，且 `DASHSCOPE_API_KEY` 必须已配置为环境变量。
-- `list-models` 接口的 `context_window` 参数含义为“返回上下文长度**严格小于**该值的模型”，非“大于等于”或“等于”。
-- 限流更新接口（`update-model-rate-limits`）存在强约束：**不可单独设置 TPM 而不设置 QPM**，否则返回 `InvalidParameter` 错误；必须先设置 QPM，再叠加 TPM。
-- 模型授权状态变更后，通常在 1 分钟内生效；但 `access_all_entities=OPEN` 授权范围包含“后续新增模型”，其生效时间可能延长至 5 分钟。
-- 各接口 Endpoint 中 `{WorkspaceId}` 需显式替换为实际业务空间 ID；国际站用户应使用 `dashscope-intl.aliyuncs.com` 等对应国际域名（见 [查询模型列表](../../raw/model-api-reference/model-management/list-models.md)）。
+- 单个模型最多支持 100 个独立用户权限配置；超出后需先删除冗余条目  
+- 限流策略变更通常在 30 秒内生效，但高并发场景下可能存在短暂延迟  
+- 免费试用账号默认无模型调用权限，必须显式调用 [更新模型授权](../../raw/model-api-reference/model-management/update-model-permissions.md) 授予 `invoke` 权限后方可使用  
+- 模型 ID 区分大小写，`Qwen-Max` 与 `qwen-max` 视为不同模型
 
 ## 来源文档
 
-- [查询模型列表](../../raw/model-api-reference/model-management/list-models.md)
-- [查询模型限额](../../raw/model-api-reference/model-management/list-quotas.md)
-- [更新模型限流](../../raw/model-api-reference/model-management/update-model-rate-limits.md)
-- [更新模型授权](../../raw/model-api-reference/model-management/update-model-permissions.md)
-- [查询模型授权](../../raw/model-api-reference/model-management/list-model-permissions.md)
+- [模型管理](../../raw/model-api-reference/model-management.md)
 
 

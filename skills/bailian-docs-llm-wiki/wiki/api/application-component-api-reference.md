@@ -1,41 +1,48 @@
 # application component api reference
 
-应用组件 API 提供了在百炼平台中集成和调用预置能力（如对话、知识检索、工具调用等）的标准接口，适用于构建企业级 AI 应用。该 API 以 RESTful 形式提供，支持同步响应与[流式输出](../concepts/streaming.md)，并与百炼统一身份认证体系深度集成。开发者需通过 RAM 授权获取访问凭证，方可调用相关接口。
+应用组件 API 是百炼平台提供的核心能力封装，用于在自定义应用中集成大模型推理、知识库检索、工作流编排等能力。该 API 以 RESTful 形式提供，支持细粒度权限控制与异步任务管理。开发者需通过 RAM 授权并使用指定 endpoint 调用，具体行为受所选模型和参数组合约束。
 
 ## 支持的模型/功能
 
-当前应用组件 API 支持以下核心能力：  
-- 基于百炼托管模型的对话推理（如 `qwen-max`、`qwen-plus`、`qwen-turbo`）；  
-- 结合知识库的增强问答（需提前配置 KnowledgeBase ID）；  
-- 工具调用（Tool Calling），支持自定义函数描述与自动参数提取；  
-- 多轮会话状态管理（通过 `session_id` 维持上下文）。  
-详细能力列表及对应模型兼容性请参见 [API目录](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md)。
+当前支持以下能力类型：
+- **基础推理**：`qwen-max`、`qwen-plus`、`qwen-turbo` 等 Qwen 系列模型（详见 [API目录](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md)）；
+- **增强能力**：RAG 检索增强（需绑定知识库 ID）、[函数调用](../concepts/function-calling.md)（function calling）、多轮对话状态保持（`conversation_id` 必填）；
+- **异步任务**：长耗时任务（如批量文档解析）返回 `task_id`，需轮询 [GET /v1/tasks/{task_id}](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md) 获取结果。
+
+> **注意**：[版本说明](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-changeset.md) 中声明 `qwen-14b-chat` 已于 2024-03-01 下线，但部分旧版 SDK 示例仍引用该模型，实际调用将返回 `404 Model not found` 错误，请务必使用当前有效模型列表。
 
 ## 关键参数
 
 | 参数名 | 类型 | 必填 | 说明 |
 |--------|------|------|------|
-| `model` | string | 是 | 模型标识符，如 `qwen-max`；必须与 [API概览](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md) 中声明的可用模型一致 |
-| `input.messages` | array | 是 | 对话消息数组，格式为 `[{ "role": "user", "content": "..." }]`；`role` 仅支持 `"user"` 和 `"assistant"` |
-| `parameters.temperature` | number | 否 | 采样温度，默认 `0.85`；取值范围 `[0.0, 2.0]` |
-| `parameters.top_p` | number | 否 | 核采样阈值，默认 `0.8`；取值范围 `[0.0, 1.0]` |
-| `knowledge_config.knowledge_base_ids` | array | 否 | 知识库 ID 列表，启用知识增强时必填；ID 需已在控制台创建并发布 |
-
-> **注意**：`input.messages` 中若包含 `role: "system"`，将被静默忽略——该行为与 [API概览](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md) 描述一致，但与旧版文档 `api-bailian-2023-09-15-overview.md`（已归档）中“支持 system 角色”的说明冲突，后者已过时。
+| `model` | string | 是 | 模型标识符，必须为 [API目录](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md) 中列出的有效值 |
+| `input.messages` | array | 是 | 对话消息数组，格式为 `[{role: "user", content: "xxx"}]`；`role` 仅支持 `"user"`/`"assistant"`/`"system"` |
+| `parameters.temperature` | number | 否 | 取值范围 [0.0, 2.0]，默认 1.0；低于 0.5 时输出稳定性显著提升 |
+| `parameters.max_tokens` | integer | 否 | 响应最大 token 数，上限 8192（`qwen-max`）或 4096（其余模型） |
 
 ## 使用方式
 
-1. 获取服务接入点：调用前需从 [服务接入点](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-endpoint.md) 获取最新 Region 对应的 endpoint URL；  
-2. 构造请求头：`Authorization: Bearer <access_token>`，其中 token 由 RAM 授权流程颁发；  
-3. 发送 POST 请求至 `/v1/applications/{app_id}/chat`，body 为 JSON 格式，结构符合上述关键参数定义；  
-4. 流式响应需设置 `Accept: text/event-stream`，并按 SSE 协议解析 `data:` 字段。
+1. **认证**：在请求 Header 中携带 `Authorization: Bearer <access_token>`，Token 需通过 RAM 角色扮演获取（参见 [授权信息](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-ram.md)）；  
+2. **Endpoint**：生产环境统一使用 `https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation`；  
+3. **调用示例**（cURL）：
+   ```bash
+   curl -X POST \
+     -H "Authorization: Bearer $ACCESS_TOKEN" \
+     -H "Content-Type: application/json" \
+     -d '{
+           "model": "qwen-plus",
+           "input": {"messages": [{"role":"user","content":"你好"}]},
+           "parameters": {"temperature": 0.7}
+         }' \
+     https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation
+   ```
 
 ## 限制和注意事项
 
-- 单次请求 `input.messages` 最多支持 50 条消息，总 tokens 不得超过模型最大上下文长度（例如 `qwen-max` 为 32768）；  
-- `session_id` 若未显式传入，服务端将自动生成，但不保证跨请求一致性；建议业务层主动维护；  
-- 知识库检索结果默认最多返回 5 个 chunk，不可通过参数调整；如需更多上下文，请自行调用知识库检索 API；  
-- 所有调用均受配额限制，具体额度取决于应用绑定的 RAM 角色策略，详见 [授权信息](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-ram.md)。
+- 单次请求 `input.messages` 最多 10 条，总输入 token 不得超过模型上下文长度（`qwen-plus` 为 32768）；  
+- 免费试用额度按自然日重置，超出后触发计费（详见 [API概览](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md)）；  
+- `system` 角色消息仅在首条生效，后续出现将被忽略；  
+- 异步任务最长保留 7 天，超期后 `task_id` 不可查，建议业务侧及时持久化结果。
 
 ## 来源文档
 

@@ -1,6 +1,6 @@
 # 百炼模型市场索引
 
-> 自动生成 · 共 188 个模型家族 · 414 个主干模型 · 更新于 2026-10-01
+> 自动生成 · 共 189 个模型家族 · 434 个主干模型 · 更新于 2026-10-02
 
 **机器查询走结构化文件**：
 
@@ -165,7 +165,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [鞋靴模特](groups/shoemodel-v1.json) — 鞋靴模特支持输入多视角鞋靴系列图片，同时对输入模特模板图的鞋子区域进行鞋靴AI试穿，实现模特鞋靴布局重绘生成，最终生成图片的效果, 布局自然、细节丰富、画面细腻、试穿结果逼真。可用于模特商品图设计、新…
   - 模型：`shoemodel-v1`
 
-## 视频生成 `VG` — 25 个家族
+## 视频生成 `VG` — 26 个家族
 
 - [HappyHorse-1.0](groups/happyhorse-1.0.json) — 视频生成与编辑系列，支持文生、图生、参考生及自然语言视频编辑，适合常规创作和局部调整。
   - 模型：`happyhorse-1.0-i2v`, `happyhorse-1.0-r2v`, `happyhorse-1.0-t2v`, `happyhorse-1.0-video-edit`
@@ -181,6 +181,8 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`pixverse/pixverse-v5.6-it2v`, `pixverse/pixverse-v5.6-kf2v`, `pixverse/pixverse-v5.6-r2v`, `pixverse/pixverse-v5.6-t2v`
 - [PixVerse V6](groups/pixverse-v6-market-place.json) — 由爱诗科技提供的PixVerse V系列视频大模型API服务。
   - 模型：`pixverse/pixverse-v6-it2v`, `pixverse/pixverse-v6-kf2v`, `pixverse/pixverse-v6-r2v`, `pixverse/pixverse-v6-r2v-omni`, `pixverse/pixverse-v6-t2v`
+- [Vidu AI生视频](groups/vidu-models-market-place.json) — 由生数科技提供Vidu系列视频生成API服务，电影级画质、一致性保持、精准可控。
+  - 模型：`vidu/viduq2_reference2video`, `vidu/viduq2_text2video`, `vidu/viduq2-pro_img2video`, `vidu/viduq2-pro_reference2video`, `vidu/viduq2-pro_start-end2video`, `vidu/viduq2-pro-fast_img2video`, `vidu/viduq2-turbo_img2video`, `vidu/viduq2-turbo_start-end2video`, `vidu/viduq3_reference2video`, `vidu/viduq3-ad_reference2video`, `vidu/viduq3-drama_reference2video`, `vidu/viduq3-mix_reference2video`, `vidu/viduq3-pro_img2video`, `vidu/viduq3-pro_start-end2video`, `vidu/viduq3-pro_text2video`, `vidu/viduq3-pro-fast_img2video`, `vidu/viduq3-turbo_img2video`, `vidu/viduq3-turbo_reference2video`, `vidu/viduq3-turbo_start-end2video`, `vidu/viduq3-turbo_text2video`
 - [Wan-I2V](groups/wan-image-to-video.json) — 图片生成视频内容，稳定保持图像主体、风格和文字等细节信息
   - 模型：`wan2.2-animate-mix`, `wan2.2-animate-move`, `wan2.2-i2v-flash`, `wan2.2-i2v-plus`, `wan2.2-kf2v-flash`, `wan2.2-s2v`, `wan2.2-s2v-detect`, `wan2.5-i2v-preview`, `wan2.6-i2v`, `wan2.6-i2v-flash`, `wan2.7-i2v`, `wanx2.1-i2v-plus`, `wanx2.1-i2v-turbo`, `wanx2.1-kf2v-plus`
 - [Wan-R2V](groups/wan-reference-to-video.json) — 参考视频中的人或物，精准保持形象和声音，支持多参考合拍

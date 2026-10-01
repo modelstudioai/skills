@@ -1,57 +1,78 @@
 # 检索增强生成
 
-检索增强生成（Retrieval-Augmented Generation，简称 RAG）是一种将大语言模型（LLM）的生成能力与外部知识源的精准检索能力相结合的技术范式。它通过在模型推理前动态检索相关知识片段，并将其作为上下文注入提示（[prompt](../guides/prompt.md)），显著提升回答的事实准确性、领域专业性与可溯源性，同时降低幻觉风险。
+检索增强生成（Retrieval-Augmented Generation，RAG）是一种将大语言模型（LLM）的生成能力与外部知识源的精准检索能力深度融合的技术范式。它通过在模型推理前动态检索相关上下文片段，并将其作为提示的一部分注入生成过程，从而显著提升回答的事实准确性、领域专业性与私有知识覆盖能力。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-RAG 在百炼平台不是单一功能，而是贯穿多个产品层级的**核心增强机制**，开发者可根据需求选择不同抽象层级的实现方式：
+在百炼平台中，RAG 不是独立功能，而是贯穿多个能力层的**基础增强机制**，其使用方式因场景而异，但核心逻辑统一：**检索 → 注入 → 生成**。
 
-- **零代码应用层**：在「知识库问答应用」或「智能体应用（Agent 2.0）」中，只需绑定已创建的知识库，开启 `enable_search` 开关，平台自动完成检索→重排→融合→生成全流程，无需编写任何 RAG 逻辑。
-- **低代码工作流层**：在 Workflow 中拖入「知识库节点」，可显式配置 `topK`（召回片段数）、知识库描述（影响触发准确性）、检索策略（如 `hybrid` 混合检索），并与其他节点（如条件判断、[函数调用](function-calling.md)）组合编排复杂 RAG 流程。
-- **API 集成层**：通过 RAG API 直接调用 `/api/v1/indices/knowledge/search`（纯检索）或 `/api/v2/apps/knowledge/chat`（检索+生成），传入 `agent_id` 控制具体知识库与策略，适用于需要细粒度控制或与自有系统深度集成的场景。
-- **框架开发层**：使用 LlamaIndex 或 Spring AI Alibaba 等官方适配器，通过 `DashScopeCloudRetriever` 或 `DashScopeEmbedding` 等组件，在本地代码中构建端到端 RAG 流水线，支持自定义切分、向量化与重排（注意：云端托管知识库 `DashScopeCloudIndex` 不支持自定义切分与 embedding 模型）。
+- **知识库问答（最典型场景）**  
+  通过控制台「知识库问答」模板或 `/api/v2/apps/knowledge/chat` 接口调用，系统自动完成：用户问题 → 向量+关键词混合检索 → 重排精筛 → 将 TopK 切片拼接为 `context` → 注入到 Qwen 系列模型（如 `qwen3.6-plus`）的 [prompt](../guides/prompt.md) 中 → 流式生成带引用标注的回答。全程无需编码，支持多模态（图文联合检索）与多库路由。
 
-> ✅ 统一前提：所有 RAG 能力均依赖**已发布且状态为 `active` 的知识库**，且所用大模型必须具备 `rag` 能力标识（如 `qwen-max`、`qwen-plus`、`Qwen3.5-Plus`）。
+- **智能体（Agent 2.0）应用**  
+  RAG 作为“工具”被显式集成：在 Agent 配置中启用知识库工具，或通过 `rag_options` 参数（API 调用时）指定 `pipeline_ids`、`tags` 或 `metadata_filter`，实现按需、精准、可审计的私有知识调用。Agent 的规划链路可自主决定是否触发检索，支持“先思考→再检索→后生成”的闭环。
+
+- **工作流（Workflow）应用**  
+  通过拖拽「知识库节点」接入 RAG 能力，可与其他节点（如大模型、条件判断、API）编排组合。例如：用户提问 → 意图分类 → 若属产品咨询 → 触发知识库检索 → 将结果传给大模型润色输出。检索参数（TopK、阈值等）可在节点内独立配置。
+
+- **低代码/零代码集成（如企业微信、网站助手）**  
+  在 AppFlow 连接流中开启「引用知识」开关，选择已发布知识库并设置调用策略（`必定调用` 或 `按需调用`），即可将 RAG 能力一键嵌入第三方平台，无需修改前端或后端逻辑。
+
+- **高代码应用与第三方框架（LangChain/Dify/Coze）**  
+  通过调用底层 RAG API（如 `/api/v1/indices/rag/index/retrieve` 获取原始切片，或 `/api/v1/indices/knowledge/search` 调用多库联合检索服务），开发者可完全自定义检索逻辑、上下文组装策略与生成提示，实现深度定制。
+
+> ✅ 关键区别：知识库问答是开箱即用的 RAG 封装；Agent/Workflow 是 RAG 的可编程集成；API 层则是 RAG 的原子能力暴露。
 
 ## 关键参数和配置
 
-以下参数直接影响 RAG 效果，需根据业务场景合理设置：
+RAG 效果由**检索侧**与**生成侧**参数协同控制，需分层配置：
 
-| 参数名 | 所属层级 | 说明 | 推荐值 | 注意事项 |
-|---------|-----------|------|----------|------------|
-| `retrieval_config.top_k` / `topK` | 知识库/API/Workflow | 单次检索返回的最相关切片数量 | `3–10` | 过小易遗漏关键信息；过大增加噪声与 token 开销；多知识库并行时按库分别计数 |
-| `retrieval_config.strategy` | 知识库/API | 检索策略 | `"hybrid"`（默认） | 支持 `"hybrid"`（BM25 + 向量混合）、`"vector_only"`、`"bm25_only"`；混合策略通常效果更鲁棒 |
-| `qa_config.model_id` | 知识库/API/应用配置 | 执行最终生成的大模型 ID | `"qwen-plus"`（平衡型） | 必须是平台开通且带 `rag` 标识的模型；`qwen-turbo` 适合低延迟场景，`qwen-max` 适合高精度长文本 |
-| `enable_reranking` + `rerank_top_n` | Frameworks/API | 是否启用重排序模型（如 `gte-rerank`）对初检结果二次打分 | `true`, `5` | 重排可显著提升 top1 准确率，但增加约 200–500ms 延迟；`rerank_min_score` 可过滤低置信结果 |
-| `stream` / `incremental_output` | API/SDK | 是否启用流式响应 | `true`, `true` | `incremental_output=True` 时客户端仅接收新增 token，避免重复渲染，推荐用于 Web/APP 实时交互 |
+| 类别 | 参数名 | 说明 | 配置位置 | 典型取值 |
+|------|--------|------|----------|----------|
+| **检索控制（知识库级）** | `top_k` | 最终返回的最相关切片数量 | 知识库服务配置 / `rag_options` / 工作流知识库节点 | `3`–`10`（默认 `5`） |
+| | `similarity_threshold` | 相似度过滤下限（0.01–1.0） | 知识库服务配置 / `rag_options` | `0.3`–`0.6`（过低易召回噪声） |
+| | `rerank_model_name` | 重排模型（提升相关性） | 创建知识库或 Agent 配置时指定 | `qwen3-rerank`, `qwen3-vl-rerank` |
+| | `query_rewrite` | 是否启用查询改写（优化语义表达） | 知识库服务配置 | `true`/`false` |
+| **生成控制（应用级）** | `temperature` | 控制生成多样性（影响答案严谨性） | 应用模型参数 / API `parameters.temperature` | `0.1`–`0.5`（RAG 场景推荐低值） |
+| | `system_prompt` | 显式指令模型“基于以下检索内容回答，不可编造” | 智能体/工作流系统提示词 | 必须包含引用约束（如“仅依据提供的上下文作答”） |
+| | `enable_thinking` | 开启模型深度推理（提升对长上下文的理解） | Agent 应用参数 / API `enable_thinking` | `true`（配合 RAG 可提升答案结构化程度） |
+| **高级路由（多库场景）** | `knowledge_routing` | 启用大模型自动选择知识库 | 知识库服务配置 | `true`（需多库且标签清晰） |
+| | `tags` / `metadata_filter` | 按元数据精准限定检索范围 | `rag_options` / 知识库节点配置 | `["product_v2", "internal_only"]` |
 
-> ⚠️ 重要约束：  
-> - 知识库切片单条长度上限为 **8192 tokens**（超长将被截断，不报错）；  
-> - 所有上传文档仅存储于用户专属租户空间，**不用于模型训练**，符合企业数据合规要求；  
-> - 不支持跨知识库联合检索；如需多源融合，须在应用层聚合或预先合并知识库。
+> ⚠️ 注意：`max_tokens`（生成长度）不宜过大，避免模型在冗余上下文中迷失；`temperature=0` 与 `similarity_threshold` 高值搭配，可获得最确定、最忠实于检索结果的回答。
 
 ## 面向开发者，简洁实用
 
-- **快速验证**：用控制台 Playground 上传一份 PDF，执行一次检索+问答，5 分钟内确认 RAG 效果是否符合预期。  
-- **调试技巧**：若问答结果不准，优先检查 `RequestId` 并提交工单；同时复制检索返回的 `chunk_ids` 和原文片段，比对是否召回了正确依据。  
-- **性能优化**：  
-  - 对响应延迟敏感的场景（如微信公众号），选用 `qwen-turbo` + `topK=3` + `enable_reranking=false`；  
-  - 对准确性要求高的场景（如合同审查），选用 `qwen-max` + `topK=5` + `enable_reranking=true` + `rerank_top_n=3`；  
-- **避坑提醒**：  
-  - API 参数命名不一致（如 `index_id` vs `indexId`），务必严格按各接口文档传参；  
-  - 文件上传时 `sizeBytes` 必须为字符串（如 `"1048576"`），传数字会失败；  
-  - `AgentKey`（业务空间标识）必须与 `App ID`、`API Key` 同属一个 workspace，否则鉴权失败。  
+- **快速验证**：直接使用 [RAG Playground](https://bailian.console.aliyun.com/cn-beijing/rag/playground)，上传文档 → 创建知识库 → 切换「知识问答」模式，实时观察检索切片与生成结果，5 分钟完成效果调优。
+- **API 集成首选路径**：  
+  ```bash
+  # 1. 检索（获取原始切片）
+  curl -X POST https://dashscope.aliyuncs.com/api/v1/indices/rag/index/retrieve \
+    -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+    -d '{"index_id":"idx_abc123","query":"Qwen3 支持哪些嵌入模型？","top_k":5}'
 
-RAG 是百炼平台连接私有知识与大模型智能的“神经突触”。善用它，即可让通用大模型瞬间成为你业务领域的专家。
+  # 2. 问答（端到端 RAG，流式响应）
+  curl -X POST https://dashscope.aliyuncs.com/api/v2/apps/knowledge/chat \
+    -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+    -H "Content-Type: application/json" \
+    -d '{"agent_id":"agt_xyz789","input":{"messages":[{"role":"user","content":"Qwen3 支持哪些嵌入模型？"}]},"stream":true}'
+  ```
+- **调试黄金法则**：  
+  - 若答案不准确 → 检查 `similarity_threshold` 是否过低，或 `rerank_model_name` 是否未启用；  
+  - 若答案无引用 → 确认 `system_prompt` 中明确要求“基于以下内容回答”，且未被其他提示覆盖；  
+  - 若检索为空 → 检查知识库状态（是否完成解析/向量化）、文件格式兼容性（PDF/TXT/DOCX）、以及 `query_rewrite` 是否误改写了关键术语。
+- **生产建议**：  
+  - 对敏感业务，开启 `enable_anti_leak`（防信息泄露）；  
+  - 多库场景优先用 `knowledge_routing` + 清晰 `tags`，而非硬编码 `pipeline_ids`；  
+  - 流式接口务必设 `stream=true`，否则请求失败（当前强制要求）。
 
 ## 关联主题页
 
-- [rag api](../api/rag-api.md)
 - [start using](../guides/start-using.md)
-- [llm application](../guides/llm-application.md)
+- [rag api](../api/rag-api.md)
 - [knowledge base](../guides/knowledge-base.md)
+- [llm application](../guides/llm-application.md)
+- [application call](../api/application-call.md)
 - [application use cases](../guides/application-use-cases.md)
-- [application support](../guides/application-support.md)
-- [frameworks](../api/frameworks.md)
 
 

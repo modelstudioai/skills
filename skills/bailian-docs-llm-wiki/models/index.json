@@ -1,17 +1,17 @@
 {
-  "updatedAt": "2026-10-01",
-  "totalFamilies": 188,
-  "totalModels": 414,
+  "updatedAt": "2026-10-02",
+  "totalFamilies": 189,
+  "totalModels": 434,
   "profileCoverage": {
-    "full": 366,
-    "partial": 48,
-    "structured-only": 0,
+    "full": 370,
+    "partial": 53,
+    "structured-only": 11,
     "none": 0
   },
   "capabilityDistribution": {
     "TG": 40,
     "IG": 31,
-    "VG": 25,
+    "VG": 26,
     "TTS": 18,
     "ASR": 16,
     "Reasoning": 15,
@@ -37,12 +37,12 @@
     "zhipu-ai": 3,
     "moonshot-ai": 2,
     "happyhorse": 2,
+    "vidu": 2,
     "happyoyster": 1,
     "kling": 1,
     "stepfun": 1,
     "tripo": 1,
     "unisound": 1,
-    "vidu": 1,
     "xiaomi": 1
   },
   "families": [
@@ -2877,6 +2877,40 @@
         "vidu/viduq2-fast_reference2image",
         "vidu/viduq2-pro_reference2image",
         "vidu/viduq3-fast_reference2image"
+      ]
+    },
+    {
+      "slug": "vidu-models-market-place",
+      "name": "Vidu AI生视频",
+      "primaryCapability": "VG",
+      "capabilities": [
+        "VG"
+      ],
+      "providers": [
+        "vidu"
+      ],
+      "itemCount": 20,
+      "items": [
+        "vidu/viduq2_reference2video",
+        "vidu/viduq2_text2video",
+        "vidu/viduq2-pro_img2video",
+        "vidu/viduq2-pro_reference2video",
+        "vidu/viduq2-pro_start-end2video",
+        "vidu/viduq2-pro-fast_img2video",
+        "vidu/viduq2-turbo_img2video",
+        "vidu/viduq2-turbo_start-end2video",
+        "vidu/viduq3_reference2video",
+        "vidu/viduq3-ad_reference2video",
+        "vidu/viduq3-drama_reference2video",
+        "vidu/viduq3-mix_reference2video",
+        "vidu/viduq3-pro_img2video",
+        "vidu/viduq3-pro_start-end2video",
+        "vidu/viduq3-pro_text2video",
+        "vidu/viduq3-pro-fast_img2video",
+        "vidu/viduq3-turbo_img2video",
+        "vidu/viduq3-turbo_reference2video",
+        "vidu/viduq3-turbo_start-end2video",
+        "vidu/viduq3-turbo_text2video"
       ]
     },
     {
