@@ -1,77 +1,79 @@
-# Qwen系列大模型能力对比
+# Qwen系列模型能力对比
 
-为帮助开发者在百炼平台上高效选型，本文系统对比 Qwen 系列中三类核心能力模型的调用方式、能力边界与适用场景：  
-- **通用大语言模型（Qwen3.x 系列）**：面向开放生成、多轮对话、工具协同等综合任务；  
-- **全模态翻译模型（Qwen-MT-Uni）**：专注端到端、保格式、跨模态的高保真翻译；  
-- **结构化决策模型（decision-model-preview）**：专为低延迟、高确定性、非生成类判断任务设计。  
-
-对比聚焦实际开发关切点——协议兼容性、输入/输出形态、模型灵活性、计费逻辑与工程约束，避免概念泛化，直击技术选型关键决策因子。
+为帮助开发者在阿里云百炼平台上高效选型，本文系统对比 Qwen 系列主流模型调用方案的核心能力维度。随着 Qwen3 全新架构发布（含 `qwen3.8-max`、`qwen3.7-plus`、`qwen3-vl-plus`、`qwen3.8-omni-flash` 等通用大模型，以及 `qwen-audio`、`qwen-mt-uni` 等垂直领域专用模型），平台已构建**多协议、多模态、多范式**的统一服务能力。本对比聚焦实际工程落地关键指标——不单看模型参数或基准分数，而关注：**协议兼容性、输入/输出控制粒度、工具链集成深度、多模态支持边界、计费透明度与典型场景匹配度**，助力技术决策者快速定位最优路径。
 
 ---
 
-## 关键维度对比表
+## 关键能力维度对比
 
-| 维度 | Qwen 通用大模型（如 `qwen3.8-max`, `qwen3-vl-plus` 等） | Qwen-MT-Uni 翻译模型 | decision-model-preview 决策模型 |
-|------|--------------------------------------------------------|------------------------|----------------------------------|
-| **输入格式** | • OpenAI 兼容：`messages` 数组（支持 `text`/`image_url`/`video_url`/`input_audio`）<br>• DashScope 原生：`input`（`string` 或 `array`），支持 `ResponseOutputMessage` 多轮结构<br>• Anthropic 兼容：`messages` + `tools` schema | • 同步：`input.source_texts`（字符串或数组）或 `input.fileUrl`（HTTPS 公开 URL）<br>• 异步：仅支持 `input.fileUrl`<br>• 支持 PDF/DOCX/PPTX/XLSX/HTML/Markdown/JPG/PNG/MP3/WAV 等 10+ 格式 | • `state`：任意结构化数据（JSON 对象/数组/字符串），最大 65536 token<br>• `questions`：键值对对象，每个 question 定义 `type`（`choice`/`noul`/`score`）、`criteria`（选项集/评分描述） |
-| **输出格式** | • OpenAI 兼容：标准 `choices[].message` + `usage`<br>• Anthropic 兼容：`content[]`（含 `tool_use`/`tool_result`）+ `usage`<br>• 结构化输出：支持 `output_config.format.type = "json_schema"`（强校验）或提示词驱动 JSON | • 同步：`output.Data.TranslatedTexts`（文本数组）或 `output.Data.TranslatedFileUrl`（文件 URL）<br>• 异步：轮询 `/api/v1/tasks/{task_id}` 获取 `TranslatedFileUrl`（24 小时有效）<br>• 输出严格保持原始格式（如 `.pdf` → `.pdf`） | • 严格结构化 JSON：<br>  – `choice`: `{selected: key, probabilities: {key: prob}, confidence: 0.0–1.0}`<br>  – `noul`: `{probability_yes: float}`<br>  – `score`: `{expected_score: float, level_probabilities: [p1,p2,...], confidence: float}`<br>• **无任何自由文本生成** |
-| **支持模型** | • 全量 Qwen 系列：`qwen3.8-max`, `qwen3.7-plus`, `qwen3.5-flash`, `qwen3-vl-plus`, `qwen3-coder-next`, `qwen3.8-omni-flash` 等<br>• 第三方模型：DeepSeek、GLM、Kimi（需控制台开通）<br>• **Qwen-Audio 仅 DashScope 原生协议支持** | • **唯一模型**：`qwen-mt-uni`（无别名，不支持其他 Qwen 变体） | • **唯一模型**：`decision-model-preview`（预览版，无历史版本或别名） |
-| **API 端点** | • OpenAI 兼容：`/compatible-mode/v1/chat/completions`（Chat）或 `/compatible-mode/v1/responses`（带工具）<br>• Anthropic 兼容：`/v1/messages`<br>• DashScope 原生：`/text-generation/generation`（文本）或 `/multimodal-generation/generation`（多模态） | • 统一端点：`/api/v1/services/aigc/multimodal-generation/generation`<br>• 通过请求头 `X-DashScope-Async: enable` 切换同步/异步模式 | • 统一端点：`POST /compatible-mode/v1/systemone`（固定路径，无 `/v1/models` 发现接口） |
-| **计费方式** | • 按 `input_tokens + output_tokens` 计费<br>• `usage` 中细分：`cached_tokens`（缓存命中）、`reasoning_tokens`（思考过程）、`document_tokens`/`image_tokens`/`audio_tokens`（多模态） | • 按 `input_tokens + output_tokens` 总量计费<br>• `usage.input_tokens_details` 显式区分 `document_tokens`/`image_tokens`/`audio_tokens`/`character_tokens`，支持细粒度成本归因 | • 按 `input_tokens` 计费（**output 不计费**）<br>• `usage.input_tokens` 为实际消耗 token 数，超长 `state` 截断后按截断后长度计费 |
-| **典型场景** | • 智能客服多轮对话<br>• 多模态内容理解（图文问答、视频摘要）<br>• 工具增强型 Agent（代码执行、网页搜索）<br>• 结构化数据生成（JSON Schema 输出） | • 跨语言文档本地化（PDF 技术手册→日文）<br>• 会议纪要音频转译+翻译<br>• PPT/Excel 批量双语交付<br>• 含敏感词/术语的合规翻译（支持 `glossary` 与 `sensitives`） | • 工单智能分派（“归属团队：A/B/C”）<br>• 内容安全审核（“是否违规：yes/no”）<br>• 用户意图路由（“下一步动作：查询/退款/投诉”）<br>• 服务质量评分（“响应及时性：1–4 分”） |
+| 维度 | OpenAI 兼容协议（`/chat/completions`） | OpenAI 兼容协议（`/responses`） | Anthropic 兼容协议（`/messages`） | DashScope 原生协议（文本/多模态） | Qwen-MT-Uni 专用协议 |
+|------|----------------------------------------|-----------------------------------|-------------------------------------|------------------------------------|------------------------|
+| **输入格式** | `messages[]` 数组；`content` 支持 `text`/`image_url`/`video_url`（需公网可访问） | `input` 支持 `string` 或 `EasyInputMessage[]`；`content` 可直接嵌入 `input_audio`/`input_video`（二进制 Base64 或 URL） | `messages[]` + `system`；`content` 支持 `text`/`image`/`video`/`tool_use`；`video` 支持 `fps` 控制 | `input.messages[]`；`content` 支持 `text`/`image`/`video`；`video` 支持 `max_frames`（DashScope 特有精细抽帧） | `input.fileUrl`（HTTPS 公网 URL）或 `input.source_texts`（文本）；支持 PDF/DOCX/PPTX/XLSX/HTML/Markdown/TXT/JPG/PNG/MP3/WAV 等全模态文件 |
+| **输出格式** | 标准 OpenAI `choices[].message.content`；流式响应支持 `delta` | 结构化 JSON：含 `output.response_id`、`output.tool_calls`、`output.final_answer`；支持 `previous_response_id` 多轮上下文自动续接 | `content[]` 数组，含 `text`/`image`/`tool_use`/`tool_result`；支持 `output_config.format=json_schema` 强约束输出 | 原生 `output.text` / `output.data`；多模态返回 `output.image_url`/`output.video_summary` 等字段；无隐式结构化包装 | 同步：`output.Data.TranslatedTexts`（文本）或 `output.Data.TranslatedFileUrl`（文件）；异步：通过 `/tasks/{task_id}` 查询，结果含 `TranslatedFileUrl` 与 `TranslatedTexts` |
+| **支持模型** | `qwen3.8-max`、`qwen3-vl-plus`、`deepseek-v4-pro` 等通用模型（含第三方） | 聚焦 Qwen 商业版：`qwen3.8-max`、`qwen3.7-plus`、`qwen3.8-omni-flash`；第三方模型 Agent 能力受限 | 按能力分组：`qwen3.8-max`（强推理）、`qwen3.7-plus`（均衡）、`qwen3-vl-plus`（视觉）、`qwen3.8-omni-flash`（音视频）、`qwen-coder`（代码） | 全系支持，含 DashScope 特有模型：`qwen-audio`（仅此协议支持）、`qwen3.8-omni-flash`（高精度音视频理解）、`qwen3-vl-plus` | **唯一模型**：`qwen-mt-uni`（全模态翻译专用，不支持其他模型别名） |
+| **API 端点** | `POST /compatible-mode/v1/chat/completions` | `POST /compatible-mode/v1/responses` | `POST /apps/anthropic/v1/messages` | 文本：`POST /api/v1/services/aigc/text-generation/generation`<br>多模态：`POST /api/v1/services/aigc/multimodal-generation/generation` | `POST /api/v1/services/aigc/multimodal-generation/generation`（同步/异步由请求头 `X-DashScope-Async` 控制） |
+| **计费方式** | 按 `usage.prompt_tokens` + `usage.completion_tokens` 计费；多模态额外计 `image_tokens`/`video_tokens` | 同上，但 Agent 工具调用（如 `web_search`）按次单独计费（见 [计费说明](https://help.aliyun.com/zh/model-studio/pricing)） | 按 `usage.input_tokens` + `usage.output_tokens` 计费；`tool_use` 不额外计费，但工具执行本身可能产生子费用 | 按 `usage.input_tokens` + `usage.output_tokens` 计费；多模态拆分为 `image_tokens`/`document_tokens`/`audio_tokens`/`character_tokens`（精确到字符级） | **仅按输入计费**：`usage.input_tokens`；模态类型自动识别并分类计费（如 `document_tokens` for PDF, `audio_tokens` for MP3）；无输出 token 费用 |
+| **典型场景** | 快速迁移现有 OpenAI 应用；轻量对话、摘要、简单代码生成 | 构建 AI Agent：需联网搜索、网页抓取、代码解释、知识库问答、文搜图等复合能力 | 需强结构化输出（JSON Schema）、复杂推理链（`thinking.effort`）、显式缓存控制（`cache_control`）的高确定性任务 | 高精度音视频理解（`qwen-audio`）、细粒度视频分析（`max_frames` 控制）、低延迟纯文本生成 | 全模态文档/音视频端到端翻译：PDF 报告双语交付、会议录音实时字幕+译文、PPT 演示稿多语言适配 |
 
 ---
 
 ## 各方案适用场景建议
 
-### ✅ 选择 Qwen 通用大模型（`qwen3.x` 系列）当：
-- 任务需要**开放式文本生成**（如创作、摘要、改写）；
-- 输入包含**混合模态**（图像+文本、视频+语音、多图对比）且需联合推理；
-- 需要**内置工具调用能力**（如实时搜索、代码沙箱执行）；
-- 已有 OpenAI/Anthropic SDK 生态，追求**最小迁移成本**；
-- 要求**强结构化输出保障**（如金融报告字段提取，需 `json_schema` 校验）。
+### ✅ 推荐选择 OpenAI `/chat/completions`
+- **适用团队**：已有成熟 OpenAI SDK 集成，追求最小改造成本上线。
+- **典型用例**：客服对话机器人、内容初稿生成、基础代码补全、轻量图文摘要。
+- **注意边界**：不支持 `qwen-audio`；音视频输入依赖公网 URL，无法直传二进制；无内置 Agent 工具链。
 
-> ⚠️ 注意：若仅需纯翻译，Qwen 通用模型效果与效率均显著低于 `qwen-mt-uni`；若仅需是非判断，其延迟与成本远高于 `decision-model-preview`。
+### ✅ 推荐选择 OpenAI `/responses`
+- **适用团队**：需快速构建具备“感知-决策-执行”能力的 AI Agent，且接受百炼平台封装的工具生态。
+- **典型用例**：智能办公助手（查邮件+搜网页+写周报）、教育答疑系统（解析题目+检索知识点+生成讲解）、跨境电商客服（理解用户截图+查产品库+生成回复）。
+- **注意边界**：第三方模型（如 `deepseek-v4-pro`）无法调用内置工具；旧路径 `/api/v2/apps/protocols/compatible-mode/v1/responses` 已停用，必须使用新路径。
 
-### ✅ 选择 Qwen-MT-Uni 当：
-- 核心目标是**保格式、保结构、保语义的端到端翻译**（非简单文本替换）；
-- 输入源为**真实业务文档**（PDF 合同、PPT 方案、XLSX 表格、含图表的 HTML）；
-- 需处理**长音频（≤60 分钟）或大文档（≤200 页）**，且接受异步工作流；
-- 有**领域术语强约束**（如医疗器械术语表）或**敏感信息过滤需求**（如客户姓名脱敏）；
-- 要求输出与输入**格式完全一致**（如翻译后的 `.docx` 仍可直接编辑）。
+### ✅ 推荐选择 Anthropic `/messages`
+- **适用团队**：对输出格式、推理过程、缓存行为有强管控需求，熟悉 Anthropic 生态。
+- **典型用例**：金融合规报告生成（强制 JSON Schema 输出）、法律条款比对（深度思考 `effort=high`）、企业知识库问答（`cache_control=ephemeral` 防幻觉）。
+- **注意边界**：不支持 `qwen-mt-uni`；`tool_use` 流程需自行管理 `tool_result` 回填，无百炼预置工具。
 
-> ⚠️ 注意：不适用于需要生成解释、润色或上下文扩展的翻译任务；不支持自定义模型或微调。
+### ✅ 推荐选择 DashScope 原生协议
+- **适用团队**：追求最高控制精度、需调用 `qwen-audio` 或进行视频帧级分析、或已深度集成 DashScope SDK。
+- **典型用例**：语音质检系统（ASR+情感分析+违规词检测）、工业视频缺陷识别（抽关键帧+多图推理）、低延迟 API 网关（绕过兼容层开销）。
+- **注意边界**：无开箱即用 Agent 工具；需通过 DashScope SDK 的 `ToolCall` 机制自行实现工具调用逻辑。
 
-### ✅ 选择 decision-model-preview 当：
-- 任务本质是**确定性分类/判断/打分**，且**无需生成解释性文字**；
-- 对**延迟敏感**（P99 < 500ms）与**高并发稳定**有硬性要求（如每秒万级工单分流）；
-- 需要**可解释的概率分布**（如“选择 A 的置信度为 92%”，而非模糊的“可能选 A”）；
-- 输入数据已高度结构化（如工单 JSON、用户行为日志），无需 NLU 解析；
-- 追求**极致成本效益**——相同决策任务，其 token 消耗仅为通用模型的 1/10～1/5。
-
-> ⚠️ 注意：不支持流式响应；不支持自由文本输出；`score` 类型强烈建议使用 3–7 级量表以保障置信度。
+### ✅ 推荐选择 Qwen-MT-Uni 专用协议
+- **适用团队**：业务核心诉求是**跨模态、高保真、格式无损**的翻译，而非通用生成。
+- **典型用例**：跨国企业本地化平台（PDF 手册→多语言 PDF）、在线教育平台（课程视频→带时间轴双语字幕）、政府外事文档处理（扫描件→可编辑 Word 译文）。
+- **注意边界**：**非通用大模型**，不可用于问答、创作、推理等任务；仅支持 `qwen-mt-uni` 单一模型；`.doc`/`.ppt` 等旧格式需先转 OOXML。
 
 ---
 
-## 开发者技术选型参考
+## 技术选型决策树（面向开发者）
 
-| 你的需求 | 推荐方案 | 关键理由 |
-|----------|-----------|-----------|
-| “我已有 OpenAI SDK，想快速接入 Qwen 最强模型做客服对话” | ✅ Qwen 通用模型（OpenAI 兼容 `/responses`） | 协议零改造，自动获得 `web_search`/`code_interpreter` 工具链，`qwen3.8-max` 提供当前最高综合能力 |
-| “我要把 500 页英文产品手册 PDF 翻译成中文，并保留所有目录、表格和图片位置” | ✅ Qwen-MT-Uni（异步调用） | 唯一支持 PDF→PDF 端到端保格式翻译的模型，自动识别版式，术语表与敏感词策略完备 |
-| “我需要实时判断用户消息是否含欺诈关键词，并路由到风控团队，P99 延迟必须 < 300ms” | ✅ decision-model-preview | 专用决策模型，无文本生成开销，`noul` 类型直接返回 `probability_yes`，延迟稳定且可预测 |
-| “我想让模型看一张商品图，再回答‘这个是否符合欧盟 CE 认证标准？’并给出依据” | ✅ Qwen 通用模型（`qwen3-vl-plus` 或 `qwen3.8-omni-flash`） | 多模态理解 + 开放推理 + 文本生成三位一体，`qwen3.8-omni-flash` 还支持视频/音频输入扩展 |
-| “我需要将一段中文语音转文字后再翻译成英文，但不想自己拼接 ASR+MT 服务” | ✅ Qwen-MT-Uni（同步调用，传 `input.fileUrl` MP3） | 全模态统一入口，自动完成语音识别→翻译→输出英文文本，省去中间格式转换与状态管理 |
+```mermaid
+graph TD
+    A[你的核心需求是什么？] --> B{是否需调用 qwen-audio？}
+    B -->|是| C[✅ DashScope 原生协议]
+    B -->|否| D{是否需全模态文档/音视频端到端翻译？}
+    D -->|是| E[✅ Qwen-MT-Uni 专用协议]
+    D -->|否| F{是否需内置 Agent 工具链<br>（联网/代码/知识库）？}
+    F -->|是| G[✅ OpenAI /responses]
+    F -->|否| H{是否需强结构化输出<br>或深度推理控制？}
+    H -->|是| I[✅ Anthropic /messages]
+    H -->|否| J{是否已有 OpenAI 集成<br>且追求最小改造？}
+    J -->|是| K[✅ OpenAI /chat/completions]
+    J -->|否| L[✅ DashScope 原生协议<br>（最高灵活性与性能）]
+```
 
-**最后建议**：  
-- **优先验证 API 协议匹配度**：检查现有 SDK 是否原生支持 OpenAI/Anthropic/DashScope 协议，避免手动封装成本；  
-- **务必压测 Token 消耗**：通用模型的 `input_tokens` 在多模态场景下增长极快（尤其高分辨率图/长视频），Qwen-MT-Uni 和 decision-model-preview 的计费结构更可预测；  
-- **生产环境强制启用缓存**：Qwen 通用模型通过 `x-dashscope-session-cache: enable`（OpenAI）或 `cache_control`（Anthropic）可显著降本，Qwen-MT-Uni 与 decision-model-preview 本身无缓存机制，需应用层实现。
+> **重要提醒**：
+> - **域名统一**：所有协议均使用业务空间专属域名 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`，请勿混用旧版公共域名。
+> - **认证一致**：均通过 `Authorization: Bearer <API_KEY>` 或 `x-api-key` 认证，API Key 在百炼控制台“API 密钥管理”中获取。
+> - **SDK 配置差异**：OpenAI SDK 需设 `base_url` 为兼容端点；Anthropic SDK 设 `base_url` 为 `/apps/anthropic`；DashScope SDK 设 `base_http_api_url` 为 `/api/v1`。
+> - **多模态计费透明**：Qwen-MT-Uni 与 DashScope 原生协议均提供模态级 token 拆分（`image_tokens`, `document_tokens` 等），便于成本归因与优化。
+
+如需进一步验证性能或压测吞吐，请参考 [百炼性能测试指南](../../raw/model-api-reference/performance-testing.md)。
 
 ## 被对比主题页
 
 - [qwen api reference](../api/qwen-api-reference.md)
 - [qwen mt translation models](../api/qwen-mt-translation-models.md)
-- [decision model](../api/decision-model.md)
 
 

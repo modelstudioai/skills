@@ -1,40 +1,50 @@
 # asset center page
 
-资产中心是百炼平台统一管理模型生成图片与视频资产的核心控制台，提供筛选、收藏、删除、OSS 转存及 API 引用等能力。所有资产默认持久化于百炼平台存储（限时免费），支持按业务空间隔离查看，并可通过全局 OSS 配置实现长期归档与成本优化。详细功能与行为边界请参考 [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md)。
+资产中心是百炼平台统一管理模型生成图片与视频资产的核心控制台，提供筛选、收藏、删除、OSS 转存及 API 引用等能力。所有资产默认持久化于平台存储（限时免费），用户可通过控制台或 API 全生命周期管理生成内容。详细功能说明请参见 [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md)。
 
 ## 支持的模型/功能
 
-- **支持资产类型**：仅限图片与视频（暂不支持音频）；对应模型包括 `qwen-image-*` 系列（如 `qwen-image-3.0-pro`）、`wan2.7-*` 全系列（如 `wan2.7-t2v`、`wan2.7-i2v`、`wan2.7-videoedit`）等，完整列表以控制台实时展示为准。  
-- **核心功能**：  
-  - 多维筛选（类型、模型、时间、提示词关键词）  
-  - 收藏/取消收藏、批量删除、回收站恢复与永久清除  
-  - OSS 自动转存（含路径模板 `{workspace}/{yyyy}/{mm}/{model}/{id}.{ext}`）  
-  - 资产详情查看（含完整 [prompt](prompt.md)、参数、生成时间）  
-  - 在 API 中直接通过 `asset_id` 引用已有资产，替代 `image_url` 或 `image_base64` —— 此能力已在 [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md) 明确说明，适用于生图与生视频模型输入参数。
+- **支持资产类型**：仅限图片与视频（暂不支持音频）；对应模型包括 `qwen-image-*` 系列（如 `qwen-image-3.0-pro`、`qwen-image-2.0-2026-03-03`）、`wan2.7-*` 全系列（`t2v`/`i2v`/`r2v`/`videoedit` 等）及 `z-image-turbo`。完整列表以控制台实时展示为准，详见 [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md)。
+- **核心功能**：
+  - 多维筛选（类型、模型、时间、提示词）
+  - 收藏/批量删除/回收站恢复
+  - OSS 自动转存（含路径模板、释放平台副本选项）
+  - 资产详情查看（含完整生成参数）
+  - API 层 `asset_id` 直接引用（替代 `image_url` 或 `image_base64`）
 
-> **注意**：文档中提及的模型版本如 `qwen-image-2.0-2026-03-03` 含未来日期，实际部署版本应以控制台资产中心「模型筛选下拉框」中可选值为准；该命名可能为内部测试标识，生产环境请以运行时可用模型为准。
+> **注意**：文档中列出的 `qwen-image-2.0-pro-2026-06-22` 等带未来日期的模型名，实际为内部版本标识，控制台当前仅显示稳定版模型（如 `qwen-image-2.0-pro`）。请以 [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md) 页面实际下拉选项为准，避免硬编码过期模型名。
 
 ## 关键参数
 
-- `asset_id`：每个资产唯一标识，用于 API 输入引用，可在资产详情弹窗中直接复制。  
-- OSS 路径模板变量：`{workspace}`（当前业务空间 ID）、`{yyyy}/{mm}`（生成时间）、`{model}`（模型名）、`{id}`（asset_id）、`{ext}`（扩展名）。  
-- 平台存储配额：默认 5 GB 免费额度，超量部分按 0.15 元/GB/月计费；已释放平台副本的 OSS 转存资产不计入用量。  
-- 回收站保留期：30 天，期间仍占用平台存储并计费；到期自动永久清除，不可恢复。
+- `asset_id`：全局唯一字符串，用于 API 中引用资产（如生图模型的 `reference_image.asset_id` 字段）。
+- OSS 路径模板：默认 `{workspace}/{yyyy}/{mm}/{model}/{id}.{ext}`，其中 `{workspace}` 为当前业务空间 ID。
+- 转存范围策略：支持“全部资产”或“N 天前资产”，并可选是否释放平台存储副本。
+- 存储容量计量：已用容量按自然月统计，回收站内资产在 30 天保留期内持续计费。
 
 ## 使用方式
 
-1. **开通与访问**：首次使用需访问 [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md)，点击「立即开通」启用服务。  
-2. **OSS 绑定**：右上角「绑定 OSS」→ 授权 SLR 角色 `AliyunServiceRoleForBailianAssetForward` → 选择 Bucket/地域/路径 → 设置转存范围与是否释放平台副本。  
-3. **API 集成**：调用生图/生视频 API 时，在图像或视频输入字段（如 `control_image`、`first_frame`）中传入 `"asset_id": "xxx"`，无需再提供 URL 或 Base64。  
-4. **权限配置**：子账号需授予 `AliyunBailianAssetCenterReader`（只读+删除）或 `AliyunBailianAssetCenterAdmin`（含 OSS 配置）策略，详见 [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md) 权限说明章节。
+1. **开通与访问**：首次使用需访问 [资产中心](https://bailian.console.aliyun.com/cn-beijing/model/asset-center) 并点击**立即开通**。
+2. **OSS 绑定**：
+   - 授权服务关联角色 `AliyunServiceRoleForBailianAssetForward`
+   - 选择目标 OSS Bucket、地域、目录及路径模板
+   - 设置转存范围与是否释放平台副本
+3. **API 集成**：
+   - 在生图/生视频请求体中，将原 `image_url` 或 `video_url` 字段替换为 `{"asset_id": "xxx"}`（具体字段名依模型接口定义而定）
+   - 示例（生图参考图）：
+     ```json
+     "reference_image": { "asset_id": "asst_xxx" }
+     ```
+4. **权限配置**：通过 RAM 授予 `AliyunBailianAssetCenterReader`（只读+删除）或 `AliyunBailianAssetCenterAdmin`（含 OSS 配置权）策略。
 
 ## 限制和注意事项
 
-- OSS 转存为**全局配置**，不随业务空间切换而变更；但资产列表始终仅显示当前业务空间下的数据。  
-- 删除操作进入回收站，非立即释放存储；回收站内资产在 30 天保留期内仍计费，且无法通过 API 访问。  
-- 若绑定 OSS 时勾选「释放平台存储」，该资产将**不再出现在资产中心列表中**，也无法被筛选或收藏，仅存在于目标 OSS Bucket。  
-- 平台存储费用与百炼模型用量合并结算至阿里云账单中心；OSS 存储费用、访问费用及安全策略由用户自行承担，适用《阿里云存储服务协议》。  
-- > **注意**：文档中“平台存储目前限时免费使用”与“商用计费启动后……”存在状态模糊性。实际计费策略以控制台资产中心顶部容量条旁的信息图标展开内容为准，建议开发者定期检查实时配额与计费状态。
+- **存储限制**：每个账号默认 5 GB 免费额度，超量部分按 0.15 元/GB/月计费；已转存并释放平台副本的资产不计入用量。
+- **回收站行为**：删除后进入回收站，保留 30 天（期间仍占平台存储），到期自动永久清除且不可恢复。
+- **OSS 转存约束**：
+  - 配置为全局生效，不随业务空间切换变化；
+  - 若选择“释放平台存储”，该资产将**不再显示于资产中心列表**，仅存在于 OSS；
+  - 转存失败任务自动重试，日志可在控制台查看。
+- **安全责任**：转存至自有 OSS 的资产，其存储费用、ACL 控制、数据合规性均由用户自行承担，适用《阿里云存储服务协议》——此条款在 [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md) 中有明确说明。
 
 ## 来源文档
 

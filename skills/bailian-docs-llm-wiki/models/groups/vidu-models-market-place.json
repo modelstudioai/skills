@@ -1,0 +1,1521 @@
+{
+  "name": "Vidu AI生视频",
+  "description": "由生数科技提供Vidu系列视频生成API服务，电影级画质、一致性保持、精准可控。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Video"
+        ],
+        "request_modality": [
+          "Text",
+          "Image"
+        ]
+      },
+      "description": "ViduQ3-Ad是面向广告行业的专用模型，主打\"营销级切镜+智能运镜+直出音效\"三大能力，上传商品图即可生成16秒广告视频，降低广告视频的创作门槛与制作成本。",
+      "features": [],
+      "provider": "vidu",
+      "model": "vidu/viduq3-ad_reference2video",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.75",
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.90625",
+          "type": "video_ratio_1080p",
+          "priceName": "视频生成（1080P）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "priceTimeBands": [],
+      "capabilities": [
+        "VG"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-07-09T07:26:50.000+00:00",
+      "inferenceProvider": "vidu",
+      "name": "ViduQ3-Ad_reference2video",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-reference-to-video-api-reference",
+      "category": "Third-party",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n   -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"vidu/viduq3-ad_reference2video\",\n       \"input\": {\n        \"media\": [\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260320/knsple/wan-r2v-role-frame.jpg\"\n            },\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/qpzxps/wan-r2v-object4.png\"\n            },\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/wfjikw/wan-r2v-backgroud5.png\"\n            }\n        ],\n        \"prompt\": \"男人坐在靠窗的椅子上，手持吉他，在咖啡厅旁演奏一首舒缓的美国乡村民谣\"\n    },\n    \"parameters\": {\n        \"duration\": 5,\n        \"size\": \"1280*720\",\n        \"resolution\": \"720P\",\n        \"watermark\": true\n    }\n}'",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-reference-to-video-api-reference"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Video"
+        ],
+        "request_modality": [
+          "Text",
+          "Image"
+        ]
+      },
+      "description": "ViduQ3-Drama 是面向精品剧/AI漫剧生产的专用模型，主打\"一致性+动效+细节美学+性价比\"四大维度的全面升级，效果更稳、情绪更真、动态更强。",
+      "features": [],
+      "provider": "vidu",
+      "model": "vidu/viduq3-drama_reference2video",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.875",
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.875",
+          "type": "video_ratio_1080p",
+          "priceName": "视频生成（1080P）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "priceTimeBands": [],
+      "capabilities": [
+        "VG"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-07-09T07:30:16.000+00:00",
+      "inferenceProvider": "vidu",
+      "name": "ViduQ3-Drama_reference2video",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-reference-to-video-api-reference",
+      "category": "Third-party",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n   -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"vidu/viduq3-drama_reference2video\",\n       \"input\": {\n        \"media\": [\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260320/knsple/wan-r2v-role-frame.jpg\"\n            },\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/qpzxps/wan-r2v-object4.png\"\n            },\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/wfjikw/wan-r2v-backgroud5.png\"\n            }\n        ],\n        \"prompt\": \"男人坐在靠窗的椅子上，手持吉他，在咖啡厅旁演奏一首舒缓的美国乡村民谣\"\n    },\n    \"parameters\": {\n        \"duration\": 5,\n        \"size\": \"1280*720\",\n        \"resolution\": \"720P\",\n        \"watermark\": true\n    }\n}'",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-reference-to-video-api-reference"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Video"
+        ],
+        "request_modality": [
+          "Text",
+          "Image"
+        ]
+      },
+      "description": "输入图片与文本描述，生成视频。ViduQ3-Pro-fast生成速度更快，性价比更高；较 ViduQ2-Pro-fast 生成时长 10 秒扩展至 16 秒 ，可实现更复杂的镜头切换与叙事逻辑。",
+      "features": [],
+      "provider": "vidu",
+      "model": "vidu/viduq3-pro-fast_img2video",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.375",
+          "timeBand": "standard",
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.46875",
+          "timeBand": "standard",
+          "type": "video_ratio_1080p",
+          "priceName": "视频生成（1080P）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "priceTimeBands": [
+        "standard"
+      ],
+      "capabilities": [
+        "VG"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-07-09T07:29:54.000+00:00",
+      "inferenceProvider": "vidu",
+      "name": "ViduQ3-Pro-fast_img2video",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-image-to-video-api-reference",
+      "category": "Third-party",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"vidu/viduq3-pro-fast_img2video\",\n    \"input\": {\n        \"media\": [\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260121/zlpocv/wan-i2v-haigui.webp\"\n            }\n        ],\n        \"prompt\": \"镜头从海龟下方缓缓上移，海龟悠然游动，腹部细节清晰可见。\"\n    },\n    \"parameters\": {\n        \"duration\": 5,\n        \"resolution\": \"720P\",\n        \"watermark\": true\n    }\n}'",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-image-to-video-api-reference"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Video"
+        ],
+        "request_modality": [
+          "Image",
+          "Text"
+        ]
+      },
+      "description": "输入图片与文本描述，生成视频。ViduQ3-Pro图生视频是旗舰级音视频原生模型。支持长达16秒的音画同步生成，实现多镜头自由切换，精准把控节奏、情绪与叙事连贯性。参数量领先，画质、人物一致性及情绪表现卓越，达电影级标准。适用于广告（电商、TVC、效果投放）、漫剧、真人剧及游戏等专业生产场景。",
+      "features": [],
+      "provider": "vidu",
+      "model": "vidu/viduq3-pro_img2video",
+      "iconUrl": "",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.3125",
+          "timeBand": "standard",
+          "ntmAmountType": "540P",
+          "type": "video_ratio_540p",
+          "priceName": "视频生成（540P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.78125",
+          "timeBand": "standard",
+          "ntmAmountType": "|720P|1088*832|960*960|1280*720|720*1280|832*1088|",
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.9375",
+          "timeBand": "standard",
+          "ntmAmountType": "|1080P|1920*1080|1080*1920|1440*1440|1632*1248|1248*1632|",
+          "type": "video_ratio_1080p",
+          "priceName": "视频生成（1080P）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "priceTimeBands": [
+        "standard"
+      ],
+      "capabilities": [
+        "VG"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-03-26T13:47:00.000+00:00",
+      "inferenceProvider": "vidu",
+      "name": "ViduQ3-Pro_img2video",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"vidu/viduq3-pro_img2video\",\n    \"input\": {\n        \"media\": [\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260121/zlpocv/wan-i2v-haigui.webp\"\n            }\n        ],\n        \"prompt\": \"镜头从海龟下方缓缓上移，海龟悠然游动，腹部细节清晰可见。\"\n    },\n    \"parameters\": {\n        \"duration\": 5,\n        \"resolution\": \"720P\",\n        \"watermark\": true\n    }\n}'",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-image-to-video-api-reference"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Video"
+        ],
+        "request_modality": [
+          "Text"
+        ]
+      },
+      "description": "输入一段文本，生成视频。ViduQ3-Pro文生视频是旗舰级音视频原生模型。支持长达16秒的音画同步生成，实现多镜头自由切换，精准把控节奏、情绪与叙事连贯性。参数量领先，画质、人物一致性及情绪表现卓越，达电影级标准。适用于广告（电商、TVC、效果投放）、漫剧、真人剧及游戏等专业生产场景。",
+      "features": [],
+      "provider": "vidu",
+      "model": "vidu/viduq3-pro_text2video",
+      "iconUrl": "",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.3125",
+          "timeBand": "standard",
+          "ntmAmountType": "540P",
+          "type": "video_ratio_540p",
+          "priceName": "视频生成（540P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.78125",
+          "timeBand": "standard",
+          "ntmAmountType": "|720P|1088*832|960*960|1280*720|720*1280|832*1088|",
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.9375",
+          "timeBand": "standard",
+          "ntmAmountType": "|1080P|1920*1080|1080*1920|1440*1440|1632*1248|1248*1632|",
+          "type": "video_ratio_1080p",
+          "priceName": "视频生成（1080P）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "priceTimeBands": [
+        "standard"
+      ],
+      "capabilities": [
+        "VG"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-03-26T13:45:57.000+00:00",
+      "inferenceProvider": "vidu",
+      "name": "ViduQ3-Pro_text2video",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"vidu/viduq3-pro_text2video\",\n    \"input\": {\n        \"prompt\": \"一只小猫在月光下奔跑\"\n    },\n    \"parameters\": {\n        \"size\": \"960*528\",\n        \"resolution\": \"540P\",\n        \"duration\": 5,\n        \"watermark\": true\n    }\n}'",
+            "python": "from http import HTTPStatus\nfrom dashscope import VideoSynthesis\nimport dashscope\nimport os\n\n# 以下为北京地域URL\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\n\n# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key=\"sk-xxx\"\napi_key = os.getenv(\"DASHSCOPE_API_KEY\")\n\ndef sample_sync_call_t2v():\n    # call sync api, will return the result\n    print('please wait...')\n    rsp = VideoSynthesis.call(api_key=api_key,\n                              model='vidu/viduq3-turbo_text2video',\n                              prompt='一只小猫在月光下奔跑',\n                              size='960*528',\n                              duration=5,\n                              resolution='540P',\n                              watermark=True)\n    print(rsp)\n    if rsp.status_code == HTTPStatus.OK:\n        print(rsp.output.video_url)\n    else:\n        print('Failed, status_code: %s, code: %s, message: %s' %\n              (rsp.status_code, rsp.code, rsp.message))\n\n\nif __name__ == '__main__':\n    sample_sync_call_t2v()",
+            "java": "// Copyright (c) Alibaba, Inc. and its affiliates.\n\nimport com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesis;\nimport com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesisParam;\nimport com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesisResult;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.InputRequiredException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.JsonUtils;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic class Text2Video {\n\n    static {\n        // 以下为北京地域url\n        Constants.baseHttpApiUrl = \"https://dashscope.aliyuncs.com/api/v1\";\n    }\n\n    // 若没有配置环境变量，请用百炼API Key将下行替换为：api_key=\"sk-xxx\"\n    public static String apiKey = System.getenv(\"DASHSCOPE_API_KEY\");\n\n    /**\n     * Create a video compositing task and wait for the task to complete.\n     */\n    public static void text2Video() throws ApiException, NoApiKeyException, InputRequiredException {\n        VideoSynthesis vs = new VideoSynthesis();\n        VideoSynthesisParam param =\n                VideoSynthesisParam.builder()\n                        .apiKey(apiKey)\n                        .model(\"vidu/viduq3-turbo_text2video\")\n                        .prompt(\"一只小猫在月光下奔跑\")\n                        .size(\"960*528\")\n                        .resolution(\"540P\")\n                        .duration(5)\n                        .watermark(true)\n                        .build();\n        System.out.println(\"please wait...\");\n        VideoSynthesisResult result = vs.call(param);\n        System.out.println(JsonUtils.toJson(result));\n    }\n\n    public static void main(String[] args) {\n        try {\n            text2Video();\n        } catch (ApiException | NoApiKeyException | InputRequiredException e) {\n            System.out.println(e.getMessage());\n        }\n        System.exit(0);\n    }\n}",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-text-to-video-api-reference"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Video"
+        ],
+        "request_modality": [
+          "Image",
+          "Text"
+        ]
+      },
+      "description": "输入首帧图、尾帧图与文本描述，生成视频。ViduQ3-Pro首尾帧生视频是旗舰级音视频原生模型。支持长达16秒的音画同步生成，实现多镜头自由切换，精准把控节奏、情绪与叙事连贯性。参数量领先，画质、人物一致性及情绪表现卓越，达电影级标准。适用于广告（电商、TVC、效果投放）、漫剧、真人剧及游戏等专业生产场景。",
+      "features": [],
+      "provider": "vidu",
+      "model": "vidu/viduq3-pro_start-end2video",
+      "iconUrl": "",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.3125",
+          "timeBand": "standard",
+          "ntmAmountType": "540P",
+          "type": "video_ratio_540p",
+          "priceName": "视频生成（540P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.78125",
+          "timeBand": "standard",
+          "ntmAmountType": "|720P|1088*832|960*960|1280*720|720*1280|832*1088|",
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.9375",
+          "timeBand": "standard",
+          "ntmAmountType": "|1080P|1920*1080|1080*1920|1440*1440|1632*1248|1248*1632|",
+          "type": "video_ratio_1080p",
+          "priceName": "视频生成（1080P）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "priceTimeBands": [
+        "standard"
+      ],
+      "capabilities": [
+        "VG"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-03-26T13:46:33.000+00:00",
+      "inferenceProvider": "vidu",
+      "name": "ViduQ3-Pro_start-end2video",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"vidu/viduq3-pro_start-end2video\",\n    \"input\": {\n        \"media\": [\n            {\n                \"type\": \"image\",\n                \"url\": \"https://wanx.alicdn.com/material/20250318/first_frame.png\"\n            },\n            {\n                \"type\": \"image\",\n                \"url\": \"https://wanx.alicdn.com/material/20250318/last_frame.png\"\n            }\n        ],\n        \"prompt\": \"一只小猫从窗台向下跳跃，轻盈地落在沙发上，然后好奇地环顾四周。\"\n    },\n    \"parameters\": {\n        \"resolution\": \"540P\",\n        \"duration\": 5,\n        \"watermark\": true\n    }\n}'",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-keyframe-to-video-api-reference"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Video"
+        ],
+        "request_modality": [
+          "Image",
+          "Text"
+        ]
+      },
+      "description": "输入图片与文本描述，生成视频。ViduQ3-Turbo图生视频是高性能加速版模型。生成效率极高，兼具优质画质与动态表现，尤其在打斗场面、情绪渲染及语义理解上表现出色。性价比突出，适合图片社交、AI陪伴及特效素材等泛娱乐场景。",
+      "features": [],
+      "provider": "vidu",
+      "model": "vidu/viduq3-turbo_img2video",
+      "iconUrl": "",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.25",
+          "timeBand": "standard",
+          "ntmAmountType": "540P",
+          "type": "video_ratio_540p",
+          "priceName": "视频生成（540P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.375",
+          "timeBand": "standard",
+          "ntmAmountType": "|720P|1088*832|960*960|1280*720|720*1280|832*1088|",
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.4375",
+          "timeBand": "standard",
+          "ntmAmountType": "|1080P|1920*1080|1080*1920|1440*1440|1632*1248|1248*1632|",
+          "type": "video_ratio_1080p",
+          "priceName": "视频生成（1080P）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "priceTimeBands": [
+        "standard"
+      ],
+      "capabilities": [
+        "VG"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-03-26T13:46:46.000+00:00",
+      "inferenceProvider": "vidu",
+      "name": "ViduQ3-Turbo_img2video",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"vidu/viduq3-turbo_img2video\",\n    \"input\": {\n        \"media\": [\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260121/zlpocv/wan-i2v-haigui.webp\"\n            }\n        ],\n        \"prompt\": \"镜头从海龟下方缓缓上移，海龟悠然游动，腹部细节清晰可见。\"\n    },\n    \"parameters\": {\n        \"duration\": 5,\n        \"resolution\": \"720P\",\n        \"watermark\": true\n    }\n}'",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-image-to-video-api-reference"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Video"
+        ],
+        "request_modality": [
+          "Text"
+        ]
+      },
+      "description": "输入一段文本，生成视频。ViduQ3-Turbo文生视频是高性能加速版模型。生成效率极高，兼具优质画质与动态表现，尤其在打斗场面、情绪渲染及语义理解上表现出色。性价比突出，适合图片社交、AI陪伴及特效素材等泛娱乐场景。",
+      "features": [],
+      "provider": "vidu",
+      "model": "vidu/viduq3-turbo_text2video",
+      "iconUrl": "",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.25",
+          "timeBand": "standard",
+          "ntmAmountType": "540P",
+          "type": "video_ratio_540p",
+          "priceName": "视频生成（540P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.375",
+          "timeBand": "standard",
+          "ntmAmountType": "|720P|1088*832|960*960|1280*720|720*1280|832*1088|",
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.4375",
+          "timeBand": "standard",
+          "ntmAmountType": "|1080P|1920*1080|1080*1920|1440*1440|1632*1248|1248*1632|",
+          "type": "video_ratio_1080p",
+          "priceName": "视频生成（1080P）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "priceTimeBands": [
+        "standard"
+      ],
+      "capabilities": [
+        "VG"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-03-26T13:46:51.000+00:00",
+      "inferenceProvider": "vidu",
+      "name": "ViduQ3-Turbo_text2video",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"vidu/viduq3-turbo_text2video\",\n    \"input\": {\n        \"prompt\": \"一只小猫在月光下奔跑\"\n    },\n    \"parameters\": {\n        \"size\": \"960*528\",\n        \"resolution\": \"540P\",\n        \"duration\": 5,\n        \"watermark\": true\n    }\n}'",
+            "python": "from http import HTTPStatus\nfrom dashscope import VideoSynthesis\nimport dashscope\nimport os\n\n# 以下为北京地域URL\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\n\n# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key=\"sk-xxx\"\napi_key = os.getenv(\"DASHSCOPE_API_KEY\")\n\ndef sample_sync_call_t2v():\n    # call sync api, will return the result\n    print('please wait...')\n    rsp = VideoSynthesis.call(api_key=api_key,\n                              model='vidu/viduq3-turbo_text2video',\n                              prompt='一只小猫在月光下奔跑',\n                              size='960*528',\n                              duration=5,\n                              resolution='540P',\n                              watermark=True)\n    print(rsp)\n    if rsp.status_code == HTTPStatus.OK:\n        print(rsp.output.video_url)\n    else:\n        print('Failed, status_code: %s, code: %s, message: %s' %\n              (rsp.status_code, rsp.code, rsp.message))\n\n\nif __name__ == '__main__':\n    sample_sync_call_t2v()",
+            "java": "// Copyright (c) Alibaba, Inc. and its affiliates.\n\nimport com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesis;\nimport com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesisParam;\nimport com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesisResult;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.InputRequiredException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.JsonUtils;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic class Text2Video {\n\n    static {\n        // 以下为北京地域url\n        Constants.baseHttpApiUrl = \"https://dashscope.aliyuncs.com/api/v1\";\n    }\n\n    // 若没有配置环境变量，请用百炼API Key将下行替换为：api_key=\"sk-xxx\"\n    public static String apiKey = System.getenv(\"DASHSCOPE_API_KEY\");\n\n    /**\n     * Create a video compositing task and wait for the task to complete.\n     */\n    public static void text2Video() throws ApiException, NoApiKeyException, InputRequiredException {\n        VideoSynthesis vs = new VideoSynthesis();\n        VideoSynthesisParam param =\n                VideoSynthesisParam.builder()\n                        .apiKey(apiKey)\n                        .model(\"vidu/viduq3-turbo_text2video\")\n                        .prompt(\"一只小猫在月光下奔跑\")\n                        .size(\"960*528\")\n                        .resolution(\"540P\")\n                        .duration(5)\n                        .watermark(true)\n                        .build();\n        System.out.println(\"please wait...\");\n        VideoSynthesisResult result = vs.call(param);\n        System.out.println(JsonUtils.toJson(result));\n    }\n\n    public static void main(String[] args) {\n        try {\n            text2Video();\n        } catch (ApiException | NoApiKeyException | InputRequiredException e) {\n            System.out.println(e.getMessage());\n        }\n        System.exit(0);\n    }\n}",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-text-to-video-api-reference"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Video"
+        ],
+        "request_modality": [
+          "Image",
+          "Text"
+        ]
+      },
+      "description": "输入首帧图、尾帧图与文本描述，生成视频。ViduQ3-Turbo首尾帧生视频是高性能加速版模型。生成效率极高，兼具优质画质与动态表现，尤其在打斗场面、情绪渲染及语义理解上表现出色。性价比突出，适合图片社交、AI陪伴及特效素材等泛娱乐场景。",
+      "features": [],
+      "provider": "vidu",
+      "model": "vidu/viduq3-turbo_start-end2video",
+      "iconUrl": "",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.25",
+          "timeBand": "standard",
+          "ntmAmountType": "540P",
+          "type": "video_ratio_540p",
+          "priceName": "视频生成（540P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.375",
+          "timeBand": "standard",
+          "ntmAmountType": "|720P|1088*832|960*960|1280*720|720*1280|832*1088|",
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.4375",
+          "timeBand": "standard",
+          "ntmAmountType": "|1080P|1920*1080|1080*1920|1440*1440|1632*1248|1248*1632|",
+          "type": "video_ratio_1080p",
+          "priceName": "视频生成（1080P）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "priceTimeBands": [
+        "standard"
+      ],
+      "capabilities": [
+        "VG"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-03-26T13:46:28.000+00:00",
+      "inferenceProvider": "vidu",
+      "name": "ViduQ3-Turbo_start-end2video",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"vidu/viduq3-turbo_start-end2video\",\n    \"input\": {\n        \"media\": [\n            {\n                \"type\": \"image\",\n                \"url\": \"https://wanx.alicdn.com/material/20250318/first_frame.png\"\n            },\n            {\n                \"type\": \"image\",\n                \"url\": \"https://wanx.alicdn.com/material/20250318/last_frame.png\"\n            }\n        ],\n        \"prompt\": \"一只小猫从窗台向下跳跃，轻盈地落在沙发上，然后好奇地环顾四周。\"\n    },\n    \"parameters\": {\n        \"resolution\": \"540P\",\n        \"duration\": 5,\n        \"watermark\": true\n    }\n}'",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-keyframe-to-video-api-reference"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Video"
+        ],
+        "request_modality": [
+          "Image",
+          "Text"
+        ]
+      },
+      "description": "输入图片与文本描述，生成视频。ViduQ2-Pro图生视频是全球首创「万物可参考」视频模型。支持特效、表情、纹理、动作、人物、场景等六大维度参考，实现编辑全面进化。通过可控式增、删、改，达成精细化视频编辑，专为漫剧、短剧、影视制作打造的生产级创作引擎。",
+      "features": [],
+      "provider": "vidu",
+      "model": "vidu/viduq2-pro_img2video",
+      "iconUrl": "",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.15625",
+          "timeBand": "standard",
+          "ntmAmountType": "540P",
+          "type": "video_ratio_540p",
+          "priceName": "视频生成（540P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.34375",
+          "timeBand": "standard",
+          "ntmAmountType": "|720P|1088*832|960*960|1280*720|720*1280|832*1088|",
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.71875",
+          "timeBand": "standard",
+          "ntmAmountType": "|1080P|1920*1080|1080*1920|1440*1440|1632*1248|1248*1632|",
+          "type": "video_ratio_1080p",
+          "priceName": "视频生成（1080P）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "priceTimeBands": [
+        "standard"
+      ],
+      "capabilities": [
+        "VG"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-03-26T13:46:18.000+00:00",
+      "inferenceProvider": "vidu",
+      "name": "ViduQ2-Pro_img2video",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"vidu/viduq2-pro_img2video\",\n    \"input\": {\n        \"media\": [\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260121/zlpocv/wan-i2v-haigui.webp\"\n            }\n        ],\n        \"prompt\": \"镜头从海龟下方缓缓上移，海龟悠然游动，腹部细节清晰可见。\"\n    },\n    \"parameters\": {\n        \"duration\": 5,\n        \"resolution\": \"720P\",\n        \"watermark\": true\n    }\n}'",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-image-to-video-api-reference"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Video"
+        ],
+        "request_modality": [
+          "Image",
+          "Text"
+        ]
+      },
+      "description": "输入首帧图、尾帧图与文本描述，生成视频。ViduQ2-Pro首尾帧生视频是全球首创「万物可参考」视频模型。支持特效、表情、纹理、动作、人物、场景等六大维度参考，实现编辑全面进化。通过可控式增、删、改，达成精细化视频编辑，专为漫剧、短剧、影视制作打造的生产级创作引擎。",
+      "features": [],
+      "provider": "vidu",
+      "model": "vidu/viduq2-pro_start-end2video",
+      "iconUrl": "",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.15625",
+          "timeBand": "standard",
+          "ntmAmountType": "540P",
+          "type": "video_ratio_540p",
+          "priceName": "视频生成（540P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.34375",
+          "timeBand": "standard",
+          "ntmAmountType": "|720P|1088*832|960*960|1280*720|720*1280|832*1088|",
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.71875",
+          "timeBand": "standard",
+          "ntmAmountType": "|1080P|1920*1080|1080*1920|1440*1440|1632*1248|1248*1632|",
+          "type": "video_ratio_1080p",
+          "priceName": "视频生成（1080P）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "priceTimeBands": [
+        "standard"
+      ],
+      "capabilities": [
+        "VG"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-03-26T13:46:02.000+00:00",
+      "inferenceProvider": "vidu",
+      "name": "ViduQ2-Pro_start-end2video",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"vidu/viduq2-pro_start-end2video\",\n    \"input\": {\n        \"media\": [\n            {\n                \"type\": \"image\",\n                \"url\": \"https://wanx.alicdn.com/material/20250318/first_frame.png\"\n            },\n            {\n                \"type\": \"image\",\n                \"url\": \"https://wanx.alicdn.com/material/20250318/last_frame.png\"\n            }\n        ],\n        \"prompt\": \"一只小猫从窗台向下跳跃，轻盈地落在沙发上，然后好奇地环顾四周。\"\n    },\n    \"parameters\": {\n        \"resolution\": \"540P\",\n        \"duration\": 5,\n        \"watermark\": true\n    }\n}'",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-keyframe-to-video-api-reference"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Video"
+        ],
+        "request_modality": [
+          "Image",
+          "Text",
+          "Video"
+        ]
+      },
+      "description": "输入参考视频、图片与文本描述，生成视频。ViduQ2-Pro参考生视频是全球首创「万物可参考」视频模型。支持特效、表情、纹理、动作、人物、场景等六大维度参考，实现编辑全面进化。通过可控式增、删、改，达成精细化视频编辑，专为漫剧、短剧、影视制作打造的生产级创作引擎。",
+      "features": [],
+      "provider": "vidu",
+      "model": "vidu/viduq2-pro_reference2video",
+      "iconUrl": "",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.25",
+          "timeBand": "standard",
+          "ntmAmountType": "540P",
+          "type": "video_ratio_540p",
+          "priceName": "视频生成（540P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.3125",
+          "timeBand": "standard",
+          "ntmAmountType": "|720P|1088*832|960*960|1280*720|720*1280|832*1088|",
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.78125",
+          "timeBand": "standard",
+          "ntmAmountType": "|1080P|1920*1080|1080*1920|1440*1440|1632*1248|1248*1632|",
+          "type": "video_ratio_1080p",
+          "priceName": "视频生成（1080P）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "priceTimeBands": [
+        "standard"
+      ],
+      "capabilities": [
+        "VG"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-03-26T13:46:23.000+00:00",
+      "inferenceProvider": "vidu",
+      "name": "ViduQ2-Pro_reference2video",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n   -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"vidu/viduq2-pro_reference2video\",\n       \"input\": {\n        \"media\": [\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260320/knsple/wan-r2v-role-frame.jpg\"\n            },\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/qpzxps/wan-r2v-object4.png\"\n            },\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/wfjikw/wan-r2v-backgroud5.png\"\n            }\n        ],\n        \"prompt\": \"男人坐在靠窗的椅子上，手持吉他，在咖啡厅旁演奏一首舒缓的美国乡村民谣\"\n    },\n    \"parameters\": {\n        \"duration\": 5,\n        \"size\": \"1280*720\",\n        \"resolution\": \"720P\",\n        \"watermark\": true\n    }\n}'",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-reference-to-video-api-reference"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Video"
+        ],
+        "request_modality": [
+          "Image",
+          "Text"
+        ]
+      },
+      "description": "输入图片与文本描述，生成视频。ViduQ2-Turbo图生视频是极速生成引擎。720P 5s视频最快仅需19秒，1080P 5s视频约27秒。人物动作与表情自然逼真，真实感强，在打斗等高动态场景中效果出色，运动幅度大。",
+      "features": [],
+      "provider": "vidu",
+      "model": "vidu/viduq2-turbo_img2video",
+      "iconUrl": "",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.0875",
+          "timeBand": "standard",
+          "ntmAmountType": "540P",
+          "type": "video_ratio_540p",
+          "priceName": "视频生成（540P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.25",
+          "timeBand": "standard",
+          "ntmAmountType": "|720P|1088*832|960*960|1280*720|720*1280|832*1088|",
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.46875",
+          "timeBand": "standard",
+          "ntmAmountType": "|1080P|1920*1080|1080*1920|1440*1440|1632*1248|1248*1632|",
+          "type": "video_ratio_1080p",
+          "priceName": "视频生成（1080P）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "priceTimeBands": [
+        "standard"
+      ],
+      "capabilities": [
+        "VG"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-03-26T13:46:08.000+00:00",
+      "inferenceProvider": "vidu",
+      "name": "ViduQ2-Turbo_img2video",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"vidu/viduq2-turbo_img2video\",\n    \"input\": {\n        \"media\": [\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260121/zlpocv/wan-i2v-haigui.webp\"\n            }\n        ],\n        \"prompt\": \"镜头从海龟下方缓缓上移，海龟悠然游动，腹部细节清晰可见。\"\n    },\n    \"parameters\": {\n        \"duration\": 5,\n        \"resolution\": \"720P\",\n        \"watermark\": true\n    }\n}'",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-image-to-video-api-reference"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Video"
+        ],
+        "request_modality": [
+          "Text"
+        ]
+      },
+      "description": "输入一段文本，生成视频。ViduQ2文生视频是精准指令遵循与细腻情感捕捉模型。具备卓越的剧情控制力，能深刻理解并表现微表情变化；镜头语言丰富，运镜流畅，画面张力十足。广泛适用于影视动漫、广告电商、短剧及文旅等行业。",
+      "features": [],
+      "provider": "vidu",
+      "model": "vidu/viduq2_text2video",
+      "iconUrl": "",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.1125",
+          "timeBand": "standard",
+          "ntmAmountType": "540P",
+          "type": "video_ratio_540p",
+          "priceName": "视频生成（540P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.21875",
+          "timeBand": "standard",
+          "ntmAmountType": "|720P|1088*832|960*960|1280*720|720*1280|832*1088|",
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.375",
+          "timeBand": "standard",
+          "ntmAmountType": "|1080P|1920*1080|1080*1920|1440*1440|1632*1248|1248*1632|",
+          "type": "video_ratio_1080p",
+          "priceName": "视频生成（1080P）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "priceTimeBands": [
+        "standard"
+      ],
+      "capabilities": [
+        "VG"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-03-26T13:45:21.000+00:00",
+      "inferenceProvider": "vidu",
+      "name": "ViduQ2_text2video",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"vidu/viduq2_text2video\",\n    \"input\": {\n        \"prompt\": \"一只小猫在月光下奔跑\"\n    },\n    \"parameters\": {\n        \"size\": \"960*528\",\n        \"resolution\": \"540P\",\n        \"duration\": 5,\n        \"watermark\": true\n    }\n}'",
+            "python": "from http import HTTPStatus\nfrom dashscope import VideoSynthesis\nimport dashscope\nimport os\n\n# 以下为北京地域URL\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\n\n# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key=\"sk-xxx\"\napi_key = os.getenv(\"DASHSCOPE_API_KEY\")\n\ndef sample_sync_call_t2v():\n    # call sync api, will return the result\n    print('please wait...')\n    rsp = VideoSynthesis.call(api_key=api_key,\n                              model='vidu/viduq3-turbo_text2video',\n                              prompt='一只小猫在月光下奔跑',\n                              size='960*528',\n                              duration=5,\n                              resolution='540P',\n                              watermark=True)\n    print(rsp)\n    if rsp.status_code == HTTPStatus.OK:\n        print(rsp.output.video_url)\n    else:\n        print('Failed, status_code: %s, code: %s, message: %s' %\n              (rsp.status_code, rsp.code, rsp.message))\n\n\nif __name__ == '__main__':\n    sample_sync_call_t2v()",
+            "java": "// Copyright (c) Alibaba, Inc. and its affiliates.\n\nimport com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesis;\nimport com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesisParam;\nimport com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesisResult;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.InputRequiredException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.JsonUtils;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic class Text2Video {\n\n    static {\n        // 以下为北京地域url\n        Constants.baseHttpApiUrl = \"https://dashscope.aliyuncs.com/api/v1\";\n    }\n\n    // 若没有配置环境变量，请用百炼API Key将下行替换为：api_key=\"sk-xxx\"\n    public static String apiKey = System.getenv(\"DASHSCOPE_API_KEY\");\n\n    /**\n     * Create a video compositing task and wait for the task to complete.\n     */\n    public static void text2Video() throws ApiException, NoApiKeyException, InputRequiredException {\n        VideoSynthesis vs = new VideoSynthesis();\n        VideoSynthesisParam param =\n                VideoSynthesisParam.builder()\n                        .apiKey(apiKey)\n                        .model(\"vidu/viduq3-turbo_text2video\")\n                        .prompt(\"一只小猫在月光下奔跑\")\n                        .size(\"960*528\")\n                        .resolution(\"540P\")\n                        .duration(5)\n                        .watermark(true)\n                        .build();\n        System.out.println(\"please wait...\");\n        VideoSynthesisResult result = vs.call(param);\n        System.out.println(JsonUtils.toJson(result));\n    }\n\n    public static void main(String[] args) {\n        try {\n            text2Video();\n        } catch (ApiException | NoApiKeyException | InputRequiredException e) {\n            System.out.println(e.getMessage());\n        }\n        System.exit(0);\n    }\n}",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-text-to-video-api-reference"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Video"
+        ],
+        "request_modality": [
+          "Image",
+          "Text"
+        ]
+      },
+      "description": "输入首帧图、尾帧图与文本描述，生成视频。ViduQ2-Turbo首尾帧生视频是极速生成引擎。720P 5s视频最快仅需19秒，1080P 5s视频约27秒。人物动作与表情自然逼真，真实感强，在打斗等高动态场景中效果出色，运动幅度大。",
+      "features": [],
+      "provider": "vidu",
+      "model": "vidu/viduq2-turbo_start-end2video",
+      "iconUrl": "",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.0875",
+          "timeBand": "standard",
+          "ntmAmountType": "540P",
+          "type": "video_ratio_540p",
+          "priceName": "视频生成（540P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.25",
+          "timeBand": "standard",
+          "ntmAmountType": "|720P|1088*832|960*960|1280*720|720*1280|832*1088|",
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.46875",
+          "timeBand": "standard",
+          "ntmAmountType": "|1080P|1920*1080|1080*1920|1440*1440|1632*1248|1248*1632|",
+          "type": "video_ratio_1080p",
+          "priceName": "视频生成（1080P）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "priceTimeBands": [
+        "standard"
+      ],
+      "capabilities": [
+        "VG"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-03-26T13:46:14.000+00:00",
+      "inferenceProvider": "vidu",
+      "name": "ViduQ2-Turbo_start-end2video",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"vidu/viduq2-turbo_start-end2video\",\n    \"input\": {\n        \"media\": [\n            {\n                \"type\": \"image\",\n                \"url\": \"https://wanx.alicdn.com/material/20250318/first_frame.png\"\n            },\n            {\n                \"type\": \"image\",\n                \"url\": \"https://wanx.alicdn.com/material/20250318/last_frame.png\"\n            }\n        ],\n        \"prompt\": \"一只小猫从窗台向下跳跃，轻盈地落在沙发上，然后好奇地环顾四周。\"\n    },\n    \"parameters\": {\n        \"resolution\": \"540P\",\n        \"duration\": 5,\n        \"watermark\": true\n    }\n}'",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-keyframe-to-video-api-reference"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Video"
+        ],
+        "request_modality": [
+          "Image",
+          "Text"
+        ]
+      },
+      "description": "输入参考图片与文本描述，生成视频。ViduQ2参考生视频是精准指令遵循与细腻情感捕捉模型。具备卓越的剧情控制力，能深刻理解并表现微表情变化；镜头语言丰富，运镜流畅，画面张力十足。广泛适用于影视动漫、广告电商、短剧及文旅等行业。",
+      "features": [],
+      "provider": "vidu",
+      "model": "vidu/viduq2_reference2video",
+      "iconUrl": "",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.21875",
+          "timeBand": "standard",
+          "ntmAmountType": "540P",
+          "type": "video_ratio_540p",
+          "priceName": "视频生成（540P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.28125",
+          "timeBand": "standard",
+          "ntmAmountType": "|720P|1088*832|960*960|1280*720|720*1280|832*1088|",
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.71875",
+          "timeBand": "standard",
+          "ntmAmountType": "|1080P|1920*1080|1080*1920|1440*1440|1632*1248|1248*1632|",
+          "type": "video_ratio_1080p",
+          "priceName": "视频生成（1080P）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "priceTimeBands": [
+        "standard"
+      ],
+      "capabilities": [
+        "VG"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-03-26T13:45:51.000+00:00",
+      "inferenceProvider": "vidu",
+      "name": "ViduQ2_reference2video",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n   -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"vidu/viduq2_reference2video\",\n       \"input\": {\n        \"media\": [\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260320/knsple/wan-r2v-role-frame.jpg\"\n            },\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/qpzxps/wan-r2v-object4.png\"\n            },\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/wfjikw/wan-r2v-backgroud5.png\"\n            }\n        ],\n        \"prompt\": \"男人坐在靠窗的椅子上，手持吉他，在咖啡厅旁演奏一首舒缓的美国乡村民谣\"\n    },\n    \"parameters\": {\n        \"duration\": 5,\n        \"size\": \"1280*720\",\n        \"resolution\": \"720P\",\n        \"watermark\": true\n    }\n}'",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-reference-to-video-api-reference"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Video"
+        ],
+        "request_modality": [
+          "Text",
+          "Image"
+        ]
+      },
+      "description": "输入1-7张参考图片与文本描述，生成视频。ViduQ3支持智能切镜，多机位一致性更出色。ViduQ3参考生视频为剧而生，万物可参，声画同出：6大特效（粒子 / 流体 / 动力学 / 运镜 / 转场 / 光影）、5大音效（环境 / 动态 / 氛围 / 拟音 / 情绪）、4大场景（短剧 / 漫剧 / 影视剧 / 广告）全面融合，轻松驾驭短剧、漫剧、广告等多元创作。",
+      "features": [],
+      "provider": "vidu",
+      "model": "vidu/viduq3_reference2video",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.3125",
+          "timeBand": "standard",
+          "ntmAmountType": "540P",
+          "type": "video_ratio_540p",
+          "priceName": "视频生成（540P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.625",
+          "timeBand": "standard",
+          "ntmAmountType": "|720P|1088*832|960*960|1280*720|720*1280|832*1088|",
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.78125",
+          "timeBand": "standard",
+          "ntmAmountType": "|1080P|1920*1080|1080*1920|1440*1440|1632*1248|1248*1632|",
+          "type": "video_ratio_1080p",
+          "priceName": "视频生成（1080P）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "priceTimeBands": [
+        "standard"
+      ],
+      "capabilities": [
+        "VG"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-04-27T08:35:14.000+00:00",
+      "inferenceProvider": "vidu",
+      "name": "ViduQ3_reference2video",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n   -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"vidu/viduq3_reference2video\",\n       \"input\": {\n        \"media\": [\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260320/knsple/wan-r2v-role-frame.jpg\"\n            },\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/qpzxps/wan-r2v-object4.png\"\n            },\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/wfjikw/wan-r2v-backgroud5.png\"\n            }\n        ],\n        \"prompt\": \"男人坐在靠窗的椅子上，手持吉他，在咖啡厅旁演奏一首舒缓的美国乡村民谣\"\n    },\n    \"parameters\": {\n        \"duration\": 5,\n        \"size\": \"1280*720\",\n        \"resolution\": \"720P\",\n        \"watermark\": true\n    }\n}'",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-reference-to-video-api-reference"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Video"
+        ],
+        "request_modality": [
+          "Text",
+          "Image"
+        ]
+      },
+      "description": "输入1-7张参考图片与文本描述，生成视频。ViduQ3-Turbo生成速度快，性价比高。ViduQ3参考生视频为剧而生，万物可参，声画同出：6大特效（粒子 / 流体 / 动力学 / 运镜 / 转场 / 光影）、5大音效（环境 / 动态 / 氛围 / 拟音 / 情绪）、4大场景（短剧 / 漫剧 / 影视剧 / 广告）全面融合，轻松驾驭短剧、漫剧、广告等多元创作。",
+      "features": [],
+      "provider": "vidu",
+      "model": "vidu/viduq3-turbo_reference2video",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.15625",
+          "timeBand": "standard",
+          "ntmAmountType": "540P",
+          "type": "video_ratio_540p",
+          "priceName": "视频生成（540P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.3125",
+          "timeBand": "standard",
+          "ntmAmountType": "|720P|1088*832|960*960|1280*720|720*1280|832*1088|",
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.40625",
+          "timeBand": "standard",
+          "ntmAmountType": "|1080P|1920*1080|1080*1920|1440*1440|1632*1248|1248*1632|",
+          "type": "video_ratio_1080p",
+          "priceName": "视频生成（1080P）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "priceTimeBands": [
+        "standard"
+      ],
+      "capabilities": [
+        "VG"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-04-27T08:33:07.000+00:00",
+      "inferenceProvider": "vidu",
+      "name": "ViduQ3-Turbo_reference2video",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n   -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"vidu/viduq3-turbo_reference2video\",\n       \"input\": {\n        \"media\": [\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260320/knsple/wan-r2v-role-frame.jpg\"\n            },\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/qpzxps/wan-r2v-object4.png\"\n            },\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/wfjikw/wan-r2v-backgroud5.png\"\n            }\n        ],\n        \"prompt\": \"男人坐在靠窗的椅子上，手持吉他，在咖啡厅旁演奏一首舒缓的美国乡村民谣\"\n    },\n    \"parameters\": {\n        \"duration\": 5,\n        \"size\": \"1280*720\",\n        \"resolution\": \"720P\",\n        \"watermark\": true\n    }\n}'",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-reference-to-video-api-reference"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Video"
+        ],
+        "request_modality": [
+          "Text",
+          "Image"
+        ]
+      },
+      "description": "输入1-7张参考图片与文本描述，生成视频。ViduQ3-mix画面质感强，均衡性好。ViduQ3参考生视频为剧而生，万物可参，声画同出：6大特效（粒子 / 流体 / 动力学 / 运镜 / 转场 / 光影）、5大音效（环境 / 动态 / 氛围 / 拟音 / 情绪）、4大场景（短剧 / 漫剧 / 影视剧 / 广告）全面融合，轻松驾驭短剧、漫剧、广告等多元创作。",
+      "features": [],
+      "provider": "vidu",
+      "model": "vidu/viduq3-mix_reference2video",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.78125",
+          "ntmAmountType": "|720P|1088*832|960*960|1280*720|720*1280|832*1088|",
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.9375",
+          "ntmAmountType": "|1080P|1920*1080|1080*1920|1440*1440|1632*1248|1248*1632|",
+          "type": "video_ratio_1080p",
+          "priceName": "视频生成（1080P）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "priceTimeBands": [],
+      "capabilities": [
+        "VG"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-04-28T02:40:03.000+00:00",
+      "inferenceProvider": "vidu",
+      "name": "ViduQ3-mix_reference2video",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n   -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"vidu/viduq3-mix_reference2video\",\n       \"input\": {\n        \"media\": [\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260320/knsple/wan-r2v-role-frame.jpg\"\n            },\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/qpzxps/wan-r2v-object4.png\"\n            },\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/wfjikw/wan-r2v-backgroud5.png\"\n            }\n        ],\n        \"prompt\": \"男人坐在靠窗的椅子上，手持吉他，在咖啡厅旁演奏一首舒缓的美国乡村民谣\"\n    },\n    \"parameters\": {\n        \"duration\": 5,\n        \"size\": \"1280*720\",\n        \"resolution\": \"720P\",\n        \"watermark\": true\n    }\n}'",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-reference-to-video-api-reference"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Video"
+        ],
+        "request_modality": [
+          "Text",
+          "Image"
+        ]
+      },
+      "description": "输入图片与文本描述，生成视频。ViduQ2-Pro-fast价格触底、效果稳定，生成速度较turbo提高2-3倍。ViduQ2图生视频是全球首创「万物可参考」视频模型。支持特效、表情、纹理、动作、人物、场景等六大维度参考，实现编辑全面进化。通过可控式增、删、改，达成精细化视频编辑，专为漫剧、短剧、影视制作打造的生产级创作引擎。",
+      "features": [],
+      "provider": "vidu",
+      "model": "vidu/viduq2-pro-fast_img2video",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.1",
+          "ntmAmountType": "|720P|1088*832|960*960|1280*720|720*1280|832*1088|",
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.2",
+          "ntmAmountType": "|1080P|1920*1080|1080*1920|1440*1440|1632*1248|1248*1632|",
+          "type": "video_ratio_1080p",
+          "priceName": "视频生成（1080P）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "priceTimeBands": [],
+      "capabilities": [
+        "VG"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-04-27T12:09:25.000+00:00",
+      "inferenceProvider": "vidu",
+      "name": "ViduQ2-Pro-fast_img2video",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"vidu/viduq2-pro-fast_img2video\",\n    \"input\": {\n        \"media\": [\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260121/zlpocv/wan-i2v-haigui.webp\"\n            }\n        ],\n        \"prompt\": \"镜头从海龟下方缓缓上移，海龟悠然游动，腹部细节清晰可见。\"\n    },\n    \"parameters\": {\n        \"duration\": 5,\n        \"resolution\": \"720P\",\n        \"watermark\": true\n    }\n}'",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-image-to-video-api-reference"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,48 +1,45 @@
-# Token 计费与管理
+# Token 计量与配额
 
-Token 计费与管理是百炼平台统一的资源计量与成本控制核心机制，以输入/输出 Token 为最小计费单元，贯穿模型调用、评测、训练、部署等全生命周期；所有费用结算、配额限制、预算管控和资源预留均基于精确的 Token 消耗量进行。
+Token 计量与配额是百炼平台统一衡量模型调用资源消耗、实施配额管控与计费结算的核心横切机制。它以 token 为原子单位，对输入/输出文本、图像、音频、结构化输出及工具调用等多模态计算负载进行标准化计量，并通过预设的配额计划（Token Plan）实现资源隔离、用量限制与成本归属。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **模型推理调用**：每次 API 请求按实际消耗的输入 Token（[prompt](../guides/prompt.md)）和输出 Token（completion）分别计费，单价依模型、地域、阶梯用量浮动；免费额度自动优先抵扣，额度耗尽后按量扣费。
-- **Token Plan 配额管控**：通过 `X-Token-Plan-ID` 请求头绑定预设的 Token Plan，实现单次请求最大 Token 数（`quota`）、突发容量（`burst_quota`）及周期性重置（`reset_interval_seconds`）的硬性约束，适用于多环境隔离、成本封顶与流量整形。
-- **模型评测**：当使用「评测数据集」触发被测模型推理时，产生标准推理 Token 费用；若启用大模型评估（裁判模型），其评分过程也按 Token 单独计费。
-- **吞吐预留（TPM）**：购买的吞吐资源（如 200 kTPM 输入）本质是 Token 消耗速率承诺，系统按每分钟实际 Token 吞吐量动态校验并保障服务水位，超限将触发限流而非额外计费。
-- **模型训练与微调**：训练费用 = 训练数据总 Token 数 × 训练轮数 × 单价，图像/视频任务还叠加 `max_pixels` 等因子换算为等效 Token，体现多模态统一计费抽象。
-- **异步任务与文件处理**：异步图像/视频生成任务按最终输出内容的 Token 当量（或等效 Token）计费；上传文件解析（如 PDF 文本提取）产生的中间 Token 消耗亦计入总账单。
+- **标准 API 调用（同步/异步）**：所有支持 Token Plan 的模型（如 `qwen-max`、`qwen-vl-plus`、`paraformer-16k-1`）在调用时需显式指定 `plan` 参数（如 `"personal"`），平台据此启用对应配额池、计费规则与用量统计。图像 token 按 1:175 换算为文本 token；[函数调用](function-calling.md)参数、[prompt](../guides/prompt.md) template 占比等细粒度消耗可通过 `enable_tracing=true` 查看。
+  
+- **专属模型部署（PTU/MU/DTU）**：Token 计量不直接参与这些模式的实时配额控制（其资源由 TPM/RPM/实例规格保障），但**仍用于计费归因**——例如 PTU 的长输入阶梯系数（如 `(32K,256K] ×3`）即基于实际输入 token 长度动态折算容量扣减；DTU/MU 的账单明细中也按 token 粒度拆分输入/输出消耗。
+
+- **微调模型与 LoRA 部署**：LoRA 微调模型若通过 `plan: "lora"` 方式按量部署，其调用完全纳入 Token 计量体系，按实际 token 消耗计费，无固定资源预留；而全参微调模型部署至 PTU/DTU 后，其 token 消耗仍计入对应部署实例的吞吐统计，影响容量水位与扩容决策。
+
+- **组织级资源治理（Token Plan API）**：企业管理员通过 Token Plan API 管理席位（`standard`/`pro`/`max`）与成员配额，将 token 配额以“席位”为单位分配给团队成员，实现跨账号的用量隔离与预算管控。此时，`plan` 参数不仅标识计费策略，更映射到组织内具体席位规格与权限边界。
+
+- **成本与预算管理（[test 1](../guides/test-1.md)）**：Token 是所有计费层级的底层单位——免费额度、资源包、节省计划均按模型维度以 token 为单位发放与抵扣；账单明细、用量查询（`/v1/usage/token-plan`）、预算告警均基于 token 消耗聚合生成，确保成本可追溯、可预测、可管控。
 
 ## 关键参数和配置
 
-| 参数 | 说明 | 典型值/约束 | 生效位置 |
-|------|------|-------------|----------|
-| `input_tokens`, `output_tokens` | 实际消耗的 Token 数，由服务端精确统计并返回在响应 `usage` 字段中 | 整数，≥0；多模态模型含视觉 Token 换算 | 所有模型 API 响应体 |
-| `token_plan_id` | Token Plan 唯一标识符，用于启用配额控制 | 如 `tp-abc123`，控制台创建分配 | 请求 Header：`X-Token-Plan-ID` |
-| `quota` | 单次请求允许消耗的最大 Token 总数（输入+输出） | ≥100，≤1,000,000 | Token Plan 配置项 |
-| `burst_quota` | 突发配额上限，支持短时超限 | 默认 `quota × 2`，需连续 3 个周期未超限才生效 | Token Plan 配置项 |
-| `reset_interval_seconds` | 配额重置周期 | 支持 `60`（1 分钟）、`300`（5 分钟）、`3600`（1 小时） | Token Plan 配置项 |
-| `override_quota` / `override_burst_quota` | 动态覆盖配额（需 `token_plan:override` 权限） | Query 参数，如 `?override_quota=5000` | HTTP 请求 Query |
-| 免费额度（Free Tier） | 新人自动发放的 Token 抵扣额度 | 华北2（北京）地域有效，90 天有效期，仅限实时推理 | 账户级自动应用，无需显式配置 |
+- `plan`（必填）：字符串，取值为 `"personal"`、`"team"` 或 `"coding"`，决定配额上限、单价、支持模型范围及组织权限。不可混用，且必须与调用方账号类型一致。
+- `X-DashScope-Token-Plan`（Header）或 `plan`（Body）：两种指定方式，推荐 Header 方式以避免 Body 解析歧义。
+- `enable_tracing`（可选）：启用后，响应 `usage` 字段返回细粒度 token 拆分（如 `prompt_template`、`tool_parameters`、`output_json_schema` 等子项），用于调试与成本归因。
+- `X-DashScope-Used-Tokens`（响应 Header）：整请求总 token 消耗（含输入+输出），毫秒级返回，适合轻量监控。
+- `usage`（响应 Body）：当 `enable_tracing=true` 时返回 JSON 结构，包含 `input_tokens`、`output_tokens` 及各组件明细，精度达 token 级。
+- `/v1/usage/token-plan`（用量查询接口）：需携带对应 plan 的认证凭证，返回当前周期内已用/剩余 token 数，支持实时配额检查。
 
-> ⚠️ 注意：Token Plan 与模型版本强绑定（v2.3+ 接口默认启用），且不支持跨 Region 复用；使用 Token Plan 专属 API Key 时，**不享受免费额度**，图像/视频模型调用将直接报错，必须改用通用 API Key 或 Skill 接入。
+> ⚠️ 注意：`"pro"` plan 已于 2024 年 7 月下线；图像 token 换算系数固定为 1:175（1 张 1024×1024 图 ≈ 175k text tokens）；超配额请求返回 `429 Too Many Requests`（错误码 `ResourceExhausted`），不自动升配。
 
 ## 面向开发者，简洁实用
 
-- ✅ **必做**：始终检查响应中的 `"usage": {"input_tokens": X, "output_tokens": Y}` 字段，用于本地监控、成本归因与预算预警。
-- ✅ **推荐**：高并发生产环境避免依赖「免费额度用完即停」或「预算达限即停」，建议结合 Token Plan 设置 `quota` + `burst_quota` 实现主动限流，保障服务稳定性。
-- ✅ **降本技巧**：
-  - 评测阶段优先复用已有的「推理结果集」，避免重复调用被测模型；
-  - 异步任务开启事件驱动回调（EventBridge），替代高频轮询，减少无效 Token 消耗；
-  - 多模态输入前预估文本长度，合理设置 `max_output_tokens` 防止长输出失控。
-- ❌ **禁止**：在前端代码中暴露 API Key；使用临时 Key 时 `expire_in_seconds` 不得超过 180 秒；Token Plan 不可与 Coding Plan 同时启用。
-- 🔧 **调试工具**：使用 OpenAPI Explorer 或 dashscope CLI（`dashscope api call --model qwen-plus --input-text "hello"`）快速验证 Token 消耗与配额行为。
+- ✅ **调试必开**：开发阶段始终设置 `enable_tracing=true`，快速定位 token 消耗热点（如模板膨胀、工具参数过长）。
+- ✅ **生产必查**：关键服务在调用前调用 `/v1/usage/token-plan` 检查余量，避免突发 `429`；结合 `X-DashScope-Used-Tokens` 做本地用量缓存。
+- ✅ **选型对齐**：个人项目用 `"personal"`，团队协作用 `"team"`，代码生成密集场景用 `"coding"`——三者单价与配额不同，勿凭直觉混用。
+- ✅ **图像处理注意**：传图前预估 token 成本（`width × height ÷ 1024 × 175`），大图建议压缩或分块处理。
+- ✅ **流式响应处理**：`stream=true` 时，`usage` 仅在最终 `data: [DONE]` 帧中返回，前端需等待结束帧再解析用量。
+- ❌ **禁止硬编码 plan**：`plan` 应随环境/角色动态注入（如通过配置中心或用户身份判断），避免测试环境误用 `"team"` 导致配额挤占。
 
 ## 关联主题页
 
 - [token plan guide](../guides/token-plan-guide.md)
 - [token plan api](../api/token-plan-api.md)
-- [preparations](../api/preparations.md)
-- [test 1](../guides/test-1.md)
-- [model evaluation introduction](../guides/model-evaluation-introduction.md)
 - [more about models](../api/more-about-models.md)
+- [test 1](../guides/test-1.md)
+- [model deployment index](../guides/model-deployment-index.md)
 
 

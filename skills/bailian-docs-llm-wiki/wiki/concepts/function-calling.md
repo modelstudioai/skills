@@ -1,47 +1,53 @@
 # 函数调用
 
-函数调用（Function Calling）是百炼平台支持的一种结构化工具调用机制，允许大模型在推理过程中自主识别用户意图、生成符合预定义 Schema 的函数参数，并触发外部工具或服务执行。该能力是构建智能体（Agent）、工作流（Workflow）及高代码应用中“工具编排”与“任务自动化”的核心技术基础。
+函数调用（Function Calling）是百炼平台中大模型主动识别用户意图、自主决策并调用外部工具（如插件、知识库、API 或自定义服务）执行具体任务的核心能力。它使模型从“文本生成器”升级为“可执行智能体”，支持动态规划、实时信息获取、结构化计算与多步骤任务闭环。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **智能体（Agent）应用**：在 Agent 2.0 中，函数调用作为默认启用的内置能力，模型可基于系统提示词和用户输入，自动选择并调用已配置的内置插件（如计算器、图片生成、夸克搜索）或自定义 MCP 工具；开发者通过 `tools` 字段声明函数 Schema（OpenAPI 3.0 兼容），无需手动解析 JSON 或编写调度逻辑。  
-- **工作流（Workflow）应用**：函数调用以「MCP 节点」或「API 调用节点」形式显式编排，由工作流引擎控制调用时机与上下文传递；适用于需强顺序、错误重试、多工具协同的复杂流程（如“先查天气 → 再订机票 → 发送通知”）。  
-- **API 直接调用**：在 `/v1/chat/completions`（OpenAI 兼容）或 `/apps/{app_id}/completion`（DashScope 原生）接口中，通过 `tools` + `tool_choice` 参数启用函数调用；模型返回 `{"role": "assistant", "content": null, "tool_calls": [...]}` 结构，客户端需解析 `tool_calls` 并同步/异步执行对应函数，再将结果以 `tool` 角色消息回传继续对话。  
-- **高代码应用**：通过 `fastmcp.Client` 集成 MCP 协议，在 Python 代码中注册本地函数为工具，模型可直接调用并获取实时返回值，实现深度定制化逻辑（如数据库查询、内部 API 封装、业务规则校验）。
+函数调用在百炼平台中并非独立接口，而是贯穿于多个能力层的**统一语义机制**，其底层均基于 OpenAI 兼容的 `tools` + `tool_choice` 协议实现，但在不同场景下封装层级与配置方式不同：
 
-> ⚠️ 注意：函数调用能力依赖模型本身支持（当前仅 `qwen-max`、`qwen-plus` 及部分千问 VL 模型完整支持），且需在应用配置或请求体中显式声明 `tools`；未声明时模型不会触发任何工具调用。
+- **模型 API 直接调用**（`/v1/chat/completions`）：需显式启用 `enable_function_calling: true`，并在请求中传入符合 OpenAI 格式的 `tools` 数组（含 `function.name`、`description`、`parameters`）。模型返回 `tool_calls` 字段，开发者需解析并同步/异步执行对应工具，再将结果以 `tool_message` 形式回传继续对话。
+  
+- **智能体应用（Agent 2.0）**：函数调用被抽象为“工具调用”，知识库、MCP 服务、官方插件（如 `calculator`、`quark_search`）均统一注册为工具。无需手动构造 `tools`，只需在控制台绑定工具并开启“自动调用”，模型会根据系统提示词和用户输入自主规划调用序列，并支持完整链路回溯（规划→执行→反思）。
+
+- **工作流应用（Workflow）**：函数调用体现为“工具节点”或“API 节点”的显式编排。开发者通过拖拽将插件/MCP/自定义 API 作为确定性节点接入流程，由人工定义触发条件与参数传递逻辑，不依赖模型自主决策，适用于强流程约束场景。
+
+- **插件集成**：所有插件（官方、三方、自定义）本质上都是可被函数调用机制发现和调度的标准化工具。自定义插件需明确定义 `function.name`、参数 schema 和鉴权方式，发布后即可被 Agent 或模型 API 调用。
+
+> ✅ 关键区别：模型 API 和 Agent 2.0 依赖模型**自主决策调用**（`auto` / `required` 模式），而工作流是**人工编排调用**；前者灵活但不可控，后者确定但需预设逻辑。
 
 ## 关键参数和配置
 
-| 参数名 | 类型 | 说明 | 是否必填 |
-|--------|------|------|----------|
-| `tools` | array of object | 工具列表，每个对象包含 `type`（固定为 `"function"`）、`function.name`、`function.description` 和 `function.parameters`（JSON Schema 格式） | 是（启用函数调用时） |
-| `tool_choice` | string or object | 控制调用策略：<br>• `"auto"`（默认）：由模型自主决定是否调用及调用哪个工具<br>• `"none"`：禁止调用任何工具<br>• `{"type": "function", "function": {"name": "xxx"}}`：强制指定调用某函数 | 否（默认 `"auto"`） |
-| `enable_thinking` | boolean | 启用思维链推理，提升复杂工具选择与参数生成准确性（尤其对多步骤、多工具场景） | 否（建议开启） |
-| `thinking_budget` | integer | 思维链推理所允许的最大 token 数，默认 4000，避免过度消耗上下文 | 否（仅当 `enable_thinking=true` 时生效） |
+| 参数名 | 类型 | 必填 | 说明 | 使用位置 |
+|--------|------|------|------|-----------|
+| `enable_function_calling` | boolean | 是（模型 API） | 启用函数调用能力，必须设为 `true` 才能触发 `tool_calls` 响应 | 模型 API 请求 `parameters` |
+| `tools` | array | 是（模型 API / Agent 工具绑定） | OpenAI 兼容格式的工具定义数组，每个元素含 `function.name`、`description`、`parameters`（JSON Schema） | 模型 API `input` 或 Agent 控制台工具管理 |
+| `tool_choice` | string / object | 否 | 控制调用策略：`"none"`（禁用）、`"auto"`（默认，模型自主决定）、`"required"`（强制调用至少一个）、`{"type": "function", "function": {"name": "xxx"}}`（指定工具） | 模型 API `input` |
+| `biz_params.user_defined_params` | object | 否（推荐） | 用于向工具透传业务参数（如 `{"city": "杭州"}`），避免依赖模型抽取，提升准确率与安全性 | 所有支持插件的 API（`application call` / 模型 API） |
+| `workspace` | string | 否（子空间必需） | 调用子业务空间内插件或应用时必须传入，确保工具上下文隔离 | HTTP Header（`X-DashScope-Workspace`） |
 
-- **Schema 要求**：`function.parameters` 必须为合法 JSON Schema（支持 `string`、`number`、`boolean`、`object`、`array` 及嵌套），不支持 `null` 类型或 `$ref` 引用；推荐使用 `required` 字段明确必填参数。
-- **响应处理**：函数执行后，需将结果以 `{"role": "tool", "tool_call_id": "...", "content": "..."}` 格式作为新消息加入 `messages`，再次调用模型完成最终回复。
+> ⚠️ 注意事项：
+> - `tools` 中 `parameters` 必须为严格有效的 JSON Schema（支持 `string`/`number`/`boolean`/`object`/`array` 及嵌套），空 `properties` 或语法错误将导致调用失败；
+> - 模型对工具名称和描述的语义理解高度敏感，建议 `function.name` 简洁唯一（如 `get_weather_by_city`），`description` 明确说明用途、输入约束与输出格式；
+> - 在 Agent 2.0 中，工具调用失败时模型可能重试或降级处理，可通过系统提示词添加兜底指令（如“若工具不可用，请如实告知用户”）。
 
 ## 面向开发者，简洁实用
 
-- ✅ **快速起步**：在控制台创建 Agent 2.0 应用 → 绑定知识库与内置插件 → 发布后即可测试函数调用效果；无需写一行工具调用代码。  
-- ✅ **调试技巧**：开启 `stream=false` + `enable_thinking=true`，观察模型返回的 `tool_calls` 内容是否符合预期；若参数缺失或格式错误，检查 `parameters` Schema 中 `required` 和 `type` 定义。  
-- ✅ **生产建议**：  
-  - 对关键业务函数（如支付、删库），务必在工具实现层做鉴权与幂等校验；  
-  - 避免在 `function.description` 中暴露敏感逻辑，仅描述用途与输入输出语义；  
-  - 流式场景下，`tool_calls` 仅在首 chunk 返回，后续 chunk 为工具执行结果或最终回复，需按 `delta.role` 区分处理。  
-- ❌ **常见误区**：  
-  - 误以为 `tools` 声明后模型一定会调用——实际仍取决于输入意图与模型能力；  
-  - 将函数返回的原始 JSON 当作最终答案——必须回传给模型生成自然语言总结；  
-  - 在非函数调用模式（如纯文本生成）下传入 `tools` 参数，将被忽略且不报错。
+- **快速验证**：用 `qwen-turbo` + 最小 `tools`（如单个 `calculator`）发起一次 `/v1/chat/completions` 请求，观察是否返回 `tool_calls`，而非普通文本回复。
+- **生产建议**：
+  - 优先使用 **Agent 2.0** 替代裸模型 API 调用函数，它内置工具路由、错误重试、结果解析与上下文融合，大幅降低工程复杂度；
+  - 对确定性流程（如“查订单→转工单→发短信”），选 **工作流应用**，避免模型幻觉导致工具误调；
+  - 自定义插件务必启用 **调试模式** 并测试边界参数（空值、超长字符串、非法类型），工具返回非 2xx 响应需在 `responses` 中明确 `error` 字段供模型理解；
+  - 所有工具调用结果请做**可信度校验**（如搜索结果是否含有效链接、代码执行是否超时），再决定是否回传给模型，防止污染推理链路。
+
+函数调用不是功能开关，而是构建可靠 AI 应用的**协议基石**——设计清晰的工具契约、控制好调用边界、善用平台抽象层，才能让大模型真正“动起来”。
 
 ## 关联主题页
 
 - [start using](../guides/start-using.md)
-- [test 1](../guides/test-1.md)
+- [get started with models](../guides/get-started-with-models.md)
 - [llm application](../guides/llm-application.md)
 - [application call](../api/application-call.md)
-- [application support](../guides/application-support.md)
+- [plug in](../guides/plug-in.md)
 
 

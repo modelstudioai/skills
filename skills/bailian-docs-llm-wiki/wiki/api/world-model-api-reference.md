@@ -1,46 +1,47 @@
 # world model api reference
 
-世界模型 API 提供面向游戏与交互式叙事场景的多模态建模能力，支持剧情生成、角色行为决策、环境状态演化等核心功能。当前以 HappyOyster 系列模型为主力实现，涵盖 Adventure（冒险叙事）、Directing（导演调度）和 Acting（角色表演）三大子系统。所有接口均通过标准 HTTP POST 调用，遵循 OpenAPI 3.0 规范。
+世界模型 API 提供面向叙事与交互式内容生成的专用能力，当前聚焦于冒险（Adventure）、导演（Directing）两类核心场景，支持结构化剧情推演、角色行为决策与多模态指令编排。该 API 为百炼平台内测能力，需申请权限后使用。详细接口定义与参数说明请参考 [原文标题](../../raw/model-api-reference/world-model-api-reference.md)。
 
 ## 支持的模型/功能
 
-- **Adventure 模型**：用于生成动态剧情分支、世界状态演化及玩家意图推理，适用于开放世界 RPG 或文字冒险类应用。详见 [Adventure Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-adventure-openapi-reference.md)。  
-- **Directing 模型**：负责多角色协同调度、镜头语言生成与节奏控制，常用于交互式影视或虚拟制片流程。其能力说明见 [Directing Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-directing-openapi-reference.md)。  
-- **Acting 模型**（邀测中）：专注单角色实时行为建模，包括微表情、语音韵律与动作序列生成，当前仅对白名单用户开放。完整接口定义请参阅 [Acting Open API参考（邀测中）](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-acting-openapi-reference.md)。
+- **Adventure 模型**：用于生成动态剧情分支、环境响应与玩家交互反馈，适用于文字冒险、教育模拟等场景。  
+- **Directing 模型**：用于解析导演意图、生成分镜脚本、协调角色动作与镜头调度，适用于虚拟制片与AIGC视频预演。  
+- **Acting 模型（邀测中）**：面向角色实时表演建模，支持情绪驱动的动作与语音协同生成；当前仅对白名单用户开放，具体能力以 [原文标题](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-acting-openapi-reference.md) 为准。
 
-> **注意**：原始文档中未明确标注 Acting 模型是否支持流式响应，但 [Directing Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-directing-openapi-reference.md) 明确要求 `stream: false`；实际调用时若启用 `stream=true` 将返回 400 错误，建议以 Directing 文档为准统一禁用流式。
+> **注意**：原始文档中将 Acting 模型标注为“邀测中”，但部分内部 SDK 文档已默认启用该模型入口。实际调用前请务必确认账户权限状态，避免 403 错误。
 
 ## 关键参数
 
-| 参数名 | 类型 | 必填 | 说明 |
-|--------|------|------|------|
-| `model` | string | 是 | 固定值：`happyoyster-adventure` / `happyoyster-directing` / `happyoyster-acting` |
-| `input.world_state` | object | 是 | 当前世界快照（JSON Schema 见各子模型文档） |
-| `input.user_intent` | string | 否 | 用户最近输入或动作意图（仅 Adventure 和 Directing 推荐提供） |
-| `parameters.temperature` | number | 否 | 默认 0.7；Acting 模型建议 ≤0.5 以保障行为一致性 |
+所有世界模型 API 均遵循统一基础参数规范：
+- `model`: 必填，取值为 `"happyoyster/adventure"`、`"happyoyster/directing"` 或 `"happyoyster/acting"`（后者需权限）  
+- `input`: 必填，结构化 JSON 对象，格式依模型类型而异（详见各 OpenAPI 参考）  
+- `stream`: 可选，布尔值，仅 Adventure 和 Directing 支持流式响应；Acting 模型暂不支持流式（参见 [原文标题](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-directing-openapi-reference.md)）  
+- `max_tokens`: 建议显式指定，避免超长输出导致截断或超时  
 
 ## 使用方式
 
-1. 向 `https://dashscope.aliyuncs.com/api/v1/services/aigc/world-model` 发起 POST 请求  
-2. Header 中携带 `Authorization: Bearer <api_key>` 和 `Content-Type: application/json`  
-3. Body 示例（Adventure 场景）：
-```json
-{
-  "model": "happyoyster-adventure",
-  "input": {
-    "world_state": {"location": "forest", "characters": ["player", "elf"]},
-    "user_intent": "ask elf about the ancient gate"
-  },
-  "parameters": {"temperature": 0.6}
-}
-```
+1. 确认已开通世界模型服务权限（控制台 → API 权限管理 → “世界模型”）  
+2. 构造 POST 请求至 `https://dashscope.aliyuncs.com/api/v1/services/aigc/world-model/invoke`  
+3. 在请求头中携带 `Authorization: Bearer <api_key>` 与 `Content-Type: application/json`  
+4. 请求体示例（Adventure）：
+   ```json
+   {
+     "model": "happyoyster/adventure",
+     "input": {
+       "scene": "forest_clearing",
+       "player_action": "examine the old chest",
+       "world_state": {"items": ["key", "map"], "enemies": []}
+     }
+   }
+   ```
 
 ## 限制和注意事项
 
-- 单次请求 `world_state` 最大 JSON 大小为 128 KB；超限将返回 `413 Payload Too Large`  
-- Acting 模型暂不支持 `system_prompt` 字段，该字段在 [Adventure Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-adventure-openapi-reference.md) 中虽有定义，但在 Acting 实现中被忽略  
-- 所有模型均要求 `input.world_state` 包含 `location` 和 `characters` 两个顶层字段，缺失将触发校验失败（HTTP 400）  
-- 调用频率限制：默认 5 QPS / key，如需提升请提交工单申请配额扩容
+- 单次请求 `input` 字段总 token 数上限为 8192（含结构开销），超出将返回 `400 Bad Request`  
+- Adventure 与 Directing 模型最大输出长度为 2048 tokens；Acting 模型当前限制为 512 tokens（以实际响应为准）  
+- 所有模型均不支持系统提示词（`system` 字段被忽略），世界状态与指令必须通过 `input` 显式传递  
+- 调用频率限制：默认 5 QPS / 账户，如需提升请提交工单申请  
+- 注意模型间输入 schema 差异显著，切勿复用 Adventure 的 input 结构调用 Directing 接口——此类错误在日志中表现为 `invalid_input_schema`，调试时请严格对照各 OpenAPI 文档
 
 ## 来源文档
 

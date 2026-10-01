@@ -1,66 +1,58 @@
 # 长期记忆
 
-长期记忆（Long Term Memory, LTM）是百炼平台提供的跨会话、结构化、语义驱动的记忆持久化与检索能力，用于突破大模型单次推理的上下文长度限制，实现用户事实信息、行为偏好与画像特征的自动提取、长期存储与高相关性召回。
+长期记忆是百炼平台为大模型应用提供的**跨会话、结构化、语义可检索的持久化记忆服务**，用于突破大模型上下文窗口限制，实现用户状态、行为意图与固有特征的自动沉淀与智能复用。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-长期记忆不是单一功能模块，而是贯穿多个平台能力的横切基础设施，其使用方式因集成路径和应用范式而异：
+长期记忆不是独立运行的模块，而是深度集成于百炼核心应用范式中，按需启用、自动协同：
 
-- **在 Memory Library（记忆库）中**：作为独立服务提供，通过 `AddMemory` / `SearchMemory` 等开放 API 显式管理。支持两类记忆类型：  
-  - **事实记忆（Fragments）**：从对话消息中自动提取可验证的离散事实（如“每天9点喝水”），适用于动态、时效性信息；  
-  - **用户画像（Profiles）**：基于预定义 schema 结构化抽取稳定属性（如“职业=设计师，偏好=简洁回复”），支持异步生成与查询。  
-  可通过 Agent Harness 一键启用，或通过 OpenClaw 插件在工作流中全自动捕获与注入（`before_agent_start` → `agent_end` 钩子驱动）。
+- **智能体（Agent 2.0）应用**：在控制台创建 Agent 时，开启「长期记忆」开关后，系统自动在每次对话 `completion` 调用前后执行记忆写入（`AddMemory`）与检索（`SearchMemory`）。检索结果以 `memory_nodes` 形式注入 Prompt，支撑个性化响应与连续任务规划。调用 API 时通过 `memory_id` 参数显式启用（仅对 Agent 应用有效）。
 
-- **在 LLM Application（智能体/工作流）中**：作为增强能力嵌入应用生命周期。调用已发布的智能体时，通过请求参数 `memory_id` 指定关联的记忆库 ID，平台自动完成检索与 Prompt 注入；该能力仅对新版智能体（Agent 2.0）及部分旧版智能体生效，工作流暂不原生支持。
+- **工作流（Workflow）应用**：不直接内置长期记忆能力，但可通过 **OpenClaw 插件** 或自定义 HTTP 节点调用长期记忆 API（如 `/add-async` 和 `/memory_nodes/search`），实现记忆驱动的流程分支（例如：“若用户历史有健身目标，则推荐运动计划”）。
 
-- **在 Model-Level API（模型直调）中**：需配合标注 `ltm_enabled: true` 的专用模型（如 `qwen-max-20241017`, `qwen3-max` 等）使用。通过 `parameters.memory.{write, read}` 控制写入与读取行为，系统自动判别内容类型并分发至事实库或画像库，无需手动指定。
+- **高代码应用**：开发者可直接集成 `dashscope` SDK 或调用 REST API，在 Python 服务中自主控制记忆生命周期——例如，在用户登录后预加载画像，在工具调用后写入技能记录，在生成回复前注入相关事实。
 
-- **在 Managed Agents 中**：作为上下文扩展资源挂载，与文件、工具环境并列。记忆库以“跨会话持久化文件树”的抽象形式提供状态复用能力，支撑长时运行任务中的上下文连续性（如多轮代码调试、迭代式数据分析）。
+- **安全防护体系**：长期记忆内容（包括事实记忆文本、用户画像字段）默认接受**输入/输出内容安全检测**；启用高级防护后，还支持记忆窃取行为审计与知识投毒风险识别，确保记忆数据本身可信、合规、可控。
 
-> ⚠️ 注意：基础模型（如 `qwen-turbo`）或未显式启用 LTM 的模型，即使传入 `memory` 参数也不会触发任何持久化或检索行为。
+> ✅ 注意：当前所有文档所指“长期记忆”均指向统一升级后的 **记忆库（Memory Library）服务**，旧版功能已下线，无兼容或并存版本。
 
 ## 关键参数和配置
 
-| 参数 | 所属场景 | 说明 | 默认值 | 建议值 |
-|------|----------|------|--------|--------|
-| `user_id` | Memory Library API / LTM Model API | 记忆隔离维度，不同 `user_id` 数据完全隔离 | 必填 | 业务侧唯一用户标识（如 UUID 或登录 ID） |
-| `memory_id` | Application Call（智能体调用） | 绑定已创建的记忆库 ID，启用自动检索注入 | 可选 | 控制台创建记忆库后获得的 `memory_id` 字符串 |
-| `plan_version`（`Pro` / `Lite`） | Memory Library | 控制 Rerank 是否开启，影响精度与成本 | `Pro` | 高精度场景用 `Pro`；高频低敏感场景可用 `Lite` |
-| `top_k` | Memory Library API / LTM Model API | 单次检索最大返回条数 | `10`（API） / `5`（插件） / `5`（model-level） | `3–5`（平衡效果与噪声）；上限 `100` |
-| `min_score` / `fact_threshold` / `profile_threshold` | Memory Library（`min_score`） / Model API（`*_threshold`） | 相似度阈值（0.0–1.0），低于则过滤 | `0.3` / `0.65` / `0.72` | `0.5–0.7`（通用推荐）；`profile_threshold` 可略高于 `fact_threshold` |
-| `expires_at` | Memory Library API / LTM Model API | ISO8601 格式时间戳，显式设置 TTL | 无（永不过期） | 显式传入（如 `"2025-12-31T23:59:59Z"`）以实现精准过期控制 |
-| `profile_schema` | Memory Library（用户画像） | 用户画像模板 ID，启用结构化抽取 | 可选 | 调用 `CreateProfileSchema` 后获取 |
+| 参数 | 说明 | 推荐值 | 备注 |
+|------|------|--------|------|
+| `user_id` | **必填**，用户级隔离标识符 | 字符串（如 `"u_12345"`） | 所有读写操作均以此为维度，确保多租户数据隔离 |
+| `plan_version` | 计费与能力策略版本 | `"Pro"`（推荐） / `"Lite"` | `"Pro"` 支持 Rerank、`min_score` 过滤；`"Lite"` 仅基础检索，不计费但能力受限 |
+| `top_k` | 检索返回最大条数 | `5–10`（生产环境常用） | 默认值未显式声明，API 示例多用 `10`；过高易引入噪声，过低可能漏召关键信息 |
+| `min_score` | 相似度阈值（仅 `plan_version="Pro"` 生效） | `0.6`（起始推荐） | 范围 `0.0–1.0`；`<0.5` 易召回无关项，`>0.7` 可能漏召；需结合业务效果微调 |
+| `memory_types` | 指定检索类型 | `["observation", "skill"]` 或 `["profile"]` | 控制搜索范围，避免混检干扰；默认全类型 |
+| `extract_mode` | 写入时抽取控制模式 | `"profile_only"` / `"all"` | 同步写入时可指定仅提取画像，降低延迟；异步写入（`/add-async`）更推荐全量处理 |
 
-> 💡 提示：记忆默认**永不过期**，除非显式配置 `expires_at` 或在控制台记忆规则中设置过期时间；文档中提及的“默认180天”仅为初始规则模板值，非全局强制策略。
+- **异步写入必备**：当需高精度用户画像提取或批量处理多条消息时，必须使用 `/add-async` 接口，并轮询 `GET /events/{event_id}` 获取最终结果（`status=SUCCEEDED` 后 `result` 字段才有效）。
+- **画像模板依赖**：提取用户画像需提前在控制台或通过 `/profile_schemas` API 创建并传入 `profile_schema_id`；模板字段变更后，新写入将按新结构生效。
 
 ## 面向开发者，简洁实用
 
-- ✅ **快速验证**：开通 Memory Library 后，直接调用 `AddMemory` 写入含 `user_id` 和 `messages` 的对话，再用 `SearchMemory` 检索，无需额外配置即可体验。
-- ✅ **零侵入集成**：OpenClaw 工作流中安装 `@modelstudio/modelstudio-memory-for-openclaw` 插件，配置 `apiKey` 和 `userId`，启用 `autoCapture`/`autoRecall`，Agent 自动完成全链路记忆管理。
-- ✅ **模型直调最简用法**：
-  ```json
-  {
-    "model": "qwen-max-20241017",
-    "input": { "messages": [{"role":"user","content":"我的生日是1992年5月3日"}] },
-    "parameters": {
-      "memory": { "write": true, "read": true, "fact_threshold": 0.7 }
-    }
-  }
-  ```
-- ✅ **避坑指南**：
-  - 不要对非 `ltm_enabled` 模型使用 `memory` 参数；
-  - 流式响应（`stream: true`）下 `memory.write` 不生效，请改用同步模式；
-  - 记忆内容严格按 `app_id + user_id` 隔离，跨应用/跨用户数据不可见；
-  - `memory.read: true` 不自动过滤低分或过期记忆，需结合 `min_score` 或主动清理。
+- **快速上手三步**：  
+  1️⃣ 开通：控制台 → [记忆库页面](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/memory/list) → 点击「立即开通」；  
+  2️⃣ 写入：`POST /api/v2/apps/memory/add`，传 `user_id` + `messages`（事实）或 `+ profile_schema_id`（画像）；  
+  3️⃣ 检索：`POST /api/v2/apps/memory/memory_nodes/search`，传 `user_id` + 当前 `messages`，结果自动注入 Agent Prompt 或供你手动解析。
 
-- 📈 **容量注意**：单应用上限为 100 万条事实记忆 + 10 万条用户画像；超限时写入返回 `400 QuotaExceeded`，建议定期归档或按需清理。
+- **避坑提示**：  
+  ▪ 用户画像提取为**异步过程**，`AddMemory` 后立即调用 `GetUserProfile` 可能返回空，建议等待 2–5 秒或改用 `/add-async` + 事件轮询；  
+  ▪ `min_score` 在 `"Lite"` 版本下**不生效**，勿配置；  
+  ▪ 免费额度仅限首 3 个月（商业化起始日：2026-08-20），建议尽早压测并规划配额；  
+  ▪ 所有接口受账号级限流约束（`AddMemory ≤ 120 QPM`, `SearchMemory ≤ 300 QPM`），超限返回 `429`，务必实现指数退避重试。
+
+- **调试建议**：  
+  使用 `GET /memory_nodes?user_id=xxx&page_num=1&page_size=20` 浏览原始记忆节点，验证提取质量；  
+  在 Agent 调试面板中开启「显示注入记忆」开关，直观查看哪些 `memory_nodes` 被实际用于本次推理。
 
 ## 关联主题页
 
 - [memory library overview](../guides/memory-library-overview.md)
 - [long term memory new](../api/long-term-memory-new.md)
 - [llm application](../guides/llm-application.md)
-- [managed agents](../guides/managed-agents.md)
 - [application call](../api/application-call.md)
+- [security guide](../guides/security-guide.md)
 
 
