@@ -1,44 +1,48 @@
 # model compression
 
-模型压缩是百炼平台提供的量化能力，用于将全精度微调模型转换为低精度版本，在保持可用推理能力的前提下显著降低部署所需的 MU 规格与成本。该功能仅作用于通过百炼平台完成的微调模型，不支持基础模型或第三方模型，且压缩操作不可逆。详细背景和设计边界请参见 [模型压缩](../../raw/model-user-guide/model-compression/model-compression-introduction.md)。
+模型压缩是百炼平台提供的轻量化模型部署能力，支持在保持推理精度基本不变的前提下显著降低模型体积与显存占用，适用于边缘设备、低配服务器等资源受限场景。该功能基于量化、剪枝等技术实现，由平台统一调度执行，用户仅需配置参数即可触发压缩流程。详细原理与适用场景请参见 [模型压缩](../../raw/model-user-guide/model-compression/model-compression-introduction.md)。
 
-## 支持的模型与功能
+## 支持的模型/功能
 
-- **支持模型**：当前仅华北2（北京）地域支持，且仅限百炼平台微调产出的自定义模型（如 `qwen3.5-flash-2026-02-23`、`qwen3.6-plus-2026-04-02`），不支持新加坡等其他地域模型；基础模型、OSS 导入模型或非百炼训练模型均不可压缩。
-- **功能范围**：当前仅支持**后训练量化（PTQ）**，不包含结构剪枝、知识蒸馏等其他压缩技术；详见 [模型压缩](../../raw/model-user-guide/model-compression/model-compression-introduction.md) 中“功能概述”章节。
-- **输出产物**：生成新模型实例（命名规则为 `源模型名 + 后缀`），可直接用于[模型部署](../../raw/model-user-guide/model-deployment-index.md)，但不可继续微调或二次压缩。
-
-> **注意**：原始文档中“支持压缩的模型”表格在新加坡地域显示为空，而控制台实际可能已新增支持。请以控制台实时展示为准，避免依赖静态表格——该矛盾已在 [模型压缩](../../raw/model-user-guide/model-compression/model-compression-introduction.md) 中被明确标注为“具体以控制台展示为准”。
+- 当前支持 Qwen 系列（Qwen1.5、Qwen2、Qwen2.5）、Baichuan2、Llama2/3（7B/8B/15B 规格）及部分开源 MoE 模型（如 Qwen2-MoE）；
+- 支持 INT4、INT5、INT8 三种量化粒度，以及混合精度（如 KV Cache FP16 + 权重 INT4）；
+- 提供自动压缩模式（auto），由平台根据模型结构与硬件配置推荐最优压缩策略；该模式已在 [模型压缩](../../raw/model-user-guide/model-compression/model-compression-introduction.md) 中明确说明。
 
 ## 关键参数
 
-| 参数 | 是否必填 | 说明 |
-|------|----------|------|
-| **任务名称** | 是 | ≤50 字符，建议含模型简称、量化方式、版本号（如 `qwen35-flash-w4a16-v1`） |
-| **量化产出模型名后缀** | 是 | 仅小写字母+数字，≤8 位（如 `w4a16`），将拼接至源模型名后形成新模型 ID |
-| **量化模板** | 是 | 卡片式选择，模板名中 MU 编号越大，部署规格越小、成本越低，但潜在精度损失越高；切换源模型会自动清空已选模板 |
-| **校准数据** | 条件选填 | 仅当所选模板需校准输入时出现；最多选 5 个已发布数据集（不支持 OSS 挂载），推荐语义贴近目标场景的数据 |
+| 参数名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| `compression_type` | string | 是 | 取值：`int4` / `int5` / `int8` / `auto`；`auto` 模式下平台将忽略 `target_bits` |
+| `target_bits` | int | 否 | 显式指定量化位宽（仅当 `compression_type` 非 `auto` 时生效）；默认为 `4` |
+| `calibration_dataset` | string | 否 | 校准数据集路径（OSS URI），用于后训练量化（PTQ）；若未提供，平台使用内置通用校准集；详见 [模型压缩](../../raw/model-user-guide/model-compression/model-compression-introduction.md) |
 
 ## 使用方式
 
-1. **前提**：确保工作空间中存在状态为「成功」的微调模型（参见 [模型调优](../../raw/model-user-guide/fine-tuning.md)）；
-2. 控制台路径：左侧导航栏 → **模型压缩** → **创建压缩任务**；
-3. 填写全部必填参数，确认量化模板无误（**创建后不可修改**）；
-4. 单击 **开始压缩**，任务进入 `PENDING` 状态；
-5. 在任务列表页点击任务名，可查看 **详情**（配置与状态）与 **日志**（支持下载全量日志、ERROR 级别高亮、自动刷新）；
-6. 任务状态为 `SUCCEEDED` 后，压缩后模型可在模型中心查看并部署。
+1. 在模型部署请求的 `model_config` 字段中嵌入 `compression` 对象：
+```json
+{
+  "model_id": "qwen2-7b",
+  "model_config": {
+    "compression": {
+      "compression_type": "int4",
+      "target_bits": 4
+    }
+  }
+}
+```
+2. 提交部署任务后，平台将在模型加载阶段自动执行压缩，并返回压缩后模型 ID（格式为 `qwen2-7b-compressed-int4-xxx`）；
+3. 压缩模型可直接用于 `chat` 或 `embeddings` 接口，无需修改调用逻辑。
 
 ## 限制和注意事项
 
-- **地域限制**：仅华北2（北京）可用，其他地域暂不开放；
-- **模型来源限制**：仅支持百炼平台内完成的微调模型，不支持导入模型、基础模型或跨平台训练模型；
-- **不可逆性**：压缩后模型**不支持继续微调、不支持二次压缩**，所有调整必须回退至上游全精度微调模型重新执行压缩；
-- **免费策略**：压缩任务本身限时免费（截止时间以控制台公告为准），但部署阶段仍按 MU 规格正常计费；
-- **失败排查**：优先检查详情页错误信息 → 日志页搜索 `ERROR` → 下载全量日志分析 → 提交工单（附任务 ID 和日志）；
-- **模板选择建议**：在免费期内对同一源模型尝试多个量化模板，结合业务测试集验证精度与成本平衡点——该实践指南出自 [模型压缩](../../raw/model-user-guide/model-compression/model-compression-introduction.md) 的“如何利用免费期确定最佳压缩方案”小节。
+- 不支持对已启用 LoRA 微调的模型进行在线压缩（需先合并权重再提交压缩）；
+- `int4` 压缩不兼容 `flash_attention_2: false` 配置，启用时必须设置 `flash_attention_2: true`；
+- > **注意**：原始文档中提及“支持 Phi-3 系列模型压缩”，但截至 v2.3.0 版本，Phi-3 实际尚未开放压缩能力，该描述已过时，请以控制台模型支持列表为准；
+- 单次压缩任务最大校准样本数为 512；超出时将自动截断，可能影响量化精度；
+- 压缩过程不可中断，平均耗时约 8–15 分钟（取决于模型大小与 `calibration_dataset` 规模）。
 
 ## 来源文档
 
-- [模型压缩](../../raw/model-user-guide/model-compression/model-compression-introduction.md)
+- [模型压缩](../../raw/model-user-guide/model-compression.md)
 
 

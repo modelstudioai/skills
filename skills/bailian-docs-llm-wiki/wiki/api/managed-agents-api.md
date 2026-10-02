@@ -1,32 +1,42 @@
 # [managed agents](../guides/managed-agents.md) api
 
-Managed Agents API 是百炼平台提供的托管式智能体服务接口，用于创建、配置和管理具备[长期记忆](../concepts/memory.md)、工具调用、多步推理能力的 AI Agent。该 API 以 RESTful 形式提供，支持细粒度的生命周期控制与环境隔离。开发者可通过组合 Agent、Environment、Session、Memory Store 等核心资源构建生产级智能体应用。
+Managed Agents API 是百炼平台提供的托管式智能体服务接口，用于创建、配置和运行具备[长期记忆](../concepts/long-term-memory.md)、工具调用、多步推理能力的自主 Agent。该 API 封装了环境管理、会话生命周期、文件与凭证安全存储、技能编排等底层能力，开发者无需自行维护基础设施即可构建生产级 Agent 应用。详细设计与行为规范请参考 [Managed Agents](../../raw/application-api-reference/managed-agents-api.md)。
 
 ## 支持的模型与功能
 
-- **模型支持**：当前仅支持百炼平台托管的 `qwen-max`、`qwen-plus` 和 `qwen-turbo` 三类大模型（详见 [API 总览与认证](../../raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md)）；不支持自定义模型或外部模型接入。
-- **核心功能**：包括会话状态管理（Session）、持久化记忆存储（Memory Store）、安全凭证管理（Credential）、技能封装（Skill）、文件上传与引用（File）、环境沙箱隔离（Environment）及 Webhook 事件回调。所有功能均通过独立子资源 API 暴露，例如 [Environment](../../raw/application-api-reference/managed-agents-api/environment-api.md) 提供运行时依赖注入能力。
+- **模型支持**：当前仅支持百炼平台托管的 `qwen-max`、`qwen-plus` 和 `qwen-turbo` 三款 Qwen 系列大模型；其他模型（如 `qwen2.5`）暂未开放 Agent 模式调用，具体以 [Agent](../../raw/application-api-reference/managed-agents-api/agent-api.md) 文档为准。
+- **核心功能**：
+  - 基于 `Environment` 的隔离[沙箱](../concepts/sandbox.md)执行上下文；
+  - `Session` 管理带状态的多轮交互与事件流（含 `on_tool_call`、`on_memory_update` 等钩子）；
+  - `Memory Store` 提供向量+结构化混合记忆检索；
+  - `Skill` 机制支持声明式工具注册与自动路由；
+  - `Vault` + `Credential` 实现敏感凭据的加密托管与按需注入。
+
+> **注意**：原始文档中 [Environment](../../raw/application-api-reference/managed-agents-api/environment-api.md) 描述其支持自定义 Docker 镜像，但该能力已于 v2.3 版本下线；实际仅支持平台预置的 Python 3.11 运行时环境，请以 [Session and Event](../../raw/application-api-reference/managed-agents-api/session-api.md) 中的 runtime 兼容性说明为准。
 
 ## 关键参数
 
-- `agent_id`（路径参数）：Agent 唯一标识，由平台在创建后返回，不可自定义。
-- `session_id`（请求体/查询参数）：用于关联用户会话，若未提供则自动创建新会话；建议前端传入稳定用户 ID 以启用跨设备记忆同步。
-- `memory_store_id`（可选）：指定绑定的记忆存储实例，若为空则使用 Agent 默认 Memory Store；注意该字段在 [Session and Event](../../raw/application-api-reference/managed-agents-api/session-api.md) 中为必填项，与 [Memory Store](../../raw/application-api-reference/managed-agents-api/memory-store-api.md) 文档描述存在不一致。
-> **注意**：`memory_store_id` 在 Session 创建时是否强制要求，[Session and Event](../../raw/application-api-reference/managed-agents-api/session-api.md) 与 [Memory Store](../../raw/application-api-reference/managed-agents-api/memory-store-api.md) 的约束说明冲突，建议以 Session API 文档为准并显式传入。
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `agent_id` | string | 是 | 通过 `/v1/agents` 创建后返回的唯一标识符 |
+| `session_id` | string | 否 | 复用已有会话时传入；不传则新建会话（自动持久化） |
+| `input` | object | 是 | 用户输入，格式为 `{ "text": "..." }` 或 `{ "files": ["file_id_1", "..."] }` |
+| `stream` | boolean | 否 | `true` 时返回 Server-Sent Events 流；默认 `false`（JSON 响应） |
+| `max_steps` | integer | 否 | 单次请求最大执行步数，范围 1–50，默认 20 |
 
 ## 使用方式
 
-1. **初始化 Agent**：先调用 `/v1/agents` 创建 Agent 实例，指定 `model_id` 和基础配置；
-2. **配置依赖**：按需创建 Environment、Memory Store、Skill 等资源，并通过 `POST /v1/agents/{agent_id}/bindings` 关联；
-3. **启动交互**：使用 `POST /v1/agents/{agent_id}/sessions/{session_id}/chat` 发起对话，请求体中可携带 `files`、`tool_choice` 等上下文参数；
-4. 参考完整流程见 [快速开始](../../raw/application-api-reference/managed-agents-api/managed-agents-quickstart.md)。
+1. **创建 Agent**：调用 `POST /v1/agents`，传入 `name`、`description`、启用的 `skills` 列表及 `memory_store_id`（可选）；
+2. **发起调用**：`POST /v1/agents/{agent_id}/chat`，携带 `input` 与可选 `session_id`；
+3. **管理资源**：通过 `/v1/environments`、`/v1/skills`、`/v1/vaults` 等子路径独立配置依赖组件；
+4. **调试与监控**：所有会话事件可通过 `/v1/sessions/{session_id}/events` 查询，详见 [Session and Event](../../raw/application-api-reference/managed-agents-api/session-api.md)。
 
 ## 限制和注意事项
 
-- 单个 Agent 最多绑定 10 个 Skill、5 个 Environment 和 1 个 Memory Store；
-- Session 生命周期默认 7 天，超时后关联 Memory Store 中的历史记录仍保留，但会话状态不可恢复；
-- 文件上传大小上限为 100 MB，且仅支持 `pdf`, `txt`, `md`, `csv`, `xlsx` 格式（参见 [File](../../raw/application-api-reference/managed-agents-api/files-api.md)）；
-- 所有 API 均需通过 Bearer Token 认证，Token 权限须包含 `managed_agents:full_access`，具体鉴权规则见 [API 总览与认证](../../raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md)。
+- 单次 `chat` 请求最大 `input.text` 长度为 32768 字符；文件总大小不超过 100 MB；
+- `Memory Store` 默认保留最近 100 条记忆条目，超出部分按 LRU 自动淘汰；
+- Agent 不支持跨 `Environment` 共享 `Vault` 凭据——每个 Environment 必须显式绑定 Vault，此约束在 [Vault](../../raw/application-api-reference/managed-agents-api/vault-api.md) 中有明确说明；
+- 所有 API 均需使用 `Authorization: Bearer <api_key>` 认证，且 `api_key` 必须具备 `managed_agents:write` 权限。
 
 ## 来源文档
 

@@ -1,44 +1,44 @@
 # billing api
 
-Billing API 提供账单数据的查询能力，支持按月汇总和按时间趋势两种视角，帮助开发者获取模型调用、训练等 MaaS 服务的费用明细。当前仅开放 `GetBillingOverview` 和 `GetBillingTrend` 两个核心接口，均基于 RESTful 设计，需通过 HTTPS 调用并携带有效认证凭证。所有接口返回结构统一，含 `requestId`、`code`、`success` 及业务数据 `data` 字段，便于程序化解析与监控集成。
+Billing API 提供账单数据的查询能力，支持按月获取费用总览（`GetBillingOverview`）和按时间范围获取费用趋势（`GetBillingTrend`）。所有接口均基于 RESTful 设计，使用 HTTPS 协议，返回结构化 JSON 响应。开发者可通过维度分组、条件筛选和多语言支持灵活适配财务分析与成本监控场景。
 
 ## 支持的模型/功能
 
-- **账单总览**：`GetBillingOverview` 接口用于查询指定单个月份（`billMonth`）的费用聚合结果，适用于月度成本复盘与预算核对。该接口不支持跨月查询，且分组维度必须且仅能指定一个（如 `MAAS_TYPE` 或 `BASE_MODEL`）[GetBillingOverview](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingoverview.md)。  
-- **账单趋势**：`GetBillingTrend` 接口支持按天（`DAY`）或按月（`MONTH`）粒度查询连续时间段（`timePeriod.start` 至 `timePeriod.end`）的费用变化，返回分组维度下的周期性明细及汇总，适用于用量波动分析与异常检测 [GetBillingTrend](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingtrend.md)。  
-- 两接口均支持相同维度体系（如 `BASE_MODEL`、`API_KEY_ID`、`WORKSPACE_ID` 等），且 `filter.dimensions[].values` 均可传入 `DIMENSION_FILTER_NULL_VALUE` 表示匹配空值，语义一致 [GetBillingOverview](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingoverview.md)。
+- `GetBillingOverview`：查询**单个月份**的账单总览，返回按指定维度聚合的 TopN 分组及金额占比，适用于月度成本概览与归因分析。详见 [GetBillingOverview](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingoverview.md)。
+- `GetBillingTrend`：查询**连续时间范围内**（支持 DAY/MONTH 粒度）的账单趋势，返回分周期费用明细、分组汇总及“其他”合并项，适用于成本波动追踪与用量预测。详见 [GetBillingTrend](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingtrend.md)。
+
+> **注意**：两接口均要求 `groupBy` 必填且仅支持单维度（如 `MAAS_TYPE` 或 `BASE_MODEL`），不支持多维嵌套分组；文档中未提及任何实时账单或秒级粒度能力，当前 API 仅面向已结算的账单数据。
 
 ## 关键参数
 
 | 参数名 | 类型 | 必填 | 说明 | 示例值 |
 |--------|------|------|------|--------|
-| `billMonth`（仅 Overview） | string | 是 | 账单月份，格式 `YYYY-MM` | `"2026-08"` |
-| `granularity`（仅 Trend） | string | 是 | 时间粒度，取值 `DAY` 或 `MONTH` | `"DAY"` |
-| `timePeriod`（仅 Trend） | object | 是 | 含 `start`（`YYYY-MM-DD`）和 `end`（`YYYY-MM-DD`） | `{"start":"2026-08-01","end":"2026-08-31"}` |
-| `groupBy` | array<object> | 是 | 分组维度，必须且仅含一个元素；`code` 值需从标准维度列表中选取 | `[{"code":"MAAS_TYPE"}]` |
-| `filter` | object | 否 | 维度过滤条件，支持多维组合筛选 | `{"dimensions":[{"code":"BASE_MODEL","values":["qwen-plus"],"selectType":"IN"}]}` |
-| `topNum` | integer | 否 | 返回 TopN 分组数量（1–20），默认 20；超出部分在 Trend 中合并为“其他” | `10` |
+| `billMonth`（仅 `GetBillingOverview`） | string | 是 | 账单月份，格式 `YYYY-MM` | `2026-08` |
+| `granularity`（仅 `GetBillingTrend`） | string | 是 | 时间粒度：`DAY` 或 `MONTH` | `DAY` |
+| `timePeriod.start` / `.end`（仅 `GetBillingTrend`） | string | 是 | 查询起止日期，格式 `YYYY-MM-DD`；`end` 可等于 `start` | `2026-08-01`, `2026-08-31` |
+| `groupBy[].code` | string | 是 | 分组维度 Code，统一建议大写；两接口支持完全相同的维度列表（如 `MAAS_TYPE`, `BASE_MODEL`, `API_KEY_ID` 等） | `BASE_MODEL` |
+| `filter.dimensions[]` | array<object> | 否 | 维度过滤条件，支持 `IN`/`NOT` 逻辑；各维度 `values` 均可传 `DIMENSION_FILTER_NULL_VALUE` 表示匹配空值 | `[{"code": "BASE_MODEL", "values": ["qwen-plus"], "selectType": "IN"}]` |
+| `topNum` | integer | 否 | 返回 TopN 分组数（1–20），默认 20；超出部分在 `GetBillingTrend` 中合并为“其他”，`GetBillingOverview` 中直接截断 | `10` |
 | `zeroFilter` | boolean | 否 | 是否过滤金额为 0 的分组，默认 `true` | `false` |
-| `locale` | string | 否 | 返回语言，`zh-CN` 或 `en-US`，影响 `name` 字段展示 | `"zh-CN"` |
-
-> **注意**：`GetBillingOverview` 的 `filter.dimensions[].code` 与 `GetBillingTrend` 的对应字段完全一致，但文档 1 中 `filter.dimensions.values` 示例写为 `["qwen-max"]`，而文档 2 示例为 `["qwen-plus"]`；实际传值应以账单系统中真实出现的模型标识为准，建议通过 `GetBillingOverview` 先查询可用值再用于 `filter`。
+| `locale` | string | 否 | 返回语言：`zh-CN`（中文）或 `en-US`（英文），影响 `name` 字段展示 | `zh-CN` |
 
 ## 使用方式
 
-1. **认证**：所有请求需在 HTTP Header 中携带有效的 `Authorization`（如 Bearer Token）及 `x-acs-region-id`（若指定 `regionId` 参数）。
-2. **构造 URL**：
-   - 总览：`GET https://<endpoint>/modelstudio/billing/overview?billMonth=2026-08&groupBy=[{"code":"BASE_MODEL"}]&locale=zh-CN`
-   - 趋势：`GET https://<endpoint>/modelstudio/billing/trend?granularity=DAY&timePeriod.start=2026-08-01&timePeriod.end=2026-08-31&groupBy=[{"code":"MAAS_TYPE"}]`
+1. **认证**：所有请求需携带有效的 Bearer [Token](../concepts/token.md)（通过百炼平台 AccessKey/SecretKey 获取，具体鉴权流程见 [GetBillingOverview](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingoverview.md) 文档头部说明）。
+2. **构造请求**：
+   - `GetBillingOverview`：`GET /modelstudio/billing/overview?billMonth=2026-08&groupBy[0].code=MAAS_TYPE&locale=zh-CN`
+   - `GetBillingTrend`：`GET /modelstudio/billing/trend?granularity=DAY&timePeriod.start=2026-08-01&timePeriod.end=2026-08-31&groupBy[0].code=BASE_MODEL`
 3. **解析响应**：
-   - `data.currency` 标识币种（如 `CNY`、`USD`），金额字段（如 `amount`、`pretaxAmount`）均为字符串类型，需转为数值处理；
-   - `data.groups`（Overview）与 `data.resultByTime.periodDetails`（Trend）中的 `percentage` 为小数格式（如 `"0.6667"`），非百分比整数。
+   - 共同字段：`requestId`, `code`, `success`, `message`；
+   - `GetBillingOverview` 主要数据在 `data.groups`（分组列表）和 `data.totalAmount`（总额）；
+   - `GetBillingTrend` 主要数据在 `data.resultByTime`（时间序列）、`data.groupByTotal`（分组汇总）和 `data.costTotals`（总计）。
 
 ## 限制和注意事项
 
-- **时间范围限制**：`GetBillingTrend` 的 `timePeriod.end` 不能晚于当前日期，且 `end - start` 最大跨度为 90 天（`DAY` 粒度）或 12 个月（`MONTH` 粒度）；`GetBillingOverview` 仅支持已结算完成的月份，通常延迟 1–3 个工作日。
-- **分组约束**：两个接口均强制要求 `groupBy` 数组长度为 1，不支持多维嵌套分组；若需交叉分析，需客户端自行聚合。
-- **空值处理**：当 `filter.dimensions[].values` 包含 `DIMENSION_FILTER_NULL_VALUE` 时，将匹配数据库中该字段为 `NULL` 或空字符串的记录，此行为在两接口中完全一致。
-- **错误响应**：所有接口统一使用 `code` 字段表示业务状态（如 `"400"` 表示参数错误），`message` 字段提供可读提示，`success: false` 时 `data` 可能为空或不完整。
+- **时间范围限制**：`GetBillingTrend` 的 `timePeriod.end` 不能晚于当前日期，且 `end - start` 最大跨度为 90 天（`granularity=DAY`）或 24 个月（`granularity=MONTH`）；`GetBillingOverview` 仅支持已生成账单的月份，通常延迟 1–3 个工作日。
+- **维度一致性**：两接口对 `groupBy.code` 和 `filter.dimensions.code` 的取值集合、含义及 `values` 可选范围完全一致，详见 [GetBillingTrend](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingtrend.md) 补充说明章节。
+- **金额精度**：所有金额字段（如 `amount`, `pretaxAmount`）均为字符串类型，保留两位小数，**不可直接用浮点数解析**，须按字符串处理后转 decimal 避免精度丢失。
+- > **注意**：`GetBillingOverview` 响应中 `data.groups.percentage` 是“占 TopN 分组金额合计”的比例，而非占全量账单的比例；而 `GetBillingTrend` 的 `periodDetails.percentage` 是“占该周期总金额”的比例——二者统计基准不同，不可混用。
 
 ## 来源文档
 

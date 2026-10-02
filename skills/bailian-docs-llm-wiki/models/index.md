@@ -1,6 +1,6 @@
 # 百炼模型市场索引
 
-> 自动生成 · 共 189 个模型家族 · 434 个主干模型 · 更新于 2026-10-02
+> 自动生成 · 共 188 个模型家族 · 426 个主干模型 · 更新于 2026-10-03
 
 **机器查询走结构化文件**：
 
@@ -429,17 +429,15 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [Qwen-TTS-Realtime](groups/qwen-tts-realtime.json) — Qwen-TTS实时模型是通义实验室“qwen系列”模型中的语音合成利器。具备双向上下文感知能力，可以低延迟高保真完成多音色、方言及长文本的双向流式生成。
   - 模型：`qwen-tts-realtime`, `qwen-tts-realtime-latest`
 
-## 翻译 `TR` — 2 个家族
-
-- [Qwen-Embedding](groups/qwen-embedding.json) — 基于Qwen模型基座训练的多语言文本统一向量模型，文本检索、聚类、分类性能大幅提升，多语言支持，适用于向量检索、向量化等等场景，可搭配检索增强、文档处理场景使用，支持64~2560维用户自定义向量维度…
-  - 模型：`qwen3.7-text-embedding`, `qwen3.7-text-embedding-flash`, `text-embedding-async-v1`, `text-embedding-async-v2`, `text-embedding-v1`, `text-embedding-v2`, `text-embedding-v3`, `text-embedding-v4`
-- [Qwen-Rerank](groups/qwen-rerank.json) — 基于Qwen LLM底座训练的文本排序模型，对输入的Query和候选Docs进行相关性排序，支持100+语种和长文本输入，适用于文本检索、RAG等场景，效果对齐Qwen家族开源Rerank系列模型。
-  - 模型：`gte-rerank-v2`, `qwen3-rerank`, `qwen3-vl-rerank`, `qwen3.7-text-rerank`
-
 ## World-Model `World-Model` — 1 个家族
 
 - [HappyOyster-1.0](groups/happyoyster-1.0.json) — Happyoyster 系列首个实时交互的开放式世界模型。只需输入一句话，即可生成一个完整、可演绎、可探索、可互动的数字世界。
   - 模型：`happyoyster-1.0-adventure`
+
+## 翻译 `TR` — 1 个家族
+
+- [Qwen-Rerank](groups/qwen-rerank.json) — 基于Qwen LLM底座训练的文本排序模型，对输入的Query和候选Docs进行相关性排序，支持100+语种和长文本输入，适用于文本检索、RAG等场景，效果对齐Qwen家族开源Rerank系列模型。
+  - 模型：`gte-rerank-v2`, `qwen3-rerank`, `qwen3-vl-rerank`, `qwen3.7-text-rerank`
 
 ## 3D 生成 `3D-generation` — 1 个家族
 
