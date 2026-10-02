@@ -97,6 +97,7 @@ The table below is an index of **curated community** projects verified by the Ba
 | 🛠️ Skill Management | [gptzero-mcp](./AWESOME_SKILLS.md#gptzero-mcp) | Check whether this text is AI-generated | [louis030195/gptzero-mcp](https://github.com/louis030195/gptzero-mcp) |
 | 💻 Code Development | [mcp-builder](./AWESOME_SKILLS.md#mcp-builder) | Build me an MCP Server so Claude can call weather-related services | [anthropics/skills](https://github.com/anthropics/skills) |
 | 💻 Code Development | [goframe-v2](./AWESOME_SKILLS.md#goframe-v2) | Write a login API in GoFrame v2 | [gogf/skills](https://github.com/gogf/skills) |
+| 💻 Code Development | [plan-ledger-tasks-yylo](./AWESOME_SKILLS.md#plan-ledger-tasks-yylo) | Plan this feature request into implementation-sized tasks for my coding agent | [yylo-dev/yylo-skills](https://github.com/yylo-dev/yylo-skills) |
 | 🎨 Design & Creativity | [shadcn-ui](./AWESOME_SKILLS.md#shadcn-ui) | Build a chat room page with the shadcn-ui component library | [google-labs-code/stitch-skills](https://github.com/google-labs-code/stitch-skills) |
 | 🎨 Design & Creativity | [ui-ux-pro-max](./AWESOME_SKILLS.md#ui-ux-pro-max) | Design a personal blog UI in one of 50 styles | [davila7/claude-code-templates](https://github.com/davila7/claude-code-templates) |
 | 🎨 Design & Creativity | [canvas-design](./AWESOME_SKILLS.md#canvas-design) | Design a visual poster themed around freedom and butterflies | [anthropics/skills](https://github.com/anthropics/skills) |

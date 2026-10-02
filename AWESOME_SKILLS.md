@@ -268,7 +268,7 @@ npx skills add louis030195/gptzero-mcp -y
 
 ---
 
-## 💻 代码开发（2）
+## 💻 代码开发（3）
 
 ### mcp-builder
 
@@ -304,6 +304,24 @@ npx skills add gogf/skills --skill goframe-v2 -y
 
 ```text
 帮我用 GoFrame v2 写一个登录的 API 接口
+```
+
+### plan-ledger-tasks-yylo
+
+**来源**：[yylo-dev/yylo-skills](https://github.com/yylo-dev/yylo-skills)
+
+编码 Agent 的任务规划技能：当用户明确要求规划或登记工作时，先产出一份简明的产品开发需求（PDR，覆盖目标、范围、验收标准与依赖），再拆分为若干实现粒度的 YYLO Ledger 任务，规划过程通过不可变 Artifact 记录留痕，供后续逐任务执行、验证与合并。
+
+**安装**
+
+```bash
+npx skills add yylo-dev/yylo-skills --skill plan-ledger-tasks-yylo -y
+```
+
+**使用**
+
+```text
+帮我把这个功能需求规划成实现粒度的开发任务
 ```
 
 ---
