@@ -1,11 +1,11 @@
 {
-  "updatedAt": "2026-10-02",
-  "totalFamilies": 189,
-  "totalModels": 434,
+  "updatedAt": "2026-10-03",
+  "totalFamilies": 188,
+  "totalModels": 426,
   "profileCoverage": {
-    "full": 370,
-    "partial": 53,
-    "structured-only": 11,
+    "full": 386,
+    "partial": 40,
+    "structured-only": 0,
     "none": 0
   },
   "capabilityDistribution": {
@@ -23,13 +23,13 @@
     "ME": 2,
     "Realtime-Chatting": 2,
     "Realtime-Text-to-Speech": 2,
-    "TR": 2,
     "World-Model": 1,
+    "TR": 1,
     "3D-generation": 1
   },
   "providerDistribution": {
-    "qwen": 117,
-    "qwen-domain-model": 36,
+    "qwen": 116,
+    "qwen-domain-model": 35,
     "wan": 14,
     "mini-max": 4,
     "pixverse": 4,
@@ -1217,30 +1217,6 @@
         "qwen-doc-turbo"
       ],
       "maxContextWindow": 262144
-    },
-    {
-      "slug": "qwen-embedding",
-      "name": "Qwen-Embedding",
-      "primaryCapability": "TR",
-      "capabilities": [
-        "TR"
-      ],
-      "providers": [
-        "qwen-domain-model",
-        "qwen"
-      ],
-      "itemCount": 8,
-      "items": [
-        "qwen3.7-text-embedding",
-        "qwen3.7-text-embedding-flash",
-        "text-embedding-async-v1",
-        "text-embedding-async-v2",
-        "text-embedding-v1",
-        "text-embedding-v2",
-        "text-embedding-v3",
-        "text-embedding-v4"
-      ],
-      "maxContextWindow": 131072
     },
     {
       "slug": "qwen-flash-character",

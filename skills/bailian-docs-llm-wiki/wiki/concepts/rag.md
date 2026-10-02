@@ -1,78 +1,58 @@
 # 检索增强生成
 
-检索增强生成（Retrieval-Augmented Generation，RAG）是一种将大语言模型（LLM）的生成能力与外部知识源的精准检索能力深度融合的技术范式。它通过在模型推理前动态检索相关上下文片段，并将其作为提示的一部分注入生成过程，从而显著提升回答的事实准确性、领域专业性与私有知识覆盖能力。
+检索增强生成（Retrieval-Augmented Generation，RAG）是一种将大语言模型（LLM）的生成能力与外部知识源的精准检索能力相结合的技术范式。它通过在模型推理前动态检索相关知识片段，并将其作为上下文注入提示词，显著提升模型回答的事实准确性、领域专业性和私有数据覆盖能力，同时规避模型幻觉与知识过时问题。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-在百炼平台中，RAG 不是独立功能，而是贯穿多个能力层的**基础增强机制**，其使用方式因场景而异，但核心逻辑统一：**检索 → 注入 → 生成**。
+RAG 在百炼平台不是单一功能，而是贯穿多个核心能力层的**横切增强机制**，开发者可根据应用复杂度和控制粒度需求，在以下场景中按需启用：
 
-- **知识库问答（最典型场景）**  
-  通过控制台「知识库问答」模板或 `/api/v2/apps/knowledge/chat` 接口调用，系统自动完成：用户问题 → 向量+关键词混合检索 → 重排精筛 → 将 TopK 切片拼接为 `context` → 注入到 Qwen 系列模型（如 `qwen3.6-plus`）的 [prompt](../guides/prompt.md) 中 → 流式生成带引用标注的回答。全程无需编码，支持多模态（图文联合检索）与多库路由。
+- **知识库服务（独立 RAG API）**：最轻量级接入方式。调用 `/v1/knowledge` 接口，传入 `knowledge_base_id` 和 `query`，平台自动完成检索（向量+关键词混合召回）、重排（可选 rerank 模型）、片段拼接与 LLM 生成全流程，适用于问答、摘要等标准化场景。
+  
+- **LLM Application 工作流（Workflow）**：在可视化编排中，将「知识库」节点作为 AI 节点之一嵌入流程。可与其他节点（如条件判断、多模态生成、API 工具）组合，实现“先检索 → 再决策 → 后生成”的确定性逻辑，例如：用户提问后，先查知识库获取政策条款，再调用 LLM 解析条款适用性，最后生成合规建议。
 
-- **智能体（Agent 2.0）应用**  
-  RAG 作为“工具”被显式集成：在 Agent 配置中启用知识库工具，或通过 `rag_options` 参数（API 调用时）指定 `pipeline_ids`、`tags` 或 `metadata_filter`，实现按需、精准、可审计的私有知识调用。Agent 的规划链路可自主决定是否触发检索，支持“先思考→再检索→后生成”的闭环。
+- **智能体（Agent）**：RAG 以「工具」形式深度集成。在 Agent 2.0 中，知识库与 MCP [插件](plugin.md)统一为可被规划器（Planner）自主调用的工具；在 Agent 1.0 中，则作为预设的固定检索步骤。支持多轮对话中自动维护检索上下文，结合 `Query 改写` 提升模糊查询鲁棒性。
 
-- **工作流（Workflow）应用**  
-  通过拖拽「知识库节点」接入 RAG 能力，可与其他节点（如大模型、条件判断、API）编排组合。例如：用户提问 → 意图分类 → 若属产品咨询 → 触发知识库检索 → 将结果传给大模型润色输出。检索参数（TopK、阈值等）可在节点内独立配置。
+- **高代码应用（Rich Code）**：开发者完全掌控 RAG 链路。可通过 `fastmcp.Client` 调用知识库检索 API，或直接集成 `DashScopeCloudRetriever`（LlamaIndex）/ `DashScopeDocumentRetriever`（Spring AI）等 SDK，自定义切分策略、重排逻辑与上下文组装规则，满足金融、法律等强合规场景需求。
 
-- **低代码/零代码集成（如企业微信、网站助手）**  
-  在 AppFlow 连接流中开启「引用知识」开关，选择已发布知识库并设置调用策略（`必定调用` 或 `按需调用`），即可将 RAG 能力一键嵌入第三方平台，无需修改前端或后端逻辑。
+- **框架集成（LlamaIndex / Spring AI）**：面向熟悉开源生态的开发者。使用 `DashScopeCloudIndex` 构建云端托管知识库，或用 `DashScopeEmbedding` + `DashScopeRerank` 搭建本地可控 RAG 流水线，无缝对接现有工程架构。
 
-- **高代码应用与第三方框架（LangChain/Dify/Coze）**  
-  通过调用底层 RAG API（如 `/api/v1/indices/rag/index/retrieve` 获取原始切片，或 `/api/v1/indices/knowledge/search` 调用多库联合检索服务），开发者可完全自定义检索逻辑、上下文组装策略与生成提示，实现深度定制。
-
-> ✅ 关键区别：知识库问答是开箱即用的 RAG 封装；Agent/Workflow 是 RAG 的可编程集成；API 层则是 RAG 的原子能力暴露。
+> ✅ 关键区别：**知识库服务/API 是开箱即用的端到端 RAG；工作流与 Agent 提供编排灵活性；高代码与框架集成则赋予最大定制自由度。**
 
 ## 关键参数和配置
 
-RAG 效果由**检索侧**与**生成侧**参数协同控制，需分层配置：
+RAG 效果高度依赖参数协同，主要分为三类，均支持控制台、API 或 SDK 配置：
 
-| 类别 | 参数名 | 说明 | 配置位置 | 典型取值 |
-|------|--------|------|----------|----------|
-| **检索控制（知识库级）** | `top_k` | 最终返回的最相关切片数量 | 知识库服务配置 / `rag_options` / 工作流知识库节点 | `3`–`10`（默认 `5`） |
-| | `similarity_threshold` | 相似度过滤下限（0.01–1.0） | 知识库服务配置 / `rag_options` | `0.3`–`0.6`（过低易召回噪声） |
-| | `rerank_model_name` | 重排模型（提升相关性） | 创建知识库或 Agent 配置时指定 | `qwen3-rerank`, `qwen3-vl-rerank` |
-| | `query_rewrite` | 是否启用查询改写（优化语义表达） | 知识库服务配置 | `true`/`false` |
-| **生成控制（应用级）** | `temperature` | 控制生成多样性（影响答案严谨性） | 应用模型参数 / API `parameters.temperature` | `0.1`–`0.5`（RAG 场景推荐低值） |
-| | `system_prompt` | 显式指令模型“基于以下检索内容回答，不可编造” | 智能体/工作流系统提示词 | 必须包含引用约束（如“仅依据提供的上下文作答”） |
-| | `enable_thinking` | 开启模型深度推理（提升对长上下文的理解） | Agent 应用参数 / API `enable_thinking` | `true`（配合 RAG 可提升答案结构化程度） |
-| **高级路由（多库场景）** | `knowledge_routing` | 启用大模型自动选择知识库 | 知识库服务配置 | `true`（需多库且标签清晰） |
-| | `tags` / `metadata_filter` | 按元数据精准限定检索范围 | `rag_options` / 知识库节点配置 | `["product_v2", "internal_only"]` |
+| 类别 | 参数名 | 常用值/范围 | 作用说明 |
+|--------|---------|--------------|-----------|
+| **检索控制** | `top_k`（检索） | 3–10（默认 3） | 控制向量/关键词初检召回数量；值过小易漏关键信息，过大增加噪声与延迟 |
+| | `max_retrieved` | 1–20 | 最终送入 LLM 的最大片段数，硬性截断上限 |
+| | `similarity_threshold` | 0.01–1.0（默认 0.3） | 过滤低相似度切片，提升答案精准度（值越高越严格） |
+| | `enable_query_rewrite` | `true`/`false` | 开启后自动优化用户原始 query（如补全缩写、纠正错字），提升多轮对话检索一致性 |
+| **重排增强** | `rerank_model` | `qwen3-rerank`, `gte-rerank-hybrid` | 对初检结果进行语义精排，显著提升 Top-K 相关性；`hybrid` 版本融合稀疏与稠密信号 |
+| | `rerank_top_n` | 1–10（默认 5） | 重排后保留的最终片段数 |
+| **生成控制** | `temperature` | 0.0–1.0（默认 0.5） | 控制生成随机性；RAG 场景建议设为 0.1–0.3 以保障事实稳定性 |
+| | `enable_thinking` | `true`/`false` | 开启后模型显式输出推理链（如“根据知识库第2段…”），便于调试与可信度验证 |
 
-> ⚠️ 注意：`max_tokens`（生成长度）不宜过大，避免模型在冗余上下文中迷失；`temperature=0` 与 `similarity_threshold` 高值搭配，可获得最确定、最忠实于检索结果的回答。
+> ⚠️ 注意：`top_k` 与 `max_retrieved` 是两个独立参数——前者影响检索阶段性能，后者决定生成阶段上下文长度。建议 `max_retrieved ≤ top_k`，避免无效截断。
 
 ## 面向开发者，简洁实用
 
-- **快速验证**：直接使用 [RAG Playground](https://bailian.console.aliyun.com/cn-beijing/rag/playground)，上传文档 → 创建知识库 → 切换「知识问答」模式，实时观察检索切片与生成结果，5 分钟完成效果调优。
-- **API 集成首选路径**：  
-  ```bash
-  # 1. 检索（获取原始切片）
-  curl -X POST https://dashscope.aliyuncs.com/api/v1/indices/rag/index/retrieve \
-    -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
-    -d '{"index_id":"idx_abc123","query":"Qwen3 支持哪些嵌入模型？","top_k":5}'
-
-  # 2. 问答（端到端 RAG，流式响应）
-  curl -X POST https://dashscope.aliyuncs.com/api/v2/apps/knowledge/chat \
-    -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
-    -H "Content-Type: application/json" \
-    -d '{"agent_id":"agt_xyz789","input":{"messages":[{"role":"user","content":"Qwen3 支持哪些嵌入模型？"}]},"stream":true}'
-  ```
-- **调试黄金法则**：  
-  - 若答案不准确 → 检查 `similarity_threshold` 是否过低，或 `rerank_model_name` 是否未启用；  
-  - 若答案无引用 → 确认 `system_prompt` 中明确要求“基于以下内容回答”，且未被其他提示覆盖；  
-  - 若检索为空 → 检查知识库状态（是否完成解析/向量化）、文件格式兼容性（PDF/TXT/DOCX）、以及 `query_rewrite` 是否误改写了关键术语。
-- **生产建议**：  
-  - 对敏感业务，开启 `enable_anti_leak`（防信息泄露）；  
-  - 多库场景优先用 `knowledge_routing` + 清晰 `tags`，而非硬编码 `pipeline_ids`；  
-  - 流式接口务必设 `stream=true`，否则请求失败（当前强制要求）。
+- **快速验证**：用控制台 [Knowledge Base Playground](https://dashscope.console.aliyun.com/knowledge-base/playground) 输入问题，实时查看检索切片与生成结果，5 分钟完成效果调优。
+- **生产集成**：
+  - 简单问答：直接调用 RAG API `/v1/knowledge`，传 `knowledge_base_id` + `query`；
+  - 复杂流程：在 Workflow 中拖入「知识库」节点，连接至下游 LLM 节点，配置 `top_k` 和 `similarity_threshold`；
+  - 完全可控：Python 中使用 `DashScopeCloudRetriever`（LlamaIndex）或 `DashScopeDocumentRetriever`（Spring AI），代码示例见 [框架文档](../../raw/application-api-reference/frameworks/llamaindex/dashscopecloudindex-and-dashscopecloudretriever.md)。
+- **避坑指南**：
+  - 切片参数（如 `chunk_size`）在知识库创建后**不可修改**，首次配置务必结合业务文档结构测试；
+  - 使用 `agent_id` 调用 RAG API 时，`model` 字段已废弃，模型由 Agent 绑定决定；
+  - 多轮对话需显式传递历史 `tool_calls`（见 `/api/v2/apps/knowledge/chat` SSE 流响应格式），否则无法维持上下文连贯性。
 
 ## 关联主题页
 
-- [start using](../guides/start-using.md)
+- [llm application](../guides/llm-application.md)
 - [rag api](../api/rag-api.md)
 - [knowledge base](../guides/knowledge-base.md)
-- [llm application](../guides/llm-application.md)
-- [application call](../api/application-call.md)
-- [application use cases](../guides/application-use-cases.md)
+- [use cases](../guides/use-cases.md)
+- [frameworks](../api/frameworks.md)
 
 

@@ -1,32 +1,38 @@
 # start using
 
-本文档介绍如何快速开始使用百炼平台的核心能力，包括模型调用、应用构建与基础配置。开发者可基于平台提供的 API 或低代码界面快速集成大模型能力。所有操作均需先完成[百炼控制台注册与项目创建](../../raw/application-user-guide/getting-started.md)。
+百炼平台提供低门槛、高灵活性的模型调用与应用构建能力，开发者可快速集成大模型能力或零代码搭建业务应用。本文档梳理核心使用路径、参数规范及约束条件，帮助开发者高效上手。所有功能均基于 [开始使用](../../raw/application-user-guide/start-using.md) 文档定义的基础流程展开。
 
 ## 支持的模型/功能
 
-当前平台默认提供 `qwen-max`、`qwen-plus` 和 `qwen-turbo` 三类推理模型，支持文本生成、知识库问答、[函数调用](../concepts/function-calling.md)（Function Calling）及多轮对话状态管理。知识库问答能力依赖于[0代码构建问答应用](../../raw/application-user-guide/start-using/build-knowledge-base-qa-assistant-without-coding.md)中描述的向量化流程；[函数调用](../concepts/function-calling.md)需在请求中显式启用 `enable_function_calling: true` 并传入符合 OpenAI 兼容格式的 `tools` 定义。
+- 支持调用通义千问系列（Qwen1、Qwen2、Qwen2.5、Qwen3）及百炼专属微调模型（如 `qwen-max`、`qwen-plus`）
+- 提供两类使用模式：  
+  - **API 调用**：通过 RESTful 接口直接请求模型（见 [开始使用](../../raw/application-user-guide/start-using.md)）  
+  - **零代码应用构建**：基于知识库快速搭建问答助手，无需开发即可发布（详见 [0代码构建问答应用](../../raw/application-user-guide/start-using/build-knowledge-base-qa-assistant-without-coding.md)）
+
+> **注意**：[应用功能动态](../../raw/application-user-guide/start-using/application-release-notes.md) 中提及的“实时流式对话增强”功能在 v2.3.0 后已默认启用，但部分旧版 SDK 尚未同步该行为，建议升级至最新版 client SDK 或显式设置 `stream=true`。
 
 ## 关键参数
 
-| 参数名 | 类型 | 必填 | 说明 |
-|--------|------|------|------|
-| `model` | string | 是 | 模型 ID，如 `qwen-turbo`；必须与[应用功能动态](../../raw/application-user-guide/start-using/application-release-notes.md)中当前可用模型列表一致 |
-| `input.messages` | array | 是 | 至少包含一个 `role: user` 的 message 对象，`content` 字段不支持空字符串或纯空白符 |
-| `parameters.temperature` | number | 否 | 范围 0.0–2.0，默认 1.0；设为 0 时启用确定性采样 |
+调用 API 时必需或强推荐的参数包括：
 
-> **注意**：`top_p` 与 `temperature` 不应同时设为极端值（如 `temperature=0` 且 `top_p=0.1`），否则可能触发服务端校验拒绝——该行为与[应用功能动态](../../raw/application-user-guide/start-using/application-release-notes.md)中 v2024.06 版本说明存在不一致，以实际 API 响应为准。
+| 参数名 | 类型 | 是否必需 | 说明 |
+|--------|------|----------|------|
+| `model` | string | 是 | 模型 ID，必须为平台支持的合法值（如 `qwen-max`），不支持自定义别名 |
+| `input.messages` | array | 是 | 至少包含一条 `user` 角色消息；系统提示词需显式传入 `system` 消息，不可省略 |
+| `parameters.temperature` | number | 否（默认 0.8） | 控制输出随机性，取值范围 [0.0, 2.0]；生产环境建议 ≤1.0 |
+| `parameters.top_p` | number | 否（默认 0.95） | 核采样阈值，与 `temperature` 互斥生效，二者同时设置时以 `top_p` 为准 |
 
 ## 使用方式
 
-- **API 方式**：调用 `POST /v1/chat/completions`，需携带 `Authorization: Bearer <api_key>` 及 `Content-Type: application/json`。完整请求示例见 [0代码构建问答应用](../../raw/application-user-guide/start-using/build-knowledge-base-qa-assistant-without-coding.md) 的“API 集成”小节。
-- **低代码方式**：在控制台「应用」→「新建应用」中选择「知识库问答」模板，上传文档后自动完成切片、嵌入与检索配置，无需编码。
+1. **获取 API Key**：在控制台「API 密钥管理」中创建并复制密钥（权限需包含 `model:Invoke`）  
+2. **发起请求**：向 `https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation` 发送 POST 请求，Header 中携带 `Authorization: Bearer <api_key>`  
+3. **解析响应**：检查 `output.choices[0].message.content` 字段获取结果；流式响应需按 SSE 协议解析 `data:` 行（参考 [开始使用](../../raw/application-user-guide/start-using.md) 的示例代码）  
 
 ## 限制和注意事项
 
-- 单次请求 `input.messages` 总长度上限为 32768 token（含 system [prompt](prompt.md)）；
-- 知识库问答场景下，上传文件单个大小不得超过 100 MB，且仅支持 PDF、TXT、DOCX、PPTX 格式；
-- 所有 API 请求需在 `X-Bailian-Request-ID` 头中传递唯一 trace ID，便于问题定位；缺失该头可能导致日志无法关联。  
-- 免费试用额度仅限新注册用户首 30 天内使用，配额详情以[应用功能动态](../../raw/application-user-guide/start-using/application-release-notes.md)最新公告为准。
+- 单次请求最大 `input.messages` 长度为 32768 token（含 system + user + assistant 消息），超限将返回 `400 Bad Request`  
+- 免费试用额度仅限新用户首次开通后 30 天内使用，过期后需绑定支付方式（具体规则见 [0代码构建问答应用](../../raw/application-user-guide/start-using/build-knowledge-base-qa-assistant-without-coding.md) 附录）  
+- 知识库问答应用不支持上传 `.exe`、`.bin` 等可执行文件，且单文件上限为 100 MB；该限制在 [应用功能动态](../../raw/application-user-guide/start-using/application-release-notes.md) 中未更新，仍以当前控制台实际校验逻辑为准
 
 ## 来源文档
 
