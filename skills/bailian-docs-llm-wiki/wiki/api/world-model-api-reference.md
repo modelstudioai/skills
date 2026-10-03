@@ -1,46 +1,37 @@
 # world model api reference
 
-世界模型 API 提供面向叙事与交互式场景的多模态建模能力，支持剧情推演、角色行为生成与环境动态响应等核心功能。当前以 HappyOyster 系列模型为主力实现，覆盖 Adventure（冒险推演）、Directing（导演调度）和 Acting（角色表演，邀测中）三大子能力。该接口遵循标准 RESTful 设计，兼容 JSON Schema 请求/响应格式。
+世界模型 API 提供面向具身智能与交互式场景的建模能力，支持动态环境理解、角色行为生成与多智能体协同推演。当前以 HappyOyster 系列模型为核心，覆盖冒险（Adventure）、导演（Directing）和表演（Acting）三类任务范式。所有接口均基于 OpenAPI 规范实现，需通过百炼平台统一鉴权调用。
 
 ## 支持的模型/功能
 
-- **HappyOyster-Adventure**：用于长周期剧情演化、状态空间建模与因果链推理，适用于游戏引擎集成与互动叙事系统。详见 [Adventure Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-adventure-openapi-reference.md)。
-- **HappyOyster-Directing**：聚焦多角色协同调度、镜头语言生成与节奏控制，常用于虚拟制片与AI导演工作流。详见 [Directing Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-directing-openapi-reference.md)。
-- **HappyOyster-Acting**（邀测中）：支持细粒度角色动作、微表情与语音韵律联合生成，当前仅对白名单用户开放。其接口规范见 [Acting Open API参考（邀测中）](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-acting-openapi-reference.md)。
-
-> **注意**：Acting 模型的 `emotion_intensity` 参数在 [Acting Open API参考（邀测中）](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-acting-openapi-reference.md) 中定义为 0–100 的整数，但部分旧版 SDK 示例中误用为浮点范围 0.0–1.0，实际调用请以该文档为准。
+- **Adventure 模型**：用于开放世界状态演化与因果推理，适用于游戏引擎集成、教育模拟等场景。  
+- **Directing 模型**：聚焦多角色叙事调度与事件编排，支持长程剧情一致性控制。  
+- **Acting 模型**（邀测中）：面向单角色实时行为生成，强调情感表达与物理动作合理性。  
+> **注意**：[Adventure Open API参考](raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-adventure-openapi-reference.md) 中描述的 `max_step` 默认值为 50，但 [Directing Open API参考](raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-directing-openapi-reference.md) 同名参数默认为 200 —— 实际行为以各接口文档最新版为准，建议显式传参。
 
 ## 关键参数
 
-所有端点共用以下基础参数（`POST /v1/world-model/{task_type}`）：
-
 | 参数名 | 类型 | 必填 | 说明 |
 |--------|------|------|------|
-| `scene_state` | object | 是 | 当前世界状态快照，需符合 [Adventure Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-adventure-openapi-reference.md) 定义的 `SceneState` schema |
-| `task_type` | string | 是 | 取值为 `"adventure"`、`"directing"` 或 `"acting"`，决定路由至对应子模型 |
-| `max_steps` | integer | 否 | 推演最大步数，默认 1；`adventure` 场景下建议 ≤ 5，避免状态爆炸 |
+| `scene_id` | string | 是 | 场景唯一标识，需提前在平台注册；未注册时返回 `404` |
+| `context_window` | integer | 否 | 上下文窗口长度（token），范围 1024–8192，默认 4096 |
+| `temperature` | number | 否 | 采样温度，0.0–2.0，默认 0.7（[Acting Open API参考（邀测中）](raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-acting-openapi-reference.md) 中明确禁用该参数） |
+| `enable_state_tracking` | boolean | 否 | 是否启用内部世界状态快照，默认 `true` |
 
 ## 使用方式
 
-1. 认证：使用 `Authorization: Bearer <api_key>` 头部；
-2. 请求体示例（Adventure 推演）：
-   ```json
-   {
-     "scene_state": {
-       "entities": [{"id": "hero", "position": [3, 5], "health": 82}],
-       "world_rules": ["gravity=9.8", "day_cycle=24h"]
-     },
-     "task_type": "adventure",
-     "max_steps": 3
-   }
-   ```
-3. 响应含 `next_state`（更新后的世界状态）与 `reasoning_trace`（可选，需显式启用 `enable_trace=true` 查询参数）。
+1. 调用前确保已开通世界模型权限，并获取 `API_KEY`；  
+2. 构造 POST 请求至对应 endpoint（如 `/v1/world-model/adventure`），`Content-Type: application/json`；  
+3. 在请求头中携带 `Authorization: Bearer <API_KEY>`；  
+4. 响应体含 `state_id`（用于后续 step 追溯）与 `next_action` 字段，详见 [原文标题](../../raw/model-api-reference/world-model-api-reference.md)。
 
 ## 限制和注意事项
 
-- 单次请求 `scene_state` JSON 大小上限为 256 KB；
-- `acting` 类型请求暂不支持流式响应，必须等待完整动作序列生成后返回；
-- 所有模型均要求 `scene_state` 中的时间戳字段（如 `timestamp_ms`）为毫秒级 Unix 时间，且不得早于请求发起时间前 5 秒，否则将被拒绝——该约束在 [Directing Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-directing-openapi-reference.md) 中明确强调，但未在 Adventure 文档中重复说明，请统一遵守。
+- 单次请求最大输入长度为 65536 字符，超限将返回 `400 Bad Request`；  
+- Acting 模型处于邀测阶段，未获白名单的调用将返回 `403 Forbidden`；  
+- 所有模型均不支持流式响应（`stream=false` 强制生效），此限制在 [原文标题](../../raw/model-api-reference/world-model-api-reference.md) 中明确声明；  
+- 多次调用同一 `scene_id` 时，若间隔超过 30 分钟未续期，内部状态将被自动清理；  
+- > **注意**：[原文标题](../../raw/model-api-reference/world-model-api-reference.md) 列出的子文档路径（如 `happyoyster-acting-openapi-reference.md`）尚未同步更新 v2.1 接口变更（如新增 `physics_constraints` 字段），请以 OpenAPI Schema 文件为准。
 
 ## 来源文档
 

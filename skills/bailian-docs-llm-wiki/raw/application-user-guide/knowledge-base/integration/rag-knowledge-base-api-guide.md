@@ -6825,7 +6825,7 @@ func CreateClient() (_result *bailian20231229.Client, _err error) {
     
 -   **file\_md5：**请传入上传文件的MD5值（但当前阿里云不对该值进行校验，便于您使用URL地址上传文件）。
     
-    > 以Python为例，MD5值可使用hashlib模块获取。其他语言请参见[完整示例代码](raw/application-user-guide/knowledge-base/rag-knowledge-base-api-guide.md)。
+    > 以Python为例，MD5值可使用hashlib模块获取。其他语言请参见[完整示例代码](raw/application-user-guide/knowledge-base/integration/rag-knowledge-base-api-guide.md)。
     
     代码示例
     
@@ -6866,7 +6866,7 @@ func CreateClient() (_result *bailian20231229.Client, _err error) {
     
 -   **file\_size：**请传入上传文件的字节大小。
     
-    > 以Python为例，该值可使用os模块获取。其他语言请参见[完整示例代码](raw/application-user-guide/knowledge-base/rag-knowledge-base-api-guide.md)。
+    > 以Python为例，该值可使用os模块获取。其他语言请参见[完整示例代码](raw/application-user-guide/knowledge-base/integration/rag-knowledge-base-api-guide.md)。
     
     代码示例
     
@@ -7126,7 +7126,7 @@ func ApplyLease(client *bailian20231229.Client, categoryId, fileName, fileMD5 st
 
 取得上传租约后，您即可使用租约中的临时上传参数和临时上传URL，将本地存储或可通过公网访问的文件上传至阿里云百炼服务器。请注意，每个业务空间最多支持10万个文件。目前支持上传的格式包括：PDF、DOCX、DOC、TXT、Markdown、PPTX、PPT、XLSX、XLS、HTML、PNG、JPG、JPEG、BMP 和 GIF。
 
--   **pre\_signed\_url：**请传入[申请文件上传租约](raw/application-user-guide/knowledge-base/rag-knowledge-base-api-guide.md)时接口返回的`Data.Param.Url`。
+-   **pre\_signed\_url：**请传入[申请文件上传租约](raw/application-user-guide/knowledge-base/integration/rag-knowledge-base-api-guide.md)时接口返回的`Data.Param.Url`。
     
     > 该 URL 为预签名 URL，不支持 FormData 方式上传，需使用二进制方式上传（详见示例代码）。
     
@@ -8003,11 +8003,11 @@ func main() {
 
 -   **parser：**请传入`DASHSCOPE_DOCMIND`。
     
--   **lease\_id：**请传入[申请文件上传租约](raw/application-user-guide/knowledge-base/rag-knowledge-base-api-guide.md)时接口返回的`Data.FileUploadLeaseId`。
+-   **lease\_id：**请传入[申请文件上传租约](raw/application-user-guide/knowledge-base/integration/rag-knowledge-base-api-guide.md)时接口返回的`Data.FileUploadLeaseId`。
     
 -   **category\_id：**本示例中，请传入`default`。若您使用了自建类目上传，则需传入对应的`category_id`。
     
-    **重要**请确保此处传入的`CategoryId`与[申请文件上传租约](raw/application-user-guide/knowledge-base/rag-knowledge-base-api-guide.md)步骤中使用的`CategoryId`保持一致，否则会出现`Category is mismatched`错误。
+    **重要**请确保此处传入的`CategoryId`与[申请文件上传租约](raw/application-user-guide/knowledge-base/integration/rag-knowledge-base-api-guide.md)步骤中使用的`CategoryId`保持一致，否则会出现`Category is mismatched`错误。
     
 
 完成添加后，阿里云百炼将返回该文件的`FileId`，并自动开始解析您的文件。同时`lease_id`（租约ID）随即失效，**请勿再使用相同的租约ID重复提交**。
@@ -8207,7 +8207,7 @@ func AddFile(client *bailian20231229.Client, leaseId, parser, categoryId, worksp
 
 未解析完成的文件无法用于知识库，在请求高峰时段，该过程可能需要数小时。您可以调用[DescribeFile接口](raw/_short/api-bailian-2023-12-29-describefile-020886c28a208bf2.md)查询文件的解析状态。
 
--   **file\_id：**请传入[添加文件到类目中](raw/application-user-guide/knowledge-base/rag-knowledge-base-api-guide.md)时接口返回的`FileId`。
+-   **file\_id：**请传入[添加文件到类目中](raw/application-user-guide/knowledge-base/integration/rag-knowledge-base-api-guide.md)时接口返回的`FileId`。
 
 当本接口返回的`Data.Status`字段值为`PARSE_SUCCESS`时，表示文件已解析完成，可以将其导入知识库。
 
@@ -8370,7 +8370,7 @@ func DescribeFile(client *bailian20231229.Client, workspaceId, fileId string) (_
 
 -   **workspace\_id：**[如何获取业务空间ID](https://help.aliyun.com/zh/model-studio/use-workspace)
     
--   **file\_id：**请传入[添加文件到类目中](raw/application-user-guide/knowledge-base/rag-knowledge-base-api-guide.md)时接口返回的`FileId`。
+-   **file\_id：**请传入[添加文件到类目中](raw/application-user-guide/knowledge-base/integration/rag-knowledge-base-api-guide.md)时接口返回的`FileId`。
     
     > 若source\_type为`DATA_CENTER_FILE`，则该参数为必传，否则接口将报错。
     
@@ -8611,7 +8611,7 @@ func CreateIndex(client *bailian20231229.Client, workspaceId, fileId, name, stru
 
 初始化知识库后，您需要调用[SubmitIndexJob接口](raw/_short/api-bailian-2023-12-29-submitindexjob-63b38294171880d4.md)提交索引任务，以启动知识库的索引构建。
 
--   **index\_id：**请传入[初始化知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base-api-guide.md)时接口返回的`Data.Id`。
+-   **index\_id：**请传入[初始化知识库](raw/application-user-guide/knowledge-base/integration/rag-knowledge-base-api-guide.md)时接口返回的`Data.Id`。
 
 完成提交后，阿里云百炼随即以异步任务方式开始构建索引。本接口返回的`Data.Id`为对应的任务ID。下一步中，您将用到此ID查询任务的最新状态。
 
@@ -8780,7 +8780,7 @@ func SubmitIndex(client *bailian20231229.Client, workspaceId, indexId string) (_
 
 索引任务的执行需要一定时间，在请求高峰时段，该过程可能需要数小时。查询其执行状态可以调用[GetIndexJobStatus接口](raw/_short/api-bailian-2023-12-29-getindexjobstatus-1e88b6ccfffe0fe4.md)。
 
--   **job\_id：**请传入[提交索引任务](raw/application-user-guide/knowledge-base/rag-knowledge-base-api-guide.md)时接口返回的`Data.Id`。
+-   **job\_id：**请传入[提交索引任务](raw/application-user-guide/knowledge-base/integration/rag-knowledge-base-api-guide.md)时接口返回的`Data.Id`。
 
 当本接口返回的`Data.Status`字段值为`COMPLETED`时，表示知识库已创建完成。
 
@@ -9137,7 +9137,7 @@ print(resp.output.text)
 
 -   **如何增量更新知识库：**请您按照以下三步（先上传更新后的文件，再追加文件至知识库，最后删除旧文件）操作。此外暂无其他实现方式。
 -   **如何全量更新知识库：**对知识库中的所有文件，请您逐一执行以下三步完成更新。
--   **如何实现知识库的自动更新/同步：**请详见[如何实现知识库的自动更新/同步](raw/application-user-guide/knowledge-base/rag-knowledge-base-api-guide.md)。
+-   **如何实现知识库的自动更新/同步：**请详见[如何实现知识库的自动更新/同步](raw/application-user-guide/knowledge-base/integration/rag-knowledge-base-api-guide.md)。
 -   **单次更新对文件数量是否有限制：**建议不超过10万个，否则可能导致知识库无法正常更新。
 
 ### 1\. 上传更新后的文件
@@ -9154,7 +9154,7 @@ print(resp.output.text)
 
 -   **client：**[如何获取client](https://help.aliyun.com/zh/model-studio/rag-knowledge-base-api-guide#a8ce8e7788gmh)
 -   **workspace\_id：**[如何获取业务空间ID](https://help.aliyun.com/zh/model-studio/use-workspace)
--   **file\_id：**请传入[添加文件到类目中](raw/application-user-guide/knowledge-base/rag-knowledge-base-api-guide.md)时接口返回的`FileId`。
+-   **file\_id：**请传入[添加文件到类目中](raw/application-user-guide/knowledge-base/integration/rag-knowledge-base-api-guide.md)时接口返回的`FileId`。
 -   **source\_type：**在本示例中，请传入`DATA_CENTER_FILE`。
 
 完成提交后，阿里云百炼将以异步任务方式开始重新构建知识库。本接口返回的`Data.Id`为对应的任务ID（job\_id）。下一步中，您将用到此ID查询任务的最新状态。
@@ -9361,7 +9361,7 @@ func SubmitIndexAddDocumentsJob(client *bailian20231229.Client, workspaceId, ind
 
 索引任务的执行需要一定时间，在请求高峰时段，该过程可能需要数小时。查询其执行状态可以调用[GetIndexJobStatus接口](raw/_short/api-bailian-2023-12-29-getindexjobstatus-1e88b6ccfffe0fe4.md)。
 
--   **job\_id：**请传入[提交追加文件任务](raw/application-user-guide/knowledge-base/rag-knowledge-base-api-guide.md)时接口返回的`Data.Id`。
+-   **job\_id：**请传入[提交追加文件任务](raw/application-user-guide/knowledge-base/integration/rag-knowledge-base-api-guide.md)时接口返回的`Data.Id`。
 
 当本接口返回的`Data.Status`字段值为`COMPLETED`，表示本次更新的文件已全部成功追加至知识库。
 
@@ -9919,7 +9919,7 @@ func listIndices(client *bailian20231229.Client, workspaceId string) (_result *b
 
 ### 删除知识库
 
-要永久性删除某个知识库，可以调用[DeleteIndex接口](raw/_short/api-bailian-2023-12-29-deleteindex-500502bd6df1c49c.md)。删除前，请[解除该知识库关联的所有阿里云百炼应用](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)（仅可通过阿里云百炼控制台操作），否则会删除失败。
+要永久性删除某个知识库，可以调用[DeleteIndex接口](raw/_short/api-bailian-2023-12-29-deleteindex-500502bd6df1c49c.md)。删除前，请[解除该知识库关联的所有阿里云百炼应用](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)（仅可通过阿里云百炼控制台操作），否则会删除失败。
 
 -   **client：**[如何获取client](https://help.aliyun.com/zh/model-studio/rag-knowledge-base-api-guide#a8ce8e7788gmh)
     
@@ -9927,10 +9927,10 @@ func listIndices(client *bailian20231229.Client, workspaceId string) (_result *b
     
     > 子账号只能删除自己[已加入的业务空间](https://help.aliyun.com/zh/model-studio/grant-the-business-space-permission-to-ram-users)中的知识库。
     
--   **index\_id：**请传入[初始化知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base-api-guide.md)时接口返回的`Data.Id`。
+-   **index\_id：**请传入[初始化知识库](raw/application-user-guide/knowledge-base/integration/rag-knowledge-base-api-guide.md)时接口返回的`Data.Id`。
     
 
-请注意：本操作不会删除您已[添加至类目中](raw/application-user-guide/knowledge-base/rag-knowledge-base-api-guide.md)的文件。
+请注意：本操作不会删除您已[添加至类目中](raw/application-user-guide/knowledge-base/integration/rag-knowledge-base-api-guide.md)的文件。
 
 **重要**
 
@@ -10400,7 +10400,7 @@ func deleteChunk(client *bailian20231229.Client, workspaceId, pipelineId string,
     
     #### 数据查询/图片问答类知识库
     
-    若要实现数据查询/图片问答类知识库的自动更新，可基于RDS数据表构建知识库。具体操作请参见[创建知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
+    若要实现数据查询/图片问答类知识库的自动更新，可基于RDS数据表构建知识库。具体操作请参见[创建知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)。
     
     #### 音视频搜索类知识库
     
@@ -10408,11 +10408,11 @@ func deleteChunk(client *bailian20231229.Client, workspaceId, pipelineId string,
     
 2.  **为什么我新建的知识库里没有内容？**
     
-    一般是由于没有执行或未能成功执行[提交索引任务](raw/application-user-guide/knowledge-base/rag-knowledge-base-api-guide.md)这一步导致。若调用[CreateIndex](raw/_short/api-bailian-2023-12-29-createindex-8bc613c75f8af371.md)接口后未成功调用[SubmitIndexJob](raw/_short/api-bailian-2023-12-29-submitindexjob-63b38294171880d4.md)接口，您将得到一个空知识库。此时，您只需重新执行[提交索引任务](raw/application-user-guide/knowledge-base/rag-knowledge-base-api-guide.md)并[等待索引任务完成](raw/application-user-guide/knowledge-base/rag-knowledge-base-api-guide.md)即可。
+    一般是由于没有执行或未能成功执行[提交索引任务](raw/application-user-guide/knowledge-base/integration/rag-knowledge-base-api-guide.md)这一步导致。若调用[CreateIndex](raw/_short/api-bailian-2023-12-29-createindex-8bc613c75f8af371.md)接口后未成功调用[SubmitIndexJob](raw/_short/api-bailian-2023-12-29-submitindexjob-63b38294171880d4.md)接口，您将得到一个空知识库。此时，您只需重新执行[提交索引任务](raw/application-user-guide/knowledge-base/integration/rag-knowledge-base-api-guide.md)并[等待索引任务完成](raw/application-user-guide/knowledge-base/integration/rag-knowledge-base-api-guide.md)即可。
     
 3.  **遇到报错Access your uploaded file failed. Please check if your upload action was successful，应该如何处理？**
     
-    一般是由于没有执行或未能成功执行[上传文件到临时存储](raw/application-user-guide/knowledge-base/rag-knowledge-base-api-guide.md)这一步导致。请在确认该步骤成功执行后，再调用[AddFile](raw/_short/api-bailian-2023-12-29-addfile-8c254b3500bc50bc.md)接口。
+    一般是由于没有执行或未能成功执行[上传文件到临时存储](raw/application-user-guide/knowledge-base/integration/rag-knowledge-base-api-guide.md)这一步导致。请在确认该步骤成功执行后，再调用[AddFile](raw/_short/api-bailian-2023-12-29-addfile-8c254b3500bc50bc.md)接口。
     
 4.  **遇到报错Access denied: Either you are not authorized to access this workspace, or the workspace does not exist，应该如何处理？**
     

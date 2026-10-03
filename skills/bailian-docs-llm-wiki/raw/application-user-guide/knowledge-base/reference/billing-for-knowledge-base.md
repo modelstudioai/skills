@@ -562,7 +562,7 @@ Query 向量化（向量模型，按输入 Token 计费）
 
 ### 知识库数据量很大，旗舰版的平台存储不够用怎么办？
 
-您可以在创建知识库时，选择使用您自购的 ADB-PG 实例作为向量存储。具体配置方法请参见[创建知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)章节。
+您可以在创建知识库时，选择使用您自购的 ADB-PG 实例作为向量存储。具体配置方法请参见[创建知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)章节。
 
 ### 配置变更跨小时如何计费？
 

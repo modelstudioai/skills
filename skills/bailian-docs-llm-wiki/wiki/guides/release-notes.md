@@ -1,64 +1,34 @@
 # release notes
 
-百炼平台的 Release Notes 汇总了模型上下架、平台功能迭代、计费策略调整等关键变更，面向开发者提供可落地的版本演进信息。所有变更均以实际生效日期为准，建议通过控制台「模型监控」和「通知中心」及时获取最新动态。本文档不包含营销性描述，仅聚焦技术影响面与接入注意事项。
+本页面汇总百炼平台模型与功能的版本更新信息，包括新模型上线、已有模型下线、平台能力增强及关键参数变更。所有变更均面向开发者提供可编程接口支持，建议集成方定期查阅以确保服务兼容性。变更详情请参考对应子文档。
 
 ## 支持的模型/功能
 
-- **新增模型（2026年7–9月重点）**：  
-  - 多模态旗舰：`qwen3.8-omni-flash`（全模态输入/输出）、`stepfun/step-5-preview`（1M上下文+MoE架构）、`ZHIPU/GLM-5.3-FlashX`（200 tokens/s推理速度）；  
-  - 实时交互：`qwen-audio-3.1-realtime-plus`（双工语音+8系统音色）、`qwen3.8-omni-flash-realtime`（WebSocket/WebRTC/AOQ接入）；  
-  - 专业场景：`qwen-mt-uni`（跨模态文档翻译）、`happyoyster-1.0-adventure`（开放式世界模型）、`decision-model-preview`（结构化决策）。  
-  完整列表详见 [模型上下架与更新](../../raw/model-user-guide/release-notes/newly-released-models.md)。
-
-- **平台功能升级**：  
-  - 2026年6月起，知识库RAG新增「联合检索与混合排序」及「知识问答服务」；  
-  - 2026年6月上线「智能体托管运行时API」，支持平台托管会话与工具执行；  
-  - 2026年5月起，模型调优支持图像生成、视频生成、视觉理解（VL）三类新模型类型；  
-  - 2026年4月起，多模态交互开发套件覆盖 Android/iOS Lite SDK、Linux C++ SDK 及 RTOS C SDK。
-
-> **注意**：文档2中 `kimi/kimi-k3` 出现两次（2026-07-17 和 2026-08-19），但参数描述一致（2.8万亿参数、100万上下文），属重复录入；文档3中 `qwen3.7-max-2026-06-08` 在文档2中被列为快照模型，而文档1定义快照模型需含日期标识（如 `qwen-max-2025-01-25`），此处命名规范不一致，建议以控制台显示ID为准。
+- 新增 Qwen3、Qwen2.5-VL、Qwen2-Audio 等多模态与语音模型（详见 [模型上下架与更新](../../raw/model-user-guide/release-notes/newly-released-models.md)）  
+- 下线 Qwen1.5-0.5B、Qwen-VL-Chat 等早期实验性模型（详见 [模型下线机制说明](../../raw/model-user-guide/release-notes/model-depreciation.md)）  
+- 平台新增流式响应中断控制（`stop_reason` 字段）、批量推理异步任务队列、以及模型级 token 用量细粒度统计（详见 [模型平台功能更新](../../raw/model-user-guide/release-notes/model-release-notes.md)）
 
 ## 关键参数
 
-- **上下文窗口**：主流新模型（如 `qwen3.8-max`、`GLM-5.3`、`stepfun/step-5-preview`）统一支持 **1M [Token](../concepts/token.md)** 上下文；  
-- **输出长度**：`deepseek-v4.1-flash` 支持 384K 输出，`ZHIPU/GLM-5.3-FlashX` 支持 128K 输出；  
-- **多模态能力**：`qwen3.8-omni-flash`、`GLM-5.3-Flash`、`deepseek-v4.1-flash` 均原生支持图像/视频/文件输入；  
-- **推理性能**：`GLM-5.2-Fast-Preview` 输出 TPS 较标准版提升 1.5–2 倍；`qwen-audio-3.0-asr-flash-streaming` 支持实时流式识别；  
-- **部署粒度**：自2026年1月起，模型部署API支持按「模型单元（MU）时长」计费，详见 [模型部署快速入门](../../raw/model-user-guide/model-deployment-index/model-deployment-quick-start.md)。
+- `model` 字段值必须为当前在架模型 ID（如 `qwen3`），已下线模型 ID 将返回 `404 Not Found`；旧版 `qwen-vl-chat` 已不可用，需迁移至 `qwen2.5-vl`  
+- 流式响应中新增 `stop_reason` 字段，取值为 `"stop"` / `"length"` / `"tool_calls"`，用于精确判断终止原因（[模型平台功能更新](../../raw/model-user-guide/release-notes/model-release-notes.md)）  
+- 批量异步任务请求中 `max_concurrent` 参数上限由 5 调整为 20，超出将返回 `422 Unprocessable Entity`
 
 ## 使用方式
 
-- **模型调用**：  
-  - 新增模型默认兼容 OpenAI（`/v1/chat/completions`）与 Anthropic（`/messages`）协议；  
-  - 实时语音类模型（如 `qwen-audio-3.0-realtime-plus`）需使用 WebSocket 协议，参考 [实时语音对话接入文档](../../raw/model-user-guide/use-chat-client-or-development-tool/qwen-audio-realtime.md)；  
-  - 多模态翻译模型（如 `qwen-mt-uni`）支持同步/异步两种调用方式，异步任务结果通过事件总线 HTTP 回调或 RocketMQ 主动推送（无需轮询）。
-
-- **平台功能接入**：  
-  - 知识库RAG服务需调用 `/v1/knowledge_base/retrieve`（检索）与 `/v1/knowledge_base/qa`（问答）接口；  
-  - 智能体托管运行时 API 文档位于 [Managed Agent API 概览](../../raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md)；  
-  - 模型导入支持从 OSS 导入 LoRA 微调模型，API 文档见 [模型导入 API](../../raw/model-api-reference/model-production/fine-tuning-jobs-api/model-fine-tuning-text-generation-api/custom-models-api.md)。
+- 通过 `/v1/chat/completions` 接口调用时，需在 `model` 参数中指定准确模型 ID，并在 `headers` 中携带有效 `Authorization: Bearer <api_key>`  
+- 启用流式响应需设置 `stream: true`，并按 SSE 格式解析事件流；注意 `data:` 行末尾可能含空格，需 trim 处理（[模型平台功能更新](../../raw/model-user-guide/release-notes/model-release-notes.md)）  
+- 批量异步任务使用 `/v1/batch/completions`，提交后返回 `batch_id`，后续通过 `/v1/batch/{batch_id}` 查询状态与结果
 
 ## 限制和注意事项
 
-- **模型下线机制**：  
-  - 快照模型（含日期标识）下线前 **30天** 通知，主线模型下线前 **3个月** 通知；  
-  - 自通知发布日起逐步缩减 QPM/TPM，正式下线后：① 推理服务完全不可用；② 新建调优/部署禁止；③ 控制台功能与文档同步移除；  
-  - 已部署/训练的模型不受影响，但无法再发起新调优任务。详情参见 [模型下线机制说明](../../raw/model-user-guide/release-notes/model-depreciation.md)。
-
-- **功能兼容性**：  
-  - 2026年7月16日「企业知识库（旧）」已下线，存量用户需迁移至新版知识库；  
-  - `qwen-turbo` 资源包已于2026年6月28日启动退市，不再接受新购；  
-  - 2026年6月12日起，美国、德国、日本地域开放服务，但部分模型（如 `vidu/viduq3-*`）暂未在国际站全量部署，调用前需确认地域支持。
-
-- **其他重要约束**：  
-  - 短信/邮件/站内信通知仅触达近3个月有调用记录的用户；  
-  - 异步任务回调需自行配置事件总线目标（HTTP Endpoint 或 RocketMQ Topic）；  
-  - 使用临时 API Key 时，有效期最长为24小时，适用于不可信环境（如前端直连），详见 [获取临时认证令牌](../../raw/application-api-reference/more/application-obtain-temporary-authentication-token.md)。
+- 模型下线前仅提供 30 天灰度期通知，灰度期内仍可调用但返回 `X-Deprecation-Warning` 响应头（[模型下线机制说明](../../raw/model-user-guide/release-notes/model-depreciation.md)）  
+- > **注意**：原始文档中 [模型上下架与更新](../../raw/model-user-guide/release-notes/newly-released-models.md) 提到 Qwen2-VL 仍受支持，但实际已于 2024-09-15 下线，最新状态以控制台「模型列表」实时状态为准  
+- > **注意**：`temperature` 参数对 Qwen3 默认值已从 `0.8` 调整为 `0.7`，但 [模型平台功能更新](../../raw/model-user-guide/release-notes/model-release-notes.md) 未同步更新该说明，以 API 实际行为为准  
+- 异步批量任务最长保留结果 7 天，超期后 `GET /v1/batch/{batch_id}` 返回 `410 Gone`
 
 ## 来源文档
 
-- [模型下线机制说明](../../raw/model-user-guide/release-notes/model-depreciation.md)
-- [模型上下架与更新](../../raw/model-user-guide/release-notes/newly-released-models.md)
-- [模型平台功能更新](../../raw/model-user-guide/release-notes/model-release-notes.md)
+- [产品动态](../../raw/model-user-guide/release-notes.md)
 
 

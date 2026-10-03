@@ -1,48 +1,44 @@
 # 函数调用
 
-函数调用（Function Calling）是百炼平台中模型主动识别用户意图、结构化提取参数，并按约定协议触发外部能力（如[插件](plugin.md)、API、自定义工具）的核心机制。它使大模型从“纯文本生成器”升级为可执行动作的智能代理，是构建 Agent、工作流和高代码应用的关键支撑能力。
+函数调用（Function Calling）是百炼平台中大模型与外部能力协同执行任务的核心机制，指模型在推理过程中，基于用户输入和上下文，自主识别需调用的工具（Tool）、技能（Skill）或插件（Plugin），并生成结构化调用请求（含工具 ID、参数等），由平台运行时安全执行、捕获结果，并将返回值注入后续推理循环。该机制实现了“思考—决策—行动—观察”的闭环，是构建自主智能体（Agent）和复杂工作流的基础能力。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **智能体（Agent）应用**：模型在 `Agent 2.0` 模式下自动规划并调用注册的函数（如搜索、计算、图像生成），全过程可追溯；函数结果被自动注入上下文，支持多轮迭代与反思。旧版 Agent 1.0 则需显式配置“工具调用阶段”，分步完成检索与决策。
+函数调用在百炼平台并非单一接口，而是贯穿多个能力层的统一抽象，具体体现为以下三类实践方式：
 
-- **工作流（Workflow）应用**：通过“工具节点”接入函数调用能力，支持 MCP 协议、OpenAPI 规范或百炼兼容的 Function Calling Schema。开发者可将函数作为确定性流程中的一个执行单元，与其他节点（如条件判断、循环）组合编排。
+- **Managed Agents 中的自动工具调用**：当创建智能体时配置 `tools`（如 `bash`、`web_search`）、`mcp_servers` 或绑定 `skills`，模型会在对话中自主决定是否调用、调用哪个工具/技能，并传入参数。平台自动完成沙箱执行、结果解析与上下文注入，开发者无需编写调用逻辑。
+  
+- **Application Call（应用调用）中的显式能力扩展**：在调用已发布的智能体应用时，可通过 `rag_options`（知识库检索）、`memory_id`（[长期记忆](memory.md)）等参数触发平台内置函数；若应用已集成插件或 Skill，这些能力也会在模型推理中被自动纳入函数调用候选集。
 
-- **高代码应用**：在 Python 代码中通过 `fastmcp.Client` 显式发起函数调用，或接收模型返回的 `tool_calls` 结构并手动 dispatch；控制台仅用于工具元信息注册与环境变量配置，实际调用逻辑由开发者完全掌控。
+- **Plug-in 与 Skill 的标准化接入**：插件（Plugin）和技能（Skill）本质是函数调用的两种封装形态——插件面向通用 API 封装（支持鉴权、参数映射、多模态输入），Skill 面向 Python 逻辑封装（文件处理、数据转换等）。二者均通过 `tool_id` 唯一标识，在模型输出的 `tool_calls` 字段中被引用，由平台统一调度执行。
 
-- **Assistant API 直接调用**：开发者可向 `/v1/assistants/runs` 等端点提交含 `tools` 数组的请求，模型将根据输入自动选择函数、填充参数并返回 `tool_calls` 字段（含 `id`、`function.name`、`function.arguments`），开发者需自行解析并执行对应逻辑。
-
-> ⚠️ 注意：所有函数调用均**不透传自定义 Header**，仅允许 `Authorization` 字段；函数 endpoint 必须可公网访问，且响应需符合 JSON Schema 格式（推荐使用 OpenAPI 3.0 定义）。
+> ✅ 关键区别：Managed Agents 和 Application Call 是**运行时环境**，负责触发、执行、编排函数调用；而 Plug-in 和 Skill 是**可调用单元本身**，提供具体功能实现。
 
 ## 关键参数和配置
 
-| 参数 | 类型 | 说明 | 是否必需 |
-|------|------|------|----------|
-| `tools` | array | 注册的函数列表，每个元素为 `{ "type": "function", "function": { "name", "description", "parameters" } }`，`parameters` 需为 JSON Schema Object | 是（启用函数调用时） |
-| `tool_choice` | string / object | 控制调用策略：`"auto"`（默认，模型自主决定）、`"none"`（禁用）、`{"type": "function", "function": {"name": "xxx"}}`（强制指定） | 否 |
-| `function_call`（已弃用） | string / object | 旧版参数，等效于 `tool_choice`，新应用请统一使用 `tool_choice` | 否（不推荐） |
-| `arguments`（响应字段） | string | 模型生成的 JSON 字符串（非对象），需 `json.loads()` 解析后校验结构 | —— |
-| `tool_calls`（响应字段） | array | 包含一个或多个调用请求，每个含 `id`、`function.name`、`function.arguments`；支持并发调用多个函数 | —— |
+函数调用行为由以下关键参数控制，开发者需根据使用场景合理配置：
 
-- **Schema 要求**：`parameters` 必须是有效的 JSON Schema Object（非字符串），推荐使用 `required` 字段明确必填项，避免模型传入空值。
-- **错误处理**：若函数执行失败或返回格式错误，需在后续请求中通过 `tool_outputs` 提交错误信息，模型将据此重试或调整策略。
+| 参数 | 所属场景 | 说明 | 推荐值 |
+|------|----------|------|--------|
+| `tool_choice` | Managed Agents API（`/v1/agents/{id}/chat`） | 控制模型是否及如何选择工具：<br>• `"auto"`：模型自主决策（默认）<br>• `"none"`：禁用调用<br>• `{"type": "function", "function": {"name": "xxx"}}`：强制指定工具 | `"auto"`（生产推荐）；调试时可用 `"none"` 快速验证基础响应 |
+| `tools` | Managed Agents / Plug-in / Skill 配置 | 工具列表声明，格式为 OpenAI 兼容的 `tools` 数组，包含 `type`、`function.name`、`function.description`、`function.parameters`（JSON Schema） | `description` 必须精准描述用途与边界，直接影响调用准确率 |
+| `tool_id` | Plug-in / Skill 元信息 | 插件或技能的全局唯一标识符，用于在 `tools` 列表和模型输出中引用 | 从控制台复制，避免手写错误（如 `calculator`, `pdf-parser`） |
+| `biz_params` / `user_defined_params` | Plug-in API 调用 | 向插件透传业务参数（如用户 ID、会话上下文），绕过模型参数抽取，提升稳定性和安全性 | 敏感参数（如 token）必须通过此方式传入，禁止写入 `description` |
+| `permission_policy` | Managed Agents 工具配置 | 控制工具调用权限策略：<br>• `"always_allow"`：无条件允许（适合 `read`/`write` 等安全操作）<br>• `"always_ask"`：每次调用前向用户确认（适合 `bash`/`web_search` 等高风险操作） | 按最小权限原则配置，生产环境慎用 `"always_allow"` |
 
 ## 面向开发者，简洁实用
 
-- ✅ **快速验证**：在控制台“智能体调试”或 Postman 中发送含 `tools` 的请求，观察响应是否含 `tool_calls`；若无，检查 `parameters` 是否为合法 Schema Object 或尝试设 `tool_choice="auto"`。
-- ✅ **安全实践**：函数 endpoint 应校验 `Authorization` 头（如 Bearer [Token](token.md)），禁止依赖其他 Header 或未签名参数；敏感操作建议增加二次确认逻辑。
-- ✅ **调试技巧**：开启 `stream=True` 可实时捕获 `tool_calls` 流式事件；结合 `enable_thinking=True` 查看模型内部规划过程。
-- ❌ **避坑提示**：  
-  - 不要将函数名设为保留字（如 `list`, `get`, `run`），易与平台内部方法冲突；  
-  - `function.arguments` 是字符串，不是 JSON 对象——解析前务必 `json.loads()`；  
-  - 自定义函数不支持 WebSocket、长连接或异步回调，必须同步返回 HTTP 2xx 响应。
-
-函数调用不是黑盒能力，而是你与模型协作的契约接口：定义清晰，调用可靠，反馈及时。从第一个 `tool_calls` 出现开始，你的应用就真正“活”起来了。
+- **不要手动解析 `tool_calls`**：百炼平台自动完成工具调用、执行、结果注入。你只需关注 `tools` 声明是否完整、`description` 是否准确、`tool_id` 是否匹配。
+- **调试优先级**：若函数调用未触发，按顺序检查：① `tool_choice` 是否为 `"auto"`；② `tools` 是否已正确声明且 `name` 与 `tool_id` 一致；③ `description` 是否包含足够触发关键词（如“计算”“搜索”“解析PDF”）；④ 模型是否支持该能力（如 `qwen-turbo` 支持插件，但 `qwen-vl-plus` 不支持 `code_interpreter`）。
+- **安全第一**：禁止在 Skill 代码中硬编码密钥或发起外网请求；插件鉴权参数必须通过 `biz_params` 传入；敏感工具（如 `bash`）务必设 `permission_policy: always_ask`。
+- **性能提示**：单次调用最多触发 3 次函数调用（含嵌套），超限将中断执行。复杂流程建议拆分为多个智能体协作或改用工作流节点编排。
 
 ## 关联主题页
 
-- [more about models](../api/more-about-models.md)
-- [application support](../guides/application-support.md)
-- [llm application](../guides/llm-application.md)
+- [managed agents api](../api/managed-agents-api.md)
+- [managed agents](../guides/managed-agents.md)
+- [application call](../api/application-call.md)
+- [plug in](../guides/plug-in.md)
+- [skill](../guides/skill.md)
 
 
