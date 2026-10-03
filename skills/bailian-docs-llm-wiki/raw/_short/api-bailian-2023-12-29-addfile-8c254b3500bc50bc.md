@@ -186,7 +186,7 @@ string
 
 否
 
-通过此参数为文件添加一个 URL，系统将在构建[文档搜索类知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)时记录该链接。在使用阿里云百炼控制台与[智能体应用](raw/application-user-guide/llm-application/single-agent-application.md)对话时，随该文件召回结果返回（通过`docUrl`字段）。
+通过此参数为文件添加一个 URL，系统将在构建[文档搜索类知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)时记录该链接。在使用阿里云百炼控制台与[智能体应用](raw/application-user-guide/llm-application/single-agent-application.md)对话时，随该文件召回结果返回（通过`docUrl`字段）。
 
 智能体应用必须开启**知识库**，并启用**展示回答来源**功能，否则此参数不生效。
 

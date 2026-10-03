@@ -10,8 +10,8 @@
 -   [核心概念](raw/application-user-guide/knowledge-base/concepts.md)：RAG、切片、向量化、索引与检索如何协同工作。
 -   [Playground](raw/application-user-guide/knowledge-base/playground.md)：在控制台在线体验检索与问答效果。
 -   [数据集](raw/application-user-guide/knowledge-base/data-connection-overview/data-connection.md)：从文件、表格、MySQL、OSS 等多种来源导入数据。
--   [创建知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)：选择知识库类型，配置解析与切片策略。
--   [知识检索](raw/application-user-guide/knowledge-base/rag-knowledge-retrieval.md)：多路召回与 Agentic 多轮检索。
+-   [创建知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)：选择知识库类型，配置解析与切片策略。
+-   [知识检索](raw/application-user-guide/knowledge-base/service/rag-knowledge-retrieval.md)：多路召回与 Agentic 多轮检索。
 -   [知识问答](raw/application-user-guide/knowledge-base/service/rag-knowledge-qa.md)：基于大模型的流式 RAG 问答。
 -   [应用集成](raw/application-user-guide/knowledge-base/integration/channels.md)：API、MCP、CLI 与 Skill 多种集成方式。
 -   [RAG API 参考](raw/application-api-reference/rag-api/rag-api-overview.md)：知识库、文档、切片、检索与问答等接口。

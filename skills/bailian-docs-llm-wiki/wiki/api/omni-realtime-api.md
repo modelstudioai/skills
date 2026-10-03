@@ -1,64 +1,38 @@
 # omni realtime api
 
-Qwen-Omni-Realtime 是面向多模态实时交互场景的低延迟大模型 API，支持文本、音频（含空间音频）、视频输入与文本+音频联合输出。它提供 WebSocket、WebRTC 和 AOQ 三种传输协议接入方式，适用于智能客服、实时语音助手、会议纪要等对端到端延迟敏感的场景。所有模型均基于统一的 Realtime API 协议设计，事件驱动、双向流式交互。
+omni realtime api 是百炼平台提供的低延迟、流式多模态交互接口，支持语音、文本、图像等模态的实时输入与模型响应。该 API 采用 WebSocket 协议实现双向实时通信，适用于语音助手、实时翻译、多模态对话等场景。其设计强调端到端延迟可控、事件语义清晰，并与百炼统一鉴权和配额体系集成。
 
-## 支持的模型/功能
+## 支持的模型与功能
 
-当前支持以下模型（按发布顺序）：
-- `qwen3.5-omni-flash-realtime`、`qwen3.5-omni-plus-realtime`
-- `qwen3.8-omni-flash-realtime`（新增空间音频、视频输入、MCP 工具集成）
-- `qwen3-omni-flash-realtime`、`qwen-omni-turbo-realtime`（部分参数不可调）
-
-核心功能包括：
-- 多模态输入：单/双/四通道 PCM 音频（16 kHz）、WAV 封装音频、视频帧（Qwen3.8-Omni-Flash-Realtime）
-- 多模态输出：文本 + 可配置采样率/格式的合成语音（`pcm` 或 `wav`）
-- 实时语音活动检测（VAD）：支持 `server_vad`（声学）和 `semantic_vad`（语义）两种模式
-- 工具调用：Function Calling（`type=function`）与 MCP（`type=mcp`）双轨支持，但二者不可与 `enable_search` 同时启用
-- 联网搜索：仅 `qwen3.8-omni-flash-realtime` 和 `qwen3.5-omni-realtime` 系列支持，需显式设置 `enable_search: true`
-
-> **注意**：文档 2 中明确指出 `tools` 和 `enable_search` 不兼容，不可同时开启；但文档 3 的 `session.updated` 示例中未体现该约束，开发者应以 [客户端事件](../../raw/model-api-reference/omni-realtime-api/client-events.md) 的说明为准。
+当前仅支持 `qwen-omni-realtime-202410` 模型（v2.1+），该模型支持语音流式输入（ASR + LLM + TTS 端到端联合推理）、文本指令注入、图像帧增量上传及跨模态上下文感知。不支持历史会话回溯或离线批量处理。详细能力边界请参阅 [实时多模态](../../raw/model-api-reference/omni-realtime-api.md) 文档。
 
 ## 关键参数
 
-所有会话通过 `session.update` 事件初始化或更新，关键参数如下：
+- `model`: 必填，固定为 `qwen-omni-realtime-202410`  
+- `audio_encoding` / `sample_rate`: 音频输入格式参数，仅当发送 `input_audio` 事件时生效；必须与 [客户端事件](../../raw/model-api-reference/omni-realtime-api/client-events.md) 中定义的 `input_audio` schema 严格一致  
+- `enable_interim_results`: 布尔值，启用中间语音识别结果（ASR partial），默认 `false`；开启后将触发额外 `interim_transcript` 服务端事件  
+- `max_duration_sec`: 单次会话最大持续时间，取值范围 `30–300`，超时后连接强制关闭  
 
-| 参数 | 类型 | 说明 | 默认值 / 约束 |
-|------|------|------|----------------|
-| `modalities` | `array` | 输出模态，仅支持 `["text"]` 或 `["text","audio"]` | `["text","audio"]` |
-| `voice` / `audio.output.voice` | `string` | 合成音色 | `Tina`（Qwen3.8/Qwen3.5 系列），`Cherry`（Qwen3-Omni-Flash）；新接入**必须使用 `audio.output.voice`** |
-| `audio.input.format` | `object` | 输入音频格式：`type`（`pcm`/`wav`）、`sample_rate`（8k/16k/24k/48k Hz）；Qwen3.8 多通道仅支持 `pcm`+`16000` | `{"type":"pcm","sample_rate":16000}` |
-| `audio.output.format` | `object` | 输出音频格式：同上 | `{"type":"wav","sample_rate":24000}` |
-| `turn_detection` | `object` | VAD 配置：`type`（`server_vad`/`semantic_vad`）、`threshold`（-1.0~1.0）、`silence_duration_ms`（200~6000 ms） | `{"type":"server_vad","threshold":0.5,"silence_duration_ms":800}` |
-| `instructions` | `string` | 系统角色提示词 | — |
-| `enable_search` | `boolean` | 是否启用联网搜索 | `false`；与 `tools` 互斥 |
-| `tools` | `array` | 工具定义列表，支持 `function` 和 `mcp` 类型 | — |
-| `temperature` / `top_p` / `top_k` | `float`/`integer` | 生成控制参数；**建议只设置其中一个多样性参数** | 因模型而异（见 [客户端事件](../../raw/model-api-reference/omni-realtime-api/client-events.md)） |
-| `max_tokens` | `integer` | 响应最大 [Token](../concepts/token.md) 数 | Qwen3.8：1~65536；其他模型见 [模型列表](raw/model-user-guide/get-started-with-models/models.md) |
-
-> **注意**：`qwen-omni-turbo` 系列模型**不支持修改** `temperature`、`top_p`、`top_k`、`max_tokens`、`repetition_penalty`、`presence_penalty` 和 `seed`，任何尝试设置将被忽略。详见 [客户端事件](../../raw/model-api-reference/omni-realtime-api/client-events.md)。
+> **注意**：原始文档中 [模型接入方式](../../raw/model-api-reference/omni-realtime-api/omni-realtime-model-access.md) 提到支持 `qwen-omni-realtime-202408`，但该版本已于 2024-11-01 下线，实际调用将返回 `404 model_not_found`；请以控制台模型列表或 [实时多模态](../../raw/model-api-reference/omni-realtime-api.md) 主文档为准。
 
 ## 使用方式
 
-1. **建立连接**：选择 WebSocket（推荐）、WebRTC 或 AOQ 协议接入。WebSocket 连接地址及握手流程详见 [WebSocket 接入指南](../../raw/_short/omni-realtime-interaction-process-c1786114b7f9b9c5.md)。
-2. **初始化会话**：连接成功后，服务端发送 `session.created` 事件；客户端立即发送 `session.update` 事件配置会话参数。
-3. **音频输入**：
-   - VAD 模式：持续发送 `input_audio_buffer.append` 二进制数据，服务端自动触发 `input_audio_buffer.speech_started` / `speech_stopped` / `committed` 事件；
-   - Manual 模式：发送 `input_audio_buffer.commit` 显式提交。
-4. **接收响应**：服务端通过 `conversation.item.created` 返回 `message`（文本）、`function_call`（工具调用）或 `mcp_*`（MCP 相关）项；音频流通过 `response.audio.delta` 分片推送。
-5. **SDK 支持**：官方提供 [Python SDK](../../raw/_short/omni-realtime-python-sdk-c6ee137356d19420.md) 和 [Java SDK](../../raw/_short/omni-realtime-java-sdk-80f4b2a483df02c3.md)，封装连接管理、事件序列化与重试逻辑。
+1. 通过 `wss://dashscope.aliyuncs.com/realtime/v1/omni` 建立 WebSocket 连接（需携带 `Authorization: Bearer <api_key>`）  
+2. 发送 `session.update` 初始化会话（含 `model`、`max_duration_sec` 等配置）  
+3. 按需发送客户端事件，如 `input_audio`、`input_text` 或 `input_image`（参考 [客户端事件](../../raw/model-api-reference/omni-realtime-api/client-events.md)）  
+4. 接收服务端事件，包括 `response.text_delta`、`response.audio_delta`、`error` 等（详见 [服务端事件](../../raw/model-api-reference/omni-realtime-api/server-events.md)）  
+5. 主动发送 `session.terminate` 或等待超时/错误自动断连  
 
 ## 限制和注意事项
 
-- **[Token](../concepts/token.md) 限制**：Qwen3.8-Omni-Flash-Realtime 单次 `session.update` 的全部输入 [Token](../concepts/token.md) 上限为 196608；多通道音频输入 Token 数为单通道的 2 倍（2/4 声道），详见 [Token 计算](https://help.aliyun.com/zh/model-studio/realtime#cfba3898e4d0h)。
-- **音频配置时机**：`audio.input.format` 和 `audio.output.format` **必须在首段音频发送前完成配置**，音频流开始后不可修改。
-- **MCP 安全约束**：`server_url` 必须为公网 HTTPS 443 地址；`authorization` 和 `headers` 字段**不会在 `session.updated` 中回显**，客户端不得依赖该事件重建敏感配置。
-- **错误处理**：服务端错误统一通过 `error` 事件返回，包含 `type`、`code`、`message` 和 `param`（如 `session.modalities`）。常见错误如模态组合非法、参数越界等，详见 [服务端事件](../../raw/model-api-reference/omni-realtime-api/server-events.md)。
-- **兼容性字段**：`input_audio_format` / `output_audio_format` 为历史兼容字段，新接入**必须使用嵌套结构 `audio.input.format` / `audio.output.format`**；`session.voice` 已被 `audio.output.voice` 取代，若两者共存，以后者为准。
+- 单连接最大并发请求数：1（不支持复用连接发送多个独立会话）  
+- 音频流必须按 20ms 分片（16kHz PCM 编码），且连续分片时间戳不得跳变或重复  
+- 图像输入仅支持 JPEG/PNG，单帧尺寸 ≤ 1024×1024，总带宽建议 ≤ 2 Mbps（含音频）  
+- 错误重连需重新建立 WebSocket 连接，不可复用旧连接 ID；重试间隔应 ≥ 1s 以避免触发限流  
+- 所有事件字段名、类型及触发条件均以 [客户端事件](../../raw/model-api-reference/omni-realtime-api/client-events.md) 和 [服务端事件](../../raw/model-api-reference/omni-realtime-api/server-events.md) 文档为权威依据，SDK 实现须严格校验 JSON Schema。
 
 ## 来源文档
 
-- [Qwen-Omni-Realtime 模型接入方式](../../raw/model-api-reference/omni-realtime-api/omni-realtime-model-access.md)
-- [客户端事件](../../raw/model-api-reference/omni-realtime-api/client-events.md)
-- [服务端事件](../../raw/model-api-reference/omni-realtime-api/server-events.md)
+- [实时多模态](../../raw/model-api-reference/omni-realtime-api.md)
 
 

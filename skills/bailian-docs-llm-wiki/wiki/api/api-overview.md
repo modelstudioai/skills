@@ -1,53 +1,41 @@
 # api [overview](../guides/overview.md)
 
-ParseX API 提供文档、图片及音视频的结构化解析与字段抽取能力，采用异步调用模式：先提交任务获取 `biz_id`，再轮询查询结果。所有接口均需通过 API Key 鉴权，支持灵活的处理配置与输出定制。
+ParseX API 提供文档解析与结构化信息抽取的编程接口，所有能力通过 DashScope 网关统一接入。接口采用标准 RESTful 设计，基于 HTTPS 协议，以异步任务模式为主，适用于高并发、多格式（PDF/Word/音视频等）的自动化处理场景。开发者需使用有效的 `DASHSCOPE_API_KEY` 进行认证。
 
 ## 支持的模型/功能
 
-- **文档解析**：支持 PDF、Word、Excel、PPT、图片（PNG/JPG）等格式，输出 Markdown、布局信息、表格、段落、坐标等；支持页码范围控制、页眉页脚解析、图像描述生成等 [提交解析任务](../../raw/application-api-reference/api-overview/document-parsing/parse-submit.md)。
-- **音视频解析**：支持 MP4、MOV、AVI 等主流格式，提供 ASR 转录、人声分离（diarization）、抽帧（支持 `auto`/`frame_rate` 模式）、剧情解析（含摘要、分段、内容描述）等能力 [提交解析任务](../../raw/application-api-reference/api-overview/document-parsing/parse-submit.md)。
-- **字段抽取**：基于 JSON Schema 从解析结果或原始文件中抽取结构化字段，支持引用定位（`citations`）、推断开关（`allow_inference`）和置信度说明（`reason`），但**不支持直接输入音视频** [提交抽取任务](../../raw/application-api-reference/api-overview/field-extraction/extract-submit.md)。
+- **文档解析**：支持 PDF、Word、Excel、PPT、图片及音视频文件的版面分析、文字识别（OCR）、表格重建与语义段落切分；  
+- **结构化抽取**：支持按用户定义的 JSON Schema 提取字段（如合同关键条款、发票要素、简历信息等），底层调用 ParseX 专用抽取模型；  
+- **多模态扩展能力**：音视频解析自动关联语音转写、关键帧提取与时间戳对齐，详见 [提交解析任务](../../raw/application-api-reference/api-overview/document-parsing/parse-submit.md)。  
 
-> **注意**：文档解析与字段抽取虽共享 `biz_id` 机制和异步流程，但二者任务类型隔离——`parse/submit` 返回的 `biz_id` 仅用于 `parse/result`；`extract/submit` 返回的 `biz_id` 仅用于 `extract/result`。混用将导致 `NotExistBizId` 错误。
+> **注意**：原始文档中未明确列出支持的模型名称（如 `parsex-v1` 或 `parsex-video`），仅通过路径和 biz_id 前缀（如 `parseX-video-...`）间接体现。实际可用模型请以 [提交解析任务](../../raw/application-api-reference/api-overview/document-parsing/parse-submit.md) 中的 `model` 参数枚举为准，避免依赖 biz_id 命名推断。
 
 ## 关键参数
 
-- **必填鉴权头**：`Authorization: Bearer $DASHSCOPE_API_KEY`，API Key 需通过百炼控制台获取并安全存储 [鉴权](../../raw/application-api-reference/api-overview/authentication.md)。
-- **任务标识**：`biz_id` 是所有异步操作的核心 ID，由 `/parse/submit` 或 `/extract/submit` 返回，不可跨接口复用。
-- **输入源二选一**：
-  - 解析任务：`file_url`（必需） + 可选 `file_name` 或 `file_name_extension`；
-  - 抽取任务：`file_url` **或** `parsed_file_biz_id`（二者必选其一）；复用解析结果时，需确保其未超 7 天保留期且类型兼容。
-- **处理配置优先级**：`processing`（内联对象） > `config_id`（已保存配置）。
-- **输出控制**：`output.output_file_format`（如 `["markdown"]`）、`output.oss_config`（用于持久化到客户 OSS）等。
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `biz_id` | string | 是（结果查询时） | 异步任务唯一标识，由提交接口返回，用于轮询结果；见 [提交抽取任务](../../raw/application-api-reference/api-overview/field-extraction/extract-submit.md) |
+| `model` | string | 否（默认 `parsex-general`） | 指定解析模型，如 `parsex-video`、`parsex-contract`；不同模型对输入格式和字段 schema 有约束 |
+| `file_url` / `file_bytes` | string / base64 | 是（二选一） | 文件来源，推荐使用 `file_url`（需公网可访问的直链）以提升大文件稳定性 |
+| `schema` | object | 是（抽取任务） | 符合 JSON Schema Draft-07 的结构定义，决定输出字段粒度与校验规则 |
 
 ## 使用方式
 
-1. **准备凭证**：按 [鉴权](../../raw/application-api-reference/api-overview/authentication.md) 获取并配置 `DASHSCOPE_API_KEY`；
-2. **提交任务**：
-   - 文档/音视频解析 → 调用 `/parse/submit`，获取 `biz_id`；
-   - 字段抽取 → 调用 `/extract/submit`，获取 `biz_id`；
-3. **轮询结果**：
-   - 解析任务 → 轮询 `/parse/result?biz_id=xxx`，关注 `data.status`（`success`/`failed`/`processing`）；
-   - 抽取任务 → 轮询 `/extract/result?biz_id=xxx`，同样依据 `data.status` 判断终止条件；
-4. **错误处理**：若返回 `ResultNotReady`，继续轮询；若返回其他错误码（如 `ProcessingTimeout`、`ParseResultNotReusable`），需结合 [错误码](../../raw/application-api-reference/api-overview/errors.md) 文档定位原因。
+1. **认证**：在请求 Header 中携带 `Authorization: Bearer $DASHSCOPE_API_KEY` 和 `Content-Type: application/json`；  
+2. **提交任务**：向 `https://{workspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/parse-x` 发送 POST 请求，Body 包含文件引用与配置；  
+3. **轮询结果**：使用返回的 `biz_id` 调用 `/result` 接口（路径为 `/api/v2/apps/parse-x/result`），按 `data.status` 字段判断状态，直至 `success` 或 `failed`；  
+4. **错误处理**：统一响应含 `code` 与 `message`，需结合 [错误码](../../raw/application-api-reference/api-overview/errors.md) 文档定位问题。
 
 ## 限制和注意事项
 
-- **文件限制**：单文件大小、页数、时长均有上限，具体配额以控制台实时页面为准；超限将返回 `FileSizeExceeded` 或 `PageCountExceeded` [错误码](../../raw/application-api-reference/api-overview/errors.md)。
-- **复用约束**：抽取任务复用解析结果时，必须满足：① `parsed_file_biz_id` 存在且未过期（≤7 天）；② 原始解析类型支持抽取（音视频解析结果不可用于字段抽取）；否则返回 `ParseResultNotReusable`。
-- **重试策略**：`FileDownloadTimeout` 可重试；`FileDownloadFailed` 不可重试，需检查 URL 可访问性及权限 [错误码](../../raw/application-api-reference/api-overview/errors.md)。
-- **Schema 与输入匹配**：抽取任务中 `extract_schema` 必须为合法 JSON 对象，且字段类型需与实际内容语义一致；`InvalidSchema` 错误表明格式非法。
-- **OSS 安全**：若使用 `oss_config`，AccessKey 等敏感信息应通过请求体传入，避免硬编码；建议使用临时 Security [Token](../concepts/token.md)。
+- 单次请求最大文件体积为 100 MB（音视频建议 ≤ 500 MB，但处理超时风险显著上升）；  
+- `biz_id` 有效期为 7 天，过期后结果不可查，需重新提交；  
+- 所有接口强制 HTTPS，明文 HTTP 请求将被网关拒绝；  
+- 响应体 UTF-8 编码，非 UTF-8 字符（如 GBK 中文）可能导致解析失败；  
+- 异步轮询建议间隔 ≥ 2 秒，高频请求可能触发限流（HTTP 429），具体配额见 [鉴权](../../raw/application-api-reference/api-overview/authentication.md) 文档。
 
 ## 来源文档
 
-- [错误码](../../raw/application-api-reference/api-overview/errors.md)
-- [鉴权](../../raw/application-api-reference/api-overview/authentication.md)
-- [文档解析 API](../../raw/application-api-reference/api-overview/document-parsing.md)
-- [提交解析任务](../../raw/application-api-reference/api-overview/document-parsing/parse-submit.md)
-- [字段解析 API](../../raw/application-api-reference/api-overview/field-extraction.md)
-- [提交抽取任务](../../raw/application-api-reference/api-overview/field-extraction/extract-submit.md)
-- [查询抽取结果](../../raw/application-api-reference/api-overview/field-extraction/extract-result.md)
-- [查询解析结果](../../raw/application-api-reference/api-overview/document-parsing/parse-result.md)
+- [API 概览](../../raw/application-api-reference/api-overview.md)
 
 

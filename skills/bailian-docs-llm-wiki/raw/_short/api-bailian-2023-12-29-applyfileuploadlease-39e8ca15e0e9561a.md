@@ -76,7 +76,7 @@ string
 
 是
 
-上传用于构建[知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)的文件时：
+上传用于构建[知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)的文件时：
 
 -   该字段代表上传文件所属类目 ID，即 **AddCategory** 接口返回的`CategoryId`。您也可以在[应用数据](https://bailian.console.aliyun.com/?tab=app#/data-center)\-文件页签，单击类目名称旁的 ID 图标获取。此处允许传入 default，即使用系统创建的“默认类目”。
     
@@ -118,7 +118,7 @@ string
 
 是
 
-上传用于构建[知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)的文件：
+上传用于构建[知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)的文件：
 
 -   该字段代表上传文件的名称，注意后缀需要带上文件格式类型，支持格式：
     -   文档（小于 150MB）：doc、docx、wps、ppt、pptx、xls、xlsx、md、txt、pdf、epub、mobi。
@@ -133,7 +133,7 @@ string
         
     -   视频：mp4、mkv、avi、mov、wmv。
         
--   文件名称长度限制 4-128 个字符。其它限制请参考[知识库配额与限制](raw/application-user-guide/knowledge-base/rag-knowledge-base-specifications.md)。
+-   文件名称长度限制 4-128 个字符。其它限制请参考[知识库配额与限制](raw/application-user-guide/knowledge-base/reference/rag-knowledge-base-specifications.md)。
     
 
 如需新增数据表并上传数据，请使用阿里云百炼控制台，API 不支持。
@@ -182,7 +182,7 @@ string
 
 类目类型，不传入该参数时，默认值为 UNSTRUCTURED。取值范围：
 
-UNSTRUCTURED：类目，用于构建[知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)场景。
+UNSTRUCTURED：类目，用于构建[知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)场景。
 
 SESSION\_FILE：上传用于智能体应用[会话交互](https://help.aliyun.com/zh/model-studio/user-guide/file-interaction)的文件。
 

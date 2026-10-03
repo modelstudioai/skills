@@ -1,65 +1,59 @@
-# Qwen 大模型、World Model 与 Decision Model 对比
+# Qwen大模型、World Model与Decision Model对比
 
-本对比旨在帮助开发者在百炼平台技术选型中，清晰区分三类核心能力模型的定位、能力边界与适用场景。Qwen 系列代表通用大语言/多模态生成能力，World Model 聚焦动态世界状态建模与因果推演，Decision Model 则专为确定性结构化决策设计。三者并非替代关系，而是面向不同抽象层级（生成 → 推演 → 判定）的互补能力组件。理解其差异有助于避免误用（如用 Qwen 做工单分流导致延迟高、成本高、结果不可控），并支持构建分层智能系统（例如：Decision Model 路由请求 → Qwen 生成响应 → World Model 模拟用户行为反馈）。
+本文旨在帮助开发者在百炼平台上进行技术选型时，清晰理解三类核心能力模型的定位差异、能力边界与适用场景。Qwen大模型代表通用多模态生成能力，World Model聚焦具身智能与动态环境建模，而Decision Model则专为确定性结构化决策任务设计。三者并非替代关系，而是面向不同抽象层级（生成 → 推演 → 判定）的互补能力组件。本对比基于当前（2024年Q3）百炼平台正式可用的API能力，涵盖协议兼容性、输入输出范式、部署约束及工程实践要点。
 
 ## 关键维度对比
 
-| 维度 | Qwen 大模型 | World Model | Decision Model |
-|------|-------------|-------------|----------------|
-| **核心范式** | 生成式（Generative）：基于上下文生成自然语言、代码、图像描述、音视频理解结果等 | 推演式（Simulative）：基于初始世界状态，按规则/因果逻辑演化多步状态，输出状态变更与推理轨迹 | 判定式（Discriminative）：对给定上下文进行结构化分类、是非判断或有序评分，**不生成文本** |
-| **输入格式** | 多协议支持：<br>• OpenAI Chat：`messages: [{role, content}]`，`content` 支持 `text`/`image_url`/`video_url` 等<br>• DashScope 原生：`input` 包裹 `messages`，`image`/`video` 为独立字段<br>• Anthropic Messages：`messages` + `system` 字符串/数组 | JSON 结构化对象：<br>• 必填 `scene_state`（符合预定义 schema 的世界快照，含 `entities`、`world_rules` 等）<br>• 必填 `task_type`（`"adventure"`/`"directing"`/`"acting"`）<br>• 可选 `max_steps` | JSON 结构化对象：<br>• 必填 `model: "decision-model-preview"`<br>• 必填 `state`（文本/JSON/数组，最大 65536 token）<br>• 必填 `questions`（键值对，每个值定义 `type`/`instructions`/`criteria`） |
-| **输出格式** | 文本流或完整响应（含 `choices[0].message.content` 或 `content` 字段）；多模态任务返回结构化结果（如 `video_frames`、`tool_calls`）；支持 `reasoning_trace`（需启用） | JSON 对象：<br>• `next_state`（更新后的世界状态快照）<br>• `reasoning_trace`（可选，需 `enable_trace=true`）<br>• 无自由文本生成字段 | 纯结构化 JSON：<br>• `choice`: `{selected, probabilities, confidence}`<br>• `noul`: `{noul}`（P(yes) 浮点值）<br>• `score`: `{expected_score, probabilities, confidence, legend}`<br>• **无 `content`、`text`、`reasoning` 等文本字段** |
-| **支持模型** | 全系列千问模型：<br>• 文本：`qwen3.8-max`、`qwen3.7-plus`、`qwen-coder-next` 等<br>• 多模态：`qwen3-vl-plus`、`Qwen-Omni`、`QVQ` 等<br>• 第三方：DeepSeek、Kimi、GLM、MiniMax（限华北2） | HappyOyster 系列：<br>• `HappyOyster-Adventure`（剧情/状态推演）<br>• `HappyOyster-Directing`（多角色调度/镜头生成）<br>• `HappyOyster-Acting`（邀测中，动作/微表情联合生成） | 仅 `decision-model-preview`（预览版，无其他别名或 GA 版本） |
-| **API 端点（示例，华北2）** | • OpenAI Chat：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions`<br>• Responses：`/compatible-mode/v1/responses`<br>• Anthropic Messages：`/apps/anthropic/v1/messages`<br>• DashScope 原生：`/text-generation/generation` 或 `/multimodal-generation/generation` | `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/v1/world-model/{task_type}`（如 `/v1/world-model/adventure`） | `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/systemone` |
-| **计费方式** | 按 token（输入+输出）计费，多模态任务按像素/帧数额外计费；不同模型单价不同（如 `qwen3.8-max` > `qwen-turbo`）；OpenAI/Anthropic 协议调用统一计入 Qwen 计费体系 | 按请求次数（per call）计费；`max_steps` 增加不额外计费（但影响延迟与资源消耗）；`acting` 类型因计算密集，单价高于 `adventure`/`directing` | 按请求次数（per call）计费；**批量提交多个问题仍计为 1 次调用**；单价显著低于 Qwen 和 World Model，适合高频低延迟场景 |
-| **典型场景** | • 智能客服对话生成<br>• 多模态内容理解（图/视频问答）<br>• 代码生成与解释<br>• 文档摘要与改写<br>• Agent 工具调用（通过 Responses API） | • 游戏引擎中的 NPC 行为推演与世界状态更新<br>• 虚拟制片中导演指令到镜头序列的生成<br>• 互动叙事应用的剧情分支模拟与因果验证<br>• 数字孪生环境中的动态响应仿真 | • 工单自动分级与路由（如「紧急/高/中/低」）<br>• 内容安全审核（「违规/边缘/合规」三分类）<br>• 智能体任务分发（「交由 A 处理 / B 处理 / 需人工」）<br>• 结果置信度校验（如 LLM 输出是否可信） |
+| 维度 | Qwen大模型 | World Model | Decision Model |
+|------|-------------|--------------|----------------|
+| **核心定位** | 通用大语言/多模态基础模型，支持开放式文本生成、理解与工具调用 | 面向具身智能的动态世界建模引擎，支持环境状态演化、角色行为推演与多智能体协同 | 轻量级结构化决策推理模型，仅输出分类、是非判断或有序评分及其概率分布 |
+| **输入格式** | 多样化：<br>• OpenAI `/chat/completions`：`messages` 数组（含 `text`/`image_url`/`video` 块）<br>• `/responses`：支持扁平字符串或 `EasyInputMessage`<br>• Anthropic：`role`+`content`（支持 `image`/`video` 块）<br>• DashScope：按服务类型区分（`text-generation`/`multimodal-generation`） | 结构化 JSON：<br>• 必填 `scene_id`（预注册场景ID）<br>• `context_window`（可选）<br>• `enable_state_tracking`（可选）<br>• 输入内容嵌入请求体，无标准消息数组结构 | 严格结构化 JSON：<br>• 必填 `state`（文本/JSON对象/数组）<br>• 必填 `questions`（键值对，每个值含 `type`/`instructions`/`criteria`）<br>• `model` 固定为 `"decision-model-preview"` |
+| **输出格式** | 文本为主，支持流式响应：<br>• OpenAI/Anthropic：标准 `choices[0].message.content` + `tool_calls`<br>• `/responses`：含 `previous_response_id` 支持上下文链路<br>• DashScope：`output.text` + `output.choices` | 同步非流式 JSON：<br>• `state_id`（用于状态追溯）<br>• `next_action`（动作指令）<br>• `world_state_snapshot`（可选，当 `enable_state_tracking=true`）<br>• **不支持流式响应（`stream` 参数强制忽略）** | 纯结构化非文本输出：<br>• 每个 `question_id` 对应一个答案对象：<br> – `choice`: `{ "choice": "A", "probabilities": {"A": 0.82, "B": 0.15}, "confidence": 0.93 }`<br> – `noul`: `{ "probability_yes": 0.76, "probabilities": {"yes": 0.76, "no": 0.18, ...}, "confidence": 0.89 }`<br> – `score`: `{ "expected_score": 2.25, "probabilities": [0.1, 0.65, 0.22, 0.03], "confidence": 0.91 }`<br>• **零文本生成，无 `content` 字段** |
+| **支持模型** | • 文本：`qwen3.8-max`、`qwen3.7-plus`、`qwen-turbo`、`qwen-coder-next` 等<br>• 多模态：`qwen3.8-omni-flash`、`qwen3-vl-plus`、`QVQ`<br>• 第三方直供：DeepSeek-v4、Kimi-k3、GLM-5.3、MiniMax-M2.5（限华北2） | • `HappyOyster-Adventure`（开放世界演化）<br>• `HappyOyster-Directing`（多角色叙事调度）<br>• `HappyOyster-Acting`（单角色实时行为，邀测中） | • 仅 `decision-model-preview`（预览版），无其他型号 |
+| **API 端点（华北2示例）** | • OpenAI Chat：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions`<br>• OpenAI Responses：`/compatible-mode/v1/responses`<br>• Anthropic：`/apps/anthropic/v1/messages`<br>• DashScope：`/api/v1/services/aigc/text-generation/generation` 等 | `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/v1/world-model/adventure`<br>`/v1/world-model/directing`<br>`/v1/world-model/acting`（邀测） | `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/systemone` |
+| **计费方式** | 按 **输入 token + 输出 token** 计费（单位：千token）<br>• 多模态输入按等效文本 token 折算（如图像按分辨率/帧数折算）<br>• `/responses` 中思考 token 单独计费（需显式配置） | 按 **每次请求（per call）** 计费<br>• 与输入长度、输出复杂度无关<br>• 不区分 token，统一单价 | 按 **每次请求（per call）** 计费<br>• 与 `state` 长度、`questions` 数量、输出等级数均无关<br>• 成本恒定，适合高并发场景 |
+| **典型场景** | • 智能客服对话生成<br>• 多模态内容理解（图文问答、视频摘要）<br>• 工具增强型应用（联网搜索、代码执行）<br>• AI 编程助手、创意文案生成 | • 游戏NPC行为仿真与剧情驱动<br>• 教育沙盒模拟（物理实验、历史事件推演）<br>• 影视分镜自动编排与角色调度<br>• 工业数字孪生中的设备交互推演 | • 工单智能分流（→ 技术/售后/合规团队）<br>• 内容安全审核（涉政/暴恐/违禁分级）<br>• 智能体路由决策（选择下一步调用哪个Agent）<br>• A/B测试结果置信度校验 |
 
 ## 各方案的适用场景建议
 
-- **选择 Qwen 大模型，当您需要**：  
-  ✅ 生成自然语言、代码、数学解题步骤、创意文案等开放性内容；  
-  ✅ 处理图像、视频、音频等多模态输入并产出语义理解结果；  
-  ✅ 构建具备工具调用能力的 AI Agent（推荐使用 Responses API）；  
-  ✅ 快速迁移现有 OpenAI/Anthropic 应用栈；  
-  ❌ 不适用于对延迟敏感（>500ms）、要求确定性输出或需严格结构化结果的场景。
+### ✅ 选择 Qwen大模型 当：
+- 任务需要**开放式文本生成、自由问答或创造性输出**（如写诗、编故事、生成报告）；
+- 输入包含**图像、音频、视频等多模态数据**，且需跨模态理解（如“分析这张财报截图并总结风险点”）；
+- 应用需集成**外部工具能力**（如实时搜索、运行Python代码、调用API）；
+- 场景对**上下文长度、多轮对话连贯性、流式响应体验**有较高要求；
+- 开发团队已熟悉 OpenAI 或 Anthropic 生态，希望复用现有 SDK 和[提示工程](../concepts/prompt-engineering.md)经验。
 
-- **选择 World Model，当您需要**：  
-  ✅ 在虚拟环境中模拟实体交互与状态演化（如游戏角色移动、物品状态变化）；  
-  ✅ 将高层指令（“让主角避开守卫到达密室”）转化为多步可执行动作序列；  
-  ✅ 验证叙事逻辑一致性或生成导演级镜头调度方案；  
-  ✅ 构建具备“世界心智”的交互式体验（如教育模拟、沙盒游戏）；  
-  ❌ 不适用于单轮问答、文本摘要、简单分类等非状态推演任务；`acting` 类型暂不支持流式，需等待完整动作序列。
+### ✅ 选择 World Model 当：
+- 构建**具身智能系统**（如机器人控制、虚拟人交互、游戏AI），需建模“环境状态如何随动作变化”；
+- 需要**长周期、多步骤因果推演**（如：“若用户点击按钮A，NPC会如何反应？3步后场景状态为何？”）；
+- 设计**多角色协同叙事系统**（如影视剧本生成、教育对话模拟），强调角色一致性与事件逻辑链；
+- 场景具备明确的**预定义场景ID（`scene_id`）和状态生命周期管理需求**（如30分钟自动清理）；
+- 可接受**同步阻塞调用、无流式响应、更高单次延迟**，以换取强状态一致性保障。
 
-- **选择 Decision Model，当您需要**：  
-  ✅ 在毫秒级完成高并发结构化判定（如每秒处理数千条工单）；  
-  ✅ 获取带概率分布与置信度的确定性决策（而非模糊文本解释）；  
-  ✅ 批量处理同类判定问题（如同时评估 10 条评论的合规性）；  
-  ✅ 作为智能系统“决策中枢”，为 Qwen 或 World Model 提供前置路由或后置校验；  
-  ❌ 不适用于任何需要生成解释、理由、摘要或自由文本的场景；无法处理开放式问题。
+### ✅ 选择 Decision Model 当：
+- 业务逻辑本质是**确定性分类/打分/二元判断**（如“是否违规？”、“严重度1–4级？”、“分配至哪个部门？”）；
+- 对**延迟敏感、需高并发低抖动**（如每秒处理数千工单），且不能容忍生成式模型的不确定性延迟；
+- 要求**可解释性与置信度量化**（如返回各选项概率、整体置信分数），用于下游阈值控制或贝叶斯融合；
+- 输入上下文虽长（≤65536 token），但**只需一次前向计算完成全部问题联合推理**，无需分步生成；
+- 团队希望**规避文本生成幻觉风险**，确保输出始终是结构化、可验证、可审计的决策结果。
 
 ## 面向开发者的选型参考
 
-1. **先明确任务本质**：  
-   - 问题是“**生成什么？**” → 选 **Qwen**；  
-   - 问题是“**接下来会发生什么？状态如何演变？**” → 选 **World Model**；  
-   - 问题是“**这属于哪一类？是/否？打几分？**” → 选 **Decision Model**。
+- **不要用 Qwen 替代 Decision Model**：即使 Qwen 能通过 [prompt](../guides/prompt.md) 实现类似分类，其输出不可控、成本随输出长度增长、无内置概率分布、无法保证确定性，不适用于 SLA 严格的决策流水线。
+  
+- **World Model 不是“更强的 Qwen”**：它不擅长自由文本生成，也不支持工具调用；其价值在于状态演化建模能力。若只需回答问题或生成文案，请优先使用 Qwen。
 
-2. **关注性能与成本约束**：  
-   - 若 SLA 要求 P99 < 300ms 且 QPS > 100，优先评估 Decision Model 或 Qwen Turbo；World Model 的 `max_steps=3` 推演通常 > 800ms。  
-   - 若预算敏感且任务为高频二分类，Decision Model 单次调用成本约为 Qwen Turbo 的 1/20，是更优解。
+- **组合使用是最佳实践**：  
+  ▶ 典型架构：`用户输入 → Qwen（理解与摘要） → Decision Model（路由决策） → World Model（执行推演） → Qwen（生成自然语言反馈）`  
+  ▶ 示例：智能客服中，Qwen 解析用户问题 → Decision Model 判断是否需转人工/升级 → 若需推演解决方案，则调用 World Model 模拟处置流程 → 最终由 Qwen 将推演结果转化为用户可读回复。
 
-3. **注意协议与生态兼容性**：  
-   - 已集成 OpenAI SDK？→ 直接复用 `openai` 客户端调用 Qwen Chat/Responses；  
-   - 已使用 Anthropic SDK？→ 切换 `base_url` 即可接入 Qwen Anthropic Messages；  
-   - 需要精细控制视频抽帧（如 `max_frames`）？→ 必须选用 DashScope 原生协议；  
-   - 需要结构化 Schema 输出？→ Qwen Anthropic Messages 或 Decision Model 原生支持，Qwen OpenAI Chat 需依赖 `response_format`（部分模型支持有限）。
+- **工程注意事项**：  
+  • Qwen 的 `max_tokens` 在不同协议下语义不同（尤其 `/responses` vs Anthropic），务必查阅对应协议文档；  
+  • World Model 的 `scene_id` 必须提前注册，且状态超时（30分钟）后需重建，不适合无状态短连接场景；  
+  • Decision Model 的 `questions` 建议 ≤16 个，`score` 等级强烈推荐 3–7 级——超出将显著降低 `confidence` 可靠性；  
+  • 所有模型均需通过业务空间专属域名访问，`{WorkspaceId}` 须从百炼控制台获取，不可硬编码。
 
-4. **组合使用是最佳实践**：  
-   - 示例架构：`Decision Model` 先判定用户意图类型 → 路由至 `Qwen`（对话）或 `World Model`（游戏指令）；  
-   - 示例增强：`Qwen` 生成回复后，用 `Decision Model` 校验其安全性得分；  
-   - 示例协同：`World Model` 输出 `next_state` 后，交由 `Qwen` 生成该状态下的自然语言描述。
-
-> **重要提醒**：所有模型均需通过业务空间专属域名接入（`https://{WorkspaceId}.{region}.maas.aliyuncs.com`），旧域名 `dashscope.aliyuncs.com` 已不推荐使用。认证统一采用 `Authorization: Bearer <API_KEY>`。请务必查阅各模型文档中的参数细节（如 Anthropic 协议 `temperature` 范围差异、Decision Model `legend` 键类型为字符串等），避免因参数误配导致异常。
+> 提示：首次集成建议从 Decision Model 入手——接口最简洁、成本最低、效果最确定；再逐步引入 Qwen 实现表达层，最后按需扩展 World Model 构建智能体行为层。
 
 ## 被对比主题页
 

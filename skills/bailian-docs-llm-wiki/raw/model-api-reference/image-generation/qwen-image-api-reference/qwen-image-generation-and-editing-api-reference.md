@@ -1,6 +1,6 @@
-# 千问-图像生成与编辑3.0 API参考
+# 千问-图像生成与编辑 API参考
 
-千问-图像生成与编辑3.0模型同时支持文生图（T2I）和图生图/图像编辑（I2I），可根据文本提示词直接生成图像，也可基于1-3张参考图结合编辑指令进行精确编辑。支持通过OpenAI 兼容或DashScope协议调用。
+千问-图像生成与编辑模型同时支持文生图（T2I）和图生图/图像编辑（I2I），可根据文本提示词直接生成图像，也可基于参考图结合编辑指令进行精确编辑。支持通过OpenAI 兼容或DashScope协议调用。
 
 ## 模型概览
 
@@ -29,6 +29,10 @@ qwen-image-3.0
 
 千问图像生成与编辑3.0标准模型，同时支持文生图（T2I）和图生图/图像编辑（I2I），兼顾质量与速度。
 
+qwen-image-2.1-pro
+
+千问图像生成与编辑2.1 Pro模型，图生图/图像编辑（I2I）支持传入最多10张参考图，且能够根据提示词描述自动决定输出普通图像还是带有透明通道的图像。
+
 ## 适用范围
 
 为确保调用成功，请务必保证模型、endpoint URL 和 API Key 均属于**同一地域**。跨地域调用将会失败。
@@ -49,7 +53,7 @@ qwen-image-3.0
 
 ## 接入方式
 
-千问-图像生成与编辑3.0提供三种接入方式，模型能力一致，请根据业务情况选择：
+千问-图像生成与编辑提供三种接入方式，模型能力一致，请根据业务情况选择：
 
 **接入方式**
 
@@ -69,7 +73,7 @@ qwen-image-3.0
 
 ## OpenAI 兼容
 
-如果您的应用已基于 OpenAI Images 协议或 OpenAI SDK 开发，可通过 OpenAI 兼容模式调用千问-图像生成与编辑3.0，无需改造请求结构。文生图（T2I）与图生图/图像编辑（I2I）共用同一个接口：**不传**`image`**为文生图，传**`image`**为图生图**。
+如果您的应用已基于 OpenAI Images 协议或 OpenAI SDK 开发，可通过 OpenAI 兼容模式调用千问-图像生成与编辑，无需改造请求结构。文生图（T2I）与图生图/图像编辑（I2I）共用同一个接口：**不传**`image`**为文生图，传**`image`**为图生图**。
 
 **说明**OpenAI 兼容模式为**同步、非流式**接口，图生图通过`/images/generations`接口的扩展字段`image`实现，**不使用**OpenAI 官方`/images/edits`的 multipart 文件上传形式。以下能力暂不支持：异步调用、流式输出、partial image、`/images/edits`、multipart 与 mask。传入`response_format=b64_json`不会报错，但会被忽略，响应中仍返回图像URL。如需异步调用，请使用[DashScope异步调用](https://help.aliyun.com/zh/model-studio/qwen-image-generation-and-editing-api-reference#6740266-async-title)。
 
@@ -125,7 +129,7 @@ SDK调用配置的base\_url：`https://{WorkspaceId}.ap-northeast-1.maas.aliyunc
 
 **model** `string` **（必选）**
 
-模型名称，可选值为`qwen-image-3.0-pro`和`qwen-image-3.0`。
+模型名称，可选值为`qwen-image-3.0-pro`、`qwen-image-3.0`和`qwen-image-2.1-pro`。
 
 **prompt** `string` **（必选）**
 
@@ -133,7 +137,7 @@ SDK调用配置的base\_url：`https://{WorkspaceId}.ap-northeast-1.maas.aliyunc
 
 **image** `string` **或** `array` （可选）
 
-输入图像的 URL 或 Base64 编码数据。不传此参数为文生图（T2I）；传入此参数为图生图（I2I），支持传入1-3张图像。单张图像可直接传字符串，多张图像传字符串数组，按数组顺序定义图像顺序。
+输入图像的 URL 或 Base64 编码数据。不传此参数为文生图（T2I）；传入此参数为图生图（I2I），qwen-image-2.1-pro支持传入1-10张图像，qwen-image-3.0系列支持传入1-3张图像。单张图像可直接传字符串，多张图像传字符串数组，按数组顺序定义图像顺序。
 
 **注意**：不能传入`null`或空数组，否则将返回400错误。
 
@@ -243,6 +247,8 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 
 属性
 
+#### qwen-image-3.0 系列
+
 **output\_width** `integer`
 
 最终输出图片的宽度（像素）。
@@ -266,6 +272,20 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 **output\_image\_type** `string`
 
 输出图片计量档位。按输出分辨率像素面积判断：面积≤2,250,000为`qima_output_1k`，面积>2,250,000为`qima_output_2k`。
+
+#### qwen-image-2.1-pro
+
+**image\_count** `integer`
+
+模型生成图像的数量。
+
+**width** `integer`
+
+模型生成图像的宽度（像素）。
+
+**height** `integer`
+
+模型生成图像的高度（像素）。
 
 **error** `object`
 
@@ -295,6 +315,8 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 
 图像URL仅保留24小时，超时后会被自动清除。请您务必及时保存生成的图像。
 
+qwen-image-3.0 系列
+
 ```
 {
     "created": 1788339600,
@@ -310,6 +332,24 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
         "input_image_type": "qima_input_1k",
         "output_image_count": 1,
         "output_image_type": "qima_output_1k"
+    }
+}
+```
+
+qwen-image-2.1-pro
+
+```
+{
+    "created": 1788339600,
+    "data": [
+        {
+            "url": "https://dashscope-result-sz.oss-cn-shenzhen.aliyuncs.com/xxx.png?Expires=xxx"
+        }
+    ],
+    "usage": {
+        "image_count": 1,
+        "width": 1024,
+        "height": 1024
     }
 }
 ```
@@ -465,7 +505,7 @@ except APIStatusError as exc:
 
 **model** `string` **（必选）**
 
-模型名称，可选值为`qwen-image-3.0-pro`和`qwen-image-3.0`。
+模型名称，可选值为`qwen-image-3.0-pro`、`qwen-image-3.0`和`qwen-image-2.1-pro`。
 
 **input** `object` **（必选）**
 
@@ -488,13 +528,13 @@ except APIStatusError as exc:
 消息内容数组，根据使用场景有不同的组合方式：
 
 -   **文生图（T2I）**：仅包含一个`{"text": "..."}`对象。
--   **图生图（I2I）**：包含1-3个`{"image": "..."}`对象和1个`{"text": "..."}`对象。
+-   **图生图（I2I）**：qwen-image-2.1-pro包含1-10个`{"image": "..."}`对象，qwen-image-3.0系列包含1-3个，以及1个`{"text": "..."}`对象。
 
 属性
 
 **image** `string` （可选）
 
-输入图像的 URL 或 Base64 编码数据。I2I场景下支持传入1-3张图像。多图输入时，按照数组顺序定义图像顺序。
+输入图像的 URL 或 Base64 编码数据。I2I场景下，qwen-image-2.1-pro支持传入1-10张图像，qwen-image-3.0系列支持传入1-3张图像。多图输入时，按照数组顺序定义图像顺序。
 
 **图像要求：**
 
@@ -660,6 +700,8 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 属性
 
+#### qwen-image-3.0 系列
+
 **output\_width** `integer`
 
 最终输出图片的宽度（像素）。
@@ -684,6 +726,20 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 输出图片计量档位。按输出分辨率像素面积判断：面积≤2,250,000为`qima_output_1k`，面积>2,250,000为`qima_output_2k`。
 
+#### qwen-image-2.1-pro
+
+**image\_count** `integer`
+
+模型生成图像的数量。
+
+**width** `integer`
+
+模型生成图像的宽度（像素）。
+
+**height** `integer`
+
+模型生成图像的高度（像素）。
+
 **request\_id**`string`
 
 请求唯一标识。可用于请求明细溯源和问题排查。
@@ -699,6 +755,8 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 #### 任务执行成功
 
 任务数据（如任务状态、图像URL等）仅保留24小时，超时后会被自动清除。请您务必及时保存生成的图像。
+
+qwen-image-3.0 系列
 
 ```
 {
@@ -724,6 +782,34 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
         "input_image_type": "qima_input_1k",
         "output_image_count": 1,
         "output_image_type": "qima_output_1k"
+    },
+    "request_id": "571ae02f-5c9d-436c-83c2-f221e6df0xxx"
+}
+```
+
+qwen-image-2.1-pro
+
+```
+{
+    "output": {
+        "choices": [
+            {
+                "finish_reason": "stop",
+                "message": {
+                    "content": [
+                        {
+                            "image": "https://dashscope-result-sz.oss-cn-shenzhen.aliyuncs.com/xxx.png?Expires=xxx"
+                        }
+                    ],
+                    "role": "assistant"
+                }
+            }
+        ]
+    },
+    "usage": {
+        "image_count": 1,
+        "width": 1024,
+        "height": 1024
     },
     "request_id": "571ae02f-5c9d-436c-83c2-f221e6df0xxx"
 }
@@ -868,7 +954,7 @@ public class ImageEditExample {
 
 ## DashScope异步调用
 
-千问-图像生成与编辑3.0模型除了支持上文的同步调用外，还支持异步调用。异步接口与同步接口共用相同的请求参数结构，仅需在请求头中增加`X-DashScope-Async: enable`，服务受理后返回任务ID（`task_id`），再通过任务ID轮询查询接口获取最终结果。
+千问-图像生成与编辑模型除了支持上文的同步调用外，还支持异步调用。异步接口与同步接口共用相同的请求参数结构，仅需在请求头中增加`X-DashScope-Async: enable`，服务受理后返回任务ID（`task_id`），再通过任务ID轮询查询接口获取最终结果。
 
 **重要**异步接口的请求地址与同步接口不同，请使用本节给出的Endpoint，不要沿用同步接口地址。
 
@@ -927,7 +1013,7 @@ public class ImageEditExample {
 
 **model** `string` **（必选）**
 
-模型名称，可选值为`qwen-image-3.0-pro`和`qwen-image-3.0`。
+模型名称，可选值为`qwen-image-3.0-pro`、`qwen-image-3.0`和`qwen-image-2.1-pro`。
 
 **input** `object` **（必选）**
 
@@ -950,13 +1036,13 @@ public class ImageEditExample {
 消息内容数组，根据使用场景有不同的组合方式：
 
 -   **文生图（T2I）**：仅包含一个`{"text": "..."}`对象。
--   **图生图（I2I）**：包含1-3个`{"image": "..."}`对象和1个`{"text": "..."}`对象。
+-   **图生图（I2I）**：qwen-image-2.1-pro包含1-10个`{"image": "..."}`对象，qwen-image-3.0系列包含1-3个，以及1个`{"text": "..."}`对象。
 
 属性
 
 **image** `string` （可选）
 
-输入图像的 URL 或 Base64 编码数据。I2I场景下支持传入1-3张图像。多图输入时，按照数组顺序定义图像顺序。
+输入图像的 URL 或 Base64 编码数据。I2I场景下，qwen-image-2.1-pro支持传入1-10张图像，qwen-image-3.0系列支持传入1-3张图像。多图输入时，按照数组顺序定义图像顺序。
 
 **图像要求：**
 
@@ -1263,6 +1349,8 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 
 属性
 
+#### qwen-image-3.0 系列
+
 **output\_width** `integer`
 
 最终输出图片的宽度（像素）。
@@ -1287,6 +1375,20 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 
 输出图片计量档位。按输出分辨率像素面积判断：面积≤2,250,000为`qima_output_1k`，面积>2,250,000为`qima_output_2k`。
 
+#### qwen-image-2.1-pro
+
+**image\_count** `integer`
+
+模型生成图像的数量。
+
+**width** `integer`
+
+模型生成图像的宽度（像素）。
+
+**height** `integer`
+
+模型生成图像的高度（像素）。
+
 **request\_id**`string`
 
 请求唯一标识。可用于请求明细溯源和问题排查。
@@ -1302,6 +1404,8 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 #### 任务执行成功
 
 任务数据（如任务状态、图像URL等）仅保留24小时，超时后会被自动清除。请您务必及时保存生成的图像。
+
+qwen-image-3.0 系列
 
 ```
 {
@@ -1334,6 +1438,41 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
         "input_image_type": "qima_input_1k",
         "output_image_count": 1,
         "output_image_type": "qima_output_1k"
+    },
+    "request_id": "2bd94002-5624-9129-916b-fbdde107b4ba"
+}
+```
+
+qwen-image-2.1-pro
+
+```
+{
+    "output": {
+        "task_id": "17d7d840-82b9-485b-a954-724d06bc88d2",
+        "task_status": "SUCCEEDED",
+        "submit_time": "2026-08-07 15:50:14.837",
+        "scheduled_time": "2026-08-07 15:50:14.884",
+        "end_time": "2026-08-07 15:50:33.607",
+        "rewrite_status": "not_use",
+        "choices": [
+            {
+                "finish_reason": "stop",
+                "message": {
+                    "role": "assistant",
+                    "content": [
+                        {
+                            "image": "https://dashscope-result-sz.oss-cn-shenzhen.aliyuncs.com/xxx.png?Expires=xxx",
+                            "type": "image"
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "usage": {
+        "image_count": 1,
+        "width": 1024,
+        "height": 1024
     },
     "request_id": "2bd94002-5624-9129-916b-fbdde107b4ba"
 }

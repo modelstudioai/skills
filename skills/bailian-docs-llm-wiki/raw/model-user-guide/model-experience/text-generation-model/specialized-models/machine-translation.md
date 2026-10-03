@@ -2405,4 +2405,4 @@ fa
 
 ## API参考
 
-Qwen-MT 模型的输入与输出参数请参考[Qwen-MT 翻译模型](raw/model-api-reference/more-models/qwen-mt-api.md)。
+Qwen-MT 模型的输入与输出参数请参考[Qwen-MT 翻译模型](raw/model-api-reference/qwen-mt-translation-models/qwen-mt-api.md)。

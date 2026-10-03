@@ -1,6 +1,6 @@
 # 百炼模型市场索引
 
-> 自动生成 · 共 188 个模型家族 · 426 个主干模型 · 更新于 2026-10-03
+> 自动生成 · 共 188 个模型家族 · 434 个主干模型 · 更新于 2026-10-04
 
 **机器查询走结构化文件**：
 
@@ -117,7 +117,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [Qwen-Image-2.0](groups/qwen-image-2.0.json) — Qwen-Image-2.0系列加速版模型，实现了图片生成和图片编辑的融合；具备更专业的文字渲染1k token指令支持能力、更细腻的真实质感，细腻刻画写实场景、更强的语义遵循能力。加速版有效实现了模…
   - 模型：`qwen-image-2.0`
 - [Qwen-Image-2.0-Pro](groups/qwen-image-2.0-pro.json) — Qwen-Image-2.0系列满血版模型，实现了图片生成和图片编辑的融合；具备更专业的文字渲染1k token指令支持能力、更细腻的真实质感，细腻刻画写实场景、更强的语义遵循能力。满血版具备2.0系…
-  - 模型：`qwen-image-2.0-pro`
+  - 模型：`qwen-image-2.0-pro`, `qwen-image-2.1-pro`
 - [Qwen-Image-3.0](groups/qwen-image-3.0.json) — Qwen-Image-3.0 系列支持最长 4.5K tokens 的复杂图文提示词，可一次生成包含图中图、密集信息排版和清晰文字的复杂画面，支持文生图、图生图及图像编辑。Standard 版兼顾生成…
   - 模型：`qwen-image-3.0`, `qwen-image-3.0-pro`
 - [Qwen-Image-Edit-Max](groups/qwen-image-edit-max.json) — 千问图像编辑模型Max系列，提供更稳定、更丰富的编辑能力：提升工业设计与几何推理能力；提升角色一致性；减轻偏移问题；集成Lora能力，可以进行更多功能的图像编辑。此版本为2026年1月16日快照。
@@ -397,7 +397,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [Qwen3.8-Omni-Flash-Realtime](groups/qwen3.8-omni-flash-realtime.json) — Qwen3.8-Omni-Flash-Realtime 通过多种实时协议提供音视频双工交互，面向智能硬件、机器人与实时交互 Agent。支持多通道音频输入与多种通道布局，视频表征可在细粒度与聚合之间按…
   - 模型：`qwen3.8-omni-flash-realtime`
 
-## 实时音频翻译 `Realtime-Audio-Translate` — 4 个家族
+## 实时音频翻译 `Realtime-Audio-Translate` — 3 个家族
 
 - [Qwen3-LiveTranslate-Flash-Realtime](groups/qwen3-livetranslate-flash-realtime.json) — Qwen3-LiveTranslate-Flash-Realtime的实时版本，一款高精度、高响应、高鲁棒性的多语言实时音视频同传大模型。依托Qwen3-Omni强大的基座能力、海量多模态数据、跨语言…
   - 模型：`qwen3-livetranslate-flash-realtime`
@@ -405,8 +405,6 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`qwen3.5-livetranslate-flash-realtime`
 - [Qwen3.8-LiveTranslate-Flash-Realtime](groups/qwen3.8-livetranslate-flash-realtime.json) — Qwen3.8-LiveTranslate-Flash的实时版本，一款高精度、高响应、高鲁棒性的多语言实时音视频同传大模型。依托Qwen-Omni强大的基座能力、海量多模态数据、跨语言跨模态对齐和视觉…
   - 模型：`qwen3.8-livetranslate-flash-realtime`
-- [实时语音识别及翻译V1.0](groups/gummy-realtime-v1.json) — 多语言语音转写及翻译的多模态大模型。本模型提供长时间、高准确率、实时转写中/英/日/韩等10个混合语种的服务。同时支持中英日韩互译，以其他6个语种翻译成中文或英文。
-  - 模型：`gummy-realtime-v1`
 
 ## 多模态嵌入 `ME` — 2 个家族
 
@@ -429,15 +427,17 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [Qwen-TTS-Realtime](groups/qwen-tts-realtime.json) — Qwen-TTS实时模型是通义实验室“qwen系列”模型中的语音合成利器。具备双向上下文感知能力，可以低延迟高保真完成多音色、方言及长文本的双向流式生成。
   - 模型：`qwen-tts-realtime`, `qwen-tts-realtime-latest`
 
+## 翻译 `TR` — 2 个家族
+
+- [Qwen-Embedding](groups/qwen-embedding.json) — 基于Qwen模型基座训练的多语言文本统一向量模型，文本检索、聚类、分类性能大幅提升，多语言支持，适用于向量检索、向量化等等场景，可搭配检索增强、文档处理场景使用，支持64~2560维用户自定义向量维度…
+  - 模型：`qwen3.7-text-embedding`, `qwen3.7-text-embedding-flash`, `text-embedding-async-v1`, `text-embedding-async-v2`, `text-embedding-v1`, `text-embedding-v2`, `text-embedding-v3`, `text-embedding-v4`
+- [Qwen-Rerank](groups/qwen-rerank.json) — 基于Qwen LLM底座训练的文本排序模型，对输入的Query和候选Docs进行相关性排序，支持100+语种和长文本输入，适用于文本检索、RAG等场景，效果对齐Qwen家族开源Rerank系列模型。
+  - 模型：`gte-rerank-v2`, `qwen3-rerank`, `qwen3-vl-rerank`, `qwen3.7-text-rerank`
+
 ## World-Model `World-Model` — 1 个家族
 
 - [HappyOyster-1.0](groups/happyoyster-1.0.json) — Happyoyster 系列首个实时交互的开放式世界模型。只需输入一句话，即可生成一个完整、可演绎、可探索、可互动的数字世界。
   - 模型：`happyoyster-1.0-adventure`
-
-## 翻译 `TR` — 1 个家族
-
-- [Qwen-Rerank](groups/qwen-rerank.json) — 基于Qwen LLM底座训练的文本排序模型，对输入的Query和候选Docs进行相关性排序，支持100+语种和长文本输入，适用于文本检索、RAG等场景，效果对齐Qwen家族开源Rerank系列模型。
-  - 模型：`gte-rerank-v2`, `qwen3-rerank`, `qwen3-vl-rerank`, `qwen3.7-text-rerank`
 
 ## 3D 生成 `3D-generation` — 1 个家族
 

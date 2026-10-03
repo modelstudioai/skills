@@ -15,7 +15,7 @@
 
 ## 步骤二：获取 Token Plan 个人版 API Key 和 Base URL
 
--   **API Key**：订阅完成后，在 Token Plan 控制台的**我的订阅**页面生成 API Key。API Key 仅在生成时完整显示一次，请立即复制并妥善保存。此 API Key 以 `sk-sp-` 开头，用于模型调用、按 Credits 抵扣；Harness 权益工具（联网搜索增强版等）使用百炼 API Key（以 `sk-` 开头），详见[接入 Harness 工具](raw/model-user-guide/token-plan-guide/token-plan-best-practice/token-plan-harness-tool.md)。
+-   **API Key**：订阅完成后，在 Token Plan 控制台的**我的订阅**页面生成 API Key。API Key 仅在生成时完整显示一次，请立即复制并妥善保存。此 API Key 以 `sk-sp-` 开头，用于模型调用、按 Credits 抵扣；Harness 权益工具（联网搜索增强版等）使用百炼 API Key（以 `sk-` 开头），详见[接入 Harness 工具](raw/model-user-guide/token-plan-guide/token-plan-personal/token-plan-harness-tool.md)。
 -   **Base URL**：根据 AI 工具支持的协议，选择对应的 Base URL。
 
 **协议**
@@ -109,7 +109,7 @@ Standard 与 Pro 套餐附赠的 Harness 权益工具（联网搜索增强版、
 -   **一键接入**：点击**一键接入**，选择需要的工具并复制配置指令，发给本地 Agent（支持 Qoder、QwenWork、Claude Code、Codex）。首次使用需安装[百炼 CLI](https://bailian.aliyun.com/cli/install.md) 并执行 `bl auth login --console` 登录，再通过 `bl config show` 获取 api\_key。
 -   **参考文档**：在工具卡片点击**说明文档**或**AI Native 接入**，按该工具的指引接入。
 
-完整接入流程详见[接入 Harness 工具](raw/model-user-guide/token-plan-guide/token-plan-best-practice/token-plan-harness-tool.md)。
+完整接入流程详见[接入 Harness 工具](raw/model-user-guide/token-plan-guide/token-plan-personal/token-plan-harness-tool.md)。
 
 ## 可选：接入多模态生成模型
 

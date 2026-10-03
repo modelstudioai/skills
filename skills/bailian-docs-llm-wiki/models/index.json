@@ -1,11 +1,11 @@
 {
-  "updatedAt": "2026-10-03",
+  "updatedAt": "2026-10-04",
   "totalFamilies": 188,
-  "totalModels": 426,
+  "totalModels": 434,
   "profileCoverage": {
-    "full": 386,
-    "partial": 40,
-    "structured-only": 0,
+    "full": 377,
+    "partial": 51,
+    "structured-only": 6,
     "none": 0
   },
   "capabilityDistribution": {
@@ -19,17 +19,17 @@
     "Realtime-ASR": 8,
     "Multimodal-Omni": 7,
     "Realtime-Omni": 5,
-    "Realtime-Audio-Translate": 4,
+    "Realtime-Audio-Translate": 3,
     "ME": 2,
     "Realtime-Chatting": 2,
     "Realtime-Text-to-Speech": 2,
+    "TR": 2,
     "World-Model": 1,
-    "TR": 1,
     "3D-generation": 1
   },
   "providerDistribution": {
     "qwen": 116,
-    "qwen-domain-model": 35,
+    "qwen-domain-model": 36,
     "wan": 14,
     "mini-max": 4,
     "pixverse": 4,
@@ -550,21 +550,6 @@
       "itemCount": 1,
       "items": [
         "gummy-chat-v1"
-      ]
-    },
-    {
-      "slug": "gummy-realtime-v1",
-      "name": "实时语音识别及翻译V1.0",
-      "primaryCapability": "Realtime-Audio-Translate",
-      "capabilities": [
-        "Realtime-Audio-Translate"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "gummy-realtime-v1"
       ]
     },
     {
@@ -1219,6 +1204,30 @@
       "maxContextWindow": 262144
     },
     {
+      "slug": "qwen-embedding",
+      "name": "Qwen-Embedding",
+      "primaryCapability": "TR",
+      "capabilities": [
+        "TR"
+      ],
+      "providers": [
+        "qwen-domain-model",
+        "qwen"
+      ],
+      "itemCount": 8,
+      "items": [
+        "qwen3.7-text-embedding",
+        "qwen3.7-text-embedding-flash",
+        "text-embedding-async-v1",
+        "text-embedding-async-v2",
+        "text-embedding-v1",
+        "text-embedding-v2",
+        "text-embedding-v3",
+        "text-embedding-v4"
+      ],
+      "maxContextWindow": 131072
+    },
+    {
       "slug": "qwen-flash-character",
       "name": "Qwen-Flash-Character",
       "primaryCapability": "TG",
@@ -1261,9 +1270,10 @@
       "providers": [
         "qwen"
       ],
-      "itemCount": 1,
+      "itemCount": 2,
       "items": [
-        "qwen-image-2.0-pro"
+        "qwen-image-2.0-pro",
+        "qwen-image-2.1-pro"
       ]
     },
     {

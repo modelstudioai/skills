@@ -1,29 +1,31 @@
 # support
 
-`support` 是百炼平台为开发者提供的模型服务支持能力入口，涵盖模型可用性、功能覆盖范围、调用参数规范及服务边界说明。它不提供实时人工客服，而是通过结构化文档与自助工具帮助开发者快速定位问题、理解限制并完成集成。所有支持信息均以平台当前控制台和 API 行为为准，历史文档可能滞后。
+百炼平台的 `support` 模块提供模型调用过程中的基础服务保障能力，包括模型可用性说明、售后响应机制及合规协议支持。开发者可通过该模块确认所选模型是否在官方支持范围内，并了解服务边界与响应时效。所有支持策略均以 [服务支持](../../raw/model-user-guide/support.md) 文档为权威依据。
 
 ## 支持的模型/功能
 
-当前支持的模型列表详见 [模型列表](../../raw/model-user-guide/support/model-studio-model-list.md)，该文档按模型类型（基础大模型、多模态、嵌入、推理优化等）分类，并标注各模型在百炼控制台、API 及 SDK 中的可用状态。功能层面，`support` 覆盖模型调用、异步任务管理、流式响应、[Token](../concepts/token.md) 统计与错误码解析；但**不支持**模型微调过程中的实时日志透出或训练中断恢复——此类能力需通过 [售后说明](../../raw/model-user-guide/support/after-sales-service-scope.md) 中定义的工单通道申请专项支持。
-
-> **注意**：[模型列表](../../raw/model-user-guide/support/model-studio-model-list.md) 中标注“Beta”的模型，其 API 接口稳定性与参数行为可能随版本迭代变更，不承诺向后兼容；而 [常见问题](../../raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md) 中部分示例仍引用已下线的旧版 endpoint，实际开发请以控制台「API 调试」页生成的最新请求为准。
+- 当前支持的模型列表详见 [模型列表](../../raw/model-user-guide/support/model-studio-model-list.md)，该列表按模型类型（如文本生成、多模态、Embedding）和上线状态（GA / Beta）分类，每日自动同步生产环境实际可用模型。
+- 功能层面，`support` 覆盖模型调用异常诊断、配额超限告警、基础错误码解释（如 `429`, `503`），但**不包含**模型微调过程中的训练失败归因或私有化部署的硬件兼容性排查。
+- 所有已上线模型均默认启用基础服务支持；Beta 模型的支持范围参见 [售后说明](../../raw/model-user-guide/support/after-sales-service-scope.md) 中的分级定义。
 
 ## 关键参数
 
-调用 `support` 相关接口（如 `/v1/models/{model_id}/invoke`）时，必需参数包括 `model_id`（严格匹配 [模型列表](../../raw/model-user-guide/support/model-studio-model-list.md) 中的 ID 字符串）、`input`（JSON 格式，结构依模型而异）和 `api_key`（平台颁发的密钥）。可选参数含 `stream`（布尔值，控制是否启用流式）、`max_tokens`（整数，硬性截断上限）及 `temperature`（仅对生成类模型生效）。所有参数名区分大小写，未声明的字段将被静默忽略。
+- `support_level`：请求头中可选字段，取值为 `"basic"`（默认）或 `"premium"`，仅对开通企业版且完成实名认证的账号生效，影响 SLA 响应时长（详见 [售后说明](../../raw/model-user-guide/support/after-sales-service-scope.md)）。
+- `trace_id`：强烈建议在每次调用中透传唯一 trace ID，用于故障定界；缺失时将降低问题复现与日志关联效率。
+- 无专用 API endpoint，支持能力通过统一 `/v1/chat/completions` 等主接口隐式承载，不需额外鉴权或路由切换。
 
 ## 使用方式
 
-1. 登录百炼控制台 → 进入「模型服务」→ 选择目标模型 → 点击「API 调试」获取实时 cURL 示例；  
-2. 在代码中构造 HTTP POST 请求，Header 必须包含 `Authorization: Bearer ${API_KEY}` 和 `Content-Type: application/json`；  
-3. 响应体为标准 JSON，含 `output`（结果）、`usage`（token 消耗）和 `request_id`（用于问题排查）。调试过程中若遇 `400 Bad Request`，优先对照 [常见问题](../../raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md) 中的参数校验清单自查。
+- 开发者无需主动调用独立 `support` 接口，所有支持能力内嵌于标准模型调用链路中：
+  - 错误响应体中自动携带 `support_ticket_id`（当 HTTP 状态码 ≥ 400 且非客户端参数错误时）；
+  - 控制台「调用监控」页可基于 `trace_id` 或 `support_ticket_id` 查看完整服务侧诊断日志；
+  - 如需人工介入，须凭 `support_ticket_id` 在工单系统提交，系统自动关联原始请求上下文。
 
 ## 限制和注意事项
 
-- 单次请求 `input` 内容长度上限为 128KB（文本）或 10MB（二进制，如图像 base64）；  
-- 异步任务最长保留 7 天，超期后 `request_id` 不再可查；  
-- 免费额度用户无法调用部分商用模型（如 qwen-max），具体禁用列表见 [相关协议](../../raw/model-user-guide/support/related-agreements.md) 附录；  
-- 所有错误响应均遵循 RFC 7807 标准，`type` 字段指向 [常见问题](../../raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md) 中对应条目编号，便于快速检索解决方案。
+- 单个 `support_ticket_id` 仅保留 30 天，超期后无法检索原始诊断数据。
+- 免费试用账号仅享 `basic` 支持等级，响应时效为 5 个工作日；企业版账号需显式设置 `support_level=premium` 并确保账户状态有效。
+> **注意**：[模型列表](../../raw/model-user-guide/support/model-studio-model-list.md) 中标注为 “Beta” 的模型，其 `premium` 支持等级在部分区域（如金融云）暂未开通，实际服务能力以控制台实时提示为准，与 [售后说明](../../raw/model-user-guide/support/after-sales-service-scope.md) 中的全局描述存在临时性差异。
 
 ## 来源文档
 
