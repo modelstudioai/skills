@@ -1,46 +1,37 @@
 # long term memory new
 
-[长期记忆](../concepts/memory.md)（Long Term Memory, LTM）是百炼平台提供的结构化记忆管理能力，支持在多轮对话中持久化存储和检索用户事实性信息、行为偏好与画像特征。该能力通过独立的 API 接口与推理请求解耦，允许开发者按需写入、查询和更新记忆片段。其设计目标是提升大模型应用在个性化、上下文连续性和状态一致性方面的工程可控性。
+[长期记忆](../concepts/memory.md)（Long Term Memory, LTM）是百炼平台提供的结构化记忆管理能力，用于在多轮对话中持久化存储和检索用户事实性信息与画像特征。它通过分层抽象（事实记忆 + 用户画像）实现语义化存储，并支持开发者按需配置生命周期与访问策略。该能力当前仅面向 API 调用场景开放，不直接暴露于低代码界面。
 
-## 支持的模型与功能
+## 支持的模型/功能
 
-- 当前仅对 `qwen-max`、`qwen-plus` 和 `qwen-turbo` 等 Qwen 系列模型开放[长期记忆](../concepts/memory.md)能力（需在请求中显式启用）；其他模型调用时将忽略 `memory` 相关参数。
-- 支持两类核心记忆类型：**事实记忆**（facts，如“用户姓张”“常住北京”）和**用户画像**（profiles，如“偏好科技新闻”“阅读水平为高级”），二者语义分离、存储隔离、检索独立。
-- 记忆写入与检索不依赖于模型内部 token 位置，因此不受上下文窗口限制，详见 [长期记忆 API 参考](../../raw/application-api-reference/long-term-memory-new/long-term-memory-api-reference.md)。
+- **模型支持**：目前仅 `qwen-max`、`qwen-plus` 和 `qwen-turbo` 三款 Qwen 系列模型原生集成 LTM 检索与写入逻辑；其他模型调用时将忽略 `memory` 相关参数，不报错但无实际效果。  
+- **核心功能**：  
+  - **事实记忆（Fragments）**：以键值对形式存储可验证的客观事实（如“用户生日：1992-05-18”），支持模糊匹配与时间衰减权重；参见 [长期记忆](../../raw/application-api-reference/long-term-memory-new.md) 中的 [事实记忆](../../raw/application-api-reference/long-term-memory-new/fragments-overview.md) 说明。  
+  - **用户画像（Profiles）**：聚合多维度偏好、身份标签与行为模式（如“技术从业者｜偏好 Python｜关注 AI 基础设施”），支持向量相似度检索；其设计目标与使用约束详见 [用户画像](../../raw/application-api-reference/long-term-memory-new/profiles-overview.md) 文档。  
 
 ## 关键参数
 
-- `memory.write`: 布尔值，设为 `true` 时触发本次请求结果自动提取并写入记忆（需配合 `memory.rules` 定义提取逻辑）。
-- `memory.rules`: JSON 数组，每项指定字段名、来源路径（如 `response.content`）、类型（`fact` 或 `profile`）及可选的归一化规则（如 `"value": "lowercase"`）。
-- `memory.query`: 对象，支持 `facts` 和 `profiles` 两个子字段，各为字符串数组（如 `["user_name", "location"]`），用于声明本轮请求需注入的记忆键；具体匹配策略参见 [通用](../../raw/application-api-reference/long-term-memory-new/api-overview.md)。
+| 参数名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| `enable_memory` | boolean | 否 | 默认 `false`；设为 `true` 后触发 LTM 检索与自动更新（需配合 `memory_config`） |
+| `memory_config.type` | string | 是（当 `enable_memory=true`） | 取值 `"fragments"` 或 `"profiles"`，不可混用；[通用](../../raw/application-api-reference/long-term-memory-new/api-overview.md) 文档明确禁止同时启用两类记忆 |
+| `memory_config.ttl_seconds` | integer | 否 | 记忆项 TTL，默认 `604800`（7 天）；设为 `0` 表示永不过期（不推荐生产环境使用） |
 
-> **注意**：`memory.rules` 中若指定 `type: "profile"`，但对应字段值为纯数字或空字符串，系统将静默跳过写入——此行为与 [事实记忆](../../raw/application-api-reference/long-term-memory-new/fragments-overview.md) 文档中描述的“空值强制转为 null 并保留条目”存在不一致，建议以实际 API 返回 `201 Created` 且 `memory_id` 非空为准。
+> **注意**：`memory_config.ttl_seconds` 在 [事实记忆](../../raw/application-api-reference/long-term-memory-new/fragments-overview.md) 文档中标注为“最小单位为小时”，但实际 API 接收秒级整数 —— 请以 [通用](../../raw/application-api-reference/long-term-memory-new/api-overview.md) 文档的秒级定义为准，避免误设。
 
 ## 使用方式
 
-1. 在 `/v1/chat/completions` 请求体中添加 `memory` 对象；
-2. 若需写入，设置 `memory.write: true` 并配置 `memory.rules`；
-3. 若需读取，设置 `memory.query.facts` 或 `memory.query.profiles`；
-4. 所有记忆操作均基于 `user_id`（必传 header `x-bailian-user-id`）进行隔离，跨用户不可见。
-
-示例片段（精简）：
-```json
-{
-  "model": "qwen-plus",
-  "messages": [...],
-  "memory": {
-    "write": true,
-    "rules": [{"field": "name", "source": "response.content.name", "type": "fact"}],
-    "query": {"facts": ["location"]}
-  }
-}
-```
+1. 在请求体中显式声明 `enable_memory: true` 并配置 `memory_config`；  
+2. 对于事实记忆，确保 `user_id` 字段存在且稳定（用于跨会话关联）；  
+3. 用户画像需预先通过 `/v1/memory/profiles/upsert` 接口注入初始标签，否则首次检索返回空；  
+4. 所有 LTM 操作均异步执行，主请求响应中不包含记忆操作结果 —— 详情请查阅 [长期记忆 API 参考](../../raw/application-api-reference/long-term-memory-new/long-term-memory-api-reference.md)。
 
 ## 限制和注意事项
 
-- 单个 `user_id` 下，事实记忆总量上限为 500 条，用户画像上限为 100 条；超出后写入失败并返回 `400 Bad Request`。
-- 记忆内容不参与模型训练，且默认 TTL 为 90 天（可配置），过期后自动清理。
-- 写入时若 `memory.rules` 中 `source` 路径不存在于响应中，该条规则被忽略，**不会报错**——此静默行为已在 [通用](../../raw/application-api-reference/long-term-memory-new/api-overview.md) 中明确说明，但与部分旧版 SDK 示例代码存在偏差，请以该文档为准。
+- 单次请求最多触发 **1 次事实记忆写入** 和 **1 次用户画像更新**，不支持批量操作；  
+- 记忆内容不参与模型训练或微调，纯属运行时上下文增强；  
+- `user_id` 必须符合平台 ID 规范（长度 1–64 字符，仅含字母、数字、下划线、短横线），否则记忆写入失败且无明确错误码；  
+- 当前不支持跨应用共享记忆空间，每个应用拥有独立 LTM 存储域。
 
 ## 来源文档
 

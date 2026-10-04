@@ -1,43 +1,52 @@
 # model high speed inference
 
-百炼平台的 model high speed inference 是面向低延迟、高并发场景优化的推理服务模式，适用于实时对话、搜索补全、实时内容生成等对响应速度敏感的业务。它通过资源预分配、模型常驻加载和定制化计算图优化，显著降低端到端 P99 延迟。该能力需在创建应用或调用 API 时显式启用，不默认开启。
+百炼平台的 model high speed inference 是面向低延迟、高并发场景优化的推理服务模式，适用于实时对话、搜索补全、流式响应等对端到端时延敏感的业务。它通过预热实例、资源隔离与请求调度优化，在保障 SLO 的前提下显著降低 P99 延迟。该能力需在创建模型服务时显式启用，并依赖底层 Prime 模式与吞吐预留机制协同工作 [模型推理](../../raw/model-user-guide/model-high-speed-inference.md)。
 
 ## 支持的模型/功能
 
-- 当前仅支持 Qwen 系列模型（Qwen1.5、Qwen2、Qwen2.5、Qwen3）的 7B 及以下参数量版本；Qwen-VL 和 Qwen-Audio 暂不支持。
-- 支持两种加速模式：[Prime 模式](raw/model-user-guide/model-high-speed-inference/prime-mode.md)（单请求极致低延迟）与 [吞吐预留](raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)（保障稳定 TPS 上限）。
-- 不支持动态 batch size 调整、LoRA 微调权重热加载、或自定义 tokenizer 配置——所有 tokenization 行为严格绑定模型原始分词器。
+- 当前仅支持 Qwen 系列（Qwen1.5、Qwen2、Qwen2.5）及部分 Llama3 定制版本（需白名单开通）；
+- 必须部署为 `vLLM` 或 `Triton` 后端，不支持 `Transformers` 默认 CPU 推理路径；
+- 支持的功能包括：[流式输出](../concepts/streaming-output.md)（`stream=true`）、动态 batch（自动合并同模型小请求）、优先级队列（基于 `priority` header）；
+- Prime 模式是核心支撑机制，提供实例常驻与冷启规避能力 [Prime 模式](../../raw/model-user-guide/model-high-speed-inference/prime-mode.md)。
 
 ## 关键参数
 
 | 参数名 | 类型 | 必填 | 说明 |
 |--------|------|------|------|
-| `high_speed` | boolean | 是 | 启用高速推理模式；设为 `true` 后必须同时指定 `mode` |
-| `mode` | string | 是 | 取值为 `"prime"` 或 `"tpm_reservation"`；对应 [Prime 模式](raw/model-user-guide/model-high-speed-inference/prime-mode.md) 和 [吞吐预留](raw/model-user-guide/model-high-speed-inference/tpm-reservation.md) |
-| `tpm` | integer | 否（仅 `mode=tpm_reservation` 时必填） | 预留每分钟 Token 处理量，最小值 1000，最大值 60000 |
-| `max_tokens` | integer | 否 | 单次响应最大生成长度，高速模式下默认限制为 512（高于此值将自动降级为普通推理） |
+| `high_speed_inference` | boolean | 是 | 启用高速推理模式（默认 `false`） |
+| `tpm_reservation` | integer | 否 | 预留吞吐量（TPM），单位 tokens/min，范围 100–10000；未设置时按模型默认值分配 [吞吐预留](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md) |
+| `max_batch_size` | integer | 否 | 动态批处理最大尺寸，建议设为 8–32；超过将触发强制 flush |
+| `timeout_ms` | integer | 否 | 单请求最大等待+执行时间，默认 15000ms；低于 3000ms 可能导致超时率上升 |
 
-> **注意**：原始文档中未明确 `max_tokens` 的默认值及降级逻辑，但实测发现超过 512 时请求会静默回退至标准推理通道，该行为与 [原文标题](../../raw/model-user-guide/model-high-speed-inference.md) 中“保障确定性延迟”的承诺存在偏差，建议显式设置并监控 `x-bailian-inference-mode` 响应头确认实际执行模式。
+> **注意**：文档中提及 `tpm_reservation` 支持浮点数输入，但实际 API 校验仅接受整数 —— 请以 [吞吐预留](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md) 中的接口定义为准，浮点值将被向下取整并告警。
 
 ## 使用方式
 
-1. **API 调用（推荐）**：在 `/v1/chat/completions` 请求体中添加 `high_speed: true` 和 `mode` 字段：
-   ```json
-   {
-     "model": "qwen2-7b",
-     "high_speed": true,
-     "mode": "prime",
-     "messages": [{"role":"user","content":"你好"}]
-   }
+1. 创建服务时在 `spec.modelConfig` 中添加配置：
+   ```yaml
+   high_speed_inference: true
+   tpm_reservation: 2000
    ```
-2. **控制台配置**：在「应用管理 → 推理设置」中勾选「启用高速推理」，并选择模式；该配置仅对当前应用生效。
-3. **SDK 支持**：Python SDK v1.12.0+、Java SDK v1.8.0+ 已内置 `high_speed` 参数支持，旧版本需升级，详见 [原文标题](../../raw/model-user-guide/model-high-speed-inference.md)。
+2. 调用时需在 HTTP Header 中声明：
+   ```http
+   X-Bailian-High-Speed: true
+   ```
+   （缺失该 header 将降级至普通推理路径）
+3. 流式请求示例（curl）：
+   ```bash
+   curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation \
+     -H "Authorization: Bearer $API_KEY" \
+     -H "X-Bailian-High-Speed: true" \
+     -d '{"model": "qwen2-7b-instruct", "input": {"messages": [...]}, "parameters": {"stream": true}}'
+   ```
 
 ## 限制和注意事项
 
-- 单账号最多同时启用 3 个高速推理实例（按 `model + mode` 组合计数），超出后新请求返回 `429 Too Many Requests`。
-- Prime 模式下不支持流式响应（`stream: true` 将被忽略），且请求超时时间固定为 15 秒（不可覆盖）。
-- 所有高速推理请求强制启用 `temperature=0` 和 `top_p=1.0`，采样参数将被覆盖——该约束未在 [原文标题](../../raw/model-user-guide/model-high-speed-inference.md) 中说明，但已通过接口验证确认。
+- 不支持多模态模型（如 Qwen-VL、Qwen2-Audio）；
+- 启用后无法动态关闭，需重建服务；
+- 同一模型在同一 region 下最多启用 3 个高速推理服务实例；
+- 若请求中 `max_tokens` > `tpm_reservation / 60 * 2`，可能因令牌速率限制被限流；
+- Prime 模式实例在空闲 5 分钟后进入轻量休眠（非完全释放），首次唤醒延迟约 800–1200ms —— 此行为由 [Prime 模式](../../raw/model-user-guide/model-high-speed-inference/prime-mode.md) 定义，不可配置。
 
 ## 来源文档
 

@@ -1,53 +1,77 @@
 # 长期记忆
 
-长期记忆（Long Term Memory, LTM）是百炼平台提供的**跨会话、用户级、结构化记忆管理服务**，用于在多轮对话与多次调用中持久化存储和语义化检索关键信息，突破大模型上下文窗口限制，实现个性化、连贯、状态一致的 AI 交互体验。它不依赖模型内部 token 位置，而是通过独立的存储-检索机制，将事实性信息与用户画像解耦管理。
+长期记忆（Long Term Memory, LTM）是百炼平台提供的跨会话、结构化、语义可检索的记忆管理能力，用于持久化存储用户事实性信息与画像特征，并在后续对话中自动注入相关上下文，突破大模型单次请求的上下文窗口限制。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-长期记忆不是单一功能模块，而是贯穿多个核心能力的横切基础设施，按使用方式可分为三类：
+长期记忆不是单一功能模块，而是贯穿多个平台能力的横切基础设施，按使用方式可分为三类：
 
-- **自动提取式（被动写入）**：在 `application call` 或 `/v1/chat/completions` 请求中启用 `memory.write: true`，系统根据预设规则（`memory.rules`）从模型响应中自动抽取事实（如“明天下午3点开会”）或结构化画像（如“职业=医生”），并持久化。适用于对话流中自然浮现的关键信息沉淀。
+- **Agent Harness 原生集成**（推荐）：在智能体（Agent 2.0）或 Managed Agents 中启用 `enable_memory: true`，平台自动完成记忆写入（基于对话内容提取）与检索（语义召回），无需手动调用 API。适用于需要“开箱即用”记忆能力的智能体应用。
+  
+- **插件/工作流集成**：通过「长期记忆插件」接入工作流（Workflow）或 OpenClaw 等低代码编排环境，支持配置 `autoCapture`（对话结束自动写入）和 `autoRecall`（对话开始前自动检索），适合需精细控制触发时机的流程型应用。
 
-- **主动调用式（显式读写）**：通过 Memory Library 的开放 API（如 `/add`, `/memory_nodes/search`）或 OpenClaw 插件的 `memory_store`/`memory_search` 工具，在 Agent 生命周期钩子（如 `before_agent_start`）中按需写入原始内容或检索相关记忆。适用于用户明确指令（如“记住我的邮箱”）或需要精细控制记忆粒度的场景。
+- **API 直接调用**：通过 `AddMemory` / `SearchMemory` 等 REST API 或 `agentscope-runtime` SDK 手动管理记忆，适用于高代码应用（如 Serverless Function）、自定义 RAG 流程或需与外部系统（如 CRM）双向同步的场景。
 
-- **托管集成式（零代码启用）**：在 Managed Agents 或智能体控制台中绑定已配置的记忆库，平台自动在每次会话开始前注入匹配记忆、在会话结束后触发规则提取。开发者无需修改代码，即可获得开箱即用的跨会话状态保持能力。
-
-> ✅ 关键区别：`memory.write`（API 层）和 `AddMemory`（Memory Library API）均基于规则抽取；而 `memory_store`（OpenClaw）支持绕过规则、直接写入任意字符串，二者定位互补，不可混用。
+> ✅ 统一前提：所有路径均要求稳定传入 `user_id`（符合规范：1–64 字符，仅含字母、数字、`_`、`-`），否则记忆无法跨会话关联或写入失败。
 
 ## 关键参数和配置
 
-| 参数 | 说明 | 推荐值 | 注意事项 |
-|------|------|--------|----------|
-| `user_id` | **必填**，用户唯一标识，实现记忆完全隔离 | 业务侧稳定 ID（如 `uid_12345`） | 不同 `user_id` 的记忆物理隔离；OpenClaw 插件强制要求此字段作为 Header `x-bailian-user-id` 传递 |
-| `plan_version` | 检索策略版本（`Pro`/`Lite`） | `Pro`（默认） | `Pro` 启用 Rerank，精度高；`Lite` 关闭 Rerank，成本低但召回质量略降；Search 请求中可独立指定，不依赖写入时配置 |
-| `top_k` | 单次检索返回最大条数 | `5`（插件） / `10`（API） | 范围 1–100；建议 ≤20，避免噪声干扰 Prompt |
-| `min_score` | 相似度阈值（0.0–1.0） | `0.5–0.7` | 默认 `0.3`（API）易召回低质结果；设为 `0.6` 可显著提升注入质量；低于阈值的记忆被静默过滤 |
-| `meta_data` | 自定义元数据（JSON 对象） | `{"source": "chat", "priority": "high"}` | 强烈建议添加，用于后续 `metadata_filter` 精确筛选（如仅召回来自知识库的记忆） |
-| `memory.rules` | 写入规则数组（仅 API 层） | `[{"field":"email","source":"response.content.email","type":"fact"}]` | `source` 路径不存在时**静默忽略**，不报错；`type: "profile"` 时，空值或纯数字将被跳过写入 |
+| 参数 | 说明 | 取值/范围 | 注意事项 |
+|------|------|-----------|----------|
+| `user_id` | 记忆归属标识，强制隔离不同用户数据 | 字符串（1–64 字符，仅含 `[a-zA-Z0-9_-]`） | **必填**；同一用户所有调用必须一致，否则视为不同实体 |
+| `memory_library_id` | 指定目标记忆库（用于多业务隔离） | 字符串 | 不传则使用账号默认记忆库（不可删除） |
+| `plan_version` | 决定检索质量与计费版本 | `"Pro"`（默认） / `"Lite"` | `Pro` 启用重排序（Rerank），精度高；`Lite` 成本低，适合简单匹配；**事实记忆与用户画像的 Lite 单价不同（¥0.018 vs ¥0.025/次）** |
+| `top_k` | 检索返回的最大记忆条数 | `1–100` | 默认 `10`；增大可提升召回率，但增加 [Token](token.md) 消耗与延迟 |
+| `min_score` | Pro 版相似度阈值（仅 `SearchMemory` 生效） | `0.0–1.0` | 建议 `0.5–0.7`；过低引入噪声，过高漏召 |
+| `memory_config.type` | API 场景下指定记忆类型（仅限 `enable_memory=true` 时） | `"fragments"`（事实记忆） 或 `"profiles"`（用户画像） | **不可混用**；两类记忆需独立配置、独立调用 |
+| `memory_config.ttl_seconds` | 记忆项存活时间（TTL） | 整数（秒），默认 `604800`（7 天） | 设为 `0` 表示永不过期（不推荐生产环境） |
 
-> ⚠️ 限制提醒：单 `user_id` 下，事实记忆上限 500 条，用户画像上限 100 条；超出返回 `400 Bad Request`。默认 TTL 为 90 天，可在记忆库规则中自定义为 7/30/180 天或永不过期。
+> ⚠️ 重要约束：  
+> - 用户画像需预先调用 `CreateProfileSchema` 定义字段模板，并在 `AddMemory` 中传入 `profile_schema` ID 才生效；  
+> - 画像提取为异步过程，`AddMemory` 返回后需等待数秒再调用 `GetUserProfile`；  
+> - 单次 API 请求最多触发 **1 次事实记忆写入 + 1 次用户画像更新**，不支持批量操作。
 
-## 面向开发者，简洁实用
+## 面向开发者：快速上手建议
 
-- **快速验证**：开通服务后，3 步闭环：<br>① `POST /add` 写入测试消息（带 `user_id`）→ ② 控制台查提取结果 → ③ `POST /memory_nodes/search` 检索验证<br>✅ 无需模型适配，所有 Qwen 系列模型（`qwen-max`/`qwen-plus`/`qwen-turbo`/`qwen3-*`）均支持。
+1. **验证通路（3 分钟）**：  
+   ```bash
+   # 1. 写入记忆（替换 YOUR_API_KEY 和 USER_ID）
+   curl -X POST https://dashscope.aliyuncs.com/api/v2/apps/memory/AddMemory \
+     -H "Authorization: Bearer YOUR_API_KEY" \
+     -H "Content-Type: application/json" \
+     -d '{
+           "user_id": "USER_ID",
+           "messages": [{"role":"user","content":"我叫张三，28岁，工程师，每天9点喝水"}]
+         }'
 
-- **生产建议**：
-  - 优先使用 `Pro` 策略 + `min_score: 0.6` + `top_k: 10` 平衡效果与成本；
-  - 用户画像务必提前配置 `profile_schema_id` 并传入请求，首次提取可能异步延迟，建议重试逻辑；
-  - 敏感信息（如手机号、身份证）写入前需自行脱敏，平台默认启用**记忆内容安全检测**（自动拦截违规内容）；
-  - 避免高频调用：`/add` ≤ 120 QPM，`/search` ≤ 300 QPM，超限返回 `429`，需实现指数退避重试。
+   # 2. 检索记忆（相同 user_id）
+   curl -X POST https://dashscope.aliyuncs.com/api/v2/apps/memory/SearchMemory \
+     -H "Authorization: Bearer YOUR_API_KEY" \
+     -H "Content-Type: application/json" \
+     -d '{
+           "user_id": "USER_ID",
+           "messages": [{"role":"user","content":"提醒我喝水"}],
+           "top_k": 3
+         }'
+   ```
 
-- **调试技巧**：  
-  - 使用 `GET /memory_nodes?user_id={id}` 查看原始记忆列表及 `score` 字段，快速定位低分噪声；  
-  - 在 `memory.rules` 中添加 `"debug": true`（若 SDK 支持）可返回提取过程日志；  
-  - OpenClaw 插件中，`memory_search` 返回结果含 `relevance_score`，可直接用于排序过滤。
+2. **生产部署要点**：  
+   - 优先创建**独立记忆库**（非默认库），避免多业务相互干扰；  
+   - 为用户画像配置明确 `profile_schema` 并预置初始标签（如通过 `/v1/memory/profiles/upsert`）；  
+   - 在 Agent 或 Workflow 中启用 `autoRecall` 时，务必设置合理 `top_k` 和 `min_score`，防止低质记忆污染 Prompt；  
+   - 监控 `SearchMemory` 调用量与平均 `top_k`，平衡效果与成本。
+
+3. **调试技巧**：  
+   - 使用控制台「记忆详情」页按 `user_id` 查看提取结果，验证规则是否生效；  
+   - 在 `agenteval` 观测中检查 `memory_read` / `memory_write` Trace 节点，定位检索为空或写入失败原因；  
+   - 若检索无结果，优先检查 `user_id` 是否一致、`plan_version` 是否匹配、`min_score` 是否过高。
 
 ## 关联主题页
 
 - [memory library overview](../guides/memory-library-overview.md)
 - [long term memory new](../api/long-term-memory-new.md)
-- [application call](../api/application-call.md)
+- [llm application](../guides/llm-application.md)
 - [managed agents](../guides/managed-agents.md)
-- [security guide](../guides/security-guide.md)
+- [agenteval](../guides/agenteval.md)
 
 

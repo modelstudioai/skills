@@ -1,52 +1,44 @@
 # 向量嵌入
 
-向量嵌入（Vector Embedding）是将原始文本、图像、视频等非结构化数据映射到高维稠密实数向量空间的表示方法，使语义相近的内容在向量空间中距离更近，从而支撑检索、聚类、去重、RAG 等下游任务。该表示不依赖关键词匹配，而是基于模型对语义的理解生成，是百炼平台实现语义搜索与多模态理解的核心基础能力。
+向量嵌入（Embedding）是将原始非结构化数据（如文本、图像、视频）映射到低维稠密实数向量空间的过程，使语义相近的内容在向量空间中距离更近。该向量表示保留了原始内容的语义特征，是检索、聚类、去重、RAG 等 AI 应用的底层基础能力。
 
-## 在百炼平台的不同场景中，这个概念如何使用
+## 在百炼平台的不同场景中如何使用
 
-- **知识库（RAG）构建**：知识库创建时需指定嵌入模型（如 `text-embedding-v4`），系统自动对文档切片进行向量化，并构建可检索的向量索引；向量质量直接影响召回准确率与问答依据可靠性。
-- **通用语义检索服务**：通过 `/api/v1/services/embeddings/text-embedding`（同步）或 `/api/v1/services/embeddings/text-embedding/batch`（异步）接口，开发者可独立调用文本向量能力，用于自建检索系统、相似文本推荐、去重等场景。
-- **多模态统一表征**：使用 `qwen3-vl-embedding` 或 `tongyi-embedding-vision-plus-2026-03-06` 等模型，支持文本+图像+视频混合输入，生成**融合向量**（单向量表征跨模态语义）或**独立向量**（各模态各一向量），服务于图文搜索、音视频内容理解等场景。
-- **框架集成开发**：LlamaIndex 通过 `DashScopeEmbedding` 组件封装调用，Spring AI Alibaba 亦提供对应 Embedding 支持；开发者可将向量生成无缝嵌入本地 RAG 流程（解析 → 切分 → 嵌入 → 索引），绕过云端知识库限制，实现完全自定义。
-- **Agent 与工作流底座**：RAG Agent 的检索阶段依赖向量嵌入完成初步召回；其配置中的 `embedding_model` 字段（如 `text-embedding-v4`）即决定整个知识服务的语义表征能力边界。
+- **知识库（Knowledge Base）**：文档切片后，由指定嵌入模型（如 `text-embedding-v4`）统一生成向量，并构建可检索的向量索引；创建知识库时选定嵌入模型，**创建后不可更改**。
+- **RAG API**：在 `/knowledge/query` 等接口中，系统自动调用知识库绑定的嵌入模型对用户查询和文档切片进行向量化，支撑 `vector` 或 `hybrid` 检索模式。
+- **向量与排序服务（Vector & Sort）**：提供独立的 Embedding 接口（同步/异步），支持文本、图像、视频三模态输入，可用于自建检索系统、语义聚类、相似性分析等定制场景。
+- **工具链与框架（Toolkits & Frameworks）**：通过 [OpenAI 兼容接口](openai-compatible-interface.md)（如 `/compatible-mode/v1/embeddings`）调用，无缝集成 LangChain、LlamaIndex 等主流框架，无需修改 SDK 代码。
+- **多模态理解与生成流程**：在图文/音视频混合处理链路中，嵌入模型（如 `qwen3-vl-embedding`）可输出独立模态向量或融合向量（启用 `enable_fusion=true`），为跨模态检索与重排提供统一表征。
 
 ## 关键参数和配置
 
-| 参数 | 适用模型/场景 | 说明 | 注意事项 |
-|------|----------------|------|-----------|
-| `dimensions` / `dimension` | 同步文本向量（OpenAI 兼容） / 多模态向量（DashScope 原生） | 指定向量维度，如 `64`、`256`、`1024`；`text-embedding-v4` 支持 64–2560 可调，更高维通常提升精度但增加存储与计算开销 | OpenAI 接口用 `dimensions`，DashScope 多模态接口用 `dimension`；旧模型（如 `v2`）不支持该参数，固定维度 |
-| `text_type` | 批处理文本向量（`text-embedding-async-v1/v2`） | 取值 `document`（默认，用于知识库底库）或 `query`（用于用户检索查询）；影响向量方向性，对检索效果有显著影响 | 必须严格区分用途：底库切片用 `document`，用户问题用 `query`，混用将导致语义错位 |
-| `enable_fusion` | `qwen3-vl-embedding` 模型 | `true`：将 `contents` 中所有模态输入融合为 1 个向量；`false` 或未设置：返回各模态独立向量 | 仅该模型支持；其他多模态模型（如 `tongyi-embedding-vision-plus-2026-03-06`）通过输入格式隐式控制融合，不依赖此参数 |
-| `model_name` | 框架集成（LlamaIndex/Spring AI） | 指定嵌入模型标识，如 `"text-embedding-v4"`、`"qwen3-vl-embedding"` | 框架内需与百炼平台实际可用模型名一致；建议优先选用带版本后缀的最新模型（如 `-2026-03-06`）以获得最佳效果 |
+| 参数 | 说明 | 是否必填 | 注意事项 |
+|------|------|----------|-----------|
+| `model` | 嵌入模型名称，必须严格匹配平台支持列表（如 `text-embedding-v4`、`qwen3.7-text-embedding`、`qwen3-vl-embedding`） | 是 | 模型决定输入类型（纯文本/多模态）、最大长度、维度范围及是否支持融合 |
+| `input` | 输入内容：支持单字符串、字符串数组、文件 URL（如 OSS 地址）；多模态输入需按 `content` 数组组织（含 `type` 和 `data` 字段） | 是 | 异步批处理接口（如 `text-embedding-async-v2`）要求 JSONL 格式，每行一个 `input` |
+| `dimensions` | 指定向量维度（如 `512`、`1024`），仅部分新模型支持（`qwen3.7-text-embedding`、`text-embedding-v4`、`qwen3-vl-embedding` 等） | 否 | 默认值因模型而异（如 `text-embedding-v4` 默认 1024）；旧模型（如 `text-embedding-v2`）不支持该参数 |
+| `encoding_format` | 输出格式：`float`（默认，返回浮点数数组）或 `base64`（Base64 编码的二进制向量） | 否 | 当前同步接口强制返回 `float`；长请求或老网关会自动降级为 `float`，`base64` 实际不可用 |
+| `enable_fusion` | 仅 `qwen3-vl-embedding` 支持：设为 `true` 时，将文本+图像+视频输入融合为单个向量；设为 `false`（默认）则返回各模态独立向量 | 否 | 其他多模态模型（如 `tongyi-embedding-vision-plus-2026-03-06`）通过输入结构隐式控制融合行为 |
 
-> ⚠️ 重要提示：  
-> - 向量模型在知识库创建时选定且**不可修改**，如需更换，需重建知识库；  
-> - 多模态嵌入中，`qwen2.5-vl-embedding` 仅支持融合向量且不支持多图，而 `tongyi-embedding-vision-plus`（无后缀）仅支持独立向量——请以 [Multimodal-Embedding API详情](../../raw/model-api-reference/vector-and-sort/multimodal-vector/multimodal-embedding-api-reference.md) 中的能力对照表为准；  
-> - `gte-rerank` 系列模型将于 2026 年 5 月 30 日下线，但其配套的 `text-embedding-v2` 等嵌入模型仍长期可用。
+> ⚠️ 注意：  
+> - 所有嵌入模型**均不支持稀疏向量输出**（传入 `output_type=sparse` 将返回空 embedding）；  
+> - `text-embedding-async-v2` 的 `text_type`（`document`/`query`）仅影响下游检索策略，**不改变向量本身**；  
+> - 多模态嵌入需注意模型能力边界：`qwen2.5-vl-embedding` 仅支持融合向量，`tongyi-embedding-vision-plus` 仅支持独立向量。
 
-## 面向开发者，简洁实用
+## 面向开发者的小贴士
 
-- ✅ **选型建议**：  
-  - 中文为主、兼顾性能：用 `text-embedding-v4`（64–2560 维可调，推荐 256 或 512）；  
-  - 超长文本（≤128K Token）：用 `qwen3.7-text-embedding`；  
-  - 图文混合搜索：首选 `qwen3-vl-embedding`（支持 `enable_fusion=true`）或 `tongyi-embedding-vision-plus-2026-03-06`（支持多图+视频+文本混合输入）。
-
-- ✅ **调用速查**：  
-  - 小批量（≤20 条）→ 同步接口：`POST /compatible-mode/v1/embeddings`（OpenAI 兼容）或 `/api/v1/services/embeddings/text-embedding/text-embedding`（DashScope 原生）；  
-  - 大批量（万级+）→ 异步批处理：`POST /api/v1/services/embeddings/text-embedding/batch` + `X-DashScope-Async: enable`，输入为 OSS URL；  
-  - 多模态 → `POST /api/v1/services/embeddings/multimodal-embedding`，按文档要求组织 `contents` 数组。
-
-- ✅ **避坑提醒**：  
-  - 不要对同一份文本同时用 `document` 和 `query` 类型生成向量；  
-  - 多模态输入时，确保 `contents` 中每个元素的 `type`（`text`/`image`/`video`）与 `value`（字符串或 OSS URL）严格匹配；  
-  - 使用框架时，确认 `DashScopeEmbedding` 的 `model_name` 与百炼控制台「模型中心」中已开通的模型完全一致（含大小写与版本号）。
+- ✅ **优先选用新模型**：`qwen3.7-text-embedding`（2560 维，128K token）和 `text-embedding-v4`（64–2048 维可调）兼顾精度、灵活性与性能，推荐用于新项目。  
+- ✅ **多模态场景明确输入结构**：使用 `qwen3-vl-embedding` 时，若需融合向量，务必传 `{"enable_fusion": true}` 并确保 `content` 中包含至少两种模态；否则默认返回独立向量。  
+- ✅ **批量处理选异步接口**：单次 >1000 条文本向量化，请用 `text-embedding-async-v2`（支持 10 万行/请求），避免同步超时。  
+- ❌ **避免维度误配**：调用 `dimensions` 参数前，务必查阅对应模型文档确认支持范围（如 `qwen3-vl-embedding` 支持 256–2560，超出将报错）。  
+- 📌 **调试建议**：在 Playground 中使用 “Embedding” 工具快速验证输入格式与向量输出；生产环境请始终校验响应中的 `usage.total_tokens` 与 `data[0].embedding.length` 是否符合预期。
 
 ## 关联主题页
 
 - [vector and sort](../api/vector-and-sort.md)
 - [knowledge base](../guides/knowledge-base.md)
 - [rag api](../api/rag-api.md)
-- [frameworks](../api/frameworks.md)
-- [more about models](../api/more-about-models.md)
+- [toolkits and frameworks](../api/toolkits-and-frameworks.md)
+- [model data overview](../guides/model-data-overview.md)
 
 

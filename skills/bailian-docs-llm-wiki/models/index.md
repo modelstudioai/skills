@@ -1,6 +1,6 @@
 # 百炼模型市场索引
 
-> 自动生成 · 共 188 个模型家族 · 434 个主干模型 · 更新于 2026-10-04
+> 自动生成 · 共 189 个模型家族 · 435 个主干模型 · 更新于 2026-10-05
 
 **机器查询走结构化文件**：
 
@@ -397,7 +397,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [Qwen3.8-Omni-Flash-Realtime](groups/qwen3.8-omni-flash-realtime.json) — Qwen3.8-Omni-Flash-Realtime 通过多种实时协议提供音视频双工交互，面向智能硬件、机器人与实时交互 Agent。支持多通道音频输入与多种通道布局，视频表征可在细粒度与聚合之间按…
   - 模型：`qwen3.8-omni-flash-realtime`
 
-## 实时音频翻译 `Realtime-Audio-Translate` — 3 个家族
+## 实时音频翻译 `Realtime-Audio-Translate` — 4 个家族
 
 - [Qwen3-LiveTranslate-Flash-Realtime](groups/qwen3-livetranslate-flash-realtime.json) — Qwen3-LiveTranslate-Flash-Realtime的实时版本，一款高精度、高响应、高鲁棒性的多语言实时音视频同传大模型。依托Qwen3-Omni强大的基座能力、海量多模态数据、跨语言…
   - 模型：`qwen3-livetranslate-flash-realtime`
@@ -405,6 +405,8 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`qwen3.5-livetranslate-flash-realtime`
 - [Qwen3.8-LiveTranslate-Flash-Realtime](groups/qwen3.8-livetranslate-flash-realtime.json) — Qwen3.8-LiveTranslate-Flash的实时版本，一款高精度、高响应、高鲁棒性的多语言实时音视频同传大模型。依托Qwen-Omni强大的基座能力、海量多模态数据、跨语言跨模态对齐和视觉…
   - 模型：`qwen3.8-livetranslate-flash-realtime`
+- [实时语音识别及翻译V1.0](groups/gummy-realtime-v1.json) — 多语言语音转写及翻译的多模态大模型。本模型提供长时间、高准确率、实时转写中/英/日/韩等10个混合语种的服务。同时支持中英日韩互译，以其他6个语种翻译成中文或英文。
+  - 模型：`gummy-realtime-v1`
 
 ## 多模态嵌入 `ME` — 2 个家族
 

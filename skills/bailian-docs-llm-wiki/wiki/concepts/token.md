@@ -1,46 +1,44 @@
-# Token 管理
+# Token
 
-Token 管理是百炼平台对模型调用过程中输入/输出 token 消耗进行计量、配额控制、计费结算与资源调度的核心机制。它贯穿 API 调用、应用集成、组织治理和成本优化全链路，是实现细粒度用量隔离、确定性性能保障与精细化预算管控的技术基础。
+Token 是百炼平台中用于度量和计量模型输入与输出内容的基本单位，是资源配额、计费、监控与限流的核心粒度。一个 Token 通常对应一个子词（subword）或字符级单元（具体取决于模型分词器），而非固定字节数或字符数；多模态输入（如图像、音频）会按模型定义的换算系数折算为等效文本 Token。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **模型 API 调用（实时/异步/Batch）**：通过 `X-Plan-ID` Header 或请求体中的 `plan_id` 显式绑定 Token Plan，触发配额校验与计费；未指定时回退至账户级默认额度，不计入 Token Plan 计费体系。  
-- **智能体与工作流应用调用**：Token 消耗由底层所选模型（如 `qwen-vl`）自动计量，若应用配置了 Token Plan，则调用自动继承该 Plan 的配额与限流策略；OpenAI 兼容模式下同样支持 `X-Plan-ID` 透传。  
-- **组织级资源治理**：通过 Token Plan API 实现按组织、成员、席位三级分配与动态调整配额（如 `PATCH /member/{id}/quota`），支持 SSO 集成、自动化审计与席位生命周期管理。  
-- **模型权限与限流配置**：在模型管理接口中，`usage_limit`（Token/周期）与 `request_limit`（请求/周期）共同构成模型级 token 使用边界，需协同设置以生效。  
-- **成本与预算控制**：Token 是计费基本单位（输入/输出分开计价），免费额度、节省计划、吞吐预留（PTU）均以 token 消耗为计量依据；预算告警、用量监控（如 `/v1/plans/{plan_id}/usage`）均基于 token 统计。
+- **资源配额与计费（Token Plan）**：Token 是 Token Plan 套餐的计量基础。每次调用（如 `/v1/chat/completions`）的 `input_tokens + output_tokens` 总和实时扣减所绑定套餐的当日配额。图像、音频等非文本输入按模型版本对应的系数折算（例如 Qwen-VL 中 1 张 512×512 图像 ≈ 1280 tokens），详见官方换算表。
+  
+- **用量监控（Model Monitoring）**：`/v1/monitoring/metrics` 接口及控制台「监控中心」中，“输入 Token 数”“输出 Token 数”是核心指标，支持按项目（`project_id`）聚合统计，用于容量规划与成本分析（v2.3+ 模型才提供精确 token 粒度）。
+
+- **可观测性（AgentEval）**：在智能体全链路 Trace 中，每个模型调用节点自动记录 `input_tokens` 和 `output_tokens`，用于定位高消耗环节、分析 Prompt 效率，并支撑 LLM 评估器自身的调用计费（LLM 评估器产生的 token 按标准计费）。
+
+- **API 资源治理（Token Plan API）**：组织管理员通过 `/v1/token-plan/seats/{seat_id}/quota` 等接口为席位或成员分配 Token 配额，单位为千 Token（k-tokens），最小值为 100（即 100,000 tokens）；配额变更仅对后续请求生效。
+
+- **异步与多模态调用（More about Models）**：异步任务（如图像生成）虽不直接暴露 token 字段，但其底层推理仍计入调用者绑定的 Token Plan；上传图像等文件获取临时 URL 时，平台内部已预估并预留对应 token 消耗，确保调用时不会因配额不足失败。
 
 ## 关键参数和配置
 
-| 参数 | 位置 | 类型 | 说明 | 生效范围 |
-|------|------|------|------|-----------|
-| `plan_id` | Header (`X-Plan-ID`) 或 Body 字段 | string | Token Plan 唯一标识，必须与调用模型匹配 | 所有模型 API（同步/异步/Batch）、应用调用 |
-| `max_tokens` | Body | integer | 单次请求最大生成 token 数，受 Plan 的 `per_request_limit` 约束 | 单次请求级配额控制 |
-| `priority` | Body | integer (1–100) | 请求调度优先级，默认 50；影响队列排队顺序 | 团队版及个人版 v2.1+（SDK v3.4.0+ 推荐） |
-| `usage_limit` / `usage_limit_period` | Model Limits API Body | integer / integer（秒） | 模型级 token 消耗上限（如 `1000000`/`3600` 表示每小时 100 万 token） | 账号级或业务空间级模型限流 |
-| `initial_quota` | Token Plan API（席位创建） | integer | 席位创建时预分配的初始 token 配额 | 组织内席位维度资源分配 |
-
-> ⚠️ 注意：  
-> - `plan_id` 与模型 `model` 必须严格一致，跨模型 Plan 不互通；  
-> - `usage_limit` 依赖 `request_limit` 存在，单独设置会报错；  
-> - Plan 创建后 `plan_id` 不可修改，配额变更（如 `total_quota`）立即生效，但缓存同步延迟 ≤3 秒，紧急时可调用 `/v1/plans/{plan_id}/refresh` 强制刷新。
+- `max_tokens`（请求级）：硬性输出长度上限，超出将返回 `400 Bad Request`，不计入配额；建议设为合理值以避免意外超限。
+- `temperature` / `top_p`（请求级）：影响输出多样性与长度，间接增加实际输出 token 数；高值易导致冗长或重复响应。
+- `repetition_penalty`（请求级）：过高（>1.5）可能引发模型反复重写，显著抬升输出 token 消耗。
+- `quota`（Token Plan API）：配额值，单位为千 Token（k-tokens），非“个 token”；例如 `quota: 500` 表示 500,000 tokens/日。
+- 单次请求限制：`input_tokens + output_tokens ≤ 套餐单日上限 × 5%`（如 100 万套餐，单次最多 5 万 tokens）。
 
 ## 面向开发者，简洁实用
 
-- ✅ **快速启用**：控制台「配额中心 → Token Plan」新建计划 → 复制 `plan_id` → 在请求 Header 加 `X-Plan-ID: pln-xxx` 即可生效。  
-- ✅ **调试验证**：调用 `/v1/plans/{plan_id}/usage` 查看 `used_tokens`、`remaining_tokens`、`reset_time`，确认配额扣减是否符合预期。  
-- ✅ **错误排查**：返回 `403 Forbidden` 且含 `"code":"QUOTA_EXCEEDED"` 表示 Plan 配额耗尽；含 `"code":"PLAN_MODEL_MISMATCH"` 表示 `model` 与 Plan 绑定模型不一致。  
-- ✅ **生产建议**：  
-  - 避免在生产环境启用「额度用完即停」，改用「高额消费预警 + 自动扩容」策略；  
-  - 多环境（开发/测试/生产）建议为每个环境独立创建 Plan，避免用量混杂；  
-  - SDK 用户请升级至 v3.4.0+，自动处理 Plan 透传与优先级调度，无需手动拼接 Header。
+- ✅ **查用量**：调用 `/v1/usage` 获取当前 API Key 的当日剩余 token；  
+- ✅ **看明细**：在控制台「监控中心」→「模型调用」页查看按小时/天聚合的 `input_tokens` 和 `output_tokens`；  
+- ✅ **控配额**：用 Token Plan API 为团队成员设置独立配额，避免个别账号耗尽全局额度；  
+- ✅ **避踩坑**：  
+  - 流式响应中断后，已发送的 token 仍计费；  
+  - 多模态输入务必参考最新换算系数（随模型版本更新）；  
+  - 免费试用额度不适用于私有化模型，且不可叠加；  
+  - 所有 token 统计延迟 ≤ 30 秒（Token Plan API）或 2–5 分钟（Model Monitoring），不适用于毫秒级熔断。
 
 ## 关联主题页
 
 - [token plan guide](../guides/token-plan-guide.md)
 - [token plan api](../api/token-plan-api.md)
-- [test 1](../guides/test-1.md)
-- [application call](../api/application-call.md)
-- [model management](../api/model-management.md)
+- [agenteval](../guides/agenteval.md)
+- [model monitoring](../guides/model-monitoring.md)
+- [more about models](../api/more-about-models.md)
 
 

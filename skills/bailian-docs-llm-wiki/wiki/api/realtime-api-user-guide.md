@@ -1,41 +1,43 @@
 # realtime api user guide
 
-Realtime API 是百炼平台提供的低延迟、流式响应的模型调用接口，适用于语音交互、实时对话、音视频流处理等对端到端时延敏感的场景。它基于 WebSocket 协议实现双向通信，支持增量式 token 返回与实时中断控制。该接口不兼容传统 RESTful 同步调用模式，需使用专用客户端或 SDK 接入。
+Realtime API 是百炼平台提供的低延迟、流式双向通信接口，适用于语音交互、实时对话、多轮上下文协同等场景。它基于 WebSocket 协议，支持模型推理过程中的 token 级别流式返回与客户端指令实时注入（如中断、暂停、工具调用）。该 API 不同于标准 REST 推理接口，需维持长连接并遵循特定帧协议。
 
 ## 支持的模型与功能
 
-当前 Realtime API 支持以下模型（以 `qwen-audio-realtime-v1`、`qwen-video-realtime-v1` 和 `qwen-rtc-v2` 为主），均针对实时音频/视频流输入优化，具备语音活动检测（VAD）、流式 ASR、语义理解与 TTS 合成一体化能力。模型列表及能力详情请参见 [Realtime API](../../raw/model-api-reference/realtime-api-user-guide.md) 的“接入模型与应用”章节。注意：`qwen-rtc-v1` 已于 2024-Q3 正式下线，文档中若仍提及该模型，请以 [Realtime API](../../raw/model-api-reference/realtime-api-user-guide.md) 中最新模型清单为准。
+当前 Realtime API 仅支持以下模型：`qwen-audio-realtime-v1`（语音输入/输出）、`qwen2.5-7b-instruct-realtime-v1`（文本交互），后续将逐步扩展至更多实时优化模型。核心功能包括：
+- 实时音频流输入（PCM/WAV）与合成语音流输出（ulaw/alaw）
+- 多轮会话状态自动维护（含 `session_id` 生命周期管理）
+- 客户端主动发送 `input_interrupt`、`tool_use_request` 等控制帧
+- 模型侧触发 `tool_call` 后支持同步/异步工具执行反馈
+
+> **注意**：文档 [Realtime API](../../raw/model-api-reference/realtime-api-user-guide.md) 中列出的 `qwen-vl-realtime-beta` 已于 v2.3.0 版本下线，实际可用模型请以 [快速开始](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide.md) 中的 `model_list` 响应为准。
 
 ## 关键参数
 
 | 参数名 | 类型 | 必填 | 说明 |
 |--------|------|------|------|
-| `model` | string | 是 | 模型标识符，如 `qwen-audio-realtime-v1`；必须与实际部署版本严格匹配 |
-| `input_format` | string | 是 | 输入流格式，支持 `"pcm"`、`"opus"`、`"h264"`（视频）等，详见 [Realtime API](../../raw/model-api-reference/realtime-api-user-guide.md) 的 AOQ客户端SDK 文档 |
-| `max_latency_ms` | integer | 否 | 端到端最大容忍延迟（毫秒），默认 `300`，取值范围 `100–2000` |
-| `enable_vad` | boolean | 否 | 是否启用服务端 VAD，默认 `true`；设为 `false` 时需由客户端自行切分语音段 |
-
-> **注意**：`temperature` 和 `top_p` 等采样参数在 Realtime API 中**不生效**，模型推理策略由服务端统一管控，此行为与 [概述](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-overview.md) 中描述一致，但与部分旧版 Quick Start 示例存在矛盾，请以本说明为准。
+| `model` | string | 是 | 模型标识符，如 `qwen-audio-realtime-v1`；必须与 [接入模型与应用](../../raw/model-api-reference/realtime-api-user-guide/realtime-model-connection.md) 中注册的模型一致 |
+| `temperature` | float | 否 | 采样温度，默认 `0.7`，取值范围 `[0.0, 2.0]` |
+| `max_output_tokens` | int | 否 | 单次响应最大 token 数，硬上限 `4096` |
+| `enable_audio` | boolean | 否 | 是否启用音频编解码（仅对音频模型有效），默认 `false` |
 
 ## 使用方式
 
-1. 建立 WebSocket 连接：向 `wss://dashscope.aliyuncs.com/realtime/v1/chat` 发起连接，携带 `Authorization: Bearer <api_key>` 头；
-2. 发送 `session.update` 控制帧配置会话参数（如 `input_format`, `model`）；
-3. 通过 `input.audio` 或 `input.video` 帧持续推送二进制流数据；
-4. 监听 `output.text.delta`、`output.audio.delta` 等事件接收流式响应；
-5. 如需中断当前响应，发送 `control.interrupt` 帧。
+1. **建立 WebSocket 连接**：向 `wss://dashscope.aliyuncs.com/realtime/v1/chat` 发起连接，携带 `Authorization: Bearer <api_key>` 和 `X-DashScope-Model: <model>` 头；
+2. **发送初始化帧**：首帧为 JSON 格式 `{"type": "session.update", "session": {...}}`，其中 `session` 字段需包含 `turn_id`、`user_id` 等元信息；
+3. **交互循环**：后续按帧发送 `input.audio`、`input.text` 或 `input.tool_result`；接收 `output.text.delta`、`output.audio.chunk` 等流式响应；
+4. **终止会话**：发送 `{"type": "session.end"}` 帧，服务端将关闭连接并释放资源。
 
-完整交互流程与错误码定义请参考 [快速开始](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide.md)。
+推荐使用官方 AOQ 客户端 SDK（Python/JS）封装连接管理与帧序列化逻辑，详见 [AOQ客户端SDK](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-aoq-api.md)。
 
 ## 限制和注意事项
 
-- 单连接最长存活时间：10 分钟（超时后需重连）；
-- 音频流采样率仅支持 `16000 Hz`（PCM）或 `48000 Hz`（Opus），其他采样率将被拒绝；
-- 视频流分辨率建议 ≤ `640×480`，帧率 ≤ `15 fps`，超出可能触发服务端限流；
-- 所有流式输入必须按时间顺序连续发送，乱序或重复帧将导致会话异常终止；
-- 客户端必须实现心跳保活（每 30 秒发送 `ping` 帧），否则连接可能被中间代理关闭。
+- 单连接最长存活时间 30 分钟，超时后需重连并新建 `session_id`；
+- 音频流输入需严格满足采样率 16kHz、单声道、16-bit PCM 格式，否则将触发 `input_format_error` 错误；
+- 同一 `session_id` 不支持跨连接复用，重复使用将导致 `session_conflict`；
+- 工具调用（`tool_use`）仅支持预注册函数，未在 [接入模型与应用](../../raw/model-api-reference/realtime-api-user-guide/realtime-model-connection.md) 中配置的工具将被静默忽略。
 
-如遇连接频繁断开或延迟突增，建议优先检查网络稳定性，并确认是否符合 [AOQ客户端SDK](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-aoq-api.md) 中的兼容性要求。
+> **注意**：[概述](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-overview.md) 中提及的“自动重连机制”尚未在 v2.4.0 生产环境启用，当前需由客户端自行实现断线重连与会话恢复逻辑。
 
 ## 来源文档
 

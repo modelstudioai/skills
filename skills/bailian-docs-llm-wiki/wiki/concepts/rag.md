@@ -1,50 +1,53 @@
 # 检索增强生成
 
-检索增强生成（Retrieval-Augmented Generation，RAG）是一种将大语言模型（LLM）与外部知识源动态结合的技术范式：在生成回答前，系统先从结构化或非结构化知识库中检索相关片段，再将检索结果作为上下文注入提示（[prompt](../guides/prompt.md)），引导模型生成准确、可溯源、事实一致的响应。
-
-在百炼平台中，RAG 不是独立模块，而是贯穿知识管理、检索服务与生成应用的一体化能力链路，核心目标是让大模型“言之有据”，同时保障企业私有知识的安全可控与高效复用。
+检索增强生成（Retrieval-Augmented Generation，RAG）是一种将大语言模型（LLM）的生成能力与外部知识源的精准检索能力相结合的技术范式。它通过“先检索、后生成”两阶段流程，使模型在回答用户问题时能动态引用可信、实时、私有的上下文片段，显著提升事实准确性、领域专业性与幻觉抑制能力。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **知识库问答（核心场景）**：通过创建知识库（Knowledge Base）并绑定 RAG Agent，用户提问时系统自动执行「向量检索 → 重排精筛 → 上下文拼接 → 大模型生成」全流程。支持文档、表格、图片、音视频等多模态数据，适用于客服助手、内部知识查询等生产场景。
-- **智能体应用（Agent）集成**：在调用已发布的智能体应用时，通过 `rag_options` 参数显式指定知识库（`pipeline_ids`）、文档（`file_ids`）、元数据过滤条件（`metadata_filter`）或标签（`tags`），实现按需启用 RAG 增强，无需修改应用逻辑。
-- **低代码渠道集成（AppFlow）**：在网站悬浮窗、企业微信、钉钉等渠道中嵌入 AI 助手时，只需在应用配置页启用“知识库”并设为“必定调用”，即可零代码获得 RAG 能力，所有检索与生成由平台自动调度。
-- **本地开发框架集成**：通过 LlamaIndex 或 Spring AI Alibaba SDK，开发者可组合 `DashScopeParse`（解析）、`DashScopeJsonNodeParser`（切分）、`DashScopeEmbedding`（向量化）、`DashScopeCloudRetriever`（检索）与 `DashScope`（生成）构建全自定义 RAG 流程，灵活控制各环节行为。
-- **API 直接调用**：  
-  - 底层检索：调用 `/api/v1/indices/rag/index/retrieve` 获取原始召回结果（无重排）；  
-  - 联合语义检索：调用 `/api/v1/indices/knowledge/search`（需 `agent_id`），策略由 Agent 配置驱动；  
-  - 流式问答：调用 `/api/v2/apps/knowledge/chat`，返回带引用高亮的 SSE 流式响应。
+RAG 在百炼平台不是单一功能，而是贯穿多个产品模块的**核心能力底座**，按使用深度和控制粒度分为三类：
+
+- **开箱即用型 RAG（知识库服务）**  
+  通过「知识库」控制台或 API 快速构建：上传文档 → 自动解析/切片/向量化 → 配置检索策略 → 发布问答服务。适用于客服知识问答、内部文档助手等标准化场景。所有环节（嵌入、重排、生成）均预集成 Qwen 系列模型，无需代码即可上线。
+
+- **编排增强型 RAG（LLM Application）**  
+  在智能体（Agent 2.0）或工作流（Workflow）中，将知识库作为**可调用工具**（Tool）显式接入。支持多知识库并行检索、与 MCP 插件/函数计算节点串联、结合条件判断动态启用 RAG，适用于需多步骤推理、混合工具调用的复杂业务（如合同比对+条款解释+风险提示）。
+
+- **自主可控型 RAG（本地/高代码集成）**  
+  通过 `local_rag.zip` 开源示例或高代码应用（Python Serverless），使用百炼 API（如 `/knowledge/query`）或 LlamaIndex SDK 接入知识库服务，自定义切片逻辑、替换嵌入模型（如 GTE-Chinese-Large）、对接自有向量库。适用于对数据主权、模型选型、链路可观测性有强要求的企业级部署。
+
+> ✅ 共同特点：所有场景均复用同一套知识库索引，确保数据一致性；检索结果默认带来源切片（`retrieved_chunks`）与引用标记，支持审计与溯源。
 
 ## 关键参数和配置
 
-| 层级 | 参数名 | 说明 | 典型取值 | 生效位置 |
-|------|--------|------|-----------|------------|
-| **检索阶段** | `top_k`（初步召回数） | 向量检索返回的候选切片数量 | `10–100` | 知识库详情页 / Agent 配置 / API 请求体 |
-| | `similarity_threshold`（相似度阈值） | 过滤低分切片，避免噪声干扰生成 | `0.3–0.8`（越高越严格） | 知识库详情页 / Agent 配置 / `rag_options` |
-| | `rerank_model_name`（重排模型） | 对初检结果进行语义精排，提升相关性 | `qwen3-rerank`（文本）、`qwen3-vl-rerank`（多模态） | Agent 配置 / `rag_options` |
-| **生成阶段** | `temperature` | 控制生成随机性，影响答案稳定性 | `0.0–0.5`（RAG 场景建议 ≤0.4） | 应用配置页 / `rag_options` / SDK 参数 |
-| | `enable_thinking` | 启用模型内部推理链，提升复杂问题拆解能力 | `true` / `false` | 知识库问答服务配置 |
-| **知识构建期** | `chunk_size`（切片长度） | 影响上下文完整性与检索精度平衡 | `300–1000` token（默认 `600`） | 创建知识库时设置 / `DashScopeJsonNodeParser` |
-| | `embedding_model`（嵌入模型） | 决定语义匹配质量，创建后不可更改 | `text-embedding-v4`（推荐） | 创建知识库时选定 |
+RAG 效果高度依赖以下可调参数，按作用阶段分类：
 
-> ⚠️ 注意：`top_k` 与 `similarity_threshold` 存在协同效应——提高阈值可能降低有效召回数，建议优先调优 `top_k`，再微调阈值；`temperature` 在 RAG 场景中宜设较低值（如 `0.3`），以抑制幻觉、强化依据依赖。
+| 阶段 | 参数名 | 取值范围 | 说明 | 配置位置 |
+|------|--------|----------|------|-----------|
+| **检索前** | 最大分段长度 | 10–6000 token | 切片过长易丢失细节，过短破坏语义连贯性；**创建知识库时设定，不可修改** | 创建知识库 → 索引设置页 |
+| **检索中** | `top_k`（召回数） | 1–10（API 默认 3）<br>1–100（控制台默认 5） | 控制向量检索返回的候选切片数量；建议 3–5，兼顾精度与成本 | API 请求体 / 控制台知识库服务配置页 |
+| | 相似度阈值 | 0.01–1.0 | 过滤低相关切片；设为 0.5–0.7 可有效抑制噪声；值过高可能导致无结果 | 同上 |
+| | `retrieval_mode` | `hybrid`（默认）/ `vector` / `keyword` | `hybrid` 融合关键词匹配与向量相似度，鲁棒性最佳 | API 请求体（仅 `/knowledge/query` 支持） |
+| **生成中** | `temperature` | 0.0–1.0（推荐 0.1–0.6） | 降低该值可减少幻觉，提升答案稳定性 | 知识问答服务模型设置 / 工作流大模型节点参数 |
+| | 引用控制 | `enable_citation: true`（API）<br>控制台开启「带引用回答」 | 强制模型在回答中标注来源切片编号（如 `[1][3]`），便于用户验证 | API 请求体 / 控制台知识问答服务开关 |
+
+> ⚠️ 注意：切片方式（智能切分/按页/按标题）与最大分段长度在知识库创建时锁定；嵌入模型（如 `text-embedding-v4`）选定后不可更改；重排模型（如 `qwen3-rerank`）需在知识检索/问答服务中显式启用。
 
 ## 面向开发者，简洁实用
 
-- ✅ **快速验证**：用控制台 Playground 选择知识库 → 切换“知识问答”模式 → 输入问题，实时查看命中文档卡片与引用高亮，5 分钟完成效果验证。
-- ✅ **生产集成**：优先使用 `/api/v1/indices/knowledge/search`（联合检索）和 `/api/v2/apps/knowledge/chat`（流式问答），二者均基于已发布的 `agent_id`，策略统一管控，避免参数分散。
-- ✅ **调试技巧**：开启 `debug: true`（部分 API 支持）或在 Playground 中勾选“显示检索过程”，可查看每步召回内容、重排分数与 [prompt](../guides/prompt.md) 构造细节。
-- ✅ **性能优化**：若延迟敏感，可关闭重排（`enable_reranking: false`）或降低 `top_k` 至 `10–20`；若准确性优先，启用 `qwen3-rerank` 并设 `rerank_top_n: 5`。
-- ✅ **安全边界**：所有知识库运行在业务空间（Workspace）内，权限隔离；知识库 ID（`pipeline_id`）不暴露原始文件路径，确保私有数据不出域。
-
-RAG 的本质是“让模型知道它该知道的”。在百炼，你只需聚焦知识组织与业务意图，其余——检索、排序、融合、生成——皆由平台可靠交付。
+- **快速验证**：用控制台 Playground 输入问题，实时查看检索到的切片原文与模型回答，确认内容相关性与引用准确性。
+- **调试技巧**：若回答不理想，优先检查 `retrieved_chunks` 字段——若切片本身不相关，说明需优化切片长度或相似度阈值；若切片相关但回答错误，应调低 `temperature` 或更换更强生成模型（如 `qwen3.8-max`）。
+- **生产建议**：
+  - 对延迟敏感场景（如网页客服），启用 `hybrid` 检索 + `qwen-turbo` 生成；
+  - 对准确性要求极高场景（如法律/医疗），启用重排模型 + `qwen3.8-max` + `temperature=0.1`；
+  - 多知识库联合需求，通过工作流并行调用多个 `/knowledge/query` 接口后聚合结果。
+- **避坑提醒**：单次问答请求 `query` 不得超过 2048 字符；知识库同步为异步任务，需轮询 `GET /v1/knowledge_bases/{kb_id}/sync_status` 确认完成后再调用检索。
 
 ## 关联主题页
 
 - [knowledge base](../guides/knowledge-base.md)
 - [rag api](../api/rag-api.md)
-- [application call](../api/application-call.md)
+- [llm application](../guides/llm-application.md)
+- [use cases](../guides/use-cases.md)
 - [application use cases](../guides/application-use-cases.md)
-- [frameworks](../api/frameworks.md)
 
 
