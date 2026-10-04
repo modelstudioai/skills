@@ -1,52 +1,42 @@
 # 流式输出
 
-流式输出（Streaming Output）是百炼平台提供的一种响应模式，允许模型推理结果以增量方式（如逐 token、逐 chunk 或逐事件）实时返回给客户端，而非等待整个响应生成完毕后一次性返回。该机制显著降低端到端延迟，提升用户交互体验，是构建实时对话、语音助手、长文本生成等场景的关键能力。
+流式输出（Streaming Output）是百炼平台中一种实时、增量返回模型推理结果的响应机制，允许客户端在模型生成过程中逐段接收 token、文本片段、音频帧或结构化事件，而非等待整个响应完成后再一次性返回。该机制显著降低端到端延迟，是实现实时语音交互、长文本渐进渲染、低延迟多模态协同等场景的核心能力。
 
 ## 在百炼平台的不同场景中如何使用
 
-流式输出在百炼平台的多个核心接口中统一支持，但启用方式、协议承载和语义细节因场景而异：
-
-- **Application Call（智能体/工作流调用）**：  
-  支持 DashScope 原生 API 和 OpenAI 兼容的 Responses API。DashScope API 需在请求 Header 中设置 `X-DashScope-SSE: enable` 并传入 `stream=true`；Responses API 则直接在 JSON Body 中设置 `"stream": true`。响应格式为 Server-Sent Events（SSE），每条事件含 `data:` 字段，包含 `delta`（增量内容）、`finish_reason` 等字段。
-
-- **Realtime API（低延迟音视频流）**：  
-  基于 WebSocket 协议原生流式设计，不依赖 SSE。客户端通过 `wss://dashscope.aliyuncs.com/realtime/v1/chat` 建立连接后，服务端持续推送 `output.text.delta`、`output.audio.delta` 等事件，支持毫秒级响应与实时中断（`control.interrupt`）。
-
-- **Omni Realtime API（多模态实时交互）**：  
-  同样基于 WebSocket，支持 `input_audio`/`input_text`/`input_image` 混合输入，并返回 `response.text_delta`、`response.audio.delta` 等结构化事件。特别支持 `enable_interim_results=true` 获取 ASR 中间识别结果。
-
-- **[OpenAI 兼容接口](openai-compatible-interface.md)（Chat / Responses）**：  
-  完全遵循 OpenAI 流式规范：设置 `"stream": true` 后，响应为 `text/event-stream` 类型的 SSE 流，每行以 `data:` 开头，含 `choices[0].delta.content` 字段。`finish_reason` 字段标识流结束原因（如 `"stop"`、`"length"`、`"tool_calls"`）。
-
-- **Application Support（应用层增强）**：  
-  提供 `incremental_output=true` 参数（需与 `stream=true` 同时启用），用于避免重复返回历史内容——即仅推送本次推理新增的 token，适用于前端需精确控制渲染增量的场景（如打字机效果、实时编辑预览）。
+- **Realtime API（WebSocket 实时双向接口）**：默认启用流式输出，服务端以帧（frame）为单位推送 `output.text.delta`（文本 token 增量）、`output.audio.chunk`（音频 PCM 分片）等事件；客户端需按序拼接 delta 并实时渲染，支持中断、暂停等控制指令注入。
+- **Omni Realtime API（多模态实时接口）**：基于统一事件模型，流式响应通过 `output_text_delta`、`output_audio_chunk`、`output_image_preview` 等事件持续推送；`stream=false` 可显式禁用（不推荐），此时仅在会话结束时返回完整结果。
+- **Audio API（RESTful 音频接口）**：TTS、ASR、Voice Conversation 等能力支持 `stream=true` 参数，响应格式为 Server-Sent Events（SSE），每行一个 `data: {...}` 事件；非流式则返回标准 JSON 包含 `output.audio_url` 或 `output.text`。
+- **Application Call（智能体/工作流调用）**：通过 `stream=true`（OpenAI 兼容模式）或 `X-DashScope-SSE: enable`（DashScope 原生模式）启用；返回 SSE 流，包含 `content` 增量、`tool_calls` 触发事件及状态变更（如 `delta`, `end`, `error`）。
+- **Toolkits & Frameworks（[OpenAI 兼容接口](openai-compatible-interface.md)）**：`/chat/completions`、`/vision/chat/completions` 等路径均支持 `stream=true`，行为与 OpenAI 官方一致：返回 `text/event-stream`，含 `data: {"choices":[{"delta":{"content":"..."}}]}` 格式事件；适用于 LangChain、LlamaIndex 等框架的流式回调集成。
 
 ## 关键参数和配置
 
-| 参数名 | 类型 | 说明 | 所属接口 | 备注 |
-|--------|------|------|-----------|------|
-| `stream` | boolean | 启用流式响应（必选） | 全部 | 默认 `false`；设为 `true` 是启用流式的基础前提 |
-| `X-DashScope-SSE` | string | Header 字段，值为 `enable` | DashScope 原生 API（Application Call） | 仅 DashScope API 需显式设置；Responses API 不需要 |
-| `incremental_output` | boolean | 启用增量式流式（仅返回新增内容） | Application Call（Application Support） | 必须与 `stream=true` 同时设置，否则无效 |
-| `enable_interim_results` | boolean | 启用 ASR 中间识别结果（partial transcript） | Omni Realtime API | 开启后将额外触发 `interim_transcript` 事件 |
-| `max_latency_ms` | integer | Realtime API 端到端最大延迟容忍（毫秒） | Realtime API | 影响服务端调度策略，默认 `300`，取值范围 `100–2000` |
+| 接口类型 | 启用方式 | 关键参数/头 | 说明 |
+|----------|-----------|--------------|------|
+| **Realtime API** | 默认启用 | — | 无需显式配置；流式为协议级强制行为，连接即开始接收增量帧 |
+| **Omni Realtime API** | URL 查询参数 | `stream=true`（默认） | 设为 `false` 将退化为单次完整响应，丧失实时性 |
+| **Audio API（REST）** | 请求 Body | `"stream": true` | 必须与 `model` 匹配（如 `qwen2-audio-tts-0.5b`）；响应为 SSE，需正确解析 `data:` 行 |
+| **Application Call** | DashScope 模式 | Header `X-DashScope-SSE: enable` | 无 body 参数；响应含 `event: message` / `event: tool_call` 等自定义事件类型 |
+| | OpenAI 兼容模式 | Body 字段 | `"stream": true` | 标准 OpenAI 格式，支持 `stream_options.include_usage`（v2.4.0+） |
+| **Toolkits & Frameworks** | Body 字段 | `"stream": true` | 所有 `/v1/chat/completions` 等兼容接口通用；注意 `qwen3.8-omni-flash` 等多模态模型同样支持 |
 
-> ⚠️ 注意：所有流式接口均要求客户端正确处理分块响应（SSE 或 WebSocket 事件），并实现超时重连、心跳保活（WebSocket 场景）、错误恢复等健壮性逻辑。未按规范解析可能导致内容截断或乱序。
+> ⚠️ 注意：流式响应不支持 `max_output_tokens` 超限截断后的“优雅终止”——若达到上限，服务端将发送 `finish_reason: "length"` 事件并关闭流；客户端应监听 `finish_reason` 字段判断生成是否完成。
 
-## 面向开发者：实用建议
+## 面向开发者：简洁实用建议
 
-- **首选 OpenAI 兼容模式**：若已使用 OpenAI SDK，优先选用 `/compatible-mode/v1/responses` 路径，`stream=true` 行为与 OpenAI 完全一致，迁移成本最低。
-- **前端渲染优化**：启用 `incremental_output=true` 可避免前端重复拼接历史内容，减少 DOM 操作开销；配合 `delta.content` 累加即可获得完整响应。
-- **错误处理必须覆盖**：流式请求可能中途失败（如网络中断、token 超限）。务必监听 `error` 事件（WebSocket）或 `event: error`（SSE），并实现降级逻辑（如 fallback 到非流式重试）。
-- **不要忽略 `finish_reason`**：该字段明确指示流为何终止（`"stop"`=正常结束，`"length"`=达到 max_tokens，`"tool_calls"`=触发插件调用），是判断响应完整性与后续动作的关键依据。
-- **调试技巧**：使用 `curl -N` 或浏览器开发者工具的 Network → EventStream 标签页可直观查看 SSE 流；WebSocket 场景推荐使用 [wscat](https://github.com/websockets/wscat) 工具快速验证连接与事件。
+- **始终处理增量拼接**：`output.text.delta` 或 `choices[0].delta.content` 是片段，非完整句子；需累积至 `finish_reason == "stop"` 才获得终版文本。
+- **音频流需严格对齐编解码**：Realtime/Omni 的 `output.audio.chunk` 为 raw PCM（16kHz, 16-bit, mono），直接写入 AudioContext 或播放器前勿做格式转换。
+- **错误恢复要重连而非重试**：WebSocket 断连后，必须新建连接 + 新 `session_id`；复用旧 ID 将触发 `session_conflict` 错误。
+- **SSE 客户端请设置超时与重连**：Audio/Application 的 REST 流式响应可能因网络中断静默终止，建议设置 `fetch` 的 `signal` 或使用 `EventSource` 并监听 `error` 事件。
+- **性能优化提示**：在 Omni Realtime 中，音频输入分片建议 20–200ms；过长分片会引入缓冲延迟；Realtime API 中 `temperature=0` 可减少 token 波动，提升流式稳定性。
 
 ## 关联主题页
 
-- [application call](../api/application-call.md)
 - [realtime api user guide](../api/realtime-api-user-guide.md)
 - [omni realtime api](../api/omni-realtime-api.md)
+- [audio api references](../api/audio-api-references.md)
+- [application call](../api/application-call.md)
 - [toolkits and frameworks](../api/toolkits-and-frameworks.md)
-- [application support](../guides/application-support.md)
 
 

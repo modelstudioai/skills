@@ -1,9 +1,9 @@
 {
-  "updatedAt": "2026-10-04",
-  "totalFamilies": 188,
-  "totalModels": 434,
+  "updatedAt": "2026-10-05",
+  "totalFamilies": 189,
+  "totalModels": 435,
   "profileCoverage": {
-    "full": 377,
+    "full": 378,
     "partial": 51,
     "structured-only": 6,
     "none": 0
@@ -19,7 +19,7 @@
     "Realtime-ASR": 8,
     "Multimodal-Omni": 7,
     "Realtime-Omni": 5,
-    "Realtime-Audio-Translate": 3,
+    "Realtime-Audio-Translate": 4,
     "ME": 2,
     "Realtime-Chatting": 2,
     "Realtime-Text-to-Speech": 2,
@@ -28,7 +28,7 @@
     "3D-generation": 1
   },
   "providerDistribution": {
-    "qwen": 116,
+    "qwen": 117,
     "qwen-domain-model": 36,
     "wan": 14,
     "mini-max": 4,
@@ -550,6 +550,21 @@
       "itemCount": 1,
       "items": [
         "gummy-chat-v1"
+      ]
+    },
+    {
+      "slug": "gummy-realtime-v1",
+      "name": "实时语音识别及翻译V1.0",
+      "primaryCapability": "Realtime-Audio-Translate",
+      "capabilities": [
+        "Realtime-Audio-Translate"
+      ],
+      "providers": [
+        "qwen"
+      ],
+      "itemCount": 1,
+      "items": [
+        "gummy-realtime-v1"
       ]
     },
     {

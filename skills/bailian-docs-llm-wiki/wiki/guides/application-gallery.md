@@ -1,40 +1,44 @@
 # application gallery
 
-应用广场是百炼平台提供的预置应用集合，面向开发者提供开箱即用的行业场景解决方案与技术能力组件。所有应用均基于通义系列大模型构建，支持直接调用、快速集成或二次开发。应用按功能类型分类组织，部分应用需开通对应模型权限后方可使用。
+应用广场是百炼平台提供的预置能力集合，面向开发者提供开箱即用的行业级 Agent 应用与多模态工具链，可直接调用或作为模板快速二次开发。所有应用均经过平台统一接入验证，支持标准 API 调用与低代码配置。当前版本聚焦教育、音视频、客服、金融、法律、数据智能等垂直场景，覆盖文本、语音、图像、表格等多模态交互需求。
 
-## 支持的模型/功能
+## 支持的模型与功能
 
-应用广场中的应用底层依赖不同通义模型能力，例如：
-- 通义法睿、析言GBI 等法律/商业智能类应用主要调用 `qwen-max` 或 `qwen-plus`；
-- 通义听悟Agent、伶鹊CCAI 系列语音对话应用依赖 `qwen-audio` 和 `qwen-vl` 多模态模型；
-- 通义 UI Agent、千问联网检索Agent 等需启用 `qwen-websearch` 插件能力。
+应用广场中的每个应用均绑定特定模型栈与功能模块，例如：
+- `通义听悟Agent` 基于 Qwen-Audio 模型，支持语音转写、会议摘要与发言角色分离；
+- `通义 UI Agent` 依赖 Qwen-VL 与 Qwen2.5-72B，实现网页截图理解、操作意图识别与自动化点击；
+- `千问联网检索Agent` 集成 Qwen2.5-72B + 自研检索增强模块，支持实时网络结果融合生成。
 
-具体模型绑定关系详见 [应用广场](../../raw/application-user-guide/application-gallery.md) 中各子应用链接所指向的文档，例如 [官方应用-通义听悟Agent](../../raw/application-user-guide/application-gallery/official-application-tingwu-agent.md) 明确声明其音频理解模块强制使用 `qwen-audio-20240910` 版本。
-
-> **注意**：[官方应用-伶鹊CCAI-客服对话Agent](../../raw/application-user-guide/application-gallery/official-application-voicepica-ccai-beebot-agent.md) 文档中提及的 `qwen-turbo` 调用方式，与当前平台控制台实际可用模型列表（v2024.10）不一致；请以控制台「模型管理」页显示的已授权模型为准，该应用实际运行时将自动降级至 `qwen-plus`。
+全部官方应用列表及对应能力说明详见 [应用广场](../../raw/application-user-guide/application-gallery.md)。各子应用的技术细节（如输入格式、输出 Schema、支持的 media type）请参考其独立文档，例如 [官方应用-通义音频播客生成](../../raw/application-user-guide/application-gallery/official-application-aipodcast.md) 和 [通义法睿](../../raw/application-user-guide/application-gallery/tongyi-farui.md)。
 
 ## 关键参数
 
-调用应用广场中的应用时，通用参数包括：
-- `app_id`：应用唯一标识（如 `tingwu-agent-v1`），可在应用详情页或 [应用广场](../../raw/application-user-guide/application-gallery.md) 列表中获取；
-- `input`：结构化输入对象，字段因应用而异（如 `audio_url`、`image_base64`、`query`）；
-- `stream`：布尔值，控制是否启用流式响应（仅部分应用支持，如 [通义 UI Agent](../../raw/application-user-guide/application-gallery/ui-agent.md)）；
-- `timeout`：最大执行时长（单位秒），默认 30s，上限为 300s。
+调用任一应用时，需在请求体中指定以下必选参数：
+- `application_id`: 应用唯一标识（如 `tingwu-agent`, `ui-agent`），取值必须来自 [应用广场](../../raw/application-user-guide/application-gallery.md) 中列出的 ID；
+- `input`: 结构化输入对象，字段依应用而异（如 `audio_url` 用于听悟Agent，`screenshot_base64` 用于 UI Agent）；
+- `parameters`: 可选 JSON 对象，用于控制行为（如 `max_output_tokens`, `enable_citation`, `language`）。
+
+> **注意**：部分旧版文档（如 [官方应用-伶鹊CCAI-语音对话机器人](../../raw/application-user-guide/application-gallery/official-application-lingque-ccai-voice-dialogue-robot.md)）仍标注 `model_name` 为必需参数，但自 v2.3.0 起该字段已废弃，实际以 `application_id` 绑定模型，忽略 `model_name`。
 
 ## 使用方式
 
-1. 登录百炼控制台 → 进入「应用广场」页面；
-2. 选择目标应用，点击「立即体验」或「接入 API」；
-3. 若为 API 接入，复制生成的 `app_id` 与鉴权 `API-Key`；
-4. 构造 HTTP POST 请求至 `/v1/apps/{app_id}/chat`，`input` 字段需严格遵循对应应用文档定义（参考 [官方应用-通义数据挖掘](../../raw/application-user-guide/application-gallery/tongyi-docmining.md) 的 input schema 示例）；
-5. 建议在生产环境配置重试逻辑与错误码处理（如 `429 Too Many Requests` 表示超出应用 QPS 限制）。
+1. 登录百炼控制台 → 进入「应用广场」页，复制目标应用的 `application_id`；
+2. 调用 `/v1/applications/{application_id}/invoke` 接口（HTTP POST），携带认证 Header（`Authorization: Bearer <api_key>`）；
+3. 请求体示例（以 `web-search-agent` 为例）：
+   ```json
+   {
+     "input": {"query": "2024年Q2中国新能源汽车出口量"},
+     "parameters": {"max_results": 5, "enable_citation": true}
+   }
+   ```
+详细接口规范与 SDK 示例见 [应用广场](../../raw/application-user-guide/application-gallery.md) 所引各子文档。
 
 ## 限制和注意事项
 
-- 所有应用均受账户级配额约束（QPS、总调用量、单次输入长度），具体限额见控制台「配额管理」；
-- 部分应用（如 [通义深度搜索](../../raw/application-user-guide/application-gallery/tongyi-deepsearch.md)）要求输入文本长度 ≤ 8192 tokens，超长将被截断且不报错；
-- 应用间不共享上下文，每次请求均为无状态调用；
-- 自定义微调模型不可用于应用广场应用——所有应用仅绑定平台托管模型，此限制在 [官方应用-多模态交互开发套件](../../raw/application-user-guide/application-gallery/multimodal-products.md) 的 FAQ 中已明确说明。
+- 单次调用最大输入长度：文本类应用 ≤ 32k tokens，多模态应用（如 UI Agent）单张截图分辨率上限为 1920×1080；
+- 免费试用额度仅适用于首次部署的前 3 个应用实例，超出后需绑定计费项目；
+- `通义深度搜索` 与 `千问联网检索Agent` 均依赖外部网络访问，若企业 VPC 未放行 `*.bailian.aliyuncs.com` 及搜索引擎域名，将返回 `NETWORK_UNREACHABLE` 错误；
+- 所有应用不支持跨 Region 调用，`application_id` 仅在其部署地域内有效（如杭州地域创建的 `xiyan-gbi` 无法在北京地域调用）。
 
 ## 来源文档
 
