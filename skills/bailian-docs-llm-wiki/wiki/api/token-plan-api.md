@@ -1,50 +1,71 @@
 # token plan api
 
-[Token](../concepts/token.md) Plan API 是百炼平台用于管理组织级 [Token](../concepts/token.md) 配额、订阅计划及用量监控的核心接口集合，支持按组织/成员/席位维度精细化控制模型调用资源。该 API 不直接参与模型推理，而是为配额分配、权限隔离和计费结算提供基础设施能力。开发者需结合 [原文标题](../../raw/model-api-reference/token-plan-api.md) 中的模块划分理解其完整能力边界。
+Token Plan API 是百炼平台面向企业组织提供的账号、成员、席位、邀请及订阅管理的统一管控接口集合，基于阿里云 OpenAPI 规范实现。所有接口均需使用 AccessKey 签名认证（`ACS3-HMAC-SHA256`），不支持 `Bearer {API_KEY}` 方式。开发者可通过 SDK 或 OpenAPI Explorer 快速集成，适用于组织治理、自动化开通与资源配额调度等场景。
 
 ## 支持的模型/功能
 
-[Token](../concepts/token.md) Plan API **不涉及具体大模型（如 Qwen 系列）的推理能力**，其功能完全聚焦于资源治理层，包括：
-- 组织级 Token 配额配置与继承策略  
-- 成员 Token 用量实时查询与限额设置  
-- 席位（Seat）生命周期管理（分配、回收、冻结）  
-- 邀请链接生成与邀请状态跟踪  
-- API Key 级别 Token 配额绑定与轮换  
-- 订阅计划变更、用量汇总与账期快照  
+Token Plan API 不涉及模型调用，而是提供完整的**组织级资源治理能力**，覆盖以下核心功能域：
 
-所有子功能均在 [原文标题](../../raw/model-api-reference/token-plan-api.md) 的导航结构中明确定义，各子模块文档（如 `token-plan-api-seat.md`）描述了对应 REST 资源的 URI 和语义。
+- **组织与账号管理**：获取当前账号详情、查询/更新组织基本信息（如名称、描述）  
+- **成员全生命周期管理**：添加、查询、修改角色、移除成员，并支持席位分配状态过滤与统计  
+- **席位精细化运营**：批量分配/回收席位、查询席位明细与订阅统计、管理共享包  
+- **邀请机制配置**：创建/获取/撤销邀请链接，设置默认角色与席位分配策略  
+- **API Key 安全管控**：为成员创建及重置专属 API Key  
+- **订阅与用量洞察**：获取席位总数、已分配数、剩余 Credits 等关键指标  
+
+> **注意**：文档中多次出现 `ORG_OWNER` 角色（如 [获取账号详情](../../raw/model-api-reference/token-plan-api/token-plan-api-organization/get-token-plan-account-detail.md) 返回字段 `RoleCode: "ORG_OWNER"`），但实际权限体系中该角色未在 [修改成员角色](../../raw/model-api-reference/token-plan-api/token-plan-api-member/update-organization-member.md) 的 `NewRoleCode` 可选值中列出（仅支持 `ORG_ADMIN`/`ORG_MEMBER`），表明 `ORG_OWNER` 为系统固定主账号角色，不可通过 API 修改。
 
 ## 关键参数
 
-| 参数 | 类型 | 必填 | 说明 |
-|------|------|------|------|
-| `org_id` | string | 是 | 组织唯一标识，从百炼控制台或 `/v1/orgs` 接口获取；所有操作均需显式指定 |
-| `seat_id` / `member_id` | string | 条件必填 | 席位或成员 ID，用于粒度化配额操作；二者不可同时为空（见 [原文标题](../../raw/model-api-reference/token-plan-api.md) 中 `token-plan-api-seat.md` 与 `token-plan-api-member.md` 的约束说明） |
-| `quota` | integer | 是 | Token 配额值，单位为千 token（k-tokens），最小值为 100（即 100k tokens） |
-| `effective_at` | string (ISO8601) | 否 | 配额生效时间，默认为请求时刻；历史时间将被拒绝 |
-
-> **注意**：部分旧版 SDK 示例中将 `quota` 单位误标为“个 token”，实际始终以千 token 为单位，以 [原文标题](../../raw/model-api-reference/token-plan-api.md) 中 `token-plan-api-subscription.md` 的用量统计口径为准。
+- **认证参数**：必须携带 `x-acs-action`、`x-acs-version: 2026-02-10`、`x-acs-date`、`x-acs-content-sha256`、`x-acs-signature-nonce` 及 `Authorization` 头；推荐使用阿里云 SDK 自动签名。
+- **席位规格（`SpecType` / `SeatType`）**：统一取值为 `standard`（标准）、`pro`（高级）、`max`（尊享），见 [批量分配席位](../../raw/model-api-reference/token-plan-api/token-plan-api-seat/batch-assign-seats.md) 与 [获取订阅席位与额度统计](../../raw/model-api-reference/token-plan-api/token-plan-api-subscription/get-subscription-stats.md)。
+- **分页参数**：`PageNo`/`PageNum`（从 1 开始）、`PageSize`（默认 10–20，最大 100），不同接口命名不一致（如 [查询成员列表](../../raw/model-api-reference/token-plan-api/token-plan-api-member/list-organization-members.md) 用 `PageNum`，而 [查询订阅席位明细](../../raw/model-api-reference/token-plan-api/token-plan-api-seat/get-subscription-seat-details.md) 用 `PageNo`），需按各接口文档严格使用。
+- **数组参数格式**：采用 Flat 格式（如 `AccountIds.1=acc_xxx&AccountIds.2=acc_yyy`），非 JSON 数组或逗号分隔。
 
 ## 使用方式
 
-1. **认证**：使用组织管理员的 `API Key`（需具备 `token_plan:manage` 权限），通过 `Authorization: Bearer <api_key>` 传入  
-2. **基础路径**：`https://dashscope.aliyuncs.com/api/v1/token-plan`  
-3. **典型流程**：  
-   - 创建席位 → 分配给成员 → 为该席位绑定 API Key → 查询该 Key 的实时用量  
-   - 或：直接为成员设置全局配额（绕过席位），适用于轻量协作场景  
-
-所有端点均遵循 RESTful 设计，支持 `GET`（查询）、`POST`（创建/触发）、`PATCH`（更新配额）操作，详见各子模块文档。
+1. **前置准备**：确保 RAM 用户已授予 `AliyunModelStudioFullAccess` 或最小化自定义策略（含 `modelstudio:ListOrganizationMembers`, `modelstudio:BatchAssignSeats` 等 Action）。
+2. **Endpoint**：全部接口仅支持华北2（北京）地域，Endpoint 均为 `https://modelstudio.cn-beijing.aliyuncs.com/tokenplan/...`。
+3. **典型流程**：
+   - 调用 [获取账号详情](../../raw/model-api-reference/token-plan-api/token-plan-api-organization/get-token-plan-account-detail.md) 确认当前组织 ID（`OrgId`）
+   - 调用 [获取邀请配置](../../raw/model-api-reference/token-plan-api/token-plan-api-invite/get-token-plan-org-invite-config.md) 查看默认策略
+   - 创建邀请链接 → 新成员注册 → 调用 [查询成员列表](../../raw/model-api-reference/token-plan-api/token-plan-api-member/list-organization-members.md) 确认入账 → 批量分配席位
+4. **调试建议**：优先使用 [OpenAPI Explorer](https://api.aliyun.com/api/ModelStudio/2026-02-10/) 实时生成签名请求，避免手动计算错误。
 
 ## 限制和注意事项
 
-- 单次 `PATCH /seats/{seat_id}/quota` 请求最多修改 10 个席位配额（批量接口需另行调用 `/bulk` 端点）  
-- 配额变更**不立即生效于正在执行的请求**，新配额仅对变更后发起的调用生效  
-- 成员被移出组织后，其关联席位自动释放，但历史用量数据保留 90 天  
-- 免费试用组织默认无 Token Plan 权限，需升级为付费组织后方可调用（参见 [原文标题](../../raw/model-api-reference/token-plan-api.md) 中 `token-plan-api-organization.md` 的权限矩阵）  
-- 所有用量统计延迟 ≤ 30 秒，不适用于毫秒级配额熔断场景
+- **认证强制性**：所有接口**仅支持 AccessKey 签名**，明确不支持 `Authorization: Bearer {API_KEY}`（见 [获取账号详情](../../raw/model-api-reference/token-plan-api/token-plan-api-organization/get-token-plan-account-detail.md)、[添加成员](../../raw/model-api-reference/token-plan-api/token-plan-api-member/add-organization-member.md) 等多处强调）。
+- **席位强约束**：移除成员前必须确保其无已分配席位（[移除成员](../../raw/model-api-reference/token-plan-api/token-plan-api-member/remove-organization-member.md) 明确说明“持有席位时拒绝移除”）；回收席位后，成员将无法调用模型 API。
+- **幂等性与 Token 安全**：邀请链接 Token 仅在创建/获取时返回一次（[创建成员邀请链接](../../raw/model-api-reference/token-plan-api/token-plan-api-invite/create-token-plan-invite-link.md)、[获取成员邀请链接](../../raw/model-api-reference/token-plan-api/token-plan-api-invite/get-token-plan-invite-link.md)），且用户同一时刻仅允许一个有效链接，需自行保管。
+- **数据一致性**：`GetSubscriptionStats` 返回的 `SeatRemainingCredits` 为当前周期实时剩余额度，但 `ListOrganizationMembers` 中 `PackLimitInfo.CycleSurplusValue` 字段存在同名但结构嵌套更深的冗余字段，以 `GetSubscriptionStats` 为准。
 
 ## 来源文档
 
-- [TokenPlan](../../raw/model-api-reference/token-plan-api.md)
+- [组织与账号](../../raw/model-api-reference/token-plan-api/token-plan-api-organization.md)
+- [获取账号详情](../../raw/model-api-reference/token-plan-api/token-plan-api-organization/get-token-plan-account-detail.md)
+- [获取组织信息](../../raw/model-api-reference/token-plan-api/token-plan-api-organization/get-organization.md)
+- [修改组织信息](../../raw/model-api-reference/token-plan-api/token-plan-api-organization/update-organization.md)
+- [成员管理](../../raw/model-api-reference/token-plan-api/token-plan-api-member.md)
+- [添加成员](../../raw/model-api-reference/token-plan-api/token-plan-api-member/add-organization-member.md)
+- [查询成员列表](../../raw/model-api-reference/token-plan-api/token-plan-api-member/list-organization-members.md)
+- [修改成员角色](../../raw/model-api-reference/token-plan-api/token-plan-api-member/update-organization-member.md)
+- [移除成员](../../raw/model-api-reference/token-plan-api/token-plan-api-member/remove-organization-member.md)
+- [获取成员与席位统计](../../raw/model-api-reference/token-plan-api/token-plan-api-member/get-organization-member-seat-stats.md)
+- [批量回收席位](../../raw/model-api-reference/token-plan-api/token-plan-api-seat/batch-revoke-seats.md)
+- [席位管理](../../raw/model-api-reference/token-plan-api/token-plan-api-seat.md)
+- [批量分配席位](../../raw/model-api-reference/token-plan-api/token-plan-api-seat/batch-assign-seats.md)
+- [查询订阅席位明细](../../raw/model-api-reference/token-plan-api/token-plan-api-seat/get-subscription-seat-details.md)
+- [邀请管理](../../raw/model-api-reference/token-plan-api/token-plan-api-invite.md)
+- [创建成员邀请链接](../../raw/model-api-reference/token-plan-api/token-plan-api-invite/create-token-plan-invite-link.md)
+- [获取邀请配置](../../raw/model-api-reference/token-plan-api/token-plan-api-invite/get-token-plan-org-invite-config.md)
+- [撤销成员邀请链接](../../raw/model-api-reference/token-plan-api/token-plan-api-invite/revoke-token-plan-invite-link.md)
+- [获取成员邀请链接](../../raw/model-api-reference/token-plan-api/token-plan-api-invite/get-token-plan-invite-link.md)
+- [设置邀请配置](../../raw/model-api-reference/token-plan-api/token-plan-api-invite/set-token-plan-org-invite-config.md)
+- [API Key 管理](../../raw/model-api-reference/token-plan-api/token-plan-api-key.md)
+- [创建 API Key](../../raw/model-api-reference/token-plan-api/token-plan-api-key/create-token-plan-key.md)
+- [重置 API Key](../../raw/model-api-reference/token-plan-api/token-plan-api-key/rotate-token-plan-key.md)
+- [订阅与用量](../../raw/model-api-reference/token-plan-api/token-plan-api-subscription.md)
+- [查询共享包明细](../../raw/model-api-reference/token-plan-api/token-plan-api-subscription/list-subscription-shared-packages.md)
+- [获取订阅席位与额度统计](../../raw/model-api-reference/token-plan-api/token-plan-api-subscription/get-subscription-stats.md)
 
 

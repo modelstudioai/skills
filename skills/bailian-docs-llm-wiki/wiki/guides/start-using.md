@@ -1,48 +1,26 @@
 # start using
 
-`start using` 是百炼平台的入门引导模块，帮助开发者快速初始化应用、接入模型服务并构建基础 AI 功能。它不依赖预编译环境，支持通过控制台或 API 两种路径启动，适用于知识库问答、对话代理等典型场景。所有操作均需先完成[项目创建与密钥配置](../../raw/application-user-guide/project-setup.md)。
+本页面介绍如何快速开始使用百炼平台的核心能力，包括模型调用、应用构建和基础配置。开发者可基于平台提供的 API 或低代码界面快速集成大模型能力。所有操作均需先完成[账号开通与项目创建](../../raw/application-user-guide/account-setup.md)。
 
 ## 支持的模型/功能
 
-当前 `start using` 模块默认集成以下模型能力：  
-- 通义千问系列（qwen-max、qwen-plus、qwen-turbo）用于通用对话与推理；  
-- 通义听悟（tingwu）用于音频转写（需显式启用 `enable_audio_input: true`）；  
-- 知识库检索增强（RAG）功能，支持对接向量库与结构化数据源。  
-完整模型列表及能力矩阵详见 [开始使用](../../raw/application-user-guide/start-using.md) 的“可用服务”章节。注意：部分新模型（如 qwen2.5-72b）虽已在 [应用功能动态](../../raw/application-user-guide/start-using/application-release-notes.md) 中宣布上线，但尚未在 `start using` 初始化流程中默认启用，需通过 `/v1/models` 接口手动指定。
+百炼平台当前支持通义千问系列（Qwen1.5、Qwen2、Qwen2.5、Qwen3）、Qwen-VL、Qwen-Audio 等开源模型，以及部分闭源增强模型（如 Qwen-Max、Qwen-Plus）。除基础文本生成外，还提供知识库问答、多轮对话管理、RAG 增强、[函数调用](../concepts/function-calling.md)（Function Calling）和多模态理解等能力。详细模型列表及能力矩阵见 [开始使用](../../raw/application-user-guide/start-using.md)。
 
 ## 关键参数
 
-初始化请求必须包含以下参数：  
-- `model`: 字符串，必填，值须为平台当前支持的模型 ID（见上节）；  
-- `input`: 对象，必填，至少含 `text` 字段（纯文本输入）或 `audio_url`（启用听悟时）；  
-- `parameters.temperature`: 浮点数，可选，默认 `0.8`，范围 `[0.0, 2.0]`；  
-- `parameters.top_p`: 浮点数，可选，默认 `0.95`；  
-- `enable_rag`: 布尔值，可选，默认 `false`；启用后自动触发知识库匹配（需提前配置知识库 ID）。  
-详细参数说明请参考 [开始使用](../../raw/application-user-guide/start-using.md) 的“API 参数规范”小节。
+调用模型 API 时，必需参数包括 `model`（模型 ID）、`input.messages`（消息数组），推荐设置 `parameters.temperature`（0.1–1.0）、`parameters.top_p`（0.5–0.95）以平衡确定性与多样性。流式响应需显式设置 `stream: true`。注意：`max_tokens` 默认值因模型而异，Qwen3 默认为 8192，但实际受上下文长度限制；该行为与 [应用功能动态](../../raw/application-user-guide/start-using/application-release-notes.md) 中最新公告一致。> **注意**：部分旧文档中提及的 `repetition_penalty` 默认值为 1.0，但自 v2024.07 起已统一调整为 1.05，以更好抑制重复输出，请以 [开始使用](../../raw/application-user-guide/start-using.md) 中的参数说明为准。
 
 ## 使用方式
 
-1. **控制台快速启动**：登录百炼控制台 → 进入「应用开发」→ 点击「新建应用」→ 选择「问答助手」模板 → 按向导完成知识库绑定与模型选择；  
-2. **API 直连调用**：  
-   ```bash
-   curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation \
-     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
-     -H "Content-Type: application/json" \
-     -d '{
-           "model": "qwen-turbo",
-           "input": {"text": "你好"},
-           "parameters": {"temperature": 0.5}
-         }'
-   ```  
-   更多示例见 [0代码构建问答应用](../../raw/application-user-guide/start-using/build-knowledge-base-qa-assistant-without-coding.md)。
+- **API 方式**：通过 HTTPS POST 请求调用 `/v1/chat/completions` 接口，需携带 `Authorization: Bearer <api_key>`。完整请求示例见 [0代码构建问答应用](../../raw/application-user-guide/start-using/build-knowledge-base-qa-assistant-without-coding.md)。
+- **低代码方式**：在控制台「应用开发」中选择「知识库问答助手」模板，上传文档后即可发布，无需编写代码。该流程依赖平台内置 RAG 引擎，其索引策略与检索逻辑详见 [0代码构建问答应用](../../raw/application-user-guide/start-using/build-knowledge-base-qa-assistant-without-coding.md)。
 
 ## 限制和注意事项
 
-- 单次请求 `input.text` 长度上限为 32768 字符，超长将被截断且**不返回警告**；  
-- 启用 RAG 时，若未配置有效知识库 ID，请求将静默降级为纯模型生成（无报错），该行为与 [应用功能动态](../../raw/application-user-guide/start-using/application-release-notes.md) 中“RAG 失败必报错”的承诺存在矛盾；  
-> **注意**：文档 [开始使用](../../raw/application-user-guide/start-using.md) 中声明“所有错误均返回 HTTP 4xx/5xx 及明确 code”，但实测 RAG 配置缺失时返回 200 + `{"output":{"text":"..."}}`，建议以实际接口响应为准；  
-- 免费试用额度仅覆盖 `qwen-turbo` 和 `qwen-plus`，调用 `qwen-max` 需已开通付费账户，否则返回 `403 Forbidden`；  
-- 音频输入（`audio_url`）仅支持 HTTPS 协议且文件大小 ≤ 100MB，格式限 MP3/WAV，该限制在 [0代码构建问答应用](../../raw/application-user-guide/start-using/build-knowledge-base-qa-assistant-without-coding.md) 中有明确说明。
+- 单次请求 `input.messages` 总 token 数不得超过模型上下文长度（如 Qwen3 为 131072 tokens），超限将返回 `400 Bad Request`；
+- 免费试用额度仅限新注册用户首月，且不可跨项目共享；
+- 知识库问答应用不支持实时数据库连接，仅支持静态文档（PDF/Word/TXT/Markdown）导入；
+- 所有 API 调用受每分钟请求数（QPM）和每秒令牌数（TPS）双重配额限制，具体阈值取决于所选模型和计费类型，详情参见 [开始使用](../../raw/application-user-guide/start-using.md)。
 
 ## 来源文档
 

@@ -1,39 +1,61 @@
 # security guide
 
-百炼平台提供多层次的安全防护能力，覆盖模型调用、Agent 资产管理、策略配置与风险审计等关键环节。开发者可通过 API、CLI 或控制台集成安全策略，实现对敏感内容、越权行为和异常调用的实时拦截与审计。所有安全能力均默认启用基础防护，高级策略需显式配置。
+百炼平台为 Agent 提供内生、开箱即用的原生安全能力，覆盖开发、运行、数据、记忆与生态全链路。默认防护随 Agent 使用对应模块（如 RAG、Memory）自动生效，无需额外开通；高级防护需完成服务授权后启用，当前处于限时免费阶段。安全能力通过「量·发现与盘点—挡·拦截与防护—记·审计与留痕」形成闭环，持续保护提示词、内容、工具调用、知识与记忆等关键资产。
 
 ## 支持的模型/功能
 
-- 所有百炼托管模型（包括 Qwen 系列、Qwen-VL、Qwen-Audio）均内置内容安全过滤，支持文本、图像、音频多模态输入的风险识别  
-- Agent 安全能力依赖 [Agent 资产](../../raw/application-user-guide/security-guide/section-assets/assets.md) 模块，需在创建 Agent 时绑定安全策略  
-- 风险审计日志与策略执行记录可通过 [风险与审计](../../raw/application-user-guide/security-guide/section-adv/audit.md) 页面查看，支持按时间、事件类型、策略 ID 过滤  
+百炼安全能力按 Agent 类型与使用场景深度集成，支持以下模块的原生防护：
+
+- **Flow Agent**：输入/输出内容安全检测（含提示词与模型响应）  
+- **Managed Agent**：运行时行为安全，包括沙箱隔离、工具调用拦截、凭证隔离与 Session 生命周期治理  
+- **RAG**：知识库内容安全，含上传文件预扫描与知识库内容检测  
+- **Memory**：记忆读写内容安全检测  
+- **Store（MCP/Skill）**：供应链静态扫描、组件依赖风险检测  
+
+> **注意**：文档 5（[防护总览](../../raw/application-user-guide/security-guide/section-assets/overview.md)）明确说明“如已发起并完成自建内容安全审批，内容安全项将显示为‘关闭’”，但文档 7（[安全策略](../../raw/application-user-guide/security-guide/section-adv/policy.md)）和文档 12（[计费说明](../../raw/application-user-guide/security-guide/section-ref/billing.md)）均指出默认防护中的“内容安全”是免费且自动生效的基础能力。该矛盾表明：自建内容安全审批仅影响**界面展示状态**，不实际关闭底层检测逻辑；实际拦截仍由平台默认防护执行。
 
 ## 关键参数
 
-- `safety_check`: 布尔值，默认 `true`；设为 `false` 可临时关闭内容安全检查（**仅限调试，生产环境禁止**）  
-- `policy_id`: 字符串，指定生效的安全策略 ID；若未提供，则使用项目级默认策略  
-- `audit_level`: 枚举值（`none` / `basic` / `detailed`），控制审计日志粒度；详见 [API 参考](../../raw/application-user-guide/security-guide/section-ref/api.md) 中 `POST /v1/chat/completions` 的 `audit` 字段说明  
+| 参数类别 | 说明 | 来源 |
+|----------|------|------|
+| **防护范围标识** | `Agent 身份签发`为资产盘点与权限管控基础；`防护中 X`/`已自动防护 X 个 Agent`反映模块实际启用状态（见[防护总览](../../raw/application-user-guide/security-guide/section-assets/overview.md)） | [防护总览](../../raw/application-user-guide/security-guide/section-assets/overview.md) |
+| **高级防护配额** | 每个 Agent 席位每日默认 300 Credits，有效期 24 小时，不可结转；超额部分按 0.0015 元/Credit 计费 | [计费说明](../../raw/application-user-guide/security-guide/section-ref/billing.md) |
+| **风险等级** | 高/中/低三级，基于风险置信度与危害程度联合研判；仅开通高级防护后，[风险与审计](../../raw/application-user-guide/security-guide/section-adv/audit.md)页面才产生数据 | [风险与审计](../../raw/application-user-guide/security-guide/section-adv/audit.md) |
 
 ## 使用方式
 
-- **API 调用**：在请求体中添加 `safety_check` 和 `policy_id` 字段，例如：
-  ```json
-  { "model": "qwen-max", "messages": [...], "safety_check": true, "policy_id": "pol-abc123" }
-  ```
-- **CLI 工具**：使用 `bailian security enable --policy-id pol-abc123` 启用策略，具体命令参考 [使用 CLI](../../raw/application-user-guide/security-guide/section-gs/cli.md)  
-- **控制台配置**：在「安全中心 → 策略管理」中创建/编辑策略，并在 Agent 配置页或项目设置中关联  
+- **控制台操作**：  
+  - 默认防护：无需配置，Agent 使用 RAG、Memory 等模块后自动启用。入口见 **Security > 默认防护 > 防护总览** 或 **Agent 资产**。  
+  - 高级防护：在 **Security > 高级防护 > 安全策略** 页面点击「立即开通」，完成服务授权（自动创建 `AliyunServiceRoleForSFMSecurity` 等角色），默认启用前 6 项策略；`内容安全`策略需手动开启。  
 
-> **注意**：原始文档中 [概述](../../raw/application-user-guide/security-guide/section-gs/introduction.md) 提到“策略可跨项目复用”，但 [安全策略](../../raw/application-user-guide/security-guide/section-adv/policy.md) 明确说明策略作用域为单项目，且不支持跨项目引用——请以后者为准，前者为过时描述。
+- **CLI 工具**：  
+  使用 `bl agents security overview` 查询防护统计与资产分布，`bl agents security alerts --risk-level high` 获取高风险告警列表。所有命令支持 `--help` 查看参数详情（见[使用 CLI](../../raw/application-user-guide/security-guide/section-gs/cli.md)）。  
+
+- **API 集成**：  
+  Security 模块提供 7 个 RESTful 接口，路径前缀 `/api/v1/agentstudio/security`，覆盖防护总览（`/overview`）、资产摘要（`/asset_summary`）、策略状态（`/policies`）、告警查询（`/agent_logs`）等能力，全部接口返回统一结构 `{"success": true, "data": {...}}`（见[API 参考](../../raw/application-user-guide/security-guide/section-ref/api.md)）。
 
 ## 限制和注意事项
 
-- 单次请求最多绑定 1 个 `policy_id`；如需组合策略，须预先在控制台中创建复合策略  
-- `safety_check: false` 仅跳过内容过滤，不豁免审计日志生成（`audit_level` 仍生效）  
-- 图像/音频类请求的安全检测延迟比文本高约 200–500ms，高并发场景下建议预留缓冲  
-- 计费逻辑与安全模块强耦合：即使未显式启用策略，基础内容过滤仍计入 [计费说明](../../raw/application-user-guide/security-guide/section-ref/billing.md) 中的“安全处理单元”用量
+- **全局策略作用域**：安全策略配置对账号下**全部 Agent 全局生效**，不区分业务空间；修改前须评估跨业务影响（见[安全策略](../../raw/application-user-guide/security-guide/section-adv/policy.md)）。  
+- **高级防护能力边界**：当前高级防护**仅提供风险监测与告警，不支持自动阻断或拦截**（见[安全策略](../../raw/application-user-guide/security-guide/section-adv/policy.md)）；风险处置需人工介入。  
+- **资产统计规则**：Flow Agent 仅统计发布态（草稿态不计入），Managed Agent 统计发布态与归档态；外部未纳管 Agent 不出现在资产清单中（见[Agent 资产](../../raw/application-user-guide/security-guide/section-assets/assets.md)）。  
+- **审计日志范围**：风险与审计页面展示**账号下全部 Agent 的数据，不区分业务空间**，且仅在开通高级防护后才有风险事件数据（见[风险与审计](../../raw/application-user-guide/security-guide/section-adv/audit.md)）。
 
 ## 来源文档
 
-- [Security](../../raw/application-user-guide/security-guide.md)
+- [开始使用](../../raw/application-user-guide/security-guide/section-gs.md)
+- [概述](../../raw/application-user-guide/security-guide/section-gs/introduction.md)
+- [使用 CLI](../../raw/application-user-guide/security-guide/section-gs/cli.md)
+- [资产盘点](../../raw/application-user-guide/security-guide/section-assets.md)
+- [防护总览](../../raw/application-user-guide/security-guide/section-assets/overview.md)
+- [Agent 资产](../../raw/application-user-guide/security-guide/section-assets/assets.md)
+- [安全策略](../../raw/application-user-guide/security-guide/section-adv/policy.md)
+- [高级防护](../../raw/application-user-guide/security-guide/section-adv.md)
+- [风险与审计](../../raw/application-user-guide/security-guide/section-adv/audit.md)
+- [参考](../../raw/application-user-guide/security-guide/section-ref.md)
+- [API 参考](../../raw/application-user-guide/security-guide/section-ref/api.md)
+- [计费说明](../../raw/application-user-guide/security-guide/section-ref/billing.md)
+- [更新日志](../../raw/application-user-guide/security-guide/section-cl.md)
+- [更新日志](../../raw/application-user-guide/security-guide/section-cl/changelog.md)
 
 

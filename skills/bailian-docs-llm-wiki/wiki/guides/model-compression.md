@@ -1,47 +1,32 @@
 # model compression
 
-模型压缩是百炼平台提供的轻量化模型部署能力，支持在保持推理精度基本不变的前提下，显著降低模型体积与显存占用，适用于边缘设备或高并发场景。该功能基于量化、剪枝等技术实现，由平台统一调度执行，用户仅需配置参数即可触发。详细原理与适用场景参见 [模型压缩](../../raw/model-user-guide/model-compression.md)。
+模型压缩是百炼平台提供的轻量化模型部署能力，通过量化、剪枝等技术降低模型体积与推理延迟，适用于资源受限的边缘设备或高并发服务场景。该功能集成在模型部署工作流中，支持对已发布的模型版本进行离线压缩并生成新版本。所有压缩操作均需通过 API 或控制台触发，不支持运行时动态压缩。
 
 ## 支持的模型/功能
 
-- 当前支持 Llama、Qwen、Phi 系列的 7B/14B 参数量级的 Decoder-only 模型（如 `qwen2-7b`, `llama3-8b`），暂不支持多模态或编码器-解码器结构（如 T5、Whisper）。
-- 支持 INT4 量化（AWQ/GPTQ）、Group-wise 量化、以及结构化剪枝（仅限注意力头剪枝）；不支持知识蒸馏或低秩适配（LoRA）压缩路径。
-- 压缩后模型可直接用于 `model.deploy()` 或通过 `model.invoke()` 调用，兼容标准 [OpenAI 兼容接口](../concepts/openai-compatible-interface.md)。更多模型兼容性说明请参考 [模型压缩](../../raw/model-user-guide/model-compression.md)。
+- 当前仅支持 Qwen 系列（Qwen1.5、Qwen2、Qwen2.5）和 Qwen-VL 的 FP16 模型版本进行 INT4 量化压缩；[模型压缩](../../raw/model-user-guide/model-compression.md) 明确列出不支持 Llama、Phi 等第三方开源架构。
+- 支持的压缩类型包括：W4A16（权重 INT4 + 激活 FP16）、AWQ（通道级权重量化）；[模型压缩介绍](../../raw/model-user-guide/model-compression/model-compression-introduction.md) 中提到的“混合精度剪枝”功能暂未上线，属于规划中特性。
+- > **注意**：[模型压缩](../../raw/model-user-guide/model-compression.md) 文档中提及的 “支持 ONNX 格式导出” 与实际平台能力不符——当前压缩后模型仅输出适配百炼推理引擎的专有格式（`.bml`），ONNX 导出尚未开放。
 
 ## 关键参数
 
-| 参数名 | 类型 | 必填 | 说明 |
-|--------|------|------|------|
-| `compression_type` | string | 是 | 可选 `"int4_awq"`、`"int4_gptq"`、`"prune_head"`；默认 `"int4_awq"` |
-| `group_size` | int | 否 | 仅对 AWQ/GPTQ 有效，取值 32/64/128；默认 128 |
-| `prune_ratio` | float | 否 | 仅对 `prune_head` 有效，范围 `[0.1, 0.5]`；默认 0.2 |
-| `calibration_dataset` | string | 否 | 校准数据集 ID（如 `"alpaca-clean"`），若未指定则使用平台内置小样本集 |
-
-> **注意**：原始文档 [模型压缩](../../raw/model-user-guide/model-compression.md) 中提及支持 `"fp16_to_int8"` 类型，但该选项已在 v3.2.0 版本中移除，实际调用将返回 `UnsupportedCompressionType` 错误，请以 SDK 最新枚举为准。
+- `compression_type`: 必填，取值为 `"w4a16"` 或 `"awq"`；
+- `calibration_dataset`: 可选，指定校准数据集 ID（需为已上传的 JSONL 格式样本集，含 `text` 字段）；
+- `calibration_steps`: 默认 128，建议 64–512，影响量化精度；[模型压缩介绍](../../raw/model-user-guide/model-compression/model-compression-introduction.md) 强调该参数对 AWQ 效果尤为关键；
+- `device_map`: 可选，指定校准所用 GPU 设备（如 `"cuda:0"`），多卡环境下需显式声明。
 
 ## 使用方式
 
-1. 创建压缩任务：
-```python
-from dashscope import Model
-
-task = Model.compress(
-    model='qwen2-7b',
-    compression_type='int4_awq',
-    group_size=64,
-    calibration_dataset='alpaca-clean'
-)
-```
-2. 轮询任务状态直至 `status == 'succeeded'`；
-3. 获取压缩后模型 ID（`task.output.model_id`），用于后续部署或推理；
-4. 验证效果建议参考 [模型压缩](../../raw/model-user-guide/model-compression.md) 中的精度评估方法。
+1. 确保目标模型版本状态为 `published`，且满足架构与精度要求；
+2. 调用 `POST /v1/models/{model_id}/versions/{version_id}/compress` 接口，传入上述参数；
+3. 压缩任务异步执行，可通过 `GET /v1/jobs/{job_id}` 查询状态；成功后返回新模型版本 ID，该版本可直接用于部署；
+4. 控制台路径：模型详情页 →「版本管理」→ 选择版本 →「压缩」按钮（仅对支持型号可见）。
 
 ## 限制和注意事项
 
-- 单次压缩任务最大耗时 90 分钟，超时自动终止；大模型（>14B）建议优先选用 `int4_awq` 而非 `prune_head`。
-- 压缩后模型不支持微调（`model.finetune()` 报错），且无法回退为原始权重。
-- 校准数据集需与目标领域分布一致，否则可能引入显著精度下降；平台内置校准集仅适用于通用对话场景。
-- 所有压缩操作均需模型处于 `published` 状态，草稿模型（`draft`）不可压缩。
+- 单次压缩任务最大耗时 120 分钟，超时自动终止；大模型（>10B 参数）建议预留至少 2× GPU 显存（相对于原始 FP16 占用）；
+- 压缩后模型不支持微调或继续训练，仅限推理使用；
+- 校准数据集质量直接影响量化稳定性：若 `calibration_dataset` 缺失或样本过少（<32 条），系统将回退至内部默认校准集，但 [模型压缩介绍](../../raw/model-user-guide/model-compression/model-compression-introduction.md) 提示此模式可能导致部分长文本生成质量下降。
 
 ## 来源文档
 

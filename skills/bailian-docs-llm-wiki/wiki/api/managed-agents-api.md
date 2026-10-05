@@ -1,34 +1,42 @@
 # [managed agents](../guides/managed-agents.md) api
 
-Managed Agents API 是百炼平台提供的托管式智能体服务接口，用于创建、配置和运行具备[长期记忆](../concepts/memory.md)、工具调用、多步推理能力的 AI Agent。该 API 将底层模型调度、状态管理、环境隔离与安全凭证等复杂性封装为声明式资源（如 `Agent`、`Environment`、`Memory Store`），开发者可通过 RESTful 接口按需编排。所有资源均支持细粒度权限控制与异步生命周期管理。
+Managed Agents API 是百炼平台提供的托管式智能体服务接口，用于创建、配置和运行具备[长期记忆](../concepts/memory.md)、工具调用、多步推理能力的 AI Agent。该 API 以 RESTful 形式提供，支持细粒度的生命周期管理与环境隔离，适用于构建客服助手、自动化工作流、数据分析师等生产级应用。所有资源均通过统一的 `https://dashscope.aliyuncs.com/api/v1/agents` 基路径访问。
 
 ## 支持的模型与功能
 
-- **模型支持**：当前仅支持百炼平台托管的 `qwen-max`、`qwen-plus` 和 `qwen-turbo` 三款 Qwen 系列大模型；不支持自定义模型或第三方模型接入。  
-- **核心功能**：包括会话管理（`Session`）、持久化记忆（`Memory Store`）、文件上传与上下文注入（`File`）、技能注册与调用（`Skill`）、密钥安全存储（`Vault`/`Credential`）、环境隔离（`Environment`）及事件驱动回调（`Webhook`）。完整能力矩阵详见 [Managed Agents](../../raw/application-api-reference/managed-agents-api.md)。
+- **模型支持**：当前仅支持 `qwen-max` 和 `qwen-plus` 作为底层推理模型；`qwen-turbo` 因上下文长度与工具调用能力限制，**不支持**用于 Managed Agents（详见 [Agent](raw/application-api-reference/managed-agents-api/agent-api.md) 文档）。
+- **核心功能**：
+  - 多轮 Session 管理与事件流订阅（[Session and Event](raw/application-api-reference/managed-agents-api/session-api.md)）
+  - 持久化 Memory Store（支持向量检索与结构化元数据过滤）
+  - 文件上传与内容解析（PDF/DOCX/CSV 等，见 [File](raw/application-api-reference/managed-agents-api/files-api.md)）
+  - 技能（Skill）编排与 Vault 加密凭证注入（[Skill](raw/application-api-reference/managed-agents-api/skills-api.md)、[Vault](raw/application-api-reference/managed-agents-api/vault-api.md)）
 
 ## 关键参数
 
-- `agent_id`：必填，全局唯一标识符，由平台生成或用户指定（需符合 `^[a-z0-9]([a-z0-9\-]{0,61}[a-z0-9])?$` 正则）。  
-- `model`：必填，值必须为 `qwen-max`、`qwen-plus` 或 `qwen-turbo`；其他值将返回 `400 Bad Request`。  
-- `memory_store_id`：可选，若指定则自动启用[长期记忆](../concepts/memory.md)，且该 Memory Store 必须与 Agent 同属一个 `Environment`。  
-- `tools`：数组，每个元素为已注册的 `skill_id`；未在 `Skill` 资源中显式启用的 [skill](../guides/skill.md) 将被忽略。详细参数说明见 [Agent](../../raw/application-api-reference/managed-agents-api/agent-api.md)。
+| 参数名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| `model_id` | string | 是 | 必须为 `qwen-max` 或 `qwen-plus`；其他模型将返回 `400 Bad Request` |
+| `environment_id` | string | 否 | 指定运行环境；未指定时使用默认环境（[Environment](raw/application-api-reference/managed-agents-api/environment-api.md)） |
+| `memory_store_id` | string | 否 | 绑定已有 Memory Store；若为空则自动创建临时 store（不持久化） |
+| `enable_streaming` | boolean | 否 | 默认 `false`；设为 `true` 时响应为 SSE 流，需处理 `event: token` 格式 |
+
+> **注意**：`system_prompt` 字段在 [Agent](raw/application-api-reference/managed-agents-api/agent-api.md) 中定义为可选，但实际调用中若未提供，系统将回退至平台默认提示词，可能导致行为不可控——建议始终显式传入。
 
 ## 使用方式
 
-1. **初始化环境**：先调用 `POST /environments` 创建隔离运行环境（推荐每业务线一个 Environment）；  
-2. **注册技能与凭证**：通过 `/skills` 和 `/credentials` 接口上传工具定义与敏感凭据；  
-3. **创建 Agent**：`POST /agents`，传入 `model`、`environment_id`、`memory_store_id`（可选）及 `tools` 列表；  
-4. **启动会话**：`POST /sessions` 获取 `session_id`，再以 `POST /sessions/{session_id}/messages` 发送用户消息。  
-快速上手流程请参考 [快速开始](../../raw/application-api-reference/managed-agents-api/managed-agents-quickstart.md)。
+1. **创建 Agent**：`POST /agents`，传入 `model_id`、`name`、`description` 及可选 `skills` 列表；
+2. **启动会话**：`POST /agents/{agent_id}/sessions`，获取 `session_id`；
+3. **发送消息**：`POST /agents/{agent_id}/sessions/{session_id}/messages`，支持 `files` 数组上传（见 [File](raw/application-api-reference/managed-agents-api/files-api.md)）；
+4. **监听事件**（可选）：对 `/sessions/{session_id}/events` 建立长连接，接收 `tool_call`、`memory_update` 等事件。
+
+完整流程示例参见 [快速开始](raw/application-api-reference/managed-agents-api/managed-agents-quickstart.md)。
 
 ## 限制和注意事项
 
-- 单个 Environment 下最多创建 100 个 Agent，单个 Agent 最多关联 50 个 Skill；  
-- Memory Store 默认 TTL 为 7 天，不可修改；若需更长保留期，须使用外部向量库并自行集成；  
-- > **注意**：[API 总览与认证](../../raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md) 中提及的 `X-Bailian-Region` 请求头已废弃，现统一使用 `X-Bailian-Endpoint` 指定区域（如 `https://dashscope.aliyuncs.com`），旧文档未同步更新；  
-- 所有文件上传（`/files`）大小上限为 50 MB，且仅支持 `text/plain`、`application/json`、`text/csv`、`application/pdf` 四种 MIME 类型；  
-- Webhook 事件投递失败后重试 3 次（间隔 1s/2s/4s），超时时间为 10 秒；若连续 5 次失败，该 Webhook 将被自动禁用。
+- 单次请求最大输入 tokens：`qwen-max` 为 32768，`qwen-plus` 为 65536；超出将被截断并返回警告头 `X-Warning: input_truncated`；
+- Memory Store 单条记录最大 size 为 1MB，超限写入失败；
+- Webhook 事件投递最多重试 3 次，间隔指数退避；需确保 endpoint 返回 `2xx`，否则视为失败（[Webhook](raw/application-api-reference/managed-agents-api/webhook-api.md)）；
+- 所有资源（Agent、Session、File 等）均受项目级配额约束，详情见 [API 总览与认证](raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md)。
 
 ## 来源文档
 

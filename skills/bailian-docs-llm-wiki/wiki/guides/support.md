@@ -1,38 +1,35 @@
 # support
 
-百炼平台的 `support` 接口用于查询当前服务支持的模型能力、服务范围及售后政策，是开发者集成前必查的元信息入口。它不提供实时推理能力，而是返回静态的、平台级的服务声明数据。所有响应内容均以 JSON 格式返回，结构稳定，适用于自动化校验与配置初始化。
+百炼平台的 `support` 接口用于查询当前服务支持的模型列表、功能范围及售后政策等基础信息，主要面向开发者进行集成前的兼容性确认与服务边界评估。该接口不提供实时推理能力，仅返回静态元数据和策略说明。所有内容均以平台最新发布的模型服务协议与模型 Studio 文档为准。
 
 ## 支持的模型/功能
 
-平台当前支持的模型列表由模型工坊（Model Studio）统一维护，涵盖通义千问系列（Qwen）、语音合成（TTS）、多模态理解（如 Qwen-VL）等类别。具体模型名称、版本号、输入输出格式及是否支持流式响应，详见 [模型列表](../../raw/model-user-guide/support/model-studio-model-list.md)。注意：部分旧版文档中列出的实验性模型（如 `qwen-vl-preview-202312`）已在最新 [模型列表](../../raw/model-user-guide/support/model-studio-model-list.md) 中移除，实际调用将返回 `404`。
+- 当前支持的模型列表详见 [模型列表](../../raw/model-user-guide/support/model-studio-model-list.md)，包含通义千问系列（Qwen1、Qwen2、Qwen3）、Qwen-VL、Qwen-Audio 等开源与闭源模型，以及部分第三方授权模型。
+- 功能覆盖模型调用、微调、部署、RAG 增强、Agent 编排等核心能力，具体以 [相关协议](../../raw/model-user-guide/support/related-agreements.md) 中定义的服务等级协议（SLA）为准。
+- 售后支持范围（如故障响应时效、问题分类标准）请参考 [售后说明](../../raw/model-user-guide/support/after-sales-service-scope.md)。
 
 ## 关键参数
 
-调用 `support` 接口时需传入以下参数（均为可选）：
-
-- `model`: 指定模型 ID，用于查询该模型的详细支持能力（如 `qwen-max`）；
-- `format`: 响应格式，仅支持 `json`（默认）；
-- `include_deprecated`: 布尔值，设为 `true` 时返回已废弃但暂未下线的模型（默认 `false`）。
-
-> **注意**：`include_deprecated` 参数在 [售后说明](../../raw/model-user-guide/support/after-sales-service-scope.md) 中未被提及，其行为以 [常见问题](../../raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md) 的“API 元数据查询”章节为准。
+- `service_type`：必填，取值为 `model`, `fine-tuning`, `deployment`, `rag`, `agent` 之一，用于限定查询维度；
+- `region_id`：可选，指定地域 ID（如 `cn-beijing`），影响返回的可用模型与服务节点；
+- `version`：可选，指定 API 版本（默认 `v1`），历史版本行为可能与 [常见问题](../../raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md) 中描述存在差异。
 
 ## 使用方式
 
-通过 HTTP GET 请求访问 `/v1/support` 端点（需携带有效的 `Authorization: Bearer <api_key>` 头）。示例请求：
+通过 HTTP GET 请求调用 `/v1/support` 端点，需携带有效的 `Authorization` Bearer Token。示例请求：
 
 ```bash
-curl -X GET "https://dashscope.aliyuncs.com/api/v1/support?model=qwen-plus" \
-  -H "Authorization: Bearer sk-xxx"
+curl -X GET "https://dashscope.aliyuncs.com/api/v1/support?service_type=model&region_id=cn-hangzhou" \
+  -H "Authorization: Bearer $API_KEY"
 ```
 
-响应包含 `models`（支持模型数组）、`service_scope`（服务地域与合规说明）和 `version`（元数据版本戳）。完整字段定义请参考 [相关协议](../../raw/model-user-guide/support/related-agreements.md) 中的附录 A。
+响应为 JSON 格式，包含 `models`, `features`, `policies` 三个顶层字段，结构与 [模型列表](../../raw/model-user-guide/support/model-studio-model-list.md) 的 schema 保持一致。
 
 ## 限制和注意事项
 
-- 单 IP 每分钟最多 60 次请求，超出将返回 `429 Too Many Requests`；
-- `model` 参数仅接受平台注册的合法模型 ID，大小写敏感，非法值返回 `400 Bad Request`；
-- 该接口不校验用户配额或模型开通状态，仅反映平台全局服务能力；  
-- 所有返回的模型信息以 [模型列表](../../raw/model-user-guide/support/model-studio-model-list.md) 为准，其他文档（如过时的 FAQ 快照）若存在版本差异，一律以该文档为权威来源。
+- 单日调用频次上限为 100 次/项目（Project），超出后返回 `429 Too Many Requests`；
+- `region_id` 参数仅对部署类服务生效，对模型元数据查询无实际过滤作用，此行为与 [售后说明](../../raw/model-user-guide/support/after-sales-service-scope.md) 中“地域一致性保障”条款存在表述偏差；
+> **注意**：[常见问题](../../raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md) 中称 `support` 接口支持 `format=markdown` 输出，但实测仅接受 `application/json`，该功能已下线且未在 [模型列表](../../raw/model-user-guide/support/model-studio-model-list.md) 中同步更新，建议忽略该参数。
 
 ## 来源文档
 

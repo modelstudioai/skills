@@ -1,77 +1,45 @@
 # 长期记忆
 
-长期记忆（Long Term Memory, LTM）是百炼平台提供的跨会话、结构化、语义可检索的记忆管理能力，用于持久化存储用户事实性信息与画像特征，并在后续对话中自动注入相关上下文，突破大模型单次请求的上下文窗口限制。
+长期记忆是百炼平台提供的结构化、跨会话持久化记忆服务，通过语义驱动的自动抽取与向量检索能力，突破大模型单次对话的上下文窗口限制，实现用户状态、事实信息与技能知识的长期留存与智能复用。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-长期记忆不是单一功能模块，而是贯穿多个平台能力的横切基础设施，按使用方式可分为三类：
-
-- **Agent Harness 原生集成**（推荐）：在智能体（Agent 2.0）或 Managed Agents 中启用 `enable_memory: true`，平台自动完成记忆写入（基于对话内容提取）与检索（语义召回），无需手动调用 API。适用于需要“开箱即用”记忆能力的智能体应用。
-  
-- **插件/工作流集成**：通过「长期记忆插件」接入工作流（Workflow）或 OpenClaw 等低代码编排环境，支持配置 `autoCapture`（对话结束自动写入）和 `autoRecall`（对话开始前自动检索），适合需精细控制触发时机的流程型应用。
-
-- **API 直接调用**：通过 `AddMemory` / `SearchMemory` 等 REST API 或 `agentscope-runtime` SDK 手动管理记忆，适用于高代码应用（如 Serverless Function）、自定义 RAG 流程或需与外部系统（如 CRM）双向同步的场景。
-
-> ✅ 统一前提：所有路径均要求稳定传入 `user_id`（符合规范：1–64 字符，仅含字母、数字、`_`、`-`），否则记忆无法跨会话关联或写入失败。
+- **智能体（Agent）应用**：在 Managed Agents 中，长期记忆以「记忆库」形式挂载为会话级资源（路径 `/mnt/memory`），与文件系统并列作为上下文扩展源；Agent 可通过 `memory_search` 工具主动调用，或由平台在 `autoRecall` 钩子中自动注入相关记忆至 Prompt，支撑多轮连贯决策（如“上次我让你查的服务器配置是什么？”）。
+- **记忆库原生集成**：通过开放 API（`/add`、`/search`、`/get-user-profile` 等）直接管理记忆生命周期。支持两类核心记忆：
+  - **事实记忆**：自动从 `messages` 对话流中提取 `observation`（如提醒、偏好、事件）或显式注册 `skill`（可复用操作流程，含 `skill_name`/`skill_description`）；
+  - **用户画像**：基于预定义 `profile_schema`（如年龄、职业、健康目标）结构化抽取，结果异步生成，需轮询 `GetUserProfile` 获取。
+- **插件协同场景**：OpenClaw 等插件提供 `memory_store` 工具，允许用户通过自然语言指令（如“记住我的家庭地址”）绕过自动抽取规则，直接写入原始内容；该能力与 `AddMemory` 的被动提炼形成互补，适用于明确意图的主动记忆存档。
+- **RAG 增强补充**：虽非传统 RAG 知识库，但长期记忆的语义搜索（`/memory_nodes/search`）可与知识库检索并行调用，在 Prompt 中融合注入，兼顾个性化历史与通用领域知识。
 
 ## 关键参数和配置
 
-| 参数 | 说明 | 取值/范围 | 注意事项 |
-|------|------|-----------|----------|
-| `user_id` | 记忆归属标识，强制隔离不同用户数据 | 字符串（1–64 字符，仅含 `[a-zA-Z0-9_-]`） | **必填**；同一用户所有调用必须一致，否则视为不同实体 |
-| `memory_library_id` | 指定目标记忆库（用于多业务隔离） | 字符串 | 不传则使用账号默认记忆库（不可删除） |
-| `plan_version` | 决定检索质量与计费版本 | `"Pro"`（默认） / `"Lite"` | `Pro` 启用重排序（Rerank），精度高；`Lite` 成本低，适合简单匹配；**事实记忆与用户画像的 Lite 单价不同（¥0.018 vs ¥0.025/次）** |
-| `top_k` | 检索返回的最大记忆条数 | `1–100` | 默认 `10`；增大可提升召回率，但增加 [Token](token.md) 消耗与延迟 |
-| `min_score` | Pro 版相似度阈值（仅 `SearchMemory` 生效） | `0.0–1.0` | 建议 `0.5–0.7`；过低引入噪声，过高漏召 |
-| `memory_config.type` | API 场景下指定记忆类型（仅限 `enable_memory=true` 时） | `"fragments"`（事实记忆） 或 `"profiles"`（用户画像） | **不可混用**；两类记忆需独立配置、独立调用 |
-| `memory_config.ttl_seconds` | 记忆项存活时间（TTL） | 整数（秒），默认 `604800`（7 天） | 设为 `0` 表示永不过期（不推荐生产环境） |
+| 参数 | 说明 | 开发建议 |
+|------|------|----------|
+| `user_id` | 必填，记忆隔离的最小单元；同一 `user_id` 下所有记忆默认互通 | 严格绑定业务用户标识（如登录态 UID），避免混用导致记忆污染 |
+| `memory_library_id` | 指定目标记忆库；不传则使用账号默认库（不可删除，但可编辑） | 多业务线建议创建独立记忆库，便于规则隔离与计费归因 |
+| `plan_version` | 控制抽取与检索策略版本（`pro`/`lite`）；`pro` 支持 `min_score` 过滤，`lite` 仅基础检索 | 生产环境统一设为 `pro`；调试阶段可临时降级验证效果差异 |
+| `top_k` | 检索最大返回条数（API 默认 10，OpenClaw 插件默认 5） | 初始设为 `3–5`，避免噪声干扰；高精度场景可升至 `10`，勿超 `20` |
+| `min_score` | 相似度阈值（0.0–1.0），仅 `plan_version=pro` 时生效（API 默认 0.3） | **强烈建议设为 `0.5–0.7`**：低于 0.5 易召回无关项，高于 0.7 可能漏检关键记忆 |
+| `profile_schema` | 触发用户画像抽取的模板 ID；需提前创建 schema 并传入此参数 | 首次调用后需轮询 `GetUserProfile`，若返回空建议 1s 后重试（异步抽取耗时约 0.5–2s） |
+| `extract_mode` | 可选 `profile_only`，此时仅执行画像抽取（忽略 `messages` 内容） | 用于纯画像初始化场景，如新用户注册后批量导入基础属性 |
 
-> ⚠️ 重要约束：  
-> - 用户画像需预先调用 `CreateProfileSchema` 定义字段模板，并在 `AddMemory` 中传入 `profile_schema` ID 才生效；  
-> - 画像提取为异步过程，`AddMemory` 返回后需等待数秒再调用 `GetUserProfile`；  
-> - 单次 API 请求最多触发 **1 次事实记忆写入 + 1 次用户画像更新**，不支持批量操作。
+> ⚠️ 注意：`AddMemory`（同步）在 `intelligent` 模式下存在超时风险；**生产环境务必优先使用 `AddMemoryAsync`**，并通过 `GET /events/{event_id}` 轮询状态确保技能/画像抽取成功。
 
-## 面向开发者：快速上手建议
+## 面向开发者，简洁实用
 
-1. **验证通路（3 分钟）**：  
-   ```bash
-   # 1. 写入记忆（替换 YOUR_API_KEY 和 USER_ID）
-   curl -X POST https://dashscope.aliyuncs.com/api/v2/apps/memory/AddMemory \
-     -H "Authorization: Bearer YOUR_API_KEY" \
-     -H "Content-Type: application/json" \
-     -d '{
-           "user_id": "USER_ID",
-           "messages": [{"role":"user","content":"我叫张三，28岁，工程师，每天9点喝水"}]
-         }'
-
-   # 2. 检索记忆（相同 user_id）
-   curl -X POST https://dashscope.aliyuncs.com/api/v2/apps/memory/SearchMemory \
-     -H "Authorization: Bearer YOUR_API_KEY" \
-     -H "Content-Type: application/json" \
-     -d '{
-           "user_id": "USER_ID",
-           "messages": [{"role":"user","content":"提醒我喝水"}],
-           "top_k": 3
-         }'
-   ```
-
-2. **生产部署要点**：  
-   - 优先创建**独立记忆库**（非默认库），避免多业务相互干扰；  
-   - 为用户画像配置明确 `profile_schema` 并预置初始标签（如通过 `/v1/memory/profiles/upsert`）；  
-   - 在 Agent 或 Workflow 中启用 `autoRecall` 时，务必设置合理 `top_k` 和 `min_score`，防止低质记忆污染 Prompt；  
-   - 监控 `SearchMemory` 调用量与平均 `top_k`，平衡效果与成本。
-
-3. **调试技巧**：  
-   - 使用控制台「记忆详情」页按 `user_id` 查看提取结果，验证规则是否生效；  
-   - 在 `agenteval` 观测中检查 `memory_read` / `memory_write` Trace 节点，定位检索为空或写入失败原因；  
-   - 若检索无结果，优先检查 `user_id` 是否一致、`plan_version` 是否匹配、`min_score` 是否过高。
+- **快速验证三步法**：  
+  1. 调用 `POST /add-async` 写入带 `user_id` 的对话消息；  
+  2. 控制台 → 记忆库 → 按 `user_id` 查看抽取结果；  
+  3. 调用 `POST /memory_nodes/search` 传入新查询消息，验证语义召回。  
+- **必做配置**：为每条记忆添加 `meta_data`（如 `{"category": "health", "source": "chat"}`），后续可通过 `filter` 参数精准限定检索范围。  
+- **限流应对**：账号级总 QPM ≤ 3000（`add` ≤ 120，`search` ≤ 300），超限返回 `429`；请实现指数退避（1s → 2s → 4s）重试逻辑。  
+- **商业化提示**：长期记忆服务将于 **2026 年 8 月 20 日 10:00（北京时间）起正式计费**，此前为免费体验期；当前 10,000 条免费存储额度长期有效。
 
 ## 关联主题页
 
 - [memory library overview](../guides/memory-library-overview.md)
 - [long term memory new](../api/long-term-memory-new.md)
-- [llm application](../guides/llm-application.md)
 - [managed agents](../guides/managed-agents.md)
-- [agenteval](../guides/agenteval.md)
+- [application support](../guides/application-support.md)
 
 

@@ -1,43 +1,47 @@
 # realtime api user guide
 
-Realtime API 是百炼平台提供的低延迟、流式双向通信接口，适用于语音交互、实时对话、多轮上下文协同等场景。它基于 WebSocket 协议，支持模型推理过程中的 token 级别流式返回与客户端指令实时注入（如中断、暂停、工具调用）。该 API 不同于标准 REST 推理接口，需维持长连接并遵循特定帧协议。
+Realtime API 是百炼平台提供的低延迟、流式响应的模型调用接口，适用于语音交互、实时对话、音视频流处理等对端到端时延敏感的场景。它基于 WebSocket 协议实现双向通信，支持音频输入、文本输入、多模态上下文维护及结构化输出控制。该接口不兼容传统 REST 同步调用模式，需按长连接生命周期管理请求流程。
 
 ## 支持的模型与功能
 
-当前 Realtime API 仅支持以下模型：`qwen-audio-realtime-v1`（语音输入/输出）、`qwen2.5-7b-instruct-realtime-v1`（文本交互），后续将逐步扩展至更多实时优化模型。核心功能包括：
-- 实时音频流输入（PCM/WAV）与合成语音流输出（ulaw/alaw）
-- 多轮会话状态自动维护（含 `session_id` 生命周期管理）
-- 客户端主动发送 `input_interrupt`、`tool_use_request` 等控制帧
-- 模型侧触发 `tool_call` 后支持同步/异步工具执行反馈
+当前 Realtime API 仅支持以下模型：
+- `qwen-audio-realtime-v1`（音频流实时转写与理解）
+- `qwen2.5-7b-instruct-realtime-v1`（文本流式推理，支持工具调用与 function calling）
+- `qwen-vl-realtime-v1`（图像+文本混合输入的实时多模态理解）
 
-> **注意**：文档 [Realtime API](../../raw/model-api-reference/realtime-api-user-guide.md) 中列出的 `qwen-vl-realtime-beta` 已于 v2.3.0 版本下线，实际可用模型请以 [快速开始](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide.md) 中的 `model_list` 响应为准。
+> **注意**：文档 [接入模型与应用](../../raw/model-api-reference/realtime-api-user-guide/realtime-model-connection.md) 中列出的 `qwen-14b-realtime-beta` 已于 v2024.09.15 版本下线，实际调用将返回 `model_not_found` 错误，请以 [快速开始](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide.md) 中的模型列表为准。
+
+功能包括：音频流分块上传与实时响应、文本增量输入、会话状态保持（`session_id`）、中断恢复（`interrupt` 指令）、工具调用（`tool_choice` + `tools`）、以及结构化输出约束（`response_format`）。
 
 ## 关键参数
 
 | 参数名 | 类型 | 必填 | 说明 |
 |--------|------|------|------|
-| `model` | string | 是 | 模型标识符，如 `qwen-audio-realtime-v1`；必须与 [接入模型与应用](../../raw/model-api-reference/realtime-api-user-guide/realtime-model-connection.md) 中注册的模型一致 |
-| `temperature` | float | 否 | 采样温度，默认 `0.7`，取值范围 `[0.0, 2.0]` |
-| `max_output_tokens` | int | 否 | 单次响应最大 token 数，硬上限 `4096` |
-| `enable_audio` | boolean | 否 | 是否启用音频编解码（仅对音频模型有效），默认 `false` |
+| `model` | string | 是 | 模型标识符，必须为上述支持列表中的值 |
+| `session_id` | string | 否 | 用于关联同一会话的多次请求；未提供时服务端自动生成 |
+| `audio_encoding` | string | 否（音频场景必填） | `pcm16` / `opus`，需与实际音频编码一致 |
+| `sample_rate` | integer | 否（音频场景必填） | 音频采样率，如 `16000` |
+| `response_format` | object | 否 | 指定输出 JSON Schema，详见 [概述](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-overview.md) |
+
+所有参数均通过 WebSocket 连接建立时的 `init` 消息 payload 传递，不可在会话中动态修改。
 
 ## 使用方式
 
-1. **建立 WebSocket 连接**：向 `wss://dashscope.aliyuncs.com/realtime/v1/chat` 发起连接，携带 `Authorization: Bearer <api_key>` 和 `X-DashScope-Model: <model>` 头；
-2. **发送初始化帧**：首帧为 JSON 格式 `{"type": "session.update", "session": {...}}`，其中 `session` 字段需包含 `turn_id`、`user_id` 等元信息；
-3. **交互循环**：后续按帧发送 `input.audio`、`input.text` 或 `input.tool_result`；接收 `output.text.delta`、`output.audio.chunk` 等流式响应；
-4. **终止会话**：发送 `{"type": "session.end"}` 帧，服务端将关闭连接并释放资源。
+1. 建立 WebSocket 连接：`wss://dashscope.aliyuncs.com/realtime/v1/chat?apiKey=<your_api_key>`  
+2. 发送 `init` 消息（含 `model`、`session_id` 等初始化参数）  
+3. 按需发送 `input` 消息（`audio_chunk` 或 `text` 类型）  
+4. 接收 `output` 流式事件（含 `delta`、`finish_reason`、`tool_calls` 等字段）  
+5. 主动发送 `close` 消息或等待超时自动断连  
 
-推荐使用官方 AOQ 客户端 SDK（Python/JS）封装连接管理与帧序列化逻辑，详见 [AOQ客户端SDK](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-aoq-api.md)。
+完整交互示例见 [AOQ客户端SDK](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-aoq-api.md)，该 SDK 封装了重连、心跳、chunk 分片、buffer 合并等底层逻辑，推荐生产环境直接使用。
 
 ## 限制和注意事项
 
-- 单连接最长存活时间 30 分钟，超时后需重连并新建 `session_id`；
-- 音频流输入需严格满足采样率 16kHz、单声道、16-bit PCM 格式，否则将触发 `input_format_error` 错误；
-- 同一 `session_id` 不支持跨连接复用，重复使用将导致 `session_conflict`；
-- 工具调用（`tool_use`）仅支持预注册函数，未在 [接入模型与应用](../../raw/model-api-reference/realtime-api-user-guide/realtime-model-connection.md) 中配置的工具将被静默忽略。
-
-> **注意**：[概述](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-overview.md) 中提及的“自动重连机制”尚未在 v2.4.0 生产环境启用，当前需由客户端自行实现断线重连与会话恢复逻辑。
+- 单次会话最大时长：300 秒（含静默期），超时后连接强制关闭  
+- 音频流单 chunk 大小上限：64 KB；文本单次 `input` 长度上限：8192 字符  
+- 不支持跨 session 复用 `session_id`；重复使用旧 `session_id` 将触发新会话创建  
+- `interrupt` 指令仅终止当前响应生成，不回滚已发送的 `input`  
+- 所有音频数据必须为原始 PCM（LE）或 Opus 编码，**不支持 MP3/WAV 容器封装** —— 此限制在 [概述](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-overview.md) 中明确说明，但 [快速开始](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide.md) 的示例代码未做格式校验，开发者需自行确保编码合规。
 
 ## 来源文档
 
