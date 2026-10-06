@@ -1,56 +1,51 @@
 # 模型上下文协议
 
-模型上下文协议（Model Context Protocol, MCP）是百炼平台提供的标准化、可扩展的工具集成协议，用于在大语言模型与外部能力（如搜索、地图、数据库、API 等）之间建立安全、声明式的信息通道。它不依赖特定模型，而是由平台层统一实现协议交互逻辑，使模型作为“协议消费者”参与工具选择、参数生成与结果理解。
+模型上下文协议（Model Context Protocol，简称 MCP）是百炼平台定义的标准化上下文注入机制，用于在大模型推理过程中**按需、安全、可扩展地引入外部结构化数据**（如数据库查询结果、实时日志、知识库片段、SaaS 服务响应等），从而增强模型回答的准确性、时效性与业务相关性。该协议基于 JSON-RPC 2.0 规范设计，提供统一的服务契约与轻量集成接口，是百炼实现“模型+上下文+工具”协同推理的核心基础设施。
 
 ## 在百炼平台的不同场景中如何使用
 
-MCP 不直接暴露给模型 API 调用，而是深度集成于三大应用范式中，按使用方式分为两类：
+MCP 不是独立服务，而是贯穿多个能力层的**上下文供给协议**，开发者可在以下典型场景中直接使用：
 
-- **智能体（Agent）**：支持**自动推理调用**。模型根据用户输入自主判断是否需调用 MCP 工具，并生成符合 `inputSchema` 的参数。单个智能体最多配置 5 个 MCP 服务（如同时启用 `WebSearch` 和 `Amap Maps`），无需指定具体工具名，由模型动态选择。适用于开放性任务（如“帮我查北京今天天气并规划一条避开拥堵的骑行路线”）。
+- **智能体（Agent）与工作流应用**：通过 `context` 或 `context_list` 字段在用户消息中声明 MCP 上下文源，模型自动加载并融合内容参与推理（例如：“请结合最新销售数据回答” → 自动调用 `mcp://sales-api/v1/recent-orders`）；
+- **RAG 增强问答**：知识库检索结果可封装为 MCP 服务（如 `mcp://rag-kb.internal/{kb_id}/search?query=...`），替代传统静态 prompt 注入，支持动态重排、权限过滤与缓存控制；
+- **Connector 集成**：百炼 Connector 本质是 MCP 服务框架——所有已接入的文件、数据库、OSS、Salesforce、语雀等系统，均被自动注册为符合 MCP 规范的工具端点，客户端只需配置 `mcp_url` 即可调用；
+- **自定义插件扩展**：开发者可将自有 API 封装为 MCP 服务（返回标准 JSON-RPC `result`），发布后即可被任何支持 MCP 的模型（如 `qwen-plus`）原生识别和调用，无需额外工具声明；
+- **应用组件 API 调用**：在 `messages` 中直接嵌入 `context` 对象，或通过 `tools` 字段声明 `mcp://...` 类型工具，触发协议解析与上下文加载。
 
-- **工作流（Workflow）**：支持**显式编排调用**。通过拖拽 MCP 节点，绑定一个确定工具（如 `maps_weather`），并在节点配置中手动完成输入参数映射（如将上游“城市提取”节点输出 `city: string` 映射至该工具的 `location` 字段）。适合确定性、可复现的任务链路（如“先查天气 → 再查景点 → 生成行程表”）。
-
-- **Managed Agents（托管智能体）**：作为扩展能力接入。在智能体定义中通过 `mcp_servers` 字段声明 MCP 服务，与内置工具（如 `bash`、`web_search`）同级管理，支持沙箱内异步执行、状态持久化与失败重试，适用于长时、多步、需环境隔离的生产任务。
-
-> ⚠️ 注意：MCP 服务**不能直接用于调用千问基础模型 API**（如 `/v1/chat` 接口）。必须通过智能体、工作流或 Managed Agents 这类平台应用载体使用。
+> ✅ 关键区别：MCP 是**上下文数据的传输协议**，而插件（Plugin）是**动作执行的调用协议**；二者可协同使用（如 MCP 提供数据，插件执行计算），但不可互换。
 
 ## 关键参数和配置
 
-MCP 配置分为**服务级**（部署时设定）和**工具级**（运行时传递）两类，开发者需分别关注：
+| 参数名 | 类型 | 必填 | 说明 | 示例 |
+|--------|------|------|------|------|
+| `mcp_url` | string | 是 | 标准 MCP 服务地址，格式为 `mcp://<host>:<port>/<path>` 或 `mcp+https://...`；必须已在百炼 MCP 目录注册或白名单配置 | `"mcp://sales-api.internal/v1/recent-orders"` |
+| `context_id` | string | 否 | 缓存键与链路追踪 ID；未提供时平台自动生成 UUID；建议业务侧设置有意义的值（如 `"kb_2024q3_policy"`） | `"sales_q3_2024"` |
+| `timeout_ms` | integer | 否 | 单次请求超时毫秒数，默认 `3000`，上限 `10000` | `5000` |
+| `retry_count` | integer | 否 | 失败重试次数，默认 `1`（v202409+ SDK 行为），最大 `2` | `1` |
+| `context_list` | array | 否 | 替代单个 `context`，用于并发加载多个上下文（优先级更高）；数组元素结构同 `context` | `[{"mcp_url":"mcp://kb/faq"},{"mcp_url":"mcp://log/error-today"}]` |
 
-### 服务级参数（在控制台或 API 创建 MCP 服务时配置）
-| 参数 | 说明 | 示例值 |
-|------|------|--------|
-| `type` | 协议类型，决定通信方式与端点路径 | `"streamableHttp"`（推荐，对应 `/mcp` 端点）；不建议使用已淘汰的 `"sse"`（`/sse`） |
-| `url` | 服务地址（自定义服务）或留空（官方服务） | `"https://your-mcp-server.example.com/mcp"` |
-| `env` | 敏感环境变量（如 API Key），平台自动加密存储 | `{"AMAP_MAPS_API_KEY": "{{KMS_CREDENTIAL_ID}}"}` |
-| `deployment_mode` | 部署模式：`basic`（按调用计费，有冷启动）或 `ultra`（常驻内存，额外收取部署时长费） | `"ultra"` |
+⚠️ 注意事项：
+- 单次请求最多 5 个 MCP 上下文项（`context` + `context_list` 合计）；
+- 每个上下文响应解压后 ≤128 KB，超限将截断并告警；
+- 响应必须为 JSON-RPC 2.0 格式，且 `result` 字段为 `string` 或 `object`（不支持 `array`）；
+- 不传递 cookies 或 Authorization header；认证需通过 `mcp_url` 查询参数（如 `?token=xxx`）或服务端预置密钥完成。
 
-### 工具级参数（在智能体/工作流中调用时生效）
-- 每个 MCP 工具严格遵循 JSON Schema 定义：
-  - `inputSchema`：声明必填/选填字段、类型、描述（如 `{ "city": { "type": "string", "description": "城市名称" } }`）；
-  - `outputSchema`：声明返回结构，供下游节点解析；
-- 在工作流中，**必须显式映射输入**：通过变量引用（如 `{{nodes.extract_city.output.city}}`）将上游输出绑定到工具字段；
-- 在智能体中，模型自动填充 `inputSchema` 字段，开发者只需确保提示词提供足够上下文（如“查询杭州天气”含明确地名）。
+## 面向开发者的实用提示
 
-## 面向开发者：简洁实用指南
+- **快速验证**：在请求 Header 中添加 `"debug": "true"`，可获取完整上下文加载日志（含耗时、状态码、原始响应），便于排查超时或格式错误；
+- **降级保障**：MCP 服务不可用时自动跳过该上下文项，主推理流程不受影响——无需额外容错代码；
+- **缓存控制**：利用 `context_id` + 平台默认 TTL（300s），或在 MCP 服务响应头中返回 `X-MCP-Cache-TTL: 60` 显式控制缓存生命周期；
+- **调试工具**：使用 `curl` 直接调用 MCP 服务 URL（需带 `Content-Type: application/json` 和 `Accept: application/json`），验证其是否返回合法 JSON-RPC 响应；
+- **生产就绪**：所有 `mcp_url` 必须提前在百炼控制台完成服务注册（Connector 场景自动注册），否则请求将被拒绝。
 
-- ✅ **快速上手**：进入 [MCP 广场](https://bailian.console.aliyun.com/?tab=mcp#/mcp-market)，开通官方服务（如 `WebSearch`）→ 在智能体「MCP 服务」模块添加 → 测试自然语言指令。
-- ✅ **自定义接入**：优先使用 AI 网关封装现有 RESTful API（零代码），或通过 OpenAPI 门户发布阿里云产品能力；本地开发 MCP Server 仅推荐高级场景。
-- ✅ **调试要点**：
-  - 工作流中若调用失败，检查输入映射是否为空、字段名是否与 `inputSchema` 完全一致（区分大小写）；
-  - 智能体未触发调用？优化系统提示词，加入类似“你可调用工具获取实时信息”的明确授权；
-  - 自定义服务超时？确认函数计算 FC 出口 IP 已加入目标服务白名单，或改用 VPC 内网打通。
-- ❌ **禁止操作**：不要尝试在 `application-component-api-reference` 的 `/chat` 接口中直接传入 `tools` 字段调用 MCP——该接口不支持 MCP 协议，仅支持百炼内置工具。
-
-> 提示：所有 MCP 工具调用均受百炼统一鉴权与配额管控，无需额外实现访问控制；敏感凭证通过 KMS 加密，杜绝硬编码风险。
+> 💡 最佳实践：优先使用 Connector 内置连接器（如 OSS、MySQL），避免重复开发；自定义 MCP 服务应遵循幂等设计，并在 `result` 中返回结构化对象（如 `{"data": [...], "meta": {"source": "sales_db", "freshness": "realtime"}}`），便于模型理解上下文语义。
 
 ## 关联主题页
 
 - [model context protocol](../guides/model-context-protocol.md)
 - [overview](../guides/overview.md)
-- [llm application](../guides/llm-application.md)
-- [managed agents](../guides/managed-agents.md)
+- [plug in](../guides/plug-in.md)
 - [application component api reference](../api/application-component-api-reference.md)
+- [rag api](../api/rag-api.md)
 
 

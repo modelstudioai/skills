@@ -1,44 +1,45 @@
 # Token
 
-Token 是百炼平台中用于度量和计量模型输入与输出内容的基本单位，是资源配额、计费、监控与限流的核心粒度。一个 Token 通常对应一个子词（subword）或字符级单元（具体取决于模型分词器），而非固定字节数或字符数；多模态输入（如图像、音频）会按模型定义的换算系数折算为等效文本 Token。
+Token 是百炼平台中用于计量模型输入与输出文本长度的基本单位，也是计费、配额控制、资源调度和性能评估的核心度量基准。一个 Token 通常对应一个子词（subword）或标点符号，在中文场景下平均约等于 1.5–2 个汉字，具体取决于分词器（如 Qwen 的 tokenizer）的切分策略。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **资源配额与计费（Token Plan）**：Token 是 Token Plan 套餐的计量基础。每次调用（如 `/v1/chat/completions`）的 `input_tokens + output_tokens` 总和实时扣减所绑定套餐的当日配额。图像、音频等非文本输入按模型版本对应的系数折算（例如 Qwen-VL 中 1 张 512×512 图像 ≈ 1280 tokens），详见官方换算表。
-  
-- **用量监控（Model Monitoring）**：`/v1/monitoring/metrics` 接口及控制台「监控中心」中，“输入 Token 数”“输出 Token 数”是核心指标，支持按项目（`project_id`）聚合统计，用于容量规划与成本分析（v2.3+ 模型才提供精确 token 粒度）。
+- **计费与成本管理**：所有文本生成类模型（如 `qwen-plus`、`qwen3.8-max`）均按实际消耗的 `input_tokens + output_tokens` 计费；多模态（如 `qwen-vl`）、语音（如 `qwen-tts`）、图像（如 `wanx2.1-t2i`）等模型也基于等效 Token 或像素/时长换算为 Token 进行计费。
+- **Token Plan 配额控制**：通过 `plan` 参数启用配额校验后，每次调用的总 token 消耗（含 prompt 和 completion）将实时扣减所属 Plan 的日额度（如 `team` 版每日 1000 万 tokens）；Coding Plan 仅对 `/v1/coding/completions` 接口及 `qwen-coder` 系列模型生效。
+- **模型部署计费模式选择**：
+  - *Token 按量*：仅适用于 LoRA 微调模型，按实际调用 token 数实时计费；
+  - *PTU（预置吞吐）*：以 TPM（Tokens Per Minute）为容量单位，`ptu_capacity` 中的 `input_tpm`/`output_tpm` 直接对应每分钟可处理的 token 量；
+  - *DTU/MU（独占算力）*：虽按模型单元或 TPM 计费，但实际吞吐能力仍以 token 处理速率（TPM）为底层指标。
+- **模型评测**：当使用「评测数据集」触发被测模型推理时，会产生 `input_tokens + output_tokens` 的推理费用；若启用「大模型评估」维度，裁判模型（如 `qwen-max`）对每条样本的评分过程同样消耗 token。
+- **异步与文件调用**：多模态模型（如 `qwen-vl-plus`）在解析 `oss://` 图片 URL 时，视觉编码器会将图像转换为等效 token 序列参与计算，该部分 token 会计入总消耗。
 
-- **可观测性（AgentEval）**：在智能体全链路 Trace 中，每个模型调用节点自动记录 `input_tokens` 和 `output_tokens`，用于定位高消耗环节、分析 Prompt 效率，并支撑 LLM 评估器自身的调用计费（LLM 评估器产生的 token 按标准计费）。
-
-- **API 资源治理（Token Plan API）**：组织管理员通过 `/v1/token-plan/seats/{seat_id}/quota` 等接口为席位或成员分配 Token 配额，单位为千 Token（k-tokens），最小值为 100（即 100,000 tokens）；配额变更仅对后续请求生效。
-
-- **异步与多模态调用（More about Models）**：异步任务（如图像生成）虽不直接暴露 token 字段，但其底层推理仍计入调用者绑定的 Token Plan；上传图像等文件获取临时 URL 时，平台内部已预估并预留对应 token 消耗，确保调用时不会因配额不足失败。
+> ⚠️ 注意：非文本生成类任务（如向量检索、Function Calling 调用本身、联网搜索插件）不产生 token 消耗，但其触发的后续模型推理（如 LLM 决策或结果生成）仍计入 token。
 
 ## 关键参数和配置
 
-- `max_tokens`（请求级）：硬性输出长度上限，超出将返回 `400 Bad Request`，不计入配额；建议设为合理值以避免意外超限。
-- `temperature` / `top_p`（请求级）：影响输出多样性与长度，间接增加实际输出 token 数；高值易导致冗长或重复响应。
-- `repetition_penalty`（请求级）：过高（>1.5）可能引发模型反复重写，显著抬升输出 token 消耗。
-- `quota`（Token Plan API）：配额值，单位为千 Token（k-tokens），非“个 token”；例如 `quota: 500` 表示 500,000 tokens/日。
-- 单次请求限制：`input_tokens + output_tokens ≤ 套餐单日上限 × 5%`（如 100 万套餐，单次最多 5 万 tokens）。
+| 参数 | 所属场景 | 说明 | 开发者须知 |
+|------|----------|------|-------------|
+| `input_tokens` / `output_tokens` | 计费、监控、调试 | 响应头中返回的实际消耗值（如 `X-DashScope-Usage-Input-Tokens: 1247`），是账单与用量统计的唯一依据 | 不可设置，仅读取；可用于客户端 token 预估与 budget 控制 |
+| `max_tokens` | 所有文本生成调用 | 限制模型生成的最大输出 token 数；受当前 Token Plan 的 `max_output_tokens` 限制（如 `personal` 版上限为 2048） | 设置过大会导致超配额失败（403）；建议设为业务所需最小值 |
+| `plan` | Token Plan | 请求头 `X-Plan` 或 query 参数 `?plan=xxx`，启用配额校验 | 必填且必须与模型兼容（如 `coding` plan 不能用于 `qwen-plus`）；body 方式已废弃 |
+| `temperature`, `top_p`, `repetition_penalty` | 生成质量控制 | 影响输出多样性与稳定性，**不改变 token 消耗量**，但可能间接导致实际输出长度波动 | 高 `temperature` 可能引发更长/更短响应，建议压测时固定该类参数以稳定 token 预估 |
 
 ## 面向开发者，简洁实用
 
-- ✅ **查用量**：调用 `/v1/usage` 获取当前 API Key 的当日剩余 token；  
-- ✅ **看明细**：在控制台「监控中心」→「模型调用」页查看按小时/天聚合的 `input_tokens` 和 `output_tokens`；  
-- ✅ **控配额**：用 Token Plan API 为团队成员设置独立配额，避免个别账号耗尽全局额度；  
-- ✅ **避踩坑**：  
-  - 流式响应中断后，已发送的 token 仍计费；  
-  - 多模态输入务必参考最新换算系数（随模型版本更新）；  
-  - 免费试用额度不适用于私有化模型，且不可叠加；  
-  - 所有 token 统计延迟 ≤ 30 秒（Token Plan API）或 2–5 分钟（Model Monitoring），不适用于毫秒级熔断。
+- ✅ **必做**：所有生产环境文本生成调用，务必显式传 `plan` 参数并监控 `X-DashScope-Usage-*` 响应头，避免意外超限或后付费。
+- ✅ **推荐**：用 `max_tokens` 主动约束输出长度，既控成本又防超时；结合 `stream=true` 实时流式消费时，token 消耗仍按完整响应累计。
+- ✅ **避坑**：
+  - 不要依赖字符数估算 token —— 使用 [DashScope Tokenizer 工具](https://help.aliyun.com/zh/dashscope/developer-reference/token-calculator) 或 SDK 的 `count_tokens()` 方法精确计算；
+  - Token Plan 绑定的是 API Key，不是模型或业务空间；单 Key 最多绑 3 个 Plan，跨 Plan 不共享额度；
+  - 免费额度、资源包、节省计划、Token Plan 的抵扣顺序为：**免费额度 > 资源包 > 节省计划 > Token Plan > 按量付费**，需按优先级规划采购。
+- ✅ **调试技巧**：本地开发时，用 `curl -v` 查看响应头中的 `X-DashScope-Usage-*` 字段，快速验证 token 消耗是否符合预期。
 
 ## 关联主题页
 
 - [token plan guide](../guides/token-plan-guide.md)
-- [token plan api](../api/token-plan-api.md)
-- [agenteval](../guides/agenteval.md)
-- [model monitoring](../guides/model-monitoring.md)
+- [test 1](../guides/test-1.md)
+- [model deployment index](../guides/model-deployment-index.md)
+- [model evaluation introduction](../guides/model-evaluation-introduction.md)
 - [more about models](../api/more-about-models.md)
 
 

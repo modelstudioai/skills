@@ -1,50 +1,45 @@
 # application component api reference
 
-应用组件 API 是百炼平台提供的核心能力封装，用于在自定义应用中集成大模型推理、工具调用、会话管理等能力。该接口面向生产级应用开发，支持同步/异步调用模式，并与百炼统一鉴权体系深度集成。所有功能均通过标准 HTTP RESTful 接口暴露，开发者需按规范构造请求并处理响应。
+应用组件 API 提供了百炼平台中可复用业务能力的标准化调用接口，用于构建对话式 AI 应用（如智能客服、知识助手等）。该 API 封装了模型推理、上下文管理、工具调用等核心能力，开发者无需直接对接底层模型即可集成高阶功能。所有接口均基于 RESTful 设计，支持 HTTPS 调用与 RAM 授权。
 
-## 支持的模型与功能
+## 支持的模型/功能
 
-当前支持以下模型能力：
-- 通义千问系列（`qwen-max`、`qwen-plus`、`qwen-turbo`）的文本生成与多轮对话；
-- 内置工具调用（如搜索、代码解释、知识库检索），需在 `tools` 参数中显式声明；
-- 流式响应（`stream=true`）和非流式响应两种模式；
-- 会话状态维护（通过 `session_id` 实现上下文延续），详见 [API概览](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md)。
+当前应用组件 API 支持以下模型与能力：
+- 内置模型：`qwen-max`、`qwen-plus`、`qwen-turbo`（默认为 `qwen-turbo`）；
+- 功能模块：多轮对话状态维护、RAG 检索增强、[函数调用](../concepts/function-calling.md)（Function Calling）、流式响应（`stream=true`）；
+- 工具集成：支持通过 `tools` 字段声明并调用预注册的插件（如搜索、数据库查询），具体可用工具列表见 [API目录](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md)。
 
-> **注意**：文档中提及的 `qwen-vl` 视觉语言模型暂未在应用组件 API 中开放，实际可用模型请以 [API目录](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md) 列表为准；该不一致已在 [版本说明](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-changeset.md) 中标记为“待上线”。
+> **注意**：文档中提及的 `qwen-vl` 和 `qwen-audio` 模型**暂未开放**于应用组件 API，仅限独立多模态 API 使用；此信息与 [API概览](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md) 中“支持全模态模型”的表述存在冲突，以本节为准。
 
 ## 关键参数
 
 | 参数名 | 类型 | 必填 | 说明 |
 |--------|------|------|------|
-| `model` | string | 是 | 模型标识符，如 `qwen-plus`，必须与 [API目录](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md) 中所列一致 |
-| `input.messages` | array | 是 | 对话消息数组，格式为 `[{ "role": "user", "content": "..." }]` |
-| `parameters.temperature` | number | 否 | 采样温度，默认 `0.8`；取值范围 `[0.0, 1.0]` |
-| `session_id` | string | 否 | 会话唯一标识，用于上下文保持；若未提供，服务端将自动生成新会话 |
-| `stream` | boolean | 否 | 是否启用流式响应，默认 `false` |
+| `model` | string | 是 | 模型标识符，必须为白名单内值（见上节） |
+| `messages` | array | 是 | 对话历史，格式为 `[{ "role": "user/system/assistant", "content": "..." }]` |
+| `stream` | boolean | 否 | 默认 `false`；设为 `true` 时返回 SSE 流式响应 |
+| `tools` | array | 否 | 工具定义数组，结构需严格匹配 [授权信息](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-ram.md) 中已授权的工具 Schema |
+| `tool_choice` | string / object | 否 | 控制工具调用策略，可选 `"auto"`、`"none"` 或指定工具名称 |
 
 ## 使用方式
 
-1. **认证**：使用 RAM 凭据（AccessKey ID / Secret）签发签名，或通过 STS [Token](../concepts/token.md) 授权，具体流程见 [授权信息](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-ram.md)；  
-2. **请求地址**：向服务接入点（Endpoint）发送 `POST /v1/apps/{app_id}/chat` 请求，Endpoint 地址请参考 [服务接入点](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-endpoint.md)；  
-3. **示例请求体**：
+1. **获取访问凭证**：通过 RAM 角色或 AccessKey 获取 `Authorization` 头（详见 [授权信息](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-ram.md)）；  
+2. **确定接入点**：使用地域化 Endpoint，例如 `https://dashscope.aliyuncs.com/api/v1/apps/{app_id}/chat`（Endpoint 列表见 [服务接入点](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-endpoint.md)）；  
+3. **发起请求**：POST JSON payload，`Content-Type: application/json`，示例：
    ```json
    {
      "model": "qwen-plus",
-     "input": {
-       "messages": [{"role": "user", "content": "你好"}]
-     },
-     "parameters": {"temperature": 0.5},
-     "session_id": "sess_abc123"
+     "messages": [{"role": "user", "content": "今天北京天气如何？"}],
+     "stream": true
    }
    ```
 
 ## 限制和注意事项
 
-- 单次请求 `input.messages` 总长度（字符数）不得超过 32768；
-- `session_id` 生命周期为 7 天，超时后上下文自动失效；
-- 工具调用返回结果中 `tool_calls` 字段仅在 `stream=false` 时完整返回；流式模式下需按 chunk 解析 `delta.tool_calls`；
-- 跨区域调用需确保 Endpoint 与应用所在地域一致，否则将返回 `InvalidRegion` 错误；
-- 所有错误响应均遵循统一格式，含 `code` 和 `message` 字段，详细错误码见 [API概览](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md)。
+- 单次请求 `messages` 总长度上限为 32768 token（含 system prompt）；
+- 流式响应中 `delta.content` 可能为空（表示工具调用触发），需检查 `delta.tool_calls` 字段；
+- 应用 ID（`app_id`）需在百炼控制台创建，并确保其关联的模型与工具已获 RAM 授权；
+- 版本兼容性：v2023-12-29 是当前唯一稳定版本，旧版接口已下线；变更详情参见 [版本说明](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-changeset.md)。
 
 ## 来源文档
 

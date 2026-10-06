@@ -1,33 +1,55 @@
 # decision model
 
-决策模型是百炼平台提供的专用模型类型，基于 System One 协议设计，支持单次前向推理同步返回分类结果、数值评分、是非判断（yes/no）及其对应的概率分布与置信度。该模型适用于风控审核、内容合规判定、策略规则引擎等需结构化决策输出的场景。其接口语义明确，无需后处理即可直接集成至业务逻辑。
+decision model 是百炼平台专为结构化决策任务设计的轻量级推理模型，不生成文本，仅输出分类、是非判断、有序评分及其概率分布与置信度。适用于工单分流、内容审核、智能体路由、结果校验等低延迟、高并发的确定性决策场景。其核心能力基于 TypeSafe System One 协议实现，一次前向计算即可并行响应多个异构问题 [决策模型 API](../../raw/model-api-reference/decision-model/decision-model-api.md)。
 
 ## 支持的模型/功能
 
-- 当前公开可用的决策模型包括 `decision-model-preview`，提供基础分类（多类/二类）、连续评分（0–100）、布尔判断（yes/no）三类结构化输出 [decision-model-preview 模型信息](../../raw/model-user-guide/support/model-studio-model-list/model-list-decision/decision-model-preview.md)  
-- 所有决策模型均遵循统一的 System One 协议规范，确保输出字段（如 `classification`, `score`, `judgment`, `confidence`）格式一致，便于自动化解析 [决策模型 API 参考](../../raw/model-api-reference/decision-model/decision-model-api.md)  
-- 不支持文本生成、多轮对话或非结构化输出；若需扩展能力，应评估是否适用 [决策模型 API 参考](../../raw/model-api-reference/decision-model/decision-model-api.md) 中定义的 `output_schema` 自定义字段机制
+- 当前唯一可用模型：`decision-model-preview`（预览版），暂无其他变体或版本别名。
+- 支持三类结构化问题：
+  - `choice`：多选一判定（如「派单团队」），返回选中项、各选项概率及置信度；
+  - `noul`：是非判断（yes/no），返回 P(yes) 概率值（0.0–1.0）；
+  - `score`：有序量表打分（如严重度 1–4 级），返回加权期望分（可为浮点数）、各级概率及置信度。
+- 所有问题可**批量提交**（`questions` 为对象字典），模型一次前向完成全部推理，不生成任何自由文本 [决策模型 API](../../raw/model-api-reference/decision-model/decision-model-api.md)。
 
 ## 关键参数
 
-- `input`: 必填，字符串或结构化 JSON（如含 `text`, `metadata` 字段），具体格式见 [decision-model-preview 模型信息](../../raw/model-user-guide/support/model-studio-model-list/model-list-decision/decision-model-preview.md) 的输入示例  
-- `temperature`: 仅影响置信度计算路径，取值范围 `[0.0, 1.0]`；设为 `0.0` 时启用确定性推理（推荐生产环境使用）  
-- `output_schema`: 可选，用于声明期望的输出结构（如仅需 `judgment` 和 `confidence`），未声明时返回全字段  
+| 字段 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `model` | `String` | 是 | 固定为 `"decision-model-preview"` |
+| `state` | `String / Object / Array` | 是 | 待决策的原始上下文，支持纯文本、JSON 对象或数组；对象将被序列化后送入模型 |
+| `questions` | `Object` | 是 | 键为自定义 question_id，值为问题对象，含 `type`、`instructions`、`criteria`（按类型可选） |
+| `type` | `String` | 是 | 取值 `"choice"` / `"noul"` / `"score"` |
+| `criteria` | `Object`（choice）<br>`Object`（noul）<br>`Array`（score） | 视 `type` | `choice`：选项名→描述映射（建议含 `"other"` 兜底）；`noul`：可选 `{"true": "...", "false": "..."}`；`score`：从低到高的等级描述数组（建议 3–7 级） |
+
+> **注意**：文档中 `score` 的等级数量限制在“2–255 级”，但实际建议范围明确为“3–7 级且每级可清晰区分”；若使用超 7 级，可能因语义模糊导致置信度下降，此矛盾已在 [决策模型 API](../../raw/model-api-reference/decision-model/decision-model-api.md) 中体现，以建议值为准。
 
 ## 使用方式
 
-1. 通过百炼控制台在 Model Studio 中部署 `decision-model-preview` 实例，或调用 `/v1/models/decision-model-preview:predict` 接口  
-2. 构造符合 System One 协议的请求体，`messages` 字段中 `role: "user"` 的 `content` 应为待决策文本或结构化输入  
-3. 解析响应中的 `choices[0].message.content`，其为标准 JSON 对象，包含 `classification`, `score`, `judgment`, `confidence` 等字段  
+- **协议与端点**：HTTP POST 到 `https://{WorkspaceId}.{region}.maas.aliyuncs.com/compatible-mode/v1/systemone`，其中 `{WorkspaceId}` 和 `{region}` 需按[地域与域名](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)配置。
+- **认证**：Header 中传 `Authorization: Bearer $DASHSCOPE_API_KEY`，API Key 需提前配置为环境变量 `DASHSCOPE_API_KEY`。
+- **SDK 推荐**：使用 `typesafe-sdk`（`pip install typesafe-sdk`），自动处理路径拼接与响应解析：
+  ```python
+  from typesafe_sdk import TypeSafeClient
+  client = TypeSafeClient(
+      api_key=os.environ["DASHSCOPE_API_KEY"],
+      base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode"
+  )
+  result = client.system_one(model="decision-model-preview", state=..., questions={...})
+  ```
+- 完整请求示例（含工单分流与是非判断）见 [决策模型 API](../../raw/model-api-reference/decision-model/decision-model-api.md)。
 
 ## 限制和注意事项
 
-- 上下文长度上限为 8192 token，超长输入将被截断（非报错），建议预处理关键特征 [decision-model-preview 模型信息](../../raw/model-user-guide/support/model-studio-model-list/model-list-decision/decision-model-preview.md)  
-- 不支持流式响应（`stream: true` 将被忽略），所有输出均为完整 JSON 一次性返回  
-- > **注意**：原始文档中“通过 System One 协议一次前向返回……”的描述与当前实际接口路径 `/v1/models/decision-model-preview:predict` 存在协议命名歧义——System One 是内部通信协议抽象，对外暴露的是标准 REST+JSON 接口，开发者无需实现底层协议栈。
+- **问题规模**：单次请求建议 ≤ 16 个问题；延迟随问题数近线性增长。
+- **选项与等级**：
+  - `choice` 最多支持 255 个选项；
+  - `score` 等级数支持 2–255，但**强烈建议 3–7 级**，过多等级易降低判别精度。
+- **上下文长度**：最大 65536 token，超长 `state` 将被拒绝或截断。
+- **输出特性**：不生成文本，因此无 `output_tokens`、无流式响应、无 `finish_reason` 字段；所有答案均带 `probabilities`，`choice`/`score` 额外带 `confidence`。
+- **错误处理**：失败时返回标准错误码，详情参见 `raw/model-api-reference/preparations/error-code.md`（该路径在原始文档中被引用，但未提供完整内容，开发者需自行查阅）。
 
 ## 来源文档
 
-- [决策模型](../../raw/model-api-reference/decision-model.md)
+- [决策模型 API](../../raw/model-api-reference/decision-model/decision-model-api.md)
 
 

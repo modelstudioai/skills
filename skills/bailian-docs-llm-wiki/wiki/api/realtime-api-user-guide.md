@@ -1,43 +1,46 @@
 # realtime api user guide
 
-Realtime API 是百炼平台提供的低延迟、流式双向通信接口，适用于语音交互、实时对话、多轮上下文协同等场景。它基于 WebSocket 协议，支持模型推理过程中的 token 级别流式返回与客户端指令实时注入（如中断、暂停、工具调用）。该 API 不同于标准 REST 推理接口，需维持长连接并遵循特定帧协议。
+Realtime API 是百炼平台提供的低延迟、流式响应的模型调用接口，适用于语音交互、实时对话、音视频流处理等对端到端时延敏感的场景。它基于 WebSocket 协议实现双向通信，支持增量式 token 返回与客户端主动控制（如中断、暂停）。该接口不兼容传统 REST 同步调用模式，需按事件驱动方式集成。
 
 ## 支持的模型与功能
 
-当前 Realtime API 仅支持以下模型：`qwen-audio-realtime-v1`（语音输入/输出）、`qwen2.5-7b-instruct-realtime-v1`（文本交互），后续将逐步扩展至更多实时优化模型。核心功能包括：
-- 实时音频流输入（PCM/WAV）与合成语音流输出（ulaw/alaw）
-- 多轮会话状态自动维护（含 `session_id` 生命周期管理）
-- 客户端主动发送 `input_interrupt`、`tool_use_request` 等控制帧
-- 模型侧触发 `tool_call` 后支持同步/异步工具执行反馈
+当前 Realtime API 支持以下模型（截至 2024 Q3）：
+- `qwen-audio-realtime-v1`（音频流实时 ASR + LLM 推理）
+- `qwen-video-realtime-v1`（视频帧流 + 音频流联合理解）
+- `qwen-chat-realtime-v1`（纯文本流式对话，支持工具调用）
 
-> **注意**：文档 [Realtime API](../../raw/model-api-reference/realtime-api-user-guide.md) 中列出的 `qwen-vl-realtime-beta` 已于 v2.3.0 版本下线，实际可用模型请以 [快速开始](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide.md) 中的 `model_list` 响应为准。
+所有模型均支持 **[流式输出](../concepts/streaming-output.md)**、**客户端中断（`/interrupt` 事件）**、**会话状态保持（`session_id` 复用）** 和 **自定义 system prompt 注入**。详细能力说明见 [Realtime API](../../raw/model-api-reference/realtime-api-user-guide.md) 文档中的“接入模型与应用”章节。
 
 ## 关键参数
 
 | 参数名 | 类型 | 必填 | 说明 |
 |--------|------|------|------|
-| `model` | string | 是 | 模型标识符，如 `qwen-audio-realtime-v1`；必须与 [接入模型与应用](../../raw/model-api-reference/realtime-api-user-guide/realtime-model-connection.md) 中注册的模型一致 |
-| `temperature` | float | 否 | 采样温度，默认 `0.7`，取值范围 `[0.0, 2.0]` |
-| `max_output_tokens` | int | 否 | 单次响应最大 token 数，硬上限 `4096` |
-| `enable_audio` | boolean | 否 | 是否启用音频编解码（仅对音频模型有效），默认 `false` |
+| `model` | string | 是 | 模型标识符，必须为上述支持列表中的值 |
+| `session_id` | string | 否 | 用于跨请求维持上下文；若未提供，服务端将自动生成新会话 |
+| `audio_encoding` / `video_encoding` | string | 条件必填 | 音频/视频流编码格式（如 `pcm-f32le`, `h264-annexb`），详见 [快速开始](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide.md) |
+| `sample_rate` | integer | 条件必填 | 音频采样率（Hz），仅当传音频时必需 |
+| `max_output_tokens` | integer | 否 | 输出长度上限，默认 2048，最大 4096 |
+
+> **注意**：`temperature` 和 `top_p` 等采样参数在 Realtime API 中**不生效**——模型内部采用固定解码策略以保障实时性，此行为与 [概述](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-overview.md) 中描述一致，但与部分旧版 REST API 文档存在表述冲突，请以本 Realtime API 文档为准。
 
 ## 使用方式
 
-1. **建立 WebSocket 连接**：向 `wss://dashscope.aliyuncs.com/realtime/v1/chat` 发起连接，携带 `Authorization: Bearer <api_key>` 和 `X-DashScope-Model: <model>` 头；
-2. **发送初始化帧**：首帧为 JSON 格式 `{"type": "session.update", "session": {...}}`，其中 `session` 字段需包含 `turn_id`、`user_id` 等元信息；
-3. **交互循环**：后续按帧发送 `input.audio`、`input.text` 或 `input.tool_result`；接收 `output.text.delta`、`output.audio.chunk` 等流式响应；
-4. **终止会话**：发送 `{"type": "session.end"}` 帧，服务端将关闭连接并释放资源。
+1. 建立 WebSocket 连接：  
+   `wss://dashscope.aliyuncs.com/realtime/v1/{model}`（需携带 `Authorization: Bearer <api_key>` header）
 
-推荐使用官方 AOQ 客户端 SDK（Python/JS）封装连接管理与帧序列化逻辑，详见 [AOQ客户端SDK](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-aoq-api.md)。
+2. 发送初始化消息（JSON）：  
+   ```json
+   { "type": "session.update", "session": { "model": "qwen-audio-realtime-v1", "session_id": "sess_abc123" } }
+   ```
+
+3. 流式发送数据帧（二进制或 base64 编码）并监听 `response.text.delta` 或 `response.audio.delta` 事件。完整协议规范和示例见 [AOQ客户端SDK](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-aoq-api.md)。
 
 ## 限制和注意事项
 
-- 单连接最长存活时间 30 分钟，超时后需重连并新建 `session_id`；
-- 音频流输入需严格满足采样率 16kHz、单声道、16-bit PCM 格式，否则将触发 `input_format_error` 错误；
-- 同一 `session_id` 不支持跨连接复用，重复使用将导致 `session_conflict`；
-- 工具调用（`tool_use`）仅支持预注册函数，未在 [接入模型与应用](../../raw/model-api-reference/realtime-api-user-guide/realtime-model-connection.md) 中配置的工具将被静默忽略。
-
-> **注意**：[概述](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-overview.md) 中提及的“自动重连机制”尚未在 v2.4.0 生产环境启用，当前需由客户端自行实现断线重连与会话恢复逻辑。
+- 单次会话最长持续 **300 秒**（含静默期），超时后连接自动关闭；
+- 音频流要求 **单通道、16kHz 采样率、PCM 小端浮点（f32le）**，不支持 MP3/WAV 封装；
+- 不支持 `stream=false` 模式；所有响应均为分块流式；
+- 若需调试连接行为，建议优先使用 AOQ SDK 内置日志，而非自行封装 WebSocket——SDK 已处理重连、心跳、帧序号校验等底层细节，参见 [AOQ客户端SDK](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-aoq-api.md)。
 
 ## 来源文档
 
