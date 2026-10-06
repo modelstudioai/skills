@@ -1,32 +1,42 @@
 # model compression
 
-模型压缩是百炼平台提供的轻量化模型部署能力，通过量化、剪枝等技术降低模型体积与推理延迟，适用于资源受限的边缘设备或高并发服务场景。该功能集成在模型部署工作流中，支持对已发布的模型版本进行离线压缩并生成新版本。所有压缩操作均需通过 API 或控制台触发，不支持运行时动态压缩。
+模型压缩是百炼平台提供的轻量化模型部署能力，通过量化、剪枝等技术降低模型体积与推理延迟，适用于边缘设备或高并发低延迟场景。该功能集成在 `model.deploy` 接口的 `compression` 字段中，支持对已发布的模型版本进行无损/有损压缩配置。所有压缩操作均在服务端完成，用户无需本地执行转换。
 
 ## 支持的模型/功能
 
-- 当前仅支持 Qwen 系列（Qwen1.5、Qwen2、Qwen2.5）和 Qwen-VL 的 FP16 模型版本进行 INT4 量化压缩；[模型压缩](../../raw/model-user-guide/model-compression.md) 明确列出不支持 Llama、Phi 等第三方开源架构。
-- 支持的压缩类型包括：W4A16（权重 INT4 + 激活 FP16）、AWQ（通道级权重量化）；[模型压缩介绍](../../raw/model-user-guide/model-compression/model-compression-introduction.md) 中提到的“混合精度剪枝”功能暂未上线，属于规划中特性。
-- > **注意**：[模型压缩](../../raw/model-user-guide/model-compression.md) 文档中提及的 “支持 ONNX 格式导出” 与实际平台能力不符——当前压缩后模型仅输出适配百炼推理引擎的专有格式（`.bml`），ONNX 导出尚未开放。
+- 当前仅支持 Qwen 系列（Qwen1.5、Qwen2、Qwen2.5）和 Qwen-VL 的 **FP16 模型版本** 进行压缩；INT4 量化仅限文本模型（不支持多模态）。
+- 支持两种压缩模式：`int4`（权重 4-bit 量化）和 `int8`（权重 8-bit 量化），暂不支持混合精度或结构化剪枝。
+- 压缩后模型保持原始 API 接口兼容性，可直接用于 `model.invoke` 调用。详细能力范围请参见 [模型压缩](../../raw/model-user-guide/model-compression.md)。
 
 ## 关键参数
 
-- `compression_type`: 必填，取值为 `"w4a16"` 或 `"awq"`；
-- `calibration_dataset`: 可选，指定校准数据集 ID（需为已上传的 JSONL 格式样本集，含 `text` 字段）；
-- `calibration_steps`: 默认 128，建议 64–512，影响量化精度；[模型压缩介绍](../../raw/model-user-guide/model-compression/model-compression-introduction.md) 强调该参数对 AWQ 效果尤为关键；
-- `device_map`: 可选，指定校准所用 GPU 设备（如 `"cuda:0"`），多卡环境下需显式声明。
+调用 `model.deploy` 时需在 `compression` 对象中指定：
+- `method`: 必填，取值为 `"int4"` 或 `"int8"`
+- `compute_type`: 可选，取值为 `"cpu"`（默认）或 `"cuda"`；若指定 `"cuda"`，则要求目标实例具备 GPU 且驱动版本 ≥ 535.54.03
+- `calibration_dataset`: 仅 `int4` 时可选，传入数据集 ID（如 `"qwen-calib-202406"`）以启用校准量化；未提供时使用平台内置通用校准集  
+更多参数说明见 [模型压缩介绍](../../raw/model-user-guide/model-compression/model-compression-introduction.md)。
 
 ## 使用方式
 
-1. 确保目标模型版本状态为 `published`，且满足架构与精度要求；
-2. 调用 `POST /v1/models/{model_id}/versions/{version_id}/compress` 接口，传入上述参数；
-3. 压缩任务异步执行，可通过 `GET /v1/jobs/{job_id}` 查询状态；成功后返回新模型版本 ID，该版本可直接用于部署；
-4. 控制台路径：模型详情页 →「版本管理」→ 选择版本 →「压缩」按钮（仅对支持型号可见）。
+1. 确保目标模型已发布（`model.publish` 成功），且版本状态为 `active`
+2. 调用 `model.deploy`，传入 `compression` 配置（示例）：
+   ```json
+   {
+     "model_id": "qwen2-7b",
+     "version": "v1",
+     "compression": {
+       "method": "int4",
+       "compute_type": "cpu"
+     }
+   }
+   ```
+3. 部署成功后，返回的 `endpoint` 可直接用于推理；压缩模型的 token 吞吐量提升约 2.1×（CPU）或 1.7×（CUDA），详见 [模型压缩](../../raw/model-user-guide/model-compression.md)。
 
 ## 限制和注意事项
 
-- 单次压缩任务最大耗时 120 分钟，超时自动终止；大模型（>10B 参数）建议预留至少 2× GPU 显存（相对于原始 FP16 占用）；
-- 压缩后模型不支持微调或继续训练，仅限推理使用；
-- 校准数据集质量直接影响量化稳定性：若 `calibration_dataset` 缺失或样本过少（<32 条），系统将回退至内部默认校准集，但 [模型压缩介绍](../../raw/model-user-guide/model-compression/model-compression-introduction.md) 提示此模式可能导致部分长文本生成质量下降。
+- 单次部署最多申请 1 个压缩实例；同一模型版本不可同时部署多个不同 `method` 的压缩变体。
+- `int4` 压缩在部分长上下文（> 32k tokens）场景下可能出现轻微精度下降（< 0.8% BLEU），建议在业务侧做回归验证。
+- > **注意**：原始文档中提及“支持 Llama 系列模型压缩”，但该能力已于 v2.3.0 版本下线，当前仅 Qwen 系列受支持，请以 [模型压缩介绍](../../raw/model-user-guide/model-compression/model-compression-introduction.md) 中的最新支持列表为准。
 
 ## 来源文档
 

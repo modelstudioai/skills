@@ -1,33 +1,33 @@
 # application [use cases](use-cases.md)
 
-`application use cases` 模块面向开发者提供开箱即用的 AI 应用集成方案，覆盖主流企业通讯与内容平台（如企业微信、钉钉、微信公众号、网站嵌入）及本地知识增强场景（RAG）。所有用例均基于百炼平台统一 API 和 SDK 实现，无需从零训练模型。实际部署前请务必参考对应场景的完整实践文档。
+本页面汇总百炼平台在实际业务场景中的典型应用模式，涵盖嵌入式AI助手、企业IM集成、智能客服及RAG类应用等方向。所有用例均基于平台提供的标准API与SDK能力实现，适用于Web、移动端及企业办公生态。具体实现细节请参考各子场景文档。
 
 ## 支持的模型/功能
 
-- 所有应用用例默认使用 `qwen-max` 或 `qwen-plus`（取决于性能与成本权衡），部分轻量场景支持 `qwen-turbo`；模型选择需在请求参数中显式指定。
-- 功能上支持：多轮对话上下文管理、流式响应（`stream=true`）、自定义系统提示（`system_prompt`）、文件上传解析（PDF/Word/Excel/TXT）及向量检索增强（仅 RAG 场景）。
-- 注意：[在钉钉创建AI机器人](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-dingtalk.md) 中提及的“自动同步钉钉组织架构”能力，已在 v2.3.0 后移除，当前需通过 OpenAPI 手动同步用户信息；详见 [在企业微信集成AI助手](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-work-wechat.md) 的权限配置说明。
+- 支持调用 `qwen-max`、`qwen-plus`、`qwen-turbo` 等全系列大模型，以及 `qwen-audio`（语音）、`qwen-vl`（多模态）等专用模型  
+- 提供开箱即用的对话管理、流式响应、历史上下文维护、[函数调用](../concepts/function-calling.md)（Function Calling）能力  
+- RAG场景下支持向量检索（`retrieval` 模块）与知识库热更新，详见 [基于本地知识库构建RAG应用](../../raw/application-user-guide/application-use-cases/build-rag-application-based-on-local-retrieval.md)  
 
 ## 关键参数
 
-- `model`: 必填，取值为 `qwen-max`、`qwen-plus` 或 `qwen-turbo`（RAG 场景推荐 `qwen-plus`）。
-- `stream`: 布尔值，启用[流式输出](../concepts/streaming-output.md)时设为 `true`，适用于前端实时渲染。
-- `retrieval_enabled`: 仅 RAG 场景有效，设为 `true` 并配合 `knowledge_id` 使用。
-- `knowledge_id`: RAG 场景必填，指向已上传并切片完成的知识库 ID；该 ID 需通过 `/v1/knowledge` 接口创建后获取。
-- 其他通用参数（如 `temperature`、`top_p`）行为与 [基于本地知识库构建RAG应用](../../raw/application-user-guide/application-use-cases/build-rag-application-based-on-local-retrieval.md) 文档一致。
+- `model`: 必填，指定模型ID（如 `qwen-plus`），不同模型对 `max_tokens` 和 `temperature` 的默认值存在差异  
+- `stream`: 布尔值，启用[流式输出](../concepts/streaming-output.md)时需设为 `true`，客户端须按 SSE 协议解析；部分旧版 SDK 默认关闭，需显式设置  
+- `enable_search`: 仅 `qwen-max` 和 `qwen-plus` 支持，开启后自动调用百炼内置搜索服务（注意：该参数在 [在网站上增加一个AI助手](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-website-in-10-minutes.md) 中被明确要求启用）  
+- `retrieval_config`: RAG场景必填，含 `top_k`、`knowledge_id` 等字段，格式与 [基于本地知识库构建RAG应用](../../raw/application-user-guide/application-use-cases/build-rag-application-based-on-local-retrieval.md) 严格一致  
 
 ## 使用方式
 
-1. **初始化 SDK 或调用 REST API**：使用 `https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation`（通用生成）或 `https://dashscope.aliyuncs.com/api/v1/services/aigc/retrieval-augmented-generation/generation`（RAG 专用）。
-2. **按场景配置参数**：例如在网站嵌入场景中，需设置 `system_prompt` 为“你是一个友好、简洁的客服助手”，并启用 `stream=true`；详情见 [在网站上增加一个AI助手](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-website-in-10-minutes.md)。
-3. **处理回调与错误**：企业微信/钉钉等平台需配置 HTTPS 回调地址，并校验 `x-hub-signature-256` 头；签名密钥在控制台「应用凭证」中获取。
+- Web端：通过 `@alibaba/bailian-js-sdk` 初始化 client，调用 `client.chat.completions.create()` 发起请求  
+- 企业IM（企微/钉钉/微信公众号）：使用平台提供的 Bot SDK 或 Webhook 接入，消息体需按对应渠道协议封装（如企微需校验 `msg_signature`）  
+- 后端服务：推荐使用 REST API + 短期 access token（有效期2小时），避免长期凭证硬编码；token 获取方式见 [在企业微信集成AI助手](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-work-wechat.md)  
 
 ## 限制和注意事项
 
-- 单次请求最大上下文长度为 32768 token（`qwen-max`），RAG 场景中检索返回的 chunk 总长度计入该限制。
-- 文件解析类用例（如微信公众号客服）仅支持 UTF-8 编码文本，非 UTF-8 的 Word/PDF 可能解析失败；建议预处理转码。
-- > **注意**：[10分钟实现微信公众号智能客服](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-wechat-in-10-minutes.md) 中描述的“自动接入公众号消息接口”步骤，因微信平台策略更新，自 2024 年 7 月起必须通过「微信公众号平台 → 开发 → 基本配置 → 服务器配置」手动填写 Token 和 EncodingAESKey，不再支持一键导入。
-- 所有平台集成均需在百炼控制台完成「应用授权」与「平台 OAuth 配置」，未授权的应用将返回 `403 Forbidden`。
+- 单次请求最大上下文长度受模型限制（`qwen-turbo`: 8K tokens；`qwen-plus`: 32K tokens；`qwen-max`: 32K tokens），超长输入将被截断且**不报错**  
+- 流式响应中 `delta.content` 可能为空字符串（尤其在[函数调用](../concepts/function-calling.md)或工具触发阶段），客户端需容错处理  
+- > **注意**：[在钉钉创建AI机器人](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-dingtalk.md) 文档中描述的 `dingtalk-bot-sdk v1.2.0` 已废弃，当前应使用 `@alibaba/bailian-dingtalk-sdk v2.0.0+`，旧版无法兼容新版鉴权机制  
+- 所有IM渠道均要求 HTTPS 回调地址，且需在百炼控制台白名单中配置域名（非IP）  
+- RAG知识库更新后，新请求默认立即生效，但已有会话的缓存检索结果**不会自动刷新**，需主动调用 `clear_session` 或新建 session
 
 ## 来源文档
 

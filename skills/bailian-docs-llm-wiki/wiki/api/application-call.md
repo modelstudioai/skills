@@ -1,59 +1,60 @@
 # application call
 
-`application call` 是阿里云百炼平台提供的核心能力，用于通过 API 同步或异步调用已发布的智能体（Agent）或工作流（Workflow）应用。它支持多种调用协议（DashScope 原生 API 和 OpenAI 兼容 Responses API），并提供[流式输出](../concepts/streaming-output.md)、多模态输入、自定义参数传递等关键功能，适用于构建生产级 AI 应用集成。
+`application call` 是阿里云百炼平台提供的核心能力，用于通过 API 同步或异步调用已发布的智能体（Agent）或工作流（Workflow）应用。它支持多种调用协议（DashScope 原生 API 和 OpenAI 兼容 Responses API），并提供[流式输出](../concepts/streaming-output.md)、多模态输入、[长期记忆](../concepts/memory.md)、RAG 检索等高级功能，适用于构建生产级 AI 应用。
 
 ## 支持的模型/功能
 
-- **应用类型**：支持新版智能体应用（Agent 2.0）、旧版智能体应用及工作流应用。其中，[新版智能体应用 API 参考](../../raw/_short/new-agent-application-api-reference-d745b325d97fcf2e.md) 专为 Agent 2.0 设计，而 [工作流与旧版智能体应用 API](../../raw/_short/agent-and-workflow-application-api-reference-81f0d3ecfd878b1f.md) 覆盖更广的兼容场景。
-- **多模态能力**：支持图像（需选用通义千问 VL 系列模型）和文件（仅智能体应用）输入，通过 `image_list` 或 `file_list`（DashScope API）及 `input_image`/`input_file`（Responses API）字段传入。
-- **调用模式**：
-  - **同步调用**：适用于实时交互，立即返回结果（如 [同步调用 API 参考](../../raw/application-api-reference/application-call/openai-responses-api/synchronous-call-api-reference.md) 所述）；
-  - **异步调用**：适用于耗时任务（如复杂报告生成），返回任务 ID 后可轮询状态，避免超时。
-- **思考与检索增强**：支持 `enable_thinking`（新版智能体）和 `has_thoughts`（所有类型）控制思考过程输出；支持 `rag_options` 配置知识库检索（仅智能体应用）。
+- **应用类型**：支持新版智能体（Agent 2.0）、旧版智能体、工作流三类应用，但不同 API 路径和参数支持存在差异。
+- **多模态能力**：通过 `image_list`（DashScope API）或 `input_image`（Responses API）支持图像理解；通过 `file_list` 或 `input_file` 支持文档、音视频文件问答（仅智能体应用）[新版智能体应用 API 参考](../../raw/_short/new-agent-application-api-reference-d745b325d97fcf2e.md)。
+- **[长期记忆](../concepts/memory.md)**：智能体应用可通过 `memory_id` 参数启用[长期记忆](../concepts/memory.md)，自动构建、保存并恢复用户偏好信息 [工作流与旧版智能体应用 API](../../raw/_short/agent-and-workflow-application-api-reference-81f0d3ecfd878b1f.md)。
+- **RAG 检索**：智能体应用支持通过 `rag_options` 配置知识库（`pipeline_ids`）、文档（`file_ids`）、元数据（`metadata_filter`）及标签（`tags`）等多维度检索 [工作流与旧版智能体应用 API](../../raw/_short/agent-and-workflow-application-api-reference-81f0d3ecfd878b1f.md)。
+- **思考模式**：深度思考模型支持 `enable_thinking` + `has_thoughts` 组合开启思考过程输出，`thought` 字段返回推理链，`text` 字段返回最终答案 [新版智能体应用 API 参考](../../raw/_short/new-agent-application-api-reference-d745b325d97fcf2e.md)。
 
-> **注意**：文档中明确指出，[工作流与旧版智能体应用 API](../../raw/_short/agent-and-workflow-application-api-reference-81f0d3ecfd878b1f.md) 和 [新版智能体应用 API 参考](../../raw/_short/new-agent-application-api-reference-d745b325d97fcf2e.md) 均声明“仅适用于华北2（北京）地域”，但 [获取APP ID和Workspace ID](../../raw/application-api-reference/application-call/obtain-the-app-id-and-workspace-id.md) 文档指出 Workspace ID 在德国（法兰克福）、新加坡等多地为必需项，且是 Base URL 的组成部分。这表明实际地域支持范围大于文档所限，开发者应以控制台可用地域和实际请求成功率为准。
+> **注意**：新版智能体应用 API 文档明确声明“仅适用于华北2（北京）地域”，而工作流与旧版智能体应用 API 同样标注“仅适用于华北2（北京）地域”，但 [获取APP ID和Workspace ID](../../raw/application-api-reference/application-call/obtain-the-app-id-and-workspace-id.md) 文档指出 Workspace ID 在德国（法兰克福）、新加坡等多地为必需项。这表明实际地域支持范围可能已扩展，但官方 API 文档尚未同步更新，开发者应以控制台可用地域和 Base URL 实际配置为准。
 
 ## 关键参数
 
 | 参数名 | 类型 | 必选 | 说明 | 所属 API |
 |--------|------|------|------|----------|
-| `app_id` | string | 是 | 应用唯一标识，从控制台 [应用管理](https://bailian.console.aliyun.com/#/app-center) 获取。HTTP 调用时需嵌入 URL 路径。 | DashScope & Responses |
-| `prompt` / `input` | string / array | 是 | 用户指令。`prompt` 用于单轮文本（DashScope）；`input` 可为字符串或消息数组（Responses），支持 `system`/`user`/`assistant` 角色及多模态内容。 | DashScope / Responses |
-| `workspace` | string | 否 | 子业务空间 ID，仅当应用位于子空间或特定地域（如法兰克福）时必需。HTTP 调用需通过 `X-DashScope-WorkSpace` Header 传递。 | DashScope & Responses |
-| `stream` | boolean | 否 | 是否启用[流式输出](../concepts/streaming-output.md)。推荐设为 `true` 以降低超时风险。Responses API 中 `background=true` 时不可用。 | DashScope & Responses |
-| `incremental_output` | boolean | 否 | 仅流式模式下有效，控制是否增量输出（`true`）或全量追加（`false`）。 | DashScope |
-| `biz_params` | object | 否 | 传递自定义变量、插件参数或用户鉴权信息，结构详见 [工作流与旧版智能体应用 API](../../raw/_short/agent-and-workflow-application-api-reference-81f0d3ecfd878b1f.md)。 | DashScope & Responses |
-| `rag_options` | object | 否 | 检索知识库配置，含 `pipeline_ids`（必填）、`file_ids`、`metadata_filter` 等，**仅智能体应用支持**。 | DashScope |
+| `app_id` | string | 是 | 应用唯一标识，在[应用管理](https://bailian.console.aliyun.com/#/app-center)中获取。HTTP 调用时需填入 URL 路径。 | 全部 |
+| `prompt` | string | 是（DashScope） | 单轮文本输入指令。 | DashScope API |
+| `input` | string/array | 是（Responses） | 支持字符串（单轮）或消息数组（多轮/多模态）。`content` 数组内可嵌套 `input_text`/`input_image`/`input_file`。 | Responses API |
+| `session_id` | string | 否 | 对话历史标识，1 小时无请求后失效。与 `messages` 冲突时，后者优先。 | DashScope API |
+| `messages` | array | 否（DashScope） | 多轮对话上下文，含 `system`/`user`/`assistant` 角色消息。 | DashScope API |
+| `stream` | boolean | 否 | 是否[流式输出](../concepts/streaming-output.md)。DashScope 需 Header `X-DashScope-SSE: enable`；Responses 直接传 `stream=true`。 | 全部 |
+| `workspace` | string | 否 | 子业务空间 ID，调用子空间应用或特定地域模型时必需，通过 Header `X-DashScope-WorkSpace` 传递。 | DashScope API |
+| `biz_params` | object | 否 | 传递自定义变量、插件参数（`user_defined_params`）、用户鉴权（`user_defined_tokens`）等。 | DashScope API & Responses API（via `extra_body`） |
 
 ## 使用方式
 
-- **DashScope 原生 API**  
-  Endpoint：`POST https://dashscope.aliyuncs.com/api/v1/apps/{APP_ID}/completion`  
-  推荐用于需要完整功能（如 `flow_stream_mode` 工作流推流、`memory_id` [长期记忆](../concepts/memory.md)）的场景。SDK 调用简洁，HTTP 调用需注意参数嵌套层级（`prompt` 在 `input` 内，`workspace` 在 Header）。
+### 1. 协议选择
+- **DashScope 原生 API**：功能最全，推荐用于新项目。Endpoint 为 `POST https://dashscope.aliyuncs.com/api/v1/apps/{APP_ID}/completion`（同步）或 `/api/v2/apps/...`（异步，部分场景）。
+- **OpenAI 兼容 Responses API**：便于迁移现有 OpenAI 代码。同步 Endpoint 为 `POST https://dashscope.aliyuncs.com/api/v2/apps/agent/{APP_ID}/compatible-mode/v1/responses`；异步需设置 `background=true` [同步调用 API 参考](../../raw/application-api-reference/application-call/openai-responses-api/synchronous-call-api-reference.md)。
 
-- **OpenAI 兼容 Responses API**  
-  - 同步：`POST https://dashscope.aliyuncs.com/api/v2/apps/agent/{APP_ID}/compatible-mode/v1/responses`  
-  - 异步：同上 endpoint，请求体中 `background=true`  
-  适用于复用现有 OpenAI 生态代码的场景，`input` 字段直接接受消息数组，语义更直观。但异步模式不支持流式，且部分高级功能（如 `flow_stream_mode`）不可用。
+### 2. 认证与凭证
+- **API Key**：通过[密钥管理](https://bailian.console.aliyun.com/?tab=app#/api-key)获取，并配置为环境变量 `DASHSCOPE_API_KEY`。
+- **APP ID & Workspace ID**：必须通过控制台手动获取，不支持 API 查询 [获取APP ID和Workspace ID](../../raw/application-api-reference/application-call/obtain-the-app-id-and-workspace-id.md)。
 
-- **调试与 SDK**  
-  控制台提供“应用卡片 → 发布 → API 调试”在线调试入口。各语言 SDK（Python/Java/Node.js 等）均提供封装方法（如 `Application.call()` 或 `client.responses.create()`），详情见对应 SDK 文档。
+### 3. SDK 与 HTTP 示例
+- **SDK**：Python/Java DashScope SDK 或 OpenAI Python SDK（需指定 `base_url`）。版本要求严格，如新版智能体 API 要求 Java SDK ≥ 2.20.0。
+- **HTTP**：`Authorization: Bearer ${DASHSCOPE_API_KEY}` + `Content-Type: application/json`。流式请求需额外添加 `X-DashScope-SSE: enable`（DashScope）或 `stream=true`（Responses）。
 
 ## 限制和注意事项
 
-- **地域与 Workspace 依赖**：调用子业务空间应用或非北京地域模型（如法兰克福）时，`workspace` 为必需参数，且影响 Base URL 构成。务必通过 [获取APP ID和Workspace ID](../../raw/application-api-reference/application-call/obtain-the-app-id-and-workspace-id.md) 文档指引正确获取。
-- **会话与状态管理**：`session_id` 有效期为 1 小时无请求，超时后失效；`messages` 参数可替代 `session_id` 实现完全可控的上下文管理，但需客户端自行维护历史。
-- **版本与兼容性**：不同 SDK 版本对参数支持有差异（如 `flow_stream_mode` 要求 Java SDK ≥2.22.23），请严格按文档要求升级。`model_id` 参数可覆盖控制台配置，但仅在新版智能体 API 中明确支持。
-- **异步限制**：Responses API 的异步调用不支持 `stream=true`，且需自行实现轮询逻辑；DashScope API 当前未提供原生异步接口，需结合 `background` 模式或业务层重试机制实现。
+- **地域限制**：所有当前公开的 API 文档均标注“仅适用于华北2（北京）地域”，但实际业务空间（Workspace）机制覆盖多地域，调用前务必确认所用 `Base URL` 与目标地域匹配。
+- **参数冲突**：`session_id` 与 `messages` 同时存在时，`messages` 优先生效；`prompt` 与 `messages` 同时存在时，`messages` 优先生效。
+- **异步限制**：Responses API 的异步模式（`background=true`）**不支持[流式输出](../concepts/streaming-output.md)**（`stream=true` 会被忽略）[异步调用API参考](../../raw/application-api-reference/application-call/openai-responses-api/asynchronous-call-api-reference.md)。
+- **版本兼容性**：`incremental_output`（DashScope）与 `stream`（Responses）语义不同：前者控制 chunk 内容是否增量（delta），后者控制是否启用 SSE 流；两者可同时启用以获得最佳体验。
+- **安全实践**：禁止在代码中硬编码 `DASHSCOPE_API_KEY`，务必使用环境变量或密钥管理服务。
 
 ## 来源文档
 
 - [获取APP ID和Workspace ID](../../raw/application-api-reference/application-call/obtain-the-app-id-and-workspace-id.md)
-- [DashScope API](../../raw/application-api-reference/application-call/application-dashscope-api-reference.md)
+- [新版智能体应用 API 参考](../../raw/_short/new-agent-application-api-reference-d745b325d97fcf2e.md)
 - [工作流与旧版智能体应用 API](../../raw/_short/agent-and-workflow-application-api-reference-81f0d3ecfd878b1f.md)
 - [Responses API](../../raw/application-api-reference/application-call/openai-responses-api.md)
 - [同步调用 API 参考](../../raw/application-api-reference/application-call/openai-responses-api/synchronous-call-api-reference.md)
 - [异步调用API参考](../../raw/application-api-reference/application-call/openai-responses-api/asynchronous-call-api-reference.md)
-- [新版智能体应用 API 参考](../../raw/_short/new-agent-application-api-reference-d745b325d97fcf2e.md)
+- [DashScope API](../../raw/application-api-reference/application-call/application-dashscope-api-reference.md)
 
 

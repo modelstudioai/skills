@@ -1,39 +1,42 @@
 # memory library [overview](overview.md)
 
-记忆库是百炼平台为大模型提供的跨会话[长期记忆](../concepts/memory.md)服务，通过自动从对话中提取关键信息并持久化存储，解决大模型上下文窗口限制导致的“每次对话从零开始”问题。它支持两种核心记忆类型：动态的**事实记忆**（如事件、提醒）和结构化的**用户画像**（如年龄、职业），并在后续对话中基于语义检索相关记忆，注入 Prompt 实现个性化、连贯的交互。所有能力均通过开放 API 提供，可无缝集成至 Agent 或工作流应用。
+记忆库是百炼平台为大模型提供的跨会话[长期记忆](../concepts/memory.md)服务，通过自动从对话中提取关键信息并持久化存储为事实记忆与用户画像，在后续对话中基于语义检索并注入上下文，从而突破上下文窗口限制，实现个性化、连贯的智能体交互。它以 API 为核心交付形态，支持灵活集成与多应用共享，适用于需持续理解用户偏好与历史行为的生产场景。
 
 ## 支持的模型/功能
 
-- **事实记忆**：自动从 `messages` 对话流中提取关键事件（如“每天上午9点提醒我喝水”），支持配置过期时间（7/30/180天或永不过期）和抽取策略版本（Pro/Lite）。详见[配置记忆规则](../../raw/application-user-guide/memory-library-overview/create-memory/configure-rules.md)。
-- **用户画像**：基于预定义模板（`profile_schema`）提取结构化属性（如年龄、爱好、职业），需显式传入 `profile_schema_id` 才触发抽取，提取结果异步生成，首次查询可能为空，建议按业务重试。完整流程见[使用用户画像](../../raw/application-user-guide/memory-library-overview/create-memory/user-profile.md)。
-- **多模态与技能记忆**：当前文档未覆盖多模态记忆细节，但计费说明明确区分了“事实记忆多模态 Pro”和“技能记忆 Pro”等独立计费项，表明底层支持扩展类型 [计费说明](../../raw/application-user-guide/memory-library-overview/integration-overview/billing.md)。
-
-> **注意**：文档 15 中 OpenClaw 插件的 `memory_store` 工具允许直接写入原始内容（绕过自动抽取），而文档 2 和 4 的 `AddMemory` 接口默认仅支持自动抽取。二者功能定位不同：前者用于用户主动指令（如“记住我的服务器IP”），后者用于被动提炼对话。开发者应根据场景选择。
+- **两类核心记忆类型**：  
+  - **事实记忆**：自动从对话中提取动态事件信息（如“用户每天上午9点需要喝水提醒”），适用于临时性、时效性任务；  
+  - **用户画像**：基于预定义模板提取结构化用户属性（如年龄、职业、爱好），适用于固定、长期稳定的用户特征。二者可独立使用或协同增强上下文理解。  
+- **完整生命周期能力**：覆盖记忆写入（`AddMemory`/`AddMemoryAsync`）、语义检索（`SearchMemory`）、列表查询（`ListMemory`）、详情获取（`GetMemoryNode`）、更新（`UpdateMemory`）与删除（`DeleteMemory`）；用户画像支持模板管理（`CreateProfileSchema`）、异步提取与同步获取（`GetUserProfile`）[长期记忆 API](../../raw/application-user-guide/memory-library-overview/long-term-memory-2-0.md)。  
+- **两种集成路径**：支持通过 **Agent Harness**（控制台零代码配置）快速接入百炼智能体，或通过 **插件方式**（如 `modelstudio-memory-for-openclaw`）为工作流注入记忆能力 [集成方式概览](../../raw/application-user-guide/memory-library-overview/integration-overview.md)。
 
 ## 关键参数
 
-| 参数 | 说明 | 默认值 | 注意事项 |
-|------|------|--------|----------|
-| `user_id` | 记忆实体 ID，实现用户级隔离 | 必填 | 不同 `user_id` 的记忆完全隔离；OpenClaw 插件强制要求配置此参数 |
-| `plan_version` | 控制 Add/Search 调用的策略版本 | `Pro` | `Add` 的版本由记忆规则配置决定；`Search` 的版本由请求参数独立控制，不传即 `Pro`。详见[核心概念](../../raw/application-user-guide/memory-library-overview/overview/concepts.md) |
-| `top_k` | 检索最大返回条数 | `10`（API） / `5`（OpenClaw 插件） | 取值范围 1–100；过高可能引入噪声，建议按需设置 |
-| `min_score` | 相似度阈值（0.0–1.0） | `0.3`（API） / `0`（OpenClaw 插件） | 建议设为 `0.5–0.7` 平衡召回率与精度；低于阈值的记忆被过滤 |
-| `meta_data` | 自定义元数据字段 | 可选 | 强烈建议用于分类管理（如 `{"category": "health"}`），便于后续精确检索 |
+- `user_id`：记忆实体唯一标识符，用于隔离不同用户的记忆空间，所有读写操作均以此为维度进行数据隔离。  
+- `plan_version`：控制 Pro/Lite 策略版本的核心参数：  
+  - **Add 调用**的版本由记忆规则中配置的 `plan_version` 决定（创建/更新规则时指定）；  
+  - **Search 调用**的版本由请求体中的 `plan_version` 字段独立控制（不传默认 `Pro`）；  
+  > **注意**：文档 5 与文档 11 均明确说明 `plan_version` 对 Add/Search 的控制逻辑分离，但文档 4 的 cURL 示例中 `SearchMemory` 请求误写为 `"plan_version": "Lite"`（小写），而实际 API 仅接受 `Pro` 或 `Lite`（首字母大写）。请严格按 [计费说明](../../raw/application-user-guide/memory-library-overview/integration-overview/billing.md) 中的枚举值使用，避免调用失败。  
+- `top_k`：控制最大召回数量（1–100），默认值未显式声明，建议显式设置以保障结果可控性；  
+- `min_score`：相似度阈值（0.0–1.0），Pro 版本生效，默认 `0.3`；推荐业务侧设为 `0.5–0.7` 以平衡查全率与查准率 [管理记忆](../../raw/application-user-guide/memory-library-overview/create-memory/manage-memory.md)；  
+- `profile_schema`：调用 `AddMemory` 时传入画像模板 ID，方可触发用户画像字段提取；不传则仅处理事实记忆。
 
 ## 使用方式
 
-1. **快速验证**：使用默认记忆库，3 步完成闭环——调用 `AddMemory` 写入对话 → 在控制台**记忆详情**页按 `user_id` 查看 → 调用 `SearchMemory` 检索 [快速开始](../../raw/application-user-guide/memory-library-overview/overview/quickstart.md)。
-2. **自定义规则**：创建新记忆库后，在**记忆规则**标签页配置事实记忆（指定指令、过期时间）和用户画像（定义字段、初始值），每个库最多 50+50 条规则 [配置记忆规则](../../raw/application-user-guide/memory-library-overview/create-memory/configure-rules.md)。
-3. **集成路径**：
-   - **Agent Harness**：在百炼智能体控制台直接绑定记忆库，零代码启用跨会话记忆；
-   - **插件模式**：如 OpenClaw 插件，通过 `autoCapture`/`autoRecall` 钩子自动完成记忆生命周期管理，同时暴露 `memory_search` 等工具供 Agent 主动调用 [集成方式概览](../../raw/application-user-guide/memory-library-overview/integration-overview.md)。
+1. **开通与准备**：进入[百炼控制台记忆库页面](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/memory/list)点击**立即开通**，并确保已获取有效 `DASHSCOPE_API_KEY`；  
+2. **写入记忆**：调用 `AddMemory`，传入 `user_id` 与对话 `messages` 数组（含 user/assistant 角色），系统自动提取事实记忆；若需提取画像，须同时传入 `profile_schema`；  
+3. **检索记忆**：调用 `SearchMemory`，传入 `user_id` 与当前 `messages`（代表用户最新意图），系统返回语义相关记忆节点；检索结果需由业务方主动注入 Prompt；  
+4. **控制台调试**：在记忆库详情页的**记忆检索**标签页可实时调试参数效果，支持开启“意图判别召回”“改写”“排序”等优化开关；  
+5. **进阶配置**：通过创建自定义记忆库并配置规则（最多 50 条事实记忆规则 + 50 条用户画像规则），可精细化控制抽取指令、过期时间（7/30/180 天或永不过期）及策略版本 [配置记忆规则](../../raw/application-user-guide/memory-library-overview/create-memory/configure-rules.md)。
 
 ## 限制和注意事项
 
-- **限流**：全部接口总计 ≤ 3000 QPM（账号级）；`AddMemory` ≤ 120 QPM；`SearchMemory` ≤ 300 QPM。超限返回 HTTP `429`，需实现退避重试 [限流说明](../../raw/application-user-guide/memory-library-overview/integration-overview/limits.md)。
-- **商业化时间点**：记忆库将于 **2026 年 8 月 20 日 10:00（北京时间）** 正式计费，此前为免费体验期。所有文档均强调此时间点，信息一致。
-- **默认记忆库**：每个账号自带且**不可删除**，但可编辑名称、描述及规则；其预置的“默认项目”规则可修改，不可删除 [创建与删除记忆库](../../raw/application-user-guide/memory-library-overview/create-memory.md)。
-- **存储有效期**：事实记忆与用户画像本身无全局失效日期，仅受创建时配置的“记忆过期时间”约束；10,000 条免费存储额度长期有效，无时效限制 [常见问题](../../raw/application-user-guide/memory-library-overview/integration-overview/faq.md)。
+- **限流约束**：全部接口总计 ≤ 3000 QPM（阿里云账号级别）；其中 `AddMemory` ≤ 120 QPM，`SearchMemory` ≤ 300 QPM；超限返回 HTTP `429`，需实现退避重试 [限流说明](../../raw/application-user-guide/memory-library-overview/integration-overview/limits.md)；  
+- **商业化时间点**：记忆库将于 **2026 年 8 月 20 日 10:00（北京时间）** 正式开始计费，Add/Search 调用区分 Pro/Lite 版本，免费额度自商业化日起 3 个月内有效 [计费说明](../../raw/application-user-guide/memory-library-overview/integration-overview/billing.md)；  
+- **默认记忆库不可删除**：每个账号自带一个默认记忆库，仅可编辑名称、描述及规则，不可删除；新建记忆库可自由增删；  
+- **画像提取为异步过程**：调用 `AddMemory` 后，用户画像字段可能延迟数秒才就绪，首次 `GetUserProfile` 可能返回空值，需按业务逻辑重试；  
+- **存储成本按小时计费**：记忆存储费用为 ¥0.002/万条/小时（约 ¥1.44/万条/月），长期有效，无有效期限制；  
+- **Rerank 模型依赖**：Pro 版本的 `SearchMemory` 依赖 `gte-rerank-v2` 模型进行重排序，该模型为当前唯一支持排序的模型，不可替换。
 
 ## 来源文档
 
@@ -43,10 +46,10 @@
 - [快速开始](../../raw/application-user-guide/memory-library-overview/overview/quickstart.md)
 - [核心概念](../../raw/application-user-guide/memory-library-overview/overview/concepts.md)
 - [创建与删除记忆库](../../raw/application-user-guide/memory-library-overview/create-memory.md)
-- [使用用户画像](../../raw/application-user-guide/memory-library-overview/create-memory/user-profile.md)
 - [配置记忆规则](../../raw/application-user-guide/memory-library-overview/create-memory/configure-rules.md)
-- [集成方式概览](../../raw/application-user-guide/memory-library-overview/integration-overview.md)
+- [使用用户画像](../../raw/application-user-guide/memory-library-overview/create-memory/user-profile.md)
 - [管理记忆](../../raw/application-user-guide/memory-library-overview/create-memory/manage-memory.md)
+- [集成方式概览](../../raw/application-user-guide/memory-library-overview/integration-overview.md)
 - [计费说明](../../raw/application-user-guide/memory-library-overview/integration-overview/billing.md)
 - [限流说明](../../raw/application-user-guide/memory-library-overview/integration-overview/limits.md)
 - [常见问题](../../raw/application-user-guide/memory-library-overview/integration-overview/faq.md)

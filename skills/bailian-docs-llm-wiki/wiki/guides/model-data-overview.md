@@ -4,46 +4,49 @@
 
 ## 支持的模型/功能
 
-- **数据集类型**：明确区分**训练集**（用于[模型调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)）和**评测集**（用于[模型评测](raw/model-user-guide/model-evaluation-introduction/model-evaluation-overview.md)），创建后类型不可变更 [训练集与评测集](../../raw/model-user-guide/model-data-overview/training-set-and-evaluation-set.md)。
-- **训练场景与方法**：
-  - 训练集支持文本生成、视觉理解、图生视频（首帧/首尾帧）四类场景；评测集**仅支持文本生成**。
-  - 训练方法包括 SFT（全地域可用）、DPO 和 CPT（二者**仅限北京地域**）。
-- **高级功能**：
-  - **日志回流**：将 SLS 推理日志自动转化为结构化训练/评测数据集，支持北京与新加坡 Region [日志回流](../../raw/model-user-guide/model-data-overview/model-log-backflow.md)。
-  - **数据处理**：支持对 SFT-文本生成训练集（ChatML 格式）进行清洗（如敏感信息打码）与增强（如 Few-Shot 生成），**当前仅限北京地域**，且不支持 DPO 或视觉类训练集 [数据清洗或增强](../../raw/model-user-guide/model-data-overview/data-processing.md)。
+- **训练集**：支持文本生成、视觉理解、图生视频（首帧/首尾帧）四类训练场景；对应训练方法包括 SFT（监督微调）、DPO（直接偏好优化）和 CPT（持续预训练）。其中 DPO 与 CPT 仅在北京地域可用 [训练集与评测集](../../raw/model-user-guide/model-data-overview/training-set-and-evaluation-set.md)。
+- **评测集**：仅支持文本生成场景，可用于模型效果客观评估 [训练集与评测集](../../raw/model-user-guide/model-data-overview/training-set-and-evaluation-set.md)。
+- **数据处理**：支持对已发布的 SFT-文本生成训练集（ChatML 格式）进行清洗（如敏感信息打码、特殊内容移除）与增强（如 Few-Shot 生成），暂不支持 DPO、CPT 或视觉类训练集 [数据清洗或增强](../../raw/model-user-guide/model-data-overview/data-processing.md)。
+- **日志回流**：将 SLS 推理日志自动转化为结构化 JSONL 数据集，支持训练集（SFT/DPO/CPT）与评测集两类用途，当前仅在北京和新加坡 Region 可用 [日志回流](../../raw/model-user-guide/model-data-overview/model-log-backflow.md)。
 
-> **注意**：文档 2 明确指出数据处理“暂不支持[SFT-图片理解训练集]和[DPO-文本生成训练集]”，而文档 1 中“训练集支持4种训练场景”未排除其数据处理适用性，此处以文档 2 的限定为准。
+> **注意**：文档 2 明确指出数据处理“暂不支持[SFT-图片理解训练集]和[DPO-文本生成训练集]”，而文档 1 中“数据准备”章节提及“视觉理解和图生视频训练集暂无官方推荐数据量”，二者一致；但文档 1 表格中“训练方法与场景”未明确限制 DPO/CPT 的数据处理兼容性，实际以文档 2 的功能边界为准。
 
 ## 关键参数
 
-| 参数 | 说明 | 约束 |
-|------|------|------|
-| **数据集名称** | 最长 50 字符，支持中文、英文、数字、下划线、连字符、点（文档 1）或斜杠（文档 3） | 创建后不可修改 |
-| **数据集类型** | `训练集` 或 `评测集` | 创建后不可变更 |
-| **训练场景** | 文本生成 / 视觉理解 / 图生视频（首帧） / 图生视频（首尾帧） | 评测集仅允许“文本生成” |
-| **训练方法** | SFT / DPO / CPT | 仅训练集显示；DPO/CPT 限北京 |
-| **数据格式** | `Jsonl 格式` 或 `Excel 格式` | 模板需严格匹配对应场景 [训练集与评测集](../../raw/model-user-guide/model-data-overview/training-set-and-evaluation-set.md) |
-| **存储位置** | `平台 OSS 存储`（免费，自动发布）或 `云存储挂载`（需 OSS 授权，评测集不支持） | 创建后不可更改；OSS 挂载需添加 Bucket 标签 `bailian-datahub-access=read` |
-| **导入方式** | 本地上传 / 从 OSS 导入 / 日志回流 / API 上传 | 评测集不支持 OSS 导入；日志回流单次上限 10 万条，仅支持最近 30 天日志 |
+| 参数 | 说明 | 是否必填 | 取值约束 |
+|------|------|----------|----------|
+| 数据集名称 | 全局唯一标识符 | 是 | ≤50 字符，支持中文、英文、数字、下划线、连字符、点（文档 1）或斜杠（文档 3） |
+| 数据集类型 | 创建后不可变更 | 是 | `训练集` / `评测集` |
+| 训练场景 | 仅训练集需选 | 是 | `文本生成` / `视觉理解` / `图生视频（首帧）` / `图生视频（首尾帧）`；评测集固定为文本生成 |
+| 训练方法 | 仅训练集需选 | 是 | `SFT`（全站点）、`DPO` / `CPT`（仅北京） |
+| 数据格式 | 导入文件格式 | 是 | `Jsonl 格式` / `Excel 格式` |
+| 存储位置 | 影响计费与权限 | 是 | `平台 OSS 存储`（免费，自动发布） / `云存储挂载`（需 OSS 标签 `bailian-datahub-access=read`，仅训练集可用） |
+| 导入方式 | 决定前置条件 | 是 | `本地上传`（无依赖）、`从 OSS 导入`（需 Bucket 标签）、`日志回流`（需 SLS 授权）、`API 上传` |
+
+- **日志回流特有参数**：时间范围（最近 30 天）、API Key 过滤（全部/其他/指定）、模型选择（最多 10 个）、OSS 数据路径（仅挂载模式）——修改时间范围会联动重置 API Key 和模型选择 [日志回流](../../raw/model-user-guide/model-data-overview/model-log-backflow.md)。
 
 ## 使用方式
 
-- **创建流程**：在控制台 **[数据管理](https://bailian.console.aliyun.com/cn-beijing/model/data)** > **数据集** 页面点击 **创建数据集**，依次填写名称、类型、场景、方法、格式、存储位置及导入方式 [训练集与评测集](../../raw/model-user-guide/model-data-overview/training-set-and-evaluation-set.md)。
-- **日志回流专用路径**：可通过 **模型监控列表页**、**模型监控详情页** 或 **数据管理新建页** 三个入口进入配置表单，需先完成审计日志与推理日志的授权开通 [日志回流](../../raw/model-user-guide/model-data-overview/model-log-backflow.md)。
-- **数据处理**：仅支持已发布的 SFT-文本生成训练集（ChatML 格式）。需在 **数据管理 > 数据流** 页签创建数据流任务，选择预置模板或自定义节点（如“数据清洗→数据增强”），处理结果将生成独立新版本 [数据清洗或增强](../../raw/model-user-guide/model-data-overview/data-processing.md)。
-- **API 集成**：支持通过 API 上传数据文件（详见[调优 API 指南](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/fine-tuning-api-guide.md)），但数据处理功能**暂无可用 API**（文档 2 明确声明）。
+1. **创建数据集**：进入 [数据管理 > 数据集](https://bailian.console.aliyun.com/cn-beijing/model/data)，点击**创建数据集**，按向导填写参数并选择导入方式。
+2. **导入数据**：
+   - *本地上传*：直接拖拽或选择文件，SFT/DPO 文本生成支持多文件；
+   - *OSS 导入*：目标 Bucket 需添加标签 `bailian-datahub-access=read`；
+   - *日志回流*：需先完成 SLS 审计日志与推理日志授权（顺序不可逆），再配置筛选条件 [日志回流](../../raw/model-user-guide/model-data-overview/model-log-backflow.md)；
+   - *API 上传*：通过 `training_file_ids` 引用已发布数据集 ID，详见[模型调优 API 指南](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/fine-tuning-api-guide.md)。
+3. **数据处理（可选）**：仅适用于已发布的 SFT-文本生成训练集（ChatML 格式），在 [数据管理 > 数据流](https://bailian.console.aliyun.com/cn-beijing/model/data?tab=data_flow) 中创建清洗/增强任务，输出为新版本 [数据清洗或增强](../../raw/model-user-guide/model-data-overview/data-processing.md)。
+4. **下游使用**：发布后的训练集用于[模型调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)，评测集用于[模型评测](raw/model-user-guide/model-evaluation-introduction/model-evaluation-overview.md)。
 
 ## 限制和注意事项
 
-- **地域限制**：DPO/CPT 训练、日志回流（北京/新加坡）、数据处理功能均**仅限北京地域**（文档 1 与文档 2 均强调“重要：本文档仅适用于华北2（北京）地域”）；文档 3 补充日志回流亦支持新加坡。
-- **不可逆操作**：数据集发布后不可编辑；删除操作不可恢复；版本管理采用**新建模式**（非增量继承），每次新增版本需重新导入全部数据 [训练集与评测集](../../raw/model-user-guide/model-data-overview/training-set-and-evaluation-set.md)。
-- **格式与兼容性**：
-  - 数据处理仅接受 ChatML 格式的 SFT-文本生成训练集，不支持 Excel、DPO 或视觉类数据 [数据清洗或增强](../../raw/model-user-guide/model-data-overview/data-processing.md)。
-  - 日志回流产出 JSONL 格式结构化数据，可直接用于调优或评测，也支持后续数据清洗 [日志回流](../../raw/model-user-guide/model-data-overview/model-log-backflow.md)。
+- **地域限制**：DPO/CPT 训练、数据处理功能、日志回流均仅在北京（华北2）可用；日志回流额外支持新加坡 Region [日志回流](../../raw/model-user-guide/model-data-overview/model-log-backflow.md)。
+- **不可变性**：数据集类型、训练场景、训练方法、存储位置、数据格式创建后均不可修改；发布操作不可逆，已发布版本不可编辑 [训练集与评测集](../../raw/model-user-guide/model-data-overview/training-set-and-evaluation-set.md)。
 - **容量与配额**：
-  - 单次日志回流上限 10 万条（可多次追加至不同版本）；OSS 导入无数据量上限；平台存储无数据量上限。
-  - 数据集名称/描述长度、字符集等约束详见各参数说明。
-- **计费提示**：数据管理功能本身免费，但存储（平台 OSS 或自有 OSS）、SLS 日志服务、模型调用等下游资源按各自产品计费。
+  - 单次日志回流上限 10 万条（可多次追加至不同版本）；
+  - 数据集创建数量无限制，导入数据量无上限（平台 OSS 存储）；
+  - 数据处理节点中，“数据增强-通用”单次最多生成 2000 条样本 [数据清洗或增强](../../raw/model-user-guide/model-data-overview/data-processing.md)。
+- **格式强约束**：SFT/DPO/CPT/评测集均有严格数据格式要求（如 ChatML），建议下载对应模板校验；非标准格式导入将失败 [训练集与评测集](../../raw/model-user-guide/model-data-overview/training-set-and-evaluation-set.md)。
+- **安全与合规**：所有导入数据默认启用 OSS 服务端加密（SSE-OSS）；敏感信息打码等清洗操作需人工验证输出完整性 [数据清洗或增强](../../raw/model-user-guide/model-data-overview/data-processing.md)。
+- **计费提示**：数据管理功能本身免费，但平台 OSS 存储、OSS 挂载、SLS 日志服务等下游资源按各自产品计费 [训练集与评测集](../../raw/model-user-guide/model-data-overview/training-set-and-evaluation-set.md)。
 
 ## 来源文档
 

@@ -1,49 +1,49 @@
 # 流式输出
 
-流式输出（Streaming Output）是百炼平台提供的一种实时响应机制，允许模型在生成结果过程中分块、渐进地返回内容，而非等待全部推理完成后再一次性返回。该机制显著降低端到端延迟，提升用户交互体验，并有效规避长响应场景下的网络超时风险。
+流式输出（Streaming Output）是百炼平台提供的一种实时响应机制，允许模型在生成过程中将结果以增量方式分块返回，而非等待全部内容完成后再一次性交付。该机制显著降低端到端延迟，提升用户交互体验，尤其适用于对话、语音、多模态实时处理等对响应速度敏感的场景。
 
-## 在百炼平台的不同场景中如何使用
+## 在百炼平台的不同场景中，这个概念如何使用
 
-- **应用调用（`application call`）**：  
-  通过 `stream=true` 参数启用流式输出，适用于智能体（Agent）或工作流（Workflow）的同步调用。服务端按 token 或语义单元（如思考步骤、工具调用片段、最终回答段落）分批推送事件。配合 `incremental_output=true` 可实现 delta 增量更新（即每帧仅含本次新增内容），便于前端逐字渲染；设为 `false` 则每帧返回当前完整累积内容。
+- **标准模型 API（RESTful）**：通过设置请求 Header `Accept: text/event-stream` 并解析 Server-Sent Events（SSE）格式响应实现流式输出。每条 `data:` 行包含一个 JSON 片段（如 `{"output":{"text":"Hello"}}`），客户端需逐帧拼接并渲染。
+  
+- **Application Call（智能体/工作流调用）**：支持两种协议下的流式开关：
+  - DashScope 原生 API：在请求 Header 中添加 `X-DashScope-SSE: enable`；
+  - OpenAI 兼容 Responses API：在请求体中传入 `stream=true`（布尔值）。
 
-- **Realtime API（WebSocket 实时接口）**：  
-  流式输出为默认且强制行为。所有响应均以 WebSocket 事件形式实时推送，包含 `output` 类型消息，其 `delta` 字段承载增量文本、`tool_calls` 字段承载结构化工具调用信息、`finish_reason` 标识生成终止原因（如 `stop`、`length`、`tool_calls`）。该模式天然支持语音流中断恢复、多轮上下文维持与低延迟交互。
+- **Realtime API（WebSocket）**：**强制流式**，不支持同步模式。所有响应均以事件形式推送（如 `response.text.delta`、`response.audio.delta`），客户端需监听并消费增量数据流。
 
-- **标准模型调用（[OpenAI 兼容接口](openai-compatible-api.md)）**：  
-  在 `chat.completions.create()` 中设置 `stream=True` 即可启用。返回 `Stream[ChatCompletionChunk]` 对象，开发者需迭代处理每个 `chunk`，从中提取 `chunk.choices[0].delta.content`（文本）、`chunk.choices[0].delta.tool_calls`（工具调用）等字段。注意：`stream=True` 时 `response_format`（如 JSON Schema）仍生效，服务端保证流式输出符合指定结构。
+- **Omni Realtime API（多模态 WebSocket）**：同样为强制流式，`stream=true` 是 URL 必填参数；服务端按语义粒度（如 token、音频帧、图像区域描述）持续推送 `output` 和 `progress` 事件。
 
-> ⚠️ 注意：流式输出不支持异步任务（`background=true`）和部分非流式模型（如某些图像/视频生成模型），启用前请确认模型与接口类型兼容。
+- **开发工具与客户端（CLI / IDE / Web）**：当底层调用启用 `stream=true`（或对应配置如 `--stream`、`stream: true`）时，工具自动处理 SSE 或 WebSocket 流，并以“打字机效果”实时呈现输出，开发者无需手动解析协议。
 
 ## 关键参数和配置
 
-| 参数 | 所属接口 | 类型 | 说明 |
-|------|----------|------|------|
-| `stream` | 所有 REST 接口（Application Call / Model Call） | `boolean` | 必须显式设为 `true` 启用流式；默认 `false`（全量返回）。 |
-| `incremental_output` | Application Call（DashScope API） | `boolean` | 仅当 `stream=true` 时有效：`true` → 返回 delta 增量；`false` → 返回当前完整响应（追加模式）。默认 `true`。 |
-| `stream_options.include_usage` | Model Call（OpenAI 兼容） | `boolean` | 控制是否在流结束前的 `usage` 字段中包含 token 统计（实验性，部分模型暂不支持）。 |
+| 场景 | 启用方式 | 关键参数/头 | 说明 |
+|------|----------|-------------|------|
+| RESTful 模型 API | Header + 响应解析 | `Accept: text/event-stream` | 必须设置，否则返回完整 JSON；响应为 SSE 格式，需按行解析 `data:` 字段 |
+| Application Call（DashScope） | Header | `X-DashScope-SSE: enable` | 仅此 Header 生效，`stream` 字段在请求体中被忽略 |
+| Application Call（Responses API） | 请求体 | `"stream": true` | 直接在 JSON payload 中声明；兼容 OpenAI v1 格式 |
+| Realtime API / Omni Realtime API | 协议级强制 | 无显式开关 | WebSocket 连接即开启流式；`stream=false` 不被接受，会报错或静默忽略 |
 
-- **HTTP Header（Application Call）**：  
-  `X-DashScope-Streaming: true`（旧版兼容头，推荐优先使用 `stream` 参数）
+> ⚠️ 注意：  
+> - 所有流式接口均要求客户端具备事件解析与错误恢复能力（如重连、心跳、帧序号校验）；推荐优先使用百炼官方 SDK（如 AOQ SDK）而非裸 WebSocket 封装。  
+> - 流式响应中，`finish_reason` 字段仅在最后一帧出现，用于标识生成结束原因（如 `"stop"`、`"length"`、`"tool_calls"`）；中间帧仅含 `delta` 或 `text` 增量内容。  
+> - 若需获取完整响应，可自行缓存所有 `delta` 并拼接 `output.text`；但注意部分多模态流（如音频 delta）需按二进制帧重组，不可简单字符串拼接。
 
-- **WebSocket 初始化（Realtime API）**：  
-  流式为协议内建能力，无需额外参数；但需正确处理 `output` 事件中的 `delta`、`index`、`finish_reason` 字段以实现可靠拼接。
+## 面向开发者，简洁实用
 
-## 面向开发者的实践建议
-
-- ✅ **必做**：始终检查 `finish_reason` 字段判断流是否正常结束（避免截断）；对 `tool_calls` 等结构化字段做增量合并解析。
-- ✅ **推荐**：前端使用 `TextDecoder` + `ReadableStream`（浏览器）或 `aiohttp.ClientResponse.content`（Python）高效消费流；后端避免阻塞式读取，采用异步迭代。
-- ⚠️ **避坑**：  
-  - `stream=true` 时 `completion.choices[0].message.content` 为空，必须从 `delta.content` 提取；  
-  - Realtime API 的 `session_id` 不可复用，重复使用将创建新会话；  
-  - Application Call 中 `stream=true` 与 `background=true` 互斥，不可同时设置。
-- 📈 **性能提示**：流式请求仍计入 RPM/TPM 限流，但单次请求生命周期更短，有利于高并发场景下的资源利用率提升。
+- ✅ **快速启用**：RESTful 调用加 `Accept: text/event-stream`；Application Call 选 Responses 协议则直接设 `"stream": true`。  
+- ✅ **安全兜底**：流式请求失败时，服务端仍保证至少返回一个含 `error` 字段的 SSE 事件（如 `data: {"error":{...}}`），请务必监听并处理。  
+- ✅ **性能提示**：流式不降低总计算耗时，但大幅改善首 token 延迟（TTFT）和 token 间隔（ITL）；建议搭配 `max_output_tokens` 限制防止无限生成。  
+- ❌ **避免踩坑**：不要在流式请求中同时设置 `stream=false`；不要忽略 `event:` 类型字段（如 `event: message`）；不要假设所有 `data:` 行都是合法 JSON（空行、注释行需跳过）。  
+- 🛠️ **调试建议**：用 `curl -N` 或 Postman 的 SSE 插件直接测试；生产环境务必实现超时控制（如单帧等待 >5s 则中断连接）和断线重连逻辑。
 
 ## 关联主题页
 
+- [get started with models](../guides/get-started-with-models.md)
 - [application call](../api/application-call.md)
 - [realtime api user guide](../api/realtime-api-user-guide.md)
-- [get started with models](../guides/get-started-with-models.md)
-- [more about models](../api/more-about-models.md)
+- [omni realtime api](../api/omni-realtime-api.md)
+- [use chat client or development tool](../guides/use-chat-client-or-development-tool.md)
 
 

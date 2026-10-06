@@ -1,26 +1,29 @@
 # start using
 
-本页面介绍如何快速开始使用百炼平台的核心能力，包括模型调用、应用构建和基础配置。开发者可基于平台提供的 API 或低代码界面快速集成大模型能力。所有操作均需先完成[账号开通与项目创建](../../raw/application-user-guide/account-setup.md)。
+本节介绍如何快速开始使用百炼平台构建 AI 应用，涵盖模型接入、核心参数配置、调用方式及常见约束。适用于希望快速验证能力或集成到生产环境的开发者。所有操作均基于百炼 API 与控制台双路径支持。
 
 ## 支持的模型/功能
 
-百炼平台当前支持通义千问系列（Qwen1.5、Qwen2、Qwen2.5、Qwen3）、Qwen-VL、Qwen-Audio 等开源模型，以及部分闭源增强模型（如 Qwen-Max、Qwen-Plus）。除基础文本生成外，还提供知识库问答、多轮对话管理、RAG 增强、[函数调用](../concepts/function-calling.md)（Function Calling）和多模态理解等能力。详细模型列表及能力矩阵见 [开始使用](../../raw/application-user-guide/start-using.md)。
+当前平台默认提供 `qwen-max`、`qwen-plus` 和 `qwen-turbo` 三类大语言模型，支持文本生成、知识库问答、[函数调用](../concepts/function-calling.md)（Function Calling）和多轮对话状态管理。图像理解（`qwen-vl`）与语音转文本（`qwen-audio`）需单独开通权限并申请配额。详细模型能力说明见 [开始使用](../../raw/application-user-guide/start-using.md)。
 
 ## 关键参数
 
-调用模型 API 时，必需参数包括 `model`（模型 ID）、`input.messages`（消息数组），推荐设置 `parameters.temperature`（0.1–1.0）、`parameters.top_p`（0.5–0.95）以平衡确定性与多样性。流式响应需显式设置 `stream: true`。注意：`max_tokens` 默认值因模型而异，Qwen3 默认为 8192，但实际受上下文长度限制；该行为与 [应用功能动态](../../raw/application-user-guide/start-using/application-release-notes.md) 中最新公告一致。> **注意**：部分旧文档中提及的 `repetition_penalty` 默认值为 1.0，但自 v2024.07 起已统一调整为 1.05，以更好抑制重复输出，请以 [开始使用](../../raw/application-user-guide/start-using.md) 中的参数说明为准。
+调用 API 时必需指定 `model`（如 `"qwen-turbo"`）与 `input.messages`（非空数组，至少含 `role` 和 `content` 字段）。推荐设置 `temperature=0.7`（平衡确定性与多样性）和 `max_tokens=2048`（避免截断）。流式响应需显式传入 `stream=true`；若启用知识库增强，须在请求中携带 `retrieval_config` 对象。更多参数定义请参考 [开始使用](../../raw/application-user-guide/start-using.md) 中的参数速查表。
 
 ## 使用方式
 
-- **API 方式**：通过 HTTPS POST 请求调用 `/v1/chat/completions` 接口，需携带 `Authorization: Bearer <api_key>`。完整请求示例见 [0代码构建问答应用](../../raw/application-user-guide/start-using/build-knowledge-base-qa-assistant-without-coding.md)。
-- **低代码方式**：在控制台「应用开发」中选择「知识库问答助手」模板，上传文档后即可发布，无需编写代码。该流程依赖平台内置 RAG 引擎，其索引策略与检索逻辑详见 [0代码构建问答应用](../../raw/application-user-guide/start-using/build-knowledge-base-qa-assistant-without-coding.md)。
+1. **控制台快速体验**：登录百炼控制台 → 创建应用 → 选择模板（如“知识库问答”）→ 上传文档 → 点击“测试”即可交互；
+2. **API 集成**：使用 `POST /v1/chat/completions` 接口，携带 `Authorization: Bearer <api_key>` 请求头；
+3. **SDK 调用**：Python SDK 示例见 [0代码构建问答应用](../../raw/application-user-guide/start-using/build-knowledge-base-qa-assistant-without-coding.md)，支持一键部署知识库应用。
+
+> **注意**：原始文档中 [应用功能动态](../../raw/application-user-guide/start-using/application-release-notes.md) 提到 v2.3.0 版本已支持异步批量推理，但当前 API 文档未同步更新该接口路径与字段，建议以控制台「任务中心」或 `/v1/batch/jobs`（需白名单）为准。
 
 ## 限制和注意事项
 
-- 单次请求 `input.messages` 总 token 数不得超过模型上下文长度（如 Qwen3 为 131072 tokens），超限将返回 `400 Bad Request`；
-- 免费试用额度仅限新注册用户首月，且不可跨项目共享；
-- 知识库问答应用不支持实时数据库连接，仅支持静态文档（PDF/Word/TXT/Markdown）导入；
-- 所有 API 调用受每分钟请求数（QPM）和每秒令牌数（TPS）双重配额限制，具体阈值取决于所选模型和计费类型，详情参见 [开始使用](../../raw/application-user-guide/start-using.md)。
+- 免费试用期为开通后 30 天，每日调用上限 1000 次（按 `model` 分桶计费）；
+- 单次请求 `input.messages` 总长度不得超过 32768 token（`qwen-max`）或 8192 token（`qwen-turbo`），超长将被静默截断；
+- 知识库检索结果默认返回 Top5，不可通过 `top_k` 参数覆盖（该参数在 [0代码构建问答应用](../../raw/application-user-guide/start-using/build-knowledge-base-qa-assistant-without-coding.md) 中被错误标注为可配置，实际无效）；
+- 所有请求必须携带 `X-DashScope-SSE: enable` 头才能接收 Server-Sent Events 流式响应。
 
 ## 来源文档
 

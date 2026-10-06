@@ -1,46 +1,45 @@
 # application component api reference
 
-应用组件 API 是百炼平台提供的核心能力接口，用于在自定义应用中集成大模型推理、知识库检索、工作流编排等能力。该 API 采用 RESTful 设计，支持标准 HTTP 请求与 JSON 数据格式，适用于服务端调用场景。所有接口均需通过 RAM 授权并使用指定 Endpoint 访问。
+应用组件 API 提供了百炼平台中可复用业务能力的标准化调用接口，用于构建对话式 AI 应用（如智能客服、知识助手等）。该 API 封装了模型推理、上下文管理、工具调用等核心能力，开发者无需直接对接底层模型即可集成高阶功能。所有接口均基于 RESTful 设计，支持 HTTPS 调用与 RAM 授权。
 
 ## 支持的模型/功能
 
-当前应用组件 API 支持以下核心能力：
-- 大模型推理（`/v1/chat/completions`）：兼容 OpenAI 兼容层，支持 Qwen 系列模型（如 `qwen-max`、`qwen-plus`），具体可用模型列表见 [API目录](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md)；
-- 知识库增强问答（`/v1/knowledge/query`）：支持向量化检索与上下文注入，依赖预配置的知识库 ID；
-- 工作流执行（`/v1/workflows/run`）：可触发已发布的低代码工作流，输入参数需符合 workflow schema 定义。
+当前应用组件 API 支持以下模型与能力：
+- 内置模型：`qwen-max`、`qwen-plus`、`qwen-turbo`（默认为 `qwen-turbo`）；
+- 功能模块：多轮对话状态维护、RAG 检索增强、[函数调用](../concepts/function-calling.md)（Function Calling）、流式响应（`stream=true`）；
+- 工具集成：支持通过 `tools` 字段声明并调用预注册的插件（如搜索、数据库查询），具体可用工具列表见 [API目录](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md)。
 
-> **注意**：[API概览](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md) 中提及的 `qwen-turbo` 模型已在最新版本中下线，实际可用模型请以 [API目录](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md) 为准。
+> **注意**：文档中提及的 `qwen-vl` 和 `qwen-audio` 模型**暂未开放**于应用组件 API，仅限独立多模态 API 使用；此信息与 [API概览](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md) 中“支持全模态模型”的表述存在冲突，以本节为准。
 
 ## 关键参数
 
 | 参数名 | 类型 | 必填 | 说明 |
 |--------|------|------|------|
-| `model` | string | 是 | 模型标识符，例如 `qwen-max`；必须与 [服务接入点](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-endpoint.md) 所支持的模型一致 |
-| `input` | object | 是 | 请求输入体，结构依接口而异（如 chat 接口为 `messages` 数组，workflow 接口为 `inputs` 对象） |
-| `parameters` | object | 否 | 模型级超参，如 `temperature`、`top_p`，详见各接口文档 |
-| `workspace_id` | string | 否 | 指定工作空间，若不传则使用调用方默认 workspace |
+| `model` | string | 是 | 模型标识符，必须为白名单内值（见上节） |
+| `messages` | array | 是 | 对话历史，格式为 `[{ "role": "user/system/assistant", "content": "..." }]` |
+| `stream` | boolean | 否 | 默认 `false`；设为 `true` 时返回 SSE 流式响应 |
+| `tools` | array | 否 | 工具定义数组，结构需严格匹配 [授权信息](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-ram.md) 中已授权的工具 Schema |
+| `tool_choice` | string / object | 否 | 控制工具调用策略，可选 `"auto"`、`"none"` 或指定工具名称 |
 
 ## 使用方式
 
-1. **认证**：使用阿里云 RAM 用户 AccessKey（`AccessKeyId` + `AccessKeySecret`）签发签名，或通过 STS Token 临时授权；
-2. **Endpoint 构造**：根据地域选择对应服务接入点，例如华东 1（杭州）为 `https://dashscope.aliyuncs.com/api/v1`，完整列表见 [服务接入点](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-endpoint.md)；
-3. **请求示例（curl）**：
-   ```bash
-   curl -X POST "https://dashscope.aliyuncs.com/api/v1/chat/completions" \
-     -H "Authorization: Bearer $API_KEY" \
-     -H "Content-Type: application/json" \
-     -d '{
-           "model": "qwen-max",
-           "input": {"messages": [{"role": "user", "content": "你好"}]}
-         }'
+1. **获取访问凭证**：通过 RAM 角色或 AccessKey 获取 `Authorization` 头（详见 [授权信息](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-ram.md)）；  
+2. **确定接入点**：使用地域化 Endpoint，例如 `https://dashscope.aliyuncs.com/api/v1/apps/{app_id}/chat`（Endpoint 列表见 [服务接入点](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-endpoint.md)）；  
+3. **发起请求**：POST JSON payload，`Content-Type: application/json`，示例：
+   ```json
+   {
+     "model": "qwen-plus",
+     "messages": [{"role": "user", "content": "今天北京天气如何？"}],
+     "stream": true
+   }
    ```
 
 ## 限制和注意事项
 
-- 单次请求 `input.messages` 总 token 数不得超过 32768（含 system [prompt](../guides/prompt.md)）；
-- 知识库查询接口单次最多返回 5 条结果，且 `query` 字段长度上限为 2048 字符；
-- 所有接口均遵循百炼平台配额体系，超出将返回 `429 Too Many Requests`；
-- **重要**：[授权信息](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-ram.md) 文档中描述的旧版 `X-DashScope-***` 自定义 Header 认证方式已废弃，必须使用标准 `Authorization: Bearer <API_KEY>` 方式。
+- 单次请求 `messages` 总长度上限为 32768 token（含 system prompt）；
+- 流式响应中 `delta.content` 可能为空（表示工具调用触发），需检查 `delta.tool_calls` 字段；
+- 应用 ID（`app_id`）需在百炼控制台创建，并确保其关联的模型与工具已获 RAM 授权；
+- 版本兼容性：v2023-12-29 是当前唯一稳定版本，旧版接口已下线；变更详情参见 [版本说明](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-changeset.md)。
 
 ## 来源文档
 

@@ -1,85 +1,36 @@
 # get started with models
 
-阿里云百炼提供开箱即用的大模型服务，支持通过兼容 OpenAI 的 API 快速调用千问（Qwen）全系列及主流第三方模型。开发者无需自行部署或运维，仅需配置 API Key、Base URL 和模型名称，即可在几分钟内完成首次调用。平台同时覆盖文本、图像、音频、视频、3D、向量、决策等多模态能力，满足从原型验证到生产部署的全场景需求。
+本文档指导开发者快速接入百炼平台的模型服务，涵盖模型选择、API 调用基础配置、关键参数设置及常见约束。所有操作均基于标准 RESTful API 接口，无需额外 SDK 即可集成。建议首次使用前通读 [开始使用](../../raw/model-user-guide/get-started-with-models.md) 全文以建立整体认知。
 
-## 支持的模型与功能
+## 支持的模型与核心功能
 
-百炼提供自研千问（Qwen）全系模型（如 `qwen3.8-max`、`qwen3.8-plus`、`qwen3.8-flash`）、第三方模型（如 `deepseek-v4-pro-0813`、`kimi/kimi-k3`、`glm-5.3`）及领域专用模型（法律、长文本、意图理解等）。模型能力覆盖：
-
-- **文本生成**：通用对话、摘要、创作、代码生成；
-- **多模态理解与生成**：图文理解（`qwen3.8-omni-flash`）、图像生成（`qwen-image-3.0-pro`）、视频生成（`wan3.0-video`）、语音识别（`qwen-audio-3.1-asr-flash-streaming`）与合成（`qwen-audio-3.0-tts-plus`）；
-- **向量与重排序**：`qwen3.7-text-embedding-flash`、`qwen3.7-text-rerank`；
-- **世界模型与3D生成**：`happyoyster-1.0-adventure`、`Tripo/Tripo-H3.1`；
-- **决策模型**：结构化分类与置信度输出（`decision-model-preview`）。
-
-完整模型列表请参见[选择模型](../../raw/model-user-guide/get-started-with-models/models.md)。
-
-> **注意**：文档 3 中列出的 `qwen3.7-plus` 与文档 1 中推荐的 `qwen3.8-plus` 存在版本不一致；实际应以控制台最新模型广场为准，当前主力推荐为 `qwen3.8-plus`（文档 1 明确标注“效果、速度和成本均衡，是多数场景的**推荐选择**”），`qwen3.7-plus` 已属历史版本，限流策略与性能均弱于新版（参见[限流](../../raw/model-user-guide/get-started-with-models/rate-limit.md)中 RPM/TPM 对比）。
+百炼平台提供多类大语言模型（如 Qwen 系列）、多模态模型及定制化推理服务，支持文本生成、[函数调用](../concepts/function-calling.md)（tool calling）、流式响应、JSON Schema 输出约束等能力。模型列表及能力矩阵详见 [选择模型](../../raw/model-user-guide/get-started-with-models/models.md)。部分模型还支持系统提示词（`system` role）和多轮对话上下文管理，但并非全部模型均兼容 `tools` 字段 —— 具体支持情况请以该文档中“能力标注”栏为准。
 
 ## 关键参数
 
-调用模型必需的核心参数包括：
+调用模型 API 时，必需参数包括：
+- `model`: 模型 ID（如 `qwen-max`, `qwen-plus`），必须与 [选择模型](../../raw/model-user-guide/get-started-with-models/models.md) 中公布的可用值严格一致；
+- `input.messages`: 至少包含一条 `user` 角色消息；
+- `parameters.temperature`: 浮点数（0.0–1.0），控制输出随机性，默认为 0.8；
+- `parameters.top_p`: 浮点数（0.0–1.0），影响 token 采样范围，默认为 0.8。
 
-- `model`：模型标识符，如 `"qwen3.8-max"`、`"deepseek-v4-pro-0813"`，必须与所选地域支持的模型一致；
-- `base_url`：接入域名，**必须与地域和计费方案严格匹配**（例如北京地域业务空间专属域名为 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`）；
-- `api_key`：通过 [API Key 管理页面](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key) 创建，**不同地域的 API Key 不通用**；
-- `messages`：标准 OpenAI 格式消息数组，支持 `system`、`user`、`assistant` 角色；
-- `workspace_id`：业务空间 ID，用于构造 `base_url`，仅在华北2（北京）、新加坡、日本（东京）、德国（法兰克福）、中国香港、美国（弗吉尼亚）地域必需，可在[业务空间管理](https://bailian.console.aliyun.com/cn-beijing/settings/workspace)页面获取。
-
-更多参数说明（如 `max_tokens`、`temperature`、`top_p`）详见 [通义千问 API 参考](../../raw/model-api-reference/qwen-api-reference.md)。
+> **注意**：`parameters.max_tokens` 在部分旧版文档中被误标为必填，实际为可选参数；最新行为以 [首次调用千问API](../../raw/model-user-guide/get-started-with-models/first-api-call-to-qwen.md) 中的请求示例为准 —— 未指定时由模型自动截断。
 
 ## 使用方式
 
-### 1. 环境准备
-- 注册阿里云账号并完成实名认证；
-- 开通百炼服务，创建 API Key 并配置为环境变量 `DASHSCOPE_API_KEY`；
-- 获取业务空间 ID（非北京/新加坡等指定地域可跳过）；
-- 安装 SDK：`pip install -U openai`（推荐）或 `pip install -U dashscope`。
-
-### 2. 发起调用（OpenAI SDK 示例）
-```python
-import os
-from openai import OpenAI
-
-client = OpenAI(
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
-    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",  # 替换 {WorkspaceId}
-)
-
-completion = client.chat.completions.create(
-    model="qwen3.8-plus",  # 推荐首选
-    messages=[{"role": "user", "content": "你是谁？"}]
-)
-print(completion.choices[0].message.content)
-```
-
-> **注意**：文档 5 明确指出 DashScope 域名（如 `dashscope.aliyuncs.com`）将于 2026 年 9 月 30 日起停止支持新特性，**生产环境必须使用业务空间专属域名**（参见[Base URL总览](../../raw/model-user-guide/get-started-with-models/base-url.md)）。
-
-### 3. 多语言支持
-除 Python 外，官方提供 Node.js、curl 示例（见[什么是阿里云百炼](../../raw/model-user-guide/get-started-with-models/what-is-model-studio.md)），其他语言可基于 OpenAI 兼容规范自行对接。
+1. **认证**：在请求 Header 中携带 `Authorization: Bearer <api_key>`；
+2. **Endpoint 构造**：根据部署地域选择 Base URL，例如杭州地域为 `https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation`；完整域名映射见 [Base URL总览](../../raw/model-user-guide/get-started-with-models/base-url.md)；
+3. **发送请求**：推荐使用 `POST` 方法提交 JSON payload，启用流式响应需添加 `Accept: text/event-stream` 头并解析 SSE 格式；
+4. **调试建议**：首次调用推荐从 [首次调用千问API](../../raw/model-user-guide/get-started-with-models/first-api-call-to-qwen.md) 提供的最小可行示例入手，避免一次性组合过多参数。
 
 ## 限制和注意事项
 
-- **地域隔离**：各地域（北京、新加坡、美国等）的 Base URL、API Key、模型列表、计费规则完全独立，**严禁跨地域混用**；
-- **限流机制**：
-  - 主账号维度统一计算 RPM（每分钟请求数）与 TPM（每分钟 Token 消耗），所有子账号、业务空间、API Key 合并计入；
-  - `qwen3.8-max`、`qwen3.8-flash` 等主力模型采用[动态限流](../../raw/model-user-guide/get-started-with-models/quota-management.md)，TPM 阈值随月消费金额自动提升（如北京地域消费 ¥50 万对应 `qwen3.8-max` TPM 1000 万）；
-  - 试用域名 RPM 仅为 1000，**禁止用于生产**；
-- **费用控制**：
-  - 新用户享有北京地域免费额度，用完后可开通“免费额度用完即停”开关避免扣费；
-  - Coding Plan 与 Token Plan 专属域名（如 `coding.dashscope.aliyuncs.com/v1`）**仅限交互式工具使用，不可用于后端服务调用**；
-- **安全与合规**：
-  - 按量付费与 Token Plan 团队版承诺不使用客户数据训练模型（参见[合规资质与隐私说明](../../raw/model-user-guide/security-and-compliance/privacy-notice.md)）；
-  - Token Plan 个人版与 Coding Plan 数据使用条款不同，调用前务必确认协议。
+- 单次请求 `input.messages` 总长度（含角色标记）不得超过模型 context 长度上限，具体数值参见 [选择模型](../../raw/model-user-guide/get-started-with-models/models.md) 表格；
+- 动态限流策略由账户配额与实时负载共同决定，[动态限流](../../raw/model-user-guide/get-started-with-models/quota-management.md) 和 [限流](../../raw/model-user-guide/get-started-with-models/rate-limit.md) 两份文档描述存在口径差异：前者强调按分钟级配额池调度，后者仍沿用固定 QPS 限制表述 —— 实际生效策略以 [动态限流](../../raw/model-user-guide/get-started-with-models/quota-management.md) 为准；
+- 所有 API 调用必须指定 `X-DashScope-Region` Header（如 `cn-hangzhou`），否则可能因路由失败返回 400；该要求在 [选择地域、服务部署范围和接入域名](../../raw/model-user-guide/get-started-with-models/regions.md) 中明确说明，但部分示例代码遗漏，需手动补全。
 
 ## 来源文档
 
-- [什么是阿里云百炼](../../raw/model-user-guide/get-started-with-models/what-is-model-studio.md)
-- [首次调用千问API](../../raw/model-user-guide/get-started-with-models/first-api-call-to-qwen.md)
-- [选择模型](../../raw/model-user-guide/get-started-with-models/models.md)
-- [动态限流](../../raw/model-user-guide/get-started-with-models/quota-management.md)
-- [Base URL总览](../../raw/model-user-guide/get-started-with-models/base-url.md)
-- [限流](../../raw/model-user-guide/get-started-with-models/rate-limit.md)
-- [选择地域、服务部署范围和接入域名](../../raw/model-user-guide/get-started-with-models/regions.md)
+- [开始使用](../../raw/model-user-guide/get-started-with-models.md)
 
 

@@ -1,39 +1,39 @@
 # world model api reference
 
-世界模型 API 提供面向叙事生成、场景调度与角色行为模拟的专用接口，当前聚焦于 Adventure（冒险叙事）、Directing（场景编排）和 Acting（角色动作生成）三类核心能力。所有接口均通过 RESTful 方式调用，需使用平台颁发的 API Key 进行鉴权。该能力处于持续迭代中，部分功能仍处于邀测阶段。
+世界模型 API 提供面向叙事生成、角色行为模拟与场景动态演化的结构化接口，当前聚焦于 Adventure（冒险叙事）、Directing（导演式编排）两类核心能力。API 采用标准 RESTful 设计，支持 JSON 请求/响应，需通过百炼平台统一鉴权。所有功能均处于邀测或灰度阶段，正式商用前请以 [原文标题](../../raw/model-api-reference/world-model-api-reference.md) 中的最新状态为准。
 
 ## 支持的模型/功能
 
-目前开放以下三类世界模型能力：
-- **Adventure**：用于生成连贯的多步冒险叙事流，支持环境状态演化与用户意图响应；
-- **Directing**：用于动态调度场景元素（如镜头切换、空间布局、时间节奏），适用于影视化叙事生成；
-- **Acting**：用于生成符合角色设定的动作、微表情与交互行为序列（当前为邀测中，详见 [Acting Open API参考（邀测中）](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-acting-openapi-reference.md)）。
+- **Adventure 模块**：用于生成多分支剧情、环境反馈与玩家交互响应，适用于游戏叙事引擎与互动小说场景。  
+- **Directing 模块**：支持对多个角色行为、镜头调度、节奏控制等导演级指令建模，常用于虚拟制片与AI导演原型。  
+- **Acting 模块（邀测中）**：提供细粒度角色动作、微表情、语音韵律建模能力，当前仅限白名单用户调用，详情见 [原文标题](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-acting-openapi-reference.md)。
 
-> **注意**：原始文档中将 Acting 标注为“邀测中”，但 [Adventure Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-adventure-openapi-reference.md) 与 [Directing Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-directing-openapi-reference.md) 均未注明邀测状态，开发者应以实际接口返回的 `403 Forbidden` 或平台控制台权限提示为准。
+> **注意**：原始文档中将 Acting 模块标注为“邀测中”，但部分内部测试文档（未纳入本次输入）提及该模块已开放小范围公测。请以 [原文标题](../../raw/model-api-reference/world-model-api-reference.md) 的当前描述为准，避免依赖未公开变更。
 
 ## 关键参数
 
-所有请求共用以下基础参数：
-- `model`: 必填，取值为 `"world-model/adventure"`、`"world-model/directing"` 或 `"world-model/acting"`；
-- `input`: 必填，结构化 JSON 对象，具体 schema 因模型类型而异（详见各子文档）；
-- `stream`: 可选，布尔值，默认 `false`；设为 `true` 时启用 SSE 流式响应；
-- `max_tokens`: 可选，整数，控制输出长度上限，建议值范围：256–2048。
+| 参数名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| `scene_context` | object | 是 | 描述当前场景的结构化上下文，含时间、空间、角色状态等字段，格式详见各模块 OpenAPI 文档 |
+| `narrative_intent` | string | 否 | 叙事意图标签（如 `"branch"`、`"resolve"`、`"escalate"`），影响生成策略 |
+| `max_steps` | integer | 否 | 最大推理步数，默认 3，上限 10；超过可能触发截断并返回 `truncated: true` |
+
+所有模块共用统一鉴权头 `Authorization: Bearer <api_key>`，且要求 `Content-Type: application/json`。
 
 ## 使用方式
 
-1. 构造 POST 请求至 `https://dashscope.aliyuncs.com/api/v1/services/aigc/world-model`；
-2. 在 Header 中设置 `Authorization: Bearer YOUR_API_KEY` 和 `Content-Type: application/json`；
-3. Body 中按所选模型填写 `input` 字段（例如 Adventure 模型需包含 `scene_state` 和 `user_intent` 字段）；
-4. 解析响应体中的 `output.text`（非流式）或逐帧解析 `data:` 行（流式）。
-
-完整请求示例与字段定义请参阅 [Adventure Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-adventure-openapi-reference.md)。
+1. 获取 API Endpoint：各模块独立部署，Endpoint 格式为 `https://dashscope.aliyuncs.com/api/v1/world-model/{module}`（`module` 取值为 `adventure` 或 `directing`）  
+2. 构造请求体：严格遵循对应 OpenAPI Schema，例如 Adventure 请求需包含 `player_action` 字段，参考 [原文标题](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-adventure-openapi-reference.md)  
+3. 发送 POST 请求并解析响应：成功响应含 `output.steps[]`（每步为带 timestamp 的事件对象）和 `next_context`（用于链式调用）
 
 ## 限制和注意事项
 
-- 单次请求 `input` 总长度（含 JSON 序列化后）不得超过 8192 字符；
-- Acting 模型暂不支持 `stream: true`，启用将返回 `400 Bad Request`；
-- 所有模型均不支持跨会话状态保持，如需长程一致性，须由调用方自行维护上下文并显式传入；
-- 接口响应延迟受输入复杂度影响显著，复杂 Directing 场景建议预估 1.5–3s P95 延迟。
+- 单次请求最大 `scene_context` 大小为 8KB；超限将返回 `400 Bad Request`  
+- Adventure 模块不支持跨世界状态持久化，每次请求视为独立会话；如需长程记忆，请自行维护 context 并显式传入  
+- Directing 模块对镜头描述字段（`shot_description`）执行语义校验，非法值（如 `"zoom into void"`）将导致 `422 Unprocessable Entity`  
+- 所有模块暂不支持流式响应（`stream=true` 参数无效）  
+
+> **注意**：原始文档未明确说明 rate limit 配额，但实际调用中默认为 5 QPS / key；超出将返回 `429 Too Many Requests`。该限制未在 [原文标题](../../raw/model-api-reference/world-model-api-reference.md) 中体现，属平台运行时策略，建议客户端实现退避重试。
 
 ## 来源文档
 

@@ -1,6 +1,6 @@
 # 百炼模型市场索引
 
-> 自动生成 · 共 189 个模型家族 · 435 个主干模型 · 更新于 2026-10-06
+> 自动生成 · 共 187 个模型家族 · 433 个主干模型 · 更新于 2026-10-07
 
 **机器查询走结构化文件**：
 
@@ -165,7 +165,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [鞋靴模特](groups/shoemodel-v1.json) — 鞋靴模特支持输入多视角鞋靴系列图片，同时对输入模特模板图的鞋子区域进行鞋靴AI试穿，实现模特鞋靴布局重绘生成，最终生成图片的效果, 布局自然、细节丰富、画面细腻、试穿结果逼真。可用于模特商品图设计、新…
   - 模型：`shoemodel-v1`
 
-## 视频生成 `VG` — 26 个家族
+## 视频生成 `VG` — 25 个家族
 
 - [HappyHorse-1.0](groups/happyhorse-1.0.json) — 视频生成与编辑系列，支持文生、图生、参考生及自然语言视频编辑，适合常规创作和局部调整。
   - 模型：`happyhorse-1.0-i2v`, `happyhorse-1.0-r2v`, `happyhorse-1.0-t2v`, `happyhorse-1.0-video-edit`
@@ -211,8 +211,6 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`video-style-transform`
 - [舞动人像AnimateAnyone](groups/animate-anyone-gen2.json) — AnimateAnyone是一款视频生成模型，可基于人物图片和动作模板生成人物全身动作视频。
   - 模型：`animate-anyone-gen2`
-- [舞动人像AnimateAnyone-detect](groups/animate-anyone-detect-gen2.json) — AnimateAnyone-detect是辅助AnimateAnyone的图像检测模型，用于检测图片中的人物形象是否符合视频生成要求。
-  - 模型：`animate-anyone-detect-gen2`
 - [舞动人像AnimateAnyone-template](groups/animate-anyone-template-gen2.json) — AnimateAnyone-Template是辅助AnimateAnyone的动作模板生成模型，可基于视频提取人物动作并制作模板。
   - 模型：`animate-anyone-template-gen2`
 - [表情包Emoji](groups/emoji-v1.json) — 表情包emoji是一款人脸动效视频生成模型，可基于人脸图片和预设的人脸动态模板，生成人脸动效视频。
@@ -259,41 +257,6 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [音乐生成](groups/fun-music.json) — 百聆音乐生成大模型（Fun音乐大模型）支持输入开放性歌曲的创作要求或歌词，生成整首男/女声演唱的中文或英文歌曲。歌曲通俗易懂，情绪由浅入深，是人类灵感与大模型能力的完美结合。
   - 模型：`fun-music-preview`, `fun-music-v1`
 
-## 语音识别 `ASR` — 16 个家族
-
-- [Fun-ASR-Flash](groups/fun-asr-flash.json) — 百聆2026年6月更新的大模型ASR版本，全面支持汉语传统七大方言体系（官话/吴/湘/赣/客/闽/粤），并适配 20+ 地区口音官话。针对中文古诗词的韵律、节奏与文言表达特点进行专项优化，提升对古诗词…
-  - 模型：`fun-asr-flash-2026-06-15`
-- [Fun-ASR语音识别](groups/fun-asr.json) — 通义百聆新一代语音识别大模型，主打中文、英文、日文语音识别，多地区方言覆盖，具备更强的噪声鲁棒性，适应多样复杂环境，国内用户首推。
-  - 模型：`fun-asr`, `fun-asr-mtl`
-- [Paraformer语音识别-8k-v1](groups/paraformer-8k-v1.json) — Paraformer语音识别提供的文件转写API，能够对常见的音频或音视频文件进行语音识别，并将结果返回给调用者。Paraformer中文语音识别模型，支持8kHz电话语音识别。
-  - 模型：`paraformer-8k-v1`
-- [Paraformer语音识别-8k-v2](groups/paraformer-8k-v2.json) — Paraformer最新中文语音识别模型，模型结构升级，具有更好的识别效果,支持8kHz电话语音识别，仅支持中文热词。
-  - 模型：`paraformer-8k-v2`
-- [Paraformer语音识别-mtl-v1](groups/paraformer-mtl-v1.json) — Paraformer多语言语音识别模型，支持16kHz及以上采样率的音频或视频语音识别。 支持的语种/方言包括：中文普通话、中文方言（粤语、吴语、闽南语、东北话、甘肃话、贵州话、河南话、湖北话、湖南话…
-  - 模型：`paraformer-mtl-v1`
-- [Paraformer语音识别-v1](groups/paraformer-v1.json) — Paraformer中英文语音识别模型，支持16kHz及以上采样率的音频或视频语音识别。
-  - 模型：`paraformer-v1`
-- [Paraformer语音识别-v2](groups/paraformer-v2.json) — 推荐使用 Paraformer最新语音识别模型，支持多个语种的语音识别。可以通过language_hints参数选择语种获得更准确的识别效果，支持任意采样率。 支持的语言包括：中文（含粤语等各种方言）…
-  - 模型：`paraformer-v2`
-- [Qwen-Audio-3.0-ASR](groups/qwen-audio-3.0-asr.json) — 多语种语音识别，覆盖短音频、长文件及实时流式转写，支持方言、热词与上下文增强。
-  - 模型：`qwen-audio-3.0-asr-flash`
-- [Qwen-Audio-3.1-ASR](groups/qwen-audio-3.1-asr.json) — Qwen-Audio-3.1-ASR是一款支持短语音高效识别的大模型，面向高质量、多语种及文化内容转写场景。模型支持多语种与多地区中文方言识别，同时针对中文古诗词的韵律、节奏与文言表达进行优化。具备上…
-  - 模型：`qwen-audio-3.1-asr-flash`, `qwen-audio-3.1-asr-flash-filetrans`, `qwen-audio-3.1-asr-flash-streaming`
-- [Qwen-Audio-3.1-ASR-Message](groups/qwen-audio-3.1-asr-message.json) — Qwen-Audio-3.1-ASR-Flash-Message是一款基于大语言模型的高精度、长上下文、高灵活性的多语种语音识别模型。ASR-Flash-Message模型不仅支持超长音频上下文的无缝…
-  - 模型：`qwen-audio-3.1-asr-flash-message`
-- [Qwen-Audio-ASR-Flash-Filetrans](groups/qwen-audio-asr-flash-filetrans.json) — Qwen-Audio-ASR-Flash-Filetrans是新一代端到端离线语音识别大模型，面向会议转写、内容生产与通话分析等场景，支持多语种与多地区中文方言识别。模型具备高精度转写、热词及上下文增…
-  - 模型：`qwen-audio-3.0-asr-flash-filetrans`
-- [Qwen3-ASR-Flash](groups/qwen3-asr-flash.json) — Qwen3-ASR-Flash是一款基于大语言模型的高精度、高智能、高鲁棒性的多语种语音识别模型。依托强大的基座模型、海量的文本与多模态数据、千万小时音频数据，Qwen3-ASR-Flash实现了高精…
-  - 模型：`qwen3-asr-flash`
-- [Qwen3-ASR-Flash-Filetrans](groups/qwen3-asr-flash-filetrans.json) — Qwen3-ASR-Flash的大文件转录版本，Qwen3-ASR-Flash是一款基于大语言模型的高精度、高智能、高鲁棒性的多语种语音识别模型。依托强大的基座模型、海量的文本与多模态数据、千万小时音…
-  - 模型：`qwen3-asr-flash-filetrans`
-- [Qwen3-Omni-30b-a3b-Captioner](groups/qwen3-omni-30b-a3b-captioner.json) — 千问3-Omni-30b-a3b-Captioner是一款强大的音频细粒度分析模型，专为在复杂多变的音频场景中生成精准、全面的内容描述而设计，可自动解析并描述从复杂语音、环境声到音乐、影视声效等各类音…
-  - 模型：`qwen3-omni-30b-a3b-captioner`
-- [一句话识别及翻译V1.0](groups/gummy-chat-v1.json) — 多语言语音转写及翻译的多模态大模型。本模型支持60秒以内的实时语音识别，适用于语音搜索、设备指令等场景。提供10个混合语种的高准确率识别服务，同时支持中英日韩互译，以其他6个语种翻译成中文或英文。
-  - 模型：`gummy-chat-v1`
-- [语音识别热词](groups/speech-biasing.json) — 热词是指用户可以预先定义的一组特定词汇或短语，这些词汇或短语在识别、翻译过程中会被赋予更高的优先级。针对您的特定业务领域，如果有部分词汇的语音识别、翻译效果不够好，可以将这些关键词或短语添加为热词进行…
-  - 模型：`speech-biasing`
-
 ## 推理 `Reasoning` — 15 个家族
 
 - [MiniMax](groups/MiniMax-M2.1.json) — MiniMax推出的旗舰级开源大模型，聚焦真实世界复杂任务，包含MiniMax-M2.1、MiniMax-M2.5等开源模型。
@@ -326,6 +289,39 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`qwen3.8-max`, `qwen3.8-max-0902`
 - [智谱GLM系列文本模型](groups/zhipu-models-market-place.json) — 由智谱提供的GLM系列文本模型API服务
   - 模型：`ZHIPU/GLM-5`, `ZHIPU/GLM-5.1`, `ZHIPU/GLM-5.2`, `ZHIPU/GLM-5.3`, `ZHIPU/GLM-5.3-Flash`, `ZHIPU/GLM-5.3-FlashX`
+
+## 语音识别 `ASR` — 15 个家族
+
+- [Fun-ASR-Flash](groups/fun-asr-flash.json) — 百聆2026年6月更新的大模型ASR版本，全面支持汉语传统七大方言体系（官话/吴/湘/赣/客/闽/粤），并适配 20+ 地区口音官话。针对中文古诗词的韵律、节奏与文言表达特点进行专项优化，提升对古诗词…
+  - 模型：`fun-asr-flash-2026-06-15`
+- [Fun-ASR语音识别](groups/fun-asr.json) — 通义百聆新一代语音识别大模型，主打中文、英文、日文语音识别，多地区方言覆盖，具备更强的噪声鲁棒性，适应多样复杂环境，国内用户首推。
+  - 模型：`fun-asr`, `fun-asr-mtl`
+- [Paraformer语音识别-8k-v2](groups/paraformer-8k-v2.json) — Paraformer最新中文语音识别模型，模型结构升级，具有更好的识别效果,支持8kHz电话语音识别，仅支持中文热词。
+  - 模型：`paraformer-8k-v2`
+- [Paraformer语音识别-mtl-v1](groups/paraformer-mtl-v1.json) — Paraformer多语言语音识别模型，支持16kHz及以上采样率的音频或视频语音识别。 支持的语种/方言包括：中文普通话、中文方言（粤语、吴语、闽南语、东北话、甘肃话、贵州话、河南话、湖北话、湖南话…
+  - 模型：`paraformer-mtl-v1`
+- [Paraformer语音识别-v1](groups/paraformer-v1.json) — Paraformer中英文语音识别模型，支持16kHz及以上采样率的音频或视频语音识别。
+  - 模型：`paraformer-v1`
+- [Paraformer语音识别-v2](groups/paraformer-v2.json) — 推荐使用 Paraformer最新语音识别模型，支持多个语种的语音识别。可以通过language_hints参数选择语种获得更准确的识别效果，支持任意采样率。 支持的语言包括：中文（含粤语等各种方言）…
+  - 模型：`paraformer-v2`
+- [Qwen-Audio-3.0-ASR](groups/qwen-audio-3.0-asr.json) — 多语种语音识别，覆盖短音频、长文件及实时流式转写，支持方言、热词与上下文增强。
+  - 模型：`qwen-audio-3.0-asr-flash`
+- [Qwen-Audio-3.1-ASR](groups/qwen-audio-3.1-asr.json) — Qwen-Audio-3.1-ASR是一款支持短语音高效识别的大模型，面向高质量、多语种及文化内容转写场景。模型支持多语种与多地区中文方言识别，同时针对中文古诗词的韵律、节奏与文言表达进行优化。具备上…
+  - 模型：`qwen-audio-3.1-asr-flash`, `qwen-audio-3.1-asr-flash-filetrans`, `qwen-audio-3.1-asr-flash-streaming`
+- [Qwen-Audio-3.1-ASR-Message](groups/qwen-audio-3.1-asr-message.json) — Qwen-Audio-3.1-ASR-Flash-Message是一款基于大语言模型的高精度、长上下文、高灵活性的多语种语音识别模型。ASR-Flash-Message模型不仅支持超长音频上下文的无缝…
+  - 模型：`qwen-audio-3.1-asr-flash-message`
+- [Qwen-Audio-ASR-Flash-Filetrans](groups/qwen-audio-asr-flash-filetrans.json) — Qwen-Audio-ASR-Flash-Filetrans是新一代端到端离线语音识别大模型，面向会议转写、内容生产与通话分析等场景，支持多语种与多地区中文方言识别。模型具备高精度转写、热词及上下文增…
+  - 模型：`qwen-audio-3.0-asr-flash-filetrans`
+- [Qwen3-ASR-Flash](groups/qwen3-asr-flash.json) — Qwen3-ASR-Flash是一款基于大语言模型的高精度、高智能、高鲁棒性的多语种语音识别模型。依托强大的基座模型、海量的文本与多模态数据、千万小时音频数据，Qwen3-ASR-Flash实现了高精…
+  - 模型：`qwen3-asr-flash`
+- [Qwen3-ASR-Flash-Filetrans](groups/qwen3-asr-flash-filetrans.json) — Qwen3-ASR-Flash的大文件转录版本，Qwen3-ASR-Flash是一款基于大语言模型的高精度、高智能、高鲁棒性的多语种语音识别模型。依托强大的基座模型、海量的文本与多模态数据、千万小时音…
+  - 模型：`qwen3-asr-flash-filetrans`
+- [Qwen3-Omni-30b-a3b-Captioner](groups/qwen3-omni-30b-a3b-captioner.json) — 千问3-Omni-30b-a3b-Captioner是一款强大的音频细粒度分析模型，专为在复杂多变的音频场景中生成精准、全面的内容描述而设计，可自动解析并描述从复杂语音、环境声到音乐、影视声效等各类音…
+  - 模型：`qwen3-omni-30b-a3b-captioner`
+- [一句话识别及翻译V1.0](groups/gummy-chat-v1.json) — 多语言语音转写及翻译的多模态大模型。本模型支持60秒以内的实时语音识别，适用于语音搜索、设备指令等场景。提供10个混合语种的高准确率识别服务，同时支持中英日韩互译，以其他6个语种翻译成中文或英文。
+  - 模型：`gummy-chat-v1`
+- [语音识别热词](groups/speech-biasing.json) — 热词是指用户可以预先定义的一组特定词汇或短语，这些词汇或短语在识别、翻译过程中会被赋予更高的优先级。针对您的特定业务领域，如果有部分词汇的语音识别、翻译效果不够好，可以将这些关键词或短语添加为热词进行…
+  - 模型：`speech-biasing`
 
 ## 视觉理解 `VU` — 9 个家族
 

@@ -1,20 +1,20 @@
 {
-  "updatedAt": "2026-10-06",
-  "totalFamilies": 189,
-  "totalModels": 435,
+  "updatedAt": "2026-10-07",
+  "totalFamilies": 187,
+  "totalModels": 433,
   "profileCoverage": {
-    "full": 390,
-    "partial": 39,
+    "full": 378,
+    "partial": 49,
     "structured-only": 6,
     "none": 0
   },
   "capabilityDistribution": {
     "TG": 40,
     "IG": 31,
-    "VG": 26,
+    "VG": 25,
     "TTS": 18,
-    "ASR": 16,
     "Reasoning": 15,
+    "ASR": 15,
     "VU": 9,
     "Realtime-ASR": 8,
     "Multimodal-Omni": 7,
@@ -28,7 +28,7 @@
     "3D-generation": 1
   },
   "providerDistribution": {
-    "qwen": 117,
+    "qwen": 115,
     "qwen-domain-model": 36,
     "wan": 14,
     "mini-max": 4,
@@ -178,21 +178,6 @@
       "itemCount": 1,
       "items": [
         "aitryon"
-      ]
-    },
-    {
-      "slug": "animate-anyone-detect-gen2",
-      "name": "舞动人像AnimateAnyone-detect",
-      "primaryCapability": "VG",
-      "capabilities": [
-        "VG"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "animate-anyone-detect-gen2"
       ]
     },
     {
@@ -754,21 +739,6 @@
         "MiniMax/MiniMax-M3"
       ],
       "maxContextWindow": 1000000
-    },
-    {
-      "slug": "paraformer-8k-v1",
-      "name": "Paraformer语音识别-8k-v1",
-      "primaryCapability": "ASR",
-      "capabilities": [
-        "ASR"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "paraformer-8k-v1"
-      ]
     },
     {
       "slug": "paraformer-8k-v2",

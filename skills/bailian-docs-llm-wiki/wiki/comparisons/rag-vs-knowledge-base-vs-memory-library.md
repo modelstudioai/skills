@@ -1,75 +1,73 @@
-# RAG API、知识库与[长期记忆](../concepts/memory.md)库功能对比
+# 知识增强方案对比：RAG API、知识库与记忆库
 
-本文档面向百炼平台开发者，旨在清晰区分 **RAG API**、**知识库（Knowledge Base）** 和 **[长期记忆](../concepts/memory.md)库（Long Term Memory）** 三大核心能力模块的定位、能力边界与适用场景。三者虽均涉及“私有知识管理”与“语义检索”，但在设计目标、数据模型、生命周期管理、集成方式及计费逻辑上存在本质差异。正确理解其差异是构建高可用、可演进 RAG 应用与智能体系统的关键前提。
+为帮助开发者在百炼平台上高效选型，本文系统对比三种核心知识增强能力：**RAG API（编程接口层）**、**知识库（服务化能力单元）** 和 **记忆库（长期会话记忆服务）**。三者虽均面向“外部知识注入大模型”这一目标，但在设计定位、能力边界、使用范式与计费逻辑上存在本质差异。本文旨在厘清适用边界，避免功能错配（如用记忆库替代结构化文档检索），并为构建 RAG 应用、智能体（Agent）或个性化对话系统提供可落地的技术决策依据。
 
 ---
 
 ## 关键维度对比
 
-| 维度 | RAG API | 知识库（Knowledge Base） | [长期记忆](../concepts/memory.md)库（Long Term Memory） |
-|------|---------|---------------------------|------------------------------|
-| **本质定位** | **面向开发者的底层能力接口集合**：提供知识库全生命周期管理（创建/导入/更新/删除）、文档切片、向量索引、检索与问答服务的细粒度控制能力。强调可编程性与定制自由度。 | **面向应用的标准化服务载体**：以“知识库实例”为单位封装数据接入、向量化、检索与问答能力，通过控制台+API+Playground 提供开箱即用的服务化体验。强调易用性与生产就绪性。 | **面向用户状态建模的记忆中枢**：结构化存储和管理**动态演化的用户事实（Observation/Skill）与静态画像（Profile）**，支持语义搜索与跨会话上下文复用。强调状态感知与个性化。 |
-| **输入格式** | 支持多源异构输入：<br>• 文件 ID 列表（`docIds`）<br>• OSS/飞书/钉钉等授权链接<br>• 数据库连接配置（MySQL/PostgreSQL）<br>• 原始文本/HTML/Markdown/图片/音视频二进制流（需配合解析器） | 同 RAG API，但通过统一 UI/API 封装：<br>• 拖拽上传文件（PDF/DOCX/XLSX/PNG/JPG/MP4 等）<br>• 可视化配置数据源（OSS Bucket、数据库连接串、语雀空间等）<br>• 支持批量导入与增量同步 | 结构化 JSON 输入为主：<br>• `messages[]`（含 `text` + `image_url`）作为记忆内容源<br>• `profile_schema` ID 触发画像抽取<br>• `skill_name`/`skill_description` 显式定义技能<br>• 不直接接受原始文件，依赖内容解析与语义抽取 |
-| **输出格式** | • 检索接口（`/retrieve`）：返回原始切片（`chunk_id`, `content`, `score`, `source`）<br>• 问答接口（`/chat`）：流式 SSE 响应，含 `answer`, `references`, `thoughts`（Agentic 模式）<br>• 管理接口（`/list`）：标准分页 JSON（`data`, `next_token`） | • 检索服务：同 RAG API 输出结构，但经统一服务层封装，支持多库联合与权重配置<br>• 问答服务：增强版自然语言回答，内置拒答、防泄漏、引用标注等策略<br>• Playground 输出：带高亮引用、溯源链接、调试元信息（召回切片、rerank 分数） | • `GET /memory_nodes`：精确匹配结果（`id`, `type`, `content`, `created_at`, `project_ids`）<br>• `POST /search`：语义相似度搜索结果（`node_id`, `score`, `content`, `type`, `metadata`）<br>• `GET /user_profile`：结构化 JSON 用户画像（按 schema 字段组织）<br>• `GET /events/{id}`：异步任务状态与抽取结果（`skills`, `profile_fields`） |
-| **支持模型** | • **Embedding**：`text-embedding-v4`, `qwen3-vl-embedding`（显式指定）<br>• **Rerank**：`qwen3-rerank`, `qwen3-vl-rerank`（可 per-kb 配置）<br>• **LLM（问答）**：`qwen3.7-plus`, `qwen3.6-plus`（由 `agent_config.agent_model` 控制） | • **Embedding**：默认 `text-embedding-v4`（创建后不可改）<br>• **Rerank**：`qwen3-rerank`（文本）/ `qwen3-vl-rerank`（多模态），可动态启用<br>• **LLM（问答）**：`qwen3.6-plus` 等，支持 `temperature`, `enable_thinking` 等参数 | • **抽取模型**：内置专用模型（未公开名称），用于：<br>  - Observation/Skill 识别与结构化<br>  - Profile Schema 字段值抽取（支持多轮上下文）<br>• **搜索模型**：基于统一 embedding 向量空间（不暴露具体模型名），支持 `min_score` 过滤（`pro` 版本） |
-| **API 端点（典型）** | • 管理：`/api/v1/indices/rag/index/create_v2`, `/api/v1/indices/rag/index/job/create`<br>• 检索：`/api/v1/indices/knowledge/search`, `/api/v1/indices/rag/index/retrieve`<br>• 问答：`/api/v2/apps/knowledge/chat` | • 控制台服务调用：`/api/v1/indices/knowledge/search`, `/api/v2/apps/knowledge/chat`（与 RAG API 兼容）<br>• CLI 封装：`bl knowledge search`, `bl knowledge chat`<br>• Playground 调试：控制台内嵌 HTTP 请求 | • 写入：`POST /add`, `POST /add-async`<br>• 检索：`GET /memory_nodes`, `POST /memory_nodes/search`<br>• 画像：`POST /profile_schemas`, `GET /profile_schemas/{id}/user_profile`<br>• 异步：`GET /events/{event_id}` |
-| **计费方式** | • **按调用次数计费**：<br>  - 知识库创建/更新/删除：按次<br>  - 文档导入/切片：按文档页数或 token 数<br>  - 检索（`/retrieve`）：按 QPS + 调用量<br>  - 问答（`/chat`）：按 token（输入+输出）计费<br>• 所有费用归属业务空间（Workspace） | • **按知识库实例 + 使用量混合计费**：<br>  - 知识库实例：按月/按小时（取决于部署模式）<br>  - 检索/问答调用：同 RAG API（token/QPS）<br>  - 向量化计算：按文档体积与切片数计费<br>• 控制台服务发布即产生实例费用 | • **按记忆操作与搜索调用计费**：<br>  - `add`/`add-async`：按事件数（含抽取复杂度）<br>  - `search`：按 `top_k` 与 `min_score` 计算资源消耗<br>  - `GetUserProfile`：按次<br>• **分版本计费**：`Lite`（基础功能）与 `Pro`（支持 `min_score`, 多项目, 高级抽取）<br>• 商业化起始时间：2026-08-20 10:00（CST） |
-| **典型场景** | • 构建自定义 RAG 流水线（如：预处理 → 自定义切片 → 多模型 rerank → LLM 聚合）<br>• 需要精细控制每个环节（如：替换 embedding 模型、跳过 rerank、自定义召回逻辑）<br>• 与非百炼生态框架（如 LangChain 自研组件、LlamaIndex）深度集成 | • 快速上线企业知识问答机器人（HR政策/IT手册/产品文档）<br>• 多源数据统一检索（OSS文档 + 数据库表格 + 钉钉会议纪要）<br>• 低代码平台（Dify/Coze）对接百炼知识服务<br>• 需要 Playground 快速验证与 A/B 测试参数效果 | • 智能体（Agent）的长期状态管理：<br>  - 记录用户习惯（“用户常在周五下午订会议室”）<br>  - 存储可复用技能（“帮用户生成周报 PPT”）<br>  - 构建用户画像（职位、技术栈、偏好风格）<br>• 跨会话个性化推荐与响应（如：根据历史技能自动调用对应工具） |
+| 维度 | RAG API | 知识库（Knowledge Base） | 记忆库（Memory Library） |
+|------|---------|---------------------------|----------------------------|
+| **本质定位** | **底层能力封装的 RESTful 接口集合**，面向开发者提供对知识库全生命周期及检索/问答能力的细粒度编程控制 | **开箱即用的知识服务实体**，是 RAG 能力的标准化交付单元，支持控制台可视化管理与多模态语义检索+问答 | **跨会话[长期记忆](../concepts/memory.md)服务**，专为大模型对话场景设计，自动提取、存储、检索用户事实性信息与结构化画像 |
+| **输入格式** | JSON 请求体（含 `query`、`index_id`/`agent_id`、`docIds`、`messages` 等）；支持文件二进制上传（`multipart/form-data`） | 控制台拖拽上传（PDF/DOCX/CSV/图片等）；API 传入 `file_ids` 或 OSS 路径；Playground 支持纯文本提问 | JSON 请求体（含 `user_id`、`messages` 数组、`profile_schema`）；不接受原始文件，仅处理对话文本流 |
+| **输出格式** | - 管理类接口：标准 JSON 响应（含 `data.id`、`job_id` 等）<br>- 检索接口：返回切片列表（含 `content`、`score`、`source`）<br>- 问答接口：支持 SSE 流式响应（`event: message`）或 JSON 结构化回答（含 `references` 引用标注） | - Playground：富文本回答 + 高亮引用片段 + 可展开原始切片<br>- API `/knowledge/search`：JSON 切片列表<br>- API `/knowledge/chat`：SSE 流式回答（含 `references`） | JSON 响应：<br>- `SearchMemory`：返回 `memory_nodes[]`（含 `content`、`score`、`type`（fact/profile）、`metadata`）<br>- `GetUserProfile`：结构化用户画像对象<br>- **无自动生成回答能力**，需业务方注入 Prompt |
+| **支持模型** | - Embedding：`text-embedding-v4`、`qwen3-vl-embedding` 等可显式指定<br>- Rerank：`qwen3-rerank`、`qwen3-vl-rerank` 等<br>- Agent 模型：`qwen3.7-plus` 等（用于封装策略） | - 默认绑定 `text-embedding-v4` + `qwen3-rerank`<br>- 多模态场景自动适配 `Qwen-VL` 解析 + `qwen3-vl-rerank`<br>- 问答阶段调用 `qwen3.6-plus` 等大模型生成回答 | - Embedding：由平台统一管理，不可选<br>- Rerank：Pro 版本强制使用 `gte-rerank-v2`（不可替换）<br>- **不调用大模型生成回答**，仅提供记忆内容供上层模型使用 |
+| **API 端点示例** | - 创建知识库：`POST /api/v1/indices/rag/index/create_v2`<br>- 检索：`POST /api/v1/indices/rag/index/retrieve`（单库）<br>- 问答：`POST /api/v2/apps/knowledge/chat`（需 `agent_id`） | - 检索服务（多库联合）：`POST /api/v1/indices/knowledge/search`<br>- 问答服务：`POST /api/v2/apps/knowledge/chat`<br>- **所有端点均需已发布的 `agent_id`** | - 写入：`POST /api/v1/memory/add`<br>- 检索：`POST /api/v1/memory/search`<br>- 用户画像：`GET /api/v1/memory/profile/{user_id}`<br>- **所有端点均需 `user_id`** |
+| **计费方式** | - **按调用次数计费**：知识库管理、数据导入、检索、问答等各接口独立计费<br>- Embedding/Rerank/QA 模型调用单独计费<br>- 知识库规格费（标准版 0.03 元/小时）按知识库实例收取 | - **规格费 + 模型调用费**：知识库实例按小时计费（标准版/旗舰版）<br>- Embedding/Rerank/QA 模型调用按 token 或次数计费<br>- 免费额度仅抵扣标准版规格费（720 小时） | - **Add/Search 调用费**：区分 Pro/Lite 版本，按次计费<br>- **存储费**：¥0.002/万条/小时（长期有效）<br>- 免费额度自商业化日（2026-08-20）起 3 个月内有效 |
+| **典型场景** | - 构建企业级 RAG 平台（需自研控制台、权限体系、工作流编排）<br>- 批量知识库自动化运维（CI/CD 集成）<br>- 定制化检索策略开发（如混合召回、动态重排） | - 快速上线文档问答机器人（HR 政策、产品手册）<br>- 多源数据联合检索（文档+表格+图片）<br>- 通过 Playground 快速验证 RAG 效果与调参 | - 智能客服中记住用户历史投诉与偏好<br>- 个人助理中持续学习用户作息、饮食习惯、会议偏好<br>- 多轮对话中保持上下文连贯性（突破 32K 上下文限制） |
 
 ---
 
 ## 各方案适用场景建议
 
-### ✅ 推荐使用 **RAG API**
-- 你正在构建一个**高度定制化、对性能与精度有极致要求**的 RAG 系统；
-- 你需要**替换或组合多个 embedding/rerank/LLM 模型**（例如：用 `text-embedding-v3` + `qwen3-vl-rerank` + `qwen3.7-plus`）；
-- 你的数据源非常规（如：自定义协议的内部系统、加密文档流），需要**绕过标准导入流程，直接注入切片**；
-- 你已具备成熟的 DevOps 能力，需通过 CI/CD 自动化知识库构建与灰度发布；
-- 你正在将百炼能力**嵌入到自有 Agent 框架中**，且需要完全掌控请求链路（如：自定义重试、熔断、日志埋点）。
+### ✅ 选择 **RAG API** 当：
+- 你需要**完全掌控技术栈**：自建前端、权限系统、审计日志、监控告警；
+- 业务要求**高度定制化**：例如，将知识库检索嵌入现有 CRM 工作流，或实现“先关键词过滤再向量召回”的混合策略；
+- 需要**大规模自动化管理**：如每日同步 100+ 个业务部门的更新文档，并触发重索引；
+- 正在构建 PaaS 平台，需向租户暴露标准化知识能力接口。
 
-### ✅ 推荐使用 **知识库（Knowledge Base）**
-- 你希望**在 1 小时内完成一个可对外服务的知识问答应用**（如：客服知识库、内部 Wiki 助手）；
-- 你的数据主要来自**标准文件（PDF/Word/Excel）或主流协作平台（钉钉/飞书/OSS）**；
-- 你需要**可视化调试、A/B 参数对比、多知识库联合检索**等运营友好能力；
-- 你使用 **Dify/Coze/LangChain 等低代码/框架平台**，追求“配置即服务”；
-- 你关注**服务稳定性与 SLA**，希望平台自动处理索引重建、故障转移、容量伸缩。
+> ⚠️ 注意：RAG API 是能力底座，**不提供开箱即用的问答服务**。若直接调用 `/index/retrieve`，你仍需自行调用大模型拼装 Prompt 并生成回答。
 
-### ✅ 推荐使用 **长期记忆库（Long Term Memory）**
-- 你正在开发一个**具备长期记忆能力的智能体（Agent）**，需记住用户偏好、历史行为、技能习惯；
-- 你需要**自动化从对话中提取结构化事实**（如：“用户下周要去上海出差” → `observation` 类型记忆）；
-- 你希望为用户提供**千人千面的交互体验**（如：根据画像自动切换回答语气、推荐相关技能）；
-- 你的应用涉及**多项目/多租户隔离**（如：SaaS 平台为不同客户维护独立记忆空间）；
-- 你需要**跨会话复用技能**（如：用户第一次教 Agent “如何导出财务报表”，后续可直接调用该技能）。
+### ✅ 选择 **知识库** 当：
+- 你的目标是**快速交付一个可用的 RAG 应用**（如内部知识助手、销售话术库）；
+- 数据类型多样：既有 PDF 技术文档，又有 Excel 产品参数表，还有产品宣传图；
+- 需要**开箱即用的调试与可观测能力**：Playground 实时试问、SLS 日志追踪召回质量、引用高亮验证准确性；
+- 团队以业务人员为主，希望低代码配置（如通过控制台设置切片长度、相似度阈值）。
+
+> ⚠️ 注意：知识库是“静态知识”的载体，**不感知对话状态与用户身份**。它无法记住“张三上周问过服务器配置”，只能回答“服务器配置标准是什么”。
+
+### ✅ 选择 **记忆库** 当：
+- 你的应用是**强交互、长周期、个性化**的对话系统（如 AI 助理、教育陪练、健康顾问）；
+- 核心需求是**跨会话理解用户**：例如，“用户昨天说过敏源是花生，今天问零食推荐时应自动过滤”；
+- 需要**结构化沉淀用户特征**：如从对话中自动提取“职业=程序员”、“偏好=简洁风格”、“当前项目=AI平台重构”；
+- 愿意接受“平台托管记忆逻辑”，聚焦于如何将检索结果注入 Prompt，而非维护向量数据库。
+
+> ⚠️ 注意：记忆库**不替代知识库**。它不索引企业文档，也不支持 NL2SQL 查询数据库。它是对“用户侧知识”的补充，而非“企业侧知识”的解决方案。
 
 ---
 
-## 技术选型决策树（面向开发者）
+## 开发者技术选型参考
 
-```mermaid
-graph TD
-    A[你的核心需求是什么？] --> B{是否需要管理“用户状态”？}
-    B -->|是| C[→ 选 长期记忆库<br>（事实/技能/画像）]
-    B -->|否| D{是否追求开箱即用、快速上线？}
-    D -->|是| E[→ 选 知识库<br>（控制台+Playground+服务化）]
-    D -->|否| F{是否需要深度定制每个 RAG 环节？}
-    F -->|是| G[→ 选 RAG API<br>（细粒度控制+多模型组合）]
-    F -->|否| H[→ 知识库仍是更优选择<br>（API 兼容，且更稳定易维护）]
+| 你的问题 | 推荐方案 | 理由 |
+|----------|----------|------|
+| “我想让客服机器人读懂我们全部的产品手册和合同模板，并准确回答客户问题。” | **知识库**（首选）或 **RAG API**（如需深度定制） | 文档是静态、共享、结构化的组织知识，知识库原生支持 PDF/Word 解析、多库联合检索与带引用的回答生成。 |
+| “我正在开发一个 SaaS 平台，需要为每个租户提供独立的知识管理后台，支持 API 对接其 ERP 系统。” | **RAG API**（必需） | RAG API 提供租户隔离（`workspace_id`）、细粒度权限（RAM 策略）、批量操作（OSS 导入）和完整生命周期管理，是构建多租户平台的基础设施。 |
+| “我的 AI 助理需要记住用户每次对话中透露的生日、宠物名字、常去餐厅，下次主动问候。” | **记忆库**（必需） | 记忆库专为该场景设计：自动提取事实、按 `user_id` 隔离、支持 TTL 过期、提供低延迟语义检索，且无需你维护向量索引。 |
+| “我有 10 个不同部门的文档，想做一个统一搜索入口，但不想让用户看到所有结果，只显示与其角色相关的部分。” | **知识库 + RAG API**（组合） | 用知识库分别创建 10 个部门知识库 → 用 RAG API 的 `agent_id` 封装“按角色路由”策略 → 在 `/knowledge/search` 中传入角色标签实现权限过滤。 |
+| “我只需要一个简单的 FAQ 机器人，5 分钟内上线，不写代码。” | **知识库（控制台）**（唯一推荐） | 控制台上传文件 → 选择“基础文档问答” → 点击“发布到 Playground” → 直接测试。零开发成本，效果可验证。 |
 
-    style C fill:#4CAF50,stroke:#388E3C,color:white
-    style E fill:#2196F3,stroke:#1565C0,color:white
-    style G fill:#FF9800,stroke:#EF6C00,color:white
-    style H fill:#9E9E9E,stroke:#616161,color:white
-```
+> 💡 **关键结论**：  
+> - **知识库是 RAG 的“默认答案”**——90% 的文档问答、数据查询、多模态检索需求，应优先使用知识库；  
+> - **RAG API 是知识库的“引擎盖”**——当你需要拆开发动机、更换零件、加装涡轮时才打开它；  
+> - **记忆库是知识库的“互补项”**——它不解决“企业知道什么”，而是解决“用户是谁、记得什么”，二者常协同使用（如：知识库回答“公司差旅政策”，记忆库补充“张三上次报销被拒因发票不全”）。  
 
-> **重要提醒**：
-> - **不要混淆“知识库实例”与“长期记忆库”**：前者存储**静态、共享、领域知识**（如公司制度）；后者存储**动态、私有、用户专属状态**（如用户个人日程）。二者可协同使用（例如：Agent 用长期记忆判断“用户想查报销政策”，再调用知识库检索具体条款）。
-> - **RAG API 是知识库的底层实现**：控制台创建的知识库，其背后即调用 RAG API 完成索引构建与服务发布。因此，知识库是 RAG API 的“产品化封装”，而非并列替代方案。
-> - **长期记忆库不替代知识库**：它不支持文档解析、表格 NL2SQL、音视频转写等知识库特有能力；也不提供“知识检索服务”这类
+---  
+*最后更新：2025年4月*
 
 ## 被对比主题页
 
 - [rag api](../api/rag-api.md)
 - [knowledge base](../guides/knowledge-base.md)
-- [long term memory new](../api/long-term-memory-new.md)
+- [memory library overview](../guides/memory-library-overview.md)
 
 
