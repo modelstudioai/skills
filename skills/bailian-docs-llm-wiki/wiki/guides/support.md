@@ -1,49 +1,45 @@
 # support
 
-百炼平台的 `support` 接口用于查询当前服务支持的模型能力、功能范围及基础服务策略，是开发者集成前必查的元信息入口。它不提供实时推理能力，仅返回静态配置与策略说明。所有响应内容均以结构化 JSON 形式返回，适用于自动化校验与文档同步。
+百炼平台的 `support` 接口提供模型调用过程中的基础服务支持能力，包括错误诊断、请求追踪、响应元信息返回等，主要用于调试与问题排查。该能力默认启用，无需额外配置，但部分高级功能需配合特定参数或模型版本使用。开发者应结合 [服务支持](../../raw/model-user-guide/support.md) 文档理解整体支持范围。
 
 ## 支持的模型/功能
 
-- 支持的模型列表详见 [模型列表](../../raw/model-user-guide/support/model-studio-model-list.md)，该文档按模型类型（如 text-generation、embedding、multimodal）和上线状态（`active` / `deprecated`）分类维护。
-- 功能覆盖包括：同步调用、流式响应、批量推理、[Token](../concepts/token.md) 计费模式、私有化部署兼容性标识等，具体以 [模型列表](../../raw/model-user-guide/support/model-studio-model-list.md) 中各模型的 `capabilities` 字段为准。
-- 售后支持范围（如 SLA、故障响应等级、工单通道）见 [售后说明](../../raw/model-user-guide/support/after-sales-service-scope.md)，注意该文档明确区分了公有云与专属版的服务边界。
+- 所有在 [模型列表](../../raw/model-user-guide/support/model-studio-model-list.md) 中标注为“已上线”且状态为“可用”的模型均支持基础 `support` 能力（如 `request_id` 返回、HTTP 状态码语义化）；
+- 高级支持功能（如详细错误分类码、token 级耗时分析、推理链路日志标识）仅对 Qwen2.5-72B-Instruct、Qwen3-32B 和 Qwen3-235B-A22B 等指定大模型版本开放；
+- 流式响应（`stream=true`）下，`support` 会附加 `x-bailian-trace-id` 和 `x-bailian-request-id` 响应头，便于全链路追踪。
 
 ## 关键参数
 
-调用 `support` 接口时需传入以下可选参数：
-- `model_id`（string）：指定模型 ID，用于获取单个模型的详细支持信息；若省略，则返回全局支持概览。
-- `with_capabilities`（boolean，默认 `false`）：启用后返回完整能力矩阵（含输入格式、最大上下文长度、支持的 temperature 范围等）。
-- `locale`（string，默认 `"zh"`）：控制返回文案语言，当前仅支持 `"zh"` 和 `"en"`。
+| 参数名 | 类型 | 是否必需 | 说明 |
+|--------|------|----------|------|
+| `support.trace` | boolean | 否 | 设为 `true` 时强制启用全链路追踪（默认由平台策略自动控制）；详见 [服务支持](../../raw/model-user-guide/support.md) |
+| `support.debug` | string | 否 | 可选值：`"minimal"`（默认）、`"full"`；设为 `"full"` 将在响应 `x-bailian-debug-info` 头中返回 token 分析与缓存命中详情 |
+| `support.timeout_ms` | integer | 否 | 覆盖全局超时设置，单位毫秒；仅对支持该字段的模型生效（参见 [模型列表](../../raw/model-user-guide/support/model-studio-model-list.md) 中的“支持参数”列） |
 
-> **注意**：[售后说明](../../raw/model-user-guide/support/after-sales-service-scope.md) 中关于“2 小时内响应 P1 故障”的承诺，仅适用于已签署《企业级服务协议》的客户；标准版用户适用 [相关协议](../../raw/model-user-guide/support/related-agreements.md) 中约定的通用响应时效，二者存在差异，请务必核对签约版本。
+> **注意**：`support.debug=full` 在 v3.2.0+ SDK 中才被完整支持；旧版 SDK 或直接 HTTP 调用可能忽略该参数，建议同步查阅 [售后说明](../../raw/model-user-guide/support/after-sales-service-scope.md) 中关于调试支持的时效性说明。
 
 ## 使用方式
 
-通过 HTTP GET 请求访问 `/v1/support` 端点（鉴权方式同其他 API，需携带 `Authorization: Bearer <api_key>`）：
-
-```bash
-curl -X GET "https://dashscope.aliyuncs.com/api/v1/support?model_id=qwen-max&with_capabilities=true" \
-  -H "Authorization: Bearer sk-xxx"
-```
-
-响应示例（精简）：
-```json
-{
-  "model_id": "qwen-max",
-  "status": "active",
-  "capabilities": {
-    "max_input_tokens": 32768,
-    "streaming": true,
-    "input_types": ["text"]
-  }
-}
-```
+1. 发起标准 `/v1/chat/completions` 请求，在 `headers` 中添加 `X-DashScope-Support: true`（推荐，兼容性最佳）；
+2. 或在 `body` 中显式传入 `support` 对象（JSON 格式），例如：
+   ```json
+   {
+     "model": "qwen3-32b",
+     "messages": [{"role": "user", "content": "Hello"}],
+     "support": {
+       "trace": true,
+       "debug": "full"
+     }
+   }
+   ```
+3. 成功响应中检查 `x-bailian-request-id`、`x-bailian-trace-id` 及（当启用 debug 时）`x-bailian-debug-info` 头字段。
 
 ## 限制和注意事项
 
-- 单 IP 每分钟限频 60 次，超出将返回 `429 Too Many Requests`。
-- `model_id` 必须为 [模型列表](../../raw/model-user-guide/support/model-studio-model-list.md) 中明确标注 `status: active` 的 ID；传入已下线模型将返回 `404 Not Found`。
-- 接口返回的 `capabilities` 为服务端当前生效配置，**不保证与模型实际推理行为完全一致**——例如部分 embedding 模型虽声明支持 `batch_size > 1`，但实际调用时需以 [常见问题](../../raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md) 中“批量调用限制”章节为准。
+- 单次请求中 `support.debug="full"` 最多返回前 100 个 token 的详细分析，超出部分不填充；
+- `support.trace=true` 会轻微增加首 token 延迟（约 5–15ms），生产环境建议仅在问题复现时启用；
+- 不支持在 `/v1/embeddings` 或 `/v1/rerank` 等非 chat 接口上使用 `support` 参数；
+- 若响应中缺失 `x-bailian-*` 头，表明当前模型未接入新版支持框架，请核对模型是否在 [模型列表](../../raw/model-user-guide/support/model-studio-model-list.md) 中明确标注“支持 support v2”。
 
 ## 来源文档
 

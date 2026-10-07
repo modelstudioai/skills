@@ -1,64 +1,51 @@
 # 安全防护
 
-安全防护是百炼平台内生、分层、可编排的防御能力体系，面向 Agent 全生命周期（开发、运行、数据、记忆、生态）提供默认启用的内容检测、行为隔离与风险审计能力，形成「量 → 挡 → 记」闭环：自动度量风险、实时拦截高危操作、完整记录事件链路，无需开发者手动集成即可获得基础防护。
+安全防护是百炼平台内生、开箱即用的智能体全生命周期安全治理能力，覆盖开发、运行、数据、记忆与生态链路。它通过「量·发现与盘点—挡·拦截与防护—记·审计与留痕」闭环机制，实现资产自动识别、风险实时监测与事件可追溯，无需开发者自行构建底层安全设施。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-安全防护不是单一功能模块，而是按防护对象与阶段深度融入各核心场景：
+安全防护以**分层启用、按需生效**方式深度集成于各核心模块：
 
-- **Flow Agent**：输入/输出内容自动触发默认内容安全检测（涉黄、涉政、广告等），拦截违规文本；高级防护可开启「提示词攻击」策略，识别 jailbreak、越狱指令等对抗性输入。
-- **Managed Agent**：运行时默认启用沙箱隔离、工具调用拦截（如禁止 `rm -rf /`）、凭证隔离与 Session 生命周期治理；高级防护中「工具调用安全」策略可监测异常工具组合调用模式并告警。
-- **RAG 应用**：知识库上传文件时默认预扫描（病毒、恶意宏、敏感信息），索引构建与检索过程默认检测内容投毒风险；高级防护「RAG 数据投毒」策略提供细粒度语义级投毒识别与溯源。
-- **Memory 与 Store**：记忆读写、技能（Skill）包上传、MCP 组件注册均默认执行内容安全检测；高级防护「知识库与记忆窃取」「身份与安全凭证」策略可识别越权访问、凭证硬编码等风险行为。
-- **模型调用与传输**：通过 `X-DashScope-DataInspection` 头启用 AI 安全护栏，对输入输出做合规检查；支持 AES+RSA 混合加密传输，保障敏感数据在公网链路中的机密性——此属传输层安全能力，与运行时防护协同构成纵深防御。
+- **Flow Agent**：默认启用输入/输出内容安全检测（含提示词注入识别）；当接入 RAG 或 Memory 时，自动触发知识库内容与记忆读写内容的安全扫描。
+- **Managed Agent**：默认提供沙箱隔离、工具调用拦截、凭证隔离与 Session 生命周期治理；所有运行时行为均在受控环境中执行。
+- **RAG（知识库）**：上传文件时默认预扫描（病毒、恶意宏）；启用高级防护后，额外执行知识库内容投毒检测（如恶意指令注入、隐蔽后门文本）。
+- **Memory（记忆服务）**：默认对读写内容进行合规性检测（涉政、涉黄、隐私泄露等），防止敏感信息意外留存或泄露。
+- **Store（MCP/Skill）**：默认对上架的技能包（.zip/.py）执行供应链静态扫描，识别恶意代码、高危依赖（如 `requests>=2.32.0` 中的 CVE-2023-31519）、硬编码密钥等风险。
+- **模型调用层**：通过 `X-DashScope-DataInspection` 请求头可按需启用 AI 安全护栏，对单次请求的 `input` 和 `output` 进行实时内容合规检测（CIP 类型）。
 
-> ✅ 关键原则：**默认防护随模块使用自动生效，零配置；高级防护需授权开通，全局生效，仅监测告警，不自动阻断。**
+> ⚠️ 注意：**默认防护自动生效，不消耗 Credit，仅记录基础日志；高级防护需开通服务授权（限时免费），才可生成完整风险事件（含风险等级、触发节点、Trace ID）并支持审计回溯。**
 
 ## 关键参数和配置
 
-| 参数 | 类型 | 说明 | 开启方式 |
-|------|------|------|----------|
-| `risk_level` | string | 风险等级（`high`/`medium`/`low`），由置信度与危害联合判定，用于告警筛选与处置优先级 | 所有告警接口返回字段（如 `/agent_logs`） |
-| `Credit` | integer | 高级防护用量单位（1 Credit ≈ 对应 [Token](token.md) 量的内容检测），每日每席位默认 300 Credits | 控制台 **Security > 高级防护 > 配额管理** 查看与调整 |
-| `seat`（席位） | — | 启用高级防护且处于运行状态的 Agent 实例数；停用或未启用不计费 | 自动统计，控制台 **Security > 高级防护 > 使用概况** 可见 |
-| `X-DashScope-DataInspection` | HTTP Header | 启用 AI 安全护栏（如 `{"input":"cip","output":"cip"}`），独立于平台默认防护 | 调用模型 API 时显式传入 |
-| `enable_encryption` | bool（SDK） | 启用端到端传输加密（AES+RSA），保护 `input` 字段 | SDK 中设置（如 Python `Generation.call(enable_encryption=True)`） |
+| 参数/配置项 | 说明 | 使用位置 | 备注 |
+|-------------|------|----------|------|
+| `X-DashScope-DataInspection: {"input":"cip","output":"cip"}` | 启用 AI 安全护栏的 HTTP 请求头 | 模型/Agent 调用 API | 值为 JSON 字符串（需转义双引号），非法值返回 400 |
+| `--risk-level high` | CLI 命令中过滤高风险告警 | `bl agents security alerts` | 支持 `high`/`medium`/`low`，默认返回全部 |
+| `enable_encryption=True` (Python) / `.enableEncrypt(true)` (Java) | SDK 级传输加密开关 | DashScope SDK 调用 | 自动管理 AES 密钥与 RSA 加解密，无需手动调用公钥接口 |
+| `available: false` | API 响应中表示某策略未开通 | `/policies` 等接口响应体 | 不导致整体失败，便于前端灰度降级 |
+| `Credit` | 安全检测计费单位 | 高级防护启用后 | 按被检测内容 [Token](token.md) 数换算，每席位每日 300 Credits 免费额度 |
 
-> ⚠️ 注意：  
-> - 高级防护策略（如「敏感数据外泄」「身份凭证」）**仅输出告警，不自动拦截请求或终止 Agent**；拦截动作由默认防护中的内容检测、沙箱机制等底层能力完成。  
-> - `X-DashScope-DataInspection` 是模型服务层能力，与平台层安全防护正交，可叠加使用。  
-> - 所有高级防护策略配置对**账号下全部 Agent 全局生效**，不区分业务空间。
+- **策略配置入口**：控制台 → **Security > 高级防护 > 安全策略**  
+- **全局生效性**：所有安全策略对账号下全部 Agent 全局生效，不区分业务空间，修改前请评估影响范围。  
+- **审计数据延迟**：防护总览页面数据约每 2 分钟刷新一次，非实时。
 
 ## 面向开发者，简洁实用
 
-- **快速验证防护是否生效**：  
-  ```bash
-  # 查看最近24小时拦截统计（含默认防护）
-  bl agents security overview
+- ✅ **开箱即用**：只要使用 Flow/Managed Agent、RAG、Memory 或 Store，对应默认防护即自动启用，无需代码改造。  
+- ✅ **按需增强**：通过控制台一键开通高级防护，即可获取结构化风险事件与审计日志，用于自动化响应或合规报告。  
+- ✅ **统一 API**：所有安全数据通过 `/api/v1/agentstudio/security` 接口族获取，支持告警查询、资产统计、策略管理与日志导出，响应格式统一（`{"success": true, "data": {...}}`）。  
+- ✅ **SDK 友好**：DashScope Python/Java SDK 已内置传输加密、安全护栏等能力，一行代码启用（如 `Generation.call(..., enable_encryption=True)`）。  
+- ✅ **最小侵入**：安全能力不改变原有调用协议（如 [OpenAI 兼容接口](openai-compatible-api.md)仍可用），仅通过新增 Header 或参数启用。  
 
-  # 查询高风险告警（高级防护产出）
-  bl agents security alerts --risk-level high
-  ```
-
-- **API 集成告警流**：  
-  调用 `/api/v1/agentstudio/security/agent_logs?risk_level=high&order_by=check_time&order=desc` 获取实时告警列表，响应含 `alert_id`、`risk_domain`（如 `prompt_attack`）、`details`（风险上下文）等关键字段。
-
-- **导出全量告警用于 SOC 分析**：  
-  先 POST `/export_agent_logs` 提交任务（注意 `params` 字段需为 **PascalCase 字符串化 JSON**），再 GET `/export_status?export_id=xxx` 轮询下载链接。
-
-- **生产环境必做三件事**：  
-  1. **禁用默认业务空间**：新建独立业务空间，避免权限失控；  
-  2. **开通高级防护并启用关键策略**：如「提示词攻击」「敏感数据外泄」，及时发现新型风险；  
-  3. **为敏感 Agent 配置私网访问 + 传输加密**：双重保障数据链路安全（PrivateLink + `enable_encryption`）。
-
-安全防护的目标不是增加复杂度，而是让安全成为平台的“空气”——你感知不到它的存在，但离开它就无法呼吸。
+> 💡 提示：首次集成建议先运行 `bl agents security overview` 查看当前防护覆盖情况；生产环境务必开通高级防护以满足审计与溯源要求。
 
 ## 关联主题页
 
 - [security guide](../guides/security-guide.md)
 - [security api guide](../api/security-api-guide.md)
 - [security and compliance](../guides/security-and-compliance.md)
-- [application permission management](../guides/application-permission-management.md)
+- [knowledge base](../guides/knowledge-base.md)
 - [managed agents](../guides/managed-agents.md)
+- [application call](../api/application-call.md)
 
 
