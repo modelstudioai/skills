@@ -1,39 +1,40 @@
 # model high speed inference
 
-百炼平台的 model high speed inference 是面向低延迟、高并发场景优化的推理服务模式，适用于实时对话、搜索补全、流式响应等对端到端时延敏感的业务。该模式通过资源隔离、预热调度与硬件级加速协同，显著降低 P99 延迟并提升吞吐稳定性。其能力边界和配置方式需严格遵循平台当前运行时约束。
+百炼平台提供多种面向高吞吐、低延迟推理场景的加速能力，主要包括 Prime 模式（轻量级性能增强）和吞吐预留（专属容量保障）。二者均通过模型标识符（`model` 参数）触发，无需修改 API 协议或 SDK，适用于对响应速度、稳定性有明确要求的生产级 AI 应用。
 
 ## 支持的模型/功能
 
-- 当前仅支持 Qwen 系列（Qwen1.5、Qwen2、Qwen2.5）及部分 Llama3 定制量化版本（INT4/FP16），不支持非白名单模型或自定义 LoRA 微调后未重新编译的实例。  
-- 核心功能包括：Prime 模式（[Prime 模式](../../raw/model-user-guide/model-high-speed-inference/prime-mode.md)）、吞吐预留（[吞吐预留](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)）及自动批处理（Auto-batching）启用开关。  
-- 不支持动态 batch size 调整、运行时模型切换或跨 region 的共享实例复用。
+- **Prime 模式**：面向输出速度敏感场景（如实时对话、Agent 多步推理），提供 1.5~2 倍于标准 API 的 TPS 提升。支持模型包括 `glm-5.3-prime`、`glm-5.2-fast-preview`、`wan3.0-video-prime` 等，详见 [Prime 模式](../../raw/model-user-guide/model-high-speed-inference/prime-mode.md) 文档。
+- **吞吐预留**：为指定模型锁定专属 TPM（[Token](../concepts/token.md)s Per Minute）容量，实现刚性容量保障。支持 Qwen、GLM、DeepSeek、Kimi 等主流大模型系列，覆盖华北2（北京）与新加坡地域，具体列表见 [吞吐预留](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md) 文档。
+- > **注意**：`glm-5.2-fast-preview` 在 Prime 模式下仍沿用原模型名，而吞吐预留为同一基础模型（如 `GLM-5.2`）生成全新专属 `model` code，二者不可混用；调用时必须严格匹配对应模式的模型标识符。
 
 ## 关键参数
 
-| 参数名 | 类型 | 必填 | 说明 |
-|--------|------|------|------|
-| `mode` | string | 是 | 取值为 `"prime"` 或 `"default"`；`"prime"` 启用低延迟路径，需配合 `tpm_reservation` 使用 |
-| `tpm_reservation` | integer | 否（`mode=prime` 时必填） | 预留每分钟 [Token](../concepts/token.md) 处理量（TPM），最小值 1000，最大值见 [吞吐预留](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md) 文档 |
-| `stream` | boolean | 否 | 设为 `true` 时启用流式响应，但 Prime 模式下流式首 token 延迟仍受 `tpm_reservation` 下限约束 |
-
-> **注意**：原始文档中 `tpm_reservation` 单位曾被误标为“每秒”，实际单位为“每分钟”——请以 [吞吐预留](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md) 中最新定义为准。
+| 参数 | Prime 模式 | 吞吐预留 |
+|------|------------|-----------|
+| **触发方式** | 直接使用预置模型 ID（如 `glm-5.2-fast-preview`） | 使用控制台生成的专属 `model` code |
+| **性能档位** | 固定高速档（无配置项） | 创建时可选「标准模式」或「高速模式」（后者等效 PTU 部署，TPS 提升 1.5~2 倍） |
+| **容量单位** | 无显式容量配置；实际 TPS 受平台资源动态调节 | 按 kTPM（千 token/分钟）预设输入/输出吞吐量 |
+| **溢出行为** | 不适用（无预留概念） | 可选「自动溢出至按量计费」（默认）或「仅预留容量，超限返回 429」 |
+| **计费粒度** | 按实际输入/输出 token 计费，与标准 API 一致 | 预付费购买 kTPM 容量，预留内调用不额外计费；溢出部分按 token 计费 |
 
 ## 使用方式
 
-1. 在调用 `/v1/chat/completions` 或 `/v1/completions` 时，于请求体中显式传入 `mode` 和（如适用）`tpm_reservation`；  
-2. Prime 模式需提前申请配额并通过工单开通，未开通时设置 `mode="prime"` 将返回 `403 Forbidden`；  
-3. 推荐搭配 `temperature=0` 与 `top_p=1.0` 使用，避免采样逻辑引入不可控延迟；  
-4. 初始化冷启动延迟约 8–12 秒，后续请求可稳定在 <150ms（P99，输入≤512 tokens，输出≤256 tokens）。
+- **Prime 模式**：仅需将请求中的 `model` 字段设为对应 Prime 模型 ID（如 `"model": "glm-5.2-fast-preview"`），并确保请求域名指向兼容模式入口（`https://{workspace_id}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`）。流式响应中需分别处理 `delta.reasoning_content` 和 `delta.content` 字段。完整示例见 [Prime 模式](../../raw/model-user-guide/model-high-speed-inference/prime-mode.md)。
+- **吞吐预留**：在百炼控制台创建实例后，复制生成的专属 `model` code，并在 API 请求中替换 `model` 参数。调用前需确保实例状态为「运行中」。注意：短时间内请求量快速拉升时存在短暂预热期，可能引发延迟波动，建议客户端实现排队或重试机制。接入细节参见 [吞吐预留](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)。
+- > **注意**：吞吐预留创建时若选择「高速模式」，其性能表现与 Prime 模式接近（TPS 提升 1.5~2 倍），但二者底层资源隔离策略、计费模型与 SLA 保障等级不同，不可等价替代。
 
 ## 限制和注意事项
 
-- 单次请求最大 `max_tokens` 为 1024（Prime 模式下强制限制，`default` 模式仍为 4096）；  
-- 不支持 `logprobs`、`echo`、`functions` 等增强字段，启用将导致 400 错误；  
-- 同一 `tpm_reservation` 值在 24 小时内不可重复提交，变更需先调用释放接口（见 [Prime 模式](../../raw/model-user-guide/model-high-speed-inference/prime-mode.md)）；  
-- > **注意**：文档 1 中未明确说明多租户隔离粒度，但实测表明 `tpm_reservation` 配额按 API Key 维度独占，而非 project 或 uid —— 该行为与 [Prime 模式](../../raw/model-user-guide/model-high-speed-inference/prime-mode.md) 描述一致，但与早期内部设计稿存在偏差，请以运行时实际表现为准。
+- **模型能力一致性**：Prime 模式下模型的功能、上下文长度、工具调用等能力与对应基础模型完全一致，无降级；吞吐预留亦不改变基础模型能力，仅保障容量 [Prime 模式](../../raw/model-user-guide/model-high-speed-inference/prime-mode.md)。
+- **地域与模型绑定**：Prime 模型 ID 与地域强绑定（如 `glm-5.3-prime` 在北京与新加坡价格不同）；吞吐预留也需在目标地域创建，且专属 `model` code 仅在该地域有效。
+- **缓存行为**：两者均支持 token 缓存（`cached_tokens`），但 Prime 模式在 `usage` 中明确返回 `prompt_tokens_details.cached_tokens`，而吞吐预留监控中提供独立的「缓存命中量」指标，详见 [模型监控](../../raw/model-user-guide/model-monitoring/model-telemetry.md)。
+- **退订与失效**：吞吐预留退订后专属 `model` code 立即失效，请求回退至公共资源；Prime 模式无生命周期管理，只要模型可用即可持续调用。
+- **调试建议**：首次使用吞吐预留时，建议先以小容量（如 10 kTPM 输入/1 kTPM 输出）创建并观察 7 天用量趋势，再结合 [TPM 容量计算器](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md) 进行扩容。
 
 ## 来源文档
 
-- [模型推理](../../raw/model-user-guide/model-high-speed-inference.md)
+- [Prime 模式](../../raw/model-user-guide/model-high-speed-inference/prime-mode.md)
+- [吞吐预留](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)
 
 

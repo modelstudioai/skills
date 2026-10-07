@@ -1,67 +1,62 @@
-# sandbox api
+# [sandbox](../guides/sandbox.md) api
 
-Sandbox API 是阿里云百炼提供的沙箱环境生命周期管理接口，兼容 E2B 协议，支持模版构建与实例的创建、连接、暂停、恢复和释放。所有请求通过阿里云百炼 API Key 鉴权，Endpoint 按工作空间与地域拼装，当前仅支持 `cn-beijing` 地域。该 API 专为需要动态执行代码、隔离运行环境的 AI 应用场景设计，不封装为百炼统一 `Result<T>` 结构，响应体贴近 E2B 原生格式。
+Sandbox API 是阿里云百炼提供的沙箱环境生命周期管理接口，兼容 E2B 协议，支持模版构建与实例的创建、连接、暂停、恢复和释放。所有请求需通过阿里云百炼 API Key 鉴权，并按工作空间与地域拼装 Endpoint。该 API 服务于代码执行、浏览器自动化等需要隔离运行时的场景，不封装为百炼统一 `Result<T>` 结构，响应体贴近 E2B 原生格式。
 
 ## 支持的模型/功能
 
-Sandbox API 不直接提供“模型”推理能力，而是提供**可编程沙箱环境**作为执行底座，其功能围绕两类核心资源展开：
+Sandbox API 不直接提供“模型”推理能力，而是提供**可定制化沙箱环境的托管服务**，其核心能力分为两类：
 
-- **模版（Template）**：定义沙箱的基础镜像、资源配置（CPU/内存）、网络策略、环境变量及挂载文件等静态配置。支持使用官方镜像（如 `code-interpreter-v1`、`browser`、`all-in-one`）或自定义镜像。模版需经构建（build）流程，状态变为 `ready` 后方可用于创建实例。详见 [创建模版](../../raw/application-api-reference/sandbox-api/sandbox-api-templates/sandbox-api-template-create.md)。
-- **实例（Sandbox）**：基于模版启动的运行时环境，具备独立 CPU、内存、磁盘、网络与生命周期。支持按需创建、连接、暂停/恢复、自动超时控制，并可通过 `envdUrl` 和访问 token 接入数据面执行命令或文件操作。实例状态包括 `running`、`paused`，释放后不可恢复。
+- **模版（Template）管理**：定义沙箱基础镜像、资源规格（CPU / 内存）、网络策略、环境变量、文件挂载等静态配置。支持基于官方镜像（如 `code-interpreter-v1`、`browser`、`all-in-one`）或自定义镜像构建，详见 [创建模版](../../raw/application-api-reference/sandbox-api/sandbox-api-templates/sandbox-api-template-create.md)。
+- **实例（Sandbox）管理**：基于已构建完成（`buildStatus: "ready"`）的模版动态创建、连接、控制运行中沙箱。支持带状态暂停/恢复、自动超时策略、公网访问控制及细粒度网络规则（白名单/黑名单），详见 [创建实例](../../raw/application-api-reference/sandbox-api/sandbox-api-instances/sandbox-api-create.md)。
 
-> **注意**：文档中 `fromImage` 字段在 [创建模版](../../raw/application-api-reference/sandbox-api/sandbox-api-templates/sandbox-api-template-create.md) 中明确说明官方镜像位于 `fc-e2b-registry.cn-beijing.cr.aliyuncs.com/runtime/` 下，但 [获取模版](../../raw/application-api-reference/sandbox-api/sandbox-api-templates/sandbox-api-template-get.md) 的响应示例未体现该 registry 前缀，实际使用应以创建时传入的完整镜像地址为准。
+> **注意**：文档 1 中称“Sandbox API 兼容 E2B 协议”，但文档 12 明确指出更新模版接口（`PUT /templates/{templateCode}`）是“阿里云百炼扩展协议，不声明完全兼容 E2B Update Template v2”。开发者不应假设所有模版操作均与 E2B 官方行为一致。
 
 ## 关键参数
 
-| 参数类别 | 参数名 | 类型 | 必填 | 说明 |
-|----------|--------|------|------|------|
-| **通用** | `Authorization: Bearer <api-key>` | Header | 是 | 阿里云百炼 API Key，用于业务鉴权；E2B SDK 中的 `X-API-Key` 仅作协议占位，不参与鉴权。 |
-| **实例创建** | `templateID` | string | 是 | 已构建完成（`buildStatus=ready`）的模版 ID，见 [获取构建状态](../../raw/application-api-reference/sandbox-api/sandbox-api-templates/sandbox-api-template-build-status.md)。 |
-| | `timeout` | integer | 否 | 实例生命周期时间（秒），范围 `[300, 604800]`；到期行为由 `lifecycle.on_timeout` 控制。 |
-| | `allow_internet_access` / `allowInternetAccess` | boolean | 否 | 是否允许公网访问；注意字段命名在请求体（snake_case）与响应体（camelCase）中不一致。 |
-| | `lifecycle.on_timeout` | string | 否 | 到期行为，值为 `"pause"`（暂停）或 `"kill"`（释放），优先级高于 `autoPause`。 |
-| **模版创建** | `cpuCount` & `memoryMB` | integer | 是 | 必须**同时指定**，且必须匹配平台预设的规格组合（如 1C2G、4C8G），单独传任一值将报错。 |
-| | `maxRunningTimeout` | integer | 否 | 最大运行时间（秒），范围 `[300, 604800]`；若与 `autoPauseTime` 同时存在，则 `maxRunningTimeout` 优先生效，到期自动释放。 |
+| 参数 | 所属接口 | 必填 | 类型 | 说明 |
+|------|----------|------|------|------|
+| `templateID` | 创建/列举/获取实例 | 是 | string | 模版唯一标识，必须为已构建完成（`status: "ready"`）的模版，否则创建实例返回 409 |
+| `timeout` | 创建/连接/恢复实例 | 否 | integer | 实例生命周期或连接会话超时时间（秒），范围 `[300, 604800]`；到期行为由 `lifecycle.on_timeout` 或 `autoPause` 控制 |
+| `allow_internet_access` / `allowInternetAccess` | 创建/获取实例 | 否 | boolean | 是否允许实例访问公网；注意字段名在请求体（snake_case）与响应体（camelCase）中不一致 |
+| `lifecycle` / `network` | 创建/获取实例 | 否 | object | 生命周期配置（`on_timeout`, `auto_resume`）与网络配置（`allowOut`, `denyOut`, `allowPublicTraffic`）；文档 3 和文档 5 字段结构存在嵌套差异，建议以文档 5 的响应结构为准 |
+| `cpuCount` & `memoryMB` | 创建/更新模版 | 是（创建时）/ 同时传（更新时） | integer | 资源规格，必须匹配平台支持的组合；更新时二者须同时提供，否则保留原值 |
 
 ## 使用方式
 
 1. **准备前提**：开通百炼服务、创建 API Key、完成 SLR 授权、获取 `workspace_id`（见 [API 总览与认证](../../raw/application-api-reference/sandbox-api/sandbox-api-overview.md)）。
-2. **构建模版**：
-   - 调用 `POST /v3/templates` 创建模版，获取 `templateID` 和 `buildID`。
-   - 轮询 `GET /templates/{templateID}/builds/{buildID}/status` 直至 `status="ready"`。
-3. **管理实例**：
-   - 创建：`POST /sandboxes`，传入 `templateID` 等参数。
-   - 连接：`POST /sandboxes/{sandboxID}/connect` 获取 `domain`、`envdAccessToken` 等数据面凭证。
-   - 控制：`POST /sandboxes/{sandboxID}/pause` 或 `/resume`；`DELETE /sandboxes/{sandboxID}` 释放。
-4. **查询与调试**：
-   - 列举：`GET /v2/sandboxes`（实例）、`GET /v2/templates`（模版）。
-   - 查看详情：`GET /sandboxes/{sandboxID}`、`GET /templates/{templateID}`。
+2. **拼装 Endpoint**：`https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio/sandbox`（当前仅支持 `cn-beijing` 地域）。
+3. **鉴权**：所有请求 Header 携带 `Authorization: Bearer <your-api-key>`；E2B SDK 中的 `X-API-Key` 仅用于协议占位，不参与百炼业务鉴权。
+4. **典型流程**：
+   - 创建模版 → 查询构建状态（`GET /templates/{templateCode}/builds/{buildID}/status`）→ 等待 `status: "ready"`；
+   - 创建实例（`POST /sandboxes`）→ 连接实例（`POST /sandboxes/{sandboxID}/connect`）获取 `domain` 与 `envdAccessToken`；
+   - （可选）暂停/恢复实例（`POST /sandboxes/{sandboxID}/pause` / `resume`）；
+   - 实例使用完毕后释放（`DELETE /sandboxes/{sandboxID}`）或删除模版（`DELETE /templates/{templateCode}`，需确保无活跃实例）。
 
 ## 限制和注意事项
 
-- **地域限制**：Endpoint 仅支持 `cn-beijing`，其他地域请求将失败。
-- **资源规格约束**：模版的 `cpuCount` 与 `memoryMB` 必须成对出现且匹配平台规格表，否则创建模版返回 400。
-- **实例生命周期**：`timeout` 最小值为 300 秒（5 分钟），最大值为 604800 秒（7 天）；`autoResume` 仅在实例处于 `paused` 状态且连接请求中启用时生效。
-- **模版删除保护**：调用 `DELETE /templates/{templateCode}` 前，必须确保该模版下无 `running` 或 `paused` 实例，否则返回 409 错误并附带关联实例 ID。
-- **网络配置差异**：`networkConfig.denyOut` 在模版创建时**不支持域名**（仅 IPv4/IPv6/CIDR），但 `network.allowOut` 支持；而实例创建时的 `network.allowOut`/`denyOut` 字段均支持域名（见 [创建实例](../../raw/application-api-reference/sandbox-api/sandbox-api-instances/sandbox-api-create.md)）。
+- **地域限制**：Endpoint 中 `region` 固定为 `cn-beijing`，不支持其他地域。
+- **模版构建依赖**：创建实例前，模版构建状态必须为 `ready`；若构建失败（`status: "error"`），需检查 [获取构建状态](../../raw/application-api-reference/sandbox-api/sandbox-api-templates/sandbox-api-template-build-status.md) 返回的 `reason` 字段定位问题。
+- **实例释放与模版删除强约束**：删除模版前，必须确保该模版下无 `running` 或 `paused` 状态的实例，否则返回 409 错误并附带关联实例 ID（见 [删除模版](../../raw/application-api-reference/sandbox-api/sandbox-api-templates/sandbox-api-template-delete.md)）。
+- **分页与路由兼容性**：列举接口存在多版本路径（如 `/v2/sandboxes`、`/v2/templates`），同时兼容旧路由（`/sandboxes`、`/templates`），但推荐使用带版本号的路径以保证稳定性。
+- **错误处理**：HTTP 状态码含义明确（400 参数错误、401 鉴权失败、404 资源不存在、409 状态冲突、500 内部异常），错误响应体结构统一（含 `code`, `message`, `requestID`），便于程序化处理。
 
 ## 来源文档
 
 - [API 总览与认证](../../raw/application-api-reference/sandbox-api/sandbox-api-overview.md)
 - [实例管理](../../raw/application-api-reference/sandbox-api/sandbox-api-instances.md)
 - [创建实例](../../raw/application-api-reference/sandbox-api/sandbox-api-instances/sandbox-api-create.md)
-- [获取实例](../../raw/application-api-reference/sandbox-api/sandbox-api-instances/sandbox-api-get.md)
 - [列举实例](../../raw/application-api-reference/sandbox-api/sandbox-api-instances/sandbox-api-list.md)
+- [获取实例](../../raw/application-api-reference/sandbox-api/sandbox-api-instances/sandbox-api-get.md)
 - [连接实例](../../raw/application-api-reference/sandbox-api/sandbox-api-instances/sandbox-api-connect.md)
 - [暂停实例](../../raw/application-api-reference/sandbox-api/sandbox-api-instances/sandbox-api-pause.md)
 - [恢复实例](../../raw/application-api-reference/sandbox-api/sandbox-api-instances/sandbox-api-resume.md)
-- [释放实例](../../raw/application-api-reference/sandbox-api/sandbox-api-instances/sandbox-api-delete.md)
 - [模版管理](../../raw/application-api-reference/sandbox-api/sandbox-api-templates.md)
-- [创建模版](../../raw/application-api-reference/sandbox-api/sandbox-api-templates/sandbox-api-template-create.md)
+- [释放实例](../../raw/application-api-reference/sandbox-api/sandbox-api-instances/sandbox-api-delete.md)
 - [获取模版](../../raw/application-api-reference/sandbox-api/sandbox-api-templates/sandbox-api-template-get.md)
-- [列举模版](../../raw/application-api-reference/sandbox-api/sandbox-api-templates/sandbox-api-template-list.md)
 - [更新模版](../../raw/application-api-reference/sandbox-api/sandbox-api-templates/sandbox-api-template-update.md)
 - [获取构建状态](../../raw/application-api-reference/sandbox-api/sandbox-api-templates/sandbox-api-template-build-status.md)
 - [删除模版](../../raw/application-api-reference/sandbox-api/sandbox-api-templates/sandbox-api-template-delete.md)
+- [列举模版](../../raw/application-api-reference/sandbox-api/sandbox-api-templates/sandbox-api-template-list.md)
+- [创建模版](../../raw/application-api-reference/sandbox-api/sandbox-api-templates/sandbox-api-template-create.md)
 
 

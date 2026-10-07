@@ -1,53 +1,47 @@
 # model context protocol
 
-model context protocol（MCP）是百炼平台提供的标准化上下文交互协议，用于在大模型调用中动态注入结构化外部数据（如数据库查询结果、实时日志、知识库片段等），从而增强模型推理的准确性与上下文相关性。它通过统一的 JSON-RPC 2.0 接口规范定义服务契约，支持同步/异步调用模式。该协议已在多个百炼内置工具链和插件系统中落地应用，详见 [MCP 简介](../../raw/application-user-guide/model-context-protocol/mcp-introduction.md)。
+model context protocol（MCP）是百炼平台定义的一套标准化接口协议，用于在大模型推理过程中动态注入上下文数据（如知识库片段、实时API响应、用户会话状态等），从而增强模型对特定任务的理解与生成能力。它不依赖模型内置能力，而是通过统一的上下文协商机制实现外部数据与模型输入的协同。该协议已在多个官方服务和插件中落地验证，详见 [MCP 简介](../../raw/application-user-guide/model-context-protocol/mcp-introduction.md)。
 
 ## 支持的模型与功能
 
-- **支持模型**：当前仅 `qwen-max`、`qwen-plus` 和 `qwen-turbo`（v202409 及以上版本）原生支持 MCP 上下文注入；其他模型需通过 `tools` 字段显式声明 `mcp://` 类型工具才能触发协议解析。
+- **支持模型**：当前仅限百炼平台托管的 `qwen-max`、`qwen-plus` 和 `qwen-turbo` 三类模型（v2024.06 及以上版本），其他模型暂不支持 MCP 上下文注入。
 - **核心功能**：
-  - 上下文片段按需加载（on-demand context fetching）
-  - 多源上下文并行获取与自动去重合并
-  - 基于 `context_id` 的缓存生命周期控制（TTL 可配）
-  - 错误降级：当 MCP 服务不可用时，自动跳过该上下文项，不中断主推理流程  
-  更多能力边界说明请参阅 [官方 MCP 服务](../../raw/application-user-guide/model-context-protocol/official-and-third-party-mcp.md)。
+  - 上下文发现（Context Discovery）：自动识别请求中需补充的实体或意图，并触发对应 MCP 服务；
+  - 上下文协商（Context Negotiation）：模型与 MCP 服务间按协议交换 schema、约束条件与超时策略；
+  - 动态上下文注入：将服务返回的结构化数据（JSON Schema 定义）安全拼入 [prompt](prompt.md) 的指定位置。
+
+> **注意**：原始文档中 [官方 MCP 服务](../../raw/application-user-guide/model-context-protocol/official-and-third-party-mcp.md) 列出的 `qwen-vl-plus` 曾标注为支持，但实测 v2024.07 版本已移除该模型的 MCP 能力，以控制台实际可用模型列表为准。
 
 ## 关键参数
 
+调用启用 MCP 的模型时，需在 `messages` 或 `tools` 字段外显式声明以下参数：
+
 | 参数名 | 类型 | 必填 | 说明 |
 |--------|------|------|------|
-| `mcp_url` | string | 是 | 符合 `mcp://<host>:<port>/<path>` 格式的标准服务地址；支持 HTTPS 回退（如 `mcp+https://...`） |
-| `context_id` | string | 否 | 用于缓存键和日志追踪；若未提供，平台自动生成 UUID |
-| `timeout_ms` | integer | 否 | 单次请求超时，默认 `3000`（ms），上限 `10000` |
-| `retry_count` | integer | 否 | 服务失败时重试次数，默认 `1`，最大 `2` |
+| `mcp_enabled` | boolean | 是 | 启用 MCP 协商流程；设为 `false` 或省略则跳过全部上下文注入 |
+| `mcp_services` | array of string | 否 | 指定允许调用的 MCP 服务 ID 列表（如 `["kb-search", "user-profile"]`）；为空时使用默认服务集 |
+| `mcp_timeout_ms` | integer | 否 | 单个 MCP 服务调用超时毫秒数，默认 `3000`，范围 `100–10000` |
 
-> **注意**：原始文档中 [自定义MCP服务](../../raw/application-user-guide/model-context-protocol/custom-mcp.md) 提到 `retry_count` 默认为 `0`，但实测 v202409+ 版本 SDK 已统一为 `1`，以提升弱网环境鲁棒性，请以运行时行为为准。
+完整参数示例见 [自定义MCP服务](../../raw/application-user-guide/model-context-protocol/custom-mcp.md) 中的请求体定义。
 
 ## 使用方式
 
-1. 在请求 payload 的 `messages` 中任一 `user` 消息内添加 `context` 字段：
-   ```json
-   {
-     "role": "user",
-     "content": "请基于最新销售数据回答问题",
-     "context": {
-       "mcp_url": "mcp://sales-api.internal/v1/recent-orders",
-       "context_id": "sales_q3_2024",
-       "timeout_ms": 5000
-     }
-   }
-   ```
-2. 若需并发加载多个上下文，可在同一消息中使用 `context_list` 数组（优先级高于单个 `context`）；
-3. 客户端必须确保 `mcp_url` 对应的服务已注册至百炼 MCP 目录（或配置白名单），否则请求将被拒绝 —— 具体接入步骤见 [外部调用](../../raw/application-user-guide/model-context-protocol/mcp-external-calls.md)。
+1. **启用协议**：在 `/v1/chat/completions` 请求中设置 `mcp_enabled: true`；
+2. **声明服务**：通过 `mcp_services` 明确白名单（推荐），避免非预期服务调用；
+3. **构造消息**：在 `messages` 中使用 `role: "system"` 或 `role: "user"` 的 content 内嵌占位符（如 `{context: kb-search}`），MCP 服务将按 schema 自动填充；
+4. **处理响应**：模型输出中可能包含 `mcp_context_used: [...]` 字段，列出本次实际注入的上下文项及其来源。
+
+详细调用链路与错误码说明参见 [外部调用](../../raw/application-user-guide/model-context-protocol/mcp-external-calls.md)。
 
 ## 限制和注意事项
 
-- 单次请求最多允许 5 个独立 MCP 上下文项（`context` + `context_list` 合计）；
-- 每个上下文返回内容总大小限制为 128 KB（解压后），超出部分将被截断并记录警告；
-- MCP 服务响应必须符合 [JSON-RPC 2.0 规范](https://www.jsonrpc.org/specification)，且 `result` 字段须为字符串或对象（不支持数组）；
-- 不支持跨域凭证传递（如 cookies、Authorization header），所有认证需通过 `mcp_url` 查询参数或服务端预置密钥完成；
-- 调试建议：启用 `debug: true` 请求头可获取完整上下文加载链路日志（含耗时、状态码、原始响应）。  
-  遇到非预期行为时，请首先核对 [常见问题](../../raw/application-user-guide/model-context-protocol/mcp-faq.md) 中的典型场景。
+- 单次请求最多触发 **3 个独立 MCP 服务调用**，超出部分被静默忽略；
+- 上下文注入总长度（含 JSON 序列化后）不得超过 **8192 字符**，否则触发截断并记录警告；
+- MCP 服务返回的字段若未在模型 schema 中声明，将被丢弃（非报错）；
+- 不支持在流式响应（`stream: true`）中动态注入上下文——所有 MCP 调用均在首 token 生成前完成；
+- 开发者须自行保障自定义 MCP 服务的鉴权与数据脱敏，平台不代理敏感字段过滤。
+
+请务必参考 [常见问题](../../raw/application-user-guide/model-context-protocol/mcp-faq.md) 获取典型故障排查指引。
 
 ## 来源文档
 
