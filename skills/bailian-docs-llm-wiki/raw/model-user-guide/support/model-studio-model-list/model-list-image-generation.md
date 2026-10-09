@@ -2,6 +2,8 @@
 
 -   [qwen-image-3.0-pro](raw/model-user-guide/support/model-studio-model-list/model-list-image-generation/qwen-image-3-0-pro.md)
 -   [qwen-image-3.0](raw/model-user-guide/support/model-studio-model-list/model-list-image-generation/qwen-image-3-0.md)
+-   [qwen-image-2.1-pro](raw/model-user-guide/support/model-studio-model-list/model-list-image-generation/qwen-image-2-1-pro.md)
+-   [qwen-image-2.1-turbo](raw/model-user-guide/support/model-studio-model-list/model-list-image-generation/qwen-image-2-1-turbo.md)
 -   [qwen-image-2.0-pro](raw/model-user-guide/support/model-studio-model-list/model-list-image-generation/qwen-image-2-0-pro.md)
 -   [qwen-image-2.0](raw/model-user-guide/support/model-studio-model-list/model-list-image-generation/qwen-image-2-0.md)
 -   [qwen-image-edit-max](raw/model-user-guide/support/model-studio-model-list/model-list-image-generation/qwen-image-edit-max.md)

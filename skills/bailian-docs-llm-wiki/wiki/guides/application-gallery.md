@@ -1,53 +1,38 @@
 # application gallery
 
-应用广场是百炼平台提供的预置应用集合，面向开发者提供开箱即用的 AI 能力封装，覆盖教育、语音处理、多模态交互、法律、金融、客服、数据挖掘、翻译、搜索等多个垂直场景。所有应用均基于百炼统一模型服务框架构建，支持快速集成与二次开发。开发者可通过控制台或 API 直接调用，无需自行部署底层模型。
+应用广场是百炼平台提供的预置应用集合，面向开发者提供开箱即用的行业级 Agent 和多模态能力封装。所有应用均基于平台统一的 Runtime 执行环境部署，支持快速集成、参数化调用与轻量定制。开发者可通过 API 或控制台直接调用，无需自行搭建模型服务或编排工作流。
 
-## 支持的模型/功能
+## 支持的模型与功能
 
-应用广场中的每个应用均绑定特定模型栈与能力组合，例如：
-- `通义拍照解题辅导` 基于 Qwen-VL 多模态模型 + 教育领域微调策略，支持图像识别与数学推理；
-- `通义听悟Agent` 依赖 Qwen-Audio 模型 + ASR/NLU 流式 pipeline；
-- `千问联网检索Agent` 集成 Qwen2.5 + RAG 检索增强模块与实时网页抓取适配器。
-
-全部官方应用列表及对应能力说明详见 [应用广场](../../raw/application-user-guide/application-gallery.md)。部分轻量级应用（如 `全妙轻应用系列`）默认使用共享推理资源池，其底层模型版本由平台统一维护，具体模型映射关系请参考 [官方应用-全妙轻应用系列](../../raw/application-user-guide/application-gallery/quanmiao-light-application-series.md)。
+应用广场中的每个应用均已绑定特定模型栈与功能边界，例如：
+- `通义听悟Agent` 依赖 ASR + LLM + TTS 全链路模型，专用于会议纪要生成与语音对话理解；  
+- `通义 UI Agent` 基于视觉语言模型（VLM）与动作规划模块，支持网页/APP 界面理解与自动化操作；  
+- `千问联网检索Agent` 集成 Qwen-72B + 检索增强模块（RAG），实时调用搜索引擎接口完成事实性问答。  
+全部应用能力详见 [应用广场](../../raw/application-user-guide/application-gallery.md) 的分类清单。
 
 ## 关键参数
 
-调用应用时需传入以下通用参数（部分应用支持扩展参数）：
+调用任一应用时，需传入以下通用参数（部分应用支持扩展参数）：
 
 | 参数名 | 类型 | 必填 | 说明 |
 |--------|------|------|------|
-| `app_id` | string | 是 | 应用唯一标识，可在控制台「应用广场」页获取，例如 `edu-tutor` 或 `tingwu-agent` |
-| `input` | object | 是 | 输入结构体，格式因应用而异（如 `tongyi-dianjin` 要求 `{"query": "...", "industry": "finance"}`） |
-| `timeout` | integer | 否 | 请求超时（秒），默认 60，最大支持 300；超过将触发 `RequestTimeoutError` |
+| `app_id` | string | 是 | 应用唯一标识，如 `tingwu-agent`、`ui-agent`，取值见 [应用广场](../../raw/application-user-guide/application-gallery.md) 中各子页面标题 |
+| `input` | object | 是 | 输入结构体，schema 因应用而异（如 `web-search-agent` 要求 `{"query": "..."}`，`xiyan-gbi` 要求 `{"question": "...", "tables": [...]}`） |
+| `timeout` | integer | 否 | 单位秒，默认 60，最大 300 |
 
-> **注意**：`web-search-agent` 的 `input` 中 `query` 字段长度上限为 512 字符，但 [通义深度搜索](../../raw/application-user-guide/application-gallery/tongyi-deepsearch.md) 文档中声明为 1024 字符——实际以 `web-search-agent` 当前运行时限制为准，建议客户端做截断校验。
+> **注意**：`tongyi-farui` 与 `xiyan-gbi` 均宣称支持 SQL 生成，但前者仅接受法律文书文本输入并返回条款分析结果，后者明确要求结构化表元数据——二者输入 schema 不兼容，不可混用，具体以 [官方应用-析言GBI](../../raw/application-user-guide/application-gallery/xiyan-gbi.md) 文档为准。
 
 ## 使用方式
 
-1. **控制台调用**：进入百炼控制台 →「应用广场」→ 选择目标应用 → 点击「在线调试」填写 input 并执行；
-2. **API 调用**：使用 `POST /v1/applications/{app_id}/invoke` 接口，需携带 `Authorization: Bearer <api_key>`；
-3. **SDK 调用**（Python 示例）：
-   ```python
-   from alibabacloud_bailian20231219 import models as bailian_models
-   client = BailianClient(...)
-   req = bailian_models.InvokeApplicationRequest(
-       app_id="tingwu-agent",
-       input={"audio_url": "https://example.com/audio.mp3"}
-   )
-   resp = client.invoke_application(req)
-   ```
-
-详细接口定义与错误码见 [官方应用-通义听悟Agent](../../raw/application-user-guide/application-gallery/official-application-tingwu-agent.md)。
+1. **获取 app_id**：从 [应用广场](../../raw/application-user-guide/application-gallery.md) 列表中确认目标应用的 ID（如 `lingque-ccai-dialogue-analysis-aio`）；  
+2. **构造请求体**：参考对应子文档的 `input` 示例（如 [官方应用-伶鹊CCAI-对话分析AIO](../../raw/application-user-guide/application-gallery/official-application-lingque-ccai-dialogue-analysis-aio.md) 中的 JSON Schema）；  
+3. **调用 API**：向 `/v1/applications/{app_id}/invoke` 发送 POST 请求，携带 `Authorization: Bearer <api_key>` 与 `Content-Type: application/json`。
 
 ## 限制和注意事项
 
-- 单账号默认 QPS 上限为 5（可提工单申请提升），突发流量可能触发 `RateLimitExceeded` 错误；
-- 所有应用不支持跨区域调用（如杭州集群部署的应用不可通过上海 endpoint 访问）；
-- `ui-agent` 和 `multimodal-products` 类应用暂不开放自定义 [prompt](prompt.md) 覆盖，输入必须严格遵循 schema 定义；
-- 非官方应用（如用户自主发布的应用）不在本广场范围内，其管理与调用方式参见独立文档。
-
-> **注意**：`xiyan-gbi`（析言GBI）当前仅支持结构化数据库连接（MySQL/PostgreSQL），但 [官方应用-析言GBI](../../raw/application-user-guide/application-gallery/xiyan-gbi.md) 中提及的“Excel 文件直连”功能尚未上线，该描述已过时，请勿依赖。
+- 单次调用最大输入长度为 128KB（含附件 Base64 编码后），超出将返回 `413 Payload Too Large`；  
+- 所有应用默认启用流式响应（`stream=true`），若需完整响应请显式设置 `stream=false`；  
+- `tongyi-deepsearch` 与 `web-search-agent` 均依赖外部搜索服务，当网络策略禁止出向 HTTP(S) 请求时将失败，该行为未在 [官方应用-通义深度搜索](../../raw/application-user-guide/application-gallery/tongyi-deepsearch.md) 中明确说明，需开发者自行验证连通性。
 
 ## 来源文档
 

@@ -1,17 +1,17 @@
 {
-  "updatedAt": "2026-10-08",
-  "totalFamilies": 189,
-  "totalModels": 435,
+  "updatedAt": "2026-10-10",
+  "totalFamilies": 187,
+  "totalModels": 431,
   "profileCoverage": {
-    "full": 379,
-    "partial": 49,
-    "structured-only": 7,
+    "full": 393,
+    "partial": 35,
+    "structured-only": 3,
     "none": 0
   },
   "capabilityDistribution": {
     "TG": 40,
-    "IG": 31,
-    "VG": 26,
+    "IG": 30,
+    "VG": 25,
     "TTS": 18,
     "ASR": 16,
     "Reasoning": 15,
@@ -28,13 +28,13 @@
     "3D-generation": 1
   },
   "providerDistribution": {
-    "qwen": 117,
+    "qwen": 115,
     "qwen-domain-model": 36,
     "wan": 14,
     "mini-max": 4,
-    "pixverse": 4,
     "deepseek": 3,
     "zhipu-ai": 3,
+    "pixverse": 3,
     "moonshot-ai": 2,
     "happyhorse": 2,
     "vidu": 2,
@@ -372,21 +372,6 @@
       ]
     },
     {
-      "slug": "facechain-facedetect",
-      "name": "FaceChain人物图像检测",
-      "primaryCapability": "IG",
-      "capabilities": [
-        "IG"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "facechain-facedetect"
-      ]
-    },
-    {
       "slug": "facechain-generation",
       "name": "FaceChain人物写真生成",
       "primaryCapability": "IG",
@@ -474,10 +459,9 @@
       "providers": [
         "qwen"
       ],
-      "itemCount": 2,
+      "itemCount": 1,
       "items": [
-        "fun-music-preview",
-        "fun-music-v1"
+        "fun-music-preview"
       ]
     },
     {
@@ -909,23 +893,6 @@
       ]
     },
     {
-      "slug": "pixverse-capability-market-place",
-      "name": "PixVerse Capabilities",
-      "primaryCapability": "VG",
-      "capabilities": [
-        "VG"
-      ],
-      "providers": [
-        "pixverse"
-      ],
-      "itemCount": 3,
-      "items": [
-        "pixverse/pixverse-lipsync",
-        "pixverse/pixverse-motioncontrol",
-        "pixverse/pixverse-upscale"
-      ]
-    },
-    {
       "slug": "pixverse-market-place",
       "name": "PixVerse V5.6",
       "primaryCapability": "VG",
@@ -1226,8 +1193,7 @@
         "TR"
       ],
       "providers": [
-        "qwen-domain-model",
-        "qwen"
+        "qwen-domain-model"
       ],
       "itemCount": 8,
       "items": [
@@ -1293,7 +1259,7 @@
     },
     {
       "slug": "qwen-image-2.0",
-      "name": "Qwen-Image-2.0",
+      "name": "Qwen-Image-2.1",
       "primaryCapability": "IG",
       "capabilities": [
         "IG"
@@ -1301,9 +1267,10 @@
       "providers": [
         "qwen"
       ],
-      "itemCount": 1,
+      "itemCount": 2,
       "items": [
-        "qwen-image-2.0"
+        "qwen-image-2.0",
+        "qwen-image-2.1-turbo"
       ]
     },
     {
@@ -1627,8 +1594,8 @@
         "TR"
       ],
       "providers": [
-        "qwen",
-        "qwen-domain-model"
+        "qwen-domain-model",
+        "qwen"
       ],
       "itemCount": 4,
       "items": [

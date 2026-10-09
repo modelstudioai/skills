@@ -2,7 +2,7 @@
 
 本文介绍声音复刻的Java SDK使用方法。
 
-**用户指南：**[声音复刻](https://help.aliyun.com/zh/model-studio/voice-cloning-user-guide)。
+**用户指南：**[声音复刻](raw/model-user-guide/model-experience/speech-synthesis/voice-cloning-user-guide.md)。
 
 ## 接口地址
 

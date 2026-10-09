@@ -637,6 +637,6 @@ Android 加载 SDK 失败
 -   [SDK 简介](raw/model-api-reference/realtime-api-user-guide/realtime-api-aoq-api/realtime-api-aoq-sdk-desc.md)
 -   [SDK 下载](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-sdk-download.md)
 -   [Token 鉴权](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-token-authentication.md)
--   [实时语音识别](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide)
+-   [实时语音识别](raw/model-user-guide/model-experience/speech-recognition/real-time-speech-recognition-user-guide.md)
 -   [客户端事件](raw/_short/fun-asr-client-events-997ba24ade1a8a48.md)
 -   [服务端事件](raw/_short/fun-asr-server-events-666d2f9990cd5ae1.md)

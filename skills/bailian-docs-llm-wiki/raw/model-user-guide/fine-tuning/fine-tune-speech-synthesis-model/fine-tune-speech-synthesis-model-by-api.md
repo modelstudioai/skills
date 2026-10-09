@@ -4,7 +4,7 @@
 
 ## 适用范围
 
-CosyVoice 模型调优面向**同一发音人**多条录音的高还原度专属音色定制：当单条音频的[声音复刻](https://help.aliyun.com/zh/model-studio/voice-cloning-user-guide)仍达不到目标还原度，且能够准备同一发音人的多条 / 数小时录音时，可通过调优 API 训练独立部署的专属音色模型。
+CosyVoice 模型调优面向**同一发音人**多条录音的高还原度专属音色定制：当单条音频的[声音复刻](raw/model-user-guide/model-experience/speech-synthesis/voice-cloning-user-guide.md)仍达不到目标还原度，且能够准备同一发音人的多条 / 数小时录音时，可通过调优 API 训练独立部署的专属音色模型。
 
 ### 适用场景
 
@@ -28,8 +28,8 @@ CosyVoice 模型调优面向**同一发音人**多条录音的高还原度专属
 以下能力由基础模型 `cosyvoice-v3-flash` 决定，无法通过调优新增、扩展或改变：
 
 -   **语种支持**：训练数据语种必须为基础模型已支持的语种。使用基础模型不支持的语种（例如保加利亚语）训练，模型仍无法合成该语种的语音。
--   **请求级控制接口**：调优产物支持 [SSML 与 LaTeX](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)（请求中精细控制语速、语调、停顿、音量、发音等）与 LaTeX（数学公式朗读），**不支持指令控制功能**，调用时不可传入 `instruction` 参数。
--   **声音复刻 / 声音设计**：调优产物为单音色独立模型（`voice="default"` 锁死），不再提供声音复刻、声音设计能力。如需创建新的音色 ID，请使用基础模型的[声音复刻](https://help.aliyun.com/zh/model-studio/voice-cloning-user-guide)或[声音设计](https://help.aliyun.com/zh/model-studio/voice-design-user-guide)。
+-   **请求级控制接口**：调优产物支持 [SSML 与 LaTeX](raw/model-user-guide/model-experience/speech-synthesis/ssml-latex-user-guide.md)（请求中精细控制语速、语调、停顿、音量、发音等）与 LaTeX（数学公式朗读），**不支持指令控制功能**，调用时不可传入 `instruction` 参数。
+-   **声音复刻 / 声音设计**：调优产物为单音色独立模型（`voice="default"` 锁死），不再提供声音复刻、声音设计能力。如需创建新的音色 ID，请使用基础模型的[声音复刻](raw/model-user-guide/model-experience/speech-synthesis/voice-cloning-user-guide.md)或[声音设计](raw/model-user-guide/model-experience/speech-synthesis/voice-design-user-guide.md)。
 
 ## 是否需要调优？
 
@@ -45,13 +45,13 @@ CosyVoice 模型调优面向**同一发音人**多条录音的高还原度专属
 
 仅有单条音频可用，需要快速克隆某个发音人
 
-[声音复刻](https://help.aliyun.com/zh/model-studio/voice-cloning-user-guide)
+[声音复刻](raw/model-user-guide/model-experience/speech-synthesis/voice-cloning-user-guide.md)
 
 声音复刻是基础模型已支持的独立功能，输入一段音频即可创建专属音色 ID。
 
 在无录音素材的情况下生成全新音色（仅有文字描述）
 
-[声音设计](https://help.aliyun.com/zh/model-studio/voice-design-user-guide)
+[声音设计](raw/model-user-guide/model-experience/speech-synthesis/voice-design-user-guide.md)
 
 声音设计直接根据文字描述生成新音色 ID。
 
@@ -59,7 +59,7 @@ CosyVoice 模型调优面向**同一发音人**多条录音的高还原度专属
 
 指令控制 或 SSML
 
-CosyVoice 提供两种请求级控制机制，均无需训练新模型：**指令控制**用自然语言描述目标，可覆盖语速、情绪、风格，详见[实时语音合成](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)；**SSML** 在文本中嵌入标签，精细控制语速、语调、停顿、音量、发音等（**不涉及情绪 / 风格**），详见[SSML 与 LaTeX](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)。
+CosyVoice 提供两种请求级控制机制，均无需训练新模型：**指令控制**用自然语言描述目标，可覆盖语速、情绪、风格，详见[实时语音合成](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)；**SSML** 在文本中嵌入标签，精细控制语速、语调、停顿、音量、发音等（**不涉及情绪 / 风格**），详见[SSML 与 LaTeX](raw/model-user-guide/model-experience/speech-synthesis/ssml-latex-user-guide.md)。
 
 让模型支持基础模型不具备的语种
 
@@ -556,7 +556,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/deployments/<替换为 de
 
 ## 调用模型
 
-当模型部署状态为 `RUNNING` 时，调优后的模型即可投入业务调用。调用方式（含 endpoint、请求体字段、典型响应与音频取回方式）与其他 CosyVoice 模型一致，完整说明请参见用户指南 [语音合成](https://help.aliyun.com/zh/model-studio/tts-model)。相比基础模型 `cosyvoice-v3-flash` 的调用方式，**仅需调整以下两个请求参数**，其他字段（`text`、`format`、`sample_rate` 等）保持一致：
+当模型部署状态为 `RUNNING` 时，调优后的模型即可投入业务调用。调用方式（含 endpoint、请求体字段、典型响应与音频取回方式）与其他 CosyVoice 模型一致，完整说明请参见用户指南 [语音合成](raw/model-user-guide/model-experience/speech-synthesis/tts-model.md)。相比基础模型 `cosyvoice-v3-flash` 的调用方式，**仅需调整以下两个请求参数**，其他字段（`text`、`format`、`sample_rate` 等）保持一致：
 
 -   `model`：设置为部署任务成功后的实例 ID，即部署响应中 `output.deployed_model` 字段的值。
 -   `voice`：必须固定为 `"default"`，代表训练数据所对应的专属音色；传入预置音色名或音色复刻 ID 会请求失败。
@@ -584,7 +584,7 @@ curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/audio/tts/SpeechSyn
 
 #### 实时（Python WebSocket）
 
-通过 DashScope Python SDK 接入 WebSocket 合成接口，依赖 `dashscope` 包。**WebSocket 接口本身支持边合成边推送的流式回调**，为方便快速验证，**本示例改用同步调用**`synthesizer.call(text)`**一次性返回完整音频**；如需流式回调（边合成边播放）的完整写法，请参见[用户指南](https://help.aliyun.com/zh/model-studio/tts-model)中的流式合成完整示例。
+通过 DashScope Python SDK 接入 WebSocket 合成接口，依赖 `dashscope` 包。**WebSocket 接口本身支持边合成边推送的流式回调**，为方便快速验证，**本示例改用同步调用**`synthesizer.call(text)`**一次性返回完整音频**；如需流式回调（边合成边播放）的完整写法，请参见[用户指南](raw/model-user-guide/model-experience/speech-synthesis/tts-model.md)中的流式合成完整示例。
 
 ```
 # coding=utf-8
@@ -614,7 +614,7 @@ with open('output.mp3', 'wb') as f:
 
 每一次调用都建议落入业务日志，以便事后追溯异常请求与诊断性能问题。重点采集以下三类信息：
 
--   **请求 ID**（`request_id`）：WebSocket SDK 通过 `synthesizer.get_last_request_id()` 获取（参见前文 [实时（Python WebSocket）](raw/model-user-guide/fine-tuning/fine-tune-speech-synthesis-model/fine-tune-speech-synthesis-model-by-api.md) 示例）；HTTP 调用方式下的获取位置请参考[语音合成](https://help.aliyun.com/zh/model-studio/tts-model)。排查异常或回溯问题时请始终保留该 ID。
+-   **请求 ID**（`request_id`）：WebSocket SDK 通过 `synthesizer.get_last_request_id()` 获取（参见前文 [实时（Python WebSocket）](raw/model-user-guide/fine-tuning/fine-tune-speech-synthesis-model/fine-tune-speech-synthesis-model-by-api.md) 示例）；HTTP 调用方式下的获取位置请参考[语音合成](raw/model-user-guide/model-experience/speech-synthesis/tts-model.md)。排查异常或回溯问题时请始终保留该 ID。
 -   **首包延迟**：WebSocket SDK 通过 `synthesizer.get_first_package_delay()` 获取首个音频包到达时延（毫秒），是衡量实时合成体感的核心指标，前文 [实时（Python WebSocket）](raw/model-user-guide/fine-tuning/fine-tune-speech-synthesis-model/fine-tune-speech-synthesis-model-by-api.md) 示例代码已演示其打印用法。
 -   **错误码与错误信息**：错误响应中的 `code`、`message` 字段用于区分鉴权失败、配额耗尽、模型未就绪、文本超限等不同失败原因，建议按错误码分别设置告警与排查路径。
 
@@ -720,7 +720,7 @@ with open('output.mp3', 'wb') as f:
 
 [上传调优文件](https://help.aliyun.com/zh/model-studio/fine-tune-speech-synthesis-model-by-api#cv_upload_title)
 
-[上传文件](https://help.aliyun.com/zh/model-studio/upload-file-api)
+[上传文件](raw/model-api-reference/file-management-api/upload-file-api.md)
 
 创建调优任务
 

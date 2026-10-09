@@ -4,7 +4,7 @@
 
 DashScope SDK目前仅支持Java和Python。使用其他编程语言时，可通过WebSocket连接与服务进行通信。
 
-**用户指南：**关于模型介绍和选型建议请参见[语音合成](https://help.aliyun.com/zh/model-studio/tts-model)。
+**用户指南：**关于模型介绍和选型建议请参见[语音合成](raw/model-user-guide/model-experience/speech-synthesis/tts-model.md)。
 
 ## 接口地址
 

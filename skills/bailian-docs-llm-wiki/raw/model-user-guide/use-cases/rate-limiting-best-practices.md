@@ -6,7 +6,7 @@
 
 本文按改动成本从低到高，介绍三类方案：
 
--   [平台配置方案](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#h2_platform_solutions)（低改动成本）：[服务端排队等待](raw/model-user-guide/use-cases/rate-limiting-best-practices.md)、[提升限流额度](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#h3_quota)、[PTU](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#h3_ptu)、[Batch API](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#h3_batch_api)。
+-   [平台配置方案](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#h2_platform_solutions)（低改动成本）：[服务端排队等待](raw/model-user-guide/use-cases/rate-limiting-best-practices.md)、[PTU](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#h3_ptu)、[Batch API](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#h3_batch_api)。
 -   [客户端流控策略](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#h2_strategies)（改客户端代码）：从[基础重试](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#h3_l1)到[自适应拥塞控制](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#h3_l4)，按工程复杂度递进的四种策略。
 -   [架构兜底方案](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#h2_arch_fallback)（改系统架构）：[模型降级（Fallback）](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#h3_fallback)、[基于消息队列（MQ）的削峰填谷](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#h3_mq_arch)。
 
@@ -152,14 +152,6 @@ curl -X POST "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions
   }'
 ```
 
-### 提升限流额度
-
-默认额度不足时，可在百炼控制台直接提升临时限流额度，提交后立即生效。目前支持华北2（北京）和新加坡地域。
-
-适用场景：业务增长导致 RPM/TPM 配额不足，或短期活动需临时提升吞吐量。操作详情参见[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)。
-
-操作简单，建议在尝试客户端流控前优先评估。
-
 ### 预置吞吐单元（PTU）
 
 [PTU 服务](raw/model-user-guide/model-deployment-index/model-deployment-introduction.md)提供独立预留的专享算力，可避免公共资源池的竞争，是保障实时高吞吐的首选。
@@ -178,7 +170,7 @@ PTU 为预留资源，未满负荷使用也持续计费。建议根据实际峰�
 
 ## 客户端流控策略
 
-当平台方案（如[服务端排队等待](raw/model-user-guide/use-cases/rate-limiting-best-practices.md)、提升额度等）无法满足需求时，需在客户端引入流控。核心原则：**将请求均匀分布在时间窗口内**，避免突发触发限流。系统启动或长时间空闲后，应逐步提升并发而非瞬间拉满。
+当平台方案（如[服务端排队等待](raw/model-user-guide/use-cases/rate-limiting-best-practices.md)等）无法满足需求时，需在客户端引入流控。核心原则：**将请求均匀分布在时间窗口内**，避免突发触发限流。系统启动或长时间空闲后，应逐步提升并发而非瞬间拉满。
 
 以下四种策略按工程复杂度递增，每种包含上一级能力并增强：
 

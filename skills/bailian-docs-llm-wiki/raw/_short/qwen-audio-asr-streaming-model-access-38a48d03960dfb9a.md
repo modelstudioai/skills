@@ -4,7 +4,7 @@
 
 ## 接入方式
 
-**说明**Qwen-Audio-3.0-ASR-Flash-Streaming 模型支持 AOQ（AI over QUIC）、WebSocket 两种传输协议，开发者可以根据业务场景灵活选择。详细接入流程请参见 [Realtime API](raw/model-api-reference/realtime-api-user-guide/realtime-api-overview.md)。
+**说明**支持通过 AOQ（AI over QUIC）和 WebSocket 协议接入。详细接入流程请参见 [Realtime API](raw/model-api-reference/realtime-api-user-guide/realtime-api-overview.md)。
 
 #### AOQ
 

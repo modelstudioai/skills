@@ -1,64 +1,63 @@
 # omni realtime api
 
-Qwen-Omni-Realtime 是面向多模态实时交互场景的低延迟大模型 API，支持文本、音频（含空间音频）、视频输入与文本+音频联合输出。它提供 WebSocket、WebRTC 和 AOQ 三种传输协议接入方式，适用于智能客服、实时语音助手、会议纪要等对端到端延迟敏感的场景。所有模型均基于统一的 Realtime API 协议设计，事件驱动、双向流式交互。
+Qwen-Omni-Realtime 是面向实时多模态交互（语音+文本）优化的流式大模型 API，支持低延迟音频输入/输出、端到端 VAD、工具调用（Function Calling / MCP）及联网搜索等能力。它通过 AOQ、WebSocket 和 WebRTC 三种协议提供接入，适用于智能客服、语音助手、实时会议摘要等场景。开发者需关注模态组合、音频格式约束及模型间参数兼容性差异。
 
-## 支持的模型/功能
+## 支持的模型与功能
 
-当前支持以下模型（按发布顺序）：
-- `qwen3.5-omni-flash-realtime`、`qwen3.5-omni-plus-realtime`
-- `qwen3.8-omni-flash-realtime`（新增空间音频、视频输入、MCP 工具集成）
-- `qwen3-omni-flash-realtime`、`qwen-omni-turbo-realtime`（部分参数不可调）
+当前支持以下模型（均以 `-realtime` 后缀标识）：
+- `qwen3.8-omni-flash-realtime`
+- `qwen3.5-omni-plus-realtime`
+- `qwen3.5-omni-flash-realtime`
 
 核心功能包括：
-- 多模态输入：单/双/四通道 PCM 音频（16 kHz）、WAV 封装音频、视频帧（Qwen3.8-Omni-Flash-Realtime）
-- 多模态输出：文本 + 可配置采样率/格式的合成语音（`pcm` 或 `wav`）
-- 实时语音活动检测（VAD）：支持 `server_vad`（声学）和 `semantic_vad`（语义）两种模式
-- 工具调用：Function Calling（`type=function`）与 MCP（`type=mcp`）双轨支持，但二者不可与 `enable_search` 同时启用
-- 联网搜索：仅 `qwen3.8-omni-flash-realtime` 和 `qwen3.5-omni-realtime` 系列支持，需显式设置 `enable_search: true`
+- **多模态 I/O**：支持 `["text"]` 或 `["text", "audio"]` 输出模态；输入音频仅支持 `pcm`（默认）或 `wav`（部分模型），采样率需匹配（如 16 kHz 输入、24 kHz 输出）[Qwen-Omni-Realtime 模型接入方式](../../raw/model-api-reference/omni-realtime-api/omni-realtime-model-access.md)。
+- **语音活动检测（VAD）**：支持 `server_vad`（声学检测）和 `semantic_vad`（语义检测）两种模式；`idle_timeout_ms` 仅在 `qwen3.5-omni-plus-realtime` 或 `qwen3.5-omni-flash-realtime` + `server_vad` 下生效 [服务端事件](../../raw/model-api-reference/omni-realtime-api/server-events.md)。
+- **工具调用**：支持 Function Calling（`type=function`）和 MCP（`type=mcp`）；MCP 配置中的 `server_url`、`authorization` 等敏感字段**不会在 `session.updated` 中回显**，客户端不可依赖该事件重建连接 [客户端事件](../../raw/model-api-reference/omni-realtime-api/client-events.md)。
+- **联网搜索**：`enable_search` 仅对 `qwen3.8-omni-flash-realtime` 和 `qwen3.5-omni-realtime` 系列有效，且与 `tools` **互斥**（不可同时启用）。
 
-> **注意**：文档 3 中 `session.created` 示例显示 `"output_audio_format": "pcm"` 且注明“当前不支持自定义输出采样率”，但文档 2 明确说明 `session.audio.output.format.sample_rate` 在 `qwen3.5-omni-plus-realtime` 等模型上可设为 8000/16000/24000/48000 Hz，默认 24000 Hz。该矛盾以 [客户端事件](../../raw/model-api-reference/omni-realtime-api/client-events.md) 为准，服务端事件中的限制性描述已过时。
+> **注意**：文档 2 中 `session.created` 示例显示 `output_audio_format` 固定为 `"pcm"` 且“不支持自定义输出采样率”，但文档 3 明确说明 `qwen3.5-omni-plus-realtime` 和 `qwen3.5-omni-flash-realtime` 的 `audio.output.format.sample_rate` 可设为 `8000/16000/24000/48000`。此处以文档 3 的客户端配置能力为准，服务端示例存在过时风险。
 
 ## 关键参数
 
-所有会话通过 `session.update` 事件初始化或更新，关键参数如下：
+所有参数通过 `session.update` 客户端事件设置，服务端校验后返回 `session.updated` 事件。关键参数如下：
 
-| 参数 | 类型 | 说明 | 默认值/约束 |
-|------|------|------|-------------|
-| `modalities` | `array` | 输出模态，仅支持 `["text"]` 或 `["text","audio"]` | `["text","audio"]` |
-| `voice` / `audio.output.voice` | `string` | 合成音色 | `Tina`（Qwen3.5/Qwen3.8 系列），`Cherry`（Qwen3-Omni-Flash）；新接入**必须使用 `audio.output.voice`** |
-| `audio.input.format` | `object` | 输入音频格式：`type`（`pcm`/`wav`）、`sample_rate`（8k/16k/24k/48k Hz）；Qwen3.8 多通道强制 `pcm`+`16000` | `{"type":"pcm","sample_rate":16000}` |
-| `audio.output.format` | `object` | 输出音频格式：同上，`sample_rate` 可设为 24000 Hz（推荐） | `{"type":"wav","sample_rate":24000}` |
-| `turn_detection` | `object` | VAD 配置：`type`（`server_vad`/`semantic_vad`）、`threshold`（-1.0~1.0）、`silence_duration_ms`（200~6000 ms） | `{"type":"server_vad","threshold":0.5,"silence_duration_ms":800}` |
-| `enable_search` | `boolean` | 启用联网搜索 | `false`；与 `tools` 互斥 |
-| `tools` | `array` | Function Calling 或 MCP 工具定义 | 空数组；[客户端事件](../../raw/model-api-reference/omni-realtime-api/client-events.md) 提供完整 schema |
-| `temperature` / `top_p` / `top_k` | `float`/`integer` | 生成控制参数 | 各模型默认值不同，详见 [客户端事件](../../raw/model-api-reference/omni-realtime-api/client-events.md) 表格；**建议只设置其中一个多样性参数** |
-| `max_tokens` | `integer` | 响应最大 [Token](../concepts/token.md) 数 | Qwen3.8：1~65536；其他模型见 [模型列表](raw/model-user-guide/get-started-with-models/models.md) |
+| 参数 | 类型 | 说明 | 默认值 | 模型限制 |
+|------|------|------|--------|----------|
+| `modalities` | `array` | 输出模态，仅支持 `["text"]` 或 `["text","audio"]` | `["text","audio"]` | 全系列支持 |
+| `voice` / `audio.output.voice` | `string` | 输出音色 | `Tina`（Qwen3.8）、`Cherry`（Qwen3.5-Flash） | [音色列表](https://help.aliyun.com/zh/model-studio/omni-voice-list#qwen38-voices) |
+| `audio.input.format.type` | `string` | 输入格式：`pcm`（默认）或 `wav` | `pcm` | `qwen3.5-*` 支持两者；`qwen3.8-*` 多通道仅支持 `pcm` |
+| `audio.input.format.sample_rate` | `integer` | 输入采样率（Hz） | `16000` | `qwen3.5-*`: 8k/16k/24k/48k；`qwen3.8-*`: 仅 `16000` |
+| `audio.output.format.type` | `string` | 输出格式：`pcm`（默认）或 `wav` | `pcm` | `qwen3.5-*` 支持两者 |
+| `turn_detection.type` | `string` | VAD 类型：`server_vad`（默认）或 `semantic_vad` | `server_vad` | `qwen3.8-*` 和 `qwen3.5-*` 系列支持 |
+| `enable_search` | `boolean` | 启用联网搜索 | `false` | `qwen3.8-*` 和 `qwen3.5-*` 系列支持；与 `tools` 不兼容 |
+| `tools` | `array` | 工具定义（`function` 或 `mcp`） | `[]` | `qwen3.8-*` 支持混合配置；`qwen3.5-*` 仅支持 `function` |
+| `temperature` | `float` | 采样温度 | `0.6`（Qwen3.8）、`0.7`（Qwen3.5） | `qwen-omni-turbo-*` 系列**不支持修改** |
 
-> **注意**：`qwen-omni-turbo` 系列模型**不支持修改** `temperature`、`top_p`、`top_k`、`max_tokens`、`repetition_penalty`、`presence_penalty`、`seed` 等全部生成参数，文档 2 和文档 3 中相关默认值说明对其不适用。
+> **注意**：`qwen-omni-turbo-*` 系列模型在 `temperature`、`top_p`、`top_k`、`max_tokens`、`repetition_penalty`、`presence_penalty`、`seed` 等参数上**完全不可配置**，文档 3 中明确标注了此限制，而文档 2 的 `session.updated` 示例中包含这些字段，易引发误用。
 
 ## 使用方式
 
-1. **建立连接**：选择 WebSocket（推荐）、WebRTC 或 AOQ 协议接入。WebSocket 连接地址与握手流程详见 [WebSocket 接入指南](../../raw/_short/omni-realtime-interaction-process-c1786114b7f9b9c5.md)。
-2. **初始化会话**：连接成功后，立即发送 `session.update` 事件（含完整 `session` 对象）。服务端校验通过后返回 `session.created`（首次）或 `session.updated`（后续更新）。
-3. **音频输入**：
-   - VAD 模式：持续发送 `input_audio_buffer.append` 二进制数据，服务端自动触发 `speech_started`/`speech_stopped`/`committed` 事件；
-   - Manual 模式：发送 `input_audio_buffer.commit` 显式提交。
-4. **接收响应**：服务端推送 `conversation.item.created`（含文本/音频/工具调用）、`response.audio.delta`（音频流片段）、`response.text.delta`（文本流片段）等事件。
-5. **SDK 快速启动**：官方提供 Python 和 Java SDK，封装连接管理、事件解析与重试逻辑，详见 [Python SDK](../../raw/_short/omni-realtime-python-sdk-c6ee137356d19420.md) 和 [Java SDK](../../raw/_short/omni-realtime-java-sdk-80f4b2a483df02c3.md)。
+1. **建立连接**：选择 AOQ、WebSocket 或 WebRTC 协议接入。推荐 WebSocket（[WebSocket 接入指南](../../raw/_short/omni-realtime-interaction-process-c1786114b7f9b9c5.md)）或使用官方 SDK（[Python SDK](../../raw/_short/omni-realtime-python-sdk-c6ee137356d19420.md)、[Java SDK](../../raw/_short/omni-realtime-java-sdk-80f4b2a483df02c3.md)）。
+2. **初始化会话**：连接成功后，立即发送 `session.update` 事件配置参数（如 `modalities`、`voice`、`turn_detection`）。服务端返回 `session.created` 事件确认初始配置。
+3. **音频流传输**：按配置的 `input_audio_format` 和采样率，持续写入 PCM/WAV 音频流至缓冲区。VAD 自动触发 `input_audio_buffer.speech_started` / `speech_stopped` 事件。
+4. **交互控制**：
+   - 手动提交：发送 `input_audio_buffer.commit` 触发模型响应；
+   - 清空缓冲区：发送 `input_audio_buffer.clear`；
+   - 动态更新：再次发送 `session.update` 修改参数（如切换音色、启用搜索）。
+5. **处理响应**：监听服务端事件，如 `conversation.item.created`（含文本/音频内容）、`error`（错误处理）、`session.updated`（配置生效确认）。
 
 ## 限制和注意事项
 
-- **[Token](../concepts/token.md) 限制**：Qwen3.8-Omni-Flash-Realtime 单次 `session.update` 的 `session` 对象总 [Token](../concepts/token.md) 上限为 196608；输入音频 Token 计算与声道数强相关（2/4 声道为单声道 2 倍），详见 [Token 计算](https://help.aliyun.com/zh/model-studio/realtime#cfba3898e4d0h)。
-- **音频配置时机**：`audio.input.format` 和 `audio.output.format` **必须在首段音频发送前完成配置**，音频流开始后不可修改。
-- **多通道约束**：Qwen3.8-Omni-Flash-Realtime 的多通道输入（2/4 声道）强制要求 `type=pcm`、`sample_rate=16000`、`sample_format=s16le`、`packing=interleaved`，`channel_layout` 需与 `channels` 匹配（1→`mono`，2→`raw_mic_array`，4→`foa_ambix`）。
-- **工具与搜索互斥**：`tools` 数组非空时，`enable_search` 必须为 `false`，反之亦然。
-- **错误处理**：服务端返回 `error` 事件时（如 `invalid_request_error`），需检查 `error.param` 字段定位问题参数，例如 `session.modalities` 不合法会明确提示支持的组合。
-- **音色兼容性**：`session.voice` 是历史字段，新接入必须使用 `session.audio.output.voice`；若两者同时存在，以 `audio.output.voice` 为准。
+- **音频格式硬约束**：输入必须为单声道/多声道 PCM（`s16le`）或 WAV；`qwen3.8-*` 多通道输入强制要求 `channels=2/4`、`sample_rate=16000`、`packing=interleaved`，且 `channel_layout` 必须匹配（如 `raw_mic_array`）。
+- **参数互斥性**：`tools` 与 `enable_search` 不可同时为 `true`；`temperature` 和 `top_p` 建议只设置其一以避免行为不可控。
+- **[Token](../concepts/token.md) 计算**：多通道音频（2/4 声道）输入 [Token](../concepts/token.md) 数为单声道的 2 倍；视频 `representation_compact=normal` 可降低 [Token](../concepts/token.md) 数至 `none` 模式的 1/4（详见 [Token 计算](https://help.aliyun.com/zh/model-studio/realtime#cfba3898e4d0h)）。
+- **MCP 安全限制**：`server_url` 必须为公网 HTTPS 443 地址；`authorization` 和 `headers` 字段**永不回显**于服务端事件，客户端不得尝试从 `session.updated` 提取。
+- **超时与配额**：MCP 调用受服务端配额及超时限制（参见 [MCP 调用限制](https://help.aliyun.com/zh/model-studio/omni-realtime-interaction-process#qwen38-mcp-limits)）；`idle_timeout_ms` 仅在无用户语音输入时触发主动响应，计时始于上一条模型音频播放完毕。
 
 ## 来源文档
 
 - [Qwen-Omni-Realtime 模型接入方式](../../raw/model-api-reference/omni-realtime-api/omni-realtime-model-access.md)
-- [客户端事件](../../raw/model-api-reference/omni-realtime-api/client-events.md)
 - [服务端事件](../../raw/model-api-reference/omni-realtime-api/server-events.md)
+- [客户端事件](../../raw/model-api-reference/omni-realtime-api/client-events.md)
 
 

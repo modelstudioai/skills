@@ -58,7 +58,7 @@ string
 
 object
 
-预装依赖，按包管理器分组。键为 `apt` / `pip` / `npm`，值为包名数组
+预装依赖，按包管理器分组。键为 `apt` / `pip` / `npm`，值为包名数组。安装可能需要预热时间，完成前环境不可被会话绑定
 
 `config.networking`
 

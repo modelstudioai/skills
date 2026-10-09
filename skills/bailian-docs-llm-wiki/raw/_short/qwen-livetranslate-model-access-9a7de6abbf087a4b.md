@@ -4,7 +4,7 @@
 
 ## 接入方式
 
-**说明**Qwen3.5-Livetranslate-Flash-Realtime 模型支持 AOQ（AI over QUIC）、WebRTC 和 WebSocket 三种传输协议，开发者可以根据业务场景灵活选择。详细接入流程请参见 [Realtime API](raw/model-api-reference/realtime-api-user-guide/realtime-api-overview.md)。
+**说明**Qwen-Livetranslate-Realtime 系列模型支持 AOQ（AI over QUIC）、WebRTC 和 WebSocket 三种传输协议，开发者可以根据业务场景灵活选择。详细接入流程请参见 [Realtime API](raw/model-api-reference/realtime-api-user-guide/realtime-api-overview.md)。
 
 #### AOQ
 

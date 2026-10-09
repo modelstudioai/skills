@@ -2,7 +2,7 @@
 
 实时双工语音对话模型，支持文本和音频输入输出、工具调用、联网搜索及声音复刻。
 
-推理服务供应商为阿里云百炼。默认音色为 `longanqian_v3.1`。接入方式、支持音色和参数详见[实时语音对话指南](https://help.aliyun.com/zh/model-studio/qwen-audio-realtime-user-guides)。
+推理服务供应商为阿里云百炼。默认音色为 `longanqian_v3.1`。接入方式、支持音色和参数详见[实时语音对话指南](raw/model-user-guide/model-experience/speech-to-speech/qwen-audio-realtime-user-guides.md)。
 
 联网搜索通过 `enable_search` 开启，不能与 Function Calling 同时启用。
 

@@ -14,7 +14,7 @@
       "description": "基于 Qwen3.7底座训练的多语言通用文本重排序模型。相较 Qwen3-rerank，在通用与 Web 检索、代码检索、指令遵循、Agentic 与 Memory 检索等方面大幅提升；在 MTEB、websearch 等评测任务上均取得更优效果，其中 websearch 相对提升约 35%。",
       "collectionTag": "qwen3.7",
       "features": [],
-      "provider": "qwen",
+      "provider": "qwen-domain-model",
       "model": "qwen3.7-text-rerank",
       "prices": [
         {

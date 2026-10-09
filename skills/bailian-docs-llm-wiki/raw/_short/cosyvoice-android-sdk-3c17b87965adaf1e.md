@@ -247,7 +247,7 @@ API Key。建议使用时效性短、安全性更高的[临时API Key](raw/model
 
 语音合成所使用的音色。
 
--   **系统音色**：参见[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)
+-   **系统音色**：参见[CosyVoice音色列表](raw/model-user-guide/model-experience/speech-synthesis/tts-voice-list/cosyvoice-voice-list.md)
 -   **复刻音色**：通过声音复刻功能定制
 -   **声音设计音色**：通过声音设计功能定制
 
@@ -363,7 +363,7 @@ SSML 的使用限制（支持的模型、音色和接口），请参见[使用�
 
 默认值：false。
 
-仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2模型的复刻音色，以及[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。其他模型的复刻音色不支持此功能。
+仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2模型的复刻音色，以及[CosyVoice音色列表](raw/model-user-guide/model-experience/speech-synthesis/tts-voice-list/cosyvoice-voice-list.md)中标记为支持的系统音色。其他模型的复刻音色不支持此功能。
 
 > 时间戳结果在`INativeStreamInputTtsCallback`的all\_response中。
 
@@ -536,7 +536,7 @@ public synchronized int sendStreamInputTts(String text)
 
 `String`
 
-待合成文本。不支持[SSML](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)。如果传入的文本包含SSML标签，这些标签将被当作普通文本读出，不会被解析。
+待合成文本。不支持[SSML](raw/model-user-guide/model-experience/speech-synthesis/ssml-latex-user-guide.md)。如果传入的文本包含SSML标签，这些标签将被当作普通文本读出，不会被解析。
 
 ### stopStreamInputTts
 
@@ -601,7 +601,7 @@ callback、ticket等参数与`startStreamInputTts`接口中的定义相同。
 
 `String`
 
-待合成文本。支持[SSML](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)。
+待合成文本。支持[SSML](raw/model-user-guide/model-experience/speech-synthesis/ssml-latex-user-guide.md)。
 
 ### asyncPlayStreamInputTts
 
@@ -633,7 +633,7 @@ callback、ticket等参数与`startStreamInputTts`接口中的定义相同。
 
 `String`
 
-待合成文本。支持[SSML](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)。
+待合成文本。支持[SSML](raw/model-user-guide/model-experience/speech-synthesis/ssml-latex-user-guide.md)。
 
 ## INativeStreamInputTtsCallback
 
@@ -837,7 +837,7 @@ CosyVoice 流式语音合成事件类型枚举。
 
 **使用方法**：调用 `playStreamInputTts`或`asyncPlayStreamInputTts`接口时，SDK 会自动启用 SSML，此时直接在 `text` 参数中传入包含 SSML 标签的文本即可。
 
-更多说明请参见 [SSML 与 LaTeX](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)。
+更多说明请参见 [SSML 与 LaTeX](raw/model-user-guide/model-experience/speech-synthesis/ssml-latex-user-guide.md)。
 
 ### 数学表达式
 

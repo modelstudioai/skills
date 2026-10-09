@@ -182,6 +182,6 @@ TPM（每分钟 Token 数）
 
 ## 调用方式
 
-通过 WebSocket Realtime API 调用，模型 ID 为 `qwen3.8-livetranslate-flash-realtime`。连接地址和示例参见[实时翻译使用指南](https://help.aliyun.com/zh/model-studio/qwen3-5-livetranslate-flash-realtime#a36e6dc44fucp)。
+通过 Realtime API 的 AOQ、WebRTC 或 WebSocket 协议调用，模型 ID 为 `qwen3.8-livetranslate-flash-realtime`。协议选型和接入方式参见 [Realtime API 概述](raw/model-api-reference/realtime-api-user-guide/realtime-api-overview.md)，WebSocket 连接地址和示例参见[实时翻译使用指南](https://help.aliyun.com/zh/model-studio/qwen3-5-livetranslate-flash-realtime#a36e6dc44fucp)。
 
 本模型使用 `session.output_modalities` 配置输出模态。流式译文使用 `response.text.delta` 或 `response.audio_transcript.delta` 事件返回。参数和事件与 `qwen3.5-livetranslate-flash-realtime` 存在差异，详见[客户端事件](https://help.aliyun.com/zh/model-studio/live-translator-client-events#af43722339yva)和[服务端事件](https://help.aliyun.com/zh/model-studio/live-translator-server-events#text-delta)。

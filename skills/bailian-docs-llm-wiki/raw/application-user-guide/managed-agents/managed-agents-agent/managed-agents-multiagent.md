@@ -54,7 +54,7 @@ curl -X POST "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentst
   -H "Content-Type: application/json" \
   -d '{
     "name": "my-coordinator",
-    "model": {"id": "qwen3-max"},
+    "model": {"id": "qwen3.8-max"},
     "multiagent": {
       "type": "coordinator",
       "agents": [
@@ -70,7 +70,7 @@ python
 ```
 agent = client.agents.create(
     name="my-coordinator",
-    model="qwen3-max",
+    model="qwen3.8-max",
     multiagent={
         "type": "coordinator",
         "agents": [
@@ -87,7 +87,7 @@ java
 ```
 Agent agent = client.agents().create(AgentCreateParam.builder()
     .name("my-coordinator")
-    .model("qwen3-max")
+    .model("qwen3.8-max")
     .multiagent(MultiAgentConfig.builder()
         .type("coordinator")
         .agents(List.of(

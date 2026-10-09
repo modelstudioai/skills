@@ -1,8 +1,8 @@
 # Python SDK
 
-本文介绍 DashScope Python SDK 调用[实时语音合成](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)时的关键接口与请求参数。
+本文介绍 DashScope Python SDK 调用[实时语音合成](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)时的关键接口与请求参数。
 
-**用户指南**：关于模型介绍和选型建议请参见[实时语音合成](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)或[非实时语音合成](https://help.aliyun.com/zh/model-studio/non-realtime-tts-user-guide)。
+**用户指南**：关于模型介绍和选型建议请参见[实时语音合成](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)或[非实时语音合成](raw/model-user-guide/model-experience/speech-synthesis/non-realtime-tts-user-guide.md)。
 
 ## 前期准备
 
@@ -360,7 +360,7 @@ str
 -   `opus`
     
 
-千问-TTS-Realtime（参见[支持的模型](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)）仅支持`pcm`。
+千问-TTS-Realtime（参见[支持的模型](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)）仅支持`pcm`。
 
 sample\_rate
 
@@ -381,7 +381,7 @@ int
 -   48000
     
 
-千问-TTS-Realtime（参见[支持的模型](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)）仅支持24000。
+千问-TTS-Realtime（参见[支持的模型](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)）仅支持24000。
 
 speech\_rate
 
@@ -395,7 +395,7 @@ float
 
 取值范围：\[0.5, 2.0\]。
 
-千问-TTS-Realtime（参见[支持的模型](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)）不支持该参数。
+千问-TTS-Realtime（参见[支持的模型](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)）不支持该参数。
 
 volume
 
@@ -409,7 +409,7 @@ int
 
 取值范围：\[0, 100\]。
 
-千问-TTS-Realtime（参见[支持的模型](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)）不支持该参数。
+千问-TTS-Realtime（参见[支持的模型](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)）不支持该参数。
 
 pitch\_rate
 
@@ -423,7 +423,7 @@ float
 
 取值范围：\[0.5, 2.0\]。
 
-千问-TTS-Realtime（参见[支持的模型](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)）不支持该参数。
+千问-TTS-Realtime（参见[支持的模型](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)）不支持该参数。
 
 bit\_rate
 
@@ -437,7 +437,7 @@ int
 
 取值范围：\[6, 510\]。
 
-千问-TTS-Realtime（参见[支持的模型](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)）不支持该参数。
+千问-TTS-Realtime（参见[支持的模型](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)）不支持该参数。
 
 instructions
 

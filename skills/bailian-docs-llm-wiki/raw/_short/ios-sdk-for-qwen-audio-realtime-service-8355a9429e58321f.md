@@ -2,7 +2,7 @@
 
 使用Qwen-Audio-3.0-Realtime实时语音对话iOS SDK，实现实时音频输入以及语音或文本输出。
 
-**用户指南：**关于模型介绍和选型建议请参见[实时语音对话](https://help.aliyun.com/zh/model-studio/qwen-audio-realtime-user-guides)。
+**用户指南：**关于模型介绍和选型建议请参见[实时语音对话](raw/model-user-guide/model-experience/speech-to-speech/qwen-audio-realtime-user-guides.md)。
 
 ## 快速开始
 

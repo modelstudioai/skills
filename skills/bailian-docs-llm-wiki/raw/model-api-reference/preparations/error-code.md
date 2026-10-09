@@ -945,7 +945,7 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
         
         -   须按固定格式编写
         -   仅支持中文 `instruction`
-        -   不同音色支持的 `instruction` 不同，详情请参见[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)
+        -   不同音色支持的 `instruction` 不同，详情请参见[CosyVoice音色列表](raw/model-user-guide/model-experience/speech-synthesis/tts-voice-list/cosyvoice-voice-list.md)
 
 **解决方案：**
 

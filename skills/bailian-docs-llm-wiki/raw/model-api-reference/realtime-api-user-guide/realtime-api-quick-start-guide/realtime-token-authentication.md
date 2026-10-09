@@ -87,7 +87,7 @@ qwen-audio-3.1-realtime-plus、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-rea
 
 `/api/v1/webrtc/realtime`
 
-qwen3.5-livetranslate-flash-realtime
+Qwen-Livetranslate-Realtime 系列模型
 
 `/api/v1/webrtc/realtime`
 

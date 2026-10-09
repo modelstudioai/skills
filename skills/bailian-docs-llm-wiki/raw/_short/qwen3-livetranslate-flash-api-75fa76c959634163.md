@@ -2,7 +2,7 @@
 
 本文介绍通过 OpenAI 兼容接口调用 qwen3-livetranslate-flash 模型的输入与输出参数。
 
-> 相关文档：[音视频文件翻译-千问](https://help.aliyun.com/zh/model-studio/qwen3-livetranslate-flash)
+> 相关文档：[音视频文件翻译-千问](raw/model-user-guide/model-experience/speech-to-speech/qwen3-livetranslate-flash.md)
 
 > 不支持通过 DashScope 接口调用。
 

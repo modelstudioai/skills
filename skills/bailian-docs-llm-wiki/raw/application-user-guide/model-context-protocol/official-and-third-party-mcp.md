@@ -2,13 +2,21 @@
 
 阿里云百炼的官方 MCP 服务开通后即可使用。百炼官方 MCP 服务既支持在平台内部（如智能体、工作流）直接集成，也支持通过外部调用集成至第三方应用或项目中。
 
-## 开通云部署MCP 服务
+## One Key MCP
 
-**说明**阿里云百炼采取了安全策略来保障云部署 MCP Server 的数据安全。对于敏感数据，云部署 MCP Server 会在创建时使用 KMS 进行加密管理。
+One Key MCP 服务无需手动开通，首次调用自动生效。以使用 **Amap Maps** 高德地图 MCP 服务为例：
 
 **说明**目前 Amap Maps MCP 服务限时免费使用。
 
-开通后，即可使用云部署 MCP 服务。以“开通 **Amap Maps** MCP 服务”为例：
+1.  **进入 MCP 广场**：前往[阿里云百炼 MCP 页面](https://bailian.console.aliyun.com/?tab=mcp#/mcp-market)，浏览并选择带有 One Key 标识的 MCP 服务。
+2.  **获取接入配置**：在服务详情页的**接入方式**中，复制接入配置或点击一键配置到客户端。使用阿里云百炼 API Key（DASHSCOPE\_API\_KEY）即可完成鉴权，无需为该服务单独申请密钥。
+3.  **开始调用**：配置完成后即可调用。首次调用自动生效，无需手动开通。如服务提供免费额度，将自动激活。
+
+## 需开通的广场 MCP
+
+对于未标识为 One Key 的广场 MCP 服务，需手动开通后使用：
+
+**说明**阿里云百炼采取了安全策略来保障云部署 MCP Server 的数据安全。对于敏感数据，云部署 MCP Server 会在创建时使用 KMS 进行加密管理。
 
 1.  前往[阿里云百炼 MCP 页面](https://bailian.console.aliyun.com/?tab=mcp#/mcp-market)，点击 **Amap Maps** 卡片。
     

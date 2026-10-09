@@ -1877,6 +1877,50 @@ Qwen-Omni 模型支持传入多张图片。对输入图片的要求如下：
 extra_body={"use_multichannel": True},
 ```
 
+以下完整示例以双通道立体声 WAV 为例，演示如何调用 `qwen3.8-omni-flash` 解析空间音频信息；四通道 FOA 音频调用方式相同，只需将 `AUDIO_URL` 替换为符合 WYZX 通道顺序的四通道 WAV。
+
+```
+import os
+from openai import OpenAI
+
+client = OpenAI(
+    api_key=os.environ["DASHSCOPE_API_KEY"],
+    base_url=os.environ["DASHSCOPE_BASE_URL"],
+)
+completion = client.chat.completions.create(
+    model="qwen3.8-omni-flash",
+    messages=[{
+        "role": "user",
+        "content": [
+            {"type": "text", "text": "描述这段录音中的空间音频信息。"},
+            {"type": "input_audio", "input_audio": {
+                "data": os.environ["AUDIO_URL"],
+                "format": "wav",
+            }},
+        ],
+    }],
+    extra_body={"use_multichannel": True},
+    stream=True,
+    stream_options={"include_usage": True},
+)
+for chunk in completion:
+    if not chunk.choices:
+        if chunk.usage:
+            print("\nUsage:", chunk.usage)
+        continue
+    delta = chunk.choices[0].delta
+    if getattr(delta, "reasoning_content", None):
+        print(delta.reasoning_content, end="", flush=True)
+    if delta.content:
+        print(delta.content, end="", flush=True)
+```
+
+**说明**多通道音频的声道数必须为 2（双通道立体声，左右声道）或 4（四通道 FOA，WYZX 通道顺序）。可用 `soundfile` 查看音频声道数：
+
+```
+python3 -c "import soundfile as sf; print(sf.info('audio.wav').channels)"
+```
+
 ## 联网搜索
 
 Qwen3.8-Omni-Flash 支持联网搜索，可获取实时信息并生成文本回答。

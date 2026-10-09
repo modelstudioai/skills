@@ -12,7 +12,7 @@
 
 云端
 
-由阿里云百炼托管的沙箱容器，开箱即用。创建后即可被会话绑定
+由阿里云百炼托管的沙箱容器，开箱即用，可被多个会话复用。配置预装包后可能需要预热，见[环境预热](#h-env-warmup)
 
 ## 配置字段
 
@@ -137,6 +137,10 @@ Environment env = client.environments().create(EnvironmentCreateParam.builder()
 -   **apt**：系统包，例如 ffmpeg
 -   **pip**：Python 包，例如 pandas、numpy
 -   **npm**：Node.js 包
+
+## 环境预热
+
+配置了预装包的环境，创建后可能需要预热时间安装依赖，耗时与包的数量和大小相关，可能持续数分钟以上。安装完成前环境处于**准备中**状态，不能被会话引用：此时创建会话返回 `invalid_parameter`，报错信息为 `The environment is still being prepared. Please wait until it is ready and try again.`。预热完成后即可正常绑定；未配置预装包的环境创建后立即可用。建议提前创建环境并预留预热时间，再绑定会话。
 
 ## 归档与删除
 

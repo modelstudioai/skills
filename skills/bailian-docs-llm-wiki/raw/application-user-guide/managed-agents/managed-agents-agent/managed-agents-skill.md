@@ -121,7 +121,7 @@ curl -X POST "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentst
   -H "Content-Type: application/json" \
   -d '{
     "name": "my-agent",
-    "model": {"id": "qwen3-max"},
+    "model": {"id": "qwen3.8-max"},
     "skills": [
       {"type": "customer", "skill_id": "skill_xxx", "version": "1.0"}
     ]
@@ -146,7 +146,7 @@ java
 ```
 Agent agent = client.agents().create(AgentCreateParam.builder()
     .name("my-agent")
-    .model("qwen3-max")
+    .model("qwen3.8-max")
     .skills(List.of(SkillConfig.builder()
         .type("customer")
         .skillId("skill_xxx")

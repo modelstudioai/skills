@@ -36,7 +36,7 @@
 
 是
 
-从下拉选择，例如 `qwen3-max`。变更模型会产生新版本
+从下拉选择，当前支持的模型见[可选模型](#h-models)。变更模型会产生新版本
 
 系统提示词
 
@@ -52,7 +52,7 @@
 
 是
 
-7 个内置工具，按需勾选。详见 [Agent 工具配置](raw/application-user-guide/managed-agents/managed-agents-agent/managed-agents-builtin-tools.md)
+9 个内置工具，按需勾选。详见 [Agent 工具配置](raw/application-user-guide/managed-agents/managed-agents-agent/managed-agents-builtin-tools.md)
 
 MCP 服务器
 
@@ -88,6 +88,8 @@ MCP 服务器
 
 通过 API 创建智能体时，需指定名称与模型，可选配系统提示词和工具集。完整参数与响应字段详见[创建 Agent API](raw/application-api-reference/managed-agents-api/agent-api/agent-create.md)。
 
+**重要**也可通过阿里云百炼 CLI 以基础设施即代码方式管理智能体：`bl managed-agent init` 生成配置模板，`bl managed-agent plan` 预览变更，`bl managed-agent apply` 一键创建。详见[使用 CLI](raw/application-user-guide/managed-agents/managed-agents-cli.md)。
+
 bash
 
 ```
@@ -96,7 +98,7 @@ curl -X POST "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentst
   -H "Content-Type: application/json" \
   -d '{
     "name": "data-analyst",
-    "model": {"id": "qwen3-max"},
+    "model": {"id": "qwen3.8-max"},
     "system": "你是数据分析专家，使用 pandas 处理 CSV 文件。",
     "tools": [
       {
@@ -138,18 +140,120 @@ java
 ```
 Agent agent = client.agents().create(AgentCreateParam.builder()
     .name("data-analyst")
-    .model("qwen3-max")
+    .model("qwen3.8-max")
     .instructions("你是数据分析专家，使用 pandas 处理 CSV 文件。")
     .build());
 System.out.println(agent.getId());       // "agent_xxx"
 System.out.println(agent.getVersion());  // 1
 ```
 
+## 可选模型
+
+`model.id` 支持智能模式，由平台按档位路由：
+
+**模式 ID**
+
+**说明**
+
+`auto`
+
+按任务复杂度自动路由到合适的档位
+
+`performance`
+
+性能档，高质量模型，速度质量兼顾
+
+`balanced`
+
+均衡档，高级推理能力，高质量输出
+
+`economy`
+
+经济档，标准推理能力，高性价比
+
+同时支持的模型如下：
+
+**品牌**
+
+**模型 ID（Model ID）**
+
+**模型能力**
+
+千问
+
+qwen3.8-max
+
+推理模型、视觉理解、文本生成
+
+千问
+
+qwen3.8-flash
+
+推理模型、视觉理解、文本生成
+
+千问
+
+qwen3.7-max
+
+推理模型、文本生成
+
+千问
+
+qwen3.7-plus
+
+推理模型、视觉理解、文本生成
+
+千问
+
+qwen3.6-plus
+
+推理模型、视觉理解、文本生成
+
+千问
+
+qwen3.6-flash
+
+推理模型、视觉理解、文本生成
+
+DeepSeek
+
+deepseek-v4-pro
+
+推理模型、文本生成
+
+DeepSeek
+
+deepseek-v4-flash
+
+推理模型、文本生成
+
+智谱 AI
+
+glm-5.2
+
+推理模型、文本生成
+
+智谱 AI
+
+glm-5.1
+
+推理模型、文本生成
+
+月之暗面
+
+kimi-k3
+
+推理模型、视觉理解、文本生成
+
+具备视觉理解能力的模型可处理会话中投递的图片与视频，详见[发送 Event](raw/application-api-reference/managed-agents-api/session-api/event-post.md)。
+
+**说明**模型列表持续更新，以控制台创建智能体时的下拉列表为准。
+
 ## 相关配置
 
 智能体的能力由以下组件共同决定，详细配置参见各自页面：
 
--   [Agent 工具配置](raw/application-user-guide/managed-agents/managed-agents-agent/managed-agents-builtin-tools.md)：7 个开箱即用的工具，覆盖命令执行、文件操作与网络访问。
+-   [Agent 工具配置](raw/application-user-guide/managed-agents/managed-agents-agent/managed-agents-builtin-tools.md)：9 个开箱即用的工具，覆盖命令执行、文件操作与网络访问。
 -   [Agent MCP](raw/application-user-guide/managed-agents/managed-agents-agent/managed-agents-mcp.md)：通过 MCP 协议接入外部工具服务。
 -   [Agent Skills](raw/application-user-guide/managed-agents/managed-agents-agent/managed-agents-skill.md)：挂载预置的工具组合，封装端到端任务流程。
 -   [多智能体协作](raw/application-user-guide/managed-agents/managed-agents-agent/managed-agents-multiagent.md)：通过 coordinator 编队编排多个成员智能体。

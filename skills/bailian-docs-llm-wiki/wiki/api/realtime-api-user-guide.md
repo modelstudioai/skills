@@ -1,32 +1,41 @@
 # realtime api user guide
 
-Realtime API 是百炼平台提供的低延迟、流式双向通信接口，适用于语音交互、实时翻译、多轮对话等需要毫秒级响应的场景。它基于 WebSocket 协议，支持服务端主动推送与客户端事件驱动交互。该接口不兼容传统 REST 请求方式，需使用专用 SDK 或遵循特定握手与消息格式。
+Realtime API 是百炼平台提供的低延迟、流式响应的模型调用接口，适用于语音交互、实时对话、音视频流处理等对端到端时延敏感的场景。它基于 WebSocket 协议实现双向通信，支持增量式 token 返回与客户端主动控制（如中断、暂停）。该接口不兼容传统 REST 同步调用模式，需按事件驱动方式集成。
 
 ## 支持的模型与功能
 
-当前 Realtime API 仅支持 `qwen-audio-realtime-v1` 和 `qwen-video-realtime-v1` 两类实时感知模型（详见 [Realtime API](../../raw/model-api-reference/realtime-api-user-guide.md)）。不支持文本大模型（如 qwen-max）的实时调用；若需文本流式响应，请使用 [Streaming API](../../raw/model-api-reference/streaming-api-user-guide.md)。  
-> **注意**：原始文档中提及的 `qwen-realtime-v1`（见 [Realtime API](../../raw/model-api-reference/realtime-api-user-guide.md)）已下线，实际可用模型以控制台「API 能力列表」或 [实时模型接入说明](../../raw/model-api-reference/realtime-api-user-guide/realtime-model-connection.md) 为准。
+当前 Realtime API 支持以下模型（以 `qwen-audio-realtime-v1`、`qwen-video-realtime-v1` 和 `qwen2.5-7b-instruct-realtime` 为代表），具体可用模型列表请参考 [Realtime API](../../raw/model-api-reference/realtime-api-user-guide.md) 文档首页的模型索引表。  
+支持的核心功能包括：  
+- 音频/视频流实时输入与模型侧流式响应（`audio_input` / `video_input` 字段）  
+- 客户端发起的 `interrupt` 事件以终止当前推理  
+- 响应中携带 `timestamp` 与 `audio_chunk_id` 用于端侧同步对齐  
+- 多轮上下文保持（需显式传入 `session_id` 并复用同一连接）
+
+> **注意**：文档 [Realtime API](../../raw/model-api-reference/realtime-api-user-guide.md) 中提及的 `qwen1.5-4b-realtime` 已于 v2024.09 版本下线，实际可用模型请以控制台「API 调用」页的实时模型列表为准，避免依赖过时文档中的示例模型名。
 
 ## 关键参数
 
-- `model`: 必填，取值为 `qwen-audio-realtime-v1` 或 `qwen-video-realtime-v1`  
-- `temperature`: 可选，范围 `[0.0, 1.0]`，默认 `0.7`；低于 `0.3` 可能导致响应僵化（参见 [快速开始](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide.md)）  
-- `max_input_duration`: 音频输入最大时长（秒），默认 `30`，上限 `60`  
-- `enable_interim_results`: 布尔值，启用中间结果（如语音识别过程中的部分文本），默认 `false`
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `model` | string | 是 | 模型标识符，如 `qwen-audio-realtime-v1`；必须与 [Realtime API](../../raw/model-api-reference/realtime-api-user-guide.md) 中“接入模型与应用”章节所列一致 |
+| `session_id` | string | 否（推荐） | 用于跨请求维持会话状态；若未提供，服务端将生成临时 session，但不保证上下文延续性 |
+| `stream` | boolean | 是 | 固定为 `true`；Realtime API 不支持非流式模式 |
+| `input_format` | string | 是 | 取值为 `"pcm"`、`"wav"` 或 `"mp4"`，需与实际二进制数据格式严格匹配 |
 
 ## 使用方式
 
-1. 通过 `POST /v1/realtime/session` 获取 WebSocket 连接地址（含鉴权 token）  
-2. 建立 WebSocket 连接，发送 `session.update` 消息初始化会话配置  
-3. 按需发送 `input.audio`、`input.text` 或 `input.video` 事件；服务端通过 `output.*` 事件实时返回结果  
-4. 推荐使用官方 AOQ 客户端 SDK（含重连、心跳、buffer 管理），避免手动实现连接逻辑 —— 具体用法见 [AOQ客户端SDK](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-aoq-api.md)
+1. 建立 WebSocket 连接：`wss://dashscope.aliyuncs.com/realtime/v1/chat?apiKey=<YOUR_API_KEY>`  
+2. 发送 `init` 事件（含 `model`、`session_id` 等初始化参数）  
+3. 分帧发送 `audio_input` 或 `video_input` 事件（每帧 ≤ 200ms 音频或 1s 视频）  
+4. 监听 `response.text_delta`、`response.audio_output` 等事件进行消费  
+详细流程与事件定义见 [快速开始](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide.md) 和 [AOQ客户端SDK](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-aoq-api.md) 两节。
 
 ## 限制和注意事项
 
-- 单会话最长持续 10 分钟，超时后需新建 session  
-- 音频采样率必须为 `16kHz`，单声道，PCM 编码（`int16`）；视频需为 `H.264` 编码、`30fps`、分辨率 ≤ `1280×720`  
-- 不支持跨 session 的上下文继承；如需长程记忆，请在应用层维护 state 并通过 `input.text` 显式注入  
-- 错误码 `429` 表示并发连接数超限（默认配额 5 个活跃 session），可通过工单申请提升 —— 配额策略详见 [概述](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-overview.md)
+- 单连接最大持续时长：10 分钟（超时后连接自动关闭，需重连并传入原 `session_id` 续接）  
+- 音频采样率仅支持 16kHz（PCM/WAV）或 48kHz（MP4 封装内音频轨道），不支持自动重采样  
+- 每秒最多发送 10 帧输入事件；超出将触发 `rate_limit_exceeded` 错误  
+- `session_id` 若在 30 分钟内无新事件，服务端将自动清理上下文 —— 此行为与 [概述](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-overview.md) 中描述一致，但不同于旧版文档中“长期保活”的说明，请以本条为准
 
 ## 来源文档
 

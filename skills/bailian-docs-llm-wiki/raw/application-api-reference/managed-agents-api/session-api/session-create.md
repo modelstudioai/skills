@@ -34,7 +34,7 @@ string
 
 string
 
-绑定的运行环境 ID
+绑定的运行环境 ID。环境配置预装包时创建后可能需要预热，准备中的环境不可被会话绑定（返回 invalid\_parameter），需等待预热完成
 
 `title`
 

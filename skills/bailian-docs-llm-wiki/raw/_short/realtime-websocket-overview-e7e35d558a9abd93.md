@@ -334,7 +334,7 @@ Qwen-Audio-TTS/CosyVoice 使用 `run-task → task-started → continue-task →
     
 -   [Java SDK](raw/_short/qwen-livetranslate-java-sdk-be8175c4887f8470.md)
     
--   [实时语音翻译](https://help.aliyun.com/zh/model-studio/qwen3-5-livetranslate-flash-realtime)
+-   [实时语音翻译](raw/model-user-guide/model-experience/speech-to-speech/qwen3-5-livetranslate-flash-realtime.md)
     
 
 ### 多模态交互套件

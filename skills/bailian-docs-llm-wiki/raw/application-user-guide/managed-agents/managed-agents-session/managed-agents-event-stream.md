@@ -58,7 +58,7 @@ MCP 工具调用请求与执行结果
 
 中断当前处理；用于结束当前整批待审批调用。在 `requires_action` 下发送纯 `interrupt` 会触发服务端为批次内尚未执行的调用（含已裁决未执行项）补发 `deny`（见 工具审批）
 
-发送 `message` 事件触发智能体处理。完整参数详见 [Session API](raw/application-user-guide/managed-agents/managed-agents-session.md)。
+发送 `message` 事件触发智能体处理。完整参数详见[发送 Event API](raw/application-api-reference/managed-agents-api/session-api/event-post.md)。
 
 bash
 
@@ -461,4 +461,4 @@ data: {"type":"session_status","content":[{"type":"data","data":{"session_status
 ## 下一步
 
 -   [管理会话](raw/application-user-guide/managed-agents/managed-agents-session/managed-agents-session-operations.md)：了解状态机与工具调用流程。
--   [Session API](raw/application-user-guide/managed-agents/managed-agents-session.md)：SSE 事件流 API 详细说明。
+-   [事件流 (SSE) API](raw/application-api-reference/managed-agents-api/session-api/event-sse-stream.md)：SSE 事件流 API 详细说明。

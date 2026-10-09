@@ -12,6 +12,8 @@
 
 通过 API 创建会话时，需绑定智能体与运行环境，服务端自动快照当前智能体配置。完整参数与响应字段详见[创建 Session API](raw/application-api-reference/managed-agents-api/session-api/session-create.md)。
 
+绑定的环境配置了预装包时，需等待预热完成，准备中的环境无法创建会话，详见[环境预热](https://help.aliyun.com/zh/model-studio/managed-agents-cloud-hosting#h-env-warmup)。
+
 bash
 
 ```

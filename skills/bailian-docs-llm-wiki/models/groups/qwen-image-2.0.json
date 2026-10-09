@@ -1,7 +1,68 @@
 {
-  "name": "Qwen-Image-2.0",
-  "description": "Qwen-Image-2.0系列加速版模型，实现了图片生成和图片编辑的融合；具备更专业的文字渲染1k token指令支持能力、更细腻的真实质感，细腻刻画写实场景、更强的语义遵循能力。加速版有效实现了模型效果和性能的最佳平衡。",
+  "name": "Qwen-Image-2.1",
+  "description": "Qwen-Image-2.1系列标准版模型支持以下能力：透明背景图像生成与编辑：支持 Alpha 通道，可直接生成透明背景图像，无需先生成 RGB 再进行背景去除。多参考图编辑：支持多张参考图像输入，支持人物与产品身份保持。局部编辑：支持圆形标记、涂绘标注等区域指定方式。前缀 KV 缓存复用：跨去噪步骤缓存条件上下文，降低多参考图编辑的计算开销。提示词增强：提供 T2I 与 I2I 提示词重写。",
   "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Image"
+        ],
+        "request_modality": [
+          "Text",
+          "Image"
+        ]
+      },
+      "description": "Qwen-Image-2.1-Turbo 是目前 Qwen-Image 系列中综合表现与性价比最优的开源图像生成模型，具备四大核心优势：\n模型轻量，性能强劲，性价比卓越。\n原生透明，生成与编辑一体化。\n灵活编辑：支持多参考图、局部控制、高保真还原与全面编辑能力。\n真实质感，优雅排版，精美人像。",
+      "features": [],
+      "provider": "qwen",
+      "model": "qwen-image-2.1-turbo",
+      "prices": [
+        {
+          "priceUnit": "每张",
+          "price": "0.1",
+          "timeBand": "standard",
+          "ntmAmountType": "|images|times|",
+          "type": "image_number",
+          "priceName": "图片生成"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 200,
+          "count_limit": 120,
+          "type": "model-default",
+          "async_user_concurrency_limit": 10
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 200,
+          "count_limit": 120,
+          "type": "model-default",
+          "async_user_concurrency_limit": 10
+        }
+      },
+      "priceTimeBands": [
+        "standard"
+      ],
+      "capabilities": [
+        "IG"
+      ],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-10-09T12:49:18.410+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen-Image-2.1-Turbo",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-image-generation-and-editing-api-reference",
+      "category": "Visual",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \\\n--header 'Content-Type: application/json' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--data '{\n    \"model\": \"qwen-image-2.1-turbo\",\n    \"input\": {\n        \"messages\": [\n            {\n                \"role\": \"user\",\n                \"content\": [\n                    {\n                        \"text\": \"画面是一张竖幅户外人像摄影，整体从上到下呈现温暖的午后街景氛围。顶部左侧到上方大面积被深绿色藤蔓和橙色小花覆盖，花叶从建筑檐口自然垂落，受阳光照射的叶片呈黄绿色高光，阴影处则偏深绿，形成浓密而柔和的背景层次。左上至中上区域是一块深蓝色横向招牌，招牌表面较暗、略带磨砂质感，上面以白色哥特体大字写着 Il Messaggero，文字位于画面左侧偏上，部分被前景花叶轻微遮挡，字体高对比、带装饰性尖角和粗细变化。招牌下方是报刊亭或书报摊的玻璃展示窗，黑色金属框架将橱窗分隔成多个矩形区域，内部陈列着许多报纸、杂志和书刊封面，但大多因景深虚化和光线反射而难以辨读，形成浅色纸张与深色边框交错的背景纹理。画面右上方是强烈的逆光区域，阳光从街道尽头照入，背景建筑被虚化成米灰色块面，边缘柔和，呈现明显的浅景深效果。画面中部偏右是一名年轻成年女性的半身至膝上人像，她回头面向镜头微笑，身体略向右转，肩背朝向观者，姿态自然放松。她有长而浓密的黑色波浪卷发，发丝被逆光勾勒出金色轮廓光，发梢在右侧向外散开，显得轻盈蓬松。她肤色白皙，脸型柔和偏鹅蛋形，眉形细致，眼睛明亮，眼妆清透，睫毛明显，面部带有自然高光，唇部为柔和珊瑚红色，笑容露齿，表情亲切明朗。她佩戴小巧耳饰，身穿黑色细肩带露背连衣裙，面料颜色深黑、轮廓简洁，细肩带从肩部向背部延伸，背部线条清晰。画面下部偏左到中部，她双手抱着一束玫瑰花，花束体积较大，主要由橙色、杏色、粉色和浅桃色玫瑰组成，花瓣层层卷曲，边缘被阳光照亮，绿色叶片和长花茎从花束下方垂出，花束与黑色裙装形成鲜明色彩对比。右侧背景是一条被阳光照亮的城市街道，地面呈暖灰与金黄色调，远处建筑、街边设施和一个模糊的红色圆形交通标志位于右下远景，均因焦外虚化而只保留色块和轮廓。整张照片采用暖色胶片感处理，带有细腻颗粒、柔和对比和明显逆光边缘光，人物位于视觉焦点，背景报刊亭、花藤、街道和阳光共同营造出浪漫、明亮、都市漫步式的氛围。\"\n                    }\n                ]\n            }\n        ]\n    },\n    \"parameters\": {\n        \"prompt_extend\": true\n    }\n}'",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-image-generation-and-editing-api-reference"
+          }
+        }
+      }
+    },
     {
       "inferenceMetadata": {
         "response_modality": [

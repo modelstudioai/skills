@@ -609,8 +609,6 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 
 日常查询建议使用默认的 `turbo` 策略。对于需要高精度、多源交叉验证的研究或报告生成场景，可选择 `max`或`agent` 策略。英文场景推荐使用`agent`。
 
-不同模型处理时效性数据的能力存在差异。qwen3-max 具备日期推理能力，能识别非交易日并提示无数据；qwen-max 不具备该能力，会直接返回搜索获取的股价数据。股票等强时效性查询建议使用 qwen3-max 或更新版本的模型。
-
 #### OpenAI 兼容
 
 #### Python
@@ -1659,8 +1657,6 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 
 英超现在哪支球队排名第一
 
-垂域搜索优先使用垂直领域数据源，但不能替代模型的日期推理能力。若在非交易日查询股价仍返回股价数据，需更换为 qwen3-max 或更新版本的模型。
-
 #### OpenAI 兼容
 
 #### Python
@@ -2314,8 +2310,6 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 通过 `prompt_intervene` 参数，可用自然语言指定搜索范围（如仅检索特定主题或地域），系统据此进行针对性检索。
 
 **支持模型**：qwen3-max、qwen3-max-preview、qwen3-max-2025-09-23、qwen-plus、qwen-flash、qwen-plus-character、qwen-flash-character、qwen-flash-character-2026-02-26
-
-`prompt_intervene` 只能指定检索范围，无法弥补模型推理能力的不足。若在非交易日查询股价仍返回股价数据，需更换模型解决。
 
 #### OpenAI 兼容
 

@@ -36,7 +36,7 @@
 
 其他
 
-.pdf、.doc、.docx、.wps、.ppt、.pptx、.md、.txt
+.pdf、.doc、.docx、.ppt、.pptx、.md、.txt
 
 输出 layout 数组，包含 markdown 格式内容
 

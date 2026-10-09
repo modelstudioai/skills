@@ -2,7 +2,7 @@
 
 Qwen-ASR-Realtime 实时语音识别服务通过 WebSocket 协议，接收实时音频流并实时转写。支持 VAD 模式 和 Manual 模式 交互流程。
 
-**用户指南：**关于模型介绍和选型建议请参见[语音识别](https://help.aliyun.com/zh/model-studio/asr-model)，示例代码请参见[实时语音识别](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide)。
+**用户指南：**关于模型介绍和选型建议请参见[语音识别](raw/model-user-guide/model-experience/speech-recognition/asr-model.md)，示例代码请参见[实时语音识别](raw/model-user-guide/model-experience/speech-recognition/real-time-speech-recognition-user-guide.md)。
 
 ## 接口地址
 

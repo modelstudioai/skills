@@ -6,6 +6,8 @@
 
 已创建 API Key 并配置为环境变量 `DASHSCOPE_API_KEY`。配置方法请参见[配置 API Key 到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
 
+**重要****在线体验**：在编写代码前，可先通过 [Playground](https://bailian.console.aliyun.com/systemone_playground) 在线体验决策模型。选择预设场景（客服对话判断、Agent 完成度核验、工单分流、内容审核、Agent 任务路由、医疗导诊辅助），输入业务内容并运行模型，查看判断结果、概率分布与 Token 用量，再修改条件观察结果变化。
+
 ## 请求说明
 
 **协议**：TypeSafe System One（`POST /compatible-mode/v1/systemone`）

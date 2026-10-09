@@ -33,6 +33,10 @@ qwen-image-2.1-pro
 
 千问图像生成与编辑2.1 Pro模型，图生图/图像编辑（I2I）支持传入最多10张参考图，且能够根据提示词描述自动决定输出普通图像还是带有透明通道的图像。
 
+qwen-image-2.1-turbo
+
+千问图像生成与编辑2.1 Turbo模型，是目前Qwen-Image系列中综合表现与性价比最优的模型，图生图/图像编辑（I2I）支持传入最多10张参考图，且能够根据提示词描述自动决定输出普通图像还是带有透明通道的图像。
+
 ## 适用范围
 
 为确保调用成功，请务必保证模型、endpoint URL 和 API Key 均属于**同一地域**。跨地域调用将会失败。
@@ -129,7 +133,7 @@ SDK调用配置的base\_url：`https://{WorkspaceId}.ap-northeast-1.maas.aliyunc
 
 **model** `string` **（必选）**
 
-模型名称，可选值为`qwen-image-3.0-pro`、`qwen-image-3.0`和`qwen-image-2.1-pro`。
+模型名称，可选值为`qwen-image-3.0-pro`、`qwen-image-3.0`、`qwen-image-2.1-pro`和`qwen-image-2.1-turbo`。
 
 **prompt** `string` **（必选）**
 
@@ -137,14 +141,15 @@ SDK调用配置的base\_url：`https://{WorkspaceId}.ap-northeast-1.maas.aliyunc
 
 **image** `string` **或** `array` （可选）
 
-输入图像的 URL 或 Base64 编码数据。不传此参数为文生图（T2I）；传入此参数为图生图（I2I），qwen-image-2.1-pro支持传入1-10张图像，qwen-image-3.0系列支持传入1-3张图像。单张图像可直接传字符串，多张图像传字符串数组，按数组顺序定义图像顺序。
+输入图像的 URL 或 Base64 编码数据。不传此参数为文生图（T2I）；传入此参数为图生图（I2I），qwen-image-2.1系列支持传入1-10张图像，qwen-image-3.0系列支持传入1-3张图像。单张图像可直接传字符串，多张图像传字符串数组，按数组顺序定义图像顺序。
 
 **注意**：不能传入`null`或空数组，否则将返回400错误。
 
 **图像要求：**
 
 -   图像格式：JPG、JPEG、PNG、BMP、TIFF、WEBP和GIF。
--   图像分辨率：建议图像的宽和高均在384像素至2048像素之间。
+-   图像分辨率：宽和高须在1至8000像素之间，超过将返回400错误；建议在384至2048像素之间以获得最佳效果。
+-   图像宽高比：长边与短边之比不超过10:1。
 -   图像大小：不超过10MB。
 
 **支持的输入格式**
@@ -273,7 +278,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 
 输出图片计量档位。按输出分辨率像素面积判断：面积≤2,250,000为`qima_output_1k`，面积>2,250,000为`qima_output_2k`。
 
-#### qwen-image-2.1-pro
+#### qwen-image-2.1系列
 
 **image\_count** `integer`
 
@@ -336,7 +341,7 @@ qwen-image-3.0 系列
 }
 ```
 
-qwen-image-2.1-pro
+qwen-image-2.1系列
 
 ```
 {
@@ -505,7 +510,7 @@ except APIStatusError as exc:
 
 **model** `string` **（必选）**
 
-模型名称，可选值为`qwen-image-3.0-pro`、`qwen-image-3.0`和`qwen-image-2.1-pro`。
+模型名称，可选值为`qwen-image-3.0-pro`、`qwen-image-3.0`、`qwen-image-2.1-pro`和`qwen-image-2.1-turbo`。
 
 **input** `object` **（必选）**
 
@@ -528,18 +533,19 @@ except APIStatusError as exc:
 消息内容数组，根据使用场景有不同的组合方式：
 
 -   **文生图（T2I）**：仅包含一个`{"text": "..."}`对象。
--   **图生图（I2I）**：qwen-image-2.1-pro包含1-10个`{"image": "..."}`对象，qwen-image-3.0系列包含1-3个，以及1个`{"text": "..."}`对象。
+-   **图生图（I2I）**：qwen-image-2.1系列包含1-10个`{"image": "..."}`对象，qwen-image-3.0系列包含1-3个，以及1个`{"text": "..."}`对象。
 
 属性
 
 **image** `string` （可选）
 
-输入图像的 URL 或 Base64 编码数据。I2I场景下，qwen-image-2.1-pro支持传入1-10张图像，qwen-image-3.0系列支持传入1-3张图像。多图输入时，按照数组顺序定义图像顺序。
+输入图像的 URL 或 Base64 编码数据。I2I场景下，qwen-image-2.1系列支持传入1-10张图像，qwen-image-3.0系列支持传入1-3张图像。多图输入时，按照数组顺序定义图像顺序。
 
 **图像要求：**
 
 -   图像格式：JPG、JPEG、PNG、BMP、TIFF、WEBP和GIF。
--   图像分辨率：建议图像的宽和高均在384像素至2048像素之间。
+-   图像分辨率：宽和高须在1至8000像素之间，超过将返回400错误；建议在384至2048像素之间以获得最佳效果。
+-   图像宽高比：长边与短边之比不超过10:1。
 -   图像大小：不超过10MB。
 
 **支持的输入格式**
@@ -726,7 +732,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 输出图片计量档位。按输出分辨率像素面积判断：面积≤2,250,000为`qima_output_1k`，面积>2,250,000为`qima_output_2k`。
 
-#### qwen-image-2.1-pro
+#### qwen-image-2.1系列
 
 **image\_count** `integer`
 
@@ -787,7 +793,7 @@ qwen-image-3.0 系列
 }
 ```
 
-qwen-image-2.1-pro
+qwen-image-2.1系列
 
 ```
 {
@@ -1013,7 +1019,7 @@ public class ImageEditExample {
 
 **model** `string` **（必选）**
 
-模型名称，可选值为`qwen-image-3.0-pro`、`qwen-image-3.0`和`qwen-image-2.1-pro`。
+模型名称，可选值为`qwen-image-3.0-pro`、`qwen-image-3.0`、`qwen-image-2.1-pro`和`qwen-image-2.1-turbo`。
 
 **input** `object` **（必选）**
 
@@ -1036,18 +1042,19 @@ public class ImageEditExample {
 消息内容数组，根据使用场景有不同的组合方式：
 
 -   **文生图（T2I）**：仅包含一个`{"text": "..."}`对象。
--   **图生图（I2I）**：qwen-image-2.1-pro包含1-10个`{"image": "..."}`对象，qwen-image-3.0系列包含1-3个，以及1个`{"text": "..."}`对象。
+-   **图生图（I2I）**：qwen-image-2.1系列包含1-10个`{"image": "..."}`对象，qwen-image-3.0系列包含1-3个，以及1个`{"text": "..."}`对象。
 
 属性
 
 **image** `string` （可选）
 
-输入图像的 URL 或 Base64 编码数据。I2I场景下，qwen-image-2.1-pro支持传入1-10张图像，qwen-image-3.0系列支持传入1-3张图像。多图输入时，按照数组顺序定义图像顺序。
+输入图像的 URL 或 Base64 编码数据。I2I场景下，qwen-image-2.1系列支持传入1-10张图像，qwen-image-3.0系列支持传入1-3张图像。多图输入时，按照数组顺序定义图像顺序。
 
 **图像要求：**
 
 -   图像格式：JPG、JPEG、PNG、BMP、TIFF、WEBP和GIF。
--   图像分辨率：建议图像的宽和高均在384像素至2048像素之间。
+-   图像分辨率：宽和高须在1至8000像素之间，超过将返回400错误；建议在384至2048像素之间以获得最佳效果。
+-   图像宽高比：长边与短边之比不超过10:1。
 -   图像大小：不超过10MB。
 
 **支持的输入格式**
@@ -1375,7 +1382,7 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 
 输出图片计量档位。按输出分辨率像素面积判断：面积≤2,250,000为`qima_output_1k`，面积>2,250,000为`qima_output_2k`。
 
-#### qwen-image-2.1-pro
+#### qwen-image-2.1系列
 
 **image\_count** `integer`
 
@@ -1443,7 +1450,7 @@ qwen-image-3.0 系列
 }
 ```
 
-qwen-image-2.1-pro
+qwen-image-2.1系列
 
 ```
 {

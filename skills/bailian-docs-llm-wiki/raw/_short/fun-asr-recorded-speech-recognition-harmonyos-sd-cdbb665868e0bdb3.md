@@ -2,7 +2,7 @@
 
 使用Qwen-Audio-3.x-ASR-Flash-Filetrans/Fun-ASR非实时语音识别HarmonyOS SDK将音视频文件转换为文本。
 
-**用户指南：** 参见[非实时语音识别](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide)。关于支持的音频格式、文件大小限制和时长限制等输入要求，请参见[音频规格](https://help.aliyun.com/zh/model-studio/asr-model#asr_audio_spec02)。
+**用户指南：** 参见[非实时语音识别](raw/model-user-guide/model-experience/speech-recognition/non-realtime-speech-recognition-user-guide.md)。关于支持的音频格式、文件大小限制和时长限制等输入要求，请参见[音频规格](https://help.aliyun.com/zh/model-studio/asr-model#asr_audio_spec02)。
 
 ## 快速开始
 

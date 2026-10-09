@@ -104,7 +104,7 @@ Function Calling
 
 批量推理
 
-不支持
+支持
 
 模型调优
 

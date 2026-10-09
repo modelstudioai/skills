@@ -2,7 +2,7 @@
 
 本文介绍 Paraformer 实时语音识别服务中客户端通过 WebSocket 发送给服务端的客户端事件，包括 run-task（启动任务）和 finish-task（结束任务）两类指令的数据结构与字段含义。
 
-**用户指南：**关于模型介绍和选型建议请参见[语音识别](https://help.aliyun.com/zh/model-studio/asr-model)。
+**用户指南：**关于模型介绍和选型建议请参见[语音识别](raw/model-user-guide/model-experience/speech-recognition/asr-model.md)。
 
 **事件交互流程**：如需了解事件交互时序，请参见[WebSocket API](raw/_short/websocket-for-paraformer-real-time-service-b96dcec7afe963a4.md)。
 

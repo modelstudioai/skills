@@ -1,63 +1,83 @@
 # memory library [overview](overview.md)
 
-记忆库是为大模型提供跨会话[长期记忆](../concepts/memory.md)的 API 服务，通过自动从对话中提取关键信息并持久化存储为**事实记忆**和**用户画像**，在后续对话中基于语义检索相关记忆并注入上下文，从而突破上下文窗口限制，实现个性化、连贯的智能体交互。它以 `user_id` 为隔离维度，支持多应用共享同一记忆库，并提供完整的开放接口与控制台管理能力。
+记忆库是百炼平台为大模型提供的跨会话[长期记忆](../concepts/memory.md)服务，通过自动从对话中提取关键信息并持久化存储，解决大模型上下文窗口限制导致的会话间信息丢失问题。它支持事实记忆与用户画像两类结构化记忆形式，并提供开放 API 供开发者集成到各类智能体和工作流中。所有功能均基于 DashScope 网关统一鉴权与调用。
 
 ## 支持的模型/功能
 
-- **两类核心记忆类型**：
-  - **事实记忆**：自动从对话中提取动态事件信息（如“每天上午9点提醒我喝水”），适用于临时性、时效性信息。
-  - **用户画像**：基于预定义模板提取结构化用户属性（如年龄、职业、爱好），适用于固定、长期稳定的用户特征。两者可并行使用，互不干扰。
-- **策略版本支持**：Add 和 Search 操作均支持 `Pro`（开启 Rerank，检索质量更高）与 `Lite`（关闭 Rerank，成本更低）两个策略版本，按需选择。详见[计费说明](raw/application-user-guide/memory-library-overview/integration-overview/billing.md)。
-- **集成路径**：支持两种主流接入方式——面向百炼智能体的 **Agent Harness**（零代码配置）和面向工作流的 **插件模式**（如 OpenClaw 插件），参见[集成方式概览](raw/application-user-guide/memory-library-overview/integration-overview.md)。
+- **两类核心记忆类型**：  
+  - **事实记忆**：自动从对话中提取动态事件信息（如“每天上午9点提醒我喝水”），适用于行为、偏好、临时状态等可变信息；  
+  - **用户画像**：基于预定义模板提取结构化静态属性（如年龄、职业、爱好），需先调用 `CreateProfileSchema` 创建模板，再在 `AddMemory` 中传入 `profile_schema` 参数触发提取。  
+  两者可共存使用，分别覆盖不同语义场景，详见[核心概念](../../raw/application-user-guide/memory-library-overview/overview/concepts.md)。
 
-> **注意**：文档 6 与文档 11 均指出 `plan_version` 默认为 `Pro`，但文档 7 的配置界面说明中称“不传默认 Pro”，而文档 11 明确补充“商业化前已存在的规则，`plan_version` 默认为 Pro”。该表述一致，无矛盾；但需注意：**Search 接口的 `plan_version` 由请求参数独立控制，与规则配置无关**，此关键行为在文档 6 和文档 11 中均有强调，而文档 3 的 cURL 示例中误写为 `"plan_version": "Lite"`（应为 `"pro"` 或 `"Pro"`，大小写敏感），实际调用以文档 11 的规范为准。
+- **两种集成路径**：  
+  - **Agent Harness**：面向百炼原生智能体，通过控制台配置即可启用跨会话记忆，无需编码；  
+  - **插件方式**：面向 OpenClaw 等工作流框架，通过 `@modelstudio/modelstudio-memory-for-openclaw` 插件实现自动捕获（`autoCapture`）与自动召回（`autoRecall`），支持 `memory_search`、`memory_store` 等工具调用，具体实践参见[为 OpenClaw 配置长期记忆插件](../../raw/application-user-guide/memory-library-overview/best-practices/modelstudio-memory-for-openclaw.md)。
+
+> **注意**：文档 13 中插件默认使用 `memoryLibraryId` 和 `projectId` 的自动 fallback 行为（如不传则选默认记忆库及默认规则），但文档 7 明确指出“默认项目”规则不可删除、仅可编辑——这意味着插件在未显式指定 `projectId` 时的行为强依赖该默认规则的可用性与配置一致性，生产环境建议显式传入稳定 ID。
 
 ## 关键参数
 
-| 参数 | 说明 | 取值/范围 | 备注 |
-|------|------|-----------|------|
-| `user_id` | 记忆实体唯一标识，用于跨会话隔离 | 字符串 | 必填；所有读写操作均以此为作用域 |
-| `plan_version` | 控制策略版本 | `"Pro"` / `"Lite"` | Add 调用由记忆规则配置决定；Search 调用由请求参数决定，**不传时默认 `"Pro"`** |
-| `top_k` | 检索返回的最大记忆条数 | `1–100` | 默认值未统一（文档 3 示例为 `10`，文档 9 控制台建议为 `10`，文档 14 插件默认为 `5`） |
-| `min_score` | 相似度阈值，过滤低相关性结果 | `0.0–1.0` | 文档 6 建议 `0.5–0.7`；文档 9 控制台说明中称“相似度过高可能漏召”，文档 1 的 API 描述中 `min_score` 仅对 Pro 版本生效 |
-| `memory_library_id` | 指定目标记忆库 ID | 字符串 | 非必填；不传时使用默认记忆库（文档 1、文档 14） |
+| 参数 | 说明 | 取值/范围 | 默认值 | 备注 |
+|------|------|-----------|--------|------|
+| `user_id` | 记忆实体隔离维度，必填 | 字符串 | — | 不同 `user_id` 完全隔离；同一 `user_id` 下所有记忆共享命名空间 |
+| `plan_version` | 控制 Pro/Lite 策略版本 | `"Pro"` 或 `"Lite"` | `"Pro"` | **Add 调用**由记忆规则配置决定；**Search 调用**由请求参数独立控制（与规则无关）；详见[计费说明](../../raw/application-user-guide/memory-library-overview/integration-overview/billing.md) |
+| `top_k` | 检索最大返回条数 | 1–100 | `10`（API） / `5`（插件） | 过高易引入噪声，建议按业务需求设为 3–10 |
+| `min_score` | 相似度阈值（过滤低相关结果） | `0.0`–`1.0` | `0.3`（API） / `0`（插件） | 推荐 `0.5–0.7` 平衡召回率与精度；插件文档中 `minScore` 单位为 `0–100`（整数），需注意单位转换 |
+| `memory_library_id` | 指定目标记忆库 | 字符串 | 默认记忆库 | 可在控制台记忆库卡片上获取 ID |
+| `profile_schema` | 用户画像模板 ID | 字符串 | — | `AddMemory` 中必须传入才触发画像提取；提取为异步过程，首次 `GetUserProfile` 可能为空，需重试 |
 
 ## 使用方式
 
-1. **快速上手（3 步）**：  
-   - **写入**：调用 `AddMemory`，传入 `messages` 和 `user_id`，系统自动提取事实记忆或画像（需指定 `profile_schema`）；  
-   - **查看**：通过控制台[记忆详情](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/memory/list)页按 `user_id` 查询，或调用 `ListMemory`；  
-   - **检索**：调用 `SearchMemory`，传入当前对话 `messages` 和 `user_id`，获取语义相关记忆片段。完整流程见[快速开始](raw/application-user-guide/memory-library-overview/overview/quickstart.md)。
+1. **快速验证（3 步）**：  
+   - 调用 `AddMemory` 写入对话（含 `user_id` 和 `messages`）；  
+   - 通过控制台「记忆详情」页或 `ListMemory` API 查看写入结果；  
+   - 调用 `SearchMemory`（传 `user_id` + 当前 `messages`）检索历史记忆，将返回的 `memory_nodes` 注入 Prompt 即可。完整示例见[快速开始](../../raw/application-user-guide/memory-library-overview/overview/quickstart.md)。
 
-2. **高级配置**：  
-   - 创建自定义记忆库（非必需，但推荐用于业务隔离），并在其下配置最多 50 条事实记忆规则和 50 条用户画像规则；  
-   - 用户画像需先调用 `CreateProfileSchema` 创建模板，再在 `AddMemory` 中传入 `profile_schema` 才能触发结构化抽取；  
-   - 插件方式（如 OpenClaw）支持全自动捕获（`autoCapture`）与召回（`autoRecall`），无需手动调用 API。
+2. **自定义规则（推荐生产使用）**：  
+   - 在控制台创建新记忆库（或复用默认库）；  
+   - 进入「记忆规则」标签页，配置最多 50 条事实记忆规则（含过期时间、`plan_version`）和 50 条用户画像规则（含字段定义与初始值）；  
+   - 规则生效后，后续 `AddMemory` 自动按规则抽取，`SearchMemory` 可指定 `project_id` 精准召回。
+
+3. **高级操作**：  
+   - 更新/删除单条记忆：使用 `UpdateMemory`（PATCH `/memory_nodes/{id}`）或 `DeleteMemory`（DELETE `/memory_nodes/{id}`）；  
+   - 批量管理：结合 `meta_data` 字段添加业务标签，提升后续检索精度；  
+   - 异步写入：对高吞吐场景，可用 `AddMemoryAsync` 提交任务，再轮询 `GetEvent` 获取状态。
 
 ## 限制和注意事项
 
-- **限流**：全部接口总计 ≤ 3000 QPM（账号级）；`AddMemory` ≤ 120 QPM；`SearchMemory` ≤ 300 QPM。超限返回 HTTP `429`，需实现退避重试 [限流说明](raw/application-user-guide/memory-library-overview/integration-overview/limits.md)。
-- **默认记忆库**：每个账号自带一个，**不可删除**，但可编辑名称、描述及规则；已预置一条有效期 180 天的“默认项目”事实记忆规则。
-- **计费与生命周期**：商业化将于 **2026 年 8 月 20 日 10:00（北京时间）** 启动，届时 Add/Search 调用按 Pro/Lite 版本计费，存储按小时计费；免费额度（1500 次 Add + 5000 次 Search）自商业化日起 3 个月内有效 [计费说明](raw/application-user-guide/memory-library-overview/integration-overview/billing.md)。
-- **异步行为**：用户画像提取为异步过程，首次 `GetUserProfile` 可能返回空值，需按业务逻辑重试（文档 10 明确提示）。
-- **元数据建议**：推荐使用 `meta_data` 字段对记忆分类，便于后续精确过滤与管理（文档 9）。
+- **限流策略**（阿里云账号级别）：  
+  - 全部接口合计 ≤ 3000 QPM；  
+  - `AddMemory` ≤ 120 QPM；  
+  - `SearchMemory` ≤ 300 QPM；  
+  超出返回 HTTP `429`，需实现退避重试。详细限流规则见[限流说明](../../raw/application-user-guide/memory-library-overview/integration-overview/limits.md)。
+
+- **商业化与免费额度**：  
+  - **2026 年 8 月 20 日 10:00（北京时间）起正式计费**；  
+  - 商业化后赠送 1,500 次 Add（分 6 类规格）和 5,000 次 Search（分 2 类规格），3 个月内有效；存储 10,000 条永久免费；  
+  - Pro/Lite 版本单价差异显著（如 Search Pro ¥0.001/次 vs Lite ¥0.00002/次），需根据准确率要求与成本预算权衡选择。
+
+- **关键注意事项**：  
+  - 默认记忆库**不可删除**，仅可编辑名称、描述与规则；  
+  - 记忆内容无全局失效机制（除非规则中配置了过期时间），需主动调用 `DeleteMemory` 或控制台删除；  
+  - 用户画像提取为异步过程，`AddMemory` 返回成功不代表画像已就绪，`GetUserProfile` 需等待并重试；  
+  - 检索结果注入 Prompt 后，将额外增加大模型 [Token](../concepts/token.md) 消耗，此部分费用**不包含在记忆库计费中**，需单独核算。
 
 ## 来源文档
 
 - [记忆库](../../raw/application-user-guide/memory-library-overview/memory-library.md)
+- [记忆库概览](../../raw/application-user-guide/memory-library-overview/overview.md)
 - [长期记忆 API](../../raw/application-user-guide/memory-library-overview/long-term-memory-2-0.md)
 - [快速开始](../../raw/application-user-guide/memory-library-overview/overview/quickstart.md)
-- [记忆库概览](../../raw/application-user-guide/memory-library-overview/overview.md)
-- [创建与删除记忆库](../../raw/application-user-guide/memory-library-overview/create-memory.md)
 - [核心概念](../../raw/application-user-guide/memory-library-overview/overview/concepts.md)
+- [创建与删除记忆库](../../raw/application-user-guide/memory-library-overview/create-memory.md)
 - [配置记忆规则](../../raw/application-user-guide/memory-library-overview/create-memory/configure-rules.md)
-- [集成方式概览](../../raw/application-user-guide/memory-library-overview/integration-overview.md)
-- [管理记忆](../../raw/application-user-guide/memory-library-overview/create-memory/manage-memory.md)
 - [使用用户画像](../../raw/application-user-guide/memory-library-overview/create-memory/user-profile.md)
-- [计费说明](../../raw/application-user-guide/memory-library-overview/integration-overview/billing.md)
+- [管理记忆](../../raw/application-user-guide/memory-library-overview/create-memory/manage-memory.md)
 - [限流说明](../../raw/application-user-guide/memory-library-overview/integration-overview/limits.md)
-- [常见问题](../../raw/application-user-guide/memory-library-overview/integration-overview/faq.md)
+- [计费说明](../../raw/application-user-guide/memory-library-overview/integration-overview/billing.md)
+- [集成方式概览](../../raw/application-user-guide/memory-library-overview/integration-overview.md)
 - [为 OpenClaw 配置长期记忆插件](../../raw/application-user-guide/memory-library-overview/best-practices/modelstudio-memory-for-openclaw.md)
+- [常见问题](../../raw/application-user-guide/memory-library-overview/integration-overview/faq.md)
 - [最佳实践](../../raw/application-user-guide/memory-library-overview/best-practices.md)
 
 
