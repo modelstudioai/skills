@@ -160,6 +160,8 @@ Environment env = client.environments().create(EnvironmentCreateParam.builder()
     .build());
 ```
 
+**说明**API 示例配置了预装包：环境创建后可能需要预热时间，预热完成前步骤 3 的会话创建会被拒绝，详见[环境预热](https://help.aliyun.com/zh/model-studio/managed-agents-cloud-hosting#h-env-warmup)。
+
 点击**完成并下一步**，系统创建并保存环境，随后进入会话配置。
 
 ## 步骤 3：确认会话配置

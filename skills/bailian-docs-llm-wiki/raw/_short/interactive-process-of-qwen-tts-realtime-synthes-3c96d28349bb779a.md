@@ -2,7 +2,7 @@
 
 本文介绍通过 WebSocket 连接访问 Qwen-TTS-Realtime 实时语音合成服务的接口地址、请求头和交互流程。
 
-**用户指南**：关于模型介绍和选型建议请参见[实时语音合成](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)
+**用户指南**：关于模型介绍和选型建议请参见[实时语音合成](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)
 
 Qwen-TTS Realtime API 基于 WebSocket 协议。Java 和 Python 推荐通过 DashScope SDK 调用，可免去处理 WebSocket 细节；其他语言可使用 WebSocket 库直接连接。
 

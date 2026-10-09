@@ -554,7 +554,7 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
 
 否
 
-输入对象，用于传入对话上下文（context）。上下文用于辅助识别、提升专有词汇的识别准确率。使用方法详见[提升识别准确率](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy)。
+输入对象，用于传入对话上下文（context）。上下文用于辅助识别、提升专有词汇的识别准确率。使用方法详见[提升识别准确率](raw/model-user-guide/model-experience/speech-recognition/improve-asr-accuracy.md)。
 
 **重要**仅 `fun-asr-realtime`、`fun-asr-realtime-2025-11-07` 模型支持 context 参数。
 

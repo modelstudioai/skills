@@ -1378,22 +1378,6 @@ data: {"choices":[],"object":"chat.completion.chunk","usage":{"prompt_tokens":10
 data: [DONE]
 ```
 
-**说明**在思考模式（`enable_thinking`设置为`true`）下，`max_tokens`参数的有效取值范围为 \[1, 32768\]，超出该范围时接口返回 400 错误，错误信息为`InvalidParameter: Range of max_tokens should be [1, 32768]`。非思考模式下无此限制。
-
-建议使用`max_completion_tokens`参数替代`max_tokens`。`max_completion_tokens`限制模型的完整输出长度（包含思维链和最终回复），`max_tokens`仅限制最终回复部分的长度。`max_tokens`参数即将废弃，新接入的业务请使用`max_completion_tokens`。
-
-```
-# 思考模式下推荐使用 max_completion_tokens 限制输出长度
-completion = client.chat.completions.create(
-    model="qwen3.8-max",
-    messages=[{"role": "user", "content": "你是谁"}],
-    extra_body={"enable_thinking": True},
-    # max_completion_tokens 限制思维链与回复的总输出长度，无 32768 上限约束
-    max_completion_tokens=65536,
-)
-# 思考模式下 max_tokens 上限为 32768，超出会返回 400 错误
-```
-
 #### DashScope
 
 > Qwen3.5 系列的 DashScope API采用多模态接口，以下示例会报错 `url error` ，调用方式请参见 [开启/关闭思考模式](https://help.aliyun.com/zh/model-studio/vision#bc67a9a2bd2of) 。

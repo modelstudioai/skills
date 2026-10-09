@@ -269,7 +269,7 @@ SpeechSynthesisParam param = SpeechSynthesisParam.builder()
 
 语音合成所使用的音色。
 
--   **系统音色**：参见[Qwen-Audio-TTS音色列表](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list)
+-   **系统音色**：参见[Qwen-Audio-TTS音色列表](raw/model-user-guide/model-experience/speech-synthesis/tts-voice-list/qwen-audio-tts-voice-list.md)
 -   **复刻音色**：通过声音复刻功能定制
 -   **声音设计音色**：通过声音设计功能定制
 
@@ -331,7 +331,7 @@ SpeechSynthesisAudioFormat包路径：`com.alibaba.dashscope.audio.ttsv2.SpeechS
 
 默认值：false。
 
-仅在流式输出模式下可用。支持复刻音色；支持的系统音色请参见[Qwen-Audio-TTS音色列表](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list)。
+仅在流式输出模式下可用。支持复刻音色；支持的系统音色请参见[Qwen-Audio-TTS音色列表](raw/model-user-guide/model-experience/speech-synthesis/tts-voice-list/qwen-audio-tts-voice-list.md)。
 
 `seed(int)`
 

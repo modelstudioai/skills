@@ -552,6 +552,6 @@ continue-task 被拒绝
 -   [AOQ Client SDK 简介](raw/model-api-reference/realtime-api-user-guide/realtime-api-aoq-api/realtime-api-aoq-sdk-desc.md)
 -   [SDK 下载](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-sdk-download.md)
 -   [Token 鉴权](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-token-authentication.md)
--   [Qwen-Audio-TTS 用户指南](https://help.aliyun.com/zh/model-studio/tts-model)
+-   [Qwen-Audio-TTS 用户指南](raw/model-user-guide/model-experience/speech-synthesis/tts-model.md)
 -   [客户端事件](raw/_short/cosyvoice-client-events-a63a525ab07e6693.md)
 -   [服务端事件](raw/_short/cosyvoice-server-events-388da422580d5c78.md)

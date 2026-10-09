@@ -143,6 +143,12 @@ GLM-5.1
 
 ¥24.19
 
+DeepSeek-v4.1-Flash
+
+¥20.20
+
+¥8.06
+
 DeepSeek-v4-Flash
 
 ¥10.10
@@ -269,6 +275,16 @@ GLM-5.1
 
 —
 
+DeepSeek-v4.1-Flash
+
+—
+
+—
+
+—
+
+—
+
 DeepSeek-v4-Flash
 
 ¥3.6
@@ -378,6 +394,12 @@ GLM-5.1
 ¥105.80
 
 ¥33.24
+
+DeepSeek-v4.1-Flash
+
+¥22.10
+
+¥8.22
 
 DeepSeek-v4-Flash
 
@@ -490,6 +512,16 @@ GLM-5.2
 ¥142.45
 
 GLM-5.1
+
+—
+
+—
+
+—
+
+—
+
+DeepSeek-v4.1-Flash
 
 —
 
@@ -620,6 +652,14 @@ glm-5.1
 
 (0,32K\] 输入 1x / 输出 1x  
 (32K,200K\] 输入 1.33x / 输出 1.17x
+
+deepseek-v4.1-flash
+
+1M
+
+0.06
+
+无阶梯（1.0）
 
 deepseek-v4-flash
 

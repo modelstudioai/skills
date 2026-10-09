@@ -124,9 +124,9 @@ GLM：glm-5.1
 不同服务部署范围支持的模型不同。
 
 -   **美国部署范围：**
-    -   千问 Max: qwen3.7-max
+    -   千问 Max: qwen3.8-max、qwen3.7-max
     -   千问 Plus: qwen3.7-plus
-    -   千问 Flash：qwen3.8-flash、qwen3.6-flash
+    -   千问 Flash：qwen3.8-flash、qwen3.7-flash、qwen3.6-flash
 -   **全球服务部署范围：**
     
     千问 Max：qwen3.8-max、qwen3.8-max-0902、qwen3.7-max、qwen3.7-max-2026-05-20、qwen3.7-max-2026-06-08、qwen3-max
@@ -988,9 +988,9 @@ while True:
 -   **美国服务部署范围：**
     -   文本生成模型
         
-        -   千问 Max：qwen3.7-max
+        -   千问 Max：qwen3.8-max、qwen3.7-max
         -   千问 Plus：qwen-plus、qwen3.7-plus
-        -   千问 Flash：qwen-flash
+        -   千问 Flash：qwen3.8-flash、qwen3.7-flash、qwen-flash
     -   视觉理解模型
         
         -   千问 VL：qwen3-vl-flash

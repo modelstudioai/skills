@@ -336,6 +336,20 @@ qwen3.8-max
 
 36元
 
+qwen3.8-max
+
+> [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
+
+美国
+
+非思考和思考模式
+
+0<Token≤1M
+
+14.988元
+
+44.965元
+
 qwen3.8-max-0902
 
 > [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
@@ -2857,6 +2871,34 @@ qwen3.7-flash
 1.2元
 
 4.8元
+
+qwen3.7-flash
+
+> 当前能力等同于qwen3.7-flash-2026-07-15
+
+> [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
+
+美国
+
+非思考和思考模式
+
+0<Token≤32K
+
+0.225元
+
+0.974元
+
+32K<Token≤256K
+
+0.749元
+
+2.998元
+
+256K<Token≤1M
+
+1.499元
+
+5.995元
 
 qwen3.6-flash
 
@@ -10979,6 +11021,12 @@ qwen-image-2.1-pro
 
 10张
 
+qwen-image-2.1-turbo
+
+0.1元/张
+
+10张
+
 qwen-image-2.0-pro
 
 0.5元/张
@@ -11029,6 +11077,12 @@ qwen-image-2.1-pro
 
 0.25元/张
 
+qwen-image-2.1-turbo
+
+全球
+
+0.1元/张
+
 #### 新加坡
 
 **模型 ID（Model ID）**
@@ -11042,6 +11096,12 @@ qwen-image-2.1-pro
 国际
 
 0.283404元/张
+
+qwen-image-2.1-turbo
+
+国际
+
+0.113362元/张
 
 qwen-image-2.0-pro
 
@@ -11093,6 +11153,12 @@ qwen-image-2.1-pro
 
 0.25元/张
 
+qwen-image-2.1-turbo
+
+全球
+
+0.1元/张
+
 #### 日本（东京）
 
 **模型 ID（Model ID）**
@@ -11107,6 +11173,12 @@ qwen-image-2.1-pro
 
 0.25元/张
 
+qwen-image-2.1-turbo
+
+全球
+
+0.1元/张
+
 #### 中国香港
 
 **模型 ID（Model ID）**
@@ -11120,6 +11192,12 @@ qwen-image-2.1-pro
 全球
 
 0.25元/张
+
+qwen-image-2.1-turbo
+
+全球
+
+0.1元/张
 
 ### 千问文生图
 

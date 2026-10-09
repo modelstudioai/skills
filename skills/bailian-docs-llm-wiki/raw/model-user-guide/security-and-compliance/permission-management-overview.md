@@ -691,7 +691,7 @@ RAM 权限（如 AliyunBailianFullAccess）与百炼平台内部的业务空间�
 
 ### 5\. 如何删除业务空间？
 
-访问[阿里云百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)，在页面右上角选择目标地域，进入[业务空间管理](https://bailian.console.aliyun.com/settings/workspace)页面，在操作列选择删除；或调用 DeleteWorkspace API（`DELETE /modelstudio/workspaces/{workspaceId}`）。**删除后不可恢复**。
+访问[阿里云百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)，在页面右上角选择目标地域，进入[业务空间管理](https://bailian.console.aliyun.com/settings/workspace)页面，在操作列选择删除；或调用 [DeleteWorkspace API](https://next.api.aliyun.com/document/ModelStudio/2026-02-10/DeleteWorkspace)（`DELETE /modelstudio/workspaces/{workspaceId}`）。**删除后不可恢复**。
 
 **删除前提：**满足以下条件的业务空间才允许删除：
 

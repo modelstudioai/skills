@@ -93,7 +93,7 @@
 
 **警告**按状态驱动界面时，请以 `stop_reason` 而非仅 `idle` 判断可交互性：只有 `requires_action` 禁用普通消息、启用审批/中断；其余可交互 `idle`（`null` / `end_turn` / `retries_exhausted`）均放行新一轮消息。切勿把 `retries_exhausted` 当作永久禁聊。
 
-会话运行期间可通过 API 动态挂载、查询与卸载文件资源，详见 [Session API](raw/application-api-reference/managed-agents-api/session-api.md)。
+会话运行期间可通过 API 动态挂载、查询与卸载文件资源，详见[运行时挂载资源 API](raw/application-api-reference/managed-agents-api/session-api/session-resource-create.md)。
 
 ## 工具调用
 
@@ -115,7 +115,7 @@
 -   **归档**：状态变为 `terminated`（终态），事件历史保留可查。适用于已完成的会话。
 -   **删除**：硬删除，会话元数据、事件历史、内部拷贝的资源全部清除，不可恢复。如需保留事件历史请改用归档。
 
-通过 API 归档会话，详见[归档 Session](raw/application-api-reference/managed-agents-api/session-api/session-archive.md)。
+通过 API 归档会话，详见[归档 Session API](raw/application-api-reference/managed-agents-api/session-api/session-archive.md)。
 
 bash
 
@@ -136,7 +136,7 @@ java
 client.sessions().archive("sesn_xxx");
 ```
 
-通过 API 删除会话，详见[删除 Session](raw/application-api-reference/managed-agents-api/session-api/session-delete.md)。
+通过 API 删除会话：
 
 bash
 

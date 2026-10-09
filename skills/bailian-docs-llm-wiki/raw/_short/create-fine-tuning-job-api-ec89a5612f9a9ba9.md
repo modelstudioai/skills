@@ -288,7 +288,7 @@ Dataset 结构
 
 **file\_id** `string` （条件必选）
 
-数据源类型为 `file_id` 时必填。文件 ID，由[上传文件 API](https://help.aliyun.com/zh/model-studio/upload-file-api) 产生。
+数据源类型为 `file_id` 时必填。文件 ID，由[上传文件 API](raw/model-api-reference/file-management-api/upload-file-api.md) 产生。
 
 **validation\_datasets** `Array of Dataset` （可选）
 

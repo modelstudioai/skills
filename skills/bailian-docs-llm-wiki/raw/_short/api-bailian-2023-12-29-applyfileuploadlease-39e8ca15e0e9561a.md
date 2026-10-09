@@ -141,7 +141,7 @@ string
 上传用于智能体应用[会话交互](https://help.aliyun.com/zh/model-studio/user-guide/file-interaction)的文件：
 
 -   该字段代表上传文件的名称，注意后缀需要带上文件格式类型。支持格式：
-    -   文档：doc、docx、wps、ppt、pptx、xls、xlsx、md、txt、pdf、epub、mobi。
+    -   文档：doc、docx、ppt、pptx、xls、xlsx、md、txt、pdf、epub、mobi。
         
     -   图片：png、jpg、jpeg、bmp、gif。
         

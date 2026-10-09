@@ -115,7 +115,7 @@ Dataset 结构
 
 **file\_id** `string` （条件必选）
 
-数据源类型为 `file_id` 时必填。文件 ID，由[上传文件 API](https://help.aliyun.com/zh/model-studio/upload-file-api) 产生。
+数据源类型为 `file_id` 时必填。文件 ID，由[上传文件 API](raw/model-api-reference/file-management-api/upload-file-api.md) 产生。
 
 **validation\_datasets** `Array of Dataset` （可选）
 
@@ -125,11 +125,11 @@ Dataset 结构
 
 **training\_file\_ids** `array[string]` **（条件必选）**
 
-训练集文件ID数组，可传入多个ID。与 `training_datasets` 二选一，若使用 `training_datasets` 则无需传此参数。文件ID通过[上传文件 API](https://help.aliyun.com/zh/model-studio/upload-file-api) 获取。
+训练集文件ID数组，可传入多个ID。与 `training_datasets` 二选一，若使用 `training_datasets` 则无需传此参数。文件ID通过[上传文件 API](raw/model-api-reference/file-management-api/upload-file-api.md) 获取。
 
 **validation\_file\_ids** `array[string]` （可选）
 
-验证集文件ID数组，可传入多个ID。与 `validation_datasets` 二选一，若使用 `validation_datasets` 则无需传此参数。若两者均不提供，系统会从训练集中自动划分。文件ID通过[上传文件 API](https://help.aliyun.com/zh/model-studio/upload-file-api) 获取。
+验证集文件ID数组，可传入多个ID。与 `validation_datasets` 二选一，若使用 `validation_datasets` 则无需传此参数。若两者均不提供，系统会从训练集中自动划分。文件ID通过[上传文件 API](raw/model-api-reference/file-management-api/upload-file-api.md) 获取。
 
 **job\_name** `string` （可选）
 

@@ -11,62 +11,6 @@
           "Text"
         ]
       },
-      "description": "百聆音乐生成大模型（Fun音乐大模型）支持输入开放性歌曲的创作要求或歌词，生成整首男/女声演唱的中文或英文歌曲。歌曲通俗易懂，情绪由浅入深，是人类灵感与大模型能力的完美结合。",
-      "features": [],
-      "provider": "qwen",
-      "model": "fun-music-v1",
-      "prices": [
-        {
-          "priceUnit": "每秒",
-          "price": "0.002",
-          "timeBand": "standard",
-          "ntmAmountType": "duration",
-          "type": "content_duration",
-          "priceName": "音频时长"
-        }
-      ],
-      "qpmInfo": {
-        "model-default-actual": {
-          "count_limit_period": 1,
-          "count_limit": 3,
-          "type": "model-default"
-        },
-        "model-default": {
-          "count_limit_period": 1,
-          "count_limit": 3,
-          "type": "model-default"
-        }
-      },
-      "priceTimeBands": [
-        "standard"
-      ],
-      "capabilities": [
-        "TTS"
-      ],
-      "modelAlias": "",
-      "versionTag": "MAJOR",
-      "latestOnlineAt": "2026-05-06T12:15:28.000+00:00",
-      "inferenceProvider": "aliyun-bailian",
-      "name": "音乐生成",
-      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/fun-music",
-      "samples": {
-        "dashscope": {
-          "default": {
-            "curl": "curl -X POST 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/audio/music/generation' \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"fun-music-v1\",\n    \"input\": {\n        \"prompt\": \"夏日清新民谣，木吉他与口琴伴奏，轻快节奏，适合旅行Vlog背景音乐\",\n        \"gender\": \"female\"\n    }\n}'",
-            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/fun-music"
-          }
-        }
-      }
-    },
-    {
-      "inferenceMetadata": {
-        "response_modality": [
-          "Audio"
-        ],
-        "request_modality": [
-          "Text"
-        ]
-      },
       "description": "百聆音乐生成preview版大模型（Fun音乐大模型）支持输入开放性歌曲的创作要求或歌词，生成整首男/女声演唱的中文或英文歌曲。歌曲通俗易懂，情绪由浅入深，是人类灵感与大模型能力的完美结合。本次版本为预览快照版",
       "features": [],
       "provider": "qwen",

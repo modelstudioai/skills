@@ -116,6 +116,6 @@ RPS（每秒请求数）
 
 ## 调用方式
 
--   [实时语音合成（WebSocket）](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)
--   [非实时语音合成（HTTP）](https://help.aliyun.com/zh/model-studio/non-realtime-tts-user-guide)
+-   [实时语音合成（WebSocket）](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)
+-   [非实时语音合成（HTTP）](raw/model-user-guide/model-experience/speech-synthesis/non-realtime-tts-user-guide.md)
 -   [Qwen-Audio-TTS音色列表](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list#qwen-tts31-voices)

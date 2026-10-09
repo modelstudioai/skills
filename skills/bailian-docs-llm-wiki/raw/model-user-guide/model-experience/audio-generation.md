@@ -9,7 +9,7 @@
 -   **语音与对话**：单人旁白、多人对话、播客、有声书和广播剧。
 -   **综合声音场景**：为台词搭配雨声、海浪声或游戏场景音效。
 
-只需将固定文本转换为人声时，也可以使用[语音合成](https://help.aliyun.com/zh/model-studio/tts-model)。需要围绕一个场景同时描述人物和其他声音时，可以使用音频生成。
+只需将固定文本转换为人声时，也可以使用[语音合成](raw/model-user-guide/model-experience/speech-synthesis/tts-model.md)。需要围绕一个场景同时描述人物和其他声音时，可以使用音频生成。
 
 ## 效果示例
 

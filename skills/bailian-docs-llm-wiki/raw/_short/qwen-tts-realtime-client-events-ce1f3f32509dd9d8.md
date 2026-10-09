@@ -2,7 +2,7 @@
 
 本文介绍 Qwen-TTS Realtime API 的客户端事件。
 
-> 相关文档：[实时语音合成](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)。
+> 相关文档：[实时语音合成](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)。
 
 ## session.update
 
@@ -71,7 +71,7 @@
 -   `mp3`
 -   `opus`
 
-千问-TTS-Realtime（参见[支持的模型](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)）仅支持`pcm`。
+千问-TTS-Realtime（参见[支持的模型](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)）仅支持`pcm`。
 
 **sample\_rate**`integer`（可选）
 
@@ -84,7 +84,7 @@
 -   24000（默认）
 -   48000
 
-千问-TTS-Realtime（参见[支持的模型](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)）仅支持24000。
+千问-TTS-Realtime（参见[支持的模型](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)）仅支持24000。
 
 **speech\_rate**`float`（可选）
 
@@ -94,7 +94,7 @@
 
 取值范围：\[0.5, 2.0\]。
 
-千问-TTS-Realtime（参见[支持的模型](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)）不支持该参数。
+千问-TTS-Realtime（参见[支持的模型](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)）不支持该参数。
 
 **volume**`integer`（可选）
 
@@ -104,7 +104,7 @@
 
 取值范围：\[0, 100\]。
 
-千问-TTS-Realtime（参见[支持的模型](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)）不支持该参数。
+千问-TTS-Realtime（参见[支持的模型](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)）不支持该参数。
 
 **pitch\_rate**`float`（可选）
 
@@ -114,7 +114,7 @@
 
 取值范围：\[0.5, 2.0\]。
 
-千问-TTS-Realtime（参见[支持的模型](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)）不支持该参数。
+千问-TTS-Realtime（参见[支持的模型](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)）不支持该参数。
 
 **bit\_rate**`integer`（可选）
 
@@ -124,7 +124,7 @@
 
 取值范围：\[6, 510\]。
 
-千问-TTS-Realtime（参见[支持的模型](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)）不支持该参数。
+千问-TTS-Realtime（参见[支持的模型](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)）不支持该参数。
 
 **instructions**`string`（可选）
 

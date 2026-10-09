@@ -23,7 +23,7 @@ curl -X POST "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentst
   -H "Content-Type: application/json" \
   -d '{
     "name": "my-agent",
-    "model": {"id": "qwen3-max"},
+    "model": {"id": "qwen3.8-max"},
     "mcp_servers": [
       {"type": "official", "name": "web_search"}
     ]
@@ -48,7 +48,7 @@ java
 ```
 Agent agent = client.agents().create(AgentCreateParam.builder()
     .name("my-agent")
-    .model("qwen3-max")
+    .model("qwen3.8-max")
     .mcpServers(List.of(McpServerConfig.builder()
         .type("official")
         .name("web_search")

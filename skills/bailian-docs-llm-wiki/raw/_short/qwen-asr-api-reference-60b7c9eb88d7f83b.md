@@ -4,7 +4,7 @@
 
 ## 模型接入方式
 
-不同[模型](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide)支持的接入方式不同，请根据下表选择正确的方式进行集成。
+不同[模型](raw/model-user-guide/model-experience/speech-recognition/non-realtime-speech-recognition-user-guide.md)支持的接入方式不同，请根据下表选择正确的方式进行集成。
 
 **模型**
 
@@ -51,7 +51,7 @@ SDK调用配置的base\_url：`https://{WorkspaceId}.ap-southeast-1.maas.aliyunc
 
 **model**`string`**（必选）**
 
-[模型](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide)名称。仅适用于千问3-ASR-Flash模型。
+[模型](raw/model-user-guide/model-experience/speech-recognition/non-realtime-speech-recognition-user-guide.md)名称。仅适用于千问3-ASR-Flash模型。
 
 **messages**`array`**（必选）**
 
@@ -804,7 +804,7 @@ SDK调用配置的base\_url：`https://{WorkspaceId}.us-east-1.maas.aliyuncs.com
 
 **model**`string`**（必选）**
 
-[模型](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide)名称。仅适用于千问3-ASR-Flash模型。
+[模型](raw/model-user-guide/model-experience/speech-recognition/non-realtime-speech-recognition-user-guide.md)名称。仅适用于千问3-ASR-Flash模型。
 
 **messages**`array`**（必选）**
 
@@ -2038,7 +2038,7 @@ SDK调用配置的base\_url：`https://{WorkspaceId}.ap-southeast-1.maas.aliyunc
 
 **model**`string`**（必选）**
 
-[模型](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide)名称。仅适用于千问3-ASR-Flash-Filetrans模型。
+[模型](raw/model-user-guide/model-experience/speech-recognition/non-realtime-speech-recognition-user-guide.md)名称。仅适用于千问3-ASR-Flash-Filetrans模型。
 
 **input**`object`**（必选）**
 

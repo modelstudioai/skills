@@ -27,6 +27,10 @@
 -   [向量模型](raw/model-user-guide/model-experience/embedding-rerank-model/embedding.md)**：**text-embedding-v1、text-embedding-v2、text-embedding-v3、text-embedding-v4、qwen3.7-text-embedding、qwen3.7-text-embedding-flash
     
 
+#### 新加坡
+
+**支持的模型**：qwen3.7-plus、qwen-max、qwen-plus、qwen-turbo。
+
 **重要**
 
 -   在Batch 场景下，`qwen3.8-max`、`qwen3.8-flash`、`qwen3.7-max`、`qwen3.7-plus`、`qwen3.6-plus`、`qwen3.7-flash`、`qwen3.6-flash`、`qwen3.5-plus`、`qwen3.5-flash`、`qwen3.5-omni-flash`和`qwen3.5-omni-plus`单次请求的上下文 Token 数最大支持 256K，`qwen3.5-omni-plus`、`qwen3.5-omni-flash`不支持语音输出。
@@ -34,10 +38,6 @@
 -   `qwen3.8`、`qwen3.7`、`qwen3.6`和`qwen3.5` 系列模型默认开启思考模式。建议使用混合思考模型时，显式设置`enable_thinking`参数（`true`开启/`false`关闭）。
 -   在 JSONL 请求体中，`enable_thinking` 为 `body` 的顶层参数，须与 `model` 同级传入，不能放在 `extra_body` 中。
 -   批量推理结果文件不包含 `reasoning_content` 字段。即使设置 `enable_thinking=true`，结果文件中 `choices[0].message` 也仅包含 `content` 和 `role` 字段。如需获取思考过程内容，请使用实时 API 调用（流式、非流式均可，设置 `enable_thinking=true` 即可），详情请参见[深度思考](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md)。
-
-#### 新加坡
-
-**支持的模型**：qwen-max、qwen-plus、qwen-turbo。
 
 ## 使用批量推理
 

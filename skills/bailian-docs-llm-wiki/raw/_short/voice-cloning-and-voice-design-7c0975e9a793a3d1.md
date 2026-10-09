@@ -29,7 +29,7 @@
 
 使用声音复刻能力，生成的音色将会同步至当前列表，您可以通过填写Prefix值获取对应音色列表，然后选择需要的音色点击「确定」即可。
 
-**说明**同步音色列表前，您需要先创建音色列表，参考[声音复刻](https://help.aliyun.com/zh/model-studio/voice-cloning-user-guide)文档。
+**说明**同步音色列表前，您需要先创建音色列表，参考[声音复刻](raw/model-user-guide/model-experience/speech-synthesis/voice-cloning-user-guide.md)文档。
 
 ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2218843871/p1086153.png)
 
@@ -62,4 +62,4 @@
 
 使用声音设计能力，生成的音色将会同步至当前列表，您可以通过搜索获取对应音色列表，然后选择需要的音色点击「确定」即可。
 
-**说明**同步音色列表前，您需要先创建音色列表，创建音色列表请参考[声音设计](https://help.aliyun.com/zh/model-studio/voice-design-user-guide)文档。
+**说明**同步音色列表前，您需要先创建音色列表，创建音色列表请参考[声音设计](raw/model-user-guide/model-experience/speech-synthesis/voice-design-user-guide.md)文档。

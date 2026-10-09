@@ -1,50 +1,58 @@
 # model context protocol
 
-model context protocol（MCP）是百炼平台定义的一套标准化接口协议，用于在大模型推理过程中动态注入上下文数据（如知识库片段、实时API响应、用户会话状态等），从而增强模型对特定任务的理解与生成能力。它不依赖模型内置能力，而是通过统一的上下文协商机制实现外部数据与模型输入的协同。该协议已在多个官方服务和插件中落地验证，详见 [MCP 简介](../../raw/application-user-guide/model-context-protocol/mcp-introduction.md)。
+[模型上下文协议](../concepts/mcp.md)（Model Context Protocol, MCP）是阿里云百炼平台提供的标准化接口协议，用于在大语言模型与外部工具（如地图、搜索、数据库等）之间建立安全、可扩展的信息通道。它屏蔽了工具接入的底层差异，使开发者无需为每个工具单独开发适配逻辑，即可在智能体、工作流或第三方客户端中统一调用。该协议基于 [MCP 官网](https://modelcontextprotocol.io/) 开源标准实现，并已升级为 Streamable HTTP 协议以支持更稳定的外部集成。
 
-## 支持的模型与功能
+## 支持的模型/功能
 
-- **支持模型**：当前仅限百炼平台托管的 `qwen-max`、`qwen-plus` 和 `qwen-turbo` 三类模型（v2024.06 及以上版本），其他模型暂不支持 MCP 上下文注入。
-- **核心功能**：
-  - 上下文发现（Context Discovery）：自动识别请求中需补充的实体或意图，并触发对应 MCP 服务；
-  - 上下文协商（Context Negotiation）：模型与 MCP 服务间按协议交换 schema、约束条件与超时策略；
-  - 动态上下文注入：将服务返回的结构化数据（JSON Schema 定义）安全拼入 [prompt](prompt.md) 的指定位置。
+MCP 服务本身不绑定特定大模型，但其调用能力需通过百炼平台的**智能体应用**或**工作流应用**触发。当前支持以下两类使用场景：
 
-> **注意**：原始文档中 [官方 MCP 服务](../../raw/application-user-guide/model-context-protocol/official-and-third-party-mcp.md) 列出的 `qwen-vl-plus` 曾标注为支持，但实测 v2024.07 版本已移除该模型的 MCP 能力，以控制台实际可用模型列表为准。
+- **平台内集成**：在智能体中，模型根据对话上下文自动判断是否调用及调用哪个 MCP 工具（如 `maps_route`、`WebSearch.search`），最多可同时配置 5 个 MCP 服务；在工作流中，每个 MCP 节点需手动指定具体工具（如 `maps_weather`），并显式传递输入/输出参数。
+- **外部调用**：支持通过标准 HTTP（Streamable HTTP）、SSE 或 CLI 集成至 Cherry Studio、Cursor 等第三方客户端，或通过 MCP SDK 在自有项目中编码调用。详情见 [外部调用](raw/application-user-guide/model-context-protocol/mcp-external-calls.md)。
+
+官方已提供多种开箱即用的 MCP 服务，包括 Amap Maps（地理信息）、WebSearch（联网搜索）、Firecrawl（网页爬取）等；同时也支持自定义部署，覆盖代码包（npx/uvx）、现有 RESTful API（通过 AI 网关封装）和阿里云 OpenAPI 三类来源。详见 [自定义 MCP 服务](raw/application-user-guide/model-context-protocol/custom-mcp.md)。
+
+> **注意**：文档 4 中提到“One Key MCP 服务首次调用自动生效”，但文档 3 明确要求“已开通用户需先取消再重新开通以升级协议”。二者存在矛盾——实际行为以协议升级为准：**所有存量 MCP 服务必须完成协议升级（即取消后重开通）才能使用新版 Streamable HTTP 接口**，否则外部调用将失败。
 
 ## 关键参数
 
-调用启用 MCP 的模型时，需在 `messages` 或 `tools` 字段外显式声明以下参数：
+MCP 服务配置与调用涉及以下核心参数：
 
-| 参数名 | 类型 | 必填 | 说明 |
-|--------|------|------|------|
-| `mcp_enabled` | boolean | 是 | 启用 MCP 协商流程；设为 `false` 或省略则跳过全部上下文注入 |
-| `mcp_services` | array of string | 否 | 指定允许调用的 MCP 服务 ID 列表（如 `["kb-search", "user-profile"]`）；为空时使用默认服务集 |
-| `mcp_timeout_ms` | integer | 否 | 单个 MCP 服务调用超时毫秒数，默认 `3000`，范围 `100–10000` |
-
-完整参数示例见 [自定义MCP服务](../../raw/application-user-guide/model-context-protocol/custom-mcp.md) 中的请求体定义。
+- **服务类型标识**：决定传输协议与端点路径，必须严格匹配：
+  - `"type": "sse"` → 对应 `/sse` 端点，使用 GET 方法；
+  - `"type": "streamableHttp"` → 对应 `/mcp` 端点，使用 POST 方法；
+  - 配置错误将导致 `11200058`（METHOD_NOT_ALLOWED）或 `11200059`（NOT_FOUND）错误（见 [MCP 常见问题](raw/application-user-guide/model-context-protocol/mcp-faq.md)）。
+- **鉴权凭证**：统一使用百炼通用 API Key（`DASHSCOPE_API_KEY`），通过 `Authorization: Bearer <key>` 传入 HTTP Header；敏感参数（如 `AMAP_MAPS_API_KEY`）须通过 KMS 凭据加密。
+- **工具级参数**：由 MCP 服务自身定义，例如 `maps_weather` 工具要求 `city: string`，`WebSearch.search` 要求 `query: string`；参数名与类型必须与 `list_tools()` 返回的 `inputSchema` 严格一致，否则触发 `11200060`（BAD_REQUEST）错误。
 
 ## 使用方式
 
-1. **启用协议**：在 `/v1/chat/completions` 请求中设置 `mcp_enabled: true`；
-2. **声明服务**：通过 `mcp_services` 明确白名单（推荐），避免非预期服务调用；
-3. **构造消息**：在 `messages` 中使用 `role: "system"` 或 `role: "user"` 的 content 内嵌占位符（如 `{context: kb-search}`），MCP 服务将按 schema 自动填充；
-4. **处理响应**：模型输出中可能包含 `mcp_context_used: [...]` 字段，列出本次实际注入的上下文项及其来源。
+### 平台内配置（智能体/工作流）
+1. 进入 [MCP 管理](https://bailian.console.aliyun.com/?tab=app#/mcp-manage)，创建或导入 MCP 服务；
+2. 在智能体/工作流编辑页的“工具”区域添加已部署服务；
+3. 智能体无需额外配置，模型自动决策；工作流需在 MCP 节点中选择具体工具并绑定输入变量（如 `引用：信息提取/result`）。
 
-详细调用链路与错误码说明参见 [外部调用](../../raw/application-user-guide/model-context-protocol/mcp-external-calls.md)。
+### 外部调用
+- **CLI 快速验证**：`bl mcp list` 查看服务列表，`bl mcp call --target WebSearch.search --args '{"query":"MCP最新进展"}'` 直接调用；
+- **SDK 编程集成**：使用 `mcp.client.streamable_http` 客户端连接 `https://dashscope.aliyuncs.com/api/v1/mcps/<SERVICE_NAME>/mcp`，配合 [OpenAI 兼容接口](../concepts/openai-compatible-interface.md)完成多轮工具调用（示例见 [外部调用](raw/application-user-guide/model-context-protocol/mcp-external-calls.md)）；
+- **第三方客户端**：通过 MCP 广场的“一键配置”生成 JSON 配置，导入 Cherry Studio/Cursor 等。
 
 ## 限制和注意事项
 
-- 单次请求最多触发 **3 个独立 MCP 服务调用**，超出部分被静默忽略；
-- 上下文注入总长度（含 JSON 序列化后）不得超过 **8192 字符**，否则触发截断并记录警告；
-- MCP 服务返回的字段若未在模型 schema 中声明，将被丢弃（非报错）；
-- 不支持在流式响应（`stream: true`）中动态注入上下文——所有 MCP 调用均在首 token 生成前完成；
-- 开发者须自行保障自定义 MCP 服务的鉴权与数据脱敏，平台不代理敏感字段过滤。
+- **网络与权限限制**：自定义 MCP 服务运行于函数计算 FC，**无固定出口 IP**，访问云数据库等资源需配置 IP 白名单或 VPC 打通；**无法访问本地资源**（如本地文件、硬件设备）。
+- **部署与更新**：通过 `npx`/`uvx` 部署的服务版本固化，MCP Server 更新后**必须手动重新部署**；私有 npm/PyPI 仓库暂不支持，需发布至公共仓库。
+- **计费模式差异**：
+  - 官方云部署服务（如 WebSearch）按调用量计费（29 元/千次），含免费额度；
+  - 自定义服务分“基础模式”（按调用时长计费，0.000156 元/秒）与“极速模式”（另加部署费用 0.000036 元/秒），后者适用于高频率调用场景。
+- **协议兼容性**：所有外部调用必须使用新版 Streamable HTTP 协议（`/mcp` 端点），旧版 SSE 协议已停用；若服务配置为 `"sse"` 类型但指向 `/mcp` 地址，将触发 `11200054`（PROTOCOL_ERROR）。
 
-请务必参考 [常见问题](../../raw/application-user-guide/model-context-protocol/mcp-faq.md) 获取典型故障排查指引。
+> **注意**：文档 1 中“联网搜索MCP服务限流为 15 QPS”与文档 5 错误码 `11200051`（HTTP_RATE_LIMIT）描述的限流主体不一致——实际限流策略按**主账号及其 RAM 子账号共享**执行，非单服务实例级限流。
 
 ## 来源文档
 
-- [MCP](../../raw/application-user-guide/model-context-protocol.md)
+- [模型上下文协议（MCP）](../../raw/application-user-guide/model-context-protocol/mcp-introduction.md)
+- [自定义 MCP 服务](../../raw/application-user-guide/model-context-protocol/custom-mcp.md)
+- [外部调用](../../raw/application-user-guide/model-context-protocol/mcp-external-calls.md)
+- [官方 MCP 服务](../../raw/application-user-guide/model-context-protocol/official-and-third-party-mcp.md)
+- [MCP 常见问题](../../raw/application-user-guide/model-context-protocol/mcp-faq.md)
 
 

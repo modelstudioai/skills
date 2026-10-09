@@ -18,6 +18,8 @@
 
 跨会话持久化的文件树，挂载后智能体通过文件工具读写，内容跨会话保留
 
+**重要**通过阿里云百炼 CLI 发起会话时，也可在配置文件中声明需要挂载的资源。详见[使用 CLI](raw/application-user-guide/managed-agents/managed-agents-cli.md)。
+
 ## 资源与会话的关系
 
 ### 挂载时机

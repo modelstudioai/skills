@@ -6,7 +6,7 @@
 
 `{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。现有域名仍可正常使用。
 
-**用户指南：**[非实时语音识别](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide)
+**用户指南：**[非实时语音识别](raw/model-user-guide/model-experience/speech-recognition/non-realtime-speech-recognition-user-guide.md)
 
 目前提供了[提交任务接口](https://help.aliyun.com/zh/model-studio/paraformer-recorded-speech-recognition-restful-api#418f2ac8ecxm4)和[查询任务接口](https://help.aliyun.com/zh/model-studio/paraformer-recorded-speech-recognition-restful-api#480630e0582sb)，通常情况下，您可以先调用提交任务接口上传识别任务，然后循环调用查询任务接口，直至任务完成。
 

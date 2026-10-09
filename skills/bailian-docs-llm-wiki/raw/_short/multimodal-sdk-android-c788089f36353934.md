@@ -683,7 +683,7 @@ boolean
 
 必须在intermediate\_text有指定dialog的情况下才会返回；
 
-只有[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中表明支持时间戳的音色和复刻音色才会返回。
+只有[CosyVoice音色列表](raw/model-user-guide/model-experience/speech-synthesis/tts-voice-list/cosyvoice-voice-list.md)中表明支持时间戳的音色和复刻音色才会返回。
 
 transmit\_rate\_limit
 

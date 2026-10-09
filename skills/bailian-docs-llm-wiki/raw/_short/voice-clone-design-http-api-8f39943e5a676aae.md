@@ -2,7 +2,7 @@
 
 本文介绍声音复刻的HTTP API接口详情，包括创建音色、查询音色列表、查询音色详情、更新音色和删除音色等操作。
 
-**用户指南：**[声音复刻](https://help.aliyun.com/zh/model-studio/voice-cloning-user-guide)。
+**用户指南：**[声音复刻](raw/model-user-guide/model-experience/speech-synthesis/voice-cloning-user-guide.md)。
 
 ## 接口地址（Qwen-Audio-TTS/CosyVoice/Qwen-TTS）
 

@@ -76,7 +76,7 @@ pcm、wav、mp3、opus
 
 8kHz、16kHz、22.05kHz、24kHz、44.1kHz、48kHz
 
-[千问3-TTS-Flash-Realtime](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)
+[千问3-TTS-Flash-Realtime](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)
 
 17种高表现力的拟人音色，支持多种外语和方言。
 
@@ -112,7 +112,7 @@ pcm、wav、mp3
 
 16kHz、48kHz
 
-[千问-TTS](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)
+[千问-TTS](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)
 
 支持中英双语。目前仅支持24k 采样率、pcm编码。
 

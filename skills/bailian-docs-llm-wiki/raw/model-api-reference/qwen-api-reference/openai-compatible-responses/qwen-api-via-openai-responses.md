@@ -1363,16 +1363,11 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 Session 缓存按精确匹配命中，规则如下：
 
--   **缓存键**：system prompt 与 user prompt 共同构成缓存键，其中任意一项变更都会导致本轮请求不命中缓存。
--   **前缀缓存**：system prompt 作为前缀独立缓存。仅变更 `previous_response_id` 时，system prompt 前缀部分仍然命中缓存，只有变化的对话上下文部分会新建缓存条目；`previous_response_id` 不属于 system prompt 的缓存键。
--   **精确匹配**：system prompt 或 user prompt 的任意字符变更（包括空格和标点）都会使 `cached_tokens` 归零。
 -   **不支持前缀匹配**：在原有 user prompt 之后追加内容不会命中缓存。
 -   **不支持语义匹配**：只有内容完全相同才会命中缓存，语义相同但文字不同不会命中。
 -   **最小可缓存 Token 数**：1024 Token。低于该阈值的输入不会触发缓存创建；多轮对话中累积上下文超过 1024 Token 后才会开始创建缓存。
 
 您可以通过 `usage.input_tokens_details.cached_tokens` 查看命中缓存的 Token 数，通过 `cache_creation_input_tokens` 查看本次请求新创建缓存的 Token 数。
-
-**缓存命中机制**：Session 缓存基于系统提示词前缀匹配。后续请求的系统提示词与已缓存内容一致时即命中缓存，修改 user prompt 不影响命中。可通过响应中的 `usage.input_tokens_details.cached_tokens` 确认命中情况，该值大于 0 表示命中缓存。
 
 ## Response 响应对象（非流式输出）
 

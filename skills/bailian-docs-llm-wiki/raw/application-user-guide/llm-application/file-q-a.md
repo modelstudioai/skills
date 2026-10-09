@@ -74,7 +74,7 @@
 
 支持上传本地的文档、图片、视频或音频，格式要求为：
 
--   **文档**：`.doc`、`.docx`、`.wps`、`.ppt`、`.pptx`、`.xls`、`.xlsx`、`.md`、`.txt`、`.pdf`
+-   **文档**：`.doc`、`.docx`、`.ppt`、`.pptx`、`.xls`、`.xlsx`、`.md`、`.txt`、`.pdf`
 -   **图片**：`.png`、`.jpg`、`.jpeg`、`.bmp`、`.gif`
 -   **视频**：`.mp4`、`.mkv`、`.avi`、`.mov`、`.wmv`、`.webm`、`.flv`
 -   **音频**：`.aac`、`.amr`、`.flac`、`.m4a`、`.mp3`、`.mpeg`、`.ogg`、`.opus`、`.wav`、`.wma`

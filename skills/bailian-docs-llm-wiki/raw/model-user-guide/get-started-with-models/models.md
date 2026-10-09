@@ -96,7 +96,7 @@
 
 ![](https://img.alicdn.com/imgextra/i1/O1CN01EFGi131NqT95FPDqc_!!6000000001621-2-tps-56-56.png)**[MiniMax/speech-2.8-hd](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/MiniMax%2Fspeech-2.8-hd)**
 
-[查看更多](https://help.aliyun.com/zh/model-studio/tts-model)
+[查看更多](raw/model-user-guide/model-experience/speech-synthesis/tts-model.md)
 
 ### 音乐生成
 
@@ -118,7 +118,7 @@
 
 ![](https://img.alicdn.com/imgextra/i3/O1CN01Kmx9dR1wcHOaMMXAk_!!6000000006328-55-tps-28-28.svg)**[qwen3.8-omni-flash](raw/model-user-guide/support/model-studio-model-list/model-list-omni/qwen3-8-omni-flash.md)**
 
-[查看更多](https://help.aliyun.com/zh/model-studio/asr-model)
+[查看更多](raw/model-user-guide/model-experience/speech-recognition/asr-model.md)
 
 ### 语音转语音
 
@@ -130,7 +130,7 @@
 
 **[qwen3.8-omni-flash-realtime](raw/model-user-guide/support/model-studio-model-list/model-list-omni/qwen3-8-omni-flash-realtime.md)**
 
-[查看更多](https://help.aliyun.com/zh/model-studio/s2s-model)
+[查看更多](raw/model-user-guide/model-experience/speech-to-speech/s2s-model.md)
 
 ## 全模态
 

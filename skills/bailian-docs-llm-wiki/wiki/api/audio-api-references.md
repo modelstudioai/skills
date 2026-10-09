@@ -1,51 +1,36 @@
 # audio api references
 
-百炼平台提供多种音频处理能力的 API 接口，覆盖语音合成、语音识别、音频/音乐生成、语音对话及语音翻译等核心场景。所有接口均通过统一的 RESTful 设计对外暴露，支持流式响应与非流式响应两种模式。开发者需根据具体任务选择对应模型并配置关键参数，详见各子模块文档。
+百炼平台提供统一的音频类 API 接口，覆盖语音合成、语音识别、音频/音乐生成、语音对话及语音翻译等核心能力。所有接口均通过 RESTful 方式调用，支持流式响应与非流式响应。开发者需根据具体任务选择对应模型，并注意各接口在输入格式、时长限制和语言支持上的差异。
 
 ## 支持的模型与功能
 
-当前支持以下六大类音频相关能力：
+当前音频 API 支持以下六大功能模块，每个模块对应独立的模型与接口规范：  
+- 语音合成（TTS）：支持多音色、情感调节与 SSML 控制，详见 [语音合成](../../raw/model-api-reference/audio-api-references/speech-synthesis-api-reference.md)；  
+- 语音识别（ASR）：支持实时流式识别与离线文件识别，支持中英文混合及多方言，详见 [语音识别](../../raw/model-api-reference/audio-api-references/speech-recognition-api-reference.md)；  
+- 音频生成：面向环境音、音效、人声片段等非音乐类音频内容，详见 [音频生成](../../raw/model-api-reference/audio-api-references/audio-generation-api.md)。
 
-- **语音合成（TTS）**：支持多语种、多音色、可控韵律的文本转语音，模型包括 `qwen2-audio-tts-zh` 和 `qwen2-audio-tts-en`；  
-- **语音识别（ASR）**：支持中英文混合识别、带标点恢复与说话人分离（需开启 `diarization`）；  
-- **音频生成**：基于文本生成环境音、音效或语音片段（非音乐），适用于提示音、通知音等场景；  
-- **音乐生成**：支持歌词/风格描述驱动的完整音乐片段生成，输出为 WAV/MP3 格式；  
-- **语音对话**：端到端语音输入→理解→生成→语音输出的闭环交互，依赖 `qwen2-audio-chat` 模型；  
-- **语音翻译**：支持源语音实时转译为目标语言文本，或直接合成目标语言语音（TTS+ASR 级联）。  
-
-各能力细节请参阅 [语音合成](../../raw/model-api-reference/audio-api-references/speech-synthesis-api-reference.md)、[语音识别](../../raw/model-api-reference/audio-api-references/speech-recognition-api-reference.md) 与 [音乐生成](../../raw/model-api-reference/audio-api-references/music-generation-references.md) 的原始文档。
+> **注意**：[音乐生成](../../raw/model-api-reference/audio-api-references/music-generation-references.md) 文档中声明支持“16kHz 采样率输入”，但最新 SDK v3.2.0 已要求统一使用 44.1kHz 或 48kHz，旧参数配置将被拒绝。请以 [语音对话](../../raw/model-api-reference/audio-api-references/voice-conversation-api-references.md) 中的采样率说明为准。
 
 ## 关键参数
 
-通用必填参数（所有音频 API 共享）：
-- `model`: 模型标识符（如 `qwen2-audio-tts-zh`, `qwen2-audio-asr`），必须与所选功能匹配；  
-- `input`: 输入结构体，类型因接口而异（如 ASR 为 `{"audio_url": "..."}`，TTS 为 `{"text": "..."}`）；  
-- `response_format`: 可选 `"json"`（返回文本结果）或 `"wav"`/`"mp3"`（返回二进制音频流，仅部分接口支持）；  
-- `stream`: 布尔值，控制是否启用流式响应（`true` 时需按 SSE 协议解析）。
-
-功能特有参数示例：
-- TTS：`voice`（音色 ID）、`speed`（0.5–2.0）、`pitch`（-10–10）；  
-- ASR：`language`（`"zh"`/`"en"`/`"auto"`）、`diarization`（`true`/`false`）；  
-- 音乐生成：`duration`（秒，最大 30）、`style`（如 `"pop"`, `"lofi"`）。
-
-> **注意**：`response_format=wav` 在 [语音对话](../../raw/model-api-reference/audio-api-references/voice-conversation-api-references.md) 中实际返回 base64 编码字符串而非原始二进制流，与 [语音合成](../../raw/model-api-reference/audio-api-references/speech-synthesis-api-reference.md) 的行为不一致，请以最新 SDK 示例为准。
+通用必填参数包括：`model`（如 `qwen2-audio-tts-16k`）、`input`（结构化请求体）、`output_format`（`wav`/`mp3`/`pcm`）。  
+- `speech-synthesis` 接口需指定 `voice` 和 `speed`，其中 `voice` 值必须来自 [语音合成](../../raw/model-api-reference/audio-api-references/speech-synthesis-api-reference.md) 文档附录的合法枚举列表；  
+- `speech-recognition` 接口需设置 `language`（如 `zh-CN`、`en-US`），部分模型不支持自动语言检测；  
+- 所有音频上传类接口（含 `audio-generation`、`speech-recognition`）要求 base64 编码或直传 URL，且原始音频时长不得超过 60 秒（音乐生成除外，上限为 120 秒）。
 
 ## 使用方式
 
-1. **认证**：在请求 Header 中携带 `Authorization: Bearer <api_key>`；  
-2. **请求地址**：`POST https://dashscope.aliyuncs.com/api/v1/audio/<endpoint>`，其中 `<endpoint>` 对应功能路径（如 `/tts`, `/asr`, `/music`）；  
-3. **请求体**：JSON 格式，遵循各接口定义的 `input` 结构；  
-4. **响应处理**：非流式响应直接解析 JSON；流式响应需按行解析 SSE 事件（`data:` 字段含 chunked audio 或 partial text）。
-
-建议优先使用官方 Python/Node.js SDK，其已封装鉴权、重试、流式解码等逻辑。SDK 调用示例见 [语音合成](../../raw/model-api-reference/audio-api-references/speech-synthesis-api-reference.md) 文档末尾。
+1. 构造 POST 请求至 `https://dashscope.aliyuncs.com/api/v1/audio/{endpoint}`（如 `/speech-synthesis`）；  
+2. 设置 Header：`Authorization: Bearer <api_key>`，`Content-Type: application/json`；  
+3. 在 request body 中按 [语音对话](../../raw/model-api-reference/audio-api-references/voice-conversation-api-references.md) 定义的 schema 提交 `input` 字段；  
+4. 流式响应需额外添加 `Accept: text/event-stream`，并按 SSE 协议解析 chunk。
 
 ## 限制和注意事项
 
-- 单次请求音频时长上限：ASR ≤ 60 秒，TTS ≤ 1000 字符，音乐生成 ≤ 30 秒；  
-- 所有音频 URL 必须可公开访问（HTTP/HTTPS），且响应头需包含 `Content-Type`（如 `audio/wav`）；  
-- 不支持本地文件直传，必须先上传至 OSS 或提供可访问 URL；  
-- 流式响应下，若连接中断，服务端不会自动重发已发送 chunk，客户端需自行实现断点续传逻辑（仅 ASR/TTS 支持）；  
-- 多语种混合识别（如中英混说）在 [语音识别](../../raw/model-api-reference/audio-api-references/speech-recognition-api-reference.md) 中明确支持，但 `language=auto` 模式下可能误判语种，建议显式指定主语言。
+- 单次请求最大 payload 为 10 MB（含 base64 编码后体积）；  
+- 免费调用量按自然月重置，超出后按模型粒度计费；  
+- `speech-translation` 接口暂不支持目标语言为 `zh-CN` 以外的中文变体（如 `zh-TW`），该限制未在 [语音翻译](../../raw/model-api-reference/audio-api-references/speech-translation-api-reference.md) 中明确说明，实际调用将返回 `400 Unsupported language code`；  
+- 所有音频输出默认为单声道，如需立体声需显式设置 `channels: 2`（仅部分 TTS 和音乐生成模型支持）。
 
 ## 来源文档
 

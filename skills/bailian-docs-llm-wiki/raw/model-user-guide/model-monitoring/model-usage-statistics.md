@@ -98,19 +98,19 @@
 
 **语音模型**
 
-[语音合成模型](https://help.aliyun.com/zh/model-studio/non-realtime-tts-user-guide)
+[语音合成模型](raw/model-user-guide/model-experience/speech-synthesis/non-realtime-tts-user-guide.md)
 
 **秒、字符或 Token**
 
 可能按音频时长（秒）、对应的文本字符数或 Token 数计费，视模型而定。
 
-[实时语音合成模型](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)
+[实时语音合成模型](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)
 
-[录音文件识别模型](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide)
+[录音文件识别模型](raw/model-user-guide/model-experience/speech-recognition/non-realtime-speech-recognition-user-guide.md)
 
-[实时语音识别模型](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide)
+[实时语音识别模型](raw/model-user-guide/model-experience/speech-recognition/real-time-speech-recognition-user-guide.md)
 
-[音视频翻译模型](https://help.aliyun.com/zh/model-studio/qwen3-livetranslate-flash)
+[音视频翻译模型](raw/model-user-guide/model-experience/speech-to-speech/qwen3-livetranslate-flash.md)
 
 **全模态模型**
 

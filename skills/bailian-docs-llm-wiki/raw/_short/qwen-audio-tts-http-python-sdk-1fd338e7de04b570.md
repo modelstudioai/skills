@@ -66,7 +66,7 @@ def call(cls, model: str, text: str, voice: str,
 
 支持 SSML 和 LaTeX 格式输入。将待合成文本替换为对应格式即可。
 
--   使用 SSML 时，需同时将 `enable_ssml` 设置为 `True`。支持的 SSML 标签及用法，请参见[SSML 与 LaTeX](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)。
+-   使用 SSML 时，需同时将 `enable_ssml` 设置为 `True`。支持的 SSML 标签及用法，请参见[SSML 与 LaTeX](raw/model-user-guide/model-experience/speech-synthesis/ssml-latex-user-guide.md)。
 -   使用 LaTeX 时，将待合成文本替换为 LaTeX 格式即可，无需额外配置。支持的 LaTeX 语法及用法，请参见[LaTeX 公式转语音](https://help.aliyun.com/zh/model-studio/latex-capability-support-description)。
 
 `voice`
@@ -79,7 +79,7 @@ def call(cls, model: str, text: str, voice: str,
 
 取值范围：
 
--   系统音色：参见[Qwen-Audio-TTS音色列表](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list)
+-   系统音色：参见[Qwen-Audio-TTS音色列表](raw/model-user-guide/model-experience/speech-synthesis/tts-voice-list/qwen-audio-tts-voice-list.md)
 -   声音复刻音色：如何创建音色请参见[声音复刻HTTP API参考](raw/_short/voice-clone-design-http-api-8f39943e5a676aae.md)
 -   声音设计音色：如何创建音色请参见[声音设计API参考](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/voice-design-api-references.md)
 
@@ -166,7 +166,7 @@ def call(cls, model: str, text: str, voice: str,
 
 否
 
-是否开启SSML功能。当`text`使用SSML格式时，需设为`True`。默认为`False`。支持的SSML标签及用法，请参考[SSML 与 LaTeX](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)。SSML 的使用限制（支持的模型、音色和接口），请参见[使用限制](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide#sl01_constraint_h3)。
+是否开启SSML功能。当`text`使用SSML格式时，需设为`True`。默认为`False`。支持的SSML标签及用法，请参考[SSML 与 LaTeX](raw/model-user-guide/model-experience/speech-synthesis/ssml-latex-user-guide.md)。SSML 的使用限制（支持的模型、音色和接口），请参见[使用限制](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide#sl01_constraint_h3)。
 
 `word_timestamp_enabled`
 
@@ -181,7 +181,7 @@ def call(cls, model: str, text: str, voice: str,
 -   True：开启。
 -   False：关闭。
 
-仅在流式输出模式下可用。支持复刻音色；支持的系统音色请参见[Qwen-Audio-TTS音色列表](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list)。
+仅在流式输出模式下可用。支持复刻音色；支持的系统音色请参见[Qwen-Audio-TTS音色列表](raw/model-user-guide/model-experience/speech-synthesis/tts-voice-list/qwen-audio-tts-voice-list.md)。
 
 `seed`
 
@@ -241,7 +241,7 @@ def call(cls, model: str, text: str, voice: str,
 
 设置指令，用于控制方言、情感或角色等合成效果。
 
-具体用法请参见[非实时语音合成](https://help.aliyun.com/zh/model-studio/non-realtime-tts-user-guide)。
+具体用法请参见[非实时语音合成](raw/model-user-guide/model-experience/speech-synthesis/non-realtime-tts-user-guide.md)。
 
 `enable_aigc_tag`
 
@@ -334,7 +334,7 @@ API Key。如果未指定，SDK会自动从环境变量`DASHSCOPE_API_KEY`中读
 
 以下示例展示Qwen-Audio-TTS语音合成的非流式和流式调用方式。运行前请确保已设置环境变量`DASHSCOPE_API_KEY`。
 
-**重要**不同模型需使用匹配的音色。更换模型时，请同步更换音色，并确认音色支持目标语言。具体对应关系请参见[Qwen-Audio-TTS音色列表](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list)。
+**重要**不同模型需使用匹配的音色。更换模型时，请同步更换音色，并确认音色支持目标语言。具体对应关系请参见[Qwen-Audio-TTS音色列表](raw/model-user-guide/model-experience/speech-synthesis/tts-voice-list/qwen-audio-tts-voice-list.md)。
 
 #### 非流式调用
 

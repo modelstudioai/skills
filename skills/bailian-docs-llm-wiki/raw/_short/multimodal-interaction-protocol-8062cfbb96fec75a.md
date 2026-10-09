@@ -48,9 +48,9 @@ wss://dashscope.aliyuncs.com/api-ws/v1/inference
 
 多模态交互应用开启了**语音交互**后，支持语音识别和语音合成。
 
-语音识别支持的模型包括：[Paraformer实时语音识别](raw/_short/paraformer-real-time-speech-recognition-api-refe-79877d5c8ef469f7.md)（Paraformer），[FUN-ASR实时语音识别](raw/_short/fun-asr-real-time-speech-recognition-api-referen-16635189e873e42b.md)（FunASR），[Qwen-Audio-3.0-ASR-Flash-Streaming](raw/_short/fun-asr-realtime-java-sdk-1f6304ff694438f5.md)，[千问3-ASR-Flash-Realtime](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide)（qwen3-asr-flash-realtime），多模态交互轻量版语音识别（AppSpecificASR-Realtime）。
+语音识别支持的模型包括：[Paraformer实时语音识别](raw/_short/paraformer-real-time-speech-recognition-api-refe-79877d5c8ef469f7.md)（Paraformer），[FUN-ASR实时语音识别](raw/_short/fun-asr-real-time-speech-recognition-api-referen-16635189e873e42b.md)（FunASR），[Qwen-Audio-3.0-ASR-Flash-Streaming](raw/_short/fun-asr-realtime-java-sdk-1f6304ff694438f5.md)，[千问3-ASR-Flash-Realtime](raw/model-user-guide/model-experience/speech-recognition/real-time-speech-recognition-user-guide.md)（qwen3-asr-flash-realtime），多模态交互轻量版语音识别（AppSpecificASR-Realtime）。
 
-语音合成支持的模型包括：[语音合成CosyVoice-v2大模型](raw/_short/cosyvoice-large-model-for-speech-synthesis-c25d07a9b3ba6047.md)（cosyvoice-v2），[语音合成CosyVoice-v3-Flash大模型](https://help.aliyun.com/zh/model-studio/text-to-speech)（cosyvoice-v3-flash），[语音合成CosyVoice-v3-plus大模型](https://help.aliyun.com/zh/model-studio/text-to-speech)（cosyvoice-v3-plus），[语音合成CosyVoice-v3.5-Flash大模型](https://help.aliyun.com/zh/model-studio/text-to-speech)（cosyvoice-v3.5-flash），[语音合成CosyVoice-v3.5-Plus大模型](https://help.aliyun.com/zh/model-studio/text-to-speech)（cosyvoice-v3.5-plus），[Qwen-Audio-3.0-TTS-Plus](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)（qwen-audio-3.0-tts-plus）、[Qwen-Audio-3.0-TTS-Flash](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)（qwen-audio-3.0-tts-flash），[千问3-TTS-Flash-Realtime](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)（qwen3-tts），[千问3-TTS-Instruct-Flash-Realtime](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)（qwen3-tts-instruct），[千问3-声音设计](https://help.aliyun.com/zh/model-studio/qwen-tts-voice-design)（qwen3-tts-vd），[千问3-声音复刻](https://help.aliyun.com/zh/model-studio/qwen-tts-voice-cloning)（qwen3-tts-vc），[Sambert语音合成](raw/_short/sambert-speech-synthesis-60d77f54e64567a1.md)（sambert），多模态交互轻量版语音合成（AppSpecificTTS）。
+语音合成支持的模型包括：[语音合成CosyVoice-v2大模型](raw/_short/cosyvoice-large-model-for-speech-synthesis-c25d07a9b3ba6047.md)（cosyvoice-v2），[语音合成CosyVoice-v3-Flash大模型](https://help.aliyun.com/zh/model-studio/text-to-speech)（cosyvoice-v3-flash），[语音合成CosyVoice-v3-plus大模型](https://help.aliyun.com/zh/model-studio/text-to-speech)（cosyvoice-v3-plus），[语音合成CosyVoice-v3.5-Flash大模型](https://help.aliyun.com/zh/model-studio/text-to-speech)（cosyvoice-v3.5-flash），[语音合成CosyVoice-v3.5-Plus大模型](https://help.aliyun.com/zh/model-studio/text-to-speech)（cosyvoice-v3.5-plus），[Qwen-Audio-3.0-TTS-Plus](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)（qwen-audio-3.0-tts-plus）、[Qwen-Audio-3.0-TTS-Flash](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)（qwen-audio-3.0-tts-flash），[千问3-TTS-Flash-Realtime](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)（qwen3-tts），[千问3-TTS-Instruct-Flash-Realtime](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)（qwen3-tts-instruct），[千问3-声音设计](https://help.aliyun.com/zh/model-studio/qwen-tts-voice-design)（qwen3-tts-vd），[千问3-声音复刻](https://help.aliyun.com/zh/model-studio/qwen-tts-voice-cloning)（qwen3-tts-vc），[Sambert语音合成](raw/_short/sambert-speech-synthesis-60d77f54e64567a1.md)（sambert），多模态交互轻量版语音合成（AppSpecificTTS）。
 
 语音合成支持的音色，可以在控制台上选择了模型后，点击右侧语音交互体验区域的右上角查看音色列表。
 
@@ -486,7 +486,7 @@ boolean
 
 必须在intermediate\_text有指定dialog的情况下才会返回；
 
-只有[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中表明支持时间戳的音色和复刻音色才会返回。
+只有[CosyVoice音色列表](raw/model-user-guide/model-experience/speech-synthesis/tts-voice-list/cosyvoice-voice-list.md)中表明支持时间戳的音色和复刻音色才会返回。
 
 transmit\_rate\_limit
 

@@ -14,13 +14,13 @@
 
 Qwen-Audio-TTS 支持一次性输入和流式输入两种调用方式。
 
-**一次性输入**：适用于短文本合成、需要使用 [SSML](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide) 标记语言的场景。
+**一次性输入**：适用于短文本合成、需要使用 [SSML](raw/model-user-guide/model-experience/speech-synthesis/ssml-latex-user-guide.md) 标记语言的场景。
 
 1.  `playStreamInputTts()` 或 `asyncPlayStreamInputTts()` - 发送一段完整的待合成文本并开始语音合成。前者为同步请求，合成完成后返回；后者为异步请求，发起合成后立即返回
 2.  `onStreamInputTtsDataCallback()` - 接收音频数据
 3.  `TTS_EVENT_SYNTHESIS_COMPLETE` - 语音合成结束
 
-**流式输入**：适用于实时对话、长文本"边说边合"的场景。此方式不支持 [SSML](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide) 标记语言。
+**流式输入**：适用于实时对话、长文本"边说边合"的场景。此方式不支持 [SSML](raw/model-user-guide/model-experience/speech-synthesis/ssml-latex-user-guide.md) 标记语言。
 
 1.  `startStreamInputTts()` - 初始化SDK，设置回调接口和连接参数
 2.  `sendStreamInputTts()` - 持续发送待合成文本
@@ -219,7 +219,7 @@ API Key。建议使用时效性短、安全性更高的[临时API Key](raw/model
 
 语音合成所使用的音色。
 
--   **系统音色**：参见[Qwen-Audio-TTS音色列表](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list)
+-   **系统音色**：参见[Qwen-Audio-TTS音色列表](raw/model-user-guide/model-experience/speech-synthesis/tts-voice-list/qwen-audio-tts-voice-list.md)
 -   **复刻音色**：通过声音复刻功能定制
 -   **声音设计音色**：通过声音设计功能定制
 
@@ -331,7 +331,7 @@ SSML 的使用限制（支持的模型、音色和接口），请参见[使用�
 
 默认值：false。
 
-仅在流式输出模式下可用。支持复刻音色；支持的系统音色请参见[Qwen-Audio-TTS音色列表](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list)。
+仅在流式输出模式下可用。支持复刻音色；支持的系统音色请参见[Qwen-Audio-TTS音色列表](raw/model-user-guide/model-experience/speech-synthesis/tts-voice-list/qwen-audio-tts-voice-list.md)。
 
 > 时间戳结果在`onStreamInputTtsEventCallback`的all\_response中。
 
@@ -475,7 +475,7 @@ SSML 的使用限制（支持的模型、音色和接口），请参见[使用�
 
 `char*`
 
-待合成文本。不支持[SSML](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)。如果传入的文本包含SSML标签，这些标签将被当作普通文本读出，不会被解析。
+待合成文本。不支持[SSML](raw/model-user-guide/model-experience/speech-synthesis/ssml-latex-user-guide.md)。如果传入的文本包含SSML标签，这些标签将被当作普通文本读出，不会被解析。
 
 ### stopStreamInputTts
 
@@ -512,7 +512,7 @@ SSML 的使用限制（支持的模型、音色和接口），请参见[使用�
 
 同步执行的一次性合成接口。该接口会发送文本并阻塞等待接收所有音频数据，直到合成完成后才返回。无需再调用`stopStreamInputTts`接口。
 
-该接口默认启用[SSML](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)，可通过parameters中的`enable_ssml`参数关闭。
+该接口默认启用[SSML](raw/model-user-guide/model-experience/speech-synthesis/ssml-latex-user-guide.md)，可通过parameters中的`enable_ssml`参数关闭。
 
 **方法签名**
 ```
@@ -532,13 +532,13 @@ ticket、parameters等参数与`startStreamInputTts`接口中的定义相同。
 
 `char*`
 
-待合成文本。支持[SSML](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)。
+待合成文本。支持[SSML](raw/model-user-guide/model-experience/speech-synthesis/ssml-latex-user-guide.md)。
 
 ### asyncPlayStreamInputTts
 
 此接口异步发送全部待合成文本。调用后立即返回，不等待合成数据。无需再调用`stopStreamInputTts`接口。
 
-该接口默认启用[SSML](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)，可通过parameters中的`enable_ssml`参数关闭。
+该接口默认启用[SSML](raw/model-user-guide/model-experience/speech-synthesis/ssml-latex-user-guide.md)，可通过parameters中的`enable_ssml`参数关闭。
 
 **方法签名**
 ```
@@ -558,7 +558,7 @@ ticket、parameters等参数与`startStreamInputTts`接口中的定义相同。
 
 `char*`
 
-待合成文本。支持[SSML](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)。
+待合成文本。支持[SSML](raw/model-user-guide/model-experience/speech-synthesis/ssml-latex-user-guide.md)。
 
 ## StreamInputTtsDelegate
 
@@ -814,7 +814,7 @@ SDK 日志级别枚举，用于控制日志输出。
 
 **使用方法**：调用 `playStreamInputTts` 或 `asyncPlayStreamInputTts` 接口时，SDK 会自动启用 SSML，此时直接在 `text` 参数中传入包含 SSML 标签的文本即可。
 
-更多说明请参见 [SSML 与 LaTeX](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)。
+更多说明请参见 [SSML 与 LaTeX](raw/model-user-guide/model-experience/speech-synthesis/ssml-latex-user-guide.md)。
 
 ### 数学表达式
 

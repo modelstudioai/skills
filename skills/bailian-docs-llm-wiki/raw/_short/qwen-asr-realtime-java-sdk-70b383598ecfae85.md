@@ -182,7 +182,7 @@ public class Qwen3AsrRealtimeUsage {
     
     是
     
-    指定要使用的[模型](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide)名称。
+    指定要使用的[模型](raw/model-user-guide/model-experience/speech-recognition/real-time-speech-recognition-user-guide.md)名称。
     
     `url`
     

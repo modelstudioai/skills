@@ -21,7 +21,7 @@ const nuiInstance = new NativeNui(Constants.ModeType.MODE_STREAM_INPUT_TTS);
 
 CosyVoice支持一次性输入和流式输入两种调用方式。
 
-**一次性输入**：适用于短文本合成或需要使用[SSML](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)的场景。
+**一次性输入**：适用于短文本合成或需要使用[SSML](raw/model-user-guide/model-experience/speech-synthesis/ssml-latex-user-guide.md)的场景。
 
 1.  调用 `playStreamInputTts` 或 `asyncPlayStreamInputTts`，直接传入完整文本并开始合成。前者同步阻塞，后者立即返回并在后台合成。无需先调用 `startStreamInputTts`，也无需再调用停止接口。
 2.  在 `onStreamInputTtsDataCallback` 中接收音频数据。
@@ -207,7 +207,7 @@ SDK内部追踪日志过滤级别，默认值为 `2`。取值与 `log_level` 相
 
 是
 
-模型名称。参见[语音合成模型](https://help.aliyun.com/zh/model-studio/tts-model)。
+模型名称。参见[语音合成模型](raw/model-user-guide/model-experience/speech-synthesis/tts-model.md)。
 
 `voice`
 
@@ -215,7 +215,7 @@ SDK内部追踪日志过滤级别，默认值为 `2`。取值与 `log_level` 相
 
 是
 
-音色。系统音色参见[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)；也可使用声音复刻或[声音设计](https://help.aliyun.com/zh/model-studio/voice-design-user-guide)生成的音色。
+音色。系统音色参见[CosyVoice音色列表](raw/model-user-guide/model-experience/speech-synthesis/tts-voice-list/cosyvoice-voice-list.md)；也可使用声音复刻或[声音设计](raw/model-user-guide/model-experience/speech-synthesis/voice-design-user-guide.md)生成的音色。
 
 `format`
 
@@ -291,7 +291,7 @@ MP3或Opus码率（kbps），默认值为 `32`，取值范围为 `[6, 510]`。
 
 否
 
-是否返回字级时间戳，默认值为 `false`，仅在流式输出模式下可用。支持cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2的复刻音色，以及[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色；其他模型的复刻音色不支持。时间戳结果位于 `INativeStreamInputTtsCallback` 的 `all_response` 中。
+是否返回字级时间戳，默认值为 `false`，仅在流式输出模式下可用。支持cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2的复刻音色，以及[CosyVoice音色列表](raw/model-user-guide/model-experience/speech-synthesis/tts-voice-list/cosyvoice-voice-list.md)中标记为支持的系统音色；其他模型的复刻音色不支持。时间戳结果位于 `INativeStreamInputTtsCallback` 的 `all_response` 中。
 
 `seed`
 
@@ -381,7 +381,7 @@ sendStreamInputTts(text: string): number
 
 `string`
 
-待合成文本。不支持[SSML](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)；SSML标签会被当作普通文本朗读。
+待合成文本。不支持[SSML](raw/model-user-guide/model-experience/speech-synthesis/ssml-latex-user-guide.md)；SSML标签会被当作普通文本朗读。
 
 ### stopStreamInputTts
 
@@ -440,7 +440,7 @@ playStreamInputTts(
 
 同步的一次性合成接口。该接口独立完成初始化、发送文本和接收音频，合成完成后才返回，无需先调用 `startStreamInputTts`，也无需调用停止接口。该接口默认启用SSML；如果显式设置 `enable_ssml`，则以设置值为准。请勿在UI线程调用。
 
-`callback`、`ticket`、`parameters`、`session_id`、`log_level` 和 `save_log` 与 [startStreamInputTts](#startstreaminputtts) 中的定义相同。`text` 为待合成文本，支持[SSML](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)。
+`callback`、`ticket`、`parameters`、`session_id`、`log_level` 和 `save_log` 与 [startStreamInputTts](#startstreaminputtts) 中的定义相同。`text` 为待合成文本，支持[SSML](raw/model-user-guide/model-experience/speech-synthesis/ssml-latex-user-guide.md)。
 
 ### asyncPlayStreamInputTts
 
@@ -458,7 +458,7 @@ asyncPlayStreamInputTts(
 
 异步的一次性合成接口。调用后立即返回，结果通过回调返回。无需先调用 `startStreamInputTts`，也无需调用停止接口。该接口默认启用SSML；如果显式设置 `enable_ssml`，则以设置值为准。
 
-`callback`、`ticket`、`parameters`、`session_id`、`log_level` 和 `save_log` 与 [startStreamInputTts](#startstreaminputtts) 中的定义相同。`text` 为待合成文本，支持[SSML](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)。
+`callback`、`ticket`、`parameters`、`session_id`、`log_level` 和 `save_log` 与 [startStreamInputTts](#startstreaminputtts) 中的定义相同。`text` 为待合成文本，支持[SSML](raw/model-user-guide/model-experience/speech-synthesis/ssml-latex-user-guide.md)。
 
 ### releaseStreamInputTts
 
@@ -686,7 +686,7 @@ oneShotInstance.asyncPlayStreamInputTts(
 
 **使用限制**：仅一次性输入接口 `playStreamInputTts` 和 `asyncPlayStreamInputTts` 支持SSML；流式输入接口 `sendStreamInputTts` 不支持。
 
-**使用方法**：调用 `playStreamInputTts` 或 `asyncPlayStreamInputTts` 时，SDK默认启用SSML，直接在 `text` 中传入包含SSML标签的文本。更多信息，请参见[SSML与LaTeX](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)。
+**使用方法**：调用 `playStreamInputTts` 或 `asyncPlayStreamInputTts` 时，SDK默认启用SSML，直接在 `text` 中传入包含SSML标签的文本。更多信息，请参见[SSML与LaTeX](raw/model-user-guide/model-experience/speech-synthesis/ssml-latex-user-guide.md)。
 
 ### 数学表达式
 

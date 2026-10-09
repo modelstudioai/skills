@@ -116,7 +116,7 @@ Token Plan
 
 [实时全模态](raw/model-user-guide/model-experience/omni-modal/realtime.md)
 
-[qwen3.8-omni-flash-realtime](https://help.aliyun.com/zh/model-studio/realtime#qwen38-realtime)
+qwen3.8-omni-flash-realtime、qwen3.5-omni-plus-realtime、qwen3.5-omni-flash-realtime
 
 支持
 
@@ -124,25 +124,9 @@ Token Plan
 
 支持
 
-qwen3.5-omni-plus-realtime
+[实时语音合成](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)
 
-支持
-
-支持
-
-支持
-
-qwen3.5-omni-flash-realtime
-
-支持
-
-支持
-
-支持
-
-[实时语音合成](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)
-
-qwen-audio-3.0-tts-flash、qwen-audio-3.0-tts-plus
+qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-flash、qwen-audio-3.0-tts-plus
 
 支持
 
@@ -158,9 +142,17 @@ CosyVoice系列模型
 
 支持
 
-[实时语音识别](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide)
+[实时语音识别](raw/model-user-guide/model-experience/speech-recognition/real-time-speech-recognition-user-guide.md)
 
-Qwen-Audio-3.0-ASR-Flash-Streaming、Fun-ASR-Realtime系列模型
+qwen-audio-3.1-asr-flash-message
+
+不支持
+
+不支持
+
+支持
+
+qwen-audio-3.1-asr-flash-streaming、qwen-audio-3.0-asr-flash-streaming、Fun-ASR-Realtime系列模型
 
 支持
 
@@ -178,9 +170,9 @@ qwen-audio-3.1-realtime-plus、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-rea
 
 支持
 
-[实时语音翻译](https://help.aliyun.com/zh/model-studio/qwen3-5-livetranslate-flash-realtime)
+[实时语音翻译](raw/model-user-guide/model-experience/speech-to-speech/qwen3-5-livetranslate-flash-realtime.md)
 
-qwen3.5-livetranslate-flash-realtime
+Qwen-Livetranslate-Realtime 系列模型
 
 支持
 

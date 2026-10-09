@@ -2,7 +2,7 @@
 
 通过Java SDK管理定制热词列表，包括VocabularyService类的方法说明与示例代码。
 
-**用户指南：**[提升识别准确率](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy)。热词列表数量上限等使用限制详见[热词限制与计费](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw10_limit_h2)。
+**用户指南：**[提升识别准确率](raw/model-user-guide/model-experience/speech-recognition/improve-asr-accuracy.md)。热词列表数量上限等使用限制详见[热词限制与计费](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw10_limit_h2)。
 
 **重要**新加坡地域的子业务空间暂不支持热词功能。
 

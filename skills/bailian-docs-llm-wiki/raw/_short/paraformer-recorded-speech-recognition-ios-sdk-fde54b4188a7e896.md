@@ -2,7 +2,7 @@
 
 本文档提供了Paraformer非实时语音识别iOS SDK的详细使用指南，帮助您将语音转换为文本。
 
-**用户指南：**[非实时语音识别](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide)
+**用户指南：**[非实时语音识别](raw/model-user-guide/model-experience/speech-recognition/non-realtime-speech-recognition-user-guide.md)
 
 ## 快速开始
 

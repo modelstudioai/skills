@@ -5,6 +5,8 @@
 -   集成至第三方应用：支持一键自动配置到第三方应用，快速实现外部调用。
 -   集成至个人项目：通过 MCP SDK 调用，实现灵活编码和深度定制。
 
+**重要**也可通过阿里云百炼 CLI 外部调用 MCP 服务：`bl mcp list` 查看已开通服务，`bl mcp call --target <名称>.<工具>` 直接调用。详见[使用 CLI](https://help.aliyun.com/zh/model-studio/cli/mcp-skill)。
+
 ## 开通 MCP 服务
 
 **说明**百炼 MCP 服务已从旧版 SSE 协议升级为新版 Streamable HTTP 协议。请根据您的情况选择对应的操作步骤。

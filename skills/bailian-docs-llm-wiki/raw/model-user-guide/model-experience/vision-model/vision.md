@@ -2920,35 +2920,8 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
     
 -   当`vl_high_resolution_images=false`时，最终的像素上限取决于 `max_pixels` 参数值。
     
-    -   对成本敏感（希望减少视觉 Token 消耗）：使用`max_pixels`的默认值或设置为更小的值。`max_pixels`主要影响视觉 Token 数量与调用成本，实测对端到端响应时间没有显著影响；如需降低时延，请参见下方[响应速度与模型选型](raw/model-user-guide/model-experience/vision-model/vision.md)。
+    -   对成本敏感（希望减少视觉 Token 消耗）：使用`max_pixels`的默认值或设置为更小的值。
     -   需要关注一定的细节，可接受较低的处理速度：适当提高`max_pixels`的值
-
-#### 响应速度与模型选型
-
-在延迟敏感的场景中，响应时间主要由所选模型决定，而不是由`max_pixels`决定。`qwen-vl-max`与`qwen-vl-plus`在相同输入条件下的响应时间对比如下：
-
-**模型**
-
-**平均响应时间**
-
-**特点**
-
-`qwen-vl-max`
-
-约 12s
-
-识别精度更高，适合细节密集、容错要求低的图像
-
-`qwen-vl-plus`
-
-约 8s
-
-速度与精度平衡，比`qwen-vl-max`快约 39%
-
-上表为单张 2480x3508 像素图像在默认参数（`vl_high_resolution_images=false`）下的实测参考值：`qwen-vl-max`两次调用分别为 12.75s、11.84s，平均 12.29s；`qwen-vl-plus`两次调用分别为 8.29s、6.75s，平均 7.52s。实际耗时随图像尺寸、输出长度和网络状况变化，仅供量级参考，不构成性能承诺。
-
--   启用流式输出（`stream=True`）可显著降低首字延迟：同一请求下首个 Token 约 0.95s 返回，完整响应的总耗时不变。适合需要尽快向用户反馈的交互式场景。
--   工作流等对时延敏感的图片识别场景：建议使用`qwen-vl-plus`并开启`stream=True`，可在约 1 秒内拿到首字响应；仅当`qwen-vl-plus`的识别准确度不满足要求时，再切换到`qwen-vl-max`。调小`max_pixels`不是提速手段——实测中`max_pixels=16384`为 18.59s、`max_pixels=65536`为 13.22s，与默认值下的 12.29s 基本持平甚至更慢。
 
 #### OpenAI 兼容
 
@@ -3254,7 +3227,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
     -   以本地路径传入时：单个图像不超过`10MB`
     -   以 Base64 编码传入时：Qwen3.8系列、Qwen3.7系列、Qwen3.6系列、Qwen3.5、Qwen3-VL系列编码前的原始图像文件不超过 `20MB`，其他模型不超过 `10MB`；且编码后的 Data URI 字符串在 OpenAI 兼容接口与 DashScope 不超过 `20MB`，在 Anthropic 兼容接口不超过 `32MB`。
     
-    此外，所有接口的请求体整体大小均不得超过 `64MB`，多张图像时需共享此整体额度。
+    此外，所有接口的请求体整体大小均不得超过 `64MB`，多张图像时需共享此整体额度。DashScope 域名的请求体上限为 16 MiB，建议改用 `{WorkspaceId}.{region}.maas.aliyuncs.com` 工作空间域名。
     
     上述限制取决于所选模型，不支持通过购买高级套餐或升级模型版本提升。
     

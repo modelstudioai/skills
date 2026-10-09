@@ -2,7 +2,7 @@
 
 本文介绍千问实时语音/音视频翻译 API 的客户端事件，包括事件类型、参数和示例。
 
-> 相关文档：[实时语音/音视频翻译-千问](https://help.aliyun.com/zh/model-studio/qwen3-5-livetranslate-flash-realtime)。
+> 相关文档：[实时语音/音视频翻译-千问](raw/model-user-guide/model-experience/speech-to-speech/qwen3-5-livetranslate-flash-realtime.md)。
 
 ## session.update
 

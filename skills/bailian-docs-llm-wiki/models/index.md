@@ -1,6 +1,6 @@
 # 百炼模型市场索引
 
-> 自动生成 · 共 189 个模型家族 · 435 个主干模型 · 更新于 2026-10-08
+> 自动生成 · 共 187 个模型家族 · 431 个主干模型 · 更新于 2026-10-10
 
 **机器查询走结构化文件**：
 
@@ -100,7 +100,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [通义法睿-Plus-32K](groups/farui-plus.json) — 通义法睿是以通义千问为基座经法律行业数据和知识专门训练的法律行业大模型产品，综合运用了模型精调、强化学习、 RAG检索增强、法律Agent技术，具有回答法律问题、推理法律适用、推荐裁判类案、辅助案情分…
   - 模型：`farui-plus`
 
-## 图像生成 `IG` — 31 个家族
+## 图像生成 `IG` — 30 个家族
 
 - [AI试衣-Plus版](groups/aitryon-plus.json) — aitryon-plus是一款效果出众的虚拟试衣图片生成模型，可基于服饰平拍图片以及人物正面全身照，输出服饰的人物试衣效果图片。 相较于aitryon模型，aitryon-plus模型在图片清晰度、服…
   - 模型：`aitryon-plus`
@@ -112,10 +112,8 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`aitryon-refiner`
 - [FaceChain人物写真生成](groups/facechain-generation.json) — 基于人物形象训练已经得到的形象，可以继续通过人物生成写真模型完成该形象的写真生成，支持多种预设风格，包括证件照、商务写真等。
   - 模型：`facechain-generation`
-- [FaceChain人物图像检测](groups/facechain-facedetect.json) — 对用户上传的人物图像进行检测，判断其中所包含的人脸是否符合facechain微调所需的标准，检测维度包括人脸数量、大小、角度、光照、清晰度等多维度，支持图像组输入，并返回每张图像对应的检测结果。
-  - 模型：`facechain-facedetect`
-- [Qwen-Image-2.0](groups/qwen-image-2.0.json) — Qwen-Image-2.0系列加速版模型，实现了图片生成和图片编辑的融合；具备更专业的文字渲染1k token指令支持能力、更细腻的真实质感，细腻刻画写实场景、更强的语义遵循能力。加速版有效实现了模…
-  - 模型：`qwen-image-2.0`
+- [Qwen-Image-2.1](groups/qwen-image-2.0.json) — Qwen-Image-2.1系列标准版模型支持以下能力：透明背景图像生成与编辑：支持 Alpha 通道，可直接生成透明背景图像，无需先生成 RGB 再进行背景去除。多参考图编辑：支持多张参考图像输入，…
+  - 模型：`qwen-image-2.0`, `qwen-image-2.1-turbo`
 - [Qwen-Image-2.1-Pro](groups/qwen-image-2.0-pro.json) — Qwen-Image-2.1系列满血版模型新增以下核心能力：原生 RGBA 透明图像生成与编辑：新增支持 Alpha 通道的 VAE，可直接生成透明背景图像，无需先生成 RGB 再进行背景去除。多参考…
   - 模型：`qwen-image-2.0-pro`, `qwen-image-2.1-pro`
 - [Qwen-Image-3.0](groups/qwen-image-3.0.json) — Qwen-Image-3.0 系列支持最长 4.5K tokens 的复杂图文提示词，可一次生成包含图中图、密集信息排版和清晰文字的复杂画面，支持文生图、图生图及图像编辑。Standard 版兼顾生成…
@@ -165,7 +163,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [鞋靴模特](groups/shoemodel-v1.json) — 鞋靴模特支持输入多视角鞋靴系列图片，同时对输入模特模板图的鞋子区域进行鞋靴AI试穿，实现模特鞋靴布局重绘生成，最终生成图片的效果, 布局自然、细节丰富、画面细腻、试穿结果逼真。可用于模特商品图设计、新…
   - 模型：`shoemodel-v1`
 
-## 视频生成 `VG` — 26 个家族
+## 视频生成 `VG` — 25 个家族
 
 - [HappyHorse-1.0](groups/happyhorse-1.0.json) — 视频生成与编辑系列，支持文生、图生、参考生及自然语言视频编辑，适合常规创作和局部调整。
   - 模型：`happyhorse-1.0-i2v`, `happyhorse-1.0-r2v`, `happyhorse-1.0-t2v`, `happyhorse-1.0-video-edit`
@@ -175,8 +173,6 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`MiniMax/MiniMax-H3`
 - [PixVerse C1](groups/pixverse-c1-market-place.json) — 由爱诗科技提供的PixVerse C系列视频大模型API服务。
   - 模型：`pixverse/pixverse-c1-it2v`, `pixverse/pixverse-c1-kf2v`, `pixverse/pixverse-c1-r2v`, `pixverse/pixverse-c1-t2v`
-- [PixVerse Capabilities](groups/pixverse-capability-market-place.json) — 由爱诗科技提供的视频原子能力大模型API服务。
-  - 模型：`pixverse/pixverse-lipsync`, `pixverse/pixverse-motioncontrol`, `pixverse/pixverse-upscale`
 - [PixVerse V5.6](groups/pixverse-market-place.json) — 由爱诗科技提供的PixVerse V系列视频大模型API服务。
   - 模型：`pixverse/pixverse-v5.6-it2v`, `pixverse/pixverse-v5.6-kf2v`, `pixverse/pixverse-v5.6-r2v`, `pixverse/pixverse-v5.6-t2v`
 - [PixVerse V6](groups/pixverse-v6-market-place.json) — 由爱诗科技提供的PixVerse V系列视频大模型API服务。
@@ -257,7 +253,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [大模型声音复刻及声音设计](groups/voice-enrollment.json) — 大模型声音复刻服务依托先进的大模型技术进行特征提取，无需训练过程就可以完成声音的复刻。仅需提供极短的音频，即可迅速生成高度相似且听感自然的定制声音。 大模型声音设计使用FunAudioGen-VD模型…
   - 模型：`voice-enrollment`
 - [音乐生成](groups/fun-music.json) — 百聆音乐生成大模型（Fun音乐大模型）支持输入开放性歌曲的创作要求或歌词，生成整首男/女声演唱的中文或英文歌曲。歌曲通俗易懂，情绪由浅入深，是人类灵感与大模型能力的完美结合。
-  - 模型：`fun-music-preview`, `fun-music-v1`
+  - 模型：`fun-music-preview`
 
 ## 语音识别 `ASR` — 16 个家族
 

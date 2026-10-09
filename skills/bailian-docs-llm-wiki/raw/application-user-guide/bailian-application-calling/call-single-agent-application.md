@@ -6999,7 +6999,7 @@ API方式操作请参阅以下内容。
 
 支持上传的文件上限10个。支持上传本地的文档、图片、视频或音频，格式要求为：
 
--   文档（单文件不超过100MB）：.doc,.docx,.wps,.ppt,.pptx,.xls,.xlsx,.md,.txt,.pdf；
+-   文档（单文件不超过100MB）：.doc,.docx,.ppt,.pptx,.xls,.xlsx,.md,.txt,.pdf；
     
 -   图片（单文件不超过20MB）：.png,.jpg,.jpeg,.bmp,.gif；
     

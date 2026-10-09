@@ -8,7 +8,7 @@ CosyVoice-V2 支持的音色请参见：[实时语音合成-CosyVoice /Sambert](
 
 Sambert 支持的音色请参见：[实时语音合成-CosyVoice /Sambert](https://help.aliyun.com/zh/model-studio/text-to-speech)中 Sambert音色列表。
 
-通义千问-TTS 支持的音色请参见：[实时语音合成](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)。
+通义千问-TTS 支持的音色请参见：[实时语音合成](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)。
 
 #### 端侧支持哪些算法？仅是唤醒、指令这种，还是其他什么能力？
 

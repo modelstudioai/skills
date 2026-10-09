@@ -66,49 +66,49 @@
 
 **标点符号预测**
 
-✅ 默认支持，无需配置
+默认支持，无需配置
 
-✅ 默认支持，无需配置
+默认支持，无需配置
 
-✅ 默认支持，无需配置
+默认支持，无需配置
 
-✅ 默认支持，无需配置
+默认支持，无需配置
 
 **逆文本正则化（ITN）**
 
-✅ 默认支持，无需配置
+默认支持，无需配置
 
-✅ 默认支持，无需配置
+默认支持，无需配置
 
-✅ 默认支持，无需配置
+默认支持，无需配置
 
-✅ 默认支持，无需配置
+默认支持，无需配置
 
 **定制热词**
 
-✅ 参见[定制热词](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/custom-hot-words.md)
+参见[定制热词](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/custom-hot-words.md)
 
-✅ 参见[定制热词](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/custom-hot-words.md)
+参见[定制热词](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/custom-hot-words.md)
 
-✅ 参见[Paraformer语音识别热词定制与管理](https://help.aliyun.com/zh/model-studio/paraformer-asr-phrase-manager)
+参见[Paraformer语音识别热词定制与管理](https://help.aliyun.com/zh/model-studio/paraformer-asr-phrase-manager)
 
-✅ 参见[Paraformer语音识别热词定制与管理](https://help.aliyun.com/zh/model-studio/paraformer-asr-phrase-manager)
+参见[Paraformer语音识别热词定制与管理](https://help.aliyun.com/zh/model-studio/paraformer-asr-phrase-manager)
 
 **指定待识别语种**
 
-✅ 通过`language_hints`参数指定
+通过`language_hints`参数指定
 
-❌
+不支持
 
-❌
+不支持
 
-❌
+不支持
 
 **情感识别**
 
-❌
+不支持
 
-✅ （点击查看使用方式）
+点击查看使用方式
 
 情感识别遵循如下约束：
 
@@ -118,9 +118,9 @@
 
 情感识别结果获取方式：通过[单句信息（Sentence）](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-python-sdk#f28f50b035qtn)的`emo_tag`和`emo_confidence`字段分别获取当前句子的情感和情感置信度。
 
-❌
+不支持
 
-❌
+不支持
 
 ## 快速开始
 
@@ -1031,7 +1031,7 @@ ffmpeg -i input.flac -c:a libopus -b:a 128k -vbr on output.opus
 
 1.  请检查请求参数中的音频格式（`format`）和采样率（`sampleRate`/`sample_rate`）设置是否正确且符合参数约束。以下为常见错误示例：
     
-    -   音频文件扩展名为 .wav，但实际为 MP3 格式，而请求参数 `format` 设置为 mp3（参数设置错误）。
+    -   音频文件扩展名为 .wav，但实际为 MP3 格式，而请求参数 `format` 设置为 `wav`（参数设置错误）。
     -   音频采样率为 3600Hz，但请求参数 `sampleRate`/`sample_rate` 设置为 48000（参数设置错误）。
     
     可以使用[ffprobe](https://ffmpeg.org/ffprobe.html)工具获取音频的容器、编码、采样率、声道等信息：
@@ -1048,24 +1048,25 @@ ffprobe -v error -show_entries format=format_name -show_entries stream=codec_nam
 3.  若以上检查均无问题，可通过定制热词提升对特定词语的识别效果。
     
 
-#### Q：音频文件扩展名与实际编码格式不一致导致无识别结果，如何处理？
+#### Q：音频格式参数设置错误导致无识别结果，如何处理？
 
-当音频文件的扩展名与实际编码格式不一致时（例如文件扩展名为`.wav`但实际编码为 MP3），请求参数`format`必须与音频的**实际编码格式**一致，而非文件扩展名。
+`format`为必填参数，必须与音频的**实际格式**匹配。例如，对于实际格式为 MP3、扩展名为`.wav`的音频文件，应设置`format='mp3'`。
 
-您可以按以下步骤排查和解决：
+1.  **检查音频实际格式**：使用`ffprobe`工具查看音频的容器、编码、采样率和声道信息。
+    
+    ```
+    ffprobe -v error -show_entries format=format_name -show_entries stream=codec_name,sample_rate,channels -of default=noprint_wrappers=1 your_audio_file
+    ```
+    
+2.  **设置请求参数**：将`format`设置为音频的实际格式，并确保`sample_rate`与音频的实际采样率一致，且符合所用模型的参数要求。
+    
+3.  **按需转换音频格式**：如需将音频转换为 WAV，可使用以下命令生成 PCM 编码、16 kHz、单声道的 WAV 文件。
+    
+    ```
+    ffmpeg -i input_file -c:a pcm_s16le -ar 16000 -ac 1 output.wav
+    ```
+    
+    转换后，设置`format='wav'`和`sample_rate=16000`。
+    
 
-1.  **检查音频实际格式**：使用`ffprobe`工具查看音频文件的实际编码格式。
-
-```
-ffprobe -v error -show_entries format=format_name -show_entries stream=codec_name,sample_rate,channels -of default=noprint_wrappers=1 your_audio_file
-```
-
-2.  **转换音频格式**：如果音频的实际编码格式与目标格式不一致，可使用`ffmpeg`工具将音频转换为标准 WAV 格式（PCM 编码）。
-
-```
-ffmpeg -i input_file -c:a pcm_s16le -ar 16000 -ac 1 output.wav
-```
-
-3.  **修改请求参数**：将`format`参数设置为与转换后音频一致的格式（如`wav`），并确保`sample_rate`参数与音频的实际采样率一致。
-
-**重要**`format`参数设置为`wav`时，音频必须为 PCM 编码。如果音频文件扩展名为`.wav`但实际编码不是 PCM（例如 MP3），需要先使用上述`ffmpeg`命令进行格式转换。
+**重要**使用`format='wav'`时，音频必须为 PCM 编码的 WAV 文件。
