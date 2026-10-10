@@ -53,7 +53,7 @@ String
 
 是
 
-模型 ID，不能为空。如 `qwen-plus`、`qwen3-max`。
+模型 ID，不能为空。如 `qwen-plus`、`qwen-max`。
 
 models\[\].inference
 
@@ -144,7 +144,7 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/models/permissions" \
     --data '{
         "models": [
             {"model": "qwen-plus", "inference": true, "fine_tune": true, "deploy": false},
-            {"model": "qwen3-max", "inference": true}
+            {"model": "qwen-max", "inference": true}
         ]
     }'
 ```

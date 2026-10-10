@@ -664,24 +664,11 @@ JSON Object
 #### Qwen3-VL
 
 -   `qwen3-vl-plus`及其快照版本
--   `qwen3-vl-flash`及其快照版本
 
 #### Qwen-Omni
 
 -   `qwen3-omni-flash`及其快照版本
--   `qwen-omni-turbo`及其快照版本
 
 #### Qwen-OCR
 
 -   `qwen-vl-ocr`及其快照版本
--   `qwen-vl-ocr-latest`
-
-#### QVQ
-
--   `qvq-max`
--   `qvq-plus`
-
-#### 旧版Qwen-VL
-
--   `qwen-vl-max`
--   `qwen-vl-plus`

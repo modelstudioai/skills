@@ -27,21 +27,20 @@
 **支持的模型：**
 
 -   **文本生成模型**
-    -   千问 Max：qwen3.8-max、qwen3.7-max、qwen3-max
+    -   千问 Max：qwen3.8-max、qwen3.7-max
     -   千问 Plus：qwen3.7-plus、qwen3.6-plus、qwen3.5-plus、qwen-plus、qwen-plus-latest
     -   千问 Flash：qwen3.8-flash、qwen3.7-flash、qwen3.6-flash、qwen3.5-flash、qwen-flash
-    -   千问 Long：qwen-long、qwen-long-latest
-    -   第三方模型：deepseek-r1、deepseek-v3.2、deepseek-v3
+    -   千问 Long：qwen-long
 -   **多模态模型**
-    -   [图像与视频理解](raw/model-user-guide/model-experience/vision-model/vision.md)：qwen3.8-max、qwen3.8-flash、qwen3.7-plus、qwen3.6-plus、qwen3.7-flash、qwen3.6-flash、qwen3.5-plus、qwen3.5-flash、qwen3-vl-plus、qwen3-vl-flash
-    -   [文字提取](raw/model-user-guide/model-experience/vision-model/qwen-vl-ocr.md)：qwen-vl-ocr、qwen-vl-ocr-latest
+    -   [图像与视频理解](raw/model-user-guide/model-experience/vision-model/vision.md)：qwen3.8-max、qwen3.8-flash、qwen3.7-plus、qwen3.6-plus、qwen3.7-flash、qwen3.6-flash、qwen3.5-plus、qwen3.5-flash、qwen3-vl-plus
+    -   [文字提取](raw/model-user-guide/model-experience/vision-model/qwen-vl-ocr.md)：qwen-vl-ocr
     -   [全模态](raw/model-user-guide/model-experience/omni-modal/qwen-omni.md)：qwen3.5-omni-plus
 -   [**向量模型**](https://help.aliyun.com/zh/model-studio/user-guide/embedding)**：**text-embedding-v1、text-embedding-v2、text-embedding-v3、text-embedding-v4、qwen3.7-text-embedding、qwen3.7-text-embedding-flash
     
 
 #### 新加坡
 
-**支持的模型**：qwen3.7-plus、qwen-max、qwen-plus、qwen-turbo。
+**支持的模型**：qwen3.7-plus、qwen-max、qwen-plus。
 
 **重要**
 
@@ -71,11 +70,11 @@
 {"custom_id":"2","method":"POST","url":"/v1/chat/ds-test","body":{"model":"batch-test-model","messages":[{"role":"system","content":"You are a helpful assistant."},{"role":"user","content":"What is 2+2?"}]}}
 ```
 
-多模态模型（如 qwen-vl-plus）支持文件 URL、Base64 编码传入方式：
+多模态模型（如 qwen3-vl-plus）支持文件 URL、Base64 编码传入方式：
 
 ```
-{"custom_id":"image-url","method":"POST","url":"/v1/chat/completions","body":{"model":"qwen-vl-plus","messages":[{"role":"user","content":[{"type":"image_url","image_url":{"url":"https://dashscope.oss-cn-beijing.aliyuncs.com/images/dog_and_girl.jpeg"}},{"type":"text","text":"请描述这张图片"}]}]}}
-{"custom_id":"image-base64","method":"POST","url":"/v1/chat/completions","body":{"model":"qwen-vl-plus","messages":[{"role":"user","content":[{"type":"image_url","image_url":{"url":"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEA8ADwAAD..."}},{"type":"text","text":"请描述这张图片"}]}]}}
+{"custom_id":"image-url","method":"POST","url":"/v1/chat/completions","body":{"model":"qwen3-vl-plus","messages":[{"role":"user","content":[{"type":"image_url","image_url":{"url":"https://dashscope.oss-cn-beijing.aliyuncs.com/images/dog_and_girl.jpeg"}},{"type":"text","text":"请描述这张图片"}]}]}}
+{"custom_id":"image-base64","method":"POST","url":"/v1/chat/completions","body":{"model":"qwen3-vl-plus","messages":[{"role":"user","content":[{"type":"image_url","image_url":{"url":"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEA8ADwAAD..."}},{"type":"text","text":"请描述这张图片"}]}]}}
 ```
 
 ### 第 2 步：运行代码
@@ -694,15 +693,15 @@ fi
 ```
 **场景2：图像与视频理解**
 
-多模态模型（如 qwen-vl-plus）支持文件 URL、Base64 编码传入方式。
+多模态模型（如 qwen3-vl-plus）支持文件 URL、Base64 编码传入方式。
 
 ```
-{"custom_id":"image-url","method":"POST","url":"/v1/chat/completions","body":{"model":"qwen-vl-plus","messages":[{"role":"user","content":[{"type":"image_url","image_url":{"url":"https://dashscope.oss-cn-beijing.aliyuncs.com/images/dog_and_girl.jpeg"}},{"type":"text","text":"请描述这张图片"}]}]}}
-{"custom_id":"image-base64","method":"POST","url":"/v1/chat/completions","body":{"model":"qwen-vl-plus","messages":[{"role":"user","content":[{"type":"image_url","image_url":{"url":"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEA8ADwAAD..."}},{"type":"text","text":"请描述这张图片"}]}]}}
-{"custom_id":"video-url","method":"POST","url":"/v1/chat/completions","body":{"model":"qwen-vl-plus","messages":[{"role":"user","content":[{"type":"video","video":"https://example.com/video.mp4"},{"type":"text","text":"描述这个视频"}]}]}}
-{"custom_id":"video-base64","method":"POST","url":"/v1/chat/completions","body":{"model":"qwen-vl-plus","messages":[{"role":"user","content":[{"type":"video","video":["data:image/jpeg;base64,{frame1}","data:image/jpeg;base64,{frame2}","data:image/jpeg;base64,{frame3}"]},{"type":"text","text":"描述这个视频"}]}]}}
-{"custom_id":"multi-image-url","method":"POST","url":"/v1/chat/completions","body":{"model":"qwen-vl-plus","messages":[{"role":"user","content":[{"type":"image_url","image_url":{"url":"https://example.com/image1.jpg"}},{"type":"image_url","image_url":{"url":"https://example.com/image2.jpg"}},{"type":"text","text":"对比这两张图片"}]}]}}
-{"custom_id":"multi-image-base64","method":"POST","url":"/v1/chat/completions","body":{"model":"qwen-vl-plus","messages":[{"role":"user","content":[{"type":"image_url","image_url":{"url":"data:image/jpeg;base64,{image1_base64}"}},{"type":"image_url","image_url":{"url":"data:image/jpeg;base64,{image2_base64}"}},{"type":"text","text":"对比这两张图片"}]}]}}
+{"custom_id":"image-url","method":"POST","url":"/v1/chat/completions","body":{"model":"qwen3-vl-plus","messages":[{"role":"user","content":[{"type":"image_url","image_url":{"url":"https://dashscope.oss-cn-beijing.aliyuncs.com/images/dog_and_girl.jpeg"}},{"type":"text","text":"请描述这张图片"}]}]}}
+{"custom_id":"image-base64","method":"POST","url":"/v1/chat/completions","body":{"model":"qwen3-vl-plus","messages":[{"role":"user","content":[{"type":"image_url","image_url":{"url":"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEA8ADwAAD..."}},{"type":"text","text":"请描述这张图片"}]}]}}
+{"custom_id":"video-url","method":"POST","url":"/v1/chat/completions","body":{"model":"qwen3-vl-plus","messages":[{"role":"user","content":[{"type":"video","video":"https://example.com/video.mp4"},{"type":"text","text":"描述这个视频"}]}]}}
+{"custom_id":"video-base64","method":"POST","url":"/v1/chat/completions","body":{"model":"qwen3-vl-plus","messages":[{"role":"user","content":[{"type":"video","video":["data:image/jpeg;base64,{frame1}","data:image/jpeg;base64,{frame2}","data:image/jpeg;base64,{frame3}"]},{"type":"text","text":"描述这个视频"}]}]}}
+{"custom_id":"multi-image-url","method":"POST","url":"/v1/chat/completions","body":{"model":"qwen3-vl-plus","messages":[{"role":"user","content":[{"type":"image_url","image_url":{"url":"https://example.com/image1.jpg"}},{"type":"image_url","image_url":{"url":"https://example.com/image2.jpg"}},{"type":"text","text":"对比这两张图片"}]}]}}
+{"custom_id":"multi-image-base64","method":"POST","url":"/v1/chat/completions","body":{"model":"qwen3-vl-plus","messages":[{"role":"user","content":[{"type":"image_url","image_url":{"url":"data:image/jpeg;base64,{image1_base64}"}},{"type":"image_url","image_url":{"url":"data:image/jpeg;base64,{image2_base64}"}},{"type":"text","text":"对比这两张图片"}]}]}}
 ```
 
 > 示例中的 Base64 字符串已省略，使用下方 Python 代码生成完整编码即可。
@@ -820,7 +819,7 @@ if __name__ == "__main__":
 
 ```
 # 多模态模型配置示例
-MODEL = "qwen-vl-max"       # 多模态模型
+MODEL = "qwen3-vl-plus"       # 多模态模型
 
 # 多模态任务：content 为数组格式
 TASKS = [
@@ -831,12 +830,8 @@ TASKS = [
     ]},
 ]
 
-# qwen-omni-turbo 音频/视频格式：
-# {"type": "input_audio", "input_audio": {"data": "https://example.com/audio.wav", "format": "wav"}}
-# {"type": "video_url", "video_url": "https://example.com/video.mp4"}
-
 # 注意：
-# - qwen3-vl-plus 和 qwen3-vl-flash 不使用 system 角色，thinking_budget 设置为 500
+# - qwen3-vl-plus 不使用 system 角色，thinking_budget 设置为 500
 # - 其他多模态模型包含 system 角色，thinking_budget 设置为 50
 # - 思考模式需额外设置 ENABLE_THINKING = True
 ```
@@ -2830,7 +2825,7 @@ with open("input_demo.csv", "r") as fin:
     with open("input_demo.jsonl", 'w', encoding='utf-8') as fout:
         csvreader = csv.reader(fin)
         for row in csvreader:
-            body = {"model": "qwen-turbo", "messages": messages_builder_example(row[1])}
+            body = {"model": "qwen-plus", "messages": messages_builder_example(row[1])}
             # 选择向量模型进行调用时，url的值需填写"/v1/embeddings",其他模型填写/v1/chat/completions
             request = {"custom_id": row[0], "method": "POST", "url": "/v1/chat/completions", "body": body}
             fout.write(json.dumps(request, separators=(',', ':'), ensure_ascii=False) + "\n")

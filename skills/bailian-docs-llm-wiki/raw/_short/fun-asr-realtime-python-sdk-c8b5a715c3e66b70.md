@@ -457,7 +457,7 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
 
 点击查看支持的语言代码
 
--   fun-asr-realtime、fun-asr-realtime-2025-11-07：
+-   fun-asr-realtime：
     
     -   zh: 中文
     -   en: 英文
@@ -494,10 +494,6 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
     -   zh: 中文
     -   en: 英文
     -   ja: 日语
--   fun-asr-realtime-2025-09-15：
-    
-    -   zh: 中文
-    -   en: 英文
 -   fun-asr-flash-8k-realtime、fun-asr-flash-8k-realtime-2026-01-28：
     
     -   zh: 中文
@@ -556,7 +552,7 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
 
 输入对象，用于传入对话上下文（context）。上下文用于辅助识别、提升专有词汇的识别准确率。使用方法详见[提升识别准确率](raw/model-user-guide/model-experience/speech-recognition/improve-asr-accuracy.md)。
 
-**重要**仅 `fun-asr-realtime`、`fun-asr-realtime-2025-11-07` 模型支持 context 参数。
+**重要**仅 `fun-asr-realtime` 模型支持 context 参数。
 
 dict 中需包含 `context` 键，值为消息列表（list\[dict\]），每条消息包含以下字段：
 

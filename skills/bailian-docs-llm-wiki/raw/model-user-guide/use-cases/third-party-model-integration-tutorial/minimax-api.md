@@ -2,8 +2,6 @@
 
 本文档介绍如何调用阿里云百炼部署的 MiniMax 模型推理服务。
 
-**重要**MiniMax-M2.1 将于**2026年7月9日**下架。推荐转用：[qwen3.7-plus](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.7-plus)、[qwen3.7-max](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.7-max)、[qwen3.6-flash](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.6-flash)。
-
 **重要**本文档描述的功能仅在华北2（北京）地域可用，如需使用模型，需从华北2（北京）地域[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
 
 ## 快速开始
@@ -517,22 +515,6 @@ MiniMax-M2.5
 
 > 仅支持隐式缓存
 
-MiniMax-M2.1
-
-支持
-
-支持
-
-支持
-
-不支持
-
-支持
-
-不支持
-
-不支持
-
 ## 参数默认值
 
 **模型**
@@ -544,14 +526,6 @@ MiniMax-M2.1
 **presence\_penalty**
 
 MiniMax-M2.5
-
-1.0
-
-0.95
-
-0.0
-
-MiniMax-M2.1
 
 1.0
 

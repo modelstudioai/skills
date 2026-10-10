@@ -108,7 +108,7 @@ for (Session s : page.getData()) {
         "type": "agent",
         "version": 1,
         "name": "data-analyst",
-        "model": {"id": "qwen3-max"},
+        "model": {"id": "qwen3.7-max"},
         "system": "你是数据分析专家，使用 pandas 处理 CSV 文件。",
         "tools": []
       },

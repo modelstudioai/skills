@@ -21,16 +21,12 @@ dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'
 text = "那我来给大家推荐一款T恤，这款呢真的是超级好看，这个颜色呢很显气质，而且呢也是搭配的绝佳单品，大家可以闭眼入，真的是非常好看，对身材的包容性也很好，不管啥身材的宝宝呢，穿上去都是很好看的。推荐宝宝们下单哦。"
 # SpeechSynthesizer接口使用方法：dashscope.audio.qwen_tts.SpeechSynthesizer.call(...)
 response = dashscope.MultiModalConversation.call(
-    # 如需使用指令控制功能，请将model替换为qwen3-tts-instruct-flash
     model="qwen3-tts-flash",
     # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx"
     api_key=os.getenv("DASHSCOPE_API_KEY"),
     text=text,
     voice="Cherry"
-    # 如需使用指令控制功能，请取消下方注释，并将model替换为qwen3-tts-instruct-flash
-    # instructions='语速较快，带有明显的上扬语调，适合介绍时尚产品。',
-    # optimize_instructions=True
 )
 print(response)
 ```
@@ -50,7 +46,6 @@ import com.alibaba.dashscope.utils.JsonUtils;
 import com.alibaba.dashscope.utils.Constants;
 
 public class Main {
-    // 如需使用指令控制功能，请将MODEL替换为qwen3-tts-instruct-flash
     private static final String MODEL = "qwen3-tts-flash";
     public static void call() throws ApiException, NoApiKeyException, UploadFileException {
         MultiModalConversation conv = new MultiModalConversation();
@@ -62,9 +57,6 @@ public class Main {
                 .text("Today is a wonderful day to build something people love!")
                 .voice(AudioParameters.Voice.CHERRY)
                 .parameter("language_type", "English")
-                // 如需使用指令控制功能，请取消下方注释，并将model替换为qwen3-tts-instruct-flash
-                // .parameter("instructions","语速较快，带有明显的上扬语调，适合介绍时尚产品。")
-                // .parameter("optimize_instructions",true)
                 .build();
         MultiModalConversationResult result = conv.call(param);
         System.out.println(JsonUtils.toJson(result));
@@ -112,29 +104,25 @@ curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-gen
 
 ```
 # DashScope SDK 版本不低于 1.24.5
-    import os
-    import dashscope
+import os
+import dashscope
 
-    # 以下为华北2（北京）地域的配置。
-    dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'
+# 以下为华北2（北京）地域的配置。
+dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'
 
-    text = "那我来给大家推荐一款T恤，这款呢真的是超级好看，这个颜色呢很显气质，而且呢也是搭配的绝佳单品，大家可以闭眼入，真的是非常好看，对身材的包容性也很好，不管啥身材的宝宝呢，穿上去都是很好看的。推荐宝宝们下单哦。"
-    # SpeechSynthesizer接口使用方法：dashscope.audio.qwen_tts.SpeechSynthesizer.call(...)
-    response = dashscope.MultiModalConversation.call(
-        # 如需使用指令控制功能，请将model替换为qwen3-tts-instruct-flash
-        model="qwen3-tts-flash",
-        # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-        # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx"
-        api_key=os.getenv("DASHSCOPE_API_KEY"),
-        text=text,
-        voice="Cherry",
-        # 如需使用指令控制功能，请取消下方注释，并将model替换为qwen3-tts-instruct-flash
-        # instructions='语速较快，带有明显的上扬语调，适合介绍时尚产品。',
-        # optimize_instructions=True,
-        stream=True
-    )
-    for chunk in response:
-        print(chunk)
+text = "那我来给大家推荐一款T恤，这款呢真的是超级好看，这个颜色呢很显气质，而且呢也是搭配的绝佳单品，大家可以闭眼入，真的是非常好看，对身材的包容性也很好，不管啥身材的宝宝呢，穿上去都是很好看的。推荐宝宝们下单哦。"
+# SpeechSynthesizer接口使用方法：dashscope.audio.qwen_tts.SpeechSynthesizer.call(...)
+response = dashscope.MultiModalConversation.call(
+    model="qwen3-tts-flash",
+    # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx"
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    text=text,
+    voice="Cherry",
+    stream=True
+)
+for chunk in response:
+    print(chunk)
 ```
 
 #### Java
@@ -153,7 +141,6 @@ import com.alibaba.dashscope.utils.Constants;
 import io.reactivex.Flowable;
 
 public class Main {
-    // 如需使用指令控制功能，请将MODEL替换为qwen3-tts-instruct-flash
     private static final String MODEL = "qwen3-tts-flash";
     public static void streamCall() throws ApiException, NoApiKeyException, UploadFileException {
         MultiModalConversation conv = new MultiModalConversation();
@@ -165,9 +152,6 @@ public class Main {
                 .text("Today is a wonderful day to build something people love!")
                 .voice(AudioParameters.Voice.CHERRY)
                 .parameter("language_type", "English")
-                // 如需使用指令控制功能，请取消下方注释，并将model替换为qwen3-tts-instruct-flash
-                // .parameter("instructions","语速较快，带有明显的上扬语调，适合介绍时尚产品。")
-                // .parameter("optimize_instructions",true)
                 .build();
         Flowable<MultiModalConversationResult> result = conv.streamCall(param);
         result.blockingForEach(r -> {System.out.println(JsonUtils.toJson(r));
@@ -223,7 +207,7 @@ curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-gen
 
 **text** `string` **（必选）**
 
-要合成的文本，支持多语种混合输入。最大输入长度：千问-TTS模型为 512 Token，其他模型为 600 字符。
+要合成的文本，支持多语种混合输入。最大输入长度为 600 字符。
 
 **voice** `string` **（必选）**
 
@@ -247,32 +231,6 @@ curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-gen
     -   `Korean`
     -   `French`
     -   `Russian`
-
-**instructions**`string`（可选）
-
-设置指令，参见[指令控制](https://help.aliyun.com/zh/model-studio/non-realtime-tts-user-guide#nrt_instruct_h3)。
-
-默认值：无，不设置时不生效。
-
-最大长度：1600 Token。
-
-支持语言：仅支持中文和英文。
-
-适用范围：该功能仅适用于千问3-TTS-Instruct-Flash系列模型。
-
-**optimize\_instructions**`boolean`（可选）
-
-对 `instructions` 进行语义优化，以提升语音合成的自然度和表现力。
-
-默认值：false。
-
-行为说明：当设置为 true 时，系统将对 `instructions` 的内容进行语义增强与重写，生成更适合语音合成的内部指令。
-
-推荐在追求高品质、精细化语音表达时开启。
-
-依赖 `instructions` 参数。若 `instructions` 为空，此参数不生效。
-
-适用范围：该功能仅适用于千问3-TTS-Instruct-Flash系列模型。
 
 ## 返回对象（流式与非流式输出格式一致）
 
@@ -299,41 +257,6 @@ curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-gen
         "input_tokens": 0,
         "output_tokens": 0,
         "characters": 195
-    }
-}
-```
-
-千问-TTS
-
-```
-{
-    "status_code": 200,
-    "request_id": "f4e8139b-3203-4887-92cb-xxxxxxxxxxxx",
-    "code": "",
-    "message": "",
-    "output": {
-        "text": null,
-        "finish_reason": "stop",
-        "choices": null,
-        "audio": {
-            "data": "",
-            "url": "http://dashscope-result-wlcb.oss-cn-wulanchabu.aliyuncs.com/1d/50/20251218/e6c1b9cc/9acec74e-e317-4dbd-9e76-745c47bcbf2d.wav?Expires=1766116806&OSSAccessKeyId=YOUR_ACCESS_KEY_ID&Signature=YOUR_SIGNATURE",
-            "id": "audio_f4e8139b-3203-4887-92cb-xxxxxxxxxxxx",
-            "expires_at": 1766116806
-        }
-    },
-    "usage": {
-        "input_tokens": 76,
-        "output_tokens": 1045,
-        "characters": 0,
-        "input_tokens_details": {
-            "text_tokens": 76
-        },
-        "output_tokens_details": {
-            "audio_tokens": 1045,
-            "text_tokens": 0
-        },
-        "total_tokens": 1121
     }
 }
 ```
@@ -406,23 +329,9 @@ URL 过期时间的 UNIX 时间戳。
 
 **usage** `object`
 
-本次请求的 Token 或字符消耗信息。千问-TTS模型返回Token消耗信息，千问3-TTS-Flash模型返回字符消耗信息
+本次请求的字符消耗信息。
 
 属性
-
-**input\_tokens\_details** `object`
-
-输入文本的 Token消耗信息。仅千问-TTS模型返回该字段。
-
-属性
-
-**text\_tokens** `integer`
-
-输入文本的 Token 消耗量。
-
-**total\_tokens** `integer`
-
-本次请求总共消耗的 Token 量。仅千问-TTS模型返回该字段。
 
 **output\_tokens** `integer`
 
@@ -431,20 +340,6 @@ URL 过期时间的 UNIX 时间戳。
 **input\_tokens** `integer`
 
 输入文本的 Token 消耗量。对于千问3-TTS-Flash模型，该字段固定为0。
-
-**output\_tokens\_details** `object`
-
-输出的 Token 消耗信息。仅千问-TTS模型返回该字段。
-
-属性
-
-**audio\_tokens** `integer`
-
-输出音频的 Token 消耗量。
-
-**text\_tokens** `integer`
-
-输出文本的 Token 消耗量，当前固定为0。
 
 **characters** `integer`
 
@@ -498,7 +393,6 @@ import java.io.InputStream;
 import java.net.URL;
 
 public class Main {
-    // 如需使用指令控制功能，请将MODEL替换为qwen3-tts-instruct-flash
     private static final String MODEL = "qwen3-tts-flash";
     public static void call() throws ApiException, NoApiKeyException, UploadFileException {
         MultiModalConversation conv = new MultiModalConversation();
@@ -510,9 +404,6 @@ public class Main {
                 .text("Today is a wonderful day to build something people love!")
                 .voice(AudioParameters.Voice.CHERRY)
                 .parameter("language_type", "English") // 建议与文本语种一致，以获得正确的发音和自然的语调。
-                // 如需使用指令控制功能，请取消下方注释，并将model替换为qwen3-tts-instruct-flash
-                // .parameter("instructions","语速较快，带有明显的上扬语调，适合介绍时尚产品。")
-                // .parameter("optimize_instructions",true)
                 .build();
         MultiModalConversationResult result = conv.call(param);
         String audioUrl = result.getOutput().getAudio().getUrl();
@@ -586,14 +477,10 @@ response = dashscope.MultiModalConversation.call(
     # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx"
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # 如需使用指令控制功能，请将model替换为qwen3-tts-instruct-flash
     model="qwen3-tts-flash",
     text=text,
     voice="Cherry",
     language_type="Chinese",  # 建议与文本语种一致，以获得正确的发音和自然的语调。
-    # 如需使用指令控制功能，请取消下方注释，并将model替换为qwen3-tts-instruct-flash
-    # instructions='语速较快，带有明显的上扬语调，适合介绍时尚产品。',
-    # optimize_instructions=True,
     stream=True
 )
 
@@ -654,7 +541,6 @@ import javax.sound.sampled.*;
 import java.util.Base64;
 
 public class Main {
-    // 如需使用指令控制功能，请将MODEL替换为qwen3-tts-instruct-flash
     private static final String MODEL = "qwen3-tts-flash";
     public static void streamCall() throws ApiException, NoApiKeyException, UploadFileException {
         MultiModalConversation conv = new MultiModalConversation();
@@ -666,9 +552,6 @@ public class Main {
                 .text("Today is a wonderful day to build something people love!")
                 .voice(AudioParameters.Voice.CHERRY)
                 .parameter("language_type", "English") // 建议与文本语种一致，以获得正确的发音和自然的语调。
-                // 如需使用指令控制功能，请取消下方注释，并将model替换为qwen3-tts-instruct-flash
-                // .parameter("instructions","语速较快，带有明显的上扬语调，适合介绍时尚产品。")
-                // .parameter("optimize_instructions",true)
                 .build();
         Flowable<MultiModalConversationResult> result = conv.streamCall(param);
         result.blockingForEach(r -> {

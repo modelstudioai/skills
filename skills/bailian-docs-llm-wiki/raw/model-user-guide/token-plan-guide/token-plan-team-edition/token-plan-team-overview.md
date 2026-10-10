@@ -111,15 +111,7 @@ deepseek-v4-pro-0813
 
 推理模型、文本生成
 
-deepseek-v4-flash
-
-推理模型、文本生成
-
 deepseek-v4-flash-0731
-
-推理模型、文本生成
-
-deepseek-v3.2
 
 推理模型、文本生成
 

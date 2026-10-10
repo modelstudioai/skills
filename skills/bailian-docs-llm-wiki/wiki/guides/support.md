@@ -1,31 +1,30 @@
 # support
 
-百炼平台的 `support` 模块提供模型服务可用性、功能边界及售后保障的统一说明，覆盖模型支持范围、关键调用参数、接入方式和使用约束。开发者应结合具体模型能力文档与售后条款进行集成设计。所有服务均以 [服务支持](../../raw/model-user-guide/support.md) 为总览入口。
+`support` 是百炼平台为模型调用和服务使用提供的基础支持能力，涵盖模型兼容性、服务范围、售后保障及合规协议等内容。开发者可通过该模块确认所选模型是否受支持、了解服务边界与限制，并获取故障排查和问题反馈路径。所有支持策略均以 [服务支持](../../raw/model-user-guide/support.md) 为准。
 
 ## 支持的模型/功能
 
-当前支持的模型列表详见 [模型列表](../../raw/model-user-guide/support/model-studio-model-list.md)，涵盖通义千问系列（Qwen1.5/Qwen2/Qwen2.5/Qwen3）、Qwen-VL、Qwen-Audio 等开源与闭源模型，以及部分第三方微调模型。功能支持包括文本生成、多模态推理、流式响应、[函数调用](../concepts/function-calling.md)（Tool Calling）等，具体以各模型在 [模型列表](../../raw/model-user-guide/support/model-studio-model-list.md) 中标注的 capability 字段为准。> **注意**：部分旧版文档中提及的“Qwen1”已归档，实际可用模型请以 [模型列表](../../raw/model-user-guide/support/model-studio-model-list.md) 的 latest 标签为准，避免参考过时的模型别名。
+- 当前支持的模型列表详见 [模型列表](../../raw/model-user-guide/support/model-studio-model-list.md)，包括通义千问系列（Qwen1、Qwen2、Qwen3）、Qwen-VL、Qwen-Audio 等开源与闭源模型，以及部分第三方微调模型。
+- 功能支持覆盖同步推理（`/v1/chat/completions`）、异步任务（`/v1/async-tasks`）、批量处理（`/v1/batch`）及模型微调结果部署后的在线服务调用。
+- 模型能力边界（如上下文长度、输入格式、多模态支持）需以各模型专属文档及 [服务支持](../../raw/model-user-guide/support.md) 中的说明为准。
 
 ## 关键参数
 
-调用 `support` 相关接口（如 `/v1/models` 或控制台模型元数据查询）时，核心参数包括：  
-- `model`（必填，字符串，需与 [模型列表](../../raw/model-user-guide/support/model-studio-model-list.md) 中的 model_id 完全一致）  
-- `response_format`（可选，支持 `json_object` 或 `text`，影响输出结构）  
-- `max_tokens`（受模型最大上下文限制，具体值见对应模型文档）  
-参数合法性校验由服务端执行，非法值将返回 `400 Bad Request` 并附错误码。
+- `model`：必需，值必须在 [模型列表](../../raw/model-user-guide/support/model-studio-model-list.md) 公布的有效模型 ID 范围内，大小写敏感，非法值将返回 `400 Bad Request`。
+- `enable_search` / `enable_retrieval`：仅对明确标注“支持检索增强”的模型生效（见 [服务支持](../../raw/model-user-guide/support.md) 的附录说明），默认关闭。
+- `stream`：流式响应仅在模型原生支持且服务端已启用时可用；若模型不支持但强制设为 `true`，将静默降级为非流式并返回警告头 `X-Warning: stream-not-supported`。
 
 ## 使用方式
 
-1. 控制台：进入「模型服务」→「模型列表」，点击目标模型查看实时支持状态与功能开关；  
-2. API：通过 `GET /v1/models` 获取全部支持模型元数据，或 `GET /v1/models/{model}` 查询单个模型详情；  
-3. SDK：使用 `dashscope` Python SDK 时，调用 `dashscope.get_model_list()` 或实例化 `Generation` 时传入合法 `model` 参数即可触发支持校验。所有行为均遵循 [售后说明](../../raw/model-user-guide/support/after-sales-service-scope.md) 中定义的服务等级协议（SLA）。
+- 所有支持模型均可通过标准 OpenAI 兼容 API（`POST /v1/chat/completions`）调用，无需额外开通权限，但需确保账号已开通百炼服务并完成实名认证。
+- 售后问题须通过控制台「工单系统」提交，选择对应模型与问题类型，并附上请求 ID（`X-Request-ID`）及完整错误响应体；参考 [售后说明](../../raw/model-user-guide/support/after-sales-service-scope.md) 明确可受理范围。
+- 协议约束（如数据隐私、商用许可、输出内容责任）请严格遵循 [相关协议](../../raw/model-user-guide/support/related-agreements.md)，尤其注意免费试用模型与按量付费模型的条款差异。
 
 ## 限制和注意事项
 
-- 免费试用额度仅适用于首次开通的账号，且不覆盖商用场景，详细范围见 [售后说明](../../raw/model-user-guide/support/after-sales-service-scope.md)；  
-- 某些模型（如 Qwen-VL-Pro）需单独申请权限，未授权调用将返回 `403 Forbidden`；  
-- 流式响应（`stream=true`）不支持所有模型，是否可用请严格参照 [模型列表](../../raw/model-user-guide/support/model-studio-model-list.md) 中的 `streaming_supported` 字段；  
-- 跨区域调用（如华东1调用华北2部署的模型）可能触发额外延迟或失败，建议就近部署应用。
+- 单次请求最大输入 token 数受模型本身限制（如 Qwen3-32B 最高支持 32768），超出将被截断并返回 `400` 错误；具体数值请查阅 [模型列表](../../raw/model-user-guide/support/model-studio-model-list.md) 中对应模型的“Max Context Length”字段。
+- 异步任务最长保留结果 7 天，超期自动清理；此策略与 [售后说明](../../raw/model-user-guide/support/after-sales-service-scope.md) 中“历史记录查询时效”一致，但不适用于调试日志留存。
+> **注意**：原始文档中 [服务支持](../../raw/model-user-guide/support.md) 提到“所有模型默认支持 JSON Schema 输出”，但最新 [模型列表](../../raw/model-user-guide/support/model-studio-model-list.md) 显示仅 Qwen3-72B-Instruct 及以上版本明确标注支持 `response_format: { "type": "json_object" }`，其余模型实际调用将忽略该参数。请以模型列表为准。
 
 ## 来源文档
 

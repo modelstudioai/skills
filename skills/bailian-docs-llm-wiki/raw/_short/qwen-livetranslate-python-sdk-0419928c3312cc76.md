@@ -92,8 +92,6 @@
     
     指定要使用的模型名称，推荐使用`qwen3.5-livetranslate-flash-realtime`。
     
-    > `qwen3-livetranslate-flash-realtime`为旧版模型。
-    
     `callback`
     
     `回调接口（OmniRealtimeCallback）`
@@ -175,8 +173,6 @@
     默认值：
     
     -   Qwen3.5-LiveTranslate-Flash-Realtime默认音色为： `Tina`
-        
-    -   Qwen3-LiveTranslate-Flash-Realtime默认音色为： `Cherry`
         
     
     可选值：参见[支持的音色](https://help.aliyun.com/zh/model-studio/qwen3-5-livetranslate-flash-realtime#0a5bde7593gdk)。

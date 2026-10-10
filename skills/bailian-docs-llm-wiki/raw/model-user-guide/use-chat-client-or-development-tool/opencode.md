@@ -269,14 +269,8 @@ opencode -v
         "deepseek-v4-pro-0813": {
           "name": "DeepSeek V4 Pro 0813"
         },
-        "deepseek-v4-flash": {
-          "name": "DeepSeek V4 Flash"
-        },
         "deepseek-v4-flash-0731": {
           "name": "DeepSeek V4 Flash 0731"
-        },
-        "deepseek-v3.2": {
-          "name": "DeepSeek V3.2"
         },
         "kimi-k2.7-code": {
           "name": "Kimi K2.7 Code",
@@ -417,15 +411,6 @@ opencode -v
             }
           }
         },
-        "qwen3-max-2026-01-23": {
-          "name": "Qwen3 Max 0123"
-        },
-        "qwen3-coder-next": {
-          "name": "Qwen3 Coder Next"
-        },
-        "qwen3-coder-plus": {
-          "name": "Qwen3 Coder Plus"
-        },
         "MiniMax-M2.5": {
           "name": "MiniMax M2.5"
         },
@@ -437,9 +422,6 @@ opencode -v
               "budgetTokens": 1024
             }
           }
-        },
-        "glm-4.7": {
-          "name": "GLM-4.7"
         },
         "kimi-k2.5": {
           "name": "Kimi K2.5",
@@ -516,9 +498,6 @@ opencode -v
               "budgetTokens": 8192
             }
           }
-        },
-        "deepseek-v3.2": {
-          "name": "DeepSeek V3.2"
         }
       }
     }

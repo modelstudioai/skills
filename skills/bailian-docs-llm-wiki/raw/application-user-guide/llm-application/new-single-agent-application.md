@@ -156,9 +156,9 @@
 
 ### 知识库
 
-知识库使智能体能够查询外部信息，并将检索到的内容作为生成答案的依据。这种主动获取知识的方式，在处理私有知识或垂直领域问答时，能提升回答的准确率并有效减少内容幻觉。知识库的创建与管理，请参见[创建和使用知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)。
+知识库使智能体能够查询外部信息，并将检索到的内容作为生成答案的依据。这种主动获取知识的方式，在处理私有知识或垂直领域问答时，能提升回答的准确率并有效减少内容幻觉。知识库的创建与管理，请参见[创建和使用知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
 
-新版智能体通过关联知识检索服务使用知识库。一个知识检索服务可以包含一个或多个知识库，支持单知识库检索或多知识库联合检索；一个应用同时只关联一个知识检索服务，关联其他服务会替换已关联的服务。关联前，请确认已创建知识检索服务，为服务添加所需知识库，并完成发布，参见[知识检索](raw/application-user-guide/knowledge-base/service/rag-knowledge-retrieval.md)。
+新版智能体通过关联知识检索服务使用知识库。一个知识检索服务可以包含一个或多个知识库，支持单知识库检索或多知识库联合检索；一个应用同时只关联一个知识检索服务，关联其他服务会替换已关联的服务。关联前，请确认已创建知识检索服务，为服务添加所需知识库，并完成发布，参见[知识检索](raw/application-user-guide/knowledge-base/rag-knowledge-retrieval.md)。
 
 **说明**在[回复](https://help.aliyun.com/zh/model-studio/new-single-agent-application#fc6449f54ay5r)中开启**展示回答来源**可以展示知识来源和源文件地址。
 
@@ -231,7 +231,7 @@
 
 **说明**旧版知识库以 MCP 工具形式接入，在新版百炼页面位于**工具 → MCP 服务**下。如需添加旧版知识库，请前往[旧版百炼页面](https://bailian-legacy.console.aliyun.com/cn-beijing/flow-agent/app-center/?tab=app#/app-center)操作。
 
-新版智能体支持通过标签来限定知识库的查询范围。通过为知识库文件设置标签，并在系统提示词（Prompt）中定义使用规则，可以引导智能体根据用户意图，在更小的、更精准的文件范围内进行检索，从而显著提升回答的准确性和相关性。详情请参见[新版智能体知识库标签过滤](raw/application-user-guide/knowledge-base/best-practices/rag-optimization.md)。
+新版智能体支持通过标签来限定知识库的查询范围。通过为知识库文件设置标签，并在系统提示词（Prompt）中定义使用规则，可以引导智能体根据用户意图，在更小的、更精准的文件范围内进行检索，从而显著提升回答的准确性和相关性。详情请参见[新版智能体知识库标签过滤](raw/application-user-guide/knowledge-base/rag-optimization.md)。
 
 ### MCP
 

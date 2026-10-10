@@ -194,8 +194,6 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 
 **各模型指令规格**：
 
-**说明**指令参数名因模型系列而异：CosyVoice 使用 `instruction`，Qwen-TTS 使用 `instructions`。跨模型迁移时请注意修改参数名。
-
 #### Qwen-Audio-TTS
 
 **支持的模型**：`qwen-audio-3.1-tts-flash`、`qwen-audio-3.0-tts-plus`、`qwen-audio-3.0-tts-flash`
@@ -239,16 +237,6 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
     -   系统音色：中文。
 
 **指令文本长度限制**：不超过 100 字符。汉字（包括简体/繁体汉字、日文汉字和韩文汉字）按 2 个字符计算，其他字符（如标点符号、字母、数字、日韩文假名/谚文等）按 1 个字符计算。
-
-#### Qwen-TTS
-
-**支持的模型**：仅支持Qwen3-TTS-Instruct-Flash 系列模型。
-
-**使用方式**：通过 `instructions` 参数传入指令内容。
-
-**指令文本支持的语言**：仅支持中文和英文。
-
-**指令文本长度限制**：不超过 1,600 Token。
 
 **适用场景**：
 
@@ -360,13 +348,9 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }'
 ```
 
-**说明**此处指令参数名 `instruction` 为 CosyVoice 专用；Qwen-TTS 的指令参数名为 `instructions`，请勿混用。
-
 #### Qwen-TTS
 
 -   **系统音色**：使用支持方言的系统音色，参见[Qwen-TTS音色列表](raw/model-user-guide/model-experience/speech-synthesis/tts-voice-list/qwen-tts-voice-list.md)。
--   **声音复刻音色**：不支持方言。
--   **声音设计音色**：不支持方言。
 
 **具体支持哪些方言**：参见[Qwen3-TTS](https://help.aliyun.com/zh/model-studio/tts-model#tts08_q3tts02)中各模型“支持的语言”。
 
@@ -538,11 +522,7 @@ ASMR 轻柔耳语
     
 -   **Qwen-TTS**：
     
-    -   **Qwen3-TTS-Instruct-Flash**：qwen3-tts-instruct-flash（稳定版，当前等同 qwen3-tts-instruct-flash-2026-01-26）、qwen3-tts-instruct-flash-2026-01-26（最新快照版）
-    -   **Qwen3-TTS-VD：**qwen3-tts-vd-2026-01-26（最新快照版）
-    -   **Qwen3-TTS-VC：**qwen3-tts-vc-2026-01-22（最新快照版）
-    -   **Qwen3-TTS-Flash**：qwen3-tts-flash（稳定版，当前等同 qwen3-tts-flash-2025-11-27）、qwen3-tts-flash-2025-11-27、qwen3-tts-flash-2025-09-18
-    -   **Qwen-TTS**：qwen-tts（稳定版，当前等同 qwen-tts-2025-04-10）、qwen-tts-latest（最新版，当前等同 qwen-tts-2025-05-22）、qwen-tts-2025-05-22（快照版）、qwen-tts-2025-04-10（快照版）
+    -   **Qwen3-TTS-Flash**：qwen3-tts-flash（稳定版）
 -   **MiniMax**：MiniMax/speech-2.8-hd、MiniMax/speech-02-hd、MiniMax/speech-2.8-turbo、MiniMax/speech-02-turbo
     
 
@@ -552,10 +532,7 @@ ASMR 轻柔耳语
 
 -   **Qwen-TTS**：
     
-    -   **Qwen3-TTS-Instruct-Flash**：qwen3-tts-instruct-flash（稳定版，当前等同 qwen3-tts-instruct-flash-2026-01-26）、qwen3-tts-instruct-flash-2026-01-26（最新快照版）
-    -   **Qwen3-TTS-VD：**qwen3-tts-vd-2026-01-26（最新快照版）
-    -   **Qwen3-TTS-VC：**qwen3-tts-vc-2026-01-22（最新快照版）
-    -   **Qwen3-TTS-Flash**：qwen3-tts-flash（稳定版，当前等同 qwen3-tts-flash-2025-11-27）、qwen3-tts-flash-2025-11-27、qwen3-tts-flash-2025-09-18
+    -   **Qwen3-TTS-Flash**：qwen3-tts-flash（稳定版）
 
 ## 支持的系统音色
 

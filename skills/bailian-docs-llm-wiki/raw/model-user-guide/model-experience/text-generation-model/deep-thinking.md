@@ -81,7 +81,7 @@
 -   **仅思考模式**：模型始终在回复前进行思考，无法关闭。除无需设置 `enable_thinking` 参数外，请求格式与混合思考模式一致。
     
 
-思考内容通过`reasoning_content`字段返回，回复内容通过`content`字段返回。深度思考需要额外推理时间，本文示例默认采用流式调用（推荐，可实时查看思考过程、避免长时间等待）。商业版深度思考模型同时支持非流式（同步）输出，用法及注意事项参见下方**常见问题**；部分模型（如 qwen3-235b-a22b、qwen3-32b 等开源版）仅支持流式输出，非流式调用会报错。
+思考内容通过`reasoning_content`字段返回，回复内容通过`content`字段返回。深度思考需要额外推理时间，本文示例默认采用流式调用（推荐，可实时查看思考过程、避免长时间等待）。商业版深度思考模型同时支持非流式（同步）输出，用法及注意事项参见下方**常见问题**；部分模型（如 qwen3.5-122b-a10b、qwen3.5-27b 等开源版）仅支持流式输出，非流式调用会报错。
 
 ## 支持的模型
 
@@ -109,8 +109,6 @@
 
 #### Qwen3.6
 
-**千问3.6 Max系列**（混合思考模式，**默认开启思考模式**）：qwen3.6-max-preview
-
 **千问3.6 Plus系列**（混合思考模式，**默认开启思考模式**）：qwen3.6-plus、qwen3.6-plus-2026-04-02
 
 **千问3.6 Flash系列**（混合思考模式，**默认开启思考模式**）：qwen3.6-flash、qwen3.6-flash-2026-04-16
@@ -130,7 +128,7 @@
 -   阿里云百炼部署
     
     -   混合思考模式，默认关闭思考模式：kimi-k2.6、kimi-k2.5
-    -   仅思考模式：kimi-k3、kimi-k2.7-code、kimi-k2-thinking
+    -   仅思考模式：kimi-k3、kimi-k2.7-code
 -   月之暗面部署
     
     -   混合思考模式，默认开启思考模式：kimi/kimi-k2.6、kimi/kimi-k2.5
@@ -138,26 +136,15 @@
 
 #### Qwen3
 
--   **商业版**
-    -   **千问Max系列**：qwen3-max、qwen3-max-2026-01-23、qwen3-max-preview（混合思考模式，默认不开启思考模式）
-    -   **千问Plus系列**（混合思考模式，默认不开启思考模式）：qwen-plus、qwen-plus-latest、qwen-plus-2025-04-28 及之后的快照版模型
-    -   **千问Flash系列**（混合思考模式，默认不开启思考模式）：qwen-flash、qwen-flash-2025-07-28 及之后的快照版模型
-    -   **千问Turbo系列**（混合思考模式，默认不开启思考模式）：qwen-turbo 及之后的快照版模型
--   **开源版**
-    -   混合思考模式，默认开启思考模式：qwen3-235b-a22b、qwen3-32b、qwen3-30b-a3b、qwen3-14b、qwen3-8b
-    -   仅思考模式：qwen3-next-80b-a3b-thinking、qwen3-235b-a22b-thinking-2507、qwen3-30b-a3b-thinking-2507
-
-#### QwQ （基于 Qwen2.5）
-
-仅思考模式：qwq-plus
+-   **千问Plus系列**（混合思考模式，默认不开启思考模式）：qwen-plus、qwen-plus-latest、qwen-plus-2025-04-28 及之后的快照版模型
+-   **千问Flash系列**（混合思考模式，默认不开启思考模式）：qwen-flash、qwen-flash-2025-07-28 及之后的快照版模型
 
 #### DeepSeek
 
 -   阿里云百炼部署
     
-    -   混合思考模式，默认开启思考模式：deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-flash
-    -   混合思考模式，默认不开启思考模式：deepseek-v3.2、deepseek-v3.2-exp、deepseek-v3.1
-    -   仅思考模式：deepseek-r1、deepseek-r1-0528、deepseek-r1蒸馏模型
+    -   混合思考模式，默认开启思考模式：deepseek-v4.1-flash、deepseek-v4-pro
+    -   仅思考模式：deepseek-r1蒸馏模型
 -   硅基流动部署
     
     -   混合思考模式，默认不开启思考模式：siliconflow/deepseek-v3.2、siliconflow/deepseek-v3.1-terminus
@@ -170,13 +157,13 @@
 #### GLM
 
 -   仅思考模式：glm-5.3
--   混合思考模式，默认开启思考模式：glm-5.2、glm-5.2-fast-preview、glm-5.1、glm-5、glm-4.7、glm-4.6、glm-4.5、glm-4.5-air
+-   混合思考模式，默认开启思考模式：glm-5.2、glm-5.2-fast-preview、glm-5.1、glm-5
 
 #### MiniMax
 
 -   阿里云百炼部署
     
-    -   仅思考模式：MiniMax-M2.5、MiniMax-M2.1
+    -   仅思考模式：MiniMax-M2.5
 -   稀宇科技部署
     
     -   混合思考模式：MiniMax/MiniMax-M3
@@ -2090,7 +2077,7 @@ Q：怎么关闭思考模式？
 是否能关闭思考模式取决于所用模型：
 
 -   混合思考模式模型（如 qwen3.6-plus、deepseek-v4-pro）：将 `enable_thinking` 设为 `false` 即可关闭；
--   仅思考模式模型（如 qwen3-235b-a22b-thinking-2507、deepseek-r1）：无法关闭。
+-   仅思考模式模型（如 glm-5.3、kimi-k3）：无法关闭。
 
 `enable_thinking` 是百炼的扩展参数，不属于 OpenAI 标准字段。使用 OpenAI Java SDK 时，`ChatCompletionCreateParams` 不原生支持该字段，需通过 `extraBody` 方法传入：
 
@@ -2133,7 +2120,7 @@ qwen3.7-plus 属于混合思考模式模型，且默认开启思考模式。思�
 
 Q：如何以非流式（同步）方式调用深度思考模型？
 
-本文示例默认采用流式输出（推荐，可实时查看思考过程、避免长时间等待）。商业版深度思考模型（如 qwen-plus、qwen3-max、qwen-flash 等）也支持非流式（同步）输出，一次性返回完整的思考过程与回复。
+本文示例默认采用流式输出（推荐，可实时查看思考过程、避免长时间等待）。商业版深度思考模型（如 qwen-plus、qwen-flash 等）也支持非流式（同步）输出，一次性返回完整的思考过程与回复。
 
 > 将流式示例改为非流式时，请同步修改**结果解析代码**：非流式调用返回的是完整的响应对象（`completion`），**不能**再像流式示例那样通过 `for chunk in completion` 迭代（否则会报错 `'tuple' object has no attribute 'choices'`），而应直接读取 `completion.choices[0].message.reasoning_content`（思考过程）与 `completion.choices[0].message.content`（回复内容）。此外，`stream=False` 时不能设置 `stream_options` 参数。
 
@@ -2166,7 +2153,7 @@ print("\n" + "=" * 20 + "完整回复" + "=" * 20 + "\n")
 print(message.content)
 ```
 
-> 部分模型（如 qwen3-235b-a22b、qwen3-32b 等开源版）仅支持流式输出，非流式调用会报错 `parameter.enable_thinking only support stream call`，此类模型请使用流式调用。
+> 部分模型（如 qwen3.5-122b-a10b、qwen3.5-27b 等开源版）仅支持流式输出，非流式调用会报错 `parameter.enable_thinking only support stream call`，此类模型请使用流式调用。
 
 Q： 免费额度 用完后如何购买 Token？
 
@@ -2280,7 +2267,7 @@ Q：使用第三方客户端调用深度思考模型时，输出思考标签后�
 
 您也可以通过 DashScope API 直接调用模型，验证思考功能是否正常工作。
 
-Q：使用视觉模型（如 qwen-vl-plus）进行图片安全判断时，模型结论与内容描述矛盾怎么办？
+Q：使用视觉模型（如 qwen3-vl-plus）进行图片安全判断时，模型结论与内容描述矛盾怎么办？
 
 视觉模型输出的安全判断是模型生成文本的一部分，并非独立的内容审核裁决。该结论可能随模型版本和所在区域不同而变化，也可能与同一次响应中的内容描述不一致，因此不建议将其作为内容合规的唯一依据。
 

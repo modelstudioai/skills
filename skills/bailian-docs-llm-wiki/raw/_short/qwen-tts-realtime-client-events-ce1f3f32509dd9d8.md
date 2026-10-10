@@ -24,15 +24,7 @@
 
 **voice**`string`**（必选）**
 
-语音合成所使用的音色。参见[支持的音色](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#bac280ddf5a1u)。
-
-支持系统音色和专属音色：
-
--   **系统音色**：仅限千问3-TTS-Instruct-Flash-Realtime、千问3-TTS-Flash-Realtime和千问-TTS-Realtime系列模型。音色效果请参见：[支持的音色](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#bac280ddf5a1u)。
-    
--   **专属音色**
-    -   [声音复刻（Qwen）](https://help.aliyun.com/zh/model-studio/qwen-tts-voice-cloning)功能定制的音色：仅限千问3-TTS-VC-Realtime系列模型
-    -   [声音设计（Qwen）](https://help.aliyun.com/zh/model-studio/qwen-tts-voice-design)功能定制的音色：仅限千问3-TTS-VD-Realtime系列模型
+语音合成所使用的系统音色，参见[支持的音色](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#bac280ddf5a1u)。
 
 **mode**`string`（可选）
 
@@ -71,8 +63,6 @@
 -   `mp3`
 -   `opus`
 
-千问-TTS-Realtime（参见[支持的模型](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)）仅支持`pcm`。
-
 **sample\_rate**`integer`（可选）
 
 模型输出音频的采样率（Hz）。
@@ -84,8 +74,6 @@
 -   24000（默认）
 -   48000
 
-千问-TTS-Realtime（参见[支持的模型](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)）仅支持24000。
-
 **speech\_rate**`float`（可选）
 
 音频的语速。1.0为正常语速，小于1.0为慢速，大于1.0为快速。
@@ -93,8 +81,6 @@
 默认值：1.0。
 
 取值范围：\[0.5, 2.0\]。
-
-千问-TTS-Realtime（参见[支持的模型](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)）不支持该参数。
 
 **volume**`integer`（可选）
 
@@ -104,8 +90,6 @@
 
 取值范围：\[0, 100\]。
 
-千问-TTS-Realtime（参见[支持的模型](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)）不支持该参数。
-
 **pitch\_rate**`float`（可选）
 
 合成音频的语调。
@@ -114,8 +98,6 @@
 
 取值范围：\[0.5, 2.0\]。
 
-千问-TTS-Realtime（参见[支持的模型](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)）不支持该参数。
-
 **bit\_rate**`integer`（可选）
 
 指定音频的[码率](https://opus-codec.org/)（kbps）。码率越大，音质越好，音频文件体积越大。仅在音频格式（`response_format`）为`opus`时可用。
@@ -123,34 +105,6 @@
 默认值：128。
 
 取值范围：\[6, 510\]。
-
-千问-TTS-Realtime（参见[支持的模型](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)）不支持该参数。
-
-**instructions**`string`（可选）
-
-设置指令，参见[指令控制](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#12884a10929p9)。
-
-默认值：无默认值，不设置不生效。
-
-长度限制：长度不得超过 1600 Token。
-
-支持语言：仅支持中文和英文。
-
-适用范围：该功能仅适用于千问3-TTS-Instruct-Flash-Realtime系列模型。
-
-**optimize\_instructions**`boolean`（可选）
-
-是否对 `instructions` 进行优化，以提升语音合成的自然度和表现力。
-
-默认值：false。
-
-行为说明：当设置为 true 时，系统将对 `instructions` 的内容进行语义增强与重写，生成更适合语音合成的内部指令。
-
-适用场景：推荐在追求高品质、精细化语音表达的场景下开启。
-
-依赖关系：此参数依赖于 `instructions` 参数被设置。如果 `instructions` 为空，此参数不生效。
-
-适用范围：该功能仅适用于千问3-TTS-Instruct-Flash-Realtime系列模型。
 
 ```
 {
@@ -161,9 +115,7 @@
         "mode": "server_commit",
         "language_type": "Chinese",
         "response_format": "pcm",
-        "sample_rate": 24000,
-        "instructions": "",
-        "optimize_instructions": false
+        "sample_rate": 24000
     }
 }
 ```

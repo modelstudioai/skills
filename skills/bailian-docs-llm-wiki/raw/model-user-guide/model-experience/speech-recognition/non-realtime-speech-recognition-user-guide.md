@@ -951,11 +951,11 @@ Qwen3-ASR-Flash-Filetrans
 -   **Qwen-Audio-3.0-ASR-Flash-Filetrans：**qwen-audio-3.0-asr-flash-filetrans
 -   **Qwen-Audio-3.1-ASR-Flash**：qwen-audio-3.1-asr-flash
 -   **Qwen-Audio-3.0-ASR-Flash**：qwen-audio-3.0-asr-flash
--   **Fun-ASR**：fun-asr（稳定版，当前等同fun-asr-2025-11-07）、fun-asr-2025-11-07（快照版）、fun-asr-2025-08-25（快照版）、fun-asr-mtl（稳定版，当前等同fun-asr-mtl-2025-08-25）、fun-asr-mtl-2025-08-25（快照版）
+-   **Fun-ASR**：fun-asr（稳定版）
 -   **Fun-ASR-Flash**：fun-asr-flash-2026-06-15
--   **Qwen3-ASR-Flash-Filetrans：**qwen3-asr-flash-filetrans（稳定版，当前等同qwen3-asr-flash-filetrans-2025-11-17）、qwen3-asr-flash-filetrans-2025-11-17（快照版）
--   **Qwen3-ASR-Flash：**qwen3-asr-flash（稳定版，当前等同qwen3-asr-flash-2025-09-08）、qwen3-asr-flash-2026-02-10（最新快照版）、qwen3-asr-flash-2025-09-08（快照版）
--   **Paraformer**：paraformer-v2、paraformer-8k-v2、paraformer-v1、paraformer-8k-v1、paraformer-mtl-v1
+-   **Qwen3-ASR-Flash-Filetrans：**qwen3-asr-flash-filetrans（稳定版）
+-   **Qwen3-ASR-Flash：**qwen3-asr-flash（稳定版）
+-   **Paraformer**：paraformer-v2、paraformer-8k-v2
 
 #### 新加坡
 
@@ -965,16 +965,16 @@ Qwen3-ASR-Flash-Filetrans
 -   **Qwen-Audio-3.0-ASR-Flash-Filetrans：**qwen-audio-3.0-asr-flash-filetrans
 -   **Qwen-Audio-3.1-ASR-Flash**：qwen-audio-3.1-asr-flash
 -   **Qwen-Audio-3.0-ASR-Flash**：qwen-audio-3.0-asr-flash
--   **Fun-ASR**：fun-asr（稳定版，当前等同fun-asr-2025-11-07）、fun-asr-2025-11-07（快照版）、fun-asr-2025-08-25（快照版）、fun-asr-mtl（稳定版，当前等同fun-asr-mtl-2025-08-25）、fun-asr-mtl-2025-08-25（快照版）
+-   **Fun-ASR**：fun-asr（稳定版）
 -   **Fun-ASR-Flash**：fun-asr-flash-2026-06-15
--   **Qwen3-ASR-Flash-Filetrans：**qwen3-asr-flash-filetrans（稳定版，当前等同qwen3-asr-flash-filetrans-2025-11-17）、qwen3-asr-flash-filetrans-2025-11-17（快照版）
--   **Qwen3-ASR-Flash：**qwen3-asr-flash（稳定版，当前等同qwen3-asr-flash-2025-09-08）、qwen3-asr-flash-2026-02-10（最新快照版）、qwen3-asr-flash-2025-09-08（快照版）
+-   **Qwen3-ASR-Flash-Filetrans：**qwen3-asr-flash-filetrans（稳定版）
+-   **Qwen3-ASR-Flash：**qwen3-asr-flash（稳定版）
 
 #### 美国（弗吉尼亚）
 
 调用以下模型时，请选择美国地域的[API Key](https://bailian.console.aliyun.com/us-east-1/model/settings/api-key)：
 
-**Qwen3-ASR-Flash：**qwen3-asr-flash（稳定版，当前等同qwen3-asr-flash-2025-09-08）、qwen3-asr-flash-2025-09-08（快照版）
+**Qwen3-ASR-Flash：**qwen3-asr-flash（稳定版）
 
 ## API参考
 

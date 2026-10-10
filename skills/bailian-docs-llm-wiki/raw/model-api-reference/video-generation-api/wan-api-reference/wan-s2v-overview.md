@@ -115,7 +115,7 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/86ec
 
 **数字人wan2.2-s2v**
 
-**悦动人像EMO**（[查看](raw/model-api-reference/video-generation-api/portrait-animation-api-reference/emo-quick-start.md)）
+**悦动人像EMO**（[查看](https://help.aliyun.com/zh/model-studio/emo-quick-start)）
 
 **模型简介**
 

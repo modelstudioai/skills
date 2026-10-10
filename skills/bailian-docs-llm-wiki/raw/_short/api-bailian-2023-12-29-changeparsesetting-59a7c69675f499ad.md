@@ -201,16 +201,12 @@ string
 
 **枚举值：**
 
--   qwen-vl-max :
+-   qwen3-vl-plus :
     
-    qwen-vl-max
-    
--   qwen-vl-plus :
-    
-    qwen-vl-plus
+    qwen3-vl-plus
     
 
-qwen-vl-max
+qwen3-vl-plus
 
 modelPrompt
 

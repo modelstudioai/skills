@@ -35,8 +35,8 @@
     -   Qwen3开源系列（非思考模式）
     -   Qwen2.5开源系列
     -   千问Math：Qwen-Math系列、Qwen2.5-Math系列
-    -   DeepSeek（硅基流动部署）：siliconflow/deepseek-v3.2（非思考模式）、siliconflow/deepseek-v3.1-terminus（非思考模式）、siliconflow/deepseek-v3-0324
-    -   DeepSeek（快手万擎部署）：vanchin/deepseek-v3.2-think、vanchin/deepseek-r1、vanchin/deepseek-v3
+    -   DeepSeek（硅基流动部署）：siliconflow/deepseek-v3.1-terminus（非思考模式）、siliconflow/deepseek-v3-0324
+    -   DeepSeek（快手万擎部署）：vanchin/deepseek-v3.2-think
 -   **多模态模型**
     -   千问VL：Qwen3-VL-Plus系列、Qwen3-VL-Flash系列、Qwen-VL-Max系列、Qwen-VL-Plus系列
     -   Qwen3-VL 开源系列（非思考模式）

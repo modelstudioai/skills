@@ -1661,4 +1661,4 @@ InternalError
 
 ## 常见问题
 
-图像模型的通用问题请参见[常见问题](raw/model-api-reference/image-generation/image-faq.md)文档，包括以下内容：模型计费与限流规则、接口高频报错解决方法等。
+图像模型的通用问题请参见[常见问题](https://help.aliyun.com/zh/model-studio/image-faq)文档，包括以下内容：模型计费与限流规则、接口高频报错解决方法等。

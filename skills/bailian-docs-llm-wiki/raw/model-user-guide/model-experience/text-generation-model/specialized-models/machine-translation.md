@@ -157,20 +157,6 @@ qwen-mt-flash
 
 支持
 
-> qwen-mt-turbo
-
-turbo模型后续不再更新，建议选用效果与功能均更优的flash模型
-
-良好
-
-较快
-
-较低
-
-92种
-
-不支持
-
 qwen-mt-lite
 
 实时聊天、弹幕翻译等对延迟敏感的简单场景
@@ -381,7 +367,7 @@ I didn't laugh after watching this video.
 
 ## 流式输出
 
-流式输出可实时返回翻译内容，减少用户等待时间。`qwen-mt-flash` 和 `qwen-mt-lite` 支持增量流式输出，通过 `incremental_output` 参数开启，每次仅返回新生成的内容。`qwen-mt-plus` 和 `qwen-mt-turbo` 仅支持非增量流式输出，每次返回当前已生成的完整序列。详情请参见[流式输出](raw/model-user-guide/model-experience/text-generation-model/stream.md)。
+流式输出可实时返回翻译内容，减少用户等待时间。`qwen-mt-flash` 和 `qwen-mt-lite` 支持增量流式输出，通过 `incremental_output` 参数开启，每次仅返回新生成的内容。`qwen-mt-plus` 仅支持非增量流式输出，每次返回当前已生成的完整序列。详情请参见[流式输出](raw/model-user-guide/model-experience/text-generation-model/stream.md)。
 
 #### OpenAI兼容
 
@@ -583,7 +569,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 I didn't laugh after watching this video.
 ```
 
-> qwen-mt-plus、qwen-mt-turbo模型不支持增量式流式输出。
+> qwen-mt-plus模型不支持增量式流式输出。
 
 ## 提升翻译效果
 
@@ -2405,4 +2391,4 @@ fa
 
 ## API参考
 
-Qwen-MT 模型的输入与输出参数请参考[Qwen-MT 翻译模型](raw/model-api-reference/qwen-mt-translation-models/qwen-mt-api.md)。
+Qwen-MT 模型的输入与输出参数请参考[Qwen-MT 翻译模型](raw/model-api-reference/more-models/qwen-mt-api.md)。

@@ -53,7 +53,7 @@ String
 
 是
 
-模型 ID，不能为空。如 `qwen-plus`、`qwen3-max`。
+模型 ID，不能为空。如 `qwen-plus`、`qwen3.7-plus`。
 
 models\[\].operation\_type
 

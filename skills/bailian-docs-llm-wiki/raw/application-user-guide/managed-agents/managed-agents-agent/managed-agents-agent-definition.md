@@ -223,7 +223,7 @@ deepseek-v4-pro
 
 DeepSeek
 
-deepseek-v4-flash
+deepseek-v4-flash-0731
 
 推理模型、文本生成
 

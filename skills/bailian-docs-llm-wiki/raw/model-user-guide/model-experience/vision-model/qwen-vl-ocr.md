@@ -59,10 +59,10 @@ Qwen-OCR 是专为文字提取设计的视觉理解模型，支持从扫描文�
 Qwen-OCR 提供以下模型，请根据业务需求选择：
 
 -   **Qwen3.5-OCR**：基于 Qwen3.5 架构，在文档解析、文字定位、关键信息提取等方面全面升级。支持多轮对话、PDF 文档解析。在业务卡证（身份证、驾驶证等）信息抽取场景效果显著提升，支持的卡证种类请参见[支持的证照与票据类型](https://help.aliyun.com/zh/model-studio/qwen-vl-ocr#d7bedd5c84156)。包括 `qwen3.5-ocr` 模型。
--   **Qwen-VL-OCR**：基于 Qwen3-VL 架构，支持文档解析、文字定位（高精识别）、信息抽取、表格解析、公式识别、通用文字识别、多语言识别等内置任务，支持图像旋转矫正。包括 `qwen-vl-ocr`（稳定版）、`qwen-vl-ocr-latest`（最新版）、`qwen-vl-ocr-2025-11-20` 和 `qwen-vl-ocr-2025-08-28` 模型。
--   **早期版本（不推荐）**：功能和效果均不及新版本，建议迁移至 `qwen3.5-ocr`。包括 `qwen-vl-ocr-2025-04-13` 和 `qwen-vl-ocr-2024-10-28` 模型。
+-   **Qwen-VL-OCR**：基于 Qwen3-VL 架构，支持文档解析、文字定位（高精识别）、信息抽取、表格解析、公式识别、通用文字识别、多语言识别等内置任务，支持图像旋转矫正。包括 `qwen-vl-ocr`（稳定版）和 `qwen-vl-ocr-2025-11-20` 模型。
+-   **早期版本（不推荐）**：功能和效果均不及新版本，建议迁移至 `qwen3.5-ocr`。包括 `qwen-vl-ocr-2024-10-28` 模型。
 
-> `qwen-vl-ocr、qwen-vl-ocr-2025-04-13、qwen-vl-ocr-2025-08-28` 模型的 `max_tokens` 参数（最大输出长度）默认为 4096。如需将该参数调高至 4097~8192 范围，请联系商务经理进行申请，并提供：主账号 ID、图像类型（文档图、电商图、合同等）、模型名称、预计QPS和每日请求总量，以及输出长度超过 4096 的请求占比。
+> `qwen-vl-ocr` 模型的 `max_tokens` 参数（最大输出长度）默认为 4096。如需将该参数调高至 4097~8192 范围，请联系商务经理进行申请，并提供：主账号 ID、图像类型（文档图、电商图、合同等）、模型名称、预计QPS和每日请求总量，以及输出长度超过 4096 的请求占比。
 
 **在线体验：**访问[阿里云百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)，在页面右上角选择目标地域，进入[视觉模型](https://bailian.console.aliyun.com/model/experience/vision)页面选择千问OCR 模型进行体验。
 
@@ -531,7 +531,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 #### 高精识别
 
-高精识别任务建议使用 `qwen-vl-ocr-2025-08-28` 及以后版本或最新版模型，支持：
+高精识别任务建议使用 `qwen-vl-ocr-2025-11-20` 及以后版本模型，支持：
 
 -   文本内容识别（提取文字）
 -   文本位置检测（定位文本行并输出坐标）
@@ -2950,7 +2950,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
             
         -   `token_pixels`表示每`Token`对应的像素数
             
-            -   `qwen3.5-ocr`、`qwen-vl-ocr`、`qwen-vl-ocr-2025-11-20`、`qwen-vl-ocr-latest`固定为`32*32`（即`1024`）
+            -   `qwen3.5-ocr`、`qwen-vl-ocr`、`qwen-vl-ocr-2025-11-20`固定为`32*32`（即`1024`）
             -   其他模型固定为`28*28`（即`784`）。
         
         以下代码演示模型内部的图像缩放逻辑，可用于估算 token 用量，实际计费以API响应为准。

@@ -310,10 +310,6 @@ Chat Completions、Responses
     -   输入限制：150 秒以内音视频
     -   思考模式：支持通过 `enable_thinking` 开启或关闭思考
     -   输入模态：仅支持文本与单一其他模态（图片、音频或视频）的组合输入
--   **Qwen-Omni-Turbo 系列**
-    
-    已停止更新。文本分析场景可迁移至 Qwen3.8-Omni-Flash；需要音频输出时可选择 Qwen3.5-Omni。
-    
 
 **模型系列**
 
@@ -401,22 +397,6 @@ Qwen3-Omni-Flash
 
 > 因版本而异
 
-Qwen-Omni-Turbo
-
-**已停止更新**
-
-无
-
-不支持
-
-不支持
-
-中文、英语
-
-中文、英语
-
-4 种
-
 > 模型名称、上下文长度、价格及快照版本请参见百炼控制台；并发限流规则请参见 [限流](raw/model-user-guide/get-started-with-models/rate-limit.md) 。
 
 ## 模型效果
@@ -499,7 +479,7 @@ Qwen-Omni-Turbo
 
 ### 流式输出
 
-以下 Qwen3.5-Omni、Qwen3-Omni-Flash 和 Qwen-Omni-Turbo 示例必须设置 `stream=True`。
+以下 Qwen3.5-Omni、Qwen3-Omni-Flash 示例必须设置 `stream=True`。
 
 ### Responses：音频和视频输入
 
@@ -1387,14 +1367,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
     
     -   Qwen3.8-Omni-Flash：最多可传入 64 个。
     -   Qwen3.5-Omni系列：使用公网URL方式，最多可传入 512 个；使用Base64编码方式，最多可传入 250 个。
-    -   Qwen3-Omni-Flash系列、Qwen-Omni-Turbo系列：仅支持输入一个；
+    -   Qwen3-Omni-Flash系列：仅支持输入一个；
 -   文件大小：
     
     -   使用公网URL方式：
         
         -   Qwen3.8-Omni-Flash、Qwen3.5-Omni系列：限制为 2GB
         -   Qwen3-Omni-Flash：限制为 256 MB
-        -   Qwen-Omni-Turbo：限制为 150 MB
     -   使用 Base64 编码方式：编码后的 Base64 字符串大小必须小于 10MB
         
 -   时长限制：
@@ -1402,7 +1381,6 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
     -   Qwen3.8-Omni-Flash：2 小时
     -   Qwen3.5-Omni系列：1 小时
     -   Qwen3-Omni-Flash：150 秒
-    -   Qwen-Omni-Turbo：40 秒
 -   文件格式：MP4、AVI、MKV、MOV、FLV、WMV 等。
     
 -   视频文件中的视觉信息与音频信息会分开计费。
@@ -1555,7 +1533,6 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 -   Qwen3.8-Omni-Flash、Qwen3.5-Omni系列：最少传入 2 张图片，最多可传入 2048 张图片
 -   Qwen3-Omni-Flash：最少传入 2 张图片，最多可传入 128 张图片
--   Qwen-Omni-Turbo：最少传入 4 张图片，最多可传入 80 张图片
 
 #### 音频+文本输入
 
@@ -1695,21 +1672,19 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -   文件数量：
     
     -   Qwen3.8-Omni-Flash、Qwen3.5-Omni系列：使用公网URL方式，最多可传入 2048 个；使用Base64编码方式，最多可传入 250 个；
-    -   Qwen3-Omni-Flash系列、Qwen-Omni-Turbo系列：仅支持输入一个；
+    -   Qwen3-Omni-Flash系列：仅支持输入一个；
 -   文件大小：
     
     -   使用公网URL方式：
         
         -   Qwen3.8-Omni-Flash、Qwen3.5-Omni系列：不超过 2GB
         -   Qwen3-Omni-Flash：不超过 100MB
-        -   Qwen-Omni-Turbo：不超过 10MB
     -   使用 Base64 编码方式：编码后的 Base64 字符串大小必须小于 10MB
         
 -   时长限制：
     
     -   Qwen3.8-Omni-Flash、Qwen3.5-Omni系列：最长 3 小时
     -   Qwen3-Omni-Flash：最长 20 分钟
-    -   Qwen-Omni-Turbo：最长 3 分钟
 -   文件格式：支持AMR、 WAV、 3GP、 3GPP、 AAC、 MP3等主流格式
     
 
@@ -1857,8 +1832,8 @@ Qwen-Omni 模型支持传入多张图片。对输入图片的要求如下：
     -   使用公网URL方式：
         
         -   Qwen3.8-Omni-Flash、Qwen3.5-Omni系列：单个图片文件的大小不超过 20MB
-        -   Qwen3-Omni-Flash系列、Qwen-Omni-Turbo系列：单个图片文件的大小不超过 10MB
-    -   Qwen3.5-Omni、Qwen3-Omni-Flash 和 Qwen-Omni-Turbo 使用 Base64 编码方式：编码后的 Base64 字符串大小必须小于 10MB；
+        -   Qwen3-Omni-Flash系列：单个图片文件的大小不超过 10MB
+    -   Qwen3.5-Omni、Qwen3-Omni-Flash 使用 Base64 编码方式：编码后的 Base64 字符串大小必须小于 10MB；
         
 -   图片的宽度和高度均应大于 10 像素，宽高比不应超过 200:1 或 1:200
     
@@ -2082,7 +2057,7 @@ completion = client.chat.completions.create(
     model="qwen3-omni-flash",
     messages=[{"role": "user", "content": "你是谁"}],
 
-    # 开启/关闭思考模式，在思考模式下不支持输出音频；qwen-omni-turbo不支持设置enable_thinking。
+    # 开启/关闭思考模式，在思考模式下不支持输出音频
     extra_body={'enable_thinking': True},
 
     # 设置输出数据的模态，非思考模式下当前支持两种：["text","audio"]、["text"]，思考模式仅支持：["text"]
@@ -2125,7 +2100,7 @@ const completion = await openai.chat.completions.create({
     stream_options: {
         include_usage: true
     },
-    // 开启/关闭思考模式，在思考模式下不支持输出音频；qwen-omni-turbo不支持设置enable_thinking。
+    // 开启/关闭思考模式，在思考模式下不支持输出音频
     enable_thinking: true,
     //  设置输出数据的模态，非思考模式下当前支持两种：["text","audio"]、["text"]，思考模式仅支持：["text"]
     modalities: ["text"],
@@ -2692,7 +2667,7 @@ if playback_errors:
 
 ## 输入 Base64 编码的本地文件
 
-以下示例使用 Qwen3.8-Omni-Flash，将本地文件编码为 Base64 后传入，并返回文本。音频和视频编码后的 Base64 字符串必须小于 10MB；Qwen3.5-Omni、Qwen3-Omni-Flash 和 Qwen-Omni-Turbo 的图片输入也有此限制。
+以下示例使用 Qwen3.8-Omni-Flash，将本地文件编码为 Base64 后传入，并返回文本。音频和视频编码后的 Base64 字符串必须小于 10MB；Qwen3.5-Omni、Qwen3-Omni-Flash 的图片输入也有此限制。
 
 #### 图片
 
@@ -3160,17 +3135,14 @@ Qwen-Omni 根据不同模态（音频、图像、视频）的 Token 数计费。
     -   输出音频计算公式：`总 Tokens 数 = 音频时长（单位：秒）* 12.5`
 -   `Qwen3-Omni-Flash：输入与输出音频的计算公式均为总 Tokens 数 = 音频时长（单位：秒）* 12.5`
     
--   `Qwen-Omni-Turbo：输入与输出音频的计算公式均为总 Tokens 数 = 音频时长（单位：秒）* 25`
-    
 
 不足 1 秒的音频按 1 秒计算。
 
 #### 图片
 
 -   `Qwen3.8-Omni-Flash`、`Qwen3.5-Omni系列`、`Qwen3-Omni-Flash`模型**：**每`32x32`像素对应 1 个 Token
--   `Qwen-Omni-Turbo`模型：每`28x28`像素对应 1 个 Token
 
-Qwen3.8-Omni-Flash 和 Qwen3.5-Omni 系列每张图最少 24 个 Token，Qwen3-Omni-Flash 和 Qwen-Omni-Turbo 最少 4 个 Token；默认上限 1280 个 Token。Qwen3.8-Omni-Flash 和 Qwen3.5-Omni 系列可通过 `vl_high_resolution_images` 参数将上限提升至 16384 个 Token（Qwen-Omni-Turbo 和 Qwen3-Omni-Flash 不支持）。以下代码可估算单张图片消耗的 Token 数：
+Qwen3.8-Omni-Flash 和 Qwen3.5-Omni 系列每张图最少 24 个 Token，Qwen3-Omni-Flash 最少 4 个 Token；默认上限 1280 个 Token。Qwen3.8-Omni-Flash 和 Qwen3.5-Omni 系列可通过 `vl_high_resolution_images` 参数将上限提升至 16384 个 Token（Qwen3-Omni-Flash 不支持）。以下代码可估算单张图片消耗的 Token 数：
 
 ```
 import math
@@ -3178,13 +3150,13 @@ from PIL import Image  # pip install Pillow
 
 # ============ 模型参数配置（按需修改） ============
 
-# 图像因子：Qwen3.8-Omni-Flash、Qwen3.5-Omni系列、Qwen3-Omni-Flash 为 32；Qwen-Omni-Turbo 为 28
+# 图像因子：Qwen3.8-Omni-Flash、Qwen3.5-Omni系列、Qwen3-Omni-Flash 为 32
 IMAGE_FACTOR = 32
 
-# Token 下限：Qwen3.8-Omni-Flash、Qwen3.5-Omni系列为 24；Qwen-Omni-Turbo、Qwen3-Omni-Flash 为 4
+# Token 下限：Qwen3.8-Omni-Flash、Qwen3.5-Omni系列为 24；Qwen3-Omni-Flash 为 4
 MIN_TOKENS = 24
 
-# 高分辨率模式（Qwen3.8-Omni-Flash 和 Qwen3.5-Omni 系列支持，Qwen-Omni-Turbo 和 Qwen3-Omni-Flash 不支持）
+# 高分辨率模式（Qwen3.8-Omni-Flash 和 Qwen3.5-Omni 系列支持，Qwen3-Omni-Flash 不支持）
 # True  → Token 上限 16384
 # False → Token 上限 1280（默认）
 VL_HIGH_RESOLUTION_IMAGES = False
@@ -3236,7 +3208,7 @@ import cv2
 
 # ============ 模型参数配置（按需修改） ============
 
-# 图像因子：Qwen3.8-Omni-Flash、Qwen3.5-Omni系列、Qwen3-Omni-Flash 为 32；Qwen-Omni-Turbo 为 28
+# 图像因子：Qwen3.8-Omni-Flash、Qwen3.5-Omni系列、Qwen3-Omni-Flash 为 32
 IMAGE_FACTOR = 32
 
 FRAME_FACTOR = 2
@@ -3249,19 +3221,17 @@ VIDEO_MIN_PIXELS = 64 * IMAGE_FACTOR * IMAGE_FACTOR
 # 视频帧的像素上限
 # Qwen3.8-Omni-Flash、Qwen3.5-Omni系列：640 * 32 * 32
 # Qwen3-Omni-Flash：768 * 32 * 32
-# Qwen-Omni-Turbo：768 * 28 * 28
 VIDEO_MAX_PIXELS = 640 * IMAGE_FACTOR * IMAGE_FACTOR
 
-# 最少抽取帧数：Qwen3.8-Omni-Flash、Qwen3.5-Omni系列、Qwen3-Omni-Flash 为 2；Qwen-Omni-Turbo 为 4
+# 最少抽取帧数：Qwen3.8-Omni-Flash、Qwen3.5-Omni系列、Qwen3-Omni-Flash 为 2
 FPS_MIN_FRAMES = 2
 
-# 最大抽取帧数：Qwen3.8-Omni-Flash、Qwen3.5-Omni系列为 2048；Qwen3-Omni-Flash 为 128；Qwen-Omni-Turbo 为 80
+# 最大抽取帧数：Qwen3.8-Omni-Flash、Qwen3.5-Omni系列为 2048；Qwen3-Omni-Flash 为 128
 FPS_MAX_FRAMES = 2048
 
 # 视频输入的最大像素值
 # Qwen3.8-Omni-Flash、Qwen3.5-Omni系列：180224 * 32 * 32
 # Qwen3-Omni-Flash：16384 * 32 * 32
-# Qwen-Omni-Turbo：16384 * 28 * 28
 VIDEO_TOTAL_PIXELS = 180224 * IMAGE_FACTOR * IMAGE_FACTOR
 
 # ============ 核心函数 ============
@@ -3343,8 +3313,6 @@ if __name__ == "__main__":
         -   输出音频计算公式：`总 Tokens 数 = 音频时长（单位：秒）* 12.5`
     -   `Qwen3-Omni-Flash：输入与输出音频的计算公式均为总 Tokens 数 = 音频时长（单位：秒）* 12.5`
         
-    -   `Qwen-Omni-Turbo：输入与输出音频的计算公式均为总 Tokens 数 = 音频时长（单位：秒）* 25`
-        
     
     若音频时长不足1秒，则按 1 秒计算。
     
@@ -3359,173 +3327,116 @@ if __name__ == "__main__":
 
 ## 常见问题
 
-### Q：如何给 Qwen-Omni-Turbo 模型设置角色？
+### Q：如何传入历史对话？
 
-A：Qwen-Omni-Turbo 在输出模态包含音频时**不支持设定 System Message**——即使设置"你是XXX"等角色信息，模型的自我认知仍然是千问。
+在 `messages` 数组中按对话顺序传入 User Message 和 Assistant Message。以下示例使用 `qwen3.5-omni-plus`。
 
--   **方法1：**文本回复场景可使用支持 System Message 的 Qwen3.8-Omni-Flash。Qwen3-Omni-Flash 的既有 System Message 用法仍适用。
-    
--   **方法2：**在 messages 数组开头手动添加角色设定的 User Message 和 Assistant Message，变通实现角色设定。
-    
-    用于角色设定的示例代码
-    
-    #### OpenAI 兼容
-    
-    python
-    
-    ```
-    import os
-    from openai import OpenAI
-    
-    client = OpenAI(
-        # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
-        api_key=os.getenv("DASHSCOPE_API_KEY"),
-        # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
-        base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
-    )
-    
-    completion = client.chat.completions.create(
-        model="qwen3.5-omni-plus",
-        messages=[
-            {"role": "user", "content": "你是一个商场的导购员，你负责的商品有手机、电脑、冰箱"},
-            {"role": "assistant", "content": "好的，我记住了你的设定。"},
-            {"role": "user", "content": "你是谁"},
-        ],
-        # 设置输出数据的模态，当前支持两种：["text","audio"]、["text"]
-        modalities=["text", "audio"],
-        audio={"voice": "Tina", "format": "wav"},
-        # stream 必须设置为 True，否则会报错
-        stream=True,
-        stream_options={"include_usage": True},
-    )
-    
-    for chunk in completion:
-        if chunk.choices:
-            print(chunk.choices[0].delta)
-        else:
-            print(chunk.usage)
-    ```
-    
-    javascript
-    
-    ```
-    import OpenAI from "openai";
-    
-    const openai = new OpenAI(
-        {
-            // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
-            apiKey: process.env.DASHSCOPE_API_KEY,
-            // 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
-            baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
-        }
-    );
-    const completion = await openai.chat.completions.create({
-        model: "qwen3.5-omni-plus",
-        messages: [
-            { role: "user", content: "你是一个商场的导购员，你负责的商品有手机、电脑、冰箱" },
-            { role: "assistant", content: "好的，我记住了你的设定。" },
-            { role: "user", content: "你是谁？" }
-        ],
-        stream: true,
-        stream_options: {
-            include_usage: true
-        },
-        modalities: ["text", "audio"],
-        audio: { voice: "Tina", format: "wav" }
-    });
-    
-    for await (const chunk of completion) {
-        if (Array.isArray(chunk.choices) && chunk.choices.length > 0) {
-            console.log(chunk.choices[0].delta);
-        } else {
-            console.log(chunk.usage);
-        }
+包含历史对话的示例代码
+
+#### OpenAI 兼容
+
+python
+
+```
+import os
+from openai import OpenAI
+
+client = OpenAI(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
+)
+
+completion = client.chat.completions.create(
+    model="qwen3.5-omni-plus",
+    messages=[
+        {"role": "user", "content": "你是一个商场的导购员，你负责的商品有手机、电脑、冰箱"},
+        {"role": "assistant", "content": "好的，我记住了你的设定。"},
+        {"role": "user", "content": "你是谁"},
+    ],
+    # 设置输出数据的模态，当前支持两种：["text","audio"]、["text"]
+    modalities=["text", "audio"],
+    audio={"voice": "Tina", "format": "wav"},
+    # stream 必须设置为 True，否则会报错
+    stream=True,
+    stream_options={"include_usage": True},
+)
+
+for chunk in completion:
+    if chunk.choices:
+        print(chunk.choices[0].delta)
+    else:
+        print(chunk.usage)
+```
+
+javascript
+
+```
+import OpenAI from "openai";
+
+const openai = new OpenAI(
+    {
+        // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
+        apiKey: process.env.DASHSCOPE_API_KEY,
+        // 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+        baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
     }
-    ```
-    
-    bash
-    
-    ```
-    curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
-    -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
-    -H "Content-Type: application/json" \
-    -d '{
-        "model": "qwen3.5-omni-plus",
-        "messages": [
-            {
-                "role": "user",
-                "content": "你是一个商场的导购员，你负责的商品有手机、电脑、冰箱"
-            },
-            {
-                "role": "assistant",
-                "content": "好的，我记住了你的设定。"
-            },
-            {
-                "role": "user",
-                "content": "你是谁？"
-            }
-        ],
-        "stream":true,
-        "stream_options":{
-            "include_usage":true
+);
+const completion = await openai.chat.completions.create({
+    model: "qwen3.5-omni-plus",
+    messages: [
+        { role: "user", content: "你是一个商场的导购员，你负责的商品有手机、电脑、冰箱" },
+        { role: "assistant", content: "好的，我记住了你的设定。" },
+        { role: "user", content: "你是谁？" }
+    ],
+    stream: true,
+    stream_options: {
+        include_usage: true
+    },
+    modalities: ["text", "audio"],
+    audio: { voice: "Tina", format: "wav" }
+});
+
+for await (const chunk of completion) {
+    if (Array.isArray(chunk.choices) && chunk.choices.length > 0) {
+        console.log(chunk.choices[0].delta);
+    } else {
+        console.log(chunk.usage);
+    }
+}
+```
+
+bash
+
+```
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
+-H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+-H "Content-Type: application/json" \
+-d '{
+    "model": "qwen3.5-omni-plus",
+    "messages": [
+        {
+            "role": "user",
+            "content": "你是一个商场的导购员，你负责的商品有手机、电脑、冰箱"
         },
-        "modalities":["text","audio"],
-        "audio":{"voice":"Tina","format":"wav"}
-    }'
-    ```
-    
-    #### DashScope
-    
-    python
-    
-    ```
-    import os
-    import dashscope
-    import base64
-    import numpy as np
-    import soundfile as sf
-    
-    dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-    messages =  [{"role": "user", "content": [{"text": "你是谁？"}]}]
-    response = dashscope.MultiModalConversation.call(
-        # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
-        model="qwen-omni-turbo",
-        messages=messages,
-        modalities=["text","audio"],
-        stream=True
-        )
-    
-    audio_string = ""
-    for r in response:
-        try:
-            audio_string += r.output.choices[0].message.content[0]["audio"]["data"]
-        except:
-            print(r.output.choices[0].message.content)
-    
-    wav_bytes = base64.b64decode(audio_string)
-    audio_np = np.frombuffer(wav_bytes, dtype=np.int16)
-    sf.write('audio_assistant.wav', audio_np, samplerate=24000)
-    ```
-    
-    bash
-    
-    ```
-    curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
-    --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
-    --header 'Content-Type: application/json' \
-    --header 'X-DashScope-SSE: enable' \
-    --data '{
-        "model": "qwen-omni-turbo",
-        "input":{
-            "messages": [{"role": "user", "content": [{"text": "你是谁"}]}]
+        {
+            "role": "assistant",
+            "content": "好的，我记住了你的设定。"
         },
-        "parameters": {
-            "debug": true,
-            "modalities": ["text", "audio"]
+        {
+            "role": "user",
+            "content": "你是谁？"
         }
-    }'
-    ```
-    
+    ],
+    "stream":true,
+    "stream_options":{
+        "include_usage":true
+    },
+    "modalities":["text","audio"],
+    "audio":{"voice":"Tina","format":"wav"}
+}'
+```
 
 ## 错误码
 

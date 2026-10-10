@@ -8,7 +8,7 @@ Completions 接口专为文本补全场景设计，适合代码补全、内容�
 
 当前支持 [Qwen Coder](raw/model-user-guide/model-experience/text-generation-model/specialized-models/qwen-coder.md) 部分模型：
 
-qwen-coder-turbo
+qwen-coder-turbo-latest
 
 ## 前提条件
 
@@ -47,7 +47,7 @@ client = OpenAI(
 )
 
 completion = client.completions.create(
-  model="qwen-coder-turbo",
+  model="qwen-coder-turbo-latest",
   prompt="<|fim_prefix|>写一个python的快速排序函数，def quick_sort(arr):<|fim_suffix|>",
 )
 
@@ -69,7 +69,7 @@ const openai = new OpenAI(
 
 async function main() {
     const completion = await openai.completions.create({
-        model: "qwen-coder-turbo",
+        model: "qwen-coder-turbo-latest",
         prompt: "<|fim_prefix|>写一个python的快速排序函数，def quick_sort(arr):<|fim_suffix|>",
     });
     console.log(completion.choices[0].text)
@@ -85,7 +85,7 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen-coder-turbo",
+    "model": "qwen-coder-turbo-latest",
     "prompt": "<|fim_prefix|>写一个python的快速排序函数，def quick_sort(arr):<|fim_suffix|>"
 }'
 ```
@@ -128,7 +128,7 @@ prefix_content = f"""def reverse_words_with_special_chars(s):
 suffix_content = "return result"
 
 completion = client.completions.create(
-  model="qwen-coder-turbo",
+  model="qwen-coder-turbo-latest",
   prompt=f"<|fim_prefix|>{prefix_content}<|fim_suffix|>{suffix_content}<|fim_middle|>",
 )
 
@@ -161,7 +161,7 @@ const suffixContent = "return result";
 
 async function main() {
   const completion = await client.completions.create({
-    model: "qwen-coder-turbo",
+    model: "qwen-coder-turbo-latest",
     prompt: `<|fim_prefix|>${prefixContent}<|fim_suffix|>${suffixContent}<|fim_middle|>`
   });
 
@@ -178,7 +178,7 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen-coder-turbo",
+    "model": "qwen-coder-turbo-latest",
     "prompt": "<|fim_prefix|>def reverse_words_with_special_chars(s):\n\"\"\"\n反转字符串中的每个单词（保留非字母字符的位置），并保持单词顺序。\n    示例:\n    reverse_words_with_special_chars(\"Hello, world!\") -> \"olleH, dlrow!\"\n    参数:\n        s (str): 输入字符串（可能包含标点符号）\n    返回:\n        str: 处理后的字符串，单词反转但非字母字符位置不变\n\"\"\"\n<|fim_suffix|>return result<|fim_middle|>"
 }'
 ```

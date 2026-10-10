@@ -156,10 +156,9 @@ string
 
 枚举值：
 
--   qwen-vl-max：qwen-vl-max。
--   qwen-vl-plus：qwen-vl-plus。
+-   qwen3-vl-plus：qwen3-vl-plus。
 
-qwen-vl-max
+qwen3-vl-plus
 
 ModelPrompt
 
@@ -231,7 +230,7 @@ success
       "FileType": "pdf",
       "ParserDisplayName": "电子文档解析",
       "ParserConfig": {
-        "ModelName": "qwen-vl-max",
+        "ModelName": "qwen3-vl-plus",
         "ModelPrompt": "#角色\n你是一个专业的图片内容标注人员，擅长识别并描述出图片中的内容。\n# 任务目标\n请结合输入图片，详细描述图片中的内容。"
       },
       "Parser": "DOCMIND"

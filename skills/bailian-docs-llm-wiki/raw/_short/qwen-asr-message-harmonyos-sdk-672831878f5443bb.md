@@ -318,13 +318,21 @@ SDK拉取音频时的采集配置，仅在 `audio_update_manually` 为 `"false"`
 
 采样率（Hz）。仅支持 `16000` Hz。
 
+`nls_config.language_hints`
+
+`string[]`
+
+否
+
+待识别音频的语种，无默认值；不设置时由模型自动识别。最多支持设置 4 个值，超出时仅前 4 个生效。 仅在最终结果（`sentence_end=true`）生效，中间结果（`sentence_end=false`）不支持。 支持的语言代码请参见[客户端事件](raw/_short/qwen-asr-message-client-events-0be34a3639cdd40b.md)。
+
 `nls_config.max_sentence_silence`
 
 `number`
 
 否
 
-VAD断句静音阈值（毫秒）。一段语音后的静音时长超过该阈值时，系统判定句子结束。默认值为 `1300`，取值范围为 `[200, 6000]`。
+VAD断句静音阈值（毫秒）。一段语音后的静音时长超过该阈值时，系统判定句子结束。默认值为 `800`，取值范围为 `[200, 6000]`。
 
 `nls_config.heartbeat`
 

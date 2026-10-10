@@ -983,24 +983,6 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 
 有效期：百炼开通后90天内
 
-**qwen-long-latest**
-
-> 始终与最新快照版能力相同
-
-> [Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)半价
-
-最新版
-
-qwen-long-2025-01-25
-
-> 又称qwen-long-0125
-
-快照版
-
-0.5元
-
-2元
-
 在[体验中心](https://bailian.console.aliyun.com/model/experience/text?modelId=qwen-long)页面，您可以上传文档，在线提问。
 
 ## 常见问题
@@ -1013,11 +995,7 @@ qwen-long-2025-01-25
     
     所有通过OpenAI文件兼容接口上传的文件均将被保存在当前阿里云账号下的阿里云百炼存储空间且不会产生任何费用，关于所上传文件的信息查询与管理请参考[OpenAI文件接口](raw/model-api-reference/toolkits-and-frameworks/openai-file-interface.md)。
     
-3.  `qwen-long-2025-01-25` 是什么？
-    
-    这是一个版本快照标识。它代表模型在某个时间点的功能和性能冻结版本，提供比 latest 版更高的稳定性。它不代表到期日。
-    
-4.  如何确保模型输出标准格式的 JSON 字符串？
+3.  如何确保模型输出标准格式的 JSON 字符串？
     
     `qwen-long`及其所有快照版本均支持[结构化输出](raw/model-user-guide/model-experience/text-generation-model/qwen-structured-output.md)功能。可以通过指定一个JSON Schema，使模型按照定义的结构以合法的JSON格式返回。
     

@@ -94,8 +94,7 @@ str
 默认音色：
 
 -   Qwen3.5-Omni-Realtime系列模型: `"Tina"`
--   Qwen3-Omni-Flash-Realtime: `"Cherry"`
--   Qwen-Omni-Turbo-Realtime: `"Chelsie"`
+-   qwen3-omni-flash-realtime-2025-09-15: `"Cherry"`
 
 input\_audio\_config
 
@@ -129,7 +128,7 @@ smooth\_output
 
 bool
 
-仅Qwen3-Omni-Flash-Realtime系列模型支持设置。
+仅 `qwen3-omni-flash-realtime-2025-09-15` 支持设置。
 
 -   True：获得口语化的回复
     
@@ -252,10 +251,7 @@ temperature越高，生成的内容更多样，反之，生成的内容更确定
 
 -   `qwen3.8-omni-flash-realtime`：0.6
 -   Qwen3.5-Omni-Realtime系列模型：0.7
--   Qwen3-Omni-Flash-Realtime系列模型：0.9
--   Qwen-Omni-Turbo-Realtime系列模型：1.0
-
-> `qwen-omni-turbo` 系列模型**不支持修改**。
+-   qwen3-omni-flash-realtime-2025-09-15：0.9
 
 top\_p
 
@@ -273,10 +269,7 @@ top\_p默认值：
 
 -   `qwen3.8-omni-flash-realtime`：0.95
 -   Qwen3.5-Omni-Realtime系列模型：0.8
--   Qwen3-Omni-Flash-Realtime系列模型：1.0
--   Qwen-Omni-Turbo-Realtime系列模型：0.01
-
-> `qwen-omni-turbo` 系列模型**不支持修改**。
+-   qwen3-omni-flash-realtime-2025-09-15：1.0
 
 top\_k
 
@@ -290,10 +283,7 @@ top\_k默认值：
 
 -   `qwen3.8-omni-flash-realtime`：20
 -   Qwen3.5-Omni-Realtime系列模型：20
--   Qwen3-Omni-Flash-Realtime系列模型：50
--   Qwen-Omni-Turbo-Realtime系列模型：20
-
-> `qwen-omni-turbo` 系列模型**不支持修改**。
+-   qwen3-omni-flash-realtime-2025-09-15：50
 
 max\_tokens
 
@@ -307,8 +297,6 @@ integer
 
 max\_tokens参数适用于需要限制字数（如生成摘要、关键词）、控制成本或减少响应时间的场景。
 
-> `qwen-omni-turbo` 系列模型**不支持修改**。
-
 repetition\_penalty
 
 float
@@ -320,8 +308,6 @@ repetition\_penalty默认值：
 -   `qwen3.8-omni-flash-realtime`：0
 -   Qwen3.5-Omni-Realtime系列模型：1.0
 -   其他模型：1.05
-
-> `qwen-omni-turbo` 系列模型**不支持修改**。
 
 presence\_penalty
 
@@ -343,8 +329,6 @@ presence\_penalty默认值：
 
 较低的presence\_penalty适用于要求一致性或专业术语的场景，如技术文档或其他正式文档。
 
-> `qwen-omni-turbo` 系列模型**不支持修改**。
-
 seed
 
 integer
@@ -354,8 +338,6 @@ integer
 在每次模型调用时传入相同的seed值（自行指定），并保持其他参数不变，模型将尽可能返回相同的结果。
 
 取值范围：0到231−1，默认值-1。
-
-> `qwen-omni-turbo` 系列模型**不支持修改**。
 
 ## 关键接口
 

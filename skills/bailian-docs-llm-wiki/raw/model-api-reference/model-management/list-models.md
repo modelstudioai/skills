@@ -56,7 +56,7 @@
 
 **model** · `String` · 可选
 
-按模型 ID 进行精确查询。示例：`qwen3-max`
+按模型 ID 进行精确查询。示例：`qwen3.8-max`
 
 **language** · `String` · 可选
 
@@ -222,13 +222,13 @@ print(resp.output)
 
 #### 按模型 ID 查询
 
-设置 `model=qwen3-max`，按模型 ID 精确查询。
+设置 `model=qwen3.8-max`，按模型 ID 精确查询。
 
 ```
 curl --get "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/models" \
     --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
     --header "Content-Type: application/json" \
-    --data-urlencode "model=qwen3-max" \
+    --data-urlencode "model=qwen3.8-max" \
     --data-urlencode "page_no=1" \
     --data-urlencode "page_size=20"
 ```
@@ -364,8 +364,8 @@ output.models\[\]
         "page_size": 10,
         "models": [
             {
-                "model": "qwen3-max",
-                "name": "通义千问3-Max",
+                "model": "qwen3.8-max",
+                "name": "通义千问3.8-Max",
                 "description": "通义千问3系列Max模型，适配场景更加复杂的智能体需求。",
                 "features": [
                     "function-calling",
@@ -404,8 +404,8 @@ output.models\[\]
                 }
             },
             {
-                "model": "qwen-image-max",
-                "name": "Qwen-Image-Max",
+                "model": "qwen-image-3.0-pro",
+                "name": "Qwen-Image-3.0-Pro",
                 "description": "通义千问图像生成模型Max系列。",
                 "features": ["model-experience"],
                 "prices": [

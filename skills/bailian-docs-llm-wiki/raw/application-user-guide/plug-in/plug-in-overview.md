@@ -100,10 +100,6 @@ github\_search
 
 **模型标识符**
 
-通义千问-Turbo
-
-qwen-turbo
-
 通义千问-Plus
 
 qwen-plus
@@ -111,14 +107,6 @@ qwen-plus
 通义千问-Max
 
 qwen-max
-
-通义千问VL-Max
-
-qwen-vl-max
-
-通义千问VL-Plus
-
-qwen-vl-plus
 
 **说明**各模型对插件的兼容性可能有差异，最新的兼容性状态，请以控制台实际执行结果为准。
 

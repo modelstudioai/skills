@@ -2,7 +2,7 @@
 
 千问-文生图模型（Qwen-Image）是一款通用图像生成模型，支持多种艺术风格，尤其擅长 复杂文本渲染 。模型支持多行布局、段落级文本生成以及细粒度细节刻画，可实现复杂的图文混合布局设计。
 
-**快速入口：**[使用指南](raw/model-user-guide/model-experience/image-model/text-to-image.md) | 在线体验（[北京](https://bailian.console.aliyun.com/cn-beijing/model/experience/vision/imageGenerate?modelId=qwen-image-max) | [新加坡](https://bailian.console.aliyun.com/ap-southeast-1/model/experience/vision/imageGenerate?modelId=qwen-image-max)） | [技术博客](https://qwen.ai/blog?id=9467b4bff9c638e847f08443802c6b96ab116a87&from=research.research-list)
+**快速入口：**[使用指南](raw/model-user-guide/model-experience/image-model/text-to-image.md) | 在线体验（[北京](https://bailian.console.aliyun.com/cn-beijing/model/experience/vision/imageGenerate?modelId=qwen-image-3.0-pro) | [新加坡](https://bailian.console.aliyun.com/ap-southeast-1/model/experience/vision/imageGenerate?modelId=qwen-image-3.0-pro)） | [技术博客](https://qwen.ai/blog?id=9467b4bff9c638e847f08443802c6b96ab116a87&from=research.research-list)
 
 ## 效果展示
 
@@ -63,30 +63,6 @@ qwen-image-2.0 `推荐`
 > 图像编辑请参考[千问-图像编辑](raw/model-api-reference/image-generation/qwen-image-api-reference/legacy-qwen-image-models/qwen-image-edit-api.md)。
 
 qwen-image-2.0-2026-03-03 `推荐`
-
-qwen-image-max
-
-> 当前与qwen-image-max-2025-12-30能力相同
-
-千问图像生成模型Max系列。真实感、自然度更强，AI合成痕迹更低。
-
-图像分辨率：可选分辨率及对应宽高比例请参见[size参数设置](raw/model-api-reference/image-generation/qwen-image-api-reference/legacy-qwen-image-models/qwen-image-api.md)
-
-图像格式：png
-
-图像张数：固定1张
-
-qwen-image-max-2025-12-30
-
-qwen-image-plus
-
-> 当前与qwen-image能力相同
-
-千问图像生成模型Plus系列，擅长多样化艺术风格与文字渲染。
-
-qwen-image-plus-2026-01-09
-
-qwen-image
 
 各地域支持的模型请参见[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)。
 
@@ -189,21 +165,11 @@ qwen-image
 -   `2368*1728` ：4:3
 -   `1728*2368` ：3:4
 
-**qwen-image-max、qwen-image-plus系列模型**：默认分辨率为`1664*928`。**可选**的分辨率及其对应的图像宽高比例为：
-
--   `1664*928`（**默认值**）：16:9
--   `1472*1104`：4:3
--   `1328*1328`：1:1
--   `1104*1472`：3:4
--   `928*1664`：9:16
-
 **n** `integer` （可选）
 
 输出图像的数量，默认值为1。
 
 对于qwen-image-2.0系列模型，可选择输出1-6张图片。
-
-对于qwen-image-max、qwen-image-plus系列模型，此参数固定为1，设置其他值将导致报错。
 
 **prompt\_extend** `bool` （可选）
 
@@ -585,8 +551,6 @@ public class QwenImage {
 
 ## 异步接口
 
-**重要**当前仅qwen-image-plus、qwen-image模型支持异步接口调用。
-
 ### HTTP调用
 
 调用流程分为两步：
@@ -627,9 +591,9 @@ public class QwenImage {
 
 **model** `string` **（必选）**
 
-模型名称。当前仅`qwen-image-plus`、`qwen-image`模型支持异步接口调用。
+模型名称。
 
-示例值：`qwen-image-plus`。
+示例值：`qwen-image-3.0-pro`。
 
 **input** `object` **（必选）**
 
@@ -702,15 +666,13 @@ public class QwenImage {
 
 #### 文生图
 
-当前仅`qwen-image-plus`、`qwen-image`模型支持异步接口调用。
-
 ```
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis \
     -H 'X-DashScope-Async: enable' \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
     -H 'Content-Type: application/json' \
     -d '{
-    "model": "qwen-image-plus",
+    "model": "qwen-image-3.0-pro",
     "input": {
         "prompt": "一副典雅庄重的对联悬挂于厅堂之中，房间是个安静古典的中式布置，桌子上放着一些青花瓷，对联上左书“义本生知人机同道善思新”，右书“通云赋智乾坤启数高志远”， 横批“智启千问”，字体飘逸，在中间挂着一幅中国风的画作，内容是岳阳楼。"
     },
@@ -994,7 +956,7 @@ api_key = os.getenv("DASHSCOPE_API_KEY")
 
 print('----同步调用，请等待任务执行----')
 rsp = ImageSynthesis.call(api_key=api_key,
-                          model="qwen-image-plus", # 当前仅qwen-image-plus、qwen-image模型支持异步接口
+                          model="qwen-image-3.0-pro",
                           prompt=prompt,
                           negative_prompt=" ",
                           n=1,
@@ -1074,7 +1036,7 @@ def async_call():
 # 创建异步任务
 def create_async_task():
     rsp = ImageSynthesis.async_call(api_key=api_key,
-                                    model="qwen-image-plus", # 当前仅qwen-image-plus、qwen-image模型支持异步接口
+                                    model="qwen-image-3.0-pro",
                                     prompt=prompt,
                                     negative_prompt=" ",
                                     n=1,
@@ -1234,8 +1196,7 @@ public class Text2Image {
         ImageSynthesisParam param =
                 ImageSynthesisParam.builder()
                         .apiKey(apiKey)
-                        // 当前仅qwen-image-plus、qwen-image模型支持异步接口
-                        .model("qwen-image-plus")
+                        .model("qwen-image-3.0-pro")
                         .prompt(prompt)
                         .n(1)
                         .size("1664*928")
@@ -1331,8 +1292,7 @@ public class Text2Image {
         ImageSynthesisParam param =
                 ImageSynthesisParam.builder()
                         .apiKey(apiKey)
-                        // 当前仅qwen-image-plus、qwen-image模型支持异步接口
-                        .model("qwen-image-plus")
+                        .model("qwen-image-3.0-pro")
                         .prompt(prompt)
                         .n(1)
                         .size("1664*928")
@@ -1475,7 +1435,7 @@ def generate_image(prompt: str) -> str:
     """根据文本描述生成一张图片并返回图片 URL。prompt：图片内容的文字描述。"""
     rsp = MultiModalConversation.call(
         api_key=API_KEY,
-        model="qwen-image",
+        model="qwen-image-3.0-pro",
         messages=[{"role": "user", "content": [{"text": prompt}]}],
         result_format="message",
     )
@@ -1500,7 +1460,7 @@ if __name__ == "__main__":
 
 ## 计费与限流
 
--   模型免费额度和计费单价请参见[模型价格](https://help.aliyun.com/zh/model-studio/model-pricing#11a4ac6ea62wt)。
+-   模型免费额度和计费单价请参见[模型价格](https://help.aliyun.com/zh/model-studio/model-pricing#2e0ddf5c9edy0)。
 -   模型限流请参见[千问（Qwen-Image）](https://help.aliyun.com/zh/model-studio/rate-limit#f812e7c63axvx)。
 -   计费说明：按成功生成的 **图像张数** 计费。模型调用失败或处理错误不产生任何费用，也不消耗[新人免费额度](raw/model-user-guide/test-1/new-free-quota.md)。
 
@@ -1514,7 +1474,7 @@ if __name__ == "__main__":
 
 A：如果希望图像内容更多样化，由模型补充细节，建议开启此选项（默认）。如果图像细节更可控，建议关闭此选项，并参考[文生图Prompt指南](raw/model-user-guide/use-cases/text-to-image-prompt.md)进行优化，
 
-#### Q：qwen-image、qwen-image-plus、qwen-image-max、qwen-image-2.0、qwen-image-edit 等模型的区别是什么？
+#### Q：qwen-image-2.0系列模型有什么区别？
 
 A：
 
@@ -1522,14 +1482,6 @@ A：
     
     -   `qwen-image-2.0-pro`、`qwen-image-2.0-pro-2026-04-22`：当前两者能力相同，Pro系列具备更专业的文字渲染能力、更细腻的真实质感，细腻刻画写实场景，以及更强的语义遵循能力。仅支持同步接口。
     -   `qwen-image-2.0`、`qwen-image-2.0-2026-03-03`：当前两者能力相同，加速版有效实现了模型效果和性能的最佳平衡。仅支持同步接口。
--   **文生图模型：**根据文本描述生成图像。
-    
-    -   `qwen-image-max`、`qwen-image-max-2025-12-30`：当前两者能力相同，相较于`qwen-image-plus`提升了生成图像的真实感与自然度，在人物质感、纹理细节和文字渲染等方面效果更佳。
-    -   `qwen-image`、`qwen-image-plus`：当前两者能力相同，但`qwen-image-plus`的价格更优惠。
-    -   `qwen-image-plus-2026-01-09`：千问图像生成的全新快照版模型，为`qwen-image-max`的蒸馏加速版，支持快速生成高质量图像。
--   **图像编辑模型**：  
-    `qwen-image-edit`：根据输入的图像和文本指令，执行图生图、局部修改等操作，详情请参见[千问-图像编辑](raw/model-api-reference/image-generation/qwen-image-api-reference/legacy-qwen-image-models/qwen-image-edit-api.md)。
-    
 
 ### Q：如何获取图像存储的访问域名白名单？
 

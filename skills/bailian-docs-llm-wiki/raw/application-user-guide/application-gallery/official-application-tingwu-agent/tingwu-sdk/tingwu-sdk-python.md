@@ -31,7 +31,7 @@ def call(
 """Call generation model service.
 
     Args:
-          model (str): The requested model, such as qwen-turbo
+          model (str): The requested model, such as qwen3.5-flash
           api_key (str, optional): The api api_key, can be None,
               if None, will get by default rule(TODO: api key doc).
           user_defined_input: custom input

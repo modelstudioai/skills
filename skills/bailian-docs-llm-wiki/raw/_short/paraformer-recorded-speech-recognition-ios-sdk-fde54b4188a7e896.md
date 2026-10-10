@@ -197,10 +197,9 @@
         因[模型](raw/_short/paraformer-recorded-speech-recognition-restful-a-2954d97d37cd0262.md)而异：
         
         -   paraformer-v2 支持任意采样率
-        -   paraformer-v1 支持任意采样率
+            
         -   paraformer-8k-v2 仅支持8kHz采样率
-        -   paraformer-8k-v1 仅支持8kHz采样率
-        -   paraformer-mtl-v1 支持16kHz及以上采样率
+            
     -   **音频文件大小和时长**：音频文件不超过2GB；时长在12小时以内。
         
         如果希望处理的文件超过了上述限制，可尝试对文件进行预处理以降低文件尺寸。有关文件预处理的最佳实践可以查阅[预处理视频文件以提高文件转写效率（针对录音文件识别场景）](https://help.aliyun.com/zh/model-studio/paraformer-best-practices#c5dda0a0cf2x9)。
@@ -407,36 +406,6 @@
     否
     
     热词列表ID，用于提升特定词汇的识别准确率。该参数适用于v2及更高版本模型。热词的使用方法请参见[定制热词](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/custom-hot-words.md)。
-    
-    `nls_config.resources`
-    
-    `array[object]`
-    
-    否
-    
-    热词资源配置，用于v1版本模型。功能与`vocabulary_id`相同，但配置方式不同：
-    
-    `resources` 是一个对象数组，其每个元素包含 `resource_id` 和 `resource_type` 字段：
-    
-    -   `resource_id`：`string`类型，热词ID。
-    -   `resource_type`：`string`类型，取值为固定字符串“`asr_phrase`”。
-    
-    示例：
-    
-    ```
-    {
-        "nls_config": {
-              "resources": [
-                  {
-                      "resource_id": "xxxxxxxxxxxx",
-                      "resource_type": "asr_phrase"
-                  }
-              ]
-        }
-    }
-    ```
-    
-    热词的使用方法请参见[Paraformer语音识别热词定制与管理](https://help.aliyun.com/zh/model-studio/paraformer-asr-phrase-manager)。
     
 
 ## 关键接口

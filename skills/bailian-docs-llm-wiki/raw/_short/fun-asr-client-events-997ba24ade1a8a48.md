@@ -50,7 +50,7 @@
 
 输入对象。不携带上下文时传入`{}`。
 
-**重要**仅 `fun-asr-realtime`、`fun-asr-realtime-2025-11-07` 模型支持上下文。
+**重要**仅 `fun-asr-realtime` 模型支持上下文。
 
 属性
 
@@ -138,7 +138,7 @@ amr：仅支持AMR-NB类型。
 
 点击查看支持的语言代码
 
--   fun-asr-realtime、fun-asr-realtime-2025-11-07：
+-   fun-asr-realtime：
     
     -   zh: 中文
     -   en: 英文
@@ -175,10 +175,6 @@ amr：仅支持AMR-NB类型。
     -   zh: 中文
     -   en: 英文
     -   ja: 日语
--   fun-asr-realtime-2025-09-15：
-    
-    -   zh: 中文
-    -   en: 英文
 -   fun-asr-flash-8k-realtime、fun-asr-flash-8k-realtime-2026-01-28：
     
     -   zh: 中文
@@ -314,7 +310,7 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
 
 **发送时机**：任务运行中，需要更新对话上下文时发送。
 
-**重要**仅 `fun-asr-realtime`、`fun-asr-realtime-2025-11-07` 模型支持该事件。
+**重要**仅 `fun-asr-realtime` 模型支持该事件。
 
 **header**`object`**（必选）**
 

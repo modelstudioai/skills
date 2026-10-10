@@ -51,8 +51,6 @@
 -   **汽车领域模型（中英粤）**
 -   **paraformer-v2（中英日韩粤）**
 -   **paraformer-8k-v2（中文）**
--   **paraformer-v1（中英）**
--   **paraformer-8k-v1（中文）**
 -   **教育领域模型（中英）**
 
 #### 音频类型

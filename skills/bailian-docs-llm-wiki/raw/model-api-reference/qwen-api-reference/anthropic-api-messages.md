@@ -89,27 +89,25 @@ temperature 取值范围
 
 支持的模型列表
 
-**千问Max**：qwen3.8-max、qwen3.8-max-0902、qwen3.7-max、qwen3.7-max-2026-05-20、qwen3.7-max-2026-06-08、qwen3.6-max-preview、qwen3-max、qwen3-max-2026-01-23、qwen3-max-preview
+**千问Max**：qwen3.8-max、qwen3.8-max-0902、qwen3.7-max、qwen3.7-max-2026-05-20、qwen3.7-max-2026-06-08
 
-**千问Plus**：qwen3.7-plus、qwen3.7-plus-2026-05-26、qwen3.6-plus、qwen3.6-plus-2026-04-02、qwen3.5-plus、qwen3.5-plus-2026-04-20、qwen3.5-plus-2026-02-15、qwen-plus、qwen-plus-latest、qwen-plus-2025-09-11
+**千问Plus**：qwen3.7-plus、qwen3.7-plus-2026-05-26、qwen3.6-plus、qwen3.6-plus-2026-04-02、qwen3.5-plus、qwen3.5-plus-2026-04-20、qwen3.5-plus-2026-02-15、qwen-plus、qwen-plus-latest
 
 **千问Flash**：qwen3.8-flash、qwen3.7-flash、qwen3.7-flash-2026-07-15、qwen3.6-flash、qwen3.6-flash-2026-04-16、qwen3.5-flash、qwen3.5-flash-2026-02-23、qwen-flash、qwen-flash-2025-07-28
 
-**千问Turbo**：qwen-turbo
+**千问Coder**：qwen3-coder-flash
 
-**千问Coder**：qwen3-coder-next、qwen3-coder-plus、qwen3-coder-plus-2025-09-23、qwen3-coder-flash
-
-**千问VL**：qwen3-vl-plus、qwen3-vl-flash、qwen-vl-max、qwen-vl-plus
+**千问VL**：qwen3-vl-plus
 
 **千问开源模型**：qwen3.6-27b、qwen3.5-397b-a17b、qwen3.5-122b-a10b、qwen3.5-27b、qwen3.5-35b-a3b、qwen3.8-2.4t-a95b、qwen3.8-27b
 
 **第三方模型**
 
-deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash、deepseek-v4-flash-0731、deepseek-v3.2、kimi-k3、kimi-k2.7-code、kimi-k2.6、kimi-k2.5、kimi-k2-thinking、glm-5.3、glm-5.2、glm-5.1、glm-5、glm-4.7、glm-4.6、MiniMax-M2.5、MiniMax-M2.1
+deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731、kimi-k3、kimi-k2.7-code、kimi-k2.6、kimi-k2.5、glm-5.3、glm-5.2、glm-5.1、glm-5、MiniMax-M2.5
 
 **max\_tokens** `integer` **（必选）**
 
--   deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash、deepseek-v4-flash-0731、qwen3.8-max、qwen3.8-flash：模型回复内容和思维链内容之和的最大Token数，模型输出超过此值时生成将提前停止，`stop_reason` 为 `max_tokens`。
+-   deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731、qwen3.8-max、qwen3.8-flash：模型回复内容和思维链内容之和的最大Token数，模型输出超过此值时生成将提前停止，`stop_reason` 为 `max_tokens`。
     
     > `max_tokens` 限制模型回复内容+思考过程的长度。开启深度思考时，`max_tokens` > `thinking.budget_tokens`
     
@@ -306,7 +304,7 @@ Base64 编码的视频数据。当 `type` 为 `base64` 时必填。
 
 深度思考配置。开启后，模型会在生成回复前先进行推理，以提升回答准确度。开启后，响应会包含 `thinking` 类型的内容块。
 
-未传入该参数时，是否进行思考由模型默认行为决定：qwen3.8-max、qwen3.8-flash、deepseek-v4 系列、glm 系列默认开启思考；kimi-k2.6、kimi-k2.5 默认关闭思考；kimi-k2.7-code、kimi-k2-thinking、MiniMax-M2.5、MiniMax-M2.1 仅支持思考模式（无法关闭）。各模型对思考模式的支持情况与默认开关，请参见[深度思考](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md)。
+未传入该参数时，是否进行思考由模型默认行为决定：qwen3.8-max、qwen3.8-flash、deepseek-v4 系列、glm 系列默认开启思考；kimi-k2.6、kimi-k2.5 默认关闭思考；kimi-k2.7-code、MiniMax-M2.5 仅支持思考模式（无法关闭）。各模型对思考模式的支持情况与默认开关，请参见[深度思考](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md)。
 
 属性
 
@@ -367,7 +365,7 @@ tools 数组元素
     
     传入其它取值会返回错误。
     
--   glm-5.2、deepseek-v4-pro、deepseek-v4-flash（阿里云直供）（默认值为 `max`）：
+-   glm-5.2、deepseek-v4-pro（阿里云直供）（默认值为 `max`）：
     
     可选值：
     

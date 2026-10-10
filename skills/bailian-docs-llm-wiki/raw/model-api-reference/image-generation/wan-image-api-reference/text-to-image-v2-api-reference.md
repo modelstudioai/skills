@@ -2,7 +2,7 @@
 
 万相-文生图模型基于文本生成图像，支持多种艺术风格与写实摄影效果，满足多样化创意需求。
 
-**快速入口：**在线体验（[北京](https://bailian.console.aliyun.com/model/experience/vision/imageGenerate?modelId=qwen-image) | [新加坡](https://bailian.console.aliyun.com/model/experience/vision/imageGenerate)| [弗吉尼亚](https://bailian.console.aliyun.com/us-east-1/model/experience/vision/imageGenerate?modelId=wan2.6-t2i)） | [万相官网](https://tongyi.aliyun.com/wan/generate/image/text-to-image) | [文生图使用指南](raw/model-user-guide/model-experience/image-model/text-to-image.md)
+**快速入口：**在线体验（[北京](https://bailian.console.aliyun.com/model/experience/vision/imageGenerate?modelId=wan2.6-t2i) | [新加坡](https://bailian.console.aliyun.com/model/experience/vision/imageGenerate)| [弗吉尼亚](https://bailian.console.aliyun.com/us-east-1/model/experience/vision/imageGenerate?modelId=wan2.6-t2i)） | [万相官网](https://tongyi.aliyun.com/wan/generate/image/text-to-image) | [文生图使用指南](raw/model-user-guide/model-experience/image-model/text-to-image.md)
 
 **说明**万相官网的功能与API支持的能力可能存在差异。本文档以API的实际能力为准，并会随功能更新及时同步。
 

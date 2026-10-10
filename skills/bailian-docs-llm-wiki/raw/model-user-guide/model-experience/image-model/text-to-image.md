@@ -2,7 +2,7 @@
 
 通过文生图API，您可以基于文本描述创造出全新的图像。阿里云百炼提供万相（Wan）、千问（Qwen-Image）和z-image系列模型。
 
-**在线体验**：[北京](https://bailian.console.aliyun.com/model/experience/vision/imageGenerate?modelId=qwen-image)｜[新加坡](https://bailian.console.aliyun.com/model/experience/vision/imageGenerate)
+**在线体验**：[北京](https://bailian.console.aliyun.com/model/experience/vision/imageGenerate)｜[新加坡](https://bailian.console.aliyun.com/model/experience/vision/imageGenerate)
 
 **在线体验**提供无需编程的网页版文生图功能，在页面中输入文本描述即可直接生成图像：
 
@@ -210,37 +210,9 @@ Temp: 24°C”
 
 ## 模型选型
 
--   **qwen-image-3.0-pro**：千问图像3.0旗舰版，支持prompt智能改写，擅长文本渲染，能精准生成贴合物理材质的中英文。
--   **wan2.7-image-pro**：功能最全面，支持组图生成和高达4096x4096的分辨率，并增强了五官控制、色彩控制和超长文字渲染能力。
--   **z-image-turbo**：追求速度与性价比。生成速度快、成本低，擅长高逼真度的人像与产品图。
-
-## 使用方式
-
-文生图提供两种使用方式，请按需选择：
-
-**使用方式**
-
-**是否需要编程**
-
-**入口**
-
-**适用场景**
-
-网页版在线体验
-
-否
-
-**体验中心**（见本文开篇的**在线体验**链接）；[通义万相独立站](https://tongyi.aliyun.com/wan)
-
-快速试用模型、验证提示词效果、少量出图
-
-API 调用
-
-是
-
-见下方**快速开始**
-
-在自有应用或服务中批量、自动化地集成文生图能力
+-   **qwen-image-3.0-pro**：旗舰效果，支持prompt智能改写，擅长文本渲染，能精准生成贴合物理材质的中英文。
+-   **qwen-image-2.1-pro**：速度、效果、成本最均衡。图生图支持传入最多10张参考图，能根据提示词自动决定输出普通图像或带透明通道的图像。
+-   **qwen-image-2.1-turbo**：极致性价比，Qwen-Image系列中综合性价比最优。图生图支持传入最多10张参考图，能根据提示词自动决定输出普通图像或带透明通道的图像。
 
 ## 快速开始
 
@@ -250,12 +222,7 @@ API 调用
 
 #### 示例代码
 
-**调用方式说明**：
-
--   千问生图模型（qwen-image-3.0系列、qwen-image-2.0系列）均支持同步调用，其中qwen-image-3.0系列、qwen-image-plus、qwen-image模型支持异步调用，详情请参见[千问-图像生成与编辑3.0](raw/model-api-reference/image-generation/qwen-image-api-reference/qwen-image-generation-and-editing-api-reference.md)和[千问-文生图](raw/model-api-reference/image-generation/qwen-image-api-reference/legacy-qwen-image-models/qwen-image-api.md)。
--   万相文生图模型均支持异步调用，其中wan2.7-image-pro、wan2.7-image、wan2.6-image、wan2.6-t2i支持同步调用，详情请参见[万相-图像生成与编辑2.7](raw/model-api-reference/image-generation/wan-image-api-reference/wan-image-generation-and-editing-api-reference.md)、[万相-图像生成与编辑2.6](raw/model-api-reference/image-generation/wan-image-api-reference/wan-image-generation-api-reference.md)和[万相-文生图V2](raw/model-api-reference/image-generation/wan-image-api-reference/text-to-image-v2-api-reference.md)。
-
-#### 千问-同步调用
+以下示例使用**同步调用**方式。千问图像系列还支持异步调用，万相系列模型的调用方式请参见对应的[API参考文档](#189eed0801tx2)。
 
 #### Python
 
@@ -303,42 +270,6 @@ import com.alibaba.dashscope.utils.Constants;
 public class ImageEditExample {
     public static void main(String[] args) {
         Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
-
-        MultiModalConversation conv = new MultiModalConversation();
-        MultiModalMessage userMessage = MultiModalMessage.builder()
-            .role(Role.USER.getValue())
-            .content(Arrays.asList(
-                Collections.singletonMap("text", "画面是一张竖幅户外人像摄影，整体从上到下呈现温暖的午后街景氛围。顶部左侧到上方大面积被深绿色藤蔓和橙色小花覆盖，花叶从建筑檐口自然垂落，受阳光照射的叶片呈黄绿色高光，阴影处则偏深绿，形成浓密而柔和的背景层次。左上至中上区域是一块深蓝色横向招牌，招牌表面较暗、略带磨砂质感，上面以白色哥特体大字写着 Il Messaggero，文字位于画面左侧偏上，部分被前景花叶轻微遮挡，字体高对比、带装饰性尖角和粗细变化。招牌下方是报刊亭或书报摊的玻璃展示窗，黑色金属框架将橱窗分隔成多个矩形区域，内部陈列着许多报纸、杂志和书刊封面，但大多因景深虚化和光线反射而难以辨读，形成浅色纸张与深色边框交错的背景纹理。画面右上方是强烈的逆光区域，阳光从街道尽头照入，背景建筑被虚化成米灰色块面，边缘柔和，呈现明显的浅景深效果。画面中部偏右是一名年轻成年女性的半身至膝上人像，她回头面向镜头微笑，身体略向右转，肩背朝向观者，姿态自然放松。她有长而浓密的黑色波浪卷发，发丝被逆光勾勒出金色轮廓光，发梢在右侧向外散开，显得轻盈蓬松。她肤色白皙，脸型柔和偏鹅蛋形，眉形细致，眼睛明亮，眼妆清透，睫毛明显，面部带有自然高光，唇部为柔和珊瑚红色，笑容露齿，表情亲切明朗。她佩戴小巧耳饰，身穿黑色细肩带露背连衣裙，面料颜色深黑、轮廓简洁，细肩带从肩部向背部延伸，背部线条清晰。画面下部偏左到中部，她双手抱着一束玫瑰花，花束体积较大，主要由橙色、杏色、粉色和浅桃色玫瑰组成，花瓣层层卷曲，边缘被阳光照亮，绿色叶片和长花茎从花束下方垂出，花束与黑色裙装形成鲜明色彩对比。右侧背景是一条被阳光照亮的城市街道，地面呈暖灰与金黄色调，远处建筑、街边设施和一个模糊的红色圆形交通标志位于右下远景，均因焦外虚化而只保留色块和轮廓。整张照片采用暖色胶片感处理，带有细腻颗粒、柔和对比和明显逆光边缘光，人物位于视觉焦点，背景报刊亭、花藤、街道和阳光共同营造出浪漫、明亮、都市漫步式的氛围。")
-            ))
-            .build();
-        MultiModalConversationParam param = MultiModalConversationParam.builder()
-            .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-            .model("qwen-image-3.0-pro")
-            .messages(Arrays.asList(userMessage))
-            .parameter("prompt_extend", true)
-            .build();
-        try {
-            MultiModalConversationResult result = conv.call(param);
-            System.out.println(result);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-```
-```
-import java.util.Arrays;
-import java.util.Collections;
-import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;
-import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationParam;
-import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationResult;
-import com.alibaba.dashscope.common.MultiModalMessage;
-import com.alibaba.dashscope.common.Role;
-import com.alibaba.dashscope.utils.Constants;
-
-public class ImageEditExample {
-    public static void main(String[] args) {
-        Constants.baseHttpApiUrl = "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1";
 
         MultiModalConversation conv = new MultiModalConversation();
         MultiModalMessage userMessage = MultiModalMessage.builder()
@@ -428,7 +359,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 export DASHSCOPE_API_KEY="your-api-key"
 # 将 {WorkspaceId} 替换为业务空间ID，cn-beijing 替换为对应地域（新加坡: ap-southeast-1, 美东: us-east-1）
 export DASHSCOPE_HTTP_BASE_URL="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
-dashscope image-synthesis create -m wanx2.1-t2i-turbo -p "一只可爱的猫" -n 1
+dashscope image-synthesis create -m qwen-image-3.0-pro -p "一只可爱的猫" -n 1
 ```
 
 **重要**SDK Expert 交互式助手可按自然语言完成同样的开发与排障，见
@@ -436,317 +367,6 @@ dashscope image-synthesis create -m wanx2.1-t2i-turbo -p "一只可爱的猫" -n
 [DashScope SDK Expert](raw/model-api-reference/preparations/dashscope-sdk-expert.md)。
 
 完整地域表见 [Base URL 总览](raw/model-user-guide/get-started-with-models/base-url.md)。
-
-#### 万相-异步调用
-
-#### Python
-
-##### 请求示例
-
-```
-import os
-import dashscope
-from dashscope.aigc.image_generation import ImageGeneration
-from dashscope.api_entities.dashscope_response import Message
-
-# 以下为北京地域base_url，各地域的base_url不同
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-
-# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-# 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-api_key = os.getenv("DASHSCOPE_API_KEY")
-
-def main():
-    message = Message(
-        role="user",
-        content=[
-            {"text": "一位年轻女性，自然随性的自拍风格，超高清写实人物生活照。她身着黄色碎花长袖上衣，长发自然垂落且略带波浪卷。画面背景为户外自然景色，近处有绿植，远处可见水域和山峦。自然柔和的阳光洒在人物脸上和身上，形成自然的光影效果，拍摄机位为人物手持设备的中景自拍视角，人物身体自然站立，展现出轻松自在的状态。角度自然，随手一拍的快照风格，不经意间的抓拍。"}
-        ]
-    )
-
-    # 提交异步任务
-    print("提交异步任务...")
-    response = ImageGeneration.async_call(
-        model="wan2.7-image-pro",
-        api_key=api_key,
-        messages=[message],
-        enable_sequential=False,
-        n=1,
-        size="2K"
-    )
-
-    if response.status_code == 200:
-        print(f"任务提交成功，任务ID: {response.output.task_id}")
-
-        # 等待任务完成
-        status = ImageGeneration.wait(task=response, api_key=api_key)
-
-        if status.output.task_status == "SUCCEEDED":
-            print("任务完成!")
-            print(f"结果:")
-            print(status)
-        else:
-            print(f"任务失败，状态: {status.output.task_status}")
-    else:
-        print(f"任务创建失败: {response.code} - {response.message}")
-
-if __name__ == "__main__":
-    try:
-        main()
-    except Exception as e:
-        print(f"错误: {e}")
-```
-
-##### 响应示例
-
-1、创建任务的响应示例
-
-```
-{
-    "status_code": 200,
-    "request_id": "4fb3050f-de57-4a24-84ff-e37ee5xxxxxx",
-    "code": "",
-    "message": "",
-    "output": {
-        "text": null,
-        "finish_reason": null,
-        "choices": null,
-        "audio": null,
-        "task_id": "77093787-a217-4c29-9cd4-ca7b5ac86xxx",
-        "task_status": "PENDING"
-    },
-    "usage": {
-        "input_tokens": 0,
-        "output_tokens": 0,
-        "characters": 0
-    }
-}
-```
-
-2、查询任务结果的响应示例
-
-> url 有效期24小时，请及时下载图像。
-
-```
-{
-    "status_code": 200,
-    "request_id": "56e318fd-ed60-99e8-8ca1-cdef25ca4xxx",
-    "code": "",
-    "message": "",
-    "output": {
-        "text": null,
-        "finish_reason": null,
-        "choices": [
-            {
-                "finish_reason": "stop",
-                "message": {
-                    "role": "assistant",
-                    "content": [
-                        {
-                            "image": "https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/xxxxxx.png?Expires=xxxxxx",
-                            "type": "image"
-                        }
-                    ]
-                }
-            }
-        ],
-        "audio": null,
-        "task_id": "77093787-a217-4c29-9cd4-ca7b5ac86xxx",
-        "task_status": "SUCCEEDED",
-        "submit_time": "2026-03-31 23:04:46.166",
-        "scheduled_time": "2026-03-31 23:04:46.208",
-        "end_time": "2026-03-31 23:05:11.664",
-        "finished": true
-    },
-    "usage": {
-        "input_tokens": 720,
-        "output_tokens": 11,
-        "characters": 0,
-        "size": "2048*2048",
-        "total_tokens": 731,
-        "image_count": 1
-    }
-}
-```
-
-#### Java
-
-##### 请求示例
-
-```
-import com.alibaba.dashscope.aigc.imagegeneration.*;
-import com.alibaba.dashscope.exception.ApiException;
-import com.alibaba.dashscope.exception.NoApiKeyException;
-import com.alibaba.dashscope.exception.UploadFileException;
-import com.alibaba.dashscope.utils.Constants;
-import com.alibaba.dashscope.utils.JsonUtils;
-
-import java.util.Collections;
-
-public class Main {
-
-    static {
-        // 以下为北京地域url，各地域的base_url不同
-        Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
-    }
-
-    // 若没有配置环境变量，请用百炼API Key将下行替换为：apiKey="sk-xxx"
-    // 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    static String apiKey = System.getenv("DASHSCOPE_API_KEY");
-
-    public static ImageGenerationResult waitTask(String taskId)
-            throws ApiException, NoApiKeyException {
-        ImageGeneration imageGeneration = new ImageGeneration();
-        return imageGeneration.wait(taskId, apiKey);
-    }
-
-    public static void asyncCall() throws ApiException, NoApiKeyException, UploadFileException {
-        ImageGenerationMessage message = ImageGenerationMessage.builder()
-                .role("user")
-                .content(Collections.singletonList(
-                        Collections.singletonMap("text", "一位年轻女性，自然随性的自拍风格，超高清写实人物生活照。她身着黄色碎花长袖上衣，长发自然垂落且略带波浪卷。画面背景为户外自然景色，近处有绿植，远处可见水域和山峦。自然柔和的阳光洒在人物脸上和身上，形成自然的光影效果，拍摄机位为人物手持设备的中景自拍视角，人物身体自然站立，展现出轻松自在的状态。角度自然，随手一拍的快照风格，不经意间的抓拍。")
-                )).build();
-
-        ImageGenerationParam param = ImageGenerationParam.builder()
-                .apiKey(apiKey)
-                .model("wan2.7-image-pro")
-                .messages(Collections.singletonList(message))
-                .enableSequential(false)
-                .n(1)
-                .size("2K")
-                .build();
-
-        ImageGeneration imageGeneration = new ImageGeneration();
-        ImageGenerationResult taskResult = null;
-        try {
-            System.out.println("----async call, creating task----");
-            taskResult = imageGeneration.asyncCall(param);
-        } catch (ApiException | NoApiKeyException | UploadFileException e) {
-            throw new RuntimeException(e.getMessage());
-        }
-        System.out.println("Task created: " + JsonUtils.toJson(taskResult));
-
-        // 等待任务完成
-        String taskId = taskResult.getOutput().getTaskId();
-        ImageGenerationResult result = waitTask(taskId);
-        System.out.println(JsonUtils.toJson(result));
-    }
-
-    public static void main(String[] args) {
-        try {
-            asyncCall();
-        } catch (ApiException | NoApiKeyException | UploadFileException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-}
-```
-
-##### 响应示例
-
-1、创建任务的响应示例
-
-```
-{
-    "requestId": "7d026dc1-e8c9-9caa-84ac-e82e2da97xxx",
-    "output": {
-        "task_id": "2de18c56-c151-4b80-8105-1d164733exxx",
-        "task_status": "PENDING"
-    },
-    "status_code": 200,
-    "code": "",
-    "message": ""
-}
-```
-
-2、查询任务结果的响应示例
-
-```
-{
-    "requestId": "daea7295-4ce0-928a-9a11-4d2bea058xxx",
-    "usage": {
-        "input_tokens": 720,
-        "output_tokens": 11,
-        "total_tokens": 731,
-        "image_count": 1,
-        "size": "2048*2048"
-    },
-    "output": {
-        "choices": [
-            {
-                "finish_reason": "stop",
-                "message": {
-                    "role": "assistant",
-                    "content": [
-                        {
-                            "image": "https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/xxxxxx.png?Expires=xxxxxx",
-                            "type": "image"
-                        }
-                    ]
-                }
-            }
-        ],
-        "task_id": "2de18c56-c151-4b80-8105-1d164733exxx",
-        "task_status": "SUCCEEDED",
-        "finished": true,
-        "submit_time": "2026-03-31 19:49:53.124",
-        "scheduled_time": "2026-03-31 19:49:53.175",
-        "end_time": "2026-03-31 19:50:53.160"
-    },
-    "status_code": 200,
-    "code": "",
-    "message": ""
-}
-```
-
-#### curl
-
-**说明**
-
--   异步调用必须设置 Header 参数`X-DashScope-Async` 为`enable`。
--   异步任务的 `task_id` 查询有效期为 24 小时，过期后任务状态将变为 `UNKNOWN`。
--   适用于所有模型，新手建议使用 [Postman](raw/model-user-guide/use-chat-client-or-development-tool/first-call-to-image-and-video-api.md)调用API。
-
-##### 步骤1：发起创建任务请求
-
-该请求会返回一个任务ID（`task_id`）。
-
-```
-curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image-generation/generation' \
---header 'Content-Type: application/json' \
---header "Authorization: Bearer $DASHSCOPE_API_KEY" \
---header "X-DashScope-Async: enable" \
---data '{
-    "model": "wan2.7-image-pro",
-    "input": {
-        "messages": [
-            {
-                "role": "user",
-                "content": [
-                    {"text": "一间有着精致窗户的花店，漂亮的木质门，摆放着花朵"}
-                ]
-            }
-        ]
-    },
-    "parameters": {
-        "size": "2K",
-        "n": 1,
-        "watermark": false,
-        "thinking_mode": true
-    }
-}'
-```
-
-##### 步骤2：根据任务ID查询结果
-
-使用上一步获取的 `task_id`，通过接口轮询任务状态，直到 `task_status` 变为 SUCCEEDED 或 FAILED。
-
-将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
-
-```
-curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id} \
---header "Authorization: Bearer $DASHSCOPE_API_KEY"
-```
 
 ## 关键能力
 
@@ -760,7 +380,7 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 
 撰写技巧：一个结构化的 Prompt 通常能带来更好的效果，撰写技巧请参见[文生图Prompt指南](raw/model-user-guide/use-cases/text-to-image-prompt.md)。
 
-> wan2.7-image-pro、wan2.7-image不支持`negative_prompt`参数，对于不希望出现的元素，请在正向提示词中描述（不要出现xxx）。
+> wan2.7-image-pro、wan2.7-image、qwen-image-2.1系列不支持`negative_prompt`参数，对于不希望出现的元素，请在正向提示词中描述（不要出现xxx）。
 
 ### 2\. 开启prompt智能改写
 
@@ -775,7 +395,7 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 
 > wan2.7-image-pro、wan2.7-image不支持`prompt_extend`参数，可通过开启`thinking_mode`提升出图质量。
 
-参数: `parameters.prompt_extend_mode` (string，可选，默认为 `direct`)。仅qwen-image-3.0系列支持，用于指定`prompt_extend`开启后的改写方式：
+参数: `parameters.prompt_extend_mode` (string，可选，默认为 `direct`)。仅qwen-image-3.0系列、qwen-image-2.1系列支持，用于指定`prompt_extend`开启后的改写方式：
 
 -   `direct`：直接提示词增强（DPE），适用于大多数场景。文生图（T2I）和图生图/图像编辑（I2I）均支持。
 -   `agent`：智能体提示词增强（APE），提供更精细的改写效果，仅支持文生图（T2I）。图生图/图像编辑（I2I）场景传入`agent`将返回400错误。
@@ -784,113 +404,13 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 
 参数: parameters.size (string)，格式为 `"宽*高"`。
 
-**模型**
-
-**size格式**
-
-**总像素支持范围**
-
-**默认**
-
-**宽高比**
-
-wan2.7-image-pro
-
-缩写
-
-`1K`（1024\*1024）、`2K`（2048\*2048）、`4K`（4096\*4096）
-
-`2K`（2048\*2048）
-
-1:8 – 8:1
-
-自定义 `"宽*高"`
-
-768\*768 – 4096\*4096
-
-wan2.7-image
-
-缩写
-
-`1K`（1024\*1024）、`2K`（2048\*2048）
-
-`2K`（2048\*2048）
-
-1:8 – 8:1
-
-自定义 `"宽*高"`
-
-768\*768 – 2048\*2048
-
-wan2.6-image（图文混排输出模式）
-
-自定义 `"宽*高"`
-
-768\*768 – 1280\*1280
-
-匹配输入宽高比 (≤1280\*1280)
-
-1:4 – 4:1
-
-wan2.6-t2i, wan2.5-t2i-preview
-
-自定义 `"宽*高"`
-
-1280\*1280 – 1440\*1440
-
-1280\*1280
-
-1:4 – 4:1
-
-wan2.2 及更早的 t2i 模型
-
-自定义 `"宽*高"`
-
-\[512, 1440\]，且总像素 ≤1440\*1440
-
-1024\*1024
-
-\-
-
-qwen-image-3.0 系列
-
-自定义 `"宽*高"`
-
-512\*512 – 2048\*2048
-
-模型自动推荐
-
-1:8 – 8:1
-
-qwen-image-2.0 系列
-
-自定义 `"宽*高"`
-
-512\*512 – 2048\*2048
-
-2048\*2048
-
-\-
-
-qwen-image-max / qwen-image-plus 系列
-
-仅限固定预设尺寸
-
-见下方预设尺寸
-
-1664\*928 (16:9)
-
-\-
+-   **qwen-image-3.0 系列、qwen-image-2.1 系列**：512\*512 至 2048\*2048，宽高比 1:8 至 8:1，不指定时由模型自动推荐。
+-   **qwen-image-2.0 系列**：512\*512 至 2048\*2048，默认 2048\*2048。
+-   **wan2.7-image-pro**：支持 `1K`/`2K`/`4K` 缩写或自定义 768\*768 至 4096\*4096，默认 2K。宽高比 1:8 至 8:1。
+-   **wan2.7-image**：支持 `1K`/`2K` 缩写或自定义 768\*768 至 2048\*2048，默认 2K。宽高比 1:8 至 8:1。
+-   更早的万相模型请参见对应的[API参考文档](#189eed0801tx2)。
 
 > wan2.7-image-pro仅文生图场景（无图片输入、非组图生成）支持4K与自定义4096_4096分辨率，其余场景仅支持2K与2048_2048分辨率。
-
-**qwen-image-max、qwen-image-plus 系列**：仅支持以下 5 种固定的分辨率：
-
--   `1664*928`（默认值）：16:9
--   `1472*1104`：4:3
--   `1328*1328`：1:1
--   `1104*1472`：3:4
--   `928*1664`：9:16
 
 推荐分辨率：
 
@@ -898,7 +418,7 @@ qwen-image-max / qwen-image-plus 系列
 
 **4K (wan2.7-image-pro)**
 
-**2K (wan2.7-image, qwen-image-3.0系列, qwen-image-2.0系列)**
+**2K (wan2.7-image, qwen-image-3.0系列, qwen-image-2.1系列, qwen-image-2.0系列)**
 
 **1K (Wan t2i)**
 
@@ -1008,7 +528,7 @@ qwen-image-max / qwen-image-plus 系列
 
 ### 7\. 其他通用参数
 
-参数：`parameters.n`（integer，可选，**默认为 1**）。输出图像的数量。qwen-image-3.0 系列支持 1~6 张；`wan2.7-image-pro`、`wan2.7-image` 在关闭组图模式时支持 1~4 张；开启组图模式时表示最大生成图像数量（取值范围 1~12，默认为 12），详见上文“组图生成”。
+参数：`parameters.n`（integer，可选，**默认为 1**）。输出图像的数量。qwen-image-3.0 系列、qwen-image-2.1 系列支持 1~6 张；`wan2.7-image-pro`、`wan2.7-image` 在关闭组图模式时支持 1~4 张；开启组图模式时表示最大生成图像数量（取值范围 1~12，默认为 12），详见上文“组图生成”。
 
 > n 直接影响费用：费用 = 单价 × 成功生成的图片张数。
 
@@ -1028,7 +548,7 @@ qwen-image-max / qwen-image-plus 系列
 
 ## API文档
 
--   [千问-图像生成与编辑3.0](raw/model-api-reference/image-generation/qwen-image-api-reference/qwen-image-generation-and-editing-api-reference.md)
+-   [千问-图像生成与编辑](raw/model-api-reference/image-generation/qwen-image-api-reference/qwen-image-generation-and-editing-api-reference.md)
 -   [千问 Qwen-Image](raw/model-api-reference/image-generation/qwen-image-api-reference/legacy-qwen-image-models/qwen-image-api.md)
 -   [万相-图像生成与编辑2.7](raw/model-api-reference/image-generation/wan-image-api-reference/wan-image-generation-and-editing-api-reference.md)
 -   [万相-图像生成与编辑2.6](raw/model-api-reference/image-generation/wan-image-api-reference/wan-image-generation-api-reference.md)
@@ -1055,6 +575,6 @@ A: 当输入的prompt比较简洁或希望模型发挥更多创意时，建议�
 
 注意：wan2.7-image-pro、wan2.7-image不支持`prompt_extend`参数，可通过开启`thinking_mode`提升出图质量。
 
-**Q:**[体验中心](https://bailian.console.aliyun.com/model/experience/vision/imageGenerate)如何清空会话的内容？
+**Q: [体验中心](https://bailian.console.aliyun.com/model/experience/vision/imageGenerate)如何清空会话的内容？**
 
 A: 点击控制台右上角**清空当前对话**。

@@ -2,8 +2,6 @@
 
 本文介绍了在阿里云百炼平台通过API调用 GLM 系列模型的方法。 每个模型各有100万免费Token。
 
-**重要**glm-4.6、glm-4.7 将于**2026年10月10日**下架。推荐转用：[qwen3.7-plus](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.7-plus)、[qwen3.8-max](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.8-max)、[qwen3.8-flash](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.8-flash)。
-
 ## 服务接入地址
 
 不同地域的服务接入地址不同，请根据您选择的地域配置对应的 Base URL。
@@ -649,7 +647,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/v
 
 ## 流式工具调用
 
-glm-5.3、glm-5.2、glm-5.2-fast-preview、glm-5.1、glm-5、glm-4.7、glm-4.6 支持`tool_stream`参数（boolean）。glm-5.3 的默认值为`true`，其余模型的默认值为`false`；该参数仅在`stream`为`true`时生效。开启后，Function Calling 返回的 tool\_call 参数（arguments）会以流式增量方式逐步返回，而非等待完整生成后一次性返回。
+glm-5.3、glm-5.2、glm-5.2-fast-preview、glm-5.1、glm-5 支持`tool_stream`参数（boolean）。glm-5.3 的默认值为`true`，其余模型的默认值为`false`；该参数仅在`stream`为`true`时生效。开启后，Function Calling 返回的 tool\_call 参数（arguments）会以流式增量方式逐步返回，而非等待完整生成后一次性返回。
 
 `stream`与`tool_stream`的组合行为如下：
 
@@ -1255,70 +1253,6 @@ glm-5
 
 > 仅支持隐式缓存
 
-glm-4.7
-
-支持
-
-支持
-
-支持
-
-> 仅非思考模式
-
-不支持
-
-不支持
-
-支持
-
-> 仅支持隐式缓存
-
-glm-4.6
-
-支持
-
-支持
-
-支持
-
-> 仅非思考模式
-
-不支持
-
-不支持
-
-支持
-
-> 仅支持隐式缓存
-
-glm-4.5
-
-支持
-
-支持
-
-支持
-
-不支持
-
-不支持
-
-不支持
-
-glm-4.5-air
-
-支持
-
-支持
-
-支持
-
-不支持
-
-不支持
-
-不支持
-
 ## 参数默认值
 
 **模型**
@@ -1386,54 +1320,6 @@ glm-5
 true
 
 1.0
-
-0.95
-
-20
-
-1.0
-
-glm-4.7
-
-true
-
-1.0
-
-0.95
-
-20
-
-1.0
-
-glm-4.6
-
-true
-
-1.0
-
-0.95
-
-20
-
-1.0
-
-glm-4.5
-
-true
-
-0.6
-
-0.95
-
-20
-
-1.0
-
-glm-4.5-air
-
-true
-
-0.6
 
 0.95
 

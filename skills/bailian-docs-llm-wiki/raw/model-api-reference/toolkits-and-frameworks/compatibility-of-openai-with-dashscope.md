@@ -872,12 +872,12 @@ data: [DONE]
     
 3.  **API Key**：填写对应地域的百炼 API Key。您可以在百炼控制台[API Key管理页面](https://bailian.console.aliyun.com/model/settings/api-key)创建并获取 API Key。
     
-4.  **模型名称**：填写支持 OpenAI 兼容协议的大语言模型名称。可选模型以本文“兼容OpenAI需要信息”中[支持的模型列表](https://help.aliyun.com/zh/model-studio/compatibility-of-openai-with-dashscope#eadfc13038jd5)部分为准；例如 `qwen3-vl-32b-thinking` 仅作为模型名称示例，不表示免费额度承诺。
+4.  **模型名称**：填写支持 OpenAI 兼容协议的大语言模型名称。可选模型以本文“兼容OpenAI需要信息”中[支持的模型列表](https://help.aliyun.com/zh/model-studio/compatibility-of-openai-with-dashscope#eadfc13038jd5)部分为准；例如 `qwen3.7-plus` 仅作为模型名称示例，不表示免费额度承诺。
     
 5.  保存配置后发起一次对话，验证第三方客户端是否可以正常调用模型。
     
 
-如果调用返回 HTTP 400，且 `error.message` 为 `current user api does not support http call`、`error.type` 为 `invalid_request_error`，说明当前填写的模型不支持通过 OpenAI 兼容接口进行 HTTP 调用。请更换为[支持的模型列表](https://help.aliyun.com/zh/model-studio/compatibility-of-openai-with-dashscope#eadfc13038jd5)中的模型后重试，例如不要使用已确认不支持该调用方式的 `qvq-max`。
+如果调用返回 HTTP 400，且 `error.message` 为 `current user api does not support http call`、`error.type` 为 `invalid_request_error`，说明当前填写的模型不支持通过 OpenAI 兼容接口进行 HTTP 调用。请更换为[支持的模型列表](https://help.aliyun.com/zh/model-studio/compatibility-of-openai-with-dashscope#eadfc13038jd5)中的模型后重试。
 
 ## 状态码说明
 

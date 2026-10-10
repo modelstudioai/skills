@@ -30,21 +30,29 @@
 
 属性
 
-**input.turn\_detection**`object`（可选）
+**input**`object`
+
+输入音频配置。
+
+属性
+
+**turn\_detection**`object`（可选）
 
 语音检测配置。
 
-**input.turn\_detection.type**`string`（可选）
+属性
+
+**type**`string`（可选）
 
 可选值：`speaker_detection`（默认，开启实时说话人分离）、`server_vad`（语音活动检测）。
 
-**input.turn\_detection.threshold**`number`（可选）
+**threshold**`number`（可选）
 
-检测阈值。使用 `speaker_detection` 时固定为 `0.5`。
+检测阈值。使用 `speaker_detection` 时，用于区分静音和有效人声，低于阈值的声音会被过滤，不输入模型；取值固定为 `0.5`。
 
 **modalities**`array`（可选）
 
-适用于 `qwen3.5-livetranslate-flash-realtime` 等模型。
+适用于 `qwen3.5-livetranslate-flash-realtime`。
 
 模型输出模态设置，可选值：
 
@@ -59,11 +67,9 @@
 
 **voice**`string`（可选）
 
-适用于 `qwen3.5-livetranslate-flash-realtime` 等模型。
+生成音频的音色。未启用声音复刻时，可设置为系统预设音色，可选值参见[支持的音色](https://help.aliyun.com/zh/model-studio/qwen3-5-livetranslate-flash-realtime#0a5bde7593gdk)。`qwen3.8-livetranslate-flash-realtime` 和 `qwen3.5-livetranslate-flash-realtime` 的默认音色为 `Tina`；`qwen3-livetranslate-flash-realtime` 的默认音色为 `Cherry`。
 
-生成音频的音色。未启用声音复刻时，可设置为系统预设音色，可选值参见[支持的音色](https://help.aliyun.com/zh/model-studio/qwen3-5-livetranslate-flash-realtime#0a5bde7593gdk)。Qwen3.5-LiveTranslate-Flash-Realtime默认音色为： `Tina`。Qwen3-LiveTranslate-Flash-Realtime默认音色为： `Cherry`。
-
-> 启用声音复刻（`enable_voice_clone`为`true`）时，`voice`的取值取决于`frequency`：当`frequency`为`once`或`always`时，必须设置为`default`；当`frequency`为`never`时，设置为用户预先复刻的音色 ID。此时不可设置为系统预设音色，否则服务端会返回错误。
+> 启用声音复刻（`enable_voice_clone`为`true`）时，`voice`的取值取决于`voice_clone_options.frequency`：当`frequency`为`once`或`always`时，必须设置为`default`；当`frequency`为`never`时，设置为用户预先复刻的音色 ID。此时不可设置为系统预设音色，否则服务端会返回错误。
 
 **enable\_voice\_clone**`boolean`（可选）
 
@@ -75,7 +81,7 @@
 
 属性
 
-**voice\_clone\_options.frequency**`string`（可选）
+**frequency**`string`（可选）
 
 音色复刻频率，可选值：
 
@@ -94,7 +100,7 @@
 
 **sample\_rate**`integer`（可选）
 
-适用于 `qwen3.5-livetranslate-flash-realtime` 等模型。
+适用于 `qwen3.5-livetranslate-flash-realtime`。
 
 输入音频的采样率，单位为Hz。可选值：
 
@@ -103,7 +109,7 @@
 
 **input\_audio\_transcription**`object`（可选）
 
-适用于 `qwen3.5-livetranslate-flash-realtime` 等模型。
+适用于 `qwen3.5-livetranslate-flash-realtime`。
 
 `qwen3.8-livetranslate-flash-realtime` 的 ASR 始终开启，不支持关闭，识别结果免费。
 
@@ -111,7 +117,7 @@
 
 属性
 
-**model**`string`（可选）
+**model**`string|null`（可选）
 
 语音识别模型，默认值为 `qwen3-asr-flash-realtime`，ASR 默认启用。服务端会在翻译的同时返回输入音频的语音识别结果（源语言原文），通过`conversation.item.input_audio_transcription.text`和`conversation.item.input_audio_transcription.completed`事件返回。如需关闭 ASR，请将此参数显式设置为 `null`。
 
@@ -123,7 +129,7 @@
 
 **input\_audio\_format**`string`（可选）
 
-适用于 `qwen3.5-livetranslate-flash-realtime` 等模型。
+适用于 `qwen3.5-livetranslate-flash-realtime`。
 
 用户输入音频格式，可选值：
 
@@ -138,13 +144,13 @@
 
 **output\_audio\_format**`string`（可选）
 
-适用于 `qwen3.5-livetranslate-flash-realtime` 等模型。
+适用于 `qwen3.5-livetranslate-flash-realtime`。
 
 输出音频格式，当前仅支持设为`pcm`。
 
-**turn\_detection**`object`（可选）
+**turn\_detection**`object|null`（可选）
 
-适用于 `qwen3.5-livetranslate-flash-realtime` 等模型。
+适用于 `qwen3.5-livetranslate-flash-realtime`。
 
 语音活动检测（VAD，Voice Activity Detection）配置，用于控制语音起止的检测方式：
 
@@ -183,7 +189,7 @@ VAD 检测灵敏度。值越低，越容易将微弱声音（包括背景噪音�
 
 `qwen3.8-livetranslate-flash-realtime` 不支持此参数。
 
-同语种输出配置。当源语种与目标语种相同时，可跳过文本输出、音频输出或两者。仅当`translation.language`为`zh`或`en`时生效。
+同语种输出配置。当源语种与目标语种相同时，可跳过文本输出、音频输出或两者。仅当翻译目标语种为`zh`或`en`时生效。
 
 属性
 
@@ -207,7 +213,7 @@ VAD 检测灵敏度。值越低，越容易将微弱声音（包括背景噪音�
 
 示例：`{"人工智能": "Artificial Intelligence"}`
 
-适用于 `qwen3.8-livetranslate-flash-realtime`。
+#### qwen3.8-livetranslate-flash-realtime
 
 ```
 {
@@ -217,31 +223,18 @@ VAD 检测灵敏度。值越低，越容易将微弱声音（包括背景噪音�
       "text",
       "audio"
     ],
-    "translation": {
-      "language": "en"
-    }
-  }
-}
-```
-
-`qwen3.5-livetranslate-flash-realtime` 配置示例：
-
-```
-{
-  "event_id": "event_ToPZqeobitzUJnt3QqtWg",
-  "type": "session.update",
-  "session": {
-    "modalities": [
-      "text",
-      "audio"
-    ],
-    "voice": "Tina",
-    "sample_rate": 16000,
-    "input_audio_format": "pcm",
-    "output_audio_format": "pcm",
-    "input_audio_transcription": {
-      "model": "qwen3-asr-flash-realtime",
-      "language": "zh"
+    "audio": {
+      "input": {
+        "turn_detection": {
+          "type": "speaker_detection",
+          "threshold": 0.5
+        }
+      }
+    },
+    "voice": "default",
+    "enable_voice_clone": true,
+    "voice_clone_options": {
+      "frequency": "once"
     },
     "translation": {
       "language": "en",
@@ -256,7 +249,7 @@ VAD 检测灵敏度。值越低，越容易将微弱声音（包括背景噪音�
 }
 ```
 
-启用声音复刻（`frequency=once`）的示例：
+#### qwen3.5-livetranslate-flash-realtime
 
 ```
 {
@@ -275,28 +268,26 @@ VAD 检测灵敏度。值越低，越容易将微弱声音（包括背景噪音�
     "sample_rate": 16000,
     "input_audio_format": "pcm",
     "output_audio_format": "pcm",
-    "translation": {
-      "language": "en"
-    }
-  }
-}
-```
-
-源语种和目标语种均为英语，并跳过文本和音频输出的示例（不适用于 `qwen3.8-livetranslate-flash-realtime`）：
-
-```
-{
-  "event_id": "event_xxx",
-  "type": "session.update",
-  "session": {
     "input_audio_transcription": {
-      "language": "en"
+      "model": "qwen3-asr-flash-realtime",
+      "language": "zh"
+    },
+    "turn_detection": {
+      "type": "server_vad",
+      "threshold": 0.2,
+      "silence_duration_ms": 1000
     },
     "translation": {
       "language": "en",
       "same_language_skip_options": {
-        "skip_text": true,
-        "skip_audio": true
+        "skip_text": false,
+        "skip_audio": false
+      },
+      "corpus": {
+        "phrases": {
+          "人工智能": "Artificial Intelligence",
+          "机器学习": "Machine Learning"
+        }
       }
     }
   }
@@ -387,7 +378,7 @@ Base64 编码的图像数据。
 
 用于结束当前会话。发送此事件后，服务端响应流程：
 
--   已检测到语音：服务端完成语音识别后，发送包含识别结果的[conversation.item.input\_audio\_transcription.completed](https://help.aliyun.com/zh/model-studio/live-translator-server-events#asr003comph2)事件，随后发送[session.finished](https://help.aliyun.com/zh/model-studio/qwen-asr-realtime-server-events#6eaa77339djdv)事件作为会话结束标识。
+-   已检测到语音：服务端完成剩余翻译；启用原文识别时，通过 [conversation.item.input\_audio\_transcription.completed](https://help.aliyun.com/zh/model-studio/live-translator-server-events#asr003comph2) 事件返回完整原文。所有音频翻译完成后，发送 [session.finished](https://help.aliyun.com/zh/model-studio/live-translator-server-events#5369266402pgb) 事件作为会话结束标识。
 -   未检测到语音：服务端直接发送`session.finished`事件。
 
 客户端监听到`session.finished`事件后，需主动断开连接。

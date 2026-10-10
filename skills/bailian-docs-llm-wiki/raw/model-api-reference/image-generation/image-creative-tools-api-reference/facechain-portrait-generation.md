@@ -9,4 +9,3 @@
 -   [快速开始](raw/_short/facechain-quick-start-20c922b5dddad051.md)
 -   [人物图像检测API详情](raw/_short/facechain-face-detection-api-3fa0c8f9a08beb3a.md)
 -   [人物形象训练API详情](raw/_short/facechain-finetune-api-98000a80fe5f2fef.md)
--   [人物写真生成API详情](raw/_short/facechain-generation-e11b15fa1f0ad97a.md)

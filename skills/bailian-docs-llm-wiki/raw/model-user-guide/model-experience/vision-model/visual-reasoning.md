@@ -27,10 +27,7 @@
 -   **Qwen3.5**
     -   **混合思考模型：**qwen3.5-plus、qwen3.5-plus-2026-02-15、qwen3.5-flash、qwen3.5-flash-2026-02-23、qwen3.5-397b-a17b、qwen3.5-122b-a10b、qwen3.5-27b、qwen3.5-35b-a3b
 -   **Qwen3-VL**
-    -   **混合思考模型：**qwen3-vl-plus、qwen3-vl-plus-2025-12-19、qwen3-vl-plus-2025-09-23、qwen3-vl-flash、qwen3-vl-flash-2025-10-15
-    -   **仅思考模型：**qwen3-vl-235b-a22b-thinking**、**qwen3-vl-32b-thinking**、**qwen3-vl-30b-a3b-thinking**、**qwen3-vl-8b-thinking
--   **QVQ**
-    -   **仅思考模型：**qvq-max系列、qvq-plus系列
+    -   **混合思考模型：**qwen3-vl-plus
 -   **Kimi**
     -   **混合思考模型：**kimi-k2.6、kimi-k2.5
 -   **Stepfun**
@@ -40,18 +37,13 @@
 
 ## 使用方式
 
--   **思考过程：**阿里云百炼提供混合思考和仅思考两种视觉推理模型。
+-   **思考过程：**阿里云百炼提供混合思考视觉推理模型，可通过`enable_thinking`控制其思考行为：
     
-    -   **混合思考模型：**可通过`enable_thinking`控制其思考行为：
-        
-        -   设置为 `true`，开启思考，模型将先输出思考过程，再输出最终回复。Qwen3.8、Qwen3.7、Qwen3.6、Qwen3.5系列模型默认为`true`。
-        -   设置为 `false`，关闭思考，模型将直接生成回复。`qwen3-vl-plus`、`qwen3-vl-flash`系列模型默认为`false`。
-    -   **仅思考模型：**模型总会在回复前进行思考，且无法关闭。
-        
+    -   设置为 `true`，开启思考，模型将先输出思考过程，再输出最终回复。Qwen3.8、Qwen3.7、Qwen3.6、Qwen3.5系列模型默认为`true`。
+    -   设置为 `false`，关闭思考，模型将直接生成回复。`qwen3-vl-plus`系列模型默认为`false`。
 -   **输出方式：**视觉推理模型包含详细的思考过程，为避免因响应内容过长导致超时，建议使用流式输出。
     
     -   Qwen3.8、Qwen3.7、Qwen3.6、Qwen3.5、Qwen3-VL、kimi-k2.6、kimi-k2.5、stepfun/step-3.7-flash、stepfun/step-5-preview系列支持**流式和非流式**两种方式。
-    -   QVQ系列仅支持**流式输出。**
 -   **System Prompt使用建议：**
     -   **对于单次或简单的对话调用**：为获得最佳推理效果，建议不设置 `System Message`。可将模型角色设定、输出格式要求等指令通过 `User Message` 传入。
     -   **对于构建 Agent 、实现工具调用等复杂应用：**可使用 `System Message` 来定义模型的角色、能力和行为框架，以确保其稳定性和可靠性。
@@ -63,7 +55,7 @@
 -   已[获取 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
 -   如果通过 SDK 进行调用，需安装[最新版SDK](raw/model-api-reference/preparations/install-sdk.md)，其中 DashScope Python SDK 版本不低于1.24.6，DashScope Java SDK 版本不低于 2.21.10。
 
-下列示例演示如何调用 `qvq-max`模型，对一张包含数学题的图片进行求解，并以流式输出的方式分别打印思考过程和最终回复。
+下列示例演示如何调用 `qwen3-vl-plus`模型，对一张包含数学题的图片进行求解，并以流式输出的方式分别打印思考过程和最终回复。
 
 #### OpenAI兼容
 
@@ -86,7 +78,7 @@ is_answering = False   # 判断是否结束思考过程并开始回复
 
 # 创建聊天完成请求
 completion = client.chat.completions.create(
-    model="qvq-max",  # 此处以 qvq-max 为例，可按需更换模型名称
+    model="qwen3-vl-plus",  # 此处以 qwen3-vl-plus 为例，可按需更换模型名称
     messages=[
         {
             "role": "user",
@@ -164,7 +156,7 @@ let messages = [
 async function main() {
     try {
         const stream = await openai.chat.completions.create({
-            model: 'qvq-max',
+            model: 'qwen3-vl-plus',
             messages: messages,
             stream: true
         });
@@ -288,7 +280,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
 --data '{
-    "model": "qvq-max",
+    "model": "qwen3-vl-plus",
     "messages": [
     {
       "role": "user",
@@ -314,35 +306,30 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 点击查看思考过程和完整回复
 
 ```
-data: {"choices":[{"delta":{"content":null,"role":"assistant","reasoning_content":""},"index":0,"logprobs":null,"finish_reason":null}],"object":"chat.completion.chunk","usage":null,"created":1742983020,"system_fingerprint":null,"model":"qvq-max","id":"chatcmpl-ab4f3963-2c2a-9291-bda2-65d5b325f435"}
+data: {"choices":[{"delta":{"content":null,"role":"assistant","reasoning_content":""},"index":0,"logprobs":null,"finish_reason":null}],"object":"chat.completion.chunk","usage":null,"created":1742983020,"system_fingerprint":null,"model":"qwen3-vl-plus","id":"chatcmpl-ab4f3963-2c2a-9291-bda2-65d5b325f435"}
 
-data: {"choices":[{"finish_reason":null,"delta":{"content":null,"reasoning_content":"好的"},"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1742983020,"system_fingerprint":null,"model":"qvq-max","id":"chatcmpl-ab4f3963-2c2a-9291-bda2-65d5b325f435"}
+data: {"choices":[{"finish_reason":null,"delta":{"content":null,"reasoning_content":"好的"},"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1742983020,"system_fingerprint":null,"model":"qwen3-vl-plus","id":"chatcmpl-ab4f3963-2c2a-9291-bda2-65d5b325f435"}
 
-data: {"choices":[{"delta":{"content":null,"reasoning_content":"，"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1742983020,"system_fingerprint":null,"model":"qvq-max","id":"chatcmpl-ab4f3963-2c2a-9291-bda2-65d5b325f435"}
+data: {"choices":[{"delta":{"content":null,"reasoning_content":"，"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1742983020,"system_fingerprint":null,"model":"qwen3-vl-plus","id":"chatcmpl-ab4f3963-2c2a-9291-bda2-65d5b325f435"}
 
-data: {"choices":[{"delta":{"content":null,"reasoning_content":"我现在"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1742983020,"system_fingerprint":null,"model":"qvq-max","id":"chatcmpl-ab4f3963-2c2a-9291-bda2-65d5b325f435"}
+data: {"choices":[{"delta":{"content":null,"reasoning_content":"我现在"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1742983020,"system_fingerprint":null,"model":"qwen3-vl-plus","id":"chatcmpl-ab4f3963-2c2a-9291-bda2-65d5b325f435"}
 
-data: {"choices":[{"delta":{"content":null,"reasoning_content":"要"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1742983020,"system_fingerprint":null,"model":"qvq-max","id":"chatcmpl-ab4f3963-2c2a-9291-bda2-65d5b325f435"}
+data: {"choices":[{"delta":{"content":null,"reasoning_content":"要"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1742983020,"system_fingerprint":null,"model":"qwen3-vl-plus","id":"chatcmpl-ab4f3963-2c2a-9291-bda2-65d5b325f435"}
 
-data: {"choices":[{"delta":{"content":null,"reasoning_content":"解决"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1742983020,"system_fingerprint":null,"model":"qvq-max","id":"chatcmpl-ab4f3963-2c2a-9291-bda2-65d5b325f435"}
+data: {"choices":[{"delta":{"content":null,"reasoning_content":"解决"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1742983020,"system_fingerprint":null,"model":"qwen3-vl-plus","id":"chatcmpl-ab4f3963-2c2a-9291-bda2-65d5b325f435"}
 .....
-data: {"choices":[{"delta":{"content":"方"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1742983095,"system_fingerprint":null,"model":"qvq-max","id":"chatcmpl-23d30959-42b4-9f24-b7ab-1bb0f72ce265"}
+data: {"choices":[{"delta":{"content":"方"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1742983095,"system_fingerprint":null,"model":"qwen3-vl-plus","id":"chatcmpl-23d30959-42b4-9f24-b7ab-1bb0f72ce265"}
 
-data: {"choices":[{"delta":{"content":"厘米"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1742983095,"system_fingerprint":null,"model":"qvq-max","id":"chatcmpl-23d30959-42b4-9f24-b7ab-1bb0f72ce265"}
+data: {"choices":[{"delta":{"content":"厘米"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1742983095,"system_fingerprint":null,"model":"qwen3-vl-plus","id":"chatcmpl-23d30959-42b4-9f24-b7ab-1bb0f72ce265"}
 
-data: {"choices":[{"finish_reason":"stop","delta":{"content":"","reasoning_content":null},"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1742983095,"system_fingerprint":null,"model":"qvq-max","id":"chatcmpl-23d30959-42b4-9f24-b7ab-1bb0f72ce265"}
+data: {"choices":[{"finish_reason":"stop","delta":{"content":"","reasoning_content":null},"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1742983095,"system_fingerprint":null,"model":"qwen3-vl-plus","id":"chatcmpl-23d30959-42b4-9f24-b7ab-1bb0f72ce265"}
 
-data: {"choices":[],"object":"chat.completion.chunk","usage":{"prompt_tokens":544,"completion_tokens":590,"total_tokens":1134,"completion_tokens_details":{"text_tokens":590},"prompt_tokens_details":{"text_tokens":24,"image_tokens":520}},"created":1742983095,"system_fingerprint":null,"model":"qvq-max","id":"chatcmpl-23d30959-42b4-9f24-b7ab-1bb0f72ce265"}
+data: {"choices":[],"object":"chat.completion.chunk","usage":{"prompt_tokens":544,"completion_tokens":590,"total_tokens":1134,"completion_tokens_details":{"text_tokens":590},"prompt_tokens_details":{"text_tokens":24,"image_tokens":520}},"created":1742983095,"system_fingerprint":null,"model":"qwen3-vl-plus","id":"chatcmpl-23d30959-42b4-9f24-b7ab-1bb0f72ce265"}
 
 data: [DONE]
 ```
 
 #### DashScope
-
-**说明**使用 DashScope 方式调用 QVQ 模型：
-
--   `incremental_output` 参数默认为 `true`，且不支持设置为 `false`，仅支持增量流式返回。
--   `result_format`参数默认为`"message"`，且不支持设置为`"text"`
 
 #### Python
 
@@ -363,7 +350,7 @@ messages = [
 response = MultiModalConversation.call(
     # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
     api_key=os.getenv('DASHSCOPE_API_KEY'),
-    model="qvq-max",  # 此处以qvq-max为例，可按需更换模型名称。
+    model="qwen3-vl-plus",  # 此处以qwen3-vl-plus为例，可按需更换模型名称。
     messages=messages,
     stream=True,
 )
@@ -547,8 +534,8 @@ public class Main {
         return MultiModalConversationParam.builder()
                 // 若没有配置环境变量，请用百炼API Key将下行替换为：.apiKey("sk-xxx")
                 .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-                // 此处以 qvq-max 为例，可按需更换模型名称
-                .model("qvq-max")
+                // 此处以 qwen3-vl-plus 为例，可按需更换模型名称
+                .model("qwen3-vl-plus")
                 .messages(Arrays.asList(Msg))
                 .incrementalOutput(true)
                 .build();
@@ -629,7 +616,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 -H 'Content-Type: application/json' \
 -H 'X-DashScope-SSE: enable' \
 -d '{
-    "model": "qvq-max",
+    "model": "qwen3-vl-plus",
     "input":{
         "messages":[
             {
@@ -730,7 +717,7 @@ completion = client.chat.completions.create(
     ],
     stream=True,
     # enable_thinking 参数开启思考过程，thinking_budget 参数设置最大推理过程 Token 数
-    # qwen3.5-plus、qwen3-vl-plus、qwen3-vl-flash可通过enable_thinking开启或关闭思考（其中qwen3.5-plus默认开启）、对于qwen3-vl-235b-a22b-thinking等带thinking后缀的模型，enable_thinking仅支持设置为开启，对其他Qwen-VL模型均不适用
+    # qwen3.5-plus、qwen3-vl-plus可通过enable_thinking开启或关闭思考（其中qwen3.5-plus默认开启），对其他Qwen-VL模型均不适用
     extra_body={
         'enable_thinking': enable_thinking},
 
@@ -912,7 +899,7 @@ response = MultiModalConversation.call(
     messages=messages,
     stream=True,
     # enable_thinking 参数开启思考过程
-    # qwen3.5-plus、qwen3-vl-plus、qwen3-vl-flash可通过enable_thinking开启或关闭思考（其中qwen3.5-plus默认开启）、对于qwen3-vl-235b-a22b-thinking等带thinking后缀的模型，enable_thinking仅支持设置为开启，对其他视觉推理模型均不适用
+    # qwen3.5-plus、qwen3-vl-plus可通过enable_thinking开启或关闭思考（其中qwen3.5-plus默认开启），对其他视觉推理模型均不适用
     enable_thinking=enable_thinking
 
 )
@@ -1135,7 +1122,7 @@ completion = client.chat.completions.create(
     ],
     stream=True,
     # enable_thinking 参数开启思考过程，thinking_budget 参数设置最大推理过程 Token 数
-    # qwen3.5-plus、qwen3-vl-plus、qwen3-vl-flash可通过enable_thinking开启或关闭思考（其中qwen3.5-plus默认开启）、对于qwen3-vl-235b-a22b-thinking等带thinking后缀的模型，enable_thinking仅支持设置为开启，对其他Qwen-VL模型均不适用
+    # qwen3.5-plus、qwen3-vl-plus可通过enable_thinking开启或关闭思考（其中qwen3.5-plus默认开启），对其他Qwen-VL模型均不适用
     extra_body={
         'enable_thinking': enable_thinking,
         "thinking_budget": 81920},
@@ -1319,7 +1306,7 @@ response = MultiModalConversation.call(
     messages=messages,
     stream=True,
     # enable_thinking 参数开启思考过程
-    # qwen3.5-plus、qwen3-vl-plus、qwen3-vl-flash可通过enable_thinking开启或关闭思考（其中qwen3.5-plus默认开启）、对于qwen3-vl-235b-a22b-thinking等带thinking后缀的模型，enable_thinking仅支持设置为开启，对其他Qwen-VL模型均不适用
+    # qwen3.5-plus、qwen3-vl-plus可通过enable_thinking开启或关闭思考（其中qwen3.5-plus默认开启），对其他Qwen-VL模型均不适用
     enable_thinking=enable_thinking,
     # thinking_budget 参数设置最大推理过程 Token 数
     thinking_budget=81920,

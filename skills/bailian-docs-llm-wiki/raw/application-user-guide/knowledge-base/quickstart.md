@@ -19,7 +19,7 @@
     
     系统自动完成解析、切片、向量化与索引构建。知识库状态变为 **已就绪** 即可检索。
     
-    **重要**知识库类型、使用场景、切片策略等完整配置说明见[创建知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)。
+    **重要**知识库类型、使用场景、切片策略等完整配置说明见[创建知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
     
 2.  **在 Playground 中试问答**：点击左侧 **Playground**，选择刚创建的知识库，在顶部切换到 **知识问答**，输入一个问题。
     
@@ -53,6 +53,6 @@
 
 -   了解 RAG 工作原理：[核心概念](raw/application-user-guide/knowledge-base/concepts.md)
 -   接入外部数据源：[数据集](raw/application-user-guide/knowledge-base/data-connection-overview/data-connection.md)
--   创建检索服务实现多库联合检索：[知识检索](raw/application-user-guide/knowledge-base/service/rag-knowledge-retrieval.md)
+-   创建检索服务实现多库联合检索：[知识检索](raw/application-user-guide/knowledge-base/rag-knowledge-retrieval.md)
 -   创建问答服务获得流式回答：[知识问答](raw/application-user-guide/knowledge-base/service/rag-knowledge-qa.md)
 -   查看完整 API：[API 参考](raw/application-api-reference/rag-api/rag-api-overview.md)

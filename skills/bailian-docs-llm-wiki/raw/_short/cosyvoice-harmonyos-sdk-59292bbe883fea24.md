@@ -225,8 +225,6 @@ SDK内部追踪日志过滤级别，默认值为 `2`。取值与 `log_level` 相
 
 音频编码格式，取值为 `pcm`、`wav`、`mp3`（默认）或 `opus`。
 
-**说明**`cosyvoice-v1` 不支持Opus。
-
 `enable_audio_decoder`
 
 `boolean`
@@ -275,8 +273,6 @@ SDK内部追踪日志过滤级别，默认值为 `2`。取值与 `log_level` 相
 
 MP3或Opus码率（kbps），默认值为 `32`，取值范围为 `[6, 510]`。
 
-**说明**`cosyvoice-v1` 不支持。
-
 `enable_ssml`
 
 `boolean`
@@ -301,8 +297,6 @@ MP3或Opus码率（kbps），默认值为 `32`，取值范围为 `[6, 510]`。
 
 生成时使用的随机数种子，可改变合成效果。在模型版本、文本、音色和其他参数均相同时，使用相同的 `seed` 可复现相同的合成结果。默认值为 `0`，取值范围为 `[0, 65535]`。
 
-**说明**`cosyvoice-v1` 不支持。
-
 `language_hints`
 
 `string[]`
@@ -314,8 +308,6 @@ MP3或Opus码率（kbps），默认值为 `32`，取值范围为 `[6, 510]`。
 取值范围
 
 支持 `zh`、`en`、`fr`、`de`、`ja`、`ko`、`ru`、`pt`、`th`、`id`、`vi`、`es`、`it`、`ms`、`fil` 和 `ar`。
-
-**说明**`cosyvoice-v1` 不支持。
 
 `instruction`
 
@@ -359,7 +351,7 @@ AIGC标识的 `PropagateID` 字段，仅在 `enable_aigc_tag` 为 `true` 时生�
 
 文本热修复配置，用于自定义发音或替换文本。
 
-**说明**`cosyvoice-v2` 和 `cosyvoice-v1` 不支持。
+**说明**`cosyvoice-v2` 不支持。
 
 格式参见[客户端事件](raw/_short/cosyvoice-client-events-a63a525ab07e6693.md)。
 

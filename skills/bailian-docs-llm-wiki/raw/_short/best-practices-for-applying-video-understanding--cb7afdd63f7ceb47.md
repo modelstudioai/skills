@@ -127,7 +127,7 @@ class LightApp:
     async def do_sse_query(self):
         body = {
             'videoUrl': self.videoUrl,
-            "videoModelId":"qwen-vl-max",   # 模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
+            "videoModelId":"qwen3-vl-plus",   # 模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
             "videoModelCustomPromptTemplate": self.videoModelCustomPromptTemplate,
             "modelCustomPromptTemplate": self.modelCustomPromptTemplate
         }

@@ -164,7 +164,7 @@
 
 开启知识库后，通过在提示词中手动输入「/」来添加变量。
 
-具体操作可查看[创建和使用知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)说明文档。
+具体操作可查看[创建和使用知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)说明文档。
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2655897471/p958293.png)
 

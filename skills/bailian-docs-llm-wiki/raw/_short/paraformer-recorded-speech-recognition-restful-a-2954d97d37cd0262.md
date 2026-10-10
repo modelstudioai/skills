@@ -133,24 +133,6 @@ string
 
 最新热词ID，支持最新v2系列模型并配置语种信息，此次语音识别中生效此热词ID对应的热词信息。默认不启用。使用方法请参考[定制热词](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/custom-hot-words.md)。
 
-resource\_id
-
-string
-
-否
-
-热词ID，此次语音识别中生效此热词ID对应的热词信息。默认不启用。
-
-注：`resource_id`对应SDK中的`phrase_id`字段，`phrase_id`为v1版本模型热词方案，不支持v2及后续系列模型。支持该方式热词的模型列表请参考[Paraformer语音识别热词定制与管理](https://help.aliyun.com/zh/model-studio/paraformer-asr-phrase-manager)。
-
-resource\_type
-
-string
-
-否
-
-固定字符串"asr\_phrase"，和"resource\_id"需同时使用。
-
 channel\_id
 
 array\[integer\]

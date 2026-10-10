@@ -108,11 +108,11 @@ AI 通用型节省计划是针对大模型按量付费使用场景设计的折�
 
 不同档位享受不同的折扣。
 
--   A 类：千问（不含 qwen3.6-max-preview）、千问-开源、文本向量、多模态向量、排序模型、行业模型、模型原生工具调用（[Function Calling](raw/model-user-guide/model-experience/text-generation-model/tool-calls/qwen-function-calling.md)、[网页抓取](raw/model-user-guide/model-experience/text-generation-model/tool-calls/web-extractor.md)等）
+-   A 类：千问、千问-开源、文本向量、多模态向量、排序模型、行业模型、模型原生工具调用（[Function Calling](raw/model-user-guide/model-experience/text-generation-model/tool-calls/qwen-function-calling.md)、[网页抓取](raw/model-user-guide/model-experience/text-generation-model/tool-calls/web-extractor.md)等）
     
 -   B 类：图像生成、语音合成、语音识别与翻译、视频生成与编辑
     
--   C 类：qwen3.6-max-preview、DeepSeek、Kimi、GLM、MiniMax、HappyHorse
+-   C 类：、DeepSeek、Kimi、GLM、MiniMax、HappyHorse
     
     > C 类中仅**阿里直供**版本支持抵扣，**三方直供**版本不支持抵扣。模型是否有阿里云直供版本，请以控制台模型广场实际展示为准。详情参见[三方直供模型支持抵扣 AI 通用型节省计划吗？](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package#c14b3d84925t1)
     
@@ -689,35 +689,35 @@ ASR模型按秒计费，TTS模型按字符计费，请前往[百炼控制台](ht
 
 -   华北2（北京）**：**
     
-    -   **实时语音合成（CosyVoice）：**cosyvoice-v3-plus、cosyvoice-v3-flash、cosyvoice-v2、cosyvoice-v1
+    -   **实时语音合成（CosyVoice）：**cosyvoice-v3-plus、cosyvoice-v3-flash、cosyvoice-v2、
         
-    -   **实时语音合成（Qwen-TTS-Realtime）：**qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-09-18、qwen-tts-realtime、qwen-tts-realtime-latest、qwen-tts-realtime-2025-07-15
+    -   **实时语音合成（Qwen-TTS-Realtime）：**qwen3-tts-flash-realtime、
         
-    -   **语音合成（Qwen-TTS）：**qwen3-tts-flash、qwen3-tts-flash-2025-09-18、qwen-tts、qwen-tts-latest、qwen-tts-2025-05-22、qwen-tts-2025-04-10
+    -   **语音合成（Qwen-TTS）：**qwen3-tts-flash、
         
-    -   **实时语音识别（Paraformer）：**paraformer-realtime-v2、paraformer-realtime-v1、paraformer-realtime-8k-v2、paraformer-realtime-8k-v1
+    -   **实时语音识别（Paraformer）：**paraformer-realtime-v2、paraformer-realtime-8k-v2、
         
-    -   **实时语音识别（Fun-ASR）：**fun-asr-realtime、fun-asr-realtime-2025-11-07、fun-asr-realtime-2025-09-15
+    -   **实时语音识别（Fun-ASR）：**fun-asr-realtime、
         
-    -   **实时语音识别（Qwen-ASR-Realtime）：**qwen3-asr-flash-realtime、qwen3-asr-flash-realtime-2025-10-27
+    -   **实时语音识别（Qwen-ASR-Realtime）：**qwen3-asr-flash-realtime、
         
-    -   **录音文件识别（Paraformer）：**paraformer-v2、paraformer-v1、paraformer-8k-v2、paraformer-8k-v1、paraformer-mtl-v1
+    -   **录音文件识别（Paraformer）：**paraformer-v2、paraformer-8k-v2、
         
-    -   **录音文件识别（Fun-ASR）：**fun-asr、fun-asr-2025-11-07、fun-asr-2025-08-25、fun-asr-mtl、fun-asr-mtl-2025-08-25
+    -   **录音文件识别（Fun-ASR）：**fun-asr、
         
-    -   **录音文件识别（Qwen-ASR）：**qwen3-asr-flash-filetrans、qwen3-asr-flash-filetrans-2025-11-17、qwen3-asr-flash、qwen3-asr-flash-2025-09-08
+    -   **录音文件识别（Qwen-ASR）：**qwen3-asr-flash-filetrans、qwen3-asr-flash、
         
 -   **新加坡：**
     
-    -   **实时语音合成（Qwen-TTS-Realtime）：**qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-09-18
+    -   **实时语音合成（Qwen-TTS-Realtime）：**qwen3-tts-flash-realtime、
         
-    -   **语音合成（Qwen-TTS）：**qwen3-tts-flash、qwen3-tts-flash-2025-09-18
+    -   **语音合成（Qwen-TTS）：**qwen3-tts-flash、
         
-    -   **实时语音识别（Qwen-ASR-Realtime）：**qwen3-asr-flash-realtime、qwen3-asr-flash-realtime-2025-10-27
+    -   **实时语音识别（Qwen-ASR-Realtime）：**qwen3-asr-flash-realtime、
         
-    -   **录音文件识别（Fun-ASR）：**fun-asr、fun-asr-2025-11-07、fun-asr-2025-08-25
+    -   **录音文件识别（Fun-ASR）：**fun-asr、
         
-    -   **录音文件识别（Qwen-ASR）：**qwen3-asr-flash-filetrans、qwen3-asr-flash-filetrans-2025-11-17、qwen3-asr-flash、qwen3-asr-flash-2025-09-08
+    -   **录音文件识别（Qwen-ASR）：**qwen3-asr-flash-filetrans、qwen3-asr-flash、
         
 
 请前往百炼控制台查看全部模型。
@@ -896,64 +896,6 @@ qwen-max的实时推理服务（[非思考模式](raw/model-user-guide/model-exp
     
     -   仅支持抵扣实时推理产生的费用（[非思考模式](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md)，包含输入和输出），不支持抵扣[Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)、[上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)、[模型调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)、[模型部署](raw/model-user-guide/model-deployment-index/model-deployment-introduction.md)产生的费用。
         
-
-### 图像生成模型资源包
-
-**订购地址**
-
-[千问图像生成模型资源包qwen-image](https://common-buy.aliyun.com/?commodityCode=sfm_qwenimage_dp_cn)
-
-[千问图像生成模型资源包qwen-image-plus](https://common-buy.aliyun.com/?commodityCode=sfm_qwenimageplus_dp_cn)
-
-**适用地域**
-
-华北2（北京）
-
-华北2（北京）
-
-**适用模型**
-
-**文生图**：qwen-image
-
-**图像编辑**：qwen-image-edit
-
-**文生图**：qwen-image-plus
-
-**图像编辑**：qwen-image-edit-plus
-
-**资源包容量（生成图片张数）**
-
-80/400
-
-100/1,000/10,000/100,000/500,000
-
-**价格（元）**
-
-20/100
-
-享阶梯折扣：
-
-20/196（9.8折）/1,900（9.5折）/18,000（9折）/85,000（8.5折）
-
-**有效期**
-
-自购买之日起有效期为 3 个月。
-
-对于100、1,000张档位，自购买之日起有效期为3个月。
-
-对于10,000、100,000张档位，自购买之日起有效期为6个月。
-
-对于500,000张档位，自购买之日起有效期为12个月。
-
-**说明**
-
-使用文生图模型生成一张图片消耗 1 张额度，使用图片编辑模型编辑一张图片消耗 1.2 张额度。
-
-资源包容量耗尽后，将自动转为按量付费模式，超出部分按各模型对应的价格进行计费，详见[模型调用计费](raw/model-user-guide/test-1/model-pricing.md)。
-
-生成或编辑一张图片消耗 1 张额度。
-
-资源包容量耗尽后，将自动转为按量付费模式，超出部分按各模型对应的价格进行计费，详见[模型调用计费](raw/model-user-guide/test-1/model-pricing.md)。
 
 ## 常见问题
 

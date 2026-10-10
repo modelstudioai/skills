@@ -30,7 +30,7 @@ GPT-5.4、Claude Sonnet 4.6、Gemini 3 Pro
 
 GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
-`qwen3.8-flash`、`deepseek-v4-flash`、`MiniMax-M2.5`
+`qwen3.8-flash`、`MiniMax-M2.5`
 
 ## 应用场景
 
@@ -182,18 +182,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 支持
 
-`deepseek-v4-flash`
-
-1M
-
-支持
-
-支持
-
-不支持
-
-支持
-
 `glm-5.2`
 
 1M
@@ -289,18 +277,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 **内置工具**
 
 **结构化输出**
-
-`qwen3.6-max-preview`
-
-256k
-
-支持
-
-支持
-
-不支持
-
-支持
 
 `qwen3.6-plus`
 
@@ -428,168 +404,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 支持
 
-#### Qwen3
-
-**模型ID**
-
-**上下文**
-
-**思考模式**
-
-**Function Calling**
-
-**内置工具**
-
-**结构化输出**
-
-`qwen3-max`
-
-查看快照版本
-
-`qwen3-max-2026-01-23` `qwen3-max-preview` `qwen3-max-2025-09-23`
-
-256k
-
-支持
-
-支持
-
-支持
-
-支持
-
-`qwen3-235b-a22b`
-
-128k
-
-支持
-
-支持
-
-不支持
-
-支持
-
-`qwen3-235b-a22b-thinking-2507`
-
-128k
-
-支持
-
-支持
-
-不支持
-
-不支持
-
-`qwen3-235b-a22b-instruct-2507`
-
-128k
-
-不支持
-
-支持
-
-不支持
-
-支持
-
-`qwen3-next-80b-a3b-thinking`
-
-128k
-
-支持
-
-支持
-
-不支持
-
-不支持
-
-`qwen3-next-80b-a3b-instruct`
-
-128k
-
-不支持
-
-支持
-
-不支持
-
-支持
-
-`qwen3-32b`
-
-128k
-
-支持
-
-支持
-
-不支持
-
-支持
-
-`qwen3-30b-a3b`
-
-128k
-
-支持
-
-支持
-
-不支持
-
-支持
-
-`qwen3-30b-a3b-thinking-2507`
-
-80k
-
-支持
-
-支持
-
-不支持
-
-不支持
-
-`qwen3-30b-a3b-instruct-2507`
-
-128k
-
-不支持
-
-支持
-
-不支持
-
-支持
-
-`qwen3-14b`
-
-128k
-
-支持
-
-支持
-
-不支持
-
-支持
-
-`qwen3-8b`
-
-128k
-
-支持
-
-支持
-
-不支持
-
-支持
-
 #### Qwen3-Coder
 
 **模型ID**
@@ -604,22 +418,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 **结构化输出**
 
-`qwen3-coder-plus`
-
-查看快照版本
-
-`qwen3-coder-plus-2025-09-23` `qwen3-coder-plus-2025-07-22`
-
-1M
-
-支持
-
-支持
-
-不支持
-
-支持
-
 `qwen3-coder-flash`
 
 查看快照版本
@@ -629,42 +427,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 1M
 
 支持
-
-支持
-
-不支持
-
-支持
-
-`qwen3-coder-next`
-
-256k
-
-支持
-
-支持
-
-不支持
-
-支持
-
-`qwen3-coder-480b-a35b-instruct`
-
-256k
-
-不支持
-
-支持
-
-不支持
-
-支持
-
-`qwen3-coder-30b-a3b-instruct`
-
-256k
-
-不支持
 
 支持
 
@@ -687,18 +449,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 **结构化输出**
 
 `qwen-mt-plus`
-
-16k
-
-不支持
-
-不支持
-
-不支持
-
-不支持
-
-`qwen-mt-turbo`
 
 16k
 
@@ -750,10 +500,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 `qwen-long`
 
-查看快照版本
-
-`qwen-long-2025-01-25`
-
 10M
 
 不支持
@@ -762,19 +508,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 不支持
 
-支持
-
-`qwen-long-latest`
-
-10M
-
 不支持
-
-不支持
-
-不支持
-
-支持
 
 #### 角色扮演
 
@@ -840,18 +574,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 **结构化输出**
 
-`qwen2.5-omni-7b`
-
-32k
-
-不支持
-
-不支持
-
-不支持
-
-不支持
-
 `qwen-plus`及其快照版本
 
 1M
@@ -887,54 +609,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 支持
 
 支持
-
-`qwen-turbo`及其快照版本
-
-128k
-
-支持
-
-支持
-
-支持
-
-支持
-
-`qwq-plus`
-
-128k
-
-支持
-
-支持
-
-不支持
-
-不支持
-
-`qvq-max`及其快照版本
-
-128k
-
-支持
-
-不支持
-
-不支持
-
-不支持
-
-`qwen-omni-turbo`及其快照版本
-
-32k
-
-不支持
-
-不支持
-
-不支持
-
-不支持
 
 #### 三方模型
 
@@ -974,42 +648,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 支持
 
-`glm-4.7`
-
-198k
-
-支持
-
-支持
-
-不支持
-
-支持
-
-`glm-4.5`
-
-128k
-
-支持
-
-支持
-
-不支持
-
-支持
-
-`glm-4.5-air`
-
-128k
-
-支持
-
-支持
-
-不支持
-
-支持
-
 `MiniMax-M2.7`
 
 192k
@@ -1034,117 +672,9 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 不支持
 
-`MiniMax-M2.1`
-
-200k
-
-支持
-
-支持
-
-不支持
-
-不支持
-
 `kimi-k2.5`
 
 256k
-
-支持
-
-支持
-
-不支持
-
-不支持
-
-`kimi-k2-thinking`
-
-256k
-
-支持
-
-支持
-
-不支持
-
-支持
-
-`Moonshot-Kimi-K2-Instruct`
-
-128k
-
-不支持
-
-支持
-
-不支持
-
-不支持
-
-`deepseek-v3.2`
-
-128k
-
-支持
-
-支持
-
-不支持
-
-不支持
-
-`deepseek-v3.2-exp`
-
-128k
-
-支持
-
-支持
-
-不支持
-
-不支持
-
-`deepseek-v3.1`
-
-128k
-
-支持
-
-支持
-
-不支持
-
-不支持
-
-`deepseek-v3`
-
-128k
-
-不支持
-
-支持
-
-不支持
-
-不支持
-
-`deepseek-r1`
-
-128k
-
-支持
-
-支持
-
-不支持
-
-不支持
-
-`deepseek-r1-0528`
-
-128k
 
 支持
 
@@ -1166,55 +696,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 不支持
 
-`deepseek-r1-distill-qwen-32b`
-
-128k
-
-支持
-
-不支持
-
-不支持
-
-不支持
-
-`deepseek-r1-distill-qwen-14b`
-
-128k
-
-支持
-
-不支持
-
-不支持
-
-不支持
-
-`deepseek-r1-distill-qwen-7b`
-
-128k
-
-支持
-
-不支持
-
-不支持
-
-不支持
-
 `deepseek-r1-distill-qwen-1.5b`
-
-128k
-
-支持
-
-不支持
-
-不支持
-
-不支持
-
-`deepseek-r1-distill-llama-8b`
 
 128k
 

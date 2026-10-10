@@ -46,7 +46,7 @@ string
 
 object
 
-模型配置，结构 `{"id": "qwen3-max"}`，必填子字段 `id`
+模型配置，结构 `{"id": "qwen3.7-max"}`，必填子字段 `id`
 
 `description`
 
@@ -118,7 +118,7 @@ curl -X POST "$AGENTSTUDIO_URL/agents/agent_xxx" \
     "version": 1,
     "name": "data-analyst",
     "description": "数据分析助手",
-    "model": {"id": "qwen3-max"},
+    "model": {"id": "qwen3.7-max"},
     "system": "你是资深数据分析师，输出结论时附带置信度。",
     "tools": [],
     "mcp_servers": [],
@@ -159,7 +159,7 @@ Agent current = client.agents().retrieve("agent_xxx");
 Agent updated = client.agents().update("agent_xxx", AgentUpdateParam.builder()
     .version(current.getVersion())
     .name("data-analyst")
-    .model("qwen3-max")
+    .model("qwen3.7-max")
     .description("数据分析助手")
     .instructions("你是资深数据分析师，输出结论时附带置信度。")
     .metadata(Map.of("team", "data"))

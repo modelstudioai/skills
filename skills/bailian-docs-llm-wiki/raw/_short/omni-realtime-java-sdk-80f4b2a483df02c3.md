@@ -88,8 +88,7 @@ String
 默认音色：
 
 -   Qwen3.5-Omni: "Tina"
--   Qwen3-Omni-Flash-Realtime：“Cherry”，
--   Qwen-Omni-Turbo-Realtime：“Chelsie”
+-   qwen3-omni-flash-realtime-2025-09-15：“Cherry”，
 
 inputAudioFormat
 
@@ -130,7 +129,7 @@ smooth\_output
 
 Boolean
 
-仅Qwen3-Omni-Flash-Realtime系列版本支持设置。
+仅 `qwen3-omni-flash-realtime-2025-09-15` 支持设置。
 
 -   true：获得口语化的回复
     
@@ -259,10 +258,7 @@ temperature默认值：
 
 -   `qwen3.8-omni-flash-realtime`：0.6
 -   `qwen3.5-omni-realtime`系列：0.7
--   `qwen3-omni-flash-realtime`系列：0.9
--   `qwen-omni-turbo-realtime`系列：1.0
-
-> `qwen-omni-turbo` 系列模型**不支持修改**。
+-   `qwen3-omni-flash-realtime-2025-09-15`：0.9
 
 > `temperature`需要通过`OmniRealtimeConfig`实例的`parameters`方法进行设置，用法与`instructions`一致。
 
@@ -282,10 +278,7 @@ top\_p默认值：
 
 -   `qwen3.8-omni-flash-realtime`：0.95
 -   `qwen3.5-omni-realtime`系列：0.8
--   `qwen3-omni-flash-realtime`系列：1.0
--   `qwen-omni-turbo-realtime`系列：0.01
-
-> `qwen-omni-turbo` 系列模型**不支持修改**。
+-   `qwen3-omni-flash-realtime-2025-09-15`：1.0
 
 > `top_p`需要通过`OmniRealtimeConfig`实例的`parameters`方法进行设置，用法与`instructions`一致。
 
@@ -301,10 +294,7 @@ top\_k默认值：
 
 -   `qwen3.8-omni-flash-realtime`：20
 -   `qwen3.5-omni-realtime`系列：20
--   `qwen3-omni-flash-realtime`系列：50
--   `qwen-omni-turbo-realtime`系列：20
-
-> `qwen-omni-turbo` 系列模型**不支持修改**。
+-   `qwen3-omni-flash-realtime-2025-09-15`：50
 
 > `top_k`需要通过`OmniRealtimeConfig`实例的`parameters`方法进行设置，用法与`instructions`一致。
 
@@ -320,8 +310,6 @@ Integer
 
 max\_tokens参数适用于需要限制字数（如生成摘要、关键词）、控制成本或减少响应时间的场景。
 
-> `qwen-omni-turbo` 系列模型**不支持修改**。
-
 > `max_tokens`需要通过`OmniRealtimeConfig`实例的`parameters`方法进行设置，用法与`instructions`一致。
 
 repetition\_penalty
@@ -335,8 +323,6 @@ repetition\_penalty默认值：
 -   `qwen3.8-omni-flash-realtime`：0
 -   `qwen3.5-omni-realtime`系列：1.0
 -   其他模型：1.05
-
-> `qwen-omni-turbo` 系列模型**不支持修改**。
 
 > `repetition_penalty`需要通过`OmniRealtimeConfig`实例的`parameters`方法进行设置，用法与`instructions`一致。
 
@@ -360,8 +346,6 @@ presence\_penalty默认值：
 
 较低的presence\_penalty适用于要求一致性或专业术语的场景，如技术文档或其他正式文档。
 
-> `qwen-omni-turbo` 系列模型**不支持修改**。
-
 > `presence_penalty`需要通过`OmniRealtimeConfig`实例的`parameters`方法进行设置，用法与`instructions`一致。
 
 seed
@@ -373,8 +357,6 @@ Integer
 在每次模型调用时传入相同的seed值（由您指定），并保持其他参数不变，模型将尽可能返回相同的结果。
 
 取值范围：0到231−1，默认值-1。
-
-> `qwen-omni-turbo` 系列模型**不支持修改**。
 
 > `seed`需要通过`OmniRealtimeConfig`实例的`parameters`方法进行设置，用法与`instructions`一致。
 

@@ -3505,11 +3505,11 @@ DashScope Java SDK 通过全局单例的连接池管理和复用 WebSocket 连�
     
 -   **Fun-ASR-Realtime**：
     
-    -   fun-asr-realtime（稳定版，当前等同fun-asr-realtime-2025-11-07）、fun-asr-realtime-2026-02-28（最新快照版）、fun-asr-realtime-2025-11-07（快照版）、fun-asr-realtime-2025-09-15（快照版）
+    -   fun-asr-realtime（稳定版）、fun-asr-realtime-2026-02-28（最新快照版）
     -   fun-asr-flash-8k-realtime（稳定版，当前等同fun-asr-flash-8k-realtime-2026-01-28）、fun-asr-flash-8k-realtime-2026-01-28
--   **Qwen3-ASR-Flash-Realtime**：qwen3-asr-flash-realtime（稳定版，当前等同qwen3-asr-flash-realtime-2025-10-27）、qwen3-asr-flash-realtime-2026-02-10（最新快照版）、qwen3-asr-flash-realtime-2025-10-27（快照版）
+-   **Qwen3-ASR-Flash-Realtime**：qwen3-asr-flash-realtime（稳定版）
     
--   **Paraformer**：paraformer-realtime-v2、paraformer-realtime-v1、paraformer-realtime-8k-v2、paraformer-realtime-8k-v1
+-   **Paraformer**：paraformer-realtime-v2、paraformer-realtime-8k-v2
     
 
 #### 新加坡
@@ -3518,8 +3518,8 @@ DashScope Java SDK 通过全局单例的连接池管理和复用 WebSocket 连�
 
 -   **Qwen-Audio-3.1-ASR-Flash-Streaming：**qwen-audio-3.1-asr-flash-streaming
 -   **Qwen-Audio-3.0-ASR-Flash-Streaming：**qwen-audio-3.0-asr-flash-streaming
--   **Fun-ASR-Realtime**：fun-asr-realtime（稳定版，当前等同fun-asr-realtime-2025-11-07）、fun-asr-realtime-2025-11-07（快照版）
--   **Qwen3-ASR-Flash-Realtime**：qwen3-asr-flash-realtime（稳定版，当前等同qwen3-asr-flash-realtime-2025-10-27）、qwen3-asr-flash-realtime-2026-02-10（最新快照版）、qwen3-asr-flash-realtime-2025-10-27（快照版）
+-   **Fun-ASR-Realtime**：fun-asr-realtime（稳定版）
+-   **Qwen3-ASR-Flash-Realtime**：qwen3-asr-flash-realtime（稳定版）
 
 ## API参考
 

@@ -10,8 +10,6 @@
 
 要启用网页抓取功能，您需要在 `tools` 参数中同时添加 `web_search`（联网搜索）和 `web_extractor`（网页抓取）工具。
 
-> 当使用 qwen3-max-2026-01-23 时，需要启用 `enable_thinking` 参数以开启思考模式。
-
 > 为获得最佳回复效果，尤其是在解决数学计算、数据分析类问题时，建议同时开启 `code_interpreter` 工具。这将允许模型在需要时调用代码解释器，提高结果的准确性。
 
 ```
@@ -87,6 +85,8 @@ response = Generation.call(
 
 > 只添加网页抓取工具而未添加联网搜索工具时，请求返回 `InvalidParameter` 错误：`The web_extractor tool must be executed with web_search tool.`
 
+> 支持以下模型：Qwen3.8 Max、Flash 与开源系列（不含 Omni）；Qwen3.7 Max、Plus、Flash 系列；Qwen3.6-Plus、Qwen3.6-Flash 系列；Qwen3.5-Plus、Qwen3.5-Flash 系列；deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731；glm-5.2；kimi-k3。
+
 ```
 # 导入依赖与创建客户端...
 message = client.messages.create(
@@ -116,7 +116,7 @@ message = client.messages.create(
 
 千问Plus：Qwen3.7-Plus系列、Qwen3.6-Plus系列、Qwen3.5-Plus系列
 
-DeepSeek：deepseek-v4-flash、deepseek-v4-flash-0731
+DeepSeek：deepseek-v4-flash-0731
 
 Qwen3.8开源系列
 
@@ -478,7 +478,7 @@ const openai = new OpenAI({
 
 async function main() {
     const stream = await openai.chat.completions.create({
-        model: "qwen3-max",
+        model: "qwen-max",
         messages: [
             { role: "user", content: "请访问阿里云百炼代码解释器部分的官方文档，并总结主要内容" }
         ],
@@ -525,7 +525,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3-max",
+    "model": "qwen-max",
     "messages": [
         {"role": "user", "content": "请访问阿里云百炼代码解释器部分的官方文档，并总结主要内容"}
     ],
@@ -599,7 +599,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 -H "X-DashScope-SSE: enable" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3-max",
+    "model": "qwen-max",
     "input": {
         "messages": [
             {

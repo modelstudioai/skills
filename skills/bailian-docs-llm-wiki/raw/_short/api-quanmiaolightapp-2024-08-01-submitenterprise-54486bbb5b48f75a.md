@@ -271,7 +271,7 @@ boolean
 
 是否走模型的 BATCH API （费用减半、时效性 24 小时内）
 
-(支持 batchAPI 的模型有：通义千问 Max、Plus、Flash、Turbo、Long 的稳定版本及其部分 latest 版本，以及 QwQ 系列（qwq-plus、qwq-32b-preview）和部分第三方模型（deepseek-r1、deepseek-v3）。 )
+(支持 batchAPI 的模型有：通义千问 Max、Plus、Flash、Turbo、Long 的稳定版本及其部分 latest 版本，以及 QwQ 系列（qwq-32b-preview）。 )
 
 positiveFilter
 

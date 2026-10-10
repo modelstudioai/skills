@@ -45,7 +45,7 @@ npm install -g @anthropic-ai/claude-code
 
 新建 `~/.claude/settings.json`（Windows 路径：`C:\Users\<用户名>\.claude\settings.json`），写入对应套餐的配置。
 
-若您此前使用旧版兼容接口 `https://dashscope.aliyuncs.com/api/v2/apps/claude-code-proxy`（仅支持 `qwen3-coder-plus` 模型），请按本文配置迁移至新版接口，详见下文 FAQ“使用旧版接口，切换模型不生效”。
+若您此前使用旧版兼容接口 `https://dashscope.aliyuncs.com/api/v2/apps/claude-code-proxy`，请按本文配置迁移至新版接口，详见下文 FAQ“使用旧版接口，切换模型不生效”。
 
 ### Token Plan 个人版
 
@@ -395,7 +395,7 @@ Token Plan 团队版专属 API Key
 
 ### 使用旧版接口，切换模型不生效
 
-旧版兼容接口 `https://dashscope.aliyuncs.com/api/v2/apps/claude-code-proxy` 仅支持 `qwen3-coder-plus` 模型，指定其他模型不会生效。如需调用其他模型，按本文配置迁移至新版接口。
+旧版兼容接口 `https://dashscope.aliyuncs.com/api/v2/apps/claude-code-proxy` 仅支持已下架的模型，指定其他模型不会生效。如需调用可用模型，按本文配置迁移至新版接口。
 
 ### 使用 CC Switch 添加供应商时提示"未找到可用的模型列表端点，请检查 Base URL 或确认供应商是否开放端口"
 
@@ -410,7 +410,7 @@ Token Plan 团队版专属 API Key
 模型映射配置后在 Claude Code 中无法调用、返回 `AccessDenied`（HTTP 403，错误码 `access_denied`）错误时，检查该模型是否在百炼控制台的**模型广场**中被标记为“即将下线”。标记为“即将下线”的模型仍会显示在列表中，但 API 调用会返回 403 `AccessDenied`。排查步骤如下：
 
 1.  **检查模型是否标记“即将下线”。**在百炼控制台的**模型广场**搜索所用模型，查看其状态标签。
-2.  **更换为最新可用模型。**将模型映射中的旧版模型（如 `qwen-coder-turbo-0919`）替换为最新版本的可用模型（如 `qwen3-coder-plus`）。
+2.  **更换为最新可用模型。**将模型映射中的旧版模型（如 `qwen-coder-turbo-0919`）替换为最新版本的可用模型（如 `qwen3.7-plus`）。
 3.  **重新配置模型映射并测试。**在 CC Switch 的**高级选项**中更新模型映射，点击**启用**并新开一个 Claude Code 会话验证。
 
 百炼控制台的**模型广场**中标记“即将下线”的模型可能随时不可用，请关注模型生命周期，并在模型广场查看模型的可用状态。

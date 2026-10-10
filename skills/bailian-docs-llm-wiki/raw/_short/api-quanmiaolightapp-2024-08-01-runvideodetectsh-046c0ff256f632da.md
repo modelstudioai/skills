@@ -91,15 +91,12 @@ string
 
 否
 
-llm 的模型，推荐选择 deepseek-r1 可选项：
+llm 的模型，可选项：
 
--   deepseek-r1
 -   quanmiao-llm-max
 -   quanmiao-llm-max-thinking
 -   quanmiao-llm-plus
 -   quanmiao-llm-turbo
-
-deepseek-r1
 
 options
 
@@ -201,7 +198,6 @@ string
 
 执行 intelliSimpPrompt 的模型，推荐选择 quanmiao-llm-max 可选项：
 
--   deepseek-r1
 -   quanmiao-llm-max
 -   quanmiao-llm-max-thinking
 -   quanmiao-llm-plus
@@ -539,9 +535,9 @@ You are not authorized to perform this action , Please check the assignment of t
 
 目前拆条提供三种场景视频的处理： 1、节目场景 2、新闻场景 3、其他场景
 
-针对节目场景的视频： 推荐使用 ASR 方式分镜，视频识别选择 ASR+VL； modelVlCustomPromptTemplateId 建议选择节目 vl 模版（videoDetectShotVlShowPrompt），或者通过 vlPrompt 字段自定义 prompt； modelCustomPromptTemplateId 建议选择节目模版（videoDetectShotShowPrompt），或者通过 prompt 字段进行自定义； 建议开启简化 llm 入参文本功能（使用 intelliSimpPromptTemplateId 或 intelliSimpPrompt）； intelliSimpPromptTemplateId 选择 intelliSimpShowPrompt 时，modelCustomPromptTemplateId 建议使用 videoDetectShotShowPrompt； intelliSimpPromptTemplateId 选择 intelliSimpSecondShowPrompt 时，modelCustomPromptTemplateId 建议使用 videoDetectShotSecondShowPrompt； preModelId 推荐选择 quanmiao-llm-max，modelId 推荐选择 deepseek-r1；
+针对节目场景的视频： 推荐使用 ASR 方式分镜，视频识别选择 ASR+VL； modelVlCustomPromptTemplateId 建议选择节目 vl 模版（videoDetectShotVlShowPrompt），或者通过 vlPrompt 字段自定义 prompt； modelCustomPromptTemplateId 建议选择节目模版（videoDetectShotShowPrompt），或者通过 prompt 字段进行自定义； 建议开启简化 llm 入参文本功能（使用 intelliSimpPromptTemplateId 或 intelliSimpPrompt）； intelliSimpPromptTemplateId 选择 intelliSimpShowPrompt 时，modelCustomPromptTemplateId 建议使用 videoDetectShotShowPrompt； intelliSimpPromptTemplateId 选择 intelliSimpSecondShowPrompt 时，modelCustomPromptTemplateId 建议使用 videoDetectShotSecondShowPrompt； preModelId 推荐选择 quanmiao-llm-max；
 
-针对新闻场景的视频： 新闻类视频通常音频较为标准清晰，推荐在识别视频内容时只选择 ASR，使用 ASR 方式分镜； 如果启用 vl（不推荐），modelVlCustomPromptTemplateId 建议选择新闻 vl 模版、videoDetectShotVlNewsPrompt，或者通过 vlPrompt 字段自定义 prompt； modelCustomPromptTemplateId 建议选择新闻模版（videoDetectShotNewsPrompt），或者通过 prompt 字段进行自定义； preModelId 推荐选择 quanmiao-llm-max，modelId 推荐选择 deepseek-r1；
+针对新闻场景的视频： 新闻类视频通常音频较为标准清晰，推荐在识别视频内容时只选择 ASR，使用 ASR 方式分镜； 如果启用 vl（不推荐），modelVlCustomPromptTemplateId 建议选择新闻 vl 模版、videoDetectShotVlNewsPrompt，或者通过 vlPrompt 字段自定义 prompt； modelCustomPromptTemplateId 建议选择新闻模版（videoDetectShotNewsPrompt），或者通过 prompt 字段进行自定义； preModelId 推荐选择 quanmiao-llm-max；
 
 针对其他场景的视频： 如果音频清晰且能覆盖到该视频的主要信息，推荐优先尝试使用 ASR 方式分镜，视频识别选择 ASR。 如果视频本身的信息量较小或在视频识别步骤中获取到的信息较少，推荐优先尝试不使用 intelliSimpPromptTemplateId 和 intelliSimpPrompt；
 

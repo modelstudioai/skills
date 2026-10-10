@@ -1,49 +1,44 @@
 # Prompt 工程
 
-Prompt 工程是系统化设计、验证与优化大语言模型输入指令（Prompt）的方法论与工程实践，其目标是通过结构化表达任务意图、约束上下文、引导推理路径与规范输出格式，显著提升模型响应的准确性、一致性、可控性与业务适配性。在百炼平台中，它不是一次性技巧，而是可复用、可管理、可迭代的核心基础设施能力。
+Prompt 工程是系统化设计、验证、优化和管理提示词（Prompt）的方法论与实践体系，旨在通过结构化模板、上下文增强、反馈迭代与可观测评估等手段，提升大语言模型在特定任务中的输出准确性、一致性、可控性与可维护性。它不是一次性指令编写，而是贯穿 LLM 应用全生命周期的工程化能力。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-Prompt 工程在百炼平台贯穿模型调用全链路，具体体现为以下四类工程化实践：
+- **基础模型调用**：直接向 `ChatCompletion` 等接口提交高质量 Prompt，适用于简单问答、文案生成等轻量任务；推荐结合 `temperature`、`top_p` 等参数协同调控输出稳定性。
+- **智能体（Agent）与工作流（Workflow）**：Prompt 作为系统提示词（System Prompt）或节点级指令嵌入 Agent 2.0 的规划链路或工作流的大模型节点中，配合工具描述、记忆配置与思考模式（`enable_thinking`）实现多步推理与反思优化。
+- **Skill 封装**：Prompt 与模型、工具、后处理逻辑共同封装为可复用的 Skill 单元，通过 `skill_id` 被工作流或外部系统调用，实现 Prompt 的版本化、灰度发布与跨应用共享。
+- **RAG 应用构建**：Prompt 与知识库检索结果动态组合（如通过 `context` 变量注入），替代已停用的 Prompt 样例库；需配合 RAG 表格库的 `recall_count` 参数控制上下文密度，平衡信息量与噪声。
+- **Agenteval 持续优化闭环**：基于线上 Trace 沉淀真实 query/response 对，通过 Agenteval 的「调试窗口」输入人工反馈，驱动大模型自动生成优化版 Prompt；支持多版本对比测试，但采纳后需手动发布生效，确保变更受控。
 
-- **模板驱动开发**：通过控制台或 API 管理结构化 Prompt 模板（如 ICIO、CRISPE 框架），支持变量插值（`${topic}`）、角色设定、示例注入与跨环境复用。适用于标准化应用（如客服问答、报告生成），确保不同开发者、不同版本间 Prompt 行为一致。
-- **知识增强型工程**：将 Prompt 与 RAG 表格库深度耦合——不再依赖已下线的 Prompt 样例库，而是通过 `has_thoughts: true` 启用召回溯源，并配置 `recall_count` 控制知识片段数量（默认 5，上限 10）。典型场景包括政策解读、产品文档问答等强事实性任务。
-- **多模态 Prompt 编排**：在图像/视频生成类模型（如万相、Qwen-Image）中，Prompt 工程体现为正向提示词（`prompt`）与负向提示词（`negative_prompt`）的协同设计；万相 3.0 还支持分镜语法（`分镜1（0-3秒）：...`）、参考素材引用（`图1`）和导演风格关键词（`宫崎骏风格`），需按语义粒度精细组织。
-- **翻译与多模态任务定制**：在 Qwen-MT 系列中，Prompt 工程转化为领域提示（`ext.domainHint`）、术语干预（`ext.terminologies`）和敏感词过滤（`ext.sensitives`）等参数化指令，实现对译文风格、专业术语与合规边界的精准控制。
+> ⚠️ 注意：旧版 Prompt 样例库功能已下线，所有新项目必须使用 RAG 表格库或 Agenteval 的反馈优化路径替代。
 
 ## 关键参数和配置
 
-| 参数名 | 类型 | 说明 | 使用场景 |
-|--------|------|------|----------|
-| `promptTemplateId` | string | 模板唯一标识符，用于 API 获取模板内容 | 模板化调用（所有文本生成类模型） |
-| `workspaceId` | string | 业务空间 ID，所有 Prompt 相关操作必需 | 所有 Prompt 功能的基础上下文 |
-| `variables` | array<string> | 模板中声明的变量名列表（如 `["platform", "topic"]`），用于运行时填充 | 模板渲染前必校验的字段 |
-| `has_thoughts` | boolean | 启用后返回 `thoughts` 字段，含 RAG 召回详情与推理依据 | 知识增强类应用调试与可解释性分析 |
-| `recall_count` | integer | RAG 表格库召回片段数（默认 5，上限 10） | 平衡响应质量与 [Token](token.md) 成本的关键调优参数 |
-| `prompt_extend` | boolean | （万相 V2 特有）开启后由大模型智能改写原始 Prompt，默认 `true` | 文生图场景中提升语义完整性 |
-| `ext.domainHint` / `ext.terminologies` | string / object[] | 领域提示（英文）与术语表，直接嵌入 Prompt 逻辑层 | Qwen-MT 翻译类模型的 Prompt 定制核心 |
-
-> ⚠️ 注意：Prompt 样例库功能已全面下线，所有依赖该能力的应用必须迁移至 RAG 表格库；`has_thoughts` 参数同时兼容旧样例库（仅限存量）与新 RAG 表格库，但新项目应仅绑定 RAG 表格库。
+| 参数 | 说明 | 典型值/约束 | 使用场景 |
+|------|------|--------------|-----------|
+| `promptTemplateId` | 预定义 Prompt 模板唯一 ID | 字符串，由控制台或 API 创建生成 | 模板化调用（如营销文案生成） |
+| `variables` | 模板中声明的占位符变量名列表（如 `["topic", "tone"]`） | 由 `GetPromptTemplate` 接口返回，不可手动指定 | 动态填充模板内容 |
+| `has_thoughts` | 是否在响应中返回推理过程（如 RAG 召回片段、思考链） | `true` / `false`；调试时设为 `true` | 问题定位与效果归因 |
+| `recall_count` | RAG 表格库召回知识片段数量 | 默认 `5`，最大 `10` | 控制上下文长度与相关性精度 |
+| `workspaceId` | 业务空间 ID，用于权限隔离与资源归属 | 必填，需通过控制台或 API 获取 | 所有 Prompt 相关 API 调用必需 |
+| `enable_thinking` | 启用模型内部思考模式（Agent 2.0 / 大模型节点特有） | `true` / `false`；影响反思质量与输出结构化程度 | 复杂任务规划、结构化 JSON 输出 |
 
 ## 面向开发者，简洁实用
 
-- **起步最快方式**：进入控制台 `应用开发 > 组件管理 > 提示词 > 自动优化`，粘贴原始自然语言指令，一键生成结构化模板并保存复用。
-- **调试黄金组合**：调用时设置 `has_thoughts: true` + `recall_count: 3`，观察 `thoughts.retrieved_chunks` 内容是否匹配业务预期，再逐步调高 `recall_count` 或优化 RAG 表格库索引策略。
-- **多模态 Prompt 必检项**：
-  - 图像生成：检查 `negative_prompt` 是否明确排除模糊、畸变、水印等干扰项；
-  - 视频生成：确认分镜语法格式正确（`分镜N（起-止秒）：...`），且参考素材 ID（`图1`/`音频2`）与 `input.files` 中顺序严格对应；
-  - 翻译任务：`ext.domainHint` 必须为英文短语（≤200 单词），`ext.terminologies` 中 `source`/`target` 字段需完全匹配原文与译文。
-- **避坑提醒**：
-  - 所有 Prompt 功能仅支持华北2（北京）地域，跨地域 endpoint 调用必然失败；
-  - 单个模板最大长度为 6144 字符，超长需拆分为多步骤 Prompt 链或启用 RAG 分片召回；
-  - 使用三方模型（如 Kimi、DeepSeek）时，Prompt 工程仍有效，但需通过 `extra_body` 或顶层字段传入非标准参数（如 `enable_thinking`）。
+- ✅ **起步建议**：从控制台「提示词」页面 → 「基于 Prompt 工程创建」模板入手，选用 ICIO（Identity, Context, Instruction, Output）等成熟框架快速生成结构化 Prompt 草稿。
+- ✅ **调试必做**：调用时始终设置 `has_thoughts=true` 查看实际输入给模型的完整 Prompt（含变量替换、RAG 注入内容），避免“黑盒幻觉”。
+- ✅ **上线前验证**：使用 Agenteval 创建评测集（含典型 query + reference_response），运行多轮评测确认关键指标（如格式合规率、术语准确率）达标后再发布。
+- ✅ **版本管理**：Prompt 模板、Skill、Agent 均支持版本号（`version`），生产环境务必显式指定版本（如 `v2.1.0`），禁止依赖 `latest`。
+- ❌ **避免踩坑**：不要硬编码 Prompt 字符串到业务代码中；不使用已废弃的样例库字段；不跳过 Agenteval 的“重新调试验证”步骤即发布优化版 Prompt。
+
+Prompt 工程的本质是让模型行为可预期、可测量、可演进。在百炼平台，它已深度融入模板、RAG、Agenteval、Agent 和 Skill 等核心能力，开发者应将其视为与模型选型、API 调用同等重要的基础设施来建设与维护。
 
 ## 关联主题页
 
 - [prompt](../guides/prompt.md)
+- [agenteval](../guides/agenteval.md)
 - [use cases](../guides/use-cases.md)
-- [qwen mt translation models](../api/qwen-mt-translation-models.md)
-- [image generation](../api/image-generation.md)
-- [video generation api](../api/video-generation-api.md)
+- [llm application](../guides/llm-application.md)
+- [skill](../guides/skill.md)
 
 

@@ -253,12 +253,6 @@ qwen3.8-Max、qwen3.7-Max、qwen3.5-omni-plus-textout、deepseek-v4-pro、qvq-72
 
 17.6
 
-qwen3.5-omni-plus-audioout，farui-plus
-
-13x
-
-28.6
-
 qwen-deep-research
 
 32x

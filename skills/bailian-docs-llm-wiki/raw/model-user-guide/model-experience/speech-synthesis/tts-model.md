@@ -117,7 +117,7 @@ CosyVoice 系列模型还支持通过 AOQ 协议接入；如果是客户端对�
 
 用自然语言描述期望的表达方式，可按请求动态控制语速、情绪和风格。例如“用温柔的语气，语速稍慢”或“用激动的播报风格”。适用于情感化内容制作、专业播报、有声读物等需要丰富表现力的场景。
 
-支持指令控制的模型：Qwen-Audio-TTS 系列（`qwen-audio-3.0-tts-plus`、`qwen-audio-3.0-tts-flash`）、CosyVoice 系列（`cosyvoice-v3.5-plus`、`cosyvoice-v3.5-flash`、`cosyvoice-v3-flash`）和 Qwen-TTS 系列（`qwen3-tts-instruct-flash-realtime`、`qwen3-tts-instruct-flash-realtime-2026-01-22`、`qwen3-tts-instruct-flash`、`qwen3-tts-instruct-flash-2026-01-26`）。详细使用方式请参见[实时语音合成 > 指令控制](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)。
+支持指令控制的模型：Qwen-Audio-TTS 系列（`qwen-audio-3.0-tts-plus`、`qwen-audio-3.0-tts-flash`）、CosyVoice 系列（`cosyvoice-v3.5-plus`、`cosyvoice-v3.5-flash`、`cosyvoice-v3-flash`）。详细使用方式请参见[实时语音合成 > 指令控制](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)。
 
 ## 推荐模型
 
@@ -296,16 +296,6 @@ WebSocket/ HTTP
 
 不支持
 
-`cosyvoice-v1`
-
-WebSocket
-
-支持
-
-不支持
-
-不支持
-
 **支持的语言（按版本）**：
 
 -   `cosyvoice-v3.5-plus`**、**`cosyvoice-v3.5-flash`（不支持系统音色）：
@@ -325,10 +315,6 @@ WebSocket
 -   `cosyvoice-v2`（不支持声音设计音色）：
     
     -   系统音色（因音色而异）：中文（普通话、粤语、东北话、闽南话、陕西话）、英文、日语、韩语
-    -   声音复刻音色：中文（普通话）、英文
--   `cosyvoice-v1`（不支持声音设计音色）：
-    
-    -   系统音色（因音色而异）：中文（普通话）、英文
     -   声音复刻音色：中文（普通话）、英文
 
 ### Qwen3-TTS
@@ -353,26 +339,6 @@ HTTP
 
 不支持
 
-`qwen3-tts-flash-2025-11-27`
-
-HTTP
-
-不支持
-
-不支持
-
-不支持
-
-`qwen3-tts-flash-2025-09-18`
-
-HTTP
-
-不支持
-
-不支持
-
-不支持
-
 `qwen3-tts-flash-realtime`
 
 WebSocket
@@ -383,132 +349,9 @@ WebSocket
 
 不支持
 
-`qwen3-tts-flash-realtime-2025-11-27`
-
-WebSocket
-
-不支持
-
-不支持
-
-不支持
-
-`qwen3-tts-flash-realtime-2025-09-18`
-
-WebSocket
-
-不支持
-
-不支持
-
-不支持
-
-`qwen3-tts-instruct-flash`
-
-HTTP
-
-不支持
-
-不支持
-
-支持
-
-`qwen3-tts-instruct-flash-2026-01-26`
-
-HTTP
-
-不支持
-
-不支持
-
-支持
-
-`qwen3-tts-instruct-flash-realtime`
-
-WebSocket
-
-不支持
-
-不支持
-
-支持
-
-`qwen3-tts-instruct-flash-realtime-2026-01-22`
-
-WebSocket
-
-不支持
-
-不支持
-
-支持
-
-`qwen3-tts-vc-2026-01-22`
-
-HTTP
-
-支持
-
-不支持
-
-不支持
-
-`qwen3-tts-vc-realtime-2026-01-15`
-
-WebSocket
-
-支持
-
-不支持
-
-不支持
-
-`qwen3-tts-vc-realtime-2025-11-27`
-
-WebSocket
-
-支持
-
-不支持
-
-不支持
-
-`qwen3-tts-vd-2026-01-26`
-
-HTTP
-
-不支持
-
-支持
-
-不支持
-
-`qwen3-tts-vd-realtime-2026-01-15`
-
-WebSocket
-
-不支持
-
-支持
-
-不支持
-
-`qwen3-tts-vd-realtime-2025-12-16`
-
-WebSocket
-
-不支持
-
-支持
-
-不支持
-
 **支持的语言（按版本）**：
 
--   **Qwen3-TTS-Flash 系列**（系统音色）（`qwen3-tts-flash`、`qwen3-tts-flash-2025-11-27`、`qwen3-tts-flash-2025-09-18`、`qwen3-tts-flash-realtime`、`qwen3-tts-flash-realtime-2025-11-27`、`qwen3-tts-flash-realtime-2025-09-18`）：中文（普通话、北京话、上海话、四川话、南京话、陕西话、闽南话、天津话、粤语，因音色而异）、英文、德语、意大利语、葡萄牙语、西班牙语、日语、韩语、法语、俄语
--   **Qwen3-TTS-Instruct-Flash 系列**（系统音色）（`qwen3-tts-instruct-flash`、`qwen3-tts-instruct-flash-2026-01-26`、`qwen3-tts-instruct-flash-realtime`、`qwen3-tts-instruct-flash-realtime-2026-01-22`）：中文（普通话）、英文、德语、意大利语、葡萄牙语、西班牙语、日语、韩语、法语、俄语
--   **Qwen3-TTS-VC 系列**（声音复刻）（`qwen3-tts-vc-2026-01-22`、`qwen3-tts-vc-realtime-2026-01-15`、`qwen3-tts-vc-realtime-2025-11-27`）：中文（普通话）、英文、德语、意大利语、葡萄牙语、西班牙语、日语、韩语、法语、俄语
--   **Qwen3-TTS-VD 系列**（声音设计）（`qwen3-tts-vd-2026-01-26`、`qwen3-tts-vd-realtime-2026-01-15`、`qwen3-tts-vd-realtime-2025-12-16`）：中文（普通话）、英文、德语、意大利语、葡萄牙语、西班牙语、日语、韩语、法语、俄语
+-   **Qwen3-TTS-Flash 系列**（系统音色）（`qwen3-tts-flash`、`qwen3-tts-flash-realtime`）：中文（普通话、北京话、上海话、四川话、南京话、陕西话、闽南话、天津话、粤语，因音色而异）、英文、德语、意大利语、葡萄牙语、西班牙语、日语、韩语、法语、俄语
 
 ### MiniMax
 
@@ -561,60 +404,3 @@ HTTP
 不支持
 
 不支持
-
-### Qwen-TTS（旧版，按 Token 计费）
-
-以下为按 Token 计费的旧版 Qwen-TTS 模型。若您已迁移到 Qwen3-TTS，可优先使用前文推荐的模型。
-
-**模型ID**
-
-**API**
-
-**说明**
-
-`qwen-tts`
-
-HTTP
-
-非流式合成，按 Token 计费
-
-`qwen-tts-latest`
-
-HTTP
-
-非流式合成，按 Token 计费
-
-`qwen-tts-2025-05-22`
-
-HTTP
-
-快照版本，按 Token 计费
-
-`qwen-tts-2025-04-10`
-
-HTTP
-
-快照版本，按 Token 计费
-
-`qwen-tts-realtime`
-
-WebSocket
-
-流式合成，按 Token 计费
-
-`qwen-tts-realtime-latest`
-
-WebSocket
-
-流式合成，按 Token 计费
-
-`qwen-tts-realtime-2025-07-15`
-
-WebSocket
-
-快照版本，流式合成，按 Token 计费
-
-**支持的语言（按版本）**：
-
--   **Qwen-TTS 系列**（系统音色）（`qwen-tts`、`qwen-tts-latest`、`qwen-tts-2025-05-22`、`qwen-tts-2025-04-10`）：中文（普通话、北京话、上海话、四川话，因音色而异）、英文、德语、意大利语、葡萄牙语、西班牙语、日语、韩语、法语、俄语
--   **Qwen-TTS-Realtime 系列**（系统音色）（`qwen-tts-realtime`、`qwen-tts-realtime-latest`、`qwen-tts-realtime-2025-07-15`）：中文（普通话）、英文、德语、意大利语、葡萄牙语、西班牙语、日语、韩语、法语、俄语

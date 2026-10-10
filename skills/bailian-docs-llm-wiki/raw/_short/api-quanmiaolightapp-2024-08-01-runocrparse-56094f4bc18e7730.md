@@ -103,7 +103,7 @@ string
 
 模型 ID
 
-qwen-vl-ocr-latest
+qwen3.7-plus
 
 ## 返回参数
 

@@ -10,6 +10,8 @@
 
 > 以上组件仅供您参考，并未真实发送请求。
 
+**说明**流式与非流式的响应结构不同：非流式返回单个 JSON 对象，正文位于 `choices[0].message.content`；流式通过 SSE 逐块返回，正文位于 `choices[0].delta.content`，需客户端拼接，以 `data: [DONE]` 结束。
+
 ## 计费说明
 
 流式输出计费规则与非流式调用完全相同，根据请求的输入Token数和输出Token数计费。
@@ -506,7 +508,7 @@ data:{"output":{"choices":[{"message":{"content":"","role":"assistant"},"finish_
 -   **用户消息（user message）的构造方式**：多模态模型的输入不仅包括文本，还包含图片、音频等多模态信息。
 -   **DashScope SDK接口：**使用 DashScope Python SDK 时，需调用 MultiModalConversation 接口；使用DashScope Java SDK 时，则调用 MultiModalConversation 类。
 
-> 多模态模型请参见：[图像与视频理解](raw/model-user-guide/model-experience/vision-model/vision.md)、[文字提取](raw/model-user-guide/model-experience/vision-model/qwen-vl-ocr.md)、[界面交互](raw/model-user-guide/model-experience/text-generation-model/specialized-models/gui-automation.md)、[音频理解-Qwen3-Omni-Captioner](raw/model-user-guide/model-experience/text-generation-model/specialized-models/qwen3-omni-captioner.md)、[Kimi](raw/model-user-guide/use-cases/third-party-model-integration-tutorial/kimi-api.md)等，Qwen3.5-Omni、Qwen3-Omni-Flash 和 Qwen-Omni-Turbo **仅支持流式输出**，因其输出可包含**文本**或**音频**等多模态内容，结果解析方式与其他模型不同，具体请参见[全模态](https://help.aliyun.com/zh/model-studio/qwen-omni#4d96cc766ehhi)。
+> 多模态模型请参见：[图像与视频理解](raw/model-user-guide/model-experience/vision-model/vision.md)、[文字提取](raw/model-user-guide/model-experience/vision-model/qwen-vl-ocr.md)、[界面交互](raw/model-user-guide/model-experience/text-generation-model/specialized-models/gui-automation.md)、[音频理解-Qwen3-Omni-Captioner](https://help.aliyun.com/zh/model-studio/qwen3-omni-captioner)、[Kimi](raw/model-user-guide/use-cases/third-party-model-integration-tutorial/kimi-api.md)等，Qwen3.5-Omni、Qwen3-Omni-Flash 和 Qwen-Omni-Turbo **仅支持流式输出**，因其输出可包含**文本**或**音频**等多模态内容，结果解析方式与其他模型不同，具体请参见[全模态](https://help.aliyun.com/zh/model-studio/qwen-omni#4d96cc766ehhi)。
 
 #### OpenAI兼容
 
@@ -803,7 +805,7 @@ messages = [{"role": "user", "content": "你是谁"}]
 completion = client.chat.completions.create(
     model="qwen-plus",  # 您可以按需更换为其它深度思考模型
     messages=messages,
-    # enable_thinking 参数开启思考过程，qwen3-30b-a3b-thinking-2507、qwen3-235b-a22b-thinking-2507、QwQ 与 DeepSeek-R1 模型总会进行思考，不支持该参数
+    # enable_thinking 参数开启思考过程，QwQ 与 DeepSeek-R1 模型总会进行思考，不支持该参数
     extra_body={"enable_thinking": True},
     stream=True,
     # stream_options={
@@ -878,7 +880,7 @@ async function main() {
             model: 'qwen-plus',
             messages,
             stream: true,
-            // enable_thinking 参数开启思考过程，qwen3-30b-a3b-thinking-2507、qwen3-235b-a22b-thinking-2507、QwQ 与 DeepSeek-R1 模型总会进行思考，不支持该参数
+            // enable_thinking 参数开启思考过程，QwQ 与 DeepSeek-R1 模型总会进行思考，不支持该参数
             enable_thinking: true
         });
         console.log('\n' + '='.repeat(20) + '思考过程' + '='.repeat(20) + '\n');
@@ -935,7 +937,7 @@ main();
 
 #### curl
 
-Qwen3 开源版模型需要设置`enable_thinking`为`true`来开启思考模式；`enable_thinking`对 qwen3-30b-a3b-thinking-2507、qwen3-235b-a22b-thinking-2507、QwQ 与 DeepSeek-R1 模型无效。
+Qwen3 开源版模型需要设置`enable_thinking`为`true`来开启思考模式；`enable_thinking`对 QwQ 与 DeepSeek-R1 模型无效。
 
 ```
 # ======= 重要提示 =======
@@ -1014,7 +1016,7 @@ completion = Generation.call(
     model="qwen-plus",
     messages=messages,
     result_format="message", # Qwen3开源版模型只支持设定为"message"；为了更好的体验，其它模型也推荐您优先设定为"message"
-    # 开启深度思考，该参数对qwen3-30b-a3b-thinking-2507、qwen3-235b-a22b-thinking-2507、QwQ、DeepSeek-R1 模型无效
+    # 开启深度思考，该参数对QwQ、DeepSeek-R1 模型无效
     enable_thinking=True,
     stream=True,
     incremental_output=True, # Qwen3开源版模型只支持 true；为了更好的体验，其它模型也推荐您优先设定为 true
@@ -1131,7 +1133,7 @@ public class Main {
                 .apiKey(System.getenv("DASHSCOPE_API_KEY"))
                 // 此处使用qwen-plus模型，可以按需替换为其它深度思考模型
                 .model("qwen-plus")
-                // 开启深度思考，对 qwen3-30b-a3b-thinking-2507、qwen3-235b-a22b-thinking-2507、QwQ、DeepSeek-R1 模型无效
+                // 开启深度思考，对 QwQ、DeepSeek-R1 模型无效
                 .enableThinking(true)
                 .incrementalOutput(true) // Qwen3开源版模型只支持 true；为了更好的体验，其它模型也推荐您优先设定为 true
                 .resultFormat("message") // Qwen3开源版模型只支持设定为"message"；为了更好的体验，其它模型也推荐您优先设定为"message"
@@ -1184,7 +1186,7 @@ public class Main {
 
 #### curl
 
-混合思考模型需要设置`enable_thinking`为`true`来开启思考模式；`enable_thinking`对qwen3-30b-a3b-thinking-2507、qwen3-235b-a22b-thinking-2507、 QwQ 与 DeepSeek-R1 模型无效。
+混合思考模型需要设置`enable_thinking`为`true`来开启思考模式；`enable_thinking`对QwQ 与 DeepSeek-R1 模型无效。
 
 ```
 # ======= 重要提示 =======

@@ -85,7 +85,8 @@ string
 
 枚举值：
 
--   paraformer-realtime-v1：paraformer-realtime-v1。
+-   paraformer-realtime-v2：paraformer-realtime-v2。
+-   paraformer-realtime-8k-v2：paraformer-realtime-8k-v2。
 -   nls-base：nls-base。
 
 nls-base
@@ -485,7 +486,7 @@ CommonRequest commonRequest = CommonRequest.builder()
             .version("2024-06-28")
             .action("EndToEndRealTimeDialog")
             .path(String.format("/%s/ws/realtime/dialog", WORKSPACE_ID))
-            .putQueryParameters("asrModelId", "paraformer-realtime-v1")
+            .putQueryParameters("asrModelId", "paraformer-realtime-v2")
             .putQueryParameters("ttsModelId", "cosyvoice-v2")
             .putQueryParameters("voiceCode", "longxiaochun_v2")
             .putQueryParameters("speechRate", 1)

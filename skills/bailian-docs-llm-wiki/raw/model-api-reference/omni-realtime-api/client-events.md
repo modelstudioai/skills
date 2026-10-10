@@ -101,8 +101,7 @@ Qwen3.8-Omni-Flash-Realtime 更新会话时必须提供 `session`。全部输入
 
 -   Qwen3.8-Omni-Flash-Realtime：`Tina`
 -   Qwen3.5-Omni-Realtime 系列模型：`Tina`
--   Qwen3-Omni-Flash-Realtime：`Cherry`
--   Qwen-Omni-Turbo-Realtime：`Chelsie`
+-   qwen3-omni-flash-realtime-2025-09-15：`Cherry`
 
 **audio**`object`（可选）
 
@@ -194,7 +193,7 @@ Qwen3.8-Omni-Flash-Realtime 的输出音色，默认为 `Tina`。支持的音色
 
 **smooth\_output**`boolean｜null`（可选）
 
-**仅在使用 Qwen3-Omni-Flash-Realtime 系列模型时生效。**
+**仅在使用 `qwen3-omni-flash-realtime-2025-09-15` 时生效。**
 
 控制回复风格。可选值：
 
@@ -368,10 +367,7 @@ MCP Streamable HTTP 地址，必须为公网 HTTPS 443 地址，最长 4096 字�
 
 -   `qwen3.8-omni-flash-realtime`：0.6
 -   Qwen3.5-Omni-Realtime 系列模型：0.7
--   `qwen3-omni-flash-realtime` 系列：0.9
--   `qwen-omni-turbo-realtime` 系列：1.0
-
-> `qwen-omni-turbo` 系列模型**不支持修改**。
+-   `qwen3-omni-flash-realtime-2025-09-15`：0.9
 
 **top\_p**`float`（可选）
 
@@ -385,10 +381,7 @@ MCP Streamable HTTP 地址，必须为公网 HTTPS 443 地址，最长 4096 字�
 
 -   `qwen3.8-omni-flash-realtime`：0.95
 -   Qwen3.5-Omni-Realtime 系列模型：0.8
--   `qwen3-omni-flash-realtime` 系列：1.0
--   `qwen-omni-turbo-realtime` 系列：0.01
-
-> `qwen-omni-turbo` 系列模型**不支持修改**。
+-   `qwen3-omni-flash-realtime-2025-09-15`：1.0
 
 **top\_k**`integer`（可选）
 
@@ -400,10 +393,7 @@ MCP Streamable HTTP 地址，必须为公网 HTTPS 443 地址，最长 4096 字�
 
 -   `qwen3.8-omni-flash-realtime`：20
 -   Qwen3.5-Omni-Realtime 系列模型：20
--   `qwen3-omni-flash-realtime` 系列：50
--   `qwen-omni-turbo-realtime` 系列：20
-
-> `qwen-omni-turbo` 系列模型**不支持修改**。
+-   `qwen3-omni-flash-realtime-2025-09-15`：50
 
 **max\_tokens**`integer`（可选）
 
@@ -415,8 +405,6 @@ MCP Streamable HTTP 地址，必须为公网 HTTPS 443 地址，最长 4096 字�
 
 适用于需要限制输出长度的场景，如生成摘要或关键词、控制成本、缩短响应时间等。
 
-> `qwen-omni-turbo` 系列模型**不支持修改**。
-
 **repetition\_penalty**`float`（可选）
 
 控制生成内容中连续序列的重复度。值越高，重复惩罚越强；1.0 表示不做惩罚。`qwen3.8-omni-flash-realtime` 支持取值 0；其他模型取值需大于 0，无严格上限。
@@ -425,10 +413,7 @@ MCP Streamable HTTP 地址，必须为公网 HTTPS 443 地址，最长 4096 字�
 
 -   `qwen3.8-omni-flash-realtime`：0
 -   Qwen3.5-Omni-Realtime 系列模型：1.0
--   `qwen3-omni-flash-realtime` 系列：1.05
--   `qwen-omni-turbo-realtime` 系列：1.05
-
-> `qwen-omni-turbo` 系列模型**不支持修改**。
+-   `qwen3-omni-flash-realtime-2025-09-15`：1.05
 
 **presence\_penalty** `float`（可选）
 
@@ -440,16 +425,13 @@ MCP Streamable HTTP 地址，必须为公网 HTTPS 443 地址，最长 4096 字�
 
 -   `qwen3.8-omni-flash-realtime`：1
 -   Qwen3.5-Omni-Realtime 系列模型：1.5
--   `qwen3-omni-flash-realtime` 系列：0.0
--   `qwen-omni-turbo-realtime` 系列：0.0
+-   `qwen3-omni-flash-realtime-2025-09-15`：0.0
 
 适用场景：
 
 较高值适合创意写作、头脑风暴等需要多样性和创造性的场景。
 
 较低值适合技术文档等需要一致性和专业术语的场景。
-
-> `qwen-omni-turbo` 系列模型**不支持修改**。
 
 **seed**`integer`（可选）
 
@@ -458,8 +440,6 @@ MCP Streamable HTTP 地址，必须为公网 HTTPS 443 地址，最长 4096 字�
 每次调用时传入相同的 seed 值并保持其他参数不变，模型将尽可能返回相同的结果。
 
 取值范围：0 到 231−1，默认值为 -1。
-
-> `qwen-omni-turbo` 系列模型**不支持修改**。
 
 ### 工具配置示例
 

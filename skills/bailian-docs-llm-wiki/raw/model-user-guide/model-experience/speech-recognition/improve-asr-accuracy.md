@@ -71,7 +71,7 @@
     
     -   **Qwen-Audio-3.1-ASR-Flash-Streaming：**qwen-audio-3.1-asr-flash-streaming
     -   **Qwen-Audio-3.0-ASR-Flash-Streaming：**qwen-audio-3.0-asr-flash-streaming
-    -   **Fun-ASR-Realtime**：fun-asr-realtime、fun-asr-realtime-2026-02-28、fun-asr-realtime-2025-11-07、fun-asr-realtime-2025-09-15、fun-asr-flash-8k-realtime、fun-asr-flash-8k-realtime-2026-01-28
+    -   **Fun-ASR-Realtime**：fun-asr-realtime、fun-asr-realtime-2026-02-28、fun-asr-flash-8k-realtime、fun-asr-flash-8k-realtime-2026-01-28
     -   **Paraformer**：paraformer-realtime-v2、paraformer-realtime-8k-v2
 -   **非实时语音识别**：
     
@@ -80,7 +80,7 @@
     -   **Qwen-Audio-3.1-ASR-Flash**：qwen-audio-3.1-asr-flash
     -   **Qwen-Audio-3.0-ASR-Flash**：qwen-audio-3.0-asr-flash
     -   **Fun-ASR-Flash**：fun-asr-flash-2026-06-15
-    -   **Fun-ASR**：fun-asr、fun-asr-2025-11-07、fun-asr-2025-08-25、fun-asr-mtl、fun-asr-mtl-2025-08-25
+    -   **Fun-ASR**：fun-asr
     -   **Paraformer：**paraformer-v2、paraformer-8k-v2
 
 #### 新加坡
@@ -91,7 +91,7 @@
     
     -   **Qwen-Audio-3.1-ASR-Flash-Streaming：**qwen-audio-3.1-asr-flash-streaming
     -   **Qwen-Audio-3.0-ASR-Flash-Streaming：**qwen-audio-3.0-asr-flash-streaming
-    -   **Fun-ASR-Realtime**：fun-asr-realtime、fun-asr-realtime-2025-11-07
+    -   **Fun-ASR-Realtime**：fun-asr-realtime
 -   **非实时语音识别**：
     
     -   **Qwen-Audio-3.1-ASR-Flash-Filetrans：**qwen-audio-3.1-asr-flash-filetrans
@@ -99,7 +99,7 @@
     -   **Qwen-Audio-3.1-ASR-Flash**：qwen-audio-3.1-asr-flash
     -   **Qwen-Audio-3.0-ASR-Flash**：qwen-audio-3.0-asr-flash
     -   **Fun-ASR-Flash**：fun-asr-flash-2026-06-15
-    -   **Fun-ASR**：fun-asr、fun-asr-2025-11-07、fun-asr-2025-08-25、fun-asr-mtl、fun-asr-mtl-2025-08-25
+    -   **Fun-ASR**：fun-asr
 
 ### 快速开始
 
@@ -404,18 +404,18 @@ curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/a
     
     示例：
     
-    -   ✅ `"厄洛替尼盐酸盐"`（7 字符）
-    -   ✅ `"EGFR抑制剂"`（7 字符，其中 EGFR 占 4 个 ASCII 字符）
-    -   ✅ `"こんにちは"`（5 字符）
-    -   ✅ `"Фенибут Белфарм"`（15 字符，含中间空格）
-    -   ❌ `"Клофелин Белмедпрепараты"`（24 字符）
+    -   符合要求：`"厄洛替尼盐酸盐"`（7 字符）
+    -   符合要求：`"EGFR抑制剂"`（7 字符，其中 EGFR 占 4 个 ASCII 字符）
+    -   符合要求：`"こんにちは"`（5 字符）
+    -   符合要求：`"Фенибут Белфарм"`（15 字符，含中间空格）
+    -   不符合要求：`"Клофелин Белмедпрепараты"`（24 字符）
 -   **纯 ASCII 字符时**：按空格切分后的片段数不超过 7 个。
     
     示例：
     
-    -   ✅ `"Exothermic reaction"` → 2 个片段
-    -   ✅ `"Human immunodeficiency virus type 1"` → 5 个片段
-    -   ❌ `"The effect of temperature variations on enzyme activity in biochemical reactions"` → 11 个片段
+    -   符合要求：`"Exothermic reaction"` → 2 个片段
+    -   符合要求：`"Human immunodeficiency virus type 1"` → 5 个片段
+    -   不符合要求：`"The effect of temperature variations on enzyme activity in biochemical reactions"` → 11 个片段
 
 ### 调整热词权重
 
@@ -498,7 +498,7 @@ curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/a
     
     -   **Qwen-Audio-3.1-ASR-Flash-Streaming：**qwen-audio-3.1-asr-flash-streaming
     -   **Qwen-Audio-3.0-ASR-Flash-Streaming：**qwen-audio-3.0-asr-flash-streaming
-    -   **Fun-ASR-Realtime**：fun-asr-realtime、fun-asr-realtime-2025-11-07
+    -   **Fun-ASR-Realtime**：fun-asr-realtime
 -   **非实时语音识别**：
     
     -   **Qwen-Audio-3.1-ASR-Flash-Filetrans：**qwen-audio-3.1-asr-flash-filetrans
@@ -515,7 +515,7 @@ curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/a
     
     -   **Qwen-Audio-3.1-ASR-Flash-Streaming：**qwen-audio-3.1-asr-flash-streaming
     -   **Qwen-Audio-3.0-ASR-Flash-Streaming：**qwen-audio-3.0-asr-flash-streaming
-    -   **Fun-ASR-Realtime**：fun-asr-realtime、fun-asr-realtime-2025-11-07
+    -   **Fun-ASR-Realtime**：fun-asr-realtime
 -   **非实时语音识别**：
     
     -   **Qwen-Audio-3.1-ASR-Flash-Filetrans：**qwen-audio-3.1-asr-flash-filetrans

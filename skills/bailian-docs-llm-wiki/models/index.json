@@ -1,40 +1,40 @@
 {
-  "updatedAt": "2026-10-10",
-  "totalFamilies": 187,
-  "totalModels": 431,
+  "updatedAt": "2026-10-11",
+  "totalFamilies": 125,
+  "totalModels": 317,
   "profileCoverage": {
-    "full": 393,
-    "partial": 35,
-    "structured-only": 3,
+    "full": 260,
+    "partial": 51,
+    "structured-only": 6,
     "none": 0
   },
   "capabilityDistribution": {
-    "TG": 40,
-    "IG": 30,
-    "VG": 25,
-    "TTS": 18,
-    "ASR": 16,
-    "Reasoning": 15,
-    "VU": 9,
-    "Realtime-ASR": 8,
-    "Multimodal-Omni": 7,
-    "Realtime-Omni": 5,
-    "Realtime-Audio-Translate": 4,
+    "TG": 30,
+    "VG": 17,
+    "IG": 17,
+    "ASR": 11,
+    "Reasoning": 10,
+    "TTS": 9,
+    "Realtime-ASR": 6,
+    "VU": 5,
+    "Multimodal-Omni": 5,
+    "Realtime-Omni": 4,
     "ME": 2,
     "Realtime-Chatting": 2,
-    "Realtime-Text-to-Speech": 2,
     "TR": 2,
+    "Realtime-Audio-Translate": 2,
     "World-Model": 1,
+    "Realtime-Text-to-Speech": 1,
     "3D-generation": 1
   },
   "providerDistribution": {
-    "qwen": 115,
-    "qwen-domain-model": 36,
-    "wan": 14,
+    "qwen": 63,
+    "qwen-domain-model": 26,
+    "wan": 13,
     "mini-max": 4,
+    "pixverse": 4,
     "deepseek": 3,
     "zhipu-ai": 3,
-    "pixverse": 3,
     "moonshot-ai": 2,
     "happyhorse": 2,
     "vidu": 2,
@@ -58,14 +58,12 @@
       "providers": [
         "moonshot-ai"
       ],
-      "itemCount": 6,
+      "itemCount": 4,
       "items": [
-        "kimi-k2-thinking",
         "kimi-k2.5",
         "kimi-k2.6",
         "kimi-k2.7-code",
-        "kimi-k3",
-        "Moonshot-Kimi-K2-Instruct"
+        "kimi-k3"
       ],
       "maxContextWindow": 1000000
     },
@@ -80,9 +78,8 @@
       "providers": [
         "mini-max"
       ],
-      "itemCount": 2,
+      "itemCount": 1,
       "items": [
-        "MiniMax-M2.1",
         "MiniMax-M2.5"
       ],
       "maxContextWindow": 204800
@@ -121,111 +118,6 @@
       ]
     },
     {
-      "slug": "aitryon-parsing-v1",
-      "name": "AI试衣OutfitAnyone-图片分割",
-      "primaryCapability": "IG",
-      "capabilities": [
-        "IG"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "aitryon-parsing-v1"
-      ]
-    },
-    {
-      "slug": "aitryon-plus",
-      "name": "AI试衣-Plus版",
-      "primaryCapability": "IG",
-      "capabilities": [
-        "IG"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "aitryon-plus"
-      ]
-    },
-    {
-      "slug": "aitryon-refiner",
-      "name": "AI试衣OutfitAnyone-图片精修",
-      "primaryCapability": "IG",
-      "capabilities": [
-        "IG"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "aitryon-refiner"
-      ]
-    },
-    {
-      "slug": "aitryon",
-      "name": "AI试衣-基础版",
-      "primaryCapability": "IG",
-      "capabilities": [
-        "IG"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "aitryon"
-      ]
-    },
-    {
-      "slug": "animate-anyone-detect-gen2",
-      "name": "舞动人像AnimateAnyone-detect",
-      "primaryCapability": "VG",
-      "capabilities": [
-        "VG"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "animate-anyone-detect-gen2"
-      ]
-    },
-    {
-      "slug": "animate-anyone-gen2",
-      "name": "舞动人像AnimateAnyone",
-      "primaryCapability": "VG",
-      "capabilities": [
-        "VG"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "animate-anyone-gen2"
-      ]
-    },
-    {
-      "slug": "animate-anyone-template-gen2",
-      "name": "舞动人像AnimateAnyone-template",
-      "primaryCapability": "VG",
-      "capabilities": [
-        "VG"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "animate-anyone-template-gen2"
-      ]
-    },
-    {
       "slug": "cosyvoice",
       "name": "CosyVoice大模型",
       "primaryCapability": "TTS",
@@ -236,10 +128,8 @@
         "qwen",
         "qwen-domain-model"
       ],
-      "itemCount": 7,
+      "itemCount": 5,
       "items": [
-        "cosyvoice-clone-v1",
-        "cosyvoice-v1",
         "cosyvoice-v2",
         "cosyvoice-v3-flash",
         "cosyvoice-v3-plus",
@@ -274,19 +164,9 @@
       "providers": [
         "deepseek"
       ],
-      "itemCount": 15,
+      "itemCount": 5,
       "items": [
-        "deepseek-r1",
-        "deepseek-r1-0528",
         "deepseek-r1-distill-qwen-1.5b",
-        "deepseek-r1-distill-qwen-14b",
-        "deepseek-r1-distill-qwen-32b",
-        "deepseek-r1-distill-qwen-7b",
-        "deepseek-v3",
-        "deepseek-v3.1",
-        "deepseek-v3.2",
-        "deepseek-v3.2-exp",
-        "deepseek-v4-flash",
         "deepseek-v4-flash-0731",
         "deepseek-v4-pro",
         "deepseek-v4-pro-0813",
@@ -310,97 +190,6 @@
         "tongyi-embedding-vision-flash",
         "tongyi-embedding-vision-plus"
       ]
-    },
-    {
-      "slug": "emo-detect-v1",
-      "name": "悦动人像EMO-detect",
-      "primaryCapability": "VG",
-      "capabilities": [
-        "VG"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "emo-detect-v1"
-      ]
-    },
-    {
-      "slug": "emo-v1",
-      "name": "悦动人像EMO",
-      "primaryCapability": "VG",
-      "capabilities": [
-        "VG"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "emo-v1"
-      ]
-    },
-    {
-      "slug": "emoji-detect-v1",
-      "name": "表情包Emoji-detect",
-      "primaryCapability": "VG",
-      "capabilities": [
-        "VG"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "emoji-detect-v1"
-      ]
-    },
-    {
-      "slug": "emoji-v1",
-      "name": "表情包Emoji",
-      "primaryCapability": "VG",
-      "capabilities": [
-        "VG"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "emoji-v1"
-      ]
-    },
-    {
-      "slug": "facechain-generation",
-      "name": "FaceChain人物写真生成",
-      "primaryCapability": "IG",
-      "capabilities": [
-        "IG"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "facechain-generation"
-      ]
-    },
-    {
-      "slug": "farui-plus",
-      "name": "通义法睿-Plus-32K",
-      "primaryCapability": "TG",
-      "capabilities": [
-        "TG"
-      ],
-      "providers": [
-        "qwen-domain-model"
-      ],
-      "itemCount": 1,
-      "items": [
-        "farui-plus"
-      ],
-      "maxContextWindow": 12000
     },
     {
       "slug": "fun-asr-flash",
@@ -443,25 +232,9 @@
       "providers": [
         "qwen-domain-model"
       ],
-      "itemCount": 2,
-      "items": [
-        "fun-asr",
-        "fun-asr-mtl"
-      ]
-    },
-    {
-      "slug": "fun-music",
-      "name": "音乐生成",
-      "primaryCapability": "TTS",
-      "capabilities": [
-        "TTS"
-      ],
-      "providers": [
-        "qwen"
-      ],
       "itemCount": 1,
       "items": [
-        "fun-music-preview"
+        "fun-asr"
       ]
     },
     {
@@ -475,12 +248,8 @@
       "providers": [
         "zhipu-ai"
       ],
-      "itemCount": 9,
+      "itemCount": 5,
       "items": [
-        "glm-4.5",
-        "glm-4.5-air",
-        "glm-4.6",
-        "glm-4.7",
         "glm-5",
         "glm-5.1",
         "glm-5.2",
@@ -520,36 +289,6 @@
         "gui-plus"
       ],
       "maxContextWindow": 256000
-    },
-    {
-      "slug": "gummy-chat-v1",
-      "name": "一句话识别及翻译V1.0",
-      "primaryCapability": "ASR",
-      "capabilities": [
-        "ASR"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "gummy-chat-v1"
-      ]
-    },
-    {
-      "slug": "gummy-realtime-v1",
-      "name": "实时语音识别及翻译V1.0",
-      "primaryCapability": "Realtime-Audio-Translate",
-      "capabilities": [
-        "Realtime-Audio-Translate"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "gummy-realtime-v1"
-      ]
     },
     {
       "slug": "happyhorse-1.0",
@@ -632,21 +371,6 @@
       ]
     },
     {
-      "slug": "image-out-painting",
-      "name": "图像画面扩展",
-      "primaryCapability": "IG",
-      "capabilities": [
-        "IG"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "image-out-painting"
-      ]
-    },
-    {
       "slug": "kimi-models-market-place",
       "name": "Kimi",
       "primaryCapability": "TG",
@@ -689,36 +413,6 @@
       ]
     },
     {
-      "slug": "liveportrait-detect",
-      "name": "灵动人像LivePortrait-detect",
-      "primaryCapability": "VG",
-      "capabilities": [
-        "VG"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "liveportrait-detect"
-      ]
-    },
-    {
-      "slug": "liveportrait",
-      "name": "灵动人像LivePortrait",
-      "primaryCapability": "VG",
-      "capabilities": [
-        "VG"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "liveportrait"
-      ]
-    },
-    {
       "slug": "minimax-models-market-place",
       "name": "MiniMax文本模型",
       "primaryCapability": "TG",
@@ -740,21 +434,6 @@
       "maxContextWindow": 1000000
     },
     {
-      "slug": "paraformer-8k-v1",
-      "name": "Paraformer语音识别-8k-v1",
-      "primaryCapability": "ASR",
-      "capabilities": [
-        "ASR"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "paraformer-8k-v1"
-      ]
-    },
-    {
       "slug": "paraformer-8k-v2",
       "name": "Paraformer语音识别-8k-v2",
       "primaryCapability": "ASR",
@@ -767,36 +446,6 @@
       "itemCount": 1,
       "items": [
         "paraformer-8k-v2"
-      ]
-    },
-    {
-      "slug": "paraformer-mtl-v1",
-      "name": "Paraformer语音识别-mtl-v1",
-      "primaryCapability": "ASR",
-      "capabilities": [
-        "ASR"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "paraformer-mtl-v1"
-      ]
-    },
-    {
-      "slug": "paraformer-realtime-8k-v1",
-      "name": "Paraformer实时语音识别-8k-v1",
-      "primaryCapability": "Realtime-ASR",
-      "capabilities": [
-        "Realtime-ASR"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "paraformer-realtime-8k-v1"
       ]
     },
     {
@@ -815,21 +464,6 @@
       ]
     },
     {
-      "slug": "paraformer-realtime-v1",
-      "name": "Paraformer实时语音识别-v1",
-      "primaryCapability": "Realtime-ASR",
-      "capabilities": [
-        "Realtime-ASR"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "paraformer-realtime-v1"
-      ]
-    },
-    {
       "slug": "paraformer-realtime-v2",
       "name": "Paraformer实时语音识别-v2",
       "primaryCapability": "Realtime-ASR",
@@ -842,21 +476,6 @@
       "itemCount": 1,
       "items": [
         "paraformer-realtime-v2"
-      ]
-    },
-    {
-      "slug": "paraformer-v1",
-      "name": "Paraformer语音识别-v1",
-      "primaryCapability": "ASR",
-      "capabilities": [
-        "ASR"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "paraformer-v1"
       ]
     },
     {
@@ -890,6 +509,23 @@
         "pixverse/pixverse-c1-kf2v",
         "pixverse/pixverse-c1-r2v",
         "pixverse/pixverse-c1-t2v"
+      ]
+    },
+    {
+      "slug": "pixverse-capability-market-place",
+      "name": "PixVerse Capabilities",
+      "primaryCapability": "VG",
+      "capabilities": [
+        "VG"
+      ],
+      "providers": [
+        "pixverse"
+      ],
+      "itemCount": 3,
+      "items": [
+        "pixverse/pixverse-lipsync",
+        "pixverse/pixverse-motioncontrol",
+        "pixverse/pixverse-upscale"
       ]
     },
     {
@@ -928,40 +564,6 @@
         "pixverse/pixverse-v6-r2v-omni",
         "pixverse/pixverse-v6-t2v"
       ]
-    },
-    {
-      "slug": "qvq-max",
-      "name": "QVQ-Max",
-      "primaryCapability": "Reasoning",
-      "capabilities": [
-        "Reasoning",
-        "VU"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "qvq-max"
-      ],
-      "maxContextWindow": 131072
-    },
-    {
-      "slug": "qvq-plus",
-      "name": "Qwen-QVQ-Plus",
-      "primaryCapability": "Reasoning",
-      "capabilities": [
-        "Reasoning",
-        "VU"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "qvq-plus"
-      ],
-      "maxContextWindow": 131072
     },
     {
       "slug": "qwen-audio-3.0-asr",
@@ -1122,38 +724,6 @@
       ]
     },
     {
-      "slug": "qwen-coder-plus",
-      "name": "Qwen-Coder-Plus",
-      "primaryCapability": "TG",
-      "capabilities": [
-        "TG"
-      ],
-      "providers": [
-        "qwen-domain-model"
-      ],
-      "itemCount": 1,
-      "items": [
-        "qwen-coder-plus"
-      ],
-      "maxContextWindow": 131072
-    },
-    {
-      "slug": "qwen-coder-turbo",
-      "name": "Qwen-Coder-Turbo",
-      "primaryCapability": "TG",
-      "capabilities": [
-        "TG"
-      ],
-      "providers": [
-        "qwen-domain-model"
-      ],
-      "itemCount": 1,
-      "items": [
-        "qwen-coder-turbo"
-      ],
-      "maxContextWindow": 131072
-    },
-    {
       "slug": "qwen-deep-research",
       "name": "qwen-deep-research",
       "primaryCapability": "TG",
@@ -1242,24 +812,8 @@
       "maxContextWindow": 1000000
     },
     {
-      "slug": "qwen-image-2.0-pro",
-      "name": "Qwen-Image-2.1-Pro",
-      "primaryCapability": "IG",
-      "capabilities": [
-        "IG"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 2,
-      "items": [
-        "qwen-image-2.0-pro",
-        "qwen-image-2.1-pro"
-      ]
-    },
-    {
       "slug": "qwen-image-2.0",
-      "name": "Qwen-Image-2.1",
+      "name": "Qwen-Image-2.0",
       "primaryCapability": "IG",
       "capabilities": [
         "IG"
@@ -1270,6 +824,22 @@
       "itemCount": 2,
       "items": [
         "qwen-image-2.0",
+        "qwen-image-2.0-pro"
+      ]
+    },
+    {
+      "slug": "qwen-image-2.1",
+      "name": "Qwen-Image-2.1",
+      "primaryCapability": "IG",
+      "capabilities": [
+        "IG"
+      ],
+      "providers": [
+        "qwen"
+      ],
+      "itemCount": 2,
+      "items": [
+        "qwen-image-2.1-pro",
         "qwen-image-2.1-turbo"
       ]
     },
@@ -1290,68 +860,6 @@
       ]
     },
     {
-      "slug": "qwen-image-edit-max",
-      "name": "Qwen-Image-Edit-Max",
-      "primaryCapability": "IG",
-      "capabilities": [
-        "IG"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "qwen-image-edit-max"
-      ]
-    },
-    {
-      "slug": "qwen-image-edit",
-      "name": "Qwen-Image-Edit-Plus",
-      "primaryCapability": "IG",
-      "capabilities": [
-        "IG"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 2,
-      "items": [
-        "qwen-image-edit",
-        "qwen-image-edit-plus"
-      ]
-    },
-    {
-      "slug": "qwen-image-max",
-      "name": "Qwen-Image-Max",
-      "primaryCapability": "IG",
-      "capabilities": [
-        "IG"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "qwen-image-max"
-      ]
-    },
-    {
-      "slug": "qwen-image-plus",
-      "name": "Qwen-Image-Plus",
-      "primaryCapability": "IG",
-      "capabilities": [
-        "IG"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 2,
-      "items": [
-        "qwen-image",
-        "qwen-image-plus"
-      ]
-    },
-    {
       "slug": "qwen-long",
       "name": "Qwen-Long",
       "primaryCapability": "TG",
@@ -1361,47 +869,11 @@
       "providers": [
         "qwen-domain-model"
       ],
-      "itemCount": 2,
-      "items": [
-        "qwen-long",
-        "qwen-long-latest"
-      ],
-      "maxContextWindow": 10000000
-    },
-    {
-      "slug": "qwen-math-plus",
-      "name": "Qwen-Math-Plus",
-      "primaryCapability": "TG",
-      "capabilities": [
-        "TG"
-      ],
-      "providers": [
-        "qwen-domain-model"
-      ],
-      "itemCount": 4,
-      "items": [
-        "qwen-math-plus",
-        "qwen-math-plus-0816",
-        "qwen-math-plus-0919",
-        "qwen-math-plus-latest"
-      ],
-      "maxContextWindow": 4096
-    },
-    {
-      "slug": "qwen-math-turbo",
-      "name": "Qwen-Math-Turbo",
-      "primaryCapability": "TG",
-      "capabilities": [
-        "TG"
-      ],
-      "providers": [
-        "qwen-domain-model"
-      ],
       "itemCount": 1,
       "items": [
-        "qwen-math-turbo"
+        "qwen-long"
       ],
-      "maxContextWindow": 4096
+      "maxContextWindow": 10000000
     },
     {
       "slug": "qwen-max",
@@ -1485,22 +957,6 @@
       "maxContextWindow": 16384
     },
     {
-      "slug": "qwen-mt-turbo",
-      "name": "Qwen-MT-Turbo",
-      "primaryCapability": "TG",
-      "capabilities": [
-        "TG"
-      ],
-      "providers": [
-        "qwen-domain-model"
-      ],
-      "itemCount": 1,
-      "items": [
-        "qwen-mt-turbo"
-      ],
-      "maxContextWindow": 16384
-    },
-    {
       "slug": "qwen-mt-uni",
       "name": "Qwen-MT-Uni",
       "primaryCapability": "Multimodal-Omni",
@@ -1515,40 +971,6 @@
         "qwen-mt-uni"
       ],
       "maxContextWindow": 1000000
-    },
-    {
-      "slug": "qwen-omni-turbo-realtime",
-      "name": "Qwen-Omni-Turbo-Realtime",
-      "primaryCapability": "Realtime-Omni",
-      "capabilities": [
-        "Realtime-Omni"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 2,
-      "items": [
-        "qwen-omni-turbo-realtime",
-        "qwen-omni-turbo-realtime-latest"
-      ],
-      "maxContextWindow": 32768
-    },
-    {
-      "slug": "qwen-omni-turbo",
-      "name": "Qwen-Omni-Turbo",
-      "primaryCapability": "Multimodal-Omni",
-      "capabilities": [
-        "Multimodal-Omni"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 2,
-      "items": [
-        "qwen-omni-turbo",
-        "qwen-omni-turbo-latest"
-      ],
-      "maxContextWindow": 32768
     },
     {
       "slug": "qwen-plus-character",
@@ -1577,11 +999,9 @@
       "providers": [
         "qwen"
       ],
-      "itemCount": 4,
+      "itemCount": 2,
       "items": [
         "qwen-plus",
-        "qwen-plus-0112",
-        "qwen-plus-1220",
         "qwen-plus-latest"
       ],
       "maxContextWindow": 1000000
@@ -1607,57 +1027,6 @@
       "maxContextWindow": 32768
     },
     {
-      "slug": "qwen-tts-realtime",
-      "name": "Qwen-TTS-Realtime",
-      "primaryCapability": "Realtime-Text-to-Speech",
-      "capabilities": [
-        "Realtime-Text-to-Speech"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 2,
-      "items": [
-        "qwen-tts-realtime",
-        "qwen-tts-realtime-latest"
-      ],
-      "maxContextWindow": 8192
-    },
-    {
-      "slug": "qwen-tts",
-      "name": "Qwen-TTS",
-      "primaryCapability": "TTS",
-      "capabilities": [
-        "TTS"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 2,
-      "items": [
-        "qwen-tts",
-        "qwen-tts-latest"
-      ],
-      "maxContextWindow": 8192
-    },
-    {
-      "slug": "qwen-turbo",
-      "name": "Qwen-Turbo",
-      "primaryCapability": "Reasoning",
-      "capabilities": [
-        "Reasoning",
-        "TG"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "qwen-turbo"
-      ],
-      "maxContextWindow": 131072
-    },
-    {
       "slug": "qwen-vl-embedding",
       "name": "Qwen-VL-Embedding",
       "primaryCapability": "ME",
@@ -1674,22 +1043,6 @@
       ]
     },
     {
-      "slug": "qwen-vl-max",
-      "name": "Qwen-VL-Max",
-      "primaryCapability": "VU",
-      "capabilities": [
-        "VU"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "qwen-vl-max"
-      ],
-      "maxContextWindow": 131072
-    },
-    {
       "slug": "qwen-vl-ocr",
       "name": "Qwen-VL-OCR",
       "primaryCapability": "VU",
@@ -1699,44 +1052,11 @@
       "providers": [
         "qwen-domain-model"
       ],
-      "itemCount": 3,
+      "itemCount": 1,
       "items": [
-        "qwen-vl-ocr",
-        "qwen-vl-ocr-1028",
-        "qwen-vl-ocr-latest"
+        "qwen-vl-ocr"
       ],
       "maxContextWindow": 38192
-    },
-    {
-      "slug": "qwen-vl-plus",
-      "name": "Qwen-VL-Plus",
-      "primaryCapability": "VU",
-      "capabilities": [
-        "VU"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "qwen-vl-plus"
-      ],
-      "maxContextWindow": 131072
-    },
-    {
-      "slug": "qwen-voice-design",
-      "name": "Qwen-声音设计",
-      "primaryCapability": "TTS",
-      "capabilities": [
-        "TTS"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "qwen-voice-design"
-      ]
     },
     {
       "slug": "qwen-voice-enrollment",
@@ -1752,22 +1072,6 @@
       "items": [
         "qwen-voice-enrollment"
       ]
-    },
-    {
-      "slug": "qwen2.5",
-      "name": "Qwen2.5-开源模型",
-      "primaryCapability": "Multimodal-Omni",
-      "capabilities": [
-        "Multimodal-Omni"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "qwen2.5-omni-7b"
-      ],
-      "maxContextWindow": 32768
     },
     {
       "slug": "qwen3-asr-flash-filetrans",
@@ -1815,38 +1119,6 @@
       ]
     },
     {
-      "slug": "qwen3-coder-30b-a3b-instruct",
-      "name": "Qwen3-Coder-30B-A3B-Instruct",
-      "primaryCapability": "TG",
-      "capabilities": [
-        "TG"
-      ],
-      "providers": [
-        "qwen-domain-model"
-      ],
-      "itemCount": 1,
-      "items": [
-        "qwen3-coder-30b-a3b-instruct"
-      ],
-      "maxContextWindow": 262144
-    },
-    {
-      "slug": "qwen3-coder-480b-a35b-instruct",
-      "name": "Qwen3-Coder-480B-A35B-Instruct",
-      "primaryCapability": "TG",
-      "capabilities": [
-        "TG"
-      ],
-      "providers": [
-        "qwen-domain-model"
-      ],
-      "itemCount": 1,
-      "items": [
-        "qwen3-coder-480b-a35b-instruct"
-      ],
-      "maxContextWindow": 262144
-    },
-    {
       "slug": "qwen3-coder-flash",
       "name": "Qwen3-Coder-Flash",
       "primaryCapability": "TG",
@@ -1861,38 +1133,6 @@
         "qwen3-coder-flash"
       ],
       "maxContextWindow": 1000000
-    },
-    {
-      "slug": "qwen3-coder-plus",
-      "name": "Qwen3-Coder-Plus",
-      "primaryCapability": "TG",
-      "capabilities": [
-        "TG"
-      ],
-      "providers": [
-        "qwen-domain-model"
-      ],
-      "itemCount": 1,
-      "items": [
-        "qwen3-coder-plus"
-      ],
-      "maxContextWindow": 1000000
-    },
-    {
-      "slug": "qwen3-livetranslate-flash-realtime",
-      "name": "Qwen3-LiveTranslate-Flash-Realtime",
-      "primaryCapability": "Realtime-Audio-Translate",
-      "capabilities": [
-        "Realtime-Audio-Translate"
-      ],
-      "providers": [
-        "qwen-domain-model"
-      ],
-      "itemCount": 1,
-      "items": [
-        "qwen3-livetranslate-flash-realtime"
-      ],
-      "maxContextWindow": 53248
     },
     {
       "slug": "qwen3-livetranslate-flash",
@@ -1911,40 +1151,6 @@
       "maxContextWindow": 53248
     },
     {
-      "slug": "qwen3-max",
-      "name": "Qwen3-Max",
-      "primaryCapability": "TG",
-      "capabilities": [
-        "TG",
-        "Reasoning"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 2,
-      "items": [
-        "qwen3-max",
-        "qwen3-max-preview"
-      ],
-      "maxContextWindow": 262144
-    },
-    {
-      "slug": "qwen3-omni-30b-a3b-captioner",
-      "name": "Qwen3-Omni-30b-a3b-Captioner",
-      "primaryCapability": "ASR",
-      "capabilities": [
-        "ASR"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "qwen3-omni-30b-a3b-captioner"
-      ],
-      "maxContextWindow": 65536
-    },
-    {
       "slug": "qwen3-omni-flash-realtime",
       "name": "Qwen3-Omni-Flash-Realtime",
       "primaryCapability": "Realtime-Omni",
@@ -1956,7 +1162,7 @@
       ],
       "itemCount": 1,
       "items": [
-        "qwen3-omni-flash-realtime"
+        "qwen3-omni-flash-realtime-2025-09-15"
       ],
       "maxContextWindow": 65536
     },
@@ -2005,113 +1211,6 @@
       "items": [
         "qwen3-tts-flash"
       ]
-    },
-    {
-      "slug": "qwen3-tts-instruct-flash-realtime",
-      "name": "qwen3-tts-instruct-flash-realtime",
-      "primaryCapability": "TTS",
-      "capabilities": [
-        "TTS"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "qwen3-tts-instruct-flash-realtime"
-      ]
-    },
-    {
-      "slug": "qwen3-tts-instruct-flash",
-      "name": "Qwen3-TTS-Instruct-Flash",
-      "primaryCapability": "TTS",
-      "capabilities": [
-        "TTS"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "qwen3-tts-instruct-flash"
-      ]
-    },
-    {
-      "slug": "qwen3-tts-vc-realtime",
-      "name": "Qwen3-TTS-VC-Realtime",
-      "primaryCapability": "TTS",
-      "capabilities": [
-        "TTS"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "qwen3-tts-vc-realtime-2026-01-15"
-      ]
-    },
-    {
-      "slug": "qwen3-tts-vc",
-      "name": "Qwen3-TTS-VC",
-      "primaryCapability": "TTS",
-      "capabilities": [
-        "TTS"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "qwen3-tts-vc-2026-01-22"
-      ]
-    },
-    {
-      "slug": "qwen3-tts-vd-realtime",
-      "name": "Qwen3-TTS-VD-Realtime",
-      "primaryCapability": "TTS",
-      "capabilities": [
-        "TTS"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "qwen3-tts-vd-realtime-2026-01-15"
-      ]
-    },
-    {
-      "slug": "qwen3-tts-vd",
-      "name": "Qwen3-TTS-VD",
-      "primaryCapability": "TTS",
-      "capabilities": [
-        "TTS"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "qwen3-tts-vd-2026-01-26"
-      ]
-    },
-    {
-      "slug": "qwen3-vl-flash",
-      "name": "Qwen3-VL-Flash",
-      "primaryCapability": "VU",
-      "capabilities": [
-        "VU",
-        "Reasoning"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "qwen3-vl-flash"
-      ],
-      "maxContextWindow": 262144
     },
     {
       "slug": "qwen3-vl-plus",
@@ -2300,23 +1399,6 @@
         "qwen3.6-flash"
       ],
       "maxContextWindow": 1000000
-    },
-    {
-      "slug": "qwen3.6-max",
-      "name": "Qwen3.6-Max",
-      "primaryCapability": "Reasoning",
-      "capabilities": [
-        "Reasoning",
-        "TG"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "qwen3.6-max-preview"
-      ],
-      "maxContextWindow": 262144
     },
     {
       "slug": "qwen3.6-plus",
@@ -2511,59 +1593,6 @@
         "qwen3.8-27b"
       ],
       "maxContextWindow": 1000000
-    },
-    {
-      "slug": "qwen3",
-      "name": "Qwen3开源模型",
-      "primaryCapability": "VU",
-      "capabilities": [
-        "VU",
-        "Reasoning",
-        "TG"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 20,
-      "items": [
-        "qwen3-14b",
-        "qwen3-235b-a22b",
-        "qwen3-235b-a22b-instruct-2507",
-        "qwen3-235b-a22b-thinking-2507",
-        "qwen3-30b-a3b",
-        "qwen3-30b-a3b-instruct-2507",
-        "qwen3-30b-a3b-thinking-2507",
-        "qwen3-32b",
-        "qwen3-8b",
-        "qwen3-coder-next",
-        "qwen3-next-80b-a3b-instruct",
-        "qwen3-next-80b-a3b-thinking",
-        "qwen3-vl-235b-a22b-instruct",
-        "qwen3-vl-235b-a22b-thinking",
-        "qwen3-vl-30b-a3b-instruct",
-        "qwen3-vl-30b-a3b-thinking",
-        "qwen3-vl-32b-instruct",
-        "qwen3-vl-32b-thinking",
-        "qwen3-vl-8b-instruct",
-        "qwen3-vl-8b-thinking"
-      ],
-      "maxContextWindow": 262144
-    },
-    {
-      "slug": "qwq-plus",
-      "name": "Qwen-QwQ-Plus",
-      "primaryCapability": "Reasoning",
-      "capabilities": [
-        "Reasoning"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "qwq-plus"
-      ],
-      "maxContextWindow": 131072
     },
     {
       "slug": "sambert",
@@ -3050,21 +2079,6 @@
       ]
     },
     {
-      "slug": "wanx-background-generation-v2",
-      "name": "图像背景生成",
-      "primaryCapability": "IG",
-      "capabilities": [
-        "IG"
-      ],
-      "providers": [
-        "wan"
-      ],
-      "itemCount": 1,
-      "items": [
-        "wanx-background-generation-v2"
-      ]
-    },
-    {
       "slug": "wanx-poster-generation-v1",
       "name": "创意海报生成",
       "primaryCapability": "IG",
@@ -3152,36 +2166,6 @@
       "itemCount": 1,
       "items": [
         "wanx2.1-vace-plus"
-      ]
-    },
-    {
-      "slug": "wordart-semantic",
-      "name": "WordArt锦书-文字变形",
-      "primaryCapability": "IG",
-      "capabilities": [
-        "IG"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "wordart-semantic"
-      ]
-    },
-    {
-      "slug": "wordart-texture",
-      "name": "WordArt锦书-文字纹理生成",
-      "primaryCapability": "IG",
-      "capabilities": [
-        "IG"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "wordart-texture"
       ]
     },
     {

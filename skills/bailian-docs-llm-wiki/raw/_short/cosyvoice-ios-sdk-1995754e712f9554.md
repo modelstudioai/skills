@@ -238,8 +238,6 @@ API Key。建议使用时效性短、安全性更高的[临时API Key](raw/model
 -   mp3（默认）
 -   opus
 
-**说明**cosyvoice-v1不支持opus格式。
-
 `enable_audio_decoder`
 
 `BOOL`
@@ -308,8 +306,6 @@ API Key。建议使用时效性短、安全性更高的[临时API Key](raw/model
 
 取值范围：\[6, 510\]。
 
-**说明**cosyvoice-v1模型不支持该参数。
-
 `enable_ssml`
 
 `boolean`
@@ -351,8 +347,6 @@ SSML 的使用限制（支持的模型、音色和接口），请参见[使用�
 
 取值范围：\[0, 65535\]。
 
-**说明**cosyvoice-v1不支持该参数。
-
 `language_hints`
 
 `array[string]`
@@ -365,8 +359,6 @@ SSML 的使用限制（支持的模型、音色和接口），请参见[使用�
 -   此参数用于指定语音合成的目标语言，该设置与声音复刻时的样本音频的语种无关。如需设置复刻任务的源语言，请参见[声音复刻API参考](https://help.aliyun.com/zh/model-studio/voice-clone-design-http-api#h2-create)。
 
 指定语音合成的目标语言，提升合成效果。
-
-**说明**cosyvoice-v1不支持该功能。
 
 当数字、缩写、符号等朗读方式或者小语种合成效果不符合预期时使用，例如：
 
@@ -447,7 +439,7 @@ SSML 的使用限制（支持的模型、音色和接口），请参见[使用�
 
 文本热修复配置，用于自定义指定词语的发音或对待合成文本进行替换。
 
-**说明**cosyvoice-v2、cosyvoice-v1不支持该功能。
+**说明**cosyvoice-v2不支持该功能。
 
 参数介绍：
 

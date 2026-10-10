@@ -1,46 +1,61 @@
 # 函数调用
 
-函数调用（Function Calling）是百炼平台中大模型主动识别用户意图、自主规划并执行外部工具（如 API、插件、搜索服务等）的核心能力。它通过结构化工具定义与语义化参数解析，使模型能安全、可控地扩展其能力边界，完成实时信息检索、精确计算、代码执行、图像生成等模型原生不支持的任务。
+函数调用（Function Calling）是百炼平台中模型主动识别用户意图、生成结构化工具调用请求，并交由外部系统执行的关键能力。它使大模型从“纯文本生成器”升级为“可执行智能体”，支持动态接入天气查询、代码执行、文件处理、数据库操作等真实世界能力，是构建生产级 AI 应用的核心横切机制。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-函数调用在百炼平台中并非单一接口能力，而是贯穿多个 API 层级的统一机制，具体体现为以下三类典型场景：
+函数调用并非单一功能模块，而是贯穿多个平台能力层的统一协议行为，具体体现为以下四类场景：
 
-- **Omni Realtime API（实时多模态交互）**：在语音+文本流式对话中，模型可基于语音输入或文本上下文，动态触发 `type=function` 类型的工具调用。适用于需要低延迟响应的智能客服、会议助手等场景。此时工具定义需在 `tools` 参数中声明，且与 `enable_search` 互斥。
+- **插件（Plug-in）场景**：面向轻量、确定性工具（如 `weather`、`web_search`），通过 `tools` 数组声明 OpenAPI 3.0 schema，在 `/v1/chat/completions` 请求中启用。模型返回 `tool_calls` 后，开发者需同步调用对应服务并回传结果，形成“推理→调用→反馈→再推理”的闭环。适用于单轮决策明确、延迟敏感的任务。
 
-- **Application Call（应用调用）与 Plug-in（插件）体系**：在智能体（Agent）或工作流（Workflow）中，函数调用表现为插件的自动调度。官方插件（如计算器、夸克搜索）、三方插件及自定义插件均通过 `tools` 数组注册；模型根据 `tool_description` 和用户 query 自主选择工具并填充参数。`biz_params` 可用于透传业务侧参数（如用户 ID、会话上下文），但仅 `Authorization` Header 可被插件服务端接收。
+- **Managed Agents 场景**：面向长时、多步、状态化任务（如数据分析、自动化文档处理），函数调用在沙箱容器内自主执行。内置工具（`bash`、`read`、`web_fetch`）与 MCP/Skill 工具统一注册为 `tool`，由 Agent 运行时自动调度、管理生命周期、挂载文件/密钥、记录事件流。支持中断续接与可观测追踪。
 
-- **Managed Agents API（托管智能体）**：作为声明式 Agent 的核心执行单元，函数调用由 `Skill` 资源封装，配合 `Vault` 管理凭证、`Environment` 控制执行沙箱。工具调用事件（`tool_executed`）可通过 Webhook 实时捕获，便于构建可观测、可审计的生产级智能体。
+- **LLM Application（工作流/智能体）场景**：作为低代码编排的原子能力单元。在工作流中，函数调用以“工具节点”形式存在，可与其他节点（条件判断、循环、知识库）自由组合；在 Agent 2.0 中，函数调用与知识库检索统一抽象为“工具”，由模型自主规划调用顺序与参数，完整支持“规划-执行-反思”链路。
 
-> ✅ 共同前提：所有场景均要求工具定义符合 OpenAI 兼容格式（含 `name`、`description`、`parameters`），且 `parameters` 中每个字段必须明确 `type` 与 `description`（含格式示例），否则模型无法准确提取参数。
+- **Skill 与 MCP 场景**：提供标准化封装接口。Skill 将函数调用逻辑封装为带版本号的可复用服务（`skill_id`），支持 JSON Schema 输入约束与异步执行；MCP 则定义跨平台工具通信协议（Streamable HTTP），屏蔽底层差异，使同一工具（如 `WebSearch`）可在智能体、工作流、CLI、IDE 等多环境一致调用。
+
+> ✅ 共同本质：所有场景均依赖模型输出符合约定格式的 `tool_calls`（含 `name` 和 `arguments`），平台或开发者负责解析、执行、注入结果，最终扩展模型能力边界。
 
 ## 关键参数和配置
 
-| 参数 | 位置 | 类型 | 说明 | 注意事项 |
-|------|------|------|------|----------|
-| `tools` | 请求体顶层 | `array` | 工具定义列表，每个元素为 `{ "type": "function", "function": { ... } }` | 必须提供；`qwen3.5-*` 系列仅支持 `function` 类型；`qwen3.8-*` 支持 `function` + `mcp` 混合 |
-| `tool_choice` | 请求体顶层 | `string` 或 `object` | 控制调用策略：`"auto"`（默认，模型自主决策）、`"none"`（禁用）、`{"type": "function", "function": {"name": "xxx"}}`（强制指定） | 不填即为 `auto`；强制指定时 `name` 必须与 `tools` 中某项完全匹配 |
-| `biz_params` | 请求体顶层（Application Call / Managed Agents）或 `tools[].function.parameters`（自定义插件） | `object` | 业务透传参数容器，用于注入用户上下文、鉴权 [Token](token.md)、环境变量等 | 自定义插件中，`passing_method="业务透传"` 的参数必须从此处传入；不可写入用户 prompt |
-| `enable_search` | Omni Realtime API 专用 | `boolean` | 启用内置联网搜索（非插件） | 与 `tools` 互斥，不可同时启用 |
+| 参数 | 所属场景 | 类型 | 说明 | 示例 |
+|------|----------|------|------|------|
+| `tools` | 插件、Managed Agents、工作流、Agent 2.0 | array | 工具定义列表，每个元素为含 `name`、`description`、`parameters`（JSON Schema）的对象 | `[{"name": "get_weather", "description": "获取指定城市天气", "parameters": {"type": "object", "properties": {"city": {"type": "string"}}}}]` |
+| `tool_choice` | 插件、Agent 2.0 | string / object | 控制模型是否及如何选择工具：`"auto"`（默认）、`"none"` 或 `{ "type": "function", "function": { "name": "xxx" } }` | `"auto"` 或 `{"type": "function", "function": {"name": "get_weather"}}` |
+| `tool_config` | 插件 | object | 高级配置，如 `{"parallel": true}` 启用并行调用（仅部分模型支持） | `{"parallel": true}` |
+| `stream` | Skill | boolean | 是否启用 SSE 流式响应 | `true` |
+| `timeout` | Skill | integer | 单次执行超时（秒），范围 5–300 | `60` |
+| `mcp_url` | MCP | string | 外部 MCP 服务调用地址 | `https://dashscope.aliyuncs.com/api/v1/mcps/WebSearch/mcp` |
 
-> ⚠️ 重要限制：  
-> - 单次对话最多触发 **10 次工具调用**（含重复调用同一工具）；  
-> - 自定义插件的 `Object` 类型参数，子属性**不可为空**，否则发布失败（错误码 130022）；  
-> - 所有工具调用返回结果将作为上下文输入模型，开发者需关注响应结构是否扁平、字段名是否清晰，避免解析失败。
+⚠️ 注意事项：
+- `tools` 中 `name` 必须全小写、仅含字母数字和下划线，且不能与平台保留字冲突；
+- 单次请求最多声明 20 个工具，最多触发 5 次嵌套调用；
+- 所有工具调用默认超时 10 秒（插件）或由 Skill/MCP 自定义（`timeout`），超时后模型不重试，需应用层容错；
+- 工具返回内容计入模型上下文，长响应可能被截断，建议服务端压缩或分页。
 
 ## 面向开发者，简洁实用
 
-- ✅ **快速验证**：在控制台「智能体调试」页开启「显示思考过程」，观察模型是否生成 `tool_calls` 字段及参数提取是否准确；  
-- ✅ **调试技巧**：若调用失败，优先检查 `tool_description` 是否包含具体使用示例（如 `"获取北京今日天气：get_weather(city='北京')"`），这是模型理解意图的关键；  
-- ✅ **安全实践**：敏感凭证（如 API Key）**必须**通过 `Vault`（Managed Agents）或插件鉴权配置注入，严禁硬编码或通过 `prompt`/`biz_params` 明文传递；  
-- ✅ **性能提示**：函数调用会增加端到端延迟，对实时性要求极高的语音场景（如实时会议转录），建议预判高频需求并设计缓存策略或降级逻辑。
+- **快速上手三步法**：  
+  1️⃣ **定义工具**：用 OpenAPI 3.0 或 JSON Schema 描述能力（必填 `name`、`description`、`parameters`）；  
+  2️⃣ **发起请求**：在 API 请求体中传入 `tools`（+ 可选 `tool_choice`），调用 `/v1/chat/completions` 或工作流/Agent 接口；  
+  3️⃣ **处理响应**：检查 `finish_reason === "tool_calls"`，解析 `message.tool_calls`，按 `name` 调用服务，将结果以 `role: "tool"` 消息回传（插件/Agent）或直接返回（Skill/MCP）。
+
+- **调试建议**：  
+  - 使用 `tool_choice: "none"` 强制禁用调用，验证基础推理是否正常；  
+  - 开启 `enable_thinking: true`（Agent 2.0）或 `temperature: 0` 观察模型规划逻辑；  
+  - 查看平台日志中的 `tool_call_output` 事件（Managed Agents）或 `tool_calls` 响应字段，确认参数生成准确性。
+
+- **生产提示**：  
+  - 敏感参数（如 API Key）严禁硬编码在 `tools` schema 中，应通过 Vault 注入（Managed Agents）或 MCP KMS 加密（MCP）；  
+  - 对高并发场景，优先使用 `tool_config.parallel: true`（插件）或工作流批处理节点控制资源；  
+  - 技术选型参考：简单工具 → 插件；复杂沙箱任务 → Managed Agents；复用封装 → Skill；跨平台集成 → MCP。
 
 ## 关联主题页
 
-- [omni realtime api](../api/omni-realtime-api.md)
-- [application call](../api/application-call.md)
-- [application support](../guides/application-support.md)
 - [plug in](../guides/plug-in.md)
-- [managed agents api](../api/managed-agents-api.md)
+- [managed agents](../guides/managed-agents.md)
+- [llm application](../guides/llm-application.md)
+- [skill](../guides/skill.md)
+- [model context protocol](../guides/model-context-protocol.md)
 
 
