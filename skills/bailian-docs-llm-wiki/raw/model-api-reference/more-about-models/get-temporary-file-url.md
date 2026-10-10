@@ -47,7 +47,7 @@ pip install -U requests
 **输入参数**
 
 -   api\_key：阿里云百炼API KEY。
--   model\_name：指定文件将要用于哪个模型，如`qwen-vl-plus`。
+-   model\_name：指定文件将要用于哪个模型，如`qwen3-vl-plus`。
 -   file\_path：待上传的本地文件路径（图片、视频等）。
 
 ```
@@ -114,7 +114,7 @@ if __name__ == "__main__":
         raise Exception("请设置DASHSCOPE_API_KEY环境变量")
 
     # 设置model名称
-    model_name="qwen-vl-plus"
+    model_name="qwen3-vl-plus"
 
     # 待上传的文件路径
     file_path = "/tmp/cat.png"  # 替换为实际文件路径
@@ -167,7 +167,7 @@ if __name__ == "__main__":
 **输入参数**
 
 -   apiKey：阿里云百炼API KEY。
--   modelName：指定文件将要用于哪个模型，如`qwen-vl-plus`。
+-   modelName：指定文件将要用于哪个模型，如`qwen3-vl-plus`。
 -   filePath：待上传的本地文件路径（图片、视频等）。
 
 ```
@@ -256,7 +256,7 @@ public class PublicUrlHandler {
             System.exit(1);
         }
         // 模型名称
-        String modelName = "qwen-vl-plus";
+        String modelName = "qwen3-vl-plus";
         //替换为实际文件路径
         String filePath = "src/main/resources/tmp/cat.png";
 
@@ -363,13 +363,13 @@ pip install -U dashscope
 执行上传命令：
 
 ```
-dashscope oss.upload --model qwen-vl-plus --file cat.png
+dashscope oss.upload --model qwen3-vl-plus --file cat.png
 ```
 
 输出示例：
 
 ```
-Start oss.upload: model=qwen-vl-plus, file=cat.png, api_key=None
+Start oss.upload: model=qwen3-vl-plus, file=cat.png, api_key=None
 Uploaded oss url: oss://dashscope-instant/xxxx/2025-08-01/xxxx/cat.png
 ```
 
@@ -380,13 +380,13 @@ Uploaded oss url: oss://dashscope-instant/xxxx/2025-08-01/xxxx/cat.png
 执行上传命令：
 
 ```
-dashscope oss.upload --model qwen-vl-plus --file cat.png --api_key sk-xxxxxxx
+dashscope oss.upload --model qwen3-vl-plus --file cat.png --api_key sk-xxxxxxx
 ```
 
 输出示例：
 
 ```
-Start oss.upload: model=qwen-vl-plus, file=cat.png, api_key=sk-xxxxxxx
+Start oss.upload: model=qwen3-vl-plus, file=cat.png, api_key=sk-xxxxxxx
 Uploaded oss url: oss://dashscope-instant/xxx/2025-08-01/xxx/cat.png
 ```
 
@@ -416,7 +416,7 @@ oss.upload
 
 指定文件将要用于哪个模型。
 
-qwen-vl-plus
+qwen3-vl-plus
 
 \--file
 
@@ -454,7 +454,7 @@ sk-xxxx
 
 #### 请求示例
 
-本示例为调用 qwen-vl-plus 模型识别图片内容。
+本示例为调用 qwen3-vl-plus 模型识别图片内容。
 
 **说明**请将 `oss://...`替换为真实的临时 URL，否则请求将失败。
 
@@ -464,7 +464,7 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions 
 -H 'Content-Type: application/json' \
 -H 'X-DashScope-OssResourceResolve: enable' \
 -d '{
-  "model": "qwen-vl-plus",
+  "model": "qwen3-vl-plus",
   "messages": [{
       "role": "user",
       "content":
@@ -497,7 +497,7 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions 
   },
   "created": 1739349052,
   "system_fingerprint": null,
-  "model": "qwen-vl-plus",
+  "model": "qwen3-vl-plus",
   "id": "chatcmpl-cfc4f2aa-22a8-9a94-8243-44c5bd9899bc"
 }
 ```
@@ -525,7 +525,7 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions 
 
 **示例代码**
 
-本示例为调用 qwen-vl-plus 模型识别图片内容。此代码示例仅适用于 qwen-vl 和 omni 系列模型。
+本示例为调用 qwen3-vl-plus 模型识别图片内容。此代码示例仅适用于 qwen-vl 和 omni 系列模型。
 
 #### 请求示例
 
@@ -552,7 +552,7 @@ api_key = os.getenv('DASHSCOPE_API_KEY')
 
 response = dashscope.MultiModalConversation.call(
     api_key=api_key,
-    model='qwen-vl-plus',
+    model='qwen3-vl-plus',
     messages=messages
 )
 
@@ -611,7 +611,7 @@ print(response)
 
 **示例代码**
 
-本示例为调用 qwen-vl-plus 模型识别图片内容。此代码示例仅适用于 qwen-vl 和 omni 系列模型。
+本示例为调用 qwen3-vl-plus 模型识别图片内容。此代码示例仅适用于 qwen-vl 和 omni 系列模型。
 
 #### 请求示例
 
@@ -629,7 +629,7 @@ import java.util.Arrays;
 
 public class MultiModalConversationUsage {
 
-    private static final String modelName = "qwen-vl-plus";
+    private static final String modelName = "qwen3-vl-plus";
 
     // 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
     public static String apiKey = System.getenv("DASHSCOPE_API_KEY");
@@ -788,7 +788,7 @@ _string_
 
 需要调用的模型名称。
 
-qwen-vl-plus
+qwen3-vl-plus
 
 ##### 出参描述
 
@@ -903,7 +903,7 @@ true
 ##### 请求示例
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/api/v1/uploads?action=getPolicy&model=qwen-vl-plus' \
+curl --location 'https://dashscope.aliyuncs.com/api/v1/uploads?action=getPolicy&model=qwen3-vl-plus' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json'
 ```

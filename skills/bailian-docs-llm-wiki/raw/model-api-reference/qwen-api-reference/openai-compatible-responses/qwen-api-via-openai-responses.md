@@ -76,7 +76,7 @@ HTTP 请求地址：`POST https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/co
 
 支持的模型
 
-`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、`qwen3.8-omni-flash`、`qwen3.7-max`、`qwen3.7-max-2026-05-20`、`qwen3.7-max-2026-06-08`、`qwen3.7-max-2026-05-17`、`qwen3.7-max-preview`、`qwen3-max`、`qwen3-max-2026-01-23`、`qwen3.7-plus`、`qwen3.7-plus-2026-05-26`、`qwen3.6-plus`、`qwen3.6-plus-2026-04-02`、`qwen3.5-plus`、`qwen3.5-plus-2026-04-20`、`qwen3.5-plus-2026-02-15`、`qwen3.7-flash`、`qwen3.7-flash-2026-07-15`、`qwen3.6-flash`、`qwen3.6-flash-2026-04-16`、`qwen3.5-flash`、`qwen3.5-flash-2026-02-23`、`qwen3.6-35b-a3b`、`qwen3.5-397b-a17b`、`qwen3.5-122b-a10b`、`qwen3.5-27b`、`qwen3.5-35b-a3b`、`deepseek-v4.1-flash`、`deepseek-v4-pro`、`deepseek-v4-pro-0813`、`deepseek-v4-flash`、`deepseek-v4-flash-0731`、`glm-5.3`、`glm-5.2`、`kimi-k3`
+`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、`qwen3.8-omni-flash`、`qwen3.7-max`、`qwen3.7-max-2026-05-20`、`qwen3.7-max-2026-06-08`、`qwen3.7-max-2026-05-17`、`qwen3.7-max-preview`、`qwen3.7-plus`、`qwen3.7-plus-2026-05-26`、`qwen3.6-plus`、`qwen3.6-plus-2026-04-02`、`qwen3.5-plus`、`qwen3.5-plus-2026-04-20`、`qwen3.5-plus-2026-02-15`、`qwen3.7-flash`、`qwen3.7-flash-2026-07-15`、`qwen3.6-flash`、`qwen3.6-flash-2026-04-16`、`qwen3.5-flash`、`qwen3.5-flash-2026-02-23`、`qwen3.6-35b-a3b`、`qwen3.5-397b-a17b`、`qwen3.5-122b-a10b`、`qwen3.5-27b`、`qwen3.5-35b-a3b`、`deepseek-v4.1-flash`、`deepseek-v4-pro`、`deepseek-v4-pro-0813`、`deepseek-v4-flash-0731`、`glm-5.3`、`glm-5.2`、`kimi-k3`
 
 **重要**非列表中阿里云百炼直供文本生成模型仅支持基础兼容能力，Agent 能力（内置工具等）受限。
 
@@ -374,7 +374,7 @@ Function Call Output 的唯一标识。
 
 **web\_extractor**
 
-网页抽取工具，允许模型访问并提取网页内容。当前必须配合`web_search`工具一起使用。`qwen3-max`、`qwen3-max-2026-01-23`需要同时开启思考模式。相关文档：[网页抓取](raw/model-user-guide/model-experience/text-generation-model/tool-calls/web-extractor.md)
+网页抽取工具，允许模型访问并提取网页内容。当前必须配合`web_search`工具一起使用。相关文档：[网页抓取](raw/model-user-guide/model-experience/text-generation-model/tool-calls/web-extractor.md)
 
 属性
 
@@ -386,7 +386,7 @@ Function Call Output 的唯一标识。
 
 **code\_interpreter**
 
-代码解释器工具，允许模型执行代码并返回结果，支持数据分析。`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3-max`、`qwen3-max-2026-01-23`、`qwen3.7-max`、`qwen3.7-max-2026-05-20`、`qwen3.7-max-2026-06-08`需要同时开启思考模式。相关文档：[代码解释器](raw/model-user-guide/model-experience/text-generation-model/tool-calls/qwen-code-interpreter.md)
+代码解释器工具，允许模型执行代码并返回结果，支持数据分析。`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.7-max`、`qwen3.7-max-2026-05-20`、`qwen3.7-max-2026-06-08`需要同时开启思考模式。相关文档：[代码解释器](raw/model-user-guide/model-experience/text-generation-model/tool-calls/qwen-code-interpreter.md)
 
 属性
 
@@ -643,7 +643,7 @@ temperature与top\_p均可以控制生成文本的多样性，建议只设置其
 
 `minimal` 映射为 `low`，`medium` 映射为 `high`，`xhigh` 映射为 `max`
 
-`glm-5.2`、`deepseek-v4-pro`、`deepseek-v4-flash`
+`glm-5.2`、`deepseek-v4-pro`
 
 `high`
 

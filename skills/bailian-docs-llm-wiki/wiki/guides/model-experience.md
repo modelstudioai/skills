@@ -1,48 +1,51 @@
 # model experience
 
-模型体验（Model Experience）是百炼平台面向开发者提供的统一模型调用入口，支持多模态模型的快速接入与实验。通过标准化 API 和控制台界面，开发者可便捷地测试、调试和集成各类大模型能力。所有模型均遵循统一的鉴权、计费与监控机制。
+模型体验（Model Experience）是百炼平台面向开发者提供的统一模型调用入口，支持多模态模型的快速接入与实验。通过标准化 API 和控制台界面，开发者可便捷地测试、调试和集成各类大模型能力。所有模型均遵循统一的鉴权、计费与限流机制。
 
 ## 支持的模型与功能
 
-当前支持以下核心模型类别及对应能力：
-
+当前支持以下核心模型类别及对应能力：  
 - 文本生成（含对话、补全、摘要等）  
-- 视觉理解（图像分类、OCR、图文理解）  
+- 视觉理解（图像分类、OCR、多图推理）  
 - 图片生成与编辑（文生图、图生图、局部重绘）  
 - 视频生成与编辑（文生视频、视频扩时、关键帧编辑）  
-- 世界模型（具身智能、环境建模与推理）  
-- 3D 模型生成（单图生成 3D 网格，支持 GLB 导出）  
-- 语音合成（TTS，多语种、多音色）  
-- 音频生成（音效、环境声）  
-- 音乐生成（旋律、编曲、风格迁移）  
-- 语音识别（ASR，支持长音频流式识别）  
-- 语音转语音（跨语言/音色转换）  
-- 全模态（多输入模态联合理解与生成）  
-- 向量与重排序（文本嵌入、稠密检索、结果重排）  
+- 世界模型（环境建模、具身推理、仿真交互）  
+- 3D 模型生成（单图/多图生成 `.glb` 格式，支持 TriPo 系列）  
+- 语音合成（TTS，支持多语种与音色定制）  
+- 音频生成（环境音、SFX、非音乐类音频）  
+- 音乐生成（旋律、编曲、风格化生成）  
+- 语音识别（ASR，支持中英文混合与长音频）  
+- 语音转语音（跨语种/音色实时转换）  
+- 全模态（多模态联合理解与生成，如图文音视频协同）  
+- 向量与重排序（文本嵌入、多粒度重排，用于 RAG 场景）  
 
-各模型能力详情请参阅 [模型体验](../../raw/model-user-guide/model-experience.md) 的子文档索引；例如，图片生成能力的具体参数与示例见 [图片生成与编辑](../../raw/model-user-guide/model-experience/image-model.md)，而 3D 生成流程则以 [3D模型生成](../../raw/model-user-guide/model-experience/tripo-3d-generation-guide.md) 为准。
+各模型详情请参阅 [原文标题](../../raw/model-user-guide/model-experience/text-generation-model.md)、[原文标题](../../raw/model-user-guide/model-experience/vision-model.md) 和 [原文标题](../../raw/model-user-guide/model-experience/embedding-rerank-model.md)。
 
 ## 关键参数
 
-通用请求参数包括：`model`（必需，如 `qwen-vl-plus`）、`input`（结构化输入，格式依模型类型而异）、`parameters`（可选，如 `temperature`, `top_p`, `seed`）。部分模型支持扩展字段，例如视觉模型需指定 `image_url` 或 `image_base64`，语音合成需传入 `voice` 和 `text`。所有参数定义与默认值均在对应子文档中明确说明，例如 [语音合成](../../raw/model-user-guide/model-experience/speech-synthesis.md) 中详细列出了 `speed`, `pitch`, `volume` 的取值范围与行为影响。
+所有模型调用均需指定 `model`（模型 ID）、`input`（输入数据结构）和 `parameters`（可选配置）。通用关键参数包括：  
+- `temperature`: 控制输出随机性（0.0–2.0，默认值因模型而异）  
+- `top_p`: 核采样阈值（0.0–1.0）  
+- `max_tokens`: 输出长度上限（注意：部分视觉/视频模型不支持该参数）  
+- `stream`: 是否启用流式响应（布尔值，仅文本、语音合成等支持）  
+- `seed`: 随机种子（确保结果可复现，部分模型如世界模型、3D 生成暂不支持）  
 
-> **注意**：`max_tokens` 在文本生成模型中表示输出长度上限，但在视频生成模型中实际控制生成帧数（而非 token 数），该语义差异未在 [视频生成与编辑](../../raw/model-user-guide/model-experience/video-generate-edit-model.md) 中显式强调，开发者需结合模型文档与实际响应验证。
+> **注意**：`max_tokens` 在 [原文标题](../../raw/model-user-guide/model-experience/video-generate-edit-model.md) 中被定义为“最大帧数”，而非 token 数，与文本模型语义不同；使用时需严格参照对应模型文档。
 
 ## 使用方式
 
-1. **API 调用**：使用 `POST /v1/models/{model}/invoke` 接口，携带 `Authorization: Bearer <api_key>` 头；  
-2. **控制台调试**：登录百炼控制台 →「模型体验」页 → 选择目标模型 → 填写输入并提交；  
-3. **SDK 集成**：Python SDK 提供 `BaiLianClient.invoke_model()` 方法，自动处理序列化与错误映射。  
-
-所有调用均需遵守统一的输入 schema（详见 [模型体验](../../raw/model-user-guide/model-experience.md) 中的通用协议说明）。
+1. **API 调用**：通过 `POST /v1/models/{model}/invoke` 发起请求，`model` 值须从平台模型列表获取（如 `qwen-vl-plus`、`wanx-video-1.0`）；  
+2. **控制台体验**：登录百炼控制台 →「模型体验」页 → 选择模型 → 输入 prompt 或上传文件 → 点击运行；  
+3. **SDK 集成**：推荐使用 `dashscope` Python SDK（v1.20.0+），自动处理鉴权与参数校验；  
+4. **批量测试**：支持 CSV 文件上传进行批量推理（仅限文本、语音识别、嵌入等结构化输入模型）。
 
 ## 限制和注意事项
 
-- 单次请求最大输入长度因模型而异：文本类模型通常为 32k tokens，视觉模型单图分辨率上限为 1536×1536，视频模型单次生成最长 8 秒；  
-- 免费额度仅限新用户首月，超出后按 [模型体验](../../raw/model-user-guide/model-experience.md) 所列计费项扣费；  
-- 音频/视频类模型暂不支持异步回调，需轮询 `task_id` 获取结果；  
-- `world-model` 类别尚处 Beta 阶段，接口稳定性与 SLA 不适用于生产环境；  
-- 向量模型（如 `bge-m3`）返回的 embedding 维度固定，但重排序模型（如 `bge-reranker-v2-m3`）要求 query 与 candidates 分别传入，不可混用字段——该约束在 [向量与重排序](../../raw/model-user-guide/model-experience/embedding-rerank-model.md) 中有明确定义。
+- 所有模型调用受账户配额与 QPS 限制，超限返回 `429 Too Many Requests`；  
+- 视频、3D、世界模型等计算密集型任务存在单次请求时长上限（默认 300 秒），超时将中断并返回错误；  
+- 图片/视频/3D 模型暂不支持 `stream: true`；  
+- 语音识别（ASR）对音频格式要求严格：仅支持 WAV/MP3/FLAC，采样率必须为 16kHz 或 44.1kHz，单文件 ≤ 100MB；  
+- 全模态模型（`omni-1.0`）目前仅接受 JSON 格式 `input`，不兼容原始二进制 multipart 请求 —— 此限制与 [原文标题](../../raw/model-user-guide/model-experience/omni-modal.md) 描述一致，但与早期 SDK 示例存在偏差，请以该文档为准。
 
 ## 来源文档
 

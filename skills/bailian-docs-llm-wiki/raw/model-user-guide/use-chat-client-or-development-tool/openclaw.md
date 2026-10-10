@@ -420,15 +420,6 @@ nano ~/.openclaw/openclaw.json
             "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
           },
           {
-            "id": "deepseek-v4-flash",
-            "name": "deepseek-v4-flash",
-            "reasoning": false,
-            "input": ["text"],
-            "contextWindow": 163840,
-            "maxTokens": 16384,
-            "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
-          },
-          {
             "id": "deepseek-v4-flash-0731",
             "name": "deepseek-v4-flash-0731",
             "reasoning": false,
@@ -438,16 +429,6 @@ nano ~/.openclaw/openclaw.json
             "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
           },
 
-          {
-            "id": "deepseek-v3.2",
-            "name": "deepseek-v3.2",
-            "reasoning": false,
-            "input": ["text"],
-            "contextWindow": 163840,
-            "maxTokens": 16384,
-            "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
-            "compat": { "thinkingFormat": "openai" }
-          },
           {
             "id": "kimi-k2.7-code",
             "name": "kimi-k2.7-code",
@@ -547,9 +528,7 @@ nano ~/.openclaw/openclaw.json
         "bailian-token-plan/deepseek-v4.1-flash": {},
         "bailian-token-plan/deepseek-v4-pro": {},
         "bailian-token-plan/deepseek-v4-pro-0813": {},
-        "bailian-token-plan/deepseek-v4-flash": {},
         "bailian-token-plan/deepseek-v4-flash-0731": {},
-        "bailian-token-plan/deepseek-v3.2": {},
 
         "bailian-token-plan/kimi-k2.7-code": {},
         "bailian-token-plan/kimi-k2.6": {},
@@ -710,15 +689,6 @@ openclaw dashboard
             "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
           },
           {
-            "id": "deepseek-v4-flash",
-            "name": "deepseek-v4-flash",
-            "reasoning": false,
-            "input": ["text"],
-            "contextWindow": 163840,
-            "maxTokens": 16384,
-            "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
-          },
-          {
             "id": "deepseek-v4-flash-0731",
             "name": "deepseek-v4-flash-0731",
             "reasoning": false,
@@ -728,16 +698,6 @@ openclaw dashboard
             "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
           },
 
-          {
-            "id": "deepseek-v3.2",
-            "name": "deepseek-v3.2",
-            "reasoning": false,
-            "input": ["text"],
-            "contextWindow": 163840,
-            "maxTokens": 16384,
-            "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
-            "compat": { "thinkingFormat": "openai" }
-          },
           {
             "id": "kimi-k2.7-code",
             "name": "kimi-k2.7-code",
@@ -837,9 +797,7 @@ openclaw dashboard
         "bailian-token-plan/deepseek-v4.1-flash": {},
         "bailian-token-plan/deepseek-v4-pro": {},
         "bailian-token-plan/deepseek-v4-pro-0813": {},
-        "bailian-token-plan/deepseek-v4-flash": {},
         "bailian-token-plan/deepseek-v4-flash-0731": {},
-        "bailian-token-plan/deepseek-v3.2": {},
 
         "bailian-token-plan/kimi-k2.7-code": {},
         "bailian-token-plan/kimi-k2.6": {},
@@ -946,34 +904,6 @@ nano ~/.openclaw/openclaw.json
             "compat": { "thinkingFormat": "openai" }
           },
           {
-            "id": "qwen3-max-2026-01-23",
-            "name": "qwen3-max-2026-01-23",
-            "reasoning": false,
-            "input": ["text"],
-            "contextWindow": 262144,
-            "maxTokens": 65536,
-            "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
-            "compat": { "thinkingFormat": "openai" }
-          },
-          {
-            "id": "qwen3-coder-next",
-            "name": "qwen3-coder-next",
-            "reasoning": false,
-            "input": ["text"],
-            "contextWindow": 262144,
-            "maxTokens": 65536,
-            "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
-          },
-          {
-            "id": "qwen3-coder-plus",
-            "name": "qwen3-coder-plus",
-            "reasoning": false,
-            "input": ["text"],
-            "contextWindow": 1000000,
-            "maxTokens": 65536,
-            "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
-          },
-          {
             "id": "MiniMax-M2.5",
             "name": "MiniMax-M2.5",
             "reasoning": false,
@@ -991,15 +921,6 @@ nano ~/.openclaw/openclaw.json
             "maxTokens": 16384,
             "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
             "compat": { "thinkingFormat": "openai" }
-          },
-          {
-            "id": "glm-4.7",
-            "name": "glm-4.7",
-            "reasoning": false,
-            "input": ["text"],
-            "contextWindow": 202752,
-            "maxTokens": 16384,
-            "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
           },
           {
             "id": "kimi-k2.5",
@@ -1024,12 +945,8 @@ nano ~/.openclaw/openclaw.json
         "bailian-coding-plan/qwen3.7-plus": {},
         "bailian-coding-plan/qwen3.6-plus": {},
         "bailian-coding-plan/qwen3.5-plus": {},
-        "bailian-coding-plan/qwen3-max-2026-01-23": {},
-        "bailian-coding-plan/qwen3-coder-next": {},
-        "bailian-coding-plan/qwen3-coder-plus": {},
         "bailian-coding-plan/MiniMax-M2.5": {},
         "bailian-coding-plan/glm-5": {},
-        "bailian-coding-plan/glm-4.7": {},
         "bailian-coding-plan/kimi-k2.5": {}
       }
     }
@@ -1116,34 +1033,6 @@ openclaw dashboard
             "compat": { "thinkingFormat": "openai" }
           },
           {
-            "id": "qwen3-max-2026-01-23",
-            "name": "qwen3-max-2026-01-23",
-            "reasoning": false,
-            "input": ["text"],
-            "contextWindow": 262144,
-            "maxTokens": 65536,
-            "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
-            "compat": { "thinkingFormat": "openai" }
-          },
-          {
-            "id": "qwen3-coder-next",
-            "name": "qwen3-coder-next",
-            "reasoning": false,
-            "input": ["text"],
-            "contextWindow": 262144,
-            "maxTokens": 65536,
-            "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
-          },
-          {
-            "id": "qwen3-coder-plus",
-            "name": "qwen3-coder-plus",
-            "reasoning": false,
-            "input": ["text"],
-            "contextWindow": 1000000,
-            "maxTokens": 65536,
-            "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
-          },
-          {
             "id": "MiniMax-M2.5",
             "name": "MiniMax-M2.5",
             "reasoning": false,
@@ -1161,15 +1050,6 @@ openclaw dashboard
             "maxTokens": 16384,
             "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
             "compat": { "thinkingFormat": "openai" }
-          },
-          {
-            "id": "glm-4.7",
-            "name": "glm-4.7",
-            "reasoning": false,
-            "input": ["text"],
-            "contextWindow": 202752,
-            "maxTokens": 16384,
-            "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
           },
           {
             "id": "kimi-k2.5",
@@ -1194,12 +1074,8 @@ openclaw dashboard
         "bailian-coding-plan/qwen3.7-plus": {},
         "bailian-coding-plan/qwen3.6-plus": {},
         "bailian-coding-plan/qwen3.5-plus": {},
-        "bailian-coding-plan/qwen3-max-2026-01-23": {},
-        "bailian-coding-plan/qwen3-coder-next": {},
-        "bailian-coding-plan/qwen3-coder-plus": {},
         "bailian-coding-plan/MiniMax-M2.5": {},
         "bailian-coding-plan/glm-5": {},
-        "bailian-coding-plan/glm-4.7": {},
         "bailian-coding-plan/kimi-k2.5": {}
       }
     }
@@ -1302,16 +1178,6 @@ nano ~/.openclaw/openclaw.json
             "maxTokens": 16384,
             "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
             "compat": { "thinkingFormat": "openai" }
-          },
-          {
-            "id": "deepseek-v3.2",
-            "name": "deepseek-v3.2",
-            "reasoning": false,
-            "input": ["text"],
-            "contextWindow": 163840,
-            "maxTokens": 16384,
-            "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
-            "compat": { "thinkingFormat": "openai" }
           }
         ]
       }
@@ -1325,8 +1191,7 @@ nano ~/.openclaw/openclaw.json
       "models": {
         "bailian/qwen3.6-plus": {},
         "bailian/MiniMax-M2.5": {},
-        "bailian/glm-5": {},
-        "bailian/deepseek-v3.2": {}
+        "bailian/glm-5": {}
       }
     }
   },
@@ -1409,16 +1274,6 @@ openclaw dashboard
             "maxTokens": 16384,
             "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
             "compat": { "thinkingFormat": "openai" }
-          },
-          {
-            "id": "deepseek-v3.2",
-            "name": "deepseek-v3.2",
-            "reasoning": false,
-            "input": ["text"],
-            "contextWindow": 163840,
-            "maxTokens": 16384,
-            "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
-            "compat": { "thinkingFormat": "openai" }
           }
         ]
       }
@@ -1432,8 +1287,7 @@ openclaw dashboard
       "models": {
         "bailian/qwen3.6-plus": {},
         "bailian/MiniMax-M2.5": {},
-        "bailian/glm-5": {},
-        "bailian/deepseek-v3.2": {}
+        "bailian/glm-5": {}
       }
     }
   },
@@ -2162,7 +2016,7 @@ openclaw skills list
 
 ### 接入 MCP 服务
 
-OpenClaw 支持通过 MCP（Model Context Protocol）插件扩展 Agent 的工具调用能力，例如联网搜索、网页抓取等。具体案例可以参考[接入 Harness 工具](raw/model-user-guide/token-plan-guide/token-plan-personal/token-plan-harness-tool.md)。
+OpenClaw 支持通过 MCP（Model Context Protocol）插件扩展 Agent 的工具调用能力，例如联网搜索、网页抓取等。具体案例可以参考[接入 Harness 工具](raw/model-user-guide/token-plan-guide/token-plan-best-practice/token-plan-harness-tool.md)。
 
 ## 常见问题
 

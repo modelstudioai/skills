@@ -4,13 +4,13 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 ## 实时语音合成
 
+以下音色支持qwen3-tts-flash-realtime模型。
+
 音色信息
 
 **支持语种**
 
 试听
-
-**支持模型**
 
 **名称**：芊悦
 
@@ -20,10 +20,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Instruct-Flash-Realtime**：qwen3-tts-instruct-flash-realtime、qwen3-tts-instruct-flash-realtime-2026-01-22
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27、qwen3-tts-flash-realtime-2025-09-18
--   **Qwen-TTS-Realtime**：qwen-tts-realtime、qwen-tts-realtime-latest、qwen-tts-realtime-2025-07-15
-
 **名称**：苏瑶
 
 **voice参数**：Serena
@@ -31,10 +27,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：温柔小姐姐（女性）
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Instruct-Flash-Realtime**：qwen3-tts-instruct-flash-realtime、qwen3-tts-instruct-flash-realtime-2026-01-22
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27
--   **Qwen-TTS-Realtime**：qwen-tts-realtime、qwen-tts-realtime-latest、qwen-tts-realtime-2025-07-15
 
 **名称**：晨煦
 
@@ -44,10 +36,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Instruct-Flash-Realtime**：qwen3-tts-instruct-flash-realtime、qwen3-tts-instruct-flash-realtime-2026-01-22
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27、qwen3-tts-flash-realtime-2025-09-18
--   **Qwen-TTS-Realtime**：qwen-tts-realtime、qwen-tts-realtime-latest、qwen-tts-realtime-2025-07-15
-
 **名称**：千雪
 
 **voice参数**：Chelsie
@@ -55,10 +43,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：二次元虚拟女友（女性）
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Instruct-Flash-Realtime**：qwen3-tts-instruct-flash-realtime、qwen3-tts-instruct-flash-realtime-2026-01-22
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27
--   **Qwen-TTS-Realtime**：qwen-tts-realtime、qwen-tts-realtime-latest、qwen-tts-realtime-2025-07-15
 
 **名称**：茉兔
 
@@ -68,9 +52,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Instruct-Flash-Realtime**：qwen3-tts-instruct-flash-realtime、qwen3-tts-instruct-flash-realtime-2026-01-22
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27
-
 **名称**：十三
 
 **voice参数**：Vivian
@@ -78,9 +59,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：拽拽的、可爱的小暴躁（女性）
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Instruct-Flash-Realtime**：qwen3-tts-instruct-flash-realtime、qwen3-tts-instruct-flash-realtime-2026-01-22
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27
 
 **名称**：月白
 
@@ -90,9 +68,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Instruct-Flash-Realtime**：qwen3-tts-instruct-flash-realtime、qwen3-tts-instruct-flash-realtime-2026-01-22
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27
-
 **名称**：四月
 
 **voice参数**：Maia
@@ -100,9 +75,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：知性与温柔的碰撞（女性）
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Instruct-Flash-Realtime**：qwen3-tts-instruct-flash-realtime、qwen3-tts-instruct-flash-realtime-2026-01-22
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27
 
 **名称**：凯
 
@@ -112,9 +84,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Instruct-Flash-Realtime**：qwen3-tts-instruct-flash-realtime、qwen3-tts-instruct-flash-realtime-2026-01-22
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27
-
 **名称**：不吃鱼
 
 **voice参数**：Nofish
@@ -122,9 +91,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：不会翘舌音的设计师（男性）
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Instruct-Flash-Realtime**：qwen3-tts-instruct-flash-realtime、qwen3-tts-instruct-flash-realtime-2026-01-22
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27、qwen3-tts-flash-realtime-2025-09-18
 
 **名称**：萌宝
 
@@ -134,9 +100,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Instruct-Flash-Realtime**：qwen3-tts-instruct-flash-realtime、qwen3-tts-instruct-flash-realtime-2026-01-22
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27
-
 **名称**：詹妮弗
 
 **voice参数**：Jennifer
@@ -144,8 +107,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：品牌级、电影质感般美语女声（女性）
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27、qwen3-tts-flash-realtime-2025-09-18
 
 **名称**：甜茶
 
@@ -155,8 +116,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27、qwen3-tts-flash-realtime-2025-09-18
-
 **名称**：卡捷琳娜
 
 **voice参数**：Katerina
@@ -164,8 +123,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：御姐音色，韵律回味十足（女性）
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27、qwen3-tts-flash-realtime-2025-09-18
 
 **名称**：艾登
 
@@ -175,8 +132,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27
-
 **名称**：沧明子
 
 **voice参数**：Eldric Sage
@@ -184,9 +139,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：沉稳睿智的老者，沧桑如松却心明如镜（男性）
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Instruct-Flash-Realtime**：qwen3-tts-instruct-flash-realtime、qwen3-tts-instruct-flash-realtime-2026-01-22
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27
 
 **名称**：乖小妹
 
@@ -196,9 +148,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Instruct-Flash-Realtime**：qwen3-tts-instruct-flash-realtime、qwen3-tts-instruct-flash-realtime-2026-01-22
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27
-
 **名称**：沙小弥
 
 **voice参数**：Mochi
@@ -206,9 +155,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：聪明伶俐的小大人，童真未泯却早慧如禅（男性）
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Instruct-Flash-Realtime**：qwen3-tts-instruct-flash-realtime、qwen3-tts-instruct-flash-realtime-2026-01-22
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27
 
 **名称**：燕铮莺
 
@@ -218,9 +164,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Instruct-Flash-Realtime**：qwen3-tts-instruct-flash-realtime、qwen3-tts-instruct-flash-realtime-2026-01-22
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27
-
 **名称**：田叔
 
 **voice参数**：Vincent
@@ -228,9 +171,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：一口独特的沙哑烟嗓，一开口便道尽了千军万马与江湖豪情（男性）
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Instruct-Flash-Realtime**：qwen3-tts-instruct-flash-realtime、qwen3-tts-instruct-flash-realtime-2026-01-22
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27
 
 **名称**：萌小姬
 
@@ -240,9 +180,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Instruct-Flash-Realtime**：qwen3-tts-instruct-flash-realtime、qwen3-tts-instruct-flash-realtime-2026-01-22
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27
-
 **名称**：阿闻
 
 **voice参数**：Neil
@@ -250,9 +187,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：平直的基线语调，字正腔圆的咬字发音，这就是最专业的新闻主持人（男性）
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Instruct-Flash-Realtime**：qwen3-tts-instruct-flash-realtime、qwen3-tts-instruct-flash-realtime-2026-01-22
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27
 
 **名称**：墨讲师
 
@@ -262,9 +196,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Instruct-Flash-Realtime**：qwen3-tts-instruct-flash-realtime、qwen3-tts-instruct-flash-realtime-2026-01-22
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27、qwen3-tts-flash-realtime-2025-09-18
-
 **名称**：徐大爷
 
 **voice参数**：Arthur
@@ -272,9 +203,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：被岁月和旱烟浸泡过的质朴嗓音，不疾不徐地摇开了满村的奇闻异事（男性）
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Instruct-Flash-Realtime**：qwen3-tts-instruct-flash-realtime、qwen3-tts-instruct-flash-realtime-2026-01-22
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27
 
 **名称**：邻家妹妹
 
@@ -284,9 +212,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Instruct-Flash-Realtime**：qwen3-tts-instruct-flash-realtime、qwen3-tts-instruct-flash-realtime-2026-01-22
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27
-
 **名称**：小婉
 
 **voice参数**：Seren
@@ -294,9 +219,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：温和舒缓的声线，助你更快地进入睡眠，晚安，好梦（女性）
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Instruct-Flash-Realtime**：qwen3-tts-instruct-flash-realtime、qwen3-tts-instruct-flash-realtime-2026-01-22
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27
 
 **名称**：顽屁小孩
 
@@ -306,9 +228,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Instruct-Flash-Realtime**：qwen3-tts-instruct-flash-realtime、qwen3-tts-instruct-flash-realtime-2026-01-22
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27
-
 **名称**：少女阿月
 
 **voice参数**：Stella
@@ -316,9 +235,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：平时是甜到发腻的迷糊少女音，但在喊出“代表月亮消灭你”时，瞬间充满不容置疑的爱与正义（女性）
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Instruct-Flash-Realtime**：qwen3-tts-instruct-flash-realtime、qwen3-tts-instruct-flash-realtime-2026-01-22
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27
 
 **名称**：博德加
 
@@ -328,8 +244,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27
-
 **名称**：索尼莎
 
 **voice参数**：Sonrisa
@@ -337,8 +251,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：热情开朗的拉美大姐（女性）
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27
 
 **名称**：阿列克
 
@@ -348,8 +260,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27
-
 **名称**：多尔切
 
 **voice参数**：Dolce
@@ -357,8 +267,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：慵懒的意大利大叔（男性）
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27
 
 **名称**：素熙
 
@@ -368,8 +276,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27
-
 **名称**：小野杏
 
 **voice参数**：Ono Anna
@@ -377,8 +283,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：鬼灵精怪的青梅竹马（女性）
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27
 
 **名称**：莱恩
 
@@ -388,8 +292,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27
-
 **名称**：埃米尔安
 
 **voice参数**：Emilien
@@ -397,8 +299,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：浪漫的法国大哥哥（男性）
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27
 
 **名称**：安德雷
 
@@ -408,8 +308,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27
-
 **名称**：拉迪奥·戈尔
 
 **voice参数**：Radio Gol
@@ -417,8 +315,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：足球诗人Rádio Gol！今天我要用名字为你们解说足球（男性）
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27
 
 **名称**：上海-阿珍
 
@@ -428,8 +324,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（上海话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27、qwen3-tts-flash-realtime-2025-09-18
-
 **名称**：北京-晓东
 
 **voice参数**：Dylan
@@ -437,8 +331,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：北京胡同里长大的少年（男性）
 
 中文（北京话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27、qwen3-tts-flash-realtime-2025-09-18
 
 **名称**：南京-老李
 
@@ -448,8 +340,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（南京话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27、qwen3-tts-flash-realtime-2025-09-18
-
 **名称**：陕西-秦川
 
 **voice参数**：Marcus
@@ -457,8 +347,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：面宽话短，心实声沉——老陕的味道（男性）
 
 中文（陕西话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27、qwen3-tts-flash-realtime-2025-09-18
 
 **名称**：闽南-阿杰
 
@@ -468,8 +356,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（闽南语）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27、qwen3-tts-flash-realtime-2025-09-18
-
 **名称**：天津-李彼得
 
 **voice参数**：Peter
@@ -477,8 +363,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：天津相声，专业捧哏（男性）
 
 中文（天津话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27、qwen3-tts-flash-realtime-2025-09-18
 
 **名称**：四川-晴儿
 
@@ -488,8 +372,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（四川话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27、qwen3-tts-flash-realtime-2025-09-18
-
 **名称**：四川-程川
 
 **voice参数**：Eric
@@ -497,8 +379,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：一个跳脱市井的四川成都男子（男性）
 
 中文（四川话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27、qwen3-tts-flash-realtime-2025-09-18
 
 **名称**：粤语-阿强
 
@@ -508,8 +388,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（粤语）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27、qwen3-tts-flash-realtime-2025-09-18
-
 **名称**：粤语-阿清
 
 **voice参数**：Kiki
@@ -517,18 +395,16 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：甜美的港妹闺蜜（女性）
 
 中文（粤语）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Flash-Realtime**：qwen3-tts-flash-realtime、qwen3-tts-flash-realtime-2025-11-27、qwen3-tts-flash-realtime-2025-09-18
 
 ## 非实时语音合成
 
+以下音色支持qwen3-tts-flash模型。
+
 音色信息
 
 **支持语种**
 
 试听
-
-**支持模型**
 
 **名称**：芊悦
 
@@ -538,10 +414,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Instruct-Flash**：qwen3-tts-instruct-flash、qwen3-tts-instruct-flash-2026-01-26
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27、qwen3-tts-flash-2025-09-18
--   **Qwen-TTS**：qwen-tts、qwen-tts-2025-04-10、qwen-tts-latest、qwen-tts-2025-05-22
-
 **名称**：苏瑶
 
 **voice参数**：Serena
@@ -549,10 +421,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：温柔小姐姐（女性）
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Instruct-Flash**：qwen3-tts-instruct-flash、qwen3-tts-instruct-flash-2026-01-26
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27
--   **Qwen-TTS**：qwen-tts、qwen-tts-2025-04-10、qwen-tts-latest、qwen-tts-2025-05-22
 
 **名称**：晨煦
 
@@ -562,10 +430,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Instruct-Flash**：qwen3-tts-instruct-flash、qwen3-tts-instruct-flash-2026-01-26
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27、qwen3-tts-flash-2025-09-18
--   **Qwen-TTS**：qwen-tts、qwen-tts-2025-04-10、qwen-tts-latest、qwen-tts-2025-05-22
-
 **名称**：千雪
 
 **voice参数**：Chelsie
@@ -573,10 +437,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：二次元虚拟女友（女性）
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Instruct-Flash**：qwen3-tts-instruct-flash、qwen3-tts-instruct-flash-2026-01-26
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27
--   **Qwen-TTS**：qwen-tts、qwen-tts-2025-04-10、qwen-tts-latest、qwen-tts-2025-05-22
 
 **名称**：茉兔
 
@@ -586,9 +446,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Instruct-Flash**：qwen3-tts-instruct-flash、qwen3-tts-instruct-flash-2026-01-26
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27
-
 **名称**：十三
 
 **voice参数**：Vivian
@@ -596,9 +453,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：拽拽的、可爱的小暴躁（女性）
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Instruct-Flash**：qwen3-tts-instruct-flash、qwen3-tts-instruct-flash-2026-01-26
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27
 
 **名称**：月白
 
@@ -608,9 +462,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Instruct-Flash**：qwen3-tts-instruct-flash、qwen3-tts-instruct-flash-2026-01-26
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27
-
 **名称**：四月
 
 **voice参数**：Maia
@@ -618,9 +469,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：知性与温柔的碰撞（女性）
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Instruct-Flash**：qwen3-tts-instruct-flash、qwen3-tts-instruct-flash-2026-01-26
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27
 
 **名称**：凯
 
@@ -630,9 +478,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Instruct-Flash**：qwen3-tts-instruct-flash、qwen3-tts-instruct-flash-2026-01-26
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27
-
 **名称**：不吃鱼
 
 **voice参数**：Nofish
@@ -640,9 +485,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：不会翘舌音的设计师（男性）
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Instruct-Flash**：qwen3-tts-instruct-flash、qwen3-tts-instruct-flash-2026-01-26
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27、qwen3-tts-flash-2025-09-18
 
 **名称**：萌宝
 
@@ -652,9 +494,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Instruct-Flash**：qwen3-tts-instruct-flash、qwen3-tts-instruct-flash-2026-01-26
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27
-
 **名称**：詹妮弗
 
 **voice参数**：Jennifer
@@ -662,8 +501,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：品牌级、电影质感般美语女声（女性）
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27、qwen3-tts-flash-2025-09-18
 
 **名称**：甜茶
 
@@ -673,8 +510,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27、qwen3-tts-flash-2025-09-18
-
 **名称**：卡捷琳娜
 
 **voice参数**：Katerina
@@ -682,8 +517,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：御姐音色，韵律回味十足（女性）
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27、qwen3-tts-flash-2025-09-18
 
 **名称**：艾登
 
@@ -693,8 +526,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27
-
 **名称**：沧明子
 
 **voice参数**：Eldric Sage
@@ -702,9 +533,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：沉稳睿智的老者，沧桑如松却心明如镜（男性）
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Instruct-Flash**：qwen3-tts-instruct-flash、qwen3-tts-instruct-flash-2026-01-26
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27
 
 **名称**：乖小妹
 
@@ -714,9 +542,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Instruct-Flash**：qwen3-tts-instruct-flash、qwen3-tts-instruct-flash-2026-01-26
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27
-
 **名称**：沙小弥
 
 **voice参数**：Mochi
@@ -724,9 +549,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：聪明伶俐的小大人，童真未泯却早慧如禅（男性）
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Instruct-Flash**：qwen3-tts-instruct-flash、qwen3-tts-instruct-flash-2026-01-26
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27
 
 **名称**：燕铮莺
 
@@ -736,9 +558,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Instruct-Flash**：qwen3-tts-instruct-flash、qwen3-tts-instruct-flash-2026-01-26
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27
-
 **名称**：田叔
 
 **voice参数**：Vincent
@@ -746,9 +565,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：一口独特的沙哑烟嗓，一开口便道尽了千军万马与江湖豪情（男性）
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Instruct-Flash**：qwen3-tts-instruct-flash、qwen3-tts-instruct-flash-2026-01-26
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27
 
 **名称**：萌小姬
 
@@ -758,9 +574,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Instruct-Flash**：qwen3-tts-instruct-flash、qwen3-tts-instruct-flash-2026-01-26
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27
-
 **名称**：阿闻
 
 **voice参数**：Neil
@@ -768,9 +581,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：平直的基线语调，字正腔圆的咬字发音，这就是最专业的新闻主持人（男性）
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Instruct-Flash**：qwen3-tts-instruct-flash、qwen3-tts-instruct-flash-2026-01-26
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27
 
 **名称**：墨讲师
 
@@ -780,9 +590,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Instruct-Flash**：qwen3-tts-instruct-flash、qwen3-tts-instruct-flash-2026-01-26
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27、qwen3-tts-flash-2025-09-18
-
 **名称**：徐大爷
 
 **voice参数**：Arthur
@@ -790,9 +597,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：被岁月和旱烟浸泡过的质朴嗓音，不疾不徐地摇开了满村的奇闻异事（男性）
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Instruct-Flash**：qwen3-tts-instruct-flash、qwen3-tts-instruct-flash-2026-01-26
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27
 
 **名称**：邻家妹妹
 
@@ -802,9 +606,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Instruct-Flash**：qwen3-tts-instruct-flash、qwen3-tts-instruct-flash-2026-01-26
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27
-
 **名称**：小婉
 
 **voice参数**：Seren
@@ -812,9 +613,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：温和舒缓的声线，助你更快地进入睡眠，晚安，好梦（女性）
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Instruct-Flash**：qwen3-tts-instruct-flash、qwen3-tts-instruct-flash-2026-01-26
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27
 
 **名称**：顽屁小孩
 
@@ -824,9 +622,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Instruct-Flash**：qwen3-tts-instruct-flash、qwen3-tts-instruct-flash-2026-01-26
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27
-
 **名称**：少女阿月
 
 **voice参数**：Stella
@@ -834,9 +629,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：平时是甜到发腻的迷糊少女音，但在喊出“代表月亮消灭你”时，瞬间充满不容置疑的爱与正义（女性）
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Instruct-Flash**：qwen3-tts-instruct-flash、qwen3-tts-instruct-flash-2026-01-26
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27
 
 **名称**：博德加
 
@@ -846,8 +638,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27
-
 **名称**：索尼莎
 
 **voice参数**：Sonrisa
@@ -855,8 +645,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：热情开朗的拉美大姐（女性）
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27
 
 **名称**：阿列克
 
@@ -866,8 +654,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27
-
 **名称**：多尔切
 
 **voice参数**：Dolce
@@ -875,8 +661,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：慵懒的意大利大叔（男性）
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27
 
 **名称**：素熙
 
@@ -886,8 +670,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27
-
 **名称**：小野杏
 
 **voice参数**：Ono Anna
@@ -895,8 +677,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：鬼灵精怪的青梅竹马（女性）
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27
 
 **名称**：莱恩
 
@@ -906,8 +686,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27
-
 **名称**：埃米尔安
 
 **voice参数**：Emilien
@@ -915,8 +693,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：浪漫的法国大哥哥（男性）
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27
 
 **名称**：安德雷
 
@@ -926,8 +702,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27
-
 **名称**：拉迪奥·戈尔
 
 **voice参数**：Radio Gol
@@ -935,8 +709,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：足球诗人Rádio Gol！今天我要用名字为你们解说足球（男性）
 
 中文（普通话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27
 
 **名称**：上海-阿珍
 
@@ -946,9 +718,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（上海话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27、qwen3-tts-flash-2025-09-18
--   **Qwen-TTS**：qwen-tts-latest、qwen-tts-2025-05-22
-
 **名称**：北京-晓东
 
 **voice参数**：Dylan
@@ -956,9 +725,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：北京胡同里长大的少年（男性）
 
 中文（北京话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27、qwen3-tts-flash-2025-09-18
--   **Qwen-TTS**：qwen-tts-latest、qwen-tts-2025-05-22
 
 **名称**：南京-老李
 
@@ -968,8 +734,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（南京话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27、qwen3-tts-flash-2025-09-18
-
 **名称**：陕西-秦川
 
 **voice参数**：Marcus
@@ -977,8 +741,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：面宽话短，心实声沉——老陕的味道（男性）
 
 中文（陕西话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27、qwen3-tts-flash-2025-09-18
 
 **名称**：闽南-阿杰
 
@@ -988,8 +750,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（闽南语）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27、qwen3-tts-flash-2025-09-18
-
 **名称**：天津-李彼得
 
 **voice参数**：Peter
@@ -997,8 +757,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：天津相声，专业捧哏（男性）
 
 中文（天津话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27、qwen3-tts-flash-2025-09-18
 
 **名称**：四川-晴儿
 
@@ -1008,9 +766,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（四川话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27、qwen3-tts-flash-2025-09-18
--   **Qwen-TTS**：qwen-tts-latest、qwen-tts-2025-05-22
-
 **名称**：四川-程川
 
 **voice参数**：Eric
@@ -1018,8 +773,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：一个跳脱市井的四川成都男子（男性）
 
 中文（四川话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27、qwen3-tts-flash-2025-09-18
 
 **名称**：粤语-阿强
 
@@ -1029,8 +782,6 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 
 中文（粤语）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27、qwen3-tts-flash-2025-09-18
-
 **名称**：粤语-阿清
 
 **voice参数**：Kiki
@@ -1038,5 +789,3 @@ Qwen-TTS 实时与非实时语音合成的音色列表与试听。
 **描述**：甜美的港妹闺蜜（女性）
 
 中文（粤语）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
--   **Qwen3-TTS-Flash**：qwen3-tts-flash、qwen3-tts-flash-2025-11-27、qwen3-tts-flash-2025-09-18

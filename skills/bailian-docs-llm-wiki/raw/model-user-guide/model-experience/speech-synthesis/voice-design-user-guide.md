@@ -8,7 +8,6 @@
 
 -   **CosyVoice**：支持实时与非实时语音合成，可用于北京地域（v3.5 系列和 v3 系列）。
 -   **Qwen-Audio-TTS**：支持实时与非实时语音合成，可用于北京地域（qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash）。
--   **Qwen-TTS**：支持实时与非实时语音合成，声音描述长度上限更高（2048 字符），可用于北京和新加坡地域。
 
 如果您已有音频样本，请参见[声音复刻](raw/model-user-guide/model-experience/speech-synthesis/voice-cloning-user-guide.md)。如需了解模型选型建议，请参见[语音合成](raw/model-user-guide/model-experience/speech-synthesis/tts-model.md)。
 
@@ -91,147 +90,13 @@ with open('output.mp3', 'wb') as f:
     f.write(audio)
 ```
 
-### Qwen-TTS 声音设计
-
-以下示例演示如何创建音色并用于语音合成。
-
-**说明**建议先试听返回的预览音频，确认效果后再用于合成，以降低调用成本。
-
-#### Python
-
-```
-import os
-import requests
-import dashscope
-
-# ======= 常量配置 =======
-DEFAULT_TARGET_MODEL = "qwen3-tts-vd-2026-01-26"  # 声音设计、语音合成要使用相同的模型
-DEFAULT_PREFERRED_NAME = "custom_voice"
-
-# 声音描述：用自然语言描述期望的声音特质
-VOICE_PROMPT = "年轻活泼的女性声音，语速较快，带有明显的上扬语调，适合介绍时尚产品。"
-
-def create_voice_by_design(voice_prompt: str,
-                           target_model: str = DEFAULT_TARGET_MODEL,
-                           preferred_name: str = DEFAULT_PREFERRED_NAME) -> str:
-    """
-    通过声音描述创建音色，并返回 voice 参数
-    """
-    # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx"
-    api_key = os.getenv("DASHSCOPE_API_KEY")
-
-    # 以下为华北2（北京）地域的配置。
-    url = "https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization"
-    payload = {
-        "model": "qwen-voice-design",
-        "input": {
-            "action": "create",
-            "target_model": target_model,
-            "preferred_name": preferred_name,
-            "voice_prompt": voice_prompt,
-            "preview_text": "大家好，欢迎来到我们的直播间！今天给大家推荐的这款产品真的超级好用。"
-        },
-        "parameters": {
-            "sample_rate": 24000,
-            "response_format": "wav"
-        }
-    }
-    headers = {
-        "Authorization": f"Bearer {api_key}",
-        "Content-Type": "application/json"
-    }
-
-    resp = requests.post(url, json=payload, headers=headers)
-    if resp.status_code != 200:
-        raise RuntimeError(f"创建 voice 失败: {resp.status_code}, {resp.text}")
-
-    result = resp.json()
-    # 返回预览音频（可选：先试听确认效果）
-    preview_audio = result.get("output", {}).get("preview_audio")
-    if preview_audio:
-        import base64
-        audio_data = base64.b64decode(preview_audio["data"])
-        with open("preview_audio.wav", "wb") as f:
-            f.write(audio_data)
-        print(f"预览音频已保存到 preview_audio.wav ({len(audio_data)} bytes)")
-
-    try:
-        return result["output"]["voice"]
-    except (KeyError, ValueError) as e:
-        raise RuntimeError(f"解析 voice 响应失败: {e}")
-
-if __name__ == '__main__':
-    # 以下为华北2（北京）地域的配置。
-    dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'
-
-    voice_id = create_voice_by_design(VOICE_PROMPT)
-    print(f"创建的音色ID: {voice_id}")
-
-    text = "大家好，欢迎来到我们的直播间！今天给大家推荐的这款产品真的超级好用。"
-    response = dashscope.MultiModalConversation.call(
-        model=DEFAULT_TARGET_MODEL,
-        # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-        # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx"
-        api_key=os.getenv("DASHSCOPE_API_KEY"),
-        text=text,
-        voice=voice_id,
-        stream=False
-    )
-    print(response)
-```
-
-#### cURL
-
-**步骤一：通过声音描述创建音色**
-
-以下为华北2（北京）地域的配置。
-
-```
-curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization' \
--H "Authorization: Bearer $DASHSCOPE_API_KEY" \
--H 'Content-Type: application/json' \
--d '{
-    "model": "qwen-voice-design",
-    "input": {
-        "action": "create",
-        "target_model": "qwen3-tts-vd-2026-01-26",
-        "preferred_name": "custom_voice",
-        "voice_prompt": "年轻活泼的女性声音，语速较快，带有明显的上扬语调，适合介绍时尚产品。",
-        "preview_text": "大家好，欢迎来到我们的直播间！今天给大家推荐的这款产品真的超级好用。"
-    },
-    "parameters": {
-        "sample_rate": 24000,
-        "response_format": "wav"
-    }
-}'
-```
-**步骤二：使用设计音色合成语音**
-
-将 `YOUR_VOICE_ID` 替换为上一步返回的 `voice` 值。
-
-以下为华北2（北京）地域的配置。
-
-```
-curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
--H "Authorization: Bearer $DASHSCOPE_API_KEY" \
--H 'Content-Type: application/json' \
--d '{
-    "model": "qwen3-tts-vd-2026-01-26",
-    "input": {
-        "text": "大家好，欢迎来到我们的直播间！今天给大家推荐的这款产品真的超级好用。",
-        "voice": "YOUR_VOICE_ID"
-    }
-}'
-```
-
 ## 编写声音描述
 
 声音描述（`voice_prompt`）直接决定生成音色的效果。描述越清晰具体，生成结果越符合预期。
 
 ### 要求与限制
 
--   **长度限制**：`voice_prompt`的最大长度因模型而异：CosyVoice 不超过 500 个字符，Qwen-TTS 不超过 2048 个字符。
+-   **长度限制**：`voice_prompt` 的最大长度为 500 个字符。
 -   **支持语言**：描述文本仅支持中文和英文。
 
 ### 核心原则
@@ -294,21 +159,12 @@ curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-gen
 
 ### 音色配额与自动清理
 
--   **音色总数限制**：每个阿里云百炼账号下，CosyVoice 与 Qwen-TTS 分别最多可创建 1000 个自定义音色（两类配额独立计算）。
+-   **音色总数限制**：每个阿里云百炼账号下，CosyVoice 最多可创建 1000 个自定义音色。
 -   **自动清理规则**：若单个音色在过去 1 年内未被用于任何语音合成请求，系统将自动删除该音色。
 
 ### 计费规则
 
 -   **CosyVoice**：创建音色免费。
-    
--   **Qwen-TTS**：按 0.2 元/个 计费，创建失败不计费。
-    
-    **免费额度**（仅北京地域提供）：
-    
-    -   阿里云百炼开通后 90 天内，可享 10 次免费音色创建机会。
-    -   创建失败不占用免费次数。
-    -   删除音色不会恢复免费次数。
-    -   免费额度用完或超出 90 天有效期后，创建音色将按 0.2 元/个 的价格计费。
 
 ## 支持的模型与地域
 
@@ -317,22 +173,7 @@ curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-gen
 调用以下模型时，请选择北京地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)：
 
 -   **CosyVoice：**cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-plus、cosyvoice-v3-flash
-    
 -   **Qwen-Audio-TTS：**qwen-audio-3.0-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-flash
-    
--   **Qwen-TTS**：
-    
-    -   **Qwen3-TTS-VD-Realtime：**qwen3-tts-vd-realtime-2026-01-15（最新快照版）、qwen3-tts-vd-realtime-2025-12-16（快照版）
-    -   **Qwen3-TTS-VD**：qwen3-tts-vd-2026-01-26（最新快照版）
-
-#### 新加坡
-
-调用以下模型时，请选择新加坡地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)：
-
--   **Qwen-TTS**：
-    
-    -   **Qwen3-TTS-VD-Realtime：**qwen3-tts-vd-realtime-2026-01-15（最新快照版）、qwen3-tts-vd-realtime-2025-12-16（快照版）
-    -   **Qwen3-TTS-VD**：qwen3-tts-vd-2026-01-26（最新快照版）
 
 **说明**
 

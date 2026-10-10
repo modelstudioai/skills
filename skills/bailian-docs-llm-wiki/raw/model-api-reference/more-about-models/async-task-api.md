@@ -99,7 +99,7 @@
     "aliyunpublishtime": "2023-10-25T01:45:16.993Z",
     "data": {
         "start_time": "2023-10-25 09:45:09",
-        "user_api_unique_key": "apikey:v1:audio:asr:transcription:paraformer-8k-v1",
+        "user_api_unique_key": "apikey:v1:audio:asr:transcription:paraformer-8k-v2",
         "task_status": "SUCCEEDED",
         "contain_result": false,
         "end_time": "2023-10-25 09:45:16",
@@ -141,7 +141,7 @@
     "aliyunpublishtime": "2023-10-25T01:45:16.993Z",
     "data": {
         "start_time": "2023-10-25 09:45:09",
-        "user_api_unique_key": "apikey:v1:audio:asr:transcription:paraformer-8k-v1",
+        "user_api_unique_key": "apikey:v1:audio:asr:transcription:paraformer-8k-v2",
         "task_status": "SUCCEEDED",
         "contain_result": false,
         "end_time": "2023-10-25 09:45:16",
@@ -240,7 +240,7 @@ API 的唯一key（提交任务时，模型API的五要素），组成格式为�
 -   model：模型名称
     
 
-`apikey:v1:audio:asr:transcription:paraformer-8k-v1`
+`apikey:v1:audio:asr:transcription:paraformer-8k-v2`
 
 data\[\].task\_status
 
@@ -409,7 +409,7 @@ dashscope:System:AsyncTaskFinish
 }
 ```
 
--   通过指定字段过滤事件：筛选出 `user_api_unique_key`字段后缀为`:paraformer-8k-v1`的事件，即仅转发模型名称为`paraformer-8k-v1`的事件。事件类型为`dashscope:System:AsyncTaskFinish`。
+-   通过指定字段过滤事件：筛选出 `user_api_unique_key`字段后缀为`:paraformer-8k-v2`的事件，即仅转发模型名称为`paraformer-8k-v2`的事件。事件类型为`dashscope:System:AsyncTaskFinish`。
 
 ```
 {
@@ -417,7 +417,7 @@ dashscope:System:AsyncTaskFinish
   "type": ["dashscope:System:AsyncTaskFinish"],
   "data": {
     "user_api_unique_key": [
-      {"suffix": ":paraformer-8k-v1"}
+      {"suffix": ":paraformer-8k-v2"}
     ]
   }
 }
@@ -505,7 +505,7 @@ dashscope:System:AsyncTaskFinish
     "aliyunpublishtime": "2023-10-25T01:45:16.993Z",
     "data": {
         "start_time": "2023-10-25 09:45:09",
-        "user_api_unique_key": "apikey:v1:audio:asr:transcription:paraformer-8k-v1",
+        "user_api_unique_key": "apikey:v1:audio:asr:transcription:paraformer-8k-v2",
         "task_status": "SUCCEEDED",
         "contain_result": false,
         "end_time": "2023-10-25 09:45:16",
@@ -604,7 +604,7 @@ API 的唯一key（提交任务时，模型API的五要素），组成格式为�
 -   model：模型名称
     
 
-`apikey:v1:audio:asr:transcription:paraformer-8k-v1`
+`apikey:v1:audio:asr:transcription:paraformer-8k-v2`
 
 data\[\].task\_status
 
@@ -773,7 +773,7 @@ dashscope:System:AsyncTaskFinish
 }
 ```
 
--   通过指定字段过滤事件：筛选出 `user_api_unique_key`字段后缀为`:paraformer-8k-v1`的事件，即仅转发模型名称为`paraformer-8k-v1`的事件。事件类型为`dashscope:System:AsyncTaskFinish`。
+-   通过指定字段过滤事件：筛选出 `user_api_unique_key`字段后缀为`:paraformer-8k-v2`的事件，即仅转发模型名称为`paraformer-8k-v2`的事件。事件类型为`dashscope:System:AsyncTaskFinish`。
 
 ```
 {
@@ -781,7 +781,7 @@ dashscope:System:AsyncTaskFinish
   "type": ["dashscope:System:AsyncTaskFinish"],
   "data": {
     "user_api_unique_key": [
-      {"suffix": ":paraformer-8k-v1"}
+      {"suffix": ":paraformer-8k-v2"}
     ]
   }
 }

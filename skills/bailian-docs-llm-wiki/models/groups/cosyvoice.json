@@ -239,47 +239,6 @@
           "Text"
         ]
       },
-      "description": "声音复刻Cosyvoice大模型，依托先进的大模型技术进行特征提取，从而完成声音的复刻，且无需训练过程。仅需提供时长较短的音频，即可迅速生成高度相似且听感自然的定制声音。",
-      "features": [],
-      "provider": "qwen-domain-model",
-      "model": "cosyvoice-clone-v1",
-      "prices": [
-        {
-          "priceUnit": "每万字符",
-          "price": "2",
-          "timeBand": "standard",
-          "ntmAmountType": "audio_tts",
-          "type": "cosy_tts_number",
-          "priceName": "语音合成"
-        }
-      ],
-      "priceTimeBands": [
-        "standard"
-      ],
-      "capabilities": [
-        "TTS"
-      ],
-      "versionTag": "MAJOR",
-      "latestOnlineAt": "2024-09-12T16:00:00.000+00:00",
-      "offlineInfo": {
-        "inference": {
-          "announceUrl": "https://www.aliyun.com/notice/118434",
-          "offlineTime": "2026-10-10 00:00:00"
-        }
-      },
-      "inferenceProvider": "aliyun-bailian",
-      "name": "声音复刻CosyVoice大模型",
-      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/voice-cloning-user-guide"
-    },
-    {
-      "inferenceMetadata": {
-        "response_modality": [
-          "Audio"
-        ],
-        "request_modality": [
-          "Text"
-        ]
-      },
       "description": "cosyvoice-V2是通义实验室依托大规模预训练语言模型，在深度融合文本理解和语音生成的新一代生成式语音合成大模型，支持文本至语音的实时流式合成。",
       "features": [],
       "provider": "qwen-domain-model",
@@ -310,55 +269,6 @@
           "default": {
             "python": "# coding=utf-8\n\nimport dashscope\nfrom dashscope.audio.tts_v2 import *\n\n# 若没有将API Key配置到环境变量中，需将your-api-key替换为自己的API Key\n# dashscope.api_key = \"your-api-key\"\n\nmodel = \"cosyvoice-v2\"\nvoice = \"longxiaochun_v2\"\n\nsynthesizer = SpeechSynthesizer(model=model, voice=voice)\naudio = synthesizer.call(\"今天天气怎么样？\")\n\nwith open('output.mp3', 'wb') as f:\n    f.write(audio)",
             "java": "import com.alibaba.dashscope.audio.ttsv2.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.ttsv2.SpeechSynthesizer;\n\nimport java.io.File;\nimport java.io.FileOutputStream;\nimport java.io.IOException;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    private static String model = \"cosyvoice-v2\";\n    private static String voice = \"longxiaochun_v2\";\n\n    public static void streamAudioDataToSpeaker() {\n        SpeechSynthesisParam param =\n                SpeechSynthesisParam.builder()\n                        // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将your-api-key替换为自己的API Key\n                        // .apiKey(\"your-api-key\")\n                        .model(model)\n                        .voice(voice)\n                        .build();\n\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer(param, null);\n        ByteBuffer audio = null;\n        try {\n            audio = synthesizer.call(\"今天天气怎么样？\");\n        } catch (Exception e) {\n            throw new RuntimeException(e);\n        } finally {\n            synthesizer.getDuplexApi().close(1000, \"bye\");\n        }\n        if (audio != null) {\n            File file = new File(\"output.mp3\");\n            try (FileOutputStream fos = new FileOutputStream(file)) {\n                fos.write(audio.array());\n            } catch (IOException e) {\n                throw new RuntimeException(e);\n            }\n        }\n    }\n\n    public static void main(String[] args) {\n        streamAudioDataToSpeaker();\n        System.exit(0);\n    }\n}"
-          }
-        }
-      }
-    },
-    {
-      "inferenceMetadata": {
-        "response_modality": [
-          "Audio"
-        ],
-        "request_modality": [
-          "Text"
-        ]
-      },
-      "description": "CosyVoice 是通义实验室依托大规模预训练语言模型，深度融合文本理解和语音生成的新一代生成式语音合成大模型，支持文本至语音的实时流式合成。",
-      "features": [],
-      "provider": "qwen-domain-model",
-      "model": "cosyvoice-v1",
-      "prices": [
-        {
-          "priceUnit": "每万字符",
-          "price": "2",
-          "timeBand": "standard",
-          "ntmAmountType": "audio_tts",
-          "type": "cosy_tts_number",
-          "priceName": "语音合成"
-        }
-      ],
-      "priceTimeBands": [
-        "standard"
-      ],
-      "capabilities": [
-        "TTS"
-      ],
-      "versionTag": "MAJOR",
-      "latestOnlineAt": "2025-03-18T02:20:34.000+00:00",
-      "offlineInfo": {
-        "inference": {
-          "announceUrl": "https://www.aliyun.com/notice/118434",
-          "offlineTime": "2026-10-10 00:00:00"
-        }
-      },
-      "inferenceProvider": "aliyun-bailian",
-      "name": "语音合成CosyVoice大模型",
-      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/cosyvoice-large-model-for-speech-synthesis",
-      "samples": {
-        "dashscope": {
-          "default": {
-            "python": "# coding=utf-8\n\nimport dashscope\nfrom dashscope.audio.tts_v2 import *\n\n# 若没有将API Key配置到环境变量中，需将your-api-key替换为自己的API Key\n# dashscope.api_key = \"your-api-key\"\n\nmodel = \"cosyvoice-v1\"\nvoice = \"longxiaochun\"\n\nsynthesizer = SpeechSynthesizer(model=model, voice=voice)\naudio = synthesizer.call(\"今天天气怎么样？\")\n\nwith open('output.mp3', 'wb') as f:\n    f.write(audio)",
-            "java": "import com.alibaba.dashscope.audio.ttsv2.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.ttsv2.SpeechSynthesizer;\n\nimport java.io.File;\nimport java.io.FileOutputStream;\nimport java.io.IOException;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    private static String model = \"cosyvoice-v1\";\n    private static String voice = \"longxiaochun\";\n\n    public static void streamAudioDataToSpeaker() {\n        SpeechSynthesisParam param =\n                SpeechSynthesisParam.builder()\n                        // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将your-api-key替换为自己的API Key\n                        // .apiKey(\"your-api-key\")\n                        .model(model)\n                        .voice(voice)\n                        .build();\n\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer(param, null);\n        ByteBuffer audio = null;\n        try {\n            audio = synthesizer.call(\"今天天气怎么样？\");\n        } catch (Exception e) {\n            throw new RuntimeException(e);\n        } finally {\n            synthesizer.getDuplexApi().close(1000, \"bye\");\n        }\n        if (audio != null) {\n            File file = new File(\"output.mp3\");\n            try (FileOutputStream fos = new FileOutputStream(file)) {\n                fos.write(audio.array());\n            } catch (IOException e) {\n                throw new RuntimeException(e);\n            }\n        }\n    }\n\n    public static void main(String[] args) {\n        streamAudioDataToSpeaker();\n        System.exit(0);\n    }\n}"
           }
         }
       }

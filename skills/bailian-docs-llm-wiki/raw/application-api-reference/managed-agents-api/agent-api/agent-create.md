@@ -42,7 +42,7 @@ string
 
 object
 
-模型配置。必填子字段 `id`（模型 ID，如 qwen3-max）；可选子字段 `enable_thinking`（bool，是否启用思考模式）、`max_tokens`（int32，最大生成长度）、`temperature`（double，温度参数，控制随机性）、`thinking_budget`（int32，思考预算长度）
+模型配置。必填子字段 `id`（模型 ID，如 qwen3.7-max）；可选子字段 `enable_thinking`（bool，是否启用思考模式）、`max_tokens`（int32，最大生成长度）、`temperature`（double，温度参数，控制随机性）、`thinking_budget`（int32，思考预算长度）
 
 `system`
 
@@ -105,7 +105,7 @@ curl -X POST "$AGENTSTUDIO_URL/agents" \
   -d '{
     "name": "data-analyst",
     "description": "数据分析助手",
-    "model": {"id": "qwen3-max"},
+    "model": {"id": "qwen3.7-max"},
     "system": "你是数据分析专家，使用 pandas 处理 CSV 文件。",
     "tools": [
       {
@@ -163,7 +163,7 @@ java
 ```
 Agent agent = client.agents().create(AgentCreateParam.builder()
     .name("data-analyst")
-    .model("qwen3-max")
+    .model("qwen3.7-max")
     .description("数据分析助手")
     .instructions("你是数据分析专家，使用 pandas 处理 CSV 文件。")
     .metadata(Map.of("team", "data"))
@@ -181,7 +181,7 @@ System.out.println(agent.getVersion());  // 1
   "version": 1,
   "name": "data-analyst",
   "description": "数据分析助手",
-  "model": {"id": "qwen3-max"},
+  "model": {"id": "qwen3.7-max"},
   "system": "你是数据分析专家，使用 pandas 处理 CSV 文件。",
   "tools": [],
   "mcp_servers": [],

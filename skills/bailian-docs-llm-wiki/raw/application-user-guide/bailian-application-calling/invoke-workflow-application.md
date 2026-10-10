@@ -3684,15 +3684,6 @@ final_answer = "".join(answer_content)
 # print_section("完整回复")
 # print(final_answer)
 ```
-**响应示例**
-```
-==================== 思考过程 ====================
-
-您好！我是由中国的深度求索（DeepSeek）公司开发的智能助手DeepSeek-R1。如您有任何问题，我会尽我所能为您提供帮助。
-==================== 完整回复 ====================
-
-您好！我是由中国的深度求索（DeepSeek）公司开发的智能助手DeepSeek-R1。如您有任何问题，我会尽我所能为您提供帮助。
-```
 
 #### Java
 
@@ -3987,43 +3978,6 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/APP_ID/completion \
     },
     "debug": {}
 }'
-```
-**响应示例**
-```
-id:1
-event:result
-:HTTP_STATUS/200
-data:{"output":{"thoughts":[{"action":"reasoning","thought":"嗯","action_type":"reasoning","response":"嗯","action_name":"思考过程"}],"session_id":"ea188f5f795a485f8956e3af0212ba29","finish_reason":"null","text":""},"usage":{"models":[{"input_tokens":31,"output_tokens":3,"model_id":"deepseek-r1"}]},"request_id":"b4b0b65f-4378-93b6-8ca2-7936b2725bc8"}
-
-id:2
-event:result
-:HTTP_STATUS/200
-data:{"output":{"thoughts":[{"action":"reasoning","thought":"，","action_type":"reasoning","response":"，","action_name":"思考过程"}],"session_id":"ea188f5f795a485f8956e3af0212ba29","finish_reason":"null","text":""},"usage":{"models":[{"input_tokens":31,"output_tokens":4,"model_id":"deepseek-r1"}]},"request_id":"b4b0b65f-4378-93b6-8ca2-7936b2725bc8"}
-
-id:3
-event:result
-:HTTP_STATUS/200
-data:{"output":{"thoughts":[{"action":"reasoning","thought":"用户","action_type":"reasoning","response":"用户","action_name":"思考过程"}],"session_id":"ea188f5f795a485f8956e3af0212ba29","finish_reason":"null","text":""},"usage":{"models":[{"input_tokens":31,"output_tokens":5,"model_id":"deepseek-r1"}]},"request_id":"b4b0b65f-4378-93b6-8ca2-7936b2725bc8"}
-......
-id:320
-event:result
-:HTTP_STATUS/200
-data:{"output":{"thoughts":[{"action":"reasoning","thought":"","action_type":"reasoning","response":"","action_name":"思考过程"}],"session_id":"ea188f5f795a485f8956e3af0212ba29","finish_reason":"null","text":"问题"},"usage":{"models":[{"input_tokens":31,"output_tokens":322,"model_id":"deepseek-r1"}]},"request_id":"b4b0b65f-4378-93b6-8ca2-7936b2725bc8"}
-
-id:321
-event:result
-:HTTP_STATUS/200
-data:{"output":{"thoughts":[{"action":"reasoning","thought":"","action_type":"reasoning","response":"","action_name":"思考过程"}],"session_id":"ea188f5f795a485f8956e3af0212ba29","finish_reason":"null","text":"吗"},"usage":{"models":[{"input_tokens":31,"output_tokens":323,"model_id":"deepseek-r1"}]},"request_id":"b4b0b65f-4378-93b6-8ca2-7936b2725bc8"}
-
-id:322
-event:result
-:HTTP_STATUS/200
-data:{"output":{"thoughts":[{"action":"reasoning","thought":"","action_type":"reasoning","response":"","action_name":"思考过程"}],"session_id":"ea188f5f795a485f8956e3af0212ba29","finish_reason":"null","text":"？"},"usage":{"models":[{"input_tokens":31,"output_tokens":324,"model_id":"deepseek-r1"}]},"request_id":"b4b0b65f-4378-93b6-8ca2-7936b2725bc8"}
-
-id:323
-event:result
-:HTTP_STATUS/200
-data:{"output":{"thoughts":[{"action":"reasoning","thought":"","action_type":"reasoning","response":"","action_name":"思考过程"}],"session_id":"ea188f5f795a485f8956e3af0212ba29","finish_reason":"stop","text":""},"usage":{"models":[{"input_tokens":31,"output_tokens":324,"model_id":"deepseek-r1"}]},"request_id":"b4b0b65f-4378-93b6-8ca2-7936b2725bc8"}
 ```
 
 ## 参数传递

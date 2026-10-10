@@ -1,39 +1,34 @@
 # long term memory new
 
-[长期记忆](../concepts/memory.md)（Long Term Memory, LTM）是百炼平台提供的结构化用户状态持久化能力，用于在多轮对话或跨会话场景中维护事实性知识、用户偏好与行为画像。它通过语义索引与向量检索实现低延迟读写，支持开发者构建具备上下文连续性的智能体应用。该能力需配合兼容模型与特定 API 调用方式使用，详见 [长期记忆](../../raw/application-api-reference/long-term-memory-new.md)。
+长期记忆（Long Term Memory, LTM）是百炼平台提供的结构化记忆存储与检索能力，支持在多轮对话中持久化保存用户事实性信息、行为偏好和画像特征。该能力通过独立的 API 接口与推理服务解耦，可按需启用或关闭。其设计目标是提升对话一致性与个性化水平，同时保障数据隔离与可控性。
 
-## 支持的模型与功能
+## 支持的模型/功能
 
-- **模型支持**：当前仅 `qwen-max`、`qwen-plus` 和 `qwen-turbo`（v202409 及以上版本）原生支持 LTM 的自动注入与更新；其他模型需显式调用 `/v1/memory/query` 与 `/v1/memory/upsert` 接口管理记忆。
-- **核心功能模块**：
-  - **事实记忆（Fragments）**：存储结构化短文本片段（如“用户住址：杭州市西湖区”），支持语义检索与去重合并，详见 [事实记忆](../../raw/application-api-reference/long-term-memory-new/fragments-overview.md)。
-  - **用户画像（Profiles）**：维护键值对形式的用户属性（如 `age: 28`, `preferred_language: zh`），支持类型校验与 TTL 过期，详见 [用户画像](../../raw/application-api-reference/long-term-memory-new/profiles-overview.md)。
+- 当前仅 `qwen-max`、`qwen-plus` 和 `qwen-turbo` 三款模型原生支持长期记忆上下文注入（需显式开启 `enable_long_term_memory: true`）；其他模型调用时将忽略该字段。
+- 功能分为两类：**事实记忆**（Fact Memory）用于存储结构化实体关系（如“用户居住地为杭州”），支持语义检索与版本管理；**用户画像**（Profile）用于聚合非结构化偏好标签（如“偏好技术类内容”），支持动态更新与权重衰减。
+- 所有功能均基于 [长期记忆 API 参考](../../raw/application-api-reference/long-term-memory-new/long-term-memory-api-reference.md) 定义的 REST 接口实现，不依赖模型内部参数微调。
 
 ## 关键参数
 
-| 参数名 | 类型 | 必填 | 说明 |
-|--------|------|------|------|
-| `memory_type` | string | 是 | 取值为 `"fragment"` 或 `"profile"` |
-| `namespace` | string | 是 | 命名空间，用于隔离不同业务域（如 `"customer_service"`） |
-| `ttl_seconds` | integer | 否 | 记忆存活时间（秒），`0` 表示永不过期；`profile` 默认 30 天，`fragment` 默认 7 天 |
-| `embedding_model` | string | 否 | 指定嵌入模型（如 `"text-embedding-v3"`），未指定时使用平台默认模型 |
-
-> **注意**：原始文档 [通用](../../raw/application-api-reference/long-term-memory-new/api-overview.md) 中提及 `ttl_seconds` 对 `profile` 默认为永久，但实测 v202410 版本 API 返回的 `profile` 默认 TTL 为 2592000 秒（30 天），以实际接口响应为准。
+- `enable_long_term_memory`: 布尔值，必须设为 `true` 才启用记忆注入（默认 `false`）。
+- `memory_source`: 字符串，指定来源类型，可选 `"fact"` 或 `"profile"`；混合使用需分两次请求。
+- `max_memory_items`: 整数，单次请求最多注入 20 条记忆片段（超过部分被截断），详见 [通用](../../raw/application-api-reference/long-term-memory-new/api-overview.md) 文档说明。
+- `ttl_seconds`: 可选，记忆有效期（秒），`fact` 类型默认 30 天，`profile` 类型默认 7 天；设为 `0` 表示永不过期（不推荐生产环境使用）。
 
 ## 使用方式
 
-1. **启用记忆注入**：在 `/v1/chat/completions` 请求中设置 `enable_memory: true`，并确保 `model` 在支持列表内；
-2. **手动管理记忆**：
-   - 查询：`POST /v1/memory/query`，传入 `query_text` 与 `filter`；
-   - 写入：`POST /v1/memory/upsert`，按 `memory_type` 提交结构化 payload；
-3. **调试建议**：首次集成时，务必调用 `/v1/memory/query?namespace=xxx&limit=5` 验证数据可见性，避免因命名空间拼写错误导致静默失败。
+1. 首先通过 [事实记忆](../../raw/application-api-reference/long-term-memory-new/fragments-overview.md) 或 [用户画像](../../raw/application-api-reference/long-term-memory-new/profiles-overview.md) 对应的写入接口（如 `POST /v1/memory/facts`）存入数据；
+2. 在调用 `/v1/chat/completions` 时，在 `messages` 上层传入 `long_term_memory` 对象，并设置上述关键参数；
+3. 平台自动在 prompt 中注入匹配的记忆片段（按相关性 Top-K 截取），不改变原始模型输入格式。
+
+> **注意**：文档中提及的 `memory_strategy: "auto"` 参数已在 v2.3.0 版本移除，当前仅支持显式指定 `memory_source`；旧版 SDK 示例代码若含此字段将导致 400 错误，请同步更新至最新 SDK。
 
 ## 限制和注意事项
 
-- 单次 `upsert` 最多写入 50 条记忆；单个 `fragment` 文本长度上限 2048 字符，`profile` 键名长度 ≤ 64 字符、值长度 ≤ 1024 字符；
-- 记忆检索不保证强一致性：写入后最多 2 秒内可被查到，高并发场景下可能出现短暂延迟；
-- 所有记忆按 `app_id` + `namespace` + `user_id` 三级隔离，**跨 app_id 的记忆不可见**，即使 namespace 相同；
-- 删除操作仅支持按 `id` 或 `filter` 批量删除，不支持清空整个 namespace —— 如需重置，须在 [长期记忆](../../raw/application-api-reference/long-term-memory-new.md) 文档指引下使用 `delete_by_filter` 并谨慎构造条件。
+- 单个应用（app_id）下所有用户的记忆数据物理隔离，但**不支持跨应用共享记忆**；
+- 记忆检索基于向量相似度 + 规则过滤（如时间衰减、权限标签），不保证 100% 召回，高精度场景建议结合业务 ID 显式查询；
+- 每个 `fact` 片段最大长度为 512 字符，超长内容会被截断——该限制在 [通用](../../raw/application-api-reference/long-term-memory-new/api-overview.md) 中未明确说明，实际以 API 返回 `400` 错误为准；
+- 用户删除自身账户后，关联记忆不会自动清除，需调用 `/v1/memory/clear` 主动清理。
 
 ## 来源文档
 

@@ -364,7 +364,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 export DASHSCOPE_API_KEY="your-api-key"
 # 将 {WorkspaceId} 替换为业务空间ID，cn-beijing 替换为对应地域（新加坡: ap-southeast-1, 美东: us-east-1）
 export DASHSCOPE_HTTP_BASE_URL="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
-dashscope multimodal-conversation create -m qwen-vl-plus -t "你好"
+dashscope multimodal-conversation create -m qwen3-vl-plus -t "你好"
 ```
 
 **重要**SDK Expert 交互式助手可按自然语言完成同样的开发与排障，见
@@ -536,11 +536,11 @@ qwenvl markdown。
 
 ### 开启/关闭思考模式
 
--   `qwen3.8`、`qwen3.7`、`qwen3.6`、`qwen3.5`、`qwen3-vl-plus`、`qwen3-vl-flash`系列模型属于混合思考模型，模型可以在思考后回复，也可直接回复；通过`enable_thinking`参数控制是否开启思考模式：
+-   `qwen3.8`、`qwen3.7`、`qwen3.6`、`qwen3.5`、`qwen3-vl-plus`系列模型属于混合思考模型，模型可以在思考后回复，也可直接回复；通过`enable_thinking`参数控制是否开启思考模式：
     
     -   `true`：开启思考模式。`qwen3.8`、`qwen3.7`、`qwen3.6`、`qwen3.5`系列模型默认为`true`。
-    -   `false`：关闭思考模式。`qwen3-vl-plus`、`qwen3-vl-flash`系列模型默认为`false`。
--   `qwen3-vl-235b-a22b-thinking`等带`thinking`后缀的属于仅思考模型，模型总会在回复前进行思考，且无法关闭。
+    -   `false`：关闭思考模式。`qwen3-vl-plus`系列模型默认为`false`。
+-   带`thinking`后缀的属于仅思考模型，模型总会在回复前进行思考，且无法关闭。
     
 
 **重要**
@@ -2876,26 +2876,6 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 
 `max_pixels`
 
-`qwen-vl-max`、`qwen-vl-plus`模型
-
-`32*32`
-
-`true`
-
-`max_pixels` 无效
-
-`16384 Token`
-
-`16777216`（即`16384*32*32`）
-
-`false`（默认）
-
-可自定义，默认为`1310720`，最大值是`16777216`
-
-由 `max_pixels` 决定，即`max_pixels/32/32`
-
-`max_pixels`
-
 `QVQ`系列模型
 
 `28*28`
@@ -3251,7 +3231,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 
 -   **以图像列表传入，图像列表的数量有如下限制：**
     -   `qwen3.8`系列、`qwen3.7`系列、`qwen3.6`系列、`qwen3.5` 系列：最少传入 4 张图片，最多 8000 张图片
-    -   `qwen3-vl-plus` 系列、`qwen3-vl-flash` 系列、`qwen3-vl-235b-a22b-thinking`、`qwen3-vl-235b-a22b-instruct`：最少传入 4 张图片，最多 2000 张图片
+    -   `qwen3-vl-plus` 系列：最少传入 4 张图片，最多 2000 张图片
     -   其他`Qwen3-VL`开源、`Qwen2.5-VL`（包括商业版和开源版）和`QVQ`系列模型：最少传入 4 张图片，最多 512 张图片
     -   其他模型：最少传入 4 张图片，最多 80 张图片
 -   **以视频文件传入时：**
@@ -3259,8 +3239,8 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
         
         -   以公网URL传入时：
             
-            -   `qwen3.8`系列、`qwen3.7`系列、`qwen3.6`系列、`qwen3.5` 系列、`Qwen3-VL`系列、`qwen-vl-max` ：不超过 2GB；
-            -   `qwen-vl-plus` 系列、其他`qwen-vl-max`模型、`Qwen2.5-VL`开源系列及`QVQ`系列模型：不超过 1GB；
+            -   `qwen3.8`系列、`qwen3.7`系列、`qwen3.6`系列、`qwen3.5` 系列、`Qwen3-VL`系列：不超过 2GB；
+            -   `Qwen2.5-VL`开源系列及`QVQ`系列模型：不超过 1GB；
             -   其他模型不超过 150MB
         -   以 Base64 编码传入时：编码后的字符串小于 10MB；
             
@@ -3271,9 +3251,9 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
         
     -   **视频时长：**
         -   `qwen3.8`系列、`qwen3.7`系列、`qwen3.6`系列、`qwen3.5` 系列：2秒至2小时；
-        -   `qwen3-vl-plus`系列、`qwen3-vl-flash`系列、`qwen3-vl-235b-a22b-thinking`、`qwen3-vl-235b-a22b-instruct`：2 秒至 1 小时；
-        -   其他`Qwen3-VL`开源系列、`qwen-vl-max` ：2 秒至 20 分钟；
-        -   `qwen-vl-plus`系列、 其他`qwen-vl-max`模型、`Qwen2.5-VL`开源系列及`QVQ`系列模型：2 秒至 10 分钟；
+        -   `qwen3-vl-plus`系列：2 秒至 1 小时；
+        -   其他`Qwen3-VL`开源系列：2 秒至 20 分钟；
+        -   `Qwen2.5-VL`开源系列及`QVQ`系列模型：2 秒至 10 分钟；
         -   其他模型：2 秒至 40 秒。
     -   **视频格式：** MP4、AVI、MKV、MOV、FLV、WMV 等。
         
@@ -3314,7 +3294,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 ```
 client = client.with_options(timeout=1800.0)
 response = client.chat.completions.create(
-    model="qwen-vl-plus",
+    model="qwen3-vl-plus",
     messages=[...]
 )
 ```
@@ -3323,7 +3303,7 @@ response = client.chat.completions.create(
 
 ```
 stream = client.chat.completions.create(
-    model="qwen-vl-plus",
+    model="qwen3-vl-plus",
     messages=[...],
     stream=True
 )
@@ -3351,7 +3331,7 @@ for chunk in stream:
             
         -   `token_pixels`：每视觉`Token`对应的像素值，不同模型情况不同：
             
-            -   `qwen3.8系列`、`qwen3.7系列`、`qwen3.6系列`、`qwen3.5系列`、`Qwen3-VL`、`qwen-vl-max`、`qwen-vl-plus`**：**每个`Token`对应 `32x32`像素
+            -   `qwen3.8系列`、`qwen3.7系列`、`qwen3.6系列`、`qwen3.5系列`、`Qwen3-VL`**：**每个`Token`对应 `32x32`像素
             -   `QVQ`及其他`Qwen2.5-VL`模型**：**每个Token对应`28x28`像素
         
         以下代码演示了模型内部对图像的大致缩放逻辑，可用于估算一张图像的Token，实际计费请以API响应为准。
@@ -3417,7 +3397,7 @@ for chunk in stream:
         
         FRAME_FACTOR = 2
         
-        # Qwen3.6、Qwen3.5、Qwen3-VL、qwen-vl-max-0813、qwen-vl-plus-0815、qwen-vl-plus-0710等模型，图像缩放因子为32
+        # Qwen3.6、Qwen3.5、Qwen3-VL等模型，图像缩放因子为32
         IMAGE_FACTOR = 32
         
         #  其他模型，图像缩放因子为28
@@ -3577,7 +3557,7 @@ for chunk in stream:
         
         # ==================== 常量定义 ====================
         FRAME_FACTOR = 2
-        # Qwen3-VL、qwen-vl-max-0813、qwen-vl-plus-0815、qwen-vl-plus-0710模型，缩放因子为32
+        # Qwen3-VL模型，缩放因子为32
         IMAGE_FACTOR = 32
         
         #  其他模型，缩放因子为28

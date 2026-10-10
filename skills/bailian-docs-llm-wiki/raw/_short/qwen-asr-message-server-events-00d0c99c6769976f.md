@@ -1,6 +1,6 @@
 # 实时语音识别（Qwen-Audio-ASR-Message）服务端事件
 
-本文介绍 Qwen-Audio-3.1-ASR-Flash-Message 实时语音识别服务通过 WebSocket 推送给客户端的服务端事件，包括 task-started、result-generated、task-finished、task-failed 四类事件的数据结构与字段含义。
+本文介绍 Qwen-Audio-ASR-Message 的服务端事件及字段。
 
 ## task-started
 

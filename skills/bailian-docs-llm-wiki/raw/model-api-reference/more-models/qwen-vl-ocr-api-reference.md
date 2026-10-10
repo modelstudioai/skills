@@ -96,13 +96,13 @@ User Message`object`**（必选）**
 
 不同模型，每个图像 Token 对应的像素不同：
 
--   `qwen3.5-ocr`、`qwen-vl-ocr-latest`、`qwen-vl-ocr-2025-11-20`：每 Token 对应像素为`32*32`。
--   `qwen-vl-ocr`、`qwen-vl-ocr-2025-08-28`及之前更新的模型：每 Token 对应像素为`28*28`。
+-   `qwen3.5-ocr`、`qwen-vl-ocr-2025-11-20`：每 Token 对应像素为`32*32`。
+-   `qwen-vl-ocr`及之前更新的模型：每 Token 对应像素为`28*28`。
 
 min\_pixels 取值范围
 
--   `qwen3.5-ocr`、`qwen-vl-ocr-latest`、`qwen-vl-ocr-2025-11-20`：默认值和最小值均为3072（即`3×32×32`）
--   `qwen-vl-ocr`、`qwen-vl-ocr-2025-08-28`及之前更新的模型：默认值和最小值均为 `3136` （即`4×28×28`）。
+-   `qwen3.5-ocr`、`qwen-vl-ocr-2025-11-20`：默认值和最小值均为3072（即`3×32×32`）
+-   `qwen-vl-ocr`及之前更新的模型：默认值和最小值均为 `3136` （即`4×28×28`）。
 
 示例值：`{"type": "image_url","image_url": {"url":"https://xxxx.jpg"},"min_pixels": 3072}`
 
@@ -116,16 +116,16 @@ min\_pixels 取值范围
 
 不同模型，每个图像 Token 对应的像素不同：
 
--   `qwen3.5-ocr`、`qwen-vl-ocr-latest`、`qwen-vl-ocr-2025-11-20`：每 Token 对应像素为`32*32`。
--   `qwen-vl-ocr`、`qwen-vl-ocr-2025-08-28`及之前更新的模型：每 Token 对应像素为`28*28`。
+-   `qwen3.5-ocr`、`qwen-vl-ocr-2025-11-20`：每 Token 对应像素为`32*32`。
+-   `qwen-vl-ocr`及之前更新的模型：每 Token 对应像素为`28*28`。
 
 max\_pixels 取值范围
 
--   `qwen3.5-ocr、qwen-vl-ocr-latest、qwen-vl-ocr-2025-11-20`
+-   `qwen3.5-ocr、qwen-vl-ocr-2025-11-20`
     
     -   默认值：8388608 （即`8192x32x32`）
     -   最大值：30720000（即`30000x32x32`）
--   `qwen-vl-ocr、qwen-vl-ocr-2025-08-28`及之前更新的模型
+-   `qwen-vl-ocr`及之前更新的模型
     
     -   默认值：6422528（即`8192x28x28`）
     -   最大值：23520000（即`30000x28x28`）
@@ -166,9 +166,9 @@ max\_pixels 取值范围
 
 -   `qwen3.5-ocr`：默认值与最大值为32768。
     
--   `qwen-vl-ocr-latest`、`qwen-vl-ocr-2025-11-20`、`qwen-vl-ocr-2024-10-28`默认值与最大值均为模型的最大输出长度，请参见[模型选型](https://help.aliyun.com/zh/model-studio/qwen-vl-ocr#0573ce495fnnf)。
+-   `qwen-vl-ocr-2025-11-20`、`qwen-vl-ocr-2024-10-28`默认值与最大值均为模型的最大输出长度，请参见[模型选型](https://help.aliyun.com/zh/model-studio/qwen-vl-ocr#0573ce495fnnf)。
     
--   `qwen-vl-ocr、qwen-vl-ocr-2025-04-13、qwen-vl-ocr-2025-08-28`，默认值和最大值为4096。
+-   `qwen-vl-ocr`，默认值和最大值为4096。
     
     > 如需提高该参数值（4097~8192范围），请联系商务经理进行申请，并提供以下信息：主账号ID、图像类型（如文档图、电商图、合同等）、模型名称、预计 QPS 和每日请求总数，以及模型输出长度超过4096的请求占比。
     
@@ -1004,13 +1004,13 @@ User Message`object`**（必选）**
 
 不同模型，每个图像 Token 对应的像素不同：
 
--   `qwen3.5-ocr`、`qwen-vl-ocr-latest`、`qwen-vl-ocr-2025-11-20`：每 Token 对应像素为`32*32`。
--   `qwen-vl-ocr`、`qwen-vl-ocr-2025-08-28`及之前更新的模型：每 Token 对应像素为`28*28`。
+-   `qwen3.5-ocr`、`qwen-vl-ocr-2025-11-20`：每 Token 对应像素为`32*32`。
+-   `qwen-vl-ocr`及之前更新的模型：每 Token 对应像素为`28*28`。
 
 min\_pixels 取值范围
 
--   `qwen3.5-ocr`、`qwen-vl-ocr-latest`、`qwen-vl-ocr-2025-11-20`：默认值和最小值均为3072（即`3×32×32`）
--   `qwen-vl-ocr`、`qwen-vl-ocr-2025-08-28`及之前更新的模型：默认值和最小值均为 `3136` （即`4×28×28`）。
+-   `qwen3.5-ocr`、`qwen-vl-ocr-2025-11-20`：默认值和最小值均为3072（即`3×32×32`）
+-   `qwen-vl-ocr`及之前更新的模型：默认值和最小值均为 `3136` （即`4×28×28`）。
 
 示例值：`{"image":"https://xxxx.jpeg","min_pixels": 3072}`
 
@@ -1024,16 +1024,16 @@ min\_pixels 取值范围
 
 不同模型，每个图像 Token 对应的像素不同：
 
--   `qwen3.5-ocr`、`qwen-vl-ocr-latest`、`qwen-vl-ocr-2025-11-20`：每 Token 对应像素为`32*32`。
--   `qwen-vl-ocr`、`qwen-vl-ocr-2025-08-28`及之前更新的模型：每 Token 对应像素为`28*28`。
+-   `qwen3.5-ocr`、`qwen-vl-ocr-2025-11-20`：每 Token 对应像素为`32*32`。
+-   `qwen-vl-ocr`及之前更新的模型：每 Token 对应像素为`28*28`。
 
 max\_pixels 取值范围
 
--   `qwen3.5-ocr、qwen-vl-ocr-latest、qwen-vl-ocr-2025-11-20`
+-   `qwen3.5-ocr、qwen-vl-ocr-2025-11-20`
     
     -   默认值：8388608 （即`8192x32x32`）
     -   最大值：30720000（即`30000x32x32`）
--   `qwen-vl-ocr、qwen-vl-ocr-2025-08-28`及之前更新的模型
+-   `qwen-vl-ocr`及之前更新的模型
     
     -   默认值：6422528（即`8192x28x28`）
     -   最大值：23520000（即`30000x28x28`）
@@ -1050,9 +1050,9 @@ max\_pixels 取值范围
 
 -   `qwen3.5-ocr`：默认值与最大值为32768。
     
--   `qwen-vl-ocr-latest`、`qwen-vl-ocr-2025-11-20`、`qwen-vl-ocr-2024-10-28`默认值与最大值均为模型的最大输出长度，请参见[模型选型](https://help.aliyun.com/zh/model-studio/qwen-vl-ocr#0573ce495fnnf)。
+-   `qwen-vl-ocr-2025-11-20`、`qwen-vl-ocr-2024-10-28`默认值与最大值均为模型的最大输出长度，请参见[模型选型](https://help.aliyun.com/zh/model-studio/qwen-vl-ocr#0573ce495fnnf)。
     
--   `qwen-vl-ocr、qwen-vl-ocr-2025-04-13、qwen-vl-ocr-2025-08-28`，默认值和最大值为4096。
+-   `qwen-vl-ocr`，默认值和最大值为4096。
     
     > 如需提高该参数值（4097~8192范围），请联系商务经理进行申请，并提供以下信息：主账号ID、图像类型（如文档图、电商图、合同等）、模型名称、预计 QPS 和每日请求总数，以及模型输出长度超过4096的请求占比。
     
@@ -1230,7 +1230,7 @@ apple
     不返回
     
 
-支持的模型：qwen-vl-ocr-2025-04-13及之后更新的模型
+支持的模型：qwen-vl-ocr-2025-11-20及之后更新的模型
 
 > 通过HTTP调用时，请将 **logprobs**放入 **parameters** 对象中。
 

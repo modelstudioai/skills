@@ -9,4 +9,3 @@
 -   [数学能力（Qwen-Math）](raw/model-user-guide/model-experience/text-generation-model/specialized-models/math-language-model.md)
 -   [对话分析（Tongyi-Xiaomi-Analysis）](raw/model-user-guide/model-experience/text-generation-model/specialized-models/dialogue-analysis.md)
 -   [界面交互](raw/model-user-guide/model-experience/text-generation-model/specialized-models/gui-automation.md)
--   [音频理解-Qwen3-Omni-Captioner](raw/model-user-guide/model-experience/text-generation-model/specialized-models/qwen3-omni-captioner.md)

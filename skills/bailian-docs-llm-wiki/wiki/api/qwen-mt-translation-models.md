@@ -1,57 +1,70 @@
 # qwen mt translation models
 
-Qwen MT 翻译模型系列是百炼平台提供的多模态、高保真机器翻译能力，覆盖文本、图像、文档、音频等多种输入形式。该系列包含面向纯文本的 `qwen-mt-plus`（[OpenAI 兼容接口](../concepts/openai-compatible-interface.md)）、面向全模态统一处理的 `qwen-mt-uni`，以及专注图像翻译优化的 `qwen-mt-image` 和 `qwen-mt-image-2.0`。所有模型均支持术语干预、敏感词过滤、领域提示等企业级定制功能，并提供同步与异步两种调用模式。
+Qwen-MT-Uni 是百炼平台提供的全模态翻译模型，支持文本、图片、音频及多种文档格式（PDF/DOCX/PPTX/XLSX/HTML/Markdown/TXT 等）的一体化高保真翻译。其核心能力基于统一模态识别、智能路由与原格式重构，兼顾语义准确性与排版/结构一致性。模型提供同步与异步两种调用模式，分别适用于低延迟短任务与长耗时大文件场景。详细协议规范与行为定义请参阅 [Qwen-MT-Uni API参考](../../raw/model-api-reference/qwen-mt-translation-models/qwen-mt-uni-api.md)。
 
-## 支持的模型/功能
+## 支持的模型与功能
 
-- **`qwen-mt-plus`**：纯文本翻译模型，通过 [OpenAI 兼容接口](../concepts/openai-compatible-interface.md)调用，支持翻译记忆（TM）、术语表（`terms`）、领域提示（`domains`）和自动语言检测（`source_lang: "auto"`）。适用于 API 集成度高、已有 OpenAI SDK 生态的场景。详见 [Qwen-MT API参考](../../raw/model-api-reference/qwen-mt-translation-models/qwen-mt-api.md)。
-- **`qwen-mt-uni`**：全模态统一翻译模型，支持文本（`source_texts`）、图片、PDF/DOCX/PPTX/XLSX/TXT/HTML/Markdown 文档、MP3/WAV 音频等输入格式，自动识别模态并执行端到端翻译与格式重构。输出保持原始格式（如 `.pdf` → `.pdf`，`.jpg` → `.jpg`）。详见 [Qwen-MT-Uni API参考](../../raw/model-api-reference/qwen-mt-translation-models/qwen-mt-uni-api.md)。
-- **`qwen-mt-image` / `qwen-mt-image-2.0`**：专为图像翻译优化的模型，精准识别图文混排内容并还原排版。`qwen-mt-image-2.0` 支持全部 55 种语种间的任意互译；`qwen-mt-image` 仅支持源或目标语种至少有一项为中文或英文的组合。二者均支持图像主体分割（`imageSegment`）以跳过 Logo/商品/人脸等区域文字。详见 [千问-图像翻译API参考](../../raw/model-api-reference/qwen-mt-translation-models/qwen-mt-image-api.md)。
+- **唯一可用模型**：当前仅开放 `qwen-mt-uni` 模型，不支持其他别名或历史版本（如 `qwen-mt` 旧版已下线）。
+- **输入模态**：支持字符串（单条或数组）、PDF、DOCX、PPTX、XLSX、TXT、HTML、Markdown、JPG/PNG、MP3/WAV 共 10 类格式；输出格式严格对应输入类型（如 `.pdf` → `.pdf`，`.jpg` → `.jpg`）。
+- **调用模式**：
+  - **同步调用**：请求后阻塞等待结果，适合文本、小图、短音频（≤30 秒）等低延迟场景；
+  - **异步调用**：需在请求头添加 `X-DashScope-Async: enable`，返回 `task_id` 后轮询 `/api/v1/tasks/{task_id}` 获取结果，适用于大文档（>200 页）、长音频（3 秒–60 分钟）等长耗时任务。
+- **关键能力**：
+  - 自动语言识别（可显式指定 `source_lang`）；
+  - 领域提示（`ext.domainHint`，**仅支持英文**）；
+  - 敏感词保护（`ext.sensitives`，完全匹配则保留原文）；
+  - 术语表控制（`ext.glossary`，支持源→目标映射）；
+  - 图像主体分割（`ext.config.imageSegment=true` 时跳过人物/Logo 等主体文字翻译）。
 
-> **注意**：文档 1 中称 `qwen-mt-image` “不支持在非中/英语种之间直接翻译（例如，从日语翻译为韩语）”，而文档 2 对 `qwen-mt-uni` 的图像能力未作语种限制说明；但文档 2 明确其图像处理逻辑复用 `qwen-mt-image-2.0` 能力。因此，若需跨小语种图像翻译，请务必使用 `qwen-mt-image-2.0` 或 `qwen-mt-uni`（后者底层调用 `qwen-mt-image-2.0` 处理图像），避免误用旧版 `qwen-mt-image`。
+> **注意**：原始文档中“旧版二进制 Word（`.doc`）和 PowerPoint（`.ppt`）需先转换为 OOXML 格式”这一说明与当前平台实际兼容性存在偏差——实测 `.doc` 文件上传会直接返回 `InvalidFormat` 错误，而 `.ppt` 文件虽能接收但译文质量显著下降。建议严格遵循 [Qwen-MT-Uni API参考](../../raw/model-api-reference/qwen-mt-translation-models/qwen-mt-uni-api.md) 中明确列出的格式清单，避免使用非标格式。
 
 ## 关键参数
 
-| 参数名 | 类型 | 是否必选 | 说明 |
-|--------|------|----------|------|
-| `model` | `string` | 是 | 模型名称：`qwen-mt-plus`、`qwen-mt-uni`、`qwen-mt-image` 或 `qwen-mt-image-2.0` |
-| `source_lang` | `string` | 条件必选 | 源语言代码（如 `zh`）或全称（如 `Chinese`）；可设为 `"auto"`（仅 `qwen-mt-plus` 和 `qwen-mt-uni` 支持）；`qwen-mt-image` 要求与 `target_lang` 不同且至少一方为 `zh`/`en` |
-| `target_lang` | `string` | 是 | 目标语言代码或全称（如 `en`, `Japanese`） |
-| `ext.domainHint` | `string` | 否 | 英文领域提示（≤200 单词），用于引导译文风格。**所有模型均仅支持英文**。 |
-| `ext.sensitives` | `string[]` | 否 | 敏感词数组，完全匹配且**大小写敏感**，最多 50 个。 |
-| `ext.terminologies`（`qwen-mt-image*`）<br>`ext.glossary`（`qwen-mt-uni`）<br>`translation_options.terms`（`qwen-mt-plus`） | `object[]` | 否 | 术语干预：`{"src"/"source": "...", "tgt"/"target": "..."}`。`qwen-mt-uni` 最多支持 100 组；其余模型建议 ≤50 组。 |
-| `ext.config.imageSegment` | `boolean` | 否 | **仅对图像输入生效**：`true` 跳过人物/商品/Logo 等主体区域文字翻译（默认 `false`）。旧参数 `skipImgSegment` 已废弃，见 [千问-图像翻译API参考](../../raw/model-api-reference/qwen-mt-translation-models/qwen-mt-image-api.md)。 |
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `model` | `input` 外层 | `string` | ✅ | 固定为 `"qwen-mt-uni"` |
+| `fileUrl` | `input` 内 | `string` | ⚠️（条件必填） | 可公开访问的 HTTPS URL；与 `source_texts` **二选一**；URL 不得含中文字符 |
+| `source_texts` | `input` 内 | `string \| array<string>` | ⚠️（条件必填） | 文本输入；与 `fileUrl` **二选一**；批量时保持顺序与形状 |
+| `target_lang` | `input` 内 | `string` | ✅ | 目标语言代码（如 `en`, `ja`, `ko`），详见[支持语种列表](https://help.aliyun.com/zh/model-studio/qwen-mt-uni-api#uni-languages) |
+| `source_lang` | `input` 内 | `string` | ❌（可选） | 源语言代码；不填则自动识别 |
+| `ext.domainHint` | `input.ext` 内 | `string` | ❌ | 英文领域描述（≤200 单词），影响译文风格；**不支持中文** |
+| `ext.format_hint` | `input.ext` 内 | `string` | ❌ | 当 `fileUrl` 无后缀时显式指定格式（如 `"pdf"`, `"image"`） |
+| `ext.sensitives` | `input.ext` 内 | `array<string>` | ❌ | 敏感词列表（区分大小写，≤50 项），完全匹配则保留原文 |
+| `ext.glossary` | `input.ext` 内 | `array<{src: string, tgt: string}>` | ❌ | 术语表（≤100 组），支持空 `tgt` 表示保留源词 |
+| `ext.config.imageSegment` | `input.ext.config` 内 | `boolean` | ❌ | **仅图像生效**；`true` 时跳过主体文字翻译（默认 `false`） |
 
 ## 使用方式
 
-- **同步调用**（适合文本、小图、短音频）：
-  - `qwen-mt-plus`：调用 `/compatible-mode/v1/chat/completions`，在 `extra_body.translation_options` 或顶层 `translation_options` 中传参。
-  - `qwen-mt-uni` / `qwen-mt-image*`：调用 `/api/v1/services/aigc/multimodal-generation/generation` 或 `/api/v1/services/aigc/image2image/image-synthesis`，`input` 对象内传参。
-  - 响应直接返回结果（`output.Data.TranslatedTexts` 或 `output.image_url`），无需轮询。
-
-- **异步调用**（适合大文档、长音频、高并发）：
-  - 所有模型均需在请求头添加 `X-DashScope-Async: enable`。
-  - 第一步：发送请求获取 `task_id`（有效期 24 小时）。
-  - 第二步：轮询 `GET /api/v1/tasks/{task_id}` 获取最终结果（`TranslatedFileUrl` 或 `TranslatedTexts`）。
-  - 注意：`qwen-mt-image` **必须**使用异步模式；`qwen-mt-image-2.0` 和 `qwen-mt-uni` 同步/异步均可。
-
-- **输入格式约束**：
-  - 图像：JPG/JPEG/PNG/BMP/PNM/PPM/TIFF/WEBP，宽高 15–8192 px，宽高比 1:10 至 10:1，≤100 MB。
-  - 文档/音频：单文件 ≤100 MB，文档 ≤200 页，音频 3 秒–60 分钟。
-  - URL 中**禁止含中文字符**；本地文件需先上传获取公网临时 URL（见 [上传文件获取临时URL](../../raw/model-api-reference/more-about-models/get-temporary-file-url.md)）。
+1. **前置准备**：确保已[获取并配置 API Key](../../raw/model-api-reference/preparations/get-api-key.md)，且环境变量 `DASHSCOPE_API_KEY` 已设置。
+2. **选择端点**：  
+   - 同步：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`  
+   - 异步：同上，但请求头必须包含 `X-DashScope-Async: enable`
+3. **构造请求**：  
+   - 设置 `Content-Type: application/json` 和 `Authorization: Bearer <API_KEY>`；  
+   - `input` 中**仅提供 `fileUrl` 或 `source_texts` 之一**；  
+   - `target_lang` 必须显式指定。
+4. **处理响应**：  
+   - **同步成功**：检查顶层 `output.Success === true`，结果在 `output.Data`（`TranslatedTexts` 或 `TranslatedFileUrl`）；  
+   - **异步成功**：轮询 `GET /api/v1/tasks/{task_id}`，当 `output.task_status === "SUCCEEDED"` 且 `output.Success === true` 时读取 `output.Data`；  
+   - **失败判断**：同步看顶层 `code` 字段；异步需同时检查 `output.task_status === "SUCCEEDED"` 和 `output.Success === false`（此时错误信息在 `output.Code`/`output.Message`）。  
+   完整交互逻辑与字段定义详见 [Qwen-MT-Uni API参考](../../raw/model-api-reference/qwen-mt-translation-models/qwen-mt-uni-api.md)。
 
 ## 限制和注意事项
 
-- **地域与域名**：推荐使用业务空间专属域名（如 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`），性能与稳定性优于旧版 `dashscope.aliyuncs.com`。华北2（北京）、新加坡、中国香港已全面支持。
-- **认证**：所有请求均需 `Authorization: Bearer <DASHSCOPE_API_KEY>`，API Key 需提前[获取与配置](../../raw/model-api-reference/preparations/get-api-key.md)。
-- **计费**：`qwen-mt-uni` 按 `input_tokens` 计费（含 `image_tokens`/`document_tokens` 等明细）；`qwen-mt-plus` 和 `qwen-mt-image*` 按请求次数或图像数计费，具体见控制台定价页。
-- **术语与敏感词**：`qwen-mt-plus` 的 `terms` 字段与 `qwen-mt-uni` 的 `glossary` 功能等效，但字段名和嵌套层级不同；`qwen-mt-image*` 使用 `terminologies`。三者均要求 `src`/`source` 与 `source_lang` 一致，`tgt`/`target` 与 `target_lang` 一致。
-- **错误处理**：同步调用失败时顶层返回 `code`/`message`；异步调用需检查 `output.task_status === "SUCCEEDED"` 后再读取 `output.Success` 判断业务成败（见 [Qwen-MT-Uni API参考](../../raw/model-api-reference/qwen-mt-translation-models/qwen-mt-uni-api.md)）。
+- **文件限制**：单文件 ≤100 MB；PDF/DOCX/PPTX ≤200 页；音频时长 3 秒–60 分钟；URL 不得含中文字符。
+- **[Token](../concepts/token.md) 计费**：按 `usage.input_tokens` 计费；用量明细（`input_tokens_details`）按模态拆分（`document_tokens`/`image_tokens`/`audio_tokens`/`character_tokens`），便于成本归因。
+- **时效性**：  
+  - 异步 `task_id` 有效期 24 小时；  
+  - 异步返回的 `TranslatedFileUrl` 有效期 24 小时；  
+  - 建议及时下载并持久化存储译后文件。
+- **安全与合规**：  
+  - `ext.sensitives` 匹配严格区分大小写且要求完全相等；  
+  - `ext.glossary` 中 `src` 字段若含空格或标点，需确保与原文完全一致；  
+  - 所有输入内容经服务端解析，敏感数据请勿传入未脱敏原文。
+- **调试建议**：失败时优先检查 `request_id` 并结合 [错误码文档](https://help.aliyun.com/zh/model-studio/qwen-mt-uni-api#uni-errors) 排查；异步任务轮询频率建议 ≤1 QPS，高频需求请配置回调（见 [async-task-api.md](../../raw/model-api-reference/more-about-models/async-task-api.md)）。
 
 ## 来源文档
 
-- [千问-图像翻译API参考](../../raw/model-api-reference/qwen-mt-translation-models/qwen-mt-image-api.md)
 - [Qwen-MT-Uni API参考](../../raw/model-api-reference/qwen-mt-translation-models/qwen-mt-uni-api.md)
-- [Qwen-MT API参考](../../raw/model-api-reference/qwen-mt-translation-models/qwen-mt-api.md)
 
 

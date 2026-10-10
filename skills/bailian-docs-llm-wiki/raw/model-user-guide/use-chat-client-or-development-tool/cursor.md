@@ -63,7 +63,7 @@ Coding Plan 专属 [API Key](https://bailian.console.aliyun.com/cn-beijing/subsc
 
 Coding Plan [支持的模型](raw/model-user-guide/token-plan-guide/coding-plan-guide/coding-plan.md)
 
-部分模型名称需调整：kimi-k2.5 写为 **kimi-k2-5**，glm-4.7 写为 **glm-4-7**，glm-5 写为 **glm-5-0**。
+部分模型名称需调整：kimi-k2.5 写为 **kimi-k2-5**，glm-5 写为 **glm-5-0**。
 
 ### 按量计费
 

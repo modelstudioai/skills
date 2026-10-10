@@ -1,50 +1,40 @@
 # preparations
 
-在调用阿里云百炼平台模型服务前，开发者需完成 SDK 安装、API Key 获取与配置、基础环境准备等关键步骤。这些准备工作直接影响调用的稳定性、安全性与兼容性。本文汇总核心实践要点，覆盖主流 SDK（DashScope / OpenAI）、多语言支持、关键参数约束及常见排障路径，面向生产环境使用场景。
+在调用阿里云百炼平台模型服务前，开发者需完成 SDK 安装、API Key 获取与配置、环境变量设置等基础准备。这些步骤是所有模型调用（文本生成、多模态、语音、向量等）的共同前置条件，直接影响调用成功率与安全性。本文档结构化梳理关键环节，聚焦可执行操作与常见陷阱。
 
 ## 支持的模型/功能
 
-百炼平台支持通过 DashScope SDK 和 [OpenAI 兼容接口](../concepts/openai-compatible-interface.md)调用多种模型类型，包括文本生成（如 `qwen-plus`、`qwen3-8b`）、图像生成、视频生成、语音合成（TTS）、语音识别（ASR）、[向量嵌入](../concepts/embedding.md)（Embedding）和排序（Rerank）等。具体支持范围请参见[模型与协议支持范围](https://help.aliyun.com/zh/model-studio/realtime-api-overview#rtov-s02h2)。  
-> **注意**：部分实时语音或多模态模型（如 Realtime API）需使用专用 [AOQ SDK](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-sdk-download.md)，标准 DashScope 或 OpenAI SDK 不适用。  
-对于高级开发体验，推荐使用 DashScope Python SDK ≥1.27.3 内置的 [DashScope SDK Expert](../../raw/model-api-reference/preparations/dashscope-sdk-expert.md)，其提供自然语言驱动的代码生成、错误诊断与自动修复能力，覆盖文本生成、多模态、语音、检索等全部能力域。
+百炼支持通过 DashScope SDK 和 OpenAI 兼容 SDK 调用全栈模型能力，包括文本生成（如 `qwen-plus`、`qwen3.7-max`）、图像生成、视频生成、语音合成（TTS）、语音识别（ASR）、向量嵌入（Embedding）、排序（Rerank）及实时语音/多模态模型（需 AOQ SDK）。**注意**：文档 1 中提到的“AOQ SDK 下载”链接指向 `raw/model-api-reference/realtime-api-user-guide/...`，但该路径下实际内容已迁移至新版 Realtime API 文档体系；请以 [模型与协议支持范围](https://help.aliyun.com/zh/model-studio/realtime-api-overview#rtov-s02h2) 为准，避免依赖过时路径。实时语音与多模态模型必须使用 AOQ SDK 或指定 Realtime WebSocket 协议，DashScope HTTP SDK 不支持其底层流式交互语义。
 
 ## 关键参数
 
-调用时需关注以下核心参数及其约束（详见 [错误码文档](../../raw/model-api-reference/preparations/error-code.md)）：
-
-- **`model`**：必须为百炼控制台模型市场中已开通的**精确模型 ID**（如 `qwen3-235b-a22b-instruct-2507`），不可混用开源社区命名（如 `Qwen/Qwen3-235B...`）；未开通模型将返回 `Model not exist` 或 `The product is not activated` 错误。
-- **`stream`**：部分模型（如思考模式模型、音频输出模型）**强制要求 `stream=true`**；非流式调用将触发 `This model only support stream mode` 错误。
-- **`enable_thinking`**：开启后需同时满足 `result_format="message"` 且 `incremental_output=true`；关闭该参数时，部分专用思考模型（如 `qwen3-235b-a22b-thinking-2507`）会报错 `The value of the enable_thinking parameter is restricted to True`。
-- **`messages` / `content`**：纯文本模型仅接受字符串型 `content`；若传入数组（如 `[{ "type": "text", "text": "..." }]`）或含 `image_url` 等多模态元素，将报 `input content must be a string` 或 `Unexpected item type in content`；多模态模型则需严格按 `type`（`text`/`image_url`/`video_url`）校验结构。
-- **数值型参数**：`temperature` ∈ [0.0, 2.0)，`top_p` ∈ (0.0, 1.0]，`max_tokens` ∈ [1, 模型最大输出 Token]，`seed` ∈ [0, 9223372036854775807]，越界将直接拒绝请求。
+- **API Key**：必须通过百炼控制台按地域单独创建，**不可跨地域混用**；推荐归属 RAM 用户并绑定业务空间以实现权限隔离 [获取与配置 API Key](../../raw/model-api-reference/preparations/get-api-key.md)。
+- **Base URL**：华北2（北京）为 `https://dashscope.aliyuncs.com/compatible-mode/v1`，其他地域需查 [Base URL 总览](../../raw/model-user-guide/get-started-with-models/base-url.md)；DashScope SDK Expert 还支持私有 workspace 域名（如 `https://{workspace-id}.{region}.maas.aliyuncs.com/api/v1`）。
+- **模型名称（model）**：严格区分大小写与命名规范，必须使用百炼官方模型 ID（如 `qwen3.7-plus`），而非开源社区名称（如 `Qwen/Qwen3.7-Plus`）；错误示例见 [错误码](../../raw/model-api-reference/preparations/error-code.md) 中 `Model not exist.` 条目。
+- **流式参数（stream）**：部分模型（如思考模式模型、音频输出模型）强制要求 `stream=true`，否则报错；详见 [错误码](../../raw/model-api-reference/preparations/error-code.md) 中相关条目。
 
 ## 使用方式
 
 1. **安装 SDK**：  
-   - Python：`pip install -U dashscope`（推荐）或 `pip install -U openai`（[OpenAI 兼容接口](../concepts/openai-compatible-interface.md)）；  
-   - Java：通过 Maven/Gradle 引入 [DashScope Java SDK](https://mvnrepository.com/artifact/com.alibaba/dashscope-sdk-java) 或 [OpenAI Java SDK](https://github.com/openai/openai-java?tab=readme-ov-file#openai-java-api-library)（建议 v3.5.0+）；  
-   - Node.js/Go：分别执行 `npm install --save openai` 或 `go get 'github.com/openai/openai-go/v3'`。  
-   > **注意**：DashScope SDK Expert 需 `dashscope>=1.27.3`，多模态模型需额外安装 `pip install -U 'dashscope[acli-all]'`（见 [DashScope SDK Expert](../../raw/model-api-reference/preparations/dashscope-sdk-expert.md)）。
-
+   - Python：`pip install -U dashscope`（≥1.27.3 启用 SDK Expert）或 `pip install -U openai`；  
+   - Java/Node.js/Go：按文档 1 的 Gradle/Maven/npm/go get 指令配置对应依赖。  
 2. **配置 API Key**：  
-   - 在百炼控制台 [API Key 页面](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key) 创建 Key（注意地域隔离，不可跨地域混用）；  
-   - 推荐将 `DASHSCOPE_API_KEY` 设为**永久环境变量**（Linux/macOS：`~/.bashrc`/`~/.zshrc`；Windows：系统属性 → 环境变量），避免客户端硬编码；  
-   - 若需临时密钥，可生成最长 1800 秒的 [临时 API Key](raw/model-api-reference/more-about-models/generate-temporary-api-key.md)。
-
-3. **设置 Base URL**：  
-   - DashScope 协议默认为 `https://dashscope.aliyuncs.com/api/v1`；  
-   - [OpenAI 兼容接口](../concepts/openai-compatible-interface.md)需按地域配置 Base URL（如华北2为 `https://dashscope.aliyuncs.com/compatible-mode/v1`），详见 [Base URL 总览](raw/model-user-guide/get-started-with-models/base-url.md)。
+   - 推荐方式：设为环境变量 `DASHSCOPE_API_KEY`（Linux/macOS/Windows 均有详细步骤）；  
+   - 禁止行为：**切勿在客户端代码（浏览器、移动 App）中硬编码长期 API Key**，应使用临时 API Key（最长 1800 秒）[获取与配置 API Key](../../raw/model-api-reference/preparations/get-api-key.md)。  
+3. **快速验证**：  
+   - 使用 DashScope SDK Expert（`dashscope` CLI）：自然语言描述需求（如“用 qwen-plus [流式输出](../concepts/streaming-output.md)并统计 token”），自动校验版本、生成并执行可运行代码；  
+   - 手动调用：确保 `messages` 格式合法（非空数组、`content` 类型匹配模型能力）、`model` 名称准确、`stream` 参数符合模型约束。
 
 ## 限制和注意事项
 
-- **地域与权限隔离**：API Key 与地域强绑定，且权限由其**归属业务空间**决定；同一空间内所有 Key 权限一致，无需为不同模型单独创建 Key（见 [获取与配置 API Key](../../raw/model-api-reference/preparations/get-api-key.md)）。  
-- **安全红线**：**严禁在浏览器、移动 App 等客户端环境配置长期有效的 API Key**；敏感场景应使用临时 Key 或服务端代理。  
-- **SDK 版本兼容性**：DashScope SDK Expert 会主动校验本地版本，过旧时提示升级；OpenAI SDK 的 `openai-java` 推荐固定为 `3.5.0`，避免因版本差异导致参数解析失败。  
-- **错误排查优先级**：  
-  1. 检查 `Request ID`（响应 Header 或 Body 中），用于日志追踪；  
-  2. 使用 [阿里云 AI 助理](https://www.aliyun.com/ai-assistant/)输入错误信息快速定位；  
-  3. 对于代码问题，优先用 [DashScope SDK Expert](../../raw/model-api-reference/preparations/dashscope-sdk-expert.md) 的 `/skill diagnose` 自动分析源码根因。  
-- **配额与并发**：`Throttling.RateQuota` 类错误需检查账号配额，可通过控制台申请提升；高并发调用需自行实现重试与降级逻辑。
+- **地域隔离**：API Key、Base URL、模型列表均按地域独立，跨地域调用必然失败。  
+- **权限继承**：API Key 权限由其**归属业务空间**决定，同一空间内所有 API Key 权限一致；子业务空间的 API Key 仅能调用该空间已授权的模型 [获取与配置 API Key](../../raw/model-api-reference/preparations/get-api-key.md)。  
+- **参数强校验**：`temperature` 必须 ∈ [0.0, 2.0)，`top_p` ∈ (0.0, 1.0]，`max_tokens` ≤ 模型最大输出长度；纯文本模型禁止传入 `image_url` 等多模态 `content`，否则触发 `InvalidParameter` 错误 [错误码](../../raw/model-api-reference/preparations/error-code.md)。  
+- **SDK Expert 注意事项**：  
+  - 需联网且消耗 token（按百炼计费）；  
+  - 修改源码前必生成 diff 并征得用户确认，支持回滚；  
+  - 仅校验 Python SDK 版本，生成其他语言代码时不校验其 SDK 版本。  
+> **注意**：文档 3 中“多模态或通义以外模型：`pip install -U 'dashscope[acli-all]'`”与文档 1 中“安装 DashScope Python SDK”指令未明确此扩展依赖，实际使用多模态模型时需额外安装该 extra，否则 SDK Expert 可能无法生成正确代码。
 
 ## 来源文档
 

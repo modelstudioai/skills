@@ -608,7 +608,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 #### DashScope
 
-**重要**qwen3.8-2.4t-a95b、qwen3.7-max、qwen3.7-max-2026-05-20 和 qwen3.6-max-preview 仅支持文本接口，qwen3.8-max、qwen3.8-flash、qwen3.8-27b、qwen3.7-max-2026-06-08、Qwen3.6 和 Qwen3.5 系列的 DashScope API均需使用多模态接口。以下示例使用 qwen-plus（文本接口），可直接运行；若将模型替换为上述需使用多模态接口的模型，会提示 `url error` 错误。多模态接口的正确调用方法，请参见[图像、视频数据处理](https://help.aliyun.com/zh/model-studio/text-generation#270b260cb6or2)。
+**重要**qwen3.8-2.4t-a95b、qwen3.7-max、qwen3.7-max-2026-05-20 仅支持文本接口，qwen3.8-max、qwen3.8-flash、qwen3.8-27b、qwen3.7-max-2026-06-08、Qwen3.6 和 Qwen3.5 系列的 DashScope API均需使用多模态接口。以下示例使用 qwen-plus（文本接口），可直接运行；若将模型替换为上述需使用多模态接口的模型，会提示 `url error` 错误。多模态接口的正确调用方法，请参见[图像、视频数据处理](https://help.aliyun.com/zh/model-studio/text-generation#270b260cb6or2)。
 
 #### Python
 
@@ -628,7 +628,7 @@ response = Generation.call(
     # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # qwen3.7-max、qwen3.7-max-2026-05-20和qwen3.6-max-preview仅支持文本接口，qwen3.8-max、qwen3.7-max-2026-06-08、Qwen3.6、Qwen3.5系列需要使用多模态接口，直接替换模型会导致报错
+    # qwen3.7-max、qwen3.7-max-2026-05-20仅支持文本接口，qwen3.8-max、qwen3.7-max-2026-06-08、Qwen3.6、Qwen3.5系列需要使用多模态接口，直接替换模型会导致报错
     model="qwen-plus",
     messages=messages,
     result_format="message",
@@ -683,7 +683,7 @@ public class Main {
                 // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：.apiKey("sk-xxx")
                 // 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
                 .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-                // qwen3.7-max、qwen3.7-max-2026-05-20和qwen3.6-max-preview仅支持文本接口，qwen3.8-max、qwen3.7-max-2026-06-08支持多模态接口，Qwen3.6、Qwen3.5系列需要使用多模态接口，直接替换模型会导致报错
+                // qwen3.7-max、qwen3.7-max-2026-05-20仅支持文本接口，qwen3.8-max、qwen3.7-max-2026-06-08支持多模态接口，Qwen3.6、Qwen3.5系列需要使用多模态接口，直接替换模型会导致报错
                 .model("qwen-plus")
                 .messages(Arrays.asList(systemMsg, userMsg))
                 .resultFormat(GenerationParam.ResultFormat.MESSAGE)
@@ -719,7 +719,7 @@ public class Main {
 const apiKey = process.env.DASHSCOPE_API_KEY;
 
 const data = {
-    // qwen3.7-max、qwen3.7-max-2026-05-20和qwen3.6-max-preview仅支持文本接口，qwen3.8-max、qwen3.7-max-2026-06-08支持多模态接口，Qwen3.6、Qwen3.5系列需要使用多模态接口，直接替换模型会导致报错
+    // qwen3.7-max、qwen3.7-max-2026-05-20仅支持文本接口，qwen3.8-max、qwen3.7-max-2026-06-08支持多模态接口，Qwen3.6、Qwen3.5系列需要使用多模态接口，直接替换模型会导致报错
     model: "qwen-plus",
     input: {
         messages: [
@@ -786,7 +786,7 @@ import (
 
 func main() {
 	requestBody := map[string]interface{}{
-		// qwen3.7-max、qwen3.7-max-2026-05-20和qwen3.6-max-preview仅支持文本接口，qwen3.8-max、qwen3.7-max-2026-06-08支持多模态接口，Qwen3.6、Qwen3.5系列需要使用多模态接口，直接替换模型会导致报错
+		// qwen3.7-max、qwen3.7-max-2026-05-20仅支持文本接口，qwen3.8-max、qwen3.7-max-2026-06-08支持多模态接口，Qwen3.6、Qwen3.5系列需要使用多模态接口，直接替换模型会导致报错
 		"model": "qwen-plus",
 		"input": map[string]interface{}{
 			"messages": []map[string]string{
@@ -863,7 +863,7 @@ class Program
         // 设置请求 URL 和内容
         // 各地域配置不同，请根据实际地域修改
         string url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation";
-        // qwen3.7-max、qwen3.7-max-2026-05-20和qwen3.6-max-preview仅支持文本接口，qwen3.8-max、qwen3.7-max-2026-06-08支持多模态接口，Qwen3.6、Qwen3.5系列需要使用多模态接口，直接替换模型会导致报错
+        // qwen3.7-max、qwen3.7-max-2026-05-20仅支持文本接口，qwen3.8-max、qwen3.7-max-2026-06-08支持多模态接口，Qwen3.6、Qwen3.5系列需要使用多模态接口，直接替换模型会导致报错
         string jsonContent = @"{
             ""model"": ""qwen-plus"",
             ""input"": {
@@ -952,7 +952,7 @@ $url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/
 $apiKey = getenv('DASHSCOPE_API_KEY');
 
 $data = [
-    // qwen3.7-max、qwen3.7-max-2026-05-20和qwen3.6-max-preview仅支持文本接口，qwen3.8-max、qwen3.7-max-2026-06-08支持多模态接口，Qwen3.6、Qwen3.5系列需要使用多模态接口，直接替换模型会导致报错
+    // qwen3.7-max、qwen3.7-max-2026-05-20仅支持文本接口，qwen3.8-max、qwen3.7-max-2026-06-08支持多模态接口，Qwen3.6、Qwen3.5系列需要使用多模态接口，直接替换模型会导致报错
     "model" => "qwen-plus",
     "input" => [
         "messages" => [
@@ -1472,7 +1472,7 @@ if __name__ == '__main__':
 向大模型直接输入大量原始数据，会因上下文容量的限制导致成本增加与效果下降。上下文工程（Context Engineering）通过动态加载精准知识，显著提升生成质量与效率。核心技术包括：
 
 -   **提示词工程（Prompt Engineering）**：通过设计和优化文本指令（Prompt），可以更精确地引导模型，使其输出更符合预期的结果。若想了解更多，可参考[文生文Prompt指南](raw/model-user-guide/use-cases/prompt-engineering-guide.md)、阿里云百炼 [提示词模板](https://bailian.console.aliyun.com/flow-agent/plugin-market/prompt)页面。
--   [检索增强生成（RAG）](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)：适用于需要模型依据外部知识库（例如产品文档或技术手册）来回答问题的场景。
+-   [检索增强生成（RAG）](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)：适用于需要模型依据外部知识库（例如产品文档或技术手册）来回答问题的场景。
 -   [工具调用（Tool）](raw/model-user-guide/model-experience/text-generation-model/tool-calls.md)：允许模型获取实时信息（如查询天气、路况）或完成特定操作（如调用API、发送邮件）。
 -   **记忆机制（Memory）**：为模型建立长短期记忆，使其能够理解连续对话的历史信息。
 

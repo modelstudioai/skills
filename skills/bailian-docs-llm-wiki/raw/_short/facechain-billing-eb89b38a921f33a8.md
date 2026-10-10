@@ -3,7 +3,6 @@
 **重要**
 
 -   本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)。
--   FaceChain人物写真生成需“[申请体验](https://bailian.console.aliyun.com/model/market/detail/facechain-generation)”并通过后才可使用，否则API调用将返回错误状态码。
 
 ### 计费单元
 
@@ -18,10 +17,6 @@ FaceChain人物图像检测
 FaceChain人物形象训练
 
 训练形象次数
-
-FaceChain人物写真生成
-
-生成图片张数
 
 ### 计费单价
 
@@ -43,12 +38,6 @@ facechain-finetune
 
 2.5元/次
 
-FaceChain人物写真生成
-
-facechain-generation
-
-0.18元/张
-
 ### 免费额度
 
 **模型名称**
@@ -62,12 +51,6 @@ facechain-facedetect
 facechain-finetune
 
 50次
-
-有效期：申请通过后90天内
-
-facechain-generation
-
-500张
 
 有效期：申请通过后90天内
 
@@ -98,14 +81,6 @@ facechain-facedetect
 FaceChain人物形象训练
 
 facechain-finetune
-
-2
-
-1
-
-FaceChain人物写真生成
-
-facechain-generation
 
 2
 

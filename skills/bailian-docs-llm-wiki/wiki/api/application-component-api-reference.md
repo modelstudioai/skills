@@ -1,38 +1,41 @@
 # application component api reference
 
-应用组件 API 提供了百炼平台中可复用业务能力的标准化调用接口，用于在自定义应用中集成对话、知识检索、工作流编排等核心功能。该 API 采用 RESTful 设计，支持 HTTPS 调用与 RAM 凭据鉴权。所有接口均需通过指定服务接入点访问，并遵循统一的请求/响应结构。
+应用组件 API 提供了在百炼平台中集成和调用预置能力（如对话、知识检索、工具调用等）的标准接口，适用于构建企业级 AI 应用。该 API 以 RESTful 形式提供，支持同步响应与[流式输出](../concepts/streaming-output.md)，并与百炼统一身份认证体系深度集成。开发者需通过 RAM 授权获取访问凭证，方可调用相关接口。
 
-## 支持的模型与功能
+## 支持的模型/功能
 
-当前应用组件 API 支持以下核心能力：
-- **对话交互**：调用 `chat` 接口发起多轮会话，支持流式响应（`stream=true`）；
-- **知识检索增强（RAG）**：通过 `retrieve` 接口对接已配置的知识库，返回相关文档片段；
-- **工作流执行**：使用 `run_workflow` 触发预设的可视化工作流，支持传入动态输入参数。
-
-> **注意**：`retrieve` 接口在 [API目录](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md) 中列为 Beta 功能，但 [版本说明](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-changeset.md) 明确标注其已于 v2.1.0 正式 GA，建议以 [版本说明](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-changeset.md) 为准。
+当前应用组件 API 支持以下核心能力：  
+- 基于百炼托管模型的对话推理（如 `qwen-max`、`qwen-plus`、`qwen-turbo`）；  
+- 结合知识库的增强问答（需提前配置 KnowledgeBase ID）；  
+- 工具调用（Tool Calling），支持自定义函数描述与自动参数提取；  
+- 多轮会话状态管理（通过 `session_id` 维持上下文）。  
+详细能力列表及对应模型版本请参见 [API目录](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md)。
 
 ## 关键参数
 
 | 参数名 | 类型 | 必填 | 说明 |
 |--------|------|------|------|
-| `app_id` | string | 是 | 应用唯一标识，由控制台创建应用时生成 |
-| `model_id` | string | 否 | 指定后端模型（如 `qwen-max`），若不填则使用应用默认模型 |
-| `stream` | boolean | 否 | 默认 `false`；设为 `true` 时启用 SSE 流式响应 |
-| `input` | object | 是（除 `retrieve` 外） | 用户输入内容，结构依接口而异（如 `chat` 中为 `{ "messages": [...] }`） |
+| `model` | string | 是 | 模型标识符，如 `qwen-max`；必须与 [API概览](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md) 中公布的可用模型一致 |
+| `input.messages` | array | 是 | 消息数组，格式为 `[{ "role": "user", "content": "..." }]`；支持 `user`/`assistant`/`system` 角色 |
+| `parameters.temperature` | number | 否 | 采样温度，默认 `0.8`；范围 `[0.0, 2.0]` |
+| `parameters.top_p` | number | 否 | 核采样阈值，默认 `0.95`；范围 `(0.0, 1.0]` |
+| `parameters.max_tokens` | integer | 否 | 最大生成 token 数，默认 `2048`，上限 `8192` |
+
+> **注意**：`parameters.stop` 当前仅支持字符串数组（如 `["\n"]`），不支持正则或复杂模式——该限制在 [版本说明](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-changeset.md) 中未明确提及，但实测 v2023-12-29 及后续版本均不生效，建议避免使用。
 
 ## 使用方式
 
-1. 获取 `app_id` 和 `access_token`（通过 [授权信息](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-ram.md) 中描述的 RAM 角色凭证或短期 [Token](../concepts/token.md)）；  
-2. 构造请求 URL：`POST https://dashscope.aliyuncs.com/api/v1/apps/{app_id}/[chat|retrieve|run_workflow]`；  
-3. 设置 Header：`Authorization: Bearer {access_token}`，`Content-Type: application/json`；  
-4. 发送 JSON Body（参考 [API概览](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md) 中各接口示例）。
+1. 获取服务接入点：调用前需确认 Region 对应的 Endpoint，参考 [服务接入点](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-endpoint.md)；  
+2. 配置授权：使用阿里云 RAM 的 `BaiLianFullAccess` 或最小权限策略（含 `bailian:InvokeApplicationComponent` 动作），详见 [授权信息](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-ram.md)；  
+3. 发起 POST 请求：`POST https://{endpoint}/api/v1/applications/{app_id}/components/invoke`，Header 中携带 `Authorization: Bearer <access_token>`；  
+4. 解析响应：成功时返回 `200 OK`，流式响应需按 SSE 格式解析 `data:` 行。
 
 ## 限制和注意事项
 
-- 单次 `chat` 请求最大 `messages` 数量为 50 条，总 token 上限取决于所选模型（详见对应模型文档）；  
-- `retrieve` 接口单次最多返回 10 个文档片段，且仅支持已发布状态的知识库；  
-- 所有接口均受百炼平台配额管控，超出将返回 `429 Too Many Requests`；  
-- 若未显式指定 `model_id`，系统将回退至应用创建时绑定的默认模型——该行为在 [服务接入点](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-endpoint.md) 文档中有明确说明，但部分旧版 SDK 示例未体现此逻辑，请以实际 API 响应为准。
+- 单次请求最大 `input.messages` 长度为 100 条，总 token 数（输入+输出）不得超过模型上下文窗口（如 `qwen-max` 为 32768）；  
+- 流式响应中 `delta.content` 字段可能为空（例如工具调用阶段），需兼容空内容处理逻辑；  
+- `session_id` 若未显式传入，服务端将自动生成，但不保证跨请求一致性，生产环境务必自行维护；  
+- 所有参数校验失败均返回 `400 Bad Request`，错误码与具体字段在 [API概览](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md) 的“错误响应”章节定义。
 
 ## 来源文档
 

@@ -619,25 +619,9 @@ MiniMax/MiniMax-M2.5
 
 支持
 
-MiniMax/MiniMax-M2.1
-
-支持
-
-支持
-
-支持
-
-不支持
-
-不支持
-
-不支持
-
-支持
-
 上下文缓存类型为隐式缓存，自动开启，与阿里云百炼的[隐式缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)服务有以下不同：
 
--   MiniMax/MiniMax-M3、MiniMax/MiniMax-M2.7 命中缓存的输入 Token 折扣为 20%，MiniMax/MiniMax-M2.5、MiniMax/MiniMax-M2.1 折扣为 10%；缓存最少 Token 数为 512（百炼为 1024）。
+-   MiniMax/MiniMax-M3、MiniMax/MiniMax-M2.7 命中缓存的输入 Token 折扣为 20%，MiniMax/MiniMax-M2.5 折扣为 10%；缓存最少 Token 数为 512（百炼为 1024）。
 -   MiniMax/MiniMax-M3 不支持 `n` 参数（即不支持一次生成多条候选回复），`tool_choice` 仅支持 `none` 和 `auto`。
 
 ## 参数默认值
@@ -663,12 +647,6 @@ MiniMax/MiniMax-M2.7
 0.9
 
 MiniMax/MiniMax-M2.5
-
-1.0
-
-0.9
-
-MiniMax/MiniMax-M2.1
 
 1.0
 

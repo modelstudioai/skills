@@ -99,7 +99,7 @@
 
 #### 华北2（北京）
 
-千问 Max：qwen3.8-max、qwen3.8-max-0902、qwen3.7-max、qwen3.7-max-2026-05-20、qwen3.7-max-2026-06-08、qwen3.6-max-preview、qwen3-max
+千问 Max：qwen3.8-max、qwen3.8-max-0902、qwen3.7-max、qwen3.7-max-2026-05-20、qwen3.7-max-2026-06-08
 
 千问开源：qwen3.8-2.4t-a95b、qwen3.8-27b
 
@@ -107,13 +107,11 @@
 
 千问 Flash：qwen3.8-flash、qwen3.7-flash、qwen3.7-flash-2026-07-15、qwen3.6-flash、qwen3.5-flash、qwen-flash
 
-千问 Coder：qwen3-coder-plus、qwen3-coder-flash
+千问 Coder：qwen3-coder-flash
 
-千问 VL：qwen3-vl-plus、qwen3-vl-flash
+千问 VL：qwen3-vl-plus
 
 千问 Character：qwen-plus-character
-
-DeepSeek：deepseek-v3.2
 
 Kimi：kimi-k2.6、kimi-k2.5、kimi-k2.7-code
 
@@ -129,7 +127,7 @@ GLM：glm-5.1
     -   千问 Flash：qwen3.8-flash、qwen3.7-flash、qwen3.6-flash
 -   **全球服务部署范围：**
     
-    千问 Max：qwen3.8-max、qwen3.8-max-0902、qwen3.7-max、qwen3.7-max-2026-05-20、qwen3.7-max-2026-06-08、qwen3-max
+    千问 Max：qwen3.8-max、qwen3.8-max-0902、qwen3.7-max、qwen3.7-max-2026-05-20、qwen3.7-max-2026-06-08
     
     千问 Flash：qwen3.8-flash、qwen3.7-flash、qwen3.7-flash-2026-07-15、kimi-k2.7-code
     
@@ -138,7 +136,7 @@ GLM：glm-5.1
 
 > 以下模型均为国际部署范围。
 
-千问 Max：qwen3.8-max、qwen3.8-max-0902、qwen3.7-max、qwen3.7-max-2026-05-20、qwen3.7-max-2026-06-08、qwen3-max
+千问 Max：qwen3.8-max、qwen3.8-max-0902、qwen3.7-max、qwen3.7-max-2026-05-20、qwen3.7-max-2026-06-08
 
 千问开源：qwen3.8-2.4t-a95b、qwen3.8-27b
 
@@ -146,11 +144,9 @@ GLM：glm-5.1
 
 千问 Flash：qwen3.8-flash、qwen3.7-flash、qwen3.7-flash-2026-07-15、qwen3.6-flash、qwen3.5-flash、qwen-flash
 
-千问 Coder：qwen3-coder-plus、qwen3-coder-flash
+千问 Coder：qwen3-coder-flash
 
-千问 VL：qwen3-vl-plus、qwen3-vl-flash
-
-DeepSeek：deepseek-v3.2
+千问 VL：qwen3-vl-plus
 
 Kimi：kimi-k2.7-code
 
@@ -160,7 +156,7 @@ Kimi：kimi-k2.7-code
 
 -   **全球服务部署范围：**
     
-    千问 Max：qwen3.8-max、qwen3.8-max-0902、qwen3.7-max、qwen3.7-max-2026-05-20、qwen3.7-max-2026-06-08、qwen3-max
+    千问 Max：qwen3.8-max、qwen3.8-max-0902、qwen3.7-max、qwen3.7-max-2026-05-20、qwen3.7-max-2026-06-08
     
     千问 Plus：qwen3.7-plus、qwen3.7-plus-2026-05-26、qwen3.6-plus、qwen3.5-plus、qwen-plus
     
@@ -168,19 +164,17 @@ Kimi：kimi-k2.7-code
     
     千问 VL：qwen3-vl-plus
     
-    千问 Coder：qwen3-coder-plus、qwen3-coder-flash
+    千问 Coder：qwen3-coder-flash
     
     Kimi：kimi-k2.5、kimi-k2.7-code
     
 -   **欧盟服务部署范围：**
     
-    千问 Max：qwen3-max
-    
     千问 Plus：qwen-plus
     
     千问 Flash：qwen3.5-flash
     
-    千问 VL：qwen3-vl-plus、qwen3-vl-flash
+    千问 VL：qwen3-vl-plus
     
 
 #### 日本（东京）
@@ -217,8 +211,6 @@ Kimi：kimi-k2.7-code
     Kimi：kimi-k2.7-code
     
 -   **中国香港服务部署范围：**
-    
-    千问 Max：qwen3-max
     
     千问 Plus：qwen-plus
     
@@ -922,25 +914,24 @@ while True:
 -   **全模态模型**
     -   千问 Omni：`qwen3.8-omni-flash`
 -   **文本生成模型**
-    -   千问 Max：qwen3.8-max、qwen3.8-max-0902、qwen3.7-max、qwen3.7-max-2026-05-20、qwen3.7-max-2026-06-08、qwen3-max、qwen3-max-preview、qwen-max
+    -   千问 Max：qwen3.8-max、qwen3.8-max-0902、qwen3.7-max、qwen3.7-max-2026-05-20、qwen3.7-max-2026-06-08、qwen-max
     -   千问 Plus：qwen3.7-plus、qwen3.7-plus-2026-05-26、qwen-plus
     -   千问 Flash：qwen3.8-flash、qwen3.7-flash、qwen3.7-flash-2026-07-15、qwen-flash
-    -   千问 Turbo：qwen-turbo
-    -   千问 Coder：qwen3-coder-plus、qwen3-coder-flash
+    -   千问 Coder：qwen3-coder-flash
     -   千问 Character：qwen-plus-character、qwen-flash-character
     -   千问开源：qwen3.8-2.4t-a95b、qwen3.8-27b
-    -   DeepSeek（阿里云百炼部署）：deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-flash、deepseek-v3.2、deepseek-v3.1、deepseek-v3、deepseek-r1
+    -   DeepSeek（阿里云百炼部署）：deepseek-v4.1-flash、deepseek-v4-pro
     -   DeepSeek（快手万擎部署）：vanchin/deepseek-v4.1-flash、vanchin/deepseek-v4-pro、vanchin/deepseek-v3.2-think、vanchin/deepseek-v3.1-terminus、vanchin/deepseek-r1、vanchin/deepseek-v3
-    -   Kimi（阿里云百炼部署）：kimi-k3、kimi-k2.7-code、kimi-k2.6、kimi-k2.5、kimi-k2-thinking、Moonshot-Kimi-K2-Instruct
+    -   Kimi（阿里云百炼部署）：kimi-k3、kimi-k2.7-code、kimi-k2.6、kimi-k2.5
     -   Kimi（月之暗面部署）：kimi/kimi-k3、kimi/kimi-k2.7-code-highspeed、kimi/kimi-k2.7-code、kimi/kimi-k2.6、kimi/kimi-k2.5
-    -   GLM（阿里云百炼部署）：glm-5.3、glm-5.2、glm-5.2-fast-preview、glm-5.1、glm-5、glm-4.7、glm-4.6
+    -   GLM（阿里云百炼部署）：glm-5.3、glm-5.2、glm-5.2-fast-preview、glm-5.1、glm-5
     -   GLM（智谱部署）：ZHIPU/GLM-5.3-FlashX、ZHIPU/GLM-5.3-Flash、ZHIPU/GLM-5.3、ZHIPU/GLM-5.2、ZHIPU/GLM-5.1、ZHIPU/GLM-5
-    -   MiniMax（阿里云百炼部署）：MiniMax-M2.5、MiniMax-M2.1
+    -   MiniMax（阿里云百炼部署）：MiniMax-M2.5
     -   MiniMax（稀宇科技部署）：MiniMax/MiniMax-M3、MiniMax/MiniMax-M2.7、MiniMax/MiniMax-M2.5、MiniMax/MiniMax-M2.1
     -   MiMo（小米部署）：xiaomi/mimo-v2.5-pro
     -   Stepfun（阶跃星辰部署）：stepfun/step-3.7-flash、stepfun/step-5-preview
 -   **视觉理解模型**
-    -   千问 VL：qwen3-vl-plus、qwen3-vl-flash、qwen-vl-max、qwen-vl-plus
+    -   千问 VL：qwen3-vl-plus
 -   **行业模型**
     -   [数据挖掘](raw/model-user-guide/model-experience/text-generation-model/specialized-models/data-mining-qwen-doc.md)：qwen-doc-turbo
     -   [对话分析](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/tongyi-xiaomi-analysis-pro.md)：tongyi-xiaomi-analysis-pro、tongyi-xiaomi-analysis-flash
@@ -952,18 +943,17 @@ while True:
 -   **全模态模型**
     -   千问 Omni：`qwen3.8-omni-flash`
 -   **文本生成模型**
-    -   千问 Max：qwen3.8-max、qwen3.8-max-0902、qwen3.7-max、qwen3.7-max-2026-05-20、qwen3.7-max-2026-06-08、qwen3-max、qwen-max
+    -   千问 Max：qwen3.8-max、qwen3.8-max-0902、qwen3.7-max、qwen3.7-max-2026-05-20、qwen3.7-max-2026-06-08、qwen-max
     -   千问 Plus：qwen3.7-plus、qwen3.7-plus-2026-05-26、qwen-plus
     -   千问 Flash：qwen3.8-flash、qwen3.7-flash、qwen3.7-flash-2026-07-15、qwen-flash
-    -   千问 Turbo：qwen-turbo
-    -   千问 Coder：qwen3-coder-plus、qwen3-coder-flash
+    -   千问 Coder：qwen3-coder-flash
     -   千问 Character：qwen-plus-character、qwen-flash-character、qwen-plus-character-ja
     -   千问开源：qwen3.8-2.4t-a95b、qwen3.8-27b
-    -   DeepSeek：deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-flash、deepseek-v3.2
+    -   DeepSeek：deepseek-v4.1-flash、deepseek-v4-pro
     -   GLM（阿里云百炼部署）：glm-5.3、glm-5.1
     -   Kimi（阿里云百炼部署）：kimi-k3、kimi-k2.7-code
 -   **视觉理解模型**
-    -   千问 VL：qwen3-vl-plus、qwen3-vl-flash、qwen-vl-max、qwen-vl-plus
+    -   千问 VL：qwen3-vl-plus
 
 #### 美国（弗吉尼亚）
 
@@ -975,16 +965,16 @@ while True:
         -   千问 Omni：`qwen3.8-omni-flash`
     -   文本生成模型
         
-        -   千问 Max：qwen3.8-max、qwen3.8-max-0902、qwen3.7-max、qwen3.7-max-2026-05-20、qwen3.7-max-2026-06-08、qwen3-max
+        -   千问 Max：qwen3.8-max、qwen3.8-max-0902、qwen3.7-max、qwen3.7-max-2026-05-20、qwen3.7-max-2026-06-08
         -   千问 Plus：qwen3.7-plus、qwen3.7-plus-2026-05-26、qwen-plus
         -   千问 Flash：qwen3.8-flash、qwen3.7-flash、qwen3.7-flash-2026-07-15、qwen-flash
-        -   千问 Coder：qwen3-coder-plus、qwen3-coder-flash
+        -   千问 Coder：qwen3-coder-flash
         -   千问 Character：qwen-plus-character
         -   Kimi（阿里云百炼部署）：kimi-k2.5、kimi-k2.7-code
         -   GLM（阿里云百炼部署）：glm-5.3、glm-5.2
     -   视觉理解模型
         
-        -   千问 VL：qwen3-vl-plus、qwen3-vl-flash
+        -   千问 VL：qwen3-vl-plus
 -   **美国服务部署范围：**
     -   文本生成模型
         
@@ -993,7 +983,6 @@ while True:
         -   千问 Flash：qwen3.8-flash、qwen3.7-flash、qwen-flash
     -   视觉理解模型
         
-        -   千问 VL：qwen3-vl-flash
 
 #### 德国（法兰克福）
 
@@ -1005,24 +994,23 @@ while True:
         -   千问 Omni：`qwen3.8-omni-flash`
     -   文本生成模型
         
-        -   千问 Max：qwen3.8-max、qwen3.8-max-0902、qwen3.7-max、qwen3.7-max-2026-05-20、qwen3.7-max-2026-06-08、qwen3-max
+        -   千问 Max：qwen3.8-max、qwen3.8-max-0902、qwen3.7-max、qwen3.7-max-2026-05-20、qwen3.7-max-2026-06-08
         -   千问 Plus：qwen3.7-plus、qwen3.7-plus-2026-05-26、qwen-plus
         -   千问 Flash：qwen3.8-flash、qwen3.7-flash、qwen3.7-flash-2026-07-15、qwen-flash
-        -   千问 Coder：qwen3-coder-plus、qwen3-coder-flash
+        -   千问 Coder：qwen3-coder-flash
         -   千问 Character：qwen-plus-character
         -   Kimi（阿里云百炼部署）：kimi-k3、kimi-k2.5、kimi-k2.7-code
         -   GLM（阿里云百炼部署）：glm-5.3、glm-5.2
     -   视觉理解模型
         
-        -   千问 VL：qwen3-vl-plus、qwen3-vl-flash
+        -   千问 VL：qwen3-vl-plus
 -   **欧盟服务部署范围：**
     -   文本生成模型
         
-        -   千问 Max：qwen3-max
         -   千问 Plus：qwen-plus
     -   视觉理解模型
         
-        -   千问 VL：qwen3-vl-plus、qwen3-vl-flash
+        -   千问 VL：qwen3-vl-plus
 
 #### 日本（东京）
 
@@ -1032,7 +1020,7 @@ while True:
     -   文本生成模型
         
         -   千问 Plus：qwen3.7-plus、qwen3.7-plus-2026-05-26
-        -   DeepSeek（阿里云百炼部署）：deepseek-v4-pro、deepseek-v4-flash
+        -   DeepSeek（阿里云百炼部署）：deepseek-v4-pro
 -   **全球服务部署范围：**
     -   全模态模型
         
@@ -1043,7 +1031,7 @@ while True:
         -   千问 Plus：qwen3.7-plus、qwen3.7-plus-2026-05-26
         -   千问 Flash：qwen3.8-flash、qwen3.7-flash、qwen3.7-flash-2026-07-15
         -   千问 Character：qwen-plus-character
-        -   DeepSeek（阿里云百炼部署）：deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-flash
+        -   DeepSeek（阿里云百炼部署）：deepseek-v4.1-flash、deepseek-v4-pro
         -   GLM（阿里云百炼部署）：glm-5.3、glm-5.1
         -   Kimi（阿里云百炼部署）：kimi-k3、kimi-k2.5、kimi-k2.7-code
 
@@ -1071,7 +1059,6 @@ while True:
 -   **中国香港服务部署范围：**
     -   文本生成模型
         
-        -   千问 Max：qwen3-max
         -   千问 Plus：qwen-plus
     -   视觉理解模型
         
@@ -1257,7 +1244,7 @@ while True:
     }
   ],
   "created": 1744956927,
-  "model": "qwen-vl-max",
+  "model": "qwen3-vl-plus",
   "object": "chat.completion",
   "service_tier": null,
   "system_fingerprint": null,
@@ -1280,8 +1267,7 @@ while True:
 
 -   北京地域：
     
-    -   `qwen-vl-max`、`qwen-vl-plus`：在`usage.prompt_tokens_details.cached_tokens`查看
-    -   `qwen3-vl-plus`、`qwen3-vl-flash`：在 `usage.prompt_tokens_details.cached_tokens`查看
+    -   `qwen3-vl-plus`：在 `usage.prompt_tokens_details.cached_tokens`查看
 -   新加坡地域：所有模型均查看 `usage.cached_tokens`
     
 
@@ -1344,7 +1330,7 @@ while True:
       "text": "这张图片展示了一位女性和一只狗在海滩上互动的温馨场景。"
     }
   ],
-  "model": "qwen-vl-max",
+  "model": "qwen3-vl-plus",
   "stop_reason": "end_turn",
   "usage": {
     "input_tokens": 369,

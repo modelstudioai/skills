@@ -69,7 +69,7 @@ Browser Use Sandbox 面向需要访问网页、点击按钮、填写表单、截
 pip install "browser-use==0.13.10" "e2b==2.31.0"
 ```
 
-BrowserUse 示例中的模型调用使用百炼 OpenAI 兼容接口，`api_key` 填百炼 API Key（必填），`model` 可选，默认 `qwen-vl-max`。
+BrowserUse 示例中的模型调用使用百炼 OpenAI 兼容接口，`api_key` 填百炼 API Key（必填），`model` 可选，默认 `qwen3-vl-plus`。
 
 ## Puppeteer 示例
 
@@ -212,7 +212,7 @@ async def main():
         agent = Agent(
             task="访问 https://example.com 并提取页面标题，总结首屏正文",
             llm=ChatOpenAI(
-                model="qwen-vl-max",
+                model="qwen3-vl-plus",
                 api_key=BAILIAN_API_KEY,
                 base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
             ),

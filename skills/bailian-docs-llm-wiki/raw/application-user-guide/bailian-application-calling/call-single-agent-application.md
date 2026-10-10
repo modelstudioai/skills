@@ -2915,7 +2915,7 @@ API调用示例如下：
             "models": [
                 {
                     "output_tokens": 11,
-                    "model_id": "qwen-turbo",
+                    "model_id": "qwen3.5-flash",
                     "input_tokens": 78
                 }
             ]
@@ -3152,7 +3152,7 @@ API调用示例如下：
             "models": [
                 {
                     "output_tokens": 11,
-                    "model_id": "qwen-turbo",
+                    "model_id": "qwen3.5-flash",
                     "input_tokens": 78
                 }
             ]
@@ -3256,7 +3256,7 @@ API调用示例如下：
             "models": [
                 {
                     "output_tokens": 11,
-                    "model_id": "qwen-turbo",
+                    "model_id": "qwen3.5-flash",
                     "input_tokens": 78
                 }
             ]
@@ -4290,7 +4290,7 @@ func main() {
 
 ### 检索知识库
 
-知识库功能作为百炼的RAG能力，能有效地为大模型补充私有知识、提供最新信息。调用**智能体应用**时指定检索范围，可提高大模型的回答准确性。更多知识库功能请参考：[创建和使用知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)。
+知识库功能作为百炼的RAG能力，能有效地为大模型补充私有知识、提供最新信息。调用**智能体应用**时指定检索范围，可提高大模型的回答准确性。更多知识库功能请参考：[创建和使用知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
 
 #### 前提条件
 
@@ -4298,7 +4298,7 @@ func main() {
 
 #### 指定检索范围
 
-1.  检索指定的[创建和使用知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)，有以下三种方式：
+1.  检索指定的[创建和使用知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)，有以下三种方式：
     
     1.  在应用内单击**配置知识库**以关联指定知识库，并**发布**应用；
         
@@ -5864,7 +5864,7 @@ for chunk in response:
     # 处理思考过程
     if chunk.output.thoughts:
         for it in chunk.output.thoughts:
-            if it.action_type == 'reasoning':# deepseek-r1类模型的思考过程action_type为reasoning，输出在thought
+            if it.action_type == 'reasoning':# 推理类模型的思考过程action_type为reasoning，输出在thought
                 content = str(it.thought) if not isinstance(it.thought, str) else it.thought
                 reasoning_content.append(content)
                 print(content, end="", flush=True)
@@ -6020,37 +6020,37 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/YOUR_APP_ID/completion \
 id:1
 event:result
 :HTTP_STATUS/200
-data:{"output":{"thoughts":[{"action":"reasoning","thought":"嗯","action_type":"reasoning","response":"嗯","action_name":"思考过程"}],"session_id":"ea188f5f795a485f8956e3af0212ba29","finish_reason":"null","text":""},"usage":{"models":[{"input_tokens":31,"output_tokens":3,"model_id":"deepseek-r1"}]},"request_id":"b4b0b65f-4378-93b6-8ca2-7936b2725bc8"}
+data:{"output":{"thoughts":[{"action":"reasoning","thought":"嗯","action_type":"reasoning","response":"嗯","action_name":"思考过程"}],"session_id":"ea188f5f795a485f8956e3af0212ba29","finish_reason":"null","text":""},"usage":{"models":[{"input_tokens":31,"output_tokens":3,"model_id":"qwen3.7-plus"}]},"request_id":"b4b0b65f-4378-93b6-8ca2-7936b2725bc8"}
 
 id:2
 event:result
 :HTTP_STATUS/200
-data:{"output":{"thoughts":[{"action":"reasoning","thought":"，","action_type":"reasoning","response":"，","action_name":"思考过程"}],"session_id":"ea188f5f795a485f8956e3af0212ba29","finish_reason":"null","text":""},"usage":{"models":[{"input_tokens":31,"output_tokens":4,"model_id":"deepseek-r1"}]},"request_id":"b4b0b65f-4378-93b6-8ca2-7936b2725bc8"}
+data:{"output":{"thoughts":[{"action":"reasoning","thought":"，","action_type":"reasoning","response":"，","action_name":"思考过程"}],"session_id":"ea188f5f795a485f8956e3af0212ba29","finish_reason":"null","text":""},"usage":{"models":[{"input_tokens":31,"output_tokens":4,"model_id":"qwen3.7-plus"}]},"request_id":"b4b0b65f-4378-93b6-8ca2-7936b2725bc8"}
 
 id:3
 event:result
 :HTTP_STATUS/200
-data:{"output":{"thoughts":[{"action":"reasoning","thought":"用户","action_type":"reasoning","response":"用户","action_name":"思考过程"}],"session_id":"ea188f5f795a485f8956e3af0212ba29","finish_reason":"null","text":""},"usage":{"models":[{"input_tokens":31,"output_tokens":5,"model_id":"deepseek-r1"}]},"request_id":"b4b0b65f-4378-93b6-8ca2-7936b2725bc8"}
+data:{"output":{"thoughts":[{"action":"reasoning","thought":"用户","action_type":"reasoning","response":"用户","action_name":"思考过程"}],"session_id":"ea188f5f795a485f8956e3af0212ba29","finish_reason":"null","text":""},"usage":{"models":[{"input_tokens":31,"output_tokens":5,"model_id":"qwen3.7-plus"}]},"request_id":"b4b0b65f-4378-93b6-8ca2-7936b2725bc8"}
 ......
 id:320
 event:result
 :HTTP_STATUS/200
-data:{"output":{"thoughts":[{"action":"reasoning","thought":"","action_type":"reasoning","response":"","action_name":"思考过程"}],"session_id":"ea188f5f795a485f8956e3af0212ba29","finish_reason":"null","text":"问题"},"usage":{"models":[{"input_tokens":31,"output_tokens":322,"model_id":"deepseek-r1"}]},"request_id":"b4b0b65f-4378-93b6-8ca2-7936b2725bc8"}
+data:{"output":{"thoughts":[{"action":"reasoning","thought":"","action_type":"reasoning","response":"","action_name":"思考过程"}],"session_id":"ea188f5f795a485f8956e3af0212ba29","finish_reason":"null","text":"问题"},"usage":{"models":[{"input_tokens":31,"output_tokens":322,"model_id":"qwen3.7-plus"}]},"request_id":"b4b0b65f-4378-93b6-8ca2-7936b2725bc8"}
 
 id:321
 event:result
 :HTTP_STATUS/200
-data:{"output":{"thoughts":[{"action":"reasoning","thought":"","action_type":"reasoning","response":"","action_name":"思考过程"}],"session_id":"ea188f5f795a485f8956e3af0212ba29","finish_reason":"null","text":"吗"},"usage":{"models":[{"input_tokens":31,"output_tokens":323,"model_id":"deepseek-r1"}]},"request_id":"b4b0b65f-4378-93b6-8ca2-7936b2725bc8"}
+data:{"output":{"thoughts":[{"action":"reasoning","thought":"","action_type":"reasoning","response":"","action_name":"思考过程"}],"session_id":"ea188f5f795a485f8956e3af0212ba29","finish_reason":"null","text":"吗"},"usage":{"models":[{"input_tokens":31,"output_tokens":323,"model_id":"qwen3.7-plus"}]},"request_id":"b4b0b65f-4378-93b6-8ca2-7936b2725bc8"}
 
 id:322
 event:result
 :HTTP_STATUS/200
-data:{"output":{"thoughts":[{"action":"reasoning","thought":"","action_type":"reasoning","response":"","action_name":"思考过程"}],"session_id":"ea188f5f795a485f8956e3af0212ba29","finish_reason":"null","text":"？"},"usage":{"models":[{"input_tokens":31,"output_tokens":324,"model_id":"deepseek-r1"}]},"request_id":"b4b0b65f-4378-93b6-8ca2-7936b2725bc8"}
+data:{"output":{"thoughts":[{"action":"reasoning","thought":"","action_type":"reasoning","response":"","action_name":"思考过程"}],"session_id":"ea188f5f795a485f8956e3af0212ba29","finish_reason":"null","text":"？"},"usage":{"models":[{"input_tokens":31,"output_tokens":324,"model_id":"qwen3.7-plus"}]},"request_id":"b4b0b65f-4378-93b6-8ca2-7936b2725bc8"}
 
 id:323
 event:result
 :HTTP_STATUS/200
-data:{"output":{"thoughts":[{"action":"reasoning","thought":"","action_type":"reasoning","response":"","action_name":"思考过程"}],"session_id":"ea188f5f795a485f8956e3af0212ba29","finish_reason":"stop","text":""},"usage":{"models":[{"input_tokens":31,"output_tokens":324,"model_id":"deepseek-r1"}]},"request_id":"b4b0b65f-4378-93b6-8ca2-7936b2725bc8"}
+data:{"output":{"thoughts":[{"action":"reasoning","thought":"","action_type":"reasoning","response":"","action_name":"思考过程"}],"session_id":"ea188f5f795a485f8956e3af0212ba29","finish_reason":"stop","text":""},"usage":{"models":[{"input_tokens":31,"output_tokens":324,"model_id":"qwen3.7-plus"}]},"request_id":"b4b0b65f-4378-93b6-8ca2-7936b2725bc8"}
 ```
 
 检索知识库
@@ -7932,7 +7932,7 @@ API方式操作请参阅以下内容。
 5.  完成有效的会话文件ID获取后，可进入上述步骤三：API调用应用。
     
 
-如需查看上述获取ID步骤中的接口参数详细说明请参阅[API上传文件](raw/application-user-guide/knowledge-base/integration/rag-knowledge-base-api-guide.md)。
+如需查看上述获取ID步骤中的接口参数详细说明请参阅[API上传文件](raw/application-user-guide/knowledge-base/rag-knowledge-base-api-guide.md)。
 
 #### 视觉理解
 
@@ -8048,7 +8048,7 @@ API方式操作请参阅以下内容。
             "models": [
                 {
                     "output_tokens": 49,
-                    "model_id": "qwen-vl-max",
+                    "model_id": "qwen3-vl-plus",
                     "input_tokens": 1305
                 }
             ]
@@ -8259,7 +8259,7 @@ API方式操作请参阅以下内容。
             "models": [
                 {
                     "output_tokens": 49,
-                    "model_id": "qwen-vl-max",
+                    "model_id": "qwen3-vl-plus",
                     "input_tokens": 1305
                 }
             ]
@@ -8359,7 +8359,7 @@ API方式操作请参阅以下内容。
             "models": [
                 {
                     "output_tokens": 88,
-                    "model_id": "qwen-vl-max",
+                    "model_id": "qwen3-vl-plus",
                     "input_tokens": 2554
                 }
             ]

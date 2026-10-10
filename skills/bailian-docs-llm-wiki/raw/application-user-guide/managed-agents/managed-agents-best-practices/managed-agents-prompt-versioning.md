@@ -32,7 +32,7 @@ DASHSCOPE_API_KEY="<你的 DashScope API Key>"
 AGENT_ID="agent_xxx"     # 创建 Agent 后回填
 ```
 
-鉴权用 `Authorization: Bearer $DASHSCOPE_API_KEY`，一把 Key 覆盖工作空间内全部资源。当前区域仅 `cn-beijing`。模型 ID 用 `qwen3.8-max` / `qwen3.7-max` / `qwen3.7-plus`（本篇用 `qwen3.7-plus`，分类任务足够；`qwen3-max` 这类常规 ID 会被拒）。
+鉴权用 `Authorization: Bearer $DASHSCOPE_API_KEY`，一把 Key 覆盖工作空间内全部资源。当前区域仅 `cn-beijing`。模型 ID 用 `qwen3.8-max` / `qwen3.7-max` / `qwen3.7-plus`（本篇用 `qwen3.7-plus`，分类任务足够）。
 
 **说明**本篇的 Agent 是纯 LLM 分类器（无工具调用），**不需要 Environment**——Session 不挂 `environment_id` 也能跑。只有要跑 bash / 读写文件的 Agent 才需要沙箱，见[入门：搭一个数据分析 Agent](raw/application-user-guide/managed-agents/managed-agents-best-practices/managed-agents-data-analysis.md)。
 

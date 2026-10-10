@@ -286,8 +286,6 @@ SpeechSynthesisParam param = SpeechSynthesisParam.builder()
 
 音频编码格式及采样率。
 
-**说明**cosyvoice-v1不支持opus格式。
-
 默认值：SpeechSynthesisAudioFormat.MP3\_22050HZ\_MONO\_256KBPS。
 
 SpeechSynthesisAudioFormat包路径：`com.alibaba.dashscope.audio.ttsv2.SpeechSynthesisAudioFormat`。
@@ -352,8 +350,6 @@ SpeechSynthesisAudioFormat包路径：`com.alibaba.dashscope.audio.ttsv2.SpeechS
 
 取值范围：\[0, 65535\]。
 
-**说明**cosyvoice-v1不支持该参数。
-
 SDK版本低于2.21.7时，`seed`需要通过扩展参数进行设置。
 
 `languageHints(List<String>)`
@@ -368,8 +364,6 @@ SDK版本低于2.21.7时，`seed`需要通过扩展参数进行设置。
 -   此参数用于指定语音合成的目标语言，该设置与声音复刻时的样本音频的语种无关。如需设置复刻任务的源语言，请参见[声音复刻API参考](https://help.aliyun.com/zh/model-studio/voice-clone-design-http-api#h2-create)。
 
 指定语音合成的目标语言，提升合成效果。
-
-**说明**cosyvoice-v1不支持该功能。
 
 当数字、缩写、符号等朗读方式或者小语种合成效果不符合预期时使用，例如：
 
@@ -414,7 +408,7 @@ SDK版本低于2.21.7时，`seed`需要通过扩展参数进行设置。
 
 文本热修复配置，用于自定义指定词语的发音或对待合成文本进行替换。
 
-**说明**cosyvoice-v2、cosyvoice-v1不支持该功能。
+**说明**cosyvoice-v2不支持该功能。
 
 参数介绍：
 
@@ -490,8 +484,6 @@ SpeechSynthesisParam param = SpeechSynthesisParam.builder()
 默认值：32。
 
 取值范围：\[6, 510\]。
-
-**说明**`cosyvoice-v1`模型不支持该参数。
 
 `enable_aigc_tag`
 

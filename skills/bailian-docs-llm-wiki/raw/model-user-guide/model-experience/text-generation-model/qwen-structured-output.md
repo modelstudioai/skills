@@ -93,7 +93,6 @@ Qwen 大部分模型、Kimi、GLM、DeepSeek、Stepfun
 -   阿里云百炼部署
     
     -   kimi-k3
-    -   kimi-k2-thinking
 -   月之暗面部署
     
     -   kimi/kimi-k3、kimi/kimi-k2.7-code-highspeed、kimi/kimi-k2.7-code 、kimi/kimi-k2.6、kimi/kimi-k2.5
@@ -102,15 +101,15 @@ Qwen 大部分模型、Kimi、GLM、DeepSeek、Stepfun
 
 -   阿里云百炼部署
     
-    -   deepseek-v4-pro、deepseek-v4-flash
+    -   deepseek-v4-pro
 -   快手万擎部署
     
     -   vanchin/deepseek-v3.2-think、vanchin/deepseek-v3、vanchin/deepseek-ocr
 
 #### GLM
 
--   glm-5.1、glm-4.5、glm-4.5-air
--   非思考模式：glm-5、glm-4.7、glm-4.6
+-   glm-5.1
+-   非思考模式：glm-5
 
 #### Stepfun
 
@@ -2029,7 +2028,66 @@ print(f"姓名：{json_object['name']}，年龄：{json_object['age']}")
 
 需要捕获更多信息
 
--   **支持的数据类型：**string、number、integer、boolean、object、array、enum。
+-   **支持的 JSON Schema 关键字**
+    
+    以下列出 JSON Schema 模式（strict 模式）所支持的关键字。标记为"不支持"的关键字提交后会返回 400 错误。关键字的完整定义请参考 [JSON Schema 官方规范](https://json-schema.org/draft/2020-12)。
+    
+    **Schema 层面公共关键字**
+    
+    **关键字**
+    
+    **说明**
+    
+    `type`
+    
+    支持 `string`、`number`、`integer`、`boolean`、`null`、`array`、`object`；也支持联合类型，如 `["string", "null"]`
+    
+    `enum` / `const`
+    
+    `enum` 限制取值范围，`const` 限制为固定值
+    
+    `defs</code>+<code>defs</code> + <code>defs</code>+<code>ref`
+    
+    支持本地引用（如 `#/defs/address</code>）；外部URL引用不报错但不生效</p></td></tr><tr><tdstyle=verticalAlign:"top"><p><code>anyOf</code>/<code>oneOf</code>/<code>allOf</code>/<code>not</code></p></td><tdstyle=verticalAlign:"top"><p>支持组合与条件约束。其中<code>oneOf</code>不严格保证exactly−one语义</p></td></tr><tr><tdstyle=verticalAlign:"top"><p><code>if</code>/<code>then</code>/<code>else</code></p></td><tdstyle=verticalAlign:"top"><p>支持条件Schema，可根据字段值动态切换校验规则</p></td></tr><tr><tdstyle=verticalAlign:"top"><p><code>title</code>/<code>description</code>/<code>default</code>/<code>examples</code></p></td><tdstyle=verticalAlign:"top"><p>可正常提交，作为模型生成的语义提示，不参与硬性校验</p></td></tr><tr><tdstyle=verticalAlign:"top"><p><code>defs/address</code>）；外部 URL 引用不报错但不生效</p></td></tr><tr><td style={{ verticalAlign: "top" }}><p><code>anyOf</code> / <code>oneOf</code> / <code>allOf</code> / <code>not</code></p></td><td style={{ verticalAlign: "top" }}><p>支持组合与条件约束。其中 <code>oneOf</code> 不严格保证 exactly-one 语义</p></td></tr><tr><td style={{ verticalAlign: "top" }}><p><code>if</code> / <code>then</code> / <code>else</code></p></td><td style={{ verticalAlign: "top" }}><p>支持条件 Schema，可根据字段值动态切换校验规则</p></td></tr><tr><td style={{ verticalAlign: "top" }}><p><code>title</code> / <code>description</code> / <code>default</code> / <code>examples</code></p></td><td style={{ verticalAlign: "top" }}><p>可正常提交，作为模型生成的语义提示，不参与硬性校验</p></td></tr><tr><td style={{ verticalAlign: "top" }}><p><code>defs/address</code>）；外部URL引用不报错但不生效</p></td></tr><tr><tdstyle=verticalAlign:"top"><p><code>anyOf</code>/<code>oneOf</code>/<code>allOf</code>/<code>not</code></p></td><tdstyle=verticalAlign:"top"><p>支持组合与条件约束。其中<code>oneOf</code>不严格保证exactly−one语义</p></td></tr><tr><tdstyle=verticalAlign:"top"><p><code>if</code>/<code>then</code>/<code>else</code></p></td><tdstyle=verticalAlign:"top"><p>支持条件Schema，可根据字段值动态切换校验规则</p></td></tr><tr><tdstyle=verticalAlign:"top"><p><code>title</code>/<code>description</code>/<code>default</code>/<code>examples</code></p></td><tdstyle=verticalAlign:"top"><p>可正常提交，作为模型生成的语义提示，不参与硬性校验</p></td></tr><tr><tdstyle=verticalAlign:"top"><p><code>schema` / `id</code>/<code>id</code> / <code>id</code>/<code>comment`
+    
+    元标识符，可正常提交，不影响校验行为
+    
+    `deprecated` / `readOnly` / `writeOnly`
+    
+    注解关键字，可正常提交，不影响校验行为
+    
+    **各类型专属关键字**
+    
+    **类型**
+    
+    **支持的关键字**
+    
+    **不支持的关键字（400 错误）**
+    
+    `string`
+    
+    `minLength`、`maxLength`、`pattern`、`format`（如 `email`、`date`）、`contentMediaType`、`contentEncoding`
+    
+    \-
+    
+    `number` / `integer`
+    
+    `minimum`、`maximum`、`exclusiveMinimum`、`exclusiveMaximum`
+    
+    `multipleOf`
+    
+    `array`
+    
+    `items`、`prefixItems`（元组模式）、`minItems`、`maxItems`、`unevaluatedItems`
+    
+    `uniqueItems`、`contains`、`minContains`、`maxContains`、`additionalItems`
+    
+    `object`
+    
+    `properties`、`required`、`additionalProperties`、`minProperties`、`maxProperties`、`dependentRequired`、`dependentSchemas`、`unevaluatedProperties`
+    
+    `patternProperties`、`propertyNames`
+    
 
 ## 应用于生产环境
 

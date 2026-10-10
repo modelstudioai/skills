@@ -1,60 +1,49 @@
 # api [overview](../guides/overview.md)
 
-ParseX API 提供文档与音视频的结构化解析、以及基于 Schema 的字段抽取两大核心能力，所有接口均采用异步调用模式：先提交任务获取 `biz_id`，再轮询查询结果。API 通过统一的 `Authorization: Bearer <API Key>` 鉴权，支持灵活的处理配置（内联或预存）和 OSS 输出选项。
+ParseX API 提供文档与音视频的结构化解析能力，以及基于 Schema 的字段抽取能力。所有接口均采用异步调用模式：先提交任务获取 `biz_id`，再轮询查询结果。API 通过标准 `Authorization: Bearer <API Key>` 进行鉴权，适用于自动化集成与批量处理场景。
 
 ## 支持的模型/功能
 
-- **文档解析**：支持 PDF、Word、Excel、PPT、图片（JPG/PNG）等格式，输出 Markdown、布局结构（`layouts`）、段落/表格/图片计数等；可选页眉页脚、坐标定位、图片描述生成 [提交解析任务](../../raw/application-api-reference/api-overview/document-parsing/parse-submit.md)。
-- **音视频解析**：支持 MP4、MOV 等主流格式，提供 ASR 转录、人声分离（`enable_diarization`）、抽帧（支持 `auto` 或指定 `frame_rate`）、剧情解析（`synopsis_parse`/`synopsis_segments`/`synopsis_summary`）等能力 [提交解析任务](../../raw/application-api-reference/api-overview/document-parsing/parse-submit.md)。
-- **字段抽取**：基于 JSON Schema 从已解析内容或原始文件中抽取结构化字段，支持引用溯源（`citations`）、推断（`allow_inference`）和自定义 Prompt [字段解析 API](../../raw/application-api-reference/api-overview/field-extraction.md)。
-
-> **注意**：字段抽取不支持直接输入音视频文件，仅支持 `file_url`（文档类）或 `parsed_file_biz_id`（需为文档解析结果）；音视频解析结果不可用于后续抽取任务 [错误码](../../raw/application-api-reference/api-overview/errors.md) 中明确标注 `UnsupportedFileType` 和 `ParseResultNotReusable`。
+- **文档解析**：支持 PDF、Word、Excel、PPT、图片（JPG/PNG）等格式，输出 Markdown、布局结构（`layouts`）、表格、段落、页码等；支持页码范围指定、页眉页脚控制、坐标返回、图片描述生成等配置。详见 [文档解析 API](raw/application-api-reference/api-overview/document-parsing.md)。
+- **音视频解析**：支持 MP4、MOV 等主流音视频格式，输出 ASR 文本、人声分离（`diarization`）、抽帧图像、剧情解析摘要（`synopsis_summary`）、分段剧情（`synopsis_segments`）及视觉帧描述（`text_info`）。详见 [提交解析任务](raw/application-api-reference/api-overview/document-parsing/parse-submit.md)。
+- **字段抽取**：基于用户提供的 JSON Schema，从已解析文档或原始文件中抽取结构化字段（如合同编号、金额），支持引用溯源（`citations`）、推断开关（`allow_inference`）和置信状态（`found`/`miss`/`inferred`）。> **注意**：抽取不支持直接输入音视频，仅支持文档类输入或复用文档解析结果；且复用的解析结果必须在 7 天保留期内，否则返回 `ParseResultNotReusable` 错误 —— 具体限制请参考 [错误码](raw/application-api-reference/api-overview/errors.md) 中的说明。
 
 ## 关键参数
 
-- **鉴权**：必须通过 `Authorization: Bearer $DASHSCOPE_API_KEY` Header 传递，API Key 需提前在控制台获取并安全存储 [鉴权](../../raw/application-api-reference/api-overview/authentication.md)。
-- **任务标识**：所有异步操作依赖 `biz_id`（由 `/submit` 接口返回），用于后续 `/result` 查询。
-- **输入源**（二选一）：
-  - `file_url`：公开可访问的文件 URL（需确保服务端可直连下载）；
-  - `parsed_file_biz_id`：复用已有解析任务 ID（仅限文档解析结果，且须在 7 天保留期内）。
-- **处理配置**（二选一）：
-  - `config_id`：复用控制台预存的配置；
-  - `processing`：内联配置对象，优先级更高，包含 `doc_processing_config`（文档）或 `media_processing_config`（音视频）等子项。
-- **输出控制**：`output.oss_config` 支持自定义 OSS 存储，`output.output_file_format` 可指定 `["markdown"]` 等格式。
+- `biz_id`：所有异步任务的核心标识，由 `/parse/submit` 或 `/extract/submit` 返回，用于后续 `/parse/result` 或 `/extract/result` 查询。
+- `file_url`：必须为公网可访问、带有效签名（如 OSS 签名 URL）的文件地址；不支持内网或需登录跳转的链接。
+- `processing` 对象：内联处理配置，优先级高于 `config_id`。关键子字段包括：
+  - `doc_processing_config.page_index`（如 `"1-5"`）、`head_foot`、`layout_position`
+  - `media_processing_config.enable_synopsis_parse`、`frame_extraction.mode`
+  - `extract_processing_config.extract_schema`（必需 JSON 对象，非字符串）、`citation_required`
+- `output.oss_config`：用于指定结果写入客户自有 OSS，需完整提供 `bucket`、`endpoint`、`access_key_id`、`access_key_secret`（及可选 `security_token`）。
 
 ## 使用方式
 
-1. **准备凭证**：设置环境变量 `DASHSCOPE_API_KEY`，确保其具备对应权限 [鉴权](../../raw/application-api-reference/api-overview/authentication.md)。
+1. **鉴权准备**：在百炼控制台获取 `DASHSCOPE_API_KEY`（以 `sk-` 开头），并通过环境变量或请求 Header 传递。务必遵循安全规范，避免硬编码或泄露 —— 具体操作见 [鉴权](raw/application-api-reference/api-overview/authentication.md)。
 2. **提交任务**：
-   - 文档/音视频解析 → 调用 `/parse/submit`；
-   - 字段抽取 → 调用 `/extract/submit`；
-   - 均返回 `data.biz_id`。
-3. **轮询结果**：
-   - 解析任务 → 调用 `/parse/result`，检查 `data.status`（`init`/`processing`/`success`/`failed`）；
-   - 抽取任务 → 调用 `/extract/result`，同上逻辑；
-   - 状态为 `processing` 时需重试（建议指数退避），`failed` 时参考错误码排查。
-4. **结果消费**：成功响应中，解析结果含 `markdown_content`、`layouts`、`segments` 等；抽取结果含 `extract_result_json` 和带坐标的 `fields[].citations`。
+   - 解析任务：调用 `/api/v2/apps/parse-x/parse/submit`，传入 `file_url` 及可选 `processing` 配置；
+   - 抽取任务：调用 `/api/v2/apps/parse-x/extract/submit`，二选一提供 `file_url` 或 `parsed_file_biz_id`，并确保 `extract_schema` 正确嵌套在 `processing.extract_processing_config` 中。
+3. **轮询结果**：使用返回的 `biz_id` 定期调用对应的结果端点（`/parse/result` 或 `/extract/result`），检查 `data.status` 字段。状态为 `processing` 时继续轮询；为 `success` 或 `failed` 时终止。轮询间隔建议 ≥1s，避免高频请求触发限流。
 
 ## 限制和注意事项
 
-- **文件限制**：单文件大小、页数、时长等受配额约束，具体以控制台实际配额为准；超限返回 `FileSizeExceeded` 或 `PageCountExceeded` 错误 [错误码](../../raw/application-api-reference/api-overview/errors.md)。
-- **时效性**：
-  - 解析结果默认保留 **30 天**（`ParseResultExpired`）；
-  - 复用解析结果进行抽取时，该结果须在 **7 天内**（`ParseResultNotReusable`）。
-- **重试策略**：
-  - `FileDownloadTimeout` 可重试；
-  - `FileDownloadFailed` 不可重试，需修复 URL 或网络条件。
-- **安全要求**：API Key 必须通过环境变量注入，禁止硬编码或提交至代码仓库；建议按应用拆分 Key 并定期轮转 [鉴权](../../raw/application-api-reference/api-overview/authentication.md)。
+- **文件限制**：单文件大小上限为 100 MB；PDF 页数上限为 1000 页；音视频时长上限为 2 小时；超出将返回 `FileSizeExceeded` 或 `PageCountExceeded` 错误。
+- **保留期约束**：
+  - 解析结果默认保留 **30 天**（`ParseResultExpired` 错误）；
+  - 抽取任务复用解析结果时，该结果必须在 **7 天内**（`ParseResultNotReusable` 错误），且类型匹配（音视频解析结果不可用于字段抽取）。
+- **错误处理**：所有失败响应均含 `request_id`、`code` 和 `message`。例如 `ResultNotReady`（409）表示任务未完成，应继续轮询；`FileDownloadTimeout`（400）可重试，而 `FileDownloadFailed`（400）需修复源文件；详细含义请查阅 [错误码](raw/application-api-reference/api-overview/errors.md)。
+- **配额与计费**：服务受账号级配额限制，超限返回 `ServiceQuotaExhausted`（503）；欠费将返回 `AccountOverdue`（403）。实际配额以控制台实时显示为准。
 
 ## 来源文档
 
 - [鉴权](../../raw/application-api-reference/api-overview/authentication.md)
 - [错误码](../../raw/application-api-reference/api-overview/errors.md)
-- [查询解析结果](../../raw/application-api-reference/api-overview/document-parsing/parse-result.md)
-- [字段解析 API](../../raw/application-api-reference/api-overview/field-extraction.md)
-- [提交抽取任务](../../raw/application-api-reference/api-overview/field-extraction/extract-submit.md)
-- [查询抽取结果](../../raw/application-api-reference/api-overview/field-extraction/extract-result.md)
-- [提交解析任务](../../raw/application-api-reference/api-overview/document-parsing/parse-submit.md)
 - [文档解析 API](../../raw/application-api-reference/api-overview/document-parsing.md)
+- [查询解析结果](../../raw/application-api-reference/api-overview/document-parsing/parse-result.md)
+- [提交解析任务](../../raw/application-api-reference/api-overview/document-parsing/parse-submit.md)
+- [查询抽取结果](../../raw/application-api-reference/api-overview/field-extraction/extract-result.md)
+- [提交抽取任务](../../raw/application-api-reference/api-overview/field-extraction/extract-submit.md)
+- [字段解析 API](../../raw/application-api-reference/api-overview/field-extraction.md)
 
 

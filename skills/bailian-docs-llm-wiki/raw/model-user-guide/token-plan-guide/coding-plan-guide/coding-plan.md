@@ -17,7 +17,7 @@ Coding Plan 整合了千问、GLM、Kimi、MiniMax 等模型，并兼容主流 A
 
 推荐模型：**qwen3.7-plus**（支持图片理解）、**qwen3.6-plus**（支持图片理解）、**kimi-k2.5**（支持图片理解）、**glm-5**、**MiniMax-M2.5**
 
-更多模型：qwen3.5-plus（支持图片理解）**、**qwen3-max-2026-01-23、qwen3-coder-next、qwen3-coder-plus、glm-4.7
+更多模型：qwen3.5-plus（支持图片理解）
 
 价格
 
@@ -72,61 +72,65 @@ RAM 子账号授权步骤
 
 ### 步骤三：接入AI工具
 
-![](https://unpkg.com/@lobehub/icons-static-svg@latest/icons/openclaw-color.svg)**[OpenClaw](raw/model-user-guide/use-chat-client-or-development-tool/openclaw.md)**
+![](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f923f.svg)**[OpenClaw](raw/model-user-guide/use-chat-client-or-development-tool/openclaw.md)**
 
 开源、自托管个人 AI 助手
 
-![](https://unpkg.com/@lobehub/icons-static-svg@latest/icons/nousresearch.svg)**[Hermes Agent](raw/model-user-guide/use-chat-client-or-development-tool/hermes-agent.md)**
+![](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f923e.svg)**[Hermes Agent](raw/model-user-guide/use-chat-client-or-development-tool/hermes-agent.md)**
 
 开源 AI 代理框架，内置自学习循环
 
-![](https://unpkg.com/@lobehub/icons-static-svg@latest/icons/claude-color.svg)**[Claude Code](raw/model-user-guide/use-chat-client-or-development-tool/claude-code.md)**
+![](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f923d.svg)**[Claude Code](raw/model-user-guide/use-chat-client-or-development-tool/claude-code.md)**
 
 AI 终端编码助手，支持自然语言编程
 
-![](https://unpkg.com/@lobehub/icons-static-svg@latest/icons/opencode.svg)**[OpenCode](raw/model-user-guide/use-chat-client-or-development-tool/opencode.md)**
+![](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f923c.svg)**[OpenCode](raw/model-user-guide/use-chat-client-or-development-tool/opencode.md)**
 
 开源 AI 编程代理工具
 
-![](https://unpkg.com/@lobehub/icons-static-svg@latest/icons/cursor.svg)**[Cursor](raw/model-user-guide/use-chat-client-or-development-tool/cursor.md)**
+![](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f9233.svg)**[Cursor](raw/model-user-guide/use-chat-client-or-development-tool/cursor.md)**
 
 AI 原生代码编辑器
 
-![](https://unpkg.com/@lobehub/icons-static-svg@latest/icons/codex.svg)**[Codex](raw/model-user-guide/use-chat-client-or-development-tool/codex.md)**
+![](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f9232.svg)**[Codex](raw/model-user-guide/use-chat-client-or-development-tool/codex.md)**
 
 OpenAI 推出的命令行编程工具
 
-![](https://unpkg.com/@lobehub/icons-static-svg@latest/icons/qwen-color.svg)**[Qwen Code](raw/model-user-guide/use-chat-client-or-development-tool/qwen-code.md)**
+![](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f9231.svg)**[Qwen Code](raw/model-user-guide/use-chat-client-or-development-tool/qwen-code.md)**
 
 开源命令行 AI 编码工具
 
-![](https://cdn.jsdelivr.net/gh/agentscope-ai/QwenPaw@main/website/public/qwenpaw-symbol.png)**[QwenPaw](raw/model-user-guide/use-chat-client-or-development-tool/qwenpaw.md)**
+![](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f9237.png)**[QwenPaw](raw/model-user-guide/use-chat-client-or-development-tool/qwenpaw.md)**
 
 开源个人 AI 助手，支持本地与云端部署
 
-![](https://unpkg.com/@lobehub/icons-static-svg@latest/icons/cherrystudio-color.svg)**[Cherry Studio](raw/model-user-guide/use-chat-client-or-development-tool/cherry-studio.md)**
+![](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f9230.svg)**[Cherry Studio](raw/model-user-guide/use-chat-client-or-development-tool/cherry-studio.md)**
 
 多模型桌面客户端
 
-![](https://cdn.jsdelivr.net/gh/chatboxai/chatbox@main/assets/icon.png)**[Chatbox](https://help.aliyun.com/zh/model-studio/cline-tool)**
+![](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f9236.png)**[Chatbox](https://help.aliyun.com/zh/model-studio/cline-tool)**
 
 跨平台 AI 桌面客户端
 
-![](https://unpkg.com/@lobehub/icons-static-svg@latest/icons/cline.svg)**[Cline](raw/model-user-guide/use-chat-client-or-development-tool/cline.md)**
+![](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f9235.svg)**[Cline](raw/model-user-guide/use-chat-client-or-development-tool/cline.md)**
 
 VS Code 扩展，智能代码补全和调试
 
-![](https://unpkg.com/@lobehub/icons-static-svg@latest/icons/qoder-color.svg)**[Qoder](raw/model-user-guide/use-chat-client-or-development-tool/qoder-agent.md)**
+![](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f9234.svg)**[Qoder](raw/model-user-guide/use-chat-client-or-development-tool/qoder-agent.md)**
 
 面向真实软件开发的 Agentic 编码平台
 
-![](https://unpkg.com/@lobehub/icons-static-svg@latest/icons/bailian-color.svg)**[Lingma](raw/model-user-guide/use-chat-client-or-development-tool/lingma-agent.md)**
+![](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f924b.svg)**[Lingma](raw/model-user-guide/use-chat-client-or-development-tool/lingma-agent.md)**
 
 阿里云智能编码助手，提供独立 IDE
 
-![](https://unpkg.com/@lobehub/icons-static-svg@latest/icons/kilocode.svg)**[Kilo CLI](raw/model-user-guide/use-chat-client-or-development-tool/kilo-cli.md)**
+![](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f924a.svg)**[Kilo CLI](raw/model-user-guide/use-chat-client-or-development-tool/kilo-cli.md)**
 
 轻量高性能命令行编程工具
+
+![](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f9248.svg)**[WorkBuddy](raw/model-user-guide/use-chat-client-or-development-tool/workbuddy.md)**
+
+桌面 AI Agent 工作台
 
 **[更多工具](raw/model-user-guide/use-chat-client-or-development-tool/more-tools.md)**
 

@@ -150,5 +150,4 @@ RPM（每分钟请求数）
 
 ## 调用方式
 
--   [实时语音识别](raw/model-user-guide/model-experience/speech-recognition/real-time-speech-recognition-user-guide.md)
--   [WebSocket API](raw/_short/qwen-asr-message-websocket-api-a1cfd459a83a1a77.md)
+-   [模型接入方式](raw/_short/qwen-asr-message-model-access-353e08817f836f55.md)

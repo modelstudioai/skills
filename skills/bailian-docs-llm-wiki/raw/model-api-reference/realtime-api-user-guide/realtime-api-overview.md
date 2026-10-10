@@ -144,15 +144,7 @@ CosyVoice系列模型
 
 [实时语音识别](raw/model-user-guide/model-experience/speech-recognition/real-time-speech-recognition-user-guide.md)
 
-qwen-audio-3.1-asr-flash-message
-
-不支持
-
-不支持
-
-支持
-
-qwen-audio-3.1-asr-flash-streaming、qwen-audio-3.0-asr-flash-streaming、Fun-ASR-Realtime系列模型
+qwen-audio-3.1-asr-flash-message、qwen-audio-3.1-asr-flash-streaming、qwen-audio-3.0-asr-flash-streaming、Fun-ASR-Realtime系列模型
 
 支持
 

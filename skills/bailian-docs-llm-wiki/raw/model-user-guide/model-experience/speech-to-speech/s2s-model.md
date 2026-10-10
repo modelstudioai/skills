@@ -835,8 +835,6 @@ Qwen3.8-Omni-Flash-Realtime 和 Qwen3.5-Omni 均支持113种输入语言/方言�
 
 Qwen3.5-Livetranslate支持60种语言（29种音频+文本，31种仅文本）。
 
-旧版`qwen-omni-turbo`仅支持中文和英文。
-
 ## 推荐模型
 
 下表列出每个系列的常用入口模型。如需锁定特定日期版本（用于版本回归或稳定性需求），请见下方“所有模型”。
@@ -1089,30 +1087,6 @@ Chat Completions
 
 **思考模式**
 
-`qwen3-omni-flash-realtime`
-
-WebSocket
-
-文本、音频、图片、视频
-
-\--
-
-\--
-
-\--
-
-`qwen3-omni-flash-realtime-2025-12-01`
-
-WebSocket
-
-文本、音频、图片、视频
-
-\--
-
-\--
-
-\--
-
 `qwen3-omni-flash-realtime-2025-09-15`
 
 WebSocket
@@ -1126,30 +1100,6 @@ WebSocket
 \--
 
 `qwen3-omni-flash`
-
-Chat Completions
-
-文本、音频、图片、视频
-
-支持
-
-\--
-
-支持
-
-`qwen3-omni-flash-2025-12-01`
-
-Chat Completions
-
-文本、音频、图片、视频
-
-支持
-
-\--
-
-支持
-
-`qwen3-omni-flash-2025-09-15`
 
 Chat Completions
 
@@ -1215,22 +1165,6 @@ WebSocket
 
 **语言数**
 
-`qwen3-livetranslate-flash-realtime`
-
-WebSocket
-
-音频
-
-18
-
-`qwen3-livetranslate-flash-realtime-2025-09-22`
-
-WebSocket
-
-音频
-
-18
-
 `qwen3-livetranslate-flash`
 
 Chat Completions
@@ -1246,58 +1180,6 @@ Chat Completions
 音频、视频
 
 18
-
-### 旧版模型
-
-以下模型不再更新，新项目的实时音视频对话推荐 Qwen3.8-Omni-Flash-Realtime；离线语音输出可选择 Qwen3.5-Omni。
-
-**模型**
-
-**输入**
-
-**API**
-
-`qwen2.5-omni-7b`
-
-文本、音频、图片、视频
-
-HTTP
-
-`qwen-omni-turbo`
-
-文本、音频、图片、视频
-
-HTTP
-
-`qwen-omni-turbo-latest`
-
-文本、音频、图片、视频
-
-HTTP
-
-`qwen-omni-turbo-2025-03-26`
-
-文本、音频、图片、视频
-
-HTTP
-
-`qwen-omni-turbo-realtime`
-
-文本、音频
-
-WebSocket
-
-`qwen-omni-turbo-realtime-latest`
-
-文本、音频
-
-WebSocket
-
-`qwen-omni-turbo-realtime-2025-05-08`
-
-文本、音频
-
-WebSocket
 
 ## 下一步
 

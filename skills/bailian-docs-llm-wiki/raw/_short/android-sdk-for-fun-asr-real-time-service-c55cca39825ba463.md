@@ -374,7 +374,7 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
 
 点击查看支持的语言代码
 
--   fun-asr-realtime、fun-asr-realtime-2025-11-07：
+-   fun-asr-realtime：
     
     -   zh: 中文
     -   en: 英文
@@ -411,14 +411,10 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
     -   zh: 中文
     -   en: 英文
     -   ja: 日语
--   fun-asr-realtime-2025-09-15：
-    
-    -   zh: 中文
-    -   en: 英文
 -   fun-asr-flash-8k-realtime、fun-asr-flash-8k-realtime-2026-01-28：
     
     -   zh: 中文
--   fun-asr-mtl-realtime、fun-asr-mtl-realtime-2025-12-10：
+-   fun-asr-mtl-realtime-2025-12-10：
     
     -   zh: 中文
     -   en: 英文

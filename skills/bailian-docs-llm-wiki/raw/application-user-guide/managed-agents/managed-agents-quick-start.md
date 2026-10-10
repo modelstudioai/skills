@@ -45,7 +45,7 @@ curl -X POST "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentst
   -H "Content-Type: application/json" \
   -d '{
     "name": "data-analyst",
-    "model": {"id": "qwen3-max"},
+    "model": {"id": "qwen3.7-max"},
     "system": "你是数据分析专家，使用 pandas 处理 CSV 文件。",
     "tools": [
       {
@@ -87,7 +87,7 @@ java
 ```
 Agent agent = client.agents().create(AgentCreateParam.builder()
     .name("data-analyst")
-    .model("qwen3-max")
+    .model("qwen3.7-max")
     .instructions("你是数据分析专家，使用 pandas 处理 CSV 文件。")
     .build());
 System.out.println(agent.getId());       // "agent_xxx"

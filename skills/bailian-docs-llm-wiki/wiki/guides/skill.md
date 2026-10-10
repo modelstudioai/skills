@@ -1,48 +1,53 @@
 # skill
 
-Skill 是百炼平台中用于扩展智能体任务处理能力的可插拔能力包，支持无需编码即可让智能体自动识别并执行特定类型任务（如文件解析、数据清洗、格式转换等）。官方 Skill 开箱即用，自定义 Skill 则通过 ZIP 包形式灵活适配业务场景。其核心机制依赖 `SKILL.md` 中的语义描述驱动智能体调用决策，而非硬编码规则。
+`skill` 是百炼平台中用于封装和复用特定任务逻辑的可调用单元，支持以函数式接口被工作流或 API 调用。它可绑定模型、提示词、工具链及后处理逻辑，实现端到端任务抽象（如“提取合同关键条款”“生成合规摘要”）。每个 skill 具有唯一 ID 和版本管理，适用于低代码编排与高代码集成两种场景。
 
-## 支持的模型/功能
+## 支持的模型与功能
 
-- **适用模型**：所有支持 Skill 调用的百炼智能体模型（当前为 Qwen 系列大模型，具体以 [Skill (raw/application-user-guide/skill/introduction-to-skill.md)](../../raw/application-user-guide/skill/introduction-to-skill.md) 中“添加 Skill 到智能体”章节说明为准）。
-- **核心功能**：
-  - 自动触发：基于用户输入语义与 `description` 字段匹配，动态决定是否调用；
-  - 文件处理：覆盖 `.xlsx`, `.csv`, `.tsv`, `.xlsm` 等主流表格格式（详见 [Skill (raw/application-user-guide/skill/introduction-to-skill.md)](../../raw/application-user-guide/skill/introduction-to-skill.md) 中 xlsx 示例）；
-  - 多阶段操作：支持读取、编辑、创建、转换、清洗等端到端处理；
-  - 版本管理：官方 Skill 自动更新；自定义 Skill 支持多版本上传与回滚。
-
-> **注意**：文档未明确说明 Skill 是否支持非表格类文件（如 PDF、图像）的原生处理。当前所有示例和要求均聚焦于结构化/半结构化数据，若需处理其他格式，应参考 [Skill (raw/application-user-guide/skill/introduction-to-skill.md)](../../raw/application-user-guide/skill/introduction-to-skill.md) 中“自定义 Skill”章节确认 ZIP 包内实际实现逻辑。
+- 支持绑定 Qwen 系列大模型（Qwen1.5、Qwen2、Qwen2.5）及部分第三方模型（需开通白名单）；
+- 支持内置工具调用（如 HTTP 请求、数据库查询、知识库检索），也可通过 `tool_call` 协议接入自定义工具；
+- 支持结构化输出（JSON Schema 约束）、流式响应、异步执行模式；
+- 多模态能力暂未开放，文本类 skill 为当前唯一稳定支持类型。  
+> **注意**：文档 [Skill](raw/application-user-guide/skill.md) 中提及“支持图像理解 skill”，但该能力尚未上线生产环境，实际使用请以 [introduction-to-skill.md](../../raw/application-user-guide/skill/introduction-to-skill.md) 的当前描述为准。
 
 ## 关键参数
 
-| 参数 | 位置 | 必填 | 说明 |
-|------|------|------|------|
-| `name` | `SKILL.md` YAML frontmatter | 是 | Skill 唯一标识符，仅限小写字母、数字、连字符；同一账号下不可重复。 |
-| `description` | `SKILL.md` YAML frontmatter | 是 | 决定调用准确性的关键字段，需明确输入类型、支持操作、触发关键词及**不适用场景**（见原文完整示例）。 |
-| ZIP 包大小 | 上传时校验 | — | ≤ 10 MB，超限将拒绝上传。 |
+| 参数名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| `skill_id` | string | 是 | 平台分配的唯一标识，格式如 `sk-abc123` |
+| `version` | string | 否 | 默认为 `latest`；指定版本号（如 `v1.2.0`）可确保行为确定性 |
+| `input` | object | 是 | 符合 skill 定义的 JSON Schema 的输入对象，字段名与 schema 严格匹配 |
+| `stream` | boolean | 否 | `true` 时返回 SSE 流；默认 `false` |
+| `timeout` | integer | 否 | 单位秒，范围 `5–300`；超时将中断执行并返回 `504` |
 
 ## 使用方式
 
-1. **创建 Skill**  
-   - 官方 Skill：直接在 [Skill 管理](https://bailian.console.aliyun.com/?tab=app#/skill) 页面查看并添加；  
-   - 自定义 Skill：按规范编写 `SKILL.md`，打包为 ZIP（根目录必须含该文件），通过控制台 **组件 > Skill 管理 > 自定义 Skill** 上传。
+1. **API 调用**（推荐）：  
+   ```bash
+   curl -X POST https://dashscope.aliyuncs.com/api/v1/skills/{skill_id} \
+     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+     -H "Content-Type: application/json" \
+     -d '{"input": {"text": "请总结以下会议纪要..."}, "stream": false}'
+   ```
 
-2. **添加到智能体**  
-   - 方式一：从 Skill 详情页点击 **添加到智能体**，选择目标应用；  
-   - 方式二：进入智能体 **应用配置 > 技能** 区域，点击 Skill 右侧 `+` 添加。
+2. **工作流内嵌入**：在百炼控制台「工作流编排」中拖入 Skill 节点，配置 `skill_id` 与输入映射；支持上游节点输出自动绑定至 `input` 字段。  
+3. **SDK 调用**（Python）：  
+   ```python
+   from dashscope import Skill
+   resp = Skill.call(skill_id='sk-xxx', input={'text': '...'})
+   ```
 
-3. **测试效果**  
-   在应用配置页右侧对话窗格中输入典型指令（如“帮我清洗这个 CSV 的空行和重复列”），观察是否触发对应 Skill 并返回预期结果。
+详细协议规范见 [introduction-to-skill.md](../../raw/application-user-guide/skill/introduction-to-skill.md)。
 
 ## 限制和注意事项
 
-- **触发依赖描述质量**：`description` 字段是唯一调度依据，模糊或遗漏不适用场景将导致误调用（例如 xlsx Skill 明确排除产出 Word 文档的场景）；
-- **无运行时调试接口**：Skill 执行过程不可见，失败时仅返回通用错误提示，需依赖 `description` 严谨性和本地 ZIP 包功能验证；
-- **版本更新策略差异**：官方 Skill 自动生效；自定义 Skill 需重新上传同名 ZIP 包触发新版本，已添加的应用**立即使用最新版**（无需手动切换）；
-- **安全限制**：ZIP 包内禁止包含可执行二进制、shell 脚本或外部网络请求逻辑；所有处理必须在平台沙箱内完成。
+- 单次请求 `input` 总大小 ≤ 1MB；超出将返回 `413 Payload Too Large`；
+- 每个 skill 最多绑定 5 个工具；工具间调用深度限制为 3 层（含主 skill 自身）；
+- `version` 若指定为不存在的版本号，将返回 `404 Not Found`，**不会自动 fallback 到 latest**；
+- 异步执行（`async=True`）需配合 `/result` 接口轮询，详见 [introduction-to-skill.md](../../raw/application-user-guide/skill/introduction-to-skill.md)。
 
 ## 来源文档
 
-- [Skill](../../raw/application-user-guide/skill/introduction-to-skill.md)
+- [Skill](../../raw/application-user-guide/skill.md)
 
 

@@ -11,7 +11,6 @@
 -   **Qwen-Audio-TTS** / **CosyVoice**：通过 DashScope SDK 或 HTTP API 创建音色，支持实时与非实时语音合成，可用于华北2（北京）和新加坡地域。
 -   **MiniMax**：通过 HTTP API 创建音色，仅支持非实时语音合成，仅限华北2（北京）地域使用。
 -   **Qwen-Audio-Realtime**：Qwen-Audio-Realtime 是实时语音对话模型（非语音合成模型），声音复刻用于自定义对话模型回复时的 TTS 音色。通过 DashScope SDK 或 HTTP API 创建音色，仅支持华北2（北京）地域。
--   **Qwen-TTS**：通过 HTTP API 创建音色，支持实时与非实时语音合成，可用于华北2（北京）和新加坡地域。
 
 如需了解各模型系列的详细对比和选型建议，请参见[语音合成](raw/model-user-guide/model-experience/speech-synthesis/tts-model.md)。
 
@@ -275,130 +274,6 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-gen
 }'
 ```
 
-### Qwen-TTS 声音复刻
-
-示例使用本地音频文件`voice.mp3`，运行时请替换为实际路径。
-
-**重要**创建音色时的`target_model`必须与语音合成时使用的模型完全一致，否则合成将失败。
-
-#### Python
-
-```
-import os
-import requests
-import base64
-import pathlib
-import dashscope
-
-# ======= 常量配置 =======
-DEFAULT_TARGET_MODEL = "qwen3-tts-vc-2026-01-22"  # 声音复刻、语音合成要使用相同的模型
-DEFAULT_PREFERRED_NAME = "guanyu"
-DEFAULT_AUDIO_MIME_TYPE = "audio/mpeg"
-VOICE_FILE_PATH = "voice.mp3"  # 用于声音复刻的本地音频文件的相对路径
-
-def create_voice(file_path: str,
-                 target_model: str = DEFAULT_TARGET_MODEL,
-                 preferred_name: str = DEFAULT_PREFERRED_NAME,
-                 audio_mime_type: str = DEFAULT_AUDIO_MIME_TYPE) -> str:
-    """
-    创建音色，并返回 voice 参数
-    """
-    # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx"
-    api_key = os.getenv("DASHSCOPE_API_KEY")
-
-    file_path_obj = pathlib.Path(file_path)
-    if not file_path_obj.exists():
-        raise FileNotFoundError(f"音频文件不存在: {file_path}")
-
-    base64_str = base64.b64encode(file_path_obj.read_bytes()).decode()
-    data_uri = f"data:{audio_mime_type};base64,{base64_str}"
-
-    # 以下为华北2（北京）地域的配置。
-    url = "https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization"
-    payload = {
-        "model": "qwen-voice-enrollment", # 不要修改该值
-        "input": {
-            "action": "create",
-            "target_model": target_model,
-            "preferred_name": preferred_name,
-            "audio": {"data": data_uri}
-        }
-    }
-    headers = {
-        "Authorization": f"Bearer {api_key}",
-        "Content-Type": "application/json"
-    }
-
-    resp = requests.post(url, json=payload, headers=headers)
-    if resp.status_code != 200:
-        raise RuntimeError(f"创建 voice 失败: {resp.status_code}, {resp.text}")
-
-    try:
-        return resp.json()["output"]["voice"]
-    except (KeyError, ValueError) as e:
-        raise RuntimeError(f"解析 voice 响应失败: {e}")
-
-if __name__ == '__main__':
-    # 以下为华北2（北京）地域的配置。
-    dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'
-
-    text = "今天天气怎么样？"
-    response = dashscope.MultiModalConversation.call(
-        model=DEFAULT_TARGET_MODEL,
-        api_key=os.getenv("DASHSCOPE_API_KEY"),
-        text=text,
-        voice=create_voice(VOICE_FILE_PATH), # 将voice参数替换为复刻生成的专属音色
-        stream=False
-    )
-    print(response)
-```
-
-#### cURL
-
-**步骤一：创建音色**
-
-将`data`替换为实际音频文件的公网 URL 或 Base64 编码的 Data URI（格式为 `data:{MIME_type};base64,{base64_data}`）。
-
-以下为华北2（北京）地域的配置。
-
-```
-curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization' \
--H "Authorization: Bearer $DASHSCOPE_API_KEY" \
--H 'Content-Type: application/json' \
--d '{
-    "model": "qwen-voice-enrollment",
-    "input": {
-        "action": "create",
-        "target_model": "qwen3-tts-vc-2026-01-22",
-        "preferred_name": "guanyu",
-        "audio": {
-            "data": "https://xxx.wav"
-        }
-    }
-}'
-```
-**步骤二：使用复刻音色合成语音**
-
-将 `YOUR_VOICE_ID` 替换为上一步返回的 `voice` 值。
-
-Qwen-TTS 系列创建音色接口的返回体中，音色 ID 位于 `output.voice` 字段；其他模型系列的创建音色接口返回的是 `voice_id` 字段，两者均表示音色 ID，注意字段名差异。
-
-以下为华北2（北京）地域的配置。
-
-```
-curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
--H "Authorization: Bearer $DASHSCOPE_API_KEY" \
--H 'Content-Type: application/json' \
--d '{
-    "model": "qwen3-tts-vc-2026-01-22",
-    "input": {
-        "text": "今天天气怎么样？",
-        "voice": "YOUR_VOICE_ID"
-    }
-}'
-```
-
 ## 音频要求
 
 输入音频的质量直接决定复刻效果。不同模型系列对音频的具体要求有所差异，请按照目标模型的要求准备音频样本。
@@ -477,7 +352,7 @@ WAV (16bit)、MP3、M4A
     
 -   **cosyvoice-v3-flash**：中文（普通话、广东话、东北话、甘肃话、贵州话、河南话、湖北话、江西话、闽南话、宁夏话、山西话、陕西话、山东话、上海话、四川话、天津话、云南话）、英文、法语、德语、日语、韩语、俄语、葡萄牙语、泰语、印尼语、越南语
     
--   **cosyvoice-v1、****cosyvoice-v2**：中文（普通话）、英文
+-   **cosyvoice-v2**：中文（普通话）、英文
     
 
 #### MiniMax
@@ -505,40 +380,6 @@ MP3、M4A、WAV
 **支持语言**
 
 无特殊限制
-
-#### Qwen-TTS
-
-**项目**
-
-**要求**
-
-**支持格式**
-
-WAV (16bit)、MP3、M4A
-
-**音频时长**
-
-推荐 10~20 秒，最长不超过 60 秒
-
-**文件大小**
-
-≤ 10 MB
-
-**采样率**
-
-≥ 24 kHz
-
-**声道**
-
-单声道
-
-**内容**
-
-音频必须包含至少 3 秒连续清晰的朗读内容（无背景音），其余部分仅允许短暂停顿（≤ 2 秒）。整段音频应避免出现背景音乐、环境噪音或其他人声。请使用正常语速的说话音频，不要上传歌曲或唱歌录音。
-
-**支持语言**
-
-中文、英文、德语、意大利语、葡萄牙语、西班牙语、日语、韩语、法语、俄语
 
 **说明**为获得最佳复刻效果，建议参照[录音建议](https://help.aliyun.com/zh/model-studio/voice-cloning-user-guide#vc_rec_h2)准备样本。
 
@@ -587,7 +428,7 @@ WAV (16bit)、MP3、M4A
 
 ## 管理自定义音色
 
-音色创建完成后，您可以通过 API 对已有音色进行查询和管理（Qwen-Audio-TTS、Qwen-Audio-Realtime、Qwen-TTS 和 CosyVoice 支持）。Qwen-Audio-Realtime 的音色查询与删除接口与 Qwen-Audio-TTS 完全相同。
+音色创建完成后，您可以通过 API 对已有音色进行查询和管理（Qwen-Audio-TTS、Qwen-Audio-Realtime和 CosyVoice 支持）。Qwen-Audio-Realtime 的音色查询与删除接口与 Qwen-Audio-TTS 完全相同。
 
 **重要**MiniMax 仅支持创建音色，不支持查询和删除等音色管理操作。
 
@@ -601,7 +442,7 @@ WAV (16bit)、MP3、M4A
 
 ### 音色配额与自动清理
 
--   **音色总数限制**：每个阿里云百炼账号下，Qwen-Audio-TTS / Qwen-Audio-Realtime / CosyVoice 与 Qwen-TTS 分别最多可创建 1000 个自定义音色（两类配额独立计算）。达到上限后，新的创建请求将直接失败并返回错误，系统不会自动删除最早创建的复刻音色。如需创建新音色，请先删除不需要的音色以释放配额，或等待未被使用的音色自动清理（详见下方自动清理规则）。
+-   **音色总数限制**：每个阿里云百炼账号下，Qwen-Audio-TTS / Qwen-Audio-Realtime / CosyVoice 最多可创建 1000 个自定义音色。达到上限后，新的创建请求将直接失败并返回错误，系统不会自动删除最早创建的复刻音色。如需创建新音色，请先删除不需要的音色以释放配额，或等待未被使用的音色自动清理（详见下方自动清理规则）。
 -   **上限后创建行为**：达到 1000 个音色上限后，继续调用创建音色接口将直接返回失败错误，系统不会自动淘汰最早创建的复刻音色来腾出空间。需手动删除不需要的音色释放配额后才能继续创建。
 -   **自动清理规则**：若单个音色在过去 1 年内未被用于任何语音合成请求，系统将自动删除该音色。
 
@@ -610,17 +451,7 @@ WAV (16bit)、MP3、M4A
 ### 计费规则
 
 -   **Qwen-Audio-TTS** / **Qwen-Audio-Realtime** / **CosyVoice**：创建音色免费。
-    
 -   **MiniMax**：声音复刻本身不计费。首次使用复刻音色进行语音合成时，扣除 9.9 元音色解锁费用，且无免费额度。
-    
--   **Qwen-TTS**：按 0.01 元/个 计费，创建失败不计费。
-    
-    **免费额度**（仅北京地域提供）：
-    
-    -   阿里云百炼开通后 90 天内，可享 1000 次免费音色创建机会。
-    -   创建失败不占用免费次数。
-    -   删除音色不会恢复免费次数。
-    -   免费额度用完或超出 90 天有效期后，创建音色将按 0.01 元/个 的价格计费。
 
 ## 支持的模型与地域
 
@@ -629,30 +460,16 @@ WAV (16bit)、MP3、M4A
 调用以下模型时，请选择北京地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)：
 
 -   **Qwen-Audio-TTS：**qwen-audio-3.0-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-flash
-    
 -   **Qwen-Audio-Realtime：**qwen-audio-3.1-realtime-plus、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash
-    
--   **CosyVoice：**cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-plus、cosyvoice-v3-flash、cosyvoice-v2、cosyvoice-v1
-    
+-   **CosyVoice：**cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-plus、cosyvoice-v3-flash、cosyvoice-v2
 -   **MiniMax**：MiniMax/speech-2.8-hd、MiniMax/speech-02-hd、MiniMax/speech-2.8-turbo、MiniMax/speech-02-turbo
-    
--   **Qwen-TTS**：
-    
-    -   **Qwen3-TTS-VC-Realtime：**qwen3-tts-vc-realtime-2026-01-15（最新快照版）、qwen3-tts-vc-realtime-2025-11-27（快照版）
-    -   **Qwen3-TTS-VC**：qwen3-tts-vc-2026-01-22（最新快照版）
 
 #### 新加坡
 
 调用以下模型时，请选择新加坡地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)：
 
 -   **Qwen-Audio-TTS**：qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash
-    
 -   **CosyVoice**：cosyvoice-v3-plus（`cosyvoice-v3-flash` 暂不支持在新加坡地域使用复刻音色合成语音，请改用 `qwen-audio-3.0-tts-flash`）
-    
--   **Qwen-TTS**：
-    
-    -   **Qwen3-TTS-VC-Realtime：**qwen3-tts-vc-realtime-2026-01-15（最新快照版）、qwen3-tts-vc-realtime-2025-11-27（快照版）
-    -   **Qwen3-TTS-VC**：qwen3-tts-vc-2026-01-22（最新快照版）
 
 ## API 参考
 
@@ -666,7 +483,7 @@ WAV (16bit)、MP3、M4A
 
 ### Q：复刻音色的有效期是多久？
 
-Qwen-Audio-TTS、Qwen-Audio-Realtime、Qwen-TTS 和 CosyVoice 创建的音色默认长期有效。若单个音色在过去 1 年内未被用于任何语音合成请求，系统将自动删除该音色，详情请参见[音色配额与自动清理](https://help.aliyun.com/zh/model-studio/voice-cloning-user-guide#vc07_count_h3)。建议妥善保存音色 ID，需要时可通过查询接口确认音色是否仍然可用。
+Qwen-Audio-TTS、Qwen-Audio-Realtime和 CosyVoice 创建的音色默认长期有效。若单个音色在过去 1 年内未被用于任何语音合成请求，系统将自动删除该音色，详情请参见[音色配额与自动清理](https://help.aliyun.com/zh/model-studio/voice-cloning-user-guide#vc07_count_h3)。建议妥善保存音色 ID，需要时可通过查询接口确认音色是否仍然可用。
 
 ### Q：音频质量不好会影响复刻效果吗？
 

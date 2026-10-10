@@ -189,10 +189,6 @@ qwen3.5-plus
 
 81,920
 
-qwen3-max-2026-01-23
-
-81,920
-
 kimi-k2.5
 
 81,920
@@ -201,23 +197,11 @@ glm-5
 
 32,768
 
-glm-4.7
-
-32,768
-
 MiniMax-M2.5
 
 默认启用，无需配置 budgetTokens
 
-qwen3-coder-next
-
-不支持思考模式
-
-qwen3-coder-plus
-
-不支持思考模式
-
-**解决方案**：打开 OpenCode 配置文件 `opencode.json`，将对应模型的 `options.thinking.budgetTokens` 值调整为不超过该模型的上限值。对于不支持思考模式的模型（qwen3-coder-next、qwen3-coder-plus），需要移除 `options.thinking` 配置项。详情请参见[OpenCode](raw/model-user-guide/use-chat-client-or-development-tool/opencode.md)。
+**解决方案**：打开 OpenCode 配置文件 `opencode.json`，将对应模型的 `options.thinking.budgetTokens` 值调整为不超过该模型的上限值。详情请参见[OpenCode](raw/model-user-guide/use-chat-client-or-development-tool/opencode.md)。
 
 ### OpenCode 报错`InternalError.Algo.InvalidParameter: Range of max_tokens should be [1, xxxx]`怎么办？
 
@@ -400,8 +384,8 @@ OpenClaw 2026.3.8 (commit: 3caab92)
 
 ```
 {
-  "id": "qwen3-max-2026-01-23",
-  "name": "qwen3-max-2026-01-23",
+  "id": "qwen3.7-max",
+  "name": "qwen3.7-max",
   "reasoning": true,
   "compat": {
     "thinkingFormat": "qwen"
@@ -816,25 +800,9 @@ MiniMax-M2.5
 
 196,608
 
-qwen3-max-2026-01-23
-
-262,144
-
-qwen3-coder-next
-
-262,144
-
-qwen3-coder-plus
-
-1,000,000
-
-glm-4.7
-
-202,752
-
 当遇到与上下文超限相关的报错时，建议新建会话。此外，可以通过以下方式来避免超出上下文长度：
 
-1.  **切换模型**：切换支持更长上下文的模型，如 qwen3.7-plus、qwen3.6-plus、qwen3.5-plus、qwen3-coder-plus。
+1.  **切换模型**：切换支持更长上下文的模型，如 qwen3.7-plus、qwen3.6-plus、qwen3.5-plus。
 2.  **减少无关文件**：建议在具体的项目目录中启动 AI 编程工具，同时仅保留必要的项目文件。
 3.  **拆分任务**：将复杂任务拆成若干子任务，逐项提问，降低单次请求的上下文占用。
 4.  **精确指令**：模糊的请求会触发非必要的文件扫描，请在使用 AI 编程工具时提出更明确、具体的问题或指令。

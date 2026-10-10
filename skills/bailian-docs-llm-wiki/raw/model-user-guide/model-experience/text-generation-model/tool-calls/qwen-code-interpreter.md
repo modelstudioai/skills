@@ -100,7 +100,7 @@ response = dashscope.MultiModalConversation.call(
 
 千问Plus：Qwen3.7-Plus系列、Qwen3.6-Plus系列、Qwen3.5-Plus系列
 
-DeepSeek：deepseek-v4-flash、deepseek-v4-flash-0731
+DeepSeek：deepseek-v4-flash-0731
 
 Qwen3.8开源系列
 
@@ -330,7 +330,7 @@ async function main() {
     try {
         const messages = [{ role: 'user', content: '123的21次方是多少？' }];
         const stream = await openai.chat.completions.create({
-            model: 'qwen3-max',
+            model: 'qwen-max',
             messages,
             stream: true,
             enable_thinking: true,
@@ -397,7 +397,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3-max",
+    "model": "qwen-max",
     "messages": [
         {
             "role": "user",
@@ -413,23 +413,23 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 #### 响应示例
 
 ```
-data: {"choices":[{"delta":{"content":null,"role":"assistant","reasoning_content":""},"index":0,"logprobs":null,"finish_reason":null}],"object":"chat.completion.chunk","usage":null,"created":1761899724,"system_fingerprint":null,"model":"qwen3-max","id":"chatcmpl-2f96ef0b-5924-4dfc-b768-4d53ec538b4e"}
+data: {"choices":[{"delta":{"content":null,"role":"assistant","reasoning_content":""},"index":0,"logprobs":null,"finish_reason":null}],"object":"chat.completion.chunk","usage":null,"created":1761899724,"system_fingerprint":null,"model":"qwen-max","id":"chatcmpl-2f96ef0b-5924-4dfc-b768-4d53ec538b4e"}
 
-data: {"choices":[{"finish_reason":null,"logprobs":null,"delta":{"content":null,"reasoning_content":"用户"},"index":0}],"object":"chat.completion.chunk","usage":null,"created":1761899724,"system_fingerprint":null,"model":"qwen3-max","id":"chatcmpl-2f96ef0b-5924-4dfc-b768-4d53ec538b4e"}
+data: {"choices":[{"finish_reason":null,"logprobs":null,"delta":{"content":null,"reasoning_content":"用户"},"index":0}],"object":"chat.completion.chunk","usage":null,"created":1761899724,"system_fingerprint":null,"model":"qwen-max","id":"chatcmpl-2f96ef0b-5924-4dfc-b768-4d53ec538b4e"}
 
-data: {"choices":[{"delta":{"content":null,"reasoning_content":"问"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1761899724,"system_fingerprint":null,"model":"qwen3-max","id":"chatcmpl-2f96ef0b-5924-4dfc-b768-4d53ec538b4e"}
+data: {"choices":[{"delta":{"content":null,"reasoning_content":"问"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1761899724,"system_fingerprint":null,"model":"qwen-max","id":"chatcmpl-2f96ef0b-5924-4dfc-b768-4d53ec538b4e"}
 
-data: {"choices":[{"delta":{"content":null,"reasoning_content":"的是"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1761899724,"system_fingerprint":null,"model":"qwen3-max","id":"chatcmpl-2f96ef0b-5924-4dfc-b768-4d53ec538b4e"}
+data: {"choices":[{"delta":{"content":null,"reasoning_content":"的是"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1761899724,"system_fingerprint":null,"model":"qwen-max","id":"chatcmpl-2f96ef0b-5924-4dfc-b768-4d53ec538b4e"}
 
 ...
 
-data: {"choices":[{"delta":{"content":"非常大的数字，总","reasoning_content":null},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1761899724,"system_fingerprint":null,"model":"qwen3-max","id":"chatcmpl-2f96ef0b-5924-4dfc-b768-4d53ec538b4e"}
+data: {"choices":[{"delta":{"content":"非常大的数字，总","reasoning_content":null},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1761899724,"system_fingerprint":null,"model":"qwen-max","id":"chatcmpl-2f96ef0b-5924-4dfc-b768-4d53ec538b4e"}
 
-data: {"choices":[{"delta":{"content":"共有43位","reasoning_content":null},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1761899724,"system_fingerprint":null,"model":"qwen3-max","id":"chatcmpl-2f96ef0b-5924-4dfc-b768-4d53ec538b4e"}
+data: {"choices":[{"delta":{"content":"共有43位","reasoning_content":null},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1761899724,"system_fingerprint":null,"model":"qwen-max","id":"chatcmpl-2f96ef0b-5924-4dfc-b768-4d53ec538b4e"}
 
-data: {"choices":[{"delta":{"content":"。","reasoning_content":null},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1761899724,"system_fingerprint":null,"model":"qwen3-max","id":"chatcmpl-2f96ef0b-5924-4dfc-b768-4d53ec538b4e"}
+data: {"choices":[{"delta":{"content":"。","reasoning_content":null},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1761899724,"system_fingerprint":null,"model":"qwen-max","id":"chatcmpl-2f96ef0b-5924-4dfc-b768-4d53ec538b4e"}
 
-data: {"choices":[{"finish_reason":"stop","delta":{"content":"","reasoning_content":null},"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1761899724,"system_fingerprint":null,"model":"qwen3-max","id":"chatcmpl-2f96ef0b-5924-4dfc-b768-4d53ec538b4e"}
+data: {"choices":[{"finish_reason":"stop","delta":{"content":"","reasoning_content":null},"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1761899724,"system_fingerprint":null,"model":"qwen-max","id":"chatcmpl-2f96ef0b-5924-4dfc-b768-4d53ec538b4e"}
 
 data: [DONE]
 ```

@@ -6,4 +6,3 @@
 -   [可灵](raw/model-api-reference/image-generation/kling-image-api-reference.md)
 -   [Vidu](raw/model-api-reference/image-generation/vidu-image-models.md)
 -   [创意工具](raw/model-api-reference/image-generation/image-creative-tools-api-reference.md)
--   [常见问题](raw/model-api-reference/image-generation/image-faq.md)

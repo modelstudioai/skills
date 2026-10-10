@@ -53,7 +53,7 @@ String
 
 否
 
-按模型 ID 进行精确查询。示例：`qwen3-max`
+按模型 ID 进行精确查询。示例：`qwen3.8-max`
 
 page\_no
 
@@ -152,7 +152,7 @@ curl "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/models/limits?pa
 ```
 **示例二：查询特定模型的限额**
 ```
-curl "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/models/limits?model=qwen3-max" \
+curl "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/models/limits?model=qwen3.8-max" \
     --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
     --header "Content-Type: application/json"
 ```
@@ -170,7 +170,7 @@ curl "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/models/limits?mo
         "page_size": 10,
         "quotas": [
             {
-                "model": "qwen3-max",
+                "model": "qwen3.8-max",
                 "workspace_id": "llm-8l75168qayuhsr3o",
                 "model_limit": {
                     "request_limit": 500,
@@ -198,7 +198,7 @@ curl "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/models/limits?mo
                 "workspace_limit": null
             },
             {
-                "model": "qwen-image-max",
+                "model": "qwen-image-3.0-pro",
                 "workspace_id": "llm-8l75168qayuhsr3o",
                 "model_limit": {
                     "request_limit": 2,
@@ -219,9 +219,9 @@ curl "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/models/limits?mo
 
 以上示例中：
 
--   `qwen3-max`：每秒最多 500 次请求，每 6 秒最多使用 500,000 Token，未设置业务空间级别限制。
+-   `qwen3.8-max`：每秒最多 500 次请求，每 6 秒最多使用 500,000 Token，未设置业务空间级别限制。
 -   `wan2.6-i2v-flash`：每秒最多 5 次请求，无用量限制，异步任务最大排队数 500、最大并发数 5。
--   `qwen-image-max`：每分钟最多 2 次请求，每分钟最多使用 1,000,000 Token，未设置业务空间级别限制。
+-   `qwen-image-3.0-pro`：每分钟最多 2 次请求，每分钟最多使用 1,000,000 Token，未设置业务空间级别限制。
 
 ## 错误码
 

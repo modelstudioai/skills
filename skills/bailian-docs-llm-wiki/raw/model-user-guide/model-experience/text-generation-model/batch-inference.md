@@ -15,21 +15,20 @@
 **支持的模型：**
 
 -   **文本生成模型**
-    -   千问 Max：qwen3.8-max、qwen3.7-max、qwen3-max
+    -   千问 Max：qwen3.8-max、qwen3.7-max
     -   千问 Plus：qwen3.7-plus、qwen3.6-plus、qwen3.5-plus、qwen-plus、qwen-plus-latest
     -   千问 Flash：qwen3.8-flash、qwen3.7-flash、qwen3.6-flash、qwen3.5-flash、qwen-flash
-    -   千问 Long：qwen-long、qwen-long-latest
-    -   第三方模型：deepseek-r1、deepseek-v3.2、deepseek-v3
+    -   千问 Long：qwen-long
 -   **多模态模型**
-    -   [图像与视频理解](raw/model-user-guide/model-experience/vision-model/vision.md)：qwen3.8-max、qwen3.8-flash、qwen3.7-plus、qwen3.6-plus、qwen3.7-flash、qwen3.6-flash、qwen3.5-plus、qwen3.5-flash、qwen3-vl-plus、qwen3-vl-flash
-    -   [文字提取](raw/model-user-guide/model-experience/vision-model/qwen-vl-ocr.md)：qwen-vl-ocr、qwen-vl-ocr-latest
+    -   [图像与视频理解](raw/model-user-guide/model-experience/vision-model/vision.md)：qwen3.8-max、qwen3.8-flash、qwen3.7-plus、qwen3.6-plus、qwen3.7-flash、qwen3.6-flash、qwen3.5-plus、qwen3.5-flash、qwen3-vl-plus
+    -   [文字提取](raw/model-user-guide/model-experience/vision-model/qwen-vl-ocr.md)：qwen-vl-ocr
     -   [全模态](raw/model-user-guide/model-experience/omni-modal/qwen-omni.md)：qwen3.5-omni-plus、qwen3.5-omni-flash
 -   [向量模型](raw/model-user-guide/model-experience/embedding-rerank-model/embedding.md)**：**text-embedding-v1、text-embedding-v2、text-embedding-v3、text-embedding-v4、qwen3.7-text-embedding、qwen3.7-text-embedding-flash
     
 
 #### 新加坡
 
-**支持的模型**：qwen3.7-plus、qwen-max、qwen-plus、qwen-turbo。
+**支持的模型**：qwen3.7-plus、qwen-max、qwen-plus。
 
 **重要**
 
@@ -201,7 +200,7 @@ if __name__ == "__main__":
 
 ```
 # 多模态模型配置示例
-MODEL = "qwen-vl-max"       # 多模态模型
+MODEL = "qwen3-vl-plus"       # 多模态模型
 
 # 多模态任务：content 为数组格式
 TASKS = [
@@ -212,12 +211,8 @@ TASKS = [
     ]},
 ]
 
-# qwen-omni-turbo 音频/视频格式：
-# {"type": "input_audio", "input_audio": {"data": "https://example.com/audio.wav", "format": "wav"}}
-# {"type": "video_url", "video_url": "https://example.com/video.mp4"}
-
 # 注意：
-# - qwen3-vl-plus 和 qwen3-vl-flash 不使用 system 角色，thinking_budget 设置为 500
+# - qwen3-vl-plus 不使用 system 角色，thinking_budget 设置为 500
 # - 其他多模态模型包含 system 角色，thinking_budget 设置为 50
 # - 思考模式需额外设置 ENABLE_THINKING = True
 ```
@@ -290,7 +285,7 @@ print(f"已生成 {output_file}，共 {len(TEXTS)} 条请求")
 -   **管理**：
     
     -   取消："执行中"的任务可在**操作**列取消。
-    -   排错："失败"的任务可悬停状态查看错误概要，下载错误文件查看详情。例如，若批次文件中混用了不同模型，任务将显示**失败**状态，错误信息示例：`The model 'qwen-turbo' for this request does not match the rest of the batch. Each batch must contain requests for a single model.`
+    -   排错："失败"的任务可悬停状态查看错误概要，下载错误文件查看详情。例如，若批次文件中混用了不同模型，任务将显示**失败**状态，错误信息示例：`The model 'qwen-plus' for this request does not match the rest of the batch. Each batch must contain requests for a single model.`
 
 ### 步骤四：下载结果
 

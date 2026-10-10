@@ -4,7 +4,7 @@
 
 ## 接口说明
 
--   本接口不支持数据查询/图片问答类知识库。关于如何更新数据查询/图片问答类知识库，请参见[知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)一文中关于更新知识库的说明。
+-   本接口不支持数据查询/图片问答类知识库。关于如何更新数据查询/图片问答类知识库，请参见[知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)一文中关于更新知识库的说明。
 -   RAM 用户（子账号）需要首先获取阿里云百炼的 [API 权限](https://help.aliyun.com/zh/model-studio/grant-data-access-permission-to-ram-user)（需要`AliyunBailianDataFullAccess`，已包括 sfm:SubmitIndexAddDocumentsJob 权限点），并[加入一个业务空间](https://help.aliyun.com/zh/model-studio/grant-the-business-space-permission-to-ram-users)后，方可调用本接口。阿里云账号（主账号）可直接调用无须授权。建议您通过最新版[阿里云百炼 SDK](https://api.aliyun.com/api-tools/sdk/bailian?version=2023-12-29)来调用本接口。
 -   调用本接口前，请确保您的知识库已经创建完成且未被删除（即知识库 ID`IndexId`有效）。
 -   调用该接口前，请先调用 **AddFile** 接口将您需要追加导入的文件上传至阿里云百炼。
@@ -172,7 +172,7 @@ string
 
 否
 
-启用自定义切分（仅对您本次追加的文件生效）。更多信息，请参见[知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)。可能取值（不支持同时传入多个值）：
+启用自定义切分（仅对您本次追加的文件生效）。更多信息，请参见[知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。可能取值（不支持同时传入多个值）：
 
 -   **length**：按长度切分。严格按照您指定的`ChunkSize`和`OverlapSize`切分。 若您未传入这两个参数，系统将采用默认值（`ChunkSize`为 500，`OverlapSize`为 100）。按长度切分不支持`Separator`（即使传入也不生效）。
     
@@ -193,7 +193,7 @@ string
 
 否
 
-分句标识符，仅在`chunkMode`\=**regex** 时生效（否则即使传入也不生效）。可传入一个正则表达式（不支持多个），用于将文件分割为小段的文本切片。更多信息，请参见[知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)。
+分句标识符，仅在`chunkMode`\=**regex** 时生效（否则即使传入也不生效）。可传入一个正则表达式（不支持多个），用于将文件分割为小段的文本切片。更多信息，请参见[知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
 
 使用智能切分（未指定`chunkMode`）时，保持默认空值即可。
 
@@ -214,7 +214,7 @@ integer
 
 取值范围\[1-6000\]。如果未传入本参数，将使用默认值 500。
 
-更多信息，请参见[知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)。
+更多信息，请参见[知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
 
 请注意，如果您指定了`ChunkSize`参数且小于 100，则必须指定`OverlapSize`参数。您也可以不指定这 2 个参数（系统将采用默认值）。
 
@@ -226,7 +226,7 @@ integer
 
 否
 
-分段重叠长度（仅对您本次追加的文件生效）。它表示当前文本切片与上一个文本切片的重叠字符数。更多信息，请参见[知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)。取值范围\[0-1024\]。
+分段重叠长度（仅对您本次追加的文件生效）。它表示当前文本切片与上一个文本切片的重叠字符数。更多信息，请参见[知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。取值范围\[0-1024\]。
 
 如果未传入本参数，将使用默认值 100。
 

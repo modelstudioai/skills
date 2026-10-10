@@ -582,8 +582,6 @@ string
     
 -   qwen2.5-7b-instruct-1m
     
--   deepseek-r1
-    
 
 qwen-max
 
@@ -1112,7 +1110,7 @@ string
 
 实际使用的模型唯一标识
 
-qwen-vl-max
+qwen3-vl-plus
 
 videoCaptionResult
 
@@ -1921,7 +1919,7 @@ string
             "text": "根据xxx"
           }
         ],
-        "modelId": "qwen-vl-max"
+        "modelId": "qwen3-vl-plus"
       },
       "videoCaptionResult": {
         "generateFinished": true,

@@ -259,8 +259,10 @@ public class ImageDownloader {
 
 ## 模型选型建议
 
--   `qwen-image-3.0-pro`**系列（推荐）：**千问图像3.0旗舰版，图像生成与编辑能力全面升级，文字渲染、真实质感、语义遵循能力更强。
--   `qwen-image-3.0`**系列：**千问图像3.0标准版，兼顾质量与速度。
+-   `qwen-image-3.0-pro`**（旗舰效果）：**千问图像3.0旗舰版，图像生成与编辑能力全面升级，文字渲染、真实质感、语义遵循能力更强。
+-   `qwen-image-2.1-pro`**（速度、效果、成本最均衡）：**支持传入最多10张参考图，能根据提示词自动决定输出普通图像或带透明通道的图像，不支持`negative_prompt`。
+-   `qwen-image-2.1-turbo`**（极致性价比）：**Qwen-Image系列中综合性价比最优，支持传入最多10张参考图，能根据提示词自动决定输出普通图像或带透明通道的图像，不支持`negative_prompt`。
+-   `qwen-image-3.0`**：**千问图像3.0标准版，兼顾质量与速度。
 
 各地域支持的模型请参见[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)模型列表。
 
@@ -268,7 +270,7 @@ public class ImageDownloader {
 
 ### 输入图像（messages）
 
-`messages` 是一个数组，且必须仅包含一个对象。该对象需包含 `role` 和 `content` 属性。其中`role`必须设置为`user`，`content`需要同时包含`image`（1-3张图像）和`text`（一条编辑指令）。
+`messages` 是一个数组，且必须仅包含一个对象。该对象需包含 `role` 和 `content` 属性。其中`role`必须设置为`user`，`content`需要同时包含`image`和`text`（一条编辑指令）。qwen-image-3.0系列支持1-3张图像，qwen-image-2.1系列支持1-10张图像。
 
 输入图片必须满足以下要求：
 
@@ -350,15 +352,12 @@ public class ImageDownloader {
 
 可以通过以下**可选**参数调整生成效果：
 
--   **n**：指定输出图像数量，默认值为1。qwen-image-3.0系列、qwen-image-2.0系列、qwen-image-edit-max和qwen-image-edit-plus系列模型支持输出1-6张图片，`qwen-image-edit`模型仅支持输出1张图片。
--   **negative\_prompt（反向提示词）**：描述不希望在画面中出现的内容，如“模糊”、“多余的手指”等，用于辅助优化生成质量。
--   **watermark**：是否在图像右下角添加 "Qwen-Image" 水印。默认值为 `false`。
--   **seed**：随机数种子。取值范围是`[0, 2147483647]`。如果不提供，则算法自动生成一个随机数作为种子。使用相同的 seed 值可帮助生成内容保持相对稳定。
-
-以下**可选**参数仅qwen-image-3.0系列、qwen-image-2.0系列、qwen-image-edit-max、qwen-image-edit-plus系列模型支持：
-
--   **size**：设置输出图像的分辨率，格式为`宽*高`，例如`"1024*2048"`。对于qwen-image-3.0系列模型，像素面积范围为512_512至2048_2048，宽高比限制为1:8至8:1，未指定时由模型根据提示词自动推荐分辨率。对于qwen-image-2.0系列模型，支持自由设置宽高，输出图像总像素需在512_512至2048_2048之间，默认分辨率与输入图（多图输入时为最后一张图）一致。对于qwen-image-edit-max、qwen-image-edit-plus系列模型，宽和高的取值范围均为\[512, 2048\]像素，默认保持与原图相似的长宽比，总像素接近`1024*1024`分辨率。
--   **prompt\_extend：**是否开启prompt智能改写功能，默认值为 `true`。开启后，模型将优化提示词，对描述性不足、较为简单的prompt提升效果较明显。
+-   **n**：输出图像数量（默认 1，最多 6 张）。n 直接影响费用。
+-   **negative\_prompt**：描述不希望出现的内容（如”模糊”、”多余的手指”），辅助优化生成质量。qwen-image-2.1 系列不支持此参数，请在正向提示词中描述。
+-   **size**：输出分辨率，格式为`宽*高`。qwen-image-3.0 系列和 qwen-image-2.1 系列支持 512\*512 至 2048\*2048（宽高比 1:8 至 8:1），不指定时由模型自动推荐。
+-   **prompt\_extend**：prompt 智能改写（默认开启）。简洁 prompt 建议开启；详细 prompt 或延迟敏感场景建议关闭。
+-   **seed**：随机数种子，使用相同值可使生成结果保持相对稳定。
+-   **watermark**：是否添加水印（默认关闭）。
 
 完整参数列表请参考[千问-图像编辑API](raw/model-api-reference/image-generation/qwen-image-api-reference/legacy-qwen-image-models/qwen-image-edit-api.md)。
 
@@ -656,16 +655,16 @@ API的输入输出参数，请参见[千问-图像编辑](raw/model-api-referenc
 
 ## 常见问题
 
-### Q：千问图像编辑模型支持哪些语言？
+#### Q：千问图像编辑模型支持哪些语言？
 
 A：目前正式支持**简体中文和英文**；其他语言可自行尝试，但效果存在不确定性。
 
-#### Q: 如何查看模型调用量？
+#### Q：如何查看模型调用量？
 
-A: 模型调用完一小时后，请在[**模型监控**（北京）](https://bailian.console.aliyun.com/cn-beijing/model/telemetry)或[**模型监控**（新加坡）](https://bailian.console.aliyun.com/ap-southeast-1/model/telemetry) 页面，查看模型的调用次数、成功率等指标。详情请参见[账单查询与成本管理](raw/model-user-guide/test-1/bill-query-and-cost-management.md)。
+A：模型调用完一小时后，请在[**模型监控**（北京）](https://bailian.console.aliyun.com/cn-beijing/model/telemetry)或[**模型监控**（新加坡）](https://bailian.console.aliyun.com/ap-southeast-1/model/telemetry) 页面，查看模型的调用次数、成功率等指标。详情请参见[账单查询与成本管理](raw/model-user-guide/test-1/bill-query-and-cost-management.md)。
 
 #### Q：如何获取图像存储的访问域名白名单？
 
 A： 模型生成的图像存储于阿里云OSS，API将返回一个临时的公网URL（链接有效期为 24 小时，请及时下载保存）。图片URL的域名格式为`dashscope-{标识}.oss-accelerate.aliyuncs.com`或`dashscope-{标识}.oss-cn-{地域}.aliyuncs.com`。**若需要对该下载地址进行防火墙白名单配置**，请注意：由于底层存储会动态变更，以下bucket名称仅供参考，可能随时更新：dashscope-a717、dashscope-66f3、dashscope-7c2c、dashscope-2522、dashscope-c72b、dashscope-0484、dashscope-7e0f、dashscope-5859、dashscope-5496、dashscope-35f9、dashscope-31d9、dashscope-7f1f、dashscope-cc75、dashscope-64e9。为避免过期信息影响访问，文档不提供固定的OSS域名白名单。如有安全管控需求，请联系客户经理获取最新OSS域名列表。API当前仅支持返回URL格式，不支持base64格式输出。
 
-更多问题请参见[图像生成常见问题](raw/model-api-reference/image-generation/image-faq.md)。
+更多问题请参见[图像生成常见问题](https://help.aliyun.com/zh/model-studio/image-faq)。

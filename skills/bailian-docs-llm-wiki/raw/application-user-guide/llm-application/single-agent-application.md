@@ -58,7 +58,7 @@
 
 ### 知识库（RAG）
 
-检索增强生成（RAG）使智能体能够查询外部知识库，并以检索到的内容作为生成答案的依据。对于私有知识或垂直领域问答，RAG 可显著提升回答准确率，减少幻觉问题。详情参见[创建和使用知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)。
+检索增强生成（RAG）使智能体能够查询外部知识库，并以检索到的内容作为生成答案的依据。对于私有知识或垂直领域问答，RAG 可显著提升回答准确率，减少幻觉问题。详情参见[创建和使用知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
 
 **说明**从知识库中检索到的文本会占用模型的上下文窗口。需根据实际情况调整检索策略和文本长度，以充分利用上下文窗口并避免超限。
 

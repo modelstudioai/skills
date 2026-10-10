@@ -1,12 +1,12 @@
 # 实时语音识别（Qwen-Audio-ASR-Message）客户端事件
 
-本文介绍 Qwen-Audio-3.1-ASR-Flash-Message 实时语音识别服务中客户端通过 WebSocket 发送给服务端的客户端事件，包括 run-task（启动任务）、 continue-task（更新上下文）、 finish-task（结束任务）等指令的数据结构与字段含义。
+本文介绍 Qwen-Audio-ASR-Message 的客户端事件及参数。
 
 ## run-task
 
 启动语音识别任务，设置模型、音频格式、采样率等参数。
 
-**发送时机**：建立 WebSocket 连接后立即发送。
+**发送时机**：连接建立成功后立即发送。
 
 **响应事件**：服务端返回 `task-started` 事件后才能发送音频。
 
@@ -104,6 +104,8 @@
 
 是否保留方言表达，默认值为 `false`。`false`：将方言转写为普通话文本；`true`：保留方言表达。
 
+仅在最终结果（`sentence_end=true`）生效，中间结果（`sentence_end=false`）不支持。
+
 **vad\_model** `string`（可选）
 
 VAD 模型，默认值为 `far_field_meeting_16k`。
@@ -157,11 +159,52 @@ amr：仅支持AMR-NB类型。
 
 与预编译热词同时配置时，系统会合并两类热词；合并后超过 2000 个时，随机选择 2000 个使用。使用方法请参见[即时热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_instant_h3)。
 
+**language\_hints**`array[string]`（可选）
+
+待识别音频语种。无默认值，不设置时模型自动识别。
+
+最多支持设置 4 个值，超出时仅前 4 个生效。
+
+点击查看支持的语言代码
+
+-   zh: 中文
+-   en: 英文
+-   ja: 日语
+-   ko：韩语
+-   vi：越南语
+-   th：泰语
+-   id：印尼语
+-   ms：马来语
+-   tl：菲律宾语
+-   hi：印地语
+-   ar：阿拉伯语
+-   fr：法语
+-   de：德语
+-   es：西班牙语
+-   pt：葡萄牙语
+-   ru：俄语
+-   it：意大利语
+-   nl：荷兰语
+-   sv：瑞典语
+-   da：丹麦语
+-   fi：芬兰语
+-   no：挪威语
+-   el：希腊语
+-   pl：波兰语
+-   cs：捷克语
+-   hu：匈牙利语
+-   ro：罗马尼亚语
+-   bg：保加利亚语
+-   hr：克罗地亚语
+-   sk：斯洛伐克语
+
+仅在最终结果（`sentence_end=true`）生效，中间结果（`sentence_end=false`）不支持。
+
 **max\_sentence\_silence**`integer`（可选）
 
 VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈值时，系统会判定该句子已结束。
 
-默认值：1300。
+默认值：800。
 
 取值范围：\[200, 6000\]。
 

@@ -134,8 +134,8 @@ npm install @langchain/community @langchain/core
 import { ChatAlibabaTongyi } from "@langchain/community/chat_models/alibaba_tongyi";
 import { HumanMessage } from "@langchain/core/messages";
 
-// Default model is qwen-turbo
-const qwenTurbo = new ChatAlibabaTongyi({
+// Default model is qwen-plus
+const qwenPlus = new ChatAlibabaTongyi({
   alibabaApiKey: process.env.DASHSCOPE_API_KEY,
   // other params...
 });

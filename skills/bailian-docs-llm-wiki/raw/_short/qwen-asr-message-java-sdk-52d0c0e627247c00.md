@@ -570,6 +570,8 @@ amr：仅支持AMR-NB类型。
 
 默认 `false`，将方言转写为普通话；设为 `true` 时保留方言表达。通过 `.parameter("keep_dialect", value)` 设置。完整参数说明请参见[客户端事件](raw/_short/qwen-asr-message-client-events-0be34a3639cdd40b.md)。
 
+仅在最终结果（`sentence_end=true`）生效，中间结果（`sentence_end=false`）不支持。
+
 `vad_model`
 
 `String`
@@ -641,6 +643,53 @@ RecognitionParam param = RecognitionParam.builder()
         .build();
 ```
 
+`language_hints`
+
+`String[]`
+
+否
+
+待识别音频语种。无默认值，不设置时模型自动识别。
+
+最多支持设置 4 个值，超出时仅前 4 个生效。
+
+点击查看支持的语言代码
+
+-   zh: 中文
+-   en: 英文
+-   ja: 日语
+-   ko：韩语
+-   vi：越南语
+-   th：泰语
+-   id：印尼语
+-   ms：马来语
+-   tl：菲律宾语
+-   hi：印地语
+-   ar：阿拉伯语
+-   fr：法语
+-   de：德语
+-   es：西班牙语
+-   pt：葡萄牙语
+-   ru：俄语
+-   it：意大利语
+-   nl：荷兰语
+-   sv：瑞典语
+-   da：丹麦语
+-   fi：芬兰语
+-   no：挪威语
+-   el：希腊语
+-   pl：波兰语
+-   cs：捷克语
+-   hu：匈牙利语
+-   ro：罗马尼亚语
+-   bg：保加利亚语
+-   hr：克罗地亚语
+-   sk：斯洛伐克语
+
+通过 `RecognitionParam` 的 `.parameter("language_hints", new String[]{"zh"})` 设置。
+
+仅在最终结果（`sentence_end=true`）生效，中间结果（`sentence_end=false`）不支持。
+
 `max_sentence_silence`
 
 `Integer`
@@ -649,7 +698,7 @@ RecognitionParam param = RecognitionParam.builder()
 
 VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈值时，系统会判定该句子已结束。
 
-默认值：1300。
+默认值：800。
 
 取值范围：\[200, 6000\]。
 

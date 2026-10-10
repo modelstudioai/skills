@@ -2,7 +2,7 @@
 
 千问-图像编辑模型支持多图输入和多图输出，可精确修改图内文字、增删或移动物体、改变主体动作、迁移图片风格及增强画面细节。
 
-**快速入口：**[使用指南](raw/model-user-guide/model-experience/image-model/image-edit-guide/qwen-image-edit-guide.md) | [技术博客](https://qwen.ai/blog?id=1675c295dc29dd31073e5b3f72876e9d684e41c6&from=research.research-list) | [在线体验](https://bailian.console.aliyun.com/model/experience/vision/imageGenerate?modelId=qwen-image-edit)
+**快速入口：**[使用指南](raw/model-user-guide/model-experience/image-model/image-edit-guide/qwen-image-edit-guide.md) | [技术博客](https://qwen.ai/blog?id=1675c295dc29dd31073e5b3f72876e9d684e41c6&from=research.research-list) | [在线体验](https://bailian.console.aliyun.com/model/experience/vision/imageGenerate?modelId=qwen-image-edit-3.0-pro)
 
 ## 模型概览
 
@@ -62,43 +62,6 @@ qwen-image-2.0 `推荐`
 > 图像生成请参考[千问-文生图](raw/model-api-reference/image-generation/qwen-image-api-reference/legacy-qwen-image-models/qwen-image-api.md)。
 
 qwen-image-2.0-2026-03-03 `推荐`
-
-qwen-image-edit-max
-
-> 当前与qwen-image-edit-max-2026-01-16能力相同
-
-千问图像编辑Max系列。工业设计、几何推理、角色一致性更强。
-
-图像分辨率：
-
--   **可指定**：宽和高的取值范围均为`[512, 2048]`像素。
--   **默认**：总像素数接近 1024\*1024，宽高比与输入图（多图输入时为最后一张）相近。
-
-图像格式：png
-
-图像张数：1-6张
-
-qwen-image-edit-max-2026-01-16
-
-qwen-image-edit-plus
-
-> 当前与qwen-image-edit-plus-2025-10-30能力相同
-
-千问图像编辑Plus系列，支持多图输出与自定义分辨率。
-
-qwen-image-edit-plus-2025-12-15
-
-qwen-image-edit-plus-2025-10-30
-
-qwen-image-edit
-
-支持单图编辑和多图融合。
-
-图像分辨率：**不可指定**。生成规则同上方的**默认**规则。
-
-图像格式：png
-
-图像张数：固定1张
 
 各地域支持的模型请参见[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)。
 
@@ -203,7 +166,7 @@ qwen-image-edit
 
 正向提示词用于描述您期望生成的图像内容、风格和构图。
 
-支持中英文，qwen-image-2.0系列模型长度上限为 1300 Token，其他模型为 800 Token，超出部分将自动截断。
+支持中英文，qwen-image-2.0系列模型长度上限为 1300 Token，超出部分将自动截断。
 
 **注意**：仅支持传入一个text，不传或传入多个将报错。
 
@@ -217,9 +180,7 @@ qwen-image-edit
 
 输出图像的数量，默认值为1。
 
-对于qwen-image-2.0系列、qwen-image-edit-max、qwen-image-edit-plus系列模型，可选择输出1-6张图片。
-
-对于`qwen-image-edit`，仅支持输出1张图片。
+对于qwen-image-2.0系列模型，可选择输出1-6张图片。
 
 **negative\_prompt** `string` （可选）
 
@@ -238,11 +199,6 @@ qwen-image-edit
 -   图像总像素需在512_512至2048_2048之间。
 -   默认总像素数接近 `1024*1024`，宽高比与输入图（多图输入时为最后一张）相近。
 
-**qwen-image-edit-max、qwen-image-edit-plus系列模型**：
-
--   宽和高的取值范围均为\[512, 2048\]像素。
--   默认总像素数接近 `1024*1024`，宽高比与输入图（多图输入时为最后一张）相近。
-
 > 指定 `size` 参数，系统会以 `size`指定的宽高为目标，将实际输出图像的宽高调整为最接近的16的倍数。例如，设置`1033*1032`，输出图像尺寸为`1040*1024`。
 
 常见比例推荐分辨率
@@ -256,13 +212,13 @@ qwen-image-edit
 -   16:9: 1280_720、1920_1080
 -   21:9: 1344_576、2048_872
 
-**支持模型**：除`qwen-image-edit`以外的模型。
+**支持模型**：所有模型。
 
 **prompt\_extend** `boolean` （可选）
 
 是否开启提示词智能改写，默认值为 `true`。开启后，模型会优化正向提示词（`text`），对描述较简单的提示词效果提升明显。
 
-**支持模型**：除`qwen-image-edit`以外的模型。
+**支持模型**：所有模型。
 
 **watermark** `boolean` （可选）
 
@@ -495,7 +451,7 @@ messages = [
 # 若没有配置环境变量，请用百炼 API Key 将下行替换为：api_key="sk-xxx"
 api_key = os.getenv("DASHSCOPE_API_KEY")
 
-# qwen-image-2.0系列、qwen-image-edit-max、qwen-image-edit-plus系列支持输出1-6张图片
+# qwen-image-2.0系列支持输出1-6张图片
 response = MultiModalConversation.call(
     api_key=api_key,
     model="qwen-image-2.0-pro",
@@ -566,7 +522,7 @@ messages = [
 # 若没有配置环境变量，请用百炼 API Key 将下行替换为：api_key="sk-xxx"
 api_key = os.getenv("DASHSCOPE_API_KEY")
 
-# qwen-image-2.0系列、qwen-image-edit-max、qwen-image-edit-plus系列支持输出1-6张图片
+# qwen-image-2.0系列支持输出1-6张图片
 response = MultiModalConversation.call(
     api_key=api_key,
     model="qwen-image-2.0-pro",
@@ -699,7 +655,7 @@ public class QwenImageEdit {
                         Collections.singletonMap("image", "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260310/qokhtl/image+%2816%29.png"),
                         Collections.singletonMap("text", "使用图一的城市照片作为底图。请勿更改照片中的真实建筑、街道、车辆或人物。保持照片的真实性。三个图二中的卡通形象在建筑物周围，一个趴在建筑物上方，一个从建筑物的右边探出头来，一个坐在建筑物前的空地上。该形象应采用扁平化的图形风格绘制，轮廓清晰，类似于壁画或海报插图。")
                 )).build();
-        // qwen-image-2.0系列、qwen-image-edit-max、qwen-image-edit-plus系列支持输出1-6张图片
+        // qwen-image-2.0系列支持输出1-6张图片
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("watermark", false);
         parameters.put("negative_prompt", " ");
@@ -780,7 +736,7 @@ public class QwenImageEdit {
                         Collections.singletonMap("image", image),
                         Collections.singletonMap("text", "在画面右下角石板路旁、靠近树干根部的位置，以浅灰墨色手写体题写一首七言绝句，字体为行楷风格，笔触自然流畅、略带飞白，大小适中（约占画面高度1/10），与整体水墨淡雅氛围协调。诗文内容为：“青石桥畔柳风轻， 素手拈花闭目听。 一水碧痕浮旧梦， 半篙烟雨入空舲。”诗句横向排列，四句分两行书写（前两句一行，后两句一行），末句“舲”字右下角钤一枚朱红小印，印文为“江南”二字篆书，尺寸约等于单字高度的1/3。")
                 )).build();
-        // qwen-image-2.0系列、qwen-image-edit-max、qwen-image-edit-plus系列支持输出1-6张图片
+        // qwen-image-2.0系列支持输出1-6张图片
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("watermark", false);
         parameters.put("negative_prompt", " ");

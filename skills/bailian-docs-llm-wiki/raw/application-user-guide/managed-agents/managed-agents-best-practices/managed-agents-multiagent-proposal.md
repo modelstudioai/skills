@@ -19,7 +19,7 @@ export DASHSCOPE_API_KEY="<你的 DashScope API Key>"
 
 所有请求带 `Authorization: Bearer $DASHSCOPE_API_KEY`。多智能体的 `multiagent` 配置与 Session 事件流属于 Managed Agents 能力，当前仅 `cn-beijing`。
 
-模型 ID 用 `qwen3.8-max` / `qwen3.7-max` / `qwen3.7-plus`（`qwen3-max` 这类常规 ID 会被拒，返回 400）。roster 里每个成员都是完整 Agent，**可按角色混用不同模型**——高价值的写作/协调用旗舰模型，机械的读文件、套规则可换更廉价的模型档位，用不同模型 ID 区分成本即可。本例统一用 `qwen3.7-plus` 演示。
+模型 ID 用 `qwen3.8-max` / `qwen3.7-max` / `qwen3.7-plus`。roster 里每个成员都是完整 Agent，**可按角色混用不同模型**——高价值的写作/协调用旗舰模型，机械的读文件、套规则可换更廉价的模型档位，用不同模型 ID 区分成本即可。本例统一用 `qwen3.7-plus` 演示。
 
 多智能体场景的两个高频问题，先放在最前面：
 

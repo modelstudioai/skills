@@ -378,7 +378,7 @@ String\[\]
 
 点击查看支持的语言代码
 
--   qwen-audio-3.1-asr-flash-filetrans、qwen-audio-3.0-asr-flash-filetrans、fun-asr、fun-asr-2025-11-07、fun-asr-mtl、fun-asr-mtl-2025-08-25：
+-   qwen-audio-3.1-asr-flash-filetrans、qwen-audio-3.0-asr-flash-filetrans、fun-asr：
     
     -   zh: 中文
     -   en: 英文
@@ -410,10 +410,6 @@ String\[\]
     -   bg：保加利亚语
     -   hr：克罗地亚语
     -   sk：斯洛伐克语
--   fun-asr-2025-08-25：
-    
-    -   zh: 中文
-    -   en: 英文
 
 **说明**`language_hints`需要通过`TranscriptionParam`实例的`parameter`方法或者`parameters`方法进行设置：
 

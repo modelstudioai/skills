@@ -1,68 +1,42 @@
 # plug in
 
-插件是百炼平台用于扩展大模型能力的核心机制，通过将外部工具（如 API）封装为可调用的标准化组件，弥补大模型在实时信息获取、精确计算、代码执行、图像生成等方面的固有局限。插件支持由大模型自主规划调用（Agent 模式），也可作为工作流节点显式编排，适用于智能体应用、工作流应用及 Assistant API 等多种调用路径。其设计兼顾开箱即用性与深度定制能力。
+插件（Plug-in）是百炼平台提供的扩展能力机制，允许用户在不修改模型底层逻辑的前提下，动态接入外部工具、API 或业务系统，实现[函数调用](../concepts/function-calling.md)（Function Calling）、数据检索、服务编排等增强功能。插件以标准化 schema 描述能力，并通过平台统一调度与权限管控。当前插件能力深度集成于推理请求链路，支持同步/异步调用模式。
 
 ## 支持的模型/功能
 
-百炼插件当前支持以下模型：`qwen-turbo`、`qwen-plus`、`qwen-max`、`qwen-vl-max`、`qwen-vl-plus`。各模型对插件的兼容性存在差异，**实际可用性以控制台运行结果为准**，不建议依赖文档中静态列表做兼容性断言 [插件概述](../../raw/application-user-guide/plug-in/plug-in-overview.md)。
+- **模型支持**：仅限 `qwen-plus`、`qwen-max` 及后续标注为“支持插件调用”的大模型版本；`qwen-turbo` 和 `qwen-14b-chat` 等轻量模型**不支持**插件调用。  
+- **功能类型**：  
+  - 官方插件（如 `weather`, `web_search`, `calendar`）由百炼预置并维护，详见 [官方和第三方插件](../../raw/application-user-guide/plug-in/plugins.md)；  
+  - 自定义插件需按 OpenAPI 3.0 规范定义 schema，并通过控制台注册，具体要求见 [自定义插件](../../raw/application-user-guide/plug-in/custom-plug-ins.md)；  
+  - 所有插件均支持 `tool_choice` 显式控制是否启用，且可参与多轮 tool calling 迭代。
 
-插件按来源分为三类：
-- **官方插件**：预置于组件广场，免配置即用，包括 `code_interpreter`（Python 代码执行）、`calculator`（复杂数学计算）、`text_to_image`（文生图）、`quark_search`（实时网络搜索）、`generate_qrcode`（URL 转二维码）、`github_search`（GitHub 项目检索）等 [官方和第三方插件](../../raw/application-user-guide/plug-in/plugins.md)。
-- **三方插件**：来自云市场，覆盖商业服务、图像视频、教育等领域，需开通后使用，无需额外参数配置。
-- **自定义插件**：用户自主创建并托管的 API 封装，支持完全自定义 URL、鉴权方式、输入/输出参数结构及调用逻辑 [自定义插件](../../raw/application-user-guide/plug-in/custom-plug-ins.md)。
-
-> **注意**：文档 1 中称“夸克搜索插件目前支持检索网页标题、关键词和摘要，但不支持直接访问网页详情”，而文档 3 的“常见问题”明确指出“夸克搜索和联网搜索（enable_search）有什么区别？——开启夸克搜索插件时，模型将直接调用插件执行搜索，并将搜索结果以文本形式返回……”，二者描述存在潜在矛盾：前者强调“不支持访问详情”，后者隐含“结果已包含足够上下文供模型生成”。实践中应以插件实际返回的 `results` 字段内容为准，而非预设限制。
+> **注意**：[插件概述](../../raw/application-user-guide/plug-in/plug-in-overview.md) 中提及“所有 Qwen 系列模型默认支持插件”，该描述已过时，实际以模型文档中标注的 `plugin_support: true` 字段为准。
 
 ## 关键参数
 
-插件调用的核心参数由两层定义构成：
-
-- **插件级参数**（仅自定义插件）：
-  - `plugin_url`：插件根域名，如 `https://example.com`；
-  - 鉴权配置：支持 `Header` 或 `Query` 位置，`Type` 可选 `basic`/`bearer`/`appcode`，`Token` 为服务级凭据；
-  - 是否启用鉴权：影响请求头或 URL 构造。
-
-- **工具级参数**（所有插件）：
-  - `tool_name`：语义化名称，影响模型调用决策；
-  - `tool_description`：自然语言描述，**必须包含使用示例**，直接影响模型是否准确识别调用意图；
-  - `tool_path`：相对路径，拼接至 `plugin_url` 构成完整 endpoint；
-  - 输入参数（`in_params`）：
-    - `parameter_name`：如 `city`、`article_index`；
-    - `parameter_description`：需精确说明格式（如 `yyyy-MM-dd`）；
-    - `type`：支持 `String`/`Number`/`Object`（Object 子属性**不可为空**）；
-    - `passing_method`：`大模型识别`（从用户 query 提取）或 `业务透传`（由外部传入 `biz_params`）；
-  - 输出参数（`out_params`）：定义模型如何解析 API 响应，**所有字段必填且层级宜扁平**。
+| 参数名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| `tools` | array | 是 | 插件定义列表，每个元素为符合 OpenAPI 3.0 的 tool schema 对象（含 `name`, `description`, `parameters`） |
+| `tool_choice` | string / object | 否 | 可选 `"auto"`（默认）、`"none"` 或 `{ "type": "function", "function": { "name": "xxx" } }`；控制模型是否及如何选择插件 |
+| `tool_config` | object | 否 | 高级配置，如 `{"parallel": true}` 启用并行调用（仅部分模型支持） |
 
 ## 使用方式
 
-插件可通过三种方式集成：
-
-1. **控制台可视化集成**：
-   - 官方/三方插件：在[插件](https://bailian.console.aliyun.com/#/plugin-market)页面，单击目标插件的**添加至智能体**，选择工具与目标智能体应用即可；
-   - 自定义插件：需先发布为 MCP 服务（插件卡片 → **发布为MCP服务**），再在智能体编排页的 **MCP 区块**中添加 [自定义插件](../../raw/application-user-guide/plug-in/custom-plug-ins.md)；
-   - 注意：官方插件仅支持与**同业务空间**的智能体关联；子业务空间首次使用需单独授权。
-
-2. **工作流应用**：
-   - 将插件作为独立节点拖入画布，显式配置输入/输出映射，不依赖模型自主决策 [插件概述](../../raw/application-user-guide/plug-in/plug-in-overview.md)。
-
-3. **API 调用**：
-   - Assistant API：在 `tools` 数组中声明工具 ID（如 `"id": "calculator"`），模型自动规划调用；
-   - DashScope SDK / HTTP 接口：需在请求体中传入 `tools` 列表及 `tool_choice` 策略，并通过 `biz_params` 传递 `业务透传` 参数或用户级鉴权 [Token](../concepts/token.md) [自定义插件](../../raw/application-user-guide/plug-in/custom-plug-ins.md)。
+1. **准备插件 schema**：参考 [自定义插件](../../raw/application-user-guide/plug-in/custom-plug-ins.md) 编写 JSON Schema，确保 `parameters` 中各字段含 `type` 和 `description`；  
+2. **发起请求**：在 `/v1/chat/completions` 请求体中传入 `tools` 和（可选）`tool_choice`；  
+3. **处理响应**：当模型返回 `finish_reason: "tool_calls"` 时，解析 `message.tool_calls` 数组，按 `function.name` 和 `function.arguments` 调用对应服务；  
+4. **追加调用结果**：将执行结果以 `role: "tool"` 消息格式回传，继续下一轮请求。
 
 ## 限制和注意事项
 
-- **调用上限**：单次对话中最多调用 10 个工具（含同一插件下的多个工具）；
-- **Object 类型限制**：GET 请求**不支持 Object 类型输入参数**；POST 请求中 Object 的子属性**必须非空**，否则发布失败（错误码 130022）；
-- **鉴权与透传**：`业务透传` 参数和用户级鉴权 [Token](../concepts/token.md) **必须通过 `biz_params` 传入**，不可写入用户 query；
-- **调试要求**：所有自定义工具必须经**在线测试成功**并**发布**后才可在应用中调用；草稿状态工具不可用；
-- **删除风险**：删除插件将**级联删除其下所有工具**，且已关联该插件的应用将立即失效，操作不可逆；
-- **计费提示**：`text_to_image` 和 `quark_search` 为限时免费，需主动申请开通；其余官方插件当前免费，但策略可能调整；
-- **安全边界**：`code_interpreter` 插件**禁止网络访问与本地文件上传**，依赖库版本固定，不可扩展 [官方和第三方插件](../../raw/application-user-guide/plug-in/plugins.md)。
+- 单次请求最多声明 20 个 `tools`；单次调用最多触发 5 次 `tool_calls`（含嵌套）；  
+- 插件调用超时默认为 10 秒，不可配置；失败后模型不会自动重试，需应用层处理；  
+- `tools` 中的 `name` 必须全小写、仅含字母数字和下划线，且不能与平台保留字（如 `get_current_time`）冲突；  
+- 插件返回内容受模型上下文长度限制，长响应可能被截断——建议服务端主动压缩或分页；  
+- 所有插件调用日志默认记录，但敏感字段（如 `Authorization` header）会被脱敏，详情参见 [插件概述](../../raw/application-user-guide/plug-in/plug-in-overview.md)。
 
 ## 来源文档
 
-- [插件概述](../../raw/application-user-guide/plug-in/plug-in-overview.md)
-- [自定义插件](../../raw/application-user-guide/plug-in/custom-plug-ins.md)
-- [官方和第三方插件](../../raw/application-user-guide/plug-in/plugins.md)
+- [插件](../../raw/application-user-guide/plug-in.md)
 
 

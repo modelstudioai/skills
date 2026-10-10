@@ -79,17 +79,17 @@ if __name__=='__main__':
 运行代码可以获得以下结果：
 
 ```
-{'id': 'chatcmpl-31042a05-c968-4fc6-ba28-c3aa471258dc', 'choices': [{'delta': {'content': '', 'function_call': None, 'refusal': None, 'role': 'assistant', 'tool_calls': None}, 'finish_reason': None, 'index': 0, 'logprobs': None}], 'created': 1765780318, 'model': 'qwen-vl-plus', 'object': 'chat.completion.chunk', 'service_tier': None, 'system_fingerprint': None, 'usage': None}
-{'id': 'chatcmpl-31042a05-c968-4fc6-ba28-c3aa471258dc', 'choices': [{'delta': {'content': '这张', 'function_call': None, 'refusal': None, 'role': None, 'tool_calls': None}, 'finish_reason': None, 'index': 0, 'logprobs': None}], 'created': 1765780318, 'model': 'qwen-vl-plus', 'object': 'chat.completion.chunk', 'service_tier': None, 'system_fingerprint': None, 'usage': None}
-{'id': 'chatcmpl-31042a05-c968-4fc6-ba28-c3aa471258dc', 'choices': [{'delta': {'content': '照片', 'function_call': None, 'refusal': None, 'role': None, 'tool_calls': None}, 'finish_reason': None, 'index': 0, 'logprobs': None}], 'created': 1765780318, 'model': 'qwen-vl-plus', 'object': 'chat.completion.chunk', 'service_tier': None, 'system_fingerprint': None, 'usage': None}
-{'id': 'chatcmpl-31042a05-c968-4fc6-ba28-c3aa471258dc', 'choices': [{'delta': {'content': '展示', 'function_call': None, 'refusal': None, 'role': None, 'tool_calls': None}, 'finish_reason': None, 'index': 0, 'logprobs': None}], 'created': 1765780318, 'model': 'qwen-vl-plus', 'object': 'chat.completion.chunk', 'service_tier': None, 'system_fingerprint': None, 'usage': None}
+{'id': 'chatcmpl-31042a05-c968-4fc6-ba28-c3aa471258dc', 'choices': [{'delta': {'content': '', 'function_call': None, 'refusal': None, 'role': 'assistant', 'tool_calls': None}, 'finish_reason': None, 'index': 0, 'logprobs': None}], 'created': 1765780318, 'model': 'qwen3-vl-plus', 'object': 'chat.completion.chunk', 'service_tier': None, 'system_fingerprint': None, 'usage': None}
+{'id': 'chatcmpl-31042a05-c968-4fc6-ba28-c3aa471258dc', 'choices': [{'delta': {'content': '这张', 'function_call': None, 'refusal': None, 'role': None, 'tool_calls': None}, 'finish_reason': None, 'index': 0, 'logprobs': None}], 'created': 1765780318, 'model': 'qwen3-vl-plus', 'object': 'chat.completion.chunk', 'service_tier': None, 'system_fingerprint': None, 'usage': None}
+{'id': 'chatcmpl-31042a05-c968-4fc6-ba28-c3aa471258dc', 'choices': [{'delta': {'content': '照片', 'function_call': None, 'refusal': None, 'role': None, 'tool_calls': None}, 'finish_reason': None, 'index': 0, 'logprobs': None}], 'created': 1765780318, 'model': 'qwen3-vl-plus', 'object': 'chat.completion.chunk', 'service_tier': None, 'system_fingerprint': None, 'usage': None}
+{'id': 'chatcmpl-31042a05-c968-4fc6-ba28-c3aa471258dc', 'choices': [{'delta': {'content': '展示', 'function_call': None, 'refusal': None, 'role': None, 'tool_calls': None}, 'finish_reason': None, 'index': 0, 'logprobs': None}], 'created': 1765780318, 'model': 'qwen3-vl-plus', 'object': 'chat.completion.chunk', 'service_tier': None, 'system_fingerprint': None, 'usage': None}
 
 ......
 
-{'id': 'chatcmpl-31042a05-c968-4fc6-ba28-c3aa471258dc', 'choices': [{'delta': {'content': '瞬间', 'function_call': None, 'refusal': None, 'role': None, 'tool_calls': None}, 'finish_reason': None, 'index': 0, 'logprobs': None}], 'created': 1765780318, 'model': 'qwen-vl-plus', 'object': 'chat.completion.chunk', 'service_tier': None, 'system_fingerprint': None, 'usage': None}
-{'id': 'chatcmpl-31042a05-c968-4fc6-ba28-c3aa471258dc', 'choices': [{'delta': {'content': '。', 'function_call': None, 'refusal': None, 'role': None, 'tool_calls': None}, 'finish_reason': None, 'index': 0, 'logprobs': None}], 'created': 1765780318, 'model': 'qwen-vl-plus', 'object': 'chat.completion.chunk', 'service_tier': None, 'system_fingerprint': None, 'usage': None}
-{'id': 'chatcmpl-31042a05-c968-4fc6-ba28-c3aa471258dc', 'choices': [{'delta': {'content': '', 'function_call': None, 'refusal': None, 'role': None, 'tool_calls': None}, 'finish_reason': 'stop', 'index': 0, 'logprobs': None}], 'created': 1765780318, 'model': 'qwen-vl-plus', 'object': 'chat.completion.chunk', 'service_tier': None, 'system_fingerprint': None, 'usage': None}
-{'id': 'chatcmpl-31042a05-c968-4fc6-ba28-c3aa471258dc', 'choices': [], 'created': 1765780318, 'model': 'qwen-vl-plus', 'object': 'chat.completion.chunk', 'service_tier': None, 'system_fingerprint': None, 'usage': {'completion_tokens': 230, 'prompt_tokens': 1259, 'total_tokens': 1489, 'completion_tokens_details': {'accepted_prediction_tokens': None, 'audio_tokens': None, 'reasoning_tokens': None, 'rejected_prediction_tokens': None, 'text_tokens': 230}, 'prompt_tokens_details': {'audio_tokens': None, 'cached_tokens': 0}}}
+{'id': 'chatcmpl-31042a05-c968-4fc6-ba28-c3aa471258dc', 'choices': [{'delta': {'content': '瞬间', 'function_call': None, 'refusal': None, 'role': None, 'tool_calls': None}, 'finish_reason': None, 'index': 0, 'logprobs': None}], 'created': 1765780318, 'model': 'qwen3-vl-plus', 'object': 'chat.completion.chunk', 'service_tier': None, 'system_fingerprint': None, 'usage': None}
+{'id': 'chatcmpl-31042a05-c968-4fc6-ba28-c3aa471258dc', 'choices': [{'delta': {'content': '。', 'function_call': None, 'refusal': None, 'role': None, 'tool_calls': None}, 'finish_reason': None, 'index': 0, 'logprobs': None}], 'created': 1765780318, 'model': 'qwen3-vl-plus', 'object': 'chat.completion.chunk', 'service_tier': None, 'system_fingerprint': None, 'usage': None}
+{'id': 'chatcmpl-31042a05-c968-4fc6-ba28-c3aa471258dc', 'choices': [{'delta': {'content': '', 'function_call': None, 'refusal': None, 'role': None, 'tool_calls': None}, 'finish_reason': 'stop', 'index': 0, 'logprobs': None}], 'created': 1765780318, 'model': 'qwen3-vl-plus', 'object': 'chat.completion.chunk', 'service_tier': None, 'system_fingerprint': None, 'usage': None}
+{'id': 'chatcmpl-31042a05-c968-4fc6-ba28-c3aa471258dc', 'choices': [], 'created': 1765780318, 'model': 'qwen3-vl-plus', 'object': 'chat.completion.chunk', 'service_tier': None, 'system_fingerprint': None, 'usage': {'completion_tokens': 230, 'prompt_tokens': 1259, 'total_tokens': 1489, 'completion_tokens_details': {'accepted_prediction_tokens': None, 'audio_tokens': None, 'reasoning_tokens': None, 'rejected_prediction_tokens': None, 'text_tokens': 230}, 'prompt_tokens_details': {'audio_tokens': None, 'cached_tokens': 0}}}
 ```
 
 ## 通过langchain\_openai SDK调用
@@ -179,7 +179,7 @@ if __name__ == "__main__":
       }
     },
     "model_provider": "openai",
-    "model_name": "qwen-vl-plus",
+    "model_name": "qwen3-vl-plus",
     "system_fingerprint": null,
     "id": "chatcmpl-9f3eba85-4f7a-4f73-b254-220a650xxxxx",
     "finish_reason": "stop",
@@ -354,7 +354,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
   },
   "created": 1724729556,
   "system_fingerprint": null,
-  "model": "qwen-vl-plus",
+  "model": "qwen3-vl-plus",
   "id": "chatcmpl-1abb4eb9-f508-9637-a8ba-ac7fc6f73e53"
 }
 ```
@@ -398,35 +398,35 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 运行命令可得到以下结果：
 
 ```
-data: {"choices":[{"delta":{"content":"","role":"assistant"},"index":0,"logprobs":null,"finish_reason":null}],"object":"chat.completion.chunk","usage":null,"created":1724729595,"system_fingerprint":null,"model":"qwen-vl-plus","id":"chatcmpl-4c83f437-303f-907b-9de5-79cac83d6b18"}
+data: {"choices":[{"delta":{"content":"","role":"assistant"},"index":0,"logprobs":null,"finish_reason":null}],"object":"chat.completion.chunk","usage":null,"created":1724729595,"system_fingerprint":null,"model":"qwen3-vl-plus","id":"chatcmpl-4c83f437-303f-907b-9de5-79cac83d6b18"}
 
-data: {"choices":[{"finish_reason":null,"delta":{"content":"图"},"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1724729595,"system_fingerprint":null,"model":"qwen-vl-plus","id":"chatcmpl-4c83f437-303f-907b-9de5-79cac83d6b18"}
+data: {"choices":[{"finish_reason":null,"delta":{"content":"图"},"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1724729595,"system_fingerprint":null,"model":"qwen3-vl-plus","id":"chatcmpl-4c83f437-303f-907b-9de5-79cac83d6b18"}
 
-data: {"choices":[{"delta":{"content":"中"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1724729595,"system_fingerprint":null,"model":"qwen-vl-plus","id":"chatcmpl-4c83f437-303f-907b-9de5-79cac83d6b18"}
+data: {"choices":[{"delta":{"content":"中"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1724729595,"system_fingerprint":null,"model":"qwen3-vl-plus","id":"chatcmpl-4c83f437-303f-907b-9de5-79cac83d6b18"}
 
-data: {"choices":[{"delta":{"content":"是一名"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1724729595,"system_fingerprint":null,"model":"qwen-vl-plus","id":"chatcmpl-4c83f437-303f-907b-9de5-79cac83d6b18"}
+data: {"choices":[{"delta":{"content":"是一名"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1724729595,"system_fingerprint":null,"model":"qwen3-vl-plus","id":"chatcmpl-4c83f437-303f-907b-9de5-79cac83d6b18"}
 
-data: {"choices":[{"delta":{"content":"女子和她的狗在"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1724729595,"system_fingerprint":null,"model":"qwen-vl-plus","id":"chatcmpl-4c83f437-303f-907b-9de5-79cac83d6b18"}
+data: {"choices":[{"delta":{"content":"女子和她的狗在"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1724729595,"system_fingerprint":null,"model":"qwen3-vl-plus","id":"chatcmpl-4c83f437-303f-907b-9de5-79cac83d6b18"}
 
-data: {"choices":[{"delta":{"content":"沙滩上互动。狗狗坐在地上，"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1724729595,"system_fingerprint":null,"model":"qwen-vl-plus","id":"chatcmpl-4c83f437-303f-907b-9de5-79cac83d6b18"}
+data: {"choices":[{"delta":{"content":"沙滩上互动。狗狗坐在地上，"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1724729595,"system_fingerprint":null,"model":"qwen3-vl-plus","id":"chatcmpl-4c83f437-303f-907b-9de5-79cac83d6b18"}
 
-data: {"choices":[{"delta":{"content":"伸出爪子像是要握手或者击"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1724729595,"system_fingerprint":null,"model":"qwen-vl-plus","id":"chatcmpl-4c83f437-303f-907b-9de5-79cac83d6b18"}
+data: {"choices":[{"delta":{"content":"伸出爪子像是要握手或者击"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1724729595,"system_fingerprint":null,"model":"qwen3-vl-plus","id":"chatcmpl-4c83f437-303f-907b-9de5-79cac83d6b18"}
 
-data: {"choices":[{"delta":{"content":"掌的样子。这名女士穿着格子"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1724729595,"system_fingerprint":null,"model":"qwen-vl-plus","id":"chatcmpl-4c83f437-303f-907b-9de5-79cac83d6b18"}
+data: {"choices":[{"delta":{"content":"掌的样子。这名女士穿着格子"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1724729595,"system_fingerprint":null,"model":"qwen3-vl-plus","id":"chatcmpl-4c83f437-303f-907b-9de5-79cac83d6b18"}
 
-data: {"choices":[{"delta":{"content":"衬衫，似乎正在与狗狗进行亲密"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1724729595,"system_fingerprint":null,"model":"qwen-vl-plus","id":"chatcmpl-4c83f437-303f-907b-9de5-79cac83d6b18"}
+data: {"choices":[{"delta":{"content":"衬衫，似乎正在与狗狗进行亲密"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1724729595,"system_fingerprint":null,"model":"qwen3-vl-plus","id":"chatcmpl-4c83f437-303f-907b-9de5-79cac83d6b18"}
 
-data: {"choices":[{"delta":{"content":"的接触，并且面带微笑。"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1724729595,"system_fingerprint":null,"model":"qwen-vl-plus","id":"chatcmpl-4c83f437-303f-907b-9de5-79cac83d6b18"}
+data: {"choices":[{"delta":{"content":"的接触，并且面带微笑。"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1724729595,"system_fingerprint":null,"model":"qwen3-vl-plus","id":"chatcmpl-4c83f437-303f-907b-9de5-79cac83d6b18"}
 
-data: {"choices":[{"delta":{"content":"背景是海洋和日出或日"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1724729595,"system_fingerprint":null,"model":"qwen-vl-plus","id":"chatcmpl-4c83f437-303f-907b-9de5-79cac83d6b18"}
+data: {"choices":[{"delta":{"content":"背景是海洋和日出或日"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1724729595,"system_fingerprint":null,"model":"qwen3-vl-plus","id":"chatcmpl-4c83f437-303f-907b-9de5-79cac83d6b18"}
 
-data: {"choices":[{"delta":{"content":"落时分的天空。这是一"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1724729595,"system_fingerprint":null,"model":"qwen-vl-plus","id":"chatcmpl-4c83f437-303f-907b-9de5-79cac83d6b18"}
+data: {"choices":[{"delta":{"content":"落时分的天空。这是一"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1724729595,"system_fingerprint":null,"model":"qwen3-vl-plus","id":"chatcmpl-4c83f437-303f-907b-9de5-79cac83d6b18"}
 
-data: {"choices":[{"delta":{"content":"张充满温馨感的照片，展现了人"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1724729595,"system_fingerprint":null,"model":"qwen-vl-plus","id":"chatcmpl-4c83f437-303f-907b-9de5-79cac83d6b18"}
+data: {"choices":[{"delta":{"content":"张充满温馨感的照片，展现了人"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1724729595,"system_fingerprint":null,"model":"qwen3-vl-plus","id":"chatcmpl-4c83f437-303f-907b-9de5-79cac83d6b18"}
 
-data: {"choices":[{"finish_reason":"stop","delta":{"content":"与宠物之间的友谊时刻。"},"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1724729595,"system_fingerprint":null,"model":"qwen-vl-plus","id":"chatcmpl-4c83f437-303f-907b-9de5-79cac83d6b18"}
+data: {"choices":[{"finish_reason":"stop","delta":{"content":"与宠物之间的友谊时刻。"},"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1724729595,"system_fingerprint":null,"model":"qwen3-vl-plus","id":"chatcmpl-4c83f437-303f-907b-9de5-79cac83d6b18"}
 
-data: {"choices":[],"object":"chat.completion.chunk","usage":{"prompt_tokens":1276,"completion_tokens":79,"total_tokens":1355},"created":1724729595,"system_fingerprint":null,"model":"qwen-vl-plus","id":"chatcmpl-4c83f437-303f-907b-9de5-79cac83d6b18"}
+data: {"choices":[],"object":"chat.completion.chunk","usage":{"prompt_tokens":1276,"completion_tokens":79,"total_tokens":1355},"created":1724729595,"system_fingerprint":null,"model":"qwen3-vl-plus","id":"chatcmpl-4c83f437-303f-907b-9de5-79cac83d6b18"}
 
 data: [DONE]
 ```

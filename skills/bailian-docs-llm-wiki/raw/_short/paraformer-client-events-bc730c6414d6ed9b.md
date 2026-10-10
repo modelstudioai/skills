@@ -89,9 +89,9 @@
 -   Paraformer（因模型而异）：
     
     -   paraformer-realtime-v2：支持任意采样率
-    -   paraformer-realtime-v1：仅支持 16000 Hz
+        
     -   paraformer-realtime-8k-v2：仅支持 8000 Hz
-    -   paraformer-realtime-8k-v1：仅支持 8000 Hz
+        
 
 **vocabulary\_id**`string`（可选）
 

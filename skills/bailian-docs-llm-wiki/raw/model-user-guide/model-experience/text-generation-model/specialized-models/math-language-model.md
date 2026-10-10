@@ -31,28 +31,6 @@
 
 **（Token数）**
 
-**qwen-math-plus**
-
-4元
-
-12元
-
-4,096
-
-3,072
-
-3,072
-
-各100万Token
-
-有效期：百炼开通后90天内
-
-**qwen-math-turbo**
-
-2元
-
-6元
-
 > **各模型的免费额度均不共用。**
 
 关于模型的限流条件，请参见[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)。
@@ -75,7 +53,7 @@ client = OpenAI(
     base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 completion = client.chat.completions.create(
-    model="qwen-math-plus",
+    model="qwen-max",
     messages=[{'role': 'user', 'content': 'Derive a universal solution for the quadratic equation $ Ax^2+Bx+C=0 $'}])
 print(completion.choices[0].message.content)
 ```
@@ -87,7 +65,7 @@ curl --location "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header "Content-Type: application/json" \
 --data '{
-    "model": "qwen-math-plus",
+    "model": "qwen-max",
     "messages": [
         {
             "role": "user",
@@ -112,7 +90,7 @@ def call_with_messages():
     messages = [
         {'role': 'user', 'content': 'Derive a universal solution for the quadratic equation $ Ax^2+Bx+C=0 $'}]
     response = dashscope.Generation.call(
-        model='qwen-math-plus',
+        model='qwen-max',
         messages=messages,
         # 设置result_format为message格式
         result_format='message',
@@ -152,7 +130,7 @@ public class Main {
         Message userMsg = Message.builder().role(Role.USER.getValue()).content("Derive a universal solution for the quadratic equation $ Ax^2+Bx+C=0 $").build();
         GenerationParam param =GenerationParam.builder()
                 .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-                .model("qwen-math-plus")
+                .model("qwen-max")
                 .messages(Arrays.asList(userMsg))
                 .resultFormat(GenerationParam.ResultFormat.MESSAGE)
                 .build();
@@ -177,7 +155,7 @@ curl --location "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header "Content-Type: application/json" \
 --data '{
-    "model": "qwen-math-plus",
+    "model": "qwen-max",
     "input":{
         "messages":[
             {
@@ -192,7 +170,7 @@ curl --location "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-> 也可以前往[百炼控制台](https://bailian.console.aliyun.com/model/experience/text?modelId=qwen-math-plus)体验模型。
+> 也可以前往[百炼控制台](https://bailian.console.aliyun.com/model/experience/text?modelId=qwen-max)体验模型。
 
 ## 使用建议
 

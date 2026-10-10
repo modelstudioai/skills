@@ -2,7 +2,7 @@
 
 本文档介绍如何在阿里云百炼平台通过OpenAI兼容接口或DashScope SDK调用DeepSeek系列模型。
 
-**重要**deepseek-v3、deepseek-v3.1、deepseek-v3.2、deepseek-v3.2-exp、deepseek-r1、deepseek-r1-0528、deepseek-r1-distill-qwen-7b/14b/32b 将于**2026年10月10日**下架。推荐转用：[qwen3.7-plus](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.7-plus)、[qwen3.7-max](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.7-max)、[qwen3.6-flash](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.6-flash)。
+**重要**deepseek-r1-distill-qwen-14b、deepseek-r1-distill-qwen-32b 将于**2026年10月10日**下架。推荐转用：[qwen3.7-plus](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.7-plus)、[qwen3.7-max](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.7-max)、[qwen3.6-flash](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.6-flash)。
 
 ## 服务接入地址
 
@@ -42,7 +42,7 @@ HTTP 请求地址：`POST https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com
 
 #### OpenAI兼容-Responses API
 
-**说明**Responses API 目前仅支持`deepseek-v4.1-flash`、`deepseek-v4-flash`、`deepseek-v4-flash-0731`、`deepseek-v4-pro`、`deepseek-v4-pro-0813`模型，且仅在华北2（北京）与新加坡地域提供服务。
+**说明**Responses API 目前仅支持`deepseek-v4.1-flash`、`deepseek-v4-flash-0731`、`deepseek-v4-pro`、`deepseek-v4-pro-0813`模型，且仅在华北2（北京）与新加坡地域提供服务。
 
 #### 华北2（北京）
 
@@ -523,7 +523,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/v
 
 ## 推理强度（reasoning\_effort）
 
-deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-flash 、 deepseek-v4-flash-0731 和 deepseek-v4-pro-0813默认开启思考模式。通过`reasoning_effort`参数可以调整推理强度，可选值为`low(仅deepseek-v4.1-flash、deepseek-v4-flash-0731 和 deepseek-v4-pro-0813 支持)`、`high`和`max`，默认为`high`。
+deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-flash-0731 和 deepseek-v4-pro-0813默认开启思考模式。通过`reasoning_effort`参数可以调整推理强度，可选值为`low(仅deepseek-v4.1-flash、deepseek-v4-flash-0731 和 deepseek-v4-pro-0813 支持)`、`high`和`max`，默认为`high`。
 
 #### OpenAI兼容
 
@@ -596,82 +596,9 @@ print(response.output.choices[0].message.content)
 
 ## Responses API
 
-`deepseek-v4.1-flash`、`deepseek-v4-flash`、`deepseek-v4-flash-0731`、`deepseek-v4-pro`与`deepseek-v4-pro-0813`支持通过 OpenAI 兼容的 Responses API 调用，仅支持华北2（北京）与新加坡地域，服务接入地址参见[服务接入地址](https://help.aliyun.com/zh/model-studio/deepseek-api#ds_bu_h2)。
+`deepseek-v4.1-flash`、`deepseek-v4-flash-0731`、`deepseek-v4-pro`与`deepseek-v4-pro-0813`支持通过 OpenAI 兼容的 Responses API 调用，仅支持华北2（北京）与新加坡地域，服务接入地址参见[服务接入地址](https://help.aliyun.com/zh/model-studio/deepseek-api#ds_bu_h2)。
 
 通过 Responses API 调用时，可在`tools`参数中添加`web_search`（[联网搜索](raw/model-user-guide/model-experience/text-generation-model/tool-calls/web-search.md)）、`web_extractor`（[网页抓取](raw/model-user-guide/model-experience/text-generation-model/tool-calls/web-extractor.md)）与`code_interpreter`（[代码解释器](raw/model-user-guide/model-experience/text-generation-model/tool-calls/qwen-code-interpreter.md)）工具。
-
-Python
-
-```
-from openai import OpenAI
-import os
-
-client = OpenAI(
-    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key="sk-xxx"
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # 以下为华北2（北京）地域的URL。新加坡地域请使用 https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
-    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
-)
-
-response = client.responses.create(
-    model="deepseek-v4-flash",
-    input="你好，请用一句话介绍你自己。",
-    # 可选：通过 tools 参数开启联网搜索、网页抓取与代码解释器工具
-    tools=[
-        {"type": "web_search"},
-        {"type": "web_extractor"},
-        {"type": "code_interpreter"},
-    ],
-)
-
-# 获取模型回复
-print(response.output_text)
-```
-
-Node.js
-
-```
-import OpenAI from "openai";
-
-const openai = new OpenAI({
-    // 如果没有配置环境变量，请用阿里云百炼API Key替换：apiKey: "sk-xxx"
-    apiKey: process.env.DASHSCOPE_API_KEY,
-    // 以下为华北2（北京）地域的URL。新加坡地域请使用 https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
-    baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
-});
-
-const response = await openai.responses.create({
-    model: "deepseek-v4-flash",
-    input: "你好，请用一句话介绍你自己。",
-    // 可选：通过 tools 参数开启联网搜索、网页抓取与代码解释器工具
-    tools: [
-        { type: "web_search" },
-        { type: "web_extractor" },
-        { type: "code_interpreter" },
-    ],
-});
-
-// 获取模型回复
-console.log(response.output_text);
-```
-
-curl
-
-```
-# 以下为华北2（北京）地域的URL。新加坡地域请使用 https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/responses
-curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses \
--H "Authorization: Bearer $DASHSCOPE_API_KEY" \
--H "Content-Type: application/json" \
--d '{
-    "model": "deepseek-v4-flash",
-    "input": "你好，请用一句话介绍你自己。",
-    "tools": [
-        {"type": "web_search"},
-        {"type": "web_extractor"},
-        {"type": "code_interpreter"}
-    ]
-}'
-```
 
 ## 其它功能
 
@@ -728,108 +655,6 @@ deepseek-v4-flash-0731
 支持
 
 支持
-
-不支持
-
-deepseek-v4-flash
-
-支持
-
-支持
-
-支持
-
-支持
-
-支持
-
-不支持
-
-deepseek-v3.2
-
-支持
-
-支持
-
-支持
-
-支持
-
-不支持
-
-不支持
-
-deepseek-v3.2-exp
-
-支持
-
-支持
-
-> 仅支持非思考模式。
-
-支持
-
-不支持
-
-不支持
-
-不支持
-
-deepseek-v3.1
-
-支持
-
-支持
-
-> 仅支持非思考模式。
-
-支持
-
-支持
-
-不支持
-
-不支持
-
-deepseek-r1
-
-支持
-
-支持
-
-支持
-
-支持
-
-不支持
-
-不支持
-
-deepseek-r1-0528
-
-支持
-
-支持
-
-支持
-
-不支持
-
-不支持
-
-不支持
-
-deepseek-v3
-
-支持
-
-支持
-
-支持
-
-支持
-
-不支持
 
 不支持
 
@@ -901,88 +726,6 @@ deepseek-v4-flash-0731
 
 共393,216
 
-deepseek-v4-flash
-
-1.0
-
-1.0
-
-\-
-
-\-
-
-共393,216
-
-deepseek-v3.2
-
-1.0
-
-0.95
-
-\-
-
-\-
-
-65,536
-
-32,768
-
-deepseek-v3.2-exp
-
-0.6
-
-0.95
-
-1.0
-
-\-
-
-65,536
-
-32,768
-
-deepseek-v3.1
-
-0.6
-
-0.95
-
-1.0
-
-\-
-
-65,536
-
-32,768
-
-deepseek-r1
-
-0.6
-
-0.95
-
-\-
-
-1
-
-16,384
-
-32,768
-
-deepseek-r1-0528
-
-0.6
-
-0.95
-
-\-
-
-1
-
-16,384
-
-32,768
-
 蒸馏版
 
 0.6
@@ -997,30 +740,14 @@ deepseek-r1-0528
 
 16,384
 
-deepseek-v3
-
-0.7
-
-0.6
-
-\-
-
-\-
-
-16,384
-
-\-
-
 -   “-” 表示没有默认值，也不支持设置。
--   deepseek-r1、deepseek-r1-0528、蒸馏版模型不支持设置以上参数值。
+-   蒸馏版模型不支持设置以上参数值。
 -   “共393,216” 表示 deepseek-v4 系列模型的 max\_tokens 与 thinking\_budget 共用同一上限，两者合计最大为 393,216 Token（即模型的最大输出长度）。
 -   参数含义请参考[OpenAI兼容-Chat](raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)。
 
 ## 模型列表与计费
 
--   混合思考模型（通过`enable_thinking`参数控制是否思考）：deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-flash、deepseek-v4-flash-0731、deepseek-v3.2、deepseek-v3.2-exp、deepseek-v3.1
--   仅思考模型（回复前总会思考）：deepseek-r1、deepseek-r1-0528
--   非思考模型：deepseek-v3
+-   混合思考模型（通过`enable_thinking`参数控制是否思考）：deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-flash-0731
 
 deepseek-v4-pro 在编程、数学和通用任务方面表现出色，deepseek-v4-flash-0731 快速且经济高效，推荐优先使用 deepseek-v4-pro。
 
@@ -1032,7 +759,7 @@ deepseek-v4-pro 在编程、数学和通用任务方面表现出色，deepseek-v
 
 ## 常见问题
 
-### [免费额度](https://bailian.console.aliyun.com/model/market/detail/deepseek-r1)用完后如何购买 Token？
+### 免费额度用完后如何购买 Token？
 
 访问[费用与成本](https://usercenter2.aliyun.com/home)中心进行充值，确保您的账户没有欠费即可调用 DeepSeek 模型。
 

@@ -211,38 +211,6 @@ qwen3.5-livetranslate-flash-realtime-2026-05-19
 
 快照版
 
-### 旧版模型
-
-> 以下模型不作为首选推荐，建议使用新一代模型。
-
-**模型名称**
-
-**版本**
-
-**上下文长度**
-
-**最大输入**
-
-**最大输出**
-
-**（Token数）**
-
-**qwen3-livetranslate-flash-realtime**
-
-> 当前能力等同 qwen3-livetranslate-flash-realtime-2025-09-22
-
-稳定版
-
-53248
-
-49152
-
-4096
-
-qwen3-livetranslate-flash-realtime-2025-09-22
-
-快照版
-
 ## 快速开始
 
 ### 实时翻译麦克风输入
@@ -861,13 +829,7 @@ session.finished
 
 -   **Qwen3.8-LiveTranslate-Flash-Realtime、Qwen3.5-LiveTranslate-Flash-Realtime**
     -   **音频**：输入每秒音频消耗 7 Token，输出每秒音频消耗 12.5 Token。
-    -   **图片**：每输入 32\*32 像素消耗 0.5 Token。
--   **Qwen3-LiveTranslate-Flash-Realtime**
-    -   **音频**：输入或输出每秒音频均消耗 12.5 Token。
-    -   **图片**：每输入 28\*28 像素消耗 0.5 Token。
-    -   **文本**：启用源语言语音识别功能后，服务除返回翻译结果外，还会返回输入音频的语音识别文本（即源语言原文），该识别文本将按输出文本的 Token 标准计费。
-
-各模型的 Token 单价请参见[模型调用计费](raw/model-user-guide/test-1/model-pricing.md)。
+    -   **图片**：每输入 32\*32 像素消耗 0.5 Token。 各模型的 Token 单价请参见[模型调用计费](raw/model-user-guide/test-1/model-pricing.md)。
 
 **实时复刻**：`qwen3.8-livetranslate-flash-realtime` 和 `qwen3.5-livetranslate-flash-realtime` 在翻译过程中从输入音频复刻音色，不额外收取复刻费用；模型调用仍按 Token 用量计费。
 
@@ -881,7 +843,7 @@ session.finished
 
 下表中的语种代码可用于指定源语种与目标语种。
 
-> 部分目标语种仅支持输出文本，不支持输出音频。老模型 qwen3-livetranslate-flash-realtime 仅支持以下 18 种语种：en、zh、ru、fr、de、pt、es、it、id、ko、ja、vi、th、ar、yue、hi、el、tr。
+> 部分目标语种仅支持输出文本，不支持输出音频。
 
 **语种代码**
 

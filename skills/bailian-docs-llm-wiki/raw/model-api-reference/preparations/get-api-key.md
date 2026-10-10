@@ -26,7 +26,7 @@
         
         -   华北2（北京）：`https://dashscope.aliyuncs.com/compatible-mode/v1`
         -   其他地域：请参见[Base URL 总览](raw/model-user-guide/get-started-with-models/base-url.md)
-    -   模型名称，如 qwen-plus、qwen3-8b、deepseek-r1 等。
+    -   模型名称，如 qwen-plus、qwen-max、deepseek-v4-pro 等。
         
     
     我们也提供了一些常用工具的配置方法：[Dify](raw/model-user-guide/use-chat-client-or-development-tool/dify.md)、[Chatbox](raw/model-user-guide/use-chat-client-or-development-tool/chatbox.md)、[Cline](raw/model-user-guide/use-chat-client-or-development-tool/cline.md)、[Claude Code](raw/model-user-guide/use-chat-client-or-development-tool/claude-code.md)、[Postman](raw/model-user-guide/use-chat-client-or-development-tool/first-call-to-image-and-video-api.md)。

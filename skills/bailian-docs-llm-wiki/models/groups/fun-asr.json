@@ -55,66 +55,6 @@
           }
         }
       }
-    },
-    {
-      "inferenceMetadata": {
-        "response_modality": [
-          "Text"
-        ],
-        "request_modality": [
-          "Audio"
-        ]
-      },
-      "description": "百聆多语言语音识别大模型，支持超过31种语言，支持语种自由切换，出海用户首推，尤其东南亚出海。fun-asr为该模型的升级版本，建议切换使用fun-asr。",
-      "features": [],
-      "provider": "qwen-domain-model",
-      "model": "fun-asr-mtl",
-      "prices": [
-        {
-          "priceUnit": "每秒",
-          "price": "0.00022",
-          "timeBand": "standard",
-          "ntmAmountType": "duration",
-          "type": "content_duration",
-          "priceName": "音频时长"
-        }
-      ],
-      "qpmInfo": {
-        "model-default-actual": {
-          "count_limit_period": 1,
-          "count_limit": 10,
-          "type": "model-default"
-        },
-        "model-default": {
-          "count_limit_period": 1,
-          "count_limit": 10,
-          "type": "model-default"
-        }
-      },
-      "priceTimeBands": [
-        "standard"
-      ],
-      "capabilities": [
-        "ASR"
-      ],
-      "versionTag": "MAJOR",
-      "latestOnlineAt": "2025-09-25T06:03:29.000+00:00",
-      "offlineInfo": {
-        "inference": {
-          "announceUrl": "https://www.aliyun.com/notice/118434",
-          "offlineTime": "2026-10-10 00:00:00"
-        }
-      },
-      "inferenceProvider": "aliyun-bailian",
-      "name": "Fun-ASR-MTL",
-      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk",
-      "samples": {
-        "dashscope": {
-          "default": {
-            "python": "from http import HTTPStatus\nfrom dashscope.audio.asr import Transcription\nimport dashscope\nimport os\nimport json\n\n# 若没有配置环境变量，请用百炼API Key将下行替换为：dashscope.api_key = \"sk-xxx\"\ndashscope.api_key = os.getenv(\"DASHSCOPE_API_KEY\")\n\ntask_response = Transcription.async_call(\n    model='fun-asr-mtl',\n    file_urls=['https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav',\n               'https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_male2.wav']\n)\n\ntranscribe_response = Transcription.wait(task=task_response.output.task_id)\nif transcribe_response.status_code == HTTPStatus.OK:\n    print(json.dumps(transcribe_response.output, indent=4, ensure_ascii=False))\n    print('transcription done!')"
-          }
-        }
-      }
     }
   ]
 }

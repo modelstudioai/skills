@@ -4,7 +4,11 @@
 
 ## 接入方式
 
-**说明**Qwen-Audio-3.1-ASR-Flash-Message 模型支持 WebSocket 接入。详细接入流程请参见 [Realtime API](raw/model-api-reference/realtime-api-user-guide/realtime-api-overview.md)。
+**说明**支持通过 AOQ（AI over QUIC）和 WebSocket 协议接入。详细接入流程请参见 [Realtime API](raw/model-api-reference/realtime-api-user-guide/realtime-api-overview.md)。
+
+#### AOQ
+
+[AOQ 接入](raw/model-api-reference/realtime-api-user-guide/realtime-model-connection/realtime-aoq-access.md)
 
 #### WebSocket
 

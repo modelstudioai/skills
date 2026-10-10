@@ -94,7 +94,7 @@
   "session": {
     "object": "realtime.session",
     "mode": "server_commit",
-    "model": "qwen-tts-realtime",
+    "model": "qwen3-tts-flash-realtime",
     "voice": "Cherry",
     "response_format": "pcm",
     "sample_rate": 24000,
@@ -160,7 +160,7 @@
   "session": {
     "id": "sess_xxx",
     "object": "realtime.session",
-    "model": "qwen-tts-realtime",
+    "model": "qwen3-tts-flash-realtime",
     "voice": "Cherry",
     "language_type": "Chinese",
     "mode": "commit",
@@ -635,40 +635,6 @@
 
 Qwen3-TTS Realtime计费字符数。
 
-**total\_tokens**`integer`
-
-Qwen-TTS Realtime输入和输出（合成的音频）内容总长度（Token）。
-
-**input\_tokens**`integer`
-
-Qwen-TTS Realtime输入内容总长度（Token）。
-
-**output\_tokens**`integer`
-
-Qwen-TTS Realtime输出内容总长度（Token）。
-
-**input\_tokens\_details**`integer`
-
-Qwen-TTS Realtime输入内容长度（Token）详情。
-
-**input\_tokens\_details.text\_tokens**`integer`
-
-Qwen-TTS Realtime输入文本内容总长度（Token）。
-
-**output\_tokens\_details**`integer`
-
-Qwen-TTS Realtime输出内容长度（Token）详情。
-
-**output\_tokens\_details.text\_tokens**`integer`
-
-Qwen-TTS Realtime输出文本内容总长度（Token）。
-
-**output\_tokens\_details.audio\_tokens**`integer`
-
-Qwen-TTS Realtime输出音频内容总长度（Token）。
-
-音频转换为 Token 的规则：每1秒的音频对应 50个 Token 。若音频时长不足1秒，则按 50个 Token 计算。
-
 Qwen3-TTS Realtime
 
 ```
@@ -704,53 +670,6 @@ Qwen3-TTS Realtime
             "characters": 25
         }
     }
-}
-```
-
-Qwen-TTS Realtime
-
-```
-{
-  "event_id": "event_xxx",
-  "type": "response.done",
-  "response": {
-    "id": "resp_xxx",
-    "object": "realtime.response",
-    "conversation_id": "",
-    "status": "completed",
-    "modalities": [
-      "text",
-      "audio"
-    ],
-    "voice": "Cherry",
-    "output": [
-      {
-        "id": "item_FIrYGaNVK3rbIZqeY4QjM",
-        "object": "realtime.item",
-        "type": "message",
-        "status": "completed",
-        "role": "assistant",
-        "content": [
-          {
-            "type": "audio",
-            "transcript": ""
-          }
-        ]
-      }
-    ],
-    "usage": {
-      "total_tokens": 67,
-      "input_tokens": 3,
-      "output_tokens": 64,
-      "input_tokens_details": {
-        "text_tokens": 3
-      },
-      "output_tokens_details": {
-        "text_tokens": 0,
-        "audio_tokens": 64
-      }
-    }
-  }
 }
 ```
 

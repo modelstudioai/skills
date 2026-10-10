@@ -371,7 +371,7 @@
     
     点击查看支持的语言代码
     
-    -   Qwen-Audio-3.x-ASR-Flash-Filetrans、fun-asr、fun-asr-2025-11-07、fun-asr-mtl、fun-asr-mtl-2025-08-25：
+    -   Qwen-Audio-3.x-ASR-Flash-Filetrans、fun-asr：
         
         -   zh: 中文
         -   en: 英文
@@ -403,10 +403,6 @@
         -   bg：保加利亚语
         -   hr：克罗地亚语
         -   sk：斯洛伐克语
-    -   fun-asr-2025-08-25：
-        
-        -   zh: 中文
-        -   en: 英文
     
 
 ## 关键接口

@@ -499,8 +499,6 @@ string
     
 -   qwen2.5-7b-instruct-1m
     
--   deepseek-r1
-    
 
 qwen-max-latest
 

@@ -187,7 +187,7 @@ qwen-turbo 资源包启动退市通知[了解详情](https://www.aliyun.com/noti
 
 知识检索服务上线
 
-新增知识检索服务，支持多知识库联合检索与混合排序，[了解详情](raw/application-user-guide/knowledge-base/service/rag-knowledge-retrieval.md)
+新增知识检索服务，支持多知识库联合检索与混合排序，[了解详情](raw/application-user-guide/knowledge-base/rag-knowledge-retrieval.md)
 
 6月23日
 
@@ -219,7 +219,7 @@ Coding Plan
 
 Coding Plan 联网搜索 MCP 升级
 
-Coding Plan 联网搜索 MCP 升级 Streamable HTTP 协议，前 2000 次免费，[了解详情](raw/model-user-guide/token-plan-guide/token-plan-personal/token-plan-harness-tool.md)
+Coding Plan 联网搜索 MCP 升级 Streamable HTTP 协议，前 2000 次免费，[了解详情](raw/model-user-guide/token-plan-guide/token-plan-best-practice/token-plan-harness-tool.md)
 
 6月10日
 

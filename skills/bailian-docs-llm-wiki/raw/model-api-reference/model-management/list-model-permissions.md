@@ -191,31 +191,13 @@ curl "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/models/permissio
     "message": null,
     "success": true,
     "output": {
-        "total": 3,
+        "total": 1,
         "page_no": 1,
         "page_size": 20,
         "permissions": [
             {
                 "model": "qwen-plus",
                 "name": "通义千问-Plus",
-                "permissions": {
-                    "inference": true,
-                    "fine_tune": false,
-                    "deploy": false
-                }
-            },
-            {
-                "model": "qwen3-max",
-                "name": "通义千问3-Max",
-                "permissions": {
-                    "inference": true,
-                    "fine_tune": true,
-                    "deploy": false
-                }
-            },
-            {
-                "model": "qwen-turbo",
-                "name": "通义千问-Turbo",
                 "permissions": {
                     "inference": true,
                     "fine_tune": false,

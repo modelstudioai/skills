@@ -158,13 +158,13 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 错误示例（`text` 字段缺少闭合引号，导致请求体不是合法 JSON）：
 
 ```
-{"model":"qwen-image-edit","input":{"messages":[{"role":"user","content":[{"image":"https://example.com/img.png"},{"text":"请将图片背景改为蓝色}]}]}}
+{"model":"qwen-image-3.0-pro","input":{"messages":[{"role":"user","content":[{"image":"https://example.com/img.png"},{"text":"请将图片背景改为蓝色}]}]}}
 ```
 
 正确示例：
 
 ```
-{"model":"qwen-image-edit","input":{"messages":[{"role":"user","content":[{"image":"https://example.com/img.png"},{"text":"请将图片背景改为蓝色"}]}]}}
+{"model":"qwen-image-3.0-pro","input":{"messages":[{"role":"user","content":[{"image":"https://example.com/img.png"},{"text":"请将图片背景改为蓝色"}]}]}}
 ```
 
 提交请求前可使用 jsonlint.com 等 JSON 校验工具检查请求体语法。也可借助阿里云AI助理帮助修复请求体格式。
@@ -213,7 +213,7 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 ### The value of the enable\_thinking parameter is restricted to True.
 
-**原因：** 部分模型（如`qwen3-235b-a22b-thinking-2507`）不可将`enable_thinking`参数设为 `false`。
+**原因：** 部分模型（如`qwen3.7-plus`）不可将`enable_thinking`参数设为 `false`。
 
 **解决方案：**
 
@@ -239,7 +239,7 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 **解决方案：**
 
 -   **检查模型名称格式：**确认`model`参数大小写是否正确，是否存在多余的空格。
--   **使用正确的模型名称：**请对照[模型列表](raw/model-user-guide/get-started-with-models/models.md)中的模型名称，检查输入的`model`是否正确。请勿混用开源社区的模型名与百炼模型ID，如应该使用`qwen3-235b-a22b-instruct-2507`，而非`Qwen/Qwen3-235B-A22B-Instruct-2507`。
+-   **使用正确的模型名称：**请对照[模型列表](raw/model-user-guide/get-started-with-models/models.md)中的模型名称，检查输入的`model`是否正确。请勿混用开源社区的模型名与百炼模型ID，如应该使用`qwen3.7-plus`，而非`Qwen/Qwen3.7-Plus`。
 
 ### The product is not activated, please confirm that you have activated products and try again after activation.
 
@@ -312,7 +312,7 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **原因：** `messages` 数组中某条消息的 `content` 字段包含了不受支持的元素类型。当 `content` 为数组时，其中每个元素必须是字符串，或符合规范的对象（如 `{"type": "text", "text": "..."}`、`{"type": "image_url", ...}` 等）；若数组中混入了数字、布尔值、嵌套数组，或 `type` 取值不受支持的对象，则会触发该错误。该错误对应的 HTTP 状态码为 400，错误码为 `InternalError.Algo.InvalidParameter`。
 
-**常见场景：**使用纯文本模型（如 Qwen-Max 文本系列，包括 `qwen3-max`）时，若 `messages`（尤其是多轮对话历史）中包含图片（`image_url`）等多模态 `content` 元素时，由于纯文本模型不支持图片等模态输入，同样会触发该错误（在部分接入工具/智能体中，该报错可能被转述为「模型服务商返回空内容」等提示）。
+**常见场景：**使用纯文本模型（如 Qwen-Max 文本系列，包括 `qwen3.7-max`）时，若 `messages`（尤其是多轮对话历史）中包含图片（`image_url`）等多模态 `content` 元素时，由于纯文本模型不支持图片等模态输入，同样会触发该错误（在部分接入工具/智能体中，该报错可能被转述为「模型服务商返回空内容」等提示）。
 
 **解决方案：**
 
@@ -429,8 +429,8 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
     
 -   **文件 URL**：图像文件不得超过 10 MB；对于视频文件，
     
-    -   Qwen3-VL、qwen-vl-max：不超过 2GB；
-    -   qwen-vl-plus系列：不超过 1GB；
+    -   Qwen3-VL、qwen3-vl-max：不超过 2GB；
+    -   qwen3-vl-plus系列：不超过 1GB；
     -   其他模型不超过 150MB。
 
 > 压缩文件体积请参见[如何将图像或视频压缩到满足要求的大小？](raw/model-user-guide/model-experience/vision-model/vision.md)
@@ -577,7 +577,7 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
         
         > 若使用 spring-ai-alibaba 框架，请确认是否设置多模态参数[withMultiModel](https://github.com/spring-ai-alibaba/examples/blob/c66ffdec789defe4adf86b34bac0084df3b71e92/spring-ai-alibaba-multi-model-example/dashscope-multi-model/src/main/java/com/alibaba/cloud/ai/example/multi/controller/MultiModelController.java#L82)。
         
-    2.  通过DashScope使用qwen3-max、qwen-plus、deepseek-v4-pro等**纯文本模型**时，需使用Generation.call() 或 text-generation 端点，具体参考[概述](raw/model-user-guide/model-experience/text-generation-model/text-generation.md)。
+    2.  通过DashScope使用qwen3.7-max、qwen-plus、deepseek-v4-pro等**纯文本模型**时，需使用Generation.call() 或 text-generation 端点，具体参考[概述](raw/model-user-guide/model-experience/text-generation-model/text-generation.md)。
         
     3.  通过DashScope使用CosyVoice**声音复刻**接口时：该接口包含 `model` 与 `target_model` 参数：需将 `model` 设置为 `voice-enrollment`， `target_model` 设置为具体的 CosyVoice 模型，具体参考[CosyVoice声音复刻/设计API](https://help.aliyun.com/zh/model-studio/cosyvoice-clone-design-api)。
         
@@ -641,7 +641,7 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **原因：** style\_level不在枚举范围内。
 
-**解决方案：** 详情参见[EMO 视频生成](raw/model-api-reference/video-generation-api/portrait-animation-api-reference/emo-quick-start/emo-api.md)。
+**解决方案：** 详情参见[EMO 视频生成](https://help.aliyun.com/zh/model-studio/emo-api)。
 
 ### parameters.video\_ratio must be 9:16 or 3:4.
 
@@ -737,7 +737,7 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **原因：** 音频、图片格式不符合要求。
 
-**解决方案：** 音频支持格式mp3, wav, aac，图片支持格式jpg, jpeg, png, bmp, webp。详情参见[LivePortrait 视频生成](raw/_short/liveportrait-api-aed61e9b5a74b8a5.md)。
+**解决方案：** 音频支持格式mp3, wav, aac，图片支持格式jpg, jpeg, png, bmp, webp。详情参见[LivePortrait 视频生成](https://help.aliyun.com/zh/model-studio/liveportrait-api)。
 
 ### Failed to download input files.
 
@@ -773,13 +773,13 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **原因：** 该报错为多场景通用报错：可能是`clothes_type`入参不合规（AI试衣-图片分割），也可能是画幅入参不合规。
 
-**解决方案：** 详情参见[AI试衣-图片分割](raw/model-api-reference/image-generation/image-creative-tools-api-reference/outfitanyone/aitryon-parsing-api.md)；若为画幅入参问题，可选"1:1"或"3:4"。
+**解决方案：** 详情参见[AI试衣-图片分割](https://help.aliyun.com/zh/model-studio/aitryon-parsing-api)；若为画幅入参问题，可选"1:1"或"3:4"。
 
 ### The type or value of {parameter} is out of definition.
 
 **原因：** 参数类型或值不符合要求。
 
-**解决方案：** 详情参见[LivePortrait 视频生成](raw/_short/liveportrait-api-aed61e9b5a74b8a5.md)。
+**解决方案：** 详情参见[LivePortrait 视频生成](https://help.aliyun.com/zh/model-studio/liveportrait-api)。
 
 ### request timeout after 23 seconds.
 
@@ -899,25 +899,25 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **原因：** 缺少入参`image_url`。
 
-**解决方案：** 请参考[Emoji 视频生成](raw/model-api-reference/video-generation-api/portrait-animation-api-reference/emoji-quick-start/emoji-api.md)，传入`image_url`参数。
+**解决方案：** 请参考[Emoji 视频生成](https://help.aliyun.com/zh/model-studio/emoji-api)，传入`image_url`参数。
 
 ### Field required: driven\_id
 
 **原因：** 缺少入参`driven_id`。
 
-**解决方案：** 请参考[Emoji 视频生成](raw/model-api-reference/video-generation-api/portrait-animation-api-reference/emoji-quick-start/emoji-api.md)，传入`driven_id`参数。
+**解决方案：** 请参考[Emoji 视频生成](https://help.aliyun.com/zh/model-studio/emoji-api)，传入`driven_id`参数。
 
 ### Invalid ext\_bbox
 
 **原因：** 输入`ext_bbox`参数无效。
 
-**解决方案：** 请参考[Emoji 视频生成](raw/model-api-reference/video-generation-api/portrait-animation-api-reference/emoji-quick-start/emoji-api.md)，传入正确的`ext_bbox`。
+**解决方案：** 请参考[Emoji 视频生成](https://help.aliyun.com/zh/model-studio/emoji-api)，传入正确的`ext_bbox`。
 
 ### Driven not exist: driven\_id
 
 **原因：**输入`driven_id`不存在。
 
-**解决方案：** 请参考[Emoji 视频生成](raw/model-api-reference/video-generation-api/portrait-animation-api-reference/emoji-quick-start/emoji-api.md)，传入正确的`driven_id`。
+**解决方案：** 请参考[Emoji 视频生成](https://help.aliyun.com/zh/model-studio/emoji-api)，传入正确的`driven_id`。
 
 ### Text request limit violated, expected 1.
 

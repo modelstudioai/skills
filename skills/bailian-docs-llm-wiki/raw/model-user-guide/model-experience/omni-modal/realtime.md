@@ -459,8 +459,6 @@ Qwen3.5-Omni-Realtime 配置示例
     
     > 由于视频以抽帧方式输入（建议 1 帧/秒），视频最大时长即模型能保留的图像帧累计时长。例如 240 秒表示模型最多保留最近 240 秒内收到的帧，超过后更早的帧将被丢弃。
     
-    > qwen3-omni-flash-realtime 最大轮次为 8 轮，一般会先触及轮次限制，时长限制为模型的上下文长度限制，不再单独列出。
-    
     **模型**
     
     **音频最大轮次**
@@ -500,16 +498,6 @@ Qwen3.5-Omni-Realtime 配置示例
     480秒
     
     120秒
-    
-    qwen3-omni-flash-realtime
-    
-    8轮
-    
-    8轮
-    
-    —
-    
-    —
     
 -   调用 `close()` 关闭 WebSocket 连接时，若连接刚建立即关闭（无会话交互），关闭耗时约 5-10 秒，此为正常现象。服务端需完成音频流处理、上下文缓存及推理资源初始化后才能响应关闭请求。建议异步执行 `close()` 操作，避免阻塞主流程。
     
@@ -3860,9 +3848,7 @@ MCP 工具调用不额外收费，模型推理仍按模型价格计费。MCP 的
     
     -   输入音频计算公式：`总 Token 数 = 音频时长（单位：秒）* 7`
     -   输出音频计算公式：`总 Tokens 数 = 音频时长（单位：秒）* 12.5`
--   Qwen3-Omni-Flash-Realtime系列模型：输入与输出音频的计算公式均为`总 Token 数 = 音频时长（单位：秒）* 12.5`
-    
--   Qwen-Omni-Turbo-Realtime系列模型：输入与输出音频的计算公式均为`总 Token 数 = 音频时长（单位：秒）* 25`
+-   qwen3-omni-flash-realtime-2025-09-15：输入与输出音频的计算公式均为`总 Token 数 = 音频时长（单位：秒）* 12.5`
     
     若音频时长不足1秒，则按 1 秒计算。
     
@@ -3872,8 +3858,7 @@ MCP 工具调用不额外收费，模型推理仍按模型价格计费。MCP 的
 #### 图片
 
 -   `qwen3.8-omni-flash-realtime`、Qwen3.5-Omni-Realtime 系列模型：每 `32x32` 像素对应 1 个 Token
--   Qwen3-Omni-Flash-Realtime系列模型**：**每`32x32`像素对应 1 个 Token
--   Qwen-Omni-Turbo-Realtime系列模型：每`28x28`像素对应 1 个 Token
+-   qwen3-omni-flash-realtime-2025-09-15**：**每`32x32`像素对应 1 个 Token
 
 一张图最少需要 4 个 Token，最多支持 1280 个 Token；可使用以下代码，传入图像路径和会话时长即可估算图片消耗的 Token 总量：
 
@@ -3882,9 +3867,7 @@ MCP 工具调用不额外收费，模型推理仍按模型价格计费。MCP 的
 from PIL import Image
 import math
 
-# Qwen-Omni-Turbo-Realtime系列模型，缩放因子为28
-# factor = 28
-# Qwen3.8-Omni-Flash-Realtime、Qwen3.5-Omni-Realtime、Qwen3-Omni-Flash-Realtime系列模型，缩放因子为32
+# Qwen3.8-Omni-Flash-Realtime、Qwen3.5-Omni-Realtime、qwen3-omni-flash-realtime-2025-09-15，缩放因子为32
 factor = 32
 
 def token_calculate(image_path='', duration=10):

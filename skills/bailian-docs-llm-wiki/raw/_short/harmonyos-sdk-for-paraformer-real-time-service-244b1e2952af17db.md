@@ -8,7 +8,7 @@
 
 **用户指南**：关于模型介绍和选型建议请参见[实时语音识别-Fun-ASR/Paraformer](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition)。
 
-**在线体验**：仅 `paraformer-realtime-v2`、`paraformer-realtime-8k-v2` 和 `paraformer-realtime-v1` 支持[在线体验](https://bailian.console.aliyun.com/model/experience/voice)。
+**在线体验**：仅 `paraformer-realtime-v2`、`paraformer-realtime-8k-v2` 支持[在线体验](https://bailian.console.aliyun.com/model/experience/voice)。
 
 ## 快速开始
 
@@ -190,7 +190,7 @@ API Key。建议使用时效性短、安全性更高的[临时API Key](raw/model
 
 是
 
-待识别音频采样率（单位Hz）。 因模型而异： - paraformer-realtime-v2支持任意采样率。 - paraformer-realtime-v1仅支持16000Hz采样。 - paraformer-realtime-8k-v2仅支持8000Hz采样率。 - paraformer-realtime-8k-v1仅支持8000Hz采样率。
+待识别音频采样率（单位Hz）。 因模型而异： - paraformer-realtime-v2支持任意采样率。 - paraformer-realtime-8k-v2仅支持8000Hz采样率。
 
 `nls_config.disfluency_removal_enabled`
 
@@ -263,14 +263,6 @@ VAD（Voice Activity Detection，语音活动检测）断句的静音时长阈�
 否
 
 热词词表ID，用于提升特定词汇的识别准确率。该参数适用于v2及更高版本模型。热词的使用方法请参见[定制热词](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/custom-hot-words.md)。
-
-`nls_config.resources`
-
-`array[object]`
-
-否
-
-热词资源配置，用于v1版本模型。功能与`vocabulary_id`相同，但配置方式不同： `resources` 是一个对象数组，其每个元素包含 `resource_id` 和 `resource_type` 字段： - `resource_id`：`string`类型，热词ID。 - `resource_type`：`string`类型，取值为固定字符串“`asr_phrase`”。 示例： `{ "nls_config": { "resources": [ { "resource_id": "xxxxxxxxxxxx", "resource_type": "asr_phrase" } ] } }` 热词的使用方法请参见[Paraformer语音识别热词定制与管理](https://help.aliyun.com/zh/model-studio/paraformer-asr-phrase-manager)。
 
 ## 关键接口
 

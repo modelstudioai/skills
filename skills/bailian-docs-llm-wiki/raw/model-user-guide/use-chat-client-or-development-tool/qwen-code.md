@@ -293,20 +293,8 @@ qwen --version
         "envKey": "BAILIAN_TOKEN_PLAN_API_KEY"
       },
       {
-        "id": "deepseek-v4-flash",
-        "name": "[Token Plan 团队版] deepseek-v4-flash",
-        "baseUrl": "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
-        "envKey": "BAILIAN_TOKEN_PLAN_API_KEY"
-      },
-      {
         "id": "deepseek-v4-flash-0731",
         "name": "[Token Plan 团队版] deepseek-v4-flash-0731",
-        "baseUrl": "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
-        "envKey": "BAILIAN_TOKEN_PLAN_API_KEY"
-      },
-      {
-        "id": "deepseek-v3.2",
-        "name": "[Token Plan 团队版] deepseek-v3.2",
         "baseUrl": "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
         "envKey": "BAILIAN_TOKEN_PLAN_API_KEY"
       },
@@ -463,24 +451,6 @@ qwen --version
         }
       },
       {
-        "id": "qwen3-max-2026-01-23",
-        "name": "[Bailian Coding Plan] qwen3-max-2026-01-23",
-        "baseUrl": "https://coding.dashscope.aliyuncs.com/v1",
-        "envKey": "BAILIAN_CODING_PLAN_API_KEY"
-      },
-      {
-        "id": "qwen3-coder-next",
-        "name": "[Bailian Coding Plan] qwen3-coder-next",
-        "baseUrl": "https://coding.dashscope.aliyuncs.com/v1",
-        "envKey": "BAILIAN_CODING_PLAN_API_KEY"
-      },
-      {
-        "id": "qwen3-coder-plus",
-        "name": "[Bailian Coding Plan] qwen3-coder-plus",
-        "baseUrl": "https://coding.dashscope.aliyuncs.com/v1",
-        "envKey": "BAILIAN_CODING_PLAN_API_KEY"
-      },
-      {
         "id": "MiniMax-M2.5",
         "name": "[Bailian Coding Plan] MiniMax-M2.5",
         "baseUrl": "https://coding.dashscope.aliyuncs.com/v1",
@@ -496,12 +466,6 @@ qwen --version
             "enable_thinking": true
           }
         }
-      },
-      {
-        "id": "glm-4.7",
-        "name": "[Bailian Coding Plan] glm-4.7",
-        "baseUrl": "https://coding.dashscope.aliyuncs.com/v1",
-        "envKey": "BAILIAN_CODING_PLAN_API_KEY"
       },
       {
         "id": "kimi-k2.5",

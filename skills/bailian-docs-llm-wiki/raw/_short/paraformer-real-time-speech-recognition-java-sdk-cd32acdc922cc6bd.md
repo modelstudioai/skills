@@ -8,7 +8,7 @@
 
 **用户指南：**关于模型介绍和选型建议请参见[实时语音识别-Fun-ASR/Paraformer](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition)。
 
-**在线体验**：仅paraformer-realtime-v2、paraformer-realtime-8k-v2和paraformer-realtime-v1支持[在线体验](https://bailian.console.aliyun.com/model/experience/voice)。
+**在线体验**：仅paraformer-realtime-v2、paraformer-realtime-8k-v2支持[在线体验](https://bailian.console.aliyun.com/model/experience/voice)。
 
 ## 前提条件
 
@@ -28,15 +28,7 @@
 
 **paraformer-realtime-8k-v2（推荐）**
 
-**paraformer-realtime-v1**
-
-**paraformer-realtime-8k-v1**
-
 **适用场景**
-
-直播、会议等场景
-
-电话客服、语音信箱等 8kHz 音频的识别场景
 
 直播、会议等场景
 
@@ -48,10 +40,6 @@
 
 8kHz
 
-16kHz
-
-8kHz
-
 **语种**
 
 中文（包含中文普通话和各种方言）、英文、日语、韩语、德语、法语、俄语
@@ -60,55 +48,35 @@
 
 中文
 
-中文
-
-中文
-
 **标点符号预测**
 
-✅ 默认支持，无需配置
+默认支持，无需配置
 
-✅ 默认支持，无需配置
-
-✅ 默认支持，无需配置
-
-✅ 默认支持，无需配置
+默认支持，无需配置
 
 **逆文本正则化（ITN）**
 
-✅ 默认支持，无需配置
+默认支持，无需配置
 
-✅ 默认支持，无需配置
-
-✅ 默认支持，无需配置
-
-✅ 默认支持，无需配置
+默认支持，无需配置
 
 **定制热词**
 
-✅ 参见[定制热词](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/custom-hot-words.md)
+支持：参见[定制热词](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/custom-hot-words.md)
 
-✅ 参见[定制热词](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/custom-hot-words.md)
-
-✅ 参见[Paraformer语音识别热词定制与管理](https://help.aliyun.com/zh/model-studio/paraformer-asr-phrase-manager)
-
-✅ 参见[Paraformer语音识别热词定制与管理](https://help.aliyun.com/zh/model-studio/paraformer-asr-phrase-manager)
+支持：参见[定制热词](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/custom-hot-words.md)
 
 **指定待识别语种**
 
-✅ 通过`language_hints`参数指定
+支持：通过`language_hints`参数指定
 
-❌
-
-❌
-
-❌
+不支持
 
 **情感识别**
 
-❌
+不支持
 
-✅ （点击查看使用方式）
+支持：（点击查看使用方式）
 
 情感识别遵循如下约束：
 
@@ -117,10 +85,6 @@
 -   只有在[实时识别结果（RecognitionResult）](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-java-sdk#11a082e1d9ijq)的`isSentenceEnd`方法返回结果为`true`时才显示情感识别结果。
 
 情感识别结果获取方式：调用[单句信息（Sentence）](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-java-sdk#e3e502b072h3a)的`getEmoTag`和`getEmoConfidence`方法分别获取当前句子的情感和情感置信度。
-
-❌
-
-❌
 
 ## 快速开始
 
@@ -615,9 +579,7 @@ Integer
 因模型而异：
 
 -   paraformer-realtime-v2支持任意采样率。
--   paraformer-realtime-v1仅支持16000Hz采样。
 -   paraformer-realtime-8k-v2仅支持8000Hz采样率。
--   paraformer-realtime-8k-v1仅支持8000Hz采样率。
 
 format
 
@@ -644,16 +606,6 @@ String
 设置热词ID，若未设置则不生效。v2及更高版本模型设置热词ID时使用该字段。
 
 在本次语音识别中，将应用与该热词ID对应的热词信息。具体使用方法请参见[定制热词](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/custom-hot-words.md)。
-
-phraseId
-
-String
-
-否
-
-设置热词ID，若未设置则不生效。v1系列模型设置热词ID时使用该字段。
-
-在本次语音识别中，将应用与该热词ID对应的热词信息。具体使用方法请参见[Paraformer语音识别热词定制与管理](https://help.aliyun.com/zh/model-studio/paraformer-asr-phrase-manager)。
 
 disfluencyRemovalEnabled
 

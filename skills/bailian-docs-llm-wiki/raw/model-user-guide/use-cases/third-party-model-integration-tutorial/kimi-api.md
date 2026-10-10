@@ -2,8 +2,6 @@
 
 本文档介绍如何调用阿里云百炼部署的 Kimi 模型推理服务。
 
-**重要**Moonshot-Kimi-K2-Instruct、kimi-k2-thinking 已于**2026年7月9日**下架。推荐转用：[qwen3.7-plus](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.7-plus)、[qwen3.8-max](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.8-max)、[qwen3.8-flash](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.8-flash)。
-
 **支持的地域：**华北2（北京）、新加坡、日本（东京）、美国（弗吉尼亚）、德国（法兰克福）、中国香港。
 
 **模型体验：**您可以前往[体验中心](https://bailian.console.aliyun.com/cn-beijing/model/experience/text)体验 Kimi 模型效果。
@@ -46,8 +44,6 @@ HTTP 请求地址：`POST https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com
 
 #### 华北2（北京）
 
-纯文本模型（如 kimi-k2-thinking）的 HTTP 请求地址为`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
-
 多模态模型（如 kimi-k3、kimi-k2.7-code、kimi-k2.6、kimi-k2.5）的 HTTP 请求地址为`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
 SDK调用配置的`base_url`：
@@ -79,8 +75,6 @@ Constants.baseHttpApiUrl="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api
 
 #### 美国（弗吉尼亚）
 
-纯文本模型（如 kimi-k2-thinking）的 HTTP 请求地址为`POST https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
-
 多模态模型（如 kimi-k3、kimi-k2.7-code、kimi-k2.6、kimi-k2.5）的 HTTP 请求地址为`POST https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
 SDK调用配置的`base_url`：
@@ -109,8 +103,6 @@ Constants.baseHttpApiUrl="https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/
 
 #### 德国（法兰克福）
 
-纯文本模型（如 kimi-k2-thinking）的 HTTP 请求地址为`POST https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
-
 多模态模型（如 kimi-k3、kimi-k2.7-code、kimi-k2.6、kimi-k2.5）的 HTTP 请求地址为`POST https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
 SDK调用配置的`base_url`：
@@ -138,8 +130,6 @@ Constants.baseHttpApiUrl="https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/a
 ```
 
 #### 新加坡
-
-纯文本模型（如 kimi-k2-thinking）的 HTTP 请求地址为`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
 
 多模态模型（如 kimi-k3、kimi-k2.7-code、kimi-k2.6、kimi-k2.5）的 HTTP 请求地址为`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
@@ -172,8 +162,6 @@ Constants.baseHttpApiUrl="https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com
 
 #### 日本（东京）
 
-纯文本模型（如 kimi-k2-thinking）的 HTTP 请求地址为`POST https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
-
 多模态模型（如 kimi-k3、kimi-k2.7-code、kimi-k2.6、kimi-k2.5）的 HTTP 请求地址为`POST https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
 SDK调用配置的`base_url`：
@@ -201,8 +189,6 @@ Constants.baseHttpApiUrl="https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com
 ```
 
 #### 中国香港
-
-纯文本模型（如 kimi-k2-thinking）的 HTTP 请求地址为`POST https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
 
 多模态模型（如 kimi-k3、kimi-k2.7-code、kimi-k2.6、kimi-k2.5）的 HTTP 请求地址为`POST https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
@@ -2144,38 +2130,6 @@ kimi-k2.5
 
 支持
 
-kimi-k2-thinking
-
-支持
-
-支持
-
-支持
-
-支持
-
-不支持
-
-不支持
-
-支持
-
-Moonshot-Kimi-K2-Instruct
-
-支持
-
-不支持
-
-支持
-
-不支持
-
-支持
-
-不支持
-
-支持
-
 ## 动态加载工具（Kimi-K3）
 
 当应用需要挂载大量工具时，如果把所有工具的声明一次性放进请求顶层的`tools`字段，会遇到工具定义膨胀（Tool Definition Bloat）问题：每个请求都要携带全部工具的描述和参数 Schema，Token 消耗高；候选工具越多，模型也越容易选错工具、构造出错误的调用参数。
@@ -2371,34 +2325,6 @@ false
 
 2000
 
-kimi-k2-thinking
-
-\-
-
-1.0
-
-\-
-
-\-
-
-\-
-
-\-
-
-Moonshot-Kimi-K2-Instruct
-
-\-
-
-0.6
-
-1.0
-
-0
-
-\-
-
-\-
-
 “-" 表示没有默认值，也不支持设置。
 
 ## 模型列表与计费
@@ -2409,8 +2335,6 @@ Kimi 系列模型是由月之暗面公司（Moonshot AI）推出的大语言模�
 -   kimi-k2.7-code：Kimi 最强编程模型，长上下文指令遵循更可靠，编程任务成功率更高。支持文本、图片与视频输入、思考模式、对话与 Agent 任务。
 -   kimi-k2.6：Kimi最新最智能的模型，具备更强更稳的长程代码编写能力，指令遵循和自我纠错能力显著提升。同时支持文本、图片与视频输入、思考与非思考模式、对话与 Agent 任务。
 -   kimi-k2.5：在 Agent、代码生成、视觉理解及一系列通用智能任务上取得开源 SOTA 表现。同时支持图像、视频与文本输入、思考与非思考模式、对话与 Agent 任务。
--   kimi-k2-thinking：仅支持深度思考模式，并通过`reasoning_content`字段展示思考过程，具有卓越的编码和工具调用能力，适用于需要逻辑分析、规划或深度理解的场景。
--   Moonshot-Kimi-K2-Instruct：不支持深度思考，直接生成回复，响应速度更快，适用于需要快速直接回答的场景。
 
 **说明**kimi-k3 不支持 `thinking_budget` 参数，思考长度不可通过该参数限制。
 
@@ -2423,12 +2347,6 @@ kimi-k3 暂不支持 OpenAI 兼容 Responses 接口（coming soon），请使用
 按照模型的输入与输出 Token 数量计费。
 
 > 思考模式下，思维链按照输出 Token 计费。
-
-## 常见问题
-
-### Q：如何部署 Kimi-K2-Instruct 模型？
-
-A：我们推荐您通过本文介绍的阿里云百炼 API 方式调用。如有私有化部署需求，请参见[阿里云 Kimi K2 解决方案](https://www.aliyun.com/solution/tech-solution/kimi-k2-instruct)，涵盖了通过 PAI、GPU 云服务器等部署模型的方式。
 
 ## 错误码
 

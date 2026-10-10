@@ -65,31 +65,19 @@ AOQ 采用**服务端代理鉴权**模式：API Key 仅在业务 AppServer 侧�
 
 ![Token鉴权](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3935914871/p1088069.jpg)
 
-通过 AOQ 接入时，根据目标模型选择建连请求路径：实时全模态、实时语音对话和实时语音翻译使用 `/api/v1/webrtc/realtime`；下表所列的语音合成和实时语音识别模型使用 `/api/v1/webrtc/inference`。
+通过 AOQ 接入时，请根据模型系列选择建连请求路径。具体模型的协议支持情况，请参见 [Realtime API 概述](https://help.aliyun.com/zh/model-studio/realtime-api-overview#rtov-s02h2)。
 
-模型
+模型系列
 
 建连请求路径
 
-qwen3.8-omni-flash-realtime、qwen3.5-omni-plus-realtime、qwen3.5-omni-flash-realtime
+Qwen-Omni-Realtime、Qwen-Audio-Realtime、Qwen-Livetranslate-Realtime
 
 `/api/v1/webrtc/realtime`
 
-qwen-audio-3.0-tts-flash、qwen-audio-3.0-tts-plus、CosyVoice 系列
+Qwen-Audio-TTS、CosyVoice、Qwen-Audio-ASR-Streaming、Qwen-Audio-ASR-Message、Fun-ASR-Realtime
 
 `/api/v1/webrtc/inference`
-
-Qwen-Audio-3.0-ASR-Flash-Streaming、Fun-ASR-Realtime 系列
-
-`/api/v1/webrtc/inference`
-
-qwen-audio-3.1-realtime-plus、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash
-
-`/api/v1/webrtc/realtime`
-
-Qwen-Livetranslate-Realtime 系列模型
-
-`/api/v1/webrtc/realtime`
 
 以下 Realtime 示例使用 `qwen3.8-omni-flash-realtime`。`{endpoint}` 使用华北2（北京）的 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com` 或新加坡的 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，替换为实际业务空间 ID，并使用对应地域和业务空间的 API Key。
 

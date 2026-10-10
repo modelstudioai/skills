@@ -207,7 +207,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 ## 推理强度（reasoning\_effort）
 
-deepseek-v4-pro 和 deepseek-v4-flash 默认开启思考模式。通过`reasoning_effort`参数可以调整推理强度，可选值为`high`和`max`，默认为`high`。
+deepseek-v4-pro 默认开启思考模式。通过`reasoning_effort`参数可以调整推理强度，可选值为`high`和`max`，默认为`high`。
 
 vanchin/deepseek-v4.1-flash 默认开启思考模式，`reasoning_effort`可选值为`low`、`high`和`max`，默认为`high`。
 
@@ -538,38 +538,6 @@ vanchin/deepseek-v3.1-terminus
 
 支持
 
-vanchin/deepseek-r1
-
-支持
-
-支持
-
-支持
-
-不支持
-
-不支持
-
-支持
-
-支持
-
-vanchin/deepseek-v3
-
-支持
-
-不支持
-
-支持
-
-支持
-
-不支持
-
-支持
-
-支持
-
 vanchin/deepseek-ocr
 
 不支持
@@ -607,7 +575,7 @@ vanchin/deepseek-v4-pro 不支持以下参数：`repetition_penalty`、`preserve
     -   vanchin/deepseek-v4.1-flash：按输入价格的 2% 计费
     -   vanchin/deepseek-v4-pro、vanchin/deepseek-v4-pro-0813：按输入价格的 8.33% 计费
     -   vanchin/deepseek-v3.2-think：按输入价格的 10% 计费
-    -   vanchin/deepseek-v3.1-terminus、vanchin/deepseek-r1、vanchin/deepseek-v3：按输入价格的 40% 计费
+    -   vanchin/deepseek-v3.1-terminus：按输入价格的 40% 计费
 
 ## 参数默认值
 
@@ -668,26 +636,6 @@ vanchin/deepseek-v3.1-terminus
 0.95
 
 false
-
-\-
-
-vanchin/deepseek-r1
-
-1.0
-
-0.8
-
-\-（仅支持思考模式）
-
-\-
-
-vanchin/deepseek-v3
-
-1.0
-
-1.0
-
-\-（不支持思考模式）
 
 \-
 

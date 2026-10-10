@@ -135,37 +135,34 @@ VAD检测阈值。
 
 模型的温度参数。
 
+以下为北京地域 `qwen3.8-omni-flash-realtime` 返回的默认会话示例。
+
 ```
 {
-    "event_id": "event_RdvlSpbBb2ssyBjYrDHjt",
+    "event_id": "event_QQubXbhHMyXmKaSuE6PQ8",
     "type": "session.created",
     "session": {
+        "input_audio_format": "pcm",
+        "input_audio_transcription": {
+            "model": "qwen3-asr-flash-realtime"
+        },
+        "id": "sess_MjEctgJ4ziXPEioCzSSvK",
         "object": "realtime.session",
-        "model": "qwen3-omni-flash-realtime",
         "modalities": [
             "text",
             "audio"
         ],
-        "voice": "Cherry",
-        "input_audio_format": "pcm",
-        "output_audio_format": "pcm",
-        "input_audio_transcription": {
-            "model": "qwen3-asr-flash-realtime"
-        },
         "turn_detection": {
-            // 取值为server_vad或semantic_vad（qwen3.8-omni-flash-realtime和qwen3.5-omni-realtime系列支持）
             "type": "server_vad",
-            "threshold": 0.5,
-            "prefix_padding_ms": 300,
             "silence_duration_ms": 800,
+            "interrupt_response": true,
             "create_response": true,
-            "interrupt_response": true
+            "threshold": 0.5,
+            "prefix_padding_ms": 300
         },
-        "enable_search": false,
-        "search_options": {},
-        "tools": [],
-        "temperature": 0.8,
-        "id": "sess_Ov7GOXoNXhNjlxXtOGKQS"
+        "model": "qwen3.8-omni-flash-realtime",
+        "voice": "Tina",
+        "output_audio_format": "pcm"
     }
 }
 ```

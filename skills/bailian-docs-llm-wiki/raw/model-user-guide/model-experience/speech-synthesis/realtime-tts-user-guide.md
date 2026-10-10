@@ -313,16 +313,6 @@ public class Main {
 
 **指令文本长度限制**：不超过 100 字符。汉字（包括简体/繁体汉字、日文汉字和韩文汉字）按 2 个字符计算，其他字符（如标点符号、字母、数字、日韩文假名/谚文等）按 1 个字符计算。
 
-#### Qwen-TTS
-
-**支持的模型**：仅支持Qwen3-TTS-Instruct-Flash-Realtime系列模型。
-
-**使用方式**：通过 `instructions` 参数指定指令内容。
-
-**指令文本支持的语言**：仅支持中文和英文。
-
-**指令文本长度限制**：不超过 1600 Token。
-
 **适用场景**：
 
 -   有声书和广播剧配音
@@ -457,8 +447,6 @@ with open('output.mp3', 'wb') as f:
 #### Qwen-TTS
 
 -   **系统音色**：使用支持方言的系统音色，参见[支持的音色](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#bac280ddf5a1u)中的 Qwen-TTS音色列表。
--   **声音复刻音色**：不支持方言。
--   **声音设计音色**：不支持方言。
 
 **具体支持哪些方言**：参见[Qwen3-TTS](https://help.aliyun.com/zh/model-studio/tts-model#tts08_q3tts02)中各模型“支持的语言”。
 
@@ -2006,9 +1994,6 @@ if __name__ == "__main__":
             await self.update_session({
                 "mode": self.mode.value,
                 "voice": self.voice,
-                # 如需使用指令控制功能，请取消下方注释，并在server_commit.py或commit.py中将model替换为qwen3-tts-instruct-flash-realtime
-                # "instructions": "语速较快，带有明显的上扬语调，适合介绍时尚产品。",
-                # "optimize_instructions": true
                 "language_type": self.language_type,
                 "response_format": "pcm",
                 "sample_rate": 24000
@@ -2206,9 +2191,6 @@ if __name__ == "__main__":
                     JsonObject session = new JsonObject();
                     session.addProperty("mode", mode.getValue());
                     session.addProperty("voice", TTSRealtimeClient.this.voice);
-                    // 如需使用指令控制功能，请取消下方注释，并将model替换为qwen3-tts-instruct-flash-realtime
-                    // session.addProperty("instructions", "语速较快，带有明显的上扬语调，适合介绍时尚产品。");
-                    // session.addProperty("optimize_instructions", true);
                     session.addProperty("language_type", languageType);
                     session.addProperty("response_format", "pcm");
                     session.addProperty("sample_rate", 24000);
@@ -2397,7 +2379,6 @@ if __name__ == "__main__":
     import pyaudio
     
     # QwenTTS 服务配置
-    # 如需使用指令控制功能，请将model替换为qwen3-tts-instruct-flash-realtime，并在tts_realtime_client.py中取消instructions的注释
     # 以下是北京地域url，如果使用新加坡地域的模型，需要将url替换为：wss://dashscope-intl.aliyuncs.com/api-ws/v1/realtime?model=qwen3-tts-flash-realtime
     URL = "wss://dashscope.aliyuncs.com/api-ws/v1/realtime?model=qwen3-tts-flash-realtime"
     # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
@@ -2577,7 +2558,6 @@ if __name__ == "__main__":
             playerThread.start();
     
             // 创建 TTS 客户端
-            // 如需使用指令控制功能，请将model替换为qwen3-tts-instruct-flash-realtime，并在TTSRealtimeClient.java中取消instructions的注释
             TTSRealtimeClient client = new TTSRealtimeClient(
                 URL, API_KEY, "Cherry",
                 TTSRealtimeClient.SessionMode.SERVER_COMMIT,
@@ -2662,7 +2642,6 @@ if __name__ == "__main__":
     import pyaudio
     
     # QwenTTS 服务配置
-    # 如需使用指令控制功能，请将model替换为qwen3-tts-instruct-flash-realtime，并在tts_realtime_client.py中取消instructions的注释
     # 以下是北京地域url，如果使用新加坡地域的模型，需要将url替换为：wss://dashscope-intl.aliyuncs.com/api-ws/v1/realtime?model=qwen3-tts-flash-realtime
     URL = "wss://dashscope.aliyuncs.com/api-ws/v1/realtime?model=qwen3-tts-flash-realtime"
     # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
@@ -2846,7 +2825,6 @@ if __name__ == "__main__":
             playerThread.start();
     
             // 创建 TTS 客户端（commit 模式）
-            // 如需使用指令控制功能，请将model替换为qwen3-tts-instruct-flash-realtime，并在TTSRealtimeClient.java中取消instructions的注释
             TTSRealtimeClient client = new TTSRealtimeClient(
                 URL, API_KEY, "Cherry",
                 TTSRealtimeClient.SessionMode.COMMIT,
@@ -4971,15 +4949,11 @@ synthesizer.getSyncApi().close(1000, "bye");
 
 -   **Qwen-Audio-TTS：**qwen-audio-3.0-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-flash
     
--   **CosyVoice：**cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-plus、cosyvoice-v3-flash、cosyvoice-v2、cosyvoice-v1
+-   **CosyVoice：**cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-plus、cosyvoice-v3-flash、cosyvoice-v2
     
 -   **Qwen-TTS**：
     
-    -   **Qwen3-TTS-Instruct-Flash-Realtime**：qwen3-tts-instruct-flash-realtime（稳定版，当前等同qwen3-tts-instruct-flash-realtime-2026-01-22）、qwen3-tts-instruct-flash-realtime-2026-01-22（最新快照版）
-    -   **Qwen3-TTS-VD-Realtime：**qwen3-tts-vd-realtime-2026-01-15（最新快照版）、qwen3-tts-vd-realtime-2025-12-16（快照版）
-    -   **Qwen3-TTS-VC-Realtime：**qwen3-tts-vc-realtime-2026-01-15（最新快照版）、qwen3-tts-vc-realtime-2025-11-27（快照版）
-    -   **Qwen3-TTS-Flash-Realtime：**qwen3-tts-flash-realtime（稳定版，当前等同qwen3-tts-flash-realtime-2025-11-27）、qwen3-tts-flash-realtime-2025-11-27（最新快照版）、qwen3-tts-flash-realtime-2025-09-18（快照版）
-    -   **Qwen-TTS-Realtime：**qwen-tts-realtime（稳定版，当前等同qwen-tts-realtime-2025-07-15）、qwen-tts-realtime-latest（最新版，当前等同qwen-tts-realtime-2025-07-15）、qwen-tts-realtime-2025-07-15（快照版）
+    -   **Qwen3-TTS-Flash-Realtime：**qwen3-tts-flash-realtime（稳定版）
 -   **Sambert：**sambert-zhinan-v1、sambert-zhiqi-v1、sambert-zhichu-v1、sambert-zhide-v1、sambert-zhijia-v1、sambert-zhiru-v1、sambert-zhiqian-v1、sambert-zhixiang-v1、sambert-zhiwei-v1、sambert-zhihao-v1、sambert-zhijing-v1、sambert-zhiming-v1、sambert-zhimo-v1、sambert-zhina-v1、sambert-zhishu-v1、sambert-zhistella-v1、sambert-zhiting-v1、sambert-zhixiao-v1、sambert-zhiya-v1、sambert-zhiye-v1、sambert-zhiying-v1、sambert-zhiyuan-v1、sambert-zhiyue-v1、sambert-zhigui-v1、sambert-zhishuo-v1、sambert-zhimiao-emo-v1、sambert-zhimao-v1、sambert-zhilun-v1、sambert-zhifei-v1、sambert-zhida-v1、sambert-camila-v1、sambert-perla-v1、sambert-indah-v1、sambert-clara-v1、sambert-hanna-v1、sambert-beth-v1、sambert-betty-v1、sambert-cally-v1、sambert-cindy-v1、sambert-eva-v1、sambert-donna-v1、sambert-brian-v1、sambert-waan-v1，请参见[Sambert模型列表](https://help.aliyun.com/zh/model-studio/sambert-java-sdk#57d33631f7doi)
     
 
@@ -4993,10 +4967,7 @@ synthesizer.getSyncApi().close(1000, "bye");
     
 -   **Qwen-TTS**：
     
-    -   **Qwen3-TTS-Instruct-Flash-Realtime**：qwen3-tts-instruct-flash-realtime（稳定版，当前等同qwen3-tts-instruct-flash-realtime-2026-01-22）、qwen3-tts-instruct-flash-realtime-2026-01-22（最新快照版）
-    -   **Qwen3-TTS-VD-Realtime：**qwen3-tts-vd-realtime-2026-01-15（最新快照版）、qwen3-tts-vd-realtime-2025-12-16（快照版）
-    -   **Qwen3-TTS-VC-Realtime：**qwen3-tts-vc-realtime-2026-01-15（最新快照版）、qwen3-tts-vc-realtime-2025-11-27（快照版）
-    -   **Qwen3-TTS-Flash-Realtime：**qwen3-tts-flash-realtime（稳定版，当前等同qwen3-tts-flash-realtime-2025-11-27）、qwen3-tts-flash-realtime-2025-11-27（最新快照版）、qwen3-tts-flash-realtime-2025-09-18（快照版）
+    -   **Qwen3-TTS-Flash-Realtime：**qwen3-tts-flash-realtime（稳定版）
 
 ## 支持的音色
 

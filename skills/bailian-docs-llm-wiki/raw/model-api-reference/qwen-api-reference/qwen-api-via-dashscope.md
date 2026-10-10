@@ -290,8 +290,7 @@ fps有两个功能：
 取值范围
 
 -   qwen3.7系列、qwen3.6系列、qwen3.5系列：最大值和默认值均为 8000。
--   `qwen3-vl-plus`系列、`qwen3-vl-flash`系列、`qwen3-vl-235b-a22b-thinking`、`qwen3-vl-235b-a22b-instruct`：最大值和默认值均为 2000。
--   `qwen-vl-max`、`qwen-vl-max-0813`、`qwen-vl-plus`、`qwen-vl-plus-0815``、qwen-vl-plus-0710`：最大值和默认值均为 512。
+-   `qwen3-vl-plus`系列：最大值和默认值均为 2000。
 
 示例值
 
@@ -307,11 +306,10 @@ fps有两个功能：
 
 -   **输入图像：**
     -   `Qwen3.7、Qwen3.6、Qwen3.5`、`Qwen3-VL`：默认值和最小值均为：`65536`
-    -   `qwen-vl-max`、`qwen-vl-max-0813`、`qwen-vl-plus`、`qwen-vl-plus-0815``、qwen-vl-plus-0710`：默认值和最小值均为`4096`
-    -   其他`qwen-vl-plus`模型、其他`qwen-vl-max`模型、`Qwen2.5-VL`开源系列及`QVQ`系列模型：默认值和最小值均为`3136`
+    -   `Qwen2.5-VL`开源系列及`QVQ`系列模型：默认值和最小值均为`3136`
 -   **输入视频文件或图像列表：**
-    -   `Qwen3.7、Qwen3.6、Qwen3.5`、Qwen3-VL（包括商业版和开源版）、`qwen-vl-max`、`qwen-vl-max-0813`、`qwen-vl-plus`、`qwen-vl-plus-0815``、qwen-vl-plus-0710`：默认值为`65536`，最小值为`4096`
-    -   其他`qwen-vl-plus`模型、其他`qwen-vl-max`模型、`Qwen2.5-VL`开源系列及`QVQ`系列模型：默认值为`50176`，最小值为`3136`
+    -   `Qwen3.7、Qwen3.6、Qwen3.5`、Qwen3-VL（包括商业版和开源版）：默认值为`65536`，最小值为`4096`
+    -   `Qwen2.5-VL`开源系列及`QVQ`系列模型：默认值为`50176`，最小值为`3136`
 
 示例值
 
@@ -332,16 +330,15 @@ fps有两个功能：
     -   当`vl_high_resolution_images`为`False`时：
         
         -   `Qwen3.7、Qwen3.6、Qwen3.5`、`Qwen3-VL`：默认值为`2621440`，最大值为：`16777216`
-        -   `qwen-vl-max`、`qwen-vl-max-0813`、`qwen-vl-plus`、`qwen-vl-plus-0815``、qwen-vl-plus-0710`：默认值为`1310720`，最大值为：`16777216`
-        -   其他`qwen-vl-plus`模型、其他`qwen-vl-max`模型、`Qwen2.5-VL`开源系列及`QVQ`系列模型：默认值为`1003520` ，最大值为`12845056`
+        -   `Qwen2.5-VL`开源系列及`QVQ`系列模型：默认值为`1003520` ，最大值为`12845056`
     -   当`vl_high_resolution_images`为`True`时：
         
-        -   `Qwen3.7、Qwen3.6、Qwen3.5`、Qwen3-VL、`qwen-vl-max`、`qwen-vl-max-0813`、`qwen-vl-plus`、`qwen-vl-plus-0815``、qwen-vl-plus-0710`：`max_pixels`无效，输入图像的最大像素固定为`16777216`
-        -   其他`qwen-vl-plus`模型、其他`qwen-vl-max`模型、`Qwen2.5-VL`开源系列及`QVQ`系列模型：`max_pixels`无效，输入图像的最大像素固定为`12845056`
+        -   `Qwen3.7、Qwen3.6、Qwen3.5`、Qwen3-VL：`max_pixels`无效，输入图像的最大像素固定为`16777216`
+        -   `Qwen2.5-VL`开源系列及`QVQ`系列模型：`max_pixels`无效，输入图像的最大像素固定为`12845056`
 -   **输入视频文件或图像列表：**
-    -   `qwen3.7系列、qwen3.6系列、qwen3.5系列、qwen3-vl-plus`系列、`qwen3-vl-flash`系列、`qwen3-vl-235b-a22b-thinking`、`qwen3-vl-235b-a22b-instruct`：默认值为`655360`，最大值为`2048000`
-    -   其他`Qwen3-VL`开源模型、`qwen-vl-max`、`qwen-vl-max-0813`、`qwen-vl-plus`、`qwen-vl-plus-0815``、qwen-vl-plus-0710`：默认值`655360`，最大值为`786432`
-    -   其他`qwen-vl-plus`模型、其他`qwen-vl-max`模型、`Qwen2.5-VL`开源系列及`QVQ`系列模型：默认值为`501760`，最大值为`602112`
+    -   `qwen3.7系列、qwen3.6系列、qwen3.5系列、qwen3-vl-plus`系列：默认值为`655360`，最大值为`2048000`
+    -   其他`Qwen3-VL`开源模型：默认值`655360`，最大值为`786432`
+    -   `Qwen2.5-VL`开源系列及`QVQ`系列模型：默认值为`501760`，最大值为`602112`
 
 示例值
 
@@ -358,9 +355,9 @@ fps有两个功能：
 取值范围
 
 -   qwen3.7系列、qwen3.6系列、qwen3.5系列：默认值和最大值均为819200000，该值对应 `800000` 个图像 Token（每 32×32 像素对应 1 个图像 Token）。
--   `qwen3-vl-plus`系列、`qwen3-vl-flash`系列、`qwen3-vl-235b-a22b-thinking`、`qwen3-vl-235b-a22b-instruct`：默认值和最大值均为134217728，该值对应 `131072` 个图像 Token（每 32×32 像素对应 1 个图像 Token）。
--   其他`Qwen3-VL`开源模型、`qwen-vl-max`、`qwen-vl-max-0813`、`qwen-vl-plus`、`qwen-vl-plus-0815``、qwen-vl-plus-0710`：默认值和最小值均为`67108864`，该值对应 `65536` 个图像 Token（每 32×32 像素对应 1 个图像 Token）。
--   其他`qwen-vl-plus`模型、其他`qwen-vl-max`模型、`Qwen2.5-VL`开源系列及`QVQ`系列模型：默认值和最小值均为`51380224`，该值对应 `65536` 个图像 Token（每 28×28 像素对应 1 个图像 Token）。
+-   `qwen3-vl-plus`系列：默认值和最大值均为134217728，该值对应 `131072` 个图像 Token（每 32×32 像素对应 1 个图像 Token）。
+-   其他`Qwen3-VL`开源模型：默认值和最小值均为`67108864`，该值对应 `65536` 个图像 Token（每 32×32 像素对应 1 个图像 Token）。
+-   `Qwen2.5-VL`开源系列及`QVQ`系列模型：默认值和最小值均为`51380224`，该值对应 `65536` 个图像 Token（每 28×28 像素对应 1 个图像 Token）。
 
 示例值
 
@@ -468,24 +465,24 @@ temperature越高，生成的文本更多样，反之，生成的文本更确定
 temperature默认值
 
 -   qwen3.8-max/qwen3.8-flash（思考模式）：视觉理解0.6，文本输入1.0，0.6以下的temperature值会默认改为0.6
--   Qwen3.8（非思考模式）、Qwen3.7（非思考模式）、Qwen3.6（非思考模式）、Qwen3.5-Omni、Qwen3.5（非思考模式）、Qwen3（非思考模式）、Qwen3-Instruct系列、Qwen3-Coder系列、qwen-max系列、qwen-plus系列（非思考模式）、qwen-flash系列（非思考模式）、qwen-turbo系列（非思考模式）、qwen开源系列、qwen-coder系列、qwen-doc-turbo、Qwen3-VL（非思考）：0.7；
+-   Qwen3.8（非思考模式）、Qwen3.7（非思考模式）、Qwen3.6（非思考模式）、Qwen3.5-Omni、Qwen3.5（非思考模式）、Qwen3（非思考模式）、Qwen3-Instruct系列、Qwen3-Coder系列、qwen-max系列、qwen-plus系列（非思考模式）、qwen-flash系列（非思考模式）、qwen开源系列、qwen-coder系列、qwen-doc-turbo、Qwen3-VL（非思考）：0.7；
 -   QVQ系列 : 0.5；
 -   qwen-audio-turbo系列：0.00001；
--   qwen-vl系列、qwen2.5-omni-7b：0.01；
+-   qwen-vl系列：0.01；
 -   qwen-math系列：0；
 -   Qwen3.7（思考模式）、Qwen3.6（思考模式）、Qwen3.5（思考模式）、Qwen3（思考模式）、Qwen3-Thinking、Qwen3-Omni-Captioner、QwQ 系列：0.6；
--   qwen3-max-preview（思考模式）、qwen-long系列： 1.0；
+-   qwen-long系列： 1.0；
 -   qwen-plus-character：0.92
 -   qwen3-omni-flash系列：0.9
 -   Qwen3-VL（思考模式）：0.8
--   DeepSeek系列（阿里云直供）：deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-flash、deepseek-v3.2（非思考模式）: 1.0；deepseek-v3.2（思考模式）、deepseek-v3.2-exp、deepseek-v3.1、deepseek-r1、deepseek-r1-0528、deepseek-r1-distill-qwen 蒸馏版: 0.6；deepseek-v3: 0.7；
+-   DeepSeek系列（阿里云直供）：deepseek-v4.1-flash、deepseek-v4-pro: 1.0；deepseek-r1-distill-qwen 蒸馏版: 0.6；
 -   DeepSeek系列（硅基流动直供）：siliconflow/deepseek-v3.2、siliconflow/deepseek-v3.1-terminus、siliconflow/deepseek-r1-0528、siliconflow/deepseek-v3-0324: 1.0；
 -   DeepSeek系列（快手万擎直供）：vanchin/deepseek-v3.2-think（思考模式）: 0.6；vanchin/deepseek-v3.1-terminus: 0.7；vanchin/deepseek-v3.2-speciale、vanchin/deepseek-r1、vanchin/deepseek-v3、vanchin/deepseek-ocr: 1.0；
--   Kimi系列（阿里云直供）：kimi-k2.7-code、kimi-k2.6（思考模式）、kimi-k2.5（思考模式）、kimi-k2-thinking: 1.0；kimi-k2.6（非思考模式）、kimi-k2.5（非思考模式）、Moonshot-Kimi-K2-Instruct: 0.6；
+-   Kimi系列（阿里云直供）：kimi-k2.7-code、kimi-k2.6（思考模式）、kimi-k2.5（思考模式）: 1.0；kimi-k2.6（非思考模式）、kimi-k2.5（非思考模式）: 0.6；
 -   Kimi系列（月之暗面直供）：kimi/kimi-k3、kimi/kimi-k2.7-code-highspeed、kimi/kimi-k2.7-code、kimi/kimi-k2.6（思考模式）、kimi/kimi-k2.5（思考模式）: 1.0；kimi/kimi-k2.6（非思考模式）、kimi/kimi-k2.5（非思考模式）: 0.6；
--   GLM系列（阿里云直供）：glm-5.1、glm-5、glm-4.7、glm-4.6: 1.0；glm-4.5、glm-4.5-air: 0.6；
+-   GLM系列（阿里云直供）：glm-5.1、glm-5: 1.0；
 -   GLM系列（智谱直供）：ZHIPU/GLM-5.1、ZHIPU/GLM-5: 0.6；
--   MiniMax系列（阿里云直供）：MiniMax-M2.5、MiniMax-M2.1: 1.0；
+-   MiniMax系列（阿里云直供）：MiniMax-M2.5: 1.0；
 -   MiniMax系列（稀宇科技直供）：MiniMax/MiniMax-M3、MiniMax/MiniMax-M2.7、MiniMax/MiniMax-M2.5、MiniMax/MiniMax-M2.1: 1.0。
 -   MiMo系列（小米直供）：mimo-v2.5-pro: 1.0，范围 \[0, 1.5\]。
 
@@ -503,25 +500,21 @@ top\_p越高，生成的文本更多样。反之，生成的文本更确定。
 
 top\_p默认值
 
-Qwen3.8（非思考模式）、Qwen3.7（非思考模式）、Qwen3.6（非思考模式）、Qwen3.5-Omni、Qwen3.5（非思考模式）、Qwen3（非思考模式）、Qwen3-Instruct系列、Qwen3-Coder系列、qwen-max系列、qwen-plus系列（非思考模式）、qwen-flash系列（非思考模式）、qwen-turbo系列（非思考模式）、Qwen 2.5开源系列、qwen-coder系列、qwen-long、qwen-doc-turbo、Qwen3-VL（非思考）：0.8；
-
-qwen-omni-turbo 系列：0.01；
-
-qwen-vl-plus系列、qwen-vl-max、qwen2.5-omni-7b：0.001；
+Qwen3.8（非思考模式）、Qwen3.7（非思考模式）、Qwen3.6（非思考模式）、Qwen3.5-Omni、Qwen3.5（非思考模式）、Qwen3（非思考模式）、Qwen3-Instruct系列、Qwen3-Coder系列、qwen-max系列、qwen-plus系列（非思考模式）、qwen-flash系列（非思考模式）、Qwen 2.5开源系列、qwen-coder系列、qwen-long、qwen-doc-turbo、Qwen3-VL（非思考）：0.8；
 
 QVQ系列 : 0.5；
 
-qwen3-max-preview（思考模式）、qwen-math系列、Qwen3-Omni-Flash系列：1.0；
+qwen-math系列、Qwen3-Omni-Flash系列：1.0；
 
 Qwen3.8（思考模式）、Qwen3.7（思考模式）、Qwen3.6（思考模式）、Qwen3.5（思考模式）、Qwen3（思考模式）、Qwen3-VL（思考模式）、Qwen3-Thinking、QwQ 系列、Qwen3-Omni-Captioner、qwen-plus-character：0.95
 
-DeepSeek系列（阿里云直供）：deepseek-v4-pro、deepseek-v4-flash、deepseek-v3.2、deepseek-v3.2-exp、deepseek-v3.1、deepseek-r1、deepseek-r1-0528、deepseek-r1-distill-qwen 蒸馏版: 0.95；deepseek-v3: 0.6；
+DeepSeek系列（阿里云直供）：deepseek-v4-pro、deepseek-r1-distill-qwen 蒸馏版: 0.95；
 
 DeepSeek系列（硅基流动直供）：siliconflow/deepseek-v3.2、siliconflow/deepseek-v3.1-terminus、siliconflow/deepseek-r1-0528、siliconflow/deepseek-v3-0324: 1.0；
 
 DeepSeek系列（快手万擎直供）：vanchin/deepseek-v3.2-think、vanchin/deepseek-v3.1-terminus: 0.95；vanchin/deepseek-v3.2-speciale: 0.9；vanchin/deepseek-r1: 0.8；vanchin/deepseek-v3、vanchin/deepseek-ocr: 1.0；
 
-Kimi系列（阿里云直供）：kimi-k2.7-code、kimi-k2.6、kimi-k2.5、kimi-k2-thinking: 0.95；Moonshot-Kimi-K2-Instruct: 1.0；
+Kimi系列（阿里云直供）：kimi-k2.7-code、kimi-k2.6、kimi-k2.5: 0.95；
 
 Kimi系列（月之暗面直供）：kimi/kimi-k3、kimi/kimi-k2.7-code-highspeed、kimi/kimi-k2.7-code、kimi/kimi-k2.6、kimi/kimi-k2.5: 0.95；
 
@@ -529,7 +522,7 @@ GLM系列（阿里云直供）：0.95；
 
 GLM系列（智谱直供）：ZHIPU/GLM-5.1、ZHIPU/GLM-5: 0.95；
 
-MiniMax系列（阿里云直供）：MiniMax-M2.5、MiniMax-M2.1: 0.95；
+MiniMax系列（阿里云直供）：MiniMax-M2.5: 0.95；
 
 MiniMax系列（稀宇科技直供）：MiniMax/MiniMax-M3: 0.95；MiniMax/MiniMax-M2.7、MiniMax/MiniMax-M2.5、MiniMax/MiniMax-M2.1: 0.9。
 
@@ -551,7 +544,7 @@ QVQ系列：10；
 
 QwQ 系列：40；
 
-qwen-math 系列、其余qwen-vl-plus系列之前的模型、qwen-audio-turbo系列、：1；
+qwen-math 系列、qwen-audio-turbo系列：1；
 
 其余模型均为20；
 
@@ -584,7 +577,7 @@ DeepSeek/Kimi/MiniMax系列均不支持top\_k参数。
 
 是否将对话历史中 assistant 消息的 reasoning\_content 拼接至模型输入。适用于需要模型参考历史思考过程的场景。
 
-目前支持qwen3.8-max、qwen3.8-max-0902、qwen3.8-flash（默认开启）、qwen3.7-max、qwen3.7-max-2026-05-20以及后续快照、qwen3.6-max-preview、qwen3.7-plus、qwen3.7-plus-2026-05-26、qwen3.6-plus、qwen3.6-plus-2026-04-02、qwen3.7-flash、qwen3.7-flash-2026-07-15、qwen3.6-flash、qwen3.6-flash-2026-04-16、kimi-k2.6（阿里云百炼部署）、kimi-k2.7-code（阿里云百炼部署，默认开启）、kimi/kimi-k2.7-code-highspeed（月之暗面直供，默认开启）、kimi/kimi-k2.7-code（月之暗面直供，默认开启）。
+目前支持qwen3.8-max、qwen3.8-max-0902、qwen3.8-flash（默认开启）、qwen3.7-max、qwen3.7-max-2026-05-20以及后续快照、qwen3.7-plus、qwen3.7-plus-2026-05-26、qwen3.6-plus、qwen3.6-plus-2026-04-02、qwen3.7-flash、qwen3.7-flash-2026-07-15、qwen3.6-flash、qwen3.6-flash-2026-04-16、kimi-k2.6（阿里云百炼部署）、kimi-k2.7-code（阿里云百炼部署，默认开启）、kimi/kimi-k2.7-code-highspeed（月之暗面直供，默认开启）、kimi/kimi-k2.7-code（月之暗面直供，默认开启）。
 
 > **重要：**使用 qwen3.8-max/qwen3.8-flash 时，preserve\_thinking 默认为 true，必须将历史对话中所有的 reasoning\_content 完整回传。**不支持将 reasoning\_content 拼接到 content 字段中回传。**
 
@@ -616,7 +609,7 @@ DeepSeek/Kimi/MiniMax系列均不支持top\_k参数。
 
 low和medium映射为high，xhigh映射为max。
 
-适用于glm-5.2、glm-5.1、glm-5、deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-flash（阿里云直供）（deepseek-v4-flash-0731 除外）、kimi/kimi-k3（月之暗面直供，仅支持 `max`）
+适用于glm-5.2、glm-5.1、glm-5、deepseek-v4.1-flash、deepseek-v4-pro（deepseek-v4-flash-0731 除外）、kimi/kimi-k3（月之暗面直供，仅支持 `max`）
 
 **glm-5.3、ZHIPU/GLM-5.3、ZHIPU/GLM-5.3-Flash、ZHIPU/GLM-5.3-FlashX 与 kimi-k3（阿里云直供）模型：默认值为**`max`
 
@@ -675,7 +668,7 @@ low和medium映射为high，xhigh映射为max。
 
 > 复杂工具是指工具定义中某些参数类型为array或object。
 
-**GLM系列支持列表：**glm-4.6、glm-4.7、glm-5、glm-5.1（阿里云直供）。
+**GLM系列支持列表：**glm-5、glm-5.1（阿里云直供）。
 
 **GLM系列使用参考：**
 
@@ -697,7 +690,7 @@ low和medium映射为high，xhigh映射为max。
 
 **clear\_thinking**`boolean`（可选）默认值为false
 
-用于控制多轮对话中是否将历史轮次的 `reasoning_content`（思考过程）作为上下文输入给模型。仅 GLM 系列glm-5.3、glm-5.2、glm-5.1、glm-5、glm-4.7模型支持。其中 glm-5.3 的默认值为 `true`，其余模型的默认值为 `false`。
+用于控制多轮对话中是否将历史轮次的 `reasoning_content`（思考过程）作为上下文输入给模型。仅 GLM 系列glm-5.3、glm-5.2、glm-5.1、glm-5模型支持。其中 glm-5.3 的默认值为 `true`，其余模型的默认值为 `false`。
 
 -   `true`：开启。忽略历史轮次的 `reasoning_content`，仅使用可见文本、工具调用与结果等非推理内容作为上下文输入，可降低上下文长度与成本。
 -   `false`（默认）：不开启。保留历史轮次的 `reasoning_content` 并随上下文一同提供给模型。若希望启用 Preserved Thinking，必须在 messages 中完整、未修改、按原顺序透传历史 `reasoning_content`，缺失、裁剪、改写或重排会导致效果下降或无法生效。
@@ -708,16 +701,12 @@ low和medium映射为high，xhigh映射为max。
 
 repetition\_penalty默认值
 
--   qwen-max、qwen-math系列、qwen-vl-max系列、qwen-audio-turbo系列、QVQ系列、QwQ系列、Qwen3-VL： 1.0；
+-   qwen-max、qwen-math系列、qwen-audio-turbo系列、QVQ系列、QwQ系列、Qwen3-VL： 1.0；
 -   qwen-coder系列：1.1；
--   qwen-vl-plus：1.2；
 -   其余模型为1.05。
--   DeepSeek系列（阿里云直供）：deepseek-v3.2-exp/v3.1:1.0；
 -   GLM系列（阿里云直供）：1.0；
 
 > Java SDK中为**repetitionPenalty**\*。\*通过HTTP调用时，请将 **repetition\_penalty**放入 **parameters** 对象中。
-
-> 使用qwen-vl-plus\_2025-01-25模型进行文字提取时，建议设置repetition\_penalty为1.0。
 
 > 不建议修改QVQ模型的默认 repetition\_penalty 值。
 
@@ -731,19 +720,19 @@ repetition\_penalty默认值
 
 presence\_penalty默认值
 
-Qwen3.8（非思考模式）、Qwen3.7（非思考模式）、Qwen3.6（非思考模式）、Qwen3.5-Omni、Qwen3.5（非思考模式）、qwen3-max-preview（思考模式）、Qwen3（非思考模式）、Qwen3-Instruct系列/1.7b/4b（思考模式）、QVQ系列、qwen-max、qwen2.5-vl系列、qwen-vl-max系列、qwen-vl-plus、Qwen3-VL（非思考）：1.5；
+Qwen3.8（非思考模式）、Qwen3.7（非思考模式）、Qwen3.6（非思考模式）、Qwen3.5-Omni、Qwen3.5（非思考模式）、Qwen3（非思考模式）、Qwen3-Instruct系列/1.7b/4b（思考模式）、QVQ系列、qwen-max、qwen2.5-vl系列、Qwen3-VL（非思考）：1.5；
 
-qwen3-8b/14b/32b/30b-a3b/235b-a22b（思考模式）、qwen-plus/qwen-plus-latest/2025-04-28（思考模式）、qwen-turbo/qwen-turbo/2025-04-28（思考模式）：0.5；
+qwen3-14b/32b/30b-a3b/235b-a22b（思考模式）、qwen-plus/qwen-plus-latest/2025-04-28（思考模式）：0.5；
 
 其余均为0.0。
 
-DeepSeek系列（阿里云直供）：deepseek-r1、deepseek-r1-0528、deepseek-r1-distill-qwen 蒸馏版: 1；
+DeepSeek系列（阿里云直供）：deepseek-r1-distill-qwen 蒸馏版: 1；
 
 Kimi系列（阿里云直供）：kimi-k2.7-code、kimi-k2.6、kimi-k2.5: 0.0；
 
 Kimi系列（月之暗面直供）：0.0；
 
-MiniMax系列（阿里云直供）：MiniMax-M2.5、MiniMax-M2.1: 0.0；
+MiniMax系列（阿里云直供）：MiniMax-M2.5: 0.0；
 
 其余DeepSeek/Kimi/GLM/MiniMax模型无默认值。
 
@@ -761,8 +750,6 @@ MiniMax系列（阿里云直供）：MiniMax-M2.5、MiniMax-M2.1: 0.0；
 
 参数值为-2.0：这部电影很好。情节很好，演技很好，音乐也很好，总的来说，整部电影都很好。实际上，它真的很棒。情节非常好，演技也非常好，音乐也非常好。
 
-> 使用qwen-vl-plus模型进行文字提取时，建议设置presence\_penalty为1.5。
-
 > 不建议修改QVQ模型的默认presence\_penalty值。
 
 > Java SDK不支持设置该参数\*。\*通过HTTP调用时，请将 **presence\_penalty**放入 **parameters** 对象中。
@@ -777,7 +764,7 @@ MiniMax系列（阿里云直供）：MiniMax-M2.5、MiniMax-M2.1: 0.0；
     
     `vl_high_resolution_images`为`True`时，不同模型像素上限不同：
     
-    -   Qwen3.7系列、`Qwen3.6`系列、`Qwen3.5`系列、`Qwen3-VL系列`、`qwen-vl-max`、`qwen-vl-max-0813`、`qwen-vl-plus`、`qwen-vl-plus-0815``、qwen-vl-plus-0710`模型：`16777216`（每`Token`对应`32*32`像素，即`16384*32*32`）
+    -   Qwen3.7系列、`Qwen3.6`系列、`Qwen3.5`系列、`Qwen3-VL系列`模型：`16777216`（每`Token`对应`32*32`像素，即`16384*32*32`）
     -   `QVQ系列`、其他`Qwen2.5-VL系列`模型：`12845056`（每`Token`对应`28*28`像素，即 `16384*28*28`）
     
 -   `vl_high_resolution_images`为`false`，像素上限由 `max_pixels` 决定，输入图像的像素超过`max_pixels`会将图像缩小至`max_pixels`内。各模型的默认像素上限即`max_pixels`的默认值。
@@ -797,7 +784,7 @@ MiniMax系列（阿里云直供）：MiniMax-M2.5、MiniMax-M2.1: 0.0；
 
 该参数的含义随模型不同，具体如下：
 
--   deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash、deepseek-v4-flash-0731：模型回答与思维链内容之和的最大 Token 数。模型输出超过此值时生成将提前停止，返回的 `finish_reason` 为 `length`。
+-   deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731：模型回答与思维链内容之和的最大 Token 数。模型输出超过此值时生成将提前停止，返回的 `finish_reason` 为 `length`。
 -   glm-5.3：`max_tokens` 为模型回答与思维链内容之和的最大 Token 数，模型输出超过此值时生成将提前停止，返回的 `finish_reason` 为 `length`。glm-5.3 会忽略 `thinking_budget` 参数。
 -   glm-5.2：不传入 `thinking_budget` 参数时，`max_tokens` 为模型回答与思维链内容之和的最大 Token 数，模型输出超过此值时生成将提前停止，返回的 `finish_reason` 为 `length`；传入 `thinking_budget` 参数时，`max_tokens` 仅为模型回答的最大 Token 数，思维链部分的 Token 数由 `thinking_budget` 单独控制。
 -   其他模型：模型回答的最大 Token 数（不包含思维链）。若生成内容超过此值，生成将提前停止，返回的 `finish_reason` 为 `length`。
@@ -822,7 +809,7 @@ MiniMax系列（阿里云直供）：MiniMax-M2.5、MiniMax-M2.1: 0.0；
 -   Kimi：kimi-k2.5 及其之后推出的Kimi模型
 -   GLM：glm-5 及其之后推出的GLM系列模型
 -   MiniMax：MiniMax-M2.5 及之后推出的MiniMax模型
--   DeepSeek：deepseek-v3、deepseek-r1、deepseek-r1-0528、deepseek-v3.1、deepseek-v3.2、deepseek-v3.2-exp、deepseek-v4-pro、deepseek-v4-flash 及之后推出的DeepSeek模型
+-   DeepSeek：deepseek-v4-pro 及之后推出的DeepSeek模型
 
 > 以上模型均不包含三方直供模型。
 
@@ -837,10 +824,6 @@ MiniMax系列（阿里云直供）：MiniMax-M2.5、MiniMax-M2.1: 0.0；
 取值范围：`[0,2 31 −1]`。
 
 seed默认值
-
-qwen-vl-max、qvq-max系列：3407；
-
-qwen-vl-max-2024-02-01、qwen-vl-plus：无默认值；
 
 其余模型均为1234。
 
@@ -961,9 +944,7 @@ Schema 的名称。
 支持以下模型：
 
 -   qwen-plus系列的快照模型（不包含稳定版模型）
--   qwen-turbo 系列的快照模型（不包含稳定版模型）
 -   qwen3-vl-plus系列（包含稳定版模型）
--   qwen3-vl-flash系列（包含稳定版模型）
 -   Qwen3 开源模型
 
 > 通过HTTP调用时，请将 **logprobs**放入 **parameters** 对象中。
@@ -1137,13 +1118,13 @@ Schema 的名称。
     
 -   `agent`：可多次调用联网搜索工具与大模型，实现多轮信息检索与内容整合。
     
-    > 该策略仅适用于qwen3.8-max、qwen3.7-max、qwen3.7-max-2026-05-20、qwen3.5-plus、qwen3.5-plus-2026-02-15、qwen3.5-flash、qwen3.5-flash-2026-02-23、qwen3-max与 qwen3-max-2026-01-23 的思考模式（仅支持流式）、qwen3-max-2026-01-23的非思考模式、qwen3-max-2025-09-23。
+    > 该策略仅适用于qwen3.8-max、qwen3.7-max、qwen3.7-max-2026-05-20、qwen3.5-plus、qwen3.5-plus-2026-02-15、qwen3.5-flash与qwen3.5-flash-2026-02-23的思考模式（仅支持流式）的非思考模式。
     
     > 启用该策略时，仅支持**返回搜索来源**（`enable_source: true`），其他联网搜索功能不可用。
     
 -   `agent_max`：在`agent`策略基础上支持网页抓取，参见：[网页抓取](raw/model-user-guide/model-experience/text-generation-model/tool-calls/web-extractor.md)。
     
-    > 该策略仅适用于qwen3.8-max、qwen3.7-max、qwen3.7-max-2026-05-20、qwen3-max、qwen3-max-2026-01-23的思考模式。
+    > 该策略仅适用于qwen3.8-max、qwen3.7-max、qwen3.7-max-2026-05-20的思考模式。
     
     > 启用该策略时，仅支持**返回搜索来源**（`enable_source: true`），其他联网搜索功能不可用。
     
@@ -1886,7 +1867,7 @@ messages = [
 response = dashscope.MultiModalConversation.call(
     # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
     api_key=os.getenv('DASHSCOPE_API_KEY'),
-    model='qwen-vl-max', # 此处以qwen-vl-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
+    model='qwen3-vl-plus', # 此处以qwen3-vl-plus为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
     messages=messages
     )
 print(response)
@@ -1923,8 +1904,8 @@ public class Main {
         MultiModalConversationParam param = MultiModalConversationParam.builder()
                 // 若没有配置环境变量，请用百炼API Key将下行替换为：.apiKey("sk-xxx")
                 .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-                // 此处以qwen-vl-plus为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
-                .model("qwen-vl-plus")
+                // 此处以qwen3-vl-plus为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
+                .model("qwen3-vl-plus")
                 .message(userMessage)
                 .build();
         MultiModalConversationResult result = conv.call(param);
@@ -1949,7 +1930,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
 --data '{
-    "model": "qwen-vl-plus",
+    "model": "qwen3-vl-plus",
     "input":{
         "messages":[
             {
@@ -1989,7 +1970,7 @@ messages = [{"role": "user",
 response = dashscope.MultiModalConversation.call(
     # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    model='qwen-vl-max',  # 此处以qwen-vl-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
+    model='qwen3-vl-plus',  # 此处以qwen3-vl-plus为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
     messages=messages
 )
 if response.status_code == HTTPStatus.OK:
@@ -2017,8 +1998,8 @@ import com.alibaba.dashscope.utils.JsonUtils;
 import com.alibaba.dashscope.utils.Constants;
 public class Main {
     static {Constants.baseHttpApiUrl="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";}
-    // 此处以qwen-vl-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
-    private static final String MODEL_NAME = "qwen-vl-max";
+    // 此处以qwen3-vl-plus为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
+    private static final String MODEL_NAME = "qwen3-vl-plus";
     public static void videoImageListSample() throws ApiException, NoApiKeyException, UploadFileException {
         MultiModalConversation conv = new MultiModalConversation();
         MultiModalMessage systemMessage = MultiModalMessage.builder()
@@ -2057,7 +2038,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H 'Content-Type: application/json' \
 -d '{
-  "model": "qwen-vl-max",
+  "model": "qwen3-vl-plus",
   "input": {
     "messages": [
       {

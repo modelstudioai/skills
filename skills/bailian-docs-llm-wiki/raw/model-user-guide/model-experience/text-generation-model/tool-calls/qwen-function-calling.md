@@ -61,13 +61,6 @@ Function Calling 通过应用程序与大模型之间的多步骤交互实现：
 -   阿里云百炼部署
     
     -   deepseek-v4-pro
-    -   deepseek-v4-flash
-    -   deepseek-v3.2
-    -   deepseek-v3.2-exp（非思考模式）
-    -   deepseek-v3.1（非思考模式）
-    -   deepseek-r1
-    -   deepseek-r1-0528
-    -   deepseek-v3
 -   硅基流动部署
     
     -   siliconflow/deepseek-v3.2
@@ -89,10 +82,6 @@ Function Calling 通过应用程序与大模型之间的多步骤交互实现：
 -   glm-5.2
 -   glm-5.1
 -   glm-5
--   glm-4.7
--   glm-4.6
--   glm-4.5
--   glm-4.5-air
 
 #### Kimi
 
@@ -102,8 +91,6 @@ Function Calling 通过应用程序与大模型之间的多步骤交互实现：
     -   kimi-k2.7-code
     -   kimi-k2.6
     -   kimi-k2.5
-    -   kimi-k2-thinking
-    -   Moonshot-Kimi-K2-Instruct
 -   月之暗面部署
     
     -   kimi/kimi-k3、kimi/kimi-k2.7-code-highspeed、kimi/kimi-k2.7-code、kimi/kimi-k2.6、kimi/kimi-k2.5
@@ -115,7 +102,6 @@ Function Calling 通过应用程序与大模型之间的多步骤交互实现：
 -   阿里云百炼部署
     
     -   MiniMax-M2.5
-    -   MiniMax-M2.1
 -   稀宇科技部署
     
     -   MiniMax/MiniMax-M3
@@ -377,7 +363,7 @@ def get_response(messages):
     response = MultiModalConversation.call(
         # 如果没有配置环境变量，请将下行替换为api_key="sk-xxx"
         api_key=os.getenv("DASHSCOPE_API_KEY"),
-        # 此处以多模态模型 qwen3.8-max 为例。若调用 qwen3.6-max-preview、qwen-plus 等纯文本模型需使用纯文本模型接口，参见https://help.aliyun.com/model-studio/qwen-api-via-dashscope
+        # 此处以多模态模型 qwen3.8-max 为例。若调用 qwen-plus 等纯文本模型需使用纯文本模型接口，参见https://help.aliyun.com/model-studio/qwen-api-via-dashscope
         model="qwen3.8-max",
         enable_thinking=False,
         messages=messages,
@@ -523,7 +509,7 @@ public class Main {
 
             // 第四步：首次调用模型。将用户的请求和我们定义好的工具列表一同发送给模型。
             MultiModalConversationParam param = MultiModalConversationParam.builder()
-                    .model("qwen3.8-max") //此处以多模态模型 qwen3.8-max 为例。若调用 qwen3.6-max-preview、qwen-plus 等纯文本模型需使用纯文本模型接口，参见https://help.aliyun.com/model-studio/qwen-api-via-dashscope
+                    .model("qwen3.8-max") //此处以多模态模型 qwen3.8-max 为例。若调用 qwen-plus 等纯文本模型需使用纯文本模型接口，参见https://help.aliyun.com/model-studio/qwen-api-via-dashscope
                     .enableThinking(false)
                     .apiKey(System.getenv("DASHSCOPE_API_KEY")) // 从环境变量中获取API Key。
                     .messages(messages) // 传入当前的对话历史。

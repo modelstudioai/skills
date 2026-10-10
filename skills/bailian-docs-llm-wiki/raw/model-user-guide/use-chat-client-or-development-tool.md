@@ -9,6 +9,7 @@
 -   [千问](raw/model-user-guide/use-chat-client-or-development-tool/qwen-office-assistant.md)
 -   [Qwen Code](raw/model-user-guide/use-chat-client-or-development-tool/qwen-code.md)
 -   [DeepSeek Harness](raw/model-user-guide/use-chat-client-or-development-tool/deepseek-harness.md)
+-   [WorkBuddy](raw/model-user-guide/use-chat-client-or-development-tool/workbuddy.md)
 -   [QwenPaw](raw/model-user-guide/use-chat-client-or-development-tool/qwenpaw.md)
 -   [Cherry Studio](raw/model-user-guide/use-chat-client-or-development-tool/cherry-studio.md)
 -   [Chatbox](raw/model-user-guide/use-chat-client-or-development-tool/chatbox.md)
