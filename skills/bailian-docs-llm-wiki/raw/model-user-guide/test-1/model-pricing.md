@@ -1744,62 +1744,6 @@ qwen-plus-2025-12-01
 
 89.93元
 
-qwen-plus-2025-09-11
-
-全球
-
-0<Token≤128K
-
-0.8元
-
-2元
-
-8元
-
-128K<Token≤256K
-
-2.4元
-
-20元
-
-24元
-
-256K<Token≤1M
-
-4.8元
-
-48元
-
-64元
-
-qwen-plus-2025-07-28
-
-全球
-
-0<Token≤128K
-
-0.8元
-
-2元
-
-8元
-
-128K<Token≤256K
-
-2.4元
-
-20元
-
-24元
-
-256K<Token≤1M
-
-4.8元
-
-48元
-
-64元
-
 #### 日本（东京）
 
 **模型 ID（Model ID）**
@@ -3100,7 +3044,7 @@ qwen-long
 
 计费规则：按输入Token和输出Token计费。不同模态的Token计算规则请参见[计费与限流](https://help.aliyun.com/zh/model-studio/qwen-omni#a9018938d3niq)。
 
-**说明**Qwen3.5-Omni、Qwen3-Omni 和 Qwen-Omni-Turbo 系列仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**Qwen3.5-Omni 和 Qwen3-Omni 系列仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -3373,24 +3317,6 @@ qwen3.5-omni-flash-2026-03-15
 > 仅音频计费
 
 qwen3-omni-flash
-
-国际
-
-非思考和思考模式
-
-3.156元
-
-27.962元
-
-5.725元
-
-12.183元
-
-22.458元
-
-110.896元
-
-qwen3-omni-flash-2025-09-15
 
 国际
 
@@ -3778,22 +3704,6 @@ qwen3.5-omni-flash-realtime-2026-03-15
 
 > 仅音频计费
 
-qwen3-omni-flash-realtime
-
-国际
-
-3.816元
-
-33.54元
-
-6.899元
-
-14.605元
-
-26.935元
-
-133.06元
-
 qwen3-omni-flash-realtime-2025-09-15
 
 国际
@@ -3880,33 +3790,7 @@ qwen3-vl-plus
 
 > **思维链+回答**
 
-qwen3-vl-flash-2026-01-22
-
-美国
-
-非思考和思考模式
-
-0<Token≤32K
-
-0.367元
-
-2.936元
-
-32K<Token≤128K
-
-0.55元
-
-4.404元
-
-128K<Token≤256K
-
-0.881元
-
-7.046元
-
 qwen3-vl-plus
-
-> 当前能力等同于qwen3-vl-plus-2025-12-19
 
 > [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
 
@@ -3990,8 +3874,6 @@ qwen3-vl-plus
 
 qwen3-vl-plus
 
-> 当前能力等同于qwen3-vl-plus-2025-12-19
-
 > [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
 
 全球
@@ -4017,54 +3899,6 @@ qwen3-vl-plus
 30元
 
 qwen3-vl-plus
-
-欧盟
-
-非思考和思考模式
-
-0<Token≤32K
-
-1.499元
-
-11.991元
-
-32K<Token≤128K
-
-2.248元
-
-17.986元
-
-128K<Token≤256K
-
-4.497元
-
-35.972元
-
-qwen3-vl-plus-2025-09-23
-
-全球
-
-非思考和思考模式
-
-0<Token≤32K
-
-1元
-
-10元
-
-32K<Token≤128K
-
-1.5元
-
-15元
-
-128K<Token≤256K
-
-3元
-
-30元
-
-qwen3-vl-plus-2025-09-23
 
 欧盟
 
@@ -5448,458 +5282,6 @@ qwen3.5-35b-a3b
 
 12.8元
 
-### Qwen3
-
-计费规则：按输入Token和输出Token计费。
-
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
-
-#### 美国（弗吉尼亚）
-
-**模型 ID（Model ID）**
-
-**服务部署范围**
-
-**模式**
-
-**输入单价（每百万Token）**
-
-**输出单价（每百万Token）**
-
-**非思考模式**
-
-**思考模式（思维链+回答）**
-
-qwen3-next-80b-a3b-thinking
-
-全球
-
-仅思考模式
-
-1元
-
-\-
-
-10元
-
-qwen3-next-80b-a3b-instruct
-
-全球
-
-仅非思考模式
-
-1元
-
-4元
-
-\-
-
-qwen3-235b-a22b-thinking-2507
-
-全球
-
-仅思考模式
-
-1.688元
-
-\-
-
-16.88元
-
-qwen3-30b-a3b-thinking-2507
-
-全球
-
-仅思考模式
-
-0.75元
-
-\-
-
-7.5元
-
-qwen3-30b-a3b-instruct-2507
-
-全球
-
-仅非思考模式
-
-0.75元
-
-3元
-
-\-
-
-qwen3-235b-a22b
-
-全球
-
-非思考和思考模式
-
-2元
-
-8元
-
-20元
-
-qwen3-30b-a3b
-
-全球
-
-非思考和思考模式
-
-0.75元
-
-3元
-
-7.5元
-
-qwen3-14b
-
-全球
-
-非思考和思考模式
-
-1元
-
-4元
-
-10元
-
-qwen3-8b
-
-全球
-
-非思考和思考模式
-
-0.5元
-
-2元
-
-5元
-
-#### 德国（法兰克福）
-
-**模型 ID（Model ID）**
-
-**服务部署范围**
-
-**模式**
-
-**输入单价（每百万Token）**
-
-**输出单价（每百万Token）**
-
-**非思考模式**
-
-**思考模式（思维链+回答）**
-
-qwen3-next-80b-a3b-thinking
-
-全球
-
-仅思考模式
-
-1元
-
-\-
-
-10元
-
-qwen3-next-80b-a3b-instruct
-
-全球
-
-仅非思考模式
-
-1元
-
-4元
-
-\-
-
-qwen3-235b-a22b-thinking-2507
-
-全球
-
-仅思考模式
-
-1.688元
-
-\-
-
-16.88元
-
-qwen3-30b-a3b-thinking-2507
-
-全球
-
-仅思考模式
-
-0.75元
-
-\-
-
-7.5元
-
-qwen3-30b-a3b-instruct-2507
-
-全球
-
-仅非思考模式
-
-0.75元
-
-3元
-
-\-
-
-qwen3-235b-a22b
-
-全球
-
-非思考和思考模式
-
-2元
-
-8元
-
-20元
-
-qwen3-30b-a3b
-
-全球
-
-非思考和思考模式
-
-0.75元
-
-3元
-
-7.5元
-
-qwen3-14b
-
-全球
-
-非思考和思考模式
-
-1元
-
-4元
-
-10元
-
-qwen3-8b
-
-全球
-
-非思考和思考模式
-
-0.5元
-
-2元
-
-5元
-
-### Qwen3-Omni-Captioner
-
-计费规则：按输入Token和输出Token计费。
-
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
-
-#### 新加坡
-
-**模型 ID（Model ID）**
-
-**服务部署范围**
-
-**输入单价（每百万Token）**
-
-**输出单价（每百万Token）**
-
-qwen3-omni-30b-a3b-captioner
-
-国际
-
-27.962元
-
-22.458元
-
-### Qwen-VL
-
-计费规则：按输入Token和输出Token计费。
-
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
-
-#### 美国（弗吉尼亚）
-
-**模型 ID（Model ID）**
-
-**服务部署范围**
-
-**模式**
-
-**输入单价（每百万Token）**
-
-**输出单价（每百万Token）**
-
-> **思维链+回答**
-
-qwen3-vl-235b-a22b-thinking
-
-全球
-
-仅思考模式
-
-2元
-
-20元
-
-qwen3-vl-32b-thinking
-
-全球
-
-仅思考模式
-
-1.174元
-
-4.697元
-
-qwen3-vl-32b-instruct
-
-全球
-
-仅非思考模式
-
-1.174元
-
-4.697元
-
-qwen3-vl-30b-a3b-thinking
-
-全球
-
-仅思考模式
-
-0.75元
-
-7.5元
-
-qwen3-vl-30b-a3b-instruct
-
-全球
-
-仅非思考模式
-
-0.75元
-
-3元
-
-qwen3-vl-8b-thinking
-
-全球
-
-仅思考模式
-
-0.5元
-
-5元
-
-qwen3-vl-8b-instruct
-
-全球
-
-仅非思考模式
-
-0.5元
-
-2元
-
-#### 德国（法兰克福）
-
-**模型 ID（Model ID）**
-
-**服务部署范围**
-
-**模式**
-
-**输入单价（每百万Token）**
-
-**输出单价（每百万Token）**
-
-> **思维链+回答**
-
-qwen3-vl-235b-a22b-thinking
-
-全球
-
-仅思考模式
-
-2元
-
-20元
-
-qwen3-vl-32b-thinking
-
-全球
-
-仅思考模式
-
-1.174元
-
-4.697元
-
-qwen3-vl-32b-instruct
-
-全球
-
-仅非思考模式
-
-1.174元
-
-4.697元
-
-qwen3-vl-30b-a3b-thinking
-
-全球
-
-仅思考模式
-
-0.75元
-
-7.5元
-
-qwen3-vl-30b-a3b-instruct
-
-全球
-
-仅非思考模式
-
-0.75元
-
-3元
-
-qwen3-vl-8b-thinking
-
-全球
-
-仅思考模式
-
-0.5元
-
-5元
-
-qwen3-vl-8b-instruct
-
-全球
-
-仅非思考模式
-
-0.5元
-
-2元
-
 ### Qwen-Audio
 
 计费规则：按输入Token和输出Token计费。
@@ -5925,124 +5307,6 @@ qwen2-audio-instruct
 10万Token
 
 qwen-audio-chat
-
-### Qwen-Coder
-
-计费规则：按输入Token和输出Token计费。
-
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
-
-#### 美国（弗吉尼亚）
-
-**模型 ID（Model ID）**
-
-**服务部署范围**
-
-**单次请求的输入Token数**
-
-**输入单价（每百万Token）**
-
-**输出单价（每百万Token）**
-
-qwen3-coder-480b-a35b-instruct
-
-全球
-
-0<Token≤32K
-
-6元
-
-24元
-
-32K<Token≤128K
-
-9元
-
-36元
-
-128K<Token≤200K
-
-15元
-
-60元
-
-qwen3-coder-30b-a3b-instruct
-
-全球
-
-0<Token≤32K
-
-1.5元
-
-6元
-
-32K<Token≤128K
-
-2.25元
-
-9元
-
-128K<Token≤200K
-
-3.75元
-
-15元
-
-#### 德国（法兰克福）
-
-**模型 ID（Model ID）**
-
-**服务部署范围**
-
-**单次请求的输入Token数**
-
-**输入单价（每百万Token）**
-
-**输出单价（每百万Token）**
-
-qwen3-coder-30b-a3b-instruct
-
-全球
-
-0<Token≤32K
-
-1.5元
-
-6元
-
-32K<Token≤128K
-
-2.25元
-
-9元
-
-128K<Token≤200K
-
-3.75元
-
-15元
-
-qwen3-coder-480b-a35b-instruct
-
-全球
-
-0<Token≤32K
-
-6元
-
-24元
-
-32K<Token≤128K
-
-9元
-
-36元
-
-128K<Token≤200K
-
-15元
-
-60元
 
 ## 文本生成-第三方模型
 
@@ -6416,16 +5680,6 @@ deepseek-v4-flash-0731
 
 闲时 4.5元
 
-deepseek-v4-flash
-
-> [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
-
-全球
-
-1元
-
-2元
-
 deepseek-v4-pro
 
 > [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
@@ -6435,16 +5689,6 @@ deepseek-v4-pro
 17.986元
 
 35.972元
-
-deepseek-v4-flash
-
-> [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
-
-日本
-
-1.499元
-
-2.998元
 
 deepseek-v4-flash-0731
 
@@ -9109,32 +8353,6 @@ qwen3.5-livetranslate-flash-realtime-2026-05-19
 
 224.826元
 
-qwen3-livetranslate-flash-realtime
-
-> 当前能力等同于qwen3-livetranslate-flash-realtime-2025-09-22
-
-国际
-
-73.392元
-
-9.541元
-
-73.392元
-
-278.891元
-
-qwen3-livetranslate-flash-realtime-2025-09-22
-
-国际
-
-73.392元
-
-9.541元
-
-73.392元
-
-278.891元
-
 ### 千问-LiveTranslate-Flash
 
 计费规则：按输入Token和输出Token计费。不同模态的Token计算规则请参见[计费说明](https://help.aliyun.com/zh/model-studio/qwen3-livetranslate-flash#e02a82e668y2c)。
@@ -9510,12 +8728,6 @@ qwen3-asr-flash
 
 不计费
 
-qwen3-asr-flash-2025-09-08
-
-美国
-
-0.000035元/秒
-
 #### 新加坡
 
 计费规则：按输入音频的秒数计费，输出不计费。
@@ -9621,10 +8833,6 @@ fun-asr
 国际
 
 0.00026元/秒
-
-fun-asr-2025-08-25
-
-国际
 
 fun-asr-flash-2026-06-15
 

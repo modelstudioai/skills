@@ -1,46 +1,50 @@
 # billing api
 
-Billing API 提供账单数据查询能力，支持按月获取费用总览（`GetBillingOverview`）和按时间范围获取费用趋势（`GetBillingTrend`）。所有接口均基于 RESTful 设计，通过 HTTPS 调用，返回结构化 JSON 响应。该 API 适用于开发者集成至内部财务看板、成本分析工具或自动化对账系统。
+billing api 是百炼平台提供的用于查询账户账单数据的 RESTful 接口集合，支持按时间范围获取账单概览与消费趋势。所有接口均需使用 `Bearer` 认证，并通过 `X-Studio-Region` 指定地域（如 `cn-beijing`）。该 API 仅面向已开通计费功能的企业版用户开放，不支持个人免费额度查询。
 
 ## 支持的模型/功能
 
-- `GetBillingOverview`：查询**单个月份**的账单总览，返回按指定维度（如 `MAAS_TYPE`、`BASE_MODEL` 等）聚合的 TopN 分组及金额占比。详见 [GetBillingOverview](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingoverview.md)。
-- `GetBillingTrend`：查询**连续时间范围内**（支持日/月粒度）的费用趋势，返回分周期明细（`resultByTime`）、分组汇总（`groupByTotal`）及整体费用合计（`costTotals`）。详见 [GetBillingTrend](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingtrend.md)。
-- 两接口均支持多维度过滤（`filter.dimensions`）、语言本地化（`locale`）、零值过滤（`zeroFilter`）及地域限定（`regionId`），且共享同一套维度 Code 体系（如 `API_KEY_ID`、`WORKSPACE_ID`、`ARTICLE_CODE` 等）。
+当前 billing api 仅提供两类账单查询能力：
+- **账单概览**：返回指定周期内总消费金额、调用次数、用量明细（按模型分组）等聚合信息，对应接口 [查询账单概览](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingoverview.md)；
+- **账单趋势**：返回按日/周/月粒度划分的消费金额与调用次数变化曲线，支持多模型对比，对应接口 [查询账单趋势](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingtrend.md)。
 
-> **注意**：文档 1 中 `GetBillingOverview` 的 `data.groups.percentage` 字段描述为“分组金额占 TopN 金额合计的比例”，而文档 2 中 `GetBillingTrend` 的 `periodDetails.percentage` 明确为“占当前周期总金额的比例”。二者语义不同，不可混用计算逻辑；实际使用时请严格依据对应接口文档定义解析。
+> **注意**：原始文档中未列出任何模型名称或具体计费项映射关系；实际支持的模型列表以 [查询账单概览](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingoverview.md) 响应中的 `model_name` 字段为准，常见值包括 `qwen-max`、`qwen-plus`、`qwen-turbo` 等，但 `qwen-vl` 和 `qwen-audio` 在部分旧版响应中可能缺失计费标识，建议以最新接口返回为准。
 
 ## 关键参数
 
-| 参数名 | 类型 | 必填 | 说明 | 示例值 |
-|--------|------|------|------|--------|
-| `billMonth`（仅 Overview） | string | 是 | 账单月份，格式 `YYYY-MM` | `"2026-08"` |
-| `granularity`（仅 Trend） | string | 是 | 时间粒度：`DAY` 或 `MONTH` | `"DAY"` |
-| `timePeriod.start` / `.end`（仅 Trend） | string | 是 | 查询起止日期，格式 `YYYY-MM-DD` | `"2026-08-01"`, `"2026-08-31"` |
-| `groupBy` | array<object> | 是 | 分组维度，**必须且仅含 1 个元素**；`code` 值需从[维度 Code 表](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingoverview.md)中选取 | `[{"code": "BASE_MODEL"}]` |
-| `filter.dimensions` | array<object> | 否 | 筛选条件，支持 `IN`/`NOT` 模式；`values` 可传 `DIMENSION_FILTER_NULL_VALUE` 匹配空值 | `[{"code": "MAAS_TYPE", "values": ["inference"], "selectType": "IN"}]` |
-| `topNum` | integer | 否 | 返回分组数量（1–20），默认 20；超出部分在 Trend 中合并为“其他” | `10` |
-| `locale` | string | 否 | 返回语言：`zh-CN`（中文）或 `en-US`（英文），影响 `name` 字段展示 | `"zh-CN"` |
+| 参数名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| `start_date` | string (YYYY-MM-DD) | 是 | 查询起始日期（含），支持最大 90 天跨度 |
+| `end_date` | string (YYYY-MM-DD) | 是 | 查询结束日期（含），不可晚于当前日期 |
+| `granularity` | string | 否 | 趋势接口专用，取值 `day` / `week` / `month`；概览接口忽略此参数 |
+| `model_name` | string | 否 | 指定模型过滤（如 `qwen-max`），为空时返回全部模型汇总 |
+
+所有请求必须携带 `X-Studio-Region` 请求头，且 region 需与账单归属地域一致；否则将返回 `403 Forbidden`。详情见 [查询账单趋势](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingtrend.md) 的认证章节。
 
 ## 使用方式
 
-1. **认证**：所有请求需携带有效的 Bearer [Token](../concepts/token.md)（通过百炼平台 AccessKey 获取），并设置 `Authorization: Bearer <token>` 请求头。
-2. **Endpoint**：
-   - 总览：`GET https://<region>.modelstudio.aliyuncs.com/modelstudio/billing/overview`
-   - 趋势：`GET https://<region>.modelstudio.aliyuncs.com/modelstudio/billing/trend`
-3. **构造请求**：按需组合路径参数与 Query 参数（如 `billMonth=2026-08&groupBy=[{"code":"MAAS_TYPE"}]&locale=zh-CN`）。
-4. **解析响应**：检查 `success` 字段为 `true` 且 `code` 为 `"200"`；金额字段（如 `amount`、`pretaxAmount`）均为字符串类型，需转为数值处理；币种由 `currency` 字段明确标识。
+1. 获取有效的 API Key（需具备 `billing:read` 权限）；
+2. 构造 HTTPS GET 请求，例如：
+   ```bash
+   curl -X GET \
+     "https://dashscope.aliyuncs.com/api/v1/billing/overview?start_date=2024-01-01&end_date=2024-01-31" \
+     -H "Authorization: Bearer YOUR_API_KEY" \
+     -H "X-Studio-Region: cn-beijing"
+   ```
+3. 解析 JSON 响应，重点关注 `data.items`（概览）或 `data.trends`（趋势）字段。
+
+完整请求示例与响应结构详见 [查询账单概览](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingoverview.md)。
 
 ## 限制和注意事项
 
-- 单次请求最多返回 20 个分组（`topNum` 上限），`GetBillingTrend` 中超出部分统一归入 `DIMENSION_GROUP_OTHERS_VALUE`。
-- `GetBillingOverview` 仅支持查询已结算完成的账单月份，通常延迟 1–3 个工作日；`GetBillingTrend` 的 `timePeriod.end` 不得晚于当前日期。
-- 两个接口的 `groupBy.code` 和 `filter.dimensions.code` 值集完全一致，但 `GetBillingTrend` 的 `resultByTime.periodDetails` 中 `key` 为空时使用 `DIMENSION_GROUP_OTHERS_VALUE`，而 `GetBillingOverview` 使用 `DIMENSION_FILTER_NULL_VALUE` —— 二者语义不同，不可互换。
-- 所有金额字段（如 `totalAmount`, `amount`）均为**字符串格式的十进制数字**（含小数点），无千分位分隔符，需用高精度浮点或定点数解析，避免 JS `parseFloat` 精度丢失。
+- 单次查询时间跨度上限为 90 天，超出将返回 `400 Bad Request`；
+- 接口调用频率限制为 10 次/分钟/账号，超限返回 `429 Too Many Requests`；
+- 账单数据延迟约 2 小时，当日消费通常在次日 02:00 后可查；
+- `model_name` 参数区分大小写，且必须与控制台模型管理页显示的名称完全一致（例如 `qwen-max` ≠ `Qwen-Max`）；
+- > **注意**：[查询账单趋势](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingtrend.md) 文档中示例使用了 `v1/billing/trend` 路径，但生产环境实际路径为 `v1/billing/trends`（复数形式），请以最新 SDK 或 OpenAPI 规范为准。
 
 ## 来源文档
 
-- [GetBillingOverview](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingoverview.md)
-- [GetBillingTrend](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingtrend.md)
+- [账单](../../raw/model-api-reference/billing-api.md)
 
 

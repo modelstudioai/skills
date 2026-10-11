@@ -1,47 +1,50 @@
 # getting started [overview](overview.md)
 
-ParseX 提供文档解析（Parse）与字段抽取（Extract）两类核心能力，面向开发者提供结构化内容生成与业务数据提取的端到端流程。本文档概述关键能力边界、配置方式、集成路径及使用约束，帮助开发者快速验证、集成并规模化使用服务。所有操作均基于真实 Workspace 隔离环境，配置与任务状态不可跨 Workspace 共享。
+ParseX 是面向开发者的一站式文档智能处理平台，提供文档解析（Parse）与字段抽取（Extract）两大核心能力。本文档概述快速上手的关键路径：从控制台体验、配置管理到 API 集成，覆盖模型支持范围、关键参数含义、调用方式及生产级限制。所有操作均基于真实样本验证和可复用配置，确保结果稳定、可追溯、可审计。
 
 ## 支持的模型/功能
 
-ParseX 当前提供两类正交能力，适用不同输入与目标：
+ParseX 提供两类正交能力，适用不同阶段的处理需求：
 
-- **文档解析（Parse）**：支持图文（PDF/Office/图片/HTML/EPUB 等）、音频（MP3/WAV/FLAC 等）和视频（MP4/MKV/AVI 等）三类输入，输出结构化内容（如 Markdown/JSON）、时间线、剧情分段与摘要。详见[文档解析概览](../../raw/application-user-guide/getting-started-overview/overview.md)。
-- **字段抽取（Extract）**：**仅支持图文输入**（含本地上传或复用 Parse 生成的图文 `ParseResult`），不支持音频/视频及其 ParseResult。按用户定义的 JSON Schema 抽取强类型业务字段，并返回字段值、来源页码（Citation）、状态（`missing`/`inferred`/`conflict`）等可审计信息。详见[字段抽取概览](../../raw/application-user-guide/getting-started-overview/extract-overview.md)。
+- **文档解析（Parse）**：将 PDF、Office 文档、图片、音频、视频等多模态输入转换为结构化内容。支持图文（含表格、图片描述、坐标）、音频（语音转录+说话人分离）和视频（剧情分段、摘要、抽帧理解）。详见 [文档解析概览](../../raw/application-user-guide/getting-started-overview/overview.md)。
+- **字段抽取（Extract）**：仅支持图文输入（含已解析的 ParseResult），按用户定义的 JSON Schema 严格抽取业务字段，并返回字段值、来源页码（Citation）、状态（`missing`/`inferred`/`conflict`/`success`）。不支持音频/视频直接抽取，[常见问题](../../raw/application-user-guide/getting-started-overview/settings-configurations/faq.md) 明确说明此限制。
 
-> **注意**：文档 20 明确指出“Extract 可以处理音频或视频吗？不可以”，但文档 2 的表格中将“音频”列为 Extract 的输入类型，该处为过时信息，应以文档 20 和文档 19 的明确限制为准。
+> **注意**：文档 18 与文档 20 均指出 Extract 仅支持图文，但文档 7 的“Extract适合解决什么问题”示例中未明确排除音视频；实际能力以文档 18 和文档 20 的权威声明为准，此处以文档 20 为准。
 
 ## 关键参数
 
-核心参数分为控制台配置项与 API 请求字段两类，关键参数如下：
+核心参数围绕**能力选择**、**输入指定**和**配置复用**展开，避免重复定义：
 
-- **`config_id`**：已保存的解析或抽取配置唯一标识符，用于复用经验证的设置。必须通过控制台真实样本运行后保存获得，不可构造或猜测。配置管理详见[配置](../../raw/application-user-guide/getting-started-overview/settings-configurations.md)。
-- **`biz_id`**：异步任务唯一业务 ID，由 `/submit` 接口返回，用于后续轮询 `/result` 查询状态与结果。客户端需持久化存储，不可丢弃。
-- **`file_url` / `parsed_file_biz_id`**：Extract 输入二选一。前者用于直接处理新图文文件；后者用于复用已有图文 ParseResult（需确保其未超 7 天保留期）。详见[REST API 接入](../../raw/application-user-guide/getting-started-overview/integration-overview/rest-api.md)。
-- **`extract_schema`**：Extract 必传参数，定义抽取字段结构。兼容 LlamaIndex JSON Schema 格式，但有严格限制：嵌套深度 ≤6 层、叶子字段数 ≤100、序列化后 ≤600 KB。不支持 `format`/`pattern` 等关键字，格式约束需写入 `description`。详见[Schema规则参考](../../raw/application-user-guide/getting-started-overview/extract-overview/extract-schema.md)。
+- `config_id`：唯一标识已保存的 Parse 或 Extract 配置。**强烈推荐生产环境使用**，而非内联参数，以保障规则一致性与可维护性。配置需通过真实样本验证后保存，详见 [配置](../../raw/application-user-guide/getting-started-overview/settings-configurations.md)。
+- `biz_id`：每次异步任务的业务唯一标识，由 `/submit` 接口返回，用于后续轮询 `/result`。与 `request_id`（单次 HTTP 请求 ID）分离，不可互换。
+- `file_url`（Parse/Extract 直接处理）或 `parsed_file_biz_id`（Extract 复用解析结果）：输入来源必须明确。复用 ParseResult 时，该 ID 必须来自已完成、类型为图文、且未超 7 天保留期的任务（见 [支持的文件与限制](../../raw/application-user-guide/getting-started-overview/settings-configurations/supported-files-and-limits.md)）。
+- `output.oss_config`（OSS 托管）：若需结果直写客户 OSS，必须传入 STS 临时凭证（`access_key_id`/`access_key_secret`/`security_token`）及 Bucket 信息。**不支持角色信任，凭证需客户端自行获取并传入**，详见 [OSS 托管使用](../../raw/application-user-guide/getting-started-overview/integration-overview/parse-x-oss-integration.md)。
 
 ## 使用方式
 
-开发者可通过两种主渠道接入：
+遵循“验证→保存→复用”三步法，兼顾控制台快速验证与 API 稳定集成：
 
-1. **控制台体验与配置**  
+1. **控制台体验**：  
    - 进入 [ParseX 控制台](https://bailian.console.aliyun.com/cn-beijing/parsex/document-parse)，选择「文档解析」或「字段抽取」工作区。  
-   - 上传样例文件 → 调整配置（如解析页数、图片描述、字段 Schema）→ 运行 → 核验结果（Markdown/JSON 视图）→ 保存为 `config_id`。  
-   - 历史任务与配置在「任务记录」和「配置」菜单中管理，任务仅保留最近 7 天。
+   - 上传样例文件 → 调整配置（如解析页数、字段 Schema）→ 运行 → 核验 Markdown/JSON 结果 → 逐字段对照原文（见 [获取文档解析结果](../../raw/application-user-guide/getting-started-overview/overview/results-and-best-practices.md) 和 [获取字段抽取结果](../../raw/application-user-guide/getting-started-overview/extract-overview/extract-results.md)）。  
+   - 成功后点击「保存配置」，获得 `config_id`。
 
-2. **REST API 集成**  
-   - 使用 DashScope API Key 鉴权（`Authorization: Bearer <DASHSCOPE_API_KEY>`）。  
-   - 生产 Base URL 为 `https://{workspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/parse-x`。  
-   - 标准流程：`POST /parse/submit` 或 `/extract/submit` → 保存 `biz_id` → 轮询 `POST /parse/result` 或 `/extract/result` → 检查 `data.status`（`processing`/`success`/`failed`）。  
-   - **重要**：API 协议已定稿，但生产 Base URL 尚未公开确认，正式发布前勿使用占位符或预发地址。详见[REST API 接入](../../raw/application-user-guide/getting-started-overview/integration-overview/rest-api.md)。
+2. **API 集成**：  
+   - 使用 REST API（非 DashScope 通用接口），Base URL 为 `https://{workspace}.cn-beijing.maas.aliyuncs.com/api/v2/apps/parse-x`。  
+   - 认证：`Authorization: Bearer <DASHSCOPE_API_KEY>`（API Key 在控制台创建）。  
+   - 调用流程：`POST /parse/submit` 或 `/extract/submit` → 保存响应中的 `biz_id` → 轮询 `POST /parse/result` 或 `/extract/result` → 检查 `data.status`（`processing`/`success`/`failed`）。  
+   - **严禁同时传 `config_id` 与内联参数**，否则触发 `ConfigInlineConflict` 错误（见 [REST API 接入](../../raw/application-user-guide/getting-started-overview/integration-overview/rest-api.md)）。
+
+3. **Skill 接入（实验性）**：  
+   - 当前 Skill 为预发布状态，无官方安装命令或 Schema。正式使用前，必须从 ParseX 正式发布入口确认 Skill 名称、版本及权限，且 Skill 必须绑定 `config_id`，不得动态覆盖配置（见 [Skill 接入要求](../../raw/application-user-guide/getting-started-overview/integration-overview/integration-skill.md)）。
 
 ## 限制和注意事项
 
-- **文件大小限制**：控制台体验页单文件上限为 200 MB（图文/文本/网页/电子书）、20 MB（图片）、200 MB（音频）、200 MB（视频）；API 上限更高（如图文 1 GB、视频 10 GB），具体见[支持的文件与限制](../../raw/application-user-guide/getting-started-overview/settings-configurations/supported-files-and-limits.md)。
-- **异步行为**：所有任务均为异步，提交后立即返回 `biz_id`，无即时结果。客户端需轮询，且必须使用退避策略，避免高频查询。
-- **配置与任务快照**：历史任务固定使用提交时的配置快照，编辑现有 `config_id` 仅影响后续新任务，不影响已运行任务。配置快照可在「任务记录」中查看。
-- **OSS 托管安全要求**：若启用 OSS 结果落库，必须传入客户自有 STS 临时凭证（或 RAM 用户 AK），服务端不托管凭证。凭证权限须最小化（仅限源目录 `GetObject` + 结果目录 `PutObject`/`GetObject`）。
-- **计费计量**：Parse 按图文页数、音视频秒数计费；Extract 按抽取页数计费（新文档直抽含解析，复用 ParseResult 单独计抽）。首次开通赠送额度，用尽后按量计费。
+- **文件大小**：控制台体验页限制为单文件 ≤200 MB（图文/视频）或 ≤20 MB（图片）；API 支持更大文件（图文 ≤1 GB，视频 ≤10 GB），以 [支持的文件与限制](../../raw/application-user-guide/getting-started-overview/settings-configurations/supported-files-and-limits.md) 为准。
+- **Schema 限制**：Extract 的 `schema` 参数有严格约束：嵌套深度 ≤6 层、叶子字段数 ≤100、序列化后 ≤600 KB。不支持 `format`/`pattern` 等 JSON Schema 关键字，格式要求须写入 `description`（见 [Schema规则参考](../../raw/application-user-guide/getting-started-overview/extract-overview/extract-schema.md)）。
+- **异步行为**：所有任务均为异步。提交后立即返回 `biz_id`，结果需轮询查询；HTTP `409 ResultNotReady` 表示结果未就绪，应继续轮询原 `biz_id`，**不可重复提交**（见 [REST API 接入](../../raw/application-user-guide/getting-started-overview/integration-overview/rest-api.md)）。
+- **数据隔离**：文件、配置、任务、用量均按 Workspace 隔离。切换 Workspace 后无法看到其他空间的资源（见 [常见问题](../../raw/application-user-guide/getting-started-overview/settings-configurations/faq.md)）。
+- **免费额度**：首次开通赠送图文解析/抽取各 3,000 页、音视频各 100 小时，额度一次性发放，用尽后按量计费（见 [计量与计费](../../raw/application-user-guide/getting-started-overview/settings-configurations/pricing.md)）。
 
 ## 来源文档
 
@@ -49,21 +52,21 @@ ParseX 当前提供两类正交能力，适用不同输入与目标：
 - [文档解析概览](../../raw/application-user-guide/getting-started-overview/overview.md)
 - [使用文档解析控制台](../../raw/application-user-guide/getting-started-overview/overview/playground-parse.md)
 - [配置文档解析](../../raw/application-user-guide/getting-started-overview/overview/configuration.md)
-- [字段抽取概览](../../raw/application-user-guide/getting-started-overview/extract-overview.md)
 - [获取文档解析结果](../../raw/application-user-guide/getting-started-overview/overview/results-and-best-practices.md)
 - [使用字段抽取控制台](../../raw/application-user-guide/getting-started-overview/extract-overview/playground-extract.md)
+- [字段抽取概览](../../raw/application-user-guide/getting-started-overview/extract-overview.md)
 - [配置字段抽取](../../raw/application-user-guide/getting-started-overview/extract-overview/extract-configuration.md)
-- [Schema规则参考](../../raw/application-user-guide/getting-started-overview/extract-overview/extract-schema.md)
 - [获取字段抽取结果](../../raw/application-user-guide/getting-started-overview/extract-overview/extract-results.md)
-- [服务渠道](../../raw/application-user-guide/getting-started-overview/integration-overview.md)
+- [Schema规则参考](../../raw/application-user-guide/getting-started-overview/extract-overview/extract-schema.md)
 - [REST API 接入](../../raw/application-user-guide/getting-started-overview/integration-overview/rest-api.md)
+- [服务渠道](../../raw/application-user-guide/getting-started-overview/integration-overview.md)
 - [Skill 接入要求](../../raw/application-user-guide/getting-started-overview/integration-overview/integration-skill.md)
+- [任务记录](../../raw/application-user-guide/getting-started-overview/settings-configurations/tasks.md)
 - [OSS 托管使用](../../raw/application-user-guide/getting-started-overview/integration-overview/parse-x-oss-integration.md)
 - [配置](../../raw/application-user-guide/getting-started-overview/settings-configurations.md)
-- [任务记录](../../raw/application-user-guide/getting-started-overview/settings-configurations/tasks.md)
 - [用量](../../raw/application-user-guide/getting-started-overview/settings-configurations/usage.md)
-- [计量与计费](../../raw/application-user-guide/getting-started-overview/settings-configurations/pricing.md)
 - [支持的文件与限制](../../raw/application-user-guide/getting-started-overview/settings-configurations/supported-files-and-limits.md)
+- [计量与计费](../../raw/application-user-guide/getting-started-overview/settings-configurations/pricing.md)
 - [常见问题](../../raw/application-user-guide/getting-started-overview/settings-configurations/faq.md)
 
 

@@ -147,7 +147,7 @@ curl --location 'https://bailian.aliyuncs.com/v2/app/completions' \
     
 2.  **目前阿里云百炼只能训练文字吗？图片可以训练吗？**
     
-    目前已支持图片训练，qwen-vl-plus模型支持训练微调。
+    目前已支持图片训练，qwen3-vl-plus模型支持训练微调。
     
 3.  **使用高阶模型微调，低阶模型做能力下沉，是想做蒸馏吗？**
     
@@ -161,9 +161,9 @@ curl --location 'https://bailian.aliyuncs.com/v2/app/completions' \
     
     语料数据集的多样性是指其在语言特征、内容主题、文本类型、写作风格、语言变体、作者背景、时间跨度等多个维度上体现出的丰富程度和差异性，旨在真实反映语言的实际使用情况，提升NLP模型的泛化能力和对多元应用场景的适应性。
     
-6.  **个人使用大模型训练时，qwen-turbo和qwen-max应该怎么选？**
+6.  **个人使用大模型训练时，qwen3.5-flash和qwen-max应该怎么选？**
     
-    qwen-turbo注重速度与资源效率，适合对响应速度和部署便捷性有较高要求的场景；qwen-max则聚焦顶级性能与全面知识，适用于对模型精度和处理复杂任务能力有严格要求的环境。其中qwen-turbo的费用要比qwen-max低。根据您的具体需求和条件权衡，选择最适合自己的模型版本。也可以查看模型介绍：[千问介绍](https://help.aliyun.com/zh/model-studio/tongyi-qianwen)了解具体差异。
+    qwen3.5-flash注重速度与资源效率，适合对响应速度和部署便捷性有较高要求的场景；qwen-max则聚焦顶级性能与全面知识，适用于对模型精度和处理复杂任务能力有严格要求的环境。其中qwen3.5-flash的费用要比qwen-max低。根据您的具体需求和条件权衡，选择最适合自己的模型版本。也可以查看模型介绍：[千问介绍](https://help.aliyun.com/zh/model-studio/tongyi-qianwen)了解具体差异。
     
 7.  **模型训练中的自定义模型怎么上传？**
     

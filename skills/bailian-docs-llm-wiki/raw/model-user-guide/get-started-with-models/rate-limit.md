@@ -1046,22 +1046,6 @@ qwen-plus-2025-12-01
 
 1,000,000
 
-qwen-plus-2025-09-11
-
-全球
-
-60
-
-1,000,000
-
-qwen-plus-2025-07-28
-
-全球
-
-60
-
-1,000,000
-
 qwen3.5-flash
 
 全球
@@ -1286,22 +1270,6 @@ qwen3.8-flash
 
 5,000,000
 
-qwen3-max
-
-中国香港
-
-600
-
-1,000,000
-
-qwen3-max-2026-01-23
-
-中国香港
-
-60
-
-100,000
-
 qwen3.6-plus
 
 全球
@@ -1470,14 +1438,6 @@ qwen3-vl-plus
 
 1,000,000
 
-qwen3-vl-plus-2025-09-23
-
-全球
-
-60
-
-100,000
-
 #### 中国香港
 
 **模型名称**
@@ -1495,14 +1455,6 @@ qwen3-vl-plus-2025-09-23
 > **含输入与输出Token**
 
 qwen3-vl-plus
-
-中国香港
-
-6,000
-
-1,000,000
-
-qwen3-vl-plus-2025-12-19
 
 中国香港
 
@@ -1619,14 +1571,6 @@ qwen3.5-omni-flash-2026-03-15
 100,000
 
 qwen3-omni-flash
-
-国际
-
-60
-
-100,000
-
-qwen3-omni-flash-2025-09-15
 
 国际
 
@@ -1831,14 +1775,6 @@ qwen3.5-omni-flash-realtime
 100,000
 
 qwen3.5-omni-flash-realtime-2026-03-15
-
-国际
-
-60
-
-100,000
-
-qwen3-omni-flash-realtime
 
 国际
 
@@ -2522,78 +2458,6 @@ qwen3.5-35b-a3b
 
 1,000,000
 
-qwen3-next-80b-a3b-thinking
-
-全球
-
-600
-
-1,000,000
-
-qwen3-next-80b-a3b-instruct
-
-全球
-
-600
-
-1,000,000
-
-qwen3-235b-a22b-thinking-2507
-
-全球
-
-600
-
-1,000,000
-
-qwen3-30b-a3b-thinking-2507
-
-全球
-
-600
-
-1,000,000
-
-qwen3-30b-a3b-instruct-2507
-
-全球
-
-600
-
-1,000,000
-
-qwen3-235b-a22b
-
-全球
-
-600
-
-1,000,000
-
-qwen3-30b-a3b
-
-全球
-
-600
-
-1,000,000
-
-qwen3-14b
-
-全球
-
-600
-
-1,000,000
-
-qwen3-8b
-
-全球
-
-600
-
-1,000,000
-
 #### 新加坡
 
 **模型名称**
@@ -2719,316 +2583,6 @@ qwen3.5-27b
 1,000,000
 
 qwen3.5-35b-a3b
-
-全球
-
-600
-
-1,000,000
-
-qwen3-next-80b-a3b-thinking
-
-全球
-
-600
-
-1,000,000
-
-qwen3-next-80b-a3b-instruct
-
-全球
-
-600
-
-1,000,000
-
-qwen3-235b-a22b-thinking-2507
-
-全球
-
-600
-
-1,000,000
-
-qwen3-30b-a3b-thinking-2507
-
-全球
-
-600
-
-1,000,000
-
-qwen3-30b-a3b-instruct-2507
-
-全球
-
-600
-
-1,000,000
-
-qwen3-235b-a22b
-
-全球
-
-600
-
-1,000,000
-
-qwen3-30b-a3b
-
-全球
-
-600
-
-1,000,000
-
-qwen3-14b
-
-全球
-
-600
-
-1,000,000
-
-qwen3-8b
-
-全球
-
-600
-
-1,000,000
-
-### Qwen-VL
-
-#### 美国（弗吉尼亚）
-
-**模型名称**
-
-**服务部署范围**
-
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen3-vl-235b-a22b-thinking
-
-全球
-
-60
-
-100,000
-
-qwen3-vl-32b-thinking
-
-全球
-
-600
-
-1,000,000
-
-qwen3-vl-32b-instruct
-
-全球
-
-600
-
-1,000,000
-
-qwen3-vl-30b-a3b-thinking
-
-全球
-
-600
-
-1,000,000
-
-qwen3-vl-30b-a3b-instruct
-
-全球
-
-600
-
-1,000,000
-
-qwen3-vl-8b-thinking
-
-全球
-
-600
-
-1,000,000
-
-qwen3-vl-8b-instruct
-
-全球
-
-600
-
-1,000,000
-
-#### 德国（法兰克福）
-
-**模型名称**
-
-**服务部署范围**
-
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen3-vl-235b-a22b-thinking
-
-全球
-
-60
-
-100,000
-
-qwen3-vl-32b-thinking
-
-全球
-
-600
-
-1,000,000
-
-qwen3-vl-32b-instruct
-
-全球
-
-600
-
-1,000,000
-
-qwen3-vl-30b-a3b-thinking
-
-全球
-
-600
-
-1,000,000
-
-qwen3-vl-30b-a3b-instruct
-
-全球
-
-600
-
-1,000,000
-
-qwen3-vl-8b-thinking
-
-全球
-
-600
-
-1,000,000
-
-qwen3-vl-8b-instruct
-
-全球
-
-600
-
-1,000,000
-
-### Qwen3-Omni-Captioner
-
-#### 新加坡
-
-**模型名称**
-
-**服务部署范围**
-
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen3-omni-30b-a3b-captioner
-
-国际
-
-60
-
-100,000
-
-### Qwen-Coder
-
-#### 美国（弗吉尼亚）
-
-**模型名称**
-
-**服务部署范围**
-
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen3-coder-480b-a35b-instruct
-
-全球
-
-600
-
-1,000,000
-
-qwen3-coder-30b-a3b-instruct
-
-全球
-
-600
-
-1,000,000
-
-#### 德国（法兰克福）
-
-**模型名称**
-
-**服务部署范围**
-
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen3-coder-480b-a35b-instruct
-
-全球
-
-600
-
-1,000,000
-
-qwen3-coder-30b-a3b-instruct
 
 全球
 
@@ -3278,14 +2832,6 @@ deepseek-v4-pro-0813
 
 1,200,000
 
-deepseek-v4-flash
-
-日本
-
-10,000
-
-1,200,000
-
 deepseek-v4-flash-0731
 
 日本
@@ -3323,14 +2869,6 @@ deepseek-v4-flash-0731
 全球
 
 15,000
-
-1,200,000
-
-deepseek-v4-flash
-
-全球
-
-10,000
 
 1,200,000
 
@@ -5394,14 +4932,6 @@ qwen3.5-livetranslate-flash-realtime-2026-05-19
 
 国际
 
-qwen3-livetranslate-flash-realtime
-
-国际
-
-qwen3-livetranslate-flash-realtime-2025-09-22
-
-国际
-
 ### Qwen-Audio-3.1-ASR-Flash-Message
 
 #### 华北2（北京）
@@ -5616,10 +5146,6 @@ qwen3-asr-flash
 
 100
 
-qwen3-asr-flash-2025-09-08
-
-美国
-
 ### Qwen-ASR-Realtime
 
 #### 华北2（北京）
@@ -5669,12 +5195,6 @@ fun-asr-flash-2026-06-15
 **每分钟调用次数（RPM）**
 
 fun-asr
-
-国际
-
-600
-
-fun-asr-2025-08-25
 
 国际
 
@@ -7484,4 +7004,4 @@ decision-model-preview
 
 ## 已下线模型
 
-> 详细信息，请参见 [模型下线机制说明](raw/model-user-guide/release-notes/model-depreciation.md) 。
+详细信息，请参见 [模型下线机制说明](raw/model-user-guide/release-notes/model-depreciation.md) 。

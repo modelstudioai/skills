@@ -394,7 +394,7 @@ stop参数用于实现内容生成过程的精确控制，在模型生成的内�
     
 -   array类型
     
-    array中的元素可以为token\_id或者字符串，或者元素为token\_id的array。当模型将要生成的token或其对应的token\_id在stop中时，模型生成将会停止。以下为stop为array时的示例（tokenizer对应模型为qwen-turbo）：
+    array中的元素可以为token\_id或者字符串，或者元素为token\_id的array。当模型将要生成的token或其对应的token\_id在stop中时，模型生成将会停止。以下为stop为array时的示例（tokenizer对应模型为qwen3.5-flash）：
     
     1.元素为token\_id：
     
@@ -446,7 +446,7 @@ None
 }
 ```
 
-在function call流程中，无论是发起function call的轮次，还是向模型提交工具函数的执行结果，均需设置tools参数。当前支持的模型包括qwen-turbo、qwen-plus和qwen-max。
+在function call流程中，无论是发起function call的轮次，还是向模型提交工具函数的执行结果，均需设置tools参数。当前支持的模型包括qwen-plus和qwen-max。
 
 **说明**tools暂时无法与stream=True同时使用。
 

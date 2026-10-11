@@ -914,7 +914,7 @@ Schema 的名称。
 
 是否严格遵循 `schema` 定义的结构。推荐设置为 `true`。
 
-**result\_format**`string`（可选）默认为`text`（Qwen3-Max、Qwen3-VL、[QwQ](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md) 模型、Qwen3 开源模型（除了qwen3-next-80b-a3b-instruct）与 Qwen-Long 模型默认值为 message）
+**result\_format**`string`（可选）默认为`text`（Qwen3-Max、Qwen3-VL、[QwQ](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md) 模型、Qwen3 开源模型与 Qwen-Long 模型默认值为 message）
 
 返回数据的格式。推荐您优先设置为`message`，可以更方便地进行[多轮对话](raw/model-user-guide/model-experience/text-generation-model/multi-round-conversation.md)。
 

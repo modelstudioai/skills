@@ -1,52 +1,39 @@
 # release notes
 
-本页汇总百炼平台近期模型发布、功能更新及下线机制等关键变更，面向开发者提供结构化、可操作的版本演进信息。所有内容均基于官方发布的模型与平台更新文档整理，聚焦技术事实与接入影响，不包含营销性描述。建议开发者定期查阅以确保应用兼容性与成本优化。
+百炼平台的 Release Notes 汇总了模型上下架、平台功能迭代、计费策略调整等关键变更，面向开发者提供可操作的版本演进信息。所有变更均以实际生效时间为准，建议通过控制台通知中心、API 响应头（如 `X-Bailian-Release-Date`）及文档更新时间戳交叉验证。模型生命周期管理与平台能力升级同步推进，需特别关注下线窗口期与替代方案兼容性。
 
 ## 支持的模型/功能
 
-平台持续扩展多模态与垂直场景模型支持，覆盖文本生成、图像/视频生成、语音处理、决策推理、翻译、向量检索等类别。最新上线模型包括：`qwen-image-2.1-turbo`（图片生成，2026-10-09）、`decision-model-preview`（结构化决策，2026-09-24）、`qwen3.8-omni-flash-realtime`（实时全模态交互，2026-09-21）以及 `qwen-mt-uni`（多模态翻译，2026-09-16）。完整列表详见 [模型上下架与更新](../../raw/model-user-guide/release-notes/newly-released-models.md)。
-
-> **注意**：文档 1 中对 `deepseek-v4.1-flash` 的参数描述存在矛盾——一处称其为“尺寸最小的模型”，另一处称其为“轻量旗舰模型”；同时总参数量在两处分别标注为“552B MoE”和“284B”，需以控制台或 API 返回的 `model_info` 为准。实际部署前请务必通过 `/v1/models` 接口验证模型元数据。
-
-平台级功能同步迭代，重点包括：  
-- **模型调优**：自2026年5月起支持图像生成、视频生成及视觉理解（VL）模型类型调优；  
-- **知识库RAG**：2026年6月上线联合检索与混合排序能力；  
-- **异步任务**：Responses API 自2026年6月1日支持 `background=true` 异步模式；  
-- **接入协议**：新增 Codex 客户端、Spring AI Alibaba 集成文档，以及 WebSocket/WebRTC/AOQ 等多通道实时接入支持。  
-详情参见 [模型平台功能更新](../../raw/model-user-guide/release-notes/model-release-notes.md)。
+- **新模型上架**：2026年9月起密集发布多模态旗舰模型，包括 `qwen3.8-omni-flash-realtime`（实时全模态）、`ZHIPU/GLM-5.3-FlashX`（1M上下文+多模态输入）、`deepseek-v4.1-flash`（原生视觉理解+384K输出）等；图像生成领域新增 `qwen-image-2.1-turbo` 和 `vidu/viduq3-ad_reference2video`（广告专用）；视频生成覆盖 `wan3.0-video-prime`（高速版）与 `pixverse/pixverse-lipsync`（精准对口型）等细分能力模型。完整清单见 [模型上下架与更新](../../raw/model-user-guide/release-notes/newly-released-models.md)。
+- **平台功能扩展**：2026年6月起全面支持多模态翻译 API（含 PDF/Word/PPT 等文档解析）、知识检索服务（多知识库联合检索）、智能体托管运行时（会话与工具执行托管）、以及 Responses API 异步调用（`background=true` 参数启用）。模型调优能力持续增强，已支持图像生成、视频生成、视觉理解（VL）三类模型的定制训练，详见 [模型平台功能更新](../../raw/model-user-guide/release-notes/model-release-notes.md)。
+- **SDK 与接入工具**：新增 Codex 客户端、Spring AI Alibaba 集成文档、Linux C++ / Android/iOS Lite 多模态 SDK，并于2026年6月上线 RTOS C SDK License 模式，覆盖嵌入式半托管场景。
 
 ## 关键参数
 
-各模型关键能力参数需结合具体使用场景确认，以下为通用参考维度（非全部模型均支持）：
-
-| 参数类型       | 典型值与说明                                                                 |
-|----------------|----------------------------------------------------------------------------|
-| 上下文长度     | 多数旗舰模型（如 `qwen3.8-max`, `glm-5.3`, `kimi-k3`）支持 **1M [Token](../concepts/token.md)**；部分 Flash 模型（如 `qwen3.7-flash`）亦达此规格。 |
-| 输出长度       | `ZHIPU/GLM-5.3-FlashX` 支持 128K；`deepseek-v4.1-flash` 支持 384K；`qwen3.8-2.4t-a95b` 未明确上限，但实测稳定输出 ≥256K。         |
-| 多模态输入     | `qwen3.8-omni-flash`, `GLM-5.3-FlashX`, `stepfun/step-5-preview` 均原生支持文本+图像+音频+视频混合输入。                          |
-| 推理速度       | `GLM-5.3-FlashX` 达 200 tokens/s；`kimi-k3` 未公开 TPS，但工程优化侧重低延迟；`qwen-audio-3.0-tts-flash` 专为实时合成优化。      |
-| 特殊能力       | `qwen-mt-uni` 自动识别输入模态并执行版面还原；`vidu/viduq3-drama_reference2video` 提供角色一致性保持；`happyoyster-1.0-adventure` 支持镜头控制与世界探索。 |
+- **上下文窗口**：主流新模型（如 `qwen3.8-max`、`glm-5.3`、`kimi-k3`）统一支持 **1M Token** 上下文；部分轻量模型（如 `qwen3.7-text-embedding-flash`）支持 **128K** 输入长度。
+- **输出能力**：`qwen3.8-max` 最大输出 **384K Token**；`ZHIPU/GLM-5.3-FlashX` 支持 **128K 输出**；语音合成模型 `qwen-audio-3.0-tts-plus` 提供细粒度情绪/语速/音量控制标签。
+- **性能指标**：`deepseek-v4-flash-0731` 推理延迟低至毫秒级，TPS 较前代提升 2–3 倍；`glm-5.2-fast-preview` 输出速度达标准版 **1.5–2 倍**；`qwen-audio-3.0-asr-flash-streaming` 支持实时流式识别，端到端时延 <500ms。
+- **多模态支持**：`qwen3.8-omni-flash`、`GLM-5.3-Flash`、`deepseek-v4.1-flash` 均原生支持文本、图像、音频、视频混合输入；`qwen-mt-uni` 自动识别输入模态并完成版面还原与语音克隆。
 
 ## 使用方式
 
-- **模型调用**：统一通过 `/v1/chat/completions`（OpenAI 兼容）或 `/v1/messages`（Anthropic 兼容）接口发起，模型 ID 作为 `model` 字段传入（如 `"model": "qwen-image-2.1-turbo"`）。  
-- **异步任务**：对长耗时请求（如视频生成、大文件翻译），启用 `background=true` 并轮询 `GET /v1/async_tasks/{task_id}` 获取结果。  
-- **多模态输入**：图像/音频/视频需 Base64 编码或上传至 OSS 后传入 URL；文档类输入（PDF/Word 等）直接传入文件 URL 即可触发自动解析。  
-- **功能开关**：部分模型支持运行时模式切换，例如 `qwen3.8-omni-flash` 可通过 `thinking: true/false` 控制是否启用思考链。  
-
-详细接口规范与示例见 [模型平台功能更新](../../raw/model-user-guide/release-notes/model-release-notes.md) 中各功能点链接文档。
+- **模型调用**：通过标准 REST API（兼容 OpenAI Anthropic 协议）或 DashScope SDK 调用；新模型默认启用 `thinking_mode`（深度思考）与 `function_calling`，需在请求 payload 中显式声明 `tool_choice`。
+- **异步任务**：长耗时任务（如视频生成、大文件翻译）须使用 Responses API 的 `background=true` 模式提交，轮询 `/v1/tasks/{task_id}` 获取结果；事件总线（EventBridge）支持 HTTP 回调与 RocketMQ 主动推送，避免轮询开销。
+- **模型迁移**：快照模型（如 `qwen-max-2025-01-25`）下线前30天、主线模型下线前3个月启动限流（QPM/TPM 逐步缩减），期间仍可正常调用；切换前务必在 [模型监控](https://bailian.console.aliyun.com/cn-beijing/model/telemetry) 页面验证替代模型效果，参考 [模型下线机制说明](../../raw/model-user-guide/release-notes/model-depreciation.md) 执行灰度迁移。
+- **部署与调优**：预置模型可通过 API 直接部署（支持按模型单元 MU 计费）；微调任务需指定 `model_type`（如 `image_generation`、`video_generation`），调优后模型支持量化压缩（降低 HBM/SSD 占用）。
 
 ## 限制和注意事项
 
-- **模型下线策略**：快照模型（含日期后缀）提前 **30天** 通知下线；主线模型提前 **3个月** 通知。下线后 API 将返回 `410 Gone`，且不再接受新调用。已部署的微调模型不受影响，但无法再基于下线模型创建新调优任务。完整机制详见 [模型下线机制说明](../../raw/model-user-guide/release-notes/model-depreciation.md)。  
-- **地域与协议限制**：`qwen3.8-omni-flash-realtime` 仅支持 WebSocket/WebRTC 接入；`qwen-audio-3.0-realtime-plus` 要求客户端实现双工流式处理，不兼容纯 HTTP POST。  
-- **资源配额**：自2026年7月起，待下线模型的 QPM/TPM 将逐步缩减；部分功能（如 Managed Agent）已于2026年7月16日启动商业化，免费额度外调用将计费。  
-- **兼容性风险**：`qwen3.8-flash` 声称“兼容 OpenAI 与 Anthropic 协议”，但实测其 `tool_choice` 行为与 Anthropic Messages v3 存在差异，建议严格按百炼文档中定义的 `tools` schema 构造请求。
+- > **注意**：文档2中 `kimi/kimi-k3` 出现两次（2026-07-17 与 2026-09-17），但参数描述完全一致（2.8万亿参数、100万上下文），属重复条目，以首次发布时间（2026-07-17）为准，后续条目为冗余记录。
+- > **注意**：文档2列出 `qwen3.8-2.4t-a95b`（2026-08-12）为“开源版本”，但文档3未提及该模型开源状态，且百炼平台不提供模型权重下载；实际仅开放 API 调用，非真正开源。
+- **下线模型不可逆**：自正式下线日起，模型推理、新调优/新部署全部终止；已部署模型不受影响，但无法创建新实例。历史下线批次（如2025年7月30日、2024年4月22日）未发布专项公告，需依赖控制台通知与文档归档核查。
+- **功能兼容性风险**：`企业知识库（旧）` 已于2026年7月16日下线，其 API（`/v1/knowledge_base/old/*`）同步失效；新知识库 RAG 服务需使用 `/v1/knowledge_base/retrieve` 等新版接口，旧集成需重构。
+- **地域限制**：新增美国、德国、日本地域部署（2026-06-12），但部分模型（如 `qwen-mt-image-2.0`）暂未开放海外地域调用，调用前需确认 `region_id` 有效性。
 
 ## 来源文档
 
-- [模型上下架与更新](../../raw/model-user-guide/release-notes/newly-released-models.md)
 - [模型下线机制说明](../../raw/model-user-guide/release-notes/model-depreciation.md)
+- [模型上下架与更新](../../raw/model-user-guide/release-notes/newly-released-models.md)
 - [模型平台功能更新](../../raw/model-user-guide/release-notes/model-release-notes.md)
 
 
