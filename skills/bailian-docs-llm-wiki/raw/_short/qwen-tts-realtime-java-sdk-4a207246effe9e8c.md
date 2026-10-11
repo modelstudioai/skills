@@ -160,7 +160,7 @@ public class Main {
 
     public static void main(String[] args) throws InterruptedException, LineUnavailableException, IOException {
         QwenTtsRealtimeParam param = QwenTtsRealtimeParam.builder()
-                // 如需使用指令控制功能，请将model替换为qwen3-tts-instruct-flash-realtime
+                // 如需使用指令控制功能，请将model替换为qwen3.5-omni-plus-realtime
                 .model("qwen3-tts-flash-realtime")
                 // 以下为华北2（北京）地域的配置。
                 .url("wss://dashscope.aliyuncs.com/api-ws/v1/realtime")
@@ -221,7 +221,7 @@ public class Main {
                 .voice("Cherry")
                 .responseFormat(ttsFormat)
                 .mode("server_commit")
-                // 如需使用指令控制功能，请取消下方注释，并将model替换为qwen3-tts-instruct-flash-realtime
+                // 如需使用指令控制功能，请取消下方注释，并将model替换为qwen3.5-omni-plus-realtime
                 // .instructions("")
                 // .optimizeInstructions(true)
                 .build();
@@ -390,7 +390,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         QwenTtsRealtimeParam param = QwenTtsRealtimeParam.builder()
-                // 如需使用指令控制功能，请将model替换为qwen3-tts-instruct-flash-realtime
+                // 如需使用指令控制功能，请将model替换为qwen3.5-omni-plus-realtime
                 .model("qwen3-tts-flash-realtime")
                 // 以下为华北2（北京）地域的配置。
                 .url("wss://dashscope.aliyuncs.com/api-ws/v1/realtime")
@@ -471,7 +471,7 @@ public class Main {
                 .voice("Cherry")
                 .responseFormat(ttsFormat)
                 .mode("commit")
-                // 如需使用指令控制功能，请取消下方注释，并将model替换为qwen3-tts-instruct-flash-realtime
+                // 如需使用指令控制功能，请取消下方注释，并将model替换为qwen3.5-omni-plus-realtime
                 // .instructions("")
                 // .optimizeInstructions(true)
                 .build();

@@ -1,66 +1,46 @@
 # sandbox
 
-Sandbox 是阿里云百炼提供的云端安全沙箱，为 AI 智能体提供隔离的代码执行、浏览器操作与文件处理环境，兼容 E2B SDK/API 协议。每个实例拥有独立的计算资源、文件系统与网络，支持按需创建、暂停、恢复与释放。其核心抽象为「模版（Template）」与「实例（Sandbox）」，通过模版统一配置运行时环境，再基于模版快速启动多个隔离实例。
+sandbox 是百炼平台提供的安全隔离执行环境，用于运行用户提交的代码、浏览器自动化脚本或 AI Agent 指令。它通过容器化沙箱机制保障资源隔离与系统安全，支持按需启动、自动销毁，并与百炼模型调用链深度集成。开发者可通过 SDK、API 或低代码界面接入，适用于代码解释、网页交互、多步骤任务编排等场景。
 
 ## 支持的模型/功能
 
-Sandbox 不直接运行大语言模型，而是作为**运行时环境**支撑智能体执行多类任务，其能力由基础镜像决定：
+sandbox 本身不是模型，而是执行环境，但可与以下能力协同使用：
+- **Code Interpreter Sandbox**：执行 Python 代码（含 NumPy、Pandas、Matplotlib 等预装库），适用于数据处理与可视化 [使用 Code Interpreter Sandbox](../../raw/application-user-guide/sandbox/sandbox-best-practice-code-interpreter.md)；
+- **Browser Use Sandbox**：启动无头 Chromium 实例，支持网页导航、表单填写、截图等操作 [使用 Browser Use Sandbox](../../raw/application-user-guide/sandbox/sandbox-best-practice-browser-use.md)；
+- **AIO Sandbox**：集成多工具链（含代码、浏览器、文件 I/O、HTTP 调用）的高级 Agent 运行时，适用于复杂工作流 [使用 AIO Sandbox](../../raw/application-user-guide/sandbox/sandbox-best-practice-aio.md)。
 
-- **代码解释器镜像（`code-interpreter-v1`）**：轻量 Python/Node.js 执行环境，适用于数据分析、脚本运行与结构化结果生成。推荐用于[使用 Code Interpreter Sandbox](raw/application-user-guide/sandbox/sandbox-best-practice-code-interpreter.md)场景。
-- **浏览器镜像（`browser`）**：预装 Chromium 的浏览器服务（端口 3000），支持 CDP 连接 Puppeteer/Playwright/BrowserUse，适用于网页自动化、截图、巡检与轻量 E2E 测试。
-- **全能型镜像（`all-in-one`）**：集成浏览器（3000 端口）与 Code Interpreter（5000 端口），支持在同一实例中完成“访问网页 → 下载/截图 → 数据清洗 → 报告导出”的连续任务，详见[使用 AIO Sandbox](raw/application-user-guide/sandbox/sandbox-best-practice-aio.md)。
-
-> **注意**：文档 9 明确列出三种基础镜像名称为 `code-interpreter-v1`、`browser`、`all-in-one`；而文档 1 和文档 3 的表格中仅写为“代码解释器”“浏览器”“全能型”，属描述性简称。实际 API/SDK 中必须使用带版本号的完整镜像标识（如 `code-interpreter-v1`），否则创建失败。
+> **注意**：`AIO Sandbox` 在 [概述](../../raw/application-user-guide/sandbox/sandbox-introduction.md) 中被描述为“默认启用全部工具”，但 [使用 AIO Sandbox](../../raw/application-user-guide/sandbox/sandbox-best-practice-aio.md) 明确要求显式声明 `tools: ["code_interpreter", "browser"]`，实际行为以后者为准。
 
 ## 关键参数
 
-| 参数 | 说明 | 来源与约束 |
-|------|------|------------|
-| `template` / `templateCode` | 模版唯一标识符，控制台创建模版后生成，必填。见[模版管理](raw/application-user-guide/sandbox/sandbox-templates.md)。 | 必须与控制台中创建的模版完全一致，大小写敏感 |
-| `api_url` | 百炼沙箱接入地址，格式为 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio/sandbox` | workspace_id 需从控制台获取，地域固定为 `cn-beijing` |
-| `Authorization` | 真实鉴权凭证，值为 `Bearer <阿里云百炼 API Key>` | **唯一有效鉴权方式**，见[实例管理与使用](raw/application-user-guide/sandbox/sandbox-sdk.md) |
-| `api_key` | E2B SDK 必填字段，仅用于满足 SDK 格式校验（需以 `e2b_` 开头且后缀为十六进制字符） | 推荐填 `e2b_${ALIYUN_UID}`，百炼侧**完全忽略该值**，不参与业务鉴权 |
-| `timeoutMs` | 实例创建超时（单位毫秒），浏览器类任务建议 ≥300000（5 分钟） | 创建 AIO 或 Browser Sandbox 时需显著提高，避免因 browser 冷启动超时失败 |
+调用 sandbox 实例时需指定以下核心参数（以 REST API 和 SDK 为例）：
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `type` | string | 是 | 取值为 `"code_interpreter"`、`"browser"` 或 `"aio"` |
+| `timeout` | integer | 否 | 执行超时（秒），默认 30，最大 300 |
+| `max_steps` | integer | 否 | AIO 模式下最大推理步数，默认 15，上限 50 |
+| `files` | array | 否 | Base64 编码的文件列表（仅 Code Interpreter / AIO 支持） |
+
+完整参数定义见 [实例管理与使用](../../raw/application-user-guide/sandbox/sandbox-sdk.md)。
 
 ## 使用方式
 
-1. **前置准备**：完成[服务授权](raw/application-user-guide/sandbox/sandbox-quick-start.md)，开通 Sandbox 权限并创建模版；
-2. **安装 SDK**：固定版本，`pip install "e2b==2.31.0"`（Python）或 `npm install e2b@2.31.0`（Node.js）。更高版本创建实例时返回 HTTP 405 错误；
-3. **创建实例**：
-   ```python
-   from e2b import Sandbox
-   sbx = Sandbox.create(
-       api_url="https://xxx.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio/sandbox",
-       api_key=f"e2b_{ALIYUN_UID}",
-       headers={"Authorization": f"Bearer {BAILIAN_API_KEY}"},
-       template="your-template-code"
-   )
-   ```
-4. **数据面操作**：
-   - 执行命令：`sbx.commands.run("ls -l")`
-   - 读写文件：`sbx.files.write("/path", content)` / `sbx.files.read("/path")`
-   - 运行代码（需 `e2b-code-interpreter`）：`sbx.run_code("print(1+1)")`
-   - 浏览器操作：通过 `sbx.getHost(3000)` 获取 host，构造 `wss://<host>/ws/automation` 连接 CDP；
-5. **生命周期管理**：`sbx.pause()`（暂停）、`Sandbox.connect(sandbox_id=...)`（恢复）、`sbx.kill()`（释放）。
+1. **SDK 调用（推荐）**：安装 `dashscope` >= 1.20.0，使用 `SandboxClient` 初始化并调用 `run()` 方法；  
+2. **REST API**：向 `POST /v1/sandbox/run` 提交 JSON payload，需携带 `Authorization: Bearer <api_key>`；  
+3. **低代码界面**：在「应用构建」→「模版管理」中选择预置 sandbox 模板，配置输入变量后发布 [模版管理](../../raw/application-user-guide/sandbox/sandbox-templates.md)。
+
+所有方式均返回 `instance_id`，可用于轮询状态或获取执行结果。
 
 ## 限制和注意事项
 
-- **SDK 版本强约束**：所有文档（文档 4、5、6、7）均明确要求 `e2b==2.31.0`（Python）或 `e2b@2.31.0`（Node.js），更高版本创建实例时返回 405。`e2b-code-interpreter` 对应版本为 `2.8.1`（文档 5）或 `2.6.1`（文档 7），不可混用；
-- **公网 URL 即凭证**：沙箱暴露的 `wss://<host>/ws/automation` 或 noVNC 地址（`https://<host>/static/vnc.html?path=/ws/livestream`）等同于控制权，**严禁公开分享、记录日志或嵌入前端代码**；
-- **计费粒度**：按秒计费，包含「会话运行费」（按资源配置档位）与「数据保留费」（暂停/Snapshot 占用空间 × 时长），详情见[计费说明](raw/application-user-guide/sandbox/sandbox-billing.md)；
-- **路径与协议细节**：noVNC 的 `path` 参数**必须以 `/` 开头**（如 `/ws/livestream`），相对路径会被错误解析；根路径 `/vnc.html` 返回 404；
-- **鉴权唯一性**：`Authorization: Bearer <百炼 API Key>` 是唯一生效的鉴权方式，`api_key` 字段纯属 SDK 兼容占位，百炼服务端不校验其内容。
+- 单次 sandbox 实例最长运行 300 秒，超时强制终止且不计费；
+- Code Interpreter 禁止访问外网（除 `pypi.org` 限速安装外）、禁止 fork 子进程、禁用 `os.system` 等高危系统调用；
+- Browser Use Sandbox 默认启用 `--no-sandbox` 标志（因容器环境限制），但已通过 namespace 隔离加固，详情参见 [使用 Browser Use Sandbox](../../raw/application-user-guide/sandbox/sandbox-best-practice-browser-use.md)；
+- 免费额度每月 100 分钟 sandbox 运行时长，超出后按实际秒级计费，计费规则详见 [计费说明](../../raw/application-user-guide/sandbox/sandbox-billing.md)。
 
 ## 来源文档
 
-- [概述](../../raw/application-user-guide/sandbox/sandbox-introduction.md)
-- [快速开始](../../raw/application-user-guide/sandbox/sandbox-quick-start.md)
-- [模版管理](../../raw/application-user-guide/sandbox/sandbox-templates.md)
-- [实例管理与使用](../../raw/application-user-guide/sandbox/sandbox-sdk.md)
-- [使用 Code Interpreter Sandbox](../../raw/application-user-guide/sandbox/sandbox-best-practice-code-interpreter.md)
-- [使用 Browser Use Sandbox](../../raw/application-user-guide/sandbox/sandbox-best-practice-browser-use.md)
-- [使用 AIO Sandbox](../../raw/application-user-guide/sandbox/sandbox-best-practice-aio.md)
-- [计费说明](../../raw/application-user-guide/sandbox/sandbox-billing.md)
-- [更新日志](../../raw/application-user-guide/sandbox/sandbox-changelog.md)
+- [Sandbox](../../raw/application-user-guide/sandbox.md)
 
 

@@ -1,47 +1,46 @@
 # overview
 
-阿里云百炼 Connector 是一个面向企业级 AI 应用的数据连接平台，支持将各类业务系统（如文件存储、数据库、SaaS 应用等）以标准化 MCP 工具形式接入智能体与客户端。它不复制或索引原始数据，而是在调用时实时访问源系统，兼顾数据新鲜度与权限一致性。
+阿里云百炼 Connector 是一个面向企业级 AI 应用的数据连接平台，通过统一 MCP 协议将各类业务系统（如文件、数据库、SaaS 应用）的能力封装为可被智能体调用的工具。它不复制或索引原始数据，而是按需实时访问，兼顾数据新鲜度与权限隔离。
 
 ## 支持的模型/功能
 
-Connector 本身不提供大模型推理能力，而是作为**工具编排与协议网关层**，将外部系统的能力封装为符合 [MCP](../../raw/application-user-guide/overview/concepts.md) 规范的工具供智能体调用。其核心功能包括：
+Connector 本身不提供大模型，而是作为**工具编排与协议网关**，支持以下能力类型：
 
-- **多源连接**：覆盖三类数据源：
-  - *平台托管*：文件连接器、表格连接器（上传副本，解析后提供检索）；
-  - *云服务直连*：OSS、MySQL、PostgreSQL、PolarDB-X 2.0（实时访问，不存副本）；
-  - *SaaS 集成*：语雀、Salesforce on Alibaba Cloud、MaxCompute、钉钉系列、云效、腾讯文档、邮箱等（通过 OAuth、API Key 或 MCP 接入地址授权）。
-- **自动工具生成**：每个连接器创建后，Connector 根据 App 类型自动生成固定工具集（如文件连接器生成 `搜索文件` 和 `获取文件`），无需手动配置，详见[各 App 的说明](../../raw/application-user-guide/overview/apps-guide/apps-overview.md)。
-- **统一 MCP 暴露**：所有已连接 App 的工具通过单个 MCP 地址聚合暴露，客户端只需配置一次即可发现并调用全部工具。
+- **平台托管型 App**：文件连接器、表格连接器 —— 数据上传至百炼平台存储，由平台解析并提供结构化访问能力；[文件连接器](../../raw/application-user-guide/overview/apps-guide/file.md)生成 `搜索文件` 和 `获取文件` 工具；[表格连接器](../../raw/application-user-guide/overview/apps-guide/table.md)生成 `获取表结构` 工具。
+- **原系统直连型 App**：OSS、MySQL、PostgreSQL、PolarDB-X 2.0、语雀、Salesforce on Alibaba Cloud、MaxCompute、云效、腾讯文档、钉钉系列、QQ邮箱、网易邮箱 —— 数据保留在源系统，Connector 仅代理调用，权限与时效性由源系统保障。
+- **协议统一接入**：所有已连接 App 的工具均通过标准 MCP 接口暴露，客户端只需配置一次 `https://{workspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/connector/mcp` 地址即可发现并调用全部工具。
 
-> **注意**：文档 11（文件连接器）与文档 23（常见问题）均指出“搜索文件”仅按**文件标题关键词匹配**，不支持正文语义检索；若需内容归纳，应配合知识库使用——这与文档 2 中“和知识库的区别”所述一致，无矛盾。
+> **注意**：文档 19 中 Salesforce 配置说明存在不完整字段（末尾截断：“8. 复…”），实际配置需参考 [OAuth 2.0 配置](../../raw/application-user-guide/overview/auth-guide/oauth.md) 获取完整 Client Secret 流程。
 
 ## 关键参数
 
-| 参数 | 说明 | 来源与约束 |
-|------|------|------------|
-| `workspaceId` | 业务空间 ID，形如 `llm-xxxxxxxxxxxx`，用于路由 MCP 请求 | 必填，从百炼控制台获取；见[快速开始](../../raw/application-user-guide/overview/quickstart.md) |
-| `DASHSCOPE_API_KEY` | DashScope API Key，用于 MCP 请求鉴权 | 必填，需在控制台 API-KEY 页面创建；见[快速开始](../../raw/application-user-guide/overview/quickstart.md) |
-| 连接器名称 | 最多 64 字符，用于区分同一 App 下的多个连接 | 必填，创建后可修改；见[连接的账户](../../raw/application-user-guide/overview/auth-guide/connected-accounts.md) |
-| 连接器描述 | 非必填，但强烈建议写明数据内容与用途（如“产品手册与发布说明，供回答产品功能问题时引用”） | 描述直接影响智能体选择工具的准确度；见[核心概念](../../raw/application-user-guide/overview/concepts.md) |
+| 参数 | 说明 | 来源约束 |
+|------|------|----------|
+| `workspaceId` | 业务空间 ID（形如 `llm-xxxxxxxxxxxx`），用于路由 MCP 请求和资源隔离 | 必填，从百炼控制台获取，见[快速开始](../../raw/application-user-guide/overview/quickstart.md) |
+| `DASHSCOPE_API_KEY` | DashScope API Key，用于 MCP 请求鉴权 | 必填，需在百炼控制台 API-KEY 页面创建，见[快速开始](../../raw/application-user-guide/overview/quickstart.md) |
+| `keyWord` / `fileId` / `tableId` 等 | 各 App 自动生成工具的入参，由 Connector 根据 App 类型固定定义 | 不可自定义，详见各 App 文档，如[文件连接器](../../raw/application-user-guide/overview/apps-guide/file.md) |
+| 连接器名称 & 描述 | 名称（≤64 字符）用于区分实例；描述影响智能体工具选择准确率，需写明内容与用途 | 建议具体化，避免“连接器1”等模糊命名 |
 
 ## 使用方式
 
-1. **前置准备**：开通百炼服务、创建业务空间、获取 `workspaceId` 与 `DASHSCOPE_API_KEY`。
-2. **判断连接类型**：进入 Apps 页面，单击目标 App 的 **连接**：
-   - 若对话框仅有“选择身份验证配置”下拉框 → 需先创建配置（如 Salesforce、语雀）；
-   - 若对话框含连接器名称/描述等字段 → 直接填写（如文件、OSS、钉钉）；
-   - 若弹出独立授权窗口 → 直接登录授权（如云效、腾讯文档）。
-3. **创建连接器**：按向导完成凭证填写或授权（OAuth 2.0、API Key、MCP 地址等），确认后连接即生效。
-4. **配置 MCP 客户端**：在 Qoder 等客户端中添加 MCP 服务器，URL 格式为 `https://${workspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/connector/mcp`，并注入 `Authorization: Bearer ${DASHSCOPE_API_KEY}`。
-5. **调用工具**：客户端自动同步工具列表，智能体根据自然语言请求自主选择并调用对应工具。
+1. **前置准备**：开通百炼服务、创建业务空间、获取 `workspaceId` 和 `DASHSCOPE_API_KEY`；
+2. **判断连接模式**：单击 Apps 卡片 → 若连接对话框仅含“选择身份验证配置”下拉框，则需先建配置（如 Salesforce、语雀、MaxCompute）；否则直接填写凭证（如文件、OSS、数据库）；
+3. **创建连接**：
+   - 需配置类目的 App（文件、表格）：先建类目，再导入数据；
+   - OAuth 类 App（云效、腾讯文档）：新开窗口授权；
+   - 钉钉/邮箱类 App：粘贴含密钥的完整 MCP 地址或授权码；
+4. **MCP 客户端接入**：在 Qoder 等客户端中配置 MCP Server，替换 `workspaceId` 和 `API_KEY`；
+5. **调用验证**：自然语言提问（如“找计费相关文件”），客户端自动路由至对应工具。
 
 ## 限制和注意事项
 
-- **配额限制**：平台托管存储（文件/表格连接器）上限为 **200,000 个文件 + 1 TB**，且仅支持查看最近 90 天内导入的文件；类目数上限 500 个/业务空间（见[配额与限制](../../raw/application-user-guide/overview/reference-overview/limits.md)）。
-- **格式限制**：JSON、CSV、YAML 文件**不支持直接导入**，需先转换为 XLSX/XLS 再通过表格连接器处理（见[文件连接器](../../raw/application-user-guide/overview/apps-guide/file.md) 和 [常见问题](../../raw/application-user-guide/overview/reference-overview/faq.md)）。
-- **凭证安全**：API Key、授权码、MCP 接入地址（含 `key=` 参数）均为敏感凭证，严禁明文提交至代码仓库或聊天工具；推荐使用环境变量注入客户端配置（见[快速开始](../../raw/application-user-guide/overview/quickstart.md)）。
-- **连接器不可变性**：连接器类型（如文件→OSS）创建后不可修改，只能新建；删除连接器不可恢复，且会立即中断依赖它的智能体与工作流（见[连接的账户](../../raw/application-user-guide/overview/auth-guide/connected-accounts.md)）。
-- **旧版迁移截止**：一键迁移旧版数据连接的入口将于 **2026 年 9 月 30 日关闭**，逾期需手动重建（见[数据连接迁移](../../raw/application-user-guide/overview/reference-overview/migration.md)）。
+- **配额限制**：平台托管存储限 200,000 文件 + 1 TB，类目上限 500 个，单文件标签 ≤100 个且总长 ≤700 字符；文件仅可查看最近 90 天内导入的记录（见[配额与限制](../../raw/application-user-guide/overview/reference-overview/limits.md)）；
+- **格式限制**：JSON/CSV/YAML 不支持直接导入，须转为 XLSX/XLS 后通过表格连接器处理；
+- **安全要求**：
+  - API Key、授权码、MCP 地址中的 `key` 参数均为敏感凭证，禁止明文提交至代码仓库或聊天工具；
+  - OSS Bucket 必须打标签 `bailian-datahub-access=read` 才可被识别；
+- **迁移截止**：旧版数据连接一键迁移入口将于 **2026 年 9 月 30 日关闭**，逾期需手动重建（见[数据连接迁移](../../raw/application-user-guide/overview/reference-overview/migration.md)）；
+- **状态管理**：连接状态为“已过期”时，需更新身份验证配置凭证并重建连接，删除连接不会影响其复用的身份验证配置。
 
 ## 来源文档
 
@@ -54,22 +53,22 @@ Connector 本身不提供大模型推理能力，而是作为**工具编排与�
 - [API Key 配置](../../raw/application-user-guide/overview/auth-guide/api-key.md)
 - [连接 Apps](../../raw/application-user-guide/overview/apps-guide.md)
 - [连接的账户](../../raw/application-user-guide/overview/auth-guide/connected-accounts.md)
-- [Apps 目录](../../raw/application-user-guide/overview/apps-guide/apps-overview.md)
 - [文件连接器](../../raw/application-user-guide/overview/apps-guide/file.md)
-- [表格连接器](../../raw/application-user-guide/overview/apps-guide/table.md)
+- [Apps 目录](../../raw/application-user-guide/overview/apps-guide/apps-overview.md)
 - [语雀](../../raw/application-user-guide/overview/apps-guide/yuque.md)
+- [表格连接器](../../raw/application-user-guide/overview/apps-guide/table.md)
+- [钉钉系列](../../raw/application-user-guide/overview/apps-guide/dingtalk.md)
+- [QQ邮箱](../../raw/application-user-guide/overview/apps-guide/qq-mail.md)
 - [网易邮箱](../../raw/application-user-guide/overview/apps-guide/netease-mail.md)
 - [云效](../../raw/application-user-guide/overview/apps-guide/yunxiao.md)
 - [腾讯文档](../../raw/application-user-guide/overview/apps-guide/tencent-docs.md)
-- [OSS](../../raw/application-user-guide/overview/apps-guide/oss.md)
-- [数据库](../../raw/application-user-guide/overview/apps-guide/database.md)
-- [MaxCompute](../../raw/application-user-guide/overview/apps-guide/maxcompute.md)
-- [参考](../../raw/application-user-guide/overview/reference-overview.md)
-- [配额与限制](../../raw/application-user-guide/overview/reference-overview/limits.md)
-- [数据连接迁移](../../raw/application-user-guide/overview/reference-overview/migration.md)
-- [常见问题](../../raw/application-user-guide/overview/reference-overview/faq.md)
 - [Salesforce on Alibaba Cloud](../../raw/application-user-guide/overview/apps-guide/salesforce.md)
-- [钉钉系列](../../raw/application-user-guide/overview/apps-guide/dingtalk.md)
-- [QQ邮箱](../../raw/application-user-guide/overview/apps-guide/qq-mail.md)
+- [OSS](../../raw/application-user-guide/overview/apps-guide/oss.md)
+- [MaxCompute](../../raw/application-user-guide/overview/apps-guide/maxcompute.md)
+- [数据库](../../raw/application-user-guide/overview/apps-guide/database.md)
+- [数据连接迁移](../../raw/application-user-guide/overview/reference-overview/migration.md)
+- [配额与限制](../../raw/application-user-guide/overview/reference-overview/limits.md)
+- [参考](../../raw/application-user-guide/overview/reference-overview.md)
+- [常见问题](../../raw/application-user-guide/overview/reference-overview/faq.md)
 
 

@@ -1,62 +1,61 @@
 # model deployment index
 
-百炼平台提供多种模型部署方式，以满足不同场景下的性能、成本与灵活性需求。本文档系统梳理了预置吞吐（PTU）、独占算力（DTU/MU）、[Token](../concepts/token.md)按量及智能路由四类核心部署模式，涵盖支持能力、关键参数、使用方式及约束限制，为开发者提供统一、准确的选型与实施参考。
+百炼平台提供多种模型部署方式，以满足不同场景下的性能、成本与灵活性需求。本文档系统梳理专属部署的核心能力，涵盖支持的模型类型、关键配置参数、标准化使用流程，以及各方案的适用边界与约束条件，帮助开发者快速选型并落地生产服务。
 
 ## 支持的模型/功能
 
-百炼当前支持四类主流部署模式，覆盖基础模型、微调模型及自定义模型：
+百炼支持三类主流部署模式：**PTU（预置吞吐）**、**DTU/MU（独占算力）** 和 **Token 按量**，每种模式支持的模型范围不同：
 
-- **预置吞吐（PTU）**：面向高吞吐、低延迟生产环境，支持千问（Qwen）、DeepSeek、GLM、千问VL等系列模型，具备长输入阶梯容量系数与前缀缓存折扣能力，详见[PTU 预置吞吐部署](../../raw/model-user-guide/model-deployment-index/ptu-long-input-and-cache.md)。
-- **独占算力（DTU/MU）**：提供物理资源隔离，DTU 按输入/输出 TPM 计费，MU 按模型单元数量计费；支持全参与 LoRA 微调模型，以及部分视觉语言模型（如千问VL系列），详见[DTU 独占算力部署](../../raw/model-user-guide/model-deployment-index/dtu-model-deployment.md)。
-- **[Token](../concepts/token.md) 按量部署**：仅支持 LoRA 微调模型，按实际 [Token](../concepts/token.md) 输入/输出用量计费，适用于效果验证与低成本轻量场景，不支持自助扩缩容，详见[Token 按量部署](../../raw/model-user-guide/model-deployment-index/model-deployment-token.md)。
-- **智能路由**：动态匹配请求内容至最优备选模型，仅支持 [OpenAI 兼容接口](../concepts/openai-compatible-interface.md)与文本 Chat Completions 调用，当前版本 `model-router-2026-0908` 支持 `qwen3.8-max`、`deepseek-v4-flash-0731`、`glm-5.2` 等 9 款模型，详见[智能路由](../../raw/model-user-guide/model-deployment-index/model-routing.md)。
+- **PTU 部署**：主要面向千问（Qwen）、DeepSeek、GLM、千问VL 等预置大模型，支持长输入（最高 1M token）与前缀缓存优化，适用于高并发、低延迟的稳定流量场景 [PTU 预置吞吐部署](../../raw/model-user-guide/model-deployment-index/ptu-long-input-and-cache.md)。
+- **DTU/MU 部署**：覆盖更广的模型谱系，包括千问全系列（3.8-Max、3.7-Plus、3.5-397B-A17B 等）、GLM-5.x、DeepSeek-v4、千问VL 多模态模型及 Omni、CosyVoice 语音模型；同时支持 LoRA 微调模型与用户从 OSS 导入的自定义模型 [DTU 独占算力部署](../../raw/model-user-guide/model-deployment-index/dtu-model-deployment.md)。
+- **Token 按量部署**：**仅限 LoRA 微调模型**，不支持基础模型或全参微调模型，适用于效果验证与低成本轻量级调用 [Token 按量部署](../../raw/model-user-guide/model-deployment-index/model-deployment-token.md)。
 
-> **注意**：文档 1 中列出的 `qwen3.7-flash-2026-07-15` 在“新加坡”区域价格表中标注“联系商务经理开通”，而文档 2 的部署概述中未提及该模型的开通限制；实际部署前请以控制台实时可选模型为准，避免依赖文档静态描述。
+此外，**智能路由**作为高级调度能力，支持基于内容动态匹配备选模型集（如 `qwen3.8-max`、`deepseek-v4-flash-0731`、`glm-5.2` 等），但仅限文本 Chat Completions 接口且必须使用 `maas.aliyuncs.com` 域名 [智能路由](../../raw/model-user-guide/model-deployment-index/model-routing.md)。
+
+> **注意**：文档 7 与文档 8 均明确指出“当前版本支持导入 LoRA 模型，**不支持导入全参微调模型**”，而文档 7 中“支持的模型”表格下方又标注“导入全参微调后的模型属于白名单功能，如需开通请联系客户经理”。该表述存在矛盾——实际生产环境应以文档 8 的明确限制为准：**全参微调模型暂不可通过 OSS 导入**，白名单属例外通道，非标准能力。
 
 ## 关键参数
 
-各部署模式的关键配置参数如下：
+不同部署模式的关键配置参数差异显著，开发者需按需设置：
 
-| 部署类型 | 必填参数 | 说明 |
-|----------|----------|------|
-| **PTU** | `plan: "ptu"` + `ptu_capacity: {input_tpm, output_tpm}` | `input_tpm`/`output_tpm` 单位为 KTPM，需结合预置吞吐额度计算器评估长输入与缓存命中率后设定，详见[PTU 预置吞吐部署](../../raw/model-user-guide/model-deployment-index/ptu-long-input-and-cache.md)。 |
-| **DTU** | `plan: "dtu"` + `input_tpm`, `output_tpm`（整数倍基准值） | 基准 TPM 因模型而异（如 `qwen3.7-plus-2026-05-26` 基准输入为 1,372,000 TPM），购买值必须为基准的整数倍。 |
-| **MU** | `plan: "mu"` + `deploy_spec`（如 `"MU1"`）+ `capacity` | `capacity` 表示副本数，总算力 = `capacity × deploy_spec`；部分模型支持 `enable_thinking`、`max_context_length` 等推理参数。 |
-| **Token 按量** | `plan: "lora"` + `capacity`（必填但无效） | `capacity` 字段必须提供（如设为 `1`），实际扩容需人工审核，不支持 API 自助调整。 |
-| **智能路由** | `model: "auto-model-xxxxxxx"`（固定前缀） | 无显式容量参数；路由策略（`EFFECT_FIRST`/`COST_FIRST`）与备选模型集在控制台创建时配置，API 调用无需变更。 |
+| 参数类别 | PTU 模式 | DTU/MU 模式 | Token 按量模式 |
+|----------|-----------|--------------|------------------|
+| **核心计量单位** | 输入/输出 TPM（每分钟 Token 数） | DTU：输入/输出 TPM；MU：模型单元（MU）数量 | 输入/输出 Token 数 |
+| **必填容量参数** | `input_tpm`, `output_tpm`（整数倍基准值） | DTU：`input_tpm`, `output_tpm`；MU：`deploy_spec`, `capacity`（副本数） | `capacity`（必须填写，但实际无效） |
+| **推理控制** | 不可调（平台预置） | 可配置 `enable_thinking`, `max_context_length`, `rpm_limit`, `tpm_limit` | 不可调（平台预置） |
+| **缓存支持** | 支持长输入阶梯系数与前缀缓存折扣（如 `glm-5.1` 缓存命中部分按 20% 折算） | MU 模式支持 PD 分离计算模式以降低首 Token 延迟 | 不支持显式缓存，仅依赖底层模型隐式缓存 |
+
+所有模式均需指定 `model_name`（模型代码）与 `name`（服务名称）。API 部署时，`plan` 字段必须为 `ptu` / `mu` / `lora` 之一，详见 [API 部署指南](../../raw/model-user-guide/model-deployment-index/model-deployment-quick-start.md)。
 
 ## 使用方式
 
-- **控制台部署**：登录[百炼专属部署控制台](https://bailian.console.aliyun.com/cn-beijing/model/deploy)，选择「部署新模型」→ 指定部署模式 → 填写参数 → 确认。PTU、DTU、智能路由均支持控制台全流程操作；Token 按量部署仅支持 LoRA 模型，且扩容需提交工单。
-- **API 部署**：通过 `POST /api/v1/deployments` 接口创建，需在请求体中明确 `plan` 字段（`"ptu"`/`"mu"`/`"lora"`）。DTU 部署暂不支持 API 创建，详见[API 部署指南](../../raw/model-user-guide/model-deployment-index/model-deployment-quick-start.md)。
-- **模型来源**：除平台预置模型外，LoRA 微调模型可通过[我的模型](../../raw/model-user-guide/model-deployment-index/my-model-center.md)导入 OSS 后部署；全参微调模型需联系客户经理白名单开通。
-- **调用方式**：所有部署服务均通过 `model_code`（如 `qwen3.8-max-abc123` 或 `auto-model-abcd1234`）调用；智能路由仅支持 `maas.aliyuncs.com` 域名与 [OpenAI 兼容接口](../concepts/openai-compatible-interface.md)，不支持 DashScope 协议。
+部署可通过控制台或 API 两种方式完成，推荐优先使用控制台进行首次配置与调试：
+
+1. **控制台流程**：登录[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/deploy) → **模型推理 > 专属部署** → **部署新模型** → 选择部署模式（PTU/DTU/MU/Token/智能路由）→ 填写服务名称、模型、计费方式及对应容量参数 → 确认创建。
+2. **API 流程**：调用 `/api/v1/deployments` 接口，按 `plan` 类型提交结构化 JSON：
+   - PTU：传入 `"plan": "ptu"`, `"ptu_capacity": {"input_tpm": 10000, "output_tpm": 1000}`
+   - MU：传入 `"plan": "mu"`, `"deploy_spec": "MU1"`, `"capacity": 4`
+   - Token：传入 `"plan": "lora"`，`"capacity"` 任意值（如 `1`）[API 部署指南](../../raw/model-user-guide/model-deployment-index/model-deployment-quick-start.md)
+
+部署成功后，服务状态变为 `RUNNING`，其唯一标识 `deployed_model`（即模型 code）可用于后续推理调用。调用时需确保 API Key 所属业务空间已开通该模型的部署权限，否则将报错 `Workspace xxx does not have deployment privilege for model xxxx` [API 部署指南](../../raw/model-user-guide/model-deployment-index/model-deployment-quick-start.md)。
 
 ## 限制和注意事项
 
-- **计费不可变**：部署创建后计费方式不可更改，切换需先下线旧服务再新建，详见[专属部署概述](../../raw/model-user-guide/model-deployment-index/model-deployment-introduction.md)。
-- **地域与协议限制**：
-  - 智能路由仅支持北京（`cn-beijing`）与新加坡（`ap-southeast-1`）地域，且**仅限 [OpenAI 兼容接口](../concepts/openai-compatible-interface.md)**，不支持 DashScope 或 Anthropic 协议；
-  - PTU 部署的 API 响应中 `cached_tokens` 字段在 Anthropic 兼容格式下暂不返回，需通过 `provisioned_tokens` 间接判断缓存效果。
-- **模型兼容性**：
-  - Token 按量部署**仅支持 LoRA 模型**，不支持基础模型或全参微调模型；
-  - 导入 LoRA 模型须满足严格约束：`rank` 仅限 8/16/32/64；词汇表与 `chat_template` 必须与基座模型完全一致；视觉模型必须冻结 VIT（禁止 `visual.*` 参数），详见[模型导入](../../raw/model-user-guide/model-deployment-index/model-import.md)。
-- **扩缩容差异**：
-  - PTU 与 DTU 支持自助扩缩容（含自动伸缩策略）；
-  - MU 支持自助增减副本数；
-  - Token 按量部署扩容需人工审核，不支持 API 调整；
-  - 智能路由不提供容量参数，其吞吐能力由备选模型的实际限流（RPM/TPM）决定。
-- **缓存行为**：PTU 的前缀缓存折扣与长输入阶梯系数直接影响额度消耗，但智能路由因请求可能被分发至不同模型，**不保障缓存命中率**，仅依赖各备选模型自身的隐式缓存机制。
+- **计费不可变**：所有部署方式在创建后**无法更改计费模式**，切换必须先下线旧服务再新建 [专属部署概述](../../raw/model-user-guide/model-deployment-index/model-deployment-introduction.md)。
+- **模型权限隔离**：调优后的模型仅能被其所在业务空间的 API Key 调用，且目前**不支持 [OpenAI 兼容接口](../concepts/openai-compatibility.md)调用**，仅限 DashScope SDK 或原生协议 [我的模型](../../raw/model-user-guide/model-deployment-index/my-model-center.md)。
+- **OSS 导入强约束**：LoRA 模型导入要求严格——必需文件（`adapter_model.safetensors`, `adapter_config.json`, `config.json`）、rank 值（8/16/32/64）、词汇表与 chat_template 必须与基础模型完全一致；视觉模型必须冻结 VIT [模型导入](../../raw/model-user-guide/model-deployment-index/model-import.md)。
+- **智能路由限制**：仅支持 OpenAI Chat Completions 协议、`maas.aliyuncs.com` 域名、文本输入；不支持 `logprobs`, `top_p`, `temperature` 等采样参数；上下文上限取备选集中最小窗口值 [智能路由](../../raw/model-user-guide/model-deployment-index/model-routing.md)。
+- **自动释放策略**：Token 按量部署若**连续一个月未使用将自动释放**，而 PTU/DTU/MU 无此策略，需手动下线或删除以停止计费 [Token 按量部署](../../raw/model-user-guide/model-deployment-index/model-deployment-token.md)。
 
 ## 来源文档
 
-- [PTU 预置吞吐部署](../../raw/model-user-guide/model-deployment-index/ptu-long-input-and-cache.md)
 - [专属部署概述](../../raw/model-user-guide/model-deployment-index/model-deployment-introduction.md)
-- [Token 按量部署](../../raw/model-user-guide/model-deployment-index/model-deployment-token.md)
+- [PTU 预置吞吐部署](../../raw/model-user-guide/model-deployment-index/ptu-long-input-and-cache.md)
 - [DTU 独占算力部署](../../raw/model-user-guide/model-deployment-index/dtu-model-deployment.md)
+- [Token 按量部署](../../raw/model-user-guide/model-deployment-index/model-deployment-token.md)
 - [API 部署指南](../../raw/model-user-guide/model-deployment-index/model-deployment-quick-start.md)
-- [我的模型](../../raw/model-user-guide/model-deployment-index/my-model-center.md)
 - [智能路由](../../raw/model-user-guide/model-deployment-index/model-routing.md)
+- [我的模型](../../raw/model-user-guide/model-deployment-index/my-model-center.md)
 - [模型导入](../../raw/model-user-guide/model-deployment-index/model-import.md)
 
 

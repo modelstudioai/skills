@@ -432,7 +432,7 @@ temperature默认值
 
 -   qwen3.8-max/qwen3.8-flash（思考模式）：视觉理解0.6，文本输入1.0，0.6以下的temperature值会默认改为0.6
 -   Qwen3.8-Omni-Flash：思考模式为 0.6，非思考模式为 0.7；
--   Qwen3.8（非思考模式）、Qwen3.7（非思考模式）、Qwen3.6（非思考模式）、Qwen3.5-Omni、Qwen3.5（非思考模式）、Qwen3（非思考模式）、Qwen3-Instruct系列、Qwen3-Coder系列、qwen-max系列、qwen-plus系列（非思考模式）、qwen-flash系列（非思考模式）、qwen-turbo系列（非思考模式）、qwen开源系列、qwen-coder系列、qwen-doc-turbo、Qwen3-VL（非思考）：0.7；
+-   Qwen3.8（非思考模式）、Qwen3.7（非思考模式）、Qwen3.6（非思考模式）、Qwen3.5-Omni、Qwen3.5（非思考模式）、Qwen3（非思考模式）、Qwen3-Instruct系列、Qwen3-Coder系列、qwen-max系列、qwen-plus系列（非思考模式）、qwen-flash系列（非思考模式）、qwen开源系列、qwen-coder系列、qwen-doc-turbo、Qwen3-VL（非思考）：0.7；
 -   QVQ系列 : 0.5；
 -   qwen-audio-turbo系列：0.00001；
 -   qwen-vl系列：0.01；
@@ -467,7 +467,7 @@ temperature与top\_p均可以控制生成文本的多样性，建议只设置其
 
 top\_p默认值
 
-非思考模式下的以下型号（`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`）、Qwen3.7（非思考模式）、Qwen3.6（非思考模式）、Qwen3.5-Omni、Qwen3.5（非思考模式）、Qwen3（非思考模式）、Qwen3-Instruct系列、Qwen3-Coder系列、qwen-max系列、qwen-plus系列（非思考模式）、qwen-flash系列（非思考模式）、qwen-turbo系列（非思考模式）、Qwen 2.5开源系列、qwen-coder系列、qwen-long、qwen-doc-turbo、Qwen3-VL（非思考）：0.8；
+非思考模式下的以下型号（`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`）、Qwen3.7（非思考模式）、Qwen3.6（非思考模式）、Qwen3.5-Omni、Qwen3.5（非思考模式）、Qwen3（非思考模式）、Qwen3-Instruct系列、Qwen3-Coder系列、qwen-max系列、qwen-plus系列（非思考模式）、qwen-flash系列（非思考模式）、Qwen 2.5开源系列、qwen-coder系列、qwen-long、qwen-doc-turbo、Qwen3-VL（非思考）：0.8；
 
 Qwen3.8-Omni-Flash：思考模式为 0.95，非思考模式为 0.8；
 
@@ -885,9 +885,7 @@ seed默认值
 支持的模型
 
 -   qwen-plus系列的快照模型（不包含稳定版模型）
--   qwen-turbo 系列的快照模型（不包含稳定版模型）
 -   qwen3-vl-plus系列模型（包含稳定版模型）
--   qwen3-vl-flash系列模型（包含稳定版模型）
 -   Qwen3 开源模型
 
 **top\_logprobs** `integer` （可选）默认值为0

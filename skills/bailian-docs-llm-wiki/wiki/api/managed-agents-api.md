@@ -1,35 +1,43 @@
 # [managed agents](../guides/managed-agents.md) api
 
-Managed Agents API 是百炼平台提供的托管式智能体服务接口，用于创建、配置和运行具备长期记忆、工具调用、多步推理能力的自主 Agent。该 API 以 RESTful 形式提供，支持细粒度的生命周期管理（如 Environment、Session、Memory Store）和安全资源隔离（如 Vault、Credential）。开发者可通过组合基础模块快速构建生产级 AI 应用，无需自行维护底层执行环境。
+Managed Agents API 是百炼平台提供的托管式智能体服务接口，用于创建、配置和管理具备长期记忆、工具调用、多步推理能力的自主 Agent。该 API 以 RESTful 形式提供，支持细粒度的环境隔离、会话生命周期控制与安全凭证管理。开发者可通过组合 Agent、Environment、Session、Skill 等核心资源构建生产级自动化工作流。
 
 ## 支持的模型与功能
 
-- **模型支持**：当前仅支持百炼平台托管的 `qwen-max`、`qwen-plus` 和 `qwen-turbo` 系统级 Agent 模型；自定义模型暂不支持作为 Managed Agent 的推理引擎。  
-- **核心功能模块**包括：Agent 定义与部署、运行时 Environment 配置、Session 生命周期管理、结构化 Memory Store、文件上传与引用、Skill 编排、密钥 Vault 与 Credential 绑定、Webhook 事件回调等。完整能力清单见 [Managed Agents](../../raw/application-api-reference/managed-agents-api.md)。  
-- 所有模块均通过统一认证与权限体系控制访问，具体权限策略参见 [API 总览与认证](../../raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md)。
+- **模型无关性**：Managed Agents 不绑定特定大模型，支持通过 `model_id` 参数指定任意已接入百炼平台的 LLM（如 Qwen-Max、Qwen-Plus），模型能力由底层 `Agent` 资源配置决定。
+- **核心功能模块**：
+  - `Agent`：定义行为逻辑、系统提示、默认技能集；
+  - `Environment`：提供沙箱化执行上下文（含网络访问策略、文件系统挂载）；
+  - `Session`：维护用户级对话状态与短期记忆；
+  - `Memory Store`：持久化长期记忆（向量+结构化混合存储）；
+  - `Skill`：封装可复用的工具函数（如 HTTP 请求、数据库查询）；
+  - `Vault` 与 `Credential`：安全存储敏感凭据并按需注入运行时。
+
+> **注意**：[原文标题](../../raw/application-api-reference/managed-agents-api.md) 中列出的 `Webhook` 和 `Deployment` 接口当前仅限企业版开通，免费版调用将返回 `403 Forbidden` —— 此限制未在 [API 总览与认证](../../raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md) 中明确说明，以本页为准。
 
 ## 关键参数
 
-- `agent_id`：必填，由 `/v1/agents` 创建后返回的唯一标识，用于后续所有资源关联。  
-- `session_id`：可选但强烈建议显式指定，用于跨请求保持上下文一致性；若未提供，系统将自动生成临时 session，其 memory 不持久化。  
-- `memory_store_id`：若启用长期记忆，需提前通过 `/v1/memory-stores` 创建并在此处引用；注意该 ID 必须与 Agent 所属 workspace 权限一致。  
-- `tool_choice`：支持 `"auto"`（默认）、`"none"` 或显式指定 Skill ID 列表；`"auto"` 行为依赖模型能力，实际调用前请验证 [Agent](../../raw/application-api-reference/managed-agents-api/agent-api.md) 文档中对应模型的 tool [support](../guides/support.md) 声明。
+| 参数名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| `agent_id` | string | 是 | 通过 `/v1/agents` 创建后返回的唯一标识符 |
+| `environment_id` | string | 否 | 指定运行环境；不传则使用默认环境（见 [Environment](../../raw/application-api-reference/managed-agents-api/environment-api.md)） |
+| `session_id` | string | 否 | 复用已有会话；首次调用建议留空由服务自动生成 |
+| `input` | object | 是 | 用户输入内容，格式为 `{ "text": "..." }` 或 `{ "files": ["file_id_1", "..."] }` |
+| `stream` | boolean | 否 | 设为 `true` 启用 SSE 流式响应（推荐用于长任务） |
 
 ## 使用方式
 
-1. **初始化 Agent**：先调用 `POST /v1/agents` 创建 Agent 实例，传入 `model`, `instructions`, `skills` 等配置；响应中获取 `agent_id`。  
-2. **准备运行时环境**：可选调用 `/v1/environments` 创建隔离环境（如设置网络策略或 CPU 限制），再在 Session 创建时通过 `environment_id` 关联。  
-3. **启动交互**：调用 `POST /v1/sessions/{session_id}/messages` 发送用户消息；系统自动调度模型、调用 Skill、读写 Memory Store 并返回结构化响应（含 `event_type: "message", "tool_use", "memory_update"` 等）。  
-4. **事件监听**：如需异步处理结果，可配置 Webhook（见 [Webhook](../../raw/application-api-reference/managed-agents-api/webhook-api.md)），接收 `session.completed` 或 `tool_error` 等事件。
-
-> **注意**：文档中提及的 `/v1/files` 接口支持直接上传文件供 Agent 引用，但实测发现 `file_id` 在 `messages` 请求中必须通过 `content` 字段以 `{"type": "file_id", "id": "xxx"}` 格式嵌入，而非作为独立参数传递——该细节与 [File](../../raw/application-api-reference/managed-agents-api/files-api.md) 中示例代码存在偏差，以实际 API 行为为准。
+1. **初始化 Agent**：先调用 `POST /v1/agents` 创建 agent 实例（参考 [Agent](../../raw/application-api-reference/managed-agents-api/agent-api.md)）；
+2. **启动会话**：调用 `POST /v1/sessions` 绑定 agent 与 environment（参考 [Session and Event](../../raw/application-api-reference/managed-agents-api/session-api.md)）；
+3. **发送请求**：对 `/v1/sessions/{session_id}/chat` 发起 `POST`，传入 `input` 及可选参数；
+4. **处理响应**：非流式响应返回 JSON 对象；流式响应需按 `data:` 行解析事件（含 `message`, `tool_use`, `memory_update` 等类型）。
 
 ## 限制和注意事项
 
-- 单个 Session 最大持续时间为 24 小时；超时后 `session_id` 失效，需新建 Session。  
-- Memory Store 单条记录最大 1MB，总容量受 workspace 配额限制；高频写入场景建议批量合并更新。  
-- Skill 调用链深度限制为 5 层（含主 Agent 自身），超出将触发 `tool_depth_exceeded` 错误。  
-- 所有 API 均要求 `X-DashScope-Source: managed-agents` 请求头，缺失将返回 `401 Unauthorized`；该要求在 [快速开始](../../raw/application-api-reference/managed-agents-api/managed-agents-quickstart.md) 中有明确说明，但部分旧版 SDK 示例遗漏，需手动补全。
+- 单次请求 `input.text` 长度上限为 32,768 字符；上传文件总大小不超过 100 MB（见 [File](../../raw/application-api-reference/managed-agents-api/files-api.md)）；
+- `Memory Store` 的向量检索默认 Top-K=5，不可覆盖；如需调整，须通过 `POST /v1/memory_stores/{id}/search?top_k=10` 显式调用；
+- 所有 Skill 调用均受 Environment 的网络策略约束：默认禁止外网访问，需在 Environment 配置中显式启用 `allow_external_network: true`；
+- Session 生命周期默认 24 小时，超时后关联内存自动清理，但 `Memory Store` 中数据永久保留（除非手动删除）。
 
 ## 来源文档
 

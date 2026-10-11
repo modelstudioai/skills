@@ -67,7 +67,7 @@
 
 **voice**`string`（可选）
 
-生成音频的音色。未启用声音复刻时，可设置为系统预设音色，可选值参见[支持的音色](https://help.aliyun.com/zh/model-studio/qwen3-5-livetranslate-flash-realtime#0a5bde7593gdk)。`qwen3.8-livetranslate-flash-realtime` 和 `qwen3.5-livetranslate-flash-realtime` 的默认音色为 `Tina`；`qwen3-livetranslate-flash-realtime` 的默认音色为 `Cherry`。
+生成音频的音色。未启用声音复刻时，可设置为系统预设音色，可选值参见[支持的音色](https://help.aliyun.com/zh/model-studio/qwen3-5-livetranslate-flash-realtime#0a5bde7593gdk)。`qwen3.8-livetranslate-flash-realtime` 和 `qwen3.5-livetranslate-flash-realtime` 的默认音色为 `Tina`。
 
 > 启用声音复刻（`enable_voice_clone`为`true`）时，`voice`的取值取决于`voice_clone_options.frequency`：当`frequency`为`once`或`always`时，必须设置为`default`；当`frequency`为`never`时，设置为用户预先复刻的音色 ID。此时不可设置为系统预设音色，否则服务端会返回错误。
 

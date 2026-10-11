@@ -86,7 +86,7 @@ if __name__  == '__main__':
     callback = MyCallback()
 
     qwen_tts_realtime = QwenTtsRealtime(
-        # 如需使用指令控制功能，请将model替换为qwen3-tts-instruct-flash-realtime
+        # 如需使用指令控制功能，请将model替换为qwen3.5-omni-plus-realtime
         model='qwen3-tts-flash-realtime',
         callback=callback,
         # 以下为华北2（北京）地域的配置。
@@ -97,7 +97,7 @@ if __name__  == '__main__':
     qwen_tts_realtime.update_session(
         voice = 'Cherry',
         response_format = AudioFormat.PCM_24000HZ_MONO_16BIT,
-        # 如需使用指令控制功能，请取消下方注释，并将model替换为qwen3-tts-instruct-flash-realtime
+        # 如需使用指令控制功能，请取消下方注释，并将model替换为qwen3.5-omni-plus-realtime
         # instructions='语速较快，带有明显的上扬语调，适合介绍时尚产品。',
         # optimize_instructions=True,
         mode = 'server_commit'
@@ -194,7 +194,7 @@ if __name__  == '__main__':
     callback = MyCallback()
 
     qwen_tts_realtime = QwenTtsRealtime(
-        # 如需使用指令控制功能，请将model替换为qwen3-tts-instruct-flash-realtime
+        # 如需使用指令控制功能，请将model替换为qwen3.5-omni-plus-realtime
         model='qwen3-tts-flash-realtime',
         callback=callback,
         # 以下为华北2（北京）地域的配置。
@@ -205,7 +205,7 @@ if __name__  == '__main__':
     qwen_tts_realtime.update_session(
         voice = 'Cherry',
         response_format = AudioFormat.PCM_24000HZ_MONO_16BIT,
-        # 如需使用指令控制功能，请取消下方注释，并将model替换为qwen3-tts-instruct-flash-realtime
+        # 如需使用指令控制功能，请取消下方注释，并将model替换为qwen3.5-omni-plus-realtime
         # instructions='语速较快，带有明显的上扬语调，适合介绍时尚产品。',
         # optimize_instructions=True,
         mode = 'commit'

@@ -122,7 +122,7 @@ RAG应用能够根据用户提供的文档生成回复，有效缓解大模型�
 
 -   **模型选择**
     
-    您可以选择qwen-max、qwen-plus或qwen-turbo三个通义千问商业模型。一般来说，qwen-max性能优秀，qwen-turbo生成速度较快，价格较低，qwen-plus效果、速度、成本均衡，介于qwen-max和qwen-turbo之间。
+    您可以选择qwen-max、qwen-plus或qwen3.5-flash三个通义千问商业模型。一般来说，qwen-max性能优秀，qwen3.5-flash生成速度较快，价格较低，qwen-plus效果、速度、成本均衡，介于qwen-max和qwen3.5-flash之间。
     
 -   **温度参数**
     

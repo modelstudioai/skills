@@ -819,7 +819,7 @@ GUI任务的结果。
 
 **content** `string`
 
-翻译结果，qwen-mt-flash为增量式更新，qwen-mt-plus和qwen-mt-turbo为非增量式更新。
+翻译结果，qwen-mt-flash为增量式更新，qwen-mt-plus为非增量式更新。
 
 **function\_call** `object`
 
