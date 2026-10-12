@@ -78,6 +78,32 @@
               "currency": "CNY"
             }
           ]
+        },
+        {
+          "supportedApi": "Anthropic API",
+          "name": "web_search",
+          "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/web-search",
+          "type": "web_search_anthropic",
+          "prices": [
+            {
+              "priceUnit": "千次调用",
+              "price": "4",
+              "currency": "CNY"
+            }
+          ]
+        },
+        {
+          "supportedApi": "Anthropic API",
+          "name": "web_fetch",
+          "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/web-extractor",
+          "type": "web_fetch",
+          "prices": [
+            {
+              "priceUnit": "",
+              "price": "0",
+              "currency": "CNY"
+            }
+          ]
         }
       ],
       "description": "Qwen3.5系列397B-A17B原生视觉语言模型，基于混合架构设计，融合了线性注意力机制与稀疏混合专家模型，实现了更高的推理效率。在语言理解、逻辑推理、代码生成、智能体任务、图像理解、视频理解、图形用户界面（GUI）等多种任务中，均展现出与当前顶尖前沿模型相媲美的卓越性能。具备强大的代码生成与智能体能力，对于各类智能体场景具有良好的泛化性。",
@@ -276,6 +302,32 @@
               "currency": "CNY"
             }
           ]
+        },
+        {
+          "supportedApi": "Anthropic API",
+          "name": "web_search",
+          "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/web-search",
+          "type": "web_search_anthropic",
+          "prices": [
+            {
+              "priceUnit": "千次调用",
+              "price": "4",
+              "currency": "CNY"
+            }
+          ]
+        },
+        {
+          "supportedApi": "Anthropic API",
+          "name": "web_fetch",
+          "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/web-extractor",
+          "type": "web_fetch",
+          "prices": [
+            {
+              "priceUnit": "",
+              "price": "0",
+              "currency": "CNY"
+            }
+          ]
         }
       ],
       "description": "Qwen3.5系列35B-A3B原生视觉语言模型，基于混合架构设计，融合了线性注意力机制与稀疏混合专家模型，实现了更高的推理效率。该模型的综合表现接近于Qwen3.5-27B。",
@@ -470,6 +522,32 @@
             {
               "priceUnit": "千次调用",
               "price": "48",
+              "currency": "CNY"
+            }
+          ]
+        },
+        {
+          "supportedApi": "Anthropic API",
+          "name": "web_search",
+          "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/web-search",
+          "type": "web_search_anthropic",
+          "prices": [
+            {
+              "priceUnit": "千次调用",
+              "price": "4",
+              "currency": "CNY"
+            }
+          ]
+        },
+        {
+          "supportedApi": "Anthropic API",
+          "name": "web_fetch",
+          "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/web-extractor",
+          "type": "web_fetch",
+          "prices": [
+            {
+              "priceUnit": "",
+              "price": "0",
               "currency": "CNY"
             }
           ]
@@ -675,6 +753,32 @@
             {
               "priceUnit": "千次调用",
               "price": "48",
+              "currency": "CNY"
+            }
+          ]
+        },
+        {
+          "supportedApi": "Anthropic API",
+          "name": "web_search",
+          "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/web-search",
+          "type": "web_search_anthropic",
+          "prices": [
+            {
+              "priceUnit": "千次调用",
+              "price": "4",
+              "currency": "CNY"
+            }
+          ]
+        },
+        {
+          "supportedApi": "Anthropic API",
+          "name": "web_fetch",
+          "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/web-extractor",
+          "type": "web_fetch",
+          "prices": [
+            {
+              "priceUnit": "",
+              "price": "0",
               "currency": "CNY"
             }
           ]

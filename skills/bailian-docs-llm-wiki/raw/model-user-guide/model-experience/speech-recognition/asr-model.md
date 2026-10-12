@@ -16,7 +16,8 @@
 
 Deepgram Nova-3、Google Chirp 3
 
-`qwen-audio-3.1-asr-flash-streaming`
+输入法、语音消息：`qwen-audio-3.1-asr-flash-message`  
+持续转写：`qwen-audio-3.1-asr-flash-streaming`
 
 非实时 / 文件转写
 
@@ -34,8 +35,12 @@ OpenAI gpt-4o-transcribe、Whisper
 
 实时是指在用户说话的同时输出识别结果，非实时是指录音结束后再进行转写。
 
--   **实时（实时语音识别）**：基于WebSocket协议，音频流式输入，文本流式输出。适用于实时字幕、语音助手和会议转写。推荐使用 `qwen-audio-3.1-asr-flash-streaming`（热词、Prompt上下文、多语种及方言）。
+-   实时语音识别通过 WebSocket 流式输入音频。按使用场景选择：
+    
+    -   输入法、语音消息等短段语音输入：推荐 `qwen-audio-3.1-asr-flash-message`，首字和整体延迟较低，支持文本润色，并在一段语音结束后整理最终结果。
+    -   会议、课堂记录等持续转写场景：推荐 `qwen-audio-3.1-asr-flash-streaming`，适合边转写边阅读、对中间结果准确性要求较高的应用。
 -   **非实时（录音文件识别）**：基于HTTP协议，提交音频文件获取识别结果。适用于呼叫中心录音、播客和访谈等场景。推荐使用 `qwen-audio-3.1-asr-flash-filetrans`（热词、Prompt上下文、说话人分离）。
+    
 
 客户端接入如需稳定的延迟、弱网适应能力，以及实时双工的降噪与回声消除，可参考 [Realtime API 概述](https://help.aliyun.com/zh/model-studio/realtime-api-overview#rtov-s02h2)中的 AOQ 协议选型及支持范围。
 
@@ -47,8 +52,10 @@ OpenAI gpt-4o-transcribe、Whisper
 
 两种方式，按灵活性排序：
 
-1.  **Prompt上下文注入**：在系统提示词中描述您的领域背景，无需预配置。模型在每次请求时自适应。推荐使用 Qwen-Audio-3.1-ASR-Flash-Streaming、Qwen-Audio-3.1-ASR-Flash-Filetrans 和 Qwen-Audio-3.1-ASR-Flash 系列模型。
-2.  **热词**：提供带权重的词汇表。推荐使用 Qwen-Audio-3.1-ASR-Flash-Streaming、Qwen-Audio-3.1-ASR-Flash-Filetrans 和 Qwen-Audio-3.1-ASR-Flash 系列模型。
+1.  **Prompt上下文注入**：在系统提示词中描述您的领域背景，无需预配置。模型在每次请求时自适应。推荐使用 `qwen-audio-3.1-asr-flash-streaming`、`qwen-audio-3.1-asr-flash-filetrans` 和 `qwen-audio-3.1-asr-flash` 模型。
+2.  **热词**：提供带权重的词汇表。推荐使用 `qwen-audio-3.1-asr-flash-streaming`、`qwen-audio-3.1-asr-flash-filetrans` 和 `qwen-audio-3.1-asr-flash` 模型。
+
+`qwen-audio-3.1-asr-flash-message` 支持即时热词、预编译热词以及对话上下文增强。通过 `vocabulary` 或 `vocabulary_id` 配置热词；通过 `input.context` 传入前几轮用户转写与助手回复。参数定义请参见 [客户端事件](raw/_short/qwen-asr-message-client-events-0be34a3639cdd40b.md)。
 
 ### 说话人分离
 
@@ -77,6 +84,22 @@ Qwen-ASR 系列模型在转写的同时支持情感识别。推荐使用 `qwen3-
 **支持语言**
 
 **音频最大时长/大小**
+
+`qwen-audio-3.1-asr-flash-message`
+
+实时
+
+WebSocket
+
+热词、上下文
+
+不支持
+
+不支持
+
+多语种及方言
+
+—
 
 `qwen-audio-3.1-asr-flash-streaming`
 
@@ -111,6 +134,44 @@ HTTP
 12小时 / 2GB
 
 ## 所有模型
+
+### Qwen-Audio-ASR-Message
+
+**模型ID**
+
+**模式**
+
+**API**
+
+**精度增强**
+
+**情感识别**
+
+**说话人分离**
+
+**支持语言**
+
+**音频最大时长/大小**
+
+`qwen-audio-3.1-asr-flash-message`
+
+实时
+
+WebSocket
+
+热词、上下文
+
+不支持
+
+不支持
+
+多语种及方言
+
+—
+
+**支持的语言**：
+
+-   `qwen-audio-3.1-asr-flash-message`：中文（普通话、粤语、吴语、闽南语、客家话、赣语、湘语、晋语；并支持中原、西南、冀鲁、江淮、兰银、胶辽、东北、北京、港台等，包括河南、陕西、湖北、四川、重庆、云南、贵州、广东、广西、河北、天津、山东、安徽、南京、江苏、杭州、甘肃、宁夏等地区官话口音）、英语、日语、韩语、越南语、泰语、印尼语、马来语、菲律宾语、印地语、阿拉伯语、法语、德语、西班牙语、葡萄牙语、俄语、意大利语、荷兰语、瑞典语、丹麦语、芬兰语、挪威语、希腊语、波兰语、捷克语、匈牙利语、罗马尼亚语、保加利亚语、克罗地亚语、斯洛伐克语
 
 ### Qwen-Audio-ASR-Streaming
 
@@ -519,7 +580,17 @@ HTTP
 
 **大小/时长**
 
-**Qwen-Audio-3.x-ASR-Flash-Streaming**（`qwen-audio-3.1-asr-flash-streaming`、`qwen-audio-3.0-asr-flash-streaming` 系列）
+`qwen-audio-3.1-asr-flash-message`
+
+二进制（Binary）流
+
+`pcm`、`wav`、`mp3`、`opus`、`speex`、`aac`、`amr`
+
+16 kHz
+
+—
+
+`qwen-audio-3.1-asr-flash-streaming`、`qwen-audio-3.0-asr-flash-streaming`
 
 二进制（Binary）流
 
@@ -529,7 +600,7 @@ HTTP
 
 不限
 
-**Fun-ASR-Realtime**（`fun-asr-realtime` 系列）
+**Fun-ASR-Realtime系列**（`fun-asr-realtime`等）
 
 二进制（Binary）流
 
@@ -539,7 +610,7 @@ HTTP
 
 不限
 
-**Fun-ASR-Flash-8K-Realtime**（`fun-asr-flash-8k-realtime` 系列）
+**Fun-ASR-Flash-8K-Realtime系列**（`fun-asr-flash-8k-realtime`等）
 
 二进制（Binary）流
 
@@ -549,7 +620,7 @@ HTTP
 
 不限
 
-**Qwen-ASR-Realtime**（`qwen3-asr-flash-realtime` 系列）
+`qwen3-asr-flash-realtime`
 
 二进制（Binary）流
 
@@ -559,7 +630,7 @@ HTTP
 
 不限
 
-**Paraformer-Realtime**（`paraformer-realtime-v2`、`paraformer-realtime-8k-v2`）
+`paraformer-realtime-v2`、`paraformer-realtime-8k-v2`
 
 二进制（Binary）流
 
@@ -583,7 +654,7 @@ HTTP
 
 **文件大小/时长**
 
-**Qwen-Audio-3.x-ASR-Flash-Filetrans**（`qwen-audio-3.1-asr-flash-filetrans`、`qwen-audio-3.0-asr-flash-filetrans` 系列）
+`qwen-audio-3.1-asr-flash-filetrans`、`qwen-audio-3.0-asr-flash-filetrans`
 
 公网可访问的文件 URL，单次 1 个
 
@@ -593,7 +664,7 @@ HTTP
 
 ≤2 GB；≤12 小时（启用说话人分离建议 ≤2 小时）
 
-**Qwen-Audio-3.1-ASR-Flash**（`qwen-audio-3.1-asr-flash`）
+`qwen-audio-3.1-asr-flash`
 
 URL / Base64，单次 1 个
 
@@ -603,7 +674,7 @@ URL / Base64，单次 1 个
 
 ≤2 GB；≤5 分钟
 
-**Qwen-Audio-3.0-ASR-Flash**（`qwen-audio-3.0-asr-flash`）
+`qwen-audio-3.0-asr-flash`
 
 URL / Base64，单次 1 个
 
@@ -613,7 +684,7 @@ URL / Base64，单次 1 个
 
 ≤10 MB；≤5 分钟
 
-**Fun-ASR**（`fun-asr` 系列）
+`fun-asr`
 
 公网可访问的文件 URL，单次 1 个
 
@@ -623,7 +694,7 @@ URL / Base64，单次 1 个
 
 ≤2 GB；≤12 小时（启用说话人分离建议 ≤2 小时）
 
-**Fun-ASR-Flash**（`fun-asr-flash-2026-06-15`）
+`fun-asr-flash-2026-06-15`
 
 URL / Base64，单次 1 个
 
@@ -633,7 +704,7 @@ URL / Base64，单次 1 个
 
 ≤2 GB；≤5 分钟
 
-**Fun-ASR-Realtime**（`fun-asr-realtime`、`fun-asr-realtime-2026-02-28`）
+`fun-asr-realtime`、`fun-asr-realtime-2026-02-28`
 
 URL / Base64，单次 1 个
 
@@ -643,7 +714,7 @@ URL / Base64，单次 1 个
 
 ≤2 GB；≤5 分钟
 
-**Paraformer**（`paraformer-v2`、`paraformer-8k-v2`）
+`paraformer-v2`、`paraformer-8k-v2`
 
 同 Fun-ASR
 
@@ -653,7 +724,7 @@ URL / Base64，单次 1 个
 
 同 Fun-ASR
 
-**Qwen3-ASR-Flash-Filetrans**（`qwen3-asr-flash-filetrans` 系列）
+`qwen3-asr-flash-filetrans`
 
 公网可访问的文件 URL，单次 1 个
 
@@ -663,7 +734,7 @@ URL / Base64，单次 1 个
 
 ≤2 GB；≤12 小时
 
-**Qwen3-ASR-Flash**（`qwen3-asr-flash` 系列）
+`qwen3-asr-flash`
 
 URL / Base64 / 本地文件绝对路径，单次 1 个
 

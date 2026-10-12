@@ -63,7 +63,7 @@ CPT
 -   **日志回流**：从 SLS 推理日志自动提取训练数据，需授权服务关联角色，形成推理→数据→微调增强回路。
 -   **API 上传**：通过百炼 API 以编程方式上传数据文件，适合需要自动化集成的场景。详见[使用 API 或命令行进行模型调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/fine-tuning-api-guide.md)。
 
-日志回流仅支持最近 30 天内的日志，单次导入上限 10 万条，且需指定 API Key 和模型筛选条件。
+日志回流的完整限制（30 天范围、10 万条上限、API Key/模型筛选）与授权要求见[日志回流](raw/model-user-guide/model-data-overview/model-log-backflow.md)专篇。
 
 导入数据自动启用 OSS 服务端加密（SSE-OSS，AES256）。日志回流可用。完整受限项见数据集概述。
 
@@ -99,7 +99,7 @@ Bucket 标签 bailian-datahub-access=read
 
 支持
 
-**警告**日志回流需先授权服务关联角色，且仅支持最近 30 天内的日志，单次导入上限 10 万条。
+**警告**日志回流需先授权服务关联角色，完整限制与操作细节见[日志回流](raw/model-user-guide/model-data-overview/model-log-backflow.md)专篇。
 
 ## 数据准备
 

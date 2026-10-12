@@ -50,7 +50,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 ### 上下文窗口
 
-100万Token约相当于70万个汉字或10本小说。
+以千问模型处理中文文本为例，100 万 Token 约相当于 150 万个汉字。该数字仅供理解上下文规模和初步选型参考，实际换算比例因模型、版本及文本内容而异。
 
 -   长文档或大型代码库：`qwen3.8-max` / `qwen3.8-flash` / `qwen3.7-plus` / `qwen3.7-flash`（100万）。
 -   常规任务：128k-256k已足够。
@@ -86,7 +86,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 适用于大量请求且对延迟要求不高的场景，可降低请求成本。
 
-> 详情参见[批量推理](raw/model-user-guide/model-experience/text-generation-model/batch-inference.md)。
+> 详情参见[批量推理](raw/model-user-guide/model-high-speed-inference/batch-inference.md)。
 
 ## 推荐模型
 

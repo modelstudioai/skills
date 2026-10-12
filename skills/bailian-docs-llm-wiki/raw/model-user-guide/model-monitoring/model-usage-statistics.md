@@ -6,7 +6,7 @@
 
 ## 适用范围
 
--   **支持的模型**：模型列表中的所有模型均支持查看用量，包括基于它们[调优后的模型](raw/model-user-guide/model-deployment-index/model-deployment-introduction.md)。
+-   **支持的模型**：模型列表中的所有模型均支持查看用量，包括基于它们[调优后的模型](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)。
 
 ## 查看免费额度使用情况
 
@@ -140,7 +140,7 @@
 -   **根据任务类型选择模型：** 对于分类、摘要等简单任务，优先选择成本更低的轻量级模型，而不是始终使用功能强大但价格也较高的模型。
 -   **监控与告警：** 通过[模型监控](raw/model-user-guide/model-monitoring/model-telemetry.md)监控用量趋势，并可配置用量告警，当用量出现异常时及时收到通知。
 -   **优化 Prompt：** 简洁、清晰的 Prompt 不仅能提升模型输出质量，也能减少不必要的输入 Token 消耗。
--   **使用批量推理：** 对于非实时、大批量的处理任务，使用[批量推理](raw/model-user-guide/model-experience/text-generation-model/batch-inference.md)通常比实时调用更具成本优势。
+-   **使用批量推理：** 对于非实时、大批量的处理任务，使用[批量推理](raw/model-user-guide/model-high-speed-inference/batch-inference.md)通常比实时调用更具成本优势。
 
 ## 名词解释
 

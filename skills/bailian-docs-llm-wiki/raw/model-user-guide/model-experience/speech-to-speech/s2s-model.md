@@ -4,7 +4,7 @@
 
 ## 从闭源模型迁移到百炼?
 
-如果你正在使用 OpenAI Realtime 或 Gemini Live，可参考下表选择百炼对位模型。
+如果你正在使用 OpenAI 或 Gemini 的实时语音模型，可参考下表选择百炼对位模型。
 
 **闭源模型代表**
 
@@ -12,19 +12,19 @@
 
 高能力实时对话
 
-OpenAI GPT Realtime、Gemini 3.1 Live
+OpenAI GPT-Live 1、Gemini 3.8 Live
 
 `qwen-audio-3.1-realtime-plus`
 
 成本敏感对话
 
-OpenAI gpt-4o-mini Realtime
+OpenAI GPT-Realtime-2.1 Mini
 
 `qwen-audio-3.0-realtime-flash`
 
 实时翻译 / 同传
 
-Gemini 3.1 Live
+Gemini 3.5 Live Translate (Preview)
 
 `qwen3.8-livetranslate-flash-realtime`
 
@@ -50,16 +50,10 @@ Gemini 3.1 Live
 
 先转文本再处理 -- 音频中的细微信息丢失
 
-音色定制
-
-通过系统提示词选择预设音色
-
-声音克隆、声音设计（CosyVoice）
-
 -   **使用S2S**：当交互式对话、低延迟和音频感知的回复是关键需求时。
--   **使用Pipeline**：当需要自定义音色，或者需要为每个阶段分别选择最优的ASR、LLM和TTS模型时。
+-   **使用Pipeline**：当需要为每个阶段分别选择最优的ASR、LLM和TTS模型时。
 
-本文档继续介绍 S2S 单模型路线（Omni、Livetranslate）。如选择 Pipeline 路线，分别在以下文档中挑选三个组件：
+本文档继续介绍 S2S 单模型路线（Omni、Qwen-Audio Realtime、Livetranslate）。如选择 Pipeline 路线，分别在以下文档中挑选三个组件：
 
 -   **ASR（语音识别）**：[语音识别](raw/model-user-guide/model-experience/speech-recognition/asr-model.md)
 -   **LLM（大语言模型）**：[文本生成](raw/model-user-guide/model-experience/text-generation-model.md)
@@ -67,7 +61,10 @@ Gemini 3.1 Live
 
 ## 实时还是文件模式？
 
--   **实时（WebSocket）**：适用于语音助手、呼叫中心、同声传译等实时语音交互场景。音频流式输入，语音流式输出。
+-   **实时**：适用于语音助手、呼叫中心、同声传译等实时语音交互场景。音频流式输入，语音流式输出。
+
+**说明**Realtime API 提供 WebSocket、WebRTC 和 AOQ 三种接入方式，各型号支持范围和协议选型见 [Realtime API 概述](raw/model-api-reference/realtime-api-user-guide/realtime-api-overview.md)。
+
 -   **文件模式（HTTP）**：可以用延迟换取更好的效果，适用于视频配音、播客翻译、离线内容处理等场景。文件模式下还支持 Function Calling、联网搜索、思考模式、视频上下文等附带能力（详见下方“S2S 单模型的附带能力”）。
 
 ## 按场景选模型（S2S 单模型路线）
@@ -84,25 +81,25 @@ Gemini 3.1 Live
 
 [qwen3.8-omni-flash-realtime](raw/model-user-guide/support/model-studio-model-list/model-list-omni/qwen3-8-omni-flash-realtime.md)
 
-WebSocket / WebRTC / AOQ
+Realtime API
 
 语音助手 / 客服对话
 
 `qwen-audio-3.1-realtime-plus`
 
-WebSocket
+Realtime API
 
 成本敏感的对话
 
 `qwen-audio-3.0-realtime-flash`
 
-WebSocket
+Realtime API
 
 同声传译 / 直播翻译
 
 `qwen3.8-livetranslate-flash-realtime`
 
-WebSocket
+Realtime API
 
 视频配音 / 播客翻译
 
@@ -114,7 +111,7 @@ Chat Completions
 
 `qwen-audio-3.1-realtime-plus`
 
-WebSocket
+Realtime API
 
 ## S2S 单模型的附带能力
 
@@ -122,7 +119,7 @@ WebSocket
 
 ### Function Calling
 
-根据音视频内容查询知识库、查询日程或触发工作流，可使用 Qwen3.8-Omni-Flash-Realtime（WebSocket / WebRTC / AOQ）、Qwen-Audio Realtime（WebSocket）。
+根据音视频内容查询知识库、查询日程或触发工作流，可使用 Qwen3.8-Omni-Flash-Realtime、Qwen-Audio Realtime。
 
 ### 联网搜索
 
@@ -151,7 +148,7 @@ WebSocket
 
 **语言**
 
-**Qwen3.5-Livetranslate**
+**Qwen3.8 / 3.5-Livetranslate**
 
 **Qwen3-Livetranslate**
 
@@ -205,7 +202,7 @@ WebSocket
 
 支持
 
-支持
+\--
 
 支持
 
@@ -833,7 +830,7 @@ WebSocket
 
 Qwen3.8-Omni-Flash-Realtime 和 Qwen3.5-Omni 均支持113种输入语言/方言。
 
-Qwen3.5-Livetranslate支持60种语言（29种音频+文本，31种仅文本）。
+Qwen3.8 / 3.5-Livetranslate支持60种语言（29种音频+文本，31种仅文本）。
 
 ## 推荐模型
 
@@ -847,13 +844,13 @@ API
 
 qwen3.8-omni-flash-realtime
 
-WebSocket / WebRTC / AOQ
+Realtime API
 
 实时音视频对话
 
 qwen-audio-3.1-realtime-plus / qwen-audio-3.0-realtime-flash
 
-WebSocket
+Realtime API
 
 实时语音对话
 
@@ -865,7 +862,7 @@ Chat Completions
 
 qwen3.8-livetranslate-flash-realtime
 
-WebSocket
+Realtime API
 
 实时翻译
 
@@ -895,7 +892,7 @@ Chat Completions
 
 `qwen-audio-3.1-realtime-plus`
 
-WebSocket
+Realtime API
 
 音频、文本
 
@@ -909,7 +906,7 @@ WebSocket
 
 `qwen-audio-3.0-realtime-plus`
 
-WebSocket
+Realtime API
 
 音频、文本
 
@@ -923,7 +920,7 @@ WebSocket
 
 `qwen-audio-3.0-realtime-flash`
 
-WebSocket
+Realtime API
 
 音频、文本
 
@@ -951,7 +948,7 @@ WebSocket
 
 `qwen3.8-omni-flash-realtime`
 
-WebSocket / WebRTC / AOQ
+Realtime API
 
 文本、音频、图片、视频
 
@@ -979,7 +976,7 @@ WebSocket / WebRTC / AOQ
 
 `qwen3.5-omni-plus-realtime`
 
-WebSocket
+Realtime API
 
 文本、音频、图片、视频
 
@@ -991,7 +988,7 @@ WebSocket
 
 `qwen3.5-omni-plus-realtime-2026-03-15`
 
-WebSocket
+Realtime API
 
 文本、音频、图片、视频
 
@@ -1027,7 +1024,7 @@ Chat Completions
 
 `qwen3.5-omni-flash-realtime`
 
-WebSocket
+Realtime API
 
 文本、音频、图片、视频
 
@@ -1039,7 +1036,7 @@ WebSocket
 
 `qwen3.5-omni-flash-realtime-2026-03-15`
 
-WebSocket
+Realtime API
 
 文本、音频、图片、视频
 
@@ -1123,7 +1120,7 @@ Chat Completions
 
 [qwen3.8-livetranslate-flash-realtime](raw/model-user-guide/support/model-studio-model-list/model-list-speech-to-speech/qwen3-8-livetranslate-flash-realtime.md)
 
-WebSocket
+Realtime API
 
 音频、图片
 
@@ -1141,7 +1138,7 @@ WebSocket
 
 `qwen3.5-livetranslate-flash-realtime`
 
-WebSocket
+Realtime API
 
 音频、图片
 
@@ -1149,7 +1146,7 @@ WebSocket
 
 `qwen3.5-livetranslate-flash-realtime-2026-05-19`
 
-WebSocket
+Realtime API
 
 音频
 
@@ -1185,8 +1182,8 @@ Chat Completions
 
 选定模型后，参考对应的调用文档：
 
--   Qwen-Audio Realtime（WebSocket，实时语音对话）→ [实时语音对话（Qwen-Audio-Realtime）](https://help.aliyun.com/zh/model-studio/qwen-audio-realtime-user-guides)
--   Qwen3.8-Omni-Flash-Realtime（WebSocket / WebRTC / AOQ，实时）→ [实时（Qwen-Omni-Realtime）](raw/model-user-guide/model-experience/omni-modal/realtime.md)
--   Qwen3.5-Omni（HTTP，离线语音输出）→ [非实时（Qwen-Omni）](raw/model-user-guide/model-experience/omni-modal/qwen-omni.md)
+-   Qwen-Audio Realtime（实时语音对话）→ [实时语音对话（Qwen-Audio-Realtime）](https://help.aliyun.com/zh/model-studio/qwen-audio-realtime-user-guides)
+-   Qwen3.8-Omni-Flash-Realtime（实时）→ [实时（Qwen-Omni-Realtime）](raw/model-user-guide/model-experience/omni-modal/realtime.md)
+-   Qwen3.5-Omni（离线语音输出）→ [非实时（Qwen-Omni）](raw/model-user-guide/model-experience/omni-modal/qwen-omni.md)
 -   Qwen3.8-Livetranslate / Qwen3.5-Livetranslate（实时）→ [实时语音/音视频翻译-千问](raw/model-user-guide/model-experience/speech-to-speech/qwen3-5-livetranslate-flash-realtime.md)
--   Qwen3-Livetranslate（HTTP，文件）→ [音视频文件翻译-千问](raw/model-user-guide/model-experience/speech-to-speech/qwen3-livetranslate-flash.md)
+-   Qwen3-Livetranslate（文件）→ [音视频文件翻译-千问](raw/model-user-guide/model-experience/speech-to-speech/qwen3-livetranslate-flash.md)

@@ -722,7 +722,7 @@ presence\_penalty默认值
 
 Qwen3.8（非思考模式）、Qwen3.7（非思考模式）、Qwen3.6（非思考模式）、Qwen3.5-Omni、Qwen3.5（非思考模式）、Qwen3（非思考模式）、Qwen3-Instruct系列/1.7b/4b（思考模式）、QVQ系列、qwen-max、qwen2.5-vl系列、Qwen3-VL（非思考）：1.5；
 
-qwen3-14b/32b/30b-a3b/235b-a22b（思考模式）、qwen-plus/qwen-plus-latest/2025-04-28（思考模式）：0.5；
+qwen-plus/qwen-plus-latest/2025-04-28（思考模式）：0.5；
 
 其余均为0.0。
 

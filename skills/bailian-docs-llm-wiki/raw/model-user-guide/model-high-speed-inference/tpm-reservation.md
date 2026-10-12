@@ -64,7 +64,7 @@
 
 替换 model 参数即可
 
-PTU（[模型部署](raw/model-user-guide/model-deployment-index/model-deployment-introduction.md)）
+PTU（[模型部署](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)）
 
 按 kTPM 预付费
 

@@ -661,6 +661,14 @@ deepseek-v4.1-flash
 
 无阶梯（1.0）
 
+deepseek-v4-flash
+
+256K
+
+0.1
+
+无阶梯（1.0）
+
 deepseek-v4-flash-0731
 
 1M

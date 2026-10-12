@@ -12,7 +12,7 @@ DashScope API 域名为 `https://dashscope.aliyuncs.com`。弗吉尼亚地域使
 
 异步容量操作的结果通过 [查询容量操作](#operation-query) 获取。
 
-控制台入口参见[吞吐预留](raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)，部署概念参见[模型部署](raw/model-user-guide/model-deployment-index/model-deployment-introduction.md)，通用部署 API 参见[使用 API 进行模型部署](raw/model-user-guide/model-deployment-index/model-deployment-quick-start.md)。
+控制台入口参见[吞吐预留](raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)，部署概念参见[模型部署](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)，通用部署 API 参见[使用 API 进行模型部署](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-quick-start.md)。
 
 ## 公共约定
 
@@ -536,7 +536,7 @@ ModelCode 状态，不代表每个容量实例的状态
 }
 ```
 
-**警告**开启溢出策略后，超出容量的流量按量计费，会产生额外费用。关闭后，超出容量的请求会被限流。溢出计费口径详见[吞吐预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-overflow-h2)；更多说明参见[预置吞吐长输入与缓存](raw/model-user-guide/model-deployment-index/ptu-long-input-and-cache.md)。
+**警告**开启溢出策略后，超出容量的流量按量计费，会产生额外费用。关闭后，超出容量的请求会被限流。溢出计费口径详见[吞吐预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-overflow-h2)；更多说明参见[预置吞吐长输入与缓存](raw/_short/ptu-long-input-and-cache-f0b1f22118ea9791.md)。
 
 ## 容量实例接口
 

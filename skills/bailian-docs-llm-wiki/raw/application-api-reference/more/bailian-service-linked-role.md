@@ -24,7 +24,7 @@
 
 [AliyunServiceRoleForSFMAccessADB](https://help.aliyun.com/zh/model-studio/bailian-service-linked-role#7deade0402e0y)
 
-[创建和使用知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)和[安全存储空间](raw/model-user-guide/security-and-compliance/secure-storage.md)通过此服务关联角色访问您的[ADB-PG](https://help.aliyun.com/zh/analyticdb/analyticdb-for-postgresql/product-overview/overview-product-overview)实例。
+[创建和使用知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)和[安全存储空间](raw/model-user-guide/security-and-compliance/secure-storage.md)通过此服务关联角色访问您的[ADB-PG](https://help.aliyun.com/zh/analyticdb/analyticdb-for-postgresql/product-overview/overview-product-overview)实例。
 
 [AliyunServiceRoleForSFMAccessingMNS](https://help.aliyun.com/zh/model-studio/bailian-service-linked-role#e412ddc7eac5w)
 

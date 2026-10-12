@@ -97,14 +97,9 @@ MP4, AVI, MOV（仅支持URL）
 
 ## HTTP调用
 
-不同模型使用不同的API接口：
-
--   **qwen3-rerank**：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-api/v1/reranks`
--   **qwen3.7-text-rerank / qwen3-vl-rerank / gte-rerank-v2**：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/rerank/text-rerank/text-rerank`
-
 调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
-> 两种接口的请求体结构和响应格式不同，请参考对应模型的请求示例和响应示例。
+> 本节介绍 DashScope HTTP 接口。
 
 ### 请求
 
@@ -128,7 +123,7 @@ MP4, AVI, MOV（仅支持URL）
 
 输入内容。
 
-> 当使用 `qwen3-rerank` 模型时，无需使用 `input` 对象参数。此时，`query` 和 documents 参数需与 `model` 等参数位于同一层级。
+> `query` 和 `documents` 嵌套在 `input` 对象中。
 
 属性
 
@@ -159,7 +154,7 @@ MP4, AVI, MOV（仅支持URL）
 
 可选参数。
 
-> 当使用 `qwen3-rerank` 模型时，无需使用 `parameters` 对象参数。此时，`top_n` 和 `instruct` 参数需与 `model` 等参数位于同一层级。
+> `top_n` 和 `instruct` 嵌套在 `parameters` 对象中。
 
 属性
 
@@ -169,7 +164,7 @@ MP4, AVI, MOV（仅支持URL）
 
 **return\_documents**`bool`**（可选）**
 
-是否在排序结果中返回文档原文。默认值`false`，以减少网络传输开销。支持的模型：`gte-rerank-v2`、`qwen3-vl-rerank`。
+是否在排序结果中返回文档原文。默认值`false`，以减少网络传输开销。支持的模型：`gte-rerank-v2`、`qwen3-vl-rerank`、`qwen3-rerank`。
 
 **instruct** `string` **可选**
 
@@ -217,19 +212,23 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 ```
 curl --request POST \
-  --url https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-api/v1/reranks \
+  --url https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/rerank/text-rerank/text-rerank \
   --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
   --header "Content-Type: application/json" \
   --data '{
         "model": "qwen3-rerank",
-        "documents": [
+        "input": {
+            "documents": [
                 "文本排序模型广泛用于搜索引擎和推荐系统中，它们根据文本相关性对候选文本进行排序",
                 "量子计算是计算科学的一个前沿领域",
                 "预训练语言模型的发展给文本排序模型带来了新的进展"
-        ],
-        "query": "什么是文本排序模型",
-        "top_n": 2,
-        "instruct": "Given a web search query, retrieve relevant passages that answer the query."
+            ],
+            "query": "什么是文本排序模型"
+        },
+        "parameters": {
+            "top_n": 2,
+            "instruct": "Given a web search query, retrieve relevant passages that answer the query."
+        }
 }'
 ```
 
@@ -333,8 +332,6 @@ dashscope rerank create -m gte-rerank-v2 -q "机器学习" -d "机器学习是AI
 
 任务输出信息。
 
-> 当使用 `qwen3-rerank` 模型时，响应中不包含 `output` 对象，`results` 直接位于响应顶层。
-
 属性
 
 **results**`array`
@@ -409,19 +406,19 @@ qwen3-rerank
 
 ```
 {
-    "object": "list",
-    "results": [
-        {
-            "index": 0,
-            "relevance_score": 0.9334521178273196
-        },
-        {
-            "index": 2,
-            "relevance_score": 0.34100082626411193
-        }
-    ],
-    "model": "qwen3-rerank",
-    "id": "85ba5752-1900-47d2-8896-23f99b13f6e1",
+    "output": {
+        "results": [
+            {
+                "index": 0,
+                "relevance_score": 0.9334521178273196
+            },
+            {
+                "index": 2,
+                "relevance_score": 0.34100082626411193
+            }
+        ]
+    },
+    "request_id": "85ba5752-1900-47d2-8896-23f99b13f6e1",
     "usage": {
         "total_tokens": 79
     }

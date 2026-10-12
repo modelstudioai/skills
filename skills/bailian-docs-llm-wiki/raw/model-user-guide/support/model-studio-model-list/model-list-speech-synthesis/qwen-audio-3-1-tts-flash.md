@@ -102,6 +102,26 @@ Function Calling
 
 每百万 Token
 
+#### 新加坡
+
+计费项
+
+价格（元）
+
+单位
+
+输入
+
+1.677
+
+每百万 Token
+
+输出
+
+13.636
+
+每百万 Token
+
 ## 限流
 
 #### 华北2（北京）
@@ -110,12 +130,21 @@ Function Calling
 
 值
 
-RPS（每秒请求数）
+RPM（每分钟请求数）
 
-3
+180
+
+#### 新加坡
+
+参数
+
+值
+
+RPM（每分钟请求数）
+
+180
 
 ## 调用方式
 
--   [实时语音合成（WebSocket）](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)
--   [非实时语音合成（HTTP）](raw/model-user-guide/model-experience/speech-synthesis/non-realtime-tts-user-guide.md)
+-   [模型接入方式](raw/_short/qwen-audio-tts-model-access-6e664ddb54b00e5d.md)
 -   [Qwen-Audio-TTS音色列表](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list#qwen-tts31-voices)

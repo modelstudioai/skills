@@ -2046,9 +2046,23 @@ print(f"姓名：{json_object['name']}，年龄：{json_object['age']}")
     
     `enum` 限制取值范围，`const` 限制为固定值
     
-    `defs</code>+<code>defs</code> + <code>defs</code>+<code>ref`
+    `$defs` + `$ref`
     
-    支持本地引用（如 `#/defs/address</code>）；外部URL引用不报错但不生效</p></td></tr><tr><tdstyle=verticalAlign:"top"><p><code>anyOf</code>/<code>oneOf</code>/<code>allOf</code>/<code>not</code></p></td><tdstyle=verticalAlign:"top"><p>支持组合与条件约束。其中<code>oneOf</code>不严格保证exactly−one语义</p></td></tr><tr><tdstyle=verticalAlign:"top"><p><code>if</code>/<code>then</code>/<code>else</code></p></td><tdstyle=verticalAlign:"top"><p>支持条件Schema，可根据字段值动态切换校验规则</p></td></tr><tr><tdstyle=verticalAlign:"top"><p><code>title</code>/<code>description</code>/<code>default</code>/<code>examples</code></p></td><tdstyle=verticalAlign:"top"><p>可正常提交，作为模型生成的语义提示，不参与硬性校验</p></td></tr><tr><tdstyle=verticalAlign:"top"><p><code>defs/address</code>）；外部 URL 引用不报错但不生效</p></td></tr><tr><td style={{ verticalAlign: "top" }}><p><code>anyOf</code> / <code>oneOf</code> / <code>allOf</code> / <code>not</code></p></td><td style={{ verticalAlign: "top" }}><p>支持组合与条件约束。其中 <code>oneOf</code> 不严格保证 exactly-one 语义</p></td></tr><tr><td style={{ verticalAlign: "top" }}><p><code>if</code> / <code>then</code> / <code>else</code></p></td><td style={{ verticalAlign: "top" }}><p>支持条件 Schema，可根据字段值动态切换校验规则</p></td></tr><tr><td style={{ verticalAlign: "top" }}><p><code>title</code> / <code>description</code> / <code>default</code> / <code>examples</code></p></td><td style={{ verticalAlign: "top" }}><p>可正常提交，作为模型生成的语义提示，不参与硬性校验</p></td></tr><tr><td style={{ verticalAlign: "top" }}><p><code>defs/address</code>）；外部URL引用不报错但不生效</p></td></tr><tr><tdstyle=verticalAlign:"top"><p><code>anyOf</code>/<code>oneOf</code>/<code>allOf</code>/<code>not</code></p></td><tdstyle=verticalAlign:"top"><p>支持组合与条件约束。其中<code>oneOf</code>不严格保证exactly−one语义</p></td></tr><tr><tdstyle=verticalAlign:"top"><p><code>if</code>/<code>then</code>/<code>else</code></p></td><tdstyle=verticalAlign:"top"><p>支持条件Schema，可根据字段值动态切换校验规则</p></td></tr><tr><tdstyle=verticalAlign:"top"><p><code>title</code>/<code>description</code>/<code>default</code>/<code>examples</code></p></td><tdstyle=verticalAlign:"top"><p>可正常提交，作为模型生成的语义提示，不参与硬性校验</p></td></tr><tr><tdstyle=verticalAlign:"top"><p><code>schema` / `id</code>/<code>id</code> / <code>id</code>/<code>comment`
+    支持本地引用（如 `#/$defs/address`）；外部 URL 引用不报错但不生效
+    
+    `anyOf` / `oneOf` / `allOf` / `not`
+    
+    支持组合与条件约束。其中 `oneOf` 不严格保证 exactly-one 语义
+    
+    `if` / `then` / `else`
+    
+    支持条件 Schema，可根据字段值动态切换校验规则
+    
+    `title` / `description` / `default` / `examples`
+    
+    可正常提交，作为模型生成的语义提示，不参与硬性校验
+    
+    `$schema` / `$id` / `$comment`
     
     元标识符，可正常提交，不影响校验行为
     

@@ -67,7 +67,7 @@ Dify 具有多种大模型应用类型，请选择您使用的类型进行参考
     
 2.  **添加LLM节点**
     
-    在画布中添加一个LLM节点，选中节点进入编辑界面，选择您需要使用的模型。此处选择qwen-plus-2025-07-28(Qwen3)，打开思考模式并设置为True。
+    在画布中添加一个LLM节点，选中节点进入编辑界面，选择您需要使用的模型。此处选择qwen3.7-plus，打开思考模式并设置为True。
     
     如果您使用 [Qwen-VL](raw/model-user-guide/model-experience/vision-model/vision.md) 或 [QVQ](raw/model-user-guide/model-experience/vision-model/visual-reasoning.md)模型，请打开LLM节点的视觉开关：
     

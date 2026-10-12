@@ -130,13 +130,18 @@ curl --request POST \
   --header "Content-Type: application/json" \
   --data '{
     "model": "qwen3-rerank",
-    "query": "什么是重排序模型",
-    "documents": [
-      "重排序模型广泛应用于搜索引擎和推荐系统，按相关性对候选文本进行排序",
-      "量子计算是计算科学的前沿领域",
-      "预训练语言模型的发展为重排序模型带来了新的进展"
-    ],
-    "top_n": 2
+    "input": {
+      "query": "什么是重排序模型",
+      "documents": [
+        "重排序模型广泛应用于搜索引擎和推荐系统，按相关性对候选文本进行排序",
+        "量子计算是计算科学的前沿领域",
+        "预训练语言模型的发展为重排序模型带来了新的进展"
+      ]
+    },
+    "parameters": {
+      "top_n": 2,
+      "return_documents": true
+    }
 }'
 ```
 
