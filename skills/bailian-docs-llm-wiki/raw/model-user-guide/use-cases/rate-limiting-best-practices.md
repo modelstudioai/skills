@@ -154,7 +154,7 @@ curl -X POST "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions
 
 ### 预置吞吐单元（PTU）
 
-[PTU 服务](raw/model-user-guide/model-deployment-index/model-deployment-introduction.md)提供独立预留的专享算力，可避免公共资源池的竞争，是保障实时高吞吐的首选。
+[PTU 服务](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)提供独立预留的专享算力，可避免公共资源池的竞争，是保障实时高吞吐的首选。
 
 适用场景：业务对吞吐量有确定性要求（如 SLA 承诺），或希望免去客户端流控开发，直接获得稳定高吞吐。
 
@@ -162,7 +162,7 @@ PTU 为预留资源，未满负荷使用也持续计费。建议根据实际峰�
 
 ### 异步批处理（Batch API）
 
-数据清洗、离线分析等无实时性要求的任务，可使用 [Batch API](raw/model-user-guide/model-experience/text-generation-model/batch-inference.md) 批量提交。任务在低峰期异步执行，不受在线限流约束。
+数据清洗、离线分析等无实时性要求的任务，可使用 [Batch API](raw/model-user-guide/model-high-speed-inference/batch-inference.md) 批量提交。任务在低峰期异步执行，不受在线限流约束。
 
 适用场景：数据标注、日志分析、批量摘要等允许数小时至数天返回结果的任务。费用通常低于实时 API。
 

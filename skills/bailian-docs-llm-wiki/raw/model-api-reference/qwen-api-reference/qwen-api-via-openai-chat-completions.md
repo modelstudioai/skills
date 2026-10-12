@@ -553,7 +553,7 @@ presence\_penalty默认值
 
 Qwen3.8-Omni-Flash：思考模式为 0.0，非思考模式为 1.5；
 
-qwen3-14b/32b/30b-a3b/235b-a22b（思考模式）、qwen-plus/qwen-plus-latest/2025-04-28（思考模式）、qwen-turbo-2025-04-28（思考模式）：0.5；
+qwen-plus/qwen-plus-latest/2025-04-28（思考模式）、qwen-turbo-2025-04-28（思考模式）：0.5；
 
 其余均为0.0。
 

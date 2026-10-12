@@ -14,8 +14,6 @@
 -   支持时间戳输出，生成结构化识别结果
 -   灵活采样率与多种音频格式，适配不同录音环境
 
-批量场景（会议转写、通话分析、字幕生成等）可使用[非实时语音识别](raw/model-user-guide/model-experience/speech-recognition/non-realtime-speech-recognition-user-guide.md)。各模型选型建议请参见[语音识别](raw/model-user-guide/model-experience/speech-recognition/asr-model.md)。
-
 ## 前提条件
 
 -   已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并将其[配置到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
@@ -25,7 +23,36 @@
 
 以下示例展示如何通过 DashScope SDK 快速调用实时语音识别服务。
 
-#### Qwen-Audio-3.x-ASR-Flash-Streaming/ Fun-ASR -Realtime
+#### Qwen-Audio-ASR-Message
+
+接入方式请参见 [模型接入方式](raw/_short/qwen-asr-message-model-access-353e08817f836f55.md)。
+
+```
+import os
+from http import HTTPStatus
+
+import dashscope
+from dashscope.audio.asr import Recognition
+
+dashscope.api_key = os.environ["DASHSCOPE_API_KEY"]
+# 将 {WorkspaceId} 替换为北京地域的业务空间 ID。
+dashscope.base_websocket_api_url = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference"
+
+recognition = Recognition(
+    model="qwen-audio-3.1-asr-flash-message",
+    format="wav",
+    sample_rate=16000,
+    callback=None,
+)
+# audio.wav：16 kHz、单声道、16-bit PCM 编码的 WAV 文件。
+result = recognition.call("audio.wav")
+if result.status_code == HTTPStatus.OK:
+    print(result.get_sentence())
+else:
+    raise RuntimeError(result.message)
+```
+
+#### Qwen-Audio-ASR-Streaming / Fun-ASR-Realtime
 
 AOQ 协议的适用场景、支持模型和接入方式，请参见[Realtime API 概述](raw/model-api-reference/realtime-api-user-guide/realtime-api-overview.md)。
 
@@ -518,19 +545,28 @@ print(
 
 #### Paraformer
 
-Paraformer示例代码和Qwen-Audio-3.x-ASR-Flash-Streaming/Fun-ASR-Realtime相似，将model替换成Paraformer模型名即可。
+Paraformer示例代码和Qwen-Audio-ASR-Streaming/Fun-ASR-Realtime相似，将model替换成Paraformer模型名即可。
 
 ## 进阶功能
+
+### 中间结果与文本润色
+
+`qwen-audio-3.1-asr-flash-message` 的 `intermediate_result_enabled` 控制中间结果，`disfluency_removal_enabled` 控制文本润色，两项默认均为 `false`。
+
+开启中间结果后，按 `sentence_id` 更新对应句子的显示文本；中间结果可能修正，不应逐条拼接。收到 `sentence_end=true` 后，用最终结果替换该句文本。开启润色后，最终结果可去除语气词、重复和自我纠正，并整理表达。
+
+[客户端事件](raw/_short/qwen-asr-message-client-events-0be34a3639cdd40b.md) · [服务端事件](raw/_short/qwen-asr-message-server-events-00d0c99c6769976f.md)
 
 ### VAD 断句配置
 
 VAD（Voice Activity Detection，语音活动检测）用于判定一段连续语音何时结束，从而触发"最终识别结果"事件。以下模型均默认启用服务端 VAD，但参数命名与可调粒度不同：
 
--   **Qwen-Audio-3.1-ASR-Flash-Streaming**：通过 `vad_model` 选择 VAD 模型，可选值为 `near_meeting_16k`（近场）和 `far_field_meeting_16k`（远场，默认值）。参数定义请参见[客户端事件](raw/_short/qwen-audio-asr-streaming-client-events-1bae8548d2be6bc5.md)。
--   **Qwen-Audio-3.0-ASR-Flash-Streaming / Fun-ASR-Realtime / Paraformer**：通过 `max_sentence_silence`（VAD 断句静音阈值，毫秒）配置。当一段语音后的静音时长超过该阈值时，系统判定该句子已结束。
+-   `qwen-audio-3.1-asr-flash-message`：通过 `vad_model` 选择 `near_meeting_16k`（近场）或 `far_field_meeting_16k`（远场，默认值）。参数定义请参见 [客户端事件](raw/_short/qwen-asr-message-client-events-0be34a3639cdd40b.md)。
+-   **`qwen-audio-3.1-asr-flash-streaming`**：通过 `vad_model` 选择 VAD 模型，可选值为 `near_meeting_16k`（近场）和 `far_field_meeting_16k`（远场，默认值）。参数定义请参见[客户端事件](raw/_short/qwen-audio-asr-streaming-client-events-1bae8548d2be6bc5.md)。
+-   **`qwen-audio-3.0-asr-flash-streaming` / Fun-ASR-Realtime / Paraformer**：通过 `max_sentence_silence`（VAD 断句静音阈值，毫秒）配置。当一段语音后的静音时长超过该阈值时，系统判定该句子已结束。
 -   **Qwen3-ASR-Flash-Realtime**：通过 `session.turn_detection` 配置，含 `silence_duration_ms`（静音持续时长阈值，超过则判定 turn 结束，服务端默认 `800`，对话和聊天等需快速断句的场景推荐设为 `400`）与 `threshold`（VAD 检测灵敏度，服务端默认 `0.2`）。Qwen3-ASR-Flash-Realtime 还支持关闭 VAD 改用客户端 commit 控制断句的 Manual 模式，详见 [Qwen3-ASR-Flash-Realtime 交互模式](https://help.aliyun.com/zh/model-studio/qwen-asr-realtime-interaction-process#qwen-asr-flow-h2)。
 
-参数名因协议而异（同一含义在 Qwen-Audio-3.0-ASR-Flash-Streaming / Fun-ASR-Realtime / Paraformer 中称 `max_sentence_silence`，在 Qwen3-ASR-Flash-Realtime 中称 `silence_duration_ms`）。完整字段定义请参见[API参考](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide#c09d428f2crac)。
+参数名因协议而异（同一含义在 `qwen-audio-3.0-asr-flash-streaming` / Fun-ASR-Realtime / Paraformer 中称 `max_sentence_silence`，在 Qwen3-ASR-Flash-Realtime 中称 `silence_duration_ms`）。完整字段定义请参见[API参考](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide#c09d428f2crac)。
 
 ### 使用热词提升准确率
 
@@ -544,7 +580,9 @@ VAD（Voice Activity Detection，语音活动检测）用于判定一段连续�
 
 ### 获取时间戳
 
-Qwen-Audio-3.x-ASR-Flash-Streaming、Fun-ASR-Realtime 和 Paraformer 系列模型默认输出**句级**与**字级**两种粒度的时间戳，便于字幕对齐、关键词高亮、卡拉 OK 跟读等场景。**Qwen3-ASR-Flash-Realtime（qwen3-asr-flash-realtime）当前不返回时间戳信息**，如需时间戳请使用 Qwen-Audio-3.x-ASR-Flash-Streaming、Fun-ASR-Realtime 或 Paraformer。**Qwen ASR** 的录音文件转写模型 `qwen3-asr-flash-filetrans` 支持字级时间戳，详见[非实时语音识别](raw/model-user-guide/model-experience/speech-recognition/non-realtime-speech-recognition-user-guide.md)。
+`qwen-audio-3.1-asr-flash-message` 同样在最终结果中返回句级与字级时间戳，字段定义请参见 [服务端事件](raw/_short/qwen-asr-message-server-events-00d0c99c6769976f.md)。
+
+Qwen-Audio-ASR-Streaming、Fun-ASR-Realtime 和 Paraformer 系列模型默认输出**句级**与**字级**两种粒度的时间戳，便于字幕对齐、关键词高亮、卡拉 OK 跟读等场景。**Qwen3-ASR-Flash-Realtime（qwen3-asr-flash-realtime）当前不返回时间戳信息**，如需时间戳请使用 Qwen-Audio-ASR-Streaming、Fun-ASR-Realtime 或 Paraformer。**Qwen ASR** 的录音文件转写模型 `qwen3-asr-flash-filetrans` 支持字级时间戳，详见[非实时语音识别](raw/model-user-guide/model-experience/speech-recognition/non-realtime-speech-recognition-user-guide.md)。
 
 时间戳单位均为毫秒，分两个层级返回：
 
@@ -611,7 +649,7 @@ Qwen-Audio-3.x-ASR-Flash-Streaming、Fun-ASR-Realtime 和 Paraformer 系列模�
 
 敏感词过滤可对识别结果中的敏感词执行替换或移除，适用于客服质检、内容合规、字幕审核等场景。
 
-**支持范围：**仅Qwen-Audio-3.x-ASR-Flash-Streaming和Fun-ASR-Realtime。
+**支持范围：**仅Qwen-Audio-ASR-Streaming和Fun-ASR-Realtime。
 
 **使用限制：**最多支持设置32个敏感词。
 
@@ -647,7 +685,15 @@ Qwen-Audio-3.x-ASR-Flash-Streaming、Fun-ASR-Realtime 和 Paraformer 系列模�
 
 点击查看 WebSocket 原始协议调用示例
 
-#### Qwen-Audio-3.x-ASR-Flash-Streaming/ Fun-ASR-Realtime
+#### Qwen-Audio-ASR-Message
+
+使用 `qwen-audio-3.1-asr-flash-message`，示例请参见 [WebSocket API](raw/_short/qwen-asr-message-websocket-api-a1cfd459a83a1a77.md)。
+
+默认返回最终结果。如需边说边显示，设置 `intermediate_result_enabled=true`；如需去除语气词、重复和自我纠正并整理文本，设置 `disfluency_removal_enabled=true`。两项默认值均为 `false`。
+
+[客户端事件](raw/_short/qwen-asr-message-client-events-0be34a3639cdd40b.md) · [服务端事件](raw/_short/qwen-asr-message-server-events-00d0c99c6769976f.md)
+
+#### Qwen-Audio-ASR-Streaming / Fun-ASR-Realtime
 
 #### Python
 
@@ -2944,13 +2990,13 @@ func receiveMessages(conn *websocket.Conn, sessionFinished chan<- bool) {
 
 #### Paraformer
 
-Paraformer示例代码和Qwen-Audio-3.x-ASR-Flash-Streaming/Fun-ASR-Realtime相似，将model替换成Paraformer模型名即可。
+Paraformer示例代码和Qwen-Audio-ASR-Streaming/Fun-ASR-Realtime相似，将model替换成Paraformer模型名即可。
 
 ## 应用于生产环境
 
 ### 连接复用（WebSocket）
 
-Qwen-Audio-3.x-ASR-Flash-Streaming/Fun-ASR-Realtime 和 Paraformer 的 WebSocket 连接支持复用：一个识别任务结束后，无需重新建立连接即可开启下一个任务。
+Qwen-Audio-ASR-Streaming/Fun-ASR-Realtime 和 Paraformer 的 WebSocket 连接支持复用：一个识别任务结束后，无需重新建立连接即可开启下一个任务。
 
 **复用流程**：客户端发送 `finish-task`，服务端返回 `task-finished` 后，可重新发送 `run-task` 开启新任务。
 
@@ -3499,15 +3545,15 @@ DashScope Java SDK 通过全局单例的连接池管理和复用 WebSocket 连�
 
 调用以下模型时，请选择北京地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)：
 
--   **Qwen-Audio-3.1-ASR-Flash-Streaming：**qwen-audio-3.1-asr-flash-streaming
+-   **Qwen-Audio-ASR-Message**：`qwen-audio-3.1-asr-flash-message`
     
--   **Qwen-Audio-3.0-ASR-Flash-Streaming：**qwen-audio-3.0-asr-flash-streaming
+-   **Qwen-Audio-ASR-Streaming**：`qwen-audio-3.1-asr-flash-streaming`、`qwen-audio-3.0-asr-flash-streaming`
     
 -   **Fun-ASR-Realtime**：
     
     -   fun-asr-realtime（稳定版）、fun-asr-realtime-2026-02-28（最新快照版）
     -   fun-asr-flash-8k-realtime（稳定版，当前等同fun-asr-flash-8k-realtime-2026-01-28）、fun-asr-flash-8k-realtime-2026-01-28
--   **Qwen3-ASR-Flash-Realtime**：qwen3-asr-flash-realtime（稳定版）
+-   **Qwen-ASR-Realtime**：qwen3-asr-flash-realtime（稳定版）
     
 -   **Paraformer**：paraformer-realtime-v2、paraformer-realtime-8k-v2
     
@@ -3516,15 +3562,16 @@ DashScope Java SDK 通过全局单例的连接池管理和复用 WebSocket 连�
 
 调用以下模型时，请选择新加坡地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)：
 
--   **Qwen-Audio-3.1-ASR-Flash-Streaming：**qwen-audio-3.1-asr-flash-streaming
--   **Qwen-Audio-3.0-ASR-Flash-Streaming：**qwen-audio-3.0-asr-flash-streaming
+-   **Qwen-Audio-ASR-Message**：`qwen-audio-3.1-asr-flash-message`
+-   **Qwen-Audio-ASR-Streaming**：`qwen-audio-3.1-asr-flash-streaming`、`qwen-audio-3.0-asr-flash-streaming`
 -   **Fun-ASR-Realtime**：fun-asr-realtime（稳定版）
--   **Qwen3-ASR-Flash-Realtime**：qwen3-asr-flash-realtime（稳定版）
+-   **Qwen-ASR-Realtime**：qwen3-asr-flash-realtime（稳定版）
 
 ## API参考
 
 通过 AOQ 接入的流程和示例，请参见[AOQ 接入](raw/model-api-reference/realtime-api-user-guide/realtime-model-connection/realtime-aoq-access.md)。支持的模型及版本请参见[模型与协议支持范围](https://help.aliyun.com/zh/model-studio/realtime-api-overview#rtov-s02h2)。
 
+-   [Qwen-Audio-ASR-Message API](raw/_short/qwen-asr-message-model-access-353e08817f836f55.md)
 -   [实时语音识别-Qwen-Audio-ASR-Streaming API参考](raw/_short/qwen-audio-asr-streaming-model-access-38a48d03960dfb9a.md)
 -   [实时语音识别-Fun-ASR-Realtime API参考](raw/_short/fun-asr-realtime-model-access-3d1392d9c101b199.md)
 -   [实时语音识别-Qwen3-ASR-Flash-Realtime API参考](raw/_short/qwen-asr-realtime-api-18aa3c2b3386c250.md)
@@ -3534,7 +3581,9 @@ DashScope Java SDK 通过全局单例的连接池管理和复用 WebSocket 连�
 
 ### 实时语音识别支持哪些音频格式？
 
-Qwen-Audio-3.x-ASR-Flash-Streaming、Fun-ASR-Realtime 和 Paraformer 模型支持 pcm、wav、mp3、opus、speex、aac、amr 格式。**Qwen3-ASR-Flash-Realtime 模型推荐使用 pcm 或 opus 格式**；其他格式（如 wav、aac、amr）虽然在 `session.update` 校验层会被接受，但服务端实际解码可能失败，请务必确认音频流为推荐格式后再发送。
+`qwen-audio-3.1-asr-flash-message` 支持 pcm、wav、mp3、opus、speex、aac、amr 格式，`sample_rate` 设置为 `16000`。编码及封装要求请参见 [客户端事件](raw/_short/qwen-asr-message-client-events-0be34a3639cdd40b.md)。
+
+Qwen-Audio-ASR-Streaming、Fun-ASR-Realtime 和 Paraformer 模型支持 pcm、wav、mp3、opus、speex、aac、amr 格式。**Qwen3-ASR-Flash-Realtime 模型推荐使用 pcm 或 opus 格式**；其他格式（如 wav、aac、amr）虽然在 `session.update` 校验层会被接受，但服务端实际解码可能失败，请务必确认音频流为推荐格式后再发送。
 
 ### SDK 和 WebSocket API 有什么区别？该如何选择？
 

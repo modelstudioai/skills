@@ -117,7 +117,7 @@
     
 4.  **拆分任务**：长对话或大型文档会快速消耗大量 Token。将大批量任务拆分为小批次，分时段提交。
     
-5.  **批量推理**：无需实时响应时，使用[批量推理](raw/model-user-guide/model-experience/text-generation-model/batch-inference.md)（Batch API）。批量请求不受实时限流约束，但需考虑排队和处理时间。
+5.  **批量推理**：无需实时响应时，使用[批量推理](raw/model-user-guide/model-high-speed-inference/batch-inference.md)（Batch API）。批量请求不受实时限流约束，但需考虑排队和处理时间。
     
 
 ### 如何控制 Token 用量或费用支出？
@@ -4582,19 +4582,19 @@ qwen-audio-3.0-realtime-flash
 
 **模型名称**
 
-**每秒钟调用次数（RPS）**
+**每分钟调用次数（RPM）**
 
 qwen-audio-3.1-tts-flash
 
-3
+180
 
 qwen-audio-3.0-tts-plus
 
-3
+180
 
 qwen-audio-3.0-tts-flash
 
-3
+180
 
 #### 新加坡
 
@@ -4602,19 +4602,25 @@ qwen-audio-3.0-tts-flash
 
 **服务部署范围**
 
-**每秒钟调用次数（RPS）**
+**每分钟调用次数（RPM）**
+
+qwen-audio-3.1-tts-flash
+
+国际
+
+180
 
 qwen-audio-3.0-tts-plus
 
 国际
 
-3
+180
 
 qwen-audio-3.0-tts-flash
 
 国际
 
-3
+180
 
 ### Qwen-TTS
 
@@ -5576,34 +5582,6 @@ happyhorse-1.0-video-edit
 
 5
 
-#### 中国香港
-
-**模型名称**
-
-**服务部署范围**
-
-**限流条件（超出任一数值时触发限流）**
-
-**每秒钟调用次数（RPS）**
-
-**同时处理中任务数量（并发数）**
-
-wan3.0-video-prime
-
-全球
-
-5
-
-5
-
-wan3.0-video
-
-全球
-
-5
-
-5
-
 ### 万相系列
 
 #### 华北2（北京）
@@ -6151,6 +6129,34 @@ wan2.6-r2v
 5
 
 #### 日本（东京）
+
+**模型名称**
+
+**服务部署范围**
+
+**限流条件（超出任一数值时触发限流）**
+
+**每秒钟调用次数（RPS）**
+
+**同时处理中任务数量（并发数）**
+
+wan3.0-video-prime
+
+全球
+
+5
+
+5
+
+wan3.0-video
+
+全球
+
+5
+
+5
+
+#### 中国香港
 
 **模型名称**
 

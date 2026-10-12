@@ -2,8 +2,6 @@
 
 本文档介绍如何在阿里云百炼平台通过OpenAI兼容接口或DashScope SDK调用DeepSeek系列模型。
 
-**重要**deepseek-r1-distill-qwen-14b、deepseek-r1-distill-qwen-32b 将于**2026年10月10日**下架。推荐转用：[qwen3.7-plus](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.7-plus)、[qwen3.7-max](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.7-max)、[qwen3.6-flash](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.6-flash)。
-
 ## 服务接入地址
 
 不同地域的服务接入地址不同，请根据您选择的地域配置对应的 Base URL（调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)）。各地域可调用的模型及限流不同，请参见[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)文档。

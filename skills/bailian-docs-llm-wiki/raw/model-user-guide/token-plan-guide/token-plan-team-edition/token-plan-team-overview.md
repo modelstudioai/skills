@@ -97,6 +97,10 @@ wan2.7-image-pro
 
 图片生成
 
+wan3.0-video
+
+视频生成
+
 DeepSeek
 
 deepseek-v4.1-flash

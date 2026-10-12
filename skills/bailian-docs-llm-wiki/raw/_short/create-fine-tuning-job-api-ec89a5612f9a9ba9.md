@@ -8,6 +8,7 @@
 -   **开通账号权限**：若使用[阿里云子账号](raw/model-user-guide/security-and-compliance/permission-management-overview.md)（[RAM用户](https://help.aliyun.com/zh/ram/user-guide/overview-of-ram-users)），需要为子账号授予模型调用、训练和部署[权限](https://help.aliyun.com/zh/model-studio/use-workspace)。
 -   **配置环境变量**：已成功[获取 API Key](raw/model-api-reference/preparations/get-api-key.md)，并[配置到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
 -   **准备工作**：已阅读[千问模型调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model.md)，了解支持微调的模型、微调步骤、数据格式以及计费说明。
+-   **RL/OPD 训练**：本接口适用于 SFT/CPT/DPO 微调。强化学习（RL）与在线策略蒸馏（OPD）训练通过 DashScope SDK/CLI 提交（`dashscope rl run` 或 `AgenticRL().run()`），非 REST API，详见 [强化学习训练配置](raw/model-user-guide/fine-tuning/rl-overview/rl-training-config-monitoring.md) 与 [在线策略蒸馏训练配置](raw/model-user-guide/fine-tuning/opd-overview/opd-training-config.md)。
 
 ## 创建微调任务
 

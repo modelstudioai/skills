@@ -34,7 +34,7 @@ Function Calling
 
 结构化输出
 
-不支持
+支持 JSON Object
 
 联网搜索
 
@@ -55,6 +55,8 @@ Function Calling
 模型调优
 
 不支持
+
+`qwen-long`仅支持 JSON Object 模式。参数设置与调用方法请参见[结构化输出](raw/model-user-guide/model-experience/text-generation-model/qwen-structured-output.md)。
 
 ## 上下文限制
 

@@ -53,5 +53,3 @@
 ## 讨论交流
 
 欢迎加入讨论钉钉群，在这里您可以与其他用户进行深入交流，分享使用经验或获取更多技术支持，群号102415041551
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3534551671/p1019409.png)

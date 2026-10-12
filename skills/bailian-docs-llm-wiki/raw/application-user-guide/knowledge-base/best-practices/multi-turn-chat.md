@@ -38,7 +38,7 @@ RAG Agent 是无状态服务，每次请求独立，服务端不保存对话上�
 2.  知识库类型选择**文档搜索**，使用场景选择**基础文档问答**
 3.  上传样例文档，完成切片与向量化，等待文档状态变为**解析完成**
 
-详见[创建知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)和[文档管理](raw/application-user-guide/knowledge-base/data-connection-overview/documents.md)。
+详见[创建知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)和[文档管理](raw/application-user-guide/knowledge-base/data-connection-overview/documents.md)。
 
 ### 2\. 创建知识问答服务并绑定知识库
 

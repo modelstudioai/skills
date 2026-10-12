@@ -125,13 +125,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 ### 模型调优、部署和评测
 
 -   [模型调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)：支持有监督微调（SFT）、继续预训练（CPT）和直接偏好优化（DPO），满足特定业务需求。
--   [模型部署](raw/model-user-guide/model-deployment-index/model-deployment-introduction.md)：将预置模型或调优后的自定义模型部署为资源专享的推理服务，满足高并发、低延迟等性能要求。支持按时长、包月、按 Token 量等多种计费方式。
+-   [模型部署](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)：将预置模型或调优后的自定义模型部署为资源专享的推理服务，满足高并发、低延迟等性能要求。支持按时长、包月、按 Token 量等多种计费方式。
 -   [模型评测](raw/model-user-guide/model-evaluation-introduction/model-evaluation-overview.md)：提供人工评测、自动评测和基线评测，支持快速对比不同模型表现，验证调优效果，提前发现潜在调用风险。
 
 ## 应用构建
 
 -   **应用类型**：提供可视化和高代码两种开发模式。可视化模式可快速创建[智能体应用（Agent 1.0）](raw/application-user-guide/llm-application/single-agent-application.md)和[工作流应用](raw/application-user-guide/llm-application/workflow-application.md)；[高代码应用](raw/application-user-guide/llm-application/rich-code-application.md)则支持将 Python 项目部署为后端服务，具备自动化运维、可观测、日志服务等能力。
--   **功能拓展**：通过[知识库（RAG）](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)接入私有数据和专业领域知识；通过[插件](raw/application-user-guide/plug-in/plug-in-overview.md)和[模型上下文协议（MCP）](raw/application-user-guide/model-context-protocol/mcp-introduction.md)调用外部服务。
+-   **功能拓展**：通过[知识库（RAG）](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)接入私有数据和专业领域知识；通过[插件](raw/application-user-guide/plug-in/plug-in-overview.md)和[模型上下文协议（MCP）](raw/application-user-guide/model-context-protocol/mcp-introduction.md)调用外部服务。
 -   **分享与发布**：支持将应用发布至网页、钉钉机器人、微信公众号及音视频互动智能体等多种平台，详见[应用分享](raw/application-user-guide/application-publishing-and-sharing/share-an-application.md)。
 
 ## 产品计费

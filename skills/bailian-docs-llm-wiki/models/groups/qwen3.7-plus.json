@@ -78,6 +78,32 @@
               "currency": "CNY"
             }
           ]
+        },
+        {
+          "supportedApi": "Anthropic API",
+          "name": "web_search",
+          "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/web-search",
+          "type": "web_search_anthropic",
+          "prices": [
+            {
+              "priceUnit": "千次调用",
+              "price": "4",
+              "currency": "CNY"
+            }
+          ]
+        },
+        {
+          "supportedApi": "Anthropic API",
+          "name": "web_fetch",
+          "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/web-extractor",
+          "type": "web_fetch",
+          "prices": [
+            {
+              "priceUnit": "",
+              "price": "0",
+              "currency": "CNY"
+            }
+          ]
         }
       ],
       "description": "Qwen3.7系列中高性价比Plus模型，在强大文本能力的基础上全面升级了视觉-语言能力，同时保持了在编码、工具使用和生产力工作流方面的完整智能体能力。其核心特色为多模态交互混合智能体能力，能够感知真实世界场景、读取屏幕并操作 GUI、基于视觉参考生成代码、端到端导航移动应用。",

@@ -6,7 +6,7 @@
 
 -   **权限要求**：调用本接口需提供阿里云百炼 API Key及业务空间。在控制台 [API Key 页面](https://bailian.console.aliyun.com/?tab=model#/api-key)及[业务空间管理](https://bailian.console.aliyun.com/cn-beijing?tab=globalset#/efm/business_management)获取。
 -   **调用方式**：HTTP REST，`POST` + `application/json`。Base URL 为 `https://{workspaceId}.cn-beijing.maas.aliyuncs.com`，其中 `{workspaceId}` 为业务空间 ID。
--   **前置条件**：调用前须在百炼控制台 [知识检索服务页面](https://bailian.console.aliyun.com/cn-beijing/rag/retrieval/list) 创建并发布[知识检索](raw/application-user-guide/knowledge-base/rag-knowledge-retrieval.md)服务，获取服务 ID（`agent_id`）。检索策略（多库权重、知识路由、混排模型、混排模型模式等）预先在控制台配置进服务实例并发布，调用方只需传入检索意图（`query` / `images`）与 `agent_id`，还可通过 `kb_search_configs` 为每个知识库指定文档/标签过滤条件。未发布时返回 Agent 未发布错误。
+-   **前置条件**：调用前须在百炼控制台 [知识检索服务页面](https://bailian.console.aliyun.com/cn-beijing/rag/retrieval/list) 创建并发布[知识检索](raw/application-user-guide/knowledge-base/service/rag-knowledge-retrieval.md)服务，获取服务 ID（`agent_id`）。检索策略（多库权重、知识路由、混排模型、混排模型模式等）预先在控制台配置进服务实例并发布，调用方只需传入检索意图（`query` / `images`）与 `agent_id`，还可通过 `kb_search_configs` 为每个知识库指定文档/标签过滤条件。未发布时返回 Agent 未发布错误。
 -   **限流**：默认用户维度 25 QPS。如遇限流，请稍后重试。
 
 ## 请求语法

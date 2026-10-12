@@ -33,8 +33,6 @@
 
 以下示例演示如何使用 Qwen-Audio-TTS 模型合成语音。
 
-**重要**Qwen-Audio-TTS 非实时语音合成仅在北京地域可用。
-
 #### 非流式输出
 
 非流式模式下，响应中包含合成音频的 URL，有效期为 24 小时。
@@ -530,6 +528,8 @@ ASMR 轻柔耳语
 
 调用以下模型时，请选择新加坡地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)：
 
+-   **Qwen-Audio-TTS**：qwen-audio-3.1-tts-flash
+    
 -   **Qwen-TTS**：
     
     -   **Qwen3-TTS-Flash**：qwen3-tts-flash（稳定版）

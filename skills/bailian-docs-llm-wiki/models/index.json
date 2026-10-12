@@ -1,11 +1,11 @@
 {
-  "updatedAt": "2026-10-12",
+  "updatedAt": "2026-10-13",
   "totalFamilies": 125,
   "totalModels": 317,
   "profileCoverage": {
-    "full": 277,
-    "partial": 33,
-    "structured-only": 7,
+    "full": 79,
+    "partial": 43,
+    "structured-only": 195,
     "none": 0
   },
   "capabilityDistribution": {
@@ -159,7 +159,8 @@
       "primaryCapability": "TG",
       "capabilities": [
         "TG",
-        "Reasoning"
+        "Reasoning",
+        "VU"
       ],
       "providers": [
         "deepseek"

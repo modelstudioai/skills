@@ -166,7 +166,7 @@
     -   对音视频素材进行二次创作，如生成脚本和字幕、给出剪辑建议等。
         
     
-    详情请参见[创建和使用知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
+    详情请参见[创建和使用知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)。
     
 
 12月17日
@@ -271,7 +271,7 @@
 
 数据源支持DMS
 
--   创建知识库时，可直接从 DMS 指定数据表同步数据，详情请参见[知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
+-   创建知识库时，可直接从 DMS 指定数据表同步数据，详情请参见[知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)。
     
 
 9月23日
@@ -280,7 +280,7 @@
 
 创建流程优化
 
--   根据应用场景，将知识库类型分为**文档**、**数据**和**图片**三类，以简化创建过程，详情请参见[知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
+-   根据应用场景，将知识库类型分为**文档**、**数据**和**图片**三类，以简化创建过程，详情请参见[知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)。
     
 
 9月23日
@@ -289,7 +289,7 @@
 
 新增调试面板
 
--   编辑智能体应用时，可直接在线调整知识库参数，并实时验证检索召回效果。使用方法请参见[知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
+-   编辑智能体应用时，可直接在线调整知识库参数，并实时验证检索召回效果。使用方法请参见[知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)。
     
 
 **8月**
@@ -377,7 +377,7 @@ MCP
 
 导入图片可选择Qwen VL进行解析
 
--   您可选择qwen-vl-max或qwen-vl-plus模型，通过传入Prompt指引需识别的版面、元素和内容，适用于解析复杂图片或图表，详情请参见[创建和使用知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
+-   您可选择qwen-vl-max或qwen-vl-plus模型，通过传入Prompt指引需识别的版面、元素和内容，适用于解析复杂图片或图表，详情请参见[创建和使用知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)。
     
 
 5月8日
@@ -386,7 +386,7 @@ MCP
 
 非结构化知识库支持导入离线HTML文件
 
--   支持基于离线HTML文件构建非结构化知识库，详情请参见[创建和使用知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
+-   支持基于离线HTML文件构建非结构化知识库，详情请参见[创建和使用知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)。
     
 
 **4月**
@@ -405,7 +405,7 @@ MCP
 
 新增权重设置功能
 
--   当智能体应用同时关联多个知识库时，您可以按信息源的重要性为每个知识库设置权重。系统将优先召回权重更高的知识库中的相关信息。使用方法请参见[创建和使用知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
+-   当智能体应用同时关联多个知识库时，您可以按信息源的重要性为每个知识库设置权重。系统将优先召回权重更高的知识库中的相关信息。使用方法请参见[创建和使用知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)。
 
 4月9日
 
@@ -603,7 +603,7 @@ MCP
     -   导入多个具有不同表结构的Excel文档。
         
     
-    详情请参见[知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
+    详情请参见[知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)。
     
 
 **10月**
@@ -659,21 +659,21 @@ SFM服务关联角色
 
 结构化知识库数据源支持云上数据库
 
--   结构化知识库的数据源支持云数据库RDS。具体说明请参见[创建和使用知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
+-   结构化知识库的数据源支持云数据库RDS。具体说明请参见[创建和使用知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)。
     
 
 非结构化知识库支持自定义metadata
 
--   支持为非结构化知识库中的文档附加metadata，以提升知识库检索的效率和精准度。具体说明请参见[创建和使用知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
+-   支持为非结构化知识库中的文档附加metadata，以提升知识库检索的效率和精准度。具体说明请参见[创建和使用知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)。
     
 
 支持图文检索
 
--   知识库支持解析文档中的图片，结构化文档中的图片将被转为向量，非结构化文档中的图片将被提取文字然后再转为向量。具体说明请参见[创建和使用知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
+-   知识库支持解析文档中的图片，结构化文档中的图片将被转为向量，非结构化文档中的图片将被提取文字然后再转为向量。具体说明请参见[创建和使用知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)。
     
 -   如果智能体应用关联的结构化知识库包含图片索引，可以在提问时上传图片，与输入图片相关的数据记录会与提问一起提供给大模型。具体说明请参见[智能体应用（Agent 1.0）](raw/application-user-guide/llm-application/single-agent-application.md)。
     
--   测试知识库页面同样支持了图文输入，便于您评估知识库的图文检索能力。具体说明请参见[创建和使用知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
+-   测试知识库页面同样支持了图文输入，便于您评估知识库的图文检索能力。具体说明请参见[创建和使用知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)。
     
 
 9月17日
@@ -682,7 +682,7 @@ SFM服务关联角色
 
 非结构化数据文件支持标签分类
 
--   非结构化数据支持标签分类，点击[创建和使用知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)查看详情。
+-   非结构化数据支持标签分类，点击[创建和使用知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)查看详情。
     
 
 9月4日
@@ -691,7 +691,7 @@ SFM服务关联角色
 
 智能体应用新增“检索配置”功能
 
--   智能体应用中，打开“知识检索增强”开关后，增加“检索配置”功能，用于设置大模型的回答范围、是否展示回答来源等。点击[创建和使用知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)查看完整信息。
+-   智能体应用中，打开“知识检索增强”开关后，增加“检索配置”功能，用于设置大模型的回答范围、是否展示回答来源等。点击[创建和使用知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)查看完整信息。
     
 
 **8月**

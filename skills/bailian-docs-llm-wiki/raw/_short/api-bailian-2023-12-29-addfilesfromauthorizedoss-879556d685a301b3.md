@@ -178,7 +178,7 @@ string
     
 -   文件名称长度限制 4-128 个字符。
     
--   对文件上传要求限制，请参见[知识库配额与限制](raw/application-user-guide/knowledge-base/rag-knowledge-base-specifications.md)。
+-   对文件上传要求限制，请参见[知识库配额与限制](raw/application-user-guide/knowledge-base/reference/rag-knowledge-base-specifications.md)。
     
 
 当导入的文件名称与知识库中已有文件名称重复时，接口仍会返回`Status`为`SUCCESS`，但该文件实际不会被导入知识库，已有的同名文件保持不变。请确保每次导入的文件名称唯一。

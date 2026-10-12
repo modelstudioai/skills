@@ -1,45 +1,46 @@
-# Token 计量与管理
+# Token
 
-Token 计量与管理是百炼平台对模型调用资源消耗进行精确统计、配额控制与成本核算的核心机制，以输入 token 数与输出 token 数为唯一计量单位，贯穿 API 调用、配额分配、计费结算、监控告警及用量分析全链路。
+Token 是百炼平台中用于计量模型输入与输出内容的基本单位，也是计费、限流、上下文长度控制和性能监控的核心度量标准。一个 Token 通常对应一个子词（subword）或标点符号，在中文场景下约等于 1–2 个汉字，英文场景下约等于 1 个单词或标点；具体切分由模型所用 tokenizer 决定。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **API 调用与配额控制（Token Plan）**：所有实时推理请求均按实际 `input_tokens` + `output_tokens` 四舍五入到整数进行计量；配额扣减实时发生，流式响应按每个 chunk 的实际 tokens 分次扣减；超限直接返回 HTTP 429，不降级。
-- **计费与成本管理（[test 1](../guides/test-1.md)）**：Token 是最小计费粒度（1 Token 起计），输入/输出分开计价；免费额度（如 100 万 Token/模型）、资源包、节省计划均基于此计量结果按序抵扣；吞吐预留（TPM）也以 kTPM（千 Tokens/分钟）为单位购买和折算。
-- **模型监控（[model monitoring](../guides/model-monitoring.md)）**：监控系统按 `model_id` 和 `api_key_hash` 维度聚合 Token 消耗量，用于用量趋势分析与异常检测；注意：监控值为内容长度粗略估算，与账单系统存在 ≤3% 偏差，不可用于精确对账。
-- **账单与用量溯源（[test 1](../guides/test-1.md) / [model monitoring](../guides/model-monitoring.md)）**：账单明细中 `实例 ID` 字段（格式：`ApiKeyID;业务空间ID;模型名称;...`）关联 Token 消耗记录；开发者可通过 `/v1/token-plans/usage` 接口或控制台「API 密钥与配额」页实时查询绑定 Plan 的剩余配额。
-- **开发调试与可观测性**：每次成功响应的 Header 中固定返回 `x-bailian-input-tokens` 和 `x-bailian-output-tokens`，是开发者验证 [prompt](../guides/prompt.md) 长度、评估输出效率、优化上下文截断策略的权威依据。
+- **模型调用（API 请求）**：  
+  `max_tokens` 参数限制模型单次响应的最大输出 Token 数（如 `qwen3.7-plus` 默认上限为 8192）；`messages` 中所有内容（含 system prompt、user 和 assistant 消息）共同构成输入 Token，总长度受模型上下文窗口限制（如 `qwen3.8-max` 为 32768 tokens）。超出将触发 `400 Bad Request` 错误。
+
+- **计费与用量统计**：  
+  百炼按 **总 Token 数 = 输入 Token + 输出 Token** 计费（部分[多模态](multi-modal.md)模型按图像张数/音频秒数等独立计费单位核算，但文本生成类模型统一以 Token 为准）。在「模型用量」控制台中，可按分钟/小时/天维度查看各模型的 `TotalToken` 消耗，用于成本分析与预算管控。
+
+- **[模型评测](model-evaluation.md)（Evaluation）**：  
+  评测任务中，被测模型对每条 `Prompt` 的推理会消耗输入 + 输出 Token，产生推理费用；裁判模型（如 `qwen3.8-max`）对每条 `Output` 打分时也按 Token 计费。Token 消耗量直接影响评测成本，小规模验证建议先用 ≤100 条样本预估开销。
+
+- **模型监控（Monitoring）**：  
+  `TotalToken` 是核心监控指标之一，与调用次数、失败率、首 Token 延迟等并列展示。告警规则可基于 `TotalToken` 设置阈值（如“单小时超 100 万 Token”），及时发现异常调用或爬虫行为。
 
 ## 关键参数和配置
 
-| 参数 | 说明 | 开发者须知 |
-|------|------|------------|
-| `input_tokens` / `output_tokens` | 响应头中返回的实际消耗 token 数（整数） | 唯一可信来源，用于调试、审计与自建配额校验；不依赖客户端 tokenizer 估算 |
-| `max_tokens` | 单次请求允许生成的最大 token 数（如 Qwen3-8B 默认 8192） | 影响输出上限与配额占用，设过小可能导致截断，设过大则浪费配额 |
-| `stream: true` | 启用流式响应 | 不改变总消耗，但触发多次细粒度配额扣减（每 chunk 独立扣减），需确保服务端能处理分块配额不足场景 |
-| `temperature` / `top_p` | 采样参数 | **不影响 token 消耗量**，但显著影响实际输出长度分布，间接决定配额使用效率，建议在稳定性要求高的生产环境保持较低 temperature（如 0.1–0.3） |
+| 参数名 | 所属场景 | 说明 | 典型取值范围 | 注意事项 |
+|--------|----------|------|--------------|----------|
+| `max_tokens` | API 调用（OpenAI/DashScope） | 控制模型输出最大 Token 数 | `1`–`8192`（依模型而异，`qwen3.8-max` 最高支持 `8192`） | 不设或设为 `0` 将使用模型默认值；设过高可能增加延迟与费用，且不保证实际输出长度 |
+| `input_tokens` / `output_tokens` | API 响应体（`usage` 字段） | 实际消耗的输入/输出 Token 数 | 非负整数 | [OpenAI 兼容接口](openai-compatible-api.md)返回 `"usage": {"prompt_tokens": N, "completion_tokens": M}`；DashScope 返回 `"usage": {"input_tokens": N, "output_tokens": M}` |
+| `TotalToken` | 监控与用量报表 | 单次请求的 `input_tokens + output_tokens` 总和 | 同上 | 控制台用量统计、告警规则、账单明细均以此字段为依据；不包含系统内部处理开销 |
 
-> ⚠️ 注意事项：
-> - 所有计量均四舍五入到整数（1.6 tokens → 2 tokens），无小数累计；
-> - 多模态（语音/图像/VL）、离线批量推理、模型微调训练、私有化部署等任务**不纳入 Token Plan 统一计量体系**；
-> - Coding Plan 等特殊 Plan 对代码上下文有专用截断逻辑，其 token 计量规则独立于通用 Plan；
-> - 监控数据中的 Token 统计仅作参考，**不可替代账单与配额接口的精确值**。
+> 💡 提示：可通过 SDK 或响应头 `X-DashScope-Usage`（格式为 `{"input_tokens":N,"output_tokens":M}`）实时获取本次调用的精确 Token 消耗，便于客户端做动态限流或成本预估。
 
 ## 面向开发者，简洁实用
 
-- ✅ **必查响应头**：每次调用后检查 `x-bailian-input-tokens` 和 `x-bailian-output-tokens`，快速定位长 [prompt](../guides/prompt.md) 或失控输出；
-- ✅ **配额自查**：调用 `GET /v1/token-plans/usage`（需对应 API Key 权限），避免静默失败；
-- ✅ **流式容错**：若使用 `stream: true`，需在客户端处理 `429 Too Many Requests` 出现在任意 chunk 的可能性；
-- ✅ **成本预估**：本地用 Hugging Face `transformers` 或 `tiktoken` 库对 [prompt](../guides/prompt.md) + stop sequence 进行 tokenizer 估算（注意：百炼使用自研 tokenizer，结果供参考，非最终计费依据）；
-- ❌ **勿依赖监控值做配额判断**：监控延迟约 30 秒且存在估算偏差，配额控制必须依赖 Token Plan 接口或响应头；
-- ❌ **勿复用同一 API Key 绑定多环境**：dev/staging/prod 应使用不同 API Key 并分别绑定 Plan，实现硬隔离。
+- **估算 Token 数**：本地可使用 `tiktoken`（OpenAI 兼容）或 `transformers.AutoTokenizer` 加载对应模型 tokenizer 进行粗略计算（如 `qwen3` 系列推荐使用 `QwenTokenizer`）；生产环境请以 API 响应中的 `usage` 字段为准。
+- **优化 Token 开销**：
+  - 缩短 system prompt，避免冗余描述；
+  - 对长文档做分块摘要或提取关键句再输入；
+  - 使用 `qwen3.8-flash` 等高性价比模型处理简单任务；
+  - 流式响应（`stream=True`）不减少总 Token 消耗，但可降低首 Token 延迟感知。
+- **调试技巧**：若遇到 `context_length_exceeded` 错误，优先检查 `messages` 总长度（非字符数）；使用百炼控制台「API 调试」工具可直观查看分词结果与 Token 统计。
 
 ## 关联主题页
 
-- [token plan guide](../guides/token-plan-guide.md)
-- [token plan api](../api/token-plan-api.md)
-- [test 1](../guides/test-1.md)
+- [get started with models](../guides/get-started-with-models.md)
+- [qwen api reference](../api/qwen-api-reference.md)
+- [model evaluation introduction](../guides/model-evaluation-introduction.md)
 - [model monitoring](../guides/model-monitoring.md)
-- [model data overview](../guides/model-data-overview.md)
 
 
