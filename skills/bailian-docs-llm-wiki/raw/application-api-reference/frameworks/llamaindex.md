@@ -8,7 +8,7 @@
 
 > 如果您希望将知识库部署在本地，实现灵活地文档切分与嵌入模型选择，请参考[基于本地知识库构建RAG应用](raw/application-user-guide/application-use-cases/build-rag-application-based-on-local-retrieval.md)。
 
-> 如果您希望将知识库部署在云端，实现0代码地创建RAG应用，请参考[0代码构建RAG应用](raw/application-user-guide/start-using/build-knowledge-base-qa-assistant-without-coding.md)。
+> 如果您希望将知识库部署在云端，实现0代码地创建RAG应用，请参考[0代码构建RAG应用](raw/_short/build-knowledge-base-qa-assistant-without-coding-117468a8b3869dc4.md)。
 
 ## 效果展示
 

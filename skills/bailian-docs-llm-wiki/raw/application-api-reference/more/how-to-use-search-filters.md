@@ -69,7 +69,7 @@ Retrieve接口返回：
 
 ## 语法说明
 
-SearchFilters可以包含一个或多个子分组（如下方示例包含了两个子分组）。每个子分组由一组或多组Key-Value键值对（检索字段：字段值）组成，对通过用户提示词找到的文本切片进行进一步过滤。子分组之间默认采用 **AND** 语义，且不可更改。﻿关于如何使用子分组，请参见[子分组查询示例](raw/application-api-reference/more/how-to-use-search-filters.md)。
+SearchFilters可以包含一个或多个子分组（如下方示例包含了两个子分组）。每个子分组由一组或多组Key-Value键值对（检索字段：字段值）组成，对通过用户提示词找到的文本切片进行进一步过滤。数组中的子分组之间采用 **AND** 语义；同一子分组内的多个检索字段默认也采用 **AND** 语义，可通过该子分组的 `_operator` 设置为 **OR**。关于如何使用子分组，请参见[子分组查询示例](raw/application-api-reference/more/how-to-use-search-filters.md)。
 
 ```
 {
@@ -84,6 +84,36 @@ SearchFilters可以包含一个或多个子分组（如下方示例包含了两�
   ]
 }
 ```
+
+**多字段 OR 查询：**在同一子分组中，将 `_operator` 与检索字段并列，并设为 `OR`（也支持小写 `or`），即可匹配任一字段条件。省略 `_operator` 或设为 `AND` 时，需同时满足该子分组的所有字段条件。
+
+例如，以下条件筛选文档名称（`doc_name`）为“长上下文Qwen-Long”或切片标题（`title`）为“返回结果”的切片。请将字段和值替换为知识库中实际可检索的字段和值。
+
+```
+{
+  "searchFilters": [
+    {
+      "_operator": "OR",
+      "doc_name": "长上下文Qwen-Long",
+      "title": "返回结果"
+    }
+  ]
+}
+```
+
+使用下方完整代码示例中的 Python 客户端时，可将 `retrieve_request.search_filters` 替换为：
+
+```
+retrieve_request.search_filters = [
+    {
+        "_operator": "OR",
+        "doc_name": "长上下文Qwen-Long",
+        "title": "返回结果"
+    }
+]
+```
+
+如果还需叠加其他条件，将其放在数组中的另一个子分组中。例如，在上述 OR 子分组后追加 `{"doc_name": "长上下文Qwen-Long"}`，整体条件为“（文档名称为长上下文Qwen-Long OR 切片标题为返回结果）AND 文档名称为长上下文Qwen-Long”。`_operator` 只改变其所在子分组内字段的关系，不改变数组中子分组之间的 AND 关系。
 
 子分组内的检索字段支持**单值查询**、**多值查询**、**范围查询**、**模糊查询**和**标签（Tag）查询**。
 
@@ -102,7 +132,7 @@ SearchFilters可以包含一个或多个子分组（如下方示例包含了两�
 
 ## 前置步骤
 
--   [子账号](raw/application-user-guide/application-permission-management/application-permission-management-overview.md)（主账号不需要）需[获取AliyunBailianDataFullAccess策略](https://help.aliyun.com/zh/model-studio/grant-data-access-permission-to-ram-user)，并[加入一个业务空间](https://help.aliyun.com/zh/model-studio/grant-the-business-space-permission-to-ram-users)，然后才能使用阿里云API操作知识库。
+-   [子账号](raw/_short/application-permission-management-overview-120c7de0a1f705a5.md)（主账号不需要）需[获取AliyunBailianDataFullAccess策略](https://help.aliyun.com/zh/model-studio/grant-data-access-permission-to-ram-user)，并[加入一个业务空间](https://help.aliyun.com/zh/model-studio/grant-the-business-space-permission-to-ram-users)，然后才能使用阿里云API操作知识库。
     
     > 子账号只能操作自己已加入的业务空间中的知识库；主账号可操作所有业务空间下的知识库。
     
@@ -112,7 +142,7 @@ SearchFilters可以包含一个或多个子分组（如下方示例包含了两�
     
 -   [获取并配置AccessKey和AccessKey Secret到环境变量](https://help.aliyun.com/zh/sdk/developer-reference/configure-the-alibaba-cloud-accesskey-environment-variable-on-linux-macos-and-windows-systems)。
     
--   准备员工信息表[员工信息表.xlsx](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250224/ghwuqu/%E5%91%98%E5%B7%A5%E4%BF%A1%E6%81%AF%E8%A1%A8.xlsx)（包含三条记录），用于创建知识库（下文示例中会用到）。[创建和使用知识库说明](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)
+-   准备员工信息表[员工信息表.xlsx](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250224/ghwuqu/%E5%91%98%E5%B7%A5%E4%BF%A1%E6%81%AF%E8%A1%A8.xlsx)（包含三条记录），用于创建知识库（下文示例中会用到）。[创建和使用知识库说明](raw/application-user-guide/agent-context/knowledge-base/data-connection-overview/rag-knowledge-base.md)
     
     -   **知识库配置：**
         
@@ -1950,7 +1980,7 @@ public class WildcardQueryExample {
 
 ### 标签（Tag）查询示例
 
-检索文档搜索、音视频搜索类知识库时，可通过[标签](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)筛选文件，提高检索效率与准确性。
+检索文档搜索、音视频搜索类知识库时，可通过[标签](raw/application-user-guide/agent-context/knowledge-base/data-connection-overview/rag-knowledge-base.md)筛选文件，提高检索效率与准确性。
 
 **示例：**创建一个文档搜索类知识库，其中包含张三、李四和王五三人的信息。
 
@@ -2547,7 +2577,7 @@ public class TagQueryExample2 {
 
 **知识库用户指南**
 
-请参见[创建和使用知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)。
+请参见[创建和使用知识库](raw/application-user-guide/agent-context/knowledge-base/data-connection-overview/rag-knowledge-base.md)。
 
 **检索知识库**
 

@@ -1,6 +1,6 @@
 # 列出 Skill
 
-cursor 分页列出技能，按 created\_at 倒序。支持按来源过滤（自建或百炼官方）。仅 active 状态可挂载到智能体。
+cursor 分页列出技能，按 created\_at 倒序。支持按来源过滤（自建或阿里云百炼官方）。仅 active 状态可挂载到智能体。
 
 ## 前提
 
@@ -42,7 +42,7 @@ string
 
 `customer`
 
-来源筛选：`customer`（自建）或 `official`（百炼官方）
+来源筛选：`customer`（自建）或 `official`（阿里云百炼官方）
 
 ## 请求示例
 
@@ -122,7 +122,7 @@ string
 
 string
 
-来源：`customer`（自建） / `official`（百炼官方）
+来源：`customer`（自建） / `official`（阿里云百炼官方）
 
 `status`
 

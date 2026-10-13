@@ -4,7 +4,7 @@
 
 ## 前提
 
-1.  已开通百炼并创建 API Key（`sk-xxx`），已获取工作空间 ID（`ws_xxxxxxxxxxxx`），详见[API 总览与认证](raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md)。
+1.  已开通阿里云百炼并创建 API Key（`sk-xxx`），已获取工作空间 ID（`ws_xxxxxxxxxxxx`），详见[API 总览与认证](raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md)。
 2.  将 API Key 与 Endpoint 导出为环境变量，后续示例直接引用：
 
 ```

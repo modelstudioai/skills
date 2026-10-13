@@ -88,13 +88,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
-![robot](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6710872271/p824100.png) [构建智能客服](raw/application-user-guide/llm-application/single-agent-application.md)
+![robot](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6710872271/p824100.png) [构建智能客服](raw/application-user-guide/agent-development/llm-application/single-agent-application.md)
 
 通过可视化工具快速搭建 AI 助手，处理客户咨询。
 
 ![智能客服示例](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6710872271/p823451.gif)
 
-![process](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6710872271/p824091.png) [编排流程](raw/application-user-guide/llm-application/workflow-application.md)
+![process](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6710872271/p824091.png) [编排流程](raw/application-user-guide/agent-development/llm-application/workflow-application.md)
 
 可视化流程编排，无代码基础的业务人员也能独立完成工作流设计。
 
@@ -130,9 +130,9 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 ## 应用构建
 
--   **应用类型**：提供可视化和高代码两种开发模式。可视化模式可快速创建[智能体应用（Agent 1.0）](raw/application-user-guide/llm-application/single-agent-application.md)和[工作流应用](raw/application-user-guide/llm-application/workflow-application.md)；[高代码应用](raw/application-user-guide/llm-application/rich-code-application.md)则支持将 Python 项目部署为后端服务，具备自动化运维、可观测、日志服务等能力。
--   **功能拓展**：通过[知识库（RAG）](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)接入私有数据和专业领域知识；通过[插件](raw/application-user-guide/plug-in/plug-in-overview.md)和[模型上下文协议（MCP）](raw/application-user-guide/model-context-protocol/mcp-introduction.md)调用外部服务。
--   **分享与发布**：支持将应用发布至网页、钉钉机器人、微信公众号及音视频互动智能体等多种平台，详见[应用分享](raw/application-user-guide/application-publishing-and-sharing/share-an-application.md)。
+-   **应用类型**：提供可视化和高代码两种开发模式。可视化模式可快速创建[智能体应用（Agent 1.0）](raw/application-user-guide/agent-development/llm-application/single-agent-application.md)和[工作流应用](raw/application-user-guide/agent-development/llm-application/workflow-application.md)；[高代码应用](raw/application-user-guide/agent-development/llm-application/rich-code-application.md)则支持将 Python 项目部署为后端服务，具备自动化运维、可观测、日志服务等能力。
+-   **功能拓展**：通过[知识库（RAG）](raw/application-user-guide/agent-context/knowledge-base/data-connection-overview/rag-knowledge-base.md)接入私有数据和专业领域知识；通过[插件](raw/application-user-guide/agent-development/llm-application/plug-in/plug-in-overview.md)和[模型上下文协议（MCP）](raw/application-user-guide/agent-store/model-context-protocol/mcp-introduction.md)调用外部服务。
+-   **分享与发布**：支持将应用发布至网页、钉钉机器人、微信公众号及音视频互动智能体等多种平台，详见[应用分享](raw/application-user-guide/agent-development/llm-application/application-publishing-and-sharing/share-an-application.md)。
 
 ## 产品计费
 
@@ -172,7 +172,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
     -   打开[阿里云百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)，在右上角选择目标地域
     -   进入[体验中心](https://bailian.console.aliyun.com/model/experience/text)页面，选择模型开始体验
 -   发起第一个API请求：[首次调用千问API](raw/model-user-guide/get-started-with-models/first-api-call-to-qwen.md)
--   构建第一个大模型应用：[0代码构建问答应用](raw/application-user-guide/start-using/build-knowledge-base-qa-assistant-without-coding.md)
+-   构建第一个大模型应用：[0代码构建问答应用](raw/_short/build-knowledge-base-qa-assistant-without-coding-117468a8b3869dc4.md)
 
 ## 常见问题
 
@@ -208,4 +208,4 @@ A：
 1.  **在线体验**：打开[阿里云百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)，选择目标地域，进入[模型广场](https://bailian.console.aliyun.com/model/market)页面，点击模型即可体验（DeepSeek 仅支持北京地域）。
 2.  **通过API调用**：请参见[首次调用千问API](raw/model-user-guide/get-started-with-models/first-api-call-to-qwen.md)。
 3.  **通过开发工具（如 Claude Code）调用**：请参考[接入客户端/开发工具](raw/model-user-guide/use-chat-client-or-development-tool.md)。
-4.  **通过可视化界面构建大模型应用**：请参考[智能体应用（Agent 1.0）](raw/application-user-guide/llm-application/single-agent-application.md)或[工作流应用](raw/application-user-guide/llm-application/workflow-application.md)。
+4.  **通过可视化界面构建大模型应用**：请参考[智能体应用（Agent 1.0）](raw/application-user-guide/agent-development/llm-application/single-agent-application.md)或[工作流应用](raw/application-user-guide/agent-development/llm-application/workflow-application.md)。

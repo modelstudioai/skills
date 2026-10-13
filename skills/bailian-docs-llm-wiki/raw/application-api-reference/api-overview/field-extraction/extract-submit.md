@@ -239,6 +239,6 @@ curl -X POST 'https://{workspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/par
 }
 ```
 
-**警告**抽取不支持音视频输入。复用的解析结果若已超过 7 天保留期或类型不匹配，接口会返回对应错误；详见[错误码](raw/application-api-reference/api-overview/errors.md)。Schema 规模和长文档页数仅按工程设计边界规划，公开配额以正式页面为准，见[支持的文件与限制](raw/application-user-guide/getting-started-overview/settings-configurations/supported-files-and-limits.md)。
+**警告**抽取不支持音视频输入。复用的解析结果若已超过 7 天保留期或类型不匹配，接口会返回对应错误；详见[错误码](raw/application-api-reference/api-overview/errors.md)。Schema 规模和长文档页数仅按工程设计边界规划，公开配额以正式页面为准，见[支持的文件与限制](raw/application-user-guide/agent-context/getting-started-overview/settings-configurations/supported-files-and-limits.md)。
 
 **重要**提交后，使用[查询抽取结果](raw/application-api-reference/api-overview/field-extraction/extract-result.md)轮询任务状态并获取结构化结果。

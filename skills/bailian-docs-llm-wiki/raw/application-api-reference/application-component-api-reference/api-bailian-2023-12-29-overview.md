@@ -260,31 +260,31 @@ API
 
 API概述
 
-[CreatePromptTemplate](raw/_short/api-bailian-2023-12-29-createprompttemplate-1194e536beb0529a.md)
+[CreatePromptTemplate](raw/_short/api-bailian-2023-12-29-createprompttemplate-5d322a6c80396e15.md)
 
 创建Prompt模板
 
 创建Prompt模板。
 
-[GetPromptTemplate](raw/_short/api-bailian-2023-12-29-getprompttemplate-584c357dd7cb48d6.md)
+[GetPromptTemplate](raw/_short/api-bailian-2023-12-29-getprompttemplate-33268b72d11a1cac.md)
 
 获取Prompt模板
 
 基于模板Id获取Prompt模板。
 
-[UpdatePromptTemplate](raw/_short/api-bailian-2023-12-29-updateprompttemplate-519fb4af5ea50522.md)
+[UpdatePromptTemplate](raw/_short/api-bailian-2023-12-29-updateprompttemplate-e09e2567b2b8646d.md)
 
 更新Prompt模板
 
 基于模板Id增量更新Prompt模板。
 
-[DeletePromptTemplate](raw/_short/api-bailian-2023-12-29-deleteprompttemplate-b441fa1b9c777b81.md)
+[DeletePromptTemplate](raw/_short/api-bailian-2023-12-29-deleteprompttemplate-e7dac02713c2120e.md)
 
 删除Prompt模板
 
 基于模板Id删除Prompt模板。
 
-[ListPromptTemplates](raw/_short/api-bailian-2023-12-29-listprompttemplates-ab5ba5362e93cfcd.md)
+[ListPromptTemplates](raw/_short/api-bailian-2023-12-29-listprompttemplates-16aa76e6889fef61.md)
 
 获取Prompt模板列表
 
@@ -302,79 +302,79 @@ API概述
 
 长期记忆（旧）
 
-[CreateMemory](raw/_short/api-bailian-2023-12-29-creatememory-b8e710cdd3512a87.md)
+[CreateMemory](raw/_short/api-bailian-2023-12-29-creatememory-71d9eb60188e5ed4.md)
 
 创建长期记忆体
 
 创建一个长期记忆体。
 
-[GetMemory](raw/_short/api-bailian-2023-12-29-getmemory-c25d3815c2b70f40.md)
+[GetMemory](raw/_short/api-bailian-2023-12-29-getmemory-93a2074c0e9ce4e8.md)
 
 获取长期记忆体
 
 获取指定长期记忆体的描述信息。
 
-[UpdateMemory](raw/_short/api-bailian-2023-12-29-updatememory-b5fdfa9f480e94bb.md)
+[UpdateMemory](raw/_short/api-bailian-2023-12-29-updatememory-b92bc2a2bf604c38.md)
 
 更新长期记忆体
 
 更新指定长期记忆体的描述信息。
 
-[DeleteMemory](raw/_short/api-bailian-2023-12-29-deletememory-ffa5f461924db8f6.md)
+[DeleteMemory](raw/_short/api-bailian-2023-12-29-deletememory-2e39ced8c987fad3.md)
 
 删除长期记忆体
 
 永久性删除指定的长期记忆体。
 
-[ListMemories](raw/_short/api-bailian-2023-12-29-listmemories-3411c870627f174b.md)
+[ListMemories](raw/_short/api-bailian-2023-12-29-listmemories-ca86cf5601eec468.md)
 
 获取长期记忆体列表
 
 获取指定业务空间下一个或多个长期记忆体的详细信息。
 
-[CreateMemoryNode](raw/_short/api-bailian-2023-12-29-creatememorynode-c6cd91f25e1f7997.md)
+[CreateMemoryNode](raw/_short/api-bailian-2023-12-29-creatememorynode-7e5dec47c8bf17cc.md)
 
 创建记忆片段
 
 创建记忆片段。
 
-[GetMemoryNode](raw/_short/api-bailian-2023-12-29-getmemorynode-59d0d4efa0e86d78.md)
+[GetMemoryNode](raw/_short/api-bailian-2023-12-29-getmemorynode-c43110862c1879b6.md)
 
 获取记忆片段
 
 获取记忆片段。
 
-[UpdateMemoryNode](raw/_short/api-bailian-2023-12-29-updatememorynode-f2d05378b761b201.md)
+[UpdateMemoryNode](raw/_short/api-bailian-2023-12-29-updatememorynode-c71c6bef92b1ecc3.md)
 
 更新记忆片段
 
 更新记忆片段。
 
-[DeleteMemoryNode](raw/_short/api-bailian-2023-12-29-deletememorynode-d7919fd53d316466.md)
+[DeleteMemoryNode](raw/_short/api-bailian-2023-12-29-deletememorynode-21f72ddcbaecd822.md)
 
 删除记忆片段
 
 删除记忆片段。
 
-[ListMemoryNodes](raw/_short/api-bailian-2023-12-29-listmemorynodes-4f1cc5232bdc67a5.md)
+[ListMemoryNodes](raw/_short/api-bailian-2023-12-29-listmemorynodes-ec6bee0a62fb4cb8.md)
 
 获取记忆片段列表
 
 获取记忆片段列表。
 
-[GetAlipayTransferStatus](raw/_short/api-bailian-2023-12-29-getalipaytransferstatus-04aa88852762fd85.md)
+[GetAlipayTransferStatus](raw/_short/api-bailian-2023-12-29-getalipaytransferstatus-1e6bc508cb390a4f.md)
 
 查询支付宝打赏状态
 
 查询应用中绑定的支付宝钱包的打赏状态。
 
-[GetAlipayUrl](raw/_short/api-bailian-2023-12-29-getalipayurl-e6e9715d5164f74a.md)
+[GetAlipayUrl](raw/application-api-reference/flow-agent-api/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-getalipayurl.md)
 
 获取支付宝打赏URL
 
 获取应用上支付宝的打赏链接。
 
-[ApplyTempStorageLease](raw/_short/api-bailian-2023-12-29-applytempstoragelease-5a38ce0eefc66408.md)
+[ApplyTempStorageLease](raw/_short/api-bailian-2023-12-29-applytempstoragelease-23a13524c8ed9f9d.md)
 
 申请临时文件上传许可
 

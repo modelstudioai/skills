@@ -19,7 +19,7 @@
 
 ## 选择地域和服务部署范围
 
-不同地域支持不同的服务部署范围，百炼将在所选范围内进行推理调度。例如美国（弗吉尼亚）支持全球和美国，德国（法兰克福）支持全球和欧盟等。完整的地域与服务部署范围对应关系，请前往[控制台](https://bailian.console.aliyun.com/)查看。
+不同地域支持不同的服务部署范围，百炼将在所选范围内进行推理调度。例如美国（弗吉尼亚）支持全球和美国，德国（法兰克福）支持全球和欧盟等。各地域支持的服务部署范围和接入方式，请参见[华北2（北京）](https://help.aliyun.com/zh/model-studio/beijing-access-information)、[新加坡](https://help.aliyun.com/zh/model-studio/singapore-regional-access-information)、[美国（弗吉尼亚）](https://help.aliyun.com/zh/model-studio/usa-virginia-global)、[德国（法兰克福）](https://help.aliyun.com/zh/model-studio/germany-frankfurt-global)、[日本（东京）](https://help.aliyun.com/zh/model-studio/japan-tokyo-global)、[中国香港](https://help.aliyun.com/zh/model-studio/hong-kong-china-global)。
 
 ## 选择接入域名
 
@@ -194,7 +194,6 @@ HTTP、SSE
 [可用模型](https://bailian.console.aliyun.com/us-east-1/model/market)
 
 -   **德国（法兰克福）、日本（东京）、中国香港、美国（弗吉尼亚）**地域通过**业务空间（Workspace）**区分服务部署范围，开始调用前需前往业务空间管理页面创建业务空间并选择服务部署范围：[德国（法兰克福）](https://bailian.console.aliyun.com/eu-central-1/settings/workspace)（全球/欧盟）、[日本（东京）](https://bailian.console.aliyun.com/ap-northeast-1/settings/workspace)（全球/日本）、[中国香港](https://bailian.console.aliyun.com/cn-hongkong/settings/workspace)（全球/中国香港）、[美国（弗吉尼亚）](https://bailian.console.aliyun.com/us-east-1/settings/workspace)（全球/美国）。
--   **华北2（北京）**和**新加坡地域**各仅支持一种服务部署范围，无需选择。
 
 **说明**美国（弗吉尼亚）地域的部署模式已升级。如果正在使用带 `-us` 后缀的模型，请尽快完成切换升级，详情请参见[升级公告](https://www.aliyun.com/notice/118646)。
 

@@ -85,7 +85,7 @@ string
 
 string
 
-来源：`customer`（自建） / `official`（百炼官方）
+来源：`customer`（自建） / `official`（阿里云百炼官方）
 
 `status`
 

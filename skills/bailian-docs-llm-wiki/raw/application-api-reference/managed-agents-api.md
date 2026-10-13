@@ -1,6 +1,8 @@
-# Managed Agents
+# Managed Agent API
 
--   [API 总览与认证](raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md)
+-   [概览](raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md)
+-   [认证](raw/application-api-reference/managed-agents-api/managed-agents-api-authentication.md)
+-   [错误码](raw/application-api-reference/managed-agents-api/managed-agents-api-errors.md)
 -   [快速开始](raw/application-api-reference/managed-agents-api/managed-agents-quickstart.md)
 -   [Agent](raw/application-api-reference/managed-agents-api/agent-api.md)
 -   [Environment](raw/application-api-reference/managed-agents-api/environment-api.md)

@@ -4,7 +4,7 @@
 
 如果您希望将知识库部署在本地，实现灵活的文档切分与嵌入模型选择，请参考本文档进行操作。
 
-> 如果您希望将知识库部署在云端，直观、快速地创建RAG应用，请使用阿里云百炼提供的[0代码构建RAG应用](raw/application-user-guide/start-using/build-knowledge-base-qa-assistant-without-coding.md)功能。
+> 如果您希望将知识库部署在云端，直观、快速地创建RAG应用，请使用阿里云百炼提供的[0代码构建RAG应用](raw/_short/build-knowledge-base-qa-assistant-without-coding-117468a8b3869dc4.md)功能。
 
 ## 方案概览
 

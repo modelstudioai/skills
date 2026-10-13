@@ -1,8 +1,8 @@
-# API 概览
+# 概览
 
 服务地址、协议约定、请求格式与通用响应
 
-通过记忆库 API，你可以以编程方式写入记忆、检索记忆、管理画像模板。所有接口通过 DashScope 网关提供服务。
+通过记忆库 API，你可以以编程方式写入记忆、检索记忆、管理画像模板。全部接口通过 DashScope 网关提供服务。
 
 ## 服务地址
 
@@ -10,11 +10,11 @@
 https://dashscope.aliyuncs.com/api/v2/apps/memory/
 ```
 
-所有接口使用统一的服务地址。将各接口页面列出的路径拼接到服务地址后即可得到完整请求地址，例如 `/add` 对应 `https://dashscope.aliyuncs.com/api/v2/apps/memory/add`。
+全部接口使用统一的服务地址。将各接口页面列出的路径拼接到服务地址后即可得到完整请求地址，例如 `/add` 对应 `https://dashscope.aliyuncs.com/api/v2/apps/memory/add`。
 
 ## 协议约定
 
--   所有接口均通过 **HTTPS** 访问，不支持 HTTP
+-   全部接口均通过 **HTTPS** 访问，不支持 HTTP
 -   请求体和响应体均为 **JSON** 格式，字符集 **UTF-8**
 -   写入和检索接口使用 `POST` 方法；列表查询使用 `GET` 方法；更新使用 `PATCH`；删除使用 `DELETE`
 
@@ -78,6 +78,6 @@ Header
 
 页码，从 1 开始
 
-**说明**记忆库将于 **2026 年 8 月 20 日** 正式商业化计费。Add 和 Search 调用区分 **Pro** 和 **Lite** 两个策略版本。详见[计费说明](raw/application-user-guide/memory-library-overview/integration-overview/billing.md)。
+**说明**记忆库将于 **2026 年 8 月 20 日** 正式商业化计费。Add 和 Search 调用区分 **Pro** 和 **Lite** 两个策略版本。详见[计费说明](raw/application-user-guide/agent-context/memory-library-overview/integration-overview/billing.md)。
 
 **重要**准备好凭证后，查看 [AddMemory 接口](raw/application-api-reference/long-term-memory-new/fragments-overview/add-memory.md)。

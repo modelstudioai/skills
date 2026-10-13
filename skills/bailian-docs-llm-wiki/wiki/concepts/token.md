@@ -1,46 +1,36 @@
-# Token
+# Token 计量与管理
 
-Token 是百炼平台中用于计量模型输入与输出内容的基本单位，也是计费、限流、上下文长度控制和性能监控的核心度量标准。一个 Token 通常对应一个子词（subword）或标点符号，在中文场景下约等于 1–2 个汉字，英文场景下约等于 1 个单词或标点；具体切分由模型所用 tokenizer 决定。
+Token 计量与管理是百炼平台对模型调用资源消耗进行统一量化、实时扣减、配额控制与成本归因的核心机制。它以输入 token 与输出 token 的实际消耗为唯一计量基准，贯穿 API 调用、配额分配、计费结算、预算控制及服务限流全链路。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **模型调用（API 请求）**：  
-  `max_tokens` 参数限制模型单次响应的最大输出 Token 数（如 `qwen3.7-plus` 默认上限为 8192）；`messages` 中所有内容（含 system prompt、user 和 assistant 消息）共同构成输入 Token，总长度受模型上下文窗口限制（如 `qwen3.8-max` 为 32768 tokens）。超出将触发 `400 Bad Request` 错误。
-
-- **计费与用量统计**：  
-  百炼按 **总 Token 数 = 输入 Token + 输出 Token** 计费（部分[多模态](multi-modal.md)模型按图像张数/音频秒数等独立计费单位核算，但文本生成类模型统一以 Token 为准）。在「模型用量」控制台中，可按分钟/小时/天维度查看各模型的 `TotalToken` 消耗，用于成本分析与预算管控。
-
-- **[模型评测](model-evaluation.md)（Evaluation）**：  
-  评测任务中，被测模型对每条 `Prompt` 的推理会消耗输入 + 输出 Token，产生推理费用；裁判模型（如 `qwen3.8-max`）对每条 `Output` 打分时也按 Token 计费。Token 消耗量直接影响评测成本，小规模验证建议先用 ≤100 条样本预估开销。
-
-- **模型监控（Monitoring）**：  
-  `TotalToken` 是核心监控指标之一，与调用次数、失败率、首 Token 延迟等并列展示。告警规则可基于 `TotalToken` 设置阈值（如“单小时超 100 万 Token”），及时发现异常调用或爬虫行为。
+- **API 调用配额控制（Token Plan）**：所有标准文本生成接口（如 `/v1/chat/completions`）在调用时自动按 `input_tokens + output_tokens` 总量扣减所绑定 Token Plan 的日配额；流式响应（`stream=true`）按每个 chunk 实际 token 数分次扣减，保障配额使用精度。
+- **成本计费与账单归因**：计费严格按实际消耗的百万级 token 数结算，单价按输入 token 总量所属阶梯档位统一计算；账单中“大模型文本消耗量”字段即为此计量结果，并通过 `ApiKeyID;业务空间ID;模型名称` 组合实现细粒度归因。
+- **吞吐预留（TPM）容量折算**：在 TPU/DTU 吞吐预留场景中，token 消耗量被映射为容量单位（kTPM），长输入、缓存命中等场景按模型特定系数折算，确保容量预估与真实负载一致。
+- **免费额度与节省计划抵扣**：新人免费额度（100 万 Token）、资源包、AI 通用型节省计划等均以 token 消耗量为兑付依据，系统按 `免费额度 > 资源包 > 节省计划 > 按量付费` 顺序自动抵扣，无需开发者干预。
+- **异步与多模态任务**：当前 Token Plan 体系暂不覆盖异步图像生成、语音转写、模型微调训练及私有化部署等任务；其 token 消耗需参考对应模块独立计量规则（如文生图按分辨率+步数折算，ASR 按音频时长折算）。
 
 ## 关键参数和配置
 
-| 参数名 | 所属场景 | 说明 | 典型取值范围 | 注意事项 |
-|--------|----------|------|--------------|----------|
-| `max_tokens` | API 调用（OpenAI/DashScope） | 控制模型输出最大 Token 数 | `1`–`8192`（依模型而异，`qwen3.8-max` 最高支持 `8192`） | 不设或设为 `0` 将使用模型默认值；设过高可能增加延迟与费用，且不保证实际输出长度 |
-| `input_tokens` / `output_tokens` | API 响应体（`usage` 字段） | 实际消耗的输入/输出 Token 数 | 非负整数 | [OpenAI 兼容接口](openai-compatible-api.md)返回 `"usage": {"prompt_tokens": N, "completion_tokens": M}`；DashScope 返回 `"usage": {"input_tokens": N, "output_tokens": M}` |
-| `TotalToken` | 监控与用量报表 | 单次请求的 `input_tokens + output_tokens` 总和 | 同上 | 控制台用量统计、告警规则、账单明细均以此字段为依据；不包含系统内部处理开销 |
-
-> 💡 提示：可通过 SDK 或响应头 `X-DashScope-Usage`（格式为 `{"input_tokens":N,"output_tokens":M}`）实时获取本次调用的精确 Token 消耗，便于客户端做动态限流或成本预估。
+- `input_tokens` / `output_tokens`：API 响应中明确返回的两个整型字段，代表本次请求实际消耗的输入与输出 token 数，是配额监控与成本分析的直接依据。
+- `max_tokens`：单次请求允许生成的最大输出 token 数（默认值因模型而异，如 `qwen3-8b` 默认为 8192），用于前置约束输出长度，避免意外超额。
+- `stream`：启用流式响应不影响总 token 消耗量，但改变配额扣减节奏——由一次性扣减变为按 chunk 分批扣减，适用于需实时反馈且配额敏感的场景。
+- `n`（并行生成数）：设置 `n>1` 会线性增加输出 token 消耗（如 `n=3` 且每条输出 100 tokens，则总 `output_tokens = 300`），可能触发团队版突发流量熔断；高吞吐场景推荐改用 `/v1/batch/completions` 异步批处理接口。
+- 配额重置周期：所有 Token Plan 按 UTC+0 时间每日重置（非北京时间），存在最多 5 分钟延迟；重置后配额清零，历史用量不结转。
 
 ## 面向开发者，简洁实用
 
-- **估算 Token 数**：本地可使用 `tiktoken`（OpenAI 兼容）或 `transformers.AutoTokenizer` 加载对应模型 tokenizer 进行粗略计算（如 `qwen3` 系列推荐使用 `QwenTokenizer`）；生产环境请以 API 响应中的 `usage` 字段为准。
-- **优化 Token 开销**：
-  - 缩短 system prompt，避免冗余描述；
-  - 对长文档做分块摘要或提取关键句再输入；
-  - 使用 `qwen3.8-flash` 等高性价比模型处理简单任务；
-  - 流式响应（`stream=True`）不减少总 Token 消耗，但可降低首 Token 延迟感知。
-- **调试技巧**：若遇到 `context_length_exceeded` 错误，优先检查 `messages` 总长度（非字符数）；使用百炼控制台「API 调试」工具可直观查看分词结果与 Token 统计。
+- ✅ **必查响应字段**：每次调用后检查响应中的 `usage.input_tokens` 和 `usage.output_tokens`，用于本地配额校验与异常诊断。
+- ✅ **实时用量查询**：调用 `/v1/usage?date=2024-06-15&model=qwen-plus` 获取指定日期/模型的已用 token 量，支持按天聚合，便于构建用量看板。
+- ✅ **配额告警建议**：结合 `/v1/usage` 接口 + 定时任务，在用量达 80% 时触发通知；生产环境禁用“预算超限自动停服”（HTTP 429），应通过主动降级或限流策略保障可用性。
+- ❌ **避免误区**：`temperature`/`top_p` 不影响 token 消耗量；`enable_thinking` 等模型特有参数仅影响输出内容，不改变计量逻辑；多模态模型（VL/TTS/ASR）暂不纳入统一 Token Plan，需单独查阅对应文档。
+- ⚙️ **调试提示**：本地开发时，可先用免费额度快速验证；上线前务必确认 API Key 已绑定合适 Token Plan 或节省计划，并在控制台开启「用量明细」日志留存（保留 90 天）。
 
 ## 关联主题页
 
-- [get started with models](../guides/get-started-with-models.md)
-- [qwen api reference](../api/qwen-api-reference.md)
-- [model evaluation introduction](../guides/model-evaluation-introduction.md)
-- [model monitoring](../guides/model-monitoring.md)
+- [token plan guide](../guides/token-plan-guide.md)
+- [test 1](../guides/test-1.md)
+- [preparations](../api/preparations.md)
+- [more about models](../api/more-about-models.md)
 
 

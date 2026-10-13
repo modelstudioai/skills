@@ -1,10 +1,12 @@
-# API 总览与认证
+# 概览
 
 Managed Agents API 是阿里云百炼提供的智能体托管运行时，由平台托管会话、沙箱、工具执行与事件流。
 
+**说明**调用前请先配置[认证](raw/application-api-reference/managed-agents-api/managed-agents-api-authentication.md)；错误处理见[错误码](raw/application-api-reference/managed-agents-api/managed-agents-api-errors.md)。
+
 ## 前提条件
 
-1.  **开通阿里云百炼并创建 API Key**：通过[控制台](https://bailian.console.aliyun.com/?tab=model#/api-key)获取，并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
+1.  已开通阿里云百炼，并[创建 API Key](raw/application-api-reference/managed-agents-api/managed-agents-api-authentication.md)。
 2.  **获取工作空间 ID**：阿里云百炼控制台右上角下拉菜单查看，形如 `ws_xxxxxxxxxxxx`。
 
 ## Endpoint
@@ -17,14 +19,6 @@ https://{workspace_id}.{region}.maas.aliyuncs.com/api/v1/agentstudio
 
 -   `workspace_id`：工作空间 ID，例如 `ws_xxxxxxxxxxxx`
 -   `region`：地域 ID，当前仅支持 `cn-beijing`
-
-## 鉴权
-
-全部请求通过 HTTP Header 携带 API Key，一个 Key 可访问其归属工作空间下的全部资源。
-
-```
-Authorization: Bearer <your-api-key>
-```
 
 ## SDK
 
@@ -48,7 +42,7 @@ java
 ## 请求与响应
 
 -   请求体为 JSON，`Content-Type: application/json`
--   每次响应携带 `x-request-id` 头，提工单时附上此 ID 可加速定位
+-   每次响应携带 `x-request-id` 头，可用于定位具体请求
 -   列表端点支持分页：`limit`（默认 20，最大 100）、`page`（首次不传，后续传上一次响应的 `next_page`）。响应不含 `next_page` 表示已是末页
 
 ## 可用 API

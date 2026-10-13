@@ -1,13 +1,15 @@
-# API 总览与认证
+# 概览
 
 Sandbox API 的前提条件、Endpoint 拼装、鉴权方式，以及实例与模版管理的可用接口和错误响应。
+
+**说明**调用前请先配置[认证](raw/application-api-reference/sandbox-api/sandbox-api-authentication.md)；错误处理见[错误码](raw/application-api-reference/sandbox-api/sandbox-api-errors.md)。
 
 Sandbox API 兼容 [E2B](https://e2b.dev/docs) 协议，提供沙箱实例的生命周期管理与模版管理能力。管控面请求经阿里云百炼 AI 网关转发。
 
 ## 前提条件
 
-1.  **开通阿里云百炼并创建 API Key**：通过[控制台](https://bailian.console.aliyun.com/?tab=model#/api-key)获取。
-2.  **完成服务授权**：首次使用 Sandbox 需完成 SLR 授权，详见[快速开始](raw/application-user-guide/sandbox/sandbox-quick-start.md)。
+1.  已开通阿里云百炼，并[创建 API Key](raw/application-api-reference/sandbox-api/sandbox-api-authentication.md)。
+2.  **完成服务授权**：首次使用 Sandbox 需完成 SLR 授权，详见[快速开始](raw/application-user-guide/agent-development/sandbox/sandbox-start-using/sandbox-quick-start.md)。
 3.  **获取工作空间 ID**：阿里云百炼控制台右上角下拉菜单查看，形如 `{workspace_id}`。
 
 ## Endpoint
@@ -20,18 +22,6 @@ https://{workspace_id}.{region}.maas.aliyuncs.com/api/v1/agentstudio/sandbox
 
 -   `workspace_id`：工作空间 ID
 -   `region`：地域 ID，当前仅支持 `cn-beijing`
-
-## 鉴权
-
-全部请求通过 HTTP Header 携带阿里云百炼 API Key：
-
-```
-Authorization: Bearer <your-api-key>
-```
-
-使用 E2B SDK 时，SDK 必填的 `X-API-Key` / `api_key` 仅用于满足 E2B 协议格式，阿里云百炼侧不使用它做业务鉴权。推荐填写 `e2b_${ALIYUN_UID}`。
-
-**说明**兼容 E2B 协议的接口返回体贴近 E2B 原生响应结构，不封装为阿里云百炼统一 `Result<T>` 结构。
 
 ## 可用 API
 
@@ -129,48 +119,6 @@ Authorization: Bearer <your-api-key>
 
 `/templates/{templateCode}`
 
-## 错误响应
-
-调用出错时，接口返回的错误响应如下：
-
-```
-{
-  "code": 100004,
-  "message": "参数缺失",
-  "requestID": "request-id"
-}
-```
-
-常见 HTTP 状态码含义如下：
-
-HTTP 状态码
-
-说明
-
-400
-
-参数缺失、格式错误、超出取值范围
-
-401
-
-API Key 无效
-
-404
-
-模版或实例不存在
-
-409
-
-当前资源状态不允许执行该操作
-
-500
-
-服务内部异常
-
-501
-
-当前版本暂不支持
-
 ## E2B 官方参考
 
 Sandbox 当前对外提供兼容 E2B 协议的 HTTP API。各接口的方法、路径与响应结构贴近 E2B 官方定义，除更新模版为阿里云百炼自定义协议外，其余接口的通用字段与语义可参阅 E2B 官方 API 文档：
@@ -181,4 +129,4 @@ Sandbox 当前对外提供兼容 E2B 协议的 HTTP API。各接口的方法、�
 
 ## SDK
 
-除直接调用 REST 接口外，还可通过 E2B 官方 SDK 接入。详见[实例管理与使用](raw/application-user-guide/sandbox/sandbox-sdk.md)。
+除直接调用 REST 接口外，还可通过 E2B 官方 SDK 接入。详见[实例管理与使用](raw/application-user-guide/agent-development/sandbox/sandbox-sdk.md)。

@@ -152,4 +152,4 @@ asyncio.run(main())
 }
 ```
 
-**重要**完整画像流程参见[使用用户画像](raw/application-user-guide/memory-library-overview/create-memory/user-profile.md)。
+**重要**完整画像流程参见[使用用户画像](raw/application-user-guide/agent-context/memory-library-overview/create-memory/user-profile.md)。

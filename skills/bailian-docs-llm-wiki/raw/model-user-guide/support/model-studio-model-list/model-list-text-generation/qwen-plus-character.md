@@ -370,6 +370,18 @@ Function Calling
 
 每百万tokens
 
+显式缓存创建
+
+1
+
+每百万tokens
+
+显式缓存命中
+
+0.08
+
+每百万tokens
+
 #### 新加坡
 
 部署范围：国际
@@ -466,19 +478,19 @@ Function Calling
 
 输入
 
-0.115
+0.8
 
 每百万tokens
 
 输出
 
-0.287
+2
 
 每百万tokens
 
 输入（缓存命中）
 
-0.023
+0.16
 
 每百万tokens
 

@@ -2,8 +2,6 @@
 
 本文档介绍如何在阿里云百炼平台调用月之暗面（Moonshot AI）直供的模型推理服务。
 
-**重要**三方直供模型 kimi/kimi-k2.5 将于**2026年8月31日**下架。推荐转用：[kimi-k2.6](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/kimi-k2.6) 或其他模型。
-
 **重要**本文档描述的功能仅在华北2（北京）地域可用，如需使用模型，需从华北2（北京）地域[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
 
 ## 服务开通
@@ -26,12 +24,12 @@ kimi 系列模型均支持输入文本、图像或视频：
     
 2.  kimi/kimi-k3、kimi/kimi-k2.7-code-highspeed、kimi/kimi-k2.7-code 为仅思考模型。
     
-3.  kimi/kimi-k2.6、kimi/kimi-k2.5 可通过 `enable_thinking` 参数控制思考模式，默认开启思考模式：
+3.  kimi/kimi-k2.6 可通过 `enable_thinking` 参数控制思考模式，默认开启思考模式：
     
     -   **思考模式**（`reasoning_effort: "max"`）：模型会输出详细的推理过程（`reasoning_content`）
     -   **非思考模式**（`enable_thinking: false` 或不设置）：直接输出结果，不包含推理过程
 
-除 kimi/kimi-k2.5外，其他模型均支持通过 `preserve_thinking` 参数在多轮对话中传递思考过程，详情请参见[传递思考过程](https://help.aliyun.com/zh/model-studio/deep-thinking#jln7docdq5et5)。
+以上模型均支持通过 `preserve_thinking` 参数在多轮对话中传递思考过程，详情请参见[传递思考过程](https://help.aliyun.com/zh/model-studio/deep-thinking#jln7docdq5et5)。
 
 以下示例演示如何调用思考模式的 kimi/kimi-k3 模型进行文本生成。
 
@@ -297,7 +295,7 @@ console.log(completion.choices[0].message.content);
 
 // 多图传入示例（开启思考模式，取消注释使用）
 // const multiCompletion = await openai.chat.completions.create({
-//     model: 'kimi-k2.5',
+//     model: 'kimi/kimi-k3',
 //     messages: [
 //         {
 //             role: 'user',
@@ -545,7 +543,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 ## 其它功能
 
-**模型**
+模型
 
 [多轮对话](raw/model-user-guide/model-experience/text-generation-model/multi-round-conversation.md)
 
@@ -579,113 +577,105 @@ kimi/kimi-k2.7-code
 
 kimi/kimi-k2.6
 
-kimi/kimi-k2.5
-
 以上模型支持上下文缓存（隐式缓存，自动开启）：
 
 -   kimi/kimi-k3命中缓存的输入Token按输入价格的10%计费
 -   kimi/kimi-k2.7-code-highspeed、kimi/kimi-k2.7-code 命中缓存的输入Token按输入价格的20.0%计费，
 -   kimi/kimi-k2.6命中缓存的输入Token按输入价格的16.9%计费
--   kimi/kimi-k2.5命中缓存的输入Token按输入价格的17.5%计费。
 
 ## 参数默认值
 
-**模型**
-
-**tool\_choice**
-
-**preserve\_thinking**
-
-**reasoning\_effort**
-
-**temperature**
-
-**top\_p**
-
-**repetition\_penalty**
-
-**presence\_penalty**
-
-**stream\_options**
+参数
 
 kimi/kimi-k3
 
-auto
-
-默认关闭
-
-max
-
-1
-
-0.95
-
-0.0
-
-\-
-
-仅支持设置为`true`
-
 kimi/kimi-k2.7-code-highspeed
-
-auto
-
-默认开启
-
-\-
-
-1.0
-
-0.95
-
-0.0
-
-0.0
-
-仅支持设置为`true`
 
 kimi/kimi-k2.7-code
 
+kimi/kimi-k2.6
+
+`tool_choice`
+
 auto
 
-默认开启
+auto
 
-\-
-
-1.0
-
-0.95
-
-0.0
-
-0.0
-
-仅支持设置为`true`
-
-kimi/kimi-k2.6
+auto
 
 思考模式/非思考模式：auto
 
+`preserve_thinking`
+
 默认关闭
+
+默认开启
+
+默认开启
+
+默认关闭
+
+`reasoning_effort`
+
+max
 
 \-
 
-思考模式：1.0  
-非思考模式：0.6  
+\-
+
+\-
+
+`temperature`
+
+1
+
+1.0
+
+1.0
+
+思考模式：1.0
+
+非思考模式：0.6
+
+`top_p`
+
+0.95
+
+0.95
+
+0.95
 
 思考模式/非思考模式：0.95
 
-思考模式/非思考模式：0.0
+`repetition_penalty`
+
+0.0
+
+0.0
+
+0.0
 
 思考模式/非思考模式：0.0
+
+`presence_penalty`
+
+\-
+
+0.0
+
+0.0
+
+思考模式/非思考模式：0.0
+
+`stream_options`
 
 仅支持设置为`true`
 
-kimi/kimi-k2.5
+仅支持设置为`true`
 
-\-
+仅支持设置为`true`
 
-\-
+仅支持设置为`true`
 
 -   `stream_options`仅支持设置为`true`，`temperature`、`top_p`、`repetition_penalty`、`presence_penalty`不支持设置为其他值；
 -   kimi/kimi-k3 支持 `reasoning_effort` 参数，唯一支持值 `max`。
