@@ -1,4 +1,4 @@
-# 鉴权
+# 认证
 
 API Key 获取与使用方式
 
@@ -35,7 +35,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v2/apps/memory/add' \
 
 ## 权限说明
 
--   **阿里云主账号**：可直接调用所有接口
+-   **阿里云主账号**：可直接调用全部接口
 -   **RAM 子账号**：需获得相应权限授权后调用
 -   API Key 的权限范围由控制台配置
 

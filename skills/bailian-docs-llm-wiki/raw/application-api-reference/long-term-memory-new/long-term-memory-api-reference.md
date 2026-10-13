@@ -2,7 +2,7 @@
 
 长期记忆的完整 API 接口目录：公共请求信息、全部接口一览与使用限制，各接口的请求参数、返回结果和示例代码见对应分页。
 
-本文档是长期记忆（记忆库）全部 API 的目录总览。功能介绍和使用指南参见[记忆库](raw/application-user-guide/memory-library-overview/memory-library.md)与[长期记忆 API](raw/application-user-guide/memory-library-overview/long-term-memory-2-0.md)。
+本文档是长期记忆（记忆库）全部 API 的目录总览。功能介绍和使用指南参见[记忆库](raw/application-user-guide/agent-context/memory-library-overview/memory-library.md)与[长期记忆 API](raw/application-user-guide/agent-context/memory-library-overview/long-term-memory-2-0.md)。
 
 ## 公共请求信息
 
@@ -26,7 +26,7 @@ Content-Type
 
 ## 接口概览
 
-**重要**记忆库将于 **2026 年 8 月 20 日 10:00**（北京时间）正式商业化计费。Add 和 Search 调用均区分 **Pro** 和 **Lite** 版本：Add 的版本对应不同质量的记忆抽取模型，Search 的版本决定是否开启 Rerank。详见[计费说明](raw/application-user-guide/memory-library-overview/integration-overview/billing.md)。
+**重要**记忆库将于 **2026 年 8 月 20 日 10:00**（北京时间）正式商业化计费。Add 和 Search 调用均区分 **Pro** 和 **Lite** 版本：Add 的版本对应不同质量的记忆抽取模型，Search 的版本决定是否开启 Rerank。详见[计费说明](raw/application-user-guide/agent-context/memory-library-overview/integration-overview/billing.md)。
 
 **事实记忆**：
 
@@ -180,4 +180,4 @@ API 接口
 
 300 QPM
 
-生成的记忆片段与用户画像暂无失效日期。如需扩容限流额度，请[提交工单](https://smartservice.console.aliyun.com/service/create-ticket)申请，详见[限流说明](raw/application-user-guide/memory-library-overview/integration-overview/limits.md)。
+生成的记忆片段与用户画像暂无失效日期。如需扩容限流额度，请[提交工单](https://smartservice.console.aliyun.com/service/create-ticket)申请，详见[限流说明](raw/application-user-guide/agent-context/memory-library-overview/integration-overview/limits.md)。

@@ -138,7 +138,7 @@ string
 
 收费计划：`pro` 或 `lite`，默认值为 `pro`。不区分大小写，传入其他值会报错
 
-**说明**`pro` 计划支持按 `min_score` 过滤结果；`lite` 计划不使用该参数。计费信息请参见[计费说明](raw/application-user-guide/memory-library-overview/integration-overview/billing.md)。
+**说明**`pro` 计划支持按 `min_score` 过滤结果；`lite` 计划不使用该参数。计费信息请参见[计费说明](raw/application-user-guide/agent-context/memory-library-overview/integration-overview/billing.md)。
 
 ## 返回结果
 

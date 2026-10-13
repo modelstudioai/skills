@@ -126,7 +126,7 @@ boolean
 
 否
 
-是否开启重排序。更多信息，请参见[知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)。取值范围：
+是否开启重排序。更多信息，请参见[知识库](raw/application-user-guide/agent-context/knowledge-base/data-connection-overview/rag-knowledge-base.md)。取值范围：
 
 -   true：开启。
     
@@ -376,7 +376,7 @@ array<object>
 
 否
 
-支持通过 SearchFilter 设置个性化的检索条件（比如标签），对语义检索结果进行过滤，以排除与查询 Query 无关的信息。 设置 is\_displayed\_chunk\_content 参数为 true 生效筛选逻辑，具体内容请参见[知识库 SearchFilters](raw/application-api-reference/more/how-to-use-search-filters.md)。
+支持通过 SearchFilters 设置个性化的检索条件（比如标签），对语义检索结果进行过滤，以排除与查询 Query 无关的信息。数组中的条件对象之间采用 AND 关系。同一对象内的多个检索字段默认采用 AND 关系；将 `_operator` 与检索字段放在同一对象中，并设为 `OR`（也支持 `or`），可匹配任一字段条件；设为 `AND` 则需同时满足所有字段条件。设置 is\_displayed\_chunk\_content 参数为 true 生效筛选逻辑，具体内容请参见[知识库 SearchFilters](raw/application-api-reference/more/how-to-use-search-filters.md)。
 
 object
 
@@ -458,6 +458,18 @@ uniqueId
 string
 
 否
+
+例如，以下 `SearchFilters` 筛选文档名称为“长上下文Qwen-Long”或切片标题为“返回结果”的切片。将字段和值替换为知识库中实际可检索的字段和值：
+
+```
+[
+  {
+    "_operator": "OR",
+    "doc_name": "长上下文Qwen-Long",
+    "title": "返回结果"
+  }
+]
+```
 
 ## 返回参数
 

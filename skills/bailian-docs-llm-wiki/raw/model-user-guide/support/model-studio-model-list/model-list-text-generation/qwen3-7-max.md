@@ -638,31 +638,31 @@ Function Calling
 
 输入
 
-1.65
+12
 
 每百万tokens
 
 输出
 
-4.951
+36
 
 每百万tokens
 
 输入（缓存命中）
 
-0.33
+2.4
 
 每百万tokens
 
 显式缓存创建
 
-2.063
+15
 
 每百万tokens
 
 显式缓存命中
 
-0.165
+1.2
 
 每百万tokens
 
@@ -1478,25 +1478,25 @@ Function Calling
 
 输入
 
-1.65
+12
 
 每百万tokens
 
 输出
 
-4.951
+36
 
 每百万tokens
 
 显式缓存创建
 
-2.063
+15
 
 每百万tokens
 
 显式缓存命中
 
-0.165
+1.2
 
 每百万tokens
 

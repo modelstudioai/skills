@@ -1,9 +1,9 @@
-# RAG
+# RAG API
 
 -   [概览](raw/application-api-reference/rag-api/rag-api-overview.md)
--   [认证方式](raw/application-api-reference/rag-api/rag-api-authentication.md)
--   [限流策略](raw/application-api-reference/rag-api/rag-api-rate-limits.md)
+-   [认证](raw/application-api-reference/rag-api/rag-api-authentication.md)
 -   [错误码](raw/application-api-reference/rag-api/rag-api-errors.md)
+-   [限流](raw/application-api-reference/rag-api/rag-api-rate-limits.md)
 -   [知识库](raw/application-api-reference/rag-api/rag-api-knowledge-base.md)
 -   [文档管理](raw/application-api-reference/rag-api/rag-api-documents.md)
 -   [切片管理](raw/application-api-reference/rag-api/rag-api-chunks.md)

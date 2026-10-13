@@ -1,115 +1,103 @@
 # 声音设计
 
-声音设计（Voice Design）无需音频样本，仅通过自然语言描述即可创建定制化音色。
+通过自然语言描述创建自定义音色，试听预览后用于语音合成。
 
-## 概述
+## 功能介绍
 
-声音设计适用于快速原型验证、创意内容生产、游戏角色配音等场景。阿里云百炼提供以下模型系列的声音设计能力：
+声音设计适用于快速原型验证、创意内容生产、游戏角色配音等场景。
 
--   **CosyVoice**：支持实时与非实时语音合成，可用于北京地域（v3.5 系列和 v3 系列）。
--   **Qwen-Audio-TTS**：支持实时与非实时语音合成，可用于北京地域（qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash）。
+**说明**创建音色无需提供音频样本。如需根据已有音频样本还原其声音，请使用[声音复刻](raw/model-user-guide/model-experience/speech-synthesis/voice-cloning-user-guide.md)。
 
-如果您已有音频样本，请参见[声音复刻](raw/model-user-guide/model-experience/speech-synthesis/voice-cloning-user-guide.md)。如需了解模型选型建议，请参见[语音合成](raw/model-user-guide/model-experience/speech-synthesis/tts-model.md)。
+## 准备工作
 
-## 前提条件
+-   [获取 API Key](raw/model-api-reference/preparations/get-api-key.md)，并将其[配置到环境变量](https://help.aliyun.com/zh/model-studio/get-api-key#20b17d4430qvt) `DASHSCOPE_API_KEY`。
+    
+-   获取业务空间 ID，将示例中的 `YOUR_WORKSPACE_ID` 替换为真实值。获取方式请参见[选择地域、服务部署范围和接入域名](raw/model-user-guide/get-started-with-models/regions.md)。
+    
+-   安装 [DashScope SDK](raw/model-api-reference/preparations/install-sdk.md) 和 `requests`：
+    
+    ```
+    pip install -U dashscope requests
+    ```
+    
 
--   已[配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并将其[设置到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
--   如果通过 DashScope SDK 调用，需要[安装最新版SDK](raw/model-api-reference/preparations/install-sdk.md)。
+## 开始使用
 
-## 快速开始
+Qwen-Audio-TTS 和 CosyVoice 使用相同的音色创建、预览和基础合成流程。以下以 `qwen-audio-3.1-tts-flash` 为例。
 
-声音设计的基本流程为：描述 → 创建 → 使用。
-
-1.  **编写声音描述**：用自然语言描述期望的声音特质。详细的编写指南请参见[编写声音描述](https://help.aliyun.com/zh/model-studio/voice-design-user-guide#vd02_prompt_h2)。
-2.  **创建音色**：调用声音设计接口，系统根据描述生成音色并返回预览音频。建议试听确认效果后再使用。
-3.  **使用音色合成语音**：调用语音合成接口，传入音色 ID 进行语音合成。
-
-### CosyVoice 声音设计
-
-以下示例演示如何通过文本描述创建 CosyVoice 音色并用于语音合成。
-
-**重要**CosyVoice 声音设计仅支持北京地域（v3.5 系列和 v3 系列）。
-
-**步骤一：通过声音描述创建音色**
-
-调用API，通过`voice_prompt`参数传入声音描述，`preview_text`参数指定预览音频朗读的文本。
+1.  **创建音色**：设置声音描述 `voice_prompt`、预览文本 `preview_text` 和目标模型 `target_model`，获取音色 ID。
+2.  **保存预览音频**：解码返回的 `preview_audio.data`，保存为 WAV 文件，用于试听。
+3.  **合成语音**：将创建音色时返回的 `voice_id` 作为 `voice`，使用绑定模型合成语音。
 
 ```
-curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization' \
--H "Authorization: Bearer $DASHSCOPE_API_KEY" \
--H "Content-Type: application/json" \
--d '{
-    "model": "voice-enrollment",
-    "input": {
-        "action": "create_voice",
-        "target_model": "cosyvoice-v3.5-plus",
-        "voice_prompt": "沉稳的中年男性播音员，音色低沉浑厚，富有磁性，语速平稳，吐字清晰，适合用于新闻播报或纪录片解说。",
-        "preview_text": "各位听众朋友，大家好，欢迎收听晚间新闻。",
-        "prefix": "announcer"
-    },
-    "parameters": {
-        "sample_rate": 24000,
-        "response_format": "wav"
-    }
-}'
-```
-**步骤二：使用设计音色合成语音**
-
-将上一步返回的`voice_id`值填入以下请求中。
-
-```
-# coding=utf-8
-
-import dashscope
-from dashscope.audio.tts_v2 import *
+import base64
 import os
 
-# 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：dashscope.api_key = "sk-xxx"
-dashscope.api_key = os.environ.get('DASHSCOPE_API_KEY')
+import dashscope
+import requests
+from dashscope.audio.tts_v2 import AudioFormat, SpeechSynthesizer
 
-# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_websocket_api_url='wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference'
+api_key = os.environ["DASHSCOPE_API_KEY"]
+workspace_id = "YOUR_WORKSPACE_ID"
+target_model = "qwen-audio-3.1-tts-flash"
 
-# 声音设计、语音合成要使用相同的模型
-model = "cosyvoice-v3.5-plus"
-# 将voice参数替换为声音设计生成的专属音色
-voice = "voice_id"
+# 创建音色，并将返回的预览音频保存到本地。
+response = requests.post(
+    f"https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization",
+    headers={"Authorization": f"Bearer {api_key}"},
+    json={
+        "model": "voice-enrollment",
+        "input": {
+            "action": "create_voice",
+            "target_model": target_model,
+            "voice_prompt": "沉稳的中年男性播音员，音色低沉浑厚，富有磁性，语速平稳，吐字清晰，适合用于新闻播报或纪录片解说。",
+            "preview_text": "各位听众朋友，大家好，欢迎收听晚间新闻。",
+            "prefix": "announcer",
+            "language_hints": ["zh"],
+        },
+        "parameters": {"sample_rate": 24000, "response_format": "wav"},
+    },
+    timeout=120,
+)
+response.raise_for_status()
+output = response.json()["output"]
+voice_id = output["voice_id"]
+print(f"voice_id: {voice_id}")
+with open("preview.wav", "wb") as f:
+    f.write(base64.b64decode(output["preview_audio"]["data"]))
 
-# 实例化SpeechSynthesizer，并在构造方法中传入模型（model）、音色（voice）等请求参数
-synthesizer = SpeechSynthesizer(model=model, voice=voice)
-# 发送待合成文本，获取二进制音频
-audio = synthesizer.call("今天天气怎么样？")
-# 首次发送文本时需建立 WebSocket 连接，因此首包延迟会包含连接建立的耗时
-print('[Metric] requestId为：{}，首包延迟为：{}毫秒'.format(
-    synthesizer.get_last_request_id(),
-    synthesizer.get_first_package_delay()))
-
-# 将音频保存至本地
-with open('output.mp3', 'wb') as f:
+# 使用创建音色时指定的模型和返回的音色 ID 合成语音。
+dashscope.api_key = api_key
+dashscope.base_websocket_api_url = (
+    f"wss://{workspace_id}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference"
+)
+synthesizer = SpeechSynthesizer(
+    model=target_model,
+    voice=voice_id,
+    format=AudioFormat.WAV_24000HZ_MONO_16BIT,
+)
+audio = synthesizer.call("今天天气晴朗，适合外出散步。祝你度过愉快的一天。")
+with open("output.wav", "wb") as f:
     f.write(audio)
 ```
 
-## 编写声音描述
+运行示例后，`preview.wav` 为预览音频，`output.wav` 为合成音频。保存打印的音色 ID，后续可使用该 ID 调用语音合成。
 
-声音描述（`voice_prompt`）直接决定生成音色的效果。描述越清晰具体，生成结果越符合预期。
+HTTP 请求示例、可选参数和返回字段请参见[声音设计 API 参考](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/voice-design-api-references.md)；合成参数请参见 [Qwen-Audio-TTS 客户端事件](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-client-events#h3runtask)。
 
-### 要求与限制
+## 声音描述指南
 
--   **长度限制**：`voice_prompt` 的最大长度为 500 个字符。
--   **支持语言**：描述文本仅支持中文和英文。
+声音描述（`voice_prompt`）用于指定期望的声音特质。清晰、具体的描述有助于生成符合需求的音色。
 
-### 核心原则
+### 描述建议
 
-1.  **具体而非模糊**：使用描绘声音特质的词语，如"低沉""清脆""语速偏快"，避免"好听""普通"等主观或模糊的表述。
-2.  **多维而非单一**：好的描述通常涵盖多个维度（如性别、年龄、情感等）。仅写"女声"过于宽泛，难以生成有特色的音色。
-3.  **客观而非主观**：聚焦声音的物理和感知特征。例如，用"音调偏高，带有活力"代替"我最喜欢的声音"。
-4.  **原创而非模仿**：描述声音的特质，而非要求模仿特定人物（如名人、演员）。模型不支持模仿，且可能涉及版权风险。
-5.  **简洁而非冗余**：避免重复的同义词或无意义的修饰，确保每个词都有明确作用。
+-   **具体**：使用“低沉”“清脆”“语速偏快”等声音特征，避免“好听”“普通”等模糊评价。
+-   **多维**：组合性别、年龄、音调、语速和情感等维度，仅写“女声”难以描述出有特色的声音。
+-   **客观**：描述可感知的声音特征，例如“音调偏高、充满活力”，避免“我最喜欢的声音”等主观表达。
+-   **原创**：描述声音特质，不要求模仿名人、演员等特定人物。模型不支持指定模仿，相关请求也可能涉及版权风险。
+-   **简洁**：减少重复的同义词和无意义的修饰。
 
-### 描述维度参考
-
-建议组合以下维度描述声音，维度越丰富，生成效果越精准。
+可组合以下维度编写声音描述：
 
 **维度**
 
@@ -143,7 +131,7 @@ with open('output.mp3', 'wb') as f:
 
 新闻播报、广告配音、有声书、动画角色、语音助手、纪录片解说
 
-### 示例
+### 描述示例
 
 -   标准播音风格：吐字清晰精准，字正腔圆
 -   年轻活泼的女性声音，语速较快，带有明显的上扬语调，适合介绍时尚产品
@@ -151,49 +139,46 @@ with open('output.mp3', 'wb') as f:
 -   温柔知性的女性，30 岁左右，语调平和，适合有声书朗读
 -   可爱的儿童声音，大约 8 岁女孩，说话略带稚气，适合动画角色配音
 
-## 管理自定义音色
+**说明**相同描述可能生成不同的音色。创建后先试听预览音频；需要比较效果时，可多次生成后择优使用。
 
-声音设计支持查询列表、查看详情和删除操作。API 接口和参数详情请参见[API 参考](https://help.aliyun.com/zh/model-studio/voice-design-user-guide#vd06_apiref_h2)。
+## 音色管理
 
-## 配额与计费
+-   **查询音色列表**：查看已有的自定义音色。
+-   **查询音色详情**：查看音色绑定的模型、状态等信息。
+-   **删除音色**：删除不再使用的音色，释放配额。
 
-### 音色配额与自动清理
+接口与参数说明请参见[声音设计 API 参考](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/voice-design-api-references.md)。
 
--   **音色总数限制**：每个阿里云百炼账号下，CosyVoice 最多可创建 1000 个自定义音色。
--   **自动清理规则**：若单个音色在过去 1 年内未被用于任何语音合成请求，系统将自动删除该音色。
-
-### 计费规则
-
--   **CosyVoice**：创建音色免费。
-
-## 支持的模型与地域
+## 支持模型
 
 #### 华北2（北京）
 
-调用以下模型时，请选择北京地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)：
+使用该地域的 [API Key](https://bailian.console.aliyun.com/model/settings/api-key) 调用以下模型：
 
--   **CosyVoice：**cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-plus、cosyvoice-v3-flash
--   **Qwen-Audio-TTS：**qwen-audio-3.0-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-flash
+-   **Qwen-Audio-TTS**：qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash
+    
+-   **CosyVoice**：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-plus、cosyvoice-v3-flash
+    
 
-**说明**
+**说明**CosyVoice 声音设计基于 FunAudioGen-VD 模型能力。
 
--   CosyVoice 声音设计基于 FunAudioGen-VD 模型能力。
--   相同描述文本（Prompt）设计的音色可能存在差异，建议多次生成后择优使用。
+## 配额与限制
 
-## API 参考
+-   **音色数量**：每个阿里云百炼账号的自定义音色总数上限为 1000 个。声音复刻和声音设计共用该配额，不按模型分别计算。
+    
+    **说明**达到上限后，新的声音复刻或声音设计创建请求将失败。需先删除不再使用的音色，释放配额后再创建。
+    
+-   **声音描述**：`voice_prompt` 仅支持中文和英文，最大长度为 500 个字符。
+    
+-   **预览文本**：`preview_text` 仅支持中文和英文，长度为 15～200 个字符。
+    
+-   **模型绑定**：音色在创建时通过 `target_model` 绑定到语音合成模型，后续合成必须使用同一模型。
+    
 
-[声音设计API参考](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/voice-design-api-references.md)
+生成的音色可用于合成多种语言的语音，具体支持范围以目标语音合成模型为准。
 
-## 常见问题
+## 计费说明
 
-### Q：相同的声音描述每次生成的音色一样吗？
+创建音色免费。
 
-不一定。声音设计具有随机性，相同描述可能生成略有差异的音色。建议多次生成后试听，择优使用。
-
-### Q：声音描述可以使用哪些语言？
-
-目前声音描述（`voice_prompt`）仅支持中文和英文，但生成的音色可用于合成多种语言的语音。
-
-### Q：声音设计和声音复刻有什么区别？
-
-声音设计通过文本描述从零创建音色，无需音频样本，适合设计全新的声音形象。声音复刻基于真实音频样本复制音色，适合还原特定人物的声音。详情请参见[声音复刻](raw/model-user-guide/model-experience/speech-synthesis/voice-cloning-user-guide.md)。
+使用设计音色合成语音时，按目标语音合成模型计费。具体费用请参见[模型计费](raw/model-user-guide/test-1/model-pricing.md)。
