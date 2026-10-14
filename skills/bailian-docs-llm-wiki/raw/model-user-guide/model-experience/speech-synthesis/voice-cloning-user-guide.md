@@ -1,236 +1,120 @@
 # 声音复刻
 
-声音复刻（Voice Cloning）只需提供一段 10~20 秒的音频样本，即可生成高度相似的定制音色，无需模型训练。
+根据音频样本创建自定义音色，用于语音合成或实时语音对话。
 
-## 概述
+## 功能介绍
 
-适用于个性化语音助手、品牌专属播报、有声内容定制化等场景。
+声音复刻适用于个性化语音助手、品牌专属播报和有声内容定制等场景，无需训练模型。
 
-阿里云百炼平台提供以下模型系列的声音复刻能力：
+**说明**如需通过自然语言描述创建音色，无需提供音频样本，请使用[声音设计](raw/model-user-guide/model-experience/speech-synthesis/voice-design-user-guide.md)。
 
--   **Qwen-Audio-TTS** / **CosyVoice**：通过 DashScope SDK 或 HTTP API 创建音色，支持实时与非实时语音合成，可用于华北2（北京）和新加坡地域。
--   **MiniMax**：通过 HTTP API 创建音色，仅支持非实时语音合成，仅限华北2（北京）地域使用。
--   **Qwen-Audio-Realtime**：Qwen-Audio-Realtime 是实时语音对话模型（非语音合成模型），声音复刻用于自定义对话模型回复时的 TTS 音色。通过 DashScope SDK 或 HTTP API 创建音色，仅支持华北2（北京）地域。
+## 准备工作
 
-如需了解各模型系列的详细对比和选型建议，请参见[语音合成](raw/model-user-guide/model-experience/speech-synthesis/tts-model.md)。
+-   [获取 API Key](raw/model-api-reference/preparations/get-api-key.md)，并将其[配置到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables) `DASHSCOPE_API_KEY`。
+    
+-   获取业务空间 ID，将示例中的 `YOUR_WORKSPACE_ID` 替换为真实值。获取方式请参见[地域与接入域名](raw/model-user-guide/get-started-with-models/regions.md)。
+    
+-   安装 [DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)：
+    
+    ```
+    pip install -U dashscope
+    ```
+    
+-   准备符合[音频要求](#vc02_audio_h2)且可通过公网 URL 访问的音频文件。可使用[示例音频](https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/cosyvoice/cosyvoice-zeroshot-sample.wav)运行以下代码，也可以替换为自己的音频 URL。
+    
 
-## 前提条件
+## 开始使用
 
-1.  已[配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并将其[设置到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
-2.  如果通过 DashScope SDK 调用，需要[安装最新版SDK](raw/model-api-reference/preparations/install-sdk.md)。
-3.  **准备音频文件**：音频需符合[音频要求](https://help.aliyun.com/zh/model-studio/voice-cloning-user-guide#vc02_audio_h2)。
+**说明**Qwen-Audio-TTS / Qwen-Audio-Realtime / CosyVoice 的复刻音色在创建时绑定到 `target_model`，不能跨模型使用。如需让多个模型使用同一段音频的声音，应为每个模型分别创建音色。
 
-## 快速开始
+#### Qwen-Audio-TTS / CosyVoice
 
-声音复刻的使用分为以下三步：
+Qwen-Audio-TTS 和 CosyVoice 使用相同的音色创建和基础合成流程。以下以 `qwen-audio-3.1-tts-flash` 为例。
 
-1.  **准备音频**：准备一段符合[音频要求](https://help.aliyun.com/zh/model-studio/voice-cloning-user-guide#vc02_audio_h2)的音频文件。
-2.  **创建音色**：调用声音复刻接口上传音频创建音色，通过`target_model`指定绑定的语音合成模型。
-3.  **使用音色合成语音**：调用语音合成接口，传入创建音色时返回的音色 ID。
-
-### Qwen-Audio-TTS 声音复刻
-
-**重要**Qwen-Audio-TTS 声音复刻支持华北2（北京）地域和新加坡地域。
-
-**步骤一：创建音色**
-
-调用声音复刻 API 上传音频并创建音色。`url`参数传入音频文件的可访问 URL 地址，`prefix`参数作为音色名称前缀。
-
-以下为华北2（北京）地域的配置，若使用新加坡地域的模型，需将域名替换为：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audio/tts/customization`（将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)）。
+1.  **创建音色**：用 `url` 指定参考音频，通过 `target_model` 指定目标模型，`prefix` 为音色名称前缀。
+2.  **合成语音**：将返回的音色 ID 传入 `voice`，使用同一个目标模型合成语音并保存音频。
 
 ```
-curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization' \
--H "Authorization: Bearer $DASHSCOPE_API_KEY" \
--H "Content-Type: application/json" \
--d '{
-    "model": "voice-enrollment",
-    "input": {
-        "action": "create_voice",
-        "target_model": "qwen-audio-3.0-tts-flash",
-        "prefix": "myvoice",
-        "url": "https://your-audio-url.wav"
-    }
-}'
-```
-**步骤二：使用复刻音色合成语音**
-
-将上一步返回的`voice_id`值填入以下请求中。
-
-```
-# coding=utf-8
-
-import dashscope
-from dashscope.audio.tts_v2 import *
 import os
 
-# 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：dashscope.api_key = "sk-xxx"
-dashscope.api_key = os.environ.get('DASHSCOPE_API_KEY')
+import dashscope
+from dashscope.audio.tts_v2 import AudioFormat, SpeechSynthesizer, VoiceEnrollmentService
 
-# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_websocket_api_url='wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference'
+dashscope.api_key = os.environ["DASHSCOPE_API_KEY"]
+workspace_id = "YOUR_WORKSPACE_ID"
+target_model = "qwen-audio-3.1-tts-flash"
+dashscope.base_http_api_url = (
+    f"https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1"
+)
+dashscope.base_websocket_api_url = (
+    f"wss://{workspace_id}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference"
+)
 
-# 声音复刻、语音合成要使用相同的模型
-model = "qwen-audio-3.0-tts-flash"
-# 将voice参数替换为声音复刻生成的专属音色
-voice = "voice_id"
+# 创建音色。
+service = VoiceEnrollmentService()
+voice_id = service.create_voice(
+    target_model=target_model,
+    prefix="myvoice",
+    url="https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/cosyvoice/cosyvoice-zeroshot-sample.wav",
+)
+print(f"voice_id: {voice_id}")
 
-# 实例化SpeechSynthesizer，并在构造方法中传入模型（model）、音色（voice）等请求参数
-synthesizer = SpeechSynthesizer(model=model, voice=voice)
-# 发送待合成文本，获取二进制音频
-audio = synthesizer.call("今天天气怎么样？")
-# 首次发送文本时需建立 WebSocket 连接，因此首包延迟会包含连接建立的耗时
-print('[Metric] requestId为：{}，首包延迟为：{}毫秒'.format(
-    synthesizer.get_last_request_id(),
-    synthesizer.get_first_package_delay()))
-
-# 将音频保存至本地
-with open('output.mp3', 'wb') as f:
+# 使用绑定模型和返回的音色 ID 合成语音。
+synthesizer = SpeechSynthesizer(
+    model=target_model,
+    voice=voice_id,
+    format=AudioFormat.WAV_24000HZ_MONO_16BIT,
+)
+audio = synthesizer.call("今天天气晴朗，适合外出散步。祝你度过愉快的一天。")
+with open("output.wav", "wb") as f:
     f.write(audio)
 ```
 
-### Qwen-Audio-Realtime 声音复刻
+运行后，合成音频保存为 `output.wav`。保存打印的音色 ID，后续可继续使用。
 
-**重要**Qwen-Audio-Realtime 声音复刻仅支持华北2（北京）地域，音频要求与 Qwen-Audio-TTS 相同。
+#### Qwen-Audio-Realtime
 
-**步骤一：创建音色**
-
-通过 DashScope SDK 或 HTTP API 调用声音复刻接口，上传音频并创建音色。`target_model` 参数填入实时语音对话模型名称，`prefix` 参数作为音色名称前缀。
-
-#### Python
+Qwen-Audio-Realtime 的复刻音色用于自定义实时语音对话的回复声音。以下以 `qwen-audio-3.1-realtime-plus` 为例创建音色。
 
 ```
 import os
-import requests
 
-# 若没有配置环境变量，请用阿里云百炼 API Key 将下行替换为：api_key = "sk-xxx"
-api_key = os.environ.get('DASHSCOPE_API_KEY')
+import dashscope
+from dashscope.audio.tts_v2 import VoiceEnrollmentService
 
-# Qwen-Audio-Realtime 仅支持华北2（北京）地域，请将 {WorkspaceId} 替换为真实的业务空间 ID
-url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization'
-
-response = requests.post(
-    url,
-    headers={
-        'Authorization': f'Bearer {api_key}',
-        'Content-Type': 'application/json'
-    },
-    json={
-        'model': 'voice-enrollment',
-        'input': {
-            'action': 'create_voice',
-            'target_model': 'qwen-audio-3.1-realtime-plus',
-            'prefix': 'myvoice',
-            'url': 'https://your-audio-url.wav'
-        }
-    }
+dashscope.api_key = os.environ["DASHSCOPE_API_KEY"]
+workspace_id = "YOUR_WORKSPACE_ID"
+target_model = "qwen-audio-3.1-realtime-plus"
+dashscope.base_http_api_url = (
+    f"https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1"
 )
-result = response.json()
-print('voice_id:', result['output']['voice_id'])
+
+# 创建音色。
+service = VoiceEnrollmentService()
+voice_id = service.create_voice(
+    target_model=target_model,
+    prefix="myvoice",
+    url="https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/cosyvoice/cosyvoice-zeroshot-sample.wav",
+)
+print(f"voice_id: {voice_id}")
 ```
 
-#### cURL
-
-调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
-
-```
-curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization' \
--H "Authorization: Bearer $DASHSCOPE_API_KEY" \
--H "Content-Type: application/json" \
--d '{
-    "model": "voice-enrollment",
-    "input": {
-        "action": "create_voice",
-        "target_model": "qwen-audio-3.1-realtime-plus",
-        "prefix": "myvoice",
-        "url": "https://your-audio-url.wav"
-    }
-}'
-```
-
-**步骤二：在实时语音对话中使用复刻音色**
-
-将上一步返回的 `voice_id` 填入实时语音对话 `session.update` 事件的 `voice` 参数中，详见[音色配置](https://help.aliyun.com/zh/model-studio/fun-audiochat-realtime#fc60h311)。
+建立实时语音对话连接后，在**首次** `session.update` 事件中，将 `session.voice` 设置为返回的音色 ID（替换下方的 `VOICE_ID`）。会话模型必须与创建音色时的 `target_model` 一致。
 
 ```
 {
     "type": "session.update",
     "session": {
-        "voice": "qwen-audio-3.1-realtime-plus-myvoice-xxxxxx"
+        "voice": "VOICE_ID"
     }
 }
 ```
 
-### CosyVoice 声音复刻
+#### MiniMax
 
-**重要**CosyVoice 声音复刻支持华北2（北京）地域（v3.5/v3/v2/v1 系列）和新加坡地域（cosyvoice-v3-plus）。
+MiniMax 通过 HTTP API 创建音色，并支持非实时语音合成。
 
-新加坡地域的 `cosyvoice-v3-flash` 暂不支持使用复刻音色合成语音。如需在新加坡地域使用复刻音色，请改用 `qwen-audio-3.0-tts-flash`。
-
-**步骤一：创建音色**
-
-调用声音复刻 API 上传音频并创建音色。`url`参数传入音频文件的可访问 URL 地址，`prefix`参数作为音色名称前缀。
-
-以下为华北2（北京）地域的配置，若使用新加坡地域的模型，需将域名替换为：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audio/tts/customization`。调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
-
-```
-curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization' \
--H "Authorization: Bearer $DASHSCOPE_API_KEY" \
--H "Content-Type: application/json" \
--d '{
-    "model": "voice-enrollment",
-    "input": {
-        "action": "create_voice",
-        "target_model": "cosyvoice-v3.5-plus",
-        "prefix": "myvoice",
-        "url": "https://your-audio-url.wav"
-    }
-}'
-```
-**步骤二：使用复刻音色合成语音**
-
-将上一步返回的`voice_id`值填入以下请求中。
-
-```
-# coding=utf-8
-
-import dashscope
-from dashscope.audio.tts_v2 import *
-import os
-
-# 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：dashscope.api_key = "sk-xxx"
-dashscope.api_key = os.environ.get('DASHSCOPE_API_KEY')
-
-# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_websocket_api_url='wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference'
-
-# 声音复刻、语音合成要使用相同的模型
-model = "cosyvoice-v3.5-plus"
-# 将voice参数替换为声音复刻生成的专属音色
-voice = "voice_id"
-
-# 实例化SpeechSynthesizer，并在构造方法中传入模型（model）、音色（voice）等请求参数
-synthesizer = SpeechSynthesizer(model=model, voice=voice)
-# 发送待合成文本，获取二进制音频
-audio = synthesizer.call("今天天气怎么样？")
-# 首次发送文本时需建立 WebSocket 连接，因此首包延迟会包含连接建立的耗时
-print('[Metric] requestId为：{}，首包延迟为：{}毫秒'.format(
-    synthesizer.get_last_request_id(),
-    synthesizer.get_first_package_delay()))
-
-# 将音频保存至本地
-with open('output.mp3', 'wb') as f:
-    f.write(audio)
-```
-
-### MiniMax 声音复刻
-
-MiniMax 声音复刻仅在华北2（北京）地域可用。提交复刻请求后，系统会生成一段试听音频（按同步语音合成单价计费）。首次使用复刻音色进行语音合成时，需支付 9.9 元音色解锁费用。
-
-**步骤一：创建音色**
-
-调用音色复刻 API 上传音频并创建音色。`voice_id`参数用于指定新音色的 ID，`audio_url`参数传入音频文件的可访问 URL 地址。
+**创建音色**：用 `voice_id` 指定新音色的 ID，`audio_url` 指定可访问的音频 URL，`text` 指定试听文本。请求返回试听音频，费用见[计费说明](#vc07_billing_h3)。
 
 ```
 curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
@@ -246,9 +130,8 @@ curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-gen
     "model": "MiniMax/speech-2.8-turbo"
   }'
 ```
-**步骤二：使用复刻音色合成语音**
 
-将上一步指定的`voice_id`值填入以下请求中。
+**合成语音**：将创建时指定的 `voice_id` 传入 `voice_setting.voice_id`。
 
 ```
 curl -X POST "https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation" \
@@ -274,86 +157,59 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-gen
 }'
 ```
 
+更多声音复刻参数与示例请参见 [HTTP API](raw/_short/voice-clone-design-http-api-8f39943e5a676aae.md)、[Python SDK](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/sound-reengraving/voice-clone-python-sdk.md)和 [Java SDK](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/sound-reengraving/voice-clone-java-sdk.md)。
+
+使用复刻音色进行语音合成或实时语音对话的调用方式，请参见：
+
+-   **Qwen-Audio-TTS**：[模型接入方式](raw/_short/qwen-audio-tts-model-access-6e664ddb54b00e5d.md)
+-   **CosyVoice**：[模型接入方式](raw/_short/cosyvoice-model-access-80a06b5339b1723a.md)
+-   **Qwen-Audio-Realtime**：[模型接入方式](raw/_short/qwen-audio-realtime-model-access-82f1eed54dbb343f.md)
+-   **MiniMax**：[非实时语音合成 API 参考](raw/_short/minimax-speech-synthesis-36f3b02a593324ef.md)
+
 ## 音频要求
 
-输入音频的质量直接决定复刻效果。不同模型系列对音频的具体要求有所差异，请按照目标模型的要求准备音频样本。
+输入音频的质量会影响音色的相似度和自然度。按目标模型的规格准备样本，并参照下方录音建议减少噪声、混响和其他人声。
 
-#### Qwen-Audio-TTS / Qwen-Audio-Realtime
-
-**项目**
-
-**要求**
-
-**支持格式**
-
-WAV (16bit)、MP3、M4A
-
-**音频时长**
-
-推荐 10~20 秒，最长不超过 60 秒
-
-**文件大小**
-
-≤ 10 MB
-
-**采样率**
-
-≥ 16 kHz
-
-**声道**
-
-单声道或双声道。双声道音频仅处理首声道，请确保首声道包含有效人声。
-
-**内容**
-
-音频必须包含至少 5 秒连续清晰的朗读内容（无背景音），其余部分仅允许短暂停顿（≤ 2 秒）。整段音频应避免出现背景音乐、环境噪音或其他人声。请使用正常语速的说话音频，不要上传歌曲或唱歌录音。
-
-**支持语言**
-
-中文（普通话、广东话、重庆话、东北话、甘肃话、贵州话、浙江话、河北话、河南话、湖北话、湖南话、江西话、宁波话、宁夏话、青岛话、陕西话、山西话、山东话、上海话、四川话、云南话）、英语、日语、韩语、俄语、法语、德语、葡萄牙语、泰语、印尼语、越南语、西班牙语、意大利语、马来西亚语、菲律宾语、阿拉伯语
-
-#### CosyVoice
+#### Qwen-Audio-TTS / Qwen-Audio-Realtime / CosyVoice
 
 **项目**
 
 **要求**
 
-**支持格式**
+支持格式
 
-WAV (16bit)、MP3、M4A
+WAV（16-bit）、MP3、M4A
 
-**音频时长**
+音频时长
 
-推荐 10~20 秒，最长不超过 60 秒
+推荐 10～20 秒，最长不超过 60 秒。
 
-**文件大小**
+文件大小
 
 ≤ 10 MB
 
-**采样率**
+采样率
 
 ≥ 16 kHz
 
-**声道**
+声道
 
-单声道或双声道。双声道音频仅处理首声道，请确保首声道包含有效人声。
+单声道或双声道。双声道音频仅处理首声道，首声道需包含有效人声。
 
-**内容**
+内容
 
-音频必须包含至少 5 秒连续清晰的朗读内容（无背景音），其余部分仅允许短暂停顿（≤ 2 秒）。整段音频应避免出现背景音乐、环境噪音或其他人声。请使用正常语速的说话音频，不要上传歌曲或唱歌录音。
+至少包含 5 秒连续清晰的朗读内容，其余部分仅允许短暂停顿（≤ 2 秒）。避免背景音乐、环境噪声和其他人声。使用正常语速的说话音频，不使用歌曲或唱歌录音。
 
-**支持语言**
+支持语言
 
-因驱动音色的语音合成模型（通过 `target_model` 参数指定）而异：
+-   **Qwen-Audio-TTS / Qwen-Audio-Realtime**：中文（普通话、广东话、重庆话、东北话、甘肃话、贵州话、浙江话、河北话、河南话、湖北话、湖南话、江西话、宁波话、宁夏话、青岛话、陕西话、山西话、山东话、上海话、四川话、云南话）、英语、日语、韩语、俄语、法语、德语、葡萄牙语、泰语、印尼语、越南语、西班牙语、意大利语、马来西亚语、菲律宾语、阿拉伯语
+-   **CosyVoice**：参考音频支持的语言因驱动音色的目标模型而异。
 
--   **cosyvoice-v3.5-plus、cosyvoice-v3.5-flash**：中文（普通话、广东话、东北话、甘肃话、贵州话、河南话、湖北话、江西话、闽南话、宁夏话、山西话、陕西话、山东话、上海话、四川话、天津话、云南话）、英文、法语、德语、日语、韩语、俄语、葡萄牙语、泰语、印尼语、越南语
-    
+点击查看 CosyVoice 各模型支持的语言
+
+-   **cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash**：中文（普通话、广东话、东北话、甘肃话、贵州话、河南话、湖北话、江西话、闽南话、宁夏话、山西话、陕西话、山东话、上海话、四川话、天津话、云南话）、英文、法语、德语、日语、韩语、俄语、葡萄牙语、泰语、印尼语、越南语
 -   **cosyvoice-v3-plus**：中文（普通话、广东话、东北话、甘肃话、贵州话、河南话、湖北话、江西话、闽南话、宁夏话、山西话、陕西话、山东话、上海话、四川话、天津话、云南话）、英文、法语、德语、日语、韩语、俄语
-    
--   **cosyvoice-v3-flash**：中文（普通话、广东话、东北话、甘肃话、贵州话、河南话、湖北话、江西话、闽南话、宁夏话、山西话、陕西话、山东话、上海话、四川话、天津话、云南话）、英文、法语、德语、日语、韩语、俄语、葡萄牙语、泰语、印尼语、越南语
-    
 -   **cosyvoice-v2**：中文（普通话）、英文
-    
 
 #### MiniMax
 
@@ -361,37 +217,35 @@ WAV (16bit)、MP3、M4A
 
 **要求**
 
-**支持格式**
+支持格式
 
 MP3、M4A、WAV
 
-**音频时长**
+音频时长
 
 不低于 10 秒，最长不超过 5 分钟
 
-**文件大小**
+文件大小
 
 ≤ 20 MB
 
-**内容**
+内容
 
 音频应包含连续清晰的朗读内容（无背景音），停顿时长不超过 2 秒。整段音频应避免出现背景音乐、环境噪音或其他人声。请使用正常语速的说话音频，不要上传歌曲或唱歌录音。
 
-**支持语言**
+支持语言
 
 无特殊限制
 
-**说明**为获得最佳复刻效果，建议参照[录音建议](https://help.aliyun.com/zh/model-studio/voice-cloning-user-guide#vc_rec_h2)准备样本。
+清晰、自然的录音有助于获得高质量的参考音频并保留声音特征。录音前可参考以下录音与操作建议。
 
-## 录音建议
+点击查看录音与操作建议
 
-高质量的输入音频是获得优质复刻效果的基础。
-
-### 录音设备
+**录音设备**
 
 可使用手机、数字录音笔、专业录音机等。建议使用支持高采样率（≥ 24 kHz）录音的设备，以满足音频要求。
 
-### 录音环境
+**录音环境**
 
 **场地**
 
@@ -410,7 +264,7 @@ MP3、M4A、WAV
 -   减少光滑表面反射：拉上窗帘、打开衣柜门、铺放衣物或床单覆盖桌面/柜面。
 -   利用不规则物体（如书架、软包家具）实现声波漫反射。
 
-### 录音文案
+**录音文案**
 
 -   内容无特殊限制，建议与目标应用场景一致。
 -   避免短句（如你好、是的），应使用完整句子。
@@ -419,72 +273,62 @@ MP3、M4A、WAV
 -   可加入适当情绪表达（如温暖、亲切、严肃），避免机械朗读。
 -   不包含敏感词汇（如政治、色情、暴力相关内容），否则会导致复刻失败。
 
-### 操作建议
+**操作建议**
 
 以普通卧室为例，完成降噪和混响控制后：
 
 1.  提前熟悉文案，设定角色语气，自然演绎。
 2.  与录音设备保持约 10 厘米距离，避免喷麦或信号过弱。
 
-## 管理自定义音色
+## 音色管理
 
-音色创建完成后，您可以通过 API 对已有音色进行查询和管理（Qwen-Audio-TTS、Qwen-Audio-Realtime和 CosyVoice 支持）。Qwen-Audio-Realtime 的音色查询与删除接口与 Qwen-Audio-TTS 完全相同。
+Qwen-Audio-TTS、Qwen-Audio-Realtime 和 CosyVoice 使用相同的音色查询、更新与删除接口。具体接口与参数请参见[声音复刻 HTTP API 参考](raw/_short/voice-clone-design-http-api-8f39943e5a676aae.md)。
 
-**重要**MiniMax 仅支持创建音色，不支持查询和删除等音色管理操作。
+-   **查询音色列表**：查看账号下已有的自定义音色。
+-   **查询音色详情**：查看创建时间、绑定模型等信息。
+-   **更新音色**：替换参考音频，保留原有音色 ID。
+-   **删除音色**：删除不再使用的音色，释放配额。
 
--   **查询音色列表**：获取当前账号下所有自定义音色的列表。
--   **查询音色详情**（仅 Qwen-Audio-TTS / Qwen-Audio-Realtime / CosyVoice）：查看指定音色的详细信息，如创建时间、绑定的语音合成模型等。
--   **删除音色**：删除不再需要的自定义音色，释放配额。
+创建的音色默认长期有效。保存音色 ID，需要时可通过查询接口确认音色是否可用。
 
-各模型的 API 接口和参数详情请参见[API 参考](https://help.aliyun.com/zh/model-studio/voice-cloning-user-guide#vc06_apiref_h2)。
+**说明**MiniMax 的音色查询与删除请参见[声音管理](https://help.aliyun.com/zh/model-studio/sound-management)。
 
-## 配额与计费
-
-### 音色配额与自动清理
-
--   **音色总数限制**：每个阿里云百炼账号下，Qwen-Audio-TTS / Qwen-Audio-Realtime / CosyVoice 最多可创建 1000 个自定义音色。达到上限后，新的创建请求将直接失败并返回错误，系统不会自动删除最早创建的复刻音色。如需创建新音色，请先删除不需要的音色以释放配额，或等待未被使用的音色自动清理（详见下方自动清理规则）。
--   **上限后创建行为**：达到 1000 个音色上限后，继续调用创建音色接口将直接返回失败错误，系统不会自动淘汰最早创建的复刻音色来腾出空间。需手动删除不需要的音色释放配额后才能继续创建。
--   **自动清理规则**：若单个音色在过去 1 年内未被用于任何语音合成请求，系统将自动删除该音色。
-
-**重要**MiniMax 创建的音色不受上述配额与清理规则约束。
-
-### 计费规则
-
--   **Qwen-Audio-TTS** / **Qwen-Audio-Realtime** / **CosyVoice**：创建音色免费。
--   **MiniMax**：声音复刻本身不计费。首次使用复刻音色进行语音合成时，扣除 9.9 元音色解锁费用，且无免费额度。
-
-## 支持的模型与地域
+## 支持模型
 
 #### 华北2（北京）
 
-调用以下模型时，请选择北京地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)：
+使用该地域的 [API Key](https://bailian.console.aliyun.com/model/settings/api-key) 调用以下模型：
 
--   **Qwen-Audio-TTS：**qwen-audio-3.0-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-flash
--   **Qwen-Audio-Realtime：**qwen-audio-3.1-realtime-plus、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash
--   **CosyVoice：**cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-plus、cosyvoice-v3-flash、cosyvoice-v2
+-   **Qwen-Audio-TTS**：qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash
+    
+-   **Qwen-Audio-Realtime**：qwen-audio-3.1-realtime-plus、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash
+    
+-   **CosyVoice**：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-plus、cosyvoice-v3-flash、cosyvoice-v2
+    
 -   **MiniMax**：MiniMax/speech-2.8-hd、MiniMax/speech-02-hd、MiniMax/speech-2.8-turbo、MiniMax/speech-02-turbo
+    
 
 #### 新加坡
 
-调用以下模型时，请选择新加坡地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)：
+使用该地域的 [API Key](https://bailian.console.aliyun.com/model/settings/api-key) 调用以下模型：
 
 -   **Qwen-Audio-TTS**：qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash
--   **CosyVoice**：cosyvoice-v3-plus（`cosyvoice-v3-flash` 暂不支持在新加坡地域使用复刻音色合成语音，请改用 `qwen-audio-3.0-tts-flash`）
+    
+-   **CosyVoice**：cosyvoice-v3-plus、cosyvoice-v3-flash
+    
 
-## API 参考
+## 配额与限制
 
-[声音复刻API参考](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/sound-reengraving.md)
+-   **音色数量**：每个阿里云百炼账号的自定义音色总数上限为 1000 个。声音复刻和声音设计共用该配额，不按模型分别计算。
+    
+    **说明**
+    
+    -   达到上限后，新的声音复刻或声音设计创建请求将失败。需先删除不再使用的音色，释放配额后再创建。
+    -   MiniMax 创建的音色不受上述数量配额约束。
+    
 
-## 常见问题
+## 计费说明
 
-### Q：创建音色后可以用于不同的语音合成模型吗？
-
-不可以。音色在创建时通过`target_model`绑定到特定的语音合成模型，不能跨模型使用。如果您需要在多个模型上使用同一段音频的声音，请为每个模型分别创建音色。
-
-### Q：复刻音色的有效期是多久？
-
-Qwen-Audio-TTS、Qwen-Audio-Realtime和 CosyVoice 创建的音色默认长期有效。若单个音色在过去 1 年内未被用于任何语音合成请求，系统将自动删除该音色，详情请参见[音色配额与自动清理](https://help.aliyun.com/zh/model-studio/voice-cloning-user-guide#vc07_count_h3)。建议妥善保存音色 ID，需要时可通过查询接口确认音色是否仍然可用。
-
-### Q：音频质量不好会影响复刻效果吗？
-
-输入音频的质量直接影响复刻效果。背景噪音、混响、多人声等问题都会降低复刻音色的相似度和自然度。建议参照[音频要求](https://help.aliyun.com/zh/model-studio/voice-cloning-user-guide#vc02_audio_h2)和[录音建议](https://help.aliyun.com/zh/model-studio/voice-cloning-user-guide#vc_rec_h2)准备样本。
+-   **Qwen-Audio-TTS / Qwen-Audio-Realtime / CosyVoice**：创建音色免费。使用复刻音色合成语音或进行实时语音对话时，按目标模型计费。具体费用请参见[模型计费](raw/model-user-guide/test-1/model-pricing.md)。
+    
+-   **MiniMax**：声音复刻本身不计费。复刻请求生成的试听音频按同步语音合成单价计费；首次使用复刻音色进行语音合成时，扣除 9.9 元音色解锁费用，且无免费额度。

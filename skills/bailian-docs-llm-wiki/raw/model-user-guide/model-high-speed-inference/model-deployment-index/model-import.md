@@ -111,7 +111,7 @@
 6.  返回导入模型页点击「前往授权」，在弹出的对话框中点击「立即授权」，系统自动创建服务关联角色，通常秒级生效。
 7.  为目标 OSS Bucket 添加 bailian-datahub-access=read 标签（操作同主账号步骤 3），然后返回导入模型页重新选择目标 Bucket。百炼不支持访问 Bucket 根目录下的文件。
 
-授权后须为目标 OSS Bucket 添加标签：标签名为 bailian-datahub-access，标签值为 read。该标签用于标记百炼可访问的 Bucket，未添加此标签的 Bucket 在下拉列表中不可选，须到[OSS 管理控制台](https://oss.console.aliyun.com/)添加标签后重新选择。
+授权后须为目标 OSS Bucket 添加标签：标签名为 bailian-datahub-access，标签值为 read。该标签用于标记百炼可访问的 Bucket，未添加此标签的 Bucket 在下拉列表中不可选，须到[OSS 管理控制台](https://oss.console.aliyun.com/)添加标签后重新选择。Bucket 下拉列表按当前地域筛选：当前地域为华北2（北京）时，展示国内所有地域的 Bucket；当前地域为新加坡时，展示国内所有地域及新加坡地域的 Bucket。
 
 OSS Bucket 存储类型不支持归档、冷归档或深度冷归档，服务端加密方式支持 OSS 完全托管，不支持 KMS 托管密钥（SSE-KMS）等其他服务端加密方式。支持私有 Bucket。百炼不支持访问 Bucket 根目录下的文件，须选择 Bucket 下已有的子目录或新建子目录。
 
@@ -220,7 +220,7 @@ if __name__ == "__main__":
 
 Bucket
 
-选择存放模型文件的 OSS Bucket，仅列出已添加 bailian-datahub-access=read 标签的 Bucket。
+选择存放模型文件的 OSS Bucket，仅列出已添加 bailian-datahub-access=read 标签且当前地域支持的 Bucket（华北2（北京）：国内所有地域；新加坡：国内所有地域及新加坡地域）。
 
 必填，下拉选择
 
@@ -290,7 +290,7 @@ Bucket
 
 Bucket 下拉列表中目标 Bucket 不可选怎么办？
 
-这是授权要求而非故障。新授权方式下，未添加 bailian-datahub-access=read 标签的 Bucket 在下拉中不可选。须到 OSS 管理控制台为目标 Bucket 添加该标签后返回导入页重新选择。
+这是授权或地域要求而非故障。新授权方式下，未添加 bailian-datahub-access=read 标签的 Bucket 在下拉中不可选，须到 OSS 管理控制台为目标 Bucket 添加该标签后返回导入页重新选择；此外，下拉列表仅展示当前地域支持的 Bucket：华北2（北京）展示国内所有地域的 Bucket，新加坡展示国内所有地域及新加坡地域的 Bucket。
 
 我的模型列表每隔几秒自动刷新是故障吗？
 

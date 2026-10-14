@@ -62,8 +62,11 @@
 服务地址：
 
 -   `wss://dashscope.aliyuncs.com/api-ws/v1/inference`
+    
 -   华北2（北京）：`wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference`
+    
 -   新加坡：`wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/inference`
+    
 
 调用时，请将 `{WorkspaceId}` 替换为真实的 [Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
@@ -97,7 +100,9 @@ API Key。
 
 否
 
-是否启用主动推送音频数据模式，默认值："false"。当设置为"true"启用主动推送音频数据模式时，且SDK版本支持端侧音频能力（如AEC、VAD），则默认开启端侧音频能力。
+是否启用主动推送音频数据模式，默认值："false"。
+
+当设置为"true"启用主动推送音频数据模式时，且SDK版本支持端侧音频能力（如AEC、VAD），则默认开启端侧音频能力。
 
 `workspace`
 
@@ -113,7 +118,11 @@ API Key。
 
 否
 
-日志文件的存储路径。此参数仅在调用`initialize`接口时将`save_log`设为true时生效。此时必须设置日志文件路径，否则将报错。本地最多保留两个日志文件。
+日志文件的存储路径。
+
+此参数仅在调用`initialize`接口时将`save_log`设为true时生效。此时必须设置日志文件路径，否则将报错。
+
+本地最多保留两个日志文件。
 
 `save_wav`
 
@@ -121,10 +130,16 @@ API Key。
 
 否
 
-是否保存调试用的音频文件。音频文件保存于`debug_path`下。默认值："false"。取值范围：
+是否保存调试用的音频文件。音频文件保存于`debug_path`下。
+
+默认值："false"。
+
+取值范围：
 
 -   "true"：是
+    
 -   "false"：否
+    
 
 此参数仅在调用`initialize`接口时将`save_log`设为true时生效。 同时，`debug_path`也必须被设置。
 
@@ -134,7 +149,11 @@ API Key。
 
 否
 
-设定日志文件的最大字节数。此参数仅在调用`initialize`接口时将`save_log`设为true时生效。默认值：104857600（100 \* 1024 \* 1024 字节, 即 100MiB）。
+设定日志文件的最大字节数。
+
+此参数仅在调用`initialize`接口时将`save_log`设为true时生效。
+
+默认值：104857600（100 \* 1024 \* 1024 字节, 即 100MiB）。
 
 `log_track_level`
 
@@ -142,14 +161,24 @@ API Key。
 
 否
 
-控制通过日志回调（`onNuiLogTrackCallback`）对外发送的日志内容的过滤级别。默认值：2。取值范围：
+控制通过日志回调（`onNuiLogTrackCallback`）对外发送的日志内容的过滤级别。
+
+默认值：2。
+
+取值范围：
 
 -   0：LOG\_LEVEL\_VERBOSE
+    
 -   1：LOG\_LEVEL\_DEBUG
+    
 -   2：LOG\_LEVEL\_INFO
+    
 -   3：LOG\_LEVEL\_WARNING
+    
 -   4：LOG\_LEVEL\_ERROR
+    
 -   5：LOG\_LEVEL\_NONE（表示关闭此功能）
+    
 
 注意：`log_track_level`与`level`（通过`initialize`接口设置）共同决定最终回调的日志。一条日志的级别数值必须同时大于或等于`log_track_level`和`level`的值，才会被回调。例如，`log_track_level`设为2 (INFO)，`level`设为3 (WARNING)，则只有WARNING及以上级别（数值>=3）的日志才会被回调。
 
@@ -175,7 +204,9 @@ API Key。
 
 否
 
-是否开启端侧AEC回声消除能力。当参数audio\_update\_manually设置为"true"时，且SDK版本支持端侧AEC音频能力，则默认开启。
+是否开启端侧AEC回声消除能力。
+
+当参数audio\_update\_manually设置为"true"时，且SDK版本支持端侧AEC音频能力，则默认开启。
 
 `aec_params.save_audio`
 
@@ -183,7 +214,9 @@ API Key。
 
 否
 
-是否开启端侧AEC回声消除模块音频存储功能。当`save_wav`为"true"，且设置了`debug_path`，则默认开启，将AEC运行音频数据存储到`debug_path`下。
+是否开启端侧AEC回声消除模块音频存储功能。
+
+当`save_wav`为"true"，且设置了`debug_path`，则默认开启，将AEC运行音频数据存储到`debug_path`下。
 
 `aec_params.enable_aec_data_callback`
 
@@ -207,7 +240,9 @@ API Key。
 
 否
 
-是否开启端侧VAD人声检测能力。当参数audio\_update\_manually设置为"true"时，且SDK版本支持端侧VAD音频能力，则默认开启。
+是否开启端侧VAD人声检测能力。
+
+当参数audio\_update\_manually设置为"true"时，且SDK版本支持端侧VAD音频能力，则默认开启。
 
 `vad_params.save_audio`
 
@@ -215,7 +250,9 @@ API Key。
 
 否
 
-是否开启端侧VAD人声检测模块音频存储功能。当`save_wav`为"true"，且设置了`debug_path`，则默认开启，将VAD运行音频数据存储到`debug_path`下。
+是否开启端侧VAD人声检测模块音频存储功能。
+
+当`save_wav`为"true"，且设置了`debug_path`，则默认开启，将VAD运行音频数据存储到`debug_path`下。
 
 ### 语音识别效果参数
 
@@ -306,6 +343,29 @@ API Key。
 -   false（默认）：开启 VAD 断句，关闭语义断句。
 
 语义断句准确性更高，适合会议转写场景；VAD（Voice Activity Detection，语音活动检测）断句延迟较低，适合交互场景。
+
+`nls_config.keep_dialect`
+
+`boolean`
+
+否
+
+是否保留方言表达，默认值为 `false`。`false`：将方言转写为普通话文本；`true`：保留方言表达。
+
+**说明**适用于 `qwen-audio-3.1-asr-flash-streaming`。
+
+`nls_config.vad_model`
+
+`string`
+
+否
+
+VAD 模型，默认值为 `far_field_meeting_16k`。
+
+-   `near_meeting_16k`：近场场景。
+-   `far_field_meeting_16k`：远场场景。
+
+**说明**适用于 `qwen-audio-3.1-asr-flash-streaming`。
 
 `nls_config.max_sentence_silence`
 

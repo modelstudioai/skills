@@ -59,8 +59,11 @@
 服务地址：
 
 -   `wss://dashscope.aliyuncs.com/api-ws/v1/inference`
+    
 -   华北2（北京）：`wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference`
+    
 -   新加坡：`wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/inference`
+    
 
 调用时，请将 `{WorkspaceId}` 替换为真实的 [Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
@@ -94,7 +97,9 @@ API Key。
 
 否
 
-是否启用主动推送音频数据模式。默认值：`"false"`。设为 `"true"`，且 SDK 版本支持端侧音频能力（如 AEC、VAD）时，默认启用端侧音频能力。
+是否启用主动推送音频数据模式。默认值：`"false"`。
+
+设为 `"true"`，且 SDK 版本支持端侧音频能力（如 AEC、VAD）时，默认启用端侧音频能力。
 
 `workspace`
 
@@ -110,7 +115,11 @@ API Key。
 
 否
 
-日志文件的存储路径。此参数仅在调用`nui_initialize`接口时将`save_log`设为`YES`时生效。此时必须设置日志文件路径，否则将报错。本地最多保留两个日志文件。
+日志文件的存储路径。
+
+此参数仅在调用`nui_initialize`接口时将`save_log`设为`YES`时生效。此时必须设置日志文件路径，否则将报错。
+
+本地最多保留两个日志文件。
 
 `save_wav`
 
@@ -118,10 +127,16 @@ API Key。
 
 否
 
-是否保存调试用的音频文件。音频文件保存于`debug_path`下。默认值："false"。取值范围：
+是否保存调试用的音频文件。音频文件保存于`debug_path`下。
+
+默认值："false"。
+
+取值范围：
 
 -   "true"：是
+    
 -   "false"：否
+    
 
 此参数仅在调用`nui_initialize`接口时将`save_log`设为true时生效。 同时，`debug_path`也必须被设置。
 
@@ -131,7 +146,11 @@ API Key。
 
 否
 
-设定日志文件的最大字节数。此参数仅在调用`nui_initialize`接口时将`save_log`设为`YES`时生效。默认值：104857600（100 \* 1024 \* 1024 字节, 即 100MiB）。
+设定日志文件的最大字节数。
+
+此参数仅在调用`nui_initialize`接口时将`save_log`设为`YES`时生效。
+
+默认值：104857600（100 \* 1024 \* 1024 字节, 即 100MiB）。
 
 `log_track_level`
 
@@ -139,14 +158,24 @@ API Key。
 
 否
 
-控制通过日志回调（`onNuiLogTrackCallback`）对外发送的日志内容的过滤级别。默认值：2。取值范围：
+控制通过日志回调（`onNuiLogTrackCallback`）对外发送的日志内容的过滤级别。
+
+默认值：2。
+
+取值范围：
 
 -   0：LOG\_LEVEL\_VERBOSE
+    
 -   1：LOG\_LEVEL\_DEBUG
+    
 -   2：LOG\_LEVEL\_INFO
+    
 -   3：LOG\_LEVEL\_WARNING
+    
 -   4：LOG\_LEVEL\_ERROR
+    
 -   5：LOG\_LEVEL\_NONE（表示关闭此功能）
+    
 
 注意：`log_track_level`与`level`（通过`nui_initialize`接口设置）共同决定最终回调的日志。一条日志的级别数值必须同时大于或等于`log_track_level`和`level`的值，才会被回调。例如，`log_track_level`设为2 (INFO)，`level`设为3 (WARNING)，则只有WARNING及以上级别（数值>=3）的日志才会被回调。
 
@@ -239,6 +268,29 @@ API Key。
 -   false（默认）：开启 VAD 断句，关闭语义断句。
 
 语义断句准确性更高，适合会议转写场景；VAD（Voice Activity Detection，语音活动检测）断句延迟较低，适合交互场景。
+
+`nls_config.keep_dialect`
+
+`boolean`
+
+否
+
+是否保留方言表达，默认值为 `false`。`false`：将方言转写为普通话文本；`true`：保留方言表达。
+
+**说明**适用于 `qwen-audio-3.1-asr-flash-streaming`。
+
+`nls_config.vad_model`
+
+`string`
+
+否
+
+VAD 模型，默认值为 `far_field_meeting_16k`。
+
+-   `near_meeting_16k`：近场场景。
+-   `far_field_meeting_16k`：远场场景。
+
+**说明**适用于 `qwen-audio-3.1-asr-flash-streaming`。
 
 `nls_config.max_sentence_silence`
 
@@ -519,7 +571,9 @@ VAD模式。固定为`MODE_P2T`。
 是否强制结束而忽略最终结果。
 
 -   `YES`：不等待服务端返回最终识别结果就立即结束任务。
+    
 -   `NO`：结束任务，但是会等待完整结果返回。
+    
 
 #### nui\_dialog\_action
 
@@ -556,14 +610,18 @@ JSON 字符串，用于更新识别上下文等运行时行为。
 运行指令。支持以下取值：
 
 -   `context`：即时更新上下文增强，以提升识别准确率。
+    
 -   `play_start`：使用端侧 AEC 时，通知 SDK 内部 AEC 播放器开始播放音频。
+    
 -   `play_over`：使用端侧 AEC 时，通知 SDK 内部 AEC 播放器已经播放结束。
+    
 
 `action_params.context`
 
 `String`
 
 当 `command` 为 `"context"` 时，用于即时更新上下文增强。示例：
+
 ```
 {
   "context": [

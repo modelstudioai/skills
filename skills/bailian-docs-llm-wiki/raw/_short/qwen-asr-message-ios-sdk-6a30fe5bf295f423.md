@@ -299,6 +299,27 @@ API Key。
 
 仅在最终结果（`sentence_end=true`）生效，中间结果（`sentence_end=false`）不支持。
 
+`nls_config.keep_dialect`
+
+`boolean`
+
+否
+
+是否保留方言表达，默认值为 `false`。`false`：将方言转写为普通话文本；`true`：保留方言表达。
+
+**说明**仅在最终结果（`sentence_end=true`）生效，中间结果（`sentence_end=false`）不支持。
+
+`nls_config.vad_model`
+
+`string`
+
+否
+
+VAD 模型，默认值为 `far_field_meeting_16k`。
+
+-   `near_meeting_16k`：近场场景。
+-   `far_field_meeting_16k`：远场场景。
+
 `nls_config.max_sentence_silence`
 
 `int`

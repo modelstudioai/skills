@@ -1,6 +1,6 @@
 # 创建 Session
 
-创建一个会话实例：绑定智能体与运行环境。会话创建时拍摄智能体当时最新版本的完整快照。
+创建一个会话实例：绑定智能体与运行环境。会话创建时拍摄智能体当时最新版本的完整快照，支持会话级智能体配置覆盖与 MCP 请求头。
 
 ## 前提
 
@@ -24,9 +24,9 @@
 
 是
 
-string
+object
 
-绑定的智能体 ID。会话锁定智能体当前最新版本的快照
+绑定的智能体引用对象，只传 `id` 即引用；可锁定版本，并按需建立会话级覆盖，见[会话级配置覆盖](#h-sc-override)
 
 `environment_id`
 
@@ -76,6 +76,14 @@ object
 
 会话运行时注入的环境变量，字符串键值对，沙箱代码中可直接按名读取
 
+`mcp_configs`
+
+否
+
+array
+
+会话级 MCP 请求头，独立于 `agent`，见[会话级 MCP 请求头](#h-sc-mcp)。省略时为空数组
+
 ## 请求示例
 
 bash
@@ -85,7 +93,7 @@ curl -X POST "$AGENTSTUDIO_URL/sessions" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "agent": "agent_xxx",
+    "agent": {"type": "agent", "id": "agent_xxx"},
     "environment_id": "env_xxx",
     "title": "Q3 销售数据分析",
     "resources": [
@@ -101,7 +109,7 @@ python
 
 ```
 session = client.sessions.create(
-    agent="agent_xxx",
+    agent={"type": "agent", "id": "agent_xxx"},
     environment_id="env_xxx",
     title="Q3 销售数据分析",
     resources=[
@@ -125,7 +133,7 @@ environmentVariables.put("API_BASE_URL", "https://api.example.com");
 environmentVariables.put("LOG_LEVEL", "info");
 
 Session session = client.sessions().create(SessionCreateParam.builder()
-    .agentId("agent_xxx")
+    .agent(SessionAgent.ofOverride(Map.of("type", "agent", "id", "agent_xxx")))
     .environmentId("env_xxx")
     .title("Q3 销售数据分析")
     .resources(List.of(SessionResource.builder()
@@ -138,6 +146,150 @@ Session session = client.sessions().create(SessionCreateParam.builder()
     .environmentVariables(environmentVariables)
     .build());
 System.out.println(session.getId() + " " + session.getStatus());
+```
+
+## 会话级配置覆盖
+
+`agent` 对象可仅引用智能体，也可附带覆盖字段建立会话级覆盖：覆盖只修改本会话的配置快照，不改动智能体本身，多个会话可基于同一智能体各自定制。对象字段如下：
+
+字段
+
+必填
+
+类型
+
+说明
+
+`type`
+
+否
+
+string
+
+`agent`（仅引用）或 `agent_with_overrides`（引用并覆盖）。携带覆盖字段时必须显式传 `agent_with_overrides`，否则返回 invalid\_parameter
+
+`id`
+
+是
+
+string
+
+智能体 ID
+
+`version`
+
+否
+
+integer
+
+锁定的智能体版本号，省略时使用当前最新版本；版本不存在时返回 not\_found
+
+`system`
+
+否
+
+string / null
+
+覆盖系统提示词。省略时继承智能体源配置；空字符串明确使用空提示词
+
+`tools`
+
+否
+
+array / null
+
+覆盖工具包配置，结构与[创建 Agent](raw/application-api-reference/managed-agents-api/agent-api/agent-create.md)的 `tools` 一致
+
+`mcp_servers`
+
+否
+
+array / null
+
+覆盖挂载的 MCP Server 列表，结构与创建 Agent 的 `mcp_servers` 一致
+
+`skills`
+
+否
+
+array / null
+
+覆盖挂载的技能列表，结构与创建 Agent 的 `skills` 一致
+
+覆盖字段的取值语义（createSession 与[更新 Session](raw/application-api-reference/managed-agents-api/session-api/session-update.md)一致）：
+
+取值
+
+效果
+
+省略
+
+继承智能体源配置
+
+`null`
+
+不建立覆盖，继承源配置
+
+`[]`（数组字段）
+
+明确覆盖为空
+
+`""`（仅 `system`）
+
+明确使用空提示词
+
+## 会话级 MCP 请求头
+
+`mcp_configs` 为指定 MCP Server 的全部请求注入自定义 Header，常用于透传租户 ID、鉴权 token。每项含 `mcp_server_name`（MCP Server 名称）与 `headers`（键值对，key 与 value 均为字符串）。传入不存在的 MCP Server 名称不报错，该配置不生效。
+
+创建与更新的完整请求示例：
+
+bash
+
+```
+curl -X POST "$AGENTSTUDIO_URL/sessions" \
+  -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "agent": {
+      "type": "agent_with_overrides",
+      "id": "agent_xxx",
+      "system": "你是本会话专用的数据核对助手，只输出核对结论。"
+    },
+    "environment_id": "env_xxx",
+    "mcp_configs": [
+      {"mcp_server_name": "crm", "headers": {"X-Tenant-Id": "tenant-demo"}}
+    ]
+  }'
+```
+
+python
+
+```
+session = client.sessions.create(
+    agent={"type": "agent_with_overrides", "id": "agent_xxx",
+           "system": "你是本会话专用的数据核对助手，只输出核对结论。"},
+    environment_id="env_xxx",
+    mcp_configs=[{"mcp_server_name": "crm", "headers": {"X-Tenant-Id": "tenant-demo"}}],
+)
+```
+
+java
+
+```
+Map<String, Object> agentOverride = Map.of(
+    "type", "agent_with_overrides",
+    "id", "agent_xxx",
+    "system", "你是本会话专用的数据核对助手，只输出核对结论。");
+Map<String, String> headers = Map.of("X-Tenant-Id", "tenant-demo");
+
+Session session = client.sessions().create(SessionCreateParam.builder()
+    .agent(agentOverride)
+    .environmentId("env_xxx")
+    .mcpConfigs(List.of(Map.of(
+        "mcp_server_name", "crm",
+        "headers", headers)))
+    .build());
 ```
 
 ## 响应示例
@@ -212,7 +364,7 @@ string
 
 object
 
-智能体配置完整快照（创建时锁定），含 `id` / `version` / `name` / `model` / `system` / `tools` 等
+智能体配置完整快照，含 `id` / `version` / `name` / `model` / `system` / `tools` 等；会话级覆盖已并入快照
 
 `environment_id`
 
@@ -256,6 +408,8 @@ object
 
 会话运行时注入的环境变量，字符串键值对，沙箱代码中可直接按名读取
 
+本响应不含 `mcp_configs`；通过[获取 Session](raw/application-api-reference/managed-agents-api/session-api/session-get.md)查询。
+
 ## 配置锁定
 
-会话创建时拍摄智能体当时最新版本的完整快照（嵌入到会话详情的 `agent` 字段）。后续编辑智能体只影响新建会话，已有会话继续使用快照中的配置。
+会话创建时拍摄智能体当时最新版本的完整快照（嵌入到会话详情的 `agent` 字段）。后续编辑智能体只影响新建会话，已有会话继续使用快照中的配置。会话级配置目前仅支持通过 API 设置，控制台创建的会话为只读快照。会话创建后可继续修改会话级配置，见[更新 Session](raw/application-api-reference/managed-agents-api/session-api/session-update.md)。

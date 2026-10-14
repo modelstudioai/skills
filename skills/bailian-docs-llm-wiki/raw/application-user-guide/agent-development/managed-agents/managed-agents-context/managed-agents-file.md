@@ -86,7 +86,7 @@ curl -X POST "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentst
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "agent": "agent_xxx",
+    "agent": {"type": "agent", "id": "agent_xxx"},
     "environment_id": "env_xxx",
     "resources": [
       {"type": "file", "file_id": "file_xxx", "mount_path": "/workspace/data.csv"}
@@ -105,7 +105,7 @@ python
 ```
 # 创建会话时挂载
 session = client.sessions.create(
-    agent="agent_xxx",
+    agent={"type": "agent", "id": "agent_xxx"},
     environment_id="env_xxx",
     resources=[
         {"type": "file", "file_id": "file_xxx", "mount_path": "/workspace/data.csv"},
@@ -126,7 +126,7 @@ java
 ```
 // 创建会话时挂载
 Session session = client.sessions().create(SessionCreateParam.builder()
-    .agentId("agent_xxx")
+    .agent(SessionAgent.ofOverride(Map.of("type", "agent", "id", "agent_xxx")))
     .environmentId("env_xxx")
     .resources(List.of(SessionResource.builder()
         .type("file")

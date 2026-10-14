@@ -6,6 +6,12 @@
 
 根据输出需求选择示例：文本分析使用 Qwen3.8-Omni-Flash，生成语音使用 Qwen3.5-Omni。
 
+两种输出示例都需要配置 `DASHSCOPE_BASE_URL`。将其设为业务空间对应的 [Chat Completions 服务地址](raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)中的 `base_url`，并使用对应地域的 [API Key](raw/model-api-reference/preparations/get-api-key.md)。将下方地址中的 `{WorkspaceId}` 替换为实际业务空间 ID；不同地域的服务地址不同。
+
+```
+export DASHSCOPE_BASE_URL="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
+```
+
 #### 文本输出（Qwen3.8-Omni-Flash）
 
 **前提条件**
@@ -15,14 +21,10 @@
 
 **说明**运行前安装依赖：`pip install openai`（Python）或 `npm install openai`（Node.js）。
 
-将 `DASHSCOPE_BASE_URL` 环境变量设为业务空间对应的 [Chat Completions 服务地址](raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)中的 `base_url`，并将 `AUDIO_URL` 设为可访问的 WAV 音频 URL。需使用对应地域的 [API Key](raw/model-api-reference/preparations/get-api-key.md)。
-
-在终端中安装依赖并设置以下环境变量。将服务地址和音频 URL 替换为实际值；`DASHSCOPE_API_KEY` 按上方链接配置。
+将 `AUDIO_URL` 设为可访问的 WAV 音频 URL。下方命令安装 Python 依赖并设置音频地址；服务地址按上方共用步骤配置，`DASHSCOPE_API_KEY` 按前提条件中的链接配置。
 
 ```
 python3 -m pip install openai
-# 华北2（北京）地域形如下方；请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
-export DASHSCOPE_BASE_URL="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
 export AUDIO_URL="<accessible-wav-url>"
 ```
 
@@ -392,7 +394,7 @@ data: {"choices":[],"object":"chat.completion.chunk","usage":{"prompt_tokens":20
 
 ## 模型选型
 
-音视频理解、会议纪要、字幕生成和文本问答优先使用 **Qwen3.8-Omni-Flash**，支持深度思考、工具调用和联网搜索：调用示例见[快速开始](#qwen38-offline)，思考模式见[开启/关闭思考模式](#bc67a9a2bd2of)，联网搜索见[联网搜索](#c6f395051953a)，工具调用见[函数调用](raw/model-user-guide/model-experience/text-generation-model/tool-calls/qwen-function-calling.md)。需要直接生成语音回复时，可选择下方 Qwen3.5-Omni。
+音视频理解、会议纪要、字幕生成和文本问答优先使用 **Qwen3.8-Omni-Flash**，支持深度思考、工具调用和联网搜索：调用示例见[快速开始](#qwen38-offline)，思考模式见[思考模式](#bc67a9a2bd2of)，联网搜索见[联网搜索](#c6f395051953a)，工具调用见[函数调用](raw/model-user-guide/model-experience/text-generation-model/tool-calls/qwen-function-calling.md)。需要直接生成语音回复时，可选择下方 Qwen3.5-Omni。
 
 ### Qwen3.8-Omni-Flash
 
@@ -417,32 +419,32 @@ data: {"choices":[],"object":"chat.completion.chunk","usage":{"prompt_tokens":20
 Chat Completions、Responses
 
 -   上下文长度为 1M Token。
--   音频输入支持 113 种语言和方言，与 Qwen3.5-Omni 一致。完整列表见[模型选型](#d54e85c641oux)中 Qwen3.5-Omni 的“输入音频语种”。
--   支持 [Function Calling](raw/model-user-guide/model-experience/text-generation-model/tool-calls/qwen-function-calling.md) 和联网搜索。Responses 内置工具当前仅支持 `web_search`。
+-   音频输入支持 113 种语言和方言，与 Qwen3.5-Omni 一致。完整列表见下方[输入音频语种](#omni-input-audio-languages)。
+-   支持 [Function Calling](raw/model-user-guide/model-experience/text-generation-model/tool-calls/qwen-function-calling.md) 和联网搜索。
 
-### Qwen3.5-Omni：音频输出与多模态交互
+### Qwen3.5-Omni
 
 支持地域：华北2（北京）、新加坡，需使用对应地域的 [API Key](raw/model-api-reference/preparations/get-api-key.md)。
 
--   **Qwen3.5-Omni 系列：**支持音视频理解、语音回复及音频控制。
-    
-    -   输入限制：3 小时音频或 1 小时视频
-    -   音频控制：支持通过指令调节音量、语速、情绪
-    -   视觉能力：与 Qwen3.5 同等水平，可理解画面、语音、音效等多模态信息
-    -   多模态组合输入：支持文本与图片、音频、视频的任意组合同时输入，不限于单一模态
-    -   声音复刻：支持自定义音色（仅qwen3.5-omni-plus、qwen3.5-omni-flash支持，快照版本暂不支持），详情请参见[声音复刻](raw/_short/qwen-omni-voice-cloning-717550bc449e9e29.md)
+-   输入限制：3 小时音频或 1 小时视频
+-   音频控制：支持通过指令调节音量、语速、情绪
+-   视觉能力：与 Qwen3.5 同等水平，可理解画面、语音、音效等多模态信息
+-   多模态组合输入：支持文本与图片、音频、视频的任意组合同时输入，不限于单一模态
+-   声音复刻：支持自定义音色（仅qwen3.5-omni-plus、qwen3.5-omni-flash支持，快照版本暂不支持），详情请参见[声音复刻](raw/_short/qwen-omni-voice-cloning-717550bc449e9e29.md)
 
-### 其他模型与规格
+### Qwen3-Omni-Flash
 
--   **Qwen3-Omni-Flash 系列：**
-    -   支持地域：华北2（北京）、新加坡，需使用对应地域的 [API Key](raw/model-api-reference/preparations/get-api-key.md)。
-    -   输入限制：20 分钟音频或 150 秒视频
-    -   思考模式：支持通过 `enable_thinking` 开启或关闭思考
-    -   输入模态：仅支持文本与单一其他模态（图片、音频或视频）的组合输入
+支持地域：华北2（北京）、新加坡，需使用对应地域的 [API Key](raw/model-api-reference/preparations/get-api-key.md)。
+
+-   输入限制：20 分钟音频或 150 秒视频
+-   思考模式：支持通过 `enable_thinking` 开启或关闭思考
+-   输入模态：仅支持文本与单一其他模态（图片、音频或视频）的组合输入
+
+### 模型能力对比
 
 **模型系列**
 
-**音视频描述能力**
+**音视频理解**
 
 **深度思考**
 
@@ -454,11 +456,27 @@ Chat Completions、Responses
 
 **音色数量**
 
+Qwen3.8-Omni-Flash
+
+仅输出文本
+
+支持
+
+支持
+
+支持
+
+113 种，完整列表见[输入音频语种](#omni-input-audio-languages)
+
+不支持
+
+不适用
+
 Qwen3.5-Omni
 
 支持音频输出的全模态模型
 
-强
+支持
 
 不支持
 
@@ -492,7 +510,7 @@ Qwen3-Omni-Flash
 
 混合思考模型
 
-较弱
+支持
 
 支持
 
@@ -526,87 +544,1960 @@ Qwen3-Omni-Flash
 
 > 因版本而异
 
+音视频描述效果：Qwen3.5-Omni 较强，Qwen3-Omni-Flash 相对较弱。
+
 > 模型名称、上下文长度、价格及快照版本请参见百炼控制台；并发限流规则请参见 [限流](raw/model-user-guide/get-started-with-models/rate-limit.md)。
 
-## 模型效果
+## 媒体文件输入
 
-### 音视频内容分析
+### 支持的输入模态
 
-> 请你对这个视频按时间戳生成全面的描述。
+以下介绍图片、音频、视频及多种媒体组合输入。前三类完整示例分别传入文本与一种媒体，使用 Qwen3.8-Omni-Flash，通过 Chat Completions 返回文本；多种媒体组合输入适用于 Qwen3.8-Omni-Flash 和 Qwen3.5-Omni，见下方对应示例。
 
-**00:00.000 – 00:02.500**
+#### 图片输入
 
-雨夜中的城市街道填满宽银幕画面。长时间曝光下，红蓝车灯拖出光轨滑过，在湿漉漉的路面上闪烁。一位身穿深色及膝风衣、内搭浅色衬衫领带的孤独男子，沿着右侧人行道向镜头走来。雨滴凝结在他的肩膀和头发上；每一步都在潮湿的混凝土上发出沉闷的啪嗒声。低沉不祥的电子嗡鸣支撑着环境音，同时稳定的雨声四处噼啪作响。他身旁的砖墙上贴满彩色涂鸦，街区远处几块霓虹灯招牌发光——一块清晰显示橙红色草书体 "Nice"，另一块竖置招牌的末端露出字母 "AT"。
+以下示例代码以传入图片公网URL为例，传入本地图片请参见：[本地文件（Base64）](https://help.aliyun.com/zh/model-studio/qwen-omni#c516d1e824x03)。
 
+python
+
+```
+import os
+from openai import OpenAI
+
+client = OpenAI(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    # DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
+    base_url=os.environ["DASHSCOPE_BASE_URL"],
+)
+
+completion = client.chat.completions.create(
+    model="qwen3.8-omni-flash",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241022/emyrja/dog_and_girl.jpeg"
+                    },
+                },
+                {"type": "text", "text": "图中描绘的是什么景象？"},
+            ],
+        },
+    ],
+
+    modalities=["text"],
+
+    stream=True,
+    stream_options={
+        "include_usage": True
+    }
+)
+
+for chunk in completion:
+    if chunk.choices:
+        print(chunk.choices[0].delta)
+    else:
+        print(chunk.usage)
+```
+
+javascript
+
+```
+import OpenAI from "openai";
+
+const openai = new OpenAI(
+    {
+        // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
+        // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+        apiKey: process.env.DASHSCOPE_API_KEY,
+        // DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
+        baseURL: process.env.DASHSCOPE_BASE_URL
+    }
+);
+const completion = await openai.chat.completions.create({
+    model: "qwen3.8-omni-flash",
+    messages: [
+        {
+            "role": "user",
+            "content": [{
+                "type": "image_url",
+                "image_url": { "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241022/emyrja/dog_and_girl.jpeg" },
+            },
+            { "type": "text", "text": "图中描绘的是什么景象？" }]
+        }],
+    stream: true,
+    stream_options: {
+        include_usage: true
+    },
+    modalities: ["text"],
+
+});
+
+for await (const chunk of completion) {
+    if (Array.isArray(chunk.choices) && chunk.choices.length > 0) {
+        console.log(chunk.choices[0].delta);
+    } else {
+        console.log(chunk.usage);
+    }
+}
+```
+
+bash
+
+```
+# ======= 重要提示 =======
+# 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+# 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+# === 执行时请删除该注释 ===
+
+# DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
+curl -X POST $DASHSCOPE_BASE_URL/chat/completions \
+-H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+-H "Content-Type: application/json" \
+-d '{
+    "model": "qwen3.8-omni-flash",
+    "messages": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "image_url",
+          "image_url": {
+            "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241022/emyrja/dog_and_girl.jpeg"
+          }
+        },
+        {
+          "type": "text",
+          "text": "图中描绘的是什么景象？"
+        }
+      ]
+    }
+  ],
+    "stream":true,
+    "stream_options":{
+        "include_usage":true
+    },
+    "modalities":["text"]
+
+}'
+```
+
+输入限制
+
+本页各型号支持传入多张图片。对输入图片的要求如下：
+
+-   图片数量：
+    
+    -   Qwen3.8-Omni-Flash、Qwen3.5-Omni系列：公网URL传入最多 2048 张，Base64 编码最多 250 张
+    -   Qwen3-Omni-Flash：图片列表形式视频输入为 2～128 张
+-   图像大小：
+    
+    -   使用公网URL方式：
+        
+        -   Qwen3.8-Omni-Flash、Qwen3.5-Omni系列：单个图片文件的大小不超过 20MB
+        -   Qwen3-Omni-Flash系列：单个图片文件的大小不超过 10MB
+    -   Qwen3.5-Omni、Qwen3-Omni-Flash 使用 Base64 编码方式：编码后的 Base64 字符串大小必须小于 10MB；
+        
+-   图片的宽度和高度均应大于 10 像素，宽高比不应超过 200:1 或 1:200
+    
+-   支持的图片类型请参见[图像与视频理解](raw/model-user-guide/model-experience/vision-model/vision.md)
+    
+
+#### 音频输入
+
+以下示例代码以传入音频公网URL为例，传入本地音频请参见：[本地文件（Base64）](https://help.aliyun.com/zh/model-studio/qwen-omni#c516d1e824x03)。
+
+python
+
+```
+import os
+from openai import OpenAI
+
+# 初始化OpenAI客户端
+client = OpenAI(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    # DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
+    base_url=os.environ["DASHSCOPE_BASE_URL"],
+)
+
+completion = client.chat.completions.create(
+    model="qwen3.8-omni-flash",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "input_audio",
+                    "input_audio": {
+                        "data": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250211/tixcef/cherry.wav",
+                        "format": "wav",
+                    },
+                },
+                {"type": "text", "text": "这段音频在说什么"},
+            ],
+        },
+    ],
+
+    modalities=["text"],
+
+    stream=True,
+    stream_options={"include_usage": True},
+)
+
+for chunk in completion:
+    print(chunk)
+    # if chunk.choices:
+    #     print(chunk.choices[0].delta)
+    # else:
+    #     print(chunk.usage)
+```
+
+javascript
+
+```
+import OpenAI from "openai";
+
+// 初始化 openai 客户端
+const openai = new OpenAI({
+     // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey:"sk-xxx",
+    // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    apiKey: process.env.DASHSCOPE_API_KEY,
+    // DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
+    baseURL: process.env.DASHSCOPE_BASE_URL
+});
+
+const completion = await openai.chat.completions.create({
+    model: "qwen3.8-omni-flash",
+    messages: [
+        {
+            "role": "user",
+            "content": [{
+                "type": "input_audio",
+                "input_audio": { "data": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250211/tixcef/cherry.wav", "format": "wav" },
+            },
+            { "type": "text", "text": "这段音频在说什么" }]
+        }],
+    stream: true,
+    stream_options: {
+        include_usage: true
+    },
+    modalities: ["text"],
+
+});
+
+for await (const chunk of completion) {
+    if (Array.isArray(chunk.choices) && chunk.choices.length > 0) {
+        console.log(chunk.choices[0].delta);
+    } else {
+        console.log(chunk.usage);
+    }
+}
+```
+
+bash
+
+```
+# ======= 重要提示 =======
+# 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+# 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+# === 执行时请删除该注释 ===
+
+# DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
+curl -X POST $DASHSCOPE_BASE_URL/chat/completions \
+-H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+-H "Content-Type: application/json" \
+-d '{
+    "model": "qwen3.8-omni-flash",
+    "messages": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "input_audio",
+          "input_audio": {
+            "data": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250211/tixcef/cherry.wav",
+            "format": "wav"
+          }
+        },
+        {
+          "type": "text",
+          "text": "这段音频在说什么"
+        }
+      ]
+    }
+  ],
+    "stream":true,
+    "stream_options":{
+        "include_usage":true
+    },
+    "modalities":["text"]
+
+}'
+```
+
+输入限制
+
+-   文件数量：
+    
+    -   Qwen3.8-Omni-Flash、Qwen3.5-Omni系列：使用公网URL方式，最多可传入 2048 个；使用Base64编码方式，最多可传入 250 个；
+    -   Qwen3-Omni-Flash系列：仅支持输入一个；
+-   文件大小：
+    
+    -   使用公网URL方式：
+        
+        -   Qwen3.8-Omni-Flash、Qwen3.5-Omni系列：不超过 2GB
+        -   Qwen3-Omni-Flash：不超过 100MB
+    -   使用 Base64 编码方式：编码后的 Base64 字符串大小必须小于 10MB
+        
+-   时长限制：
+    
+    -   Qwen3.8-Omni-Flash、Qwen3.5-Omni系列：最长 3 小时
+    -   Qwen3-Omni-Flash：最长 20 分钟
+-   文件格式：支持AMR、 WAV、 3GP、 3GPP、 AAC、 MP3等主流格式
+    
+
+#### 多通道音频
+
+`qwen3.8-omni-flash` 支持双通道立体声和四通道 FOA 空间音频（WYZX 通道顺序），可保留空间信息用于音频理解。
+
+`use_multichannel` 默认为 `false`，此时所有音频均按单通道解析。设为 `true` 且输入为双通道（左右）或四通道（FOA，WYZX 顺序）音频时，模型解析空间音频信息。
+
+使用[快速开始](#qwen38-offline)中的 Chat Completions 示例时，将 `AUDIO_URL` 替换为对应的多通道 WAV 音频，并在 `client.chat.completions.create()` 中增加以下参数。HTTP 请求中，`use_multichannel` 位于请求体顶层。Responses 调用的传入位置见[使用 Responses API](#qwen38-responses)。
+
+```
+extra_body={"use_multichannel": True},
+```
+
+以下完整示例以双通道立体声 WAV 为例，演示如何调用 `qwen3.8-omni-flash` 解析空间音频信息；四通道 FOA 音频调用方式相同，只需将 `AUDIO_URL` 替换为符合 WYZX 通道顺序的四通道 WAV。
+
+```
+import os
+from openai import OpenAI
+
+client = OpenAI(
+    api_key=os.environ["DASHSCOPE_API_KEY"],
+    base_url=os.environ["DASHSCOPE_BASE_URL"],
+)
+completion = client.chat.completions.create(
+    model="qwen3.8-omni-flash",
+    messages=[{
+        "role": "user",
+        "content": [
+            {"type": "text", "text": "描述这段录音中的空间音频信息。"},
+            {"type": "input_audio", "input_audio": {
+                "data": os.environ["AUDIO_URL"],
+                "format": "wav",
+            }},
+        ],
+    }],
+    extra_body={"use_multichannel": True},
+    stream=True,
+    stream_options={"include_usage": True},
+)
+for chunk in completion:
+    if not chunk.choices:
+        if chunk.usage:
+            print("\nUsage:", chunk.usage)
+        continue
+    delta = chunk.choices[0].delta
+    if getattr(delta, "reasoning_content", None):
+        print(delta.reasoning_content, end="", flush=True)
+    if delta.content:
+        print(delta.content, end="", flush=True)
+```
+
+**说明**多通道音频的声道数必须为 2（双通道立体声，左右声道）或 4（四通道 FOA，WYZX 通道顺序）。可用 `soundfile` 查看音频声道数：
+
+```
+python3 -c "import soundfile as sf; print(sf.info('audio.wav').channels)"
+```
+
+#### 视频输入
+
+视频的传入方式可以为视频文件形式或图片列表形式，见下方切换页。
+
+#### 视频文件形式（可理解视频中的音频）
+
+python
+
+```
+import os
+from openai import OpenAI
+
+client = OpenAI(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    # DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
+    base_url=os.environ["DASHSCOPE_BASE_URL"],
+)
+
+completion = client.chat.completions.create(
+    model="qwen3.8-omni-flash",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "video_url",
+                    "video_url": {
+                        "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241115/cqqkru/1.mp4"
+                    },
+                },
+                {"type": "text", "text": "视频的内容是什么?"},
+            ],
+        },
+    ],
+
+    modalities=["text"],
+
+    stream=True,
+    stream_options={"include_usage": True},
+)
+
+for chunk in completion:
+    if chunk.choices:
+        print(chunk.choices[0].delta)
+    else:
+        print(chunk.usage)
+```
+
+javascript
+
+```
+import OpenAI from "openai";
+
+const openai = new OpenAI(
+    {
+        // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
+        apiKey: process.env.DASHSCOPE_API_KEY,
+        // DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
+        baseURL: process.env.DASHSCOPE_BASE_URL
+    }
+);
+const completion = await openai.chat.completions.create({
+    model: "qwen3.8-omni-flash",
+    messages: [
+        {
+            "role": "user",
+            "content": [{
+                "type": "video_url",
+                "video_url": { "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241115/cqqkru/1.mp4" },
+            },
+            { "type": "text", "text": "视频的内容是什么?" }]
+        }],
+    stream: true,
+    stream_options: {
+        include_usage: true
+    },
+    modalities: ["text"],
+
+});
+
+for await (const chunk of completion) {
+    if (Array.isArray(chunk.choices) && chunk.choices.length > 0) {
+        console.log(chunk.choices[0].delta);
+    } else {
+        console.log(chunk.usage);
+    }
+}
+```
+
+bash
+
+```
+# ======= 重要提示 =======
+# 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+# 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+# === 执行时请删除该注释 ===
+
+# DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
+curl -X POST $DASHSCOPE_BASE_URL/chat/completions \
+-H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+-H "Content-Type: application/json" \
+-d '{
+    "model": "qwen3.8-omni-flash",
+    "messages": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "video_url",
+          "video_url": {
+            "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241115/cqqkru/1.mp4"
+          }
+        },
+        {
+          "type": "text",
+          "text": "视频的内容是什么"
+        }
+      ]
+    }
+  ],
+    "stream":true,
+    "stream_options": {
+        "include_usage": true
+    },
+    "modalities":["text"]
+
+}'
+```
+
+输入限制
+
+-   文件数量：
+    
+    -   Qwen3.8-Omni-Flash：最多可传入 64 个。
+    -   Qwen3.5-Omni系列：使用公网URL方式，最多可传入 512 个；使用Base64编码方式，最多可传入 250 个。
+    -   Qwen3-Omni-Flash系列：仅支持输入一个；
+-   文件大小：
+    
+    -   使用公网URL方式：
+        
+        -   Qwen3.8-Omni-Flash、Qwen3.5-Omni系列：限制为 2GB
+        -   Qwen3-Omni-Flash：限制为 256 MB
+    -   使用 Base64 编码方式：编码后的 Base64 字符串大小必须小于 10MB
+        
+-   时长限制：
+    
+    -   Qwen3.8-Omni-Flash：2 小时
+    -   Qwen3.5-Omni系列：1 小时
+    -   Qwen3-Omni-Flash：150 秒
+-   文件格式：MP4、AVI、MKV、MOV、FLV、WMV 等。
+    
+-   视频文件中的视觉信息与音频信息会分开计费。
+    
+
+#### 图片列表形式
+
+python
+
+```
+import os
+from openai import OpenAI
+
+# 初始化OpenAI客户端
+client = OpenAI(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    # DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
+    base_url=os.environ["DASHSCOPE_BASE_URL"],
+)
+
+completion = client.chat.completions.create(
+    model="qwen3.8-omni-flash",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "video",
+                    "video": [
+                        "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/xzsgiz/football1.jpg",
+                        "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/tdescd/football2.jpg",
+                        "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/zefdja/football3.jpg",
+                        "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/aedbqh/football4.jpg",
+                    ],
+                },
+                {"type": "text", "text": "描述这个视频的具体过程"},
+            ],
+        }
+    ],
+
+    modalities=["text"],
+
+    stream=True,
+    stream_options={"include_usage": True},
+)
+
+for chunk in completion:
+    if chunk.choices:
+        print(chunk.choices[0].delta)
+    else:
+        print(chunk.usage)
+```
+
+javascript
+
+```
+import OpenAI from "openai";
+
+const openai = new OpenAI({
+     // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
+    // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    apiKey: process.env.DASHSCOPE_API_KEY,
+    // DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
+    baseURL: process.env.DASHSCOPE_BASE_URL
+});
+
+const completion = await openai.chat.completions.create({
+    model: "qwen3.8-omni-flash",
+    messages: [{
+        role: "user",
+        content: [
+            {
+                type: "video",
+                video: [
+                    "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/xzsgiz/football1.jpg",
+                    "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/tdescd/football2.jpg",
+                    "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/zefdja/football3.jpg",
+                    "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/aedbqh/football4.jpg"
+                ]
+            },
+            {
+                type: "text",
+                text: "描述这个视频的具体过程"
+            }
+        ]
+    }],
+    stream: true,
+    stream_options: {
+        include_usage: true
+    },
+    modalities: ["text"],
+
+});
+
+for await (const chunk of completion) {
+    if (Array.isArray(chunk.choices) && chunk.choices.length > 0) {
+        console.log(chunk.choices[0].delta);
+    } else {
+        console.log(chunk.usage);
+    }
+}
+```
+
+bash
+
+```
+# ======= 重要提示 =======
+# 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+# 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+# === 执行时请删除该注释 ===
+
+# DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
+curl -X POST $DASHSCOPE_BASE_URL/chat/completions \
+-H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+-H "Content-Type: application/json" \
+-d '{
+    "model": "qwen3.8-omni-flash",
+    "messages": [
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "video",
+                    "video": [
+                        "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/xzsgiz/football1.jpg",
+                        "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/tdescd/football2.jpg",
+                        "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/zefdja/football3.jpg",
+                        "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/aedbqh/football4.jpg"
+                    ]
+                },
+                {
+                    "type": "text",
+                    "text": "描述这个视频的具体过程"
+                }
+            ]
+        }
+    ],
+    "stream": true,
+    "stream_options": {
+        "include_usage": true
+    },
+    "modalities": ["text"]
+}'
+```
+
+输入限制
+
+**图片数量**
+
+-   Qwen3.8-Omni-Flash、Qwen3.5-Omni系列：最少传入 2 张图片，最多可传入 2048 张图片
+-   Qwen3-Omni-Flash：最少传入 2 张图片，最多可传入 128 张图片
+
+#### 多种媒体组合输入
+
+Qwen3.8-Omni-Flash 和 Qwen3.5-Omni 支持在同一请求中组合输入文本、图片、音频和视频。以下示例使用 Qwen3.8-Omni-Flash 综合分析图片与音频，并生成文本回答。如需生成语音，请使用 Qwen3.5-Omni，参见[音频输出示例](#b6a6667a65zvt)。
+
+python
+
+```
+import os
+from openai import OpenAI
+
+client = OpenAI(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    # DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
+    base_url=os.environ["DASHSCOPE_BASE_URL"],
+)
+
+completion = client.chat.completions.create(
+    model="qwen3.8-omni-flash",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241022/emyrja/dog_and_girl.jpeg"
+                    },
+                },
+                {
+                    "type": "input_audio",
+                    "input_audio": {
+                        "data": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250211/tixcef/cherry.wav",
+                        "format": "wav"
+                    },
+                },
+                {"type": "text", "text": "请描述图片内容，并告诉我音频在说什么。"},
+            ],
+        },
+    ],
+    modalities=["text"],
+
+    stream=True,
+    stream_options={"include_usage": True},
+)
+
+for chunk in completion:
+    if chunk.choices:
+        print(chunk.choices[0].delta)
+    else:
+        print(chunk.usage)
+```
+
+javascript
+
+```
+import OpenAI from "openai";
+
+const openai = new OpenAI(
+    {
+        apiKey: process.env.DASHSCOPE_API_KEY,
+        // DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
+        baseURL: process.env.DASHSCOPE_BASE_URL
+    }
+);
+
+const completion = await openai.chat.completions.create({
+    model: "qwen3.8-omni-flash",
+    messages: [
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "image_url",
+                    "image_url": { "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241022/emyrja/dog_and_girl.jpeg" },
+                },
+                {
+                    "type": "input_audio",
+                    "input_audio": {
+                        "data": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250211/tixcef/cherry.wav",
+                        "format": "wav"
+                    },
+                },
+                { "type": "text", "text": "请描述图片内容，并告诉我音频在说什么。" }
+            ]
+        }
+    ],
+    stream: true,
+    stream_options: {
+        include_usage: true
+    },
+    modalities: ["text"],
+
+});
+
+for await (const chunk of completion) {
+    if (Array.isArray(chunk.choices) && chunk.choices.length > 0) {
+        console.log(chunk.choices[0].delta);
+    } else {
+        console.log(chunk.usage);
+    }
+}
+```
+
+bash
+
+```
+# DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
+curl -X POST $DASHSCOPE_BASE_URL/chat/completions \
+-H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+-H "Content-Type: application/json" \
+-d '{
+    "model": "qwen3.8-omni-flash",
+    "messages": [
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241022/emyrja/dog_and_girl.jpeg"
+                    }
+                },
+                {
+                    "type": "input_audio",
+                    "input_audio": {
+                        "data": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250211/tixcef/cherry.wav",
+                        "format": "wav"
+                    }
+                },
+                {
+                    "type": "text",
+                    "text": "请描述图片内容，并告诉我音频在说什么。"
+                }
+            ]
+        }
+    ],
+    "stream": true,
+    "stream_options": {
+        "include_usage": true
+    },
+    "modalities": ["text"]
+
+}'
+```
+
+### 媒体文件传入方式
+
+以下片段用于替换上方 Chat Completions 完整示例中的媒体项。Responses 的字段结构不同，见[使用 Responses API](#qwen38-responses)。
+
+#### 公网 URL
+
+完整示例使用公网 URL。文件需可通过 URL 访问；格式、数量、大小和时长要求见上方对应模态的“输入限制”。以下展示 Chat Completions 的核心媒体项，替换位置与本地 Base64 相同。
+
+下方依次为图片、音频、视频文件和视频图片列表的媒体项；按输入类型选用，不要将整个数组直接作为请求体。
+
+```
+[
+  {
+    "type": "image_url",
+    "image_url": {
+      "url": "https://example.com/image.png"
+    }
+  },
+  {
+    "type": "input_audio",
+    "input_audio": {
+      "data": "https://example.com/audio.mp3",
+      "format": "mp3"
+    }
+  },
+  {
+    "type": "video_url",
+    "video_url": {
+      "url": "https://example.com/video.mp4"
+    }
+  },
+  {
+    "type": "video",
+    "video": [
+      "https://example.com/frame1.jpg",
+      "https://example.com/frame2.jpg"
+    ]
+  }
+]
+```
+
+#### 本地文件（Base64）
+
+以下 Python 片段生成 `media_content`，JavaScript 片段生成 `mediaContent`。用该对象替换完整示例中 `messages` 的 `user.content` 数组内对应的媒体项，保留文本提示词及其余调用、流式输出代码。视频图片列表替换的是整个 `type="video"` 项。 沿用上方各输入模态的完整 Chat Completions 示例，将本地文件编码为 Base64，再替换对应媒体项。音频和视频编码后的 Base64 字符串必须小于 10MB；Qwen3.5-Omni、Qwen3-Omni-Flash 的图片输入也有此限制。
+
+#### 图片
+
+以保存在本地的[eagle.png](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250326/nlgymo/eagle.png)为例。
+
+python
+
+```
+import base64
+
+def encode_image(image_path):
+    with open(image_path, "rb") as image_file:
+        return base64.b64encode(image_file.read()).decode("utf-8")
+
+base64_image = encode_image("eagle.png")
+
+media_content = {
+    "type": "image_url",
+    "image_url": {"url": f"data:image/png;base64,{base64_image}"},
+}
+```
+
+javascript
+
+```
+import { readFileSync } from 'fs';
+
+const encodeImage = (imagePath) => {
+    const imageFile = readFileSync(imagePath);
+    return imageFile.toString('base64');
+};
+const base64Image = encodeImage("eagle.png")
+
+const mediaContent = {
+    "type": "image_url",
+    "image_url": { "url": `data:image/png;base64,${base64Image}` },
+};
+```
+
+#### 音频
+
+以保存在本地的[welcome.mp3](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250214/pijhos/welcome.mp3)为例。
+
+python
+
+```
+import base64
+
+def encode_audio(audio_path):
+    with open(audio_path, "rb") as audio_file:
+        return base64.b64encode(audio_file.read()).decode("utf-8")
+
+base64_audio = encode_audio("welcome.mp3")
+
+media_content = {
+    "type": "input_audio",
+    "input_audio": {
+        "data": f"data:;base64,{base64_audio}",
+        "format": "mp3",
+    },
+}
+```
+
+javascript
+
+```
+import { readFileSync } from 'fs';
+
+const encodeAudio = (audioPath) => {
+    const audioFile = readFileSync(audioPath);
+    return audioFile.toString('base64');
+};
+const base64Audio = encodeAudio("welcome.mp3")
+
+const mediaContent = {
+    "type": "input_audio",
+    "input_audio": { "data": `data:;base64,${base64Audio}`, "format": "mp3" },
+};
+```
+
+#### 视频
+
+#### 视频文件
+
+以保存在本地的[spring\_mountain.mp4](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250326/fqojlv/spring_mountain.mp4)为例。
+
+python
+
+```
+import base64
+
+def encode_video(video_path):
+    with open(video_path, "rb") as video_file:
+        return base64.b64encode(video_file.read()).decode("utf-8")
+
+base64_video = encode_video("spring_mountain.mp4")
+
+media_content = {
+    "type": "video_url",
+    "video_url": {"url": f"data:;base64,{base64_video}"},
+}
+```
+
+javascript
+
+```
+import { readFileSync } from 'fs';
+
+const encodeVideo = (videoPath) => {
+    const videoFile = readFileSync(videoPath);
+    return videoFile.toString('base64');
+};
+const base64Video = encodeVideo("spring_mountain.mp4")
+
+const mediaContent = {
+    "type": "video_url",
+    "video_url": { "url": `data:;base64,${base64Video}` },
+};
+```
+
+#### 图片列表
+
+以保存在本地的[football1.jpg](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250319/vzfwkh/football1.jpg)、[football2.jpg](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250319/vgkgqy/football2.jpg)、[football3.jpg](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250127/fytnla/football3.jpg)与[football4.jpg](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250127/ygitwp/football4.jpg)为例。
+
+python
+
+```
+import base64
+
+def encode_image(image_path):
+    with open(image_path, "rb") as image_file:
+        return base64.b64encode(image_file.read()).decode("utf-8")
+
+base64_image_1 = encode_image("football1.jpg")
+
+base64_image_2 = encode_image("football2.jpg")
+
+base64_image_3 = encode_image("football3.jpg")
+
+base64_image_4 = encode_image("football4.jpg")
+
+media_content = {
+    "type": "video",
+    "video": [
+        f"data:image/jpeg;base64,{base64_image_1}",
+        f"data:image/jpeg;base64,{base64_image_2}",
+        f"data:image/jpeg;base64,{base64_image_3}",
+        f"data:image/jpeg;base64,{base64_image_4}",
+    ],
+}
+```
+
+javascript
+
+```
+import { readFileSync } from 'fs';
+
+const encodeImage = (imagePath) => {
+    const imageFile = readFileSync(imagePath);
+    return imageFile.toString('base64');
+  };
+const base64Image1 = encodeImage("football1.jpg")
+const base64Image2 = encodeImage("football2.jpg")
+const base64Image3 = encodeImage("football3.jpg")
+const base64Image4 = encodeImage("football4.jpg")
+
+const mediaContent = {
+    type: "video",
+    video: [
+        `data:image/jpeg;base64,${base64Image1}`,
+        `data:image/jpeg;base64,${base64Image2}`,
+        `data:image/jpeg;base64,${base64Image3}`,
+        `data:image/jpeg;base64,${base64Image4}`
+    ]
+};
+```
+
+## 语音输出
+
+### 音色选择
+
+`qwen3.5-omni-plus`、`qwen3.5-omni-flash` 与 `qwen3-omni-flash` 支持语音输出，其可用音色请参见[音色列表](raw/model-user-guide/model-experience/omni-modal/omni-voice-list.md)。
+
+### 保存与实时播放
+
+`qwen3.5-omni-plus`、`qwen3.5-omni-flash` 与 `qwen3-omni-flash`（非思考模式）以流式方式输出 Base64 编码的音频数据，有两种处理方式：
+
+-   **方式一（推荐）**：收集各 chunk 的 Base64 数据，流结束后统一解码保存为音频文件。
+-   **方式二**：逐 chunk 实时解码并播放，需额外安装 pyaudio。
+
+**说明**Qwen3.5-Omni 与 Qwen3-Omni-Flash 仅支持流式输出，本节示例必须设置 `stream=True`，否则请求报错。
+
+python
+
+```
+# Installation instructions for pyaudio:
+# APPLE Mac OS X
+#   brew install portaudio
+#   pip install pyaudio
+# Debian/Ubuntu
+#   sudo apt-get install python-pyaudio python3-pyaudio
+#   or
+#   pip install pyaudio
+# CentOS
+#   sudo yum install -y portaudio portaudio-devel && pip install pyaudio
+# Microsoft Windows
+#   python -m pip install pyaudio
+
+import os
+from openai import OpenAI
+import base64
+import numpy as np
+import soundfile as sf
+
+# 初始化OpenAI客户端
+client = OpenAI(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    # DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
+    base_url=os.environ["DASHSCOPE_BASE_URL"],
+)
+
+completion = client.chat.completions.create(
+    model="qwen3.5-omni-plus", # 模型为Qwen3-Omni-Flash时，请在非思考模式下运行
+    messages=[{"role": "user", "content": "你是谁"}],
+    # 设置输出数据的模态，当前支持两种：["text","audio"]、["text"]
+    modalities=["text", "audio"],
+    audio={"voice": "Tina", "format": "wav"},
+    # stream 必须设置为 True，否则会报错
+    stream=True,
+    stream_options={"include_usage": True},
+)
+
+# 方式1: 待生成结束后再进行解码
+audio_string = ""
+for chunk in completion:
+    if chunk.choices:
+        if hasattr(chunk.choices[0].delta, "audio"):
+            try:
+                audio_string += chunk.choices[0].delta.audio["data"]
+            except Exception as e:
+                print(chunk.choices[0].delta.content)
+    else:
+        print(chunk.usage)
+
+wav_bytes = base64.b64decode(audio_string)
+audio_np = np.frombuffer(wav_bytes, dtype=np.int16)
+sf.write("audio_assistant_py.wav", audio_np, samplerate=24000)
+
+# 方式2: 边生成边解码(使用方式2请将方式1的代码进行注释)
+# # 初始化 PyAudio
+# import pyaudio
+# import time
+# p = pyaudio.PyAudio()
+# # 创建音频流
+# stream = p.open(format=pyaudio.paInt16,
+#                 channels=1,
+#                 rate=24000,
+#                 output=True)
+
+# for chunk in completion:
+#     if chunk.choices:
+#         if hasattr(chunk.choices[0].delta, "audio"):
+#             try:
+#                 audio_string = chunk.choices[0].delta.audio["data"]
+#                 wav_bytes = base64.b64decode(audio_string)
+#                 audio_np = np.frombuffer(wav_bytes, dtype=np.int16)
+#                 # 直接播放音频数据
+#                 stream.write(audio_np.tobytes())
+#             except Exception as e:
+#                 print(chunk.choices[0].delta.content)
+
+# time.sleep(0.8)
+# # 清理资源
+# stream.stop_stream()
+# stream.close()
+# p.terminate()
+```
+
+javascript
+
+```
+// 运行前的准备工作:
+// Windows/Mac/Linux 通用:
+// 1. 确保已安装 Node.js (建议版本 >= 14)
+// 2. 运行以下命令安装必要的依赖:
+//    npm install openai wav
+//
+// 如果要使用实时播放功能 (方式2), 还需要:
+// Windows:
+//    npm install speaker
+// Mac:
+//    brew install portaudio
+//    npm install speaker
+// Linux (Ubuntu/Debian):
+//    sudo apt-get install libasound2-dev
+//    npm install speaker
+
+import OpenAI from "openai";
+
+const openai = new OpenAI({
+     // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey:"sk-xxx",
+    // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    apiKey: process.env.DASHSCOPE_API_KEY,
+    // DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
+    baseURL: process.env.DASHSCOPE_BASE_URL
+});
+
+const completion = await openai.chat.completions.create({
+    model: "qwen3.5-omni-plus",  //模型为Qwen3-Omni-Flash时，请在非思考模式下运行
+    messages: [
+        {
+            "role": "user",
+            "content": "你是谁？"
+        }],
+    stream: true,
+    stream_options: {
+        include_usage: true
+    },
+    modalities: ["text", "audio"],
+    audio: { voice: "Tina", format: "wav" }
+});
+
+// 方式1: 待生成结束后再进行解码
+// 需要安装: npm install wav
+import { createWriteStream } from 'node:fs';  // node:fs 是 Node.js 内置模块，无需安装
+import { Writer } from 'wav';
+
+async function convertAudio(audioString, audioPath) {
+    try {
+        // 解码Base64字符串为Buffer
+        const wavBuffer = Buffer.from(audioString, 'base64');
+        // 创建WAV文件写入流
+        const writer = new Writer({
+            sampleRate: 24000,  // 采样率
+            channels: 1,        // 单声道
+            bitDepth: 16        // 16位深度
+        });
+        // 创建输出文件流并建立管道连接
+        const outputStream = createWriteStream(audioPath);
+        writer.pipe(outputStream);
+
+        // 写入PCM数据并结束写入
+        writer.write(wavBuffer);
+        writer.end();
+
+        // 使用Promise等待文件写入完成
+        await new Promise((resolve, reject) => {
+            outputStream.on('finish', resolve);
+            outputStream.on('error', reject);
+        });
+
+        // 添加额外等待时间确保音频完整
+        await new Promise(resolve => setTimeout(resolve, 800));
+
+        console.log(`音频文件已成功保存为 ${audioPath}`);
+    } catch (error) {
+        console.error('处理过程中发生错误:', error);
+    }
+}
+
+let audioString = "";
+for await (const chunk of completion) {
+    if (Array.isArray(chunk.choices) && chunk.choices.length > 0) {
+        if (chunk.choices[0].delta.audio) {
+            if (chunk.choices[0].delta.audio["data"]) {
+                audioString += chunk.choices[0].delta.audio["data"];
+            }
+        }
+    } else {
+        console.log(chunk.usage);
+    }
+}
+// 执行转换
+convertAudio(audioString, "audio_assistant_mjs.wav");
+
+// 方式2: 边生成边实时播放
+// 需要先按照上方系统对应的说明安装必要组件
+// import Speaker from 'speaker'; // 引入音频播放库
+
+// // 创建扬声器实例（配置与 WAV 文件参数一致）
+// const speaker = new Speaker({
+//     sampleRate: 24000,  // 采样率
+//     channels: 1,        // 声道数
+//     bitDepth: 16,       // 位深
+//     signed: true        // 有符号 PCM
+// });
+// for await (const chunk of completion) {
+//     if (Array.isArray(chunk.choices) && chunk.choices.length > 0) {
+//         if (chunk.choices[0].delta.audio) {
+//             if (chunk.choices[0].delta.audio["data"]) {
+//                 const pcmBuffer = Buffer.from(chunk.choices[0].delta.audio.data, 'base64');
+//                 // 直接写入扬声器播放
+//                 speaker.write(pcmBuffer);
+//             }
+//         }
+//     } else {
+//         console.log(chunk.usage);
+//     }
+// }
+// speaker.on('finish', () => console.log('播放完成'));
+// speaker.end(); // 根据实际 API 流结束情况调用
+```
+
+python
+
+```
+# Installation instructions for pyaudio:
+# APPLE Mac OS X
+#   brew install portaudio
+#   pip install pyaudio
+# Debian/Ubuntu
+#   sudo apt-get install python-pyaudio python3-pyaudio
+#   or
+#   pip install pyaudio
+# CentOS
+#   sudo yum install -y portaudio portaudio-devel && pip install pyaudio
+# Microsoft Windows
+#   python -m pip install pyaudio
+
+import os
+from openai import OpenAI
+import base64
+import numpy as np
+
+import queue
+import threading
+
+client = OpenAI(
+    # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    # DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
+    base_url=os.environ["DASHSCOPE_BASE_URL"],
+)
+
+# 方式2 完整示例：边生成边解码并实时播放（与方式1 二选一运行）
+# 初始化 PyAudio
+import pyaudio
+# 创建一个队列用于存储音频数据，None 表示音频流结束
+audio_queue = queue.Queue()
+playback_errors = []
+buffer_time = 5
+
+def play_audio():
+    p = None
+    stream = None
+    buffer_data = bytearray()
+    started_playing = False
+    samples_per_second = 24000 * 2  # 采样率 * 每个样本的字节数
+    buffer_size_threshold = int(samples_per_second * buffer_time)
+    chunk_size = int(samples_per_second * 0.1)
+    try:
+        p = pyaudio.PyAudio()
+        stream = p.open(format=pyaudio.paInt16, channels=1,
+                        rate=24000, output=True)
+        while True:
+            audio_np = audio_queue.get()
+            if audio_np is None:
+                # 即使总时长不足 5 秒，也播放全部剩余数据
+                if buffer_data:
+                    stream.write(bytes(buffer_data))
+                break
+            buffer_data.extend(audio_np.tobytes())
+            if len(buffer_data) >= buffer_size_threshold:
+                started_playing = True
+            if started_playing:
+                while len(buffer_data) >= chunk_size:
+                    stream.write(bytes(buffer_data[:chunk_size]))
+                    del buffer_data[:chunk_size]
+    except Exception as exc:
+        playback_errors.append(exc)
+    finally:
+        cleanup_actions = []
+        if stream is not None:
+            cleanup_actions.extend([stream.stop_stream, stream.close])
+        if p is not None:
+            cleanup_actions.append(p.terminate)
+        for cleanup in cleanup_actions:
+            try:
+                cleanup()
+            except Exception as exc:
+                playback_errors.append(exc)
+
+# 主线程等待播放线程退出，避免程序提前结束
+audio_thread = threading.Thread(target=play_audio)
+audio_thread.start()
+
+try:
+    completion = client.chat.completions.create(
+        model="qwen3.5-omni-plus", # 模型为Qwen3-Omni-Flash时，请在非思考模式下运行
+        messages=[{"role": "user", "content": "你是谁"}],
+        # 设置输出数据的模态，当前支持两种：["text","audio"]、["text"]
+        modalities=["text", "audio"],
+        audio={"voice": "Tina", "format": "wav"},
+        # stream 必须设置为 True，否则会报错
+        stream=True,
+        stream_options={"include_usage": True},
+    )
+
+    for chunk in completion:
+        if chunk.choices:
+            audio = getattr(chunk.choices[0].delta, "audio", None)
+            if audio:
+                if audio.get("data"):
+                    pcm_bytes = base64.b64decode(audio["data"])
+                    audio_queue.put(np.frombuffer(pcm_bytes, dtype=np.int16))
+                if audio.get("transcript"):
+                    print(audio["transcript"], end="", flush=True)
+finally:
+    # 正常结束或请求异常时都通知播放线程退出，并等待尾部音频播放完成
+    audio_queue.put(None)
+    audio_thread.join()
+
+if playback_errors:
+    raise RuntimeError("音频播放失败") from playback_errors[0]
+```
+
+## 进阶使用
+
+### 思考模式
+
+#### Qwen3.8-Omni-Flash
+
+`qwen3.8-omni-flash` 默认开启思考，`reasoning_effort` 默认为 `xhigh`。Chat Completions 请求体顶层的 `reasoning_effort` 接受 `none`、`minimal`、`low`、`medium`、`high`、`xhigh`、`max`。`reasoning_effort` 与 `thinking_budget` 不能同时设置，否则请求报错。
+
+可直接选择 `low`、`medium`、`xhigh` 三档思考力度。兼容取值中，`minimal` 映射为 `low`，`high` 和 `max` 映射为 `xhigh`，`none` 表示关闭思考。
+
+在[快速开始](#qwen38-offline)中的 Chat Completions 示例的 `client.chat.completions.create()` 中增加以下参数。`reasoning_effort` 直接作为 SDK 参数传入。
+
+```
+reasoning_effort="low",
+```
+
+#### Qwen3-Omni-Flash
+
+本节介绍 Qwen3-Omni-Flash 的混合思考模式，通过 `enable_thinking` 参数控制思考模式：
+
+-   `true`：开启思考模式
+-   `false`（默认）：关闭思考模式
+
+> 在思考模式下，**不支持输出音频。**
+
+**说明**Qwen3.5-Omni 与 Qwen3-Omni-Flash 仅支持流式输出，本节示例必须设置 `stream=True`，否则请求报错。
+
+python
+
+```
+import os
+from openai import OpenAI
+
+client = OpenAI(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    # DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
+    base_url=os.environ["DASHSCOPE_BASE_URL"],
+)
+
+completion = client.chat.completions.create(
+    model="qwen3-omni-flash",
+    messages=[{"role": "user", "content": "你是谁"}],
+
+    # 开启/关闭思考模式，在思考模式下不支持输出音频
+    extra_body={'enable_thinking': True},
+
+    # 设置输出数据的模态，非思考模式下当前支持两种：["text","audio"]、["text"]，思考模式仅支持：["text"]
+    modalities=["text"],
+
+    # 设置音色，思考模式下不支持设置audio参数
+    # audio={"voice": "Tina", "format": "wav"},
+    # stream 必须设置为 True，否则会报错
+    stream=True,
+    stream_options={"include_usage": True},
+)
+
+for chunk in completion:
+    if chunk.choices:
+        print(chunk.choices[0].delta)
+    else:
+        print(chunk.usage)
+```
+
+javascript
+
+```
+import OpenAI from "openai";
+
+const openai = new OpenAI({
+     // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey:"sk-xxx",
+    // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    apiKey: process.env.DASHSCOPE_API_KEY,
+    // DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
+    baseURL: process.env.DASHSCOPE_BASE_URL
+});
+
+const completion = await openai.chat.completions.create({
+    model: "qwen3-omni-flash",
+    messages: [
+        { role: "user", content: "你是谁？" }
+    ],
+    // stream 必须设置为 True，否则会报错
+    stream: true,
+    stream_options: {
+        include_usage: true
+    },
+    // 开启/关闭思考模式，在思考模式下不支持输出音频
+    enable_thinking: true,
+    //  设置输出数据的模态，非思考模式下当前支持两种：["text","audio"]、["text"]，思考模式仅支持：["text"]
+    modalities: ["text"],
+    // 设置音色，思考模式下不支持设置audio参数
+    //audio: { voice: "Tina", format: "wav" }
+});
+
+for await (const chunk of completion) {
+    if (Array.isArray(chunk.choices) && chunk.choices.length > 0) {
+        console.log(chunk.choices[0].delta);
+    } else {
+        console.log(chunk.usage);
+    }
+}
+```
+
+bash
+
+```
+# ======= 重要提示 =======
+# 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+# 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+# === 执行时请删除该注释 ===
+
+# DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
+curl -X POST $DASHSCOPE_BASE_URL/chat/completions \
+-H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+-H "Content-Type: application/json" \
+-d '{
+    "model": "qwen3-omni-flash",
+    "messages": [
+        {
+            "role": "user",
+            "content": "你是谁？"
+        }
+    ],
+    "stream":true,
+    "stream_options":{
+        "include_usage":true
+    },
+    "modalities":["text"],
+    "enable_thinking": true
+}'
+```
+
+返回结果
+
+```
+data: {"choices":[{"delta":{"content":null,"role":"assistant","reasoning_content":""},"index":0,"logprobs":null,"finish_reason":null}],"object":"chat.completion.chunk","usage":null,"created":1757937336,"system_fingerprint":null,"model":"qwen3-omni-flash","id":"chatcmpl-ce3d6fe5-e717-4b7e-8b40-3aef12288d4c"}
+data: {"choices":[{"finish_reason":null,"logprobs":null,"delta":{"content":null,"reasoning_content":"嗯"},"index":0}],"object":"chat.completion.chunk","usage":null,"reated":1757937336,"system_fingerprint":null,"model":"qwen3-omni-flash","id":"chatcmpl-ce3d6fe5-e717-4b7e-8b40-3aef12288d4c"}
+data: {"choices":[{"delta":{"content":null,"reasoning_content":"，"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"reated":1757937336,"system_fingerprint":null,"model":"qwen3-omni-flash","id":"chatcmpl-ce3d6fe5-e717-4b7e-8b40-3aef12288d4c"}
 ......
+data: {"choices":[{"delta":{"content":"告诉我"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1757937336,"tem_fingerprint":null,"model":"qwen3-omni-flash","id":"chatcmpl-ce3d6fe5-e717-4b7e-8b40-3aef12288d4c"}
+data: {"choices":[{"delta":{"content":"！"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1757937336,"systm_fingerprint":null,"model":"qwen3-omni-flash","id":"chatcmpl-ce3d6fe5-e717-4b7e-8b40-3aef12288d4c"}
+data: {"choices":[{"finish_reason":"stop","delta":{"content":"","reasoning_content":null},"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1757937336,"system_fingerprint":null,"model":"qwen3-omni-flash","id":"chatcmpl-ce3d6fe5-e717-4b7e-8b40-3aef12288d4c"}
+data: {"choices":[],"object":"chat.completion.chunk","usage":{"prompt_tokens":11,"completion_tokens":363,"total_tokens":374,"completion_tokens_details":{"reasoning_tokens":195,"text_tokens":168},"prompt_tokens_details":{"text_tokens":11}},"created":1757937336,"system_fingerprint":null,"model":"qwen3-omni-flash","id":"chatcmpl-ce3d6fe5-e717-4b7e-8b40-3aef12288d4c"}
+```
 
-**00:12.300 – 00:14.533**
+### 联网搜索
 
-镜头向下倾斜。在手电筒光圈内，一张泛黄老化的单页纸躺在浅水洼中，边缘烧焦且边角卷曲。墨迹段落覆盖大部分表面，但潮湿和焦痕使文字无法辨认。男子跪下，戴手套的手指伸向文件；手靠近时水波向外荡漾。警笛达到峰值，随后开始略微消退，而环境嗡鸣保持稳定。画面在颤抖的纸页即将被触碰前定格，片段结束。
+Qwen3.8-Omni-Flash 支持联网搜索，可获取实时信息并生成文本回答。
 
-> 仅展示部分时间戳内容。
+Qwen3.8-Omni-Flash 的 Responses 调用使用 `web_search` 工具；Qwen3.8-Omni-Flash 和 Qwen3.5-Omni 的 Chat Completions 调用使用 `agent` 搜索策略。费用请参见[联网搜索计费说明](https://help.aliyun.com/zh/model-studio/web-search#92ce83df3a599)。
 
-### 多方言理解
+以下 Chat Completions 示例使用 Qwen3.8-Omni-Flash，通过 `enable_search=True` 和 `search_options={"search_strategy": "agent"}` 开启联网搜索，并设置 `reasoning_effort="none"` 关闭思考，流式读取文本回复。
 
-> 给出不同方言歌手的声音特征、演唱时的情绪状态、以及对应的完整歌词
+python
 
-这段音频由多位来自中国不同地区的歌手用各自的方言进行说唱，展现了中国方言的丰富多样性。以下是每位歌手的声音特征、情绪状态及对应歌词的详细描述：
+```
+# 运行前的准备工作:
+# pip install openai
 
-**杭州话（吴语）****声音特征：**
+import os
+from openai import OpenAI
 
-这位男歌手的声音较为柔和，带有吴语特有的软糯和温婉。他的语调起伏平缓，节奏轻快，给人一种娓娓道来的感觉。
+# 初始化客户端
+client = OpenAI(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    # DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
+    base_url=os.environ["DASHSCOPE_BASE_URL"],
+)
 
-**情绪状态：**
+# 发起请求（开启联网搜索）
+try:
+    completion = client.chat.completions.create(
+        model="qwen3.8-omni-flash",
+        reasoning_effort="none",
+        messages=[{
+            "role": "user",
+            "content": "请查询今天的日期和星期，并告诉我今天有哪些重要节日"
+        }],
+        stream=True,
+        stream_options={"include_usage": True},
+        # 开启联网搜索
+        extra_body={
+            "enable_search": True,
+            "search_options": {"search_strategy": "agent"}
+        }
+    )
 
-悠闲、惬意且充满生活气息。他描绘了杭州的慢生活和城市变迁，情绪中带着对家乡的眷恋和对现代发展的感慨，整体感觉舒适而亲切。
+    print("模型回复（包含实时信息）：")
+    for chunk in completion:
+        if chunk.choices and chunk.choices[0].delta.content:
+            print(chunk.choices[0].delta.content, end="")
+    print()
 
-**对应歌词：**
+except Exception as e:
+    print(f"请求失败: {e}")
+```
 
-\> 杭州话，听听看，我们格文化，包括家门口的儿化音
+javascript
 
-\> 像花开在西湖边，不搞文化调查，只有我们搞得懂
+```
+// 运行前的准备工作:
+// npm install openai
 
-\> 你们都不懂，三不搭门，格儿，老儿，粉儿，伢儿，这外人分得清
+import OpenAI from "openai";
 
-\> 出发，变化快，地铁交通发达，据说要去看看
+// 初始化客户端
+const openai = new OpenAI({
+    apiKey: process.env.DASHSCOPE_API_KEY,
+    // DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
+    baseURL: process.env.DASHSCOPE_BASE_URL
+});
 
-\> 包容新马泰，看十三太，为城市骄傲，性格直给
+// 发起请求（开启联网搜索）
+const completion = await openai.chat.completions.create({
+    model: "qwen3.8-omni-flash",
+    reasoning_effort: "none",
+    messages: [{
+        "role": "user",
+        "content": "请查询今天的日期和星期，并告诉我今天有哪些重要节日"
+    }],
+    stream: true,
+    stream_options: {
+        include_usage: true
+    },
+    // 开启联网搜索
+    enable_search: true,
+    search_options: { search_strategy: "agent" }
+});
 
-\> 感情你只为过桥，而且味道不一样，你不来嘞
+console.log("模型回复（包含实时信息）：");
 
-> 仅展示部分效果。
+for await (const chunk of completion) {
+    if (Array.isArray(chunk.choices) && chunk.choices.length > 0) {
+        if (chunk.choices[0].delta.content) {
+            process.stdout.write(chunk.choices[0].delta.content);
+        }
+    }
+}
+console.log();
+```
 
-### 歌词字幕生成
+bash
 
-> 请你识别这首歌的歌词，并分句给出歌词的时间戳，输出格式如下：\[00:00:15,020 --> 00:00:28,085\] ：When you walk through a storm, hold your head up high.\[00:00:28,085 --> 00:00:40,200\] And don't be afraid of the dark. ......
+```
+# DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
+curl -X POST $DASHSCOPE_BASE_URL/chat/completions \
+-H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+-H "Content-Type: application/json" \
+-d '{
+    "model": "qwen3.8-omni-flash",
+    "reasoning_effort": "none",
+    "messages": [
+        {
+            "role": "user",
+            "content": "请查询今天的日期和星期，并告诉我今天有哪些重要节日"
+        }
+    ],
+    "stream": true,
+    "stream_options": {
+        "include_usage": true
+    },
+    "enable_search": true,
+    "search_options": {"search_strategy": "agent"}
+}'
+```
 
-\[00:00:12,680 --> 00:00:16,960\] 猫线绕过树摇晃的月光
+### 多轮对话
 
-\[00:00:18,400 --> 00:00:22,800\] 暖气片哼着九八年排行
+在 `messages` 数组中按对话顺序传入 User Message 和 Assistant Message。以下按回复类型展示完整示例，各示例的适用型号见对应说明。
 
-\[00:00:24,160 --> 00:00:28,080\] 时间拨开云雾般的热浪
+#### 文本回复
 
-\[00:00:28,920 --> 00:00:33,000\] 屏幕里的霓虹晒在鼻梁
+Qwen3.8-Omni-Flash 多轮对话中，`preserve_thinking` 默认开启。客户端将上一轮的回复和思考分别放入历史 assistant 消息的 `content` 和 `reasoning_content` 字段，再随 `messages` 传入下一轮请求。提供历史思考并启用该参数后，这些思考内容计入输入 Token 和费用。该参数的传参方式与完整多轮示例见[传递思考过程](https://help.aliyun.com/zh/model-studio/deep-thinking#jln7docdq5et5)。
 
-......
+以下多轮示例使用 Qwen3.8-Omni-Flash，并通过 `reasoning_effort="none"` 关闭思考。历史 assistant 消息传入文本回复；本示例每条 user 消息传入文本和一种模态，组合输入见[多种媒体组合输入](#h2-multi-modal-combined)：
 
-\[00:03:16,720 --> 00:03:21,680\] 我们窝在年轮最柔软一墙
+-   Assistant Message
+    
+    `messages` 数组中 Assistant Message 的 `content` 只能包含文本数据；思考内容通过 `reasoning_content` 字段传入。
+    
+-   User Message
+    
+    本示例每条 User Message 包含文本和一种模态数据，多轮对话中可在不同轮次传入不同模态。
+    
 
-\[00:03:22,400 --> 00:03:27,000\] 呼吸被余温酿成蜂蜜糖
+python
 
-\[00:03:28,160 --> 00:03:33,200\] 沙发陷落成云絮的形状
+```
+import os
+from openai import OpenAI
 
-\[00:03:34,000 --> 00:03:38,800\] 每个毛孔都晒着晴朗
+# 初始化OpenAI客户端
+client = OpenAI(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    # DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
+    base_url=os.environ["DASHSCOPE_BASE_URL"],
+)
 
-\[00:04:09,000 --> 00:04:10,020\] (End)
+completion = client.chat.completions.create(
+    model="qwen3.8-omni-flash",
+    reasoning_effort="none",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "input_audio",
+                    "input_audio": {
+                        "data": "https://dashscope.oss-cn-beijing.aliyuncs.com/audios/welcome.mp3",
+                        "format": "mp3",
+                    },
+                },
+                {"type": "text", "text": "这段音频在说什么"},
+            ],
+        },
+        {
+            "role": "assistant",
+            "content": [{"type": "text", "text": "这段音频在说：欢迎使用阿里云"}],
+        },
+        {
+            "role": "user",
+            "content": [{"type": "text", "text": "介绍一下这家公司？"}],
+        },
+    ],
 
-> 仅展示部分效果。
+    modalities=["text"],
 
-### 音视频编程
+    stream=True,
+    stream_options={"include_usage": True},
+)
 
-## 使用方式
+for chunk in completion:
+    if chunk.choices:
+        print(chunk.choices[0].delta)
+    else:
+        print(chunk.usage)
+```
 
-### Responses：音频和视频输入
+javascript
+
+```
+import OpenAI from "openai";
+
+const openai = new OpenAI({
+     // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
+    // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    apiKey: process.env.DASHSCOPE_API_KEY,
+    // DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
+    baseURL: process.env.DASHSCOPE_BASE_URL
+});
+
+const completion = await openai.chat.completions.create({
+    model: "qwen3.8-omni-flash",
+    reasoning_effort: "none",
+    messages: [
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "input_audio",
+                    "input_audio": {
+                        "data": "https://dashscope.oss-cn-beijing.aliyuncs.com/audios/welcome.mp3",
+                        "format": "mp3",
+                    },
+                },
+                { "type": "text", "text": "这段音频在说什么" },
+            ],
+        },
+        {
+            "role": "assistant",
+            "content": [{ "type": "text", "text": "这段音频在说：欢迎使用阿里云" }],
+        },
+        {
+            "role": "user",
+            "content": [{ "type": "text", "text": "介绍一下这家公司？" }]
+        }],
+    stream: true,
+    stream_options: {
+        include_usage: true
+    },
+    modalities: ["text"]
+});
+
+for await (const chunk of completion) {
+    if (Array.isArray(chunk.choices) && chunk.choices.length > 0) {
+        console.log(chunk.choices[0].delta);
+    } else {
+        console.log(chunk.usage);
+    }
+}
+```
+
+bash
+
+```
+# ======= 重要提示 =======
+# 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+# 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+# === 执行时请删除该注释 ===
+
+# DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
+curl -X POST $DASHSCOPE_BASE_URL/chat/completions \
+-H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+-H "Content-Type: application/json" \
+-d '{
+  "model": "qwen3.8-omni-flash",
+  "reasoning_effort": "none",
+  "messages": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "input_audio",
+          "input_audio": {
+            "data": "https://dashscope.oss-cn-beijing.aliyuncs.com/audios/welcome.mp3",
+            "format": "mp3"
+          }
+        },
+        {
+          "type": "text",
+          "text": "这段音频在说什么"
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "这段音频在说：欢迎使用阿里云"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": "介绍一下这家公司？"
+        }
+      ]
+    }
+  ],
+  "stream": true,
+  "stream_options": {
+    "include_usage": true
+  },
+  "modalities": ["text"]
+}'
+```
+
+#### 语音回复
+
+以下示例使用 `qwen3.5-omni-plus`，传入文本历史并生成文本和语音回复。
+
+**说明**Qwen3.5-Omni 与 Qwen3-Omni-Flash 仅支持流式输出，本节示例必须设置 `stream=True`，否则请求报错。
+
+包含历史对话的示例代码
+
+python
+
+```
+import os
+from openai import OpenAI
+
+client = OpenAI(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    # DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
+    base_url=os.environ["DASHSCOPE_BASE_URL"],
+)
+
+completion = client.chat.completions.create(
+    model="qwen3.5-omni-plus",
+    messages=[
+        {"role": "user", "content": "你是一个商场的导购员，你负责的商品有手机、电脑、冰箱"},
+        {"role": "assistant", "content": "好的，我记住了你的设定。"},
+        {"role": "user", "content": "你是谁"},
+    ],
+    # 设置输出数据的模态，当前支持两种：["text","audio"]、["text"]
+    modalities=["text", "audio"],
+    audio={"voice": "Tina", "format": "wav"},
+    # stream 必须设置为 True，否则会报错
+    stream=True,
+    stream_options={"include_usage": True},
+)
+
+for chunk in completion:
+    if chunk.choices:
+        print(chunk.choices[0].delta)
+    else:
+        print(chunk.usage)
+```
+
+javascript
+
+```
+import OpenAI from "openai";
+
+const openai = new OpenAI(
+    {
+        // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
+        apiKey: process.env.DASHSCOPE_API_KEY,
+        // DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
+        baseURL: process.env.DASHSCOPE_BASE_URL
+    }
+);
+const completion = await openai.chat.completions.create({
+    model: "qwen3.5-omni-plus",
+    messages: [
+        { role: "user", content: "你是一个商场的导购员，你负责的商品有手机、电脑、冰箱" },
+        { role: "assistant", content: "好的，我记住了你的设定。" },
+        { role: "user", content: "你是谁？" }
+    ],
+    stream: true,
+    stream_options: {
+        include_usage: true
+    },
+    modalities: ["text", "audio"],
+    audio: { voice: "Tina", format: "wav" }
+});
+
+for await (const chunk of completion) {
+    if (Array.isArray(chunk.choices) && chunk.choices.length > 0) {
+        console.log(chunk.choices[0].delta);
+    } else {
+        console.log(chunk.usage);
+    }
+}
+```
+
+bash
+
+```
+# DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
+curl -X POST $DASHSCOPE_BASE_URL/chat/completions \
+-H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+-H "Content-Type: application/json" \
+-d '{
+    "model": "qwen3.5-omni-plus",
+    "messages": [
+        {
+            "role": "user",
+            "content": "你是一个商场的导购员，你负责的商品有手机、电脑、冰箱"
+        },
+        {
+            "role": "assistant",
+            "content": "好的，我记住了你的设定。"
+        },
+        {
+            "role": "user",
+            "content": "你是谁？"
+        }
+    ],
+    "stream":true,
+    "stream_options":{
+        "include_usage":true
+    },
+    "modalities":["text","audio"],
+    "audio":{"voice":"Tina","format":"wav"}
+}'
+```
+
+### 使用 Responses API
 
 以下示例使用 Qwen3.8-Omni-Flash，通过 Responses API 处理音视频输入并生成文本回复。
 
@@ -647,7 +2538,11 @@ print(response.output_text)
 
 音频 Base64 输入、字段说明和工具范围请参见[创建响应](raw/model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)。
 
-### 模型配置
+Qwen3.8-Omni-Flash 支持 Responses Session 缓存，配置方式见[Session 缓存](https://help.aliyun.com/zh/model-studio/compatibility-with-openai-responses-api#example-session-cache-title)。
+
+## 效果优化
+
+### 音视频分析配置建议
 
 以下为 Qwen3.5-Omni 的配置建议，可按场景调整参数、提示词和音视频长度。Qwen3.8-Omni-Flash 的提示词见[推荐提示词](#qwen38-prompts)。
 
@@ -1274,2043 +3169,81 @@ Transcribe the dialogue with speaker identification and timestamps. Output forma
 Detect the timestamps of the following sound event in the audio: [audio event label]. Output the result strictly as a JSON array. Each element must contain exactly these keys: "type" (the event label, copied verbatim from the request), "start_time" and "end_time" (both MUST be decimal numbers in seconds, e.g. 4.5 or 12.0, NOT strings, and NOT in mm:ss or hh:mm:ss format). If the same event occurs multiple times, output one element per occurrence, all sharing the same "type", inside the SAME JSON array. Do not include any text outside the JSON array. Example: [{"type": "dog_barking", "start_time": 1.23, "end_time": 4.56}]
 ```
 
-## 多模态组合输入
+## 模型效果
 
-Qwen3.8-Omni-Flash 和 Qwen3.5-Omni 支持在同一请求中组合输入文本、图片、音频和视频。以下示例使用 Qwen3.8-Omni-Flash 综合分析图片与音频，并生成文本回答。如需生成语音，请使用 Qwen3.5-Omni，参见[音频输出示例](#b6a6667a65zvt)。
+### 音视频内容分析
 
-python
+> 请你对这个视频按时间戳生成全面的描述。
 
-```
-import os
-from openai import OpenAI
+**00:00.000 – 00:02.500**
 
-client = OpenAI(
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-    base_url=os.environ["DASHSCOPE_BASE_URL"],
-)
+雨夜中的城市街道填满宽银幕画面。长时间曝光下，红蓝车灯拖出光轨滑过，在湿漉漉的路面上闪烁。一位身穿深色及膝风衣、内搭浅色衬衫领带的孤独男子，沿着右侧人行道向镜头走来。雨滴凝结在他的肩膀和头发上；每一步都在潮湿的混凝土上发出沉闷的啪嗒声。低沉不祥的电子嗡鸣支撑着环境音，同时稳定的雨声四处噼啪作响。他身旁的砖墙上贴满彩色涂鸦，街区远处几块霓虹灯招牌发光——一块清晰显示橙红色草书体 "Nice"，另一块竖置招牌的末端露出字母 "AT"。
 
-completion = client.chat.completions.create(
-    model="qwen3.8-omni-flash",
-    messages=[
-        {
-            "role": "user",
-            "content": [
-                {
-                    "type": "image_url",
-                    "image_url": {
-                        "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241022/emyrja/dog_and_girl.jpeg"
-                    },
-                },
-                {
-                    "type": "input_audio",
-                    "input_audio": {
-                        "data": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250211/tixcef/cherry.wav",
-                        "format": "wav"
-                    },
-                },
-                {"type": "text", "text": "请描述图片内容，并告诉我音频在说什么。"},
-            ],
-        },
-    ],
-    modalities=["text"],
-
-    stream=True,
-    stream_options={"include_usage": True},
-)
-
-for chunk in completion:
-    if chunk.choices:
-        print(chunk.choices[0].delta)
-    else:
-        print(chunk.usage)
-```
-
-javascript
-
-```
-import OpenAI from "openai";
-
-const openai = new OpenAI(
-    {
-        apiKey: process.env.DASHSCOPE_API_KEY,
-        // DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-        baseURL: process.env.DASHSCOPE_BASE_URL
-    }
-);
-
-const completion = await openai.chat.completions.create({
-    model: "qwen3.8-omni-flash",
-    messages: [
-        {
-            "role": "user",
-            "content": [
-                {
-                    "type": "image_url",
-                    "image_url": { "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241022/emyrja/dog_and_girl.jpeg" },
-                },
-                {
-                    "type": "input_audio",
-                    "input_audio": {
-                        "data": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250211/tixcef/cherry.wav",
-                        "format": "wav"
-                    },
-                },
-                { "type": "text", "text": "请描述图片内容，并告诉我音频在说什么。" }
-            ]
-        }
-    ],
-    stream: true,
-    stream_options: {
-        include_usage: true
-    },
-    modalities: ["text"],
-
-});
-
-for await (const chunk of completion) {
-    if (Array.isArray(chunk.choices) && chunk.choices.length > 0) {
-        console.log(chunk.choices[0].delta);
-    } else {
-        console.log(chunk.usage);
-    }
-}
-```
-
-bash
-
-```
-# DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-curl -X POST $DASHSCOPE_BASE_URL/chat/completions \
--H "Authorization: Bearer $DASHSCOPE_API_KEY" \
--H "Content-Type: application/json" \
--d '{
-    "model": "qwen3.8-omni-flash",
-    "messages": [
-        {
-            "role": "user",
-            "content": [
-                {
-                    "type": "image_url",
-                    "image_url": {
-                        "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241022/emyrja/dog_and_girl.jpeg"
-                    }
-                },
-                {
-                    "type": "input_audio",
-                    "input_audio": {
-                        "data": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250211/tixcef/cherry.wav",
-                        "format": "wav"
-                    }
-                },
-                {
-                    "type": "text",
-                    "text": "请描述图片内容，并告诉我音频在说什么。"
-                }
-            ]
-        }
-    ],
-    "stream": true,
-    "stream_options": {
-        "include_usage": true
-    },
-    "modalities": ["text"]
-
-}'
-```
-
-## 单一模态输入
-
-以下场景中，每次请求传入文本与一种其他模态（视频、音频或图片）。示例使用 Qwen3.8-Omni-Flash，通过 Chat Completions 返回文本。
-
-#### 视频+文本输入
-
-视频的传入方式可以为视频文件形式或图片列表形式，见下方切换页。
-
-#### 视频文件形式（可理解视频中的音频）
-
-python
-
-```
-import os
-from openai import OpenAI
-
-client = OpenAI(
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
-    # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-    base_url=os.environ["DASHSCOPE_BASE_URL"],
-)
-
-completion = client.chat.completions.create(
-    model="qwen3.8-omni-flash",
-    messages=[
-        {
-            "role": "user",
-            "content": [
-                {
-                    "type": "video_url",
-                    "video_url": {
-                        "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241115/cqqkru/1.mp4"
-                    },
-                },
-                {"type": "text", "text": "视频的内容是什么?"},
-            ],
-        },
-    ],
-
-    modalities=["text"],
-
-    stream=True,
-    stream_options={"include_usage": True},
-)
-
-for chunk in completion:
-    if chunk.choices:
-        print(chunk.choices[0].delta)
-    else:
-        print(chunk.usage)
-```
-
-javascript
-
-```
-import OpenAI from "openai";
-
-const openai = new OpenAI(
-    {
-        // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
-        apiKey: process.env.DASHSCOPE_API_KEY,
-        // DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-        baseURL: process.env.DASHSCOPE_BASE_URL
-    }
-);
-const completion = await openai.chat.completions.create({
-    model: "qwen3.8-omni-flash",
-    messages: [
-        {
-            "role": "user",
-            "content": [{
-                "type": "video_url",
-                "video_url": { "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241115/cqqkru/1.mp4" },
-            },
-            { "type": "text", "text": "视频的内容是什么?" }]
-        }],
-    stream: true,
-    stream_options: {
-        include_usage: true
-    },
-    modalities: ["text"],
-
-});
-
-for await (const chunk of completion) {
-    if (Array.isArray(chunk.choices) && chunk.choices.length > 0) {
-        console.log(chunk.choices[0].delta);
-    } else {
-        console.log(chunk.usage);
-    }
-}
-```
-
-bash
-
-```
-# ======= 重要提示 =======
-# 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
-# === 执行时请删除该注释 ===
-
-# DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-curl -X POST $DASHSCOPE_BASE_URL/chat/completions \
--H "Authorization: Bearer $DASHSCOPE_API_KEY" \
--H "Content-Type: application/json" \
--d '{
-    "model": "qwen3.8-omni-flash",
-    "messages": [
-    {
-      "role": "user",
-      "content": [
-        {
-          "type": "video_url",
-          "video_url": {
-            "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241115/cqqkru/1.mp4"
-          }
-        },
-        {
-          "type": "text",
-          "text": "视频的内容是什么"
-        }
-      ]
-    }
-  ],
-    "stream":true,
-    "stream_options": {
-        "include_usage": true
-    },
-    "modalities":["text"]
-
-}'
-```
-
-输入限制
-
--   文件数量：
-    
-    -   Qwen3.8-Omni-Flash：最多可传入 64 个。
-    -   Qwen3.5-Omni系列：使用公网URL方式，最多可传入 512 个；使用Base64编码方式，最多可传入 250 个。
-    -   Qwen3-Omni-Flash系列：仅支持输入一个；
--   文件大小：
-    
-    -   使用公网URL方式：
-        
-        -   Qwen3.8-Omni-Flash、Qwen3.5-Omni系列：限制为 2GB
-        -   Qwen3-Omni-Flash：限制为 256 MB
-    -   使用 Base64 编码方式：编码后的 Base64 字符串大小必须小于 10MB
-        
--   时长限制：
-    
-    -   Qwen3.8-Omni-Flash：2 小时
-    -   Qwen3.5-Omni系列：1 小时
-    -   Qwen3-Omni-Flash：150 秒
--   文件格式：MP4、AVI、MKV、MOV、FLV、WMV 等。
-    
--   视频文件中的视觉信息与音频信息会分开计费。
-    
-
-#### 图片列表形式
-
-python
-
-```
-import os
-from openai import OpenAI
-
-# 初始化OpenAI客户端
-client = OpenAI(
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
-    # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-    base_url=os.environ["DASHSCOPE_BASE_URL"],
-)
-
-completion = client.chat.completions.create(
-    model="qwen3.8-omni-flash",
-    messages=[
-        {
-            "role": "user",
-            "content": [
-                {
-                    "type": "video",
-                    "video": [
-                        "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/xzsgiz/football1.jpg",
-                        "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/tdescd/football2.jpg",
-                        "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/zefdja/football3.jpg",
-                        "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/aedbqh/football4.jpg",
-                    ],
-                },
-                {"type": "text", "text": "描述这个视频的具体过程"},
-            ],
-        }
-    ],
-
-    modalities=["text"],
-
-    stream=True,
-    stream_options={"include_usage": True},
-)
-
-for chunk in completion:
-    if chunk.choices:
-        print(chunk.choices[0].delta)
-    else:
-        print(chunk.usage)
-```
-
-javascript
-
-```
-import OpenAI from "openai";
-
-const openai = new OpenAI({
-     // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
-    // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    apiKey: process.env.DASHSCOPE_API_KEY,
-    // DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-    baseURL: process.env.DASHSCOPE_BASE_URL
-});
-
-const completion = await openai.chat.completions.create({
-    model: "qwen3.8-omni-flash",
-    messages: [{
-        role: "user",
-        content: [
-            {
-                type: "video",
-                video: [
-                    "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/xzsgiz/football1.jpg",
-                    "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/tdescd/football2.jpg",
-                    "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/zefdja/football3.jpg",
-                    "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/aedbqh/football4.jpg"
-                ]
-            },
-            {
-                type: "text",
-                text: "描述这个视频的具体过程"
-            }
-        ]
-    }],
-    stream: true,
-    stream_options: {
-        include_usage: true
-    },
-    modalities: ["text"],
-
-});
-
-for await (const chunk of completion) {
-    if (Array.isArray(chunk.choices) && chunk.choices.length > 0) {
-        console.log(chunk.choices[0].delta);
-    } else {
-        console.log(chunk.usage);
-    }
-}
-```
-
-bash
-
-```
-# ======= 重要提示 =======
-# 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
-# === 执行时请删除该注释 ===
-
-# DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-curl -X POST $DASHSCOPE_BASE_URL/chat/completions \
--H "Authorization: Bearer $DASHSCOPE_API_KEY" \
--H "Content-Type: application/json" \
--d '{
-    "model": "qwen3.8-omni-flash",
-    "messages": [
-        {
-            "role": "user",
-            "content": [
-                {
-                    "type": "video",
-                    "video": [
-                        "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/xzsgiz/football1.jpg",
-                        "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/tdescd/football2.jpg",
-                        "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/zefdja/football3.jpg",
-                        "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/aedbqh/football4.jpg"
-                    ]
-                },
-                {
-                    "type": "text",
-                    "text": "描述这个视频的具体过程"
-                }
-            ]
-        }
-    ],
-    "stream": true,
-    "stream_options": {
-        "include_usage": true
-    },
-    "modalities": ["text"]
-}'
-```
-
-输入限制
-
-**图片数量**
-
--   Qwen3.8-Omni-Flash、Qwen3.5-Omni系列：最少传入 2 张图片，最多可传入 2048 张图片
--   Qwen3-Omni-Flash：最少传入 2 张图片，最多可传入 128 张图片
-
-#### 音频+文本输入
-
-以下示例代码以传入音频公网URL为例，传入本地音频请参见：[输入 Base64 编码的本地文件](https://help.aliyun.com/zh/model-studio/qwen-omni#c516d1e824x03)。
-
-python
-
-```
-import os
-from openai import OpenAI
-
-# 初始化OpenAI客户端
-client = OpenAI(
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
-    # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-    base_url=os.environ["DASHSCOPE_BASE_URL"],
-)
-
-completion = client.chat.completions.create(
-    model="qwen3.8-omni-flash",
-    messages=[
-        {
-            "role": "user",
-            "content": [
-                {
-                    "type": "input_audio",
-                    "input_audio": {
-                        "data": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250211/tixcef/cherry.wav",
-                        "format": "wav",
-                    },
-                },
-                {"type": "text", "text": "这段音频在说什么"},
-            ],
-        },
-    ],
-
-    modalities=["text"],
-
-    stream=True,
-    stream_options={"include_usage": True},
-)
-
-for chunk in completion:
-    print(chunk)
-    # if chunk.choices:
-    #     print(chunk.choices[0].delta)
-    # else:
-    #     print(chunk.usage)
-```
-
-javascript
-
-```
-import OpenAI from "openai";
-
-// 初始化 openai 客户端
-const openai = new OpenAI({
-     // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey:"sk-xxx",
-    // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    apiKey: process.env.DASHSCOPE_API_KEY,
-    // DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-    baseURL: process.env.DASHSCOPE_BASE_URL
-});
-
-const completion = await openai.chat.completions.create({
-    model: "qwen3.8-omni-flash",
-    messages: [
-        {
-            "role": "user",
-            "content": [{
-                "type": "input_audio",
-                "input_audio": { "data": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250211/tixcef/cherry.wav", "format": "wav" },
-            },
-            { "type": "text", "text": "这段音频在说什么" }]
-        }],
-    stream: true,
-    stream_options: {
-        include_usage: true
-    },
-    modalities: ["text"],
-
-});
-
-for await (const chunk of completion) {
-    if (Array.isArray(chunk.choices) && chunk.choices.length > 0) {
-        console.log(chunk.choices[0].delta);
-    } else {
-        console.log(chunk.usage);
-    }
-}
-```
-
-bash
-
-```
-# ======= 重要提示 =======
-# 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
-# === 执行时请删除该注释 ===
-
-# DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-curl -X POST $DASHSCOPE_BASE_URL/chat/completions \
--H "Authorization: Bearer $DASHSCOPE_API_KEY" \
--H "Content-Type: application/json" \
--d '{
-    "model": "qwen3.8-omni-flash",
-    "messages": [
-    {
-      "role": "user",
-      "content": [
-        {
-          "type": "input_audio",
-          "input_audio": {
-            "data": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250211/tixcef/cherry.wav",
-            "format": "wav"
-          }
-        },
-        {
-          "type": "text",
-          "text": "这段音频在说什么"
-        }
-      ]
-    }
-  ],
-    "stream":true,
-    "stream_options":{
-        "include_usage":true
-    },
-    "modalities":["text"]
-
-}'
-```
-
-输入限制
-
--   文件数量：
-    
-    -   Qwen3.8-Omni-Flash、Qwen3.5-Omni系列：使用公网URL方式，最多可传入 2048 个；使用Base64编码方式，最多可传入 250 个；
-    -   Qwen3-Omni-Flash系列：仅支持输入一个；
--   文件大小：
-    
-    -   使用公网URL方式：
-        
-        -   Qwen3.8-Omni-Flash、Qwen3.5-Omni系列：不超过 2GB
-        -   Qwen3-Omni-Flash：不超过 100MB
-    -   使用 Base64 编码方式：编码后的 Base64 字符串大小必须小于 10MB
-        
--   时长限制：
-    
-    -   Qwen3.8-Omni-Flash、Qwen3.5-Omni系列：最长 3 小时
-    -   Qwen3-Omni-Flash：最长 20 分钟
--   文件格式：支持AMR、 WAV、 3GP、 3GPP、 AAC、 MP3等主流格式
-    
-
-#### 图片+文本输入
-
-以下示例代码以传入图片公网URL为例，传入本地图片请参见：[输入 Base64 编码的本地文件](https://help.aliyun.com/zh/model-studio/qwen-omni#c516d1e824x03)。
-
-python
-
-```
-import os
-from openai import OpenAI
-
-client = OpenAI(
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
-    # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-    base_url=os.environ["DASHSCOPE_BASE_URL"],
-)
-
-completion = client.chat.completions.create(
-    model="qwen3.8-omni-flash",
-    messages=[
-        {
-            "role": "user",
-            "content": [
-                {
-                    "type": "image_url",
-                    "image_url": {
-                        "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241022/emyrja/dog_and_girl.jpeg"
-                    },
-                },
-                {"type": "text", "text": "图中描绘的是什么景象？"},
-            ],
-        },
-    ],
-
-    modalities=["text"],
-
-    stream=True,
-    stream_options={
-        "include_usage": True
-    }
-)
-
-for chunk in completion:
-    if chunk.choices:
-        print(chunk.choices[0].delta)
-    else:
-        print(chunk.usage)
-```
-
-javascript
-
-```
-import OpenAI from "openai";
-
-const openai = new OpenAI(
-    {
-        // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
-        // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-        apiKey: process.env.DASHSCOPE_API_KEY,
-        // DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-        baseURL: process.env.DASHSCOPE_BASE_URL
-    }
-);
-const completion = await openai.chat.completions.create({
-    model: "qwen3.8-omni-flash",
-    messages: [
-        {
-            "role": "user",
-            "content": [{
-                "type": "image_url",
-                "image_url": { "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241022/emyrja/dog_and_girl.jpeg" },
-            },
-            { "type": "text", "text": "图中描绘的是什么景象？" }]
-        }],
-    stream: true,
-    stream_options: {
-        include_usage: true
-    },
-    modalities: ["text"],
-
-});
-
-for await (const chunk of completion) {
-    if (Array.isArray(chunk.choices) && chunk.choices.length > 0) {
-        console.log(chunk.choices[0].delta);
-    } else {
-        console.log(chunk.usage);
-    }
-}
-```
-
-bash
-
-```
-# ======= 重要提示 =======
-# 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
-# === 执行时请删除该注释 ===
-
-# DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-curl -X POST $DASHSCOPE_BASE_URL/chat/completions \
--H "Authorization: Bearer $DASHSCOPE_API_KEY" \
--H "Content-Type: application/json" \
--d '{
-    "model": "qwen3.8-omni-flash",
-    "messages": [
-    {
-      "role": "user",
-      "content": [
-        {
-          "type": "image_url",
-          "image_url": {
-            "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241022/emyrja/dog_and_girl.jpeg"
-          }
-        },
-        {
-          "type": "text",
-          "text": "图中描绘的是什么景象？"
-        }
-      ]
-    }
-  ],
-    "stream":true,
-    "stream_options":{
-        "include_usage":true
-    },
-    "modalities":["text"]
-
-}'
-```
-
-输入限制
-
-本页各型号支持传入多张图片。对输入图片的要求如下：
-
--   图片数量：
-    
-    -   Qwen3.8-Omni-Flash、Qwen3.5-Omni系列：公网URL传入最多 2048 张，Base64 编码最多 250 张
-    -   Qwen3-Omni-Flash：图片列表形式视频输入为 2～128 张
--   图像大小：
-    
-    -   使用公网URL方式：
-        
-        -   Qwen3.8-Omni-Flash、Qwen3.5-Omni系列：单个图片文件的大小不超过 20MB
-        -   Qwen3-Omni-Flash系列：单个图片文件的大小不超过 10MB
-    -   Qwen3.5-Omni、Qwen3-Omni-Flash 使用 Base64 编码方式：编码后的 Base64 字符串大小必须小于 10MB；
-        
--   图片的宽度和高度均应大于 10 像素，宽高比不应超过 200:1 或 1:200
-    
--   支持的图片类型请参见[图像与视频理解](raw/model-user-guide/model-experience/vision-model/vision.md)
-    
-
-### 多通道音频
-
-`qwen3.8-omni-flash` 支持双通道立体声和四通道 FOA 空间音频（WYZX 通道顺序），可保留空间信息用于音频理解。
-
-`use_multichannel` 默认为 `false`，此时所有音频均按单通道解析。设为 `true` 且输入为双通道（左右）或四通道（FOA，WYZX 顺序）音频时，模型解析空间音频信息。
-
-使用[快速开始](#qwen38-offline)中的 Chat Completions 示例时，将 `AUDIO_URL` 替换为对应的多通道 WAV 音频，并在 `client.chat.completions.create()` 中增加以下参数。HTTP 请求中，`use_multichannel` 位于请求体顶层。Responses 调用的传入位置见[Responses：音频和视频输入](#qwen38-responses)。
-
-```
-extra_body={"use_multichannel": True},
-```
-
-以下完整示例以双通道立体声 WAV 为例，演示如何调用 `qwen3.8-omni-flash` 解析空间音频信息；四通道 FOA 音频调用方式相同，只需将 `AUDIO_URL` 替换为符合 WYZX 通道顺序的四通道 WAV。
-
-```
-import os
-from openai import OpenAI
-
-client = OpenAI(
-    api_key=os.environ["DASHSCOPE_API_KEY"],
-    base_url=os.environ["DASHSCOPE_BASE_URL"],
-)
-completion = client.chat.completions.create(
-    model="qwen3.8-omni-flash",
-    messages=[{
-        "role": "user",
-        "content": [
-            {"type": "text", "text": "描述这段录音中的空间音频信息。"},
-            {"type": "input_audio", "input_audio": {
-                "data": os.environ["AUDIO_URL"],
-                "format": "wav",
-            }},
-        ],
-    }],
-    extra_body={"use_multichannel": True},
-    stream=True,
-    stream_options={"include_usage": True},
-)
-for chunk in completion:
-    if not chunk.choices:
-        if chunk.usage:
-            print("\nUsage:", chunk.usage)
-        continue
-    delta = chunk.choices[0].delta
-    if getattr(delta, "reasoning_content", None):
-        print(delta.reasoning_content, end="", flush=True)
-    if delta.content:
-        print(delta.content, end="", flush=True)
-```
-
-**说明**多通道音频的声道数必须为 2（双通道立体声，左右声道）或 4（四通道 FOA，WYZX 通道顺序）。可用 `soundfile` 查看音频声道数：
-
-```
-python3 -c "import soundfile as sf; print(sf.info('audio.wav').channels)"
-```
-
-## 联网搜索
-
-Qwen3.8-Omni-Flash 支持联网搜索，可获取实时信息并生成文本回答。
-
-Qwen3.8-Omni-Flash 的 Responses 调用使用 `web_search` 工具；Qwen3.8-Omni-Flash 和 Qwen3.5-Omni 的 Chat Completions 调用使用 `agent` 搜索策略。费用请参见[联网搜索计费说明](https://help.aliyun.com/zh/model-studio/web-search#92ce83df3a599)。
-
-以下 Chat Completions 示例使用 Qwen3.8-Omni-Flash，通过 `enable_search=True` 和 `search_options={"search_strategy": "agent"}` 开启联网搜索，并设置 `reasoning_effort="none"` 关闭思考，流式读取文本回复。
-
-python
-
-```
-# 运行前的准备工作:
-# pip install openai
-
-import os
-from openai import OpenAI
-
-# 初始化客户端
-client = OpenAI(
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-    base_url=os.environ["DASHSCOPE_BASE_URL"],
-)
-
-# 发起请求（开启联网搜索）
-try:
-    completion = client.chat.completions.create(
-        model="qwen3.8-omni-flash",
-        reasoning_effort="none",
-        messages=[{
-            "role": "user",
-            "content": "请查询今天的日期和星期，并告诉我今天有哪些重要节日"
-        }],
-        stream=True,
-        stream_options={"include_usage": True},
-        # 开启联网搜索
-        extra_body={
-            "enable_search": True,
-            "search_options": {"search_strategy": "agent"}
-        }
-    )
-
-    print("模型回复（包含实时信息）：")
-    for chunk in completion:
-        if chunk.choices and chunk.choices[0].delta.content:
-            print(chunk.choices[0].delta.content, end="")
-    print()
-
-except Exception as e:
-    print(f"请求失败: {e}")
-```
-
-javascript
-
-```
-// 运行前的准备工作:
-// npm install openai
-
-import OpenAI from "openai";
-
-// 初始化客户端
-const openai = new OpenAI({
-    apiKey: process.env.DASHSCOPE_API_KEY,
-    // DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-    baseURL: process.env.DASHSCOPE_BASE_URL
-});
-
-// 发起请求（开启联网搜索）
-const completion = await openai.chat.completions.create({
-    model: "qwen3.8-omni-flash",
-    reasoning_effort: "none",
-    messages: [{
-        "role": "user",
-        "content": "请查询今天的日期和星期，并告诉我今天有哪些重要节日"
-    }],
-    stream: true,
-    stream_options: {
-        include_usage: true
-    },
-    // 开启联网搜索
-    enable_search: true,
-    search_options: { search_strategy: "agent" }
-});
-
-console.log("模型回复（包含实时信息）：");
-
-for await (const chunk of completion) {
-    if (Array.isArray(chunk.choices) && chunk.choices.length > 0) {
-        if (chunk.choices[0].delta.content) {
-            process.stdout.write(chunk.choices[0].delta.content);
-        }
-    }
-}
-console.log();
-```
-
-bash
-
-```
-# DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-curl -X POST $DASHSCOPE_BASE_URL/chat/completions \
--H "Authorization: Bearer $DASHSCOPE_API_KEY" \
--H "Content-Type: application/json" \
--d '{
-    "model": "qwen3.8-omni-flash",
-    "reasoning_effort": "none",
-    "messages": [
-        {
-            "role": "user",
-            "content": "请查询今天的日期和星期，并告诉我今天有哪些重要节日"
-        }
-    ],
-    "stream": true,
-    "stream_options": {
-        "include_usage": true
-    },
-    "enable_search": true,
-    "search_options": {"search_strategy": "agent"}
-}'
-```
-
-## 开启/关闭思考模式
-
-### Qwen3.8-Omni-Flash
-
-`qwen3.8-omni-flash` 默认开启思考，`reasoning_effort` 默认为 `xhigh`。Chat Completions 请求体顶层的 `reasoning_effort` 接受 `none`、`minimal`、`low`、`medium`、`high`、`xhigh`、`max`。`reasoning_effort` 与 `thinking_budget` 不能同时设置，否则请求报错。
-
-可直接选择 `low`、`medium`、`xhigh` 三档思考力度。兼容取值中，`minimal` 映射为 `low`，`high` 和 `max` 映射为 `xhigh`，`none` 表示关闭思考。
-
-在[快速开始](#qwen38-offline)中的 Chat Completions 示例的 `client.chat.completions.create()` 中增加以下参数。`reasoning_effort` 直接作为 SDK 参数传入。
-
-```
-reasoning_effort="low",
-```
-
-### Qwen3-Omni-Flash
-
-本节介绍 Qwen3-Omni-Flash 的混合思考模式，通过 `enable_thinking` 参数控制思考模式：
-
--   `true`：开启思考模式
--   `false`（默认）：关闭思考模式
-
-> 在思考模式下，**不支持输出音频。**
-
-**说明**Qwen3.5-Omni 与 Qwen3-Omni-Flash 仅支持流式输出，本节示例必须设置 `stream=True`，否则请求报错。
-
-python
-
-```
-import os
-from openai import OpenAI
-
-client = OpenAI(
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
-    # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-    base_url=os.environ["DASHSCOPE_BASE_URL"],
-)
-
-completion = client.chat.completions.create(
-    model="qwen3-omni-flash",
-    messages=[{"role": "user", "content": "你是谁"}],
-
-    # 开启/关闭思考模式，在思考模式下不支持输出音频
-    extra_body={'enable_thinking': True},
-
-    # 设置输出数据的模态，非思考模式下当前支持两种：["text","audio"]、["text"]，思考模式仅支持：["text"]
-    modalities=["text"],
-
-    # 设置音色，思考模式下不支持设置audio参数
-    # audio={"voice": "Tina", "format": "wav"},
-    # stream 必须设置为 True，否则会报错
-    stream=True,
-    stream_options={"include_usage": True},
-)
-
-for chunk in completion:
-    if chunk.choices:
-        print(chunk.choices[0].delta)
-    else:
-        print(chunk.usage)
-```
-
-javascript
-
-```
-import OpenAI from "openai";
-
-const openai = new OpenAI({
-     // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey:"sk-xxx",
-    // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    apiKey: process.env.DASHSCOPE_API_KEY,
-    // DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-    baseURL: process.env.DASHSCOPE_BASE_URL
-});
-
-const completion = await openai.chat.completions.create({
-    model: "qwen3-omni-flash",
-    messages: [
-        { role: "user", content: "你是谁？" }
-    ],
-    // stream 必须设置为 True，否则会报错
-    stream: true,
-    stream_options: {
-        include_usage: true
-    },
-    // 开启/关闭思考模式，在思考模式下不支持输出音频
-    enable_thinking: true,
-    //  设置输出数据的模态，非思考模式下当前支持两种：["text","audio"]、["text"]，思考模式仅支持：["text"]
-    modalities: ["text"],
-    // 设置音色，思考模式下不支持设置audio参数
-    //audio: { voice: "Tina", format: "wav" }
-});
-
-for await (const chunk of completion) {
-    if (Array.isArray(chunk.choices) && chunk.choices.length > 0) {
-        console.log(chunk.choices[0].delta);
-    } else {
-        console.log(chunk.usage);
-    }
-}
-```
-
-bash
-
-```
-# ======= 重要提示 =======
-# 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
-# === 执行时请删除该注释 ===
-
-# DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-curl -X POST $DASHSCOPE_BASE_URL/chat/completions \
--H "Authorization: Bearer $DASHSCOPE_API_KEY" \
--H "Content-Type: application/json" \
--d '{
-    "model": "qwen3-omni-flash",
-    "messages": [
-        {
-            "role": "user",
-            "content": "你是谁？"
-        }
-    ],
-    "stream":true,
-    "stream_options":{
-        "include_usage":true
-    },
-    "modalities":["text"],
-    "enable_thinking": true
-}'
-```
-
-返回结果
-
-```
-data: {"choices":[{"delta":{"content":null,"role":"assistant","reasoning_content":""},"index":0,"logprobs":null,"finish_reason":null}],"object":"chat.completion.chunk","usage":null,"created":1757937336,"system_fingerprint":null,"model":"qwen3-omni-flash","id":"chatcmpl-ce3d6fe5-e717-4b7e-8b40-3aef12288d4c"}
-data: {"choices":[{"finish_reason":null,"logprobs":null,"delta":{"content":null,"reasoning_content":"嗯"},"index":0}],"object":"chat.completion.chunk","usage":null,"reated":1757937336,"system_fingerprint":null,"model":"qwen3-omni-flash","id":"chatcmpl-ce3d6fe5-e717-4b7e-8b40-3aef12288d4c"}
-data: {"choices":[{"delta":{"content":null,"reasoning_content":"，"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"reated":1757937336,"system_fingerprint":null,"model":"qwen3-omni-flash","id":"chatcmpl-ce3d6fe5-e717-4b7e-8b40-3aef12288d4c"}
 ......
-data: {"choices":[{"delta":{"content":"告诉我"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1757937336,"tem_fingerprint":null,"model":"qwen3-omni-flash","id":"chatcmpl-ce3d6fe5-e717-4b7e-8b40-3aef12288d4c"}
-data: {"choices":[{"delta":{"content":"！"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1757937336,"systm_fingerprint":null,"model":"qwen3-omni-flash","id":"chatcmpl-ce3d6fe5-e717-4b7e-8b40-3aef12288d4c"}
-data: {"choices":[{"finish_reason":"stop","delta":{"content":"","reasoning_content":null},"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1757937336,"system_fingerprint":null,"model":"qwen3-omni-flash","id":"chatcmpl-ce3d6fe5-e717-4b7e-8b40-3aef12288d4c"}
-data: {"choices":[],"object":"chat.completion.chunk","usage":{"prompt_tokens":11,"completion_tokens":363,"total_tokens":374,"completion_tokens_details":{"reasoning_tokens":195,"text_tokens":168},"prompt_tokens_details":{"text_tokens":11}},"created":1757937336,"system_fingerprint":null,"model":"qwen3-omni-flash","id":"chatcmpl-ce3d6fe5-e717-4b7e-8b40-3aef12288d4c"}
-```
-
-## 多轮对话
-
-Qwen3.8-Omni-Flash 多轮对话中，`preserve_thinking` 默认开启。客户端将上一轮的回复和思考分别放入历史 assistant 消息的 `content` 和 `reasoning_content` 字段，再随 `messages` 传入下一轮请求。提供历史思考并启用该参数后，这些思考内容计入输入 Token 和费用。该参数的传参方式与完整多轮示例见[传递思考过程](https://help.aliyun.com/zh/model-studio/deep-thinking#jln7docdq5et5)。
-
-以下多轮示例使用 Qwen3.8-Omni-Flash，并通过 `reasoning_effort="none"` 关闭思考。历史 assistant 消息传入文本回复；本示例每条 user 消息传入文本和一种模态，组合输入见[多模态组合输入](#h2-multi-modal-combined)：
-
--   Assistant Message
-    
-    `messages` 数组中 Assistant Message 的 `content` 只能包含文本数据；思考内容通过 `reasoning_content` 字段传入。
-    
--   User Message
-    
-    本示例每条 User Message 包含文本和一种模态数据，多轮对话中可在不同轮次传入不同模态。
-    
-
-python
-
-```
-import os
-from openai import OpenAI
-
-# 初始化OpenAI客户端
-client = OpenAI(
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
-    # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-    base_url=os.environ["DASHSCOPE_BASE_URL"],
-)
-
-completion = client.chat.completions.create(
-    model="qwen3.8-omni-flash",
-    reasoning_effort="none",
-    messages=[
-        {
-            "role": "user",
-            "content": [
-                {
-                    "type": "input_audio",
-                    "input_audio": {
-                        "data": "https://dashscope.oss-cn-beijing.aliyuncs.com/audios/welcome.mp3",
-                        "format": "mp3",
-                    },
-                },
-                {"type": "text", "text": "这段音频在说什么"},
-            ],
-        },
-        {
-            "role": "assistant",
-            "content": [{"type": "text", "text": "这段音频在说：欢迎使用阿里云"}],
-        },
-        {
-            "role": "user",
-            "content": [{"type": "text", "text": "介绍一下这家公司？"}],
-        },
-    ],
-
-    modalities=["text"],
-
-    stream=True,
-    stream_options={"include_usage": True},
-)
-
-for chunk in completion:
-    if chunk.choices:
-        print(chunk.choices[0].delta)
-    else:
-        print(chunk.usage)
-```
-
-javascript
-
-```
-import OpenAI from "openai";
-
-const openai = new OpenAI({
-     // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
-    // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    apiKey: process.env.DASHSCOPE_API_KEY,
-    // DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-    baseURL: process.env.DASHSCOPE_BASE_URL
-});
-
-const completion = await openai.chat.completions.create({
-    model: "qwen3.8-omni-flash",
-    reasoning_effort: "none",
-    messages: [
-        {
-            "role": "user",
-            "content": [
-                {
-                    "type": "input_audio",
-                    "input_audio": {
-                        "data": "https://dashscope.oss-cn-beijing.aliyuncs.com/audios/welcome.mp3",
-                        "format": "mp3",
-                    },
-                },
-                { "type": "text", "text": "这段音频在说什么" },
-            ],
-        },
-        {
-            "role": "assistant",
-            "content": [{ "type": "text", "text": "这段音频在说：欢迎使用阿里云" }],
-        },
-        {
-            "role": "user",
-            "content": [{ "type": "text", "text": "介绍一下这家公司？" }]
-        }],
-    stream: true,
-    stream_options: {
-        include_usage: true
-    },
-    modalities: ["text"]
-});
-
-for await (const chunk of completion) {
-    if (Array.isArray(chunk.choices) && chunk.choices.length > 0) {
-        console.log(chunk.choices[0].delta);
-    } else {
-        console.log(chunk.usage);
-    }
-}
-```
-
-bash
-
-```
-# ======= 重要提示 =======
-# 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
-# === 执行时请删除该注释 ===
-
-# DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-curl -X POST $DASHSCOPE_BASE_URL/chat/completions \
--H "Authorization: Bearer $DASHSCOPE_API_KEY" \
--H "Content-Type: application/json" \
--d '{
-  "model": "qwen3.8-omni-flash",
-  "reasoning_effort": "none",
-  "messages": [
-    {
-      "role": "user",
-      "content": [
-        {
-          "type": "input_audio",
-          "input_audio": {
-            "data": "https://dashscope.oss-cn-beijing.aliyuncs.com/audios/welcome.mp3",
-            "format": "mp3"
-          }
-        },
-        {
-          "type": "text",
-          "text": "这段音频在说什么"
-        }
-      ]
-    },
-    {
-      "role": "assistant",
-      "content": [
-        {
-          "type": "text",
-          "text": "这段音频在说：欢迎使用阿里云"
-        }
-      ]
-    },
-    {
-      "role": "user",
-      "content": [
-        {
-          "type": "text",
-          "text": "介绍一下这家公司？"
-        }
-      ]
-    }
-  ],
-  "stream": true,
-  "stream_options": {
-    "include_usage": true
-  },
-  "modalities": ["text"]
-}'
-```
-
-## 解析输出的 Base64 编码音频数据
-
-`qwen3.5-omni-plus`、`qwen3.5-omni-flash` 与 `qwen3-omni-flash`（非思考模式）以流式方式输出 Base64 编码的音频数据，有两种处理方式：
-
--   **方式一（推荐）**：收集各 chunk 的 Base64 数据，流结束后统一解码保存为音频文件。
--   **方式二**：逐 chunk 实时解码并播放，需额外安装 pyaudio。
-
-**说明**Qwen3.5-Omni 与 Qwen3-Omni-Flash 仅支持流式输出，本节示例必须设置 `stream=True`，否则请求报错。
-
-python
-
-```
-# Installation instructions for pyaudio:
-# APPLE Mac OS X
-#   brew install portaudio
-#   pip install pyaudio
-# Debian/Ubuntu
-#   sudo apt-get install python-pyaudio python3-pyaudio
-#   or
-#   pip install pyaudio
-# CentOS
-#   sudo yum install -y portaudio portaudio-devel && pip install pyaudio
-# Microsoft Windows
-#   python -m pip install pyaudio
-
-import os
-from openai import OpenAI
-import base64
-import numpy as np
-import soundfile as sf
-
-# 初始化OpenAI客户端
-client = OpenAI(
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
-    # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-    base_url=os.environ["DASHSCOPE_BASE_URL"],
-)
-
-completion = client.chat.completions.create(
-    model="qwen3.5-omni-plus", # 模型为Qwen3-Omni-Flash时，请在非思考模式下运行
-    messages=[{"role": "user", "content": "你是谁"}],
-    # 设置输出数据的模态，当前支持两种：["text","audio"]、["text"]
-    modalities=["text", "audio"],
-    audio={"voice": "Tina", "format": "wav"},
-    # stream 必须设置为 True，否则会报错
-    stream=True,
-    stream_options={"include_usage": True},
-)
-
-# 方式1: 待生成结束后再进行解码
-audio_string = ""
-for chunk in completion:
-    if chunk.choices:
-        if hasattr(chunk.choices[0].delta, "audio"):
-            try:
-                audio_string += chunk.choices[0].delta.audio["data"]
-            except Exception as e:
-                print(chunk.choices[0].delta.content)
-    else:
-        print(chunk.usage)
-
-wav_bytes = base64.b64decode(audio_string)
-audio_np = np.frombuffer(wav_bytes, dtype=np.int16)
-sf.write("audio_assistant_py.wav", audio_np, samplerate=24000)
-
-# 方式2: 边生成边解码(使用方式2请将方式1的代码进行注释)
-# # 初始化 PyAudio
-# import pyaudio
-# import time
-# p = pyaudio.PyAudio()
-# # 创建音频流
-# stream = p.open(format=pyaudio.paInt16,
-#                 channels=1,
-#                 rate=24000,
-#                 output=True)
-
-# for chunk in completion:
-#     if chunk.choices:
-#         if hasattr(chunk.choices[0].delta, "audio"):
-#             try:
-#                 audio_string = chunk.choices[0].delta.audio["data"]
-#                 wav_bytes = base64.b64decode(audio_string)
-#                 audio_np = np.frombuffer(wav_bytes, dtype=np.int16)
-#                 # 直接播放音频数据
-#                 stream.write(audio_np.tobytes())
-#             except Exception as e:
-#                 print(chunk.choices[0].delta.content)
-
-# time.sleep(0.8)
-# # 清理资源
-# stream.stop_stream()
-# stream.close()
-# p.terminate()
-```
-
-javascript
-
-```
-// 运行前的准备工作:
-// Windows/Mac/Linux 通用:
-// 1. 确保已安装 Node.js (建议版本 >= 14)
-// 2. 运行以下命令安装必要的依赖:
-//    npm install openai wav
-//
-// 如果要使用实时播放功能 (方式2), 还需要:
-// Windows:
-//    npm install speaker
-// Mac:
-//    brew install portaudio
-//    npm install speaker
-// Linux (Ubuntu/Debian):
-//    sudo apt-get install libasound2-dev
-//    npm install speaker
-
-import OpenAI from "openai";
-
-const openai = new OpenAI({
-     // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey:"sk-xxx",
-    // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    apiKey: process.env.DASHSCOPE_API_KEY,
-    // DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-    baseURL: process.env.DASHSCOPE_BASE_URL
-});
-
-const completion = await openai.chat.completions.create({
-    model: "qwen3.5-omni-plus",  //模型为Qwen3-Omni-Flash时，请在非思考模式下运行
-    messages: [
-        {
-            "role": "user",
-            "content": "你是谁？"
-        }],
-    stream: true,
-    stream_options: {
-        include_usage: true
-    },
-    modalities: ["text", "audio"],
-    audio: { voice: "Tina", format: "wav" }
-});
-
-// 方式1: 待生成结束后再进行解码
-// 需要安装: npm install wav
-import { createWriteStream } from 'node:fs';  // node:fs 是 Node.js 内置模块，无需安装
-import { Writer } from 'wav';
-
-async function convertAudio(audioString, audioPath) {
-    try {
-        // 解码Base64字符串为Buffer
-        const wavBuffer = Buffer.from(audioString, 'base64');
-        // 创建WAV文件写入流
-        const writer = new Writer({
-            sampleRate: 24000,  // 采样率
-            channels: 1,        // 单声道
-            bitDepth: 16        // 16位深度
-        });
-        // 创建输出文件流并建立管道连接
-        const outputStream = createWriteStream(audioPath);
-        writer.pipe(outputStream);
-
-        // 写入PCM数据并结束写入
-        writer.write(wavBuffer);
-        writer.end();
-
-        // 使用Promise等待文件写入完成
-        await new Promise((resolve, reject) => {
-            outputStream.on('finish', resolve);
-            outputStream.on('error', reject);
-        });
-
-        // 添加额外等待时间确保音频完整
-        await new Promise(resolve => setTimeout(resolve, 800));
-
-        console.log(`音频文件已成功保存为 ${audioPath}`);
-    } catch (error) {
-        console.error('处理过程中发生错误:', error);
-    }
-}
-
-let audioString = "";
-for await (const chunk of completion) {
-    if (Array.isArray(chunk.choices) && chunk.choices.length > 0) {
-        if (chunk.choices[0].delta.audio) {
-            if (chunk.choices[0].delta.audio["data"]) {
-                audioString += chunk.choices[0].delta.audio["data"];
-            }
-        }
-    } else {
-        console.log(chunk.usage);
-    }
-}
-// 执行转换
-convertAudio(audioString, "audio_assistant_mjs.wav");
-
-// 方式2: 边生成边实时播放
-// 需要先按照上方系统对应的说明安装必要组件
-// import Speaker from 'speaker'; // 引入音频播放库
-
-// // 创建扬声器实例（配置与 WAV 文件参数一致）
-// const speaker = new Speaker({
-//     sampleRate: 24000,  // 采样率
-//     channels: 1,        // 声道数
-//     bitDepth: 16,       // 位深
-//     signed: true        // 有符号 PCM
-// });
-// for await (const chunk of completion) {
-//     if (Array.isArray(chunk.choices) && chunk.choices.length > 0) {
-//         if (chunk.choices[0].delta.audio) {
-//             if (chunk.choices[0].delta.audio["data"]) {
-//                 const pcmBuffer = Buffer.from(chunk.choices[0].delta.audio.data, 'base64');
-//                 // 直接写入扬声器播放
-//                 speaker.write(pcmBuffer);
-//             }
-//         }
-//     } else {
-//         console.log(chunk.usage);
-//     }
-// }
-// speaker.on('finish', () => console.log('播放完成'));
-// speaker.end(); // 根据实际 API 流结束情况调用
-```
-
-python
-
-```
-# Installation instructions for pyaudio:
-# APPLE Mac OS X
-#   brew install portaudio
-#   pip install pyaudio
-# Debian/Ubuntu
-#   sudo apt-get install python-pyaudio python3-pyaudio
-#   or
-#   pip install pyaudio
-# CentOS
-#   sudo yum install -y portaudio portaudio-devel && pip install pyaudio
-# Microsoft Windows
-#   python -m pip install pyaudio
-
-import os
-from openai import OpenAI
-import base64
-import numpy as np
-
-import queue
-import threading
-
-client = OpenAI(
-    # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-    base_url=os.environ["DASHSCOPE_BASE_URL"],
-)
-
-# 方式2 完整示例：边生成边解码并实时播放（与方式1 二选一运行）
-# 初始化 PyAudio
-import pyaudio
-# 创建一个队列用于存储音频数据，None 表示音频流结束
-audio_queue = queue.Queue()
-playback_errors = []
-buffer_time = 5
-
-def play_audio():
-    p = None
-    stream = None
-    buffer_data = bytearray()
-    started_playing = False
-    samples_per_second = 24000 * 2  # 采样率 * 每个样本的字节数
-    buffer_size_threshold = int(samples_per_second * buffer_time)
-    chunk_size = int(samples_per_second * 0.1)
-    try:
-        p = pyaudio.PyAudio()
-        stream = p.open(format=pyaudio.paInt16, channels=1,
-                        rate=24000, output=True)
-        while True:
-            audio_np = audio_queue.get()
-            if audio_np is None:
-                # 即使总时长不足 5 秒，也播放全部剩余数据
-                if buffer_data:
-                    stream.write(bytes(buffer_data))
-                break
-            buffer_data.extend(audio_np.tobytes())
-            if len(buffer_data) >= buffer_size_threshold:
-                started_playing = True
-            if started_playing:
-                while len(buffer_data) >= chunk_size:
-                    stream.write(bytes(buffer_data[:chunk_size]))
-                    del buffer_data[:chunk_size]
-    except Exception as exc:
-        playback_errors.append(exc)
-    finally:
-        cleanup_actions = []
-        if stream is not None:
-            cleanup_actions.extend([stream.stop_stream, stream.close])
-        if p is not None:
-            cleanup_actions.append(p.terminate)
-        for cleanup in cleanup_actions:
-            try:
-                cleanup()
-            except Exception as exc:
-                playback_errors.append(exc)
-
-# 主线程等待播放线程退出，避免程序提前结束
-audio_thread = threading.Thread(target=play_audio)
-audio_thread.start()
-
-try:
-    completion = client.chat.completions.create(
-        model="qwen3.5-omni-plus", # 模型为Qwen3-Omni-Flash时，请在非思考模式下运行
-        messages=[{"role": "user", "content": "你是谁"}],
-        # 设置输出数据的模态，当前支持两种：["text","audio"]、["text"]
-        modalities=["text", "audio"],
-        audio={"voice": "Tina", "format": "wav"},
-        # stream 必须设置为 True，否则会报错
-        stream=True,
-        stream_options={"include_usage": True},
-    )
-
-    for chunk in completion:
-        if chunk.choices:
-            audio = getattr(chunk.choices[0].delta, "audio", None)
-            if audio:
-                if audio.get("data"):
-                    pcm_bytes = base64.b64decode(audio["data"])
-                    audio_queue.put(np.frombuffer(pcm_bytes, dtype=np.int16))
-                if audio.get("transcript"):
-                    print(audio["transcript"], end="", flush=True)
-finally:
-    # 正常结束或请求异常时都通知播放线程退出，并等待尾部音频播放完成
-    audio_queue.put(None)
-    audio_thread.join()
-
-if playback_errors:
-    raise RuntimeError("音频播放失败") from playback_errors[0]
-```
-
-## 输入 Base64 编码的本地文件
-
-以下示例使用 Qwen3.8-Omni-Flash，将本地文件编码为 Base64 后传入，并返回文本。音频和视频编码后的 Base64 字符串必须小于 10MB；Qwen3.5-Omni、Qwen3-Omni-Flash 的图片输入也有此限制。
-
-#### 图片
-
-以保存在本地的[eagle.png](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250326/nlgymo/eagle.png)为例。
-
-python
-
-```
-import os
-from openai import OpenAI
-import base64
-
-client = OpenAI(
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
-    # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-    base_url=os.environ["DASHSCOPE_BASE_URL"],
-)
-
-#  Base64 编码格式
-def encode_image(image_path):
-    with open(image_path, "rb") as image_file:
-        return base64.b64encode(image_file.read()).decode("utf-8")
-
-base64_image = encode_image("eagle.png")
-
-completion = client.chat.completions.create(
-    model="qwen3.8-omni-flash",
-    messages=[
-        {
-            "role": "user",
-            "content": [
-                {
-                    "type": "image_url",
-                    "image_url": {"url": f"data:image/png;base64,{base64_image}"},
-                },
-                {"type": "text", "text": "图中描绘的是什么景象？"},
-            ],
-        },
-    ],
-
-    modalities=["text"],
-
-    stream=True,
-    stream_options={"include_usage": True},
-)
-
-for chunk in completion:
-    if chunk.choices:
-        print(chunk.choices[0].delta)
-    else:
-        print(chunk.usage)
-```
-
-javascript
-
-```
-import OpenAI from "openai";
-import { readFileSync } from 'fs';
-
-const openai = new OpenAI({
-     // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
-    // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    apiKey: process.env.DASHSCOPE_API_KEY,
-    // DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-    baseURL: process.env.DASHSCOPE_BASE_URL
-});
-
-const encodeImage = (imagePath) => {
-    const imageFile = readFileSync(imagePath);
-    return imageFile.toString('base64');
-};
-const base64Image = encodeImage("eagle.png")
-
-const completion = await openai.chat.completions.create({
-    model: "qwen3.8-omni-flash",
-    messages: [
-        {
-            "role": "user",
-            "content": [{
-                "type": "image_url",
-                "image_url": { "url": `data:image/png;base64,${base64Image}` },
-            },
-            { "type": "text", "text": "图中描绘的是什么景象？" }]
-        }],
-    stream: true,
-    stream_options: {
-        include_usage: true
-    },
-    modalities: ["text"],
-
-});
-
-for await (const chunk of completion) {
-    if (Array.isArray(chunk.choices) && chunk.choices.length > 0) {
-        console.log(chunk.choices[0].delta);
-    } else {
-        console.log(chunk.usage);
-    }
-}
-```
-
-#### 音频
-
-以保存在本地的[welcome.mp3](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250214/pijhos/welcome.mp3)为例。
-
-python
-
-```
-import os
-from openai import OpenAI
-import base64
-
-client = OpenAI(
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
-    # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-    base_url=os.environ["DASHSCOPE_BASE_URL"],
-)
-
-def encode_audio(audio_path):
-    with open(audio_path, "rb") as audio_file:
-        return base64.b64encode(audio_file.read()).decode("utf-8")
-
-base64_audio = encode_audio("welcome.mp3")
-
-completion = client.chat.completions.create(
-    model="qwen3.8-omni-flash",
-    messages=[
-        {
-            "role": "user",
-            "content": [
-                {
-                    "type": "input_audio",
-                    "input_audio": {
-                        "data": f"data:;base64,{base64_audio}",
-                        "format": "mp3",
-                    },
-                },
-                {"type": "text", "text": "这段音频在说什么"},
-            ],
-        },
-    ],
-
-    modalities=["text"],
-
-    stream=True,
-    stream_options={"include_usage": True},
-)
-
-for chunk in completion:
-    if chunk.choices:
-        print(chunk.choices[0].delta)
-    else:
-        print(chunk.usage)
-```
-
-javascript
-
-```
-import OpenAI from "openai";
-import { readFileSync } from 'fs';
-
-const openai = new OpenAI({
-     // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
-    // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    apiKey: process.env.DASHSCOPE_API_KEY,
-    // DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-    baseURL: process.env.DASHSCOPE_BASE_URL
-});
-
-const encodeAudio = (audioPath) => {
-    const audioFile = readFileSync(audioPath);
-    return audioFile.toString('base64');
-};
-const base64Audio = encodeAudio("welcome.mp3")
-
-const completion = await openai.chat.completions.create({
-    model: "qwen3.8-omni-flash",
-    messages: [
-        {
-            "role": "user",
-            "content": [{
-                "type": "input_audio",
-                "input_audio": { "data": `data:;base64,${base64Audio}`, "format": "mp3" },
-            },
-            { "type": "text", "text": "这段音频在说什么" }]
-        }],
-    stream: true,
-    stream_options: {
-        include_usage: true
-    },
-    modalities: ["text"],
-
-});
-
-for await (const chunk of completion) {
-    if (Array.isArray(chunk.choices) && chunk.choices.length > 0) {
-        console.log(chunk.choices[0].delta);
-    } else {
-        console.log(chunk.usage);
-    }
-}
-```
-
-#### 视频
-
-#### 视频文件
-
-以保存在本地的[spring\_mountain.mp4](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250326/fqojlv/spring_mountain.mp4)为例。
-
-python
-
-```
-import os
-from openai import OpenAI
-import base64
-
-client = OpenAI(
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-    base_url=os.environ["DASHSCOPE_BASE_URL"],
-)
-
-#  Base64 编码格式
-def encode_video(video_path):
-    with open(video_path, "rb") as video_file:
-        return base64.b64encode(video_file.read()).decode("utf-8")
-
-base64_video = encode_video("spring_mountain.mp4")
-
-completion = client.chat.completions.create(
-    model="qwen3.8-omni-flash",
-    messages=[
-        {
-            "role": "user",
-            "content": [
-                {
-                    "type": "video_url",
-                    "video_url": {"url": f"data:;base64,{base64_video}"},
-                },
-                {"type": "text", "text": "她在唱什么"},
-            ],
-        },
-    ],
-
-    modalities=["text"],
-
-    stream=True,
-    stream_options={"include_usage": True},
-)
-
-for chunk in completion:
-    if chunk.choices:
-        print(chunk.choices[0].delta)
-    else:
-        print(chunk.usage)
-```
-
-javascript
-
-```
-import OpenAI from "openai";
-import { readFileSync } from 'fs';
-
-const openai = new OpenAI(
-    {
-        // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
-        apiKey: process.env.DASHSCOPE_API_KEY,
-        // DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-        baseURL: process.env.DASHSCOPE_BASE_URL
-    }
-);
-
-const encodeVideo = (videoPath) => {
-    const videoFile = readFileSync(videoPath);
-    return videoFile.toString('base64');
-};
-const base64Video = encodeVideo("spring_mountain.mp4")
-
-const completion = await openai.chat.completions.create({
-    model: "qwen3.8-omni-flash",
-    messages: [
-        {
-            "role": "user",
-            "content": [{
-                "type": "video_url",
-                "video_url": { "url": `data:;base64,${base64Video}` },
-            },
-            { "type": "text", "text": "她在唱什么" }]
-        }],
-    stream: true,
-    stream_options: {
-        include_usage: true
-    },
-    modalities: ["text"],
-
-});
-
-for await (const chunk of completion) {
-    if (Array.isArray(chunk.choices) && chunk.choices.length > 0) {
-        console.log(chunk.choices[0].delta);
-    } else {
-        console.log(chunk.usage);
-    }
-}
-```
-
-#### 图片列表
-
-以保存在本地的[football1.jpg](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250319/vzfwkh/football1.jpg)、[football2.jpg](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250319/vgkgqy/football2.jpg)、[football3.jpg](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250127/fytnla/football3.jpg)与[football4.jpg](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250127/ygitwp/football4.jpg)为例。
-
-python
-
-```
-import os
-from openai import OpenAI
-import base64
-
-client = OpenAI(
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
-    # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-    base_url=os.environ["DASHSCOPE_BASE_URL"],
-)
-
-#  Base64 编码格式
-def encode_image(image_path):
-    with open(image_path, "rb") as image_file:
-        return base64.b64encode(image_file.read()).decode("utf-8")
-
-base64_image_1 = encode_image("football1.jpg")
-base64_image_2 = encode_image("football2.jpg")
-base64_image_3 = encode_image("football3.jpg")
-base64_image_4 = encode_image("football4.jpg")
-
-completion = client.chat.completions.create(
-    model="qwen3.8-omni-flash",
-    messages=[
-        {
-            "role": "user",
-            "content": [
-                {
-                    "type": "video",
-                    "video": [
-                        f"data:image/jpeg;base64,{base64_image_1}",
-                        f"data:image/jpeg;base64,{base64_image_2}",
-                        f"data:image/jpeg;base64,{base64_image_3}",
-                        f"data:image/jpeg;base64,{base64_image_4}",
-                    ],
-                },
-                {"type": "text", "text": "描述这个视频的具体过程"},
-            ],
-        }
-    ],
-
-    modalities=["text"],
-
-    stream=True,
-    stream_options={"include_usage": True},
-)
-
-for chunk in completion:
-    if chunk.choices:
-        print(chunk.choices[0].delta)
-    else:
-        print(chunk.usage)
-```
-
-javascript
-
-```
-import OpenAI from "openai";
-import { readFileSync } from 'fs';
-
-const openai = new OpenAI({
-     // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
-    // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    apiKey: process.env.DASHSCOPE_API_KEY,
-    // DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-    baseURL: process.env.DASHSCOPE_BASE_URL
-});
-
-const encodeImage = (imagePath) => {
-    const imageFile = readFileSync(imagePath);
-    return imageFile.toString('base64');
-  };
-const base64Image1 = encodeImage("football1.jpg")
-const base64Image2 = encodeImage("football2.jpg")
-const base64Image3 = encodeImage("football3.jpg")
-const base64Image4 = encodeImage("football4.jpg")
-
-const completion = await openai.chat.completions.create({
-    model: "qwen3.8-omni-flash",
-    messages: [{
-        role: "user",
-        content: [
-            {
-                type: "video",
-                video: [
-                    `data:image/jpeg;base64,${base64Image1}`,
-                    `data:image/jpeg;base64,${base64Image2}`,
-                    `data:image/jpeg;base64,${base64Image3}`,
-                    `data:image/jpeg;base64,${base64Image4}`
-                ]
-            },
-            {
-                type: "text",
-                text: "描述这个视频的具体过程"
-            }
-        ]
-    }],
-    stream: true,
-    stream_options: {
-        include_usage: true
-    },
-    modalities: ["text"],
-
-});
-
-for await (const chunk of completion) {
-    if (Array.isArray(chunk.choices) && chunk.choices.length > 0) {
-        console.log(chunk.choices[0].delta);
-    } else {
-        console.log(chunk.usage);
-    }
-}
-```
+
+**00:12.300 – 00:14.533**
+
+镜头向下倾斜。在手电筒光圈内，一张泛黄老化的单页纸躺在浅水洼中，边缘烧焦且边角卷曲。墨迹段落覆盖大部分表面，但潮湿和焦痕使文字无法辨认。男子跪下，戴手套的手指伸向文件；手靠近时水波向外荡漾。警笛达到峰值，随后开始略微消退，而环境嗡鸣保持稳定。画面在颤抖的纸页即将被触碰前定格，片段结束。
+
+> 仅展示部分时间戳内容。
+
+### 多方言理解
+
+> 给出不同方言歌手的声音特征、演唱时的情绪状态、以及对应的完整歌词
+
+这段音频由多位来自中国不同地区的歌手用各自的方言进行说唱，展现了中国方言的丰富多样性。以下是每位歌手的声音特征、情绪状态及对应歌词的详细描述：
+
+**杭州话（吴语）****声音特征：**
+
+这位男歌手的声音较为柔和，带有吴语特有的软糯和温婉。他的语调起伏平缓，节奏轻快，给人一种娓娓道来的感觉。
+
+**情绪状态：**
+
+悠闲、惬意且充满生活气息。他描绘了杭州的慢生活和城市变迁，情绪中带着对家乡的眷恋和对现代发展的感慨，整体感觉舒适而亲切。
+
+**对应歌词：**
+
+\> 杭州话，听听看，我们格文化，包括家门口的儿化音
+
+\> 像花开在西湖边，不搞文化调查，只有我们搞得懂
+
+\> 你们都不懂，三不搭门，格儿，老儿，粉儿，伢儿，这外人分得清
+
+\> 出发，变化快，地铁交通发达，据说要去看看
+
+\> 包容新马泰，看十三太，为城市骄傲，性格直给
+
+\> 感情你只为过桥，而且味道不一样，你不来嘞
+
+> 仅展示部分效果。
+
+### 歌词字幕生成
+
+> 请你识别这首歌的歌词，并分句给出歌词的时间戳，输出格式如下：\[00:00:15,020 --> 00:00:28,085\] ：When you walk through a storm, hold your head up high.\[00:00:28,085 --> 00:00:40,200\] And don't be afraid of the dark. ......
+
+\[00:00:12,680 --> 00:00:16,960\] 猫线绕过树摇晃的月光
+
+\[00:00:18,400 --> 00:00:22,800\] 暖气片哼着九八年排行
+
+\[00:00:24,160 --> 00:00:28,080\] 时间拨开云雾般的热浪
+
+\[00:00:28,920 --> 00:00:33,000\] 屏幕里的霓虹晒在鼻梁
+
+......
+
+\[00:03:16,720 --> 00:03:21,680\] 我们窝在年轮最柔软一墙
+
+\[00:03:22,400 --> 00:03:27,000\] 呼吸被余温酿成蜂蜜糖
+
+\[00:03:28,160 --> 00:03:33,200\] 沙发陷落成云絮的形状
+
+\[00:03:34,000 --> 00:03:38,800\] 每个毛孔都晒着晴朗
+
+\[00:04:09,000 --> 00:04:10,020\] (End)
+
+> 仅展示部分效果。
+
+### 音视频编程
 
 ## API参考
 
@@ -3319,7 +3252,7 @@ for await (const chunk of completion) {
 
 ## 计费与限流
 
-Qwen3.8-Omni-Flash 支持自动生效的[隐式缓存](https://help.aliyun.com/zh/model-studio/context-cache#2317ea09cfxok)，并支持 Responses Session 缓存，配置方式见[Session 缓存](https://help.aliyun.com/zh/model-studio/compatibility-with-openai-responses-api#example-session-cache-title)。
+Qwen3.8-Omni-Flash 支持自动生效的[隐式缓存](https://help.aliyun.com/zh/model-studio/context-cache#2317ea09cfxok)。
 
 **计费规则**
 
@@ -3529,124 +3462,6 @@ if __name__ == "__main__":
 
 限流规则及常见问题请参见[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)。
 
-## 常见问题
-
-### Q：如何传入历史对话？
-
-在 `messages` 数组中按对话顺序传入 User Message 和 Assistant Message。以下示例使用 `qwen3.5-omni-plus`。
-
-**说明**Qwen3.5-Omni 与 Qwen3-Omni-Flash 仅支持流式输出，本节示例必须设置 `stream=True`，否则请求报错。
-
-包含历史对话的示例代码
-
-python
-
-```
-import os
-from openai import OpenAI
-
-client = OpenAI(
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-    base_url=os.environ["DASHSCOPE_BASE_URL"],
-)
-
-completion = client.chat.completions.create(
-    model="qwen3.5-omni-plus",
-    messages=[
-        {"role": "user", "content": "你是一个商场的导购员，你负责的商品有手机、电脑、冰箱"},
-        {"role": "assistant", "content": "好的，我记住了你的设定。"},
-        {"role": "user", "content": "你是谁"},
-    ],
-    # 设置输出数据的模态，当前支持两种：["text","audio"]、["text"]
-    modalities=["text", "audio"],
-    audio={"voice": "Tina", "format": "wav"},
-    # stream 必须设置为 True，否则会报错
-    stream=True,
-    stream_options={"include_usage": True},
-)
-
-for chunk in completion:
-    if chunk.choices:
-        print(chunk.choices[0].delta)
-    else:
-        print(chunk.usage)
-```
-
-javascript
-
-```
-import OpenAI from "openai";
-
-const openai = new OpenAI(
-    {
-        // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
-        apiKey: process.env.DASHSCOPE_API_KEY,
-        // DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-        baseURL: process.env.DASHSCOPE_BASE_URL
-    }
-);
-const completion = await openai.chat.completions.create({
-    model: "qwen3.5-omni-plus",
-    messages: [
-        { role: "user", content: "你是一个商场的导购员，你负责的商品有手机、电脑、冰箱" },
-        { role: "assistant", content: "好的，我记住了你的设定。" },
-        { role: "user", content: "你是谁？" }
-    ],
-    stream: true,
-    stream_options: {
-        include_usage: true
-    },
-    modalities: ["text", "audio"],
-    audio: { voice: "Tina", format: "wav" }
-});
-
-for await (const chunk of completion) {
-    if (Array.isArray(chunk.choices) && chunk.choices.length > 0) {
-        console.log(chunk.choices[0].delta);
-    } else {
-        console.log(chunk.usage);
-    }
-}
-```
-
-bash
-
-```
-# DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-curl -X POST $DASHSCOPE_BASE_URL/chat/completions \
--H "Authorization: Bearer $DASHSCOPE_API_KEY" \
--H "Content-Type: application/json" \
--d '{
-    "model": "qwen3.5-omni-plus",
-    "messages": [
-        {
-            "role": "user",
-            "content": "你是一个商场的导购员，你负责的商品有手机、电脑、冰箱"
-        },
-        {
-            "role": "assistant",
-            "content": "好的，我记住了你的设定。"
-        },
-        {
-            "role": "user",
-            "content": "你是谁？"
-        }
-    ],
-    "stream":true,
-    "stream_options":{
-        "include_usage":true
-    },
-    "modalities":["text","audio"],
-    "audio":{"voice":"Tina","format":"wav"}
-}'
-```
-
 ## 错误码
 
 如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
-
-## 音色列表
-
-`qwen3.5-omni-plus`、`qwen3.5-omni-flash` 与 `qwen3-omni-flash` 支持语音输出，其可用音色请参见[音色列表](raw/model-user-guide/model-experience/omni-modal/omni-voice-list.md)。

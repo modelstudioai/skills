@@ -21,7 +21,7 @@ curl -X POST "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentst
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "agent": "agent_xxx",
+    "agent": {"type": "agent", "id": "agent_xxx"},
     "environment_id": "env_xxx",
     "title": "Q3 销售数据分析",
     "resources": [
@@ -34,7 +34,7 @@ python
 
 ```
 session = client.sessions.create(
-    agent="agent_xxx",
+    agent={"type": "agent", "id": "agent_xxx"},
     environment_id="env_xxx",
     title="Q3 销售数据分析",
     resources=[
@@ -48,7 +48,7 @@ java
 
 ```
 Session session = client.sessions().create(SessionCreateParam.builder()
-    .agent("agent_xxx")
+    .agent(SessionAgent.ofOverride(Map.of("type", "agent", "id", "agent_xxx")))
     .environmentId("env_xxx")
     .title("Q3 销售数据分析")
     .resources(List.of(SessionResource.builder()
@@ -59,6 +59,14 @@ Session session = client.sessions().create(SessionCreateParam.builder()
     .build());
 System.out.println(session.getId() + " " + session.getStatus());
 ```
+
+### 会话级配置与 MCP 请求头
+
+创建会话时通过 `agent` 对象可覆盖本会话的系统提示词、工具、MCP Server 与技能，只传 `id` 则仅引用智能体；`mcp_configs` 为指定 MCP Server 的全部请求注入自定义 Header（如租户 ID、鉴权 token）。覆盖只作用于本会话，不改动智能体本身。
+
+**说明**会话级配置目前仅支持通过 API 设置；控制台创建的会话为只读快照，在会话页面的**智能体**标签页查看。
+
+覆盖语义与完整字段见[创建 Session API](raw/application-api-reference/managed-agents-api/session-api/session-create.md)；会话创建后可继续修改，见[管理会话](raw/application-user-guide/agent-development/managed-agents/managed-agents-session/managed-agents-session-operations.md)。
 
 ### 会话页面布局
 

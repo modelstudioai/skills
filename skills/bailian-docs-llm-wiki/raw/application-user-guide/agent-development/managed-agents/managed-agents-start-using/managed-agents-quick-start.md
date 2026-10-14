@@ -9,7 +9,7 @@
 
 ## 步骤 1：配置智能体
 
-进入[百炼控制台 > Managed Agents > 快速开始](https://bailian.console.aliyun.com/#/managed-agents/quick-start/wizard)，填写智能体的基本信息、模型与工具。页面已预填模板值，按需修改即可。
+进入[百炼控制台 > Managed Agents > 快速开始](https://bailian.console.aliyun.com/cn-beijing/managed-agent/quick-start/wizard)，填写智能体的基本信息、模型与工具。页面已预填模板值，按需修改即可。
 
 **字段**
 
@@ -45,7 +45,7 @@ curl -X POST "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentst
   -H "Content-Type: application/json" \
   -d '{
     "name": "data-analyst",
-    "model": {"id": "qwen3.7-max"},
+    "model": {"id": "qwen3.8-max"},
     "system": "你是数据分析专家，使用 pandas 处理 CSV 文件。",
     "tools": [
       {
@@ -87,7 +87,7 @@ java
 ```
 Agent agent = client.agents().create(AgentCreateParam.builder()
     .name("data-analyst")
-    .model("qwen3.7-max")
+    .model("qwen3.8-max")
     .instructions("你是数据分析专家，使用 pandas 处理 CSV 文件。")
     .build());
 System.out.println(agent.getId());       // "agent_xxx"
@@ -181,7 +181,7 @@ curl -X POST "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentst
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "agent": "agent_xxx",
+    "agent": {"type": "agent", "id": "agent_xxx"},
     "environment_id": "env_xxx",
     "title": "Q3 销售数据分析"
   }'
@@ -191,7 +191,7 @@ python
 
 ```
 session = client.sessions.create(
-    agent="agent_xxx",
+    agent={"type": "agent", "id": "agent_xxx"},
     environment_id="env_xxx",
     title="Q3 销售数据分析",
 )
@@ -202,7 +202,7 @@ java
 
 ```
 Session session = client.sessions().create(SessionCreateParam.builder()
-    .agentId("agent_xxx")
+    .agent(SessionAgent.ofOverride(Map.of("type", "agent", "id", "agent_xxx")))
     .environmentId("env_xxx")
     .title("Q3 销售数据分析")
     .build());
@@ -304,4 +304,4 @@ try (AgentStudioEventStream stream = client.sessions().events().stream("sesn_xxx
 -   [管理会话与事件](raw/application-user-guide/agent-development/managed-agents/managed-agents-session.md)：创建会话、发送消息与事件流
 -   [智能体](raw/application-user-guide/agent-development/managed-agents/managed-agents-agent.md)：配置模型、提示词与工具
 -   [配置运行环境](raw/application-user-guide/agent-development/managed-agents/managed-agents-environment/managed-agents-cloud-hosting.md)：沙箱类型、预装包与网络策略
--   [API 总览与认证](raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md)：在业务代码中集成 Managed Agents
+-   [概览](raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md)：在业务代码中集成 Managed Agents
