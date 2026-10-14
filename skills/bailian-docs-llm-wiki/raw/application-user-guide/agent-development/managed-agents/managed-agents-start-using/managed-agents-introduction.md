@@ -95,7 +95,7 @@ Managed Agents 是阿里云百炼提供的智能体托管运行时，适用于�
 -   [快速开始](raw/application-user-guide/agent-development/managed-agents/managed-agents-start-using/managed-agents-quick-start.md)：创建第一个智能体并发起会话
 -   [管理会话与事件](raw/application-user-guide/agent-development/managed-agents/managed-agents-session.md)：创建会话、发送消息与事件流
 -   [智能体](raw/application-user-guide/agent-development/managed-agents/managed-agents-agent.md)：配置模型、提示词与工具
--   [API 总览与认证](raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md)：接口总览、认证与可用 API
+-   [概览](raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md)：接口总览、认证与可用 API
 -   [记忆库](raw/application-user-guide/agent-development/managed-agents/managed-agents-context/managed-agents-memory-store.md)：跨会话保留智能体的工作笔记
 -   [定时任务](raw/application-user-guide/agent-development/managed-agents/managed-agents-session/managed-agents-deployment.md)：定时或手动触发智能体运行
 -   [CLI](raw/application-user-guide/agent-development/managed-agents/managed-agents-start-using/managed-agents-cli.md)：以基础设施即代码方式在终端管理 Agent 与会话

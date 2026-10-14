@@ -92,7 +92,7 @@
     **重要**
     
     -   首次导入请先按照界面提示完成授权，并为目标Bucket添加标签。详见下方[常见问题](#9412d1ca87761)中的「首次从 OSS 向阿里云百炼导入文件，应该如何操作？」。
-    -   支持的OSS Bucket存储类型不包括归档、冷归档或深度冷归档。支持内容加密的Bucket。支持私有的Bucket。
+    -   支持的OSS Bucket存储类型不包括归档、冷归档或深度冷归档。服务端加密方式支持 OSS 完全托管，不支持 KMS 托管密钥（SSE-KMS）等其他服务端加密方式。支持私有的Bucket。
     -   不支持访问OSS Bucket根目录下的文件，请您在OSS Bucket下选择已有的子目录或新建一个子目录供阿里云百炼访问。
     -   支持导入任意大小的模型文件，导入后将使用阿里云百炼提供的免费存储空间。
     
@@ -188,7 +188,7 @@ if __name__ == "__main__":
 
 Bucket
 
-选择存放模型文件的 OSS Bucket，仅列出已添加 bailian-datahub-access=read 标签的 Bucket。
+选择存放模型文件的 OSS Bucket，仅列出已添加 bailian-datahub-access=read 标签且当前地域支持的 Bucket（华北2（北京）：国内所有地域；新加坡：国内所有地域及新加坡地域）。
 
 必填，下拉选择
 
@@ -363,7 +363,7 @@ Bucket
 
 Bucket 下拉列表中目标 Bucket 不可选怎么办？
 
-这是授权要求而非故障。新授权方式下，未添加 bailian-datahub-access=read 标签的 Bucket 在下拉中不可选。须到 OSS 管理控制台为目标 Bucket 添加该标签后返回导入页重新选择。
+这是授权或地域要求而非故障。新授权方式下，未添加 bailian-datahub-access=read 标签的 Bucket 在下拉中不可选，须到 OSS 管理控制台为目标 Bucket 添加该标签后返回导入页重新选择；此外，下拉列表仅展示当前地域支持的 Bucket：华北2（北京）展示国内所有地域的 Bucket，新加坡展示国内所有地域及新加坡地域的 Bucket。
 
 我的模型列表每隔几秒自动刷新是故障吗？
 

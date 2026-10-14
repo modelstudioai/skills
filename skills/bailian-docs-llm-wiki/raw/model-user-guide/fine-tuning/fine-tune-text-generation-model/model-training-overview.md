@@ -338,6 +338,20 @@ qwen2.5-7b-instruct
 
 ✓
 
+决策模型（预览版）-2026-09-24
+
+decision-model-preview-2026-09-24
+
+×
+
+×
+
+×
+
+×
+
+×
+
 千问-Plus-Character-2025-11-06
 
 qwen-plus-character-2025-11-06
@@ -351,6 +365,8 @@ qwen-plus-character-2025-11-06
 ✓
 
 ✓
+
+**说明**决策模型（`decision-model-preview-2026-09-24`）不参与上述常规 CPT/SFT/DPO 训练，但支持专属微调流程；微调方法请参见[决策模型微调最佳实践](raw/model-user-guide/fine-tuning/decision-model-tuning-guide.md)。
 
 #### 视觉理解（千问VL）
 

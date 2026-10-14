@@ -19,7 +19,7 @@ export AGENTSTUDIO_URL="https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/
 export DASHSCOPE_API_KEY="sk-xxxxxxxx"
 ```
 
-鉴权方式与 Base URL 的获取详见 [API 总览](raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md)。随着流程推进，还会陆续导出 `AGENT_ID`、`ENV_ID`、`SESSION_ID`、`FILE_ID`。
+鉴权方式与 Base URL 的获取详见 [概览](raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md)。随着流程推进，还会陆续导出 `AGENT_ID`、`ENV_ID`、`SESSION_ID`、`FILE_ID`。
 
 ## 三个资源概念
 
@@ -39,7 +39,7 @@ Agent 和 Environment 创建一次，可以在多个 Session 里复用。每个 
 
 **警告****最常见的配置错误**：`default_config.enabled: true` 并不会把工具真的发给模型。必须在 `configs[ ]` 里把每个要用的工具**逐个显式列出**并置 `enabled: true`。只写 `default_config.enabled: true` 而不列 `configs`，Agent 拿到的工具列表只有平台自动注入的 `mark_artifacts`，随后任何 `bash` 调用都会回 `TOOL_NOT_FOUND: Tool 'bash' not found. Available tools: ['mark_artifacts']`，回合以「没有工具可用」结束。
 
-模型选 `qwen3.8-max`。Managed Agents 接受的模型 ID 是 `qwen3.8-max` / `qwen3.7-max` / `qwen3.7-plus` / `qwen3.6-plus` / `qwen3.6-flash` 这一代命名。具体可用列表以控制台下拉为准。
+模型选 `qwen3.8-max`。Managed Agents 接受的模型 ID 是 `qwen3.8-max` / `qwen3.7-max` / `qwen3.7-plus` / `qwen3.6-plus` / `qwen3.6-flash` 这一代命名；`qwen3-max` 这类 DashScope 旧版常规 ID 会被直接拒绝（`400 AGENT_010 模型不存在`）。具体可用列表以控制台下拉为准。
 
 system prompt 里有换行，直接塞进 shell 单引号里容易出错，建议先落成文件再用 `-d @`：
 
@@ -563,7 +563,7 @@ curl -X GET "$AGENTSTUDIO_URL/sessions/$SESSION_ID/events?order=desc&limit=1" \
 
 ## 速查表
 
-**模型 ID**：`qwen3.8-max` / `qwen3.7-max` / `qwen3.7-plus` / `qwen3.6-plus` / `qwen3.6-flash`。
+**模型 ID**：`qwen3.8-max` / `qwen3.7-max` / `qwen3.7-plus` / `qwen3.6-plus` / `qwen3.6-flash`（`qwen3-max`、`qwen-plus` 等常规 DashScope ID 会被拒）。
 
 **内置工具**：核心工具 `bash`、`read`、`write`、`edit`、`glob`、`grep`，联网工具 `web_search`、`web_fetch`，**必须在 `configs[ ]` 里逐个 `enabled: true`**。平台额外自动注入 `mark_artifacts`（无需声明）。`download_file` 已下线，勿再配置。
 

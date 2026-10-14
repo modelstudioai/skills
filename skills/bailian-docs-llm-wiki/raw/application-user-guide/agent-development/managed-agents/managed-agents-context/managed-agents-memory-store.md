@@ -110,7 +110,7 @@ curl -X POST "$AGENTSTUDIO_URL/sessions" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "agent": "agent_xxx",
+    "agent": {"type": "agent", "id": "agent_xxx"},
     "resources": [
       {
         "type": "memory_store",

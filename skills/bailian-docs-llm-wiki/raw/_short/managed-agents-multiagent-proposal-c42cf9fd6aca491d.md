@@ -235,7 +235,7 @@ curl -X POST "$AGENTSTUDIO_URL/sessions" \
   }'
 ```
 
-**说明**字段就叫 `agent`（传 ID 字符串即锁定该 Agent 当前最新版本快照；要锁旧版本传 `{"id": ..., "version": N}`）。响应里 `agent` 字段回显的是**完整配置快照**（含 system 与 tools，但不含 multiagent——roster 不进 Session 快照，成员版本按上表规则在委派时解析）。另外注意：`resources[ ]` 回显的 `file_id` 与提交的不同——挂载时平台为每个文件生成了 session 作用域的新 file id，原 upload id 仍然有效。响应 `id` 形如 `sesn_<ULID>`，记为 `$SESSION_ID`。
+**说明**字段就叫 `agent`（对象只传 `id` 即锁定该 Agent 当前最新版本快照；要锁旧版本传 `{"id": ..., "version": N}`）。响应里 `agent` 字段回显的是**完整配置快照**（含 system 与 tools，但不含 multiagent——roster 不进 Session 快照，成员版本按上表规则在委派时解析）。另外注意：`resources[ ]` 回显的 `file_id` 与提交的不同——挂载时平台为每个文件生成了 session 作用域的新 file id，原 upload id 仍然有效。响应 `id` 形如 `sesn_<ULID>`，记为 `$SESSION_ID`。
 
 ## 启动提案并观察
 

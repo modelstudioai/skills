@@ -2,11 +2,14 @@
 
 本文介绍声音复刻的Java SDK使用方法。
 
-**用户指南：**[声音复刻](raw/model-user-guide/model-experience/speech-synthesis/voice-cloning-user-guide.md)。
-
 ## 接口地址
 
 SDK的接口地址需在初始化前设置为下方地址（包含WorkspaceId）。如需切换到其他地域，请修改 `Constants.baseHttpApiUrl`为对应地域的URL。
+
+**说明**
+
+-   不同地域的 API Key 不同，调用时需使用对应地域的 API Key。
+-   地域配置为全局设置，影响所有 DashScope SDK API 调用。
 
 #### 华北2（北京）
 
@@ -20,32 +23,16 @@ SDK的接口地址需在初始化前设置为下方地址（包含WorkspaceId）
 
 调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
-**切换到新加坡地域**：
-
-```
-import com.alibaba.dashscope.utils.Constants;
-
-// 调用时请将"{WorkspaceId}"替换为真实的业务空间ID
-Constants.baseHttpApiUrl = "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1";
-```
-
-**注意**：
-
--   不同地域的 API Key 不同，请确保使用对应地域的 API Key
--   地域配置为全局设置，影响所有 DashScope SDK 的 API 调用
-
 **重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
 
 -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
 -   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
 
-`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。现有域名仍可正常使用。
-
 ## VoiceEnrollmentService 类
 
 **包路径**：`com.alibaba.dashscope.audio.ttsv2.enrollment.VoiceEnrollmentService`
 
-**功能**：管理Qwen-Audio-TTS/CosyVoice复刻音色的生命周期（创建、查询、更新、删除）
+**功能**：管理 Qwen-Audio-TTS、Qwen-Audio-Realtime 和 CosyVoice 复刻音色的生命周期（创建、查询、更新、删除）。
 
 ### 构造方法
 
@@ -91,7 +78,7 @@ String
 
 是
 
-驱动音色的语音合成模型。必须与后续调用语音合成接口时使用的模型一致，否则合成会失败。
+驱动音色的目标模型。必须与后续使用该音色的模型一致，否则调用失败。
 
 prefix
 
@@ -284,6 +271,8 @@ Object
 
 设置自定义参数，如 parameter("language\_hints", Arrays.asList("zh"))、parameter("max\_prompt\_audio\_length", 10.0f)、parameter("enable\_preprocess", false)、parameter("enable\_volume\_normalization", "false")。
 
+**说明**`language_hints` 数组的长度必须为 1。可选参数及其支持模型请参见[HTTP API 参考](https://help.aliyun.com/zh/model-studio/voice-clone-design-http-api#h2-create)。
+
 ### 扩展参数
 
 **参数名**
@@ -300,11 +289,11 @@ boolean
 
 否
 
-仅适用于Qwen-Audio-TTS/CosyVoice声音复刻（model为`voice-enrollment`时），且仅qwen-audio-3.0-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-flash、cosyvoice-v3.5-plus、v3.5-flash和v3-flash模型支持。
-
 是否开启音频预处理（降噪、音频增强、音量规整）。有背景噪音时建议开启；安静环境建议关闭以最大程度还原音色。
 
 默认值：false。
+
+**说明**适用于 qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、qwen-audio-3.1-realtime-plus、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash、cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash。
 
 enable\_volume\_normalization
 

@@ -24,6 +24,8 @@ https://{workspace_id}.{region}.maas.aliyuncs.com/api/v1/agentstudio
 
 除直接调用 REST 接口外，还可通过 Python 或 Java SDK 接入。Managed Agents 模块要求 Python SDK v1.26.2 及以上、Java SDK v2.22.24 及以上。若已安装旧版本，请重新执行安装命令以升级。
 
+会话级智能体配置覆盖（`agent` 对象与 patch）和会话级 MCP 请求头（`mcp_configs`）需要 Python SDK v1.27.7 及以上、Java SDK v2.23.2 及以上；直接调用 REST 接口不受此限制。
+
 python
 
 ```

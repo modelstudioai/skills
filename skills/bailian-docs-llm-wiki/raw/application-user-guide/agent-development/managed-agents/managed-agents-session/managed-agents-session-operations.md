@@ -95,6 +95,12 @@
 
 会话运行期间可通过 API 动态挂载、查询与卸载文件资源，详见[运行时挂载资源 API](raw/application-api-reference/managed-agents-api/session-api/session-resource-create.md)。
 
+## 会话级配置
+
+会话运行期间可通过[更新 Session API](raw/application-api-reference/managed-agents-api/session-api/session-update.md) 修改会话级智能体配置（`agent` patch：系统提示词、工具、MCP Server、技能）与会话级 MCP 请求头（`mcp_configs`）。修改只作用于本会话快照，不生成智能体新版本。
+
+`agent` patch 的子字段语义：省略保留已有覆盖；`null` 删除该字段覆盖并重新继承智能体源配置；空数组明确覆盖为空；空字符串（仅 `system`）明确使用空提示词。
+
 ## 工具调用
 
 智能体根据系统提示词和当前消息自主决定何时调用哪个工具。全部工具（内置、MCP、技能）均在会话绑定的运行环境中执行，调用过程通过事件面板实时可见。

@@ -74,7 +74,7 @@ Token Plan 团队版的常见问题解答，包括产品选择、Credits 计费�
 
 ### 如何限制单个成员使用共享用量包？
 
-在**成员管理**页面，所有者和管理员可点击目标成员**共享用量包额度**列的**设置**，为该成员启用额度上限。详见[团队管理](raw/model-user-guide/token-plan-guide/token-plan-team-edition/token-plan-team-management.md)。
+在**成员管理**页面，所有者和管理员可点击目标成员**共享用量包额度**列的**设置**，为该成员启用额度上限（每 24 小时仅可设置一次）。详见[团队管理](raw/model-user-guide/token-plan-guide/token-plan-team-edition/token-plan-team-management.md)。
 
 ## 模型与工具兼容性
 

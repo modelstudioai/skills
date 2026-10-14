@@ -64,7 +64,9 @@ System.out.println(session.getId() + " " + session.getStatus() + " " + session.g
   "created_at": "2026-05-28T08:23:11Z",
   "updated_at": "2026-05-28T08:23:25Z",
   "request_id": "xxx",
-  "environment_variables": {"API_BASE_URL": "https://api.example.com", "LOG_LEVEL": "info"}
+  "environment_variables": {"API_BASE_URL": "https://api.example.com", "LOG_LEVEL": "info"},
+  "vault_ids": ["vlt_xxx"],
+  "mcp_configs": [{"mcp_server_name": "crm", "headers": {"X-Tenant-Id": "tenant-demo"}}]
 }
 ```
 
@@ -106,7 +108,7 @@ object / null
 
 object
 
-智能体配置完整快照（创建时锁定），含 `id` / `version` / `name` / `model` / `system` / `tools` 等
+智能体配置完整快照，含 `id` / `version` / `name` / `model` / `system` / `tools` 等；会话级覆盖（若已设置）已并入快照
 
 `environment_id`
 
@@ -143,3 +145,15 @@ string
 object
 
 会话运行时注入的环境变量，字符串键值对，沙箱代码中可直接按名读取
+
+`vault_ids`
+
+array of string
+
+绑定的 Vault ID 列表
+
+`mcp_configs`
+
+array of object
+
+会话级 MCP 请求头，每项含 `mcp_server_name` 与 `headers`；未配置时为空数组
