@@ -4,7 +4,7 @@
 
 **用户指南**：关于模型介绍和选型建议请参见[音乐生成](raw/model-user-guide/model-experience/fun-music.md)。
 
-**重要**该模型目前处于邀测阶段，您需要前往[模型广场](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/fun-music-v1)申请开通后方可使用。该模型服务仅在华北2（北京）地域下可用。
+**Important**该模型目前处于邀测阶段。该模型服务仅在华北2（北京）地域下可用。
 
 ## 前提条件
 
@@ -15,13 +15,6 @@
 POST `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/music/generation`，调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
 通信协议：HTTPS。流式输出支持 SSE（Server-Sent Events）。
-
-**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
-
--   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
--   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
-
-其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
 ## 请求头
 
@@ -84,7 +77,7 @@ string
 -   非流式模式：1~2000 字符
 -   流式模式：5~1000 个中文汉字或英文单词
 
-**说明**当同时传入 `prompt` 和 `lyrics` 时，仅 `lyrics` 生效，`prompt` 将被忽略。
+**Note**当同时传入 `prompt` 和 `lyrics` 时，仅 `lyrics` 生效，`prompt` 将被忽略。
 
 **lyrics**`string`**（条件必选）**
 
@@ -98,13 +91,13 @@ string
 -   非流式模式：中文 5~350 字符，英文 5~2000 字符
 -   流式模式：中文 300~350 字，英文 200~250 词
 
-**说明**当同时传入 `lyrics` 和 `prompt` 时，仅 `lyrics` 生效，`prompt` 将被忽略。
+**Note**当同时传入 `lyrics` 和 `prompt` 时，仅 `lyrics` 生效，`prompt` 将被忽略。
 
 **is\_instrumental**`boolean`（可选） 默认值为 `false`
 
 是否生成纯音乐。设为 `true` 时生成纯音乐（无人声演唱），设为 `false` 时生成歌曲。
 
-**说明**当 `is_instrumental` 为 `true` 时，`lyrics` 和 `gender` 参数无效。
+**Note**当 `is_instrumental` 为 `true` 时，`lyrics` 和 `gender` 参数无效。
 
 **gender**`string`（可选） 默认值为 `female`
 

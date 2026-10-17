@@ -337,7 +337,7 @@ Token Plan 团队版 - 共享用量包
 
 ### 注意事项
 
--   退订重购后，API Key 和 Base URL 会发生变更，需在工具中重新配置。新 API Key 和 Base URL 均可在控制台[**我的订阅**](https://bailian.console.aliyun.com/cn-beijing/subscription/token-plan/enterprise)页面的 API Key 区域获取。
+-   退订后 API Key 变为不可用；重新购买成功后，原 API Key 恢复可用，无需在工具中重新配置。如需更换成员的 API Key，可[重置 API Key](https://help.aliyun.com/zh/model-studio/token-plan-team-management#tpt03-h-reset-key)。
 -   续费仅延长订阅有效期，不会叠加补充至当前计费周期的额度。
 -   团队版与个人版可同时持有，各自独立计费。
 

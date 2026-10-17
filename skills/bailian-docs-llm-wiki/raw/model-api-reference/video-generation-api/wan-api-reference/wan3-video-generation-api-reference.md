@@ -669,7 +669,7 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 
 **video\_url** `string`
 
-生成视频的URL地址。任务成功时返回。
+生成视频的URL地址。任务成功时返回。视频格式为 MP4（H.264 编码）。
 
 **code**`string`
 

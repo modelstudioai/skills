@@ -1111,7 +1111,7 @@ console.log(`工具函数输出：${functionOutput}\n`);
     
     **说明**
     
-    -   请确保工具的输出为字符串格式。
+    -   工具的输出通常为字符串。需要模型理解工具产出的图片时，`content`可传入内容数组，例如`[{"type": "text", "text": "图片生成成功。"}, {"type": "image_url", "image_url": {"url": "https://example.com/image.png"}}]`，其中`url`支持公网 URL 或 Base64 Data URI。图片 URL 作为字符串传入时按普通文本处理，不会被解析为图片。
     -   `tool_call_id` 是系统为每一次的工具调用请求生成的**唯一标识符**。模型可能一次性要求调用多个工具，将多个工具结果返回给模型时，`tool_call_id`可确保工具的输出结果能够与它的调用意图对应。
     
 
@@ -1681,6 +1681,8 @@ response.output 中 type 为 function\_call 的项
 response.choices\[0\].message.content
 
 response.output\_text
+
+两种 API 的工具结果均支持字符串和内容数组两种形式。Responses API 的`output`数组元素类型为`input_text`与`input_image`，`image_url`直接传入 URL 或 Base64 Data URI，不使用嵌套对象，字段说明参见[创建响应](raw/model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)。
 
 python
 

@@ -4,7 +4,7 @@
 
 ## 从闭源模型迁移到百炼?
 
-如果你正在使用 GPT 或 Gemini 的全模态/实时能力，可参考下表选择百炼对位模型。
+如果你正在使用 GPT 或 Gemini 的音视频理解、实时语音对话或实时翻译能力，可参考下表按场景选择百炼模型。
 
 **闭源模型代表**
 
@@ -16,11 +16,19 @@
 
 [qwen3.8-omni-flash](raw/model-user-guide/support/model-studio-model-list/model-list-omni/qwen3-8-omni-flash.md)
 
+实时语音对话
+
+[gpt-realtime-2.1](https://developers.openai.com/api/docs/models/gpt-realtime-2.1)
+
+[qwen3.8-omni-flash-realtime](raw/model-user-guide/support/model-studio-model-list/model-list-omni/qwen3-8-omni-flash-realtime.md)
+
 实时翻译
 
 [Gemini 3.5 Live Translate（Preview）](https://ai.google.dev/gemini-api/docs/models/gemini-3.5-live-translate-preview)
 
-`qwen3.8-livetranslate-flash-realtime`
+[gpt-realtime-translate](https://developers.openai.com/api/docs/models/gpt-realtime-translate)
+
+[qwen3.8-livetranslate-flash-realtime](raw/model-user-guide/support/model-studio-model-list/model-list-speech-to-speech/qwen3-8-livetranslate-flash-realtime.md)
 
 ## 使用场景
 
@@ -902,7 +910,7 @@ Qwen3.8-Omni-Flash-Realtime；Qwen3.5-Omni Plus / Flash
 
 不支持
 
-“支持”表示同时输出语音和文本。“仅文本”表示该语言不输出语音。Qwen3.8-LiveTranslate-Flash-Realtime 列中的“—”表示语种代码清单未单列该方言。
+“支持”表示同时输出语音和文本。“仅文本”表示该语言不输出语音。
 
 Qwen3.8-Omni-Flash、Qwen3.8-Omni-Flash-Realtime 和 Qwen3.5-Omni 均支持113种输入语言/方言，完整输入语种列表见[模型选型](https://help.aliyun.com/zh/model-studio/qwen-omni#d54e85c641oux)。
 
@@ -936,7 +944,7 @@ Chat Completions
 
 qwen3.8-livetranslate-flash-realtime
 
-Realtime API（WebSocket）
+Realtime API（WebSocket / WebRTC / AOQ）
 
 实时翻译
 

@@ -100,11 +100,11 @@
 
 ## 欠费处理
 
-**账户可用额度 < 0** 视为欠费，可能导致模型调用等服务暂停。在[费用与成本首页](https://billing-cost.console.aliyun.com/home)悬停**账户可用额度**区域可查看，公式为：可用额度 =（现金余额 + 信控额度）-（当月未结清 + 历史未结清）。
+**账户可用额度 < 0** 视为欠费。在[费用与成本首页](https://billing-cost.console.aliyun.com/home)悬停**账户可用额度**区域可查看，公式为：可用额度 =（现金余额 + 信控额度）-（当月未结清 + 历史未结清）。
 
--   **欠费影响**：账户欠费将导致**按量付费（后付费）**模型调用等服务暂停，能否继续使用取决于计费方式。
+-   **欠费影响**：欠费限制按**[商品 Code](#query-overdue-commodity-code)** 隔离。某个商品 Code 产生欠费时，该商品 Code 对应的服务不可用，结清欠费后恢复；其他商品 Code 对应的服务仍可正常使用并继续计费。例如，账单中**百炼容量预留**产生欠费时，该商品下的预置吞吐部署服务不可用，但不影响百炼模型调用。
     
-    -   **免费额度、节省计划、资源包**：三者均用于抵扣按量付费费用，**欠费期间即使仍有剩余额度，也无法调用模型**，需结清欠费后恢复。
+    -   仍有**免费额度、节省计划或资源包额度**：均按商品 Code 隔离，仅对未产生欠费的商品 Code 抵扣，已欠费的商品 Code 无法使用。
     -   已购 **Coding Plan** 或 **Token Plan**：套餐额度独立于账户余额，欠费期间可继续使用，但会导致自动续费失败，到期后无法续用。
 -   **代金券查看路径**：在[百炼控制台](https://bailian.console.aliyun.com/)右下角单击**费用**图标，进入[费用与成本](https://billing-cost.console.aliyun.com/home)控制台。在左侧导航栏选择**账户** > **卡券**，即可查看**优惠券**、**储值卡**和**提货券**。
     
@@ -119,9 +119,7 @@
 
 不再使用百炼时，按以下方式关停对应服务即可停止计费。
 
-**重要**如需在按量付费场景中主动控制费用上限，可前往
-
-[预算管理](raw/model-user-guide/test-1/budget-management.md)设置月度预算并开启「达到预算后立即停止」。
+**重要**如需在按量付费场景中主动控制费用上限，可前往[预算管理](raw/model-user-guide/test-1/budget-management.md)设置月度预算并开启「达到预算后立即停止」。
 
 -   **停止模型推理**：停止代码中的 API 调用、关闭控制台体验中心的调用，即不再产生费用。为防止意外调用，可在[**API Key**](https://bailian.console.aliyun.com/model/settings/api-key)页面删除已创建的 Key。
     
@@ -131,11 +129,12 @@
     
 -   **退订 Token Plan 团队版**：在[Token Plan 控制台](https://bailian.console.aliyun.com/subscription/token-plan)的**我的订阅**页面按席位退订，未产生用量消耗的席位可退订，退款原路退回支付账户。如不再续费，请关闭自动续费。
     
--   **停止模型部署**：根据部署时的计费方式操作不同：
+-   **停止模型部署**：[下线](https://bailian.console.aliyun.com/model/deploy)已部署模型。不同计费方式在账单中对应的商品名称及后续操作如下：
     
-    -   **按 Token 调用计费（后付费）**：[下线](https://bailian.console.aliyun.com/model/deploy)已部署的模型，或删除[API Key](https://bailian.console.aliyun.com/model/settings/api-key)防止意外调用。
-    -   **按算力单元或模型单元计费（后付费）**：[下线](https://bailian.console.aliyun.com/model/deploy)已部署的模型。
-    -   **按预置吞吐单元计费（预付费）**：[下线](https://bailian.console.aliyun.com/model/deploy)已部署的模型，然后在[退订管理](https://billing-cost.console.aliyun.com/refund/refund)页面退订实例。退订时已使用部分按 1.2 倍系数结算（详见[退订说明](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)），退回剩余金额。
+    -   **按 Token 调用计费（后付费）**：账单商品名称为**百炼大模型推理**。下线部署后不再产生该部署的调用费用；也可删除[API Key](https://bailian.console.aliyun.com/model/settings/api-key)防止意外调用。
+    -   **按算力单元或模型单元计费（后付费）**：账单商品名称为**百炼模型单元（按量付费）**。下线部署后停止按时长计费。
+    -   **按预置吞吐单元计费（后付费，按小时）**：账单商品名称为**百炼容量预留（后付费）**。下线部署后停止按小时计费。
+    -   **按预置吞吐单元计费（预付费，按天）**：账单商品名称为**百炼容量预留（预付费）**。下线部署后，还需在[退订管理](https://billing-cost.console.aliyun.com/refund/refund)页面退订实例。退订时已使用部分按 1.2 倍系数结算（详见[退订说明](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)），退回剩余金额。
 
 ## 常见问题
 
@@ -246,9 +245,9 @@
 
 按输入/输出 Token 实际用量结算，无折扣，单位 Token 单价在各方案中最高
 
-无需预先购买，随时可用；账户欠费期间无法调用模型
+无需预先购买，随时可用；欠费是否影响调用取决于对应的商品 Code
 
-采用“预占+月结”，月账期结束后（次月初）生成最终账单并实际扣款；无需预先购买；账户欠费期间无法调用模型
+采用“预占+月结”，月账期结束后（次月初）生成最终账单并实际扣款；无需预先购买；欠费是否影响调用取决于对应的商品 Code
 
 免费额度
 
@@ -327,3 +326,9 @@ Token Plan
 如需同时覆盖多个模型版本，选择 AI 通用型节省计划更合适。国际站不提供资源包，仅提供节省计划。
 
 选型结论：普通 API 调用场景优先选择 **AI 通用型节省计划**，编程工具场景优先选择 **Coding Plan**。长期稳定使用大模型服务，选择**节省计划**；用量较小或调用集中在单个特定模型，选择**资源包**；需要团队协作共享额度，选择 **Token Plan**；编码类场景希望按月锁定成本，选择 **Coding Plan**；仅做功能验证时先用完**免费额度**，再根据实际用量决定是否购买优惠方案。各方案的折扣档位、购买入口与生效规则可在[节省计划与资源包](raw/model-user-guide/test-1/savings-plan-and-resource-package.md)中确认，停止各方案计费的操作参见本文**停止计费（关闭服务）**章节。
+
+如何查询对应的商品 Code？
+
+1.  进入[账单详情](https://billing-cost.console.aliyun.com/finance/expense-report/expense-detail-by-instance)页面。
+2.  单击账单表格上方的**设置（齿轮）**图标。
+3.  在**定制列**弹窗中选中**商品Code**，返回账单表格即可查看每条账单对应的商品 Code。

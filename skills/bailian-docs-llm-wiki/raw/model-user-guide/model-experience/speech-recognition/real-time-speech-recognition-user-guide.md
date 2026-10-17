@@ -268,7 +268,6 @@ if __name__ == '__main__':
         # 'pcm'、'wav'、'opus'、'speex'、'aac'、'amr', you can check the supported formats in the document
         sample_rate=sample_rate,
         # support 8000, 16000
-        semantic_punctuation_enabled=False,
         callback=callback)
 
     # Start recognition

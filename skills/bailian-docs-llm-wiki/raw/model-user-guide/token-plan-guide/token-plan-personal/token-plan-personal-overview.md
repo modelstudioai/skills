@@ -288,7 +288,7 @@ code\_interpreter
 ### 其他
 
 -   个人版暂不支持退订。
--   订阅到期后重新购买，API Key 会发生变更，需在工具中重新配置。新 API Key 可在控制台[**我的订阅**](https://bailian.console.aliyun.com/cn-beijing/subscription/token-plan/personal)页面的 API Key 区域获取。
+-   订阅到期后 API Key 变为不可用；重新购买成功后，原 API Key 恢复可用，无需在工具中重新配置。
 
 ## 订阅前须知
 
@@ -296,5 +296,5 @@ code\_interpreter
 2.  **数据使用授权**：使用 Token Plan 个人版期间，模型输入以及模型生成的内容将用于服务改进与模型优化。停止使用 Token Plan 个人版服务可终止后续数据授权，但终止授权的范围不涵盖已授权使用的数据。详细条款请参见[阿里云百炼服务协议](https://terms.alicdn.com/legal-agreement/terms/common_platform_service/20230728213935489/20230728213935489.html)第 5.2 条。
 3.  **账号使用规范**：套餐为订阅人专享使用，禁止共享。账号共享可能导致订阅权益受限。
 4.  **购买限制**：同一实名认证主体限购一份，可同时购买个人版和团队版。
-5.  **设备使用说明**：Token Plan 个人版供本人在单台设备上使用。将 API Key 共享给他人使用可能被判定为违规并导致封禁。
+5.  **设备使用说明**：Token Plan 个人版可将同一个 API Key 配置到本人的多台设备（如家庭电脑和公司电脑）上使用，但仅限本人使用。将 API Key 共享给他人使用可能被判定为违规并导致封禁。
 6.  **RAM 子账号无需单独实名认证**：只要主账号已完成实名认证，并为 RAM 子账号分配了席位及 API 调用权限，该 RAM 子账号即可正常使用 Token Plan，无需单独实名认证。

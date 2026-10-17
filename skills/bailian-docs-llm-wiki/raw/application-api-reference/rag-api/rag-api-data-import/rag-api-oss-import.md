@@ -62,7 +62,7 @@ OSS 所在地域，如 cn-beijing。
 
 array<object>
 
-要导入的文件详情列表，110 个元素。元素为对象，子字段：`fileName`（string，必填，导入后的文件名称，长度 1500 个字符）、`ossKey`（string，必填，OSS 对象 Key（文件在 Bucket 中的路径），长度 1256 个字符）、`parser`（string，解析器类型，默认 `AUTO_SELECT`。`AUTO_SELECT` 自动选择解析器；`DOCMIND` 智能文档解析；`DOCMIND_DIGITAL` 电子文档解析；`DOCMIND_LLM_VERSION` 大模型文档解析；`DASH_QWEN_VL_PARSER` Qwen VL 解析（需同时传 parserConfig）；`DOCMIND_LLM_VERSION_MEDIA` 音视频解析。categoryType 为 `UNSTRUCTURED` 时按类目数据解析设置解析文件；为 `SESSION_FILE` 时系统使用默认方式解析（不支持更改））、`parserConfig`（object，解析配置，仅 parser 为 `DASH_QWEN_VL_PARSER` 时必填，其他解析方式无需传入。子字段 `modelName`（string，视觉解析模型，枚举 `qwen3-vl-plus`）、`modelPrompt`（string，解析提示词，长度 11500 字符））。
+要导入的文件详情列表，1~10 个元素。元素为对象，子字段：`fileName`（string，必填，导入后的文件名称，长度 1~500 个字符）、`ossKey`（string，必填，OSS 对象 Key（文件在 Bucket 中的路径），长度 1~256 个字符）、`parser`（string，解析器类型，默认 `AUTO_SELECT`。`AUTO_SELECT` 自动选择解析器；`DOCMIND` 智能文档解析；`DOCMIND_DIGITAL` 电子文档解析；`DOCMIND_LLM_VERSION` 大模型文档解析；`DASH_QWEN_VL_PARSER` Qwen VL 解析（需同时传 parserConfig）；`DOCMIND_LLM_VERSION_MEDIA` 音视频解析。categoryType 为 `UNSTRUCTURED` 时按类目数据解析设置解析文件；为 `SESSION_FILE` 时系统使用默认方式解析（不支持更改））、`parserConfig`（object，解析配置，仅 parser 为 `DASH_QWEN_VL_PARSER` 时必填，其他解析方式无需传入。子字段 `modelName`（string，视觉解析模型，枚举 `qwen3-vl-plus`）、`modelPrompt`（string，解析提示词，长度 1~1500 字符））。
 
 `tags`
 

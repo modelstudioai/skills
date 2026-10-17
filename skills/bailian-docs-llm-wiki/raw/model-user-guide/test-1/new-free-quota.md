@@ -145,7 +145,7 @@ ASR 类模型需在百炼控制台业务空间逐一开通权限后方可调用�
 -   若已开启[免费额度用完即停](https://bailian.console.aliyun.com/cn-beijing/costing-balance/free-quota)，免费额度用完后无法继续调用，需要关闭[免费额度用完即停](https://bailian.console.aliyun.com/cn-beijing/costing-balance/free-quota)方可继续按量付费。
 -   若未开启[免费额度用完即停](https://bailian.console.aliyun.com/cn-beijing/costing-balance/free-quota)，正在进行的调用不会中断，超出额度的Token将按控制台中的输入/输出价格计费，费用以按量后付费方式从阿里云账户扣除，可能导致账户欠费。
 
-账户欠费时，即使其他模型仍有免费额度也无法调用。
+欠费限制按商品 Code 隔离。某个商品 Code 产生欠费时，该商品 Code 对应的服务不可用，即使模型仍有免费额度也无法调用，结清欠费后恢复；其他商品 Code 对应的服务不受影响。您可以在账单中[查询商品 Code](https://help.aliyun.com/zh/model-studio/bill-query-and-cost-management#query-overdue-commodity-code)。
 
 调用前建议查询该模型剩余额度，并配置[预算管理](https://help.aliyun.com/zh/user-center/how-to-manage-a-budget)或[账号余额预警](https://help.aliyun.com/zh/user-center/monitor-account-balances)，确保账户有充足[余额](https://billing-cost.console.aliyun.com/home)，未使用的余额支持[余额提现](https://help.aliyun.com/zh/user-center/balance-withdrawal)。
 
@@ -199,7 +199,7 @@ ASR 类模型需在百炼控制台业务空间逐一开通权限后方可调用�
 
 ### 还有剩余额度，为何调用失败？
 
-请检查[阿里云账户](https://billing-cost.console.aliyun.com/home?spm=a2c4g.11186623.nav-v2-dropdown-my-aliyun.9.f6683048dWvpGu)是否欠费。账户欠费时，即使模型仍有免费额度也无法调用。
+请检查[阿里云账户](https://billing-cost.console.aliyun.com/home?spm=a2c4g.11186623.nav-v2-dropdown-my-aliyun.9.f6683048dWvpGu)是否欠费。欠费限制按商品 Code 隔离，某个商品 Code 产生欠费时，该商品 Code 对应的服务不可用，即使模型仍有免费额度也无法调用，结清欠费后恢复。您可以在账单中[查询商品 Code](https://help.aliyun.com/zh/model-studio/bill-query-and-cost-management#query-overdue-commodity-code)。
 
 ### 为什么看不到免费额度与有效期？
 

@@ -243,9 +243,23 @@ Function Call Output 的唯一标识。
 
 工具调用的标识符，需与模型返回的 `call_id` 一致。
 
-**output** `string` **（必选）**
+**output** `string 或 array` **（必选）**
 
-工具函数的执行结果。
+工具函数的执行结果。纯文本结果传入 string；需要模型理解工具产出的图片时传入 array，一个 output 中可包含多张图片。图片 URL 作为 string 传入时按普通文本处理，不会被解析为图片。
+
+output 数组元素
+
+**type** `string` **（必选）**
+
+内容类型。可选值：`input_text`（文本）、`input_image`（图片）。不支持 `input_file`、`output_text` 以及音频、视频类型。
+
+**text** `string`
+
+文本内容。当 type 为 `input_text` 时必填。
+
+**image\_url** `string`
+
+支持 URL 或者 Base64 编码，当 type 为 `input_image` 时必填。Base64 请传入完整的 Data URI，例如：`data:image/png;base64,iVBORw0K...`。此处为 string 类型，不支持 `{"url": "..."}` 嵌套对象形式。
 
 **status** `string` （可选）
 
@@ -654,8 +668,6 @@ temperature与top\_p均可以控制生成文本的多样性，建议只设置其
 `glm-5.3` 推荐使用 `max` 档位。
 
 > `reasoning.effort` 的优先级高于 `enable_thinking`，建议优先使用 `reasoning.effort`，`enable_thinking` 后续将不再支持。
-
-> 本页所列的 Qwen3.8 系列，Qwen3.7、Qwen3.6、Qwen3.5、Qwen3-Max、DeepSeek、GLM 和 Kimi 型号通过 `reasoning.effort` 控制思考强度，不支持使用 `thinking_budget` 控制最大思考长度。
 
 **ocr\_options** `object` （可选）
 
@@ -1144,6 +1156,187 @@ const main = async () => {
     }
     console.log(`助手最终回复：${response.output_text}`);
   }
+};
+
+// 启动程序
+main().catch(console.error);
+```
+
+#### 工具返回多模态结果
+
+Python
+
+```
+from openai import OpenAI
+import json
+import os
+
+# 初始化客户端
+client = OpenAI(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
+)
+# 模拟用户问题
+USER_QUESTION = "画一张小狗的照片，然后告诉我图里的小狗是什么品种、在什么场景里"
+# 定义工具列表
+tools = [
+    {
+        "type": "function",
+        "name": "generate_image",
+        "description": "当你需要根据文字描述生成图片时非常有用。",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "prompt": {
+                    "type": "string",
+                    "description": "图片内容的文字描述。",
+                }
+            },
+            "required": ["prompt"],
+        },
+    }
+]
+
+# 模拟文生图工具，实际使用时请替换为真实的图片生成调用
+def generate_image(arguments):
+    print(f"正在生成图片，提示词：{arguments['prompt']}")
+    return "https://dashscope.oss-cn-beijing.aliyuncs.com/images/dog_and_girl.jpeg"
+
+# 封装模型响应函数
+def get_response(input_data):
+    response = client.responses.create(
+        model="qwen3.8-max",
+        input=input_data,
+        tools=tools,
+    )
+    return response
+
+# 维护对话上下文
+conversation = [{"role": "user", "content": USER_QUESTION}]
+
+response = get_response(conversation)
+function_calls = [item for item in response.output if item.type == "function_call"]
+# 进入工具调用循环
+while function_calls:
+    for fc in function_calls:
+        arguments = json.loads(fc.arguments)
+        # 执行工具，得到图片地址
+        image_url = generate_image(arguments)
+        # 将工具调用和结果成对追加到上下文中
+        conversation.append(
+            {
+                "type": "function_call",
+                "name": fc.name,
+                "arguments": fc.arguments,
+                "call_id": fc.call_id,
+            }
+        )
+        # output 传入内容数组，模型才能理解图片内容
+        conversation.append(
+            {
+                "type": "function_call_output",
+                "call_id": fc.call_id,
+                "output": [
+                    {"type": "input_text", "text": "图片生成成功。"},
+                    {"type": "input_image", "image_url": image_url},
+                ],
+            }
+        )
+    # 携带完整上下文再次调用模型
+    response = get_response(conversation)
+    function_calls = [item for item in response.output if item.type == "function_call"]
+print(f"助手最终回复：{response.output_text}")
+```
+
+Node.js
+
+```
+import OpenAI from "openai";
+
+// 初始化客户端
+const openai = new OpenAI({
+  // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
+  apiKey: process.env.DASHSCOPE_API_KEY,
+  baseURL:
+    "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
+});
+
+// 定义工具列表
+const tools = [
+  {
+    type: "function",
+    name: "generate_image",
+    description: "当你需要根据文字描述生成图片时非常有用。",
+    parameters: {
+      type: "object",
+      properties: {
+        prompt: {
+          type: "string",
+          description: "图片内容的文字描述。",
+        },
+      },
+      required: ["prompt"],
+    },
+  },
+];
+
+// 模拟文生图工具，实际使用时请替换为真实的图片生成调用
+const generateImage = (args) => {
+  console.log(`正在生成图片，提示词：${args.prompt}`);
+  return "https://dashscope.oss-cn-beijing.aliyuncs.com/images/dog_and_girl.jpeg";
+};
+
+// 封装模型响应函数
+const getResponse = async (inputData) => {
+  const response = await openai.responses.create({
+    model: "qwen3.8-max",
+    input: inputData,
+    tools: tools,
+  });
+  return response;
+};
+
+const main = async () => {
+  const userQuestion = "画一张小狗的照片，然后告诉我图里的小狗是什么品种、在什么场景里";
+
+  // 维护对话上下文
+  const conversation = [{ role: "user", content: userQuestion }];
+
+  let response = await getResponse(conversation);
+  let functionCalls = response.output.filter(
+    (item) => item.type === "function_call"
+  );
+  // 进入工具调用循环
+  while (functionCalls.length > 0) {
+    for (const fc of functionCalls) {
+      const args = JSON.parse(fc.arguments);
+      // 执行工具，得到图片地址
+      const imageUrl = generateImage(args);
+      // 将工具调用和结果成对追加到上下文中
+      conversation.push({
+        type: "function_call",
+        name: fc.name,
+        arguments: fc.arguments,
+        call_id: fc.call_id,
+      });
+      // output 传入内容数组，模型才能理解图片内容
+      conversation.push({
+        type: "function_call_output",
+        call_id: fc.call_id,
+        output: [
+          { type: "input_text", text: "图片生成成功。" },
+          { type: "input_image", image_url: imageUrl },
+        ],
+      });
+    }
+    // 携带完整上下文再次调用模型
+    response = await getResponse(conversation);
+    functionCalls = response.output.filter(
+      (item) => item.type === "function_call"
+    );
+  }
+  console.log(`助手最终回复：${response.output_text}`);
 };
 
 // 启动程序

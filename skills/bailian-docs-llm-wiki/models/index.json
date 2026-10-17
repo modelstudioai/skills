@@ -1,11 +1,11 @@
 {
-  "updatedAt": "2026-10-15",
-  "totalFamilies": 125,
-  "totalModels": 317,
+  "updatedAt": "2026-10-18",
+  "totalFamilies": 124,
+  "totalModels": 316,
   "profileCoverage": {
-    "full": 49,
+    "full": 89,
     "partial": 1,
-    "structured-only": 267,
+    "structured-only": 226,
     "none": 0
   },
   "capabilityDistribution": {
@@ -13,7 +13,7 @@
     "VG": 17,
     "IG": 17,
     "ASR": 11,
-    "Reasoning": 10,
+    "Reasoning": 9,
     "TTS": 9,
     "Realtime-ASR": 6,
     "VU": 5,
@@ -28,7 +28,7 @@
     "3D-generation": 1
   },
   "providerDistribution": {
-    "qwen": 63,
+    "qwen": 62,
     "qwen-domain-model": 26,
     "wan": 13,
     "mini-max": 4,
@@ -1229,24 +1229,6 @@
         "qwen3-vl-plus"
       ],
       "maxContextWindow": 262144
-    },
-    {
-      "slug": "qwen3.5-flash",
-      "name": "Qwen3.5-Flash",
-      "primaryCapability": "Reasoning",
-      "capabilities": [
-        "Reasoning",
-        "TG",
-        "VU"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "qwen3.5-flash"
-      ],
-      "maxContextWindow": 1000000
     },
     {
       "slug": "qwen3.5-livetranslate-flash-realtime",

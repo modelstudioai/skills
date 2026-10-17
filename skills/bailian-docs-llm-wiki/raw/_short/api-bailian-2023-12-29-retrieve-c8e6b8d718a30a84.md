@@ -471,6 +471,8 @@ string
 ]
 ```
 
+**说明**本页 OpenAPI Retrieve 接口及其 SDK 的 `SearchFilters` 使用字符串值 Map，不支持嵌套 `_conditions`。传入嵌套结构时，请求可能仍返回成功响应，但不会按嵌套条件过滤。如需对同一字段设置多个 OR 条件，请通过 RAG API JSON 请求体调用检索接口，具体语法和示例请参见[知识库 SearchFilters](raw/application-api-reference/more/how-to-use-search-filters.md)。
+
 ## 返回参数
 
 **名称**

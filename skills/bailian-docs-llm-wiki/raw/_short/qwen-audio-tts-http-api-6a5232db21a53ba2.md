@@ -2,15 +2,17 @@
 
 本文介绍非实时语音合成Qwen-Audio-TTS的HTTP调用方法，支持非流式和流式两种调用模式。
 
-**重要**本文描述的功能仅在华北2（北京）地域可用。
-
-**重要**阿里云百炼为华北2（北京）地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`。
-
 ## 接口地址
+
+#### 华北2（北京）
 
 `POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/SpeechSynthesizer`
 
-调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+#### 新加坡
+
+`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audio/tts/SpeechSynthesizer`
+
+调用时请将 `{WorkspaceId}` 替换为对应地域的[业务空间 ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)，并使用同地域的 [API Key](raw/model-api-reference/preparations/get-api-key.md)。
 
 ## 请求头
 

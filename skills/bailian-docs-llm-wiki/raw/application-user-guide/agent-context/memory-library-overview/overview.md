@@ -11,6 +11,8 @@
 -   [创建记忆库](raw/application-user-guide/agent-context/memory-library-overview/create-memory.md)：创建自定义记忆库并配置记忆规则
 -   [使用用户画像](raw/application-user-guide/agent-context/memory-library-overview/create-memory/user-profile.md)：通过 API 创建画像模板并提取结构化属性
 -   [管理记忆](raw/application-user-guide/agent-context/memory-library-overview/create-memory/manage-memory.md)：查看、检索调试、更新和删除记忆
+-   [记忆观测](raw/application-user-guide/agent-context/memory-library-overview/observability/observation.md)：对照会话内容与关联的记忆变更
+-   [记忆审计](raw/application-user-guide/agent-context/memory-library-overview/observability/audit.md)：筛选变更事件并比较前后快照
 -   [集成方式](raw/application-user-guide/agent-context/memory-library-overview/integration-overview.md)：Agent Harness 与插件两种集成路径
 -   [计费说明](raw/application-user-guide/agent-context/memory-library-overview/integration-overview/billing.md)：Pro/Lite 策略版本定价、免费额度与计费示例
 -   [API 参考](raw/application-api-reference/long-term-memory-new/api-overview.md)：全部接口的参数说明

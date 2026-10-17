@@ -259,7 +259,7 @@ javascript
 ```
 // 运行前的准备工作:
 // Windows/Mac/Linux 通用:
-// 1. 确保已安装 Node.js (建议版本 >= 14)
+// 1. 确保已安装 Node.js 22 或 24 LTS
 // 2. 运行以下命令安装必要的依赖:
 //    npm install openai wav
 
@@ -1697,7 +1697,7 @@ javascript
 ```
 // 运行前的准备工作:
 // Windows/Mac/Linux 通用:
-// 1. 确保已安装 Node.js (建议版本 >= 14)
+// 1. 确保已安装 Node.js 22 或 24 LTS
 // 2. 运行以下命令安装必要的依赖:
 //    npm install openai wav
 //
@@ -1789,7 +1789,7 @@ for await (const chunk of completion) {
 // 执行转换
 convertAudio(audioString, "audio_assistant_mjs.wav");
 
-// 方式2: 边生成边实时播放
+// 方式2: 边生成边实时播放。启用本段前请注释掉方式1；同一个 completion 流只运行一种方式。
 // 需要先按照上方系统对应的说明安装必要组件
 // import Speaker from 'speaker'; // 引入音频播放库
 
@@ -1813,8 +1813,8 @@ convertAudio(audioString, "audio_assistant_mjs.wav");
 //         console.log(chunk.usage);
 //     }
 // }
-// speaker.on('finish', () => console.log('播放完成'));
-// speaker.end(); // 根据实际 API 流结束情况调用
+// speaker.on('flush', () => console.log('播放完成'));
+// speaker.end(); // completion 流结束后刷新并关闭播放器。
 ```
 
 python
@@ -2068,11 +2068,11 @@ curl -X POST $DASHSCOPE_BASE_URL/chat/completions \
 
 ```
 data: {"choices":[{"delta":{"content":null,"role":"assistant","reasoning_content":""},"index":0,"logprobs":null,"finish_reason":null}],"object":"chat.completion.chunk","usage":null,"created":1757937336,"system_fingerprint":null,"model":"qwen3-omni-flash","id":"chatcmpl-ce3d6fe5-e717-4b7e-8b40-3aef12288d4c"}
-data: {"choices":[{"finish_reason":null,"logprobs":null,"delta":{"content":null,"reasoning_content":"嗯"},"index":0}],"object":"chat.completion.chunk","usage":null,"reated":1757937336,"system_fingerprint":null,"model":"qwen3-omni-flash","id":"chatcmpl-ce3d6fe5-e717-4b7e-8b40-3aef12288d4c"}
-data: {"choices":[{"delta":{"content":null,"reasoning_content":"，"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"reated":1757937336,"system_fingerprint":null,"model":"qwen3-omni-flash","id":"chatcmpl-ce3d6fe5-e717-4b7e-8b40-3aef12288d4c"}
+data: {"choices":[{"finish_reason":null,"logprobs":null,"delta":{"content":null,"reasoning_content":"嗯"},"index":0}],"object":"chat.completion.chunk","usage":null,"created":1757937336,"system_fingerprint":null,"model":"qwen3-omni-flash","id":"chatcmpl-ce3d6fe5-e717-4b7e-8b40-3aef12288d4c"}
+data: {"choices":[{"delta":{"content":null,"reasoning_content":"，"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1757937336,"system_fingerprint":null,"model":"qwen3-omni-flash","id":"chatcmpl-ce3d6fe5-e717-4b7e-8b40-3aef12288d4c"}
 ......
-data: {"choices":[{"delta":{"content":"告诉我"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1757937336,"tem_fingerprint":null,"model":"qwen3-omni-flash","id":"chatcmpl-ce3d6fe5-e717-4b7e-8b40-3aef12288d4c"}
-data: {"choices":[{"delta":{"content":"！"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1757937336,"systm_fingerprint":null,"model":"qwen3-omni-flash","id":"chatcmpl-ce3d6fe5-e717-4b7e-8b40-3aef12288d4c"}
+data: {"choices":[{"delta":{"content":"告诉我"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1757937336,"system_fingerprint":null,"model":"qwen3-omni-flash","id":"chatcmpl-ce3d6fe5-e717-4b7e-8b40-3aef12288d4c"}
+data: {"choices":[{"delta":{"content":"！"},"finish_reason":null,"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1757937336,"system_fingerprint":null,"model":"qwen3-omni-flash","id":"chatcmpl-ce3d6fe5-e717-4b7e-8b40-3aef12288d4c"}
 data: {"choices":[{"finish_reason":"stop","delta":{"content":"","reasoning_content":null},"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1757937336,"system_fingerprint":null,"model":"qwen3-omni-flash","id":"chatcmpl-ce3d6fe5-e717-4b7e-8b40-3aef12288d4c"}
 data: {"choices":[],"object":"chat.completion.chunk","usage":{"prompt_tokens":11,"completion_tokens":363,"total_tokens":374,"completion_tokens_details":{"reasoning_tokens":195,"text_tokens":168},"prompt_tokens_details":{"text_tokens":11}},"created":1757937336,"system_fingerprint":null,"model":"qwen3-omni-flash","id":"chatcmpl-ce3d6fe5-e717-4b7e-8b40-3aef12288d4c"}
 ```
@@ -2497,11 +2497,106 @@ curl -X POST $DASHSCOPE_BASE_URL/chat/completions \
 }'
 ```
 
+### 结构化输出
+
+在语音客服场景中，先通过 ASR 转写、再调用文本模型识别意图，需要串行等待两次模型处理，且仅凭文字难以识别语气中的情绪。Omni 可直接分析音频，一次返回转写、意图和情绪，供下游业务处理。
+
+以下示例使用 `qwen3.8-omni-flash` 的 JSON Mode，并关闭思考。提示词定义三个字段：`asr` 为转写文本，`intent` 为意图，`emotion` 为情绪。
+
+**说明**Qwen3.8-Omni-Flash 不支持 JSON Schema 模式。JSON Mode 只保证 JSON 格式，字段约束需由提示词定义并在客户端校验。支持范围见[结构化输出](raw/model-user-guide/model-experience/text-generation-model/qwen-structured-output.md)。
+
+准备一段单人录音，保存为 WAV 文件。沿用[快速开始](#qwen38-offline)中的 `DASHSCOPE_API_KEY` 和 `DASHSCOPE_BASE_URL`，安装依赖并设置文件路径：
+
+```
+pip install -U openai jsonschema
+export AUDIO_PATH="/path/to/customer.wav"
+```
+```
+import base64
+import json
+import os
+from pathlib import Path
+
+from jsonschema import validate
+from openai import OpenAI
+
+schema = {
+    "type": "object",
+    "properties": {
+        "asr": {"type": "string"},
+        "intent": {"type": "string", "enum": ["delivery_status", "refund", "other", "unknown"]},
+        "emotion": {"type": "string", "enum": ["neutral", "anxious", "angry", "sad", "happy", "fearful", "unknown"]},
+    },
+    "required": ["asr", "intent", "emotion"],
+    "additionalProperties": False,
+}
+prompt = """分析录音，按以下 JSON Schema 返回 JSON，不要附加说明。
+asr：保留原语言转写，无法辨认时返回空字符串。
+intent：delivery_status 表示配送查询，refund 表示退款，other 表示其他明确意图，无法判断时用 unknown。
+emotion：根据语调、语速等声音线索判断，不仅依据文字；证据不足时用 unknown。
+JSON Schema：
+""" + json.dumps(schema, ensure_ascii=False)
+
+client = OpenAI(
+    api_key=os.environ["DASHSCOPE_API_KEY"],
+    base_url=os.environ["DASHSCOPE_BASE_URL"],
+)
+audio_base64 = base64.b64encode(Path(os.environ["AUDIO_PATH"]).read_bytes()).decode()
+completion = client.chat.completions.create(
+    model="qwen3.8-omni-flash",
+    messages=[{
+        "role": "user",
+        "content": [
+            {"type": "input_audio", "input_audio": {
+                "data": f"data:audio/wav;base64,{audio_base64}", "format": "wav",
+            }},
+            {"type": "text", "text": prompt},
+        ],
+    }],
+    modalities=["text"],
+    response_format={"type": "json_object"},
+    reasoning_effort="none",
+    stream=False,
+)
+result = json.loads(completion.choices[0].message.content)
+validate(result, schema)
+print(json.dumps(result, ensure_ascii=False, indent=2))
+
+# 根据意图和情绪选择后续处理方式。
+routes = {"delivery_status": "物流查询", "refund": "退款处理", "other": "通用客服", "unknown": "确认诉求"}
+print(routes[result["intent"]])
+print("先安抚情绪，再处理诉求" if result["emotion"] in {"anxious", "angry", "fearful"} else "常规回复")
+```
+
+例如，录音内容为配送查询、语气焦急时，输出结构如下（情绪以实际录音为准）：
+
+```
+{
+  "asr": "请帮我查一下这笔订单什么时候能送到。",
+  "intent": "delivery_status",
+  "emotion": "anxious"
+}
+```
+
+下游业务可根据 `intent` 和 `emotion` 的取值，选择业务流程和回复方式。
+
+实时场景：接入本地 VAD 断句
+
+实时场景可接入本地 VAD 模型进行断句（如 [FSMN-VAD](https://github.com/modelscope/FunASR/blob/main/docs/tutorial/README.md)），在检测到语音结束后，将音频片段封装为 WAV 并发送给 Omni，获取转写、意图和情绪。
+
+```
+音频流 → 本地 VAD 断句 → Omni → {asr, intent, emotion} → 下游处理
+```
+
 ### 使用 Responses API
 
-以下示例使用 Qwen3.8-Omni-Flash，通过 Responses API 处理音视频输入并生成文本回复。
+使用 Chat Completions 进行多轮音视频对话时，需要随每次请求传入历史消息。如果历史消息包含 Base64 音视频数据，也会重复传输这些数据，增加请求体大小和上传带宽开销。
 
-沿用[快速开始](#qwen38-offline)示例的 API Key、`DASHSCOPE_BASE_URL` 和 `AUDIO_URL`。Responses 请求使用 `input`，其中音频 URL 放在 `audio_url`，与 Chat Completions 的 `input_audio.data` 结构不同。音频和视频输入仅允许出现在 `user` 消息中。
+Qwen3.8-Omni-Flash 支持 Responses API，可通过 `previous_response_id` 关联历史上下文，后续请求只需发送新问题和上一轮响应 ID；也可配置 `web_search` 工具，让模型结合音视频内容与联网检索结果完成分析任务。
+
+#### 基础使用
+
+安装最新版 [OpenAI Python SDK](raw/model-api-reference/preparations/install-sdk.md)，并沿用[快速开始](#qwen38-offline)示例的 API Key、`DASHSCOPE_BASE_URL` 和 `AUDIO_URL`。Responses 请求使用 `input`，其中音频 URL 放在 `audio_url`，与 Chat Completions 的 `input_audio.data` 结构不同。音频和视频输入仅允许出现在 `user` 消息中。
 
 ```
 import os
@@ -2511,15 +2606,17 @@ client = OpenAI(
     api_key=os.environ["DASHSCOPE_API_KEY"],
     base_url=os.environ["DASHSCOPE_BASE_URL"],
 )
+audio_input = {"type": "input_audio", "audio_url": os.environ["AUDIO_URL"], "format": "wav"}
 response = client.responses.create(
     model="qwen3.8-omni-flash",
     input=[{
         "role": "user",
         "content": [
             {"type": "input_text", "text": "总结这段录音的主要内容。"},
-            {"type": "input_audio", "audio_url": os.environ["AUDIO_URL"], "format": "wav"},
+            audio_input,
         ],
     }],
+    reasoning={"effort": "none"},
     stream=False,
 )
 print(response.output_text)
@@ -2536,7 +2633,66 @@ print(response.output_text)
 
 使用双通道或四通道空间音频时，在上述音频内容对象中加入 `"use_multichannel": True`（Python），与 `audio_url`、`format` 同级。该参数默认为 `False`，此时按单通道解析。
 
-音频 Base64 输入、字段说明和工具范围请参见[创建响应](raw/model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)。
+使用本地 WAV 音频时，将基础示例中 `audio_input` 的定义替换为以下代码，其他调用代码不变。`data` 必须包含完整的 Data URI，不能与 `audio_url` 同时传入。视频输入沿用上方的 URL 示例。
+
+```
+import base64
+from pathlib import Path
+
+encoded_audio = base64.b64encode(Path("meeting.wav").read_bytes()).decode("ascii")
+audio_input = {
+    "type": "input_audio",
+    "data": f"data:audio/wav;base64,{encoded_audio}",
+    "format": "wav",
+}
+```
+
+字段说明和工具范围请参见[创建响应](raw/model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)。
+
+#### 进阶使用
+
+#### 多轮对话
+
+运行上方基础示例后，在同一 Python 程序中追加以下代码。通过 `response.id` 关联上下文，后续请求只需传入新问题和上一轮响应 ID。
+
+```
+follow_up = client.responses.create(
+    model="qwen3.8-omni-flash",
+    previous_response_id=response.id,
+    input="根据刚才的录音列出待办事项，按负责人归类；未提及负责人或截止时间的，标为未明确。",
+    reasoning={"effort": "none"},
+    stream=False,
+)
+print(follow_up.output_text)
+```
+
+使用默认的 `store=True` 保存响应，响应 ID 有效期为 7 天，详情见[多轮对话](https://help.aliyun.com/zh/model-studio/compatibility-with-openai-responses-api#example-multiturn-title)。
+
+#### 联网搜索
+
+配置 `web_search` 工具后，模型可结合音视频内容检索外部信息，回答需要联网查询的问题。以下以核对产品介绍录音中的发布日期和首发价格为例，沿用基础示例中的 `client` 和 `audio_input`。
+
+```
+prompt = "识别录音中提到的产品，联网查询其官方发布日期和首发价格，并与录音内容对照，附上来源链接。"
+research = client.responses.create(
+    model="qwen3.8-omni-flash",
+    input=[{
+        "role": "user",
+        "content": [
+            {"type": "input_text", "text": prompt},
+            audio_input,
+        ],
+    }],
+    tools=[{"type": "web_search"}],
+    reasoning={"effort": "none"},
+    stream=False,
+)
+print(research.output_text)
+```
+
+联网搜索的参数与用法见[Responses API 的联网搜索](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y)。
+
+`qwen3.8-omni-flash` 的内置工具仅支持 `web_search`，也支持自定义 `function` 工具；自定义函数仍需由应用执行并回传结果。联网搜索会产生工具调用及模型调用费用，详情见[联网搜索计费](raw/model-user-guide/model-experience/text-generation-model/tool-calls/web-search.md)。
 
 Qwen3.8-Omni-Flash 支持 Responses Session 缓存，配置方式见[Session 缓存](https://help.aliyun.com/zh/model-studio/compatibility-with-openai-responses-api#example-session-cache-title)。
 

@@ -4622,7 +4622,7 @@ qwen-audio-3.0-tts-flash
 
 180
 
-### Qwen-TTS
+### Qwen3-TTS
 
 #### 华北2（北京）
 
@@ -4652,7 +4652,7 @@ qwen3-tts-flash
 
 180
 
-### Qwen-TTS-Realtime
+### Qwen3-TTS-Realtime
 
 #### 华北2（北京）
 
@@ -4682,7 +4682,7 @@ qwen3-tts-flash-realtime
 
 180
 
-### Qwen-TTS声音复刻
+### Qwen3-TTS声音复刻
 
 #### 华北2（北京）
 
@@ -4938,7 +4938,7 @@ qwen3.5-livetranslate-flash-realtime-2026-05-19
 
 国际
 
-### Qwen-Audio-3.1-ASR-Flash-Message
+### Qwen-Audio-ASR-Message
 
 #### 华北2（北京）
 
@@ -4964,27 +4964,19 @@ qwen-audio-3.1-asr-flash-message
 
 1200
 
-### Qwen-Audio-3.x-ASR-Flash-Streaming
+### Qwen-Audio-ASR-Streaming
 
 #### 华北2（北京）
 
 **模型名称**
 
-**每秒钟调用次数（RPS）**
-
-每分钟调用次数（RPM）
+**每分钟调用次数（RPM）**
 
 qwen-audio-3.1-asr-flash-streaming
 
-—
-
-600
+1200
 
 qwen-audio-3.0-asr-flash-streaming
-
-20
-
-—
 
 #### 新加坡
 
@@ -4992,27 +4984,19 @@ qwen-audio-3.0-asr-flash-streaming
 
 **服务部署范围**
 
-**每秒钟调用次数（RPS）**
-
-每分钟调用次数（RPM）
+**每分钟调用次数（RPM）**
 
 qwen-audio-3.1-asr-flash-streaming
 
 国际
 
-—
-
-600
+1200
 
 qwen-audio-3.0-asr-flash-streaming
 
 国际
 
-20
-
-—
-
-### Qwen-Audio-3.x-ASR-Flash-Filetrans
+### Qwen-Audio-ASR-Filetrans
 
 #### 华北2（北京）
 
@@ -5048,7 +5032,7 @@ qwen-audio-3.0-asr-flash-filetrans
 
 600
 
-### Qwen-Audio-3.x-ASR-Flash
+### Qwen-Audio-ASR
 
 #### 华北2（北京）
 
@@ -5084,7 +5068,7 @@ qwen-audio-3.0-asr-flash
 
 600
 
-### Qwen-ASR
+### Qwen3-ASR
 
 #### 华北2（北京）
 
@@ -5152,7 +5136,7 @@ qwen3-asr-flash
 
 100
 
-### Qwen-ASR-Realtime
+### Qwen3-ASR-Realtime
 
 #### 华北2（北京）
 

@@ -8,8 +8,6 @@
 
 **用户指南：**关于模型介绍和选型建议请参见[实时语音识别-Fun-ASR/Paraformer](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition)。
 
-**在线体验**：仅paraformer-realtime-v2、paraformer-realtime-8k-v2支持[在线体验](https://bailian.console.aliyun.com/model/experience/voice)。
-
 ## 前提条件
 
 已开通服务并[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。请[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)，而非硬编码在代码中，防范因代码泄露导致的安全风险。

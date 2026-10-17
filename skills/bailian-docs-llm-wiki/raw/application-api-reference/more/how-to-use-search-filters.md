@@ -85,7 +85,7 @@ SearchFilters可以包含一个或多个子分组（如下方示例包含了两�
 }
 ```
 
-**多字段 OR 查询：**在同一子分组中，将 `_operator` 与检索字段并列，并设为 `OR`（也支持小写 `or`），即可匹配任一字段条件。省略 `_operator` 或设为 `AND` 时，需同时满足该子分组的所有字段条件。
+**多字段 OR 查询（OpenAPI Retrieve）：**在同一子分组中，将 `_operator` 与检索字段并列，并设为 `OR`（也支持小写 `or`），即可匹配任一字段条件。省略 `_operator` 或设为 `AND` 时，需同时满足该子分组的所有字段条件。
 
 例如，以下条件筛选文档名称（`doc_name`）为“长上下文Qwen-Long”或切片标题（`title`）为“返回结果”的切片。请将字段和值替换为知识库中实际可检索的字段和值。
 
@@ -113,7 +113,36 @@ retrieve_request.search_filters = [
 ]
 ```
 
+OpenAPI SDK 的 `SearchFilters` 使用字符串值 Map，不支持嵌套 `_conditions`。传入嵌套结构时，请求可能仍返回成功响应，但不会按嵌套条件过滤，结果可能未经过预期筛选。平铺 Map 中的字段名不能重复，因此这种调用方式不能表达同一字段的多个独立条件。
+
 如果还需叠加其他条件，将其放在数组中的另一个子分组中。例如，在上述 OR 子分组后追加 `{"doc_name": "长上下文Qwen-Long"}`，整体条件为“（文档名称为长上下文Qwen-Long OR 切片标题为返回结果）AND 文档名称为长上下文Qwen-Long”。`_operator` 只改变其所在子分组内字段的关系，不改变数组中子分组之间的 AND 关系。
+
+**同一字段的多条件 OR 查询（RAG API 请求体）：**通过 [RAG API](raw/application-api-reference/rag-api/rag-api-overview.md) 的 JSON 请求体调用检索接口时，可以将多个条件放入 `_conditions` 数组，并通过 `_operator` 指定这些条件之间的关系。该接口地址为：
+
+```
+POST https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/indices/rag/index/retrieve
+```
+
+例如，以下条件对应“部门等于 `Corporate`，或部门名称包含 `Research`，或文档类型包含 `Policy`”。`_conditions` 数组允许多个对象使用相同字段名，因此可以组合等值和模糊查询。`department` 和 `document_type` 是示例知识库的自定义字段名，请替换为实际 Schema 中的字段名：
+
+```
+{
+  "index_id": "your-index-id",
+  "query": "查询制度文档",
+  "search_filters": [
+    {
+      "_operator": "OR",
+      "_conditions": [
+        { "department": "Corporate" },
+        { "department": { "like": "%Research%" } },
+        { "document_type": { "like": "%Policy%" } }
+      ]
+    }
+  ]
+}
+```
+
+`_operator` 只控制其所在 `_conditions` 数组中的条件关系。`search_filters` 中不同子分组之间仍采用 AND 关系。
 
 子分组内的检索字段支持**单值查询**、**多值查询**、**范围查询**、**模糊查询**和**标签（Tag）查询**。
 

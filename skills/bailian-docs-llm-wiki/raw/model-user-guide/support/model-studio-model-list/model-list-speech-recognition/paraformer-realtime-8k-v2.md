@@ -26,7 +26,7 @@
 
 模型体验
 
-支持
+不支持
 
 Function Calling
 

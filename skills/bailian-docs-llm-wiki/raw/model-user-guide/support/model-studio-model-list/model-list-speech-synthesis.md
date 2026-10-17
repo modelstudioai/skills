@@ -12,8 +12,6 @@
 -   [cosyvoice-v3-plus](raw/model-user-guide/support/model-studio-model-list/model-list-speech-synthesis/cosyvoice-v3-plus.md)
 -   [cosyvoice-v2](raw/model-user-guide/support/model-studio-model-list/model-list-speech-synthesis/cosyvoice-v2.md)
 -   [Sambert语音合成](raw/model-user-guide/support/model-studio-model-list/model-list-speech-synthesis/sambert.md)
--   [fun-music-v1](raw/model-user-guide/support/model-studio-model-list/model-list-speech-synthesis/fun-music-v1.md)
--   [fun-music-preview](raw/model-user-guide/support/model-studio-model-list/model-list-speech-synthesis/music-generation-preview.md)
 -   [voice-enrollment](raw/model-user-guide/support/model-studio-model-list/model-list-speech-synthesis/voice-enrollment.md)
 -   [MiniMax/speech-2.8-hd](raw/model-user-guide/support/model-studio-model-list/model-list-speech-synthesis/speech-2-8-hd.md)
 -   [MiniMax/speech-2.8-turbo](raw/model-user-guide/support/model-studio-model-list/model-list-speech-synthesis/speech-2-8-turbo.md)

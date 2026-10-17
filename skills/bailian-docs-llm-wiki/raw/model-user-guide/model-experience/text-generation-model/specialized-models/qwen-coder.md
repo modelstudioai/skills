@@ -8,7 +8,7 @@ Qwen-Coder 是专用于代码任务的语言模型。通过 API，您可以调�
 
 API 使用前提：已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，需要[安装 OpenAI 或 DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)
 
-以下示例将演示如何调用`qwen-coder-plus-latest`模型编写一个寻找质数的 Python 函数。
+以下示例将演示如何调用`qwen3-coder-flash`模型编写一个寻找质数的 Python 函数。
 
 #### OpenAI兼容-Chat Completions API
 
@@ -27,7 +27,7 @@ client = OpenAI(
     base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 completion = client.chat.completions.create(
-    model="qwen-coder-plus-latest",
+    model="qwen3-coder-flash",
     messages=[
         {'role': 'system', 'content': 'You are a helpful assistant.'},
         {'role': 'user', 'content': '请编写一个Python函数 find_prime_numbers，该函数接受一个整数 n 作为参数，并返回一个包含所有小于 n 的质数（素数）的列表。不要输出非代码的内容和Markdown的代码块。'}],
@@ -71,7 +71,7 @@ const client = new OpenAI(
 
 async function main() {
     const completion = await client.chat.completions.create({
-        model: "qwen-coder-plus-latest",
+        model: "qwen3-coder-flash",
         messages: [
             { role: "system", content: "You are a helpful assistant." },
             { role: "user", content: "请编写一个Python函数 find_prime_numbers，该函数接受一个整数 n 作为参数，并返回一个包含所有小于 n 的质数（素数）的列表。不要输出非代码的内容和Markdown的代码块。" }
@@ -112,7 +112,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen-coder-plus-latest",
+    "model": "qwen3-coder-flash",
     "messages": [
         {
             "role": "system",
@@ -128,7 +128,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 **返回结果**
 ```
 {
-    "model": "qwen-coder-plus-latest",
+    "model": "qwen3-coder-flash",
     "id": "chatcmpl-3123d5cb-01b8-9a90-98cc-5bffbb369xxx",
     "choices": [
         {
@@ -176,7 +176,7 @@ response = dashscope.Generation.call(
     # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    model="qwen-coder-plus-latest",
+    model="qwen3-coder-flash",
     messages=messages,
     result_format="message"
 )
@@ -236,7 +236,7 @@ public class Main {
                 .content("请编写一个Python函数 find_prime_numbers，该函数接受一个整数 n 作为参数，并返回一个包含所有小于 n 的质数（素数）的列表。不要输出非代码的内容和Markdown的代码块。").build();
         GenerationParam param = GenerationParam.builder()
                 .apiKey(apiKey)
-                .model("qwen-coder-plus-latest")
+                .model("qwen3-coder-flash")
                 .messages(Arrays.asList(sysMsg, userMsg))
                 .resultFormat(GenerationParam.ResultFormat.MESSAGE)
                 .build();
@@ -283,7 +283,7 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen-coder-plus-latest",
+    "model": "qwen3-coder-flash",
     "input":{
         "messages":[
             {
@@ -394,7 +394,7 @@ def write_file(path: str, content: str) -> str:
 messages = [{"role": "user", "content": "写一个python代码，快速排序，命名为quick_sort.py"}]
 
 completion = client.chat.completions.create(
-    model="qwen-coder-plus-latest",
+    model="qwen3-coder-flash",
     messages=messages,
     tools=tools
 )
@@ -430,7 +430,7 @@ else:
             messages.append(tool_message)
         # 再次调用模型，获取总结后的自然语言回复
         response = client.chat.completions.create(
-            model="qwen-coder-plus-latest",
+            model="qwen3-coder-flash",
             messages=messages,
             tools=tools
         )
@@ -505,7 +505,7 @@ const messages = [{"role": "user", "content": "写一个python代码，快速排
 
 async function main() {
     const completion = await client.chat.completions.create({
-        model: "qwen-coder-plus-latest",
+        model: "qwen3-coder-flash",
         messages: messages,
         tools: tools
     });
@@ -542,7 +542,7 @@ async function main() {
             }
             // 再次调用模型，获取总结后的自然语言回复
             const response = await client.chat.completions.create({
-                model: "qwen-coder-plus-latest",
+                model: "qwen3-coder-flash",
                 messages: messages,
                 tools: tools
             });
@@ -577,7 +577,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen-coder-plus-latest",
+    "model": "qwen3-coder-flash",
     "messages": [
         {
             "role": "user",
@@ -645,7 +645,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
     },
     "created": 1761620025,
     "system_fingerprint": null,
-    "model": "qwen-coder-plus-latest",
+    "model": "qwen3-coder-flash",
     "id": "chatcmpl-20e96159-beea-451f-b3a4-d13b218112b5"
 }
 ```
@@ -703,7 +703,7 @@ messages = [{"role": "user", "content": "写一个python代码，快速排序，
 response = dashscope.Generation.call(
     # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
     api_key=os.getenv('DASHSCOPE_API_KEY'),
-    model='qwen-coder-plus-latest',
+    model='qwen3-coder-flash',
     messages=messages,
     tools=tools,
     result_format='message'
@@ -740,7 +740,7 @@ if response.status_code == 200:
             # 再次调用模型，获取总结后的自然语言回复
             response = dashscope.Generation.call(
                 api_key=os.getenv('DASHSCOPE_API_KEY'),
-                model='qwen-coder-plus-latest',
+                model='qwen3-coder-flash',
                 messages=messages,
                 tools=tools,
                 result_format='message'
@@ -836,7 +836,7 @@ public class Main {
 
             // 首次调用模型
             GenerationParam param = GenerationParam.builder()
-                    .model("qwen-coder-plus-latest")
+                    .model("qwen3-coder-flash")
                     .apiKey(System.getenv("DASHSCOPE_API_KEY"))
                     .messages(messages)
                     .tools(Arrays.asList(ToolFunction.builder().function(writeFileFunction).build()))
@@ -907,7 +907,7 @@ curl --location "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header "Content-Type: application/json" \
 --data '{
-    "model": "qwen-coder-plus-latest",
+    "model": "qwen3-coder-flash",
     "input": {
         "messages": [{
             "role": "user",
@@ -981,14 +981,7 @@ curl --location "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 ### 代码补全
 
-Qwen-Coder 支持两种代码补全方式，请根据您的需求选择：
-
--   **前缀续写（Partial Mode）**：适用于所有 Qwen-Coder 模型和地域，支持前缀补全，实现简单，推荐使用。
--   [Completions接口](raw/model-api-reference/toolkits-and-frameworks/completions.md)：仅支持华北2（北京）的`qwen-coder-turbo-latest` 模型。支持前缀补全和前后缀补全。
-
-#### 前缀续写 (Partial Mode)
-
-此功能用于在您写了一半的代码（前缀）基础上，让模型自动完成剩余部分。
+Qwen-Coder 通过前缀续写（Partial Mode）实现代码补全，适用于所有 Qwen-Coder 模型和地域。此功能用于在您写了一半的代码（前缀）基础上，让模型自动完成剩余部分。
 
 通过在 `messages` 列表中加入一个 `role` 为 `assistant` 的消息，并设置 `partial: true` 来实现。`assistant` 消息的 `content` 即为您提供的代码前缀。详情请参见[前缀续写](raw/model-user-guide/model-experience/text-generation-model/partial-mode.md)。
 
@@ -1009,7 +1002,7 @@ client = OpenAI(
     base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 completion = client.chat.completions.create(
-    model="qwen-coder-plus-latest",
+    model="qwen3-coder-flash",
     messages=[{
         "role": "user",
         "content": "请帮我写一个python代码生成100以内的素数。不要输出非代码的内容和Markdown的代码块。"
@@ -1058,7 +1051,7 @@ const client = new OpenAI(
 
 async function main() {
     const completion = await client.chat.completions.create({
-        model: "qwen-coder-plus-latest",
+        model: "qwen3-coder-flash",
         messages: [
             { role: "user", content: "请帮我写一个python代码生成100以内的素数。不要输出非代码的内容和Markdown的代码块。" },
             { role: "assistant", content: "def generate_prime_number", partial: true}
@@ -1098,7 +1091,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen-coder-plus-latest",
+    "model": "qwen3-coder-flash",
     "messages": [{
         "role": "user",
         "content": "请帮我写一个python代码生成100以内的素数。不要输出非代码的内容和Markdown的代码块。"
@@ -1135,7 +1128,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
     },
     "created": 1761634556,
     "system_fingerprint": null,
-    "model": "qwen-coder-plus-latest",
+    "model": "qwen3-coder-flash",
     "id": "chatcmpl-c108050a-bb6d-4423-9d36-f64aa6a32976"
 }
 ```
@@ -1162,7 +1155,7 @@ messages = [{
 response = dashscope.Generation.call(
     # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
     api_key=os.getenv('DASHSCOPE_API_KEY'),
-    model='qwen-coder-plus-latest',
+    model='qwen3-coder-flash',
     messages=messages,
     result_format='message',
 )
@@ -1202,7 +1195,7 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen-coder-plus-latest",
+    "model": "qwen3-coder-flash",
     "input":{
         "messages":[{
             "role": "user",
@@ -1243,178 +1236,6 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
     },
     "request_id": "9917f629-e819-4519-af44-b0e677e94b2c"
 }
-```
-
-#### Completions 接口
-
-**重要**Completions 接口仅适用华北2（北京）地域的模型，需使用华北2（北京）地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)。
-
-**支持的模型：**
-
-qwen-coder-turbo-latest
-
-[Completions接口](raw/model-api-reference/toolkits-and-frameworks/completions.md)通过在 `prompt` 中使用特殊的 `fim` (Fill-in-the-Middle) 标签来引导模型进行补全。
-
-#### 基于前缀补全
-
-**提示词模板：**
-```
-<|fim_prefix|>{prefix_content}<|fim_suffix|>
-```
-
--   `<|fim_prefix|>`和`<|fim_suffix|>`为特殊 Token，用于指引模型进行文本的补全，无需修改。
--   `{prefix_content}`需要替换为传入的前缀信息，例如函数的名称、输入参数、使用说明等信息。
-
-python
-
-```
-import os
-from openai import OpenAI
-
-client = OpenAI(
-    # 请将{WorkspaceId}替换为业务空间ID
-    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
-    api_key=os.getenv("DASHSCOPE_API_KEY")
-)
-
-completion = client.completions.create(
-  model="qwen-coder-turbo-latest",
-  prompt="<|fim_prefix|>def quick_sort(arr):<|fim_suffix|>",
-)
-
-print(completion.choices[0].text)
-```
-
-javascript
-
-```
-import OpenAI from "openai";
-
-const client = new OpenAI(
-    {
-        // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
-        apiKey: process.env.DASHSCOPE_API_KEY,
-        // 请将{WorkspaceId}替换为业务空间ID
-        baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
-    }
-);
-
-async function main() {
-    const completion = await client.completions.create({
-        model: "qwen-coder-turbo-latest",
-        prompt: "<|fim_prefix|>def quick_sort(arr):<|fim_suffix|>",
-    });
-    console.log(completion.choices[0].text)
-}
-
-main();
-```
-
-bash
-
-```
-curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/completions \
--H "Authorization: Bearer $DASHSCOPE_API_KEY" \
--H "Content-Type: application/json" \
--d '{
-    "model": "qwen-coder-turbo-latest",
-    "prompt": "<|fim_prefix|>def quick_sort(arr):<|fim_suffix|>"
-}'
-```
-
-#### 基于前缀和后缀补全
-
-**提示词模板**：
-
-```
-<|fim_prefix|>{prefix_content}<|fim_suffix|>{suffix_content}<|fim_middle|>
-```
-
--   `<|fim_prefix|>`、`<|fim_suffix|>`和`<|fim_middle|>`为特殊 Token，用于指引模型进行文本的补全，无需修改。
--   `{prefix_content}`需要替换为传入的前缀信息，例如函数的名称、输入参数、使用说明等信息。
--   `{suffix_content}`需要替换为传入的后缀信息，例如函数的返回参数等信息。
-
-python
-
-```
-import os
-from openai import OpenAI
-
-client = OpenAI(
-    # 请将{WorkspaceId}替换为业务空间ID
-    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
-    api_key=os.getenv("DASHSCOPE_API_KEY")
-)
-
-prefix_content = """def reverse_words_with_special_chars(s):
-'''
-反转字符串中的每个单词（保留非字母字符的位置），并保持单词顺序。
-    示例:
-    reverse_words_with_special_chars("Hello, world!") -> "olleH, dlrow!"
-    参数:
-        s (str): 输入字符串（可能包含标点符号）
-    返回:
-        str: 处理后的字符串，单词反转但非字母字符位置不变
-'''
-"""
-
-suffix_content = "return result"
-
-completion = client.completions.create(
-  model="qwen-coder-turbo-latest",
-  prompt=f"<|fim_prefix|>{prefix_content}<|fim_suffix|>{suffix_content}<|fim_middle|>",
-)
-
-print(completion.choices[0].text)
-```
-
-javascript
-
-```
-import OpenAI from 'openai';
-
-const client = new OpenAI({
-  // 请将{WorkspaceId}替换为业务空间ID
-  baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
-  apiKey: process.env.DASHSCOPE_API_KEY
-});
-
-const prefixContent = `def reverse_words_with_special_chars(s):
-'''
-反转字符串中的每个单词（保留非字母字符的位置），并保持单词顺序。
-    示例:
-    reverse_words_with_special_chars("Hello, world!") -> "olleH, dlrow!"
-    参数:
-        s (str): 输入字符串（可能包含标点符号）
-    返回:
-        str: 处理后的字符串，单词反转但非字母字符位置不变
-'''
-`;
-
-const suffixContent = "return result";
-
-async function main() {
-  const completion = await client.completions.create({
-    model: "qwen-coder-turbo-latest",
-    prompt: `<|fim_prefix|>${prefixContent}<|fim_suffix|>${suffixContent}<|fim_middle|>`
-  });
-
-  console.log(completion.choices[0].text);
-}
-
-main();
-```
-
-bash
-
-```
-curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/completions \
--H "Authorization: Bearer $DASHSCOPE_API_KEY" \
--H "Content-Type: application/json" \
--d '{
-    "model": "qwen-coder-turbo-latest",
-    "prompt": "<|fim_prefix|>def reverse_words_with_special_chars(s):\n\"\"\"\n反转字符串中的每个单词（保留非字母字符的位置），并保持单词顺序。\n    示例:\n    reverse_words_with_special_chars(\"Hello, world!\") -> \"olleH, dlrow!\"\n    参数:\n        s (str): 输入字符串（可能包含标点符号）\n    返回:\n        str: 处理后的字符串，单词反转但非字母字符位置不变\n\"\"\"\n<|fim_suffix|>return result<|fim_middle|>"
-}'
 ```
 
 ## 应用于生产环境

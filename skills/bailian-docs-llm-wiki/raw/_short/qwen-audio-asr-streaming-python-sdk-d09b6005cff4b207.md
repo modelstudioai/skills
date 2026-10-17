@@ -176,7 +176,6 @@ if __name__ == '__main__':
         # 'pcm'、'wav'、'opus'、'speex'、'aac'、'amr', you can check the supported formats in the document
         sample_rate=sample_rate,
         # support 8000, 16000
-        semantic_punctuation_enabled=False,
         callback=callback)
 
     # Start recognition
@@ -421,28 +420,13 @@ recognition = Recognition(
     callback=None)
 ```
 
-`semantic_punctuation_enabled`
-
-`bool`
-
-否
-
-是否启用语义断句。
-
-默认值：False。
-
--   True：开启语义断句，关闭 VAD 断句。
--   False（默认）：开启 VAD 断句，关闭语义断句。
-
-语义断句准确性更高，适合会议转写场景；VAD（Voice Activity Detection，语音活动检测）断句延迟较低，适合交互场景。
-
 `max_sentence_silence`
 
 `int`
 
 否
 
-VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈值时，系统会判定该句子已结束。当`semantic_punctuation_enabled`为true时，不作为`sentence_end`返回依据，但设置过小可能会影响识别效果。
+VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈值时，系统会判定该句子已结束。
 
 默认值：800。
 
@@ -453,8 +437,6 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
 `bool`
 
 否
-
-**重要**仅在`semantic_punctuation_enabled`参数为false时生效。
 
 是否启用多阈值模式。启用后可防止 VAD 断句切割过长。
 
@@ -707,36 +689,6 @@ def get_response(self)
 ```
 
 获取最后一次报文，可以用于获取task-failed报错。
-
-#### 更新对话上下文
-
-调用 `update_context` 在识别任务运行过程中更新对话上下文，用于辅助后续音频的识别。该方法要求 DashScope Python SDK 1.27.5 及以上版本。
-
-```
-def update_context(self, payload_input: dict)
-```
-
--   **调用时机：**调用 `start` 启动流式识别后、调用 `stop` 前。
--   **参数：**`payload_input` 为字典，传入 `continue-task` 事件的 `payload.input` 对象，包含 `context` 字段，不要额外包装 `payload` 或 `input` 层级。
--   **支持范围与参数约束：**请参见 [continue-task](https://help.aliyun.com/zh/model-studio/qwen-audio-asr-streaming-client-events#h-continue-task)。
-
-以下示例复用已启动的 `recognition` 实例。
-
-```
-payload_input = {
-    "context": [
-        {
-            "role": "user",
-            "content": [{"type": "input_text", "text": "你好啊"}]
-        },
-        {
-            "role": "assistant",
-            "content": [{"type": "text", "text": "你好啊，我是通义千问，有什么可以帮助你的？"}]
-        }
-    ]
-}
-recognition.update_context(payload_input=payload_input)
-```
 
 ### 回调接口（`RecognitionCallback`）
 

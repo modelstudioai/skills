@@ -336,6 +336,26 @@ tools 数组元素
 
 工具输入参数的 JSON Schema 定义。
 
+除上述自定义工具外，`tools` 还支持百炼服务端联网搜索工具，在 `tools` 中声明即可启用，无需客户端执行检索。
+
+联网搜索工具
+
+**type** `string` **（必选）**
+
+工具类型，取值为 `web_search_20250305` 等带日期后缀的形式。日期后缀无需固定，与客户端发送的值保持一致即可。
+
+**name** `string` **（必选）**
+
+固定为 `web_search`。
+
+**max\_uses** `integer` （可选）
+
+单次请求最多检索次数。
+
+> 使用 Anthropic SDK 或 HTTP 直接调用时，**必须**在 `system` 中传入客户端标识 `x-anthropic-billing-header: cc_entrypoint=cli;`，否则联网搜索不生效。面向 Claude Code 等 Anthropic 官方客户端时无需额外配置。详见 [联网搜索](raw/model-user-guide/model-experience/text-generation-model/tool-calls/web-search.md)。
+
+> 支持以下模型：Qwen3.8 Max、Flash 与开源系列（不含 Omni）；Qwen3.7 Max、Plus、Flash 系列；Qwen3.6-Plus、Qwen3.6-Flash 系列；Qwen3.5-Plus、Qwen3.5-Flash 系列；deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731；glm-5.2；kimi-k3。联网搜索的计费与 agent 策略相同，参见 [计费说明](https://help.aliyun.com/zh/model-studio/web-search#92ce83df3a599)。
+
 **tool\_choice** `object` （可选）
 
 工具选择策略。支持以下值：
@@ -1012,6 +1032,110 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/
 }'
 ```
 
+#### 联网搜索
+
+Python
+
+```
+import anthropic
+import os
+
+client = anthropic.Anthropic(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic",
+)
+
+message = client.messages.create(
+    model="qwen3.8-max",
+    max_tokens=2048,
+    # 传入客户端标识，否则联网搜索不生效
+    system=[{"type": "text", "text": "x-anthropic-billing-header: cc_entrypoint=cli;"}],
+    messages=[{"role": "user", "content": "杭州明天天气如何"}],
+    tools=[
+        {
+            "type": "web_search_20250305",
+            "name": "web_search",
+            "max_uses": 8
+        }
+    ],
+    thinking={"type": "disabled"},
+)
+
+for block in message.content:
+    print(f"[{block.type}]")
+    if block.type == "server_tool_use":
+        print(f"  name: {block.name}, queries: {block.input.get('queries')}")
+    elif block.type == "web_search_tool_result":
+        for result in block.content:
+            print(f"  {result.title} - {result.url}")
+    elif block.type == "text":
+        print(block.text)
+
+print(f"检索次数: {message.usage.server_tool_use.web_search_requests}")
+```
+
+TypeScript
+
+```
+import Anthropic from "@anthropic-ai/sdk";
+
+async function main() {
+  const anthropic = new Anthropic({
+    apiKey: process.env.DASHSCOPE_API_KEY,
+    baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic",
+  });
+
+  const message = await anthropic.messages.create({
+    model: "qwen3.8-max",
+    max_tokens: 2048,
+    // 传入客户端标识，否则联网搜索不生效
+    system: [{ type: "text", text: "x-anthropic-billing-header: cc_entrypoint=cli;" }],
+    messages: [{ role: "user", content: "杭州明天天气如何" }],
+    tools: [
+      {
+        type: "web_search_20250305",
+        name: "web_search",
+        max_uses: 8,
+      },
+    ],
+    thinking: { type: "disabled" },
+  });
+
+  for (const block of message.content) {
+    console.log(`[${block.type}]`);
+    if (block.type === "server_tool_use") {
+      console.log(`  name: ${block.name}, queries: ${block.input?.queries}`);
+    } else if (block.type === "web_search_tool_result") {
+      for (const result of block.content) {
+        console.log(`  ${result.title} - ${result.url}`);
+      }
+    } else if (block.type === "text") {
+      console.log(block.text);
+    }
+  }
+
+  console.log(`检索次数: ${message.usage.server_tool_use?.web_search_requests}`);
+}
+
+main().catch(console.error);
+```
+
+curl
+
+```
+curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/v1/messages" \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: $DASHSCOPE_API_KEY" \
+  -d '{
+    "model": "qwen3.8-max",
+    "max_tokens": 2048,
+    "system": [{"type": "text", "text": "x-anthropic-billing-header: cc_entrypoint=cli;"}],
+    "messages": [{"role": "user", "content": "杭州明天天气如何"}],
+    "tools": [{"type": "web_search_20250305", "name": "web_search", "max_uses": 8}],
+    "thinking": {"type": "disabled"}
+}'
+```
+
 #### 显式缓存
 
 Python
@@ -1333,6 +1457,72 @@ content 数组元素类型
 
 工具调用的入参。
 
+**服务端工具调用信息**（联网搜索场景，模型返回的服务端检索请求）
+
+属性
+
+**type** `string`
+
+固定为 `server_tool_use`。
+
+**id** `string`
+
+服务端工具调用唯一标识。
+
+**name** `string`
+
+工具名称，如 `web_search`。
+
+**input** `object`
+
+入参，含 `queries` 数组（模型生成的检索查询）。
+
+**caller** `object` （可选）
+
+调用方信息，`type` 为 `direct` 表示由模型直接发起调用。
+
+**联网搜索结果信息**（联网搜索场景，服务端返回的检索结果）
+
+属性
+
+**type** `string`
+
+固定为 `web_search_tool_result`。
+
+**tool\_use\_id** `string`
+
+对应 `server_tool_use` 中的 `id`。
+
+**content** `array`
+
+检索结果数组，元素为 `web_search_result` 对象。
+
+web\_search\_result 属性
+
+**type** `string`
+
+固定为 `web_search_result`。
+
+**title** `string`
+
+网页标题。
+
+**url** `string`
+
+网页地址。
+
+**encrypted\_content** `string`
+
+加密的网页内容。
+
+**page\_age** `string 或 null`
+
+网页时效，可为 `null`。
+
+**caller** `object` （可选）
+
+调用方信息，`type` 为 `direct` 表示由模型直接发起调用。
+
 **stop\_reason** `string`
 
 停止原因。可选值：`end_turn`（正常结束）、`max_tokens`（达到 Token 上限）、`tool_use`（工具调用）。
@@ -1345,7 +1535,7 @@ content 数组元素类型
 
 Token 用量统计。
 
-**说明**流式调用中，`message_start` 事件的 `usage` 仅包含 `input_tokens` 和 `output_tokens`；完整 4 个字段在 `message_delta` 事件中返回。
+**说明**流式调用中，`message_start` 事件的 `usage` 仅包含 `input_tokens` 和 `output_tokens`；完整字段（含 `cache_creation_input_tokens`、`cache_read_input_tokens` 和 `server_tool_use`）在 `message_delta` 事件中返回。
 
 属性
 
@@ -1365,7 +1555,18 @@ Token 用量统计。
 
 缓存读取消耗的输入 Token 数量。
 
-**响应示例**
+**server\_tool\_use** `object` （可选）
+
+服务端工具用量统计。仅在请求中使用了服务端工具（如联网搜索）时返回。
+
+属性
+
+**web\_search\_requests** `integer`
+
+联网搜索的检索次数。
+
+#### 基础响应
+
 ```
 {
   "id": "msg_e2898f19-fc0e-4cb3-bd9b-5b7dc4ea3bc9",
@@ -1390,6 +1591,69 @@ Token 用量统计。
     "output_tokens": 223,
     "cache_creation_input_tokens": 0,
     "cache_read_input_tokens": 0
+  }
+}
+```
+
+#### 联网搜索响应
+
+```
+{
+  "id": "msg_2db0950e-956e-9528-b75f-0b047ef86c03",
+  "type": "message",
+  "role": "assistant",
+  "model": "qwen3.8-max",
+  "content": [
+    {
+      "type": "server_tool_use",
+      "id": "srvtoolu_1bffa8e70882403cb14499af",
+      "name": "web_search",
+      "input": {
+        "queries": ["杭州明天天气"]
+      },
+      "caller": {"type": "direct"}
+    },
+    {
+      "type": "web_search_tool_result",
+      "tool_use_id": "srvtoolu_1bffa8e70882403cb14499af",
+      "content": [
+        {
+          "type": "web_search_result",
+          "title": "17日（明天）",
+          "url": "https://www.weather.com.cn/weather/101210101.shtml",
+          "encrypted_content": "eyJ0aXRsZSI6ICIxN+aXpe+8iOaYjuWkqe+8iSIs...",
+          "page_age": null
+        },
+        {
+          "type": "web_search_result",
+          "title": "杭州-天气预报",
+          "url": "https://www.nmc.cn/publish/forecast/AZJ/hangzhou.html",
+          "encrypted_content": "eyJ0aXRsZSI6ICLmna3lt54t5aSp5rCU6aKE5oqlIiw...",
+          "page_age": null
+        }
+      ],
+      "caller": {"type": "direct"}
+    },
+    {
+      "type": "text",
+      "text": "杭州明天（10月17日）的天气预计为多云转晴，气温在 22℃ 到 30℃ 之间..."
+    }
+  ],
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "usage": {
+    "input_tokens": 1920,
+    "output_tokens": 122,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "server_tool_use": {
+      "web_search_requests": 1
+    }
+  },
+  "x_tools": {
+    "web_search": {
+      "count": 1
+    }
   }
 }
 ```
@@ -1426,7 +1690,7 @@ Token 用量统计。
 
 **content\_block** `object`
 
-内容块的初始对象。`type` 取值为 `text`、`thinking` 或 `tool_use`。`tool_use` 类型在此事件中 `input` 为空对象，完整入参由后续 `content_block_delta` 增量拼接。
+内容块的初始对象。`type` 取值为 `text`、`thinking`、`tool_use`、`server_tool_use` 或 `web_search_tool_result`。`tool_use` 类型在此事件中 `input` 为空对象，完整入参由后续 `content_block_delta` 增量拼接。`web_search_tool_result` 在此事件中携带完整 `content` 数组，非增量拼接。
 
 **content\_block\_delta**
 

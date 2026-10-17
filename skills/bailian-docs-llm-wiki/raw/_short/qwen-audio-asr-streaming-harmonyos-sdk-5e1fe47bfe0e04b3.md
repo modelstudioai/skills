@@ -318,21 +318,13 @@ SDK拉取音频时的采集配置，仅在 `audio_update_manually` 为 `"false"`
 
 采样率（Hz）。支持任意采样率。启用端侧AEC或VAD时不支持8000 Hz。
 
-`nls_config.semantic_punctuation_enabled`
-
-`boolean`
-
-否
-
-是否启用语义断句，默认值为 `false`。`true` 表示启用语义断句并关闭VAD断句，适合对断句准确性要求较高的会议转写场景；`false` 表示启用VAD断句并关闭语义断句，适合对延迟要求较高的交互场景。
-
 `nls_config.max_sentence_silence`
 
 `number`
 
 否
 
-VAD断句静音阈值（毫秒）。一段语音后的静音时长超过该阈值时，系统判定句子结束。默认值为 `800`，取值范围为 `[200, 6000]`。启用语义断句时，该参数不作为 `sentence_end` 的返回依据，但设置过小仍可能影响识别效果。
+VAD断句静音阈值（毫秒）。一段语音后的静音时长超过该阈值时，系统判定句子结束。默认值为 `800`，取值范围为 `[200, 6000]`。
 
 `nls_config.multi_threshold_mode_enabled`
 
@@ -340,7 +332,7 @@ VAD断句静音阈值（毫秒）。一段语音后的静音时长超过该阈�
 
 否
 
-是否启用多阈值模式，默认值为 `false`。启用后可避免VAD断句切割过长。仅在 `semantic_punctuation_enabled` 为 `false` 时生效。
+是否启用多阈值模式，默认值为 `false`。启用后可避免VAD断句切割过长。
 
 `nls_config.heartbeat`
 
@@ -542,7 +534,7 @@ cancelDialog(): number
 dialogAction(action_params: string): number
 ```
 
-发送运行时动作，用于更新识别上下文、通知AEC播放状态等运行时行为。
+发送运行时动作，通知端侧 AEC 播放状态。
 
 **参数**
 
@@ -566,30 +558,7 @@ JSON字符串。
 
 `string`
 
-动作指令。支持 `"context`（更新上下文）、`play_start`（通知AEC开始播放参考音）和 `play_over"`（通知AEC参考音播放结束）。
-
-`action_params.context`
-
-`object[]`
-
-当 `command` 为 `"context"` 时传入的上下文增强内容。
-
-更新上下文示例：
-
-```
-{
-  "type": "action",
-  "command": "context",
-  "context": [
-    {
-      "role": "user",
-      "content": [
-        { "text": "示例上下文", "type": "input_text" }
-      ]
-    }
-  ]
-}
-```
+`play_start`：使用端侧 AEC 时，通知 SDK 播放器开始播放音频。 `play_over`：使用端侧 AEC 时，通知 SDK 播放器已结束播放音频。
 
 #### updateAudio
 

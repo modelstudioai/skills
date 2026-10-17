@@ -651,8 +651,6 @@ ASR模型按秒计费，TTS模型按字符计费，请前往[百炼控制台](ht
     -   **录音文件识别（Fun-ASR）**：fun-asr
     -   **录音文件识别（Qwen-ASR）**：qwen3-asr-flash-filetrans、qwen3-asr-flash
 
-请前往[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)查看全部模型。
-
 #### 向量及排序模型
 
 **购买方式**
@@ -687,8 +685,6 @@ ASR模型按秒计费，TTS模型按字符计费，请前往[百炼控制台](ht
 -   **多模态向量**：qwen2.5-vl-embedding、tongyi-embedding-vision-plus、tongyi-embedding-vision-flash、multimodal-embedding-v1
 -   **文本排序**：qwen3-rerank、gte-rerank-v2
 
-请前往[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)查看全部模型及其调用价格。
-
 #### 万相模型
 
 **购买方式**
@@ -714,12 +710,10 @@ ASR模型按秒计费，TTS模型按字符计费，请前往[百炼控制台](ht
 
 **适用模型**
 
--   **图像生成**：wan2.6-image、wan2.6-t2i、wan2.5-t2i-preview、wan2.5-i2i-preview、wan2.2-t2i-plus、wan2.2-t2i-flash、wanx2.0-t2i-turbo、wanx2.1-t2i-plus、wanx2.1-imageedit、wanx2.1-t2i-turbo、wanx-sketch-to-image-lite、wanx-v1
--   **视频生成**：wan2.6-t2v、wan2.6-i2v、wan2.6-r2v、wan2.5-t2v-preview、wan2.5-i2v-preview、wan2.2-t2v-plus、wan2.2-i2v-flash、wan2.2-t2v-flash、wan2.2-i2v-plus、wan2.1-vace-plus、wan2.1-kf2v-plus、wan2.1-t2v-turbo、wanx2.1-t2v-plus、wanx2.1-i2v-turbo、wanx2.1-i2v-plus
+-   **图像生成**：wan2.6-image、wan2.6-t2i、wan2.5-t2i-preview、wan2.5-i2i-preview、wan2.2-t2i-plus、wan2.2-t2i-flash、wanx2.0-t2i-turbo、wanx2.1-t2i-plus、wan2.1-t2i-plus、wanx2.1-imageedit、wanx2.1-t2i-turbo、wan2.1-t2i-turbo、wanx-sketch-to-image-lite、wanx-lite、wanx-v1、wanx-image-variation-v1、wanx-style-transfer-v1
+-   **视频生成**：wan2.6-t2v、wan2.6-i2v、wan2.6-r2v、wan2.5-t2v-preview、wan2.5-i2v-preview、wan2.2-t2v-plus、wan2.2-i2v-flash、wan2.2-t2v-flash、wan2.2-i2v-plus、wan2.2-kf2v-flash、wanx2.1-t2v-plus、wan2.1-t2v-plus、wanx2.1-t2v-turbo、wan2.1-t2v-turbo、wanx2.1-i2v-plus、wan2.1-i2v-plus、wanx2.1-i2v-turbo、wan2.1-i2v-turbo、wanx2.1-kf2v-plus、wan2.1-kf2v-plus、wanx2.1-vace-plus、wan2.1-vace-plus
 
-以上模型属于“百炼大模型推理”商品。wan2.7-r2v 等模型属于“百炼大模型-万相模型”商品，不在本节省计划抵扣范围内。如需抵扣百炼全量模型，建议购买[AI 通用型节省计划](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package#ghoteqo7uv9wa)。
-
-请前往[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)查看全部模型及其调用价格。
+以上模型属于“百炼大模型推理”商品，本节省计划仅支持以上列出的模型，其他版本不支持。
 
 ### 使用说明
 

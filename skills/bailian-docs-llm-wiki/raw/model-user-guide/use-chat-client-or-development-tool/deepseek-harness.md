@@ -4,7 +4,7 @@ DeepSeek Harness 是 DeepSeek 开源的 AI Agent 框架，支持 Web UI 和命�
 
 ## 安装 DeepSeek Harness
 
-1.  安装 [Node.js](https://nodejs.org/en/download/)（v18.0 或更高版本）。
+1.  安装 [Node.js](https://nodejs.org/en/download/)（v22.19.0 或 v24.0.0 及以上版本）。
 2.  在终端中执行以下命令启动 DeepSeek Harness Web UI：
 
 ```

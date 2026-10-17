@@ -3478,6 +3478,8 @@ for item in response.output:
             -   新加坡地域： 73.392381元。
         -   网页抓取工具限时免费。
             
+    -   **历史策略**：`standard`、`pro` 按 `turbo` 策略计费，`pro_max`、`pro_ultra` 按 `max` 策略计费。这些取值已不推荐使用，请改用 `turbo`、`max`、`agent` 或 `agent_max`。
+        
 
 ## 限流说明
 
@@ -3495,17 +3497,29 @@ A：可能原因如下：
 
 ### Q：如何判断是否执行了搜索？
 
-A：根据调用方式判断：
+A：分两层判断：
 
--   **DashScope**
-    -   如果执行了搜索，响应会包含 `search_info` 字段，并且 `usage` 中会包含 `plugins` 字段。
-    -   如果未执行搜索，响应不包含 `search_info` 字段，`usage` 中不包含 `plugins` 字段。
--   **OpenAI 兼容**
+-   **是否触发了搜索**
+    -   DashScope：响应包含 `search_info` 字段，`usage` 中包含 `plugins` 字段。
+    -   OpenAI 兼容：将 `include_tool_usage` 设为 `true` 后，`usage` 中返回 `x_tools` 字段。
+    -   未触发搜索时，上述字段均不返回。
+-   **是否检索到内容**
     
-    暂无法通过响应明确判断是否执行搜索。可对比`usage`中返回的输入 Token 数量。如果该数值远超问题本身，则说明执行了搜索。
+    查看 `search_info.search_results` 是否非空。触发限流等情况下 `search_info` 仍会返回，但 `search_results` 为空数组，表示未检索到可用结果。也可对比 `usage` 中返回的输入 Token 数量，如果该数值远超问题本身，说明已注入网页内容。
     
-    例如：提问“杭州天气”，未联网时输入 Token 为 10，联网搜索后输入 Token 变为 1953。
+    例如：提问“杭州天气”，未联网时输入 Token 为 10，联网搜索后输入 Token 变为 1953。
     
+
+> 上述字段中的 `count` 在意图判定阶段即被置位，不代表检索已实际完成，不作为计费或对账依据。详情请参见[账单次数与 count 字段不一致](https://help.aliyun.com/zh/model-studio/web-search#faq-search-billing-count-mismatch-title)。
+
+### Q：账单的联网搜索次数与 API 返回的 count 字段不一致，如何对账？
+
+A：两者统计口径不同，数值存在差异属于预期情况：
+
+-   **账单计量**：以搜索服务实际完成检索并正常返回结果为计费依据。
+-   **`count` 字段**（DashScope 协议为 `usage.plugins.search.count`，OpenAI 兼容协议为 `usage.x_tools.search.count`，两者取值一致）：表示本轮对话经意图判定需要联网搜索，在意图判定阶段即被置位，不代表检索已实际完成。即使[触发限流](https://help.aliyun.com/zh/model-studio/web-search#c2ea761ab4kif)或检索未返回结果，该字段仍会返回数值，不会置 0 或省略。
+
+因此 `count` 不作为计费或对账的依据，**对账请以账单出账数据为准**。
 
 ### Q：为何输入英文无法执行联网搜索？
 
