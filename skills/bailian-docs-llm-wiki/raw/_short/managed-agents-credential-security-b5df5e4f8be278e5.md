@@ -4,7 +4,7 @@ Vault 密钥库的占位符注入模型、allowed\_hosts 出口白名单、出�
 
 ## 概述
 
-本篇讲 Managed Agents 的**密钥安全链路**：Vault 密钥库的占位符注入、`allowed_hosts` 出口白名单、出网网关的 Authorization 头替换，以及会话环境变量（`environment_variables`）与密钥库的选型分层。与[生产化篇](raw/application-user-guide/agent-development/managed-agents/managed-agents-best-practices/managed-agents-production.md)的关系：那边只用最短路径把凭证接起来，本篇讲清楚密钥在链路的哪些位置、以什么形态存在。
+本篇讲 Managed Agents 的**密钥安全链路**：Vault 密钥库的占位符注入、`allowed_hosts` 出口白名单、出网网关的 Authorization 头替换，以及会话环境变量（`environment_variables`）与密钥库的选型分层。与[生产化篇](raw/application-user-guide/agent-development/managed-agents/managed-agents-best-practices/managed-agents-production.md)的关系：生产化篇只覆盖凭证接入的最短路径，本篇说明密钥在链路中的位置与存在形态。
 
 Vault 的基础用法（创建、存凭证、挂载）见[密钥库](raw/application-user-guide/agent-development/managed-agents/managed-agents-session/managed-agents-credential.md)。
 
@@ -62,7 +62,7 @@ Vault 凭证的安全模型是「**密钥永不进沙箱，用时在网关替换
 
 非白名单 host 的请求
 
-**不会被拦截**（网络照常放行），只是 Authorization 头里保持占位符——`allowed_hosts` 管的是「密钥发给谁」，不是「网络能不能出去」
+**不会被拦截**（网络照常放行），只是 Authorization 头里保持占位符——`allowed_hosts` 决定密钥替换生效的 host 范围，不限制网络出站
 
 网关拦截方式
 
@@ -110,9 +110,9 @@ Deployment 支持
 
 **不支持**（传了被静默忽略）
 
-支持，`vault_ids` 在 deployment 级接线
+支持，`vault_ids` 在 deployment 级传入
 
-选型原则：**不需要极致安全的走环境变量，需要极致安全的进密钥库**。定时/无人值守链路（Deployment）目前只能用密钥库。
+选型原则：**安全要求不高的配置用环境变量，高敏密钥用密钥库**。定时/无人值守链路（Deployment）目前只能用密钥库。
 
 ## 前置
 
@@ -199,7 +199,7 @@ curl -X POST "$AGENTSTUDIO_URL/sessions" \
   }'
 ```
 
-Deployment 里的接线方式完全相同（`vault_ids` 放 deployment 上，触发生成的每个 session 自动带上），见[生产化篇](raw/application-user-guide/agent-development/managed-agents/managed-agents-best-practices/managed-agents-production.md)。
+Deployment 中的接入方式相同（`vault_ids` 配置在 deployment 上，触发生成的每个 session 自动携带），见[生产化篇](raw/application-user-guide/agent-development/managed-agents/managed-agents-best-practices/managed-agents-production.md)。
 
 ## 步骤 4 · 验证一：沙箱里只有占位符
 
@@ -223,7 +223,7 @@ curl -X POST "$AGENTSTUDIO_URL/sessions/$SESSION_ID/events" \
 {"stdout":"BMA_SECRET_PLACEHOLDER_MY_API_KEY\n","stderr":"","exit_code":0,"interrupted":false}
 ```
 
-**这就是预期行为**——沙箱里只有占位符。所以「验证密钥注入成功」不能靠 `printenv` 读真实值，正确姿势是 步骤 5 的端到端请求验证。
+**这就是预期行为**——沙箱里只有占位符。所以「验证密钥注入成功」不能靠 `printenv` 读真实值，正确的验证方式是步骤 5 的端到端请求验证。
 
 ## 步骤 5 · 验证二：出网请求被网关替换（正路径）
 
@@ -270,7 +270,7 @@ stdout（httpbin 把收到的请求头原样回显）：
 }
 ```
 
-对方只拿到无意义的占位符，**真实密钥未泄露**。请求本身没有被拦截（HTTP 200 照常返回）——白名单的语义是「密钥只发给谁」，不是「网络只通谁」。
+对方只拿到无意义的占位符，**真实密钥未泄露**。请求本身没有被拦截（HTTP 200 照常返回）——白名单的语义是「密钥替换生效的 host 范围」，而非「网络连通范围」。
 
 ### 出网 TLS 校验：默认可直接通过
 
@@ -369,5 +369,5 @@ Deployment 不支持该参数（静默忽略）
 ## 下一步
 
 -   [密钥库](raw/application-user-guide/agent-development/managed-agents/managed-agents-session/managed-agents-credential.md)：Vault 与凭证的控制台操作。
--   [进阶：生产化定时晨报机器人](raw/application-user-guide/agent-development/managed-agents/managed-agents-best-practices/managed-agents-production.md)：`vault_ids` 在 Deployment 的接线。
+-   [进阶：生产化定时晨报机器人](raw/application-user-guide/agent-development/managed-agents/managed-agents-best-practices/managed-agents-production.md)：`vault_ids` 在 Deployment 中的配置。
 -   [Credential API](raw/application-api-reference/managed-agents-api/credential-api/credential-create.md)：凭证接口的完整参数。

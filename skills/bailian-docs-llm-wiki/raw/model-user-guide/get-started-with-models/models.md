@@ -98,14 +98,6 @@
 
 [查看更多](raw/model-user-guide/model-experience/speech-synthesis/tts-model.md)
 
-### 音乐生成
-
-根据提示词或歌词生成音乐
-
-![](https://img.alicdn.com/imgextra/i3/O1CN01Kmx9dR1wcHOaMMXAk_!!6000000006328-55-tps-28-28.svg)**[fun-music-v1](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/fun-music-v1)**
-
-[查看更多](raw/model-user-guide/model-experience/fun-music.md)
-
 ### 语音识别
 
 专业 ASR 与大模型两种方案，按精度与灵活性选择

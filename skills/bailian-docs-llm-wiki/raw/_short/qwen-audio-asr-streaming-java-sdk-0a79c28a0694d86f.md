@@ -625,52 +625,13 @@ RecognitionParam param = RecognitionParam.builder()
         .build();
 ```
 
-`semantic_punctuation_enabled`
-
-`boolean`
-
-否
-
-是否启用语义断句。
-
-默认值：false。
-
--   true：开启语义断句，关闭 VAD 断句。
--   false（默认）：开启 VAD 断句，关闭语义断句。
-
-语义断句准确性更高，适合会议转写场景；VAD（Voice Activity Detection，语音活动检测）断句延迟较低，适合交互场景。
-
-`semantic_punctuation_enabled`需要通过`RecognitionParam`实例的`parameter`方法或者`parameters`方法进行设置：
-
-通过parameter设置
-
-```
-RecognitionParam param = RecognitionParam.builder()
- .model("qwen-audio-3.1-asr-flash-streaming")
- .format("pcm")
- .sampleRate(16000)
- .parameter("semantic_punctuation_enabled", true)
- .build();
-```
-
-通过parameters设置
-
-```
-RecognitionParam param = RecognitionParam.builder()
- .model("qwen-audio-3.1-asr-flash-streaming")
- .format("pcm")
- .sampleRate(16000)
- .parameters(Collections.singletonMap("semantic_punctuation_enabled", true))
- .build();
-```
-
 `max_sentence_silence`
 
 `Integer`
 
 否
 
-VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈值时，系统会判定该句子已结束。当`semantic_punctuation_enabled`为true时，不作为`sentence_end`返回依据，但设置过小可能会影响识别效果。
+VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈值时，系统会判定该句子已结束。
 
 默认值：800。
 
@@ -705,8 +666,6 @@ RecognitionParam param = RecognitionParam.builder()
 `boolean`
 
 否
-
-**重要**仅在`semantic_punctuation_enabled`参数为false时生效。
 
 是否启用多阈值模式。启用后可防止 VAD 断句切割过长。
 
@@ -1175,40 +1134,6 @@ public long getLastPackageDelay()
 获得尾包延迟，发送`stop`指令到最后一包识别结果下发耗时，在任务完成后使用。
 
 **说明**该方法自2.18.0版本及以后的SDK中才开始提供。
-
-#### 更新对话上下文
-
-调用 `updateContext` 在识别任务运行过程中更新对话上下文，用于辅助后续音频的识别。该方法要求 DashScope Java SDK 2.23.0 及以上版本。
-
-```
-public void updateContext(Map<String, Object> payloadInput)
-```
-
--   **调用时机：**调用 `call(param, callback)` 启动流式识别后、调用 `stop` 前。
--   **参数：**`payloadInput` 为`Map<String, Object>`，传入 `continue-task` 事件的 `payload.input` 对象，包含 `context` 字段，不要额外包装 `payload` 或 `input` 层级。
--   **支持范围与参数约束：**请参见 [continue-task](https://help.aliyun.com/zh/model-studio/qwen-audio-asr-streaming-client-events#h-continue-task)。
-
-以下示例复用已启动的 `recognizer` 实例，Java 集合类型通过 `import java.util.*;` 导入。
-
-```
-Map<String, Object> userContent = new HashMap<>();
-userContent.put("type", "input_text");
-userContent.put("text", "这是第 1 轮语音识别测试");
-Map<String, Object> userMessage = new HashMap<>();
-userMessage.put("role", "user");
-userMessage.put("content", Collections.singletonList(userContent));
-
-Map<String, Object> assistantContent = new HashMap<>();
-assistantContent.put("type", "text");
-assistantContent.put("text", "好的，请开始第 1 轮测试");
-Map<String, Object> assistantMessage = new HashMap<>();
-assistantMessage.put("role", "assistant");
-assistantMessage.put("content", Collections.singletonList(assistantContent));
-
-Map<String, Object> payloadInput = new HashMap<>();
-payloadInput.put("context", Arrays.asList(userMessage, assistantMessage));
-recognizer.updateContext(payloadInput);
-```
 
 ### 回调接口（`ResultCallback`）
 

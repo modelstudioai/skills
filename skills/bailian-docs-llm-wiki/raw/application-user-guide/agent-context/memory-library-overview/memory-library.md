@@ -4,14 +4,47 @@
 
 ## 概述
 
-记忆库是一种为大模型提供跨会话长期记忆的服务。它自动从对话中提取关键信息并持久化存储为**事实记忆**和**用户画像**，在后续对话中基于语义检索相关记忆并注入上下文，使智能体持续理解用户偏好和历史信息。
+记忆库是一种为大模型提供跨会话长期记忆的服务。它从对话与可复用轨迹中提取信息，持久化存储为**事实记忆**、**用户画像**和**技能记忆**，在后续对话中基于语义检索相关记忆并注入上下文，使智能体持续理解用户偏好和历史信息。
 
 -   **事实记忆**：从对话中自动提取的关键事件和信息，如"用户每天上午 9 点需要喝水提醒"。适用于动态事件信息。
 -   **用户画像**：基于自定义模板提取的结构化属性，如年龄、职业、爱好。适用于固定用户属性。
+-   **技能记忆**：从轨迹中归纳可复用的任务方法，包含技能名称、描述和内容，适用于相似任务。
 
 记忆库提供开放的 API 接口，可接入任意应用，也支持多应用共享同一记忆库。产品概念与工作原理详见[核心概念](raw/application-user-guide/agent-context/memory-library-overview/overview/concepts.md)。
 
 **警告**记忆库将于 **2026 年 8 月 20 日 10:00**（北京时间）正式开始商业化计费，Add 和 Search 调用区分 **Pro** 和 **Lite** 策略版本。详见[计费说明](raw/application-user-guide/agent-context/memory-library-overview/integration-overview/billing.md)。
+
+## 控制台功能入口
+
+在[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/memory/playground)的 **Memory** 中按任务选择入口：
+
+入口
+
+用途
+
+Playground
+
+选择记忆库与规则，通过对话体验记忆写入和检索
+
+记忆库
+
+管理记忆库、配置记忆规则、查看记忆详情和调试检索
+
+记忆观测
+
+对照会话消息与关联的记忆变更，参见[记忆观测](raw/application-user-guide/agent-context/memory-library-overview/observability/observation.md)
+
+记忆审计
+
+筛选变更事件并查看前后快照，参见[记忆审计](raw/application-user-guide/agent-context/memory-library-overview/observability/audit.md)
+
+服务渠道
+
+查看 REST API、MCP Server、CLI 和 Agent Skill 接入方式
+
+用量
+
+查看记忆库数量、存储和调用用量
 
 ## 快速开始
 
@@ -33,12 +66,13 @@
 
 ## 配置记忆规则
 
-记忆规则定义了如何从对话中提取、存储和检索记忆，包括**事实记忆规则**和**用户画像规则**。每个记忆库最多可配置 50 条事实记忆规则和 50 条用户画像规则。点击记忆库卡片的**查看详情**，进入记忆库详情页的**记忆规则**标签页进行配置。
+记忆规则定义了如何提取、存储和检索记忆，包括**事实记忆规则**、**用户画像规则**和**技能记忆规则**。每个记忆库最多可配置 50 条事实记忆规则和 50 条用户画像规则。点击记忆库卡片的**查看详情**，进入记忆库详情页的**记忆规则**标签页进行配置。
 
 -   **事实记忆规则**：从对话内容中提取关键事件和信息片段，可配置规则指令、自动更新、记忆过期时间和记忆抽取策略版本（Pro/Lite）。
 -   **用户画像规则**：持久化存储用户的属性信息，需逐个定义画像字段的名称、描述、初始值和记忆抽取策略版本。
+-   **技能记忆规则**：从可复用轨迹中归纳技能记忆。
 
-完整参数说明参见[配置记忆规则](raw/application-user-guide/agent-context/memory-library-overview/create-memory/configure-rules.md)。
+事实记忆与用户画像的参数说明参见[配置记忆规则](raw/application-user-guide/agent-context/memory-library-overview/create-memory/configure-rules.md)。
 
 ## 查看记忆与检索调试
 
@@ -46,7 +80,7 @@
 
 在**记忆检索**标签页可调试检索效果。通过 API 调试时，调用 `/memory_nodes/search`，用 `messages` 提供对话记录，使用 `top_k` 控制最大召回数量；`min_score` 是 Pro 版本生效的最小分数阈值，默认值为 0.3。
 
-通过 API 管理记忆（列表、更新、删除）参见[管理记忆](raw/application-user-guide/agent-context/memory-library-overview/create-memory/manage-memory.md)。
+通过控制台编辑、停用、恢复、删除事实记忆，或通过 API 管理记忆（列表、更新、删除），参见[管理记忆](raw/application-user-guide/agent-context/memory-library-overview/create-memory/manage-memory.md)。
 
 ## 使用用户画像
 

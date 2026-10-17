@@ -1689,14 +1689,6 @@ qwen2.5-32b-instruct
 
 ¥6
 
-Qwen2.5-VL-32B
-
-qwen2.5-vl-32b-instruct
-
-¥8
-
-¥24
-
 Qwen2.5-开源版-14B
 
 qwen2.5-14b-instruct
@@ -1822,14 +1814,6 @@ qwen2.5-32b-instruct
 ¥5.137
 
 ¥20.55
-
-Qwen2.5-VL-32B
-
-qwen2.5-vl-32b-instruct
-
-¥10.275
-
-¥30.825
 
 Qwen2.5-开源版-14B
 

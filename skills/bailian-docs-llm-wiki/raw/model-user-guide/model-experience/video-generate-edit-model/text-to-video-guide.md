@@ -1045,10 +1045,9 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 #### Q: 控制台生成的视频有水印，如何去除？
 
 -   百炼控制台的**视频生成界面**不提供水印开关，无法在控制台关闭水印。
--   通过 API 调用模型时，将 `watermark` 设置为 `false`，即可生成不带水印的视频。
--   不传 `watermark` 参数时，API 默认会为视频添加水印。本文示例代码均传入 `watermark=true`，如需去除水印，请改为 `false`。
+-   通过 API 调用模型时，`watermark` 默认为 `false`，不传或设为 `false` 都不添加水印。本文示例代码传入了 `watermark=true`，如需去除水印请改为 `false`。
 
 #### Q: 购买了 AI 通用节省计划，为什么生成的视频仍有水印？
 
 -   AI 通用节省计划仅用于费用抵扣，不改变模型输出内容，与视频是否带水印无关。
--   视频水印只由 API 的 `watermark` 参数控制：设置为 `false` 可去除水印；不传该参数时，默认添加水印。
+-   视频水印只由 API 的 `watermark` 参数控制，仅当显式传入 `true` 时才添加水印。

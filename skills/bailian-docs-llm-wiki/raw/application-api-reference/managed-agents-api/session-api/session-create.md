@@ -240,7 +240,7 @@ array / null
 
 ## 会话级 MCP 请求头
 
-`mcp_configs` 为指定 MCP Server 的全部请求注入自定义 Header，常用于透传租户 ID、鉴权 token。每项含 `mcp_server_name`（MCP Server 名称）与 `headers`（键值对，key 与 value 均为字符串）。传入不存在的 MCP Server 名称不报错，该配置不生效。
+`mcp_configs` 为指定 MCP Server 的全部请求注入自定义 Header，常用于透传租户 ID、鉴权 token。每项含 `mcp_server_name`（MCP Server 名称）与 `headers`（键值对，key 与 value 均为字符串）。传入不存在的 MCP Server 名称不报错，该配置不生效。按会话动态传值的接入方法与示例见[自定义 MCP 与 Skills](https://help.aliyun.com/zh/model-studio/managed-agents-custom-mcp-skills#h-cm-dynamic-header)。
 
 创建与更新的完整请求示例：
 

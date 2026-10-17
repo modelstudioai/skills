@@ -1,36 +1,36 @@
 # token plan guide
 
-[Token](../concepts/token.md) Plan 是百炼平台为模型调用提供的资源配额管理机制，用于控制 API 调用的 token 消耗总量与速率。开发者可通过 [Token](../concepts/token.md) Plan 实现细粒度的用量隔离、成本管控和稳定性保障，适用于个人开发、团队协作及生产级接入等场景。其配置与生效逻辑依赖于模型服务层的统一鉴权与限流引擎。
+[Token](../concepts/token.md) Plan 是百炼平台为模型调用设计的资源配额与计费管理机制，用于控制 API 调用的 token 消耗量、设定使用上限并支持按需升级。开发者可通过 [Token](../concepts/token.md) Plan 精细管理不同环境（如开发、测试、生产）的调用量，避免意外超限或费用激增。该机制适用于所有通过百炼 API 接入的模型服务。
 
 ## 支持的模型/功能
 
-[Token](../concepts/token.md) Plan 当前支持全部百炼托管模型（含 Qwen 系列、Qwen-VL、Qwen-Audio）及部分第三方模型代理接口（需开通白名单）。功能覆盖同步推理（`/v1/chat/completions`）、异步任务（`/v1/async/task`）、批量处理（`/v1/batch/invoke`）及流式响应（`stream=true`）。不支持直接作用于模型微调训练任务或向量检索 API。详细兼容性请参考 [Token Plan 概述](../../raw/model-user-guide/token-plan-guide/token-plan-overview.md)。
+[Token](../concepts/token.md) Plan 适用于百炼平台全部公开模型（含 Qwen 系列、Qwen-VL、Qwen-Audio）及自定义微调模型，但**不适用于离线批量推理任务**（需单独申请配额）。实时流式响应、Function Calling、多轮对话上下文累计计费均纳入 Token Plan 统一计量。Coding Plan 作为子类，专用于代码生成类模型（如 Qwen2.5-Coder），其 token 计费规则与主 Plan 独立，详见 [Coding Plan](../../raw/model-user-guide/token-plan-guide/coding-plan-guide.md)。
 
 ## 关键参数
 
-- `token_quota`: 总额度（单位：千 token），按自然日重置；最小值 10，最大值 100000  
-- `token_rate_limit`: 每秒令牌速率限制（TPS），范围 1–5000  
-- `burst_capacity`: 突发容量（单位：千 token），用于平滑瞬时高峰，建议设为 `token_quota × 0.1`  
-- `model_whitelist`: 可显式指定允许调用的模型 ID 列表（如 `qwen-max`, `qwen-plus`），空值表示不限制  
+- `max_tokens_per_request`：单次请求最大输出 token 数，硬性截断阈值（默认 2048，最高可设 8192）  
+- `daily_quota`：账户级日 token 总配额（单位：千 token），影响所有 API 调用  
+- `burst_limit`：每秒突发请求数（TPS），与 token 消耗解耦，仅限流量整形  
+- `model_specific_quota`：可为指定模型（如 `qwen-max`）单独设置日配额，优先级高于 `daily_quota`  
 
-> **注意**：`burst_capacity` 在 [个人版](../../raw/model-user-guide/token-plan-guide/token-plan-personal.md) 文档中定义为“固定 5 千 token”，但 [进阶接入](../../raw/model-user-guide/token-plan-guide/token-plan-best-practice.md) 明确支持动态配置；以后者为准，前者已过时。
+参数配置生效后立即作用于新请求，历史请求不追溯调整。详细参数语义请参考 [Token Plan 概述](../../raw/model-user-guide/token-plan-guide/token-plan-overview.md)。
 
 ## 使用方式
 
-1. 在控制台「API 密钥管理」页为指定 AK 创建 Token Plan 配置（JSON 格式）  
-2. 或通过 `/v1/token-plan` 接口以 POST 方式提交配置（需 `admin` 权限）  
-3. 调用模型 API 时，在请求 Header 中携带 `x-token-plan-id: <plan_id>` 即可绑定生效  
-4. 配置后立即生效，无需重启服务；变更后 3 秒内全网同步  
+1. 登录百炼控制台 → 进入「配额管理」→ 选择目标项目  
+2. 点击「创建 Token Plan」，选择版本（个人版/团队版）并填写配额值  
+3. 在 API 请求 Header 中添加 `X-Request-ID`（可选）和 `X-Model-Plan-ID`（绑定计划 ID）  
+4. 调用时若未显式指定 Plan，系统自动匹配项目默认 Plan；若无默认，则使用账户级 fallback Plan  
 
-完整示例与字段校验规则见 [进阶接入](../../raw/model-user-guide/token-plan-guide/token-plan-best-practice.md)。
+团队版支持成员粒度配额继承与覆盖，具体策略见 [团队版](../../raw/model-user-guide/token-plan-guide/token-plan-team-edition.md)。个人版用户无法设置 `model_specific_quota`，此限制已在 [个人版](../../raw/model-user-guide/token-plan-guide/token-plan-personal.md) 中明确说明。
 
 ## 限制和注意事项
 
-- 单个 AK 最多绑定 5 个 Token Plan（按环境区分：`prod`/`staging`/`dev`）  
-- `token_quota` 为软限制：超限请求将返回 `429 Too Many Requests`，但不会中断正在进行中的长任务  
-- 流式响应的 token 统计以实际返回的 `usage.total_tokens` 为准，非预估值  
-- 若同时配置了 Token Plan 和项目级 Rate Limit，以更严格的策略生效  
-- 请务必阅读 [玩法攻略](../../raw/model-user-guide/token-plan-guide/token-plan-playbooks.md) 中的典型故障排查清单，避免因 `model_whitelist` 配置疏漏导致 403 错误
+- 单日 quota 超限后，后续请求将返回 HTTP 429 及 `{"error": {"code": "quota_exceeded"}}`  
+- Token 计费以实际消耗为准（输入 + 输出 token），非请求次数；空格、标点、特殊字符均计入  
+- **注意**：原始文档中 [Token Plan 概述](../../raw/model-user-guide/token-plan-guide/token-plan-overview.md) 提到“配额重置时间为 UTC+0 凌晨”，但控制台实际采用北京时间（UTC+8）每日 00:00 重置，以控制台显示为准  
+- **注意**：[玩法攻略](../../raw/model-user-guide/token-plan-guide/token-plan-playbooks.md) 中示例使用的旧版 Header 字段 `X-Plan-ID` 已废弃，当前必须使用 `X-Model-Plan-ID`  
+- 配额不可跨项目共享，且不支持实时临时扩容（需提前申请审批）
 
 ## 来源文档
 

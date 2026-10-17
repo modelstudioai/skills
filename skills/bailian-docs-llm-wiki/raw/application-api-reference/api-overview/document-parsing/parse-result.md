@@ -134,12 +134,6 @@ array
 
 查询分片的布局结果。
 
-`data.markdown_content`
-
-string
-
-Markdown 格式解析结果。
-
 `data.output_format_result`
 
 array
@@ -156,7 +150,7 @@ string
 
 string
 
-输出类型。
+输出类型。当值为 `markdown` 时，`output_file_url` 为 Markdown 格式解析结果的 URL。
 
 `data.media_duration`
 
@@ -216,7 +210,6 @@ curl -X POST 'https://{workspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/par
     "paragraph_count": 10,
     "page_count": 1,
     "layouts": [],
-    "markdown_content": "# 示例文档",
     "output_format_result": [
       {
         "output_file_url": "https://example.com/output/parseX-xxx.md",
@@ -249,11 +242,11 @@ curl -X POST 'https://{workspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/par
       "segments": [
         {
           "start_time": 5120.0,
-          "file_url": "http://docmind-api-pre-cn-hangzhou.oss-cn-hangzhou.aliyuncs.com/ava/1326886543471162/parseX-video-pre-20260915-6c27af41f35a46bcb972c182264c912b/segments/segment_1_video.mp4?OSSAccessKeyId=LTAI5tPtEwpyT4JR9GymJGwS&Expires=1789542252&Signature=11f9pxJ0ygjmNbu37vhJzDaZzNQ%3D",
+          "file_url": "https://example.com/output/parseX-video-xxx/segments/segment_1_video.mp4",
           "audio_frames": [
             {
               "start_time": 7000.0,
-              "file_url": "http://docmind-api-pre-cn-hangzhou.oss-cn-hangzhou.aliyuncs.com/ava/1326886543471162/parseX-video-pre-20260915-6c27af41f35a46bcb972c182264c912b/segments/segment_1_audio.mp3?OSSAccessKeyId=LTAI5tPtEwpyT4JR9GymJGwS&Expires=1789542184&Signature=Zrd9QQseJlzDDPc7tn7hfO%2BEcUg%3D",
+              "file_url": "https://example.com/output/parseX-video-xxx/segments/segment_1_audio.mp3",
               "ASR_info": "来进来有新座吗？",
               "sentences": [
                 {
@@ -272,19 +265,19 @@ curl -X POST 'https://{workspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/par
           "video_frames": [
             {
               "start_time": 7500.0,
-              "file_url": "http://docmind-api-pre-cn-hangzhou.oss-cn-hangzhou.aliyuncs.com/ava/1326886543471162/parseX-video-pre-20260915-6c27af41f35a46bcb972c182264c912b/frames/frame_4_0.jpg?OSSAccessKeyId=LTAI5tPtEwpyT4JR9GymJGwS&Expires=1789542224&Signature=2gYAWCy3Ub2ybZh4Sk4aPMECGa0%3D",
+              "file_url": "https://example.com/output/parseX-video-xxx/frames/frame_4_0.jpg",
               "text_info": "门被打开，一位头戴白色棒球帽、身穿绿色工装马甲的年轻男子满脸笑容地伸手握住敲门者的手，热情地说道“来 进来”",
               "end_time": 7566.666666666666
             },
             {
               "start_time": 8400.0,
-              "file_url": "http://docmind-api-pre-cn-hangzhou.oss-cn-hangzhou.aliyuncs.com/ava/1326886543471162/parseX-video-pre-20260915-6c27af41f35a46bcb972c182264c912b/frames/frame_5_0.jpg?OSSAccessKeyId=LTAI5tPtEwpyT4JR9GymJGwS&Expires=1789542224&Signature=axgnt1QGaBfngNUrTUjrp8SchfI%3D",
+              "file_url": "https://example.com/output/parseX-video-xxx/frames/frame_5_0.jpg",
               "text_info": "男子站在采光良好的客厅内，侧身回头并向屋内做出引导的手势，背景中可见书架、玻璃圆桌以及靠窗的蓝色休闲椅",
               "end_time": 9266.666666666668
             },
             {
               "start_time": 9933.333333333334,
-              "file_url": "http://docmind-api-pre-cn-hangzhou.oss-cn-hangzhou.aliyuncs.com/ava/1326886543471162/parseX-video-pre-20260915-6c27af41f35a46bcb972c182264c912b/frames/frame_6_0.jpg?OSSAccessKeyId=LTAI5tPtEwpyT4JR9GymJGwS&Expires=1789542224&Signature=SL%2FRCKWJsRFCGTaPJ2S8Nk7q8io%3D",
+              "file_url": "https://example.com/output/parseX-video-xxx/frames/frame_6_0.jpg",
               "text_info": "一个阳光充足的客厅，铺着绿色地毯，左侧有一个装满书的木制书架，角落里放着一把蓝色扶手椅。前景的玻璃咖啡桌上放着一个披萨盒和一本书，墙上挂着一张海报，旁边有一条垂直的绿色装饰带。",
               "end_time": 10600.0
             }
@@ -296,7 +289,7 @@ curl -X POST 'https://{workspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/par
       "synopsis_segments": [
         {
           "start_time": 0,
-          "file_url": "http://docmind-api-pre-cn-hangzhou.oss-cn-hangzhou.aliyuncs.com/ava/1326886543471162/parseX-video-pre-20260915-6c27af41f35a46bcb972c182264c912b/segments/segment_0_video.mp4?OSSAccessKeyId=LTAI5tPtEwpyT4JR9GymJGwS&Expires=1789542720&Signature=vOafwM1KJLVvYWlW5ISOR5hrX0k%3D",
+          "file_url": "https://example.com/output/parseX-video-xxx/segments/segment_0_video.mp4",
           "end_time": 5000,
           "index": 0,
           "text": "渔夫帽男子在狭长走廊里开始这段vlog，镜头先扫到他深橄榄色T恤、米白色裤子和浅色背包，随后他戴着米色渔夫帽，露出黑色卷发，对着镜头微笑。他说：“今天没事，去看看朋友们都在干什么？”随后他来到一扇带猫眼的深棕色木门前，抬手敲门。",

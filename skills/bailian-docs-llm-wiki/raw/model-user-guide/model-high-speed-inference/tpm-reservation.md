@@ -90,6 +90,7 @@ PTU（[模型部署](raw/model-user-guide/model-high-speed-inference/model-deplo
 -   GLM-5.3
 -   GLM-5.2
 -   GLM-5.1
+-   DeepSeek-v4.1-Flash
 -   DeepSeek-v4-Flash
 -   DeepSeek-v4-Flash-0731
 -   DeepSeek-v4-Pro
@@ -106,6 +107,7 @@ PTU（[模型部署](raw/model-user-guide/model-high-speed-inference/model-deplo
 -   GLM-5.3
 -   GLM-5.2
 -   GLM-5.1
+-   DeepSeek-v4.1-Flash
 -   DeepSeek-v4-Flash
 -   DeepSeek-v4-Flash-0731
 -   DeepSeek-v4-Pro

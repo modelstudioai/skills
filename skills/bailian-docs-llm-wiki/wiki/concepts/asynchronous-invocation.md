@@ -1,52 +1,49 @@
 # 异步调用
 
-异步调用是百炼平台对耗时较长模型任务（通常 >3 秒）采用的标准执行模式：客户端提交请求后立即返回任务标识（如 `task_id` 或 `biz_id`），不阻塞等待结果；后续通过独立查询接口或事件通知机制获取最终输出。该模式兼顾系统吞吐、资源利用率与调用稳定性，是图像生成、视频生成、3D 生成、长音频转写及文档/音视频解析等场景的强制或推荐方式。
+异步调用是一种非阻塞式 API 调用模式：客户端发起请求后立即获得任务标识（`task_id`），不等待模型执行完成，而是通过后续轮询或回调机制获取最终结果。该模式适用于耗时较长、资源密集型的生成任务（如高清图像编辑、视频合成、复杂[多模态](multimodal.md)推理），可避免连接超时、提升系统吞吐与稳定性。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **图像生成（T2I/I2I/编辑等）**：所有创意工具类模型（如 `wanx-style-repaint-v1`、`virtualmodel-v2`）及部分万相、可灵、Vidu 模型**强制异步**；千问图像系列支持同步/异步双模式，但高分辨率或多图生成建议使用异步以避免超时。
-- **视频生成（T2V/I2V/人像驱动等）**：全部模型统一采用异步任务模型；提交 `POST /v1/videos/generate` 后需轮询 `GET /v1/tasks/{task_id}`，或配置 `callback_url` 接收 HTTP 回调。
-- **3D 生成（Tripo）**：**完全强制异步**，必须在请求头中显式携带 `X-DashScope-Async: enable`，否则直接报错；不提供同步入口。
-- **文档与音视频解析（ParseX）**：全链路基于异步任务模型，使用 `biz_id` 而非 `task_id` 作为任务标识；解析与字段抽取均需“提交 → 轮询”两阶段，且复用解析结果时需确保其在 7 天有效期内。
-- **通用模型能力（如 ASR 长音频转写）**：虽未在各子文档详述，但明确归类于“耗时较长任务”，统一纳入异步任务管理体系，支持通过 [异步任务管理 API](../../raw/model-api-reference/more-about-models/manage-asynchronous-tasks.md) 统一查询、取消与批量管理。
+- **图像生成（Image Generation）**：  
+  适用于 `wan2.5-i2i-preview`、`kling/*`、`vidu/*` 及所有创意工具类模型（如 `wanx-poster-generation-v1`、`virtualmodel-v2`、`image-erase-completion`）。调用流程为两步：  
+  ① `POST /api/v1/services/aigc/multimodal-generation/generation` 提交请求，返回 `task_id`；  
+  ② 定期 `GET /api/v1/tasks/{task_id}` 查询状态，直至 `status == "SUCCESS"` 并获取 `output.image_url`。任务 URL 有效期为 24 小时。
 
-> ✅ 共同特征：  
-> - 所有异步任务均返回唯一、短期有效的任务 ID（`task_id` / `biz_id`）；  
-> - 结果 URL（图像、视频、3D 模型、解析文件等）均为临时链接，有效期严格限定（常见为 2–24 小时）；  
-> - 支持事件总线（EventBridge）或 HTTP 回调（`callback_url`）主动推送完成事件，**强烈推荐替代轮询**，避免 QPS 浪费与限流风险。
+- **视频生成（Video Generation）**：  
+  **全部视频模型强制使用异步调用**（无同步选项）。必须在 HTTP 请求头中显式设置 `X-DashScope-Async: enable`，否则返回错误 `"current user api does not support synchronous calls"`。流程同上：先创建任务（`POST /api/v1/services/aigc/video-generation/video-synthesis`），再轮询 `/api/v1/tasks/{task_id}` 获取 `output.video_url`。
+
+- **大语言模型（Qwen 系列）**：  
+  当前 Qwen 文本/[多模态](multimodal.md)模型默认采用**同步调用**（含流式 `stream=true`）。但若启用需长时间运行的内置工具链（如深度联网搜索 + 代码解释器组合），或未来支持长上下文重排、批量文档解析等高延迟能力时，平台可能提供异步变体接口（具体以各模型 API 文档为准）。目前不推荐对标准 `qwen3.*` 文本生成使用异步模式。
+
+> ✅ 共性原则：异步任务均强绑定地域（Workspace、API Key、Endpoint 必须同属一个 region），且 `task_id` 仅在创建地域内有效。
 
 ## 关键参数和配置
 
-| 参数 / 配置项 | 说明 | 示例值 | 注意事项 |
-|--------------|------|--------|----------|
-| `X-DashScope-Async: enable` | **3D 生成必需请求头**，其他异步接口通常隐式启用，但显式声明更健壮 | `"enable"` | 缺失将导致 Tripo 调用失败；其他模型虽非强制，建议统一添加 |
-| `callback_url` | 异步完成后的 HTTP 回调地址（POST） | `"https://your-server.com/webhook"` | 必须能被公网访问；需正确响应 HTTP 200；平台重试策略为指数退避（最多 3 次） |
-| `task_id` / `biz_id` | 任务唯一标识符，用于查询、取消、下载 | `"task-abc123..."` | 有效期通常为 24 小时，超时后无法查询；请立即持久化存储 |
-| 轮询间隔 | 建议最小查询间隔，避免触发限流 | T2I ≥5s，T2V ≥30s，3D ≥15s，ParseX 建议指数退避 | 单账号异步任务查询限流 **20 QPS**；高频轮询易被限流，优先用回调 |
-| `status` 字段值 | 任务状态机标准值 | `"PENDING"`, `"RUNNING"`, `"SUCCEEDED"`, `"FAILED"`, `"CANCELED"` | 仅 `PENDING` 状态可取消；`SUCCEEDED` 时检查 `output` 或 `results` 字段获取结果 URL |
+- **必需请求头（视频生成强制）**：  
+  `X-DashScope-Async: enable` —— 缺失将直接报错，不可省略。
 
-## 面向开发者，简洁实用
+- **通用响应字段（所有异步接口）**：  
+  - `task_id`（string）：全局唯一任务标识，用于后续查询；  
+  - `status`（string）：取值包括 `"QUEUED"`、`"RUNNING"`、`"SUCCESS"`、`"FAILED"`、`"EXPIRED"`；  
+  - `created_at` / `updated_at`（ISO8601 时间戳）：用于监控任务生命周期；  
+  - `output`（object）：成功时包含结果 URL（如 `image_url`、`video_url`）及元数据（如 `width`、`height`、`duration`）；失败时含 `error.code` 与 `error.message`。
 
-- ✅ **立刻上手**：调用异步接口（如 `ImageSynthesis.async_invoke`、`VideoGeneration.async_invoke`、`Tripo.async_invoke` 或 `/parse/submit`）→ 提取响应中的 `task_id`/`biz_id` → 用该 ID 调用 `fetch()`（SDK）或 `GET /api/v1/tasks/{id}`（HTTP）。
-- ✅ **规避陷阱**：
-  - 不要硬编码轮询频率——按模型类型设合理间隔（参考上表），生产环境务必启用 `callback_url`；
-  - 临时结果 URL（如 `video_url`, `pbr_model_url`, `output.file_url`）**必须在有效期内下载并持久化**，过期即失效；
-  - Tripo 调用**必须加 `X-DashScope-Async: enable` 头**，且仅限华北2（北京）地域；
-  - ParseX 的字段抽取不可直连音视频，必须先解析再复用 `parsed_file_biz_id`。
-- ✅ **最佳实践**：
-  - 使用 SDK 的 `fetch()` / `list()` / `cancel()` 方法（Python/Java 均支持），比手写 HTTP 更安全；
-  - 在回调服务中校验 `X-DashScope-Signature` 请求头签名，确保事件来源可信；
-  - 任务失败时，优先检查 `error.code`（如 `invalid_input`, `quota_exhausted`, `model_unavailable`），而非仅看 HTTP 状态码；
-  - 高并发场景下，禁用临时文件上传（`Files.upload`），改用客户自有 OSS + `oss://` URL 直传。
+- **轮询建议配置**：  
+  - 初始间隔：1–2 秒（任务刚提交时状态变化快）；  
+  - 指数退避：后续间隔按 `min(30, interval × 1.5)` 递增，上限建议 30 秒；  
+  - 超时保护：总等待时间不超过 23 小时（预留 1 小时容错），避免无限轮询。
 
-> 💡 提示：所有异步任务均可通过 [统一异步任务管理 API](../../raw/model-api-reference/more-about-models/manage-asynchronous-tasks.md) 进行跨模型批量操作（如按时间范围、状态、模型名筛选），无需为每个模型单独对接。
+- **注意事项**：  
+  - 不要重复提交相同参数的任务（无幂等性保障）；  
+  - 任务查询接口不计费，但频繁轮询（如 <500ms 间隔）可能触发限流；  
+  - 异步任务不支持 `stream=true`，如需实时进度反馈，请关注 `status` 变化及 `output.progress` 字段（部分模型支持）。
+
+面向开发者：优先选用异步模式处理 >5 秒预期耗时的生成任务；始终校验 `status` 再解析 `output`；将 `task_id` 存入业务数据库，便于重试与审计。
 
 ## 关联主题页
 
-- [more about models](../api/more-about-models.md)
 - [image generation](../api/image-generation.md)
 - [video generation api](../api/video-generation-api.md)
-- [3d generation](../api/3d-generation.md)
-- [api overview](../api/api-overview.md)
+- [qwen api reference](../api/qwen-api-reference.md)
 
 

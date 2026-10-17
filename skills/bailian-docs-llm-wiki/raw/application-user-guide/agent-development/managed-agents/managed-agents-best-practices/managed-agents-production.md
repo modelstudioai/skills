@@ -6,7 +6,7 @@
 
 本篇讲 Managed Agents 的生产化改造：MCP 工具集接入（市场注册制）、配置注入（会话环境变量 + Vault 密钥库）、触发平台化（Deployment：手动 / cron 定时 / `initial_events`）、人审（HITL）、资源生命周期管理，以及数据驻留的当前行为。示例统一用 curl。
 
-凭证注入的深度内容（Vault 占位符安全模型、出网网关、`allowed_hosts`）拆到[进阶：密钥库安全注入与出网网关](raw/_short/managed-agents-credential-security-b5df5e4f8be278e5.md)——本篇只用最短路径把凭证接起来。
+凭证注入的深度内容（Vault 占位符安全模型、出网网关、`allowed_hosts`）拆到[进阶：密钥库安全注入与出网网关](raw/_short/managed-agents-credential-security-b5df5e4f8be278e5.md)——本篇只覆盖凭证接入的最短路径。
 
 ## 场景：云岭茶饮的晨报机器人
 
@@ -75,7 +75,7 @@ export GITHUB_TOKEN="ghp_DUMMY_TOKEN_FOR_SMOKE_TEST"
 
 本篇再补上**触发线**：入门篇的用法里，Session 由应用创建、消息由应用发——「谁在早上 7:30 把任务发出去」只能靠自写的定时脚本。**Deployment** 把这个角色交给平台：声明式地配好「哪个 Agent、锁哪个版本、触发时下发哪些消息、挂哪些凭证、什么时间表」，之后定时触发、Session 创建、`initial_events` 下发全部由平台完成，应用只需要来看结果。
 
-**说明****安全边界**：token 存进 vault 后**不再进入沙箱**——`printenv` 只能看到占位符；出网时由网关按 `allowed_hosts` 白名单替换。占位符保证覆盖**环境变量与出站请求（替换前）**；被调用服务的**响应体**（例如回显型的测试端点会把 `Authorization` 原样返回）会作为工具输出进入事件流，这属于外部服务自身行为，不在占位符保证范围内。但注意两条仍然成立的边界：网关只替换 `Authorization` 头；沙箱出站 HTTPS 走网关 MITM，但沙箱已预置网关 CA（`SSL_CERT_FILE` / `CURL_CA_BUNDLE` / `REQUESTS_CA_BUNDLE` 均指向它），curl 与 requests 默认校验可直接通过，仅在个别环境证书异常时才需要排查 CA 配置，细节与排坑见[进阶：密钥库安全注入与出网网关](raw/_short/managed-agents-credential-security-b5df5e4f8be278e5.md)。
+**说明****安全边界**：token 存进 vault 后**不再进入沙箱**——`printenv` 只能看到占位符；出网时由网关按 `allowed_hosts` 白名单替换。占位符保证覆盖**环境变量与出站请求（替换前）**；被调用服务的**响应体**（例如回显型的测试端点会把 `Authorization` 原样返回）会作为工具输出进入事件流，这属于外部服务自身行为，不在占位符保证范围内。但注意两条仍然成立的边界：网关只替换 `Authorization` 头；沙箱出站 HTTPS 走网关 MITM，但沙箱已预置网关 CA（`SSL_CERT_FILE` / `CURL_CA_BUNDLE` / `REQUESTS_CA_BUNDLE` 均指向它），curl 与 requests 默认校验可直接通过，仅在个别环境证书异常时才需要排查 CA 配置，细节与排查方法见[进阶：密钥库安全注入与出网网关](raw/_short/managed-agents-credential-security-b5df5e4f8be278e5.md)。
 
 ## 步骤 1 · 建 Vault
 
@@ -134,7 +134,7 @@ export CRED_ID="vcrd_xxx"
 
 ## 步骤 3 · 建 Agent：挂 MCP 工具集
 
-这一步把三样东西各自备好：**Agent 定义里声明 MCP server 与工具集**、**vault 里的凭证**（步骤 2 已完成）、**Session / Deployment 创建时用 `vault_ids` 接线**（步骤 4 / 步骤 5）。
+这一步把三样东西各自备好：**Agent 定义里声明 MCP server 与工具集**、**vault 里的凭证**（步骤 2 已完成）、**Session / Deployment 创建时通过 `vault_ids` 传入**（步骤 4 / 步骤 5）。
 
 先建 Agent。`mcp_servers` 里声明市场服务，`type` 为 `official`、`name` 为**市场服务的 code**；`tools` 里用 `mcp_toolkit` 启用：
 
@@ -182,7 +182,7 @@ export AGENT_ID="agent_xxx"
 
 ## 步骤 4 · 手动试点：建 Session 验证工具与密钥链路
 
-上定时任务之前，先用最朴素的姿势跑一回合，验证两件事：**工具调用真的发生、密钥链路真的通**。
+上定时任务之前，先用最简方式运行一轮，验证两件事：**工具调用真的发生、密钥链路真的通**。
 
 ### 首选：会话环境变量（非敏感配置 / 交互式会话）
 
@@ -201,9 +201,9 @@ curl -X POST "$AGENTSTUDIO_URL/sessions" \
 
 验证：让 Agent 执行 `printenv BRIEF_MAX_ITEMS` → 输出 `5`（**真实值**）。创建响应与 GET 均回显该字段，注意只放非敏感内容。
 
-交互式会话 + 非敏感配置 → 用环境变量就够了。**需要密钥级安全（沙箱内不见明文）或走 Deployment 无人值守链路** → 用下面的 vault 接线。
+交互式会话 + 非敏感配置 → 环境变量即可满足。**需要密钥级安全（沙箱内不见明文）或通过 Deployment 运行无人值守链路** → 使用下面的 vault 配置。
 
-### 定时链路必需：vault\_ids 接线
+### 定时链路必需：vault\_ids 配置
 
 Deployment 不支持 `environment_variables`，定时链路（步骤 5）的凭证只能靠 vault。创建 Session 时用 `vault_ids` 把密钥接入运行时（`agent` 字段传 Agent ID 字符串，Session 会锁定该 Agent 当前版本的完整快照）：
 
@@ -308,7 +308,7 @@ curl -X POST "$AGENTSTUDIO_URL/deployments" \
 
 1.  `agent` **必须传对象** `{id, version}`，不接受 ID 字符串（传字符串返回 `400 PARAMS_ILLEGAL`）。这与 `sessions.create` 不同（Session 传字符串 = 锁最新）。Deployment 是长期资源，创建时就**显式锁死 Agent 版本**——响应里会把该版本的完整快照（system / tools / model）展开回显。版本语义见下文「版本语义：锁死与漂移陷阱」。
 2.  `initial_events` **是触发时下发的输入数组**，形状与给 Session 发消息的 `input` 完全一致。它补上了 `sessions.create` 不接受初始输入的缺口：触发生成的 Session，第一条 user 消息就是它——「触发即跑」，不需要应用再补发一条消息。
-3.  `vault_ids` **在 deployment 级接线**：触发生成的每个 Session 都自动带上这些凭证（注入行为与手动建 Session 完全相同）。
+3.  `vault_ids` **在 deployment 级配置**：触发生成的每个 Session 都自动携带这些凭证（注入行为与手动建 Session 完全相同）。
 
 不填 `schedule` 就是**手动模式**（只能通过 `POST /run` 触发）；填了就是定时模式（见下文 cron 小节）。创建成功响应（200）回显全部字段，`status` 为 `"active"`，id 形如 `depl_xxx`（前缀 `depl_`）。
 
@@ -471,7 +471,7 @@ curl -X POST "$AGENTSTUDIO_URL/deployments" \
 
 run 的 `session_id` → `GET /sessions/{id}/events`（或 SSE）
 
-跑挂了吗
+运行是否失败
 
 run 的 `error` 字段 + session 事件流的 `session_status`
 
@@ -536,11 +536,11 @@ curl -X POST "$AGENTSTUDIO_URL/sessions/$SESSION_ID/events" \
 
 放到晨报场景：晨报 Agent 发现疑似重大负面舆情、要往公司 repo 写「舆情预警」之前，让它调用一个需要确认的动作（自定义工具或写入前确认），Session 停在 `requires_action`，服务轮询发现后推给运营值班群，人点「允许/拒绝」，回填 `tool_approval_response`，Agent 继续。工具审批的配置方式见[内置工具](raw/application-user-guide/agent-development/managed-agents/managed-agents-agent/managed-agents-builtin-tools.md)。
 
-**说明**关于成本上限：Session 当前**不提供成本上限（budget）字段**，也没有触达上限时的通知事件。成本控制建议放到 Deployment 层做触发频率与并发限流，再配合事后用量核对来兜底。
+**说明**关于成本上限：Session 当前**不提供成本上限（budget）字段**，也没有触达上限时的通知事件。成本控制建议放到 Deployment 层做触发频率与并发限流，再配合事后用量核对作为补充。
 
 ### 方案 B：Deployment 触发 + 事后查询
 
-如果触发场景是「定时」或「由外部系统手动触发一次任务」，直接用 步骤 5 的 Deployment：外部系统只需要 `POST /deployments/{id}/run`（或干脆交给 cron），事后用 `GET /deployments/{id}/runs` 收结果——`status` 到 `succeeded` 只代表执行完成，还要用程序核验产物内容（例如逐条校验晨报资讯的发布日期是否落在时间窗内、来源 URL 是否可解析），不能以 run 状态代替内容验收。`session_id` 拿去看产物。全程无长连接。
+如果触发场景是「定时」或「由外部系统手动触发一次任务」，直接用 步骤 5 的 Deployment：外部系统只需要 `POST /deployments/{id}/run`（或直接交给 cron），事后用 `GET /deployments/{id}/runs` 收结果——`status` 到 `succeeded` 只代表执行完成，还要用程序核验产物内容（例如逐条校验晨报资讯的发布日期是否落在时间窗内、来源 URL 是否可解析），不能以 run 状态代替内容验收。`session_id` 用于查询产物。全程无长连接。
 
 ## 步骤 7 · 数据驻留与区域
 
@@ -660,7 +660,7 @@ curl -X GET "$AGENTSTUDIO_URL/agents/$AGENT_ID/versions" \
 
 ## 步骤 9 · 清理
 
-清理有**依赖顺序**，且有一个坑：**删除 vault 不会级联删除它下面的 credentials**。先删 vault 再去删 credential，credential 端点仍然可用（孤儿数据）。正确顺序是子资源先于父资源：
+清理有**依赖顺序**，且有一处注意：**删除 vault 不会级联删除其下的 credentials**。先删 vault 再去删 credential，credential 端点仍然可用（孤儿数据）。正确顺序是子资源先于父资源：
 
 ```
 # 1. 删除试点 session（支持 DELETE，返回 200）
@@ -692,10 +692,10 @@ deployment 生成的 session 也一样可删：从 `GET /deployments/{id}/runs` 
 -   生产 HITL 的两条路：**轮询** `requires_action` + 回填 `tool_approval_response`，或 **Deployment 触发 + 事后查询 runs**。
 -   生命周期动词按资源区别对待：**Agent 和 Deployment 只归档不删**，Session / Environment / Vault 可删，**credential 先于 vault 删**（无级联）。
 
-有六处当前行为需要留意：**Deployment update 不传 agent 会漂移到最新版本**（更新时永远显式带 `{id, version}`）、**并发触发无冲突限制**（限流要自己做）、**Session 无成本上限字段**（Deployment 层限流兜底）、**单区域 `cn-beijing`**、**`mcp_servers.name` 不做存在性校验**（写错名字静默失败）、**沙箱出网走网关 MITM**（已预置网关 CA，默认 TLS 校验可过；个别环境异常时排查 CA 配置）。
+有六处当前行为需要留意：**Deployment update 不传 agent 会漂移到最新版本**（更新时永远显式带 `{id, version}`）、**并发触发无冲突限制**（限流需自行实现）、**Session 无成本上限字段**（以 Deployment 层限流为补充）、**单区域 `cn-beijing`**、**`mcp_servers.name` 不做存在性校验**（写错名字静默失败）、**沙箱出网走网关 MITM**（已预置网关 CA，默认 TLS 校验可过；个别环境异常时排查 CA 配置）。
 
 ## 下一步
 
--   [进阶：密钥库安全注入与出网网关](raw/_short/managed-agents-credential-security-b5df5e4f8be278e5.md)：占位符模型、网关替换行为与排坑。
+-   [进阶：密钥库安全注入与出网网关](raw/_short/managed-agents-credential-security-b5df5e4f8be278e5.md)：占位符模型、网关替换行为与排查方法。
 -   [进阶：Webhook 事件通知](raw/_short/managed-agents-webhook-notifications-508b7232092b6608.md)：让平台在任务跑完时主动通知。
 -   [进阶：提示词版本管理与回滚](raw/_short/managed-agents-prompt-versioning-b2a756840e400199.md)：晨报 prompt 的灰度与回滚。

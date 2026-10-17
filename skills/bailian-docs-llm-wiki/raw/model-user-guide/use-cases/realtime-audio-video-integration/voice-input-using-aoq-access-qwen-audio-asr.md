@@ -8,7 +8,7 @@
 
 1.  **点击即采集**：用户点击按钮后立即启动音频采集并**缓存** PCM 数据，同时异步申请连接凭证和建立连接。由于连接建立需要一定时间，而用户在此期间已经开始说话，因此需要先缓存再补发。
 2.  **倍速补发追平**：连接成功并收到模型就绪事件后，将缓存的音频以倍速发送给模型，追平后再切换为实时发送。
-3.  **Data 通道传输音频**：qwen-audio-3.1-asr-flash-streaming 采用 Inference 协议（run-task / continue-task / finish-task）。当前场景需要先缓存音频再倍速补发，因此通过 `sendDataMsg` 接口以 JSON 消息形式传输音频数据。AOQ 服务端已对 JSON 格式的音频消息做了封装，客户端发送 JSON 后服务端自动解析为二进制数据转发给模型。
+3.  **Data 通道传输音频**：qwen-audio-3.1-asr-flash-streaming 采用 Inference 协议（run-task / finish-task）。当前场景需要先缓存音频再倍速补发，因此通过 `sendDataMsg` 接口以 JSON 消息形式传输音频数据。AOQ 服务端已对 JSON 格式的音频消息做了封装，客户端发送 JSON 后服务端自动解析为二进制数据转发给模型。
 4.  **中间结果与最终结果**：模型持续返回识别结果，中间结果（`sentence_end: false`）实时展示，最终结果（`sentence_end: true`）追加到输入框。
 
 ## 准备工作
@@ -325,7 +325,7 @@ engine.sendDataMsg(msg);
 
 以上为事件关键字段示例，其余响应字段可按业务需要读取，具体事件请参考[服务端事件](raw/_short/qwen-audio-asr-streaming-server-events-b134164fc4410c2a.md)。此时音频缓存通常已经积累了“凭证申请 + AOQ 建连 + 模型任务启动”期间采集到的音频。对带有 `task_id` 的响应核对当前任务 ID；重复的 `task-started` 不应启动第二个发送循环。
 
-**音频数据封装格式：** qwen-audio-3.1-asr-flash-streaming 的 Inference 协议（[客户端事件](raw/_short/qwen-audio-asr-streaming-client-events-1bae8548d2be6bc5.md)）只定义了 `run-task`、`continue-task`、`finish-task` 三种控制事件，音频数据本身不是通过 JSON 事件发送的。但通过 AOQ Data 通道传输时，音频数据需要以 JSON 消息形式发送。为此，AOQ 在 SDK 层面封装了 `input_audio_buffer.append` 事件，用于承载音频数据：
+**音频数据封装格式：** qwen-audio-3.1-asr-flash-streaming 的 Inference 协议（[客户端事件](raw/_short/qwen-audio-asr-streaming-client-events-1bae8548d2be6bc5.md)）只定义了 `run-task`、`finish-task` 两种控制事件，音频数据本身不是通过 JSON 事件发送的。但通过 AOQ Data 通道传输时，音频数据需要以 JSON 消息形式发送。为此，AOQ 在 SDK 层面封装了 `input_audio_buffer.append` 事件，用于承载音频数据：
 
 **字段**
 

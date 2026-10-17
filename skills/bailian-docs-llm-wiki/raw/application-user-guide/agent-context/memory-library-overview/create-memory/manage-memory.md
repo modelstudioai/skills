@@ -2,11 +2,11 @@
 
 查看、检索调试、更新和删除记忆
 
-记忆写入后，可在控制台查看和检索，或通过 API 进行列表、更新和删除操作。建议使用元数据（`meta_data`）对记忆分类管理，便于后续精确检索。
+建议使用元数据（`meta_data`）对记忆分类管理，便于后续精确检索。查看会话关联的记忆变更参见[记忆观测](raw/application-user-guide/agent-context/memory-library-overview/observability/observation.md)，追溯自动抽取及手动操作的变更记录参见[记忆审计](raw/application-user-guide/agent-context/memory-library-overview/observability/audit.md)。
 
 ## 查看记忆详情
 
-在[记忆库详情](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/memory/list)页的**记忆详情**标签页，顶部展示记忆库基本信息和统计数据。下方展示记忆实体列表，支持通过记忆实体 ID（`user_id`）筛选。点击操作列的**查看**可查看记忆详情。
+在[记忆库](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/memory/list)卡片上点击**查看详情**，进入**记忆详情**标签页。顶部展示事实记忆数、用户画像数、技能记忆数和记忆实体数；下方为实体列表，支持通过实体 ID（`user_id`）模糊搜索。点击操作列的**查看**，按记忆规则查看该实体的事实记忆、用户画像和技能记忆。
 
 通过 API 列出记忆：
 
@@ -137,6 +137,26 @@ asyncio.run(search_memory_example())
 ```
 
 ## 更新和删除记忆
+
+### 编辑事实记忆
+
+1.  在记忆库的**记忆详情**标签页找到实体并点击**查看**。
+2.  在**事实记忆规则**下选择对应规则，找到目标记忆卡片，点击详情图标进入**事实记忆详情**。
+3.  点击**编辑**修改记忆内容，再点击**保存**或**保存并关闭弹窗**。
+
+保存后，在记忆详情中确认新内容；需要比较修改前后的内容时，进入[记忆审计](raw/application-user-guide/agent-context/memory-library-overview/observability/audit.md)查看更新快照。
+
+### 停用和重新启用事实记忆
+
+在**事实记忆详情**中关闭启用开关，记忆显示为**未启用**；重新开启后显示为**已启用**。审计中分别记录为**软删除**与**恢复**。
+
+### 删除事实记忆
+
+**警告**确认删除后记忆无法恢复。若只需暂时停用，使用启用开关，不要执行删除。
+
+在目标记忆卡片上点击删除图标，再在确认框中点击**删除**。删除成功后，检查记忆列表；在[记忆审计](raw/application-user-guide/agent-context/memory-library-overview/observability/audit.md)中可查询删除记录及变更前的内容。
+
+### 通过 API 更新和删除
 
 cURL
 

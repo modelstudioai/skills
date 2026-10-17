@@ -6,13 +6,13 @@
 
 本篇讲 Managed Agents 的 Webhook 机制：把「事件发生」（会话跑完、部署执行结束、资源变更）变成一次主动的 HTTP 推送，而不是不停轮询。
 
-与系列其他篇的关系：[生产化篇](raw/application-user-guide/agent-development/managed-agents/managed-agents-best-practices/managed-agents-production.md)的 Deployment 解决「任务定时跑」，[多智能体篇](raw/_short/managed-agents-multiagent-proposal-c42cf9fd6aca491d.md)的 SSE 解决「人盯着看」，本篇解决「跑完了通知我」——三者组合才是完整的无人值守闭环。事件订阅的基础用法见[Webhook 事件订阅](raw/application-user-guide/agent-development/managed-agents/managed-agents-session/managed-agents-webhook.md)，本篇深入接收端的工程细节。
+与系列其他篇的关系：[生产化篇](raw/application-user-guide/agent-development/managed-agents/managed-agents-best-practices/managed-agents-production.md)的 Deployment 面向「按计划运行」，[多智能体篇](raw/_short/managed-agents-multiagent-proposal-c42cf9fd6aca491d.md)的 SSE 面向「人工实时查看」，本篇面向「运行完成后主动通知」——三者组合构成完整的无人值守闭环。事件订阅的基础用法见[Webhook 事件订阅](raw/application-user-guide/agent-development/managed-agents/managed-agents-session/managed-agents-webhook.md)，本篇深入接收端的工程细节。
 
 ## 场景：拾贝电商的对账通知
 
 「拾贝电商」是一家虚构的跨境电商，每晚要对账：一个对账机器人（Deployment 定时触发）核对当天的订单流水。运维同学的诉求很朴素：
 
-> 任务跑完不用我盯着，跑完了、或者跑挂了，给服务器发个通知。
+> 任务跑完不用盯着，运行完成或运行失败，给服务器发个通知。
 
 在 Webhook 之前只有拉模式：定时轮询 `GET /deployments/{id}/runs`、`GET /sessions/{id}`，反复查询任务是否完成。Webhook 把它倒过来——订阅事件，平台在事件发生时 POST 接收端：
 
@@ -178,7 +178,7 @@ ThreadingHTTPServer(("0.0.0.0", 8080), H).serve_forever()
 
 **生产接收端至少还要做两件事**：验签（下一节）和按 `data.id` 反查资源详情（事件不携带内容）。
 
-### 部署的坑
+### 部署注意事项
 
 -   **`nohup ... &` 会随 SSH 会话退出被终止**。用 systemd 常驻（`Restart=always`）：
 
@@ -200,7 +200,7 @@ WantedBy=multi-user.target
 systemctl enable --now webhook-receiver
 ```
 
--   顺带一个 shell 坑：远程杀接收端进程时 `pkill -f receiver.py` 会匹配到 SSH 远程命令行自身（命令行里就含 "receiver.py" 字样），把自己杀掉（exit 255）——按端口杀安全：`fuser -k 8080/tcp`。
+-   一个 shell 注意事项：远程终止接收端进程时，`pkill -f receiver.py` 会匹配到 SSH 远程命令行自身（命令行中含 "receiver.py" 字样），导致进程被误终止（exit 255）；按端口终止更安全：`fuser -k 8080/tcp`。
 
 ## test 端点：上线前先自检
 
@@ -418,7 +418,7 @@ curl -s "$AGENTSTUDIO_URL/webhook_endpoints" -H "Authorization: Bearer $DASHSCOP
 
 Deployment（[生产化篇](raw/application-user-guide/agent-development/managed-agents/managed-agents-best-practices/managed-agents-production.md)）
 
-人实时盯着任务执行过程
+人工实时查看任务执行过程
 
 SSE 流（[多智能体篇](raw/_short/managed-agents-multiagent-proposal-c42cf9fd6aca491d.md)）
 

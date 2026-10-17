@@ -25,7 +25,7 @@ export DASHSCOPE_API_KEY="<你的 DashScope API Key>"
 
 **警告****联网搜索的选型**。本例研究员走 MCP 市场的搜索服务（`WebSearch`，工具名 `bailian_web_search`）；内置工具集的 `web_search` / `web_fetch` 也能覆盖联网检索。两条路都行，但注意 `mcp_toolkit` 的工具名与内置工具不同，system prompt 里引用的工具名要和实际启用的对上。
 
-**警告****`default_config.enabled: true` 不会把工具发给模型**。`builtin_toolkit` / `mcp_toolkit` 都必须在 `configs[ ]` 里逐工具显式 `enabled: true`，否则 agent 手里只有平台自动注入的 `mark_artifacts`（[入门篇](raw/_short/managed-agents-data-analysis-2249e7a887786f0b.md)讲过这个坑，多智能体成员同样适用）。
+**警告****`default_config.enabled: true` 不会把工具发给模型**。`builtin_toolkit` / `mcp_toolkit` 都必须在 `configs[ ]` 里逐工具显式 `enabled: true`，否则 agent 仅能获得平台自动注入的 `mark_artifacts`（见[入门篇](raw/_short/managed-agents-data-analysis-2249e7a887786f0b.md)，多智能体成员同样适用）。
 
 ## 定义三个专家子 Agent
 
@@ -101,7 +101,7 @@ curl -X POST "$AGENTSTUDIO_URL/agents" \
 
 ## 再加一个校验员：写作前的方案自检
 
-三个专家各自只交一份局部结论，谁都不负责「三份结论合起来是否讲得通」。所以 roster 里再额外放一个 `proposal_checker` 子 Agent：它在协调者动笔之前，把关案例挑选与定价框架是否对齐潜客优先级。
+三个专家各自只给出局部结论，无人负责判断「三份结论合起来是否自洽」。所以 roster 里再额外放一个 `proposal_checker` 子 Agent：它在协调者动笔之前，把关案例挑选与定价框架是否对齐潜客优先级。
 
 它由协调者在写提案前委派一次，读取研究结论、案例挑选、定价框架，判断三者是否互相自洽、是否命中潜客最关心的痛点，然后回传一句判断和修改建议。它是一个和其他专家一样的普通 worker：可被委派、可收发消息、跑在自己的线程和上下文里。
 
@@ -122,7 +122,7 @@ curl -X POST "$AGENTSTUDIO_URL/agents" \
 
 **说明**`multiagent.agents[ ]` 的成员类型：`{"type":"agent","id":...}` 引用一个已创建的子 Agent，可选带 `version` 锁定版本（见下节）；`{"type":"self"}` 把协调者自己也作为可委派对象，**最多 1 个**——写两个会报 `AGENT_010 multiagent.agents 中 self 类型最多只能有一个`。
 
-## 给团队素材并接线协调者
+## 为团队准备素材并配置协调者
 
 ### 素材清单
 
@@ -365,7 +365,7 @@ body 可省略。成功返回归档后的 Thread 对象（`archived_at` 填充�
 前三节讲的是服务端给的观察面。客户端要消费这条流，核心只有一个数据结构——**以 `thread_id` 为键的分桶字典**，再配合四个行为，渲染逻辑比想象的简单：
 
 1.  **去重按事件 `id`**。SSE 不提供游标 / 续传 token，断线重连后新连接可能重放旧帧，按 `id` 去重即可。
-2.  **assistant 文本整条下发，无需拼接增量**。流式文本以整条 `completed` 消息一帧到位，`sequence_number` 常为 `null`、没有同 id 多帧增量；解析时按「有 `sequence_number` 就按序累积、没有就当整条」处理。多智能体的「实时感」其实主要来自结构性事件：`thread_created`（谁开工）、`thread_status`（谁完工）、`mcp_call` / `tool_call`（谁在干什么）。
+2.  **assistant 文本整条下发，无需拼接增量**。流式文本以整条 `completed` 消息一帧到位，`sequence_number` 常为 `null`、没有同 id 多帧增量；解析时按「有 `sequence_number` 就按序累积、没有就当整条」处理。多智能体的「实时感」主要来自结构性事件：`thread_created`（线程启动）、`thread_status`（线程结束）、`mcp_call` / `tool_call`（线程执行的动作）。
 3.  **`session_status` 是唯一的会话级事件**。本回合仅有的 2 条不带 `thread_id` 的事件就是它（running 与 idle+stop\_reason），分流时当会话状态处理，不属于任何线程。
 4.  **主线程没有 `thread_created`**。`thrd_` 在流开始之前就存在了——首次见到某个 `thrd_` 事件时把它注册成 coordinator 即可。
 
@@ -419,7 +419,7 @@ for ln in sys.stdin:                                 # 每帧一行 data:{...}
         feed(ln[5:])
 ```
 
-对本回合的流，其实时输出的团队时序（节选）：
+对应该回合的团队实时输出时序（节选）：
 
 ```
 === 会话 running ===
@@ -488,9 +488,9 @@ Session 级 SSE 流 + 分桶字典
 -   案例挑选器这里读 7 个文件、生产里读几百个——这个体量留在**子 Agent 的上下文**里，而不是灌进协调者上下文。
 -   协调者只决定**顺序和交接**，自己不做专家工作，上下文保持干净。
 
-额外加一个 `proposal_checker` 也是同一思路的延伸：它在动笔前把案例与定价拉回潜客优先级上对齐，让不一致在写作前就被拦住——本例里它驱动协调者改了 4 稿。校验过程跑在自己的线程里，判断依据与建议都留在事件日志中可回溯。代价是多起一个 worker 线程——多一轮委派与回传，也多一份运行开销。若某些潜客场景不需要这道自检，可以把它从 roster 里去掉，协调者会直接进入写作。
+额外增加一个 `proposal_checker` 是同一思路的延伸：它在动笔前把案例与定价对齐到潜客优先级上，让不一致在写作前被识别并修正——本例中它驱动协调者修改了 4 稿。校验过程运行在自己的线程里，判断依据与建议都保留在事件日志中，可回溯。代价是额外启动一个 worker 线程：多一轮委派与回传，也多一份运行开销。若某些潜客场景不需要这道自检，可以把它从 roster 里去掉，协调者会直接进入写作。
 
-## 收尾（归档）
+## 清理（归档）
 
 统一用 archive（保留审计、停计量）。注意顺序：**running 状态的 Session 不能 DELETE**（返回 `400 invalid_parameter`），先等它 idle 或用归档；Agent 只能 archive：
 

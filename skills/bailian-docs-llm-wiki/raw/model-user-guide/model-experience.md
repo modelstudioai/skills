@@ -8,7 +8,6 @@
 -   [3D模型生成](raw/model-user-guide/model-experience/tripo-3d-generation-guide.md)
 -   [语音合成](raw/model-user-guide/model-experience/speech-synthesis.md)
 -   [音频生成](raw/model-user-guide/model-experience/audio-generation.md)
--   [音乐生成](raw/model-user-guide/model-experience/fun-music.md)
 -   [语音识别](raw/model-user-guide/model-experience/speech-recognition.md)
 -   [语音转语音](raw/model-user-guide/model-experience/speech-to-speech.md)
 -   [全模态](raw/model-user-guide/model-experience/omni-modal.md)

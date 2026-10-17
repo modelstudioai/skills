@@ -1028,6 +1028,19 @@ seed默认值
 
 > 该参数非OpenAI标准参数。通过 Python SDK调用时，请放入 **extra\_body** 对象中。配置方式为：`extra_body={"search_options": xxx}`。
 
+**include\_tool\_usage** `boolean`（可选）默认值为 `false`
+
+是否在响应的`usage`中返回联网搜索的调用统计。
+
+可选值：
+
+-   `true`：在`usage`中返回`x_tools`字段。
+-   `false`：不返回。
+
+> `x_tools`仅在本次请求实际触发了联网搜索时返回。若未开启`enable_search`，或模型自行判断无需联网搜索，即使将本参数设为`true`也不会返回该字段。
+
+> 该参数非OpenAI标准参数。通过 Python SDK调用时，请放入 **extra\_body** 对象中。配置方式为：`extra_body={"include_tool_usage": True}`。
+
 **X-DashScope-DataInspection**`string` （可选）
 
 在千问 API 的内容安全能力基础上，是否进一步识别输入输出内容的违规信息。取值如下：
@@ -2342,6 +2355,30 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 
 使用[显式缓存](https://help.aliyun.com/zh/model-studio/context-cache#825f201c5fy6o)时，参数值为`ephemeral`，否则该参数不存在。
 
+**x\_tools** `object`（可选）
+
+联网搜索的调用统计。仅当请求中`include_tool_usage`为`true`，且本次请求实际触发了联网搜索时返回。
+
+属性
+
+**search** `object`（可选）
+
+联网搜索的调用统计。开启[联网搜索](raw/model-user-guide/model-experience/text-generation-model/tool-calls/web-search.md)并实际触发检索时返回。
+
+属性
+
+**count** `integer`
+
+本次请求中联网搜索的触发次数。使用`agent`搜索策略时，模型可进行多轮检索，该值可能大于 1。
+
+该值在意图判定阶段即被置位，即使触发限流或检索未返回结果也会计数，不代表检索已实际完成，不作为计费或对账依据。详情请参见[账单次数与 count 字段不一致](https://help.aliyun.com/zh/model-studio/web-search#faq-search-billing-count-mismatch-title)。
+
+**strategy** `string`
+
+本次联网搜索实际使用的搜索量级策略，与请求中`search_options.search_strategy`的取值一致，如`turbo`、`max`、`agent`。
+
+#### 基础响应
+
 ```
 {
     "choices": [
@@ -2368,6 +2405,45 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
     "system_fingerprint": null,
     "model": "qwen3.8-max",
     "id": "chatcmpl-6ada9ed2-7f33-9de2-8bb0-78bd4035025a"
+}
+```
+
+#### 联网搜索响应
+
+设置`include_tool_usage`为`true`并实际触发联网搜索时，`usage`中会增加`x_tools`字段：
+
+```
+{
+    "id": "chatcmpl-4233d020-62cd-949f-94e2-444b97503856",
+    "object": "chat.completion",
+    "created": 1792037298,
+    "model": "qwen3.8-max",
+    "choices": [
+        {
+            "index": 0,
+            "message": {
+                "role": "assistant",
+                "content": "杭州亚运会（第19届亚洲运动会）是在2023年举办的，具体举办时间为2023年9月23日至10月8日。"
+            },
+            "finish_reason": "stop",
+            "logprobs": null
+        }
+    ],
+    "usage": {
+        "prompt_tokens": 1905,
+        "total_tokens": 1987,
+        "completion_tokens": 82,
+        "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "text_tokens": 1905
+        },
+        "x_tools": {
+            "search": {
+                "count": 1,
+                "strategy": "turbo"
+            }
+        }
+    }
 }
 ```
 
@@ -2614,6 +2690,28 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 
 缓存类型，固定为`ephemeral`。
 
+**x\_tools** `object`（可选）
+
+联网搜索的调用统计。仅当请求中`include_tool_usage`为`true`，且本次请求实际触发了联网搜索时返回，随`usage`在最后一个 chunk 中显示。
+
+属性
+
+**search** `object`（可选）
+
+联网搜索的调用统计。开启[联网搜索](raw/model-user-guide/model-experience/text-generation-model/tool-calls/web-search.md)并实际触发检索时返回。
+
+属性
+
+**count** `integer`
+
+本次请求中联网搜索的触发次数。使用`agent`搜索策略时，模型可进行多轮检索，该值可能大于 1。
+
+该值在意图判定阶段即被置位，即使触发限流或检索未返回结果也会计数，不代表检索已实际完成，不作为计费或对账依据。详情请参见[账单次数与 count 字段不一致](https://help.aliyun.com/zh/model-studio/web-search#faq-search-billing-count-mismatch-title)。
+
+**strategy** `string`
+
+本次联网搜索实际使用的搜索量级策略，与请求中`search_options.search_strategy`的取值一致，如`turbo`、`max`、`agent`。
+
 ```
 {"id":"chatcmpl-e30f5ae7-3063-93c4-90fe-beb5f900bd57","choices":[{"delta":{"content":"","function_call":null,"refusal":null,"role":"assistant","tool_calls":null},"finish_reason":null,"index":0,"logprobs":null}],"created":1735113344,"model":"qwen3.8-max","object":"chat.completion.chunk","service_tier":null,"system_fingerprint":null,"usage":null}
 {"id":"chatcmpl-e30f5ae7-3063-93c4-90fe-beb5f900bd57","choices":[{"delta":{"content":"我是","function_call":null,"refusal":null,"role":null,"tool_calls":null},"finish_reason":null,"index":0,"logprobs":null}],"created":1735113344,"model":"qwen3.8-max","object":"chat.completion.chunk","service_tier":null,"system_fingerprint":null,"usage":null}
@@ -2625,6 +2723,12 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 {"id":"chatcmpl-e30f5ae7-3063-93c4-90fe-beb5f900bd57","choices":[{"delta":{"content":"问。","function_call":null,"refusal":null,"role":null,"tool_calls":null},"finish_reason":null,"index":0,"logprobs":null}],"created":1735113344,"model":"qwen3.8-max","object":"chat.completion.chunk","service_tier":null,"system_fingerprint":null,"usage":null}
 {"id":"chatcmpl-e30f5ae7-3063-93c4-90fe-beb5f900bd57","choices":[{"delta":{"content":"","function_call":null,"refusal":null,"role":null,"tool_calls":null},"finish_reason":"stop","index":0,"logprobs":null}],"created":1735113344,"model":"qwen3.8-max","object":"chat.completion.chunk","service_tier":null,"system_fingerprint":null,"usage":null}
 {"id":"chatcmpl-e30f5ae7-3063-93c4-90fe-beb5f900bd57","choices":[],"created":1735113344,"model":"qwen3.8-max","object":"chat.completion.chunk","service_tier":null,"system_fingerprint":null,"usage":{"completion_tokens":17,"prompt_tokens":22,"total_tokens":39,"completion_tokens_details":null,"prompt_tokens_details":{"audio_tokens":null,"cached_tokens":0}}}
+```
+
+设置`include_tool_usage`为`true`并实际触发联网搜索时，最后一个 chunk 的`usage`中会增加`x_tools`字段：
+
+```
+{"id":"chatcmpl-6076672d-ea69-9497-86bc-a5a9c9354662","object":"chat.completion.chunk","created":1792037303,"model":"qwen3.8-max","choices":[],"usage":{"prompt_tokens":1905,"total_tokens":1984,"completion_tokens":79,"prompt_tokens_details":{"cached_tokens":0,"text_tokens":1905},"x_tools":{"search":{"count":1,"strategy":"turbo"}}}}
 ```
 
 ## 错误码

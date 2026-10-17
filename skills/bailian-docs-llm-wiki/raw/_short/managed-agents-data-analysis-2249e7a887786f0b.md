@@ -35,7 +35,7 @@ Agent 和 Environment 创建一次，可以在多个 Session 里复用。每个 
 
 数据分析 Agent 的产出质量，关键在 system prompt 上。这里不写「怎么做」的流程，而是写**工作纪律**——先验数据再下结论、清洗要保守、结论必须带数字。剩下的让 Agent 自己摸索。
 
-工具用内置工具集，`type` 为 `builtin_toolkit`（一个 Agent 最多挂 1 个内置工具集）。本例开启 6 个核心工具：`bash`、`read`、`write`、`edit`、`glob`、`grep`，全程离线分析够用；内置工具集还提供 `web_search` 与 `web_fetch` 两个联网工具，本例不需要。`mark_artifacts` 由平台运行时自动注入，用于登记产物文件，无需声明（显式列出也不影响调用）；`download_file` 已下线，不要再配置，取产物走 Files API（见 步骤 6）。
+工具用内置工具集，`type` 为 `builtin_toolkit`（一个 Agent 最多挂 1 个内置工具集）。本例开启 6 个核心工具：`bash`、`read`、`write`、`edit`、`glob`、`grep`，足以覆盖全程离线分析；内置工具集还提供 `web_search` 与 `web_fetch` 两个联网工具，本例不需要。`mark_artifacts` 由平台运行时自动注入，用于登记产物文件，无需声明（显式列出也不影响调用）；`download_file` 已下线，不要再配置，取产物走 Files API（见 步骤 6）。
 
 **警告****最常见的配置错误**：`default_config.enabled: true` 并不会把工具真的发给模型。必须在 `configs[ ]` 里把每个要用的工具**逐个显式列出**并置 `enabled: true`。只写 `default_config.enabled: true` 而不列 `configs`，Agent 拿到的工具列表只有平台自动注入的 `mark_artifacts`，随后任何 `bash` 调用都会回 `TOOL_NOT_FOUND: Tool 'bash' not found. Available tools: ['mark_artifacts']`，回合以「没有工具可用」结束。
 
@@ -84,7 +84,7 @@ export AGENT_ID="agent_xxxxxxxx"
 
 这段 prompt 里有两条是本例的关键：
 
--   **「先做一次数据质量体检」**：不加这句，模型很容易直接 `read` 一眼数据就开始报数，脏数据被静默带进结论。
+-   **「先做一次数据质量体检」**：缺少这句时，模型容易直接读取数据并开始计算，脏数据会被静默带入结论。
 -   **「看起来极端但内部自洽的数据……不要删掉」**：这是防**过度清洗**的护栏。数据里埋了一笔金额畸大但完全合规的批发订单，占总营收一半以上。少了这句，模型很可能把它当异常值剔掉，报出一个「更漂亮」但错误的大盘。
 
 **说明**`builtin_toolkit` 有两级开关——`default_config.{enabled, permission_policy}` 与 `configs[ ].{name, enabled, permission_policy}`。`permission_policy` 接受 `{"type": "always_allow"}`（直接执行）或 `{"type": "always_ask"}`（每次调用前等待确认）。如果某次工具调用需要人工批准，SSE 流会出现 `stop_reason.type == "requires_action"`（带 `pending_batch_id` 与 `pending_call_ids`），此时按 `batch_id` + `call_id` 回填一条 `tool_approval_response` 事件即可，详见[会话事件流](raw/application-user-guide/agent-development/managed-agents/managed-agents-session/managed-agents-event-stream.md)。本例全程 `always_allow`。
@@ -417,7 +417,7 @@ if d["type"] == "session_status":
 9.  `mark_artifacts` **一次调用登记两个产物**，返回各自的 `file_id`；
 10.  assistant 总结 → `end_turn`。
 
-第 4 步和第 8 步集中体现了 Agent 的自主迭代：没有人告诉它 `inspect.py` 会撞名、也没人帮它查 pandas API，是它自己从报错里发现问题、改完重跑的。这两处正是「迭代」发生的地方。具体踩哪个坑每次不一样，但「跑一次 → 看结果 → 改了再跑」的循环是稳定的，最终数字多次运行完全一致。
+第 4 步和第 8 步集中体现了 Agent 的自主迭代：两次都没有提示 `inspect.py` 会与标准库同名、也没有提示 pandas API 的用法，是 Agent 自己从报错中发现问题、修改后重新运行。这两处正是「迭代」发生的位置。具体问题每次不同，但「运行 → 查看结果 → 修改后重跑」的循环是稳定的，最终数字多次运行完全一致。
 
 **说明**去重与重组：SSE 流当前不提供游标 / 续传 token，断连后重新建流时，按事件 `id` 去重。流式 assistant 文本理论上按 `sequence_number` 累积，但该字段常为 `null`、文本以整条 `completed` 消息下发，解析时按「有 `sequence_number` 就累积、没有就当整条」处理。
 
@@ -485,14 +485,14 @@ EOF
 
 ### 查看本次运行的用量
 
-`GET /sessions/{id}` 的响应里有 `stats` 和 `usage`，跑完随手核一下成本：
+`GET /sessions/{id}` 的响应里有 `stats` 和 `usage`，运行结束后可用于核对成本：
 
 ```
 curl -X GET "$AGENTSTUDIO_URL/sessions/$SESSION_ID" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
-一轮典型运行的 `stats` 为 `{ "active_seconds": 113.7, "duration_seconds": 139.6 }`，`usage` 为 `{ "input_tokens": 118011, "output_tokens": 4431, "cache_read_input_tokens": 104152, "cache_creation_input_tokens": 13793 }`。多次运行落在 110185 秒 / 115k171k input tokens 区间，取决于 Agent 中间返工了几次。input 里 82%~88% 是缓存命中——多轮工具调用会把同一段上下文反复带上，缓存命中率对成本影响很大。计费口径见[计费说明](raw/application-user-guide/agent-development/managed-agents/managed-agents-billing.md)。
+一轮典型运行的 `stats` 为 `{ "active_seconds": 113.7, "duration_seconds": 139.6 }`，`usage` 为 `{ "input_tokens": 118011, "output_tokens": 4431, "cache_read_input_tokens": 104152, "cache_creation_input_tokens": 13793 }`。多次运行落在 110~185 秒 / 115k~171k input tokens 区间，取决于 Agent 中间返工了几次。input 里 82%~88% 是缓存命中——多轮工具调用会把同一段上下文反复带上，缓存命中率对成本影响很大。计费口径见[计费说明](raw/application-user-guide/agent-development/managed-agents/managed-agents-billing.md)。
 
 ## 步骤 7：清理（归档）
 
@@ -518,7 +518,7 @@ curl -X POST "$AGENTSTUDIO_URL/agents/$AGENT_ID/archive" \
 -   **Agent / Environment / Session 三层解耦**：Agent 是可版本化的「人设+工具」，Environment 是可复用的「沙箱模板」，Session 是一次自包含运行。前两者建一次、多次复用。
 -   **依赖装在 Environment 里，不要装在回合里**：`config.packages.pip` 声明的包在容器启动时就绪，Agent 不用花 token 和时间跑 `pip install`。
 -   **工具要逐个显式开启**：`default_config.enabled: true` 只是工具集总开关，真正决定模型能拿到哪些工具的是 `configs[ ]` 里逐条 `enabled: true`。漏了这一步，Agent 只有 `mark_artifacts` 可用。
--   **文件是只读挂载 + 可写工作区**：上传文件挂在 `/mnt/session/uploads/`（只读），Agent 必须先拷到 `/mnt/user` 或 `/tmp` 才能改，产物写 `/mnt/session/outputs/`。`/mnt/user` 与 `/mnt/session/outputs` 在新容器里可能尚不存在，拷贝前用 `mkdir -p` 兜底。
+-   **文件是只读挂载 + 可写工作区**：上传文件挂在 `/mnt/session/uploads/`（只读），Agent 必须先拷到 `/mnt/user` 或 `/tmp` 才能改，产物写 `/mnt/session/outputs/`。`/mnt/user` 与 `/mnt/session/outputs` 在新容器里可能尚不存在，拷贝前先用 `mkdir -p` 创建。
 -   **产物从 `/mnt/session/outputs/` 出关**：写进该目录的文件会被平台扫描，回合结束后在 session 作用域的文件列表里可见、可下载。`mark_artifacts` 的价值是**即时**拿到 `file_id` 并附上 description——不用等扫描、不用事后翻列表，一次调用还能登记多个产物。
 -   **驱动靠事件、观测靠 SSE**：发 `message` 事件让 Agent 进入 `running`，SSE 流实时回传 assistant 文本与工具调用；用 `session_status` + `stop_reason` 判断何时结束。
 -   **idle 需要消歧**：会话状态 `idle` 在「回合结束（`end_turn`）」和「需要回填工具结果（`requires_action`）」两种情况下都会触发，务必用 `stop_reason.type` 区分，只有 `end_turn` 才退出。

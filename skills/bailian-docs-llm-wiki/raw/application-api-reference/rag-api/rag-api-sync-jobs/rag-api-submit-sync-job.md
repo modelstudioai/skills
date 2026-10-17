@@ -68,7 +68,7 @@ string
 
 integer
 
-切片大小（字符数），取值范围 16000。chunkMode 为 `length` 时必填；chunkMode 为 `h1``h5` 时若指定则一并考虑（未传入时使用默认值 500）
+切片大小（字符数），取值范围 1~6000。chunkMode 为 `length` 时必填；chunkMode 为 `h1`~`h5` 时若指定则一并考虑（未传入时使用默认值 500）
 
 `overlapSize`
 
@@ -76,7 +76,7 @@ integer
 
 integer
 
-切片重叠大小（字符数），取值范围 01024。仅 chunkMode 为 `length` 时生效，按标题切分（`h1``h5`）时不生效
+切片重叠大小（字符数），取值范围 0~1024。仅 chunkMode 为 `length` 时生效，按标题切分（`h1`~`h5`）时不生效
 
 `separator`
 

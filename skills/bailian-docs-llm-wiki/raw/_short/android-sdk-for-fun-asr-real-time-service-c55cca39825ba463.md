@@ -294,28 +294,13 @@ API Key。
 
 **重要**当开启端侧音频能力（如AEC、VAD）时，不支持8000Hz。
 
-`nls_config.semantic_punctuation_enabled`
-
-`boolean`
-
-否
-
-是否启用语义断句。
-
-默认值：false。
-
--   true：开启语义断句，关闭 VAD 断句。
--   false（默认）：开启 VAD 断句，关闭语义断句。
-
-语义断句准确性更高，适合会议转写场景；VAD（Voice Activity Detection，语音活动检测）断句延迟较低，适合交互场景。
-
 `nls_config.max_sentence_silence`
 
 `int`
 
 否
 
-VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈值时，系统会判定该句子已结束。当`semantic_punctuation_enabled`为true时，不作为`sentence_end`返回依据，但设置过小可能会影响识别效果。
+VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈值时，系统会判定该句子已结束。
 
 默认值：1300。
 
@@ -326,8 +311,6 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
 `boolean`
 
 否
-
-**重要**仅在`semantic_punctuation_enabled`参数为false时生效。
 
 是否启用多阈值模式。启用后可防止 VAD 断句切割过长。
 

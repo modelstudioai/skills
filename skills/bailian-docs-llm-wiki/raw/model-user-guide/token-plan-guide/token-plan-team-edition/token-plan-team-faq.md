@@ -133,7 +133,7 @@ Token Plan 团队版存在并发限制。平台会根据整体资源负载动态
 
 ### 续费后需要重新配置 API Key 吗？
 
-不需要。续费仅延长当前订阅的有效期，不会影响已分配席位的 API Key 和 Base URL，成员无需在工具中重新配置。仅当订阅到期后重新购买、或退订席位后重新购买时，系统才会生成新的 API Key 和 Base URL，此时需在工具中重新配置，可在控制台**我的订阅**页面的 API Key 区域获取。
+不需要。续费、订阅到期后重新购买、退订席位后重新购买均不会变更已分配席位的 API Key；订阅到期或退订期间 API Key 暂时不可用，续费或重新购买成功后即恢复可用，成员无需在工具中重新配置。如需更换成员的 API Key，可[重置 API Key](https://help.aliyun.com/zh/model-studio/token-plan-team-management#tpt03-h-reset-key)。
 
 ### 限时优惠的计费规则是什么？
 

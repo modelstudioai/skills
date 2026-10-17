@@ -1,14 +1,14 @@
 # 进阶：自定义 MCP 与 Skills
 
-把自有能力挂上 Agent：已运行的 MCP Server 注册进阿里云百炼（自定义 MCP），团队作业流程打包上传（Skills），含运行时机制与版本管理。
+把自有能力挂上 Agent：已运行的 MCP Server 注册进阿里云百炼（自定义 MCP，含按会话动态传入鉴权 Header），团队作业流程打包上传（Skills），含运行时机制与版本管理。
 
 ## 概述
 
-前面几篇里，Agent 用的都是「平台给的」能力：内置工具集（[入门篇](raw/_short/managed-agents-data-analysis-2249e7a887786f0b.md)）、MCP 市场服务（[生产化篇](raw/application-user-guide/agent-development/managed-agents/managed-agents-best-practices/managed-agents-production.md)）。本篇讲反方向——**把已有的能力挂上 Agent**：已经跑着的 MCP Server 注册进阿里云百炼（自定义 MCP），团队的作业流程打包上传（Skills）。
+内置工具集（[入门篇](raw/_short/managed-agents-data-analysis-2249e7a887786f0b.md)）、MCP 市场服务（[生产化篇](raw/application-user-guide/agent-development/managed-agents/managed-agents-best-practices/managed-agents-production.md)）都是「平台给的」能力；本篇讲反方向——**把已有的能力挂上 Agent**：已经跑着的 MCP Server 注册进阿里云百炼（自定义 MCP），团队的作业流程打包上传（Skills）。
 
 ## 场景：鹿鸣出版的审读助手
 
-「鹿鸣出版」是一家虚构的图书出版公司，内容运营部每个月要处理大量来稿。他们手里有两样现成的资产：
+「鹿鸣出版」是一家虚构的图书出版公司，内容运营部每个月要处理大量来稿。他们有两样现成的资产：
 
 1.  **一套编辑规范知识库**——早已建在阿里云百炼知识索引（RAG）上，对外暴露的就是一个标准的 MCP 端点。痛点：这个知识库以前只有应用侧能查，Managed Agent 用不上。
 2.  **一个稿件体检流程**——老编辑的「三看」经验：看标题层级、看段落长度、看绝对化用语。以前是人肉 checklist，想变成 Agent 自动执行。
@@ -107,7 +107,7 @@ curl -s -X POST "$AGENTSTUDIO_URL/agents" \
   }'
 ```
 
-`$AGENTSTUDIO_URL` 与 `$DASHSCOPE_API_KEY` 的约定见[生产化篇](raw/application-user-guide/agent-development/managed-agents/managed-agents-best-practices/managed-agents-production.md)。挂载后工具的启用方式与市场服务完全一致：`tools` 里加 `mcp_toolkit`，`mcp_server_name` 填**同一个服务 ID**（与 `mcp_servers[].name` 两处必须一致），`configs[ ]` 逐工具 `enabled: true`（忘了逐工具启用的话，运行时工具静默缺失——这个坑在[生产化篇](raw/application-user-guide/agent-development/managed-agents/managed-agents-best-practices/managed-agents-production.md)展开过）。
+`$AGENTSTUDIO_URL` 与 `$DASHSCOPE_API_KEY` 的约定见[生产化篇](raw/application-user-guide/agent-development/managed-agents/managed-agents-best-practices/managed-agents-production.md)。挂载后工具的启用方式与市场服务完全一致：`tools` 里加 `mcp_toolkit`，`mcp_server_name` 填**同一个服务 ID**（与 `mcp_servers[].name` 两处必须一致），`configs[ ]` 逐工具 `enabled: true`（未逐工具启用时，运行时工具静默缺失，完整说明见[生产化篇](raw/application-user-guide/agent-development/managed-agents/managed-agents-best-practices/managed-agents-production.md)）。
 
 **一个重要的差异——两种 type 的校验时机完全不同**：
 
@@ -134,6 +134,82 @@ curl -s -X POST "$AGENTSTUDIO_URL/agents" \
 低（创建时即报错）
 
 自定义 MCP 的接入顺序是固定的：**先在控制台注册，再写进 agents 配置**。顺带一提，当前自定义 MCP 的注册与增删改走控制台（API 总览里没有对应端点）。
+
+### 动态传入 MCP 鉴权 Header
+
+上面的 RAG 例子用固定鉴权：注册时把密钥替换成实际值，之后全部会话共用这一份。同一个自定义 MCP 服务若需要**按会话使用不同的鉴权信息**，改用动态 Header 占位符。例如审读助手调用业务 MCP 时，要按会话传入访问凭证（`dynamic-header`）与租户标识（`X-Tenant-Id`）。做法分两步：注册 MCP 时声明动态 Header 占位符；调用 `POST /sessions` 创建会话时传入当前会话的真实值，平台调用该 MCP 时完成替换。
+
+#### 注册时声明动态 Header
+
+在自定义 MCP 的 **MCP服务配置**（JSON）里，把需要动态传值的 Header 写成 `"Header名称": "${Header名称}"`。名为 `business_mcp` 的示例：
+
+```
+{
+  "mcpServers": {
+    "business_mcp": {
+      "type": "streamableHttp",
+      "url": "https://mcp.example.com/mcp",
+      "headers": {
+        "dynamic-header": "${dynamic-header}",
+        "X-Tenant-Id": "${X-Tenant-Id}"
+      }
+    }
+  }
+}
+```
+
+`${dynamic-header}` 与 `${X-Tenant-Id}` 是**注册时原样保留的动态占位符**，不要提前替换成某个会话的真实值；同一服务允许配置多个动态 Header。Header 名称、占位符名称与后续传参的键三者保持一致，配置对象的字段名为 `headers`。注册完成后按上一节完成 Agent 挂载与工具启用。
+
+#### 创建会话时通过 `mcp_configs` 传入真实值
+
+在 `POST /sessions` 请求体顶层添加 `mcp_configs`，与 `agent`、`environment_id` 并列（字段定义见[创建 Session API](raw/application-api-reference/managed-agents-api/session-api/session-create.md)）：
+
+```
+curl -s -X POST "$AGENTSTUDIO_URL/sessions" \
+  -H "Authorization: Bearer $DASHSCOPE_API_KEY" -H "Content-Type: application/json" \
+  -d '{
+    "agent": {"id": "agent_xxx"},
+    "environment_id": "env_xxx",
+    "title": "鹿鸣审读：租户 A",
+    "mcp_configs": [
+      {
+        "mcp_server_name": "mcp-xxxxxxxx",
+        "headers": {
+          "dynamic-header": "session-a-token-example",
+          "X-Tenant-Id": "tenant-a"
+        }
+      }
+    ]
+  }'
+```
+
+参数
+
+类型
+
+填写说明
+
+`mcp_configs`
+
+数组
+
+会话级 MCP 请求头配置，独立于 `agent`；省略时为空数组。为多个 MCP 服务传值时，在数组中分别添加配置
+
+`mcp_configs[].mcp_server_name`
+
+string，必填
+
+目标 MCP Server 标识，与 Agent 挂载配置的 `mcp_servers[].name`、工具包的 `mcp_server_name` 三处保持一致
+
+`mcp_configs[].headers`
+
+object，必填
+
+当前会话的请求头键值对，键和值均为字符串
+
+请求外层的 `Authorization` 用于调用 Managed Agents API；请求体中的 `mcp_configs[].headers` 用于 Agent 调用目标 MCP 服务。换一个租户时，复用同一个 Agent 与 MCP 注册，只替换 `headers` 里的值，无需重复注册 MCP。
+
+**说明**传入不存在的 MCP Server 名称不会导致创建会话报错，但运行时该配置不生效——`mcp_server_name` 需要与注册的服务 ID 核对一致。另外，`mcp_configs` 不会出现在创建会话的响应里，`GET /sessions/{id}` 才会返回，核对时以 GET 结果为准。
 
 ## Skills：把团队流程打包上传
 
@@ -344,8 +420,8 @@ curl -s -X DELETE "$AGENTSTUDIO_URL/skills/skill_xxx" -H "Authorization: Bearer 
 ```
 
 -   **技能删除是硬删除**——对比：Agent / Deployment 只能 archive 不能删。删除前想清楚：已挂载旧版本的 Agent 引用会失效。
--   自定义 MCP 的增删改在控制台（无 API），技能的增删改查在 API（本篇全链路）——两类资产的管理入口正好相反，别记混。
--   `GET /skills` 列表里还能看到工作空间下全部技能的健康状态（含官方市场的），巡检时顺手看一眼。
+-   自定义 MCP 的增删改在控制台（无 API），技能的增删改查在 API（本篇全链路）——两类资产的管理入口相反。
+-   `GET /skills` 列表返回工作空间下全部技能（含官方市场）的健康状态，可用于日常巡检。
 
 ## 小结
 
@@ -373,13 +449,19 @@ curl -s -X DELETE "$AGENTSTUDIO_URL/skills/skill_xxx" -H "Authorization: Bearer 
 
 **控制台注册（脚本部署 → http 安装方式，仅注册免费）→ API 挂载**
 
+同一个 MCP 按会话传入不同鉴权信息
+
+动态 MCP Header
+
+注册时配置 `${Header名称}` 占位符 → 创建会话的 `mcp_configs` 传入真实值
+
 **团队的作业流程（清单、脚本、模板）**
 
 **自定义 Skill**
 
 **打包 zip → API 上传 → 过审（分钟级）→ 挂载锁定版本**
 
-MCP 与 Skills 的分工：**MCP 给 Agent 加「手」（能调什么服务），Skill 给 Agent 加「SOP」（按什么流程干活）**。鹿鸣的审读助手两个都挂上：RAG MCP 让它能查编辑规范，manuscript-check 技能让它按老编辑的三看法跑体检——手和章法齐了。
+MCP 与 Skills 的分工：**MCP 决定 Agent 能调用什么服务，Skill 决定 Agent 按什么流程执行**。鹿鸣的审读助手两者都挂载：RAG MCP 让它能查编辑规范，manuscript-check 技能让它按稿件体检流程完成检查。
 
 工程清单（按优先级）：SKILL.md 的 description 写清「何时用」（模型靠它路由）→ 上传流水线预留审核等待（分钟级）→ 挂载锁定具体版本（不追随 latest）→ 说明书里脚本路径写相对用法 → 删除前评估已挂载引用。
 

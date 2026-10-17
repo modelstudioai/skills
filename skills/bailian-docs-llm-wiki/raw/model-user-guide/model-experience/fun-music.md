@@ -2,7 +2,7 @@
 
 Fun-Music 支持通过提示词描述音乐风格和场景，或提供自定义歌词，生成带有男声或女声的中文/英文完整歌曲 ，也支持生成纯音乐 。
 
-**重要**该模型目前处于邀测阶段，您需要前往[模型广场](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/fun-music-v1)申请开通后方可使用。该模型服务仅在华北2（北京）地域下可用。
+**Important**该模型目前处于邀测阶段。
 
 ## 概述
 
@@ -80,7 +80,7 @@ gender
 export DASHSCOPE_API_KEY="sk-xxx"
 ```
 
-**说明**以下示例代码中的 `{WorkspaceId}` 需要替换为您的业务空间ID。获取方式请参见[业务空间管理](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+**Note**以下示例代码中的 `{WorkspaceId}` 需要替换为您的业务空间ID。获取方式请参见[业务空间管理](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
 ## 快速开始
 
@@ -379,7 +379,7 @@ public class FunMusicInstrumentalDemo {
 -   推荐：`悲伤钢琴曲，雨夜思念`
 -   不推荐：`悲伤音乐`（过于笼统）
 
-**说明**您可以在提示词中直接指定乐器（如“钢琴伴奏”“萨克斯独奏”“古筝与竹笛”）、节奏（如“轻快节奏”“慢节拍”“密集鼓点”）和情感基调（如“温暖”“伤感”“热血”“慵懒”），模型会尽可能遵循这些描述进行创作。描述越具体，生成效果越贴合预期。
+**Note**您可以在提示词中直接指定乐器（如“钢琴伴奏”“萨克斯独奏”“古筝与竹笛”）、节奏（如“轻快节奏”“慢节拍”“密集鼓点”）和情感基调（如“温暖”“伤感”“热血”“慵懒”），模型会尽可能遵循这些描述进行创作。描述越具体，生成效果越贴合预期。
 
 **不同风格的提示词示例**
 
@@ -496,7 +496,7 @@ public class FunMusicInstrumentalDemo {
 
 流式模式支持边生成边返回音频数据，适用于实时播放等场景，`fun-music-v1` 和 `fun-music-preview` 均支持该模式。启用流式输出需要在请求头中添加 `X-DashScope-SSE: enable`。
 
-**说明**流式模式与非流式模式的输入参数字符数限制不同，请注意区分：
+**Note**流式模式与非流式模式的输入参数字符数限制不同，请注意区分：
 
 -   非流式模式：`lyrics` 支持中文 5~350 字符、英文 5~2000 字符，`prompt` 支持 1~2000 字符。
 -   流式模式：`lyrics` 支持中文 300~350 字、英文 200~250 词，`prompt` 支持 5~1000 个中文汉字或英文单词。
