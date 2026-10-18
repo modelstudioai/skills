@@ -1,51 +1,58 @@
 # OpenAI 兼容接口
 
-OpenAI 兼容接口是百炼平台提供的一套标准化 REST API 协议，完全遵循 OpenAI 的请求格式、响应结构与语义规范（如 `/v1/chat/completions`），使开发者能直接复用现有 OpenAI SDK（如 `openai==1.0+`）、工具链和代码逻辑，零改造调用百炼托管的 Qwen 全系列模型及主流第三方模型。
+OpenAI 兼容接口是百炼平台提供的一套标准化 RESTful API 协议，其请求/响应格式、路径、参数命名与语义均严格对齐 OpenAI 官方 API（如 `/v1/chat/completions` 和 `/v1/responses`），使开发者无需修改核心调用逻辑，即可将基于 OpenAI SDK 或适配器的代码无缝迁移至百炼平台。
 
-## 在百炼平台的不同场景中，这个概念如何使用
+## 在百炼平台的不同场景中如何使用
 
-- **快速接入与迁移**：无需重写业务逻辑，只需替换 `base_url` 和 `api_key`，即可将原有 OpenAI 应用无缝迁移到百炼，适用于原型验证、A/B 测试或混合模型路由场景。  
-- **多模型统一调度**：同一套 OpenAI SDK 代码可切换调用 `qwen3.7-plus`、`qwen3.8-omni-flash`、`deepseek-v4-pro` 等不同能力模型，仅需修改 `model` 字段，降低多模型集成复杂度。  
-- **Agent 与工具链开发**：支持 OpenAI-style `tools` 参数声明（如 `{"type": "web_search"}`），配合 `tool_choice` 自动触发联网搜索、代码解释器等内置能力，适用于构建智能体（Agent）应用。  
-- **流式响应与结构化输出**：完整支持 `stream: true`（SSE 流式传输）和 `response_format: {"type": "json_object"}`，满足实时对话、前端增量渲染及强 Schema 约束等生产需求。  
-- **不适用场景**：Qwen-Audio、部分语音/视频专用模型（如 `wanx-video`、`speech-to-speech`）及需显式缓存控制（`cache_control`）的高级用例，需改用 DashScope 原生协议。
+- **通用大模型调用**：通过 `POST /v1/chat/completions` 调用 Qwen 系列（如 `qwen3.8-max`、`qwen3.7-plus`）、DeepSeek、GLM、Kimi 等支持模型，适用于对话、摘要、生成等标准 LLM 场景；支持[多模态](multi-modal.md)输入（图像、视频、PDF 文件）——其中 Qwen-Omni 支持视频文件上传，Qwen-VL/QVQ 支持图像理解。
+- **高级智能体能力集成**：通过 `POST /v1/responses`（OpenAI 兼容 Responses 协议）启用完整工具调用链路（`web_search`、联网搜索、网页抓取、代码解释器）、显式缓存（`cache_control.type = "ephemeral"`）和 Session 级缓存（`x-dashscope-session-cache: enable`），适合构建需长期上下文、外部动作执行的 Agent 应用。
+- **Flow Agent 工作流接入**：在 Flow Agent 的「OpenAI 兼容模式」下，可通过 `POST /api/v2/apps/agent/{APP_ID}/compatible-mode/v1/responses` 直接复用 OpenAI 风格的 `messages` 输入结构调用已发布的智能体应用，降低工作流集成门槛。
+- **不适用场景**：Qwen-Audio 模型**明确不支持** OpenAI 兼容协议，必须使用 DashScope 原生协议；QwQ/QVQ 模型的 `system` 角色消息无效，调用时应避免设置。
 
 ## 关键参数和配置
 
-| 参数 | 必填 | 说明 | 示例 |
-|------|------|------|------|
-| `base_url` | ✅ | OpenAI 兼容接口根地址，**必须与 API Key 所属地域和计费方案匹配**。推荐使用业务空间专属域名（高吞吐、低延迟、流量隔离）。 | `https://ws-abc123.cn-beijing.maas.aliyuncs.com/compatible-mode/v1` |
-| `api_key` | ✅ | 通过百炼控制台创建的 API Key，需设置为环境变量 `DASHSCOPE_API_KEY` 或 SDK 初始化参数。注意：主账号维度生效，跨地域不通用。 | `sk-xxx` |
-| `model` | ✅ | 请求的目标模型 ID，区分大小写，必须在当前地域可用且权限已授权。 | `"qwen3.7-plus"`、`"deepseek-v4-pro"` |
-| `messages` | ✅ | 标准 OpenAI 消息数组，含 `role`（`system`/`user`/`assistant`）和 `content`（字符串或含 `image_url` 的[多模态](multimodal.md)内容）。 | `[{"role":"user","content":"你好"}]` |
-| `tools` | ❌（可选） | 声明可用工具列表，启用自动工具调用。仅部分模型（如 `qwen3.8-omni-flash`）支持有限工具集。 | `[{"type":"web_search"}]` |
-| `response_format` | ❌（可选） | 强制结构化输出，支持 `{"type": "json_object"}`（需模型支持 JSON 模式）。 | `{"type": "json_object"}` |
-| `stream` | ❌（可选） | 启用流式响应，返回 `text/event-stream`；前端需按 SSE 协议解析。 | `true` |
-| `temperature` / `top_p` / `max_tokens` | ❌（可选） | 标准采样参数，行为与 OpenAI 一致（`temperature` 范围 `0.0–2.0`，默认 `1.0`）。 | `{"temperature": 0.7, "max_tokens": 1024}` |
+| 参数 | 类型 | 必填 | 说明 | 示例值 |
+|------|------|------|------|--------|
+| `model` | string | 是 | 模型 ID，需与 OpenAI 兼容协议支持列表一致（覆盖最广） | `"qwen3.8-max"`, `"deepseek-v4.1-flash-1017"` |
+| `messages` | array | 是（Chat）<br>否（Responses） | Chat 接口必填，格式为 `[{role: "user"/"assistant"/"system", content: string}]`；Responses 接口可选，若提供则自动转为 `input` 字段 | `[{"role":"user","content":"解释量子纠缠"}]` |
+| `stream` | boolean | 否 | 是否启用流式响应（SSE）。设为 `true` 时，客户端需正确解析 Server-Sent Events | `true` |
+| `incremental_output` | boolean | 否（仅 Responses） | 仅当 `stream=true` 时生效，控制是否返回增量 token（推荐开启） | `true` |
+| `tools` | array | 否 | 定义可调用工具。支持内置工具（如 `{"type": "web_search"}`）和自定义 function schema | `[{"type": "web_search"}, {"type": "function", "function": {...}}]` |
+| `tool_choice` | string / object | 否 | 控制工具调用策略：`"auto"`（默认）、`"none"` 或指定 `{"type": "function", "function": {"name": "xxx"}}` | `"auto"` |
+| `cache_control` | object | 否（仅 Chat） | 显式缓存控制：`{"type": "ephemeral"}` 表示本次请求结果可被后续相同请求命中 | `{"type": "ephemeral"}` |
+| `max_tokens` | integer | 否 | 最大输出 token 数（非总长度）。注意：不同模型语义不同（如 `qwen3.8-max` 包含思考+回复，`qwen3.7-plus` 仅限回复） | `2048` |
+| `temperature` | number | 否 | 温度值，范围 `[0, 2)`，高于 OpenAI 官方 `[0, 1]` 上限，迁移时建议校准 | `0.7` |
 
-> ⚠️ 注意：  
-> - 不支持 OpenAI 的 `functions`（旧版[函数调用](function-calling.md)），请统一使用 `tools`；  
-> - `system` 消息在 `messages` 数组首位即生效，无需额外字段；  
-> - [多模态](multimodal.md)输入（图像）需使用 `content` 数组格式，含 `{"type": "image_url", "image_url": {"url": "data:image/png;base64,..."} }`；  
-> - 所有请求均受账号级 RPM（每分钟调用次数）与 TPM（每分钟 [Token](token.md) 总消耗）双重限流，超限返回 `429`。
+> **Endpoint 格式**：推荐使用业务空间专属域名 `https://{WorkspaceId}.{region}.maas.aliyuncs.com`（如 `https://ws-abc123.cn-beijing.maas.aliyuncs.com`），性能与稳定性优于公共域名。  
+> **认证方式**：统一使用 `Authorization: Bearer <API_KEY>` Header，API Key 在百炼控制台「API 密钥管理」中创建。  
+> **地域限制**：所有 OpenAI 兼容接口（包括 Chat 和 Responses）**仅支持华北2（北京）地域**，跨地域调用将失败。
 
-## 面向开发者，简洁实用
+## 开发者提示
 
-- ✅ **立刻上手**：复制示例代码，填入你的 `WorkspaceId` 和 `DASHSCOPE_API_KEY`，5 分钟完成首次调用。  
-- ✅ **零适配成本**：`openai>=1.0.0` SDK、LangChain、LlamaIndex 等生态工具开箱即用。  
-- ✅ **生产就绪**：业务空间专属域名提供 SLA 保障，支持监控、审计日志与用量分析。  
-- ❌ **避免踩坑**：  
-  - 不要用 DashScope 域名（`dashscope.aliyuncs.com`）用于新项目——2026 年 9 月起停更；  
-  - 不要硬编码 API Key，务必通过环境变量注入；  
-  - 不要跨地域混用 Key 与 Base URL，否则返回 `401 Unauthorized`；  
-  - 测试勿用试用域名（`trial.*`），其限流极严，仅限功能验证。  
+- ✅ **快速验证**：用 `curl` 即可发起首调，无需 SDK：
+  ```bash
+  curl -X POST "https://ws-xxx.cn-beijing.maas.aliyuncs.com/v1/chat/completions" \
+    -H "Authorization: Bearer YOUR_API_KEY" \
+    -H "Content-Type: application/json" \
+    -d '{
+          "model": "qwen3.8-max",
+          "messages": [{"role": "user", "content": "你好"}],
+          "stream": false
+        }'
+  ```
+- ✅ **流式处理**：启用 `stream=true` 时，务必按 SSE 格式逐行解析（每行以 `data:` 开头），避免直接 JSON.parse 整个响应体。
+- ⚠️ **避坑提醒**：
+  - 不要为 QwQ/QVQ 模型设置 `system` 消息；
+  - `temperature` 超出 `[0, 2)` 将报错，`top_p` 等其他采样参数在 OpenAI 兼容接口中**暂不支持**；
+  - [多模态](multi-modal.md)输入需确保文件已通过百炼文件服务上传并获得 `file_id`，再以 `{"type": "image_url", "image_url": {"url": "file-{id}"}}` 形式传入 `content`。
 
-> 提示：调试时优先使用 [百炼控制台 → 模型体验页](https://bailian.console.aliyun.com/model/experience)，可视化查看请求/响应、自动补全参数、一键生成 SDK 代码。
+如需进一步了解具体模型能力边界或错误码含义，请查阅对应协议文档：[OpenAI 兼容 Chat](../../raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)、[OpenAI 兼容 Responses](../../raw/model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)。
 
 ## 关联主题页
 
-- [get started with models](../guides/get-started-with-models.md)
 - [qwen api reference](../api/qwen-api-reference.md)
-- [model experience](../guides/model-experience.md)
+- [get started with models](../guides/get-started-with-models.md)
+- [managed agents api](../api/managed-agents-api.md)
+- [flow agent api](../api/flow-agent-api.md)
 
 

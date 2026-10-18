@@ -103,7 +103,7 @@ temperature 取值范围
 
 **第三方模型**
 
-deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731、kimi-k3、kimi-k2.7-code、kimi-k2.6、kimi-k2.5、glm-5.3、glm-5.2、glm-5.1、glm-5、MiniMax-M2.5
+deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731、kimi-k3、kimi-k2.7-code、kimi-k2.6、kimi-k2.5、glm-5.3、glm-5.2、glm-5.1、glm-5、MiniMax-M2.5、deepseek-v4.1-flash-1017
 
 **max\_tokens** `integer` **（必选）**
 
@@ -354,7 +354,9 @@ tools 数组元素
 
 > 使用 Anthropic SDK 或 HTTP 直接调用时，**必须**在 `system` 中传入客户端标识 `x-anthropic-billing-header: cc_entrypoint=cli;`，否则联网搜索不生效。面向 Claude Code 等 Anthropic 官方客户端时无需额外配置。详见 [联网搜索](raw/model-user-guide/model-experience/text-generation-model/tool-calls/web-search.md)。
 
-> 支持以下模型：Qwen3.8 Max、Flash 与开源系列（不含 Omni）；Qwen3.7 Max、Plus、Flash 系列；Qwen3.6-Plus、Qwen3.6-Flash 系列；Qwen3.5-Plus、Qwen3.5-Flash 系列；deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731；glm-5.2；kimi-k3。联网搜索的计费与 agent 策略相同，参见 [计费说明](https://help.aliyun.com/zh/model-studio/web-search#92ce83df3a599)。
+> 支持以下模型：Qwen3.8 Max、Flash 与开源系列（不含 Omni）；Qwen3.7 Max、Plus、Flash 系列；Qwen3.6-Plus、Qwen3.6-Flash 系列；Qwen3.5-Plus、Qwen3.5-Flash 系列；deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731、deepseek-v4.1-flash-1017；glm-5.2；kimi-k3。联网搜索的计费与 agent 策略相同，参见 [计费说明](https://help.aliyun.com/zh/model-studio/web-search#92ce83df3a599)。
+
+`deepseek-v4.1-flash-1017` 还支持网页抓取工具 `web_fetch`。Anthropic 兼容的请求要求及示例请参见[网页抓取](./web-extractor)。
 
 **tool\_choice** `object` （可选）
 
@@ -409,7 +411,9 @@ tools 数组元素
 
 结构化输出配置。开启后，模型将输出 JSON 字符串。不同模型的支持力度不同：
 
--   **严格结构化输出**：适用于 qwen3.8 系列、qwen3.7 系列、deepseek 系列、glm 系列模型。模型严格按照传入的 JSON Schema 进行强约束输出，确保字段类型与层级完全一致。
+`deepseek-v4.1-flash-1017` 仅支持 JSON Object，不支持 JSON Schema。
+
+-   **严格结构化输出**：适用于 qwen3.8 系列、qwen3.7 系列、deepseek 系列（不含 `deepseek-v4.1-flash-1017`）、glm 系列模型。模型严格按照传入的 JSON Schema 进行强约束输出，确保字段类型与层级完全一致。
 -   **普通结构化输出**：适用于上述以外的其他模型。Schema 的具体字段约束默认不生效，API 会自动将其转换为普通 JSON 模式（仅保证输出为合法的 JSON 字符串）。触发普通 JSON 模式时，请求必须同时满足以下两点约束：1、显式传入 `output_config` 参数；2、`system` 或 `messages` 的内容中必须包含不区分大小写的 "JSON" 关键词。若提示词中未包含 "JSON" 关键词，API将抛出异常：`'messages' must contain the word 'json' in some form`。
 
 属性

@@ -40,7 +40,9 @@ HTTP 请求地址：`POST https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com
 
 #### OpenAI兼容-Responses API
 
-**说明**Responses API 目前仅支持`deepseek-v4.1-flash`、`deepseek-v4-flash-0731`、`deepseek-v4-pro`、`deepseek-v4-pro-0813`模型，且仅在华北2（北京）与新加坡地域提供服务。
+**说明**以下4款模型支持 Responses API：`deepseek-v4.1-flash`、`deepseek-v4-flash-0731`、`deepseek-v4-pro`、`deepseek-v4-pro-0813`；这些模型的 Responses API 服务仅限华北2（北京）与新加坡地域。
+
+`deepseek-v4.1-flash-1017` 支持在华北2（北京）、新加坡、美国（弗吉尼亚）、德国（法兰克福）、日本（东京）和中国香港六个地域通过 Responses API 调用，并支持 `web_search`、`web_extractor` 和 `code_interpreter` 三种内置工具。六个地域的 SDK `base_url` 和 `POST` 请求地址见 [Responses API 端点配置](./qwen-api-via-openai-responses)。
 
 #### 华北2（北京）
 
@@ -596,6 +598,8 @@ print(response.output.choices[0].message.content)
 
 `deepseek-v4.1-flash`、`deepseek-v4-flash-0731`、`deepseek-v4-pro`与`deepseek-v4-pro-0813`支持通过 OpenAI 兼容的 Responses API 调用，仅支持华北2（北京）与新加坡地域，服务接入地址参见[服务接入地址](https://help.aliyun.com/zh/model-studio/deepseek-api#ds_bu_h2)。
 
+`deepseek-v4.1-flash-1017` 支持在华北2（北京）、新加坡、美国（弗吉尼亚）、德国（法兰克福）、日本（东京）和中国香港六个地域通过 Responses API 调用，并支持 `web_search`、`web_extractor` 和 `code_interpreter` 三种内置工具。六个地域的 SDK `base_url` 和 `POST` 请求地址见 [Responses API 端点配置](./qwen-api-via-openai-responses)。
+
 通过 Responses API 调用时，可在`tools`参数中添加`web_search`（[联网搜索](raw/model-user-guide/model-experience/text-generation-model/tool-calls/web-search.md)）、`web_extractor`（[网页抓取](raw/model-user-guide/model-experience/text-generation-model/tool-calls/web-extractor.md)）与`code_interpreter`（[代码解释器](raw/model-user-guide/model-experience/text-generation-model/tool-calls/qwen-code-interpreter.md)）工具。
 
 ## 其它功能
@@ -613,6 +617,20 @@ print(response.output.choices[0].message.content)
 [结构化输出](raw/model-user-guide/model-experience/text-generation-model/qwen-structured-output.md)
 
 [前缀续写](raw/model-user-guide/model-experience/text-generation-model/partial-mode.md)
+
+deepseek-v4.1-flash-1017
+
+支持
+
+支持
+
+支持
+
+支持（隐式缓存）
+
+支持 JSON Object，不支持 JSON Schema
+
+不支持
 
 deepseek-v4.1-flash
 
@@ -670,6 +688,8 @@ deepseek-v4-flash-0731
 
 不支持
 
+`deepseek-v4.1-flash-1017` 支持 OpenAI 兼容的 Chat Completions API、Anthropic Messages API 和思考；不支持 Batch 调用或微调。
+
 ## 参数默认值
 
 **模型**
@@ -685,6 +705,20 @@ deepseek-v4-flash-0731
 **max\_tokens**
 
 **thinking\_budget**
+
+deepseek-v4.1-flash-1017
+
+1.0
+
+1.0
+
+\-
+
+\-
+
+393,216
+
+\-
 
 deepseek-v4.1-flash
 
@@ -781,7 +815,7 @@ deepseek-v4-pro 在编程、数学和通用任务方面表现出色，deepseek-v
 
 ### 可以上传图片或文档进行提问吗？
 
-DeepSeek 模型仅支持文本输入，不支持图片或文档输入。如需图片输入，请使用[千问VL](raw/model-user-guide/model-experience/vision-model/vision.md)模型；如需文档输入，请使用[Qwen-Long](raw/model-user-guide/model-experience/text-generation-model/specialized-models/long-context-qwen-long.md)模型。
+`deepseek-v4.1-flash` 与 `deepseek-v4.1-flash-1017` 支持文本和图片输入，输出文本。其他模型的输入模态以对应模型信息页为准。图片输入也可使用[千问VL](raw/model-user-guide/model-experience/vision-model/vision.md)模型；文档输入可使用[Qwen-Long](raw/model-user-guide/model-experience/text-generation-model/specialized-models/long-context-qwen-long.md)模型。
 
 ### 如何查看Token消耗量及调用次数？
 

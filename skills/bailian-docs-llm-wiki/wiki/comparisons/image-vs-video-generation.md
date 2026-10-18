@@ -1,6 +1,6 @@
-# 图像生成与视频生成能力对比
+# 图像生成与视频生成对比
 
-为帮助开发者快速理解百炼平台在[多模态](../concepts/multimodal.md)生成领域的核心能力边界，本文对**图像生成（Image Generation）** 与**视频生成（Video Generation）** 两大能力进行系统性对比分析。对比基于当前（2024年Q3）平台正式发布的 API 能力、模型矩阵、调用范式及工程约束，旨在为技术选型提供客观、可落地的决策依据——尤其适用于内容创作工具、AIGC 应用集成、营销自动化、虚拟人/数字人系统等场景。
+本页旨在为开发者提供图像生成（Image Generation）与视频生成（Video Generation）两大核心[多模态](../concepts/multi-modal.md)能力的系统性对比，帮助技术团队在产品设计、模型选型、架构集成及成本规划阶段做出更精准的决策。随着 AIGC 应用从静态内容向动态表达演进，理解二者在协议设计、计算范式、资源消耗与工程约束上的本质差异，已成为构建高性能 AI 原生应用的关键前提。
 
 ---
 
@@ -8,55 +8,52 @@
 
 | 维度 | 图像生成（Image Generation） | 视频生成（Video Generation） |
 |------|------------------------------|------------------------------|
-| **输入格式** | • 文本提示词（`prompt`）<br>• 原图（PNG/JPEG，部分模型禁用透明通道）<br>• 多张参考图（最多14张，如 `vidu`、`qwen-image-2.1-pro`）<br>• 局部掩码（用于擦除重绘）、风格图、元素列表（`element_list`）等结构化输入 | • 文本提示词（`prompt`，长度上限因模型而异：Vidu ≤5000字符，MiniMax ≤7000字符）<br>• 首帧/首尾帧图像（`image_url`）<br>• 参考视频/音频（`video_url`/`audio_url`）<br>• 动作参考图序列、数字人驱动图等<br>• **所有媒体 URL 必须为公网可访问 HTTPS 链接**（本地文件需先调用临时上传接口） |
-| **输出格式** | • 单张或多张静态图像（PNG/JPEG）<br>• 支持分辨率定制（如 `2048×2048`、`4K`、`16:9` 宽高比）<br>• 可选水印（`watermark=true/false`）<br>• 同步返回 Base64 或直链 URL（取决于模型与调用模式） | • 单个 MP4 视频文件（H.264 编码，含音频轨道需额外指定）<br>• 分辨率可控（`"720P"`/`"1080P"`/`"4k"`）<br>• 帧率可配（`video_fps=15/30`）<br>• **仅异步返回 `output.video_url`（有效期24小时）**，不支持 Base64 内联 |
-| **主流支持模型** | • 通用模型：`qwen-image-3.0-pro`、`wan2.7-image-pro`、`z-image-turbo`、`wan2.6-t2i`<br>• 垂直工具：`virtualmodel-v2`、`shoemodel-v1`、`wanx-poster-generation-v1`、`facechain-finetune` + `facechain-inference`<br>• 工业级：`vidu/viduq2-pro_reference2image`、`kling/kling-v3-*` | • 全能型：`wan2.7-text2video`（All-in-One）、`happyhorse-text2video`<br>• [多模态](../concepts/multimodal.md)专家：`vidu/viduq3-pro_text2video`、`kling/kling-v3-video-synthesis`、`pixverse/pixverse-v6-t2v`、`minimax/minimax-v3-t2v`<br>• 垂直场景：`wan2.2-s2v`（数字人）、`videoretalk`（口型同步）、`pixverse-lipsync` |
-| **API 端点与调用模式** | • **同步为主**：`POST /api/v1/services/aigc/multimodal-generation/generation`（如 `qwen-image-*`、`wan2.7-image-*`）<br>• **异步为辅**：`POST /generation` → `GET /tasks/{task_id}`（如 `wan2.5-i2i-preview`、`kling/*`、创意工具类）<br>• OpenAI 兼容模式可用（仅同步，路径 `/images/generations`） | • **强制异步**：`POST /api/v1/services/aigc/video-generation/video-synthesis` → `GET /api/v1/tasks/{task_id}`<br>• **必须携带请求头**：`X-DashScope-Async: enable`（缺失即报错）<br>• 无 OpenAI 兼容路径，无同步能力 |
-| **计费方式** | • 按**生成张数**计费（如 `n=4` 计为4次调用）<br>• 部分模型按**分辨率档位**阶梯计费（如 `wan2.7-image-pro` 的 `"2K"` vs `"4K"`）<br>• 垂直工具类多数提供**500张免费额度**（用完即停，不支持续费）<br>• FaceChain 训练为**按次计费**（2.5元/次） | • 按**任务次数**计费（单次任务 = 1次计费，无论生成时长或帧数）<br>• **分辨率/时长/帧率不影响单价**（但影响实际渲染耗时与资源占用）<br>• 所有模型均**无免费额度**（开通即计费），控制台可设置用量告警与预算限额 |
-| **典型场景** | • 营销海报、电商主图、社交媒体配图生成<br>• 产品图精修、局部擦除补全、背景替换<br>• 虚拟模特/鞋靴模特一键上身<br>• 人物写真风格迁移（FaceChain）<br>• UI 设计稿转多端效果图 | • 短视频广告脚本→成片（文生视频）<br>• 产品静态图→动态展示视频（图生视频）<br>• KOL 录制口播视频→数字人复刻（s2v + lipsync）<br>• 参考舞蹈视频→新角色动作迁移（PixVerse 动作模仿）<br>• 品牌宣传片风格统一化重生成（Vidu/Kling 风格化） |
+| **输入格式** | 支持纯文本（T2I）、单图/多图（I2I、参考图）、局部掩码（inpainting）、涂鸦草图等；`input.messages[].content` 可混合 `text` + `image`（URL/base64），部分模型支持最多 14 张参考图（如 Vidu） | 以任务类型强驱动：文生视频（仅 `prompt`）、图生视频（需 `first_frame`/`last_frame` URL）、参考生视频（`media` 数组含图片或视频 URL）、视频编辑（`video_url` + `image_url` + `audio_url` 等组合）；不支持纯文本+多图混合输入 |
+| **输出格式** | 单帧 PNG/JPEG 图像（URL 下载链接），支持批量生成（`n=1–9`，依模型而定）；结果即时返回（同步）或 24 小时内有效（异步） | 单个 MP4 视频文件（H.264 编码），时长通常为 2–8 秒（依模型与参数而定）；**仅支持异步模式**，结果 URL 有效期 24 小时 |
+| **支持模型** | • 千问系列（`qwen-image-3.0-pro` 等）<br>• 万相系列（`wan2.7-image-pro`, `wanx-x-painting` 等）<br>• 可灵/VIDU（`kling-v3-omni-image-generation`, `viduq2-pro_reference2image`）<br>• 创意工具类（虚拟模特、海报生成、FaceChain 写真等）<br>• 轻量模型（`z-image-turbo`） | • HappyHorse（物理真实感视频）<br>• 万相系列（`wan2.7-videoedit`, `wan3-video-generation` 等）<br>• 爱诗（PixVerse，支持对口型、动作模仿、超分）<br>• VIDU / 可灵（Kling）/ MiniMax（高保真长时序建模）<br>• 数字人（`wan2.2-s2v`）等垂直模型 |
+| **API 端点** | • 同步调用：`POST /api/v1/services/aigc/multimodal-generation/generation`（适用于 `qwen-image-*`, `wan2.7-image-pro`, `z-image-turbo`）<br>• [异步调用](../concepts/asynchronous-invocation.md)：`POST /image-synthesis` 或 `/generation` → `GET /tasks/{task_id}`（适用于 `kling`, `vidu`, 创意工具类） | **统一异步端点**：<br>`POST /api/v1/services/aigc/video-generation/video-synthesis` → `GET /api/v1/tasks/{task_id}`<br>（所有视频模型强制使用该路径，旧版 `/image2video/...` 已弃用） |
+| **调用模式** | **同步与异步双模支持**：<br>• 同步：低延迟场景（<5s），适合实时预览、UI 即时反馈<br>• 异步：高分辨率/复杂编辑任务（如 `kling` 分镜组图、`wanx-x-painting` 局部重绘） | **强制异步模式**：<br>所有视频生成任务必须通过两步完成（创建任务 + 轮询），无同步接口；典型任务耗时 15–120 秒，不可用于实时交互链路 |
+| **计费方式** | • 按**成功生成的图像张数**计费（如 1 张 = 1 [Token](../concepts/token.md)）<br>• 部分模型按**分辨率档位**（1K/2K/4K）阶梯计价（如 `wan2.7-image-pro`）<br>• 免费体验额度模型（如 `shoemodel-v1`）额度用尽即停用，**不支持续购** | • 按**成功生成的视频条数**计费（1 条 = 1 [Token](../concepts/token.md)）<br>• 多数模型按**输出时长 × 分辨率**综合计价（如 `pixverse-v6-t2v` 2s@1080p vs 4s@4K 成本差异显著）<br>• **无免费体验额度**；所有视频模型均为付费调用 |
+| **典型场景** | • 营销素材快速生产（海报、Banner、商品图）<br>• 人像写真与风格化（FaceChain、虚拟模特）<br>• UI 设计稿生成与像素级还原（Vidu）<br>• A/B 测试多版本图像生成<br>• 图像修复、擦除补全、局部重绘 | • 短视频内容创作（广告片、产品演示、社交动态）<br>• 数字人播报与口型同步（PixVerse Lipsync）<br>• 动作迁移与角色动画（Animate-Move/Mix）<br>• 视频超分与画质增强（PixVerse Upscale）<br>• 分镜脚本可视化（Kling 多图参考生成） |
 
 ---
 
 ## 适用场景建议
 
 ### ✅ 推荐选择**图像生成**当：
-- 输出目标为**静态视觉资产**（如 Banner、详情页、LOGO、设计稿），且需高频、低延迟交付；
-- 需要**精细控制局部区域**（如换脸、擦除水印、重绘手部），或依赖多图融合逻辑（如 `qwen-image-2.1-pro` 支持10张参考图）；
-- 成本敏感，且生成量大（可利用 `z-image-turbo` 或 `wan2.2-t2i-flash` 实现毫秒级响应）；
-- 集成至已有 Web 应用，需同步返回结果以简化前端状态管理；
-- 使用垂直工具链（如虚拟模特、海报生成），且接受其功能边界与免费额度限制。
+- 业务需求聚焦于**静态视觉资产**：如电商主图、社交媒体配图、APP 启动页、PPT 插图；
+- 需要**毫秒级响应**：例如设计工具中的“实时提示词渲染”、“画布内局部重绘”；
+- 团队处于**MVP 验证阶段**：可利用 `z-image-turbo` 或免费创意模型（如 `virtualmodel-v2`）低成本试错；
+- 对输出可控性要求极高：如 UI 还原、文字渲染（`qwen-image-3.0-pro` 支持中英文字精准生成）、像素级编辑。
 
 ### ✅ 推荐选择**视频生成**当：
-- 核心需求是**动态表达与时间维度叙事**（如广告、教程、社交短视频）；
-- 输入具备强时序信号（如首尾帧定义运动起止、参考视频提供动作模板）；
-- 需对接数字人、口型同步、动作迁移等**专业视频工作流**（此类能力图像模型完全不支持）；
-- 可接受**2–120秒异步等待**（典型任务耗时：文生视频 30–90s，图生视频 45–150s，复杂编辑可达5分钟）；
-- 已建立稳定媒体资源托管体系（OSS/CDN），能保障 `image_url`/`video_url` 公网可达性与稳定性。
+- 核心目标是**动态表达与时间叙事**：如短视频营销、教育动画、数字人客服、游戏过场生成；
+- 已具备稳定图像资产链路，并希望向上延伸至视频层：例如用 `wan2.7-image-pro` 生成高质量首帧，再交由 `wan2.7-videoedit` 生成视频；
+- 需要**跨模态强控制能力**：如语音驱动口型（PixVerse Lipsync）、参考动作迁移（PixVerse MotionControl）、多图逻辑连贯性（Kling 分镜）；
+- 接受异步工作流与服务端状态管理：已具备任务队列、Webhook 通知、结果缓存等后端基建。
 
 ### ⚠️ 不建议混用或强行替代：
-- **勿用图像生成替代视频关键帧生成**：图像模型无法建模帧间一致性与运动物理，拼接易出现闪烁/跳变；
-- **勿用视频生成替代高精度图像编辑**：视频模型不支持掩码引导、像素级重绘、多图语义融合等图像专属能力；
-- **勿在无异步处理能力的客户端（如纯前端 JS）直接调用视频 API**：必须由服务端中转轮询，否则无法获取最终结果。
+- **勿用图像生成替代视频生成**：拼接多张图像无法保证运动连续性、时序一致性与物理合理性，且无音频/动作控制能力；
+- **勿用视频生成替代图像生成**：视频模型无法输出单帧高清图（无 `n=1` 且分辨率不可控），成本高出 5–20 倍，且延迟不可接受；
+- **避免跨地域调用**：二者均严格绑定地域（北京/新加坡/弗吉尼亚），混用 API Key 与 Endpoint 将直接返回 401/404。
 
 ---
 
-## 开发者技术选型参考
+## 技术选型参考（面向开发者）
 
-| 选型关注点 | 图像生成建议 | 视频生成建议 |
-|------------|--------------|--------------|
-| **接入复杂度** | ★★☆☆☆（同步调用简单；异步模型需轮询逻辑） | ★★★★☆（强制异步，必须实现任务状态机、超时重试、URL 有效期管理） |
-| **调试效率** | ★★★★☆（同步返回快，错误信息明确；支持本地图片直传） | ★★☆☆☆（需预上传资源、等待任务完成；错误常发生在轮询阶段，如 URL 失效、地域不匹配） |
-| **地域容错性** | ★★☆☆☆（跨地域调用直接鉴权失败，但错误反馈即时） | ★★☆☆☆（同样强地域绑定，且错误常表现为任务卡在 `RUNNING` 或 `FAILED`，需查日志定位） |
-| **扩展性** | ★★★☆☆（支持批量生成 `n>1`、分镜组图 `series_amount`，适合批处理） | ★★★★☆（天然支持“任务队列”模式；可结合消息队列实现高并发视频合成流水线） |
-| **长期维护成本** | ★★☆☆☆（部分垂直模型已标记“不推荐”，需主动升级至 `qwen-image-3.0` 或 `wan2.7-image`） | ★★★☆☆（新模型迭代快（如 `wan2.7` 替代 `wan2.6`），但协议统一性提升，旧版下线节奏更清晰） |
+| 选型维度 | 图像生成建议 | 视频生成建议 |
+|----------|--------------|--------------|
+| **入门集成** | 优先选用 `qwen-image-3.0-pro`（同步调用、OpenAI 兼容、文档完善）或 `z-image-turbo`（轻量、宽高比灵活）；SDK 直接调用 `dashscope.ImageGeneration.call()` | 从 `wan2.7-videoedit` 入手（功能全、文档成熟、支持图生+编辑）；务必封装标准轮询逻辑（含重试、超时、状态机） |
+| **高并发低延迟** | 同步模型集群部署 + 请求批处理（如 `n=4` 批量生成）；启用 `thinking_mode=true` 辅助调试 | **必须异步解耦**：前端提交后立即返回 `task_id`；后端用消息队列（如 RocketMQ）驱动轮询与结果分发；禁用前端长轮询 |
+| **成本敏感型项目** | 用 `wan2.1-turbo` 或 `z-image-turbo` 替代高阶模型；关闭水印（`watermark=false`）节省带宽；复用 base64 输入避免多次下载 | 严格限制 `parameters.resolution`（优先 720p 而非 4K）；避免冗余参考图；对口型/超分等增值能力按需开启，非默认启用 |
+| **企业级稳定性要求** | 选用 `kling/kling-v3-omni-image-generation`（工业级鲁棒性）或 `vidu/viduq2-pro_reference2image`（UI 还原精度）；配置专属 Workspace 域名 | 选用 `HappyHorse`（物理真实感）或 `Vidu`（长时序一致性）；启用 `X-DashScope-Async: enable` 显式声明，避免协议误判 |
+| **未来扩展性** | 千问图像模型与 Qwen-VL [多模态](../concepts/multi-modal.md)大模型共享底层架构，便于后续升级图文理解+生成联合体 | 万相 3.0 与 PixVerse v6 均支持“文本+图像+音频”三模态输入，是向[多模态](../concepts/multi-modal.md)智能体演进的优选底座 |
 
-> **最佳实践提示**：  
-> - 对于**图文混合内容生产系统**（如公众号推文+配套短视频），建议采用「图像生成先行 + 视频生成后置」架构：先用 `qwen-image-3.0-pro` 生成高质量封面图与关键帧，再将首帧送入 `wan2.7-text2video` 生成视频，确保视觉一致性；  
-> - 所有调用务必使用**业务空间专属域名**（`https://{WorkspaceId}.{region}.maas.aliyuncs.com`），避免旧域名（`dashscope.aliyuncs.com`）导致的性能下降与限流风险；  
-> - 生产环境必须实现**地域校验中间件**：自动比对 `API Key` 所属地域与请求 Endpoint 地域，提前拦截跨域请求。
+> 💡 **关键提醒**：图像生成与视频生成在百炼平台属于**独立服务域**，其配额、用量统计、监控告警、访问控制策略完全隔离。请在控制台分别开通服务、申请配额并配置独立告警规则。
 
 ---  
-*最后更新：2024年10月*
+*最后更新：2024年6月*  
+*文档维护：百炼平台技术文档组*
 
 ## 被对比主题页
 

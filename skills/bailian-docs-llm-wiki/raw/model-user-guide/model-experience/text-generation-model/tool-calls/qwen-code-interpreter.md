@@ -92,6 +92,8 @@ response = dashscope.MultiModalConversation.call(
 
 ## 适用范围
 
+`deepseek-v4.1-flash-1017` 支持 Responses API 内置 `code_interpreter`，适用于[模型页面](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/deepseek-v4-1-flash.md)所列的全部六个地域及对应部署范围。
+
 ### 推荐模型
 
 #### Responses API

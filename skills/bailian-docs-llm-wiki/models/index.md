@@ -1,6 +1,6 @@
 # 百炼模型市场索引
 
-> 自动生成 · 共 124 个模型家族 · 316 个主干模型 · 更新于 2026-10-18
+> 自动生成 · 共 125 个模型家族 · 318 个主干模型 · 更新于 2026-10-19
 
 **机器查询走结构化文件**：
 
@@ -22,7 +22,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [Decision Model](groups/decision-model.json) — 面向高频业务判断的结构化决策模型，可根据文本或业务状态并行完成分类、是非判断与评分，并返回概率分布和置信度，适用于工单分流、内容审核、智能体路由与结果校验等场景。
   - 模型：`decision-model-preview`
 - [DeepSeek](groups/deepseek.json) — DeepSeek 系列模型覆盖通用对话、复杂推理与多模态理解等场景，提供 Flash、Pro 等不同规格，可根据效果、响应速度和成本灵活选择。
-  - 模型：`deepseek-r1-distill-qwen-1.5b`, `deepseek-v4-flash-0731`, `deepseek-v4-pro`, `deepseek-v4-pro-0813`, `deepseek-v4.1-flash`
+  - 模型：`deepseek-r1-distill-qwen-1.5b`, `deepseek-v4-flash-0731`, `deepseek-v4-pro`, `deepseek-v4-pro-0813`, `deepseek-v4.1-flash`, `deepseek-v4.1-flash-1017`
 - [GLM](groups/glm-4.5.json) — GLM是由智谱提供的开源模型。
   - 模型：`glm-5`, `glm-5.1`, `glm-5.2`, `glm-5.3`, `glm-5.3-prime`
 - [GLM-5.2-Fast](groups/glm-fast.json) — GLM-5.2-Fast-Preview 是智谱 AI 旗舰模型 GLM-5.2 的高速版本，支持 1M 超长上下文，模型能力对齐 GLM-5.2 标准版，具备逻辑推理、长文本理解与代码生成能力。通过…
@@ -179,7 +179,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [语音识别热词](groups/speech-biasing.json) — 热词是指用户可以预先定义的一组特定词汇或短语，这些词汇或短语在识别、翻译过程中会被赋予更高的优先级。针对您的特定业务领域，如果有部分词汇的语音识别、翻译效果不够好，可以将这些关键词或短语添加为热词进行…
   - 模型：`speech-biasing`
 
-## 推理 `Reasoning` — 9 个家族
+## 推理 `Reasoning` — 10 个家族
 
 - [MiniMax](groups/MiniMax-M2.1.json) — MiniMax推出的旗舰级开源大模型，聚焦真实世界复杂任务，包含MiniMax-M2.1、MiniMax-M2.5等开源模型。
   - 模型：`MiniMax-M2.5`
@@ -187,6 +187,8 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`qwen-flash`
 - [Qwen-Plus](groups/qwen-plus.json) — 千问超大规模语言模型的增强版，支持中文英文等不同语言输入。主干模型、latest和快照04-28已升级Qwen3系列，实现思考模式和非思考模式的有效融合，可在对话中切换模式。
   - 模型：`qwen-plus`, `qwen-plus-latest`
+- [Qwen3.5-Flash](groups/qwen3.5-flash.json) — Qwen3.5原生视觉语言系列Flash模型，展现出与当前顶尖前沿模型相媲美的卓越性能，模型效果在纯文本与多模态方面相较3系列均实现飞跃式进步。
+  - 模型：`qwen3.5-flash`
 - [Qwen3.5开源模型](groups/qwen3.5.json) — Qwen3.5系列开源模型，基于混合架构设计的原生视觉语言模型，融合了线性注意力机制与稀疏混合专家模型，实现了更高的推理效率。
   - 模型：`qwen3.5-122b-a10b`, `qwen3.5-27b`, `qwen3.5-35b-a3b`, `qwen3.5-397b-a17b`
 - [Qwen3.6-Flash](groups/qwen3.6-flash.json) — Qwen3.6原生视觉语言系列Flash模型，模型效果相较3.5-Flash显著提升。本模型重点提升agentic coding能力（在多项代码智能体基准上大幅超越前代）、数学推理和代码推理能力；视觉…

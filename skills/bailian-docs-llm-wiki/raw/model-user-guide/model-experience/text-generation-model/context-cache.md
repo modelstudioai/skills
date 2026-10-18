@@ -920,7 +920,7 @@ while True:
     -   千问 Coder：qwen3-coder-flash
     -   千问 Character：qwen-plus-character、qwen-flash-character
     -   千问开源：qwen3.8-2.4t-a95b、qwen3.8-27b
-    -   DeepSeek（阿里云百炼部署）：deepseek-v4.1-flash、deepseek-v4-pro
+    -   DeepSeek（阿里云百炼部署）：deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4.1-flash-1017
     -   DeepSeek（快手万擎部署）：vanchin/deepseek-v4.1-flash、vanchin/deepseek-v4-pro、vanchin/deepseek-v3.2-think、vanchin/deepseek-v3.1-terminus、vanchin/deepseek-r1、vanchin/deepseek-v3
     -   Kimi（阿里云百炼部署）：kimi-k3、kimi-k2.7-code、kimi-k2.6、kimi-k2.5
     -   Kimi（月之暗面部署）：kimi/kimi-k3、kimi/kimi-k2.7-code-highspeed、kimi/kimi-k2.7-code、kimi/kimi-k2.6、kimi/kimi-k2.5
@@ -949,7 +949,7 @@ while True:
     -   千问 Coder：qwen3-coder-flash
     -   千问 Character：qwen-plus-character、qwen-flash-character、qwen-plus-character-ja
     -   千问开源：qwen3.8-2.4t-a95b、qwen3.8-27b
-    -   DeepSeek：deepseek-v4.1-flash、deepseek-v4-pro
+    -   DeepSeek：deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4.1-flash-1017
     -   GLM（阿里云百炼部署）：glm-5.3、glm-5.1
     -   Kimi（阿里云百炼部署）：kimi-k3、kimi-k2.7-code
 -   **视觉理解模型**
@@ -972,6 +972,7 @@ while True:
         -   千问 Character：qwen-plus-character
         -   Kimi（阿里云百炼部署）：kimi-k2.5、kimi-k2.7-code
         -   GLM（阿里云百炼部署）：glm-5.3、glm-5.2
+        -   DeepSeek（阿里云百炼部署）：deepseek-v4.1-flash-1017
     -   视觉理解模型
         
         -   千问 VL：qwen3-vl-plus
@@ -1001,6 +1002,7 @@ while True:
         -   千问 Character：qwen-plus-character
         -   Kimi（阿里云百炼部署）：kimi-k3、kimi-k2.5、kimi-k2.7-code
         -   GLM（阿里云百炼部署）：glm-5.3、glm-5.2
+        -   DeepSeek（阿里云百炼部署）：deepseek-v4.1-flash-1017
     -   视觉理解模型
         
         -   千问 VL：qwen3-vl-plus
@@ -1031,7 +1033,7 @@ while True:
         -   千问 Plus：qwen3.7-plus、qwen3.7-plus-2026-05-26
         -   千问 Flash：qwen3.8-flash、qwen3.7-flash、qwen3.7-flash-2026-07-15
         -   千问 Character：qwen-plus-character
-        -   DeepSeek（阿里云百炼部署）：deepseek-v4.1-flash、deepseek-v4-pro
+        -   DeepSeek（阿里云百炼部署）：deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4.1-flash-1017
         -   GLM（阿里云百炼部署）：glm-5.3、glm-5.1
         -   Kimi（阿里云百炼部署）：kimi-k3、kimi-k2.5、kimi-k2.7-code
 
@@ -1050,7 +1052,7 @@ while True:
         
     -   千问 Character：qwen-plus-character
         
-    -   DeepSeek（阿里云百炼部署）：deepseek-v4.1-flash、deepseek-v4-pro-0813、deepseek-v4-flash-0731
+    -   DeepSeek（阿里云百炼部署）：deepseek-v4.1-flash、deepseek-v4-pro-0813、deepseek-v4-flash-0731、deepseek-v4.1-flash-1017
         
     -   GLM（阿里云百炼部署）：glm-5.2
         
@@ -1097,10 +1099,10 @@ while True:
 
 当请求命中缓存时，命中的输入 Token 按 `cached_token` 计费，折扣比例因模型来源不同而有差异；未被命中的输入 Token 按标准 `input_token`计费。输出 Token 仍按原价计费。
 
--   阿里云百炼部署的模型（deepseek-v4.1-flash、deepseek-v4-pro、qwen3.8-max、qwen3.8-flash、qwen3.8-2.4t-a95b、qwen3.8-omni-flash 除外）：`cached_token` 单价为 `input_token` 单价的 **20%**
+-   阿里云百炼部署的模型（deepseek-v4.1-flash、deepseek-v4.1-flash-1017、deepseek-v4-pro、qwen3.8-max、qwen3.8-flash、qwen3.8-2.4t-a95b、qwen3.8-omni-flash 除外）：`cached_token` 单价为 `input_token` 单价的 **20%**
 -   qwen3.8-omni-flash：命中缓存的输入 Token 按固定单价计费，各地域单价见[模型价格](https://help.aliyun.com/zh/model-studio/model-pricing#4c2e910ce4pcq)。
 -   deepseek-v4-pro：`cached_token` 单价不是 `input_token` 单价的 20%，具体价格请参见百炼控制台
--   deepseek-v4.1-flash：`cached_token` 单价为 `input_token` 单价的 **10%**
+-   deepseek-v4.1-flash、deepseek-v4.1-flash-1017：`cached_token` 单价为 `input_token` 单价的 **10%**。其中，`deepseek-v4.1-flash-1017` 在上述六个地域的繁忙、闲时时段均适用，按对应地域和时段的输入单价计算。
 -   qwen3.8-max、qwen3.8-flash、qwen3.8-2.4t-a95b：`cached_token` 单价不是 `input_token` 单价的 20%，具体价格请参见百炼控制台
 -   DeepSeek（快手万擎部署）：vanchin/deepseek-v4.1-flash 为 **2%**；vanchin/deepseek-v4-pro 为 **8.33%**；vanchin/deepseek-v3.2-think 为 **10%**；vanchin/deepseek-v3.1-terminus、vanchin/deepseek-r1、vanchin/deepseek-v3 为 **40%**
 -   Kimi（阿里云百炼部署）：kimi-k3 为 **10%**
