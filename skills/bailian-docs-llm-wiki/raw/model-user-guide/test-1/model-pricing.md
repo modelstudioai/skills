@@ -5314,6 +5314,8 @@ qwen-audio-chat
 
 计费规则：按输入Token和输出Token计费。
 
+deepseek-v4.1-flash-1017 按峰谷价格计费：闲时为 UTC+8 22:00 至次日 08:00，忙时为其余时段。
+
 影响计费的因素：若模型支持[Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)，其输入和输出Token单价均按实时推理价格的50%计费。
 
 **说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
@@ -5335,6 +5337,20 @@ qwen-audio-chat
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
+
+deepseek-v4.1-flash-1017
+
+> [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
+
+忙时 2元
+
+闲时 1元
+
+忙时 8元
+
+闲时 4元
+
+100万Token
 
 deepseek-v4.1-flash
 
@@ -5411,6 +5427,20 @@ deepseek-r1-distill-llama-70b
 **输出单价（每百万Token）**
 
 > **思维链+回答**
+
+deepseek-v4.1-flash-1017
+
+> [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
+
+全球
+
+忙时 2元
+
+闲时 1元
+
+忙时 8元
+
+闲时 4元
 
 deepseek-v4.1-flash
 
@@ -5500,6 +5530,20 @@ deepseek-v4-flash-0731
 
 > **思维链+回答**
 
+deepseek-v4.1-flash-1017
+
+> [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
+
+国际
+
+忙时 2.188元
+
+闲时 1.094元
+
+忙时 8.75元
+
+闲时 4.375元
+
 deepseek-v4.1-flash
 
 > [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
@@ -5563,6 +5607,20 @@ deepseek-v4-flash-0731
 **输出单价（每百万Token）**
 
 > **思维链+回答**
+
+deepseek-v4.1-flash-1017
+
+> [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
+
+全球
+
+忙时 2元
+
+闲时 1元
+
+忙时 8元
+
+闲时 4元
 
 deepseek-v4.1-flash
 
@@ -5628,6 +5686,20 @@ deepseek-v4-flash-0731
 
 > **思维链+回答**
 
+deepseek-v4.1-flash-1017
+
+> [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
+
+全球
+
+忙时 2元
+
+闲时 1元
+
+忙时 8元
+
+闲时 4元
+
 deepseek-v4.1-flash
 
 > [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
@@ -5703,6 +5775,32 @@ deepseek-v4-flash-0731
 忙时 9.625元
 
 闲时 4.813元
+
+#### 中国香港
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**输入单价（每百万Token）**
+
+**输出单价（每百万Token）**
+
+> **思维链+回答**
+
+deepseek-v4.1-flash-1017
+
+> [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
+
+全球
+
+忙时 2元
+
+闲时 1元
+
+忙时 8元
+
+闲时 4元
 
 ### DeepSeek-硅基流动
 

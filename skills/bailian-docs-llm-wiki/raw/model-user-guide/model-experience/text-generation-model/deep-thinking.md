@@ -143,6 +143,7 @@
 
 -   阿里云百炼部署
     
+    -   `deepseek-v4.1-flash-1017` 支持深度思考。
     -   混合思考模式，默认开启思考模式：deepseek-v4.1-flash、deepseek-v4-pro
     -   仅思考模式：deepseek-r1蒸馏模型
 -   硅基流动部署

@@ -1,59 +1,57 @@
 # model experience
 
-模型体验（Model Experience）是百炼平台面向开发者提供的统一模型调用入口，支持[多模态](../concepts/multimodal.md)模型的快速接入与实验。通过标准化 API 和控制台界面，开发者可便捷地测试、调试和集成各类大模型能力。所有模型均遵循统一的鉴权、计费与监控机制。
+`model experience` 是百炼平台面向开发者提供的统一模型调用体验层，封装了[多模态](../concepts/multi-modal.md)模型的接入、参数配置与结果解析逻辑，支持通过标准化 API 或 SDK 快速集成各类生成与理解能力。其核心目标是降低模型使用门槛，同时保持底层模型能力的完整性与可控性。所有能力均基于 [原文标题](../../raw/model-user-guide/model-experience.md) 所列模块组织。
 
 ## 支持的模型与功能
 
-当前支持以下核心模型类别及对应能力：
-
-- 文本生成（如 Qwen 系列、CodeQwen 等）
-- 视觉理解（图文理解、OCR、目标检测等）
+当前 `model experience` 覆盖以下 12 类模型能力：
+- 文本生成（含对话、补全、指令遵循等）
+- 视觉理解（图像分类、OCR、图文推理等）
 - 图片生成与编辑（文生图、图生图、局部重绘）
-- 视频生成与编辑（短视频生成、帧插值、视频描述）
+- 视频生成与编辑（文生视频、视频扩时、关键帧控制）
 - 世界模型（具身智能、环境建模与推理）
-- 3D 模型生成（TriPo 等端到端 3D 生成）
-- 语音合成（TTS）、音频生成、语音识别（ASR）、语音转语音（S2S）
-- 全模态（Omni-modal）联合理解与生成
-- 向量嵌入（Embedding）与重排序（Rerank）
+- 3D 模型生成（TriPo 系列，支持单图/多图输入生成 GLB）
+- 语音合成（TTS，支持多音色、语速/语调调节）
+- 音频生成（背景音、音效、音乐生成）
+- 语音识别（ASR，支持中英文及多方言）
+- 语音转语音（V2V，保留语义与情感的跨语言/音色转换）
+- 全模态（Omni-modal，支持文本+图像+音频+视频混合输入与输出）
+- 向量与重排序（Embedding 生成、Cross-Encoder 重排序）
 
-各模型能力细节请参阅 [文本生成](../../raw/model-user-guide/model-experience/text-generation-model.md)、[视觉理解](../../raw/model-user-guide/model-experience/vision-model.md) 和 [全模态](../../raw/model-user-guide/model-experience/omni-modal.md) 等子文档。
+各子能力细节请参阅对应文档，例如 [原文标题](../../raw/model-user-guide/model-experience/text-generation-model.md) 和 [原文标题](../../raw/model-user-guide/model-experience/vision-model.md)。
 
 ## 关键参数
 
-调用模型时需关注以下通用参数（部分模型支持扩展参数）：
+通用参数（适用于绝大多数模型）包括：
+- `model`: 模型标识符（如 `qwen-vl-plus`, `wanx-video-1.0`, `speech-tts-1.2`），必须与 [原文标题](../../raw/model-user-guide/model-experience.md) 中列出的名称严格一致；
+- `input`: 输入结构体，格式因模态而异（如文本为 `{"text": "..."}`，图像为 `{"image_url": "..."}`，[多模态](../concepts/multi-modal.md)为 `{"messages": [...]}`）；
+- `parameters`: 可选字典，常见字段有 `temperature`（仅文本/生成类）、`top_p`、`max_output_tokens`、`seed`、`quality`（图片/视频）、`voice`（TTS）等；
+- `stream`: 布尔值，控制是否启用流式响应（部分模型如 ASR、TTS、视频生成暂不支持流式）。
 
-- `model`: 模型 ID（如 `qwen-max`, `qwen-vl-plus`, `wanx-video`），必须指定  
-- `input`: 输入数据结构，格式依模型类型而异（如 `{"prompt": "..."}` 或 `{"messages": [...]}`）  
-- `parameters`: 可选，含 `temperature`, `top_p`, `max_tokens`, `seed` 等标准采样参数  
-- `stream`: 布尔值，控制是否启用流式响应（仅部分模型支持）  
-
-> **注意**：`max_tokens` 在视觉理解模型中实际限制的是输出 token 数，而非输入图像分辨率；该行为与 [视觉理解](../../raw/model-user-guide/model-experience/vision-model.md) 文档描述一致，但与早期 [文本生成](../../raw/model-user-guide/model-experience/text-generation-model.md) 中“统一约束总 token 长度”的说明存在不一致，以当前运行时行为为准。
+> **注意**：`parameters.seed` 在视觉生成类模型中默认行为与文本模型不同——部分图像模型（如 `wanx-image-2.1`）需显式设置 `seed=-1` 才启用随机种子，该行为与 [原文标题](../../raw/model-user-guide/model-experience/image-model.md) 描述一致，但与早期文档中“默认启用 seed”的说明矛盾，以本条为准。
 
 ## 使用方式
 
-1. **API 调用**：使用 `POST /v1/models/{model}/invoke` 接口，携带认证 Header（`Authorization: Bearer <api_key>`）  
-2. **控制台体验**：登录百炼控制台 →「模型体验」页 → 选择模型 → 输入内容 → 点击运行  
-3. **SDK 调用**：推荐使用 `dashscope` Python SDK（v1.20.0+）或 `@alibabacloud/pop-core` Node.js SDK，自动处理序列化与错误重试  
-
-示例请求体（文本生成）：
-```json
-{
-  "model": "qwen-max",
-  "input": {
-    "messages": [{"role": "user", "content": "你好，请用中文简要介绍百炼平台"}]
-  },
-  "parameters": {"temperature": 0.7, "max_tokens": 512}
-}
+推荐通过百炼 SDK（Python/Java/Go）或 REST API 调用：
+```python
+from alibabacloud_bailian20231229 import models as bailian_models
+client = Bailian20231229Client(...)
+req = bailian_models.CallModelRequest(
+    model="qwen-vl-plus",
+    input={"messages": [{"role": "user", "content": [{"text": "描述这张图"}, {"image_url": "https://..."}]}]},
+    parameters={"temperature": 0.7}
+)
+resp = client.call_model(req)
 ```
+REST 接口地址为 `POST /api/v1/models/{model}/call`，认证方式为 Bearer [Token](../concepts/token.md)（AccessKey）。所有请求需携带 `X-DashScope-SSE: enable` 头以启用服务端事件流（若支持）。
 
 ## 限制和注意事项
 
-- 单次请求最大输入长度因模型而异：文本类模型默认 32k tokens，视觉模型输入图像分辨率上限为 1536×1536（长边），详见 [视觉理解](../../raw/model-user-guide/model-experience/vision-model.md)  
-- 视频与 3D 模型暂不支持流式响应，且需额外开通配额权限  
-- 嵌入（Embedding）与重排序（Rerank）模型不接受 `temperature` 等采样参数，传入将被忽略  
-- 所有模型调用均受账户级速率限制（RPS）与并发数限制，超出将返回 `429 Too Many Requests`  
-
-> **注意**：`speech-to-speech` 模型当前仅支持中文输入与输出，且不兼容 `stream=true` 参数——该限制未在 [语音转语音](../../raw/model-user-guide/model-experience/speech-to-speech.md) 文档中明确说明，已在 v2024.06 版本 API 中强制生效。
+- 单次请求最大 `input` 总大小：文本 ≤ 1MB，图像 ≤ 20MB（单张），视频 ≤ 500MB（单个），音频 ≤ 100MB；
+- 并发限制：免费版 5 QPS，企业版按配额配置，超出返回 `429 Too Many Requests`；
+- 视频与 3D 模型生成任务为异步模式，需轮询 `task_id` 获取结果，同步接口仅返回任务元信息；
+- 全模态（Omni-modal）模型暂不支持 `stream=True`，且 `input.messages` 中 content 数组长度上限为 8；
+- 语音识别（ASR）对采样率要求严格：仅支持 8kHz / 16kHz 单声道 PCM/WAV，其他格式需预处理，详见 [原文标题](../../raw/model-user-guide/model-experience/speech-recognition.md)。
 
 ## 来源文档
 

@@ -2608,6 +2608,12 @@ qwen3.5-35b-a3b
 
 > **含输入与输出Token**
 
+deepseek-v4.1-flash-1017
+
+15,000
+
+1,200,000
+
 deepseek-v4.1-flash
 
 15,000
@@ -2657,6 +2663,14 @@ deepseek-r1-distill-llama-70b
 **每分钟消耗Token数（TPM）**
 
 > **含输入与输出Token**
+
+deepseek-v4.1-flash-1017
+
+全球
+
+15,000
+
+1,200,000
 
 deepseek-v4.1-flash
 
@@ -2722,6 +2736,14 @@ deepseek-v4-flash-0731
 
 > **含输入与输出Token**
 
+deepseek-v4.1-flash-1017
+
+国际
+
+10,000
+
+1,200,000
+
 deepseek-v4.1-flash
 
 国际
@@ -2767,6 +2789,14 @@ deepseek-v4-flash-0731
 **每分钟消耗Token数（TPM）**
 
 > **含输入与输出Token**
+
+deepseek-v4.1-flash-1017
+
+全球
+
+15,000
+
+1,200,000
 
 deepseek-v4.1-flash
 
@@ -2840,6 +2870,14 @@ deepseek-v4-flash-0731
 
 1,200,000
 
+deepseek-v4.1-flash-1017
+
+全球
+
+15,000
+
+1,200,000
+
 deepseek-v4.1-flash
 
 全球
@@ -2887,6 +2925,14 @@ deepseek-v4-flash-0731
 **每分钟消耗Token数（TPM）**
 
 > **含输入与输出Token**
+
+deepseek-v4.1-flash-1017
+
+中国香港
+
+15,000
+
+1,200,000
 
 deepseek-v4.1-flash
 

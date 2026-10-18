@@ -61,6 +61,7 @@ Function Calling 通过应用程序与大模型之间的多步骤交互实现：
 -   阿里云百炼部署
     
     -   deepseek-v4-pro
+    -   `deepseek-v4.1-flash-1017`
 -   硅基流动部署
     
     -   siliconflow/deepseek-v3.2

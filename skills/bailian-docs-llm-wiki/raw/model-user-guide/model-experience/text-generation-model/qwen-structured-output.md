@@ -102,6 +102,7 @@ Qwen 大部分模型、Kimi、GLM、DeepSeek、Stepfun
 -   阿里云百炼部署
     
     -   deepseek-v4-pro
+    -   `deepseek-v4.1-flash-1017`
 -   快手万擎部署
     
     -   vanchin/deepseek-v3.2-think、vanchin/deepseek-v3、vanchin/deepseek-ocr

@@ -69,7 +69,7 @@ response = dashscope.Generation.call(
 
 > **关于工具版本号**：`type` 中的日期后缀（例如 `web_search_20250305`）由 Anthropic 官方客户端的版本决定，客户端升级后可能改用其他日期的版本号。百炼按工具类别识别该工具，不校验具体的日期后缀，因此无需将 `type` 固定为某一版本，与客户端实际发送的值保持一致即可。
 
-> 支持以下模型：Qwen3.8 Max、Flash 与开源系列（不含 Omni）；Qwen3.7 Max、Plus、Flash 系列；Qwen3.6-Plus、Qwen3.6-Flash 系列；Qwen3.5-Plus、Qwen3.5-Flash 系列；deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731；glm-5.2；kimi-k3。
+> 支持以下模型：Qwen3.8 Max、Flash 与开源系列（不含 Omni）；Qwen3.7 Max、Plus、Flash 系列；Qwen3.6-Plus、Qwen3.6-Flash 系列；Qwen3.5-Plus、Qwen3.5-Flash 系列；deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731、`deepseek-v4.1-flash-1017`；glm-5.2；kimi-k3。
 
 ```
 # 导入依赖与创建客户端...
@@ -199,7 +199,7 @@ public class Main {
     2025 年 7 月后发布的千问Max、千问Plus、千问Flash 模型都自动支持联网搜索。
     
 -   **第三方模型**
-    -   DeepSeek：deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731（其中 deepseek-v4 系列同时支持[Responses API](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y)）
+    -   DeepSeek：deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731、`deepseek-v4.1-flash-1017`（其中 deepseek-v4 系列同时支持[Responses API](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y)）
     -   GLM：glm-5.2（仅支持通过[Responses API](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y)联网搜索）
     -   Kimi：kimi-k3（仅支持通过[Responses API](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y)联网搜索）
 
@@ -213,7 +213,7 @@ public class Main {
     -   千问Omni：qwen3.8-omni-flash、qwen3.5-omni-plus、qwen3.5-omni-plus-2026-03-15、qwen3.5-omni-flash、qwen3.5-omni-flash-2026-03-15（搜索策略需设为 `agent`）
     -   千问Omni-Realtime：qwen3.8-omni-flash-realtime、qwen3.5-omni-plus-realtime、qwen3.5-omni-plus-realtime-2026-03-15、qwen3.5-omni-flash-realtime、qwen3.5-omni-flash-realtime-2026-03-15（搜索策略需设为 `agent`）
 -   **第三方模型**
-    -   DeepSeek：deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731（其中 deepseek-v4 系列同时支持[Responses API](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y)）
+    -   DeepSeek：deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731、`deepseek-v4.1-flash-1017`（其中 deepseek-v4 系列同时支持[Responses API](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y)）
     -   GLM：glm-5.2（仅支持通过[Responses API](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y)联网搜索）
     -   Kimi：kimi-k3（仅支持通过[Responses API](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y)联网搜索）
 
@@ -221,6 +221,8 @@ public class Main {
 
 美国（弗吉尼亚）、中国香港、日本（东京）、德国（法兰克福）地域支持以下模型。其中中国香港、日本（东京）、德国（法兰克福）需使用服务部署范围为**全球**的业务空间调用，参见[选择地域、服务部署范围和接入域名](raw/model-user-guide/get-started-with-models/regions.md)。
 
+-   **DeepSeek**：`deepseek-v4.1-flash-1017` 支持模型原生联网搜索、Responses API 内置 `web_search` 和 Anthropic 兼容 API 内置 `web_search`，适用于中国（北京）、新加坡（国际部署范围），以及美国（弗吉尼亚）、德国（法兰克福）、日本（东京）、中国香港（全球部署范围）。
+    
 -   **千问**
     -   Qwen3.8 系列：qwen3.8-max、qwen3.8-max-0902、qwen3.8-flash
     -   千问Omni：qwen3.8-omni-flash（Chat Completions 搜索策略需设为 `agent`；也支持 Responses API）
@@ -2757,7 +2759,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 -   **千问**
     -   千问Plus：qwen-plus、qwen-plus-latest、qwen-plus-2025-07-14及之后的快照版本
     -   千问Flash：qwen-flash、qwen-flash-2025-07-28及之后的快照版本
--   **DeepSeek**：deepseek-v4-pro
+-   **DeepSeek**：deepseek-v4-pro、`deepseek-v4.1-flash-1017`
     
 
 > 思考模型详情参见： [深度思考](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md) 。
@@ -3299,7 +3301,7 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 
 > 通过 `web_search` 工具启用时，模型以 **agent 式多轮检索** 运行——根据问题自主发起多次 `web_search_call`（必要时配合 `web_extractor_call`），最终整合结果作答。
 
-> 支持以下模型：Qwen3.8 Max、Flash 与开源系列、`qwen3.8-omni-flash`；Qwen3.7、Qwen3.5 系列模型（含开源模型，不含Omni）、Qwen3.6-Plus、Qwen3.6-Flash 系列及 qwen3.6-35b-a3b；deepseek-v4-flash-0731、deepseek-v4-pro、deepseek-v4-pro-0813；glm-5.2；kimi-k3。
+> 支持以下模型：Qwen3.8 Max、Flash 与开源系列、`qwen3.8-omni-flash`；Qwen3.7、Qwen3.5 系列模型（含开源模型，不含Omni）、Qwen3.6-Plus、Qwen3.6-Flash 系列及 qwen3.6-35b-a3b；deepseek-v4-flash-0731、`deepseek-v4.1-flash-1017`、deepseek-v4-pro、deepseek-v4-pro-0813；glm-5.2；kimi-k3。
 
 > **Qwen3.8 系列的 agent 式检索**：Qwen3.8 系列（qwen3.8-max、qwen3.8-max-0902、qwen3.8-flash、qwen3.8-2.4t-a95b、qwen3.8-27b）在 Chat Completions/DashScope 协议下不支持 `search_strategy: agent`，但通过本节的 Responses API `web_search` 工具即可实现同等的 agent 式多轮检索能力。
 

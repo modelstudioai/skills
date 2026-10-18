@@ -85,7 +85,7 @@ response = Generation.call(
 
 > 只添加网页抓取工具而未添加联网搜索工具时，请求返回 `InvalidParameter` 错误：`The web_extractor tool must be executed with web_search tool.`
 
-> 支持以下模型：Qwen3.8 Max、Flash 与开源系列（不含 Omni）；Qwen3.7 Max、Plus、Flash 系列；Qwen3.6-Plus、Qwen3.6-Flash 系列；Qwen3.5-Plus、Qwen3.5-Flash 系列；deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731；glm-5.2；kimi-k3。
+> 支持以下模型：Qwen3.8 Max、Flash 与开源系列（不含 Omni）；Qwen3.7 Max、Plus、Flash 系列；Qwen3.6-Plus、Qwen3.6-Flash 系列；Qwen3.5-Plus、Qwen3.5-Flash 系列；deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731、`deepseek-v4.1-flash-1017`；glm-5.2；kimi-k3。
 
 ```
 # 导入依赖与创建客户端...
@@ -107,6 +107,8 @@ message = client.messages.create(
 抓取过程通过 `server_tool_use`（抓取请求）和 `web_fetch_tool_result`（抓取结果）内容块返回，抓取次数记录在 `usage.server_tool_use.web_fetch_requests` 中。
 
 ## 支持的模型
+
+`deepseek-v4.1-flash-1017` 支持 Responses API 内置 `web_extractor` 和 Anthropic 兼容 API 内置 `web_fetch`，适用于[模型页面](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/deepseek-v4-1-flash.md)所列的全部六个地域及对应部署范围。
 
 ### 推荐模型
 
