@@ -1,11 +1,11 @@
 {
-  "updatedAt": "2026-10-19",
+  "updatedAt": "2026-10-20",
   "totalFamilies": 125,
-  "totalModels": 318,
+  "totalModels": 319,
   "profileCoverage": {
-    "full": 34,
+    "full": 42,
     "partial": 0,
-    "structured-only": 284,
+    "structured-only": 277,
     "none": 0
   },
   "capabilityDistribution": {
@@ -2175,16 +2175,19 @@
       "name": "MiMo文本模型",
       "primaryCapability": "TG",
       "capabilities": [
-        "TG"
+        "TG",
+        "Reasoning",
+        "VU"
       ],
       "providers": [
         "xiaomi"
       ],
-      "itemCount": 1,
+      "itemCount": 2,
       "items": [
-        "xiaomi/mimo-v2.5-pro"
+        "xiaomi/mimo-v2.5-pro",
+        "xiaomi/mimo-v2.6-pro-ultraspeed"
       ],
-      "maxContextWindow": 1000000
+      "maxContextWindow": 1048576
     },
     {
       "slug": "z-image-turbo",

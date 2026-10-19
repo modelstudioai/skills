@@ -4,7 +4,7 @@
 
 ## 接入前准备
 
-获取 [API Key](raw/model-api-reference/preparations/get-api-key.md) 和[业务空间 ID](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)，分别配置为环境变量 `DASHSCOPE_API_KEY` 和 `SFM_WORKSPACE_ID`。
+获取 [API Key](raw/model-api-reference/preparations/get-api-key.md) 和[业务空间 ID](raw/application-api-reference/application-call/obtain-the-app-id-and-workspace-id.md)，分别配置为环境变量 `DASHSCOPE_API_KEY` 和 `SFM_WORKSPACE_ID`。
 
 请求方法为 HTTPS POST，端点如下，其中 `{WorkspaceId}` 为业务空间 ID：
 

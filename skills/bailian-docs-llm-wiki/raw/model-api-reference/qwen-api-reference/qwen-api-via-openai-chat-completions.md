@@ -451,7 +451,7 @@ temperature默认值
 -   GLM系列（智谱直供）：ZHIPU/GLM-5.1、ZHIPU/GLM-5: 0.6；
 -   MiniMax系列（阿里云直供）：MiniMax-M2.5: 1.0；
 -   MiniMax系列（稀宇科技直供）：MiniMax/MiniMax-M3、MiniMax/MiniMax-M2.7、MiniMax/MiniMax-M2.5、MiniMax/MiniMax-M2.1: 1.0。
--   MiMo系列（小米直供）：mimo-v2.5-pro: 1.0，范围 \[0, 1.5\]。
+-   MiMo系列（小米直供）：mimo-v2.5-pro: 1.0，范围 \[0, 1.5\]；xiaomi/mimo-v2.6-pro-ultraspeed: 1.0，不支持自定义，传入其他值时仍按 1.0 生效。
 
 > 不建议修改QVQ模型的默认temperature值 。
 
@@ -495,7 +495,7 @@ MiniMax系列（阿里云直供）：MiniMax-M2.5: 0.95；
 
 MiniMax系列（稀宇科技直供）：MiniMax/MiniMax-M3: 0.95；MiniMax/MiniMax-M2.7、MiniMax/MiniMax-M2.5、MiniMax/MiniMax-M2.1: 0.9。
 
-MiMo系列（小米直供）：xiaomi/mimo-v2.5-pro: 0.95，范围 \[0.01, 1.0\]。
+MiMo系列（小米直供）：xiaomi/mimo-v2.5-pro: 0.95，范围 \[0.01, 1.0\]；xiaomi/mimo-v2.6-pro-ultraspeed: 0.95，不支持自定义，传入其他值时仍按 0.95 生效。
 
 > 不建议修改QVQ模型的默认 top\_p 值。
 

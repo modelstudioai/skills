@@ -1890,7 +1890,6 @@ me.ele	饿了么	淘宝闪购
 com.yek.android.kfc.activitys	肯德基
 ctrip.android.view	携程	携程旅行
 com.MobileTicket	铁路12306	12306
-com.Qunar	去哪儿旅行	去哪儿网	去哪儿
 com.sdu.didi.psnger	滴滴出行	滴滴
 tv.danmaku.bili	bilibili	b站	哔哩哔哩	哔站	bili
 com.ss.android.ugc.aweme	抖音
@@ -2474,7 +2473,6 @@ me.ele\t饿了么\t淘宝闪购\t\t\t
 com.yek.android.kfc.activitys\t肯德基\t\t\t\t
 ctrip.android.view\t携程\t携程旅行\t\t\t
 com.MobileTicket\t铁路12306\t12306\t\t\t
-com.Qunar\t去哪儿旅行\t去哪儿网\t去哪儿\t\t
 com.sdu.didi.psnger\t滴滴出行\t滴滴\t\t\t
 tv.danmaku.bili\tbilibili\tb站\t哔哩哔哩\t哔站\tbili
 com.ss.android.ugc.aweme\t抖音\t\t\t\t
@@ -2637,13 +2635,13 @@ if __name__ == '__main__':
                     print(f"✓ 打开应用: {app_name}")
                     break
             else:
-                print(f"⚠ 未找到应用: {app_name}，请手动安装")
+                print(f"警告：未找到应用: {app_name}，请手动安装")
                 continue
         elif action_type == 'answer':
             print(f'✓ 任务完成: {action_parameter.get("text", "")}')
             break
         elif action_type in ['call_user', 'calluser', 'interact']:
-            print(f"⚠ 需要用户交互: {action_parameter.get('text', '')}")
+            print(f"警告：需要用户交互: {action_parameter.get('text', '')}")
             input("请完成相关操作后按Enter继续...")
         else:
             print(f"✗ 未知操作类型: {action_type}")
@@ -2835,7 +2833,7 @@ def extract_tool_calls(text: str):
         try:
             actions.append(ast.literal_eval(blk))
         except json.JSONDecodeError as e:
-            print(f'⚠️ 解析失败: {e} | 片段: {blk[:80]}...')
+            print(f'警告：解析失败: {e} | 片段: {blk[:80]}...')
     return actions
 ```
 

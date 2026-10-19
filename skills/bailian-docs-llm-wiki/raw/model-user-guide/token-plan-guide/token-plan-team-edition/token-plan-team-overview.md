@@ -22,7 +22,7 @@ Token Plan 团队版提供套餐 Base URL，兼容 OpenAI、Anthropic 接口标�
 
 **重要**
 
--   **限时夜间五折**：每晚 22:00 - 次日 08:00 调用 deepseek-v4-pro-0813、deepseek-v4-flash-0731、deepseek-v4.1-flash，Credits 消耗享 5 折优惠。
+-   **限时夜间五折**：每晚 22:00 - 次日 08:00 调用 deepseek-v4-pro-0813、deepseek-v4-flash-0731、deepseek-v4.1-flash、deepseek-v4.1-flash-1017，Credits 消耗享 5 折优惠。
 
 阿里云百炼有权根据运营情况对活动进行变更或调整，包括不限于活动内容和有效期等，请以页面最新内容或阿里云通知为准。
 
@@ -105,6 +105,10 @@ wan3.0-video
 DeepSeek
 
 deepseek-v4.1-flash
+
+推理模型、视觉理解、文本生成
+
+deepseek-v4.1-flash-1017
 
 推理模型、视觉理解、文本生成
 

@@ -142,6 +142,9 @@ opencode -v
         "deepseek-v4.1-flash": {
           "name": "DeepSeek V4.1 Flash"
         },
+        "deepseek-v4.1-flash-1017": {
+          "name": "DeepSeek V4.1 Flash 1017"
+        },
         "deepseek-v4-pro": {
           "name": "DeepSeek V4 Pro"
         },
@@ -262,6 +265,9 @@ opencode -v
         },
         "deepseek-v4.1-flash": {
           "name": "DeepSeek V4.1 Flash"
+        },
+        "deepseek-v4.1-flash-1017": {
+          "name": "DeepSeek V4.1 Flash 1017"
         },
         "deepseek-v4-pro": {
           "name": "DeepSeek V4 Pro"

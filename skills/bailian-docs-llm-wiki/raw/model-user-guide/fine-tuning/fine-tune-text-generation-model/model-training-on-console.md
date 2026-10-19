@@ -352,7 +352,7 @@ LoRA训练中的低秩矩阵的秩大小。秩越大调优效果会更好一点�
     
     -   **耗时较长**，包括：拥有一个大规模（最少 0.5亿 token）CPT 数据集、构建一个有效（1000+）SFT 数据集、收集足够的（100+）Bad Case 构建有效 DPO 数据集、模型优化迭代速度慢等。
     -   **费用较高，**调优后的模型部署后才能使用，[模型部署计费](https://help.aliyun.com/zh/model-studio/model-training-and-deployment-billing#0c4e677c48lrp)较高。
--   阿里云百炼推荐您在考虑使用文本生成模型调优前**先尝试使用**的 [Prompt 工程](raw/model-user-guide/use-cases/prompt-engineering-guide.md)**（_Prompt Engineering_）或**[插件调用](raw/application-user-guide/agent-development/llm-application/plug-in/plug-in-overview.md)**（_Function Calling_）**定制化您的应用，**模型调优也通常作为改进模型表现“最后的手段”**。因为：
+-   阿里云百炼推荐您在考虑使用文本生成模型调优前**先尝试使用**的 [Prompt 工程](raw/model-user-guide/use-cases/prompt-engineering-guide.md)**（_Prompt Engineering_）或**[插件调用](raw/application-user-guide/plug-in/plug-in-overview.md)**（_Function Calling_）**定制化您的应用，**模型调优也通常作为改进模型表现“最后的手段”**。因为：
     
     1.  在许多任务中，模型最初可能表现不佳，但通过应用正确的 Prompt 技巧可以改进结果，不一定需要使用模型调优。
     2.  迭代优化 Prompt、插件，比模型调优的迭代更敏捷、成本更低，因为模型调优的迭代可能需要重新收集数据、清洗优化数据、收集 bad case、发起客户调研等。

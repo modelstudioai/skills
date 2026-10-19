@@ -6744,6 +6744,16 @@ MiniMax/MiniMax-M2.1
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
 
+xiaomi/mimo-v2.6-pro-ultraspeed
+
+0<Token≤1M
+
+30元
+
+60元
+
+无
+
 xiaomi/mimo-v2.5-pro
 
 0<Token≤256K

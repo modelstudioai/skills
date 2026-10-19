@@ -964,7 +964,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
         {
             "type": "web_extractor"
         }
-    ],
+    ]
 }'
 ```
 
@@ -1162,6 +1162,84 @@ const main = async () => {
 
 // 启动程序
 main().catch(console.error);
+```
+
+curl
+
+```
+# 第一步：提交用户问题与工具定义，模型返回 function_call
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses \
+-H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+-H "Content-Type: application/json" \
+-d '{
+    "model": "qwen3.8-max",
+    "input": [
+        {
+            "role": "user",
+            "content": "北京天气咋样"
+        }
+    ],
+    "tools": [
+        {
+            "type": "function",
+            "name": "get_current_weather",
+            "description": "当你想查询指定城市的天气时非常有用。",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "location": {
+                        "type": "string",
+                        "description": "城市或县区，比如北京市、杭州市、余杭区等。"
+                    }
+                },
+                "required": ["location"]
+            }
+        }
+    ]
+}'
+
+# 第二步：在本地执行函数后，将 function_call 与 function_call_output 成对追加到 input 中，获取最终回复
+# 请将 call_id 与 arguments 替换为第一步响应中实际返回的值
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses \
+-H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+-H "Content-Type: application/json" \
+-d '{
+    "model": "qwen3.8-max",
+    "input": [
+        {
+            "role": "user",
+            "content": "北京天气咋样"
+        },
+        {
+            "type": "function_call",
+            "name": "get_current_weather",
+            "arguments": "{\"location\": \"北京市\"}",
+            "call_id": "call_xxx"
+        },
+        {
+            "type": "function_call_output",
+            "call_id": "call_xxx",
+            "output": "北京市今天是晴天。"
+        }
+    ],
+    "tools": [
+        {
+            "type": "function",
+            "name": "get_current_weather",
+            "description": "当你想查询指定城市的天气时非常有用。",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "location": {
+                        "type": "string",
+                        "description": "城市或县区，比如北京市、杭州市、余杭区等。"
+                    }
+                },
+                "required": ["location"]
+            }
+        }
+    ]
+}'
 ```
 
 #### 工具返回多模态结果

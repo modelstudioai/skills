@@ -79,7 +79,7 @@ string
 
 是
 
-[工作空间](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)
+[工作空间](raw/application-api-reference/application-call/obtain-the-app-id-and-workspace-id.md)
 
 百炼工作空间Id
 

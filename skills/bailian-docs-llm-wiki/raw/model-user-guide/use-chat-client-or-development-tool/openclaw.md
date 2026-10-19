@@ -211,6 +211,15 @@ Token Plan 个人版[支持的模型](raw/model-user-guide/token-plan-guide/toke
             "contextWindow": 1000000,
             "maxTokens": 393216,
             "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
+          },
+          {
+            "id": "deepseek-v4.1-flash-1017",
+            "name": "deepseek-v4.1-flash-1017",
+            "reasoning": false,
+            "input": ["text", "image"],
+            "contextWindow": 1000000,
+            "maxTokens": 393216,
+            "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
           },          {
             "id": "deepseek-v4-pro",
             "name": "deepseek-v4-pro",
@@ -258,6 +267,7 @@ Token Plan 个人版[支持的模型](raw/model-user-guide/token-plan-guide/toke
         "bailian-token-plan/glm-5.3": {},
         "bailian-token-plan/glm-5.2": {},
         "bailian-token-plan/deepseek-v4.1-flash": {},
+        "bailian-token-plan/deepseek-v4.1-flash-1017": {},
         "bailian-token-plan/deepseek-v4-pro": {},
         "bailian-token-plan/deepseek-v4-pro-0813": {},
         "bailian-token-plan/deepseek-v4-flash-0731": {},
@@ -402,6 +412,15 @@ nano ~/.openclaw/openclaw.json
             "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
           },
           {
+            "id": "deepseek-v4.1-flash-1017",
+            "name": "deepseek-v4.1-flash-1017",
+            "reasoning": false,
+            "input": ["text", "image"],
+            "contextWindow": 1000000,
+            "maxTokens": 393216,
+            "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
+          },
+          {
             "id": "deepseek-v4-pro",
             "name": "deepseek-v4-pro",
             "reasoning": false,
@@ -526,6 +545,7 @@ nano ~/.openclaw/openclaw.json
         "bailian-token-plan/qwen3.6-plus": {},
         "bailian-token-plan/qwen3.6-flash": {},
         "bailian-token-plan/deepseek-v4.1-flash": {},
+        "bailian-token-plan/deepseek-v4.1-flash-1017": {},
         "bailian-token-plan/deepseek-v4-pro": {},
         "bailian-token-plan/deepseek-v4-pro-0813": {},
         "bailian-token-plan/deepseek-v4-flash-0731": {},
@@ -671,6 +691,15 @@ openclaw dashboard
             "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
           },
           {
+            "id": "deepseek-v4.1-flash-1017",
+            "name": "deepseek-v4.1-flash-1017",
+            "reasoning": false,
+            "input": ["text", "image"],
+            "contextWindow": 1000000,
+            "maxTokens": 393216,
+            "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
+          },
+          {
             "id": "deepseek-v4-pro",
             "name": "deepseek-v4-pro",
             "reasoning": false,
@@ -795,6 +824,7 @@ openclaw dashboard
         "bailian-token-plan/qwen3.6-plus": {},
         "bailian-token-plan/qwen3.6-flash": {},
         "bailian-token-plan/deepseek-v4.1-flash": {},
+        "bailian-token-plan/deepseek-v4.1-flash-1017": {},
         "bailian-token-plan/deepseek-v4-pro": {},
         "bailian-token-plan/deepseek-v4-pro-0813": {},
         "bailian-token-plan/deepseek-v4-flash-0731": {},
@@ -2016,7 +2046,7 @@ openclaw skills list
 
 ### 接入 MCP 服务
 
-OpenClaw 支持通过 MCP（Model Context Protocol）插件扩展 Agent 的工具调用能力，例如联网搜索、网页抓取等。具体案例可以参考[接入 Harness 工具](raw/model-user-guide/token-plan-guide/token-plan-personal/token-plan-harness-tool.md)。
+OpenClaw 支持通过 MCP（Model Context Protocol）插件扩展 Agent 的工具调用能力，例如联网搜索、网页抓取等。具体案例可以参考[接入 Harness 工具](raw/model-user-guide/token-plan-guide/token-plan-best-practice/token-plan-harness-tool.md)。
 
 ## 常见问题
 
