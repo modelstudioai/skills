@@ -928,7 +928,7 @@ while True:
     -   GLM（智谱部署）：ZHIPU/GLM-5.3-FlashX、ZHIPU/GLM-5.3-Flash、ZHIPU/GLM-5.3、ZHIPU/GLM-5.2、ZHIPU/GLM-5.1、ZHIPU/GLM-5
     -   MiniMax（阿里云百炼部署）：MiniMax-M2.5
     -   MiniMax（稀宇科技部署）：MiniMax/MiniMax-M3、MiniMax/MiniMax-M2.7、MiniMax/MiniMax-M2.5、MiniMax/MiniMax-M2.1
-    -   MiMo（小米部署）：xiaomi/mimo-v2.5-pro
+    -   MiMo（小米部署）：xiaomi/mimo-v2.6-pro-ultraspeed、xiaomi/mimo-v2.5-pro
     -   Stepfun（阶跃星辰部署）：stepfun/step-3.7-flash、stepfun/step-5-preview
 -   **视觉理解模型**
     -   千问 VL：qwen3-vl-plus

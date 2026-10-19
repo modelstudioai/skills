@@ -12,6 +12,7 @@
 -   [借助大模型将文档转换为视频](raw/model-user-guide/use-cases/use-llm-to-convert-document-to-video.md)
 -   [限流应对最佳实践](raw/model-user-guide/use-cases/rate-limiting-best-practices.md)
 -   [显式缓存最佳实践](raw/model-user-guide/use-cases/explicit-cache-guide.md)
+-   [语音合成高并发最佳实践](raw/model-user-guide/use-cases/tts-high-concurrency-best-practices.md)
 -   [三方模型调用教程](raw/model-user-guide/use-cases/third-party-model-integration-tutorial.md)
 -   [实时音视频接入](raw/model-user-guide/use-cases/realtime-audio-video-integration.md)
 -   [技术解决方案](raw/model-user-guide/use-cases/technical-solutions.md)

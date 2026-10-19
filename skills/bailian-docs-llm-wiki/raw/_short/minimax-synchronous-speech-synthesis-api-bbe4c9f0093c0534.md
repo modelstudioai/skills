@@ -522,7 +522,7 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-gen
 
 属性
 
-**atudio**`string`
+**audio**`string`
 
 合成后的音频数据，采用 hex 编码，格式与请求中（`output_format`参数）指定的输出格式一致。
 
@@ -582,19 +582,42 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-gen
 
 属性
 
-**atudio**`string`
+**audio**`string`
 
 合成后的音频数据，采用 hex 编码，格式与请求中（`output_format`参数）指定的输出格式一致。
 
 **usage**`object`
 
-本次请求的字符用量。
+本次请求的计费用量。
 
 属性
 
 **characters** `integer`
 
 输入文本的字符数。
+
+**count** `integer`（可选）
+
+本次请求产生的复刻音色解锁计费次数。首次使用复刻音色合成语音会返回此字段，值为 `1`；后续使用同一音色时不返回此字段。
+
+音色解锁费仅收取一次。
+
+首次使用复刻音色
+
+```
+{
+    "characters": 17,
+    "count": 1
+}
+```
+
+再次使用同一音色
+
+```
+{
+    "characters": 17
+}
+```
 
 非流式
 
@@ -607,25 +630,26 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-gen
         },
         "data": {
             "audio": "<hex编码的audio>",
+            "ced": "",
             "status": 2
         },
         "extra_info": {
             "audio_channel": 1,
             "audio_format": "mp3",
-            "audio_length": 3528,
-            "audio_sample_rate": 16000,
-            "audio_size": 58164,
+            "audio_length": 4536,
+            "audio_sample_rate": 32000,
+            "audio_size": 74292,
             "bitrate": 128000,
             "invisible_character_ratio": 0,
-            "usage_characters": 26,
-            "word_count": 14
+            "usage_characters": 34,
+            "word_count": 22
         },
-        "trace_id": "05fdef92e4c1b32283e3d1c456971a80"
+        "trace_id": "07251d0708c723e3a8f8dd979928e429"
     },
     "usage": {
-        "characters": 26
+        "characters": 34
     },
-    "request_id": "233b9516-1038-9697-b458-87e95a1f8108"
+    "request_id": "35c7bb92-2898-9c4a-9be4-200bc7c5d61f"
 }
 ```
 
@@ -640,24 +664,25 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-gen
         },
         "data": {
             "audio": "<hex编码的audio>",
+            "ced": "",
             "status": 2
         },
         "extra_info": {
             "audio_channel": 1,
             "audio_format": "mp3",
-            "audio_length": 3528,
-            "audio_sample_rate": 16000,
-            "audio_size": 58164,
+            "audio_length": 4003,
+            "audio_sample_rate": 32000,
+            "audio_size": 66804,
             "bitrate": 128000,
             "invisible_character_ratio": 0,
-            "usage_characters": 26,
-            "word_count": 14
+            "usage_characters": 34,
+            "word_count": 22
         },
-        "trace_id": "05fdef92e4c1b32283e3d1c456971a80"
+        "trace_id": "07251d0bd210b373b1c718f87b8452f4"
     },
     "usage": {
-        "characters": 26
+        "characters": 34
     },
-    "request_id": "233b9516-1038-9697-b458-87e95a1f8108"
+    "request_id": "eae023d1-5bbd-919f-8586-90e0ee99cd7e"
 }
 ```

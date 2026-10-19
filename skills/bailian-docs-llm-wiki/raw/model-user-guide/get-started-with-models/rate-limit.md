@@ -3678,6 +3678,12 @@ MiniMax/MiniMax-M2.1
 
 > **含输入与输出Token**
 
+xiaomi/mimo-v2.6-pro-ultraspeed
+
+100
+
+5,000,000
+
 xiaomi/mimo-v2.5-pro
 
 100

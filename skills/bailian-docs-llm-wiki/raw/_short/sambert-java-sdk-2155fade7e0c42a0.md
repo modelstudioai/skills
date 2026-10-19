@@ -222,7 +222,7 @@ public class Main {
 
 ### 高并发调用
 
-在DashScope Java SDK中，采用了OkHttp3的连接池技术，以减少重复建立连接的开销。详情请参见[高并发场景](https://help.aliyun.com/zh/model-studio/sambert-in-high-concurrency-scenarios)。
+对象池配置、并发调用完整示例及异常处理请参见[语音合成高并发最佳实践](https://help.aliyun.com/zh/model-studio/tts-high-concurrency-best-practices#sambert-java)。
 
 ## 请求参数
 

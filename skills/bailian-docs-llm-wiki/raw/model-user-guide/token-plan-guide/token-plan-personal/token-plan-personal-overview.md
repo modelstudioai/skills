@@ -108,7 +108,7 @@ Standard 全部权益
 **重要**
 
 -   **限时夜间四折**：每晚 22:00 - 次日 08:00 调用 qwen3.8-max、qwen3.8-flash，Credits 消耗享 4 折优惠。
--   **限时夜间五折**：每晚 22:00 - 次日 08:00 调用 deepseek-v4-pro-0813、deepseek-v4-flash-0731、deepseek-v4.1-flash，Credits 消耗享 5 折优惠。
+-   **限时夜间五折**：每晚 22:00 - 次日 08:00 调用 deepseek-v4-pro-0813、deepseek-v4-flash-0731、deepseek-v4.1-flash、deepseek-v4.1-flash-1017，Credits 消耗享 5 折优惠。
 -   **decision-model-preview 限时免费**：调用不消耗 Credits。接入方法参见[接入决策模型](raw/model-user-guide/token-plan-guide/token-plan-best-practice/token-plan-decision-model.md)。
 -   **qwen3.8-max-preview 已下线**：原模型 ID 仍可正常调用，请求自动路由至 qwen3.8-max，Credits 抵扣和用量统计均按 qwen3.8-max 计算，建议将配置中的模型 ID 更新为 qwen3.8-max。
 
@@ -184,6 +184,10 @@ deepseek-v4.1-flash
 
 推理模型、视觉理解、文本生成
 
+deepseek-v4.1-flash-1017
+
+推理模型、视觉理解、文本生成
+
 deepseek-v4-pro
 
 推理模型、文本生成
@@ -224,7 +228,7 @@ happyhorse-1.1-r2v
 
 decision-model-preview
 
-决策模型
+文本生成
 
 ## 支持的模型内置工具
 

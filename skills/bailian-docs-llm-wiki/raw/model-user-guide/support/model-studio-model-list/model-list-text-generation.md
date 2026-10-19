@@ -53,6 +53,7 @@
 -   [MiniMax/MiniMax-M3](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/minimax-m3.md)
 -   [MiniMax/MiniMax-M2.7](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/minimax-m2-7.md)
 -   [MiniMax-M2.5](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/minimax-m2-5.md)
+-   [xiaomi/mimo-v2.6-pro-ultraspeed](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/mimo-v2-6-pro-ultraspeed.md)
 -   [xiaomi/mimo-v2.5-pro](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/mimo-v2-5-pro.md)
 -   [stepfun/step-3.7-flash](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/step-3-7-flash.md)
 -   [stepfun/step-5-preview](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/step-5-preview.md)

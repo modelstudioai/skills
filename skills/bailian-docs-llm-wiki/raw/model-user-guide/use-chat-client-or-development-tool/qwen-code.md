@@ -150,6 +150,12 @@ qwen --version
         "envKey": "BAILIAN_TOKEN_PLAN_API_KEY"
       },
       {
+        "id": "deepseek-v4.1-flash-1017",
+        "name": "[Token Plan 个人版] deepseek-v4.1-flash-1017",
+        "baseUrl": "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
+        "envKey": "BAILIAN_TOKEN_PLAN_API_KEY"
+      },
+      {
         "id": "deepseek-v4-pro",
         "name": "[Token Plan 个人版] deepseek-v4-pro",
         "baseUrl": "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
@@ -277,6 +283,12 @@ qwen --version
       {
         "id": "deepseek-v4.1-flash",
         "name": "[Token Plan 团队版] deepseek-v4.1-flash",
+        "baseUrl": "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
+        "envKey": "BAILIAN_TOKEN_PLAN_API_KEY"
+      },
+      {
+        "id": "deepseek-v4.1-flash-1017",
+        "name": "[Token Plan 团队版] deepseek-v4.1-flash-1017",
         "baseUrl": "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
         "envKey": "BAILIAN_TOKEN_PLAN_API_KEY"
       },

@@ -1,53 +1,40 @@
-# Token
+# Token（令牌）
 
-Token 是百炼平台对模型输入与输出内容进行细粒度计量和计费的基本单位，表示模型在处理文本（或结构化内容）时实际消耗的语言单元。一个 Token 通常对应一个词、子词（subword）或标点符号；具体切分方式由模型自身的 tokenizer 决定，开发者无需手动分词，但需理解其对配额、限流和费用的影响。
+Token 是百炼平台中用于衡量模型输入与输出文本（或多媒体内容）长度的基本计量单位，本质上是模型对原始内容进行分词（tokenization）后产生的最小语义单元。一个 token 可能是一个字符、一个单词、一个子词（subword）或一个标点符号；中文场景下通常对应一个汉字、一个词或一个标点，具体取决于所用模型的 tokenizer 实现。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **API 调用计量**：每次请求的 `input.messages`（含 system/user/assistant 角色内容）和响应中的 `output.text` 或流式 `delta.content` 均按实际生成的 Token 数精确统计。例如调用 `qwen-max` 模型处理一段 500 字中文+300 字英文的 prompt，再生成 200 字回答，总消耗 ≈ 输入 Token + 输出 Token（具体数值可通过响应头 `X-DashScope-Usage` 或 `/v1/token-plans/{id}/usage` 接口实时查询）。
+- **模型 API 调用（`/v1/chat/completions` 等）**：`max_tokens` 参数明确限制模型单次响应最多生成的 token 数；同时，整个 `input.messages` 的总长度（含 system/user/assistant 内容及内部结构标记）也以 token 数计，受模型上下文窗口（如 32K、128K）硬性约束——超限将直接返回 `400 Bad Request`。
+  
+- **Application Call（智能体/工作流调用）**：虽然接口层不显式暴露 token 计数，但底层仍严格遵循上下文窗口限制。当启用 RAG、长期记忆或复杂多轮对话时，历史消息、检索片段、工具描述等均计入 token 总量；若实际 token 数超限，服务端可能静默截断或返回 `context_length_exceeded` 错误。
 
-- **配额与限流控制**：  
-  - **TPM（Tokens Per Minute）**：用于吞吐预留（PTU）和动态限流，限制每分钟最大 token 处理量；  
-  - **Token Plan**：以「总 token 配额 + 重置周期」形式实现团队/项目级用量管控，超限请求将返回 `429 Too Many Requests`；  
-  - **单次请求上限**：各模型有硬性输入 token 上限（如 `qwen-max`: 32,768；`qwen-turbo`: 8,192），超出直接返回 `400 Bad Request`。
+- **Realtime API 与 Omni Realtime API**：所有实时流式接口均以 token 为粒度增量返回响应（Delta Frame），开发者可通过监听 `delta.text` 字段感知 token 级别生成节奏；`max_tokens` 同样生效，且部分模型（如 `qwen3.8-omni-flash-realtime`）支持高达 65536 的上限，适用于长文档摘要、会议转录等场景。
 
-- **计费核心依据**：  
-  - 所有模型服务（推理、Batch、训练、部署）均以「输入 Token + 输出 Token」为计费基础；  
-  - 长文本、缓存命中、特殊模式（如 `flash` 系列）会应用阶梯系数（如 3×）或折算系数（如缓存 0.25×），详见计费文档；  
-  - 免费额度、资源包、节省计划均按 token 消耗量逐笔抵扣。
-
-- **开发调试关键指标**：  
-  - 流式响应中每个 `delta.content` 的 token 数累加即为本次响应总输出 token；  
-  - 响应头 `X-DashScope-Usage: {"input_tokens":123,"output_tokens":45}` 提供即时用量反馈，建议日志中采集该字段用于成本归因。
+- **配额与限流**：平台动态限流策略（如 QPS、并发数）虽不直接按 token 计费，但 token 消耗量是后台资源调度与成本核算的核心依据；控制台「用量统计」中展示的“Token 使用量”即为此概念的实际累计值，用于账单结算与用量预警。
 
 ## 关键参数和配置
 
-- **无显式 Token 参数**：开发者不直接设置 token 数，但必须关注以下关联参数：
-  - `input.messages` 内容长度：直接影响输入 token 消耗，长 prompt 易触发限流或超限；
-  - `max_output_tokens`（可选）：显式限制模型最大生成长度，避免意外高 token 输出；
-  - `stream: true`：启用流式后，token 计费仍以最终完整输出为准，**不预占、不估算**；
-  - `token_plan_id`（请求头或模型实例绑定）：指定 token 消耗归属的配额计划，决定是否受控于 daily/weekly quota。
+| 参数名 | 所属接口 | 类型 | 说明 | 常见取值 |
+|--------|----------|------|------|-----------|
+| `max_tokens` | 全部模型/应用/实时 API | integer | 单次响应最大生成 token 数 | `1024`（默认），`1~65536`（依模型而定） |
+| `input.messages` 长度 | 模型 API / Application（Responses） | — | 输入消息数组经 tokenizer 编码后的总 token 数 | 需自行预估或调用 `/v1/tokenize` 接口校验 |
+| `X-RateLimit-Remaining` | 所有 API 响应头 | string | 当前配额周期内剩余可调用次数（非 token 数），但 token 消耗速率影响其衰减速度 | 如 `"4"` |
 
-- **配额类配置（通过 Token Plan API 管理）**：
-  | 字段 | 说明 |
-  |------|------|
-  | `quota` | 整数，每日/每周/每月总 token 配额（最小 1000） |
-  | `reset_cycle` | `"daily"`（默认）、`"weekly"` 或 `"monthly"`，按自然日（UTC+8）重置 |
-  | `model_ids` | 绑定的模型 ID 列表（如 `["qwen-plus", "qwen-vl"]`），空则绑定账号下所有授权模型 |
+> ⚠️ 注意：百炼平台**不提供公开的 `tokenize` 接口供生产环境实时调用**。建议在开发阶段使用 SDK 中的 `count_tokens()` 工具函数（Python/Java 支持），或参考 [Tokenizer 工具页](https://help.aliyun.com/zh/model-studio/tokenizer-tool) 进行离线估算；中文文本可粗略按「字数 × 1.3」、英文按「单词数 × 1.2」预估，但最终以模型实际编码为准。
 
 ## 面向开发者，简洁实用
 
-- ✅ **必查**：调用前用 [模型规格页](https://help.aliyun.com/zh/model-studio/model-list) 确认目标模型的 `max_input_tokens` 和计费系数；  
-- ✅ **必监**：生产环境务必开启 Token Plan 并配置 `enable_alert`，避免突发流量导致超限中断；  
-- ✅ **必验**：本地调试时，在响应头解析 `X-DashScope-Usage`，验证实际 token 消耗是否符合预期；  
-- ❌ **勿硬编码**：Token Plan ID 和 API Key 同属敏感配置，须通过环境变量或密钥管理服务注入；  
-- ⚠️ **注意边界**：`qwen3.8-max-prime` 等带 `-prime` 后缀的模型不享受新人免费额度，token 消耗将直接计费。
+- ✅ **必做**：始终显式设置 `max_tokens`，避免因平台默认值变更导致响应被意外截断；
+- ✅ **必查**：在构造长对话或多模态输入前，用 SDK 工具或控制台调试器验证 token 总量是否低于模型上下文窗口；
+- ✅ **必控**：流式场景下，若需精确控制响应长度（如语音合成对齐），应基于 `delta.text` 累计 token 数，而非字符数或字数；
+- ❌ **勿依赖**：不要假设 token 数与字符数/字数严格线性对应——同一句话在不同模型（Qwen2 vs Qwen-VL）或不同语言（中/英/代码）下 token 化结果差异显著；
+- 📈 **监控建议**：在日志中记录每次请求的 `prompt_tokens` 和 `completion_tokens`（响应头 `X-DashScope-Prompt-Tokens` / `X-DashScope-Completion-Tokens`），用于性能分析与成本优化。
 
 ## 关联主题页
 
 - [get started with models](../guides/get-started-with-models.md)
-- [test 1](../guides/test-1.md)
-- [token plan guide](../guides/token-plan-guide.md)
-- [preparations](../api/preparations.md)
+- [application call](../api/application-call.md)
+- [realtime api user guide](../api/realtime-api-user-guide.md)
+- [omni realtime api](../api/omni-realtime-api.md)
 
 

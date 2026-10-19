@@ -508,6 +508,50 @@ wire_api = "responses"
       }
     },
     {
+      "slug": "deepseek-v4.1-flash-1017",
+      "display_name": "deepseek-v4.1-flash-1017",
+      "description": "DashScope model: deepseek-v4.1-flash-1017",
+      "default_reasoning_level": "medium",
+      "supported_reasoning_levels": [
+        {
+          "effort": "low",
+          "description": "Fast responses with lighter reasoning"
+        },
+        {
+          "effort": "medium",
+          "description": "Balances speed and reasoning depth"
+        },
+        {
+          "effort": "high",
+          "description": "Greater reasoning depth for complex problems"
+        },
+        {
+          "effort": "xhigh",
+          "description": "Extra high reasoning depth for complex problems"
+        }
+      ],
+      "context_window": 1000000,
+      "effective_context_window_percent": 95,
+      "supports_parallel_tool_calls": false,
+      "supports_image_detail_original": true,
+      "input_modalities": [
+        "text",
+        "image"
+      ],
+      "shell_type": "default",
+      "visibility": "list",
+      "supported_in_api": true,
+      "priority": 8,
+      "base_instructions": "",
+      "support_verbosity": false,
+      "supports_reasoning_summaries": false,
+      "experimental_supported_tools": [],
+      "truncation_policy": {
+        "mode": "bytes",
+        "limit": 10000
+      }
+    },
+    {
       "slug": "deepseek-v4-pro",
       "display_name": "deepseek-v4-pro",
       "description": "DashScope model: deepseek-v4-pro",
@@ -1111,6 +1155,50 @@ wire_api = "responses"
       "slug": "deepseek-v4.1-flash",
       "display_name": "deepseek-v4.1-flash",
       "description": "DashScope model: deepseek-v4.1-flash",
+      "default_reasoning_level": "medium",
+      "supported_reasoning_levels": [
+        {
+          "effort": "low",
+          "description": "Fast responses with lighter reasoning"
+        },
+        {
+          "effort": "medium",
+          "description": "Balances speed and reasoning depth"
+        },
+        {
+          "effort": "high",
+          "description": "Greater reasoning depth for complex problems"
+        },
+        {
+          "effort": "xhigh",
+          "description": "Extra high reasoning depth for complex problems"
+        }
+      ],
+      "context_window": 1000000,
+      "effective_context_window_percent": 95,
+      "supports_parallel_tool_calls": false,
+      "supports_image_detail_original": true,
+      "input_modalities": [
+        "text",
+        "image"
+      ],
+      "shell_type": "default",
+      "visibility": "list",
+      "supported_in_api": true,
+      "priority": 8,
+      "base_instructions": "",
+      "support_verbosity": false,
+      "supports_reasoning_summaries": false,
+      "experimental_supported_tools": [],
+      "truncation_policy": {
+        "mode": "bytes",
+        "limit": 10000
+      }
+    },
+    {
+      "slug": "deepseek-v4.1-flash-1017",
+      "display_name": "deepseek-v4.1-flash-1017",
+      "description": "DashScope model: deepseek-v4.1-flash-1017",
       "default_reasoning_level": "medium",
       "supported_reasoning_levels": [
         {

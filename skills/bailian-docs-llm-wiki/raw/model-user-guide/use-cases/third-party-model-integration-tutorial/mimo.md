@@ -196,6 +196,73 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+## 多模态输入
+
+xiaomi/mimo-v2.6-pro-ultraspeed 支持图片、音频和视频输入。在 user 消息的 `content` 数组中同时传入文本和多模态内容：图片使用 `image_url`，音频使用 `input_audio` 并通过 `format` 指定音频格式，视频使用 `video_url`。
+
+#### 图片
+
+```
+# 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
+-H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+-H "Content-Type: application/json" \
+-d '{
+    "model": "xiaomi/mimo-v2.6-pro-ultraspeed",
+    "messages": [
+        {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": "图中描绘的是什么景象？"},
+                {"type": "image_url", "image_url": {"url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241022/emyrja/dog_and_girl.jpeg"}}
+            ]
+        }
+    ]
+}'
+```
+
+#### 音频
+
+```
+# 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
+-H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+-H "Content-Type: application/json" \
+-d '{
+    "model": "xiaomi/mimo-v2.6-pro-ultraspeed",
+    "messages": [
+        {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": "音频中说的内容是什么？"},
+                {"type": "input_audio", "input_audio": {"data": "http://paas-aliyun-beijing.oss-cn-beijing.aliyuncs.com/qwen-translation/Cindy.wav", "format": "wav"}}
+            ]
+        }
+    ]
+}'
+```
+
+#### 视频
+
+```
+# 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
+-H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+-H "Content-Type: application/json" \
+-d '{
+    "model": "xiaomi/mimo-v2.6-pro-ultraspeed",
+    "messages": [
+        {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": "视频里面有什么？"},
+                {"type": "video_url", "video_url": {"url": "http://paas-aliyun-beijing.oss-cn-beijing.aliyuncs.com/qwen-translation/normal_video.mp4"}}
+            ]
+        }
+    ]
+}'
+```
+
 ## 其它功能
 
 **功能**
@@ -240,11 +307,11 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 —
 
-多模态输入
+[多模态输入](#h-mimo-multimodal)
 
-不支持
+因模型而异
 
-—
+xiaomi/mimo-v2.6-pro-ultraspeed 支持图片、音频和视频输入；xiaomi/mimo-v2.5-pro 不支持
 
 mimo-v2.5-pro 不支持以下参数：`top_k`、`reasoning_effort`、`thinking_budget`、`modalities`、`repetition_penalty`、`vl_high_resolution_images`、`preserve_thinking`、`tool_stream`、`enable_code_interpreter`、`parallel_tool_calls`、`seed`、`logprobs`、`top_logprobs`、`n`、`audio`、`enable_search`、`search_options`、`X-DashScope-DataInspection`、`skill`。
 
@@ -260,13 +327,17 @@ mimo-v2.5-pro 不支持以下参数：`top_k`、`reasoning_effort`、`thinking_b
 
 范围为 \[0, 2)
 
-范围 \[0, 1.5\]，默认 1.0
+mimo-v2.5-pro：范围 \[0, 1.5\]，默认 1.0
+
+mimo-v2.6-pro-ultraspeed：不支持自定义，传入其他值时仍按 1.0 生效
 
 `top_p`
 
 范围为 (0, 1.0\]
 
-范围 \[0.01, 1.0\]，默认 0.95
+mimo-v2.5-pro：范围 \[0.01, 1.0\]，默认 0.95
+
+mimo-v2.6-pro-ultraspeed：不支持自定义，传入其他值时仍按 0.95 生效
 
 `presence_penalty`
 
