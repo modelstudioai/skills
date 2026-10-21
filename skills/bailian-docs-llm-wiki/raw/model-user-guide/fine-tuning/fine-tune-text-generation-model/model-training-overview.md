@@ -338,20 +338,6 @@ qwen2.5-7b-instruct
 
 ✓
 
-决策模型（预览版）-2026-09-24
-
-decision-model-preview-2026-09-24
-
-×
-
-×
-
-×
-
-×
-
-×
-
 千问-Plus-Character-2025-11-06
 
 qwen-plus-character-2025-11-06

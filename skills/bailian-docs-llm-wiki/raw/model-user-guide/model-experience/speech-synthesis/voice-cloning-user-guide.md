@@ -14,13 +14,13 @@
     
 -   获取业务空间 ID，将示例中的 `YOUR_WORKSPACE_ID` 替换为真实值。获取方式请参见[地域与接入域名](raw/model-user-guide/get-started-with-models/regions.md)。
     
--   安装 [DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)：
+-   安装 Python HTTP 库 `requests`：
     
     ```
-    pip install -U dashscope
+    pip install requests
     ```
     
--   准备符合[音频要求](#vc02_audio_h2)且可通过公网 URL 访问的音频文件。可使用[示例音频](https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/cosyvoice/cosyvoice-zeroshot-sample.wav)运行以下代码，也可以替换为自己的音频 URL。
+-   准备符合[音频要求](#vc02_audio_h2)的音频文件。Qwen-Audio-TTS、Qwen-Audio-Realtime 和 CosyVoice 支持公网 URL 或 Base64 Data URI；MiniMax 仍使用公网 URL。以下示例使用[示例音频](https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/cosyvoice/cosyvoice-zeroshot-sample.wav)的 URL，本地音频的编码和传参方式请参见 [HTTP API](https://help.aliyun.com/zh/model-studio/voice-clone-design-http-api#h3-create-enrollment)。
     
 
 ## 开始使用
@@ -31,43 +31,77 @@
 
 Qwen-Audio-TTS 和 CosyVoice 使用相同的音色创建和基础合成流程。以下以 `qwen-audio-3.1-tts-flash` 为例。
 
-1.  **创建音色**：用 `url` 指定参考音频，通过 `target_model` 指定目标模型，`prefix` 为音色名称前缀。
+1.  **创建音色**：通过 HTTP API 的 `audio` 字段传入参考音频 URL 或 Base64 Data URI，`target_model` 指定目标模型，`prefix` 为音色名称前缀。
 2.  **合成语音**：将返回的音色 ID 传入 `voice`，使用同一个目标模型合成语音并保存音频。
 
 ```
 import os
+import time
+import requests
 
-import dashscope
-from dashscope.audio.tts_v2 import AudioFormat, SpeechSynthesizer, VoiceEnrollmentService
-
-dashscope.api_key = os.environ["DASHSCOPE_API_KEY"]
 workspace_id = "YOUR_WORKSPACE_ID"
 target_model = "qwen-audio-3.1-tts-flash"
-dashscope.base_http_api_url = (
-    f"https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1"
-)
-dashscope.base_websocket_api_url = (
-    f"wss://{workspace_id}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference"
-)
+base_url = f"https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1"
+headers = {"Authorization": f"Bearer {os.environ['DASHSCOPE_API_KEY']}"}
 
-# 创建音色。
-service = VoiceEnrollmentService()
-voice_id = service.create_voice(
-    target_model=target_model,
-    prefix="myvoice",
-    url="https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/cosyvoice/cosyvoice-zeroshot-sample.wav",
+response = requests.post(
+    f"{base_url}/services/audio/tts/customization",
+    headers=headers,
+    json={
+        "model": "voice-enrollment",
+        "input": {
+            "action": "create_voice",
+            "target_model": target_model,
+            "prefix": "myvoice",
+            "audio": "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/cosyvoice/cosyvoice-zeroshot-sample.wav",
+        },
+    },
+    timeout=60,
 )
+response.raise_for_status()
+voice_id = response.json()["output"]["voice_id"]
 print(f"voice_id: {voice_id}")
 
-# 使用绑定模型和返回的音色 ID 合成语音。
-synthesizer = SpeechSynthesizer(
-    model=target_model,
-    voice=voice_id,
-    format=AudioFormat.WAV_24000HZ_MONO_16BIT,
+for _ in range(30):
+    response = requests.post(
+        f"{base_url}/services/audio/tts/customization",
+        headers=headers,
+        json={
+            "model": "voice-enrollment",
+            "input": {"action": "query_voice", "voice_id": voice_id},
+        },
+        timeout=60,
+    )
+    response.raise_for_status()
+    status = response.json()["output"]["status"]
+    if status == "OK":
+        break
+    if status != "DEPLOYING":
+        raise RuntimeError(f"Voice status: {status}")
+    time.sleep(1)
+else:
+    raise TimeoutError("Voice is not ready")
+
+response = requests.post(
+    f"{base_url}/services/audio/tts/SpeechSynthesizer",
+    headers=headers,
+    json={
+        "model": target_model,
+        "input": {
+            "text": "今天天气晴朗，适合外出散步。祝你度过愉快的一天。",
+            "voice": voice_id,
+            "format": "wav",
+            "sample_rate": 24000,
+        },
+    },
+    timeout=60,
 )
-audio = synthesizer.call("今天天气晴朗，适合外出散步。祝你度过愉快的一天。")
+response.raise_for_status()
+audio_url = response.json()["output"]["audio"]["url"]
+audio_response = requests.get(audio_url, timeout=60)
+audio_response.raise_for_status()
 with open("output.wav", "wb") as f:
-    f.write(audio)
+    f.write(audio_response.content)
 ```
 
 运行后，合成音频保存为 `output.wav`。保存打印的音色 ID，后续可继续使用。
@@ -78,25 +112,51 @@ Qwen-Audio-Realtime 的复刻音色用于自定义实时语音对话的回复声
 
 ```
 import os
+import time
+import requests
 
-import dashscope
-from dashscope.audio.tts_v2 import VoiceEnrollmentService
-
-dashscope.api_key = os.environ["DASHSCOPE_API_KEY"]
 workspace_id = "YOUR_WORKSPACE_ID"
 target_model = "qwen-audio-3.1-realtime-plus"
-dashscope.base_http_api_url = (
-    f"https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1"
-)
+base_url = f"https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1"
+headers = {"Authorization": f"Bearer {os.environ['DASHSCOPE_API_KEY']}"}
 
-# 创建音色。
-service = VoiceEnrollmentService()
-voice_id = service.create_voice(
-    target_model=target_model,
-    prefix="myvoice",
-    url="https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/cosyvoice/cosyvoice-zeroshot-sample.wav",
+response = requests.post(
+    f"{base_url}/services/audio/tts/customization",
+    headers=headers,
+    json={
+        "model": "voice-enrollment",
+        "input": {
+            "action": "create_voice",
+            "target_model": target_model,
+            "prefix": "myvoice",
+            "audio": "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/cosyvoice/cosyvoice-zeroshot-sample.wav",
+        },
+    },
+    timeout=60,
 )
+response.raise_for_status()
+voice_id = response.json()["output"]["voice_id"]
 print(f"voice_id: {voice_id}")
+
+for _ in range(30):
+    response = requests.post(
+        f"{base_url}/services/audio/tts/customization",
+        headers=headers,
+        json={
+            "model": "voice-enrollment",
+            "input": {"action": "query_voice", "voice_id": voice_id},
+        },
+        timeout=60,
+    )
+    response.raise_for_status()
+    status = response.json()["output"]["status"]
+    if status == "OK":
+        break
+    if status != "DEPLOYING":
+        raise RuntimeError(f"Voice status: {status}")
+    time.sleep(1)
+else:
+    raise TimeoutError("Voice is not ready")
 ```
 
 建立实时语音对话连接后，在**首次** `session.update` 事件中，将 `session.voice` 设置为返回的音色 ID（替换下方的 `VOICE_ID`）。会话模型必须与创建音色时的 `target_model` 一致。
@@ -299,7 +359,7 @@ Qwen-Audio-TTS、Qwen-Audio-Realtime 和 CosyVoice 使用相同的音色查询�
 
 使用该地域的 [API Key](https://bailian.console.aliyun.com/model/settings/api-key) 调用以下模型：
 
--   **Qwen-Audio-TTS**：qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash
+-   **Qwen-Audio-TTS**：qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash
     
 -   **Qwen-Audio-Realtime**：qwen-audio-3.1-realtime-plus、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash
     
@@ -312,7 +372,7 @@ Qwen-Audio-TTS、Qwen-Audio-Realtime 和 CosyVoice 使用相同的音色查询�
 
 使用该地域的 [API Key](https://bailian.console.aliyun.com/model/settings/api-key) 调用以下模型：
 
--   **Qwen-Audio-TTS**：qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash
+-   **Qwen-Audio-TTS**：qwen-audio-3.1-tts-plus、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash
     
 -   **CosyVoice**：cosyvoice-v3-plus、cosyvoice-v3-flash
     

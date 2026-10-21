@@ -6,7 +6,9 @@
 
 ## 请求方法与路径
 
-`GET https://dashscope.aliyuncs.com/api/v2/apps/memory/profile_schemas/{profile_schema_id}`
+`GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/profile_schemas/{profile_schema_id}`
+
+调用时请将 `{WorkspaceId}` 替换为真实的[业务空间 ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
 ## 请求参数
 
@@ -105,7 +107,7 @@ string
 ## 代码示例
 
 ```
-curl -X GET "https://dashscope.aliyuncs.com/api/v2/apps/memory/profile_schemas/{profile_schema_id}" \
+curl -X GET "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/profile_schemas/{profile_schema_id}" \
   --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
   --header "Content-Type: application/json"
 ```

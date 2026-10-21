@@ -1,17 +1,17 @@
 {
-  "updatedAt": "2026-10-20",
-  "totalFamilies": 125,
-  "totalModels": 319,
+  "updatedAt": "2026-10-22",
+  "totalFamilies": 124,
+  "totalModels": 316,
   "profileCoverage": {
-    "full": 42,
+    "full": 0,
     "partial": 0,
-    "structured-only": 277,
+    "structured-only": 316,
     "none": 0
   },
   "capabilityDistribution": {
     "TG": 30,
-    "VG": 17,
     "IG": 17,
+    "VG": 16,
     "ASR": 11,
     "Reasoning": 10,
     "TTS": 9,
@@ -30,7 +30,7 @@
   "providerDistribution": {
     "qwen": 63,
     "qwen-domain-model": 26,
-    "wan": 13,
+    "wan": 12,
     "mini-max": 4,
     "pixverse": 4,
     "deepseek": 3,
@@ -690,9 +690,10 @@
       "providers": [
         "qwen"
       ],
-      "itemCount": 1,
+      "itemCount": 2,
       "items": [
-        "qwen-audio-3.1-tts-flash"
+        "qwen-audio-3.1-tts-flash",
+        "qwen-audio-3.1-tts-plus"
       ]
     },
     {
@@ -1990,23 +1991,6 @@
       ]
     },
     {
-      "slug": "wan-reference-to-video",
-      "name": "Wan-R2V",
-      "primaryCapability": "VG",
-      "capabilities": [
-        "VG"
-      ],
-      "providers": [
-        "wan"
-      ],
-      "itemCount": 3,
-      "items": [
-        "wan2.6-r2v",
-        "wan2.6-r2v-flash",
-        "wan2.7-r2v"
-      ]
-    },
-    {
       "slug": "wan-text-to-image",
       "name": "Wan-T2I",
       "primaryCapability": "IG",
@@ -2182,9 +2166,8 @@
       "providers": [
         "xiaomi"
       ],
-      "itemCount": 2,
+      "itemCount": 1,
       "items": [
-        "xiaomi/mimo-v2.5-pro",
         "xiaomi/mimo-v2.6-pro-ultraspeed"
       ],
       "maxContextWindow": 1048576

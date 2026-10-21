@@ -8,7 +8,9 @@
 
 ## 请求方法与路径
 
-`POST https://dashscope.aliyuncs.com/api/v2/apps/memory/add`
+`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/add`
+
+调用时请将 `{WorkspaceId}` 替换为真实的[业务空间 ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
 ## 请求参数
 
@@ -237,7 +239,7 @@ string
 cURL
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/api/v2/apps/memory/add' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/add' \
   --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
   --header 'Content-Type: application/json' \
   --data '{

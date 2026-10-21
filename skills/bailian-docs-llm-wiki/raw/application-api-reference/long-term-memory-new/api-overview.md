@@ -2,15 +2,23 @@
 
 服务地址、协议约定、请求格式与通用响应
 
-通过记忆库 API，你可以以编程方式写入记忆、检索记忆、管理画像模板。全部接口通过 DashScope 网关提供服务。
+通过记忆库 API，你可以以编程方式写入记忆、检索记忆、管理画像模板。全部接口通过业务空间专属域名提供服务。
 
 ## 服务地址
 
 ```
-https://dashscope.aliyuncs.com/api/v2/apps/memory/
+https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/
 ```
 
-全部接口使用统一的服务地址。将各接口页面列出的路径拼接到服务地址后即可得到完整请求地址，例如 `/add` 对应 `https://dashscope.aliyuncs.com/api/v2/apps/memory/add`。
+`{WorkspaceId}` 是业务空间 ID，格式如 `llm-xxxxxxxxxxxx`。在[业务空间管理](https://bailian.console.aliyun.com/cn-beijing/settings/workspace)页面复制 **API Host** 列的内容即可获得包含业务空间 ID 的域名，详见[获取业务空间专属域名](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。业务空间专属域名仅支持该业务空间所属的 API Key 调用。
+
+全部接口使用统一的服务地址。将各接口页面列出的路径拼接到服务地址后即可得到完整请求地址，例如 `/add` 对应 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/add`。
+
+使用 Python SDK（`agentscope-runtime`）时，将环境变量 `MEMORY_SERVICE_ENDPOINT` 设置为服务地址（末尾不带 `/`），SDK 会通过该地址发起请求：
+
+```
+export MEMORY_SERVICE_ENDPOINT="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory"
+```
 
 ## 协议约定
 

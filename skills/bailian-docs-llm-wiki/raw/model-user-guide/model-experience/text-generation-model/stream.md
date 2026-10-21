@@ -760,7 +760,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 
 思考模型会先返回`reasoning_content`（思考过程），再返回`content`（回复内容）。可根据数据包状态判断当前为思考或是回复阶段。
 
-> 思考模型详情参见：[深度思考](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md)、[图像与视频理解](raw/model-user-guide/model-experience/vision-model/vision.md)、[视觉推理](raw/model-user-guide/model-experience/vision-model/visual-reasoning.md)。
+> 思考模型详情参见：[深度思考](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md)、[图像与视频理解](raw/model-user-guide/model-experience/vision-model/vision.md)。
 
 > Qwen3-Omni-Flash（思考模式）实现流式输出请参见[全模态](https://help.aliyun.com/zh/model-studio/qwen-omni#bc67a9a2bd2of)。
 

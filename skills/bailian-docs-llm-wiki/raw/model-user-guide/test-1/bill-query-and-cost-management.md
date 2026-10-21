@@ -39,23 +39,53 @@
 1.  在[账单详情](https://usercenter2.aliyun.com/finance/expense-report/expense-detail)页面，选择账单月份，
 2.  选择**产品名称**为**大模型服务平台百炼**，单击**搜索**。
 3.  单击页面顶部的**导出明细**，将账单下载到本地。
-4.  打开文件，找到 实例 ID（出账粒度）列，根据下文规则进行核对。
+4.  打开文件，找到**资产/资源实例ID（出账粒度）**列（控制台账单详情页显示为**实例ID（出账粒度）**），根据下文规则进行核对。
 
 #### 2\. 解读关键字段（模型推理账单）
 
-**说明**以下字段格式说明适用于**模型推理**账单。**模型训练与调优**账单的实例ID字段格式不同（使用英文感叹号 `!` 分隔），请参见下方[训练与调优账单字段](https://help.aliyun.com/zh/model-studio/bill-query-and-cost-management#wi82451543-train-billing-h)。
+**说明**以下字段格式说明适用于**模型推理**账单。**模型训练与调优**账单的实例ID字段格式不同（使用英文感叹号 `!` 分隔），请参见下方[训练与调优账单字段](https://help.aliyun.com/zh/model-studio/bill-query-and-cost-management#wi82451543-train-billing-h)。Token Plan、知识库、联网搜索、ManagedAgent 会话运行时费等其他计费项的实例ID格式也不同，不适用本节规则。
 
-**“实例 ID（出账粒度）”字段**以英文分号 `;` 分隔，完整格式为`ApiKeyID;业务空间ID;模型名称;输入/输出类型;调用渠道;免费额度用完即停标识`。
+**“资产/资源实例ID（出账粒度）”字段**以英文分号 `;` 分隔，从左到右依次为`ApiKeyID;业务空间ID;模型名称;输入/输出类型;调用渠道;免费额度用完即停标识`。各段含义如下：
 
--   格式 A：标准调用（包含ApiKeyID）
+1.  `ApiKeyID`：本次调用使用的 API Key ID。该段为空表示本次调用未使用 API Key，通常来自控制台或 ManagedAgent 等托管服务；不为空表示通过代码调用，可据此定位具体的 API Key。
+    
+2.  `业务空间ID`：本次调用所属的业务空间（如 `llm-xxx`）。百炼按地域划分资源与业务空间，业务空间是进行权限管理（模型、用户）和阿里云账单分账的最小管理单元。
+    
+3.  `模型名称`：本次调用使用的模型，例如 `qwen-max`。
+    
+4.  `输入/输出类型`：本条账单对应的计费用量类型，例如输入 Token（`input_token`）、输出 Token（`output_token`）。
+    
+5.  `调用渠道`：发起本次调用的入口，常见取值如下：
+    
+    -   `（空）`：通过 API 调用模型。
+    -   `bmp`：通过控制台模型体验调用模型。
+    -   `assistant-api`：通过 Assistant API 调用模型。
+    -   `responses`：通过 Responses API 调用模型。
+    -   `evalModel`：通过模型评测调用模型。
+    -   `batch`：通过批量推理调用模型。
+    -   `bailian-claude-code-proxy`：通过 Anthropic 兼容接口调用模型。
+    -   `app`：通过应用调用模型。
+    -   `agent1`：通过智能体应用（Agent 1.0）调用模型。
+    -   `agent2`：通过新版智能体应用（Agent 2.0）调用模型。
+    -   `managed agent`：通过 ManagedAgent 托管智能体调用模型。
+    -   `RAG`：通过知识库检索或问答调用模型。
+6.  `免费额度用完即停标识`：`0` 表示未开启，`1` 表示已开启。
+    
+
+**说明**部分账单会省略末尾为空的字段，因此实际段数可能少于 6 段。第 5 段为 `0` 或 `1` 时，表示免费额度用完即停标识，此时调用渠道为空；第 5 段为渠道代码时，表示调用渠道，免费额度用完即停标识为空。批量推理、模型评测等任务的出账时间可能晚于调用时间，请以实际出账结果为准。例如：
+
+-   `2469635;llm-xxx;qwen3.8-max;input_token;0`：调用渠道为空，免费额度用完即停标识为 `0`。
+-   `;llm-xxx;agent_model_performance;input_token;managed agent`：通过 ManagedAgent 调用，免费额度用完即停标识为空。
+
+常见形态：
+
+-   格式 A：标准调用（包含 `ApiKeyID`）
     
     -   示例：`12xxx;llm-xxx;qwen-max;output_token;app;0`
-    -   依次表示`ApiKeyID;业务空间ID;模型名称;输入/输出类型;调用渠道;免费额度用完即停标识`。
--   格式 B：控制台调用（不含ApiKeyID）
+-   格式 B：控制台调用（不含 `ApiKeyID`）
     
-    -   示例：`;llm-xxx;qwen-max;output_token;app;0`
-    -   依次表示`;业务空间ID;模型名称;输入/输出类型;调用渠道;免费额度用完即停标识`。
-    -   若不包含`ApiKeyID`，通常表示该费用是通过阿里云百炼控制台产生的，而非通过代码调用。
+    -   示例：`;llm-xxx;qwen-max;output_token;bmp;0`
+    -   第一段为空，表示该费用由控制台调用产生。
 
 **“实例标签”字段**：如果您使用了标签分账，该列显示格式如下：
 
@@ -65,7 +95,7 @@
 
 #### 3\. 训练与调优账单字段
 
-**模型训练**与**模型调优**账单的**“实例 ID（出账粒度）”字段**以英文感叹号 `!` 分隔，常见格式为`业务空间ID!地域!训练任务标识`，与模型推理账单的分号 `;` 分隔格式不同。
+**模型训练**与**模型调优**账单的**“资产/资源实例ID（出账粒度）”字段**以英文感叹号 `!` 分隔，常见格式为`业务空间ID!地域!训练任务标识`，与模型推理账单的分号 `;` 分隔格式不同。
 
 **示例：**`ws-xxxxxxxxx!cn-beijing!qwen3-14b-ft-2026051510-1c3b`
 
@@ -74,14 +104,7 @@
 #### 4\. 数据溯源与术语说明
 
 -   查询 API Key：复制账单中的 `ApiKeyID`，前往[API Key](https://bailian.console.aliyun.com/model/settings/api-key)页面查找对应的 Key 名称。
-    
 -   查询业务空间：复制账单中的 `业务空间ID`，前往[业务空间管理](https://bailian.console.aliyun.com/settings/workspace)页面，在列表的**业务空间ID**列确认具体空间。当前所处的业务空间显示在控制台顶部右上角的**默认业务空间**切换器中，悬停可查看其地域、业务空间ID与创建时间等详情。
-    
--   调用渠道说明：
-    
-    -   `app`：通过应用程序（代码）调用模型。
-    -   `bmp`：表示通过控制台[体验中心](https://bailian.console.aliyun.com/model/experience/text)调用模型。
-    -   `assistant-api`：表示通过Assistant API调用模型。
 
 ## 分账管理
 
@@ -157,7 +180,7 @@
 
 **原因：**账单的“计费项”统一显示为“大模型文本消耗量”，未直接展示模型名称。
 
-**解决方案：**查看[账单详情](https://usercenter2.aliyun.com/finance/expense-report/expense-detail)页的**实例 ID（出账粒度）**列。字段以英文分号分隔，紧跟业务空间ID（如 llm-xxx）之后的字段即为模型名称。例：`12xxx;llm-xxx; qwen3.6-plus ;context_0-128k_input_token;bmp;0`表示 qwen3.6-plus 模型。
+**解决方案：**查看[账单详情](https://usercenter2.aliyun.com/finance/expense-report/expense-detail)页的**资产/资源实例ID（出账粒度）**列。字段以英文分号分隔，紧跟业务空间ID（如 llm-xxx）之后的字段即为模型名称。例：`12xxx;llm-xxx; qwen3.6-plus ;context_0-128k_input_token;bmp;0`表示 qwen3.6-plus 模型。
 
 在哪里查看模型调用次数和统计？
 
@@ -175,6 +198,17 @@
 
 参考[如何充值缴费](https://help.aliyun.com/zh/user-center/use-alipay-online-banking-to-recharge-online)。
 
+云工开物 300 元抵扣金可以抵扣哪些百炼费用？
+
+可用于以下两种场景：
+
+-   **购买 50 元[高校 AI 通行证](https://opc.aliyun.com/summer-2026)模型资源包**：抵扣范围与 [AI 通用型节省计划](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package#nqdi1bsux4qx0)相同（档位折扣为节省计划专属，该资源包不享受折扣）；单人可使用抵扣金抵扣 1 次，首次自费购买可享 5 折补贴，具体以活动页为准。
+-   **抵扣后付费模型服务**：可抵扣阿里直供模型的训练、推理、部署和知识库 RAG 后付费费用。
+
+某个模型处于活动折扣价期间，该模型的按量计费调用无法使用抵扣金抵扣；如需调用，建议购买模型资源包。
+
+完整活动规则参见[“云工开物”高校计划](https://help.aliyun.com/zh/model-studio/introduction-to-yungongkaiwu)。
+
 为什么没怎么用却产生了欠费？
 
 **原因：**百炼的[联网搜索](raw/model-user-guide/model-experience/text-generation-model/tool-calls/web-search.md)等附加功能按调用次数单独计费（后付费），与模型推理费用分开出账。即使您近期未主动操作控制台，历史创建的应用或代码中若开启了 `enable_search` 参数，每次被调用仍会产生联网搜索费用。
@@ -183,7 +217,7 @@
 
 **解决方案：**
 
-1.  在[账单详情](https://help.aliyun.com/zh/model-studio/bill-query-and-cost-management#29f8b9b9a4lmc)中筛选**大模型服务平台百炼**，查看**实例 ID（出账粒度）**列，确认产生费用的模型名称和调用渠道。
+1.  在[账单详情](https://help.aliyun.com/zh/model-studio/bill-query-and-cost-management#29f8b9b9a4lmc)中筛选**大模型服务平台百炼**，查看**资产/资源实例ID（出账粒度）**列，确认产生费用的模型名称和调用渠道。
 2.  检查应用代码或百炼应用配置中是否开启了 `enable_search`，如不再需要联网搜索，将该参数设为 `false` 或移除。
 3.  如已停止所有调用但仍有扣费，检查是否有其他 API Key 或应用仍在运行，可在[API Key](https://bailian.console.aliyun.com/model/settings/api-key)页面逐一排查或删除不再使用的 Key。
 
@@ -214,7 +248,7 @@
 
 如果怀疑账户被他人盗用产生非预期费用，按以下步骤排查：
 
-1.  在[账单详情](https://usercenter2.aliyun.com/finance/expense-report/expense-detail)中筛选**大模型服务平台百炼**，查看**实例 ID（出账粒度）**列中的 `ApiKeyID`，确认产生费用的 API Key。
+1.  在[账单详情](https://usercenter2.aliyun.com/finance/expense-report/expense-detail)中筛选**大模型服务平台百炼**，查看**资产/资源实例ID（出账粒度）**列中的 `ApiKeyID`，确认产生费用的 API Key。
 2.  前往[API Key](https://bailian.console.aliyun.com/model/settings/api-key)页面，核对每个 Key 的**创建时间**，确认是否为本人创建。API Key 页面仅显示创建时间，不显示调用时间。
 3.  查看调用时段分布，判断是否存在非本人操作的异常调用模式：进入[模型用量](https://bailian.console.aliyun.com/cn-beijing/costing-balance/usage-statistics)页面，按**模型**或 **API Key ID** 筛选，切换至**列表**视图查看调用时间分布。
 4.  如发现未授权调用，立即在[API Key](https://bailian.console.aliyun.com/model/settings/api-key)页面删除对应 API Key 并重新生成。更新所有合法调用方使用新 Key。
@@ -330,5 +364,5 @@ Token Plan
 如何查询对应的商品 Code？
 
 1.  进入[账单详情](https://billing-cost.console.aliyun.com/finance/expense-report/expense-detail-by-instance)页面。
-2.  单击账单表格上方的**设置（齿轮）**图标。
+2.  单击账单表格上方的**偏好设置（齿轮）**图标。
 3.  在**定制列**弹窗中选中**商品Code**，返回账单表格即可查看每条账单对应的商品 Code。

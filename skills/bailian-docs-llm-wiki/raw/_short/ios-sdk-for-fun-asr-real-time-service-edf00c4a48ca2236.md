@@ -504,7 +504,7 @@ VAD模式。固定为`MODE_P2T`。
 
 #### nui\_dialog\_action
 
-在交互过程中下发对话动作指令，用于更新识别上下文等运行时行为。
+发送运行时动作，通知端侧 AEC 播放状态。
 
 **方法签名**
 ```
@@ -522,7 +522,7 @@ VAD模式。固定为`MODE_P2T`。
 
 `char*`
 
-JSON 字符串，用于更新识别上下文等运行时行为。
+包含运行时动作的 JSON 字符串。
 
 `action_params.type`
 
@@ -534,32 +534,9 @@ JSON 字符串，用于更新识别上下文等运行时行为。
 
 `String`
 
-运行指令。支持以下取值：
+`play_start`: 使用端侧 AEC 时，通知 SDK 播放器开始播放音频。
 
--   `context`：即时更新上下文增强，以提升识别准确率。
--   `play_start`：使用端侧 AEC 时，通知 SDK 内部 AEC 播放器开始播放音频。
--   `play_over`：使用端侧 AEC 时，通知 SDK 内部 AEC 播放器已经播放结束。
-
-`action_params.context`
-
-`String`
-
-当 `command` 为 `"context"` 时，用于即时更新上下文增强。示例：
-```
-{
-  "context": [
-    {
-      "role": "user",
-      "content": [
-        {
-          "text": "xxx",
-          "type": "input_text"
-        }
-      ]
-    }
-  ]
-}
-```
+`play_over`: 使用端侧 AEC 时，通知 SDK 播放器已结束播放音频。
 
 #### nui\_update\_audio\_data
 

@@ -42,20 +42,6 @@
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
-qwen3.8-max-prime
-
-> 更多详情参考[优速模式（Prime）](raw/model-user-guide/model-high-speed-inference/prime-mode.md)
-
-非思考和思考模式
-
-0<Token≤1M
-
-24元
-
-72元
-
-无免费额度
-
 qwen3.8-max
 
 > [Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)半价
@@ -5314,15 +5300,13 @@ qwen-audio-chat
 
 计费规则：按输入Token和输出Token计费。
 
-deepseek-v4.1-flash-1017 按峰谷价格计费：闲时为 UTC+8 22:00 至次日 08:00，忙时为其余时段。
+部分模型按峰谷价格计费（见下表标注的忙时、闲时单价）：忙时为北京时间 08:00 至 22:00，闲时为北京时间 22:00 至次日 08:00。
 
 影响计费的因素：若模型支持[Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)，其输入和输出Token单价均按实时推理价格的50%计费。
 
 **说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 **说明**DeepSeek-V4-Flash-0731 已于 2026-08-17 00:00 起调整为峰谷定价模式，调整后单价可见下表，更多信息详见[DeepSeek-V4-Flash-0731 模型涨价通知](https://www.aliyun.com/notice/118555)。
-
-其中，忙时为北京时间 8:00 - 22:00，闲时为北京时间 22:00 - 次日 8:00。
 
 #### 华北2（北京）
 
@@ -6822,28 +6806,6 @@ unisound/unisound-u2
 
 无
 
-### Unisound-云知声
-
-#### 华北2（北京）
-
-**模型 ID（Model ID）**
-
-**输入单价（每百万Token）**
-
-**输出单价（每百万Token）**
-
-> **思维链和回答**
-
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
-
-unisound/unisound-u2
-
-1元
-
-2元
-
-无
-
 ## 图像生成
 
 计费规则：按输入图像和成功生成的 **图像张数**计费。未说明输入图像价格的模型，输入不计费，仅输出计费。
@@ -8031,9 +7993,13 @@ qwen-audio-3.1-tts-flash
 
 **输入单价（每万字符）**
 
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)有效期：自开通百炼或模型发布之日起90天内（以较晚者为准）
 
-有效期：自开通百炼或模型发布之日起90天内（以较晚者为准）
+qwen-audio-3.1-tts-plus
+
+1.4元
+
+1万字符
 
 qwen-audio-3.0-tts-plus
 
@@ -8066,6 +8032,12 @@ qwen-audio-3.1-tts-flash
 **服务部署范围**
 
 **输入单价（每万字符）**
+
+qwen-audio-3.1-tts-plus
+
+国际
+
+2.19元
 
 qwen-audio-3.0-tts-plus
 

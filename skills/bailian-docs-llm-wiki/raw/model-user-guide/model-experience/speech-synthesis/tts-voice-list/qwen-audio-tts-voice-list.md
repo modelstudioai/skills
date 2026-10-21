@@ -11,6 +11,66 @@
 
 ## 系统音色
 
+### qwen-audio-3.1-tts-plus
+
+以下音色适用于 `qwen-audio-3.1-tts-plus`。
+
+#### 旗舰音色
+
+**名称**
+
+**性别**
+
+**特性支持**
+
+**名称**: 龙安灵心\_v3.1
+
+**voice 参数**: `longanlingxin_v3.1`
+
+女
+
+SSML: 支持
+
+指令控制: 支持
+
+时间戳: 支持
+
+**名称**: 许南川
+
+**voice 参数**: `xunanchuan_v3.1`
+
+男
+
+SSML: 支持
+
+指令控制: 支持
+
+时间戳: 支持
+
+**名称**: 龙安欢\_v3.1
+
+**voice 参数**: `longanhuan_v3.1`
+
+女
+
+SSML: 支持
+
+指令控制: 支持
+
+时间戳: 支持
+
+**名称**: 龙安风悦\_v3.1
+
+**voice 参数**: `longanfengyue_v3.1`
+
+女
+
+SSML: 支持
+
+指令控制: 支持
+
+时间戳: 支持
+
 ### qwen-audio-3.1-tts-flash
 
 以下音色适用于 `qwen-audio-3.1-tts-flash`。`voice` 值区分大小写。

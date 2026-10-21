@@ -16,13 +16,13 @@
 
 OpenAI gpt-4o-tts、Google Chirp 3
 
-`qwen-audio-3.0-tts-plus`、`MiniMax/speech-2.8-hd`
+`qwen-audio-3.1-tts-plus`、`MiniMax/speech-2.8-hd`
 
 自定义音色 / 声音复刻
 
 ElevenLabs Multilingual v3
 
-`qwen-audio-3.0-tts-flash`（声音复刻）、`qwen-audio-3.0-tts-plus`、`qwen-audio-3.0-tts-flash`（声音设计）、`cosyvoice-v3.5-plus`（声音设计）、`MiniMax/speech-2.8-hd`（声音复刻）
+`qwen-audio-3.0-tts-flash`（声音复刻）、`qwen-audio-3.1-tts-plus`、`qwen-audio-3.0-tts-flash`（声音设计）、`cosyvoice-v3.5-plus`（声音设计）、`MiniMax/speech-2.8-hd`（声音复刻）
 
 ## 标准语音合成还是自定义音色？
 
@@ -52,9 +52,9 @@ ElevenLabs Multilingual v3
 
 推荐模型
 
-`qwen-audio-3.0-tts-plus`、`MiniMax/speech-2.8-hd`
+`qwen-audio-3.1-tts-plus`、`MiniMax/speech-2.8-hd`
 
-`qwen-audio-3.0-tts-plus`（声音复刻）、`qwen-audio-3.0-tts-plus`、`qwen-audio-3.0-tts-flash`（声音设计）、`cosyvoice-v3.5-plus`（声音设计）、`MiniMax/speech-2.8-hd`（声音复刻）
+`qwen-audio-3.1-tts-plus`（声音复刻）、`qwen-audio-3.1-tts-plus`、`qwen-audio-3.0-tts-flash`（声音设计）、`cosyvoice-v3.5-plus`（声音设计）、`MiniMax/speech-2.8-hd`（声音复刻）
 
 -   **使用标准语音合成**：当内置音色库能满足需求，希望快速上手、无需额外配置时。
 -   **使用自定义音色**：当需要品牌专属声音、复刻特定人物音色，或创建全新角色音色时。
@@ -87,9 +87,9 @@ ElevenLabs Multilingual v3
 
 推荐模型
 
-`qwen-audio-3.0-tts-plus`、`qwen-audio-3.0-tts-flash`、`MiniMax/speech-2.8-hd`
+`qwen-audio-3.1-tts-plus`、`qwen-audio-3.0-tts-flash`、`MiniMax/speech-2.8-hd`
 
-`qwen-audio-3.0-tts-plus`、`qwen-audio-3.0-tts-flash`、`cosyvoice-v3.5-plus`、`cosyvoice-v3.5-flash`
+`qwen-audio-3.1-tts-plus`、`qwen-audio-3.0-tts-flash`、`cosyvoice-v3.5-plus`、`cosyvoice-v3.5-flash`
 
 音色管理服务
 
@@ -135,11 +135,11 @@ CosyVoice 系列模型还支持通过 AOQ 协议接入；如果是客户端对�
 
 **指令控制**
 
-`qwen-audio-3.0-tts-plus`
+`qwen-audio-3.1-tts-plus`
 
 Qwen-Audio-TTS
 
-WebSocket/ HTTP
+WebSocket / HTTP
 
 支持
 
@@ -196,6 +196,16 @@ HTTP
 **声音设计**
 
 **指令控制**
+
+`qwen-audio-3.1-tts-plus`
+
+WebSocket / HTTP
+
+支持
+
+支持
+
+支持
 
 `qwen-audio-3.0-tts-plus`
 

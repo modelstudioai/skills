@@ -2,6 +2,8 @@
 
 本文档介绍如何在阿里云百炼平台调用小米直供的 MiMo 系列模型推理服务。
 
+**重要**小米直供模型 xiaomi/mimo-v2.5-pro 将于2026年10月21日下线，推荐使用 [xiaomi/mimo-v2.6-pro-ultraspeed](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/mimo-v2-6-pro-ultraspeed.md) 替代。
+
 **重要**本文档描述的功能仅在华北2（北京）地域可用，如需使用模型，需从华北2（北京）地域[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
 
 ## 快速开始

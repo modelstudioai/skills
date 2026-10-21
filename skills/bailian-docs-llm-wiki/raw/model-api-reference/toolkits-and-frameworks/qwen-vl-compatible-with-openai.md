@@ -32,7 +32,7 @@
 
 本章节提供Python（OpenAI SDK与LangChain\_OpenAI SDK）和cURL（HTTP接口）的流式调用示例，更多编程语言或输入方式示例请参考：[视觉理解请求示例](raw/model-user-guide/model-experience/vision-model/vision.md)。
 
-> QVQ模型仅支持流式输出，具体使用方法请参见[视觉推理](raw/model-user-guide/model-experience/vision-model/visual-reasoning.md)。
+> QVQ模型仅支持流式输出，具体使用方法请参见[开启/关闭思考模式](https://help.aliyun.com/zh/model-studio/vision#bc67a9a2bd2of)。
 
 #### 使用OpenAI SDK调用
 
@@ -204,7 +204,7 @@ if __name__ == "__main__":
 
 #### 流式输出
 
-> 以下示例不适用QVQ模型，QVQ调用方法请参见[视觉推理](raw/model-user-guide/model-experience/vision-model/visual-reasoning.md)。
+> 以下示例不适用QVQ模型，QVQ调用方法请参见[开启/关闭思考模式](https://help.aliyun.com/zh/model-studio/vision#bc67a9a2bd2of)。
 
 ```
 from langchain_openai import ChatOpenAI

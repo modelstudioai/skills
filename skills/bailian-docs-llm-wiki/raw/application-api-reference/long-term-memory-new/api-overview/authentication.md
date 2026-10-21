@@ -12,6 +12,8 @@ API Key 获取与使用方式
     
     **警告**API Key 具有账号级权限，请妥善保管，不要在公开渠道分享或提交到代码仓库。
     
+3.  **获取业务空间 ID**：在[业务空间管理](https://bailian.console.aliyun.com/cn-beijing/settings/workspace)页面复制 **API Host** 列的内容，其中的 `llm-xxxxxxxxxxxx` 即业务空间 ID，详见[获取业务空间专属域名](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。请求地址中的 `{WorkspaceId}` 需替换为该 ID，且 API Key 须属于同一业务空间。
+    
 
 ## 使用方式
 
@@ -24,7 +26,7 @@ export DASHSCOPE_API_KEY="sk-xxxxxxxxxxxxxxxx"
 每个请求携带 `Authorization` Header：
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/api/v2/apps/memory/add' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/add' \
   --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
   --header 'Content-Type: application/json' \
   --data '{

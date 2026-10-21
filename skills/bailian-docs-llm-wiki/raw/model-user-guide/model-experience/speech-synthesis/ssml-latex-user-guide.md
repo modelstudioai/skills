@@ -12,7 +12,7 @@ SSML 是基于 XML 的语音合成标记语言，可设置音色、语速、音�
 
 #### SSML
 
--   **支持模型：** `qwen-audio-3.1-tts-flash`、`qwen-audio-3.0-tts-flash`、`qwen-audio-3.0-tts-plus`、`cosyvoice-v3.5-flash`、`cosyvoice-v3.5-plus`、`cosyvoice-v3-flash`、`cosyvoice-v3-plus`、`cosyvoice-v2`
+-   **支持模型：** `qwen-audio-3.1-tts-plus`、`qwen-audio-3.1-tts-flash`、`qwen-audio-3.0-tts-flash`、`qwen-audio-3.0-tts-plus`、`cosyvoice-v3.5-flash`、`cosyvoice-v3.5-plus`、`cosyvoice-v3-flash`、`cosyvoice-v3-plus`、`cosyvoice-v2`
     
 -   **音色：** 仅复刻音色，以及[Qwen-Audio-TTS音色列表](raw/model-user-guide/model-experience/speech-synthesis/tts-voice-list/qwen-audio-tts-voice-list.md)和[CosyVoice音色列表](raw/model-user-guide/model-experience/speech-synthesis/tts-voice-list/cosyvoice-voice-list.md)中标注为支持 SSML 的系统音色可用。
     

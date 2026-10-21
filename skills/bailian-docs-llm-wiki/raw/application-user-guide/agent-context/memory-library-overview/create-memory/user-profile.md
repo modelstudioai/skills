@@ -10,6 +10,7 @@
 
 -   已创建记忆库或使用默认记忆库
 -   配置 `DASHSCOPE_API_KEY` 环境变量
+-   将下文请求地址中的 `{WorkspaceId}` 替换为真实的[业务空间 ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)；使用 Python SDK 时设置 `MEMORY_SERVICE_ENDPOINT`，详见[服务地址](raw/application-api-reference/long-term-memory-new/api-overview.md)
 
 ## 完整流程
 
@@ -19,7 +20,7 @@ cURL
 
 ```
 # 1. 创建画像模板（CreateProfileSchema）
-curl -X POST https://dashscope.aliyuncs.com/api/v2/apps/memory/profile_schemas \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/profile_schemas \
   --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
   --header "Content-Type: application/json" \
   --data '{
@@ -34,7 +35,7 @@ curl -X POST https://dashscope.aliyuncs.com/api/v2/apps/memory/profile_schemas \
   }'
 
 # 2. 添加对话并提取画像（AddMemory，传入上面返回的 profile_schema_id）
-curl -X POST https://dashscope.aliyuncs.com/api/v2/apps/memory/add \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/add \
   --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
   --header "Content-Type: application/json" \
   --data '{
@@ -47,7 +48,7 @@ curl -X POST https://dashscope.aliyuncs.com/api/v2/apps/memory/add \
   }'
 
 # 3. 获取用户画像（GetUserProfile，等待3秒后执行）
-curl -X GET "https://dashscope.aliyuncs.com/api/v2/apps/memory/profile_schemas/{YOUR_SCHEMA_ID}/user_profile?user_id=user_001" \
+curl -X GET "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/profile_schemas/{YOUR_SCHEMA_ID}/user_profile?user_id=user_001" \
   --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
   --header "Content-Type: application/json"
 ```

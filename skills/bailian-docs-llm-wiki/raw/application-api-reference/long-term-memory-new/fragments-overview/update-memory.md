@@ -6,7 +6,9 @@
 
 ## 请求方法与路径
 
-`PATCH https://dashscope.aliyuncs.com/api/v2/apps/memory/memory_nodes/{memory_node_id}`
+`PATCH https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/memory_nodes/{memory_node_id}`
+
+调用时请将 `{WorkspaceId}` 替换为真实的[业务空间 ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
 ## 请求参数
 
@@ -109,7 +111,7 @@ string
 cURL
 
 ```
-curl --location --request PATCH 'https://dashscope.aliyuncs.com/api/v2/apps/memory/memory_nodes/42dfc089dfa7409889966960a95c3b7e' \
+curl --location --request PATCH 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/memory_nodes/42dfc089dfa7409889966960a95c3b7e' \
   --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
   --header 'Content-Type: application/json' \
   --data '{

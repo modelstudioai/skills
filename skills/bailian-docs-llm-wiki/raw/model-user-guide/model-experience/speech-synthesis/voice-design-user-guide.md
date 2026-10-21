@@ -155,7 +155,7 @@ HTTP 请求示例、可选参数和返回字段请参见[声音设计 API 参考
 
 使用该地域的 [API Key](https://bailian.console.aliyun.com/model/settings/api-key) 调用以下模型：
 
--   **Qwen-Audio-TTS**：qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash
+-   **Qwen-Audio-TTS**：qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash
     
 -   **CosyVoice**：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-plus、cosyvoice-v3-flash
     

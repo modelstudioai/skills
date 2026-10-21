@@ -60,7 +60,8 @@
       "samples": {
         "dashscope": {
           "default": {
-            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \\\n--header 'Content-Type: application/json' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--data '{\n    \"model\": \"wan2.6-t2i\",\n    \"input\": {\n        \"messages\": [\n            {\n                \"role\": \"user\",\n                \"content\": [\n                    {\n                        \"text\": \"一间有着精致窗户的花店，漂亮的木质门，摆放着花朵\"\n                    }\n                ]\n            }\n        ]\n    },\n    \"parameters\": {\n        \"negative_prompt\": \"\",\n        \"prompt_extend\": true,\n        \"watermark\": false,\n        \"n\": 2,\n        \"size\": \"1280*1280\"\n    }\n}'"
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \\\n--header 'Content-Type: application/json' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--data '{\n    \"model\": \"wan2.6-t2i\",\n    \"input\": {\n        \"messages\": [\n            {\n                \"role\": \"user\",\n                \"content\": [\n                    {\n                        \"text\": \"一间有着精致窗户的花店，漂亮的木质门，摆放着花朵\"\n                    }\n                ]\n            }\n        ]\n    },\n    \"parameters\": {\n        \"negative_prompt\": \"\",\n        \"prompt_extend\": true,\n        \"watermark\": false,\n        \"n\": 2,\n        \"size\": \"1280*1280\"\n    }\n}'",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/text-to-image-v2-api-reference"
           }
         }
       }

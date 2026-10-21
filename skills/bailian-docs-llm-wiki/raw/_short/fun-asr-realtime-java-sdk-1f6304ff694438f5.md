@@ -1084,40 +1084,6 @@ public long getLastPackageDelay()
 
 **说明**该方法自2.18.0版本及以后的SDK中才开始提供。
 
-#### 更新对话上下文
-
-调用 `updateContext` 在识别任务运行过程中更新对话上下文，用于辅助后续音频的识别。该方法要求 DashScope Java SDK 2.23.0 及以上版本。
-
-```
-public void updateContext(Map<String, Object> payloadInput)
-```
-
--   **调用时机：**调用 `call(param, callback)` 启动流式识别后、调用 `stop` 前。
--   **参数：**`payloadInput` 为`Map<String, Object>`，传入 `continue-task` 事件的 `payload.input` 对象，包含 `context` 字段，不要额外包装 `payload` 或 `input` 层级。
--   **支持范围与参数约束：**请参见 [continue-task](https://help.aliyun.com/zh/model-studio/fun-asr-client-events#h-continue-task)。
-
-以下示例复用已启动的 `recognizer` 实例，Java 集合类型通过 `import java.util.*;` 导入。
-
-```
-Map<String, Object> userContent = new HashMap<>();
-userContent.put("type", "input_text");
-userContent.put("text", "这是第 1 轮语音识别测试");
-Map<String, Object> userMessage = new HashMap<>();
-userMessage.put("role", "user");
-userMessage.put("content", Collections.singletonList(userContent));
-
-Map<String, Object> assistantContent = new HashMap<>();
-assistantContent.put("type", "text");
-assistantContent.put("text", "好的，请开始第 1 轮测试");
-Map<String, Object> assistantMessage = new HashMap<>();
-assistantMessage.put("role", "assistant");
-assistantMessage.put("content", Collections.singletonList(assistantContent));
-
-Map<String, Object> payloadInput = new HashMap<>();
-payloadInput.put("context", Arrays.asList(userMessage, assistantMessage));
-recognizer.updateContext(payloadInput);
-```
-
 ### 回调接口（`ResultCallback`）
 
 双向流式调用时，服务端会通过回调的方式，将关键流程信息和数据返回给客户端。您需要实现回调方法，处理服务端返回的信息或者数据。

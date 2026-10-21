@@ -526,7 +526,7 @@ cancelDialog(): number
 dialogAction(action_params: string): number
 ```
 
-发送运行时动作，用于更新识别上下文、通知AEC播放状态等运行时行为。
+发送运行时动作，通知端侧 AEC 播放状态。
 
 **参数**
 
@@ -550,30 +550,7 @@ JSON字符串。
 
 `string`
 
-动作指令。支持 `"context`（更新上下文）、`play_start`（通知AEC开始播放参考音）和 `play_over"`（通知AEC参考音播放结束）。
-
-`action_params.context`
-
-`object[]`
-
-当 `command` 为 `"context"` 时传入的上下文增强内容。
-
-更新上下文示例：
-
-```
-{
-  "type": "action",
-  "command": "context",
-  "context": [
-    {
-      "role": "user",
-      "content": [
-        { "text": "示例上下文", "type": "input_text" }
-      ]
-    }
-  ]
-}
-```
+`play_start`：使用端侧 AEC 时，通知 SDK 播放器开始播放音频。 `play_over`：使用端侧 AEC 时，通知 SDK 播放器已结束播放音频。
 
 #### updateAudio
 

@@ -8,7 +8,8 @@
 
 -   首次使用需开通记忆库服务：进入[百炼控制台记忆库页面](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/memory/list)，点击**立即开通**
 -   已获取 `DASHSCOPE_API_KEY`，获取方式见[获取 API Key](raw/model-api-reference/preparations/get-api-key.md)
--   如使用 Python SDK，先安装：`pip install agentscope-runtime`
+-   已获取[业务空间 ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)，并将下文请求地址中的 `{WorkspaceId}` 替换为该 ID。API Key 须属于同一业务空间
+-   如使用 Python SDK，先安装：`pip install agentscope-runtime`，并设置服务地址：`export MEMORY_SERVICE_ENDPOINT="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory"`
 
 ## 步骤一：写入记忆
 
@@ -17,7 +18,7 @@
 cURL
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/api/v2/apps/memory/add \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/add \
   --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
   --header "Content-Type: application/json" \
   --data '{
@@ -65,7 +66,7 @@ asyncio.run(add_memory_example())
 cURL
 
 ```
-curl -X GET "https://dashscope.aliyuncs.com/api/v2/apps/memory/memory_nodes?user_id=user_001&page_size=10&page_num=1" \
+curl -X GET "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/memory_nodes?user_id=user_001&page_size=10&page_num=1" \
   --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
   --header "Content-Type: application/json"
 ```
@@ -103,7 +104,7 @@ asyncio.run(list_memory_example())
 cURL
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/api/v2/apps/memory/memory_nodes/search \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/memory_nodes/search \
   --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
   --header "Content-Type: application/json" \
   --data '{

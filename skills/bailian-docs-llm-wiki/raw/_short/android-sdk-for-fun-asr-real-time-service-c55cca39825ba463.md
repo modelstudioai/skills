@@ -583,7 +583,7 @@ public synchronized int cancelDialog();
 
 #### updateAction
 
-在交互过程中下发对话动作指令，用于更新识别上下文等运行时行为。
+发送运行时动作，通知端侧 AEC 播放状态。
 
 **方法签名**
 ```
@@ -601,7 +601,7 @@ public synchronized int updateAction(String params);
 
 `String`
 
-JSON形式的字符串，用于更新识别上下文等运行时行为。
+包含运行时动作的 JSON 字符串。
 
 `params.type`
 
@@ -613,36 +613,9 @@ JSON形式的字符串，用于更新识别上下文等运行时行为。
 
 `String`
 
-具体的运行指令，当前支持"context"、"play\_start"、"play\_over"。
+`play_start`: 使用端侧 AEC 时，通知 SDK 播放器开始播放音频。
 
--   `context`：即时更新上下文增强来提升识别准确率。
-    
--   `play_start`：当使用端侧AEC时，通过此指令通知SDK内部AEC播放器开始播放音频。
-    
--   `play_over`：当使用端侧AEC时，通过此指令通知SDK内部AEC播放器已经播放结束。
-    
-
-`params.context`
-
-`String`
-
-当`command`为`"context"`时，即时更新上下文增强来提升识别准确率。参数值是JSON格式的字符串，示例如下。
-
-```
-{
-  "context": [
-    {
-      "role": "user",
-      "content": [
-        {
-          "text": "xxx",
-          "type": "input_text"
-        }
-      ]
-    }
-  ]
-}
-```
+`play_over`: 使用端侧 AEC 时，通知 SDK 播放器已结束播放音频。
 
 #### updateAudio
 

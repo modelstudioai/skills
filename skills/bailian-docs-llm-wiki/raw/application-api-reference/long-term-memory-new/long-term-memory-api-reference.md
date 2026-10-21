@@ -12,7 +12,7 @@
 
 Base URL
 
-`https://dashscope.aliyuncs.com/api/v2/apps/memory/`
+`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/`。调用时请将 `{WorkspaceId}` 替换为真实的[业务空间 ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)
 
 认证方式
 

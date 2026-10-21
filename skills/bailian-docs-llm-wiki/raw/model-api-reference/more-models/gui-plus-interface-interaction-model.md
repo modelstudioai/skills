@@ -158,7 +158,7 @@ Assistant Message `object`（可选）
 
 **enable\_thinking** `boolean` （可选）
 
-使用混合思考（回复前既可思考也可不思考）模型时，是否开启思考模式。在界面交互系列模型中，仅`gui-plus-2026-02-26`为混合思考模型。相关文档：[视觉推理](https://help.aliyun.com/zh/model-studio/visual-reasoning#1e293c5ec9nat)
+使用混合思考（回复前既可思考也可不思考）模型时，是否开启思考模式。在界面交互系列模型中，仅`gui-plus-2026-02-26`为混合思考模型。相关文档：[图像与视频理解](https://help.aliyun.com/zh/model-studio/vision#bc67a9a2bd2of)
 
 可选值：
 
@@ -1048,7 +1048,7 @@ Assistant Message `object`（可选）
 
 **enable\_thinking** `boolean` （可选）
 
-使用混合思考模型时，是否开启思考模式。在界面交互系列模型中，仅`gui-plus-2026-02-26`为混合思考模型。相关文档：[视觉推理](https://help.aliyun.com/zh/model-studio/visual-reasoning#1e293c5ec9nat)
+使用混合思考模型时，是否开启思考模式。在界面交互系列模型中，仅`gui-plus-2026-02-26`为混合思考模型。相关文档：[图像与视频理解](https://help.aliyun.com/zh/model-studio/vision#bc67a9a2bd2of)
 
 可选值：
 
