@@ -2,7 +2,7 @@
 
 AI 在长对话中会遗忘关键信息，且跨会话没有记忆，导致上下文丢失、体验不连贯。长期记忆 API 可自动从历史对话中提炼并结构化存储事实记忆与用户画像，在后续对话或新会话中检索这些记忆并注入 Prompt，赋能 AI 实现真正的持续性理解。
 
-记忆库（长期记忆）提供完整的开放 API，覆盖事实记忆的写入、检索、更新、删除，以及用户画像模板管理和画像获取。所有接口通过 DashScope 网关提供服务，服务地址为 `https://dashscope.aliyuncs.com/api/v2/apps/memory/`，采用 API Key 鉴权，详见[鉴权](raw/application-api-reference/long-term-memory-new/api-overview/authentication.md)。
+记忆库（长期记忆）提供完整的开放 API，覆盖事实记忆的写入、检索、更新、删除，以及用户画像模板管理和画像获取。所有接口通过业务空间专属域名提供服务，服务地址为 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/`，调用时请将 `{WorkspaceId}` 替换为真实的[业务空间 ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。接口采用 API Key 鉴权，API Key 须属于同一业务空间，详见[鉴权](raw/application-api-reference/long-term-memory-new/api-overview/authentication.md)。
 
 ## 接口一览
 
@@ -143,7 +143,7 @@ GET
 写入记忆（AddMemory）：
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/api/v2/apps/memory/add \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/add \
   --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
   --header "Content-Type: application/json" \
   --data '{
@@ -158,7 +158,7 @@ curl -X POST https://dashscope.aliyuncs.com/api/v2/apps/memory/add \
 检索记忆（SearchMemory）：
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/api/v2/apps/memory/memory_nodes/search \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/memory_nodes/search \
   --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
   --header "Content-Type: application/json" \
   --data '{

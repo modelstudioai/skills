@@ -4,13 +4,13 @@ OpenClaw 是一个开源的个人 AI 助手平台，支持通过多种消息渠�
 
 ## 安装 OpenClaw
 
-OpenClaw 需要 Node.js 22.19.0 或更高版本。可通过以下命令检查 Node.js 版本：
+OpenClaw 需要 Node.js 24.16+ 或 26.1+。可通过以下命令检查 Node.js 版本：
 
 ```
 node --version
 ```
 
-如果未安装或版本过低，请访问 [Node.js 官网](https://nodejs.org/)下载安装。
+如果未安装或版本不符合要求，请访问 [Node.js 官网](https://nodejs.org/)下载安装。
 
 #### macOS / Linux
 
@@ -40,47 +40,18 @@ iwr -useb https://openclaw.ai/install.ps1 | iex
 npm install -g openclaw@latest
 ```
 
-首次安装后，OpenClaw 会自动启动配置向导，完成初始设置。也可以手动执行`openclaw onboard`命令进行配置。
+首次安装后，OpenClaw 会自动启动引导式配置。2026.7.1 及以上可执行 `openclaw onboard`（引导式）或 `openclaw onboard --classic`（经典向导）；2026.6.35 及以下直接执行 `openclaw onboard`（即经典向导）。
 
-**配置项**
+**说明**以下为配置向导中的关键选择。不同版本步骤可能不同，以实际界面为准。本文通过配置文件接入百炼，模型供应商统一选择 Skip for now。
 
-**建议配置**
+-   安全提示：如出现，选择 **Yes**。
+-   启动方式：选择 **Quick start** / **QuickStart**。
+-   创建对象：选择 **One agent**（如出现）。
+-   模型提供商：选择 **Skip for now**（本文通过配置文件接入，不在此选择供应商）。
+-   默认模型：如出现，选择 **Keep current**。
+-   渠道、技能、hooks：按需跳过或稍后配置。
 
-I understand this is powerful and inherently risky. Continue?
-
-选择 **Yes**
-
-Onboarding mode
-
-选择 **QuickStart**
-
-Model/auth provider
-
-选择 **Skip for now**（稍后配置百炼模型）
-
-Filter models by provider
-
-选择 **All providers**
-
-Default model
-
-选择 **Keep current**
-
-Select channel (QuickStart)
-
-选择 **Skip for now**（稍后配置渠道）
-
-Configure skills now? (recommended)
-
-选择 **No**
-
-Enable hooks?
-
-按空格键选中选项，按回车键进入下一步
-
-How do you want to hatch your bot?
-
-选择 **Do this later**
+**说明**完成向导后，按“配置接入凭证”章节编辑 `~/.openclaw/openclaw.json` 接入百炼。
 
 ## 配置接入凭证
 
@@ -112,10 +83,6 @@ Token Plan 个人版[支持的模型](raw/model-user-guide/token-plan-guide/toke
 
 ```
 {
-  "meta": {
-    "lastTouchedVersion": "2026.2.1",
-    "lastTouchedAt": "2026-02-03T08:20:00.000Z"
-  },
   "models": {
     "mode": "merge",
     "providers": {
@@ -246,7 +213,7 @@ Token Plan 个人版[支持的模型](raw/model-user-guide/token-plan-guide/toke
             "contextWindow": 1000000,
             "maxTokens": 393216,
             "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
-          },
+          }
 
         ]
       }
@@ -270,7 +237,7 @@ Token Plan 个人版[支持的模型](raw/model-user-guide/token-plan-guide/toke
         "bailian-token-plan/deepseek-v4.1-flash-1017": {},
         "bailian-token-plan/deepseek-v4-pro": {},
         "bailian-token-plan/deepseek-v4-pro-0813": {},
-        "bailian-token-plan/deepseek-v4-flash-0731": {},
+        "bailian-token-plan/deepseek-v4-flash-0731": {}
 
       }
     }
@@ -321,10 +288,6 @@ nano ~/.openclaw/openclaw.json
 
 ```
 {
-  "meta": {
-    "lastTouchedVersion": "2026.2.1",
-    "lastTouchedAt": "2026-02-03T08:20:00.000Z"
-  },
   "models": {
     "mode": "merge",
     "providers": {
@@ -600,10 +563,6 @@ openclaw dashboard
 
 ```
 {
-  "meta": {
-    "lastTouchedVersion": "2026.2.1",
-    "lastTouchedAt": "2026-02-03T08:20:00.000Z"
-  },
   "models": {
     "mode": "merge",
     "providers": {
@@ -891,10 +850,6 @@ nano ~/.openclaw/openclaw.json
 
 ```
 {
-  "meta": {
-    "lastTouchedVersion": "2026.2.1",
-    "lastTouchedAt": "2026-02-03T08:20:00.000Z"
-  },
   "models": {
     "mode": "merge",
     "providers": {
@@ -1020,10 +975,6 @@ openclaw dashboard
 
 ```
 {
-  "meta": {
-    "lastTouchedVersion": "2026.2.1",
-    "lastTouchedAt": "2026-02-03T08:20:00.000Z"
-  },
   "models": {
     "mode": "merge",
     "providers": {
@@ -1168,10 +1119,6 @@ nano ~/.openclaw/openclaw.json
 
 ```
 {
-  "meta": {
-    "lastTouchedVersion": "2026.2.1",
-    "lastTouchedAt": "2026-02-03T08:20:00.000Z"
-  },
   "models": {
     "mode": "merge",
     "providers": {
@@ -1264,10 +1211,6 @@ openclaw dashboard
 
 ```
 {
-  "meta": {
-    "lastTouchedVersion": "2026.2.1",
-    "lastTouchedAt": "2026-02-03T08:20:00.000Z"
-  },
   "models": {
     "mode": "merge",
     "providers": {

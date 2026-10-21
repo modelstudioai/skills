@@ -241,18 +241,18 @@ User Message`object`**（必选）**
 -   图片的 Base64 编码，格式为 `data:image/<format>;base64,<data>`
 -   本地文件：本地文件的绝对路径
 
-适用模型：[Qwen-VL](raw/model-user-guide/model-experience/vision-model/vision.md)、[QVQ](raw/model-user-guide/model-experience/vision-model/visual-reasoning.md)
+适用模型：[Qwen-VL、QVQ](raw/model-user-guide/model-experience/vision-model/vision.md)
 
 示例值：`{"image":"https://xxxx.jpeg"}`
 
 **video**`array 或 string`（可选）
 
-使用[Qwen-VL 模型](raw/model-user-guide/model-experience/vision-model/vision.md)或[QVQ模型](raw/model-user-guide/model-experience/vision-model/visual-reasoning.md)传入的视频。
+使用[Qwen-VL 或 QVQ 模型](raw/model-user-guide/model-experience/vision-model/vision.md)传入的视频。
 
 -   若传入图像列表，则为`array`类型；
 -   若传入视频文件，则为`string`类型\*。\*
 
-传入本地文件请参见[本地文件（Qwen-VL）](raw/model-user-guide/model-experience/vision-model/vision.md)或[本地文件（QVQ）](raw/model-user-guide/model-experience/vision-model/visual-reasoning.md)。
+传入本地文件请参见[本地文件](https://help.aliyun.com/zh/model-studio/vision#d987f8de5395x)。
 
 示例值：
 
@@ -269,7 +269,7 @@ fps有两个功能：
 
 -   输入视频文件时，控制抽帧频率，每 f p s 1 ​秒抽取一帧。
     
-    > 适用于[Qwen-VL 模型](raw/model-user-guide/model-experience/vision-model/vision.md)与[QVQ模型](raw/model-user-guide/model-experience/vision-model/visual-reasoning.md)。
+    > 适用于[Qwen-VL 与 QVQ 模型](raw/model-user-guide/model-experience/vision-model/vision.md)。
     
 -   告知模型相邻帧之间的时间间隔，帮助其更好地理解视频的时间动态。同时适用于输入视频文件与图像列表时。该功能同时支持视频文件和图像列表输入，适用于事件时间定位或分段内容摘要等场景。
     
@@ -840,7 +840,7 @@ seed默认值
 
 > Qwen3商业版（思考模式）、Qwen3开源版、QwQ、QVQ只支持流式输出。
 
-**incremental\_output**`boolean`（可选）默认为`false`（Qwen3-Max、Qwen3-VL、[Qwen3 开源版](raw/model-user-guide/get-started-with-models/models.md)、[QwQ](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md) 、[QVQ](raw/model-user-guide/model-experience/vision-model/visual-reasoning.md)模型默认值为 `true`）
+**incremental\_output**`boolean`（可选）默认为`false`（Qwen3-Max、Qwen3-VL、[Qwen3 开源版](raw/model-user-guide/get-started-with-models/models.md)、[QwQ](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md) 、[QVQ](raw/model-user-guide/model-experience/vision-model/vision.md)模型默认值为 `true`）
 
 在流式输出模式下是否开启增量输出。推荐您优先设置为`true`。
 

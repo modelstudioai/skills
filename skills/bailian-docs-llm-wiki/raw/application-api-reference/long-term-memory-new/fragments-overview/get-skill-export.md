@@ -6,7 +6,9 @@
 
 ## 请求方法与路径
 
-`GET https://dashscope.aliyuncs.com/api/v2/apps/memory/skill/export/{memory_node_id}`
+`GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/skill/export/{memory_node_id}`
+
+调用时请将 `{WorkspaceId}` 替换为真实的[业务空间 ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
 ## 请求参数
 
@@ -143,7 +145,7 @@ array\[string\]
 ## 请求示例
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/api/v2/apps/memory/skill/export/9f3ab2cd12344f12aabbccddeeff0011' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/skill/export/9f3ab2cd12344f12aabbccddeeff0011' \
   --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 

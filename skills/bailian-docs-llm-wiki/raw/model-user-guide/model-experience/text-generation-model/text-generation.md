@@ -606,9 +606,11 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }
 ```
 
-#### DashScope
+#### DashScope API
 
-**重要**qwen3.8-2.4t-a95b、qwen3.7-max、qwen3.7-max-2026-05-20 仅支持文本接口，qwen3.8-max、qwen3.8-flash、qwen3.8-27b、qwen3.7-max-2026-06-08、Qwen3.6 和 Qwen3.5 系列的 DashScope API均需使用多模态接口。以下示例使用 qwen-plus（文本接口），可直接运行；若将模型替换为上述需使用多模态接口的模型，会提示 `url error` 错误。多模态接口的正确调用方法，请参见[图像、视频数据处理](https://help.aliyun.com/zh/model-studio/text-generation#270b260cb6or2)。
+**重要**在 DashScope API 中，模型的接口类型由输入模态决定：输入模态仅含文本的模型使用文本接口，输入模态包含图片或视频的模型使用多模态接口，即使只传入文本也需要使用多模态接口。请以[文本生成模型列表](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation.md)中各模型页的“输入模态”为准；用错接口会提示 `url error` 错误。如需传入图片或视频，请参见[图像与视频理解](raw/model-user-guide/model-experience/vision-model/vision.md)。
+
+#### 文本接口
 
 #### Python
 
@@ -1075,117 +1077,7 @@ dashscope generation create -m qwen-plus -p "你好"
 
 完整地域表见 [Base URL 总览](raw/model-user-guide/get-started-with-models/base-url.md)。
 
-## 图像、视频数据处理
-
-多模态模型支持处理图像、视频等非文本数据，可用于视觉问答、事件检测等任务。其调用方式与纯文本模型主要有以下不同：
-
--   **用户消息（user message）的构造方式**：多模态模型的用户消息不仅包含文本，还包含图片、音频等多模态信息。
--   **DashScope SDK接口：**使用 DashScope Python SDK时，需调用 `MultiModalConversation` 接口；使用DashScope Java SDK时，需调用 `MultiModalConversation` 类。
-
-> 图片、视频文件限制请参见 [图像与视频理解](raw/model-user-guide/model-experience/vision-model/vision.md) 。
-
-#### OpenAI兼容-Chat Completions API
-
-#### Python
-
-```
-from openai import OpenAI
-import os
-
-client = OpenAI(
-    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # 以下为华北2（北京）地域的URL，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的URL不同。
-    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
-)
-messages = [
-    {
-        "role": "user",
-        "content": [
-                {
-                    "type": "image_url",
-                    "image_url": {
-                        "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20251031/ownrof/f26d201b1e3f4e62ab4a1fc82dd5c9bb.png"
-                    },
-                },
-            {"type": "text", "text": "请问图片展现了有哪些商品？"},
-        ],
-    }
-]
-completion = client.chat.completions.create(
-    model="qwen3.6-plus",
-    messages=messages,
-)
-print(completion.choices[0].message.content)
-```
-
-#### Node.js
-
-```
-import OpenAI from "openai";
-
-const openai = new OpenAI(
-    {
-        // 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-        // 若没有配置环境变量，请用百炼API Key将下行替换为：apiKey: "sk-xxx",
-        apiKey: process.env.DASHSCOPE_API_KEY,
-        // 以下为华北2（北京）地域的URL，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的URL不同。
-        baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
-    }
-);
-
-let messages = [
-    {
-        role: "user",
-        content: [
-            { type: "image_url", image_url: { "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20251031/ownrof/f26d201b1e3f4e62ab4a1fc82dd5c9bb.png" } },
-            { type: "text", text: "请问图片展现了有哪些商品？" },
-        ]
-    }]
-async function main() {
-    let response = await openai.chat.completions.create({
-        model: "qwen3.6-plus",
-        messages: messages
-    });
-    console.log(response.choices[0].message.content);
-}
-
-main()
-```
-
-#### curl
-
-各地域的base\_url和API Key不同，详情请参见[OpenAI兼容-Chat](raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)和 [获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
-
-```
-# 以下为华北2（北京）地域的URL，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的URL不同。
-curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
--H "Authorization: Bearer $DASHSCOPE_API_KEY" \
--H 'Content-Type: application/json' \
--d '{
-  "model": "qwen3.6-plus",
-  "messages": [
-    {
-      "role": "user",
-      "content": [
-        {
-          "type": "image_url",
-          "image_url": {
-            "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20251031/ownrof/f26d201b1e3f4e62ab4a1fc82dd5c9bb.png"
-          }
-        },
-        {
-          "type": "text",
-          "text": "请问图片展现了有哪些商品？"
-        }
-      ]
-    }
-  ]
-}'
-```
-
-#### DashScope
+#### 多模态接口
 
 #### Python
 
@@ -1198,33 +1090,30 @@ from dashscope import MultiModalConversation
 dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 
 messages = [
-    {
-        "role": "user",
-        "content": [
-            {
-                "image": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20251031/ownrof/f26d201b1e3f4e62ab4a1fc82dd5c9bb.png"
-            },
-            {"text": "请问图片展现了有哪些商品？"},
-        ],
-    }
+    {"role": "system", "content": [{"text": "You are a helpful assistant."}]},
+    {"role": "user", "content": [{"text": "你是谁？"}]},
 ]
 response = MultiModalConversation.call(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
     # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    api_key=os.getenv('DASHSCOPE_API_KEY'),
-    model='qwen3.6-plus',   # 可按需更换为其它多模态模型，并修改相应的 messages
-    messages=messages)
-print(response.output.choices[0].message.content[0]['text'])
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    model="qwen3.8-max",  # 可按需更换为其他多模态模型
+    messages=messages,
+)
+print(response.output.choices[0].message.content[0]["text"])
+```
+
+#### 返回结果
+
+```
+我是千问，阿里巴巴集团旗下的通义实验室自主研发的超大规模语言模型。我可以帮助你回答问题、创作文字，比如写故事、写公文、写邮件、写剧本、逻辑推理、编程等等，还能表达观点，玩游戏等。如果你有任何问题或需要帮助，欢迎随时告诉我！
 ```
 
 #### Java
 
 ```
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
-
 import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;
 import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationParam;
 import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationResult;
@@ -1239,29 +1128,26 @@ public class Main {
     // 以下为华北2（北京）地域的URL，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的URL不同。
     static {Constants.baseHttpApiUrl="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";}
 
-    private static final String modelName = "qwen3.6-plus";  // 可按需更换为其它多模态模型，并修改相应的 messages
-
-    public static void MultiRoundConversationCall() throws ApiException, NoApiKeyException, UploadFileException {
-        MultiModalConversation conv = new MultiModalConversation();
-        MultiModalMessage userMessage = MultiModalMessage.builder().role(Role.USER.getValue())
-                .content(Arrays.asList(Collections.singletonMap("image", "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20251031/ownrof/f26d201b1e3f4e62ab4a1fc82dd5c9bb.png"),
-                        Collections.singletonMap("text", "请问图片展现了有哪些商品？"))).build();
-        List<MultiModalMessage> messages = new ArrayList<>();
-        messages.add(userMessage);
-        MultiModalConversationParam param = MultiModalConversationParam.builder()
-                // 若没有配置环境变量，请用百炼API Key将下行替换为：.apiKey("sk-xxx")
-                // 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-                .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-                .model(modelName)
-                .messages(messages)
-                .build();
-        MultiModalConversationResult result = conv.call(param);
-        System.out.println(result.getOutput().getChoices().get(0).getMessage().getContent().get(0).get("text"));        // add the result to conversation
-    }
-
     public static void main(String[] args) {
+        MultiModalConversation conv = new MultiModalConversation();
+        MultiModalMessage systemMsg = MultiModalMessage.builder()
+                .role(Role.SYSTEM.getValue())
+                .content(Arrays.asList(Collections.singletonMap("text", "You are a helpful assistant.")))
+                .build();
+        MultiModalMessage userMsg = MultiModalMessage.builder()
+                .role(Role.USER.getValue())
+                .content(Arrays.asList(Collections.singletonMap("text", "你是谁？")))
+                .build();
+        MultiModalConversationParam param = MultiModalConversationParam.builder()
+                // 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+                // 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+                .apiKey(System.getenv("DASHSCOPE_API_KEY"))
+                .model("qwen3.8-max")  // 可按需更换为其他多模态模型
+                .messages(Arrays.asList(systemMsg, userMsg))
+                .build();
         try {
-            MultiRoundConversationCall();
+            MultiModalConversationResult result = conv.call(param);
+            System.out.println(result.getOutput().getChoices().get(0).getMessage().getContent().get(0).get("text"));
         } catch (ApiException | NoApiKeyException | UploadFileException e) {
             System.out.println(e.getMessage());
         }
@@ -1270,29 +1156,58 @@ public class Main {
 }
 ```
 
-#### curl
+#### 返回结果
 
-各地域的base\_url和API Key不同，详情请参见[DashScope](raw/model-api-reference/qwen-api-reference/qwen-api-via-dashscope.md)和 [获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
+```
+我是千问，阿里巴巴集团旗下的通义实验室自主研发的超大规模语言模型。我可以帮助你回答问题、创作文字，比如写故事、写公文、写邮件、写剧本、逻辑推理、编程等等，还能表达观点，玩游戏等。如果你有任何问题或需要帮助，欢迎随时告诉我！
+```
+
+#### curl
 
 ```
 # 以下为华北2（北京）地域的URL，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的URL不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
--H 'Content-Type: application/json' \
+-H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.6-plus",
-    "input":{
-        "messages":[
+    "model": "qwen3.8-max",
+    "input": {
+        "messages": [
+            {
+                "role": "system",
+                "content": [{"text": "You are a helpful assistant."}]
+            },
             {
                 "role": "user",
-                "content": [
-                    {"image": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20251031/ownrof/f26d201b1e3f4e62ab4a1fc82dd5c9bb.png"},
-                    {"text": "请问图片展现了有哪些商品？"}
-                ]
+                "content": [{"text": "你是谁？"}]
             }
         ]
     }
 }'
+```
+
+#### 返回结果
+
+```
+{
+    "output": {
+        "choices": [
+            {
+                "finish_reason": "stop",
+                "message": {
+                    "role": "assistant",
+                    "content": [{"text": "我是千问，阿里巴巴集团旗下的通义实验室自主研发的超大规模语言模型。我可以帮助你回答问题、创作文字，比如写故事、写公文、写邮件、写剧本、逻辑推理、编程等等，还能表达观点，玩游戏等。如果你有任何问题或需要帮助，欢迎随时告诉我！"}]
+                }
+            }
+        ]
+    },
+    "usage": {
+        "total_tokens": 92,
+        "output_tokens": 66,
+        "input_tokens": 26
+    },
+    "request_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+}
 ```
 
 ## 异步调用模型

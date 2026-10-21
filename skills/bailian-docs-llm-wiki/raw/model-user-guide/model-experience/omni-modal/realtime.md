@@ -3478,7 +3478,7 @@ conversation.updateSession(config);
 
 以下配置适用于 Qwen3.8-Omni-Flash-Realtime 的 WebSocket 接入。
 
-在首段音频前设置 `session.audio.input.format`。支持 1、2、4 声道；多通道必须为 PCM、16000 Hz、s16le、interleaved。2 声道使用 `raw_mic_array`，4 声道使用 `foa_ambix`。字段约束和 JSON 片段见[客户端事件](https://help.aliyun.com/zh/model-studio/client-events#session-audio-multichannel)。
+在首段音频前设置 `session.audio.input.format`。支持 1、2、4 声道；多通道必须为 PCM、16000 Hz、s16le、interleaved。2 声道使用 `raw_mic_array`，4 声道使用 `foa_ambix`。字段约束见[客户端事件](https://help.aliyun.com/zh/model-studio/client-events#session-audio-multichannel)。
 
 输入 Token 的倍数见[计费规则](#cfba3898e4d0h)。
 

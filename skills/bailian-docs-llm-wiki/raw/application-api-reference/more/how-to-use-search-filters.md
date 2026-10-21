@@ -85,6 +85,32 @@ SearchFilters可以包含一个或多个子分组（如下方示例包含了两�
 }
 ```
 
+根据调用方式选择 SearchFilters 语法：
+
+调用方式
+
+检索地址
+
+同一字段的多条件 OR
+
+OpenAPI Retrieve 及其 SDK
+
+`POST https://bailian.cn-beijing.aliyuncs.com/{WorkspaceId}/index/retrieve`
+
+不支持嵌套 `_conditions`，仅支持平铺 Map
+
+RAG API
+
+`POST https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/indices/rag/index/retrieve`
+
+支持 `_operator` 和嵌套 `_conditions`
+
+Spring AI Alibaba DashScope SDK
+
+`/api/v1/indices/pipeline/{pipeline_id}/retrieve`
+
+支持 `_operator` 和嵌套 `_conditions`
+
 **多字段 OR 查询（OpenAPI Retrieve）：**在同一子分组中，将 `_operator` 与检索字段并列，并设为 `OR`（也支持小写 `or`），即可匹配任一字段条件。省略 `_operator` 或设为 `AND` 时，需同时满足该子分组的所有字段条件。
 
 例如，以下条件筛选文档名称（`doc_name`）为“长上下文Qwen-Long”或切片标题（`title`）为“返回结果”的切片。请将字段和值替换为知识库中实际可检索的字段和值。
@@ -117,11 +143,19 @@ OpenAPI SDK 的 `SearchFilters` 使用字符串值 Map，不支持嵌套 `_condi
 
 如果还需叠加其他条件，将其放在数组中的另一个子分组中。例如，在上述 OR 子分组后追加 `{"doc_name": "长上下文Qwen-Long"}`，整体条件为“（文档名称为长上下文Qwen-Long OR 切片标题为返回结果）AND 文档名称为长上下文Qwen-Long”。`_operator` 只改变其所在子分组内字段的关系，不改变数组中子分组之间的 AND 关系。
 
-**同一字段的多条件 OR 查询（RAG API 请求体）：**通过 [RAG API](raw/application-api-reference/rag-api/rag-api-overview.md) 的 JSON 请求体调用检索接口时，可以将多个条件放入 `_conditions` 数组，并通过 `_operator` 指定这些条件之间的关系。该接口地址为：
+**同一字段的多条件 OR 查询（RAG API 或 Spring AI Alibaba）：**通过 [RAG API](raw/application-api-reference/rag-api/rag-api-overview.md) 的 JSON 请求体或 Spring AI Alibaba DashScope SDK 调用检索接口时，可以将多个条件放入 `_conditions` 数组，并通过 `_operator` 指定这些条件之间的关系。RAG API 的完整地址为：
 
 ```
 POST https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/indices/rag/index/retrieve
 ```
+
+Spring AI Alibaba DashScope SDK 使用以下路径：
+
+```
+/api/v1/indices/pipeline/{pipeline_id}/retrieve
+```
+
+SAA 应用也可以通过 `RestClient` 或 `WebClient` 直接调用上述 RAG API 地址，不经过 SDK 的 Pipeline 检索路径。两种方式的选择和 Java 集成示例见[通过 Spring AI Alibaba 检索知识库](https://help.aliyun.com/zh/model-studio/spring-ai-alibaba-integrate-knowledge-base#saa-retrieval-methods)。
 
 例如，以下条件对应“部门等于 `Corporate`，或部门名称包含 `Research`，或文档类型包含 `Policy`”。`_conditions` 数组允许多个对象使用相同字段名，因此可以组合等值和模糊查询。`department` 和 `document_type` 是示例知识库的自定义字段名，请替换为实际 Schema 中的字段名：
 
@@ -140,6 +174,24 @@ POST https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/indices/rag/inde
     }
   ]
 }
+```
+
+使用 Spring AI Alibaba 1.1.2.3 时，在[通过 Spring AI Alibaba 检索知识库](raw/application-api-reference/frameworks/spring-ai-alibaba/spring-ai-alibaba-integrate-knowledge-base.md)的 `DashScopeDocumentRetrieverOptions` 中配置相同条件：
+
+```
+List<Map<String, Object>> searchFilters = List.of(Map.of(
+    "_operator", "OR",
+    "_conditions", List.of(
+        Map.of("department", "Corporate"),
+        Map.of("department", Map.of("like", "%Research%")),
+        Map.of("document_type", Map.of("like", "%Policy%"))
+    )
+));
+
+DashScopeDocumentRetrieverOptions options = DashScopeDocumentRetrieverOptions.builder()
+    .indexName("your-knowledge-base-name")
+    .searchFilters(searchFilters)
+    .build();
 ```
 
 `_operator` 只控制其所在 `_conditions` 数组中的条件关系。`search_filters` 中不同子分组之间仍采用 AND 关系。

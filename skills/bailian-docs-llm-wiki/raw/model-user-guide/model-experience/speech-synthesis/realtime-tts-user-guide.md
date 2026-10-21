@@ -230,7 +230,7 @@ public class Main {
 
 #### Qwen-Audio-TTS
 
-`qwen-audio-3.1-tts-flash`、`qwen-audio-3.0-tts-plus`、`qwen-audio-3.0-tts-flash` 的系统音色、复刻音色和设计音色均支持在合成请求中通过 `instruction` 设置自然语言指令。
+`qwen-audio-3.1-tts-plus`、`qwen-audio-3.1-tts-flash`、`qwen-audio-3.0-tts-plus`、`qwen-audio-3.0-tts-flash` 的系统音色、复刻音色和设计音色均支持在合成请求中通过 `instruction` 设置自然语言指令。
 
 例如，将 `instruction` 设为以下内容，可放慢语速：
 
@@ -317,7 +317,7 @@ synthesizer.streaming_complete()
 
 ### 情感与富语言标签
 
-**说明**适用于 `qwen-audio-3.1-tts-flash`、`qwen-audio-3.0-tts-plus` 和 `qwen-audio-3.0-tts-flash`。
+**说明**适用于 `qwen-audio-3.1-tts-plus`、`qwen-audio-3.1-tts-flash`、`qwen-audio-3.0-tts-plus` 和 `qwen-audio-3.0-tts-flash`。
 
 情感与富语言标签可控制语音的情感和风格，并在指定位置加入笑声、叹息等拟声效果。将标签直接写入待合成文本 `text`，无需额外参数。
 
@@ -551,7 +551,7 @@ Qwen-Audio-TTS、CosyVoice、Sambert 任务结束后 60 秒内没有新任务时
 
 使用该地域的 [API Key](raw/model-api-reference/preparations/get-api-key.md) 和[接入域名](raw/model-user-guide/get-started-with-models/regions.md)调用以下模型：
 
--   **Qwen-Audio-TTS**：qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash
+-   **Qwen-Audio-TTS**：qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash
 -   **CosyVoice**：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-plus、cosyvoice-v3-flash、cosyvoice-v2
 -   **Qwen3-TTS**：qwen3-tts-flash-realtime
 -   **Sambert**：sambert-zhinan-v1、sambert-zhiqi-v1、sambert-zhichu-v1、sambert-zhide-v1、sambert-zhijia-v1、sambert-zhiru-v1、sambert-zhiqian-v1、sambert-zhixiang-v1、sambert-zhiwei-v1、sambert-zhihao-v1、sambert-zhijing-v1、sambert-zhiming-v1、sambert-zhimo-v1、sambert-zhina-v1、sambert-zhishu-v1、sambert-zhistella-v1、sambert-zhiting-v1、sambert-zhixiao-v1、sambert-zhiya-v1、sambert-zhiye-v1、sambert-zhiying-v1、sambert-zhiyuan-v1、sambert-zhiyue-v1、sambert-zhigui-v1、sambert-zhishuo-v1、sambert-zhimiao-emo-v1、sambert-zhimao-v1、sambert-zhilun-v1、sambert-zhifei-v1、sambert-zhida-v1、sambert-camila-v1、sambert-perla-v1、sambert-indah-v1、sambert-clara-v1、sambert-hanna-v1、sambert-beth-v1、sambert-betty-v1、sambert-cally-v1、sambert-cindy-v1、sambert-eva-v1、sambert-donna-v1、sambert-brian-v1、sambert-waan-v1，请参见[Sambert模型列表](https://help.aliyun.com/zh/model-studio/sambert-java-sdk#57d33631f7doi)
@@ -560,7 +560,7 @@ Qwen-Audio-TTS、CosyVoice、Sambert 任务结束后 60 秒内没有新任务时
 
 使用该地域的 [API Key](raw/model-api-reference/preparations/get-api-key.md) 和[接入域名](raw/model-user-guide/get-started-with-models/regions.md)调用以下模型：
 
--   **Qwen-Audio-TTS**：qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash
+-   **Qwen-Audio-TTS**：qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash
 -   **CosyVoice**：cosyvoice-v3-plus、cosyvoice-v3-flash
 -   **Qwen3-TTS**：qwen3-tts-flash-realtime
 

@@ -26,7 +26,8 @@
       "samples": {
         "dashscope": {
           "default": {
-            "curl": "curl --location --request POST 'https://image-instance-segmentation/api/v1/services/aigc/image2image/image-synthesis' \\\n--header 'X-DashScope-Async: enable' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data-raw '{\n    \"model\": \"image-instance-segmentation\",\n    \"input\": {\n            \"image_url\": \"https://img.alicdn.com/imgextra/i3/O1CN01nC4QEU1x58LUeMjRL_!!6000000006391-49-tps-1590-1060.webp\"\n        },\n    \"parameters\":{\n    }\n}'\n\ncurl -X GET \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\nhttps://image-instance-segmentation/api/v1/tasks/53950fb7-281a-4e60-xxxxxxxxxxxx"
+            "curl": "curl --location --request POST 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \\\n--header 'X-DashScope-Async: enable' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data-raw '{\n    \"model\": \"image-instance-segmentation\",\n    \"input\": {\n            \"image_url\": \"https://img.alicdn.com/imgextra/i3/O1CN01nC4QEU1x58LUeMjRL_!!6000000006391-49-tps-1590-1060.webp\"\n        },\n    \"parameters\":{\n    }\n}'\n\ncurl -X GET \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\nhttps://image-instance-segmentation/api/v1/tasks/53950fb7-281a-4e60-xxxxxxxxxxxx",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/image-instance-segmentation-api-reference"
           }
         }
       }

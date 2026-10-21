@@ -84,9 +84,11 @@ string
 
 驱动音色的目标模型。必须与后续使用该音色的模型一致，否则调用失败。
 
-**url** `string`**（必选）**
+**audio** `string`**（必选）**
 
-用于复刻音色的音频文件URL，要求公网可访问。
+用于复刻音色的参考音频，支持公网可访问的 URL 或 Base64 Data URI，例如 `data:audio/wav;base64,...`。
+
+**说明**兼容旧参数 `url`；使用 `url` 时可不传 `audio`。`url` 将逐步废弃，建议改用 `audio`。
 
 **prefix** `string`**（必选）**
 
@@ -98,11 +100,11 @@ string
 
 此参数为数组，长度必须为 1。
 
-**说明**适用于 qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、qwen-audio-3.1-realtime-plus、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash、cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-plus、cosyvoice-v3-flash。
+**说明**适用于 qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、qwen-audio-3.1-realtime-plus、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash、cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-plus、cosyvoice-v3-flash。
 
 点击查看各模型支持的语言
 
--   qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、qwen-audio-3.1-realtime-plus、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash：
+-   qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、qwen-audio-3.1-realtime-plus、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash：
     
     -   zh：中文
     -   en：英语
@@ -151,7 +153,7 @@ string
 
 默认值：10.0。
 
-**说明**适用于 qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、qwen-audio-3.1-realtime-plus、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash、cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash。
+**说明**适用于 qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、qwen-audio-3.1-realtime-plus、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash、cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash。
 
 **enable\_preprocess** `boolean`（可选）
 
@@ -159,7 +161,7 @@ string
 
 默认值：false。
 
-**说明**适用于 qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、qwen-audio-3.1-realtime-plus、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash、cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash。
+**说明**适用于 qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、qwen-audio-3.1-realtime-plus、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash、cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash。
 
 **enable\_volume\_normalization** `string`（可选）
 
@@ -186,11 +188,22 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
         "action": "create_voice",
         "target_model": "qwen-audio-3.0-tts-flash",
         "prefix": "myvoice",
-        "url": "https://your-audio-url.wav",
+        "audio": "https://your-audio-url.wav",
         "language_hints": ["zh"],
         "enable_volume_normalization": "false"
     }
 }'
+```
+
+使用本地 WAV 音频时，可通过以下代码生成 Base64 Data URI，并将 `audio` 的值填入创建或更新请求的 `input.audio` 字段。将 `sample.wav` 替换为本地音频路径。
+
+```
+import base64
+from pathlib import Path
+
+audio = "data:audio/wav;base64," + base64.b64encode(
+    Path("sample.wav").read_bytes()
+).decode("ascii")
 ```
 
 #### 返回体
@@ -666,9 +679,11 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 
 要更新的音色ID。
 
-**url** `string`**（必选）**
+**audio** `string`**（必选）**
 
-新的音频文件URL，要求公网可访问。
+新的参考音频，支持公网可访问的 URL 或 Base64 Data URI，例如 `data:audio/wav;base64,...`。
+
+**说明**兼容旧参数 `url`；使用 `url` 时可不传 `audio`。`url` 将逐步废弃，建议改用 `audio`。
 
 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
 
@@ -681,7 +696,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
     "input": {
         "action": "update_voice",
         "voice_id": "yourVoiceId",
-        "url": "https://new-audio-url.wav"
+        "audio": "https://new-audio-url.wav"
     }
 }'
 ```

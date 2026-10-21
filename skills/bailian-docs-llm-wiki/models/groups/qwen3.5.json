@@ -198,6 +198,12 @@
       "latestOnlineAt": "2026-02-15T09:18:22.000+00:00",
       "contextWindow": 262144,
       "maxInputTokens": 260096,
+      "offlineInfo": {
+        "inference": {
+          "announceUrl": "https://www.aliyun.com/notice/118728",
+          "offlineTime": "2027-01-19 10:00:00"
+        }
+      },
       "inferenceProvider": "aliyun-bailian",
       "name": "Qwen3.5-397B-A17B",
       "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-api-reference",

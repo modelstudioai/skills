@@ -154,7 +154,7 @@ User Message`object`**（必选）**
 
 **video**`array`
 
-输入的**图片列表形式的视频信息**。当`type`为`video`时是必选参数。使用方法请参见：[视频理解（Qwen-VL）](https://help.aliyun.com/zh/model-studio/vision#80dbf6ca8fh6s)、[视频理解（QVQ）](raw/model-user-guide/model-experience/vision-model/visual-reasoning.md)或[视频理解（Qwen-Omni）](raw/model-user-guide/model-experience/omni-modal/qwen-omni.md)。
+输入的**图片列表形式的视频信息**。当`type`为`video`时是必选参数。使用方法请参见：[视频理解（Qwen-VL、QVQ）](https://help.aliyun.com/zh/model-studio/vision#80dbf6ca8fh6s)或[视频理解（Qwen-Omni）](raw/model-user-guide/model-experience/omni-modal/qwen-omni.md)。
 
 示例值：
 
@@ -191,7 +191,7 @@ fps有两个功能：
 
 -   输入视频文件时，控制抽帧频率，每 `1/fps` 秒抽取一帧。
     
-    > 适用于 [Qwen-VL](raw/model-user-guide/model-experience/vision-model/vision.md)、[MiniMax/MiniMax-M3](raw/model-user-guide/use-cases/third-party-model-integration-tutorial/minimax-api-by-minimax.md) 与[QVQ 模型](raw/model-user-guide/model-experience/vision-model/visual-reasoning.md)。
+    > 适用于 [Qwen-VL 与 QVQ](raw/model-user-guide/model-experience/vision-model/vision.md)、[MiniMax/MiniMax-M3](raw/model-user-guide/use-cases/third-party-model-integration-tutorial/minimax-api-by-minimax.md) 模型。
     
 -   告知模型相邻帧之间的时间间隔，帮助其更好地理解视频的时间动态。同时适用于输入视频文件与图像列表时。该功能同时支持视频文件和图像列表输入，适用于事件时间定位或分段内容摘要等场景。
     

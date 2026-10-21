@@ -4636,6 +4636,10 @@ qwen-audio-3.0-realtime-flash
 
 **每分钟调用次数（RPM）**
 
+qwen-audio-3.1-tts-plus
+
+180
+
 qwen-audio-3.1-tts-flash
 
 180
@@ -4655,6 +4659,12 @@ qwen-audio-3.0-tts-flash
 **服务部署范围**
 
 **每分钟调用次数（RPM）**
+
+qwen-audio-3.1-tts-plus
+
+国际
+
+180
 
 qwen-audio-3.1-tts-flash
 

@@ -10,68 +10,6 @@ Qwen-Omni-Realtime API的客户端事件参考。
 
 事件类型，固定为 `session.update`。
 
-```
-{
-    "event_id": "event_ToPZqeobitzUJnt3QqtWg",
-    "type": "session.update",
-    "session": {
-        "modalities": [
-            "text",
-            "audio"
-        ],
-        "model": "qwen3.5-omni-flash-realtime",
-        "voice": "Tina",
-        "audio": {
-            "input": {
-                "format": {
-                    "type": "pcm",
-                    "sample_rate": 16000
-                }
-            },
-            "output": {
-                "format": {
-                    "type": "wav",
-                    "sample_rate": 24000
-                }
-            }
-        },
-        "instructions": "你是某五星级酒店的AI客服专员，请准确且友好地解答客户关于房型、设施、价格、预订政策的咨询。请始终以专业和乐于助人的态度回应，杜绝提供未经证实或超出酒店服务范围的信息。",
-        "turn_detection": {
-            "type": "server_vad",
-            "threshold": 0.5,
-            "silence_duration_ms": 800
-        },
-        "enable_search": false,
-        "tools": [
-            {
-                "type": "function",
-                "function": {
-                    "name": "get_current_weather",
-                    "description": "当你想查询指定城市的天气时非常有用。",
-                    "parameters": {
-                        "type": "object",
-                        "properties": {
-                            "location": {
-                                "type": "string",
-                                "description": "城市或县区，比如北京市、杭州市、余杭区等。"
-                            }
-                        },
-                        "required": ["location"]
-                    }
-                }
-            }
-        ],
-        "seed": 1314,
-        "max_tokens": 16384,
-        "repetition_penalty": 1.05,
-        "presence_penalty": 0.0,
-        "top_k": 50,
-        "top_p": 1.0,
-        "temperature": 0.9
-    }
-}
-```
-
 **session**`object`（可选）
 
 会话配置。
@@ -441,121 +379,65 @@ MCP Streamable HTTP 地址，必须为公网 HTTPS 443 地址，最长 4096 字�
 
 取值范围：0 到 231−1，默认值为 -1。
 
-### 工具配置示例
-
-配置 MCP 工具时，将地址与凭证替换为实际值；`allowed_tools` 使用 MCP Server 实际提供的工具名。
-
 ```
 {
-  "type": "session.update",
-  "session": {
-    "tools": [
-      {
-        "type": "mcp",
-        "server_label": "amap",
-        "server_url": "https://example.com/mcp",
-        "authorization": "Bearer ***",
-        "allowed_tools": ["maps_weather"],
-        "require_approval": "always"
-      }
-    ]
-  }
-}
-```
-
-### 音频配置示例
-
-双通道示例：
-
-```
-{
-  "type": "session.update",
-  "session": {
-    "audio": {
-      "input": {
-        "format": {
-          "type": "pcm",
-          "sample_rate": 16000,
-          "sample_format": "s16le",
-          "channels": 2,
-          "packing": "interleaved",
-          "channel_layout": "raw_mic_array"
-        }
-      }
+    "event_id": "event_ToPZqeobitzUJnt3QqtWg",
+    "type": "session.update",
+    "session": {
+        "modalities": [
+            "text",
+            "audio"
+        ],
+        "model": "qwen3.5-omni-flash-realtime",
+        "voice": "Tina",
+        "audio": {
+            "input": {
+                "format": {
+                    "type": "pcm",
+                    "sample_rate": 16000
+                }
+            },
+            "output": {
+                "format": {
+                    "type": "wav",
+                    "sample_rate": 24000
+                }
+            }
+        },
+        "instructions": "你是某五星级酒店的AI客服专员，请准确且友好地解答客户关于房型、设施、价格、预订政策的咨询。请始终以专业和乐于助人的态度回应，杜绝提供未经证实或超出酒店服务范围的信息。",
+        "turn_detection": {
+            "type": "server_vad",
+            "threshold": 0.5,
+            "silence_duration_ms": 800
+        },
+        "enable_search": false,
+        "tools": [
+            {
+                "type": "function",
+                "function": {
+                    "name": "get_current_weather",
+                    "description": "当你想查询指定城市的天气时非常有用。",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "location": {
+                                "type": "string",
+                                "description": "城市或县区，比如北京市、杭州市、余杭区等。"
+                            }
+                        },
+                        "required": ["location"]
+                    }
+                }
+            }
+        ],
+        "seed": 1314,
+        "max_tokens": 16384,
+        "repetition_penalty": 1.05,
+        "presence_penalty": 0.0,
+        "top_k": 50,
+        "top_p": 1.0,
+        "temperature": 0.9
     }
-  }
-}
-```
-
-四通道示例：
-
-```
-{
-  "type": "session.update",
-  "session": {
-    "audio": {
-      "input": {
-        "format": {
-          "type": "pcm",
-          "sample_rate": 16000,
-          "sample_format": "s16le",
-          "channels": 4,
-          "packing": "interleaved",
-          "channel_layout": "foa_ambix"
-        }
-      }
-    }
-  }
-}
-```
-
-单通道兼容示例：
-
-```
-{
-  "type": "session.update",
-  "session": {
-    "audio": {
-      "input": {
-        "format": {
-          "type": "pcm",
-          "sample_rate": 16000
-        }
-      }
-    }
-  }
-}
-```
-
-`session.audio.output.voice` 配置示例（使用“龙安灵心”音色，其 `voice` 参数值为 `longanlingxin`）：
-
-```
-{
-  "type": "session.update",
-  "session": {
-    "audio": {
-      "output": {
-        "voice": "longanlingxin"
-      }
-    }
-  }
-}
-```
-
-### 视频配置示例
-
-视频聚合示例：
-
-```
-{
-  "type": "session.update",
-  "session": {
-    "video": {
-      "input": {
-        "representation_compact": "normal"
-      }
-    }
-  }
 }
 ```
 
@@ -599,6 +481,10 @@ MCP Streamable HTTP 地址，必须为公网 HTTPS 443 地址，最长 4096 字�
 
 事件类型，固定为 `input_audio_buffer.append`。
 
+**audio**`string`（必选）
+
+Base64 编码的音频数据。
+
 ```
 {
     "event_id": "event_B4o9RHSTWobB5OQdEHLTo",
@@ -606,10 +492,6 @@ MCP Streamable HTTP 地址，必须为公网 HTTPS 443 地址，最长 4096 字�
     "audio": "UklGR..."
 }
 ```
-
-**audio**`string`（必选）
-
-Base64 编码的音频数据。
 
 ## input\_audio\_buffer.commit
 
@@ -666,6 +548,10 @@ Base64 编码的音频数据。
 
 事件类型，固定为 `input_image_buffer.append`。
 
+**image**`string`（必选）
+
+Base64 编码的图像数据。
+
 ```
 {
     "event_id": "event_xxx",
@@ -674,13 +560,9 @@ Base64 编码的音频数据。
 }
 ```
 
-**image**`string`（必选）
-
-Base64 编码的图像数据。
-
 ## conversation.item.create
 
-客户端发送此事件创建对话项，包括 Function Calling 的工具执行结果，以及 Qwen3.8-Omni-Flash-Realtime 的 MCP 审批回复。Function Calling 由客户端执行工具，再以 `function_call_output` 回传结果并发送 `response.create`；MCP 工具由服务端执行，审批回复使用 `mcp_approval_response`，续答时序见[审批回复](#qwen38-mcp-approval-response)。
+客户端发送此事件创建对话项，包括 Function Calling 的工具执行结果，以及 Qwen3.8-Omni-Flash-Realtime 的 MCP 审批回复。
 
 **event\_id**`string`（可选）
 
@@ -689,6 +571,43 @@ Base64 编码的图像数据。
 **type**`string`（必选）
 
 事件类型，固定为 `conversation.item.create`。
+
+**item**`object`（必选）
+
+要创建的对话项，不能为空。
+
+服务端返回的审批请求 ID、对话项 ID 和事件 ID 均为不透明字符串，不应依赖其长度、前缀或生成规则。
+
+属性
+
+**id**`string`（可选）
+
+对话项 ID。可预先指定以对齐本地状态；若未提供，由服务端生成。
+
+**type**`string`（必选）
+
+对话项类型：
+
+-   `function_call_output`：Function Calling 的工具执行结果。客户端执行工具后，以此类型回传结果，再发送 `response.create`。
+-   `mcp_approval_response`：Qwen3.8-Omni-Flash-Realtime 的 MCP 审批回复。MCP 工具由服务端执行；如需基于结果续答，等待本次 MCP 调用所在 Response 的 `response.done` 事件，再发送一次不附带 MCP 结果的 `response.create`。
+
+**call\_id**`string`（条件必选）
+
+仅 `function_call_output` 必填；取 `response.function_call_arguments.done` 事件中返回的 `call_id`。
+
+**output**`string`（条件必选）
+
+仅 `function_call_output` 必填；工具函数的执行结果。
+
+**approval\_request\_id**`string`（条件必选）
+
+仅 `mcp_approval_response` 必填。当 MCP 配置的 `require_approval` 为 `always` 或省略时，服务端可能发送 `mcp_approval_request`。客户端通过 `conversation.item.create` 回复审批结果，此字段必须精确匹配一个尚未处理的审批请求的 `item.id`。
+
+**approve**`boolean`（条件必选）
+
+仅 `mcp_approval_response` 必填；`true` 允许执行，`false` 拒绝且本次调用进入 `failed`。
+
+**Function Calling 工具结果**
 
 ```
 {
@@ -703,43 +622,7 @@ Base64 编码的图像数据。
 }
 ```
 
-**item**`object`（必选）
-
-要创建的对话项，不能为空。
-
-属性
-
-**id**`string`（可选）
-
-对话项 ID。可预先指定以对齐本地状态；若未提供，由服务端生成。
-
-**type**`string`（必选）
-
-`function_call_output`（Function Calling 结果）或 `mcp_approval_response`（Qwen3.8-Omni-Flash-Realtime 的 MCP 审批回复）。
-
-**call\_id**`string`（条件必选）
-
-仅 `function_call_output` 必填；取 `response.function_call_arguments.done` 事件中返回的 `call_id`。
-
-**output**`string`（条件必选）
-
-仅 `function_call_output` 必填；工具函数的执行结果。
-
-**approval\_request\_id**`string`（条件必选）
-
-仅 `mcp_approval_response` 必填；必须精确匹配一个尚未处理的 `mcp_approval_request` 的 `item.id`。
-
-**approve**`boolean`（条件必选）
-
-仅 `mcp_approval_response` 必填；`true` 允许执行，`false` 拒绝且本次调用进入 `failed`。
-
-### MCP 审批回复（Qwen3.8-Omni-Flash-Realtime）
-
-当 MCP 配置的 `require_approval` 为 `always` 或省略时，服务端可能发送 `mcp_approval_request`。客户端以本节定义的 `conversation.item.create` 和 `item.type="mcp_approval_response"` 回复审批结果。服务端执行 MCP 工具；如需基于结果续答，等待本次 MCP 调用所在 Response 的 `response.done` 事件，再发送一次不附带 MCP 结果的 `response.create`。
-
-服务端返回的审批请求 ID、对话项 ID 和事件 ID 均为不透明字符串，不应依赖其长度、前缀或生成规则。
-
-示例：
+**MCP 审批回复（Qwen3.8-Omni-Flash-Realtime）**
 
 ```
 {

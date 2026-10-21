@@ -660,36 +660,6 @@ def get_response(self)
 
 获取最后一次报文，可以用于获取task-failed报错。
 
-#### 更新对话上下文
-
-调用 `update_context` 在识别任务运行过程中更新对话上下文，用于辅助后续音频的识别。该方法要求 DashScope Python SDK 1.27.5 及以上版本。
-
-```
-def update_context(self, payload_input: dict)
-```
-
--   **调用时机：**调用 `start` 启动流式识别后、调用 `stop` 前。
--   **参数：**`payload_input` 为字典，传入 `continue-task` 事件的 `payload.input` 对象，包含 `context` 字段，不要额外包装 `payload` 或 `input` 层级。
--   **支持范围与参数约束：**请参见 [continue-task](https://help.aliyun.com/zh/model-studio/fun-asr-client-events#h-continue-task)。
-
-以下示例复用已启动的 `recognition` 实例。
-
-```
-payload_input = {
-    "context": [
-        {
-            "role": "user",
-            "content": [{"type": "input_text", "text": "你好啊"}]
-        },
-        {
-            "role": "assistant",
-            "content": [{"type": "text", "text": "你好啊，我是通义千问，有什么可以帮助你的？"}]
-        }
-    ]
-}
-recognition.update_context(payload_input=payload_input)
-```
-
 ### 回调接口（`RecognitionCallback`）
 
 双向流式调用时，服务端会通过回调的方式，将关键流程信息和数据返回给客户端。您需要实现回调方法，处理服务端返回的信息或者数据。

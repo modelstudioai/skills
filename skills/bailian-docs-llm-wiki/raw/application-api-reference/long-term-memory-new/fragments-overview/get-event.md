@@ -6,7 +6,9 @@
 
 ## 请求方法与路径
 
-`GET https://dashscope.aliyuncs.com/api/v2/apps/memory/events/{event_id}`
+`GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/events/{event_id}`
+
+调用时请将 `{WorkspaceId}` 替换为真实的[业务空间 ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
 ## 请求参数
 
@@ -149,7 +151,7 @@ string
 ## 请求示例
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/api/v2/apps/memory/events/07c054c438584f279ff7db7c3243fa51' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/events/07c054c438584f279ff7db7c3243fa51' \
   --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 

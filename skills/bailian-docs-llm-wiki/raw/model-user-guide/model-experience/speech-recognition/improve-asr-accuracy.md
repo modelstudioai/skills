@@ -529,7 +529,7 @@ curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/a
 上下文增强无需预先创建资源，在语音识别请求中直接传入上下文参数即可生效：
 
 -   **非实时语音识别：**在 HTTP 请求的 `input.messages` 中传入上下文消息，置于音频消息之前。
--   **实时语音识别：**在 WebSocket `run-task` 事件的 `input.context` 中传入上下文消息；对于支持在任务执行中更新上下文的模型，发送 `continue-task` 事件。DashScope SDK 已封装该协议，通过参数直接传入即可。
+-   **实时语音识别：**在 WebSocket `run-task` 事件的 `input.context` 中传入上下文消息。DashScope SDK 已封装该协议，通过参数直接传入即可。
 
 **使用场景：**通过传入对话历史或领域术语作为上下文，可显著提升专有词汇（人名、地名、产品术语等）的转写准确率。上下文既可以是多轮对话历史（前几轮的识别结果与大模型回复），也可以只是一组领域术语或词表。
 
@@ -587,7 +587,7 @@ curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/a
 
 #### 实时语音识别
 
-实时语音识别通过 `input.context` 传入上下文，音频通过 WebSocket 二进制帧发送。对于支持在任务执行中更新上下文的模型，发送 `continue-task` 事件。WebSocket 事件格式详见[Qwen-Audio-ASR-Streaming 客户端事件](raw/_short/qwen-audio-asr-streaming-client-events-1bae8548d2be6bc5.md) / [Fun-ASR-Realtime 客户端事件](raw/_short/fun-asr-client-events-997ba24ade1a8a48.md)，DashScope SDK 参数详见[Qwen-Audio-ASR-Streaming Python SDK](raw/_short/qwen-audio-asr-streaming-python-sdk-d09b6005cff4b207.md) / [Fun-ASR-Realtime Python SDK](raw/_short/fun-asr-realtime-python-sdk-c8b5a715c3e66b70.md)（≥ 1.25.23）和[Qwen-Audio-ASR-Streaming Java SDK](raw/_short/qwen-audio-asr-streaming-java-sdk-0a79c28a0694d86f.md) / [Fun-ASR-Realtime Java SDK](raw/_short/fun-asr-realtime-java-sdk-1f6304ff694438f5.md)（≥ 2.22.23）。
+实时语音识别通过 `input.context` 传入上下文，音频通过 WebSocket 二进制帧发送。WebSocket 事件格式详见[Qwen-Audio-ASR-Streaming 客户端事件](raw/_short/qwen-audio-asr-streaming-client-events-1bae8548d2be6bc5.md) / [Fun-ASR-Realtime 客户端事件](raw/_short/fun-asr-client-events-997ba24ade1a8a48.md)，DashScope SDK 参数详见[Qwen-Audio-ASR-Streaming Python SDK](raw/_short/qwen-audio-asr-streaming-python-sdk-d09b6005cff4b207.md) / [Fun-ASR-Realtime Python SDK](raw/_short/fun-asr-realtime-python-sdk-c8b5a715c3e66b70.md)（≥ 1.25.23）和[Qwen-Audio-ASR-Streaming Java SDK](raw/_short/qwen-audio-asr-streaming-java-sdk-0a79c28a0694d86f.md) / [Fun-ASR-Realtime Java SDK](raw/_short/fun-asr-realtime-java-sdk-1f6304ff694438f5.md)（≥ 2.22.23）。
 
 #### 多轮对话上下文
 

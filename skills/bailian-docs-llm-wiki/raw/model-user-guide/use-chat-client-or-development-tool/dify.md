@@ -56,7 +56,7 @@ Dify 具有多种大模型应用类型，请选择您使用的类型进行参考
     
     输入“你是谁”，模型会在思考后进行回答。
     
-    您也可以使用 [Qwen-VL](raw/model-user-guide/model-experience/vision-model/vision.md) 或 [QVQ](raw/model-user-guide/model-experience/vision-model/visual-reasoning.md)模型针对图片进行提问。在选择视觉模型后界面左侧会出现**视觉**开关，打开即可在右侧的对话框输入图片。
+    您也可以使用[视觉理解模型](raw/model-user-guide/model-experience/vision-model/vision.md)针对图片进行提问。在选择视觉模型后界面左侧会出现**视觉**开关，打开即可在右侧的对话框输入图片。
     
 
 #### Chatflow/工作流
@@ -69,7 +69,7 @@ Dify 具有多种大模型应用类型，请选择您使用的类型进行参考
     
     在画布中添加一个LLM节点，选中节点进入编辑界面，选择您需要使用的模型。此处选择qwen3.7-plus，打开思考模式并设置为True。
     
-    如果您使用 [Qwen-VL](raw/model-user-guide/model-experience/vision-model/vision.md) 或 [QVQ](raw/model-user-guide/model-experience/vision-model/visual-reasoning.md)模型，请打开LLM节点的视觉开关：
+    如果您使用[视觉理解模型](raw/model-user-guide/model-experience/vision-model/vision.md)，请打开LLM节点的视觉开关：
     
     在LLM节点编辑面板底部找到**视觉**开关并打开，下方可设置**分辨率**为**高**或**低**。
     

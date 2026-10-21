@@ -141,7 +141,8 @@
       "samples": {
         "dashscope": {
           "default": {
-            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"wan2.6-t2v\",\n    \"input\": {\n        \"prompt\": \"一幅史诗级可爱的场景。一只小巧可爱的卡通小猫将军，身穿细节精致的金色盔甲，头戴一个稍大的头盔，勇敢地站在悬崖上。他骑着一匹虽小但英勇的战马，说：”青海长云暗雪山，孤城遥望玉门关。黄沙百战穿金甲，不破楼兰终不还。“。悬崖下方，一支由老鼠组成的、数量庞大、无穷无尽的军队正带着临时制作的武器向前冲锋。这是一个戏剧性的、大规模的战斗场景，灵感来自中国古代的战争史诗。远处的雪山上空，天空乌云密布。整体氛围是“可爱”与“霸气”的搞笑和史诗般的融合。\"\n    },\n    \"parameters\": {\n        \"size\": \"1280*720\",\n        \"prompt_extend\": true,\n        \"duration\": 10,\n        \"audio\": true,\n        \"shot_type\":\"multi\"\n    }\n}'\n\ncurl --location --request GET 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\"\n"
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"wan2.6-t2v\",\n    \"input\": {\n        \"prompt\": \"一幅史诗级可爱的场景。一只小巧可爱的卡通小猫将军，身穿细节精致的金色盔甲，头戴一个稍大的头盔，勇敢地站在悬崖上。他骑着一匹虽小但英勇的战马，说：”青海长云暗雪山，孤城遥望玉门关。黄沙百战穿金甲，不破楼兰终不还。“。悬崖下方，一支由老鼠组成的、数量庞大、无穷无尽的军队正带着临时制作的武器向前冲锋。这是一个戏剧性的、大规模的战斗场景，灵感来自中国古代的战争史诗。远处的雪山上空，天空乌云密布。整体氛围是“可爱”与“霸气”的搞笑和史诗般的融合。\"\n    },\n    \"parameters\": {\n        \"size\": \"1280*720\",\n        \"prompt_extend\": true,\n        \"duration\": 10\n    }\n}'\n",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/legacy-wan-text-to-video-api-reference"
           }
         }
       }

@@ -228,7 +228,7 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 
 #### Qwen-Audio-TTS
 
-`qwen-audio-3.1-tts-flash`、`qwen-audio-3.0-tts-plus`、`qwen-audio-3.0-tts-flash` 的系统音色、复刻音色和设计音色均支持在合成请求中通过 `instruction` 设置自然语言指令。
+`qwen-audio-3.1-tts-plus`、`qwen-audio-3.1-tts-flash`、`qwen-audio-3.0-tts-plus`、`qwen-audio-3.0-tts-flash` 的系统音色、复刻音色和设计音色均支持在合成请求中通过 `instruction` 设置自然语言指令。
 
 在 Qwen-Audio-TTS 的开始使用示例中，为 `input` 增加以下字段，可放慢语速：
 
@@ -318,7 +318,7 @@ Qwen3-TTS 使用支持目标方言的系统音色，参见 [Qwen3-TTS 音色列�
 
 ### 情感与富语言标签
 
-**说明**适用于 `qwen-audio-3.1-tts-flash`、`qwen-audio-3.0-tts-plus` 和 `qwen-audio-3.0-tts-flash`。
+**说明**适用于 `qwen-audio-3.1-tts-plus`、`qwen-audio-3.1-tts-flash`、`qwen-audio-3.0-tts-plus` 和 `qwen-audio-3.0-tts-flash`。
 
 情感与富语言标签可控制语音的情感和风格，并在指定位置加入笑声、叹息等拟声效果。将标签直接写入待合成文本 `text`，无需额外参数。
 
@@ -480,7 +480,7 @@ ASMR 轻声
 
 使用该地域的 [API Key](raw/model-api-reference/preparations/get-api-key.md) 和[接入域名](raw/model-user-guide/get-started-with-models/regions.md)调用以下模型：
 
--   **Qwen-Audio-TTS**：`qwen-audio-3.1-tts-flash`、`qwen-audio-3.0-tts-plus`、`qwen-audio-3.0-tts-flash`
+-   **Qwen-Audio-TTS**：`qwen-audio-3.1-tts-plus`、`qwen-audio-3.1-tts-flash`、`qwen-audio-3.0-tts-plus`、`qwen-audio-3.0-tts-flash`
 -   **CosyVoice**：`cosyvoice-v3.5-plus`、`cosyvoice-v3.5-flash`、`cosyvoice-v3-plus`、`cosyvoice-v3-flash`、`cosyvoice-v2`
 -   **Qwen3-TTS**：`qwen3-tts-flash`
 -   **MiniMax**：`MiniMax/speech-2.8-hd`、`MiniMax/speech-02-hd`、`MiniMax/speech-2.8-turbo`、`MiniMax/speech-02-turbo`
@@ -489,7 +489,7 @@ ASMR 轻声
 
 使用该地域的 [API Key](raw/model-api-reference/preparations/get-api-key.md) 和[接入域名](raw/model-user-guide/get-started-with-models/regions.md)调用以下模型：
 
--   **Qwen-Audio-TTS**：`qwen-audio-3.1-tts-flash`、`qwen-audio-3.0-tts-plus`、`qwen-audio-3.0-tts-flash`
+-   **Qwen-Audio-TTS**：`qwen-audio-3.1-tts-plus`、`qwen-audio-3.1-tts-flash`、`qwen-audio-3.0-tts-plus`、`qwen-audio-3.0-tts-flash`
 -   **Qwen3-TTS**：`qwen3-tts-flash`
 
 系统音色与试听分别参见 [Qwen-Audio-TTS](raw/model-user-guide/model-experience/speech-synthesis/tts-voice-list/qwen-audio-tts-voice-list.md)、[CosyVoice](raw/model-user-guide/model-experience/speech-synthesis/tts-voice-list/cosyvoice-voice-list.md)和 [Qwen3-TTS](https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list#261bc7f209ri2) 音色列表。使用复刻或设计音色时，合成模型须与创建音色时指定的目标模型一致。

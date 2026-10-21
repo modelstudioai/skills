@@ -8,12 +8,12 @@
 
 在[记忆库](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/memory/list)卡片上点击**查看详情**，进入**记忆详情**标签页。顶部展示事实记忆数、用户画像数、技能记忆数和记忆实体数；下方为实体列表，支持通过实体 ID（`user_id`）模糊搜索。点击操作列的**查看**，按记忆规则查看该实体的事实记忆、用户画像和技能记忆。
 
-通过 API 列出记忆：
+通过 API 列出记忆（调用时请将 `{WorkspaceId}` 替换为真实的[业务空间 ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)，Python SDK 的服务地址配置见[概览](raw/application-api-reference/long-term-memory-new/api-overview.md)）：
 
 cURL
 
 ```
-curl -X GET "https://dashscope.aliyuncs.com/api/v2/apps/memory/memory_nodes?user_id=user_001&page_size=10&page_num=1" \
+curl -X GET "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/memory_nodes?user_id=user_001&page_size=10&page_num=1" \
   --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
   --header "Content-Type: application/json"
 ```
@@ -99,7 +99,7 @@ asyncio.run(list_memory_example())
 cURL
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/api/v2/apps/memory/memory_nodes/search \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/memory_nodes/search \
   --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
   --header "Content-Type: application/json" \
   --data '{
@@ -162,7 +162,7 @@ cURL
 
 ```
 # 更新记忆
-curl -X PATCH "https://dashscope.aliyuncs.com/api/v2/apps/memory/memory_nodes/{memory_node_id}" \
+curl -X PATCH "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/memory_nodes/{memory_node_id}" \
   --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
   --header "Content-Type: application/json" \
   --data '{
@@ -170,7 +170,7 @@ curl -X PATCH "https://dashscope.aliyuncs.com/api/v2/apps/memory/memory_nodes/{m
   }'
 
 # 删除记忆
-curl -X DELETE "https://dashscope.aliyuncs.com/api/v2/apps/memory/memory_nodes/{memory_node_id}" \
+curl -X DELETE "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/memory_nodes/{memory_node_id}" \
   --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
   --header "Content-Type: application/json"
 ```

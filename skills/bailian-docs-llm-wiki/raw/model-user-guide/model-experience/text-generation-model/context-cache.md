@@ -113,6 +113,8 @@
 
 千问 Character：qwen-plus-character
 
+千问 Doc：qwen-doc-turbo
+
 Kimi：kimi-k2.6、kimi-k2.5、kimi-k2.7-code
 
 GLM：glm-5.1
@@ -129,7 +131,17 @@ GLM：glm-5.1
     
     千问 Max：qwen3.8-max、qwen3.8-max-0902、qwen3.7-max、qwen3.7-max-2026-05-20、qwen3.7-max-2026-06-08
     
-    千问 Flash：qwen3.8-flash、qwen3.7-flash、qwen3.7-flash-2026-07-15、kimi-k2.7-code
+    千问 Plus：qwen3.7-plus、qwen3.7-plus-2026-05-26、qwen3.6-plus、qwen3.5-plus、qwen-plus
+    
+    千问 Flash：qwen3.8-flash、qwen3.7-flash、qwen3.7-flash-2026-07-15、qwen3.6-flash、qwen3.5-flash、qwen-flash
+    
+    千问 Coder：qwen3-coder-flash
+    
+    千问 VL：qwen3-vl-plus
+    
+    Kimi：kimi-k2.5、kimi-k2.7-code
+    
+    GLM：glm-5.1
     
 
 #### 新加坡
@@ -148,8 +160,6 @@ GLM：glm-5.1
 
 千问 VL：qwen3-vl-plus
 
-Kimi：kimi-k2.7-code
-
 #### 德国（法兰克福）
 
 不同服务部署范围支持的模型不同。
@@ -160,13 +170,15 @@ Kimi：kimi-k2.7-code
     
     千问 Plus：qwen3.7-plus、qwen3.7-plus-2026-05-26、qwen3.6-plus、qwen3.5-plus、qwen-plus
     
-    千问 Flash：qwen3.8-flash、qwen3.7-flash、qwen3.7-flash-2026-07-15、qwen3.5-flash、qwen-flash
+    千问 Flash：qwen3.8-flash、qwen3.7-flash、qwen3.7-flash-2026-07-15、qwen3.6-flash、qwen3.5-flash、qwen-flash
     
     千问 VL：qwen3-vl-plus
     
     千问 Coder：qwen3-coder-flash
     
     Kimi：kimi-k2.5、kimi-k2.7-code
+    
+    GLM：glm-5.1
     
 -   **欧盟服务部署范围：**
     
@@ -193,7 +205,9 @@ Kimi：kimi-k2.7-code
     
     千问 Flash：qwen3.8-flash、qwen3.7-flash、qwen3.7-flash-2026-07-15、qwen3.6-flash
     
-    Kimi：kimi-k2.7-code
+    Kimi：kimi-k2.5、kimi-k2.7-code
+    
+    GLM：glm-5.1
     
 
 #### 中国香港
@@ -501,8 +515,10 @@ print(f"第二次请求命中缓存 Token：{second_completion.usage.cache_read_
     
 -   **其他 Token**：未命中且未创建缓存的 Token 按原价计费。
     
--   **例外**：qwen3.8-max、qwen3.8-flash、qwen3.8-2.4t-a95b 的显式缓存命中价格不是标准输入单价的 10%，具体价格请参见百炼控制台。
+-   **例外**：以下模型的显式缓存单价不适用上述通用比例，具体价格请参见百炼控制台。
     
+    -   qwen3.8-max、qwen3.8-max-0902、qwen3.8-2.4t-a95b：创建缓存按标准输入单价的 125% 计费，但命中缓存的价格不是标准输入单价的 10%。
+    -   qwen3.8-flash：**创建缓存的价格不是标准输入单价的 125%**，命中缓存的价格也不是标准输入单价的 10%，且不同地域的比例不同。
 
 ### 可缓存内容
 
@@ -918,18 +934,19 @@ while True:
     -   千问 Plus：qwen3.7-plus、qwen3.7-plus-2026-05-26、qwen-plus
     -   千问 Flash：qwen3.8-flash、qwen3.7-flash、qwen3.7-flash-2026-07-15、qwen-flash
     -   千问 Coder：qwen3-coder-flash
-    -   千问 Character：qwen-plus-character、qwen-flash-character
+    -   千问 Character：qwen-plus-character、qwen-flash-character、qwen-flash-character-2026-02-26
     -   千问开源：qwen3.8-2.4t-a95b、qwen3.8-27b
-    -   DeepSeek（阿里云百炼部署）：deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4.1-flash-1017
-    -   DeepSeek（快手万擎部署）：vanchin/deepseek-v4.1-flash、vanchin/deepseek-v4-pro、vanchin/deepseek-v3.2-think、vanchin/deepseek-v3.1-terminus、vanchin/deepseek-r1、vanchin/deepseek-v3
+    -   DeepSeek（阿里云百炼部署）：deepseek-v4.1-flash、deepseek-v4.1-flash-1017、deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731
+    -   DeepSeek（快手万擎部署）：vanchin/deepseek-v4.1-flash、vanchin/deepseek-v4-pro、vanchin/deepseek-v4-pro-0813、vanchin/deepseek-v3.2-think、vanchin/deepseek-v3.1-terminus、vanchin/deepseek-r1、vanchin/deepseek-v3
     -   Kimi（阿里云百炼部署）：kimi-k3、kimi-k2.7-code、kimi-k2.6、kimi-k2.5
-    -   Kimi（月之暗面部署）：kimi/kimi-k3、kimi/kimi-k2.7-code-highspeed、kimi/kimi-k2.7-code、kimi/kimi-k2.6、kimi/kimi-k2.5
-    -   GLM（阿里云百炼部署）：glm-5.3、glm-5.2、glm-5.2-fast-preview、glm-5.1、glm-5
+    -   Kimi（月之暗面部署）：kimi/kimi-k3、kimi/kimi-k2.8-preview、kimi/kimi-k2.7-code-highspeed、kimi/kimi-k2.7-code、kimi/kimi-k2.6
+    -   GLM（阿里云百炼部署）：glm-5.3、glm-5.3-prime、glm-5.2、glm-5.2-fast-preview、glm-5.1、glm-5
     -   GLM（智谱部署）：ZHIPU/GLM-5.3-FlashX、ZHIPU/GLM-5.3-Flash、ZHIPU/GLM-5.3、ZHIPU/GLM-5.2、ZHIPU/GLM-5.1、ZHIPU/GLM-5
     -   MiniMax（阿里云百炼部署）：MiniMax-M2.5
     -   MiniMax（稀宇科技部署）：MiniMax/MiniMax-M3、MiniMax/MiniMax-M2.7、MiniMax/MiniMax-M2.5、MiniMax/MiniMax-M2.1
     -   MiMo（小米部署）：xiaomi/mimo-v2.6-pro-ultraspeed、xiaomi/mimo-v2.5-pro
     -   Stepfun（阶跃星辰部署）：stepfun/step-3.7-flash、stepfun/step-5-preview
+    -   Unisound（云知声部署）：unisound/unisound-u2
 -   **视觉理解模型**
     -   千问 VL：qwen3-vl-plus
 -   **行业模型**
@@ -949,8 +966,8 @@ while True:
     -   千问 Coder：qwen3-coder-flash
     -   千问 Character：qwen-plus-character、qwen-flash-character、qwen-plus-character-ja
     -   千问开源：qwen3.8-2.4t-a95b、qwen3.8-27b
-    -   DeepSeek：deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4.1-flash-1017
-    -   GLM（阿里云百炼部署）：glm-5.3、glm-5.1
+    -   DeepSeek：deepseek-v4.1-flash、deepseek-v4.1-flash-1017、deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731
+    -   GLM（阿里云百炼部署）：glm-5.3、glm-5.3-prime、glm-5.2、glm-5.2-fast-preview、glm-5.1
     -   Kimi（阿里云百炼部署）：kimi-k3、kimi-k2.7-code
 -   **视觉理解模型**
     -   千问 VL：qwen3-vl-plus
@@ -969,10 +986,10 @@ while True:
         -   千问 Plus：qwen3.7-plus、qwen3.7-plus-2026-05-26、qwen-plus
         -   千问 Flash：qwen3.8-flash、qwen3.7-flash、qwen3.7-flash-2026-07-15、qwen-flash
         -   千问 Coder：qwen3-coder-flash
-        -   千问 Character：qwen-plus-character
-        -   Kimi（阿里云百炼部署）：kimi-k2.5、kimi-k2.7-code
-        -   GLM（阿里云百炼部署）：glm-5.3、glm-5.2
-        -   DeepSeek（阿里云百炼部署）：deepseek-v4.1-flash-1017
+        -   千问 Character：qwen-plus-character、qwen-flash-character
+        -   DeepSeek（阿里云百炼部署）：deepseek-v4.1-flash、deepseek-v4.1-flash-1017、deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731
+        -   Kimi（阿里云百炼部署）：kimi-k3、kimi-k2.5、kimi-k2.7-code
+        -   GLM（阿里云百炼部署）：glm-5.3、glm-5.2、glm-5.1
     -   视觉理解模型
         
         -   千问 VL：qwen3-vl-plus
@@ -980,10 +997,10 @@ while True:
     -   文本生成模型
         
         -   千问 Max：qwen3.8-max、qwen3.7-max
-        -   千问 Plus：qwen-plus、qwen3.7-plus
-        -   千问 Flash：qwen3.8-flash、qwen3.7-flash、qwen-flash
-    -   视觉理解模型
-        
+        -   千问 Plus：qwen3.7-plus
+        -   千问 Flash：qwen3.8-flash、qwen3.7-flash
+        -   DeepSeek（阿里云百炼部署）：deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731
+        -   GLM（阿里云百炼部署）：glm-5.2
 
 #### 德国（法兰克福）
 
@@ -1000,9 +1017,9 @@ while True:
         -   千问 Flash：qwen3.8-flash、qwen3.7-flash、qwen3.7-flash-2026-07-15、qwen-flash
         -   千问 Coder：qwen3-coder-flash
         -   千问 Character：qwen-plus-character
+        -   DeepSeek（阿里云百炼部署）：deepseek-v4.1-flash、deepseek-v4.1-flash-1017、deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731
         -   Kimi（阿里云百炼部署）：kimi-k3、kimi-k2.5、kimi-k2.7-code
-        -   GLM（阿里云百炼部署）：glm-5.3、glm-5.2
-        -   DeepSeek（阿里云百炼部署）：deepseek-v4.1-flash-1017
+        -   GLM（阿里云百炼部署）：glm-5.3、glm-5.2、glm-5.1
     -   视觉理解模型
         
         -   千问 VL：qwen3-vl-plus
@@ -1033,8 +1050,8 @@ while True:
         -   千问 Plus：qwen3.7-plus、qwen3.7-plus-2026-05-26
         -   千问 Flash：qwen3.8-flash、qwen3.7-flash、qwen3.7-flash-2026-07-15
         -   千问 Character：qwen-plus-character
-        -   DeepSeek（阿里云百炼部署）：deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4.1-flash-1017
-        -   GLM（阿里云百炼部署）：glm-5.3、glm-5.1
+        -   DeepSeek（阿里云百炼部署）：deepseek-v4.1-flash、deepseek-v4.1-flash-1017、deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731
+        -   GLM（阿里云百炼部署）：glm-5.3、glm-5.2、glm-5.1
         -   Kimi（阿里云百炼部署）：kimi-k3、kimi-k2.5、kimi-k2.7-code
 
 #### 中国香港
@@ -1052,9 +1069,9 @@ while True:
         
     -   千问 Character：qwen-plus-character
         
-    -   DeepSeek（阿里云百炼部署）：deepseek-v4.1-flash、deepseek-v4-pro-0813、deepseek-v4-flash-0731、deepseek-v4.1-flash-1017
+    -   DeepSeek（阿里云百炼部署）：deepseek-v4.1-flash、deepseek-v4.1-flash-1017、deepseek-v4-pro-0813、deepseek-v4-flash-0731
         
-    -   GLM（阿里云百炼部署）：glm-5.2
+    -   GLM（阿里云百炼部署）：glm-5.3、glm-5.2
         
     -   KIMI（阿里云百炼部署）：kimi-k3、kimi-k2.7-code
         
@@ -1099,17 +1116,18 @@ while True:
 
 当请求命中缓存时，命中的输入 Token 按 `cached_token` 计费，折扣比例因模型来源不同而有差异；未被命中的输入 Token 按标准 `input_token`计费。输出 Token 仍按原价计费。
 
--   阿里云百炼部署的模型（deepseek-v4.1-flash、deepseek-v4.1-flash-1017、deepseek-v4-pro、qwen3.8-max、qwen3.8-flash、qwen3.8-2.4t-a95b、qwen3.8-omni-flash 除外）：`cached_token` 单价为 `input_token` 单价的 **20%**
+-   阿里云百炼部署的模型（deepseek-v4.1-flash、deepseek-v4.1-flash-1017、deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731、qwen3.8-max、qwen3.8-max-0902、qwen3.8-flash、qwen3.8-2.4t-a95b、qwen3.8-omni-flash 除外）：`cached_token` 单价为 `input_token` 单价的 **20%**
 -   qwen3.8-omni-flash：命中缓存的输入 Token 按固定单价计费，各地域单价见[模型价格](https://help.aliyun.com/zh/model-studio/model-pricing#4c2e910ce4pcq)。
 -   deepseek-v4-pro：`cached_token` 单价不是 `input_token` 单价的 20%，具体价格请参见百炼控制台
--   deepseek-v4.1-flash、deepseek-v4.1-flash-1017：`cached_token` 单价为 `input_token` 单价的 **10%**。其中，`deepseek-v4.1-flash-1017` 在上述六个地域的繁忙、闲时时段均适用，按对应地域和时段的输入单价计算。
--   qwen3.8-max、qwen3.8-flash、qwen3.8-2.4t-a95b：`cached_token` 单价不是 `input_token` 单价的 20%，具体价格请参见百炼控制台
--   DeepSeek（快手万擎部署）：vanchin/deepseek-v4.1-flash 为 **2%**；vanchin/deepseek-v4-pro 为 **8.33%**；vanchin/deepseek-v3.2-think 为 **10%**；vanchin/deepseek-v3.1-terminus、vanchin/deepseek-r1、vanchin/deepseek-v3 为 **40%**
+-   deepseek-v4.1-flash、deepseek-v4.1-flash-1017、deepseek-v4-pro-0813、deepseek-v4-flash-0731：`cached_token` 单价为 `input_token` 单价的 **10%**。其中，`deepseek-v4.1-flash-1017` 在上述六个地域的繁忙、闲时时段均适用，按对应地域和时段的输入单价计算。
+-   qwen3.8-max、qwen3.8-max-0902、qwen3.8-flash、qwen3.8-2.4t-a95b：`cached_token` 单价不是 `input_token` 单价的 20%，具体价格请参见百炼控制台
+-   DeepSeek（快手万擎部署）：vanchin/deepseek-v4.1-flash 为 **2%**；vanchin/deepseek-v4-pro-0813 为 **3.33%**；vanchin/deepseek-v4-pro 为 **8.33%**；vanchin/deepseek-v3.2-think 为 **10%**；vanchin/deepseek-v3.1-terminus、vanchin/deepseek-r1、vanchin/deepseek-v3 为 **40%**
 -   Kimi（阿里云百炼部署）：kimi-k3 为 **10%**
--   Kimi（月之暗面部署）：kimi/kimi-k3 为 **10%**；kimi/kimi-k2.6 为 **16.9%**；kimi/kimi-k2.5 为 **17.5%**
--   GLM（阿里云百炼部署）：glm-5.3、glm-5.2、glm-5.2-fast-preview 为 **25%**，其余glm系列模型均为 **20%**
+-   Kimi（月之暗面部署）：kimi/kimi-k3 为 **10%**；kimi/kimi-k2.6 为 **16.9%**；kimi/kimi-k2.8-preview 为 **26.15%**
+-   GLM（阿里云百炼部署）：`cached_token` 单价比例因地域而异，具体价格请参见百炼控制台。glm-5.3、glm-5.3-prime、glm-5.2、glm-5.2-fast-preview 在新加坡以及美国（弗吉尼亚）的美国服务部署范围下为 **20%**，在其他地域为 **25%**；glm-5.1 在新加坡为 **18.57%**，在其他地域为 **20%**；glm-5 为 **20%**
 -   MiniMax（稀宇科技部署）：MiniMax/MiniMax-M3、MiniMax/MiniMax-M2.7 为 **20%**，MiniMax/MiniMax-M2.5、MiniMax/MiniMax-M2.1 为 **10%**
--   GLM（智谱部署）：ZHIPU/GLM-5.3-Flash、ZHIPU/GLM-5.3、ZHIPU/GLM-5.2、ZHIPU/GLM-5.1、ZHIPU/GLM-5均为 **25%**；ZHIPU/GLM-5.3-FlashX 为 **28.5%**
+-   GLM（智谱部署）：ZHIPU/GLM-5.3、ZHIPU/GLM-5.2、ZHIPU/GLM-5.1、ZHIPU/GLM-5 均为 **25%**；ZHIPU/GLM-5.3-Flash 为 **28.75%**；ZHIPU/GLM-5.3-FlashX 为 **28.5%**
+-   Stepfun（阶跃星辰部署）：stepfun/step-5-preview 为 **5%**
 
 示例：某请求包含 10,000 个输入 Token，其中 5,000 个命中缓存。费用计算如下：
 

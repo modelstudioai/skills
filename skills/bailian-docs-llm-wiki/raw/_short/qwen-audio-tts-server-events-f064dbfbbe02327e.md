@@ -91,31 +91,31 @@ words 元素属性
 
 计费用量，在 `sentence-end` 事件中返回。
 
+**说明**`qwen-audio-3.1-tts-flash` 按输入和输出 Token 计费；`qwen-audio-3.1-tts-plus`、`qwen-audio-3.0-tts-plus` 和 `qwen-audio-3.0-tts-flash` 按字符计费。
+
 属性
 
 **input\_tokens** `integer`
 
 本次请求的输入 Token 数。
 
-**说明**适用于 `qwen-audio-3.1-tts-flash`。
+**说明**适用于 `qwen-audio-3.1-tts-plus`、`qwen-audio-3.1-tts-flash`。
 
 **output\_tokens** `integer`
 
 本次请求的输出 Token 数。
 
-**说明**适用于 `qwen-audio-3.1-tts-flash`。
+**说明**适用于 `qwen-audio-3.1-tts-plus`、`qwen-audio-3.1-tts-flash`。
 
 **total\_tokens** `integer`
 
 输入和输出 Token 数之和。
 
-**说明**适用于 `qwen-audio-3.1-tts-flash`。
+**说明**适用于 `qwen-audio-3.1-tts-plus`、`qwen-audio-3.1-tts-flash`。
 
 **characters** `integer`
 
 累计计费字符数。
-
-**说明**适用于 `qwen-audio-3.0-tts-plus`、`qwen-audio-3.0-tts-flash`。
 
 sentence-begin
 

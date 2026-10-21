@@ -4,7 +4,7 @@
 
 ## 接口说明
 
--   **调用方式**：可通过最新版[阿里云百炼 SDK](https://api.aliyun.com/api-tools/sdk/bailian?version=2023-12-29)（配合阿里云访问密钥 [AccessKey](https://help.aliyun.com/zh/ram/user-guide/create-an-accesskey-pair) ）或[Spring AI Alibaba](raw/application-api-reference/frameworks/spring-ai-alibaba/spring-ai-alibaba-integrate-knowledge-base.md)（配合阿里云百炼[API-Key](raw/model-api-reference/preparations/get-api-key.md)）检索知识库，两者均已封装复杂的签名计算逻辑，可简化您的调用过程。
+-   **调用方式**：本页描述 OpenAPI Retrieve 接口 `POST /{WorkspaceId}/index/retrieve`，可通过最新版[阿里云百炼 SDK](https://api.aliyun.com/api-tools/sdk/bailian?version=2023-12-29)并使用阿里云访问密钥 [AccessKey](https://help.aliyun.com/zh/ram/user-guide/create-an-accesskey-pair)调用。[Spring AI Alibaba](raw/application-api-reference/frameworks/spring-ai-alibaba/spring-ai-alibaba-integrate-knowledge-base.md)使用阿里云百炼 [API Key](raw/model-api-reference/preparations/get-api-key.md)和独立的 DashScope Pipeline Retrieve 路径，不使用本页的 OpenAPI 请求语法。
     
 -   权限要求：
     
@@ -471,7 +471,7 @@ string
 ]
 ```
 
-**说明**本页 OpenAPI Retrieve 接口及其 SDK 的 `SearchFilters` 使用字符串值 Map，不支持嵌套 `_conditions`。传入嵌套结构时，请求可能仍返回成功响应，但不会按嵌套条件过滤。如需对同一字段设置多个 OR 条件，请通过 RAG API JSON 请求体调用检索接口，具体语法和示例请参见[知识库 SearchFilters](raw/application-api-reference/more/how-to-use-search-filters.md)。
+**说明**本页 OpenAPI Retrieve 接口及其 SDK 的 `SearchFilters` 使用字符串值 Map，不支持嵌套 `_conditions`。传入嵌套结构时，请求可能仍返回成功响应，但不会按嵌套条件过滤。如需对同一字段设置多个 OR 条件，请使用 RAG API JSON 请求体，或通过 Spring AI Alibaba DashScope SDK 的 `/api/v1/indices/pipeline/{pipeline_id}/retrieve` 路径调用。两种调用方式均支持 `_operator` 和嵌套 `_conditions`，具体语法和示例请参见[知识库 SearchFilters](raw/application-api-reference/more/how-to-use-search-filters.md)。
 
 ## 返回参数
 

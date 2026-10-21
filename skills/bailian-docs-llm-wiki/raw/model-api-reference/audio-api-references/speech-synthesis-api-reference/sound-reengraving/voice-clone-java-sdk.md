@@ -94,7 +94,7 @@ String
 
 是
 
-用于复刻音色的音频文件URL，要求公网可访问。
+用于复刻音色的参考音频，支持公网可访问的 URL 或 Base64 Data URI，例如 `data:audio/wav;base64,...`。
 
 customParam
 
@@ -211,7 +211,7 @@ String
 
 是
 
-新的音频文件URL。
+新的参考音频，支持公网可访问的 URL 或 Base64 Data URI，例如 `data:audio/wav;base64,...`。
 
 customParam
 
@@ -293,7 +293,7 @@ boolean
 
 默认值：false。
 
-**说明**适用于 qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、qwen-audio-3.1-realtime-plus、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash、cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash。
+**说明**适用于 qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、qwen-audio-3.1-realtime-plus、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash、cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash。
 
 enable\_volume\_normalization
 
@@ -350,6 +350,13 @@ public class Main {
         }
     }
 }
+```
+
+使用本地 WAV 音频时，在上述 `try` 代码块内、调用 `createVoice` 前添加以下赋值。更新音色时，也通过 `updateVoice` 的 `url` 参数传入 Data URI。将 `sample.wav` 替换为本地音频路径。
+
+```
+fileUrl = "data:audio/wav;base64," + java.util.Base64.getEncoder().encodeToString(
+        java.nio.file.Files.readAllBytes(java.nio.file.Paths.get("sample.wav")));
 ```
 
 ### 查询音色列表

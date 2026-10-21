@@ -1,8 +1,8 @@
 # 玩法攻略
 
-Token Plan 40 个实测玩法攻略索引，覆盖 AI Coding、内容创作、资料与数据处理、生活娱乐、求职职场五大场景，每个玩法提供完整的提示词示例和实测产出。
+Token Plan 41 个实测玩法攻略索引，覆盖 AI Coding、内容创作、资料与数据处理、生活娱乐、求职职场五大场景，每个玩法提供完整的提示词示例和实测产出。
 
-订阅 Token Plan 后，可参见以下 40 个玩法快速上手。每个玩法提供完整的提示词示例和实测产出，具体产出效果与 Credits 消耗以控制台「用量详情」为准。
+订阅 Token Plan 后，可参见以下 41 个玩法快速上手。每个玩法提供完整的提示词示例和实测产出，具体产出效果与 Credits 消耗以控制台「用量详情」为准。
 
 ## 分类速览
 
@@ -32,7 +32,7 @@ AI Coding / 开发
 
 生活娱乐
 
-6
+7
 
 一套 AI 能力打通从记忆修复到日常守护全流程。会规划、能陪伴、懂关怀，开启有温度的智能生活新体验。
 
@@ -283,6 +283,14 @@ AI Coding / 开发
 上传视频，模型视觉理解按时间线拆成片段并逐段摘要，附时间戳、总体摘要与片段数量统计。
 
 [查看攻略](raw/model-user-guide/token-plan-guide/token-plan-playbooks/token-plan-playbook-data/token-plan-playbook-video-digest.md)
+
+生活娱乐
+
+品牌虚拟代言人 · 一张形象图出 15 秒口播成片
+
+把品牌形象图交给 wan3.0-video，一次生成带原生人声、口型同步的 15 秒口播成片。
+
+[查看攻略](raw/_short/token-plan-playbook-brand-spokesperson-c85c9aed928d20c2.md)
 
 生活娱乐
 
