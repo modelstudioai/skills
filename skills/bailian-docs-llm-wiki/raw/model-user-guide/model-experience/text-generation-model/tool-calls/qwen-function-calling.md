@@ -105,10 +105,13 @@ Function Calling 通过应用程序与大模型之间的多步骤交互实现：
     -   MiniMax-M2.5
 -   稀宇科技部署
     
+    -   MiniMax/MiniMax-M3.1-Flash
     -   MiniMax/MiniMax-M3
     -   MiniMax/MiniMax-M2.7
     -   MiniMax/MiniMax-M2.5
     -   MiniMax/MiniMax-M2.1
+
+> MiniMax/MiniMax-M3.1-Flash 不支持通过 `parallel_tool_calls` 控制工具调用的并行性。设置为 `false` 也不能保证串行调用，模型仍可能在一轮中返回多个 `tool_calls`，请按实际返回结果处理。`tool_choice` 仅支持 `auto`；其他取值可能报错或不生效，指定函数名称不能保证模型调用该函数。进行多轮 Function Calling 时，必须将模型返回的完整 assistant 消息加入对话历史，包括 `reasoning_content` 和 `tool_calls` 字段。不要手工重建或丢弃其中的字段。
 
 ## 快速开始
 
@@ -1197,6 +1200,8 @@ const completion_1 = await functionCalling();
 
 #### 并行工具调用
 
+> 本节仅适用于支持 `parallel_tool_calls` 的模型。MiniMax/MiniMax-M3.1-Flash 不支持通过此参数控制工具调用的并行性：设置为 `false` 也可能在一轮中返回多个 `tool_calls`。调用方需遍历并处理实际返回的全部工具调用。
+
 单一城市天气查询只需一次工具调用。若问题需要多次调用工具，如“北京上海的天气如何”或“杭州天气，以及现在几点了”，[发起 Function Calling](https://help.aliyun.com/zh/model-studio/qwen-function-calling#9f478b2e76wrk) 后只会返回一个工具调用信息，以提问“北京上海的天气如何”为例：
 
 ```
@@ -1295,6 +1300,8 @@ const completion = await functionCalling();
 ```
 
 #### 强制工具调用
+
+> 本节中指定函数、`required` 和 `none` 的用法仅适用于支持相应 `tool_choice` 取值的模型。MiniMax/MiniMax-M3.1-Flash 仅支持 `auto`；其他取值可能报错或不生效，指定函数名称不能保证模型调用该函数。
 
 大模型生成内容具有不确定性，可能选择错误的工具。如需对某类问题强制使用或禁用特定工具，可修改`tool_choice`参数。`tool_choice`参数的默认值为`"auto"`，表示由大模型自主判断如何进行工具调用。
 

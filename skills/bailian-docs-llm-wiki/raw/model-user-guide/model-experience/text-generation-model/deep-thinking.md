@@ -167,6 +167,10 @@
     -   仅思考模式：MiniMax-M2.5
 -   稀宇科技部署
     
+    -   仅思考模式：MiniMax/MiniMax-M3.1-Flash
+        
+        **说明**MiniMax/MiniMax-M3.1-Flash 始终开启思考，不支持关闭。可通过 `reasoning_effort` 参数设置 `low`、`medium`、`high`、`xhigh` 或 `max`，默认值为 `max`。
+        
     -   混合思考模式：MiniMax/MiniMax-M3
         
         **说明**MiniMax/MiniMax-M3 通过 `thinking` 参数控制思考模式，取值为 `adaptive`（自适应，默认）或 `disabled`（关闭）。详细用法请参见[MiniMax-稀宇科技](raw/model-user-guide/use-cases/third-party-model-integration-tutorial/minimax-api-by-minimax.md)。

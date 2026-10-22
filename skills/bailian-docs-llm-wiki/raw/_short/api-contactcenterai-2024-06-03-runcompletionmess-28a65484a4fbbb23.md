@@ -97,7 +97,7 @@ string
 
 是
 
-（通话角色） user-客户 agent-客服 system-系统消息 function-函数
+（通话角色）对以下枚举进行校验： user-客户 assistant-客服 system-系统消息 function-函数
 
 user
 

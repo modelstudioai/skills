@@ -204,18 +204,101 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }
 ```
 
+## MiniMax-M3.1-Flash 与 MiniMax-M3 的差异
+
+能力
+
+MiniMax/MiniMax-M3.1-Flash
+
+MiniMax/MiniMax-M3
+
+思考模式
+
+始终开启，不可关闭
+
+默认自适应思考，可关闭
+
+思考深度
+
+支持 `low`、`medium`、`high`、`xhigh`、`max`，默认 `max`
+
+不支持 `reasoning_effort`
+
+思考内容
+
+始终通过 `reasoning_content` 字段单独返回，不支持将 `reasoning_split` 设为 `false`
+
+`reasoning_split` 为 `true` 时通过 `reasoning_content` 单独返回，为 `false` 时在 `content` 中以 `<think>` 标签返回
+
+上下文窗口
+
+1M Token
+
+1M Token
+
+图片和视频输入
+
+支持
+
+支持
+
+Prompt 缓存
+
+支持
+
+支持
+
+默认限流
+
+200 RPM、10,000,000 TPM
+
+500 RPM、20,000,000 TPM
+
+实际服务可能同时按 RPS（RPM/60）与 TPS（TPM/60）执行每秒限流，具体规则请参见[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)。
+
+使用以下示例调用 MiniMax/MiniMax-M3.1-Flash，并通过 `reasoning_effort` 设置思考深度：
+
+```
+import os
+from openai import OpenAI
+
+client = OpenAI(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
+)
+
+response = client.chat.completions.create(
+    model="MiniMax/MiniMax-M3.1-Flash",
+    reasoning_effort="max",
+    messages=[{"role": "user", "content": "分析采用微服务架构的主要权衡。"}],
+)
+
+print(response.choices[0].message.reasoning_content)
+print(response.choices[0].message.content)
+```
+
+### 从 MiniMax-M3 迁移
+
+仅将模型 ID 更换为 `MiniMax/MiniMax-M3.1-Flash` 时，请同步检查以下差异：
+
+-   删除 `thinking: {"type":"disabled"}` 或 `reasoning_effort: "none"`。MiniMax-M3.1-Flash 不支持关闭思考，传入上述参数会返回 400 错误。
+-   不要将 `reasoning_split` 设为 `false`。共用 MiniMax-M3 和 MiniMax-M3.1-Flash 调用代码时，可将其设为 `true`，并统一从 `reasoning_content` 读取思考内容。使用 OpenAI Python SDK 时，通过 `extra_body={"reasoning_split": True}` 传入；通过 HTTP 调用时，将其放在请求体顶层。`thinking` 参数的位置与之相同。
+-   从 `reasoning_content` 字段读取思考内容，不要读取 `reasoning_details`。兼容 MiniMax-M3 时，应先判断 `reasoning_content` 是否存在；MiniMax-M3.1-Flash 无需解析 `content` 中的 `<think>` 标签。
+-   为输出预留足够长度。思考内容计入 `max_tokens` 或 `max_completion_tokens`，上限过小可能导致 `finish_reason` 为 `length` 且回答为空。
+-   多轮 Function Calling 时，将包含 `reasoning_content` 和 `tool_calls` 的完整 assistant 消息加入对话历史，以保持思考过程连续。
+
 ## 多模态调用示例
 
-MiniMax/MiniMax-M3 不仅支持纯文本对话，还具备强大的多模态理解能力。本章节将介绍如何让模型理解图像和视频内容。
+MiniMax/MiniMax-M3.1-Flash 和 MiniMax/MiniMax-M3 均支持文本、图片和视频输入，并输出文本。
 
-**重要**MiniMax-M3 通过 `thinking` 参数控制思考模式，默认为自适应模式（`adaptive`）：
+**重要**
 
--   **非思考模式**（`thinking.type: "disabled"`）：直接输出结果，不包含推理过程
--   **自适应模式**（`thinking.type: "adaptive"` 或不设置）：模型自主判断是否需要思考，并输出推理过程（`reasoning_content`）
+-   MiniMax/MiniMax-M3.1-Flash 始终开启思考，可通过 `reasoning_effort` 调整思考深度。
+-   MiniMax/MiniMax-M3 通过 `thinking` 参数控制思考模式，默认值为 `adaptive`；设置为 `disabled` 可关闭思考。
 
 ### 图像理解
 
-图像理解功能让 MiniMax-M3 模型能够识别和分析图像内容。您可以传入单张或多张图像。
+图像理解功能让 MiniMax/MiniMax-M3.1-Flash 和 MiniMax/MiniMax-M3 能够识别和分析单张或多张图像。以下示例使用 MiniMax/MiniMax-M3；如需使用 MiniMax/MiniMax-M3.1-Flash，请更换模型 ID，并可通过 `reasoning_effort` 调整思考深度。
 
 #### OpenAI兼容
 
@@ -555,7 +638,9 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 ## 其它功能
 
-**模型**
+MiniMax/MiniMax-M3.1-Flash 支持多轮对话、深度思考、Function Calling 和上下文缓存。
+
+模型
 
 [多轮对话](raw/model-user-guide/model-experience/text-generation-model/multi-round-conversation.md)
 
@@ -570,6 +655,22 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 [前缀续写](raw/model-user-guide/model-experience/text-generation-model/partial-mode.md)
 
 [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)
+
+MiniMax/MiniMax-M3.1-Flash
+
+支持
+
+支持
+
+支持
+
+不支持
+
+不支持
+
+不支持
+
+支持
 
 MiniMax/MiniMax-M3
 
@@ -621,18 +722,27 @@ MiniMax/MiniMax-M2.5
 
 上下文缓存类型为隐式缓存，自动开启，与阿里云百炼的[隐式缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)服务有以下不同：
 
--   MiniMax/MiniMax-M3、MiniMax/MiniMax-M2.7 命中缓存的输入 Token 折扣为 20%，MiniMax/MiniMax-M2.5 折扣为 10%；缓存最少 Token 数为 512（百炼为 1024）。
--   MiniMax/MiniMax-M3 不支持 `n` 参数（即不支持一次生成多条候选回复），`tool_choice` 仅支持 `none` 和 `auto`。
+-   MiniMax/MiniMax-M3.1-Flash、MiniMax/MiniMax-M2.5 命中缓存的输入 Token 折扣为 10%，MiniMax/MiniMax-M3、MiniMax/MiniMax-M2.7 折扣为 20%。MiniMax/MiniMax-M3、MiniMax/MiniMax-M2.7 和 MiniMax/MiniMax-M2.5 的缓存最少 Token 数为 512（百炼为 1024）。
+-   MiniMax/MiniMax-M3.1-Flash 和 MiniMax/MiniMax-M3 的 `n` 参数仅支持 `1`，即每次请求只能生成一条回复。
+-   MiniMax/MiniMax-M3.1-Flash 不支持 `stop`。传入后不会按指定停止词截断输出；请求可能仍成功且返回 `finish_reason: "stop"`，但这不表示指定停止词已生效。
+-   MiniMax/MiniMax-M3.1-Flash 不支持通过 `parallel_tool_calls` 控制工具调用的并行性。设置为 `false` 也不能保证串行调用，模型仍可能在一轮中返回多个 `tool_calls`。
+-   MiniMax/MiniMax-M3.1-Flash 的 `tool_choice` 仅支持 `auto`。其他取值可能报错或不生效，例如指定函数名称不能保证模型调用该函数。MiniMax/MiniMax-M3 的 `tool_choice` 仅支持 `none` 和 `auto`。
 
 ## 参数默认值
 
 > 当前不支持修改以下参数
 
-**模型**
+模型
 
-**temperature**
+`temperature`
 
-**top\_p**
+`top_p`
+
+MiniMax/MiniMax-M3.1-Flash
+
+1.0
+
+0.95
 
 MiniMax/MiniMax-M3
 
@@ -654,7 +764,7 @@ MiniMax/MiniMax-M2.5
 
 ## 模型列表与计费
 
-MiniMax-M3 为最新多模态推理模型，支持图像和视频理解，推荐使用；MiniMax-M2.7 擅长编程、文本摘要等任务。
+MiniMax-M3.1-Flash 是最新多模态推理模型，支持 100 万 Token 上下文、图像和视频理解以及五档思考深度，推荐用于复杂 Agentic 任务、软件开发和网络安全等场景。MiniMax-M3 支持关闭思考模式，适用于需要在思考和非思考模式间切换的场景；MiniMax-M2.7 擅长编程、文本摘要等任务。
 
 模型上下文长度与价格信息请参见[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)。
 

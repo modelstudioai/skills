@@ -3638,6 +3638,12 @@ MiniMax-M2.5
 
 > **含输入与输出Token**
 
+MiniMax/MiniMax-M3.1-Flash
+
+200
+
+10,000,000
+
 MiniMax/MiniMax-M3
 
 500
@@ -4528,11 +4534,21 @@ vidu/viduq2-fast\_reference2image
 
 模型名称
 
-每秒钟调用次数（RPS）
+每分钟调用次数（RPM）
 
 qwen-audio-3.1-tts-next
 
-3
+180
+
+#### 新加坡
+
+模型名称
+
+每分钟调用次数（RPM）
+
+qwen-audio-3.1-tts-next
+
+180
 
 ## 音乐生成
 

@@ -4,13 +4,17 @@
 
 ## 接入前准备
 
-获取 [API Key](raw/model-api-reference/preparations/get-api-key.md) 和[业务空间 ID](raw/application-api-reference/application-call/obtain-the-app-id-and-workspace-id.md)，分别配置为环境变量 `DASHSCOPE_API_KEY` 和 `SFM_WORKSPACE_ID`。
+获取对应地域的 [API Key](raw/model-api-reference/preparations/get-api-key.md) 和[业务空间 ID](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)，分别配置为环境变量 `DASHSCOPE_API_KEY` 和 `SFM_WORKSPACE_ID`。下文示例以北京地域为例。
 
 请求方法为 HTTPS POST，端点如下，其中 `{WorkspaceId}` 为业务空间 ID：
 
-```
-https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/SpeechSynthesizer
-```
+#### 华北2（北京）
+
+`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/SpeechSynthesizer`
+
+#### 新加坡
+
+`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audio/tts/SpeechSynthesizer`
 
 ### 请求头
 

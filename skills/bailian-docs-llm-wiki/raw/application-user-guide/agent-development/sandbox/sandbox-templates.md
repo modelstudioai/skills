@@ -60,7 +60,7 @@
 
 文件挂载
 
-选择本地文件初始化到指定目录，最多上传 5 个文件
+选择本地文件初始化到 `/home/user/workspace/uploads/`，最多上传 5 个文件
 
 网络配置
 
@@ -76,6 +76,8 @@
 
 -   **空闲超时（秒）**：无请求超时后自动休眠，不恢复状态，最长保持 7 天后释放。
 -   **最大存活时间（秒）**：实例首次创建或恢复后最长运行 7 天。
+
+**说明**通过 API 创建模版时，`mntConfig.mountPath` 必须以 `/home/user/workspace/uploads/` 开头。路径不在该目录下时，接口接受配置，但实例中不会出现文件。详见[文件上传](https://help.aliyun.com/zh/model-studio/sandbox-api-overview#h-sandbox-api-file-upload)。
 
 填写完成后点击**创建**。创建成功后模版出现在列表中。
 

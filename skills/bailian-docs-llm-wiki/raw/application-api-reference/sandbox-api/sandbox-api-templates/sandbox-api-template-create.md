@@ -84,7 +84,7 @@ E2B 模版别名
 
 array<object>
 
-文件挂载配置。子字段 `originFileName`（string，选填，原始文件名）、`originFileId`（string，必填，当前工作空间中真实存在的文件 ID）、`mountPath`（string，必填，实例中的挂载路径）
+文件挂载配置。子字段 `originFileName`（string，选填，原始文件名；`mountPath` 为目录时不生效）、`originFileId`（string，必填，需通过 `source=sandbox_template` 上传并处于 `available` 状态）、`mountPath`（string，必填，必须以 `/home/user/workspace/uploads/` 开头，推荐写完整文件路径；路径不在该目录下时接口接受配置但实例中不会出现文件。上传方式见[文件上传](https://help.aliyun.com/zh/model-studio/sandbox-api-overview#h-sandbox-api-file-upload)）
 
 `networkConfig`
 

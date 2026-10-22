@@ -22,7 +22,7 @@
 
 ![](https://img.alicdn.com/imgextra/i3/O1CN01z34PDh1p053HKpLoW_!!6000000005297-55-tps-28-28.svg)**[ZHIPU/GLM-5.3](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/ZHIPU%2FGLM-5.3)**
 
-![](https://img.alicdn.com/imgextra/i1/O1CN01EFGi131NqT95FPDqc_!!6000000001621-2-tps-56-56.png)**[MiniMax-M3](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/MiniMax%2FMiniMax-M3)**
+![](https://img.alicdn.com/imgextra/i1/O1CN01EFGi131NqT95FPDqc_!!6000000001621-2-tps-56-56.png)**[MiniMax-M3.1-Flash](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/minimax-m3-1-flash.md)**
 
 ![](https://img.alicdn.com/imgextra/i4/O1CN017XFdJt1jNXh3pAxhJ_!!6000000004536-2-tps-168-168.png)**[mimo-v2.5-pro](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/xiaomi%2Fmimo-v2.5-pro)**
 

@@ -183,7 +183,7 @@ Qwen-VL 只可理解视频文件的视觉信息，Qwen-Omni 可理解视频文�
 
 每秒抽帧数。取值范围为 \[0.1, 10\]，默认值为2.0。
 
-> MiniMax/MiniMax-M3 的 fps 取值范围为 \[0.2, 5\]，默认值为 1。
+> MiniMax/MiniMax-M3.1-Flash 和 MiniMax/MiniMax-M3 的 fps 取值范围为 \[0.2, 5\]，默认值为 1。
 
 功能说明
 
@@ -191,7 +191,7 @@ fps有两个功能：
 
 -   输入视频文件时，控制抽帧频率，每 `1/fps` 秒抽取一帧。
     
-    > 适用于 [Qwen-VL 与 QVQ](raw/model-user-guide/model-experience/vision-model/vision.md)、[MiniMax/MiniMax-M3](raw/model-user-guide/use-cases/third-party-model-integration-tutorial/minimax-api-by-minimax.md) 模型。
+    > 适用于 [Qwen-VL 与 QVQ](raw/model-user-guide/model-experience/vision-model/vision.md)、[MiniMax/MiniMax-M3.1-Flash 和 MiniMax/MiniMax-M3](raw/model-user-guide/use-cases/third-party-model-integration-tutorial/minimax-api-by-minimax.md) 模型。
     
 -   告知模型相邻帧之间的时间间隔，帮助其更好地理解视频的时间动态。同时适用于输入视频文件与图像列表时。该功能同时支持视频文件和图像列表输入，适用于事件时间定位或分段内容摘要等场景。
     
@@ -426,6 +426,8 @@ temperature越高，生成的文本更多样，反之，生成的文本更确定
 
 取值范围： \[0, 2)
 
+MiniMax/MiniMax-M3.1-Flash 和 MiniMax/MiniMax-M3 固定使用 `1.0`，不支持自定义；传入其他值时不会生效。
+
 temperature与top\_p均可以控制生成文本的多样性，建议只设置其中一个值。更多说明，请参见[概述](raw/model-user-guide/model-experience/text-generation-model/text-generation.md)。
 
 temperature默认值
@@ -450,7 +452,7 @@ temperature默认值
 -   GLM系列（阿里云直供）：glm-5.1、glm-5: 1.0；
 -   GLM系列（智谱直供）：ZHIPU/GLM-5.1、ZHIPU/GLM-5: 0.6；
 -   MiniMax系列（阿里云直供）：MiniMax-M2.5: 1.0；
--   MiniMax系列（稀宇科技直供）：MiniMax/MiniMax-M3、MiniMax/MiniMax-M2.7、MiniMax/MiniMax-M2.5、MiniMax/MiniMax-M2.1: 1.0。
+-   MiniMax系列（稀宇科技直供）：MiniMax/MiniMax-M3.1-Flash、MiniMax/MiniMax-M3、MiniMax/MiniMax-M2.7、MiniMax/MiniMax-M2.5、MiniMax/MiniMax-M2.1: 1.0。
 -   MiMo系列（小米直供）：mimo-v2.5-pro: 1.0，范围 \[0, 1.5\]；xiaomi/mimo-v2.6-pro-ultraspeed: 1.0，不支持自定义，传入其他值时仍按 1.0 生效。
 
 > 不建议修改QVQ模型的默认temperature值 。
@@ -462,6 +464,8 @@ temperature默认值
 top\_p越高，生成的文本更多样。反之，生成的文本更确定。
 
 取值范围：（0,1.0\]
+
+MiniMax/MiniMax-M3.1-Flash 和 MiniMax/MiniMax-M3 固定使用 `0.95`，不支持自定义；传入其他值时不会生效。
 
 temperature与top\_p均可以控制生成文本的多样性，建议只设置其中一个值。更多说明，请参见[概述](raw/model-user-guide/model-experience/text-generation-model/text-generation.md)。
 
@@ -493,7 +497,7 @@ GLM系列（智谱直供）：ZHIPU/GLM-5.1、ZHIPU/GLM-5: 0.95；
 
 MiniMax系列（阿里云直供）：MiniMax-M2.5: 0.95；
 
-MiniMax系列（稀宇科技直供）：MiniMax/MiniMax-M3: 0.95；MiniMax/MiniMax-M2.7、MiniMax/MiniMax-M2.5、MiniMax/MiniMax-M2.1: 0.9。
+MiniMax系列（稀宇科技直供）：MiniMax/MiniMax-M3.1-Flash、MiniMax/MiniMax-M3: 0.95；MiniMax/MiniMax-M2.7、MiniMax/MiniMax-M2.5、MiniMax/MiniMax-M2.1: 0.9。
 
 MiMo系列（小米直供）：xiaomi/mimo-v2.5-pro: 0.95，范围 \[0.01, 1.0\]；xiaomi/mimo-v2.6-pro-ultraspeed: 0.95，不支持自定义，传入其他值时仍按 0.95 生效。
 
@@ -684,7 +688,7 @@ Schema 的名称。
 
 > `n=0` 等价于 `n=1`。
 
-> 仅支持 [Qwen3（非思考模式）](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md)、qwen-plus-character 模型。
+> 仅 [Qwen3（非思考模式）](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md) 和 qwen-plus-character 支持将 `n` 设为大于 `1`。MiniMax/MiniMax-M3.1-Flash 和 MiniMax/MiniMax-M3 仅支持 `n=1`。
 
 > 若传入 `tools` 参数， 请将`n` 设为 1。
 
@@ -709,18 +713,27 @@ Schema 的名称。
 
 > 若不使用 OpenAI SDK，而是通过 HTTP（如 curl）方式直接调用，则无需 `extra_body`，直接将 `enable_thinking` 与 `model`、`messages` 等参数一样放在请求体（`body`）的顶层即可，例如 `"enable_thinking": true`。
 
-> 稀宇科技直供的MiniMax/MiniMax-M3 不使用此参数，请使用 `thinking` 参数。
+> 稀宇科技直供的 MiniMax/MiniMax-M3.1-Flash 和 MiniMax/MiniMax-M3 不使用此参数，请使用 `thinking` 参数。
 
 **thinking** `object` （可选）默认值为 `{"type":"adaptive"}`
 
-控制稀宇科技直供的MiniMax/MiniMax-M3 的思考模式。
+控制稀宇科技直供 MiniMax 模型的思考模式。
 
 `thinking.type` 可选值：
 
--   `adaptive`：自适应（默认），模型自主判断是否需要思考。
--   `disabled`：关闭思考，直接回答。
+-   `adaptive`：开启思考。MiniMax/MiniMax-M3.1-Flash 始终使用此模式；MiniMax/MiniMax-M3 默认使用此模式。
+-   `disabled`：关闭思考，仅 MiniMax/MiniMax-M3 支持。MiniMax/MiniMax-M3.1-Flash 设置此值时返回 400 错误。
 
 > 该参数非OpenAI标准参数。通过 Python SDK调用时，请放入 **extra\_body** 对象中。配置方式为：`extra_body={"thinking": {"type": "adaptive"}}`。
+
+**reasoning\_split** `boolean` （可选）
+
+控制 MiniMax 思考内容的返回位置：
+
+-   `true`：通过 `reasoning_content` 字段单独返回。MiniMax/MiniMax-M3.1-Flash 仅支持此值。
+-   `false`：在 `content` 字段中以 `<think>` 标签返回。仅 MiniMax/MiniMax-M3 支持此值。
+
+该参数非 OpenAI 标准参数。通过 Python SDK 调用时，请放入 `extra_body` 对象中，例如 `extra_body={"reasoning_split": True}`。
 
 **preserve\_thinking** `boolean` （可选）默认值为 `false`
 
@@ -752,6 +765,10 @@ Schema 的名称。
 **reasoning\_effort** `string` （可选）
 
 控制模型的推理力度，不同模型支持的可选值和默认值不同。
+
+**MiniMax/MiniMax-M3.1-Flash**（默认值为 `max`）
+
+可选值按推理力度从低到高依次为 `low`、`medium`、`high`、`xhigh` 和 `max`。模型始终开启思考；设置 `none` 会返回 400 错误。
 
 **DeepSeek-V4、GLM 系列与 kimi/kimi-k3**（默认值为 `high`）
 
@@ -900,6 +917,8 @@ seed默认值
 
 用于指定停止词。当模型生成的文本中出现 `stop` 指定的字符串或 `token_id` 时，生成将立即终止。
 
+> MiniMax/MiniMax-M3.1-Flash 不支持此参数。传入后不会按指定停止词截断输出；请求可能仍成功且返回 `finish_reason: "stop"`，但这不表示指定停止词已生效。
+
 可传入敏感词以控制模型的输出。
 
 > stop为数组时，不可将`token_id`和字符串同时作为元素输入，比如不可以指定为`["你好",104307]`。
@@ -938,6 +957,8 @@ seed默认值
 
 工具选择策略。若需对某类问题强制指定工具调用方式（例如始终使用某工具或禁用所有工具），可设置此参数。
 
+> MiniMax/MiniMax-M3.1-Flash 仅支持 `auto`。`none`、`required` 或指定函数名称等其他取值可能报错或不生效；指定函数名称不能保证模型调用该函数。
+
 `deepseek-v4.1-flash-1017` 支持将 `tool_choice` 设为 `auto`、`none`、`required` 或指定函数名称。
 
 可选值：
@@ -966,6 +987,8 @@ seed默认值
 **parallel\_tool\_calls** `boolean` （可选）默认值为 `false`
 
 是否开启并行工具调用。相关文档：[并行工具调用](https://help.aliyun.com/zh/model-studio/qwen-function-calling#cb6b5c484bt4x)
+
+> MiniMax/MiniMax-M3.1-Flash 不支持通过此参数控制工具调用的并行性。设置为 `false` 也不能保证串行调用，模型仍可能在一轮中返回多个 `tool_calls`。请按实际返回结果处理。
 
 可选值：
 

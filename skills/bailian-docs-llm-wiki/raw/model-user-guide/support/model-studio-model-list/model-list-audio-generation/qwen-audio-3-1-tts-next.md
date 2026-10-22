@@ -88,6 +88,20 @@ WAV、MP3、OGG Opus；不支持裸 PCM
 
 12
 
+#### 新加坡
+
+计费项
+
+单价（元/百万 Token）
+
+输入
+
+6.781
+
+输出
+
+5.104
+
 按输入和输出 Token 数分别计费。详情请参见[模型调用计费](https://help.aliyun.com/zh/model-studio/model-pricing#audio-generation-pricing)。
 
 ## 限流
@@ -98,9 +112,19 @@ WAV、MP3、OGG Opus；不支持裸 PCM
 
 数值
 
-每秒钟调用次数（RPS）
+每分钟调用次数（RPM）
 
-3
+180
+
+#### 新加坡
+
+指标
+
+数值
+
+每分钟调用次数（RPM）
+
+180
 
 ## 调用方式
 

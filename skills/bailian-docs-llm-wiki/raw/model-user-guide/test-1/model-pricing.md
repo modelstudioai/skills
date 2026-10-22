@@ -6254,6 +6254,18 @@ glm-5.2-fast-preview
 
 无
 
+glm-5.3-prime
+
+非思考和思考模式
+
+不区分阶梯
+
+16元
+
+56元
+
+无
+
 glm-5.1
 
 非思考和思考模式
@@ -6668,15 +6680,31 @@ MiniMax-M2.5
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
 
+MiniMax/MiniMax-M3.1-Flash
+
+> [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
+
+仅思考模式
+
+1元
+
+4元
+
+无
+
 MiniMax/MiniMax-M3
 
 > [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
 
 非思考和思考模式
 
-4.2元
+输入不超过 512k Token：2.1元
 
-16.8元
+输入超过 512k Token：4.2元
+
+输入不超过 512k Token：8.4元
+
+输入超过 512k Token：16.8元
 
 无
 
@@ -7928,6 +7956,20 @@ qwen-audio-3.1-tts-next
 12
 
 100万Token
+
+#### 新加坡
+
+模型 ID
+
+输入单价（元/百万 Token）
+
+输出单价（元/百万 Token）
+
+qwen-audio-3.1-tts-next
+
+6.781
+
+5.104
 
 ## 音乐生成
 
