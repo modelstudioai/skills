@@ -140,13 +140,13 @@ array
 
 object
 
-替换位置。当前仅支持 Authorization 请求头，写入请求体暂不支持
+替换位置。替换位置为请求头；请求体与查询参数中的占位符不会被替换
 
 `auth.injection_location.header`
 
 boolean
 
-是否写入 Authorization 请求头
+是否启用请求头替换
 
 `metadata`
 

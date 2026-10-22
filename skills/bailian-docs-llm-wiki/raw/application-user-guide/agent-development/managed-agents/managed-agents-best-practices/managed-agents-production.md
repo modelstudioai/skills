@@ -67,7 +67,7 @@ export GITHUB_TOKEN="ghp_DUMMY_TOKEN_FOR_SMOKE_TEST"
 -   **MCP 工具集**：Agent 声明一个（或多个）阿里云百炼 MCP 市场里的服务，运行时平台代替 Agent 去调那个服务的工具。适合「服务在公网、由阿里云百炼市场托管」的场景——不用管连接细节，也（通常）不用管 key。
 -   **配置/凭证注入（两条路，按敏感级分层）**：
     -   **会话环境变量**（`environment_variables`，主推）：建会话时传键值对，**明文直通**沙箱进程，Agent 在 bash / python 里 `os.environ` 拿到真实值。适合非敏感配置与交互式会话——最简单，不用预建任何资源。限制：Deployment 不支持。
-    -   **Vault 密钥库**：密钥预先存进 vault，会话只带 `vault_ids`。沙箱内拿到的是**占位符**（`BMA_SECRET_PLACEHOLDER_*`），真实值仅在出网网关命中该密钥的 `allowed_hosts` 白名单时替换 `Authorization` 头。适合高敏密钥与无人值守链路。完整安全模型见[进阶：密钥库安全注入与出网网关](raw/_short/managed-agents-credential-security-b5df5e4f8be278e5.md)。
+    -   **Vault 密钥库**：密钥预先存进 vault，会话只带 `vault_ids`。沙箱内拿到的是**占位符**（`BMA_SECRET_PLACEHOLDER_*`），真实值仅在出网网关命中该密钥的 `allowed_hosts` 白名单时替换请求头中的占位符。适合高敏密钥与无人值守链路。完整安全模型见[进阶：密钥库安全注入与出网网关](raw/_short/managed-agents-credential-security-b5df5e4f8be278e5.md)。
 
 两者的组合才是完整形态：平台级外部能力走 MCP，用户级私密凭证走 Vault（密钥）或环境变量（配置）。
 
@@ -75,7 +75,7 @@ export GITHUB_TOKEN="ghp_DUMMY_TOKEN_FOR_SMOKE_TEST"
 
 本篇再补上**触发线**：入门篇的用法里，Session 由应用创建、消息由应用发——「谁在早上 7:30 把任务发出去」只能靠自写的定时脚本。**Deployment** 把这个角色交给平台：声明式地配好「哪个 Agent、锁哪个版本、触发时下发哪些消息、挂哪些凭证、什么时间表」，之后定时触发、Session 创建、`initial_events` 下发全部由平台完成，应用只需要来看结果。
 
-**说明****安全边界**：token 存进 vault 后**不再进入沙箱**——`printenv` 只能看到占位符；出网时由网关按 `allowed_hosts` 白名单替换。占位符保证覆盖**环境变量与出站请求（替换前）**；被调用服务的**响应体**（例如回显型的测试端点会把 `Authorization` 原样返回）会作为工具输出进入事件流，这属于外部服务自身行为，不在占位符保证范围内。但注意两条仍然成立的边界：网关只替换 `Authorization` 头；沙箱出站 HTTPS 走网关 MITM，但沙箱已预置网关 CA（`SSL_CERT_FILE` / `CURL_CA_BUNDLE` / `REQUESTS_CA_BUNDLE` 均指向它），curl 与 requests 默认校验可直接通过，仅在个别环境证书异常时才需要排查 CA 配置，细节与排查方法见[进阶：密钥库安全注入与出网网关](raw/_short/managed-agents-credential-security-b5df5e4f8be278e5.md)。
+**说明****安全边界**：token 存进 vault 后**不再进入沙箱**——`printenv` 只能看到占位符；出网时由网关按 `allowed_hosts` 白名单替换。占位符保证覆盖**环境变量与出站请求（替换前）**；被调用服务的**响应体**（例如回显型的测试端点会把请求头原样返回）会作为工具输出进入事件流，这属于外部服务自身行为，不在占位符保证范围内。但注意两条仍然成立的边界：网关只替换请求头中的占位符；沙箱出站 HTTPS 走网关 MITM，但沙箱已预置网关 CA（`SSL_CERT_FILE` / `CURL_CA_BUNDLE` / `REQUESTS_CA_BUNDLE` 均指向它），curl 与 requests 默认校验可直接通过，仅在个别环境证书异常时才需要排查 CA 配置，细节与排查方法见[进阶：密钥库安全注入与出网网关](raw/_short/managed-agents-credential-security-b5df5e4f8be278e5.md)。
 
 ## 步骤 1 · 建 Vault
 
@@ -123,7 +123,7 @@ curl -X POST "$AGENTSTUDIO_URL/vaults/$VAULT_ID/credentials" \
 
 要点：
 
--   `secret_name`：变量名。**沙箱里** `os.environ["GITHUB_TOKEN"]` 拿到的是占位符 `BMA_SECRET_PLACEHOLDER_GITHUB_TOKEN`——真实值只在出网请求命中白名单 host 时由网关替换进 `Authorization` 头。
+-   `secret_name`：变量名。**沙箱里** `os.environ["GITHUB_TOKEN"]` 拿到的是占位符 `BMA_SECRET_PLACEHOLDER_GITHUB_TOKEN`——真实值只在出网请求命中白名单 host 时由网关替换进请求头。
 -   `secret_value`：真实密钥。**只写不回显**——GET 回来时 `auth` 里只有 `secret_name` / `type` / `networking`，没有值。
 -   `networking.allowed_hosts`：**密钥允许发往的域名白名单**，支持通配（`*.github.com`）。token 只会被替换到发往这些 host 的请求里——发往其他域名的请求保持占位符，防外泄。
 -   响应 `id` 形如 `vcrd_01M1G0W5BYXJDRD32NMB16ER1Z`（前缀是 `vcrd_`，不是 `cred_`）。
@@ -172,7 +172,7 @@ curl -X POST "$AGENTSTUDIO_URL/agents" \
 
 **警告**`mcp_servers.name` **声明时不校验存在性**。写一个市场里不存在的名字也能创建成功，运行时工具静默缺失，Agent 会回复「没有可用工具」。排查办法：发一条强制用工具的消息，看事件流里有没有 `mcp_call`。可用服务列表用 CLI 查：`bl mcp list`（列出账号下已激活的 MCP 服务器，含 code / 工具）。
 
-市场服务由平台代理调用，endpoint 形如 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/mcps/{code}/sse`，一般不需要提供凭证；需要自己 key 的服务，把 key 存进 vault、在 bash 里带 `Authorization` 头直连即可（bash 里拿到的是占位符，真实值由出网网关替换）。
+市场服务由平台代理调用，endpoint 形如 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/mcps/{code}/sse`，一般不需要提供凭证；需要自己 key 的服务，把 key 存进 vault、在 bash 里带鉴权请求头直连即可（bash 里拿到的是占位符，真实值由出网网关替换）。
 
 ```
 export AGENT_ID="agent_xxx"
@@ -262,7 +262,7 @@ message          (assistant 汇报输出)
 session_status   {"stop_reason": {"type": "end_turn"}, "session_status": "idle"}
 ```
 
-**看到占位符就是注入成功的标志**。密钥的端到端验证（出网替换真的发生）：向白名单 host 发请求、看对方收到的是真实值，见[进阶：密钥库安全注入与出网网关](raw/_short/managed-agents-credential-security-b5df5e4f8be278e5.md)。真实链路上 GitHub 推送同理——Agent 把占位符放进 `Authorization` 头调用 `api.github.com`，网关替换成真 PAT，GitHub 鉴权通过。
+**看到占位符就是注入成功的标志**。密钥的端到端验证（出网替换真的发生）：向白名单 host 发请求、看对方收到的是真实值，见[进阶：密钥库安全注入与出网网关](raw/_short/managed-agents-credential-security-b5df5e4f8be278e5.md)。真实链路上 GitHub 推送同理——Agent 把占位符放进请求头调用 `api.github.com`，网关替换成真 PAT，GitHub 鉴权通过。
 
 再发一条消息触发 MCP 工具（「用工具搜索茶饮行业最新动态」），MCP 调用产生的是**专属事件类型**，与 `tool_call` 平行：
 

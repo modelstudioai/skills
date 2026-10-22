@@ -70,7 +70,7 @@ string
 
 string
 
-环境变量名称，创建后不可修改
+环境变量名称，需满足 `^[a-zA-Z][a-zA-Z0-9_]*$`：以字母开头，仅支持字母、数字和下划线。创建后不可修改
 
 `secret_value`
 
@@ -102,7 +102,7 @@ array
 
 object
 
-替换位置，标识密钥写入请求的位置。当前仅支持 Authorization 请求头，写入请求体暂不支持
+替换位置，标识密钥写入请求的位置。替换位置为请求头；请求体与查询参数中的占位符不会被替换
 
 `injection_location.header`
 
@@ -110,7 +110,9 @@ object
 
 boolean
 
-是否写入 Authorization 请求头（Bearer 格式）
+是否启用请求头替换，固定传 true
+
+**说明**同一 Vault 内 `secret_name` 不能重复，否则返回 409 `CREDENTIAL_SECRET_NAME_DUPLICATE`「该Vault下已存在相同变量名称的凭证」。
 
 ## 请求示例
 
@@ -234,13 +236,13 @@ array
 
 object
 
-替换位置。当前仅支持 Authorization 请求头，写入请求体暂不支持
+替换位置。替换位置为请求头；请求体与查询参数中的占位符不会被替换
 
 `auth.injection_location.header`
 
 boolean
 
-是否写入 Authorization 请求头
+是否启用请求头替换
 
 `metadata`
 
@@ -291,3 +293,9 @@ Required parameter missing or invalid.
 `InvalidApiKey`
 
 Invalid API-key provided.
+
+409
+
+`CREDENTIAL_SECRET_NAME_DUPLICATE`
+
+`secret_name` 在该 Vault 内已存在。

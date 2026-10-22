@@ -1,8 +1,8 @@
 # 玩法攻略
 
-Token Plan 41 个实测玩法攻略索引，覆盖 AI Coding、内容创作、资料与数据处理、生活娱乐、求职职场五大场景，每个玩法提供完整的提示词示例和实测产出。
+Token Plan 42 个实测玩法攻略索引，覆盖 AI Coding、内容创作、资料与数据处理、生活娱乐、求职职场五大场景，每个玩法提供完整的提示词示例和实测产出。
 
-订阅 Token Plan 后，可参见以下 41 个玩法快速上手。每个玩法提供完整的提示词示例和实测产出，具体产出效果与 Credits 消耗以控制台「用量详情」为准。
+订阅 Token Plan 后，可参见以下 42 个玩法快速上手。每个玩法提供完整的提示词示例和实测产出，具体产出效果与 Credits 消耗以控制台「用量详情」为准。
 
 ## 分类速览
 
@@ -20,7 +20,7 @@ AI Coding / 开发
 
 自媒体 / 内容创作
 
-8
+9
 
 一套 AI 能力打通从图文策划到动态呈现全流程。会写稿、能配音、可动图，开启高效内容生产新体验。
 
@@ -139,6 +139,14 @@ AI Coding / 开发
 输入本次 PR diff，模型给出能不能合的结论与 blocking / suggestion / nit 三级意见，每条附具体后果与改法。
 
 [查看攻略](raw/model-user-guide/token-plan-guide/token-plan-playbooks/token-plan-playbook-coding/token-plan-playbook-code-review.md)
+
+自媒体 / 内容创作
+
+电影级空镜短片 · 一条提示词出 30 秒 1080P 素材
+
+一句场景创意交给 wan3.0-video，一次生成 30 秒、1080P 的电影级空镜，运镜、光影与配乐原生同步。
+
+[查看攻略](raw/_short/token-plan-playbook-cinematic-broll-6216407b06bb3343.md)
 
 自媒体 / 内容创作
 

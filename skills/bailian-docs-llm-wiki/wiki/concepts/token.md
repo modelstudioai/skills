@@ -1,45 +1,37 @@
-# Token 计量与管理
+# Token
 
-Token 计量与管理是百炼平台统一的资源度量、配额控制与成本治理核心机制，以输入/输出 Token 为最小计费与限流单位，贯穿模型调用、监控、计费、预算及配额分配全链路。所有 API 调用（含同步/异步、流式/非流式、多模态）均实时计量 Token 消耗，并据此触发配额校验、限流响应与用量统计。
+Token 是百炼平台中用于计量模型输入与输出文本（及多模态内容）处理规模的基本单位，1 个 token 通常对应一个子词（subword）或字符级单元；其实际长度取决于模型分词器（Tokenizer），例如 Qwen 系列模型中英文平均约 1 token ≈ 0.75 个单词，中文约 1–2 字/词。Token 是平台资源配额、计费、限流与监控的核心计量基准。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **模型调用时**：每次请求（如 `dashscope.Generation.call()`）自动计算 prompt_tokens + completion_tokens，并按模型规格（如 `qwen-max` 最大 context 32K）和阶梯规则折算长文本；缓存命中 Token 单独计费并享受折扣。
-- **配额控制时**：Token Plan 绑定至工作空间或组织，通过 `X-Model-Quota-ID` 请求头或 SDK 的 `quota_id` 参数生效，优先级高于全局免费额度；超出 `total_quota` 或 `model_specific_quota` 将返回 `429 QUOTA_EXCEEDED`。
-- **监控告警时**：模型监控页面的「调用量（Token总量）」指标即分钟级聚合的 TotalToken 数，支持配置阈值告警（如“1分钟内 Token 消耗 > 500k”），用于主动识别异常调用或配额瓶颈。
-- **成本管控时**：免费额度（100万 Token/模型/90天）、节省计划、资源包、按量付费按严格优先级抵扣；预算管理仅覆盖 API 推理费用，且需开启「达到预算后立即停止」才可触发 429 熔断。
-- **异步与多模态场景**：图像/视频/语音类[异步任务](asynchronous-task.md)在任务完成时一次性计量全部输入+输出 Token；多模态模型（如 `qwen-vl-plus`）对上传的图片/音频文件按像素/时长折算为等效 Token 后计入总用量。
-- **运维与审计时**：审计日志必含 `prompt_tokens`、`completion_tokens`、`total_tokens` 字段；推理日志（开启后）可完整追溯 Token 拆分明细，用于 Prompt 优化与成本归因。
+- **资源配额与计费（Token Plan）**：Token 消耗量是 Token Plan 的核心度量维度。`personal`、`team`、`coding` 等计划均定义了日/秒级的总 token 配额上限（如 `team` plan 默认支持 100 万 tokens/日），超出将触发 `429 Too Many Requests` 或 `403 Forbidden`。`max_tokens` 参数可显式限制单次响应 token 数，但不得突破 plan 的硬上限。
+
+- **模型调用与推理**：所有同步/异步模型请求（如 `/v1/chat/completions`、`/v1/coding/completions`、文生图任务）均按实际消耗的 input tokens + output tokens 计费与统计。多模态模型（如 `qwen-vl-plus`）中，图像 token 当前不单独计费，仅文本部分计入 token 总量。
+
+- **可观测性与监控**：`model monitoring` 提供细粒度 token 统计指标，包括 `input_tokens_total`、`output_tokens_total`、`total_tokens_per_request` 等，支持按小时/天、模型、API Key 等维度聚合分析，用于容量规划与成本归因。
+
+- **安全与隔离**：临时 API Key（通过 `/api/v1/tokens` 生成）继承父 Key 的 token 配额权限，其调用产生的 token 消耗计入原账号或子空间配额；子业务空间内调用也严格按空间绑定的 token plan 执行，实现费用与用量隔离。
 
 ## 关键参数和配置
 
-| 参数 | 说明 | 开发者操作建议 |
-|------|------|----------------|
-| `total_tokens` | 单次请求实际消耗的 Token 总数（含输入+输出），由服务端精确返回于响应体 `usage` 字段中 | 始终检查该字段，用于本地用量统计与熔断逻辑（如累计达配额 95% 时降级） |
-| `max_tokens` | 请求级输出上限（默认 2048，最高 8192），直接影响 completion_tokens 上限 | 生产环境务必显式设置，避免意外长输出耗尽配额；流式场景注意首 Token 后仍受此约束 |
-| `X-Model-Quota-ID` | HTTP 请求头，用于显式绑定 Token Plan | SDK v3.2+ 推荐直接传入 `quota_id=` 参数，比手动设 Header 更安全可靠 |
-| `burst_ratio` | 突发流量倍率（团队版默认 1.5×，最高 3×），按自然日重置 | 高峰期前可临时提升，但需监控 `x-dashscope-ptu-overflow:true` 响应头判断是否已溢出 |
-| 免费额度有效期 | 90 天（自开通/模型发布/申请通过日起算，以较晚者为准） | 在代码中记录首次调用时间，结合用量统计页数据，提前 7 天预警到期风险 |
-
-> ⚠️ 注意：Token 计量**不依赖客户端估算**（如 tiktoken），平台服务端基于真实模型 tokenizer 精确计算；任何长度限制（如 `qwen-turbo` 的 8K context）均在计量前强制截断，超限部分不计费也不返回。
+- `max_tokens`（请求体参数，可选）：控制模型生成的最大输出 token 数。若未设置，则使用模型默认值；若设置，将覆盖 plan 默认上限（但不能超过 plan 允许的硬上限）。  
+- `X-Qwen-Plan`（HTTP Header，推荐）或 `plan`（JSON Body 字段）：声明本次请求归属的 Token Plan，直接决定 token 配额生效策略。  
+- 监控查询参数：`metrics` 中可指定 `["input_tokens_total", "output_tokens_total"]` 等 token 相关指标；`group_by` 支持按 `model` 或 `api_key` 分组查看 token 分布。  
+- 注意：`temperature`、`top_p` 等采样参数虽不直接控制 token 数，但高随机性可能延长生成过程，间接增加 output token 消耗，需在性能调优时协同考量。
 
 ## 面向开发者，简洁实用
 
-- ✅ **必做**：每次调用后解析响应 `usage.total_tokens`，与本地配额余额做差值校验；生产环境必须设置 `max_tokens` 和 `quota_id`。
-- ✅ **推荐**：在监控告警中配置「限流错误次数（429）」+「Token总量」双指标联动，快速区分是配额不足还是模型自身限流。
-- ✅ **避坑**：  
-  - 不要依赖 `tiktoken` 或其他第三方库估算 token 数——百炼使用专属 tokenizer，结果可能偏差 10%+；  
-  - 不要将临时文件 URL 用于生产——其 Token 计量与持久化存储一致，但过期后调用失败不返还配额；  
-  - 不要忽略 `burst_ratio` 重置周期——它是自然日（非滚动小时），凌晨 0 点自动恢复。
-- ✅ **调试技巧**：开启审计日志后，在控制台用量页按 `API-Key ID` 筛选，对比「调用量」与「调用次数」比值，若远大于 1，说明存在高 Token 单次请求，需检查 `max_tokens` 或 Prompt 长度。
+- ✅ 始终检查响应头 `X-DashScope-Token-Usage`（如存在），它以 JSON 形式返回本次请求精确的 `"input_tokens"` 和 `"output_tokens"`，是调试与验证 token 消耗的黄金依据。  
+- ✅ 在生产环境避免硬编码 `max_tokens`；建议结合业务预期长度动态设置，并预留 10%–20% buffer 防止截断。  
+- ✅ 监控告警应至少配置 `total_tokens_per_request > N`（如 N=8192）和 `input_tokens_total 日环比突增 > 200%`，及时发现 prompt 异常或攻击行为。  
+- ❌ 不要假设 token 数 = 字符数或字数——务必使用百炼官方 SDK（如 `dashscope.Tokenizer`）或调用 `/v1/tokenize` 接口（如开放）进行准确预估。  
+- ❌ 不要复用跨 plan 的 API Key 进行 token 敏感操作（如批量微调数据预处理），配额冲突将导致静默失败或降级。
 
 ## 关联主题页
 
-- [preparations](../api/preparations.md)
 - [token plan guide](../guides/token-plan-guide.md)
-- [test 1](../guides/test-1.md)
-- [model monitoring](../guides/model-monitoring.md)
 - [token plan api](../api/token-plan-api.md)
+- [model monitoring](../guides/model-monitoring.md)
 - [more about models](../api/more-about-models.md)
 
 

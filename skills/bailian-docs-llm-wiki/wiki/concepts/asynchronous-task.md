@@ -1,49 +1,52 @@
 # 异步任务
 
-异步任务是百炼平台中用于处理耗时较长、无法在单次 HTTP 请求内完成的模型调用的标准模式。它将任务执行与结果获取解耦，通过“提交任务 → 获取唯一任务 ID → 轮询或接收事件通知 → 获取最终结果”四步流程实现可靠、可追踪、可扩展的长周期计算。
+异步任务是百炼平台中一类需“提交后轮询或监听事件”才能获取最终结果的模型调用模式，适用于计算密集、耗时较长（通常数秒至数分钟）的 AIGC 任务，如视频生成、3D 模型构建、文档/音视频解析等。它将请求发起与结果返回解耦，避免客户端长时间阻塞，提升系统吞吐与稳定性。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-异步任务并非特定于某类模型，而是平台对**计算密集型、I/O 延迟高、资源调度复杂**能力的统一抽象。以下为典型使用场景：
+- **视频生成**：所有视频类 API（文生视频、图生视频、口型替换、超分等）强制采用异步模式。开发者需先 `POST /video-generation/video-synthesis` 创建任务，获得 `task_id`，再通过 `GET /tasks/{task_id}` 轮询状态；任务 ID 有效期为 24 小时。
+  
+- **3D 生成**：Tripo 系列 3D 模型（如 `Tripo/Tripo-H3.1`）仅支持异步调用，必须携带 `X-DashScope-Async: enable` 请求头，否则直接报错；结果中的模型 URL（如 `pbr_model_url`）有效期仅 2 小时，需及时下载。
 
-- **图像生成**：`wan2.5-i2i-preview`（多图融合编辑）、`kling/*`（分镜组图）、`vidu/*`（高保真 UI/图表生成）、`wanx-style-repaint-v1`（人像风格重绘）等模型必须使用异步调用；任务创建后返回 `task_id`，需轮询 `GET /api/v1/tasks/{task_id}` 查询状态（`PENDING` → `RUNNING` → `SUCCEEDED`/`FAILED`），`task_id` 有效期默认 24 小时。
+- **文档与音视频解析（ParseX）**：所有解析与字段抽取任务均基于异步任务模型，使用 `biz_id`（而非 `task_id`）作为任务标识。提交后需轮询 `/parse/result` 或 `/extract/result`，结果默认保留 30 天，但字段抽取仅可复用 7 天内的解析结果。
 
-- **视频生成**：所有视频模型（`kling`、`wanxiang`、`portrait-animation`、`vidu` 等）均强制异步。提交 `POST /api/v1/video-generation` 后获得 `job_id`，通过 `GET /api/v1/jobs/{job_id}` 查询状态；成功时返回 `output.video_url`（直链，有效期 24 小时）。
+- **其他异步模型**：包括部分图像生成（如 `wanx2.1-t2i-turbo`）、语音转写（如 `paraformer-8k-v2`）等，统一纳入平台异步任务管理体系，支持通过事件总线（EventBridge）配置 HTTP 回调或 RocketMQ 消息通知，替代轮询。
 
-- **3D 生成**：Tripo 模型（`Tripo/Tripo-H3.1`、`Tripo/Tripo-P1.0`）仅支持异步，且必须显式声明请求头 `X-DashScope-Async: enable`，否则直接报错；任务状态查询路径为 `GET /api/v1/tasks/{task_id}`，结果中的模型 URL（如 `pbr_model_url`）有效期仅 2 小时，需及时下载。
-
-- **文档与音视频解析（ParseX）**：全部能力（PDF/Word 解析、ASR 转录、剧情摘要、字段抽取）均为异步。提交 `/parse/submit` 或 `/extract/submit` 后返回 `biz_id`，通过 `/parse/result` 或 `/extract/result` 查询；解析结果保留 30 天，但字段抽取复用的解析结果仅保留 7 天。
-
-- **其他长耗时能力**：语音转写（`paraformer-16k-1`）、部分多模态理解（如大尺寸图像输入的 VL 模型）、定制化模型推理等，也统一纳入异步任务体系管理。
-
-> ✅ **关键判断原则**：若模型文档明确标注“必须异步”、“不支持同步调用”、“需轮询 `task_id`”或要求设置 `X-DashScope-Async: enable`，即属于异步任务范畴。同步调用仅适用于毫秒级响应的轻量任务（如文本补全、向量嵌入）。
+> ✅ **关键共性**：所有异步任务均不支持同步返回；必须显式启用异步开关（如 `X-DashScope-Async: enable`）；任务标识（`task_id`/`biz_id`）是后续查询、取消、回调的唯一凭证；结果资源（URL）具有明确时效性，不可长期缓存。
 
 ## 关键参数和配置
 
-| 参数/配置 | 说明 | 示例/取值 | 注意事项 |
-|-----------|------|------------|----------|
-| `task_id` / `job_id` / `biz_id` | 任务唯一标识符，由提交接口返回，用于后续查询与管理 | `"a8532587-xxxx-xxxx-xxxx-0c46b17950d1"` | 所有异步任务的核心凭证；有效期依模型而定（常见为 24 小时），超期后查询返回 `UNKNOWN` 或 `TaskNotFound` |
-| `X-DashScope-Async` | HTTP 请求头，显式启用异步模式 | `"enable"` | **3D 生成必需**；缺失将导致 `current user api does not support synchronous calls` 错误；其他模型通常通过 endpoint 或 model 名隐式启用 |
-| `callback_url` | 可选回调地址，任务完成后平台主动推送 `POST` 通知 | `"https://your-server.com/webhook"` | 避免轮询限流（QPS ≤ 20），推荐用于生产环境；需自行实现幂等处理；支持 HTTP/HTTPS，不支持 localhost |
-| `status` 字段 | 查询响应中的任务状态 | `"PENDING"`, `"RUNNING"`, `"SUCCEEDED"`, `"FAILED"`, `"CANCELED"` | 轮询时建议按任务类型设置间隔：图像/视频类 ≥15 秒，3D/解析类 ≥30 秒；持续 `RUNNING` 超 30 分钟应检查输入或联系支持 |
-| 结果 URL 有效期 | 任务成功后返回的文件直链（如 `video_url`, `pbr_model_url`, `rendered_image_url`） | 通常为 **2 小时**（3D）、**24 小时**（图像/视频/ParseX） | **必须及时下载并持久化存储**；URL 过期后不可恢复，平台不提供续期接口 |
+| 参数 / 配置 | 说明 | 是否必需 | 注意事项 |
+|-------------|------|----------|----------|
+| `X-DashScope-Async: enable` | 强制启用异步模式的 HTTP 请求头 | 是（对所有异步模型） | 缺失将返回 `"current user api does not support synchronous calls"` 错误；大小写敏感，值必须为 `enable`（小写） |
+| `task_id` / `biz_id` | 任务唯一标识符，由创建接口响应体返回 | 是（用于轮询/回调） | `task_id` 格式为 UUID（如 `a8532587-xxxx-xxxx-xxxx-0c46b17950d1`），`biz_id` 为业务自定义前缀（如 `parseX-xxx`）；有效期统一为 **24 小时**（ParseX 解析结果除外） |
+| `callback_url`（可选） | 事件回调地址，用于接收任务完成/失败通知 | 否 | 需在创建任务时通过 `callback_url` 字段或事件总线控制台配置；推荐用于生产环境，避免轮询限流（20 QPS） |
+| `polling_interval`（建议） | 轮询间隔 | 否（但强烈建议） | 文生图 ≥2s，图生视频/3D ≥10s，文档解析 ≥15s；高频轮询易触发限流或被拒绝 |
 
 ## 面向开发者，简洁实用
 
-- **不要阻塞主线程**：永远避免在 Web 请求中同步等待异步任务完成。使用轮询（带退避）或事件回调。
-- **轮询要节制**：QPS 限流 20，建议初始间隔 1–2 秒，随 `RUNNING` 时间增长逐步延长（如指数退避：1s → 2s → 4s → 8s）。
-- **回调更可靠**：生产环境优先配置 `callback_url`，并在服务端验证 `X-DashScope-Signature` 签名防伪造。
-- **ID 是生命线**：妥善保存 `task_id`/`job_id`/`biz_id`，它是查询、取消（仅 `PENDING` 状态支持）、审计的唯一依据。
-- **URL 是临时凭证**：所有返回的文件 URL 均为临时直链，**禁止缓存、禁止长期引用、禁止前端直接展示**；务必在有效期内下载到自有存储（OSS、S3 等）。
-- **错误要分类处理**：`FAILED` 状态需解析 `output.code` 和 `output.message`（参考[统一错误码文档](../../raw/model-api-reference/preparations/error-code.md)），区分 `InvalidParameter`（修复输入）、`ResourceNotReady`（重试）、`QuotaExhausted`（升配）等场景。
-- **地域强绑定**：`task_id` 只能在创建时使用的地域 endpoint 上查询；跨地域调用 `GET /tasks/{id}` 必然失败。
+- ✅ **必做三件事**：  
+  1. 请求头务必添加 `X-DashScope-Async: enable`；  
+  2. 从创建响应中提取 `task_id` 或 `biz_id`，并妥善保存；  
+  3. 使用该 ID 调用 `/tasks/{id}` 或 `/parse/result?biz_id=xxx` 查询状态（检查 `status` 字段：`success`/`failed`/`processing`）。
+
+- ⚠️ **避坑提示**：  
+  - 不同服务使用不同任务 ID 命名空间（`task_id` vs `biz_id`），不可混用；  
+  - 所有异步任务严格绑定地域——API Key、Endpoint、模型必须同属一个地域（如 `cn-beijing`），跨地域调用必然失败；  
+  - 结果 URL（如 `video_url`、`pbr_model_url`、`rendered_image_url`）均为临时链接，有效期从 **2 小时到 30 天不等**，请立即下载或持久化存储；  
+  - 生产环境优先使用 **EventBridge 回调**，而非轮询：降低延迟、规避 QPS 限制、提升可靠性。
+
+- 🚀 **进阶推荐**：  
+  - 高并发场景下，结合 SDK 连接池（如 Python 的 `aiohttp.ClientSession`）复用 HTTP 连接；  
+  - 敏感业务中，为每个子业务空间分配独立 API Key，并启用子空间模型授权隔离；  
+  - 文件类输入（图片、视频、PDF）建议先调用 `/files/upload` 获取 `oss://` 临时 URL，再传入模型调用，避免超时失败。
 
 ## 关联主题页
 
-- [image generation](../api/image-generation.md)
 - [video generation api](../api/video-generation-api.md)
 - [3d generation](../api/3d-generation.md)
 - [api overview](../api/api-overview.md)
 - [more about models](../api/more-about-models.md)
+- [image generation](../api/image-generation.md)
 
 

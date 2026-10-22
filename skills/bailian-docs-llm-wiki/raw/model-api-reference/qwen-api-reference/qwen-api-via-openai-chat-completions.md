@@ -640,15 +640,39 @@ Schema 的名称。
 -   glm-5.2：不传入 `thinking_budget` 参数时，`max_tokens` 为模型回答与思维链内容之和的最大 Token 数，模型输出超过此值时生成将提前停止，返回的 `finish_reason` 为 `length`；传入 `thinking_budget` 参数时，`max_tokens` 仅为模型回答的最大 Token 数，思维链部分的 Token 数由 `thinking_budget` 单独控制。
 -   其他模型：模型回答的最大 Token 数（不包含思维链）。若生成内容超过此值，生成将提前停止，返回的 `finish_reason` 为 `length`。
 
-默认值与最大值均为模型的最大输出长度。
+GLM 模型的默认值与最大值如下表所示，其他模型的默认值与最大值均为模型的最大输出长度。
+
+供应方式
+
+模型
+
+默认值
+
+最大值
+
+阿里云直供
+
+glm-5.3、glm-5.2、glm-5.2-fast-preview、glm-5.1、glm-5
+
+65536
+
+131072
+
+智谱直供
+
+ZHIPU/GLM-5.3、ZHIPU/GLM-5.3-Flash、ZHIPU/GLM-5.3-FlashX、ZHIPU/GLM-5.2、ZHIPU/GLM-5.1、ZHIPU/GLM-5
+
+65536
+
+131072
 
 **max\_completion\_tokens**`integer`（可选）
 
 模型输出的最大长度，包含思维链和模型回答。模型输出超过此值时生成将提前停止，返回的 `finish_reason` 为 `length`。
 
-默认值与最大值均为模型的最大输出长度。
+GLM 模型的默认值与最大值见 `max_tokens` 参数中的表格，其他模型的默认值与最大值均为模型的最大输出长度。
 
-与 `max_tokens` 的区别：`max_completion_tokens` 限制模型完整输出（思维链 + 回答），而 `max_tokens` 仅限制回答部分。思考类模型推荐使用 `max_completion_tokens`。
+与 `max_tokens` 的区别：`max_completion_tokens` 始终限制模型完整输出（思维链 + 回答）；`max_tokens` 的具体限制范围随模型及 `thinking_budget` 设置而异，见上文说明。思考类模型推荐使用 `max_completion_tokens`。
 
 支持以下模型：
 
@@ -656,11 +680,11 @@ Schema 的名称。
 -   千问 Plus：Qwen3.5-Plus 及之后的模型
 -   千问 Flash：Qwen3.5-Flash 及之后的模型
 -   Kimi：kimi-k2.5 及其之后推出的Kimi模型
--   GLM：glm-5 及其之后推出的GLM系列模型
+-   GLM：上表所列的阿里云直供和智谱直供模型
 -   MiniMax：MiniMax-M2.5 及之后推出的MiniMax模型
 -   DeepSeek：deepseek-v4-pro 及之后推出的DeepSeek模型
 
-> 以上模型均不包含三方直供模型。
+> 除上表所列的智谱直供 GLM 模型外，以上模型均不包含其他三方直供模型。
 
 > 实际输出 Token 数与设置的 `max_completion_tokens` 值之间最多可能存在 10 个 Token 的误差。
 

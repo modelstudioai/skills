@@ -84,6 +84,8 @@ array
 
 会话级 MCP 请求头，独立于 `agent`，见[会话级 MCP 请求头](#h-sc-mcp)。省略时为空数组
 
+**说明**同一会话绑定多个 Vault 时，不同 Vault 之间的 `secret_name` 不能重复，也不要使用前缀相同的名称（例如 `API_KEY` 与 `API_KEY_V2`），否则创建会话返回 400 `invalid_parameter`（Invalid request）。
+
 ## 请求示例
 
 bash

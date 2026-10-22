@@ -1,34 +1,33 @@
 # preparations
 
-`preparations` 是调用百炼模型 API 前必需完成的环境与凭证配置步骤，涵盖 API Key 获取、SDK 安装与初始化、以及基础错误处理机制。这些操作是所有模型请求（如 `qwen-max`、`qwen-plus` 等）的前置依赖，直接影响调用成功率与调试效率。完整流程请参考 [使用 API](../../raw/model-api-reference/preparations.md)。
+`preparations` 是调用百炼平台模型 API 前必需完成的基础配置步骤，涵盖身份认证、开发环境搭建及客户端初始化。这些操作直接影响后续请求的合法性与稳定性，开发者需严格按顺序执行。所有配置项均以最小必要原则设计，避免冗余依赖。
 
 ## 支持的模型/功能
 
-当前 `preparations` 流程适用于所有通过百炼 Model API 提供的模型，包括但不限于 `qwen-max`、`qwen-plus`、`qwen-turbo` 及 `qwen-vl` 等多模态模型。SDK 初始化后，可统一调用 `dashscope.Generation.call()` 或 `dashscope.MultiModalConversation.call()` 等接口，无需为不同模型重复配置认证逻辑。具体模型能力与兼容性详见 [使用 API](../../raw/model-api-reference/preparations.md) 中的 SDK Expert 指南。
+当前 `preparations` 流程适用于所有通过百炼平台 Model API 提供的模型服务（包括 `qwen-max`、`qwen-plus`、`qwen-turbo` 等），但**不适用于控制台直接交互或 Web UI 场景**。SDK 封装已覆盖主流语言（Python、Java、Node.js、Go），各语言能力对齐详见 [使用 API](../../raw/model-api-reference/preparations.md)。注意：部分旧版 SDK（如 v3.0.0 以下 Python SDK）未支持 `dashscope-sdk-expert` 模式，需升级至最新稳定版。
 
 ## 关键参数
 
-- `api_key`：必填，需通过 [获取与配置 API Key](../../raw/model-api-reference/preparations/get-api-key.md) 获取并安全存储；
-- `model`：调用时指定，非 preparation 阶段参数，但 SDK 初始化不校验该值，实际调用时才校验；
-- `api_base`（可选）：用于私有化部署场景，覆盖默认 endpoint，详见 [安装SDK](../../raw/model-api-reference/preparations/install-sdk.md) 中的高级配置说明。
-
-> **注意**：部分旧版文档将 `region` 列为初始化参数，但自 dashscope v1.20.0 起该参数已被废弃，仅保留 `api_key` 和 `api_base` 两个有效配置项；请以 [SDK Expert](../../raw/model-api-reference/preparations/dashscope-sdk-expert.md) 的最新说明为准。
+- `api_key`：必填，用于身份鉴权，须通过 [获取与配置 API Key](../../raw/model-api-reference/preparations/get-api-key.md) 获取并安全存储；
+- `base_url`（可选）：仅在私有化部署场景下需显式指定，公有云默认使用官方 endpoint；
+- `max_retries`（可选）：推荐设为 `3`，避免因临时网络抖动导致请求失败；
+- `timeout`（可选）：建议设为 `60` 秒，适配长上下文生成类请求。
 
 ## 使用方式
 
-1. 访问 [获取与配置 API Key](../../raw/model-api-reference/preparations/get-api-key.md) 页面，登录百炼控制台，在「API 密钥管理」中创建并复制密钥；
-2. 执行 `pip install dashscope` 安装 SDK（Python），或参考 [安装SDK](../../raw/model-api-reference/preparations/install-sdk.md) 获取其他语言支持；
-3. 在代码中设置环境变量或显式传入 `api_key`，例如：  
-   ```python
-   import dashscope
-   dashscope.api_key = "sk-xxx"  # 或 os.environ["DASHSCOPE_API_KEY"]
-   ```
+1. **获取 API Key**：登录百炼控制台，在「API 密钥管理」中创建并复制密钥；  
+2. **安装 SDK**：根据语言选择对应包（如 `pip install dashscope`），参考 [安装SDK](../../raw/model-api-reference/preparations/install-sdk.md)；  
+3. **初始化客户端**：推荐使用 `dashscope-sdk-expert` 模式（自动处理重试、超时、鉴权头注入），详见 [SDK Expert](../../raw/model-api-reference/preparations/dashscope-sdk-expert.md)；  
+4. **验证连通性**：调用 `dashscope.models.list()` 或发送空 body 的 `/v1/services/aigc/text-generation` 请求测试。
+
+> **注意**：原始文档中 [错误码](../../raw/model-api-reference/preparations/error-code.md) 列表未包含 `429 Too Many Requests` 的具体限流策略说明，实际限流由百炼网关统一控制，开发者应依据响应头 `X-RateLimit-Remaining` 和 `Retry-After` 字段实现退避逻辑，而非仅依赖文档所列错误码。
 
 ## 限制和注意事项
 
-- 单个 API Key 默认配额受项目级限制约束，超出将返回 `429 Too Many Requests`，详细码表见 [错误码](../../raw/model-api-reference/preparations/error-code.md)；
-- API Key 不可跨阿里云主账号共享，且不支持子用户独立生成（需主账号操作）；
-- 本地开发建议使用 `.env` 文件管理密钥，严禁硬编码或提交至 Git；生产环境应使用 KMS 或 Secret Manager 注入。
+- 单个 API Key 默认 QPS 限制为 5，可通过工单申请提升；
+- `api_key` 不得硬编码在前端代码或公开仓库中，必须通过环境变量或密钥管理服务注入；
+- Python SDK v4.0+ 已弃用 `dashscope.api_key = "xxx"` 全局赋值方式，强制要求实例化时传入 `api_key` 参数；
+- 所有 preparatory 操作均**不涉及模型加载或资源预分配**，仅为 HTTP 客户端准备阶段。
 
 ## 来源文档
 

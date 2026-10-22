@@ -1,10 +1,10 @@
 # 进阶：密钥库安全注入与出网网关
 
-Vault 密钥库的占位符注入模型、allowed\_hosts 出口白名单、出网网关的 Authorization 头替换行为，以及会话环境变量与密钥库的选型分层。
+Vault 密钥库的占位符注入模型、allowed\_hosts 出口白名单、出网网关的请求头替换行为，以及会话环境变量与密钥库的选型分层。
 
 ## 概述
 
-本篇讲 Managed Agents 的**密钥安全链路**：Vault 密钥库的占位符注入、`allowed_hosts` 出口白名单、出网网关的 Authorization 头替换，以及会话环境变量（`environment_variables`）与密钥库的选型分层。与[生产化篇](raw/application-user-guide/agent-development/managed-agents/managed-agents-best-practices/managed-agents-production.md)的关系：生产化篇只覆盖凭证接入的最短路径，本篇说明密钥在链路中的位置与存在形态。
+本篇讲 Managed Agents 的**密钥安全链路**：Vault 密钥库的占位符注入、`allowed_hosts` 出口白名单、出网网关的请求头替换，以及会话环境变量（`environment_variables`）与密钥库的选型分层。与[生产化篇](raw/application-user-guide/agent-development/managed-agents/managed-agents-best-practices/managed-agents-production.md)的关系：生产化篇只覆盖凭证接入的最短路径，本篇说明密钥在链路中的位置与存在形态。
 
 Vault 的基础用法（创建、存凭证、挂载）见[密钥库](raw/application-user-guide/agent-development/managed-agents/managed-agents-session/managed-agents-credential.md)。
 
@@ -34,13 +34,13 @@ Vault 凭证的安全模型是「**密钥永不进沙箱，用时在网关替换
 
 ③ 沙箱发请求
 
-请求携带 `Authorization: Bearer BMA_SECRET_PLACEHOLDER_MY_API_KEY` 发往 `api.example.com`
+请求头携带占位符（例如 `Authorization: Bearer BMA_SECRET_PLACEHOLDER_MY_API_KEY`）发往 `api.example.com`
 
 ④ 出网网关判定
 
 命中 `allowed_hosts`：替换为真实值转发；未命中：占位符原样透出（真实密钥不泄露）
 
-真实密钥只存在于两处：**凭据库（加密存储）**与**出网网关命中白名单 host 替换的那一瞬**；链路上由平台控制的可观测位置（沙箱进程、模型上下文、事件流里的平台事件）全部只见占位符。唯一例外是**外部服务的响应体**——被调用方自己回显的内容（如 httpbin 返回的 Authorization）会进入工具输出，这是外部服务的行为，平台不控制。即便 Agent 被 prompt 注入诱导把凭证发往恶意域名，网关也不会替换——对方只拿到一个无意义的占位符。
+真实密钥只存在于两处：**凭据库（加密存储）**与**出网网关命中白名单 host 替换的那一瞬**；链路上由平台控制的可观测位置（沙箱进程、模型上下文、事件流里的平台事件）全部只见占位符。唯一例外是**外部服务的响应体**——被调用方自己回显的内容（如 httpbin 返回的请求头）会进入工具输出，这是外部服务的行为，平台不控制。即便 Agent 被 prompt 注入诱导把凭证发往恶意域名，网关也不会替换——对方只拿到一个无意义的占位符。
 
 ### 网关行为边界
 
@@ -50,7 +50,7 @@ Vault 凭证的安全模型是「**密钥永不进沙箱，用时在网关替换
 
 替换哪个头
 
-**仅** `Authorization`。同一请求里的 `X-Api-Key`、`Api-Key` 等其他头里的占位符**原样透出**，不被替换
+**请求头**。占位符放在哪个请求头，就在哪个请求头替换；请求体与查询参数中的占位符**原样透出**
 
 怎么定位要替换的凭证
 
@@ -62,7 +62,7 @@ Vault 凭证的安全模型是「**密钥永不进沙箱，用时在网关替换
 
 非白名单 host 的请求
 
-**不会被拦截**（网络照常放行），只是 Authorization 头里保持占位符——`allowed_hosts` 决定密钥替换生效的 host 范围，不限制网络出站
+**不会被拦截**（网络照常放行），只是请求头里保持占位符——`allowed_hosts` 决定密钥替换生效的 host 范围，不限制网络出站
 
 网关拦截方式
 
@@ -227,7 +227,7 @@ curl -X POST "$AGENTSTUDIO_URL/sessions/$SESSION_ID/events" \
 
 ## 步骤 5 · 验证二：出网请求被网关替换（正路径）
 
-让 Agent 用占位符作为 Bearer Token 调白名单内的回显服务：
+让 Agent 把占位符放进请求头，调用白名单内的回显服务：
 
 ```
 curl -X POST "$AGENTSTUDIO_URL/sessions/$SESSION_ID/events" \
@@ -254,7 +254,7 @@ stdout（httpbin 把收到的请求头原样回显）：
 }
 ```
 
-**替换只在出网的一瞬发生**：沙箱内 `printenv` 是占位符，对方服务收到的是真实值。
+**替换只在出网的一瞬发生**：沙箱内 `printenv` 是占位符，对方服务收到的是真实值。占位符也可以放在 `X-API-Key: ${MY_API_KEY}` 等自定义请求头中，网关按占位符所在的请求头替换。
 
 ### 负路径：发往非白名单 host
 
@@ -342,9 +342,9 @@ curl 加 `-k`、requests 加 `verify=False`（当前行为）
 
 对方服务说收到的还是占位符
 
-① 目标 host 不在该凭证的 `allowed_hosts` 里；② 占位符放在了 Authorization 以外的头里（如 `X-Api-Key`，网关不替换）；③ 该 host 配了多枚凭证，替换歧义
+① 目标 host 不在该凭证的 `allowed_hosts` 里；② 占位符位于请求体或查询参数（网关不替换）；③ 该 host 配了多枚凭证，替换歧义
 
-① 把目标 host 加进白名单；② 把凭证放 `Authorization` 头；③ 一个 host 只配一枚凭证
+① 把目标 host 加进白名单；② 把凭证放进请求头；③ 一个 host 只配一枚凭证
 
 Deployment 触发的 session 拿不到 `environment_variables`
 
@@ -356,12 +356,12 @@ Deployment 不支持该参数（静默忽略）
 
 沙箱内打印的只有占位符
 
-在**沙箱输出与出站请求（替换前）**范围内搜真实值应为 0 命中、搜 `BMA_SECRET_PLACEHOLDER` 可见占位符。注意：**被调用服务的响应体**（如 httpbin 会把 `Authorization` 回显进响应 JSON）会作为工具输出进入事件流——外部服务自己返回的内容不在此保证范围内，选择回显型端点做验证时用假值
+在**沙箱输出与出站请求（替换前）**范围内搜真实值应为 0 命中、搜 `BMA_SECRET_PLACEHOLDER` 可见占位符。注意：**被调用服务的响应体**（如 httpbin 会把请求头回显进响应 JSON）会作为工具输出进入事件流——外部服务自己返回的内容不在此保证范围内，选择回显型端点做验证时用假值
 
 ## 小结
 
--   **占位符模型**：密钥只存凭据库（加密），沙箱、模型上下文与平台事件全部只见 `BMA_SECRET_PLACEHOLDER_*`；真实值只在出网网关命中 `allowed_hosts` 的瞬间替换进 `Authorization` 头。外部服务响应体回显的内容（如 httpbin）不受此保证约束。
--   **网关只替换 `Authorization` 头、只按 host 匹配**：其他头原样透出；非白名单 host 请求照常放行但密钥不出门。
+-   **占位符模型**：密钥只存凭据库（加密），沙箱、模型上下文与平台事件全部只见 `BMA_SECRET_PLACEHOLDER_*`；真实值只在出网网关命中 `allowed_hosts` 的瞬间替换进请求头。外部服务响应体回显的内容（如 httpbin）不受此保证约束。
+-   **网关只替换请求头中的占位符、只按 host 匹配**：请求体与查询参数原样透出；非白名单 host 请求照常放行但密钥不出门。
 -   **一个 host 一枚凭证**：同 host 多凭证替换有歧义。
 -   **TLS**：沙箱出网走网关 MITM，但已预置网关 CA，默认校验可直接通过；证书异常时先排查 CA 环境变量，不要把关闭校验当常规步骤。
 -   **选型分层**：非敏感配置用会话环境变量（明文直通）；高敏密钥与 Deployment 无人值守链路用 Vault。
