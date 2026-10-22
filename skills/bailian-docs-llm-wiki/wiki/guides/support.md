@@ -1,39 +1,33 @@
 # support
 
-百炼平台的 `support` 接口提供模型调用过程中的基础服务支持能力，包括错误诊断、请求追踪、响应元信息获取等，主要用于调试与可观测性场景。该能力不参与模型推理计算，但对排查超时、鉴权失败、配额不足等问题至关重要。开发者需结合具体模型文档和协议条款使用。
+`support` 是百炼平台为开发者提供的模型服务支持能力入口，用于查询当前可用的模型、了解服务边界、获取售后保障及合规协议。该能力不直接提供推理接口，而是作为元信息枢纽，帮助用户快速定位技术文档、服务条款与问题排查路径。所有支持信息均以官方发布文档为准，建议定期查阅更新。
 
 ## 支持的模型/功能
 
-`support` 接口本身不绑定特定模型，但其返回的诊断信息（如 `request_id`、`error_code`、`trace_id`）与所有百炼托管模型（含 Qwen 系列、Qwen-VL、Qwen-Audio 及第三方接入模型）完全兼容。完整支持的模型清单请参阅 [模型列表](../../raw/model-user-guide/support/model-studio-model-list.md)。此外，该接口可配合 [售后说明](../../raw/model-user-guide/support/after-sales-service-scope.md) 中定义的服务等级，用于定位是否属于 SLA 覆盖范围内的问题。
+- 当前支持的模型列表详见 [模型列表](../../raw/model-user-guide/support/model-studio-model-list.md)，涵盖通义千问系列（Qwen1、Qwen2、Qwen3）、Qwen-VL、Qwen-Audio 等开源与闭源模型，按训练阶段、输入模态和商用许可分类。
+- 功能层面，`support` 提供模型能力说明、调用方式概览、输出格式约定及典型使用场景示例，但**不包含实时模型状态监控或自动故障诊断**。
+- 售后服务范围（如 SLA、工单响应时效、问题分级标准）请参考 [售后说明](../../raw/model-user-guide/support/after-sales-service-scope.md)。
 
 ## 关键参数
 
-| 参数名 | 类型 | 必填 | 说明 |
-|--------|------|------|------|
-| `request_id` | string | 否 | 用于关联原始请求的唯一标识；若未提供，则返回最近一次失败请求的上下文摘要 |
-| `include_trace` | boolean | 否 | 默认 `false`；设为 `true` 时返回完整链路追踪路径（需具备对应权限） |
-| `level` | string | 否 | 可选 `debug` / `info` / `error`；控制返回日志粒度，`debug` 级别包含输入 token 分片详情 |
+`support` 接口本身无运行时参数；其返回内容由后台静态配置驱动，依赖以下元数据字段：
+- `model_id`：模型唯一标识符，与 [模型列表](../../raw/model-user-guide/support/model-studio-model-list.md) 中定义一致；
+- `support_level`：取值为 `"basic"` / `"premium"` / `"enterprise"`，对应不同售后响应等级，具体定义见 [售后说明](../../raw/model-user-guide/support/after-sales-service-scope.md)；
+- `eula_url`：指向最新版《用户协议》或《模型许可协议》的链接，来源为 [相关协议](../../raw/model-user-guide/support/related-agreements.md)。
 
-> **注意**：`include_trace` 参数在 [常见问题](../../raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md) 中被描述为“始终启用”，但实际行为受账号角色策略限制，仅 `admin` 或 `observer` 角色可获取完整 trace；普通 `developer` 角色调用时将静默降级为 `info` 级别输出。
+> **注意**：原始文档中 [常见问题](../../raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md) 提到“Qwen2-7B 支持[流式输出](../concepts/streaming-output.md)”，但 [模型列表](../../raw/model-user-guide/support/model-studio-model-list.md) 当前版本（v20240815）未标注该能力，建议以模型实际 API 文档为准，此处视为待同步信息。
 
 ## 使用方式
 
-通过 HTTP POST 请求调用 `/v1/support` 端点，需携带有效的 `Authorization: Bearer <api_key>` 头。示例请求体：
-```json
-{
-  "request_id": "req-abc123",
-  "include_trace": true,
-  "level": "debug"
-}
-```
-响应为 JSON 格式，包含 `status`、`diagnosis`、`suggestions` 字段。建议在客户端异常捕获逻辑中自动触发 `support` 查询，以提升问题复现效率。
+- 开发者无需调用 HTTP 接口，所有支持信息通过 Web 控制台「模型详情页 → 支持」Tab 或 CLI 命令 `bailian model describe --model-id <id>` 获取；
+- 控制台展示内容动态拉取自 [模型列表](../../raw/model-user-guide/support/model-studio-model-list.md) 与 [售后说明](../../raw/model-user-guide/support/after-sales-service-scope.md) 的结构化摘要；
+- 如需程序化集成，可解析 `https://dash.aliyun.com/api/v1/models/<model-id>/support`（需认证），响应格式为 JSON，字段语义与上述关键参数一致。
 
 ## 限制和注意事项
 
-- 单日调用频次上限为 100 次/项目（按 `project_id` 维度计费），超出后返回 `429 Too Many Requests`；
-- `request_id` 仅保留最近 7 天的有效记录，过期请求将返回空诊断；
-- 所有 `support` 返回数据均受 [相关协议](../../raw/model-user-guide/support/related-agreements.md) 约束，禁止用于训练或模型逆向工程；
-- 若请求中 `request_id` 对应的原始调用发生在异步批处理任务中，`support` 将无法关联子任务日志，此时需改用批处理专用诊断接口（见 [模型列表](../../raw/model-user-guide/support/model-studio-model-list.md) 中“批量推理”章节）。
+- 不支持按地域、部署方式（公有云/专有云/VPC）筛选模型支持状态；
+- 所有协议类内容（如版权归属、商用限制）以 [相关协议](../../raw/model-user-guide/support/related-agreements.md) 最终文本为准，控制台摘要不构成法律承诺；
+- 模型下线通知提前 30 天通过站内信推送，但 [售后说明](../../raw/model-user-guide/support/after-sales-service-scope.md) 中未明确下线模型的技术支持终止时间，建议在迁移计划中预留缓冲期。
 
 ## 来源文档
 

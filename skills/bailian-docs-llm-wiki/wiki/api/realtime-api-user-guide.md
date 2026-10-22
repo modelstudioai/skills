@@ -1,50 +1,41 @@
 # realtime api user guide
 
-Realtime API 是百炼平台提供的低延迟、流式语音交互接口，适用于实时语音识别（ASR）、语音合成（TTS）与多模态对话等场景。它基于 WebSocket 协议实现双向流式通信，支持端到端毫秒级响应。该接口不经过传统 REST 请求-响应周期，需按协议规范建立并维护长连接。
+Realtime API 是百炼平台提供的低延迟、流式双向通信接口，适用于语音交互、实时对话、音视频场景下的模型调用。它基于 WebSocket 协议实现，支持服务端主动推送事件（如 `audio_chunk`、`tool_call`、`interrupt`），并允许客户端在会话中动态插入指令或中断。该接口不兼容传统 REST 调用方式，需使用专用 SDK 或原生 WebSocket 客户端接入。
 
 ## 支持的模型与功能
 
-当前 Realtime API 支持以下核心能力：
-- 实时语音识别（ASR）：支持中文普通话、英文及部分方言，采样率 16kHz，PCM/WAV 格式输入；
-- 实时语音合成（TTS）：支持音色定制与语速/语调调节，输出为 PCM 流；
-- 混合交互模式（ASR+LLM+TTS）：可启用 `enable_interactive_mode: true` 实现边说边思考边读的全链路流式响应。
+当前 Realtime API 仅支持以下模型：`qwen-audio-20241015`、`qwen-vl-20241015` 和 `qwen2-audio-20241101`（详见 [Realtime API](../../raw/model-api-reference/realtime-api-user-guide.md)）。所有模型均默认启用音频流式输入/输出、多轮上下文保持、工具调用（Tool Calling）及实时中断响应能力。视觉模型（如 `qwen-vl-20241015`）额外支持帧级图像上传与同步推理，但暂不支持纯文本会话模式——即必须携带 `input.audio` 或 `input.video` 字段，否则连接将被拒绝。
 
-所支持的具体模型列表详见 [Realtime API](../../raw/model-api-reference/realtime-api-user-guide.md) 的“接入模型与应用”章节，其中明确列出 `qwen-audio-realtime-v1` 和 `qwen-tts-realtime-v2` 为当前 GA 版本模型。> **注意**：文档中提及的 `qwen-asr-realtime-beta` 已于 v2.3.0 版本下线，实际调用将返回 404；请以 [快速开始](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide.md) 中的模型 ID 为准。
+> **注意**：原始文档中 [快速开始](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide.md) 示例使用了已下线的 `qwen-audio-20240715` 模型，实际调用请以 [接入模型与应用](../../raw/model-api-reference/realtime-api-user-guide/realtime-model-connection.md) 中列出的当前可用模型为准。
 
 ## 关键参数
 
-建立 WebSocket 连接时，必需在 URL 查询参数中指定：
-- `model`: 模型标识符（如 `qwen-audio-realtime-v1`）；
-- `api_key`: 有效且具备 `realtime_api` 权限的 API Key；
-- `sample_rate`: 输入音频采样率（仅 ASR/TTS 场景需匹配，推荐 `16000`）；
-- `response_format`: 可选 `json`（结构化事件）或 `binary`（原始音频流），默认 `json`。
+建立连接时需在 WebSocket URL 中携带以下必需查询参数：
 
-消息体中关键字段包括：
-- `audio`: Base64 编码的原始 PCM 数据（小端、16bit）；
-- `stream_id`: 客户端生成的 UUID，用于关联请求与响应事件；
-- `enable_interactive_mode`: 布尔值，启用后服务端将按 token 粒度推送 `text_delta` 与 `audio_chunk` 事件。
+- `model`: 模型 ID（如 `qwen2-audio-20241101`），必须与 [接入模型与应用](../../raw/model-api-reference/realtime-api-user-guide/realtime-model-connection.md) 所列一致  
+- `api_key`: 有效百炼平台 API Key（非 AccessKey）  
+- `response_format`: 可选，取值为 `json`（默认）或 `binary`（用于原始 PCM 音频流）  
+- `stream`: 固定为 `true`，不可省略  
 
-完整参数定义参见 [AOQ客户端SDK](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-aoq-api.md) 文档中的 `RealtimeRequest` 接口说明。
+首次发送的 `session.update` 消息中，`turn_detection` 配置决定语音断句策略；`tools` 数组定义可调用函数，其 schema 必须符合 OpenAI 兼容格式。
 
 ## 使用方式
 
-1. 构造 WebSocket 连接 URL：`wss://dashscope.aliyuncs.com/realtime/v1/audio?model=qwen-audio-realtime-v1&api_key=...`  
-2. 发送 `session.start` 控制事件初始化会话（含语言、角色等配置）；  
-3. 持续发送 `input.audio` 事件流式上传音频帧（建议每帧 20–40ms）；  
-4. 监听 `output.text_delta`、`output.audio_chunk` 等事件，按 `stream_id` 聚合响应；  
-5. 主动发送 `session.end` 或等待超时自动断连。
+1. 构造 WebSocket 连接 URL：`wss://dashscope.aliyuncs.com/realtime/v1?model={model}&api_key={key}&stream=true`  
+2. 发送 `session.update` 初始化会话（含系统提示、工具定义等）  
+3. 发送 `input.audio` 或 `input.video` 帧数据（Base64 编码或二进制分片）  
+4. 处理服务端返回的 `output.audio`、`response.text.delta`、`tool_use` 等事件  
 
-示例代码与错误码映射见 [快速开始](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide.md)。注意：重连机制需由客户端实现，服务端不维护连接状态。
+推荐使用官方 AOQ 客户端 SDK（Python/JS），其自动处理重连、帧编码、事件解析和中断信号转发。SDK 使用方法详见 [AOQ客户端SDK](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-aoq-api.md)。
 
 ## 限制和注意事项
 
-- 单连接最大持续时长：180 秒（含静默期），超时后连接关闭且不触发 `session.end` 事件；  
-- 音频帧间隔建议 ≤ 50ms，间隔过长（>200ms）可能导致 ASR 误切句；  
-- 不支持 HTTP/2 或 gRPC，仅限标准 WebSocket（`wss://`）；  
-- `audio_chunk` 输出为裸 PCM（16kHz, 16bit, mono），无 WAV 头，客户端需自行封装；  
-- 同一 `api_key` 并发连接数上限为 10，超出将拒绝新连接（HTTP 429）。
+- 单次会话最长持续 300 秒，超时后连接关闭且不自动续期  
+- 音频输入采样率必须为 16kHz、单声道、PCM 编码（`int16`），否则触发 `invalid_input_format` 错误  
+- 同一 `api_key` 并发连接数上限为 10，超出将返回 `429 Too Many Connections`  
+- 不支持 HTTP/2 或 Server-Sent Events（SSE）替代方案；REST 封装层（如 `/v1/realtime/chat`）仅为文档占位，实际不可用  
 
-> **注意**：[概述](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-overview.md) 中提到的“支持自定义 VAD 端点检测”尚未开放，当前 VAD 完全由服务端控制，`vad_enabled` 参数暂无效。
+> **注意**：[概述](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-overview.md) 中提及“支持自定义语音合成音色”，该能力尚未上线，当前所有 `output.audio` 均使用固定 TTS 声音，此描述已过时。
 
 ## 来源文档
 

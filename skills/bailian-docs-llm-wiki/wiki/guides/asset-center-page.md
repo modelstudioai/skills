@@ -1,47 +1,46 @@
 # asset center page
 
-资产中心是百炼平台中统一管理模型资产（如微调模型、推理服务、Prompt 模板等）的核心页面，为开发者提供可视化操作界面与标准化 API 接口。所有通过控制台或 SDK 创建的模型相关资产均在此集中展示、检索和生命周期管理。该页面不直接执行推理，而是作为资产元数据与部署状态的聚合视图。
+资产中心是百炼平台统一管理模型生成图片与视频资产的核心控制台页面，提供筛选、收藏、删除、OSS 转存及 API 引用等能力。所有资产默认持久化于百炼平台存储（限时免费），用户可通过控制台或 API 全生命周期管理资产。详细设计与行为规范请参见 [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md)。
 
 ## 支持的模型/功能
 
-- 微调模型（Fine-tuned Models）：支持 Qwen 系列（Qwen1.5、Qwen2、Qwen2.5）、Baichuan2、GLM4 等主流开源基座的 LoRA/Full 微调产物  
-- 推理服务（Inference Endpoints）：已部署的 HTTP 服务实例，含自动扩缩容状态与健康指标  
-- Prompt 工程资产：结构化 Prompt 模板（含变量占位符与示例）、Prompt 版本快照及 A/B 测试配置  
-- 向量库关联项：绑定至 RAG 应用的向量数据库索引（仅显示绑定关系，非管理入口）  
-详情见 [资产中心](../../raw/model-user-guide/asset-center-page.md) 的能力边界说明。
+资产中心当前支持管理以下模型生成的**图片与视频资产**（不支持音频）：  
+`qwen-image-3.0-pro`、`qwen-image-3.0`、`qwen-image-2.0-pro-2026-06-22`、`qwen-image-2.0-pro-2026-04-22`、`qwen-image-2.0-pro`、`qwen-image-2.0`、`qwen-image-2.0-2026-03-03`、`z-image-turbo`、`wan2.7-image-pro`、`wan2.7-image`、`wan2.7-videoedit`、`wan2.7-r2v`、`wan2.7-i2v`、`wan2.7-t2v`。  
+> **注意**：模型列表动态更新，实际可用模型以 [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md) 控制台实时展示为准，文档中列举的带时间后缀的模型（如 `2026-06-22`）可能已下线或被新版替代，请优先以控制台为准。
+
+核心功能包括：按类型/模型/时间/提示词筛选、收藏与“只看收藏”视图、批量删除与回收站管理（保留 30 天）、OSS 自动转存（含路径模板与释放策略）、以及通过 `asset_id` 在 API 中直接引用资产。
 
 ## 关键参数
 
-| 参数名 | 类型 | 必填 | 说明 |
-|--------|------|------|------|
-| `asset_type` | string | 是 | 取值：`fine_tuned_model` / `endpoint` / `prompt_template` / `vector_index_ref` |
-| `status` | string | 否 | 过滤状态：`active` / `failed` / `pending` / `deleting`；默认返回全部 |
-| `page` / `page_size` | integer | 否 | 分页参数，`page_size` 最大支持 100，超出将被截断 |
-| `sort_by` | string | 否 | 支持 `created_at`（默认）、`updated_at`、`name` |
-
-> **注意**：文档 [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md) 中列出的 `sort_by=last_used` 已于 v3.2.0 下线，实际调用将忽略该字段并按 `created_at` 回退 —— 请以 [资产中心](../../raw/model-user-guide/asset-center-page.md) 的最新接口定义为准。
+- `asset_id`：全局唯一资产标识符，用于 API 输入（替代 `image_url` 或 `image_base64`），在资产详情弹窗中可见；  
+- OSS 路径模板：默认 `{workspace}/{yyyy}/{mm}/{model}/{id}.{ext}`，其中 `{workspace}` 为当前业务空间 ID；  
+- 转存范围策略：支持「全部资产」或「N 天前资产」，并可选是否勾选「释放平台存储」；  
+- 平台存储配额：默认 5 GB 免费额度，超限部分按 0.15 元/GB/月计费；  
+- 回收站保留期：固定 30 天，期间仍占用平台存储容量，期满自动永久清除。
 
 ## 使用方式
 
-- **控制台操作**：登录后进入「模型服务」→「资产中心」，支持按类型筛选、关键词搜索（匹配 `name` 和 `description`）、批量导出元数据（JSON 格式）  
-- **API 调用**：调用 `GET /v3/assets`（需 `Authorization: Bearer <token>`），响应体为分页列表，每项含 `id`、`name`、`asset_type`、`status`、`created_at` 等标准字段  
-- **SDK 示例（Python）**：
-  ```python
-  from alibabacloud_bailian20231229 import models as bailian_models
-  client = bailian_models.Client(...)
-  req = bailian_models.ListAssetsRequest(asset_type="endpoint", status="active")
-  resp = client.list_assets(req)
-  ```
+1. **开通与访问**：首次使用需访问 [资产中心](https://bailian.console.aliyun.com/cn-beijing/model/asset-center) 并点击「立即开通」；  
+2. **OSS 绑定**：右上角「绑定 OSS」→ 授权 SLR 角色 `AliyunServiceRoleForBailianAssetForward` → 选择未开启版本控制的 Bucket 及目录 → 配置转存范围与释放策略；  
+3. **资产操作**：  
+   - 筛选：顶部筛选栏支持类型、模型、日期、提示词关键词；  
+   - 收藏：悬停卡片点击星标，勾选「只看收藏」过滤；  
+   - 删除：单选/批量勾选 → 点击删除 → 进入回收站（非立即清除）；  
+   - 查看详情：点击卡片弹出完整元数据（含提示词、参数、生成时间）；  
+4. **API 集成**：调用生图/生视频 API 时，在对应输入字段（如 `reference_image`, `first_frame`）中传入 `"asset_id": "xxx"`，三选一（`asset_id` / `image_url` / `image_base64`）即可。该能力详见 [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md) 的「在 API 中使用资产」章节。
 
 ## 限制和注意事项
 
-- 单次 API 请求最多返回 100 条记录（`page_size=100` 为硬上限），无游标式分页，需配合 `page` 参数遍历  
-- `prompt_template` 类型资产不支持通过 API 删除，仅可在控制台操作（因涉及版本依赖校验）  
-- 向量库索引（`vector_index_ref`）仅作为只读引用展示，其生命周期由向量库模块独立管理，删除资产中心条目不会影响底层向量数据  
-- 所有资产 ID 全局唯一，但命名（`name`）在同类型内允许重复；建议在 `description` 中补充业务标识。更多约束详见 [资产中心](../../raw/model-user-guide/asset-center-page.md) 的“使用限制”章节。
+- **OSS 限制**：不支持已开启版本控制的 Bucket，否则转存失败；  
+- **存储逻辑**：  
+  - 已转存且勾选「释放平台存储」的资产，**不再显示于资产中心列表**，也不计入平台存储用量；  
+  - 回收站内资产在 30 天保留期内**持续占用平台存储并计费**；  
+- **权限隔离**：资产列表按业务空间隔离，但 OSS 转存配置为**全局生效**，切换业务空间不影响已绑定配置；  
+- **数据安全**：平台不承诺因欠费、服务终止或回收站过期导致的数据恢复，[资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md) 明确建议用户及时转存至自有 OSS 或本地备份；  
+- **权限策略**：子账号需至少授予 `AliyunBailianAssetCenterReader` 策略方可查看与删除资产；OSS 配置权限需 `AliyunBailianAssetCenterAdmin`。
 
 ## 来源文档
 
-- [资产中心](../../raw/model-user-guide/asset-center-page.md)
+- [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md)
 
 

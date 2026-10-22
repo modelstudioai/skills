@@ -34,7 +34,7 @@
 
 新版应用评测
 
-支持智能体、工作流和自定义三种类型的评测集，构建适合业务需求的评测体系。详情请参见[新版评测集](raw/application-user-guide/agent-governance/agenteval/agenteval-evaluation/agenteval-evaluation-set.md)。
+支持智能体、工作流和自定义三种类型的评测集，构建适合业务需求的评测体系。详情请参见[新版评测集](raw/_short/agenteval-evaluation-set-946c810bda606877.md)。
 
 **1月**
 

@@ -69,16 +69,14 @@
 
 -   **实时语音识别**：
     
-    -   **Qwen-Audio-3.1-ASR-Flash-Streaming：**qwen-audio-3.1-asr-flash-streaming
-    -   **Qwen-Audio-3.0-ASR-Flash-Streaming：**qwen-audio-3.0-asr-flash-streaming
+    -   **Qwen-Audio-ASR-Message：**qwen-audio-3.1-asr-flash-message
+    -   **Qwen-Audio-ASR-Streaming：**qwen-audio-3.1-asr-flash-streaming、qwen-audio-3.0-asr-flash-streaming
     -   **Fun-ASR-Realtime**：fun-asr-realtime、fun-asr-realtime-2026-02-28、fun-asr-flash-8k-realtime、fun-asr-flash-8k-realtime-2026-01-28
     -   **Paraformer**：paraformer-realtime-v2、paraformer-realtime-8k-v2
 -   **非实时语音识别**：
     
-    -   **Qwen-Audio-3.1-ASR-Flash-Filetrans：**qwen-audio-3.1-asr-flash-filetrans
-    -   **Qwen-Audio-3.0-ASR-Flash-Filetrans：**qwen-audio-3.0-asr-flash-filetrans
-    -   **Qwen-Audio-3.1-ASR-Flash**：qwen-audio-3.1-asr-flash
-    -   **Qwen-Audio-3.0-ASR-Flash**：qwen-audio-3.0-asr-flash
+    -   **Qwen-Audio-ASR-Filetrans：**qwen-audio-3.1-asr-flash-filetrans、qwen-audio-3.0-asr-flash-filetrans
+    -   **Qwen-Audio-ASR**：qwen-audio-3.1-asr-flash、qwen-audio-3.0-asr-flash
     -   **Fun-ASR-Flash**：fun-asr-flash-2026-06-15
     -   **Fun-ASR**：fun-asr
     -   **Paraformer：**paraformer-v2、paraformer-8k-v2
@@ -89,15 +87,13 @@
 
 -   **实时语音识别**：
     
-    -   **Qwen-Audio-3.1-ASR-Flash-Streaming：**qwen-audio-3.1-asr-flash-streaming
-    -   **Qwen-Audio-3.0-ASR-Flash-Streaming：**qwen-audio-3.0-asr-flash-streaming
+    -   **Qwen-Audio-ASR-Message：**qwen-audio-3.1-asr-flash-message
+    -   **Qwen-Audio-ASR-Streaming：**qwen-audio-3.1-asr-flash-streaming、qwen-audio-3.0-asr-flash-streaming
     -   **Fun-ASR-Realtime**：fun-asr-realtime
 -   **非实时语音识别**：
     
-    -   **Qwen-Audio-3.1-ASR-Flash-Filetrans：**qwen-audio-3.1-asr-flash-filetrans
-    -   **Qwen-Audio-3.0-ASR-Flash-Filetrans：**qwen-audio-3.0-asr-flash-filetrans
-    -   **Qwen-Audio-3.1-ASR-Flash**：qwen-audio-3.1-asr-flash
-    -   **Qwen-Audio-3.0-ASR-Flash**：qwen-audio-3.0-asr-flash
+    -   **Qwen-Audio-ASR-Filetrans：**qwen-audio-3.1-asr-flash-filetrans、qwen-audio-3.0-asr-flash-filetrans
+    -   **Qwen-Audio-ASR**：qwen-audio-3.1-asr-flash、qwen-audio-3.0-asr-flash
     -   **Fun-ASR-Flash**：fun-asr-flash-2026-06-15
     -   **Fun-ASR**：fun-asr
 
@@ -292,7 +288,7 @@ int
 
 是
 
-热词权重。取值范围 \[1, 5\]，推荐 4。权重越高，模型越倾向于输出该词。使用 Qwen-Audio-3.x-ASR-Flash-Streaming、Qwen-Audio-3.x-ASR-Flash-Filetrans、Qwen-Audio-3.x-ASR-Flash 系列模型时，还支持 `weight=50`（超级热词），召回率大幅提升，但超级热词数量最多不超过 50 个。调优参见[调整热词权重](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw08_weight_h3)。
+热词权重。取值范围 \[1, 5\]，推荐 4。权重越高，模型越倾向于输出该词。使用 Qwen-Audio-ASR-Message、Qwen-Audio-ASR-Streaming、Qwen-Audio-ASR-Filetrans、Qwen-Audio-ASR 系列模型时，还支持 `weight=50`（超级热词），召回率大幅提升，但超级热词数量最多不超过 50 个。调优参见[调整热词权重](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw08_weight_h3)。
 
 lang
 
@@ -308,7 +304,7 @@ string
 
 即时热词在识别请求中直接传入 `vocabulary` 键值对，本质上也是一组带权重的热词（与预编译热词的词表内容对应），区别仅在于随请求内联传入、无需预先创建热词列表。适用于临时性、会话级别的热词优化。
 
-**重要**即时热词仅支持 Qwen-Audio-3.x-ASR-Flash-Streaming、Qwen-Audio-3.x-ASR-Flash-Filetrans 和 Qwen-Audio-3.x-ASR-Flash 系列模型。对于这些模型，同时配置预编译热词和即时热词时，系统会合并两类热词；合并后超过 2,000 个时，随机选择 2,000 个使用。
+**重要**即时热词仅支持 Qwen-Audio-ASR-Message、Qwen-Audio-ASR-Streaming、Qwen-Audio-ASR-Filetrans 和 Qwen-Audio-ASR 系列模型。对于这些模型，同时配置预编译热词和即时热词时，系统会合并两类热词；合并后超过 2,000 个时，随机选择 2,000 个使用。
 
 ### 支持的模型与地域
 
@@ -318,14 +314,12 @@ string
 
 -   **实时语音识别**：
     
-    -   **Qwen-Audio-3.1-ASR-Flash-Streaming**：qwen-audio-3.1-asr-flash-streaming
-    -   **Qwen-Audio-3.0-ASR-Flash-Streaming**：qwen-audio-3.0-asr-flash-streaming
+    -   **Qwen-Audio-ASR-Message**：qwen-audio-3.1-asr-flash-message
+    -   **Qwen-Audio-ASR-Streaming**：qwen-audio-3.1-asr-flash-streaming、qwen-audio-3.0-asr-flash-streaming
 -   **非实时语音识别**：
     
-    -   **Qwen-Audio-3.1-ASR-Flash-Filetrans**：qwen-audio-3.1-asr-flash-filetrans
-    -   **Qwen-Audio-3.0-ASR-Flash-Filetrans**：qwen-audio-3.0-asr-flash-filetrans
-    -   **Qwen-Audio-3.1-ASR-Flash**：qwen-audio-3.1-asr-flash
-    -   **Qwen-Audio-3.0-ASR-Flash**：qwen-audio-3.0-asr-flash
+    -   **Qwen-Audio-ASR-Filetrans**：qwen-audio-3.1-asr-flash-filetrans、qwen-audio-3.0-asr-flash-filetrans
+    -   **Qwen-Audio-ASR**：qwen-audio-3.1-asr-flash、qwen-audio-3.0-asr-flash
 
 #### 新加坡
 
@@ -333,14 +327,12 @@ string
 
 -   **实时语音识别**：
     
-    -   **Qwen-Audio-3.1-ASR-Flash-Streaming**：qwen-audio-3.1-asr-flash-streaming
-    -   **Qwen-Audio-3.0-ASR-Flash-Streaming**：qwen-audio-3.0-asr-flash-streaming
+    -   **Qwen-Audio-ASR-Message**：qwen-audio-3.1-asr-flash-message
+    -   **Qwen-Audio-ASR-Streaming**：qwen-audio-3.1-asr-flash-streaming、qwen-audio-3.0-asr-flash-streaming
 -   **非实时语音识别**：
     
-    -   **Qwen-Audio-3.1-ASR-Flash-Filetrans**：qwen-audio-3.1-asr-flash-filetrans
-    -   **Qwen-Audio-3.0-ASR-Flash-Filetrans**：qwen-audio-3.0-asr-flash-filetrans
-    -   **Qwen-Audio-3.1-ASR-Flash**：qwen-audio-3.1-asr-flash
-    -   **Qwen-Audio-3.0-ASR-Flash**：qwen-audio-3.0-asr-flash
+    -   **Qwen-Audio-ASR-Filetrans**：qwen-audio-3.1-asr-flash-filetrans、qwen-audio-3.0-asr-flash-filetrans
+    -   **Qwen-Audio-ASR**：qwen-audio-3.1-asr-flash、qwen-audio-3.0-asr-flash
 
 ### 快速开始
 
@@ -447,7 +439,7 @@ curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/a
 
 建议从 `weight=4` 起测，根据识别效果逐步调整。
 
-**超级热词（**`weight=50`**）**：预编译热词和即时热词均支持超级热词，但仅 Qwen-Audio-3.x-ASR-Flash-Streaming、Qwen-Audio-3.x-ASR-Flash-Filetrans、Qwen-Audio-3.x-ASR-Flash 系列模型支持。设为 50 时召回率大幅提升，但超级热词数量最多不超过 50 个。
+**超级热词（**`weight=50`**）**：预编译热词和即时热词均支持超级热词，但仅 Qwen-Audio-ASR-Message、Qwen-Audio-ASR-Streaming、Qwen-Audio-ASR-Filetrans、Qwen-Audio-ASR 系列模型支持。设为 50 时召回率大幅提升，但超级热词数量最多不超过 50 个。
 
 ### 设计建议
 
@@ -469,7 +461,7 @@ curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/a
 
 热词数量上限取决于语音识别所用的模型：
 
--   Qwen-Audio-3.x-ASR-Flash-Streaming、Qwen-Audio-3.x-ASR-Flash-Filetrans、Qwen-Audio-3.x-ASR-Flash 系列：最多 2000 个。
+-   Qwen-Audio-ASR-Message、Qwen-Audio-ASR-Streaming、Qwen-Audio-ASR-Filetrans、Qwen-Audio-ASR 系列：最多 2000 个。
     
 -   Fun-ASR-Realtime、Fun-ASR-Flash、Fun-ASR 系列主版本模型：最多 2000 个。
     
@@ -496,15 +488,12 @@ curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/a
 
 -   **实时语音识别**：
     
-    -   **Qwen-Audio-3.1-ASR-Flash-Streaming：**qwen-audio-3.1-asr-flash-streaming
-    -   **Qwen-Audio-3.0-ASR-Flash-Streaming：**qwen-audio-3.0-asr-flash-streaming
+    -   **Qwen-Audio-ASR-Streaming：**qwen-audio-3.1-asr-flash-streaming、qwen-audio-3.0-asr-flash-streaming
     -   **Fun-ASR-Realtime**：fun-asr-realtime
 -   **非实时语音识别**：
     
-    -   **Qwen-Audio-3.1-ASR-Flash-Filetrans：**qwen-audio-3.1-asr-flash-filetrans
-    -   **Qwen-Audio-3.0-ASR-Flash-Filetrans：**qwen-audio-3.0-asr-flash-filetrans
-    -   **Qwen-Audio-3.1-ASR-Flash**：qwen-audio-3.1-asr-flash
-    -   **Qwen-Audio-3.0-ASR-Flash**：qwen-audio-3.0-asr-flash
+    -   **Qwen-Audio-ASR-Filetrans：**qwen-audio-3.1-asr-flash-filetrans、qwen-audio-3.0-asr-flash-filetrans
+    -   **Qwen-Audio-ASR**：qwen-audio-3.1-asr-flash、qwen-audio-3.0-asr-flash
     -   **Fun-ASR-Flash**：fun-asr-flash-2026-06-15
 
 #### 新加坡
@@ -513,15 +502,12 @@ curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/a
 
 -   **实时语音识别**：
     
-    -   **Qwen-Audio-3.1-ASR-Flash-Streaming：**qwen-audio-3.1-asr-flash-streaming
-    -   **Qwen-Audio-3.0-ASR-Flash-Streaming：**qwen-audio-3.0-asr-flash-streaming
+    -   **Qwen-Audio-ASR-Streaming：**qwen-audio-3.1-asr-flash-streaming、qwen-audio-3.0-asr-flash-streaming
     -   **Fun-ASR-Realtime**：fun-asr-realtime
 -   **非实时语音识别**：
     
-    -   **Qwen-Audio-3.1-ASR-Flash-Filetrans：**qwen-audio-3.1-asr-flash-filetrans
-    -   **Qwen-Audio-3.0-ASR-Flash-Filetrans：**qwen-audio-3.0-asr-flash-filetrans
-    -   **Qwen-Audio-3.1-ASR-Flash**：qwen-audio-3.1-asr-flash
-    -   **Qwen-Audio-3.0-ASR-Flash**：qwen-audio-3.0-asr-flash
+    -   **Qwen-Audio-ASR-Filetrans：**qwen-audio-3.1-asr-flash-filetrans、qwen-audio-3.0-asr-flash-filetrans
+    -   **Qwen-Audio-ASR**：qwen-audio-3.1-asr-flash、qwen-audio-3.0-asr-flash
     -   **Fun-ASR-Flash**：fun-asr-flash-2026-06-15
 
 ### 快速开始
@@ -541,7 +527,7 @@ curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/a
 
 #### 非实时语音识别
 
-通过 `input.messages` 传入上下文。其中 `user` 角色 + `input_text` 类型用于传入前几轮的识别结果或领域相关的词表，`assistant` 角色用于传入前几轮大模型的回复内容（可选）。上下文消息置于音频消息之前，详见[非实时语音识别（Qwen-Audio-3.x-ASR-Flash/Fun-ASR-Flash）](raw/_short/fun-asr-flash-recorded-speech-recognition-http-a-ba2d322512e386cb.md)。
+通过 `input.messages` 传入上下文。其中 `user` 角色 + `input_text` 类型用于传入前几轮的识别结果或领域相关的词表，`assistant` 角色用于传入前几轮大模型的回复内容（可选）。上下文消息置于音频消息之前，详见[非实时语音识别（Qwen-Audio-ASR/Fun-ASR-Flash）](raw/_short/fun-asr-flash-recorded-speech-recognition-http-a-ba2d322512e386cb.md)。
 
 传入前几轮的识别结果（`user` / `input_text`）和大模型回复（`assistant` / `text`）。若只需传入领域术语或词表，省略其中的对话历史（`assistant` 消息）即可。
 
@@ -736,8 +722,8 @@ recognizer.getDuplexApi().close(1000, "bye");
 -   [实时语音识别-Fun-ASR-Realtime API参考](raw/_short/fun-asr-real-time-speech-recognition-api-referen-16635189e873e42b.md)
 -   [实时语音识别-Qwen-ASR API参考](raw/_short/qwen-asr-realtime-api-18aa3c2b3386c250.md)
 -   [实时语音识别-Paraformer API参考](raw/_short/paraformer-real-time-speech-recognition-api-refe-79877d5c8ef469f7.md)
--   [非实时语音识别-Qwen-Audio-3.x-ASR-Flash-Filetrans/Fun-ASR API参考](raw/_short/fun-asr-recorded-speech-recognition-api-referenc-cdd1d2e565f281cc.md)
--   [非实时语音识别-Qwen-Audio-3.x-ASR-Flash/Fun-ASR-Flash API参考](raw/_short/fun-asr-flash-recorded-speech-recognition-http-a-ba2d322512e386cb.md)
+-   [非实时语音识别-Qwen-Audio-ASR-Filetrans/Fun-ASR API参考](raw/_short/fun-asr-recorded-speech-recognition-api-referenc-cdd1d2e565f281cc.md)
+-   [非实时语音识别-Qwen-Audio-ASR/Fun-ASR-Flash API参考](raw/_short/fun-asr-flash-recorded-speech-recognition-http-a-ba2d322512e386cb.md)
 -   [非实时语音识别-Qwen-ASR API参考](raw/_short/qwen-asr-api-reference-60b7c9eb88d7f83b.md)
 -   [非实时语音识别-Paraformer API参考](raw/_short/paraformer-recorded-speech-recognition-api-refer-8ca94e9578cc12b7.md)
 
@@ -759,7 +745,7 @@ recognizer.getDuplexApi().close(1000, "bye");
 -   **实时语音识别**：在 Recognition 或 WebSocket 连接参数中传入 `vocabulary_id`。
 -   **录音文件识别**：在 Transcription 请求参数中传入 `vocabulary_id`。
 
-两种场景的 `target_model` 都必须与实际调用的语音识别模型一致。即时热词无需创建列表和指定 `target_model`，直接在请求参数中传入 `vocabulary` 键值对即可。对于支持即时热词的 Qwen-Audio-3.x-ASR-Flash-Streaming、Qwen-Audio-3.x-ASR-Flash-Filetrans 和 Qwen-Audio-3.x-ASR-Flash 系列模型，同时配置预编译热词和即时热词时，系统会合并两类热词；合并后超过 2,000 个时，随机选择 2,000 个使用。
+两种场景的 `target_model` 都必须与实际调用的语音识别模型一致。即时热词无需创建列表和指定 `target_model`，直接在请求参数中传入 `vocabulary` 键值对即可。对于支持即时热词的 Qwen-Audio-ASR-Message、Qwen-Audio-ASR-Streaming、Qwen-Audio-ASR-Filetrans 和 Qwen-Audio-ASR 系列模型，同时配置预编译热词和即时热词时，系统会合并两类热词；合并后超过 2,000 个时，随机选择 2,000 个使用。
 
 ### Q：除了热词和上下文增强，还有哪些方式可以提升识别准确率？
 

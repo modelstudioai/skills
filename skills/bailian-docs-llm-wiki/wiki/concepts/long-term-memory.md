@@ -1,44 +1,43 @@
 # 长期记忆
 
-长期记忆（Long Term Memory, LTM）是百炼平台提供的**跨会话、结构化、用户级**的记忆管理能力，用于持久化存储和语义化检索用户事实性信息（如订单、地址、偏好事件）与静态画像特征（如语言习惯、兴趣标签），独立于单次对话上下文，支撑个性化、一致性和状态感知型智能交互。
+长期记忆（Long Term Memory）是百炼平台提供的**结构化、用户级、可检索的持久化记忆服务**，用于跨会话、跨请求地存储和复用关键业务事实与用户画像信息。它独立于对话 session 生命周期，以 `user_id` 为隔离核心，支持语义检索、异步抽取与模板驱动的结构化建模。
 
-## 在百炼平台的不同场景中如何使用
+## 在百炼平台的不同场景中，这个概念如何使用
 
-长期记忆在平台中存在三种技术形态，面向不同架构层级和使用诉求，开发者需根据模型类型、调用方式与功能需求选择适配方案：
+- **Agent 运行时上下文注入**：在 `agent context` 中配置 `"memory_type": "user"` 并传入 `user_id`，平台将自动从长期记忆中检索匹配该用户的最新事实节点（`observation`/`skill`）和画像数据（`profile`），注入到当前推理上下文中，提升响应一致性与个性化能力。
+  
+- **智能体应用开发（Flow Agent）**：通过组件类 API（如 `/add-async`、`/memory_nodes/search`）直接管理记忆生命周期；旧版 `Memory`/`MemoryNode` 接口已标记为遗留，新项目应统一使用 `long-term-memory-new` 体系。
 
-- **Agent 场景（`qwen-agent-2.5+`）**：通过 `context_config.memory_library_id` 声明记忆库 ID，启用自动化的**会话级记忆注入**。该模式下，Agent 在每次调用时自动从指定记忆库中检索与当前 `session_id` 和 `user_id` 关联的近期记忆片段（基于 LRU 缓存策略），并作为上下文注入提示词。适用于多轮协作型 Agent，无需手动调用记忆 API，但仅支持读取，不开放写入控制。
+- **RAG 增强与行为建模**：长期记忆中的 `skill` 类型记忆可作为可复用的工具行为（如“用户习惯用语音下单”“偏好夜间客服”），被 Agent 主动调用或由 RAG 检索结果触发；`observation` 则沉淀关键事件（如“用户投诉物流延迟”），支撑后续风险识别与服务干预。
 
-- **通用大模型调用场景（`qwen-max`/`qwen-plus`/`qwen-turbo`）**：通过独立 `/v1/memory` 系列 REST API（`write`/`query`/`clear`）进行**显式、细粒度记忆操作**。必须携带 `user_id` 实现数据隔离，支持区分 `fact`（默认 TTL 30 天）与 `profile`（默认 TTL 1 年）两类记忆，适用于需自主控制记忆生命周期、构建用户档案或实现个性化推荐的业务逻辑。
+- **治理与可观测性闭环**：记忆写入与检索行为自动上报至 `Agent Governance` 的 Trace 数据流，可用于分析记忆命中率、画像更新时效性、抽取准确率等质量指标，支撑评测集构建与优化迭代。
 
-- **Managed Agents 场景**：通过 `Memory Store` 组件提供**键值对 + TTL 的轻量级持久化存储**，由 Agent 运行时自动管理（如 `session_id` 绑定的临时状态）。该能力不支持自然语言查询，仅支持精确 key 查询与过期自动清理，适用于技能编排中的中间状态暂存（如表单填写进度、多步任务上下文），与前述两种“长期记忆”在语义、API 和用途上正交，建议避免混淆。
-
-> ⚠️ 注意：三者互不兼容——Agent 的 `memory_library_id` 不能指向 `/v1/memory` 创建的记忆库；`/v1/memory` 写入的内容不会被 Agent 自动检索；Managed Agents 的 `Memory Store` 不接入统一记忆服务。
+> ⚠️ 注意：同步 `/add` 接口仅适用于 `extract_scene=efficient` 场景；若需 `intelligent` 抽取（含技能识别、多轮意图聚合、深度画像生成），必须使用 `/add-async` + 轮询事件状态，否则可能超时失败。
 
 ## 关键参数和配置
 
-| 参数 | 所属场景 | 类型 | 说明 |
-|------|----------|------|------|
-| `memory_library_id` | Agent Context | string | 指向控制台创建的「记忆库」ID；需提前授权并发布；启用后自动注入相关记忆片段 |
-| `user_id` | `/v1/memory` API | string | 必填，用于严格隔离用户数据；建议使用业务系统用户 ID（如 `uid_12345`），不可为空或泛化值（如 `"guest"`） |
-| `memory_type` | `/v1/memory` API | `"fact"` 或 `"profile"` | 必填；决定存储结构、默认 TTL 和检索权重；二者不可混存于同一写入请求 |
-| `ttl_seconds` | `/v1/memory` API | integer | 可选；`fact` 默认 2592000（30 天），`profile` 默认 31536000（1 年）；设为 `0` 表示永不过期（受配额约束） |
-| `metadata` | `/v1/memory` API | object | 可选；最多 10 对字符串键值，仅用于 `query` 时的过滤条件（如 `{"source": "crm"}`），不参与语义匹配 |
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `user_id` | Body / Query | string | ✅ | 记忆隔离主键，所有读写操作必需；需符合正则 `^[a-zA-Z0-9_-]{4,64}$` |
+| `extract_scene` | Body | string | ❌ | `efficient`（默认，低延迟）或 `intelligent`（高精度，需异步）；决定抽取能力边界 |
+| `profile_schema` | Body | string | ❌ | 指定已创建的用户画像模板 ID，传入后触发结构化属性抽取（如年龄、职业） |
+| `plan_version` | Body / Query | string | ❌ | `pro`（默认，支持 `min_score` 过滤、高级 Rerank、深度画像）或 `lite`（基础能力） |
+| `top_k` / `min_score` | Body | integer / number | ❌ | 仅 `SearchMemory` 接口有效：`top_k` 控制召回数量（默认 10）；`min_score` 仅 `plan_version=pro` 时生效（默认 0.3） |
+| `project_ids` | Body | array of string | ❌ | 最多 5 个，用于二级业务隔离（如区分 App/小程序/客服系统）；与 `project_id` 互斥 |
 
-- **配额限制（`/v1/memory`）**：单 `user_id` 下，`fact` 最多 1000 条，`profile` 最多 100 条；超出返回 `400 Bad Request`。
-- **Agent 记忆缓存**：最大会话数 10,000，超限自动淘汰最久未访问项（LRU）；无单用户条目数限制，但受总容量约束。
+## 面向开发者，简洁实用
 
-## 开发者提示
-
-- ✅ **优先选型**：若使用 `qwen-agent-2.5+` 且只需读取历史信息 → 配置 `context_config.memory_library_id`；若需写入、更新或构建用户画像 → 必须调用 `/v1/memory` API。
-- ✅ **安全合规**：所有 `/v1/memory` 写入内容默认不参与训练、不出现在日志/审计导出中，但开发者须确保 `content` 字段已脱敏（如掩码手机号、哈希邮箱）。
-- ❌ **禁止嵌套**：不要在 Connector 返回内容、RAG 检索结果或 Prompt 模板中动态拼接 `/v1/memory/query` 结果——所有记忆操作必须在应用层显式发起。
-- 📌 **调试建议**：首次集成时，先用 `POST /v1/memory/write` 写入测试记忆，再用 `POST /v1/memory/query` 验证检索效果（如 query_text=`"用户住在哪？"`），确认 `user_id` 和 `memory_type` 匹配无误后再接入 Agent 或业务流。
+- ✅ **首选异步写入**：批量导入、含图片/多轮消息、需 `intelligent` 抽取时，务必用 `/add-async` → 获取 `event_id` → 轮询 `/events/{event_id}` 直到 `status=success`。
+- ✅ **画像模板先行**：先调用 `/profile_schemas` 创建 schema，再在 `AddMemory` 请求中传 `profile_schema`，否则画像抽取不生效。
+- ✅ **检索即用**：`/memory_nodes/search` 传 `user_id` + 查询文本（`messages`），无需预加载或初始化，返回结构化 JSON 节点数组。
+- ❌ **勿混用旧接口**：`flow-agent-api` 中的 `CreateMemory` 等旧版记忆接口已废弃，新项目禁止使用。
+- 🔑 **鉴权与 Endpoint**：使用业务空间专属域名（`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory`）+ `DASHSCOPE_API_KEY`，非通用 DashScope 网关地址。
 
 ## 关联主题页
 
-- [agent context](../guides/agent-context.md)
 - [long term memory new](../api/long-term-memory-new.md)
+- [agent context](../guides/agent-context.md)
 - [flow agent api](../api/flow-agent-api.md)
-- [managed agents api](../api/managed-agents-api.md)
+- [agent governance](../guides/agent-governance.md)
 
 

@@ -789,7 +789,31 @@ MiniMax系列（阿里云直供）：MiniMax-M2.5: 0.0；
 -   glm-5.2：不传入 `thinking_budget` 参数时，`max_tokens` 为模型回答与思维链内容之和的最大 Token 数，模型输出超过此值时生成将提前停止，返回的 `finish_reason` 为 `length`；传入 `thinking_budget` 参数时，`max_tokens` 仅为模型回答的最大 Token 数，思维链部分的 Token 数由 `thinking_budget` 单独控制。
 -   其他模型：模型回答的最大 Token 数（不包含思维链）。若生成内容超过此值，生成将提前停止，返回的 `finish_reason` 为 `length`。
 
-默认值与最大值均为模型的最大输出长度。
+GLM 模型的默认值与最大值如下表所示，其他模型的默认值与最大值均为模型的最大输出长度。
+
+供应方式
+
+模型
+
+默认值
+
+最大值
+
+阿里云直供
+
+glm-5.3、glm-5.2、glm-5.2-fast-preview、glm-5.1、glm-5
+
+65536
+
+131072
+
+智谱直供
+
+ZHIPU/GLM-5.3、ZHIPU/GLM-5.3-Flash、ZHIPU/GLM-5.3-FlashX、ZHIPU/GLM-5.2、ZHIPU/GLM-5.1、ZHIPU/GLM-5
+
+65536
+
+131072
 
 > Java SDK中为**maxTokens**（模型为千问VL/Audio时，Java SDK中为**maxLength，**在 2.18.4 版本之后支持也设置为 maxTokens）\*。\*通过HTTP调用时，请将 **max\_tokens**放入 **parameters** 对象中。
 
@@ -797,9 +821,9 @@ MiniMax系列（阿里云直供）：MiniMax-M2.5: 0.0；
 
 模型输出的最大长度，包含思维链和模型回答。模型输出超过此值时生成将提前停止，返回的 `finish_reason` 为 `length`。
 
-默认值与最大值均为模型的最大输出长度。
+GLM 模型的默认值与最大值见 `max_tokens` 参数中的表格，其他模型的默认值与最大值均为模型的最大输出长度。
 
-与 `max_tokens` 的区别：`max_completion_tokens` 限制模型完整输出（思维链 + 回答），而 `max_tokens` 仅限制回答部分。思考类模型推荐使用 `max_completion_tokens`。
+与 `max_tokens` 的区别：`max_completion_tokens` 始终限制模型完整输出（思维链 + 回答）；`max_tokens` 的具体限制范围随模型及 `thinking_budget` 设置而异，见上文说明。思考类模型推荐使用 `max_completion_tokens`。
 
 支持以下模型：
 
@@ -807,11 +831,11 @@ MiniMax系列（阿里云直供）：MiniMax-M2.5: 0.0；
 -   千问 Plus：Qwen3.5-Plus 及之后的模型
 -   千问 Flash：Qwen3.5-Flash 及之后的模型
 -   Kimi：kimi-k2.5 及其之后推出的Kimi模型
--   GLM：glm-5 及其之后推出的GLM系列模型
+-   GLM：上表所列的阿里云直供和智谱直供模型
 -   MiniMax：MiniMax-M2.5 及之后推出的MiniMax模型
 -   DeepSeek：deepseek-v4-pro 及之后推出的DeepSeek模型
 
-> 以上模型均不包含三方直供模型。
+> 除上表所列的智谱直供 GLM 模型外，以上模型均不包含其他三方直供模型。
 
 > 实际输出 Token 数与设置的 `max_completion_tokens` 值之间最多可能存在 10 个 Token 的误差。
 
@@ -1159,10 +1183,12 @@ Schema 的名称。
 
 **X-DashScope-DataInspection**`string` （可选）
 
-在千问 API 的内容安全能力基础上，是否进一步识别输入输出内容的违规信息。取值如下：
+在千问 API 的内容安全能力基础上，可通过 AI 安全护栏进一步识别输入输出内容的违规信息。参数值为 JSON 字符串，`input` 和 `output` 分别对应输入和输出，取值为 `cip` 时使用 AI 安全护栏进一步识别该方向的违规信息，可分别设置：
 
--   `'{"input":"cip","output":"cip"}'`：进一步识别；
--   不设置该参数：不进一步识别。
+-   `'{"input":"cip","output":"cip"}'`：输入和输出均使用 AI 安全护栏进一步识别；
+-   `'{"input":"cip"}'`：仅对输入使用 AI 安全护栏进一步识别；
+-   `'{"output":"cip"}'`：仅对输出使用 AI 安全护栏进一步识别；
+-   不设置该参数：不启用 AI 安全护栏。
 
 通过 HTTP 调用时请放入请求头：`-H "X-DashScope-DataInspection: {\"input\": \"cip\", \"output\": \"cip\"}"`；
 

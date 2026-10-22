@@ -1,5 +1,6 @@
 # 自媒体 / 内容创作
 
+-   [电影级空镜短片 · 一条提示词出 30 秒 1080P 素材](raw/_short/token-plan-playbook-cinematic-broll-6216407b06bb3343.md)
 -   [儿童趣味动物视频生成](raw/_short/token-plan-playbook-kids-animal-video-bc4af3ec8fbb11c4.md)
 -   [睡前故事配音](raw/_short/token-plan-playbook-bedtime-story-tts-403633337202387f.md)
 -   [个人 IP 头像 / 表情包](raw/_short/token-plan-playbook-ip-avatar-sticker-0ccd0b05e153900f.md)

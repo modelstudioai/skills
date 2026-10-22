@@ -1,29 +1,35 @@
 # get started with models
 
-本文档面向开发者，介绍如何快速开始调用百炼平台提供的大模型服务。核心包括模型选择、API 调用方式、关键参数配置及基础限制说明。所有操作均基于标准 RESTful API 接口，无需额外 SDK 即可集成。
+本文档面向开发者，介绍如何快速开始调用百炼平台提供的大模型服务。核心包括模型选择、API 调用方式、关键参数配置及基础限制说明。所有操作均基于标准 RESTful API 接口，无需安装额外 SDK（但推荐使用官方 SDK 简化鉴权与重试逻辑）。
 
 ## 支持的模型与功能
 
-百炼平台提供多类预训练与微调模型，覆盖文本生成、代码补全、多模态理解等场景。模型列表及能力概览详见 [选择模型](../../raw/model-user-guide/get-started-with-models/models.md)。部分模型支持流式响应、[函数调用](../concepts/function-calling.md)（function calling）和系统提示词（system prompt）设置，具体以各模型文档为准。注意：[产品简介](../../raw/model-user-guide/get-started-with-models/what-is-model-studio.md) 中提及的“实时语音转写模型”当前尚未开放公测，实际可用模型请以控制台或 [选择模型](../../raw/model-user-guide/get-started-with-models/models.md) 页面为准。
+百炼平台当前支持 Qwen 系列（如 `qwen-max`、`qwen-plus`、`qwen-turbo`）、Qwen-VL 多模态模型，以及部分第三方模型（需单独开通权限）。模型能力覆盖文本生成、代码补全、多轮对话、结构化输出（JSON Schema）、流式响应等。完整模型列表及能力说明见 [选择模型](../../raw/model-user-guide/get-started-with-models/models.md)。动态能力（如工具调用、函数执行）需在请求中显式启用 `tools` 字段，并参考 [首次调用千问API](../../raw/model-user-guide/get-started-with-models/first-api-call-to-qwen.md) 中的示例。
 
 ## 关键参数
 
-调用模型 API 时，必需参数包括 `model`（模型 ID）、`input.messages`（消息数组）和认证头 `Authorization: Bearer <api_key>`。推荐显式指定 `parameters.temperature`（默认 1.0）和 `parameters.max_tokens`（默认 1024），避免因平台默认值变更导致行为不一致。地域相关参数（如 `region`）影响接入域名和延迟，需与 [选择地域、服务部署范围和接入域名](../../raw/model-user-guide/get-started-with-models/regions.md) 中声明的可用区域匹配。
+必需参数包括：  
+- `model`: 模型标识符（如 `"qwen-max"`），必须与 [选择模型](../../raw/model-user-guide/get-started-with-models/models.md) 中公布的名称严格一致；  
+- `input.messages`: 非空消息数组，格式为 `[{ "role": "user", "content": "..." }]`；  
+- `parameters.temperature`: 控制随机性（0.0–2.0，默认 1.0），值越低输出越确定；  
+- `parameters.max_tokens`: 输出长度上限（注意：该值不包含输入 token 数，总 token 消耗受配额约束）。
+
+> **注意**：`parameters.top_p` 在部分旧文档中被描述为“默认 0.8”，但最新 [选择模型](../../raw/model-user-guide/get-started-with-models/models.md) 明确其默认值为 `1.0`，以兼容更广义的采样策略，请以该文档为准。
 
 ## 使用方式
 
-1. 在百炼控制台开通模型服务并获取 API Key；  
-2. 根据目标模型确定 Base URL —— 全部可用地址汇总见 [Base URL总览](../../raw/model-user-guide/get-started-with-models/base-url.md)；  
-3. 构造 POST 请求，例如首次调用千问系列模型可参考 [首次调用千问API](../../raw/model-user-guide/get-started-with-models/first-api-call-to-qwen.md) 中的 cURL 示例；  
-4. 建议在生产环境启用重试逻辑（指数退避）并监控 HTTP 状态码（如 429 表示限流）。
+1. **获取凭证**：在百炼控制台创建 API Key（AccessKey ID / Secret），用于 `Authorization: Bearer <api_key>` 请求头鉴权；  
+2. **确定接入点**：根据部署地域选择 Base URL，例如华东 1（杭州）对应 `https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation`；完整域名映射见 [Base URL总览](../../raw/model-user-guide/get-started-with-models/base-url.md) 和 [选择地域、服务部署范围和接入域名](../../raw/model-user-guide/get-started-with-models/regions.md)；  
+3. **发起 POST 请求**：Body 为 JSON，含 `model`、`input`、`parameters` 字段，Content-Type 必须为 `application/json`；  
+4. **处理响应**：成功时返回 `output.text` 或 `output.choices[0].message.content`（取决于接口版本），流式响应需解析 SSE 数据块。
 
 ## 限制和注意事项
 
-- 单次请求 `input.messages` 总长度不得超过 32768 token（按模型 tokenizer 计算）；  
-- 默认 QPS 限制为 5，可通过 [动态限流](../../raw/model-user-guide/get-started-with-models/quota-management.md) 提交配额申请；  
-- > **注意**：[限流](../../raw/model-user-guide/get-started-with-models/rate-limit.md) 文档中描述的“按账户全局限流”已下线，现为“按模型 + 地域维度独立限流”，以 [动态限流](../../raw/model-user-guide/get-started-with-models/quota-management.md) 中的最新规则为准；  
-- 所有模型调用均需通过 HTTPS，HTTP 请求将被拒绝；  
-- 模型输出内容受内容安全策略过滤，敏感结果可能被截断或返回空响应，不可绕过。
+- 单次请求最大输入 token 数因模型而异（`qwen-turbo` 为 8K，`qwen-max` 为 32K），超出将返回 `400 Bad Request`；  
+- 默认调用频次限制为 5 QPS（每秒查询数），可通过 [动态限流](../../raw/model-user-guide/get-started-with-models/quota-management.md) 提交提额申请；  
+- 同一 API Key 下所有模型共享配额，且 [限流](../../raw/model-user-guide/get-started-with-models/rate-limit.md) 规则优先于单模型配额生效；  
+- 不支持跨地域调用（如使用华东 1 的 Key 访问华北 2 域名），否则返回 `403 Forbidden`；  
+- 所有模型均不支持自定义训练权重或 LoRA 微调部署——此为百炼专属模型服务，非开源模型托管平台。
 
 ## 来源文档
 

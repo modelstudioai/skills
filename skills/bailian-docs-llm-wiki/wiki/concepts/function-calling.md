@@ -1,56 +1,40 @@
 # 函数调用
 
-函数调用（Function Calling）是百炼平台支持的一种结构化工具协同机制，允许大模型在生成响应过程中主动识别用户意图、选择并调用预定义的外部函数（如企业微信消息发送、数据库查询、联网搜索等），将非文本能力无缝集成到对话流中。该能力不依赖模型自身执行代码，而是由平台在推理后解析 `tool_calls` 字段，并按约定协议触发对应服务。
+函数调用（Function Calling）是百炼平台中模型主动识别用户意图、并按预定义 Schema 触发外部工具或服务的能力。它使大模型不仅能生成文本，还能在推理过程中动态决定是否需要查询数据库、调用 API、执行计算或与业务系统交互，从而构建可扩展、可落地的智能体（Agent）应用。
 
-## 在百炼平台的不同场景中，这个概念如何使用
+## 在百炼平台的不同场景中如何使用
 
-函数调用在百炼平台中并非统一接口能力，而是按模型类型、API 协议和业务场景差异化支持：
+函数调用能力在百炼平台中主要应用于两类实时交互型 API：
 
-- **通用对话模型（Qwen-Max/Plus/Flash 等）**：通过 OpenAI 兼容 Chat API 或 DashScope 原生 API 启用，需在请求中传入 `tools` 数组（含函数名称、描述、参数 Schema）及可选的 `tool_choice`（如 `"auto"`、`"required"` 或指定函数名）。模型返回 `message.tool_calls`，开发者需自行解析并执行对应函数，再将结果以 `tool_message` 形式拼入下一轮 `messages` 继续调用。
+- **Omni Realtime API**：面向语音助手、会议实时摘要等低延迟多模态场景。通过 `session.update` 事件中的 `tools` 数组声明支持的函数列表，模型在流式响应过程中可输出 `type=function` 的 `tool_use` 事件，携带函数名与参数。开发者需监听该事件并同步执行对应逻辑，再将结果通过 `tool_result` 事件回传给模型继续推理。
 
-- **实时多模态模型（Qwen-Omni-Realtime）**：支持 `type=function` 的工具定义，但与 `enable_search` 互斥；需在 `session.update` 中声明 `tools`，并在语音/文本输入流中由模型动态触发；适用于客服坐席辅助、实时会议工具联动等低延迟场景。
+- **Realtime API（音频/视觉专用）**：适用于 `qwen-audio-20241015`、`qwen-vl-20241015` 等模型。同样通过 `tools` 字段注册函数，但要求所有函数 schema 严格遵循 OpenAI 兼容格式（含 `name`、`description`、`parameters`），且不支持嵌套对象以外的复杂类型（如 `anyOf`、`oneOf`）。模型触发后，服务端以 `tool_use` 事件推送调用请求，客户端须在 5 秒内返回 `tool_result`，否则会话中断。
 
-- **专用模型**：
-  - `tongyi-intent-detect-v3`（意图理解模型）专为函数调用优化，毫秒级输出标准化意图标签或 `tool_calls` 结构，常用于对话路由与 Bot 编排；
-  - `qwen-deep-research` 不支持函数调用，其工具能力（如联网搜索）已内建于两阶段流程中；
-  - `gui-plus` 系列暂未开放自定义函数调用，动作指令由模型直接生成（如 `"click(x=120, y=85)"`）。
-
-- **应用集成场景**：在企业微信、钉钉、微信公众号等 Bot 开发中，函数调用是实现“AI 驱动业务操作”的核心路径。例如，当用户说“把这份合同发给张三”，模型可调用 `work_wechat.send_file` 工具，自动完成文件上传与消息推送。
-
-> ⚠️ 注意：函数调用能力**取决于具体模型与所选 API 协议**。Qwen-Audio 不支持 OpenAI 兼容协议，故无法使用标准 `tool_calls`；`QwQ` 模型忽略 `system` 消息，可能影响工具描述的可见性；所有函数调用均需提前在控制台或 SDK 中完成权限配置（如企业微信 `agent_id` 白名单）。
+> ⚠️ 注意：函数调用**不支持**在标准 Model Experience（`/v1/models/{model}/invoke`）REST API 中使用；也不与联网搜索（`enable_search: true`）共存——二者互斥，启用任一功能时另一项将被忽略。
 
 ## 关键参数和配置
 
-| 参数 | 作用 | 必填 | 说明 |
+| 参数 | 位置 | 类型 | 说明 |
 |------|------|------|------|
-| `tools` | 定义可用函数列表 | 是（启用时） | JSON 数组，每个元素含 `type="function"`、`function.name`、`function.description` 和 `function.parameters`（OpenAPI 3.0 Schema 格式）。DashScope SDK 支持 `tools` 直接传入，[OpenAI 兼容接口](openai-compatible-interface.md)要求严格遵循字段命名。 |
-| `tool_choice` | 控制调用策略 | 否 | 可选值：`"none"`（禁用）、`"auto"`（默认，模型自主决定）、`"required"`（强制调用至少一个函数）、或 `{ "type": "function", "function": { "name": "xxx" } }`（指定函数）。生产环境推荐显式设置，避免行为漂移。 |
-| `parallel_tool_calls` | 是否允许多函数并行调用 | 否 | 仅 Responses API 和 Anthropic Messages API 支持；设为 `true` 时模型可一次返回多个 `tool_call`，提升效率。 |
-| `system` 消息内容 | 提供工具使用上下文 | 推荐 | 在 `messages[0]` 中加入清晰指令，如 `"You are a customer service bot. Always use functions to fulfill user requests."`；部分模型（如 intent-detect-v3）要求 `system` 中包含 `Response in INTENT_MODE.` 才启用函数输出模式。 |
+| `tools` | `session.update` 消息体 | `array` | 必填。函数定义列表，每个元素为 `{ "type": "function", "function": { "name": "...", "description": "...", "parameters": { ... } } }`。`parameters` 需为 JSON Schema object，推荐使用 `required` 字段明确必填字段。 |
+| `tool_choice` | `session.update`（可选） | `string` 或 `object` | 控制调用策略：`"auto"`（默认，由模型自主判断）、`"none"`（禁用）、或 `{ "type": "function", "function": { "name": "xxx" } }`（强制指定函数）。 |
+| `max_tool_calls` | `session.update`（可选） | `integer` | 单次响应中允许触发的最大函数调用次数，默认为 `1`，最大支持 `5`。 |
 
-- **安全与调试提示**：  
-  - 所有 `tool_calls` 输出均为纯文本结构，**不执行任何代码**，需开发者在服务端校验参数、鉴权并调用真实后端；  
-  - 建议对 `function.name` 做白名单校验，防止模型虚构函数名；  
-  - 流式响应中 `tool_calls` 仅在完整响应结束时返回（非逐 token 流出），需等待 `finish_reason="tool_calls"` 后统一处理。
+- 所有函数名（`name`）必须为合法 Python 标识符（仅含字母、数字、下划线，不以数字开头），长度 ≤ 64 字符；
+- `parameters` 中避免使用 `null` 默认值；建议为字符串字段设置 `minLength: 1`，数值字段设置 `minimum`/`maximum` 以提升模型理解准确性；
+- 工具执行结果需通过 `tool_result` 事件回传，其 `tool_call_id` 必须与原始 `tool_use` 中的 ID 完全一致，且 `content` 字段应为字符串（JSON 序列化后的结果亦可，但需确保模型能解析）。
 
-## 面向开发者，简洁实用
+## 面向开发者：简洁实用提示
 
-- ✅ **快速起步**：从 `tongyi-intent-detect-v3` 或 `qwen3.8-max` 开始测试，用 cURL 或 Python SDK 发送含 `tools` 的请求，观察 `response.choices[0].message.tool_calls` 字段；  
-- ✅ **生产建议**：  
-  - 总是设置 `tool_choice="required"`（若业务强依赖工具）或 `"auto"`（若需混合文本+工具响应）；  
-  - 将 `tools` 定义提取为常量，避免硬编码；  
-  - 实现幂等函数执行器——同一 `tool_call.id` 可能因重试重复到达，需去重处理；  
-- ❌ **避坑提醒**：  
-  - 不要将敏感凭证（如 API Key）写入 `function.parameters`，应在服务端通过配置中心注入；  
-  - `qwen-deep-research`、`QwQ`、`Qwen-Audio` 等模型明确不支持标准函数调用，切勿强行传入 `tools`；  
-  - 函数调用不等价于 RAG：`retrieval` 工具需单独配置 `retrieval_config`，且与 `tools` 并存时需注意优先级逻辑。
+- ✅ **快速验证**：在控制台「模型体验」中选择 `qwen3.8-omni-flash-realtime`，开启 WebSocket 调试，粘贴含 `tools` 的 `session.update` 示例，观察 `tool_use` 事件是否如期触发；
+- ✅ **错误排查**：若未触发调用，检查 `tools` 是否在首次 `session.update` 中完整发送、`name` 是否拼写正确、`parameters` 是否为有效 JSON Schema；
+- ❌ **禁止行为**：不要在 `input.text` 或 `input.audio` 中“提示模型调用函数”（如“请调用天气API”）——函数调用由模型自主决策，显式指令反而干扰判断；
+- 📦 **生产建议**：将工具执行逻辑封装为幂等接口，并在 `tool_result` 中返回结构化 JSON（如 `{ "status": "success", "data": {...} }`），便于模型后续提取关键信息生成自然语言回复。
 
 ## 关联主题页
 
-- [get started with models](../guides/get-started-with-models.md)
-- [qwen api reference](../api/qwen-api-reference.md)
+- [model experience](../guides/model-experience.md)
 - [omni realtime api](../api/omni-realtime-api.md)
-- [more models](../api/more-models.md)
-- [application use cases](../guides/application-use-cases.md)
+- [realtime api user guide](../api/realtime-api-user-guide.md)
 
 
