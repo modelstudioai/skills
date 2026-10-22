@@ -103,7 +103,7 @@ curl -X POST "https://modelstudio.cn-beijing.aliyuncs.com/tokenplan/organization
     --header "x-acs-version: 2026-02-10" \
     --header "x-acs-date: 2026-01-01T12:00:00Z" \
     --header "x-acs-content-sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" \
-    --header "x-acs-signature-nonce: 3e3b2a9f0c7d4f8e9a1b2c3d4e5f6a7b" \
+    --header "x-acs-signature-nonce: ${SIGNATURE_NONCE}" \
     --header "Authorization: ACS3-HMAC-SHA256 Credential=${ALIBABA_CLOUD_ACCESS_KEY_ID},SignedHeaders=host;x-acs-action;x-acs-content-sha256;x-acs-date;x-acs-signature-nonce;x-acs-version,Signature=${SIGNATURE}"
 ```
 

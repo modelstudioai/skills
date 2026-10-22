@@ -50,6 +50,7 @@
 -   [glm-5.2](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/glm-5-2.md)
 -   [glm-5.1](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/glm-5-1.md)
 -   [glm-5](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/glm-9.md)
+-   [MiniMax/MiniMax-M3.1-Flash](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/minimax-m3-1-flash.md)
 -   [MiniMax/MiniMax-M3](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/minimax-m3.md)
 -   [MiniMax/MiniMax-M2.7](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/minimax-m2-7.md)
 -   [MiniMax-M2.5](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/minimax-m2-5.md)

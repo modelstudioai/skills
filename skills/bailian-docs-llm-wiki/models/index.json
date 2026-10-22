@@ -1,17 +1,17 @@
 {
   "updatedAt": "2026-10-22",
-  "totalFamilies": 124,
-  "totalModels": 316,
+  "totalFamilies": 125,
+  "totalModels": 320,
   "profileCoverage": {
-    "full": 0,
-    "partial": 0,
-    "structured-only": 316,
+    "full": 283,
+    "partial": 35,
+    "structured-only": 2,
     "none": 0
   },
   "capabilityDistribution": {
     "TG": 30,
+    "VG": 17,
     "IG": 17,
-    "VG": 16,
     "ASR": 11,
     "Reasoning": 10,
     "TTS": 9,
@@ -30,7 +30,7 @@
   "providerDistribution": {
     "qwen": 63,
     "qwen-domain-model": 26,
-    "wan": 12,
+    "wan": 13,
     "mini-max": 4,
     "pixverse": 4,
     "deepseek": 3,
@@ -420,20 +420,21 @@
       "primaryCapability": "TG",
       "capabilities": [
         "TG",
-        "Reasoning",
-        "VU"
+        "VU",
+        "Reasoning"
       ],
       "providers": [
         "mini-max"
       ],
-      "itemCount": 4,
+      "itemCount": 5,
       "items": [
         "MiniMax/MiniMax-M2.1",
         "MiniMax/MiniMax-M2.5",
         "MiniMax/MiniMax-M2.7",
-        "MiniMax/MiniMax-M3"
+        "MiniMax/MiniMax-M3",
+        "MiniMax/MiniMax-M3.1-Flash"
       ],
-      "maxContextWindow": 1000000
+      "maxContextWindow": 1048576
     },
     {
       "slug": "paraformer-8k-v2",
@@ -1988,6 +1989,23 @@
         "wanx2.1-i2v-plus",
         "wanx2.1-i2v-turbo",
         "wanx2.1-kf2v-plus"
+      ]
+    },
+    {
+      "slug": "wan-reference-to-video",
+      "name": "Wan-R2V",
+      "primaryCapability": "VG",
+      "capabilities": [
+        "VG"
+      ],
+      "providers": [
+        "wan"
+      ],
+      "itemCount": 3,
+      "items": [
+        "wan2.6-r2v",
+        "wan2.6-r2v-flash",
+        "wan2.7-r2v"
       ]
     },
     {

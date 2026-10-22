@@ -61,8 +61,8 @@
       "samples": {
         "dashscope": {
           "default": {
-            "python": "# coding=utf-8\n\nimport dashscope\nfrom dashscope.audio.tts_v2 import *\n\n# If the API Key is not configured in the environment variable, your-api-key needs to be replaced with your own API Key\n# dashscope.api_key = \"your-api-key\"\n\ndashscope.base_websocket_api_url='wss://[workspace-id].cn-beijing.maas.aliyuncs.com/api-ws/v1/inference'\n\nmodel = \"qwen-audio-3.1-tts-next\"\n\n#Please enter the correct voice below.\nvoice = \"\"\n\nsynthesizer = SpeechSynthesizer(model=model, voice=voice)\naudio = synthesizer.call(\"How is the weather today?\")\n\nwith open('output.mp3', 'wb') as f:\n    f.write(audio)",
-            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/realtime-tts-user-guide"
+            "python": "# coding=utf-8\n# pip install requests\n\nimport os\nimport requests\n\nresponse = requests.post(\n    \"https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/SpeechSynthesizer\",\n    headers={\n        \"Authorization\": f\"Bearer {os.environ['DASHSCOPE_API_KEY']}\",\n        \"Content-Type\": \"application/json\",\n    },\n    json={\n        \"model\": \"qwen-audio-3.1-tts-next\",\n        \"input\": {\n            \"text_prompt\": '一位女性清晰地说：“你好，欢迎使用。”',\n            \"format\": \"wav\",\n        },\n    },\n    timeout=300,\n)\nresponse.raise_for_status()\naudio_url = response.json()[\"output\"][\"audio\"][\"url\"]\naudio_response = requests.get(audio_url, timeout=60)\naudio_response.raise_for_status()\nwith open(\"output.wav\", \"wb\") as f:\n    f.write(audio_response.content)",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/audio-generation-api"
           }
         }
       }

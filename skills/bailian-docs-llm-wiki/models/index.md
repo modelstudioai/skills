@@ -1,6 +1,6 @@
 # 百炼模型市场索引
 
-> 自动生成 · 共 124 个模型家族 · 316 个主干模型 · 更新于 2026-10-22
+> 自动生成 · 共 125 个模型家族 · 320 个主干模型 · 更新于 2026-10-22
 
 **机器查询走结构化文件**：
 
@@ -34,7 +34,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [MiMo文本模型](groups/xiaomi-models-market-place.json) — 由小米MiMo提供的MiMo文本模型API服务
   - 模型：`xiaomi/mimo-v2.6-pro-ultraspeed`
 - [MiniMax文本模型](groups/minimax-models-market-place.json) — 由MiniMax提供的MiniMax-M系列文本模型API服务。
-  - 模型：`MiniMax/MiniMax-M2.1`, `MiniMax/MiniMax-M2.5`, `MiniMax/MiniMax-M2.7`, `MiniMax/MiniMax-M3`
+  - 模型：`MiniMax/MiniMax-M2.1`, `MiniMax/MiniMax-M2.5`, `MiniMax/MiniMax-M2.7`, `MiniMax/MiniMax-M3`, `MiniMax/MiniMax-M3.1-Flash`
 - [qwen-deep-research](groups/qwen-deep-research.json) — 千问深入研究是一款面向复杂研究任务的高级智能体系统，具备多轮推理与全局规划能力，能够运用互联网搜索等多种工具，对任务进行精细化拆解，开展推理与分析，最终为用户生成可溯源、逻辑严谨的研究型报告。
   - 模型：`qwen-deep-research`
 - [Qwen-Doc-Turbo](groups/qwen-doc-turbo.json) — 快速对文档进行精准信息抽取，打标分类，内容审核及摘要总结。
@@ -80,6 +80,43 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [意图分类模型](groups/tongyi-intent-detect-v3.json) — 意图识别和槽位填充是对话系统中的基础任务。本模型实现了一个基于 API的意图（intent）和槽位参数（slots）联合预测。在一次模型输出中，同时完成多个指令API的返回和槽位参数的填充。返回的结果…
   - 模型：`tongyi-intent-detect-v3`
 
+## 视频生成 `VG` — 17 个家族
+
+- [HappyHorse-1.0](groups/happyhorse-1.0.json) — 视频生成与编辑系列，支持文生、图生、参考生及自然语言视频编辑，适合常规创作和局部调整。
+  - 模型：`happyhorse-1.0-i2v`, `happyhorse-1.0-r2v`, `happyhorse-1.0-t2v`, `happyhorse-1.0-video-edit`
+- [HappyHorse-1.1](groups/happyhorse-1.1.json) — HappyHorse 新一代视频生成系列，支持文生、图生和参考生视频，全面提升画面质感、主体一致性和动态表现。
+  - 模型：`happyhorse-1.1-i2v`, `happyhorse-1.1-r2v`, `happyhorse-1.1-t2v`
+- [MiniMax视频模型](groups/MiniMax-video-market-place.json) — 由MiniMax提供的MiniMax-H系列视频模型API服务。
+  - 模型：`MiniMax/MiniMax-H3`
+- [PixVerse C1](groups/pixverse-c1-market-place.json) — 由爱诗科技提供的PixVerse C系列视频大模型API服务。
+  - 模型：`pixverse/pixverse-c1-it2v`, `pixverse/pixverse-c1-kf2v`, `pixverse/pixverse-c1-r2v`, `pixverse/pixverse-c1-t2v`
+- [PixVerse Capabilities](groups/pixverse-capability-market-place.json) — 由爱诗科技提供的视频原子能力大模型API服务。
+  - 模型：`pixverse/pixverse-lipsync`, `pixverse/pixverse-motioncontrol`, `pixverse/pixverse-upscale`
+- [PixVerse V5.6](groups/pixverse-market-place.json) — 由爱诗科技提供的PixVerse V系列视频大模型API服务。
+  - 模型：`pixverse/pixverse-v5.6-it2v`, `pixverse/pixverse-v5.6-kf2v`, `pixverse/pixverse-v5.6-r2v`, `pixverse/pixverse-v5.6-t2v`
+- [PixVerse V6](groups/pixverse-v6-market-place.json) — 由爱诗科技提供的PixVerse V系列视频大模型API服务。
+  - 模型：`pixverse/pixverse-v6-it2v`, `pixverse/pixverse-v6-kf2v`, `pixverse/pixverse-v6-r2v`, `pixverse/pixverse-v6-r2v-omni`, `pixverse/pixverse-v6-t2v`
+- [Vidu AI生视频](groups/vidu-models-market-place.json) — 由生数科技提供Vidu系列视频生成API服务，电影级画质、一致性保持、精准可控。
+  - 模型：`vidu/viduq2_reference2video`, `vidu/viduq2_text2video`, `vidu/viduq2-pro_img2video`, `vidu/viduq2-pro_reference2video`, `vidu/viduq2-pro_start-end2video`, `vidu/viduq2-pro-fast_img2video`, `vidu/viduq2-turbo_img2video`, `vidu/viduq2-turbo_start-end2video`, `vidu/viduq3_reference2video`, `vidu/viduq3-ad_reference2video`, `vidu/viduq3-drama_reference2video`, `vidu/viduq3-mix_reference2video`, `vidu/viduq3-pro_img2video`, `vidu/viduq3-pro_start-end2video`, `vidu/viduq3-pro_text2video`, `vidu/viduq3-pro-fast_img2video`, `vidu/viduq3-turbo_img2video`, `vidu/viduq3-turbo_reference2video`, `vidu/viduq3-turbo_start-end2video`, `vidu/viduq3-turbo_text2video`
+- [Wan-I2V](groups/wan-image-to-video.json) — 图片生成视频内容，稳定保持图像主体、风格和文字等细节信息
+  - 模型：`wan2.2-animate-mix`, `wan2.2-animate-move`, `wan2.2-i2v-flash`, `wan2.2-i2v-plus`, `wan2.2-kf2v-flash`, `wan2.2-s2v`, `wan2.2-s2v-detect`, `wan2.5-i2v-preview`, `wan2.6-i2v`, `wan2.6-i2v-flash`, `wan2.7-i2v`, `wanx2.1-i2v-plus`, `wanx2.1-i2v-turbo`, `wanx2.1-kf2v-plus`
+- [Wan-R2V](groups/wan-reference-to-video.json) — 参考视频中的人或物，精准保持形象和声音，支持多参考合拍
+  - 模型：`wan2.6-r2v`, `wan2.6-r2v-flash`, `wan2.7-r2v`
+- [Wan-T2V](groups/wan-text-to-video.json) — 文字生成视频内容，丝滑动态能力，电影美学控制，精准指令遵循
+  - 模型：`wan2.2-t2v-plus`, `wan2.5-t2v-preview`, `wan2.6-t2v`, `wan2.7-t2v`, `wanx2.1-t2v-plus`, `wanx2.1-t2v-turbo`
+- [Wan-VideoEdit](groups/wan-video-edit.json) — 通过指令对视频进行编辑，支持局部/整体编辑、视频重塑、视频复刻等
+  - 模型：`wan2.7-videoedit`
+- [Wan2.1-VACE-Plus](groups/wanx2.1-vace-plus.json) — 万相2.1-VACE-Plus，视频编辑统一模型。支持局部编辑、视频重绘、背景扩展、时长延展、图片参考等多种视频编辑与生成任务，支持文本、图像、视频等多模态条件控制。
+  - 模型：`wanx2.1-vace-plus`
+- [Wan3.0-Video](groups/wan-video.json) — 多模态全能参考，灵活可控生成视频内容，轻松实现故事创作、创意表达、营销物料制作等
+  - 模型：`wan3.0-video`, `wan3.0-video-prime`
+- [可灵AI](groups/kling-models-market-place.json) — 由可灵AI提供的高质量视频与图像生成及编辑模型。
+  - 模型：`kling/kling-v3-image-generation`, `kling/kling-v3-omni-image-generation`, `kling/kling-v3-omni-video-generation`, `kling/kling-v3-turbo-video-generation`, `kling/kling-v3-video-generation`
+- [声动人像VideoRetalk](groups/videoretalk.json) — VideoRetalk是一个人物视频生成模型，可基于人物视频和人声音频，生成人物讲话口型与输入音频相匹配的新视频。
+  - 模型：`videoretalk`
+- [视频风格重绘](groups/video-style-transform.json) — 视频风格重绘可以将输入的视频帧序列进行多种风格化的重绘/生成，使新视频画面在兼顾原始人物和物体相貌的同时，带来不同风格的绘画效果。当前支持预置重绘风格包括日式漫画、美式漫画、清新漫画、3D卡通、国风卡…
+  - 模型：`video-style-transform`
+
 ## 图像生成 `IG` — 17 个家族
 
 - [Qwen-Image-2.0](groups/qwen-image-2.0.json) — Qwen-Image-2.0系列加速版模型，实现了图片生成和图片编辑的融合；具备更专业的文字渲染1k token指令支持能力、更细腻的真实质感，细腻刻画写实场景、更强的语义遵循能力。加速版有效实现了模…
@@ -116,41 +153,6 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`virtualmodel-v2`
 - [鞋靴模特](groups/shoemodel-v1.json) — 鞋靴模特支持输入多视角鞋靴系列图片，同时对输入模特模板图的鞋子区域进行鞋靴AI试穿，实现模特鞋靴布局重绘生成，最终生成图片的效果, 布局自然、细节丰富、画面细腻、试穿结果逼真。可用于模特商品图设计、新…
   - 模型：`shoemodel-v1`
-
-## 视频生成 `VG` — 16 个家族
-
-- [HappyHorse-1.0](groups/happyhorse-1.0.json) — 视频生成与编辑系列，支持文生、图生、参考生及自然语言视频编辑，适合常规创作和局部调整。
-  - 模型：`happyhorse-1.0-i2v`, `happyhorse-1.0-r2v`, `happyhorse-1.0-t2v`, `happyhorse-1.0-video-edit`
-- [HappyHorse-1.1](groups/happyhorse-1.1.json) — HappyHorse 新一代视频生成系列，支持文生、图生和参考生视频，全面提升画面质感、主体一致性和动态表现。
-  - 模型：`happyhorse-1.1-i2v`, `happyhorse-1.1-r2v`, `happyhorse-1.1-t2v`
-- [MiniMax视频模型](groups/MiniMax-video-market-place.json) — 由MiniMax提供的MiniMax-H系列视频模型API服务。
-  - 模型：`MiniMax/MiniMax-H3`
-- [PixVerse C1](groups/pixverse-c1-market-place.json) — 由爱诗科技提供的PixVerse C系列视频大模型API服务。
-  - 模型：`pixverse/pixverse-c1-it2v`, `pixverse/pixverse-c1-kf2v`, `pixverse/pixverse-c1-r2v`, `pixverse/pixverse-c1-t2v`
-- [PixVerse Capabilities](groups/pixverse-capability-market-place.json) — 由爱诗科技提供的视频原子能力大模型API服务。
-  - 模型：`pixverse/pixverse-lipsync`, `pixverse/pixverse-motioncontrol`, `pixverse/pixverse-upscale`
-- [PixVerse V5.6](groups/pixverse-market-place.json) — 由爱诗科技提供的PixVerse V系列视频大模型API服务。
-  - 模型：`pixverse/pixverse-v5.6-it2v`, `pixverse/pixverse-v5.6-kf2v`, `pixverse/pixverse-v5.6-r2v`, `pixverse/pixverse-v5.6-t2v`
-- [PixVerse V6](groups/pixverse-v6-market-place.json) — 由爱诗科技提供的PixVerse V系列视频大模型API服务。
-  - 模型：`pixverse/pixverse-v6-it2v`, `pixverse/pixverse-v6-kf2v`, `pixverse/pixverse-v6-r2v`, `pixverse/pixverse-v6-r2v-omni`, `pixverse/pixverse-v6-t2v`
-- [Vidu AI生视频](groups/vidu-models-market-place.json) — 由生数科技提供Vidu系列视频生成API服务，电影级画质、一致性保持、精准可控。
-  - 模型：`vidu/viduq2_reference2video`, `vidu/viduq2_text2video`, `vidu/viduq2-pro_img2video`, `vidu/viduq2-pro_reference2video`, `vidu/viduq2-pro_start-end2video`, `vidu/viduq2-pro-fast_img2video`, `vidu/viduq2-turbo_img2video`, `vidu/viduq2-turbo_start-end2video`, `vidu/viduq3_reference2video`, `vidu/viduq3-ad_reference2video`, `vidu/viduq3-drama_reference2video`, `vidu/viduq3-mix_reference2video`, `vidu/viduq3-pro_img2video`, `vidu/viduq3-pro_start-end2video`, `vidu/viduq3-pro_text2video`, `vidu/viduq3-pro-fast_img2video`, `vidu/viduq3-turbo_img2video`, `vidu/viduq3-turbo_reference2video`, `vidu/viduq3-turbo_start-end2video`, `vidu/viduq3-turbo_text2video`
-- [Wan-I2V](groups/wan-image-to-video.json) — 图片生成视频内容，稳定保持图像主体、风格和文字等细节信息
-  - 模型：`wan2.2-animate-mix`, `wan2.2-animate-move`, `wan2.2-i2v-flash`, `wan2.2-i2v-plus`, `wan2.2-kf2v-flash`, `wan2.2-s2v`, `wan2.2-s2v-detect`, `wan2.5-i2v-preview`, `wan2.6-i2v`, `wan2.6-i2v-flash`, `wan2.7-i2v`, `wanx2.1-i2v-plus`, `wanx2.1-i2v-turbo`, `wanx2.1-kf2v-plus`
-- [Wan-T2V](groups/wan-text-to-video.json) — 文字生成视频内容，丝滑动态能力，电影美学控制，精准指令遵循
-  - 模型：`wan2.2-t2v-plus`, `wan2.5-t2v-preview`, `wan2.6-t2v`, `wan2.7-t2v`, `wanx2.1-t2v-plus`, `wanx2.1-t2v-turbo`
-- [Wan-VideoEdit](groups/wan-video-edit.json) — 通过指令对视频进行编辑，支持局部/整体编辑、视频重塑、视频复刻等
-  - 模型：`wan2.7-videoedit`
-- [Wan2.1-VACE-Plus](groups/wanx2.1-vace-plus.json) — 万相2.1-VACE-Plus，视频编辑统一模型。支持局部编辑、视频重绘、背景扩展、时长延展、图片参考等多种视频编辑与生成任务，支持文本、图像、视频等多模态条件控制。
-  - 模型：`wanx2.1-vace-plus`
-- [Wan3.0-Video](groups/wan-video.json) — 多模态全能参考，灵活可控生成视频内容，轻松实现故事创作、创意表达、营销物料制作等
-  - 模型：`wan3.0-video`, `wan3.0-video-prime`
-- [可灵AI](groups/kling-models-market-place.json) — 由可灵AI提供的高质量视频与图像生成及编辑模型。
-  - 模型：`kling/kling-v3-image-generation`, `kling/kling-v3-omni-image-generation`, `kling/kling-v3-omni-video-generation`, `kling/kling-v3-turbo-video-generation`, `kling/kling-v3-video-generation`
-- [声动人像VideoRetalk](groups/videoretalk.json) — VideoRetalk是一个人物视频生成模型，可基于人物视频和人声音频，生成人物讲话口型与输入音频相匹配的新视频。
-  - 模型：`videoretalk`
-- [视频风格重绘](groups/video-style-transform.json) — 视频风格重绘可以将输入的视频帧序列进行多种风格化的重绘/生成，使新视频画面在兼顾原始人物和物体相貌的同时，带来不同风格的绘画效果。当前支持预置重绘风格包括日式漫画、美式漫画、清新漫画、3D卡通、国风卡…
-  - 模型：`video-style-transform`
 
 ## 语音识别 `ASR` — 11 个家族
 

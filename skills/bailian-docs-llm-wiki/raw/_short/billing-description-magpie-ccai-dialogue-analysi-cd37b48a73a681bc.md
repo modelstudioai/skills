@@ -69,10 +69,14 @@
 
 ## 常见问题
 
-1.  如何开通伶鹊CCAI-对话分析AIO？
+#### 1\. 如何开通伶鹊CCAI-对话分析AIO？
 
 在**阿里云百炼控制台-官方应用**找到**伶鹊CCAI-对话分析AIO**，点击免费开通。
 
-1.  怎么查看后付费账单？
+#### 2\. 怎么查看后付费账单？
 
 有关账单详情请前往[费用与成本](https://usercenter2.aliyun.com/finance/expense-report/expense-detail)查询。
+
+#### 3\. 接口有QPS限流吗？
+
+所有接口默认 QPS 为 10，可以按需扩充。

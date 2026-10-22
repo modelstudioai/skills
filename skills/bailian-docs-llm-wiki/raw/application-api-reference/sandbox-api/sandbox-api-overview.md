@@ -4,7 +4,7 @@ Sandbox API 的前提条件、Endpoint 拼装、鉴权方式，以及实例与�
 
 **说明**调用前请先配置[认证](raw/application-api-reference/sandbox-api/sandbox-api-authentication.md)；错误处理见[错误码](raw/application-api-reference/sandbox-api/sandbox-api-errors.md)。
 
-Sandbox API 兼容 [E2B](https://e2b.dev/docs) 协议，提供沙箱实例的生命周期管理与模版管理能力。管控面请求经阿里云百炼 AI 网关转发。
+Sandbox API 兼容 [E2B](https://e2b.dev/docs) 协议，提供沙箱实例的生命周期管理、模版管理与文件上传能力。管控面请求经阿里云百炼 AI 网关转发。
 
 ## 前提条件
 
@@ -118,6 +118,90 @@ https://{workspace_id}.{region}.maas.aliyuncs.com/api/v1/agentstudio/sandbox
 `DELETE`
 
 `/templates/{templateCode}`
+
+**说明**创建或更新模版时，`mntConfig` 中的文件需先按[文件上传](https://help.aliyun.com/zh/model-studio/sandbox-api-overview#h-sandbox-api-file-upload)章节上传，并带 `source=sandbox_template`；上传后等待 `status` 变为 `available`。
+
+## 文件上传
+
+挂载文件需通过文件上传接口上传，并在请求中指定 `source=sandbox_template`。
+
+### Endpoint
+
+```
+POST https://{workspace_id}.{region}.maas.aliyuncs.com/api/v1/agentstudio/files
+```
+
+### 表单上传
+
+```
+curl -X POST "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio/files" \
+  -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+  -F "file=@./config.json" \
+  -F "source=sandbox_template"
+```
+
+响应：
+
+```
+{
+  "id": "file_xxx",
+  "type": "file",
+  "filename": "config.json",
+  "downloadable": false,
+  "mime_type": "application/json",
+  "size_bytes": 128,
+  "status": "checking",
+  "created_at": "2026-10-21T15:00:00+08:00",
+  "request_id": "xxx"
+}
+```
+
+### 预签名地址上传
+
+适合大文件或直传 OSS。
+
+1.  申请上传地址。
+
+```
+curl -X POST "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio/files" \
+  -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "filename": "config.json",
+    "mimeType": "application/json",
+    "sizeBytes": 128,
+    "source": "sandbox_template"
+  }'
+```
+
+2.  将文件内容 PUT 到响应中的 `upload_url`。不要额外设置 `Content-Type`，否则可能返回 `403 SignatureDoesNotMatch`。
+    
+3.  调用 `POST /api/v1/agentstudio/files/{file_id}/complete` 完成上传。
+    
+4.  轮询 `GET /api/v1/agentstudio/files/{file_id}`，待 `status` 变为 `available`。
+    
+
+### 文件限制
+
+维度
+
+限制
+
+单文件大小
+
+50 MB
+
+工作空间文件总容量
+
+100 GB
+
+保存时效
+
+30 天
+
+文件类型按扩展名校验：`.yaml` 可上传；`.csv`、`.yml`、`.sh`、`.whl`、`.tar.gz` 不支持；`.ts` 返回视频格式错误。完整范围以接口返回为准。
+
+**说明**只有 `source=sandbox_template` 且 `status=available` 的文件可写入 `mntConfig`。文件相关错误码见[错误码](raw/application-api-reference/sandbox-api/sandbox-api-errors.md)。
 
 ## E2B 官方参考
 
