@@ -1008,11 +1008,11 @@ seed默认值
     > 思考模式的模型不支持强制调用某个工具。
     
 
-**parallel\_tool\_calls** `boolean` （可选）默认值为 `false`
+**parallel\_tool\_calls** `boolean` （可选）默认值为 `true`
 
 是否开启并行工具调用。相关文档：[并行工具调用](https://help.aliyun.com/zh/model-studio/qwen-function-calling#cb6b5c484bt4x)
 
-> MiniMax/MiniMax-M3.1-Flash 不支持通过此参数控制工具调用的并行性。设置为 `false` 也不能保证串行调用，模型仍可能在一轮中返回多个 `tool_calls`。请按实际返回结果处理。
+> MiniMax/MiniMax-M3.1-Flash、kimi-k3 不支持通过此参数控制工具调用的并行性。设置为 `false` 也不能保证串行调用，模型仍可能在一轮中返回多个 `tool_calls`。请按实际返回结果处理。
 
 可选值：
 

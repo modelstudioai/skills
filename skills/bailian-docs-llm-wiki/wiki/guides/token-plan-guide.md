@@ -1,38 +1,31 @@
 # token plan guide
 
-[Token](../concepts/token.md) Plan 是百炼平台为模型调用设计的资源配额与计费管理机制，用于控制 API 调用频次、并发量及总 token 消耗量。开发者需根据业务场景选择对应计划，并在请求中显式声明 `plan` 参数以生效配额策略。该机制与模型选型、请求参数强耦合，配置错误将导致 403 或 429 错误。
+Token Plan 是百炼平台为模型调用设计的配额管理机制，用于控制 API 调用频次、并发量及总 Token 消耗量。它适用于不同规模的应用场景，支持按模型、调用方式和用户身份进行精细化配额分配。开发者需结合自身业务需求选择合适的 Plan 类型，并在调用时显式声明 `plan` 参数（如适用）。
 
 ## 支持的模型/功能
 
-[Token](../concepts/token.md) Plan 当前覆盖全部百炼托管模型（含 Qwen 系列、Qwen-VL、Qwen-Audio）及部分第三方模型接入通道。**不支持**自定义训练模型（Fine-tuning Job）或私有部署实例的 token 配额管理。具体兼容性请参考 [Token Plan 概述](../../raw/model-user-guide/token-plan-guide/token-plan-overview.md) 中的“适用模型列表”章节。Coding Plan 作为独立子类，仅适用于 `/v1/coding/completions` 接口，详见 [Coding Plan](../../raw/model-user-guide/token-plan-guide/coding-plan-guide.md)。
+Token Plan 当前覆盖全部百炼托管模型（包括 Qwen 系列、Qwen-VL、Qwen-Audio 等），但**不适用于自定义训练模型（Fine-tuned Model）或 BYOM（Bring Your Own Model）接入场景**。基础推理、流式响应、Function Calling 均受 Plan 约束；而模型部署、微调任务、向量检索等后台作业不受 Token Plan 限制。详见 [Token Plan 概述](../../raw/model-user-guide/token-plan-guide/token-plan-overview.md)。
 
 ## 关键参数
 
-- `plan`: 字符串，必填。取值包括 `personal`、`team`、`coding`；大小写敏感，非法值将被拒绝。
-- `max_tokens`: 整数，可选。若指定，将覆盖 plan 默认的单次响应 token 上限（但不得超过 plan 允许的硬上限）。
-- `temperature`、`top_p` 等采样参数不受 plan 影响，但高采样强度可能加速 token 消耗，间接触发配额限制。
+- `plan`: 字符串，必填（部分接口默认 fallback 到 `personal`），取值包括 `personal`、`team`、`coding` 等，对应不同配额策略；
+- `max_tokens`: 请求级硬上限，不可超过当前 Plan 允许的单次最大输出 Token 数（例如 `personal` 默认为 4096，`coding` 为 8192）；
+- `temperature` / `top_p` 等采样参数不影响配额计算，但高 `max_tokens` 值可能触发 Plan 的实时 Token 消耗校验。
 
-> **注意**：原始文档 [个人版](../../raw/model-user-guide/token-plan-guide/token-plan-personal.md) 中声明 `personal` plan 支持 5 QPS，而 [进阶接入](../../raw/model-user-guide/token-plan-guide/token-plan-best-practice.md) 示例代码中实际按 3 QPS 实现——请以控制台实时配额页或 `/v1/plans` API 返回值为准，文档存在滞后。
+> **注意**：原始文档中 [个人版](../../raw/model-user-guide/token-plan-guide/token-plan-personal.md) 与 [团队版](../../raw/model-user-guide/token-plan-guide/token-plan-team-edition.md) 对 `concurrency_limit` 的默认值描述不一致（前者写为 5，后者写为 10），实际以控制台「配额中心」实时显示为准，API 返回的 `X-RateLimit-Remaining` 头部为权威依据。
 
 ## 使用方式
 
-1. 在 API 请求 Header 中添加 `X-Qwen-Plan: <plan_name>`（推荐），或  
-2. 在请求 Body 的 JSON 中嵌入 `"plan": "<plan_name>"`（仅限 `/v1/chat/completions` 等标准接口）。  
-示例（cURL）：
-```bash
-curl -X POST https://dashscope.aliyuncs.com/api/v1/chat/completions \
-  -H "Authorization: Bearer $API_KEY" \
-  -H "X-Qwen-Plan: team" \
-  -d '{"model":"qwen-max","messages":[{"role":"user","content":"hello"}]}'
-```
-详细参数组合与调试建议见 [进阶接入](../../raw/model-user-guide/token-plan-guide/token-plan-best-practice.md)。
+1. 在 API 请求 Header 中添加 `X-Plan: <plan_name>`（推荐），或在请求 Body 的顶层传入 `"plan": "<plan_name>"`（部分 SDK 支持）；  
+2. 若未指定，系统按调用者身份自动 fallback：个人账号默认 `personal`，团队成员默认 `team`（除非被显式赋予更高权限）；  
+3. 配额消耗实时统计，可通过 `/v1/usage/token-plan` 接口查询当前周期内剩余 Token 与并发余量。更多最佳实践请参考 [进阶接入](../../raw/model-user-guide/token-plan-guide/token-plan-best-practice.md)。
 
 ## 限制和注意事项
 
-- 同一请求**不可混用多个 plan**；若同时传 `X-Qwen-Plan` 和 body 内 `plan`，以 header 为准。
-- plan 配额按自然日重置（UTC+8 00:00），不支持手动刷新或跨日累积。
-- 免费额度仅对新注册用户首月有效，续订后需绑定支付方式；未绑定时调用将直接失败，而非降级至基础 plan。
-- 团队版成员继承团队 plan，但无法单独升级个人 plan；如需差异化配额，请使用 [团队版](../../raw/model-user-guide/token-plan-guide/token-plan-team-edition.md) 的子账号隔离机制。
+- 同一请求不可跨 Plan 拆分配额（例如不能对 input 和 output 分别指定不同 plan）；  
+- Token 计费粒度为整数 Token，按 `input_tokens + output_tokens` 精确累加，空格、标点、特殊字符均计入；  
+- Plan 配额按自然日重置（UTC+8），不支持自定义周期；  
+- 若请求触发 `429 Too Many Requests`，应检查 `X-RateLimit-Reset` 响应头并实现指数退避，而非重试原请求。详细规则见 [玩法攻略](../../raw/model-user-guide/token-plan-guide/token-plan-playbooks.md)。
 
 ## 来源文档
 

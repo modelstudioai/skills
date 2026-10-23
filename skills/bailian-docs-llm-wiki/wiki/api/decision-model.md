@@ -1,52 +1,49 @@
 # decision model
 
-decision model 是百炼平台专为结构化决策任务设计的轻量级推理模型，不生成文本，仅输出分类、是非判断、有序评分及其概率分布与置信度。适用于工单分流、内容审核、智能体路由、任务完成度校验等低延迟、高并发的确定性决策场景。其核心能力基于 TypeSafe System One 协议实现，一次前向计算即可并行响应多个异构问题 [决策模型 API](../../raw/model-api-reference/decision-model/decision-model-api.md)。
+decision model 是百炼平台专为结构化决策任务设计的轻量级推理模型，不生成文本，仅输出分类、是非判断、有序评分及其概率分布与置信度。适用于工单分流、内容审核、智能体路由、任务完成度校验等低延迟、高并发的确定性决策场景。其核心能力基于 TypeSafe System One 协议实现一次前向即返回多问题答案，响应延迟与输出长度无关 [决策模型 API](../../raw/model-api-reference/decision-model/decision-model-api.md)。
 
 ## 支持的模型与功能
 
-- 当前唯一可用模型：`decision-model-preview`（预览版），暂无其他变体或版本别名。
+- 当前唯一可用模型：`decision-model-preview`（预览版），通过 `POST /compatible-mode/v1/systemone` 接口调用。
 - 支持三类结构化问题：
-  - `choice`：多选一判定（如「派单团队」），返回选中选项、各选项概率及整体置信度；
-  - `noul`（no/yes/unknown/likely）：是非二元判断（如「是否索要退款？」），返回 P(yes) 概率值（0.0–1.0）；
-  - `score`：有序量表打分（如「严重度 1–4 级」），返回加权期望得分（可为浮点数）、各级概率及置信度。
-- 所有类型均**不生成任何自由文本**，输出严格受限于 `questions` 中定义的 schema，确保结果可解析、可审计 [决策模型 API](../../raw/model-api-reference/decision-model/decision-model-api.md)。
+  - `choice`：多选一决策（如「派单团队」），返回选中选项、各选项概率及整体置信度；
+  - `noul`（yes/no/uncertain/likely）：是非判断（如「是否需升级」），返回 P(yes) 概率值（0.0–1.0）；
+  - `score`：有序量表评分（如「严重度 1–4 级」），返回加权期望分（可为浮点数）、各级概率及置信度。
+- 所有类型均返回完整 `probabilities` 分布，便于下游做阈值控制或不确定性分析 [决策模型 API](../../raw/model-api-reference/decision-model/decision-model-api.md)。
 
 ## 关键参数
 
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|------|------|
 | `model` | string | ✓ | 固定为 `"decision-model-preview"` |
-| `state` | string / object / array | ✓ | 待决策的原始业务上下文；若为对象，将被 JSON 序列化后送入模型 |
-| `questions` | object | ✓ | 键为问题 ID（调用方自定义），值为问题对象；最多支持 **16 个问题** |
+| `state` | string / object / array | ✓ | 待决策的业务上下文；对象会被序列化为字符串送入模型 |
+| `questions` | object | ✓ | 键为问题 ID，值为问题定义对象；最多支持 **16 个问题** |
 | `questions.*.type` | string | ✓ | 取值 `"choice"` / `"noul"` / `"score"` |
-| `questions.*.instructions` | string | ✗ | 问题语义提示，影响判断逻辑，建议明确简洁 |
-| `questions.*.criteria` | object / array | ✓（`choice`/`score`）<br>✗（`noul`） | `choice`：选项名 → 描述映射（≤255 项，建议含 `"other"` 兜底）；`score`：等级描述数组（2–255 级，**强烈建议 3–7 级**，每级语义需可区分） |
+| `questions.*.instructions` | string | ✗ | 问题语义描述，影响判断准确性，建议明确简洁 |
+| `questions.*.criteria` | object / array | ✓（`choice`/`score`）<br>✗（`noul`） | `choice`：选项名→描述映射（≤255 项，建议含 `"other"`）；`score`：等级描述数组（2–255 级，**强烈建议 3–7 级**且语义可区分） |
 
-> **注意**：文档中 `noul` 类型虽在 `criteria` 字段注明“可选 `{"true":…, "false":…}`”，但实际调用中该字段对 `noul` 无效，模型仅依据 `instructions` 和 `state` 推理 P(yes)；此为文档冗余描述，以 [决策模型 API](../../raw/model-api-reference/decision-model/decision-model-api.md) 中请求示例和返回结构为准。
+> **注意**：文档中 `noul` 类型未要求 `criteria`，但实际使用中若提供 `{"true": "...", "false": "..."}` 可提升语义对齐效果；该行为在 [决策模型 API](../../raw/model-api-reference/decision-model/decision-model-api.md) 中未明确定义，属隐式推荐实践。
 
 ## 使用方式
 
-- **协议与端点**：HTTP POST 到 `https://{WorkspaceId}.{region}.maas.aliyuncs.com/compatible-mode/v1/systemone`（如华北2：`cn-beijing`）。
-- **认证**：Header `Authorization: Bearer $DASHSCOPE_API_KEY`，API Key 需提前配置为环境变量 [决策模型 API](../../raw/model-api-reference/decision-model/decision-model-api.md)。
-- **推荐 SDK**：使用 `typesafe-sdk`（`pip install typesafe-sdk`），自动处理 endpoint 拼接、请求序列化与响应解析：
-  ```python
-  from typesafe_sdk import TypeSafeClient
-  client = TypeSafeClient(
-      api_key=os.environ["DASHSCOPE_API_KEY"],
-      base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode"
-  )
-  result = client.system_one(model="decision-model-preview", state=..., questions={...})
-  ```
-- **在线调试**：首次集成前，务必通过 [Playground](https://bailian.console.aliyun.com/systemone_playground) 选择预设场景（如「客服对话判断」「Agent 完成度核验」）快速验证逻辑与输出格式。
+- **协议与端点**：使用 `POST` 请求 `https://{WorkspaceId}.{region}.maas.aliyuncs.com/compatible-mode/v1/systemone`，其中 `{WorkspaceId}` 为业务空间 ID，`{region}` 如 `cn-beijing` 或 `ap-southeast-1`。
+- **认证**：Header 中传 `Authorization: Bearer $DASHSCOPE_API_KEY`，API Key 需提前配置为环境变量。
+- **SDK 推荐**：使用 `typesafe-sdk`（`pip install typesafe-sdk`），自动处理 endpoint 拼接与响应解析，示例见 [决策模型 API](../../raw/model-api-reference/decision-model/decision-model-api.md) 中的 Python 调用片段。
+- **调试建议**：首次集成前，务必通过 [Playground](https://bailian.console.aliyun.com/systemone_playground) 在线体验，选择预设场景快速验证逻辑与结果分布。
 
 ## 限制和注意事项
 
-- **上下文长度**：`state` 序列化后总 token 数 ≤ 65536；超长将直接拒绝，不截断。
-- **问题规模**：
-  - 单次请求最多 16 个 `questions`，延迟随问题数近似线性增长；
-  - `choice` 选项数 ≤ 255，`score` 等级数 2–255（但 3–7 级为最佳实践，过多等级易导致概率分散、置信度下降）。
-- **输出确定性**：模型不生成文本，所有输出字段（`choice`/`noul`/`score`/`probabilities`/`confidence`）均严格按 schema 返回，无额外字段或自由文本。
-- **地域与 WorkspaceId**：Endpoint 中 `{WorkspaceId}` 为必填业务空间 ID，不可省略；地域域名需与控制台开通区域一致，否则返回 403。
+- **请求限制**：
+  - 单次最多 16 个问题（延迟近线性增长）；
+  - `choice` 选项数 ≤ 255，`score` 等级数 2–255（但 3–7 级为最佳实践）；
+  - 输入 `state` 上下文上限 **65536 token**，超长将被拒绝（无截断）。
+- **输出特性**：
+  - 不生成任何自由文本，仅返回结构化答案（`answers` 对象）；
+  - `choice` 和 `score` 类型返回 `confidence`（0.0–1.0），`noul` 仅返回 `noul`（P(yes)）；
+  - `score` 的 `score` 字段为浮点期望值（如 `2.25`），非整数索引。
+- **其他**：
+  - 返回中 `usage.input_tokens` 为实际消耗输入 token 数，可用于成本监控；
+  - 错误排查请参考统一错误码文档，详见 [错误信息](raw/model-api-reference/preparations/error-code.md)（注意路径为 raw 下相对路径）。
 
 ## 来源文档
 

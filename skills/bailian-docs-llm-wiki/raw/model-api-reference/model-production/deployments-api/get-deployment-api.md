@@ -8,9 +8,9 @@
 -   已成功[获取 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
 -   已阅读[模型部署](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)和[使用 API 进行模型部署](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-quick-start.md)，了解模型部署的基本步骤。
 
-**说明**DTU 计费模式的部署暂不支持通过本组 API 创建与管理，请在控制台操作，详见
+**说明**DTU 计费模式的部署使用同一组部署接口创建与管理，请求中以
 
-[DTU 独占算力部署](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-modes/dtu-model-deployment.md)。
+`plan="dtu"` 区分部署形式（创建、查询、扩缩容、修改限流与更新模型），DTU 相关参数、状态与域名说明详见 [模型部署 API 参考](raw/model-api-reference/model-production/deployments-api/model-deployment-api-reference.md)。续费与自动续费变更请在控制台操作，详见 [DTU 独占算力部署](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-modes/dtu-model-deployment.md)。
 
 ## 查询部署模型状态
 

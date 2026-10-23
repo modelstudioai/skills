@@ -1,41 +1,38 @@
 # realtime api user guide
 
-Realtime API 是百炼平台提供的低延迟、流式双向通信接口，适用于语音交互、实时对话、音视频场景下的模型调用。它基于 WebSocket 协议实现，支持服务端主动推送事件（如 `audio_chunk`、`tool_call`、`interrupt`），并允许客户端在会话中动态插入指令或中断。该接口不兼容传统 REST 调用方式，需使用专用 SDK 或原生 WebSocket 客户端接入。
+Realtime API 是百炼平台提供的低延迟、流式响应的模型调用接口，适用于语音交互、实时对话、音视频流处理等对端到端时延敏感的场景。它基于 WebSocket 协议实现双向通信，支持增量式 token 返回与实时控制指令（如中断、暂停）。该接口不兼容传统 REST 同步调用模式，需使用专用客户端或遵循指定协议握手。
 
 ## 支持的模型与功能
 
-当前 Realtime API 仅支持以下模型：`qwen-audio-20241015`、`qwen-vl-20241015` 和 `qwen2-audio-20241101`（详见 [Realtime API](../../raw/model-api-reference/realtime-api-user-guide.md)）。所有模型均默认启用音频流式输入/输出、多轮上下文保持、工具调用（Tool Calling）及实时中断响应能力。视觉模型（如 `qwen-vl-20241015`）额外支持帧级图像上传与同步推理，但暂不支持纯文本会话模式——即必须携带 `input.audio` 或 `input.video` 字段，否则连接将被拒绝。
+当前 Realtime API 支持以下模型（以 `qwen-audio-realtime`、`qwen-vl-realtime` 和 `qwen2.5-7b-realtime` 为代表），所有模型均启用音频/视频流输入、文本流输出、上下文状态保持及实时事件反馈（如 `input_audio_buffer.committed`、`response.done`）。多模态能力（如语音转写+视觉理解联合推理）仅在 [接入模型与应用](../../raw/model-api-reference/realtime-api-user-guide/realtime-model-connection.md) 文档中明确列出的模型上可用。
 
-> **注意**：原始文档中 [快速开始](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide.md) 示例使用了已下线的 `qwen-audio-20240715` 模型，实际调用请以 [接入模型与应用](../../raw/model-api-reference/realtime-api-user-guide/realtime-model-connection.md) 中列出的当前可用模型为准。
+> **注意**：原始文档中 [AOQ客户端SDK](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-aoq-api.md) 提到支持 `qwen1.5-14b-realtime`，但该模型已在 v2024.09 版本中下线；实际可用模型请以 [概述](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-overview.md) 中的最新支持列表为准。
 
 ## 关键参数
 
-建立连接时需在 WebSocket URL 中携带以下必需查询参数：
-
-- `model`: 模型 ID（如 `qwen2-audio-20241101`），必须与 [接入模型与应用](../../raw/model-api-reference/realtime-api-user-guide/realtime-model-connection.md) 所列一致  
-- `api_key`: 有效百炼平台 API Key（非 AccessKey）  
-- `response_format`: 可选，取值为 `json`（默认）或 `binary`（用于原始 PCM 音频流）  
-- `stream`: 固定为 `true`，不可省略  
-
-首次发送的 `session.update` 消息中，`turn_detection` 配置决定语音断句策略；`tools` 数组定义可调用函数，其 schema 必须符合 OpenAI 兼容格式。
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `model` | string | 是 | 模型 ID，必须为 Realtime 系列模型（如 `qwen2.5-7b-realtime`） |
+| `temperature` | number | 否 | 采样温度，默认 `0.7`；设为 `0` 可启用确定性解码 |
+| `max_output_tokens` | integer | 否 | 单次响应最大 token 数，上限 `4096`（超出将被截断） |
+| `input_audio_format` | string | 否 | 音频编码格式，支持 `"pcm16"`（默认）、`"opus"`；详见 [快速开始](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide.md) |
 
 ## 使用方式
 
-1. 构造 WebSocket 连接 URL：`wss://dashscope.aliyuncs.com/realtime/v1?model={model}&api_key={key}&stream=true`  
-2. 发送 `session.update` 初始化会话（含系统提示、工具定义等）  
-3. 发送 `input.audio` 或 `input.video` 帧数据（Base64 编码或二进制分片）  
-4. 处理服务端返回的 `output.audio`、`response.text.delta`、`tool_use` 等事件  
+1. 建立 WebSocket 连接：向 `wss://dashscope.aliyuncs.com/realtime/v1/chat` 发起握手，携带 `Authorization: Bearer <api_key>` 与 `X-DashScope-Model: <model_id>` 头；
+2. 发送 `session.update` 消息初始化会话配置；
+3. 分块发送 `input_audio_buffer.append` 或 `input_text` 消息；
+4. 接收 `response.text.delta` 流式事件，并监听 `response.done` 完成信号。
 
-推荐使用官方 AOQ 客户端 SDK（Python/JS），其自动处理重连、帧编码、事件解析和中断信号转发。SDK 使用方法详见 [AOQ客户端SDK](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-aoq-api.md)。
+完整流程示例见 [快速开始](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide.md)。
 
 ## 限制和注意事项
 
-- 单次会话最长持续 300 秒，超时后连接关闭且不自动续期  
-- 音频输入采样率必须为 16kHz、单声道、PCM 编码（`int16`），否则触发 `invalid_input_format` 错误  
-- 同一 `api_key` 并发连接数上限为 10，超出将返回 `429 Too Many Connections`  
-- 不支持 HTTP/2 或 Server-Sent Events（SSE）替代方案；REST 封装层（如 `/v1/realtime/chat`）仅为文档占位，实际不可用  
-
-> **注意**：[概述](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-overview.md) 中提及“支持自定义语音合成音色”，该能力尚未上线，当前所有 `output.audio` 均使用固定 TTS 声音，此描述已过时。
+- 单连接最长存活时间：300 秒（含空闲期），超时后需重连；
+- 音频输入缓冲区最大长度：10 秒 PCM 数据（按 16kHz/16bit 计），超出部分将被丢弃；
+- 不支持 `system` 角色消息；角色仅限 `user` 和 `assistant`；
+- 所有请求必须启用 TLS 1.2+，禁用 HTTP 降级；
+- 实时音频流需严格按帧时间戳对齐，时钟漂移超过 ±50ms 将触发 `input_audio_buffer.silence` 自动补偿 —— 此行为在 [AOQ客户端SDK](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-aoq-api.md) 中已封装，但自建客户端需自行实现。
 
 ## 来源文档
 

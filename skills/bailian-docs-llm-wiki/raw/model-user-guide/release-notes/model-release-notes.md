@@ -187,7 +187,7 @@ qwen-turbo 资源包启动退市通知[了解详情](https://www.aliyun.com/noti
 
 知识检索服务上线
 
-新增知识检索服务，支持多知识库联合检索与混合排序，[了解详情](raw/application-user-guide/agent-context/knowledge-base/service/rag-knowledge-retrieval.md)
+新增知识检索服务，支持多知识库联合检索与混合排序，[了解详情](raw/application-user-guide/knowledge-base/rag-knowledge-retrieval.md)
 
 6月23日
 
@@ -195,7 +195,7 @@ qwen-turbo 资源包启动退市通知[了解详情](https://www.aliyun.com/noti
 
 知识问答服务上线
 
-新增知识问答服务，基于大模型结合检索生成回答，[了解详情](raw/application-user-guide/agent-context/knowledge-base/service/rag-knowledge-qa.md)
+新增知识问答服务，基于大模型结合检索生成回答，[了解详情](raw/application-user-guide/knowledge-base/service/rag-knowledge-qa.md)
 
 6月15日
 
@@ -219,7 +219,7 @@ Coding Plan
 
 Coding Plan 联网搜索 MCP 升级
 
-Coding Plan 联网搜索 MCP 升级 Streamable HTTP 协议，前 2000 次免费，[了解详情](raw/model-user-guide/token-plan-guide/token-plan-personal/token-plan-harness-tool.md)
+Coding Plan 联网搜索 MCP 升级 Streamable HTTP 协议，前 2000 次免费，[了解详情](raw/model-user-guide/token-plan-guide/token-plan-best-practice/token-plan-harness-tool.md)
 
 6月10日
 
@@ -235,7 +235,7 @@ Skill 能力包上线
 
 数据连接模块上线
 
-新增数据连接模块，支持 MySQL/语雀/OSS 等数据源，[了解详情](raw/application-user-guide/agent-context/knowledge-base/data-connection-overview/data-connection.md)
+新增数据连接模块，支持 MySQL/语雀/OSS 等数据源，[了解详情](raw/application-user-guide/knowledge-base/data-connection-overview/data-connection.md)
 
 6月9日
 
@@ -373,7 +373,7 @@ Spring AI Alibaba 调用百炼应用文档上线
 
 新版智能体应用 DashScope API 首发
 
-发布新版智能体应用 DashScope API 参考，支持单轮/多轮、流式、文件问答、视觉理解，[了解详情](raw/_short/new-agent-application-api-reference-be3bf785ec80b8bd.md)
+发布新版智能体应用 DashScope API 参考，支持单轮/多轮、流式、文件问答、视觉理解，[了解详情](raw/_short/new-agent-application-api-reference-d745b325d97fcf2e.md)
 
 5月8日
 
@@ -415,7 +415,7 @@ Token Plan 团队版新增团队管理：支持 SSO/钉钉登录、席位分配�
 
 知识库新增日志与监控
 
-知识库检索调用全量投递至 SLS 日志服务，支持审计/排查/统计/告警，[了解详情](raw/application-user-guide/agent-context/knowledge-base/reference/rag-knowledge-base-log-monitoring.md)
+知识库检索调用全量投递至 SLS 日志服务，支持审计/排查/统计/告警，[了解详情](raw/application-user-guide/knowledge-base/reference/rag-knowledge-base-log-monitoring.md)
 
 4月23日
 
@@ -447,7 +447,7 @@ RTOS C SDK 新增 License 模式
 
 应用组件 Prompt 工程 API 上线
 
-应用组件新增 Prompt 工程模块及其 API，提供 Prompt 模板管理能力，[了解详情](raw/application-api-reference/flow-agent-api/api-bailian-2023-12-29-dir-prompt-engineering.md)
+应用组件新增 Prompt 工程模块及其 API，提供 Prompt 模板管理能力，[了解详情](raw/_short/api-bailian-2023-12-29-dir-prompt-engineering-11ee962a5f5d5d1e.md)
 
 4月1日
 
@@ -1359,7 +1359,7 @@ OpenAI接口兼容
     
 -   新增模型中心内容更新，点击[模型](https://help.aliyun.com/zh/model-studio/model)查看详情。
     
--   新增应用中心内容更新，点击[应用开发](raw/application-user-guide/agent-development/llm-application.md)查看详情。
+-   新增应用中心内容更新，点击[应用开发](raw/application-user-guide/llm-application.md)查看详情。
     
 -   新增系统管理内容更新，点击系统管理查看详情。
     

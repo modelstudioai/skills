@@ -56,8 +56,8 @@
       "samples": {
         "dashscope": {
           "default": {
-            "python": "# coding=utf-8\n\nimport dashscope\nfrom dashscope.audio.tts_v2 import *\n\n# If the API Key is not configured in the environment variable, your-api-key needs to be replaced with your own API Key\n# dashscope.api_key = \"your-api-key\"\n\ndashscope.base_websocket_api_url='wss://[workspace-id].cn-beijing.maas.aliyuncs.com/api-ws/v1/inference'\n\nmodel = \"qwen-audio-3.0-tts-plus\"\n\n#Please enter the correct voice below.\nvoice = \"\"\n\nsynthesizer = SpeechSynthesizer(model=model, voice=voice)\naudio = synthesizer.call(\"How is the weather today?\")\n\nwith open('output.mp3', 'wb') as f:\n    f.write(audio)",
-            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/realtime-tts-user-guide"
+            "python": "# coding=utf-8\n\nimport dashscope\nfrom dashscope.audio.tts_v2 import *\n\n# If the API Key is not configured in the environment variable, your-api-key needs to be replaced with your own API Key\n# dashscope.api_key = \"your-api-key\"\n\ndashscope.base_websocket_api_url='wss://[workspace-id].cn-beijing.maas.aliyuncs.com/api-ws/v1/inference'\n\nmodel = \"qwen-audio-3.0-tts-plus\"\nvoice = \"longanlingxin\"\n\nsynthesizer = SpeechSynthesizer(model=model, voice=voice)\naudio = synthesizer.call(\"How is the weather today?\")\n\nwith open('output.mp3', 'wb') as f:\n    f.write(audio)",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-audio-tts-client-events"
           }
         }
       }
@@ -116,8 +116,8 @@
       "samples": {
         "dashscope": {
           "default": {
-            "python": "# coding=utf-8\n\nimport dashscope\nfrom dashscope.audio.tts_v2 import *\n\n# If the API Key is not configured in the environment variable, your-api-key needs to be replaced with your own API Key\n# dashscope.api_key = \"your-api-key\"\n\ndashscope.base_websocket_api_url='wss://[workspace-id].cn-beijing.maas.aliyuncs.com/api-ws/v1/inference'\n\nmodel = \"qwen-audio-3.0-tts-flash\"\n\n#Please enter the correct voice below.\nvoice = \"\"\n\nsynthesizer = SpeechSynthesizer(model=model, voice=voice)\naudio = synthesizer.call(\"How is the weather today?\")\n\nwith open('output.mp3', 'wb') as f:\n    f.write(audio)",
-            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/realtime-tts-user-guide"
+            "python": "# coding=utf-8\n\nimport dashscope\nfrom dashscope.audio.tts_v2 import *\n\n# If the API Key is not configured in the environment variable, your-api-key needs to be replaced with your own API Key\n# dashscope.api_key = \"your-api-key\"\n\ndashscope.base_websocket_api_url='wss://[workspace-id].cn-beijing.maas.aliyuncs.com/api-ws/v1/inference'\n\nmodel = \"qwen-audio-3.0-tts-flash\"\n\nvoice = \"longanfengyue\"\n\nsynthesizer = SpeechSynthesizer(model=model, voice=voice)\naudio = synthesizer.call(\"How is the weather today?\")\n\nwith open('output.mp3', 'wb') as f:\n    f.write(audio)",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-audio-tts-client-events"
           }
         }
       }

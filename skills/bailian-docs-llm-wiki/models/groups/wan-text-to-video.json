@@ -286,11 +286,12 @@
       "latestOnlineAt": "2025-07-27T16:00:00.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Wan2.2-T2V-Plus",
-      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/text-to-video-api-reference",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/legacy-wan-text-to-video-api-reference",
       "samples": {
         "dashscope": {
           "default": {
-            "python": "from http import HTTPStatus\nfrom dashscope import VideoSynthesis\nimport dashscope\n\ndashscope.base_http_api_url = 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1'\ndef sample_sync_call_t2v():\n    # call sync api, will return the result\n    print('please wait...')\n    rsp = VideoSynthesis.call(model='wan2.2-t2v-plus',\n                              prompt='一只小猫在月光下奔跑',\n                              size='1280*720')\n    print(rsp)\n    if rsp.status_code == HTTPStatus.OK:\n        print(rsp.output.video_url)\n    else:\n        print('Failed, status_code: %s, code: %s, message: %s' %\n              (rsp.status_code, rsp.code, rsp.message))\n\n\nif __name__ == '__main__':\n    sample_sync_call_t2v()"
+            "python": "from http import HTTPStatus\nfrom dashscope import VideoSynthesis\nimport dashscope\n\ndashscope.base_http_api_url = 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1'\ndef sample_sync_call_t2v():\n    # call sync api, will return the result\n    print('please wait...')\n    rsp = VideoSynthesis.call(model='wan2.2-t2v-plus',\n                              prompt='一只小猫在月光下奔跑',\n                              size='832*480')\n    print(rsp)\n    if rsp.status_code == HTTPStatus.OK:\n        print(rsp.output.video_url)\n    else:\n        print('Failed, status_code: %s, code: %s, message: %s' %\n              (rsp.status_code, rsp.code, rsp.message))\n\n\nif __name__ == '__main__':\n    sample_sync_call_t2v()",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/legacy-wan-text-to-video-api-reference"
           }
         }
       }

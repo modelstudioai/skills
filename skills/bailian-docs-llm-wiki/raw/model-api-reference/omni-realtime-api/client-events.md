@@ -160,6 +160,7 @@ VAD 类型，可选值：
 
 -   `server_vad`（默认值）：基于声学特征检测语音结束。
 -   `semantic_vad`：基于语义有效性检测语音结束，可过滤回应语、背景音等无意义声音。Qwen3.8-Omni-Flash-Realtime 和 Qwen3.5-Omni-Realtime 系列模型支持。
+-   `semantic_vad_ec`：适用于客服和商务场景的语义有效性检测。相比 `semantic_vad`，更易于检测到用户说话并打断模型回复，同样可过滤背景音等无意义声音。Qwen3.8-Omni-Flash-Realtime 系列模型支持。
 
 **threshold**`float`（可选）
 

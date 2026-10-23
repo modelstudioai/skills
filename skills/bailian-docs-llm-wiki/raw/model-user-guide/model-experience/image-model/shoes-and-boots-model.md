@@ -102,8 +102,8 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 --data '{
     "model": "shoemodel-v1",
     "input": {
-        "template_image_url": "https://huarong123.oss-cn-hangzhou.aliyuncs.com/image/%E9%9E%8B%E9%9D%B4%E5%9B%BE.webp",
-        "shoe_image_url": ["https://huarong123.oss-cn-hangzhou.aliyuncs.com/image/%E9%9E%8B%E9%9D%B4temp.webp"]
+        "template_image_url": "https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8268778171/p809310.webp",
+        "shoe_image_url": ["https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8268778171/p809301.webp"]
     },
     "parameters": {
         "n": 1

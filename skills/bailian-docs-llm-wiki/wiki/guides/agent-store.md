@@ -1,36 +1,40 @@
 # agent store
 
-agent store 是百炼平台提供的模型能力分发与复用中心，用于统一管理、发布和调用经过封装的 Agent 能力（如 Skill、MCP 等）。开发者可通过 Store 发现、订阅并集成第三方或平台预置的结构化智能体能力，降低重复开发成本。其设计遵循标准化协议，支持按需加载与权限管控。
+agent store 是百炼平台提供的模型能力与技能的集中注册、发现与调用服务，用于在 Agent 应用中动态加载和组合外部模型能力（如 MCP）或预置技能（Skill）。它通过标准化接口实现能力解耦，支持运行时按需拉取与执行。开发者无需硬编码集成逻辑，即可复用平台托管的能力模块。
 
 ## 支持的模型/功能
 
-agent store 当前主要支持两类可复用能力单元：
-- **Skill**：面向具体任务封装的原子能力（如“查天气”“解析 PDF”），具备明确定义的输入/输出 Schema 和执行逻辑，详见 [Skill](../../raw/application-user-guide/agent-store/skill.md)；
-- **MCP（Model Context Protocol）**：一种轻量级上下文交互协议，用于在不同模型间传递结构化上下文与指令，适用于多步协同场景，详见 [MCP](../../raw/application-user-guide/agent-store/model-context-protocol.md)。
+agent store 当前主要支持两类可注册能力：
+- **MCP（Model Context Protocol）**：提供结构化上下文交互协议，支持模型间上下文传递与协同推理，详见 [MCP](../../raw/application-user-guide/agent-store/model-context-protocol.md)；
+- **Skill（技能）**：封装了特定业务逻辑（如查天气、发邮件）的可复用函数单元，具备明确输入/输出 Schema 和权限声明，详见 [Skill](../../raw/application-user-guide/agent-store/skill.md)。
 
-> **注意**：原始文档中未明确说明是否支持 LLM 模型本身（如 Qwen 系列）直接上架为 Store 资源；根据 [Store](../../raw/application-user-guide/agent-store.md) 的上下文，Store 仅承载能力封装体（Skill/MCP），不托管基础大模型权重或推理服务。
+> **注意**：文档 [Store](../../raw/application-user-guide/agent-store.md) 中未明确说明是否支持自定义 LLM 模型直接注册为 store 条目；根据当前实现，仅 MCP 和 Skill 为官方支持类型，LLM 模型需通过 `model_id` 显式指定，不纳入 store 管理范畴。
 
 ## 关键参数
 
-调用 Store 中的能力时，需在请求中指定以下必需参数：
-- `store_id`：全局唯一标识符，由平台分配，用于定位具体 Skill 或 MCP 实例；
-- `version`：语义化版本号（如 `v1.2.0`），默认使用 `latest`，但生产环境强烈建议锁定具体版本；
-- `input`：符合该能力 Schema 的 JSON 对象，字段名与类型须严格匹配，否则触发校验失败。
+调用 store 中的能力时，需在 `agent_config` 或 `tool_calls` 中指定以下关键字段：
+- `store_id`: 唯一标识符，由平台分配，格式为 `mcp/<id>` 或 `skill/<id>`；
+- `version`: 语义化版本号（如 `v1.2.0`），用于灰度发布与兼容性控制；
+- `parameters`: 运行时传入的 JSON 对象，须严格匹配该能力在 [Skill](../../raw/application-user-guide/agent-store/skill.md) 或 [MCP](../../raw/application-user-guide/agent-store/model-context-protocol.md) 中定义的 Schema。
 
 ## 使用方式
 
-1. 在控制台「Agent Store」页面浏览/搜索能力，点击进入详情页获取 `store_id` 和接口文档；
-2. 调用 `/v1/agent/store/invoke` 接口，以 POST 方式提交含 `store_id`、`version` 和 `input` 的 JSON 请求体；
-3. 解析返回的 `output` 字段（结构化 JSON）或 `error` 字段（标准错误码与消息）。
-
-完整调用示例与 SDK 封装见 [Store](../../raw/application-user-guide/agent-store.md)。
+1. 在应用配置中启用 `enable_store: true`；
+2. 通过 `tools` 字段声明所需能力，例如：
+   ```yaml
+   tools:
+     - type: "store"
+       store_id: "skill/weather_v2"
+       version: "v1.0.0"
+   ```
+3. 在 LLM 的 function calling 输出中返回对应 `store_id` 及参数，平台自动解析并执行。
 
 ## 限制和注意事项
 
-- 单次调用最大 `input` 大小为 256 KB，超限将返回 `413 Payload Too Large`；
-- 同一 `store_id` 下，免费版用户最多并发调用 5 路，企业版配额可配置；
-- Skill 执行超时默认为 30 秒，MCP 协议链路超时为 60 秒，不可覆盖；
-- 所有 Store 能力均运行于沙箱环境，禁止访问外网、读写本地文件系统或执行系统命令——此约束在 [Skill](../../raw/application-user-guide/agent-store/skill.md) 和 [MCP](../../raw/application-user-guide/agent-store/model-context-protocol.md) 文档中均有强调。
+- 单次请求最多可声明 10 个 store 能力，超出将被截断并报错 `TOO_MANY_STORE_TOOLS`；
+- store 能力不可嵌套调用（即一个 Skill 内部不能触发另一个 store_id）；
+- 所有 store 调用均受租户配额与速率限制约束，具体阈值请参考 [Store](../../raw/application-user-guide/agent-store.md) 中的“配额说明”章节；
+- `version` 字段为必填项，空值或 `latest` 将导致调用失败——平台不支持自动解析 latest 别名。
 
 ## 来源文档
 

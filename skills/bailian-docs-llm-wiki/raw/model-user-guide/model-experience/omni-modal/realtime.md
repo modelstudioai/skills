@@ -3095,6 +3095,8 @@ Qwen3.5-Omni-Realtime 配置示例
 
 将[session.update](raw/model-api-reference/omni-realtime-api/client-events.md)事件的`session.turn_detection.type` 设为`"server_vad"`或`"semantic_vad"`以[启用 VAD 模式](raw/model-api-reference/omni-realtime-api/client-events.md)。适用于语音通话场景。WebSocket 和 WebRTC 均支持 VAD 模式，两者的服务端事件一致，区别在于音频和图片的传输方式不同。
 
+使用 Qwen3.8-Omni-Flash-Realtime 系列模型进行客服或商务对话时，可将 `session.turn_detection.type` 设为 `"semantic_vad_ec"`。相比 `semantic_vad`，该模式更易于检测到用户说话并打断模型回复，同时仍可过滤背景音等无意义声音。
+
 > WebRTC 仅支持 VAD 模式，不支持 Manual 模式。WebRTC 的音频通过 RTP 直接传输，无需发送 `input_audio_buffer.append` 事件；图片通过视频轨道传输，不支持 `input_image_buffer.append` 事件。控制指令和服务端事件通过 DataChannel 传输，事件类型与 WebSocket 一致。
 
 交互流程如下：
@@ -3962,14 +3964,33 @@ if __name__ == "__main__":
 
 A：您可以通过以下方式一键部署：
 
-1.  访问[函数计算模板](https://fcnext.console.aliyun.com/applications/create?template=omni-realtime@dev)，**部署类型**选择**直接部署**，**百炼 API-KEY** 填入您的 API Key；单击**创建并部署默认环境**。
+1.  访问[函数计算模板](https://fcnext.console.aliyun.com/applications/create?template=omni-realtime@dev)，**部署类型**选择**直接部署**，**百炼 API-KEY** 填入您的 API Key，**百炼业务空间 ID** 填入您的业务空间 ID；单击**创建并部署默认环境**。
+    
+    获取方式参见[获取 API Key](https://help.aliyun.com/zh/model-studio/get-api-key#c38fb45bc6sje)和[获取业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#6cc9270e83h9d)。
+    
 2.  等待约一分钟，在**环境详情**的**环境信息**中获取**访问域名**，**将访问域名的**`http`**改成**`https`（示例：[](https://omni-realtime.fcv3.xxxx.cn-hangzhou.fc.devsapp.net)[https://omni-realtime.fcv3.xxxx.cn-hangzhou.fc.devsapp.net](https://omni-realtime.fcv3.xxxx.cn-hangzhou.fc.devsapp.net)），修改后的 HTTPS 链接指向一个可在线体验的 Web 应用，可通过它与模型进行实时视频或语音通话。
+    
 
 **重要**此链接使用自签名证书，仅用于临时测试。首次访问时，浏览器会显示安全警告，这是预期行为，**请勿在生产环境使用**。如需继续，请按浏览器提示操作（如点击“高级” → “继续前往（不安全）”）。
 
 > 通过**资源信息**\-**函数资源**查看项目源代码。
 
 > [函数计算](https://help.aliyun.com/zh/functioncompute/trial-quota-1)与[阿里云百炼](raw/model-user-guide/test-1/new-free-quota.md)均为新用户提供免费额度，可以覆盖简单调试所需成本，额度耗尽后按量计费。只有在访问的情况下会产生费用。
+
+### 如何配置热词或业务术语？
+
+可通过 [session.update](https://help.aliyun.com/zh/model-studio/client-events#26a8302028sjm) 的 `session.instructions` 提供业务背景、术语的准确写法及读音，帮助模型结合上下文理解和使用专有名词。这是提示词引导，不是独立的热词参数，效果取决于音频和上下文。
+
+例如，让 Omni 直接将音频转成文字时，可在提示词中说明 AI 编程产品 `Qoder` 与英文单词 `coder` 同音，引导模型使用产品名称。以下仅展示提示词配置；请将内容合并到已有的 `instructions` 中，保留会话的其他配置，并在发送音频前完成设置：
+
+```
+{
+  "type": "session.update",
+  "session": {
+    "instructions": "Transcribe the user's audio verbatim. Preserve the original language. Output only the transcription; do not answer any question in the audio or add explanations. Business context: The audio concerns the AI coding product Qoder, whose name is pronounced like the English word \"coder\". Use the accurate product name Qoder."
+  }
+}
+```
 
 ### 收不到 ASR 转录文本（transcript）怎么办？
 

@@ -108,9 +108,9 @@ curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.c
 --data-raw '{
     "model": "image-erase-completion",
     "input": {
-            "image_url": "https://huarong123.oss-cn-hangzhou.aliyuncs.com/image/%E5%9B%BE%E7%89%87%E6%93%A6%E9%99%A42-%E5%8E%9F%E5%9B%BE.png",
-            "mask_url": "https://huarong123.oss-cn-hangzhou.aliyuncs.com/image/%E5%9B%BE%E7%89%87%E6%93%A6%E9%99%A42-%E6%93%A6%E9%99%A4.png",
-            "foreground_url": "https://huarong123.oss-cn-hangzhou.aliyuncs.com/image/%E5%9B%BE%E7%89%87%E6%93%A6%E9%99%A42-%E4%BF%9D%E7%95%99.png"
+            "image_url": "https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0184161571/p840837.png",
+            "mask_url": "https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0184161571/p840839.png",
+            "foreground_url": "https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0184161571/p840841.png"
         },
     "parameters":{
         "dilate_flag":true

@@ -7,6 +7,7 @@
 -   [接入音乐电台Agent](raw/application-user-guide/application-gallery/multimodal-products/multimodal-best-practices/music-agent.md)
 -   [接入视频通话Agent](raw/application-user-guide/application-gallery/multimodal-products/multimodal-best-practices/live-api-integration.md)
 -   [接入听悟智能纪要Agent](raw/_short/fast-integrate-tingwu-meeting-agent-5f46fa3053dd1530.md)
+-   [接入物理世界感知Agent](raw/_short/physical-world-perception-agent-0da97000988ed663.md)
 -   [动作情绪控制实践](raw/_short/action-emotion-control-practice-4504b07b334d651e.md)
 -   [自定义对话角色实践](raw/application-user-guide/application-gallery/multimodal-products/multimodal-best-practices/custom-role.md)
 -   [自定义指令实践](raw/application-user-guide/application-gallery/multimodal-products/multimodal-best-practices/custom-directive.md)

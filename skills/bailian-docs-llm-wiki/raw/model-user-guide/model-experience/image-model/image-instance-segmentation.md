@@ -92,7 +92,7 @@ curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.c
 --data-raw '{
     "model": "image-instance-segmentation",
     "input": {
-        "image_url": "https://huarong123.oss-cn-hangzhou.aliyuncs.com/image/%E4%BA%BA%E5%83%8F%E5%88%86%E5%89%B2.png"
+        "image_url": "https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0184161571/p841095.png"
     },
     "parameters": {}
 }'
