@@ -383,4 +383,4 @@ curl --request DELETE 'https://dashscope.aliyuncs.com/api/v1/deployments/qwen3-8
 
 ## API参考
 
-详细API调用请参考[API 详情](raw/model-api-reference/model-production/deployments-api/model-deployment-text-generation-api/create-deployment-api.md)及[部署 API 全集](raw/model-api-reference/model-production/deployments-api/model-deployment-new-api-reference.md)。
+详细API调用请参考[API 详情](raw/model-api-reference/model-production/deployments-api/model-deployment-text-generation-api/create-deployment-api.md)及[部署 API 全集](raw/model-api-reference/model-production/deployments-api/model-deployment-api-reference.md)。

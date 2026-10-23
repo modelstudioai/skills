@@ -1268,7 +1268,9 @@ MU5
 
 使用 DTU 前需在控制台开通 DTU 功能并申请资源额度。开通后在百炼控制台**专属部署**页面选择目标模型，计费方式选择 DTU 即可创建部署。
 
-**警告**DTU 部署暂不支持通过 API 创建与管理，请在百炼控制台完成开通、创建、扩缩容与续费等操作。
+**警告**DTU 部署支持通过 API 创建部署、查询详情与列表、扩缩容、修改限流与更新模型（以
+
+`plan="dtu"` 区分部署形式），详见[模型部署 API 参考](raw/model-api-reference/model-production/deployments-api/model-deployment-api-reference.md)。续费与自动续费变更、停止/启动与删除请在百炼控制台操作；开通 DTU 功能与资源额度申请亦需在控制台完成。
 
 通用模型部署的基础流程详见[专属部署概述](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)。
 
@@ -1428,7 +1430,7 @@ DTU 按输入/输出 TPM 售卖，所购 TPM 即每分钟可处理的最大 toke
 
 部署列表展示已购买的输入/输出 TPM 额度，详情页展示 TPM 容量详情。
 
-扩缩容：在部署列表中点击「扩缩容」修改输入/输出 TPM 容量。扩容显示需补交金额，缩容显示预计退款金额。输入和输出需同增或同减，不能一增一减。仅运行中的部署可操作。
+扩缩容：在部署列表中点击「扩缩容」修改输入/输出 TPM 容量。扩容显示需补交金额，缩容显示预计退款金额。输入和输出需同增或同减，不能一增一减。也可通过 API 扩缩容，详见[模型部署 API 参考](raw/model-api-reference/model-production/deployments-api/model-deployment-api-reference.md)。仅运行中的部署可操作。
 
 续费：预付费包月到期可续费，详情页续费按钮进入续费流程，支持自动续费开关与单次续费时长。
 

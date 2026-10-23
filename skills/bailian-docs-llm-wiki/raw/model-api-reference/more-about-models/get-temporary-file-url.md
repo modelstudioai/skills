@@ -17,6 +17,8 @@
 -   文件上传凭证接口限流为 100 QPS 且不支持扩容，**请勿用于生产环境、高并发及压测场景。**
 -   生产环境建议使用[阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss) 等稳定存储，确保文件长期可用并规避限流问题。
 
+**说明**本功能支持**华北2（北京）**和**新加坡**地域。本文代码示例默认以**北京地域**为例；如需使用新加坡地域，请按示例中的注释将请求 URL 中的 `dashscope.aliyuncs.com` 替换为 `dashscope-intl.aliyuncs.com`，并使用新加坡地域的 API Key（两地域 API Key 不同，获取方式见[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)）。
+
 ## 使用方式
 
 1.  获取文件 URL：请先通过[步骤一](https://help.aliyun.com/zh/model-studio/get-temporary-file-url#a363e01e741gu)上传文件（图片、视频或音频），获取以`oss://` 为前缀的临时 URL。
@@ -58,6 +60,8 @@ from datetime import datetime, timedelta
 
 def get_upload_policy(api_key, model_name):
     """获取文件上传凭证"""
+    # 北京与新加坡地域的 API Key 不同，请使用对应地域的 API Key
+    # 以下为北京地域 url，若使用新加坡地域，需将 url 替换为：https://dashscope-intl.aliyuncs.com/api/v1/uploads
     url = "https://dashscope.aliyuncs.com/api/v1/uploads"
     headers = {
         "Authorization": f"Bearer {api_key}",
@@ -191,6 +195,8 @@ import java.time.format.DateTimeFormatter;
 
 public class PublicUrlHandler {
 
+    // 北京与新加坡地域的 API Key 不同，请使用对应地域的 API Key
+    // 以下为北京地域 url，若使用新加坡地域，需将 url 替换为：https://dashscope-intl.aliyuncs.com/api/v1/uploads
     private static final String API_URL = "https://dashscope.aliyuncs.com/api/v1/uploads";
 
     public static JSONObject getUploadPolicy(String apiKey, String modelName) throws IOException {
@@ -302,10 +308,15 @@ DashScope SDK 提供了 `Files` 类，封装了文件上传、查询、删除等
 
 ```
 import os
+import dashscope
 from dashscope import Files
 
+# 北京与新加坡地域的 API Key 不同，请使用对应地域的 API Key
 # 从环境变量中获取 API Key
 api_key = os.getenv('DASHSCOPE_API_KEY')
+
+# 以下为北京地域 url，若使用新加坡地域，需将 url 替换为：https://dashscope-intl.aliyuncs.com/api/v1
+dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'
 
 # 上传文件（purpose=fine_tune 用于微调训练文件，purpose=inference 用于推理临时文件）
 result = Files.upload(
@@ -363,6 +374,7 @@ pip install -U dashscope
 执行上传命令：
 
 ```
+# 默认使用北京地域，若使用新加坡地域，请先执行：export DASHSCOPE_HTTP_BASE_URL="https://dashscope-intl.aliyuncs.com/api/v1"（新加坡地域 API Key 不同）
 dashscope oss.upload --model qwen3-vl-plus --file cat.png
 ```
 
@@ -380,6 +392,7 @@ Uploaded oss url: oss://dashscope-instant/xxxx/2025-08-01/xxxx/cat.png
 执行上传命令：
 
 ```
+# 默认使用北京地域，若使用新加坡地域，请先执行：export DASHSCOPE_HTTP_BASE_URL="https://dashscope-intl.aliyuncs.com/api/v1"（新加坡地域 API Key 不同）
 dashscope oss.upload --model qwen3-vl-plus --file cat.png --api_key sk-xxxxxxx
 ```
 
@@ -459,6 +472,7 @@ sk-xxxx
 **说明**请将 `oss://...`替换为真实的临时 URL，否则请求将失败。
 
 ```
+# 以下为北京地域 url，若使用新加坡地域，需将 url 替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions
 curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H 'Content-Type: application/json' \
@@ -547,8 +561,12 @@ messages = [
             {"text": "这是什么"}]
     }]
 
+# 北京与新加坡地域的 API Key 不同，请使用对应地域的 API Key
 # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
 api_key = os.getenv('DASHSCOPE_API_KEY')
+
+# 以下为北京地域 url，若使用新加坡地域，需将 url 替换为：https://dashscope-intl.aliyuncs.com/api/v1
+dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'
 
 response = dashscope.MultiModalConversation.call(
     api_key=api_key,
@@ -623,6 +641,7 @@ import com.alibaba.dashscope.common.Role;
 import com.alibaba.dashscope.exception.ApiException;
 import com.alibaba.dashscope.exception.NoApiKeyException;
 import com.alibaba.dashscope.exception.UploadFileException;
+import com.alibaba.dashscope.utils.Constants;
 import com.alibaba.dashscope.utils.JsonUtils;
 
 import java.util.Arrays;
@@ -631,10 +650,13 @@ public class MultiModalConversationUsage {
 
     private static final String modelName = "qwen3-vl-plus";
 
+    // 北京与新加坡地域的 API Key 不同，请使用对应地域的 API Key
     // 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
     public static String apiKey = System.getenv("DASHSCOPE_API_KEY");
 
     public static void simpleMultiModalConversationCall() throws ApiException, NoApiKeyException, UploadFileException {
+        // 以下为北京地域 url，若使用新加坡地域，需将 url 替换为：https://dashscope-intl.aliyuncs.com/api/v1
+        Constants.baseHttpApiUrl = "https://dashscope.aliyuncs.com/api/v1";
         MultiModalConversation conv = new MultiModalConversation();
         MultiModalMessageItemText systemText = new MultiModalMessageItemText("You are a helpful assistant.");
         MultiModalConversationMessage systemMessage = MultiModalConversationMessage.builder()
@@ -727,7 +749,8 @@ public class MultiModalConversationUsage {
 ##### 请求接口
 
 ```
-GET https://dashscope.aliyuncs.com/api/v1/uploads
+北京地域：GET https://dashscope.aliyuncs.com/api/v1/uploads
+新加坡地域：GET https://dashscope-intl.aliyuncs.com/api/v1/uploads
 ```
 
 **重要**文件上传凭证接口限流为 100 QPS（按“阿里云主账号+模型”维度），且临时存储不可扩容。生产环境或高并发场景请使用[阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss)等存储服务。
@@ -903,6 +926,7 @@ true
 ##### 请求示例
 
 ```
+# 以下为北京地域 url，若使用新加坡地域，需将 url 替换为：https://dashscope-intl.aliyuncs.com/api/v1/uploads
 curl --location 'https://dashscope.aliyuncs.com/api/v1/uploads?action=getPolicy&model=qwen3-vl-plus' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json'

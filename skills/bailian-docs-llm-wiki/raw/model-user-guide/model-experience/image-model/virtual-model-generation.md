@@ -150,11 +150,11 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 --data '{
   "model": "virtualmodel-v2",
   "input": {
-    "base_image_url": "https://huarong123.oss-cn-hangzhou.aliyuncs.com/image/%E7%9C%9F%E4%BA%BA%E6%A8%A1%E7%89%B9%E5%AE%9E%E6%8B%8D-%E5%A5%B3%20%281%29.jpeg",
-    "mask_image_url": "https://huarong123.oss-cn-hangzhou.aliyuncs.com/image/image.jpg",
+    "base_image_url": "https://g-adoc.alcasset.com/media/maas_docs/sfm/common/images/6a4b3c2d1e0f9275.jpg",
+    "mask_image_url": "https://g-adoc.alcasset.com/media/maas_docs/sfm/common/images/6a4b3c2d1e0f9274.png",
     "prompt": "A woman stands on a rural road",
     "face_prompt": "good face, beautiful face, best quality.",
-    "background_image_url": "https://huarong123.oss-cn-hangzhou.aliyuncs.com/image/%E8%99%9A%E6%8B%9F%E6%A8%A1%E7%89%B9%E7%94%9F%E6%88%90%E8%83%8C%E6%99%AF%E5%9B%BE.png"
+    "background_image_url": "https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4644874271/p827239.png"
   },
   "parameters": {
       "short_side_size": "1024",
@@ -212,8 +212,8 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 --data '{
   "model": "wanx-virtualmodel",
   "input": {
-    "base_image_url": "https://huarong123.oss-cn-hangzhou.aliyuncs.com/image/%E7%9C%9F%E4%BA%BA%E6%A8%A1%E7%89%B9%E5%AE%9E%E6%8B%8D-%E5%A5%B3%20%281%29.jpeg",
-    "mask_image_url": "https://huarong123.oss-cn-hangzhou.aliyuncs.com/image/image.jpg",
+    "base_image_url": "https://g-adoc.alcasset.com/media/maas_docs/sfm/common/images/6a4b3c2d1e0f9275.jpg",
+    "mask_image_url": "https://g-adoc.alcasset.com/media/maas_docs/sfm/common/images/6a4b3c2d1e0f9274.png",
     "prompt": "一名年轻女子，身穿白色短裤，极简风格调色板，长镜头，双色效果（暗银色和浅粉色）",
     "face_prompt": "年轻女子，面容姣好，最高品质"
   },

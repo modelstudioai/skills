@@ -649,7 +649,9 @@ def send_audio():
 
 控制台暂不支持体验。可通过以下方式一键部署：
 
-1.  打开我们写好的[函数计算模板](https://fcnext.console.aliyun.com/applications/create?template=qwen-livetranslate-flash-realtime@dev)，填入 API Key， 单击**创建并部署默认环境**即可在线体验。
+1.  打开我们写好的[函数计算模板](https://fcnext.console.aliyun.com/applications/create?template=qwen-livetranslate-flash-realtime@dev)，填入 API Key 和业务空间 ID，单击**创建并部署默认环境**即可在线体验。
+    
+    获取方式参见[获取 API Key](https://help.aliyun.com/zh/model-studio/get-api-key#c38fb45bc6sje)和[获取业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#6cc9270e83h9d)。
     
 2.  等待约一分钟，在 **环境详情 > 环境信息** 中获取访问域名，**将访问域名的**`http`**改成**`https`（例如[https://qwen-livetranslate-flash-realtime.fcv3.xxx.cn-hangzhou.fc.devsapp.net/），通过该链接与模型交互。](https://qwen-livetranslate-flash-realtime.fcv3.xxx.cn-hangzhou.fc.devsapp.net/%EF%BC%89%EF%BC%8C%E9%80%9A%E8%BF%87%E8%AF%A5%E9%93%BE%E6%8E%A5%E4%B8%8E%E6%A8%A1%E5%9E%8B%E4%BA%A4%E4%BA%92%E3%80%82)
     

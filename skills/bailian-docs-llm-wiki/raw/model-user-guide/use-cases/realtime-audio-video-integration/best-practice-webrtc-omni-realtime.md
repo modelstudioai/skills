@@ -85,6 +85,8 @@ localStream.getAudioTracks().forEach(t => {
 ```
 **添加视频轨道（可选，通过 Canvas 降帧至 2fps）：**
 
+开始发送视频前，应先发送音频。如果音频尚未发送，先发送视频帧会触发 `Error append image before append audio.`。
+
 Canvas 尺寸从摄像头实际分辨率动态获取，而非硬编码：
 
 ```

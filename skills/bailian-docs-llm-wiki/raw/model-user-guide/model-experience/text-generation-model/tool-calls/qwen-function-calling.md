@@ -1200,77 +1200,9 @@ const completion_1 = await functionCalling();
 
 #### 并行工具调用
 
-> 本节仅适用于支持 `parallel_tool_calls` 的模型。MiniMax/MiniMax-M3.1-Flash 不支持通过此参数控制工具调用的并行性：设置为 `false` 也可能在一轮中返回多个 `tool_calls`。调用方需遍历并处理实际返回的全部工具调用。
+> 本节仅适用于支持 `parallel_tool_calls` 的模型。MiniMax/MiniMax-M3.1-Flash、kimi-k3 不支持通过此参数控制工具调用的并行性：设置为 `false` 也可能在一轮中返回多个 `tool_calls`。调用方需遍历并处理实际返回的全部工具调用。
 
-单一城市天气查询只需一次工具调用。若问题需要多次调用工具，如“北京上海的天气如何”或“杭州天气，以及现在几点了”，[发起 Function Calling](https://help.aliyun.com/zh/model-studio/qwen-function-calling#9f478b2e76wrk) 后只会返回一个工具调用信息，以提问“北京上海的天气如何”为例：
-
-```
-{
-    "content": "",
-    "refusal": null,
-    "role": "assistant",
-    "audio": null,
-    "function_call": null,
-    "tool_calls": [
-        {
-            "id": "call_61a2bbd82a8042289f1ff2",
-            "function": {
-                "arguments": "{\"location\": \"北京市\"}",
-                "name": "get_current_weather"
-            },
-            "type": "function",
-            "index": 0
-        }
-    ]
-}
-```
-
-返回结果中只有北京市的入参信息。为了解决这一问题，在[发起 Function Calling](https://help.aliyun.com/zh/model-studio/qwen-function-calling#9f478b2e76wrk)时，可设置请求参数`parallel_tool_calls`为`true`，这样返回对象中将包含所有需要调用的工具函数与入参信息。
-
-**说明**并行工具调用适合任务之间无依赖的情况。若任务之间有依赖关系（工具A的输入与工具B的输出结果有关），请参见[快速开始](https://help.aliyun.com/zh/model-studio/qwen-function-calling#dd5a3dca390k9)，通过while循环实现串行工具调用（一次调用一个工具）。
-
-python
-
-```
-def function_calling():
-    completion = client.chat.completions.create(
-        model="qwen3.8-max",  # 此处以qwen3.8-max为例，可按需更换模型名称
-        extra_body={"enable_thinking": False},
-        messages=messages,
-        tools=tools,
-        # 新增参数
-        parallel_tool_calls=True
-    )
-    print("返回对象：")
-    print(completion.choices[0].message.model_dump_json())
-    print("\n")
-    return completion
-
-print("正在发起function calling...")
-completion = function_calling()
-```
-
-javascript
-
-```
-async function functionCalling() {
-    const completion = await openai.chat.completions.create({
-        model: "qwen3.8-max",  // 此处以qwen3.8-max为例，可按需更换模型名称
-        enable_thinking: false,
-        messages: messages,
-        tools: tools,
-        parallel_tool_calls: true
-    });
-    console.log("返回对象：");
-    console.log(JSON.stringify(completion.choices[0].message));
-    console.log("\n");
-    return completion;
-}
-
-const completion = await functionCalling();
-```
-
-在返回对象的`tool_calls`数组中包含了北京上海的入参信息：
+单一城市天气查询只需一次工具调用。若问题需要多次调用工具，如“北京上海的天气如何”或“杭州天气，以及现在几点了”，由于 `parallel_tool_calls` 默认为 `true`，[发起 Function Calling](https://help.aliyun.com/zh/model-studio/qwen-function-calling#9f478b2e76wrk) 后，模型可在一次返回中包含多个工具调用信息。以提问“北京上海的天气如何”为例，返回对象的`tool_calls`数组中包含了北京和上海的入参信息：
 
 ```
 {
@@ -1298,6 +1230,74 @@ const completion = await functionCalling();
     ]
 }
 ```
+
+若希望模型每次只返回一个工具调用，可在[发起 Function Calling](https://help.aliyun.com/zh/model-studio/qwen-function-calling#9f478b2e76wrk)时将请求参数`parallel_tool_calls`设为`false`：
+
+python
+
+```
+def function_calling():
+    completion = client.chat.completions.create(
+        model="qwen3.8-max",  # 此处以qwen3.8-max为例，可按需更换模型名称
+        extra_body={"enable_thinking": False},
+        messages=messages,
+        tools=tools,
+        # 设为 False 时，每次只返回一个工具调用
+        parallel_tool_calls=False
+    )
+    print("返回对象：")
+    print(completion.choices[0].message.model_dump_json())
+    print("\n")
+    return completion
+
+print("正在发起function calling...")
+completion = function_calling()
+```
+
+javascript
+
+```
+async function functionCalling() {
+    const completion = await openai.chat.completions.create({
+        model: "qwen3.8-max",  // 此处以qwen3.8-max为例，可按需更换模型名称
+        enable_thinking: false,
+        messages: messages,
+        tools: tools,
+        parallel_tool_calls: false
+    });
+    console.log("返回对象：");
+    console.log(JSON.stringify(completion.choices[0].message));
+    console.log("\n");
+    return completion;
+}
+
+const completion = await functionCalling();
+```
+
+返回结果中只包含北京市的入参信息：
+
+```
+{
+    "content": "",
+    "refusal": null,
+    "role": "assistant",
+    "audio": null,
+    "function_call": null,
+    "tool_calls": [
+        {
+            "id": "call_61a2bbd82a8042289f1ff2",
+            "function": {
+                "arguments": "{\"location\": \"北京市\"}",
+                "name": "get_current_weather"
+            },
+            "type": "function",
+            "index": 0
+        }
+    ]
+}
+```
+
+**说明**并行工具调用适合任务之间无依赖的情况。若任务之间有依赖关系（工具A的输入与工具B的输出结果有关），请参见[快速开始](https://help.aliyun.com/zh/model-studio/qwen-function-calling#dd5a3dca390k9)，通过while循环实现串行工具调用（一次调用一个工具）。
 
 #### 强制工具调用
 

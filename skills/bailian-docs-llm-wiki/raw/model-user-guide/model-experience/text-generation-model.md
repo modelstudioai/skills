@@ -44,7 +44,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 如需最强推理能力（如复杂数据分析、多步逻辑推演），可选择 `qwen3.8-max`，但成本较高。
 
-文档超过 100 万 Token 时，把文档导入[知识库](raw/application-user-guide/agent-context/knowledge-base.md)，或分段处理。
+文档超过 100 万 Token 时，把文档导入[知识库](raw/application-user-guide/knowledge-base.md)，或分段处理。
 
 ### 上下文窗口
 

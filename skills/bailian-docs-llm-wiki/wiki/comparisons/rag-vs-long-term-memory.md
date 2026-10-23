@@ -1,54 +1,54 @@
-# RAG 与[长期记忆](../concepts/long-term-memory.md)（LTM）架构对比
+# RAG 与[长期记忆](../concepts/long-term-memory.md)（Long-Term Memory）对比
 
-本对比旨在帮助百炼平台开发者清晰理解 **RAG（[检索增强生成](../concepts/rag.md)）API** 与 **[长期记忆](../concepts/long-term-memory.md)（Long Term Memory, LTM）服务** 在设计目标、能力边界、技术实现及工程落地层面的核心差异，避免因概念混淆导致的架构误用。二者虽均涉及“外部知识接入”与“语义检索”，但定位截然不同：  
-- **RAG 是面向文档级知识库的静态/半静态知识服务**，核心解决「如何让大模型准确回答结构化业务文档中的问题」；  
-- **LTM 是面向用户与会话的动态记忆管理系统**，核心解决「如何让 Agent 持续理解用户、沉淀经验、复用技能」。  
-二者可协同使用（如 LTM 检索用户偏好 → 注入 RAG Agent 提示词），但不可相互替代。
+在构建智能对话、知识增强型应用时，开发者常需在「外部知识注入」与「用户状态延续」两类能力间做技术选型。RAG（[检索增强生成](../concepts/rag.md)）聚焦于将**结构化/非结构化文档知识**动态引入推理过程，解决模型“不知道”的问题；而[长期记忆](../concepts/long-term-memory.md)（Long-Term Memory, LTM）则专注于跨会话持久化存储和精准调用**用户专属的事实性信息与行为画像**，解决模型“记不住”的问题。二者虽均通过外部数据增强大模型输出，但设计目标、数据形态、生命周期及集成方式存在本质差异。本文面向百炼平台开发者，系统对比 RAG API 与 LTM 新版 API 的核心特性，为实际场景下的技术选型提供明确依据。
 
 ## 关键维度对比
 
 | 维度 | RAG API | [长期记忆](../concepts/long-term-memory.md)（LTM） |
-|--------|---------|----------------|
-| **核心定位** | 文档知识库的全生命周期管理与语义问答服务，聚焦**领域知识的结构化组织与精准问答** | 用户级结构化记忆的写入、抽取、检索与画像构建，聚焦**Agent 的持续学习与个性化上下文建模** |
-| **输入格式** | 支持上传 PDF/Word/Excel/PPT/Markdown/TXT 等文件（通过 `docIds` 关联），或直接传入文本块（`chunks`）；支持多模态文档（需指定 `qwen3-vl-embedding` 等解析模型） | 以 `messages` 数组形式传入对话片段（含文本、`image_url`）、事件描述或原始日志；支持 `observation`（事实）、`skill`（可复用行为）、`profile_schema`（画像模板 ID）等语义类型标识 |
-| **输出格式** | - 检索接口（`/knowledge/search`）：返回带相关性分数的文档切片列表（`chunks`）<br>- 问答接口（`/knowledge/chat`）：流式返回自然语言答案 + 引用来源（`citations`）<br>- 所有响应统一含 `request_id` 与 `code="Success"` 结构 | - 同步 `/add`：返回 `memory_node_id` 或错误码<br>- 异步 `/add-async`：返回 `event_id`，需轮询 `/events/{id}` 获取抽取结果（含 `observations`/`skills`/`profile` 字段）<br>- `/memory_nodes/search`：返回带 `score` 的记忆节点列表，含 `type`（`observation`/`skill`/`profile`）和结构化 `content`<br>- `/profile_schemas/{id}/user_profile`：返回符合 schema 的 JSON 用户画像对象 |
-| **支持模型** | - 嵌入模型：`text-embedding-v4`（文本）、`qwen3-vl-embedding`（多模态）<br>- 重排序模型：`qwen3-rerank`（可配置阈值与 TopN）<br>- Agent 问答模型：`qwen3.7-plus`、`qwen3.6-plus` 等（由 `agent_config.agent_model` 指定）<br>- 解析模型：`DOCMIND`、`DASH_QWEN_VL_PARSER` | - 抽取模型：内置 `efficient`（低延迟）与 `intelligent`（高精度）双模式，自动适配 `extract_scene`<br>- 画像模型：依赖 `plan_version=pro` 或 `lite` 版本，影响 `min_score` 过滤、Rerank 能力及抽取深度<br>- **不暴露底层 LLM 调用接口**，所有模型能力封装在抽取/检索逻辑中 |
-| **API 端点基址** | `https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/indices/...`（知识库管理）<br>`/api/v1/indices/knowledge/search`（检索）<br>`/api/v2/apps/knowledge/chat`（问答） | `https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/...`<br>`/add`, `/add-async`, `/memory_nodes/search`, `/profile_schemas/...` |
-| **计费方式** | 按知识库调用量计费：<br>- 文档解析、切片、索引构建（一次性）<br>- 检索（`/search`）与问答（`/chat`）调用次数<br>- 嵌入/重排/Agent 模型调用按 token 计费（计入对应模型账单） | 按记忆操作计费（2026年8月20日起正式商业化）：<br>- `Add` / `Add-Async` 调用次数（区分 `pro`/`lite` 版本）<br>- `SearchMemory` 调用次数（`pro` 版本支持 `min_score` 过滤与高级 Rerank）<br>- 用户画像模板创建与查询不额外计费 |
-| **典型场景** | - 客服知识库问答（产品手册、FAQ）<br>- 内部文档智能搜索（合同、制度、研发文档）<br>- 多文档交叉分析（财报+新闻+公告联合解读）<br>- Agent 的「外部知识插件」（如 `RetrieveProductDocs` 工具） | - 对话式 Agent 的用户偏好记忆（如“用户常订川菜”、“讨厌电话推销”）<br>- 技能沉淀与复用（如“用户上次成功用扫码支付退款”→生成 `refund_by_scan` skill）<br>- 实时用户画像构建（职业、兴趣、消费等级）并用于个性化推荐<br>- 多轮会话状态跟踪（避免重复提问、跨 session 上下文延续） |
+|------|---------|----------------|
+| **核心目标** | 将私有文档知识（如产品手册、合同、FAQ）融入问答，提升回答的**事实准确性与领域专业性** | 在多轮对话中持久化保存并动态注入**用户级结构化信息**（如偏好、身份、历史决策），提升**个性化与上下文连贯性** |
+| **输入格式** | 原始文档（PDF/Word/Excel/TXT/HTML 等，≤100 MB/份）或结构化数据源（OSS、数据库连接）；自动解析为语义切片（默认 512 token） | 显式定义的 JSON 结构：<br>• `fragment`：键值对（如 `{"phone": "138****1234"}`），支持 TTL<br>• `profile`：嵌套对象（如 `{"industry": "finance", "language_preference": "en"}`），支持字段版本控制 |
+| **输出格式** | • `/v1/knowledge/retrieve`：返回匹配切片列表（含内容、元数据、相似度分数）<br>• `/v1/knowledge/ask`：返回带引用标注的自然语言答案（含 `citations` 字段） | • 写入接口：返回操作结果（成功/失败）<br>• 推理时：**无独立输出**；数据作为系统上下文隐式注入 `/v1/chat/completions` 响应中，模型自主决定是否使用及如何表达 |
+| **支持模型** | **通用适配**：所有百炼平台支持的推理模型（`qwen-max`/`qwen-plus`/`qwen-turbo`/`llama-3-70b` 等）均可调用 RAG 接口；检索与生成解耦，模型仅消费 RAG 返回的结果 | **模型强约束**：仅 `qwen-max`、`qwen-plus`、`qwen-turbo` **原生支持** `memory_id` 上下文注入；其他模型（含 `llama-3-70b`）忽略该参数，不报错但无效 |
+| **API 端点** | • 知识库管理：`POST /v1/knowledge_bases`<br>• 文档上传：`POST /v1/knowledge_bases/{id}/documents`<br>• 检索：`POST /v1/knowledge/retrieve`<br>• 问答：`POST /v1/knowledge/ask` | • 记忆实例创建：`POST /v1/memories`<br>• 事实写入：`POST /v1/memories/{memory_id}/fragments`<br>• 画像写入：`POST /v1/memories/{memory_id}/profiles`<br>• 推理启用：在 `/v1/chat/completions` 请求体中添加 `"memory_id": "xxx"` 字段 |
+| **计费方式** | 按**调用量计费**：<br>• 文档解析（按页/字符）<br>• 向量检索（按 query 次数）<br>• 重排服务（按 query 次数）<br>• 问答生成（按 tokens）<br>（详见 [RAG 计费说明](../../raw/application-api-reference/rag-api/rag-api-pricing.md)） | 按**存储量 + 调用量计费**：<br>• 记忆实例创建：免费<br>• `fragment`/`profile` 写入：按条计费<br>• 存储占用：按 GB/天计费（TTL 过期后自动释放）<br>• 推理时注入：**不额外计费**（计入基础模型调用费用） |
+| **数据生命周期** | • 知识库级：由开发者显式管理（CRUD）<br>• 切片级：静态快照，更新需重新解析文档<br>• 无自动过期机制，需手动清理 | • `fragment`：支持 TTL（5 分钟–30 天），到期自动删除<br>• `profile`：长期有效，需显式删除或覆盖<br>• `memory_id` 删除后，所有关联数据**立即且不可恢复地清除** |
+| **隔离与安全** | • 知识库天然租户隔离（归属特定 `app_id`）<br>• 文档内容加密传输与存储<br>• 支持字段级脱敏（需应用层实现） | • `memory_id` **无租户隔离**：不同 `app_id` 使用相同 ID 将共享数据（高风险！）<br>• 全量数据加密落盘<br>• **不支持字段级权限控制**：敏感字段（如身份证号）必须由应用层脱敏后写入 |
+| **典型场景** | • 客服机器人基于企业知识库回答产品问题<br>• 法律助手检索合同条款生成意见书<br>• 内部员工搜索公司制度文档<br>• 基于用户上传的 PDF 报告进行摘要分析 | • 对话机器人记住用户姓名、常用地址、订单偏好<br>• 金融顾问持续追踪客户风险承受等级与投资目标<br>• 教育应用记录学生薄弱知识点，动态调整习题难度<br>• SaaS 工具根据用户角色（管理员/普通成员）差异化展示功能 |
 
 ## 适用场景建议
 
-### ✅ 推荐使用 RAG API 当：
-- 你的数据是**批量导入、相对稳定、以文档为单位**（如 PDF 手册、Word 规范、网页快照）；
-- 核心需求是**高精度、可溯源的答案生成**，且需明确标注答案出处（`citations`）；
-- 需要支持**复杂文档结构解析**（表格、图表、多级标题）与**多模态内容理解**（图文混合文档）；
-- 业务要求**知识库权限隔离、版本管理、人工审核流程**（通过控制台或 API 管理 `indexId` 生命周期）；
-- 你已具备或计划构建一个**面向领域的垂直问答 Agent**，需要可靠的知识底座支撑。
+### ✅ 优先选用 RAG API 当：
+- 你的知识源是**静态或低频更新的文档集合**（如帮助中心、政策法规、技术白皮书）；
+- 需要支持**复杂语义检索**（同义词、模糊匹配、多跳推理）而非简单关键词查找；
+- 应用需**可审计、可追溯的答案来源**（RAG 返回 `citations` 明确标注依据切片）；
+- 业务逻辑要求**模型无关性**——未来可能切换底层大模型，但知识库能力保持不变；
+- 数据量大（万级文档）、需增量同步（如对接数据库变更日志）。
 
-### ✅ 推荐使用长期记忆（LTM）当：
-- 你的数据是**实时产生、高度动态、以用户/会话为粒度**（如聊天记录、操作日志、表单提交）；
-- 核心需求是**让 Agent “记住用户”、“学会做事”、“越用越懂”**，而非回答某个固定文档的问题；
-- 需要**结构化提取用户意图（observation）、可复用行为模式（skill）、画像属性（profile）**，并支持后续条件检索（如“查所有标记为 `high_value_user` 的 observation”）；
-- 你正在构建**个性化推荐、智能客服、数字员工等强交互型 Agent**，需跨会话维持上下文一致性；
-- 你接受异步处理（尤其 `intelligent` 模式），并愿意通过 `event_id` 轮询管理任务状态。
+### ✅ 优先选用长期记忆（LTM）当：
+- 核心需求是**跨会话维护用户个体状态**（如登录态、偏好设置、历史交互结论）；
+- 数据高度**结构化、字段明确、更新频繁**（如用户修改收货地址、更新语言偏好）；
+- 需要**精确控制数据时效性**（如临时验证码 5 分钟失效、用户试用期 30 天）；
+- 已确定使用 `qwen-max`/`qwen-plus`/`qwen-turbo`，且希望**零成本复用模型原生记忆注入能力**；
+- 场景对**租户隔离有严格要求**，且能确保 `memory_id` 全局唯一（例如拼接 `app_id + user_id`）。
 
-### ⚠️ 不推荐混用或替代的情况：
-- ❌ 用 LTM 存储整份《产品白皮书》PDF 并期望它像 RAG 一样做全文精准问答 —— LTM 不提供文档级切片、向量索引与重排能力，召回精度与可解释性远低于 RAG；  
-- ❌ 用 RAG 管理 10 万用户的实时对话偏好 —— RAG 缺乏 `user_id` 隔离、画像 schema、技能抽象等机制，无法支撑个性化记忆建模；  
-- ❌ 在未启用 `profile_schema` 的情况下，期望 LTM 自动识别用户年龄/职业 —— 必须先定义 schema 并在 `AddMemory` 中显式传入，否则仅作通用文本记忆。
+### ⚠️ 避免混用或误用：
+- **不要用 RAG 存储用户隐私字段**（如手机号、身份证号）：RAG 切片不可控、难脱敏、无 TTL，违反最小必要原则；
+- **不要用 LTM 存储通用知识**（如产品参数、FAQ）：LTM 不支持全文检索、无法处理非结构化文本、容量上限低（1000 fragments），且无重排等语义增强能力；
+- **不要假设 LTM 对所有模型生效**：若应用需兼容 `llama-3-70b`，必须自行实现记忆注入逻辑（如拼接 system [prompt](../guides/prompt.md)），不能依赖 `memory_id`；
+- **不要忽略 LTM 的租户风险**：生产环境务必校验 `memory_id` 生成逻辑，禁止硬编码或共享 ID。
 
-## 技术选型参考（面向开发者）
+## 开发者技术选型参考
 
-| 选型考量点 | RAG API | 长期记忆（LTM） | 建议动作 |
-|------------|---------|------------------|----------|
-| **数据形态** | 文档集合（静态/低频更新） | 用户事件流（高频、实时） | 选 RAG 若数据源是文件系统/OSS；选 LTM 若数据源是消息队列/API 日志 |
-| **查询模式** | “这个问题在哪些文档里被提到？”（关键词+语义） | “这个用户过去说过什么？做过什么？喜欢什么？”（用户ID+类型+语义） | RAG 无 `user_id` 概念；LTM 所有接口强制 `user_id`，缺失则报错 |
-| **开发复杂度** | 中高：需管理知识库生命周期（创建/同步/删除）、切片策略、Agent 配置、多模型参数协调 | 中：SDK 封装良好（`agentscope-runtime`），但需理解 `extract_mode`/`plan_version`/`profile_schema` 语义 | 新团队建议从 LTM 同步 `/add` 入手；RAG 建议用控制台先行验证知识库效果 |
-| **可观测性** | 提供 `/index/monitor`（秒级时间戳）、任务状态查询、详细 `request_id` 日志 | 提供 `/events/{id}` 状态轮询、`GetUserProfile` 延迟说明、`UNRECORDED` 等明确错误码 | 二者均需集成阿里云 SLS 日志；RAG 更依赖 `Retry-After` 处理限流，LTM 更需处理 `PENDING/RUNNING` 状态机 |
-| **扩展性** | 支持自定义嵌入/重排模型、多知识库路由、Agent 插件化编排 | 支持多 `project_id` 隔离、`memory_library_id` 分库、`profile_schema` 模板热更新 | 高并发场景：RAG 注意 `/rag/index/monitor` 仅 1 QPS；LTM 注意 `/add` ≤ 120 QPM，超量必用 `/add-async` |
+| 你的问题 | 推荐方案 | 关键原因 |
+|----------|----------|----------|
+| “如何让客服机器人准确回答我们最新版《售后服务协议》里的退换货规则？” | **RAG API** | 协议是静态文档，需语义检索+重排+引用溯源；RAG 支持 PDF 解析与向量检索，LTM 无法处理非结构化长文本。 |
+| “用户上次说‘我讨厌弹窗广告’，下次对话时如何自动关闭推荐位？” | **LTM** | 属于用户偏好（`profile`），需跨会话持久化、字段级更新；RAG 无法建立“用户→偏好”的映射关系。 |
+| “需要根据用户上传的体检报告 PDF，生成健康建议” | **RAG API** | 输入是原始文档，需切片、向量化、检索关键指标；LTM 不支持文档解析。 |
+| “记录用户每轮对话中确认的预算范围（如‘5000–8000元’），并在后续推荐时过滤价格” | **LTM**（`fragment` + TTL） | 预算是临时性、会话级事实，适合 `fragment`；RAG 无法动态绑定用户 ID 与预算值。 |
+| “应用需同时支持 Qwen 和 Llama 模型，且都要用到用户记忆” | **自研记忆层 + RAG 模式** | LTM 仅限 Qwen；应将用户记忆存于自有数据库，推理前按需拼接为 system [prompt](../guides/prompt.md) 或 context，再调用任一模型。 |
 
-> **协同实践提示**：最佳架构常为 **RAG + LTM 双引擎**。例如：用户提问“我的订单为什么还没发货？”时，Agent 可并行执行：<br>① RAG 检索《物流规则手册》获取通用政策；<br>② LTM 检索该 `user_id` 的 `observation`（如“上周投诉过物流慢”）与 `skill`（如“曾用 `track_shipment` 工具查单号”）；<br>③ 将二者结果融合注入最终 LLM 提示词，生成既专业又个性化的回复。
+> **最佳实践提示**：在复杂应用中，RAG 与 LTM 可**协同使用**——例如，客服机器人先用 LTM 获取用户身份与历史工单号，再用 RAG 检索对应产品的维修指南，最终生成个性化解答。此时，LTM 提供“谁在问”，RAG 提供“问什么知识”，二者分层解耦，各司其职。
 
 ## 被对比主题页
 

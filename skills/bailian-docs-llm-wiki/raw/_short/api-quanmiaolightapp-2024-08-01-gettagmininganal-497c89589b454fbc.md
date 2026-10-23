@@ -81,7 +81,7 @@ string
 
 否
 
-[workspaceId](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)
+[workspaceId](raw/application-api-reference/application-call/obtain-the-app-id-and-workspace-id.md)
 
 llm-xx
 

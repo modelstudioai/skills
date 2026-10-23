@@ -51,7 +51,8 @@
       "samples": {
         "dashscope": {
           "default": {
-            "python": "from http import HTTPStatus\nfrom dashscope.audio.asr import Transcription\nimport dashscope\nimport os\nimport json\n\n# 若没有配置环境变量，请用百炼API Key将下行替换为：dashscope.api_key = \"sk-xxx\"\ndashscope.api_key = os.getenv(\"DASHSCOPE_API_KEY\")\n\ntask_response = Transcription.async_call(\n    model='fun-asr',\n    file_urls=['https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav',\n               'https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_male2.wav']\n)\n\ntranscribe_response = Transcription.wait(task=task_response.output.task_id)\nif transcribe_response.status_code == HTTPStatus.OK:\n    print(json.dumps(transcribe_response.output, indent=4, ensure_ascii=False))\n    print('transcription done!')"
+            "python": "from http import HTTPStatus\nfrom dashscope.audio.asr import Transcription\nimport dashscope\nimport os\nimport json\n\ndashscope.base_http_api_url = \"https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1\"\n\n# 若没有配置环境变量，请用百炼API Key将下行替换为：dashscope.api_key = \"sk-xxx\"\ndashscope.api_key = os.getenv(\"DASHSCOPE_API_KEY\")\n\ntask_response = Transcription.async_call(\n    model='fun-asr',\n    file_urls=['https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav']\n)\n\ntranscribe_response = Transcription.wait(task=task_response.output.task_id)\nif transcribe_response.status_code == HTTPStatus.OK:\n    print(json.dumps(transcribe_response.output, indent=4, ensure_ascii=False))\n    print('transcription done!')",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/fun-asr-recorded-speech-recognition-http-api"
           }
         }
       }

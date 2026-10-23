@@ -109,7 +109,7 @@
 
 **type**`string`
 
-VAD类型。取值：`server_vad`（默认值）或 `semantic_vad`。详情请参见[客户端事件](raw/model-api-reference/omni-realtime-api/client-events.md)。
+VAD类型。取值：`server_vad`（默认值）、`semantic_vad` 或 `semantic_vad_ec`。其中，`semantic_vad_ec` 适用于 Qwen3.8-Omni-Flash-Realtime 系列模型。详情请参见[客户端事件](raw/model-api-reference/omni-realtime-api/client-events.md)。
 
 **threshold**`float`
 
@@ -249,7 +249,7 @@ VAD检测阈值。
 
 **type**`string`
 
-VAD类型。取值：`server_vad`（默认值）或 `semantic_vad`。详情请参见[客户端事件](raw/model-api-reference/omni-realtime-api/client-events.md)。
+VAD类型。取值：`server_vad`（默认值）、`semantic_vad` 或 `semantic_vad_ec`。其中，`semantic_vad_ec` 适用于 Qwen3.8-Omni-Flash-Realtime 系列模型。详情请参见[客户端事件](raw/model-api-reference/omni-realtime-api/client-events.md)。
 
 **threshold**`float`
 
@@ -365,7 +365,7 @@ VAD检测阈值。
             "model": "qwen3-asr-flash-realtime"
         },
         "turn_detection": {
-            // 取值为server_vad或semantic_vad（qwen3.8-omni-flash-realtime和qwen3.5-omni-realtime系列支持）
+            // VAD 类型及各模式的支持范围参见客户端事件中的 turn_detection.type
             "type": "server_vad",
             "threshold": 0.1,
             "prefix_padding_ms": 500,

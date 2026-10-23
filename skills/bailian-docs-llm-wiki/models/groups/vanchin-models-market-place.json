@@ -12,7 +12,7 @@
           "Image"
         ]
       },
-      "description": "DeepSeek-V4.1-Flash 模型，全新模型结构系列中的最小尺寸的模型，具备原生多模态视觉理解能力。新模型结构的设计初衷是：能力上限更高、推理速度更快、吞吐更大、可扩展到更大参数模型。",
+      "description": "由快手Vanchin提供的DeepSeek V4.1 Flash现已更新至 V4.1-Flash-1017 版本！相比上一版本的 DeepSeek V4.1 Flash，新模型在各方面的基准测试中取得了长足的提升，模型输出更精炼、任务完成速度更快，基于552B参数MoE架构，推理时仅激活约8B参数，显著降低调用成本。",
       "features": [
         "function-calling",
         "structured-outputs",

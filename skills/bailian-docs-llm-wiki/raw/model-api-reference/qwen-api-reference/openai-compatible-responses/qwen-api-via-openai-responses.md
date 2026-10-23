@@ -119,7 +119,7 @@ content 数组元素
 
 **file\_url** `string`
 
-文件的公网 URL。当 type 为 `input_file` 时必填。支持 PDF 文件（最大 100 MB）和图片文件（最大 20 MB）。目前仅 `qwen3.5-ocr` 支持此类型。
+文件的公网 URL。当 type 为 `input_file` 时必填。支持 PDF 文件（最大 100 MB）和图片文件（最大 20 MB）。目前 `qwen3.8-flash`、`qwen3.8-max`、`qwen3.5-ocr` 支持此类型。
 
 PDF 的页数上限取决于 `ocr_options` 中的 `task`：设置为 `document_parsing` 时最大 50 页；未设置 `task` 或设置为其他任务时，最大 10 页。
 
@@ -575,6 +575,17 @@ mcp_tool = {
 **type**`string` **（必选）**
 
 允许的工具配置类型，固定为 `allowed_tools`。
+
+**parallel\_tool\_calls** `boolean` （可选）默认值为 `true`
+
+是否开启并行工具调用。相关文档：[并行工具调用](https://help.aliyun.com/zh/model-studio/qwen-function-calling#cb6b5c484bt4x)
+
+> kimi-k3 不支持通过此参数控制工具调用的并行性。设置为 `false` 也不能保证串行调用，模型仍可能在一次响应中返回多个 `function_call`。请按实际返回结果处理。
+
+可选值：
+
+-   `true`：开启
+-   `false`：不开启
 
 **temperature**`float`（可选）
 

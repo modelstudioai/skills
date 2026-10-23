@@ -1,53 +1,63 @@
 # model experience
 
-模型体验（Model Experience）是百炼平台面向开发者提供的统一模型调用入口，支持多模态模型的快速接入与实验。通过标准化 API 和控制台界面，开发者可一站式试用、调试和集成各类大模型能力。所有模型均遵循统一的鉴权、计费与限流机制。
+`model experience` 是百炼平台面向开发者提供的统一模型调用体验层，封装了多模态模型的接入、参数配置与结果解析逻辑，支持通过标准化 API 或 SDK 快速集成各类生成与理解能力。其核心目标是降低模型使用门槛，同时保持底层模型能力的完整性与可控性。所有能力均基于 [原文标题](../../raw/model-user-guide/model-experience.md) 所列模块组织。
 
 ## 支持的模型与功能
 
-当前支持以下 12 类模型能力，覆盖文本、视觉、语音、音视频、3D、世界建模及检索增强等场景：
+当前 `model experience` 覆盖以下 12 类模型能力，每类对应独立文档说明具体输入输出格式、典型场景及最佳实践：
 
-- 文本生成：支持长上下文推理、结构化输出、[函数调用](../concepts/function-calling.md)等 [文本生成](../../raw/model-user-guide/model-experience/text-generation-model.md)  
-- 视觉理解：包括图文问答、OCR、图表解析等多任务能力 [视觉理解](../../raw/model-user-guide/model-experience/vision-model.md)  
-- 图片生成与编辑：支持文生图、图生图、局部重绘、尺寸扩展等 [图片生成与编辑](../../raw/model-user-guide/model-experience/image-model.md)  
-- 视频生成与编辑：含文生视频、视频扩时、关键帧控制等功能 [视频生成与编辑](../../raw/model-user-guide/model-experience/video-generate-edit-model.md)  
-- 世界模型：提供具身交互、环境模拟与动作规划接口 [世界模型](../../raw/model-user-guide/model-experience/world-model.md)  
-- 3D模型生成：支持 TriPo 等架构的单图生成 3D 网格与纹理 [3D模型生成](../../raw/model-user-guide/model-experience/tripo-3d-generation-guide.md)  
-- 语音合成（TTS）、音频生成、语音识别（ASR）、语音转语音（S2S）：均基于统一音频处理栈 [语音合成](../../raw/model-user-guide/model-experience/speech-synthesis.md)  
-- 全模态：支持跨模态联合输入（如“描述+草图+语音指令”）的端到端理解与响应 [全模态](../../raw/model-user-guide/model-experience/omni-modal.md)  
-- 向量与重排序：提供嵌入向量生成（embedding）与语义相关性重排序（rerank）两类基础检索模型 [向量与重排序](../../raw/model-user-guide/model-experience/embedding-rerank-model.md)  
+- 文本生成（含对话、补全、指令遵循）  
+- 视觉理解（图像分类、OCR、图文推理等）  
+- 图片生成与编辑（文生图、图生图、局部重绘）  
+- 视频生成与编辑（文生视频、视频扩时、关键帧控制）  
+- 世界模型（具身智能、环境建模与动作规划）  
+- 3D 模型生成（TriPo 系列，支持 GLB/OBJ 输出）  
+- 语音合成（TTS，支持多语种与音色克隆）  
+- 音频生成（背景音、音效、音乐生成）  
+- 语音识别（ASR，支持长音频流式转写）  
+- 语音转语音（V2V，保留语义与韵律的跨语言/音色转换）  
+- 全模态（Omni-modal，支持文本+图像+音频+视频混合输入）  
+- 向量与重排序（Embedding 生成、语义相似度计算、Rerank 排序）
 
-> **注意**：`world-model.md` 中声明的“支持实时物理引擎反馈”尚未在 v3.2.0 API 中开放，实际调用将返回 `400 UnsupportedFeature`；请参考 [世界模型](../../raw/model-user-guide/model-experience/world-model.md) 的「已知限制」章节确认当前可用能力。
+> **注意**：`world-model` 的接口定义与 `omni-modal` 在 [原文标题](../../raw/model-user-guide/model-experience/world-model.md) 和 [原文标题](../../raw/model-user-guide/model-experience/omni-modal.md) 中存在部分参数命名不一致（如 `context_mode` vs `input_mode`），建议以最新版 SDK 的 `ModelExperienceClient` 初始化逻辑为准，避免直接拼接请求体。
 
 ## 关键参数
 
-所有模型调用共用以下核心参数（部分模型支持扩展参数）：
+所有模型调用共用以下顶层参数（部分能力可选）：
 
-- `model`: 必填，模型标识符（如 `qwen-vl-plus`、`wanx-video-1.0`），详见各子文档的「模型列表」表格  
-- `input`: 必填，结构化输入对象，格式依模型类型而异（如 `text_generation` 为 `{ "prompt": "...", "parameters": {...} }`；`vision` 为 `{ "messages": [...], "images": ["base64..."] }`）  
-- `parameters`: 可选，通用超参（`temperature`, `top_p`, `max_tokens` 等），但**并非所有模型均支持全部参数**——例如 `embedding` 模型忽略 `temperature`，`rerank` 模型不接受 `max_tokens`  
-- `stream`: 布尔值，仅对文本生成、语音合成等流式响应模型生效；其他类型（如图像/3D生成）强制 `false`
+| 参数名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| `model` | string | 是 | 模型标识符，如 `qwen-vl-plus`、`wanx-video-1.0`、`speech-tts-1.2`，详见各子文档 [原文标题](../../raw/model-user-guide/model-experience/text-generation-model.md) 等所列支持列表 |
+| `input` | object | 是 | 模型特定输入结构，如 `{"prompt": "..."}` 或 `{"image_url": "...", "text": "..."}` |
+| `parameters` | object | 否 | 控制生成行为，常见字段：`temperature`（仅文本/音频类）、`top_p`、`max_output_tokens`、`seed`、`enable_streaming` |
+| `extra` | object | 否 | 扩展字段，用于传递能力特有参数（如视觉理解中的 `detail_level`，图片生成中的 `style_preset`） |
 
 ## 使用方式
 
-1. **API 调用**：使用 `POST /v1/models/{model}/invoke`，Header 需携带 `Authorization: Bearer <api_key>`  
-2. **控制台调试**：登录百炼控制台 →「模型体验」页 → 选择模型 → 填写输入 → 点击「运行」  
-3. **SDK 调用**（Python 示例）：
-   ```python
-   from alibabacloud_bailian20231219.client import Client
-   client = Client("<access_key_id>", "<access_key_secret>", "cn-beijing")
-   response = client.invoke_model(
-       model="qwen-max",
-       input={"prompt": "你好"},
-       parameters={"temperature": 0.7}
-   )
-   ```
+推荐通过百炼官方 SDK（Python/Java/Go）调用：
+
+```python
+from alibabacloud_bailian20231219 import models as bailian_models
+from alibabacloud_bailian20231219.client import Client
+
+client = Client(...)
+req = bailian_models.CallModelExperienceRequest(
+    model="qwen-vl-plus",
+    input={"text": "描述这张图", "image_url": "https://..."},
+    parameters={"temperature": 0.5}
+)
+resp = client.call_model_experience(req)
+```
+
+HTTP 直连方式需 POST 到 `/api/v1/model/experience`，Header 中携带 `X-DashScope-Access-Token`，Body 为 JSON 格式。详细协议规范见 [原文标题](../../raw/model-user-guide/model-experience.md)。
 
 ## 限制和注意事项
 
-- 单次请求最大输入长度：文本类模型上限 32768 tokens；视觉/视频类模型受 base64 图像/视频体积限制（≤ 50MB）；3D 模型仅支持单张输入图（≤ 4MB）  
-- 输出长度限制：文本生成默认 `max_tokens=2048`，不可超过模型原生上下文窗口的 50%；图像生成固定输出分辨率（如 `image-generation-v1` 仅支持 `1024x1024`）  
-- 计费粒度：按实际调用次数与资源消耗计费（如 token 数、图像分辨率、视频秒数），详情见 [文本生成](../../raw/model-user-guide/model-experience/text-generation-model.md) 的「计费说明」章节  
-- **重要兼容性提示**：`speech-to-speech.md` 中描述的 `voice_clone` 参数已在 v3.1.0 版本中移除，新流程需先调用 `/v1/voices/create` 创建声纹 ID，再于 `input` 中传入 `voice_id`；旧参数将被静默忽略 —— 请务必更新至最新 SDK 或参照 [语音转语音](../../raw/model-user-guide/model-experience/speech-to-speech.md) 的「迁移指南」
+- 单次请求最大 `input` 总大小为 50 MB（含 Base64 编码图像/音频）；视频文件限 120 秒、200 MB  
+- `streaming` 模式仅对文本生成、语音合成、部分视频生成生效，其余类型返回完整响应  
+- 多模态输入（如图文混合）必须使用 `omni-modal` 模型标识，不可混用 `qwen-vl-plus` + `audio_generation` 参数  
+- 所有模型均按 token/秒或请求次数计费，具体配额与计费规则请参考对应子文档，例如 [原文标题](../../raw/model-user-guide/model-experience/speech-synthesis.md) 明确标注了 TTS 的字符计费粒度  
+- `embedding-rerank-model` 不支持 streaming，且 `rerank` 请求中 `query` 字段长度上限为 2048 Unicode 字符
 
 ## 来源文档
 

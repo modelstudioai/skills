@@ -1,59 +1,69 @@
-# 图像、视频与3D生成能力对比
+# 图像生成、视频生成与3D生成对比
 
-为帮助开发者快速理解百炼平台在多模态生成领域的技术布局与能力边界，本文档系统对比图像生成（Image Generation）、视频生成（Video Generation）与3D生成（3D Generation）三大核心AIGC能力。对比聚焦于**工程落地关键维度**，涵盖调用方式、模型生态、输入输出约束、计费逻辑及适用场景，旨在为技术选型提供客观、可操作的决策依据。
+为帮助开发者快速理解百炼平台多模态生成能力的定位差异，明确技术选型边界，本文从输入输出、模型生态、调用方式、计费逻辑及业务适配性等维度，系统对比图像生成（Image Generation）、视频生成（Video Generation）与3D生成（3D Generation）三大核心能力。本对比基于当前（2024年Q3）平台正式发布的API能力，适用于新项目架构设计、已有服务迁移评估及跨模态方案整合决策。
 
----
-
-## 关键能力维度对比
-
-| 维度 | 图像生成（Image Generation） | 视频生成（Video Generation） | 3D生成（3D Generation） |
-|------|------------------------------|------------------------------|--------------------------|
-| **核心定位** | 静态视觉内容生成与编辑 | 动态时序内容生成与操控 | 空间结构建模与几何重建 |
-| **输入格式** | 文本（`prompt`）、Base64 或公网 URL 图像（图生图/局部重绘）、可选 `mask` | 文本、单帧/首尾帧图像 URL、参考视频 URL、音频 URL、TTS 内容；支持多模态组合输入 | 文本（`prompt`）、单张图像 URL（单图生3D）、或严格顺序的 2–4 张视角图 URL（前/左/后/右） |
-| **输出格式** | Base64 编码图像或临时下载 URL（有效期 1 小时），返回 `data: [{ "url": "...", "b64_json": "..." }]` | 异步返回 `output.video_url`（MP4/H.264，有效期 24 小时）；部分模型额外返回预览图、关键帧序列 | 异步返回 `results` 数组，含 `pbr_model_url`（GLB + PBR 材质）、`base_model_url`（无贴图 GLB）、`rendered_image_url`（渲染预览图）；所有 URL 有效期 2 小时 |
-| **支持模型（代表性）** | `wanx-v1`（万相）、`kling-v2`（可灵）、`zimage-pro`（Z-Image）、`vidu/viduq3-pro_image_generation`（Vidu 图像模式） | `wan3.0-video-generation`（万相3.0）、`kling-v3-omni-video-generation`（可灵）、`pixverse/pixverse-v6-t2v`（爱诗）、`videoretalk`（口型替换） | `Tripo/Tripo-H3.1`（高精度）、`Tripo/Tripo-P1.0`（轻量快速） |
-| **API 端点** | 同步 RESTful：`POST /v1/images/generations` | [异步任务](../concepts/asynchronous-task.md)式：`POST {WorkspaceId}.{region}.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis` | [异步任务](../concepts/asynchronous-task.md)式：`POST {WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/3d-generation`（仅华北2北京） |
-| **调用模式** | **同步响应**（典型耗时 1–8 秒），请求即得结果 | **强制异步**（创建任务 + 轮询查询），任务生命周期 ≤24 小时；需处理 `task_id` 状态轮询 | **强制异步**（创建任务 + 轮询查询），任务生命周期 ≤24 小时；轮询间隔建议 ≥15 秒 |
-| **地域约束** | 无强绑定，支持多地域通用 API 域名（如 `dashscope.aliyuncs.com`） | **强地域绑定**：模型、Endpoint、API Key 必须同属一个地域（如 `cn-beijing`）；推荐使用 Workspace 专属域名 | **强地域锁定**：**仅支持华北2（北京）地域**；Endpoint 固定为 `cn-beijing.maas.aliyuncs.com` |
-| **计费方式** | 按**成功请求数**计费（例：1 次请求生成 4 张图 = 4 次计费）；部分模型含免费额度 | 按**任务次数**或**视频秒数**计费（如 `videoretalk` 0.08 元/秒）；多数模型含基础免费额度 | 按**成功任务数**计费（无论输出面数或质量等级）；`Tripo-H3.1` 与 `Tripo-P1.0` 单价不同，详见控制台定价页 |
-| **典型延迟** | 低延迟（<5s）：适合实时交互场景（如设计工具即时预览） | 中高延迟（30s–10min+）：取决于视频长度、分辨率与模型负载（如 4K 30 秒视频常需 3–5 分钟） | 高延迟（2–15 分钟）：受几何复杂度影响显著（`H3.1-ultra` 通常 >8 分钟） |
-| **关键限制** | • `prompt` ≤500 字符<br>• `size` 必须为模型明确支持的尺寸组合（如 `1024x1536`）<br>• Z-Image 不支持 `negative_prompt` | • 输入媒体 URL 必须公网可访问；OSS URL 需加 `X-DashScope-OssResourceResolve: enable`<br>• `wan2.6` 及更早模型与 `wan2.7+` 参数协议不兼容<br>• 并发任务数受账号等级限制 | • `prompt`/`image`/`images` 三者**严格互斥**<br>• 多图输入必须按 `[前, 左, 后, 右]` 顺序，缺位填 `{}`<br>• `task_id` 与结果 URL 时效性要求高（24h / 2h） |
-
----
+| 维度 | 图像生成 | 视频生成 | 3D生成 |
+|------|----------|----------|--------|
+| **输入格式** | 文本（`prompt`） + 可选参考图（最多10–14张，支持PNG/JPEG/WEBP；部分模型如 `qwen-mt-image-2.0` 仅支持JPG） | 文本（`prompt`）或单图（`img_url`）或首尾帧（`first_frame`/`last_frame`）或参考媒体数组（含`image_url`/`video_url`）；所有URL需公网可访问 | **二选一**：<br>• 纯文本描述（`prompt`，≤100字，中英文）<br>• 单张RGB图像（`image_url`，JPG/PNG，建议512×512+，禁止人脸/文字/Logo） |
+| **输出格式** | PNG/JPEG格式图像URL（同步返回）或临时URL（[异步任务](../concepts/asynchronous-task.md)）；支持水印控制（`watermark: true/false`） | MP4格式视频URL（异步返回，有效期24小时）；无水印选项（默认无水印，部分模型如Vidu可配置品牌标识） | `.glb` 格式3D模型文件URL（异步返回，有效期24小时）；含基础几何、材质与光照，**不支持动画、骨骼、PBR高级材质** |
+| **支持模型（主力）** | • 千问系列：`qwen-image-3.0-pro`、`qwen-mt-image-2.0`<br>• 万相系列：`wan2.7-image-pro`、`wan2.5-i2i-preview`、`wanx-style-repaint-v1`<br>• 可灵/Vidu：`kling/kling-v3-omni-image-generation`、`vidu/viduq2-pro_reference2image`<br>• 创意工具：`virtualmodel-v2`、`facechain-finetune`（需训练）等 | • HappyHorse：文/图/参考生视频、视频编辑<br>• 万相：`wan2.7-videoedit`、`wan2.7-t2v`、`wan3.0-video-all-in-one`<br>• 第三方模型：`pixverse/pixverse-v6-t2v`、`kling/kling-v3-t2v`、`vidu/viduq3-pro_text2video`、`minimax/minimax-v2-t2v`<br>• 垂直能力：`videoretalk`（口型驱动）、`video-style-transform`（风格重绘）、`wan2.2-s2v`（数字人） | • **仅 Tripo-3D**（`tripo-3d-generation`）<br>• 不支持其他3D模型（如Luma、Stable Diffusion 3D等） |
+| **API 端点** | 同步模型（如`qwen-image-3.0-pro`）：<br>`POST /api/v1/services/aigc/multimodal-generation/generation`<br>异步模型（如`kling`/`vidu`）：<br>`POST /api/v1/services/aigc/image-generation/generation` → 轮询 `/tasks/{task_id}` | **统一异步端点**：<br>`POST /api/v1/services/aigc/video-generation/video-synthesis`（主用）<br>少数模型（如`wan2.2-s2v`）使用：<br>`POST /api/v1/services/aigc/image2video/video-synthesis`<br>→ 全部轮询 `/api/v1/tasks/{task_id}` | **专用端点**：<br>`POST /v1/models/tripo-3d-generation:generate`<br>→ 轮询 `/v1/tasks/{task_id}` |
+| **调用范式** | • **混合范式**：低延迟模型（千问3.0+/万相2.7+）支持**同步调用**（秒级返回）；高保真/复杂编辑类（可灵/Vidu/FaceChain）强制**异步调用**（需轮询） | • **强制异步**：所有模型均需 `X-DashScope-Async: enable` 头；创建任务后必须轮询，**不支持同步响应** | • **强制异步**：固定流程：提交 → 获取`task_id` → 轮询 → 下载`.glb`；**不支持同步、无Webhook回调** |
+| **计费方式** | • 按**调用次数**（如`qwen-image-3.0-pro` 1次=1张图）<br>• 部分模型按**分辨率档位**（如`wan2.7-image-pro`选`4K`比`2K`贵）<br>• 创意工具多数**仅限免费体验**（额度用尽即停） | • 主流按**视频时长（秒）** 计费（如`videoretalk` 0.08元/秒，`wan2.2-s2v` 480P 0.5元/秒）<br>• 部分模型按**任务次数**（如`pixverse/pixverse-v6-t2v`）<br>• 所有模型存在并发数与RPS硬限制（如`videoretalk`最大并发=1） | • 按**单次任务**计费（无论文本/图像输入）<br>• 分辨率选项（`low`/`medium`/`high`）**不影响单价**<br>• 无免费额度，**无创意工具类“限时免费”模型** |
+| **典型场景** | • 广告素材批量生成（Banner/海报）<br>• 电商AI试穿/虚拟模特展示<br>• 多语言图文翻译（`qwen-mt-image-2.0`）<br>• 设计稿局部重绘与风格迁移<br>• 漫画分镜图生成（Kling多图输入） | • 短视频内容创作（抖音/小红书）<br>• 数字人口播视频生成（`videoretalk`+`wan2.2-s2v`）<br>• 产品广告片制作（Vidu工业级一致性）<br>• 游戏过场动画原型（HappyHorse物理真实感）<br>• 视频超分与艺术风格化（PixVerse Upscale/Style Transform） | • Web端3D商品预览（电商/AR导购）<br>• 游戏资产快速原型（低多边形角色/道具）<br>• 工业设计概念验证（简单机械结构/家居摆件）<br>• 教育可视化模型（分子/地理/建筑简模） |
+| **地域隔离要求** | ✅ 强制：API Key、Endpoint、Workspace ID 必须同地域（北京/新加坡/美东）；跨地域调用必然失败 | ✅ 强制：同图像生成；**额外注意**：`wan2.2-s2v`、`videoretalk`、`video-style-transform` **仅支持北京地域** | ✅ 强制：同属百炼地域体系，需使用对应地域专属域名（如`{WorkspaceId}.cn-beijing.maas.aliyuncs.com`） |
 
 ## 各方案适用场景建议
 
-### ✅ 图像生成 —— 适合「轻量、高频、实时反馈」场景  
-- **推荐场景**：电商主图生成、营销海报批量制作、UI 设计稿草图转高清、AIGC 辅助绘画、社交媒体配图、图像增强（去背景/扩图/超分）  
-- **慎用场景**：需严格时间一致性（如角色动作连贯性）、需三维空间理解（如物体遮挡关系推理）、对动态构图无需求的静态图生成（此时应优先选用专用图像模型而非 Vidu 的降级模式）  
+### ✅ 优先选择图像生成，当：
+- 需要**毫秒级响应**（如实时UI组件渲染、A/B测试图生成），且任务复杂度适中（推荐千问3.0+/万相2.7+同步模型）；
+- 输入依赖**多图参考**（如分镜草图+风格图+人物图），需强上下文对齐（Vidu/Kling支持14图输入）；
+- 涉及**多语言图文排版保留**（如海外电商详情页本地化），必须使用 `qwen-mt-image-2.0`；
+- 业务已深度集成图像工作流（如PS插件、Figma AI助手），需最小改造接入。
 
-### ✅ 视频生成 —— 适合「时序表达、行为驱动、跨模态协同」场景  
-- **推荐场景**：短视频广告自动成片、数字人直播/课程视频生成、产品演示动画（图→视频）、口型同步配音（视频+音频）、老视频风格迁移（如胶片感/赛博朋克）、4K 视频超分增强  
-- **慎用场景**：毫秒级响应要求（如游戏内实时生成）、超长视频（>60 秒）批量生产（建议分段合成）、需精确物理仿真（如流体/布料动力学）的工业级视频  
+### ✅ 优先选择视频生成，当：
+- 核心交付物是**动态内容**（非静态截图），且对运动连贯性、物理合理性有要求（HappyHorse首选）；
+- 需复用**已有数字人形象或口播音频**（`wan2.2-s2v` + `videoretalk` 组合方案）；
+- 面向**专业影视/广告场景**，强调分镜一致性与品牌视觉规范（Vidu系列）；
+- 需对存量视频进行**增强处理**（超分至4K、转换油画/赛博朋克风格），而非从零生成。
 
-### ✅ 3D生成 —— 适合「空间建模、资产复用、跨平台部署」场景  
-- **推荐场景**：游戏/元宇宙 3D 资产快速原型（文生模型）、电商商品 360° 展示建模（单图→3D）、工业零件逆向建模（多视角图→精准网格）、AR 应用轻量化模型生成（`P1.0` 适配移动端）  
-- **慎用场景**：需要真实物理材质与光照交互（当前 PBR 材质为静态烘焙，非实时渲染管线）、微米级精度医疗建模（`H3.1-ultra` 最高 200 万面仍属中等精度）、非结构化场景（如自然景观、毛发/烟雾等不可拓扑表示对象）  
+### ✅ 优先选择3D生成，当：
+- 目标是生成**可交互、可嵌入WebGL/Three.js的轻量3D资产**（`.glb`直接加载）；
+- 输入源为**清晰单视角产品图或简洁文本描述**（如“不锈钢保温杯，圆柱形，带硅胶底座”）；
+- 对模型精度要求为**原型级/展示级**（三角面数≤10k），无需骨骼绑定、动画或PBR材质；
+- 业务链路已具备3D渲染能力（如Unity WebGL导出、Babylon.js前端展示），只需补充生成环节。
 
----
+### ⚠️ 需谨慎评估或规避的场景：
+- **跨模态强耦合需求**（如“生成一段3秒视频，其中主角是刚生成的3D模型”）：平台当前**无原生跨模态流水线**，需自行编排图像→3D→视频（但Tripo输出无法直接驱动视频模型，需人工重建）；
+- **高精度工业/医疗3D建模**：Tripo-3D不支持CAD级精度、拓扑约束或参数化建模，应转向专业软件（Blender+Geometry Nodes）或专用SaaS；
+- **超长视频生成（>15秒）或高帧率（>30fps）需求**：所有视频模型均以10–15秒/16fps为标准输出，延长需拼接，质量下降风险高；
+- **图像生成中依赖“免费创意工具”构建核心功能**：如`wanx-x-painting`、`shoemodel-v1`等已明确标注“免费额度用尽即停”，不可用于生产环境。
 
-## 开发者技术选型参考指南
+## 面向开发者的选型决策指南
 
-| 选型目标 | 推荐方案 | 关键理由 | 注意事项 |
-|----------|----------|----------|----------|
-| **追求最低接入成本 & 快速验证** | 图像生成（`wanx-v1` 或 `zimage-pro`） | 同步 API、无需轮询、文档成熟、错误反馈直接；`zimage-pro` 支持 `1:1`/`4:3` 即开即用 | 避免在 `zimage-pro` 中传 `negative_prompt`；注意 `size` 合法值范围 |
-| **需构建带状态的生成工作流（如视频剪辑平台）** | 视频生成（`wan3.0-video-generation`） | 统一模型覆盖文/图/参考/编辑全链路；任务状态机清晰（`QUEUED`→`RUNNING`→`SUCCEEDED`）；支持回调通知 | 必须实现健壮的轮询逻辑（含退避重试）；务必校验 `X-DashScope-Async: enable` 请求头 |
-| **面向 Web/APP 的 3D 内容服务（如在线家具预览）** | 3D生成（`Tripo/Tripo-P1.0`） | 输出轻量 GLB（≤2 万面），加载快、兼容 Three.js/Babylon.js；北京地域稳定性高 | 仅限华北2；需预热 CDN 缓存 `pbr_model_url`；避免高频重复提交相同任务 |
-| **高保真工业/影视级资产生成** | 3D生成（`Tripo/Tripo-H3.1` + `geometry_quality: "ultra"`） | 支持 200 万面精细网格，满足中等复杂度机械结构、角色模型需求 | 生成耗时长（常 >8 分钟），需前端友好 Loading 提示；结果需二次优化（如法线重计算） |
-| **需多模态混合生成（如“生成一张图，再转成 5 秒视频，最后建模”）** | **组合调用**：<br>① `/v1/images/generations` → 获取高质量首帧<br>② `/video-generation/video-synthesis` → 图生视频<br>③ `/3d-generation` → 单图生3D | 百炼平台各模块解耦清晰，URL 格式与鉴权机制统一（均用 `Authorization: Bearer <key>`） | 注意各环节地域一致性（视频/3D 均需北京）；结果 URL 时效性差异大（图像 1h / 视频 24h / 3D 2h），需及时下载并持久化 |
+1. **从输出定义起点**：  
+   明确业务最终需要交付的是**静态画面**（→ 图像生成）、**动态序列**（→ 视频生成）还是**可旋转/可交互的三维网格**（→ 3D生成）。此为不可妥协的第一判断。
 
-> **重要提醒**：  
-> - **不要混用旧版与新版协议**：`wan2.6` 视频模型与 `wan3.0`、`viduq2` 与 `viduq3`、`zimage` 与 `zimage-pro` 在参数名、字段结构、Endpoint 上均不兼容，请严格对照对应子文档；  
-> - **安全合规是前提**：所有生成接口均内置内容安全策略，违规提示词将触发 HTTP 400；建议在生产环境前置部署提示词过滤器；  
-> - **监控与告警必做**：对[异步任务](../concepts/asynchronous-task.md)（视频/3D）务必监听 `task_id` 状态异常（如 `FAILED`/`TIMEOUT`），并配置失败重试（非重复创建）与人工兜底通道。  
+2. **检查输入约束匹配度**：  
+   - 若输入含**多张参考图/复杂布局图** → 图像生成（Vidu/Kling）；  
+   - 若输入含**音频文件或需口型同步** → 视频生成（`videoretalk`）；  
+   - 若输入仅为**单张正视图或短文本** → 3D生成（Tripo）；  
+   - 若输入需**严格保留原始文字排版** → 图像生成（`qwen-mt-image-2.0`）。
 
----  
-*本文档基于百炼平台 2024Q3 正式版 API 规范编写，最新变更请以 [API 参考文档](https://help.aliyun.com/zh/model-studio) 为准。*
+3. **评估延迟与架构适配性**：  
+   - 要求**<2秒端到端响应** → 仅图像生成中的同步模型可行；  
+   - 可接受**10–120秒异步等待** → 三者均可，但需统一轮询逻辑（推荐封装通用Task Poller SDK）；  
+   - 已有**[异步任务](../concepts/asynchronous-task.md)队列（如Celery/RabbitMQ）** → 视频/3D生成天然契合；  
+   - 使用**Serverless函数（如FC）** → 注意冷启动与超时（3D生成最大300秒，视频生成通常60–90秒）。
+
+4. **成本与稳定性兜底**：  
+   - 避免将**免费额度模型**纳入核心链路（查看文档中“仅限免费体验”标注）；  
+   - 高并发场景必做**限流降级**：图像生成QPS上限2，视频生成并发任务上限1–3，3D生成无明确并发限制但单任务耗时波动大；  
+   - 所有[异步任务](../concepts/asynchronous-task.md)必须实现**幂等轮询**（`task_id`唯一，重复查询安全）与**过期清理**（24小时URL失效，需提前下载并持久化）。
+
+5. **地域与密钥治理**：  
+   - 新项目**必须使用业务空间专属域名**（`{WorkspaceId}.<region>.maas.aliyuncs.com`），禁用旧版`dashscope.aliyuncs.com`；  
+   - 北京地域覆盖最全（含`s2v`/`videoretalk`），新加坡/美东暂不支持
 
 ## 被对比主题页
 
