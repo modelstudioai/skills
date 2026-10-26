@@ -1,6 +1,6 @@
 # qwen-plus-character-ja
 
-The Qwen Role-Playing Model Series is specifically optimized for Japanese anthropomorphic interaction scenarios. It demonstrates advanced capabilities in character consistency maintenance, context-aware dialogue progression, and empathetic engagement, enabling precise personalized character embodiment. This version significantly enhances Japanese linguistic localization (including dialects and honorifics), human-like role-playing authenticity, narrative coherence control, and scenario-based cognitive intelligence.
+千问系列角色扮演模型，适合日文场景下的拟人化的角色扮演。具备人设指令遵循、话题推进、倾听共情等能力，支持个性化角色的深度还原。该版本在日语本地化知识理解与表达、角色拟人化能力、剧情演进能力、聪明度等方面都有显著优化。
 
 ## 推理服务供应商
 
@@ -68,11 +68,11 @@ Function Calling
 
 最大输入长度
 
-7680
+8192
 
 最大输出长度
 
-512
+4096
 
 上下文长度
 

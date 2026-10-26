@@ -6152,6 +6152,24 @@ kimi-k2.7-code
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
 
+kimi/kimi-k3.1-pro-highspeed
+
+> [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
+
+26元
+
+136元
+
+无
+
+kimi/kimi-k3.1-pro
+
+> [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
+
+13元
+
+68元
+
 kimi/kimi-k3
 
 > [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
@@ -6159,8 +6177,6 @@ kimi/kimi-k3
 20元
 
 100元
-
-无
 
 kimi/kimi-k2.7-code-highspeed
 
@@ -6329,6 +6345,18 @@ glm-5.3
 8元
 
 28元
+
+glm-5.3
+
+美国
+
+非思考和思考模式
+
+不区分阶梯
+
+10.208元
+
+32.084元
 
 glm-5.2
 

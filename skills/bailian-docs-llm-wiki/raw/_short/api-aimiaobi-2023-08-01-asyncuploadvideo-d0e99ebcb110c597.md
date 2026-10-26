@@ -123,7 +123,7 @@ string
 
 是
 
-[百炼工作空间 Id](raw/application-api-reference/application-call/obtain-the-app-id-and-workspace-id.md)
+[百炼工作空间 Id](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)
 
 llm-xxxx
 

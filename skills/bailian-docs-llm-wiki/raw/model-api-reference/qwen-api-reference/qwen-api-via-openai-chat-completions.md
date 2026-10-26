@@ -448,7 +448,7 @@ temperature默认值
 -   DeepSeek系列（硅基流动直供）：siliconflow/deepseek-v3.2、siliconflow/deepseek-v3.1-terminus、siliconflow/deepseek-r1-0528、siliconflow/deepseek-v3-0324: 1.0；
 -   DeepSeek系列（快手万擎直供）：vanchin/deepseek-v3.2-think（思考模式）: 0.6；vanchin/deepseek-v3.1-terminus: 0.7；vanchin/deepseek-v3.2-speciale、vanchin/deepseek-r1、vanchin/deepseek-v3、vanchin/deepseek-ocr: 1.0；
 -   Kimi系列（阿里云直供）：kimi-k2.7-code、kimi-k2.6（思考模式）、kimi-k2.5（思考模式）: 1.0；kimi-k2.6（非思考模式）、kimi-k2.5（非思考模式）: 0.6；
--   Kimi系列（月之暗面直供）：kimi/kimi-k3、kimi/kimi-k2.7-code-highspeed、kimi/kimi-k2.7-code、kimi/kimi-k2.6（思考模式）、kimi/kimi-k2.5（思考模式）: 1.0；kimi/kimi-k2.6（非思考模式）、kimi/kimi-k2.5（非思考模式）: 0.6；
+-   Kimi系列（月之暗面直供）：kimi/kimi-k3、kimi/kimi-k3.1-pro、kimi/kimi-k3.1-pro-highspeed、kimi/kimi-k2.7-code-highspeed、kimi/kimi-k2.7-code、kimi/kimi-k2.6（思考模式）、kimi/kimi-k2.5（思考模式）: 1.0；kimi/kimi-k2.6（非思考模式）、kimi/kimi-k2.5（非思考模式）: 0.6；
 -   GLM系列（阿里云直供）：glm-5.1、glm-5: 1.0；
 -   GLM系列（智谱直供）：ZHIPU/GLM-5.1、ZHIPU/GLM-5: 0.6；
 -   MiniMax系列（阿里云直供）：MiniMax-M2.5: 1.0；
@@ -489,7 +489,7 @@ DeepSeek系列（快手万擎直供）：vanchin/deepseek-v3.2-think、vanchin/d
 
 Kimi系列（阿里云直供）：kimi-k2.7-code、kimi-k2.6、kimi-k2.5: 0.95；
 
-Kimi系列（月之暗面直供）：kimi/kimi-k3、kimi/kimi-k2.7-code-highspeed、kimi/kimi-k2.7-code、kimi/kimi-k2.6、kimi/kimi-k2.5: 0.95；
+Kimi系列（月之暗面直供）：kimi/kimi-k3、kimi/kimi-k3.1-pro、kimi/kimi-k3.1-pro-highspeed、kimi/kimi-k2.7-code-highspeed、kimi/kimi-k2.7-code、kimi/kimi-k2.6、kimi/kimi-k2.5: 0.95；
 
 GLM系列（阿里云直供）：0.95；
 
@@ -712,7 +712,7 @@ GLM 模型的默认值与最大值见 `max_tokens` 参数中的表格，其他�
 
 > `n=0` 等价于 `n=1`。
 
-> 仅 [Qwen3（非思考模式）](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md) 和 qwen-plus-character 支持将 `n` 设为大于 `1`。MiniMax/MiniMax-M3.1-Flash 和 MiniMax/MiniMax-M3 仅支持 `n=1`。
+> 仅 [Qwen3（非思考模式）](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md) 和 qwen-plus-character 支持将 `n` 设为大于 `1`。MiniMax/MiniMax-M3.1-Flash 和 MiniMax/MiniMax-M3 仅支持 `n=1`。kimi/kimi-k3.1-pro 和 kimi/kimi-k3.1-pro-highspeed 不支持此参数。
 
 > 若传入 `tools` 参数， 请将`n` 设为 1。
 
@@ -763,6 +763,8 @@ GLM 模型的默认值与最大值见 `max_tokens` 参数中的表格，其他�
 
 是否将对话历史中 assistant 消息的 reasoning\_content 拼接至模型输入。适用于需要模型参考历史思考过程的场景。
 
+kimi/kimi-k3.1-pro 和 kimi/kimi-k3.1-pro-highspeed 支持此参数，默认关闭。
+
 需要参考上一轮思考时，将其放在历史 assistant 消息的 `reasoning_content` 字段中随 `messages` 回传。用法见[传递思考过程](https://help.aliyun.com/zh/model-studio/deep-thinking#jln7docdq5et5)。
 
 目前支持qwen3.8-max、qwen3.8-max-0902、qwen3.8-flash（默认开启）、qwen3.8-omni-flash（默认开启）、qwen3.7-max、qwen3.7-max-2026-05-20以及后续快照、qwen3.7-plus、qwen3.7-plus-2026-05-26、qwen3.6-plus、qwen3.6-plus-2026-04-02、qwen3.7-flash、qwen3.7-flash-2026-07-15、qwen3.6-flash、qwen3.6-flash-2026-04-16、kimi-k2.6（阿里云百炼部署）、kimi-k2.7-code（阿里云百炼部署，默认开启）、kimi/kimi-k2.7-code-highspeed（月之暗面直供，默认开启）、kimi/kimi-k2.7-code（月之暗面直供，默认开启）。
@@ -794,7 +796,7 @@ GLM 模型的默认值与最大值见 `max_tokens` 参数中的表格，其他�
 
 可选值按推理力度从低到高依次为 `low`、`medium`、`high`、`xhigh` 和 `max`。模型始终开启思考；设置 `none` 会返回 400 错误。
 
-**DeepSeek-V4、GLM 系列与 kimi/kimi-k3**（默认值为 `high`）
+**DeepSeek-V4、GLM 系列**（默认值为 `high`）
 
 可选值：
 
@@ -803,7 +805,13 @@ GLM 模型的默认值与最大值见 `max_tokens` 参数中的表格，其他�
 
 low和medium映射为high，xhigh映射为max。
 
-适用于glm-5.2、glm-5.1、glm-5、deepseek-v4-pro（阿里云直供）、kimi/kimi-k3（月之暗面直供，仅支持 `max`）
+适用于glm-5.2、glm-5.1、glm-5、deepseek-v4-pro（阿里云直供）
+
+**kimi/kimi-k3、kimi/kimi-k3.1-pro、kimi/kimi-k3.1-pro-highspeed（月之暗面直供）**（默认值为 `max`，仅支持 `max`）
+
+可选值：
+
+-   `max`：最大力度推理
 
 **glm-5.3、ZHIPU/GLM-5.3、ZHIPU/GLM-5.3-Flash、ZHIPU/GLM-5.3-FlashX 与 kimi-k3（阿里云直供）模型：默认值为**`max`
 
@@ -1013,6 +1021,8 @@ seed默认值
 是否开启并行工具调用。相关文档：[并行工具调用](https://help.aliyun.com/zh/model-studio/qwen-function-calling#cb6b5c484bt4x)
 
 > MiniMax/MiniMax-M3.1-Flash、kimi-k3 不支持通过此参数控制工具调用的并行性。设置为 `false` 也不能保证串行调用，模型仍可能在一轮中返回多个 `tool_calls`。请按实际返回结果处理。
+
+> kimi/kimi-k3.1-pro 和 kimi/kimi-k3.1-pro-highspeed 不支持此参数。
 
 可选值：
 

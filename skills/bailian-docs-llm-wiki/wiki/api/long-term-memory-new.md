@@ -1,37 +1,46 @@
 # long term memory new
 
-[长期记忆](../concepts/long-term-memory.md)（Long Term Memory, LTM）是百炼平台提供的结构化记忆存储与检索能力，支持在多轮对话中持久化保存和动态调用用户事实性信息、行为偏好及画像特征。该能力通过 API 显式控制，不依赖模型自身隐式记忆，确保可审计、可更新、可隔离。详细设计目标与架构说明见 [长期记忆](../../raw/application-api-reference/long-term-memory-new.md)。
+[长期记忆](../concepts/long-term-memory.md)（Long Term Memory, LTM）是百炼平台提供的结构化记忆存储与检索能力，支持在多轮对话中持久化保存和动态召回用户事实、偏好及行为画像。该能力通过 API 显式控制记忆的写入、查询与更新，不依赖模型内部隐式状态。其设计目标是提升应用在复杂业务场景下的上下文一致性与个性化能力，详见 [长期记忆](../../raw/application-api-reference/long-term-memory-new.md)。
 
 ## 支持的模型/功能
 
-- **模型兼容性**：当前仅 `qwen-max`、`qwen-plus` 和 `qwen-turbo` 三款 Qwen 系列模型原生支持 LTM 上下文注入；其他模型调用时将忽略 `memory_id` 参数，不报错但无实际效果。  
-- **核心功能模块**：  
-  - **事实记忆（Fragments）**：以键值对形式存储短生命周期、高精度的事实（如“用户手机号为138****1234”），支持按 key 精确检索与批量更新；详见 [事实记忆](../../raw/application-api-reference/long-term-memory-new/fragments-overview.md)。  
-  - **用户画像（Profiles）**：结构化存储跨会话的长期属性（如“偏好语言=英语”“行业=金融”），支持字段级版本控制与条件查询；详见 [用户画像](../../raw/application-api-reference/long-term-memory-new/profiles-overview.md)。  
-
-> **注意**：文档 [通用](../../raw/application-api-reference/long-term-memory-new/api-overview.md) 中提及的 `llama-3-70b` 支持声明已过时，实测该模型无法解析 `memory_id` 字段，应以当前 SDK 文档为准。
+- **模型兼容性**：当前仅 `qwen-max`、`qwen-plus` 和 `qwen-turbo` 三款 Qwen 系列模型原生支持 LTM 的自动记忆注入（即在 `messages` 中启用 `enable_long_term_memory: true` 后，系统自动关联相关记忆片段）。其他模型需手动构造记忆上下文。
+- **核心功能模块**：
+  - **事实记忆（Fragments）**：以键值对形式存储可验证的客观信息（如“用户手机号=138****1234”），支持模糊匹配与语义检索；参考 [事实记忆](../../raw/application-api-reference/long-term-memory-new/fragments-overview.md)。
+  - **用户画像（Profiles）**：结构化存储跨会话的用户属性（如 `age_group: "25-34"`, `preferred_language: "zh"`），支持字段级更新与条件查询；参考 [用户画像](../../raw/application-api-reference/long-term-memory-new/profiles-overview.md)。
 
 ## 关键参数
 
 | 参数名 | 类型 | 必填 | 说明 |
 |--------|------|------|------|
-| `memory_id` | string | 是 | 记忆实例唯一标识符，由应用侧生成并维护，长度 1–64 字符，仅支持字母、数字、`-`、`_` |
-| `memory_type` | string | 否 | 取值 `fragment` 或 `profile`，未指定时默认为 `fragment`；类型决定后续读写行为 |
-| `ttl_seconds` | integer | 否 | 仅对 `fragment` 有效，过期时间（秒），范围 300–2592000（5 分钟–30 天），默认 86400（24 小时） |
+| `memory_id` | string | 否 | 记忆唯一标识，由系统生成或用户指定（仅限 Profiles）；若未提供，系统自动生成 |
+| `fragment_key` | string | 是（Fragments） | 用于检索的事实记忆键，建议使用语义明确的命名（如 `"user_email"`） |
+| `profile_id` | string | 是（Profiles） | 用户全局唯一 ID（如 OpenID 或 UUID），用于绑定画像 |
+| `ttl_seconds` | integer | 否 | 过期时间（秒），默认 `31536000`（1 年），设为 `0` 表示永不过期 |
+| `enable_long_term_memory` | boolean | 否 | 在 `/v1/chat/completions` 请求中启用自动记忆注入，默认 `false` |
+
+> **注意**：`ttl_seconds` 在 [通用](../../raw/application-api-reference/long-term-memory-new/api-overview.md) 文档中被描述为“最小单位为小时”，但实际 API 接收秒级整数，以接口行为为准。
 
 ## 使用方式
 
-1. **初始化记忆实例**：调用 `/v1/memories` 创建 `memory_id`（需携带 `app_id` 认证）；  
-2. **写入数据**：向 `/v1/memories/{memory_id}/fragments` 或 `/v1/memories/{memory_id}/profiles` 发送 POST 请求，body 为 JSON 对象；  
-3. **在推理中启用**：在 `/v1/chat/completions` 请求中，于 `messages` 外层传入 `"memory_id": "xxx"` 字段（非 message 内容中）；模型将自动注入关联的 fragment + profile 数据作为系统上下文。  
-完整流程与示例代码参见 [长期记忆 API 参考](../../raw/application-api-reference/long-term-memory-new/long-term-memory-api-reference.md)。
+1. **写入记忆**：  
+   - 事实记忆：`POST /v1/memory/fragments`，请求体含 `fragment_key`、`value`、`profile_id`（可选）；  
+   - 用户画像：`POST /v1/memory/profiles`，请求体需含 `profile_id` 及结构化字段（如 `{"preferences": {"theme": "dark"}}`）。
+
+2. **查询记忆**：  
+   - 按键查事实：`GET /v1/memory/fragments/{fragment_key}?profile_id=xxx`；  
+   - 查画像全量：`GET /v1/memory/profiles/{profile_id}`；  
+   - 语义检索（实验性）：`POST /v1/memory/fragments/search`，传入自然语言 query。
+
+3. **在对话中启用**：  
+   在 `/v1/chat/completions` 请求的 `messages` 外层添加 `"enable_long_term_memory": true`，并确保 `profile_id` 已通过 `headers.x-profile-id` 或 `messages[0].profile_id` 传递。
 
 ## 限制和注意事项
 
-- 单个 `memory_id` 下最多存储 1000 条 fragment 或 100 条 profile；超出后写入失败并返回 `400 Bad Request`；  
-- `memory_id` 不具备租户隔离能力：不同 `app_id` 若使用相同 `memory_id`，将共享同一份记忆数据（此行为已在 [通用](../../raw/application-api-reference/long-term-memory-new/api-overview.md) 中明确标注，但易被忽略）；  
-- 所有 memory 数据默认加密落盘，但**不支持字段级权限控制**，敏感字段（如身份证号）需应用层脱敏后再写入；  
-- 删除 `memory_id` 后，其关联的所有 fragment/profile 立即不可访问，且**不可恢复**——该强一致性语义与 [长期记忆](../../raw/application-api-reference/long-term-memory-new.md) 中“软删除”的旧版描述存在冲突，以当前 API 行为为准。
+- 单个 Profile 最多存储 1000 个字段（含嵌套），单个 Fragment 值长度上限 8192 字符；
+- 事实记忆不支持事务性写入，高并发写同一 `fragment_key` 可能导致最终一致性延迟（约 1–3 秒）；
+- 自动记忆注入（`enable_long_term_memory: true`）**仅在流式响应（`stream: true`）下生效**，非流式请求不会注入记忆上下文 —— 此行为与 [通用](../../raw/application-api-reference/long-term-memory-new/api-overview.md) 文档中“所有模式均支持”的描述矛盾，以实际接口表现为准；
+- 删除操作暂不开放，过期记忆自动清理，非过期记忆需联系技术支持清除。
 
 ## 来源文档
 

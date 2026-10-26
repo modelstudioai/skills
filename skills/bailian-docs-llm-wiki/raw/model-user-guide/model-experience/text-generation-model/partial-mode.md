@@ -40,7 +40,7 @@
 -   **多模态模型**
     -   千问VL：Qwen3-VL-Plus系列、Qwen3-VL-Flash系列、Qwen-VL-Max系列、Qwen-VL-Plus系列
     -   Qwen3-VL 开源系列（非思考模式）
-    -   Kimi（月之暗面部署）：kimi/kimi-k3、kimi/kimi-k2.6、kimi/kimi-k2.5
+    -   Kimi（月之暗面部署）：kimi/kimi-k3.1-pro、kimi/kimi-k3.1-pro-highspeed、kimi/kimi-k3、kimi/kimi-k2.6、kimi/kimi-k2.5
 
 ## 快速开始
 

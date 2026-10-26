@@ -1849,6 +1849,16 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请前往阿里云百炼控制台，在[模型广场](https://bailian.console.aliyun.com/model/market)的对应模型卡片下方单击**立即申请**发起测试申请。或改用其他模型，例如千问或万相的文生图模型替代 Flux。
 
+### Access denied by API-Key restrictions.
+
+**原因：** 当前 API Key 配置了**访问模型范围**（自定义权限），请求的模型不在该 Key 允许调用的模型列表中，网关直接拒绝请求并返回 HTTP 403 `access_denied`。
+
+**解决方案：**
+
+-   前往百炼控制台的 [API Key](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key) 页面，编辑该 API Key 的权限：将**权限**改为**全部**，或在**自定义**权限下将目标模型加入**访问模型范围**的勾选列表。
+-   也可以新建一个权限为**全部**的 API Key 后重试。
+-   该限制对 OpenAI 兼容接口和 DashScope 原生接口均生效，更换 Base URL 无法绕过；请确认调用时使用的 API Key 具备目标模型的调用权限。
+
 ## 403- AccessDenied.Unpurchased
 
 ### Access to model denied. Please make sure you are eligible for using the model.

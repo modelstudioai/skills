@@ -32,6 +32,12 @@ SDK 调用配置的`base_url`：`https://{WorkspaceId}.ap-southeast-1.maas.aliyu
 
 HTTP 请求地址：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
 
+#### 中国香港
+
+SDK 调用配置的`base_url`：`https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/compatible-mode/v1`
+
+HTTP 请求地址：`POST https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
+
 #### OpenAI兼容-Responses API
 
 **说明**Responses API 目前仅支持`glm-5.2`与`glm-5.3`模型，且仅在华北2（北京）与新加坡地域提供服务。
@@ -151,12 +157,6 @@ SDK 调用配置的`base_url`：
 ```
 dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/api/v1'
 ```
-
-#### 中国香港
-
-SDK 调用配置的`base_url`：`https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/compatible-mode/v1`
-
-HTTP 请求地址：`POST https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
 
 调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
@@ -1332,6 +1332,11 @@ true
 ## 注意事项
 
 **警告**云上部署的三方开源模型（如 glm-5.2）与模型官方对超参数的处理逻辑不同：模型官方会对超参数进行阈值校验，超出阈值时回退为默认值；云上部署的处理逻辑是直接透传用户传入的参数值，不做阈值校验。因此，不当设置超参数（如将 `repetition_penalty` 设为 `0.1`）可能导致非预期输出（如循环打印）。建议三方开源模型使用默认超参数值（请参见上方参数默认值表），不建议自定义传入。
+
+调用时，请遵循对应 API 的参数类型与必填字段要求，尤其注意：
+
+-   `max_tokens` 必须为整数，例如 `1024`，不要传入布尔值 `true`。调用 glm-5.3 时，`true` 可能被按 `1` 处理，使输出在 1 个 Token 后截断，且不返回参数错误。此时可能只有思考内容，没有最终回答。
+-   使用 Anthropic 兼容接口时，`tools` 数组中的每个工具都必须包含 `name`，例如 `"name": "get_weather"`。缺少 `name` 会导致请求失败，请在发送请求前补全工具名称。
 
 ## 模型列表与计费
 

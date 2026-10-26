@@ -95,13 +95,14 @@ Qwen 大部分模型、Kimi、GLM、DeepSeek、Stepfun
     -   kimi-k3
 -   月之暗面部署
     
-    -   kimi/kimi-k3、kimi/kimi-k2.7-code-highspeed、kimi/kimi-k2.7-code 、kimi/kimi-k2.6、kimi/kimi-k2.5
+    -   kimi/kimi-k3.1-pro、kimi/kimi-k3.1-pro-highspeed、kimi/kimi-k3、kimi/kimi-k2.7-code-highspeed、kimi/kimi-k2.7-code 、kimi/kimi-k2.6、kimi/kimi-k2.5
 
 #### DeepSeek
 
 -   阿里云百炼部署
     
     -   deepseek-v4-pro
+    -   deepseek-v4.1-flash
     -   `deepseek-v4.1-flash-1017`
 -   快手万擎部署
     

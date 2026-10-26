@@ -75,6 +75,8 @@
 -   [kimi/kimi-k2.6](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k2-6-by-moonshot.md)
 -   [kimi/kimi-k2.7-code](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k2-7-code-by-moonshot.md)
 -   [kimi/kimi-k3](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k3-by-moonshot.md)
+-   [kimi/kimi-k3.1-pro](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro-by-moonshot.md)
+-   [kimi/kimi-k3.1-pro-highspeed](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro-highspeed-by-moonshot.md)
 -   [MiniMax/MiniMax-M2.1](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/minimax-m2-1-by-minimax.md)
 -   [MiniMax/MiniMax-M2.5](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/minimax-m2-5-by-minimax.md)
 -   [unisound/unisound-u2](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/unisound-u2-by-unisound.md)

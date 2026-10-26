@@ -4,60 +4,46 @@
 
 ## 支持的模型与功能
 
-当前 `model experience` 覆盖以下 12 类模型能力，每类对应独立文档说明具体输入输出格式、典型场景及最佳实践：
+当前 `model experience` 覆盖以下 12 类模型能力：
+- 文本生成（含对话、补全、指令遵循等）
+- 视觉理解（图像分类、OCR、图文推理等）
+- 图片生成与编辑（文生图、图生图、局部重绘）
+- 视频生成与编辑（文生视频、视频扩时、关键帧控制）
+- 世界模型（具身智能、环境建模与交互模拟）
+- 3D 模型生成（单图/多图生成 `.glb` 等格式，见 [原文标题](../../raw/model-user-guide/model-experience/tripo-3d-generation-guide.md)）
+- 语音合成（TTS，支持多语种与音色定制）
+- 音频生成（背景音、音效、BGM 生成）
+- 语音识别（ASR，支持长音频流式识别）
+- 语音转语音（V2V，保留语义与韵律的跨语言/音色转换）
+- 全模态（多输入模态联合理解与生成，如“图片+语音+文本”协同推理）
+- 向量与重排序（Embedding 生成、稠密检索、Cross-Encoder 重排序）
 
-- 文本生成（含对话、补全、指令遵循）  
-- 视觉理解（图像分类、OCR、图文推理等）  
-- 图片生成与编辑（文生图、图生图、局部重绘）  
-- 视频生成与编辑（文生视频、视频扩时、关键帧控制）  
-- 世界模型（具身智能、环境建模与动作规划）  
-- 3D 模型生成（TriPo 系列，支持 GLB/OBJ 输出）  
-- 语音合成（TTS，支持多语种与音色克隆）  
-- 音频生成（背景音、音效、音乐生成）  
-- 语音识别（ASR，支持长音频流式转写）  
-- 语音转语音（V2V，保留语义与韵律的跨语言/音色转换）  
-- 全模态（Omni-modal，支持文本+图像+音频+视频混合输入）  
-- 向量与重排序（Embedding 生成、语义相似度计算、Rerank 排序）
-
-> **注意**：`world-model` 的接口定义与 `omni-modal` 在 [原文标题](../../raw/model-user-guide/model-experience/world-model.md) 和 [原文标题](../../raw/model-user-guide/model-experience/omni-modal.md) 中存在部分参数命名不一致（如 `context_mode` vs `input_mode`），建议以最新版 SDK 的 `ModelExperienceClient` 初始化逻辑为准，避免直接拼接请求体。
+> **注意**：`world-model` 的实时仿真延迟要求（≤200ms）与 `video-generate-edit-model` 的最大输出时长（15s）在 [原文标题](../../raw/model-user-guide/model-experience/world-model.md) 和 [原文标题](../../raw/model-user-guide/model-experience/video-generate-edit-model.md) 中存在不一致表述；以最新版 `world-model.md`（v2.3.1）为准，视频生成模块已同步放宽至 30s。
 
 ## 关键参数
 
-所有模型调用共用以下顶层参数（部分能力可选）：
-
-| 参数名 | 类型 | 必填 | 说明 |
-|--------|------|------|------|
-| `model` | string | 是 | 模型标识符，如 `qwen-vl-plus`、`wanx-video-1.0`、`speech-tts-1.2`，详见各子文档 [原文标题](../../raw/model-user-guide/model-experience/text-generation-model.md) 等所列支持列表 |
-| `input` | object | 是 | 模型特定输入结构，如 `{"prompt": "..."}` 或 `{"image_url": "...", "text": "..."}` |
-| `parameters` | object | 否 | 控制生成行为，常见字段：`temperature`（仅文本/音频类）、`top_p`、`max_output_tokens`、`seed`、`enable_streaming` |
-| `extra` | object | 否 | 扩展字段，用于传递能力特有参数（如视觉理解中的 `detail_level`，图片生成中的 `style_preset`） |
+通用参数（适用于所有模型类型）：
+- `model`: 必填，模型标识符（如 `qwen-vl-plus`、`wanx-video-1.0`），需与 [原文标题](../../raw/model-user-guide/model-experience.md) 中各子文档所列型号严格匹配；
+- `input`: 结构化输入，格式依模型类型而异（如视觉模型需 `{"image": "base64..."}`，语音模型需 `{"audio": "base64..."}`）；
+- `parameters`: 可选，包含 `temperature`、`top_p`、`max_tokens` 等通用采样参数，以及模型特有参数（如 `image_size`、`voice_id`）；
+- `stream`: 布尔值，仅部分文本/语音模型支持流式响应。
 
 ## 使用方式
 
-推荐通过百炼官方 SDK（Python/Java/Go）调用：
-
-```python
-from alibabacloud_bailian20231219 import models as bailian_models
-from alibabacloud_bailian20231219.client import Client
-
-client = Client(...)
-req = bailian_models.CallModelExperienceRequest(
-    model="qwen-vl-plus",
-    input={"text": "描述这张图", "image_url": "https://..."},
-    parameters={"temperature": 0.5}
-)
-resp = client.call_model_experience(req)
-```
-
-HTTP 直连方式需 POST 到 `/api/v1/model/experience`，Header 中携带 `X-DashScope-Access-Token`，Body 为 JSON 格式。详细协议规范见 [原文标题](../../raw/model-user-guide/model-experience.md)。
+1. **API 调用**：向 `https://dashscope.aliyuncs.com/api/v1/services/aigc/<model_type>/<endpoint>` 发送 POST 请求（`<model_type>` 如 `text-generation`、`vision`）；  
+2. **SDK 调用**：使用 `dashscope` Python SDK，示例：
+   ```python
+   from dashscope import MultiModalConversation
+   response = MultiModalConversation.call(model='qwen-vl-plus', input={'messages': [{'role': 'user', 'content': [{'image': 'http://...'}, {'text': '描述这张图'}]}]})
+   ```
+3. 所有模型均支持[异步任务](../concepts/asynchronous-task.md)提交（`/async` 后缀端点）与轮询获取结果，适用于长耗时任务（如 3D 生成、视频生成）。
 
 ## 限制和注意事项
 
-- 单次请求最大 `input` 总大小为 50 MB（含 Base64 编码图像/音频）；视频文件限 120 秒、200 MB  
-- `streaming` 模式仅对文本生成、语音合成、部分视频生成生效，其余类型返回完整响应  
-- 多模态输入（如图文混合）必须使用 `omni-modal` 模型标识，不可混用 `qwen-vl-plus` + `audio_generation` 参数  
-- 所有模型均按 token/秒或请求次数计费，具体配额与计费规则请参考对应子文档，例如 [原文标题](../../raw/model-user-guide/model-experience/speech-synthesis.md) 明确标注了 TTS 的字符计费粒度  
-- `embedding-rerank-model` 不支持 streaming，且 `rerank` 请求中 `query` 字段长度上限为 2048 Unicode 字符
+- 单次请求 `input` 总大小上限为 50MB（视频/3D 场景下建议 ≤20MB）；
+- 免费试用额度按模型类型独立计费，超出后需绑定付费账号；
+- `omni-modal` 模型暂不支持自定义 `parameters` 中的 `temperature`，该限制已在 [原文标题](../../raw/model-user-guide/model-experience/omni-modal.md) 中明确说明；
+- 所有语音类模型（`speech-synthesis`、`speech-recognition` 等）输入音频必须为 PCM/WAV 格式，采样率 16kHz，单声道；MP3/AAC 需先转码。
 
 ## 来源文档
 

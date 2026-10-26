@@ -64,7 +64,7 @@
           "usage_limit_field": "total_tokens",
           "count_limit": 17,
           "usage_limit_period": 6,
-          "async_task_timeout": 180,
+          "async_task_timeout": 360,
           "type": "model-default",
           "async_user_concurrency_limit": 3
         },
@@ -75,7 +75,7 @@
           "usage_limit_field": "total_tokens",
           "count_limit": 17,
           "usage_limit_period": 6,
-          "async_task_timeout": 180,
+          "async_task_timeout": 360,
           "type": "model-default",
           "async_user_concurrency_limit": 3
         }

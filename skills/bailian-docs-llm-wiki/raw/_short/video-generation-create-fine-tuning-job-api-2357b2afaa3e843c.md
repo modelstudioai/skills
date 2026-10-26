@@ -382,7 +382,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes' \
 
 **workspace\_id** `string`
 
-阿里云百炼API Key所属的业务空间ID。请参见[获取Workspace ID](raw/application-api-reference/application-call/obtain-the-app-id-and-workspace-id.md)。
+阿里云百炼API Key所属的业务空间ID。请参见[获取Workspace ID](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)。
 
 **user\_identity** `string`
 

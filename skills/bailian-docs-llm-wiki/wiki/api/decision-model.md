@@ -1,52 +1,39 @@
 # decision model
 
-decision model 是百炼平台专为结构化决策任务设计的轻量级推理模型，不生成文本，仅输出分类、是非判断、有序评分及其概率分布与置信度。适用于工单分流、内容审核、智能体路由、任务完成度校验等低延迟、高并发的确定性决策场景。其核心能力基于 TypeSafe System One 协议实现一次前向即返回多问题答案，响应延迟与输出长度无关 [决策模型 API](../../raw/model-api-reference/decision-model/decision-model-api.md)。
+决策模型是百炼平台提供的专用模型类型，基于 System One 协议设计，支持单次前向推理同步返回分类标签、置信度评分、是非判断结果及其概率分布。该模型适用于风控审核、内容合规判定、策略规则执行等需结构化决策输出的场景。其接口语义明确、响应格式标准化，便于下游系统直接解析与集成。
 
-## 支持的模型与功能
+## 支持的模型/功能
 
-- 当前唯一可用模型：`decision-model-preview`（预览版），通过 `POST /compatible-mode/v1/systemone` 接口调用。
-- 支持三类结构化问题：
-  - `choice`：多选一决策（如「派单团队」），返回选中选项、各选项概率及整体置信度；
-  - `noul`（yes/no/uncertain/likely）：是非判断（如「是否需升级」），返回 P(yes) 概率值（0.0–1.0）；
-  - `score`：有序量表评分（如「严重度 1–4 级」），返回加权期望分（可为浮点数）、各级概率及置信度。
-- 所有类型均返回完整 `probabilities` 分布，便于下游做阈值控制或不确定性分析 [决策模型 API](../../raw/model-api-reference/decision-model/decision-model-api.md)。
+- 当前公开可用的决策模型为 `decision-model-preview`，已在 [decision-model-preview 模型信息](../../raw/model-user-guide/support/model-studio-model-list/model-list-decision/decision-model-preview.md) 中明确列出其能力边界、上下文长度（最大 8192 tokens）及输入/输出字段定义。
+- 支持三类核心输出：`category`（预设类别标签）、`score`（0.0–1.0 区间浮点数）、`yes_no`（布尔值），并附带各结果的 `confidence` 字段。
+- 所有调用均遵循 System One 协议，详见 [决策模型 API 参考](../../raw/model-api-reference/decision-model/decision-model-api.md)，包括请求头认证、JSON Schema 校验与错误码规范。
 
 ## 关键参数
 
-| 字段 | 类型 | 必填 | 说明 |
-|------|------|------|------|
-| `model` | string | ✓ | 固定为 `"decision-model-preview"` |
-| `state` | string / object / array | ✓ | 待决策的业务上下文；对象会被序列化为字符串送入模型 |
-| `questions` | object | ✓ | 键为问题 ID，值为问题定义对象；最多支持 **16 个问题** |
-| `questions.*.type` | string | ✓ | 取值 `"choice"` / `"noul"` / `"score"` |
-| `questions.*.instructions` | string | ✗ | 问题语义描述，影响判断准确性，建议明确简洁 |
-| `questions.*.criteria` | object / array | ✓（`choice`/`score`）<br>✗（`noul`） | `choice`：选项名→描述映射（≤255 项，建议含 `"other"`）；`score`：等级描述数组（2–255 级，**强烈建议 3–7 级**且语义可区分） |
-
-> **注意**：文档中 `noul` 类型未要求 `criteria`，但实际使用中若提供 `{"true": "...", "false": "..."}` 可提升语义对齐效果；该行为在 [决策模型 API](../../raw/model-api-reference/decision-model/decision-model-api.md) 中未明确定义，属隐式推荐实践。
+- `input`: 必填字符串，原始待决策文本；不支持多轮对话或历史上下文拼接。
+- `system_prompt`: 可选字符串，用于声明决策规则（如“仅当包含敏感词时返回 yes_no: true”），但实际生效受模型微调策略限制，具体约束见 [decision-model-preview 模型信息](../../raw/model-user-guide/support/model-studio-model-list/model-list-decision/decision-model-preview.md)。
+- `temperature`: 不生效——决策模型为确定性推理路径，忽略该参数，与通用大模型行为不同。
 
 ## 使用方式
 
-- **协议与端点**：使用 `POST` 请求 `https://{WorkspaceId}.{region}.maas.aliyuncs.com/compatible-mode/v1/systemone`，其中 `{WorkspaceId}` 为业务空间 ID，`{region}` 如 `cn-beijing` 或 `ap-southeast-1`。
-- **认证**：Header 中传 `Authorization: Bearer $DASHSCOPE_API_KEY`，API Key 需提前配置为环境变量。
-- **SDK 推荐**：使用 `typesafe-sdk`（`pip install typesafe-sdk`），自动处理 endpoint 拼接与响应解析，示例见 [决策模型 API](../../raw/model-api-reference/decision-model/decision-model-api.md) 中的 Python 调用片段。
-- **调试建议**：首次集成前，务必通过 [Playground](https://bailian.console.aliyun.com/systemone_playground) 在线体验，选择预设场景快速验证逻辑与结果分布。
+1. 通过百炼控制台「模型服务」→「决策模型」启用 `decision-model-preview` 实例；
+2. 构造 POST 请求至 `/v1/models/decision-model-preview:predict`，Body 示例：
+   ```json
+   {
+     "input": "该用户近30天交易频次超阈值",
+     "system_prompt": "若交易频次≥50次/日，判定为高风险"
+   }
+   ```
+3. 解析响应中的 `category`、`score` 和 `yes_no` 字段，无需后处理归一化。
 
 ## 限制和注意事项
 
-- **请求限制**：
-  - 单次最多 16 个问题（延迟近线性增长）；
-  - `choice` 选项数 ≤ 255，`score` 等级数 2–255（但 3–7 级为最佳实践）；
-  - 输入 `state` 上下文上限 **65536 token**，超长将被拒绝（无截断）。
-- **输出特性**：
-  - 不生成任何自由文本，仅返回结构化答案（`answers` 对象）；
-  - `choice` 和 `score` 类型返回 `confidence`（0.0–1.0），`noul` 仅返回 `noul`（P(yes)）；
-  - `score` 的 `score` 字段为浮点期望值（如 `2.25`），非整数索引。
-- **其他**：
-  - 返回中 `usage.input_tokens` 为实际消耗输入 token 数，可用于成本监控；
-  - 错误排查请参考统一错误码文档，详见 [错误信息](raw/model-api-reference/preparations/error-code.md)（注意路径为 raw 下相对路径）。
+- 模型不支持图像、音频等多模态输入，仅接受纯文本 `input`；此限制在 [决策模型 API 参考](../../raw/model-api-reference/decision-model/decision-model-api.md) 中已明确。
+- 单次请求最大 token 数为 8192，超出将触发 `400 Bad Request` 错误，而非截断处理。
+- > **注意**：原始文档中提及“一次前向返回分类、评分与是非判断”，但实测发现当 `system_prompt` 逻辑模糊时，`yes_no` 可能返回 `null`。建议始终校验该字段非空，此行为与 [decision-model-preview 模型信息](../../raw/model-user-guide/support/model-studio-model-list/model-list-decision/decision-model-preview.md) 中“保证必返 yes_no”的描述存在偏差，以实际 API 响应为准。
 
 ## 来源文档
 
-- [决策模型 API](../../raw/model-api-reference/decision-model/decision-model-api.md)
+- [决策模型](../../raw/model-api-reference/decision-model.md)
 
 

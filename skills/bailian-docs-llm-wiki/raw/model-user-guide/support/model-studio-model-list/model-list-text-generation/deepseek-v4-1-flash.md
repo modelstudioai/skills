@@ -36,7 +36,7 @@ Function Calling
 
 结构化输出
 
-支持
+支持 JSON Object
 
 联网搜索
 
@@ -88,7 +88,7 @@ Function Calling
 
 结构化输出
 
-支持
+支持 JSON Object
 
 联网搜索
 
@@ -140,7 +140,7 @@ Function Calling
 
 结构化输出
 
-支持
+支持 JSON Object
 
 联网搜索
 
@@ -192,7 +192,7 @@ Function Calling
 
 结构化输出
 
-支持
+支持 JSON Object
 
 联网搜索
 
@@ -244,7 +244,7 @@ Function Calling
 
 结构化输出
 
-支持
+支持 JSON Object
 
 联网搜索
 

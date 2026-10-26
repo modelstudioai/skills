@@ -1,44 +1,58 @@
 # 长期记忆
 
-长期记忆（Long Term Memory, LTM）是百炼平台提供的**结构化、可持久化、显式可控**的用户级记忆存储与检索能力。它独立于模型参数和会话上下文，通过 API 显式创建、写入与关联，用于在多轮对话及跨会话场景中稳定保存用户事实性信息、行为偏好与结构化画像，确保记忆可审计、可更新、可隔离。
+长期记忆（Long Term Memory, LTM）是百炼平台提供的**结构化、跨会话、可编程的持久化记忆能力**，用于显式存储和检索用户事实、偏好、行为画像等关键上下文信息。它不依赖模型内部隐式状态，而是通过独立的存储引擎与标准化 API 实现强一致性、低延迟的读写，是构建高一致性、个性化智能体的核心基础设施。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **智能体（Agent）调用场景**：在 `/v1/chat/completions` 或 `/v1/agents/{id}/chat` 等推理请求中，通过外层传入 `memory_id` 字段，平台将自动将该 memory 下关联的 **Fragments（事实记忆）** 和 **Profiles（用户画像）** 注入为系统上下文，供支持的模型（如 `qwen-max`、`qwen-plus`、`qwen-turbo`）直接感知和引用。  
-- **工作流（Workflow）与应用调用场景**：仅新版智能体应用（Agent 2.0）支持 `memory_id` 参数；工作流和旧版智能体不支持长期记忆注入，需自行通过 `biz_params` 或 Connector 接入外部存储。  
-- **Agent 上下文（Agent Context）编排场景**：当 `context_type` 设置为 `"memory"` 或包含 `"memory"`（如 `["rag", "memory"]`）时，平台将根据 `memory_id` 拉取对应记忆数据，并按 `context_ttl` 缓存、按 `max_context_length` 截断后注入上下文。此时记忆内容以压缩摘要形式参与推理，不暴露原始键值结构。  
-- **Flow Agent 组件管理场景**：旧版长期记忆（`CreateMemory` / `CreateMemoryNode` 等接口）仍可用，但属遗留能力，仅支持扁平化文本片段（`content` ≤ 200 字符），**不支持 Profiles、版本控制或 TTL**，新项目应优先使用新版 LTM API。  
+长期记忆在百炼平台中并非单一实现，而是根据应用形态和调用路径呈现为**三层抽象、统一语义**的协同能力：
 
-> ⚠️ 注意：`memory_id` **不具备租户隔离**——不同 `app_id` 若复用同一 `memory_id`，将共享同一份记忆数据；敏感字段（如手机号、身份证号）必须由应用层完成脱敏后再写入。
+- **API 直接调用层（`/v1/memory/*`）**：面向需要精细控制记忆生命周期的开发者。通过 `POST /v1/memory/fragments` 写入事实（如 `"user_email"`）、`POST /v1/memory/profiles` 绑定用户画像（需 `profile_id`），再在 `/v1/chat/completions` 中启用 `enable_long_term_memory: true`，系统自动注入相关记忆片段至模型输入。此方式适用于定制化对话服务、CRM 集成等场景。
+
+- **Agent 上下文层（`context.memory`）**：在 Agent 编排中作为 `context` 的子模块启用（`context.memory.enabled = true`）。此时记忆以 `memory_id` 为标识，支持 LRU 回溯最近 100 条交互记录（会话级短期记忆），但**不自动关联用户画像或跨会话事实**；若需长期关联，必须显式复用同一 `memory_id` 或结合 `profile_id` 手动注入。
+
+- **Managed Agent / Flow Agent 层（`Memory Store` / `Memory` 组件）**：在 Managed Agents API 中，`Memory Store` 提供键值对 + TTL 的轻量存储，常用于临时缓存会话中间状态；在 Flow Agent API 中，`Memory` 是独立资源实体（`/memories`），支持分页列表与全量管理，适用于工作流编排中需跨步骤共享结构化数据的场景。二者均需开发者主动读写，**不参与自动上下文注入**。
+
+> ✅ 关键区别：只有 **`/v1/memory/*` + `enable_long_term_memory: true`** 组合支持「自动记忆注入」——即系统根据当前 `profile_id` 和对话语义，自动检索并拼接最相关的事实与画像字段到 prompt 中。其他路径均为手动管理，需自行构造上下文。
 
 ## 关键参数和配置
 
-| 参数名 | 类型 | 必填 | 说明 |
-|--------|------|------|------|
-| `memory_id` | string | ✅ | 记忆实例唯一 ID，由应用侧生成并维护；长度 1–64 字符，仅支持字母、数字、`-`、`_`；全局唯一且不可变更。 |
-| `memory_type` | string | ❌ | 取值 `fragment`（默认）或 `profile`；决定后续读写接口路径（`/fragments` 或 `/profiles`）及语义行为。 |
-| `ttl_seconds` | integer | ❌（仅 `fragment` 有效） | 过期时间（秒），范围 300–2592000（5 分钟–30 天），默认 86400（24 小时）；`profile` 永不过期。 |
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `enable_long_term_memory` | `/v1/chat/completions` 请求体外层 | boolean | 否 | 启用自动记忆注入，默认 `false`；**仅流式请求（`stream: true`）生效** |
+| `profile_id` | 请求头 `x-profile-id` 或 `messages[0].profile_id` | string | 是（启用 LTM 时） | 用户全局唯一 ID（如 OpenID/UUID），用于关联画像与事实 |
+| `fragment_key` | `/v1/memory/fragments` 请求体 | string | 是 | 事实记忆的语义键名（如 `"shipping_address"`），建议小写+下划线 |
+| `ttl_seconds` | `/v1/memory/fragments` 或 `/v1/memory/profiles` 请求体 | integer | 否 | 过期时间（秒），默认 `31536000`（1 年）；设为 `0` 表示永不过期 |
+| `memory_id` | `/v1/memory/profiles` 请求体（可选） | string | 否 | 用户画像唯一标识，未提供时由系统生成；可用于精确覆盖更新 |
 
-- **配额限制**：单个 `memory_id` 最多存储 1000 条 fragment 或 100 条 profile；超出返回 `400 Bad Request`。  
-- **删除语义**：调用 `DELETE /v1/memories/{memory_id}` 后，所有关联数据**立即物理删除且不可恢复**（强一致性）。  
+> ⚠️ 注意事项：
+> - 单个 `profile_id` 下最多存储 1000 个字段（含嵌套），单个 `fragment` 值上限 8192 字符；
+> - 高并发写同一 `fragment_key` 存在约 1–3 秒最终一致性延迟；
+> - 删除操作暂不开放，过期记忆自动清理；非过期记忆需联系技术支持清除。
 
 ## 面向开发者，简洁实用
 
-- ✅ **只用三步即可启用**：  
-  1. `POST /v1/memories` 创建 `memory_id`；  
-  2. `POST /v1/memories/{id}/fragments` 写入键值对（如 `{"phone": "138****1234"}`）；  
-  3. 在推理请求中添加 `"memory_id": "xxx"` —— 模型自动注入。  
-- ✅ **严格模型兼容**：仅 `qwen-max`、`qwen-plus`、`qwen-turbo` 原生支持；其他模型（含 `llama-3-70b`）会静默忽略 `memory_id`，不报错但无效果。  
-- ✅ **安全第一**：所有数据默认加密落盘，但**不提供字段级权限控制**；请勿写入明文敏感信息，务必前置脱敏（如掩码、哈希、泛化）。  
-- ✅ **调试建议**：使用 `GET /v1/memories/{id}/fragments?limit=10` 快速验证写入结果；避免在生产环境高频轮询 `ListMemories`（受 1 秒限流约束）。  
-- ❌ **避免踩坑**：不要复用 `memory_id` 跨应用；不要依赖旧版 Flow Agent 记忆接口开发新功能；不要在 `messages` 内容中拼接 `memory_id`（必须置于请求体顶层）。
+- **快速上手三步走**：  
+  1. 写入用户画像：`POST /v1/memory/profiles`，Body `{ "profile_id": "u_123", "age_group": "25-34", "preferred_language": "zh" }`  
+  2. 写入事实记忆：`POST /v1/memory/fragments`，Body `{ "fragment_key": "last_order_id", "value": "ORD-7890", "profile_id": "u_123" }`  
+  3. 对话中启用：调用 `/v1/chat/completions`，Header 加 `x-profile-id: u_123`，Body 外层加 `"enable_long_term_memory": true`，且 `stream: true`
+
+- **调试技巧**：  
+  - 查询画像：`GET /v1/memory/profiles/u_123`  
+  - 按键查事实：`GET /v1/memory/fragments/last_order_id?profile_id=u_123`  
+  - 语义搜索（实验性）：`POST /v1/memory/fragments/search`，Body `{ "query": "用户最近下的订单号是什么？" }`
+
+- **避坑指南**：  
+  - ❌ 不要混用 `context.memory.enabled` 和 `enable_long_term_memory`：前者是会话回溯，后者是用户画像注入，机制完全不同；  
+  - ❌ 不要在非流式请求中依赖 `enable_long_term_memory`——它不会生效；  
+  - ✅ 优先使用 `profile_id` 而非 `session_id` 管理长期记忆，确保跨设备、跨会话一致性；  
+  - ✅ 敏感字段（如手机号、邮箱）建议加密后存入 `fragments`，平台不提供内置加密。
 
 ## 关联主题页
 
 - [long term memory new](../api/long-term-memory-new.md)
 - [agent context](../guides/agent-context.md)
-- [application call](../api/application-call.md)
 - [flow agent api](../api/flow-agent-api.md)
-- [agent development](../guides/agent-development.md)
+- [managed agents api](../api/managed-agents-api.md)
+- [application component api reference](../api/application-component-api-reference.md)
 
 
