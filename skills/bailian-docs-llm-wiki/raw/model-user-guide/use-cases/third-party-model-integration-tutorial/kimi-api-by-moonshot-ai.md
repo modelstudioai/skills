@@ -22,7 +22,7 @@ kimi 系列模型均支持输入文本、图像或视频：
 
 1.  kimi/kimi-k2.7-code-highspeed 与 kimi/kimi-k2.7-code 功能完全一致，速度提升5~6倍。
     
-2.  kimi/kimi-k3、kimi/kimi-k2.7-code-highspeed、kimi/kimi-k2.7-code 为仅思考模型。
+2.  kimi/kimi-k3、kimi/kimi-k3.1-pro、kimi/kimi-k3.1-pro-highspeed、kimi/kimi-k2.7-code-highspeed、kimi/kimi-k2.7-code 为仅思考模型。
     
 3.  kimi/kimi-k2.6 可通过 `enable_thinking` 参数控制思考模式，默认开启思考模式：
     
@@ -571,6 +571,10 @@ kimi/kimi-k3
 
 支持
 
+kimi/kimi-k3.1-pro
+
+kimi/kimi-k3.1-pro-highspeed
+
 kimi/kimi-k2.7-code-highspeed
 
 kimi/kimi-k2.7-code
@@ -579,7 +583,8 @@ kimi/kimi-k2.6
 
 以上模型支持上下文缓存（隐式缓存，自动开启）：
 
--   kimi/kimi-k3命中缓存的输入Token按输入价格的10%计费
+-   kimi/kimi-k3、kimi/kimi-k3.1-pro命中缓存的输入Token按输入价格的10%计费
+-   kimi/kimi-k3.1-pro-highspeed命中缓存的输入Token按输入价格的5%计费
 -   kimi/kimi-k2.7-code-highspeed、kimi/kimi-k2.7-code 命中缓存的输入Token按输入价格的20.0%计费，
 -   kimi/kimi-k2.6命中缓存的输入Token按输入价格的16.9%计费
 
@@ -587,7 +592,7 @@ kimi/kimi-k2.6
 
 参数
 
-kimi/kimi-k3
+kimi/kimi-k3、kimi/kimi-k3.1-pro、kimi/kimi-k3.1-pro-highspeed
 
 kimi/kimi-k2.7-code-highspeed
 
@@ -678,8 +683,9 @@ max
 仅支持设置为`true`
 
 -   `stream_options`仅支持设置为`true`，`temperature`、`top_p`、`repetition_penalty`、`presence_penalty`不支持设置为其他值；
--   kimi/kimi-k3 支持 `reasoning_effort` 参数，唯一支持值 `max`。
--   在思考模式下，使用 Kimi 模型进行工具调用时：必须在每轮 assistant 消息中保留 `reasoning_content` 字段；对于`tool_choice`参数，`kimi-k3` 支持 `auto` / `none` / `required` 三档；其他模型不支持 `required`，传入会报错。`kimi-k3` 支持动态加载工具，详细用法请参见[动态加载工具](https://platform.kimi.com/docs/guide/use-dynamic-tool-loading)。
+-   kimi/kimi-k3、kimi/kimi-k3.1-pro、kimi/kimi-k3.1-pro-highspeed 支持 `reasoning_effort` 参数，唯一支持值 `max`。
+-   kimi/kimi-k3.1-pro、kimi/kimi-k3.1-pro-highspeed 不支持 `parallel_tool_calls` 和 `n` 参数。
+-   在思考模式下，使用 Kimi 模型进行工具调用时：必须在每轮 assistant 消息中保留 `reasoning_content` 字段；对于`tool_choice`参数，`kimi-k3`、`kimi-k3.1-pro`、`kimi-k3.1-pro-highspeed` 支持 `auto` / `none` / `required` 三档；其他模型不支持 `required`，传入会报错。以上三个模型支持动态加载工具，详细用法请参见[动态加载工具](https://platform.kimi.com/docs/guide/use-dynamic-tool-loading)。
 -   ”-”表示没有默认值，也不支持设置。
 
 ## 模型列表与计费

@@ -3321,7 +3321,7 @@ Qwen3.5-Omni-Realtime 配置示例
 
 ### 结束会话
 
-每通会话结束后，发送 `session.finish` 事件关闭会话，或直接断开 WebSocket 连接。同一会话不关闭会导致上下文持续累积。
+每通会话结束后，应断开连接。WebSocket 接入可调用 `close()` 关闭连接；WebRTC 接入需停止媒体并关闭 PeerConnection，具体步骤参见[结束会话与资源清理](https://help.aliyun.com/zh/model-studio/best-practice-webrtc-omni-realtime#bpwrtcomni-s02jh2)。同一会话不关闭会导致上下文持续累积。
 
 调用 `close()` 关闭 WebSocket 连接时，若连接刚建立即关闭（无会话交互），关闭耗时约 5-10 秒，此为正常现象。服务端需完成音频流处理、上下文缓存及推理资源初始化后才能响应关闭请求。建议异步执行 `close()` 操作，避免阻塞主流程。
 
@@ -3329,6 +3329,10 @@ Qwen3.5-Omni-Realtime 配置示例
 
 `qwen3.8-omni-flash-realtime` 的全部输入 Token 总数上限为 196608，输入长度计算规则与 Qwen3.5-Omni-Realtime 一致。
 
+-   历史对话与本轮输入的 Token 总数超过最大输入长度时，服务端会自动截断历史对话并继续对话。文本和工具返回结果也计入输入长度。
+    
+-   本轮输入本身超过最大输入长度时，服务端会返回错误。
+    
 -   单次会话最长可持续 **120 分钟**，达到此上限后服务将主动关闭连接。
     
 -   模型会维护对话历史上下文，当对话轮次或累计时长超过以下限制时，将自动丢弃更早的历史信息。**最大时长**指模型上下文中能保留的音频或视频（图像帧）累计时长上限。该时长不是整个会话的持续时间。
@@ -3960,6 +3964,10 @@ if __name__ == "__main__":
 
 ## 常见问题与错误处理
 
+### 云工开物 300 元学生代金券能否抵扣 Omni 调用费用？
+
+不支持。云工开物 300 元学生代金券不支持直接抵扣 Omni 全系列模型的按量调用费用。活动详情请参见[“云工开物”高校计划](https://help.aliyun.com/zh/model-studio/introduction-to-yungongkaiwu)。
+
 ### 如何在线体验 Qwen-Omni-Realtime 模型？
 
 A：您可以通过以下方式一键部署：
@@ -3991,6 +3999,13 @@ A：您可以通过以下方式一键部署：
   }
 }
 ```
+
+### VAD 未及时触发回复，如何调整？
+
+可通过 [session.update](https://help.aliyun.com/zh/model-studio/client-events#26a8302028sjm) 的 `session.turn_detection`，根据当前使用的 VAD 模式调整：
+
+-   **`server_vad`**：适当降低 `silence_duration_ms`，缩短用户停止说话后的静音等待时间。设置过低可能将句中的短暂停顿判断为说话结束，提前触发回复。
+-   **`semantic_vad`**：如果“可以”“yes”等有效的简短回答未能触发回复，使用 Qwen3.8-Omni-Flash-Realtime 系列模型时，可尝试将 `type` 切换为 `semantic_vad_ec`。相比 `semantic_vad`，该模式更容易检测到用户说话并触发打断，同时保留对背景音等无意义声音的过滤能力。
 
 ### 收不到 ASR 转录文本（transcript）怎么办？
 

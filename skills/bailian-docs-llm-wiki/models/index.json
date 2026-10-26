@@ -1,11 +1,11 @@
 {
-  "updatedAt": "2026-10-24",
+  "updatedAt": "2026-10-27",
   "totalFamilies": 125,
-  "totalModels": 320,
+  "totalModels": 322,
   "profileCoverage": {
-    "full": 265,
-    "partial": 48,
-    "structured-only": 7,
+    "full": 282,
+    "partial": 39,
+    "structured-only": 1,
     "none": 0
   },
   "capabilityDistribution": {
@@ -378,19 +378,21 @@
       "primaryCapability": "TG",
       "capabilities": [
         "TG",
-        "VU",
-        "Reasoning"
+        "Reasoning",
+        "VU"
       ],
       "providers": [
         "moonshot-ai"
       ],
-      "itemCount": 5,
+      "itemCount": 7,
       "items": [
         "kimi/kimi-k2.6",
         "kimi/kimi-k2.7-code",
         "kimi/kimi-k2.7-code-highspeed",
         "kimi/kimi-k2.8-preview",
-        "kimi/kimi-k3"
+        "kimi/kimi-k3",
+        "kimi/kimi-k3.1-pro",
+        "kimi/kimi-k3.1-pro-highspeed"
       ],
       "maxContextWindow": 1048576
     },

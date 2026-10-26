@@ -939,7 +939,7 @@ while True:
     -   DeepSeek（阿里云百炼部署）：deepseek-v4.1-flash、deepseek-v4.1-flash-1017、deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731
     -   DeepSeek（快手万擎部署）：vanchin/deepseek-v4.1-flash、vanchin/deepseek-v4-pro、vanchin/deepseek-v4-pro-0813、vanchin/deepseek-v3.2-think、vanchin/deepseek-v3.1-terminus、vanchin/deepseek-r1、vanchin/deepseek-v3
     -   Kimi（阿里云百炼部署）：kimi-k3、kimi-k2.7-code、kimi-k2.6、kimi-k2.5
-    -   Kimi（月之暗面部署）：kimi/kimi-k3、kimi/kimi-k2.8-preview、kimi/kimi-k2.7-code-highspeed、kimi/kimi-k2.7-code、kimi/kimi-k2.6
+    -   Kimi（月之暗面部署）：kimi/kimi-k3.1-pro、kimi/kimi-k3.1-pro-highspeed、kimi/kimi-k3、kimi/kimi-k2.8-preview、kimi/kimi-k2.7-code-highspeed、kimi/kimi-k2.7-code、kimi/kimi-k2.6
     -   GLM（阿里云百炼部署）：glm-5.3、glm-5.3-prime、glm-5.2、glm-5.2-fast-preview、glm-5.1、glm-5
     -   GLM（智谱部署）：ZHIPU/GLM-5.3-FlashX、ZHIPU/GLM-5.3-Flash、ZHIPU/GLM-5.3、ZHIPU/GLM-5.2、ZHIPU/GLM-5.1、ZHIPU/GLM-5
     -   MiniMax（阿里云百炼部署）：MiniMax-M2.5
@@ -1123,7 +1123,7 @@ while True:
 -   qwen3.8-max、qwen3.8-max-0902、qwen3.8-flash、qwen3.8-2.4t-a95b：`cached_token` 单价不是 `input_token` 单价的 20%，具体价格请参见百炼控制台
 -   DeepSeek（快手万擎部署）：vanchin/deepseek-v4.1-flash 为 **2%**；vanchin/deepseek-v4-pro-0813 为 **3.33%**；vanchin/deepseek-v4-pro 为 **8.33%**；vanchin/deepseek-v3.2-think 为 **10%**；vanchin/deepseek-v3.1-terminus、vanchin/deepseek-r1、vanchin/deepseek-v3 为 **40%**
 -   Kimi（阿里云百炼部署）：kimi-k3 为 **10%**
--   Kimi（月之暗面部署）：kimi/kimi-k3 为 **10%**；kimi/kimi-k2.6 为 **16.9%**；kimi/kimi-k2.8-preview 为 **26.15%**
+-   Kimi（月之暗面部署）：kimi/kimi-k3.1-pro、kimi/kimi-k3 为 **10%**；kimi/kimi-k3.1-pro-highspeed 为 **5%**；kimi/kimi-k2.6 为 **16.9%**；kimi/kimi-k2.8-preview 为 **26.15%**
 -   GLM（阿里云百炼部署）：`cached_token` 单价比例因地域而异，具体价格请参见百炼控制台。glm-5.3、glm-5.3-prime、glm-5.2、glm-5.2-fast-preview 在新加坡以及美国（弗吉尼亚）的美国服务部署范围下为 **20%**，在其他地域为 **25%**；glm-5.1 在新加坡为 **18.57%**，在其他地域为 **20%**；glm-5 为 **20%**
 -   MiniMax（稀宇科技部署）：MiniMax/MiniMax-M3.1-Flash、MiniMax/MiniMax-M2.5、MiniMax/MiniMax-M2.1 为 **10%**，MiniMax/MiniMax-M3、MiniMax/MiniMax-M2.7 为 **20%**
 -   GLM（智谱部署）：ZHIPU/GLM-5.3、ZHIPU/GLM-5.2、ZHIPU/GLM-5.1、ZHIPU/GLM-5 均为 **25%**；ZHIPU/GLM-5.3-Flash 为 **28.75%**；ZHIPU/GLM-5.3-FlashX 为 **28.5%**

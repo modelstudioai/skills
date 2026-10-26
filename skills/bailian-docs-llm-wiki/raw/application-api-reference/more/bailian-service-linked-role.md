@@ -12,7 +12,7 @@
 
 [AliyunServiceRoleForSFMAccessFC](https://help.aliyun.com/zh/model-studio/bailian-service-linked-role#Bd0OF)
 
-[百炼工作流应用](raw/application-user-guide/llm-application/workflow-application.md)和[流程编排](https://help.aliyun.com/zh/model-studio/what-is-process-orchestration-old)通过此服务关联角色访问您在[FC](https://help.aliyun.com/zh/functioncompute/what-is-function-compute)中的资源。
+[百炼工作流应用](raw/application-user-guide/agent-development/llm-application/workflow-application.md)和[流程编排](https://help.aliyun.com/zh/model-studio/what-is-process-orchestration-old)通过此服务关联角色访问您在[FC](https://help.aliyun.com/zh/functioncompute/what-is-function-compute)中的资源。
 
 [AliyunServiceRoleForSFMDataHubOSSImport](https://help.aliyun.com/zh/model-studio/bailian-service-linked-role#2b75fc8a97g4c)
 
@@ -24,7 +24,7 @@
 
 [AliyunServiceRoleForSFMAccessADB](https://help.aliyun.com/zh/model-studio/bailian-service-linked-role#7deade0402e0y)
 
-[创建和使用知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)和[安全存储空间](raw/model-user-guide/security-and-compliance/secure-storage.md)通过此服务关联角色访问您的[ADB-PG](https://help.aliyun.com/zh/analyticdb/analyticdb-for-postgresql/product-overview/overview-product-overview)实例。
+[创建和使用知识库](raw/application-user-guide/agent-context/knowledge-base/data-connection-overview/rag-knowledge-base.md)和[安全存储空间](raw/model-user-guide/security-and-compliance/secure-storage.md)通过此服务关联角色访问您的[ADB-PG](https://help.aliyun.com/zh/analyticdb/analyticdb-for-postgresql/product-overview/overview-product-overview)实例。
 
 [AliyunServiceRoleForSFMAccessingMNS](https://help.aliyun.com/zh/model-studio/bailian-service-linked-role#e412ddc7eac5w)
 
@@ -36,7 +36,7 @@
 
 [AliyunServiceRoleForSFMAccessingCIP](https://help.aliyun.com/zh/model-studio/bailian-service-linked-role#e02fae3cf9x0q)
 
-[百炼应用](raw/application-user-guide/llm-application/application-introduction.md)通过此服务关联角色访问您在[内容安全](https://help.aliyun.com/zh/document_detail/28417.html)中的服务或资源。
+[百炼应用](raw/application-user-guide/agent-development/llm-application/application-introduction.md)通过此服务关联角色访问您在[内容安全](https://help.aliyun.com/zh/document_detail/28417.html)中的服务或资源。
 
 [AliyunServiceRoleForSFMAccessSLS](https://help.aliyun.com/zh/model-studio/bailian-service-linked-role#558c3f95f9me9)
 
@@ -62,7 +62,7 @@
 
 ### 应用场景
 
-百炼[工作流应用](raw/application-user-guide/llm-application/workflow-application.md)和[流程编排](https://help.aliyun.com/zh/model-studio/what-is-process-orchestration-old)中的函数计算节点通过此服务关联角色访问您在[FC](https://help.aliyun.com/zh/functioncompute/what-is-function-compute)中的资源。
+百炼[工作流应用](raw/application-user-guide/agent-development/llm-application/workflow-application.md)和[流程编排](https://help.aliyun.com/zh/model-studio/what-is-process-orchestration-old)中的函数计算节点通过此服务关联角色访问您在[FC](https://help.aliyun.com/zh/functioncompute/what-is-function-compute)中的资源。
 
 ### 角色及权限说明
 
@@ -465,7 +465,7 @@
 
 ### 应用场景
 
-[百炼应用](raw/application-user-guide/llm-application/application-introduction.md)通过此服务关联角色访问您在[内容安全](https://help.aliyun.com/zh/document_detail/28417.html)中的服务或资源。
+[百炼应用](raw/application-user-guide/agent-development/llm-application/application-introduction.md)通过此服务关联角色访问您在[内容安全](https://help.aliyun.com/zh/document_detail/28417.html)中的服务或资源。
 
 ### 角色及权限说明
 

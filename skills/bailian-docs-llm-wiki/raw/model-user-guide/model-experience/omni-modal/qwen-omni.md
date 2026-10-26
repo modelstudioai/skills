@@ -3618,6 +3618,12 @@ if __name__ == "__main__":
 
 限流规则及常见问题请参见[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)。
 
+## 常见问题
+
+### 云工开物 300 元学生代金券能否抵扣 Omni 调用费用？
+
+不支持。云工开物 300 元学生代金券不支持直接抵扣 Omni 全系列模型的按量调用费用。活动详情请参见[“云工开物”高校计划](https://help.aliyun.com/zh/model-studio/introduction-to-yungongkaiwu)。
+
 ## 错误码
 
 如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。

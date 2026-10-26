@@ -1,49 +1,50 @@
-# Token 管理
+# Token
 
-Token 管理是百炼平台对模型调用过程中输入与输出文本（及多模态内容）所消耗的计算单元（Token）进行计量、配额控制、实时校验与用量观测的核心机制。它贯穿 API 调用生命周期，既是资源约束的执行层，也是成本控制与系统稳定性的基础保障。
+Token 是百炼平台中用于计量模型调用资源消耗的最小计费与限流单位，代表模型处理的文本、图像、音频等输入/输出内容经编码后产生的基本语义单元。一个 Token 通常对应一个子词（subword）、标点、空格或特殊控制符；具体数量由模型所用分词器（Tokenizer）决定，与原始字符数无固定换算关系。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **API 调用配额控制**：通过 `Token Plan` 机制实现精细化配额分配。开发者在请求中显式指定 `plan`（如 `personal`、`team`、`coding`），系统据此校验单次 `max_tokens` 上限、并发请求数及当日总 Token 消耗量。未指定时按账号身份自动 fallback，配额按自然日（UTC+8）重置。
+- **模型推理调用**：每次 API 请求（同步 `/v1/chat/completions`、异步 `/v1/async-tasks`、批量 `/v1/batch`、流式 `stream=true`）均按实际消耗的 `input_tokens`（提示词 + 历史上下文）和 `output_tokens`（生成结果）分别计费与限流。系统在响应头（如 `X-Input-Tokens`, `X-Output-Tokens`）及响应体中返回精确数值，可用于用量分析与账单核对。
 
-- **组织级资源编排**：企业管理员通过 `Token Plan API` 统一购买、分配和管理 Token 席位（`seat_type: standard/pro/enterprise`），将配额绑定至成员或 API Key，并实时查询订阅用量。该层不直接操作模型，而是为上层调用提供可计量、可审计、可伸缩的资源底座。
+- **Token Plan 配额管理**：Token 是 Token Plan 的核心计量维度。购买的 Plan（如 Standard/Pro/Enterprise）以「千 Token」为单位授予配额，该配额在绑定的项目或 API Key 下统一扣减，支持跨模型（Qwen 系列、Qwen-VL、Qwen-Audio 等）和跨调用方式复用。Coding Plan 则独立计费，专用于代码生成类模型（如 Qwen2.5-Coder）。
 
-- **可观测性与优化闭环**：在 `Model Monitoring` 中，`TotalToken 数` 是核心用量指标，支持按模型、API Key、时间范围多维统计；同时可基于 Token 消耗突增配置告警，并结合审计日志分析具体请求的 `input_tokens` 与 `output_tokens`，驱动 Prompt 优化、`max_tokens` 合理设置等降本实践。
+- **模型训练与部署**：训练任务按训练过程中模型前向/反向计算涉及的总 Token 数（如 `n_epochs × N × (max_pixels / 压缩率) × GPU系数`）计费；部署服务（如 PTU 吞吐预留）也以 Token/分钟（TPM）为单位报价，并应用长输入阶梯系数（如 >32K 输入部分×3）和缓存折算系数（如 0.25）进行容量换算。
 
-- **基础调用约束**：所有模型 API 请求均隐式参与 Token 管理——`input.messages` 内容与 `parameters.max_tokens` 共同决定本次调用的 Token 预估与实际消耗；系统在响应头中返回 `X-RateLimit-Remaining` 等字段，供客户端实时感知配额余量。
+- **知识库（RAG）与工具调用**：Embedding 模型调用、Rerank 排序、Function Calling 中的工具描述解析等环节，其输入/输出同样按 Token 计量，纳入 `test 1` 统一计费体系，可被 AI 通用型节省计划抵扣。
 
-- **安全与稳定性边界**：Token 管理与 `preparations` 中的 `api_key` 认证、`base_url` 地域隔离协同工作——同一 API Key 的 Token 配额仅在指定地域生效；超限触发 `429 Too Many Requests` 时，必须依据 `X-RateLimit-Reset` 实现指数退避，而非无差别重试。
+- **免费额度与预算控制**：新人赠送的免费额度（如 100 万 Token）按输入+输出 Token 总和统一抵扣（仅限实时推理），不区分类型；预算管理、用量预警（≤5% 剩余配额触发通知）均基于 Token 消耗量实时统计。
 
 ## 关键参数和配置
 
-| 参数 | 位置 | 类型 | 说明 | 是否必填 |
-|------|------|------|------|----------|
-| `plan` | Header (`X-Plan`) 或 Body 顶层 | string | 指定 Token Plan 类型，决定配额策略；取值如 `personal`、`team`、`coding` | 推荐显式声明（部分接口默认 fallback） |
-| `max_tokens` | Body `parameters` 内 | integer | 单次请求最大输出 Token 数，不可超过当前 Plan 允许上限（如 `personal`: 4096） | 否（有模型默认值），但强烈建议显式设置以控本防超限 |
-| `org_id` | Token Plan API 请求路径/Body | string | 组织唯一标识，用于席位分配与用量归属 | 是（Token Plan API 所有接口） |
-| `seat_type` | Token Plan API（席位类） | string | 席位规格，对应不同 Token 配额包（`standard` / `pro` / `enterprise`） | 是（席位操作接口） |
-| `X-RateLimit-Remaining` | 响应 Header | string | 当前周期剩余 Token 配额（权威值，优先于控制台显示） | —— |
-| `X-RateLimit-Reset` | 响应 Header | integer (Unix timestamp) | 配额重置时间戳（秒级 UTC 时间） | —— |
+- `input_tokens` / `output_tokens`：只读字段，由平台自动统计并返回，不可手动设置。开发者应通过 `/v1/usage` 接口或控制台「用量明细」页定期校验，避免因分词差异导致预估偏差。
 
-> ⚠️ 注意：  
-> - Token 计费粒度为整数，精确累加 `input_tokens + output_tokens`，空格、标点、特殊字符、Base64 编码图像块均计入；  
-> - 同一请求不可跨 Plan 拆分计费；  
-> - 自定义训练模型（Fine-tuned Model）与 BYOM 场景**不适用** Token Plan 约束。
+- `max_tokens`：可选请求参数，用于限制生成长度。超出该值时输出将被截断，**不额外计费**；但若设为过小值导致业务异常，需自行承担重试带来的重复计费风险。
+
+- `model`：必填参数，指定模型 ID（如 `qwen-max`）。Token 计费规则与模型强绑定——不同模型的上下文窗口、分词策略、单价均不同，直接影响 Token 消耗量与费用。
+
+- **地域与隔离性**：Token 配额、免费额度、节省计划、吞吐预留均严格按地域（Region）隔离，华东 1 购买的资源无法在华北 2 使用；API Key 亦不可跨地域复用。
+
+- **单次请求硬限制**：`input_tokens + output_tokens` 总和不得超过模型上下文窗口的 90%（例如 qwen-max 上下文 32768，则单次上限为 29491），超限将直接返回 `400 Bad Request`。
 
 ## 面向开发者，简洁实用
 
-- ✅ **立即生效**：在请求 Header 加 `X-Plan: team` 或 Body 加 `"plan": "team"`，即可启用团队级配额，无需额外开通。  
-- ✅ **查用量**：调用 `GET /v1/usage/token-plan` 获取当前周期剩余 Token 与并发余量；或访问控制台「用量统计」页面按模型/API Key 筛选。  
-- ✅ **控成本**：始终设置合理的 `max_tokens`；用轻量模型处理简单任务；批量任务优先走 OpenAI 兼容 Batch 接口。  
-- ✅ **防失败**：收到 `429` 时，读取 `X-RateLimit-Reset` 并实现指数退避（如 `2^retry * 100ms`），避免请求风暴。  
-- ✅ **看明细**：开启审计日志后，在监控页查看每条请求的 `input_tokens` 和 `output_tokens`，精准定位高消耗请求。  
-- ❌ **不推荐**：硬编码 `api_key` 或 `base_url`；忽略 `X-RateLimit-*` 响应头；在流式响应中依赖中间 chunk 的 `output.text` 完整性。
+- ✅ **务必校验实际 Token 消耗**：使用 [Tokenizer 工具](https://help.aliyun.com/token-calculator) 或 SDK 的 `count_tokens()` 方法预估输入长度，避免因 prompt 过长触发截断或报错。
+
+- ✅ **优先使用 Token Plan 绑定 Key**：相比通用 API Key，绑定 Token Plan 的 Key 具备明确配额、统一结算、团队权限继承等优势，适合生产环境。
+
+- ✅ **流式响应仍按完整输出计费**：即使客户端提前中断 SSE 流，只要模型已生成并推送了 token，即计入 `output_tokens`。
+
+- ❌ **不要依赖 `token_limit` 参数**：该旧版请求级硬限参数已于 v2024.06 废弃，实际生效的是账户/项目级 Token Plan 配额。
+
+- ❌ **避免前端硬编码 API Key**：密钥泄露将导致 Token 配额被恶意耗尽，务必通过后端代理或短期临时凭证（如 STS Token）调用。
+
+- ⚠️ **注意免费额度适用范围**：仅覆盖实时推理（`/v1/chat/completions` 等），不适用于 Batch 调用、模型训练、部署、PAI-DSW 或 OSS 存储。
 
 ## 关联主题页
 
 - [token plan guide](../guides/token-plan-guide.md)
 - [token plan api](../api/token-plan-api.md)
-- [model monitoring](../guides/model-monitoring.md)
+- [test 1](../guides/test-1.md)
 - [preparations](../api/preparations.md)
 - [get started with models](../guides/get-started-with-models.md)
 

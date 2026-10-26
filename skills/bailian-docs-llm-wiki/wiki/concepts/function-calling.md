@@ -1,52 +1,48 @@
 # 函数调用
 
-函数调用（Function Calling）是百炼平台中大模型主动识别用户意图、规划执行步骤，并按标准协议触发外部工具或服务的关键能力。它使模型从“纯文本生成器”升级为可操作现实世界的智能代理，支撑联网搜索、代码执行、图像生成、数据库查询等超出模型原生能力的复杂任务。
+函数调用（Function Calling）是百炼平台中让大模型具备**主动识别用户意图、结构化生成工具请求、并协同外部系统执行动作**的核心能力。它不是简单的文本输出，而是模型在推理过程中自动生成符合预定义 Schema 的 JSON 工具调用指令，交由运行时环境解析、执行并注入结果回对话流。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-函数调用在百炼平台中并非单一接口特性，而是贯穿多个技术栈的统一语义能力，具体体现为：
+函数调用在百炼平台中并非单一接口特性，而是贯穿多类模型与交互范式的横切能力，具体体现为：
 
-- **API 层（Qwen API）**：在 `Responses` 和 `Anthropic Messages` 协议中，通过 `tools` 字段声明可用函数列表；模型返回结构化 `tool_calls`，平台自动解析并同步/异步调用对应工具，再将结果注入上下文继续推理。`Responses API` 还支持内置工具（如 `web_search`, `code_interpreter`）开箱即用，无需额外部署。
+- **通用大模型（Qwen-Max/Plus/Turbo）**：通过 `tools` + `tool_choice` 参数声明可用函数列表，模型在生成响应前可自主决定是否调用、调用哪个函数及传入参数。DashScope 原生接口支持最完整的控制（如 `tool_choice="auto"` / `"required"` / `{"type": "function", "function": {"name": "xxx"}}`），且流式响应中可逐帧返回工具调用中间步骤；Anthropic 兼容接口完整支持 `tool_use` 语义；OpenAI 兼容的 `chat/completions` 接口**不原生支持**，需自行解析模型输出的 JSON 字符串。
 
-- **Agent 开发层**：Managed Agent 和 Flow Agent 原生集成函数调用逻辑——开发者只需配置 `tools` 参数，Agent 运行时自动完成工具选择、参数提取、调用执行与结果整合；Sandbox Agent 则由开发者在 Python 沙箱中手动调用 `agent_tools.*` 或自定义 HTTP 客户端，实现完全可控的函数调度。
+- **实时多模态交互（Qwen-Omni-Realtime）**：支持 `type=function` 工具定义，与 `type=mcp` 并存（但不可与 `enable_search` 同时启用）。VAD 触发语音输入后，模型可在文本响应中嵌入函数调用，服务端自动拦截、执行并追加 `conversation.item.created`（role=`tool`）事件，实现“说一句话，查一次天气，播一段音频”的无缝链路。
 
-- **插件（Plug-in）层**：所有插件（官方/三方/自定义）均以函数为最小可调用单元。自定义插件需明确定义 `tool_name`、`tool_description` 和 `input_parameters`，其本质就是注册一个可通过自然语言触发的 HTTP 函数端点；调用时平台自动完成参数映射、鉴权透传（`biz_params`）和响应解析。
+- **专用模型（意图理解、GUI-Plus 等）**：  
+  - `tongyi-intent-detect-v3` 提供 `INTENT_MODE`，将用户输入直接映射为标准化函数调用（如 `{"name": "route_to_sales", "parameters": {}}`），毫秒级完成对话路由；  
+  - `gui-plus` 系列要求在 system message 中声明 `<tools>` 和 `<tool_call>` 输出格式，模型输出严格遵循该结构，确保 UI 操作指令可被自动化引擎精准解析执行。
 
-- **Application Call 层**：当调用已发布的智能体或工作流应用时，若该应用启用了插件或工具，`biz_params` 可携带运行时参数（如用户 token、业务 ID），驱动函数调用动态适配上下文；RAG 检索、知识库查询等高级功能也常以内置函数形式参与调用链。
+- **Agent 编排与 RAG 应用**：函数调用是 Agent 的“手脚”。当 `context.rag.enabled=true` 或 `context.connector.ids` 配置生效时，模型可结合检索到的知识或 Connector 拉取的实时数据，动态生成函数调用（如 `get_user_order_status(order_id=xxx)`），实现“查知识 → 调 API → 综合回答”的闭环。
 
-- **Omni Realtime 层**：在实时音视频交互中，函数调用支持 `type=function`（传统工具）与 `type=mcp`（MCP 协议插件）双模式共存（仅 `qwen3.8-omni-flash-realtime` 支持），允许模型在语音对话流中即时触发搜索、计算或图像生成，并将结果以文本+音频混合方式实时返回。
-
-> ✅ 关键共识：无论在哪一层，函数调用都遵循「声明 → 规划 → 执行 → 注入」四步闭环，且调用结果始终作为新消息（`tool_result`）加入 `messages` 上下文，供后续推理使用。
+> ⚠️ 注意：所有函数调用均**不共享会话状态**——每次调用独立执行，返回结果后由平台自动拼入消息历史；若需跨调用状态传递，请在 `parameters` 中显式携带上下文字段，或使用 `context.memory` 模块持久化关键信息。
 
 ## 关键参数和配置
 
-| 参数 | 作用 | 必填 | 常见值/说明 |
-|------|------|------|-------------|
-| `tools` | 声明可用函数列表 | 是（启用调用时） | 数组，每个元素含 `name`（字符串）、`description`（自然语言描述）、`parameters`（JSON Schema 定义）。`Responses API` 支持内置工具名（如 `"web_search"`）；`Anthropic` 需带日期后缀（如 `"web_search_20250305"`）；`Omni Realtime` 支持 `{"type": "function"}` 或 `{"type": "mcp"}`。 |
-| `tool_choice` | 控制调用策略 | 否 | `"auto"`（默认，模型自主决定）、`"none"`（禁用）、`{"type": "function", "function": {"name": "xxx"}}`（强制指定）。`Responses API` 使用 `tool_choice`；`Anthropic` 使用 `tool_choice`；`Omni Realtime` 使用 `tool_choice`。 |
-| `biz_params` | 传递运行时上下文参数 | 否（按需） | 对象，用于向工具注入用户级信息（如 `"user_id": "u123"`）、鉴权凭证（`"user_defined_tokens"`）或业务透传字段（`"biz_data"`）。在 Application Call 和 Plug-in 场景中关键。 |
-| `enable_search` | 启用内置联网搜索（替代自定义工具） | 否 | `true`/`false`。注意：与 `tools` **互斥**，不可同时启用（尤其在 Omni Realtime 中）。 |
-| `previous_response_id`（仅 Responses） | 复用历史调用上下文 | 否 | 字符串，用于多轮函数调用链的上下文继承（如搜索→摘要→翻译），避免重复传参。 |
-
-> ⚠️ 注意事项：
-> - 工具描述（`description`）质量直接影响模型调用准确率，建议包含典型输入示例；
-> - `parameters` 的 JSON Schema 必须严格定义类型与必填项，`Object` 类型子属性不能为空（否则插件发布失败）；
-> - 所有协议中，函数调用返回的 `tool_call_id` 必须与后续 `tool_result` 的 `tool_call_id` 精确匹配，否则上下文注入失败；
-> - 流式响应中，`tool_calls` 事件需在 `message` 事件前到达，客户端应按事件顺序组装完整上下文。
+| 参数 | 类型 | 说明 | 必填性 | 支持接口 |
+|------|------|------|--------|----------|
+| `tools` | array | 工具定义列表，每个元素为 OpenAPI 3.0 兼容的 JSON Schema（含 `name`, `description`, `parameters`） | 否（无工具则不触发） | DashScope、Anthropic、OpenAI-Responses、Omni-Realtime、Intent-Detect、GUI-Plus |
+| `tool_choice` | string / object | 控制调用策略：<br>• `"auto"`（默认，模型自主决策）<br>• `"none"`（禁用）<br>• `"required"`（必须调用一个）<br>• `{"type": "function", "function": {"name": "xxx"}}`（指定函数） | 否（默认 `auto`） | DashScope、Anthropic（`tool_choice`）、Omni-Realtime（`tool_choice`）；*OpenAI-Responses 使用隐式调度，不暴露此参数* |
+| `enable_search` | boolean | 启用联网搜索（自动触发 `web_search` 工具） | 否 | DashScope、Omni-Realtime、Qwen-Deep-Research；⚠️ 与 `tools` 不可共存（二者互斥） |
+| `system` message | string | **必须明确提示模型启用函数调用**，例如：<br>`"You are a helpful assistant. Use the provided functions to answer user questions."`<br>或针对 Intent 模型：<br>`"Response in INTENT_MODE."` | 是（否则模型忽略 `tools`） | 全部支持函数调用的接口 |
 
 ## 面向开发者，简洁实用
 
-- **快速验证**：用 `qwen3.8-max` + `Responses API`，`tools` 设为 `[{"name": "calculator", "description": "执行数学运算，如 '2+3*4'" }]`，输入 `"计算 123 的平方根"`，观察是否返回 `tool_calls`。
-- **生产推荐**：优先使用 `Responses API`（非 `Chat API`），因其支持 `previous_response_id`、`store`、内置工具及更稳定的多模态函数调用语义。
-- **调试技巧**：开启 `stream=true`，监听 `event: tool_call` 和 `event: tool_result` 事件，确认调用链完整性；检查响应中的 `response.tool_calls` 字段是否存在及格式是否合法。
-- **避坑提示**：`enable_search=true` 与自定义 `tools` 不兼容；`Anthropic` 工具名必须带日期后缀；`Omni Realtime` 中 `mcp` 工具仅 `qwen3.8` 支持；所有函数调用结果都需显式注入上下文，平台不会自动重试失败调用。
+- ✅ **快速验证**：用 `qwen-turbo` + DashScope 接口，`tools=[{"name":"get_time","description":"获取当前时间","parameters":{"type":"object"}}]`，发送 `"现在几点？"`，观察响应中 `output.choices[0].message.tool_calls` 字段。
+- ✅ **错误排查**：若未触发调用，先检查 `system` message 是否含明确指令；再确认 `tools` Schema 是否语法合法（推荐用 [JSON Schema Validator](https://jsonschemalint.com/) 校验）；最后检查模型是否支持（`qwen-turbo` 支持，但部分旧版 OCR 模型不支持）。
+- ✅ **生产建议**：  
+  - 优先选用 DashScope 接口——功能最全、流式调试友好、文档最准；  
+  - 工具名（`name`）用小写字母+下划线，避免空格与特殊字符；  
+  - `parameters` 中必填字段标注 `"required": ["field1", "field2"]`，模型将严格校验；  
+  - 多工具场景下，`tool_choice="required"` 可强制模型选择，避免“不调用”导致流程中断。
 
 ## 关联主题页
 
 - [qwen api reference](../api/qwen-api-reference.md)
-- [agent development](../guides/agent-development.md)
-- [plug in](../guides/plug-in.md)
-- [application call](../api/application-call.md)
 - [omni realtime api](../api/omni-realtime-api.md)
+- [agent context](../guides/agent-context.md)
+- [more models](../api/more-models.md)
+- [application support](../guides/application-support.md)
 
 

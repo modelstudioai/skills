@@ -132,7 +132,7 @@
 -   月之暗面部署
     
     -   混合思考模式，默认开启思考模式：kimi/kimi-k2.6、kimi/kimi-k2.5
-    -   仅思考模式：kimi/kimi-k3、kimi/kimi-k2.7-code-highspeed、kimi/kimi-k2.7-code
+    -   仅思考模式：kimi/kimi-k3.1-pro、kimi/kimi-k3.1-pro-highspeed、kimi/kimi-k3、kimi/kimi-k2.7-code-highspeed、kimi/kimi-k2.7-code
 
 #### Qwen3
 
@@ -1611,7 +1611,7 @@ data:{"output":{"choices":[{"message":{"content":"","reasoning_content":"","role
 
 多轮对话中，`preserve_thinking` 控制模型是否读取历史 assistant 消息中的 `reasoning_content`。设为 `true` 后，这些思考内容会拼接到下一轮输入。客户端需在请求的 `messages` 中提供历史 assistant 消息及其 `reasoning_content`。各型号的默认值以[Chat Completions 参数说明](raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)为准。
 
-**重要**`preserve_thinking`参数仅支持 qwen3.8-max、qwen3.8-max-0902、qwen3.8-omni-flash（默认开启）、qwen3.7-max、qwen3.7-max-2026-05-20、qwen3.7-max-2026-06-08、qwen3.7-max-preview、qwen3.7-max-2026-05-17、qwen3.7-plus、qwen3.7-plus-2026-05-26、qwen3.6-plus、qwen3.6-plus-2026-04-02、qwen3.7-flash、qwen3.7-flash-2026-07-15、kimi-k2.7-code（阿里云百炼部署）、kimi-k2.6（阿里云百炼部署）、kimi/kimi-k3（月之暗面部署）、kimi/kimi-k2.7-code-highspeed（月之暗面部署）、kimi/kimi-k2.7-code（月之暗面部署）、kimi/kimi-k2.6（月之暗面部署）。
+**重要**`preserve_thinking`参数仅支持 qwen3.8-max、qwen3.8-max-0902、qwen3.8-omni-flash（默认开启）、qwen3.7-max、qwen3.7-max-2026-05-20、qwen3.7-max-2026-06-08、qwen3.7-max-preview、qwen3.7-max-2026-05-17、qwen3.7-plus、qwen3.7-plus-2026-05-26、qwen3.6-plus、qwen3.6-plus-2026-04-02、qwen3.7-flash、qwen3.7-flash-2026-07-15、kimi-k2.7-code（阿里云百炼部署）、kimi-k2.6（阿里云百炼部署）、kimi/kimi-k3.1-pro（月之暗面部署）、kimi/kimi-k3.1-pro-highspeed（月之暗面部署）、kimi/kimi-k3（月之暗面部署）、kimi/kimi-k2.7-code-highspeed（月之暗面部署）、kimi/kimi-k2.7-code（月之暗面部署）、kimi/kimi-k2.6（月之暗面部署）。
 
 > 对于上述支持此参数的 Qwen3.8 Max、Qwen3.7、Qwen3.6 和 Kimi 型号，若历史消息中不包含 `reasoning_content`，开启此参数不会报错。
 

@@ -1,57 +1,42 @@
 # api overview
 
-ParseX API 提供文档与音视频的结构化解析、以及基于 Schema 的字段抽取两大核心能力，所有接口均采用[异步任务](../concepts/asynchronous-task.md)模型。开发者需先通过 API Key 鉴权，提交任务获取 `biz_id`，再轮询查询结果。整个流程支持灵活的配置方式（预存配置 ID 或内联 JSON），并提供细粒度的错误码和状态反馈。
+ParseX API 提供文档解析与结构化信息抽取的编程接口，所有能力通过 DashScope 网关统一接入。接口采用标准 RESTful 设计，基于 HTTPS 协议、JSON 格式通信，支持[异步任务](../concepts/asynchronous-task.md)提交与轮询获取结果。开发者需使用有效的 `DASHSCOPE_API_KEY` 进行认证。
 
 ## 支持的模型/功能
 
-- **文档解析**：支持 PDF、Word、Excel、PPT、图片（JPG/PNG）等格式，输出结构化布局（`layouts`）、Markdown、表格、段落等；可选页眉页脚、坐标定位、图片描述生成等功能。详见[文档解析 API](raw/application-api-reference/api-overview/document-parsing.md)。
-- **音视频解析**：支持 MP4、MOV、AVI、MP3、WAV 等格式，输出 ASR 文本、人声分离（`diarization`）、剧情解析（`synopsis_parse`）、分段（`segments`）、摘要（`summary`）及抽帧结果。抽帧支持 `auto` 和 `frame_rate` 模式，可指定宽高（32–4096 px）。详见[提交解析任务](raw/application-api-reference/api-overview/document-parsing/parse-submit.md)。
-- **字段抽取**：基于用户提供的 JSON Schema 从图文材料中抽取结构化字段，支持引用溯源（`citations`）、推断开关（`allow_inference`）及自定义 Prompt。**注意：抽取不支持音视频输入**，且仅能复用 7 天内有效的解析结果（见[错误码](raw/application-api-reference/api-overview/errors.md)中 `ParseResultNotReusable` 和 `ParseResultExpired`）。
-
-> **注意**：文档 7 明确指出“抽取不支持音视频输入”，而文档 4 中音视频解析示例未提及抽取能力；二者边界清晰，无矛盾。但文档 7 末尾引用的配额说明链接 `raw/application-user-guide/.../supported-files-and-limits.md` 与当前 API 概览层级不一致，该路径实际属于用户指南而非 API 参考，建议以[错误码](raw/application-api-reference/api-overview/errors.md)中明确列出的限制（如 `PageCountExceeded`、`FileSizeExceeded`）为准。
+- **文档解析**：支持 PDF、Word、Excel、PPT、图片（含扫描件）、纯文本等格式的版面分析、文字识别与语义分块；  
+- **音视频解析**：支持 MP4、MOV、AVI 等常见格式的语音转写、关键帧提取与时间轴对齐；  
+- **结构化抽取**：基于用户提供的 JSON Schema，从解析结果中抽取指定字段（如合同金额、签署方、生效日期等），详见 [提交抽取任务](../../raw/application-api-reference/api-overview/field-extraction/extract-submit.md)；  
+- 所有功能均以异步方式执行，不提供同步阻塞式调用。
 
 ## 关键参数
 
-- **鉴权**：必须在 `Authorization: Bearer <API_KEY>` Header 中传递百炼平台颁发的 `DASHSCOPE_API_KEY`（以 `sk-` 开头），详见[认证](../../raw/application-api-reference/api-overview/authentication.md)。
-- **任务标识**：所有异步操作依赖 `biz_id` —— 由 `/parse/submit` 或 `/extract/submit` 返回，用于后续 `/parse/result` 或 `/extract/result` 查询。
-- **输入源**（二选一）：
-  - `file_url` + `file_name`（或 `file_name_extension`）：直接传入远程文件；
-  - `parsed_file_biz_id`：复用已有解析任务结果（仅限文档类，且需在 7 天保留期内）。
-- **处理配置**（二选一，内联优先）：
-  - `config_id`：复用控制台预设的解析或抽取配置；
-  - `processing.*_config`：内联定义，如 `doc_processing_config`、`media_processing_config`、`extract_processing_config`，其中 `extract_schema` 为必需 JSON 对象。
-- **输出控制**：`output.output_file_format`（如 `["markdown"]`）、`output.oss_config`（用于持久化到客户 OSS）。
+| 参数名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| `biz_id` | string | 是（结果查询时） | 由提交接口返回，用于轮询任务状态和获取最终结果；首次提交时不可传入 |
+| `file_url` 或 `file_bytes` | string / binary | 是（提交时） | 指定待处理文件来源；`file_url` 需为公网可访问的 HTTPS 地址，`file_bytes` 以 base64 编码嵌入请求体 |
+| `schema` | object | 否（抽取任务必填） | 符合 JSON Schema Draft-07 的结构定义，决定抽取字段的类型、约束与嵌套关系；详见 [提交抽取任务](../../raw/application-api-reference/api-overview/field-extraction/extract-submit.md) |
+| `parse_config` | object | 否 | 控制解析粒度（如是否启用表格识别、公式识别、OCR 精度模式等），具体字段见 [API 概览](../../raw/application-api-reference/api-overview.md) |
+
+> **注意**：原始文档中 `parse_config` 的可用字段未在 [API 概览](../../raw/application-api-reference/api-overview.md) 中完整列出，实际支持项请以最新 SDK 文档或 OpenAPI Spec 为准；部分配置（如 `enable_formula_ocr: true`）在 v2.3+ 版本才生效，旧版调用将被忽略。
 
 ## 使用方式
 
-1. **准备凭证**：在百炼控制台获取 `DASHSCOPE_API_KEY`，并通过环境变量或 Header 传递；
-2. **提交任务**：
-   - 解析：调用 `/api/v2/apps/parse-x/parse/submit`，传入 `file_url` 及可选配置；
-   - 抽取：调用 `/api/v2/apps/parse-x/extract/submit`，传入 `file_url` 或 `parsed_file_biz_id` 及 `extract_schema`；
-3. **轮询结果**：
-   - 解析结果：调用 `/api/v2/apps/parse-x/parse/result`，检查 `data.status`（`success`/`failed`/`processing`）；
-   - 抽取结果：调用 `/api/v2/apps/parse-x/extract/result`，解析 `data.extract_result_json` 或细粒度 `data.fields`；
-4. **错误处理**：根据响应中的 `code` 和 HTTP 状态码对照[错误码](../../raw/application-api-reference/api-overview/errors.md)，例如 `ResultNotReady`（409）需重试，`FileDownloadTimeout`（400）可重试，`FileDownloadFailed`（400）不可重试。
+1. **认证准备**：在 DashScope 控制台获取 `DASHSCOPE_API_KEY`，并确保其具备 `parse-x` 权限；  
+2. **提交任务**：向 `https://{workspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/parse-x` 发送 `POST` 请求，携带 `Authorization: Bearer $DASHSCOPE_API_KEY` 和 `Content-Type: application/json`；  
+3. **轮询结果**：使用响应中的 `biz_id` 调用结果查询接口（路径为 `/api/v2/apps/parse-x/{biz_id}`），按 [异步调用流程](../../raw/application-api-reference/api-overview.md) 所示持续轮询，直到 `data.status` 为 `success` 或 `failed`；  
+4. **错误处理**：失败响应包含 `code` 与 `message` 字段，可对照 [错误码](../../raw/application-api-reference/api-overview/errors.md) 进行诊断。
 
 ## 限制和注意事项
 
-- **文件限制**：单文件大小、页数、时长等受服务端配额约束，超限时返回 `FileSizeExceeded`、`PageCountExceeded`、`ProcessingTimeout` 等错误码，具体阈值以[错误码](../../raw/application-api-reference/api-overview/errors.md)所列为准；
-- **保留期**：
-  - 解析结果默认保留 **30 天**（`ParseResultExpired` 错误码对应此期限）；
-  - 抽取任务复用解析结果时，仅支持 **7 天内**的有效 `parsed_file_biz_id`（见文档 7 警告）；
-- **安全要求**：API Key 必须通过环境变量管理，禁止硬编码或提交至代码仓库；建议按应用拆分 Key 并定期轮转，详见[认证](../../raw/application-api-reference/api-overview/authentication.md)；
-- **OSS 凭据**：若使用 `output.oss_config`，需确保 `access_key_id`/`access_key_secret`/`security_token` 具备目标 Bucket 的写入权限，且 Token 未过期；
-- **Schema 规范**：`extract_schema` 必须是合法 JSON 对象，类型支持 `string`、`number`、`boolean`、`object`、`array`；嵌套过深或字段过多可能导致 `InvalidSchema` 错误。
+- 单次请求最大文件体积为 500 MB（音视频）或 100 MB（文档/图片）；  
+- `biz_id` 有效期为 7 天，超期后结果接口返回 `404`；  
+- 不支持跨地域调用：`workspaceId` 必须与 API Key 所属地域一致（当前仅支持 `cn-beijing`）；  
+- 所有接口必须使用 HTTPS，明文 HTTP 请求将被网关拒绝；  
+- 响应体中的 `request_id` 是排查问题的关键标识，建议日志中持久化记录。
 
 ## 来源文档
 
-- [认证](../../raw/application-api-reference/api-overview/authentication.md)
-- [错误码](../../raw/application-api-reference/api-overview/errors.md)
-- [文档解析 API](../../raw/application-api-reference/api-overview/document-parsing.md)
-- [提交解析任务](../../raw/application-api-reference/api-overview/document-parsing/parse-submit.md)
-- [查询解析结果](../../raw/application-api-reference/api-overview/document-parsing/parse-result.md)
-- [字段解析 API](../../raw/application-api-reference/api-overview/field-extraction.md)
-- [提交抽取任务](../../raw/application-api-reference/api-overview/field-extraction/extract-submit.md)
-- [查询抽取结果](../../raw/application-api-reference/api-overview/field-extraction/extract-result.md)
+- [API 概览](../../raw/application-api-reference/api-overview.md)
 
 

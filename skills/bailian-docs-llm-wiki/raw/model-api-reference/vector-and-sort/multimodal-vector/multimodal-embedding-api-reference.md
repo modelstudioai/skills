@@ -994,9 +994,9 @@ if resp.status_code == HTTPStatus.OK:
 
 ```
 export DASHSCOPE_API_KEY="your-api-key"
-# 将 {WorkspaceId} 替换为业务空间ID，cn-beijing 替换为对应地域（新加坡: ap-southeast-1, 美东: us-east-1）
+# 将 {WorkspaceId} 替换为业务空间ID；该模型仅在北京和新加坡地域提供，使用新加坡时将 cn-beijing 替换为 ap-southeast-1
 export DASHSCOPE_HTTP_BASE_URL="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
-dashscope multimodal-embedding create -m multimodal-embedding-one-peace-v1 --text "你好世界"
+dashscope multimodal-embedding create -m tongyi-embedding-vision-plus --text "你好世界"
 ```
 
 **重要**SDK Expert 交互式助手可按自然语言完成同样的开发与排障，见

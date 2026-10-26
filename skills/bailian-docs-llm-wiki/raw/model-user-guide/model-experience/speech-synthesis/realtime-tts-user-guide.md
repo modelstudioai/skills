@@ -290,8 +290,10 @@ public class Main {
 
 #### Qwen-Audio-TTS
 
--   **系统音色**：从 [Qwen-Audio-TTS 音色列表](raw/model-user-guide/model-experience/speech-synthesis/tts-voice-list/qwen-audio-tts-voice-list.md)中选择支持目标方言的音色。直接支持该方言的音色无需额外设置；支持方言指令的音色使用 `instruction` 指定。
--   **复刻音色**：通过 `instruction` 指定方言，例如 `请用河南话表达。`。
+-   **系统音色**：从 [Qwen-Audio-TTS 音色列表](raw/model-user-guide/model-experience/speech-synthesis/tts-voice-list/qwen-audio-tts-voice-list.md)中选择支持目标方言的音色。直接支持该方言的音色无需额外设置；支持方言指令的音色使用指令控制参数 `instruction` 指定。
+-   **复刻音色**：通过指令控制参数 `instruction` 指定方言。
+
+对于支持方言指令的音色，在初始化 `SpeechSynthesizer` 时传入 `instruction="请讲上海话。"`，可将中文文本合成为上海话。
 
 #### CosyVoice
 

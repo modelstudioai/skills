@@ -228,6 +228,12 @@ API Key 的状态随账号操作而变化：
 
 删除后立即失效，不可恢复
 
+### 删除 API Key 后的异步任务
+
+删除 API Key 后，该 API Key 无法使用，也无法找回。如果该 API Key 关联的异步任务还未执行或还未执行完毕，删除 API Key 后系统依然会正常执行这些任务。
+
+如果确认不希望继续执行已关联的异步任务，请手动终止相关任务，避免在 API Key 删除后产生账单。
+
 ### 数量与权限限制
 
 API Key 相关限制汇总：
@@ -253,7 +259,7 @@ API Key 的创建需使用[超级管理员](https://help.aliyun.com/zh/model-stu
 
 API Key 的调用权限完全由其**归属业务空间**决定。**同一空间内的 API Key 权限相同**，无需为不同模型（如文生文、文生图、语音合成）创建不同的 API Key。
 
--   **默认业务空间下的 API Key：**可调用所有[标准模型](raw/model-user-guide/get-started-with-models/models.md)，以及默认业务空间内的[应用](raw/application-user-guide/llm-application/application-introduction.md)。
+-   **默认业务空间下的 API Key：**可调用所有[标准模型](raw/model-user-guide/get-started-with-models/models.md)，以及默认业务空间内的[应用](raw/application-user-guide/agent-development/llm-application/application-introduction.md)。
 -   **子业务空间下的 API Key：**可调用该子业务空间已获得[模型调用授权](raw/model-user-guide/security-and-compliance/permission-management-overview.md)的标准模型，以及该业务空间内的应用。
 
 **调用在阿里云百炼**[**调优后的模型**](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)**：**此类模型部署成功后，仅能用其所在业务空间的API Key调用。

@@ -94,9 +94,9 @@ Function Calling 通过应用程序与大模型之间的多步骤交互实现：
     -   kimi-k2.5
 -   月之暗面部署
     
-    -   kimi/kimi-k3、kimi/kimi-k2.7-code-highspeed、kimi/kimi-k2.7-code、kimi/kimi-k2.6、kimi/kimi-k2.5
+    -   kimi/kimi-k3.1-pro、kimi/kimi-k3.1-pro-highspeed、kimi/kimi-k3、kimi/kimi-k2.7-code-highspeed、kimi/kimi-k2.7-code、kimi/kimi-k2.6、kimi/kimi-k2.5
 
-> 在思考模式下，使用 kimi/kimi-k3、kimi/kimi-k2.7-code-highspeed、kimi/kimi-k2.7-code、kimi/kimi-k2.6、kimi/kimi-k2.5 进行工具调用时，需在每轮 assistant 消息中保留 `reasoning_content` 字段；`tool_choice` 支持 `"auto"`（默认）、`"none"`，kimi/kimi-k3 还支持 `"required"`，否则会报错。
+> 在思考模式下，使用 kimi/kimi-k3.1-pro、kimi/kimi-k3.1-pro-highspeed、kimi/kimi-k3、kimi/kimi-k2.7-code-highspeed、kimi/kimi-k2.7-code、kimi/kimi-k2.6、kimi/kimi-k2.5 进行工具调用时，需在每轮 assistant 消息中保留 `reasoning_content` 字段；`tool_choice` 支持 `"auto"`（默认）、`"none"`，kimi/kimi-k3.1-pro、kimi/kimi-k3.1-pro-highspeed、kimi/kimi-k3 还支持 `"required"`，否则会报错。kimi/kimi-k3.1-pro、kimi/kimi-k3.1-pro-highspeed 不支持 `parallel_tool_calls` 参数。
 
 #### MiniMax
 
@@ -1200,7 +1200,7 @@ const completion_1 = await functionCalling();
 
 #### 并行工具调用
 
-> 本节仅适用于支持 `parallel_tool_calls` 的模型。MiniMax/MiniMax-M3.1-Flash、kimi-k3 不支持通过此参数控制工具调用的并行性：设置为 `false` 也可能在一轮中返回多个 `tool_calls`。调用方需遍历并处理实际返回的全部工具调用。
+> 本节仅适用于支持 `parallel_tool_calls` 的模型。MiniMax/MiniMax-M3.1-Flash、kimi-k3 不支持通过此参数控制工具调用的并行性：设置为 `false` 也可能在一轮中返回多个 `tool_calls`。调用方需遍历并处理实际返回的全部工具调用。kimi/kimi-k3.1-pro、kimi/kimi-k3.1-pro-highspeed 不支持 `parallel_tool_calls` 参数。
 
 单一城市天气查询只需一次工具调用。若问题需要多次调用工具，如“北京上海的天气如何”或“杭州天气，以及现在几点了”，由于 `parallel_tool_calls` 默认为 `true`，[发起 Function Calling](https://help.aliyun.com/zh/model-studio/qwen-function-calling#9f478b2e76wrk) 后，模型可在一次返回中包含多个工具调用信息。以提问“北京上海的天气如何”为例，返回对象的`tool_calls`数组中包含了北京和上海的入参信息：
 

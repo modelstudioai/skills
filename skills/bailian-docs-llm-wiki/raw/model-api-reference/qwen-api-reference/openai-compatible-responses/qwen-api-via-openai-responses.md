@@ -632,49 +632,37 @@ temperature与top\_p均可以控制生成文本的多样性，建议只设置其
 
 模型
 
-默认值
-
 支持的档位
 
 其余档位的映射
 
 `qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`
 
-`xhigh`
-
-`none`、`low`、`medium`、`xhigh`
+`none`、`low`、`medium`、`xhigh`（默认）
 
 `minimal` 映射为 `low`，`high` 和 `max` 映射为 `xhigh`
 
 `deepseek-v4-flash-0731`、`deepseek-v4-pro-0813`
 
-`high`
-
-`none`、`low`、`high`、`max`
+`none`、`low`、`high`（默认）、`max`
 
 `minimal` 映射为 `low`，`medium` 映射为 `high`，`xhigh` 映射为 `max`
 
 `deepseek-v4.1-flash`
 
-`high`
-
-`none`、`low`、`high`、`max`
+`none`、`low`、`high`（默认）、`max`
 
 `minimal` 映射为 `low`，`medium` 和 `xhigh` 映射为 `high`，传入 `ultra` 会返回错误
 
 `glm-5.3`
 
-`max`
-
-`low`、`high`、`max`
+`low`、`high`、`max`（默认）
 
 `minimal` 映射为 `low`，`medium` 映射为 `high`，`xhigh` 映射为 `max`
 
 `glm-5.2`、`deepseek-v4-pro`
 
-`high`
-
-`none`、`high`、`max`
+`none`、`high`（默认）、`max`
 
 `minimal`、`low` 和 `medium` 映射为 `high`，`xhigh` 映射为 `max`
 
