@@ -58,17 +58,29 @@ Each recommendation includes model name, ID, key specs (context window, pricing)
 
 ## How it works under the hood
 
+Deterministic pipeline (ported from the `bl advisor recommend` engine in
+bailian-cli): scene presets, recall, scoring, ranking, slot assignment and code
+sample extraction all run in `scripts/recommend.mjs` — no LLM involved in those
+decisions. The LLM only writes the final recommendation reasons.
+
 ```
 User request
-  → Parse requirement (modality, capabilities, budget, quality tier)
-  → Filter models.jsonl + group JSONs (modality match, capability match, semantic match)
-  → Score & rank candidates (remove snapshots, deduplicate families, cap per-family)
-  → Select top 3 with diverse trade-offs
-  → Fetch code samples from group files
+  → one command: scripts/recommend.mjs --scene code --exclude qwen
+      scene preset → intent (modality, capabilities, scenes, budget, targets)
+      → snapshot dedup → excludes → hard filter (modality + capability, capability never dropped)
+      → notSuitableFor exclusion → formula scoring → tier/price/provider ordering
+      → family fairness cap → slot assignment (primary / runner-up / exploration)
+      → embed specs + code samples + endpoint notes + warnings
+  → LLM: write recommendation reasons grounded in that single JSON output
   → Output natural-language recommendation with specs + code
 ```
 
+The candidate list is never added to, removed from, or reordered by the LLM.
 All recommendations are grounded in the actual model catalog data — the skill never recommends from memory.
+
+Lower-level entries stay available: `scripts/recall-rank.mjs` for a hand-written
+intent JSON (pipeline scenarios, `--with-samples` to embed code) and
+`scripts/get-samples.mjs` when the user already picked a model and only wants code.
 
 ## License
 
