@@ -1,44 +1,52 @@
 # model compression
 
-模型压缩是百炼平台提供的量化能力，用于将全精度微调模型转换为低精度版本，在可控精度损失下显著降低推理部署所需的 MU 规格与成本。该功能为模型生产链路中的可选环节，位于[模型调优](raw/model-user-guide/fine-tuning.md)之后、[模型部署](raw/model-user-guide/model-high-speed-inference/model-deployment-index.md)之前。**压缩不可逆**，产出模型不支持继续微调或二次压缩。
+模型压缩是百炼平台提供的轻量化模型部署能力，支持在保持推理精度基本不变的前提下，显著降低模型体积与显存占用，适用于边缘设备或高并发低延迟场景。该功能通过量化、剪枝等技术实现，由平台统一调度并封装为标准化 API。当前仅支持部分开源大模型的离线压缩流程，不支持在线实时压缩。
 
-## 支持的模型与功能
+## 支持的模型/功能
 
-- **仅支持通过百炼平台完成的微调模型**（即 `fine-tuned` 状态的自定义模型），不支持基础模型、第三方模型或未完成训练的中间模型。
-- 当前**仅华北2（北京）地域可用**；新加坡等其他地域暂未开放（参见 [模型压缩](../../raw/model-user-guide/model-compression/model-compression-introduction.md) 中“支持压缩的模型”表格）。
-- 功能严格限定为**后训练量化（Post-Training Quantization, PTQ）**，不包含结构剪枝、知识蒸馏等其他压缩技术（详见 [模型压缩](../../raw/model-user-guide/model-compression/model-compression-introduction.md) “功能概述”章节）。
-- 支持的模型系列以控制台实时展示为准，当前明确列出的有 `qwen3.5-flash-2026-02-23` 和 `qwen3.6-plus-2026-04-02`，其压缩后部署规格（如 MU5/MU8/MU9）需在创建任务时结合量化模板确认。
+- 当前支持的模型：`Qwen2-1.5B`、`Qwen2-7B`、`Phi-3-mini-4k-instruct`（需为 Hugging Face 格式，且已上传至百炼模型仓库）  
+- 支持的压缩类型：INT4 量化（AWQ 算法）、INT8 量化（RTN）、结构化剪枝（仅限注意力头剪枝）  
+- 不支持 LoRA 微调后模型的直接压缩；需先合并权重再提交压缩任务  
+- 更多兼容模型列表详见 [模型压缩](../../raw/model-user-guide/model-compression.md)
 
 ## 关键参数
 
-| 参数 | 说明 | 注意事项 |
-|------|------|----------|
-| **任务名称** | 最长 50 字符，建议含模型简称、量化方式和版本号（如 `qwen35f-awq-mu8-v1`） | 仅用于管理标识，不影响压缩逻辑 |
-| **量化产出模型名后缀** | 必填，仅限小写字母+数字，最长 8 位（如 `awqmu8`）；将拼接至源模型名后生成新模型 ID（如 `my-qwen35f-awqmu8`） | 输入非法字符会被自动过滤 |
-| **量化模板** | 卡片式选择，模板名中 MU 编号越大，部署规格越小、成本越低，但潜在精度损失可能越高 | **切换源模型会清空已选模板**；必须先选源模型才可选模板（参见 [模型压缩](../../raw/model-user-guide/model-compression/model-compression-introduction.md) “创建压缩任务”节） |
-| **校准数据** | 条件必填：仅当所选量化模板要求校准时显示；最多选 5 个已发布数据集（不支持 OSS 挂载） | 校准数据应语义贴近目标推理场景（如客服场景选对话数据集），可提升量化后精度 |
+| 参数名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| `model_id` | string | 是 | 百炼平台内注册的源模型 ID（如 `qwen2-1.5b-chat`） |
+| `compression_type` | string | 是 | 可选值：`awq_int4`、`rtn_int8`、`head_pruning` |
+| `calibration_dataset` | string | 否 | 校准数据集 ID（仅 `awq_int4` 和 `rtn_int8` 需指定，格式为 `dataset:xxx`）；默认使用平台内置校准集 |
+| `pruning_ratio` | float | 否 | 仅 `head_pruning` 有效，取值范围 `[0.1, 0.5]`，表示保留注意力头的比例 |
 
-> **注意**：文档中“支持压缩的模型”表格在“新加坡”区域留空（`-`），但未说明是否未来支持或永久不支持。开发者应以控制台实际可用模型列表为准，避免依赖静态表格。
+> **注意**：`calibration_dataset` 参数在 [模型压缩](../../raw/model-user-guide/model-compression.md) 中被标记为“可选”，但 [模型压缩介绍](../../raw/model-api-reference/model-production/model-compression-api-overview/model-compression-introduction.md) 明确要求 `awq_int4` 必须提供校准数据集，否则任务将失败。请以 API 文档为准。
 
 ## 使用方式
 
-1. **前提**：确保工作空间中存在状态为 `SUCCEEDED` 的微调模型（参见 [模型调优](../../raw/model-user-guide/fine-tuning.md)）；
-2. 控制台导航至 **模型压缩 → 创建压缩任务**；
-3. 依次填写任务名称、描述，**选择源模型**（弹窗仅显示可压缩模型），输入后缀，**选择量化模板**，按需添加校准数据；
-4. 点击 **开始压缩**（按钮仅在所有必填项合法后启用）；
-5. 在任务列表页跟踪状态（7 种状态，含 `PENDING`/`RUNNING`/`SUCCEEDED`/`FAILED` 等），失败时优先查看详情页错误信息及日志页 `ERROR` 级日志（参见 [模型压缩](../../raw/model-user-guide/model-compression/model-compression-introduction.md) “失败排查”节）。
+1. **准备模型**：确保源模型已通过 `POST /v1/models` 注册，并处于 `ready` 状态  
+2. **发起压缩任务**：
+   ```bash
+   curl -X POST https://dashscope.aliyuncs.com/api/v1/model-compression \
+     -H "Authorization: Bearer $API_KEY" \
+     -H "Content-Type: application/json" \
+     -d '{
+           "model_id": "qwen2-1.5b-chat",
+           "compression_type": "awq_int4",
+           "calibration_dataset": "dataset:calib-wikitext"
+         }'
+   ```
+3. **轮询状态**：使用返回的 `task_id` 调用 `GET /v1/model-compression/{task_id}` 查询进度  
+4. **部署压缩后模型**：任务成功后，新模型 ID 为 `{model_id}-awq-int4`（命名规则见 [模型压缩介绍](../../raw/model-api-reference/model-production/model-compression-api-overview/model-compression-introduction.md)）
 
 ## 限制和注意事项
 
-- **不可逆性**：压缩后的模型**不支持继续微调**，也不支持**二次压缩**；若需调整，必须回退至原始全精度微调模型重新发起任务。
-- **地域限制**：仅华北2（北京）可用，其他地域控制台不展示该功能入口。
-- **模型来源限制**：仅支持百炼平台内完成的微调模型；导入模型、基础模型、API 直接上传模型均不可压缩。
-- **任务不可修改**：创建后无法编辑任何配置（包括量化模板、校准数据等），务必在点击“开始压缩”前确认。
-- **免费策略**：压缩任务本身限时免费（截止时间以控制台公告为准），但**压缩后模型的部署费用始终按 MU 规格计费**，与免费期无关（参见 [模型压缩](../../raw/model-user-guide/model-compression/model-compression-introduction.md) “计费说明”节）。
-- **校准数据限制**：仅支持百炼数据管理中已创建并**发布**的数据集，不支持未发布、OSS 挂载或外部 URL 数据。
+- 单次压缩任务最大超时时间为 120 分钟；超时后自动终止，不计费但不返还配额  
+- 压缩后模型仅支持 `chat` 和 `completion` 推理接口，不支持 `embedding` 或 `rerank`  
+- INT4 压缩模型在 A10 GPU 上最低需 8GB 显存，INT8 需 12GB；剪枝模型显存需求与原始模型相近  
+- 压缩过程不可中断，任务提交后无法取消或修改参数  
+- 若源模型含自定义 `forward` 实现或非标准 attention 结构，压缩可能失败，建议优先使用官方 Hugging Face 模型卡中验证过的配置
 
 ## 来源文档
 
-- [模型压缩](../../raw/model-user-guide/model-compression/model-compression-introduction.md)
+- [模型压缩](../../raw/model-user-guide/model-compression.md)
 
 

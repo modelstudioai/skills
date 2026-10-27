@@ -1,6 +1,6 @@
-# Qwen-Audio-3.0-Realtime实时语音对话HarmonyOS SDK
+# Qwen-Audio Realtime 实时语音对话 HarmonyOS SDK
 
-使用Qwen-Audio-3.0-Realtime实时语音对话HarmonyOS SDK，实现实时音频输入以及语音或文本输出。
+使用 Qwen-Audio Realtime 实时语音对话 HarmonyOS SDK，实现实时音频输入以及语音或文本输出。
 
 **用户指南：**关于模型介绍和选型建议请参见[实时语音对话](raw/model-user-guide/model-experience/speech-to-speech/qwen-audio-realtime-user-guides.md)。
 
@@ -350,7 +350,7 @@ vad\_params.save\_audio
 
 是
 
-指定模型名。支持qwen-audio-3.1-realtime-plus、qwen-audio-3.0-realtime-plus和qwen-audio-3.0-realtime-flash系列模型。
+指定模型名。支持qwen-audio-3.1-realtime-plus、qwen-audio-3.1-realtime-flash、qwen-audio-3.0-realtime-plus和qwen-audio-3.0-realtime-flash系列模型。
 
 `nls_config.sr_format`
 
@@ -377,12 +377,11 @@ nls\_config.voice
 
 否
 
-TTS 音色名称，3.1 Plus 的默认值为 `longanqian_v3.1`，3.0 Plus/Flash 的默认值为 `longanqian`。支持两种类型，仅可在第一次 `session.update` 中设置，后续传入将被忽略。
+TTS 音色名称。3.1 Plus/Flash 的默认值为 `longanqian_v3.1`，3.0 Plus/Flash 的默认值为 `longanqian`。仅可在第一次 `session.update` 中设置，后续传入将被忽略。
 
--   **系统音色**：可选值：`longanqian`、`longanlingxin`、`longanlingxi`、`longanxiaoxin`、`longanlufeng`。
+-   **3.1 Plus/Flash 系统音色**：可选值包括 `longanqian_v3.1` 和 3.1 TTS Plus/Flash 音色列表中的全部音色，完整范围请参见[音色配置](https://help.aliyun.com/zh/model-studio/qwen-audio-realtime-user-guides#fc60h311)。
+-   **3.0 Plus/Flash 系统音色**：`longanqian`、`longanlingxin`、`longanlingxi`、`longanxiaoxin`、`longanlufeng`。
 -   **声音复刻音色**：通过声音复刻 API 创建，将返回的 `voice_id` 填入此参数。详见[音色配置](https://help.aliyun.com/zh/model-studio/qwen-audio-realtime-user-guides#fc60h311)。
-
-3.1 Plus 还支持 `longanqian_v3.1`、`longanhuan_v3.1`、`longanlingxin_v3.1`、`longanfengyue_v3.1`、`xunanchuan_v3.1`、`beth_v3.1`、`betty_v3.1`、`cally_v3.1`。
 
 nls\_config.enable\_speech\_emotion
 
@@ -455,6 +454,8 @@ nls\_config.turn\_detection
 `string`
 
 否
+
+以下轮次检测字段说明适用于 `qwen-audio-3.1-realtime-plus`、`qwen-audio-3.1-realtime-flash`、`qwen-audio-3.0-realtime-plus` 和 `qwen-audio-3.0-realtime-flash`。
 
 JSON 对象形式的字符串。轮次检测配置。不设置时则切换为 push-to-talk 模式（手动提交音频并触发推理）。否则启用双工对话模式。
 

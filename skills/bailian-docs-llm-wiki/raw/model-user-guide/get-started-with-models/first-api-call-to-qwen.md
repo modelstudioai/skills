@@ -526,28 +526,30 @@ except Exception as e:
 
 ```
 import os
-from dashscope import MultiModalConversation
 import dashscope
+from dashscope.v2 import DashScopeError
 
-# 以下为华北2（北京）地域的URL，各地域的URL不同。调用时请将{WorkspaceId}替换为真实的业务空间ID。
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
+# 以下为华北2（北京）地域的配置，各地域的region取值不同。调用时请将{WorkspaceId}替换为真实的业务空间ID。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 messages = [
     {'role': 'system', 'content': [{'text': 'You are a helpful assistant.'}]},
     {'role': 'user', 'content': [{'text': '你是谁？'}]}
 ]
-response = MultiModalConversation.call(
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
-    model="qwen3.8-max",   # 模型列表：https://help.aliyun.com/model-studio/getting-started/models
-    messages=messages,
-)
-
-if response.status_code == 200:
-    print(response.output.choices[0].message.content[0]["text"])
-else:
-    print(f"HTTP返回码：{response.status_code}")
-    print(f"错误码：{response.code}")
-    print(f"错误信息：{response.message}")
+try:
+    response = client.multimodal.chat.create(
+        model="qwen3.8-max",   # 模型列表：https://help.aliyun.com/model-studio/getting-started/models
+        messages=messages,
+    )
+    print(response.output_text)
+except DashScopeError as e:
+    print(f"HTTP返回码：{e.status_code}")
+    print(f"错误码：{e.code}")
+    print(f"错误信息：{e.message}")
     print("请参考文档：https://help.aliyun.com/model-studio/developer-reference/error-code")
 ```
 

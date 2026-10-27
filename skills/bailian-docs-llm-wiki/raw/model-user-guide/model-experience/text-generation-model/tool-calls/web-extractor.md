@@ -59,17 +59,18 @@ completion = client.chat.completions.create(
 > 不支持非流式输出。
 
 ```
-from dashscope import Generation
+import os
+import dashscope
 
-response = Generation.call(
+client = dashscope.Client(api_key=os.getenv("DASHSCOPE_API_KEY"))
+
+stream = client.chat.completions.create(
     model="qwen3.8-max",
     messages=[{"role": "user", "content": "请访问阿里云百炼代码解释器部分的官方文档，并总结主要内容"}],
     enable_search=True,
     search_options={"search_strategy": "agent_max"},
     enable_thinking=True,
-    result_format="message",
-    stream=True,
-    incremental_output=True
+    stream=True
 )
 ```
 
@@ -547,49 +548,52 @@ python
 ```
 import os
 import dashscope
+from dashscope.v2 import DashScopeError
 # 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
-from dashscope import Generation
-
-# 若没有配置环境变量，请用百炼API Key将下行替换为：dashscope.api_key = "sk-xxx"
-dashscope.api_key = os.getenv("DASHSCOPE_API_KEY")
-
-response = Generation.call(
-    model="qwen3.8-max",
-    messages=[
-        {"role": "user", "content": "请访问阿里云百炼代码解释器部分的官方文档，并总结主要内容"}
-    ],
-    enable_search=True,
-    search_options={"search_strategy": "agent_max"},
-    enable_thinking=True,
-    result_format="message",
-    stream=True,
-    incremental_output=True
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
 )
 
 reasoning_started = False
 output_started = False
 
-for chunk in response:
-    if chunk.status_code == 200:
-        message = chunk.output.choices[0].message
+try:
+    stream = client.chat.completions.create(
+        model="qwen3.8-max",
+        messages=[
+            {"role": "user", "content": "请访问阿里云百炼代码解释器部分的官方文档，并总结主要内容"}
+        ],
+        enable_search=True,
+        search_options={"search_strategy": "agent_max"},
+        enable_thinking=True,
+        stream=True
+    )
+
+    for chunk in stream:
+        delta = chunk.choices[0].delta
 
         # 打印思考过程
-        if hasattr(message, 'reasoning_content') and message.reasoning_content:
+        if delta.reasoning_content:
             if not reasoning_started:
                 print("="*20 + "思考过程" + "="*20)
                 reasoning_started = True
-            print(message.reasoning_content, end='', flush=True)
+            print(delta.reasoning_content, end='', flush=True)
 
         # 打印回复内容
-        if hasattr(message, 'content') and message.content:
+        if delta.content:
             if not output_started:
                 print("\n" + "="*20 + "回复内容" + "="*20)
                 output_started = True
-            print(message.content, end='', flush=True)
-    else:
-        print(f"\n请求失败: code={chunk.code}, message={chunk.message}")
-        break
+            print(delta.content, end='', flush=True)
+except DashScopeError as e:
+    print(f"\nHTTP返回码：{e.status_code}")
+    print(f"错误码：{e.code}")
+    print(f"错误信息：{e.message}")
+    print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
 bash

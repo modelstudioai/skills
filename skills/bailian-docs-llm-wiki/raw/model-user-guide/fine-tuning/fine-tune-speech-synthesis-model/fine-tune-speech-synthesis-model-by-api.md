@@ -556,7 +556,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/deployments/<替换为 de
 
 ## 调用模型
 
-当模型部署状态为 `RUNNING` 时，调优后的模型即可投入业务调用。调用方式（含 endpoint、请求体字段、典型响应与音频取回方式）与其他 CosyVoice 模型一致，完整说明请参见用户指南 [语音合成](raw/model-user-guide/model-experience/speech-synthesis/tts-model.md)。相比基础模型 `cosyvoice-v3-flash` 的调用方式，**仅需调整以下两个请求参数**，其他字段（`text`、`format`、`sample_rate` 等）保持一致：
+当模型部署状态为 `RUNNING` 时，调优后的模型即可投入业务调用。调用方式（含 endpoint、请求体字段、典型响应与音频取回方式）与其他 CosyVoice 模型一致，完整说明请参见 [CosyVoice HTTP API 参考](raw/_short/cosyvoice-tts-http-api-5bce129a0403d285.md)和 [CosyVoice WebSocket API 参考](raw/_short/cosyvoice-large-model-for-speech-synthesis-c25d07a9b3ba6047.md)。相比基础模型 `cosyvoice-v3-flash` 的调用方式，**仅需调整以下两个请求参数**，其他字段（`text`、`format`、`sample_rate` 等）保持一致：
 
 -   `model`：设置为部署任务成功后的实例 ID，即部署响应中 `output.deployed_model` 字段的值。
 -   `voice`：必须固定为 `"default"`，代表训练数据所对应的专属音色；传入预置音色名或音色复刻 ID 会请求失败。
@@ -584,27 +584,25 @@ curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/audio/tts/SpeechSyn
 
 #### 实时（Python WebSocket）
 
-通过 DashScope Python SDK 接入 WebSocket 合成接口，依赖 `dashscope` 包。**WebSocket 接口本身支持边合成边推送的流式回调**，为方便快速验证，**本示例改用同步调用**`synthesizer.call(text)`**一次性返回完整音频**；如需流式回调（边合成边播放）的完整写法，请参见[用户指南](raw/model-user-guide/model-experience/speech-synthesis/tts-model.md)中的流式合成完整示例。
+通过 DashScope Python SDK 调用语音合成接口，依赖 `dashscope` 包。**接口本身支持边合成边推送的流式会话**，为方便快速验证，**本示例改用一次性调用**`client.audio.tts.synthesize(...)`**返回完整音频**；如需流式会话（边合成边播放）的完整写法，请参见 [Python SDK 的单向流式调用示例](https://help.aliyun.com/zh/model-studio/cosyvoice-python-sdk#cc2a504f344s2)。
 
 ```
 # coding=utf-8
 import os
-import dashscope
-from dashscope.audio.tts_v2 import *
 
-dashscope.api_key = os.environ.get('DASHSCOPE_API_KEY')
-dashscope.base_websocket_api_url = 'wss://dashscope.aliyuncs.com/api-ws/v1/inference'
+import dashscope
+
+# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+client = dashscope.Client(
+    api_key=os.environ.get('DASHSCOPE_API_KEY'),
+)
 
 # 替换为部署响应中的 deployed_model 字段值；voice 固定为 "default"
 model = "<替换为部署响应中的 deployed_model 字段值>"
 voice = "default"
 
-synthesizer = SpeechSynthesizer(model=model, voice=voice)
-audio = synthesizer.call("我家的后面有一个很大的花园。")
-
-print('[Metric] requestId 为：{}，首包延迟为：{} 毫秒'.format(
-    synthesizer.get_last_request_id(),
-    synthesizer.get_first_package_delay()))
+# 一次性合成完整文本，返回完整音频 bytes
+audio = client.audio.tts.synthesize("我家的后面有一个很大的花园。", model=model, voice=voice)
 
 with open('output.mp3', 'wb') as f:
     f.write(audio)
@@ -614,8 +612,8 @@ with open('output.mp3', 'wb') as f:
 
 每一次调用都建议落入业务日志，以便事后追溯异常请求与诊断性能问题。重点采集以下三类信息：
 
--   **请求 ID**（`request_id`）：WebSocket SDK 通过 `synthesizer.get_last_request_id()` 获取（参见前文 [实时（Python WebSocket）](raw/model-user-guide/fine-tuning/fine-tune-speech-synthesis-model/fine-tune-speech-synthesis-model-by-api.md) 示例）；HTTP 调用方式下的获取位置请参考[语音合成](raw/model-user-guide/model-experience/speech-synthesis/tts-model.md)。排查异常或回溯问题时请始终保留该 ID。
--   **首包延迟**：WebSocket SDK 通过 `synthesizer.get_first_package_delay()` 获取首个音频包到达时延（毫秒），是衡量实时合成体感的核心指标，前文 [实时（Python WebSocket）](raw/model-user-guide/fine-tuning/fine-tune-speech-synthesis-model/fine-tune-speech-synthesis-model-by-api.md) 示例代码已演示其打印用法。
+-   **请求 ID**（`request_id`）：流式会话（`client.audio.tts.connect(...)`）通过会话属性 `session.last_response` 的 `header` 获取；HTTP 调用方式下的获取位置请参见 [HTTP API 返回体](https://help.aliyun.com/zh/model-studio/cosyvoice-tts-http-api#0e1c44902ea1e)。排查异常或回溯问题时请始终保留该 ID。
+-   **首包延迟**：流式会话通过会话属性 `session.first_package_delay` 获取首个音频包到达时延（毫秒），是衡量实时合成体感的核心指标（一次性 `synthesize` 不返回该指标）。会话属性的完整说明请参见[CosyVoice Python SDK](raw/_short/cosyvoice-python-sdk-c20dfd31499fc83c.md)。
 -   **错误码与错误信息**：错误响应中的 `code`、`message` 字段用于区分鉴权失败、配额耗尽、模型未就绪、文本超限等不同失败原因，建议按错误码分别设置告警与排查路径。
 
 **采集字段对照**（建议入库的最小集合）：
@@ -624,7 +622,7 @@ with open('output.mp3', 'wb') as f:
 
 **HTTP 响应字段**
 
-**WebSocket SDK 方法**
+**流式会话（tts.connect）取值方式**
 
 **建议日志键名**
 
@@ -632,7 +630,7 @@ with open('output.mp3', 'wb') as f:
 
 `request_id`
 
-`synthesizer.get_last_request_id()`
+`session.last_response` 中 `header` 的 `request_id`
 
 `tts_request_id`
 
@@ -640,7 +638,7 @@ with open('output.mp3', 'wb') as f:
 
 不适用（HTTP 一次性返回）
 
-`synthesizer.get_first_package_delay()`
+`session.first_package_delay`
 
 `tts_first_package_ms`
 
@@ -648,7 +646,7 @@ with open('output.mp3', 'wb') as f:
 
 `code` / `message`
 
-错误回调中的 `code` / `message`
+`DashScopeError` 异常的 `code` / `message`
 
 `tts_error_code` / `tts_error_msg`
 

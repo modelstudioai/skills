@@ -407,6 +407,6 @@ Validation Token Acc代表针对验证集学习的准确程度，曲线一般呈
 
 至此，本篇已经介绍了自定义模型调优、部署与评测的全生命周期管理。阅读完本篇后，您可以自行创建一个自定义模型，并能够在业务场景中调用该自定义模型。
 
-如果您需要将自定义模型投入到阿里云百炼的自定义应用中，请参考[应用类型介绍](raw/application-user-guide/agent-development/llm-application/application-introduction.md)选择并构建应用。
+如果您需要将自定义模型投入到阿里云百炼的自定义应用中，请参考[应用类型介绍](raw/application-user-guide/llm-application/application-introduction.md)选择并构建应用。
 
 本篇涉及的所有计费信息，请参考[产品计费](https://help.aliyun.com/zh/model-studio/billing-for-model-studio)。

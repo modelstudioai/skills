@@ -238,12 +238,13 @@ PTU（[模型部署](raw/model-user-guide/model-high-speed-inference/model-deplo
 
 import dashscope
 
-response = dashscope.Generation.call(
-    api_key="your-api-key",
+client = dashscope.Client(api_key="your-api-key")
+
+response = client.chat.completions.create(
     model="your-dedicated-model-code",   # 替换为专属模型 code
     messages=[{"role": "user", "content": "你好"}],
 )
-print(response.output.text)
+print(response.choices[0].message.content)
 ```
 ```
 # 短时间内请求量快速拉升时，系统需要短暂预热以匹配所需算力

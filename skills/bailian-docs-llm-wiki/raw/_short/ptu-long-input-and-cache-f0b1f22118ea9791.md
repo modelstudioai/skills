@@ -672,6 +672,16 @@ PTU
 
 1
 
+qwen3.8-flash
+
+PTU
+
+（0,1M）
+
+0.125
+
+1
+
 qwen3.8-max
 
 PTU

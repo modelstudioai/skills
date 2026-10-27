@@ -26,7 +26,7 @@ wan2.6-image
 
 ## 前提条件
 
-您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。请将示例代码中的 `DASHSCOPE_API_HOST` 替换为获取的 API Host。
+您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
 
 **重要**华北2（北京）、新加坡和美国（弗吉尼亚）地域拥有独立的 **API Key**与**请求地址**，不可混用，跨地域调用将导致鉴权失败或服务报错，详情请参见[选择地域、服务部署范围和接入域名](raw/model-user-guide/get-started-with-models/regions.md)。
 
@@ -1171,9 +1171,9 @@ SDK 的参数命名与HTTP接口基本一致，参数结构根据语言特性进
 
 > 具体耗时受限于排队任务数和服务执行情况，请在获取结果时耐心等待。
 
-**重要**请确保 DashScope Python SDK 版本**不低于**`1.25.8`，再运行以下代码。更新请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+**重要**请确保 DashScope Python SDK 版本**不低于**`2.0.1`，再运行以下代码。更新请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
-各地域的`base_url`和 API Key 不通用，以下示例以北京地域为例进行调用：
+各地域的`region`取值和 API Key 不通用，以下示例以北京地域为例进行调用：
 
 #### 华北2（北京）
 
@@ -1208,45 +1208,34 @@ SDK 的参数命名与HTTP接口基本一致，参数结构根据语言特性进
 ```
 import os
 import dashscope
-from dashscope.aigc.image_generation import ImageGeneration
-from dashscope.api_entities.dashscope_response import Message
 
-# 以下为华北2（北京）地域的URL。请将{WorkspaceId}替换为您的百炼业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-
-# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-# 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-api_key = os.getenv("DASHSCOPE_API_KEY")
-
-message = Message(
-    role="user",
-    # 支持本地文件 如 "image": "file://umbrella1.png"
-    content=[
-        {
-            "text": "参考图1的风格和图2的背景，生成番茄炒蛋"
-        },
-        {
-            "image": "https://cdn.wanx.aliyuncs.com/tmp/pressure/umbrella1.png"
-        },
-        {
-            "image": "https://img.alicdn.com/imgextra/i3/O1CN01SfG4J41UYn9WNt4X1_!!6000000002530-49-tps-1696-960.webp"
-        }
-    ]
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
 )
-print("----sync call, please wait a moment----")
-rsp = ImageGeneration.call(
-        model='wan2.6-image',
-        api_key=api_key,
-        messages=[message],
-        negative_prompt="",
-        prompt_extend=True,
-        watermark=False,
-        n=1,
-        enable_interleave=False,
-        size="1K"
-    )
 
-print(rsp)
+print("----sync call, please wait a moment----")
+job = client.images.generate(
+    model='wan2.6-image',
+    prompt="参考图1的风格和图2的背景，生成番茄炒蛋",
+    # 参考图列表，支持本地文件 如 "file://umbrella1.png"
+    image_urls=[
+        "https://cdn.wanx.aliyuncs.com/tmp/pressure/umbrella1.png",
+        "https://img.alicdn.com/imgextra/i3/O1CN01SfG4J41UYn9WNt4X1_!!6000000002530-49-tps-1696-960.webp"
+    ],
+    negative_prompt="",
+    prompt_extend=True,
+    watermark=False,
+    n=1,
+    parameters={"enable_interleave": False},
+    size="1K"
+)
+
+print(job)
 ```
 
 ##### 响应示例
@@ -1255,34 +1244,31 @@ print(rsp)
 
 ```
 {
-    "status_code": 200,
     "request_id": "b6a4c68d-3a91-4018-ae96-3cf373xxxxxx",
-    "code": "",
-    "message": "",
-    "output": {
-        "text": null,
-        "finish_reason": null,
-        "choices": [
-            {
-                "finish_reason": "stop",
-                "message": {
-                    "role": "assistant",
-                    "content": [
-                        {
-                            "image": "https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/xxxxxx.png?Expires=xxxxxx",
-                            "type": "image"
-                        }
-                    ]
-                }
+    "task_id": "127ec645-118f-4884-955d-0eba8dxxxxxx",
+    "status": "SUCCEEDED",
+    "choices": [
+        {
+            "finish_reason": "stop",
+            "message": {
+                "role": "assistant",
+                "content": [
+                    {
+                        "image": "https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/xxxxxx.png?Expires=xxxxxx",
+                        "type": "image"
+                    }
+                ]
             }
-        ],
-        "audio": null,
-        "finished": true
+        }
+    ],
+    "task_metrics": {
+        "TOTAL": 1,
+        "SUCCEEDED": 1,
+        "FAILED": 0
     },
     "usage": {
         "input_tokens": 0,
         "output_tokens": 0,
-        "characters": 0,
         "image_count": 1,
         "size": "1376*768",
         "total_tokens": 0
@@ -1297,82 +1283,74 @@ print(rsp)
 ```
 import os
 import dashscope
-from dashscope.aigc.image_generation import ImageGeneration
-from dashscope.api_entities.dashscope_response import Message
-from http import HTTPStatus
+from dashscope.v2 import DashScopeError
 
-# 以下为华北2（北京）地域的URL。请将{WorkspaceId}替换为您的百炼业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-
-# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-# 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-api_key = os.getenv("DASHSCOPE_API_KEY")
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # 创建异步任务
 def create_async_task():
     print("Creating async task...")
-    message = Message(
-        role="user",
-        content=[
-            {'text': '参考图1的风格和图2的背景，生成番茄炒蛋'},
-            {'image': 'https://cdn.wanx.aliyuncs.com/tmp/pressure/umbrella1.png'},
-            {'image': 'https://img.alicdn.com/imgextra/i3/O1CN01SfG4J41UYn9WNt4X1_!!6000000002530-49-tps-1696-960.webp'}
-        ]
-    )
-    response = ImageGeneration.async_call(
+    job = client.images.jobs.create(
         model="wan2.6-image",
-        api_key=api_key,
-        messages=[message],
+        prompt='参考图1的风格和图2的背景，生成番茄炒蛋',
+        # 参考图列表，支持本地文件 如 "file://umbrella1.png"
+        image_urls=[
+            'https://cdn.wanx.aliyuncs.com/tmp/pressure/umbrella1.png',
+            'https://img.alicdn.com/imgextra/i3/O1CN01SfG4J41UYn9WNt4X1_!!6000000002530-49-tps-1696-960.webp'
+        ],
         negative_prompt="",
         prompt_extend=True,
         watermark=False,
         n=1,
-        enable_interleave=False,
+        parameters={"enable_interleave": False},
         size="1K"
     )
 
-    if response.status_code == 200:
-        print("Task created successfully:", response)
-        return response  # 返回任务ID
-    else:
-        raise Exception(f"Failed to create task: {response.code} - {response.message}")
+    print("Task created successfully:", job)
+    return job  # 返回任务
 
 # 等待任务完成
 def wait_for_completion(task_response):
     print("Waiting for task completion...")
-    status = ImageGeneration.wait(task=task_response, api_key=api_key)
+    done = client.images.jobs.wait(task_response)
 
-    if status.output.task_status == "SUCCEEDED":
+    if done.succeeded:
         print("Task succeeded!")
-        print("Response:", status)
+        print("Response:", done)
     else:
-        raise Exception(f"Task failed with status: {status.output.task_status}")
+        raise Exception(f"Task failed with status: {done.status}")
 
 # 获取异步任务信息
-def fetch_task_status(task):
+def fetch_task_status(task_id):
     print("Fetching task status...")
-    status = ImageGeneration.fetch(task=task, api_key=api_key)
+    snapshot = client.images.jobs.fetch(task_id)
 
-    if status.status_code == HTTPStatus.OK:
-        print("Task status:", status.output.task_status)
-        print("Response details:", status)
-    else:
-        print(f"Failed to fetch status: {status.code} - {status.message}")
+    print("Task status:", snapshot.status)
+    print("Response details:", snapshot)
 
 # 取消异步任务
-def cancel_task(task):
+def cancel_task(task_id):
     print("Canceling task...")
-    response = ImageGeneration.cancel(task=task, api_key=api_key)
-
-    if response.status_code == HTTPStatus.OK:
-        print("Task canceled successfully:", response.output.task_status)
-    else:
-        print(f"Failed to cancel task: {response.code} - {response.message}")
+    response = client.images.jobs.cancel(task_id)
+    print("Task canceled successfully:", response.status)
 
 # 主执行流程
 if __name__ == "__main__":
-    task = create_async_task()
-    wait_for_completion(task)
+    try:
+        task = create_async_task()
+        wait_for_completion(task)
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
 ##### 响应示例
@@ -1381,23 +1359,9 @@ if __name__ == "__main__":
 
 ```
 {
-    "status_code": 200,
     "request_id": "4fb3050f-de57-4a24-84ff-e37ee5xxxxxx",
-    "code": "",
-    "message": "",
-    "output": {
-        "text": null,
-        "finish_reason": null,
-        "choices": null,
-        "audio": null,
-        "task_id": "127ec645-118f-4884-955d-0eba8dxxxxxx",
-        "task_status": "PENDING"
-    },
-    "usage": {
-        "input_tokens": 0,
-        "output_tokens": 0,
-        "characters": 0
-    }
+    "task_id": "127ec645-118f-4884-955d-0eba8dxxxxxx",
+    "status": "PENDING"
 }
 ```
 
@@ -1407,42 +1371,34 @@ if __name__ == "__main__":
 
 ```
 {
-    "status_code": 200,
     "request_id": "b2a7fab4-5e00-4b0a-86fe-8b9964xxxxxx",
-    "code": null,
-    "message": "",
-    "output": {
-        "text": null,
-        "finish_reason": null,
-        "choices": [
-            {
-                "finish_reason": "stop",
-                "message": {
-                    "role": "assistant",
-                    "content": [
-                        {
-                            "image": "https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/xxxxxx.png?Expires=xxxxxx",
-                            "type": "image"
-                        }
-                    ]
-                }
+    "task_id": "127ec645-118f-4884-955d-0eba8xxxxxx",
+    "status": "SUCCEEDED",
+    "choices": [
+        {
+            "finish_reason": "stop",
+            "message": {
+                "role": "assistant",
+                "content": [
+                    {
+                        "image": "https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/xxxxxx.png?Expires=xxxxxx",
+                        "type": "image"
+                    }
+                ]
             }
-        ],
-        "audio": null,
-        "task_id": "127ec645-118f-4884-955d-0eba8xxxxxx",
-        "task_status": "SUCCEEDED",
-        "submit_time": "2026-01-09 17:52:04.136",
-        "scheduled_time": "2026-01-09 17:52:04.164",
-        "end_time": "2026-01-09 17:52:25.408",
-        "finished": true
+        }
+    ],
+    "task_metrics": {
+        "TOTAL": 1,
+        "SUCCEEDED": 1,
+        "FAILED": 0
     },
     "usage": {
         "input_tokens": 0,
         "output_tokens": 0,
-        "characters": 0,
+        "image_count": 1,
         "size": "1376*768",
-        "total_tokens": 0,
-        "image_count": 1
+        "total_tokens": 0
     }
 }
 ```
@@ -1497,19 +1453,19 @@ if __name__ == "__main__":
     sync_call_with_stream()
 ```
 
-##### 响应示例
+##### 响应示例（HTTP 接口返回）
 
-> url 有效期24小时，请及时下载图像。
+> url 有效期24小时，请及时下载图像。 以上为 HTTP 接口返回的流式数据块（当前示例代码为 1.x 调用方式，其打印结果中额外包含 status\_code/code/message 等字段）。
 
 ```
-{"status_code": 200, "request_id": "5b98e8f3-aeff-4c20-a26c-499a7525axxx", "code": "", "message": "", "output": {"text": null, "finish_reason": null, "choices": [{"finish_reason": "null", "message": {"role": "assistant", "content": [{"type": "text", "text": "辣椒"}]}}], "audio": null, "finished": false}, "usage": {"input_tokens": 28, "output_tokens": 0, "characters": 0, "total_tokens": 28, "image_count": 0, "size": "0*0"}}
-{"status_code": 200, "request_id": "5b98e8f3-aeff-4c20-a26c-499a7525axxx", "code": "", "message": "", "output": {"text": null, "finish_reason": null, "choices": [{"finish_reason": "null", "message": {"role": "assistant", "content": [{"type": "text", "text": "炒"}]}}], "audio": null, "finished": false}, "usage": {"input_tokens": 28, "output_tokens": 1, "characters": 0, "total_tokens": 29, "image_count": 0, "size": "0*0"}}
-{"status_code": 200, "request_id": "5b98e8f3-aeff-4c20-a26c-499a7525axxx", "code": "", "message": "", "output": {"text": null, "finish_reason": null, "choices": [{"finish_reason": "null", "message": {"role": "assistant", "content": [{"type": "text", "text": "肉"}]}}], "audio": null, "finished": false}, "usage": {"input_tokens": 28, "output_tokens": 2, "characters": 0, "total_tokens": 30, "image_count": 0, "size": "0*0"}}
+{"request_id": "5b98e8f3-aeff-4c20-a26c-499a7525axxx", "output": {"text": null, "finish_reason": null, "choices": [{"finish_reason": "null", "message": {"role": "assistant", "content": [{"type": "text", "text": "辣椒"}]}}], "audio": null, "finished": false}, "usage": {"input_tokens": 28, "output_tokens": 0, "characters": 0, "total_tokens": 28, "image_count": 0, "size": "0*0"}}
+{"request_id": "5b98e8f3-aeff-4c20-a26c-499a7525axxx", "output": {"text": null, "finish_reason": null, "choices": [{"finish_reason": "null", "message": {"role": "assistant", "content": [{"type": "text", "text": "炒"}]}}], "audio": null, "finished": false}, "usage": {"input_tokens": 28, "output_tokens": 1, "characters": 0, "total_tokens": 29, "image_count": 0, "size": "0*0"}}
+{"request_id": "5b98e8f3-aeff-4c20-a26c-499a7525axxx", "output": {"text": null, "finish_reason": null, "choices": [{"finish_reason": "null", "message": {"role": "assistant", "content": [{"type": "text", "text": "肉"}]}}], "audio": null, "finished": false}, "usage": {"input_tokens": 28, "output_tokens": 2, "characters": 0, "total_tokens": 30, "image_count": 0, "size": "0*0"}}
 
 ......
 
-{"status_code": 200, "request_id": "5b98e8f3-aeff-4c20-a26c-499a7525axxx", "code": "", "message": "", "output": {"text": null, "finish_reason": null, "choices": [{"finish_reason": "null", "message": {"role": "assistant", "content": [{"type": "text", "text": "。"}]}}], "audio": null, "finished": false}, "usage": {"input_tokens": 28, "output_tokens": 398, "characters": 0, "total_tokens": 426, "image_count": 2, "size": "1280*1280"}}
-{"status_code": 200, "request_id": "5b98e8f3-aeff-4c20-a26c-499a7525axxx", "code": "", "message": "", "output": {"text": null, "finish_reason": null, "choices": [{"finish_reason": "stop", "message": {"role": "assistant", "content": [{"type": "image", "image": "https://dashscope-result-sh.oss-cn-shanghai.aliyuncs.com/xxx.png?Expires=xxx"}]}}], "audio": null, "finished": true}, "usage": {"input_tokens": 28, "output_tokens": 523, "characters": 0, "total_tokens": 551, "image_count": 3, "size": "1280*1280"}}
+{"request_id": "5b98e8f3-aeff-4c20-a26c-499a7525axxx", "output": {"text": null, "finish_reason": null, "choices": [{"finish_reason": "null", "message": {"role": "assistant", "content": [{"type": "text", "text": "。"}]}}], "audio": null, "finished": false}, "usage": {"input_tokens": 28, "output_tokens": 398, "characters": 0, "total_tokens": 426, "image_count": 2, "size": "1280*1280"}}
+{"request_id": "5b98e8f3-aeff-4c20-a26c-499a7525axxx", "output": {"text": null, "finish_reason": null, "choices": [{"finish_reason": "stop", "message": {"role": "assistant", "content": [{"type": "image", "image": "https://dashscope-result-sh.oss-cn-shanghai.aliyuncs.com/xxx.png?Expires=xxx"}]}}], "audio": null, "finished": true}, "usage": {"input_tokens": 28, "output_tokens": 523, "characters": 0, "total_tokens": 551, "image_count": 3, "size": "1280*1280"}}
 ```
 
 #### 异步调用
@@ -1521,67 +1477,54 @@ if __name__ == "__main__":
 ```
 import os
 import dashscope
-from dashscope.aigc.image_generation import ImageGeneration
-from dashscope.api_entities.dashscope_response import Message
-from http import HTTPStatus
+from dashscope.v2 import DashScopeError
 
-# 以下为华北2（北京）地域的URL。请将{WorkspaceId}替换为您的百炼业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-
-# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-# 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-api_key = os.getenv("DASHSCOPE_API_KEY")
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 def main():
     """异步调用 - 图文输出"""
     print("========== wan2.6-image 异步调用 - 图文输出 ==========")
 
-    image_message = Message(
-        role="user",
-        content=[
-            {
-                "text": "给我一个3张图的辣椒炒肉教程"
-            }
-        ]
-    )
-
     # 创建异步任务
     print("---async call, creating task----")
-    response = ImageGeneration.async_call(
+    job = client.images.jobs.create(
         model="wan2.6-image",
-        api_key=api_key,
-        messages=[image_message],
+        prompt="给我一个3张图的辣椒炒肉教程",
         # 异步调用不需要设置stream参数
         negative_prompt="",
-        enable_interleave=True,
-        max_images=3,
+        parameters={"enable_interleave": True, "max_images": 3},
         size="1280*1280"
     )
 
-    if response.status_code == HTTPStatus.OK:
-        print(f"任务创建成功:")
-        print(response)
+    print(f"任务创建成功:")
+    print(job)
 
-        # 等待任务完成
-        print("\n---waiting for task completion----")
-        status = ImageGeneration.wait(task=response, api_key=api_key)
+    # 等待任务完成
+    print("\n---waiting for task completion----")
+    done = client.images.jobs.wait(job)
 
-        if status.output.task_status == "SUCCEEDED":
-            print("任务完成!")
-            print(f"结果:")
-            print(status)
-        else:
-            print(f"任务失败，状态: {status.output.task_status}")
+    if done.succeeded:
+        print("任务完成!")
+        print(f"结果:")
+        print(f"图片URL: {done.image_urls}")
     else:
-        print(f"任务创建失败: {response.code} - {response.message}")
+        print(f"任务失败，状态: {done.status}")
 
 if __name__ == "__main__":
     try:
         main()
-    except Exception as e:
-        print(f"执行出错: {str(e)}")
-        import traceback
-        traceback.print_exc()
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
 ##### 响应示例
@@ -1590,23 +1533,9 @@ if __name__ == "__main__":
 
 ```
 {
-    "status_code": 200,
     "request_id": "4fb3050f-de57-4a24-84ff-e37ee5xxxxxx",
-    "code": "",
-    "message": "",
-    "output": {
-        "text": null,
-        "finish_reason": null,
-        "choices": null,
-        "audio": null,
-        "task_id": "5c67585e-a3be-4943-b04d-c3fbb2xxxxxx",
-        "task_status": "PENDING"
-    },
-    "usage": {
-        "input_tokens": 0,
-        "output_tokens": 0,
-        "characters": 0
-    }
+    "task_id": "5c67585e-a3be-4943-b04d-c3fbb2xxxxxx",
+    "status": "PENDING"
 }
 ```
 
@@ -1616,59 +1545,51 @@ if __name__ == "__main__":
 
 ```
 {
-    "status_code": 200,
     "request_id": "997a759b-fbb9-4b35-9a4d-6dab1xxxxxx",
-    "code": null,
-    "message": "",
-    "output": {
-        "text": null,
-        "finish_reason": null,
-        "choices": [
-            {
-                "finish_reason": "stop",
-                "message": {
-                    "role": "assistant",
-                    "content": [
-                        {
-                            "text": "辣椒炒肉是湘菜中的经典，也是许多人心中的家常美味。它以鲜辣爽口、肉质鲜嫩而闻名，制作过程简单，却能带来极致的味蕾享受。今天，我们就来一起学习这道菜的制作方法。\n\n首先，准备好所有食材是成功的第一步。新鲜的猪肉、红绿辣椒、蒜瓣和姜片是必不可少的。将猪肉切成薄片，辣椒切段，蒜和姜切片备用。",
-                            "type": "text"
-                        },
-                        {
-                            "image": "https://dashscope-result-sh.oss-cn-shanghai.aliyuncs.com/xxx.png?Expires=xxx",
-                            "type": "image"
-                        },
-                        {
-                            "text": "接下来是炒制的关键环节。热锅凉油，放入蒜片和姜片爆香，接着倒入切好的肉片，快速翻炒至肉片变色。肉片炒香后，加入切好的辣椒段，继续翻炒，让辣椒的香气充分释放出来，与肉片的鲜美完美融合。",
-                            "type": "text"
-                        },
-                        {
-                            "image": "https://dashscope-result-sh.oss-cn-shanghai.aliyuncs.com/xxx.png?Expires=xxx",
-                            "type": "image"
-                        },
-                        {
-                            "text": "最后，加入适量的生抽、老抽、蚝油和少许糖调味，快速翻炒均匀，让每一片肉和辣椒都裹上酱汁。待汤汁收浓，即可关火出锅。这道色香味俱全的辣椒炒肉就大功告成了！",
-                            "type": "text"
-                        },
-                        {
-                            "image": "https://dashscope-result-sh.oss-cn-shanghai.aliyuncs.com/xxx.png?Expires=xxx",
-                            "type": "image"
-                        }
-                    ]
-                }
+    "task_id": "5c67585e-a3be-4943-b04d-c3fbb2xxxxxx",
+    "status": "SUCCEEDED",
+    "choices": [
+        {
+            "finish_reason": "stop",
+            "message": {
+                "role": "assistant",
+                "content": [
+                    {
+                        "text": "辣椒炒肉是湘菜中的经典，也是许多人心中的家常美味。它以鲜辣爽口、肉质鲜嫩而闻名，制作过程简单，却能带来极致的味蕾享受。今天，我们就来一起学习这道菜的制作方法。\n\n首先，准备好所有食材是成功的第一步。新鲜的猪肉、红绿辣椒、蒜瓣和姜片是必不可少的。将猪肉切成薄片，辣椒切段，蒜和姜切片备用。",
+                        "type": "text"
+                    },
+                    {
+                        "image": "https://dashscope-result-sh.oss-cn-shanghai.aliyuncs.com/xxx.png?Expires=xxx",
+                        "type": "image"
+                    },
+                    {
+                        "text": "接下来是炒制的关键环节。热锅凉油，放入蒜片和姜片爆香，接着倒入切好的肉片，快速翻炒至肉片变色。肉片炒香后，加入切好的辣椒段，继续翻炒，让辣椒的香气充分释放出来，与肉片的鲜美完美融合。",
+                        "type": "text"
+                    },
+                    {
+                        "image": "https://dashscope-result-sh.oss-cn-shanghai.aliyuncs.com/xxx.png?Expires=xxx",
+                        "type": "image"
+                    },
+                    {
+                        "text": "最后，加入适量的生抽、老抽、蚝油和少许糖调味，快速翻炒均匀，让每一片肉和辣椒都裹上酱汁。待汤汁收浓，即可关火出锅。这道色香味俱全的辣椒炒肉就大功告成了！",
+                        "type": "text"
+                    },
+                    {
+                        "image": "https://dashscope-result-sh.oss-cn-shanghai.aliyuncs.com/xxx.png?Expires=xxx",
+                        "type": "image"
+                    }
+                ]
             }
-        ],
-        "audio": null,
-        "task_id": "5c67585e-a3be-4943-b04d-c3fbb2xxxxxx",
-        "task_status": "SUCCEEDED",
-        "submit_time": "2026-01-16 17:47:39.469",
-        "scheduled_time": "2026-01-16 17:47:39.804",
-        "end_time": "2026-01-16 17:49:46.736",
-        "finished": true
+        }
+    ],
+    "task_metrics": {
+        "TOTAL": 1,
+        "SUCCEEDED": 1,
+        "FAILED": 0
     },
     "usage": {
         "input_tokens": 29,
         "output_tokens": 477,
-        "characters": 0,
         "size": "1280*1280",
         "total_tokens": 506,
         "image_count": 3

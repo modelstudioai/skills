@@ -1,49 +1,49 @@
 # model experience
 
-`model experience` 是百炼平台面向开发者提供的统一模型调用体验层，封装了多模态模型的接入、参数配置与结果解析逻辑，支持通过标准化 API 或 SDK 快速集成各类生成与理解能力。其核心目标是降低模型使用门槛，同时保持底层模型能力的完整性与可控性。所有能力均基于 [原文标题](../../raw/model-user-guide/model-experience.md) 所列模块组织。
+模型体验（Model Experience）是百炼平台面向开发者提供的统一模型调用入口，支持多模态模型的快速接入与实验。通过标准化 API 和控制台界面，开发者可便捷地测试、调试和集成各类大模型能力。所有模型均遵循统一的鉴权、计费与监控机制。
 
 ## 支持的模型与功能
 
-当前 `model experience` 覆盖以下 12 类模型能力：
-- 文本生成（含对话、补全、指令遵循等）
-- 视觉理解（图像分类、OCR、图文推理等）
-- 图片生成与编辑（文生图、图生图、局部重绘）
-- 视频生成与编辑（文生视频、视频扩时、关键帧控制）
-- 世界模型（具身智能、环境建模与交互模拟）
-- 3D 模型生成（单图/多图生成 `.glb` 等格式，见 [原文标题](../../raw/model-user-guide/model-experience/tripo-3d-generation-guide.md)）
-- 语音合成（TTS，支持多语种与音色定制）
-- 音频生成（背景音、音效、BGM 生成）
-- 语音识别（ASR，支持长音频流式识别）
-- 语音转语音（V2V，保留语义与韵律的跨语言/音色转换）
-- 全模态（多输入模态联合理解与生成，如“图片+语音+文本”协同推理）
-- 向量与重排序（Embedding 生成、稠密检索、Cross-Encoder 重排序）
+当前支持以下 12 类模型能力，覆盖文本、视觉、语音、音视频、3D 及全模态场景：
 
-> **注意**：`world-model` 的实时仿真延迟要求（≤200ms）与 `video-generate-edit-model` 的最大输出时长（15s）在 [原文标题](../../raw/model-user-guide/model-experience/world-model.md) 和 [原文标题](../../raw/model-user-guide/model-experience/video-generate-edit-model.md) 中存在不一致表述；以最新版 `world-model.md`（v2.3.1）为准，视频生成模块已同步放宽至 30s。
+- 文本生成（如 Qwen 系列）  
+- 视觉理解（如 Qwen-VL）  
+- 图片生成与编辑（如 Wanx 图像生成）  
+- 视频生成与编辑（如 Tongyi Tingwu 视频理解 + Wanx 视频生成）  
+- 世界模型（基于环境感知与推理的交互式模型）  
+- 3D 模型生成（通过 TriPo 实现文本到 3D 输出）  
+- 语音合成（TTS）、音频生成、语音识别（ASR）、语音转语音（S2S）  
+- 全模态（Omni-modal）联合理解与生成  
+- [向量嵌入](../concepts/embedding.md)（Embedding）与重排序（Rerank）模型  
+
+各子类能力细节请参阅 [文本生成](../../raw/model-user-guide/model-experience/text-generation-model.md)、[视觉理解](../../raw/model-user-guide/model-experience/vision-model.md) 和 [向量与重排序](../../raw/model-user-guide/model-experience/embedding-rerank-model.md)。
 
 ## 关键参数
 
-通用参数（适用于所有模型类型）：
-- `model`: 必填，模型标识符（如 `qwen-vl-plus`、`wanx-video-1.0`），需与 [原文标题](../../raw/model-user-guide/model-experience.md) 中各子文档所列型号严格匹配；
-- `input`: 结构化输入，格式依模型类型而异（如视觉模型需 `{"image": "base64..."}`，语音模型需 `{"audio": "base64..."}`）；
-- `parameters`: 可选，包含 `temperature`、`top_p`、`max_tokens` 等通用采样参数，以及模型特有参数（如 `image_size`、`voice_id`）；
-- `stream`: 布尔值，仅部分文本/语音模型支持流式响应。
+所有模型调用均支持以下通用参数（部分模型有扩展参数）：
+
+- `model`: 必填，模型 ID（如 `qwen-max`, `wanx-v1`），需与 [原文标题](../../raw/model-user-guide/model-experience/text-generation-model.md) 中列出的可用模型一致  
+- `input`: 输入数据结构，格式依模型类型而异（如文本为 `{"prompt": "..."}`，图像为 `{"image_url": "..."}`）  
+- `parameters`: 可选，控制生成行为（如 `temperature`, `top_p`, `max_tokens`）  
+- `stream`: 布尔值，启用流式响应（仅部分模型支持，详见 [原文标题](../../raw/model-user-guide/model-experience/vision-model.md)）
+
+> **注意**：`max_tokens` 在语音识别模型中实际表示音频时长上限（秒），而非 token 数量，该语义差异与 [原文标题](../../raw/model-user-guide/model-experience/speech-recognition.md) 的描述一致，但与其他文本模型文档存在术语不一致，建议以具体模型文档为准。
 
 ## 使用方式
 
-1. **API 调用**：向 `https://dashscope.aliyuncs.com/api/v1/services/aigc/<model_type>/<endpoint>` 发送 POST 请求（`<model_type>` 如 `text-generation`、`vision`）；  
-2. **SDK 调用**：使用 `dashscope` Python SDK，示例：
-   ```python
-   from dashscope import MultiModalConversation
-   response = MultiModalConversation.call(model='qwen-vl-plus', input={'messages': [{'role': 'user', 'content': [{'image': 'http://...'}, {'text': '描述这张图'}]}]})
-   ```
-3. 所有模型均支持[异步任务](../concepts/asynchronous-task.md)提交（`/async` 后缀端点）与轮询获取结果，适用于长耗时任务（如 3D 生成、视频生成）。
+1. **API 调用**：使用 `POST /v1/models/{model}/invoke`，携带认证 Header（`Authorization: Bearer <api_key>`）  
+2. **控制台体验**：登录百炼控制台 →「模型体验」页 → 选择模型 → 输入示例 → 点击运行  
+3. **SDK 集成**：推荐使用 `dashscope` Python SDK（v1.20.0+），自动处理参数序列化与错误重试  
+
+所有调用均需提前在控制台开通对应模型权限；未授权模型将返回 `403 Forbidden`。
 
 ## 限制和注意事项
 
-- 单次请求 `input` 总大小上限为 50MB（视频/3D 场景下建议 ≤20MB）；
-- 免费试用额度按模型类型独立计费，超出后需绑定付费账号；
-- `omni-modal` 模型暂不支持自定义 `parameters` 中的 `temperature`，该限制已在 [原文标题](../../raw/model-user-guide/model-experience/omni-modal.md) 中明确说明；
-- 所有语音类模型（`speech-synthesis`、`speech-recognition` 等）输入音频必须为 PCM/WAV 格式，采样率 16kHz，单声道；MP3/AAC 需先转码。
+- 单次请求最大输入长度因模型而异：文本模型默认 32768 tokens，视觉模型图像分辨率上限为 1536×1536 像素（参见 [原文标题](../../raw/model-user-guide/model-experience/vision-model.md)）  
+- 视频生成暂不支持自定义帧率与分辨率，仅提供预设档位（720p/1080p）  
+- 3D 模型生成（TriPo）输出为 `.glb` 格式，暂不支持直接导出 `.obj` 或 `.fbx`  
+- 全模态模型（Omni-modal）目前仅接受单图+单文本输入，多图或多轮交互暂未开放  
+- 所有模型调用受配额与并发数限制，超出将触发 `429 Too Many Requests`，详情见配额管理页
 
 ## 来源文档
 

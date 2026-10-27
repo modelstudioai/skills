@@ -8,13 +8,18 @@ Qwen-Audio 是端到端实时语音交互大模型，支持低延迟语音对话
 
 该模型除 WebSocket 协议外，还支持通过 AOQ 和 WebRTC 协议接入；如果是客户端对接，且更看重稳定的延迟、弱网下的交互能力、实时双工的降噪与回声消除，可优先考虑 AOQ，协议对比与选型请参见[模型/应用支持力度](https://help.aliyun.com/zh/model-studio/realtime-api-overview#rtov-s02h2)。
 
--   支持三种交互模式：声学 VAD（server\_vad）、智能语义轮次（smart\_turn）和手动控制（push-to-talk）
--   独有的 smart\_turn 模式融合声学感知与语义理解判断轮次边界，无意义附和声（如“嗯”“啊”）不会打断对话
 -   支持 Function Calling 工具调用，模型可自主判断是否需要调用外部工具获取信息
 -   支持联网搜索，模型可根据实时问题自主判断是否搜索并返回搜索结果来源（不可与 Function Calling 同时启用）
 -   支持对话上下文管理（创建、查询、删除对话项），灵活注入历史上下文或清理无关对话项
 -   高表现力语音输出，根据对话语境动态调整语气、节奏和情感表达
 -   支持系统音色与声音复刻音色，可通过声音复刻创建专属 AI 音色用于语音对话输出
+
+**交互模式与说话人增强**
+
+以下交互模式和说话人增强说明适用于 `qwen-audio-3.1-realtime-plus`、`qwen-audio-3.1-realtime-flash`、`qwen-audio-3.0-realtime-plus` 和 `qwen-audio-3.0-realtime-flash`。
+
+-   支持三种交互模式：声学 VAD（server\_vad）、智能语义轮次（smart\_turn）和手动控制（push-to-talk）
+-   独有的 smart\_turn 模式融合声学感知与语义理解判断轮次边界，无意义附和声（如“嗯”“啊”）不会打断对话
 -   smart\_turn 模式下支持说话人增强，传入目标用户预录音频后，模型可在双工对话中精准锁定目标说话人，有效屏蔽旁人声音与背景噪声
 
 ### 工作原理
@@ -50,7 +55,7 @@ PCM
 -   语种：德语（de）、英语（en）、西班牙语（es）、法语（fr）、印尼语（id）、意大利语（it）、日语（ja）、韩语（ko）、葡萄牙语（pt）、俄语（ru）、中文（zh）。
 -   中文及方言：普通话、广东话、重庆话、东北话、甘肃话、贵州话、浙江话、河北话、河南话、湖北话、湖南话、江西话、宁波话、宁夏话、青岛话、陕西话、山西话、山东话、上海话、四川话、云南话。
 
-使用 `qwen-audio-3.1-realtime-plus` 时，可通过 `session.input_audio_transcription.language` 和 `session.output_audio.language` 分别指定输入音频源语种和输出音频目标语种。两个参数的可选语言代码分别见[客户端事件](https://help.aliyun.com/zh/model-studio/fun-audiochat-client-events#fc65a1b2c3d5f)。其中 `session.output_audio.language` 作用于语音合成（TTS），会尽可能让语音输出使用目标语种，但不保证一定生效，也不会改变模型回复文本的语种。
+使用 `qwen-audio-3.1-realtime-plus` 或 `qwen-audio-3.1-realtime-flash` 时，可通过 `session.input_audio_transcription.language` 和 `session.output_audio.language` 分别指定输入音频源语种和输出音频目标语种。两个参数的可选语言代码分别见[客户端事件](https://help.aliyun.com/zh/model-studio/fun-audiochat-client-events#fc65a1b2c3d5f)。其中 `session.output_audio.language` 作用于语音合成（TTS），会尽可能让语音输出使用目标语种，但不保证一定生效，也不会改变模型回复文本的语种。
 
 ### 上下文容量
 
@@ -68,6 +73,12 @@ qwen-audio-3.1-realtime-plus
 
 300秒
 
+qwen-audio-3.1-realtime-flash
+
+50
+
+300秒
+
 qwen-audio-3.0-realtime-plus
 
 50
@@ -80,7 +91,7 @@ qwen-audio-3.0-realtime-flash
 
 300秒
 
-音频最大轮次的默认值为 20 轮，最大可上调至 50 轮。调节方式请参见[历史轮次控制](https://help.aliyun.com/zh/model-studio/qwen-audio-realtime-user-guides#fc60h313)。
+`max_history_turns` 参数控制模型推理时参考的历史 QA 轮数，默认值为 20，取值范围为 1-50。调节方式请参见[历史轮次控制](https://help.aliyun.com/zh/model-studio/qwen-audio-realtime-user-guides#fc60h313)。
 
 全模态模型的整体选型建议请参见[全模态](raw/model-user-guide/model-experience/omni-modal/omni.md)。
 
@@ -823,7 +834,7 @@ finally:
 
 ### 音色配置
 
-通过 `voice` 参数设置模型回复的 TTS 音色，3.1 Plus 的默认值为 `longanqian_v3.1`，3.0 Plus/Flash 的默认值为 `longanqian`。支持系统音色和声音复刻音色两种类型。3.1 Plus 保留 3.0 Plus 的音色，并新增 8 个系统音色可选值。
+通过 `voice` 参数设置模型回复的 TTS 音色。支持系统音色和声音复刻音色两种类型。3.1 Plus/Flash 的默认音色为 `longanqian_v3.1`，3.0 Plus/Flash 的默认音色为 `longanqian`。
 
 **重要**音色仅可在**第一次** `session.update` 中设置，后续 `session.update` 传入 `voice` 将被忽略。
 
@@ -833,9 +844,9 @@ finally:
 
 系统音色 ID
 
-`qwen-audio-3.1-realtime-plus`
+`qwen-audio-3.1-realtime-plus`、`qwen-audio-3.1-realtime-flash`
 
-`longanqian`、`longanlingxin`、`longanlingxi`、`longanxiaoxin`、`longanlufeng`、`longanqian_v3.1`、`longanhuan_v3.1`、`longanlingxin_v3.1`、`longanfengyue_v3.1`、`xunanchuan_v3.1`、`beth_v3.1`、`betty_v3.1`、`cally_v3.1`
+可选音色包括 `longanqian_v3.1`，以及 [qwen-audio-3.1-tts-plus](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list#qwen-tts31-plus-voices) 和 [qwen-audio-3.1-tts-flash](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list#qwen-tts31-voices) 音色列表中的全部音色；可在列表中查询音色 ID 和试听。
 
 `qwen-audio-3.0-realtime-plus`, `qwen-audio-3.0-realtime-flash`
 
@@ -852,7 +863,7 @@ finally:
 }
 ```
 
-**声音复刻音色**：通过[声音复刻](https://help.aliyun.com/zh/model-studio/voice-cloning-user-guide#qat_vc_h3)方式创建音色（创建时将 `target_model` 设为 `qwen-audio-3.1-realtime-plus`、`qwen-audio-3.0-realtime-plus` 或 `qwen-audio-3.0-realtime-flash`），再将接口返回的 `voice_id` 填入 `voice` 参数。
+**声音复刻音色**：通过[声音复刻](https://help.aliyun.com/zh/model-studio/voice-cloning-user-guide#qat_vc_h3)方式创建音色（创建时将 `target_model` 设为 `qwen-audio-3.1-realtime-plus`、`qwen-audio-3.1-realtime-flash`、`qwen-audio-3.0-realtime-plus` 或 `qwen-audio-3.0-realtime-flash`），再将接口返回的 `voice_id` 填入 `voice` 参数。
 
 ```
 {
@@ -915,6 +926,8 @@ integer
 语音结束后需保持静音的最短时间（毫秒），超时即触发模型响应。值越低，响应越快，但可能在短暂停顿时误触发。取值范围为\[200, 6000\]，默认值为 800。对话场景推荐 400-800。
 
 ### 历史轮次控制
+
+本节适用于 `qwen-audio-3.1-realtime-plus`、`qwen-audio-3.1-realtime-flash`、`qwen-audio-3.0-realtime-plus` 和 `qwen-audio-3.0-realtime-flash`。
 
 通过 `max_history_turns` 参数控制模型推理时参考的历史 QA 轮数。值越大，模型可回顾更多对话历史以理解上下文，但会增加 Token 消耗和推理延迟。
 
@@ -1525,6 +1538,7 @@ Qwen-Audio 支持通过客户端事件管理对话上下文中的对话项（Con
 调用以下模型时，请选择北京地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)：
 
 -   qwen-audio-3.1-realtime-plus
+-   qwen-audio-3.1-realtime-flash
 -   qwen-audio-3.0-realtime-plus
 -   qwen-audio-3.0-realtime-flash
 
@@ -1533,8 +1547,15 @@ Qwen-Audio 支持通过客户端事件管理对话上下文中的对话项（Con
 调用以下模型时，请选择新加坡地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)：
 
 -   qwen-audio-3.1-realtime-plus
+-   qwen-audio-3.1-realtime-flash
 -   qwen-audio-3.0-realtime-plus
 -   qwen-audio-3.0-realtime-flash
+
+## 常见问题
+
+### RPM 限制什么？是否限制同时保持的连接总数？
+
+RPM 限制每分钟的 WebSocket 建连请求次数。同一连接内的多轮响应不重复计数；重连计为新请求。目前没有单独限制同时保持的连接总数。
 
 ## API 参考
 

@@ -6,7 +6,7 @@
 
 ## 前期准备
 
-DashScope Python SDK 版本需要不低于1.25.11。
+DashScope Python SDK 版本需要不低于2.0.1。
 
 ## 快速开始
 
@@ -15,12 +15,11 @@ server commit模式
 ```
 import os
 import base64
-import threading
 import time
-import dashscope
-from dashscope.audio.qwen_tts_realtime import *
+from concurrent.futures import ThreadPoolExecutor
 
-qwen_tts_realtime: QwenTtsRealtime = None
+import dashscope
+
 text_to_synthesize = [
     '对吧~我就特别喜欢这种超市，',
     '尤其是过年的时候',
@@ -30,215 +29,140 @@ text_to_synthesize = [
     '想买好多好多的东西呢！'
 ]
 
-DO_VIDEO_TEST = False
-
-def init_dashscope_api_key():
-    """
-        Set your DashScope API-key. More information:
-        https://github.com/aliyun/alibabacloud-bailian-speech-demo/blob/master/PREREQUISITES.md
-    """
-
+# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+client = dashscope.Client(
     # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    if 'DASHSCOPE_API_KEY' in os.environ:
-        dashscope.api_key = os.environ[
-            'DASHSCOPE_API_KEY']  # load API-key from environment variable DASHSCOPE_API_KEY
-    else:
-        dashscope.api_key = 'your-dashscope-api-key'  # set API-key manually
+    # 若没有将API Key配置到环境变量中，请将下行替换为自己的API Key：api_key="sk-xxx"
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
-class MyCallback(QwenTtsRealtimeCallback):
-    def __init__(self):
-        self.complete_event = threading.Event()
-        self.file = open('result_24k.pcm', 'wb')
-
-    def on_open(self) -> None:
-        print('connection opened, init player')
-
-    def on_close(self, close_status_code, close_msg) -> None:
-        self.file.close()
-        print('connection closed with code: {}, msg: {}, destroy player'.format(close_status_code, close_msg))
-
-    def on_event(self, response: str) -> None:
-        try:
-            global qwen_tts_realtime
-            type = response['type']
-            if 'session.created' == type:
-                print('start session: {}'.format(response['session']['id']))
-            if 'response.audio.delta' == type:
-                recv_audio_b64 = response['delta']
-                self.file.write(base64.b64decode(recv_audio_b64))
-            if 'response.done' == type:
-                print(f'response {qwen_tts_realtime.get_last_response_id()} done')
-            if 'session.finished' == type:
+# 接收线程：迭代服务端事件，音频增量写入文件
+def receive_events(session):
+    with open('result_24k.pcm', 'wb') as f:
+        for event in session.events():
+            event_type = event.get('type')
+            if event_type == 'session.created':
+                print('start session: {}'.format(event['session']['id']))
+            elif event_type == 'response.audio.delta':
+                f.write(base64.b64decode(event['delta']))
+            elif event_type == 'response.done':
+                print(f'response {session.last_response_id} done')
+            elif event_type == 'session.finished':
                 print('session finished')
-                self.complete_event.set()
-        except Exception as e:
-            print('[Error] {}'.format(e))
-            return
-
-    def wait_for_finished(self):
-        self.complete_event.wait()
 
 if __name__  == '__main__':
-    init_dashscope_api_key()
-
     print('Initializing ...')
 
-    callback = MyCallback()
-
-    qwen_tts_realtime = QwenTtsRealtime(
-        # 如需使用指令控制功能，请将model替换为qwen3.5-omni-plus-realtime
-        model='qwen3-tts-flash-realtime',
-        callback=callback,
-        # 以下为华北2（北京）地域的配置。
-        url='wss://dashscope.aliyuncs.com/api-ws/v1/realtime'
+    # 创建实时语音合成会话：进入 with 上下文时自动建立连接
+    with client.audio.realtime.connect(
+            # 如需使用指令控制功能，请将model替换为qwen3.5-omni-plus-realtime
+            model='qwen3-tts-flash-realtime',
+    ) as session:
+        session.update_session(
+            output_modalities=['audio'],
+            voice='Cherry',
+            format='pcm',
+            sample_rate=24000,
+            # 如需使用指令控制功能，请取消下方注释，并将model替换为qwen3.5-omni-plus-realtime
+            # instructions='语速较快，带有明显的上扬语调，适合介绍时尚产品。',
+            # optimize_instructions=True,
+            mode='server_commit'
         )
-
-    qwen_tts_realtime.connect()
-    qwen_tts_realtime.update_session(
-        voice = 'Cherry',
-        response_format = AudioFormat.PCM_24000HZ_MONO_16BIT,
-        # 如需使用指令控制功能，请取消下方注释，并将model替换为qwen3.5-omni-plus-realtime
-        # instructions='语速较快，带有明显的上扬语调，适合介绍时尚产品。',
-        # optimize_instructions=True,
-        mode = 'server_commit'
-    )
-    for text_chunk in text_to_synthesize:
-        print(f'send text: {text_chunk}')
-        qwen_tts_realtime.append_text(text_chunk)
-        time.sleep(0.1)
-    qwen_tts_realtime.finish()
-    callback.wait_for_finished()
-    print('[Metric] session: {}, first audio delay: {}'.format(
-                    qwen_tts_realtime.get_session_id(),
-                    qwen_tts_realtime.get_first_audio_delay(),
-                    ))
+        with ThreadPoolExecutor(max_workers=1) as pool:
+            receiver = pool.submit(receive_events, session)
+            for text_chunk in text_to_synthesize:
+                print(f'send text: {text_chunk}')
+                session.send_event({'type': 'input_text_buffer.append', 'text': text_chunk})
+                time.sleep(0.1)
+            # 通知服务端输入结束（server_commit 模式下服务端自动判断合成时机）
+            session.end_session()
+            receiver.result()
+        print('[Metric] session: {}, first audio delay: {}'.format(
+            session.session_id,
+            session.last_first_audio_delay,
+        ))
 ```
 
 commit模式
 
 ```
-import base64
 import os
-import threading
-import dashscope
-from dashscope.audio.qwen_tts_realtime import *
+import base64
+import time
+from concurrent.futures import ThreadPoolExecutor
 
-qwen_tts_realtime: QwenTtsRealtime = None
+import dashscope
+
 text_to_synthesize = [
     '这是第一句话。',
     '这是第二句话。',
     '这是第三句话。',
 ]
 
-DO_VIDEO_TEST = False
-
-def init_dashscope_api_key():
-    """
-        Set your DashScope API-key. More information:
-        https://github.com/aliyun/alibabacloud-bailian-speech-demo/blob/master/PREREQUISITES.md
-    """
-
+# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+client = dashscope.Client(
     # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    if 'DASHSCOPE_API_KEY' in os.environ:
-        dashscope.api_key = os.environ[
-            'DASHSCOPE_API_KEY']  # load API-key from environment variable DASHSCOPE_API_KEY
-    else:
-        dashscope.api_key = 'your-dashscope-api-key'  # set API-key manually
+    # 若没有将API Key配置到环境变量中，请将下行替换为自己的API Key：api_key="sk-xxx"
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
-class MyCallback(QwenTtsRealtimeCallback):
-    def __init__(self):
-        super().__init__()
-        self.response_counter = 0
-        self.complete_event = threading.Event()
-        self.file = open(f'result_{self.response_counter}_24k.pcm', 'wb')
-
-    def reset_event(self):
-        self.response_counter += 1
-        self.file = open(f'result_{self.response_counter}_24k.pcm', 'wb')
-        self.complete_event = threading.Event()
-
-    def on_open(self) -> None:
-        print('connection opened, init player')
-
-    def on_close(self, close_status_code, close_msg) -> None:
-        print('connection closed with code: {}, msg: {}, destroy player'.format(close_status_code, close_msg))
-
-    def on_event(self, response: str) -> None:
-        try:
-            global qwen_tts_realtime
-            type = response['type']
-            if 'session.created' == type:
-                print('start session: {}'.format(response['session']['id']))
-            if 'response.audio.delta' == type:
-                recv_audio_b64 = response['delta']
-                self.file.write(base64.b64decode(recv_audio_b64))
-            if 'response.done' == type:
-                print(f'response {qwen_tts_realtime.get_last_response_id()} done')
-                self.complete_event.set()
-                self.file.close()
-            if 'session.finished' == type:
+# 接收线程：迭代服务端事件，音频增量写入文件
+def receive_events(session):
+    with open('result_24k.pcm', 'wb') as f:
+        for event in session.events():
+            event_type = event.get('type')
+            if event_type == 'session.created':
+                print('start session: {}'.format(event['session']['id']))
+            elif event_type == 'response.audio.delta':
+                f.write(base64.b64decode(event['delta']))
+            elif event_type == 'response.done':
+                print(f'response {session.last_response_id} done')
+            elif event_type == 'session.finished':
                 print('session finished')
-                self.complete_event.set()
-        except Exception as e:
-            print('[Error] {}'.format(e))
-            return
-
-    def wait_for_response_done(self):
-        self.complete_event.wait()
 
 if __name__  == '__main__':
-    init_dashscope_api_key()
-
     print('Initializing ...')
 
-    callback = MyCallback()
-
-    qwen_tts_realtime = QwenTtsRealtime(
-        # 如需使用指令控制功能，请将model替换为qwen3.5-omni-plus-realtime
-        model='qwen3-tts-flash-realtime',
-        callback=callback,
-        # 以下为华北2（北京）地域的配置。
-        url='wss://dashscope.aliyuncs.com/api-ws/v1/realtime'
+    # 创建实时语音合成会话：进入 with 上下文时自动建立连接
+    with client.audio.realtime.connect(
+            # 如需使用指令控制功能，请将model替换为qwen3.5-omni-plus-realtime
+            model='qwen3-tts-flash-realtime',
+    ) as session:
+        session.update_session(
+            output_modalities=['audio'],
+            voice='Cherry',
+            format='pcm',
+            sample_rate=24000,
+            # 如需使用指令控制功能，请取消下方注释，并将model替换为qwen3.5-omni-plus-realtime
+            # instructions='语速较快，带有明显的上扬语调，适合介绍时尚产品。',
+            # optimize_instructions=True,
+            mode='commit'
         )
-
-    qwen_tts_realtime.connect()
-    qwen_tts_realtime.update_session(
-        voice = 'Cherry',
-        response_format = AudioFormat.PCM_24000HZ_MONO_16BIT,
-        # 如需使用指令控制功能，请取消下方注释，并将model替换为qwen3.5-omni-plus-realtime
-        # instructions='语速较快，带有明显的上扬语调，适合介绍时尚产品。',
-        # optimize_instructions=True,
-        mode = 'commit'
-    )
-    print(f'send text: {text_to_synthesize[0]}')
-    qwen_tts_realtime.append_text(text_to_synthesize[0])
-    qwen_tts_realtime.commit()
-    callback.wait_for_response_done()
-    callback.reset_event()
-
-    print(f'send text: {text_to_synthesize[1]}')
-    qwen_tts_realtime.append_text(text_to_synthesize[1])
-    qwen_tts_realtime.commit()
-    callback.wait_for_response_done()
-    callback.reset_event()
-
-    print(f'send text: {text_to_synthesize[2]}')
-    qwen_tts_realtime.append_text(text_to_synthesize[2])
-    qwen_tts_realtime.commit()
-    callback.wait_for_response_done()
-
-    qwen_tts_realtime.finish()
-    print('[Metric] session: {}, first audio delay: {}'.format(
-                    qwen_tts_realtime.get_session_id(),
-                    qwen_tts_realtime.get_first_audio_delay(),
-                    ))
+        with ThreadPoolExecutor(max_workers=1) as pool:
+            receiver = pool.submit(receive_events, session)
+            for text in text_to_synthesize:
+                print(f'send text: {text}')
+                session.send_event({'type': 'input_text_buffer.append', 'text': text})
+                # commit 模式下由客户端主动触发合成
+                session.send_event({'type': 'input_text_buffer.commit'})
+                time.sleep(0.1)
+            session.end_session()
+            receiver.result()
+        print('[Metric] session: {}, first audio delay: {}'.format(
+            session.session_id,
+            session.last_first_audio_delay,
+        ))
 ```
 
 访问[github](https://github.com/aliyun/alibabacloud-bailian-speech-demo/tree/master/samples/conversation/omni)下载更多示例代码。
 
 ## 请求参数
 
-下述请求参数可以通过QwenTtsRealtime的构造方法进行设置。
+下述请求参数可以通过`client.audio.realtime`的`connect`方法设置。
 
 **参数**
 
@@ -256,17 +180,15 @@ str
 
 模型名称。参见[支持的模型](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#4a43cc1bb7kxg)。
 
-url
+ws\_url
 
 str
 
-是
+否
 
-华北2（北京）地域：`wss://dashscope.aliyuncs.com/api-ws/v1/realtime`
+会话端点。缺省时由[Client](raw/model-api-reference/preparations/install-sdk.md)构造参数`workspace`/`region`自动推导（华北2（北京）地域：`wss//{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime`；新加坡地域：`wss//{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime`）。
 
-新加坡地域：`wss://dashscope-intl.aliyuncs.com/api-ws/v1/realtime`
-
-下述请求参数可以通过update\_session接口配置。
+下述请求参数可以通过会话的`update_session`方法配置（具名参数直接传入，其余参数透传至session.update事件的session对象）。
 
 **参数**
 
@@ -475,18 +397,18 @@ bool
 
 ## 关键接口
 
-### QwenTtsRealtime类
+### 会话（RealtimeSession）
 
-QwenTtsRealtime通过`from dashscope.audio.qwen_tts_realtime import QwenTtsRealtime`方法引入。
+实时语音合成会话通过`client.audio.realtime.connect(model=...)`创建，进入`with`上下文时自动建立连接（也可调用会话的`connect()`方法手动建立）。
 
 方法签名
 
-服务端响应事件（通过回调下发）
+服务端响应事件（通过`events()`迭代下发）
 
 说明
 
 ```
-def connect(self) -> None
+def connect(self) -> "RealtimeSession"
 ```
 
 [session.created](https://help.aliyun.com/zh/model-studio/qwen-tts-realtime-server-events#05bb97c283l2n)
@@ -497,16 +419,15 @@ def connect(self) -> None
 
 > 会话配置已更新
 
-和服务端创建连接。
+和服务端创建连接。进入`with`上下文时自动调用。
 
 ```
 def update_session(self,
-                       voice: str,
-                       response_format: AudioFormat = AudioFormat.
-                       PCM_24000HZ_MONO_16BIT,
-                       mode: str = 'server_commit',
-                       language_type : str = "Chinese",
-                       **kwargs) -> None
+                   output_modalities: List[str],
+                   *,
+                   voice: str = None,
+                   input_audio_transcription_model: str = None,
+                   **kwargs) -> None
 ```
 
 [session.updated](https://help.aliyun.com/zh/model-studio/qwen-tts-realtime-server-events#58f078ab61di5)
@@ -520,28 +441,31 @@ def update_session(self,
 服务端在收到session.update事件后，会进行参数校验，如果参数不合法则返回错误，否则更新服务端侧的会话配置。
 
 ```
-def append_text(self, text: str) -> None
+def send_event(self,
+               event: Dict[str, Any]) -> None
 ```
 
 无
 
-将文本片段追加到云端输入文本缓冲区。 缓冲区是你可以写入并稍后提交的临时存储。
+发送原始事件。文本输入通过`input_text_buffer`系列事件完成：将文本片段追加到云端输入文本缓冲区（`{"type": "input_text_buffer.append", "text": ...}`）。缓冲区是你可以写入并稍后提交的临时存储。
 
 -   "server\_commit"模式下，服务器决定何时提交并合成文本缓冲区中的文本。
--   "commit"模式下，客户端需要主动通过commit触发语音合成。
+-   "commit"模式下，客户端需要主动发送`input_text_buffer.commit`事件触发语音合成。
 
 ```
-def clear_appended_text(self, ) -> None
+def send_event(self,
+               event: Dict[str, Any]) -> None
 ```
 
 [input\_text\_buffer.cleared](https://help.aliyun.com/zh/model-studio/qwen-tts-realtime-server-events#7a04edb8840o7)
 
 > 清空服务端收到的文本
 
-删除当前云端缓冲区的文本。
+发送`{"type": "input_text_buffer.clear"}`事件，删除当前云端缓冲区的文本。
 
 ```
-def commit(self, ) -> None
+def send_event(self,
+               event: Dict[str, Any]) -> None
 ```
 
 [input\_text\_buffer.committed](https://help.aliyun.com/zh/model-studio/qwen-tts-realtime-server-events#76abc25665qt8)
@@ -576,20 +500,20 @@ def commit(self, ) -> None
 
 > 响应完成
 
-提交之前通过append添加到云端缓冲区的文本，并立刻合成所有文本。如果输入的文本缓冲区为空将产生错误。
+发送`{"type": "input_text_buffer.commit"}`事件，提交之前通过append添加到云端缓冲区的文本，并立刻合成所有文本。如果输入的文本缓冲区为空将产生错误。
 
 -   "server\_commit"模式下，客户端不需要发送此事件，服务器会自动提交文本缓冲区。
 -   "commit"模式下，客户端必须通过commit触发语音合成。
 
 ```
-def finish(self, ) -> None
+def end_session(self) -> None
 ```
 
 [session.finished](https://help.aliyun.com/zh/model-studio/qwen-tts-realtime-server-events#ac332f7d78oxg)
 
 > 响应完成
 
-终止任务。
+发送session.finish事件，终止任务。之后继续消费`events()`直到`session.finished`事件。
 
 ```
 def close(self, ) -> None
@@ -597,10 +521,10 @@ def close(self, ) -> None
 
 无
 
-关闭连接。
+关闭连接。退出`with`上下文时自动调用。
 
 ```
-def get_session_id(self) -> str
+session.session_id
 ```
 
 无
@@ -608,7 +532,7 @@ def get_session_id(self) -> str
 获取当前任务的session\_id。
 
 ```
-def get_last_response_id(self) -> str
+session.last_response_id
 ```
 
 无
@@ -616,18 +540,16 @@ def get_last_response_id(self) -> str
 获取最近一次response的response\_id。
 
 ```
-def get_first_audio_delay(self)
+session.last_first_audio_delay
 ```
 
 无
 
 获取首包音频延迟。
 
-### 回调接口（QwenTtsRealtimeCallback）
+### 事件迭代（`events()`）
 
-服务端会通过回调的方式，将服务端响应事件和数据返回给客户端。您需要实现回调方法，处理服务端返回的信息或者数据。
-
-通过`from dashscope.audio.qwen_tts_realtime import QwenTtsRealtimeCallback`引入。
+服务端会通过事件的方式，将服务端响应事件和数据返回给客户端。在接收线程中迭代会话的`events()`处理服务端事件，`session.finished`事件后迭代结束；`error`事件会以`DashScopeError`异常抛出，可使用try/except捕获。
 
 方法
 
@@ -638,33 +560,21 @@ def get_first_audio_delay(self)
 描述
 
 ```
-def on_open(self) -> None
+def events(self) -> Iterator[Dict]
 ```
 
-无
+event：服务端响应事件（`dict`）。
 
-无
+迭代器
 
-当和服务端建立连接完成后，该方法立刻被回调。
-
-```
-def on_event(self, message: str) -> None
-```
-
-message：服务端响应事件。
-
-无
-
-包括对接口调用的回复响应和模型生成的文本和音频。具体可以参考：[服务端事件](raw/_short/qwen-tts-realtime-server-events-8ed037c725703737.md)
+包括对接口调用的回复响应和模型生成的文本和音频，`session.finished`事件后迭代结束。具体可以参考：[服务端事件](raw/_short/qwen-tts-realtime-server-events-8ed037c725703737.md)
 
 ```
-def on_close(self, close_status_code, close_msg) -> None
+def recv_event(self) -> Optional[Dict]
 ```
 
-close\_status\_code：关闭WebSocket的状态码。
+event：服务端响应事件（`dict`）。
 
-close\_msg：关闭WebSocket的关闭信息。
+事件或`None`
 
-无
-
-当服务已经关闭连接后进行回调。
+读取一条服务端事件，正常关闭后返回`None`。

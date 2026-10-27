@@ -1,44 +1,66 @@
 # release notes
 
-百炼平台的 Release Notes 汇总了近期模型上架、功能迭代、平台能力升级及下线机制等关键变更，面向开发者提供可操作的版本演进信息。本文档聚焦于**已发布可用**的模型与功能，不包含预览或邀约制未开放能力；所有模型均默认支持华北2（北京）地域，其他地域支持情况请参考 [模型下线机制说明](../../raw/model-user-guide/release-notes/model-depreciation.md)。
+百炼平台的 Release Notes 汇总了模型上下架、平台功能迭代、计费策略调整等关键变更，面向开发者提供可落地的操作依据。所有变更均遵循明确的时间节点与通知机制，模型生命周期管理（上架、升级、下线）与平台能力演进（API、SDK、部署、评测）同步推进。开发者应定期查阅本页，并结合[模型下线机制说明](../../raw/model-user-guide/release-notes/model-depreciation.md)评估服务连续性。
 
 ## 支持的模型/功能
 
-截至 2026 年 10 月下旬，平台新增以下核心模型类别：
+- **新上线模型（2026年重点）**：  
+  - 多模态大模型：`qwen3.8-max`（2.4T MoE）、`kimi-k3`（2.8T）、`MiniMax-M3.1-Flash`（1M上下文+五档思考）、`ZHIPU/GLM-5.3-FlashX`（200 tokens/s）；  
+  - 实时语音：`qwen-audio-3.1-realtime-flash`（双工+声音复刻）、`qwen-audio-3.0-realtime-plus`（低延迟标准版）；  
+  - 3D生成：Tripo 系列共 10 个模型（如 `Tripo/Tripo-AutoRig`、`Tripo/Tripo-Retopology`），覆盖网格分割、重拓扑、绑定、动画重定向等全链路；  
+  - 视频生成：`kling/kling-v3-turbo-video-generation`、`wan3.0-video-prime`（30秒高速版）、`vidu/viduq3-drama_reference2video`（剧集专用）；  
+  - 图像生成：`qwen-image-3.0-pro`（10px小字渲染）、`vidu/vidu-image-pro_reference2image`（参考生图+UI像素级还原）；  
+  - 专用模型：`decision-model-preview`（结构化决策）、`qwen-mt-uni`（跨模态文档翻译）、`happyoyster-1.0-adventure`（开放式世界模型）。  
 
-- **多模态大语言模型（MLLM）**：`MiniMax/MiniMax-M3.1-Flash`（1M 上下文，五档思考深度，原生支持文本/图片/视频）、`xiaomi/mimo-v2.6-pro-ultraspeed`（10 倍输出加速，1M 上下文，文本/图片/视频/音频全模态）、`deepseek-v4.1-flash-1017`（MoE 552B，Terminal-Bench 4.0 等基准显著提升，支持“许愿式”编程）、`qwen3.8-omni-flash-realtime`（实时音视频交互，支持 WebSocket/WebRTC/AOQ）、`ZHIPU/GLM-5.3-FlashX`（200 tokens/s，1M 上下文，128K 输出）。
-- **图像生成模型**：`qwen-image-2.1-turbo`（轻量高性价比，生成与编辑一体化）、`qwen-image-3.0-pro`（4.5k token 输入，10px 小字精准渲染，报纸/分镜等复杂版面支持）、`vidu/viduq3-drama_reference2video`（精品剧/AI漫剧专用，强一致性与动效）。
-- **视频生成模型**：`kling/kling-v3-turbo-video-generation`（文生/图生视频，多镜头生成）、`wan3.0-video-prime`（30 秒高速生成，四模态全能参考）、`pixverse/pixverse-motioncontrol`（动作迁移）、`vidu/viduq3-ad_reference2video`（广告专用，商品图直出 16 秒视频）。
-- **专用模型**：`decision-model-preview`（结构化决策，支持分类/是非判断/评分+概率分布）、`happyoyster-1.0-adventure`（开放式世界模型，文本/图像驱动实时探索）、`qwen-mt-uni`（多模态翻译，支持 PDF/Word/PPT/图片/音频输入，自动版面还原与语音克隆）。
+- **平台功能新增（2026年Q2-Q3）**：  
+  - 智能体托管：`Managed Agent` 运行时 API 上线（2026-06-29），支持会话与工具执行托管；  
+  - 知识库 RAG：新增联合检索与混合排序（2026-06-23）、日志全量投递至 SLS（2026-04-24）；  
+  - 模型部署：PTU 预置吞吐支持长输入与前缀缓存（2026-06-15）；  
+  - SDK 扩展：Linux C++、Android/iOS Lite、RTOS C SDK 全面覆盖（2026-02）；  
+  - API 增强：Responses API 支持异步调用（`background=true`）、DashScope 新版智能体 API（2026-05-11）、事件总线 HTTP 回调（2026-04-23）。  
 
-> **注意**：文档 1 中 `kimi/kimi-k3`（2026-07-17）与 `kimi-k3`（2026-08-19）为同一模型，但后者描述中称其为“全球首个开源的 3 万亿级别模型”，而前者未提“开源”属性；实际发布状态以 [模型上下架与更新](../../raw/model-user-guide/release-notes/newly-released-models.md) 中最新条目为准，开发者应以控制台模型广场显示的标签（如 `open-source`）为依据。
+> **注意**：文档2中列出的 `qwen3.8-max-0902`（别名 `qwen3.8-max-2026-09-02`）与文档3中 2026年8月上线的 `qwen3.8-max` 存在版本命名歧义——前者为快照版本，后者为正式发布版；实际生产环境请以控制台显示的 `qwen3.8-max`（无日期后缀）为准，其能力与文档2描述一致，但不推荐在代码中硬编码带日期的别名。
 
 ## 关键参数
 
-各模型共性关键参数如下（具体值以模型文档为准）：
-
-- **上下文窗口**：主流 MLLM 普遍支持 **1,000,000 tokens**（如 `qwen3.8-max`、`glm-5.3`、`stepfun/step-5-preview`），部分轻量模型为 262,144（如 `qwen-audio-3.1-realtime-plus`）或 32K–128K（如 `qwen3.7-text-embedding-flash`）。
-- **最大输出长度**：范围从 128K（`GLM-5.3-FlashX`）到 384K（`deepseek-v4.1-flash` 系列）。
-- **多模态输入支持**：文本为必选；图像/视频/音频支持因模型而异，需查阅具体模型文档；`qwen3.8-omni-flash` 明确支持文本/图片/音频/视频输入，`qwen-mt-uni` 支持文档类文件（PDF/Word 等）输入。
-- **推理速度**：`xiaomi/mimo-v2.6-pro-ultraspeed` 声称输出速度提升约 10 倍；`ZHIPU/GLM-5.3-FlashX` 达 200 tokens/s；`MiniMax/MiniMax-M3.1-Flash` 约 170 tokens/s。
+- **上下文窗口**：主流新模型统一支持 **1,000,000 Token**（如 `qwen3.8-max`、`kimi-k3`、`GLM-5.3-FlashX`），部分轻量模型为 262,144（如 `qwen-audio-3.1-realtime-flash`）或 32K–128K（如向量模型 `qwen3.7-text-embedding-flash`）。  
+- **输出长度**：最大支持 `384K`（`deepseek-v4.1-flash-1017`）、`128K`（`GLM-5.3-FlashX`）、`256K`（`qwen3.8-flash`）；实时语音模型未公开最大输出长度，以流式响应为准。  
+- **多模态能力**：`qwen3.8-omni-flash`、`MiniMax-M3.1-Flash`、`ZHIPU/GLM-5.3-Flash` 等明确支持文本/图片/视频/音频四模态输入；`qwen-mt-uni` 支持 PDF/Word/PPT/Excel/HTML/Markdown/TXT/图片/音频八类输入模态自动识别。  
+- **推理性能**：`ZHIPU/GLM-5.3-FlashX` 达 200 tokens/s，`qwen-audio-3.0-tts-flash` 专为低延迟优化，`qwen-audio-3.1-realtime-flash` 端到端响应时延控制在行业领先水平。  
+- **模型架构**：MoE 成为主流，参数规模从 `284B`（`deepseek-v4-flash-0731`）到 `2.4T`（`qwen3.8-2.4t-a95b`）不等；稀疏注意力、混合注意力、KV Cache 压缩（如 `deepseek-v4.1-flash` 压缩至 HBM 的 1/4）为性能优化关键。
 
 ## 使用方式
 
-- **API 调用**：所有模型均通过统一推理 API 接入，兼容 OpenAI（`/v1/chat/completions`）与 Anthropic（`/v1/messages`）协议；多模态输入需按 `multipart/form-data` 或 base64 编码传递；实时语音/视频模型需使用 WebSocket 或 WebRTC 协议（见 [模型上下架与更新](../../raw/model-user-guide/release-notes/newly-released-models.md)）。
-- **模型部署**：支持 PTU 预置吞吐部署（含长输入与前缀缓存能力，详见 [模型平台功能更新](../../raw/model-user-guide/release-notes/model-release-notes.md)）；图像/视频生成模型支持异步调用（`background=true`）。
-- **功能集成**：多模态翻译、重排序、向量嵌入等模型已封装为独立服务（如 `qwen3.7-text-rerank`、`qwen3.7-text-embedding-flash`），可通过对应 API 直接调用；Managed Agent、Skill 能力包、数据连接模块等平台级功能需在应用层配置启用。
+- **模型调用**：  
+  - 通过标准 REST API（兼容 OpenAI / Anthropic 协议）调用，如 `qwen3.8-flash` 支持 `/v1/chat/completions` 接口；  
+  - 实时语音模型需使用 WebSocket 或 WebRTC 协议（如 `qwen3.8-omni-flash-realtime`）；  
+  - 多模态翻译 `qwen-mt-uni` 支持同步（HTTP）与异步（回调）两种模式，异步任务结果通过事件总线推送。  
+- **平台功能接入**：  
+  - 新增功能均配套完整文档路径，例如 Managed Agent 运行时 API 文档位于 [raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md](../../raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md)，知识检索服务文档位于 [raw/application-user-guide/knowledge-base/rag-knowledge-retrieval.md](../../raw/application-user-guide/knowledge-base/rag-knowledge-retrieval.md)；  
+  - SDK 集成参考对应语言文档：Linux C++ SDK（2026-02-28）、Android Lite SDK（2026-02-06）、Java SDK（2026-04-28）。  
+- **模型部署与调优**：  
+  - PTU 部署支持长输入与前缀缓存（2026-06-15）；  
+  - 模型调优已支持文本、视觉理解（VL）、图像生成、视频生成四类模型（2026-01 至 2026-05），强化学习（RL）训练为邀约制（2026-05-31）；  
+  - 模型压缩模块（2025-05-25）支持量化降低部署成本。
 
 ## 限制和注意事项
 
-- **模型下线策略**：快照模型（含日期后缀，如 `qwen3.8-max-2026-09-02`）下线前 **30 天**通知；主线模型（如 `qwen3.8-max`）下线前 **3 个月**通知；下线后 API 将不可用，已部署实例不受影响（详见 [模型下线机制说明](../../raw/model-user-guide/release-notes/model-depreciation.md)）。
-- **地域与协议限制**：实时语音/视频模型（如 `qwen-audio-3.0-realtime-plus`、`qwen3.8-omni-flash-realtime`）当前仅限华北2（北京）地域，且必须使用指定协议（WebSocket/WebRTC）；部分新模型（如 `decision-model-preview`）可能处于灰度阶段，需申请开通。
-- **输入格式约束**：图像/视频生成模型普遍限制参考图数量（如 `vidu` 系列为 0–14 张）；多模态翻译模型对 PDF/Word 文件大小与页数有隐式限制（建议 ≤50MB / ≤100 页）；`qwen-mt-image-2.0` 仅支持 55 种语言互译，不支持方言。
-- **成本与性能权衡**：`qwen3.8-flash` 与 `qwen3.8-max` 虽同属 Qwen3.8 系列，但前者侧重高并发低延迟，后者侧重长程任务与极致智能；开发者应基于场景选择，避免在简单对话中误用 `qwen3.8-max` 导致成本上升。
+- **模型下线强制时间表**：  
+  - 正式版模型自启动下线公告起 **3个月后停止服务（EoS）**，期间逐步缩减 QPM/TPM；预览版模型仅 **14天** 宽限期；详情见[模型下线机制说明](../../raw/model-user-guide/release-notes/model-depreciation.md)；  
+  - 已明确下线模型包括：2026年10月10日批次（公告号 118177/118434 等）、2026年7月10日“部分老旧模型”（公告 118434）、2026年7月9日“部分老旧长尾模型”（公告 118427）。  
+- **功能兼容性风险**：  
+  - `qwen-turbo` 资源包已于 2026-06-28 启动退市（[文档3](../../raw/model-user-guide/release-notes/model-release-notes.md)），存量用户需迁移至 `qwen-flash` 或 `qwen-plus`；  
+  - 企业知识库（旧）于 2026-07-16 下线（[文档3](../../raw/model-user-guide/release-notes/model-release-notes.md)），必须切换至新版知识库 RAG 服务；  
+  - `qwen-audio-3.0-asr-flash-streaming` 等 ASR 模型虽支持方言与古诗词，但对极低信噪比（<5dB）或严重混响场景识别率未作保证，建议预处理降噪。  
+- **计费与配额**：  
+  - Token Plan 团队版自 2026-05-08 起支持 SSO/钉钉登录与席位用量监控；  
+  - 新人免费额度有效期已调整（[文档3](../../raw/model-user-guide/release-notes/model-release-notes.md)），具体以控制台实时展示为准；  
+  - 部分模型（如 `qwen-vl` 系列、`qwen` 系列）存在阶段性降价活动，价格变动不影响已购资源包有效期。
 
 ## 来源文档
 
-- [模型上下架与更新](../../raw/model-user-guide/release-notes/newly-released-models.md)
 - [模型下线机制说明](../../raw/model-user-guide/release-notes/model-depreciation.md)
+- [模型上下架与更新](../../raw/model-user-guide/release-notes/newly-released-models.md)
 - [模型平台功能更新](../../raw/model-user-guide/release-notes/model-release-notes.md)
 
 

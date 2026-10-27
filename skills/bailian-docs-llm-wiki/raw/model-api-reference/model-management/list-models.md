@@ -192,7 +192,7 @@ deployment\_methods 可选值
 
 #### 查询所有模型
 
-不设置筛选条件。示例查询第一页；如需获取所有模型，请递增 `page_no`，直到获取完 `output.total` 指示的模型总数。
+不设置筛选条件。示例查询第一页；如需获取所有模型，请递增 `page_no`，直到获取完模型总数（HTTP 接口返回 `output.total`；Python SDK 2.0 取 `resp.total_count`）。
 
 curl
 
@@ -208,17 +208,19 @@ Python
 
 ```
 import os
-from dashscope import Models
+import dashscope
 
-resp = Models.list(
-    page=1,
+client = dashscope.Client(api_key=os.getenv('DASHSCOPE_API_KEY'))
+
+resp = client.models.list(
+    page_no=1,
     page_size=20,
-    api_key=os.getenv('DASHSCOPE_API_KEY'),
 )
-print(resp.output)
+# 返回分页对象：resp.models 为当前页模型列表，resp.total_count 为符合条件的模型总数
+print(resp.models)
 ```
 
-**说明**DashScope Python SDK 的 `Models.list()` 方法查询模型时仅支持 `page` 与 `page_size` 两个分页参数，不支持按 `capabilities`、`providers`、`features` 等条件筛选。如需筛选模型，请使用 HTTP API。Python 示例查询第一页，递增 `page` 可获取后续页面。
+**说明**DashScope Python SDK 的 `client.models.list()` 方法仅支持 `page_no`、`page_size` 与 `provider` 参数（`provider` 在客户端侧按当前页过滤），不支持按 `capabilities`、`features` 等条件筛选。如需筛选模型，请使用 HTTP API。Python 示例查询第一页，递增 `page_no` 可获取后续页面。
 
 #### 按模型 ID 查询
 

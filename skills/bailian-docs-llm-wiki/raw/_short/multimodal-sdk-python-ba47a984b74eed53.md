@@ -30,7 +30,7 @@
 您可以通过pip 导入Dashscope依赖， 版本号>=1.24.2。
 
 ```
-dashscope>=1.24.2
+dashscope>=2.0.1
 ```
 
 完整示例请参考：[Github示例代码](https://github.com/aliyun/alibabacloud-bailian-speech-demo/tree/master/samples/conversation/multimodal_dialog)。

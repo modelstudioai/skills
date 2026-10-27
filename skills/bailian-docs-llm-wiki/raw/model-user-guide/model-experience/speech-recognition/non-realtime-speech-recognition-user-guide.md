@@ -81,40 +81,36 @@ cat transcription.json | jq .
 #### Python
 
 ```
-from http import HTTPStatus
-from dashscope.audio.asr import Transcription
-from urllib import request
-import dashscope
 import os
 import json
+import dashscope
+from urllib import request
 
 # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-
-# 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：dashscope.api_key = "sk-xxx"
-dashscope.api_key = os.getenv("DASHSCOPE_API_KEY")
-
-task_response = Transcription.async_call(
-    model='qwen-audio-3.1-asr-flash-filetrans',
-    file_urls=['{YOUR_AUDIO_URL}'],
-    language_hints=['zh', 'en']  # language_hints为可选参数，用于指定待识别音频的语言代码。取值范围请参见API参考文档。
+client = dashscope.Client(
+    # 若没有将API Key配置到环境变量中，请将下行替换为自己的API Key：api_key="sk-xxx"
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
 )
 
-transcription_response = Transcription.wait(task=task_response.output.task_id)
+# 提交录音文件识别任务并同步等待任务完成
+job = client.audio.asr.transcribe(
+    ['{YOUR_AUDIO_URL}'],
+    model='qwen-audio-3.1-asr-flash-filetrans',
+    # language_hints为可选参数，用于指定待识别音频的语言代码。取值范围请参见API参考文档。
+    parameters={'language_hints': ['zh', 'en']},
+)
 
-if transcription_response.status_code == HTTPStatus.OK:
-    for transcription in transcription_response.output['results']:
-        if transcription['subtask_status'] == 'SUCCEEDED':
-            url = transcription['transcription_url']
-            result = json.loads(request.urlopen(url).read().decode('utf8'))
-            print(json.dumps(result, indent=4,
-                            ensure_ascii=False))
-        else:
-            print('transcription failed!')
-            print(transcription)
-else:
-        print('Error: ', transcription_response.output.message)
+for result in job.results:
+    if result.subtask_status == 'SUCCEEDED':
+        url = result.transcription_url
+        transcription = json.loads(request.urlopen(url).read().decode('utf8'))
+        print(json.dumps(transcription, indent=4,
+                        ensure_ascii=False))
+    else:
+        print('transcription failed!')
+        print(result)
 ```
 
 #### Java

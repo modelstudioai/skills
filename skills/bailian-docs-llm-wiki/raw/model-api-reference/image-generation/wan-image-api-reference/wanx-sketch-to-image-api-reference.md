@@ -56,8 +56,6 @@ wanx-sketch-to-image-lite
 
 如需通过SDK进行调用，请[安装DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。目前，该SDK已支持Python和Java。
 
-> 请将示例代码中的 `DASHSCOPE_API_HOST` 替换为获取的 API Host。
-
 ## HTTP调用
 
 图像模型处理时间较长，为了避免请求超时，HTTP调用仅支持异步获取模型结果。您需要发起两个请求：
@@ -488,69 +486,64 @@ SDK与HTTP接口的参数名基本一致，参数结构根据不同语言的SDK�
 ##### 请求示例
 
 ```
-from http import HTTPStatus
 from urllib.parse import urlparse, unquote
 from pathlib import PurePosixPath
 import requests
-import dashscope
-from dashscope import ImageSynthesis
 import os
+import dashscope
+from dashscope.v2 import DashScopeError
 
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
+client = dashscope.Client(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 prompt = "一棵参天大树"
 sketch_image_url = "https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6609471071/p743851.jpg"
 model = "wanx-sketch-to-image-lite"
-task = "image2image"
 
 print('----sync call, please wait a moment----')
-rsp = ImageSynthesis.call(api_key=os.getenv("DASHSCOPE_API_KEY"),
-                          model=model,
-                          prompt=prompt,
-                          n=1,
-                          style='<watercolor>',
-                          size='768*768',
-                          sketch_image_url=sketch_image_url,
-                          task=task)
-print('response: %s' % rsp)
-if rsp.status_code == HTTPStatus.OK:
-    print(rsp.output)
+try:
+    job = client.images.generate(
+        model=model,
+        prompt=prompt,
+        n=1,
+        style='<watercolor>',
+        size='768*768',
+        # 模型专属输入字段（sketch_image_url）经 extra_input 并入请求 input 段
+        extra_input={'sketch_image_url': sketch_image_url})
+    print('response: %s' % job)
     # save file to current directory
-    for result in rsp.output.results:
-        file_name = PurePosixPath(unquote(urlparse(result.url).path)).parts[-1]
+    for url in job.image_urls:
+        file_name = PurePosixPath(unquote(urlparse(url).path)).parts[-1]
         with open('./%s' % file_name, 'wb+') as f:
-            f.write(requests.get(result.url).content)
-else:
-    print('sync_call Failed, status_code: %s, code: %s, message: %s' %
-          (rsp.status_code, rsp.code, rsp.message))
+            f.write(requests.get(url).content)
+except DashScopeError as e:
+    print(f"HTTP返回码：{e.status_code}")
+    print(f"错误码：{e.code}")
+    print(f"错误信息：{e.message}")
+    print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
 ##### 响应示例
 
 ```
 {
-	"status_code": 200,
-	"request_id": "4126d9dd-e037-9f32-8d56-6d29ab3f9a06",
-	"code": null,
-	"message": "",
-	"output": {
-		"task_id": "b476bc4e-35c1-4c4e-a4d9-xxxxxxx",
-		"task_status": "SUCCEEDED",
-		"results": [{
-			"url": "https://dashscope-result-sh.oss-cn-shanghai.aliyuncs.com/xxxx.png"
-		}],
-		"submit_time": "2024-11-01 09:50:56.081",
-		"scheduled_time": "2024-11-01 09:50:56.104",
-		"end_time": "2024-11-01 09:51:22.740",
-		"task_metrics": {
-			"TOTAL": 1,
-			"SUCCEEDED": 1,
-			"FAILED": 0
-		}
-	},
-	"usage": {
-		"image_count": 1
-	}
+    "request_id": "4126d9dd-e037-9f32-8d56-6d29ab3f9a06",
+    "task_id": "b476bc4e-35c1-4c4e-a4d9-xxxxxxx",
+    "status": "SUCCEEDED",
+    "results": [{
+        "url": "https://dashscope-result-sh.oss-cn-shanghai.aliyuncs.com/xxxx.png"
+    }],
+    "task_metrics": {
+        "TOTAL": 1,
+        "SUCCEEDED": 1,
+        "FAILED": 0
+    },
+    "usage": {
+        "image_count": 1
+    }
 }
 ```
 
@@ -559,20 +552,22 @@ else:
 ##### 请求示例
 
 ```
-from http import HTTPStatus
 from urllib.parse import urlparse, unquote
 from pathlib import PurePosixPath
 import requests
-import dashscope
-from dashscope import ImageSynthesis
 import os
+import dashscope
+from dashscope.v2 import DashScopeError
 
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
+client = dashscope.Client(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 prompt = "一棵参天大树"
 sketch_image_url = "https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6609471071/p743851.jpg"
 model = "wanx-sketch-to-image-lite"
-task = "image2image"
 
 # 异步调用
 def async_call():
@@ -583,39 +578,37 @@ def async_call():
 
 # 创建异步任务
 def create_async_task():
-    rsp = ImageSynthesis.async_call(api_key=os.getenv("DASHSCOPE_API_KEY"),
-                                    model=model,
-                                    prompt=prompt,
-                                    n=1,
-                                    style='<watercolor>',
-                                    size='768*768',
-                                    sketch_image_url=sketch_image_url,
-                                    task=task)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print(rsp.output)
-    else:
-        print('create_async_task Failed, status_code: %s, code: %s, message: %s' %
-              (rsp.status_code, rsp.code, rsp.message))
-    return rsp
+    job = client.images.jobs.create(
+        model=model,
+        prompt=prompt,
+        n=1,
+        style='<watercolor>',
+        size='768*768',
+        # 模型专属输入字段（sketch_image_url）经 extra_input 并入请求 input 段
+        extra_input={'sketch_image_url': sketch_image_url})
+    print(job)
+    print(job.task_id, job.status)
+    return job
 
 # 等待异步任务结束
-def wait_async_task(task):
-    rsp = ImageSynthesis.wait(task)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print(rsp.output.task_status)
-        # save file to current directory
-        for result in rsp.output.results:
-            file_name = PurePosixPath(unquote(urlparse(result.url).path)).parts[-1]
-            with open('./%s' % file_name, 'wb+') as f:
-                f.write(requests.get(result.url).content)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (rsp.status_code, rsp.code, rsp.message))
+def wait_async_task(job):
+    done = client.images.jobs.wait(job)
+    print(done)
+    print(done.status)
+    # save file to current directory
+    for url in done.image_urls:
+        file_name = PurePosixPath(unquote(urlparse(url).path)).parts[-1]
+        with open('./%s' % file_name, 'wb+') as f:
+            f.write(requests.get(url).content)
 
 if __name__ == '__main__':
-    async_call()
+    try:
+        async_call()
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
 ##### 响应示例
@@ -623,43 +616,28 @@ if __name__ == '__main__':
 **1、创建任务的响应示例**
 ```
 {
-	"status_code": 200,
-	"request_id": "31b04171-011c-96bd-ac00-f0383b669cc7",
-	"code": "",
-	"message": "",
-	"output": {
-		"task_id": "4f90cf14-a34e-4eae-xxxxxxxx",
-		"task_status": "PENDING",
-		"results": []
-	},
-	"usage": null
+    "request_id": "31b04171-011c-96bd-ac00-f0383b669cc7",
+    "task_id": "4f90cf14-a34e-4eae-xxxxxxxx",
+    "status": "PENDING"
 }
 ```
 **2、查询任务结果的响应示例**
 ```
 {
-	"status_code": 200,
-	"request_id": "d861d3ba-4b29-9491-abad-266ef4fb2f08",
-	"code": null,
-	"message": "",
-	"output": {
-		"task_id": "4f90cf14-a34e-4eae-xxxxxxxx",
-		"task_status": "SUCCEEDED",
-		"results": [{
-			"url": "https://dashscope-result-hz.oss-cn-hangzhou.aliyuncs.com/xxxx.png"
-		}],
-		"submit_time": "2024-10-31 20:40:35.631",
-		"scheduled_time": "2024-10-31 20:40:35.684",
-		"end_time": "2024-10-31 20:41:02.700",
-		"task_metrics": {
-			"TOTAL": 1,
-			"SUCCEEDED": 1,
-			"FAILED": 0
-		}
-	},
-	"usage": {
-		"image_count": 1
-	}
+    "request_id": "d861d3ba-4b29-9491-abad-266ef4fb2f08",
+    "task_id": "4f90cf14-a34e-4eae-xxxxxxxx",
+    "status": "SUCCEEDED",
+    "results": [{
+        "url": "https://dashscope-result-hz.oss-cn-hangzhou.aliyuncs.com/xxxx.png"
+    }],
+    "task_metrics": {
+        "TOTAL": 1,
+        "SUCCEEDED": 1,
+        "FAILED": 0
+    },
+    "usage": {
+        "image_count": 1
+    }
 }
 ```
 
@@ -856,7 +834,7 @@ public class Main {
 
 ## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+如果模型调用失败，HTTP 接口会返回 HTTP 状态码与错误码（Python SDK 2.0 调用失败时会抛出 `DashScopeError` 异常，可通过异常属性 `e.status_code`/`e.code`/`e.message`/`e.request_id` 获取对应信息）。通用错误码请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
 
 此API还有特定状态码，具体如下所示。
 

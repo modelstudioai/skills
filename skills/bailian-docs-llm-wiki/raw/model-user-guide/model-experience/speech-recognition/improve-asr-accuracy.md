@@ -124,18 +124,16 @@ Python
 
 ```
 import dashscope
-from dashscope.audio.asr import *
 import os
 
 # 北京与新加坡地域的 API Key 不同。获取 API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 未配置环境变量时，将下行替换为：dashscope.api_key = "sk-xxx"
-dashscope.api_key = os.environ.get('DASHSCOPE_API_KEY')
-
-# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-
-# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_websocket_api_url = 'wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference'
+# 未配置环境变量时，将下行替换为：api_key="sk-xxx"
+client = dashscope.Client(
+    api_key=os.environ.get('DASHSCOPE_API_KEY'),
+    # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 prefix = 'testpfx'
 target_model = "qwen-audio-3.1-asr-flash-streaming"
@@ -144,23 +142,28 @@ my_vocabulary = [
     {"text": "语音实验室", "weight": 4}
 ]
 
-service = VocabularyService()
-vocabulary_id = service.create_vocabulary(
-      prefix=prefix,
-      target_model=target_model,
-      vocabulary=my_vocabulary)
+vocabulary = client.audio.vocabularies.create(
+    prefix=prefix,
+    target_model=target_model,
+    vocabulary=my_vocabulary)
+vocabulary_id = vocabulary.vocabulary_id
 
 try:
-    if service.query_vocabulary(vocabulary_id)['status'] == 'OK':
-        recognition = Recognition(model=target_model,
-                              format='wav',
-                              sample_rate=16000,
-                              callback=None)
-        result = recognition.call('{YOUR_AUDIO_FILE}', vocabulary_id=vocabulary_id)
-        print(result.output)
+    if client.audio.vocabularies.get(vocabulary_id).status == 'OK':
+        # 识别本地语音文件，vocabulary_id 引用刚创建的热词列表
+        for event in client.audio.asr.recognize_file(
+                '{YOUR_AUDIO_FILE}',
+                model=target_model,
+                format='wav',
+                sample_rate=16000,
+                vocabulary_id=vocabulary_id):
+            payload = event.get('payload') or {}
+            sentence = (payload.get('output') or {}).get('sentence') or {}
+            if sentence.get('text') and not sentence.get('heartbeat'):
+                print(sentence['text'])
 finally:
     # 无论识别成功与否都删除热词列表，避免占用配额
-    service.delete_vocabulary(vocabulary_id)
+    client.audio.vocabularies.delete(vocabulary_id)
 ```
 
 Java
@@ -573,7 +576,7 @@ curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/a
 
 #### 实时语音识别
 
-实时语音识别通过 `input.context` 传入上下文，音频通过 WebSocket 二进制帧发送。WebSocket 事件格式详见[Qwen-Audio-ASR-Streaming 客户端事件](raw/_short/qwen-audio-asr-streaming-client-events-1bae8548d2be6bc5.md) / [Fun-ASR-Realtime 客户端事件](raw/_short/fun-asr-client-events-997ba24ade1a8a48.md)，DashScope SDK 参数详见[Qwen-Audio-ASR-Streaming Python SDK](raw/_short/qwen-audio-asr-streaming-python-sdk-d09b6005cff4b207.md) / [Fun-ASR-Realtime Python SDK](raw/_short/fun-asr-realtime-python-sdk-c8b5a715c3e66b70.md)（≥ 1.25.23）和[Qwen-Audio-ASR-Streaming Java SDK](raw/_short/qwen-audio-asr-streaming-java-sdk-0a79c28a0694d86f.md) / [Fun-ASR-Realtime Java SDK](raw/_short/fun-asr-realtime-java-sdk-1f6304ff694438f5.md)（≥ 2.22.23）。
+实时语音识别通过 `input.context` 传入上下文，音频通过 WebSocket 二进制帧发送。对于支持在任务执行中更新上下文的模型，发送 `continue-task` 事件。WebSocket 事件格式详见[Qwen-Audio-ASR-Streaming 客户端事件](raw/_short/qwen-audio-asr-streaming-client-events-1bae8548d2be6bc5.md) / [Fun-ASR-Realtime 客户端事件](raw/_short/fun-asr-client-events-997ba24ade1a8a48.md)，DashScope SDK 参数详见[Qwen-Audio-ASR-Streaming Python SDK](raw/_short/qwen-audio-asr-streaming-python-sdk-d09b6005cff4b207.md) / [Fun-ASR-Realtime Python SDK](raw/_short/fun-asr-realtime-python-sdk-c8b5a715c3e66b70.md)（≥ 2.0.1）和[Qwen-Audio-ASR-Streaming Java SDK](raw/_short/qwen-audio-asr-streaming-java-sdk-0a79c28a0694d86f.md) / [Fun-ASR-Realtime Java SDK](raw/_short/fun-asr-realtime-java-sdk-1f6304ff694438f5.md)（≥ 2.22.23）。
 
 #### 多轮对话上下文
 
@@ -626,13 +629,12 @@ WebSocket
 Python SDK
 
 ```
-from dashscope.audio.asr import Recognition
+import os
+import time
+import dashscope
+from concurrent.futures import ThreadPoolExecutor
 
-recognition = Recognition(
-    model='qwen-audio-3.1-asr-flash-streaming',
-    format='wav',
-    sample_rate=16000,
-    callback=None)
+client = dashscope.Client(api_key=os.getenv("DASHSCOPE_API_KEY"))
 
 context = {
     "context": [
@@ -657,8 +659,36 @@ context = {
     ]
 }
 
-result = recognition.call('audio.wav', raw_input=context)
-print(result.output)
+# Real-time speech recognition event receiver
+def receive_events(rec):
+    for event in rec.events():
+        payload = event.get('payload') or {}
+        sentence = (payload.get('output') or {}).get('sentence') or {}
+        if sentence.get('text') and not sentence.get('heartbeat'):
+            print(sentence['text'])
+
+# 创建识别会话时通过 input 参数传入上下文
+with client.audio.asr.recognize(
+        model='qwen-audio-3.1-asr-flash-streaming',
+        format='wav',
+        sample_rate=16000,
+        input=context,
+) as recognition:
+    with ThreadPoolExecutor(max_workers=1) as pool:
+        receiver = pool.submit(receive_events, recognition)
+        try:
+            with open('audio.wav', 'rb') as f:
+                while True:
+                    chunk = f.read(3200)
+                    if not chunk:
+                        break
+                    recognition.send_audio_frame(chunk)
+                    time.sleep(0.1)
+            recognition.stop()
+            receiver.result()
+        finally:
+            # close must run inside the pool context to unblock the receiver
+            recognition.close()
 ```
 
 Java SDK

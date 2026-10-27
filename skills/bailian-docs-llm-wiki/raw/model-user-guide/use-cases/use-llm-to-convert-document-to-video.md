@@ -128,14 +128,14 @@
     pip install --upgrade urllib3 requests
     ```
     
-    如果遇到类似“pyppeteer 2.0.0 requires urllib3<2.0.0,>=1.25.8, but you have urllib3 2.4.0”的报错，执行下面这三个命令：
+    如果遇到类似“pyppeteer 2.0.1 requires urllib3<2.0.1,>=1.25.8, but you have urllib3 2.4.0”的报错，执行下面这三个命令：
     
     ```
     pip uninstall urllib3
-    # <2.0.0,>=1.25.8意思是小于2.0.0版本，大于等于1.25.8版本，实际要根据报错信息填写这部分内容
-    pip install "urllib3<2.0.0,>=1.25.8"
-    # 2.0.0为报错信息中提到的pyppeteer的版本，要根据实际情况进行替换
-    pip install pyppeteer==2.0.0
+    # <2.0.1,>=1.25.8意思是小于2.0.1版本，大于等于1.25.8版本，实际要根据报错信息填写这部分内容
+    pip install "urllib3<2.0.1,>=1.25.8"
+    # 2.0.1为报错信息中提到的pyppeteer的版本，要根据实际情况进行替换
+    pip install pyppeteer==2.0.1
     ```
     
 
@@ -321,9 +321,10 @@ python main.py
 theme\_generate.py
 
 ```
-from http import HTTPStatus
+import os
 import dashscope
 import re
+from dashscope.v2 import DashScopeError
 
 def theme_generate_with_qwen_plus(input_filepath, title):
     """
@@ -339,8 +340,8 @@ def theme_generate_with_qwen_plus(input_filepath, title):
     - response_content: 生成的摘要标题。
 
     注意:
-    - 该函数以流式传输的方式请求生成标题，仅当响应状态码为HTTPStatus.OK时，累加响应内容。
-    - 如果发生错误，函数会打印请求的相关错误信息。
+    - 该函数以流式传输的方式请求生成标题，逐块累加响应内容。
+    - 如果发生错误（抛出DashScopeError异常），函数会打印请求的相关错误信息。
     """
     # 读取输入文件内容
     with open(input_filepath, 'r', encoding='utf-8') as file:
@@ -366,23 +367,27 @@ def theme_generate_with_qwen_plus(input_filepath, title):
     # 初始化响应内容
     response_content = ''
 
-    # 以流式传输的方式获取生成的结果
-    responses = dashscope.Generation.call("qwen-plus",
-                                          messages=messages,
-                                          result_format='message',
-                                          stream=True,
-                                          incremental_output=True)
+    # 构造客户端
+    client = dashscope.Client(api_key=os.getenv("DASHSCOPE_API_KEY"))
 
-    # 遍历响应，累加生成的标题内容
-    for response in responses:
-        if response.status_code == HTTPStatus.OK:
-            response_content += response.output.choices[0]['message']['content']
-        else:
-            # 打印错误信息
-            print('Request id: %s, Status code: %s, error code: %s, error message: %s' % (
-                response.request_id, response.status_code,
-                response.code, response.message
-            ))
+    # 以流式传输的方式获取生成的结果（流式输出中的错误会直接抛出异常）
+    try:
+        stream = client.chat.completions.create(
+            model="qwen-plus",
+            messages=messages,
+            stream=True,
+        )
+
+        # 遍历响应，累加生成的标题内容
+        for chunk in stream:
+            content = chunk.choices[0].delta.content
+            if content:
+                response_content += content
+    except DashScopeError as e:
+        # 打印错误信息
+        print('Request id: %s, error code: %s, error message: %s' % (
+            e.request_id, e.code, e.message
+        ))
 
     # 移除标题中的双引号（如果存在）
     response_content = re.sub(r'^"|"$', '', response_content)
@@ -417,10 +422,10 @@ print(theme)
 doc\_split.py
 
 ```
-from http import HTTPStatus
 import dashscope
 import json
 import os
+from dashscope.v2 import DashScopeError
 def doc_split_with_qwen_plus(input_filepath, output_filepath):
 
     if not os.path.exists(output_filepath):
@@ -466,20 +471,26 @@ def doc_split_with_qwen_plus(input_filepath, output_filepath):
     }]
 
     response_content = ''
-    responses = dashscope.Generation.call("qwen-plus",
-                                          messages=messages,
-                                          result_format='message',
-                                          stream=True,
-                                          incremental_output=True)
 
-    for response in responses:
-        if response.status_code == HTTPStatus.OK:
-            response_content += response.output.choices[0]['message']['content']
-        else:
-            print('Request id: %s, Status code: %s, error code: %s, error message: %s' % (
-                response.request_id, response.status_code,
-                response.code, response.message
-            ))
+    # 构造客户端
+    client = dashscope.Client(api_key=os.getenv("DASHSCOPE_API_KEY"))
+
+    # 以流式传输的方式获取生成的结果（流式输出中的错误会直接抛出异常）
+    try:
+        stream = client.chat.completions.create(
+            model="qwen-plus",
+            messages=messages,
+            stream=True,
+        )
+
+        for chunk in stream:
+            content = chunk.choices[0].delta.content
+            if content:
+                response_content += content
+    except DashScopeError as e:
+        print('Request id: %s, error code: %s, error message: %s' % (
+            e.request_id, e.code, e.message
+        ))
     if response_content.startswith("```") and response_content.endswith("```"):
         response_content = response_content[8:-3].strip()
 
@@ -522,8 +533,8 @@ qwen\_plus\_marp.py
 import asyncio
 
 import os
-from http import HTTPStatus
 import dashscope
+from dashscope.v2 import DashScopeError
 
 def call_with_stream(content):
     prompt2 = """
@@ -553,20 +564,26 @@ def call_with_stream(content):
     }]
 
     response_content = ''
-    responses = dashscope.Generation.call("qwen-plus",
-                                          messages=messages,
-                                          result_format='message',
-                                          stream=True,
-                                          incremental_output=True)
 
-    for response in responses:
-        if response.status_code == HTTPStatus.OK:
-            response_content += response.output.choices[0]['message']['content']
-        else:
-            print('Request id: %s, Status code: %s, error code: %s, error message: %s' % (
-                response.request_id, response.status_code,
-                response.code, response.message
-            ))
+    # 构造客户端
+    client = dashscope.Client(api_key=os.getenv("DASHSCOPE_API_KEY"))
+
+    # 以流式传输的方式获取生成的结果（流式输出中的错误会直接抛出异常）
+    try:
+        stream = client.chat.completions.create(
+            model="qwen-plus",
+            messages=messages,
+            stream=True,
+        )
+
+        for chunk in stream:
+            content = chunk.choices[0].delta.content
+            if content:
+                response_content += content
+    except DashScopeError as e:
+        print('Request id: %s, error code: %s, error message: %s' % (
+            e.request_id, e.code, e.message
+        ))
 
     return response_content
 ```
@@ -1153,8 +1170,8 @@ import json
 import os
 import re
 import time
+
 import dashscope
-from dashscope.audio.tts_v2 import SpeechSynthesizer
 
 import traceback
 
@@ -1249,6 +1266,9 @@ def synthesize_md_to_speech(base_directory):
     if 'DASHSCOPE_API_KEY' not in os.environ:
         raise ValueError("DashScope API key must be set in the environment variables.")
 
+    # 构造客户端
+    client = dashscope.Client(api_key=os.getenv("DASHSCOPE_API_KEY"))
+
     # 遍历指定目录及其子目录
     for root, dirs, files in os.walk(base_directory):
         for file in files:
@@ -1260,11 +1280,8 @@ def synthesize_md_to_speech(base_directory):
                 with open(md_file_path, 'r', encoding='utf-8') as f:
                     text = f.read()
 
-                # 初始化语音合成器
-                speech_synthesizer = SpeechSynthesizer(model='cosyvoice-v2', voice='longxiaochun_v2')
-
-                # 合成语音
-                audio_data = speech_synthesizer.call(text)
+                # 合成语音（一次性返回完整音频 bytes）
+                audio_data = client.audio.tts.synthesize(text, model='cosyvoice-v2', voice='longxiaochun_v2')
 
                 # 构建输出.mp3文件路径
                 mp3_file_path = os.path.splitext(md_file_path)[0] + '.mp3'

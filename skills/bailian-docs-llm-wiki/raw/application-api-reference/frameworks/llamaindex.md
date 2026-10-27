@@ -8,7 +8,7 @@
 
 > 如果您希望将知识库部署在本地，实现灵活地文档切分与嵌入模型选择，请参考[基于本地知识库构建RAG应用](raw/application-user-guide/application-use-cases/build-rag-application-based-on-local-retrieval.md)。
 
-> 如果您希望将知识库部署在云端，实现0代码地创建RAG应用，请参考[0代码构建RAG应用](raw/_short/build-knowledge-base-qa-assistant-without-coding-117468a8b3869dc4.md)。
+> 如果您希望将知识库部署在云端，实现0代码地创建RAG应用，请参考[0代码构建RAG应用](https://help.aliyun.com/zh/model-studio/build-knowledge-base-qa-assistant-without-coding)。
 
 ## 效果展示
 
@@ -151,7 +151,7 @@ if __name__ == '__main__':
         similarity_top_k=similarity_top_k,
         node_postprocessors=[  # 默认检索结果可能不满足需求，本例中通过加入node_postprocessors对检索结果进行后处理。
             SimilarityPostprocessor(similarity_cutoff=similarity_cutoff),  # 过滤不满足最低相似度阈值的检索结果。
-            DashScopeRerank(top_n=top_n, model="gte-rerank")  # 对检索结果进行重排，返回语义上相关度最高的结果。
+            DashScopeRerank(top_n=top_n, model="gte-rerank-v2")  # 对检索结果进行重排，返回语义上相关度最高的结果。
         ],
         response_mode="tree_summarize"
     )

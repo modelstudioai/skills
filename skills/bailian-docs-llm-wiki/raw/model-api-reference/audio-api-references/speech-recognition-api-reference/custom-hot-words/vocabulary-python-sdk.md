@@ -1,6 +1,6 @@
 # 定制热词Python SDK参考
 
-通过Python SDK管理定制热词列表，包括VocabularyService类的方法说明与示例代码。
+通过Python SDK管理定制热词列表，包括client.audio.vocabularies资源的方法说明与示例代码。
 
 **用户指南：**[提升识别准确率](raw/model-user-guide/model-experience/speech-recognition/improve-asr-accuracy.md)。热词列表数量上限等使用限制详见[热词限制与计费](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw10_limit_h2)。
 
@@ -8,7 +8,7 @@
 
 ## 接口地址
 
-SDK 默认使用**北京地域**的接口地址。如需切换到其他地域，需在初始化前修改 `dashscope.base_http_api_url`。
+SDK 默认使用**北京地域**的接口地址。如需切换到其他地域，在构造 `dashscope.Client` 时指定 `region` 参数（如新加坡地域为 `ap-southeast-1`）。
 
 #### 华北2（北京）
 
@@ -39,41 +39,53 @@ SDK 默认使用**北京地域**的接口地址。如需切换到其他地域，
 **切换到新加坡地域**：
 
 ```
+import os
 import dashscope
 
-# 在代码开头设置
-dashscope.base_http_api_url = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1'
+# 构造 Client 时指定新加坡地域
+client = dashscope.Client(
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    region='ap-southeast-1',
+)
 ```
 
 **注意**：
 
 -   不同地域的 API Key 不同，请确保使用对应地域的 API Key
--   地域配置为全局设置，影响所有 DashScope SDK 的 API 调用
+-   地域配置为 `dashscope.Client` 实例级设置，仅影响该 client 的 API 调用
 
-## VocabularyService
+## client.audio.vocabularies
 
-**包路径**：`dashscope.audio.asr.VocabularyService`
+**资源入口**：`dashscope.Client` 实例的 `client.audio.vocabularies` 资源
 
 **功能**：管理热词列表的生命周期（创建、查询、更新、删除）
 
 ### 构造方法
 
 ```
-VocabularyService(api_key: str = None, workspace: str = None, model: str = None)
+import os
+import dashscope
+
+client = dashscope.Client(
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace='{WorkspaceId}',
+    region='cn-beijing',
+)
 ```
 
-未传 `api_key` 时，SDK 使用全局 `dashscope.api_key` 的值。
+未传 `api_key` 时，SDK 自动读取 `DASHSCOPE_API_KEY` 环境变量的值。
 
-### create\_vocabulary() - 创建热词列表
+### create() - 创建热词列表
 
 **方法签名**：
 
 ```
-def create_vocabulary(
+def create(
     self,
+    *,
     target_model: str,
     prefix: str,
-    vocabulary: List[dict]) -> str
+    vocabulary: List[dict]) -> Vocabulary
 ```
 
 **参数**：
@@ -118,22 +130,23 @@ List\[dict\]
 
 **说明**
 
-str
+Vocabulary
 
-热词列表ID。
+热词列表对象，通过 `vocabulary_id` 字段获取热词列表ID。
 
-### list\_vocabularies() - 批量查询热词列表
+### list() - 批量查询热词列表
 
-对应 HTTP API 的 `action: list_vocabulary`（HTTP 用单数，Python 方法名用复数 `list_vocabularies`）。
+对应 HTTP API 的 `action: list_vocabulary`。
 
 **方法签名**：
 
 ```
-def list_vocabularies(
+def list(
     self,
+    *,
     prefix: str = None,
     page_index: int = 0,
-    page_size: int = 10) -> List[dict]
+    page_size: int = 10) -> VocabularyList
 ```
 
 **参数**：
@@ -180,9 +193,9 @@ int
 
 **说明**
 
-List\[dict\]
+VocabularyList
 
-热词列表信息数组，每个dict包含 vocabulary\_id、gmt\_create、gmt\_modified、status。
+热词列表分页对象，`vocabularies` 字段为热词列表信息数组，每个dict包含 vocabulary\_id、gmt\_create、gmt\_modified、status。
 
 **返回对象字段**：
 
@@ -223,14 +236,16 @@ str
 
 * * *
 
-### query\_vocabulary() - 查询热词列表
+### get() - 查询热词列表
+
+对应 1.x SDK 的 `query_vocabulary()`。
 
 **方法签名**：
 
 ```
-def query_vocabulary(
+def get(
     self,
-    vocabulary_id: str) -> dict
+    vocabulary_id: str) -> Vocabulary
 ```
 
 **参数**：
@@ -257,9 +272,9 @@ str
 
 **说明**
 
-dict
+Vocabulary
 
-热词列表详细信息，包含 vocabulary、target\_model、gmt\_create、gmt\_modified、status。
+热词列表详细信息对象，包含 vocabulary、target\_model、gmt\_create、gmt\_modified、status。
 
 **返回对象字段**：
 
@@ -304,15 +319,16 @@ str
 -   UNDEPLOYED：不可调用。
     
 
-### update\_vocabulary() - 更新热词列表
+### update() - 更新热词列表
 
 **方法签名**：
 
 ```
-def update_vocabulary(
+def update(
     self,
     vocabulary_id: str,
-    vocabulary: List[dict]) -> None
+    *,
+    vocabulary: List[dict]) -> JobStatus
 ```
 
 **参数**：
@@ -341,16 +357,16 @@ List\[dict\]
 
 新的热词列表，将完全替换原有内容。
 
-**返回值**：无
+**返回值**：JobStatus 对象，status 字段为操作状态。
 
-### delete\_vocabulary() - 删除热词列表
+### delete() - 删除热词列表
 
 **方法签名**：
 
 ```
-def delete_vocabulary(
+def delete(
     self,
-    vocabulary_id: str) -> None
+    vocabulary_id: str) -> JobStatus
 ```
 
 **参数**：
@@ -371,7 +387,7 @@ str
 
 需要删除的热词列表ID。
 
-**返回值**：无
+**返回值**：JobStatus 对象，status 字段为操作状态。
 
 ## 热词字典结构
 
@@ -453,16 +469,17 @@ str
 ### 创建热词列表
 
 ```
-import dashscope
-from dashscope.audio.asr import *
 import os
+import dashscope
 
 # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 若没有配置环境变量，请用百炼API Key将下行替换为：dashscope.api_key = "sk-xxx"
-dashscope.api_key = os.environ.get('DASHSCOPE_API_KEY')
-
-# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
+# 未配置环境变量时，将下行替换为：api_key="sk-xxx"
+client = dashscope.Client(
+    api_key=os.environ.get('DASHSCOPE_API_KEY'),
+    # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+    workspace='{WorkspaceId}',
+    region='cn-beijing',
+)
 
 prefix = 'testpfx'
 target_model = "fun-asr"
@@ -472,93 +489,94 @@ my_vocabulary = [
 ]
 
 # 创建热词
-service = VocabularyService()
-vocabulary_id = service.create_vocabulary(
+vocabulary = client.audio.vocabularies.create(
     prefix=prefix,
     target_model=target_model,
     vocabulary=my_vocabulary)
 
-print(f"热词列表ID为：{vocabulary_id}")
+print(f"热词列表ID为：{vocabulary.vocabulary_id}")
 ```
 
 ### 批量查询热词列表
 
 ```
-import dashscope
-from dashscope.audio.asr import *
 import json
 import os
+import dashscope
 
 # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 若没有配置环境变量，请用百炼API Key将下行替换为：dashscope.api_key = "sk-xxx"
-dashscope.api_key = os.environ.get('DASHSCOPE_API_KEY')
+# 未配置环境变量时，将下行替换为：api_key="sk-xxx"
+client = dashscope.Client(
+    api_key=os.environ.get('DASHSCOPE_API_KEY'),
+    # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+    workspace='{WorkspaceId}',
+    region='cn-beijing',
+)
 
-# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-
-service = VocabularyService()
-vocabularies = service.list_vocabularies()
-print(f"热词列表：{json.dumps(vocabularies)}")
+result = client.audio.vocabularies.list()
+print(f"热词列表：{json.dumps(result.vocabularies)}")
 ```
 
 ### 查询热词列表
 
 ```
-import dashscope
-from dashscope.audio.asr import *
 import json
 import os
+import dashscope
 
 # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 若没有配置环境变量，请用百炼API Key将下行替换为：dashscope.api_key = "sk-xxx"
-dashscope.api_key = os.environ.get('DASHSCOPE_API_KEY')
+# 未配置环境变量时，将下行替换为：api_key="sk-xxx"
+client = dashscope.Client(
+    api_key=os.environ.get('DASHSCOPE_API_KEY'),
+    # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+    workspace='{WorkspaceId}',
+    region='cn-beijing',
+)
 
-# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-
-service = VocabularyService()
 # 查询时替换为实际的热词列表ID
-vocabulary = service.query_vocabulary("vocab-testpfx-xxx")
-print(f"热词列表：{json.dumps(vocabulary)}")
+vocabulary = client.audio.vocabularies.get("vocab-testpfx-xxx")
+print(f"热词列表：{json.dumps(vocabulary.vocabulary)}")
 ```
 
 ### 更新热词列表
 
 ```
-import dashscope
-from dashscope.audio.asr import *
 import os
+import dashscope
 
 # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 若没有配置环境变量，请用百炼API Key将下行替换为：dashscope.api_key = "sk-xxx"
-dashscope.api_key = os.environ.get('DASHSCOPE_API_KEY')
+# 未配置环境变量时，将下行替换为：api_key="sk-xxx"
+client = dashscope.Client(
+    api_key=os.environ.get('DASHSCOPE_API_KEY'),
+    # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+    workspace='{WorkspaceId}',
+    region='cn-beijing',
+)
 
-# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-
-service = VocabularyService()
 my_vocabulary = [
     {"text": "赛德克巴莱", "weight": 4, "lang": "zh"}
 ]
 # 替换为实际的热词列表ID
-service.update_vocabulary("vocab-testpfx-xxx", my_vocabulary)
+result = client.audio.vocabularies.update("vocab-testpfx-xxx", vocabulary=my_vocabulary)
+print(f"更新状态：{result.status}")
 ```
 
 ### 删除热词列表
 
 ```
-import dashscope
-from dashscope.audio.asr import *
 import os
+import dashscope
 
 # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 若没有配置环境变量，请用百炼API Key将下行替换为：dashscope.api_key = "sk-xxx"
-dashscope.api_key = os.environ.get('DASHSCOPE_API_KEY')
+# 未配置环境变量时，将下行替换为：api_key="sk-xxx"
+client = dashscope.Client(
+    api_key=os.environ.get('DASHSCOPE_API_KEY'),
+    # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+    workspace='{WorkspaceId}',
+    region='cn-beijing',
+)
 
-# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-
-service = VocabularyService()
 # 替换为实际的热词表ID
-service.delete_vocabulary("vocab-testpfx-xxxx")
+result = client.audio.vocabularies.delete("vocab-testpfx-xxxx")
+print(f"删除状态：{result.status}")
 ```

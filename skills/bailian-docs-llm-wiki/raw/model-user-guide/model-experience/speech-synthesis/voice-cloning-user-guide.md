@@ -12,12 +12,19 @@
 
 -   [获取 API Key](raw/model-api-reference/preparations/get-api-key.md)，并将其[配置到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables) `DASHSCOPE_API_KEY`。
     
--   获取业务空间 ID，将示例中的 `YOUR_WORKSPACE_ID` 替换为真实值。获取方式请参见[地域与接入域名](raw/model-user-guide/get-started-with-models/regions.md)。
+-   获取业务空间 ID，将示例中的 `YOUR_WORKSPACE_ID`（SDK 示例中的 `{WorkspaceId}`）替换为真实值。获取方式请参见[地域与接入域名](raw/model-user-guide/get-started-with-models/regions.md)。
     
--   安装 Python HTTP 库 `requests`：
+-   使用 HTTP 方式时，安装 Python HTTP 库 `requests`：
     
     ```
     pip install requests
+    ```
+    
+-   使用 Python SDK 方式时，安装 [DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)（需 2.0.1 及以上版本）：
+    
+    ```
+    # 本文档示例基于 DashScope Python SDK 2.0 编写，需 2.0.1 及以上版本
+    pip install -U "dashscope>=2.0.1"
     ```
     
 -   准备符合[音频要求](#vc02_audio_h2)的音频文件。Qwen-Audio-TTS、Qwen-Audio-Realtime 和 CosyVoice 支持公网 URL 或 Base64 Data URI；MiniMax 仍使用公网 URL。以下示例使用[示例音频](https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/cosyvoice/cosyvoice-zeroshot-sample.wav)的 URL，本地音频的编码和传参方式请参见 [HTTP API](https://help.aliyun.com/zh/model-studio/voice-clone-design-http-api#h3-create-enrollment)。
@@ -29,10 +36,50 @@
 
 #### Qwen-Audio-TTS / CosyVoice
 
-Qwen-Audio-TTS 和 CosyVoice 使用相同的音色创建和基础合成流程。以下以 `qwen-audio-3.1-tts-flash` 为例。
+Qwen-Audio-TTS 和 CosyVoice 使用相同的音色创建和基础合成流程。以下以 `qwen-audio-3.1-tts-plus` 为例。
 
-1.  **创建音色**：通过 HTTP API 的 `audio` 字段传入参考音频 URL 或 Base64 Data URI，`target_model` 指定目标模型，`prefix` 为音色名称前缀。
+1.  **创建音色**：传入参考音频 URL（HTTP 方式还支持 Base64 Data URI，SDK 方式使用公网 URL），`target_model` 指定目标模型，`prefix` 为音色名称前缀。
 2.  **合成语音**：将返回的音色 ID 传入 `voice`，使用同一个目标模型合成语音并保存音频。
+
+#### Python SDK
+
+```
+import os
+
+import dashscope
+
+# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+client = dashscope.Client(
+    # 若没有将API Key配置到环境变量中，请将下行替换为自己的API Key：api_key="sk-xxx"
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
+
+target_model = "qwen-audio-3.1-tts-plus"
+
+# 创建音色。
+voice = client.audio.voices.create(
+    target_model=target_model,
+    prefix="myvoice",
+    url="https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/cosyvoice/cosyvoice-zeroshot-sample.wav",
+)
+voice_id = voice.voice_id
+print(f"voice_id: {voice_id}")
+
+# 使用绑定模型和返回的音色 ID 合成语音。
+audio = client.audio.tts.synthesize(
+    "今天天气晴朗，适合外出散步。祝你度过愉快的一天。",
+    model=target_model,
+    voice=voice_id,
+    format="wav",
+    sample_rate=24000,
+)
+with open("output.wav", "wb") as f:
+    f.write(audio)
+```
+
+#### HTTP
 
 ```
 import os
@@ -40,7 +87,7 @@ import time
 import requests
 
 workspace_id = "YOUR_WORKSPACE_ID"
-target_model = "qwen-audio-3.1-tts-flash"
+target_model = "qwen-audio-3.1-tts-plus"
 base_url = f"https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1"
 headers = {"Authorization": f"Bearer {os.environ['DASHSCOPE_API_KEY']}"}
 
@@ -109,6 +156,34 @@ with open("output.wav", "wb") as f:
 #### Qwen-Audio-Realtime
 
 Qwen-Audio-Realtime 的复刻音色用于自定义实时语音对话的回复声音。以下以 `qwen-audio-3.1-realtime-plus` 为例创建音色。
+
+#### Python SDK
+
+```
+import os
+
+import dashscope
+
+# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+client = dashscope.Client(
+    # 若没有将API Key配置到环境变量中，请将下行替换为自己的API Key：api_key="sk-xxx"
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
+
+target_model = "qwen-audio-3.1-realtime-plus"
+
+# 创建音色。
+voice = client.audio.voices.create(
+    target_model=target_model,
+    prefix="myvoice",
+    url="https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/cosyvoice/cosyvoice-zeroshot-sample.wav",
+)
+print(f"voice_id: {voice.voice_id}")
+```
+
+#### HTTP
 
 ```
 import os
@@ -361,7 +436,7 @@ Qwen-Audio-TTS、Qwen-Audio-Realtime 和 CosyVoice 使用相同的音色查询�
 
 -   **Qwen-Audio-TTS**：qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash
     
--   **Qwen-Audio-Realtime**：qwen-audio-3.1-realtime-plus、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash
+-   **Qwen-Audio-Realtime**：qwen-audio-3.1-realtime-plus、qwen-audio-3.1-realtime-flash、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash
     
 -   **CosyVoice**：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-plus、cosyvoice-v3-flash、cosyvoice-v2
     

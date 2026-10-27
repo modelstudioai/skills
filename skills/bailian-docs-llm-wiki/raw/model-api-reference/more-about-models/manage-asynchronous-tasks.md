@@ -207,18 +207,18 @@ curl -X GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks7320
 
 #### Python SDK
 
-异步任务接口与具体任务类型无关，`fetch`、`list`、`cancel` 方法在任意异步任务类（如 `ImageSynthesis`、`VideoSynthesis`、`Transcription` 等）上均可调用，底层均请求 `/api/v1/tasks`，可查询当前账号下任意任务。
+异步任务接口与具体任务类型无关，`fetch`、`list`、`cancel` 方法在任意异步任务资源（如 `client.images.jobs`、`client.videos.jobs`、`client.audio.asr.jobs` 等）上均可调用，底层均请求 `/api/v1/tasks`，可查询当前账号下任意任务。
 
 ```
 import os
-from dashscope import ImageSynthesis
+import dashscope
+
+# 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx"
+client = dashscope.Client(api_key=os.getenv('DASHSCOPE_API_KEY'), workspace="{WorkspaceId}", region="cn-beijing")
 
 task_id = '73205176-xxxx-xxxx-xxxx-16bd5d902219'
-resp = ImageSynthesis.fetch(
-    task_id,
-    api_key=os.getenv('DASHSCOPE_API_KEY'),
-)
-print(resp.output)
+job = client.images.jobs.fetch(task_id)
+print(job.status, job.results)
 ```
 
 #### dashscope CLI
@@ -597,17 +597,19 @@ curl -X GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks?sta
 
 ```
 import os
-from dashscope import ImageSynthesis
+import dashscope
 
-resp = ImageSynthesis.list(
+# 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx"
+client = dashscope.Client(api_key=os.getenv('DASHSCOPE_API_KEY'), workspace="{WorkspaceId}", region="cn-beijing")
+
+page = client.images.jobs.list(
     start_time='20230420193000',
     end_time='20230420203000',
     status='RUNNING',
     page_no=1,
     page_size=10,
-    api_key=os.getenv('DASHSCOPE_API_KEY'),
 )
-print(resp.output)
+print(page.total, page.tasks)
 ```
 
 `list` 还支持按 `model_name`、`api_key_id`、`region` 等条件筛选，参数与 HTTP API 的 Query 参数一一对应。
@@ -772,17 +774,17 @@ curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks732
 
 ```
 import os
-from dashscope import ImageSynthesis
+import dashscope
+
+# 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx"
+client = dashscope.Client(api_key=os.getenv('DASHSCOPE_API_KEY'), workspace="{WorkspaceId}", region="cn-beijing")
 
 task_id = '73205176-xxxx-xxxx-xxxx-16bd5d902219'
-resp = ImageSynthesis.cancel(
-    task_id,
-    api_key=os.getenv('DASHSCOPE_API_KEY'),
-)
-print(resp)
+job = client.images.jobs.cancel(task_id)
+print(job)
 ```
 
-仅状态为 `PENDING` 的任务可取消，其他状态会返回失败。
+仅状态为 `PENDING` 的任务可取消，其他状态下调用将抛出 `DashScopeError`（`UnsupportedOperation`）。
 
 #### dashscope CLI
 

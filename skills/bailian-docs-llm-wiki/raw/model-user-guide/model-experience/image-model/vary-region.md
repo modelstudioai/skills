@@ -83,7 +83,7 @@ wanx-x-painting
 
 由于模型计算耗时较长，示例代码均展示异步处理的调用方式，以避免请求超时。
 
-您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，还需要[安装DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。请将示例代码中的 `DASHSCOPE_API_HOST` 替换为获取的 API Host。
+您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，还需要[安装DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
 #### curl
 
@@ -121,51 +121,67 @@ https://dashscope.aliyuncs.com/api/v1/tasks/{your_task_id}
 同步调用
 
 ```
-from http import HTTPStatus
 from urllib.parse import urlparse, unquote
 from pathlib import PurePosixPath
 import requests
-from dashscope import ImageSynthesis
+import os
+import dashscope
+from dashscope.v2 import DashScopeError
+
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 prompt = "a dog wearing red glasses"
 model = "wanx-x-painting"
-task = "image2image"
 extra_input = {
     "base_image_url": "http://synthesis-source.oss-accelerate.aliyuncs.com/lingji/validation/mask2img/demo/source3.jpg",
     "mask_image_url": "http://synthesis-source.oss-accelerate.aliyuncs.com/lingji/validation/mask2img/demo/glasses.png"
 }
 
 print('----sync call, please wait a moment----')
-rsp = ImageSynthesis.call(model=model,
-                          prompt=prompt,
-                          n=1,
-                          size='1024*1024',
-                          task=task,
-                          extra_input=extra_input)
-if rsp.status_code == HTTPStatus.OK:
-    print(rsp.output)
+try:
+    job = client.images.generate(
+        model=model,
+        prompt=prompt,
+        n=1,
+        size='1024*1024',
+        extra_input=extra_input)
+    print(job.output)
     # save file to current directory
-    for result in rsp.output.results:
-        file_name = PurePosixPath(unquote(urlparse(result.url).path)).parts[-1]
+    for url in job.image_urls:
+        file_name = PurePosixPath(unquote(urlparse(url).path)).parts[-1]
         with open('./%s' % file_name, 'wb+') as f:
-            f.write(requests.get(result.url).content)
-else:
-    print('sync_call Failed, status_code: %s, code: %s, message: %s' %
-          (rsp.status_code, rsp.code, rsp.message))
+            f.write(requests.get(url).content)
+except DashScopeError as e:
+    print(f"HTTP返回码：{e.status_code}")
+    print(f"错误码：{e.code}")
+    print(f"错误信息：{e.message}")
+    print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
 异步调用
 
 ```
-from http import HTTPStatus
 from urllib.parse import urlparse, unquote
 from pathlib import PurePosixPath
 import requests
-from dashscope import ImageSynthesis
+import os
+import dashscope
+from dashscope.v2 import DashScopeError
+
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 prompt = "a dog wearing red glasses"
 model = "wanx-x-painting"
-task = "image2image"
 extra_input = {
     "base_image_url": "http://synthesis-source.oss-accelerate.aliyuncs.com/lingji/validation/mask2img/demo/source3.jpg",
     "mask_image_url": "http://synthesis-source.oss-accelerate.aliyuncs.com/lingji/validation/mask2img/demo/glasses.png"
@@ -174,45 +190,40 @@ extra_input = {
 def async_call():
     print('----create task----')
     task_info = create_async_task()
-    if task_info.status_code == HTTPStatus.OK:
-        print('----wait task done then save image----')
-        wait_async_task(task_info)
-    else:
-        print('Task creation failed, cannot proceed to wait')
+    print('----wait task done then save image----')
+    wait_async_task(task_info)
 
 # 创建异步任务
 def create_async_task():
-    rsp = ImageSynthesis.async_call(model=model,
-                                    prompt=prompt,
-                                    n=1,
-                                    size='1024*1024',
-                                    task=task,
-                                    extra_input=extra_input)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print(rsp.output)
-    else:
-        print('create_async_task Failed, status_code: %s, code: %s, message: %s' %
-              (rsp.status_code, rsp.code, rsp.message))
-    return rsp
+    job = client.images.jobs.create(
+        model=model,
+        prompt=prompt,
+        n=1,
+        size='1024*1024',
+        extra_input=extra_input)
+    print(job)
+    print(job.task_id, job.status)
+    return job
 
 # 等待异步任务结束
-def wait_async_task(task):
-    rsp = ImageSynthesis.wait(task)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print(rsp.output.task_status)
-        # save file to current directory
-        for result in rsp.output.results:
-            file_name = PurePosixPath(unquote(urlparse(result.url).path)).parts[-1]
-            with open('./%s' % file_name, 'wb+') as f:
-                f.write(requests.get(result.url).content)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (rsp.status_code, rsp.code, rsp.message))
+def wait_async_task(job):
+    done = client.images.jobs.wait(job)
+    print(done)
+    print(done.status)
+    # save file to current directory
+    for url in done.image_urls:
+        file_name = PurePosixPath(unquote(urlparse(url).path)).parts[-1]
+        with open('./%s' % file_name, 'wb+') as f:
+            f.write(requests.get(url).content)
 
 if __name__ == '__main__':
-    async_call()
+    try:
+        async_call()
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
 #### Java

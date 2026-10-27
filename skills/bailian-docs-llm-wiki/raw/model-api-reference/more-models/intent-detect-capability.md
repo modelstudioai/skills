@@ -51,7 +51,7 @@ tongyi-intent-detect-v3
 
 ### 前提条件
 
-您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过OpenAI SDK或DashScope SDK进行调用，还需要[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。请将示例代码中的 `DASHSCOPE_API_HOST` 替换为获取的 API Host。
+您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过OpenAI SDK或DashScope SDK进行调用，还需要[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
 ### 同时输出意图与函数调用信息
 
@@ -203,9 +203,15 @@ DashScope
 ```
 import os
 import json
-from dashscope import Generation
-# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+import dashscope
+
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # 定义工具
 tools = [
@@ -240,15 +246,12 @@ messages = [
     {'role': 'system', 'content': system_prompt},
     {'role': 'user', 'content': "杭州天气"}
     ]
-response = Generation.call(
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+response = client.chat.completions.create(
     model="tongyi-intent-detect-v3",
     messages=messages,
-    result_format="message"
 )
 
-print(response.output.choices[0].message.content)
+print(response.choices[0].message.content)
 ```
 
 **说明**dashscope CLI 暂不支持 understanding 子命令，请使用 Python SDK：
@@ -404,9 +407,15 @@ DashScope
 ```
 import os
 import json
-from dashscope import Generation
-# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+import dashscope
+
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 intent_dict = {
     "play_game": "玩游戏",
@@ -438,15 +447,12 @@ messages = [
     {'role': 'system', 'content': system_prompt},
     {'role': 'user', 'content': "周五早上九点叫醒我"}
     ]
-response = Generation.call(
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+response = client.chat.completions.create(
     model="tongyi-intent-detect-v3",
     messages=messages,
-    result_format="message"
 )
 
-print(response.output.choices[0].message.content)
+print(response.choices[0].message.content)
 ```
 
 #### 响应示例
@@ -512,9 +518,15 @@ DashScope
 ```
 import os
 import json
-from dashscope import Generation
-# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+import dashscope
+
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 intent_dict = {
     "A": "玩游戏",
@@ -546,15 +558,12 @@ messages = [
     {"role": "system", "content": system_prompt},
     {"role": "user", "content": "从北京去杭州最早的飞机是？"},
 ]
-response = Generation.call(
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+response = client.chat.completions.create(
     model="tongyi-intent-detect-v3",
     messages=messages,
-    result_format="message",
 )
 
-print(response.output.choices[0].message.content)
+print(response.choices[0].message.content)
 ```
 
 运行代码后可以得到一个 Token 的意图分类结果。
@@ -631,9 +640,15 @@ DashScope
 ```
 import os
 import json
-from dashscope import Generation
-# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+import dashscope
+
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # 定义工具
 tools = [
@@ -668,15 +683,12 @@ messages = [
     {'role': 'system', 'content': system_prompt},
     {'role': 'user', 'content': "杭州天气"}
     ]
-response = Generation.call(
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+response = client.chat.completions.create(
     model="tongyi-intent-detect-v3",
     messages=messages,
-    result_format="message"
 )
 
-print(response.output.choices[0].message.content)
+print(response.choices[0].message.content)
 ```
 
 #### 响应示例
@@ -787,9 +799,15 @@ DashScope
 ```
 import os
 import json
-from dashscope import Generation
-# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+import dashscope
+
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # 定义工具
 tools = [
@@ -825,33 +843,27 @@ messages = [
     # 第一轮对话提出的问题
     {"role": "user", "content": "我想查天气"},
 ]
-response = Generation.call(
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+response = client.chat.completions.create(
     model="tongyi-intent-detect-v3",
     messages=messages,
-    result_format="message",
 )
 print("查询问题：我想查天气")
 print("第一轮输出：\n")
-print(response.output.choices[0].message.content)
+print(response.choices[0].message.content)
 
 messages.append(
-    {"role": "assistant", "content": response.output.choices[0].message.content}
+    {"role": "assistant", "content": response.choices[0].message.content}
 )
 # 第二轮对话提出的问题
 messages.append({"role": "user", "content": "杭州"})
 
-response = Generation.call(
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+response = client.chat.completions.create(
     model="tongyi-intent-detect-v3",
     messages=messages,
-    result_format="message",
 )
 print("\n查询问题：杭州")
 print("第二轮输出：\n")
-print(response.output.choices[0].message.content)
+print(response.choices[0].message.content)
 ```
 
 ##### 响应示例
@@ -949,9 +961,15 @@ DashScope
 ```
 import os
 import json
-from dashscope import Generation
-# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+import dashscope
+
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # 定义工具
 tools = [
@@ -986,30 +1004,24 @@ messages = [
     {"role": "system", "content": system_prompt},
     {"role": "user", "content": "我想查天气"},
 ]
-response = Generation.call(
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+response = client.chat.completions.create(
     model="tongyi-intent-detect-v3",
     messages=messages,
-    result_format="message",
 )
 print("查询问题：我想查天气")
 print("第一轮输出：\n")
-print(response.output.choices[0].message.content)
+print(response.choices[0].message.content)
 messages.append(
-    {"role": "assistant", "content": response.output.choices[0].message.content}
+    {"role": "assistant", "content": response.choices[0].message.content}
 )
 messages.append({"role": "user", "content": "杭州"})
-response = Generation.call(
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+response = client.chat.completions.create(
     model="tongyi-intent-detect-v3",
     messages=messages,
-    result_format="message",
 )
 print("\n查询问题：杭州")
 print("第二轮输出：\n")
-print(response.output.choices[0].message.content)
+print(response.choices[0].message.content)
 ```
 
 ##### 响应示例

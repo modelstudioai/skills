@@ -672,51 +672,57 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 #### Python SDK
 
 ```
-from http import HTTPStatus
-from dashscope import VideoSynthesis
 import dashscope
 import os
+from dashscope.v2 import DashScopeError
 
 # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
 # 获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-api_key = os.getenv("DASHSCOPE_API_KEY")
+client = dashscope.Client(api_key=os.getenv("DASHSCOPE_API_KEY"))
 
 media = [{'type': 'video_url', 'url': 'https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/qigswt/wan-r2v-role2.mp4', 'ref_name': '参考视频'}, {'type': 'image_url', 'url': 'https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260320/knsple/wan-r2v-role-frame.jpg', 'ref_name': '男人'}, {'type': 'image_url', 'url': 'https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/wfjikw/wan-r2v-backgroud5.png', 'ref_name': '咖啡厅'}]
 
 def sample_async_call():
     # 异步提交视频生成任务
-    rsp = VideoSynthesis.async_call(api_key=api_key,
-                                model='pixverse/pixverse-v6-r2v-omni',
-                                media=media,
-                                prompt='@男人 在@咖啡厅 中弹吉他 参考@参考视频',
-                                resolution='720P',
-                                aspect_ratio='16:9',
-                                duration=0,
-                                audio=True,
-                                watermark=False)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print("task_id: %s" % rsp.output.task_id)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (rsp.status_code, rsp.code, rsp.message))
+    # aspect_ratio/audio 为 parameters 段字段，不在具名签名内，经 parameters 透传
+    try:
+        job = client.videos.jobs.create(model='pixverse/pixverse-v6-r2v-omni',
+                                        media=media,
+                                        prompt='@男人 在@咖啡厅 中弹吉他 参考@参考视频',
+                                        resolution='720P',
+                                        duration=0,
+                                        watermark=False,
+                                        parameters={'aspect_ratio': '16:9',
+                                                    'audio': True})
+        print(job)
+        print("task_id: %s" % job.task_id)
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
+        return
 
     # 查询任务状态
-    status = VideoSynthesis.fetch(task=rsp, api_key=api_key)
-    if status.status_code == HTTPStatus.OK:
-        print(status.output.task_status)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (status.status_code, status.code, status.message))
+    try:
+        snapshot = client.videos.jobs.fetch(job.task_id)
+        print(snapshot.status)
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 
     # 等待任务完成
-    rsp = VideoSynthesis.wait(task=rsp, api_key=api_key)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print(rsp.output.video_url)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (rsp.status_code, rsp.code, rsp.message))
+    try:
+        done = client.videos.jobs.wait(job)
+        print(done)
+        print(done.video_url)
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 
 if __name__ == '__main__':
     sample_async_call()

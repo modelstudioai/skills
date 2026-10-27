@@ -16,10 +16,10 @@
 
 #### Python SDK
 
-Qwen-Audio-TTS、CosyVoice 的对象池需要 DashScope Python SDK 1.25.2 及以上版本：
+Qwen-Audio-TTS、CosyVoice 的对象池需要 DashScope Python SDK 2.0.1 及以上版本：
 
 ```
-pip install "dashscope>=1.25.2"
+pip install "dashscope>=2.0.1"
 ```
 
 #### Java SDK

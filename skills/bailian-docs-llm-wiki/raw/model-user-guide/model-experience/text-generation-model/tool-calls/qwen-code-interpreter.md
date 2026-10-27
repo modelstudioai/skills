@@ -58,17 +58,24 @@ completion = client.chat.completions.create(
 在 API 请求中设置 `enable_code_interpreter` 为`true`即可启用代码解释器。
 
 ```
-# 导入依赖...
-response = dashscope.MultiModalConversation.call(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
+import os
+import dashscope
+
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
+response = client.multimodal.chat.create(
     model="qwen3.5-plus",
     messages=[{"role": "user", "content": "123的21次方是多少？"}],
     # 通过 enable_code_interpreter 参数开启代码解释器
-    enable_code_interpreter=True,
+    parameters={"enable_code_interpreter": True},
     # 代码解释器功能仅支持思考模式
     enable_thinking=True,
-    result_format="message",
     # 仅支持流式输出调用
     stream=True
 )
@@ -446,28 +453,31 @@ data: [DONE]
 import os
 import dashscope
 
-# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 messages = [
     {"role": "user", "content": "123的21次方是多少？"},
 ]
 
-response = dashscope.MultiModalConversation.call(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+response = client.multimodal.chat.create(
     model="qwen3.5-plus",
     messages=messages,
-    enable_code_interpreter=True,
+    # enable_code_interpreter 非 SDK 签名参数，统一通过 parameters 传入
+    parameters={"enable_code_interpreter": True},
     enable_thinking=True,
-    result_format="message",
     # 仅支持流式输出
     stream=True
 )
 
 for chunk in response:
-    output = chunk["output"]
-    print(output)
+    print(chunk)
 ```
 
 ###### 响应示例
@@ -682,21 +692,26 @@ if final_response and final_response.usage:
 ```
 import os
 import dashscope
-from dashscope import MultiModalConversation
-# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
+
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 messages = [{"role": "user", "content": "运行两次代码解释器：第一次运行请计算123的23次方的值，第二次运行请将前者的结果除以5"}]
 
-response = MultiModalConversation.call(
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+response = client.multimodal.chat.create(
     model="qwen3.5-plus",
     messages=messages,
-    result_format="message",
     enable_thinking=True,
-    enable_code_interpreter=True,
+    # enable_code_interpreter 非 SDK 签名参数，统一通过 parameters 传入
+    parameters={"enable_code_interpreter": True},
     stream=True,
-    incremental_output=True,
+    # 流式输出默认为增量模式：每个数据块仅包含新生成的内容。
 )
 
 # 状态标志：跟踪是否已打印工具信息、是否进入回答阶段、是否在推理段
@@ -716,11 +731,10 @@ in_reasoning_section = True
 for chunk in response:
     try:
         # 提取响应中的关键字段：内容、推理文本、工具调用信息
-        choice = chunk.output.choices[0]
-        msg = choice.message
-        content = msg.get("content", "")            # 最终回答内容
-        reasoning = msg.get("reasoning_content", "") # 推理过程文本
-        tools = chunk.output.get("tool_info", None)  # 工具调用信息
+        delta = chunk.choices[0].delta
+        content = delta.content or ""                  # 最终回答内容
+        reasoning = delta.reasoning_content or ""      # 推理过程文本
+        tools = getattr(chunk, "tool_info", None)      # 工具调用信息
     except (IndexError, AttributeError, KeyError):
         # 跳过结构异常的数据块
         continue
@@ -745,9 +759,10 @@ for chunk in response:
             is_answering = True
             in_reasoning_section = False
         print(content, end="", flush=True)
-# 打印代码解释器调用次数
+# 打印代码解释器调用次数（最后一个数据块的 usage 汇总所有调用的 Token 消耗与工具调用次数）
 print_section("代码解释器运行次数")
-print(chunk.usage.plugins)
+if chunk.usage is not None:
+    print(chunk.usage.plugins)
 ```
 
 ### 响应示例

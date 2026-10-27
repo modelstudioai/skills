@@ -4,12 +4,12 @@
 
 ## 接口地址
 
-SDK的接口地址需在初始化前设置为下方地址（包含WorkspaceId）。如需切换到其他地域，请修改 `dashscope.base_http_api_url`为对应地域的URL。
+SDK的接口地址由Client构造参数`workspace`/`region`决定（对应下方地址，包含WorkspaceId）。如需切换到其他地域，请修改Client构造参数为对应地域的值。
 
 **说明**
 
 -   不同地域的 API Key 不同，调用时需使用对应地域的 API Key。
--   地域配置为全局设置，影响所有 DashScope SDK API 调用。
+-   地域配置为Client级设置，影响该Client的所有 DashScope SDK API 调用。
 
 #### 华北2（北京）
 
@@ -28,27 +28,37 @@ SDK的接口地址需在初始化前设置为下方地址（包含WorkspaceId）
 -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
 -   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
 
-## VoiceEnrollmentService 类
+## 核心资源（`client.audio.voices`）
 
-**包路径**：`dashscope.audio.tts_v2.VoiceEnrollmentService`
+**资源路径**：`client.audio.voices`
 
 **功能**：管理 Qwen-Audio-TTS、Qwen-Audio-Realtime 和 CosyVoice 复刻音色的生命周期（创建、查询、更新、删除）。
 
-### 构造方法
+### Client 构造（鉴权与地域）
 
 ```
-VoiceEnrollmentService()
+import os
+import dashscope
+
+client = dashscope.Client(
+    # 若没有将API Key配置到环境变量中，请将下行替换为自己的API Key：api_key="sk-xxx"
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 ```
 
-### create\_voice() - 创建音色
+### create() - 创建音色
 
 **方法签名**：
 
 ```
-def create_voice(self, target_model: str, prefix: str, url: str,
-                 language_hints: List[str] = None,
-                 max_prompt_audio_length: float = None,
-                 **kwargs) -> str
+def create(self, *, target_model: str, prefix: str, url: str,
+           language_hints: List[str] = None,
+           max_prompt_audio_length: float = None,
+           extra_input: Dict = None,
+           parameters: Dict = None, ...) -> Voice
 ```
 
 **参数说明**：
@@ -95,11 +105,11 @@ List\[str\]
 
 此参数为数组，长度必须为 1。
 
-**说明**适用于 qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、qwen-audio-3.1-realtime-plus、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash、cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-plus、cosyvoice-v3-flash。
+**说明**适用于 qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、qwen-audio-3.1-realtime-plus、qwen-audio-3.1-realtime-flash、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash、cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-plus、cosyvoice-v3-flash。
 
 点击查看各模型支持的语言
 
--   qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、qwen-audio-3.1-realtime-plus、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash：
+-   qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、qwen-audio-3.1-realtime-plus、qwen-audio-3.1-realtime-flash、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash：
     
     -   zh：中文
     -   en：英语
@@ -152,7 +162,7 @@ float
 
 默认值：10.0。
 
-**说明**适用于 qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、qwen-audio-3.1-realtime-plus、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash、cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash。
+**说明**适用于 qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、qwen-audio-3.1-realtime-plus、qwen-audio-3.1-realtime-flash、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash、cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash。
 
 enable\_preprocess
 
@@ -164,7 +174,7 @@ bool
 
 默认值：false。
 
-**说明**适用于 qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、qwen-audio-3.1-realtime-plus、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash、cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash。
+**说明**适用于 qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、qwen-audio-3.1-realtime-plus、qwen-audio-3.1-realtime-flash、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash、cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash。
 
 enable\_volume\_normalization
 
@@ -172,16 +182,16 @@ bool
 
 否
 
-是否对用于声音复刻的样本音频进行音量归一化。通过关键字参数直接传入。默认值为`False`。设置为`True`后，使用所创建音色合成的音频，其音量可能与关闭该参数时创建的音色不同。
+是否对用于声音复刻的样本音频进行音量归一化。通过`extra_input`字典传入。默认值为`False`。设置为`True`后，使用所创建音色合成的音频，其音量可能与关闭该参数时创建的音色不同。
 
-**返回值**：`str`，音色ID（voice\_id）。
+**返回值**：`Voice`对象，其`voice_id`为音色ID，`request_id`为请求ID。
 
-### list\_voices() - 查询音色列表
+### list() - 查询音色列表
 
 **方法签名**：
 
 ```
-def list_voices(self, prefix: str = None, page_index: int = 0, page_size: int = 10) -> list
+def list(self, *, prefix: str = None, page_index: int = 0, page_size: int = 10, ...) -> VoiceList
 ```
 
 **参数说明**：
@@ -218,14 +228,14 @@ int
 
 每页条数，默认10。
 
-**返回值**：`list`，音色列表。
+**返回值**：`VoiceList`对象，其`voices`为音色列表，`request_id`为请求ID。
 
-### query\_voice() - 查询音色详情
+### get() - 查询音色详情
 
 **方法签名**：
 
 ```
-def query_voice(self, voice_id: str) -> dict
+def get(self, voice_id: str, ...) -> Voice
 ```
 
 **参数说明**：
@@ -246,14 +256,14 @@ str
 
 要查询的音色ID。
 
-**返回值**：`dict`，音色详情。
+**返回值**：`Voice`对象，音色详情。
 
-### update\_voice() - 更新音色
+### update() - 更新音色
 
 **方法签名**：
 
 ```
-def update_voice(self, voice_id: str, url: str) -> None
+def update(self, voice_id: str, *, url: str, ...) -> JobStatus
 ```
 
 **参数说明**：
@@ -282,12 +292,12 @@ str
 
 新的参考音频，支持公网可访问的 URL 或 Base64 Data URI，例如 `data:audio/wav;base64,...`。
 
-### delete\_voice() - 删除音色
+### delete() - 删除音色
 
 **方法签名**：
 
 ```
-def delete_voice(self, voice_id: str) -> None
+def delete(self, voice_id: str, ...) -> JobStatus
 ```
 
 **参数说明**：
@@ -313,28 +323,32 @@ str
 ### 创建音色
 
 ```
+import os
 import dashscope
-from dashscope.audio.tts_v2 import VoiceEnrollmentService
-# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 
-TARGET_MODEL = 'qwen-audio-3.0-tts-flash'
+# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+client = dashscope.Client(
+    # 若没有将API Key配置到环境变量中，请将下行替换为自己的API Key：api_key="sk-xxx"
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
+
+TARGET_MODEL = 'qwen-audio-3.1-tts-plus'
 voice_prefix = 'myvoice'
 url = 'https://your-audio-file-url'
-service = VoiceEnrollmentService()
 
 # 避免频繁调用。每次调用都会创建新音色，达到配额上限后将无法创建。
-voice_id = service.create_voice(
+voice = client.audio.voices.create(
     target_model=TARGET_MODEL,
     prefix=voice_prefix,
     url=url,
     max_prompt_audio_length=10,
-    # enable_preprocess=False,
-    # enable_volume_normalization=True
+    # extra_input={'enable_preprocess': False, 'enable_volume_normalization': True}
 )
 
-print(f"Request ID: {service.get_last_request_id()}")
-print(f"Voice ID: {voice_id}")
+print(f"Request ID: {voice.request_id}")
+print(f"Voice ID: {voice.voice_id}")
 ```
 
 使用本地 WAV 音频时，将上述 `url` 赋值替换为以下代码，再调用 `create_voice`。更新音色时，也通过 `update_voice` 的 `url` 参数传入 Data URI。将 `sample.wav` 替换为本地音频路径。
@@ -351,62 +365,81 @@ url = "data:audio/wav;base64," + base64.b64encode(
 ### 查询音色列表
 
 ```
+import os
 import dashscope
-from dashscope.audio.tts_v2 import VoiceEnrollmentService
-# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 
-service = VoiceEnrollmentService()
+# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+client = dashscope.Client(
+    # 若没有将API Key配置到环境变量中，请将下行替换为自己的API Key：api_key="sk-xxx"
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # 按前缀筛选，或设为None查询所有
-voices = service.list_voices(prefix='myvoice', page_index=0, page_size=10)
+voices = client.audio.voices.list(prefix='myvoice', page_index=0, page_size=10)
 
-print(f"Request ID: {service.get_last_request_id()}")
-print(f"Found voices: {voices}")
+print(f"Request ID: {voices.request_id}")
+print(f"Found voices: {voices.voices}")
 ```
 
 ### 查询特定音色
 
 ```
+import os
 import dashscope
-from dashscope.audio.tts_v2 import VoiceEnrollmentService
-# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 
-service = VoiceEnrollmentService()
+# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+client = dashscope.Client(
+    # 若没有将API Key配置到环境变量中，请将下行替换为自己的API Key：api_key="sk-xxx"
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
+
 voice_id = 'qwen-audio-3.0-tts-flash-myvoice-xxxxxxxx'
 
-voice_details = service.query_voice(voice_id=voice_id)
+voice_details = client.audio.voices.get(voice_id=voice_id)
 
-print(f"Request ID: {service.get_last_request_id()}")
+print(f"Request ID: {voice_details.request_id}")
 print(f"Voice Details: {voice_details}")
 ```
 
 ### 更新音色
 
 ```
+import os
 import dashscope
-from dashscope.audio.tts_v2 import VoiceEnrollmentService
-# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 
-service = VoiceEnrollmentService()
-service.update_voice(
+# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+client = dashscope.Client(
+    # 若没有将API Key配置到环境变量中，请将下行替换为自己的API Key：api_key="sk-xxx"
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
+
+result = client.audio.voices.update(
     voice_id='qwen-audio-3.0-tts-flash-myvoice-xxxxxxxx',
     url='https://your-new-audio-file-url'
 )
-print(f"Update submitted. Request ID: {service.get_last_request_id()}")
+print(f"Update submitted. Request ID: {result.request_id}")
 ```
 
 ### 删除音色
 
 ```
+import os
 import dashscope
-from dashscope.audio.tts_v2 import VoiceEnrollmentService
-# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 
-service = VoiceEnrollmentService()
-service.delete_voice(voice_id='qwen-audio-3.0-tts-flash-myvoice-xxxxxxxx')
-print(f"Deletion submitted. Request ID: {service.get_last_request_id()}")
+# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+client = dashscope.Client(
+    # 若没有将API Key配置到环境变量中，请将下行替换为自己的API Key：api_key="sk-xxx"
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
+
+result = client.audio.voices.delete(voice_id='qwen-audio-3.0-tts-flash-myvoice-xxxxxxxx')
+print(f"Deletion submitted. Request ID: {result.request_id}")
 ```

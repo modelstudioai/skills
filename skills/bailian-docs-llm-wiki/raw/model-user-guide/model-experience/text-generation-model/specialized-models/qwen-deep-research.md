@@ -6,7 +6,7 @@
 
 ## 快速开始
 
-您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，还需要[安装DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。请将示例代码中的 `DASHSCOPE_API_HOST` 替换为获取的 API Host。
+您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，还需要[安装DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
 模型采用两步工作流：**第一步**，模型提出细化问题，确认你的研究方向；**第二步**，基于你的回复执行完整研究并生成报告。第一步不是多余的——它让模型在启动耗时的多轮搜索前先对齐研究范围，避免跑偏。
 

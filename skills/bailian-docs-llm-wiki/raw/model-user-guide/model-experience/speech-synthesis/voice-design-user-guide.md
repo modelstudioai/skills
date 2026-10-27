@@ -34,49 +34,39 @@ import base64
 import os
 
 import dashscope
-import requests
-from dashscope.audio.tts_v2 import AudioFormat, SpeechSynthesizer
 
-api_key = os.environ["DASHSCOPE_API_KEY"]
-workspace_id = "YOUR_WORKSPACE_ID"
+# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+client = dashscope.Client(
+    # 若没有将API Key配置到环境变量中，请将下行替换为自己的API Key：api_key="sk-xxx"
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
+
 target_model = "qwen-audio-3.1-tts-flash"
 
 # 创建音色，并将返回的预览音频保存到本地。
-response = requests.post(
-    f"https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization",
-    headers={"Authorization": f"Bearer {api_key}"},
-    json={
-        "model": "voice-enrollment",
-        "input": {
-            "action": "create_voice",
-            "target_model": target_model,
-            "voice_prompt": "沉稳的中年男性播音员，音色低沉浑厚，富有磁性，语速平稳，吐字清晰，适合用于新闻播报或纪录片解说。",
-            "preview_text": "各位听众朋友，大家好，欢迎收听晚间新闻。",
-            "prefix": "announcer",
-            "language_hints": ["zh"],
-        },
-        "parameters": {"sample_rate": 24000, "response_format": "wav"},
-    },
-    timeout=120,
+designed = client.audio.voice_design.create(
+    target_model=target_model,
+    voice_prompt="沉稳的中年男性播音员，音色低沉浑厚，富有磁性，语速平稳，吐字清晰，适合用于新闻播报或纪录片解说。",
+    preview_text="各位听众朋友，大家好，欢迎收听晚间新闻。",
+    preferred_name="announcer",
+    language="zh",
+    parameters={"sample_rate": 24000, "response_format": "wav"},
 )
-response.raise_for_status()
-output = response.json()["output"]
-voice_id = output["voice_id"]
+voice_id = designed.voice
 print(f"voice_id: {voice_id}")
 with open("preview.wav", "wb") as f:
-    f.write(base64.b64decode(output["preview_audio"]["data"]))
+    f.write(base64.b64decode(designed.preview_audio["data"]))
 
 # 使用创建音色时指定的模型和返回的音色 ID 合成语音。
-dashscope.api_key = api_key
-dashscope.base_websocket_api_url = (
-    f"wss://{workspace_id}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference"
-)
-synthesizer = SpeechSynthesizer(
+audio = client.audio.tts.synthesize(
+    "今天天气晴朗，适合外出散步。祝你度过愉快的一天。",
     model=target_model,
     voice=voice_id,
-    format=AudioFormat.WAV_24000HZ_MONO_16BIT,
+    format="wav",
+    sample_rate=24000,
 )
-audio = synthesizer.call("今天天气晴朗，适合外出散步。祝你度过愉快的一天。")
 with open("output.wav", "wb") as f:
     f.write(audio)
 ```

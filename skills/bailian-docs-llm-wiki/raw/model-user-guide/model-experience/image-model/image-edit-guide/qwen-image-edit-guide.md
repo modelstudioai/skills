@@ -8,8 +8,6 @@
 
 如需通过SDK进行调用，请[安装DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。目前，该SDK已支持Python和Java。
 
-> 请将示例代码中的 `DASHSCOPE_API_HOST` 替换为获取的 API Host。
-
 #### Python
 
 ```

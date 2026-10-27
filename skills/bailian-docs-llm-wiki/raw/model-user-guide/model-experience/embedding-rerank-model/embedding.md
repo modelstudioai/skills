@@ -4,7 +4,7 @@
 
 ## 准备工作
 
-您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过OpenAI SDK或DashScope SDK进行调用，还需要[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。请将示例代码中的 `DASHSCOPE_API_HOST` 替换为获取的 API Host。
+您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过OpenAI SDK或DashScope SDK进行调用，还需要[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
 ## 获取Embedding
 
@@ -85,18 +85,23 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 python
 
 ```
+import os
 import dashscope
-from http import HTTPStatus
-# 以下为华北2（北京）地域URL。各地域URL不同
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 input_text = "衣服的质量杠杠的"
-resp = dashscope.TextEmbedding.call(
+resp = client.embeddings.create(
     model="qwen3.7-text-embedding",
     input=input_text,
 )
 
-if resp.status_code == HTTPStatus.OK:
-    print(resp)
+print(resp)
 ```
 
 java
@@ -173,9 +178,14 @@ Python
 import dashscope
 import json
 import os
-from http import HTTPStatus
-# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # 输入可以是视频
 # video = "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250107/lbcemt/new+video.mp4"
@@ -183,14 +193,12 @@ dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.co
 # 或图片
 image = "https://dashscope.oss-cn-beijing.aliyuncs.com/images/256_1.png"
 input = [{'image': image}]
-resp = dashscope.MultiModalEmbedding.call(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
-    api_key=os.getenv('DASHSCOPE_API_KEY'),
+resp = client.multimodal.embeddings.create(
     model="tongyi-embedding-vision-plus",
     input=input
 )
 
-print(json.dumps(resp.output, indent=4))
+print(json.dumps(resp.model_dump(), indent=4))
 ```
 
 Java
@@ -253,9 +261,14 @@ public class Main {
 import dashscope
 import json
 import os
-from http import HTTPStatus
-# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # 多模态融合向量：将文本、图片、视频融合成一个融合向量
 # 适用于跨模态检索、图搜等场景
@@ -271,9 +284,7 @@ input_data = [
 ]
 
 # 使用 qwen3-vl-embedding 生成融合向量
-resp = dashscope.MultiModalEmbedding.call(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+resp = client.multimodal.embeddings.create(
     model="qwen3-vl-embedding",
     input=input_data,
     enable_fusion=True,
@@ -281,7 +292,7 @@ resp = dashscope.MultiModalEmbedding.call(
     # dimension = 1024
 )
 
-print(json.dumps(resp.output, indent=4))
+print(json.dumps(resp.model_dump(), indent=4))
 ```
 
 以下示例使用 `tongyi-embedding-vision-plus-2026-03-06` 生成融合向量。与 `qwen3-vl-embedding` 不同，该模型通过将 text、image、video 放在同一个 content 对象中实现融合，无需 `enable_fusion` 参数。
@@ -290,9 +301,14 @@ print(json.dumps(resp.output, indent=4))
 import dashscope
 import json
 import os
-from http import HTTPStatus
-# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # tongyi-embedding-vision-plus-2026-03-06 融合向量示例
 # 将 text、image 放在同一个 content 对象中，无需 enable_fusion 参数
@@ -304,16 +320,14 @@ input_data = [
     {"text": text, "image": image}
 ]
 
-resp = dashscope.MultiModalEmbedding.call(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+resp = client.multimodal.embeddings.create(
     model="tongyi-embedding-vision-plus-2026-03-06",
     input=input_data,
     # 可选参数：指定向量维度（支持 1152, 1024, 512, 256, 128, 64，默认 1152）
     dimension=1152
 )
 
-print(json.dumps(resp.output, indent=4))
+print(json.dumps(resp.model_dump(), indent=4))
 ```
 
 #### Java（HTTP）
@@ -893,17 +907,24 @@ print(f"向量维度: {len(resp.data[0].embedding)}")
 DashScope
 
 ```
+import os
 import dashscope
-# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
-resp = dashscope.TextEmbedding.call(
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
+resp = client.embeddings.create(
     model="qwen3.7-text-embedding",
     input=["喜欢，以后还来这里买"],
     # 将向量维度设置为 256
     dimension=256
 )
 
-print(f"向量维度: {len(resp.output['embeddings'][0]['embedding'])}")
+print(f"向量维度: {len(resp.embeddings[0].embedding)}")
 ```
 
 ### 区分查询与文档文本 (text\_type)
@@ -925,7 +946,7 @@ print(f"向量维度: {len(resp.output['embeddings'][0]['embedding'])}")
 
 ```
 # 场景：为搜索引擎构建文档向量时，可以添加指令以优化用于检索的向量质量。
-resp = dashscope.TextEmbedding.call(
+resp = client.embeddings.create(
     model="qwen3.7-text-embedding",
     input="机器学习的相关论文",
     text_type="query",
@@ -980,11 +1001,17 @@ dense&sparse
 通过计算查询与文档之间的向量相似度，实现精准的语义匹配。
 
 ```
+import os
 import dashscope
 import numpy as np
-from dashscope import TextEmbedding
-# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 def cosine_similarity(a, b):
     """计算余弦相似度"""
@@ -993,15 +1020,15 @@ def cosine_similarity(a, b):
 def semantic_search(query, documents, top_k=5):
     """语义搜索"""
     # 生成查询向量
-    query_resp = TextEmbedding.call(
+    query_resp = client.embeddings.create(
         model="qwen3.7-text-embedding",
         input=query,
         dimension=1024
     )
-    query_embedding = query_resp.output['embeddings'][0]['embedding']
+    query_embedding = query_resp.embeddings[0].embedding
 
     # 生成文档向量
-    doc_resp = TextEmbedding.call(
+    doc_resp = client.embeddings.create(
         model="qwen3.7-text-embedding",
         input=documents,
         dimension=1024
@@ -1009,8 +1036,8 @@ def semantic_search(query, documents, top_k=5):
 
     # 计算相似度
     similarities = []
-    for i, doc_emb in enumerate(doc_resp.output['embeddings']):
-        similarity = cosine_similarity(query_embedding, doc_emb['embedding'])
+    for i, doc_emb in enumerate(doc_resp.embeddings):
+        similarity = cosine_similarity(query_embedding, doc_emb.embedding)
         similarities.append((i, similarity))
 
     # 排序并返回top_k结果
@@ -1034,11 +1061,17 @@ for doc, sim in results:
 通过分析用户历史行为向量，发现用户的兴趣偏好并推荐相似物品。
 
 ```
+import os
 import dashscope
 import numpy as np
-from dashscope import TextEmbedding
-# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 def cosine_similarity(a, b):
     """计算余弦相似度"""
@@ -1046,7 +1079,7 @@ def cosine_similarity(a, b):
 def build_recommendation_system(user_history, all_items, top_k=10):
     """构建推荐系统"""
     # 生成用户历史向量
-    history_resp = TextEmbedding.call(
+    history_resp = client.embeddings.create(
         model="qwen3.7-text-embedding",
         input=user_history,
         dimension=1024
@@ -1054,11 +1087,11 @@ def build_recommendation_system(user_history, all_items, top_k=10):
 
     # 计算用户偏好向量（取平均）
     user_embedding = np.mean([
-        emb['embedding'] for emb in history_resp.output['embeddings']
+        emb.embedding for emb in history_resp.embeddings
     ], axis=0)
 
     # 生成所有物品向量
-    items_resp = TextEmbedding.call(
+    items_resp = client.embeddings.create(
         model="qwen3.7-text-embedding",
         input=all_items,
         dimension=1024
@@ -1066,8 +1099,8 @@ def build_recommendation_system(user_history, all_items, top_k=10):
 
     # 计算推荐分数
     recommendations = []
-    for i, item_emb in enumerate(items_resp.output['embeddings']):
-        score = cosine_similarity(user_embedding, item_emb['embedding'])
+    for i, item_emb in enumerate(items_resp.embeddings):
+        score = cosine_similarity(user_embedding, item_emb.embedding)
         recommendations.append((all_items[i], score))
 
     # 排序并返回推荐结果
@@ -1088,21 +1121,28 @@ for movie, score in recommendations:
 
 ```
 # 需要安装 scikit-learn: pip install scikit-learn
+import os
 import dashscope
 import numpy as np
 from sklearn.cluster import KMeans
-# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 def cluster_texts(texts, n_clusters=2):
     """将一组文本进行聚类"""
     # 1. 获取所有文本的向量
-    resp = dashscope.TextEmbedding.call(
+    resp = client.embeddings.create(
         model="qwen3.7-text-embedding",
         input=texts,
         dimension=1024
     )
-    embeddings = np.array([item['embedding'] for item in resp.output['embeddings']])
+    embeddings = np.array([item.embedding for item in resp.embeddings])
 
     # 2. 使用KMeans算法进行聚类
     kmeans = KMeans(n_clusters=n_clusters, random_state=0, n_init='auto').fit(embeddings)
@@ -1134,10 +1174,17 @@ for cluster_id, docs in clusters.items():
 通过计算输入文本与预定义标签的向量相似度，实现在没有预先标记的示例的情况下，对新类别进行识别和分类。
 
 ```
+import os
 import dashscope
 import numpy as np
-# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 def cosine_similarity(a, b):
     """计算余弦相似度"""
@@ -1146,14 +1193,14 @@ def cosine_similarity(a, b):
 def classify_text_zero_shot(text, labels):
     """零样本文本分类"""
     # 1. 获取输入文本和所有标签的向量
-    resp = dashscope.TextEmbedding.call(
+    resp = client.embeddings.create(
         model="qwen3.7-text-embedding",
         input=[text] + labels,
         dimension=1024
     )
-    embeddings = resp.output['embeddings']
-    text_embedding = embeddings[0]['embedding']
-    label_embeddings = [emb['embedding'] for emb in embeddings[1:]]
+    embeddings = resp.embeddings
+    text_embedding = embeddings[0].embedding
+    label_embeddings = [emb.embedding for emb in embeddings[1:]]
 
     # 2. 计算与每个标签的相似度
     scores = [cosine_similarity(text_embedding, label_emb) for label_emb in label_embeddings]
@@ -1178,10 +1225,17 @@ print(f"最匹配的分类是: '{label}' (相似度: {score:.3f})")
 > 示例代码中的阈值（threshold）仅为演示目的。在真实业务场景中，相似度的具体数值会因数据内容和分布的不同而变化，没有一个固定的阈值。建议基于自己的数据集来校准此值。
 
 ```
+import os
 import dashscope
 import numpy as np
-# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 def cosine_similarity(a, b):
     """计算余弦相似度"""
@@ -1190,12 +1244,12 @@ def cosine_similarity(a, b):
 def detect_anomaly(new_comment, normal_comments, threshold=0.6):
     # 1. 向量化所有正常评论和新评论
     all_texts = normal_comments + [new_comment]
-    resp = dashscope.TextEmbedding.call(
+    resp = client.embeddings.create(
         model="qwen3.7-text-embedding",
         input=all_texts,
         dimension=1024
     )
-    embeddings = [item['embedding'] for item in resp.output['embeddings']]
+    embeddings = [item.embedding for item in resp.embeddings]
 
     # 2. 计算正常评论的中心向量（平均值）
     normal_embeddings = np.array(embeddings[:-1])

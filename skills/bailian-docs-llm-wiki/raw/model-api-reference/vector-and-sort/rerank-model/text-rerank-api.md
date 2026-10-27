@@ -475,13 +475,19 @@ qwen3-vl-rerank / gte-rerank-v2
 > SDK 的参数命名与HTTP接口基本一致，参数结构进行了一定封装。比如 HTTP 使用嵌套的 `input` 和 `parameters` 结构，但SDK 使用扁平参数。请在开发时注意区分。
 
 ```
+import os
 import dashscope
-from http import HTTPStatus
-# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 def text_rerank():
-    resp = dashscope.TextReRank.call(
+    resp = client.rerank.create(
         model="qwen3.7-text-rerank",
         query="什么是文本排序模型",
         documents=[
@@ -492,10 +498,7 @@ def text_rerank():
         top_n=10,
         instruct="Given a web search query, retrieve relevant passages that answer the query."
     )
-    if resp.status_code == HTTPStatus.OK:
-        print(resp)
-    else:
-        print(resp)
+    print(resp)
 
 if __name__ == '__main__':
     text_rerank()
@@ -504,14 +507,20 @@ if __name__ == '__main__':
 以下示例展示了使用`qwen3-vl-rerank`模型进行多模态排序（以图片作为查询）的代码示例。
 
 ```
+import os
 import dashscope
-from http import HTTPStatus
 import json
-# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 def vl_rerank():
-    resp = dashscope.TextReRank.call(
+    resp = client.rerank.create(
         model="qwen3-vl-rerank",
         query={"image": "https://img.alicdn.com/imgextra/i3/O1CN01rdstgY1uiZWt8gqSL_!!6000000006071-0-tps-1970-356.jpg"},
         documents=[
@@ -522,10 +531,7 @@ def vl_rerank():
         top_n=2,
         return_documents=True
     )
-    if resp.status_code == HTTPStatus.OK:
-        print(json.dumps(resp, default=str, ensure_ascii=False, indent=4))
-    else:
-        print(resp)
+    print(json.dumps(resp.model_dump(), ensure_ascii=False, indent=4))
 
 if __name__ == '__main__':
     vl_rerank()
@@ -533,14 +539,11 @@ if __name__ == '__main__':
 
 ### 输出示例
 
-**说明**SDK对原始HTTP响应进行了封装，成功时会固定返回`code`和`message`字段，值为空字符串。
+**说明**SDK 2.0 返回结构化响应对象，排序结果通过 `resp.results` 访问（`resp.results[i].index` / `.relevance_score` / `.document`）；请求失败时抛出 `DashScopeError` 异常。
 
 ```
 {
-    "status_code": 200,
     "request_id": "4b0805c0-6b36-490d-8bc1-4365f4c89905",
-    "code": "",
-    "message": "",
     "output": {
         "results": [
             {

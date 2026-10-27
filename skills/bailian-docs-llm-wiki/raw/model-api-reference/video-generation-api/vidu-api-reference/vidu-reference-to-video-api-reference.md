@@ -358,50 +358,55 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 #### Python SDK
 
 ```
-from http import HTTPStatus
-from dashscope import VideoSynthesis
 import dashscope
 import os
+from dashscope.v2 import DashScopeError
 
 # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
 # 获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-api_key = os.getenv("DASHSCOPE_API_KEY")
+client = dashscope.Client(api_key=os.getenv("DASHSCOPE_API_KEY"))
 
 media = [{'type': 'image', 'url': 'https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260713/dtnctw/ad-1.png'}, {'type': 'image', 'url': 'https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260713/bspdpd/ad-2.png'}, {'type': 'image', 'url': 'https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260713/mhsjyy/ad-3.png'}]
 
 def sample_async_call():
     # 异步提交视频生成任务
-    rsp = VideoSynthesis.async_call(api_key=api_key,
-                                model='vidu/viduq3-ad_reference2video',
-                                prompt='一个瑜伽裤的广告。商品是一条左右各有一个口袋的黑色高腰瑜伽裤。亚洲模特开心地说"我现在再也不穿没有口袋的瑜伽裤了"。画面保持清晰、稳定、容易理解。',
-                                media=media,
-                                size='1080*1920',
-                                resolution='1080P',
-                                duration=8,
-                                watermark=True)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print("task_id: %s" % rsp.output.task_id)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (rsp.status_code, rsp.code, rsp.message))
+    try:
+        job = client.videos.jobs.create(model='vidu/viduq3-ad_reference2video',
+                                        prompt='一个瑜伽裤的广告。商品是一条左右各有一个口袋的黑色高腰瑜伽裤。亚洲模特开心地说"我现在再也不穿没有口袋的瑜伽裤了"。画面保持清晰、稳定、容易理解。',
+                                        media=media,
+                                        size='1080*1920',
+                                        resolution='1080P',
+                                        duration=8,
+                                        watermark=True)
+        print(job)
+        print("task_id: %s" % job.task_id)
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
+        return
 
     # 查询任务状态
-    status = VideoSynthesis.fetch(task=rsp, api_key=api_key)
-    if status.status_code == HTTPStatus.OK:
-        print(status.output.task_status)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (status.status_code, status.code, status.message))
+    try:
+        snapshot = client.videos.jobs.fetch(job.task_id)
+        print(snapshot.status)
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 
     # 等待任务完成
-    rsp = VideoSynthesis.wait(task=rsp, api_key=api_key)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print(rsp.output.video_url)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (rsp.status_code, rsp.code, rsp.message))
+    try:
+        done = client.videos.jobs.wait(job)
+        print(done)
+        print(done.video_url)
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 
 if __name__ == '__main__':
     sample_async_call()

@@ -99,13 +99,19 @@ curl --request POST \
 python
 
 ```
+import os
 import dashscope
-from http import HTTPStatus
 
-# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+  # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+  # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+  api_key=os.getenv("DASHSCOPE_API_KEY"),
+  workspace="{WorkspaceId}",
+  region="cn-beijing",
+)
 
-resp = dashscope.TextReRank.call(
+resp = client.rerank.create(
   model="qwen3-rerank",
   query="什么是重排序模型",
   documents=[
@@ -117,8 +123,7 @@ resp = dashscope.TextReRank.call(
   return_documents=True
 )
 
-if resp.status_code == HTTPStatus.OK:
-  print(resp)
+print(resp)
 ```
 
 bash
@@ -154,14 +159,20 @@ curl --request POST \
 Python
 
 ```
+import os
 import dashscope
-from http import HTTPStatus
 import json
 
-# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+  # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+  # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+  api_key=os.getenv("DASHSCOPE_API_KEY"),
+  workspace="{WorkspaceId}",
+  region="cn-beijing",
+)
 
-resp = dashscope.TextReRank.call(
+resp = client.rerank.create(
   model="qwen3-vl-rerank",
   query={"text": "什么是文本排序模型"},
   documents=[
@@ -173,8 +184,7 @@ resp = dashscope.TextReRank.call(
   return_documents=True
 )
 
-if resp.status_code == HTTPStatus.OK:
-  print(json.dumps(resp, default=str, ensure_ascii=False, indent=4))
+print(json.dumps(resp.model_dump(), ensure_ascii=False, indent=4))
 ```
 
 curl
@@ -241,13 +251,19 @@ curl --request POST \
 DashScope
 
 ```
+import os
 import dashscope
-from http import HTTPStatus
 
-# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+  # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+  # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+  api_key=os.getenv("DASHSCOPE_API_KEY"),
+  workspace="{WorkspaceId}",
+  region="cn-beijing",
+)
 
-resp = dashscope.TextReRank.call(
+resp = client.rerank.create(
   model="qwen3-rerank",
   query="如何修改密码？",
   documents=[
@@ -258,8 +274,7 @@ resp = dashscope.TextReRank.call(
   instruct="Retrieve semantically similar text."
 )
 
-if resp.status_code == HTTPStatus.OK:
-  print(resp)
+print(resp)
 ```
 
 ### 返回前 N 个结果（top\_n）

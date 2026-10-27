@@ -43,7 +43,7 @@ javascript
 
 ### 前端
 
--   资源地址：[](https://quanmiao-public.oss-cn-beijing.aliyuncs.com/quanmiao-sdk/v2.0.0/index.js)[https://quanmiao-public.oss-cn-beijing.aliyuncs.com/quanmiao-sdk/v2.0.0/index.js](https://quanmiao-public.oss-cn-beijing.aliyuncs.com/quanmiao-sdk/v2.0.0/index.js)；
+-   资源地址：[](https://quanmiao-public.oss-cn-beijing.aliyuncs.com/quanmiao-sdk/v2.0.1/index.js)[https://quanmiao-public.oss-cn-beijing.aliyuncs.com/quanmiao-sdk/v2.0.1/index.js](https://quanmiao-public.oss-cn-beijing.aliyuncs.com/quanmiao-sdk/v2.0.1/index.js)；
 -   特殊配置：接口请求需要支持refer属性；
 
 ## 分步骤调用操作步骤
@@ -337,7 +337,7 @@ try {
 全局加载初始化quanmiao-sdk，如下为示例代码：
 
 ```
-const SDK_URL = "https://quanmiao-public.oss-cn-beijing.aliyuncs.com/quanmiao-sdk/v2.0.0/index.js";
+const SDK_URL = "https://quanmiao-public.oss-cn-beijing.aliyuncs.com/quanmiao-sdk/v2.0.1/index.js";
 const script = document.createElement('script');
 script.src = SDK_URL;
 script.async = true;

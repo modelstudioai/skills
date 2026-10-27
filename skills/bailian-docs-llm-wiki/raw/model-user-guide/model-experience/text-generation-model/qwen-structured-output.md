@@ -127,7 +127,7 @@ Qwen3.7-Plus 系列、Qwen3.8-Flash 系列、Qwen3.7-Flash 系列、Qwen3.7-Max 
 
 > JSON Object 模式不保证键名与字段类型稳定，不同提示词或不同次调用的返回结果可能存在差异。如需固定结构，请使用 JSON Schema 模式。
 
-您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过OpenAI SDK或DashScope SDK进行调用，还需要[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。请将示例代码中的 `DASHSCOPE_API_HOST` 替换为获取的 API Host。
+您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过OpenAI SDK或DashScope SDK进行调用，还需要[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
 #### OpenAI兼容
 
@@ -283,8 +283,14 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 import os
 import dashscope
 
-# 若使用新加坡地域的模型，请释放下列注释
-# dashscope.base_http_api_url = "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+# 若使用新加坡地域的模型，请将region替换为ap-southeast-1
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 messages=[
     {
         "role": "system",
@@ -295,14 +301,12 @@ messages=[
         "content": [{"text": "大家好，我叫刘五，今年34岁，邮箱是liuwu@example.com，平时喜欢打篮球和旅游"}],
     },
 ]
-response = dashscope.MultiModalConversation.call(
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
-    api_key=os.getenv('DASHSCOPE_API_KEY'),
+response = client.multimodal.chat.create(
     model="qwen3.8-max",
     messages=messages,
     response_format={'type': 'json_object'}
     )
-json_string = response.output.choices[0].message.content[0]["text"]
+json_string = response.choices[0].message.content
 print(json_string)
 ```
 
@@ -640,8 +644,14 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 import os
 import dashscope
 
-# 若使用新加坡地域的模型，请释放下列注释
-# dashscope.base_http_api_url = "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+# 若使用新加坡地域的模型，请将region替换为ap-southeast-1
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    api_key = os.getenv('DASHSCOPE_API_KEY'),
+    workspace = "{WorkspaceId}",
+    region = "cn-beijing",
+)
 messages = [
 {
     "role": "system",
@@ -654,22 +664,26 @@ messages = [
     {"image": "http://duguang-labelling.oss-cn-shanghai.aliyuncs.com/demo_ocr/receipt_zh_demo.jpg"},
     {"text": "提取图中ticket(数组类型，包括 travel_date、trains、seat_num、arrival_site、price)和 invoice 的信息（数组类型，包括 invoice_code 和 invoice_number ），请输出包含 ticket 和 invoice 数组的JSON"}]
 }]
-response = dashscope.MultiModalConversation.call(
-    #若没有配置环境变量， 请用百炼API Key将下行替换为： api_key ="sk-xxx"
-    api_key = os.getenv('DASHSCOPE_API_KEY'),
+response = client.multimodal.chat.create(
     model = 'qwen3.8-max',
     messages = messages,
     response_format={'type': 'json_object'}
 )
-json_string = response.output.choices[0].message.content[0]["text"]
+json_string = response.choices[0].message.content
 print(json_string)
 ```
 ```
 import os
 import dashscope
 
-# 若使用北京地域的模型，需将base_url替换为：https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1
-dashscope.base_http_api_url = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1'
+# 以下为新加坡地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+# 若使用北京地域的模型，请将region替换为cn-beijing
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    api_key = os.getenv('DASHSCOPE_API_KEY'),
+    workspace = "{WorkspaceId}",
+    region = "ap-southeast-1",
+)
 
 messages = [
 {
@@ -683,14 +697,12 @@ messages = [
     {"image": "http://duguang-labelling.oss-cn-shanghai.aliyuncs.com/demo_ocr/receipt_zh_demo.jpg"},
     {"text": "提取图中ticket(数组类型，包括 travel_date、trains、seat_num、arrival_site、price)和 invoice 的信息（数组类型，包括 invoice_code 和 invoice_number ），请输出包含 ticket 和 invoice 数组的JSON"}]
 }]
-response = dashscope.MultiModalConversation.call(
-    #若没有配置环境变量， 请用百炼API Key将下行替换为： api_key ="sk-xxx"
-    api_key = os.getenv('DASHSCOPE_API_KEY'),
+response = client.multimodal.chat.create(
     model = 'qwen3.8-max',
     messages = messages,
     response_format={'type': 'json_object'}
 )
-json_string = response.output.choices[0].message.content[0]["text"]
+json_string = response.choices[0].message.content
 print(json_string)
 ```
 
@@ -1112,6 +1124,11 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 import os
 import dashscope
 
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+)
+
 messages = [
     {
         "role": "system",
@@ -1120,15 +1137,12 @@ messages = [
     {"role": "user", "content": [{"text": "大家好，我叫刘五，今年34岁，邮箱是liuwu@example.com，平时喜欢打篮球和旅游"}]}
 ]
 
-completion = dashscope.MultiModalConversation.call(
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+stream = client.multimodal.chat.create(
     model="qwen3.8-max",
     messages=messages,
     enable_thinking=True,
     response_format={"type": "json_object"},
     stream=True,
-    incremental_output=True
 )
 
 # 定义完整思考过程
@@ -1140,28 +1154,25 @@ is_answering = False
 
 print("=" * 20 + "思考过程" + "=" * 20)
 
-for chunk in completion:
+for chunk in stream:
+    # 获取当前chunk的内容（流式输出默认为增量模式）
+    content_text = chunk.choices[0].delta.content or ""
+    reasoning_text = chunk.choices[0].delta.reasoning_content or ""
     # 如果思考过程与回复皆为空，则忽略
-    if (
-        not chunk.output.choices[0].message.content
-        and chunk.output.choices[0].message.reasoning_content == ""
-    ):
+    if content_text == "" and reasoning_text == "":
         pass
     else:
         # 如果当前为思考过程
-        if (
-            chunk.output.choices[0].message.reasoning_content != ""
-            and not chunk.output.choices[0].message.content
-        ):
-            print(chunk.output.choices[0].message.reasoning_content, end="", flush=True)
-            reasoning_content += chunk.output.choices[0].message.reasoning_content
+        if reasoning_text != "" and content_text == "":
+            print(reasoning_text, end="", flush=True)
+            reasoning_content += reasoning_text
         # 如果当前为回复
-        elif chunk.output.choices[0].message.content:
+        elif content_text != "":
             if not is_answering:
                 print("\n" + "=" * 20 + "完整回复" + "=" * 20)
                 is_answering = True
-            print(chunk.output.choices[0].message.content[0]["text"], end="", flush=True)
-            answer_content += chunk.output.choices[0].message.content[0]["text"]
+            print(content_text, end="", flush=True)
+            answer_content += content_text
 ```
 
 ### 返回结果
@@ -1583,8 +1594,14 @@ import os
 import json
 import dashscope
 
-# 若使用新加坡地域的模型，请释放下列注释
-# dashscope.base_http_api_url = "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+# 若使用新加坡地域的模型，请将region替换为ap-southeast-1
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # 预定义示例响应（用于向模型展示期望的输出格式）
 example1_response = json.dumps(
@@ -1651,14 +1668,12 @@ A：{example3_response}
             "content": [{"text": "大家好，我叫刘五，今年34岁，邮箱是liuwu@example.com，平时喜欢打篮球和旅游"}],
         },
     ]
-response = dashscope.MultiModalConversation.call(
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
-    api_key=os.getenv('DASHSCOPE_API_KEY'),
+response = client.multimodal.chat.create(
     model="qwen3.8-max",
     messages=messages,
     response_format={'type': 'json_object'}
     )
-json_string = response.output.choices[0].message.content[0]["text"]
+json_string = response.choices[0].message.content
 print(json_string)
 ```
 
@@ -1918,8 +1933,13 @@ import os
 import dashscope
 import json
 
-# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx"
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 messages = [
     {
@@ -1927,8 +1947,7 @@ messages = [
         "content": [{"text": "我叫刘五，今年25岁。"}],
     },
 ]
-response = dashscope.MultiModalConversation.call(
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+response = client.multimodal.chat.create(
     model="qwen3.8-max",
     messages=messages,
     response_format={
@@ -1948,7 +1967,7 @@ response = dashscope.MultiModalConversation.call(
         },
     },
 )
-json_object = json.loads(response.output.choices[0].message.content[0]["text"])
+json_object = json.loads(response.choices[0].message.content)
 print(f"姓名：{json_object['name']}，年龄：{json_object['age']}")
 ```
 

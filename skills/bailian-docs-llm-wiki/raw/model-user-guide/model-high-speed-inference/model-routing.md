@@ -94,7 +94,7 @@
 
 路由模型版本是智能路由能力的标准化发布形态，每个版本明确了对应阶段下路由系统支持的模型范围与核心能力。 备选模型清单由所选路由模型版本决定——每个版本对应一组备选集，不能跨版本组合。 当前已发布的路由模型版本及备选模型如下：
 
-#### model-router-2026-0908
+#### model-router-20260908
 
 **备选模型**
 
@@ -104,15 +104,7 @@
 
 **输出**
 
-`qwen3.8-max`
-
-12元
-
-1.5元
-
-36元
-
-`qwen3.8-flash`
+**`qwen3.8-flash`**
 
 0.8元
 
@@ -120,81 +112,7 @@
 
 2.7元
 
-`qwen3.7-plus`
-
-0-256K：2元
-
-256K-1M：6元
-
-0-256K：0.4元
-
-256K-1M：1.2元
-
-0-256K：8元
-
-256K-1M：24元
-
-`qwen3.7-flash`
-
-0-32K：0.2元
-
-32K-256K：0.6元
-
-256K-1M：1.2元
-
-0-32K：0.04元
-
-32K-256K：0.12元
-
-256K-1M：0.24元
-
-0-32K：0.8元
-
-32K-256K：2.4元
-
-256K-1M：4.8元
-
-`qwen3.7-max`
-
-12元
-
-2.4元
-
-36元
-
-`deepseek-v4-pro-0813`（忙时）
-
-9元
-
-0.9元
-
-27元
-
-`deepseek-v4-pro-0813`（闲时）
-
-4.5元
-
-0.45元
-
-13.5元
-
-`deepseek-v4-flash-0731`（忙时）
-
-3元
-
-0.3元
-
-9元
-
-`deepseek-v4-flash-0731`（闲时）
-
-1.5元
-
-0.15元
-
-4.5元
-
-`kimi-k3`
+**`kimi-k3`**
 
 20元
 
@@ -202,13 +120,95 @@
 
 100元
 
-`glm-5.2`
+**`qwen3.7-plus`**
+
+0-256K：2元
+
+256k-1M：6元
+
+0-256K：0.4元
+
+256k-1M：1.2元
+
+0-256K：8元
+
+256k-1M：24元
+
+**`deepseek-v4-flash-0731`（忙时）**
+
+3元
+
+0.3元
+
+9元
+
+**`deepseek-v4-flash-0731`（闲时）**
+
+1.5元
+
+0.15元
+
+4.5元
+
+**`qwen3.7-max`**
+
+12元
+
+2.4元
+
+36元
+
+**`glm-5.2`**
 
 8元
 
 2元
 
 28元
+
+**`deepseek-v4-pro-0813`（忙时）**
+
+9元
+
+0.9元
+
+27元
+
+**`deepseek-v4-pro-0813`（闲时）**
+
+4.5元
+
+0.45元
+
+13.5元
+
+**`qwen3.8-max`**
+
+12元
+
+1.5元
+
+36元
+
+**`qwen3.7-flash`**
+
+0-32K：0.2元
+
+256k-1M：1.2元
+
+32k-256K：0.6元
+
+0-32K：0.04元
+
+256k-1M：0.24元
+
+32k-256K：0.12元
+
+0-32K：0.8元
+
+256k-1M：4.8元
+
+32k-256K：2.4元
 
 上表为各备选模型调用价格（元/百万tokens）。deepseek-v4 系列采用忙时/闲时分时计费。所有备选模型支持思考模式，思考 token 按输出价格计费。
 
@@ -254,17 +254,20 @@ DashScope SDK
 
 ```
 # DashScope SDK（需先安装 pip install dashscope）
-# 智能路由仅支持 maas.aliyuncs.com 域名，需配置 DASHSCOPE_HTTP_BASE_URL
-import os
-os.environ['DASHSCOPE_HTTP_BASE_URL'] = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-from dashscope import Generation
+# 智能路由仅支持 maas.aliyuncs.com 域名，需在构造 Client 时传入业务空间（workspace）与地域（region）
+import dashscope
 
-resp = Generation.call(
-    model="auto-model-abcd1234",
+# 智能路由仅支持 maas.aliyuncs.com 域名，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同
+client = dashscope.Client(
     api_key="YOUR_DASHSCOPE_API_KEY",
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
+resp = client.chat.completions.create(
+    model="auto-model-abcd1234",
     messages=[{"role": "user", "content": "你好"}],
 )
-print(resp.output.choices[0].message.content)
+print(resp.choices[0].message.content)
 ```
 
 Node.js

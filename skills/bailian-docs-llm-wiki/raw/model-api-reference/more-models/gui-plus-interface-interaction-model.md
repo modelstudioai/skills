@@ -1180,7 +1180,7 @@ apple
 .
 ```
 
-> Java SDK中为**incrementalOutput**\*。\*通过HTTP调用时，请将 **incremental\_output**放入 **parameters** 对象中。
+> Java SDK中为**incrementalOutput**\*。\*通过HTTP调用时，请将 **incremental\_output**放入 **parameters** 对象中；Python SDK 2.0 的流式输出始终为增量输出，无需设置该参数。
 
 **stop**`string 或 array`（可选）
 
@@ -1197,8 +1197,13 @@ Python
 ```
 import os
 import dashscope
-# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量， 请用百炼API Key将下行替换为： api_key = "sk-xxx"
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 system_prompt = """# Tools
 
@@ -1238,15 +1243,13 @@ messages = [
             {"text": "帮我打开浏览器。"}]
     }]
 
-response = dashscope.MultiModalConversation.call(
-    # 若没有配置环境变量， 请用百炼API Key将下行替换为： api_key = "sk-xxx"
-    api_key=os.getenv('DASHSCOPE_API_KEY'),
+response = client.multimodal.chat.create(
     model='gui-plus-2026-02-26',
     messages=messages,
-    vl_high_resolution_images=True
+    parameters={"vl_high_resolution_images": True}
 )
 
-print(response.output.choices[0].message.content[0]["text"])
+print(response.output_text)
 ```
 
 Java
@@ -1359,6 +1362,17 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 Python
 
 ```
+import os
+import dashscope
+
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量， 请用百炼API Key将下行替换为： api_key = "sk-xxx"
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
+
 system_prompt = """# Tools
 
 You may call one or more functions to assist with the user query.
@@ -1397,15 +1411,15 @@ messages = [
             {"text": "帮我打开浏览器。"}]
     }]
 
-response = dashscope.MultiModalConversation.call(
-    # 若没有配置环境变量， 请用百炼API Key将下行替换为： api_key = "sk-xxx"
-    api_key = os.getenv('DASHSCOPE_API_KEY'),
-    model = 'gui-plus',
-    messages = messages,
+stream = client.multimodal.chat.create(
+    model='gui-plus',
+    messages=messages,
     stream=True
 )
-for chunk in response:
-    print(chunk)
+for chunk in stream:
+    delta = chunk.choices[0].delta
+    if delta.content:
+        print(delta.content)
 ```
 
 Java
@@ -1530,23 +1544,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 
 ### chat响应对象（流式与非流式输出格式一致）
 
-**status\_code**`string`
-
-本次请求的状态码。200 表示请求成功，否则表示请求失败。
-
-> Java SDK不会返回该参数。调用失败会抛出异常，异常信息为**status\_code**和**message**的内容。
+调用失败时，Python SDK 2.0 会抛出 `DashScopeError` 异常，可通过异常属性 `e.status_code`/`e.code`/`e.message`/`e.request_id` 获取错误信息（HTTP 接口返回的原始响应中亦有对应的 code/message 字段）；Java SDK 调用失败会抛出异常，异常信息为 **status\_code** 和 **message** 的内容。
 
 **request\_id**`string`
 
 本次调用的唯一标识符。
 
 > Java SDK返回参数为**requestId。**
-
-**code**`string`
-
-错误码，调用成功时为空值。
-
-> 只有Python SDK返回该参数。
 
 **output**`object`
 
@@ -1648,12 +1652,11 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 
 消耗的总 Token 数，为`input_tokens`与`output_tokens`的总和。
 
+以下为 HTTP 接口返回的原始响应（Python SDK 2.0 返回扁平化后的响应对象，输出内容可通过 `response.output_text` 获取）。
+
 ```
 {
-  "status_code": 200,
   "request_id": "b74b3a25-3968-4059-8c44-63d793c07f02",
-  "code": "",
-  "message": "",
   "output": {
     "text": null,
     "finish_reason": null,

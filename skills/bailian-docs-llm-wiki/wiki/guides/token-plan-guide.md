@@ -1,37 +1,33 @@
 # token plan guide
 
-[Token](../concepts/token.md) Plan 是百炼平台为开发者提供的按量计费资源配额方案，用于调用模型 API 时消耗的 token 资源管理。它支持灵活的额度分配、实时用量监控与跨模型统一结算，适用于个人开发、团队协作及生产级集成场景。具体能力与配置细节请参考 [Token Plan 概述](../../raw/model-user-guide/token-plan-guide/token-plan-overview.md)。
+Token Plan 是百炼平台为开发者提供的模型调用配额管理机制，用于控制 API 调用量、保障服务稳定性并支持按需弹性伸缩。它适用于不同规模的应用场景，从个人实验到企业级生产部署均可配置对应策略。所有 Token Plan 均基于实际请求的输入/输出 token 数进行计量，计费与用量统计统一由平台后端实时完成。
 
 ## 支持的模型/功能
 
-- 当前支持所有百炼平台已上线的通用大模型（如 Qwen 系列、Qwen2、Qwen3）、多模态模型（Qwen-VL、Qwen-Audio）及部分推理优化模型（如 Qwen2.5-7B-Instruct-Int4）。
-- 支持同步推理（`/v1/chat/completions`）、[异步任务](../concepts/asynchronous-task.md)（`/v1/async-tasks`）、批量处理（`/v1/batch`）及流式响应（`stream=true`）。
-- Coding Plan 作为独立子计划，专用于代码生成类模型（如 Qwen2.5-Coder），其 token 计费规则与通用 [Token](../concepts/token.md) Plan 分离，详见 [Coding Plan](../../raw/model-user-guide/token-plan-guide/coding-plan-guide.md)。
+当前 Token Plan 适用于百炼平台全部公开模型（含 Qwen 系列、Qwen-VL、Qwen-Audio）及自定义微调模型（Fine-tuned Model），但**不支持**离线推理 SDK、本地部署模型或通过 `model.export` 导出的模型实例。图像理解（Qwen-VL）、语音转文本（Qwen-Audio）等多模态能力均纳入统一 token 计量体系，其 token 消耗按 [Token Plan 概述](../../raw/model-user-guide/token-plan-guide/token-plan-overview.md) 中定义的换算规则计算。
 
 ## 关键参数
 
-| 参数 | 类型 | 说明 |
-|------|------|------|
-| `model` | string | 必填，指定模型 ID（如 `qwen-max`, `qwen-plus`），需与所购 [Token](../concepts/token.md) Plan 的授权模型范围一致 |
-| `input_tokens` / `output_tokens` | integer | 只读，由平台自动统计返回，用于用量分析与账单核对 |
-| `max_tokens` | integer | 可选，限制生成长度；超出该值将被截断，不额外计费 |
-| `top_p`, `temperature` 等采样参数 | float / number | 不影响 token 计费，仅控制生成质量 |
+- `max_tokens`：单次请求允许生成的最大 token 数（默认 2048，上限 8192）  
+- `temperature` / `top_p`：不影响 token 计量，但影响实际输出长度和 token 分布  
+- `input_token_limit`：部分高并发场景下可配置输入长度硬限制（需联系技术支持开通）  
+- `plan_id`：绑定至具体 Token Plan 实例的唯一标识，用于路由和配额校验，详见 [进阶接入](../../raw/model-user-guide/token-plan-guide/token-plan-best-practice.md)  
 
-> **注意**：部分旧版文档中提及 `token_limit` 作为请求级硬限参，该参数已于 v2024.06 接口版本废弃，实际生效的是账户级 Token Plan 配额，以 [进阶接入](../../raw/model-user-guide/token-plan-guide/token-plan-best-practice.md) 中的配额继承逻辑为准。
+> **注意**：文档中曾提及 `max_output_tokens` 参数名，但该字段已于 v2.3.0 版本统一替换为 `max_tokens`；旧参数名已失效，请以 [进阶接入](../../raw/model-user-guide/token-plan-guide/token-plan-best-practice.md) 中的最新接口定义为准。
 
 ## 使用方式
 
-1. **开通与绑定**：在控制台「计费中心 → Token Plan」页面完成购买，并为对应项目（Project）或 API Key 绑定 Plan；
-2. **发起调用**：使用已绑定 Plan 的 API Key 发起标准 OpenAI 兼容请求，无需额外 header 或 query 参数；
-3. **用量查询**：通过 `/v1/usage` 接口或控制台「用量明细」页实时查看 `input_tokens` 与 `output_tokens` 消耗；
-4. **额度预警**：当剩余配额 ≤ 5% 时，系统自动触发邮件+站内信通知，阈值不可自定义。
+1. 在控制台「模型服务」→「Token Plan」中创建计划，选择版本（个人版/团队版）并设置月度 quota  
+2. 调用 API 时在请求 header 中添加 `X-Plan-ID: <your_plan_id>`  
+3. 若未显式传入 `X-Plan-ID`，系统将自动 fallback 至账户默认 plan（如无则报错 `403 Forbidden`）  
+4. 配额超限后请求立即失败，错误码为 `429 Too Many Requests`，响应体含剩余重试窗口时间（`Retry-After` header），参考 [玩法攻略](../../raw/model-user-guide/token-plan-guide/token-plan-playbooks.md) 中的熔断处理示例。
 
 ## 限制和注意事项
 
-- 单次请求最大 `input_tokens + output_tokens` 总和不得超过模型上下文窗口的 90%（例如 qwen-max 上下文 32k，则单次上限为 28.8k）；
-- Token Plan 不支持跨地域（Region）复用，华东 1 购买的 Plan 无法在华北 2 调用；
-- 免费试用额度（如新用户赠送 100 万 tokens）优先于付费 Plan 扣减，且不参与退款或转移；
-- 团队版 Plan 的成员权限继承规则与个人版不同，成员仅能使用其所属子账号绑定的额度，主账号不可代扣，详情见 [团队版](../../raw/model-user-guide/token-plan-guide/token-plan-team-edition.md)。
+- 单个 plan 最多绑定 50 个 API Key；超出需新建 plan 或解绑闲置 key  
+- 团队版 plan 的 quota 不可跨成员共享，每个成员使用独立子配额（见 [团队版](../../raw/model-user-guide/token-plan-guide/token-plan-team-edition.md)）  
+- Coding Plan 为独立子类，仅适用于 `/v1/coding/completions` 等专用 endpoint，不兼容通用 `/v1/chat/completions` 接口  
+- 所有 token 计量以平台侧解析结果为准，客户端预估的 token 数（如 tiktoken 计算）可能存在 ±3% 偏差，建议以实际返回的 `usage` 字段为准
 
 ## 来源文档
 

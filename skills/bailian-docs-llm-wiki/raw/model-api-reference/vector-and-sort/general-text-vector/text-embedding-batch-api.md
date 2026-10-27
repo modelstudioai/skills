@@ -394,15 +394,25 @@ url `string` **（必选）**
 Python
 
 ```
-from dashscope import BatchTextEmbedding
+import os
 import dashscope
-# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
-result = BatchTextEmbedding.call(BatchTextEmbedding.Models.text_embedding_async_v1,
-                                 url="https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241016/nigwvr/text_embedding_file.txt",
-                                 text_type="document")
+# 提交批处理任务并等待完成（任务失败或被取消时抛出 DashScopeError）
+job = client.embeddings.jobs.create(
+    model="text-embedding-async-v1",
+    file_url="https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241016/nigwvr/text_embedding_file.txt",
+    text_type="document")
+result = client.embeddings.jobs.wait(job)
 print(result)
+print(result.result_url)
 ```
 
 Java
@@ -450,59 +460,52 @@ public class Main {
 Python
 
 ```
-from dashscope import BatchTextEmbedding
+import os
 import dashscope
-from http import HTTPStatus
-# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+from dashscope.v2 import DashScopeError
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # 创建异步任务
 def create_async_task():
-    rsp = BatchTextEmbedding.async_call(model=BatchTextEmbedding.Models.text_embedding_async_v1,
-                                        url="https://modelscope.oss-cn-beijing.aliyuncs.com/resource/text_embedding_file.txt",
-                                        text_type="document")
-    if rsp.status_code == HTTPStatus.OK:
-        print(rsp.output)
-        print(rsp.usage)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (rsp.status_code, rsp.code, rsp.message))
-    return rsp
+    job = client.embeddings.jobs.create(
+        model="text-embedding-async-v1",
+        file_url="https://modelscope.oss-cn-beijing.aliyuncs.com/resource/text_embedding_file.txt",
+        text_type="document")
+    print(job.task_id, job.status)
+    return job
 
 # 获取异步任务信息
-def fetch_task_status(task):
-    status = BatchTextEmbedding.fetch(task)
-    print(status)
-    if status.status_code == HTTPStatus.OK:
-        print(status.output.task_status)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (status.status_code, status.code, status.message))
+def fetch_task_status(job):
+    snapshot = client.embeddings.jobs.fetch(job.task_id)
+    print(snapshot.status)
 
-# 等待异步任务结束，内部封装轮询逻辑，会一直等待任务结束
-def wait_task(task):
-    rsp = BatchTextEmbedding.wait(task)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print(rsp.output.task_status)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (rsp.status_code, rsp.code, rsp.message))
+# 等待异步任务结束，内部封装指数退避轮询，会一直等待任务结束；任务失败或被取消时抛出 DashScopeError
+def wait_task(job):
+    done = client.embeddings.jobs.wait(job)
+    print(done.status, done.result_url)
 
 # 取消异步任务，只有处于PENDING状态的任务才可以取消
-def cancel_task(task):
-    rsp = BatchTextEmbedding.cancel(task)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print(rsp.output.task_status)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (rsp.status_code, rsp.code, rsp.message))
+def cancel_task(job):
+    snapshot = client.embeddings.jobs.cancel(job.task_id)
+    print(snapshot.status)
 
 if __name__ == '__main__':
-    task_info = create_async_task()
-    fetch_task_status(task_info)
-    wait_task(task_info)
+    try:
+        job = create_async_task()
+        fetch_task_status(job)
+        wait_task(job)
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
 Java
@@ -582,33 +585,17 @@ public class Main {
 
 #### 响应参数
 
-**status\_code** `string`
-
-请求状态码，表示请求的执行结果（如 200 表示成功）。详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
+> Python SDK 2.0 中，`client.embeddings.jobs.create` / `wait` / `fetch` 返回 Job 对象，以下为其字段口径。
 
 **request\_id** `string`
 
 请求唯一标识。可用于请求明细溯源和问题排查。
 
-**code** `string`
-
-请求失败时表示错误码，成功时返回参数中该参数为空。详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
-
-**message** `string`
-
-请求失败，表示失败详细信息，成功时返回参数中该参数为空。详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
-
-**output**`object`
-
-任务输出信息。
-
-属性
-
 **task\_id**`string`
 
 任务唯一标识。可用于任务明细溯源和问题排查。
 
-**task\_status**`string`
+**status**`string`
 
 任务状态
 
@@ -619,35 +606,21 @@ public class Main {
 -   SUSPENDED：任务挂起
 -   RUNNING：任务处理中
 
-**url**`string`
+**result\_url**`string`
 
-包含Embedding结果的url，任务执行失败时返回参数中该参数为空。
-
-**submit\_time**`string`
-
-任务提交时间
-
-> Java SDK的返回结果中不包含此字段
-
-**scheduled\_time**`string`
-
-任务调度时间
-
-> Java SDK的返回结果中不包含此字段
-
-**end\_time**`string`
-
-任务处理结束时间
-
-> Java SDK的返回结果中不包含此字段
+包含Embedding结果的url，任务执行失败时返回参数中该参数为空。可通过 `job.result_url` 读取。
 
 **code**`string`
 
-任务执行失败，表示失败原因，成功执行时响应中不会包含此参数。
+任务执行失败，表示失败原因（对应异常的 `e.code`），成功执行时响应中不会包含此参数。详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
 
 **message**`string`
 
-任务执行失败，表示失败详细信息，成功执行时响应中不会包含此参数。
+任务执行失败，表示失败详细信息（对应异常的 `e.message`），成功执行时响应中不会包含此参数。
+
+**调用失败**
+
+请求失败或任务执行失败时，SDK 抛出 **DashScopeError**，可通过 `e.status_code`（HTTP返回码）、`e.code`（错误码）、`e.message`（错误信息）、`e.request_id`（请求唯一标识）获取失败详情。详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
 
 **usage**`object`
 
@@ -665,18 +638,10 @@ Details
 
 ```
 {
-    "status_code": 200,
     "request_id": "<Your Request ID>",
-    "code": null,
-    "message": "",
-    "output": {
-        "task_id": "<Your Task ID>",
-        "task_status": "SUCCEEDED",
-        "url": "<包含输出结果的url>",
-        "submit_time": "2023-09-07 10:22:52.459",
-        "scheduled_time": "2023-09-07 10:22:52.481",
-        "end_time": "2023-09-07 10:22:53.419"
-    },
+    "task_id": "<Your Task ID>",
+    "status": "SUCCEEDED",
+    "result_url": "<包含输出结果的url>",
     "usage": {
         "total_tokens": 384
     }
@@ -694,23 +659,16 @@ Details
 }
 ```
 **任务执行失败**
+
+任务处于 FAILED 终态时，`jobs.wait` / `jobs.fetch` 将抛出 `DashScopeError`，以下为对应的任务快照内容：
+
 ```
 {
-    "status_code": 200,
     "request_id": "<Your Request ID>",
-    "code": null,
-    "message": "",
-    "output": {
-        "task_id": "<Your Task ID>",
-        "task_status": "FAILED",
-        "url": "null",
-        "submit_time": "2023-09-07 10:22:52.459",
-        "scheduled_time": "2023-09-07 10:22:52.481",
-        "end_time": "2023-09-07 10:22:53.419"
-        "code": "InvalidFile.TypeNotTxt",
-        "message": "File type should be txt"
-    },
-    "usage": null
+    "task_id": "<Your Task ID>",
+    "status": "FAILED",
+    "code": "InvalidFile.TypeNotTxt",
+    "message": "File type should be txt"
 }
 ```
 
@@ -720,18 +678,10 @@ Details
 
 ```
 {
-    "status_code": 200,
     "request_id": "<Your Request ID>",
-    "code": null,
-    "message": "",
-    "output": {
-        "task_id": "<Your Task ID>",
-        "task_status": "SUCCEEDED",
-        "url": "<包含输出结果的url>",
-        "submit_time": "2025-02-21 13:51:26.465",
-        "scheduled_time": "2025-02-21 13:51:26.507",
-        "end_time": "2025-02-21 13:51:27.273"
-    },
+    "task_id": "<Your Task ID>",
+    "status": "SUCCEEDED",
+    "result_url": "<包含输出结果的url>",
     "usage": {
         "total_tokens": 384
     }
@@ -749,23 +699,16 @@ Details
 }
 ```
 **任务执行失败**
+
+任务处于 FAILED 终态时，`jobs.wait` / `jobs.fetch` 将抛出 `DashScopeError`，以下为对应的任务快照内容：
+
 ```
 {
-    "status_code": 200,
     "request_id": "<Your Request ID>",
-    "code": null,
-    "message": "",
-    "output": {
-        "task_id": "<Your Task ID>",
-        "task_status": "FAILED",
-        "url": "null",
-        "submit_time": "2023-09-07 10:22:52.459",
-        "scheduled_time": "2023-09-07 10:22:52.481",
-        "end_time": "2023-09-07 10:22:53.419"
-        "code": "InvalidFile.TypeNotTxt",
-        "message": "File type should be txt"
-    },
-    "usage": null
+    "task_id": "<Your Task ID>",
+    "status": "FAILED",
+    "code": "InvalidFile.TypeNotTxt",
+    "message": "File type should be txt"
 }
 ```
 

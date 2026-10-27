@@ -54,7 +54,7 @@ Function Calling 通过应用程序与大模型之间的多步骤交互实现：
     -   千问Omni-Realtime：Qwen3.8-Omni-Flash-Realtime、Qwen3.5-Omni-Plus-Realtime系列、Qwen3.5-Omni-Flash-Realtime系列
     -   Qwen3-VL 开源系列
 -   **语音对话模型**
-    -   千问Audio-Realtime：Qwen-Audio-3.1-Realtime-Plus、Qwen-Audio-3.0-Realtime-Plus系列、Qwen-Audio-3.0-Realtime-Flash系列
+    -   千问Audio-Realtime：Qwen-Audio-3.1-Realtime-Plus、Qwen-Audio-3.1-Realtime-Flash、Qwen-Audio-3.0-Realtime-Plus系列、Qwen-Audio-3.0-Realtime-Flash系列
 
 #### DeepSeek
 
@@ -326,13 +326,17 @@ python
 
 ```
 import os
-from dashscope import MultiModalConversation
 import json
 import random
 import dashscope
 
-# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 如果没有配置环境变量，请将下行替换为api_key="sk-xxx"
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # 1. 定义工具列表
 tools = [
@@ -364,15 +368,12 @@ def get_current_weather(arguments):
 
 # 3. 封装模型响应函数
 def get_response(messages):
-    response = MultiModalConversation.call(
-        # 如果没有配置环境变量，请将下行替换为api_key="sk-xxx"
-        api_key=os.getenv("DASHSCOPE_API_KEY"),
+    response = client.multimodal.chat.create(
         # 此处以多模态模型 qwen3.8-max 为例。若调用 qwen-plus 等纯文本模型需使用纯文本模型接口，参见https://help.aliyun.com/model-studio/qwen-api-via-dashscope
         model="qwen3.8-max",
         enable_thinking=False,
         messages=messages,
         tools=tools,
-        result_format="message",
     )
     return response
 
@@ -386,21 +387,21 @@ messages = [
 
 # 5. 第一次调用模型
 response = get_response(messages)
-assistant_output = response.output.choices[0].message
-messages.append(assistant_output)
+assistant_output = response.choices[0].message
+messages.append(assistant_output.model_dump(exclude_none=True))
 
 # 6. 判断是否需要调用工具
-if "tool_calls" not in assistant_output or not assistant_output["tool_calls"]:
-    print(f"无需调用工具，直接回复：{assistant_output['content']}")
+if assistant_output.tool_calls is None:
+    print(f"无需调用工具，直接回复：{assistant_output.content}")
 else:
     # 7. 进入工具调用循环
     # 循环条件：只要最新的模型回复中包含工具调用请求
-    while "tool_calls" in assistant_output and assistant_output["tool_calls"]:
-        tool_call = assistant_output["tool_calls"][0]
+    while assistant_output.tool_calls:
+        tool_call = assistant_output.tool_calls[0]
         # 解析工具调用的信息
-        func_name = tool_call["function"]["name"]
-        arguments = json.loads(tool_call["function"]["arguments"])
-        tool_call_id = tool_call.get("id")  # 获取 tool_call_id
+        func_name = tool_call.function.name
+        arguments = json.loads(tool_call.function.arguments)
+        tool_call_id = tool_call.id  # 获取 tool_call_id
         print(f"正在调用工具 [{func_name}]，参数：{arguments}")
         # 执行对应的工具函数
         tool_result = get_current_weather(arguments)
@@ -414,10 +415,10 @@ else:
         messages.append(tool_message)
         # 再次调用模型，让模型基于工具结果进行回复
         response = get_response(messages)
-        assistant_output = response.output.choices[0].message
-        messages.append(assistant_output)
+        assistant_output = response.choices[0].message
+        messages.append(assistant_output.model_dump(exclude_none=True))
     # 8. 输出最终的自然语言回复
-    content = assistant_output["content"]
+    content = assistant_output.content
     if isinstance(content, list) and content:
         content = content[0].get("text", "") if isinstance(content[0], dict) else str(content[0])
     print(f"助手最终回复：{content}")
@@ -3722,11 +3723,15 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 ### 示例代码
 
 ```
+import os
 import dashscope
-from dashscope import MultiModalConversation
 
-# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 tools = [
     # 工具1 获取当前时刻的时间
@@ -3771,16 +3776,14 @@ messages = [{"role": "user", "content": [{"text": input("请输入问题：")}]}
 #     {"text": "图像地点天气？"}]
 # }]
 
-completion = MultiModalConversation.call(
+stream = client.multimodal.chat.create(
     # 此处以qwen3.8-max为例，可更换为其它深度思考模型
     model="qwen3.8-max",
     messages=messages,
     enable_thinking=True,
     tools=tools,
     parallel_tool_calls=True,
-    stream=True,
-    incremental_output=True,
-    result_format="message"
+    stream=True,  # 流式输出默认为增量模式
 )
 
 reasoning_content = ""
@@ -3789,44 +3792,42 @@ tool_info = []
 is_answering = False
 print("="*20+"思考过程"+"="*20)
 
-for chunk in completion:
-    if chunk.status_code == 200:
-        msg = chunk.output.choices[0].message
+for chunk in stream:
+    delta = chunk.choices[0].delta
 
-        # 处理思考过程
-        if 'reasoning_content' in msg and msg.reasoning_content:
-            reasoning_content += msg.reasoning_content
-            print(msg.reasoning_content, end="", flush=True)
+    # 处理思考过程
+    if delta.reasoning_content:
+        reasoning_content += delta.reasoning_content
+        print(delta.reasoning_content, end="", flush=True)
 
-        # 处理回复内容
-        if 'content' in msg and msg.content:
-            if not is_answering:
-                is_answering = True
-                print("\n"+"="*20+"回复内容"+"="*20)
-            answer_content += msg.content
-            print(msg.content, end="", flush=True)
+    # 处理回复内容
+    if delta.content:
+        if not is_answering:
+            is_answering = True
+            print("\n"+"="*20+"回复内容"+"="*20)
+        answer_content += delta.content
+        print(delta.content, end="", flush=True)
 
-        # 处理工具调用
-        if 'tool_calls' in msg and msg.tool_calls:
-            for tool_call in msg.tool_calls:
-                index = tool_call['index']
+    # 处理工具调用
+    if delta.tool_calls:
+        for tool_call in delta.tool_calls:
+            index = tool_call.index
 
-                while len(tool_info) <= index:
-                    tool_info.append({'id': '', 'name': '', 'arguments': ''})  # 初始化所有字段
+            while len(tool_info) <= index:
+                tool_info.append({'id': '', 'name': '', 'arguments': ''})  # 初始化所有字段
 
-                # 增量更新工具ID
-                if 'id' in tool_call:
-                    tool_info[index]['id'] += tool_call.get('id', '')
+            # 增量更新工具ID
+            if tool_call.id:
+                tool_info[index]['id'] += tool_call.id
 
-                # 增量更新函数信息
-                if 'function' in tool_call:
-                    func = tool_call['function']
-                    # 增量更新函数名称
-                    if 'name' in func:
-                        tool_info[index]['name'] += func.get('name', '')
-                    # 增量更新参数
-                    if 'arguments' in func:
-                        tool_info[index]['arguments'] += func.get('arguments', '')
+            # 增量更新函数信息
+            if tool_call.function:
+                # 增量更新函数名称
+                if tool_call.function.name:
+                    tool_info[index]['name'] += tool_call.function.name
+                # 增量更新参数
+                if tool_call.function.arguments:
+                    tool_info[index]['arguments'] += tool_call.function.arguments
 
 print(f"\n"+"="*19+"工具调用信息"+"="*19)
 if not tool_info:
@@ -4386,12 +4387,16 @@ main();
 
 ```
 import os
-from dashscope import MultiModalConversation
 import json
 import dashscope
 
-# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # 自定义 System prompt
 custom_prompt = "你是一个智能助手，专门负责调用各种工具来帮助用户解决问题。你可以根据用户的需求选择合适的工具并正确调用它们。"
@@ -4456,13 +4461,10 @@ messages = [
     {"role": "user", "content": [{"text": "几点了"}]}
 ]
 
-response = MultiModalConversation.call(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+response = client.multimodal.chat.create(
     model="qwen3.8-max",
     enable_thinking=False,
     messages=messages,
-    result_format="message",  # 将输出设置为message形式
 )
 
 print(response)

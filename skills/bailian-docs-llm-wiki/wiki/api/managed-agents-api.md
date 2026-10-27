@@ -1,47 +1,34 @@
 # managed agents api
 
-Managed Agents API 是百炼平台提供的用于构建、部署和管理可编程智能体（Agent）的 RESTful 接口集合，支持环境隔离、会话状态管理、技能编排、文件与记忆存储等核心能力。该 API 采用标准 HTTP 协议，需通过 Bearer [Token](../concepts/token.md) 认证，适用于需要细粒度控制 Agent 生命周期与运行时行为的开发者场景。完整功能覆盖从开发调试到生产部署的全链路需求。
+Managed Agents API 是百炼平台提供的托管式智能体服务接口，用于创建、配置和管理具备长期记忆、工具调用、多步推理能力的自主运行 Agent。该 API 封装了环境隔离、会话生命周期、文件与凭证管理等底层复杂性，开发者可通过 RESTful 接口快速集成。其设计目标是降低构建生产级 Agent 应用的工程门槛，同时保障安全与可观测性。
 
 ## 支持的模型与功能
 
-Managed Agents API **不直接调用大模型**，而是提供对 Agent 运行时基础设施的编排能力；底层模型由用户在 `Agent` 配置中指定（如 `qwen-max`、`qwen-plus` 等），并受 [Managed Agent API 概览](../../raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md) 中定义的模型兼容性约束。支持的核心功能包括：  
-- Agent 实例的创建、更新与生命周期管理（含 `status` 查询与强制终止）  
-- 独立 `Environment` 隔离（支持多租户、多版本配置）  
-- 基于 `Session` 的有状态交互与事件流订阅（`event_type=agent_step`, `agent_finish`）  
-- `Memory Store` 提供结构化记忆持久化（键值对 + TTL）  
-- `Skill` 注册与动态绑定（支持 HTTP Webhook 和内置工具）  
-- `Vault` 与 `Credential` 安全管理敏感凭证  
-
-> **注意**：原始文档中 `skills-api.md` 描述的“本地 Python 函数注册”能力已在 v2.3 版本中移除，当前仅支持 Webhook 类型 Skill；请以 [Skill API](../../raw/application-api-reference/managed-agents-api/skills-api.md) 的最新修订版为准。
+- **模型支持**：当前仅支持百炼平台托管的 `qwen-max`、`qwen-plus` 和 `qwen-turbo` 三款 Qwen 系列大模型；其他模型（如 `qwen2.5-*`）暂未开放给 Managed Agents 使用，相关限制详见 [Managed Agent API](../../raw/application-api-reference/managed-agents-api.md)。
+- **核心功能**：包括 Agent 实例生命周期管理（创建/更新/删除）、带状态的会话（Session）控制、结构化 Memory Store 持久化、沙箱化 Environment 配置、Skill 注册与编排、Vault 安全凭证注入，以及 Webhook 事件回调。完整能力矩阵可参考 [概览](../../raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md)。
 
 ## 关键参数
 
-所有写操作（如 `POST /v1/agents`）需在请求体中包含以下必需字段：  
-- `name`: 字符串，长度 1–64，仅限字母、数字、下划线、短横线  
-- `environment_id`: 关联的 Environment ID（必须已存在）  
-- `model`: 指定模型 ID（例如 `"qwen-max"`），必须属于当前项目已开通的模型列表  
-- `prompt_template`: Jinja2 格式字符串，支持 `{{ input }}`、`{{ memory.key }}` 等上下文变量  
-
-读操作（如 `GET /v1/sessions/{session_id}`）支持通用查询参数：  
-- `include_events=true`：返回关联的 `Event` 列表（默认 `false`）  
-- `limit=50`：限制返回事件数（最大 200）  
-- `offset=0`：分页偏移量  
-
-详细参数说明见 [Agent API](../../raw/application-api-reference/managed-agents-api/agent-api.md) 与 [Session API](../../raw/application-api-reference/managed-agents-api/session-api.md)。
+- `agent_id`（路径参数）：全局唯一标识符，由平台在创建时生成，不可自定义。
+- `session_id`（请求头或 query 参数）：用于关联上下文，若未提供则自动新建会话；重复使用同一 `session_id` 可恢复历史 memory 与执行状态。
+- `input`（JSON body）：必须为字符串类型（非对象），Agent 将其作为初始用户消息解析；若需传递结构化数据，请先序列化为 JSON 字符串。
+- `tools`（可选数组）：指定启用的 Skill ID 列表，仅限已通过 [Skill](../../raw/application-api-reference/managed-agents-api/skills-api.md) 接口注册并绑定到该 Agent 的技能。
 
 ## 使用方式
 
-1. **认证**：在 `Authorization` Header 中传入 `Bearer <access_token>`，[Token](../concepts/token.md) 通过 [认证文档](../../raw/application-api-reference/managed-agents-api/managed-agents-api-authentication.md) 获取  
-2. **快速启动**：参考 [快速开始](../../raw/application-api-reference/managed-agents-api/managed-agents-quickstart.md) 中的 cURL 示例，完成 Agent 创建 → Session 启动 → 流式响应消费全流程  
-3. **生产集成**：建议使用官方 SDK（Python/Node.js），自动处理重试、事件解析与错误码映射；避免手动拼接 `webhook_url` 或硬编码 `memory_store_id`
+1. **认证**：所有请求需携带 `Authorization: Bearer <access_token>`，Token 通过 OAuth2 流程获取，具体流程见 [认证](../../raw/application-api-reference/managed-agents-api/managed-agents-api-authentication.md)。
+2. **发起调用**：向 `POST /v1/agents/{agent_id}/chat` 发送请求，Body 示例：
+   ```json
+   { "input": "请分析附件中的销售报表", "files": ["file_abc123"] }
+   ```
+3. **处理响应**：返回流式 SSE 或完整 JSON，含 `event` 类型字段（如 `"message"`、`"tool_use"`、`"error"`），需按 [Session and Event](../../raw/application-api-reference/managed-agents-api/session-api.md) 规范解析。
 
 ## 限制和注意事项
 
-- 单个 Agent 最多绑定 20 个 Skill；单个 Session 最大存活时长为 24 小时（超时后 `memory` 自动清理）  
-- `File` API 上传单文件上限 100 MB，且仅支持 `text/plain`, `application/json`, `application/pdf`, `image/*` 四类 MIME 类型  
-- 所有 `POST /v1/webhooks` 创建的回调地址必须支持 HTTPS 且响应时间 < 3s，否则触发重试（最多 3 次）并标记为 `failed`  
-- `Deployment` API 当前仅支持蓝绿发布模式，不支持金丝雀；回滚需显式调用 `POST /v1/deployments/{id}/rollback`  
-- 错误响应统一遵循 [错误码规范](../../raw/application-api-reference/managed-agents-api/managed-agents-api-errors.md)，常见 `429 Too Many Requests` 表示超出环境级 QPS 限额（默认 10 QPS）
+- 单次请求最大 `input` 长度为 32768 字符；上传文件单个不超过 100 MB，总大小不超过 500 MB/会话。
+- Memory Store 默认保留最近 100 条交互记录，超出部分自动截断；如需定制容量，须在创建 Agent 时通过 `memory_config.max_entries` 指定（最高 1000）。
+- > **注意**：原始文档中 [Environment](../../raw/application-api-reference/managed-agents-api/environment-api.md) 提到支持自定义 Docker 镜像，但该功能已于 v2.3.0 版本下线，当前仅允许使用平台预置的 `python3.11-sandbox` 和 `node18-sandbox` 运行时；最新约束以 [Deployment](../../raw/application-api-reference/managed-agents-api/deployment-api.md) 中的 `runtime` 字段说明为准。
+- 文件上传后默认 7 天过期，且仅在所属会话内可被引用；跨会话复用需显式调用 `/files/{file_id}/copy`。
 
 ## 来源文档
 

@@ -904,6 +904,14 @@ qwen3.8-max-0902
 
 qwen3.8-flash
 
+欧盟
+
+30,000
+
+5,000,000
+
+qwen3.8-flash
+
 全球
 
 30,000
@@ -1261,6 +1269,14 @@ qwen3.8-max-0902
 600
 
 150,000
+
+qwen3.8-flash
+
+中国香港
+
+30,000
+
+5,000,000
 
 qwen3.8-flash
 
@@ -1675,6 +1691,8 @@ qwen3.8-omni-flash
 2000000
 
 ### 千问Omni-Realtime
+
+通过 WebSocket 接入时，RPM 限制每分钟的建连请求次数。同一连接内的多轮响应不重复计数；重连计为新请求。目前没有单独限制同时保持的连接总数，但仍受 TPM 限制。各型号限额见下方表格。
 
 #### 华北2（北京）
 
@@ -4582,6 +4600,8 @@ fun-music-v1
 
 ### 实时语音对话
 
+通过 WebSocket 接入时，RPM 限制每分钟的建连请求次数。同一连接内的多轮响应不重复计数；重连计为新请求。目前没有单独限制同时保持的连接总数，但仍受 TPM 限制。各型号限额见下方表格。
+
 #### 华北2（北京）
 
 **模型名称**
@@ -4597,6 +4617,12 @@ fun-music-v1
 > **含输入与输出Token**
 
 qwen-audio-3.1-realtime-plus
+
+60
+
+100,000
+
+qwen-audio-3.1-realtime-flash
 
 60
 
@@ -4631,6 +4657,14 @@ qwen-audio-3.0-realtime-flash
 > **含输入与输出Token**
 
 qwen-audio-3.1-realtime-plus
+
+国际
+
+60
+
+100,000
+
+qwen-audio-3.1-realtime-flash
 
 国际
 
@@ -4971,6 +5005,8 @@ qwen3-livetranslate-flash-2025-12-01
 国际
 
 ### Qwen-LiveTranslate-Flash-Realtime
+
+通过 WebSocket 接入时，RPM 限制每分钟的建连请求次数。同一连接内的多轮响应不重复计数；重连计为新请求。目前没有单独限制同时保持的连接总数，但仍受 TPM 限制。各型号限额见下方表格。
 
 #### 华北2（北京）
 
@@ -6552,15 +6588,69 @@ MiniMax/MiniMax-H3
 
 Tripo/Tripo-H3.1
 
-5
+300
 
 10
 
-> 同一个阿里云百炼API Key 在 2 个模型间共享额度。即这 2 个模型处于运行状态的任务总数加起来不能超过 10 个。
-
 Tripo/Tripo-P1.0
 
+300
+
 5
+
+Tripo/Tripo-ImageToSplat
+
+300
+
+5
+
+Tripo/Tripo-AutoRig
+
+300
+
+10
+
+> 自动绑骨、绑骨前检查、动画重定向共享同一并发额度，三个模型处于运行状态的任务总数不能超过 10 个。
+
+Tripo/Tripo-RigCheck
+
+300
+
+Tripo/Tripo-AnimationRetarget
+
+300
+
+Tripo/Tripo-Texture
+
+300
+
+5
+
+> 贴图、格式转换共享同一并发额度，两个模型处于运行状态的任务总数不能超过 5 个。
+
+Tripo/Tripo-ConvertFormat
+
+300
+
+Tripo/Tripo-Segmentation
+
+300
+
+10
+
+> 分割、智能分割、网格补全、重拓扑共享同一并发额度，四个模型处于运行状态的任务总数不能超过 10 个。
+
+Tripo/Tripo-SmartSegmentation
+
+300
+
+Tripo/Tripo-MeshCompletion
+
+300
+
+Tripo/Tripo-Retopology
+
+300
 
 ## 向量模型
 

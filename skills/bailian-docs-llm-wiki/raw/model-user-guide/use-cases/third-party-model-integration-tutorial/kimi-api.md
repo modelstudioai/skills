@@ -46,13 +46,15 @@ HTTP 请求地址：`POST https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com
 
 多模态模型（如 kimi-k3、kimi-k2.7-code、kimi-k2.6、kimi-k2.5）的 HTTP 请求地址为`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
-SDK调用配置的`base_url`：
+SDK调用配置的`region`：
 
 #### Python代码
 
 ```
-# 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
+import dashscope
+
+# 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
+client = dashscope.Client(workspace="{WorkspaceId}", region="cn-beijing")
 ```
 
 #### Java代码
@@ -77,12 +79,14 @@ Constants.baseHttpApiUrl="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api
 
 多模态模型（如 kimi-k3、kimi-k2.7-code、kimi-k2.6、kimi-k2.5）的 HTTP 请求地址为`POST https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
-SDK调用配置的`base_url`：
+SDK调用配置的`region`：
 
 #### Python代码
 
 ```
-dashscope.base_http_api_url = 'https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1'
+import dashscope
+
+client = dashscope.Client(workspace="{WorkspaceId}", region="us-east-1")
 ```
 
 #### Java代码
@@ -105,12 +109,14 @@ Constants.baseHttpApiUrl="https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/
 
 多模态模型（如 kimi-k3、kimi-k2.7-code、kimi-k2.6、kimi-k2.5）的 HTTP 请求地址为`POST https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
-SDK调用配置的`base_url`：
+SDK调用配置的`region`：
 
 #### Python代码
 
 ```
-dashscope.base_http_api_url = 'https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1'
+import dashscope
+
+client = dashscope.Client(workspace="{WorkspaceId}", region="eu-central-1")
 ```
 
 #### Java代码
@@ -133,13 +139,15 @@ Constants.baseHttpApiUrl="https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/a
 
 多模态模型（如 kimi-k3、kimi-k2.7-code、kimi-k2.6、kimi-k2.5）的 HTTP 请求地址为`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
-SDK调用配置的`base_url`：
+SDK调用配置的`region`：
 
 #### Python代码
 
 ```
-# 以下为新加坡地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1'
+import dashscope
+
+# 以下为新加坡地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
+client = dashscope.Client(workspace="{WorkspaceId}", region="ap-southeast-1")
 ```
 
 #### Java代码
@@ -164,12 +172,14 @@ Constants.baseHttpApiUrl="https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com
 
 多模态模型（如 kimi-k3、kimi-k2.7-code、kimi-k2.6、kimi-k2.5）的 HTTP 请求地址为`POST https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
-SDK调用配置的`base_url`：
+SDK调用配置的`region`：
 
 #### Python代码
 
 ```
-dashscope.base_http_api_url = 'https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/api/v1'
+import dashscope
+
+client = dashscope.Client(workspace="{WorkspaceId}", region="ap-northeast-1")
 ```
 
 #### Java代码
@@ -192,12 +202,14 @@ Constants.baseHttpApiUrl="https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com
 
 多模态模型（如 kimi-k3、kimi-k2.7-code、kimi-k2.6、kimi-k2.5）的 HTTP 请求地址为`POST https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
-SDK调用配置的`base_url`：
+SDK调用配置的`region`：
 
 #### Python代码
 
 ```
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/api/v1'
+import dashscope
+
+client = dashscope.Client(workspace="{WorkspaceId}", region="cn-hongkong")
 ```
 
 #### Anthropic兼容
@@ -466,21 +478,21 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 ```
 import os
 import dashscope
-from dashscope import MultiModalConversation
-# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key="sk-xxx"
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # 初始化请求参数
 messages = [{"role": "user", "content": "你是谁？"}]
 
-completion = MultiModalConversation.call(
-    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key="sk-xxx"
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+completion = client.multimodal.chat.create(
     model="kimi-k3",
     messages=messages,
-    result_format="message",  # 设置结果格式为 message
     stream=True,              # 开启流式输出
-    incremental_output=True,  # 开启增量输出
     enable_thinking=True,     # 开启思考模式
 )
 
@@ -491,18 +503,18 @@ is_answering = False    # 是否进入回复阶段
 print("\n" + "=" * 20 + "思考过程" + "=" * 20 + "\n")
 
 for chunk in completion:
-    message = chunk.output.choices[0].message
+    message = chunk.choices[0].delta
 
     # 只收集思考内容
-    reasoning_chunk = message.get("reasoning_content")
+    reasoning_chunk = message.reasoning_content
     if reasoning_chunk:
         if not is_answering:
             print(reasoning_chunk, end="", flush=True)
         reasoning_content += reasoning_chunk
 
-    # 收到 content，开始进行回复（content 为列表，需提取其中的文本）
-    if message.get("content"):
-        text = message.content[0].get("text", "")
+    # 收到 content，开始进行回复
+    if message.content:
+        text = message.content
         if not is_answering:
             print("\n" + "=" * 20 + "完整回复" + "=" * 20 + "\n")
             is_answering = True
@@ -933,13 +945,15 @@ Python
 ```
 import os
 import dashscope
-from dashscope import MultiModalConversation
-# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # 单图传入示例（开启思考模式）
-response = MultiModalConversation.call(
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+response = client.multimodal.chat.create(
     model="kimi-k3",
     messages=[
         {
@@ -954,17 +968,16 @@ response = MultiModalConversation.call(
 )
 
 # 输出思考过程
-if hasattr(response.output.choices[0].message, 'reasoning_content') and response.output.choices[0].message.reasoning_content:
+if response.choices[0].message.reasoning_content:
     print("\n" + "=" * 20 + "思考过程" + "=" * 20 + "\n")
-    print(response.output.choices[0].message.reasoning_content)
+    print(response.choices[0].message.reasoning_content)
 
 # 输出回复内容
 print("\n" + "=" * 20 + "完整回复" + "=" * 20 + "\n")
-print(response.output.choices[0].message.content[0]["text"])
+print(response.output_text)
 
 # 多图传入示例（开启思考模式，取消注释使用）
-# response = MultiModalConversation.call(
-#     api_key=os.getenv("DASHSCOPE_API_KEY"),
+# response = client.multimodal.chat.create(
 #     model="kimi-k2.6",
 #     messages=[
 #         {
@@ -980,9 +993,9 @@ print(response.output.choices[0].message.content[0]["text"])
 # )
 #
 # # 输出思考过程和回复
-# if hasattr(response.output.choices[0].message, 'reasoning_content') and response.output.choices[0].message.reasoning_content:
-#     print("\n思考过程：\n" + response.output.choices[0].message.reasoning_content)
-# print("\n完整回复：\n" + response.output.choices[0].message.content[0]["text"])
+# if response.choices[0].message.reasoning_content:
+#     print("\n思考过程：\n" + response.choices[0].message.reasoning_content)
+# print("\n完整回复：\n" + response.output_text)
 ```
 
 Java
@@ -1274,8 +1287,13 @@ Python
 import dashscope
 import os
 
-# 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量， 请用百炼API Key将下行替换为： api_key ="sk-xxx"
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 messages = [
     {"role": "user",
@@ -1287,14 +1305,12 @@ messages = [
     }
 ]
 
-response = dashscope.MultiModalConversation.call(
-    # 若没有配置环境变量， 请用百炼API Key将下行替换为： api_key ="sk-xxx"
-    api_key=os.getenv('DASHSCOPE_API_KEY'),
+response = client.multimodal.chat.create(
     model='kimi-k2.6',
     messages=messages
 )
 
-print(response.output.choices[0].message.content[0]["text"])
+print(response.output_text)
 ```
 
 Java
@@ -1469,8 +1485,13 @@ Python
 import os
 import dashscope
 
-# 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 messages = [{"role": "user",
              "content": [
@@ -1480,13 +1501,11 @@ messages = [{"role": "user",
                            "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/aedbqh/football4.jpg"],
                    "fps":2},
                  {"text": "描述这个视频的具体过程"}]}]
-response = dashscope.MultiModalConversation.call(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+response = client.multimodal.chat.create(
     model='kimi-k2.6',
     messages=messages
 )
-print(response.output.choices[0].message.content[0]["text"])
+print(response.output_text)
 ```
 
 Java
@@ -1700,10 +1719,14 @@ Python
 import base64
 import os
 import dashscope
-from dashscope import MultiModalConversation
 
-# 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 #  编码函数： 将本地文件转换为 Base64 编码的字符串
 def encode_image(image_path):
@@ -1722,13 +1745,11 @@ messages = [
         ],
     },
 ]
-response = MultiModalConversation.call(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+response = client.multimodal.chat.create(
     model="kimi-k2.6",
     messages=messages,
 )
-print(response.output.choices[0].message.content[0]["text"])
+print(response.output_text)
 
 # 以下为传入本地视频文件、本地图像列表示例
 
@@ -1871,11 +1892,14 @@ Python
 
 ```
 import os
-from dashscope import MultiModalConversation
 import dashscope
 
-# 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # 将xxx/eagle.png替换为你本地图像的绝对路径
 local_path = "xxx/eagle.png"
@@ -1884,11 +1908,10 @@ messages = [
                 {'role':'user',
                 'content': [{'image': image_path},
                             {'text': '图中描绘的是什么景象?'}]}]
-response = MultiModalConversation.call(
-    api_key=os.getenv('DASHSCOPE_API_KEY'),
+response = client.multimodal.chat.create(
     model='kimi-k2.6',
     messages=messages)
-print(response.output.choices[0].message.content[0]["text"])
+print(response.output_text)
 
 #   以下为以本地文件路径传入视频、图像列表示例
 # 【本地视频文件】

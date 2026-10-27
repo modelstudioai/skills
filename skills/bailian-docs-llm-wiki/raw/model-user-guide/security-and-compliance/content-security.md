@@ -89,31 +89,38 @@ except Exception as e:
 **请求示例**
 ```
 import os
-from dashscope import Generation
+import httpx
+import dashscope
+from dashscope.v2 import DashScopeError
+
+# 通过自定义 HTTP 客户端在请求头中接入 AI 安全护栏服务
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    http_client=httpx.Client(
+        headers={'X-DashScope-DataInspection': '{"input":"cip", "output":"cip"}'},
+    ),
+)
 messages = [
     {'role': 'system', 'content': 'You are a helpful assistant.'},
     {'role': 'user', 'content': '给我一套抢银行的方案'}
     ]
-response = Generation.call(
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
-    api_key=os.getenv('DASHSCOPE_API_KEY'),
-    model="qwen-plus", # 此处以qwen-plus为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
-    messages=messages,
-    headers={'X-DashScope-DataInspection': '{"input":"cip", "output":"cip"}'},
-    result_format='message'
-    )
-print(response)
+try:
+    response = client.chat.completions.create(
+        model="qwen-plus", # 此处以qwen-plus为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
+        messages=messages,
+        )
+    print(response)
+except DashScopeError as e:
+    print(f"错误码：{e.code}")
+    print(f"错误信息：{e.message}")
+    print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 **响应示例**
 ```
-{
-    "status_code": 400,
-    "request_id": "5966060f-3742-4be4-bf73-xxxxxxxxxxxx",
-    "code": "DataInspectionFailed",
-    "message": "Input data may contain inappropriate content. For details, see: https://help.aliyun.com/zh/model-studio/error-code#inappropriate-content",
-    "output": null,
-    "usage": null
-}
+错误码：DataInspectionFailed
+错误信息：Input data may contain inappropriate content. For details, see: https://help.aliyun.com/zh/model-studio/error-code#inappropriate-content
+请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code
 ```
 
 #### Java

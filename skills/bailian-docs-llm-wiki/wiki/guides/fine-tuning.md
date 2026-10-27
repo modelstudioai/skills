@@ -1,49 +1,46 @@
 # fine tuning
 
-百炼平台的 fine tuning 是一种模型定制化能力，允许开发者基于自有数据对基础大模型进行针对性训练，从而提升其在特定业务场景、行业知识或安全合规要求下的表现。它支持多种训练范式（SFT、CPT、DPO、RL、OPD），覆盖文本、图像、视频、语音及决策模型等多种模态，并提供控制台可视化操作与 API 编程两种使用方式。
+fine tuning 是阿里云百炼平台提供的核心模型优化能力，支持通过领域数据对预训练大模型进行定制化训练，以提升其在特定业务场景下的准确性、安全性、响应速度与合规性。该能力覆盖文本生成、视觉理解、语音合成、图像/视频生成及决策模型等多种模态，并提供 SFT（监督微调）、CPT（持续预训练）、DPO（直接偏好优化）、RL（强化学习）和 OPD（在线策略蒸馏）等多种训练范式，兼顾效果、成本与工程效率。
 
-## 支持的模型/功能
+## 支持的模型与功能
 
-百炼支持多类模型的 fine tuning，按模态和训练方式划分如下：
+百炼支持多类模型的 fine tuning，不同模型支持的训练方式存在差异：
 
-- **文本生成模型**：支持 SFT、CPT、DPO、RL 和 OPD 四种主流训练方式。Qwen3 系列（如 `qwen3-8b`、`qwen3-32b`）、Qwen2.5 系列（如 `qwen2.5-7b-instruct`）及千问 Plus 等均支持全参与高效（LoRA）训练 [模型调优简介](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)。  
-- **视觉理解模型（千问VL）**：支持 SFT 训练（如 `qwen3-vl-8b-instruct`），但暂不支持 CPT 与 DPO [调优数据上传规则](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/text-generation-tuning-data-upload-rules.md)。  
-- **图像/视频生成模型（万相、千问图像）**：仅支持 SFT 高效微调（LoRA），不支持 CPT/DPO/RL；训练目标聚焦于风格、IP 形象或特效复现 [微调图像生成模型](../../raw/model-user-guide/fine-tuning/wan-image-generation-finetune-guide.md)。  
-- **语音合成模型（CosyVoice）**：仅支持 `efficient_sft` 方式，且仅限 `cosyvoice-v3-flash` 模型，不支持 CPT/DPO/RL [CosyVoice模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-speech-synthesis-model/fine-tune-speech-synthesis-model-by-api.md)。  
-- **决策模型**：`decision-model-preview-2026-09-24` 不参与常规 CPT/SFT/DPO 流程，需使用专属微调流程 [决策模型微调最佳实践](../../raw/model-user-guide/fine-tuning/decision-model-tuning-guide.md)。  
-- **强化学习（RL）与在线策略蒸馏（OPD）**：为高级训练范式，需通过 SDK 提交，依赖函数计算（FC）与 OpenTelemetry 可观测能力，且仅支持指定模型（如 `qwen3.5-9b`）与地域（北京）[强化学习训练概述](../../raw/model-user-guide/fine-tuning/rl-overview/rl-training-overview.md)、[在线策略蒸馏训练概述](../../raw/model-user-guide/fine-tuning/opd-overview/opd-training-overview.md)。
+- **文本生成模型**：全面支持 CPT、SFT（全参/高效）、DPO（全参/高效）及 RL 训练。例如 `qwen3-32b` 支持全部五种方式，而 `qwen3.7-plus-2026-05-26` 仅支持 SFT 全参训练 [模型调优简介](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)。
+- **视觉理解模型（千问VL）**：支持 SFT 全参/高效训练，但不支持 CPT 和 DPO [模型调优简介](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)。
+- **图像/视频生成模型（万相、千问图像）**：仅支持 SFT-LoRA 高效微调，且训练控制参数与文本模型不同（如万相使用 `max_steps`，千问使用 `n_epochs`）[微调图像生成模型](../../raw/model-user-guide/fine-tuning/wan-image-generation-finetune-guide.md)。
+- **语音合成模型（CosyVoice）**：仅支持 `efficient_sft` 方式，且必须为同一发音人多条录音，产出为独立部署的单音色模型 [CosyVoice模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-speech-synthesis-model/fine-tune-speech-synthesis-model-by-api.md)。
+- **决策模型**：`decision-model-preview-2026-09-24` 不参与常规 CPT/SFT/DPO 训练，需使用专属微调流程 [模型调优简介](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)。
 
-> **注意**：文档中关于“全参训练效果优于高效训练”的推荐（见[在控制台进行模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-on-console.md)）与实际工程实践存在矛盾——LoRA 高效训练在多数业务场景下已能达成接近全参的效果，且显著降低显存与时间成本；官方推荐应以模型实际支持情况与验证结果为准，而非绝对化表述。
+> **注意**：文档 2 和文档 5 的表格中，`Qwen3.6-Plus-2026-04-02` 在 CPT 全参训练列均标为 ✓，但文档 2 明确说明“**重要**本文档仅适用于华北2（北京）地域”，而文档 5 未提地域限制。实际使用时，CPT 训练仅在北京地域可用，其他地域用户尝试将失败。
 
 ## 关键参数
 
-fine tuning 的核心参数因训练方式与模型类型而异，通用关键参数如下：
+fine tuning 的效果高度依赖超参数配置，关键参数及其推荐值如下：
 
-- **训练方式（`training_type`）**：`efficient_sft`（LoRA）、`full_sft`、`cpt`、`dpo`、`rl`、`opd`；部分模型仅支持子集（如 CosyVoice 仅支持 `efficient_sft`）。  
-- **学习率（`learning_rate`）**：SFT 高效训练推荐 `1e-4` 量级，全参训练推荐 `1e-5` 量级，CPT 推荐 `1e-5`；RL 训练通常更低（如 `2e-6`）[在控制台进行模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-on-console.md)。  
-- **循环次数（`n_epochs`）**：文本 SFT 推荐 `1–5` 次（依数据量调整），RL/OPD 通常设为 `1`；图像/视频模型则用 `max_steps` 控制（如 `800` 步）[微调图像生成模型](../../raw/model-user-guide/fine-tuning/wan-image-generation-finetune-guide.md)、[强化学习训练配置 — 提交与配置](../../raw/model-user-guide/fine-tuning/rl-overview/rl-training-config-monitoring.md)。  
-- **批次大小（`batch_size`）**：文本模型常用 `16` 或 `32`；语音与视频模型常设为 `1`（因输入尺寸大）[CosyVoice模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-speech-synthesis-model/fine-tune-speech-synthesis-model-by-api.md)、[微调视频生成模型](../../raw/model-user-guide/fine-tuning/wan-video-generation-finetune-guide.md)。  
-- **LoRA 参数（`lora_rank`, `lora_alpha`, `lora_dropout`）**：默认值分别为 `8`、`16`、`0.1`；图像/视频模型常设更高秩（如 `32`）以捕获复杂模式 [微调视频生成模型](../../raw/model-user-guide/fine-tuning/wan-video-generation-finetune-guide.md)。  
-- **教师模型（`teacher_model`）**：OPD 必填字段，用于提供 token 级概率分布；须与学生模型同系列且更强（如 `qwen3.5-397b-a17b` → `qwen3.5-9b`）[在线策略蒸馏训练配置](../../raw/model-user-guide/fine-tuning/opd-overview/opd-training-config.md)。
+- **`learning_rate`**：高效训练推荐 `1e-4` 量级，全参训练推荐 `1e-5` 量级；CPT 训练也推荐 `1e-5` 量级。过高易导致模型发散，过低则收敛缓慢 [在控制台进行模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-on-console.md)。
+- **`n_epochs`**：数据量 < 10,000 条时推荐 3–5 轮；> 10,000 条时推荐 1–2 轮。过多轮次易过拟合 [在控制台进行模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-on-console.md)。
+- **`batch_size`**：默认值通常适用，常见推荐值为 16 或 32。具体范围因模型和训练方式而异，需以控制台显示为准 [在控制台进行模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-on-console.md)。
+- **`max_length`**：建议设为模型支持的最大值（如 8192）。SFT 会丢弃超长数据，DPO 则自动截断 [在控制台进行模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-on-console.md)。
+- **LoRA 参数（`lora_rank`, `lora_alpha`, `lora_dropout`）**：高效训练专用，默认值（`rank=8`, `alpha=16`, `dropout=0.1`）适用于多数场景；调整 `rank` 和 `alpha` 可平衡效果与参数量 [在控制台进行模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-on-console.md)。
 
 ## 使用方式
 
-fine tuning 支持控制台与 API 两种入口，流程高度一致：
+fine tuning 可通过控制台或 API 两种方式完成，二者流程一致但细节有别：
 
-1. **准备数据集**：按训练方式选择格式（SFT 用 `messages` JSONL，DPO 用 `chosen/rejected`，CPT 用纯文本 `{text}`，OPD/RL 需含 `rollout_extra`）；单文件 ≤200 MB（API 上传上限为 300 MB）；所有训练方式均需先上传至百炼平台获取 `file_id` [调优数据上传规则](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/text-generation-tuning-data-upload-rules.md)。  
-2. **创建训练任务**：  
-   - **控制台**：进入[模型调优](https://bailian.console.aliyun.com/cn-beijing/model/tuning)页面 → “创建训练任务” → 选择模型、训练方式、数据集、超参 → 提交 [在控制台进行模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-on-console.md)。  
-   - **API**：调用 `/api/v1/files` 上传数据 → 调用 `/api/v1/fine-tunes` 创建任务，传入 `model`、`training_file_ids`、`training_type`、`hyper_parameters` 等 [使用 API 或命令行进行模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/fine-tuning-api-guide.md)。  
-3. **监控与管理**：训练中可查看日志、损失曲线、评估指标；RL/OPD 任务需通过 ARMS 控制台查看 Tracing 与自定义指标 [强化学习的可观测配置与指标参考](../../raw/model-user-guide/fine-tuning/rl-overview/observable-configuration-for-reinforcement-learning.md)、[在线策略蒸馏可观测配置与指标参考](../../raw/model-user-guide/fine-tuning/opd-overview/opd-observable-config.md)。  
-4. **部署与调用**：训练完成后，模型自动发布至“我的模型”，可一键部署为 API 服务；调用时使用新模型 ID，无需修改 Prompt 结构 [0 代码强化大模型安全合规能力](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/enhance-the-security-compliance-of-large-models.md)。
+- **控制台方式**：适用于快速验证和低代码场景。流程为：创建训练任务 → 选择模型与训练方法（CPT/SFT/DPO/RL）→ 上传或选择数据集 → 配置超参数 → 启动训练。控制台支持训练单元预付费/后付费及按 Token 计费 [在控制台进行模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-on-console.md)。
+- **API 方式**：适用于自动化流水线和集成开发。需先调用 `/api/v1/files` 上传数据文件（`purpose="fine-tune"`），再调用 `/api/v1/fine-tunes` 创建训练任务。**通过 API 创建的任务仅支持按 Token 计费**，不支持训练单元计费 [使用 API 或命令行进行模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/fine-tuning-api-guide.md)。
+- **特殊模型（RL/OPD/决策模型）**：必须使用 API（SDK）方式。RL 和 OPD 需要自定义函数组件（Rollout/Reward）并部署到函数计算；决策[模型微调](../concepts/model-fine-tuning.md)也仅支持 API 提交 [强化学习训练概述](../../raw/model-user-guide/fine-tuning/rl-training-overview.md)、[在线策略蒸馏训练配置](../../raw/model-user-guide/fine-tuning/opd-training-overview/opd-training-config.md)、[决策模型微调最佳实践](../../raw/model-user-guide/fine-tuning/decision-model-tuning-guide.md)。
 
 ## 限制和注意事项
 
-- **地域限制**：绝大多数 fine tuning 功能（CPT、DPO、RL、OPD、决策模型）仅支持华北2（北京）地域；图像/视频/语音模型亦强制要求北京地域 API Key [微调图像生成模型](../../raw/model-user-guide/fine-tuning/wan-image-generation-finetune-guide.md)、[CosyVoice模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-speech-synthesis-model/fine-tune-speech-synthesis-model-by-api.md)。  
-- **计费差异**：控制台支持按 [Token](../concepts/token.md)、预付费/后付费训练单元三种计费方式；API 创建的任务**仅支持按 [Token](../concepts/token.md) 计费**，不支持训练单元 [使用 API 或命令行进行模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/fine-tuning-api-guide.md)。RL 训练**强制使用训练单元（MTU）**，不支持按 [Token](../concepts/token.md) 计费 [强化学习训练概述](../../raw/model-user-guide/fine-tuning/rl-overview/rl-training-overview.md)。  
-- **数据与配置约束**：数据集类型（训练集/评测集）创建后不可变更；切换训练方式（如 SFT → DPO）会清空已上传文件；`loss_weight` 字段仅默认支持 Qwen3.5+ 模型，旧版本需联系商务经理 [调优数据上传规则](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/text-generation-tuning-data-upload-rules.md)。  
-- **模型产物隔离**：CosyVoice 调优产物为独立部署的新模型，`voice` 参数固定为 `default`，不再支持声音复刻或设计；决策模型微调后亦为全新模型实例，非原模型的音色/能力扩展 [CosyVoice模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-speech-synthesis-model/fine-tune-speech-synthesis-model-by-api.md)、[决策模型微调最佳实践](../../raw/model-user-guide/fine-tuning/decision-model-tuning-guide.md)。  
-- **安全与合规**：SFT 是强化模型安全对齐的有效手段，但需确保训练数据符合中国法律法规及阿里云算法安全规范；仅依赖 Prompt 工程或后处理无法替代模型参数层面的安全内化 [0 代码强化大模型安全合规能力](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/enhance-the-security-compliance-of-large-models.md)。
+- **地域限制**：绝大多数 fine tuning 功能（包括 CPT、DPO、RL、OPD）**仅在华北2（北京）地域可用**。部分模型（如 CosyVoice）明确声明仅支持北京地域 [CosyVoice模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-speech-synthesis-model/fine-tune-speech-synthesis-model-by-api.md)。
+- **数据格式与大小**：SFT/DPO/CPT 数据需为 JSONL 格式，单文件上限 200 MB；API 上传单文件上限 300 MB，总配额 100 GB [调优数据上传规则](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/text-generation-tuning-data-upload-rules.md)。视频生成模型数据需为 ZIP 格式 [微调视频生成模型](../../raw/model-user-guide/fine-tuning/wan-video-generation-finetune-guide.md)。
+- **计费差异**：
+  - 控制台支持三种计费方式：按 Token、训练单元预付费、训练单元后付费。
+  - **API 创建的任务仅支持按 Token 计费** [使用 API 或命令行进行模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/fine-tuning-api-guide.md)。
+  - RL 训练**仅支持训练单元计费**，不支持按 Token 计费 [强化学习训练概述](../../raw/model-user-guide/fine-tuning/rl-training-overview.md)。
+- **模型选择逻辑**：对于文本生成模型，阿里云百炼推荐递进式训练顺序：`CPT（可选）→ SFT → DPO（可选）→ RL（可选）`，以分别实现补知识、学做事、做得更好、学推理的目标 [模型调优简介](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)、[强化学习训练概述](../../raw/model-user-guide/fine-tuning/rl-training-overview.md)。
 
 ## 来源文档
 
@@ -57,17 +54,15 @@ fine tuning 支持控制台与 API 两种入口，流程高度一致：
 - [微调视频生成模型](../../raw/model-user-guide/fine-tuning/wan-video-generation-finetune-guide.md)
 - [语音合成模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-speech-synthesis-model.md)
 - [CosyVoice模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-speech-synthesis-model/fine-tune-speech-synthesis-model-by-api.md)
-- [强化学习概览](../../raw/model-user-guide/fine-tuning/rl-overview.md)
-- [强化学习训练概述](../../raw/model-user-guide/fine-tuning/rl-overview/rl-training-overview.md)
-- [强化学习训练配置 — 提交与配置](../../raw/model-user-guide/fine-tuning/rl-overview/rl-training-config-monitoring.md)
-- [强化学习开发指南](../../raw/model-user-guide/fine-tuning/rl-overview/rl-function-development-guide.md)
-- [在线策略蒸馏概览](../../raw/model-user-guide/fine-tuning/opd-overview.md)
-- [强化学习的可观测配置与指标参考](../../raw/model-user-guide/fine-tuning/rl-overview/observable-configuration-for-reinforcement-learning.md)
-- [在线策略蒸馏训练概述](../../raw/model-user-guide/fine-tuning/opd-overview/opd-training-overview.md)
-- [Model OPD 开发](../../raw/model-user-guide/fine-tuning/opd-overview/opd-model-development-guide.md)
-- [Agentic OPD 开发](../../raw/model-user-guide/fine-tuning/opd-overview/opd-agentic-development-guide.md)
-- [在线策略蒸馏训练配置](../../raw/model-user-guide/fine-tuning/opd-overview/opd-training-config.md)
-- [在线策略蒸馏可观测配置与指标参考](../../raw/model-user-guide/fine-tuning/opd-overview/opd-observable-config.md)
+- [强化学习训练概述](../../raw/model-user-guide/fine-tuning/rl-training-overview.md)
+- [强化学习开发指南](../../raw/model-user-guide/fine-tuning/rl-training-overview/rl-function-development-guide.md)
+- [强化学习训练配置 — 提交与配置](../../raw/model-user-guide/fine-tuning/rl-training-overview/rl-training-config-monitoring.md)
+- [强化学习的可观测配置与指标参考](../../raw/model-user-guide/fine-tuning/rl-training-overview/observable-configuration-for-reinforcement-learning.md)
+- [在线策略蒸馏训练概述](../../raw/model-user-guide/fine-tuning/opd-training-overview.md)
+- [Model OPD 开发](../../raw/model-user-guide/fine-tuning/opd-training-overview/opd-model-development-guide.md)
+- [Agentic OPD 开发](../../raw/model-user-guide/fine-tuning/opd-training-overview/opd-agentic-development-guide.md)
+- [在线策略蒸馏训练配置](../../raw/model-user-guide/fine-tuning/opd-training-overview/opd-training-config.md)
+- [在线策略蒸馏可观测配置与指标参考](../../raw/model-user-guide/fine-tuning/opd-training-overview/opd-observable-config.md)
 - [决策模型微调最佳实践](../../raw/model-user-guide/fine-tuning/decision-model-tuning-guide.md)
 
 

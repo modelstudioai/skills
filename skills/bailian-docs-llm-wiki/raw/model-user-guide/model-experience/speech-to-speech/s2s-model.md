@@ -20,7 +20,7 @@ OpenAI GPT-Live 1、Gemini 3.8 Live
 
 OpenAI GPT-Realtime-2.1 Mini
 
-`qwen-audio-3.0-realtime-flash`
+`qwen-audio-3.1-realtime-flash`
 
 实时翻译 / 同传
 
@@ -91,7 +91,7 @@ Realtime API
 
 成本敏感的对话
 
-`qwen-audio-3.0-realtime-flash`
+`qwen-audio-3.1-realtime-flash`
 
 Realtime API
 
@@ -123,7 +123,7 @@ Realtime API
 
 ### 联网搜索
 
-需要检索实时信息并生成语音回复时，实时对话可使用 Qwen3.8-Omni-Flash-Realtime 或 Qwen3.5-Omni-Realtime；文件调用可使用 Qwen3.5-Omni（Chat Completions，Plus 和 Flash 系列）。模型自主决定是否搜索。Qwen-Audio Realtime 3.0 Plus/Flash 和 3.1 Plus 也支持联网搜索，通过 `enable_search` 开启，不能与 Function Calling 同时启用。
+需要检索实时信息并生成语音回复时，实时对话可使用 Qwen3.8-Omni-Flash-Realtime 或 Qwen3.5-Omni-Realtime；文件调用可使用 Qwen3.5-Omni（Chat Completions，Plus 和 Flash 系列）。模型自主决定是否搜索。Qwen-Audio Realtime 3.1 Plus/Flash 和 3.0 Plus/Flash 也支持联网搜索，通过 `enable_search` 开启，不能与 Function Calling 同时启用。
 
 **说明**Qwen3-Omni-Flash 和 Livetranslate 模型不支持此功能。
 
@@ -848,7 +848,7 @@ Realtime API
 
 实时音视频对话
 
-qwen-audio-3.1-realtime-plus / qwen-audio-3.0-realtime-flash
+qwen-audio-3.1-realtime-plus / qwen-audio-3.1-realtime-flash
 
 Realtime API
 
@@ -901,6 +901,20 @@ Realtime API
 支持
 
 \--
+
+\--
+
+`qwen-audio-3.1-realtime-flash`
+
+Realtime API
+
+音频、文本
+
+支持
+
+支持
+
+不支持
 
 \--
 

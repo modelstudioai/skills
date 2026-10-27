@@ -8,27 +8,29 @@
 
 #### Python
 
-> DashScope Python SDK中的`SpeechSynthesizer`接口已统一为`MultiModalConversation`，使用方法和参数保持完全一致。
+> DashScope Python SDK 2.0 中，非实时语音合成通过`client.audio.tts.http`资源调用。
 
 ```
 # 请安装 DashScope SDK 的最新版本
 import os
 import dashscope
 
-# 以下为华北2（北京）地域的配置。
-dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'
-
-text = "那我来给大家推荐一款T恤，这款呢真的是超级好看，这个颜色呢很显气质，而且呢也是搭配的绝佳单品，大家可以闭眼入，真的是非常好看，对身材的包容性也很好，不管啥身材的宝宝呢，穿上去都是很好看的。推荐宝宝们下单哦。"
-# SpeechSynthesizer接口使用方法：dashscope.audio.qwen_tts.SpeechSynthesizer.call(...)
-response = dashscope.MultiModalConversation.call(
-    model="qwen3-tts-flash",
+# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+client = dashscope.Client(
     # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx"
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    text=text,
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
+
+text = "那我来给大家推荐一款T恤，这款呢真的是超级好看，这个颜色呢很显气质，而且呢也是搭配的绝佳单品，大家可以闭眼入，真的是非常好看，对身材的包容性也很好，不管啥身材的宝宝呢，穿上去都是很好看的。推荐宝宝们下单哦。"
+result = client.audio.tts.http.synthesize(
+    text,
+    model="qwen3-tts-flash",
     voice="Cherry"
 )
-print(response)
+print(result.audio_url, result.audio_id, result.expires_at)
 ```
 
 #### Java
@@ -100,28 +102,29 @@ curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-gen
 
 #### Python
 
-> DashScope Python SDK中的`SpeechSynthesizer`接口已统一为`MultiModalConversation`，使用新接口只需替换名称即可，其他参数完全兼容。
+> DashScope Python SDK 2.0 中，非实时语音合成通过`client.audio.tts.http`资源调用。
 
 ```
-# DashScope SDK 版本不低于 1.24.5
+# DashScope SDK 版本不低于 2.0.1
 import os
 import dashscope
 
-# 以下为华北2（北京）地域的配置。
-dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'
-
-text = "那我来给大家推荐一款T恤，这款呢真的是超级好看，这个颜色呢很显气质，而且呢也是搭配的绝佳单品，大家可以闭眼入，真的是非常好看，对身材的包容性也很好，不管啥身材的宝宝呢，穿上去都是很好看的。推荐宝宝们下单哦。"
-# SpeechSynthesizer接口使用方法：dashscope.audio.qwen_tts.SpeechSynthesizer.call(...)
-response = dashscope.MultiModalConversation.call(
-    model="qwen3-tts-flash",
+# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+client = dashscope.Client(
     # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx"
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    text=text,
-    voice="Cherry",
-    stream=True
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
 )
-for chunk in response:
+
+text = "那我来给大家推荐一款T恤，这款呢真的是超级好看，这个颜色呢很显气质，而且呢也是搭配的绝佳单品，大家可以闭眼入，真的是非常好看，对身材的包容性也很好，不管啥身材的宝宝呢，穿上去都是很好看的。推荐宝宝们下单哦。"
+for chunk in client.audio.tts.http.stream(
+    text,
+    model="qwen3-tts-flash",
+    voice="Cherry",
+):
+    # chunk.audio 为已解码的音频字节（bytes），chunk.is_final 为 True 时携带整段音频 URL
     print(chunk)
 ```
 
@@ -459,11 +462,15 @@ import os
 import dashscope
 import pyaudio
 import time
-import base64
-import numpy as np
 
-# 以下为华北2（北京）地域的配置。
-dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'
+# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+client = dashscope.Client(
+    # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx"
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 p = pyaudio.PyAudio()
 # 创建音频流
@@ -473,27 +480,18 @@ stream = p.open(format=pyaudio.paInt16,
                 output=True)
 
 text = "你好啊，我是千问"
-response = dashscope.MultiModalConversation.call(
-    # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx"
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+
+for chunk in client.audio.tts.http.stream(
+    text,
     model="qwen3-tts-flash",
-    text=text,
     voice="Cherry",
     language_type="Chinese",  # 建议与文本语种一致，以获得正确的发音和自然的语调。
-    stream=True
-)
-
-for chunk in response:
-    if chunk.output is not None:
-      audio = chunk.output.audio
-      if audio.data is not None:
-          wav_bytes = base64.b64decode(audio.data)
-          audio_np = np.frombuffer(wav_bytes, dtype=np.int16)
-          # 直接播放音频数据
-          stream.write(audio_np.tobytes())
-      if chunk.output.finish_reason == "stop":
-          print(f"finish at: {chunk.output.audio.expires_at}")
+):
+    if chunk.audio:
+        # 直接播放音频数据（chunk.audio 已是解码后的音频字节）
+        stream.write(chunk.audio)
+    if chunk.is_final:
+        print(f"finish at: {chunk.expires_at}")
 time.sleep(0.8)
 # 清理资源
 stream.stop_stream()

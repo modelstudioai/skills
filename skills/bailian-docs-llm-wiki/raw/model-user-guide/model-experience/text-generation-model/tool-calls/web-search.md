@@ -46,16 +46,13 @@ completion = client.chat.completions.create(
 设置 `enable_search: true` 即可启用联网搜索。
 
 ```
-# 导入依赖...
-response = dashscope.Generation.call(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+# 导入依赖与创建客户端...
+response = client.chat.completions.create(
     # 需使用支持联网搜索的模型
     model="qwen-plus",
     messages=[{"role": "user", "content": "杭州明天天气如何"}],
     # 通过 enable_search 参数开启联网搜索
-    enable_search=True,
-    result_format="message"
+    enable_search=True
 )
 ```
 
@@ -95,22 +92,25 @@ message = client.messages.create(
 
 ### 多模态模型的联网搜索
 
-Qwen3.8 Max、Flash 与开源系列、Qwen3.7-Flash、Qwen3.7-Plus、Qwen3.6 系列、Qwen3.5 系列（含 qwen3.5-plus、qwen3.5-flash、qwen3.5-omni 系列与千问开源模型）等模型支持图片、视频等多模态输入，属于多模态模型。这类模型需通过**多模态接口**（`multimodal-generation` 端点）调用：Python 与 Java 使用 `MultiModalConversation`，而不能使用面向纯文本模型的 `Generation`（`text-generation` 端点）。多模态模型的基础调用方式可参见《视觉推理》《图像与视频理解》文档。
+Qwen3.8 Max、Flash 与开源系列、Qwen3.7-Flash、Qwen3.7-Plus、Qwen3.6 系列、Qwen3.5 系列（含 qwen3.5-plus、qwen3.5-flash、qwen3.5-omni 系列与千问开源模型）等模型支持图片、视频等多模态输入，属于多模态模型。这类模型需通过**多模态接口**（`multimodal-generation` 端点）调用：Python SDK 2.0 使用 `client.multimodal.chat.create`，Java 使用 `MultiModalConversation`，而不能使用面向纯文本模型的 `text-generation` 端点。多模态模型的基础调用方式可参见《视觉推理》《图像与视频理解》文档。
 
 搜索策略因系列而异：qwen3.5-omni 系列仅支持 `agent` 策略；`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b` 和 `qwen3.8-27b` 在多模态接口下不支持 `agent` 策略（使用默认的 `turbo` 或 `max`），如需对 Qwen3.8 使用 agent 检索，请改用 [Responses API 的联网搜索](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y)；本节列出的其余模型支持 `turbo`、`max`、`agent` 策略。
 
-> 若使用 `Generation`（`text-generation` 端点）调用上述多模态模型，会返回 `400 url error, please check url`，请改用 `MultiModalConversation`（`multimodal-generation` 端点）。Java SDK 的 `MultiModalConversationParam` 提供 `enableSearch(true)` 用于开启联网搜索，但未提供 `searchOptions()` 方法，需通过通用参数 `parameter("search_options", ...)` 注入搜索策略等配置；Python 的 `MultiModalConversation.call` 可直接传入 `search_options`。多模态模型开启联网搜索时需使用**流式调用**（Java 使用 `streamCall`，Python 设置 `stream=True`），否则会返回 `Non-streaming mode does not support Web Search` 报错。
+> 若通过 `text-generation` 端点调用上述多模态模型，会返回 `400 url error, please check url`，请改用多模态接口（`multimodal-generation` 端点，Python 为 `client.multimodal.chat.create`，Java 为 `MultiModalConversation`）。Java SDK 的 `MultiModalConversationParam` 提供 `enableSearch(true)` 用于开启联网搜索，但未提供 `searchOptions()` 方法，需通过通用参数 `parameter("search_options", ...)` 注入搜索策略等配置；Python 的 `client.multimodal.chat.create` 可直接传入 `search_options`。多模态模型开启联网搜索时需使用**流式调用**（Java 使用 `streamCall`，Python 设置 `stream=True`），否则会返回 `Non-streaming mode does not support Web Search` 报错。
 
 Python
 
 ```
 import os
 import dashscope
-from dashscope import MultiModalConversation
-# 以下为新加坡地域配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1"
-responses = MultiModalConversation.call(
+# 以下为新加坡地域配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
     api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="ap-southeast-1",
+)
+stream = client.multimodal.chat.create(
     # 需使用支持联网搜索的多模态模型
     model="qwen3.5-plus",
     messages=[{"role": "user", "content": [{"text": "杭州今天天气如何"}]}],
@@ -123,10 +123,10 @@ responses = MultiModalConversation.call(
     },
     # 多模态模型开启联网搜索时需使用流式调用
     stream=True,
-    incremental_output=True,
 )
-for response in responses:
-    print(response.output.choices[0].message.content)
+for chunk in stream:
+    content = chunk.choices[0].delta.content or ""
+    print(content)
 ```
 
 Java
@@ -351,21 +351,23 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 import os
 import dashscope
 
-# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 messages = [
     {"role": "system", "content": "You are a helpful assistant."},
     {"role": "user", "content": "杭州明天天气是什么？"},
 ]
-response = dashscope.Generation.call(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+response = client.chat.completions.create(
     model="qwen-plus",
     messages=messages,
     enable_search=True,
-    result_format="message"
 )
-print(response["output"]["choices"][0]["message"]["content"])
+print(response.choices[0].message.content)
 ```
 
 ###### 响应示例
@@ -750,10 +752,14 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 import os
 import dashscope
 
-# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
-response = dashscope.Generation.call(
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
     api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
+response = client.chat.completions.create(
     model="qwen-plus",
     messages=[{"role": "user", "content": "Qwen 2025年9月份发布了哪些模型?"}],
     enable_search=True,
@@ -761,13 +767,12 @@ response = dashscope.Generation.call(
         "search_strategy": "max",  # 配置搜索策略为高性能模式
         "enable_source": True
     },
-    result_format="message",
 )
 print("="*20 + "搜索结果" + "="*20)
-for web in response.output.search_info["search_results"]:
-    print(f"[{web['index']}]: [{web['title']}]({web['url']})")
+for web in response.search_info.search_results:
+    print(f"[{web.index}]: [{web.title}]({web.url})")
 print("="*20 + "回复内容" + "="*20)
-print(response.output.choices[0].message.content)
+print(response.choices[0].message.content)
 ```
 
 ###### 响应示例
@@ -1168,19 +1173,22 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 import os
 import dashscope
 
-# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
-response = dashscope.Generation.call(
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
     api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
+response = client.chat.completions.create(
     model="qwen-plus",
     messages=[{"role": "user", "content": "杭州明天天气是什么？"}],
     enable_search=True,
     search_options={
         "forced_search": True  # 强制联网搜索
     },
-    result_format="message"
 )
-print(response["output"]["choices"][0]["message"]["content"])
+print(response.choices[0].message.content)
 ```
 
 ###### 响应示例
@@ -1344,10 +1352,14 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 import os
 import dashscope
 
-# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
-response = dashscope.Generation.call(
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
     api_key=os.getenv("DASHSCOPE_API_KEY", "YOUR_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
+response = client.chat.completions.create(
     model="qwen-plus",
     messages=[{"role": "user", "content": "杭州明天天气是什么？"}],
     enable_search=True,
@@ -1356,14 +1368,13 @@ response = dashscope.Generation.call(
         "enable_citation": True,     # 开启角标标注
         "citation_format": "[ref_<number>]", # 设置角标样式
     },
-    result_format="message"
 )
 
 print("="*20 + "搜索结果" + "="*20)
-for web in response.output.search_info["search_results"]:
-    print(f"[{web['index']}]: [{web['title']}]({web['url']})")
+for web in response.search_info.search_results:
+    print(f"[{web.index}]: [{web.title}]({web.url})")
 print("="*20 + "回复内容" + "="*20)
-print(response.output.choices[0].message.content)
+print(response.choices[0].message.content)
 ```
 
 ###### 响应示例
@@ -1784,10 +1795,14 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 import os
 import dashscope
 
-# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
-response = dashscope.Generation.call(
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
     api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
+response = client.chat.completions.create(
     model="qwen-plus",
     messages=[{"role": "user", "content": "阿里巴巴股价多少"}],
     enable_search=True,
@@ -1795,17 +1810,16 @@ response = dashscope.Generation.call(
         "enable_search_extension": True,  # 开启垂域搜索
         "enable_source": True,
     },
-    result_format="message"
 )
 # 增强信息在 search_info 的 extra_tool_info 字段中返回
 print("="*20 + "垂域搜索结果" + "="*20)
-for info in response.output.search_info["extra_tool_info"]:
+for info in response.search_info.extra_tool_info:
     print(info["result"])
 print("="*20 + "通用搜索结果" + "="*20)
-for web in response.output.search_info["search_results"]:
-    print(f"[{web['index']}]: [{web['title']}]({web['url']})")
+for web in response.search_info.search_results:
+    print(f"[{web.index}]: [{web.title}]({web.url})")
 print("="*20 + "回复内容" + "="*20)
-print(response.output.choices[0].message.content)
+print(response.choices[0].message.content)
 ```
 
 ###### 响应示例
@@ -2090,10 +2104,14 @@ Python
 import os
 import dashscope
 
-# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
-response = dashscope.Generation.call(
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
     api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
+response = client.chat.completions.create(
     model="qwen-plus",
     messages=[{"role": "user", "content": "最近AI领域有哪些重大新闻?"}],
     enable_search=True,
@@ -2102,13 +2120,12 @@ response = dashscope.Generation.call(
         "enable_source": True,
         "freshness": 7  # 仅检索最近7天内的内容
     },
-    result_format="message"
 )
 print("="*20 + "搜索结果" + "="*20)
-for web in response.output.search_info["search_results"]:
-    print(f"[{web['index']}]: [{web['title']}]({web['url']})")
+for web in response.search_info.search_results:
+    print(f"[{web.index}]: [{web.title}]({web.url})")
 print("="*20 + "回复内容" + "="*20)
-print(response.output.choices[0].message.content)
+print(response.choices[0].message.content)
 ```
 
 curl
@@ -2251,10 +2268,14 @@ Python
 import os
 import dashscope
 
-# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
-response = dashscope.Generation.call(
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
     api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
+response = client.chat.completions.create(
     model="qwen-plus",
     messages=[{"role": "user", "content": "北京有哪些热门新闻？"}],
     enable_search=True,
@@ -2263,13 +2284,12 @@ response = dashscope.Generation.call(
         "enable_source": True,
         "assigned_site_list": ["baidu.com", "sina.cn"]  # 仅从指定站点检索
     },
-    result_format="message"
 )
 print("="*20 + "搜索结果" + "="*20)
-for web in response.output.search_info["search_results"]:
-    print(f"[{web['index']}]: [{web['title']}]({web['url']})")
+for web in response.search_info.search_results:
+    print(f"[{web.index}]: [{web.title}]({web.url})")
 print("="*20 + "回复内容" + "="*20)
-print(response.output.choices[0].message.content)
+print(response.choices[0].message.content)
 ```
 
 curl
@@ -2404,10 +2424,14 @@ Python
 import os
 import dashscope
 
-# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
-response = dashscope.Generation.call(
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
     api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
+response = client.chat.completions.create(
     model="qwen-plus",
     messages=[{"role": "user", "content": "智能科技发展现状"}],
     enable_search=True,
@@ -2418,13 +2442,12 @@ response = dashscope.Generation.call(
             "prompt_intervene": "仅检索AI技术相关内容"
         }
     },
-    result_format="message"
 )
 print("="*20 + "搜索结果" + "="*20)
-for web in response.output.search_info["search_results"]:
-    print(f"[{web['index']}]: [{web['title']}]({web['url']})")
+for web in response.search_info.search_results:
+    print(f"[{web.index}]: [{web.title}]({web.url})")
 print("="*20 + "回复内容" + "="*20)
-print(response.output.choices[0].message.content)
+print(response.choices[0].message.content)
 ```
 
 curl
@@ -2475,10 +2498,14 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 import os
 import dashscope
 
-# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
-responses = dashscope.Generation.call(
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
     api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
+stream = client.chat.completions.create(
     model="qwen-plus",
     messages=[{"role": "user", "content": "杭州明天天气是什么？"}],
     enable_search=True,
@@ -2486,23 +2513,21 @@ responses = dashscope.Generation.call(
         "enable_source": True,
         "prepend_search_result": True,  # 首包只返回搜索来源
     },
-    result_format="message",
     stream=True,
-    incremental_output=True
 )
 
 first_chunk = True
-for resp in responses:
+for chunk in stream:
     if first_chunk:
-        search_info = resp.output.get("search_info", {})
-        if search_info:
-            print("=" * 20 + f"已阅读{len(search_info['search_results'])}个页面" + "=" * 20)
-            for web in search_info["search_results"]:
-                print(f"[{web['index']}]: [{web['title']}]({web['url']})")
+        search_info = chunk.search_info
+        if search_info and search_info.search_results:
+            print("=" * 20 + f"已阅读{len(search_info.search_results)}个页面" + "=" * 20)
+            for web in search_info.search_results:
+                print(f"[{web.index}]: [{web.title}]({web.url})")
             first_chunk = False
             print("=" * 20 + "回复内容" + "=" * 20)
 
-    content = resp.output.choices[0].message.content
+    content = chunk.choices[0].delta.content or ""
     print(content, end='')
 ```
 
@@ -2704,20 +2729,25 @@ Python
 import os
 import dashscope
 
-# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
-response = dashscope.Generation.call(
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
     api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
+response = client.chat.completions.create(
     model="qwen-plus-latest",
     messages=[
         {"role": "system", "content": "You are a helpful assistant."},
         {"role": "user", "content": "介绍一下杭州西湖"},
     ],
-    # 启用图文混合输出
-    enable_text_image_mixed=True,
-    result_format="message"
+    # 启用图文混合输出（非签名参数统一通过 parameters 传入）
+    parameters={
+        "enable_text_image_mixed": True,
+    },
 )
-print(response["output"]["choices"][0]["message"]["content"])
+print(response.choices[0].message.content)
 ```
 
 curl
@@ -2985,29 +3015,30 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 import os
 import dashscope
 
-# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx"
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 messages = [
     {'role': 'user', 'content': '基于近期AI热点新闻，预测AI的发展趋势'}
 ]
 
-response = dashscope.Generation.call(
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx"
-    api_key=os.getenv('DASHSCOPE_API_KEY'),
+stream = client.chat.completions.create(
     model="qwen-plus",
     messages=messages,
-    enable_thinking = True,
-    enable_search = True, # 开启联网搜索的参数
-    search_options = {
-        "forced_search": True, # 强制开启联网搜索
-        "enable_source": True, # 使返回结果包含搜索来源的信息，OpenAI 兼容方式暂不支持返回
-        "enable_citation": True, # 开启角标标注功能
-        "citation_format": "[ref_<number>]", # 角标形式为[ref_i]
+    enable_thinking=True,
+    enable_search=True,  # 开启联网搜索的参数
+    search_options={
+        "forced_search": True,  # 强制开启联网搜索
+        "enable_source": True,  # 使返回结果包含搜索来源的信息，OpenAI 兼容方式暂不支持返回
+        "enable_citation": True,  # 开启角标标注功能
+        "citation_format": "[ref_<number>]",  # 角标形式为[ref_i]
         "search_strategy": "max"
     },
-    stream=True,
-    incremental_output=True,
-    result_format="message",
+    stream=True,  # 流式输出默认为增量模式
 )
 
 # 定义完整思考过程
@@ -3021,33 +3052,35 @@ is_first_chunk = True
 
 print("=" * 20 + "搜索信息" + "=" * 20)
 
-for chunk in response:
+for chunk in stream:
+    # 获取当前chunk的内容（流式输出默认为增量模式）
+    content_text = chunk.choices[0].delta.content or ""
+    reasoning_text = chunk.choices[0].delta.reasoning_content or ""
     if is_first_chunk:
-        search_results = chunk.output.search_info["search_results"]
+        # 搜索就绪后首个数据块会携带搜索来源
+        search_results = chunk.search_info.search_results if chunk.search_info else []
         for web in search_results:
-            print(f"[{web['index']}]: [{web['title']}]({web['url']})")
+            print(f"[{web.index}]: [{web.title}]({web.url})")
         print("=" * 20 + "思考过程" + "=" * 20)
-        reasoning_content += chunk.output.choices[0].message.reasoning_content
-        print(chunk.output.choices[0].message.reasoning_content,end="",flush=True)
+        reasoning_content += reasoning_text
+        print(reasoning_text, end="", flush=True)
         is_first_chunk = False
     else:
         # 如果思考过程与回复皆为空，则忽略
-        if (chunk.output.choices[0].message.content == "" and
-            chunk.output.choices[0].message.reasoning_content == ""):
+        if content_text == "" and reasoning_text == "":
             pass
         else:
             # 如果当前为思考过程
-            if (chunk.output.choices[0].message.reasoning_content != "" and
-                chunk.output.choices[0].message.content == ""):
-                print(chunk.output.choices[0].message.reasoning_content, end="",flush=True)
-                reasoning_content += chunk.output.choices[0].message.reasoning_content
+            if reasoning_text != "" and content_text == "":
+                print(reasoning_text, end="", flush=True)
+                reasoning_content += reasoning_text
             # 如果当前为回复
-            elif chunk.output.choices[0].message.content != "":
+            elif content_text != "":
                 if not is_answering:
                     print("\n" + "=" * 20 + "完整回复" + "=" * 20)
                     is_answering = True
-                print(chunk.output.choices[0].message.content, end="",flush=True)
-                answer_content += chunk.output.choices[0].message.content
+                print(content_text, end="", flush=True)
+                answer_content += content_text
 
 # 如需打印完整思考和回复，请解除以下代码的注释
 # print("=" * 20 + "完整思考过程" + "=" * 20 + "\n")
@@ -3454,7 +3487,7 @@ for item in response.output:
 
 ## 计费说明
 
-**说明**本文所述“联网搜索”为模型内置的联网搜索功能，其计费如下方所示，本身不提供免费调用额度。它与百炼 MCP 广场提供的“联网搜索 MCP”服务是相互独立的两个功能，计费也相互独立：联网搜索 MCP 全部用户前 2000 次调用免费，免费额度用尽后按 29 元/千次计费，详情请参见[接入 Harness 工具](raw/model-user-guide/token-plan-guide/token-plan-personal/token-plan-harness-tool.md)。
+**说明**本文所述“联网搜索”为模型内置的联网搜索功能，其计费如下方所示，本身不提供免费调用额度。它与百炼 MCP 广场提供的“联网搜索 MCP”服务是相互独立的两个功能，计费也相互独立：联网搜索 MCP 全部用户前 2000 次调用免费，免费额度用尽后按 29 元/千次计费，详情请参见[接入 Harness 工具](raw/model-user-guide/token-plan-guide/token-plan-best-practice/token-plan-harness-tool.md)。
 
 联网搜索的费用包含两部分：
 
@@ -3549,7 +3582,7 @@ A：使用 qwen3.7-max 或更新版本的模型。qwen3.7-max 能识别非交易
 
 ### Q：如何让 Kimi 系列模型执行联网搜索？
 
-A：Kimi 系列模型（kimi-k3）仅支持通过[Responses API](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y)的 `web_search` 工具联网搜索，不支持 `enable_search` 参数。如需更灵活的检索方式，也可在百炼控制台创建智能体应用，并通过**工具 > MCP 服务**添加联网搜索 MCP 工具（如 `bailian_web_search`）。联网搜索 MCP 与内置联网搜索是相互独立的两个功能，计费也相互独立，详情请参见[接入 Harness 工具](raw/model-user-guide/token-plan-guide/token-plan-personal/token-plan-harness-tool.md)。
+A：Kimi 系列模型（kimi-k3）仅支持通过[Responses API](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y)的 `web_search` 工具联网搜索，不支持 `enable_search` 参数。如需更灵活的检索方式，也可在百炼控制台创建智能体应用，并通过**工具 > MCP 服务**添加联网搜索 MCP 工具（如 `bailian_web_search`）。联网搜索 MCP 与内置联网搜索是相互独立的两个功能，计费也相互独立，详情请参见[接入 Harness 工具](raw/model-user-guide/token-plan-guide/token-plan-best-practice/token-plan-harness-tool.md)。
 
 ## 错误信息
 

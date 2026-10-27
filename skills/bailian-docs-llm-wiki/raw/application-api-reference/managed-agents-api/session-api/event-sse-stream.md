@@ -86,6 +86,10 @@ type
 
 助手输出消息，可流式分块
 
+`reasoning`
+
+助手思考过程，开启 `event_deltas[]=reasoning` 后可流式分块
+
 `tool_call`
 
 内置工具调用请求
@@ -230,11 +234,11 @@ curl -N --no-buffer --get "$AGENTSTUDIO_URL/sessions/sesn_xxx/events/stream" \
 
 `event_start`
 
-事件开始帧，`event.id` 即该事件最终完整 Message 的 `id`，`event.type` 为事件类型（`message` / `reasoning`）；该帧自身不含 `object` / `content`
+事件开始帧，`event.id` 即该事件最终完整 Message 的 `id`，`event.type` 为事件类型（`message` / `reasoning`）；该帧不含 `content`，`object` 为 `message`，`status` 为 `in_progress`
 
 `event_delta`
 
-增量帧，`event_id` 对应 `event_start` 的 `event.id`；`delta.content` 为本次新增的 ContentBlock 片段，`delta.index` 为内容块序号
+增量帧，`event_id` 对应 `event_start` 的 `event.id`；`message` 的新增片段在 `delta.content`，`reasoning` 的新增思考文本在 `delta.reasoning`；`delta.index` 为内容块序号
 
 `message` / `reasoning`
 
@@ -250,13 +254,21 @@ curl -N --no-buffer --get "$AGENTSTUDIO_URL/sessions/sesn_xxx/events/stream" \
 
 恒为 `event_delta`
 
+`object`
+
+恒为 `content`
+
+`status`
+
+恒为 `in_progress`
+
 `event_id`
 
 所属事件 ID，等于 `event_start` 的 `event.id`，也等于最终完整 Message 的 `id`；用于将增量帧归并到对应事件
 
 `delta.type`
 
-恒为 `content_delta`
+`message` 为 `content_delta`，`reasoning` 为 `reasoning_delta`
 
 `delta.index`
 
@@ -264,7 +276,11 @@ curl -N --no-buffer --get "$AGENTSTUDIO_URL/sessions/sesn_xxx/events/stream" \
 
 `delta.content`
 
-本次新增的 ContentBlock 片段，如 `{"type":"text","text":"…"}`
+`message` 本次新增的 ContentBlock 片段，如 `{"type":"text","text":"…"}`
+
+`delta.reasoning`
+
+`reasoning` 本次新增的思考文本片段
 
 示例流（`reasoning` 与 `message` 均开启增量）：
 
@@ -275,22 +291,28 @@ event: message
 data: {"object":"message","status":"completed","id":"sevt_status_running_xxx","type":"session_status","content":[{"type":"data","data":{"session_status":"running"}}]}
 
 event: message
-data: {"type":"event_start","event":{"id":"msg_reasoning_xxx","type":"reasoning"}}
+data: {"type":"event_start","event":{"id":"msg_reasoning_xxx","type":"reasoning"},"object":"message","status":"in_progress"}
 
 event: message
-data: {"object":"message","status":"completed","id":"msg_reasoning_xxx","role":"assistant","type":"reasoning"}
+data: {"type":"event_delta","event_id":"msg_reasoning_xxx","delta":{"type":"reasoning_delta","index":0,"reasoning":"先拆分为两个子数组，"},"object":"content","status":"in_progress"}
 
 event: message
-data: {"type":"event_start","event":{"id":"msg_answer_xxx","type":"message"}}
+data: {"type":"event_delta","event_id":"msg_reasoning_xxx","delta":{"type":"reasoning_delta","index":0,"reasoning":"再合并有序子数组。"},"object":"content","status":"in_progress"}
 
 event: message
-data: {"type":"event_delta","event_id":"msg_answer_xxx","delta":{"type":"content_delta","index":0,"content":{"type":"text","text":"快速"}}}
+data: {"object":"message","status":"completed","id":"msg_reasoning_xxx","role":"assistant","type":"reasoning","content":[{"type":"text","text":"先拆分为两个子数组，再合并有序子数组。"}]}
 
 event: message
-data: {"type":"event_delta","event_id":"msg_answer_xxx","delta":{"type":"content_delta","index":0,"content":{"type":"text","text":"排序是一种分治算法。"}}}
+data: {"type":"event_start","event":{"id":"msg_answer_xxx","type":"message"},"object":"message","status":"in_progress"}
 
 event: message
-data: {"object":"message","status":"completed","id":"msg_answer_xxx","role":"assistant","type":"message","content":[{"type":"text","text":"快速排序是一种分治算法。"}]}
+data: {"type":"event_delta","event_id":"msg_answer_xxx","delta":{"type":"content_delta","index":0,"content":{"type":"text","text":"快速排序是一种分治算法："}},"object":"content","status":"in_progress"}
+
+event: message
+data: {"type":"event_delta","event_id":"msg_answer_xxx","delta":{"type":"content_delta","index":0,"content":{"type":"text","text":"先拆分，再合并。"}},"object":"content","status":"in_progress"}
+
+event: message
+data: {"object":"message","status":"completed","id":"msg_answer_xxx","role":"assistant","type":"message","content":[{"type":"text","text":"快速排序是一种分治算法：先拆分，再合并。"}]}
 
 event: message
 data: {"object":"message","status":"completed","id":"sevt_status_idle_xxx","type":"session_status","content":[{"type":"data","data":{"session_status":"idle","stop_reason":{"type":"end_turn"}}}]}
@@ -298,4 +320,4 @@ data: {"object":"message","status":"completed","id":"sevt_status_idle_xxx","type
 
 **说明**拼接文本时按
 
-`event_id` + `delta.index` 顺序累加各 `event_delta` 的 `delta.content`；事件结束时下发的完整 Message 携带聚合后的完整内容，可用于校验。`reasoning` 事件可能只有 `event_start` 与完整 Message、不含 `event_delta`（思考预览不携带思考文本）。
+`event_id` + `delta.index` 顺序累加各 `event_delta` 的 `delta.content`（`message`）或 `delta.reasoning`（`reasoning`）；事件结束时下发的完整 Message 携带聚合后的完整内容，可用于校验。`reasoning` 事件可能不含 `event_delta`，此时以完整 Message 为准。

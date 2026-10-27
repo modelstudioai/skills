@@ -4,7 +4,7 @@
 
 ## 前提条件
 
-1.  [安装SDK](raw/model-api-reference/preparations/install-sdk.md)，确保DashScope SDK版本不低于1.25.6。
+1.  [安装SDK](raw/model-api-reference/preparations/install-sdk.md)，确保DashScope SDK版本不低于2.0.1。
 2.  [获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
 
 **重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
@@ -16,64 +16,44 @@
 
 ## 请求参数
 
--   以下参数通过`OmniRealtimeConversation`的构造方法设置。
+-   以下参数通过`client.audio.realtime`的`connect`方法设置。服务端事件不再通过回调接收：在接收线程中迭代会话的`events()`处理（见[事件迭代（`events()`）](#lt001callback)）。
     
     点击查看示例代码
     
     ```
-    from dashscope.audio.qwen_omni import (
-        OmniRealtimeConversation,
-        OmniRealtimeCallback,
-        MultiModality,
+    import os
+    
+    import dashscope
+    
+    # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+    client = dashscope.Client(
+        # 若没有将API Key配置到环境变量中，请将下行替换为自己的API Key：api_key="sk-xxx"
+        api_key=os.getenv("DASHSCOPE_API_KEY"),
+        workspace="{WorkspaceId}",
+        region="cn-beijing",
     )
-    from dashscope.audio.qwen_omni.omni_realtime import TranslationParams
     
-    class MyCallback(OmniRealtimeCallback):
-        """实时翻译回调处理"""
-        def __init__(self, conversation=None):
-            self.conversation = conversation
-            self.handlers = {
-                'session.created': self._handle_session_created,
-                'response.audio_transcript.done': self._handle_translation_done,
-                'response.audio.delta': self._handle_audio_delta,
-                'response.done': lambda r: print('======Response Done======'),
-                'input_audio_buffer.speech_started': lambda r: print('======Speech Start======'),
-                'input_audio_buffer.speech_stopped': lambda r: print('======Speech Stop======'),
-            }
-    
-        def on_open(self):
-            print('Connection opened')
-    
-        def on_close(self, code, msg):
-            print(f'Connection closed, code: {code}, msg: {msg}')
-    
-        def on_event(self, response):
-            try:
-                handler = self.handlers.get(response['type'])
-                if handler:
-                    handler(response)
-            except Exception as e:
-                print(f'[Error] {e}')
-    
-        def _handle_session_created(self, response):
-            print(f"Session created: {response['session']['id']}")
-    
-        def _handle_translation_done(self, response):
-            print(f"Translation result: {response['transcript']}")
-    
-        def _handle_audio_delta(self, response):
-            # 处理增量音频数据
-            audio_b64 = response.get('delta', '')
-            # 可将音频数据解码后播放或保存
-    
-    conversation = OmniRealtimeConversation(
+    # 创建实时翻译会话：进入 with 上下文时自动建立连接
+    with client.audio.realtime.connect(
         model='qwen3.5-livetranslate-flash-realtime',
-        # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
-        url='wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime',
-        callback=MyCallback(conversation=None)  # 暂时传None，稍后注入
-    )
-    # 注入自身到回调
-    conversation.callback.conversation = conversation
+    ) as session:
+        # 接收线程：迭代服务端事件
+        for event in session.events():
+            event_type = event.get('type', '')
+            if event_type == 'session.created':
+                print(f"Session created: {event['session']['id']}")
+            elif event_type == 'response.audio_transcript.done':
+                print(f"Translation result: {event['transcript']}")
+            elif event_type == 'response.audio.delta':
+                # 处理增量音频数据（base64）
+                audio_b64 = event.get('delta', '')
+                # 可将音频数据解码后播放或保存
+            elif event_type == 'response.done':
+                print('======Response Done======')
+            elif event_type == 'input_audio_buffer.speech_started':
+                print('======Speech Start======')
+            elif event_type == 'input_audio_buffer.speech_stopped':
+                print('======Speech Stop======')
     ```
     
     **参数**
@@ -92,46 +72,35 @@
     
     指定要使用的模型名称，推荐使用`qwen3.5-livetranslate-flash-realtime`。
     
-    `callback`
-    
-    `回调接口（OmniRealtimeCallback）`
-    
-    是
-    
-    用于处理服务端事件的回调对象实例。
-    
-    `url`
+    `ws_url`
     
     `str`
     
-    是
+    否
     
-    实时翻译服务地址：
-    
-    -   华北2（北京）：`wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime`
-    -   新加坡：`wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime`
+    会话端点。缺省时由[Client](raw/model-api-reference/preparations/install-sdk.md)构造参数`workspace`/`region`自动推导实时翻译服务地址（华北2（北京）：`wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime`；新加坡：`wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime`）。
     
     调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
     
--   以下参数通过`OmniRealtimeConversation`的`update_session`方法设置。
+-   以下参数通过会话的`update_session`方法设置。
     
     点击查看示例代码
     
     ```
     # 设置翻译参数
-    translation_params = TranslationParams(
-        language='en',  # 目标语言
-        corpus=TranslationParams.Corpus(
-            phrases={
+    translation_params = {
+        'language': 'en',  # 目标语言
+        'corpus': {
+            'phrases': {
                 '人工智能': 'Artificial Intelligence',
                 '机器学习': 'Machine Learning'
             }
-        )
-    )
+        }
+    }
     
     # 更新会话配置
-    conversation.update_session(
-        output_modalities=[MultiModality.TEXT, MultiModality.AUDIO],
+    session.update_session(
+        output_modalities=['text', 'audio'],
         voice='Tina',
         translation_params=translation_params,
     )
@@ -147,19 +116,19 @@
     
     `output_modalities`
     
-    `List[MultiModality]`
+    `List[str]`
     
     否
     
     模型输出模态。
     
-    默认值：`[MultiModality.TEXT, MultiModality.AUDIO]`。
+    默认值：`["text", "audio"]`。
     
     取值范围：
     
-    -   `[MultiModality.TEXT]`：仅输出文本
+    -   `["text"]`：仅输出文本
         
-    -   `[MultiModality.TEXT, MultiModality.AUDIO]`：输出文本和音频
+    -   `["text", "audio"]`：输出文本和音频
         
     
     `voice`
@@ -187,7 +156,7 @@
     
     `translation_params`
     
-    `TranslationParams`
+    `Dict`
     
     否
     
@@ -205,20 +174,20 @@
     
     设为`False`可切换为 Manual 模式，由客户端通过`commit`方法手动提交音频。详细参数说明参见[turn\_detection object （可选） 语音活动检测（VAD，Voice Activity Detection）配置，用于控制语音起止的检测方式： 设为配置对象（默认值）：启用 VAD 模式。服务端自动检测语音起止，自动提交音频缓冲区并触发翻译响应，客户端无需发送input\_audio\_buffer.commit事件。 设为null：启用 Manual 模式。由客户端通过input\_audio\_buffer.commit事件手动提交音频缓冲区，服务端收到后自动开始生成翻译响应。 属性 type string （可选） VAD 类型，固定为server\_vad。 threshold float （可选） VAD 检测灵敏度。值越低，越容易将微弱声音（包括背景噪音）识别为语音；值越高，需要更清晰、音量更大的语音才能触发。 取值范围：\[-1.0, 1.0\]，默认值为 0.2。 silence\_duration\_ms integer （可选） 语音结束后需保持静音的最短时长（毫秒）。超过该时长后判定语音结束，服务端自动提交音频缓冲区并触发翻译响应。 取值范围：\[200, 6000\]，默认值为 1000。](raw/_short/live-translator-client-events-666da53ef8b3942d.md)。
     
--   以下参数通过`TranslationParams`的构造方法设置。
+-   以下参数通过`update_session`方法的`translation_params`字典设置。
     
     点击查看示例代码
     
     ```
-    translation_params = TranslationParams(
-        language='en',  # 目标语言代码
-        corpus=TranslationParams.Corpus(
-            phrases={
+    translation_params = {
+        'language': 'en',  # 目标语言代码
+        'corpus': {
+            'phrases': {
                 '人工智能': 'Artificial Intelligence',  # 源语言词: 目标语言翻译
                 '机器学习': 'Machine Learning'
             }
-        )
-    )
+        }
+    }
     ```
     
     **参数**
@@ -243,7 +212,7 @@
     
     `corpus`
     
-    `TranslationParams.Corpus`
+    `dict`
     
     否
     
@@ -262,18 +231,18 @@
 
 ## 关键接口
 
-### OmniRealtimeConversation类
+### 会话（RealtimeSession）
 
-OmniRealtimeConversation通过`from dashscope.audio.qwen_omni import OmniRealtimeConversation`方法引入。
+实时翻译会话通过`client.audio.realtime.connect(model=...)`创建，进入`with`上下文时自动建立连接（也可调用会话的`connect()`方法手动建立）。
 
 **方法签名**
 
-**服务端响应事件（通过回调下发）**
+**服务端响应事件（通过`events()`迭代下发）**
 
 **说明**
 
 ```
-def connect(self) -> None:
+def connect(self) -> "RealtimeSession"
 ```
 
 [服务端事件](raw/_short/live-translator-server-events-e9db9578a7b303d5.md)
@@ -284,13 +253,16 @@ def connect(self) -> None:
 
 > 会话配置已更新
 
-和服务端创建连接。
+和服务端创建连接。进入`with`上下文时自动调用。
 
 ```
 def update_session(self,
-    output_modalities: List[MultiModality],
+    output_modalities: List[str],
+    *,
     voice: str = None,
-    translation_params: TranslationParams = None,
+    input_audio_transcription_model: str = None,
+    translation_params: Dict[str, Any] = None,
+    enable_turn_detection: bool = None,
     **kwargs) -> None:
 ```
 
@@ -298,10 +270,10 @@ def update_session(self,
 
 > 会话已更新
 
-用于更新会话配置，建议在连接建立后首先调用该方法进行设置。若未调用该方法，系统将使用默认配置。只需关注`OmniRealtimeConversation`的`update_session`方法涉及的参数。
+用于更新会话配置，建议在连接建立后首先调用该方法进行设置。若未调用该方法，系统将使用默认配置。只需关注会话`update_session`方法涉及的参数。
 
 ```
-def end_session(self, timeout: int = 20) -> None:
+def end_session(self) -> None
 ```
 
 [session.finished](https://help.aliyun.com/zh/model-studio/live-translator-server-events#5369266402pgb)
@@ -311,15 +283,15 @@ def end_session(self, timeout: int = 20) -> None:
 通知服务端结束会话，服务端收到会话结束通知后将完成最后的语音翻译。
 
 ```
-def append_audio(self, audio_b64: str) -> None:
+def append_audio(self, audio_b64: Union[str, bytes]) -> None
 ```
 
 无
 
-将Base64编码后的音频数据片段追加到云端输入音频缓冲区。服务端会自动检测语音起止并触发翻译。
+将音频数据片段追加到云端输入音频缓冲区，支持Base64字符串或原始`bytes`（自动编码）。服务端会自动检测语音起止并触发翻译。
 
 ```
-def commit(self) -> None:
+def commit(self) -> None
 ```
 
 [input\_audio\_buffer.committed](https://help.aliyun.com/zh/model-studio/live-translator-server-events#ltcommitted001h2)
@@ -329,7 +301,7 @@ def commit(self) -> None:
 Manual 模式下，提交之前通过`append_audio`方法追加到云端缓冲区的音频，服务端收到后自动开始生成翻译响应。VAD 模式下无需调用此方法，服务端会自动提交。
 
 ```
-def clear_appended_audio(self) -> None:
+def clear_appended_audio(self) -> None
 ```
 
 [input\_audio\_buffer.cleared](https://help.aliyun.com/zh/model-studio/live-translator-server-events#ltcleared001h2)
@@ -339,36 +311,34 @@ def clear_appended_audio(self) -> None:
 清空当前云端缓冲区中尚未提交的音频数据。
 
 ```
-def close(self) -> None:
+def close(self) -> None
 ```
 
 无
 
-终止任务，并关闭连接。
+终止任务，并关闭连接。退出`with`上下文时自动调用。
 
 ```
-def get_session_id(self) -> str:
-```
-
-无
-
-获取当前任务的session\_id。
-
-```
-def get_last_response_id(self) -> str:
+session.session_id
 ```
 
 无
 
-获取最近一次response的response\_id。
+获取当前任务的session\_id（从`session.created`事件读取）。
 
-### 回调接口（OmniRealtimeCallback）
+```
+session.last_response_id
+```
 
-服务端会通过回调的方式，将服务端响应事件和数据返回给客户端。
+无
 
-继承此类并实现相应方法以处理服务端事件。
+获取最近一次response的response\_id（从`response.created`事件读取）。
 
-通过`from dashscope.audio.qwen_omni import OmniRealtimeCallback`引入。
+### 事件迭代（`events()`）
+
+服务端会通过事件的方式，将服务端响应事件和数据返回给客户端。在接收线程中迭代会话的`events()`处理服务端事件，`session.finished`事件后迭代结束。
+
+`error`事件会以`DashScopeError`异常抛出，可在接收线程中使用try/except捕获。
 
 **方法签名**
 
@@ -377,30 +347,20 @@ def get_last_response_id(self) -> str:
 **说明**
 
 ```
-def on_open(self) -> None:
+def events(self) -> Iterator[Dict[str, Any]]
 ```
 
-无
+event：[服务端事件](raw/_short/live-translator-server-events-e9db9578a7b303d5.md)
 
-WebSocket连接成功建立时触发。
-
-```
-def on_event(self, message: dict) -> None:
-```
-
-message：[服务端事件](raw/_short/live-translator-server-events-e9db9578a7b303d5.md)
-
-收到服务端事件时触发。
+迭代接收服务端事件（`dict`），`session.finished`事件后迭代结束。请由一个接收线程持续消费，不要并发创建多个读取者。
 
 ```
-def on_close(self, close_status_code, close_msg) -> None:
+def recv_event(self) -> Optional[Dict[str, Any]]
 ```
 
-close\_status\_code：状态码
+event：[服务端事件](raw/_short/live-translator-server-events-e9db9578a7b303d5.md)
 
-close\_msg：WebSocket连接关闭时的日志信息
-
-WebSocket连接关闭时触发。
+读取一条服务端事件，正常关闭后返回`None`。
 
 ## 完整示例
 
@@ -414,47 +374,24 @@ import sys
 import base64
 import signal
 import pyaudio
-from dashscope.audio.qwen_omni import (
-    OmniRealtimeConversation,
-    OmniRealtimeCallback,
-    MultiModality,
-)
-from dashscope.audio.qwen_omni.omni_realtime import TranslationParams
+from concurrent.futures import ThreadPoolExecutor
 
-class Callback(OmniRealtimeCallback):
-    """实时翻译回调处理类"""
-
-    def __init__(self, speaker):
-        self.speaker = speaker
-
-    def on_open(self):
-        print("[连接已建立]")
-
-    def on_close(self, code, msg):
-        print(f"[连接已关闭] code: {code}, msg: {msg}")
-
-    def on_event(self, response):
-        event_type = response.get("type", "")
-        if event_type == "input_audio_buffer.speech_started":
-            print("====== 检测到语音输入 ======")
-        elif event_type == "input_audio_buffer.speech_stopped":
-            print("====== 语音输入结束 ======")
-        elif event_type == "conversation.item.input_audio_transcription.completed":
-            print(f"[原文] {response.get('transcript', '')}")
-        elif event_type == "response.audio_transcript.done":
-            print(f"[翻译结果] {response.get('transcript', '')}")
-        elif event_type == "response.audio.delta":
-            audio_b64 = response.get("delta", "")
-            if audio_b64:
-                self.speaker.write(base64.b64decode(audio_b64))
-        elif event_type == "error":
-            print(f"[错误] {response.get('error', {}).get('message', '')}")
+import dashscope
+from dashscope.v2 import DashScopeError
 
 def main():
     # 检查 API Key
     if not os.environ.get("DASHSCOPE_API_KEY"):
         print("请设置环境变量 DASHSCOPE_API_KEY")
         sys.exit(1)
+
+    # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+    client = dashscope.Client(
+        # 若没有将API Key配置到环境变量中，请将下行替换为自己的API Key：api_key="sk-xxx"
+        api_key=os.environ["DASHSCOPE_API_KEY"],
+        workspace="{WorkspaceId}",
+        region="cn-beijing",
+    )
 
     # 初始化 PyAudio
     pya = pyaudio.PyAudio()
@@ -477,59 +414,73 @@ def main():
         frames_per_buffer=1600
     )
 
-    # 创建回调实例
-    callback = Callback(speaker=speaker)
-
-    # 创建实时会话
-    conversation = OmniRealtimeConversation(
-        model="qwen3.5-livetranslate-flash-realtime",
-        # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
-        url="wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime",
-        callback=callback
-    )
-
-    # 连接服务端
-    conversation.connect()
-
-    # 配置翻译参数
-    translation_params = TranslationParams(
-        language="en",  # 翻译目标语言：英语
-        corpus=TranslationParams.Corpus(
-            phrases={
-                "人工智能": "Artificial Intelligence",
-                "机器学习": "Machine Learning"
-            }
+    # 创建实时翻译会话：进入 with 上下文时自动建立连接
+    with client.audio.realtime.connect(
+            model="qwen3.5-livetranslate-flash-realtime",
+    ) as session:
+        # 更新会话配置（建议连接建立后首先调用）
+        session.update_session(
+            output_modalities=["text", "audio"],
+            input_audio_transcription_model="qwen3-asr-flash-realtime",
+            voice="Tina",
+            translation_params={
+                "language": "en",  # 翻译目标语言：英语
+                "corpus": {
+                    "phrases": {
+                        "人工智能": "Artificial Intelligence",
+                        "机器学习": "Machine Learning"
+                    }
+                }
+            },
         )
-    )
 
-    # 更新会话配置
-    conversation.update_session(
-        output_modalities=[MultiModality.TEXT, MultiModality.AUDIO],
-        input_audio_transcription_model="qwen3-asr-flash-realtime",
-        voice="Tina",
-        translation_params=translation_params,
-    )
+        # 接收线程：迭代服务端事件
+        def receive_events():
+            try:
+                for event in session.events():
+                    event_type = event.get("type", "")
+                    if event_type == "input_audio_buffer.speech_started":
+                        print("====== 检测到语音输入 ======")
+                    elif event_type == "input_audio_buffer.speech_stopped":
+                        print("====== 语音输入结束 ======")
+                    elif event_type == "conversation.item.input_audio_transcription.completed":
+                        print(f"[原文] {event.get('transcript', '')}")
+                    elif event_type == "response.audio_transcript.done":
+                        print(f"[翻译结果] {event.get('transcript', '')}")
+                    elif event_type == "response.audio.delta":
+                        audio_b64 = event.get("delta", "")
+                        if audio_b64:
+                            speaker.write(base64.b64decode(audio_b64))
+            except DashScopeError as e:
+                print(f"[错误] {e.message}")
 
-    # 注册退出信号处理
-    def on_exit(sig, frame):
-        print("\n[正在退出...]")
-        mic.stop_stream()
-        mic.close()
-        speaker.stop_stream()
-        speaker.close()
-        pya.terminate()
-        conversation.end_session()
-        conversation.close()
-        sys.exit(0)
+        with ThreadPoolExecutor(max_workers=1) as pool:
+            receiver = pool.submit(receive_events)
 
-    signal.signal(signal.SIGINT, on_exit)
+            # 注册退出信号处理
+            def on_exit(sig, frame):
+                print("\n[正在退出...]")
+                session.end_session()
+                session.close()
+                mic.stop_stream()
+                mic.close()
+                speaker.stop_stream()
+                speaker.close()
+                pya.terminate()
+                sys.exit(0)
 
-    print("[开始实时翻译] 请对着麦克风说话，按 Ctrl+C 退出")
+            signal.signal(signal.SIGINT, on_exit)
 
-    # 持续采集麦克风音频并发送
-    while True:
-        audio_data = mic.read(1600, exception_on_overflow=False)
-        conversation.append_audio(base64.b64encode(audio_data).decode("ascii"))
+            print("[开始实时翻译] 请对着麦克风说话，按 Ctrl+C 退出")
+
+            # 持续采集麦克风音频并发送（append_audio 也接受原始 bytes，自动编码）
+            try:
+                while True:
+                    audio_data = mic.read(1600, exception_on_overflow=False)
+                    session.append_audio(audio_data)
+            finally:
+                session.end_session()
+                receiver.result()
 
 if __name__ == "__main__":
     main()

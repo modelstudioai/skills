@@ -611,19 +611,17 @@ SDK 的参数命名与HTTP接口基本一致，参数结构根据语言特性进
 
 ### Python SDK调用
 
-**重要**请确保 DashScope Python SDK 版本**不低于**`1.25.16`，再运行以下代码。
+**重要**请确保 DashScope Python SDK 版本**不低于**`2.0.1`，再运行以下代码。
 
-若版本过低，可能会触发 "url error, please check url!" 等错误。请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
-
-根据模型所在地域设置 `dashscope.base_http_api_url`:
+根据模型所在地域设置 `region`（构造 Client 时传入，各地域的region取值不同）:
 
 #### 北京
 
-`dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'`
+`region="cn-beijing"`
 
 #### 新加坡
 
-`dashscope.base_http_api_url = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1'`
+`region="ap-southeast-1"`
 
 调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
@@ -632,38 +630,41 @@ SDK 的参数命名与HTTP接口基本一致，参数结构根据语言特性进
 ##### 请求示例
 
 ```
-from http import HTTPStatus
-from dashscope import VideoSynthesis
 import dashscope
 import os
+from dashscope.v2 import DashScopeError
 
-# 以下为北京地域URL，各地域的URL不同，获取URL：https://help.aliyun.com/zh/model-studio/text-to-video-api-reference
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-
-# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-# 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-api_key = os.getenv("DASHSCOPE_API_KEY")
+# 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 def sample_sync_call_t2v():
-    # call sync api, will return the result
+    # generate 为一步式调用（提交任务并等待完成），返回已完成的 Job
     print('please wait...')
-    rsp = VideoSynthesis.call(api_key=api_key,
-                              model='wan2.7-t2v-2026-06-12',
-                              prompt='一幅史诗级可爱的场景。一只小巧可爱的卡通小猫将军，身穿细节精致的金色盔甲，头戴一个稍大的头盔，勇敢地站在悬崖上。他骑着一匹虽小但英勇的战马，说："青海长云暗雪山，孤城遥望玉门关。黄沙百战穿金甲，不破楼兰终不还。"。悬崖下方，一支由老鼠组成的、数量庞大、无穷无尽的军队正带着临时制作的武器向前冲锋。这是一个戏剧性的、大规模的战斗场景，灵感来自中国古代的战争史诗。远处的雪山上空，天空乌云密布。整体氛围是"可爱"与"霸气"的搞笑和史诗般的融合。',
-                              audio_url='https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250923/hbiayh/%E4%BB%8E%E5%86%9B%E8%A1%8C.mp3',
-                              resolution='720P',
-                              ratio='16:9',
-                              duration=10,
-                              negative_prompt="",
-                              prompt_extend=True,
-                              watermark=False,
-                              seed=12345)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print(rsp.output.video_url)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (rsp.status_code, rsp.code, rsp.message))
+    try:
+        # audio_url / negative_prompt 为 input 段字段，不在具名签名内，经 extra_input 透传
+        job = client.videos.generate(model='wan2.7-t2v-2026-06-12',
+                                     prompt='一幅史诗级可爱的场景。一只小巧可爱的卡通小猫将军，身穿细节精致的金色盔甲，头戴一个稍大的头盔，勇敢地站在悬崖上。他骑着一匹虽小但英勇的战马，说："青海长云暗雪山，孤城遥望玉门关。黄沙百战穿金甲，不破楼兰终不还。"。悬崖下方，一支由老鼠组成的、数量庞大、无穷无尽的军队正带着临时制作的武器向前冲锋。这是一个戏剧性的、大规模的战斗场景，灵感来自中国古代的战争史诗。远处的雪山上空，天空乌云密布。整体氛围是"可爱"与"霸气"的搞笑和史诗般的融合。',
+                                     extra_input={'audio_url': 'https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250923/hbiayh/%E4%BB%8E%E5%86%9B%E8%A1%8C.mp3',
+                                                  'negative_prompt': ""},
+                                     resolution='720P',
+                                     ratio='16:9',
+                                     duration=10,
+                                     prompt_extend=True,
+                                     watermark=False,
+                                     seed=12345)
+        print(job)
+        print(job.video_url)
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 
 if __name__ == '__main__':
     sample_sync_call_t2v()
@@ -675,18 +676,18 @@ if __name__ == '__main__':
 
 ```
 {
-    "status_code": 200,
     "request_id": "72082605-4559-9bb7-aa5c-xxxxxx",
-    "code": null,
-    "message": "",
-    "output": {
-        "task_id": "43b954a2-3e86-4681-9443-xxxxxx",
-        "task_status": "SUCCEEDED",
-        "video_url": "https://dashscope-a717.oss-accelerate.aliyuncs.com/xxx.mp4?Expires=xxxx",
-        "submit_time": "2026-04-16 10:50:12.718",
-        "scheduled_time": "2026-04-16 10:50:21.430",
-        "end_time": "2026-04-16 11:02:00.274",
-        "orig_prompt": "一幅史诗级可爱的场景。一只小巧可爱的卡通小猫将军，身穿细节精致的金色盔甲，头戴一个稍大的头盔，勇敢地站在悬崖上。他骑着一匹虽小但英勇的战马，说：\"青海长云暗雪山，孤城遥望玉门关。黄沙百战穿金甲，不破楼兰终不还。\"。悬崖下方，一支由老鼠组成的、数量庞大、无穷无尽的军队正带着临时制作的武器向前冲锋。这是一个戏剧性的、大规模的战斗场景，灵感来自中国古代的战争史诗。远处的雪山上空，天空乌云密布。整体氛围是\"可爱\"与\"霸气\"的搞笑和史诗般的融合。"
+    "task_id": "43b954a2-3e86-4681-9443-xxxxxx",
+    "status": "SUCCEEDED",
+    "results": [
+        {
+            "video_url": "https://dashscope-a717.oss-accelerate.aliyuncs.com/xxx.mp4?Expires=xxxx"
+        }
+    ],
+    "task_metrics": {
+        "TOTAL": 1,
+        "SUCCEEDED": 1,
+        "FAILED": 0
     },
     "usage": {
         "video_count": 1,
@@ -706,55 +707,64 @@ if __name__ == '__main__':
 ##### 请求示例
 
 ```
-from http import HTTPStatus
-from dashscope import VideoSynthesis
 import dashscope
 import os
+from dashscope.v2 import DashScopeError
 
-# 以下为北京地域URL，各地域的URL不同，获取URL：https://help.aliyun.com/zh/model-studio/text-to-video-api-reference
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-
-# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-# 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-api_key = os.getenv("DASHSCOPE_API_KEY")
+# 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 def sample_async_call_t2v():
     # call async api, will return the task information
     # you can get task status with the returned task id.
-    rsp = VideoSynthesis.async_call(api_key=api_key,
-                                    model='wan2.7-t2v-2026-06-12',
-                                    prompt='一幅史诗级可爱的场景。一只小巧可爱的卡通小猫将军，身穿细节精致的金色盔甲，头戴一个稍大的头盔，勇敢地站在悬崖上。他骑着一匹虽小但英勇的战马，说："青海长云暗雪山，孤城遥望玉门关。黄沙百战穿金甲，不破楼兰终不还。"。悬崖下方，一支由老鼠组成的、数量庞大、无穷无尽的军队正带着临时制作的武器向前冲锋。这是一个戏剧性的、大规模的战斗场景，灵感来自中国古代的战争史诗。远处的雪山上空，天空乌云密布。整体氛围是"可爱"与"霸气"的搞笑和史诗般的融合。',
-                                    audio_url='https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250923/hbiayh/%E4%BB%8E%E5%86%9B%E8%A1%8C.mp3',
-                                    resolution='720P',
-                                    ratio='16:9',
-                                    duration=10,
-                                    negative_prompt="",
-                                    prompt_extend=True,
-                                    watermark=False,
-                                    seed=12345)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print("task_id: %s" % rsp.output.task_id)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (rsp.status_code, rsp.code, rsp.message))
+    try:
+        # audio_url / negative_prompt 为 input 段字段，不在具名签名内，经 extra_input 透传
+        job = client.videos.jobs.create(model='wan2.7-t2v-2026-06-12',
+                                        prompt='一幅史诗级可爱的场景。一只小巧可爱的卡通小猫将军，身穿细节精致的金色盔甲，头戴一个稍大的头盔，勇敢地站在悬崖上。他骑着一匹虽小但英勇的战马，说："青海长云暗雪山，孤城遥望玉门关。黄沙百战穿金甲，不破楼兰终不还。"。悬崖下方，一支由老鼠组成的、数量庞大、无穷无尽的军队正带着临时制作的武器向前冲锋。这是一个戏剧性的、大规模的战斗场景，灵感来自中国古代的战争史诗。远处的雪山上空，天空乌云密布。整体氛围是"可爱"与"霸气"的搞笑和史诗般的融合。',
+                                        extra_input={'audio_url': 'https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250923/hbiayh/%E4%BB%8E%E5%86%9B%E8%A1%8C.mp3',
+                                                     'negative_prompt': ""},
+                                        resolution='720P',
+                                        ratio='16:9',
+                                        duration=10,
+                                        prompt_extend=True,
+                                        watermark=False,
+                                        seed=12345)
+        print(job)
+        print("task_id: %s" % job.task_id)
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
+        return
 
     # get the task information include the task status.
-    status = VideoSynthesis.fetch(task=rsp, api_key=api_key)
-    if status.status_code == HTTPStatus.OK:
-        print(status.output.task_status)  # check the task status
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (status.status_code, status.code, status.message))
+    try:
+        snapshot = client.videos.jobs.fetch(job.task_id)
+        print(snapshot.status)  # check the task status
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 
     # wait the task complete, will call fetch interval, and check it's in finished status.
-    rsp = VideoSynthesis.wait(task=rsp, api_key=api_key)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print(rsp.output.video_url)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (rsp.status_code, rsp.code, rsp.message))
+    # （2.0 jobs.wait 指数退避轮询，默认总预算24小时，任务 FAILED 会抛出异常）
+    try:
+        done = client.videos.jobs.wait(job)
+        print(done)
+        print(done.video_url)
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 
 if __name__ == '__main__':
     sample_async_call_t2v()
@@ -766,16 +776,9 @@ if __name__ == '__main__':
 
 ```
 {
-	"status_code": 200,
 	"request_id": "c86ff7ba-8377-917a-90ed-xxxxxx",
-	"code": "",
-	"message": "",
-	"output": {
-		"task_id": "721164c6-8619-4a35-a6d9-xxxxxx",
-		"task_status": "PENDING",
-		"video_url": ""
-	},
-	"usage": null
+	"task_id": "721164c6-8619-4a35-a6d9-xxxxxx",
+	"status": "PENDING"
 }
 ```
 
@@ -785,18 +788,18 @@ if __name__ == '__main__':
 
 ```
 {
-    "status_code": 200,
     "request_id": "72082605-4559-9bb7-aa5c-xxxxxx",
-    "code": null,
-    "message": "",
-    "output": {
-        "task_id": "43b954a2-3e86-4681-9443-xxxxxx",
-        "task_status": "SUCCEEDED",
-        "video_url": "https://dashscope-a717.oss-accelerate.aliyuncs.com/xxx.mp4?Expires=xxxx",
-        "submit_time": "2026-04-16 10:50:12.718",
-        "scheduled_time": "2026-04-16 10:50:21.430",
-        "end_time": "2026-04-16 11:02:00.274",
-        "orig_prompt": "一幅史诗级可爱的场景。一只小巧可爱的卡通小猫将军，身穿细节精致的金色盔甲，头戴一个稍大的头盔，勇敢地站在悬崖上。他骑着一匹虽小但英勇的战马，说：\"青海长云暗雪山，孤城遥望玉门关。黄沙百战穿金甲，不破楼兰终不还。\"。悬崖下方，一支由老鼠组成的、数量庞大、无穷无尽的军队正带着临时制作的武器向前冲锋。这是一个戏剧性的、大规模的战斗场景，灵感来自中国古代的战争史诗。远处的雪山上空，天空乌云密布。整体氛围是\"可爱\"与\"霸气\"的搞笑和史诗般的融合。"
+    "task_id": "43b954a2-3e86-4681-9443-xxxxxx",
+    "status": "SUCCEEDED",
+    "results": [
+        {
+            "video_url": "https://dashscope-a717.oss-accelerate.aliyuncs.com/xxx.mp4?Expires=xxxx"
+        }
+    ],
+    "task_metrics": {
+        "TOTAL": 1,
+        "SUCCEEDED": 1,
+        "FAILED": 0
     },
     "usage": {
         "video_count": 1,
@@ -814,8 +817,6 @@ if __name__ == '__main__':
 ### Java SDK调用
 
 **重要**请确保 DashScope Java SDK 版本**不低于**`2.22.14`，再运行以下代码。
-
-若版本过低，可能会触发 "url error, please check url!" 等错误。请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
 
 根据模型所在地域设置 `Constants.baseHttpApiUrl`:
 

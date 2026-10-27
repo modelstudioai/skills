@@ -1,41 +1,39 @@
 # application gallery
 
-应用广场是百炼平台提供的预置应用集合，面向开发者提供开箱即用的行业级 Agent 和多模态能力封装。所有应用均基于平台统一的 Runtime 执行环境部署，支持快速集成、参数化调用与轻量定制。开发者可通过 API 或控制台直接调用，无需从零构建底层模型链路。
+应用广场是百炼平台提供的预置应用集合，面向开发者提供开箱即用的行业级 Agent 和多模态能力封装。所有应用均基于平台统一 Runtime 运行，支持快速集成、参数化配置与轻量定制。开发者可通过控制台或 OpenAPI 直接调用，无需从零构建底层模型链路。
 
 ## 支持的模型与功能
 
-应用广场中的每个应用均已绑定特定模型栈与功能边界，例如：
-- `通义听悟Agent` 依赖 ASR + LLM + TTS 多阶段流水线，专用于会议纪要生成与语音内容结构化；
-- `通义 UI Agent` 基于视觉语言模型（VLM）与动作规划模块，支持网页/APP 界面理解与自动化操作；
-- `千问联网检索Agent` 集成 Qwen-Long 与实时搜索插件，提供带引用的动态知识响应。
+应用广场中的每个应用已绑定适配的底层模型（如 Qwen-VL、Qwen-Audio、Qwen2.5-72B 等）及配套工具集，覆盖教育辅导、语音对话分析、客服机器人、数据挖掘、深度搜索、UI 自动化等场景。例如，[官方应用-通义听悟Agent](../../raw/application-user-guide/application-gallery/official-application-tingwu-agent.md) 集成 ASR + NLU + 摘要生成流水线；[通义 UI Agent](../../raw/application-user-guide/application-gallery/ui-agent.md) 依赖多模态视觉理解与动作规划模型。部分应用（如 [通义法睿](../../raw/application-user-guide/application-gallery/tongyi-farui.md)）还内置法律垂域知识图谱与推理规则引擎。
 
-全部官方应用列表及对应能力说明见 [应用广场](../../raw/application-user-guide/application-gallery.md)。各子应用的技术细节（如输入 schema、输出格式、支持的文件类型）请查阅其独立文档，例如 [官方应用-通义音频播客生成](../../raw/application-user-guide/application-gallery/official-application-aipodcast.md) 和 [通义法睿](../../raw/application-user-guide/application-gallery/tongyi-farui.md)。
+> **注意**：文档中列出的 [官方应用-伶鹊CCAI-客服对话Agent](../../raw/application-user-guide/application-gallery/official-application-voicepica-ccai-beebot-agent.md) 当前实际服务名已更新为 `lingque-ccai-customer-service-agent`，旧名称在 API 调用中将返回 404，需以控制台展示的最新 slug 为准。
 
 ## 关键参数
 
-调用任一应用时，需传入以下通用参数：
-- `app_id`：应用唯一标识（如 `tingwu-agent`, `ui-agent`），可在控制台或 [应用广场](../../raw/application-user-guide/application-gallery.md) 文档中查得；
-- `input`：JSON 对象，结构依应用而异（如 `aipodcast` 要求 `{"script": "...", "voice": "zhitian_001"}`，而 `web-search-agent` 要求 `{"query": "..."}`）；
-- `timeout`：最大执行时长（单位：秒），默认 300，部分长流程应用（如 `tongyi-deepsearch`）建议设为 600+。
+所有应用通过 `app_id` 唯一标识，调用时需传入：
+- `input`: JSON 格式，结构依应用而异（如 `tingwu-agent` 接受 `audio_url` 或 `audio_base64`，`ui-agent` 接受 `screenshot` + `instruction`）；
+- `parameters`: 可选，用于覆盖应用默认配置（如 `max_steps`、`temperature`、`enable_search`）；
+- `stream`: 布尔值，仅部分应用（如 `web-search-agent`、`tongyi-deepsearch`）支持流式响应。
 
-> **注意**：部分旧版文档（如 [官方应用-伶鹊CCAI-语音对话机器人](../../raw/application-user-guide/application-gallery/official-application-lingque-ccai-voice-dialogue-robot.md)）仍列出已弃用的 `session_id` 参数；当前 v2.3+ Runtime 已统一由平台自动管理会话状态，该字段可忽略。
+参数定义与约束详见各应用子文档，例如 [官方应用-通义深度搜索](../../raw/application-user-guide/application-gallery/tongyi-deepsearch.md) 明确要求 `parameters.max_retrieve_count` 取值范围为 `[1, 10]`。
 
 ## 使用方式
 
-1. **API 调用**：向 `POST /v1/applications/{app_id}/invoke` 发送请求，Header 中携带 `Authorization: Bearer <api_key>`；
-2. **控制台调试**：在「应用广场」页面点击目标应用 → 「在线调试」Tab，填写 input JSON 后执行；
-3. **嵌入集成**：通过 SDK（如 `dashscope` Python 包）调用 `Application.invoke(app_id=..., input={...})`。
-
-所有调用均遵循平台统一鉴权与配额体系，具体限流策略参见 [应用广场](../../raw/application-user-guide/application-gallery.md) 的「使用约束」章节。
+1. **控制台调用**：进入「应用广场」页面，点击目标应用 → 「在线调试」填写输入并执行；
+2. **OpenAPI 调用**：使用 `POST /v1/apps/{app_id}/chat` 接口，Header 中携带 `Authorization: Bearer <api_key>`；
+3. **SDK 调用**（Python）：
+   ```python
+   from alibabacloud_bailian20231219 import models as bailian_models
+   client = bailian_models.Client(...)
+   resp = client.chat_with_app(app_id="app-xxx", input={"query": "..."})
+   ```
 
 ## 限制和注意事项
 
-- 单次调用 `input` 总大小上限为 10 MB（含 base64 编码文件），超出将返回 `413 Payload Too Large`；
-- `通义数据挖掘` 和 `析言GBI` 等分析类应用暂不支持流式响应，必须等待全量结果返回；
-- 应用间**不可跨实例共享上下文**：即使连续调用同一 `app_id` 的两次请求，平台也不保证状态延续（除非该应用明确声明支持 session，如 `lingque-ccai-dialogue-analysis-aio`）；
-- 非官方应用（用户自建）不纳入本广场目录，亦不享受预置模型优化与 SLA 保障。
-
-> **注意**：[官方应用-全妙轻应用系列](../../raw/application-user-guide/application-gallery/quanmiao-light-application-series.md) 文档中提及的“支持低代码编排”与当前平台实际能力不符——该系列所有应用均为原子能力封装，**不开放内部节点编排接口**；相关描述已在 v2.4 文档中修正，但原始文件尚未同步更新。
+- 单次请求 `input` 总大小上限为 10 MB（含 base64 编码图像/音频）；
+- 免费试用应用有 QPS 限制（通常 ≤ 1），商用需开通对应应用的计费包；
+- 应用间**不共享上下文**：即使同一 `app_id` 的多次调用，默认无会话状态保持，需显式传入 `session_id` 并启用 `enable_session` 参数（仅部分应用支持，参见 [官方应用-多模态交互开发套件](../../raw/application-user-guide/application-gallery/multimodal-products.md)）；
+- 所有应用输出均为 JSON 格式，但字段命名不统一（如有的用 `output.text`，有的用 `result.content`），建议先查看对应应用的响应示例。
 
 ## 来源文档
 

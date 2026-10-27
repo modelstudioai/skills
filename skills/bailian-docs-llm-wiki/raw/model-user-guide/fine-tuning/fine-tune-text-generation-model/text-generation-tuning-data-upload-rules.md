@@ -14,7 +14,7 @@
 -   数据集类型创建后不可变更。
 -   切换类型、场景或训练方式会清空已上传文件。
 
-管理类操作（创建参数、版本管理、评测集管理规则、导入方式选型、数据清洗、安全合规）引导到同级文档，详见[训练集与评测集](raw/model-user-guide/model-data-overview/training-set-and-evaluation-set.md)、[模型调优简介](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)等。建议在创建数据集页面下载对应场景的数据模板，按模板结构准备数据可避免导入失败。
+管理类操作（创建参数、版本管理、评测集管理规则、导入方式选型、数据清洗、安全合规）引导到同级文档，详见[训练集与评测集](raw/model-user-guide/model-evaluation-introduction/training-set-and-evaluation-set.md)、[模型调优简介](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)等。建议在创建数据集页面下载对应场景的数据模板，按模板结构准备数据可避免导入失败。
 
 数据集构建建议（推荐数据规模、多样性与均衡、数据扩充策略）详见[模型调优简介-数据集构建技巧](https://help.aliyun.com/zh/model-studio/model-training-overview#aebd25a7f1g2v)。
 
@@ -188,7 +188,7 @@ SFT 文本生成支持以下样例格式，各样例的完整 JSON 结构见对�
 
 日志回流导入方式详情见[日志回流](raw/model-user-guide/model-data-overview/model-log-backflow.md)。
 
-评测集应准备数据不重叠的独立集合，用于客观评估模型泛化能力。评测集管理规则详见[训练集与评测集](raw/model-user-guide/model-data-overview/training-set-and-evaluation-set.md)。
+评测集应准备数据不重叠的独立集合，用于客观评估模型泛化能力。评测集管理规则详见[训练集与评测集](raw/model-user-guide/model-evaluation-introduction/training-set-and-evaluation-set.md)。
 
 ## 文本生成 - DPO 格式
 
@@ -198,7 +198,7 @@ DPO 文本生成训练数据采用 jsonl 格式，基于 ChatML messages 多轮�
 
 loss\_weight （邀测）参数支持 chosen 模块，取值范围 0.0 至 1.0，数值越大训练重要性越高，详见[文本生成 - SFT 格式](https://help.aliyun.com/zh/model-studio/text-generation-tuning-data-upload-rules#i6j5k410vt000)。
 
-DPO 训练数据单文件大小上限为 200 MB，与 SFT 文本生成一致。DPO 定义详见[模型调优简介](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)，版本管理与发布操作见[训练集与评测集](raw/model-user-guide/model-data-overview/training-set-and-evaluation-set.md)。
+DPO 训练数据单文件大小上限为 200 MB，与 SFT 文本生成一致。DPO 定义详见[模型调优简介](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)，版本管理与发布操作见[训练集与评测集](raw/model-user-guide/model-evaluation-introduction/training-set-and-evaluation-set.md)。
 
 DPO 文本生成训练数据样例见下文代码块：
 
@@ -246,7 +246,7 @@ CPT 训练数据约束：
 
 -   建议至少 5000 万 Token，单文件大小上限 300 MB。
 
-CPT 定义详见[模型调优简介](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)，版本管理与发布操作见[训练集与评测集](raw/model-user-guide/model-data-overview/training-set-and-evaluation-set.md)。CPT 纯文本样例完整 JSON 结构见下文代码块。
+CPT 定义详见[模型调优简介](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)，版本管理与发布操作见[训练集与评测集](raw/model-user-guide/model-evaluation-introduction/training-set-and-evaluation-set.md)。CPT 纯文本样例完整 JSON 结构见下文代码块。
 
 {text} 纯文本格式样例（每行一个 jsonl 纯文本对象）：
 
@@ -538,7 +538,7 @@ RL 数据约束：
 
 -   数据量需大于 `batch_size`（默认 64）。几十至几百条可验证方案；正式训练数学推理 500~2000 条、Agent ≥1000 条、代码 ≥1000 题，数据量越大效果越优。
 -   训练集与验证集为两个独立 jsonl 文件，分别通过 `TrainingDataset`/`ValidationDataset` 上传（验证集可选）。
--   RL 通过 SDK 上传（`AgenticRL.run()`），非控制台打包通道；计费按 MTU 模型训练单元，非 Token。SDK 字段与提交方式详见[强化学习训练配置](raw/model-user-guide/fine-tuning/rl-overview/rl-training-config-monitoring.md)。
+-   RL 通过 SDK 上传（`AgenticRL.run()`），非控制台打包通道；计费按 MTU 模型训练单元，非 Token。SDK 字段与提交方式详见[强化学习训练配置](raw/model-user-guide/fine-tuning/rl-training-overview/rl-training-config-monitoring.md)。
 
 ## 多模态压缩包打包规则
 
@@ -552,7 +552,7 @@ RL 数据约束：
 
 云存储挂载不支持 zip 压缩包。使用云存储挂载加载数据集时，须将未经压缩的数据集文件夹整体上传到 OSS Bucket，通过 MountStorage 的 file\_path 指定 data.jsonl 文件路径；包含多文件时只需指定 data.jsonl 路径，其余同目录文件自动挂载。云存储挂载详见[使用 API 进行模型调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/fine-tuning-api-guide.md)。
 
-命名示例与目录结构见下文代码块。云存储挂载授权操作见[在控制台进行模型调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-on-console.md)，OSS 导入 Bucket 标签打标操作见[训练集与评测集](raw/model-user-guide/model-data-overview/training-set-and-evaluation-set.md)。
+命名示例与目录结构见下文代码块。云存储挂载授权操作见[在控制台进行模型调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-on-console.md)，OSS 导入 Bucket 标签打标操作见[训练集与评测集](raw/model-user-guide/model-evaluation-introduction/training-set-and-evaluation-set.md)。
 
 ```
 # 单层目录（推荐）

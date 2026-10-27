@@ -29,10 +29,13 @@ pip install -U openai
 
 ```
 # 如果运行失败，您可以将pip替换成pip3再运行
-pip install -U dashscope
+# 文档示例基于 DashScope Python SDK 2.0，需安装 2.0.1 及以上版本
+pip install -U "dashscope>=2.0.1"
 ```
 
 当终端出现`Successfully installed ... dashscope-x.x.x`的提示后，表示您已经成功安装DashScope Python SDK。
+
+**说明**本文档中的 Python SDK 示例均基于 DashScope Python SDK 2.0 编写，请确保安装 2.0.1 及以上版本。已使用 1.x 版本的存量项目可以继续运行（1.x 与 2.0 同包并存），迁移到 2.0 的方式请参见各示例代码。
 
 #### Java
 

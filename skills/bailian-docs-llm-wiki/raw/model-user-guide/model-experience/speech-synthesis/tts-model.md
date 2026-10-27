@@ -1,416 +1,229 @@
 # 语音合成概述
 
-选择适合语音合成、声音复刻和声音设计场景的模型。
+百炼语音合成可将文本转换为语音，支持系统音色，也可通过声音复刻、声音设计创建自定义音色，并可控制语速、情感、发音等合成效果。
 
-## 从闭源模型迁移到百炼？
+## 模型选型
 
-如果你正在使用 ElevenLabs、OpenAI 或 Google 的语音合成服务，可参考下表选择对应的百炼模型。
+实时交互、内容制作和精细朗读控制对模型能力的要求不同，可根据以下需求选择模型。
 
-**使用场景**
+**使用需求**
 
-**闭源模型代表**
+**推荐模型**
 
-**百炼推荐**
+**选择说明**
 
-内置音色 / 标准合成
-
-OpenAI gpt-4o-tts、Google Chirp 3
-
-`qwen-audio-3.1-tts-plus`、`MiniMax/speech-2.8-hd`
-
-自定义音色 / 声音复刻
-
-ElevenLabs Multilingual v3
-
-`qwen-audio-3.0-tts-flash`（声音复刻）、`qwen-audio-3.1-tts-plus`、`qwen-audio-3.0-tts-flash`（声音设计）、`cosyvoice-v3.5-plus`（声音设计）、`MiniMax/speech-2.8-hd`（声音复刻）
-
-## 标准语音合成还是自定义音色？
-
-语音合成模型可将文本转换为自然语音。首先确定您需要使用内置音色还是自定义音色：
-
-**标准语音合成**
-
-**自定义音色**
-
-音色来源
-
-模型内置音色库，选择即用
-
-从音频样本复刻，或用文字描述创建
-
-上手成本
-
-无需额外配置，选择模型和音色即可合成
-
-需提供音频样本或文字描述来创建音色
-
-适用场景
-
-智能客服、有声阅读、内容播报、电商直播
-
-品牌专属音色、虚拟主播、游戏角色配音
-
-推荐模型
-
-`qwen-audio-3.1-tts-plus`、`MiniMax/speech-2.8-hd`
-
-`qwen-audio-3.1-tts-plus`（声音复刻）、`qwen-audio-3.1-tts-plus`、`qwen-audio-3.0-tts-flash`（声音设计）、`cosyvoice-v3.5-plus`（声音设计）、`MiniMax/speech-2.8-hd`（声音复刻）
-
--   **使用标准语音合成**：当内置音色库能满足需求，希望快速上手、无需额外配置时。
--   **使用自定义音色**：当需要品牌专属声音、复刻特定人物音色，或创建全新角色音色时。
-
-## 声音复刻还是声音设计？
-
-如果选择自定义音色，有两种方式创建：
-
-**声音复刻（Voice Cloning）**
-
-**声音设计（Voice Design）**
-
-输入方式
-
-提供一段音频样本
-
-用文字描述期望的音色（如“温暖的低音女声”）
-
-效果
-
-合成语音与原始说话人高度相似
-
-根据描述从零生成全新音色
-
-适用场景
-
-品牌代言人/主播音色复用、虚拟主播、个性化语音助手
-
-品牌音色定制（无录音素材）、游戏/动画角色配音、创意内容制作
-
-推荐模型
-
-`qwen-audio-3.1-tts-plus`、`qwen-audio-3.0-tts-flash`、`MiniMax/speech-2.8-hd`
-
-`qwen-audio-3.1-tts-plus`、`qwen-audio-3.0-tts-flash`、`cosyvoice-v3.5-plus`、`cosyvoice-v3.5-flash`
-
-音色管理服务
-
-`voice-enrollment`（注册和管理音色）
-
-`voice-enrollment`（注册和管理音色）
-
--   **使用声音复刻**：当已有目标人物的录音素材，希望在合成中还原该音色时。
--   **使用声音设计**：当没有录音素材，希望根据文字描述从零创建全新音色时。
-
-## WebSocket还是HTTP？
-
--   **WebSocket**：双向流式通信，支持流式输入和流式输出，音频边合成边返回，延迟最低。适用于智能客服、语音助手、呼叫中心等实时交互场景。
--   **HTTP**：发送完整文本，支持流式返回音频（逐段输出）。适用于有声阅读、音频内容制作等场景。
-
-Qwen-Audio-TTS/CosyVoice 系列模型使用同一模型名称同时支持 WebSocket 和 HTTP 两种接入方式；Qwen 系列模型通过模型名称区分，带 `-realtime` 后缀的为 WebSocket 接入，不带后缀的为 HTTP 接入。
-
-Qwen-Audio-TTS/CosyVoice 和 Qwen 系列的 WebSocket 模型支持通过 DashScope SDK（Java、Python）接入。Qwen-Audio-TTS/CosyVoice 的 WebSocket 模型还支持Android、iOS SDK接入。其他模型需根据对应的 WebSocket 或 HTTP 协议直接调用。
-
-选择 WebSocket 接入请参考**实时语音合成**，选择 HTTP 接入请参考**非实时语音合成**。
-
-CosyVoice 系列模型还支持通过 AOQ 协议接入；如果是客户端对接，且更看重稳定的延迟、弱网下的交互能力、实时双工的降噪与回声消除，可优先考虑 AOQ，协议对比与选型请参见[Realtime API 概述](https://help.aliyun.com/zh/model-studio/realtime-api-overview#rtov-s02h2)。
-
-## 指令控制
-
-用自然语言描述期望的表达方式，可按请求动态控制语速、情绪和风格。例如“用温柔的语气，语速稍慢”或“用激动的播报风格”。适用于情感化内容制作、专业播报、有声读物等需要丰富表现力的场景。
-
-支持指令控制的模型：Qwen-Audio-TTS 系列（`qwen-audio-3.0-tts-plus`、`qwen-audio-3.0-tts-flash`）、CosyVoice 系列（`cosyvoice-v3.5-plus`、`cosyvoice-v3.5-flash`、`cosyvoice-v3-flash`）。详细使用方式请参见[实时语音合成 > 指令控制](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)。
-
-## 推荐模型
-
-以下为各场景下最推荐的模型，可前往模型广场查看详情。
-
-**模型ID**
-
-**系列**
-
-**API**
-
-**声音复刻**
-
-**声音设计**
-
-**指令控制**
-
-`qwen-audio-3.1-tts-plus`
-
-Qwen-Audio-TTS
-
-WebSocket / HTTP
-
-支持
-
-支持
-
-支持
-
-`cosyvoice-v3.5-plus`
-
-CosyVoice
-
-WebSocket/ HTTP
-
-支持
-
-支持
-
-支持
-
-`cosyvoice-v3-plus`
-
-CosyVoice
-
-WebSocket/ HTTP
-
-支持
-
-支持
-
-不支持
-
-`MiniMax/speech-2.8-hd`
-
-MiniMax
-
-HTTP
-
-支持
-
-不支持
-
-不支持
-
-## 所有模型
-
-### Qwen-Audio-TTS
-
-**模型ID**
-
-**API**
-
-**声音复刻**
-
-**声音设计**
-
-**指令控制**
-
-`qwen-audio-3.1-tts-plus`
-
-WebSocket / HTTP
-
-支持
-
-支持
-
-支持
-
-`qwen-audio-3.0-tts-plus`
-
-WebSocket/ HTTP
-
-支持
-
-支持
-
-支持
+语音助手、实时对话、智能客服
 
 [`qwen-audio-3.1-tts-flash`](raw/model-user-guide/support/model-studio-model-list/model-list-speech-synthesis/qwen-audio-3-1-tts-flash.md)
 
-WebSocket/ HTTP
+面向低延迟交互场景，支持系统音色、声音复刻、声音设计、自然语言指令及情感与富语言标签。
 
-支持
+有声书、影视配音、品牌声音与内容制作
 
-支持
+[`qwen-audio-3.1-tts-plus`](raw/model-user-guide/support/model-studio-model-list/model-list-speech-synthesis/qwen-audio-3-1-tts-plus.md)
 
-支持
+侧重音质、自然度和细节表现，支持系统音色、声音复刻、声音设计及丰富的表达控制。
 
-`qwen-audio-3.0-tts-flash`
+各系列的模型 ID 参见[支持模型](#tts_supported_models)。
 
-WebSocket/ HTTP
+## 音色选择
 
-支持
+前往[音色试听广场](https://creative.cosyvoice.net.cn/voice-plaza)试听音色。各模型可用的系统音色、`voice` 参数和试听音频参见下表中的音色列表。
 
-支持
+**音色来源**
 
-支持
+**需要准备**
 
-**支持的语言**：
+**适用场景**
 
--   系统音色（因音色而异）：中文（普通话）、英文
--   声音复刻音色（方言通过指令控制功能进行设置）：中文（普通话、广东话、重庆话、东北话、甘肃话、贵州话、浙江话、河北话、河南话、湖北话、湖南话、江西话、宁波话、宁夏话、青岛话、陕西话、山西话、山东话、上海话、四川话、云南话）、英语、日语、韩语、俄语、法语、德语、葡萄牙语、泰语、印尼语、越南语、西班牙语、意大利语、马来西亚语、菲律宾语、阿拉伯语
+**使用入口**
 
-### CosyVoice
+系统音色
 
-部分 CosyVoice 模型支持 SSML 标记和 LaTeX 公式朗读。
+无需音频样本或音色描述，选择已有音色即可。
 
-**模型ID**
+智能客服、有声阅读、内容播报等已有音色能够满足的场景。
 
-**API**
+-   [Qwen-Audio-TTS 音色列表](raw/model-user-guide/model-experience/speech-synthesis/tts-voice-list/qwen-audio-tts-voice-list.md)
+-   [CosyVoice 音色列表](raw/model-user-guide/model-experience/speech-synthesis/tts-voice-list/cosyvoice-voice-list.md)
+-   [Qwen-TTS 音色列表](raw/model-user-guide/model-experience/speech-synthesis/tts-voice-list/qwen-tts-voice-list.md)
 
-**声音复刻**
+复刻音色
 
-**声音设计**
+提供目标说话人的音频样本。
 
-**指令控制**
+复用品牌代言人、主播等已有声音，创建个性化语音助手或虚拟主播。
 
-`cosyvoice-v3.5-plus`
+[声音复刻](raw/model-user-guide/model-experience/speech-synthesis/voice-cloning-user-guide.md)
 
-WebSocket/ HTTP
+设计音色
 
-支持
+用文字描述期望的声音，例如“温暖的低音女声”。
 
-支持
+没有录音素材，需要为品牌、游戏或动画角色创建新音色。
 
-支持
+[声音设计](raw/model-user-guide/model-experience/speech-synthesis/voice-design-user-guide.md)
 
-`cosyvoice-v3.5-flash`
+声音设计用于创建可重复使用的音色。如果只需在单次合成中调整语速、情感或说话方式，可使用[指令控制](#tts_synthesis_controls)。
 
-WebSocket/ HTTP
+## 合成方式
 
-支持
+合成方式的区别在于一次输入完整文本还是分段持续输入，以及一次获取完整音频还是边合成边获取音频。流式输出音频与流式输入文本是两种不同的能力。
 
-支持
+**合成方式**
 
-支持
+**文本输入**
 
-`cosyvoice-v3-plus`
+**音频输出**
 
-WebSocket/ HTTP
+**适用场景**
 
-支持
+非流式
 
-支持
+一次发送完整文本。
 
-不支持
+合成完成后获取完整音频。
 
-`cosyvoice-v3-flash`
+无需边合成边播放的内容制作。
 
-WebSocket/ HTTP
+单向流式
 
-支持
+一次发送完整文本。
 
-支持
+边合成边分段返回音频。
 
-支持
+文本已准备好，希望尽早开始播放。
 
-`cosyvoice-v2`
+双向流式
 
-WebSocket/ HTTP
+持续发送文本片段。
 
-支持
+边合成边分段返回音频。
 
-不支持
+对接大模型等文本持续产生的实时交互。
 
-不支持
-
-**支持的语言（按版本）**：
-
--   `cosyvoice-v3.5-plus`**、**`cosyvoice-v3.5-flash`（不支持系统音色）：
+-   **非实时合成**：一次提交完整文本，可选择非流式或流式获取音频，参见[非实时语音合成](raw/model-user-guide/model-experience/speech-synthesis/non-realtime-tts-user-guide.md)。
     
-    -   声音复刻音色（方言通过指令控制功能进行设置）：中文（普通话、广东话、东北话、甘肃话、贵州话、河南话、湖北话、江西话、闽南话、宁夏话、山西话、陕西话、山东话、上海话、四川话、天津话、云南话）、英文、法语、德语、日语、韩语、俄语、葡萄牙语、泰语、印尼语、越南语
-    -   声音设计音色：中文（普通话）、英文
--   `cosyvoice-v3-plus`：
+-   **实时合成**：分段或持续提交文本，也可一次提交完整文本，参见[实时语音合成](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)。对于移动端等实时交互应用，可按 [Realtime API 概述](raw/model-api-reference/realtime-api-user-guide/realtime-api-overview.md)选择可用的接入协议。其中，AOQ（AI over QUIC）针对低延迟和弱网传输进行优化，并内置回声消除和降噪能力。
     
-    -   系统音色（因音色而异）：中文（普通话）、英文
-    -   声音复刻音色（方言通过指令控制功能进行设置）：中文（普通话、广东话、东北话、甘肃话、贵州话、河南话、湖北话、江西话、闽南话、宁夏话、山西话、陕西话、山东话、上海话、四川话、天津话、云南话）、英文、法语、德语、日语、韩语、俄语
-    -   声音设计音色：中文（普通话）、英文
--   `cosyvoice-v3-flash`：
-    
-    -   系统音色（因音色而异，部分方言由系统音色直接支持，部分通过指令控制功能设置）：中文（普通话、广东话、东北话、河南话、湖南话、陕西话、山东话、四川话、安徽话、闽南话）、英文、日语、韩语、印尼语
-    -   声音复刻音色（方言通过指令控制功能进行设置）：中文（普通话、广东话、东北话、甘肃话、贵州话、河南话、湖北话、江西话、闽南话、宁夏话、山西话、陕西话、山东话、上海话、四川话、天津话、云南话）、英文、法语、德语、日语、韩语、俄语、葡萄牙语、泰语、印尼语、越南语
-    -   声音设计音色：中文（普通话）、英文
--   `cosyvoice-v2`（不支持声音设计音色）：
-    
-    -   系统音色（因音色而异）：中文（普通话、粤语、东北话、闽南话、陕西话）、英文、日语、韩语
-    -   声音复刻音色：中文（普通话）、英文
 
-### Qwen3-TTS
+## 合成效果控制
 
-**模型ID**
+除了选择音色，还可以通过参数、指令或标签调整合成效果。
 
-**API**
+**希望调整的效果**
 
-**声音复刻**
+**控制方式**
 
-**声音设计**
+语速、音调、音量
 
-**指令控制**
+设置模型提供的对应合成参数。
 
-`qwen3-tts-flash`
+情感、风格、说话方式
 
-HTTP
+使用自然语言指令，例如“用温柔的语气，语速稍慢”。
+
+局部情感及笑声、呼吸等表达
+
+在待合成文本中加入情感与富语言标签。
+
+发音、停顿、数字读法等
+
+使用 [SSML](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide#sl01_tagref_h3) 标签精细控制朗读。
+
+数学公式朗读
+
+使用 [LaTeX](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide#sl02_symbols_h3) 表达公式。
+
+按合成方式查看参数、支持条件和示例：
+
+-   [非实时语音合成](https://help.aliyun.com/zh/model-studio/non-realtime-tts-user-guide#12884a10929p9)
+-   [实时语音合成](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#rt_advanced_h2)
+
+## 支持模型
+
+选择调用地域，查看各系列的模型 ID。
+
+#### 北京
+
+-   **Qwen-Audio-TTS**：`qwen-audio-3.1-tts-plus`、`qwen-audio-3.1-tts-flash`、`qwen-audio-3.0-tts-plus`、`qwen-audio-3.0-tts-flash`
+-   **CosyVoice**：`cosyvoice-v3.5-plus`、`cosyvoice-v3.5-flash`、`cosyvoice-v3-plus`、`cosyvoice-v3-flash`、`cosyvoice-v2`
+-   **Qwen3-TTS**：`qwen3-tts-flash-realtime`、`qwen3-tts-flash`
+-   **MiniMax**：`MiniMax/speech-2.8-hd`、`MiniMax/speech-2.8-turbo`、`MiniMax/speech-02-hd`、`MiniMax/speech-02-turbo`
+
+#### 新加坡
+
+-   **Qwen-Audio-TTS**：`qwen-audio-3.1-tts-plus`、`qwen-audio-3.1-tts-flash`、`qwen-audio-3.0-tts-plus`、`qwen-audio-3.0-tts-flash`
+-   **CosyVoice**：`cosyvoice-v3-plus`、`cosyvoice-v3-flash`
+-   **Qwen3-TTS**：`qwen3-tts-flash-realtime`、`qwen3-tts-flash`
+
+## 语言与方言支持
+
+按需要合成的语言或方言选择音色。下表按模型系列和音色类型列出支持范围。
+
+#### Qwen-Audio-TTS
+
+**音色类型**
+
+**合成输出语言与方言**
+
+系统音色
+
+支持中文、英语等语言，具体范围因模型和音色而异，参见[Qwen-Audio-TTS 音色列表](raw/model-user-guide/model-experience/speech-synthesis/tts-voice-list/qwen-audio-tts-voice-list.md)。
+
+复刻音色
+
+中文（普通话、广东话、重庆话、东北话、甘肃话、贵州话、浙江话、河北话、河南话、湖北话、湖南话、江西话、宁波话、宁夏话、青岛话、陕西话、山西话、山东话、上海话、四川话、云南话）、英语、日语、韩语、俄语、法语、德语、葡萄牙语、泰语、印尼语、越南语、西班牙语、意大利语、马来西亚语、菲律宾语、阿拉伯语 （方言通过指令控制功能进行设置）
+
+设计音色
+
+中文（普通话）、英文
+
+#### CosyVoice
+
+**音色类型**
+
+**合成输出语言与方言**
+
+系统音色
+
+-   `cosyvoice-v3.5-plus` / `cosyvoice-v3.5-flash`: 不支持
+-   `cosyvoice-v3-plus`（因音色而异）: 中文（普通话）、英文
+-   `cosyvoice-v3-flash`（因音色而异，部分方言由系统音色直接支持，部分通过指令控制功能设置）: 中文（普通话、广东话、东北话、河南话、湖南话、陕西话、山东话、四川话、安徽话、闽南话）、英文、日语、韩语、印尼语
+-   `cosyvoice-v2`（因音色而异）: 中文（普通话、粤语、东北话、闽南话、陕西话）、英文、日语、韩语
+
+**说明**系统音色的具体语言、方言和试听参见[CosyVoice 音色列表](raw/model-user-guide/model-experience/speech-synthesis/tts-voice-list/cosyvoice-voice-list.md)。
+
+复刻音色
+
+-   `cosyvoice-v3.5-plus` / `cosyvoice-v3.5-flash`（方言通过指令控制功能进行设置）: 中文（普通话、广东话、东北话、甘肃话、贵州话、河南话、湖北话、江西话、闽南话、宁夏话、山西话、陕西话、山东话、上海话、四川话、天津话、云南话）、英文、法语、德语、日语、韩语、俄语、葡萄牙语、泰语、印尼语、越南语
+-   `cosyvoice-v3-plus`: 中文（普通话、广东话、东北话、甘肃话、贵州话、河南话、湖北话、江西话、闽南话、宁夏话、山西话、陕西话、山东话、上海话、四川话、天津话、云南话）、英文、法语、德语、日语、韩语、俄语
+-   `cosyvoice-v3-flash`（方言通过指令控制功能进行设置）: 中文（普通话、广东话、东北话、甘肃话、贵州话、河南话、湖北话、江西话、闽南话、宁夏话、山西话、陕西话、山东话、上海话、四川话、天津话、云南话）、英文、法语、德语、日语、韩语、俄语、葡萄牙语、泰语、印尼语、越南语
+-   `cosyvoice-v2`: 中文（普通话）、英文
+
+设计音色
+
+-   `cosyvoice-v3.5-plus` / `cosyvoice-v3.5-flash`: 中文（普通话）、英文
+-   `cosyvoice-v3-plus`: 中文（普通话）、英文
+-   `cosyvoice-v3-flash`: 中文（普通话）、英文
+-   `cosyvoice-v2`: 不支持
+
+#### Qwen3-TTS
+
+**音色类型**
+
+**合成输出语言与方言**
+
+系统音色
+
+中文（普通话、北京话、上海话、四川话、南京话、陕西话、闽南话、天津话、粤语，因音色而异）、英文、德语、意大利语、葡萄牙语、西班牙语、日语、韩语、法语、俄语
+
+**说明**系统音色的具体语言、方言和试听参见[Qwen-TTS 音色列表](raw/model-user-guide/model-experience/speech-synthesis/tts-voice-list/qwen-tts-voice-list.md)。
+
+复刻音色
 
 不支持
 
-不支持
-
-不支持
-
-`qwen3-tts-flash-realtime`
-
-WebSocket
-
-不支持
-
-不支持
-
-不支持
-
-**支持的语言（按版本）**：
-
--   **Qwen3-TTS-Flash 系列**（系统音色）（`qwen3-tts-flash`、`qwen3-tts-flash-realtime`）：中文（普通话、北京话、上海话、四川话、南京话、陕西话、闽南话、天津话、粤语，因音色而异）、英文、德语、意大利语、葡萄牙语、西班牙语、日语、韩语、法语、俄语
-
-### MiniMax
-
-**模型ID**
-
-**API**
-
-**声音复刻**
-
-**声音设计**
-
-**指令控制**
-
-`MiniMax/speech-2.8-hd`
-
-HTTP
-
-支持
-
-不支持
-
-不支持
-
-`MiniMax/speech-02-hd`
-
-HTTP
-
-支持
-
-不支持
-
-不支持
-
-`MiniMax/speech-2.8-turbo`
-
-HTTP
-
-支持
-
-不支持
-
-不支持
-
-`MiniMax/speech-02-turbo`
-
-HTTP
-
-支持
-
-不支持
+设计音色
 
 不支持

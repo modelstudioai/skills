@@ -222,8 +222,14 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 import os
 import dashscope
 
-# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量， 请用百炼API Key将下行替换为： api_key ="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 messages = [
 {
@@ -232,14 +238,11 @@ messages = [
     {"image": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241022/emyrja/dog_and_girl.jpeg"},
     {"text": "图中描绘的是什么景象?"}]
 }]
-response = dashscope.MultiModalConversation.call(
-    # 若没有配置环境变量， 请用百炼API Key将下行替换为： api_key ="sk-xxx"
-    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    api_key = os.getenv('DASHSCOPE_API_KEY'),
-    model = 'qwen3.7-plus',  # 此处以qwen3.7-plus为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
-    messages = messages
+response = client.multimodal.chat.create(
+    model='qwen3.7-plus',  # 此处以qwen3.7-plus为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
+    messages=messages
 )
-print(response.output.choices[0].message.content[0]["text"])
+print(response.output_text)
 ```
 
 ### 返回结果
@@ -749,10 +752,14 @@ python
 ```
 import os
 import dashscope
-from dashscope import MultiModalConversation
 
-# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 enable_thinking=True
 messages = [
@@ -765,9 +772,7 @@ messages = [
     }
 ]
 
-response = MultiModalConversation.call(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
-    api_key=os.getenv('DASHSCOPE_API_KEY'),
+stream = client.multimodal.chat.create(
     model="qwen3.8-max",
     messages=messages,
     stream=True,
@@ -776,7 +781,6 @@ response = MultiModalConversation.call(
     enable_thinking=enable_thinking,
     # thinking_budget 参数设置最大推理过程 Token 数
     thinking_budget=81920,
-
 )
 
 # 定义完整思考过程
@@ -788,25 +792,25 @@ is_answering = False
 if enable_thinking:
     print("=" * 20 + "思考过程" + "=" * 20)
 
-for chunk in response:
+for chunk in stream:
+    # 获取当前chunk的内容（流式输出默认为增量模式）
+    content_text = chunk.choices[0].delta.content or ""
+    reasoning_text = chunk.choices[0].delta.reasoning_content or ""
     # 如果思考过程与回复皆为空，则忽略
-    message = chunk.output.choices[0].message
-    reasoning_content_chunk = message.get("reasoning_content", None)
-    if (chunk.output.choices[0].message.content == [] and
-        reasoning_content_chunk == ""):
+    if content_text == "" and reasoning_text == "":
         pass
     else:
         # 如果当前为思考过程
-        if reasoning_content_chunk is not None and chunk.output.choices[0].message.content == []:
-            print(chunk.output.choices[0].message.reasoning_content, end="")
-            reasoning_content += chunk.output.choices[0].message.reasoning_content
+        if reasoning_text != "" and content_text == "":
+            print(reasoning_text, end="")
+            reasoning_content += reasoning_text
         # 如果当前为回复
-        elif chunk.output.choices[0].message.content != []:
+        elif content_text != "":
             if not is_answering:
                 print("\n" + "=" * 20 + "完整回复" + "=" * 20)
                 is_answering = True
-            print(chunk.output.choices[0].message.content[0]["text"], end="")
-            answer_content += chunk.output.choices[0].message.content[0]["text"]
+            print(content_text, end="")
+            answer_content += content_text
 
 # 打印完整思考过程与回复
 # print("=" * 20 + "完整思考过程" + "=" * 20 + "\n")
@@ -1105,8 +1109,14 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 import os
 import dashscope
 
-# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 messages = [
     {
@@ -1119,15 +1129,12 @@ messages = [
     }
 ]
 
-response = dashscope.MultiModalConversation.call(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    api_key=os.getenv('DASHSCOPE_API_KEY'),
+response = client.multimodal.chat.create(
     model='qwen3.7-plus', # 此处以qwen3.7-plus为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
     messages=messages
 )
 
-print(response.output.choices[0].message.content[0]["text"])
+print(response.output_text)
 ```
 
 ### 返回结果
@@ -1396,8 +1403,13 @@ Python
 import dashscope
 import os
 
-# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量， 请用百炼API Key将下行替换为： api_key ="sk-xxx"
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 messages = [
     {"role": "user",
@@ -1409,14 +1421,12 @@ messages = [
     }
 ]
 
-response = dashscope.MultiModalConversation.call(
-    # 若没有配置环境变量， 请用百炼API Key将下行替换为： api_key ="sk-xxx"
-    api_key=os.getenv('DASHSCOPE_API_KEY'),
+response = client.multimodal.chat.create(
     model='qwen3.7-plus',
     messages=messages
 )
 
-print(response.output.choices[0].message.content[0]["text"])
+print(response.output_text)
 ```
 
 Java
@@ -1607,8 +1617,13 @@ Python
 import os
 import dashscope
 
-# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 messages = [{"role": "user",
              "content": [
@@ -1619,13 +1634,11 @@ messages = [{"role": "user",
                            "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/aedbqh/football4.jpg"],
                    "fps":2},
                  {"text": "描述这个视频的具体过程"}]}]
-response = dashscope.MultiModalConversation.call(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+response = client.multimodal.chat.create(
     model='qwen3.7-plus', # 此处以qwen3.7-plus为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
     messages=messages
 )
-print(response.output.choices[0].message.content[0]["text"])
+print(response.output_text)
 ```
 
 Java
@@ -1806,11 +1819,16 @@ Python
 
 ```
 import os
-from dashscope import MultiModalConversation
 import dashscope
 
-# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # 将xxx/eagle.png替换为你本地图像的绝对路径
 local_path = "xxx/eagle.png"
@@ -1819,13 +1837,10 @@ messages = [
                 {'role':'user',
                 'content': [{'image': image_path},
                             {'text': '图中描绘的是什么景象?'}]}]
-response = MultiModalConversation.call(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    api_key=os.getenv('DASHSCOPE_API_KEY'),
+response = client.multimodal.chat.create(
     model='qwen3.7-plus',  # 此处以qwen3.7-plus为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
     messages=messages)
-print(response.output.choices[0].message.content[0]["text"])
+print(response.output_text)
 ```
 
 Java
@@ -2001,10 +2016,14 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 import base64
 import os
 import dashscope
-from dashscope import MultiModalConversation
 
-# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 #  编码函数： 将本地文件转换为 Base64 编码的字符串
 def encode_image(image_path):
@@ -2027,13 +2046,11 @@ messages = [
         ],
     },
 ]
-response = MultiModalConversation.call(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+response = client.multimodal.chat.create(
     model="qwen3.8-max",  # 此处以qwen3.8-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
     messages=messages,
 )
-print(response.output.choices[0].message.content[0]["text"])
+print(response.output_text)
 ```
 
 #### Java
@@ -2141,11 +2158,15 @@ Python
 
 ```
 import os
-from dashscope import MultiModalConversation
 import dashscope
 
-# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # 将xxxx/test.mp4替换为你本地视频的绝对路径
 local_path = "xxx/test.mp4"
@@ -2155,12 +2176,10 @@ messages = [
                 # fps参数控制视频抽帧数量，表示每隔1/fps 秒抽取一帧
                 'content': [{'video': video_path,"fps":2},
                             {'text': '这段视频描绘的是什么景象？'}]}]
-response = MultiModalConversation.call(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-    api_key=os.getenv('DASHSCOPE_API_KEY'),
+response = client.multimodal.chat.create(
     model='qwen3.7-plus',
     messages=messages)
-print(response.output.choices[0].message.content[0]["text"])
+print(response.output_text)
 ```
 
 Java
@@ -2336,10 +2355,15 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 import base64
 import os
 import dashscope
-from dashscope import MultiModalConversation
 
-# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # 编码函数： 将本地文件转换为 Base64 编码的字符串
 def encode_video(video_path):
@@ -2353,14 +2377,11 @@ messages = [{'role':'user',
             # fps参数控制视频抽帧数量，表示每隔1/fps 秒抽取一帧
              'content': [{'video': f"data:video/mp4;base64,{base64_video}","fps":2},
                             {'text': '这段视频描绘的是什么景象？'}]}]
-response = MultiModalConversation.call(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    api_key=os.getenv('DASHSCOPE_API_KEY'),
+response = client.multimodal.chat.create(
     model='qwen3.7-plus',
     messages=messages)
 
-print(response.output.choices[0].message.content[0]["text"])
+print(response.output_text)
 ```
 
 #### Java
@@ -2468,11 +2489,15 @@ Python
 
 ```
 import os
-from dashscope import MultiModalConversation
 import dashscope
 
-# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 local_path1 = "football1.jpg"
 local_path2 = "football2.jpg"
@@ -2488,13 +2513,11 @@ messages = [{'role':'user',
               #  传入图像列表时，fps 参数适用于Qwen3.6、Qwen3-VL 和 Qwen2.5-VL系列模型
              'content': [{'video': [image_path1,image_path2,image_path3,image_path4],"fps":2},
                             {'text': '这段视频描绘的是什么景象?'}]}]
-response = MultiModalConversation.call(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-    api_key=os.getenv('DASHSCOPE_API_KEY'),
+response = client.multimodal.chat.create(
     model='qwen3.7-plus',  # 此处以qwen3.7-plus为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
     messages=messages)
 
-print(response.output.choices[0].message.content[0]["text"])
+print(response.output_text)
 ```
 
 Java
@@ -2682,11 +2705,15 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 ```
 import base64
 import os
-from dashscope import MultiModalConversation
 import dashscope
 
-# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 #  编码函数： 将本地文件转换为 Base64 编码的字符串
 def encode_image(image_path):
@@ -2708,13 +2735,11 @@ messages = [{'role':'user',
                          ]
                     },
                     {'text': '请描绘这个视频的具体过程?'}]}]
-response = MultiModalConversation.call(
-    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+response = client.multimodal.chat.create(
     model='qwen3.7-plus',  # 此处以qwen3.7-plus为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
     messages=messages)
 
-print(response.output.choices[0].message.content[0]["text"])
+print(response.output_text)
 ```
 
 #### Java
@@ -3016,8 +3041,14 @@ Python
 import os
 import dashscope
 
-# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 messages = [
     {
@@ -3032,17 +3063,14 @@ messages = [
     }
 ]
 
-response = dashscope.MultiModalConversation.call(
-        # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-        # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-        api_key=os.getenv('DASHSCOPE_API_KEY'),
+response = client.multimodal.chat.create(
         model='qwen3.7-plus',
         messages=messages,
-        vl_high_resolution_images=True
+        parameters={"vl_high_resolution_images": True}
     )
 
-print("模型输出",response.output.choices[0].message.content[0]["text"])
-print("输入总Tokens：",response.usage.input_tokens)
+print("模型输出", response.output_text)
+print("输入总Tokens：", response.usage.input_tokens)
 ```
 
 Java

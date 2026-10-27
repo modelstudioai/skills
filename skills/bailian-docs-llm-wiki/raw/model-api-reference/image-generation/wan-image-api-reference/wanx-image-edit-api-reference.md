@@ -162,8 +162,6 @@ wanx2.1-imageedit
 
 如需通过SDK进行调用，请[安装DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。目前，该SDK已支持Python和Java。
 
-> 请将示例代码中的 `DASHSCOPE_API_HOST` 替换为获取的 API Host。
-
 ## HTTP调用
 
 图像模型处理时间较长，为了避免请求超时，HTTP调用仅支持异步获取模型结果。您需要发起两个请求：
@@ -922,7 +920,7 @@ SDK与HTTP接口的参数名基本一致，参数结构根据不同语言的SDK�
 
 ### Python SDK调用
 
-**重要****本示例要求 dashscope Python SDK ≥ 1.23.8。**低于该版本运行本示例时会报错 **TypeError: got multiple values for keyword argument 'function'**。请先执行 **pip install -U "dashscope>=1.23.8"** 升级 SDK 后再运行示例。
+**重要****本示例要求 dashscope Python SDK ≥ 2.0.1。**请先执行 **pip install -U "dashscope>=2.0.1"** 升级 SDK 后再运行示例。
 
 使用Python SDK处理图像文件时，支持以下三种方式输入图像。请根据您的场景选择其中一种即可。
 
@@ -965,22 +963,24 @@ file://./images/test.png
 ```
 import base64
 import os
-from http import HTTPStatus
-from dashscope import ImageSynthesis
-import dashscope
 import mimetypes
+import dashscope
+from dashscope.v2 import DashScopeError
 
 """
 环境要求：
-    dashscope python SDK >= 1.23.8
+    dashscope python SDK >= 2.0.1
 安装/升级SDK:
     pip install -U dashscope
 """
 
 # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-api_key = os.getenv("DASHSCOPE_API_KEY")
-# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # --- 辅助函数：用于 Base64 编码 ---
 # 格式为 data:{MIME_type};base64,{base64_data}
@@ -1020,23 +1020,28 @@ base_image_url = "http://wanx.alicdn.com/material/20250318/description_edit_with
 
 def sample_sync_call_imageedit():
     print('please wait...')
-    rsp = ImageSynthesis.call(api_key=api_key,
-                              model="wanx2.1-imageedit",
-                              function="description_edit_with_mask",
-                              prompt="陶瓷兔子拿着陶瓷小花",
-                              mask_image_url=mask_image_url,
-                              base_image_url=base_image_url,
-                              n=1)
-    assert rsp.status_code == HTTPStatus.OK
-
-    print('response: %s' % rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        for result in rsp.output.results:
+    try:
+        # generate 为“提交+等待”一步式调用，返回已完成的任务对象 job
+        job = client.images.generate(
+            model="wanx2.1-imageedit",
+            function="description_edit_with_mask",
+            prompt="陶瓷兔子拿着陶瓷小花",
+            # base_image_url/mask_image_url 为编辑专属入参，经 extra_input 透传到请求 input 段
+            extra_input={
+                "mask_image_url": mask_image_url,
+                "base_image_url": base_image_url,
+            },
+            n=1,
+        )
+        print('response: %s' % job)
+        for url in job.image_urls:
             print("---------------------------")
-            print(result.url)
-    else:
-        print('sync_call Failed, status_code: %s, code: %s, message: %s' %
-              (rsp.status_code, rsp.code, rsp.message))
+            print(url)
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 
 if __name__ == '__main__':
     sample_sync_call_imageedit()
@@ -1048,26 +1053,18 @@ if __name__ == '__main__':
 
 ```
 {
-    "status_code": 200,
     "request_id": "dc41682c-4e4a-9010-bc6f-xxxxxx",
-    "code": null,
-    "message": "",
-    "output": {
-        "task_id": "6e319d88-a07a-420c-9493-xxxxxx",
-        "task_status": "SUCCEEDED",
-        "results": [
-            {
-                "url": "https://dashscope-result-wlcb-acdr-1.oss-cn-wulanchabu-acdr-1.aliyuncs.com/xxx.png?xxxxxx"
-            }
-        ],
-        "submit_time": "2025-05-26 14:58:27.320",
-        "scheduled_time": "2025-05-26 14:58:27.339",
-        "end_time": "2025-05-26 14:58:39.170",
-        "task_metrics": {
-            "TOTAL": 1,
-            "SUCCEEDED": 1,
-            "FAILED": 0
+    "task_id": "6e319d88-a07a-420c-9493-xxxxxx",
+    "status": "SUCCEEDED",
+    "results": [
+        {
+            "url": "https://dashscope-result-wlcb-acdr-1.oss-cn-wulanchabu-acdr-1.aliyuncs.com/xxx.png?xxxxxx"
         }
+    ],
+    "task_metrics": {
+        "TOTAL": 1,
+        "SUCCEEDED": 1,
+        "FAILED": 0
     },
     "usage": {
         "image_count": 1
@@ -1083,61 +1080,60 @@ if __name__ == '__main__':
 
 ```
 import os
-from http import HTTPStatus
-from dashscope import ImageSynthesis
 import dashscope
+from dashscope.v2 import DashScopeError
 
 """
 环境要求：
-    dashscope python SDK >= 1.23.4
+    dashscope python SDK >= 2.0.1
 安装/升级SDK:
     pip install -U dashscope
 """
 
 # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-api_key = os.getenv("DASHSCOPE_API_KEY")
-# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # 使用公网图片 URL
 mask_image_url = "http://wanx.alicdn.com/material/20250318/description_edit_with_mask_3_mask.png"
 base_image_url = "http://wanx.alicdn.com/material/20250318/description_edit_with_mask_3.jpeg"
 
 def sample_async_call_imageedit():
-    # 异步调用，返回一个task_id
-    rsp = ImageSynthesis.async_call(api_key=api_key,
-                                    model="wanx2.1-imageedit",
-                                    function="description_edit_with_mask",
-                                    prompt="陶瓷兔子拿着陶瓷小花",
-                                    mask_image_url=mask_image_url,
-                                    base_image_url=base_image_url,
-                                    n=1)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print("task_id: %s" % rsp.output.task_id)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (rsp.status_code, rsp.code, rsp.message))
+    try:
+        # 异步调用（分步提交），返回一个job对象，含task_id
+        job = client.images.jobs.create(
+            model="wanx2.1-imageedit",
+            function="description_edit_with_mask",
+            prompt="陶瓷兔子拿着陶瓷小花",
+            # base_image_url/mask_image_url 为编辑专属入参，经 extra_input 透传到请求 input 段
+            extra_input={
+                "mask_image_url": mask_image_url,
+                "base_image_url": base_image_url,
+            },
+            n=1,
+        )
+        print(job)
+        print("task_id: %s" % job.task_id)
 
-    # 获取异步任务信息
-    status = ImageSynthesis.fetch(task=rsp, api_key=api_key)
-    if status.status_code == HTTPStatus.OK:
-        print(status.output.task_status)  # check the task status
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (status.status_code, status.code, status.message))
+        # 获取异步任务信息
+        snapshot = client.images.jobs.fetch(job.task_id)
+        print(snapshot.status)  # check the task status
 
-    # 等待异步任务结束
-    rsp = ImageSynthesis.wait(rsp)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print(rsp.output)
-        for result in rsp.output.results:
+        # 等待异步任务结束（指数退避轮询，默认总预算24小时，任务FAILED会抛出DashScopeError）
+        done = client.images.jobs.wait(job.task_id)
+        print(done)
+        for url in done.image_urls:
             print("---------------------------")
-            print(result.url)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (rsp.status_code, rsp.code, rsp.message))
+            print(url)
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 
 if __name__ == '__main__':
     sample_async_call_imageedit()
@@ -1149,16 +1145,9 @@ if __name__ == '__main__':
 
 ```
 {
-	"status_code": 200,
-	"request_id": "6dc3bf6c-be18-9268-9c27-xxxxxx",
-	"code": "",
-	"message": "",
-	"output": {
-		"task_id": "686391d9-7ecf-4290-a8e9-xxxxxx",
-		"task_status": "PENDING",
-		"video_url": ""
-	},
-	"usage": null
+    "request_id": "6dc3bf6c-be18-9268-9c27-xxxxxx",
+    "task_id": "686391d9-7ecf-4290-a8e9-xxxxxx",
+    "status": "PENDING"
 }
 ```
 
@@ -1168,26 +1157,18 @@ if __name__ == '__main__':
 
 ```
 {
-    "status_code": 200,
     "request_id": "dc41682c-4e4a-9010-bc6f-xxxxxx",
-    "code": null,
-    "message": "",
-    "output": {
-        "task_id": "6e319d88-a07a-420c-9493-xxxxxx",
-        "task_status": "SUCCEEDED",
-        "results": [
-            {
-                "url": "https://dashscope-result-wlcb-acdr-1.oss-cn-wulanchabu-acdr-1.aliyuncs.com/xxx.png?Expires=17xxxxxx"
-            }
-        ],
-        "submit_time": "2025-05-26 14:58:27.320",
-        "scheduled_time": "2025-05-26 14:58:27.339",
-        "end_time": "2025-05-26 14:58:39.170",
-        "task_metrics": {
-            "TOTAL": 1,
-            "SUCCEEDED": 1,
-            "FAILED": 0
+    "task_id": "6e319d88-a07a-420c-9493-xxxxxx",
+    "status": "SUCCEEDED",
+    "results": [
+        {
+            "url": "https://dashscope-result-wlcb-acdr-1.oss-cn-wulanchabu-acdr-1.aliyuncs.com/xxx.png?Expires=17xxxxxx"
         }
+    ],
+    "task_metrics": {
+        "TOTAL": 1,
+        "SUCCEEDED": 1,
+        "FAILED": 0
     },
     "usage": {
         "image_count": 1

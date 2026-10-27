@@ -128,14 +128,15 @@ SDK Expert：
 ```
 ```
 import os, dashscope
-dashscope.api_key = os.getenv("DASHSCOPE_API_KEY")
-for chunk in dashscope.Generation.call(
+client = dashscope.Client(api_key=os.getenv("DASHSCOPE_API_KEY"))
+stream = client.chat.completions.create(
     model="qwen-plus",
     messages=[{"role": "user", "content": "写一首关于秋天的诗"}],
-    result_format="message", stream=True, incremental_output=True,
-):
-    if chunk.status_code == 200:
-        print(chunk.output.choices[0].message.content, end="", flush=True)
+    stream=True,
+)
+for chunk in stream:
+    if chunk.choices and chunk.choices[0].delta.content:
+        print(chunk.choices[0].delta.content, end="", flush=True)
 # 最后一个 chunk 含 usage（input/output tokens）
 ```
 ```

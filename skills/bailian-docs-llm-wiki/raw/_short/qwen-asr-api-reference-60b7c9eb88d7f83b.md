@@ -1005,29 +1005,33 @@ public class Main {
 }
 ```
 
-Code 3
+Python SDK
 
 ```
 import os
 import dashscope
 
-# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
+client = dashscope.Client(
+    # 新加坡/美国地域和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    # 若没有配置环境变量，请将下行替换为自己的API Key：api_key="sk-xxx"
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 messages = [
     {"role": "user", "content": [{"audio": "{YOUR_AUDIO_URL}"}]}
 ]
 
-response = dashscope.MultiModalConversation.call(
-    # 新加坡/美国地域和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx"
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+response = client.multimodal.chat.create(
     model="qwen3-asr-flash",
     messages=messages,
-    result_format="message",
-    asr_options={
-        # "language": "zh", # 可选，若已知音频的语种，可通过该参数指定待识别语种，以提升识别准确率
-        "enable_itn":False
+    parameters={
+        "asr_options": {
+            # "language": "zh", # 可选，若已知音频的语种，可通过该参数指定待识别语种，以提升识别准确率
+            "enable_itn": False
+        }
     }
 )
 print(response)
@@ -1094,8 +1098,14 @@ import dashscope
 import os
 import pathlib
 
-# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
+client = dashscope.Client(
+    # 新加坡/美国地域和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    # 若没有配置环境变量，请将下行替换为自己的API Key：api_key="sk-xxx"
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # 请替换为实际的音频文件路径
 file_path = "{YOUR_AUDIO_FILE}"
@@ -1112,19 +1122,17 @@ data_uri = f"data:{audio_mime_type};base64,{base64_str}"
 messages = [
     {"role": "user", "content": [{"audio": data_uri}]}
 ]
-response = dashscope.MultiModalConversation.call(
-    # 新加坡/美国地域和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+response = client.multimodal.chat.create(
     model="qwen3-asr-flash",
     messages=messages,
-    result_format="message",
-    asr_options={
-        # "language": "zh", # 可选，若已知音频的语种，可通过该参数指定待识别语种，以提升识别准确率
-        "enable_itn":False
+    parameters={
+        "asr_options": {
+            # "language": "zh", # 可选，若已知音频的语种，可通过该参数指定待识别语种，以提升识别准确率
+            "enable_itn": False
+        }
     }
 )
-print(response)
+print(response.output_text)
 ```
 
 Java SDK
@@ -1238,10 +1246,17 @@ Python SDK
 
 ```
 import os
+
 import dashscope
 
-# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
+client = dashscope.Client(
+    # 新加坡/美国地域和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    # 若没有配置环境变量，请将下行替换为自己的API Key：api_key="sk-xxx"
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # 请用您的本地音频的绝对路径替换 ABSOLUTE_PATH/{YOUR_AUDIO_FILE}
 audio_file_path = "file://ABSOLUTE_PATH/{YOUR_AUDIO_FILE}"
@@ -1249,19 +1264,17 @@ audio_file_path = "file://ABSOLUTE_PATH/{YOUR_AUDIO_FILE}"
 messages = [
     {"role": "user", "content": [{"audio": audio_file_path}]}
 ]
-response = dashscope.MultiModalConversation.call(
-    # 新加坡/美国地域和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+response = client.multimodal.chat.create(
     model="qwen3-asr-flash",
     messages=messages,
-    result_format="message",
-    asr_options={
-        # "language": "zh", # 可选，若已知音频的语种，可通过该参数指定待识别语种，以提升识别准确率
-        "enable_itn":False
+    parameters={
+        "asr_options": {
+            # "language": "zh", # 可选，若已知音频的语种，可通过该参数指定待识别语种，以提升识别准确率
+            "enable_itn": False
+        }
     }
 )
-print(response)
+print(response.output_text)
 ```
 
 Java SDK
@@ -1334,31 +1347,36 @@ public class Main {
 
 ```
 import os
+
 import dashscope
 
-# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
+client = dashscope.Client(
+    # 新加坡/美国地域和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    # 若没有配置环境变量，请将下行替换为自己的API Key：api_key="sk-xxx"
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 messages = [
     {"role": "user", "content": [{"audio": "{YOUR_AUDIO_URL}"}]}
 ]
-response = dashscope.MultiModalConversation.call(
-    # 新加坡/美国地域和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx"
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+stream = client.multimodal.chat.create(
     model="qwen3-asr-flash",
     messages=messages,
-    result_format="message",
-    asr_options={
-        # "language": "zh", # 可选，若已知音频的语种，可通过该参数指定待识别语种，以提升识别准确率
-        "enable_itn":False
+    parameters={
+        "asr_options": {
+            # "language": "zh", # 可选，若已知音频的语种，可通过该参数指定待识别语种，以提升识别准确率
+            "enable_itn": False
+        }
     },
     stream=True
 )
 
-for response in response:
+for chunk in stream:
     try:
-        print(response["output"]["choices"][0]["message"].content[0]["text"])
+        print(chunk.choices[0].delta.content or "")
     except Exception as e:
         print(f"解析响应失败：{e}")
 ```
@@ -1651,8 +1669,8 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
     
     SDK封装了底层的API调用细节，提供了更便捷的编程体验。
     
-    1.  提交任务：调用 `async_call()` (Python) 或 `asyncCall()` (Java) 方法提交任务。此方法将返回一个包含 `task_id` 的任务对象。
-    2.  获取结果：使用上一步返回的任务对象或 `task_id`，调用 `fetch()` 方法获取结果。SDK内部会自动处理轮询逻辑，直到任务完成或超时。
+    1.  提交任务：Python SDK 调用 `client.audio.asr.jobs.create` 创建任务，此方法将返回一个包含 `task_id` 的任务对象；Java SDK 调用 `asyncCall()` 方法提交任务。
+    2.  获取结果：Python SDK 调用 `client.audio.asr.jobs.fetch` 查询任务执行结果，或调用 `client.audio.asr.jobs.wait` 等待任务结束（内部自动处理轮询逻辑，直到任务完成或超时）；Java SDK 使用上一步返回的任务对象或 `task_id`，调用 `fetch()` 方法获取结果。
 -   2.  使用 RESTful API
     
     直接调用HTTP接口提供了最大的灵活性。
@@ -1965,36 +1983,40 @@ public class Main {
 #### Python SDK
 
 ```
-import json
 import os
-import sys
-from http import HTTPStatus
 
 import dashscope
-from dashscope.audio.qwen_asr import QwenTranscription
-from dashscope.api_entities.dashscope_response import TranscriptionResponse
 
 # run the transcription script
 if __name__ == '__main__':
     # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：dashscope.api_key = "sk-xxx"
-    dashscope.api_key = os.getenv("DASHSCOPE_API_KEY")
-
+    # 若没有配置环境变量，请将下行替换为自己的API Key：api_key="sk-xxx"
+    client = dashscope.Client(
+    # 新加坡/美国地域和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    # 若没有配置环境变量，请将下行替换为自己的API Key：api_key="sk-xxx"
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
     # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-    dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-    task_response = QwenTranscription.async_call(
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
+    # 提交任务
+    job = client.audio.asr.jobs.create(
         model='qwen3-asr-flash-filetrans',
-        file_url='{YOUR_AUDIO_URL}',
-        #language="",
-        enable_itn=False,
-        enable_words=True
+        file_urls=['{YOUR_AUDIO_URL}'],
+        parameters={
+            # 'language': 'zh',
+            'enable_itn': False,
+            'enable_words': True
+        }
     )
-    print(f'task_response: {task_response}')
-    print(task_response.output.task_id)
-    query_response = QwenTranscription.fetch(task=task_response.output.task_id)
-    print(f'query_response: {query_response}')
-    task_result = QwenTranscription.wait(task=task_response.output.task_id)
-    print(f'task_result: {task_result}')
+    print(f'task_response: {job}')
+    print(job.task_id)
+    # 查询任务执行结果
+    job = client.audio.asr.jobs.fetch(job.task_id)
+    print(f'query_response: {job}')
+    # 等待任务结束
+    job = client.audio.asr.jobs.wait(job.task_id)
+    print(f'task_result: {job}')
 ```
 
 #### 下载识别结果

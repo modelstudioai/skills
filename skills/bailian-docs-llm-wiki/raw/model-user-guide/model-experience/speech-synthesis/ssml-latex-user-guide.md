@@ -18,7 +18,7 @@ SSML 是基于 XML 的语音合成标记语言，可设置音色、语速、音�
     
 -   **接口：**
     -   Java SDK（2.20.3 及以上版本）：支持非流式调用和单向流式调用
-    -   Python SDK（1.23.4 及以上版本）：支持非流式调用和单向流式调用
+    -   Python SDK（2.0.1 及以上版本）：支持非流式调用和单向流式调用
     -   WebSocket API：需将参数 `enable_ssml` 设置为 `true`，且只允许发送一次 continue-task 事件
     -   HTTP API：需将参数 `enable_ssml` 设置为 `true`
 
@@ -45,7 +45,7 @@ SSML 是基于 XML 的语音合成标记语言，可设置音色、语速、音�
 以下示例展示如何使用 SSML 控制语速进行语音合成。运行前，请完成以下准备工作：
 
 1.  [获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)
-2.  安装 DashScope SDK（Python 1.23.4 及以上版本，Java 2.20.3 及以上版本）。详情请参见[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+2.  安装 DashScope SDK（Python 2.0.1 及以上版本，Java 2.20.3 及以上版本）。详情请参见[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
 **重要**`cosyvoice-v3.5-plus` 和 `cosyvoice-v3.5-flash` 模型目前仅在北京地域可用，专用于声音复刻场景（不提供系统音色）。使用前，请先参见[声音复刻](raw/model-user-guide/model-experience/speech-synthesis/voice-cloning-user-guide.md)创建目标音色。
 
@@ -256,36 +256,35 @@ public class Main {
 #     1. 只有非流式调用和单向流式调用支持SSML功能
 # 使用支持 SSML 的复刻音色或系统音色（如 cosyvoice-v3-flash 的 longanyang）；适用模型见本页使用限制。
 
-import dashscope
-from dashscope.audio.tts_v2 import *
 import os
 
-# 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 若没有配置环境变量，请用百炼API Key将下行替换为：dashscope.api_key = "sk-xxx"
-dashscope.api_key = os.environ.get('DASHSCOPE_API_KEY')
+import dashscope
 
-# 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_websocket_api_url='wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference'
+# 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+client = dashscope.Client(
+    api_key=os.environ.get('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # 模型
 model = "cosyvoice-v3-flash"
 # 音色
 voice = "longanyang"
 
-# 实例化SpeechSynthesizer，并在构造方法中传入模型（model）、音色（voice）等请求参数
-synthesizer = SpeechSynthesizer(model=model, voice=voice)
 # 非流式调用，阻塞直至音频返回
 # 特殊字符需要进行转义
-audio = synthesizer.call("<speak rate=\"2\">我的语速比正常人快。</speak>")
+audio = client.audio.tts.synthesize(
+    "<speak rate=\"2\">我的语速比正常人快。</speak>",
+    model=model,
+    voice=voice,
+    enable_ssml=True)
 
 # 将音频保存至本地
 with open('output.mp3', 'wb') as f:
     f.write(audio)
-
-# 首次发送文本时需建立 WebSocket 连接，因此首包延迟会包含连接建立的耗时
-print('[Metric] requestId为：{}，首包延迟为：{}毫秒'.format(
-    synthesizer.get_last_request_id(),
-    synthesizer.get_first_package_delay()))
 ```
 
 单向流式调用
@@ -296,10 +295,10 @@ print('[Metric] requestId为：{}，首包延迟为：{}毫秒'.format(
 #     1. 只有非流式调用和单向流式调用支持SSML功能
 # 使用支持 SSML 的复刻音色或系统音色（如 cosyvoice-v3-flash 的 longanyang）；适用模型见本页使用限制。
 
-import dashscope
-from dashscope.audio.tts_v2 import *
 import os
 from datetime import datetime
+
+import dashscope
 
 def get_timestamp():
     now = datetime.now()
@@ -307,70 +306,31 @@ def get_timestamp():
     return formatted_timestamp
 
 # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 若没有配置环境变量，请用百炼API Key将下行替换为：dashscope.api_key = "sk-xxx"
-dashscope.api_key = os.environ.get('DASHSCOPE_API_KEY')
-
-# 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_websocket_api_url='wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference'
+# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+client = dashscope.Client(
+    api_key=os.environ.get('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # 模型
 model = "cosyvoice-v3-flash"
 # 音色
 voice = "longanyang"
 
-# 定义回调接口
-class Callback(ResultCallback):
-    _player = None
-    _stream = None
-
-    def on_open(self):
-        # 打开输出文件，准备写入音频数据
-        self.file = open("output.mp3", "wb")
-        print("连接建立：" + get_timestamp())
-
-    def on_complete(self):
-        print("语音合成完成，所有合成结果已被接收：" + get_timestamp())
-        if hasattr(self, 'file') and self.file:
-            self.file.close()
-        self
-        # 首次发送文本时需建立 WebSocket 连接，因此首包延迟会包含连接建立的耗时
-        print('[Metric] requestId为：{}，首包延迟为：{}毫秒'.format(
-            self.synthesizer.get_last_request_id(),
-            self.synthesizer.get_first_package_delay()))
-
-    def on_error(self, message: str):
-        print(f"语音合成出现异常：{message}")
-        if hasattr(self, 'file') and self.file:
-            self.file.close()
-
-    def on_close(self):
-        print("连接关闭：" + get_timestamp())
-        if hasattr(self, 'file') and self.file:
-            self.file.close()
-
-    def on_event(self, message):
-        pass
-
-    def on_data(self, data: bytes) -> None:
-        print(get_timestamp() + " 二进制音频长度为：" + str(len(data)))
-        # 将音频数据写入文件
-        self.file.write(data)
-
-callback = Callback()
-
-# 实例化SpeechSynthesizer，并在构造方法中传入模型（model）、音色（voice）等请求参数
-synthesizer = SpeechSynthesizer(
-    model=model,
-    voice=voice,
-    callback=callback,
-)
-
-# 将synthesizer实例赋值给callback，以便在on_complete中使用
-callback.synthesizer = synthesizer
-
-# 单向流式调用，发送待合成文本，在回调接口的on_data方法中实时获取二进制音频
+# 单向流式调用，发送待合成文本，逐块实时获取二进制音频
 # 特殊字符需要进行转义
-synthesizer.call("<speak rate=\"2\">我的语速比正常人快。</speak>")
+with open("output.mp3", "wb") as f:
+    for chunk in client.audio.tts.stream(
+            "<speak rate=\"2\">我的语速比正常人快。</speak>",
+            model=model,
+            voice=voice,
+            enable_ssml=True):
+        print(get_timestamp() + " 二进制音频长度为：" + str(len(chunk)))
+        # 将音频数据写入文件
+        f.write(chunk)
+print("语音合成完成，所有合成结果已被接收：" + get_timestamp())
 ```
 
 #### WebSocket API
@@ -1700,26 +1660,25 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 # coding=utf-8
 
 import os
+
 import dashscope
-from dashscope.audio.tts_v2 import *
 
-# 若没有配置环境变量，请用百炼API Key将下行替换为：dashscope.api_key = "sk-xxx"
-dashscope.api_key = os.environ.get('DASHSCOPE_API_KEY')
-
-# 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_websocket_api_url='wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference'
+# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+client = dashscope.Client(
+    api_key=os.environ.get('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 model = "cosyvoice-v3-flash"
 voice = "longanyang"
 
-synthesizer = SpeechSynthesizer(model=model, voice=voice)
 # 公式中的反斜杠需要转义为 \\
-audio = synthesizer.call("这是一道分数：$\\frac{1}{2}$。")
+audio = client.audio.tts.synthesize("这是一道分数：$\\frac{1}{2}$。", model=model, voice=voice)
 
 with open('output.mp3', 'wb') as f:
     f.write(audio)
-
-print('requestId: {}'.format(synthesizer.get_last_request_id()))
 ```
 
 ## SSML 标签

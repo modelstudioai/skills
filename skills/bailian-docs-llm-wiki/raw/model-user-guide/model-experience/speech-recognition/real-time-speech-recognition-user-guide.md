@@ -29,27 +29,28 @@
 
 ```
 import os
-from http import HTTPStatus
 
 import dashscope
-from dashscope.audio.asr import Recognition
 
-dashscope.api_key = os.environ["DASHSCOPE_API_KEY"]
+# 若没有将API Key配置到环境变量中，请将下行替换为自己的API Key：api_key="sk-xxx"
 # 将 {WorkspaceId} 替换为北京地域的业务空间 ID。
-dashscope.base_websocket_api_url = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference"
-
-recognition = Recognition(
-    model="qwen-audio-3.1-asr-flash-message",
-    format="wav",
-    sample_rate=16000,
-    callback=None,
+client = dashscope.Client(
+    api_key=os.environ["DASHSCOPE_API_KEY"],
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
 )
+
 # audio.wav：16 kHz、单声道、16-bit PCM 编码的 WAV 文件。
-result = recognition.call("audio.wav")
-if result.status_code == HTTPStatus.OK:
-    print(result.get_sentence())
-else:
-    raise RuntimeError(result.message)
+# recognize_file 自动分块发送音频并驱动到任务结束
+for event in client.audio.asr.recognize_file(
+        "audio.wav",
+        model="qwen-audio-3.1-asr-flash-message",
+        format="wav",
+        sample_rate=16000):
+    payload = event.get('payload') or {}
+    sentence = (payload.get('output') or {}).get('sentence') or {}
+    if sentence.get('text') and not sentence.get('heartbeat'):
+        print(sentence)
 ```
 
 #### Qwen-Audio-ASR-Streaming / Fun-ASR-Realtime
@@ -177,7 +178,7 @@ import sys
 
 import dashscope
 import pyaudio
-from dashscope.audio.asr import *
+from concurrent.futures import ThreadPoolExecutor
 
 mic = None
 stream = None
@@ -189,49 +190,17 @@ dtype = 'int16'  # data type
 format_pcm = 'pcm'  # the format of the audio data
 block_size = 3200  # number of frames per buffer
 
-# Real-time speech recognition callback
-class Callback(RecognitionCallback):
-    def on_open(self) -> None:
-        global mic
-        global stream
-        print('RecognitionCallback open.')
-        mic = pyaudio.PyAudio()
-        stream = mic.open(format=pyaudio.paInt16,
-                          channels=1,
-                          rate=16000,
-                          input=True)
-
-    def on_close(self) -> None:
-        global mic
-        global stream
-        print('RecognitionCallback close.')
-        stream.stop_stream()
-        stream.close()
-        mic.terminate()
-        stream = None
-        mic = None
-
-    def on_complete(self) -> None:
-        print('RecognitionCallback completed.')  # recognition completed
-
-    def on_error(self, message) -> None:
-        print('RecognitionCallback task_id: ', message.request_id)
-        print('RecognitionCallback error: ', message.message)
-        # Stop and close the audio stream if it is running
-        if 'stream' in globals() and stream.is_active():
-            stream.stop_stream()
-            stream.close()
-        # Forcefully exit the program
-        sys.exit(1)
-
-    def on_event(self, result: RecognitionResult) -> None:
-        sentence = result.get_sentence()
-        if 'text' in sentence:
-            print('RecognitionCallback text: ', sentence['text'])
-            if RecognitionResult.is_sentence_end(sentence):
+# Real-time speech recognition event receiver
+def receive_events(rec):
+    for event in rec.events():
+        payload = event.get('payload') or {}
+        sentence = (payload.get('output') or {}).get('sentence') or {}
+        if sentence.get('text') and not sentence.get('heartbeat'):
+            print('Recognition text: ', sentence['text'])
+            if sentence.get('sentence_end'):
                 print(
-                    'RecognitionCallback sentence end, request_id:%s, usage:%s'
-                    % (result.get_request_id(), result.get_usage(sentence)))
+                    'Recognition sentence end, request_id:%s, usage:%s'
+                    % (rec.request_id, rec.usage))
 
 def signal_handler(sig, frame):
     print('Ctrl+C pressed, stop recognition ...')
@@ -241,9 +210,9 @@ def signal_handler(sig, frame):
     print(
         '[Metric] requestId: {}, first package delay ms: {}, last package delay ms: {}'
         .format(
-            recognition.get_last_request_id(),
-            recognition.get_first_package_delay(),
-            recognition.get_last_package_delay(),
+            recognition.request_id,
+            recognition.first_package_delay,
+            recognition.last_package_delay,
         ))
     # Forcefully exit the program
     sys.exit(0)
@@ -251,40 +220,46 @@ def signal_handler(sig, frame):
 # main function
 if __name__ == '__main__':
     # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：dashscope.api_key = "sk-xxx"
-    dashscope.api_key = os.environ.get('DASHSCOPE_API_KEY')
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    client = dashscope.Client(
+        api_key=os.environ.get('DASHSCOPE_API_KEY'),
+        # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+        workspace="{WorkspaceId}",
+        region="cn-beijing",
+    )
 
-    # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-    dashscope.base_websocket_api_url='wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference'
-
-    # Create the recognition callback
-    callback = Callback()
-
-    # Call recognition service by async mode, you can customize the recognition parameters, like model, format,
+    # Call recognition service, you can customize the recognition parameters, like model, format,
     # sample_rate
-    recognition = Recognition(
-        model='qwen-audio-3.0-asr-flash-streaming',
-        format=format_pcm,
-        # 'pcm'、'wav'、'opus'、'speex'、'aac'、'amr', you can check the supported formats in the document
-        sample_rate=sample_rate,
-        # support 8000, 16000
-        callback=callback)
-
-    # Start recognition
-    recognition.start()
-
-    signal.signal(signal.SIGINT, signal_handler)
-    print("Press 'Ctrl+C' to stop recording and recognition...")
-    # Create a keyboard listener until "Ctrl+C" is pressed
-
-    while True:
-        if stream:
-            data = stream.read(3200, exception_on_overflow=False)
-            recognition.send_audio_frame(data)
-        else:
-            break
-
-    recognition.stop()
+    with client.audio.asr.recognize(
+            model='qwen-audio-3.0-asr-flash-streaming',
+            format=format_pcm,
+            # 'pcm'、'wav'、'opus'、'speex'、'aac'、'amr', you can check the supported formats in the document
+            sample_rate=sample_rate,
+            # support 8000, 16000
+    ) as recognition:
+        # Open the microphone
+        mic = pyaudio.PyAudio()
+        stream = mic.open(format=pyaudio.paInt16,
+                          channels=1,
+                          rate=16000,
+                          input=True)
+        with ThreadPoolExecutor(max_workers=1) as pool:
+            receiver = pool.submit(receive_events, recognition)
+            try:
+                # Send audio from the microphone until "Ctrl+C" is pressed
+                while stream:
+                    data = stream.read(3200, exception_on_overflow=False)
+                    recognition.send_audio_frame(data)
+                recognition.stop()
+                receiver.result()
+            finally:
+                # close must run inside the pool context to unblock the receiver
+                recognition.close()
+        stream.stop_stream()
+        stream.close()
+        mic.terminate()
+        stream = None
+        mic = None
 ```
 
 #### 识别本地音频文件
@@ -454,14 +429,16 @@ Python
 import os
 import time
 import dashscope
-from dashscope.audio.asr import *
+from concurrent.futures import ThreadPoolExecutor
 
 # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 若没有配置环境变量，请用百炼API Key将下行替换为：dashscope.api_key = "sk-xxx"
-dashscope.api_key = os.environ.get('DASHSCOPE_API_KEY')
-
-# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_websocket_api_url = 'wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference'
+# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+client = dashscope.Client(
+    api_key=os.environ.get('DASHSCOPE_API_KEY'),
+    # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 from datetime import datetime
 
@@ -470,75 +447,70 @@ def get_timestamp():
     formatted_timestamp = now.strftime("[%Y-%m-%d %H:%M:%S.%f]")
     return formatted_timestamp
 
-class Callback(RecognitionCallback):
-    def on_complete(self) -> None:
-        print(get_timestamp() + ' Recognition completed')  # recognition complete
-
-    def on_error(self, result: RecognitionResult) -> None:
-        print('Recognition task_id: ', result.request_id)
-        print('Recognition error: ', result.message)
-        exit(0)
-
-    def on_event(self, result: RecognitionResult) -> None:
-        sentence = result.get_sentence()
-        if 'text' in sentence:
-            print(get_timestamp() + ' RecognitionCallback text: ', sentence['text'])
-        if RecognitionResult.is_sentence_end(sentence):
+# Real-time speech recognition event receiver
+def receive_events(rec):
+    for event in rec.events():
+        payload = event.get('payload') or {}
+        sentence = (payload.get('output') or {}).get('sentence') or {}
+        if sentence.get('text') and not sentence.get('heartbeat'):
+            print(get_timestamp() + ' Recognition text: ', sentence['text'])
+        if sentence.get('sentence_end'):
             print(get_timestamp() +
-                  'RecognitionCallback sentence end, request_id:%s, usage:%s'
-                  % (result.get_request_id(), result.get_usage(sentence)))
+                  'Recognition sentence end, request_id:%s, usage:%s'
+                  % (rec.request_id, rec.usage))
 
-callback = Callback()
+with client.audio.asr.recognize(
+        model='qwen-audio-3.1-asr-flash-streaming',
+        format='wav',
+        sample_rate=16000,
+) as recognition:
+    with ThreadPoolExecutor(max_workers=1) as pool:
+        receiver = pool.submit(receive_events, recognition)
+        try:
+            audio_data: bytes = None
+            f = open("{YOUR_AUDIO_FILE}", 'rb')
+            if os.path.getsize("{YOUR_AUDIO_FILE}"):
+                # 一次性将文件数据全部读入buffer
+                file_buffer = f.read()
+                f.close()
+                print("Start Recognition")
 
-recognition = Recognition(model='qwen-audio-3.1-asr-flash-streaming',
-                          format='wav',
-                          sample_rate=16000,
-                          callback=callback)
+                # 从buffer中间隔3200字节发送一次
+                buffer_size = len(file_buffer)
+                offset = 0
+                chunk_size = 3200
 
-try:
-    audio_data: bytes = None
-    f = open("{YOUR_AUDIO_FILE}", 'rb')
-    if os.path.getsize("{YOUR_AUDIO_FILE}"):
-        # 一次性将文件数据全部读入buffer
-        file_buffer = f.read()
-        f.close()
-        print("Start Recognition")
-        recognition.start()
+                while offset < buffer_size:
+                    # 计算本次要发送的数据块大小
+                    remaining_bytes = buffer_size - offset
+                    current_chunk_size = min(chunk_size, remaining_bytes)
 
-        # 从buffer中间隔3200字节发送一次
-        buffer_size = len(file_buffer)
-        offset = 0
-        chunk_size = 3200
+                    # 从buffer中提取当前数据块
+                    audio_data = file_buffer[offset:offset + current_chunk_size]
 
-        while offset < buffer_size:
-            # 计算本次要发送的数据块大小
-            remaining_bytes = buffer_size - offset
-            current_chunk_size = min(chunk_size, remaining_bytes)
+                    # 发送音频数据帧
+                    recognition.send_audio_frame(audio_data)
+                    # 更新偏移量
+                    offset += current_chunk_size
 
-            # 从buffer中提取当前数据块
-            audio_data = file_buffer[offset:offset + current_chunk_size]
+                    # 添加延迟模拟实时传输
+                    time.sleep(0.1)
 
-            # 发送音频数据帧
-            recognition.send_audio_frame(audio_data)
-            # 更新偏移量
-            offset += current_chunk_size
-
-            # 添加延迟模拟实时传输
-            time.sleep(0.1)
-
-        recognition.stop()
-    else:
-        raise Exception(
-            'The supplied file was empty (zero bytes long)')
-except Exception as e:
-    raise e
+                recognition.stop()
+                receiver.result()
+            else:
+                raise Exception(
+                    'The supplied file was empty (zero bytes long)')
+        finally:
+            # close must run inside the pool context to unblock the receiver
+            recognition.close()
 
 print(
     '[Metric] requestId: {}, first package delay ms: {}, last package delay ms: {}'
     .format(
-        recognition.get_last_request_id(),
-        recognition.get_first_package_delay(),
-        recognition.get_last_package_delay(),
+        recognition.request_id,
+        recognition.first_package_delay,
+        recognition.last_package_delay,
     ))
 ```
 
@@ -3530,8 +3502,8 @@ DashScope Java SDK 通过全局单例的连接池管理和复用 WebSocket 连�
 
 -   **客户端重连**：客户端应实现断线自动重连机制，以应对网络抖动。Python SDK 参考实现如下：
     
-    1.  捕获异常：在`Callback`类中实现`on_error`方法。当`dashscope` SDK遇到网络错误或其他问题时，会调用该方法。
-    2.  状态通知：当`on_error`被触发时，设置重连信号。在Python中可以使用`threading.Event`，它是一种线程安全的信号标志。
+    1.  捕获异常：将调用逻辑放入`try/except`中，当`dashscope` SDK遇到网络错误或其他问题时会抛出异常，在`except`分支中处理。
+    2.  状态通知：当捕获到异常时，设置重连信号。在Python中可以使用`threading.Event`，它是一种线程安全的信号标志。
     3.  重连循环：将主逻辑包裹在一个`for`循环中（例如重试3次）。当检测到重连信号后，当前轮次的识别会中断，清理资源，然后等待几秒钟，再次进入循环，创建一个全新的连接。
 -   **设置心跳防止连接断开：**当需要与服务端保持长连接时，可将参数[heartbeat](raw/_short/paraformer-real-time-speech-recognition-python-s-145dc2b30661b050.md)设置为`true`，即使音频中长时间没有声音，与服务端的连接也不会中断。
     

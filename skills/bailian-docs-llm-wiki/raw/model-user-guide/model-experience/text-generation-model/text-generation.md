@@ -615,35 +615,35 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 #### Python
 
 ```
-import json
 import os
-from dashscope import Generation
 import dashscope
+from dashscope.v2 import DashScopeError
 
-# 以下为华北2（北京）地域的URL，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 messages = [
     {"role": "system", "content": "You are a helpful assistant."},
     {"role": "user", "content": "你是谁？"},
 ]
-response = Generation.call(
-    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # qwen3.7-max、qwen3.7-max-2026-05-20仅支持文本接口，qwen3.8-max、qwen3.7-max-2026-06-08、Qwen3.6、Qwen3.5系列需要使用多模态接口，直接替换模型会导致报错
-    model="qwen-plus",
-    messages=messages,
-    result_format="message",
-)
-
-if response.status_code == 200:
-    print(response.output.choices[0].message.content)
+try:
+    response = client.chat.completions.create(
+        # qwen3.7-max、qwen3.7-max-2026-05-20仅支持文本接口，qwen3.8-max、qwen3.7-max-2026-06-08、Qwen3.6、Qwen3.5系列需要使用多模态接口，直接替换模型会导致报错
+        model="qwen-plus",
+        messages=messages,
+    )
+    print(response.choices[0].message.content)
     # 如需查看完整响应，请取消下列注释
-    # print(json.dumps(response, default=lambda o: o.__dict__, indent=4))
-else:
-    print(f"HTTP返回码：{response.status_code}")
-    print(f"错误码：{response.code}")
-    print(f"错误信息：{response.message}")
+    # print(response.model_dump_json(indent=2))
+except DashScopeError as e:
+    print(f"HTTP返回码：{e.status_code}")
+    print(f"错误码：{e.code}")
+    print(f"错误信息：{e.message}")
     print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
@@ -1077,36 +1077,40 @@ dashscope generation create -m qwen-plus -p "你好"
 
 完整地域表见 [Base URL 总览](raw/model-user-guide/get-started-with-models/base-url.md)。
 
-#### 多模态接口
+## 图像、视频数据处理
+
+多模态模型支持处理图像、视频等非文本数据，可用于视觉问答、事件检测等任务。其调用方式与纯文本模型主要有以下不同：
+
+-   **用户消息（user message）的构造方式**：多模态模型的用户消息不仅包含文本，还包含图片、音频等多模态信息。
+-   **DashScope SDK接口：**使用 DashScope Python SDK 2.0 时，需调用 `client.multimodal.chat.create` 接口；使用DashScope Java SDK时，需调用 `MultiModalConversation` 类。
+
+> 图片、视频文件限制请参见 [图像与视频理解](raw/model-user-guide/model-experience/vision-model/vision.md) 。
+
+#### OpenAI兼容-Chat Completions API
 
 #### Python
 
 ```
 import os
 import dashscope
-from dashscope import MultiModalConversation
 
-# 以下为华北2（北京）地域的URL，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 messages = [
     {"role": "system", "content": [{"text": "You are a helpful assistant."}]},
     {"role": "user", "content": [{"text": "你是谁？"}]},
 ]
-response = MultiModalConversation.call(
-    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
-    model="qwen3.8-max",  # 可按需更换为其他多模态模型
-    messages=messages,
-)
-print(response.output.choices[0].message.content[0]["text"])
-```
-
-#### 返回结果
-
-```
-我是千问，阿里巴巴集团旗下的通义实验室自主研发的超大规模语言模型。我可以帮助你回答问题、创作文字，比如写故事、写公文、写邮件、写剧本、逻辑推理、编程等等，还能表达观点，玩游戏等。如果你有任何问题或需要帮助，欢迎随时告诉我！
+response = client.multimodal.chat.create(
+    model='qwen3.6-plus',   # 可按需更换为其它多模态模型，并修改相应的 messages
+    messages=messages)
+print(response.output_text)
 ```
 
 #### Java
@@ -1320,28 +1324,29 @@ public class Main {
 DashScope SDK的文本生成异步调用，目前仅支持Python。
 
 ```
-# DashScope Python SDK版本需要不低于 1.19.0
+# 需要 dashscope 2.0.1 及以上版本
 import asyncio
 import platform
-from dashscope.aigc.generation import AioGeneration
 import os
 import dashscope
 
-# 以下为华北2（北京）地域的URL，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+aclient = dashscope.AsyncClient(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # 定义异步任务列表
 async def task(question):
     print(f"发送问题: {question}")
-    response = await AioGeneration.call(
-        # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
-        api_key=os.getenv("DASHSCOPE_API_KEY"),
+    response = await aclient.chat.completions.create(
         model="qwen-plus",  # 模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
         messages=[{"role": "system", "content": "You are a helpful assistant."},
                   {"role": "user", "content": question}],
-        result_format="message",
     )
-    print(f"模型回复: {response.output.choices[0].message.content}")
+    print(f"模型回复: {response.choices[0].message.content}")
 
 # 主异步函数
 async def main():
@@ -1387,7 +1392,7 @@ if __name__ == '__main__':
 向大模型直接输入大量原始数据，会因上下文容量的限制导致成本增加与效果下降。上下文工程（Context Engineering）通过动态加载精准知识，显著提升生成质量与效率。核心技术包括：
 
 -   **提示词工程（Prompt Engineering）**：通过设计和优化文本指令（Prompt），可以更精确地引导模型，使其输出更符合预期的结果。若想了解更多，可参考[文生文Prompt指南](raw/model-user-guide/use-cases/prompt-engineering-guide.md)、阿里云百炼 [提示词模板](https://bailian.console.aliyun.com/flow-agent/plugin-market/prompt)页面。
--   [检索增强生成（RAG）](raw/application-user-guide/agent-context/knowledge-base/data-connection-overview/rag-knowledge-base.md)：适用于需要模型依据外部知识库（例如产品文档或技术手册）来回答问题的场景。
+-   [检索增强生成（RAG）](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)：适用于需要模型依据外部知识库（例如产品文档或技术手册）来回答问题的场景。
 -   [工具调用（Tool）](raw/model-user-guide/model-experience/text-generation-model/tool-calls.md)：允许模型获取实时信息（如查询天气、路况）或完成特定操作（如调用API、发送邮件）。
 -   **记忆机制（Memory）**：为模型建立长短期记忆，使其能够理解连续对话的历史信息。
 

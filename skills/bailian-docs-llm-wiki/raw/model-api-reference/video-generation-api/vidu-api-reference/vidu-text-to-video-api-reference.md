@@ -490,42 +490,45 @@ SDK 的参数命名与[HTTP接口](https://help.aliyun.com/zh/model-studio/vidu-
 
 ### Python SDK调用
 
-**重要**请确保 DashScope Python SDK 版本**不低于**`1.25.8`，再运行以下代码。
+**重要**请确保 DashScope Python SDK 版本**不低于**2.0.1，再运行以下代码。
 
-**北京地域**：`dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'`
+**北京地域**：`region="cn-beijing"`
 
 #### 同步调用
 
 ##### 请求示例
 
 ```
-from http import HTTPStatus
-from dashscope import VideoSynthesis
-import dashscope
 import os
+import dashscope
+from dashscope.v2 import DashScopeError
 
-# 以下为北京地域URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-
+# 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
 # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-api_key = os.getenv("DASHSCOPE_API_KEY")
+client = dashscope.Client(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 def sample_sync_call_t2v():
     # call sync api, will return the result
     print('please wait...')
-    rsp = VideoSynthesis.call(api_key=api_key,
-                              model='vidu/viduq3-turbo_text2video',
-                              prompt='一只小猫在月光下奔跑',
-                              size='1024*576',
-                              duration=5,
-                              resolution='540P',
-                              watermark=True)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print(rsp.output.video_url)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (rsp.status_code, rsp.code, rsp.message))
+    # generate 为一步式调用（提交任务并等待完成），返回已完成的 Job
+    try:
+        job = client.videos.generate(model='vidu/viduq3-turbo_text2video',
+                                     prompt='一只小猫在月光下奔跑',
+                                     size='1024*576',
+                                     duration=5,
+                                     resolution='540P',
+                                     watermark=True)
+        print(job)
+        print(job.video_url)
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 
 if __name__ == '__main__':
     sample_sync_call_t2v()
@@ -537,18 +540,18 @@ if __name__ == '__main__':
 
 ```
 {
-    "status_code": 200,
     "request_id": "15bd86e5-28b1-40ad-a427-xxxxxx",
-    "code": null,
-    "message": "",
-    "output": {
-        "task_id": "a876c6ee-1c63-4d17-b6c0-xxxxxx",
-        "task_status": "SUCCEEDED",
-        "video_url": "https://prod-ss-vidu.s3.cn-northwest-1.amazonaws.com.cn/xxx.mp4?xxx",
-        "submit_time": "2026-03-27 13:35:49.508",
-        "scheduled_time": "2026-03-27 13:35:49.540",
-        "end_time": "2026-03-27 13:36:45.848",
-        "orig_prompt": "一只小猫在月光下奔跑"
+    "task_id": "a876c6ee-1c63-4d17-b6c0-xxxxxx",
+    "status": "SUCCEEDED",
+    "results": [
+        {
+            "video_url": "https://prod-ss-vidu.s3.cn-northwest-1.amazonaws.com.cn/xxx.mp4?xxx"
+        }
+    ],
+    "task_metrics": {
+        "TOTAL": 1,
+        "SUCCEEDED": 1,
+        "FAILED": 0
     },
     "usage": {
         "video_count": 1,
@@ -569,48 +572,55 @@ if __name__ == '__main__':
 ##### 请求示例
 
 ```
-from http import HTTPStatus
-from dashscope import VideoSynthesis
-import dashscope
 import os
+import dashscope
+from dashscope.v2 import DashScopeError
 
-# 以下为北京地域URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-
+# 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
 # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-api_key = os.getenv("DASHSCOPE_API_KEY")
+client = dashscope.Client(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 def sample_async_call_t2v():
     # call async api, will return the task information
-    rsp = VideoSynthesis.async_call(api_key=api_key,
-                                    model='vidu/viduq3-turbo_text2video',
-                                    prompt='一只小猫在月光下奔跑',
-                                    size='1024*576',
-                                    duration=5,
-                                    resolution='540P')
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print("task_id: %s" % rsp.output.task_id)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (rsp.status_code, rsp.code, rsp.message))
+    try:
+        job = client.videos.jobs.create(model='vidu/viduq3-turbo_text2video',
+                                        prompt='一只小猫在月光下奔跑',
+                                        size='1024*576',
+                                        duration=5,
+                                        resolution='540P')
+        print(job)
+        print("task_id: %s" % job.task_id)
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
+        return
 
     # get the task information include the task status.
-    status = VideoSynthesis.fetch(task=rsp, api_key=api_key)
-    if status.status_code == HTTPStatus.OK:
-        print(status.output.task_status)  # check the task status
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (status.status_code, status.code, status.message))
+    try:
+        snapshot = client.videos.jobs.fetch(job.task_id)
+        print(snapshot.status)  # check the task status
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 
     # wait the task complete
-    rsp = VideoSynthesis.wait(task=rsp, api_key=api_key)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print(rsp.output.video_url)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (rsp.status_code, rsp.code, rsp.message))
+    try:
+        done = client.videos.jobs.wait(job)
+        print(done)
+        print(done.video_url)
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 
 if __name__ == '__main__':
     sample_async_call_t2v()
@@ -622,16 +632,9 @@ if __name__ == '__main__':
 
 ```
 {
-	"status_code": 200,
 	"request_id": "c86ff7ba-8377-917a-90ed-xxxxxx",
-	"code": "",
-	"message": "",
-	"output": {
-		"task_id": "721164c6-8619-4a35-a6d9-xxxxxx",
-		"task_status": "PENDING",
-		"video_url": ""
-	},
-	"usage": null
+	"task_id": "721164c6-8619-4a35-a6d9-xxxxxx",
+	"status": "PENDING"
 }
 ```
 
@@ -641,18 +644,18 @@ if __name__ == '__main__':
 
 ```
 {
-    "status_code": 200,
     "request_id": "15bd86e5-28b1-40ad-a427-xxxxxx",
-    "code": null,
-    "message": "",
-    "output": {
-        "task_id": "a876c6ee-1c63-4d17-b6c0-xxxxxx",
-        "task_status": "SUCCEEDED",
-        "video_url": "https://prod-ss-vidu.s3.cn-northwest-1.amazonaws.com.cn/xxx.mp4?xxx",
-        "submit_time": "2026-03-27 13:35:49.508",
-        "scheduled_time": "2026-03-27 13:35:49.540",
-        "end_time": "2026-03-27 13:36:45.848",
-        "orig_prompt": "一只小猫在月光下奔跑"
+    "task_id": "a876c6ee-1c63-4d17-b6c0-xxxxxx",
+    "status": "SUCCEEDED",
+    "results": [
+        {
+            "video_url": "https://prod-ss-vidu.s3.cn-northwest-1.amazonaws.com.cn/xxx.mp4?xxx"
+        }
+    ],
+    "task_metrics": {
+        "TOTAL": 1,
+        "SUCCEEDED": 1,
+        "FAILED": 0
     },
     "usage": {
         "video_count": 1,

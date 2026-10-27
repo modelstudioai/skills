@@ -25,36 +25,42 @@
 
 #### Python SDK
 
-**重要**请确保 DashScope Python SDK 版本**不低于**`1.25.8`，再运行以下代码。
+**重要**请确保 DashScope Python SDK 版本**不低于**2.0.1，再运行以下代码。
 
 若版本过低，可能会触发 “url error, please check url!” 等错误。请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
 
 ```
 import os
-from http import HTTPStatus
-from dashscope import VideoSynthesis
 import dashscope
+from dashscope.v2 import DashScopeError
 
-# 以下为北京地域URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同，获取URL：https://help.aliyun.com/zh/model-studio/image-to-video-api-reference
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
+# 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-api_key = os.getenv("DASHSCOPE_API_KEY", "YOUR_API_KEY")
+client = dashscope.Client(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 print('please wait...')
-rsp = VideoSynthesis.call(api_key=api_key,
-                          model='wan2.6-i2v-flash',
-                          prompt='镜头从海龟下方缓缓上移，海龟悠然游动，腹部细节清晰可见。',
-                          img_url="https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260121/zlpocv/wan-i2v-haigui.webp",
-                          resolution="720P",
-                          duration=10,
-                          shot_type="multi",
-                          prompt_extend=True,
-                          watermark=True)
-print(rsp)
-if rsp.status_code == HTTPStatus.OK:
-    print("video_url:", rsp.output.video_url)
-else:
-    print('Failed, status_code: %s, code: %s, message: %s' % (rsp.status_code, rsp.code, rsp.message))
+# generate 为一步式调用（提交任务并等待完成），返回已完成的 Job
+# shot_type 不在具名签名内，经 parameters 透传
+try:
+    job = client.videos.generate(model='wan2.6-i2v-flash',
+                                 prompt='镜头从海龟下方缓缓上移，海龟悠然游动，腹部细节清晰可见。',
+                                 image_url="https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260121/zlpocv/wan-i2v-haigui.webp",
+                                 resolution="720P",
+                                 duration=10,
+                                 prompt_extend=True,
+                                 watermark=True,
+                                 parameters={'shot_type': "multi"})
+    print(job)
+    print("video_url:", job.video_url)
+except DashScopeError as e:
+    print(f"HTTP返回码：{e.status_code}")
+    print(f"错误码：{e.code}")
+    print(f"错误信息：{e.message}")
+    print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
 #### Java SDK
@@ -146,7 +152,7 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
-**输出示例**
+**输出示例（HTTP 接口返回）**
 
 > `video_url` 有效期24小时，请及时下载视频。
 
@@ -197,48 +203,57 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 
 #### Python SDK
 
-> 请确保 DashScope Python SDK 版本不低于 `1.25.8`，可参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
+> 请确保 DashScope Python SDK 版本不低于 2.0.1，可参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
 
 ```
 import os
-from http import HTTPStatus
-from dashscope import VideoSynthesis
 import dashscope
+from dashscope.v2 import DashScopeError
 
-# 以下为北京地域URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同，获取URL：https://help.aliyun.com/zh/model-studio/image-to-video-api-reference
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-
-# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-# 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-api_key = os.getenv("DASHSCOPE_API_KEY")
+# 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 def sample_async_call_i2v():
     # 异步调用，返回一个task_id
-    rsp = VideoSynthesis.async_call(api_key=api_key,
-                                    model='wan2.6-i2v-flash',
-                                    prompt='一幅都市奇幻艺术的场景。一个充满动感的涂鸦艺术角色。一个由喷漆所画成的少年，正从一面混凝土墙上活过来。他一边用极快的语速演唱一首英文rap，一边摆着一个经典的、充满活力的说唱歌手姿势。场景设定在夜晚一个充满都市感的铁路桥下。灯光来自一盏孤零零的街灯，营造出电影般的氛围，充满高能量和惊人的细节。视频的音频部分完全由rap构成，没有其他对话或杂音。',
-                                    img_url="https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250925/wpimhv/rap.png",
-                                    audio_url="https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250925/ozwpvi/rap.mp3",
-                                    resolution="720P",
-                                    duration=10,
-                                    shot_type="multi",  # 多镜头
-                                    prompt_extend=True,
-                                    watermark=True,
-                                    negative_prompt="",
-                                    seed=12345)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print("task_id: %s" % rsp.output.task_id)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' % (rsp.status_code, rsp.code, rsp.message))
+    try:
+        # audio_url / negative_prompt 为 input 段字段，不在具名签名内，经 extra_input 透传
+        # shot_type（多镜头）为 parameters 段字段，经 parameters 透传
+        job = client.videos.jobs.create(model='wan2.6-i2v-flash',
+                                        prompt='一幅都市奇幻艺术的场景。一个充满动感的涂鸦艺术角色。一个由喷漆所画成的少年，正从一面混凝土墙上活过来。他一边用极快的语速演唱一首英文rap，一边摆着一个经典的、充满活力的说唱歌手姿势。场景设定在夜晚一个充满都市感的铁路桥下。灯光来自一盏孤零零的街灯，营造出电影般的氛围，充满高能量和惊人的细节。视频的音频部分完全由rap构成，没有其他对话或杂音。',
+                                        image_url="https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250925/wpimhv/rap.png",
+                                        extra_input={'audio_url': "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250925/ozwpvi/rap.mp3",
+                                                     'negative_prompt': ""},
+                                        resolution="720P",
+                                        duration=10,
+                                        prompt_extend=True,
+                                        watermark=True,
+                                        seed=12345,
+                                        parameters={'shot_type': "multi"})
+        print(job)
+        print("task_id: %s" % job.task_id)
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
+        return
 
-    # 等待异步任务结束
-    rsp = VideoSynthesis.wait(task=rsp, api_key=api_key)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print(rsp.output.video_url)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' % (rsp.status_code, rsp.code, rsp.message))
+    # 等待异步任务结束（指数退避轮询，默认总预算24小时）
+    try:
+        done = client.videos.jobs.wait(job)
+        print(done)
+        print(done.video_url)
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 
 if __name__ == '__main__':
     sample_async_call_i2v()
@@ -370,47 +385,55 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 
 #### Python SDK
 
-> 请确保 DashScope Python SDK 版本不低于 `1.25.8`，可参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
+> 请确保 DashScope Python SDK 版本不低于 2.0.1，可参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
 
 ```
 import os
-from http import HTTPStatus
-from dashscope import VideoSynthesis
 import dashscope
+from dashscope.v2 import DashScopeError
 
-# 以下为北京地域URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同，获取URL：https://help.aliyun.com/zh/model-studio/image-to-video-api-reference
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-
-# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-# 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-api_key = os.getenv("DASHSCOPE_API_KEY")
+# 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 def sample_async_call_i2v():
     # 异步调用，返回一个task_id
-    rsp = VideoSynthesis.async_call(api_key=api_key,
-                                    model='wan2.6-i2v-flash',
-                                    prompt='一幅都市奇幻艺术的场景。一个充满动感的涂鸦艺术角色。一个由喷漆所画成的少年，正从一面混凝土墙上活过来。他一边用极快的语速演唱一首英文rap，一边摆着一个经典的、充满活力的说唱歌手姿势。场景设定在夜晚一个充满都市感的铁路桥下。灯光来自一盏孤零零的街灯，营造出电影般的氛围，充满高能量和惊人的细节。视频的音频部分完全由rap构成，没有其他对话或杂音。',
-                                    img_url="https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250925/wpimhv/rap.png",
-                                    audio_url="https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250925/ozwpvi/rap.mp3",
-                                    resolution="720P",
-                                    duration=10,
-                                    prompt_extend=True,
-                                    watermark=True,
-                                    negative_prompt="",
-                                    seed=12345)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print("task_id: %s" % rsp.output.task_id)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' % (rsp.status_code, rsp.code, rsp.message))
+    try:
+        # audio_url / negative_prompt 为 input 段字段，不在具名签名内，经 extra_input 透传
+        job = client.videos.jobs.create(model='wan2.6-i2v-flash',
+                                        prompt='一幅都市奇幻艺术的场景。一个充满动感的涂鸦艺术角色。一个由喷漆所画成的少年，正从一面混凝土墙上活过来。他一边用极快的语速演唱一首英文rap，一边摆着一个经典的、充满活力的说唱歌手姿势。场景设定在夜晚一个充满都市感的铁路桥下。灯光来自一盏孤零零的街灯，营造出电影般的氛围，充满高能量和惊人的细节。视频的音频部分完全由rap构成，没有其他对话或杂音。',
+                                        image_url="https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250925/wpimhv/rap.png",
+                                        extra_input={'audio_url': "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250925/ozwpvi/rap.mp3",
+                                                     'negative_prompt': ""},
+                                        resolution="720P",
+                                        duration=10,
+                                        prompt_extend=True,
+                                        watermark=True,
+                                        seed=12345)
+        print(job)
+        print("task_id: %s" % job.task_id)
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
+        return
 
-    # 等待异步任务结束
-    rsp = VideoSynthesis.wait(task=rsp, api_key=api_key)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print(rsp.output.video_url)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' % (rsp.status_code, rsp.code, rsp.message))
+    # 等待异步任务结束（指数退避轮询，默认总预算24小时）
+    try:
+        done = client.videos.jobs.wait(job)
+        print(done)
+        print(done.video_url)
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 
 if __name__ == '__main__':
     sample_async_call_i2v()
@@ -575,47 +598,56 @@ Tab 2 正文
 
 #### Python SDK
 
-> 请确保 DashScope Python SDK 版本不低于 `1.25.8`，可参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
+> 请确保 DashScope Python SDK 版本不低于 2.0.1，可参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
 
 ```
 import os
-from http import HTTPStatus
-from dashscope import VideoSynthesis
 import dashscope
+from dashscope.v2 import DashScopeError
 
-# 以下为北京地域URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同，获取URL：https://help.aliyun.com/zh/model-studio/image-to-video-api-reference
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-
-# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-# 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-api_key = os.getenv("DASHSCOPE_API_KEY")
+# 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 def sample_async_call_i2v():
     # 异步调用，返回一个task_id
-    rsp = VideoSynthesis.async_call(api_key=api_key,
-                                    model='wan2.6-i2v-flash',
-                                    prompt='一只猫在草地上奔跑',
-                                    img_url="https://cdn.translate.alibaba.com/r/wanx-demo-1.png",
-                                    audio=False,   # 必须显式设置为False，表示输出无声视频
-                                    resolution="720P",
-                                    duration=5,
-                                    prompt_extend=True,
-                                    watermark=True,
-                                    negative_prompt="",
-                                    seed=12345)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print("task_id: %s" % rsp.output.task_id)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' % (rsp.status_code, rsp.code, rsp.message))
+    try:
+        # negative_prompt 为 input 段字段，经 extra_input 透传
+        # audio（必须显式设置为False，表示输出无声视频）为 parameters 段字段，经 parameters 透传
+        job = client.videos.jobs.create(model='wan2.6-i2v-flash',
+                                        prompt='一只猫在草地上奔跑',
+                                        image_url="https://cdn.translate.alibaba.com/r/wanx-demo-1.png",
+                                        extra_input={'negative_prompt': ""},
+                                        resolution="720P",
+                                        duration=5,
+                                        prompt_extend=True,
+                                        watermark=True,
+                                        seed=12345,
+                                        parameters={'audio': False})
+        print(job)
+        print("task_id: %s" % job.task_id)
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
+        return
 
-    # 等待异步任务结束
-    rsp = VideoSynthesis.wait(task=rsp, api_key=api_key)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print(rsp.output.video_url)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' % (rsp.status_code, rsp.code, rsp.message))
+    # 等待异步任务结束（指数退避轮询，默认总预算24小时）
+    try:
+        done = client.videos.jobs.wait(job)
+        print(done)
+        print(done.video_url)
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 
 if __name__ == '__main__':
     sample_async_call_i2v()
@@ -763,42 +795,50 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 
 #### Python SDK
 
-> 请确保 DashScope Python SDK 版本不低于 `1.25.8`，可参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
+> 请确保 DashScope Python SDK 版本不低于 2.0.1，可参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
 
 ```
 import os
-from http import HTTPStatus
-from dashscope import VideoSynthesis
 import dashscope
+from dashscope.v2 import DashScopeError
 
-# 以下为北京地域URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同，获取URL：https://help.aliyun.com/zh/model-studio/image-to-video-api-reference
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-
-# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-# 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-api_key = os.getenv("DASHSCOPE_API_KEY")
+# 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 def sample_async_call_i2v():
     # 异步调用，返回一个task_id
-    rsp = VideoSynthesis.async_call(api_key=api_key,
-                                    model='wanx2.1-i2v-turbo',
-                                    img_url="https://cdn.translate.alibaba.com/r/wanx-demo-1.png",
-                                    template="flying",  # 模型特效
-                                    resolution="720P",
-                                    watermark=True)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print("task_id: %s" % rsp.output.task_id)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' % (rsp.status_code, rsp.code, rsp.message))
+    try:
+        # template（模型特效）为 input 段字段，不在具名签名内，经 extra_input 透传
+        job = client.videos.jobs.create(model='wanx2.1-i2v-turbo',
+                                        image_url="https://cdn.translate.alibaba.com/r/wanx-demo-1.png",
+                                        extra_input={'template': "flying"},
+                                        resolution="720P",
+                                        watermark=True)
+        print(job)
+        print("task_id: %s" % job.task_id)
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
+        return
 
-    # 等待异步任务结束
-    rsp = VideoSynthesis.wait(task=rsp, api_key=api_key)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print(rsp.output.video_url)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' % (rsp.status_code, rsp.code, rsp.message))
+    # 等待异步任务结束（指数退避轮询，默认总预算24小时）
+    try:
+        done = client.videos.jobs.wait(job)
+        print(done)
+        print(done.video_url)
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 
 if __name__ == '__main__':
     sample_async_call_i2v()
@@ -995,18 +1035,18 @@ Python SDK
 ```
 import base64
 import os
-from http import HTTPStatus
-from dashscope import VideoSynthesis
 import mimetypes
 import dashscope
+from dashscope.v2 import DashScopeError
 
-# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
-# 获取URL：https://help.aliyun.com/zh/model-studio/image-to-video-api-reference
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-
-# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-# 获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-api_key = os.getenv("DASHSCOPE_API_KEY")
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    # 获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # --- 辅助函数：用于 Base64 编码 ---
 # 格式为 data:{MIME_type};base64,{base64_data}
@@ -1046,25 +1086,27 @@ img_url = "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/2
 audio_url = "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250925/ozwpvi/rap.mp3"
 
 def sample_call_i2v():
-    # 同步调用，直接返回结果
+    # generate 为一步式调用（提交任务并等待完成），返回已完成的 Job
     print('please wait...')
-    rsp = VideoSynthesis.call(api_key=api_key,
-                              model='wan2.6-i2v-flash',
-                              prompt='一幅都市奇幻艺术的场景。一个充满动感的涂鸦艺术角色。一个由喷漆所画成的少年，正从一面混凝土墙上活过来。他一边用极快的语速演唱一首英文rap，一边摆着一个经典的、充满活力的说唱歌手姿势。场景设定在夜晚一个充满都市感的铁路桥下。灯光来自一盏孤零零的街灯，营造出电影般的氛围，充满高能量和惊人的细节。视频的音频部分完全由他的rap构成，没有其他对话或杂音。',
-                              img_url=img_url,
-                              audio_url=audio_url,
-                              resolution="720P",
-                              duration=10,
-                              prompt_extend=True,
-                              watermark=False,
-                              negative_prompt="",
-                              seed=12345)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print("video_url:", rsp.output.video_url)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (rsp.status_code, rsp.code, rsp.message))
+    # audio_url / negative_prompt 为 input 段字段，不在具名签名内，经 extra_input 透传
+    try:
+        job = client.videos.generate(model='wan2.6-i2v-flash',
+                                     prompt='一幅都市奇幻艺术的场景。一个充满动感的涂鸦艺术角色。一个由喷漆所画成的少年，正从一面混凝土墙上活过来。他一边用极快的语速演唱一首英文rap，一边摆着一个经典的、充满活力的说唱歌手姿势。场景设定在夜晚一个充满都市感的铁路桥下。灯光来自一盏孤零零的街灯，营造出电影般的氛围，充满高能量和惊人的细节。视频的音频部分完全由他的rap构成，没有其他对话或杂音。',
+                                     image_url=img_url,
+                                     extra_input={'audio_url': audio_url,
+                                                  'negative_prompt': ""},
+                                     resolution="720P",
+                                     duration=10,
+                                     prompt_extend=True,
+                                     watermark=False,
+                                     seed=12345)
+        print(job)
+        print("video_url:", job.video_url)
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 
 if __name__ == '__main__':
     sample_call_i2v()
@@ -1243,7 +1285,7 @@ A：当前 API 不支持直接指定视频宽高比。您只能通过 `resolutio
 
 A：请确保：
 
--   DashScope Python SDK 版本不低于 `1.25.8`。
+-   DashScope Python SDK 版本不低于 2.0.1。
 -   DashScope Java SDK 版本不低于 `2.22.6`。
 
 若版本过低，可能会触发 “url error, please check url!” 的错误。请参考[升级SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。

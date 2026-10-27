@@ -9,71 +9,61 @@
 
 ## 快速开始
 
-[Recognition类](https://help.aliyun.com/zh/model-studio/qwen-audio-asr-streaming-python-sdk#d6bc1f133f871)提供了非流式调用和双向流式调用等接口。请根据实际需求选择合适的调用方式：
+[核心资源（`client.audio.asr`）](https://help.aliyun.com/zh/model-studio/qwen-audio-asr-streaming-python-sdk#d6bc1f133f871)提供了非流式调用和双向流式调用等接口。请根据实际需求选择合适的调用方式：
 
--   非流式调用：针对本地文件进行识别，并一次性返回完整的处理结果。适合处理录制好的音频。
--   双向流式调用：可直接对音频流进行识别，并实时输出结果。音频流可以来自外部设备（如麦克风）或从本地文件读取。适合需要即时反馈的场景。
+-   非流式调用（`recognize_file`）：针对本地文件进行识别，SDK自动分块发送音频并驱动到任务结束。适合处理录制好的音频。
+-   双向流式调用（`recognize`会话）：可直接对音频流进行识别，并实时输出结果。音频流可以来自外部设备（如麦克风）或从本地文件读取。适合需要即时反馈的场景。
 
 #### 非流式调用
 
 提交单个语音实时转写任务，通过传入本地文件的方式同步阻塞地拿到转写结果。
 
-实例化Recognition类绑定请求参数，调用`call`进行识别/翻译并最终获取识别结果（RecognitionResult）。
+调用[核心资源（`client.audio.asr`）](https://help.aliyun.com/zh/model-studio/qwen-audio-asr-streaming-python-sdk#d6bc1f133f871)的`recognize_file`方法绑定请求参数并传入本地文件路径，迭代服务端事件获取识别结果。
 
 ```
-from http import HTTPStatus
-import dashscope
-from dashscope.audio.asr import Recognition
 import os
+import dashscope
 
 # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 若没有配置环境变量，请用百炼API Key将下行替换为：dashscope.api_key = "sk-xxx"
-dashscope.api_key = os.environ.get('DASHSCOPE_API_KEY')
+# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+client = dashscope.Client(
+    api_key=os.environ.get('DASHSCOPE_API_KEY'),
+    # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
-# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_websocket_api_url='wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference'
-
-recognition = Recognition(model='qwen-audio-3.1-asr-flash-streaming',
-                          format='wav',
-                          sample_rate=16000,
-                          callback=None)
-result = recognition.call('{YOUR_AUDIO_FILE}')
-if result.status_code == HTTPStatus.OK:
-    print('识别结果：')
-    print(result.get_sentence())
-else:
-    print('Error: ', result.message)
-
-print(
-    '[Metric] requestId: {}, first package delay ms: {}, last package delay ms: {}'
-    .format(
-        recognition.get_last_request_id(),
-        recognition.get_first_package_delay(),
-        recognition.get_last_package_delay(),
-    ))
+# 识别本地语音文件：recognize_file自动分块发送音频并驱动到任务结束
+for event in client.audio.asr.recognize_file(
+        '{YOUR_AUDIO_FILE}',
+        model='qwen-audio-3.1-asr-flash-streaming',
+        format='wav',
+        sample_rate=16000):
+    payload = event.get('payload') or {}
+    sentence = (payload.get('output') or {}).get('sentence') or {}
+    if sentence.get('text') and not sentence.get('heartbeat'):
+        print('识别结果：', sentence['text'])
 ```
 
 #### 双向流式调用
 
-提交单个语音实时转写任务，通过实现回调接口的方式流式输出实时识别结果。
+提交单个语音实时转写任务，通过迭代事件的方式流式输出实时识别结果。
 
 1.  启动流式语音识别
     
-    实例化Recognition类绑定请求参数和回调接口（RecognitionCallback），调用`start`方法启动流式语音识别。
+    调用[核心资源（`client.audio.asr`）](https://help.aliyun.com/zh/model-studio/qwen-audio-asr-streaming-python-sdk#d6bc1f133f871)的`recognize`方法创建识别会话并绑定请求参数，进入`with`上下文（自动调用`start`方法建立连接并发送任务）启动流式语音识别。
     
 2.  流式传输
     
-    循环调用Recognition类的`send_audio_frame`方法，将从本地文件或设备（如麦克风）读取的二进制音频流分段发送至服务端。
-    
-    在发送音频数据的过程中，服务端会通过回调接口（RecognitionCallback）的`on_event`方法，将识别结果实时返回给客户端。
+    循环调用会话的`send_audio_frame`方法，将从本地文件或设备（如麦克风）读取的二进制音频流分段发送至服务端。发送与接收需并发进行：接收线程通过会话的`events()`方法迭代服务端事件，将识别结果实时返回给客户端。
     
     建议每次发送的音频时长约为100毫秒，数据大小保持在1KB至16KB之间。
     
 3.  结束处理
     
-    调用Recognition类的`stop`方法结束语音识别。
+    调用会话的`stop`方法结束语音识别。
     
-    该方法会阻塞当前线程，直到回调接口（RecognitionCallback）的`on_complete`或者`on_error`回调触发后才会释放线程阻塞。
+    该方法只通知服务端输入结束；接收线程需继续消费`events()`直到`task-finished`事件以获得最后的识别结果和统计信息。ws层的错误会以`DashScopeError`异常抛出，可在发送/接收处使用try/except捕获。
     
 
 识别传入麦克风的语音
@@ -85,7 +75,7 @@ import sys
 
 import dashscope
 import pyaudio
-from dashscope.audio.asr import *
+from concurrent.futures import ThreadPoolExecutor
 
 mic = None
 stream = None
@@ -97,49 +87,17 @@ dtype = 'int16'  # data type
 format_pcm = 'pcm'  # the format of the audio data
 block_size = 3200  # number of frames per buffer
 
-# Real-time speech recognition callback
-class Callback(RecognitionCallback):
-    def on_open(self) -> None:
-        global mic
-        global stream
-        print('RecognitionCallback open.')
-        mic = pyaudio.PyAudio()
-        stream = mic.open(format=pyaudio.paInt16,
-                          channels=1,
-                          rate=16000,
-                          input=True)
-
-    def on_close(self) -> None:
-        global mic
-        global stream
-        print('RecognitionCallback close.')
-        stream.stop_stream()
-        stream.close()
-        mic.terminate()
-        stream = None
-        mic = None
-
-    def on_complete(self) -> None:
-        print('RecognitionCallback completed.')  # recognition completed
-
-    def on_error(self, message) -> None:
-        print('RecognitionCallback task_id: ', message.request_id)
-        print('RecognitionCallback error: ', message.message)
-        # Stop and close the audio stream if it is running
-        if 'stream' in globals() and stream.is_active():
-            stream.stop_stream()
-            stream.close()
-        # Forcefully exit the program
-        sys.exit(1)
-
-    def on_event(self, result: RecognitionResult) -> None:
-        sentence = result.get_sentence()
-        if 'text' in sentence:
-            print('RecognitionCallback text: ', sentence['text'])
-            if RecognitionResult.is_sentence_end(sentence):
+# Real-time speech recognition event receiver
+def receive_events(rec):
+    for event in rec.events():
+        payload = event.get('payload') or {}
+        sentence = (payload.get('output') or {}).get('sentence') or {}
+        if sentence.get('text') and not sentence.get('heartbeat'):
+            print('Recognition text: ', sentence['text'])
+            if sentence.get('sentence_end'):
                 print(
-                    'RecognitionCallback sentence end, request_id:%s, usage:%s'
-                    % (result.get_request_id(), result.get_usage(sentence)))
+                    'Recognition sentence end, request_id:%s, usage:%s'
+                    % (rec.request_id, rec.usage))
 
 def signal_handler(sig, frame):
     print('Ctrl+C pressed, stop recognition ...')
@@ -149,9 +107,9 @@ def signal_handler(sig, frame):
     print(
         '[Metric] requestId: {}, first package delay ms: {}, last package delay ms: {}'
         .format(
-            recognition.get_last_request_id(),
-            recognition.get_first_package_delay(),
-            recognition.get_last_package_delay(),
+            recognition.request_id,
+            recognition.first_package_delay,
+            recognition.last_package_delay,
         ))
     # Forcefully exit the program
     sys.exit(0)
@@ -159,40 +117,46 @@ def signal_handler(sig, frame):
 # main function
 if __name__ == '__main__':
     # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：dashscope.api_key = "sk-xxx"
-    dashscope.api_key = os.environ.get('DASHSCOPE_API_KEY')
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    client = dashscope.Client(
+        api_key=os.environ.get('DASHSCOPE_API_KEY'),
+        # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+        workspace="{WorkspaceId}",
+        region="cn-beijing",
+    )
 
-    # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-    dashscope.base_websocket_api_url='wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference'
-
-    # Create the recognition callback
-    callback = Callback()
-
-    # Call recognition service by async mode, you can customize the recognition parameters, like model, format,
+    # Call recognition service, you can customize the recognition parameters, like model, format,
     # sample_rate
-    recognition = Recognition(
-        model='qwen-audio-3.0-asr-flash-streaming',
-        format=format_pcm,
-        # 'pcm'、'wav'、'opus'、'speex'、'aac'、'amr', you can check the supported formats in the document
-        sample_rate=sample_rate,
-        # support 8000, 16000
-        callback=callback)
-
-    # Start recognition
-    recognition.start()
-
-    signal.signal(signal.SIGINT, signal_handler)
-    print("Press 'Ctrl+C' to stop recording and recognition...")
-    # Create a keyboard listener until "Ctrl+C" is pressed
-
-    while True:
-        if stream:
-            data = stream.read(3200, exception_on_overflow=False)
-            recognition.send_audio_frame(data)
-        else:
-            break
-
-    recognition.stop()
+    with client.audio.asr.recognize(
+            model='qwen-audio-3.0-asr-flash-streaming',
+            format=format_pcm,
+            # 'pcm'、'wav'、'opus'、'speex'、'aac'、'amr', you can check the supported formats in the document
+            sample_rate=sample_rate,
+            # support 8000, 16000
+    ) as recognition:
+        # Open the microphone
+        mic = pyaudio.PyAudio()
+        stream = mic.open(format=pyaudio.paInt16,
+                          channels=1,
+                          rate=16000,
+                          input=True)
+        with ThreadPoolExecutor(max_workers=1) as pool:
+            receiver = pool.submit(receive_events, recognition)
+            try:
+                # Send audio from the microphone until "Ctrl+C" is pressed
+                while stream:
+                    data = stream.read(3200, exception_on_overflow=False)
+                    recognition.send_audio_frame(data)
+                recognition.stop()
+                receiver.result()
+            finally:
+                # close must run inside the pool context to unblock the receiver
+                recognition.close()
+        stream.stop_stream()
+        stream.close()
+        mic.terminate()
+        stream = None
+        mic = None
 ```
 
 识别本地语音文件
@@ -201,14 +165,16 @@ if __name__ == '__main__':
 import os
 import time
 import dashscope
-from dashscope.audio.asr import *
+from concurrent.futures import ThreadPoolExecutor
 
 # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 若没有配置环境变量，请用百炼API Key将下行替换为：dashscope.api_key = "sk-xxx"
-dashscope.api_key = os.environ.get('DASHSCOPE_API_KEY')
-
-# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_websocket_api_url = 'wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference'
+# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+client = dashscope.Client(
+    api_key=os.environ.get('DASHSCOPE_API_KEY'),
+    # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 from datetime import datetime
 
@@ -217,81 +183,76 @@ def get_timestamp():
     formatted_timestamp = now.strftime("[%Y-%m-%d %H:%M:%S.%f]")
     return formatted_timestamp
 
-class Callback(RecognitionCallback):
-    def on_complete(self) -> None:
-        print(get_timestamp() + ' Recognition completed')  # recognition complete
-
-    def on_error(self, result: RecognitionResult) -> None:
-        print('Recognition task_id: ', result.request_id)
-        print('Recognition error: ', result.message)
-        exit(0)
-
-    def on_event(self, result: RecognitionResult) -> None:
-        sentence = result.get_sentence()
-        if 'text' in sentence:
-            print(get_timestamp() + ' RecognitionCallback text: ', sentence['text'])
-        if RecognitionResult.is_sentence_end(sentence):
+# Real-time speech recognition event receiver
+def receive_events(rec):
+    for event in rec.events():
+        payload = event.get('payload') or {}
+        sentence = (payload.get('output') or {}).get('sentence') or {}
+        if sentence.get('text') and not sentence.get('heartbeat'):
+            print(get_timestamp() + ' Recognition text: ', sentence['text'])
+        if sentence.get('sentence_end'):
             print(get_timestamp() +
-                  'RecognitionCallback sentence end, request_id:%s, usage:%s'
-                  % (result.get_request_id(), result.get_usage(sentence)))
+                  'Recognition sentence end, request_id:%s, usage:%s'
+                  % (rec.request_id, rec.usage))
 
-callback = Callback()
+with client.audio.asr.recognize(
+        model='qwen-audio-3.1-asr-flash-streaming',
+        format='wav',
+        sample_rate=16000,
+) as recognition:
+    with ThreadPoolExecutor(max_workers=1) as pool:
+        receiver = pool.submit(receive_events, recognition)
+        try:
+            audio_data: bytes = None
+            f = open("{YOUR_AUDIO_FILE}", 'rb')
+            if os.path.getsize("{YOUR_AUDIO_FILE}"):
+                # 一次性将文件数据全部读入buffer
+                file_buffer = f.read()
+                f.close()
+                print("Start Recognition")
 
-recognition = Recognition(model='qwen-audio-3.1-asr-flash-streaming',
-                          format='wav',
-                          sample_rate=16000,
-                          callback=callback)
+                # 从buffer中间隔3200字节发送一次
+                buffer_size = len(file_buffer)
+                offset = 0
+                chunk_size = 3200
 
-try:
-    audio_data: bytes = None
-    f = open("{YOUR_AUDIO_FILE}", 'rb')
-    if os.path.getsize("{YOUR_AUDIO_FILE}"):
-        # 一次性将文件数据全部读入buffer
-        file_buffer = f.read()
-        f.close()
-        print("Start Recognition")
-        recognition.start()
+                while offset < buffer_size:
+                    # 计算本次要发送的数据块大小
+                    remaining_bytes = buffer_size - offset
+                    current_chunk_size = min(chunk_size, remaining_bytes)
 
-        # 从buffer中间隔3200字节发送一次
-        buffer_size = len(file_buffer)
-        offset = 0
-        chunk_size = 3200
+                    # 从buffer中提取当前数据块
+                    audio_data = file_buffer[offset:offset + current_chunk_size]
 
-        while offset < buffer_size:
-            # 计算本次要发送的数据块大小
-            remaining_bytes = buffer_size - offset
-            current_chunk_size = min(chunk_size, remaining_bytes)
+                    # 发送音频数据帧
+                    recognition.send_audio_frame(audio_data)
+                    # 更新偏移量
+                    offset += current_chunk_size
 
-            # 从buffer中提取当前数据块
-            audio_data = file_buffer[offset:offset + current_chunk_size]
+                    # 添加延迟模拟实时传输
+                    time.sleep(0.1)
 
-            # 发送音频数据帧
-            recognition.send_audio_frame(audio_data)
-            # 更新偏移量
-            offset += current_chunk_size
-
-            # 添加延迟模拟实时传输
-            time.sleep(0.1)
-
-        recognition.stop()
-    else:
-        raise Exception(
-            'The supplied file was empty (zero bytes long)')
-except Exception as e:
-    raise e
+                recognition.stop()
+                receiver.result()
+            else:
+                raise Exception(
+                    'The supplied file was empty (zero bytes long)')
+        finally:
+            # close must run inside the pool context to unblock the receiver
+            recognition.close()
 
 print(
     '[Metric] requestId: {}, first package delay ms: {}, last package delay ms: {}'
     .format(
-        recognition.get_last_request_id(),
-        recognition.get_first_package_delay(),
-        recognition.get_last_package_delay(),
+        recognition.request_id,
+        recognition.first_package_delay,
+        recognition.last_package_delay,
     ))
 ```
 
 ## 接口地址
 
-SDK的接口地址需在初始化前设置为下方地址（包含WorkspaceId）。如需切换到其他地域，请修改 `dashscope.base_websocket_api_url`为对应地域的URL。
+SDK的实时识别走WebSocket接口，端点由`Client`的`workspace`与`region`自动决定（包含WorkspaceId）。如需切换到其他地域，构造`Client`时设置对应地域的`region`即可。
 
 #### 华北2（北京）
 
@@ -312,7 +273,7 @@ SDK的接口地址需在初始化前设置为下方地址（包含WorkspaceId）
 
 ## 请求参数
 
-请求参数通过Recognition类的构造方法（_init_）进行设置。
+请求参数通过[核心资源（`client.audio.asr`）](https://help.aliyun.com/zh/model-studio/qwen-audio-asr-streaming-python-sdk#d6bc1f133f871)的`recognize`/`recognize_file`方法进行设置：`model`、`format`、`sample_rate`、`vocabulary_id`为具名参数，其余参数（如`language_hints`）通过`parameters`字典传入。
 
 **参数**
 
@@ -409,15 +370,19 @@ amr：仅支持AMR-NB类型。
 示例：
 
 ```
-from dashscope.audio.asr import Recognition
+import os
+import dashscope
 
+client = dashscope.Client(api_key=os.getenv("DASHSCOPE_API_KEY"))
+
+# 即时热词通过parameters传入
 vocab = {"张三": 5, "李四": 5}
-recognition = Recognition(
+recognition = client.audio.asr.recognize(
     model='qwen-audio-3.1-asr-flash-streaming',
     format='wav',
     sample_rate=16000,
-    vocabulary=vocab,
-    callback=None)
+    parameters={"vocabulary": vocab},
+)
 ```
 
 `max_sentence_silence`
@@ -467,7 +432,7 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
 
 静音音频指的是在音频文件或数据流中没有声音信号的内容。静音音频可以通过多种方法生成，例如使用音频编辑软件如Audacity或Adobe Audition，或者通过命令行工具如FFmpeg。
 
-使用该字段时，SDK版本不能低于1.23.1。
+使用该字段时，SDK版本不能低于2.0.1。
 
 `language_hints`
 
@@ -540,15 +505,7 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
 
 指定在语音识别过程中需要处理的敏感词，并支持对不同敏感词设置不同的处理方式。详情请参见[敏感词过滤](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide#rt03_sensitive_h3)。
 
-`callback`
-
-`RecognitionCallback`
-
-否
-
-回调接口（RecognitionCallback）。
-
-以下参数通过`Recognition`实例的`call`或`start`方法的关键字参数传入。
+以下参数通过`recognize`/`recognize_file`方法的`input`关键字参数传入。
 
 **参数**
 
@@ -558,7 +515,7 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
 
 **说明**
 
-`raw_input`
+`input`
 
 `dict`
 
@@ -575,7 +532,7 @@ dict 中需包含 `context` 键，值为消息列表（list\[dict\]），每条�
 
 **重要**携带上下文时，`context` 中的消息顺序有要求：上下文消息必须按对话轮次排列，每轮中 `user`（`input_text` 类型）必须在对应的 `assistant`（`text` 类型）之前。
 
-**说明**使用该字段时，SDK版本不能低于1.25.23。
+**说明**使用该字段时，SDK版本不能低于2.0.1。
 
 ```
 # 构建 input 传入数据
@@ -602,17 +559,20 @@ input_context = {
     ]
 }
 
-# 通过 raw_input 参数传入
-recognition.start(raw_input=input_context)
-# 或者
-recognition.call(raw_input=input_context)
+# 创建识别会话时通过 input 参数传入
+recognition = client.audio.asr.recognize(
+    model='qwen-audio-3.1-asr-flash-streaming',
+    format='wav',
+    sample_rate=16000,
+    input=input_context,
+)
 ```
 
 ## 关键接口
 
-### `Recognition`类
+### 核心资源（`client.audio.asr`）
 
-`Recognition`通过`from dashscope.audio.asr import *`方式引入。
+实时语音识别能力挂载在`client.audio.asr`资源上：`recognize`创建双向流式识别会话（`Recognition`），`recognize_file`对本地文件一次性识别。
 
 **成员方法**
 
@@ -620,27 +580,50 @@ recognition.call(raw_input=input_context)
 
 **说明**
 
-`call`
+recognize
 
 ```
-def call(self, file: str, phrase_id: str = None, **kwargs) -> RecognitionResult
+def recognize(self,
+              *,
+              model: str,
+              format: str = "pcm",
+              sample_rate: int = 16000,
+              vocabulary_id: str = None,
+              disfluency_removal_enabled: bool = None,
+              diarization_enabled: bool = None,
+              parameters: Dict = None,
+              input: Dict = None,
+              phrase_id: str = None,
+              ...) -> Recognition
 ```
 
-基于本地文件的非流式调用，该方法会阻塞当前线程直到全部音频读完，该方法要求所识别文件具有可读权限。
+创建双向流式识别会话，进入`with`上下文时自动调用`start`建立连接并发送任务。
 
-识别结果以`RecognitionResult`类型数据返回。
+发送音频与消费事件需并发进行（配合`send_audio_frame`、`events()`/`results()`和`stop`使用）。
 
-`start`
+recognize\_file
 
 ```
-def start(self, phrase_id: str = None, **kwargs)
+def recognize_file(self,
+                   path: str,
+                   *,
+                   model: str,
+                   format: str = "pcm",
+                   sample_rate: int = 16000,
+                   ...) -> Iterator[Dict]
 ```
 
-开始语音识别。
+基于本地文件的非流式调用：自动分块发送音频并驱动到任务结束，逐个产出服务端事件。该方法要求所识别文件具有可读权限。
 
-基于回调形式的流式实时识别，该方法不会阻塞当前线程。需要配合`send_audio_frame`和`stop`使用。
+start
 
-`send_audio_frame`
+```
+def start(self)
+```
+
+开始语音识别：建立连接、发送任务并等待`task-started`。进入`with`上下文时自动调用，启动成功后才能发送音频。
+
+send\_audio\_frame
 
 ```
 def send_audio_frame(self, buffer: bytes)
@@ -648,136 +631,131 @@ def send_audio_frame(self, buffer: bytes)
 
 推送音频。每次推送的音频流不宜过大或过小，建议每包音频时长为100ms左右，大小在1KB~16KB之间。
 
-识别结果通过回调接口（RecognitionCallback）的on\_event方法获取。
+识别结果通过[事件迭代（`events()`/`results()`）](https://help.aliyun.com/zh/model-studio/qwen-audio-asr-streaming-python-sdk#85d698b9f9g8s)获取。
 
-`stop`
+stop
 
 ```
 def stop(self)
 ```
 
-停止语音识别，阻塞到服务将收到的音频都识别后结束任务。
+停止语音识别：只通知服务端输入结束，接收线程需继续消费`events()`直到`task-finished`事件。
 
-`get_last_request_id`
-
-```
-def get_last_request_id(self)
-```
-
-获取request\_id，在构造函数调用（创建对象）后可以使用。
-
-`get_first_package_delay`
+events / results
 
 ```
-def get_first_package_delay(self)
+def events(self) -> Iterator[Dict]
+def results(self) -> Iterator[RecognitionResult]
 ```
 
-获取首包延迟，从发送第一包音频到收到首包识别结果延迟，在任务完成后使用。
+迭代服务端事件：`events()`产出原始事件`dict`（识别文本位于`payload.output.sentence`）；`results()`只产出识别结果帧，返回[识别结果（RecognitionResult）](https://help.aliyun.com/zh/model-studio/qwen-audio-asr-streaming-python-sdk#bc3e1a43d6hhy)类型化对象（心跳帧已过滤）。
 
-`get_last_package_delay`
-
-```
-def get_last_package_delay(self)
-```
-
-获得尾包延迟，发送`stop`指令到最后一包识别结果下发耗时，在任务完成后使用。
-
-`get_response`
+close
 
 ```
-def get_response(self)
+def close(self)
 ```
 
-获取最后一次报文，可以用于获取task-failed报错。
+关闭识别会话。退出`with`上下文时自动调用。
 
-### 回调接口（`RecognitionCallback`）
-
-双向流式调用时，服务端会通过回调的方式，将关键流程信息和数据返回给客户端。您需要实现回调方法，处理服务端返回的信息或者数据。
+request\_id / first\_package\_delay / last\_package\_delay / last\_response
 
 ```
-class Callback(RecognitionCallback):
-    def on_open(self) -> None:
-        print('连接成功')
-
-    def on_event(self, result: RecognitionResult) -> None:
-        # 实现接收识别结果的逻辑
-        pass
-
-    def on_complete(self) -> None:
-        print('任务完成')
-
-    def on_error(self, result: RecognitionResult) -> None:
-        print('出现异常：', result)
-
-    def on_close(self) -> None:
-        print('连接关闭')
-
-callback = Callback()
+rec.request_id
+rec.first_package_delay
+rec.last_package_delay
+rec.last_response
 ```
 
-**方法**
+获取request\_id、首包延迟（从发送第一包音频到收到首包识别结果延迟）和尾包延迟（发送`stop`指令到最后一包识别结果下发耗时），在任务完成后使用；`last_response`为最近一次成功读取的原始报文，可用于获取task-failed报错。会话关闭后仍可读取。
 
-**参数**
+### 事件迭代（`events()`/`results()`）
+
+[双向流式调用](https://help.aliyun.com/zh/model-studio/qwen-audio-asr-streaming-python-sdk#9d1e5f6852jr8)时，服务端会通过事件的方式，将关键流程信息和数据返回给客户端。您需要在接收线程中迭代会话的`events()`（原始事件`dict`）或`results()`（类型化识别结果帧），处理服务端返回的信息或者数据。
+
+```
+# 迭代原始事件：识别文本位于 payload.output.sentence
+def receive_events(rec):
+    for event in rec.events():
+        payload = event.get('payload') or {}
+        sentence = (payload.get('output') or {}).get('sentence') or {}
+        if sentence.get('text') and not sentence.get('heartbeat'):
+            print('识别文本：', sentence['text'])
+
+# 或只迭代识别结果帧（返回 RecognitionResult，心跳帧已过滤）
+def receive_results(rec):
+    for result in rec.results():
+        sentence = result.get_sentence()
+        if sentence and 'text' in sentence:
+            print('识别文本：', sentence['text'])
+```
+
+**事件/迭代方法**
+
+**产出内容**
 
 **返回值**
 
 **描述**
 
 ```
-def on_open(self) -> None
+event["header"]["event"] == "task-started"
 ```
+
+`task-started`事件
 
 无
 
-无
-
-当和服务端建立连接完成后，该方法立刻被回调。
+由`start()`内部读取，启动返回时保存在`last_response`中，不会由`events()`再次产出。
 
 ```
-def on_event(self, result: RecognitionResult) -> None
+def events(self) -> Iterator[Dict]
 ```
 
-`result`：[识别结果（RecognitionResult）](https://help.aliyun.com/zh/model-studio/qwen-audio-asr-streaming-python-sdk#bc3e1a43d6hhy)
+`event`：服务端事件`dict`
 
-无
+迭代器
 
-当服务有回复时会被回调。
-
-```
-def on_complete(self) -> None
-```
-
-无
-
-无
-
-当所有识别结果全部返回后进行回调。
+当服务有回复时产出事件。识别结果位于`payload.output.sentence`，可能为心跳或空文本事件，应用可按需忽略。请由一个接收线程持续消费，不要并发创建多个读取者。
 
 ```
-def on_error(self, result: RecognitionResult) -> None
+def results(self) -> Iterator[RecognitionResult]
 ```
 
-`result`：[识别结果（RecognitionResult）](https://help.aliyun.com/zh/model-studio/qwen-audio-asr-streaming-python-sdk#bc3e1a43d6hhy)
+`result`：识别结果（`RecognitionResult`）
 
-无
+迭代器
 
-发生异常时该方法被回调。
+只产出识别结果帧（心跳帧已过滤），全部识别结果返回后迭代结束。
 
 ```
-def on_close(self) -> None
+try:
+    ...
+except DashScopeError as e:
+    print(e.code, e.message, e.request_id)
 ```
+
+`DashScopeError`异常
 
 无
 
+发生异常时在发送/接收线程中抛出，可使用try/except捕获。
+
+```
+event["header"]["event"] == "task-finished"
+```
+
+`task-finished`事件
+
 无
 
-当服务已经关闭连接后进行回调。
+当服务已经完成全部识别后由`events()`产出，随后迭代结束；发送`stop()`后仍须读取此事件。
 
 ## 响应结果
 
 ### 识别结果（`RecognitionResult`）
 
-`RecognitionResult`代表双向流式调用中一次实时识别或非流式调用的识别结果。
+`RecognitionResult`代表会话`results()`迭代产出的一次识别结果帧（双向流式调用与非流式调用均可使用；`events()`产出的是原始事件`dict`，如需该类型化视图请改用`results()`）。
 
 **成员方法**
 
@@ -791,26 +769,25 @@ def on_close(self) -> None
 def get_sentence(self) -> Union[Dict[str, Any], List[Any]]
 ```
 
-获取当前识别的句子及时间戳信息。回调中返回的是单句信息，所以此方法返回类型为Dict\[str, Any\]。
+获取当前识别的句子及时间戳信息，此方法返回类型为Dict\[str, Any\]（单句信息）。
 
 详情请参见[单句信息（Sentence）](https://help.aliyun.com/zh/model-studio/qwen-audio-asr-streaming-python-sdk#f28f50b035qtn)。
 
-`get_request_id`
+`request_id`
 
 ```
-def get_request_id(self) -> str
+result.request_id
 ```
 
-获取请求的request\_id。
+当前事件对应的请求request\_id。
 
 `is_sentence_end`
 
 ```
-@staticmethod
-def is_sentence_end(sentence: Dict[str, Any]) -> bool
+def is_sentence_end(self) -> bool
 ```
 
-判断给定句子是否已经结束。该方法通过检查 `sentence` 中 `end_time` 字段是否为 `None` 来判定——`end_time` 不为 `None` 时表示句子已结束。调用方式为 `RecognitionResult.is_sentence_end(sentence)`，其中 `sentence` 为 `get_sentence()` 返回的单句信息 dict，而非 `Sentence` 实例的布尔字段。
+判断当前句子是否已经结束。该方法通过检查 `get_sentence()` 返回的单句信息中 `end_time` 字段是否为 `None` 来判定——`end_time` 不为 `None` 时表示句子已结束。
 
 ### 单句信息（`Sentence`）
 
@@ -927,11 +904,11 @@ ffmpeg -i input.flac -c:a libopus -b:a 128k -vbr on output.opus
 
 -   直接传入本地文件路径：此种方式在最终识别结束后获取完整识别结果，不适合即时反馈的场景。
     
-    参见非流式调用，在Recognition类的`call`方法中传入文件路径对录音文件直接进行识别。
+    参见非流式调用，调用`recognize_file`方法传入文件路径对录音文件直接进行识别。
     
 -   将本地文件转成二进制流进行识别：此种方式一边识别文件一边流式获取识别结果，适合即时反馈的场景。
     
-    参见双向流式调用，通过Recognition类的`send_audio_frame`方法向服务端发送二进制流对其进行识别。
+    参见双向流式调用，通过识别会话的`send_audio_frame`方法向服务端发送二进制流对其进行识别。
     
 
 ### 故障排查
