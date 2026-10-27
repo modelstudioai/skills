@@ -4,7 +4,7 @@
 
 ## 前期准备
 
-SDK 版本需要不低于 1.26.5。请先阅读[实时多模态交互流程](raw/_short/omni-realtime-interaction-process-c1786114b7f9b9c5.md)。
+SDK 版本需要不低于 2.0.1。请先阅读[实时多模态交互流程](raw/_short/omni-realtime-interaction-process-c1786114b7f9b9c5.md)。
 
 ## 快速开始
 
@@ -31,7 +31,7 @@ SDK 版本需要不低于 1.26.5。请先阅读[实时多模态交互流程](raw
 
 ## 请求参数
 
-下述请求参数可以通过OmniRealtimeConversation的构造方法（**init**）进行设置。
+下述请求参数可以通过`client.audio.realtime.connect`方法进行设置。服务端事件不再通过回调下发，改为在接收线程中迭代会话的`events()`并按`event["type"]`分发处理（参见[事件迭代](https://help.aliyun.com/zh/model-studio/omni-realtime-python-sdk#9d08669109iwx)）。
 
 **参数**
 
@@ -45,17 +45,11 @@ str
 
 Qwen-Omni系列模型名称。参见模型列表。
 
-callback
-
-`OmniRealtimeCallback`
-
-用于处理服务端事件的回调对象实例。
-
-url
+ws\_url
 
 str
 
-调用地址：
+完整WebSocket端点，未指定时按`Client`的`workspace`与`region`自动选择端点：
 
 -   新加坡地域：wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime
     
@@ -81,9 +75,9 @@ str
 
 output\_modalities
 
-list\[MultiModality\]
+list\[str\]
 
-模型输出模态设置，支持设置\[MultiModality.TEXT\]（仅输出文本）或\[MultiModality.TEXT, MultiModality.AUDIO\]（输出音频和文本）。
+模型输出模态设置，支持设置\['text'\]（仅输出文本）或\['text', 'audio'\]（输出音频和文本）。
 
 voice
 
@@ -98,29 +92,29 @@ str
 
 input\_audio\_config
 
-AudioFormatConfig
+dict
 
-用户输入音频格式配置。通过 `AudioFormatConfig` 同时设置格式（`type`：`pcm`/`wav`）和采样率（`sample_rate`：`8000`/`16000`/`24000`/`48000`，默认 16000 Hz）。
+用户输入音频格式配置。通过 dict（含 `type`/`sample_rate` 键）同时设置格式（`type`：`pcm`/`wav`）和采样率（`sample_rate`：`8000`/`16000`/`24000`/`48000`，默认 16000 Hz），写法参见[音频格式与采样率配置](https://help.aliyun.com/zh/model-studio/omni-realtime-python-sdk#py_audioformatconfig_h3)。
 
 **适用模型：`qwen3.5-omni-plus-realtime`、`qwen3.5-omni-flash-realtime`。**
 
 output\_audio\_config
 
-AudioFormatConfig
+dict
 
-模型输出音频格式配置。通过 `AudioFormatConfig` 同时设置格式（`type`：`pcm`/`wav`）和采样率（`sample_rate`：`8000`/`16000`/`24000`/`48000`）。`AudioFormatConfig` 未指定采样率时默认 16000 Hz；配置输出音频时请显式设置所需采样率，如 24000 Hz。
+模型输出音频格式配置。通过 dict（含 `type`/`sample_rate` 键）同时设置格式（`type`：`pcm`/`wav`）和采样率（`sample_rate`：`8000`/`16000`/`24000`/`48000`）。未指定采样率时默认 16000 Hz；配置输出音频时请显式设置所需采样率，如 24000 Hz。
 
 **适用模型：`qwen3.5-omni-plus-realtime`、`qwen3.5-omni-flash-realtime`。**
 
 input\_audio\_format
 
-AudioFormat
+str
 
 历史兼容字段，新增接入建议使用 `input_audio_config` 同时配置输入格式和采样率。
 
 output\_audio\_format
 
-AudioFormat
+str
 
 历史兼容字段，新增接入建议使用 `output_audio_config` 同时配置输出格式和采样率。
 
@@ -341,18 +335,18 @@ integer
 
 ## 关键接口
 
-### OmniRealtimeConversation类
+### RealtimeSession（`client.audio.realtime.connect`）
 
-OmniRealtimeConversation通过`from dashscope.audio.qwen_omni import OmniRealtimeConversation`方法引入。
+实时会话通过`client.audio.realtime.connect(model=...)`创建：进入`with`上下文（或调用会话的`connect()`方法）后建立连接。
 
 方法签名
 
-服务端响应事件（通过回调下发）
+服务端响应事件（通过`events()`下发）
 
 说明
 
 ```
-def connect(self,) -> None
+def connect(self) -> RealtimeSession
 ```
 
 [服务端事件](raw/model-api-reference/omni-realtime-api/server-events.md)
@@ -363,25 +357,26 @@ def connect(self,) -> None
 
 > 会话配置已更新
 
-和服务端创建连接。
+和服务端创建连接。进入`with`上下文时自动调用，勿先`connect()`再进入同一会话的`with`。
 
 ```
 def update_session(self,
-                       output_modalities: List[MultiModality],
-                       voice: str = None,
-                       input_audio_format: AudioFormat = AudioFormat.PCM_16000HZ_MONO_16BIT,
-                       output_audio_format: AudioFormat = AudioFormat.PCM_24000HZ_MONO_16BIT,
-                       enable_input_audio_transcription: bool = True,
-                       input_audio_transcription_model: str = None,
-                       enable_turn_detection: bool = True,
-                       turn_detection_type: str = "server_vad",
-                       prefix_padding_ms: int = 300,
-                       turn_detection_threshold: float = 0.2,
-                       turn_detection_silence_duration_ms: int = 800,
-                       turn_detection_param: dict = None,
-                       input_audio_config: AudioFormatConfig = None,
-                       output_audio_config: AudioFormatConfig = None,
-                       **kwargs) -> None
+                   output_modalities: List[str] = ...,
+                   *,
+                   voice: str = ...,
+                   input_audio_format: str = ...,
+                   output_audio_format: str = ...,
+                   enable_input_audio_transcription: bool = ...,
+                   input_audio_transcription_model: str = ...,
+                   enable_turn_detection: bool = ...,
+                   turn_detection_type: str = ...,
+                   prefix_padding_ms: int = ...,
+                   turn_detection_threshold: float = ...,
+                   turn_detection_silence_duration_ms: int = ...,
+                   turn_detection_param: dict = ...,
+                   input_audio_config: dict = ...,
+                   output_audio_config: dict = ...,
+                   **kwargs) -> None
 ```
 
 [session.updated](https://help.aliyun.com/zh/model-studio/server-events#424ef2e774q9p)
@@ -395,23 +390,23 @@ def update_session(self,
 服务端在收到session.update事件后，会进行参数校验，如果参数不合法则返回错误，否则更新服务端侧的会话配置。
 
 ```
-def append_audio(self, audio_b64: str) -> None
+def append_audio(self, audio_b64: Union[str, bytes]) -> None
 ```
 
 无
 
-将base64编码后的音频数据片段追加到云端输入音频缓冲区。 音频缓冲区是可以写入并稍后提交的临时存储。
+将音频数据片段追加到云端输入音频缓冲区。`str`视为已编码的Base64，`bytes`会自动Base64编码。 音频缓冲区是可以写入并稍后提交的临时存储。
 
 -   打开"turn\_detection"，音频缓冲区用于检测语音，服务端决定何时提交。
 -   关闭"turn\_detection"，客户端可以选择每个事件中放置多少音频量，最多放置 15 MiB。 例如，从客户端流式处理较小的数据块可以让 VAD 响应更迅速。
 
 ```
-def append_video(self, video_b64: str) -> None
+def append_video(self, video_b64: Union[str, bytes]) -> None
 ```
 
 无
 
-将base64编码后的图片数据添加到云端视频缓冲区。图片数据可以是本地的图片，或从视频流实时采集的图片数据。
+将图片数据添加到云端视频缓冲区，`str`视为已编码的Base64，`bytes`会自动Base64编码。图片数据可以是本地的图片，或从视频流实时采集的图片数据。
 
 目前对图片输入有以下限制：
 
@@ -450,8 +445,9 @@ def commit(self, ) -> None
 
 ```
 def create_response(self,
-        instructions: str = None,
-        output_modalities: list[MultiModality] = None) -> None
+        modalities: list[str] = ...,
+        instructions: str = ...,
+        **kwargs) -> None
 ```
 
 [服务端事件](raw/model-api-reference/omni-realtime-api/server-events.md)
@@ -532,102 +528,72 @@ def close(self, ) -> None
 
 无
 
-终止任务，并关闭连接。
+终止任务，并关闭连接（幂等，不发送`session.finish`）。
 
 ```
-def get_session_id(self) -> str
-```
-
-无
-
-获取当前任务的session\_id。
-
-```
-def get_last_response_id(self) -> str
+session.session_id
+session.last_response_id
 ```
 
 无
 
-获取最近一次response的response\_id。
+获取当前任务的session\_id、最近一次response的response\_id（会话属性，另有`last_first_text_delay`/`last_first_audio_delay`等首包延迟指标）。
 
-### AudioFormatConfig 配置类
+### 音频格式与采样率配置
 
-通过 `from dashscope.audio.qwen_omni import AudioFormatConfig, AudioFormatType, AudioSampleRate` 引入。用于同时配置音频格式和采样率。
+通过 `update_session` 的 `input_audio_config` / `output_audio_config` 参数（`dict`，含 `type` 与 `sample_rate` 键）同时配置音频格式和采样率。
 
 **适用模型：`qwen3.5-omni-plus-realtime`、`qwen3.5-omni-flash-realtime`。**
 ```
-from dashscope.audio.qwen_omni import (
-    AudioFormatConfig, AudioFormatType, AudioSampleRate,
-)
-
-# 方式一：使用枚举
-conversation.update_session(
-    output_modalities=[MultiModality.AUDIO, MultiModality.TEXT],
+# dict 中同时指定格式（type）与采样率（sample_rate）
+session.update_session(
+    output_modalities=['audio', 'text'],
     voice=voice,
-    input_audio_config=AudioFormatConfig(
-        type=AudioFormatType.PCM,
-        sample_rate=AudioSampleRate.SAMPLE_RATE_16K
-    ),
-    output_audio_config=AudioFormatConfig(
-        type=AudioFormatType.WAV,
-        sample_rate=AudioSampleRate.SAMPLE_RATE_24K
-    ),
-)
-
-# 方式二：自由传值
-conversation.update_session(
-    output_modalities=[MultiModality.AUDIO, MultiModality.TEXT],
-    voice=voice,
-    input_audio_config=AudioFormatConfig(type="pcm", sample_rate=16000),
-    output_audio_config=AudioFormatConfig(type="wav", sample_rate=24000),
+    input_audio_config={"type": "pcm", "sample_rate": 16000},
+    output_audio_config={"type": "wav", "sample_rate": 24000},
 )
 ```
 
-### 回调接口（OmniRealtimeCallback）
+### 事件迭代（`events()`）
 
-服务端会通过回调的方式，将服务端响应事件和数据返回给客户端。需要实现回调方法，处理服务端返回的信息或者数据。
+服务端会通过事件的方式，将服务端响应事件和数据返回给客户端。您需要在接收线程中迭代会话的`events()`，按`event["type"]`分发处理（完整事件列表参见[服务端事件](raw/model-api-reference/omni-realtime-api/server-events.md)）。
 
-通过`from dashscope.audio.qwen_omni import OmniRealtimeCallback`引入。
+```
+def receive_events(session):
+    for event in session.events():
+        kind = event.get('type')
+        if kind == 'session.created':
+            print('start session: {}'.format(event['session']['id']))
+        elif kind == 'conversation.item.input_audio_transcription.completed':
+            print(f"[User] {event['transcript']}")
+        elif kind == 'response.audio.delta':
+            # 模型增量生成的音频（Base64），可解码后送入播放设备
+            audio = base64.b64decode(event['delta'])
+        elif kind == 'response.audio_transcript.done':
+            print(f"[LLM] {event['transcript']}")
+```
 
-方法
+方法签名
 
 参数
 
-返回值
-
-描述
+说明
 
 ```
-def on_open(self) -> None
+def events(self) -> Iterator[Dict]
+```
+
+event：[服务端事件](raw/model-api-reference/omni-realtime-api/server-events.md)
+
+连续读取并逐个产出服务端事件（`dict`）。连接关闭或收到`session.finished`后迭代结束。请由一个接收线程持续消费，不要并发创建多个读取者。
+
+```
+def recv_event(self) -> Optional[Dict]
 ```
 
 无
 
-无
-
-当和服务端建立连接完成后，该方法立刻被回调。
-
-```
-def on_event(self, message: str) -> None
-```
-
-message：服务端响应事件。
-
-无
-
-包括对接口调用的回复响应和模型生成的文本和音频。具体可以参考：[服务端事件](raw/model-api-reference/omni-realtime-api/server-events.md)
-
-```
-def on_close(self, close_status_code, close_msg) -> None
-```
-
-close\_status\_code：关闭websocket的状态码。
-
-close\_msg：关闭websocket的关闭信息。
-
-无
-
-当服务已经关闭连接后进行回调。
+阻塞读取单条服务端事件，不自动循环；无事件（连接关闭）时返回`None`。错误事件会以`DashScopeError`异常抛出。
 
 ## 常见问题
 

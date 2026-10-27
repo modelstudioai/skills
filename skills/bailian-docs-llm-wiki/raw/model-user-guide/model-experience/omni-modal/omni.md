@@ -954,7 +954,7 @@ Chat Completions
 
 音视频文件翻译
 
-qwen-audio-3.1-realtime-plus / qwen-audio-3.0-realtime-plus / qwen-audio-3.0-realtime-flash
+qwen-audio-3.1-realtime-plus / qwen-audio-3.1-realtime-flash / qwen-audio-3.0-realtime-plus
 
 Realtime API（WebSocket）
 
@@ -1247,6 +1247,18 @@ Chat Completions
 **思考模式**
 
 `qwen-audio-3.1-realtime-plus`
+
+Realtime API（WebSocket）
+
+音频、文本
+
+支持
+
+支持
+
+不支持
+
+`qwen-audio-3.1-realtime-flash`
 
 Realtime API（WebSocket）
 

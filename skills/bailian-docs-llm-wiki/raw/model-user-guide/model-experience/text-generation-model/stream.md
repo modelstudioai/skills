@@ -234,7 +234,7 @@ data: [DONE]
     
     DashScope 协议支持增量与非增量式流式输出：
     
-    -   **增量**（推荐）：每个数据块仅包含新生成的内容，设置`incremental_output`为`true`启动增量式流式输出。
+    -   **增量**（推荐）：每个数据块仅包含新生成的内容，设置`incremental_output`为`true`启动增量式流式输出（Python SDK 2.0 默认即为增量输出，无需设置该参数）。
         
         > 示例：\["我爱","吃","苹果"\]
         
@@ -251,19 +251,18 @@ data: [DONE]
 
 ```
 import os
-from http import HTTPStatus
 import dashscope
-from dashscope import Generation
+from dashscope.v2 import DashScopeError
 
-# 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
-
-# 1. 准备工作：配置API Key
+# 1. 准备工作：配置API Key与客户端
 # 建议通过环境变量配置API Key，避免硬编码。
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的region取值不同。
 try:
-    dashscope.api_key = os.environ["DASHSCOPE_API_KEY"]
+    api_key = os.environ["DASHSCOPE_API_KEY"]
 except KeyError:
     raise ValueError("请设置环境变量 DASHSCOPE_API_KEY")
+
+client = dashscope.Client(api_key=api_key, workspace="{WorkspaceId}", region="cn-beijing")
 
 # 2. 发起流式请求
 messages = [
@@ -272,44 +271,39 @@ messages = [
 ]
 
 try:
-    responses = Generation.call(
+    stream = client.chat.completions.create(
         model="qwen-plus",
         messages=messages,
-        result_format="message",
         stream=True,
-        # 关键：设置为True以获取增量输出，性能更佳。
-        incremental_output=True,
+        # 流式输出默认为增量模式：每个数据块仅包含新生成的内容。
     )
 
     # 3. 处理流式响应
     content_parts = []
     print("AI: ", end="", flush=True)
 
-    for resp in responses:
-        if resp.status_code == HTTPStatus.OK:
-            content = resp.output.choices[0].message.content
-            print(content, end="", flush=True)
-            content_parts.append(content)
+    for chunk in stream:
+        delta = chunk.choices[0].delta
+        if delta.content:
+            print(delta.content, end="", flush=True)
+            content_parts.append(delta.content)
 
-            # 检查是否是最后一个包
-            if resp.output.choices[0].finish_reason == "stop":
-                usage = resp.usage
-                print("\n--- 请求用量 ---")
-                print(f"输入 Tokens: {usage.input_tokens}")
-                print(f"输出 Tokens: {usage.output_tokens}")
-                print(f"总计 Tokens: {usage.total_tokens}")
-        else:
-            # 处理错误情况
-            print(
-                f"\n请求失败: request_id={resp.request_id}, code={resp.code}, message={resp.message}"
-            )
-            break
+        # 检查是否是最后一个包（最后一个数据块包含Token用量）
+        if chunk.choices[0].finish_reason == "stop":
+            usage = chunk.usage
+            print("\n--- 请求用量 ---")
+            print(f"输入 Tokens: {usage.input_tokens}")
+            print(f"输出 Tokens: {usage.output_tokens}")
+            print(f"总计 Tokens: {usage.total_tokens}")
 
     full_response = "".join(content_parts)
     # print(f"\n--- 完整回复 ---\n{full_response}")
 
-except Exception as e:
-    print(f"发生未知错误: {e}")
+except DashScopeError as e:
+    # 处理错误情况（流式输出中的错误会直接抛出异常）
+    print(
+        f"\n请求失败: request_id={e.request_id}, code={e.code}, message={e.message}"
+    )
 ```
 **返回结果**
 ```
@@ -506,7 +500,7 @@ data:{"output":{"choices":[{"message":{"content":"","role":"assistant"},"finish_
 多模态模型支持在对话中加入图片、音频等内容，其流式输出的实现方式与文本模型主要有以下不同：
 
 -   **用户消息（user message）的构造方式**：多模态模型的输入不仅包括文本，还包含图片、音频等多模态信息。
--   **DashScope SDK接口：**使用 DashScope Python SDK 时，需调用 MultiModalConversation 接口；使用DashScope Java SDK 时，则调用 MultiModalConversation 类。
+-   **DashScope SDK接口：**使用 DashScope Python SDK 2.0 时，需调用 `client.multimodal.chat.create` 接口；使用DashScope Java SDK 时，则调用 MultiModalConversation 类。
 
 > 多模态模型请参见：[图像与视频理解](raw/model-user-guide/model-experience/vision-model/vision.md)、[文字提取](raw/model-user-guide/model-experience/vision-model/qwen-vl-ocr.md)、[界面交互](raw/model-user-guide/model-experience/text-generation-model/specialized-models/gui-automation.md)、[音频理解-Qwen3-Omni-Captioner](https://help.aliyun.com/zh/model-studio/qwen3-omni-captioner)、[Kimi](raw/model-user-guide/use-cases/third-party-model-integration-tutorial/kimi-api.md)等，Qwen3.5-Omni、Qwen3-Omni-Flash **仅支持流式输出**，因其输出可包含**文本**或**音频**等多模态内容，结果解析方式与其他模型不同，具体请参见[全模态](https://help.aliyun.com/zh/model-studio/qwen-omni#b6a6667a65zvt)。
 
@@ -627,11 +621,16 @@ Python
 
 ```
 import os
-from dashscope import MultiModalConversation
 import dashscope
 
-# 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 messages = [
     {
@@ -643,22 +642,19 @@ messages = [
     }
 ]
 
-responses = MultiModalConversation.call(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+stream = client.multimodal.chat.create(
     model='qwen3-vl-plus',  # 可按需更换为其它多模态模型，并修改相应的 messages
     messages=messages,
     stream=True,
-    incremental_output=True
     )
 
 full_content = ""
 print("流式输出内容为：")
-for response in responses:
-    if response.output.choices[0].message.content:
-        print(response.output.choices[0].message.content[0]['text'])
-        full_content += response.output.choices[0].message.content[0]['text']
+for chunk in stream:
+    delta = chunk.choices[0].delta
+    if delta.content:
+        print(delta.content)
+        full_content += delta.content
 print(f"完整内容为：{full_content}")
 ```
 
@@ -1002,24 +998,24 @@ data: [DONE]
 
 ```
 import os
-from dashscope import Generation
 import dashscope
 
-# 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
-messages = [{"role": "user", "content": "你是谁？"}]
-
-completion = Generation.call(
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
     api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
+messages = [{"role": "user", "content": "你是谁？"}]
+
+stream = client.chat.completions.create(
     # 可按需更换为其它深度思考模型
     model="qwen-plus",
     messages=messages,
-    result_format="message", # Qwen3开源版模型只支持设定为"message"；为了更好的体验，其它模型也推荐您优先设定为"message"
     # 开启深度思考，该参数对QwQ、DeepSeek-R1 模型无效
     enable_thinking=True,
-    stream=True,
-    incremental_output=True, # Qwen3开源版模型只支持 true；为了更好的体验，其它模型也推荐您优先设定为 true
+    stream=True, # 流式输出默认为增量模式（Qwen3开源版模型只支持增量；为了更好的体验，其它模型也推荐使用增量）
 )
 
 # 定义完整思考过程
@@ -1031,28 +1027,28 @@ is_answering = False
 
 print("=" * 20 + "思考过程" + "=" * 20)
 
-for chunk in completion:
+for chunk in stream:
     # 如果思考过程与回复皆为空，则忽略
     if (
-        chunk.output.choices[0].message.content == ""
-        and chunk.output.choices[0].message.reasoning_content == ""
+        chunk.choices[0].delta.content == ""
+        and chunk.choices[0].delta.reasoning_content == ""
     ):
         pass
     else:
         # 如果当前为思考过程
         if (
-            chunk.output.choices[0].message.reasoning_content != ""
-            and chunk.output.choices[0].message.content == ""
+            chunk.choices[0].delta.reasoning_content != ""
+            and chunk.choices[0].delta.content == ""
         ):
-            print(chunk.output.choices[0].message.reasoning_content, end="", flush=True)
-            reasoning_content += chunk.output.choices[0].message.reasoning_content
+            print(chunk.choices[0].delta.reasoning_content, end="", flush=True)
+            reasoning_content += chunk.choices[0].delta.reasoning_content
         # 如果当前为回复
-        elif chunk.output.choices[0].message.content != "":
+        elif chunk.choices[0].delta.content != "":
             if not is_answering:
                 print("\n" + "=" * 20 + "完整回复" + "=" * 20)
                 is_answering = True
-            print(chunk.output.choices[0].message.content, end="", flush=True)
-            answer_content += chunk.output.choices[0].message.content
+            print(chunk.choices[0].delta.content, end="", flush=True)
+            answer_content += chunk.choices[0].delta.content
 
 # 如果您需要打印完整思考过程与完整回复，请将以下代码解除注释后运行
 # print("=" * 20 + "完整思考过程" + "=" * 20 + "\n")

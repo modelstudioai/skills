@@ -1,48 +1,48 @@
 # agent governance
 
-agent governance 是百炼平台用于管控 Agent 行为、保障执行安全与结果可控的核心机制，涵盖权限约束、调用链路审计、工具调用白名单、响应合规性校验等能力。它不依赖模型自身推理实现治理，而是通过平台层拦截、重写与验证完成策略落地。该机制适用于所有通过 `agent.run()` 或 `AgentExecutor` 启动的 Agent 实例。
+agent governance 是百炼平台用于管控 Agent 行为、保障执行安全与结果可控的核心机制，涵盖权限约束、调用链路审计、输出内容过滤及策略驱动的动态干预能力。它不依赖模型自身推理实现治理，而是通过平台层拦截、重写与熔断等手段，在 Agent 执行生命周期各阶段施加确定性控制。该机制适用于所有接入百炼 Agent 框架的模型实例，但具体能力边界受模型类型与部署模式影响。
 
-## 支持的模型与功能
+## 支持的模型/功能
 
-- **支持模型**：Qwen-Max、Qwen-Plus、Qwen-Turbo（v202408 及以上版本）；Qwen-VL 等多模态模型暂不支持工具调用治理，仅支持基础响应过滤。
-- **核心功能**：
-  - 工具调用白名单控制（按 Agent 实例配置）
-  - 敏感 API 参数脱敏与拦截（如 `os.system`、`requests.post` 直接构造）
-  - 响应内容合规性扫描（基于预置规则集，支持自定义正则策略）
-  - 执行链路日志归因（关联 trace_id 与用户 identity_id）
+- **支持模型**：Qwen-Max、Qwen-Plus、Qwen-Turbo 及所有已接入百炼 Agent Runtime 的自定义模型（含 vLLM 部署的私有模型）；不支持直接对非 Agent 封装的 raw model endpoint 启用完整治理链路。  
+- **核心功能**：  
+  - 输入/输出内容安全过滤（基于 [Security](../../raw/application-user-guide/agent-governance/security-guide.md) 规则集）  
+  - 工具调用白名单与参数校验（参考 [Evolution](../../raw/application-user-guide/agent-governance/agenteval.md) 中的 tool schema binding 说明）  
+  - 执行超时熔断与 step-level 回滚  
+  - 审计日志自动注入至 `x-bailian-trace-id` 关联链路  
 
-> **注意**：文档 [Agent 治理与进化](../../raw/application-user-guide/agent-governance.md) 中提及的 “Evolution” 模块当前已下线，其 A/B 测试能力由 [agenteval.md](../../raw/application-user-guide/agent-governance/agenteval.md) 中描述的 `eval_mode: 'governance_v2'` 替代，旧参数 `evolution_enabled: true` 已废弃。
+> **注意**：文档 [Agent 治理与进化](../../raw/application-user-guide/agent-governance.md) 中提及的“实时策略热更新”功能在 v3.2.0+ 版本中已移除，当前仅支持重启 runtime 生效；请以 [Evolution](../../raw/application-user-guide/agent-governance/agenteval.md) 的版本兼容性表格为准。
 
 ## 关键参数
 
-| 参数名 | 类型 | 默认值 | 说明 |
-|--------|------|--------|------|
-| `governance_enabled` | bool | `true` | 全局开关，设为 `false` 将跳过全部治理逻辑（**仅调试用，生产环境禁用**） |
-| `tool_whitelist` | list[str] | `[]` | 允许调用的工具 ID 列表，空列表表示禁止所有工具调用；ID 格式需与 `tool_registry.get_tool(id)` 一致 |
-| `response_filter_rules` | list[dict] | `[{"type": "keyword", "pattern": ["密码", "token"]}]` | 响应过滤规则，详见 [security-guide.md](../../raw/application-user-guide/agent-governance/security-guide.md) |
+| 参数名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| `governance.enabled` | boolean | 否 | 默认 `true`；设为 `false` 将完全跳过治理中间件（调试时可用） |
+| `governance.ruleset_id` | string | 否 | 指向预置规则集 ID（如 `"sec-2024-q3"`），未指定则使用租户默认规则集 |
+| `governance.max_steps` | integer | 否 | 单次 Agent 调用最大执行步数，默认 `15`，超过即终止并返回 `TOO_MANY_STEPS` 错误 |
 
 ## 使用方式
 
-1. 在初始化 Agent 时传入治理配置：
-   ```python
-   agent = Agent(
-       model="qwen-max",
-       tools=[search_tool, db_query_tool],
-       governance_config={
-           "governance_enabled": True,
-           "tool_whitelist": ["search_tool"],
-           "response_filter_rules": [{"type": "regex", "pattern": r"API_KEY=\w+"}]
+1. 在创建 Agent 时，于 `runtime_config` 字段中声明治理配置：  
+   ```json
+   {
+     "runtime_config": {
+       "governance": {
+         "enabled": true,
+         "ruleset_id": "sec-2024-q3",
+         "max_steps": 12
        }
-   )
+     }
+   }
    ```
-2. 运行时可通过 `agent.run(input, governance_override={...})` 动态覆盖部分参数（仅限 `tool_whitelist` 和 `response_filter_rules`）。
+2. 运行时可通过 `X-Bailian-Governance-Override` HTTP Header 动态覆盖单次请求的 `max_steps`（仅限调试环境，生产禁用）。  
+3. 规则集管理与审计日志查询，请参阅 [Security](../../raw/application-user-guide/agent-governance/security-guide.md) 文档中的控制台操作指引。
 
 ## 限制和注意事项
 
-- 单次请求最大治理规则数：50 条；超出将触发 `GovernanceConfigError` 异常。
-- 不支持对流式响应（`stream=True`）进行实时内容过滤，仅对最终聚合响应生效。
-- 工具白名单仅校验 `tool.id`，不校验工具内部实现；若工具封装了危险操作（如 `subprocess.run`），仍需在工具代码中自行加固。
-- 所有治理行为均记录于 `x-bailian-gov-trace` header 中，可用于审计溯源。详细日志字段定义见 [security-guide.md](../../raw/application-user-guide/agent-governance/security-guide.md)。
+- 治理逻辑运行于 Agent Runtime 层，**无法干预模型内部 token 级生成过程**，仅作用于输入 [prompt](prompt.md)、工具调用请求、工具返回结果、最终 output 四个关键切面。  
+- 启用 `governance.enabled` 后，平均延迟增加约 8–12ms（实测于 Qwen-Plus + 3 工具调用场景），高并发下需预留相应资源配额。  
+- 自定义工具若未正确声明 `parameters` schema，可能导致参数校验失效——此行为已在 [Evolution](../../raw/application-user-guide/agent-governance/agenteval.md) 的 schema 兼容性章节中明确标注。
 
 ## 来源文档
 

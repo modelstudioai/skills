@@ -60,12 +60,14 @@ HTTP 请求地址：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com
 
 HTTP 请求地址：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
 
-SDK 调用配置的`base_url`：
+SDK 调用配置的`region`：
 
 #### Python
 
 ```
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
+import dashscope
+
+client = dashscope.Client(workspace="{WorkspaceId}", region="cn-beijing")
 ```
 
 #### Java
@@ -88,12 +90,14 @@ Constants.baseHttpApiUrl="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api
 
 HTTP 请求地址：`POST https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
 
-SDK 调用配置的`base_url`：
+SDK 调用配置的`region`：
 
 #### Python
 
 ```
-dashscope.base_http_api_url = 'https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1'
+import dashscope
+
+client = dashscope.Client(workspace="{WorkspaceId}", region="us-east-1")
 ```
 
 #### Java
@@ -116,12 +120,14 @@ Constants.baseHttpApiUrl="https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/
 
 HTTP 请求地址：`POST https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
 
-SDK 调用配置的`base_url`：
+SDK 调用配置的`region`：
 
 #### Python
 
 ```
-dashscope.base_http_api_url = 'https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1'
+import dashscope
+
+client = dashscope.Client(workspace="{WorkspaceId}", region="eu-central-1")
 ```
 
 #### Java
@@ -144,18 +150,20 @@ Constants.baseHttpApiUrl="https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/a
 
 HTTP 请求地址为`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
 
-SDK 调用配置的`base_url`：`dashscope.base_http_api_url = "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1"`
+SDK 调用配置的`region`：`dashscope.Client(workspace="{WorkspaceId}", region="ap-southeast-1")`
 
 #### 中国香港
 
 HTTP 请求地址：`POST https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
 
-SDK 调用配置的`base_url`：
+SDK 调用配置的`region`：
 
 #### Python
 
 ```
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/api/v1'
+import dashscope
+
+client = dashscope.Client(workspace="{WorkspaceId}", region="cn-hongkong")
 ```
 
 调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
@@ -393,20 +401,19 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 ```
 import os
-from dashscope import Generation
+import dashscope
+
+# 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key="sk-xxx"
+client = dashscope.Client(api_key=os.getenv("DASHSCOPE_API_KEY"))
 
 # 初始化请求参数
 messages = [{"role": "user", "content": "你是谁？"}]
 
-completion = Generation.call(
-    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key="sk-xxx"
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+completion = client.chat.completions.create(
     model="glm-5.2",
     messages=messages,
-    result_format="message",  # 设置结果格式为 message
     enable_thinking=True,     # 开启思考模式
     stream=True,              # 开启流式输出
-    incremental_output=True,  # 开启增量输出
 )
 
 reasoning_content = ""  # 完整思考过程
@@ -416,9 +423,9 @@ is_answering = False    # 是否进入回复阶段
 print("\n" + "=" * 20 + "思考过程" + "=" * 20 + "\n")
 
 for chunk in completion:
-    message = chunk.output.choices[0].message
+    message = chunk.choices[0].delta
     # 只收集思考内容
-    if "reasoning_content" in message:
+    if message.reasoning_content:
         if not is_answering:
             print(message.reasoning_content, end="", flush=True)
         reasoning_content += message.reasoning_content
@@ -860,7 +867,9 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 ```
 import os
-from dashscope import Generation
+import dashscope
+
+client = dashscope.Client(api_key=os.getenv("DASHSCOPE_API_KEY"))
 
 tools = [
     {
@@ -881,26 +890,22 @@ tools = [
 
 messages = [{"role": "user", "content": "北京天气怎么样"}]
 
-completion = Generation.call(
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+completion = client.chat.completions.create(
     model="glm-5.2",
     messages=messages,
     tools=tools,
-    result_format="message",
     stream=True,
-    tool_stream=True,
-    incremental_output=True,
+    parameters={"tool_stream": True},
 )
 
 for chunk in completion:
-    msg = chunk.output.choices[0].message
+    msg = chunk.choices[0].delta
     if msg.content:
         print(f"[content] {msg.content}")
-    if "tool_calls" in msg and msg.tool_calls:
+    if msg.tool_calls:
         for tc in msg.tool_calls:
-            fn = tc.get("function", {})
-            print(f"[tool_call] id={tc.get('id','')}, name={fn.get('name','')}, args={fn.get('arguments','')}")
-    finish = chunk.output.choices[0].get("finish_reason", "")
+            print(f"[tool_call] id={tc.id or ''}, name={tc.function.name}, args={tc.function.arguments}")
+    finish = chunk.choices[0].finish_reason
     if finish and finish != "null":
         print(f"[finish_reason] {finish}")
 ```
@@ -1038,15 +1043,15 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 ```
 import os
-from dashscope import Generation
-response = Generation.call(
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+import dashscope
+
+client = dashscope.Client(api_key=os.getenv("DASHSCOPE_API_KEY"))
+response = client.chat.completions.create(
     model="glm-5.2",
     messages=[{"role": "user", "content": "9.9和9.11哪个大"}],
-    reasoning_effort="high",
-    result_format="message",
+    parameters={"reasoning_effort": "high"},
 )
-print(response.output.choices[0].message.content)
+print(response.choices[0].message.content)
 ```
 
 ## 清除历史思考（clear\_thinking）
@@ -1123,7 +1128,9 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 ```
 import os
-from dashscope import Generation
+import dashscope
+
+client = dashscope.Client(api_key=os.getenv("DASHSCOPE_API_KEY"))
 
 # 多轮对话，assistant 消息中携带 reasoning_content（历史思考过程）
 messages = [
@@ -1134,15 +1141,13 @@ messages = [
     {"role": "user", "content": "刚才的中间结果是多少？"},
 ]
 
-response = Generation.call(
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+response = client.chat.completions.create(
     model="glm-5.2",
     messages=messages,
-    result_format="message",
     enable_thinking=True,
     # true：忽略历史 reasoning_content，降低上下文长度与成本
     # false（默认）：保留历史 reasoning_content（Preserved Thinking）
-    clear_thinking=True,
+    parameters={"clear_thinking": True},
 )
 print(response.usage.input_tokens)
 ```

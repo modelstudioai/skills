@@ -158,7 +158,7 @@ text-embedding-v3
 
 若熟悉OpenAI生态，可使用兼容API快速迁移；DashScope API则提供更丰富的独有特性。请根据您的需求选择。
 
-您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，还需要[安装DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。请将示例代码中的 `DASHSCOPE_API_HOST` 替换为获取的 API Host。
+您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，还需要[安装DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
 ## OpenAI兼容
 
@@ -671,19 +671,25 @@ qwen3.7-text-embedding-flash 成功响应
 Python
 
 ```
+import os
 import dashscope
-from http import HTTPStatus
-# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
-resp = dashscope.TextEmbedding.call(
+resp = client.embeddings.create(
     model="qwen3.7-text-embedding",
     input='衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买',
     dimension=1024,  # 指定向量维度（仅 qwen3.7-text-embedding、text-embedding-v3及 text-embedding-v4支持该参数）
     output_type="dense&sparse"
 )
 
-print(resp) if resp.status_code == HTTPStatus.OK else print(resp)
+print(resp)
 ```
 
 Java
@@ -752,10 +758,17 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 Python
 
 ```
+import os
 import dashscope
-from http import HTTPStatus
-# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+from dashscope.v2 import DashScopeError
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 DASHSCOPE_MAX_BATCH_SIZE = 10
 
@@ -763,24 +776,27 @@ inputs = ['风急天高猿啸哀', '渚清沙白鸟飞回', '无边落木萧萧�
 
 result = None
 batch_counter = 0
-for i in range(0, len(inputs), DASHSCOPE_MAX_BATCH_SIZE):
-    batch = inputs[i:i + DASHSCOPE_MAX_BATCH_SIZE]
-    resp = dashscope.TextEmbedding.call(
-        model="qwen3.7-text-embedding",
-        input=batch,
-        dimension=1024  # 指定向量维度（仅 qwen3.7-text-embedding、text-embedding-v3及 text-embedding-v4支持该参数）
-    )
-    if resp.status_code == HTTPStatus.OK:
+try:
+    for i in range(0, len(inputs), DASHSCOPE_MAX_BATCH_SIZE):
+        batch = inputs[i:i + DASHSCOPE_MAX_BATCH_SIZE]
+        resp = client.embeddings.create(
+            model="qwen3.7-text-embedding",
+            input=batch,
+            dimension=1024  # 指定向量维度（仅 qwen3.7-text-embedding、text-embedding-v3及 text-embedding-v4支持该参数）
+        )
         if result is None:
             result = resp
         else:
-            for emb in resp.output['embeddings']:
-                emb['text_index'] += batch_counter
-                result.output['embeddings'].append(emb)
-            result.usage['total_tokens'] += resp.usage['total_tokens']
-    else:
-        print(resp)
-    batch_counter += len(batch)
+            for emb in resp.embeddings:
+                emb.index += batch_counter
+                result.embeddings.append(emb)
+            result.usage.total_tokens += resp.usage.total_tokens
+        batch_counter += len(batch)
+except DashScopeError as e:
+    print(f"HTTP返回码：{e.status_code}")
+    print(f"错误码：{e.code}")
+    print(f"错误信息：{e.message}")
+    print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 
 print(result)
 ```
@@ -877,22 +893,25 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 #### Python
 
 ```
-from http import HTTPStatus
-from dashscope import TextEmbedding
-# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+import os
+import dashscope
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 with open('texts_to_embedding.txt', 'r', encoding='utf-8') as f:
-    resp = TextEmbedding.call(
+    resp = client.embeddings.create(
         model="qwen3.7-text-embedding",
         input=f,
         dimension=1024 # 指定向量维度（仅 qwen3.7-text-embedding、text-embedding-v3及 text-embedding-v4支持该参数）
     )
 
-    if resp.status_code == HTTPStatus.OK:
-        print(resp)
-    else:
-        print(resp)
+    print(resp)
 ```
 
 #### Java
@@ -963,27 +982,11 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 ### 响应对象
 
-**status\_code** `string`
-
-状态码，表示请求的执行结果（如 200 表示成功）。
+> Python SDK 2.0 中，`client.embeddings.create` 返回的响应对象字段如下（HTTP 接口返回的 JSON 中，`embeddings` 包裹在 `output` 内）。
 
 **request\_id** `string`
 
 请求唯一标识。可用于请求明细溯源和问题排查。
-
-**code** `string`
-
-请求失败，表示错误码，成功时返回参数中该参数为空。
-
-**message** `string`
-
-请求失败，表示失败详细信息，成功时返回参数中该参数为空。
-
-**output**`object`
-
-任务输出信息。
-
-属性
 
 **embeddings**`array`
 
@@ -1013,7 +1016,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 对应字符串的算法输出连续向量表示 （dense embedding)。
 
-**text\_index** `integer`
+**index** `integer`
 
 本结构中的算法结果对应的输入文字在输入数组中的索引值。
 
@@ -1033,49 +1036,49 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 设置 `instruct` 且 `text_type` 取值为 `query` 时，`instruct` 会按输入文本的条数重复计入 Token 用量。
 
+**调用失败**
+
+调用失败时，SDK 抛出 **DashScopeError**，可通过 `e.status_code`（HTTP返回码）、`e.code`（错误码）、`e.message`（错误信息）、`e.request_id`（请求唯一标识）获取失败详情。详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
+
 qwen3.7-text-embedding 成功响应
 
 ```
-{   "status_code": 200,
+{
     "request_id": "1ba94ac8-e058-99bc-9cc1-7fdb37940a46",
-    "code": "",
-    "message": "",
-    "output":{
-        "embeddings": [
-          {
-             "sparse_embedding":[
-               {"index":7149,"value":0.829,"token":"风"},
-               .....
-               {"index":111290,"value":0.9004,"token":"哀"}],
-             "embedding": [-0.006929283495992422,-0.005336422007530928, ...],
-             "text_index": 0
-          },
-          {
-             "sparse_embedding":[
-               {"index":246351,"value":1.0483,"token":"渚"},
-               .....
-               {"index":2490,"value":0.8579,"token":"回"}],
-             "embedding": [-0.006929283495992422,-0.005336422007530928, ...],
-             "text_index": 1
-          },
-          {
-             "sparse_embedding":[
-               {"index":3759,"value":0.7065,"token":"无"},
-               .....
-               {"index":1130,"value":0.815,"token":"下"}],
-             "embedding": [-0.006929283495992422,-0.005336422007530928, ...],
-             "text_index": 2
-          },
-          {
-             "sparse_embedding":[
-               {"index":562,"value":0.6752,"token":"不"},
-               .....
-               {"index":1589,"value":0.7097,"token":"来"}],
-             "embedding": [-0.001945948973298072,-0.005336422007530928, ...],
-             "text_index": 3
-          }
-        ]
-    },
+    "embeddings": [
+      {
+         "index": 0,
+         "sparse_embedding":[
+           {"index":7149,"value":0.829,"token":"风"},
+           .....
+           {"index":111290,"value":0.9004,"token":"哀"}],
+         "embedding": [-0.006929283495992422,-0.005336422007530928, ...]
+      },
+      {
+         "index": 1,
+         "sparse_embedding":[
+           {"index":246351,"value":1.0483,"token":"渚"},
+           .....
+           {"index":2490,"value":0.8579,"token":"回"}],
+         "embedding": [-0.006929283495992422,-0.005336422007530928, ...]
+      },
+      {
+         "index": 2,
+         "sparse_embedding":[
+           {"index":3759,"value":0.7065,"token":"无"},
+           .....
+           {"index":1130,"value":0.815,"token":"下"}],
+         "embedding": [-0.006929283495992422,-0.005336422007530928, ...]
+      },
+      {
+         "index": 3,
+         "sparse_embedding":[
+           {"index":562,"value":0.6752,"token":"不"},
+           .....
+           {"index":1589,"value":0.7097,"token":"来"}],
+         "embedding": [-0.001945948973298072,-0.005336422007530928, ...]
+      }
+    ],
     "usage":{
         "total_tokens":27
     }
@@ -1086,18 +1089,13 @@ qwen3.7-text-embedding-flash 成功响应
 
 ```
 {
-    "status_code": 200,
     "request_id": "1ba94ac8-e058-99bc-9cc1-7fdb37940a46",
-    "code": "",
-    "message": "",
-    "output": {
-        "embeddings": [
-            {
-                "embedding": [-0.006929283495992422, -0.005336422007530928, ...],
-                "text_index": 0
-            }
-        ]
-    },
+    "embeddings": [
+        {
+            "index": 0,
+            "embedding": [-0.006929283495992422, -0.005336422007530928, ...]
+        }
+    ],
     "usage": {
         "prompt_tokens": 27,
         "total_tokens": 27
@@ -1105,7 +1103,7 @@ qwen3.7-text-embedding-flash 成功响应
 }
 ```
 
-异常响应
+异常响应（HTTP 接口返回）
 
 ```
 {

@@ -289,43 +289,40 @@ pip install websocket-client dashscope
     vad\_dash.py
     
     ```
-    # 依赖：dashscope >= 1.26.5，pyaudio
+    # 依赖：dashscope >= 2.0.1，pyaudio
     import os
     import base64
     import time
+    
     import pyaudio
-    from dashscope.audio.qwen_omni import MultiModality, AudioFormat,OmniRealtimeCallback,OmniRealtimeConversation
+    from concurrent.futures import ThreadPoolExecutor
+    
     import dashscope
     
-    # 配置参数：地址、API Key、音色、模型、模型角色
-    # 指定地域，设为cn表示华北2（北京）地域，设为intl表示新加坡地域。请将 {WorkspaceId} 替换为您的百炼业务空间ID。
-    region = 'cn'
-    base_domain = '{WorkspaceId}.cn-beijing.maas.aliyuncs.com' if region == 'cn' else '{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com'
-    url = f'wss://{base_domain}/api-ws/v1/realtime'
-    # 配置 API Key，若没有设置环境变量，请用 API Key 将下行替换为 dashscope.api_key = "sk-xxx"
-    dashscope.api_key = os.getenv('DASHSCOPE_API_KEY')
+    # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+    client = dashscope.Client(
+        # 配置 API Key，若没有设置环境变量，请用 API Key 将下行替换为：api_key="sk-xxx"
+        api_key=os.getenv('DASHSCOPE_API_KEY'),
+        workspace="{WorkspaceId}",
+        region="cn-beijing",
+    )
     # 指定音色
     voice = 'Tina'
     # 指定模型
     model = 'qwen3.8-omni-flash-realtime'
     # 指定模型角色
     instructions = "你是个人助理小云，请用幽默风趣的方式回答用户的问题"
-    class SimpleCallback(OmniRealtimeCallback):
-        def __init__(self, pya):
-            self.pya = pya
-            self.out = None
-        def on_open(self):
-            # 初始化音频输出流
-            self.out = self.pya.open(
-                format=pyaudio.paInt16,
-                channels=1,
-                rate=24000,
-                output=True
-            )
-        def on_event(self, response):
+    
+    # 1. 初始化音频设备与输出流
+    pya = pyaudio.PyAudio()
+    out = pya.open(format=pyaudio.paInt16, channels=1, rate=24000, output=True)
+    
+    # 2. 接收线程：迭代服务端事件，播放音频并打印文本
+    def receive_events(session):
+        for response in session.events():
             if response['type'] == 'response.audio.delta':
                 # 播放音频
-                self.out.write(base64.b64decode(response['delta']))
+                out.write(base64.b64decode(response['delta']))
             elif response['type'] == 'conversation.item.input_audio_transcription.delta':
                 # 流式预览：text为已确认前缀，stash为待确认后缀
                 preview = response.get('text', '') + response.get('stash', '')
@@ -337,30 +334,31 @@ pip install websocket-client dashscope
                 # 打印助手回复文本
                 print(f"[LLM] {response['transcript']}")
     
-    # 1. 初始化音频设备
-    pya = pyaudio.PyAudio()
-    # 2. 创建回调函数和会话
-    callback = SimpleCallback(pya)
-    conv = OmniRealtimeConversation(model=model, callback=callback, url=url)
-    # 3. 建立连接并配置会话
-    conv.connect()
-    conv.update_session(output_modalities=[MultiModality.AUDIO, MultiModality.TEXT], voice=voice, instructions=instructions)
-    # 4. 初始化音频输入流
-    mic = pya.open(format=pyaudio.paInt16, channels=1, rate=16000, input=True)
-    # 5. 主循环处理音频输入
-    print("对话已开始，对着麦克风说话 (Ctrl+C 退出)...")
-    try:
-        while True:
-            audio_data = mic.read(3200, exception_on_overflow=False)
-            conv.append_audio(base64.b64encode(audio_data).decode())
-            time.sleep(0.01)
-    except KeyboardInterrupt:
-        # 清理资源
-        conv.close()
-        mic.close()
-        callback.out.close()
-        pya.terminate()
-        print("\n对话结束")
+    # 3. 创建会话（进入 with 上下文时自动建立连接）并配置
+    with client.audio.realtime.connect(model=model) as session:
+        session.update_session(
+            output_modalities=['audio', 'text'],
+            voice=voice,
+            instructions=instructions,
+        )
+        # 4. 初始化音频输入流
+        mic = pya.open(format=pyaudio.paInt16, channels=1, rate=16000, input=True)
+        # 5. 主循环处理音频输入
+        print("对话已开始，对着麦克风说话 (Ctrl+C 退出)...")
+        try:
+            with ThreadPoolExecutor(max_workers=1) as pool:
+                receiver = pool.submit(receive_events, session)
+                while True:
+                    audio_data = mic.read(3200, exception_on_overflow=False)
+                    session.append_audio(audio_data)
+                    time.sleep(0.01)
+        except KeyboardInterrupt:
+            # 清理资源
+            session.close()
+            mic.close()
+            out.close()
+            pya.terminate()
+            print("\n对话结束")
     ```
     
     运行`vad_dash.py`，通过麦克风即可与 Qwen-Omni-Realtime 模型实时对话，系统会检测您的音频起始位置并自动发送到服务器，无需您手动发送。
@@ -373,85 +371,58 @@ pip install websocket-client dashscope
     
     ```
     # 此示例使用 Qwen3.5-Omni-Plus-Realtime，演示输入转写及会话控制。
-    # 依赖：dashscope >= 1.26.5，pyaudio。
+    # 依赖：dashscope >= 2.0.1，pyaudio。
     import os
     import base64
     import sys
     import threading
+    
     import pyaudio
-    from dashscope.audio.qwen_omni import *
+    from concurrent.futures import ThreadPoolExecutor
+    
     import dashscope
     
-    # 如果没有设置环境变量，请用您的 API Key 将下行替换为 dashscope.api_key = "sk-xxx"
-    dashscope.api_key = os.getenv('DASHSCOPE_API_KEY')
+    # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+    client = dashscope.Client(
+        # 如果没有设置环境变量，请用您的 API Key 将下行替换为：api_key="sk-xxx"
+        api_key=os.getenv('DASHSCOPE_API_KEY'),
+        workspace="{WorkspaceId}",
+        region="cn-beijing",
+    )
     voice = 'Tina'
     
-    class MyCallback(OmniRealtimeCallback):
-        """最简回调：建立连接时初始化扬声器，事件中直接播放返回音频。"""
-        def __init__(self, ctx):
-            super().__init__()
-            self.ctx = ctx
-    
-        def on_open(self) -> None:
-            # 连接建立后初始化 PyAudio 与扬声器(24k/mono/16bit)
-            print('connection opened')
-            try:
-                self.ctx['pya'] = pyaudio.PyAudio()
-                self.ctx['out'] = self.ctx['pya'].open(
-                    format=pyaudio.paInt16,
-                    channels=1,
-                    rate=24000,
-                    output=True
-                )
-                print('audio output initialized')
-            except Exception as e:
-                print('[Error] audio init failed: {}'.format(e))
-    
-        def on_close(self, close_status_code, close_msg) -> None:
-            print('connection closed with code: {}, msg: {}'.format(close_status_code, close_msg))
-            sys.exit(0)
-    
-        def on_event(self, response: str) -> None:
-            try:
+    # 接收线程：迭代服务端事件，播放音频并打印文本
+    def receive_events(session, ctx):
+        try:
+            for response in session.events():
                 t = response['type']
-                handlers = {
-                    'session.created': lambda r: print('start session: {}'.format(r['session']['id'])),
-                    'conversation.item.input_audio_transcription.delta': lambda r: print('\rquestion: {}'.format(r.get('text', '') + r.get('stash', '')), end='', flush=True),
-                    'conversation.item.input_audio_transcription.completed': self._transcription_completed,
-                    'response.audio_transcript.delta': lambda r: print('llm text: {}'.format(r['delta'])),
-                    'response.audio.delta': self._play_audio,
-                    'response.done': self._response_done,
-                }
-                h = handlers.get(t)
-                if h:
-                    h(response)
-            except Exception as e:
-                print('[Error] {}'.format(e))
-    
-        def _transcription_completed(self, response):
-            print()
-            self.ctx['transcription_done'].set()
-    
-        def _play_audio(self, response):
-            # 直接解码base64并写入输出流进行播放
-            if self.ctx['out'] is None:
-                return
-            try:
-                data = base64.b64decode(response['delta'])
-                self.ctx['out'].write(data)
-            except Exception as e:
-                print('[Error] audio playback failed: {}'.format(e))
-    
-        def _response_done(self, response):
-            # 标记本轮对话完成，用于主循环等待
-            if self.ctx['conv'] is not None:
-                print('[Metric] response: {}, first text delay: {}, first audio delay: {}'.format(
-                    self.ctx['conv'].get_last_response_id(),
-                    self.ctx['conv'].get_last_first_text_delay(),
-                    self.ctx['conv'].get_last_first_audio_delay(),
-                ))
-            if self.ctx['resp_done'] is not None:
-                self.ctx['resp_done'].set()
+                if t == 'session.created':
+                    print('start session: {}'.format(response['session']['id']))
+                elif t == 'conversation.item.input_audio_transcription.delta':
+                    print('\rquestion: {}'.format(response.get('text', '') + response.get('stash', '')), end='', flush=True)
+                elif t == 'conversation.item.input_audio_transcription.completed':
+                    print()
+                    ctx['transcription_done'].set()
+                elif t == 'response.audio_transcript.delta':
+                    print('llm text: {}'.format(response['delta']))
+                elif t == 'response.audio.delta':
+                    # 直接解码base64并写入输出流进行播放
+                    if ctx['out'] is None:
+                        return
+                    try:
+                        ctx['out'].write(base64.b64decode(response['delta']))
+                    except Exception as e:
+                        print('[Error] audio playback failed: {}'.format(e))
+                elif t == 'response.done':
+                    # 标记本轮对话完成，用于主循环等待
+                    print('[Metric] response: {}, first text delay: {}, first audio delay: {}'.format(
+                        session.last_response_id,
+                        session.last_first_text_delay,
+                        session.last_first_audio_delay,
+                    ))
+                    ctx['resp_done'].set()
+        except Exception as e:
+            print('[Error] {}'.format(e))
     
     def shutdown_ctx(ctx):
         """安全释放音频与PyAudio资源。"""
@@ -468,7 +439,7 @@ pip install websocket-client dashscope
         except Exception:
             pass
     
-    def stream_record_and_send(pya_inst, conversation, sample_rate=16000, chunk_size=3200):
+    def stream_record_and_send(pya_inst, session, sample_rate=16000, chunk_size=3200):
         stop_evt = threading.Event()
         stream = pya_inst.open(
             format=pyaudio.paInt16,
@@ -482,7 +453,7 @@ pip install websocket-client dashscope
             while not stop_evt.is_set():
                 try:
                     data = stream.read(chunk_size, exception_on_overflow=False)
-                    conversation.append_audio(base64.b64encode(data).decode())
+                    session.append_audio(data)
                 except Exception:
                     break
     
@@ -496,58 +467,61 @@ pip install websocket-client dashscope
     if __name__  == '__main__':
         print('Initializing ...')
         # 运行时上下文：存放音频与会话句柄
-        ctx = {'pya': None, 'out': None, 'conv': None, 'resp_done': threading.Event(), 'transcription_done': threading.Event()}
-        callback = MyCallback(ctx)
-        conversation = OmniRealtimeConversation(
-            model='qwen3.5-omni-plus-realtime',
-            callback=callback,
-            # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
-            url="wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime",
-        )
-        try:
-            conversation.connect()
-        except Exception as e:
-            print('[Error] connect failed: {}'.format(e))
-            sys.exit(1)
+        ctx = {'pya': None, 'out': None, 'resp_done': threading.Event(), 'transcription_done': threading.Event()}
     
-        ctx['conv'] = conversation
-        # 会话配置：启用文本+音频输出（禁用服务端VAD，改为手动录音）
-        conversation.update_session(
-            output_modalities=[MultiModality.AUDIO, MultiModality.TEXT],
-            voice=voice,
-            enable_input_audio_transcription=True,
-            input_audio_transcription_model='qwen3-asr-flash-realtime',
-            enable_turn_detection=False,
-            instructions="你是个人助理小云，请你准确且友好地解答用户的问题，始终以乐于助人的态度回应。"
-        )
+        # 创建会话：进入 with 上下文时自动建立连接
+        with client.audio.realtime.connect(
+                model='qwen3.5-omni-plus-realtime',
+        ) as session:
+            # 初始化扬声器(24k/mono/16bit)
+            ctx['pya'] = pyaudio.PyAudio()
+            ctx['out'] = ctx['pya'].open(
+                format=pyaudio.paInt16,
+                channels=1,
+                rate=24000,
+                output=True
+            )
+            print('audio output initialized')
     
-        try:
-            turn = 1
-            while True:
-                print(f"\n--- 第 {turn} 轮对话 ---")
-                print("按 Enter 开始录音（输入 q 回车退出）...")
-                user_input = input()
-                if user_input.strip().lower() in ['q', 'quit']:
-                    print("用户请求退出...")
-                    break
-                print("录音中... 再次按 Enter 停止。")
-                if ctx['pya'] is None:
-                    ctx['pya'] = pyaudio.PyAudio()
-                stream_record_and_send(ctx['pya'], conversation)
+            # 会话配置：启用文本+音频输出（禁用服务端VAD，改为手动录音）
+            session.update_session(
+                output_modalities=['audio', 'text'],
+                voice=voice,
+                enable_input_audio_transcription=True,
+                input_audio_transcription_model='qwen3-asr-flash-realtime',
+                enable_turn_detection=False,
+                instructions="你是个人助理小云，请你准确且友好地解答用户的问题，始终以乐于助人的态度回应。"
+            )
     
-                ctx['transcription_done'].clear()
-                ctx['resp_done'].clear()
-                conversation.commit()
-                ctx['transcription_done'].wait(timeout=10)
-                print("等待模型回复...")
-                conversation.create_response()
-                ctx['resp_done'].wait()
-                turn += 1
-        except KeyboardInterrupt:
-            print("\n程序被用户中断")
-        finally:
-            shutdown_ctx(ctx)
-            print("程序退出")
+            with ThreadPoolExecutor(max_workers=1) as pool:
+                receiver = pool.submit(receive_events, session, ctx)
+                try:
+                    turn = 1
+                    while True:
+                        print(f"\n--- 第 {turn} 轮对话 ---")
+                        print("按 Enter 开始录音（输入 q 回车退出）...")
+                        user_input = input()
+                        if user_input.strip().lower() in ['q', 'quit']:
+                            print("用户请求退出...")
+                            break
+                        print("录音中... 再次按 Enter 停止。")
+                        if ctx['pya'] is None:
+                            ctx['pya'] = pyaudio.PyAudio()
+                        stream_record_and_send(ctx['pya'], session)
+    
+                        ctx['transcription_done'].clear()
+                        ctx['resp_done'].clear()
+                        session.commit()
+                        ctx['transcription_done'].wait(timeout=10)
+                        print("等待模型回复...")
+                        session.create_response()
+                        ctx['resp_done'].wait()
+                        turn += 1
+                except KeyboardInterrupt:
+                    print("\n程序被用户中断")
+                finally:
+                    shutdown_ctx(ctx)
+                    print("程序退出")
     ```
     
     运行`manual_dash.py`，按 Enter 键开始说话，再按一次获取模型响应的音频。
@@ -2855,36 +2829,32 @@ ws.run_forever()
 #### DashScope Python SDK
 
 ```
-# SDK 版本不低于1.26.5
+# SDK 版本不低于2.0.1
 import os
 import json
-from dashscope.audio.qwen_omni import OmniRealtimeConversation,OmniRealtimeCallback
+
 import dashscope
-# 若没有配置 API Key，请将下行改为 dashscope.api_key = "sk-xxx"
-dashscope.api_key = os.getenv("DASHSCOPE_API_KEY")
 
-class PrintCallback(OmniRealtimeCallback):
-    def on_open(self) -> None:
-        print("Connected Successfully")
-    def on_event(self, response: dict) -> None:
-        print("Received event:")
-        print(json.dumps(response, indent=2, ensure_ascii=False))
-    def on_close(self, close_status_code: int, close_msg: str) -> None:
-        print(f"Connection closed (code={close_status_code}, msg={close_msg}).")
-
-callback = PrintCallback()
-conversation = OmniRealtimeConversation(
-    model="qwen3.8-omni-flash-realtime",
-    callback=callback,
-    # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
-    url="wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime"
+# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+client = dashscope.Client(
+    # 若没有配置 API Key，请将下行改为：api_key="sk-xxx"
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
 )
+
 try:
-    conversation.connect()
-    print("Conversation started. Press Ctrl+C to exit.")
-    conversation.thread.join()
+    with client.audio.realtime.connect(
+            model="qwen3.8-omni-flash-realtime",
+    ) as session:
+        print("Connected Successfully")
+        print("Conversation started. Press Ctrl+C to exit.")
+        # 接收线程：迭代服务端事件
+        for event in session.events():
+            print("Received event:")
+            print(json.dumps(event, indent=2, ensure_ascii=False))
 except KeyboardInterrupt:
-    conversation.close()
+    pass
 ```
 
 #### DashScope Java SDK
@@ -2998,6 +2968,8 @@ async def connect():
 AOQ 先通过业务 AppServer 获取连接参数，再由客户端 SDK 建立媒体连接。鉴权步骤见[AOQ 接入准备](#realtime-aoq-prerequisites)。
 
 ### 配置会话
+
+在 `session.update` 的 `session` 对象中，用 `instructions` 设置业务背景和回复要求。
 
 通过客户端事件 [session.update](https://help.aliyun.com/zh/model-studio/client-events#26a8302028sjm) 配置输出模态、音色、音频格式和 VAD。下面是 Qwen3.8-Omni-Flash-Realtime 的 WebSocket Manual 模式配置，与[最小音频问答](#qwen38-realtime)示例一致。本例使用“龙安灵心”音色（`longanlingxin`）：
 
@@ -3382,13 +3354,7 @@ Qwen3.5-Omni-Realtime 配置示例
 
 ## 输入与输出功能
 
-按任务选择[文本输入](#realtime-text-input)、[图片与视频](#82b7d6329836b)、[多通道音频](#realtime-multichannel)或[音色](#f4c9fd97f221z)。[工具调用](#realtime-tools)介绍 Function Calling、MCP 和联网搜索配置。
-
-### 文本输入
-
-在实时对话中，可通过 `conversation.item.create` 发送 `input_text` 类型内容，补充背景信息或提出新的要求，无需发送音频。模型目录标注的“支持文本输入”包括用户纯文本对话、system instructions 和 `function_call_output`。输入方式取决于接入协议。
-
-回复的事件处理见[接收文本与音频](#87c543412esso)。
+按任务选择[音频输入](#realtime-audio-input)、[图片与视频](#82b7d6329836b)、[多通道音频](#realtime-multichannel)或[音色](#f4c9fd97f221z)。[工具调用](#realtime-tools)介绍 Function Calling、MCP 和联网搜索配置。
 
 ### 音频输入
 
@@ -3425,25 +3391,19 @@ Qwen3.8-Omni-Flash-Realtime 的 `session.video.input.representation_compact` 默
 
 #### Python
 
-使用 DashScope Python SDK 1.26.5 及以上版本，在[实时对话示例](#realtime-sdk-mic-examples)中选择“WebSocket → DashScope Python SDK → Manual 模式”：
+使用 DashScope Python SDK 2.0.1 及以上版本，在[实时对话示例](#realtime-sdk-mic-examples)中选择“WebSocket → DashScope Python SDK → Manual 模式”：
 
 1.  在 `manual_dash.py` 中，将模型设为 `qwen3.8-omni-flash-realtime`。
-2.  用下方传入 `video` 的调用替换原 `update_session` 调用，在首段音频前调用一次。
+2.  用下方调用替换原 `update_session` 调用（`input_video_representation_compact` 即视频聚合配置），在首段音频前调用一次。
 3.  因本例关闭输入转写，省略提交后的 `ctx['transcription_done'].wait(timeout=10)`，继续执行原有提交与发起回复流程。
 
 ```
-from dashscope.audio.qwen_omni import MultiModality
-
-conversation.update_session(
-    output_modalities=[MultiModality.AUDIO, MultiModality.TEXT],
+session.update_session(
+    output_modalities=['audio', 'text'],
     voice="Tina",
     enable_turn_detection=False,
     enable_input_audio_transcription=False,
-    video={
-        "input": {
-            "representation_compact": "normal",
-        },
-    },
+    input_video_representation_compact="normal",
 )
 ```
 
@@ -3524,6 +3484,8 @@ conversation.updateSession(config);
 
 需要自定义工具时，参见[Function Calling](https://help.aliyun.com/zh/model-studio/qwen-function-calling#rt02realtime01)；接入远程服务时，使用下方 MCP 入口；获取即时信息时，使用联网搜索。
 
+Function Calling 的工具结果通过 `conversation.item.create` 回填，`item.type` 设为 `function_call_output`。
+
 ### MCP
 
 以下配置适用于 Qwen3.8-Omni-Flash-Realtime。
@@ -3563,26 +3525,29 @@ conversation.updateSession(config);
 import os
 import base64
 import time
-import json
+
 import pyaudio
-from dashscope.audio.qwen_omni import MultiModality, AudioFormat, OmniRealtimeCallback, OmniRealtimeConversation
+from concurrent.futures import ThreadPoolExecutor
+
 import dashscope
 
-dashscope.api_key = os.getenv('DASHSCOPE_API_KEY')
-# 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
-url = 'wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime'
+# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+client = dashscope.Client(
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 model = 'qwen3.8-omni-flash-realtime'
 voice = 'Tina'
 
-class SearchCallback(OmniRealtimeCallback):
-    def __init__(self, pya):
-        self.pya = pya
-        self.out = None
-    def on_open(self):
-        self.out = self.pya.open(format=pyaudio.paInt16, channels=1, rate=24000, output=True)
-    def on_event(self, response):
+pya = pyaudio.PyAudio()
+out = pya.open(format=pyaudio.paInt16, channels=1, rate=24000, output=True)
+
+# 接收线程：迭代服务端事件
+def receive_events(session):
+    for response in session.events():
         if response['type'] == 'response.audio.delta':
-            self.out.write(base64.b64decode(response['delta']))
+            out.write(base64.b64decode(response['delta']))
         elif response['type'] == 'conversation.item.input_audio_transcription.delta':
             preview = response.get('text', '') + response.get('stash', '')
             print(f"\r[User] {preview}", end='', flush=True)
@@ -3596,30 +3561,29 @@ class SearchCallback(OmniRealtimeCallback):
             if plugins.get('search'):
                 print(f"[Search] count={plugins['search']['count']}, strategy={plugins['search']['strategy']}")
 
-pya = pyaudio.PyAudio()
-callback = SearchCallback(pya)
-conv = OmniRealtimeConversation(model=model, callback=callback, url=url)
-conv.connect()
-conv.update_session(
-    output_modalities=[MultiModality.AUDIO, MultiModality.TEXT],
-    voice=voice,
-    instructions="你是个人助理小云",
-    enable_search=True,
-    search_options={'enable_source': True}
-)
-mic = pya.open(format=pyaudio.paInt16, channels=1, rate=16000, input=True)
-print("联网搜索已启用，对着麦克风说话 (Ctrl+C 退出)...")
-try:
-    while True:
-        audio_data = mic.read(3200, exception_on_overflow=False)
-        conv.append_audio(base64.b64encode(audio_data).decode())
-        time.sleep(0.01)
-except KeyboardInterrupt:
-    conv.close()
-    mic.close()
-    callback.out.close()
-    pya.terminate()
-    print("\n对话结束")
+with client.audio.realtime.connect(model=model) as session:
+    session.update_session(
+        output_modalities=['audio', 'text'],
+        voice=voice,
+        instructions="你是个人助理小云",
+        enable_search=True,
+        search_options={'enable_source': True}
+    )
+    mic = pya.open(format=pyaudio.paInt16, channels=1, rate=16000, input=True)
+    print("联网搜索已启用，对着麦克风说话 (Ctrl+C 退出)...")
+    try:
+        with ThreadPoolExecutor(max_workers=1) as pool:
+            receiver = pool.submit(receive_events, session)
+            while True:
+                audio_data = mic.read(3200, exception_on_overflow=False)
+                session.append_audio(audio_data)
+                time.sleep(0.01)
+    except KeyboardInterrupt:
+        session.close()
+        mic.close()
+        out.close()
+        pya.terminate()
+        print("\n对话结束")
 ```
 
 #### DashScope Java SDK
@@ -3964,6 +3928,12 @@ if __name__ == "__main__":
 
 ## 常见问题与错误处理
 
+### RPM 限制什么？是否限制同时保持的连接总数？
+
+RPM 限制每分钟的 WebSocket 建连请求次数。同一连接内的多轮响应不重复计数；重连计为新请求。目前没有单独限制同时保持的连接总数。
+
+建连时，若 WebSocket 以 `1007` 关闭，且原因为 `Requests rate limit exceeded, please try again later.`，说明触发了请求速率限流。降低建连频率，并采用指数退避重连。
+
 ### 云工开物 300 元学生代金券能否抵扣 Omni 调用费用？
 
 不支持。云工开物 300 元学生代金券不支持直接抵扣 Omni 全系列模型的按量调用费用。活动详情请参见[“云工开物”高校计划](https://help.aliyun.com/zh/model-studio/introduction-to-yungongkaiwu)。
@@ -4014,7 +3984,7 @@ A：如果没有收到 `conversation.item.input_audio_transcription.completed` �
 1.  **输入转录配置**。DashScope Python SDK 的 `update_session` 参数 `enable_input_audio_transcription` 默认为 `True`；设为 `False` 时，SDK 会将会话中的 `input_audio_transcription` 置为 `null`。直接使用 WebSocket，或通过 WebRTC DataChannel 发送会话配置时，按[输入音频转录配置](https://help.aliyun.com/zh/model-studio/client-events#session-input-audio-transcription)检查发送的 `session.update.session.input_audio_transcription`。`enable_input_audio_transcription` 是 SDK 参数，不是 `session.update` 的顶层字段。
 2.  **转录失败事件**。同时监听 `conversation.item.input_audio_transcription.failed`。失败时可从事件的 `error.code`、`error.message` 和 `error.param` 查看错误信息。
 3.  **音频是否完成提交**。VAD 模式下检查服务端是否检测到语音起止；Manual 模式下确认已发送 `input_audio_buffer.commit`。没有提交本轮音频时，不要只等待转录完成事件。
-4.  **连接和 SDK 版本**。确认本轮音频输入期间连接未中断；WebRTC 接入还需检查 DataChannel 状态。使用 DashScope Python SDK 时，核对版本符合本文的最低要求（1.26.5）。
+4.  **连接和 SDK 版本**。确认本轮音频输入期间连接未中断；WebRTC 接入还需检查 DataChannel 状态。使用 DashScope Python SDK 时，核对版本符合本文的最低要求（2.0.1）。
 
 ### 错误码
 

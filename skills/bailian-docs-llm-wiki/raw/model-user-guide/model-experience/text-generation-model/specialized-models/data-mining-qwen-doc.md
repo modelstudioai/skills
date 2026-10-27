@@ -517,10 +517,10 @@ public class Main {
 
 响应示例
 
-模型返回的 `response.output.choices[0].message.content` 字段可能包含 Markdown 代码块标记（如 ` ```json ` 和 ` ``` ` 包裹）。在使用 `json.loads()` 解析前，需先去除 Markdown 标记。示例处理方式：
+模型返回的内容（Python 示例中流式拼接后的 `full_content` 变量）可能包含 Markdown 代码块标记（如 ` ```json ` 和 ` ``` ` 包裹）。在使用 `json.loads()` 解析前，需先去除 Markdown 标记。示例处理方式：
 
 ```
-content = response.output.choices[0].message.content
+content = full_content
 # 去除可能的 markdown 代码块标记
 if content.startswith("```"):
     lines = content.split("\n")
@@ -659,10 +659,10 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 
 响应示例
 
-模型返回的 `response.output.choices[0].message.content` 字段可能包含 Markdown 代码块标记（如 ` ```json ` 和 ` ``` ` 包裹）。在使用 `json.loads()` 解析前，需先去除 Markdown 标记。示例处理方式：
+模型返回的内容（Python 示例中流式拼接后的 `full_content` 变量）可能包含 Markdown 代码块标记（如 ` ```json ` 和 ` ``` ` 包裹）。在使用 `json.loads()` 解析前，需先去除 Markdown 标记。示例处理方式：
 
 ```
-content = response.output.choices[0].message.content
+content = full_content
 # 去除可能的 markdown 代码块标记
 if content.startswith("```"):
     lines = content.split("\n")
@@ -796,25 +796,27 @@ python
 import os
 import dashscope
 
-# 以下为华北2（北京）地域的URL，各地域的URL不同。
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-
-response = dashscope.Generation.call(
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
     api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
+
+stream = client.chat.completions.create(
     model='qwen-doc-turbo',
     messages=[
         {"role": "system", "content": "you are a helpful assistant."},
         {"role": "system", "content": "您的文档内容"},
         {"role": "user", "content": "生成一个10到20页的ppt"}
     ],
-    skill=[{"type": "ppt", "mode": "general", "template_id": "news_01"}],
-    stream=True
+    parameters={"skill": [{"type": "ppt", "mode": "general", "template_id": "news_01"}]},
+    stream=True,
 )
-for chunk in response:
-    if chunk.output is not None and chunk.output.choices:
-        content = chunk.output.choices[0].message.content
-        if content:
-            print(content, end='', flush=True)
+for chunk in stream:
+    content = chunk.choices[0].delta.content
+    if content:
+        print(content, end='', flush=True)
 ```
 
 bash
@@ -1019,25 +1021,27 @@ python
 import os
 import dashscope
 
-# 以下为华北2（北京）地域的URL，各地域的URL不同。
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-
-response = dashscope.Generation.call(
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
     api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
+
+stream = client.chat.completions.create(
     model='qwen-doc-turbo',
     messages=[
         {"role": "system", "content": "you are a helpful assistant."},
         {"role": "system", "content": "fileid://{FILE_ID}"},
         {"role": "user", "content": "生成一个ppt"}
     ],
-    skill=[{"type": "ppt", "mode": "creative"}],
-    stream=True
+    parameters={"skill": [{"type": "ppt", "mode": "creative"}]},
+    stream=True,
 )
-for chunk in response:
-    if chunk.output is not None and chunk.output.choices:
-        content = chunk.output.choices[0].message.content
-        if content:
-            print(content, end='', flush=True)
+for chunk in stream:
+    content = chunk.choices[0].delta.content
+    if content:
+        print(content, end='', flush=True)
 ```
 
 bash
@@ -1152,25 +1156,27 @@ python
 import os
 import dashscope
 
-# 以下为华北2（北京）地域的URL，各地域的URL不同。
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-
-response = dashscope.Generation.call(
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
     api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
+
+stream = client.chat.completions.create(
     model='qwen-doc-turbo',
     messages=[
         {"role": "system", "content": "you are a helpful assistant."},
         {"role": "system", "content": "您的文档内容"},
         {"role": "user", "content": "生成一个ppt"}
     ],
-    skill=[{"type": "ppt", "mode": "creative"}],
-    stream=True
+    parameters={"skill": [{"type": "ppt", "mode": "creative"}]},
+    stream=True,
 )
-for chunk in response:
-    if chunk.output is not None and chunk.output.choices:
-        content = chunk.output.choices[0].message.content
-        if content:
-            print(content, end='', flush=True)
+for chunk in stream:
+    content = chunk.choices[0].delta.content
+    if content:
+        print(content, end='', flush=True)
 ```
 
 bash

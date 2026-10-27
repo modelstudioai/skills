@@ -185,20 +185,21 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 ```
 import os
-from dashscope import Generation
 import dashscope
-# 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 def get_response(messages):
-    response = Generation.call(
-        # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-        # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
-        api_key=os.getenv("DASHSCOPE_API_KEY"),
+    response = client.chat.completions.create(
         # 模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
         model="qwen-plus",
         messages=messages,
-        result_format="message",
     )
     return response
 
@@ -217,7 +218,7 @@ while "我已了解您的购买意向" not in assistant_output:
     user_input = input("请输入：")
     # 将用户问题信息添加到messages列表中
     messages.append({"role": "user", "content": user_input})
-    assistant_output = get_response(messages).output.choices[0].message.content
+    assistant_output = get_response(messages).choices[0].message.content
     # 将大模型的回复信息添加到messages列表中
     messages.append({"role": "assistant", "content": assistant_output})
     print(f"模型输出：{assistant_output}")
@@ -329,7 +330,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 多模态模型支持在对话中加入图片、音频等内容，其多轮对话的实现方式与文本模型主要有以下不同：
 
 -   **用户消息（user message）的构造方式**：多模态模型的用户消息不仅包含文本，还包含图片、音频等多模态信息。
--   **DashScope SDK接口：**使用 DashScope Python SDK 时，需调用 `MultiModalConversation` 接口；如需异步调用，请使用`AioMultiModalConversation`接口。使用DashScope Java SDK 时，需调用 `MultiModalConversation` 类。
+-   **DashScope SDK接口：**使用 DashScope Python SDK 2.0 时，需调用 `client.multimodal.chat.create` 接口；如需异步调用，请使用`dashscope.AsyncClient`。使用DashScope Java SDK 时，需调用 `MultiModalConversation` 类。
 
 > 多模态模型请参见：[图像与视频理解](raw/model-user-guide/model-experience/vision-model/vision.md)、[界面交互](raw/model-user-guide/model-experience/text-generation-model/specialized-models/gui-automation.md)、[Kimi](raw/model-user-guide/use-cases/third-party-model-integration-tutorial/kimi-api.md)。`Qwen-Omni`的实现方法请参见[非实时（Qwen-Omni）](raw/model-user-guide/model-experience/omni-modal/qwen-omni.md)。Qwen-VL-OCR、Qwen3-Omni-Captioner是为特定单轮任务设计的模型，不支持多轮对话。
 
@@ -488,10 +489,15 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 ```
 import os
 import dashscope
-from dashscope import MultiModalConversation
 
-# 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 messages = [
     {
@@ -504,38 +510,38 @@ messages = [
         ],
     }
 ]
-response = MultiModalConversation.call(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
-    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    api_key=os.getenv('DASHSCOPE_API_KEY'),
+response = client.multimodal.chat.create(
     model='qwen3-vl-plus',   # 可按需更换为其它多模态模型，并修改相应的 messages
     messages=messages)
-print(f"模型第一轮输出：{response.output.choices[0].message.content[0]['text']}")
+print(f"模型第一轮输出：{response.output_text}")
 
-messages.append(response['output']['choices'][0]['message'])
+messages.append(response.choices[0].message.model_dump(exclude_none=True))
 user_msg = {"role": "user", "content": [{"text": "它们属于什么风格？"}]}
 messages.append(user_msg)
-response = MultiModalConversation.call(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
-    api_key=os.getenv('DASHSCOPE_API_KEY'),
+response = client.multimodal.chat.create(
     model='qwen3-vl-plus',
     messages=messages)
 
-print(f"模型第二轮输出：{response.output.choices[0].message.content[0]['text']}")
+print(f"模型第二轮输出：{response.output_text}")
 ```
 
 ### 异步调用
 
-如需在异步环境中使用多模态多轮对话，请使用 `AioMultiModalConversation` 接口：
+如需在异步环境中使用多模态多轮对话，请使用 `dashscope.AsyncClient`：
 
 ```
 import asyncio
 import os
 import dashscope
-from dashscope import AioMultiModalConversation
 
-# 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的region取值不同。
+aclient = dashscope.AsyncClient(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 async def main():
     messages = [
@@ -547,22 +553,18 @@ async def main():
             ],
         }
     ]
-    response = await AioMultiModalConversation.call(
-        # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
-        # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-        api_key=os.getenv('DASHSCOPE_API_KEY'),
+    response = await aclient.multimodal.chat.create(
         model='qwen3-vl-plus',  # 可按需更换为其它多模态模型，并修改相应的 messages
         messages=messages)
-    print(f"模型第一轮输出：{response.output.choices[0].message.content[0]['text']}")
+    print(f"模型第一轮输出：{response.output_text}")
 
-    messages.append(response['output']['choices'][0]['message'])
+    messages.append(response.choices[0].message.model_dump(exclude_none=True))
     user_msg = {"role": "user", "content": [{"text": "它们属于什么风格？"}]}
     messages.append(user_msg)
-    response = await AioMultiModalConversation.call(
-        api_key=os.getenv('DASHSCOPE_API_KEY'),
+    response = await aclient.multimodal.chat.create(
         model='qwen3-vl-plus',
         messages=messages)
-    print(f"模型第二轮输出：{response.output.choices[0].message.content[0]['text']}")
+    print(f"模型第二轮输出：{response.output_text}")
 
 asyncio.run(main())
 ```
@@ -900,8 +902,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 import os
 import dashscope
 
-# 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 messages = []
 conversation_idx = 1
@@ -915,15 +922,12 @@ while True:
         break
     user_msg = {"role": "user", "content": [{"text": user_input}]}
     messages.append(user_msg)
-    response = dashscope.MultiModalConversation.call(
-        # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
-        api_key=os.getenv('DASHSCOPE_API_KEY'),
+    stream = client.multimodal.chat.create(
          # 此处以qwen3.8-max为例，可按需更换为其它深度思考模型
         model="qwen3.8-max",
         messages=messages,
         enable_thinking=True,
         stream=True,
-        incremental_output=True
     )
     # 定义完整思考过程
     reasoning_content = ""
@@ -932,15 +936,10 @@ while True:
     # 判断是否结束思考过程并开始回复
     is_answering = False
     print("=" * 20 + "思考过程" + "=" * 20)
-    for chunk in response:
-        # 获取当前chunk的内容
-        content_text = ""
-        raw_content = chunk.output.choices[0].message.content
-        if isinstance(raw_content, list) and raw_content:
-            content_text = raw_content[0].get("text", "")
-        elif isinstance(raw_content, str):
-            content_text = raw_content
-        reasoning_text = chunk.output.choices[0].message.reasoning_content or ""
+    for chunk in stream:
+        # 获取当前chunk的内容（流式输出默认为增量模式）
+        content_text = chunk.choices[0].delta.content or ""
+        reasoning_text = chunk.choices[0].delta.reasoning_content or ""
         # 如果思考过程与回复皆为空，则忽略
         if content_text == "" and reasoning_text == "":
             pass

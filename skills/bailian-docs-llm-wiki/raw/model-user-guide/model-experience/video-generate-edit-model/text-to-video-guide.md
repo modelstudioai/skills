@@ -14,41 +14,44 @@
 
 #### Python SDK
 
-**重要**请确保 DashScope Python SDK 版本**不低于**`1.25.16`，再运行以下代码。
-
-若版本过低，可能会触发 “url error, please check url!” 等错误。请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
+**重要**请确保 DashScope Python SDK 版本**不低于**`2.0.1`，再运行以下代码。
 
 ```
 import os
-from http import HTTPStatus
-from dashscope import VideoSynthesis
 import dashscope
+from dashscope.v2 import DashScopeError
 
-# 以下为北京地域URL，各地域的URL不同，获取URL：https://help.aliyun.com/zh/model-studio/text-to-video-api-reference
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
+# 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-api_key = os.getenv("DASHSCOPE_API_KEY", "YOUR_API_KEY")
+client = dashscope.Client(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 print('please wait...')
-rsp = VideoSynthesis.call(api_key=api_key,
-                          model='wan3.0-video',
-                          prompt='第1个镜头 大远景开篇，镜头从接近地面的低机位开始向前移动，镜头沿草原方向推进，同时向上移动，将视角从贴地逐渐抬升至略高位置，使猎豹从左侧进入画面并与前方逃窜的羚羊共同处于同一追逐路径中，建立清晰的前后空间关系。 第2个镜头 向下移动回到接近地面高度，并沿猎豹运动方向向右移动，与其保持侧向平行关系进行稳定跟随，主体始终处于画面中部偏左位置，背景产生连续横向位移效果，在这一阶段镜头运动保持稳定一段时间以强化速度感与空间连续性。 第3个镜头 在维持向右移动的同时，沿猎豹运动路径内侧做小幅弧线移动，使画面产生轻微绕行变化但始终保持与主体同向。 第4个镜头 逐渐减缓横向移动速度并过渡为机位相对稳定，同时执行变焦推进，将视觉焦点逐步压缩至猎豹与羚羊之间不断缩短的距离上。 第5个镜头 再次向前移动并轻微向下移动，贴近地面逼近两者之间的空间，在猎豹前肢逼近羚羊后方的临界位置停住，形成强烈压迫感与张力，同时配合逐渐增强的交响配乐、持续加密的鼓点、风声与踏地声推进节奏，并在最后阶段压低音乐仅保留环境声与节奏声形成短暂停顿。',
-                          resolution="720P",
-                          ratio="16:9",
-                          duration=15,
-                          watermark=True)
-print(rsp)
-if rsp.status_code == HTTPStatus.OK:
-    print("video_url:", rsp.output.video_url)
-else:
-    print('Failed, status_code: %s, code: %s, message: %s' % (rsp.status_code, rsp.code, rsp.message))
+# generate 为一步式调用（提交任务并等待完成），返回已完成的 Job
+try:
+    # prompt_extend：1.x 默认开启提示词智能改写；2.0 缺省由服务端决定，此处显式开启保持行为一致
+    job = client.videos.generate(model='wan3.0-video',
+                                 prompt='第1个镜头 大远景开篇，镜头从接近地面的低机位开始向前移动，镜头沿草原方向推进，同时向上移动，将视角从贴地逐渐抬升至略高位置，使猎豹从左侧进入画面并与前方逃窜的羚羊共同处于同一追逐路径中，建立清晰的前后空间关系。 第2个镜头 向下移动回到接近地面高度，并沿猎豹运动方向向右移动，与其保持侧向平行关系进行稳定跟随，主体始终处于画面中部偏左位置，背景产生连续横向位移效果，在这一阶段镜头运动保持稳定一段时间以强化速度感与空间连续性。 第3个镜头 在维持向右移动的同时，沿猎豹运动路径内侧做小幅弧线移动，使画面产生轻微绕行变化但始终保持与主体同向。 第4个镜头 逐渐减缓横向移动速度并过渡为机位相对稳定，同时执行变焦推进，将视觉焦点逐步压缩至猎豹与羚羊之间不断缩短的距离上。 第5个镜头 再次向前移动并轻微向下移动，贴近地面逼近两者之间的空间，在猎豹前肢逼近羚羊后方的临界位置停住，形成强烈压迫感与张力，同时配合逐渐增强的交响配乐、持续加密的鼓点、风声与踏地声推进节奏，并在最后阶段压低音乐仅保留环境声与节奏声形成短暂停顿。',
+                                 resolution="720P",
+                                 ratio="16:9",
+                                 duration=15,
+                                 watermark=True,
+                                 prompt_extend=True)
+    print(job)
+    print("video_url:", job.video_url)
+except DashScopeError as e:
+    print(f"HTTP返回码：{e.status_code}")
+    print(f"错误码：{e.code}")
+    print(f"错误信息：{e.message}")
+    print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
 #### Java SDK
 
 **重要**请确保 DashScope Java SDK 版本**不低于**`2.22.14`，再运行以下代码。
-
-若版本过低，可能会触发 “url error, please check url!” 等错误。请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
 
 ```
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesis;
@@ -133,41 +136,45 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 
 #### Python SDK
 
-**重要**请确保 DashScope Python SDK 版本**不低于**`1.25.16`，再运行以下代码。
-
-若版本过低，可能会触发 “url error, please check url!” 等错误。请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
+**重要**请确保 DashScope Python SDK 版本**不低于**`2.0.1`，再运行以下代码。
 
 ```
 import os
-from http import HTTPStatus
-from dashscope import VideoSynthesis
 import dashscope
+from dashscope.v2 import DashScopeError
 
-# 以下为北京地域URL，各地域的URL不同，获取URL：https://help.aliyun.com/zh/model-studio/text-to-video-api-reference
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
+# 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-api_key = os.getenv("DASHSCOPE_API_KEY", "YOUR_API_KEY")
+client = dashscope.Client(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 print('please wait...')
-rsp = VideoSynthesis.call(api_key=api_key,
-                          model='wan2.6-t2v',
-                          prompt='一段紧张刺激的侦探追查故事，展现电影级叙事能力。第1个镜头[0-3秒] 全景：雨夜的纽约街头，霓虹灯闪烁，一位身穿黑色风衣的侦探快步行走。 第2个镜头[3-6秒] 中景：侦探进入一栋老旧建筑，雨水打湿了他的外套，门在他身后缓缓关闭。 第3个镜头[6-9秒] 特写：侦探的眼神坚毅专注，远处传来警笛声，他微微皱眉思考。 第4个镜头[9-12秒] 中景：侦探在昏暗走廊中小心前行，手电筒照亮前方。 第5个镜头[12-15秒] 特写：侦探发现关键线索，脸上露出恍然大悟的表情。',
-                          size="1280*720",
-                          duration=15,
-                          shot_type="multi",
-                          watermark=True)
-print(rsp)
-if rsp.status_code == HTTPStatus.OK:
-    print("video_url:", rsp.output.video_url)
-else:
-    print('Failed, status_code: %s, code: %s, message: %s' % (rsp.status_code, rsp.code, rsp.message))
+# generate 为一步式调用（提交任务并等待完成），返回已完成的 Job
+try:
+    # prompt_extend：1.x 默认开启提示词智能改写；2.0 缺省由服务端决定，此处显式开启保持行为一致
+    # shot_type 不在具名签名内，经 parameters 透传
+    job = client.videos.generate(model='wan2.6-t2v',
+                                 prompt='一段紧张刺激的侦探追查故事，展现电影级叙事能力。第1个镜头[0-3秒] 全景：雨夜的纽约街头，霓虹灯闪烁，一位身穿黑色风衣的侦探快步行走。 第2个镜头[3-6秒] 中景：侦探进入一栋老旧建筑，雨水打湿了他的外套，门在他身后缓缓关闭。 第3个镜头[6-9秒] 特写：侦探的眼神坚毅专注，远处传来警笛声，他微微皱眉思考。 第4个镜头[9-12秒] 中景：侦探在昏暗走廊中小心前行，手电筒照亮前方。 第5个镜头[12-15秒] 特写：侦探发现关键线索，脸上露出恍然大悟的表情。',
+                                 size="1280*720",
+                                 duration=15,
+                                 watermark=True,
+                                 prompt_extend=True,
+                                 parameters={'shot_type': 'multi'})
+    print(job)
+    print("video_url:", job.video_url)
+except DashScopeError as e:
+    print(f"HTTP返回码：{e.status_code}")
+    print(f"错误码：{e.code}")
+    print(f"错误信息：{e.message}")
+    print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
 #### Java SDK
 
 **重要**请确保 DashScope Java SDK 版本**不低于**`2.22.14`，再运行以下代码。
-
-若版本过低，可能会触发 “url error, please check url!” 等错误。请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
 
 ```
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesis;
@@ -248,7 +255,7 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
-**输出示例**
+**输出示例（HTTP 接口返回）**
 
 > `video_url` 有效期24小时，请及时下载视频。
 
@@ -295,44 +302,53 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 
 #### Python SDK
 
-> 请确保 DashScope Python SDK 版本不低于 `1.25.16`，可参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
+> 请确保 DashScope Python SDK 版本不低于 `2.0.1`，可参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
 
 ```
 import os
-from http import HTTPStatus
-from dashscope import VideoSynthesis
 import dashscope
+from dashscope.v2 import DashScopeError
 
-# 以下为北京地域URL，各地域的URL不同，获取URL：https://help.aliyun.com/zh/model-studio/text-to-video-api-reference
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-
-# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-# 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-api_key = os.getenv("DASHSCOPE_API_KEY")
+# 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 def sample_async_call_t2v():
     # 异步调用，返回一个task_id
-    rsp = VideoSynthesis.async_call(api_key=api_key,
-                                    model='wan3.0-video',
-                                    prompt='展现未来科技与自然和谐共存的美好愿景。 第1个镜头[0-2秒] 未来城市的空中花园全景，悬浮植物在微风中摇曳。 第2个镜头[2-4秒] 机器人园丁正在精心修剪植物，动作精准而优雅。 第3个镜头[4-7秒] 阳光透过透明穹顶洒下，照亮整个花园，展现科技与自然的完美融合。 第4个镜头[7-10秒] 镜头拉远，展现整个未来城市的壮观景象，空中花园只是其中的一部分。',
-                                    resolution='720P',
-                                    ratio='16:9',
-                                    duration=10,
-                                    watermark=True,
-                                    seed=12345)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print("task_id: %s" % rsp.output.task_id)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' % (rsp.status_code, rsp.code, rsp.message))
+    try:
+        # prompt_extend：1.x 默认开启提示词智能改写；2.0 缺省由服务端决定，此处显式开启保持行为一致
+        job = client.videos.jobs.create(model='wan3.0-video',
+                                        prompt='展现未来科技与自然和谐共存的美好愿景。 第1个镜头[0-2秒] 未来城市的空中花园全景，悬浮植物在微风中摇曳。 第2个镜头[2-4秒] 机器人园丁正在精心修剪植物，动作精准而优雅。 第3个镜头[4-7秒] 阳光透过透明穹顶洒下，照亮整个花园，展现科技与自然的完美融合。 第4个镜头[7-10秒] 镜头拉远，展现整个未来城市的壮观景象，空中花园只是其中的一部分。',
+                                        resolution='720P',
+                                        ratio='16:9',
+                                        duration=10,
+                                        watermark=True,
+                                        seed=12345,
+                                        prompt_extend=True)
+        print(job)
+        print("task_id: %s" % job.task_id)
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
+        return
 
-    # 等待异步任务结束
-    rsp = VideoSynthesis.wait(task=rsp, api_key=api_key)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print(rsp.output.video_url)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' % (rsp.status_code, rsp.code, rsp.message))
+    # 等待异步任务结束（指数退避轮询，默认总预算24小时）
+    try:
+        done = client.videos.jobs.wait(job)
+        print(done)
+        print(done.video_url)
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 
 if __name__ == '__main__':
     sample_async_call_t2v()
@@ -430,44 +446,54 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 
 #### Python SDK
 
-> 请确保 DashScope Python SDK 版本不低于 `1.25.16`，可参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
+> 请确保 DashScope Python SDK 版本不低于 `2.0.1`，可参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
 
 ```
 import os
-from http import HTTPStatus
-from dashscope import VideoSynthesis
 import dashscope
+from dashscope.v2 import DashScopeError
 
-# 以下为北京地域URL，各地域的URL不同，获取URL：https://help.aliyun.com/zh/model-studio/text-to-video-api-reference
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-
-# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-# 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-api_key = os.getenv("DASHSCOPE_API_KEY")
+# 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 def sample_async_call_t2v():
     # 异步调用，返回一个task_id
-    rsp = VideoSynthesis.async_call(api_key=api_key,
-                                    model='wan2.6-t2v',
-                                    prompt='展现未来科技与自然和谐共存的美好愿景。 第1个镜头[0-2秒] 未来城市的空中花园全景，悬浮植物在微风中摇曳。 第2个镜头[2-4秒] 机器人园丁正在精心修剪植物，动作精准而优雅。 第3个镜头[4-7秒] 阳光透过透明穹顶洒下，照亮整个花园，展现科技与自然的完美融合。 第4个镜头[7-10秒] 镜头拉远，展现整个未来城市的壮观景象，空中花园只是其中的一部分。',
-                                    size='1280*720',
-                                    duration=10,
-                                    shot_type='multi',
-                                              watermark=True,
-                                    seed=12345)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print("task_id: %s" % rsp.output.task_id)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' % (rsp.status_code, rsp.code, rsp.message))
+    try:
+        # prompt_extend：1.x 默认开启提示词智能改写；2.0 缺省由服务端决定，此处显式开启保持行为一致
+        # shot_type 不在具名签名内，经 parameters 透传
+        job = client.videos.jobs.create(model='wan2.6-t2v',
+                                        prompt='展现未来科技与自然和谐共存的美好愿景。 第1个镜头[0-2秒] 未来城市的空中花园全景，悬浮植物在微风中摇曳。 第2个镜头[2-4秒] 机器人园丁正在精心修剪植物，动作精准而优雅。 第3个镜头[4-7秒] 阳光透过透明穹顶洒下，照亮整个花园，展现科技与自然的完美融合。 第4个镜头[7-10秒] 镜头拉远，展现整个未来城市的壮观景象，空中花园只是其中的一部分。',
+                                        size='1280*720',
+                                        duration=10,
+                                        watermark=True,
+                                        seed=12345,
+                                        prompt_extend=True,
+                                        parameters={'shot_type': 'multi'})
+        print(job)
+        print("task_id: %s" % job.task_id)
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
+        return
 
-    # 等待异步任务结束
-    rsp = VideoSynthesis.wait(task=rsp, api_key=api_key)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print(rsp.output.video_url)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' % (rsp.status_code, rsp.code, rsp.message))
+    # 等待异步任务结束（指数退避轮询，默认总预算24小时）
+    try:
+        done = client.videos.jobs.wait(job)
+        print(done)
+        print(done.video_url)
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 
 if __name__ == '__main__':
     sample_async_call_t2v()
@@ -583,46 +609,56 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 
 #### Python SDK
 
-> 请确保 DashScope Python SDK 版本不低于 `1.25.16`，可参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
+> 请确保 DashScope Python SDK 版本不低于 `2.0.1`，可参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
 
 ```
 import os
-from http import HTTPStatus
-from dashscope import VideoSynthesis
 import dashscope
+from dashscope.v2 import DashScopeError
 
-# 以下为北京地域URL，各地域的URL不同，获取URL：https://help.aliyun.com/zh/model-studio/text-to-video-api-reference
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-
-# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-# 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-api_key = os.getenv("DASHSCOPE_API_KEY")
+# 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 def sample_async_call_t2v():
     # 异步调用，返回一个task_id
-    rsp = VideoSynthesis.async_call(api_key=api_key,
-                                    model='wan3.0-video',
-                                    prompt='一幅史诗级可爱的场景。一只小巧可爱的卡通小猫将军，身穿细节精致的金色盔甲，头戴一个稍大的头盔，勇敢地站在悬崖上。他骑着一匹虽小但英勇的战马，说：“青海长云暗雪山，孤城遥望玉门关。黄沙百战穿金甲，不破楼兰终不还。”。悬崖下方，一支由老鼠组成的、数量庞大、无穷无尽的军队正带着临时制作的武器向前冲锋。这是一个戏剧性的、大规模的战斗场景，灵感来自中国古代的战争史诗。远处的雪山上空，天空乌云密布。整体氛围是“可爱”与“霸气”的搞笑和史诗般的融合。',
-                                    audio_url='https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250923/hbiayh/%E4%BB%8E%E5%86%9B%E8%A1%8C.mp3',
-                                    resolution='720P',
-                                    ratio='16:9',
-                                    duration=10,
-                                    watermark=True,
-                                    negative_prompt="",
-                                    seed=12345)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print("task_id: %s" % rsp.output.task_id)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' % (rsp.status_code, rsp.code, rsp.message))
+    try:
+        # prompt_extend：1.x 默认开启提示词智能改写；2.0 缺省由服务端决定，此处显式开启保持行为一致
+        # audio_url / negative_prompt 为 input 段字段，不在具名签名内，经 extra_input 透传
+        job = client.videos.jobs.create(model='wan3.0-video',
+                                        prompt='一幅史诗级可爱的场景。一只小巧可爱的卡通小猫将军，身穿细节精致的金色盔甲，头戴一个稍大的头盔，勇敢地站在悬崖上。他骑着一匹虽小但英勇的战马，说：“青海长云暗雪山，孤城遥望玉门关。黄沙百战穿金甲，不破楼兰终不还。”。悬崖下方，一支由老鼠组成的、数量庞大、无穷无尽的军队正带着临时制作的武器向前冲锋。这是一个戏剧性的、大规模的战斗场景，灵感来自中国古代的战争史诗。远处的雪山上空，天空乌云密布。整体氛围是“可爱”与“霸气”的搞笑和史诗般的融合。',
+                                        extra_input={'audio_url': 'https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250923/hbiayh/%E4%BB%8E%E5%86%9B%E8%A1%8C.mp3',
+                                                     'negative_prompt': ""},
+                                        resolution='720P',
+                                        ratio='16:9',
+                                        duration=10,
+                                        watermark=True,
+                                        seed=12345,
+                                        prompt_extend=True)
+        print(job)
+        print("task_id: %s" % job.task_id)
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
+        return
 
-    # 等待异步任务结束
-    rsp = VideoSynthesis.wait(task=rsp, api_key=api_key)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print(rsp.output.video_url)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' % (rsp.status_code, rsp.code, rsp.message))
+    # 等待异步任务结束（指数退避轮询，默认总预算24小时）
+    try:
+        done = client.videos.jobs.wait(job)
+        print(done)
+        print(done.video_url)
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 
 if __name__ == '__main__':
     sample_async_call_t2v()
@@ -723,44 +759,54 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 
 #### Python SDK
 
-> 请确保 DashScope Python SDK 版本不低于 `1.25.16`，可参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
+> 请确保 DashScope Python SDK 版本不低于 `2.0.1`，可参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
 
 ```
 import os
-from http import HTTPStatus
-from dashscope import VideoSynthesis
 import dashscope
+from dashscope.v2 import DashScopeError
 
-# 以下为北京地域URL，各地域的URL不同，获取URL：https://help.aliyun.com/zh/model-studio/text-to-video-api-reference
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-
-# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-# 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-api_key = os.getenv("DASHSCOPE_API_KEY")
+# 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 def sample_async_call_t2v():
     # 异步调用，返回一个task_id
-    rsp = VideoSynthesis.async_call(api_key=api_key,
-                                    model='wan2.6-t2v',
-                                    prompt='一幅史诗级可爱的场景。一只小巧可爱的卡通小猫将军，身穿细节精致的金色盔甲，头戴一个稍大的头盔，勇敢地站在悬崖上。他骑着一匹虽小但英勇的战马，说：“青海长云暗雪山，孤城遥望玉门关。黄沙百战穿金甲，不破楼兰终不还。”。悬崖下方，一支由老鼠组成的、数量庞大、无穷无尽的军队正带着临时制作的武器向前冲锋。这是一个戏剧性的、大规模的战斗场景，灵感来自中国古代的战争史诗。远处的雪山上空，天空乌云密布。整体氛围是“可爱”与“霸气”的搞笑和史诗般的融合。',
-                                    audio_url='https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250923/hbiayh/%E4%BB%8E%E5%86%9B%E8%A1%8C.mp3',
-                                    size='1280*720',
-                                    duration=10,
-                                    watermark=True,
-                                    seed=12345)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print("task_id: %s" % rsp.output.task_id)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' % (rsp.status_code, rsp.code, rsp.message))
+    try:
+        # prompt_extend：1.x 默认开启提示词智能改写；2.0 缺省由服务端决定，此处显式开启保持行为一致
+        # audio_url 为 input 段字段，不在具名签名内，经 extra_input 透传
+        job = client.videos.jobs.create(model='wan2.6-t2v',
+                                        prompt='一幅史诗级可爱的场景。一只小巧可爱的卡通小猫将军，身穿细节精致的金色盔甲，头戴一个稍大的头盔，勇敢地站在悬崖上。他骑着一匹虽小但英勇的战马，说：“青海长云暗雪山，孤城遥望玉门关。黄沙百战穿金甲，不破楼兰终不还。”。悬崖下方，一支由老鼠组成的、数量庞大、无穷无尽的军队正带着临时制作的武器向前冲锋。这是一个戏剧性的、大规模的战斗场景，灵感来自中国古代的战争史诗。远处的雪山上空，天空乌云密布。整体氛围是“可爱”与“霸气”的搞笑和史诗般的融合。',
+                                        extra_input={'audio_url': 'https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250923/hbiayh/%E4%BB%8E%E5%86%9B%E8%A1%8C.mp3'},
+                                        size='1280*720',
+                                        duration=10,
+                                        watermark=True,
+                                        seed=12345,
+                                        prompt_extend=True)
+        print(job)
+        print("task_id: %s" % job.task_id)
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
+        return
 
-    # 等待异步任务结束
-    rsp = VideoSynthesis.wait(task=rsp, api_key=api_key)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print(rsp.output.video_url)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' % (rsp.status_code, rsp.code, rsp.message))
+    # 等待异步任务结束（指数退避轮询，默认总预算24小时）
+    try:
+        done = client.videos.jobs.wait(job)
+        print(done)
+        print(done.video_url)
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 
 if __name__ == '__main__':
     sample_async_call_t2v()
@@ -871,42 +917,51 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 
 #### Python SDK
 
-> 请确保 DashScope Python SDK 版本不低于 `1.25.16`，可参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
+> 请确保 DashScope Python SDK 版本不低于 `2.0.1`，可参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
 
 ```
 import os
-from http import HTTPStatus
-from dashscope import VideoSynthesis
 import dashscope
+from dashscope.v2 import DashScopeError
 
-# 以下为北京地域URL，各地域的URL不同，获取URL：https://help.aliyun.com/zh/model-studio/text-to-video-api-reference
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-
-# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-# 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-api_key = os.getenv("DASHSCOPE_API_KEY")
+# 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 def sample_async_call_t2v():
     # 异步调用，返回一个task_id
-    rsp = VideoSynthesis.async_call(api_key=api_key,
-                                    model='wan2.2-t2v-plus',
-                                    prompt='边缘光，低对比度，中近景，日光，左侧重构图，干净的单人镜头，暖色调，柔光，晴天光，侧光，白天，一个年轻的女孩坐在高草丛生的田野中，两条毛发蓬松的小毛驴站在她身后。女孩大约十一二岁，穿着简单的碎花裙子，头发扎成两条麻花辫，脸上带着纯真的笑容。她双腿交叉坐下，双手轻轻抚弄身旁的野花。小毛驴体型健壮，耳朵竖起，好奇地望着镜头方向。阳光洒在田野上，营造出温暖自然的画面感。',
-                                              size='832*480',
-                                    watermark=True,
-                                    seed=12345)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print("task_id: %s" % rsp.output.task_id)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' % (rsp.status_code, rsp.code, rsp.message))
+    try:
+        # prompt_extend：1.x 默认开启提示词智能改写；2.0 缺省由服务端决定，此处显式开启保持行为一致
+        job = client.videos.jobs.create(model='wan2.2-t2v-plus',
+                                        prompt='边缘光，低对比度，中近景，日光，左侧重构图，干净的单人镜头，暖色调，柔光，晴天光，侧光，白天，一个年轻的女孩坐在高草丛生的田野中，两条毛发蓬松的小毛驴站在她身后。女孩大约十一二岁，穿着简单的碎花裙子，头发扎成两条麻花辫，脸上带着纯真的笑容。她双腿交叉坐下，双手轻轻抚弄身旁的野花。小毛驴体型健壮，耳朵竖起，好奇地望着镜头方向。阳光洒在田野上，营造出温暖自然的画面感。',
+                                        size='832*480',
+                                        watermark=True,
+                                        seed=12345,
+                                        prompt_extend=True)
+        print(job)
+        print("task_id: %s" % job.task_id)
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
+        return
 
-    # 等待异步任务结束
-    rsp = VideoSynthesis.wait(task=rsp, api_key=api_key)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print(rsp.output.video_url)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' % (rsp.status_code, rsp.code, rsp.message))
+    # 等待异步任务结束（指数退避轮询，默认总预算24小时）
+    try:
+        done = client.videos.jobs.wait(job)
+        print(done)
+        print(done.video_url)
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 
 if __name__ == '__main__':
     sample_async_call_t2v()

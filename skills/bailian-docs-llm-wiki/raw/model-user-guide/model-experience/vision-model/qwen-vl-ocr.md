@@ -70,7 +70,7 @@ Qwen-OCR 提供以下模型，请根据业务需求选择：
 
 -   [已配置API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
     
--   如果使用 OpenAI SDK或 DashScope SDK，请先安装[最新版 SDK](raw/model-api-reference/preparations/install-sdk.md)。DashScope Python SDK最低版本为 1.22.2，Java SDK最低版本为 2.21.8。
+-   如果使用 OpenAI SDK或 DashScope SDK，请先安装[最新版 SDK](raw/model-api-reference/preparations/install-sdk.md)。DashScope Python SDK最低版本为 2.0.1，Java SDK最低版本为 2.21.8。
     
     -   **DashScope SDK**
         -   **优势**：支持图像旋转矫正、内置 OCR 任务等所有高级特性，功能完整，调用简洁。
@@ -366,8 +366,14 @@ Python
 import os
 import dashscope
 
-# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 PROMPT_TICKET_EXTRACTION = """
 请提取车票图像中的发票号码、车次、起始站、终点站、发车日期和时间点、座位号、席别类型、票价、身份证号码、购票人姓名。
@@ -376,11 +382,8 @@ PROMPT_TICKET_EXTRACTION = """
 """
 
 try:
-    response = dashscope.MultiModalConversation.call(
+    response = client.multimodal.chat.create(
         model='qwen3.5-ocr',
-        # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
-        # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-        api_key=os.getenv('DASHSCOPE_API_KEY'),
         messages=[{
             'role': 'user',
             'content': [
@@ -389,15 +392,13 @@ try:
                  "min_pixels": 32 * 32 * 3,
                  # 输入图像的最大像素阈值，超过该值图像会缩小，直到总像素低于max_pixels
                  "max_pixels": 32 * 32 * 8192,
-                 # 是否开启图像自动转正功能
-                 "enable_rotate": False,
                 },
                 # 未设置内置任务时，支持在text字段中传入Prompt，若未传入则使用默认的Prompt：Please output only the text content from the image without any additional descriptions or formatting.
                 {'text': PROMPT_TICKET_EXTRACTION}
             ]
         }]
     )
-    print(response.output.choices[0].message.content[0]['text'])
+    print(response.output_text)
 except Exception as e:
     print(f"An error occurred: {e}")
 ```
@@ -493,7 +494,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-响应示例
+响应示例（HTTP 接口返回）
 
 ```
 {
@@ -716,7 +717,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 '
 ```
 
-响应示例
+响应示例（HTTP 接口返回）
 
 ```
 {
@@ -1047,7 +1048,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 '
 ```
 
-响应示例
+响应示例（HTTP 接口返回）
 
 ```
 {
@@ -1300,8 +1301,14 @@ python
 import os
 import dashscope
 
-# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 messages = [{
             "role": "user",
@@ -1310,21 +1317,16 @@ messages = [{
                 # 输入图像的最小像素阈值，小于该值图像会进行放大，直到总像素大于min_pixels
                 "min_pixels": 32 * 32 * 3,
                 # 输入图像的最大像素阈值，超过该值图像会进行缩小，直到总像素低于max_pixels
-                "max_pixels": 32 * 32 * 8192,
-                # 是否开启图像自动转正功能
-                "enable_rotate": False}]
+                "max_pixels": 32 * 32 * 8192}]
            }]
-response = dashscope.MultiModalConversation.call(
-     # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
-    api_key=os.getenv('DASHSCOPE_API_KEY'),
+response = client.multimodal.chat.create(
     model='qwen3.5-ocr',
     messages=messages,
     # 设置内置任务为表格解析
-    ocr_options= {"task": "table_parsing"}
+    parameters={"ocr_options": {"task": "table_parsing"}}
 )
 # 表格解析任务以HTML格式返回结果
-print(response["output"]["choices"][0]["message"].content[0]["text"])
+print(response.output_text)
 ```
 
 java
@@ -1430,7 +1432,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 '
 ```
 
-响应示例
+响应示例（HTTP 接口返回）
 
 ```
 {
@@ -1494,8 +1496,14 @@ python
 import os
 import dashscope
 
-# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 messages = [{
             "role": "user",
@@ -1504,22 +1512,17 @@ messages = [{
                 # 输入图像的最小像素阈值，小于该值图像会进行放大，直到总像素大于min_pixels
                 "min_pixels": 32 * 32 * 3,
                 # 输入图像的最大像素阈值，超过该值图像会进行缩小，直到总像素低于max_pixels
-                "max_pixels": 32 * 32 * 8192,
-                # 是否开启图像自动转正功能
-                "enable_rotate": False}]
+                "max_pixels": 32 * 32 * 8192}]
             }]
 
-response = dashscope.MultiModalConversation.call(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
-    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    api_key=os.getenv('DASHSCOPE_API_KEY'),
+response = client.multimodal.chat.create(
     model='qwen3.5-ocr',
     messages=messages,
     # 设置内置任务为文档解析
-    ocr_options= {"task": "document_parsing"}
+    parameters={"ocr_options": {"task": "document_parsing"}}
 )
 # 文档解析任务以LaTeX格式返回结果
-print(response["output"]["choices"][0]["message"].content[0]["text"])
+print(response.output_text)
 ```
 
 java
@@ -1622,7 +1625,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 '
 ```
 
-响应示例
+响应示例（HTTP 接口返回）
 
 ```
 {
@@ -1686,8 +1689,14 @@ python
 import os
 import dashscope
 
-# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 messages = [{
             "role": "user",
@@ -1696,22 +1705,18 @@ messages = [{
                 # 输入图像的最小像素阈值，小于该值图像会进行放大，直到总像素大于min_pixels
                 "min_pixels": 32 * 32 * 3,
                 # 输入图像的最大像素阈值，超过该值图像会进行缩小，直到总像素低于max_pixels
-                "max_pixels": 32 * 32 * 8192,
-                # 是否开启图像自动转正功能
-                "enable_rotate": False }]
+                "max_pixels": 32 * 32 * 8192}]
             }]
 
-response = dashscope.MultiModalConversation.call(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-    api_key=os.getenv('DASHSCOPE_API_KEY'),
+response = client.multimodal.chat.create(
     model='qwen3.5-ocr',
     messages=messages,
     # 设置内置任务为公式识别
-    ocr_options= {"task": "formula_recognition"}
+    parameters={"ocr_options": {"task": "formula_recognition"}}
 )
 
 # 公式识别任务以LaTeX格式返回结果
-print(response["output"]["choices"][0]["message"].content[0]["text"])
+print(response.output_text)
 ```
 
 java
@@ -1817,7 +1822,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 '
 ```
 
-响应示例
+响应示例（HTTP 接口返回）
 
 ```
 {
@@ -1873,8 +1878,14 @@ python
 import os
 import dashscope
 
-# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 messages = [{
             "role": "user",
@@ -1883,22 +1894,17 @@ messages = [{
                 # 输入图像的最小像素阈值，小于该值图像会进行放大，直到总像素大于min_pixels
                 "min_pixels": 32 * 32 * 3,
                 # 输入图像的最大像素阈值，超过该值图像会进行缩小，直到总像素低于max_pixels
-                "max_pixels": 32 * 32 * 8192,
-                # 是否开启图像自动转正功能
-                "enable_rotate": False}]
+                "max_pixels": 32 * 32 * 8192}]
         }]
 
-response = dashscope.MultiModalConversation.call(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
-    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    api_key=os.getenv('DASHSCOPE_API_KEY'),
+response = client.multimodal.chat.create(
     model='qwen3.5-ocr',
     messages=messages,
     # 设置内置任务为通用文字识别
-    ocr_options= {"task": "text_recognition"}
+    parameters={"ocr_options": {"task": "text_recognition"}}
 )
 # 通用文字识别任务以纯文本格式返回结果
-print(response["output"]["choices"][0]["message"].content[0]["text"])
+print(response.output_text)
 ```
 
 java
@@ -2002,7 +2008,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-响应示例
+响应示例（HTTP 接口返回）
 
 ```
 {
@@ -2054,8 +2060,14 @@ python
 import os
 import dashscope
 
-# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 messages = [{
             "role": "user",
@@ -2064,22 +2076,17 @@ messages = [{
                 # 输入图像的最小像素阈值，小于该值图像会进行放大，直到总像素大于min_pixels
                 "min_pixels": 32 * 32 * 3,
                 # 输入图像的最大像素阈值，超过该值图像会进行缩小，直到总像素低于max_pixels
-                "max_pixels": 32 * 32 * 8192,
-                # 是否开启图像自动转正功能
-                "enable_rotate": False }]
+                "max_pixels": 32 * 32 * 8192}]
             }]
 
-response = dashscope.MultiModalConversation.call(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
-    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    api_key=os.getenv('DASHSCOPE_API_KEY'),
+response = client.multimodal.chat.create(
     model='qwen3.5-ocr',
     messages=messages,
     # 设置内置任务为多语言识别
-    ocr_options={"task": "multi_lan"}
+    parameters={"ocr_options": {"task": "multi_lan"}}
 )
 # 多语言识别任务以纯文本的形式返回结果
-print(response["output"]["choices"][0]["message"].content[0]["text"])
+print(response.output_text)
 ```
 
 java
@@ -2185,7 +2192,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 '
 ```
 
-响应示例
+响应示例（HTTP 接口返回）
 
 ```
 {
@@ -2439,10 +2446,15 @@ Python
 ```
 import os
 import dashscope
-from dashscope import MultiModalConversation
 
-# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+   # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # 将xxxx/test.png替换为您本地图像的绝对路径
 local_path = "xxx/test.jpg"
@@ -2457,8 +2469,6 @@ messages = [
                 "min_pixels": 32 * 32 * 3,
                 # 输入图像的最大像素阈值，超过该值图像会进行缩小，直到总像素低于max_pixels
                 "max_pixels": 32 * 32 * 8192,
-                # 是否开启图像自动转正功能
-                "enable_rotate": False,
             },
             # 模型未设置内置任务时，支持在text字段中传入Prompt，若未传入则使用默认的Prompt：Please output only the text content from the image without any additional descriptions or formatting.
             {
@@ -2468,14 +2478,11 @@ messages = [
     }
 ]
 
-response = MultiModalConversation.call(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-   # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+response = client.multimodal.chat.create(
     model="qwen3.5-ocr",
     messages=messages,
 )
-print(response["output"]["choices"][0]["message"].content[0]["text"])
+print(response.output_text)
 ```
 
 Java
@@ -2687,10 +2694,15 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 import os
 import base64
 import dashscope
-from dashscope import MultiModalConversation
 
-# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+   # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 #  base64 编码格式
 def encode_image(image_path):
@@ -2714,8 +2726,6 @@ messages = [
                 "min_pixels": 32 * 32 * 3,
                 # 输入图像的最大像素阈值，超过该值图像会进行缩小，直到总像素低于max_pixels
                 "max_pixels": 32 * 32 * 8192,
-                # 是否开启图像自动转正功能
-                "enable_rotate": False,
             },
             # 模型未设置内置任务时，支持在text字段中传入Prompt，若未传入则使用默认的Prompt：Please output only the text content from the image without any additional descriptions or formatting.
             {
@@ -2725,15 +2735,12 @@ messages = [
     }
 ]
 
-response = MultiModalConversation.call(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-   # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+response = client.multimodal.chat.create(
     model="qwen3.5-ocr",
     messages=messages,
 )
 
-print(response["output"]["choices"][0]["message"].content[0]["text"])
+print(response.output_text)
 ```
 
 #### Java

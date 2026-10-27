@@ -64,11 +64,13 @@ Python SDK
 
 ```
 import os
-from dashscope import Files
+import dashscope
 
-# 列出已上传的文件（page 为页码，page_size 为每页数量）
-result = Files.list(page=1, page_size=10, api_key=os.getenv('DASHSCOPE_API_KEY'))
-print(result)
+client = dashscope.Client(api_key=os.getenv('DASHSCOPE_API_KEY'))
+
+# 列出已上传的文件（page_no 为页码，page_size 为每页数量）
+result = client.files.list(page_no=1, page_size=10)
+print(result.files)
 ```
 
 java

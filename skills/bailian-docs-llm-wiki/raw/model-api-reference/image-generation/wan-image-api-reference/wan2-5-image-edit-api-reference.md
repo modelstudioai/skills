@@ -589,7 +589,7 @@ SDK 的参数命名与[HTTP调用](https://help.aliyun.com/zh/model-studio/wan2-
 
 ### Python SDK调用
 
-**重要****请确保 DashScope Python SDK 版本不低于**`1.25.2`**。**
+**重要****请确保 DashScope Python SDK 版本不低于**2.0.1**。**
 
 若版本过低，可能会触发 “url error, please check url!” 等错误。请参考[安装或升级SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
 
@@ -602,20 +602,20 @@ SDK 的参数命名与[HTTP调用](https://help.aliyun.com/zh/model-studio/wan2-
 ```
 import base64
 import mimetypes
-from http import HTTPStatus
 from urllib.parse import urlparse, unquote
 from pathlib import PurePosixPath
 import dashscope
 import requests
-from dashscope import ImageSynthesis
 import os
 
-# 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-
+# 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
 # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
 # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-api_key = os.getenv("DASHSCOPE_API_KEY")
+client = dashscope.Client(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # --- 输入图片：使用 Base64 编码 ---
 # base64编码格式为 data:{MIME_type};base64,{base64_data}
@@ -654,26 +654,22 @@ image_url_2 = "https://img.alicdn.com/imgextra/i3/O1CN01SfG4J41UYn9WNt4X1_!!6000
 # image_url_2 = encode_file("./image_2.png")              # 以实际路径为准
 
 print('----sync call, please wait a moment----')
-rsp = ImageSynthesis.call(api_key=api_key,
-                          model="wan2.5-i2i-preview",
-                          prompt="将图1中的闹钟放置到图2的餐桌的花瓶旁边位置",
-                          images=[image_url_1, image_url_2],
-                          negative_prompt="",
-                          n=1,
-                          # size="1280*1280",
-                          prompt_extend=True,
-                          watermark=False,
-                          seed=12345)
-print('response: %s' % rsp)
-if rsp.status_code == HTTPStatus.OK:
-    # 在当前目录下保存图片
-    for result in rsp.output.results:
-        file_name = PurePosixPath(unquote(urlparse(result.url).path)).parts[-1]
-        with open('./%s' % file_name, 'wb+') as f:
-            f.write(requests.get(result.url).content)
-else:
-    print('sync_call Failed, status_code: %s, code: %s, message: %s' %
-          (rsp.status_code, rsp.code, rsp.message))
+# generate 为一步式调用（提交+等待），直接返回已完成的任务结果
+job = client.images.generate(model="wan2.5-i2i-preview",
+                             prompt="将图1中的闹钟放置到图2的餐桌的花瓶旁边位置",
+                             extra_input={'images': [image_url_1, image_url_2]},
+                             negative_prompt="",
+                             n=1,
+                             # size="1280*1280",
+                             prompt_extend=True,
+                             watermark=False,
+                             seed=12345)
+print('response: %s' % job)
+# 在当前目录下保存图片
+for result in job.results:
+    file_name = PurePosixPath(unquote(urlparse(result.url).path)).parts[-1]
+    with open('./%s' % file_name, 'wb+') as f:
+        f.write(requests.get(result.url).content)
 ```
 
 ##### 响应示例
@@ -682,28 +678,20 @@ else:
 
 ```
 {
-    "status_code": 200,
     "request_id": "8ad45834-4321-44ed-adf5-xxxxxx",
-    "code": null,
-    "message": "",
-    "output": {
-        "task_id": "3aff9ebd-35fc-4339-98a3-xxxxxx",
-        "task_status": "SUCCEEDED",
-        "results": [
-            {
-                "url": "https://dashscope-result-sh.oss-cn-shanghai.aliyuncs.com/xxx.png?Expires=xxx",
-                "orig_prompt": "将图1中的闹钟放置到图2的餐桌的花瓶旁边位置",
-                "actual_prompt": "将图1中的蓝色闹钟放置在图2餐桌的花瓶右侧，靠近桌布边缘的位置，保持闹钟朝向镜头，与桌面平行，阴影自然投射于桌面。"
-            }
-        ],
-        "submit_time": "2025-10-23 16:18:16.009",
-        "scheduled_time": "2025-10-23 16:18:16.040",
-        "end_time": "2025-10-23 16:19:09.591",
-        "task_metrics": {
-            "TOTAL": 1,
-            "FAILED": 0,
-            "SUCCEEDED": 1
+    "task_id": "3aff9ebd-35fc-4339-98a3-xxxxxx",
+    "status": "SUCCEEDED",
+    "results": [
+        {
+            "url": "https://dashscope-result-sh.oss-cn-shanghai.aliyuncs.com/xxx.png?Expires=xxx",
+            "orig_prompt": "将图1中的闹钟放置到图2的餐桌的花瓶旁边位置",
+            "actual_prompt": "将图1中的蓝色闹钟放置在图2餐桌的花瓶右侧，靠近桌布边缘的位置，保持闹钟朝向镜头，与桌面平行，阴影自然投射于桌面。"
         }
+    ],
+    "task_metrics": {
+        "TOTAL": 1,
+        "FAILED": 0,
+        "SUCCEEDED": 1
     },
     "usage": {
         "image_count": 1
@@ -719,19 +707,19 @@ else:
 
 ```
 import os
-from http import HTTPStatus
 from urllib.parse import urlparse, unquote
 from pathlib import PurePosixPath
 import dashscope
 import requests
-from dashscope import ImageSynthesis
 
-# 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-
+# 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
 # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
 # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-api_key = os.getenv("DASHSCOPE_API_KEY")
+client = dashscope.Client(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # 使用公网图片 URL
 image_url_1 = "https://img.alicdn.com/imgextra/i3/O1CN0157XGE51l6iL9441yX_!!6000000004770-49-tps-1104-1472.webp"
@@ -745,58 +733,40 @@ def async_call():
 
 # 创建异步任务
 def create_async_task():
-    rsp = ImageSynthesis.async_call(api_key=api_key,
-                                    model="wan2.5-i2i-preview",
+    job = client.images.jobs.create(model="wan2.5-i2i-preview",
                                     prompt="将图1中的闹钟放置到图2的餐桌的花瓶旁边位置",
-                                    images=[image_url_1, image_url_2],
+                                    extra_input={'images': [image_url_1, image_url_2]},
                                     negative_prompt="",
                                     n=1,
                                     # size="1280*1280",
                                     prompt_extend=True,
                                     watermark=False,
                                     seed=12345)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print(rsp.output)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (rsp.status_code, rsp.code, rsp.message))
-    return rsp
+    print(job)
+    print(job.task_id, job.status)
+    return job
 
-# 等待异步任务结束
+# 等待异步任务结束（指数退避轮询，默认总预算24小时；任务失败会抛出DashScopeError）
 def wait_async_task(task):
-    rsp = ImageSynthesis.wait(task=task, api_key=api_key)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print(rsp.output)
-        # save file to current directory
-        for result in rsp.output.results:
-            file_name = PurePosixPath(unquote(urlparse(result.url).path)).parts[-1]
-            with open('./%s' % file_name, 'wb+') as f:
-                f.write(requests.get(result.url).content)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (rsp.status_code, rsp.code, rsp.message))
+    done = client.images.jobs.wait(task)
+    print(done)
+    print(done.status)
+    # save file to current directory
+    for result in done.results:
+        file_name = PurePosixPath(unquote(urlparse(result.url).path)).parts[-1]
+        with open('./%s' % file_name, 'wb+') as f:
+            f.write(requests.get(result.url).content)
 
 # 获取异步任务信息
 def fetch_task_status(task):
-    status = ImageSynthesis.fetch(task=task, api_key=api_key)
-    print(status)
-    if status.status_code == HTTPStatus.OK:
-        print(status.output.task_status)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (status.status_code, status.code, status.message))
+    snapshot = client.images.jobs.fetch(task)
+    print(snapshot)
+    print(snapshot.status)
 
 # 取消异步任务，只有处于PENDING状态的任务才可以取消
 def cancel_task(task):
-    rsp = ImageSynthesis.cancel(task=task, api_key=api_key)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print(rsp.output.task_status)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (rsp.status_code, rsp.code, rsp.message))
+    job = client.images.jobs.cancel(task)
+    print(job)
 
 if __name__ == '__main__':
     async_call()
@@ -808,16 +778,9 @@ if __name__ == '__main__':
 
 ```
 {
-	"status_code": 200,
-	"request_id": "31b04171-011c-96bd-ac00-f0383b669cc7",
-	"code": "",
-	"message": "",
-	"output": {
-		"task_id": "4f90cf14-a34e-4eae-xxxxxxxx",
-		"task_status": "PENDING",
-		"results": []
-	},
-	"usage": null
+    "request_id": "31b04171-011c-96bd-ac00-f0383b669cc7",
+    "task_id": "4f90cf14-a34e-4eae-xxxxxxxx",
+    "status": "PENDING"
 }
 ```
 
@@ -827,28 +790,20 @@ if __name__ == '__main__':
 
 ```
 {
-    "status_code": 200,
     "request_id": "8ad45834-4321-44ed-adf5-xxxxxx",
-    "code": null,
-    "message": "",
-    "output": {
-        "task_id": "3aff9ebd-35fc-4339-98a3-xxxxxx",
-        "task_status": "SUCCEEDED",
-        "results": [
-            {
-                "url": "https://dashscope-result-sh.oss-cn-shanghai.aliyuncs.com/xxx.png?Expires=xxx",
-                "orig_prompt": "将图1中的闹钟放置到图2的餐桌的花瓶旁边位置",
-                "actual_prompt": "将图1中的蓝色闹钟放置在图2餐桌的花瓶右侧，靠近桌布边缘的位置，保持闹钟朝向镜头，与桌面平行，阴影自然投射于桌面。"
-            }
-        ],
-        "submit_time": "2025-10-23 16:18:16.009",
-        "scheduled_time": "2025-10-23 16:18:16.040",
-        "end_time": "2025-10-23 16:19:09.591",
-        "task_metrics": {
-            "TOTAL": 1,
-            "FAILED": 0,
-            "SUCCEEDED": 1
+    "task_id": "3aff9ebd-35fc-4339-98a3-xxxxxx",
+    "status": "SUCCEEDED",
+    "results": [
+        {
+            "url": "https://dashscope-result-sh.oss-cn-shanghai.aliyuncs.com/xxx.png?Expires=xxx",
+            "orig_prompt": "将图1中的闹钟放置到图2的餐桌的花瓶旁边位置",
+            "actual_prompt": "将图1中的蓝色闹钟放置在图2餐桌的花瓶右侧，靠近桌布边缘的位置，保持闹钟朝向镜头，与桌面平行，阴影自然投射于桌面。"
         }
+    ],
+    "task_metrics": {
+        "TOTAL": 1,
+        "FAILED": 0,
+        "SUCCEEDED": 1
     },
     "usage": {
         "image_count": 1

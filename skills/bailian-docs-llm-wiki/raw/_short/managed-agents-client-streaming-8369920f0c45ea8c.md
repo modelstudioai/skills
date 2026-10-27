@@ -66,9 +66,9 @@ UI 效果
 
 `event_delta`
 
-按到达顺序向 `(event_id, delta.index)` 追加文本
+按到达顺序向 `(event_id, delta.index)` 追加文本：`message` 累加 `delta.content`，`reasoning` 累加 `delta.reasoning`
 
-更新已有答案块
+更新已有答案块或思考块
 
 完整的助手 `message`
 
@@ -90,9 +90,12 @@ buffers = {}
 def append_text_delta(event):
     delta = event["delta"]
     key = (event["event_id"], delta["index"])
-    content = delta.get("content", {})
-    if content.get("type") == "text":
-        buffers[key] = buffers.get(key, "") + content.get("text", "")
+    if delta["type"] == "reasoning_delta":
+        buffers[key] = buffers.get(key, "") + delta.get("reasoning", "")
+    else:
+        content = delta.get("content", {})
+        if content.get("type") == "text":
+            buffers[key] = buffers.get(key, "") + content.get("text", "")
     return key
 ```
 
@@ -112,7 +115,7 @@ def append_text_delta(event):
 
 ## 思考与回合完成分开处理
 
-Thinking 使用 `reasoning` 事件。实测收到 reasoning 的开始帧和最终帧，**不要求中间一定有非空的 reasoning 增量**——活动尚未结束时显示思考指示器；不要补造思考文本，也不要把没有文本当成错误。
+Thinking 使用 `reasoning` 事件。开启 `event_deltas[]=reasoning` 后，思考文本通过 `delta.type=reasoning_delta` 的 `delta.reasoning` 逐块下发，客户端按 `event_id` + `delta.index` 累加；活动尚未结束时显示思考指示器，事件结束时用完整 Message 的 `content` 校验。事件可能不含 `event_delta`，此时只按开始帧和最终帧更新状态。
 
 回合真正的结束以 `session_status` 的 `stop_reason` 为准，映射为产品状态：
 
@@ -218,7 +221,7 @@ curl -s -X DELETE "$AGENTSTUDIO_URL/sessions/$SESSION_ID/resources/$RESOURCE_ID"
 ## 接入验收清单
 
 -   短文本答案：增量拼接与最终完整消息一致，没有重复答案；
--   reasoning 没有文本增量：思考指示器仍能正常开始和结束；
+-   reasoning 增量：思考文本逐块更新，且与最终完整消息一致；
 -   工具调用前后有多条助手消息：同一回合下各条消息保持正确顺序；
 -   审批暂停或失败：`requires_action` 和错误不会被误显示为成功完成；
 -   页面刷新和上游断线：恢复历史时不重复消息，也不重新执行输入；

@@ -1,6 +1,6 @@
 # 百炼模型市场索引
 
-> 自动生成 · 共 125 个模型家族 · 322 个主干模型 · 更新于 2026-10-27
+> 自动生成 · 共 125 个模型家族 · 333 个主干模型 · 更新于 2026-10-28
 
 **机器查询走结构化文件**：
 
@@ -287,7 +287,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [Qwen-Audio-3.0-Realtime](groups/qwen-audio-3.0-realtime.json) — 实时双工语音对话，兼顾低时延、自然交互与语音推理。Plus 效果优先，Flash 响应更快。
   - 模型：`qwen-audio-3.0-realtime-flash`, `qwen-audio-3.0-realtime-plus`
 - [Qwen-Audio-3.1-Realtime](groups/qwen-audio-3.1-realtime.json) — Qwen-Audio-3.1-Realtime 是新一代实时全双工语音大模型，进一步增强口语推理、多轮指令遵循、共情表达与角色扮演能力，兼顾智能应答与自然对话节奏。模型优化噪声拒识、多人对话理解与动态…
-  - 模型：`qwen-audio-3.1-realtime-plus`
+  - 模型：`qwen-audio-3.1-realtime-flash`, `qwen-audio-3.1-realtime-plus`
 
 ## 翻译 `TR` — 2 个家族
 
@@ -316,4 +316,4 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 ## 3D 生成 `3D-generation` — 1 个家族
 
 - [Tripo](groups/tripo-models-market-place.json) — AI驱动的3D通用大模型Tripo，支持文本或图片输入，数秒内一键生成高质量3D模型。
-  - 模型：`Tripo/Tripo-H3.1`, `Tripo/Tripo-P1.0`
+  - 模型：`Tripo/Tripo-AnimationRetarget`, `Tripo/Tripo-AutoRig`, `Tripo/Tripo-ConvertFormat`, `Tripo/Tripo-H3.1`, `Tripo/Tripo-ImageToSplat`, `Tripo/Tripo-MeshCompletion`, `Tripo/Tripo-P1.0`, `Tripo/Tripo-Retopology`, `Tripo/Tripo-RigCheck`, `Tripo/Tripo-Segmentation`, `Tripo/Tripo-SmartSegmentation`, `Tripo/Tripo-Texture`

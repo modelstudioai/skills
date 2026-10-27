@@ -8,87 +8,30 @@
           "3D-Generation"
         ],
         "request_modality": [
-          "Text"
+          "Text",
+          "Image"
         ]
       },
       "description": "Tripo P1.0 是面向实时应用与生产管线的 3D 生成模型，专为需要干净拓扑和引擎可用网格的开发者与创作者设计。模型可在约 2 秒内生成具备专业级拓扑结构的 3D 资产，适用于游戏、Web3D 与各类实时交互场景。针对 UGC 内容生产中对“速度”和“开箱即用”的需求，Tripo P1.0 在保证质量的同时大幅提升生成效率，使资产能够快速接入实时引擎与开发流程。",
-      "features": [
-        "function-calling",
-        "structured-outputs",
-        "batch"
-      ],
+      "features": [],
       "provider": "tripo",
       "model": "Tripo/Tripo-P1.0",
       "prices": [
         {
-          "priceUnit": "每次",
-          "price": "2.1",
-          "timeBand": "standard",
-          "type": "generation_3d_text_to_3d_no_texture",
-          "priceName": "文生3D（无贴图）"
-        },
-        {
-          "priceUnit": "每次",
-          "price": "2.8",
-          "timeBand": "standard",
-          "type": "generation_3d_image_to_3d_no_texture",
-          "priceName": "单图生3D（无贴图）"
-        },
-        {
-          "priceUnit": "每次",
-          "price": "2.8",
-          "timeBand": "standard",
-          "type": "generation_3d_multiview_to_3d_no_texture",
-          "priceName": "多图生3D（无贴图）"
-        },
-        {
-          "priceUnit": "每次",
-          "price": "2.8",
-          "timeBand": "standard",
-          "type": "generation_3d_text_to_3d_sd_texture",
-          "priceName": "文生3D（带标清贴图）"
-        },
-        {
-          "priceUnit": "每次",
-          "price": "3.5",
-          "timeBand": "standard",
-          "type": "generation_3d_image_to_3d_sd_texture",
-          "priceName": "单图生3D（带标清贴图）"
-        },
-        {
-          "priceUnit": "每次",
-          "price": "3.5",
-          "timeBand": "standard",
-          "type": "generation_3d_multiview_to_3d_sd_texture",
-          "priceName": "多图生3D（带标清贴图）"
-        },
-        {
-          "priceUnit": "每次",
-          "price": "3.5",
-          "timeBand": "standard",
-          "type": "generation_3d_text_to_3d_hd_texture",
-          "priceName": "文生3D（带高清贴图）"
-        },
-        {
-          "priceUnit": "每次",
-          "price": "4.2",
-          "timeBand": "standard",
-          "type": "generation_3d_image_to_3d_hd_texture",
-          "priceName": "单图生3D（带高清贴图）"
-        },
-        {
-          "priceUnit": "每次",
-          "price": "4.2",
-          "timeBand": "standard",
-          "type": "generation_3d_multiview_to_3d_hd_texture",
-          "priceName": "多图生3D（带高清贴图）"
+          "priceUnit": "每积分",
+          "price": "0.07",
+          "timeBand": "",
+          "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/model-pricing#3d模型生成-第三方模型",
+          "ntmAmountType": "",
+          "type": "provider_credits",
+          "priceName": "原厂积分单价"
         }
       ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 60,
           "async_user_queue_limit": 500,
-          "count_limit": 5,
+          "count_limit": 300,
           "async_task_timeout": 180,
           "type": "model-default",
           "async_user_concurrency_limit": 10
@@ -96,15 +39,13 @@
         "model-default": {
           "count_limit_period": 60,
           "async_user_queue_limit": 500,
-          "count_limit": 5,
+          "count_limit": 300,
           "async_task_timeout": 180,
           "type": "model-default",
           "async_user_concurrency_limit": 10
         }
       },
-      "priceTimeBands": [
-        "standard"
-      ],
+      "priceTimeBands": [],
       "capabilities": [
         "3D-generation"
       ],
@@ -129,150 +70,30 @@
           "3D-Generation"
         ],
         "request_modality": [
-          "Text"
+          "Text",
+          "Image"
         ]
       },
       "description": "Tripo H3.1 是 Tripo 推出的高精度 3D 生成模型，专为需要极致视觉质量与细节表现的创作者设计。模型通过核心算法升级与模块优化，参数规模达 200 亿级，支持十亿体素级三维分辨率与最高 200 万面多边形生成。在保持高精度几何与真实纹理的同时，Tripo H3.1 对输入参考图的还原度与对齐度进一步提升，在角色形体、面部细节与几何文字等复杂结构上实现更稳定、细致的表达，适用于高质量视觉制作与 3D 打印等高精度资产生产场景。",
-      "features": [
-        "function-calling",
-        "batch",
-        "structured-outputs"
-      ],
+      "features": [],
       "provider": "tripo",
       "model": "Tripo/Tripo-H3.1",
       "prices": [
         {
-          "priceUnit": "每次",
-          "price": "0.7",
-          "timeBand": "standard",
-          "type": "generation_3d_text_to_3d_standard_no_texture",
-          "priceName": "文生3D（标准版+无贴图）"
-        },
-        {
-          "priceUnit": "每次",
-          "price": "1.4",
-          "timeBand": "standard",
-          "type": "generation_3d_image_to_3d_standard_no_texture",
-          "priceName": "单图生3D（标准版+无贴图）"
-        },
-        {
-          "priceUnit": "每次",
-          "price": "1.4",
-          "timeBand": "standard",
-          "type": "generation_3d_multiview_to_3d_standard_no_texture",
-          "priceName": "多图生3D（标准版+无贴图）"
-        },
-        {
-          "priceUnit": "每次",
-          "price": "1.4",
-          "timeBand": "standard",
-          "type": "generation_3d_text_to_3d_standard_sd_texture",
-          "priceName": "文生3D（标准版+带标清贴图）"
-        },
-        {
-          "priceUnit": "每次",
-          "price": "2.1",
-          "timeBand": "standard",
-          "type": "generation_3d_image_to_3d_standard_sd_texture",
-          "priceName": "单图生3D（标准版+带标清贴图）"
-        },
-        {
-          "priceUnit": "每次",
-          "price": "2.1",
-          "timeBand": "standard",
-          "type": "generation_3d_multiview_to_3d_standard_sd_texture",
-          "priceName": "多图生3D（标准版+带标清贴图）"
-        },
-        {
-          "priceUnit": "每次",
-          "price": "2.1",
-          "timeBand": "standard",
-          "type": "generation_3d_text_to_3d_standard_hd_texture",
-          "priceName": "文生3D（标准版+带高清贴图）"
-        },
-        {
-          "priceUnit": "每次",
-          "price": "2.8",
-          "timeBand": "standard",
-          "type": "generation_3d_image_to_3d_standard_hd_texture",
-          "priceName": "单图生3D（标准版+带高清贴图）"
-        },
-        {
-          "priceUnit": "每次",
-          "price": "2.8",
-          "timeBand": "standard",
-          "type": "generation_3d_multiview_to_3d_standard_hd_texture",
-          "priceName": "多图生3D（标准版+带高清贴图）"
-        },
-        {
-          "priceUnit": "每次",
-          "price": "2.1",
-          "timeBand": "standard",
-          "type": "generation_3d_text_to_3d_ultra_no_texture",
-          "priceName": "文生3D（超清版+无贴图）"
-        },
-        {
-          "priceUnit": "每次",
-          "price": "2.8",
-          "timeBand": "standard",
-          "type": "generation_3d_image_to_3d_ultra_no_texture",
-          "priceName": "单图生3D（超清版+无贴图）"
-        },
-        {
-          "priceUnit": "每次",
-          "price": "2.8",
-          "timeBand": "standard",
-          "type": "generation_3d_multiview_to_3d_ultra_no_texture",
-          "priceName": "多图生3D（超清版+无贴图）"
-        },
-        {
-          "priceUnit": "每次",
-          "price": "2.8",
-          "timeBand": "standard",
-          "type": "generation_3d_text_to_3d_ultra_sd_texture",
-          "priceName": "文生3D（超清版+带标清贴图）"
-        },
-        {
-          "priceUnit": "每次",
-          "price": "3.5",
-          "timeBand": "standard",
-          "type": "generation_3d_image_to_3d_ultra_sd_texture",
-          "priceName": "单图生3D（超清版+带标清贴图）"
-        },
-        {
-          "priceUnit": "每次",
-          "price": "3.5",
-          "timeBand": "standard",
-          "type": "generation_3d_multiview_to_3d_ultra_sd_texture",
-          "priceName": "多图生3D（超清版+带标清贴图）"
-        },
-        {
-          "priceUnit": "每次",
-          "price": "3.5",
-          "timeBand": "standard",
-          "type": "generation_3d_text_to_3d_ultra_hd_texture",
-          "priceName": "文生3D（超清版+带高清贴图）"
-        },
-        {
-          "priceUnit": "每次",
-          "price": "4.2",
-          "timeBand": "standard",
-          "type": "generation_3d_image_to_3d_ultra_hd_texture",
-          "priceName": "单图生3D（超清版+带高清贴图）"
-        },
-        {
-          "priceUnit": "每次",
-          "price": "4.2",
-          "timeBand": "standard",
-          "type": "generation_3d_multiview_to_3d_ultra_hd_texture",
-          "priceName": "多图生3D（超清版+带高清贴图）"
+          "priceUnit": "每积分",
+          "price": "0.07",
+          "timeBand": "",
+          "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/model-pricing#3d模型生成-第三方模型",
+          "ntmAmountType": "",
+          "type": "provider_credits",
+          "priceName": "原厂积分单价"
         }
       ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 60,
           "async_user_queue_limit": 500,
-          "count_limit": 5,
+          "count_limit": 300,
           "async_task_timeout": 180,
           "type": "model-default",
           "async_user_concurrency_limit": 10
@@ -280,15 +101,13 @@
         "model-default": {
           "count_limit_period": 60,
           "async_user_queue_limit": 500,
-          "count_limit": 5,
+          "count_limit": 300,
           "async_task_timeout": 180,
           "type": "model-default",
           "async_user_concurrency_limit": 10
         }
       },
-      "priceTimeBands": [
-        "standard"
-      ],
+      "priceTimeBands": [],
       "capabilities": [
         "3D-generation"
       ],
@@ -303,6 +122,616 @@
           "default": {
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/3d-generation' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"Tripo/Tripo-H3.1\",\n    \"input\": {\n        \"prompt\": \"一只可爱的猫\"\n    },\n    \"parameters\": {\n        \"texture_quality\": \"standard\"\n    }\n}'",
             "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/tripo-3d-generation-api-reference"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "3D-Generation"
+        ],
+        "request_modality": [
+          "Image"
+        ]
+      },
+      "description": "Tripo根据单张图片生成 3D Gaussian Splat（.splat 格式）。Gaussian Splatting 是一种新型 3D 表示方式，适用于高质量实时渲染与真实感场景重建。输出的 .splat 文件可用主流 Gaussian Splat 查看器与渲染器加载。",
+      "features": [],
+      "provider": "tripo",
+      "model": "Tripo/Tripo-ImageToSplat",
+      "prices": [
+        {
+          "priceUnit": "每积分",
+          "price": "0.07",
+          "timeBand": "",
+          "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/model-pricing#3d模型生成-第三方模型",
+          "ntmAmountType": "",
+          "type": "provider_credits",
+          "priceName": "原厂积分单价"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 10
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 10
+        }
+      },
+      "priceTimeBands": [],
+      "capabilities": [
+        "3D-generation"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-10-21T03:21:05.000+00:00",
+      "inferenceProvider": "tripo",
+      "name": "Tripo-图片生成Gaussian Splat",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/tripo-image-to-splat-api-reference",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/3d-generation' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"Tripo/Tripo-ImageToSplat\",\n    \"input\": {\n        \"image\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260424/cfbxhg/tripo-single.jpg\"\n    }\n}'",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/tripo-image-to-splat-api-reference"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "3D-Generation"
+        ],
+        "request_modality": [
+          "Text",
+          "Image"
+        ]
+      },
+      "description": "Tripo AI 贴图支持输入文字或上传图片，通过 AI 算法自动为白模生成材质贴图。支持 PBR/8K 材质，提供更精致的高保真材质细节，显著提升纹理、金属等细节表现。",
+      "features": [],
+      "provider": "tripo",
+      "model": "Tripo/Tripo-Texture",
+      "prices": [
+        {
+          "priceUnit": "每积分",
+          "price": "0.07",
+          "timeBand": "",
+          "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/model-pricing#3d模型生成-第三方模型",
+          "ntmAmountType": "",
+          "type": "provider_credits",
+          "priceName": "原厂积分单价"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 10
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 10
+        }
+      },
+      "priceTimeBands": [],
+      "capabilities": [
+        "3D-generation"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-10-21T03:22:30.000+00:00",
+      "inferenceProvider": "tripo",
+      "name": "Tripo-贴图",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/tripo-texture-api-reference",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/3d-generation' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"Tripo/Tripo-Texture\",\n    \"input\": {\n        \"model_url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260507/ffaaxt/tripo-text-to-3d-result.glb\"\n    },\n    \"parameters\": {\n        \"texture_prompt\": {\n            \"text\": \"橘白相间的短毛猫\"\n        }\n    }\n}'",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/tripo-texture-api-reference"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "3D-Generation"
+        ],
+        "request_modality": [
+          "3D-Generation"
+        ]
+      },
+      "description": "Tripo AI 网格分割通过 AI 算法自动识别并完成模型部件分割，无需分件或拓扑经验。支持三档分割精度灵活选择，精准适配 3D 打印、游戏资产、动画等多种工作流。",
+      "features": [],
+      "provider": "tripo",
+      "model": "Tripo/Tripo-Segmentation",
+      "prices": [
+        {
+          "priceUnit": "每积分",
+          "price": "0.07",
+          "timeBand": "",
+          "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/model-pricing#3d模型生成-第三方模型",
+          "ntmAmountType": "",
+          "type": "provider_credits",
+          "priceName": "原厂积分单价"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 10
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 10
+        }
+      },
+      "priceTimeBands": [],
+      "capabilities": [
+        "3D-generation"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-10-21T03:23:24.000+00:00",
+      "inferenceProvider": "tripo",
+      "name": "Tripo-网格分割",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/tripo-segmentation-api-reference",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/3d-generation' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"Tripo/Tripo-Segmentation\",\n    \"input\": {\n        \"model_url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260507/ffaaxt/tripo-text-to-3d-result.glb\"\n    },\n    \"parameters\": {\n        \"model_version\": \"v1.0-20250506\"\n    }\n}'",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/tripo-segmentation-api-reference"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "3D-Generation"
+        ],
+        "request_modality": [
+          "3D-Generation",
+          "Image"
+        ]
+      },
+      "description": "Tripo智能分割支持图片或者模型的输入，提供端到端的模型分割能力；适用于需要按照语义控制进行更精准分割的场景，例如指定拆分特定部件、控制分割范围或调整分割精度。推荐在需要更高可控性的工作流中使用。",
+      "features": [],
+      "provider": "tripo",
+      "model": "Tripo/Tripo-SmartSegmentation",
+      "prices": [
+        {
+          "priceUnit": "每积分",
+          "price": "0.07",
+          "timeBand": "",
+          "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/model-pricing#3d模型生成-第三方模型",
+          "ntmAmountType": "",
+          "type": "provider_credits",
+          "priceName": "原厂积分单价"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 10
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 10
+        }
+      },
+      "priceTimeBands": [],
+      "capabilities": [
+        "3D-generation"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-10-21T03:23:45.000+00:00",
+      "inferenceProvider": "tripo",
+      "name": "Tripo-智能分割",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/tripo-smart-segmentation-api-reference",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/3d-generation' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"Tripo/Tripo-SmartSegmentation\",\n    \"input\": {\n        \"seg_type\": \"image\",\n        \"image\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260424/liafix/tripo-images-1.png\"\n    },\n    \"parameters\": {\n        \"hint\": \"wheel\"\n    }\n}'",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/tripo-smart-segmentation-api-reference"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "3D-Generation"
+        ],
+        "request_modality": [
+          "3D-Generation"
+        ]
+      },
+      "description": "Tripo网格补全支持对拆分后的模型部件进行 AI 自动补齐，保证拆分后部件的完整性，提升后续 3D 打印、游戏资产、动画等工作流的处理效率。",
+      "features": [],
+      "provider": "tripo",
+      "model": "Tripo/Tripo-MeshCompletion",
+      "prices": [
+        {
+          "priceUnit": "每积分",
+          "price": "0.07",
+          "timeBand": "",
+          "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/model-pricing#3d模型生成-第三方模型",
+          "ntmAmountType": "",
+          "type": "provider_credits",
+          "priceName": "原厂积分单价"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 10
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 10
+        }
+      },
+      "priceTimeBands": [],
+      "capabilities": [
+        "3D-generation"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-10-21T03:24:06.000+00:00",
+      "inferenceProvider": "tripo",
+      "name": "Tripo-网格补全",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/tripo-mesh-completion-api-reference",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/3d-generation' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"Tripo/Tripo-MeshCompletion\",\n    \"input\": {\n        \"original_model_task_id\": \"ca51d54a-ffba-4ecc-8e42-xxxxxx\"\n    },\n    \"parameters\": {\n        \"completion_mode\": \"ai_completion\"\n    }\n}'",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/tripo-mesh-completion-api-reference"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "3D-Generation"
+        ],
+        "request_modality": [
+          "3D-Generation"
+        ]
+      },
+      "description": "Tripo重拓扑可将高模快速减面，满足不同 LOD 制作需求，在降低模型面数的同时保持原有几何结构与细节。生成拓扑合理的网格，支持四边面，便于后续编辑与动画制作。",
+      "features": [],
+      "provider": "tripo",
+      "model": "Tripo/Tripo-Retopology",
+      "prices": [
+        {
+          "priceUnit": "每积分",
+          "price": "0.07",
+          "timeBand": "",
+          "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/model-pricing#3d模型生成-第三方模型",
+          "ntmAmountType": "",
+          "type": "provider_credits",
+          "priceName": "原厂积分单价"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 10
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 10
+        }
+      },
+      "priceTimeBands": [],
+      "capabilities": [
+        "3D-generation"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-10-21T03:24:30.000+00:00",
+      "inferenceProvider": "tripo",
+      "name": "Tripo-重拓扑",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/tripo-retopology-api-reference",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/3d-generation' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"Tripo/Tripo-Retopology\",\n    \"input\": {\n        \"model_url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260507/ffaaxt/tripo-text-to-3d-result.glb\"\n    },\n    \"parameters\": {\n        \"model_version\": \"v1.0\",\n        \"face_limit\": 5000,\n        \"quad\": false\n    }\n}'",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/tripo-retopology-api-reference"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "3D-Generation"
+        ],
+        "request_modality": [
+          "3D-Generation"
+        ]
+      },
+      "description": "Tripo AI 格式转换支持多种主流 3D 模型格式之间的快速转换，自动完成模型数据解析与格式适配，确保模型结构与材质信息完整保留，满足不同 3D 软件、引擎及生产工作流的使用需求。",
+      "features": [],
+      "provider": "tripo",
+      "model": "Tripo/Tripo-ConvertFormat",
+      "prices": [
+        {
+          "priceUnit": "每积分",
+          "price": "0.07",
+          "timeBand": "",
+          "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/model-pricing#3d模型生成-第三方模型",
+          "ntmAmountType": "",
+          "type": "provider_credits",
+          "priceName": "原厂积分单价"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 10
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 10
+        }
+      },
+      "priceTimeBands": [],
+      "capabilities": [
+        "3D-generation"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-10-21T03:24:52.000+00:00",
+      "inferenceProvider": "tripo",
+      "name": "Tripo-格式转换",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/tripo-convert-format-api-reference",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/3d-generation' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"Tripo/Tripo-ConvertFormat\",\n    \"input\": {\n        \"original_model_task_id\": \"ca51d54a-ffba-4ecc-8e42-xxxxxx\",\n        \"format\": \"GLTF\"\n    }\n}'",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/tripo-convert-format-api-reference"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [],
+        "request_modality": [
+          "3D-Generation"
+        ]
+      },
+      "description": "Tripo可绑骨检查可智能检测模型是否满足自动绑骨要求，并根据模型的形体结构与特征，自动判断适用的骨骼类型，为后续骨骼绑定与动画制作提供准确的前置判断。",
+      "features": [],
+      "provider": "tripo",
+      "model": "Tripo/Tripo-RigCheck",
+      "prices": [
+        {
+          "priceUnit": "每积分",
+          "price": "0.07",
+          "timeBand": "",
+          "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/model-pricing#3d模型生成-第三方模型",
+          "ntmAmountType": "",
+          "type": "provider_credits",
+          "priceName": "原厂积分单价"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 10
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 10
+        }
+      },
+      "priceTimeBands": [],
+      "capabilities": [
+        "3D-generation"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-10-21T03:25:15.000+00:00",
+      "inferenceProvider": "tripo",
+      "name": "Tripo-可绑骨检查",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/tripo-rig-check-api-reference",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/3d-generation' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"Tripo/Tripo-RigCheck\",\n    \"input\": {\n        \"model_url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260507/ffaaxt/tripo-text-to-3d-result.glb\"\n    }\n}'",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/tripo-rig-check-api-reference"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "3D-Generation"
+        ],
+        "request_modality": [
+          "3D-Generation"
+        ]
+      },
+      "description": "Tripo绑骨基于自研 UniRig 算法，可智能解析模型形体结构，自动完成骨骼生成、定位与蒙皮绑定。精准识别脊椎弯曲路径等关键运动维度，实现更合理的骨骼位置与蒙皮权重分配，快速生成可用于动画制作的角色模型。",
+      "features": [],
+      "provider": "tripo",
+      "model": "Tripo/Tripo-AutoRig",
+      "prices": [
+        {
+          "priceUnit": "每积分",
+          "price": "0.07",
+          "timeBand": "",
+          "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/model-pricing#3d模型生成-第三方模型",
+          "ntmAmountType": "",
+          "type": "provider_credits",
+          "priceName": "原厂积分单价"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 10
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 10
+        }
+      },
+      "priceTimeBands": [],
+      "capabilities": [
+        "3D-generation"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-10-21T03:25:41.000+00:00",
+      "inferenceProvider": "tripo",
+      "name": "Tripo-绑骨",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/tripo-auto-rig-api-reference",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/3d-generation' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"Tripo/Tripo-AutoRig\",\n    \"input\": {\n        \"model_url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260507/ffaaxt/tripo-text-to-3d-result.glb\"\n    },\n    \"parameters\": {\n        \"rig_type\": \"biped\"\n    }\n}'",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/tripo-auto-rig-api-reference"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "3D-Generation"
+        ],
+        "request_modality": [
+          "3D-Generation"
+        ]
+      },
+      "description": "Tripo动画重定向提供 100 套预制动画，可将标准动作快速重定向至已绑定骨骼的模型，自动适配不同角色的骨骼结构与体型差异，无需手动调整动画数据，快速生成可直接使用的角色动画。",
+      "features": [],
+      "provider": "tripo",
+      "model": "Tripo/Tripo-AnimationRetarget",
+      "prices": [
+        {
+          "priceUnit": "每积分",
+          "price": "0.07",
+          "timeBand": "",
+          "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/model-pricing#3d模型生成-第三方模型",
+          "ntmAmountType": "",
+          "type": "provider_credits",
+          "priceName": "原厂积分单价"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 10
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 10
+        }
+      },
+      "priceTimeBands": [],
+      "capabilities": [
+        "3D-generation"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-10-21T03:26:07.000+00:00",
+      "inferenceProvider": "tripo",
+      "name": "Tripo-动画重定向",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/tripo-animation-retarget-api-reference",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/3d-generation' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"Tripo/Tripo-AnimationRetarget\",\n    \"input\": {\n        \"original_model_task_id\": \"ca51d54a-ffba-4ecc-8e42-xxxxxx\"\n    },\n    \"parameters\": {\n        \"animations\": [\"preset:walk\"],\n        \"out_format\": \"fbx\"\n    }\n}'",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/tripo-animation-retarget-api-reference"
           }
         }
       }

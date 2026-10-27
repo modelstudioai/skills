@@ -18,20 +18,20 @@
 
 ## 快速开始
 
-[SpeechSynthesizer类](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#adcb5e9bddbyq)提供了非流式调用和单向流式调用的接口。请根据业务场景选择合适的调用方式：
+[核心资源（`client.audio.tts`）](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#adcb5e9bddbyq)提供了非流式调用和单向流式调用的接口。请根据业务场景选择合适的调用方式：
 
 -   非流式调用：提交文本后，服务端立即处理并返回完整的语音合成结果。整个过程是阻塞式的，客户端需要等待服务端完成处理后才能继续下一步操作。适合短文本合成场景。
 -   单向流式调用：将文本一次发送至服务端并实时接收语音合成结果，不允许将文本分段发送。适用于对实时性要求高的场景。
 
 ### 非流式调用
 
-提交单个语音合成任务，无需调用回调接口，进行语音合成（无流式输出中间结果），最终一次性获取完整结果。
+提交单个语音合成任务，进行语音合成（无流式输出中间结果），最终一次性获取完整结果。
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4872835871/CAEQURiBgIDHpsn4phkiIDQ0ZGE2OTk3NmY5NTRhNDVhZDQwNWE3ZGZiMzk4Yjk54709861_20241015153444.149.svg)
 
-直接调用[SpeechSynthesizer类](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#adcb5e9bddbyq)的`call`方法进行语音合成。`call`方法可对[请求参数](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#fdafc9b5535f3)进行设置，注意此时不要设置`callback`参数。
+直接调用[核心资源（`client.audio.tts`）](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#adcb5e9bddbyq)的`synthesize`方法进行语音合成。`synthesize`方法可对[请求参数](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#fdafc9b5535f3)进行设置。
 
-任务完成后该方法返回[音频数据和时间戳信息（SpeechSynthesisResult）](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#a727da82951p6)。
+任务完成后该方法返回完整的音频数据（`bytes`，时间戳信息需通过流式会话获取，参见[响应结果](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#a727da82951p6)）。
 
 点击查看完整示例
 
@@ -39,34 +39,37 @@
 
 ```
 # coding=utf-8
+import os
 import sys
-from dashscope.audio.tts import SpeechSynthesizer
-# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key
-# import dashscope
-# dashscope.api_key = "apiKey"
-# 请将"{WorkspaceId}"替换为您的业务空间ID
-dashscope.base_websocket_api_url='wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference'
-result = SpeechSynthesizer.call(model='sambert-zhichu-v1',
-                                text='今天天气怎么样',
-                                sample_rate=48000,
-                                format='wav')
-if result.get_audio_data() is not None:
-    with open('output.wav', 'wb') as f:
-        f.write(result.get_audio_data())
-    print('SUCCESS: get audio data: %dbytes in output.wav' %
-          (sys.getsizeof(result.get_audio_data())))
-else:
-    print('ERROR: response is %s' % (result.get_response()))
+
+import dashscope
+
+# 若没有将API Key配置到环境变量中，需将下行替换为自己的API Key：api_key="sk-xxx"
+# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+client = dashscope.Client(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
+audio = client.audio.tts.synthesize(
+    '今天天气怎么样',
+    model='sambert-zhichu-v1',
+    sample_rate=48000,
+    format='wav')
+with open('output.wav', 'wb') as f:
+    f.write(audio)
+print('SUCCESS: get audio data: %dbytes in output.wav' % (sys.getsizeof(audio)))
 ```
 
 ### 单向流式调用
 
-提交单个语音合成任务，通过回调的方式流式输出中间结果，合成结果通过`ResultCallback`中的回调方法流式获取。
+提交单个语音合成任务，流式输出中间结果，合成结果通过[流式合成会话](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#3639e1cb40mxi)的`events()`/`audio_chunks()`迭代获取。
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4872835871/CAEQVRiBgMDd6_yhrBkiIDUyZGFlNTkwOGRlYTQwZjQ4ODI4ZGY2ZTQxYmNiMTVm4709861_20241015153444.149.svg)
 
-1.  实例化[回调接口（ResultCallback）](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#3639e1cb40mxi)。
-2.  调用[SpeechSynthesizer类](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#adcb5e9bddbyq)的`call`方法进行语音合成。`call`方法可对[请求参数](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#fdafc9b5535f3)进行设置，注意此时要设置`callback`参数。
+1.  调用[核心资源（`client.audio.tts`）](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#adcb5e9bddbyq)的`connect`方法创建流式合成会话，进入`with`上下文时自动建立连接。
+2.  调用会话的`send_text`方法发送待合成文本，`stop`方法通知服务端输入结束。
+3.  在接收线程中迭代会话的`events()`（音频`bytes`与JSON事件，含时间戳）或`audio_chunks()`（仅音频）获取合成结果。
 
 点击查看完整示例
 
@@ -75,49 +78,42 @@ else:
 ```
 # coding=utf-8
 
+import os
 import sys
-from dashscope.api_entities.dashscope_response import SpeechSynthesisResponse
-from dashscope.audio.tts import ResultCallback, SpeechSynthesizer, SpeechSynthesisResult
 
-# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key
-# import dashscope
-# dashscope.api_key = "apiKey"
+import dashscope
 
-# 请将"{WorkspaceId}"替换为您的业务空间ID
-dashscope.base_websocket_api_url='wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference'
+# 若没有将API Key配置到环境变量中，需将下行替换为自己的API Key：api_key="sk-xxx"
+# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+client = dashscope.Client(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
-class Callback(ResultCallback):
-    def on_open(self):
-        print('Speech synthesizer is opened.')
-
-    def on_complete(self):
-        print('Speech synthesizer is completed.')
-
-    def on_error(self, response: SpeechSynthesisResponse):
-        print('Speech synthesizer failed, response is %s' % (str(response)))
-
-    def on_close(self):
-        print('Speech synthesizer is closed.')
-
-    def on_event(self, result: SpeechSynthesisResult):
-        if result.get_audio_frame() is not None:
-            print('audio result length:', sys.getsizeof(result.get_audio_frame()))
-
-        if result.get_timestamp() is not None:
-            print('timestamp result:', str(result.get_timestamp()))
-
-callback = Callback()
-SpeechSynthesizer.call(model='sambert-zhichu-v1',
-                       text='今天天气怎么样',
-                       sample_rate=48000,
-                       callback=callback,
-                       word_timestamp_enabled=True,
-                       phoneme_timestamp_enabled=True)
+# 创建流式合成会话：进入 with 上下文时自动建立连接
+with client.audio.tts.connect(
+        model='sambert-zhichu-v1',
+        sample_rate=48000,
+        parameters={'word_timestamp_enabled': True,
+                    'phoneme_timestamp_enabled': True},
+) as session:
+    session.send_text('今天天气怎么样')
+    # 通知服务端输入结束
+    session.stop()
+    # events() 同时产出音频 bytes 与服务端 JSON 事件（含时间戳）
+    for event in session.events():
+        if isinstance(event, bytes):
+            print('audio result length:', sys.getsizeof(event))
+        else:
+            output = (event.get('payload') or {}).get('output') or {}
+            if output.get('timestamp') is not None:
+                print('timestamp result:', str(output.get('timestamp')))
 ```
 
 ## 请求参数
 
-请求参数通过[SpeechSynthesizer类](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#adcb5e9bddbyq)的`call`方法进行设置。
+请求参数通过[核心资源（`client.audio.tts`）](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#adcb5e9bddbyq)的`synthesize`/`stream`/`connect`方法进行设置（具名参数直接传入，`word_timestamp_enabled`、`phoneme_timestamp_enabled`通过`parameters`字典传入）。
 
 **参数**
 
@@ -225,23 +221,11 @@ False
 
 在开启字级别时间戳（`word_timestamp_enabled`）的基础上，生成音素级别时间戳信息。默认不开启。
 
-callback
-
-ResultCallback
-
-否
-
-设置callback参数时，为单向流式调用模式。
-
-不设置callback参数时，为非流式调用模式。
-
-callback的实现请参见[回调接口（ResultCallback）](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#3639e1cb40mxi)
-
 ## 关键接口
 
-### `SpeechSynthesizer`类
+### 核心资源（`client.audio.tts`）
 
-`SpeechSynthesizer`可以通过“`from dashscope.audio.tts import SpeechSynthesizer`”方式引入。它的关键接口如下：
+语音合成能力挂载在`client.audio.tts`资源上：`synthesize`一次性返回完整音频，`stream`流式产出音频分片，`connect`创建流式合成会话。它的关键接口如下：
 
 **接口/方法**
 
@@ -252,58 +236,80 @@ callback的实现请参见[回调接口（ResultCallback）](https://help.aliyun
 **描述**
 
 ```
-@classmethod
-def call(cls,
-         model: str,
-         text: str,
-         callback: ResultCallback = None,
-         workspace: str = None,
-         **kwargs) -> SpeechSynthesisResult:
+def synthesize(self,
+               text: str,
+               *,
+               model: str,
+               voice: str = "longxiaochun",
+               format: str = "mp3",
+               sample_rate: int = 22050,
+               volume: int = None,
+               rate: float = None,
+               pitch: float = None,
+               parameters: Dict = None,
+               ...) -> bytes
+```
+
+-   `text`：待合成文本
+-   `model`：模型名，参见[模型列表](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#a737f8b6f8gx0)
+-   其余为[请求参数](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#fdafc9b5535f3)，如`format`等
+
+完整的音频数据（`bytes`）
+
+开启语音合成任务，在语音合成完成后返回完整音频数据。
+
+`synthesize`方法能够对[请求参数](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#fdafc9b5535f3)进行设置。
+
+```
+def stream(self,
+           text: str,
+           *,
+           model: str,
+           ...) -> Iterator[bytes]
+```
+
+同`synthesize`
+
+逐块产出的音频数据（`Iterator[bytes]`）
+
+开启语音合成任务，一次性发送文本并逐块产出音频分片。只输出音频，不暴露逐条JSON元数据（需时间戳请使用`connect`会话）。
+
+```
+def connect(self,
+            *,
+            model: str,
+            format: str = "mp3",
+            sample_rate: int = 22050,
+            parameters: Dict = None,
+            ...) -> SynthesisSession
 ```
 
 -   `model`：模型名，参见[模型列表](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#a737f8b6f8gx0)
--   `text`：待合成文本
--   `callback`：[回调接口（ResultCallback）](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#3639e1cb40mxi)
--   `workspace`：DashScope workspace id，不必关注
--   `kwargs`：[请求参数](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#fdafc9b5535f3)，如`format`等
+-   其余为[请求参数](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#fdafc9b5535f3)
 
-合成结果`SpeechSynthesisResult`，非流式调用时需要处理该返回，异步调用时不必处理
+`SynthesisSession`流式合成会话
 
-开启语音合成任务。根据是否传入参数`callback`，有如下两种情况：
+创建流式合成会话，进入`with`上下文时自动建立连接。配合`send_text`、`stop`、`events()`/`audio_chunks()`使用（见[事件迭代](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#3639e1cb40mxi)）。
 
--   不传入`callback`参数：`call`函数将在语音合成完成后返回所有语音合成结果。
--   传入`callback`参数：在语音合成过程中，服务器将回调`callback`中对应函数，流式返回语音合成结果。
+### 事件迭代（`events()`/`audio_chunks()`）
 
-`call`方法能够对[请求参数](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#fdafc9b5535f3)进行设置。
-
-### 回调接口（`ResultCallback`）
-
-[单向流式调用](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#ba023aacfbr84)时，服务端会通过回调的方式，将关键流程信息和数据返回给客户端。您需要实现回调方法，处理服务端返回的信息或者数据。
+[单向流式调用](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#ba023aacfbr84)时，服务端会通过事件的方式，将关键流程信息和数据返回给客户端。在接收线程中迭代会话的`events()`或`audio_chunks()`处理服务端返回的信息或者数据。
 
 点击查看示例
 
 ```
-class Callback(ResultCallback):
-    def on_open(self):
-        print('和服务器成功建立连接')
+# events() 同时产出音频 bytes 与服务端 JSON 事件（含时间戳）
+for event in session.events():
+    if isinstance(event, bytes):
+        print('收到二进制音频数据：', event)
+    else:
+        output = (event.get('payload') or {}).get('output') or {}
+        if output.get('timestamp') is not None:
+            print('收到时间戳数据：', str(output.get('timestamp')))
 
-    def on_complete(self):
-        print('任务完成')
-
-    def on_error(self, response: SpeechSynthesisResponse):
-        print('报错：%s' % (str(response)))
-
-    def on_close(self):
-        print('和服务器之间的连接已关闭')
-
-    def on_event(self, result: SpeechSynthesisResult):
-        if result.get_audio_frame() is not None:
-            print('收到二进制音频数据：', result.get_audio_frame())
-
-        if result.get_timestamp() is not None:
-            print('收到时间戳数据：', str(result.get_timestamp()))
-
-callback = Callback()
+# 或只迭代音频（仍更新会话的 last_response 与 usage）
+for chunk in session.audio_chunks():
+    print('收到二进制音频数据：', chunk)
 ```
 
 **接口/方法**
@@ -315,60 +321,60 @@ callback = Callback()
 **描述**
 
 ```
-def on_open(self) -> None
+def send_text(self, text: str) -> None
+```
+
+`text`：待合成文本
+
+无
+
+发送待合成文本。发送文本与接收结果需并发进行。
+
+```
+def stop(self) -> None
 ```
 
 无
 
 无
 
-当和服务建立连接完成后会立刻被回调。
+通知服务端输入结束，之后继续消费`events()`/`audio_chunks()`直到剩余音频全部返回。
 
 ```
-def on_event(self, result: SpeechSynthesisResult) -> None
-```
-
-`result`：[音频数据和时间戳信息（SpeechSynthesisResult）](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#a727da82951p6)
-
-无
-
-当服务端返回合成数据时会被回调。
-
-```
-def on_complete(self) -> None
+def events(self) -> Generator[Union[Dict, bytes], None, None]
 ```
 
 无
 
-无
+`Dict`（JSON事件）或`bytes`（音频）
 
-当所有合成数据全部返回后被回调。
-
-```
-def on_error(self, response: SpeechSynthesisResponse)
-```
-
-`response`：异常信息
-
-无
-
-当调用过程出现异常以及服务返回错误后被回调。
+当服务端返回合成数据时逐个产出：音频为`bytes`帧，元数据（时间戳等）为JSON事件`dict`。同一会话只允许一个`events()`或`audio_chunks()`读取者。
 
 ```
-def on_close(self) -> None
+def audio_chunks(self) -> Iterator[bytes]
 ```
 
 无
 
+`bytes`
+
+只迭代音频数据，仍更新会话的`last_response`与`usage`。
+
+```
+session.first_package_delay
+```
+
 无
 
-服务关闭连接后被回调。
+`float`
+
+从发送文本到收到第一块音频数据的延迟时间（毫秒），任务完成后读取。
 
 ## 响应结果
 
-### 音频数据和时间戳信息（`SpeechSynthesisResult`）
+### 合成结果（音频数据与时间戳）
 
-`SpeechSynthesisResult`封装了语音合成结果，常用的接口为`get_audio_frame`、`get_timestamp`、`get_audio_data`和`get_timestamps`。
+`synthesize`返回完整的音频`bytes`；流式调用通过`stream`或会话的`audio_chunks()`逐块接收音频`bytes`；时间戳信息通过会话`events()`产出的JSON事件获取（`payload.output.timestamp`）。
 
 **接口/方法**
 
@@ -379,52 +385,52 @@ def on_close(self) -> None
 **描述**
 
 ```
-def get_audio_frame(self) -> bytes
-```
-
-无
-
-当前合成的二进制音频数据片段
-
-流式合成中，获取当前合成的音频帧数据。
-
-**重要**该函数要在流式合成时，在回调方法`event`中使用。
-
-```
-def get_timestamp(self) -> Dict[str, str]
-```
-
-无
-
-当前合成的句子对应的[时间戳信息](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#6a6d7363490w6)
-
-流式合成中，获取当前合成的句子对应的时间戳信息。
-
-**重要**该函数要在流式合成时，在回调方法`event`中使用。
-
-```
-def get_audio_data(self) -> bytes
+audio = client.audio.tts.synthesize(...)
 ```
 
 无
 
 完整的二进制音频数据
 
-获取完整的二进制音频数据。
+非流式合成中，获取完整的二进制音频数据。
 
 ```
-def get_timestamps(self) -> List[Dict[str, str]]
+for chunk in session.audio_chunks():
+```
+
+无
+
+当前合成的二进制音频数据片段
+
+流式合成中，逐块接收当前合成的音频帧数据。
+
+```
+output = (event.get('payload') or {}).get('output') or {}
+output.get('timestamp')
+```
+
+无
+
+当前合成的句子对应的[时间戳信息](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#6a6d7363490w6)
+
+流式合成中，从`events()`产出的JSON事件里获取当前合成的句子对应的时间戳信息。
+
+```
+timestamps = [
+    ((e.get('payload') or {}).get('output') or {}).get('timestamp')
+    for e in json_events if ...
+]
 ```
 
 无
 
 所有句子对应的[时间戳信息](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#6a6d7363490w6)
 
-获取所有句子对应的时间戳信息。
+流式合成中，累积`events()`产出的各句时间戳即为所有句子对应的时间戳信息。
 
 ### 时间戳信息
 
-`SpeechSynthesisResult`的`get_timestamp`函数获取的是当前合成的句子的时间戳信息，`get_timestamps`函数获取的是所有句子的时间戳信息。
+会话`events()`产出的JSON事件中，`payload.output.timestamp`为当前合成的句子的时间戳信息，累积各句即为所有句子的时间戳信息。
 
 单个句子的时间戳信息示例如下所示，其中`words`对应的是字级别时间戳信息。`phonemes`对应的是音素级别时间戳信息：
 

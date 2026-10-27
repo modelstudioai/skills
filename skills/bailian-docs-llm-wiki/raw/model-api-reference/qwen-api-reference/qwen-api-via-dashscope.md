@@ -9,12 +9,22 @@ HTTP 请求地址：
 -   纯文本模型（如qwen-plus）：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
 -   多模态模型（如qwen3.7-plus或qwen3-vl-plus）：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
-SDK调用配置的`base_url`：
+SDK调用的地域配置：
 
 #### Python代码
 
 ```
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
+import os
+import dashscope
+
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 ```
 
 #### Java代码
@@ -40,12 +50,22 @@ HTTP 请求地址：
 -   纯文本模型（如qwen-plus）：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
 -   多模态模型（如qwen3.7-plus或qwen3-vl-plus）`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
-SDK调用配置的`base_url`：
+SDK调用的地域配置：
 
 #### Python代码
 
 ```
-dashscope.base_http_api_url = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1'
+import os
+import dashscope
+
+# 以下为新加坡地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="ap-southeast-1",
+)
 ```
 
 #### Java代码
@@ -71,12 +91,22 @@ HTTP 请求地址：
 -   纯文本模型（如qwen-plus）：`POST https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
 -   多模态模型（如qwen3.7-plus或qwen3-vl-plus）：`POST https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
-SDK调用配置的`base_url`：
+SDK调用的地域配置：
 
 #### Python代码
 
 ```
-dashscope.base_http_api_url = 'https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1'
+import os
+import dashscope
+
+# 以下为美国（弗吉尼亚）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="us-east-1",
+)
 ```
 
 #### Java代码
@@ -102,12 +132,22 @@ HTTP 请求地址：
 -   纯文本模型（如qwen-plus）：`POST https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
 -   多模态模型（如qwen3.7-plus或qwen3-vl-plus）：`POST https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
-SDK调用配置的`base_url`：
+SDK调用的地域配置：
 
 #### Python代码
 
 ```
-dashscope.base_http_api_url = 'https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1'
+import os
+import dashscope
+
+# 以下为德国（法兰克福）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="eu-central-1",
+)
 ```
 
 #### Java代码
@@ -133,12 +173,22 @@ HTTP 请求地址：
 -   纯文本模型（如qwen-plus）：`POST https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
 -   多模态模型（如qwen3.7-plus或qwen3-vl-plus）：`POST https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
-SDK调用配置的`base_url`：
+SDK调用的地域配置：
 
 #### Python代码
 
 ```
-dashscope.base_http_api_url = 'https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/api/v1'
+import os
+import dashscope
+
+# 以下为日本（东京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="ap-northeast-1",
+)
 ```
 
 #### Java代码
@@ -164,12 +214,22 @@ HTTP 请求地址：
 -   纯文本模型（如qwen-plus）：`POST https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
 -   多模态模型（如qwen3.7-plus或qwen3-vl-plus）：`POST https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
-SDK调用配置的`base_url`：
+SDK调用的地域配置：
 
 #### Python代码
 
 ```
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/api/v1'
+import os
+import dashscope
+
+# 以下为中国香港地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-hongkong",
+)
 ```
 
 调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
@@ -876,6 +936,8 @@ seed默认值
 
 在流式输出模式下是否开启增量输出。推荐您优先设置为`true`。
 
+> Python SDK 2.0 流式输出默认增量返回（incremental\_output 默认 true），无需设置该参数。
+
 参数值：
 
 -   false：每次输出为当前已经生成的整个序列，最后一次输出为生成的完整结果。
@@ -949,6 +1011,8 @@ Schema 的名称。
 **result\_format**`string`（可选）默认为`text`（Qwen3-Max、Qwen3-VL、[QwQ](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md) 模型、Qwen3 开源模型与 Qwen-Long 模型默认值为 message）
 
 返回数据的格式。推荐您优先设置为`message`，可以更方便地进行[多轮对话](raw/model-user-guide/model-experience/text-generation-model/multi-round-conversation.md)。
+
+> Python SDK 2.0 固定返回 message 形态，无需设置该参数；该参数仅 HTTP 接口调用需关注。
 
 > 平台后续将统一调整默认值为`message`。
 
@@ -1251,16 +1315,23 @@ PPT模板ID。与`mode`为`general`或未设置`mode`时配合使用。可选值
 ```
 import os
 import dashscope
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 messages = [
     {'role': 'system', 'content': [{'text': 'You are a helpful assistant.'}]},
     {'role': 'user', 'content': [{'text': '你是谁？'}]}
 ]
-response = dashscope.MultiModalConversation.call(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-    api_key=os.getenv('DASHSCOPE_API_KEY'),
-    model="qwen3.8-max", # 此处以qwen3.8-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
+response = client.multimodal.chat.create(
+    # 此处以qwen3.8-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
+    model="qwen3.8-max",
     messages=messages,
     )
 print(response)
@@ -1645,23 +1716,29 @@ Python
 ```
 import os
 import dashscope
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 messages = [
     {'role':'system','content':'you are a helpful assistant'},
     {'role': 'user','content': '你是谁？'}
 ]
-responses = dashscope.Generation.call(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-    api_key=os.getenv('DASHSCOPE_API_KEY'),
-    model="qwen-plus", # 此处以qwen-plus为例，可按需更换为其它文本生成模型
+responses = client.chat.completions.create(
+    # 此处以qwen-plus为例，可按需更换为其它文本生成模型
+    model="qwen-plus",
     messages=messages,
-    result_format="message",
     stream=True,
-    incremental_output=True
+    # 流式输出默认为增量模式：每个数据块仅包含新生成的内容。
     )
 for response in responses:
-    print(response.output.choices[0].message.content, end="")
+    print(response.choices[0].delta.content, end="")
 ```
 
 Java
@@ -1753,11 +1830,17 @@ Python
 
 ```
 import os
-from dashscope import MultiModalConversation
 import dashscope
 
-# 若使用新加坡地域的模型，请取消下列注释
-# dashscope.base_http_api_url = "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+# 若使用新加坡地域的模型，请将下行region替换为：region="ap-southeast-1"
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 messages = [
     {
@@ -1769,22 +1852,20 @@ messages = [
     }
 ]
 
-responses = MultiModalConversation.call(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-    # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
-    model='qwen3-vl-plus',  # 可按需更换为其它多模态模型，并修改相应的 messages
+responses = client.multimodal.chat.create(
+    # 可按需更换为其它多模态模型，并修改相应的 messages
+    model='qwen3-vl-plus',
     messages=messages,
     stream=True,
-    incremental_output=True
+    # 流式输出默认为增量模式：每个数据块仅包含新生成的内容。
     )
 
 full_content = ""
 print("流式输出内容为：")
 for response in responses:
-    if response.output.choices[0].message.content:
-        print(response.output.choices[0].message.content[0]['text'])
-        full_content += response.output.choices[0].message.content[0]['text']
+    if response.choices[0].delta.content:
+        print(response.choices[0].delta.content)
+        full_content += response.choices[0].delta.content
 print(f"完整内容为：{full_content}")
 ```
 
@@ -1889,7 +1970,15 @@ Python
 ```
 import os
 import dashscope
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 messages = [
     {
@@ -1902,10 +1991,9 @@ messages = [
         ]
     }
 ]
-response = dashscope.MultiModalConversation.call(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-    api_key=os.getenv('DASHSCOPE_API_KEY'),
-    model='qwen3-vl-plus', # 此处以qwen3-vl-plus为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
+response = client.multimodal.chat.create(
+    # 此处以qwen3-vl-plus为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
+    model='qwen3-vl-plus',
     messages=messages
     )
 print(response)
@@ -1992,11 +2080,19 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 Python
 
 ```
-from http import HTTPStatus
 import os
-# dashscope版本需要不低于1.20.10
+# 需要 dashscope 2.0.1 及以上版本
 import dashscope
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+from dashscope.v2 import DashScopeError
+
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 messages = [{"role": "user",
              "content": [
@@ -2005,17 +2101,18 @@ messages = [{"role": "user",
                            "https://img.alicdn.com/imgextra/i4/O1CN01Ib0clU27vTgBdbVLQ_!!6000000007859-0-tps-3840-2160.jpg",
                            "https://img.alicdn.com/imgextra/i1/O1CN01aygPLW1s3EXCdSN4X_!!6000000005710-0-tps-3840-2160.jpg"]},
                  {"text": "描述这个视频的具体过程"}]}]
-response = dashscope.MultiModalConversation.call(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
-    model='qwen3-vl-plus',  # 此处以qwen3-vl-plus为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
-    messages=messages
-)
-if response.status_code == HTTPStatus.OK:
+try:
+    response = client.multimodal.chat.create(
+        # 此处以qwen3-vl-plus为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
+        model='qwen3-vl-plus',
+        messages=messages
+    )
     print(response)
-else:
-    print(response.code)
-    print(response.message)
+except DashScopeError as e:
+    print(f"HTTP返回码：{e.status_code}")
+    print(f"错误码：{e.code}")
+    print(f"错误信息：{e.message}")
+    print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
 Java
@@ -2111,7 +2208,15 @@ Python
 ```
 import os
 import dashscope
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 messages = [
     {
@@ -2122,10 +2227,9 @@ messages = [
         ]
     }
 ]
-response = dashscope.MultiModalConversation.call(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-    api_key=os.getenv('DASHSCOPE_API_KEY'),
-    model='qwen-audio-turbo', # 此处以qwen-audio-turbo为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
+response = client.multimodal.chat.create(
+    # 此处以qwen-audio-turbo为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
+    model='qwen3.5-omni-plus',
     messages=messages
     )
 print(response)
@@ -2159,7 +2263,7 @@ public class Main {
                 // 若没有配置环境变量，请用百炼API Key将下行替换为：.apiKey("sk-xxx")
                 .apiKey(System.getenv("DASHSCOPE_API_KEY"))
                 // 此处以qwen-audio-turbo为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
-                .model("qwen-audio-turbo")
+                .model("qwen3.5-omni-plus")
                 .message(userMessage)
                 .build();
         MultiModalConversationResult result = conv.call(param);
@@ -2184,7 +2288,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
 --data '{
-    "model": "qwen-audio-turbo",
+    "model": "qwen3.5-omni-plus",
     "input":{
         "messages":[
             {
@@ -2212,16 +2316,23 @@ Python
 ```
 import os
 import dashscope
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 messages = [
     {'role': 'system', 'content': [{'text': 'You are a helpful assistant.'}]},
     {'role': 'user', 'content': [{'text': '杭州明天天气是什么？'}]}
     ]
-response = dashscope.MultiModalConversation.call(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-    api_key=os.getenv('DASHSCOPE_API_KEY'),
-    model="qwen3.8-max", # 此处以qwen3.8-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
+response = client.multimodal.chat.create(
+    # 此处以qwen3.8-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
+    model="qwen3.8-max",
     messages=messages,
     enable_search=True,
     )
@@ -2317,7 +2428,15 @@ Python
 ```
 import os
 import dashscope
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 tools = [
     {
@@ -2349,10 +2468,9 @@ tools = [
     }
 ]
 messages = [{"role": "user", "content": [{"text": "杭州天气怎么样"}]}]
-response = dashscope.MultiModalConversation.call(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-    api_key=os.getenv('DASHSCOPE_API_KEY'),
-    model='qwen3.8-max',  # 此处以qwen3.8-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
+response = client.multimodal.chat.create(
+    # 此处以qwen3.8-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
+    model='qwen3.8-max',
     messages=messages,
     tools=tools,
 )
@@ -2501,17 +2619,25 @@ curl --location "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 #### 异步调用
 
 ```
-# 您的Dashscope Python SDK版本需要不低于 1.19.0。
+# 需要 dashscope 2.0.1 及以上版本
 import asyncio
 import platform
 import os
-from dashscope.aigc.multimodal_conversation import AioMultiModalConversation
+import dashscope
+
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+aclient = dashscope.AsyncClient(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 async def main():
-    response = await AioMultiModalConversation.call(
-        # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-        api_key=os.getenv('DASHSCOPE_API_KEY'),
-        model="qwen3.8-max",  # 此处以qwen3.8-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
+    response = await aclient.multimodal.chat.create(
+        # 此处以qwen3.8-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
+        model="qwen3.8-max",
         messages=[{"role": "user", "content": [{"text": "你是谁"}]}],
     )
     print(response)
@@ -2528,19 +2654,24 @@ asyncio.run(main())
 ```
 import os
 import dashscope
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 messages = [
         {'role': 'system', 'content': 'you are a helpful assisstant'},
         # 请将 '{FILE_ID}'替换为您实际对话场景所使用的 fileid
-        {'role':'system','content':f'fileid://{FILE_ID}'},
+        {'role':'system','content':'fileid://{FILE_ID}'},
         {'role': 'user', 'content': '这篇文章讲了什么'}]
-response = dashscope.Generation.call(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-    api_key=os.getenv('DASHSCOPE_API_KEY'),
+response = client.chat.completions.create(
     model="qwen-long",
     messages=messages,
-    result_format="message",
 )
 print(response)
 ```
@@ -2646,28 +2777,32 @@ Python
 ```
 import os
 import dashscope
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+from dashscope.v2 import DashScopeError
 
-response = dashscope.Generation.call(
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     api_key=os.getenv('DASHSCOPE_API_KEY'),
-    model='qwen-doc-turbo',
-    messages=[
-        {"role": "system", "content": "you are a helpful assistant."},
-        {"role": "system", "content": "您的文档内容"},
-        {"role": "user", "content": "生成一个10到20页的ppt"}
-    ],
-    result_format="message",
-    skill=[{"type": "ppt", "mode": "general", "template_id": "news_01"}]
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
 )
+
 try:
-    if response.status_code == 200:
-        print(response.output.choices[0].message.content)
-    else:
-        print(f"请求失败，状态码: {response.status_code}")
-        print(f"错误信息: {response.message}")
-        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
-except Exception as e:
-    print(f"发生错误: {e}")
+    response = client.chat.completions.create(
+        model='qwen-doc-turbo',
+        messages=[
+            {"role": "system", "content": "you are a helpful assistant."},
+            {"role": "system", "content": "您的文档内容"},
+            {"role": "user", "content": "生成一个10到20页的ppt"}
+        ],
+        parameters={"skill": [{"type": "ppt", "mode": "general", "template_id": "news_01"}]}
+    )
+    print(response.choices[0].message.content)
+except DashScopeError as e:
+    print(f"HTTP返回码：{e.status_code}")
+    print(f"错误码：{e.code}")
+    print(f"错误信息：{e.message}")
     print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
@@ -2710,12 +2845,6 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 ## chat响应对象（流式与非流式输出格式一致）
 
-**status\_code**`string`
-
-本次请求的状态码。200 表示请求成功，否则表示请求失败。
-
-> Java SDK不会返回该参数。调用失败会抛出异常，异常信息为**status\_code**和**message**的内容。
-
 **request\_id**`string`
 
 本次调用的唯一标识符。
@@ -2724,9 +2853,9 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 **code**`string`
 
-错误码，调用成功时为空值。
+错误码，调用失败时返回。
 
-> 只有Python SDK返回该参数。
+> Python SDK 2.0 调用失败时不返回信封字段，而是抛出 DashScopeError（e.code/e.status\_code/e.message/e.request\_id）。
 
 **output**`object`
 
@@ -3015,10 +3144,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 ```
 {
-  "status_code": 200,
   "request_id": "902fee3b-f7f0-9a8c-96a1-6b4ea25af114",
-  "code": "",
-  "message": "",
   "output": {
     "text": null,
     "finish_reason": null,

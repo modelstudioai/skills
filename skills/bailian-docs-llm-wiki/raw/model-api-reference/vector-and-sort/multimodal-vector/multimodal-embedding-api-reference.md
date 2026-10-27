@@ -309,7 +309,7 @@ text、image、video
 
 ## 前提条件
 
-您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，还需要[安装DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。请将示例代码中的 `DASHSCOPE_API_HOST` 替换为获取的 API Host。
+您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，还需要[安装DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
 ## HTTP调用
 
@@ -727,28 +727,33 @@ API Key 无效或已过期，返回 `Invalid API-key provided.`
 #### 使用图片URL
 
 ```
+import os
 import dashscope
-import json
-from http import HTTPStatus
+from dashscope.v2 import DashScopeError
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 # 实际使用中请将url地址替换为您的图片url地址
 image = "https://dashscope.oss-cn-beijing.aliyuncs.com/images/256_1.png"
 input = [{'image': image}]
-# 调用模型接口
-resp = dashscope.MultiModalEmbedding.call(
-    model="tongyi-embedding-vision-plus",
-    input=input
-)
-
-if resp.status_code == HTTPStatus.OK:
-    result = {
-        "status_code": resp.status_code,
-        "request_id": getattr(resp, "request_id", ""),
-        "code": getattr(resp, "code", ""),
-        "message": getattr(resp, "message", ""),
-        "output": resp.output,
-        "usage": resp.usage
-    }
-    print(json.dumps(result, ensure_ascii=False, indent=4))
+try:
+    # 调用模型接口
+    resp = client.multimodal.embeddings.create(
+        model="tongyi-embedding-vision-plus",
+        input=input
+    )
+    # 向量结果：resp.embeddings[i].embedding 为向量数组，resp.embeddings[i].index 为输入序号
+    print(resp.model_dump_json(indent=4))
+except DashScopeError as e:
+    print(f"HTTP返回码：{e.status_code}")
+    print(f"错误码：{e.code}")
+    print(f"错误信息：{e.message}")
+    print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
 #### 使用本地图片
@@ -756,10 +761,18 @@ if resp.status_code == HTTPStatus.OK:
 将本地图片转换为 Base64 格式后进行向量化：
 
 ```
-import dashscope
+import os
 import base64
-import json
-from http import HTTPStatus
+import dashscope
+from dashscope.v2 import DashScopeError
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 # 读取图片并转换为Base64,实际使用中请将xxx.png替换为您的图片文件名或路径
 image_path = "xxx.png"
 with open(image_path, "rb") as image_file:
@@ -770,22 +783,18 @@ image_format = "png"  # 根据实际情况修改，比如jpg、bmp 等
 image_data = f"data:image/{image_format};base64,{base64_image}"
 # 输入数据
 input = [{'image': image_data}]
-
-# 调用模型接口
-resp = dashscope.MultiModalEmbedding.call(
-    model="tongyi-embedding-vision-plus",
-    input=input
-)
-if resp.status_code == HTTPStatus.OK:
-    result = {
-        "status_code": resp.status_code,
-        "request_id": getattr(resp, "request_id", ""),
-        "code": getattr(resp, "code", ""),
-        "message": getattr(resp, "message", ""),
-        "output": resp.output,
-        "usage": resp.usage
-    }
-    print(json.dumps(result, ensure_ascii=False, indent=4))
+try:
+    # 调用模型接口
+    resp = client.multimodal.embeddings.create(
+        model="tongyi-embedding-vision-plus",
+        input=input
+    )
+    print(resp.model_dump_json(indent=4))
+except DashScopeError as e:
+    print(f"HTTP返回码：{e.status_code}")
+    print(f"错误码：{e.code}")
+    print(f"错误信息：{e.message}")
+    print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
 #### 视频向量化示例
@@ -793,64 +802,78 @@ if resp.status_code == HTTPStatus.OK:
 > 多模态向量化模型目前仅支持以URL形式输入视频文件，暂不支持直接传入本地视频。
 
 ```
+import os
 import dashscope
-import json
-from http import HTTPStatus
+from dashscope.v2 import DashScopeError
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 # 实际使用中请将url地址替换为您的视频url地址
 video = "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250107/lbcemt/new+video.mp4"
 input = [{'video': video}]
-# 调用模型接口
-resp = dashscope.MultiModalEmbedding.call(
-    model="tongyi-embedding-vision-plus",
-    input=input
-)
-
-if resp.status_code == HTTPStatus.OK:
-    result = {
-        "status_code": resp.status_code,
-        "request_id": getattr(resp, "request_id", ""),
-        "code": getattr(resp, "code", ""),
-        "message": getattr(resp, "message", ""),
-        "output": resp.output,
-        "usage": resp.usage
-    }
-    print(json.dumps(result, ensure_ascii=False, indent=4))
+try:
+    # 调用模型接口
+    resp = client.multimodal.embeddings.create(
+        model="tongyi-embedding-vision-plus",
+        input=input
+    )
+    print(resp.model_dump_json(indent=4))
+except DashScopeError as e:
+    print(f"HTTP返回码：{e.status_code}")
+    print(f"错误码：{e.code}")
+    print(f"错误信息：{e.message}")
+    print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
 #### 文本向量化示例
 
 ```
+import os
 import dashscope
-import json
-from http import HTTPStatus
-
+from dashscope.v2 import DashScopeError
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 text = "通用多模态表征模型示例"
 input = [{'text': text}]
-# 调用模型接口
-resp = dashscope.MultiModalEmbedding.call(
-    model="tongyi-embedding-vision-plus",
-    input=input
-)
-
-if resp.status_code == HTTPStatus.OK:
-    result = {
-        "status_code": resp.status_code,
-        "request_id": getattr(resp, "request_id", ""),
-        "code": getattr(resp, "code", ""),
-        "message": getattr(resp, "message", ""),
-        "output": resp.output,
-        "usage": resp.usage
-    }
-    print(json.dumps(result, ensure_ascii=False, indent=4))
+try:
+    # 调用模型接口
+    resp = client.multimodal.embeddings.create(
+        model="tongyi-embedding-vision-plus",
+        input=input
+    )
+    print(resp.model_dump_json(indent=4))
+except DashScopeError as e:
+    print(f"HTTP返回码：{e.status_code}")
+    print(f"错误码：{e.code}")
+    print(f"错误信息：{e.message}")
+    print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
 #### 融合向量化示例
 
 ```
-import dashscope
-import json
 import os
-from http import HTTPStatus
+import dashscope
+from dashscope.v2 import DashScopeError
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # 多模态融合向量：将文本、图片、视频融合成一个融合向量
 # 适用于跨模态检索、图搜等场景
@@ -865,18 +888,21 @@ input_data = [
     {"video": video}
 ]
 
-# 使用 qwen3-vl-embedding 生成融合向量
-resp = dashscope.MultiModalEmbedding.call(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
-    model="qwen3-vl-embedding",
-    input=input_data,
-    enable_fusion=True,
-    # 可选参数：指定向量维度（支持 2560、2048、1536、1024、768、512、256，默认 2560）
-    # parameters={"dimension": 1024}
-)
-
-print(json.dumps(resp, ensure_ascii=False, indent=4))
+try:
+    # 使用 qwen3-vl-embedding 生成融合向量
+    resp = client.multimodal.embeddings.create(
+        model="qwen3-vl-embedding",
+        input=input_data,
+        enable_fusion=True,
+        # 可选参数：指定向量维度（支持 2560、2048、1536、1024、768、512、256，默认 2560）
+        # dimension=1024
+    )
+    print(resp.model_dump_json(indent=4))
+except DashScopeError as e:
+    print(f"HTTP返回码：{e.status_code}")
+    print(f"错误码：{e.code}")
+    print(f"错误信息：{e.message}")
+    print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
 #### 多图融合向量化示例
@@ -884,10 +910,17 @@ print(json.dumps(resp, ensure_ascii=False, indent=4))
 使用 `qwen3-vl-embedding` 将多张图片与文本融合为 1 个向量。传入多个 `image` 条目即可实现多图融合，适用于商品多角度图片与描述文本的综合语义检索。
 
 ```
-import dashscope
-import json
 import os
-from http import HTTPStatus
+import dashscope
+from dashscope.v2 import DashScopeError
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # 多图+文本融合向量：将多张商品图片和描述文本融合为 1 个向量
 # 适用于商品多角度图片+描述文本的综合语义检索
@@ -902,15 +935,18 @@ input_data = [
     {"image": image2}
 ]
 
-resp = dashscope.MultiModalEmbedding.call(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
-    model="qwen3-vl-embedding",
-    input=input_data,
-    enable_fusion=True
-)
-
-print(json.dumps(resp, ensure_ascii=False, indent=4))
+try:
+    resp = client.multimodal.embeddings.create(
+        model="qwen3-vl-embedding",
+        input=input_data,
+        enable_fusion=True
+    )
+    print(resp.model_dump_json(indent=4))
+except DashScopeError as e:
+    print(f"HTTP返回码：{e.status_code}")
+    print(f"错误码：{e.code}")
+    print(f"错误信息：{e.message}")
+    print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
 #### 2026-03-06 快照版本示例
@@ -918,10 +954,17 @@ print(json.dumps(resp, ensure_ascii=False, indent=4))
 > 以下示例展示如何使用 `tongyi-embedding-vision-plus-2026-03-06` 模型，演示 `res_level` （多分辨率）和 `max_video_frames` （视频帧数）参数的使用。该模型基于 Qwen3 底座，支持 30+ 种语言，同时支持独立向量和融合向量生成。
 
 ```
-import dashscope
-import json
 import os
-from http import HTTPStatus
+import dashscope
+from dashscope.v2 import DashScopeError
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # tongyi-embedding-vision-plus-2026-03-06 示例
 # 支持 res_level（多分辨率）和 max_video_frames（视频帧数）参数
@@ -935,33 +978,37 @@ input_data = [
     {"video": video}
 ]
 
-# 调用 2026-03-06 快照版本模型
-resp = dashscope.MultiModalEmbedding.call(
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
-    model="tongyi-embedding-vision-plus-2026-03-06",
-    input=input_data,
-    dimension=1152,      # 支持 1152/1024/512/256/128/64
-    res_level=1,         # 分辨率档位：0/1/2/3，默认 1
-    max_video_frames=64  # 视频最大采样帧数，默认 8，最大 64
-)
-
-if resp.status_code == HTTPStatus.OK:
-    result = {
-        "status_code": resp.status_code,
-        "request_id": getattr(resp, "request_id", ""),
-        "output": resp.output,
-        "usage": resp.usage
-    }
-    print(json.dumps(result, ensure_ascii=False, indent=4))
+try:
+    # 调用 2026-03-06 快照版本模型
+    resp = client.multimodal.embeddings.create(
+        model="tongyi-embedding-vision-plus-2026-03-06",
+        input=input_data,
+        dimension=1152,      # 支持 1152/1024/512/256/128/64
+        res_level=1,         # 分辨率档位：0/1/2/3，默认 1
+        max_video_frames=64  # 视频最大采样帧数，默认 8，最大 64
+    )
+    print(resp.model_dump_json(indent=4))
+except DashScopeError as e:
+    print(f"HTTP返回码：{e.status_code}")
+    print(f"错误码：{e.code}")
+    print(f"错误信息：{e.message}")
+    print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
 2026-03-06 版本的**融合向量**用法：将 text、image、video 放在同一个 content 对象中，模型将所有输入融合为 1 个向量（type 为 `fused`）。
 
 ```
-import dashscope
-import json
 import os
-from http import HTTPStatus
+import dashscope
+from dashscope.v2 import DashScopeError
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # 融合向量：将 text/image/video 放在同一个 content 对象中
 # 模型会将所有输入融合编码为 1 个向量，type 为 "fused"
@@ -973,21 +1020,18 @@ input_data = [
     {"text": text, "image": image}
 ]
 
-resp = dashscope.MultiModalEmbedding.call(
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
-    model="tongyi-embedding-vision-plus-2026-03-06",
-    input=input_data,
-    dimension=1152
-)
-
-if resp.status_code == HTTPStatus.OK:
-    result = {
-        "status_code": resp.status_code,
-        "request_id": getattr(resp, "request_id", ""),
-        "output": resp.output,
-        "usage": resp.usage
-    }
-    print(json.dumps(result, ensure_ascii=False, indent=4))
+try:
+    resp = client.multimodal.embeddings.create(
+        model="tongyi-embedding-vision-plus-2026-03-06",
+        input=input_data,
+        dimension=1152
+    )
+    print(resp.model_dump_json(indent=4))
+except DashScopeError as e:
+    print(f"HTTP返回码：{e.status_code}")
+    print(f"错误码：{e.code}")
+    print(f"错误信息：{e.message}")
+    print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
 #### dashscope CLI
@@ -1009,24 +1053,19 @@ dashscope multimodal-embedding create -m tongyi-embedding-vision-plus --text "�
 
 ```
 {
-    "status_code": 200,
     "request_id": "40532987-ba72-42aa-a178-bb58b52fb7f3",
-    "code": "",
-    "message": "",
-    "output": {
-        "embeddings": [
-            {
-                "index": 0,
-                "embedding": [
-                    -0.009490966796875,
-                    -0.024871826171875,
-                    -0.031280517578125,
-                    ...
-                ],
-                "type": "text"
-            }
-        ]
-    },
+    "embeddings": [
+        {
+            "index": 0,
+            "embedding": [
+                -0.009490966796875,
+                -0.024871826171875,
+                -0.031280517578125,
+                ...
+            ],
+            "type": "text"
+        }
+    ],
     "usage": {
         "input_tokens": 10,
         "input_tokens_details": {

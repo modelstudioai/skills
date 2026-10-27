@@ -81,33 +81,106 @@ API-Key，格式：`Bearer $DASHSCOPE_API_KEY`。
 
 ## 请求示例
 
-Python 示例使用 TypeSafe SDK（`typesafe-sdk`）调用，`base_url` 指向百炼网关，SDK 会自动拼接 `/v1/systemone` 并解析返回体。安装：`pip install typesafe-sdk`。
+DashScope SDK 已支持决策模型（兼容 TypeSafe System One 协议）：
+
+-   **Python**：DashScope SDK **2.0.1 及以上**（决策模型为 2.0.1 新增能力，旧版本无 `client.decision` 接口，调用会报 `AttributeError`）。安装：`pip install -U "dashscope>=2.0.1"`，参见[安装 SDK](raw/model-api-reference/preparations/install-sdk.md)。SDK 根据业务空间与地域自动拼接 `/compatible-mode/v1/systemone` 端点。
+-   **Java**：DashScope SDK **2.23.3 及以上**（决策模型为 2.23.3 新增能力，旧版本无 `com.alibaba.dashscope.decision` 包）。Maven 坐标：`com.alibaba:dashscope-sdk-java:2.23.3`（Gradle：`implementation group: 'com.alibaba', name: 'dashscope-sdk-java', version: '2.23.3'`）。API Key 默认从环境变量 `DASHSCOPE_API_KEY` 读取。
+-   调用失败时，Python SDK 抛出 `DashScopeError` 异常，Java SDK 抛出 `ApiException`。
+
+也可以使用通用 TypeSafe SDK（`typesafe-sdk`）调用，`base_url` 指向百炼网关，SDK 会自动拼接 `/v1/systemone` 并解析返回体。安装：`pip install typesafe-sdk`。
 
 #### 工单分流示例
 
 一次请求同时完成「派单团队 choice」「是否升级 noul」「严重度 score」三项决策。以下以华北2（北京）地域为例。
 
-curl
+#### DashScope Python
 
 ```
-curl -sS -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/systemone \
-  -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
-  -H 'Content-Type: application/json' \
-  -d '{
-    "model": "decision-model-preview",
-    "state": {"ticket_id": "T-1001", "content": "订单支付后超过 24 小时仍未到账，用户无法继续使用核心服务，要求立即处理。"},
-    "questions": {
-      "department": {"type": "choice", "instructions": "应该由哪个团队处理？",
-                     "criteria": {"billing": "支付、退款和账单问题", "technical": "产品故障和集成问题"}},
-      "escalate":   {"type": "noul",  "instructions": "是否需要立即通知值班人员？"},
-      "severity":   {"type": "score", "instructions": "这个问题有多严重？",
+import os
+
+import dashscope
+
+# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+# 决策模型端点固定挂在业务空间网关的 compatible-mode 路径下，SDK 会根据 workspace 与 region 自动拼接。
+client = dashscope.Client(
+    # 若没有将API Key配置到环境变量中，请将下行替换为自己的API Key：api_key="sk-xxx"
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
+
+result = client.decision.create(
+    model="decision-model-preview",
+    state={"ticket_id": "T-1001", "content": "订单支付后超过 24 小时仍未到账，用户无法继续使用核心服务。"},
+    questions={
+        "department": {"type": "choice", "instructions": "应该由哪个团队处理？",
+                       "criteria": {"billing": "支付、退款和账单问题", "technical": "产品故障和集成问题"}},
+        "escalate": {"type": "noul", "instructions": "是否需要立即通知值班人员？"},
+        "severity": {"type": "score", "instructions": "这个问题有多严重？",
                      "criteria": ["轻微问题，不影响功能", "部分功能受影响，但存在替代方案",
-                                  "核心功能不可用，没有替代方案", "造成严重业务或安全影响"]}
-    }
-  }'
+                                  "核心功能不可用，没有替代方案", "造成严重业务或安全影响"]},
+    },
+)
+
+print(result.answers["department"].choice)   # 选中选项
+print(result.answers["escalate"].noul)       # P(yes)
+print(result.answers["severity"].score)      # 概率加权等级索引
+print(result.usage.input_tokens, result.latency_ms)
 ```
 
-Python
+#### DashScope Java
+
+```
+import com.alibaba.dashscope.decision.DecisionModel;
+import com.alibaba.dashscope.decision.DecisionModelParam;
+import com.alibaba.dashscope.decision.DecisionModelResult;
+import com.alibaba.dashscope.decision.DecisionQuestion;
+import com.alibaba.dashscope.utils.JsonUtils;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+public class DecisionDemo {
+  public static void main(String[] args) throws Exception {
+    // API Key 默认从环境变量 DASHSCOPE_API_KEY 读取。
+    // 构造参数为业务空间 ID 与地域，SDK 会拼接
+    // https://{WorkspaceId}.{region}.maas.aliyuncs.com/compatible-mode/v1/systemone
+    Map<String, Object> state = new HashMap<>();
+    state.put("ticket_id", "T-1001");
+    state.put("content", "订单支付后超过 24 小时仍未到账，用户无法继续使用核心服务，要求立即处理。");
+
+    Map<String, String> options = new LinkedHashMap<>();
+    options.put("billing", "支付、退款和账单问题");
+    options.put("technical", "产品故障和集成问题");
+
+    List<String> levels = Arrays.asList(
+        "轻微问题，不影响功能",
+        "部分功能受影响，但存在替代方案",
+        "核心功能不可用，没有替代方案",
+        "造成严重业务或安全影响");
+
+    Map<String, DecisionQuestion> questions = new LinkedHashMap<>();
+    questions.put("department", DecisionQuestion.choice("应该由哪个团队处理？", options));
+    questions.put("escalate", DecisionQuestion.noul("是否需要立即通知值班人员？"));
+    questions.put("severity", DecisionQuestion.score("这个问题有多严重？", levels));
+
+    DecisionModelParam param = DecisionModelParam.builder()
+        .model(DecisionModelParam.Models.DECISION_MODEL_PREVIEW)
+        .state(state)
+        .questions(questions)
+        .build();
+
+    DecisionModel decisionModel = new DecisionModel("{WorkspaceId}", "cn-beijing");
+    DecisionModelResult result = decisionModel.call(param);
+
+    System.out.println(JsonUtils.toJson(result));
+  }
+}
+```
+
+#### TypeSafe Python
 
 ```
 import os
@@ -136,11 +209,7 @@ print(result.answers["escalate"])     # noul P(yes)
 print(result.answers["severity"])     # score, legend, probabilities
 ```
 
-#### 是非判断示例
-
-对一个 `noul` 问题返回 P(yes) 概率，0=否 1=是。以下以华北2（北京）地域为例。
-
-curl
+#### curl
 
 ```
 curl -sS -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/systemone \
@@ -148,14 +217,75 @@ curl -sS -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
   -H 'Content-Type: application/json' \
   -d '{
     "model": "decision-model-preview",
-    "state": "这段评论是否在索要退款？",
+    "state": {"ticket_id": "T-1001", "content": "订单支付后超过 24 小时仍未到账，用户无法继续使用核心服务，要求立即处理。"},
     "questions": {
-      "refund": {"type": "noul", "instructions": "是否在索要退款？"}
+      "department": {"type": "choice", "instructions": "应该由哪个团队处理？",
+                     "criteria": {"billing": "支付、退款和账单问题", "technical": "产品故障和集成问题"}},
+      "escalate":   {"type": "noul",  "instructions": "是否需要立即通知值班人员？"},
+      "severity":   {"type": "score", "instructions": "这个问题有多严重？",
+                     "criteria": ["轻微问题，不影响功能", "部分功能受影响，但存在替代方案",
+                                  "核心功能不可用，没有替代方案", "造成严重业务或安全影响"]}
     }
   }'
 ```
 
-Python
+#### 是非判断示例
+
+对一个 `noul` 问题返回 P(yes) 概率，0=否 1=是。以下以华北2（北京）地域为例。
+
+#### DashScope Python
+
+```
+import os
+
+import dashscope
+
+client = dashscope.Client(
+    # 若没有将API Key配置到环境变量中，请将下行替换为自己的API Key：api_key="sk-xxx"
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
+
+result = client.decision.create(
+    model="decision-model-preview",
+    state="这段评论是否在索要退款？",
+    questions={"refund": {"type": "noul", "instructions": "是否在索要退款？"}},
+)
+
+print(result.answers["refund"].noul)   # P(yes)
+```
+
+#### DashScope Java
+
+```
+import com.alibaba.dashscope.decision.DecisionModel;
+import com.alibaba.dashscope.decision.DecisionModelParam;
+import com.alibaba.dashscope.decision.DecisionModelResult;
+import com.alibaba.dashscope.decision.DecisionQuestion;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+public class DecisionDemo {
+  public static void main(String[] args) throws Exception {
+    Map<String, DecisionQuestion> questions = new LinkedHashMap<>();
+    questions.put("refund", DecisionQuestion.noul("是否在索要退款？"));
+
+    DecisionModelParam param = DecisionModelParam.builder()
+        .model(DecisionModelParam.Models.DECISION_MODEL_PREVIEW)
+        .state("这段评论是否在索要退款？")
+        .questions(questions)
+        .build();
+
+    DecisionModel decisionModel = new DecisionModel("{WorkspaceId}", "cn-beijing");
+    DecisionModelResult result = decisionModel.call(param);
+
+    System.out.println(result.getAnswers().get("refund").getNoul());   // P(yes)
+  }
+}
+```
+
+#### TypeSafe Python
 
 ```
 import os
@@ -173,6 +303,21 @@ result = client.system_one(
 )
 
 print(result.answers["refund"])   # noul P(yes)
+```
+
+#### curl
+
+```
+curl -sS -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/systemone \
+  -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "model": "decision-model-preview",
+    "state": "这段评论是否在索要退款？",
+    "questions": {
+      "refund": {"type": "noul", "instructions": "是否在索要退款？"}
+    }
+  }'
 ```
 
 ## 返回参数

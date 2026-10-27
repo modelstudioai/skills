@@ -18,7 +18,7 @@
 
 ## 快速开始
 
-[核心类（Transcription）](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#adcb5e9bddbyq)提供了异步提交任务、同步等待任务结束和异步查询任务执行结果的接口。可通过如下两种调用方式进行非实时语音识别：
+[核心资源（`client.audio.asr`）](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#adcb5e9bddbyq)提供了异步提交任务、同步等待任务结束和异步查询任务执行结果的接口（`transcribe`一步式 / `jobs.create`+`jobs.wait`+`jobs.fetch`分步）。可通过如下两种调用方式进行非实时语音识别：
 
 -   异步提交任务+同步等待任务结束：提交任务后，阻塞当前线程直到任务结束并获取识别结果。
 -   异步提交任务+异步查询任务执行结果：提交任务后，在需要的时候通过调用查询任务接口获取任务的执行结果。
@@ -27,99 +27,96 @@
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7269765871/CAEQURiBgMCvo5zjpxkiIDQyNzUwZjVjMWM3MjQ5Nzg4ODBjNDRjNzE1ZGFiOGFj4709861_20241015153444.149.svg)
 
-1.  调用[核心类（Transcription）](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#adcb5e9bddbyq)的`async_call`方法并设置[请求参数](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#340f6879fci7d)。
+1.  调用[核心资源（`client.audio.asr`）](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#adcb5e9bddbyq)（`jobs.create`/`transcribe`）并设置[请求参数](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#340f6879fci7d)。
     
     **说明**
     
     -   文件转写服务对通过API提交的任务采取尽力服务原则进行处理。任务提交后将进入排队（`PENDING`）状态，排队时间取决于队列长度和文件时长，无法明确给出，通常在数分钟内。任务开始处理后，语音识别将以数百倍加速完成。
     -   每一个任务完成后，识别结果和URL下载链接有效期为24小时，超时后无法查询任务或通过先前查询结果中的URL下载结果。
     
-2.  调用[核心类（Transcription）](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#adcb5e9bddbyq)的`wait`方法同步等待任务结束。
+2.  调用[核心资源（`client.audio.asr`）](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#adcb5e9bddbyq)（`jobs.wait`，或`transcribe`一步式）同步等待任务结束。
     
     任务的状态包括`PENDING`、`RUNNING`、`SUCCEEDED`和`FAILED`。当任务处于`PENDING`或`RUNNING`状态时，`wait`接口将被阻塞。当任务处于`SUCCEEDED`或`FAILED`状态时，`wait`接口不再阻塞并返回任务的执行结果。
     
-    `wait`返回[TranscriptionResponse](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#c4fe4e43ee4n6)。
+    `jobs.wait`返回终态`Job`（结构参见[响应参数](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#c4fe4e43ee4n6)）。
     
 
 点击查看完整示例
 
 ```
-from http import HTTPStatus
-from dashscope.audio.asr import Transcription
-import dashscope
 import os
 import json
+import dashscope
 
+# 若没有将API Key配置到环境变量中，请将下行替换为自己的API Key：api_key="sk-xxx"
 # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-
-# 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 若没有配置环境变量，请用百炼API Key将下行替换为：dashscope.api_key = "sk-xxx"
-dashscope.api_key = os.getenv("DASHSCOPE_API_KEY")
-
-task_response = Transcription.async_call(
-    model='qwen-audio-3.1-asr-flash-filetrans',
-    file_urls=['{YOUR_AUDIO_URL}']
+client = dashscope.Client(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
 )
 
-transcribe_response = Transcription.wait(task=task_response.output.task_id)
-if transcribe_response.status_code == HTTPStatus.OK:
-    print(json.dumps(transcribe_response.output, indent=4, ensure_ascii=False))
-    print('transcription done!')
+# 提交录音文件识别任务并同步等待任务完成
+job = client.audio.asr.transcribe(
+    ['{YOUR_AUDIO_URL}'],
+    model='qwen-audio-3.1-asr-flash-filetrans',
+)
+
+print(json.dumps(job.model_dump(), indent=4, ensure_ascii=False))
+print('transcription done!')
 ```
 
 ### 异步提交任务+异步查询任务执行结果
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7269765871/CAEQURiBgMCN3qzkpxkiIGE0YmU4YTdjMWNiNzRmYjJhMjFlMWZkZmFmOWQ1NmEx4709861_20241015153444.149.svg)
 
-1.  调用[核心类（Transcription）](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#adcb5e9bddbyq)的`async_call`方法并设置[请求参数](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#340f6879fci7d)。
+1.  调用[核心资源（`client.audio.asr`）](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#adcb5e9bddbyq)（`jobs.create`/`transcribe`）并设置[请求参数](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#340f6879fci7d)。
     
     **说明**
     
     -   文件转写服务对通过API提交的任务采取尽力服务原则进行处理。任务提交后将进入排队（`PENDING`）状态，排队时间取决于队列长度和文件时长，无法明确给出，通常在数分钟内。任务开始处理后，语音识别将以数百倍加速完成。
     -   每一个任务完成后，识别结果和URL下载链接有效期为24小时，超时后无法查询任务或通过先前查询结果中的URL下载结果。
     
-2.  循环调用[核心类（Transcription）](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#adcb5e9bddbyq)的`fetch`方法直到获取最终的任务结果。
+2.  循环调用[核心资源（`client.audio.asr`）](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#adcb5e9bddbyq)（`jobs.fetch`）直到获取最终的任务结果。
     
     当任务状态为`SUCCEEDED`或`FAILED`时，停止轮询并处理结果。
     
-    `fetch`返回[TranscriptionResponse](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#c4fe4e43ee4n6)。
+    `jobs.fetch`返回`Job`（结构参见[响应参数](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#c4fe4e43ee4n6)）。
     
 
 点击查看完整示例
 
 ```
-from http import HTTPStatus
-from dashscope.audio.asr import Transcription
-import dashscope
 import os
 import json
-
+import dashscope
 # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-
-# 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 若没有配置环境变量，请用百炼API Key将下行替换为：dashscope.api_key = "sk-xxx"
-dashscope.api_key = os.getenv("DASHSCOPE_API_KEY")
-
-transcribe_response = Transcription.async_call(
-    model='qwen-audio-3.1-asr-flash-filetrans',
-    file_urls=['{YOUR_AUDIO_URL}']
+client = dashscope.Client(
+    # 若没有将API Key配置到环境变量中，请将下行替换为自己的API Key：api_key="sk-xxx"
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
 )
 
-while True:
-    if transcribe_response.output.task_status == 'SUCCEEDED' or transcribe_response.output.task_status == 'FAILED':
-        break
-    transcribe_response = Transcription.fetch(task=transcribe_response.output.task_id)
+# 提交录音文件识别任务
+job = client.audio.asr.jobs.create(
+    model='qwen-audio-3.1-asr-flash-filetrans',
+    file_urls=['{YOUR_AUDIO_URL}'],
+)
 
-if transcribe_response.status_code == HTTPStatus.OK:
-    print(json.dumps(transcribe_response.output, indent=4, ensure_ascii=False))
-    print('transcription done!')
+# 循环查询任务直到获取最终结果
+while True:
+    if job.status == 'SUCCEEDED' or job.status == 'FAILED':
+        break
+    job = client.audio.asr.jobs.fetch(job.task_id)
+
+print(json.dumps(job.model_dump(), indent=4, ensure_ascii=False))
+print('transcription done!')
 ```
 
 ## 接口地址
 
-SDK 默认使用**北京地域**的接口地址。如需切换到其他地域，需在初始化前修改 `dashscope.base_http_api_url`。
+SDK 默认使用**北京地域**的接口地址。如需切换到其他地域，需在构造`Client`时设置对应的`region`。
 
 #### 华北2（北京）
 
@@ -136,20 +133,25 @@ SDK 默认使用**北京地域**的接口地址。如需切换到其他地域，
 **切换到新加坡地域**：
 
 ```
+import os
 import dashscope
 
-# 在代码开头设置
-dashscope.base_http_api_url = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1'
+# 构造Client时通过region指定地域
+client = dashscope.Client(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="ap-southeast-1",
+)
 ```
 
 **注意**：
 
 -   不同地域的 API Key 不同，请确保使用对应地域的 API Key
--   地域配置为全局设置，影响所有 DashScope SDK 的 API 调用
+-   地域在构造`Client`时传入，影响该`Client`的所有 API 调用
 
 ## 请求参数
 
-请求参数通过[核心类（Transcription）](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#adcb5e9bddbyq)的`async_call`方法进行设置。
+请求参数通过[核心资源（`client.audio.asr`）](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#adcb5e9bddbyq)的`jobs.create`/`transcribe`方法进行设置。
 
 **参数**
 
@@ -196,7 +198,7 @@ bool
 
 否
 
-仅 `qwen-audio-3.1-asr-flash-filetrans` 支持。默认 `false`，将方言转写为普通话；设为 `true` 时保留方言表达。作为同名关键字参数传入。完整参数说明请参见[API 参考](raw/_short/fun-asr-recorded-speech-recognition-http-api-52f7db644c1e5209.md)。
+仅 `qwen-audio-3.1-asr-flash-filetrans` 支持。默认 `false`，将方言转写为普通话；设为 `true` 时保留方言表达。调用时通过`parameters={'keep_dialect': True}`传入。完整参数说明请参见[API 参考](raw/_short/fun-asr-recorded-speech-recognition-http-api-52f7db644c1e5209.md)。
 
 vocabulary\_id
 
@@ -231,13 +233,17 @@ dict
 示例：
 
 ```
-from dashscope.audio.asr import Transcription
+import os
+import dashscope
 
+client = dashscope.Client(api_key=os.getenv("DASHSCOPE_API_KEY"))
+
+# 即时热词通过parameters传入
 vocab = {"张三": 5, "李四": 5}
-result = Transcription.async_call(
+job = client.audio.asr.transcribe(
+    ['{YOUR_AUDIO_URL}'],
     model="qwen-audio-3.1-asr-flash-filetrans",
-    vocabulary=vocab,
-    file_urls=['{YOUR_AUDIO_URL}']
+    parameters={"vocabulary": vocab},
 )
 ```
 
@@ -340,32 +346,26 @@ list\[str\]
 
 ## 响应结果
 
-### `TranscriptionResponse`
+### `Job`
 
-`TranscriptionResponse`封装了任务的基本信息（`task_id`和`task_status`）和执行结果（`output`属性对应的内容，参见[TranscriptionOutput](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#3c2916848c07k)）。
+`transcribe`一步式调用与`jobs.create`/`jobs.wait`/`jobs.fetch`分步调用均返回`Job`对象，封装了任务的基本信息（`task_id`和`task_status`）和执行结果（`results`等字段可直接读取，如`job.task_id`、`job.task_status`、`job.results`；字段详细说明参见[Job执行结果](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#3c2916848c07k)）。
 
-点击查看 TranscriptionResponse 结构示例
+点击查看 Job 结构示例
 
 PENDING 状态
 
 ```
 {
-    "status_code":200,
     "request_id":"251aceab-a6aa-9fc4-b7f7-0cc6d3e2a9f3",
-    "code":null,
-    "message":"",
-    "output":{
-        "task_id":"7d0a58a3-1dbe-4de9-8cff-5f48213128b0",
-        "task_status":"PENDING",
-        "submit_time":"2025-02-13 16:55:08.573",
-        "scheduled_time":"2025-02-13 16:55:08.592",
-        "task_metrics":{
-            "TOTAL":1,
-            "SUCCEEDED":0,
-            "FAILED":0
-        }
-    },
-    "usage":null
+    "task_id":"7d0a58a3-1dbe-4de9-8cff-5f48213128b0",
+    "task_status":"PENDING",
+    "submit_time":"2025-02-13 16:55:08.573",
+    "scheduled_time":"2025-02-13 16:55:08.592",
+    "task_metrics":{
+        "TOTAL":1,
+        "SUCCEEDED":0,
+        "FAILED":0
+    }
 }
 ```
 
@@ -373,22 +373,16 @@ RUNNING 状态
 
 ```
 {
-    "status_code":200,
     "request_id":"d9d530f1-853c-9848-a5f1-f5de59086ff7",
-    "code":null,
-    "message":"",
-    "output":{
-        "task_id":"6351feef-9694-45d2-9d32-63454f2ffb8d",
-        "task_status":"RUNNING",
-        "submit_time":"2025-02-13 17:31:20.681",
-        "scheduled_time":"2025-02-13 17:31:20.703",
-        "task_metrics":{
-            "TOTAL":1,
-            "SUCCEEDED":0,
-            "FAILED":0
-        }
-    },
-    "usage":null
+    "task_id":"6351feef-9694-45d2-9d32-63454f2ffb8d",
+    "task_status":"RUNNING",
+    "submit_time":"2025-02-13 17:31:20.681",
+    "scheduled_time":"2025-02-13 17:31:20.703",
+    "task_metrics":{
+        "TOTAL":1,
+        "SUCCEEDED":0,
+        "FAILED":0
+    }
 }
 ```
 
@@ -396,28 +390,23 @@ SUCCEEDED 状态
 
 ```
 {
-    "status_code":200,
     "request_id":"16668704-6702-9e03-8ab7-a32a5d7bb095",
-    "code":null,
-    "message":"",
-    "output":{
-        "task_id":"6351feef-9694-45d2-9d32-63454f2ffb8d",
-        "task_status":"SUCCEEDED",
-        "submit_time":"2025-02-13 17:31:20.681",
-        "scheduled_time":"2025-02-13 17:31:20.703",
-        "end_time":"2025-02-13 17:31:21.867",
-        "results":[
-            {
-                "file_url":"{YOUR_AUDIO_URL}",
-                "transcription_url":"https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/prod/paraformer-v2/20250213/17%3A31/20ee4e4f-0404-4806-b617-c7d4c62eed19-1.json?Expires=1739525481&OSSAccessKeyId=YOUR_ACCESS_KEY_ID&Signature=YOUR_SIGNATURE",
-                "subtask_status":"SUCCEEDED"
-            }
-        ],
-        "task_metrics":{
-            "TOTAL":1,
-            "SUCCEEDED":1,
-            "FAILED":0
+    "task_id":"6351feef-9694-45d2-9d32-63454f2ffb8d",
+    "task_status":"SUCCEEDED",
+    "submit_time":"2025-02-13 17:31:20.681",
+    "scheduled_time":"2025-02-13 17:31:20.703",
+    "end_time":"2025-02-13 17:31:21.867",
+    "results":[
+        {
+            "file_url":"{YOUR_AUDIO_URL}",
+            "transcription_url":"https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/prod/paraformer-v2/20250213/17%3A31/20ee4e4f-0404-4806-b617-c7d4c62eed19-1.json?Expires=1739525481&OSSAccessKeyId=YOUR_ACCESS_KEY_ID&Signature=YOUR_SIGNATURE",
+            "subtask_status":"SUCCEEDED"
         }
+    ],
+    "task_metrics":{
+        "TOTAL":1,
+        "SUCCEEDED":1,
+        "FAILED":0
     },
     "usage":{
         "duration":9
@@ -429,29 +418,24 @@ FAILED 状态
 
 ```
 {
-    "status_code":200,
     "request_id":"16668704-6702-9e03-8ab7-a32a5d7bb095",
-    "code":null,
-    "message":"",
-    "output":{
-        "task_id": "7bac899c-06ec-4a79-8875-xxxxxxxxxxxx",
-        "task_status": "SUCCEEDED",
-        "submit_time": "2024-12-16 16:30:59.170",
-        "scheduled_time": "2024-12-16 16:30:59.204",
-        "end_time": "2024-12-16 16:31:02.375",
-        "results": [
-            {
-                "file_url": "{YOUR_AUDIO_URL}",
-                "code": "InvalidFile.DownloadFailed",
-                "message": "The audio file cannot be downloaded.",
-                "subtask_status": "FAILED"
-            }
-        ],
-        "task_metrics": {
-            "TOTAL": 1,
-            "SUCCEEDED": 0,
-            "FAILED": 1
+    "task_id": "7bac899c-06ec-4a79-8875-xxxxxxxxxxxx",
+    "task_status": "SUCCEEDED",
+    "submit_time": "2024-12-16 16:30:59.170",
+    "scheduled_time": "2024-12-16 16:30:59.204",
+    "end_time": "2024-12-16 16:31:02.375",
+    "results": [
+        {
+            "file_url": "{YOUR_AUDIO_URL}",
+            "code": "InvalidFile.DownloadFailed",
+            "message": "The audio file cannot be downloaded.",
+            "subtask_status": "FAILED"
         }
+    ],
+    "task_metrics": {
+        "TOTAL": 1,
+        "SUCCEEDED": 0,
+        "FAILED": 1
     },
     "usage":{
         "duration":9
@@ -465,23 +449,13 @@ FAILED 状态
 
 **说明**
 
-status\_code
-
-HTTP请求状态码。
-
 code
 
--   最外层的`code`不必关注。
-    
--   `output.results`下面的`code`，代表错误码。可以结合`message`字段，对照[错误码](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#c70f9758027ph)排查问题。
-    
+`results`下面的`code`，代表错误码。可以结合`message`字段，对照[错误码](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#c70f9758027ph)排查问题。
 
 message
 
--   最外层的`message`不必关注。
-    
--   `output.results`下面的`message`，代表错误信息。可以结合`code`字段，对照[错误码](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#c70f9758027ph)排查问题。
-    
+`results`下面的`message`，代表错误信息。可以结合`code`字段，对照[错误码](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#c70f9758027ph)排查问题。
 
 task\_id
 
@@ -515,11 +489,11 @@ transcription\_url
 
 识别结果保存为JSON文件，您可以通过`transcription_url`对应的链接下载文件或直接通过HTTP请求读取该文件中的内容。JSON文件的内容请参见[识别结果说明](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#a9021178ccl7s)。
 
-### `TranscriptionOutput`
+### `Job` 执行结果
 
-`TranscriptionOutput`对应[TranscriptionResponse](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#c4fe4e43ee4n6)的`output`属性，代表当前任务执行结果。
+`Job`执行结果字段（`task_id`/`task_status`/`results`/`task_metrics`等）代表当前任务执行结果，即[Job](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#c4fe4e43ee4n6)对象中除`request_id`外的任务字段。
 
-点击查看 TranscriptionOutput 结构示例
+点击查看 Job 执行结果结构示例
 
 #### PENDING状态
 
@@ -799,9 +773,9 @@ string
 
 ## 关键接口
 
-### 核心类（`Transcription`）
+### 核心资源（`client.audio.asr`）
 
-`Transcription`可以通过“`from dashscope.audio.asr import Transcription`”方式引入。
+Qwen-Audio-3.x-ASR-Flash-Filetrans/Fun-ASR非实时语音识别能力挂载在`client.audio.asr`资源上，可通过`client.audio.asr.transcribe`一步完成提交与等待，或通过`client.audio.asr.jobs`分步控制。
 
 **成员方法**
 
@@ -809,50 +783,64 @@ string
 
 **说明**
 
-async\_call
+transcribe
 
 ```
-@classmethod
-def async_call(cls,
-               model: str,
+def transcribe(self,
                file_urls: List[str],
+               *,
+               model: str = "paraformer-v2",
+               parameters: Dict = None,
                phrase_id: str = None,
-               api_key: str = None,
-               workspace: str = None,
-               **kwargs) -> TranscriptionResponse
+               timeout: float = ...,
+               ...) -> Job
+```
+
+提交录音文件识别任务并阻塞当前线程直到任务结束（任务状态为`SUCCEEDED`或`FAILED`）。
+
+该方法返回`Job`，转写结果读`job.results`（每项含`transcription_url`）。
+
+jobs.create
+
+```
+def create(self,
+           *,
+           model: str,
+           file_urls: List[str],
+           parameters: Dict = None,
+           phrase_id: str = None,
+           ...) -> Job
 ```
 
 异步提交语音识别任务。
 
-wait
+该方法返回`Job`（`job.task_id`/`job.status`）。
+
+jobs.wait
 
 ```
-@classmethod
-def wait(cls,
-         task: Union[str, TranscriptionResponse],
-         api_key: str = None,
-         workspace: str = None,
-         **kwargs) -> TranscriptionResponse
+def wait(self,
+         task: Union[str, Job],
+         poll_interval: float = 1,
+         timeout: float = 86400,
+         ...) -> Job
 ```
 
-阻塞当前线程直到异步任务结束（任务状态为`SUCCEEDED`或`FAILED`）。
+阻塞当前线程直到异步任务结束（指数退避轮询，默认总预算24小时）。
 
-该方法返回[TranscriptionResponse](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#c4fe4e43ee4n6)。
+该方法返回终态`Job`（结构参见[响应参数](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#c4fe4e43ee4n6)）。
 
-fetch
+jobs.fetch
 
 ```
-@classmethod
-def fetch(cls,
-          task: Union[str, TranscriptionResponse],
-          api_key: str = None,
-          workspace: str = None,
-          **kwargs) -> TranscriptionResponse
+def fetch(self,
+          task_id: str,
+          ...) -> Job
 ```
 
 异步查询当前任务执行结果。
 
-该方法返回[TranscriptionResponse](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#c4fe4e43ee4n6)。
+该方法返回`Job`（结构参见[响应参数](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#c4fe4e43ee4n6)）。
 
 ## 其他接口：批量查询任务状态/取消任务
 

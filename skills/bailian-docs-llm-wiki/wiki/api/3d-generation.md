@@ -1,59 +1,61 @@
 # 3d generation
 
-百炼平台提供基于 Tripo 模型的 3D 内容生成能力，支持文本、单图及多图三种输入方式生成 GLB 格式的 3D 模型。该能力为[异步任务](../concepts/asynchronous-task.md)型 API，需通过“创建任务 → 轮询查询”两阶段完成，适用于华北2（北京）地域。所有调用均需配置有效的 API Key 并显式声明 `X-DashScope-Async: enable` 请求头。
+百炼平台的3D生成能力基于Tripo模型，提供从文本/图像到3D资产的一站式生成与后处理服务，覆盖文生3D、图生3D、Gaussian Splatting、网格分割、贴图生成、格式转换、自动绑骨及动画重定向等完整工作流。所有接口均采用异步调用模式，需通过任务ID轮询获取结果。
 
 ## 支持的模型/功能
 
-- **模型列表**：
-  - `Tripo/Tripo-H3.1`：高精度生成，输出模型最高 200 万面，支持 `geometry_quality=ultra`；详见 [Tripo-3D模型生成](../../raw/model-api-reference/3d-generation/tripo-3d-generation-api-reference.md)。
-  - `Tripo/Tripo-P1.0`：专业级快速生成，输出模型最高 2 万面，适合对延迟敏感的场景。
-- **输入模式（三者互斥）**：
-  - 文生3D（`input.prompt`）：支持中英文提示词，最大长度 1024 字符；
-  - 单图生3D（`input.image`）：接受 JPEG/PNG 公网 URL，分辨率 20–6000px，文件 ≤20MB；
-  - 多图生3D（`input.images`）：固定 4 元素数组，顺序为前/左/后/右，允许空对象占位，有效图数为 2–4 张。
+- **基础生成**：支持文生3D（`Tripo/Tripo-H3.1`, `Tripo/Tripo-P1.0`）、单图/多图生3D，以及单图生成Gaussian Splat（`Tripo/Tripo-ImageToSplat`）[Tripo-图片生成Gaussian Splat](../../raw/_short/tripo-image-to-splat-api-reference-6c649387c51a1d90.md)。
+- **后处理**：包括网格分割（`Tripo/Tripo-Segmentation`, `Tripo/Tripo-SmartSegmentation`）、贴图生成（`Tripo/Tripo-Texture`）、重拓扑（`Tripo/Tripo-Retopology`）、网格补全（`Tripo/Tripo-MeshCompletion`）、格式转换（`Tripo/Tripo-ConvertFormat`）等 [模型后处理](../../raw/model-api-reference/3d-generation/tripo-api-reference/tripo-post-processing-api-reference.md)。
+- **动画管线**：支持可绑骨检查（`Tripo/Tripo-RigCheck`）、自动绑骨（`Tripo/Tripo-AutoRig`）和动画重定向（`Tripo/Tripo-AnimationRetarget`）[动画](../../raw/model-api-reference/3d-generation/tripo-api-reference/tripo-animation-api-reference.md)。
 
-> **注意**：多图输入中各图像宽高比不要求一致，但建议保持相近视角与光照一致性，否则可能影响几何重建质量 —— 此约束未在 [Tripo-3D模型生成](../../raw/model-api-reference/3d-generation/tripo-3d-generation-api-reference.md) 的“图像限制”小节明确说明，仅隐含于示例和最佳实践描述中。
+> **注意**：`Tripo/Tripo-P1.0`不支持`geometry_quality`、`quad`、`smart_low_poly`、`generate_parts`等参数，传入将被忽略；而`Tripo/Tripo-H3.1`支持全部高级参数，但部分组合互斥（如`generate_parts`与`pbr`同时启用会返回400错误）。
 
 ## 关键参数
 
-| 参数名 | 类型 | 是否必填 | 说明 |
-|--------|------|----------|------|
-| `texture_quality` | string | 否 | 贴图质量：`standard`（默认）、`detailed`；影响 `pbr_model_url` 输出效果 |
-| `geometry_quality` | string | 否 | 仅 `Tripo/Tripo-H3.1` 支持：`standard`（≤150 万面）、`ultra`（≤200 万面） |
-| `pbr` | boolean | 否 | 默认 `true`；设为 `true` 时强制启用贴图，并返回 `pbr_model_url` |
-| `texture` | boolean | 否 | 默认 `true`；如需无贴图模型，**必须同时设 `texture=false` 且 `pbr=false`**，返回 `base_model_url` |
-
-所有下载 URL（如 `pbr_model_url`、`base_model_url`、`rendered_image_url`）有效期均为 **2 小时**，需及时持久化。
+| 参数名 | 适用模型 | 说明 |
+|--------|----------|------|
+| `texture_quality` | `Tripo/Tripo-H3.1`, `Tripo/Tripo-P1.0`, `Tripo/Tripo-Texture` | 取值`standard`/`detailed`/`extreme`，控制贴图分辨率与保真度。`extreme`对应8K贴图。 |
+| `face_limit` | `Tripo/Tripo-H3.1`, `Tripo/Tripo-P1.0`, `Tripo/Tripo-Retopology`, `Tripo/Tripo-ConvertFormat` | 面数上限。`Tripo-P1.0`范围为50–20,000；`Tripo-H3.1`在`ultra`精度下最高支持2,000,000面。 |
+| `quad` | `Tripo/Tripo-H3.1`, `Tripo/Tripo-Retopology`, `Tripo/Tripo-ConvertFormat` | 是否输出四边面网格。启用后强制输出FBX格式，且默认面数为10,000（未设`face_limit`时）。 |
+| `generate_parts` | `Tripo/Tripo-H3.1` | 是否生成可编辑部件。启用后`texture`和`pbr`必须为`false`，否则返回400错误 [Tripo-文生/图生3D模型](../../raw/_short/tripo-3d-generation-api-reference-a4c298b3ddebaa99.md)。 |
+| `model_version` | 多个后处理接口 | 如`Tripo/Tripo-Segmentation`支持`v1.0-20250506`（几何分割）与`v2.0-20260430`（语义+几何），版本不匹配将返回400错误。 |
 
 ## 使用方式
 
-1. **开通与准备**：  
-   在[华北2（北京）地域控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)搜索并开通 Tripo 模型服务；配置对应地域的 [API Key](https://bailian.console.aliyun.com/model/settings/api-key)，并确保环境变量 `DASHSCOPE_API_KEY` 已设置 —— 参考 [Tripo-3D模型生成](../../raw/model-api-reference/3d-generation/tripo-3d-generation-api-reference.md) 中的“适用范围”章节。
-
-2. **异步调用流程**：  
-   - **步骤1（创建任务）**：`POST /api/v1/services/aigc/video-generation/3d-generation`，必须携带 `X-DashScope-Async: enable`，返回 `task_id`（24 小时有效）；  
-   - **步骤2（轮询结果）**：`GET /api/v1/tasks/{task_id}`，建议间隔 ≥15 秒；状态流转为 `PENDING` → `RUNNING` → `SUCCEEDED`/`FAILED`。
-
-3. **典型请求体示例（文生3D）**：
-   ```json
-   {
-     "model": "Tripo/Tripo-P1.0",
-     "input": { "prompt": "一只可爱的猫" },
-     "parameters": { "texture_quality": "detailed" }
-   }
-   ```
+1. **地域与认证**：所有3D接口**仅支持华北2（北京）地域**，必须使用该地域的API Key，并配置`X-DashScope-Async: enable`请求头。
+2. **异步流程**：统一采用“创建任务 → 轮询查询”两步法：
+   - 步骤1：`POST /api/v1/services/aigc/video-generation/3d-generation`，获取`task_id`（有效期24小时）；
+   - 步骤2：`GET /api/v1/tasks/{task_id}`，建议首次查询延迟10秒，后续每15–30秒轮询一次。
+3. **输入方式**：
+   - 文生3D：传`prompt`（≤1024字符）；
+   - 单图生3D：传`image`（JPEG/PNG，≤20MB，建议≥256px）；
+   - 多图生3D：传`images`数组（长度固定为4，顺序为前/左/后/右）；
+   - 后处理任务：通过`original_model_task_id`引用前序任务，或直接传`model_url`（GLB/FBX/OBJ等，≤150MB）。
 
 ## 限制和注意事项
 
-- **地域强绑定**：仅支持华北2（北京）地域，URL 域名为 `cn-beijing.maas.aliyuncs.com`，其他地域不可用；
-- **异步强制性**：同步调用被明确禁止，缺失 `X-DashScope-Async: enable` 将返回错误 `current user api does not support synchronous calls`；
-- **任务生命周期**：`task_id` 有效期严格为 24 小时，超时后查询返回 `task_status=UNKNOWN`，无法恢复；
-- **RPS 限制**：任务查询接口默认限流 20 RPS，高频轮询需改用[异步任务回调](../../raw/model-api-reference/more-about-models/async-task-api.md)机制；
-- **输入互斥性**：`prompt`、`image`、`images` 三者不可共存，同时传入将导致 `InvalidParameter` 错误；
-- **无贴图模型生成**：必须同时设置 `texture=false` 和 `pbr=false`，单独设置任一参数无效。
+- **地域强约束**：所有文档明确要求“仅适用于华北2（北京）地域”，跨地域调用必然失败，且API Key必须与地域匹配。
+- **任务依赖**：后处理类接口（如贴图、分割、重拓扑）均要求前序任务已成功执行，且`original_model_task_id`必须由同一账号创建，跨账号引用返回400错误。
+- **文件限制**：输入图像≤20MB，3D模型文件≤150MB；多图生3D的`images`数组必须严格为4元素，缺失视角需用空对象`{}`占位。
+- **参数兼容性**：`generate_parts`与`pbr`/`texture`互斥；`quad=true`时`Tripo/Tripo-ConvertFormat`强制输出FBX；`Tripo/Tripo-AutoRig`中`spec=mixamo`的模型无法用于后续动画重定向。
+- **计费提示**：高级参数（如非默认`texture_size`、`face_limit`、`quad`）可能触发高级转换计费，详见各接口文档。
 
 ## 来源文档
 
-- [Tripo-3D模型生成](../../raw/model-api-reference/3d-generation/tripo-3d-generation-api-reference.md)
+- [3D模型生成](../../raw/model-api-reference/3d-generation/tripo-api-reference/tripo-generation-api-reference.md)
+- [Tripo-文生/图生3D模型](../../raw/_short/tripo-3d-generation-api-reference-a4c298b3ddebaa99.md)
+- [Tripo-图片生成Gaussian Splat](../../raw/_short/tripo-image-to-splat-api-reference-6c649387c51a1d90.md)
+- [模型后处理](../../raw/model-api-reference/3d-generation/tripo-api-reference/tripo-post-processing-api-reference.md)
+- [Tripo-贴图](../../raw/_short/tripo-texture-api-reference-4bba6c052f4d945b.md)
+- [Tripo-网格分割](../../raw/_short/tripo-segmentation-api-reference-cec9c68cea8a90f7.md)
+- [Tripo-智能分割](../../raw/_short/tripo-smart-segmentation-api-reference-f1e96e6bbd63884a.md)
+- [Tripo-格式转换](../../raw/_short/tripo-convert-format-api-reference-cd6936a75ce8dce3.md)
+- [动画](../../raw/model-api-reference/3d-generation/tripo-api-reference/tripo-animation-api-reference.md)
+- [Tripo-可绑骨检查](../../raw/model-api-reference/3d-generation/tripo-api-reference/tripo-animation-api-reference/tripo-rig-check-api-reference.md)
+- [Tripo-自动绑骨](../../raw/model-api-reference/3d-generation/tripo-api-reference/tripo-animation-api-reference/tripo-auto-rig-api-reference.md)
+- [Tripo-动画重定向](../../raw/_short/tripo-animation-retarget-api-reference-63dd4c8b61a39d8b.md)
+- [Tripo-重拓扑](../../raw/_short/tripo-retopology-api-reference-41eecbead5b85b83.md)
+- [Tripo](../../raw/model-api-reference/3d-generation/tripo-api-reference.md)
+- [Tripo-网格补全](../../raw/_short/tripo-mesh-completion-api-reference-2b47e6cb5ff8ed91.md)
 
 

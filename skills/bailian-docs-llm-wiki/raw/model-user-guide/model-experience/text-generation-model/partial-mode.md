@@ -206,8 +206,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 import os
 import dashscope
 
-# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 messages = [
     {
         "role": "user",
@@ -219,17 +224,14 @@ messages = [
         "partial": True
     }
 ]
-response = dashscope.Generation.call(
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+response = client.chat.completions.create(
     model='qwen3.8-max',
     messages=messages,
-    result_format='message',
 )
 
 # 手动拼接前缀和模型生成的内容
 prefix = "def calculate_fibonacci(n):\n    if n <= 1:\n        return n\n    else:\n"
-generated_code = response.output.choices[0].message.content
+generated_code = response.choices[0].message.content
 complete_code = prefix + generated_code
 
 print(complete_code)
@@ -479,8 +481,13 @@ curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode
 import os
 import dashscope
 
-# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 messages = [
     {
@@ -495,14 +502,12 @@ messages = [
     {"role": "assistant", "content": "今天发现了一家宝藏咖啡馆", "partial": True},
 ]
 
-response = dashscope.MultiModalConversation.call(
-    #若没有配置环境变量， 请用百炼API Key将下行替换为： api_key ="sk-xxx"
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+response = client.multimodal.chat.create(
     model="qwen3-vl-plus",
     messages=messages
 )
 
-print(response.output.choices[0].message.content[0]["text"])
+print(response.choices[0].message.content)
 ```
 
 ### 返回结果
@@ -714,22 +719,24 @@ main();
 import os
 import dashscope
 
-# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 def chat_completion(messages, max_tokens=None):
-    response = dashscope.Generation.call(
-        # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
-        # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-        api_key=os.getenv("DASHSCOPE_API_KEY"),
+    response = client.chat.completions.create(
         model='qwen-plus',
         messages=messages,
         max_tokens=max_tokens,
-        result_format='message',
     )
 
-    print(f"###停止生成原因：{response.output.choices[0].finish_reason}")
-    return response.output.choices[0].message.content
+    print(f"###停止生成原因：{response.choices[0].finish_reason}")
+    return response.choices[0].message.content
 
 # 使用示例
 messages = [{"role": "user", "content": "请写一个短篇科幻故事"}]

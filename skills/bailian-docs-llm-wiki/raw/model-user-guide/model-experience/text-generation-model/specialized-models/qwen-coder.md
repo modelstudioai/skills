@@ -156,11 +156,18 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 **请求示例**
 ```
-import dashscope
 import os
+import dashscope
+from dashscope.v2 import DashScopeError
 
-# 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 messages = [
     {
         "role": "system",
@@ -172,21 +179,17 @@ messages = [
     }
 ]
 
-response = dashscope.Generation.call(
-    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
-    model="qwen3-coder-flash",
-    messages=messages,
-    result_format="message"
-)
-
-if response.status_code == 200:
-    print(response.output.choices[0].message.content)
-else:
-    print(f"HTTP返回码：{response.status_code}")
-    print(f"错误码：{response.code}")
-    print(f"错误信息：{response.message}")
+try:
+    response = client.chat.completions.create(
+        model="qwen3-coder-flash",
+        messages=messages,
+    )
+    print(response.choices[0].message.content)
+except DashScopeError as e:
+    print(f"HTTP返回码：{e.status_code}")
+    print(f"错误码：{e.code}")
+    print(f"错误信息：{e.message}")
+    print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 **返回结果**
 ```
@@ -658,9 +661,16 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 import os
 import json
 import dashscope
+from dashscope.v2 import DashScopeError
 
-# 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 tools = [
     {
@@ -700,32 +710,29 @@ def write_file(path: str, content: str) -> str:
 
 messages = [{"role": "user", "content": "写一个python代码，快速排序，命名为quick_sort.py"}]
 
-response = dashscope.Generation.call(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
-    api_key=os.getenv('DASHSCOPE_API_KEY'),
-    model='qwen3-coder-flash',
-    messages=messages,
-    tools=tools,
-    result_format='message'
-)
+try:
+    response = client.chat.completions.create(
+        model='qwen3-coder-flash',
+        messages=messages,
+        tools=tools,
+    )
 
-if response.status_code == 200:
-    assistant_output = response.output.choices[0].message
-    messages.append(assistant_output)
+    assistant_output = response.choices[0].message
+    messages.append(assistant_output.model_dump(exclude_none=True))
 
     # 如果不需要调用工具，直接输出内容
-    if "tool_calls" not in assistant_output or not assistant_output["tool_calls"]:
-        print(f"无需调用工具，直接回复：{assistant_output['content']}")
+    if assistant_output.tool_calls is None:
+        print(f"无需调用工具，直接回复：{assistant_output.content}")
     else:
         # 进入工具调用循环（限制最大迭代次数，避免无限循环导致成本或超时问题）
         max_rounds = 10
         current_round = 0
-        while "tool_calls" in assistant_output and assistant_output["tool_calls"] and current_round < max_rounds:
+        while assistant_output.tool_calls and current_round < max_rounds:
             current_round += 1
-            for tool_call in assistant_output["tool_calls"]:
-                func_name = tool_call["function"]["name"]
-                arguments = json.loads(tool_call["function"]["arguments"])
-                tool_call_id = tool_call.get("id")
+            for tool_call in assistant_output.tool_calls:
+                func_name = tool_call.function.name
+                arguments = json.loads(tool_call.function.arguments)
+                tool_call_id = tool_call.id
                 print(f"正在调用工具 [{func_name}]，参数：{arguments}")
                 # 执行工具
                 tool_result = write_file(**arguments)
@@ -738,22 +745,19 @@ if response.status_code == 200:
                 print(f"工具返回：{tool_message['content']}")
                 messages.append(tool_message)
             # 再次调用模型，获取总结后的自然语言回复
-            response = dashscope.Generation.call(
-                api_key=os.getenv('DASHSCOPE_API_KEY'),
+            response = client.chat.completions.create(
                 model='qwen3-coder-flash',
                 messages=messages,
                 tools=tools,
-                result_format='message'
             )
-            if response.status_code == 200:
-                print(f"模型最终回复：{response.output.choices[0].message.content}")
-                assistant_output = response.output.choices[0].message
-                messages.append(assistant_output)
-            else:
-                print(f"总结回复时执行错误：{response}")
-                break
-else:
-    print(f"执行错误：{response}")
+            print(f"模型最终回复：{response.choices[0].message.content}")
+            assistant_output = response.choices[0].message
+            messages.append(assistant_output.model_dump(exclude_none=True))
+except DashScopeError as e:
+    print(f"HTTP返回码：{e.status_code}")
+    print(f"错误码：{e.code}")
+    print(f"错误信息：{e.message}")
+    print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 **返回结果**
 ```
@@ -1139,9 +1143,18 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 **请求示例**
 ```
-from http import HTTPStatus
 import dashscope
 import os
+from dashscope.v2 import DashScopeError
+
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 messages = [{
     "role": "user",
@@ -1152,19 +1165,17 @@ messages = [{
     "content": "def generate_prime_number",
     "partial": True
 }]
-response = dashscope.Generation.call(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
-    api_key=os.getenv('DASHSCOPE_API_KEY'),
-    model='qwen3-coder-flash',
-    messages=messages,
-    result_format='message',
-)
-if response.status_code == HTTPStatus.OK:
-    print(response.output.choices[0].message.content)
-else:
-    print(f"HTTP返回码：{response.status_code}")
-    print(f"错误码：{response.code}")
-    print(f"错误信息：{response.message}")
+try:
+    response = client.chat.completions.create(
+        model='qwen3-coder-flash',
+        messages=messages,
+    )
+    print(response.choices[0].message.content)
+except DashScopeError as e:
+    print(f"HTTP返回码：{e.status_code}")
+    print(f"错误码：{e.code}")
+    print(f"错误信息：{e.message}")
+    print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 **返回结果**
 ```

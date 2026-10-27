@@ -34,7 +34,7 @@ client = OpenAI(
 
 messages = [{"role": "user", "content": "1+1 等于多少？"}]
 completion = client.chat.completions.create(
-    model="xiaomi/mimo-v2.5-pro",
+    model="xiaomi/mimo-v2.6-pro-ultraspeed",
     messages=messages,
     # mimo-v2.5-pro 默认开启思考模式，如需关闭可改为 {"enable_thinking": False}
     stream=True,
@@ -111,7 +111,7 @@ async function main() {
         const messages = [{ role: 'user', content: '1+1 等于多少？' }];
 
         const stream = await openai.chat.completions.create({
-            model: 'xiaomi/mimo-v2.5-pro',
+            model: 'xiaomi/mimo-v2.6-pro-ultraspeed',
             messages,
             // mimo-v2.5-pro 默认开启思考模式，如需关闭可改为 enable_thinking: false
             stream: true,
@@ -184,7 +184,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "xiaomi/mimo-v2.5-pro",
+    "model": "xiaomi/mimo-v2.6-pro-ultraspeed",
     "messages": [
         {
             "role": "user",

@@ -39,15 +39,16 @@ Python SDK
 
 ```
 import os
-from dashscope import Files
+import dashscope
 
-# 上传文件（purpose='fine_tune' 用于微调训练文件，purpose='inference' 用于推理临时文件）
-result = Files.upload(
+client = dashscope.Client(api_key=os.getenv('DASHSCOPE_API_KEY'))
+
+# 上传文件（purpose='fine-tune' 用于微调训练文件，purpose='inference' 用于推理临时文件）
+result = client.files.upload(
     file_path='sales_2025.csv',
-    purpose='fine_tune',
-    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    purpose='fine-tune',
 )
-print(result)
+print(result.file_id, result.name)
 ```
 
 java

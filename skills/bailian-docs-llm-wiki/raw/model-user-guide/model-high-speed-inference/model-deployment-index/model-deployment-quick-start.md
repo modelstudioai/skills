@@ -230,16 +230,16 @@ DashScope
 import os
 import dashscope
 
+# 若没有配置环境变量，请用百炼API Key将下一行替换为：api_key="sk-xxx",
+client = dashscope.Client(api_key=os.getenv("DASHSCOPE_API_KEY"))
+
 messages = [
     {"role": "system", "content": "You are a helpful assistant."},
     {"role": "user", "content": "你是谁？"},
 ]
-response = dashscope.Generation.call(
-    # 若没有配置环境变量，请用百炼API Key将下一行替换为：api_key="sk-xxx",
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+response = client.chat.completions.create(
     model="qwen3-14b-xxx-xxx",  # 请替换为模型部署成功后的code
     messages=messages,
-    result_format="message",
     enable_thinking=False,
 )
 print(response)

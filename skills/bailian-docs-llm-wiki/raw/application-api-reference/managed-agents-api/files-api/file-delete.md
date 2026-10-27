@@ -29,11 +29,13 @@ Python SDK
 
 ```
 import os
-from dashscope import Files
+import dashscope
+
+client = dashscope.Client(api_key=os.getenv('DASHSCOPE_API_KEY'))
 
 # 删除文件
-result = Files.delete(file_id='file-xxx', api_key=os.getenv('DASHSCOPE_API_KEY'))
-print(result)
+result = client.files.delete('file-xxx')
+print(result.deleted)
 ```
 
 java

@@ -169,7 +169,7 @@
       ],
       "versionTag": "SNAPSHOT",
       "maxOutputTokens": 393216,
-      "latestOnlineAt": "2026-10-18T16:27:49.221+00:00",
+      "latestOnlineAt": "2026-10-18T16:27:49.000+00:00",
       "contextWindow": 1000000,
       "maxInputTokens": 1000000,
       "inferenceProvider": "aliyun-bailian",

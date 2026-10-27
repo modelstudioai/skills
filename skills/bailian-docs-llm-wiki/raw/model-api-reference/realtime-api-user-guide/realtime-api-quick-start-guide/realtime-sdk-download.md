@@ -14,6 +14,58 @@
 
 **更新说明**
 
+v1.4.0
+
+Android
+
+[AoqClientSdk-release.aar](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9399.aar)
+
+[libPluginOpus.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f939f.zip)
+
+2026-10-27
+
+1.  支持从外部输入 H.264 视频。
+2.  优化性能。
+3.  修复已知的稳定性问题。
+
+iOS
+
+[AoqClientSdk.framework.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9398.zip)
+
+[AoqScreenShare.framework.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f939e.zip)
+
+[PluginOpus.framework.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f939d.zip)
+
+HarmonyOS
+
+[AoqClientSdk.har](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f939c.har)
+
+[libPluginOpus.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9393.zip)
+
+Windows
+
+[AoqClientSdk-windows-x64.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9392.zip)
+
+macOS
+
+[AoqClientSdk.framework.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f93a1.zip)
+
+[PluginOpus.framework.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9391.zip)
+
+Electron
+
+[aoq-electron-sdk-1.4.0-59463182.tgz](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9390.tgz)
+
+也可以通过 npm 安装：
+
+`npm install aoq-electron-sdk@1.4.0-59463182`
+
+Linux
+
+`x86_64`: [AoqClientSdk.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9397.zip)
+
+`arm64`: [AoqClientSdk.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9396.zip)
+
 v1.3.0
 
 Android

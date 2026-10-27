@@ -101,55 +101,118 @@ array 输入项类型
 
 **content** `string 或 array` **（必选）**
 
-消息内容。若输入为纯文本，则为 string 类型；若输入为结构化内容数组，则为 array 类型。role 为 `system`/`developer` 时，array 元素类型为 `input_text`；role 为 `user` 时，array 元素类型为 `input_text`、`input_image` 或 `input_file`，`qwen3.8-omni-flash` 还支持下文所述的 `input_audio` 和 `input_video`；role 为 `assistant` 时，array 元素类型为 `output_text`。
+消息内容，支持以下格式：
 
-content 数组元素
+-   `string`：纯文本输入。
+-   `array`：内容数组，包含一个或多个内容项，可混合不同类型。`system`/`developer` 角色的元素类型为 `input_text`，`assistant` 角色的元素类型为 `output_text`。
+
+array 元素类型
+
+以下类型之一：
+
+**input\_text** `{ type, text }`
+
+文本输入。
+
+属性
 
 **type** `string` **（必选）**
 
-内容类型。可选值：`input_text`（文本输入）、`input_image`（图片输入，仅 user 角色）、`input_file`（文件输入，仅 user 角色，支持 PDF 和图片）、`output_text`（助手回复，仅 assistant 角色）。`qwen3.8-omni-flash` 的 user 消息还支持 `input_audio` 和 `input_video`，字段说明见下文。
+固定为 `input_text`。
 
-**text** `string`
+**text** `string` **（必选）**
 
-文本内容。当 type 为 `input_text` 或 `output_text` 时必填。
+输入模型的文本内容。
 
-**image\_url** `string`
+**input\_image** `{ type, image_url }`
 
-支持 URL 或者 Base64 编码，当 type 为 `input_image` 时必填。Base64 请传入完整的 Data URI，例如：`data:image/png;base64,iVBORw0K...`。
+图片输入，仅 `user` 角色。
 
-**file\_url** `string`
+属性
 
-文件的公网 URL。当 type 为 `input_file` 时必填。支持 PDF 文件（最大 100 MB）和图片文件（最大 20 MB）。目前 `qwen3.8-flash`、`qwen3.8-max`、`qwen3.5-ocr` 支持此类型。
+**type** `string` **（必选）**
+
+固定为 `input_image`。
+
+**image\_url** `string` **（必选）**
+
+图片的公网 URL 或 Base64 编码。Base64 请传入完整的 Data URI，例如：`data:image/png;base64,iVBORw0K...`。
+
+**input\_file** `{ type, file_url }`
+
+文件输入，仅 `user` 角色。目前 `qwen3.8-flash`、`qwen3.8-max`、`qwen3.5-ocr` 支持此类型。
+
+属性
+
+**type** `string` **（必选）**
+
+固定为 `input_file`。
+
+**file\_url** `string` **（必选）**
+
+PDF 文件的公网 URL，文件最大 100 MB。
 
 PDF 的页数上限取决于 `ocr_options` 中的 `task`：设置为 `document_parsing` 时最大 50 页；未设置 `task` 或设置为其他任务时，最大 10 页。
 
-**音视频输入字段**
+**input\_audio** `{ type, format, audio_url, 2 more }`
 
-以下 `input_audio`、`input_video` 类型仅适用于 `qwen3.8-omni-flash` 的 `user` 消息。字段直接放在 content 数组元素中：
+音频输入，仅适用于 `qwen3.8-omni-flash` 的 `user` 消息。
 
-type
+属性
 
-字段
+**type** `string` **（必选）**
 
-说明
+固定为 `input_audio`。
 
-`input_audio`
+**format** `string` **（必选）**
 
-`format`、`audio_url` 或 `data`
+音频格式，例如 `wav`、`mp3`。
 
-`format` 必填，例如 `wav` 或 `mp3`。`audio_url` 为音频 URL，`data` 为包含 MIME 类型前缀和 Base64 编码音频的完整 Data URI，例如 `data:audio/wav;base64,UklGR...`，两者必须二选一，不能同时传入。
+**audio\_url** `string`
 
-`input_video`
+音频的公网 URL。与 `data` 二选一，不能同时传入。
 
-`video_url`、`fps`
+**data** `string`
 
-`video_url` 必填，传入视频 URL。`fps` 为可选的数字类型（`number`）抽帧参数，表示每秒抽取的帧数，例如 `2` 表示每秒抽取 2 帧，不要传字符串。
+包含 MIME 类型前缀和 Base64 编码音频的完整 Data URI，例如：`data:audio/wav;base64,UklGR...`。与 `audio_url` 二选一，不能同时传入。
 
-**use\_multichannel** `boolean`（可选），默认 `false`。设为 `true` 时，对双通道或四通道音频进行空间音频解析；设为 `false` 时，按单通道音频解析。在 `type="input_audio"` 的 content 数组元素中传入，与 `type`、`audio_url`、`format` 同级。
+**use\_multichannel** `boolean` （可选）
 
-音视频输入沿用普通文本响应格式和流式事件，流式文本使用 `response.output_text.delta`、`response.output_text.done`。
+是否对音频进行空间音频解析，默认 `false`。设为 `true` 时，对双通道或四通道音频进行空间音频解析；设为 `false` 时，按单通道音频解析。
 
-音视频输入、文本输出示例见[Qwen3.8-Omni-Flash](https://help.aliyun.com/zh/model-studio/qwen-omni#qwen38-offline)。
+**input\_video** `{ type, video_url, fps }`
+
+视频输入，仅适用于 `qwen3.8-omni-flash` 的 `user` 消息。
+
+属性
+
+**type** `string` **（必选）**
+
+固定为 `input_video`。
+
+**video\_url** `string` **（必选）**
+
+视频的公网 URL。
+
+**fps** `number` （可选）
+
+抽帧频率，表示每秒抽取的帧数，例如 `2` 表示每秒抽取 2 帧，不要传字符串。
+
+**output\_text** `{ type, text }`
+
+助手回复，仅 `assistant` 角色。
+
+属性
+
+**type** `string` **（必选）**
+
+固定为 `output_text`。
+
+**text** `string` **（必选）**
+
+助手回复的文本内容。
+
+音视频输入沿用普通文本响应格式和流式事件，流式文本使用 `response.output_text.delta`、`response.output_text.done`。音视频输入、文本输出示例见[Qwen3.8-Omni-Flash](https://help.aliyun.com/zh/model-studio/qwen-omni#qwen38-offline)。
 
 **type** `string` （可选）
 
@@ -247,19 +310,37 @@ Function Call Output 的唯一标识。
 
 工具函数的执行结果。纯文本结果传入 string；需要模型理解工具产出的图片时传入 array，一个 output 中可包含多张图片。图片 URL 作为 string 传入时按普通文本处理，不会被解析为图片。
 
-output 数组元素
+array 元素类型
+
+以下类型之一，不支持 `input_file`、`output_text` 以及音频、视频类型：
+
+**input\_text** `{ type, text }`
+
+文本结果。
+
+属性
 
 **type** `string` **（必选）**
 
-内容类型。可选值：`input_text`（文本）、`input_image`（图片）。不支持 `input_file`、`output_text` 以及音频、视频类型。
+固定为 `input_text`。
 
-**text** `string`
+**text** `string` **（必选）**
 
-文本内容。当 type 为 `input_text` 时必填。
+文本内容。
 
-**image\_url** `string`
+**input\_image** `{ type, image_url }`
 
-支持 URL 或者 Base64 编码，当 type 为 `input_image` 时必填。Base64 请传入完整的 Data URI，例如：`data:image/png;base64,iVBORw0K...`。此处为 string 类型，不支持 `{"url": "..."}` 嵌套对象形式。
+图片结果。
+
+属性
+
+**type** `string` **（必选）**
+
+固定为 `input_image`。
+
+**image\_url** `string` **（必选）**
+
+图片的公网 URL 或 Base64 编码。Base64 请传入完整的 Data URI，例如：`data:image/png;base64,iVBORw0K...`。此处为 string 类型，不支持 `{"url": "..."}` 嵌套对象形式。
 
 **status** `string` （可选）
 

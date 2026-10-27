@@ -313,12 +313,19 @@ HTTP 请求地址：
 -   千问大语言模型：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
 -   千问VL/OCR模型：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
-SDK调用配置的`base_url`：
+SDK 调用时构造 Client 传入业务空间与地域（各地域的region取值不同，新加坡地域为`ap-southeast-1`）：
 
 #### Python代码
 
 ```
-dashscope.base_http_api_url = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1'
+import os
+import dashscope
+
+client = dashscope.Client(
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="ap-southeast-1",
+)
 ```
 
 #### Java代码
@@ -345,16 +352,16 @@ Constants.baseHttpApiUrl="https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com
 import os
 import dashscope
 
+# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+client = dashscope.Client(api_key=os.getenv('DASHSCOPE_API_KEY'))
+
 messages = [
     {'role': 'system', 'content': 'You are a helpful assistant.'},
     {'role': 'user', 'content': '你是谁？'}
 ]
-response = dashscope.Generation.call(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-    api_key=os.getenv('DASHSCOPE_API_KEY'),
+response = client.chat.completions.create(
     model="qwen-plus", # 此处以qwen-plus为例，可按需更换模型名称。模型列表：https://help.aliyun.com/model-studio/getting-started/models
     messages=messages,
-    result_format='message'
     )
 print(response)
 ```

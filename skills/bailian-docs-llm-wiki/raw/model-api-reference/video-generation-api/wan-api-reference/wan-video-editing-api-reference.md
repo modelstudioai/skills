@@ -652,19 +652,19 @@ SDK 的参数命名与[HTTP接口](https://help.aliyun.com/zh/model-studio/wan-v
 
 ### Python SDK调用
 
-**重要**请确保 DashScope Python SDK 版本**不低于**`1.25.16`，再运行以下代码。
+**重要**请确保 DashScope Python SDK 版本**不低于**`2.0.1`，再运行以下代码。
 
 若版本过低，可能会触发 "url error, please check url!" 等错误。请参考安装SDK进行更新。
 
-根据模型所在地域设置 `base_http_api_url`:
+根据模型所在地域设置 `region`（构造 Client 时传入，各地域的region取值不同）:
 
 #### 北京
 
-`dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'`
+`region="cn-beijing"`
 
 #### 新加坡
 
-`dashscope.base_http_api_url = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1'`
+`region="ap-southeast-1"`
 
 调用时请将`{WorkspaceId}`替换为真实的业务空间ID。
 
@@ -675,17 +675,18 @@ SDK 的参数命名与[HTTP接口](https://help.aliyun.com/zh/model-studio/wan-v
 ```
 import base64
 import mimetypes
-from http import HTTPStatus
-from dashscope import VideoSynthesis
 import dashscope
 import os
+from dashscope.v2 import DashScopeError
 
-# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-
-# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-# 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-api_key = os.getenv("DASHSCOPE_API_KEY")
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # 格式为 data:{MIME_type};base64,{base64_data}
 def encode_file(file_path):
@@ -713,31 +714,32 @@ reference_image_url = "https://help-static-aliyun-doc.aliyuncs.com/file-manage-f
 # reference_image_url = encode_file("/path/to/image.png")
 
 def sample_sync_call_videoedit():
-    # call sync api, will return the result
+    # generate 为一步式调用（提交任务并等待完成），返回已完成的 Job
     print('please wait...')
-    rsp = VideoSynthesis.call(
-        api_key=api_key,
-        model='wan2.7-videoedit',
-        prompt='将视频中女孩的衣服替换为图片中的衣服',
-        media=[
-            {
-                "type": "video",
-                "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260403/nlspwm/T2VA_22.mp4"
-            },
-            {
-                "type": "reference_image",
-                "url": reference_image_url
-            }
-        ],
-        resolution='720P',
-        prompt_extend=True,
-        watermark=True)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print(rsp.output.video_url)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (rsp.status_code, rsp.code, rsp.message))
+    try:
+        job = client.videos.generate(
+            model='wan2.7-videoedit',
+            prompt='将视频中女孩的衣服替换为图片中的衣服',
+            media=[
+                {
+                    "type": "video",
+                    "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260403/nlspwm/T2VA_22.mp4"
+                },
+                {
+                    "type": "reference_image",
+                    "url": reference_image_url
+                }
+            ],
+            resolution='720P',
+            prompt_extend=True,
+            watermark=True)
+        print(job)
+        print(job.video_url)
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 
 if __name__ == '__main__':
     sample_sync_call_videoedit()
@@ -749,23 +751,17 @@ if __name__ == '__main__':
 
 ```
 {
-    "status_code": 200,
     "request_id": "d6c3c865-34e9-98a9-a53d-xxxxxx",
-    "code": null,
-    "message": "",
-    "output": {
-        "task_id": "1de7c853-755a-454a-91bc-xxxxxx",
-        "task_status": "SUCCEEDED",
-        "video_url": "https://dashscope-a717.oss-accelerate.aliyuncs.com/xxx.mp4?Expires=xxxx",
-        "submit_time": "2026-04-10 17:16:30.821",
-        "scheduled_time": "2026-04-10 17:16:46.379",
-        "end_time": "2026-04-10 17:24:59.352",
-        "orig_prompt": "将视频中女孩的衣服替换为图片中的衣服"
+    "task_id": "1de7c853-755a-454a-91bc-xxxxxx",
+    "status": "SUCCEEDED",
+    "video_url": "https://dashscope-a717.oss-accelerate.aliyuncs.com/xxx.mp4?Expires=xxxx",
+    "task_metrics": {
+        "TOTAL": 1,
+        "SUCCEEDED": 1,
+        "FAILED": 0
     },
     "usage": {
         "video_count": 1,
-        "video_duration": 0,
-        "video_ratio": "",
         "duration": 10.08,
         "input_video_duration": 5.04,
         "output_video_duration": 5.04,
@@ -781,17 +777,18 @@ if __name__ == '__main__':
 ```
 import base64
 import mimetypes
-from http import HTTPStatus
-from dashscope import VideoSynthesis
 import dashscope
 import os
+from dashscope.v2 import DashScopeError
 
-# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-
-# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-# 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-api_key = os.getenv("DASHSCOPE_API_KEY")
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # 格式为 data:{MIME_type};base64,{base64_data}
 def encode_file(file_path):
@@ -821,46 +818,53 @@ reference_image_url = "https://help-static-aliyun-doc.aliyuncs.com/file-manage-f
 def sample_async_call_videoedit():
     # call async api, will return the task information
     # you can get task status with the returned task id.
-    rsp = VideoSynthesis.async_call(
-        api_key=api_key,
-        model='wan2.7-videoedit',
-        prompt='将视频中女孩的衣服替换为图片中的衣服',
-        media=[
-            {
-                "type": "video",
-                "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260403/nlspwm/T2VA_22.mp4"
-            },
-            {
-                "type": "reference_image",
-                "url": reference_image_url
-            }
-        ],
-        resolution='720P',
-        prompt_extend=True,
-        watermark=True)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print("task_id: %s" % rsp.output.task_id)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (rsp.status_code, rsp.code, rsp.message))
+    try:
+        job = client.videos.jobs.create(
+            model='wan2.7-videoedit',
+            prompt='将视频中女孩的衣服替换为图片中的衣服',
+            media=[
+                {
+                    "type": "video",
+                    "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260403/nlspwm/T2VA_22.mp4"
+                },
+                {
+                    "type": "reference_image",
+                    "url": reference_image_url
+                }
+            ],
+            resolution='720P',
+            prompt_extend=True,
+            watermark=True)
+        print(job)
+        print("task_id: %s" % job.task_id)
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
+        return
 
     # get the task information include the task status.
-    status = VideoSynthesis.fetch(task=rsp, api_key=api_key)
-    if status.status_code == HTTPStatus.OK:
-        print(status.output.task_status)  # check the task status
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (status.status_code, status.code, status.message))
+    try:
+        snapshot = client.videos.jobs.fetch(job.task_id)
+        print(snapshot.status)  # check the task status
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 
     # wait the task complete, will call fetch interval, and check it's in finished status.
-    rsp = VideoSynthesis.wait(task=rsp, api_key=api_key)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print(rsp.output.video_url)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (rsp.status_code, rsp.code, rsp.message))
+    # （2.0 jobs.wait 指数退避轮询，默认总预算24小时，任务 FAILED 会抛出异常）
+    try:
+        done = client.videos.jobs.wait(job)
+        print(done)
+        print(done.video_url)
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 
 if __name__ == '__main__':
     sample_async_call_videoedit()
@@ -872,16 +876,9 @@ if __name__ == '__main__':
 
 ```
 {
-    "status_code": 200,
     "request_id": "f16ae7e9-d518-92f8-a02c-xxxxxx",
-    "code": "",
-    "message": "",
-    "output": {
-        "task_id": "05e68c7e-850c-49e4-b866-xxxxxx",
-        "task_status": "PENDING",
-        "video_url": ""
-    },
-    "usage": null
+    "task_id": "05e68c7e-850c-49e4-b866-xxxxxx",
+    "status": "PENDING"
 }
 ```
 
@@ -891,23 +888,17 @@ if __name__ == '__main__':
 
 ```
 {
-    "status_code": 200,
     "request_id": "d6c3c865-34e9-98a9-a53d-xxxxxx",
-    "code": null,
-    "message": "",
-    "output": {
-        "task_id": "1de7c853-755a-454a-91bc-xxxxxx",
-        "task_status": "SUCCEEDED",
-        "video_url": "https://dashscope-a717.oss-accelerate.aliyuncs.com/xxx.mp4?Expires=xxxx",
-        "submit_time": "2026-04-10 17:16:30.821",
-        "scheduled_time": "2026-04-10 17:16:46.379",
-        "end_time": "2026-04-10 17:24:59.352",
-        "orig_prompt": "将视频中女孩的衣服替换为图片中的衣服"
+    "task_id": "1de7c853-755a-454a-91bc-xxxxxx",
+    "status": "SUCCEEDED",
+    "video_url": "https://dashscope-a717.oss-accelerate.aliyuncs.com/xxx.mp4?Expires=xxxx",
+    "task_metrics": {
+        "TOTAL": 1,
+        "SUCCEEDED": 1,
+        "FAILED": 0
     },
     "usage": {
         "video_count": 1,
-        "video_duration": 0,
-        "video_ratio": "",
         "duration": 10.08,
         "input_video_duration": 5.04,
         "output_video_duration": 5.04,

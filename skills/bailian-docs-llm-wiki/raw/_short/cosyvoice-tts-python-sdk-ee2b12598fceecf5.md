@@ -9,37 +9,47 @@
 ## 前提条件
 
 -   已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并将其配置到环境变量
--   已安装符合版本要求的DashScope Java SDK，建议[安装最新版](raw/model-api-reference/preparations/install-sdk.md)，SDK版本需≥1.25.17
+-   已安装符合版本要求的DashScope Python SDK，建议[安装最新版](raw/model-api-reference/preparations/install-sdk.md)，SDK版本需≥2.0.1
 
-## HttpSpeechSynthesizer 类
+## 核心资源（`client.audio.tts.http`）
 
-**包路径**：`dashscope.audio.http_tts.http_speech_synthesizer.HttpSpeechSynthesizer`
+**资源路径**：`client.audio.tts.http`
 
-**功能**：基于HTTP的语音合成，通过`stream`参数控制非流式或流式调用模式。
+**功能**：基于HTTP的语音合成，`synthesize`方法为非流式调用（音频以URL返回），`stream`方法为流式调用（SSE逐片返回音频数据）。
 
-### call() - 语音合成调用
+### synthesize() / stream() - 语音合成调用
 
 **方法签名**：
 
 ```
-@classmethod
-def call(cls, model: str, text: str, voice: str,
-         format: str = "wav", sample_rate: int = 24000,
-         volume: int = 50, rate: float = 1.0, pitch: float = 1.0,
-         bit_rate: int = 32, enable_ssml: bool = False,
-         word_timestamp_enabled: bool = False,
-         seed: int = 0, language_hints: list = None,
-         instruction: str = None,
-         enable_aigc_tag: bool = False,
-         aigc_propagator: str = None,
-         aigc_propagate_id: str = None,
-         hot_fix: dict = None,
-         enable_markdown_filter: bool = False,
-         stream: bool = False,
-         api_key: str = None, **kwargs)
+def synthesize(self,
+               text: str,
+               *,
+               model: str,
+               voice: str,
+               format: str = None,
+               sample_rate: int = None,
+               language_type: str = None,
+               parameters: Dict = None,
+               extra_input: Dict = None,
+               timeout: float = None,
+               ...) -> HttpSynthesis
+
+def stream(self,
+           text: str,
+           *,
+           model: str,
+           voice: str,
+           format: str = None,
+           sample_rate: int = None,
+           language_type: str = None,
+           parameters: Dict = None,
+           extra_input: Dict = None,
+           timeout: float = None,
+           ...) -> HttpSynthesisStream
 ```
 
-**参数说明**：
+**参数说明**（`model`、`text`、`voice`、`format`、`sample_rate`为具名参数，其余输入参数通过`extra_input`字典传入）：
 
 **参数**
 
@@ -333,35 +343,22 @@ def call(cls, model: str, text: str, voice: str,
 -   True：启用Markdown过滤
 -   False：禁用Markdown过滤
 
-`stream`
-
-`bool`
-
-否
-
-是否启用流式模式。设为`False`时为非流式调用，返回包含音频URL的结果对象；设为`True`时为流式调用，返回音频数据分片的迭代器。默认为`False`。
-
-`api_key`
-
-`str`
-
-否
-
-API Key。如果未指定，SDK会自动从环境变量`DASHSCOPE_API_KEY`中读取。
-
 **返回值**：
 
--   **非流式模式**（`stream=False`）：返回结果对象，包含以下属性：
+-   **非流式模式**（`synthesize`）：返回结果对象（`HttpSynthesis`），包含以下属性：
     
     -   `audio_url`：音频下载URL（有效期有限）。
     -   `audio_id`：音频ID。
     -   `expires_at`：URL过期时间。
--   **流式模式**（`stream=True`）：返回迭代器，每个元素包含以下属性：
+    -   `usage`：用量信息。
+-   **流式模式**（`stream`）：返回迭代器（`HttpSynthesisStream`），每个元素（`HttpSynthesisChunk`）包含以下属性：
     
-    -   `audio_data`：当前分片的音频二进制数据（bytes）。
-    -   `sentences`：句子级别的合成信息（如有）。
+    -   `audio`：当前分片的音频二进制数据（bytes，已解码）。
+    -   `sentence`：句子级别的合成信息（如有）。
+    -   `is_final`：是否为收尾分片（`finish_reason == "stop"`）。
+    -   `usage`：用量信息（收尾分片携带）。
     
-    **重要**流式模式下，迭代器的最后一个元素除了包含音频数据分片外，还会额外返回`audio_url`（完整音频的下载地址）。如果在拼接音频数据时不跳过该元素，会导致最终生成的音频中同一段内容重复播放。因此在遍历迭代器时，需通过`not chunk.audio_url`条件过滤包含完整音频URL的最后一个元素。
+    **重要**流式模式下，收尾分片（`is_final`为`True`）会额外携带`audio_url`（完整音频的下载地址）、`audio_id`与`expires_at`。遍历迭代器拼接音频时，以`chunk.audio`是否非空决定是否写入，避免同一段内容重复播放。
     
 
 ## 示例代码
@@ -372,28 +369,28 @@ API Key。如果未指定，SDK会自动从环境变量`DASHSCOPE_API_KEY`中读
 
 #### 非流式调用
 
-非流式调用设置`stream=False`，等待合成完成后返回音频URL，通过URL下载音频文件。
+非流式调用使用`synthesize`方法，等待合成完成后返回音频URL，通过URL下载音频文件。
 
 ```
 # -*- coding: utf-8 -*-
 import os
 import dashscope
-from dashscope.audio.http_tts.http_speech_synthesizer import HttpSpeechSynthesizer
 
-# 未配置环境变量时，将下行替换为：api_key = "sk-xxx"，即替换为实际的API Key
-api_key = os.getenv("DASHSCOPE_API_KEY")
-# 调用时请将"{WorkspaceId}"替换为真实的业务空间ID
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
+# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+client = dashscope.Client(
+    # 若没有将API Key配置到环境变量中，请将下行替换为自己的API Key：api_key="sk-xxx"
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # 非流式调用，返回音频URL
-result = HttpSpeechSynthesizer.call(
+result = client.audio.tts.http.synthesize(
+    "今天是个好日子，适合构建人们喜爱的产品！",
     model="cosyvoice-v3-plus",  # 更换模型时，需同步更换为对应版本的音色
-    text="今天是个好日子，适合构建人们喜爱的产品！",
     voice="longanyang",
     format="wav",
     sample_rate=24000,
-    stream=False,
-    api_key=api_key,
 )
 
 # 获取音频URL
@@ -407,44 +404,46 @@ print(f"过期时间: {result.expires_at}")
 
 #### 流式调用
 
-流式调用设置`stream=True`，返回迭代器，逐段获取音频数据。适用于对首包延迟有要求的实时播放场景。流式模式下，迭代器的最后一个元素会额外返回完整音频的`audio_url`，遍历时需通过`not chunk.audio_url`过滤该元素，避免音频内容重复。
+流式调用使用`stream`方法，返回迭代器，逐段获取音频数据。适用于对首包延迟有要求的实时播放场景。流式模式下，收尾分片（`chunk.is_final`为`True`）会额外返回完整音频的`audio_url`，拼接时只写入`chunk.audio`非空的数据分片即可，避免音频内容重复。
 
 ```
 # -*- coding: utf-8 -*-
 import os
 import dashscope
-from dashscope.audio.http_tts.http_speech_synthesizer import HttpSpeechSynthesizer
 
-# 未配置环境变量时，将下行替换为：api_key = "sk-xxx"，即替换为实际的API Key
-api_key = os.getenv("DASHSCOPE_API_KEY")
-# 调用时请将"{WorkspaceId}"替换为真实的业务空间ID
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
+# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+client = dashscope.Client(
+    # 若没有将API Key配置到环境变量中，请将下行替换为自己的API Key：api_key="sk-xxx"
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # 流式调用，逐段返回音频数据
-stream_result = HttpSpeechSynthesizer.call(
+stream_result = client.audio.tts.http.stream(
+    "今天是个好日子，适合构建人们喜爱的产品！",
     model="cosyvoice-v3-plus",  # 更换模型时，需同步更换为对应版本的音色
-    text="今天是个好日子，适合构建人们喜爱的产品！",
     voice="longanyang",
     format="wav",
     sample_rate=24000,
-    stream=True,
-    api_key=api_key,
 )
 
 # 遍历迭代器，逐段接收音频数据
 audio_chunks = []
 for chunk in stream_result:
-    if not chunk.audio_url and chunk.audio_data:  # 过滤最后一个包含完整音频URL的chunk，避免音频重复
-        audio_chunks.append(chunk.audio_data)
-        print(f"收到音频数据块，大小: {len(chunk.audio_data)} bytes")
+    if chunk.audio:  # 只写入非空的音频分片，避免音频重复
+        audio_chunks.append(chunk.audio)
+        print(f"收到音频数据块，大小: {len(chunk.audio)} bytes")
 
-    if chunk.sentences:
-        print(f"句子信息: {chunk.sentences}")
+    if chunk.sentence:
+        print(f"句子信息: {chunk.sentence}")
 
-    if chunk.audio_id:
+    if chunk.is_final:  # 收尾分片：携带完整音频的下载地址与用量
         print(f"Audio ID: {chunk.audio_id}")
         request_id = chunk.audio_id.removeprefix("audio_")
         print(f"请求 Id: {request_id}")
+        print(f"音频 URL: {chunk.audio_url}")
+        print(f"用量: {chunk.usage}")
 
 # 合并所有音频数据并保存
 full_audio = b"".join(audio_chunks)

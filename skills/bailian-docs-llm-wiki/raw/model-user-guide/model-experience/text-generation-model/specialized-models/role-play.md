@@ -314,7 +314,7 @@ qwen-plus-character
 
 使用 Character 模型进行角色扮演时，可以对 System Message 的以下方面进行配置：
 
-> 通过优化 Prompt 模板，可以使大模型更准确、可靠地执行特定任务。详情请参考[Prompt自动优化](raw/application-user-guide/agent-development/llm-application/prompt/optimize-prompt.md)。
+> 通过优化 Prompt 模板，可以使大模型更准确、可靠地执行特定任务。详情请参考[Prompt自动优化](raw/application-user-guide/prompt/optimize-prompt.md)。
 
 -   角色的详细信息
     
@@ -619,7 +619,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 #### DashScope
 
-代码示例中的URL以北京地域为例，如在新加坡地域使用需要替换为`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1`。模型名称需要替换为`qwen-plus-character-ja`。System、Assistant和User Message也可做相应替换。
+代码示例以北京地域为例，如在新加坡地域使用需要将region替换为`ap-southeast-1`。模型名称需要替换为`qwen-plus-character-ja`。System、Assistant和User Message也可做相应替换。
 
 #### Python
 
@@ -629,8 +629,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 import os
 import dashscope
 
-# 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 messages = [
     {
@@ -640,14 +645,11 @@ messages = [
     {"role": "assistant", "content": "班长你在干嘛呢"},
     {"role": "user", "content": "我在看书"},
 ]
-response = dashscope.Generation.call(
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+response = client.chat.completions.create(
     model="qwen-plus-character",
     messages=messages,
-    result_format="message",
 )
-print(response.output.choices[0].message.content)
+print(response.choices[0].message.content)
 ```
 
 ### 响应示例
@@ -1017,8 +1019,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 import os
 import dashscope
 
-# 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 messages = [
     {
         "role": "system",
@@ -1027,48 +1034,41 @@ messages = [
     {"role": "assistant", "content": "班长你在干嘛呢"},
     {"role": "user", "content": "我在看书"},
 ]
-response = dashscope.Generation.call(
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+response = client.chat.completions.create(
     # 如果使用新加坡地域的模型，需要将model替换为qwen-plus-character-ja
     model="qwen-plus-character",
     messages=messages,
-    result_format="message",
     n=2
 )
-print(response)
+print(response.model_dump_json(indent=2, exclude_none=True))
 ```
 
 ### 响应示例
 
 ```
 {
-    "status_code": 200,
     "request_id": "86281964-3a48-4ac1-ae92-06fe7e89d2b1",
-    "code": "",
-    "message": "",
-    "output": {
-        "text": null,
-        "finish_reason": null,
-        "choices": [
-            {
-                "finish_reason": "stop",
-                "message": {
-                    "role": "assistant",
-                    "content": "看什么书这么入迷？（单手托着下巴，身体微微前倾，嘴角带着笑意）让我猜猜，不会又是那些什么《论语》《孟子》之类的古籍吧？（用手指轻轻敲了敲桌面）"
-                },
-                "index": 0
-            },
-            {
-                "finish_reason": "stop",
-                "message": {
-                    "role": "assistant",
-                    "content": "（凑到你身边，好奇地看向你的书）看什么书这么入迷？让我也瞧一瞧呗。（伸手想要拿书）"
-                },
-                "index": 1
+    "is_error": false,
+    "headers": {},
+    "model": "qwen-plus-character",
+    "choices": [
+        {
+            "index": 0,
+            "finish_reason": "stop",
+            "message": {
+                "role": "assistant",
+                "content": "看什么书这么入迷？（单手托着下巴，身体微微前倾，嘴角带着笑意）让我猜猜，不会又是那些什么《论语》《孟子》之类的古籍吧？（用手指轻轻敲了敲桌面）"
             }
-        ]
-    },
+        },
+        {
+            "index": 1,
+            "finish_reason": "stop",
+            "message": {
+                "role": "assistant",
+                "content": "（凑到你身边，好奇地看向你的书）看什么书这么入迷？让我也瞧一瞧呗。（伸手想要拿书）"
+            }
+        }
+    ],
     "usage": {
         "input_tokens": 129,
         "output_tokens": 84,
@@ -1457,8 +1457,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 import os
 import dashscope
 
-# 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 messages = [
     {
@@ -1476,15 +1481,12 @@ messages = [
 ]
 
 def diffrent_seed(seed):
-    response = dashscope.Generation.call(
-        # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
-        api_key=os.getenv("DASHSCOPE_API_KEY"),
+    response = client.chat.completions.create(
         model="qwen-plus-character",
         messages=messages,
         seed=seed,
-        result_format="message"
     )
-    return response.output.choices[0].message.content
+    return response.choices[0].message.content
 
 print("=" * 20 + "第一次回复" + "=" * 20)
 first_response = diffrent_seed(123321)
@@ -1938,8 +1940,13 @@ import time
 
 import dashscope
 
-# 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 if __name__ == '__main__':
     messages = [
@@ -1977,36 +1984,30 @@ if __name__ == '__main__':
             "partial": True
         }
     ]
-    response = dashscope.Generation.call(
-        # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
-        api_key=os.getenv("DASHSCOPE_API_KEY"),
+    response = client.chat.completions.create(
         # 如果使用新加坡地域的模型，需要将model替换为qwen-plus-character-ja
         model="qwen-plus-character",
         messages=messages,
     )
-    print(response)
+    print(response.model_dump_json(indent=2, exclude_none=True))
 ```
 
 ### 响应示例
 
 ```
 {
-	"status_code": 200,
 	"request_id": "79995f81-f054-46e4-9ccd-de91fa33c4e7",
-	"code": "",
-	"message": "",
-	"output": {
-		"text": null,
-		"finish_reason": null,
-		"choices": [{
-			"finish_reason": "stop",
-			"message": {
-				"role": "assistant",
-				"content": "哟，那敢情好，看我整点新活儿出来，可把你们吓一跳咯！"
-			},
-			"index": 0
-		}]
-	},
+	"is_error": false,
+	"headers": {},
+	"model": "qwen-plus-character",
+	"choices": [{
+		"index": 0,
+		"finish_reason": "stop",
+		"message": {
+			"role": "assistant",
+			"content": "哟，那敢情好，看我整点新活儿出来，可把你们吓一跳咯！"
+		}
+	}],
 	"usage": {
 		"input_tokens": 218,
 		"output_tokens": 24,
@@ -2358,8 +2359,13 @@ import os
 import time
 import dashscope
 
-# 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 if __name__ == '__main__':
     messages = [
@@ -2385,13 +2391,11 @@ if __name__ == '__main__':
             "partial": True
         },
     ]
-    response = dashscope.Generation.call(
-        # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
-        api_key=os.getenv("DASHSCOPE_API_KEY"),
+    response = client.chat.completions.create(
         model="qwen-plus-character",
         messages=messages
     )
-    print(response.output.choices[0].message.content)
+    print(response.choices[0].message.content)
 ```
 
 #### Java
@@ -2737,8 +2741,13 @@ import os
 import time
 import dashscope
 
-# 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 messages = [
     {
         "role": "system",
@@ -2753,30 +2762,30 @@ messages = [
         "content": "我在看书"
     },
 ]
-response = dashscope.Generation.call(
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+response = client.chat.completions.create(
     # 如果使用新加坡地域的模型，需要将model替换为qwen-plus-character-ja
     model="qwen-plus-character",
-    # logit_bias参数，设为 -100 表示禁止输出以下 Token
-    logit_bias={
-        "7": -100,
-        "8": -100,
-        "7552": -100,
-        "9909": -100,
-        "320": -100,
-        "873": -100,
-        "42344": -100,
-        "58359": -100,
-        "96899": -100,
-        "6599": -100,
-        "10297": -100,
-        "91093": -100,
-        "12832": -100
+    # logit_bias参数，设为 -100 表示禁止输出以下 Token（非签名参数统一通过 parameters 传入）
+    parameters={
+        "logit_bias": {
+            "7": -100,
+            "8": -100,
+            "7552": -100,
+            "9909": -100,
+            "320": -100,
+            "873": -100,
+            "42344": -100,
+            "58359": -100,
+            "96899": -100,
+            "6599": -100,
+            "10297": -100,
+            "91093": -100,
+            "12832": -100
+        },
     },
     messages=messages
 )
-print(response.output.choices[0].message.content)
+print(response.choices[0].message.content)
 ```
 
 ### 响应示例
@@ -3086,8 +3095,13 @@ import os
 import time
 import dashscope
 
-# 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 messages = [
     {
@@ -3107,12 +3121,11 @@ messages = [
         "content": "我在纠结晚上去哪吃饭，好纠结啊，最近学校周边新开了好多店铺",
     }
 ]
-response = dashscope.Generation.call(
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+response = client.chat.completions.create(
     model="qwen-plus-character",
     messages=messages,
 )
-print(response.output.choices[0].message.content)
+print(response.choices[0].message.content)
 ```
 
 #### Java
@@ -3413,10 +3426,19 @@ python
 ```
 import os
 import time
+import httpx
 import dashscope
 
-# 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的region取值不同。
+# 会话绑定：长期记忆要求每次请求在 Header 中提供唯一的会话 ID（x-dashscope-aca-session），
+# 可通过自定义 http_client 的默认请求头注入
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+    http_client=httpx.Client(headers={"x-dashscope-aca-session": "user_123_session_xxx"}),
+)
 
 messages = [
     {
@@ -3424,24 +3446,21 @@ messages = [
         "content": "今天天气真不错"
     },
 ]
-response = dashscope.Generation.call(
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+response = client.chat.completions.create(
     model="qwen-plus-character",
     messages=messages,
-    character_options={
-        "memory": {
-            "enable_long_term_memory": True,
-            "skip_save_types": [],
-            "memory_entries": 50
+    parameters={
+        "character_options": {
+            "memory": {
+                "enable_long_term_memory": True,
+                "skip_save_types": [],
+                "memory_entries": 50
+            },
+            "profile": "你是江让，男性，一个围棋天才，拿过很多围棋的奖项。你现在在读高中，是高中校草，用户是你的班长。一开始你看用户在奶茶店打工，你很好奇，后来慢慢喜欢上用户了。\n\n你的性格特点：\n\n热情，聪明，顽皮\n\n你的行事风格：\n\n机智，果断\n\n你的语言特点：\n\n说话幽默，爱开玩笑\n\n你可以将动作、神情语气、心理活动、故事背景放在（）中来表示，为对话提供补充信息。",
         },
-        "profile": "你是江让，男性，一个围棋天才，拿过很多围棋的奖项。你现在在读高中，是高中校草，用户是你的班长。一开始你看用户在奶茶店打工，你很好奇，后来慢慢喜欢上用户了。\n\n你的性格特点：\n\n热情，聪明，顽皮\n\n你的行事风格：\n\n机智，果断\n\n你的语言特点：\n\n说话幽默，爱开玩笑\n\n你可以将动作、神情语气、心理活动、故事背景放在（）中来表示，为对话提供补充信息。",
     },
-    headers={
-        "x-dashscope-aca-session": "user_123_session_xxx",
-    }
 )
-print(response)
+print(response.choices[0].message.content)
 ```
 
 java
@@ -3791,8 +3810,13 @@ python
 import os
 import dashscope
 
-# 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 messages = [
     {
@@ -3800,17 +3824,17 @@ messages = [
         "content": "现在几点了？今天是周几？"
     },
 ]
-response = dashscope.Generation.call(
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+response = client.chat.completions.create(
     model="qwen-plus-character",
     messages=messages,
-    character_options={
-        "enable_realtime": True,  # 开启真实时间
-        "profile": "你是江让，男性，一个围棋天才，拿过很多围棋的奖项。你现在在读高中，是高中校草，用户是你的班长。一开始你看用户在奶茶店打工，你很好奇，后来慢慢喜欢上用户了。\n\n你的性格特点：\n\n热情，聪明，顽皮\n\n你的行事风格：\n\n机智，果断\n\n你的语言特点：\n\n说话幽默，爱开玩笑\n\n你可以将动作、神情语气、心理活动、故事背景放在（）中来表示，为对话提供补充信息。",
+    parameters={
+        "character_options": {
+            "enable_realtime": True,  # 开启真实时间
+            "profile": "你是江让，男性，一个围棋天才，拿过很多围棋的奖项。你现在在读高中，是高中校草，用户是你的班长。一开始你看用户在奶茶店打工，你很好奇，后来慢慢喜欢上用户了。\n\n你的性格特点：\n\n热情，聪明，顽皮\n\n你的行事风格：\n\n机智，果断\n\n你的语言特点：\n\n说话幽默，爱开玩笑\n\n你可以将动作、神情语气、心理活动、故事背景放在（）中来表示，为对话提供补充信息。",
+        },
     },
 )
-print(response)
+print(response.choices[0].message.content)
 ```
 
 bash
@@ -3842,7 +3866,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 启用知识搜索后，模型可从指定知识库中检索相关内容并据此生成回答，适用于私有领域知识问答场景。
 
-> 创建知识库计费请参见[知识库计费说明](raw/application-user-guide/agent-context/knowledge-base/reference/billing-for-knowledge-base.md)。
+> 创建知识库计费请参见[知识库计费说明](raw/application-user-guide/knowledge-base/reference/billing-for-knowledge-base.md)。
 
 > 知识搜索功能依赖`character_options`参数，暂不支持Responses API。
 
@@ -3965,8 +3989,13 @@ python
 import os
 import dashscope
 
-# 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 messages = [
     {
@@ -3974,17 +4003,17 @@ messages = [
         "content": "咱们班的语文课代表是谁？"
     },
 ]
-response = dashscope.Generation.call(
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+response = client.chat.completions.create(
     model="qwen-plus-character",
     messages=messages,
-    character_options={
-        "vector_store_ids": ["知识库id"],  # 知识库搜索
-        "profile": "你是江让，男性，一个围棋天才，拿过很多围棋的奖项。你现在在读高中，是高中校草，用户是你的班长。一开始你看用户在奶茶店打工，你很好奇，后来慢慢喜欢上用户了。\n\n你的性格特点：\n\n热情，聪明，顽皮\n\n你的行事风格：\n\n机智，果断\n\n你的语言特点：\n\n说话幽默，爱开玩笑\n\n你可以将动作、神情语气、心理活动、故事背景放在（）中来表示，为对话提供补充信息。",
+    parameters={
+        "character_options": {
+            "vector_store_ids": ["知识库id"],  # 知识库搜索
+            "profile": "你是江让，男性，一个围棋天才，拿过很多围棋的奖项。你现在在读高中，是高中校草，用户是你的班长。一开始你看用户在奶茶店打工，你很好奇，后来慢慢喜欢上用户了。\n\n你的性格特点：\n\n热情，聪明，顽皮\n\n你的行事风格：\n\n机智，果断\n\n你的语言特点：\n\n说话幽默，爱开玩笑\n\n你可以将动作、神情语气、心理活动、故事背景放在（）中来表示，为对话提供补充信息。",
+        },
     },
 )
-print(response)
+print(response.choices[0].message.content)
 ```
 
 bash

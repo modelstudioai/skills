@@ -203,21 +203,22 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 ```
 import os
 import dashscope
-from dashscope import Generation
-# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key="sk-xxx"
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # 初始化请求参数
 messages = [{"role": "user", "content": "你是谁？"}]
 
-completion = Generation.call(
-    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key="sk-xxx"
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+completion = client.chat.completions.create(
     model="MiniMax-M2.5",
     messages=messages,
-    result_format="message",  # 设置结果格式为 message
     stream=True,              # 开启流式输出
-    incremental_output=True,  # 开启增量输出
 )
 
 reasoning_content = ""  # 完整思考过程
@@ -227,7 +228,7 @@ is_answering = False    # 是否进入回复阶段
 print("\n" + "=" * 20 + "思考过程" + "=" * 20 + "\n")
 
 for chunk in completion:
-    message = chunk.output.choices[0].message
+    message = chunk.choices[0].delta
 
     # 只收集思考内容
     if message.reasoning_content:

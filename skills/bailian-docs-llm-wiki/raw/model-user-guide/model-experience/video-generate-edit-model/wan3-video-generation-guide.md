@@ -217,31 +217,37 @@ wan3.0-video / wan3.0-video-prime 是 All-in-One 模型，无需切换模型名�
 
 #### Python SDK
 
-**重要**请先更新 DashScope Python SDK 至 **1.26.2.1** 或以上版本，再运行以下代码。更新方法请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+**重要**请先更新 DashScope Python SDK 至 **2.0.1** 或以上版本，再运行以下代码。更新方法请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
 ```
 import os
-from http import HTTPStatus
-from dashscope import VideoSynthesis
 import dashscope
+from dashscope.v2 import DashScopeError
 
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-api_key = os.getenv("DASHSCOPE_API_KEY", "YOUR_API_KEY")
+# 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 print('please wait...')
-rsp = VideoSynthesis.call(
-    api_key=api_key,
-    model='wan3.0-video',
-    prompt='20秒超宽银幕毛绒宇宙冒险片段，整体采用超精细毛绒材质、电影级太空尺度、可爱外形与强烈动作反差、夸张FPV运镜和真实软体物理。一艘由毛绒布、纽扣、拉链与填充棉制成的宇宙飞船，载着兔子、狐狸和乌鸦三只小型毛绒动物，在由巨大毛线行星、绒毛星云和布偶巨兽组成的宇宙中高速逃亡。一只覆盖深蓝长绒毛、眼睛像两枚玻璃纽扣的巨大星际鲸兽从星云中追赶飞船。动态包括拉链飞船弹射起航、贴着毛线行星高速绕行、巨鲸从后方冲出、穿越纽扣小行星带、被鲸兽吞入体内、沿金色拉链从背部逃出、巨鲸如泄掉填充棉般缓慢变扁、最终穿越粉紫色绒毛星云向彩色纽扣太阳飞去。',
-    resolution="480P",
-    ratio="adaptive",
-    duration=20,
-    prompt_extend=True)
-print(rsp)
-if rsp.status_code == HTTPStatus.OK:
-    print("video_url:", rsp.output.video_url)
-else:
-    print('Failed, status_code: %s, code: %s, message: %s' % (rsp.status_code, rsp.code, rsp.message))
+# generate 为一步式调用（提交任务并等待完成），返回已完成的 Job
+try:
+    job = client.videos.generate(
+        model='wan3.0-video',
+        prompt='20秒超宽银幕毛绒宇宙冒险片段，整体采用超精细毛绒材质、电影级太空尺度、可爱外形与强烈动作反差、夸张FPV运镜和真实软体物理。一艘由毛绒布、纽扣、拉链与填充棉制成的宇宙飞船，载着兔子、狐狸和乌鸦三只小型毛绒动物，在由巨大毛线行星、绒毛星云和布偶巨兽组成的宇宙中高速逃亡。一只覆盖深蓝长绒毛、眼睛像两枚玻璃纽扣的巨大星际鲸兽从星云中追赶飞船。动态包括拉链飞船弹射起航、贴着毛线行星高速绕行、巨鲸从后方冲出、穿越纽扣小行星带、被鲸兽吞入体内、沿金色拉链从背部逃出、巨鲸如泄掉填充棉般缓慢变扁、最终穿越粉紫色绒毛星云向彩色纽扣太阳飞去。',
+        resolution="480P",
+        ratio="adaptive",
+        duration=20,
+        prompt_extend=True)
+    print(job)
+    print("video_url:", job.video_url)
+except DashScopeError as e:
+    print(f"HTTP返回码：{e.status_code}")
+    print(f"错误码：{e.code}")
+    print(f"错误信息：{e.message}")
+    print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
 #### Java SDK
@@ -395,32 +401,38 @@ curl -X GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{ta
 
 #### Python SDK
 
-**重要**请先更新 DashScope Python SDK 至 **1.26.2.1** 或以上版本，再运行以下代码。更新方法请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+**重要**请先更新 DashScope Python SDK 至 **2.0.1** 或以上版本，再运行以下代码。更新方法请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
 ```
 import os
-from http import HTTPStatus
-from dashscope import VideoSynthesis
 import dashscope
+from dashscope.v2 import DashScopeError
 
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-api_key = os.getenv("DASHSCOPE_API_KEY", "YOUR_API_KEY")
+# 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 print('please wait...')
-rsp = VideoSynthesis.call(
-    api_key=api_key,
-    model='wan3.0-video',
-    prompt='一只猫在草地上奔跑',
-    media=[{"type": "first_frame", "url": "https://cdn.translate.alibaba.com/r/wanx-demo-1.png"}],
-    resolution="720P",
-    ratio="adaptive",
-    duration=5,
-    prompt_extend=True)
-print(rsp)
-if rsp.status_code == HTTPStatus.OK:
-    print("video_url:", rsp.output.video_url)
-else:
-    print('Failed, status_code: %s, code: %s, message: %s' % (rsp.status_code, rsp.code, rsp.message))
+# generate 为一步式调用（提交任务并等待完成），返回已完成的 Job
+try:
+    job = client.videos.generate(
+        model='wan3.0-video',
+        prompt='一只猫在草地上奔跑',
+        media=[{"type": "first_frame", "url": "https://cdn.translate.alibaba.com/r/wanx-demo-1.png"}],
+        resolution="720P",
+        ratio="adaptive",
+        duration=5,
+        prompt_extend=True)
+    print(job)
+    print("video_url:", job.video_url)
+except DashScopeError as e:
+    print(f"HTTP返回码：{e.status_code}")
+    print(f"错误码：{e.code}")
+    print(f"错误信息：{e.message}")
+    print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
 #### Java SDK
@@ -572,38 +584,44 @@ curl -X GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{ta
 
 #### Python SDK
 
-**重要**请先更新 DashScope Python SDK 至 **1.26.2.1** 或以上版本，再运行以下代码。更新方法请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+**重要**请先更新 DashScope Python SDK 至 **2.0.1** 或以上版本，再运行以下代码。更新方法请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
 ```
 import os
-from http import HTTPStatus
-from dashscope import VideoSynthesis
 import dashscope
+from dashscope.v2 import DashScopeError
 
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-api_key = os.getenv("DASHSCOPE_API_KEY", "YOUR_API_KEY")
+# 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 print('please wait...')
-rsp = VideoSynthesis.call(
-    api_key=api_key,
-    model='wan3.0-video',
-    prompt='视频1抱着图3，在图4的椅子上弹奏一支舒缓的乡村民谣，并说道："今天的阳光真好。"图1手中拿着图2，路过视频1，把手中的图2放到视频1旁边的桌子上，并说道："真好听，能不能再唱一遍"。',
-    media=[
-        {"type": "reference_image", "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260408/sjuytr/wan-r2v-object-girl.jpg"},
-        {"type": "reference_video", "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/qigswt/wan-r2v-role2.mp4"},
-        {"type": "reference_image", "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/rtjeqf/wan-r2v-object3.png"},
-        {"type": "reference_image", "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/qpzxps/wan-r2v-object4.png"},
-        {"type": "reference_image", "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/wfjikw/wan-r2v-backgroud5.png"}
-    ],
-    resolution="720P",
-    ratio="adaptive",
-    duration=5,
-    prompt_extend=True)
-print(rsp)
-if rsp.status_code == HTTPStatus.OK:
-    print("video_url:", rsp.output.video_url)
-else:
-    print('Failed, status_code: %s, code: %s, message: %s' % (rsp.status_code, rsp.code, rsp.message))
+# generate 为一步式调用（提交任务并等待完成），返回已完成的 Job
+try:
+    job = client.videos.generate(
+        model='wan3.0-video',
+        prompt='视频1抱着图3，在图4的椅子上弹奏一支舒缓的乡村民谣，并说道："今天的阳光真好。"图1手中拿着图2，路过视频1，把手中的图2放到视频1旁边的桌子上，并说道："真好听，能不能再唱一遍"。',
+        media=[
+            {"type": "reference_image", "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260408/sjuytr/wan-r2v-object-girl.jpg"},
+            {"type": "reference_video", "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/qigswt/wan-r2v-role2.mp4"},
+            {"type": "reference_image", "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/rtjeqf/wan-r2v-object3.png"},
+            {"type": "reference_image", "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/qpzxps/wan-r2v-object4.png"},
+            {"type": "reference_image", "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/wfjikw/wan-r2v-backgroud5.png"}
+        ],
+        resolution="720P",
+        ratio="adaptive",
+        duration=5,
+        prompt_extend=True)
+    print(job)
+    print("video_url:", job.video_url)
+except DashScopeError as e:
+    print(f"HTTP返回码：{e.status_code}")
+    print(f"错误码：{e.code}")
+    print(f"错误信息：{e.message}")
+    print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
 #### Java SDK
@@ -772,34 +790,40 @@ H1-2026跨境电商月度GMV.xlsx
 
 #### Python SDK
 
-**重要**请先更新 DashScope Python SDK 至 **1.26.2.1** 或以上版本，再运行以下代码。更新方法请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+**重要**请先更新 DashScope Python SDK 至 **2.0.1** 或以上版本，再运行以下代码。更新方法请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
 ```
 import os
-from http import HTTPStatus
-from dashscope import VideoSynthesis
 import dashscope
+from dashscope.v2 import DashScopeError
 
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-api_key = os.getenv("DASHSCOPE_API_KEY", "YOUR_API_KEY")
+# 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 print('please wait...')
-rsp = VideoSynthesis.call(
-    api_key=api_key,
-    model='wan3.0-video',
-    prompt='一支高端智能眼镜产品广告，整体风格极简、未来感、时尚高级，光影克制，画面以黑色、银灰色、冰蓝色为主色调，局部点缀柔和白光与参数UI图形。开场在纯黑背景中，一副智能眼镜从黑暗中缓缓浮现，镜腿边缘掠过精致高光，镜框轮廓在冷冽边缘光下被勾勒出来，镜头超近距离掠过镜片、鼻托、转轴、镜腿与材质细节，展现金属与高性能复合材料的细腻质感，表面处理高级克制，线条轻薄流畅。随后产品在空中缓慢旋转，画面以极简动态图形同步展示核心参数信息。随后镜头快速收拢，所有零件精准回归组装成完整产品，切换到年轻模特佩戴展示，模特五官立体、气质自信，穿着简洁高级的都市时尚服装，在极简空间和城市光影环境中自然转头、抬手、行走、微笑，镜头从正面、侧面、斜后方展示眼镜佩戴状态，突出轻薄贴合、时尚轮廓与日常百搭属性。结尾在纯色背景中，产品悬浮定格，镜头缓慢推进到品牌logo和核心slogan，整体音乐极简电子氛围配合精准鼓点，节奏干净有力，画面质感高级、克制、纯粹，具有强烈品牌记忆点和国际化科技审美。',
-    media=[
-        {"type": "file", "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260806/ebapmr/glass.pptx"}
-    ],
-    resolution="480P",
-    ratio="adaptive",
-    duration=10,
-    prompt_extend=True)
-print(rsp)
-if rsp.status_code == HTTPStatus.OK:
-    print("video_url:", rsp.output.video_url)
-else:
-    print('Failed, status_code: %s, code: %s, message: %s' % (rsp.status_code, rsp.code, rsp.message))
+# generate 为一步式调用（提交任务并等待完成），返回已完成的 Job
+try:
+    job = client.videos.generate(
+        model='wan3.0-video',
+        prompt='一支高端智能眼镜产品广告，整体风格极简、未来感、时尚高级，光影克制，画面以黑色、银灰色、冰蓝色为主色调，局部点缀柔和白光与参数UI图形。开场在纯黑背景中，一副智能眼镜从黑暗中缓缓浮现，镜腿边缘掠过精致高光，镜框轮廓在冷冽边缘光下被勾勒出来，镜头超近距离掠过镜片、鼻托、转轴、镜腿与材质细节，展现金属与高性能复合材料的细腻质感，表面处理高级克制，线条轻薄流畅。随后产品在空中缓慢旋转，画面以极简动态图形同步展示核心参数信息。随后镜头快速收拢，所有零件精准回归组装成完整产品，切换到年轻模特佩戴展示，模特五官立体、气质自信，穿着简洁高级的都市时尚服装，在极简空间和城市光影环境中自然转头、抬手、行走、微笑，镜头从正面、侧面、斜后方展示眼镜佩戴状态，突出轻薄贴合、时尚轮廓与日常百搭属性。结尾在纯色背景中，产品悬浮定格，镜头缓慢推进到品牌logo和核心slogan，整体音乐极简电子氛围配合精准鼓点，节奏干净有力，画面质感高级、克制、纯粹，具有强烈品牌记忆点和国际化科技审美。',
+        media=[
+            {"type": "file", "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260806/ebapmr/glass.pptx"}
+        ],
+        resolution="480P",
+        ratio="adaptive",
+        duration=10,
+        prompt_extend=True)
+    print(job)
+    print("video_url:", job.video_url)
+except DashScopeError as e:
+    print(f"HTTP返回码：{e.status_code}")
+    print(f"错误码：{e.code}")
+    print(f"错误信息：{e.message}")
+    print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
 #### Java SDK
@@ -940,33 +964,39 @@ curl -X GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{ta
 
 #### Python SDK
 
-**重要**请先更新 DashScope Python SDK 至 **1.26.2.1** 或以上版本，再运行以下代码。更新方法请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+**重要**请先更新 DashScope Python SDK 至 **2.0.1** 或以上版本，再运行以下代码。更新方法请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
 ```
 import os
-from http import HTTPStatus
-from dashscope import VideoSynthesis
 import dashscope
+from dashscope.v2 import DashScopeError
 
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-api_key = os.getenv("DASHSCOPE_API_KEY", "YOUR_API_KEY")
+# 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 print('please wait...')
-rsp = VideoSynthesis.call(
-    api_key=api_key,
-    model='wan3.0-video',
-    prompt='将整个画面转换为黏土风格',
-    media=[
-        {"type": "reference_video", "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260402/ldnfdf/wan2.7-videoedit-style-change.mp4"}
-    ],
-    resolution="720P",
-    duration=-1,
-    prompt_extend=True)
-print(rsp)
-if rsp.status_code == HTTPStatus.OK:
-    print("video_url:", rsp.output.video_url)
-else:
-    print('Failed, status_code: %s, code: %s, message: %s' % (rsp.status_code, rsp.code, rsp.message))
+# generate 为一步式调用（提交任务并等待完成），返回已完成的 Job
+try:
+    job = client.videos.generate(
+        model='wan3.0-video',
+        prompt='将整个画面转换为黏土风格',
+        media=[
+            {"type": "reference_video", "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260402/ldnfdf/wan2.7-videoedit-style-change.mp4"}
+        ],
+        resolution="720P",
+        duration=-1,
+        prompt_extend=True)
+    print(job)
+    print("video_url:", job.video_url)
+except DashScopeError as e:
+    print(f"HTTP返回码：{e.status_code}")
+    print(f"错误码：{e.code}")
+    print(f"错误信息：{e.message}")
+    print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
 #### Java SDK
@@ -1107,34 +1137,40 @@ curl -X GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{ta
 
 #### Python SDK
 
-**重要**请先更新 DashScope Python SDK 至 **1.26.2.1** 或以上版本，再运行以下代码。更新方法请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+**重要**请先更新 DashScope Python SDK 至 **2.0.1** 或以上版本，再运行以下代码。更新方法请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
 ```
 import os
-from http import HTTPStatus
-from dashscope import VideoSynthesis
 import dashscope
+from dashscope.v2 import DashScopeError
 
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-api_key = os.getenv("DASHSCOPE_API_KEY", "YOUR_API_KEY")
+# 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 print('please wait...')
-rsp = VideoSynthesis.call(
-    api_key=api_key,
-    model='wan3.0-video',
-    prompt='将视频1向后延长，面包师端上刷好的面包，将刷子放到一旁，镜头跟随面包师，去斜后方的烤炉进行烤制',
-    media=[
-        {"type": "reference_video", "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260414/rptnhd/wan2.7-i2v-video-continuation-2.mp4"}
-    ],
-    resolution="720P",
-    ratio="adaptive",
-    duration=5,
-    prompt_extend=True)
-print(rsp)
-if rsp.status_code == HTTPStatus.OK:
-    print("video_url:", rsp.output.video_url)
-else:
-    print('Failed, status_code: %s, code: %s, message: %s' % (rsp.status_code, rsp.code, rsp.message))
+# generate 为一步式调用（提交任务并等待完成），返回已完成的 Job
+try:
+    job = client.videos.generate(
+        model='wan3.0-video',
+        prompt='将视频1向后延长，面包师端上刷好的面包，将刷子放到一旁，镜头跟随面包师，去斜后方的烤炉进行烤制',
+        media=[
+            {"type": "reference_video", "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260414/rptnhd/wan2.7-i2v-video-continuation-2.mp4"}
+        ],
+        resolution="720P",
+        ratio="adaptive",
+        duration=5,
+        prompt_extend=True)
+    print(job)
+    print("video_url:", job.video_url)
+except DashScopeError as e:
+    print(f"HTTP返回码：{e.status_code}")
+    print(f"错误码：{e.code}")
+    print(f"错误信息：{e.message}")
+    print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
 #### Java SDK

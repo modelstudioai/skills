@@ -216,7 +216,7 @@ qwen-plus-character-2025-11-06
 
 训练Token总量的计算公式
 
-训练Token总量≈max\_steps×Lstep训练 Token 总量 \\approx max\\\_steps \\times L\_{step}训练Token总量≈max\_steps×Lstep​
+‘训练Token总量≈max\_steps×Lstep‘\`训练 Token 总量 \\approx max\\\_steps \\times L\_{step}\`‘训练Token总量≈max\_steps×Lstep​‘
 
 其中：
 
@@ -224,7 +224,7 @@ qwen-plus-character-2025-11-06
     
 -   Lstep：每步的Token消耗量，计算公式为：
     
-    Lstep\=∑i∈batchLitem(i)≤LmaxL\_{step} = \\sum\_{i \\in batch} L\_{item}^{(i)} \\leq L\_{max}Lstep​\=i∈batch∑​Litem(i)​≤Lmax​
+    ‘Lstep\=∑i∈batchLitem(i)≤Lmax‘\`L\_{step} = \\sum\_{i \\in batch} L\_{item}^{(i)} \\leq L\_{max}\`‘Lstep​\=i∈batch∑​Litem(i)​≤Lmax​‘
     
     Lstep 近似等于 Lmax。Lmax 由 max\_token\_length 和 generation\_type 共同决定，具体取值如下表：
     
@@ -295,7 +295,7 @@ wan2.7-image
 
 训练Token总量的计算公式
 
-训练Token总量\=n\_epochs×N×(max\_pixels/压缩率)×GPU系数\\text{训练Token总量} = n\\\_epochs \\times N \\times (max\\\_pixels / \\text{压缩率}) \\times \\text{GPU系数}训练Token总量\=n\_epochs×N×(max\_pixels/压缩率)×GPU系数
+‘训练Token总量\=n\_epochs×N×(max\_pixels/压缩率)×GPU系数‘\`\\text{训练Token总量} = n\\\_epochs \\times N \\times (max\\\_pixels / \\text{压缩率}) \\times \\text{GPU系数}\`‘训练Token总量\=n\_epochs×N×(max\_pixels/压缩率)×GPU系数‘
 
 其中：
 
@@ -408,7 +408,7 @@ qwen-image-2.0-pro
 
 训练Token总量的计算公式
 
-训练Token总量\=(∑i\=1N视频i的计费时长)×max\_pixels1024×n\_epochs训练 Token 总量 = \\left( \\sum\_{i=1}^{N} 视频\_i 的计费时长 \\right) \\times \\frac{max\\\_pixels}{1024} \\times n\\\_epochs训练Token总量\=(i\=1∑N​视频i​的计费时长)×1024max\_pixels​×n\_epochs
+‘训练Token总量\=(∑i\=1N视频i的计费时长)×max\_pixels1024×n\_epochs‘\`训练 Token 总量 = \\left( \\sum\_{i=1}^{N} 视频\_i 的计费时长 \\right) \\times \\frac{max\\\_pixels}{1024} \\times n\\\_epochs\`‘训练Token总量\=(i\=1∑N​视频i​的计费时长)×1024max\_pixels​×n\_epochs‘
 
 其中：
 
@@ -589,7 +589,7 @@ wan2.2-kf2v-flash
 
 单次任务的Token消耗按下式估算：
 
-消耗 Tokens\=(lm\_max\_epoch+fm\_max\_epoch)×25×训练集总时长(秒)\\text{消耗 Tokens} = (lm\\\_max\\\_epoch + fm\\\_max\\\_epoch) \\times 25 \\times \\text{训练集总时长(秒)}消耗 Tokens\=(lm\_max\_epoch+fm\_max\_epoch)×25×训练集总时长(秒)
+‘消耗 Tokens\=(lm\_max\_epoch+fm\_max\_epoch)×25×训练集总时长(秒)‘\`\\text{消耗 Tokens} = (lm\\\_max\\\_epoch + fm\\\_max\\\_epoch) \\times 25 \\times \\text{训练集总时长(秒)}\`‘消耗 Tokens\=(lm\_max\_epoch+fm\_max\_epoch)×25×训练集总时长(秒)‘
 
 其中 `lm_max_epoch` 与 `fm_max_epoch` 为创建调优任务时设置的超参数，分别表示 LM 与 FM 训练轮次；训练集总时长为调优数据集中全部音频文件的总秒数。提高任一轮次或扩大训练集均会线性增加 Token 消耗。
 
@@ -642,6 +642,20 @@ wan2.2-kf2v-flash
 **预付费输出**
 
 **Per 1K TPM/天**
+
+Qwen3.8-Flash
+
+qwen3.8-flash
+
+128K
+
+¥2.88
+
+¥0.97
+
+¥34.56
+
+¥11.66
 
 Qwen3.8-Max
 
@@ -982,6 +996,20 @@ qwen3-vl-plus-2025-09-23
 **预付费输出**
 
 **Per 1K TPM/天**
+
+Qwen3.8-Flash
+
+qwen3.8-flash
+
+128K
+
+¥3.94
+
+¥1.23
+
+¥47.25
+
+¥14.81
 
 Qwen3.8-Max
 
@@ -2668,9 +2696,9 @@ qwen-image-2.0-pro
 
 **说明**CosyVoice 模型调优服务仅支持**华北2（北京）**地域。
 
-调优后的CosyVoice模型部署后按**模型单元的使用时长**计费，公式为：费用\=使用时长（小时）×模型单元数量×模型单元单价\\text{费用} = \\text{使用时长（小时）} \\times \\text{模型单元数量} \\times \\text{模型单元单价}费用\=使用时长（小时）×模型单元数量×模型单元单价。
+`调优后的CosyVoice模型部署后按<strong>模型单元的使用时长</strong>计费，公式为：$\text{费用} = \text{使用时长（小时）} \times \text{模型单元数量} \times \text{模型单元单价}$。`
 
-其中，模型单元数量\=单副本模型单元×部署副本数\\text{模型单元数量} = \\text{单副本模型单元} \\times \\text{部署副本数}模型单元数量\=单副本模型单元×部署副本数，可选的模版及对应的模型单元类型请参见CosyVoice模型调优的[部署模版](raw/model-user-guide/fine-tuning/fine-tune-speech-synthesis-model/fine-tune-speech-synthesis-model-by-api.md)。
+`其中，$\text{模型单元数量} = \text{单副本模型单元} \times \text{部署副本数}$，可选的模版及对应的模型单元类型请参见CosyVoice模型调优的[部署模版](/zh/model-studio/fine-tune-speech-synthesis-model-by-api)。`
 
 **模型名称**
 

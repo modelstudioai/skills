@@ -62,31 +62,31 @@ HTTP 请求地址：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com
 
 HTTP 请求地址为`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
 
-SDK 调用配置的`base_url`：`dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"`
+SDK 调用配置的`region`：`dashscope.Client(workspace="{WorkspaceId}", region="cn-beijing")`
 
 #### 美国（弗吉尼亚）
 
 HTTP 请求地址为`POST https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
 
-SDK 调用配置的`base_url`：`dashscope.base_http_api_url = "https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1"`
+SDK 调用配置的`region`：`dashscope.Client(workspace="{WorkspaceId}", region="us-east-1")`
 
 #### 新加坡
 
 HTTP 请求地址为`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
 
-SDK 调用配置的`base_url`：`dashscope.base_http_api_url = "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1"`
+SDK 调用配置的`region`：`dashscope.Client(workspace="{WorkspaceId}", region="ap-southeast-1")`
 
 #### 德国（法兰克福）
 
 HTTP 请求地址为`POST https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
 
-SDK 调用配置的`base_url`：`dashscope.base_http_api_url = "https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1"`
+SDK 调用配置的`region`：`dashscope.Client(workspace="{WorkspaceId}", region="eu-central-1")`
 
 #### 日本（东京）
 
 HTTP 请求地址为`POST https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
 
-SDK 调用配置的`base_url`：`dashscope.base_http_api_url = "https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/api/v1"`
+SDK 调用配置的`region`：`dashscope.Client(workspace="{WorkspaceId}", region="ap-northeast-1")`
 
 ## 快速开始
 
@@ -284,29 +284,29 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 ```
 import os
 import dashscope
-from dashscope import Generation
-# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
-# 初始化请求参数
-messages = [{"role": "user", "content": "你是谁？"}]
-completion = Generation.call(
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
     # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key="sk-xxx"
     api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
+# 初始化请求参数
+messages = [{"role": "user", "content": "你是谁？"}]
+completion = client.chat.completions.create(
     model="deepseek-v4-pro",
     messages=messages,
-    result_format="message",  # 设置结果格式为 message
     enable_thinking=True,
     stream=True,              # 开启流式输出
-    incremental_output=True,  # 开启增量输出
 )
 reasoning_content = ""  # 完整思考过程
 answer_content = ""     # 完整回复
 is_answering = False    # 是否进入回复阶段
 print("\n" + "=" * 20 + "思考过程" + "=" * 20 + "\n")
 for chunk in completion:
-    message = chunk.output.choices[0].message
+    message = chunk.choices[0].delta
     # 只收集思考内容
-    if "reasoning_content" in message:
+    if message.reasoning_content:
         if not is_answering:
             print(message.reasoning_content, end="", flush=True)
         reasoning_content += message.reasoning_content
@@ -581,17 +581,19 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 ```
 import os
 import dashscope
-from dashscope import Generation
-# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
-response = Generation.call(
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key="sk-xxx"
     api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
+response = client.chat.completions.create(
     model="deepseek-v4-pro",
     messages=[{"role": "user", "content": "9.9和9.11哪个大"}],
-    reasoning_effort="high",
-    result_format="message",
+    parameters={"reasoning_effort": "high"},
 )
-print(response.output.choices[0].message.content)
+print(response.choices[0].message.content)
 ```
 
 ## Responses API
@@ -829,7 +831,7 @@ deepseek-v4-pro 在编程、数学和通用任务方面表现出色，deepseek-v
 
 1.  在线体验：访问[模型广场](https://bailian.console.aliyun.com/model/market)。
 2.  通过API或客户端（如Chatbox）调用模型：请参考本文内容。
-3.  0代码构建大模型应用：请参考[智能体应用（Agent 1.0）](raw/application-user-guide/agent-development/llm-application/single-agent-application.md)或[工作流应用](raw/application-user-guide/agent-development/llm-application/workflow-application.md)。
+3.  0代码构建大模型应用：请参考[智能体应用（Agent 1.0）](raw/application-user-guide/llm-application/single-agent-application.md)或[工作流应用](raw/application-user-guide/llm-application/workflow-application.md)。
 
 如需自行部署DeepSeek，请参考[技术解决方案](https://www.aliyun.com/solution/tech-solution/deepseek-r1-for-platforms)。
 

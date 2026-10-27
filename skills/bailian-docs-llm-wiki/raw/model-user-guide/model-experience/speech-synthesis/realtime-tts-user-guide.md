@@ -33,28 +33,29 @@ Python
 ```
 import os
 import dashscope
-from dashscope.audio.tts_v2 import SpeechSynthesizer, ResultCallback, AudioFormat
 
-dashscope.api_key = os.environ["DASHSCOPE_API_KEY"]
-dashscope.base_websocket_api_url = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference"
+# 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx"
+# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID。
+client = dashscope.Client(
+    api_key=os.environ["DASHSCOPE_API_KEY"],
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 with open("output.mp3", "wb") as audio:
-    class Callback(ResultCallback):
-        def on_data(self, data: bytes):
-            audio.write(data)
-
-        def on_error(self, message):
-            print(f"Synthesis failed: {message}")
-
-    synthesizer = SpeechSynthesizer(
+    # 分段发送文本，逐段接收音频
+    with client.audio.tts.connect(
         model="qwen-audio-3.1-tts-flash",
         voice="longanhuan_v3.1",
-        format=AudioFormat.MP3_24000HZ_MONO_256KBPS,
-        callback=Callback(),
-    )
-    for text in ["你好，欢迎使用阿里云百炼。", "文本可以分段发送，音频会逐段返回。"]:
-        synthesizer.streaming_call(text)
-    synthesizer.streaming_complete()
+        format="mp3",
+        sample_rate=24000,
+    ) as session:
+        for text in ["你好，欢迎使用阿里云百炼。", "文本可以分段发送，音频会逐段返回。"]:
+            session.send_text(text)
+        session.flush()  # 触发已缓冲文本的合成（不结束输入）
+        session.stop()   # 结束输入，等待剩余音频返回
+        for chunk in session.audio_chunks():
+            audio.write(chunk)
 ```
 
 Java
@@ -117,28 +118,28 @@ Python
 ```
 import os
 import dashscope
-from dashscope.audio.tts_v2 import SpeechSynthesizer, ResultCallback, AudioFormat
 
-dashscope.api_key = os.environ["DASHSCOPE_API_KEY"]
-dashscope.base_websocket_api_url = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference"
+# 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx"
+client = dashscope.Client(
+    api_key=os.environ["DASHSCOPE_API_KEY"],
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 with open("output.mp3", "wb") as audio:
-    class Callback(ResultCallback):
-        def on_data(self, data: bytes):
-            audio.write(data)
-
-        def on_error(self, message):
-            print(f"Synthesis failed: {message}")
-
-    synthesizer = SpeechSynthesizer(
+    # 分段发送文本，逐段接收音频
+    with client.audio.tts.connect(
         model="cosyvoice-v3-flash",
         voice="longanyang",
-        format=AudioFormat.MP3_24000HZ_MONO_256KBPS,
-        callback=Callback(),
-    )
-    for text in ["你好，欢迎使用阿里云百炼。", "文本可以分段发送，音频会逐段返回。"]:
-        synthesizer.streaming_call(text)
-    synthesizer.streaming_complete()
+        format="mp3",
+        sample_rate=24000,
+    ) as session:
+        for text in ["你好，欢迎使用阿里云百炼。", "文本可以分段发送，音频会逐段返回。"]:
+            session.send_text(text)
+        session.flush()  # 触发已缓冲文本的合成（不结束输入）
+        session.stop()   # 结束输入，等待剩余音频返回
+        for chunk in session.audio_chunks():
+            audio.write(chunk)
 ```
 
 Java
@@ -304,15 +305,15 @@ public class Main {
 使用 CosyVoice 的 Python 开始使用示例时，将初始化与文本发送部分替换为以下内容，可使用 `longanhuan_v3` 输出河南话：
 
 ```
-synthesizer = SpeechSynthesizer(
+with client.audio.tts.connect(
     model="cosyvoice-v3-flash",
     voice="longanhuan_v3",
-    instruction="请用河南话表达。",
-    format=AudioFormat.MP3_24000HZ_MONO_256KBPS,
-    callback=Callback(),
-)
-synthesizer.streaming_call("叫你去买盐，你买回来一袋面，这不是弄啥嘞吗！")
-synthesizer.streaming_complete()
+    parameters={"instruction": "请用河南话表达。"},  # 指令控制
+    format="mp3",
+    sample_rate=24000,
+) as session:
+    session.send_text("叫你去买盐，你买回来一袋面，这不是弄啥嘞吗！")
+    session.flush()
 ```
 
 使用 Qwen3-TTS 时，请从 [Qwen3-TTS 音色列表](https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list#0ad0bfdd635ar)中选择支持目标方言的音色。
@@ -489,9 +490,9 @@ ASMR 轻声
 
 Python SDK
 
-1.26.4 及以上版本
+2.0.1 及以上版本
 
-调用 `SpeechSynthesizer.streaming_cancel()`。
+调用会话对象的 `session.cancel()`（`client.audio.tts.connect` 返回的会话）。
 
 Java SDK
 
@@ -521,7 +522,7 @@ Qwen-Audio-TTS、CosyVoice
 
 必须使用新的 `task_id` 发送 `run-task`，再按该系列的流程发送文本。取消任务后也按此流程复用连接。
 
-**说明**使用 Python SDK 调用 Qwen-Audio-TTS 或 CosyVoice 时，直接创建的 `SpeechSynthesizer` 会在任务结束或取消后关闭连接。需要复用连接时，从 `SpeechSynthesizerObjectPool` 借出对象。
+**说明**使用 Python SDK 时，`client.audio.tts.connect` 创建的会话在任务结束或取消后默认关闭底层连接。需要复用连接时，可先通过 `client.ws_connection()` 创建共享 WebSocket 连接，并在 `client.audio.tts.connect` 时以 `connection=` 传入，即可在同一连接上顺序执行多轮合成；连接由调用方通过 `WsConnection.close` 关闭。
 
 Sambert
 

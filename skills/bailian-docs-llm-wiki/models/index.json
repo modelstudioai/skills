@@ -1,10 +1,10 @@
 {
-  "updatedAt": "2026-10-27",
+  "updatedAt": "2026-10-28",
   "totalFamilies": 125,
-  "totalModels": 322,
+  "totalModels": 333,
   "profileCoverage": {
     "full": 282,
-    "partial": 39,
+    "partial": 50,
     "structured-only": 1,
     "none": 0
   },
@@ -662,8 +662,9 @@
       "providers": [
         "qwen"
       ],
-      "itemCount": 1,
+      "itemCount": 2,
       "items": [
+        "qwen-audio-3.1-realtime-flash",
         "qwen-audio-3.1-realtime-plus"
       ],
       "maxContextWindow": 262144
@@ -1784,10 +1785,20 @@
       "providers": [
         "tripo"
       ],
-      "itemCount": 2,
+      "itemCount": 12,
       "items": [
+        "Tripo/Tripo-AnimationRetarget",
+        "Tripo/Tripo-AutoRig",
+        "Tripo/Tripo-ConvertFormat",
         "Tripo/Tripo-H3.1",
-        "Tripo/Tripo-P1.0"
+        "Tripo/Tripo-ImageToSplat",
+        "Tripo/Tripo-MeshCompletion",
+        "Tripo/Tripo-P1.0",
+        "Tripo/Tripo-Retopology",
+        "Tripo/Tripo-RigCheck",
+        "Tripo/Tripo-Segmentation",
+        "Tripo/Tripo-SmartSegmentation",
+        "Tripo/Tripo-Texture"
       ]
     },
     {

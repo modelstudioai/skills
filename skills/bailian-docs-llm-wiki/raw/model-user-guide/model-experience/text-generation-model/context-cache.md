@@ -184,7 +184,7 @@ GLM：glm-5.1
     
     千问 Plus：qwen-plus
     
-    千问 Flash：qwen3.5-flash
+    千问 Flash：qwen3.8-flash、qwen3.5-flash
     
     千问 VL：qwen3-vl-plus
     
@@ -228,7 +228,7 @@ GLM：glm-5.1
     
     千问 Plus：qwen-plus
     
-    千问 Flash：qwen3.5-flash
+    千问 Flash：qwen3.8-flash、qwen3.5-flash
     
     千问 VL：qwen3-vl-plus
     
@@ -283,12 +283,12 @@ def get_completion(user_input):
 # 第一次请求
 first_completion = get_completion("这段代码的内容是什么")
 print(f"第一次请求创建缓存 Token：{first_completion.usage.prompt_tokens_details.cache_creation_input_tokens}")
-print(f"第一次请求命中缓存 Token：{first_completion.usage.prompt_tokens_details.cached_tokens}")
+print(f"第一次请求命中缓存 Token：{first_completion.usage.prompt_tokens_details['cached_tokens']}")
 print("=" * 20)
 # 第二次请求，代码内容一致，只修改了提问问题
 second_completion = get_completion("这段代码可以怎么优化")
 print(f"第二次请求创建缓存 Token：{second_completion.usage.prompt_tokens_details.cache_creation_input_tokens}")
-print(f"第二次请求命中缓存 Token：{second_completion.usage.prompt_tokens_details.cached_tokens}")
+print(f"第二次请求命中缓存 Token：{second_completion.usage.prompt_tokens_details['cached_tokens']}")
 ```
 
 #### DashScope
@@ -297,9 +297,16 @@ python
 
 ```
 import os
-from dashscope import MultiModalConversation
-# 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+import dashscope
+
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # 模拟的代码仓库内容，最小可缓存提示词长度为 1024 Token
 long_text_content = "<Your Code Here>" * 400
@@ -324,9 +331,7 @@ def get_completion(user_input):
             "content": [{"text": user_input}],
         },
     ]
-    response = MultiModalConversation.call(
-        # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
-        api_key=os.getenv("DASHSCOPE_API_KEY"),
+    response = client.multimodal.chat.create(
         model="qwen3.8-max",
         messages=messages,
     )
@@ -685,7 +690,7 @@ def get_completion(user_input):
 first_completion = get_completion("这段代码的内容是什么")
 created_cache_tokens = first_completion.usage.prompt_tokens_details.cache_creation_input_tokens
 print(f"第一次请求创建缓存 Token：{created_cache_tokens}")
-hit_cached_tokens = first_completion.usage.prompt_tokens_details.cached_tokens
+hit_cached_tokens = first_completion.usage.prompt_tokens_details['cached_tokens']
 print(f"第一次请求命中缓存 Token：{hit_cached_tokens}")
 print(f"第一次请求未命中也未创建缓存的 Token：{first_completion.usage.prompt_tokens-created_cache_tokens-hit_cached_tokens}")
 print("=" * 20)
@@ -693,7 +698,7 @@ print("=" * 20)
 second_completion = get_completion("这段代码有哪些可以优化的地方")
 created_cache_tokens = second_completion.usage.prompt_tokens_details.cache_creation_input_tokens
 print(f"第二次请求创建缓存 Token：{created_cache_tokens}")
-hit_cached_tokens = second_completion.usage.prompt_tokens_details.cached_tokens
+hit_cached_tokens = second_completion.usage.prompt_tokens_details['cached_tokens']
 print(f"第二次请求命中缓存 Token：{hit_cached_tokens}")
 print(f"第二次请求未命中也未创建缓存的 Token：{second_completion.usage.prompt_tokens-created_cache_tokens-hit_cached_tokens}")
 ```
@@ -839,7 +844,7 @@ first_completion = get_completion("北京现在天气怎么样？")
 usage = first_completion.usage
 print(f"Prompt Tokens: {usage.prompt_tokens}")
 print(f"创建缓存 Token: {usage.prompt_tokens_details.cache_creation_input_tokens}")
-print(f"命中缓存 Token: {usage.prompt_tokens_details.cached_tokens}")
+print(f"命中缓存 Token: {usage.prompt_tokens_details['cached_tokens']}")
 print(f"模型选择了工具: {[t.function.name for t in first_completion.choices[0].message.tool_calls or []]}")
 print()
 
@@ -861,7 +866,7 @@ second_completion = get_completion("上海现在天气怎么样？", messages=me
 usage = second_completion.usage
 print(f"Prompt Tokens: {usage.prompt_tokens}")
 print(f"创建缓存 Token: {usage.prompt_tokens_details.cache_creation_input_tokens}")
-print(f"命中缓存 Token: {usage.prompt_tokens_details.cached_tokens}")
+print(f"命中缓存 Token: {usage.prompt_tokens_details['cached_tokens']}")
 print(f"模型选择了工具: {[t.function.name for t in second_completion.choices[0].message.tool_calls or []]}")
 ```
 
@@ -912,7 +917,7 @@ while True:
     print(f"[AI Response] {completion.choices[0].message.content}")
     messages.append(completion.choices[0].message)
     created_cache_tokens = completion.usage.prompt_tokens_details.cache_creation_input_tokens
-    hit_cached_tokens = completion.usage.prompt_tokens_details.cached_tokens
+    hit_cached_tokens = completion.usage.prompt_tokens_details['cached_tokens']
     uncached_tokens = completion.usage.prompt_tokens - created_cache_tokens - hit_cached_tokens
     print(f"[Cache Info] 创建缓存 Token：{created_cache_tokens}")
     print(f"[Cache Info] 命中缓存 Token：{hit_cached_tokens}")
@@ -1027,6 +1032,7 @@ while True:
     -   文本生成模型
         
         -   千问 Plus：qwen-plus
+        -   千问 Flash：qwen3.8-flash
     -   视觉理解模型
         
         -   千问 VL：qwen3-vl-plus
@@ -1079,6 +1085,7 @@ while True:
     -   文本生成模型
         
         -   千问 Plus：qwen-plus
+        -   千问 Flash：qwen3.8-flash
     -   视觉理解模型
         
         -   千问 VL：qwen3-vl-plus
@@ -1148,7 +1155,7 @@ while True:
 
 #### OpenAI兼容
 
-当您使用 OpenAI 兼容的方式调用模型并触发了隐式缓存后，可以得到如下的返回结果，在`usage.prompt_tokens_details.cached_tokens`可以查看命中缓存的 Token 数（该数值为`usage.prompt_tokens`的一部分）。
+当您使用 OpenAI 兼容的方式调用模型并触发了隐式缓存后，可以得到如下的返回结果，在`usage.prompt_tokens_details['cached_tokens']`可以查看命中缓存的 Token 数（该数值为`usage.prompt_tokens`的一部分）。
 
 ```
 {
@@ -1181,14 +1188,11 @@ while True:
 
 #### DashScope
 
-当您使用DashScope Python SDK 或 HTTP 方式调用模型并触发了隐式缓存后，可以得到如下的返回结果，在`usage.prompt_tokens_details.cached_tokens`可以查看命中缓存的 Token 数（该数值是 `usage.input_tokens` 的一部分。）。
+当您通过 HTTP 方式调用模型并触发了隐式缓存后，可以得到如下的返回结果（HTTP 接口返回），在`usage.prompt_tokens_details['cached_tokens']`可以查看命中缓存的 Token 数（该数值是 `usage.input_tokens` 的一部分）。通过 DashScope Python SDK 2.0 调用时，返回的是扁平化后的响应对象，同样在 `response.usage.prompt_tokens_details['cached_tokens']` 查看命中缓存的 Token 数。
 
 ```
 {
-    "status_code": 200,
     "request_id": "f3acaa33-e248-97bb-96d5-cbeed34699e1",
-    "code": "",
-    "message": "",
     "output": {
         "text": null,
         "finish_reason": null,
@@ -1243,7 +1247,7 @@ while True:
 
 #### OpenAI兼容
 
-当您使用 OpenAI 兼容的方式调用模型并触发了隐式缓存后，可以得到如下的返回结果，在`usage.prompt_tokens_details.cached_tokens`可以查看命中缓存的 Token 数（该 Token 数是`usage.prompt_tokens`的一部分）。
+当您使用 OpenAI 兼容的方式调用模型并触发了隐式缓存后，可以得到如下的返回结果，在`usage.prompt_tokens_details['cached_tokens']`可以查看命中缓存的 Token 数（该 Token 数是`usage.prompt_tokens`的一部分）。
 
 ```
 {
@@ -1283,22 +1287,19 @@ while True:
 
 #### DashScope
 
-当您使用DashScope Python SDK 或 HTTP 方式调用模型并触发了隐式缓存后，命中缓存的Token数包含在总输入Token（usage.input\_tokens）中，具体查看位置因地域和模型而异：
+当您通过 HTTP 方式调用视觉理解模型并触发了隐式缓存后，命中缓存的Token数包含在总输入Token（usage.input\_tokens）中，具体查看位置因地域和模型而异（DashScope Python SDK 2.0 返回扁平化后的响应对象，查看位置相同，如 `response.usage.prompt_tokens_details['cached_tokens']`）：
 
 -   北京地域：
     
-    -   `qwen3-vl-plus`：在 `usage.prompt_tokens_details.cached_tokens`查看
+    -   `qwen3-vl-plus`：在 `usage.prompt_tokens_details['cached_tokens']`查看
 -   新加坡地域：所有模型均查看 `usage.cached_tokens`
     
 
-> 目前使用`usage.cached_tokens`的模型，后续将升级至`usage.prompt_tokens_details.cached_tokens`。
+> 目前使用`usage.cached_tokens`的模型，后续将升级至`usage.prompt_tokens_details['cached_tokens']`。
 
 ```
 {
-  "status_code": 200,
   "request_id": "06a8f3bb-d871-9db4-857d-2c6eeac819bc",
-  "code": "",
-  "message": "",
   "output": {
     "text": null,
     "finish_reason": null,

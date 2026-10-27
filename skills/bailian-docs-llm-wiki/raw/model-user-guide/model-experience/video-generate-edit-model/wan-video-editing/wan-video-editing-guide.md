@@ -23,23 +23,24 @@
 
 #### Python SDK
 
-**重要**请确保 DashScope Python SDK 版本**不低于**`1.25.16`，再运行以下代码。
+**重要**请确保 DashScope Python SDK 版本**不低于**`2.0.1`，再运行以下代码。
 
 若版本过低，可能会触发 "url error, please check url!" 等错误。请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
 
 ```
 # -*- coding: utf-8 -*-
-from http import HTTPStatus
-from dashscope import VideoSynthesis
 import dashscope
 import os
+from dashscope.v2 import DashScopeError
 
-# 以下为华北2（北京）地域的URL。调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的URL不同。获取URL：https://help.aliyun.com/zh/model-studio/wan-video-editing-api-reference
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-
-# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-# 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-api_key = os.getenv("DASHSCOPE_API_KEY")
+# 以下为华北2（北京）地域的配置。调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 media = [
     {
@@ -54,21 +55,23 @@ media = [
 
 def sample_sync_call():
     print('----sync call, please wait a moment----')
-    rsp = VideoSynthesis.call(
-        api_key=api_key,
-        model="wan2.7-videoedit",
-        media=media,
-        resolution="720P",
-        prompt_extend=True,
-        watermark=True,
-        prompt="参考视频的特效，将这个特效应用到图片中的这个长发的女人身上，场景为晚会。",
-    )
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print(rsp.output.video_url)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (rsp.status_code, rsp.code, rsp.message))
+    # generate 为一步式调用（提交任务并等待完成），返回已完成的 Job
+    try:
+        job = client.videos.generate(
+            model="wan2.7-videoedit",
+            media=media,
+            resolution="720P",
+            prompt_extend=True,
+            watermark=True,
+            prompt="参考视频的特效，将这个特效应用到图片中的这个长发的女人身上，场景为晚会。",
+        )
+        print(job)
+        print(job.video_url)
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 
 if __name__ == '__main__':
     sample_sync_call()
@@ -233,23 +236,24 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 
 #### Python SDK
 
-**重要**请确保 DashScope Python SDK 版本**不低于**`1.25.16`，再运行以下代码。
+**重要**请确保 DashScope Python SDK 版本**不低于**`2.0.1`，再运行以下代码。
 
 若版本过低，可能会触发 "url error, please check url!" 等错误。请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
 
 ```
 # -*- coding: utf-8 -*-
-from http import HTTPStatus
-from dashscope import VideoSynthesis
 import dashscope
 import os
+from dashscope.v2 import DashScopeError
 
-# 以下为华北2（北京）地域的URL。调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的URL不同。获取URL：https://help.aliyun.com/zh/model-studio/wan-video-editing-api-reference
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-
-# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-# 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-api_key = os.getenv("DASHSCOPE_API_KEY")
+# 以下为华北2（北京）地域的配置。调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 media = [
     {
@@ -260,20 +264,23 @@ media = [
 
 def sample_sync_call():
     print('----sync call, please wait a moment----')
-    rsp = VideoSynthesis.call(
-        api_key=api_key,
-        model="wan2.7-videoedit",
-        media=media,
-        resolution="720P",
-        prompt_extend=True,
-        watermark=True,
-        prompt="将整个画面转换为黏土风格",
-    )
-    if rsp.status_code == HTTPStatus.OK:
-        print(rsp.output.video_url)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (rsp.status_code, rsp.code, rsp.message))
+    # generate 为一步式调用（提交任务并等待完成），返回已完成的 Job
+    try:
+        job = client.videos.generate(
+            model="wan2.7-videoedit",
+            media=media,
+            resolution="720P",
+            prompt_extend=True,
+            watermark=True,
+            prompt="将整个画面转换为黏土风格",
+        )
+        print(job)
+        print(job.video_url)
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 
 if __name__ == '__main__':
     sample_sync_call()
@@ -406,23 +413,24 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 
 #### Python SDK
 
-**重要**请确保 DashScope Python SDK 版本**不低于**`1.25.16`，再运行以下代码。
+**重要**请确保 DashScope Python SDK 版本**不低于**`2.0.1`，再运行以下代码。
 
 若版本过低，可能会触发 "url error, please check url!" 等错误。请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
 
 ```
 # -*- coding: utf-8 -*-
-from http import HTTPStatus
-from dashscope import VideoSynthesis
 import dashscope
 import os
+from dashscope.v2 import DashScopeError
 
-# 以下为华北2（北京）地域的URL。调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的URL不同。获取URL：https://help.aliyun.com/zh/model-studio/wan-video-editing-api-reference
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-
-# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-# 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-api_key = os.getenv("DASHSCOPE_API_KEY")
+# 以下为华北2（北京）地域的配置。调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 media = [
     {
@@ -437,20 +445,23 @@ media = [
 
 def sample_sync_call():
     print('----sync call, please wait a moment----')
-    rsp = VideoSynthesis.call(
-        api_key=api_key,
-        model="wan2.7-videoedit",
-        media=media,
-        resolution="720P",
-        prompt_extend=True,
-        watermark=True,
-        prompt="将视频中女孩的衣服替换为图片中的衣服",
-    )
-    if rsp.status_code == HTTPStatus.OK:
-        print(rsp.output.video_url)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (rsp.status_code, rsp.code, rsp.message))
+    # generate 为一步式调用（提交任务并等待完成），返回已完成的 Job
+    try:
+        job = client.videos.generate(
+            model="wan2.7-videoedit",
+            media=media,
+            resolution="720P",
+            prompt_extend=True,
+            watermark=True,
+            prompt="将视频中女孩的衣服替换为图片中的衣服",
+        )
+        print(job)
+        print(job.video_url)
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 
 if __name__ == '__main__':
     sample_sync_call()

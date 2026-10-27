@@ -36,11 +36,13 @@ Python SDK
 
 ```
 import os
-from dashscope import Files
+import dashscope
+
+client = dashscope.Client(api_key=os.getenv('DASHSCOPE_API_KEY'))
 
 # 查询文件信息（返回文件元数据，不含内容）
-result = Files.get(file_id='file-xxx', api_key=os.getenv('DASHSCOPE_API_KEY'))
-print(result)
+result = client.files.get('file-xxx')
+print(result.file_id, result.name, result.size)
 ```
 
 java

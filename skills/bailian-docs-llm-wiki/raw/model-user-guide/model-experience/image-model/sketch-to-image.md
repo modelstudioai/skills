@@ -64,7 +64,7 @@ wanx-sketch-to-image-lite
 
 由于模型计算耗时较长，示例代码均展示异步处理的调用方式，以避免请求超时。
 
-您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，还需要[安装DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。请将示例代码中的 `DASHSCOPE_API_HOST` 替换为获取的 API Host。
+您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，还需要[安装DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
 #### curl
 
@@ -101,16 +101,18 @@ https://dashscope.aliyuncs.com/api/v1/tasks/{your_task_id}
 #### Python
 
 ```
-from http import HTTPStatus
 from urllib.parse import urlparse, unquote
 from pathlib import PurePosixPath
 import requests
-from dashscope import ImageSynthesis
+import os
+import dashscope
+from dashscope.v2 import DashScopeError
+
+client = dashscope.Client(api_key=os.getenv("DASHSCOPE_API_KEY"))
 
 prompt = "一棵参天大树"
 sketch_image_url = "https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6609471071/p743851.jpg"
 model = "wanx-sketch-to-image-lite"
-task = "image2image"
 
 # 异步调用
 def async_call():
@@ -121,38 +123,37 @@ def async_call():
 
 # 创建异步任务
 def create_async_task():
-    rsp = ImageSynthesis.async_call(model=model,
-                                    prompt=prompt,
-                                    n=1,
-                                    style='<watercolor>',
-                                    size='768*768',
-                                    sketch_image_url=sketch_image_url,
-                                    task=task)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print(rsp.output)
-    else:
-        print('create_async_task Failed, status_code: %s, code: %s, message: %s' %
-              (rsp.status_code, rsp.code, rsp.message))
-    return rsp
+    job = client.images.jobs.create(
+        model=model,
+        prompt=prompt,
+        n=1,
+        style='<watercolor>',
+        size='768*768',
+        # 模型专属输入字段（sketch_image_url）经 extra_input 并入请求 input 段
+        extra_input={'sketch_image_url': sketch_image_url})
+    print(job)
+    print(job.task_id, job.status)
+    return job
 
 # 等待异步任务结束
-def wait_async_task(task):
-    rsp = ImageSynthesis.wait(task)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print(rsp.output.task_status)
-        # save file to current directory
-        for result in rsp.output.results:
-            file_name = PurePosixPath(unquote(urlparse(result.url).path)).parts[-1]
-            with open('./%s' % file_name, 'wb+') as f:
-                f.write(requests.get(result.url).content)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (rsp.status_code, rsp.code, rsp.message))
+def wait_async_task(job):
+    done = client.images.jobs.wait(job)
+    print(done)
+    print(done.status)
+    # save file to current directory
+    for url in done.image_urls:
+        file_name = PurePosixPath(unquote(urlparse(url).path)).parts[-1]
+        with open('./%s' % file_name, 'wb+') as f:
+            f.write(requests.get(url).content)
 
 if __name__ == '__main__':
-    async_call()
+    try:
+        async_call()
+    except DashScopeError as e:
+        print(f"HTTP返回码：{e.status_code}")
+        print(f"错误码：{e.code}")
+        print(f"错误信息：{e.message}")
+        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
 #### Java

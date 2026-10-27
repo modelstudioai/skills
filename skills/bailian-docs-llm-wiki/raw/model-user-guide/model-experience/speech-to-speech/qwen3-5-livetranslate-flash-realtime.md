@@ -1216,3 +1216,11 @@ uk
 ## 支持的音色
 
 实时翻译支持的音色与`voice`参数取值参见[音色列表](raw/model-user-guide/model-experience/omni-modal/omni-voice-list.md)。
+
+## 常见问题
+
+### RPM 限制什么？是否限制同时保持的连接总数？
+
+RPM 限制每分钟的 WebSocket 建连请求次数。同一连接内的多轮响应不重复计数；重连计为新请求。目前没有单独限制同时保持的连接总数。
+
+建连时，若 WebSocket 以 `1007` 关闭，且原因为 `Requests rate limit exceeded, please try again later.`，说明触发了请求速率限流。降低建连频率，并采用指数退避重连。

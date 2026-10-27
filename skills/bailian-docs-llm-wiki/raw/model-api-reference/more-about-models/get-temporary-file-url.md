@@ -300,34 +300,29 @@ public class PublicUrlHandler {
 
 **前提条件**
 
-请[安装DashScope Python SDK](raw/model-api-reference/preparations/install-sdk.md)，且DashScope Python SDK版本号 >= `1.27.3`。
+请[安装DashScope Python SDK](raw/model-api-reference/preparations/install-sdk.md)，且DashScope Python SDK版本号 >= `2.0.1`。
 
-DashScope SDK 提供了 `Files` 类，封装了文件上传、查询、删除等操作，免去手工拼接上传凭证与 OSS 表单。
+DashScope SDK 提供了 `client.files` 资源，封装了文件上传、查询、删除等操作，免去手工拼接上传凭证与 OSS 表单。
 
-**说明**`Files.upload` 真实签名为 `upload(file_path, purpose)`，其中 `purpose` 取值 `fine_tune`（微调训练文件）或 `inference`（推理临时文件，对应本文场景），**无 `model` 参数**。
+**说明**`client.files.upload` 签名为 `upload(file_path, purpose)`，其中 `purpose` 取值 `fine_tune`（微调训练文件）或 `inference`（推理临时文件，对应本文场景），**无 `model` 参数**。
 
 ```
 import os
 import dashscope
-from dashscope import Files
 
 # 北京与新加坡地域的 API Key 不同，请使用对应地域的 API Key
-# 从环境变量中获取 API Key
-api_key = os.getenv('DASHSCOPE_API_KEY')
-
-# 以下为北京地域 url，若使用新加坡地域，需将 url 替换为：https://dashscope-intl.aliyuncs.com/api/v1
-dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'
+# 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx"
+client = dashscope.Client(api_key=os.getenv('DASHSCOPE_API_KEY'))
 
 # 上传文件（purpose=fine_tune 用于微调训练文件，purpose=inference 用于推理临时文件）
-result = Files.upload(
+result = client.files.upload(
     file_path='train_data.jsonl',
     purpose='fine_tune',
-    api_key=api_key,
 )
 
 print(result)
 ```
-**输出示例**
+**输出示例（HTTP 接口返回）**
 ```
 {"request_id": "xxx", "code": "", "message": "", "output": {"uploaded_files": [{"name": "train_data.jsonl", "file_id": "file-xxx"}], "failed_uploads": []}}
 ```
@@ -359,7 +354,7 @@ dashscope oss upload -f train_data.jsonl -m qwen-plus
 
 1.  环境准备：推荐使用 Python 3.9 及以上版本。
 2.  获取API-KEY：在调用前，您需要[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
-3.  安装SDK：请确保[DashScope Python SDK](raw/model-api-reference/preparations/install-sdk.md) 版本不低于 `1.24.0`。执行以下命令进行安装或升级：
+3.  安装SDK：请确保[DashScope Python SDK](raw/model-api-reference/preparations/install-sdk.md) 版本不低于 2.0.1。执行以下命令进行安装或升级：
 
 ```
 pip install -U dashscope
@@ -535,7 +530,7 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions 
 
 **前提条件**
 
-请[安装DashScope Python SDK](raw/model-api-reference/preparations/install-sdk.md)，且DashScope Python SDK版本号 >=`1.24.0`。
+请[安装DashScope Python SDK](raw/model-api-reference/preparations/install-sdk.md)，且DashScope Python SDK版本号 >=`2.0.1`。
 
 **示例代码**
 
@@ -549,6 +544,10 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions 
 import os
 import dashscope
 
+# 北京与新加坡地域的 API Key 不同，请使用对应地域的 API Key
+# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+client = dashscope.Client(api_key=os.getenv('DASHSCOPE_API_KEY'))
+
 messages = [
     {
         "role": "system",
@@ -561,62 +560,40 @@ messages = [
             {"text": "这是什么"}]
     }]
 
-# 北京与新加坡地域的 API Key 不同，请使用对应地域的 API Key
-# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-api_key = os.getenv('DASHSCOPE_API_KEY')
-
-# 以下为北京地域 url，若使用新加坡地域，需将 url 替换为：https://dashscope-intl.aliyuncs.com/api/v1
-dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'
-
-response = dashscope.MultiModalConversation.call(
-    api_key=api_key,
+response = client.multimodal.chat.create(
     model='qwen3-vl-plus',
     messages=messages
 )
 
-print(response)
+print(response.output_text)
 ```
 
 #### 响应示例
 
 ```
 {
-    "status_code": 200,
     "request_id": "ccd9dcfb-98f0-92bc-xxxxxx",
-    "code": "",
-    "message": "",
-    "output": {
-        "text": null,
-        "finish_reason": null,
-        "choices": [
-            {
-                "finish_reason": "stop",
-                "message": {
-                    "role": "assistant",
-                    "content": [
-                        {
-                            "text": "这是一张一只猫在草地上奔跑的照片。猫的毛色主要是白色，带有浅棕色的斑点，眼睛是蓝色的，显得非常可爱。背景是一个模糊的绿色草地和一些树木，阳光照射下来，给整个画面增添了一种温暖的感觉。猫的姿态显示出它正在快速移动，可能是在追逐什么或只是在享受户外活动的乐趣。整体来看，这是一幅充满活力和生机的图片。"
-                        }
-                    ]
-                }
+    "choices": [
+        {
+            "index": 0,
+            "finish_reason": "stop",
+            "message": {
+                "role": "assistant",
+                "content": "这是一张一只猫在草地上奔跑的照片。猫的毛色主要是白色，带有浅棕色的斑点，眼睛是蓝色的，显得非常可爱。背景是一个模糊的绿色草地和一些树木，阳光照射下来，给整个画面增添了一种温暖的感觉。猫的姿态显示出它正在快速移动，可能是在追逐什么或只是在享受户外活动的乐趣。整体来看，这是一幅充满活力和生机的图片。"
             }
-        ]
-    },
+        }
+    ],
     "usage": {
         "input_tokens": 1112,
         "output_tokens": 91,
+        "total_tokens": 1203,
         "input_tokens_details": {
             "text_tokens": 21,
             "image_tokens": 1091
         },
-        "prompt_tokens_details": {
-            "cached_tokens": 0
-        },
-        "total_tokens": 1203,
         "output_tokens_details": {
             "text_tokens": 91
-        },
-        "image_tokens": 1091
+        }
     }
 }
 ```

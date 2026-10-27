@@ -64,17 +64,15 @@
     > Qwen3.5 系列的 DashScope API采用多模态接口，以下示例会报错 `url error` ，调用方式请参见 [开启/关闭思考模式](https://help.aliyun.com/zh/model-studio/vision#bc67a9a2bd2of) 。
     
     ```
-    # 导入依赖...
+    # 导入依赖与创建客户端...
     
-    response = MultiModalConversation.call(
-        # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
-        api_key=os.getenv("DASHSCOPE_API_KEY"),
+    response = client.multimodal.chat.create(
         # 可按需更换为其它深度思考模型
         model="qwen3.8-max",
         messages=messages,
         enable_thinking=True,
         stream=True,
-        incremental_output=True
+        # 流式输出默认为增量模式：每个数据块仅包含新生成的内容。
     )
     ```
     
@@ -389,23 +387,26 @@ data: [DONE]
 
 ```
 import os
-from dashscope import MultiModalConversation
 import dashscope
 
-# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 messages = [{"role": "user", "content": [{"text": "你是谁？"}]}]
 
-completion = MultiModalConversation.call(
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+completion = client.multimodal.chat.create(
     # 可按需更换为其它深度思考模型
     model="qwen3.8-max",
     messages=messages,
     enable_thinking=True,
     stream=True,
-    incremental_output=True
+    # 流式输出默认为增量模式：每个数据块仅包含新生成的内容。
 )
 
 # 定义完整思考过程
@@ -418,23 +419,24 @@ is_answering = False
 print("=" * 20 + "思考过程" + "=" * 20)
 
 for chunk in completion:
+    # 获取当前chunk的内容（流式输出默认为增量模式）
+    content_text = chunk.choices[0].delta.content or ""
+    reasoning_text = chunk.choices[0].delta.reasoning_content or ""
     # 如果思考过程与回复皆为空，则忽略
-    content = chunk.output.choices[0].message.content
-    reasoning = chunk.output.choices[0].message.reasoning_content
-    if not content and reasoning == "":
+    if content_text == "" and reasoning_text == "":
         pass
     else:
         # 如果当前为思考过程
-        if reasoning != "" and not content:
-            print(reasoning, end="", flush=True)
-            reasoning_content += reasoning
+        if reasoning_text != "" and content_text == "":
+            print(reasoning_text, end="", flush=True)
+            reasoning_content += reasoning_text
         # 如果当前为回复
-        elif content:
+        elif content_text != "":
             if not is_answering:
                 print("\n" + "=" * 20 + "完整回复" + "=" * 20)
                 is_answering = True
-            print(content[0]["text"], end="", flush=True)
-            answer_content += content[0]["text"]
+            print(content_text, end="", flush=True)
+            answer_content += content_text
 
 # 如果您需要打印完整思考过程与完整回复，请将以下代码解除注释后运行
 # print("=" * 20 + "完整思考过程" + "=" * 20 + "\n")
@@ -882,24 +884,25 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 ```
 import os
-from dashscope import MultiModalConversation
 import dashscope
 
-# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # 初始化请求参数
 messages = [{"role": "user", "content": [{"text": "你是谁？"}]}]
 
-completion = MultiModalConversation.call(
-    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key="sk-xxx"
-    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+completion = client.multimodal.chat.create(
     model="qwen3.8-max",
     messages=messages,
-    enable_thinking=True,     # 开启思考过程
-    stream=True,              # 开启流式输出
-    incremental_output=True,  # 开启增量输出
+    enable_thinking=True,  # 开启思考过程
+    stream=True,           # 开启流式输出（流式输出默认为增量模式）
 )
 
 reasoning_content = ""  # 完整思考过程
@@ -909,21 +912,21 @@ is_answering = False    # 是否进入回复阶段
 print("\n" + "=" * 20 + "思考过程" + "=" * 20 + "\n")
 
 for chunk in completion:
-    message = chunk.output.choices[0].message
+    delta = chunk.choices[0].delta
 
     # 只收集思考内容
-    if message.reasoning_content:
+    if delta.reasoning_content:
         if not is_answering:
-            print(message.reasoning_content, end="", flush=True)
-        reasoning_content += message.reasoning_content
+            print(delta.reasoning_content, end="", flush=True)
+        reasoning_content += delta.reasoning_content
 
-    # 收到 content，开始进行回复（content 为列表类型）
-    if message.content:
+    # 收到 content，开始进行回复
+    if delta.content:
         if not is_answering:
             print("\n" + "=" * 20 + "完整回复" + "=" * 20 + "\n")
             is_answering = True
-        print(message.content[0]["text"], end="", flush=True)
-        answer_content += message.content[0]["text"]
+        print(delta.content, end="", flush=True)
+        answer_content += delta.content
 
 print("\n" + "=" * 20 + "Token 消耗" + "=" * 20 + "\n")
 print(chunk.usage)
@@ -1380,25 +1383,27 @@ data: [DONE]
 
 ```
 import os
-from dashscope import MultiModalConversation
 import dashscope
 
-# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
-
-messages = [{"role": "user", "content": [{"text": "你是谁？"}]}]
-
-completion = MultiModalConversation.call(
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
     # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
     api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
+
+messages = [{"role": "user", "content": [{"text": "你是谁？"}]}]
+
+completion = client.multimodal.chat.create(
     model="qwen3.8-max",
     messages=messages,
     enable_thinking=True,
     # 设置最大推理过程 Token 数
     thinking_budget=50,
     stream=True,
-    incremental_output=True,
+    # 流式输出默认为增量模式：每个数据块仅包含新生成的内容。
 )
 
 # 定义完整思考过程
@@ -1411,23 +1416,24 @@ is_answering = False
 print("=" * 20 + "思考过程" + "=" * 20)
 
 for chunk in completion:
+    # 获取当前chunk的内容（流式输出默认为增量模式）
+    content_text = chunk.choices[0].delta.content or ""
+    reasoning_text = chunk.choices[0].delta.reasoning_content or ""
     # 如果思考过程与回复皆为空，则忽略
-    content = chunk.output.choices[0].message.content
-    reasoning = chunk.output.choices[0].message.reasoning_content
-    if not content and reasoning == "":
+    if content_text == "" and reasoning_text == "":
         pass
     else:
         # 如果当前为思考过程
-        if reasoning != "" and not content:
-            print(reasoning, end="", flush=True)
-            reasoning_content += reasoning
+        if reasoning_text != "" and content_text == "":
+            print(reasoning_text, end="", flush=True)
+            reasoning_content += reasoning_text
         # 如果当前为回复
-        elif content:
+        elif content_text != "":
             if not is_answering:
                 print("\n" + "=" * 20 + "完整回复" + "=" * 20)
                 is_answering = True
-            print(content[0]["text"], end="", flush=True)
-            answer_content += content[0]["text"]
+            print(content_text, end="", flush=True)
+            answer_content += content_text
 
 # 如果您需要打印完整思考过程与完整回复，请将以下代码解除注释后运行
 # print("=" * 20 + "完整思考过程" + "=" * 20 + "\n")
@@ -1898,11 +1904,16 @@ data: [DONE]
 
 ```
 import os
-from dashscope import MultiModalConversation
 import dashscope
 
-# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/"
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # 第一轮对话
 messages = [
@@ -1913,33 +1924,31 @@ first_reasoning = ""
 first_content = ""
 is_answering = False
 
-completion = MultiModalConversation.call(
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx"
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+completion = client.multimodal.chat.create(
     model="qwen3.8-max",
     messages=messages,
     enable_thinking=True,
     stream=True,
-    incremental_output=True,
+    # 流式输出默认为增量模式：每个数据块仅包含新生成的内容。
 )
 
 print("=" * 20 + "第一轮思考过程" + "=" * 20)
 
 for chunk in completion:
-    content = chunk.output.choices[0].message.content
-    reasoning = chunk.output.choices[0].message.reasoning_content
-    if not content and reasoning == "":
+    content_text = chunk.choices[0].delta.content or ""
+    reasoning_text = chunk.choices[0].delta.reasoning_content or ""
+    if content_text == "" and reasoning_text == "":
         pass
     else:
-        if reasoning != "" and not content:
-            print(reasoning, end="", flush=True)
-            first_reasoning += reasoning
-        elif content:
+        if reasoning_text != "" and content_text == "":
+            print(reasoning_text, end="", flush=True)
+            first_reasoning += reasoning_text
+        elif content_text != "":
             if not is_answering:
                 print("\n" + "=" * 20 + "第一轮回复" + "=" * 20)
                 is_answering = True
-            print(content[0]["text"], end="", flush=True)
-            first_content += content[0]["text"]
+            print(content_text, end="", flush=True)
+            first_content += content_text
 
 # 第二轮对话：传递思考过程
 messages = [
@@ -1956,34 +1965,33 @@ reasoning_content = ""
 answer_content = ""
 is_answering = False
 
-completion = MultiModalConversation.call(
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+completion = client.multimodal.chat.create(
     model="qwen3.8-max",
     messages=messages,
     enable_thinking=True,
-    # 传递思考过程
-    preserve_thinking=True,
+    # 传递思考过程（preserve_thinking 非 SDK 签名参数，统一通过 parameters 传入）
+    parameters={"preserve_thinking": True},
     stream=True,
-    incremental_output=True,
+    # 流式输出默认为增量模式：每个数据块仅包含新生成的内容。
 )
 
 print("\n" + "=" * 20 + "第二轮思考过程" + "=" * 20)
 
 for chunk in completion:
-    content = chunk.output.choices[0].message.content
-    reasoning = chunk.output.choices[0].message.reasoning_content
-    if not content and reasoning == "":
+    content_text = chunk.choices[0].delta.content or ""
+    reasoning_text = chunk.choices[0].delta.reasoning_content or ""
+    if content_text == "" and reasoning_text == "":
         pass
     else:
-        if reasoning != "" and not content:
-            print(reasoning, end="", flush=True)
-            reasoning_content += reasoning
-        elif content:
+        if reasoning_text != "" and content_text == "":
+            print(reasoning_text, end="", flush=True)
+            reasoning_content += reasoning_text
+        elif content_text != "":
             if not is_answering:
                 print("\n" + "=" * 20 + "第二轮回复" + "=" * 20)
                 is_answering = True
-            print(content[0]["text"], end="", flush=True)
-            answer_content += content[0]["text"]
+            print(content_text, end="", flush=True)
+            answer_content += content_text
 ```
 
 ### 返回结果

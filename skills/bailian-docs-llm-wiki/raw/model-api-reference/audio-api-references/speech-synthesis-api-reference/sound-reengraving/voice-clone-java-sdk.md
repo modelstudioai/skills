@@ -293,7 +293,7 @@ boolean
 
 默认值：false。
 
-**说明**适用于 qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、qwen-audio-3.1-realtime-plus、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash、cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash。
+**说明**适用于 qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、qwen-audio-3.1-realtime-plus、qwen-audio-3.1-realtime-flash、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash、cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash。
 
 enable\_volume\_normalization
 
@@ -324,7 +324,7 @@ public class Main {
         // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
         Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
         String apiKey = System.getenv("DASHSCOPE_API_KEY");
-        String targetModel = "qwen-audio-3.0-tts-flash";
+        String targetModel = "qwen-audio-3.1-tts-plus";
         String prefix = "myvoice";
         String fileUrl = "https://your-audio-file-url";
         String cloneModelName = "voice-enrollment";
@@ -407,7 +407,7 @@ import org.slf4j.LoggerFactory;
 
 public class Main {
     public static String apiKey = System.getenv("DASHSCOPE_API_KEY");  // 如果您没有配置环境变量，请在此处用您的API-KEY进行替换
-    private static String voiceId = "qwen-audio-3.0-tts-flash-myvoice-xxx"; // 请按实际情况进行替换
+    private static String voiceId = "qwen-audio-3.1-tts-plus-myvoice-xxx"; // 请按实际情况进行替换
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args)
@@ -436,7 +436,7 @@ import org.slf4j.LoggerFactory;
 public class Main {
     public static String apiKey = System.getenv("DASHSCOPE_API_KEY");  // 如果您没有配置环境变量，请在此处用您的API-KEY进行替换
     private static String fileUrl = "https://your-audio-file-url";  // 请按实际情况进行替换
-    private static String voiceId = "qwen-audio-3.0-tts-flash-myvoice-xxx"; // 请按实际情况进行替换
+    private static String voiceId = "qwen-audio-3.1-tts-plus-myvoice-xxx"; // 请按实际情况进行替换
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args)
@@ -463,7 +463,7 @@ import org.slf4j.LoggerFactory;
 
 public class Main {
     public static String apiKey = System.getenv("DASHSCOPE_API_KEY");  // 如果您没有配置环境变量，请在此处用您的API-KEY进行替换
-    private static String voiceId = "qwen-audio-3.0-tts-flash-myvoice-xxx"; // 请按实际情况进行替换
+    private static String voiceId = "qwen-audio-3.1-tts-plus-myvoice-xxx"; // 请按实际情况进行替换
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args)

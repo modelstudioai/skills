@@ -458,13 +458,18 @@ curl --location "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 Python
 
 ```
-from http import HTTPStatus
 import dashscope
 import os
+from dashscope.v2 import DashScopeError
 
-# 华北2（北京）地域的URL。
-# 将{WorkspaceId}替换为真实的业务空间ID。各地域的URL不同
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx"
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 dialogue = """
 [1] 客服：您好，欢迎致电AB电商平台，请问有什么可以帮您？
@@ -542,29 +547,24 @@ analysis_prompt = f"""
 ```
 """
 
-# 获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx"
-response = dashscope.Generation.call(
-    api_key=os.getenv('DASHSCOPE_API_KEY'),
-    model="tongyi-xiaomi-analysis-flash",
-    messages=[
-        {
-            'role': 'user',
-            'content': analysis_prompt
-        }
-    ],
-    temperature=0.0,
-    top_k=1,
-    result_format="message"
-)
-
-if response.status_code == HTTPStatus.OK:
-    print(response.output.choices[0].message.content)
-else:
-    print('Request id: %s, Status code: %s, error code: %s, error message: %s' % (
-        response.request_id, response.status_code,
-        response.code, response.message
-    ))
+try:
+    response = client.chat.completions.create(
+        model="tongyi-xiaomi-analysis-flash",
+        messages=[
+            {
+                'role': 'user',
+                'content': analysis_prompt
+            }
+        ],
+        temperature=0.0,
+        top_k=1,
+    )
+    print(response.choices[0].message.content)
+except DashScopeError as e:
+    print(f"HTTP返回码：{e.status_code}")
+    print(f"错误码：{e.code}")
+    print(f"错误信息：{e.message}")
+    print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
 Java

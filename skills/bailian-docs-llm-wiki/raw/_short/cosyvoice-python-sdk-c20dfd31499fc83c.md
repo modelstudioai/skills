@@ -4,7 +4,7 @@
 
 ## 接口地址
 
-SDK的接口地址需在初始化前设置为下方地址（包含WorkspaceId）。如需切换到其他地域，请修改 `dashscope.base_websocket_api_url`为对应地域的URL。
+SDK的接口地址由Client构造参数`workspace`/`region`决定（对应下方地址，包含WorkspaceId）。如需切换到其他地域，请修改Client构造参数为对应地域的值。
 
 #### 华北2（北京）
 
@@ -23,29 +23,47 @@ SDK的接口地址需在初始化前设置为下方地址（包含WorkspaceId）
 -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
 -   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
 
-## SpeechSynthesizer
+## 核心资源（`client.audio.tts`）
 
-**包路径**：`dashscope.audio.tts_v2.SpeechSynthesizer`
+**资源路径**：`client.audio.tts`
 
-### 构造方法
+**功能**：基于WebSocket的语音合成，提供一次性合成（`synthesize`）、流式合成（`stream`）与双向流式会话（`connect`）三种调用形态。
+
+### 调用入口
 
 ```
-SpeechSynthesizer(
-    model: str,
-    voice: str,
-    format: AudioFormat = AudioFormat.MP3_22050HZ_MONO_256KBPS,
-    volume: int = 50,
-    speech_rate: float = 1.0,
-    pitch_rate: float = 1.0,
-    callback: ResultCallback = None)
+# 一次性合成：返回完整音频 bytes
+audio = client.audio.tts.synthesize(
+    text,                      # text 必填（位置参数）
+    model="cosyvoice-v3-plus", # 音色所属模型
+    voice="longanyang",        # 音色
+    format="mp3",              # 音频编码格式，默认 "mp3"
+    sample_rate=22050,         # 采样率，默认 22050
+)
+
+# 流式合成：逐块产出音频 bytes（边收边写/播）
+for chunk in client.audio.tts.stream(text, model=..., voice=...):
+    ...
+
+# 双向流式会话：逐段输入文本，进入 with 上下文时自动建立连接
+with client.audio.tts.connect(model=..., voice=...) as session:
+    session.send_text(text)    # 可多次调用追加文本
+    session.stop()             # 通知服务端输入结束
+    for chunk in session.audio_chunks():
+        ...
 ```
 
-### call() - 非流式调用
+### synthesize() - 非流式调用
 
 **方法签名**：
 
 ```
-def call(self, text: str) -> bytes
+def synthesize(self, text: str, *, model: str = "cosyvoice-v1",
+               voice: str = "longxiaochun", format: str = "mp3",
+               sample_rate: int = 22050, volume: int = None,
+               rate: float = None, pitch: float = None,
+               language_hints: list = None, enable_ssml: bool = None,
+               parameters: Dict = None, ...) -> bytes
 ```
 
 **参数说明**：
@@ -68,14 +86,15 @@ def call(self, text: str) -> bytes
 
 **返回值**：`bytes`，完整音频数据。
 
-**说明**：非流式调用，阻塞等待并一次性返回完整音频数据。适用于短文本、对实时性无严格要求的场景。每次调用前需重新初始化SpeechSynthesizer实例。
+**说明**：非流式调用，阻塞等待并一次性返回完整音频数据。适用于短文本、对实时性无严格要求的场景。`synthesize`与`stream`每次调用自建会话，无需复用实例。
 
-### streaming\_call() - 流式调用
+### stream() - 流式调用
 
 **方法签名**：
 
 ```
-def streaming_call(self, text: str) -> None
+def stream(self, text: str, *, model: str, voice: str,
+           format: str = "mp3", sample_rate: int = 22050, ...) -> Iterator[bytes]
 ```
 
 **参数说明**：
@@ -94,88 +113,64 @@ def streaming_call(self, text: str) -> None
 
 是
 
-当前待合成的文本片段。可多次调用以追加文本，单次不超过20000字符，累计不超过20万字符。
+待合成的完整文本，长度不得超过20000字符。
 
-**说明**：双向流式调用，支持分片提交文本并通过回调实时获取合成音频。适用于与大语言模型对接、边生成文本边合成语音的场景。发送完毕后需调用streaming\_complete()结束合成。
+**返回值**：`Iterator[bytes]`，逐块产出的音频数据。
 
-### streaming\_complete() - 结束流式合成
+**说明**：流式合成，一次性发送完整文本并逐块产出音频（`Iterator[bytes]`）。适用于对实时性要求高的短文本语音合成场景。需要分片提交文本时请使用[双向流式会话（`connect`）](#h4-py-cv-sendtext)。
 
-**方法签名**：
+### send\_text() - 流式输入（会话方法）
 
-```
-def streaming_complete(self) -> None
-```
-
-**说明**：通知服务端所有文本已发送完毕，阻塞当前线程直到剩余文本合成完成并返回所有音频数据。未调用此方法可能导致尾部文本无法转换为语音。
-
-### streaming\_cancel() - 取消流式合成
+双向流式会话（`client.audio.tts.connect(...)`）中分片提交文本。
 
 **方法签名**：
 
 ```
-def streaming_cancel(self, complete_timeout_millis: int = 10000) -> None
+def send_text(self, text: str) -> None
 ```
 
-**参数说明**：
+**参数说明**：`text`为当前待合成的文本片段。可多次调用`send_text`以追加文本，单次不超过20000字符，累计不超过20万字符。发送文本与接收音频需并发进行（配合`audio_chunks()`/`events()`和`stop`使用）。
 
-**参数**
+### stop() - 结束流式输入（会话方法）
 
-**类型**
+**方法签名**：
 
-**必填**
+```
+def stop(self) -> None
+```
 
-**说明**
+**说明**：通知服务端所有文本已发送完毕。调用后不阻塞当前线程，接收线程需继续消费`audio_chunks()`/`events()`直到剩余文本合成完成并返回所有音频数据。未调用此方法可能导致尾部文本无法转换为语音。
 
-`complete_timeout_millis`
+### cancel() - 取消流式合成（会话方法）
 
-`int`
+**方法签名**：
 
-否
+```
+def cancel(self) -> None
+```
 
-等待服务端返回 task-finished 事件的超时时间，单位毫秒。默认值：10000。
-
-**说明**：取消当前轮次的流式语音合成任务。调用后，SDK 会立即结束当前任务。取消后可在当前连接上继续发起新的合成任务，无需重新初始化 `SpeechSynthesizer` 实例。
-
-**重要****版本要求**：使用该功能需要 Python SDK 版本不低于 1.26.4。
+**说明**：取消当前轮次的流式语音合成任务。调用后，SDK 会立即结束当前任务。取消后当前会话不能再发送文本，如需继续合成请新建会话。
 
 **重要****模型限制**：
 
 -   华北2（北京）地域：CosyVoice 系列模型仅 v2 及以上版本支持该功能。
 -   新加坡地域：CosyVoice 系列模型不支持该功能。
 
-### get\_last\_request\_id() - 获取请求ID
-
-**方法签名**：
+### 会话指标与响应（会话属性）
 
 ```
-def get_last_request_id(self) -> str
+session.first_package_delay
+session.usage
+session.last_response
 ```
 
-**返回值**：`str`，最近一次请求的request\_id，可用于问题排查和日志关联。
+-   `first_package_delay`：`float`，从发送文本到收到第一块音频数据的延迟时间（毫秒）。需在合成完成后读取。
+-   `usage`：`dict`，最近一次合成任务的用量信息。
+-   `last_response`：`dict`，最近一次合成任务的响应消息（含 `header`/`payload` 键）。最近一次请求的request\_id可从`session.last_response`的`header`中获取，可用于问题排查和日志关联。
 
-### get\_first\_package\_delay() - 获取首包延迟
+### 请求参数
 
-**方法签名**：
-
-```
-def get_first_package_delay(self) -> float
-```
-
-**返回值**：`float`，从发送文本到收到第一块音频数据的延迟时间（毫秒）。需在合成完成后调用。
-
-### get\_response() - 获取响应消息
-
-**方法签名**：
-
-```
-def get_response(self) -> dict
-```
-
-**返回值**：`dict`，最近一次合成任务的响应消息（含 `header`/`payload` 键）。
-
-### 构造参数
-
-以下参数通过SpeechSynthesizer构造方法设置，用于控制合成音频的模型、音色、格式和音频特征。
+以下参数通过`client.audio.tts`的`synthesize`/`stream`/`connect`方法设置，用于控制合成音频的模型、音色、格式和音频特征（`model`、`voice`、`format`、`sample_rate`、`volume`、`rate`、`pitch`、`language_hints`、`enable_ssml`为具名参数，其余参数通过`parameters`字典传入）。
 
 **参数**
 
@@ -207,15 +202,15 @@ def get_response(self) -> dict
 
 `format`
 
-`enum`
+`str`
 
 否
 
-音频编码格式及采样率。
+音频编码格式。
 
-默认值：AudioFormat.MP3\_22050HZ\_MONO\_256KBPS。
+默认值：mp3。
 
-AudioFormat枚举类的包路径：`dashscope.audio.tts_v2`，支持MP3、WAV、PCM等格式。
+支持mp3、wav、pcm等格式；采样率通过`sample_rate`参数设置，默认22050。
 
 `volume`
 
@@ -229,7 +224,7 @@ AudioFormat枚举类的包路径：`dashscope.audio.tts_v2`，支持MP3、WAV、
 
 取值范围：\[0, 100\]。
 
-`speech_rate`
+`rate`
 
 `float`
 
@@ -241,7 +236,7 @@ AudioFormat枚举类的包路径：`dashscope.audio.tts_v2`，支持MP3、WAV、
 
 取值范围：\[0.5, 2.0\]。
 
-`pitch_rate`
+`pitch`
 
 `float`
 
@@ -265,13 +260,14 @@ AudioFormat枚举类的包路径：`dashscope.audio.tts_v2`，支持MP3、WAV、
 
 取值范围：\[6, 510\]。
 
-`bit_rate`需要通过`additional_params`参数进行设置：
+`bit_rate`需要通过`parameters`字典进行设置：
 
 ```
-synthesizer = SpeechSynthesizer(
+audio = client.audio.tts.synthesize(
+    "待合成文本",
     model="cosyvoice-v3-plus",
     voice="longanyang",
-    additional_params={"bit_rate": 128}
+    parameters={"bit_rate": 128},
 )
 ```
 
@@ -287,13 +283,14 @@ synthesizer = SpeechSynthesizer(
 
 仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2模型的复刻音色，以及[CosyVoice音色列表](raw/model-user-guide/model-experience/speech-synthesis/tts-voice-list/cosyvoice-voice-list.md)中标记为支持的系统音色。其他模型的复刻音色不支持此功能。
 
-`word_timestamp_enabled`需要通过`additional_params`参数进行设置：
+`word_timestamp_enabled`需要通过`parameters`字典进行设置：
 
 ```
-synthesizer = SpeechSynthesizer(
+audio = client.audio.tts.stream(
+    "待合成文本",
     model="cosyvoice-v3-flash",
     voice="your_voice",  # 支持字级别时间戳的系统音色或复刻音色
-    additional_params={"word_timestamp_enabled": True}
+    parameters={"word_timestamp_enabled": True},
 )
 ```
 
@@ -369,17 +366,18 @@ synthesizer = SpeechSynthesizer(
 
 **说明**仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
-`enable_aigc_tag`、`aigc_propagator`和`aigc_propagate_id`需要通过`additional_params`参数进行设置：
+`enable_aigc_tag`、`aigc_propagator`和`aigc_propagate_id`需要通过`parameters`字典进行设置：
 
 ```
-synthesizer = SpeechSynthesizer(
+audio = client.audio.tts.synthesize(
+    "待合成文本",
     model="cosyvoice-v3-plus",
     voice="longanyang",
-    additional_params={
+    parameters={
         "enable_aigc_tag": True,
         "aigc_propagator": "your_propagator",
         "aigc_propagate_id": "your_propagate_id"
-    }
+    },
 )
 ```
 
@@ -395,7 +393,7 @@ synthesizer = SpeechSynthesizer(
 
 **说明**仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
-需要通过`additional_params`参数进行设置，参见`enable_aigc_tag`的示例。
+需要通过`parameters`字典进行设置，参见`enable_aigc_tag`的示例。
 
 `aigc_propagate_id`
 
@@ -409,7 +407,7 @@ synthesizer = SpeechSynthesizer(
 
 **说明**仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
-需要通过`additional_params`参数进行设置，参见`enable_aigc_tag`的示例。
+需要通过`parameters`字典进行设置，参见`enable_aigc_tag`的示例。
 
 `hot_fix`
 
@@ -429,13 +427,16 @@ synthesizer = SpeechSynthesizer(
 示例：
 
 ```
-synthesizer = SpeechSynthesizer(
+audio = client.audio.tts.synthesize(
+    "待合成文本",
     model="cosyvoice-v3-plus",
     voice="longanyang", # 音色
-    hot_fix={
-        "pronunciation": [{"天气": "tian1 qi4"}],
-        "replace": [{"今天": "金天"}]
-    }
+    parameters={
+        "hot_fix": {
+            "pronunciation": [{"天气": "tian1 qi4"}],
+            "replace": [{"今天": "金天"}]
+        }
+    },
 )
 ```
 
@@ -456,145 +457,67 @@ synthesizer = SpeechSynthesizer(
 -   true：启用Markdown过滤
 -   false：禁用Markdown过滤
 
-`enable_markdown_filter`需要通过`additional_params`参数进行设置：
+`enable_markdown_filter`需要通过`parameters`字典进行设置：
 
 ```
-synthesizer = SpeechSynthesizer(
+audio = client.audio.tts.synthesize(
+    "待合成文本",
     model="cosyvoice-v3-flash",
     voice="your_voice",  # cosyvoice-v3-flash复刻音色
-    additional_params={"enable_markdown_filter": True}
+    parameters={"enable_markdown_filter": True},
 )
 ```
 
-`callback`
+## 会话与事件迭代
 
-`ResultCallback`
+流式合成不再使用回调接口：音频与服务端事件通过会话的迭代方法接收。`stream()`/`synthesize()`无需会话管理；双向流式会话（`client.audio.tts.connect(...)`）的生命周期为：进入`with`上下文自动建立连接 → 多次`send_text()` → `stop()` → 读完全部结果 → 退出上下文自动关闭。
 
-否
-
-回调函数实例，用于异步接收合成音频和事件通知。设置此参数时，call()方法以流式模式运行，音频数据通过on\_data回调返回；不设置时，call()以非流式模式运行，直接返回完整音频的bytes数据。
-
-## ResultCallback
-
-**包路径**：`dashscope.audio.tts_v2.ResultCallback`
-
-### on\_open() - 连接建立
+### audio\_chunks() - 迭代音频数据
 
 **方法签名**：
 
 ```
-def on_open(self) -> None
+def audio_chunks(self) -> Iterator[bytes]
 ```
 
-**触发时机**：WebSocket连接成功建立时触发。可在此回调中初始化音频输出流或打开文件等资源。
+**返回值**：`Iterator[bytes]`，逐块产出的音频二进制数据片段，格式由`format`参数指定。
 
-### on\_event() - 接收服务端回复
+**说明**：在接收线程中迭代，逐块接收音频数据，合成过程中会产出多块。可将数据写入文件或送入播放设备。同一会话只允许一个`events()`或`audio_chunks()`读取者。
+
+### events() - 迭代服务端事件
 
 **方法签名**：
 
 ```
-def on_event(self, message: str) -> None
+def events(self) -> Generator[Union[Dict, bytes], None, None]
 ```
 
-**参数说明**：
+**返回值**：同时产出服务端响应事件（`dict`，包含`header`（请求信息）和`payload`（输出信息））与音频`bytes`。其中`payload.output`包含事件类型、原始文本等信息，详见[events()事件中的output字段](#h2-py-output-info)。
 
-**参数**
+**说明**：在接收线程中迭代服务端回复，包含合成事件的输出信息（事件类型、原始文本、句子信息等），可直接访问`payload.output`获取详细信息。
 
-**类型**
+### 错误处理
 
-**必填**
-
-**说明**
-
-`message`
-
-`str`
-
-是
-
-服务端响应事件（JSON格式），包含`header`（请求信息）和`payload`（输出信息）。其中`payload.output`包含事件类型、原始文本等信息，详见[on\_event消息中的output字段](#h2-py-output-info)。
-
-**触发时机**：接收到服务端回复时触发。消息为JSON字符串，包含合成事件的输出信息（事件类型、原始文本、句子信息等）。可通过`json.loads(message)`解析后访问`payload.output`获取详细信息。
-
-### on\_complete() - 合成完成
-
-**方法签名**：
+合成过程中发生错误时，ws层会以`DashScopeError`异常抛出，异常触发后连接将自动关闭。可在发送/接收处使用try/except捕获并记录错误日志以便排查问题：
 
 ```
-def on_complete(self) -> None
+from dashscope.v2 import DashScopeError
+
+try:
+    ...
+except DashScopeError as e:
+    print(e.code, e.message, e.request_id)
 ```
 
-**触发时机**：所有文本合成完成且音频数据已全部通过on\_data返回后触发。可在此回调中调用get\_first\_package\_delay()获取性能指标。
+### 会话生命周期
 
-### on\_data() - 接收音频数据
+-   进入`with`上下文时自动建立连接（可在此前初始化音频输出流或打开文件等资源）。
+-   所有文本合成完成且音频数据已全部产出后，`events()`/`audio_chunks()`迭代结束；此后可读取`first_package_delay`等性能指标。
+-   退出`with`上下文时自动关闭连接（可在此后释放音频播放设备等资源）。
 
-**方法签名**：
+## events()事件中的output字段
 
-```
-def on_data(self, data: bytes) -> None
-```
-
-**参数说明**：
-
-**参数**
-
-**类型**
-
-**必填**
-
-**说明**
-
-`data`
-
-`bytes`
-
-是
-
-当前批次的音频二进制数据片段，格式由构造参数format指定。
-
-**触发时机**：每接收到一块音频数据时触发，合成过程中会被多次调用。可在此回调中将数据写入文件或送入播放设备。
-
-### on\_error() - 发生错误
-
-**方法签名**：
-
-```
-def on_error(self, message: str) -> None
-```
-
-**参数说明**：
-
-**参数**
-
-**类型**
-
-**必填**
-
-**说明**
-
-`message`
-
-`str`
-
-是
-
-错误描述信息，包含错误码和详细原因。
-
-**触发时机**：合成过程中发生错误时触发。触发后连接将自动关闭，建议在此回调中记录错误日志以便排查问题。
-
-### on\_close() - 连接关闭
-
-**方法签名**：
-
-```
-def on_close(self) -> None
-```
-
-**触发时机**：WebSocket连接关闭时触发（无论正常结束还是异常断开）。可在此回调中释放音频播放设备等资源。
-
-## on\_event消息中的output字段
-
-`on_event`回调接收的JSON消息中，`payload.output`包含合成事件的输出信息，可用于跟踪合成进度和获取逐句信息。以下为`output`字段的结构说明：
+会话`events()`迭代产出的事件`dict`中，`payload.output`包含合成事件的输出信息，可用于跟踪合成进度和获取逐句信息。以下为`output`字段的结构说明：
 
 **字段**
 
@@ -645,11 +568,8 @@ def on_close(self) -> None
 **解析示例**：
 
 ```
-import json
-
-def on_event(self, message):
-    data = json.loads(message)
-    output = data.get('payload', {}).get('output', {})
+def handle_event(event):
+    output = (event.get('payload') or {}).get('output') or {}
     event_type = output.get('type', '')
     original_text = output.get('original_text', '')
     if event_type:
@@ -661,46 +581,40 @@ def on_event(self, message):
 SDK提供了语音合成的关键接口，支持以下几种调用方式：
 
 -   非流式调用：阻塞式，一次性发送完整文本，直接返回完整音频。适合短文本语音合成场景。
--   单向流式调用：非阻塞式，一次性发送完整文本，通过回调函数接收音频数据（可能分片）。适用于对实时性要求高的短文本语音合成场景。
--   双向流式调用：非阻塞式，可分多次发送文本片段，通过回调函数实时接收增量合成的音频流。适合实时性要求高的长文本语音合成场景。
+-   单向流式调用：非阻塞式，一次性发送完整文本，通过迭代`stream`返回的音频分片接收数据。适用于对实时性要求高的短文本语音合成场景。
+-   双向流式调用：非阻塞式，可分多次发送文本片段，通过会话的`audio_chunks()`/`events()`迭代实时接收增量合成的音频流。适合实时性要求高的长文本语音合成场景。
 
 更多示例，请参见[GitHub](https://github.com/aliyun/alibabacloud-bailian-speech-demo)。
 
 #### 非流式调用
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6892567871/CAEQURiBgMDRr9T4phkiIGNmYzBiZjFkZjQ4MDQzZGU4NDIyZDU2NWJjYjkyZTQ04709861_20241015153444.149.svg)
+单次调用发送的文本长度不得超过20000字符，超出限制将触发 `DashScopeError` 异常。
 
-单次调用发送的文本长度不得超过20000字符，超出限制将返回错误。
-
-**重要**每次调用`call`方法前，需要重新初始化`SpeechSynthesizer`实例。
+**重要**`synthesize`与`stream`每次调用自建会话，无需复用实例。
 
 ```
 # coding=utf-8
 
-import dashscope
-from dashscope.audio.tts_v2 import *
 import os
 
-# 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 若没有配置环境变量，请用百炼API Key将下行替换为：dashscope.api_key = "sk-xxx"
-dashscope.api_key = os.environ.get('DASHSCOPE_API_KEY')
+import dashscope
 
+# 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
 # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_websocket_api_url='wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference'
+client = dashscope.Client(
+    api_key=os.environ.get('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # 模型
 model = "cosyvoice-v3-plus"
 # 音色
 voice = "longanyang"
 
-# 实例化SpeechSynthesizer，并在构造方法中传入模型（model）、音色（voice）等请求参数
-synthesizer = SpeechSynthesizer(model=model, voice=voice)
 # 发送待合成文本，获取二进制音频
-audio = synthesizer.call("今天天气怎么样？")
-# 首次发送文本时需建立 WebSocket 连接，因此首包延迟会包含连接建立的耗时
-print('[Metric] requestId为：{}，首包延迟为：{}毫秒'.format(
-    synthesizer.get_last_request_id(),
-    synthesizer.get_first_package_delay()))
+audio = client.audio.tts.synthesize("今天天气怎么样？", model=model, voice=voice)
 
 # 将音频保存至本地
 with open('output.mp3', 'wb') as f:
@@ -724,21 +638,18 @@ dashscope speech-synthesis create -m cosyvoice-v2 -t "你好世界" --voice long
 
 #### 单向流式调用
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6892567871/CAEQVRiBgIDv9fShrBkiIDhmNTk5YmQ1ZDgwNzRjZjRiN2VlMTU5YzI1ZGMwMTlm4709861_20241015153444.149.svg)
+单次调用发送的文本长度不得超过20000字符，超出限制将触发 `DashScopeError` 异常。
 
-单次调用发送的文本长度不得超过20000字符，超出限制将返回错误。
-
-**重要**每次调用`call`方法前，需要重新初始化`SpeechSynthesizer`实例。
+**重要**`synthesize`与`stream`每次调用自建会话，无需复用实例。
 
 ```
 # coding=utf-8
 
 import os
-import json
-import dashscope
-from dashscope.audio.tts_v2 import *
 
 from datetime import datetime
+
+import dashscope
 
 def get_timestamp():
     now = datetime.now()
@@ -746,85 +657,43 @@ def get_timestamp():
     return formatted_timestamp
 
 # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 若没有配置环境变量，请用百炼API Key将下行替换为：dashscope.api_key = "sk-xxx"
-dashscope.api_key = os.environ.get('DASHSCOPE_API_KEY')
-
+# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
 # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_websocket_api_url='wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference'
+client = dashscope.Client(
+    api_key=os.environ.get('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # 模型
 model = "cosyvoice-v3-plus"
 # 音色
 voice = "longanyang"
 
-# 定义回调接口
-class Callback(ResultCallback):
-    _player = None
-    _stream = None
-
-    def on_open(self):
-        self.file = open("output.mp3", "wb")
-        print("连接建立：" + get_timestamp())
-
-    def on_complete(self):
-        print("语音合成完成，所有合成结果已被接收：" + get_timestamp())
-        # 当任务完成（on_complete 回调触发）后，才可调用 get_first_package_delay 获取延迟
-        # 首次发送文本时需建立 WebSocket 连接，因此首包延迟会包含连接建立的耗时
-        print('[Metric] requestId为：{}，首包延迟为：{}毫秒'.format(
-            synthesizer.get_last_request_id(),
-            synthesizer.get_first_package_delay()))
-
-    def on_error(self, message: str):
-        print(f"语音合成出现异常：{message}")
-
-    def on_close(self):
-        print("连接关闭：" + get_timestamp())
-        self.file.close()
-
-    def on_event(self, message):
-        # 解析服务端事件，获取输出信息
-        data = json.loads(message)
-        output = data.get('payload', {}).get('output', {})
-        event_type = output.get('type', '')
-        original_text = output.get('original_text', '')
-        if event_type:
-            print(f"事件类型: {event_type}, 原始文本: {original_text}")
-
-    def on_data(self, data: bytes) -> None:
-        print(get_timestamp() + " 二进制音频长度为：" + str(len(data)))
-        self.file.write(data)
-
-callback = Callback()
-
-# 实例化SpeechSynthesizer，并在构造方法中传入模型（model）、音色（voice）等请求参数
-synthesizer = SpeechSynthesizer(
-    model=model,
-    voice=voice,
-    callback=callback,
-)
-
-# 发送待合成文本，在回调接口的on_data方法中实时获取二进制音频
-synthesizer.call("今天天气怎么样？")
+# 一次性发送待合成文本，逐块接收二进制音频
+with open("output.mp3", "wb") as f:
+    for chunk in client.audio.tts.stream("今天天气怎么样？", model=model, voice=voice):
+        print(get_timestamp() + " 二进制音频长度为：" + str(len(chunk)))
+        f.write(chunk)
+print("语音合成完成，所有合成结果已被接收：" + get_timestamp())
 ```
 
 #### 双向流式调用
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6892567871/CAEQVRiBgMDb7PahrBkiIDVkNjEwOTMxYjEwOTRmOWFhMmI1OTRiY2Q3ZDgzZmE54709861_20241015153444.149.svg)
-
 单次发送文本长度不得超过 20000 字符，且累计发送文本总长度不得超过 20 万字符。
 
--   流式输入时可多次调用`streaming_call`按顺序提交文本片段。服务端接收文本片段后自动进行分句：
+-   流式输入时可多次调用会话的`send_text`按顺序提交文本片段。服务端接收文本片段后自动进行分句：
     
     -   完整语句立即合成
     -   不完整语句缓存至完整后合成
     
-    调用 `streaming_complete` 时，服务端会强制合成所有已接收但未处理的文本片段（包括未完成的句子）。
+    调用 `stop` 时，服务端会强制合成所有已接收但未处理的文本片段（包括未完成的句子）。
     
 -   发送文本片段的间隔不得超过23秒，否则触发“request timeout after 23 seconds”异常。
     
-    若无待发送文本，需及时调用 `streaming_complete`结束任务。
+    若无待发送文本，需及时调用 `stop`结束任务。
     
-    **重要**请务必确保调用`streaming_complete`方法，否则可能会导致结尾部分的文本无法成功转换为语音。
+    **重要**请务必确保调用`stop`方法，否则可能会导致结尾部分的文本无法成功转换为语音。
     
     > 服务端强制设定23秒超时机制，客户端无法修改该配置。
     
@@ -848,10 +717,9 @@ synthesizer.call("今天天气怎么样？")
 import os
 import time
 import pyaudio
-import json
+from concurrent.futures import ThreadPoolExecutor
+
 import dashscope
-from dashscope.api_entities.dashscope_response import SpeechSynthesisResponse
-from dashscope.audio.tts_v2 import *
 
 from datetime import datetime
 
@@ -861,56 +729,18 @@ def get_timestamp():
     return formatted_timestamp
 
 # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 若没有配置环境变量，请用百炼API Key将下行替换为：dashscope.api_key = "sk-xxx"
-dashscope.api_key = os.environ.get('DASHSCOPE_API_KEY')
-
+# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
 # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_websocket_api_url='wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference'
+client = dashscope.Client(
+    api_key=os.environ.get('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # 模型
 model = "cosyvoice-v3-plus"
 # 音色
 voice = "longanyang"
-
-# 定义回调接口
-class Callback(ResultCallback):
-    _player = None
-    _stream = None
-
-    def on_open(self):
-        print("连接建立：" + get_timestamp())
-        self._player = pyaudio.PyAudio()
-        self._stream = self._player.open(
-            format=pyaudio.paInt16, channels=1, rate=22050, output=True
-        )
-
-    def on_complete(self):
-        print("语音合成完成，所有合成结果已被接收：" + get_timestamp())
-
-    def on_error(self, message: str):
-        print(f"语音合成出现异常：{message}")
-
-    def on_close(self):
-        print("连接关闭：" + get_timestamp())
-        # 停止播放器
-        self._stream.stop_stream()
-        self._stream.close()
-        self._player.terminate()
-
-    def on_event(self, message):
-        # 解析服务端事件，获取输出信息
-        data = json.loads(message)
-        output = data.get('payload', {}).get('output', {})
-        event_type = output.get('type', '')
-        original_text = output.get('original_text', '')
-        if event_type:
-            print(f"事件类型: {event_type}, 原始文本: {original_text}")
-
-    def on_data(self, data: bytes) -> None:
-        print(get_timestamp() + " 二进制音频长度为：" + str(len(data)))
-        self._stream.write(data)
-
-callback = Callback()
 
 test_text = [
     "流式文本语音合成SDK，",
@@ -928,23 +758,39 @@ test_text = [
     "进行语音合成的场景。",
 ]
 
-# 实例化SpeechSynthesizer，并在构造方法中传入模型（model）、音色（voice）等请求参数
-synthesizer = SpeechSynthesizer(
-    model=model,
-    voice=voice,
-    format=AudioFormat.PCM_22050HZ_MONO_16BIT,
-    callback=callback,
-)
+# 创建双向流式合成会话：进入 with 上下文时自动建立连接
+with client.audio.tts.connect(
+        model=model,
+        voice=voice,
+        format="pcm",
+        sample_rate=22050,
+) as session:
+    # 初始化播放器
+    player = pyaudio.PyAudio()
+    stream = player.open(format=pyaudio.paInt16, channels=1, rate=22050, output=True)
 
-# 流式发送待合成文本。在回调接口的on_data方法中实时获取二进制音频
-for text in test_text:
-    synthesizer.streaming_call(text)
-    time.sleep(0.1)
-# 结束流式语音合成
-synthesizer.streaming_complete()
+    # 接收线程：迭代音频数据，实时播放
+    def receive_audio():
+        for chunk in session.audio_chunks():
+            print(get_timestamp() + " 二进制音频长度为：" + str(len(chunk)))
+            stream.write(chunk)
 
-# 首次发送文本时需建立 WebSocket 连接，因此首包延迟会包含连接建立的耗时
-print('[Metric] requestId为：{}，首包延迟为：{}毫秒'.format(
-    synthesizer.get_last_request_id(),
-    synthesizer.get_first_package_delay()))
+    with ThreadPoolExecutor(max_workers=1) as pool:
+        receiver = pool.submit(receive_audio)
+        # 流式发送待合成文本
+        for text in test_text:
+            session.send_text(text)
+            time.sleep(0.1)
+        # 结束流式语音合成
+        session.stop()
+        receiver.result()
+
+    print("语音合成完成，所有合成结果已被接收：" + get_timestamp())
+    # 停止播放器
+    stream.stop_stream()
+    stream.close()
+    player.terminate()
+
+    # 首次发送文本时需建立 WebSocket 连接，因此首包延迟会包含连接建立的耗时
+    print('[Metric] 首包延迟为：{}毫秒'.format(session.first_package_delay))
 ```

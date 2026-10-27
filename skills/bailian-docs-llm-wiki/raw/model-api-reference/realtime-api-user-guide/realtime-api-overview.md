@@ -154,7 +154,7 @@ qwen-audio-3.1-asr-flash-message、qwen-audio-3.1-asr-flash-streaming、qwen-aud
 
 [实时语音对话](https://help.aliyun.com/zh/model-studio/fun-audiochat-realtime)
 
-qwen-audio-3.1-realtime-plus、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash
+qwen-audio-3.1-realtime-plus、qwen-audio-3.1-realtime-flash、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash
 
 支持
 

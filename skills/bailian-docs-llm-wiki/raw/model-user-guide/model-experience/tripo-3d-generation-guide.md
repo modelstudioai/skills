@@ -225,6 +225,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 -   `standard`：默认值，标清贴图，满足大多数场景。
 -   `detailed`：高清贴图，适合需要精细表面细节的场景。
+-   `extreme`：8K超清贴图，保真度最高，适合对贴图精度要求高的场景。
 
 **输出模型是否贴图**
 
@@ -282,7 +283,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 ## API参考
 
-[Tripo-3D模型生成API参考](raw/model-api-reference/3d-generation/tripo-3d-generation-api-reference.md)
+[Tripo-文生/图生3D模型API参考](raw/_short/tripo-3d-generation-api-reference-a4c298b3ddebaa99.md)
 
 ## 常见问题
 

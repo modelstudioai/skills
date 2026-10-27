@@ -115,28 +115,28 @@ DashScope Python SDK
 
 ```
 import os
-from http import HTTPStatus
-# 建议dashscope SDK 的版本 >= 1.14.0
+# 建议dashscope SDK 的版本 >= 2.0.1
 import dashscope
-from dashscope import Generation
-# 将原始域名替换为上一步骤中获取到的私网域名
-dashscope.base_http_api_url = "https://{WorkspaceId}-{VpcId}.{RegionId}.maas.aliyuncs.com/api/v1"
-dashscope.api_key = os.getenv("DASHSCOPE_API_KEY")
+from dashscope.v2 import DashScopeError
+# 配置私网域名：显式指定base_url，将原始域名替换为上一步骤中获取到的私网域名
+client = dashscope.Client(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    base_url="https://{WorkspaceId}-{VpcId}.{RegionId}.maas.aliyuncs.com/api/v1",
+)
 messages = [{
     'role': 'user', 'content': '你是谁？'
 }]
-response = Generation.call(
-    model="qwen-flash",
-    messages=messages,
-    result_format='message'
-)
-if response.status_code == HTTPStatus.OK:
+try:
+    response = client.chat.completions.create(
+        model="qwen-flash",
+        messages=messages,
+    )
     print(response)
-else:
-    print('Request id: %s, Status code: %s, error code: %s, error message: %s' % (
-        response.request_id, response.status_code,
-        response.code, response.message
+except DashScopeError as e:
+    print('Request id: %s, HTTP返回码: %s, 错误码: %s, 错误信息: %s' % (
+        e.request_id, e.status_code, e.code, e.message
     ))
+    print('请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code')
 ```
 
 DashScope Java SDK

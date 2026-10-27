@@ -35,13 +35,13 @@ Qwen-Audio Realtime API的客户端事件参考。
 
 **voice**`string`（可选）
 
-TTS 音色名称，3.1 Plus 的默认值为 `longanqian_v3.1`，3.0 Plus/Flash 的默认值为 `longanqian`。支持系统音色和声音复刻音色，仅可在第一次 `session.update` 中设置，后续传入将被忽略。
+TTS 音色名称。3.1 Plus/Flash 的默认值为 `longanqian_v3.1`，3.0 Plus/Flash 的默认值为 `longanqian`。支持系统音色和声音复刻音色，仅可在第一次 `session.update` 中设置，后续传入将被忽略。
 
--   **3.1 Plus 新增系统音色**：`longanqian_v3.1`、`longanhuan_v3.1`、`longanlingxin_v3.1`、`longanfengyue_v3.1`、`xunanchuan_v3.1`、`beth_v3.1`、`betty_v3.1`、`cally_v3.1`。
--   **3.1 Plus、3.0 Plus/Flash 共有系统音色**：可选值：`longanqian`、`longanlingxin`、`longanlingxi`、`longanxiaoxin`、`longanlufeng`。
+-   **3.1 Plus/Flash 系统音色**：可选值包括 `longanqian_v3.1` 和 3.1 TTS Plus/Flash 音色列表中的全部音色，完整范围请参见[音色配置](https://help.aliyun.com/zh/model-studio/qwen-audio-realtime-user-guides#fc60h311)。
+-   **3.0 Plus/Flash 系统音色**：可选值：`longanqian`、`longanlingxin`、`longanlingxi`、`longanxiaoxin`、`longanlufeng`。
 -   **声音复刻音色**：通过声音复刻 API 创建，将返回的 `voice_id` 填入此参数。详见[音色配置](https://help.aliyun.com/zh/model-studio/fun-audiochat-realtime#fc60h311)。
 
-连接 `qwen-audio-3.1-realtime-plus` 后，在首次 `session.update` 中设置音色，例如：
+连接 `qwen-audio-3.1-realtime-plus` 或 `qwen-audio-3.1-realtime-flash` 后，在首次 `session.update` 中设置音色，例如：
 
 ```
 {
@@ -70,7 +70,7 @@ TTS 音色名称，3.1 Plus 的默认值为 `longanqian_v3.1`，3.0 Plus/Flash �
 
 **input\_audio\_transcription**`object`（可选）
 
-输入音频转写配置。适用于 `qwen-audio-3.1-realtime-plus`。
+输入音频转写配置。适用于 `qwen-audio-3.1-realtime-plus` 和 `qwen-audio-3.1-realtime-flash`。
 
 属性
 
@@ -113,7 +113,7 @@ TTS 音色名称，3.1 Plus 的默认值为 `longanqian_v3.1`，3.0 Plus/Flash �
 
 **output\_audio**`object`（可选）
 
-输出音频配置。适用于 `qwen-audio-3.1-realtime-plus`。
+输出音频配置。适用于 `qwen-audio-3.1-realtime-plus` 和 `qwen-audio-3.1-realtime-flash`。
 
 属性
 
@@ -148,7 +148,7 @@ TTS 音色名称，3.1 Plus 的默认值为 `longanqian_v3.1`，3.0 Plus/Flash �
 
 **enable\_search**`boolean`（可选）
 
-**适用于 qwen-audio-3.1-realtime-plus、qwen-audio-3.0-realtime-plus 和 qwen-audio-3.0-realtime-flash 模型。**
+**适用于 qwen-audio-3.1-realtime-plus、qwen-audio-3.1-realtime-flash、qwen-audio-3.0-realtime-plus 和 qwen-audio-3.0-realtime-flash 模型。**
 
 是否开启联网搜索。默认值：`false`。开启后，模型可根据实时问题自主判断是否进行联网搜索。
 
@@ -202,6 +202,8 @@ Function Calling 工具定义列表。配置后模型可根据用户输入自主
 
 **turn\_detection**`object|null`（可选）
 
+以下轮次检测字段说明适用于 `qwen-audio-3.1-realtime-plus`、`qwen-audio-3.1-realtime-flash`、`qwen-audio-3.0-realtime-plus` 和 `qwen-audio-3.0-realtime-flash`。
+
 轮次检测配置。设为 `null` 可切换为 push-to-talk 模式（手动提交音频并触发推理）。若不提供此字段，系统将使用默认参数启用 VAD。
 
 属性
@@ -231,6 +233,8 @@ VAD灵敏度，仅在 server\_vad 模式下生效（smart\_turn 模式下无效�
 
 **重要**该参数仅在**第一次**发送 `session.update` 事件时可配置，后续传入该字段将被忽略。
 
+以下示例适用于 `qwen-audio-3.1-realtime-plus` 和 `qwen-audio-3.1-realtime-flash`，显式选择系统音色 `longanqian_v3.1`。
+
 ```
 {
     "type": "session.update",
@@ -239,7 +243,7 @@ VAD灵敏度，仅在 server\_vad 模式下生效（smart\_turn 模式下无效�
             "text",
             "audio"
         ],
-        "voice": "longanqian",
+        "voice": "longanqian_v3.1",
         "turn_detection": {
             "type": "server_vad",
             "threshold": 0.5,
@@ -248,9 +252,9 @@ VAD灵敏度，仅在 server\_vad 模式下生效（smart\_turn 模式下无效�
     }
 }
 ```
-**语言配置（qwen-audio-3.1-realtime-plus）**
+**语言配置（qwen-audio-3.1-realtime-plus / qwen-audio-3.1-realtime-flash）**
 
-连接 `qwen-audio-3.1-realtime-plus` 后，可发送以下 `session.update` 事件，分别将输入音频源语种设置为中文、输出音频目标语种设置为英语。
+连接 `qwen-audio-3.1-realtime-plus` 或 `qwen-audio-3.1-realtime-flash` 后，可发送以下 `session.update` 事件，分别将输入音频源语种设置为中文、输出音频目标语种设置为英语。
 
 ```
 {
@@ -276,7 +280,7 @@ Function Calling：
             "text",
             "audio"
         ],
-        "voice": "longanqian",
+        "voice": "longanqian_v3.1",
         "tools": [
             {
                 "type": "function",

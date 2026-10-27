@@ -4,27 +4,73 @@
 
 ## 文本生成
 
-![](https://img.alicdn.com/imgextra/i3/O1CN01Kmx9dR1wcHOaMMXAk_!!6000000006328-55-tps-28-28.svg)**[qwen3.8-max](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.8-max)**
+[
 
-![](https://img.alicdn.com/imgextra/i3/O1CN01Kmx9dR1wcHOaMMXAk_!!6000000006328-55-tps-28-28.svg)**[qwen3.7-plus](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.7-plus)**
+**qwen3.8-max**
 
-![](https://img.alicdn.com/imgextra/i3/O1CN01Kmx9dR1wcHOaMMXAk_!!6000000006328-55-tps-28-28.svg)**[qwen3.8-flash](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.8-flash)**
+复杂推理与编程
 
-![](https://img.alicdn.com/imgextra/i3/O1CN01z34PDh1p053HKpLoW_!!6000000005297-55-tps-28-28.svg)**[deepseek-v4-pro-0813](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/deepseek-v4-pro-0813)**
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.8-max)[
 
-![](https://img.alicdn.com/imgextra/i3/O1CN01z34PDh1p053HKpLoW_!!6000000005297-55-tps-28-28.svg)**[deepseek-v4.1-flash](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/deepseek-v4.1-flash)**
+**qwen3.7-plus**
 
-![](https://img.alicdn.com/imgextra/i4/O1CN01KzHLBW1LISVEUaotl_!!6000000001276-2-tps-56-56.png)**[kimi/kimi-k3](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/kimi%2Fkimi-k3)**
+性能、速度与成本均衡
 
-![](https://img.alicdn.com/imgextra/i4/O1CN01KzHLBW1LISVEUaotl_!!6000000001276-2-tps-56-56.png)**[kimi-k3](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/kimi-k3)**
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.7-plus)[
 
-![](https://img.alicdn.com/imgextra/i3/O1CN01z34PDh1p053HKpLoW_!!6000000005297-55-tps-28-28.svg)**[glm-5.2](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/glm-5.2)**
+**qwen3.8-flash**
 
-![](https://img.alicdn.com/imgextra/i3/O1CN01z34PDh1p053HKpLoW_!!6000000005297-55-tps-28-28.svg)**[ZHIPU/GLM-5.3](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/ZHIPU%2FGLM-5.3)**
+快速且低成本
 
-![](https://img.alicdn.com/imgextra/i1/O1CN01EFGi131NqT95FPDqc_!!6000000001621-2-tps-56-56.png)**[MiniMax-M3.1-Flash](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/minimax-m3-1-flash.md)**
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.8-flash)[
 
-![](https://img.alicdn.com/imgextra/i4/O1CN017XFdJt1jNXh3pAxhJ_!!6000000004536-2-tps-168-168.png)**[mimo-v2.5-pro](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/xiaomi%2Fmimo-v2.5-pro)**
+**deepseek-v4-pro-0813**
+
+文本生成
+
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/deepseek-v4-pro-0813)[
+
+**deepseek-v4.1-flash**
+
+文本生成
+
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/deepseek-v4.1-flash)[
+
+**kimi/kimi-k3**
+
+文本生成
+
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/kimi%2Fkimi-k3)[
+
+**kimi-k3**
+
+文本生成
+
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/kimi-k3)[
+
+**glm-5.2**
+
+文本生成
+
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/glm-5.2)[
+
+**ZHIPU/GLM-5.3**
+
+文本生成
+
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/ZHIPU%2FGLM-5.3)[
+
+**MiniMax-M3.1-Flash**
+
+文本生成
+
+](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/minimax-m3-1-flash.md)[
+
+**mimo-v2.5-pro**
+
+文本生成
+
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/xiaomi%2Fmimo-v2.5-pro)
 
 [查看更多](raw/model-user-guide/model-experience/text-generation-model.md)
 
@@ -34,13 +80,31 @@
 
 分析图片和视频内容，返回文本描述或结构化结果
 
-![](https://img.alicdn.com/imgextra/i3/O1CN01Kmx9dR1wcHOaMMXAk_!!6000000006328-55-tps-28-28.svg)**[qwen3.8-max](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.8-max)**
+[
 
-![](https://img.alicdn.com/imgextra/i3/O1CN01Kmx9dR1wcHOaMMXAk_!!6000000006328-55-tps-28-28.svg)**[qwen3.7-plus](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.7-plus)**
+**qwen3.8-max**
 
-![](https://img.alicdn.com/imgextra/i3/O1CN01Kmx9dR1wcHOaMMXAk_!!6000000006328-55-tps-28-28.svg)**[qwen3.8-omni-flash](raw/model-user-guide/support/model-studio-model-list/model-list-omni/qwen3-8-omni-flash.md)**
+视觉理解
 
-![](https://img.alicdn.com/imgextra/i4/O1CN01KzHLBW1LISVEUaotl_!!6000000001276-2-tps-56-56.png)**[kimi/kimi-k3](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/kimi%2Fkimi-k3)**
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.8-max)[
+
+**qwen3.7-plus**
+
+视觉理解
+
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.7-plus)[
+
+**qwen3.8-omni-flash**
+
+视觉理解
+
+](raw/model-user-guide/support/model-studio-model-list/model-list-omni/qwen3-8-omni-flash.md)[
+
+**kimi/kimi-k3**
+
+视觉理解
+
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/kimi%2Fkimi-k3)
 
 [查看更多](raw/model-user-guide/model-experience/vision-model.md)
 
@@ -48,19 +112,49 @@
 
 通过文本或图片生成图像与视频，支持编辑、参考与高分辨率输出
 
-![](https://img.alicdn.com/imgextra/i3/O1CN01Kmx9dR1wcHOaMMXAk_!!6000000006328-55-tps-28-28.svg)**[qwen-image-3.0-pro](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen-image-3.0-pro)**
+[
 
-![](https://img.alicdn.com/imgextra/i3/O1CN01Kmx9dR1wcHOaMMXAk_!!6000000006328-55-tps-28-28.svg)**[wan2.7-image-pro](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/wan2.7-image-pro)**
+**qwen-image-3.0-pro**
 
-![](https://img.alicdn.com/imgextra/i1/O1CN01K9R3vH1WLAdM94elo_!!6000000002771-2-tps-84-84.png)**[happyhorse-1.1-t2v](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/happyhorse-1.1-t2v)**
+图像生成
 
-![](https://img.alicdn.com/imgextra/i1/O1CN01K9R3vH1WLAdM94elo_!!6000000002771-2-tps-84-84.png)**[happyhorse-1.1-i2v](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/happyhorse-1.1-i2v)**
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen-image-3.0-pro)[
 
-![](https://img.alicdn.com/imgextra/i1/O1CN01K9R3vH1WLAdM94elo_!!6000000002771-2-tps-84-84.png)**[happyhorse-1.1-r2v](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/happyhorse-1.1-r2v)**
+**wan2.7-image-pro**
 
-![](https://img.alicdn.com/imgextra/i1/O1CN01K9R3vH1WLAdM94elo_!!6000000002771-2-tps-84-84.png)**[happyhorse-1.0-video-edit](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/happyhorse-1.0-video-edit)**
+图像生成
 
-![](https://img.alicdn.com/imgextra/i3/O1CN01Kmx9dR1wcHOaMMXAk_!!6000000006328-55-tps-28-28.svg)**[wan3.0-video](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/wan3.0-video)**
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/wan2.7-image-pro)[
+
+**happyhorse-1.1-t2v**
+
+视频生成
+
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/happyhorse-1.1-t2v)[
+
+**happyhorse-1.1-i2v**
+
+视频生成
+
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/happyhorse-1.1-i2v)[
+
+**happyhorse-1.1-r2v**
+
+视频生成
+
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/happyhorse-1.1-r2v)[
+
+**happyhorse-1.0-video-edit**
+
+视频编辑
+
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/happyhorse-1.0-video-edit)[
+
+**wan3.0-video**
+
+视频生成
+
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/wan3.0-video)
 
 [查看更多](raw/model-user-guide/model-experience/image-model.md)
 
@@ -68,11 +162,23 @@
 
 实时交互的开放式世界模型，覆盖世界探索、实时导演、角色演绎三种模式
 
-![](https://img.alicdn.com/imgextra/i2/O1CN01N42VGT1JLXyFq3Et1_!!6000000001012-0-tps-400-400.jpg)**[happyoyster-1.0-adventure](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/happyoyster-1.0-adventure)**
+[
 
-![](https://img.alicdn.com/imgextra/i2/O1CN01N42VGT1JLXyFq3Et1_!!6000000001012-0-tps-400-400.jpg)**[happyoyster-1.0-directing](https://bailian.console.aliyun.com/ap-southeast-1/?tab=model#/model-market/detail/happyoyster-1.0-directing)**
+**happyoyster-1.0-adventure**
 
-![](https://img.alicdn.com/imgextra/i2/O1CN01N42VGT1JLXyFq3Et1_!!6000000001012-0-tps-400-400.jpg)**happyoyster-1.0-acting**邀测
+世界探索
+
+](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/happyoyster-1.0-adventure)[
+
+**happyoyster-1.0-directing**
+
+实时导演
+
+](https://bailian.console.aliyun.com/ap-southeast-1/?tab=model#/model-market/detail/happyoyster-1.0-directing)
+
+**happyoyster-1.0-acting**
+
+角色演绎 邀测
 
 [查看更多](raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-overview.md)
 
@@ -80,35 +186,87 @@
 
 文生3D模型或图生3D模型，构建三维资产
 
-![](https://img.alicdn.com/imgextra/i2/O1CN019lvk1h1xXWwsSsKes_!!6000000006453-2-tps-300-300.png)**[Tripo/Tripo-H3.1](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/Tripo%2FTripo-H3.1)**
+[
 
-![](https://img.alicdn.com/imgextra/i2/O1CN019lvk1h1xXWwsSsKes_!!6000000006453-2-tps-300-300.png)**[Tripo/Tripo-P1.0](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/Tripo%2FTripo-P1.0)**
+**Tripo/Tripo-H3.1**
+
+3D生成
+
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/Tripo%2FTripo-H3.1)[
+
+**Tripo/Tripo-P1.0**
+
+3D生成
+
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/Tripo%2FTripo-P1.0)
 
 [查看更多](raw/model-user-guide/model-experience/tripo-3d-generation-guide.md)
 
 ## 音频与语音
 
+### 音频生成
+
+生成人声、音效和环境音等音频内容
+
+[
+
+**qwen-audio-3.1-tts-next**
+
+完整场景声音生成
+
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen-audio-3.1-tts-next)
+
+[查看更多](raw/model-user-guide/model-experience/audio-generation.md)
+
 ### 语音合成
 
 适用于有声阅读、语音播报、虚拟人等场景
 
-![](https://img.alicdn.com/imgextra/i3/O1CN01Kmx9dR1wcHOaMMXAk_!!6000000006328-55-tps-28-28.svg)**[qwen-audio-3.0-tts-plus](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen-audio-3.0-tts-plus)**
+[
 
-![](https://img.alicdn.com/imgextra/i1/O1CN01EFGi131NqT95FPDqc_!!6000000001621-2-tps-56-56.png)**[MiniMax/speech-2.8-hd](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/MiniMax%2Fspeech-2.8-hd)**
+**qwen-audio-3.1-tts-plus**
+
+实时、非实时
+
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen-audio-3.1-tts-plus)[
+
+**qwen-audio-3.1-tts-flash**
+
+实时、非实时
+
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen-audio-3.1-tts-flash)
 
 [查看更多](raw/model-user-guide/model-experience/speech-synthesis/tts-model.md)
 
 ### 语音识别
 
-专业 ASR 与大模型两种方案，按精度与灵活性选择
+将语音转换为文本，覆盖实时语音输入、持续转写和录音文件识别等场景
 
-![](https://img.alicdn.com/imgextra/i3/O1CN01Kmx9dR1wcHOaMMXAk_!!6000000006328-55-tps-28-28.svg)**[qwen-audio-3.1-asr-flash-streaming](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen-audio-3.1-asr-flash-streaming)**
+[
 
-![](https://img.alicdn.com/imgextra/i3/O1CN01Kmx9dR1wcHOaMMXAk_!!6000000006328-55-tps-28-28.svg)**[qwen-audio-3.1-asr-flash-filetrans](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen-audio-3.1-asr-flash-filetrans)**
+**qwen-audio-3.1-asr-flash-message**
 
-![](https://img.alicdn.com/imgextra/i3/O1CN01Kmx9dR1wcHOaMMXAk_!!6000000006328-55-tps-28-28.svg)**[qwen3.8-omni-flash-realtime](raw/model-user-guide/support/model-studio-model-list/model-list-omni/qwen3-8-omni-flash-realtime.md)**
+实时语音识别
 
-![](https://img.alicdn.com/imgextra/i3/O1CN01Kmx9dR1wcHOaMMXAk_!!6000000006328-55-tps-28-28.svg)**[qwen3.8-omni-flash](raw/model-user-guide/support/model-studio-model-list/model-list-omni/qwen3-8-omni-flash.md)**
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen-audio-3.1-asr-flash-message)[
+
+**qwen-audio-3.1-asr-flash-streaming**
+
+实时语音识别
+
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen-audio-3.1-asr-flash-streaming)[
+
+**qwen-audio-3.1-asr-flash**
+
+非实时语音识别
+
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen-audio-3.1-asr-flash)[
+
+**qwen-audio-3.1-asr-flash-filetrans**
+
+非实时语音识别
+
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen-audio-3.1-asr-flash-filetrans)
 
 [查看更多](raw/model-user-guide/model-experience/speech-recognition/asr-model.md)
 
@@ -116,11 +274,31 @@
 
 端到端语音对话，无需分别调用 ASR 和 TTS
 
-![](https://img.alicdn.com/imgextra/i3/O1CN01Kmx9dR1wcHOaMMXAk_!!6000000006328-55-tps-28-28.svg)**[qwen-audio-3.1-realtime-plus](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen-audio-3.1-realtime-plus)**
+[
 
-![](https://img.alicdn.com/imgextra/i3/O1CN01Kmx9dR1wcHOaMMXAk_!!6000000006328-55-tps-28-28.svg)**[qwen3.5-omni-plus](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.5-omni-plus)**
+**qwen-audio-3.1-realtime-plus**
 
-**[qwen3.8-omni-flash-realtime](raw/model-user-guide/support/model-studio-model-list/model-list-omni/qwen3-8-omni-flash-realtime.md)**
+语音转语音
+
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen-audio-3.1-realtime-plus)[
+
+**qwen3.5-omni-plus**
+
+语音转语音
+
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.5-omni-plus)[
+
+**qwen3.8-omni-flash-realtime**
+
+语音转语音
+
+](raw/model-user-guide/support/model-studio-model-list/model-list-omni/qwen3-8-omni-flash-realtime.md)[
+
+**qwen-audio-3.1-realtime-flash**
+
+语音转语音
+
+](raw/model-user-guide/support/model-studio-model-list/model-list-speech-to-speech/qwen-audio-3-1-realtime-flash.md)
 
 [查看更多](raw/model-user-guide/model-experience/speech-to-speech/s2s-model.md)
 
@@ -130,9 +308,19 @@
 
 **说明**如需离线语音输出，请使用 [qwen3.5-omni-plus](raw/model-user-guide/support/model-studio-model-list/model-list-omni/qwen3-5-omni-plus.md)。
 
-![](https://img.alicdn.com/imgextra/i3/O1CN01Kmx9dR1wcHOaMMXAk_!!6000000006328-55-tps-28-28.svg)**[qwen3.8-omni-flash-realtime](raw/model-user-guide/support/model-studio-model-list/model-list-omni/qwen3-8-omni-flash-realtime.md)**
+[
 
-![](https://img.alicdn.com/imgextra/i3/O1CN01Kmx9dR1wcHOaMMXAk_!!6000000006328-55-tps-28-28.svg)**[qwen3.8-omni-flash](raw/model-user-guide/support/model-studio-model-list/model-list-omni/qwen3-8-omni-flash.md)**
+**qwen3.8-omni-flash-realtime**
+
+全模态
+
+](raw/model-user-guide/support/model-studio-model-list/model-list-omni/qwen3-8-omni-flash-realtime.md)[
+
+**qwen3.8-omni-flash**
+
+全模态
+
+](raw/model-user-guide/support/model-studio-model-list/model-list-omni/qwen3-8-omni-flash.md)
 
 [查看更多](raw/model-user-guide/model-experience/omni-modal/omni.md)
 
@@ -140,13 +328,31 @@
 
 文本或图文向量化，配合重排序提升检索精度
 
-![](https://img.alicdn.com/imgextra/i3/O1CN01Kmx9dR1wcHOaMMXAk_!!6000000006328-55-tps-28-28.svg)**[qwen3.7-text-embedding-flash](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.7-text-embedding-flash)**
+[
 
-![](https://img.alicdn.com/imgextra/i3/O1CN01Kmx9dR1wcHOaMMXAk_!!6000000006328-55-tps-28-28.svg)**[qwen3.7-text-embedding](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.7-text-embedding)**
+**qwen3.7-text-embedding-flash**
 
-![](https://img.alicdn.com/imgextra/i3/O1CN01Kmx9dR1wcHOaMMXAk_!!6000000006328-55-tps-28-28.svg)**[qwen3-vl-embedding](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3-vl-embedding)**
+文本向量
 
-![](https://img.alicdn.com/imgextra/i3/O1CN01Kmx9dR1wcHOaMMXAk_!!6000000006328-55-tps-28-28.svg)**[qwen3.7-text-rerank](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.7-text-rerank)**
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.7-text-embedding-flash)[
+
+**qwen3.7-text-embedding**
+
+文本向量
+
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.7-text-embedding)[
+
+**qwen3-vl-embedding**
+
+图文向量
+
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3-vl-embedding)[
+
+**qwen3.7-text-rerank**
+
+重排
+
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.7-text-rerank)
 
 [查看更多](raw/model-user-guide/model-experience/embedding-rerank-model.md)
 
@@ -154,7 +360,13 @@
 
 面向高频业务判断的结构化决策模型，一次前向完成分类、是非判断与评分，并返回概率分布与置信度。
 
-![](https://img.alicdn.com/imgextra/i3/O1CN01Kmx9dR1wcHOaMMXAk_!!6000000006328-55-tps-28-28.svg)**[decision-model-preview](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/decision-model-preview)**
+[
+
+**decision-model-preview**
+
+结构化决策
+
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/decision-model-preview)
 
 [查看更多](raw/model-user-guide/support/model-studio-model-list/model-list-decision/decision-model-preview.md)
 

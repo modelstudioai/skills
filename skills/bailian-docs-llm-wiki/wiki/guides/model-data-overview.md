@@ -1,50 +1,42 @@
 # model data overview
 
-百炼平台的模型数据管理功能为大模型训练与评测提供统一的数据集生命周期支持，涵盖训练集（SFT/DPO/CPT/视觉理解/图生视频）和评测集的创建、导入、版本管理及后处理。所有数据集均支持结构化存储、OSS 加密保护，并可直接对接下游调优与评测任务。数据质量直接影响模型效果，建议在调优前通过清洗与增强提升数据集质量。
+模型数据是百炼平台对训练集与评测集的统一管理能力，支撑模型调优、评测及数据增强等核心场景。它提供数据集的创建、版本控制、发布、删除等全生命周期操作，并通过数据流实现可视化清洗与增强。所有数据均按业务空间隔离，确保权限与存储边界清晰。
 
 ## 支持的模型/功能
 
-- **训练集类型**：支持文本生成、视觉理解、图生视频（首帧）、图生视频（首尾帧）四类训练场景；其中 SFT、DPO、CPT 仅适用于文本生成场景，视觉与图生视频暂不支持 DPO/CPT [训练集与评测集](../../raw/model-user-guide/model-data-overview/training-set-and-evaluation-set.md)。
-- **评测集类型**：仅支持文本生成场景，不可用于视觉或视频类任务。
-- **数据处理能力**：支持对 **SFT-文本生成训练集（ChatML 格式）** 进行数据清洗（如敏感信息打码、特殊内容移除）和数据增强（通用/分类/抽取/创作等场景），但**暂不支持 SFT-视觉理解训练集和 DPO 训练集** [数据清洗或增强](../../raw/model-user-guide/model-data-overview/data-processing.md)。
-- **日志回流能力**：支持将 SLS 推理日志转化为结构化 JSONL 数据集，可用于训练集（SFT/DPO/CPT）或评测集，当前仅在华北2（北京）和新加坡 Region 可用 [日志回流](../../raw/model-user-guide/model-data-overview/model-log-backflow.md)。
-
-> **注意**：文档 2 明确指出“数据处理暂不支持 SFT-图片理解训练集和 DPO-文本生成训练集”，而文档 1 表述为“训练集支持4种训练场景”且未排除 DPO 的数据处理能力。以文档 2 的限定为准，DPO 训练集不可用于数据清洗或增强。
+- **数据集类型**：仅支持结构化文本数据集，分为**训练集**（用于[模型调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)）和**评测集**（用于[模型评测](raw/model-user-guide/model-evaluation-introduction/model-evaluation-overview.md)），二者在用途、格式校验规则及发布流程上存在差异。  
+- **数据流能力**：支持基于可视化画布的数据清洗与增强，包括字段映射、过滤、采样、合成等节点；该能力不直接作用于原始模型推理，仅服务于数据准备阶段。详情见 [数据清洗或增强](../../raw/model-user-guide/model-data-overview/data-processing.md)。  
+- **日志回流集成**：支持将模型服务调用日志自动回流为评测候选数据，需配合[日志回流](../../raw/model-user-guide/model-data-overview/model-log-backflow.md)功能启用，适用于持续评估场景。
 
 ## 关键参数
 
-| 参数 | 说明 | 是否必填 | 取值范围/约束 |
-|------|------|----------|----------------|
-| 数据集名称 | 全局唯一标识符 | 是 | ≤50 字符，支持中文、英文、数字、下划线、连字符、点（文档 1）或斜杠（文档 3） |
-| 数据集类型 | 决定用途与后续操作权限 | 是 | `训练集` 或 `评测集`，**创建后不可变更** |
-| 训练场景 | 指定模型输入输出模态 | 是 | `文本生成` / `视觉理解` / `图生视频（首帧）` / `图生视频（首尾帧）`；评测集仅允许 `文本生成` |
-| 训练方法 | 仅训练集需指定 | 是 | `SFT`（全地域）、`DPO`（仅北京）、`CPT`（仅北京） |
-| 数据格式 | 文件解析标准 | 是 | `Jsonl 格式` 或 `Excel 格式`；数据处理仅接受 ChatML 格式的 Jsonl [数据清洗或增强](../../raw/model-user-guide/model-data-overview/data-processing.md) |
-| 存储位置 | 影响计费与管理方式 | 是 | `平台 OSS 存储`（免费，自动发布）或 `云存储挂载`（需 OSS 标签授权，仅训练集可用，评测集禁用） |
-| 导入方式 | 决定数据来源与前置条件 | 是 | `本地上传`（无依赖）、`从 OSS 导入`（需 Bucket 标签 `bailian-datahub-access=read`）、`日志回流`（需 SLS 授权）、`API 上传` |
+| 参数 | 说明 | 约束 |
+|------|------|------|
+| `dataset_type` | 必填，取值为 `training` 或 `evaluation` | 创建后不可修改 |
+| `version` | 自动递增的语义化版本号（如 `v1.0.0`），每次新增版本时由系统生成 | 不支持手动指定或覆盖已有版本 |
+| `max_size` | 单数据集最大容量为 100 GB（压缩后） | 超限时上传失败，需清理旧版本或拆分数据 |
+| `row_limit` | 单文件行数上限为 500 万行 | 超出部分被截断，且不触发告警 |
+
+> **注意**：原始文档中提及“数据集支持导入方式包括 CSV/JSONL/TXT”，但实际控制台仅接受 JSONL 格式（字段名必须含 `input` 和 `output`）；该不一致已在 [训练集与评测集](../../raw/model-user-guide/model-evaluation-introduction/training-set-and-evaluation-set.md) 的最新修订版中明确修正。
 
 ## 使用方式
 
-- **创建数据集**：在控制台 **[数据管理](https://bailian.console.aliyun.com/cn-beijing/model/data)** > **数据集** 页面点击「创建数据集」，按向导完成参数配置与数据导入。提交即发布，**不再生成草稿版本**（历史草稿仍可编辑）。
-- **数据处理（清洗/增强）**：仅限已发布的 SFT-文本生成训练集。访问 **[数据管理](https://bailian.console.aliyun.com/cn-beijing/model/data?tab=data_flow)** > **数据流** 页签，创建数据流并启动任务。处理结果将自动生成新版本（如 V1 → V2），**不覆盖原版本** [数据清洗或增强](../../raw/model-user-guide/model-data-overview/data-processing.md)。
-- **日志回流**：需先在 **[模型监控](https://bailian.console.aliyun.com/cn-beijing/model/telemetry)** 完成审计日志与推理日志的开通及角色授权（文档 3）。授权后可通过模型监控页、模型详情页或数据管理页入口创建回流任务，支持按时间范围、API Key、模型等多维筛选。
-- **追加数据**：已有数据集可通过「新增版本」（平台存储）或「导入数据」页（所有存储类型）追加日志回流数据；**OSS 挂载数据集不支持「新增版本」**，必须使用「导入数据」页 [日志回流](../../raw/model-user-guide/model-data-overview/model-log-backflow.md)。
+1. 进入 [百炼控制台·数据管理](https://bailian.console.aliyun.com/cn-beijing/model/data)，切换至 **数据集** Tab；  
+2. 点击右上角 **创建数据集**，选择类型（训练集/评测集）、名称、描述，完成初始化；  
+3. 上传数据文件（JSONL 格式），系统自动校验字段与编码，成功后生成 `v1.0.0` 版本；  
+4. 如需更新，点击操作列的 **新增版本**，上传新文件并提交；  
+5. 发布前须确保数据集已通过格式与内容校验（如评测集要求 `output` 字段非空），发布后版本不可编辑，仅可新增版本。完整流程详见 [训练集与评测集](../../raw/model-user-guide/model-evaluation-introduction/training-set-and-evaluation-set.md)。
 
 ## 限制和注意事项
 
-- **地域限制**：DPO/CPT 训练、数据处理功能、日志回流（除新加坡外）均**仅限华北2（北京）地域**；OSS 导入、云存储挂载也仅支持北京地域 [训练集与评测集](../../raw/model-user-guide/model-data-overview/training-set-and-evaluation-set.md)。
-- **不可逆操作**：数据集发布后不可编辑；删除操作不可恢复；删除整个数据集将移除其所有版本，请谨慎执行。
-- **数据量约束**：
-  - 日志回流单次上限 10 万条（可多次回流累积）；
-  - 数据增强-通用节点单次最多生成 2000 条样本；
-  - CPT 推荐数据量 ≥5000 万 [Token](../concepts/token.md)，SFT 建议 ≥1000 条，DPO 建议 ≥100 条。
-- **格式强约束**：数据处理仅接受 ChatML 格式的 SFT 文本训练集；视觉/图生视频训练集暂无官方推荐数据量，需自行保障样本充分性。
-- **计费提示**：数据管理功能本身免费，但平台 OSS 存储、OSS 挂载、SLS 日志服务等下游资源按各自产品计费，详见百炼计费文档。
+- 数据集一旦发布，其当前版本即冻结，不可删除或修改；仅可通过新增版本迭代；  
+- 同一业务空间下，训练集与评测集名称不可重名（即使类型不同）；  
+- 数据流处理结果默认不自动保存为新数据集版本，需手动导出并创建新数据集；  
+- 所有数据操作均受 RAM 权限控制，`AliyunBaiLianFullAccess` 是最低必要权限；  
+- 删除数据集将同步清除其所有历史版本及关联数据流节点引用——该行为不可逆，请谨慎操作。
 
 ## 来源文档
 
-- [训练集与评测集](../../raw/model-user-guide/model-data-overview/training-set-and-evaluation-set.md)
-- [数据清洗或增强](../../raw/model-user-guide/model-data-overview/data-processing.md)
-- [日志回流](../../raw/model-user-guide/model-data-overview/model-log-backflow.md)
+- [模型数据](../../raw/model-user-guide/model-data-overview.md)
 
 

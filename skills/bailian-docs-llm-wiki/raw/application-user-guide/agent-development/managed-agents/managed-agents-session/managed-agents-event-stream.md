@@ -14,6 +14,10 @@
 
 助手输出消息
 
+`reasoning`
+
+助手思考过程，开启 `event_deltas[]=reasoning` 后可流式分块
+
 `tool_call` / `tool_call_output`
 
 内置工具调用请求与执行结果
@@ -203,7 +207,7 @@ curl -N --no-buffer --get \
   --data-urlencode 'event_deltas[]=reasoning'
 ```
 
-开启后，被声明类型的事件先下发一帧 `type=event_start`（`event.id` 即最终完整 Message 的 `id`），随后按生成顺序下发若干 `type=event_delta` 增量帧（`delta.content` 为新增的 ContentBlock 片段），最后下发聚合后的完整 Message（`status: "completed"`）。客户端按 `event_id` + `delta.index` 顺序累加各增量片段，完整 Message 可用于校验。未声明的事件类型仍按单帧完整 Message 下发。完整帧结构与示例流见 [会话事件流（SSE）API](raw/application-api-reference/managed-agents-api/session-api/event-sse-stream.md)。
+开启后，被声明类型的事件先下发一帧 `type=event_start`（`event.id` 即最终完整 Message 的 `id`），随后按生成顺序下发若干 `type=event_delta` 增量帧（`message` 的新增片段在 `delta.content`，`reasoning` 的新增思考文本在 `delta.reasoning`），最后下发聚合后的完整 Message（`status: "completed"`）。客户端按 `event_id` + `delta.index` 顺序累加各增量片段，完整 Message 可用于校验。未声明的事件类型仍按单帧完整 Message 下发。完整帧结构与示例流见 [会话事件流（SSE）API](raw/application-api-reference/managed-agents-api/session-api/event-sse-stream.md)。
 
 ## 工具审批
 

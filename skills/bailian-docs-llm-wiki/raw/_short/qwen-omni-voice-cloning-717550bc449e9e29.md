@@ -108,14 +108,15 @@ WAV (16bit)、MP3、M4A
 Python
 
 ```
-# 依赖：dashscope >= 1.26.5，pyaudio
+# 依赖：dashscope >= 2.0.1，pyaudio
 import os
 import requests
 import base64
 import pathlib
 import time
 import pyaudio
-from dashscope.audio.qwen_omni import MultiModality, OmniRealtimeCallback, OmniRealtimeConversation
+from concurrent.futures import ThreadPoolExecutor
+
 import dashscope
 
 # ======= 常量配置 =======
@@ -123,6 +124,14 @@ DEFAULT_TARGET_MODEL = "qwen3.8-omni-flash-realtime"  # 声音复刻、实时对
 DEFAULT_PREFERRED_NAME = "guanyu"
 DEFAULT_AUDIO_MIME_TYPE = "audio/mpeg"
 VOICE_FILE_PATH = "voice.mp3"  # 用于声音复刻的本地音频文件的相对路径
+
+# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 def create_voice(file_path: str,
                  url: str,
@@ -166,58 +175,55 @@ def create_voice(file_path: str,
     except (KeyError, ValueError) as e:
         raise RuntimeError(f"解析 voice 响应失败: {e}")
 
-class SimpleCallback(OmniRealtimeCallback):
-    def __init__(self, pya):
-        self.pya = pya
-        self.out = None
-    def on_open(self):
-        self.out = self.pya.open(
-            format=pyaudio.paInt16,
-            channels=1,
-            rate=24000,
-            output=True
-        )
-    def on_event(self, response):
+# 1. 初始化音频设备与输出流
+pya = pyaudio.PyAudio()
+out = pya.open(format=pyaudio.paInt16, channels=1, rate=24000, output=True)
+
+# 2. 接收线程：迭代服务端事件，播放音频并打印文本
+def receive_events(session):
+    for response in session.events():
         if response['type'] == 'response.audio.delta':
-            self.out.write(base64.b64decode(response['delta']))
+            # 播放音频
+            out.write(base64.b64decode(response['delta']))
         elif response['type'] == 'conversation.item.input_audio_transcription.completed':
             print(f"[User] {response['transcript']}")
         elif response['type'] == 'response.audio_transcript.done':
             print(f"[LLM] {response['transcript']}")
 
 if __name__ == '__main__':
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：dashscope.api_key = "sk-xxx"
-    dashscope.api_key = os.getenv("DASHSCOPE_API_KEY")
     # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
     base_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com"
-    ws_url = base_url.replace("https://", "wss://") + "/api-ws/v1/realtime"
 
     # 1. 声音复刻：创建专属音色
     voice = create_voice(VOICE_FILE_PATH, url=f"{base_url}/api/v1/services/audio/tts/customization")
     print(f"声音复刻完成，音色: {voice}")
 
     # 2. 使用复刻音色进行实时对话
-    pya = pyaudio.PyAudio()
-    callback = SimpleCallback(pya)
-    conv = OmniRealtimeConversation(model=DEFAULT_TARGET_MODEL, callback=callback, url=ws_url)
-    conv.connect()
-    conv.update_session(
-        output_modalities=[MultiModality.AUDIO, MultiModality.TEXT],
-        voice=voice  # 使用复刻生成的专属音色
-    )
-    mic = pya.open(format=pyaudio.paInt16, channels=1, rate=16000, input=True)
-    print("对话已开始，对着麦克风说话 (Ctrl+C 退出)...")
-    try:
-        while True:
-            audio_data = mic.read(3200, exception_on_overflow=False)
-            conv.append_audio(base64.b64encode(audio_data).decode())
-            time.sleep(0.01)
-    except KeyboardInterrupt:
-        conv.close()
-        mic.close()
-        callback.out.close()
-        pya.terminate()
-        print("\n对话结束")
+    # 3. 创建会话（进入 with 上下文时自动建立连接）并配置
+    with client.audio.realtime.connect(model=DEFAULT_TARGET_MODEL) as session:
+        session.update_session(
+            output_modalities=['audio', 'text'],
+            voice=voice  # 使用复刻生成的专属音色
+        )
+        # 4. 初始化音频输入流
+        mic = pya.open(format=pyaudio.paInt16, channels=1, rate=16000, input=True)
+        # 5. 主循环处理音频输入
+        print("对话已开始，对着麦克风说话 (Ctrl+C 退出)...")
+        try:
+            with ThreadPoolExecutor(max_workers=1) as pool:
+                receiver = pool.submit(receive_events, session)
+                while True:
+                    audio_data = mic.read(3200, exception_on_overflow=False)
+                    # bytes 会自动 Base64 编码后发送
+                    session.append_audio(audio_data)
+                    time.sleep(0.01)
+        except KeyboardInterrupt:
+            # 清理资源
+            session.close()
+            mic.close()
+            out.close()
+            pya.terminate()
+            print("\n对话结束")
 ```
 
 Java

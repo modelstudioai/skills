@@ -24,7 +24,7 @@
 
 #### 同步调用
 
-**重要****请确保 DashScope Python SDK 版本不低于**`1.25.15`**， DashScope Java SDK 版本不低于**`2.22.13`**。**
+**重要****请确保 DashScope Python SDK 版本不低于**`2.0.1`**， DashScope Java SDK 版本不低于**`2.22.13`**。**
 
 #### Python
 
@@ -34,17 +34,18 @@
 import os
 import base64
 import mimetypes
-import urllib.request
+import requests
 import dashscope
-from dashscope.aigc.image_generation import ImageGeneration
-from dashscope.api_entities.dashscope_response import Message
+from dashscope.aigc.image_generation import ImageGeneration, Message
 
-# 以下为华北2（北京）地域的URL，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
-
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
 # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-api_key = os.getenv("DASHSCOPE_API_KEY")
+client = dashscope.Client(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # --- Base64编码函数 ---
 # base64编码格式为 data:{MIME_type};base64,{base64_data}
@@ -75,6 +76,9 @@ image_2 = "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/2
 # image_1 = encode_file("/path/to/your/car.png")
 # image_2 = encode_file("/path/to/your/paint.png")
 
+print("----sync call, please wait a moment----")
+# generate 为一步式调用（提交+等待），直接返回已完成的任务结果
+# wan2.7-image 系列在 SDK 2.0 中暂未支持（路由缺口），保持 1.x ImageGeneration 调用
 message = Message(
     role="user",
     content=[
@@ -94,17 +98,12 @@ rsp = ImageGeneration.call(
 )
 
 # 提取结果图片URL并保存到本地
-if rsp.status_code == 200:
-    for i, choice in enumerate(rsp.output.choices):
-        for j, content in enumerate(choice["message"]["content"]):
-            if content.get("type") == "image":
-                image_url = content["image"]
-                file_name = f"output_{i}_{j}.png"
-                # 结果URL有效期为24小时，请及时下载
-                urllib.request.urlretrieve(image_url, file_name)
-                print(f"Image saved to {file_name}")
-else:
-    print(f"Failed: status_code={rsp.status_code}, message={rsp.message}")
+for i, image_url in enumerate(job.image_urls):
+    file_name = f"output_{i}.png"
+    # 结果URL有效期为24小时，请及时下载
+    with open(file_name, "wb") as f:
+        f.write(requests.get(image_url).content)
+    print(f"Image saved to {file_name}")
 ```
 
 ### 响应示例
@@ -113,37 +112,22 @@ else:
 
 ```
 {
-    "status_code": 200,
     "request_id": "81d868c6-6ce1-92d8-a90d-d2ee71xxxxxx",
-    "code": "",
-    "message": "",
-    "output": {
-        "text": null,
-        "finish_reason": null,
-        "choices": [
-            {
-                "finish_reason": "stop",
-                "message": {
-                    "role": "assistant",
-                    "content": [
-                        {
-                            "image": "https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/xxxxxx.png?Expires=xxxxxx",
-                            "type": "image"
-                        }
-                    ]
-                }
-            }
-        ],
-        "audio": null,
-        "finished": true
+    "task_id": "127ec645-118f-4884-955d-0eba8dxxxxxx",
+    "status": "SUCCEEDED",
+    "results": [
+        {
+            "url": "https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/xxxxxx.png?Expires=xxxxxx"
+        }
+    ],
+    "task_metrics": {
+        "TOTAL": 1,
+        "SUCCEEDED": 1,
+        "FAILED": 0
     },
     "usage": {
-        "input_tokens": 18790,
-        "output_tokens": 2,
-        "characters": 0,
         "image_count": 1,
-        "size": "2985*1405",
-        "total_tokens": 18792
+        "size": "2985*1405"
     }
 }
 ```
@@ -367,7 +351,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 #### 异步调用
 
-**重要****请确保 DashScope Python SDK 版本不低于**`1.25.15`**， DashScope Java SDK 版本不低于**`2.22.13`**。**
+**重要****请确保 DashScope Python SDK 版本不低于**`2.0.1`**， DashScope Java SDK 版本不低于**`2.22.13`**。**
 
 #### Python
 
@@ -377,18 +361,17 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 import os
 import base64
 import mimetypes
-import urllib.request
+import requests
 import dashscope
-from dashscope.aigc.image_generation import ImageGeneration
-from dashscope.api_entities.dashscope_response import Message
-from http import HTTPStatus
 
-# 以下为华北2（北京）地域的URL，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
-
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
 # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-api_key = os.getenv("DASHSCOPE_API_KEY")
+client = dashscope.Client(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # --- Base64编码函数 ---
 # base64编码格式为 data:{MIME_type};base64,{base64_data}
@@ -422,73 +405,48 @@ image_2 = "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/2
 # 创建异步任务
 def create_async_task():
     print("Creating async task...")
-    message = Message(
-        role="user",
-        content=[
-            {"text": "把图2的涂鸦喷绘在图1的汽车上"},
-            {"image": image_1},
-            {"image": image_2},
-        ],
-    )
-    response = ImageGeneration.async_call(
+    job = client.images.jobs.create(
         model="wan2.7-image-pro",
-        api_key=api_key,
-        messages=[message],
+        prompt="把图2的涂鸦喷绘在图1的汽车上",
+        extra_input={'images': [image_1, image_2]},
         watermark=False,
         n=1,
         size="2K",  # wan2.7-image-pro仅文生图场景支持4K分辨率，图像编辑和组图生成支持最高2K分辨率
     )
 
-    if response.status_code == 200:
-        print("Task created successfully:", response)
-        return response
-    else:
-        raise Exception(f"Failed to create task: {response.code} - {response.message}")
+    print("Task created successfully:", job.task_id, job.status)
+    return job
 
-# 等待任务完成
-def wait_for_completion(task_response):
+# 等待任务完成（指数退避轮询，默认总预算24小时；任务失败会抛出DashScopeError）
+def wait_for_completion(job):
     print("Waiting for task completion...")
-    status = ImageGeneration.wait(task=task_response, api_key=api_key)
+    done = client.images.jobs.wait(job)
 
-    if status.output.task_status == "SUCCEEDED":
-        print("Task succeeded!")
-        # 提取结果图片URL并保存到本地
-        for i, choice in enumerate(status.output.choices):
-            for j, content in enumerate(choice["message"]["content"]):
-                if content.get("type") == "image":
-                    image_url = content["image"]
-                    file_name = f"output_{i}_{j}.png"
-                    # 结果URL有效期为24小时，请及时下载
-                    urllib.request.urlretrieve(image_url, file_name)
-                    print(f"Image saved to {file_name}")
-    else:
-        raise Exception(f"Task failed with status: {status.output.task_status}")
+    print("Task succeeded!")
+    # 提取结果图片URL并保存到本地
+    for i, image_url in enumerate(done.image_urls):
+        file_name = f"output_{i}.png"
+        # 结果URL有效期为24小时，请及时下载
+        with open(file_name, "wb") as f:
+            f.write(requests.get(image_url).content)
+        print(f"Image saved to {file_name}")
 
 # 获取异步任务信息
-def fetch_task_status(task):
+def fetch_task_status(task_id):
     print("Fetching task status...")
-    status = ImageGeneration.fetch(task=task, api_key=api_key)
+    snapshot = client.images.jobs.fetch(task_id)
 
-    if status.status_code == HTTPStatus.OK:
-        print("Task status:", status.output.task_status)
-        print("Response details:", status)
-    else:
-        print(f"Failed to fetch status: {status.code} - {status.message}")
+    print("Task status:", snapshot.status)
 
-# 取消异步任务
-def cancel_task(task):
+# 取消异步任务，只有处于PENDING状态的任务才可以取消
+def cancel_task(task_id):
     print("Canceling task...")
-    response = ImageGeneration.cancel(task=task, api_key=api_key)
-
-    if response.status_code == HTTPStatus.OK:
-        print("Task canceled successfully:", response.output.task_status)
-    else:
-        print(f"Failed to cancel task: {response.code} - {response.message}")
+    client.images.jobs.cancel(task_id)
 
 # 主执行流程
 if __name__ == "__main__":
-    task = create_async_task()
-    wait_for_completion(task)
+    job = create_async_task()
+    wait_for_completion(job)
 ```
 
 ### 响应示例
@@ -497,23 +455,9 @@ if __name__ == "__main__":
 
 ```
 {
-    "status_code": 200,
     "request_id": "4fb3050f-de57-4a24-84ff-e37ee5xxxxxx",
-    "code": "",
-    "message": "",
-    "output": {
-        "text": null,
-        "finish_reason": null,
-        "choices": null,
-        "audio": null,
-        "task_id": "127ec645-118f-4884-955d-0eba8dxxxxxx",
-        "task_status": "PENDING"
-    },
-    "usage": {
-        "input_tokens": 0,
-        "output_tokens": 0,
-        "characters": 0
-    }
+    "task_id": "127ec645-118f-4884-955d-0eba8dxxxxxx",
+    "status": "PENDING"
 }
 ```
 
@@ -523,42 +467,22 @@ if __name__ == "__main__":
 
 ```
 {
-    "status_code": 200,
     "request_id": "3b99aae5-d26f-9059-8dd0-ee9ca4804xxx",
-    "code": null,
-    "message": "",
-    "output": {
-        "text": null,
-        "finish_reason": null,
-        "choices": [
-            {
-                "finish_reason": "stop",
-                "message": {
-                    "role": "assistant",
-                    "content": [
-                        {
-                            "image": "https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/xxxxxx.png?Expires=xxxxxx",
-                            "type": "image"
-                        }
-                    ]
-                }
-            }
-        ],
-        "audio": null,
-        "task_id": "127ec645-118f-4884-955d-0eba8dxxxxxx",
-        "task_status": "SUCCEEDED",
-        "submit_time": "2026-03-31 22:58:47.646",
-        "scheduled_time": "2026-03-31 22:58:47.683",
-        "end_time": "2026-03-31 22:58:59.642",
-        "finished": true
+    "task_id": "127ec645-118f-4884-955d-0eba8dxxxxxx",
+    "status": "SUCCEEDED",
+    "results": [
+        {
+            "url": "https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/xxxxxx.png?Expires=xxxxxx"
+        }
+    ],
+    "task_metrics": {
+        "TOTAL": 1,
+        "SUCCEEDED": 1,
+        "FAILED": 0
     },
     "usage": {
-        "input_tokens": 18711,
-        "output_tokens": 2,
-        "characters": 0,
-        "size": "2985*1405",
-        "total_tokens": 18713,
-        "image_count": 1
+        "image_count": 1,
+        "size": "2985*1405"
     }
 }
 ```
@@ -848,7 +772,7 @@ wan2.5-i2i-preview使用不同的API端点和参数传入方式，其调用示�
 
 #### 同步调用
 
-**重要****请确保 DashScope Python SDK 版本不低于**`1.25.2`**， DashScope Java SDK 版本不低于**`2.22.2`**。**
+**重要****请确保 DashScope Python SDK 版本不低于**2.0.1**， DashScope Java SDK 版本不低于**`2.22.2`**。**
 
 若版本过低，可能会触发 “url error, please check url!” 等错误。请参考[安装或升级SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
 
@@ -861,20 +785,20 @@ wan2.5-i2i-preview使用不同的API端点和参数传入方式，其调用示�
 ```
 import base64
 import mimetypes
-from http import HTTPStatus
 from urllib.parse import urlparse, unquote
 from pathlib import PurePosixPath
 import dashscope
 import requests
-from dashscope import ImageSynthesis
 import os
 
-# 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-
+# 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
 # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
 # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-api_key = os.getenv("DASHSCOPE_API_KEY")
+client = dashscope.Client(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # --- 输入图片：使用 Base64 编码 ---
 # base64编码格式为 data:{MIME_type};base64,{base64_data}
@@ -913,26 +837,22 @@ image_url_2 = "https://img.alicdn.com/imgextra/i3/O1CN01SfG4J41UYn9WNt4X1_!!6000
 # image_url_2 = encode_file("./image_2.png")              # 以实际路径为准
 
 print('----sync call, please wait a moment----')
-rsp = ImageSynthesis.call(api_key=api_key,
-                          model="wan2.5-i2i-preview",
-                          prompt="将图1中的闹钟放置到图2的餐桌的花瓶旁边位置",
-                          images=[image_url_1, image_url_2],
-                          negative_prompt="",
-                          n=1,
-                          # size="1280*1280",
-                          prompt_extend=True,
-                          watermark=False,
-                          seed=12345)
-print('response: %s' % rsp)
-if rsp.status_code == HTTPStatus.OK:
-    # 在当前目录下保存图片
-    for result in rsp.output.results:
-        file_name = PurePosixPath(unquote(urlparse(result.url).path)).parts[-1]
-        with open('./%s' % file_name, 'wb+') as f:
-            f.write(requests.get(result.url).content)
-else:
-    print('sync_call Failed, status_code: %s, code: %s, message: %s' %
-          (rsp.status_code, rsp.code, rsp.message))
+# generate 为一步式调用（提交+等待），直接返回已完成的任务结果
+job = client.images.generate(model="wan2.5-i2i-preview",
+                             prompt="将图1中的闹钟放置到图2的餐桌的花瓶旁边位置",
+                             extra_input={'images': [image_url_1, image_url_2]},
+                             negative_prompt="",
+                             n=1,
+                             # size="1280*1280",
+                             prompt_extend=True,
+                             watermark=False,
+                             seed=12345)
+print('response: %s' % job)
+# 在当前目录下保存图片
+for result in job.results:
+    file_name = PurePosixPath(unquote(urlparse(result.url).path)).parts[-1]
+    with open('./%s' % file_name, 'wb+') as f:
+        f.write(requests.get(result.url).content)
 ```
 
 ##### 响应示例
@@ -941,28 +861,20 @@ else:
 
 ```
 {
-    "status_code": 200,
     "request_id": "8ad45834-4321-44ed-adf5-xxxxxx",
-    "code": null,
-    "message": "",
-    "output": {
-        "task_id": "3aff9ebd-35fc-4339-98a3-xxxxxx",
-        "task_status": "SUCCEEDED",
-        "results": [
-            {
-                "url": "https://dashscope-result-sh.oss-cn-shanghai.aliyuncs.com/xxx.png?Expires=xxx",
-                "orig_prompt": "将图1中的闹钟放置到图2的餐桌的花瓶旁边位置",
-                "actual_prompt": "将图1中的蓝色闹钟放置在图2餐桌的花瓶右侧，靠近桌布边缘的位置，保持闹钟朝向镜头，与桌面平行，阴影自然投射于桌面。"
-            }
-        ],
-        "submit_time": "2025-10-23 16:18:16.009",
-        "scheduled_time": "2025-10-23 16:18:16.040",
-        "end_time": "2025-10-23 16:19:09.591",
-        "task_metrics": {
-            "TOTAL": 1,
-            "FAILED": 0,
-            "SUCCEEDED": 1
+    "task_id": "3aff9ebd-35fc-4339-98a3-xxxxxx",
+    "status": "SUCCEEDED",
+    "results": [
+        {
+            "url": "https://dashscope-result-sh.oss-cn-shanghai.aliyuncs.com/xxx.png?Expires=xxx",
+            "orig_prompt": "将图1中的闹钟放置到图2的餐桌的花瓶旁边位置",
+            "actual_prompt": "将图1中的蓝色闹钟放置在图2餐桌的花瓶右侧，靠近桌布边缘的位置，保持闹钟朝向镜头，与桌面平行，阴影自然投射于桌面。"
         }
+    ],
+    "task_metrics": {
+        "TOTAL": 1,
+        "FAILED": 0,
+        "SUCCEEDED": 1
     },
     "usage": {
         "image_count": 1
@@ -1128,7 +1040,7 @@ public class Image2Image {
 
 #### 异步调用
 
-**重要****请确保 DashScope Python SDK 版本不低于**`1.25.2`**， DashScope Java SDK 版本不低于**`2.22.2`**。**
+**重要****请确保 DashScope Python SDK 版本不低于**2.0.1**， DashScope Java SDK 版本不低于**`2.22.2`**。**
 
 若版本过低，可能会触发 “url error, please check url!” 等错误。请参考[安装或升级SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
 
@@ -1140,19 +1052,19 @@ public class Image2Image {
 
 ```
 import os
-from http import HTTPStatus
 from urllib.parse import urlparse, unquote
 from pathlib import PurePosixPath
 import dashscope
 import requests
-from dashscope import ImageSynthesis
 
-# 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-
+# 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
 # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
 # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-api_key = os.getenv("DASHSCOPE_API_KEY")
+client = dashscope.Client(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # 使用公网图片 URL
 image_url_1 = "https://img.alicdn.com/imgextra/i3/O1CN0157XGE51l6iL9441yX_!!6000000004770-49-tps-1104-1472.webp"
@@ -1166,58 +1078,40 @@ def async_call():
 
 # 创建异步任务
 def create_async_task():
-    rsp = ImageSynthesis.async_call(api_key=api_key,
-                                    model="wan2.5-i2i-preview",
+    job = client.images.jobs.create(model="wan2.5-i2i-preview",
                                     prompt="将图1中的闹钟放置到图2的餐桌的花瓶旁边位置",
-                                    images=[image_url_1, image_url_2],
+                                    extra_input={'images': [image_url_1, image_url_2]},
                                     negative_prompt="",
                                     n=1,
                                     # size="1280*1280",
                                     prompt_extend=True,
                                     watermark=False,
                                     seed=12345)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print(rsp.output)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (rsp.status_code, rsp.code, rsp.message))
-    return rsp
+    print(job)
+    print(job.task_id, job.status)
+    return job
 
-# 等待异步任务结束
+# 等待异步任务结束（指数退避轮询，默认总预算24小时；任务失败会抛出DashScopeError）
 def wait_async_task(task):
-    rsp = ImageSynthesis.wait(task=task, api_key=api_key)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print(rsp.output)
-        # save file to current directory
-        for result in rsp.output.results:
-            file_name = PurePosixPath(unquote(urlparse(result.url).path)).parts[-1]
-            with open('./%s' % file_name, 'wb+') as f:
-                f.write(requests.get(result.url).content)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (rsp.status_code, rsp.code, rsp.message))
+    done = client.images.jobs.wait(task)
+    print(done)
+    print(done.status)
+    # save file to current directory
+    for result in done.results:
+        file_name = PurePosixPath(unquote(urlparse(result.url).path)).parts[-1]
+        with open('./%s' % file_name, 'wb+') as f:
+            f.write(requests.get(result.url).content)
 
 # 获取异步任务信息
 def fetch_task_status(task):
-    status = ImageSynthesis.fetch(task=task, api_key=api_key)
-    print(status)
-    if status.status_code == HTTPStatus.OK:
-        print(status.output.task_status)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (status.status_code, status.code, status.message))
+    snapshot = client.images.jobs.fetch(task)
+    print(snapshot)
+    print(snapshot.status)
 
 # 取消异步任务，只有处于PENDING状态的任务才可以取消
 def cancel_task(task):
-    rsp = ImageSynthesis.cancel(task=task, api_key=api_key)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print(rsp.output.task_status)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (rsp.status_code, rsp.code, rsp.message))
+    job = client.images.jobs.cancel(task)
+    print(job)
 
 if __name__ == '__main__':
     async_call()
@@ -1229,16 +1123,9 @@ if __name__ == '__main__':
 
 ```
 {
-	"status_code": 200,
-	"request_id": "31b04171-011c-96bd-ac00-f0383b669cc7",
-	"code": "",
-	"message": "",
-	"output": {
-		"task_id": "4f90cf14-a34e-4eae-xxxxxxxx",
-		"task_status": "PENDING",
-		"results": []
-	},
-	"usage": null
+    "request_id": "31b04171-011c-96bd-ac00-f0383b669cc7",
+    "task_id": "4f90cf14-a34e-4eae-xxxxxxxx",
+    "status": "PENDING"
 }
 ```
 
@@ -1248,28 +1135,20 @@ if __name__ == '__main__':
 
 ```
 {
-    "status_code": 200,
     "request_id": "8ad45834-4321-44ed-adf5-xxxxxx",
-    "code": null,
-    "message": "",
-    "output": {
-        "task_id": "3aff9ebd-35fc-4339-98a3-xxxxxx",
-        "task_status": "SUCCEEDED",
-        "results": [
-            {
-                "url": "https://dashscope-result-sh.oss-cn-shanghai.aliyuncs.com/xxx.png?Expires=xxx",
-                "orig_prompt": "将图1中的闹钟放置到图2的餐桌的花瓶旁边位置",
-                "actual_prompt": "将图1中的蓝色闹钟放置在图2餐桌的花瓶右侧，靠近桌布边缘的位置，保持闹钟朝向镜头，与桌面平行，阴影自然投射于桌面。"
-            }
-        ],
-        "submit_time": "2025-10-23 16:18:16.009",
-        "scheduled_time": "2025-10-23 16:18:16.040",
-        "end_time": "2025-10-23 16:19:09.591",
-        "task_metrics": {
-            "TOTAL": 1,
-            "FAILED": 0,
-            "SUCCEEDED": 1
+    "task_id": "3aff9ebd-35fc-4339-98a3-xxxxxx",
+    "status": "SUCCEEDED",
+    "results": [
+        {
+            "url": "https://dashscope-result-sh.oss-cn-shanghai.aliyuncs.com/xxx.png?Expires=xxx",
+            "orig_prompt": "将图1中的闹钟放置到图2的餐桌的花瓶旁边位置",
+            "actual_prompt": "将图1中的蓝色闹钟放置在图2餐桌的花瓶右侧，靠近桌布边缘的位置，保持闹钟朝向镜头，与桌面平行，阴影自然投射于桌面。"
         }
+    ],
+    "task_metrics": {
+        "TOTAL": 1,
+        "FAILED": 0,
+        "SUCCEEDED": 1
     },
     "usage": {
         "image_count": 1
@@ -2107,12 +1986,15 @@ print(f"框选坐标: {bbox}")  # 将此坐标传入 parameters.bbox_list
 # 安装依赖：pip install dashscope pillow
 import os
 import json
-from dashscope import MultiModalConversation
 import dashscope
 from PIL import Image
 import urllib.request
 
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+client = dashscope.Client(
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 def get_bbox_list(image, prompt):
     """
@@ -2145,13 +2027,12 @@ def get_bbox_list(image, prompt):
          ]}
     ]
 
-    response = MultiModalConversation.call(
-        api_key=os.getenv('DASHSCOPE_API_KEY'),
+    response = client.multimodal.chat.create(
         model='qwen3.6-plus',
         messages=messages,
     )
 
-    text = response.output.choices[0].message.content[0]["text"]
+    text = response.output_text
     text = text.replace("```json", "").replace("```", "").strip()
     coords = json.loads(text)
 
