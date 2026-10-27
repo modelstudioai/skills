@@ -13,6 +13,17 @@ compatibility: 需要已安装 bailian-docs-llm-wiki skill（提供 models/ 数�
 
 从阿里云百炼平台模型库中，根据用户场景推荐最合适的模型并提供调用示例代码。
 
+## 设计原则：确定性的流程交给脚本，LLM 只做两件事
+
+本 skill 的召回、打分、排序、席位分配全部由确定性脚本完成（移植自 bailian-cli
+推荐引擎，`bailian-cli >= 2.6.0` 的 `bl advisor recommend` 同源逻辑）。**LLM 不
+参与排序和筛选决策**，只负责：
+
+1. **意图提取** — 把用户的自然语言需求转成一份 intent JSON（第二步）
+2. **推荐理由撰写** — 为脚本选出的模型写关联用户需求的理由（第四步）
+
+禁止 LLM 凭判断增删或重排脚本输出的候选列表。
+
 ## 适用场景
 
 **显式选型：**
@@ -22,90 +33,140 @@ compatibility: 需要已安装 bailian-docs-llm-wiki skill（提供 models/ 数�
 **隐式选型（用户描述想做的事，隐含需要选模型）：**
 - "我想做一个XX"（客服机器人、翻译工具、代码助手...）
 - "帮我实现XX功能"（图片生成、语音合成、文本摘要...）
-- "怎么用 AI 来做XX"、"大模型能做XX吗"
-- "XX场景有什么方案"、"我想接入XX能力"
-
-**技术选型：**
-- "XX和XX哪个更适合做YY"
-- "低成本/高并发/高精度 场景怎么选"
 
 **不适用：**
 - 用户已确定模型，只问怎么调用 → 直接给调用代码
 - 纯粹查询模型参数/价格 → 使用 bailian-docs-llm-wiki skill
 
-**与 bailian-docs-llm-wiki 的边界：** 当用户同时涉及模型查询和模型选择时，优先使用本 skill（本 skill 内部会读取模型数据完成推荐）。仅当用户已确定模型、只需查参数/价格/调用方式时，由 bailian-docs-llm-wiki 处理。
+**与 bailian-docs-llm-wiki 的边界：** 当用户同时涉及模型查询和模型选择时，优先使用本 skill。仅当用户已确定模型、只需查参数/价格/调用方式时，由 bailian-docs-llm-wiki 处理。
 
 ## 前置检查
 
-执行推荐前确认依赖的 `bailian-docs-llm-wiki` skill 已安装且数据可用。
-
-**检测逻辑：**
-
-1. 检查 `bailian-docs-llm-wiki` skill 是否已安装（通过查找已安装 skill 目录中是否存在 `bailian-docs-llm-wiki/models/models.jsonl`）
+1. 检查 `bailian-docs-llm-wiki` skill 是否已安装（查找 `~/.bailian/skills/bailian-docs-llm-wiki/models/models.jsonl`；优先用环境变量 `BAILIAN_CONFIG_DIR` 定位配置根）
 2. 如果未安装，执行安装：`npx skills add modelstudioai/skills --skill bailian-docs-llm-wiki -y`
 
 安装失败则告知用户并中止。**禁止在没有数据的情况下凭记忆推荐模型。**
 
 ## 推荐流程
 
-### 第一步：理解需求（Agent 直接完成，不输出给用户）
+### 第一步：理解需求 → 意图 JSON（LLM 完成）
 
-从用户描述中快速提取结构化需求信息。JSON 结构定义见 [references/requirement-schema.md](references/requirement-schema.md)，推断规则见 [references/capability-codes.md](references/capability-codes.md)。
+从用户描述中提取结构化意图，一次完成，不输出中间分析。JSON 结构定义见
+[references/requirement-schema.md](references/requirement-schema.md)，能力代码与
+偏好推断规则见 [references/capability-codes.md](references/capability-codes.md)。
 
-**要快：** 简单字段映射，不做复杂推理。如果需求不清晰，直接追问具体场景，不输出中间分析。
+**意图提取的关键规则**（与引擎一致，违反会导致排序失真）：
 
-### 第二步：筛选候选
+- "推荐一个"中的"一个"是量词，**不是**只返回一个结果
+- "便宜点"、"低成本" → `budget: "low"`，而不是 `optimizeDimension: "price"`；
+  `optimizeDimension` 仅在用户明确说"按价格/速度/上下文/质量优化"时设置
+- `matchedScenes` 必须从模型数据实际存在的场景词中选（先 grep 一次
+  `models.jsonl` 里 `profile.scenes` 的取值集合再填），不要编造场景词
+- 用户点名了模型 → 填 `modelPreference`（comparison=对比两个指定模型 /
+  alternative=要指定模型的替代品 / scoped=在该家族内选 / unconstrained=无约束）
+- 排除某家族 → `modelPreference.excludes`
 
-从 `models/models.jsonl` 和 `models/groups/<slug>.json` 中综合筛选匹配的模型（10~50 个），结构化字段和语义信息同时参与筛选：
+**需求模糊时（如"推荐一个模型"无任何场景信息）：** 直接向用户追问"你想用在
+什么场景"，拿到回答后把用户原话和回答一起重新提取意图。不要在信息不足时
+猜测场景。
 
-1. 去除历史快照版本（如 `model-2025-04-28`），只保留主版本
-2. 按模态过滤（输入/输出模态必须兼容）
-3. 按能力、特性、上下文窗口、质量定位评分排序
-4. 读取 group 文件的 description（group 级 + item 级），将场景关键词（如"科研"、"代码"、"长文本"、"客服"）与用户需求做语义匹配，提升匹配模型的排序
-5. 同一家族最多保留少量模型，避免同质化
-6. 候选不足时放宽过滤条件
+### 第二步：脚本召回+排序（确定性，无 LLM）
 
-数据源字段说明见 [references/data-source.md](references/data-source.md)。
+把 intent JSON 写入临时文件（或 stdin 传入），运行：
 
-### 第三步：精选推荐
+```bash
+node scripts/recall-rank.mjs intent.json            # 默认 top 3
+node scripts/recall-rank.mjs intent.json --top 5    # 指定数量
+```
 
-从候选列表中选出 3 个推荐：
+脚本内置（与 `bl advisor recommend` 引擎同源）：
 
-| 位置 | 策略 |
+| 环节 | 确定性逻辑 |
 | --- | --- |
-| 推荐 #1（最佳推荐） | 最符合用户预算和质量偏好的最佳模型 |
-| 推荐 #2（次优选择） | 另一个档次的模型，说明与 #1 的 tradeoff |
-| 推荐 #3（备选参考） | 不同视角的选择，说明场景差异 |
+| 快照去重 | 去掉日期快照版本（`-YYYY-MM-DD` / `-MMDD` 后缀），保留主版本 |
+| 硬过滤 | 输入/输出模态 + 能力交集门；不足 5 个时先去模态保能力，仅当无模型匹配能力才回全池（能力约束永不静默丢弃） |
+| 负面排除 | 模型 `profile.notSuitableFor` 与用户场景/任务关键词相交则剔除 |
+| 公式打分 | scene 0.4 / tier 0.2 / price 0.2 / context 0.2（按 userIntent 换权重集；optimize 时 price 0.6 主导） |
+| 排序 | 档位 flagship→balanced→lightweight（用户要便宜则反转）；同档阿里系 provider 优先（qwen/qwen-domain-model/wan）；同档价格降序（贵的≈更强，要便宜时升序）；无价格排最后；同价取新版本号 |
+| fairness | 同家族最多 2 席；单一家族占满时把异家族最优换进末位 |
+| 席位 | 默认每 provider 一个 flagship；用户要便宜时 lightweight→balanced→flagship 三档各一席；标注 primary / runner-up / exploration |
 
-**排序逻辑：**
+输出 JSON（结构见下方"脚本输出"）。
 
-- 用户要省钱 → #1 必须是性价比最高的，不是旗舰
-- 用户要最好 → #1 必须是能力最强的旗舰
-- 用户无倾向 → #1 选综合匹配度最高的
-- 推荐最适合场景的，不是最强的；偏好从用户表达中推断，不预设倾向
+### 第三步：读取脚本结果
 
-**约束：**
+脚本输出即最终候选列表——**不得增删、不得重排**。检查两件事：
 
-- 理由必须关联用户具体需求（禁止"性能强大"等空话），三条理由角度不同
-- 有定价信息时结合预算权衡，帮用户做成本决策
-- 避免推荐同家族多个模型，优先稳定版本
-- 提供多档次选择和 tradeoff 说明，由用户自己决定
+1. **点名模型缺失**：用户点名的模型（comparison/alternative targets）没出现 →
+   说明目录里无此模型，如实告知用户
+2. **zero 候选**：`candidates` 为空 → 检查 intent 的模态/能力字段是否填错，
+   修正后重跑脚本；仍为空才告知用户无匹配
 
-**pipeline 场景：** 相邻步骤的模型模态必须兼容，不兼容时添加提示。
+### 第四步：取调用示例 + 撰写推荐理由（LLM 完成）
 
-### 第四步：输出推荐结果
+**调用示例**（确定性提取，用脚本）：
 
-对每个推荐模型，读取对应的 group JSON 文件（`models/groups/<slug>.json`）获取 `samples` 字段中的调用示例代码。示例代码获取方式和输出格式见 [references/samples-format.md](references/samples-format.md)。
+```bash
+node scripts/get-samples.mjs qwen-max deepseek-v3
+```
+
+优先 `samples.openai`，其次 `samples.dashscope`，都没有时构造最简 OpenAI 兼容
+示例。示例代码规则见 [references/samples-format.md](references/samples-format.md)。
+
+**推荐理由**（LLM 撰写，这是 LLM 在本 skill 中唯一的生成性工作）：
+
+- 理由必须关联用户具体需求（禁止"性能强大"等空话）
+- 结合脚本输出的 `matchedScenes`、`tier`、`specs.pricing`、`specs.contextWindow` 撰写
+- 三条理由角度不同；有定价时结合预算权衡，帮用户做成本决策
+- pipeline 场景：相邻步骤模型模态必须兼容，不兼容时明确提示
+
+### 第五步：输出推荐结果
 
 用自然语言直接输出推荐（如"根据你的需求，我推荐以下模型..."），每个模型包含：
 
 1. **模型名称和 ID**
 2. **推荐理由** — 关联用户具体需求，附 tradeoff 对比
-3. **亮点** — 关键优势标签
-4. **规格信息** — 上下文窗口、最大输出、定价（如有）
-5. **调用示例代码** — 从 group 文件的 samples 字段获取（优先 openai.python，同时提供 curl）
+3. **亮点** — 关键优势标签（来自 `specs.features`）
+4. **规格信息** — 上下文窗口、最大输出、定价（来自 `specs`）
+5. **调用示例代码** — 来自 get-samples.mjs 输出（优先 Python，附 curl）
 
 **输出约束：**
 
-- 不暴露内部流程术语（禁止出现"Stage"、"意图画像"、"候选召回"、"精排"等词汇）
+- 不暴露内部流程术语（禁止出现"Stage"、"意图画像"、"硬过滤"、"召回"等词汇）
+- 候选列表与脚本输出保持一致，LLM 不得增删重排
 - 所有推荐基于 `bailian-docs-llm-wiki` 的实际数据，不凭记忆推荐
+
+## 脚本输出
+
+`recall-rank.mjs` 输出 JSON：
+
+```json
+{
+  "gate": "structured | forced-comparison | forced-alternative",
+  "poolSize": 21,
+  "candidates": [
+    {
+      "rank": 1,
+      "slot": "primary | runner-up | exploration",
+      "model": "qwen3.8-max",
+      "name": "Qwen3.8 Max",
+      "provider": "qwen",
+      "family": "qwen3.8-max",
+      "tier": "flagship",
+      "finalScore": 0.996,
+      "matchedScenes": ["代码"],
+      "specs": {
+        "pricing": ["输入 12 / 每百万tokens"],
+        "contextWindow": 262144,
+        "maxInputTokens": 262144,
+        "maxOutputTokens": 32768,
+        "features": ["function-calling", "structured-outputs"]
+      }
+    }
+  ]
+}
+```
+
+字段含义：`slot` = primary（最佳推荐）/ runner-up（次优、说明与 primary 的
+tradeoff）/ exploration（不同视角备选）。`gate` = structured（常规硬过滤链）/
+forced-*（用户点名模型路径，点名集保持用户顺序）。

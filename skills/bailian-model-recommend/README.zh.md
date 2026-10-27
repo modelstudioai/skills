@@ -57,17 +57,24 @@ Skill 会推荐 3 个模型，附带推荐理由：
 
 ## 内部工作流程
 
+确定性流程全部由脚本完成（移植自 bailian-cli `bl advisor recommend` 引擎）：
+召回、打分、排序、席位分配都在 `scripts/recall-rank.mjs` 中，不依赖 LLM 做决策。
+LLM 只负责两件事：把用户需求提取成结构化 intent JSON，以及为最终结果撰写
+推荐理由。
+
 ```
 用户请求
-  → 解析需求（模态、能力、预算、质量档次）
-  → 从 models.jsonl + group JSON 中过滤（模态匹配、能力匹配、语义匹配）
-  → 评分排序（去除快照版本、家族去重、单家族限额）
-  → 精选 3 个不同 tradeoff 的推荐
-  → 从 group 文件获取调用示例代码
+  → LLM：提取 intent JSON（模态、能力、预算、场景、点名模型）
+  → scripts/recall-rank.mjs（确定性）：
+      快照去重 → 硬过滤（模态+能力，能力约束永不丢弃）
+      → notSuitableFor 负面排除 → 公式打分 → 档位/价格/厂商排序
+      → 同家族软上限 → 席位分配（primary / runner-up / exploration）
+  → scripts/get-samples.mjs（确定性）：从 group 文件提取调用示例
+  → LLM：基于脚本输出撰写推荐理由
   → 输出自然语言推荐 + 规格 + 代码
 ```
 
-所有推荐均基于实际模型目录数据，不凭记忆推荐。
+候选列表不会被 LLM 增删或重排。所有推荐均基于实际模型目录数据，不凭记忆推荐。
 
 ## License
 
