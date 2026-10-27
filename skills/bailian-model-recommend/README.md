@@ -59,25 +59,28 @@ Each recommendation includes model name, ID, key specs (context window, pricing)
 ## How it works under the hood
 
 Deterministic pipeline (ported from the `bl advisor recommend` engine in
-bailian-cli): recall, scoring, ranking and slot assignment all run in
-`scripts/recall-rank.mjs` — no LLM involved in those decisions. The LLM only
-extracts a structured intent JSON from the user's request and writes the
-final recommendation reasons.
+bailian-cli): scene presets, recall, scoring, ranking, slot assignment and code
+sample extraction all run in `scripts/recommend.mjs` — no LLM involved in those
+decisions. The LLM only writes the final recommendation reasons.
 
 ```
 User request
-  → LLM: extract intent JSON (modality, capabilities, budget, scenes, targets)
-  → scripts/recall-rank.mjs (deterministic):
-      snapshot dedup → hard filter (modality + capability, capability never dropped)
+  → one command: scripts/recommend.mjs --scene code --exclude qwen
+      scene preset → intent (modality, capabilities, scenes, budget, targets)
+      → snapshot dedup → excludes → hard filter (modality + capability, capability never dropped)
       → notSuitableFor exclusion → formula scoring → tier/price/provider ordering
       → family fairness cap → slot assignment (primary / runner-up / exploration)
-  → scripts/get-samples.mjs (deterministic): fetch code samples from group files
-  → LLM: write recommendation reasons grounded in the script output
+      → embed specs + code samples + endpoint notes + warnings
+  → LLM: write recommendation reasons grounded in that single JSON output
   → Output natural-language recommendation with specs + code
 ```
 
 The candidate list is never added to, removed from, or reordered by the LLM.
 All recommendations are grounded in the actual model catalog data — the skill never recommends from memory.
+
+Lower-level entries stay available: `scripts/recall-rank.mjs` for a hand-written
+intent JSON (pipeline scenarios, `--with-samples` to embed code) and
+`scripts/get-samples.mjs` when the user already picked a model and only wants code.
 
 ## License
 

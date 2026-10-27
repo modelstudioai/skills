@@ -58,23 +58,25 @@ Skill 会推荐 3 个模型，附带推荐理由：
 ## 内部工作流程
 
 确定性流程全部由脚本完成（移植自 bailian-cli `bl advisor recommend` 引擎）：
-召回、打分、排序、席位分配都在 `scripts/recall-rank.mjs` 中，不依赖 LLM 做决策。
-LLM 只负责两件事：把用户需求提取成结构化 intent JSON，以及为最终结果撰写
-推荐理由。
+场景预设、召回、打分、排序、席位分配、示例提取都在 `scripts/recommend.mjs` 中，
+不依赖 LLM 做决策。LLM 只负责一件事：为脚本选出的模型撰写推荐理由。
 
 ```
 用户请求
-  → LLM：提取 intent JSON（模态、能力、预算、场景、点名模型）
-  → scripts/recall-rank.mjs（确定性）：
-      快照去重 → 硬过滤（模态+能力，能力约束永不丢弃）
+  → 一条命令：scripts/recommend.mjs --scene code --exclude qwen
+      场景预设 → intent（模态、能力、场景、预算、点名模型）
+      → 快照去重 → excludes → 硬过滤（模态+能力，能力约束永不丢弃）
       → notSuitableFor 负面排除 → 公式打分 → 档位/价格/厂商排序
       → 同家族软上限 → 席位分配（primary / runner-up / exploration）
-  → scripts/get-samples.mjs（确定性）：从 group 文件提取调用示例
-  → LLM：基于脚本输出撰写推荐理由
+      → 内嵌规格 + 示例代码 + 端点提示 + 警告
+  → LLM：基于这一份 JSON 输出撰写推荐理由
   → 输出自然语言推荐 + 规格 + 代码
 ```
 
 候选列表不会被 LLM 增删或重排。所有推荐均基于实际模型目录数据，不凭记忆推荐。
+
+低层入口保留：手写 intent JSON（pipeline 场景）用 `scripts/recall-rank.mjs`
+（`--with-samples` 可内嵌示例），用户已确定模型只要代码时用 `scripts/get-samples.mjs`。
 
 ## License
 
