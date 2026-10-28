@@ -1,72 +1,63 @@
 # qwen api reference
 
-阿里云百炼平台提供多种兼容主流协议的 Qwen 模型调用方式，包括 OpenAI 兼容 Chat/Responses、DashScope 原生 API 和 Anthropic 兼容 Messages。开发者可根据现有技术栈选择最适配的接口，所有路径均支持多地域部署与业务空间专属域名，兼顾性能、稳定性与功能完整性。
+阿里云百炼平台提供多种 API 接口协议（OpenAI 兼容、Anthropic 兼容、DashScope 原生）调用 Qwen 系列大模型，支持文本、多模态、工具调用等能力。开发者可根据现有技术栈选择适配路径，所有接口均基于业务空间专属域名（`{WorkspaceId}.<region>.maas.aliyuncs.com`）提供高性能、高稳定性服务。
 
 ## 支持的模型/功能
 
-Qwen 系列模型（如 `qwen3.8-max`、`qwen3.7-plus`、`qwen3.5-flash`、`qwen3-vl-plus`）是核心支持对象，同时兼容第三方直供模型（如 `deepseek-v4.1-flash`、`glm-5.3`、`kimi-k3`）。不同 API 协议支持的功能存在差异：
+Qwen API 支持全系列千问模型及主流第三方模型，但不同协议接口支持的模型范围存在差异：
 
-- **OpenAI 兼容 Chat API**：支持标准 `chat/completions` 流式/非流式调用，适用于通用对话场景；但明确不支持 Qwen-Audio 模型（仅 DashScope 协议支持）[OpenAI兼容-Chat](../../raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)。
-- **OpenAI 兼容 Responses API**：在 Chat 基础上增强 Agent 能力，内置联网搜索、网页抓取、代码解释器等工具，并支持 `previous_response_id` 简化多轮上下文管理 [创建响应](../../raw/model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)。
-- **DashScope 原生 API**：提供最完整的功能覆盖，包括纯文本生成（`text-generation`）与多模态生成（`multimodal-generation`）两类端点，且明确支持 Qwen-Audio 及 `max_frames` 等视频处理参数 [DashScope API 参考](../../raw/model-api-reference/qwen-api-reference/qwen-api-via-dashscope.md)。
-- **Anthropic 兼容 Messages API**：支持 `system` 提示、结构化输出（`format`）、深度思考（`thinking` 与 `output_config.effort`），但 `temperature` 取值范围为 `[0, 2)`，与 Anthropic 官方 `[0.0, 1.0]` 不同，迁移时需注意调整 [Anthropic兼容-Messages](../../raw/model-api-reference/qwen-api-reference/anthropic-api-messages.md)。
+- **OpenAI 兼容 Chat API**（[OpenAI兼容-Chat](../../raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)）支持 `qwen3.8-max`、`qwen3.7-plus`、`qwen3.5-flash`、`Qwen-VL`、`Qwen-Omni`、`Qwen-Math`、`DeepSeek`（硅基流动/快手万擎直供）、`Kimi`、`GLM`、`MiniMax` 等；但明确注明 **Qwen-Audio 不支持 OpenAI 兼容协议**，仅支持 DashScope 协议。
+- **OpenAI 兼容 Responses API**（[创建响应](../../raw/model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)）聚焦 Agent 场景，支持 `qwen3.8-max`、`qwen3.7-plus`、`deepseek-v4.1-flash-1017`、`glm-5.3` 等，并内置联网搜索、网页抓取、代码解释器等工具；非列表中模型仅支持基础文本生成，Agent 能力受限。
+- **Anthropic 兼容 Messages API**（[Anthropic兼容-Messages](../../raw/model-api-reference/qwen-api-reference/anthropic-api-messages.md)）支持 `qwen3.8-max`、`qwen3.7-plus`、`qwen3-vl-plus`、`qwen3-coder-flash` 及 `deepseek-v4-pro`、`glm-5.2`、`kimi-k3` 等，提供深度思考（`effort`）、结构化输出（`format`）等扩展能力。
+- **DashScope 原生 API**（[DashScope API 参考](../../raw/model-api-reference/qwen-api-reference/qwen-api-via-dashscope.md)）是底层协议，支持最广模型集，包括 `Qwen-Audio`、`Qwen-Coder`、数学模型等，且对视频帧数控制（`max_frames`）等参数支持更完整。
 
-> **注意**：文档 1 与文档 7 对 `min_pixels`/`max_pixels` 的默认值描述存在细微差异（如 `Qwen2.5-VL` 图像输入最小值，文档 1 写为 `3136`，文档 7 未明确最小值但示例值一致），以文档 1 为准；文档 3 中 `responses` API 列出的模型列表（如 `qwen3.8-omni-flash`）未在文档 8 的 Anthropic 兼容模型列表中出现，表明 Omni 系列暂不支持 Anthropic 协议。
+> **注意**：文档 1 和文档 8 对 `min_pixels` 默认值描述存在不一致。文档 1 中 `Qwen3.7` 图像输入默认值为 `65536`，而文档 8 同样列出 `Qwen3.7` 但未明确其默认值；文档 8 明确 `qwen3-vl-plus` 视频输入 `max_frames` 默认值为 2000，而文档 1 的 OpenAI Chat API 完全未提及 `max_frames` 参数——该参数**仅 DashScope 原生 API 支持**。
 
 ## 关键参数
 
-| 参数 | 适用协议 | 说明 |
-|------|----------|------|
-| `model` | 全部 | 必填。模型名需严格匹配，例如 `qwen3.8-max`、`qwen3-vl-plus`；第三方模型需确认地域可用性（三方直供模型仅限华北2可用）[OpenAI兼容-Chat](../../raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)。 |
-| `messages` / `input` / `content` | Chat / Responses / Anthropic | 输入格式不同：Chat 使用标准消息数组；Responses 支持 `string` 或 `array`；Anthropic 使用 `content` 数组并区分 `text`/`image`/`video` 类型。多模态输入需匹配模型能力（如 `qwen3-vl-plus` 支持图像，`qwen3.8-omni-flash` 支持音视频）。 |
-| `max_tokens` | Anthropic / Responses | Anthropic 协议中，其含义因模型而异（如 `glm-5.3` 包含思考 Token，`qwen3.7-plus` 仅限回复 Token）；Responses API 中该参数被 `reasoning.effort` 和输出长度隐式控制。 |
-| `stream` | 全部 | 控制是否启用流式响应，默认 `false`。流式数据格式依协议而异（Chat 返回 SSE，Responses 返回 JSON Lines，Anthropic 返回 SSE）。 |
-| `tools` | Responses / Anthropic | Responses 支持内置工具（`web_search`, `code_interpreter`）与自定义 function；Anthropic 需显式声明 `tools` 数组及 `tool_choice` 策略，且联网搜索需额外 `x-anthropic-billing-header` 标识。 |
+核心参数按协议分层，需严格匹配协议规范：
+
+- **通用必选参数**：`model`（字符串，如 `"qwen3.7-plus"`）、`messages`（Chat/DashScope）或 `input`（Responses）或 `system`+`messages`（Anthropic）。
+- **多模态控制**：
+  - `fps`：控制视频抽帧频率（取值 `[0.1, 10]`），在 OpenAI Chat、Responses、Anthropic、DashScope 四类接口中均支持，但 Anthropic 文档未说明其时间动态语义。
+  - `min_pixels` / `max_pixels` / `total_pixels`：图像/视频分辨率控制，**OpenAI Chat API 文档 1 提供最完整取值表**（含各模型系列的默认值与范围），DashScope 文档 8 仅覆盖部分模型。
+  - `max_frames`：**仅 DashScope 原生 API 支持**（文档 8），用于硬性限制视频总帧数，OpenAI/Anthropic 接口无此参数。
+- **Agent 与推理增强**：
+  - `tools`：Responses API 和 Anthropic API 均支持，但内置工具集不同：Responses 内置 `web_search`/`web_extractor`/`code_interpreter`；Anthropic 需显式声明 `web_search_20250305` 类型工具且依赖 `x-anthropic-billing-header` 头。
+  - `reasoning.effort`（Responses）与 `output_config.effort`（Anthropic）：均为控制思考强度的参数，但取值枚举和映射规则不同（如 `qwen3.8-max` 在 Responses 中无此字段，在 Anthropic 中支持 `xhigh`/`medium`/`low`）。
+- **流式与缓存**：`stream`（布尔值）、`cache_control`（`{"type": "ephemeral"}`）在三类协议中语义一致；`x-dashscope-session-cache: enable` 为 Responses API 特有请求头。
 
 ## 使用方式
 
-### 基础调用流程
-1. **获取凭证**：在百炼控制台创建业务空间，获取对应地域的 [API Key](../../raw/model-api-reference/preparations/get-api-key.md) 与 [WorkspaceId](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)；
-2. **配置 endpoint**：使用业务空间专属域名（推荐）或通用域名。例如华北2 Chat API：
-   - 专属域名：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
-   - 通用域名（不推荐）：`https://dashscope.aliyuncs.com/v1/chat/completions`
-3. **发起请求**：按所选协议构造请求体（如 `messages` 数组），通过 HTTP POST 或 SDK（OpenAI/DashScope/Anthropic 官方 SDK 均可）调用。
+所有接口均需配置业务空间专属域名与 API Key：
 
-### 多轮对话管理
-- **Chat API**：手动维护 `messages` 数组，将上一轮 `assistant` 回复追加至数组末尾；
-- **Responses API**：使用 `previous_response_id` 自动加载历史上下文，或通过 `conversation` 绑定会话；
-- **Anthropic API**：在 `messages` 数组中按时间顺序追加 `user`/`assistant` 交互项。
-
-### 多模态输入示例（图像）
-```json
-// OpenAI Chat 兼容
-{
-  "messages": [{
-    "role": "user",
-    "content": [{
-      "type": "image_url",
-      "image_url": { "url": "data:image/png;base64,iVBORw..." }
-    }]
-  }]
-}
-```
+- **域名格式**：`https://{WorkspaceId}.{region}.maas.aliyuncs.com`，其中 `{WorkspaceId}` 为控制台业务空间 ID，`{region}` 如 `cn-beijing`、`ap-southeast-1` 等。旧域名（如 `dashscope.aliyuncs.com`）仍可用，但**强烈建议迁移至新域名以获得更高性能与稳定性**（见 [OpenAI兼容-Chat](../../raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md) 和 [Anthropic兼容-Messages](../../raw/model-api-reference/qwen-api-reference/anthropic-api-messages.md)）。
+- **协议路由**：
+  - OpenAI Chat：`/compatible-mode/v1/chat/completions`
+  - OpenAI Responses：`/compatible-mode/v1/responses`（新版路径，旧版 `/api/v2/apps/protocols/compatible-mode/v1/responses` 已停用）
+  - Anthropic Messages：`/apps/anthropic/v1/messages`
+  - DashScope：`/api/v1/services/aigc/text-generation/generation`（文本）或 `/multimodal-generation/generation`（多模态）
+- **SDK 配置**：
+  - OpenAI SDK：设置 `base_url` 为业务空间域名（如 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`）
+  - DashScope SDK：设置 `workspace` 和 `region`（如 `workspace="{WorkspaceId}", region="cn-beijing"`）
+  - Anthropic SDK：设置 `base_url` 为 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic`
 
 ## 限制和注意事项
 
-- **地域与模型绑定**：三方直供模型（如 SiliconFlow DeepSeek）仅在中国站华北2（北京）地域可用，调用前需在控制台开通服务 [OpenAI兼容-Chat](../../raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)。
-- **域名迁移强制要求**：旧版通用域名（`dashscope.aliyuncs.com`）虽仍可用，但官方强烈建议迁移至业务空间专属域名，以获得“卓越的性能和更高的稳定性”；旧版 Responses 路径 `/api/v2/apps/protocols/compatible-mode/v1/responses` 已停止维护，必须迁移到 `/compatible-mode/v1/responses` [创建响应](../../raw/model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)。
-- **缓存与计费**：显式缓存（`cache_control`）仅对特定内容块生效，且命中后按缓存计费；Session 缓存（`x-dashscope-session-cache: enable`）自动生效，但需注意其对多轮对话延迟的优化效果依赖于服务端实现 [创建响应](../../raw/model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)。
-- **视频处理参数**：`fps`、`min_pixels`、`max_pixels`、`total_pixels` 等参数在不同协议中支持程度不一（如 DashScope 支持 `max_frames`，OpenAI 兼容 Chat 不支持），且取值范围因模型版本而异，务必查阅对应模型文档 [DashScope API 参考](../../raw/model-api-reference/qwen-api-reference/qwen-api-via-dashscope.md)。
+- **地域可用性**：三方直供模型（如 SiliconFlow DeepSeek、月之暗面 Kimi）**仅在中国站华北2（北京）地域可用**，且需在控制台手动开通（见 [OpenAI兼容-Chat](../../raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)）。
+- **上下文长度**：Responses API 为预留工具调用空间，**最大输入上下文约为模型窗口大小的 80%**，超出部分自动截断（见 [创建响应](../../raw/model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)）；Chat API 无此显式说明，但实际受模型窗口限制。
+- **参数兼容性**：[OpenAI 兼容接口](../concepts/openai-compatible-interface.md)**忽略未文档化的 OpenAI 参数**（如 `background`），且 Responses API 明确不支持异步执行（`background` 固定为 `false`）；Anthropic 兼容接口 `temperature` 取值范围为 `[0, 2)`，与 Anthropic 官方 `[0.0, 1.0]` 不同，迁移时需校验。
+- **响应管理**：Responses API 提供完整的生命周期操作——创建（`POST /responses`）、获取（`GET /responses/{id}`）、删除（`DELETE /responses/{id}`）、查询输入项（`GET /responses/{id}/input_items`），所有操作均要求 `store=true`（见 [获取响应](../../raw/model-api-reference/qwen-api-reference/openai-compatible-responses/retrieve-a-response.md) 和 [删除响应](../../raw/model-api-reference/qwen-api-reference/openai-compatible-responses/delete-a-response.md)）。
 
 ## 来源文档
 
 - [OpenAI兼容-Chat](../../raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)
 - [OpenAI兼容-Responses](../../raw/model-api-reference/qwen-api-reference/openai-compatible-responses.md)
 - [创建响应](../../raw/model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)
-- [删除响应](../../raw/model-api-reference/qwen-api-reference/openai-compatible-responses/delete-a-response.md)
 - [获取响应](../../raw/model-api-reference/qwen-api-reference/openai-compatible-responses/retrieve-a-response.md)
+- [删除响应](../../raw/model-api-reference/qwen-api-reference/openai-compatible-responses/delete-a-response.md)
 - [获取输入项列表](../../raw/model-api-reference/qwen-api-reference/openai-compatible-responses/list-input-items.md)
-- [DashScope API 参考](../../raw/model-api-reference/qwen-api-reference/qwen-api-via-dashscope.md)
 - [Anthropic兼容-Messages](../../raw/model-api-reference/qwen-api-reference/anthropic-api-messages.md)
+- [DashScope API 参考](../../raw/model-api-reference/qwen-api-reference/qwen-api-via-dashscope.md)
 
 

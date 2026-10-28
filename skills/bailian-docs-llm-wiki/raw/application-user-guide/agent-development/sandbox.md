@@ -7,4 +7,5 @@
 -   [使用 Browser Use Sandbox](raw/application-user-guide/agent-development/sandbox/sandbox-best-practice-browser-use.md)
 -   [使用 AIO Sandbox](raw/application-user-guide/agent-development/sandbox/sandbox-best-practice-aio.md)
 -   [计费说明](raw/application-user-guide/agent-development/sandbox/sandbox-billing.md)
+-   [高代码应用](raw/application-user-guide/agent-development/sandbox/rich-code-application.md)
 -   [更新日志](raw/application-user-guide/agent-development/sandbox/sandbox-changelog.md)

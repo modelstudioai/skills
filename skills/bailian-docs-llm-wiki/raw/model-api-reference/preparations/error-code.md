@@ -1568,9 +1568,9 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 ### Free allocated quota exceeded.
 
-**原因：** 使用定制热词（Paraformer）时，热词数目已超过上限（每个账号默认10个）。
+**原因：** 使用定制热词（Paraformer）时，账号下的热词列表数量已达到上限。
 
-**解决方案：** 删除部分热词。
+**解决方案：** 删除不再使用的热词列表。
 
 ### Maximum voice storage limit exceeded, please delete existing voices.
 

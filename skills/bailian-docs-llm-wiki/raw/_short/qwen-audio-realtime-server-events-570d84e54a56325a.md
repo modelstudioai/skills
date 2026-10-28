@@ -165,7 +165,7 @@ Qwen-Audio Realtime API 的服务端事件参考。所有服务端事件均包�
 
 ## input\_audio\_buffer.speech\_started
 
-**说明**：VAD 检测到语音开始（server\_vad / smart\_turn 模式）。
+**说明**：VAD 检测到语音开始（server\_vad / smart\_turn / smart\_turn\_v2 模式）。
 
 **event\_id**`string`
 
@@ -194,7 +194,7 @@ Qwen-Audio Realtime API 的服务端事件参考。所有服务端事件均包�
 
 ## input\_audio\_buffer.speech\_stopped
 
-**说明**：VAD 检测到语音结束（server\_vad / smart\_turn 模式）。
+**说明**：VAD 检测到语音结束（server\_vad / smart\_turn / smart\_turn\_v2 模式）。
 
 **event\_id**`string`
 
@@ -214,7 +214,7 @@ Qwen-Audio Realtime API 的服务端事件参考。所有服务端事件均包�
 
 **reason**`string`
 
-仅 smart\_turn 模式返回此字段。取值为 `turn_invalid` 时表示当前 turn 被判定为无效轮（无语义内容），不会触发推理。有效轮次时不返回此字段。
+仅 smart\_turn / smart\_turn\_v2 模式返回此字段。取值为 `turn_invalid` 时表示当前 turn 被判定为无效轮（无语义内容），不会触发推理。有效轮次时不返回此字段。
 
 ```
 {
@@ -544,7 +544,7 @@ Qwen-Audio Realtime API 的服务端事件参考。所有服务端事件均包�
 
 ## conversation.item.ambient\_audio\_transcription.delta
 
-**说明**：**仅 smart\_turn 模式。**环境音频转写增量结果。当 VAD 检测到语音活动但语义判定为非有效轮次（如噪声、“嗯”、“啊”等无语义内容）时，将 ASR 识别结果以 ambient 事件透传给客户端。该事件不会关联到对话上下文中的任何 item，`item_id` 为独立生成的临时 ID。
+**说明**：**仅 smart\_turn / smart\_turn\_v2 模式。**环境音频转写增量结果。当 VAD 检测到语音活动但语义判定为非有效轮次（如噪声、“嗯”、“啊”等无语义内容）时，将 ASR 识别结果以 ambient 事件透传给客户端。该事件不会关联到对话上下文中的任何 item，`item_id` 为独立生成的临时 ID。
 
 **event\_id**`string`
 
@@ -583,7 +583,7 @@ Qwen-Audio Realtime API 的服务端事件参考。所有服务端事件均包�
 
 ## conversation.item.ambient\_audio\_transcription.completed
 
-**说明**：**仅 smart\_turn 模式。**环境音频转写最终结果。与 delta 事件配对，表示一段环境音频的转写结束。该转写结果不会写入对话上下文。
+**说明**：**仅 smart\_turn / smart\_turn\_v2 模式。**环境音频转写最终结果。与 delta 事件配对，表示一段环境音频的转写结束。该转写结果不会写入对话上下文。
 
 **event\_id**`string`
 

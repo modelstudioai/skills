@@ -28,16 +28,16 @@ fine tuning 的效果高度依赖超参数配置，关键参数及其推荐值�
 
 fine tuning 可通过控制台或 API 两种方式完成，二者流程一致但细节有别：
 
-- **控制台方式**：适用于快速验证和低代码场景。流程为：创建训练任务 → 选择模型与训练方法（CPT/SFT/DPO/RL）→ 上传或选择数据集 → 配置超参数 → 启动训练。控制台支持训练单元预付费/后付费及按 Token 计费 [在控制台进行模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-on-console.md)。
-- **API 方式**：适用于自动化流水线和集成开发。需先调用 `/api/v1/files` 上传数据文件（`purpose="fine-tune"`），再调用 `/api/v1/fine-tunes` 创建训练任务。**通过 API 创建的任务仅支持按 Token 计费**，不支持训练单元计费 [使用 API 或命令行进行模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/fine-tuning-api-guide.md)。
-- **特殊模型（RL/OPD/决策模型）**：必须使用 API（SDK）方式。RL 和 OPD 需要自定义函数组件（Rollout/Reward）并部署到函数计算；决策[模型微调](../concepts/model-fine-tuning.md)也仅支持 API 提交 [强化学习训练概述](../../raw/model-user-guide/fine-tuning/rl-training-overview.md)、[在线策略蒸馏训练配置](../../raw/model-user-guide/fine-tuning/opd-training-overview/opd-training-config.md)、[决策模型微调最佳实践](../../raw/model-user-guide/fine-tuning/decision-model-tuning-guide.md)。
+- **控制台方式**：适用于快速验证和低代码场景。流程为：创建训练任务 → 选择模型与训练方法（CPT/SFT/DPO/RL）→ 上传或选择数据集 → 配置超参数 → 启动训练。控制台支持训练单元预付费/后付费及按 [Token](../concepts/token.md) 计费 [在控制台进行模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-on-console.md)。
+- **API 方式**：适用于自动化流水线和集成开发。需先调用 `/api/v1/files` 上传数据文件（`purpose="fine-tune"`），再调用 `/api/v1/fine-tunes` 创建训练任务。**通过 API 创建的任务仅支持按 [Token](../concepts/token.md) 计费**，不支持训练单元计费 [使用 API 或命令行进行模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/fine-tuning-api-guide.md)。
+- **特殊模型（RL/OPD/决策模型）**：必须使用 API（SDK）方式。RL 和 OPD 需要自定义函数组件（Rollout/Reward）并部署到函数计算；决策模型微调也仅支持 API 提交 [强化学习训练概述](../../raw/model-user-guide/fine-tuning/rl-training-overview.md)、[在线策略蒸馏训练配置](../../raw/model-user-guide/fine-tuning/opd-training-overview/opd-training-config.md)、[决策模型微调最佳实践](../../raw/model-user-guide/fine-tuning/decision-model-tuning-guide.md)。
 
 ## 限制和注意事项
 
 - **地域限制**：绝大多数 fine tuning 功能（包括 CPT、DPO、RL、OPD）**仅在华北2（北京）地域可用**。部分模型（如 CosyVoice）明确声明仅支持北京地域 [CosyVoice模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-speech-synthesis-model/fine-tune-speech-synthesis-model-by-api.md)。
 - **数据格式与大小**：SFT/DPO/CPT 数据需为 JSONL 格式，单文件上限 200 MB；API 上传单文件上限 300 MB，总配额 100 GB [调优数据上传规则](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/text-generation-tuning-data-upload-rules.md)。视频生成模型数据需为 ZIP 格式 [微调视频生成模型](../../raw/model-user-guide/fine-tuning/wan-video-generation-finetune-guide.md)。
 - **计费差异**：
-  - 控制台支持三种计费方式：按 Token、训练单元预付费、训练单元后付费。
+  - 控制台支持三种计费方式：按 [Token](../concepts/token.md)、训练单元预付费、训练单元后付费。
   - **API 创建的任务仅支持按 Token 计费** [使用 API 或命令行进行模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/fine-tuning-api-guide.md)。
   - RL 训练**仅支持训练单元计费**，不支持按 Token 计费 [强化学习训练概述](../../raw/model-user-guide/fine-tuning/rl-training-overview.md)。
 - **模型选择逻辑**：对于文本生成模型，阿里云百炼推荐递进式训练顺序：`CPT（可选）→ SFT → DPO（可选）→ RL（可选）`，以分别实现补知识、学做事、做得更好、学推理的目标 [模型调优简介](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)、[强化学习训练概述](../../raw/model-user-guide/fine-tuning/rl-training-overview.md)。

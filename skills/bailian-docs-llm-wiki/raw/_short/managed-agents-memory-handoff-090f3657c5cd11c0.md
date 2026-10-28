@@ -79,7 +79,7 @@ curl -s -X POST "$AGENTSTUDIO_URL/sessions" \
 使用文件工具，不要用 bash。
 ```
 
-**警告****bash 无法访问这棵记忆文件树**。读写记忆要走 `read` / `edit` / `write` 文件工具；`instructions` 里也应明确「使用文件工具，不要用 bash」。
+**警告****bash 无法访问这棵记忆文件树**。读写记忆要走 `write` / `read` / `edit` 文件工具；`instructions` 里也应明确「使用文件工具，不要用 bash」。
 
 ### 5\. API 回读确认
 

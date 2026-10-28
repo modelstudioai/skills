@@ -2,7 +2,7 @@
 
 当通用大语言模型在处理特定领域的专业任务时，可能难以生成精准或符合预设格式的回答。采用少样本学习（Few-shot learning）的思路，从预定义的高质量问答对中检索相关样例作为模型参考，引导其生成更准确、风格更一致的回复。该功能尤其适用于需要严格遵循既有知识或固定风格的场景，例如智能客服、特定领域知识问答以及格式化内容生成。
 
-**说明**Prompt样例库功能已不再维护，推荐您将样例库数据迁移到 RAG 表格库中，参见[Prompt 样例库迁移到 RAG 表格库](raw/application-user-guide/prompt/prompt-sample-optimization/migrate-sample-library-prompt-to-rag-table-library.md)。
+**说明**Prompt样例库功能已不再维护，控制台入口已下线：原样例库地址会跳转到提示词管理页面，左侧导航不再提供样例库菜单项。推荐将样例库数据迁移到 RAG 表格库中，参见[Prompt 样例库迁移到 RAG 表格库](raw/application-user-guide/prompt/prompt-sample-optimization/migrate-sample-library-prompt-to-rag-table-library.md)。样例库中的既有数据仍可在提示词管理的反馈优化中通过**从样例库选择**使用。
 
 ## 效果展示
 
@@ -28,32 +28,23 @@
 
 **未使用Prompt样例库**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1806201671/p1005929.png)
-
 **使用Prompt样例库**
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1806201671/p1007424.png)
 
 ## 创建并使用Prompt样例库
 
 ### 1\. 创建Prompt样例库
 
-1.  访问**[样例库](https://bailian.console.aliyun.com/?tab=app#/component-manage/prompt-case)**页面，单击**创建样例库**（首次创建时显示）或单击![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6604462571/p975472.png)图标新建样例库。
+1.  访问**样例库**页面（控制台入口已下线，以下步骤为历史操作），单击**创建样例库**（首次创建时显示）或点击图标新建样例库。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6604462571/p975479.png)
 2.  输入样例库名称，并选择导入方式，支持**手动输入**和**批量导入**两种。
     
     #### 手动输入
     
     直接在页面上输入样例信息（用户输入和模型输出），可单击**新增样例**添加多条。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3269174671/p899538.png)
-    
     #### 批量导入
     
     下载模板文件，按格式填写后上传。支持小于 20MB 的 Excel 文件，单次最多导入 100 条样例。
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5423376371/p899543.png)
     
 
 ### 2\. 在智能体应用中使用样例库
@@ -62,7 +53,7 @@
 
 1.  确保你已有一个[智能体应用（Agent 1.0）](raw/application-user-guide/llm-application/single-agent-application.md)。
     
-2.  前往**[应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)**页面，找到目标智能体应用，单击应用卡片上的**配置**。
+2.  前往**[应用管理](https://bailian.console.aliyun.com/flow-agent/app-center)**页面，找到目标智能体应用，单击应用卡片上的**配置**。
     
 3.  找到并打开**样例库**开关。添加样例库，选择上一步创建的样例库（一个应用最多可关联5个样例库，采用多路召回策略）。
     
@@ -81,11 +72,7 @@
 
 在应用调试界面输入一个与样例相关的查询。例如，**解释术语：神经网络 (Neural Network)**。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1806201671/p1007424.png)
-
 单击**prompt样例检索**，可查看样例检索的输入输出。
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1806201671/p1005919.png)
 
 #### API调用
 
@@ -97,15 +84,13 @@
 
 ### 管理样例库
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5423376371/p899512.png)
-
--   新增：单击**样例库管理**右侧的![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5423376371/p899513.png)图标创建新的样例库。
+-   新增：单击**样例库管理**右侧的图标创建新的样例库。
     
--   删除：鼠标悬停在目标样例库上，单击![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5423376371/p899514.png)图标删除样例库。
+-   删除：鼠标悬停在目标样例库上，点击图标删除样例库。
     
     > 正在被应用引用的样例库无法直接删除。请先前往**应用管理**页面，在相关应用的配置中解除引用关系，然后再执行删除操作。
     
--   重命名：鼠标悬停在需要重命名的样例库上，单击![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5423376371/p899515.png)图标对样例库重命名。
+-   重命名：鼠标悬停在需要重命名的样例库上，点击图标对样例库重命名。
     
 
 ### 管理样例
@@ -143,8 +128,8 @@ Prompt 样例库功能本身**不收取**存储或管理费用。
 
 ## 常见问题
 
--   **样例库和样例的关系？**
-    
-    包含关系。每个样例库最多包含300个相似的样例。每个样例包括用户输入和模型输出。
-    
-    样例通过样例库进行组织和管理，可以增加多个不同名称的样例库进行应用配置。
+样例库和样例的关系？
+
+包含关系。每个样例库最多包含300个相似的样例。每个样例包括用户输入和模型输出。
+
+样例通过样例库进行组织和管理，可以增加多个不同名称的样例库进行应用配置。

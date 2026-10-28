@@ -388,7 +388,7 @@ curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.c
     -   MP3：`audio/mpeg`
 -   `<data>`：音频转成的Base64编码的字符串
     
-    Base64编码会增大体积，请控制原文件大小，确保编码后仍符合输入音频大小限制（10MB）
+    Base64 编码会增大数据体积，音频文件的大小和时长限制请参见[音频规格](https://help.aliyun.com/zh/model-studio/asr-model#asr_audio_spec02)。
     
 -   示例：`data:audio/wav;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjI5LjEwMAAAAAAAAAAAAAAA//PAxABQ/BXRbMPe4IQAhl9`
     

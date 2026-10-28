@@ -3,39 +3,28 @@
 阿里云百炼平台的高代码应用功能，允许开发者基于完整的 Python 项目结构部署 AI 后端服务。
 
 -   与"低代码/无代码"拖拽式开发不同，高代码应用允许您**使用代码编程的方式构建复杂 AI 服务**。
-    
 -   使用单条命令即可快速将 Python 项目部署为**公网可访问云上后端 API 服务**。
-    
 -   支持 **Serverless Function** 和 **K8s** 两种部署方式，满足不同场景需求：无状态快速拉起或高性能有状态长程任务。
-    
 -   支持**一站式 MCP 工具接入**，可在控制台直接关联知识库、工作流、插件等 MCP 服务。
-    
 -   支持**自定义前端体验**，提供直接体验、自定义交互卡片和自定义前端 WebUI 三种方式，基于 [Spark Design](https://github.com/agentscope-ai/agentscope-spark-design) 框架构建丰富的交互界面。
-    
 -   支持**自动化运维、可观测、日志服务、API网关等**企业级能力。
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2506686771/p1070633.png)
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2506686771/p1070634.png)
-    
 
 ## 快速开始
 
-1.  前往[阿里云百炼-应用中心](https://bailian.console.aliyun.com/?tab=app#/app-center)，单击**创建应用**。在弹出的创建应用对话框左侧，选择**高代码应用**。
+1.  前往[阿里云百炼-应用中心](https://bailian.console.aliyun.com/flow-agent/app-center)，单击**创建应用**。在弹出的创建应用对话框左侧，选择**高代码应用**。
     
     选择创建类型：
     
     -   **控制台创建**：在控制台直接选择模板、配置资源并一键部署，推荐初次使用。
-    -   **命令行创建**：在控制台创建空白应用后，通过 AgentScope-AI 命令行工具上传本地代码包部署。适合已有项目代码的开发者，详细流程请参考[API 开发指南](raw/application-user-guide/llm-application/rich-code-application/rich-code-app-develop-guide.md)。
+    -   **命令行创建**：在控制台创建空白应用后，通过 AgentScope-AI 命令行工具上传本地代码包部署。适合已有项目代码的开发者，详细流程请参考[API 开发指南](raw/application-user-guide/agent-development/sandbox/rich-code-application/rich-code-app-develop-guide.md)。
     
     填写**应用名称**后，单击**立即创建**。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2506686771/p1070627.png)
 2.  确认创建后进入应用部署配置页面，按以下区域完成配置：
     
     > 创建时需按照页面引导授权函数计算 FC、API 网关两个服务的相关角色和权限。如遇权限不足，请联系您的账号管理员或 IT 管理员[获取相关授权](https://help.aliyun.com/zh/ram/user-guide/grant-permissions-to-the-ram-user)。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2506686771/p1070628.png) **选择部署方式**
+    **选择部署方式**
     
     -   **Serverless Function**（默认）：适用于低负载、无状态、快速拉起的场景，部署花销低。
     -   **K8s**：适用于高性能、有状态、执行长程任务的 Agent，性能强。使用前需开通 ACK 容器服务并完成授权。
@@ -43,7 +32,7 @@
     **提交代码**
     
     -   **使用模版代码**（默认）：选择一个预置的应用模版快速开始。
-    -   **上传代码包**：上传本地开发的 .whl 格式代码包。代码包制作方式请参考[API 开发指南](raw/application-user-guide/llm-application/rich-code-application/rich-code-app-develop-guide.md)。
+    -   **上传代码包**：上传本地开发的 .whl 格式代码包。代码包制作方式请参考[API 开发指南](raw/application-user-guide/agent-development/sandbox/rich-code-application/rich-code-app-develop-guide.md)。
     
     平台提供以下应用模版：
     
@@ -79,13 +68,10 @@
     
 3.  等待几分钟完成应用的构建和部署。页面会显示构建和部署的实时进度和耗时，可单击进度条旁的**日志**链接查看详细的构建日志和部署日志。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2506686771/p1070629.png)
 4.  待部署完成后，配置阿里云百炼的 API Key 后，即可使用页面右侧的测试面板进行体验和调试。API Key 获取方式请参考：[获取 API Key](raw/model-api-reference/preparations/get-api-key.md)。
     
     -   **文本对话体验**：直接与应用进行对话交互，快速验证应用功能。
-    -   **API测试**：手动调用应用的 API 接口（如 `GET /health`、`/process`），适合开发调试。接口协议详情请参考[API 开发指南](raw/application-user-guide/llm-application/rich-code-application/rich-code-app-develop-guide.md)。
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2506686771/p1070630.png)
+    -   **API测试**：手动调用应用的 API 接口（如 `GET /health`、`/process`），适合开发调试。接口协议详情请参考[API 开发指南](raw/application-user-guide/agent-development/sandbox/rich-code-application/rich-code-app-develop-guide.md)。
 
 ## 应用管理
 
@@ -108,9 +94,7 @@
 
 ### 工具
 
-高代码应用支持一站式**MCP** 工具接入，可在工具 Tab 中为应用关联知识库、工作流、插件等 MCP 服务。详细配置方式请参考[工具接入](raw/application-user-guide/llm-application/rich-code-application/rich-code-application-mcp.md)。
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2506686771/p1070631.png)
+高代码应用支持一站式**MCP** 工具接入，可在工具 Tab 中为应用关联知识库、工作流、插件等 MCP 服务。详细配置方式请参考[工具接入](raw/application-user-guide/agent-development/sandbox/rich-code-application/rich-code-application-mcp.md)。
 
 ### 网关
 
@@ -153,9 +137,7 @@ curl -i -X POST "http://{your-domain}/{your-agentCode}/process" \
 -   **自定义交互卡片**：在应用代码中自定义交互卡片样式，实现富文本、按钮、表单等交互元素。
 -   **自定义前端 WebUI**：基于 [AgentScope Spark Design](https://github.com/agentscope-ai/agentscope-spark-design) 框架，构建完整的前端交互界面。Spark Design 提供 `@agentscope-ai/design`（UI 组件库）和 `@agentscope-ai/chat`（对话组件库）两个核心包，支持 Markdown 渲染、流式响应、语音输入等能力。详情请参考[Spark Design 在线文档](https://sparkdesign.agentscope.io/)。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2506686771/p1070632.png)
-
 ## 后续阅读
 
--   [工具接入](raw/application-user-guide/llm-application/rich-code-application/rich-code-application-mcp.md)：了解如何通过 MCP 协议接入知识库和外部工具服务。
--   [API 开发指南](raw/application-user-guide/llm-application/rich-code-application/rich-code-app-develop-guide.md)：了解如何使用 AgentScope-AI 开发、上传和部署高代码应用。
+-   [工具接入](raw/application-user-guide/agent-development/sandbox/rich-code-application/rich-code-application-mcp.md)：了解如何通过 MCP 协议接入知识库和外部工具服务。
+-   [API 开发指南](raw/application-user-guide/agent-development/sandbox/rich-code-application/rich-code-app-develop-guide.md)：了解如何使用 AgentScope-AI 开发、上传和部署高代码应用。

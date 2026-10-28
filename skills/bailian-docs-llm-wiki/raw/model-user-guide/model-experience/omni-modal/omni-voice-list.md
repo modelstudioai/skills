@@ -15,7 +15,9 @@ Qwen-Omni 和 Qwen-LiveTranslate 模型支持的音色、试听、voice 参数�
 
 Qwen3.8-Omni-Flash-Realtime 支持 36 种语种和方言的语音生成，与 Qwen3.5-Omni-Realtime 一致；模型整体范围见[语音生成语言](https://help.aliyun.com/zh/model-studio/qwen-omni#d54e85c641oux)。各音色的具体范围见下表。
 
-通过 `session.audio.output.voice` 设置 Qwen3.8-Omni-Flash-Realtime 音色，详见[音色配置](https://help.aliyun.com/zh/model-studio/client-events#session-audio-voice)；自定义音色参见[声音复刻](raw/_short/qwen-omni-voice-cloning-717550bc449e9e29.md)。
+通过 `session.audio.output.voice` 设置 Qwen3.8-Omni-Flash-Realtime 音色，详见[音色配置](https://help.aliyun.com/zh/model-studio/client-events#session-audio-voice)；自定义音色参见[声音复刻](raw/model-user-guide/model-experience/omni-modal/qwen-omni-voice-cloning-user-guide.md)。
+
+系统音色与声音复刻支持的方言范围不同。复刻前请查看[声音复刻的语言要求](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning-user-guide#fe3daa6c3f7jw)。
 
 ### 共用语言范围
 

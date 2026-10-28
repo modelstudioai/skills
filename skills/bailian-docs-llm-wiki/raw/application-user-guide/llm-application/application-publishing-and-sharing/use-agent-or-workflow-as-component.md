@@ -12,7 +12,7 @@
 
 #### 智能体应用
 
-1.  **创建应用：**前往[应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)，创建一个新的智能体应用。智能体的配置如下：
+1.  **创建应用：**前往[应用管理](https://bailian.console.aliyun.com/flow-agent/app-center)，创建一个新的智能体应用。智能体的配置如下：
     
     **配置项**
     
@@ -39,7 +39,7 @@
 
 #### 工作流应用
 
-1.  **创建应用：**前往[应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)，创建一个新的任务型（或对话型）工作流应用。
+1.  **创建应用：**前往[应用管理](https://bailian.console.aliyun.com/flow-agent/app-center)，创建一个新的任务型（或对话型）工作流应用。
     
 2.  **配置开始节点：**删除默认的 city 和 date 参数，在本例中不会使用。
     
@@ -111,7 +111,7 @@
 
 #### 在管理面板发布组件
 
-控制台提供了**[组件管理](https://bailian.console.aliyun.com/?tab=app#/component-manage)**，您可以点击**创建组件**来将已有的智能体发布为组件，您也可以查看、修改或删除应用组件。
+在左侧导航栏选择**工具** > **组件管理**，进入[组件管理](https://bailian.console.aliyun.com/flow-agent/component-manage)页面。该页提供**智能体**与**工作流**两个页签，在**智能体**页签点击**创建智能体**，可将已有的智能体发布为组件；也可查看、修改或删除应用组件。
 
 ### 步骤三：配置组件名称和参数
 
@@ -210,7 +210,7 @@ imageList
 
 > 如果接入的组件包含需要**业务透传**的参数，您可以在测试时手动填入**入参变量配置**，或者在 API 调用时通过 `biz_param`参数传入。
 
-1.  **接入组件：**前往[应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)，创建一个新的智能体应用。智能体的配置如下：
+1.  **接入组件：**前往[应用管理](https://bailian.console.aliyun.com/flow-agent/app-center)，创建一个新的智能体应用。智能体的配置如下：
     
     **配置项**
     
@@ -239,7 +239,7 @@ imageList
 
 组件可以作为组件节点接入工作流。在此场景下，您需要手动为组件传入符合要求的参数，并将组件的输出结果传递到下一个节点。
 
-1.  **创建应用：**前往[应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)，创建一个新的任务型（或对话型）工作流应用。
+1.  **创建应用：**前往[应用管理](https://bailian.console.aliyun.com/flow-agent/app-center)，创建一个新的任务型（或对话型）工作流应用。
     
 2.  **配置开始节点：**删除默认的 city 和 date 参数，在本例中不会使用。
     

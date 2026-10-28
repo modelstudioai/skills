@@ -18,7 +18,7 @@ v1.4.0
 
 Android
 
-[AoqClientSdk-release.aar](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9399.aar)
+[AoqClientSdk-release.aar](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f93a6.aar)
 
 [libPluginOpus.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f939f.zip)
 

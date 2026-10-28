@@ -46,13 +46,13 @@ WebSocket、WebRTC、AOQ
 
 交互模式
 
-`server_vad`、`smart_turn`、push-to-talk
+`server_vad`、`smart_turn`、`smart_turn_v2`（推荐）、push-to-talk
 
 说话人增强
 
-支持（`smart_turn` 模式）
+支持（`smart_turn`、`smart_turn_v2` 模式）
 
-联网搜索通过 `enable_search` 开启，不能与 Function Calling 同时启用。
+联网搜索通过 `enable_search` 开启，可与 Function Calling 同时启用。
 
 ## 上下文限制
 

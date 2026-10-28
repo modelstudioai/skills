@@ -171,7 +171,7 @@ Token 是模型处理输入和输出的基本单位。一个 Token 可能是：
     
 -   模型广场
     
--   [阿里云百炼应用](raw/application-user-guide/llm-application/application-introduction.md)（智能体/工作流/智能体编排应用，以及涉及到模型调用的节点，如大模型节点、意图分类节点以及智能体群组节点等）的测试态和发布态
+-   [阿里云百炼应用](raw/application-user-guide/llm-application/llm-application-start-using/flow-agent-introduction.md)（智能体/工作流/智能体编排应用，以及涉及到模型调用的节点，如大模型节点、意图分类节点以及智能体群组节点等）的测试态和发布态
     
 -   [Assistant API（下线中）](https://help.aliyun.com/zh/model-studio/assistant-api)调用
     

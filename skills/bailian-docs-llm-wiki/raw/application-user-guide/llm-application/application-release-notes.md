@@ -226,7 +226,7 @@
 
 新的应用类型
 
--   支持基于Python项目结构部署AI后端服务，内置自动化运维、可观测性及日志服务等企业级能力。使用方法请参见[高代码应用](raw/application-user-guide/llm-application/rich-code-application.md)。
+-   支持基于Python项目结构部署AI后端服务，内置自动化运维、可观测性及日志服务等企业级能力。使用方法请参见[高代码应用](raw/application-user-guide/agent-development/sandbox/rich-code-application.md)。
     
 
 9月23日
@@ -235,7 +235,7 @@
 
 新增 Dify 工作流一键导入
 
--   支持 Dify 工作流一键导入，导入后自动映射节点类型与参数。使用方法请参见[工作流导入/导出](https://help.aliyun.com/zh/model-studio/workflow-application#c055d2211fwrp)。
+-   支持 Dify 工作流一键导入，导入后自动映射节点类型与参数。使用方法请参见[工作流导入/导出](https://help.aliyun.com/zh/model-studio/workflow/introduction#c055d2211fwrp)。
     
 
 9月23日

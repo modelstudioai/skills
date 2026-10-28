@@ -48,11 +48,11 @@
 
 ](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/kimi-k3)[
 
-**glm-5.2**
+**glm-5.3**
 
 文本生成
 
-](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/glm-5.2)[
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/glm-5.3)[
 
 **ZHIPU/GLM-5.3**
 
@@ -66,11 +66,11 @@
 
 ](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/minimax-m3-1-flash.md)[
 
-**mimo-v2.5-pro**
+**mimo-v2.6-pro-ultraspeed**
 
 文本生成
 
-](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/xiaomi%2Fmimo-v2.5-pro)
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/xiaomi%2Fmimo-v2.6-pro-ultraspeed)
 
 [查看更多](raw/model-user-guide/model-experience/text-generation-model.md)
 

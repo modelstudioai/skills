@@ -123,7 +123,7 @@ Realtime API
 
 ### 联网搜索
 
-需要检索实时信息并生成语音回复时，实时对话可使用 Qwen3.8-Omni-Flash-Realtime 或 Qwen3.5-Omni-Realtime；文件调用可使用 Qwen3.5-Omni（Chat Completions，Plus 和 Flash 系列）。模型自主决定是否搜索。Qwen-Audio Realtime 3.1 Plus/Flash 和 3.0 Plus/Flash 也支持联网搜索，通过 `enable_search` 开启，不能与 Function Calling 同时启用。
+需要检索实时信息并生成语音回复时，实时对话可使用 Qwen3.8-Omni-Flash-Realtime 或 Qwen3.5-Omni-Realtime；文件调用可使用 Qwen3.5-Omni（Chat Completions，Plus 和 Flash 系列）。模型自主决定是否搜索。Qwen-Audio Realtime 3.1 Plus/Flash 和 3.0 Plus/Flash 也支持联网搜索，通过 `enable_search` 开启。3.1 Flash 可同时启用联网搜索和 Function Calling。3.1 Plus 和 3.0 Plus/Flash 不可同时启用。
 
 **说明**Qwen3-Omni-Flash 和 Livetranslate 模型不支持此功能。
 

@@ -35,7 +35,7 @@ Agent 和 Environment 创建一次，可以在多个 Session 里复用。每个 
 
 数据分析 Agent 的产出质量，关键在 system prompt 上。这里不写「怎么做」的流程，而是写**工作纪律**——先验数据再下结论、清洗要保守、结论必须带数字。剩下的让 Agent 自己摸索。
 
-工具用内置工具集，`type` 为 `builtin_toolkit`（一个 Agent 最多挂 1 个内置工具集）。本例开启 6 个核心工具：`bash`、`read`、`write`、`edit`、`glob`、`grep`，足以覆盖全程离线分析；内置工具集还提供 `web_search` 与 `web_fetch` 两个联网工具，本例不需要。`mark_artifacts` 由平台运行时自动注入，用于登记产物文件，无需声明（显式列出也不影响调用）；`download_file` 已下线，不要再配置，取产物走 Files API（见 步骤 6）。
+工具用内置工具集，`type` 为 `builtin_toolkit`（一个 Agent 最多挂 1 个内置工具集）。本例开启 6 个核心工具：`bash`、`write`、`read`、`edit`、`glob`、`grep`，足以覆盖全程离线分析；内置工具集还提供 `web_search` 与 `web_fetch` 两个联网工具，本例不需要。`mark_artifacts` 由平台运行时自动注入，用于登记产物文件，无需声明（显式列出也不影响调用）；`download_file` 已下线，不要再配置，取产物走 Files API（见 步骤 6）。
 
 **警告****最常见的配置错误**：`default_config.enabled: true` 并不会把工具真的发给模型。必须在 `configs[ ]` 里把每个要用的工具**逐个显式列出**并置 `enabled: true`。只写 `default_config.enabled: true` 而不列 `configs`，Agent 拿到的工具列表只有平台自动注入的 `mark_artifacts`，随后任何 `bash` 调用都会回 `TOOL_NOT_FOUND: Tool 'bash' not found. Available tools: ['mark_artifacts']`，回合以「没有工具可用」结束。
 
@@ -565,7 +565,7 @@ curl -X GET "$AGENTSTUDIO_URL/sessions/$SESSION_ID/events?order=desc&limit=1" \
 
 **模型 ID**：`qwen3.8-max` / `qwen3.7-max` / `qwen3.7-plus` / `qwen3.6-plus` / `qwen3.6-flash`（`qwen3-max`、`qwen-plus` 等常规 DashScope ID 会被拒）。
 
-**内置工具**：核心工具 `bash`、`read`、`write`、`edit`、`glob`、`grep`，联网工具 `web_search`、`web_fetch`，**必须在 `configs[ ]` 里逐个 `enabled: true`**。平台额外自动注入 `mark_artifacts`（无需声明）。`download_file` 已下线，勿再配置。
+**内置工具**：核心工具 `bash`、`write`、`read`、`edit`、`glob`、`grep`，联网工具 `web_search`、`web_fetch`，**必须在 `configs[ ]` 里逐个 `enabled: true`**。平台额外自动注入 `mark_artifacts`（无需声明）。`download_file` 已下线，勿再配置。
 
 **文件上传**：最大 10 MB；二进制文件上传后 `status` 由 `checking` 转 `available` 才能挂载。
 

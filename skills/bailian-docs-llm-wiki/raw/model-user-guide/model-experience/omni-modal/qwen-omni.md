@@ -1,6 +1,6 @@
 # Qwen-Omni
 
-通过 HTTP API 使用 Qwen-Omni 理解文本、图片、音频和视频。文本分析使用 Qwen3.8-Omni-Flash，语音输出使用 Qwen3.5-Omni。
+通过 HTTP API 使用 Qwen-Omni 理解文本、图片、音频和视频，适合音视频分析、内容打标、会议纪要等场景。“非实时”指 HTTP 请求式调用，并非延后处理。
 
 ## 快速开始
 
@@ -430,7 +430,7 @@ Chat Completions、Responses
 -   音频控制：支持通过指令调节音量、语速、情绪
 -   视觉能力：与 Qwen3.5 同等水平，可理解画面、语音、音效等多模态信息
 -   多模态组合输入：支持文本与图片、音频、视频的任意组合同时输入，不限于单一模态
--   声音复刻：支持自定义音色（仅qwen3.5-omni-plus、qwen3.5-omni-flash支持，快照版本暂不支持），详情请参见[声音复刻](raw/_short/qwen-omni-voice-cloning-717550bc449e9e29.md)
+-   声音复刻：支持自定义音色（仅qwen3.5-omni-plus、qwen3.5-omni-flash支持，快照版本暂不支持），详情请参见[声音复刻](raw/model-user-guide/model-experience/omni-modal/qwen-omni-voice-cloning-user-guide.md)
 
 ### Qwen3-Omni-Flash
 

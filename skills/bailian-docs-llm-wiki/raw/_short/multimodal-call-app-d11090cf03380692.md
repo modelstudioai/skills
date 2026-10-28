@@ -8,7 +8,7 @@
 
 ## 创建和配置百炼应用
 
-1.  创建百炼平台应用，参考[应用类型介绍](raw/application-user-guide/llm-application/application-introduction.md)。
+1.  创建百炼平台应用，参考[应用类型](raw/application-user-guide/llm-application/llm-application-start-using/flow-agent-introduction.md)。
 2.  配置应用，调整模型、提示词和其他需要的能力。应用名修改为【西游记大全】。
 3.  测试并发布应用。
 

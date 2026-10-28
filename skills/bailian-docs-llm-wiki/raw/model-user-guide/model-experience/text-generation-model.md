@@ -4,7 +4,7 @@
 
 ## 做 AI 编程或 Agent 开发（OpenClaw、Claude Code、Hermes 等）该选哪个模型？
 
-推荐 `qwen3.7-plus`——能力与成本均衡，完整工具调用支持，1M 上下文适合大型代码库。如需最强推理能力，可选择`qwen3.8-max`。
+推荐 `qwen3.7-plus`——能力与成本均衡，完整工具调用支持，1M 上下文适合大型代码库。如需最强推理能力，可选择`qwen3.8-max`。如偏好第三方模型，长程编程可选 `kimi-k3`，开源 SOTA 水平的编程与智能体任务可选 `glm-5.3`。
 
 ## 从闭源模型迁移到百炼?
 
@@ -16,41 +16,32 @@
 
 高能力
 
-GPT-5.5、Claude Opus 4.7、Gemini 3.1 Pro
+GPT-6 Astra、Claude Opus 5.5、Gemini 4 Argon
 
-`qwen3.8-max`
+`qwen3.8-max`、`kimi-k3`
 
 平衡
 
-GPT-5.4、Claude Sonnet 4.6、Gemini 3 Pro
+GPT-6.1 Sol、Claude Sonnet 5.5
 
-`qwen3.7-plus`、`deepseek-v4-pro`、`glm-5.2`
+`qwen3.7-plus`、`deepseek-v4.1-flash-1017`、`glm-5.3`
 
 轻量低成本
 
-GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
+GPT-6 Luna、Claude Haiku 5.5、Gemini 3.8 Flash
 
-`qwen3.8-flash`、`MiniMax-M2.5`
+`qwen3.8-flash`、`MiniMax-M3.1-Flash`
 
 ## 应用场景
 
-聊天机器人、内容生成、摘要总结、文档处理等场景，推荐使用 `qwen3.7-plus`，能力与成本均衡，拥有100万上下文窗口和完整的内置工具。确认效果满足需求后，可以尝试 `qwen3.8-flash` 来降低成本，效果接近旗舰模型，且拥有相同的上下文长度和功能支持。如需最强推理能力，可选择 `qwen3.8-max`。
-
-### 办公场景（非编程）
-
-处理日常办公任务（文档撰写、邮件处理、会议纪要整理、数据分析等）时，推荐 `qwen3.7-plus`——能力与成本均衡，拥有 100 万上下文窗口，支持 Function Calling 和内置工具，适合文档摘要、内容生成等办公类任务。
-
-确认效果满足需求后，可尝试 `qwen3.8-flash` 降低成本，效果接近旗舰模型，且拥有相同的上下文长度和功能支持。
-
-如需最强推理能力（如复杂数据分析、多步逻辑推演），可选择 `qwen3.8-max`，但成本较高。
-
-文档超过 100 万 Token 时，把文档导入[知识库](raw/application-user-guide/knowledge-base.md)，或分段处理。
+聊天机器人、内容生成、摘要总结、文档处理、会议纪要整理、数据分析等场景，推荐使用 `qwen3.7-plus`——能力与成本均衡，拥有 100 万上下文窗口和完整的内置工具。确认效果满足需求后，可以尝试 `qwen3.8-flash` 来降低成本，效果接近旗舰模型，且拥有相同的上下文长度和功能支持。如需最强推理能力（如复杂数据分析、多步逻辑推演），可选择 `qwen3.8-max`，但成本较高。文档超过 100 万 Token 时，把文档导入[知识库](raw/application-user-guide/knowledge-base.md)，或分段处理。
 
 ### 上下文窗口
 
 以千问模型处理中文文本为例，100 万 Token 约相当于 150 万个汉字。该数字仅供理解上下文规模和初步选型参考，实际换算比例因模型、版本及文本内容而异。
 
 -   长文档或大型代码库：`qwen3.8-max` / `qwen3.8-flash` / `qwen3.7-plus` / `qwen3.7-flash`（100万）。
+-   第三方模型：`kimi-k3` / `glm-5.3` / `deepseek-v4.1-flash-1017` / `step-5-preview` 等同样提供 100 万上下文。
 -   常规任务：128k-256k已足够。
 
 模型的上下文信息请前往模型广场查看。 [华北2（北京）](https://bailian.console.aliyun.com/cn-beijing/model/market) | [新加坡](https://bailian.console.aliyun.com/ap-southeast-1/model/market) | [美国](https://bailian.console.aliyun.com/us-east-1/model/market) | [中国香港](https://bailian.console.aliyun.com/cn-hongkong/model/market) | [法兰克福](https://bailian.console.aliyun.com/eu-central-1/model/market)
@@ -102,15 +93,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 `qwen3.8-max`
 
-1M
-
-支持
-
-支持
-
-支持
-
-支持
+查看快照版本
 
 `qwen3.8-max-0902`
 
@@ -168,7 +151,19 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 支持
 
-`deepseek-v4-pro`
+`deepseek-v4.1-flash-1017`
+
+1M
+
+支持
+
+支持
+
+支持
+
+支持
+
+`glm-5.3`
 
 1M
 
@@ -180,7 +175,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 支持
 
-`glm-5.2`
+`kimi-k3`
 
 1M
 
@@ -192,21 +187,9 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 支持
 
-`kimi-k2.7-code`
+`MiniMax-M3.1-Flash`
 
-256k
-
-支持
-
-支持
-
-不支持
-
-不支持
-
-`MiniMax-M3`
-
-192k
+1M
 
 支持
 
@@ -216,7 +199,19 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 不支持
 
-`mimo-v2.5-pro`
+`mimo-v2.6-pro-ultraspeed`
+
+1M
+
+支持
+
+支持
+
+不支持
+
+支持
+
+`step-5-preview`
 
 1M
 
@@ -299,6 +294,30 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 `qwen3.6-flash-2026-04-16`
 
 1M
+
+支持
+
+支持
+
+支持
+
+支持
+
+`qwen3.6-27b`
+
+256k
+
+支持
+
+支持
+
+支持
+
+支持
+
+`qwen3.6-35b-a3b`
+
+256k
 
 支持
 
@@ -430,7 +449,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 不支持
 
-支持
+不支持
 
 #### 翻译
 
@@ -506,7 +525,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 不支持
 
-不支持
+支持
 
 #### 角色扮演
 
@@ -530,13 +549,13 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 不支持
 
-不支持
+支持
 
-不支持
+支持
 
 `qwen-plus-character-ja`
 
-32k
+8k
 
 不支持
 
@@ -548,15 +567,15 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 `qwen-flash-character`
 
-8k
+32k
 
 不支持
 
 不支持
 
-不支持
+支持
 
-不支持
+支持
 
 #### 旧版Qwen
 
@@ -622,6 +641,102 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 **结构化输出**
 
+`deepseek-v4-pro`
+
+1M
+
+支持
+
+支持
+
+支持
+
+支持
+
+`glm-5.2`
+
+1M
+
+支持
+
+支持
+
+不支持
+
+支持
+
+`glm-5.2-fast-preview`
+
+1M
+
+支持
+
+支持
+
+支持
+
+支持
+
+`kimi-k2.7-code`
+
+256k
+
+支持
+
+支持
+
+支持
+
+支持
+
+`MiniMax-M3`
+
+1M
+
+支持
+
+支持
+
+不支持
+
+不支持
+
+`kimi-k2.6`
+
+256k
+
+支持
+
+支持
+
+不支持
+
+不支持
+
+`mimo-v2.5-pro`
+
+1M
+
+支持
+
+支持
+
+不支持
+
+支持
+
+`step-3.7-flash`
+
+256k
+
+支持
+
+支持
+
+不支持
+
+支持
+
 `glm-5.1`
 
 198k
@@ -644,11 +759,11 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 不支持
 
-支持
+不支持
 
 `MiniMax-M2.7`
 
-192k
+200k
 
 支持
 
@@ -660,7 +775,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 `MiniMax-M2.5`
 
-192k
+200k
 
 支持
 
@@ -682,21 +797,9 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 不支持
 
-`deepseek-r1-distill-llama-70b`
-
-128k
-
-支持
-
-不支持
-
-不支持
-
-不支持
-
 `deepseek-r1-distill-qwen-1.5b`
 
-128k
+32k
 
 支持
 

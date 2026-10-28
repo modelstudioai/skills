@@ -36,7 +36,7 @@
 
 [AliyunServiceRoleForSFMAccessingCIP](https://help.aliyun.com/zh/model-studio/bailian-service-linked-role#e02fae3cf9x0q)
 
-[百炼应用](raw/application-user-guide/llm-application/application-introduction.md)通过此服务关联角色访问您在[内容安全](https://help.aliyun.com/zh/document_detail/28417.html)中的服务或资源。
+[百炼应用](raw/application-user-guide/llm-application/llm-application-start-using/flow-agent-introduction.md)通过此服务关联角色访问您在[内容安全](https://help.aliyun.com/zh/document_detail/28417.html)中的服务或资源。
 
 [AliyunServiceRoleForSFMAccessSLS](https://help.aliyun.com/zh/model-studio/bailian-service-linked-role#558c3f95f9me9)
 
@@ -465,7 +465,7 @@
 
 ### 应用场景
 
-[百炼应用](raw/application-user-guide/llm-application/application-introduction.md)通过此服务关联角色访问您在[内容安全](https://help.aliyun.com/zh/document_detail/28417.html)中的服务或资源。
+[百炼应用](raw/application-user-guide/llm-application/llm-application-start-using/flow-agent-introduction.md)通过此服务关联角色访问您在[内容安全](https://help.aliyun.com/zh/document_detail/28417.html)中的服务或资源。
 
 ### 角色及权限说明
 

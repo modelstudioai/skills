@@ -1,6 +1,6 @@
 # 百炼模型市场索引
 
-> 自动生成 · 共 125 个模型家族 · 333 个主干模型 · 更新于 2026-10-28
+> 自动生成 · 共 123 个模型家族 · 332 个主干模型 · 更新于 2026-10-29
 
 **机器查询走结构化文件**：
 
@@ -17,7 +17,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 `notSuitableFor: []` 表示无已知限制。`profileCompleteness` 为 `structured-only` 时该画像未读过文档，仅机械字段可信。
 硬规格（价格/QPM/contextWindow/openSource）一律看行内顶层字段，不要从 profile 里找。
 
-## 文本生成 `TG` — 30 个家族
+## 文本生成 `TG` — 29 个家族
 
 - [Decision Model](groups/decision-model.json) — 面向高频业务判断的结构化决策模型，可根据文本或业务状态并行完成分类、是非判断与评分，并返回概率分布和置信度，适用于工单分流、内容审核、智能体路由与结果校验等场景。
   - 模型：`decision-model-preview`
@@ -55,8 +55,6 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`qwen-plus-character`
 - [Qwen3-Coder-Flash](groups/qwen3-coder-flash.json) — 基于Qwen3的代码生成模型，继承Qwen3-Coder-Plus的coding agent能力，支持多轮工具交互，重点优化仓库级别理解能力并增加工具调用稳定性。
   - 模型：`qwen3-coder-flash`
-- [Qwen3.5-Plus](groups/qwen3.5-plus.json) — Qwen3.5原生视觉语言系列Plus模型，展现出与当前顶尖前沿模型相媲美的卓越性能，模型效果在纯文本与多模态方面相较3系列均实现飞跃式进步。
-  - 模型：`qwen3.5-plus`
 - [Qwen3.7-Flash](groups/qwen3.7-flash.json) — Qwen3.7原生视觉语言系列Flash模型，相较3.6-Flash全面提升多模态理解与Agent执行能力。重点强化多模态基础能力、万物识别能力更强，真实世界感知与空间智能进一步提升，Search A…
   - 模型：`qwen3.7-flash`
 - [Qwen3.7-Plus](groups/qwen3.7-plus.json) — Qwen3.7系列中高性价比Plus模型，在强大文本能力的基础上全面升级了视觉-语言能力，同时保持了在编码、工具使用和生产力工作流方面的完整智能体能力。其核心特色为多模态交互混合智能体能力，能够感知真…
@@ -70,7 +68,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [StepFun推理模型](groups/stepfun-models-market-place.json) — 由阶跃星辰StepFun提供的Step系列推理模型API服务
   - 模型：`stepfun/step-3.7-flash`, `stepfun/step-5-preview`
 - [Vanchin DeepSeek](groups/vanchin-models-market-place.json) — 由快手万擎提供的DeepSeek系列模型API服务。
-  - 模型：`vanchin/deepseek-ocr`, `vanchin/deepseek-r1`, `vanchin/deepseek-v3`, `vanchin/deepseek-v3.1-terminus`, `vanchin/deepseek-v3.2-think`, `vanchin/deepseek-v4-pro`, `vanchin/deepseek-v4-pro-0813`, `vanchin/deepseek-v4.1-flash`
+  - 模型：`vanchin/deepseek-ocr`, `vanchin/deepseek-r1`, `vanchin/deepseek-v3`, `vanchin/deepseek-v3.1-terminus`, `vanchin/deepseek-v3.2-think`, `vanchin/deepseek-v4-pro`, `vanchin/deepseek-v4-pro-0813`, `vanchin/deepseek-v4.1-flash`, `vanchin/deepseek-v4.1-flash-1017`
 - [云知声文本模型](groups/unisound-models-market-place.json) — 由云知声提供的 Unisound U2 模型 API 服务.
   - 模型：`unisound/unisound-u2`
 - [伶鹊-对话分析-flash](groups/tongyi-xiaomi-analysis-flash.json) — 伶鹊-对话分析-flash是专注于日常任务，如对话信息抽取、场景分类等分析类需求的模型，自定义分析标准遵循与对话语义理解能力显著提升，适用于低时延的离线在线分析任务。
@@ -251,12 +249,10 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [Qwen3.6开源模型](groups/qwen3.6.json) — Qwen3.6系列开源模型，基于混合架构设计的原生视觉语言模型，模型效果相较于3.5系列同尺寸有大幅提升。
   - 模型：`qwen3.6-27b`, `qwen3.6-35b-a3b`
 
-## 全模态 `Multimodal-Omni` — 5 个家族
+## 全模态 `Multimodal-Omni` — 4 个家族
 
 - [Qwen-MT-Uni](groups/qwen-mt-uni.json) — Qwen-MT-Uni 是 Qwen-MT 系列最新一代全模态翻译模型，除了提供文本和图片翻译之外，以文档与音频翻译为核心，覆盖 152 个语种互译：文档侧支持 Txt / Excel / PDF /…
   - 模型：`qwen-mt-uni`
-- [Qwen3-Omni-Flash](groups/qwen3-omni-flash.json) — Qwen3-Omni-Flash多模态大模型，基于Thinker–Talker混合专家（MoE）架构，支持文本、图像、音频、视频的高效理解与语音生成能力，可进行119种语言文本交互和20种语言语音交互…
-  - 模型：`qwen3-omni-flash`
 - [Qwen3.5-Omni-Flash](groups/qwen3.5-omni-flash.json) — Qwen3.5-Omni是Qwen最新一代全模态大模型，支持文本，图片，音频，音视频理解与交互。作为 Qwen3-Omni 的全面进化版本， 支持超过 10 小时的音频理解及超过 400 秒的 720…
   - 模型：`qwen3.5-omni-flash`
 - [Qwen3.5-Omni-Plus](groups/qwen3.5-omni-plus.json) — Qwen3.5-Omni是Qwen最新一代全模态大模型，支持文本，图片，音频，音视频理解与交互。作为 Qwen3-Omni 的全面进化版本， 支持超过 10 小时的音频理解及超过 400 秒的 720…

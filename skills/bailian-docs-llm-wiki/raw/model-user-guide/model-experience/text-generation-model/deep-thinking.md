@@ -178,7 +178,7 @@
 
 #### Stepfun
 
-混合思考模式：stepfun/step-3.7-flash、stepfun/step-5-preview
+仅思考模式：stepfun/step-3.7-flash、stepfun/step-5-preview
 
 ## 快速开始
 

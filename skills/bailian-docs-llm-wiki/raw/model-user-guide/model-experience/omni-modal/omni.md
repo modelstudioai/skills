@@ -52,7 +52,7 @@ Qwen3.8-Omni-Flash-Realtime
 
 [实时（Qwen-Omni-Realtime）](raw/model-user-guide/model-experience/omni-modal/realtime.md)
 
-**实时语音对话（语义 VAD）**：端到端语音交互，支持语义轮次检测（smart\_turn），无意义附和声不会打断，支持 Function Calling（语音助手、智能客服）
+**实时语音对话（语义 VAD）**：端到端语音交互，支持语义轮次检测（smart\_turn、smart\_turn\_v2，推荐后者），无意义附和声不会打断，支持 Function Calling（语音助手、智能客服）
 
 Qwen-Audio
 
@@ -80,7 +80,7 @@ Qwen3-Livetranslate
 
 Qwen3.8-Omni-Flash-Realtime；Qwen3.5-Omni Plus / Flash
 
-[声音复刻](raw/_short/qwen-omni-voice-cloning-717550bc449e9e29.md)
+[声音复刻](raw/model-user-guide/model-experience/omni-modal/qwen-omni-voice-cloning-user-guide.md)
 
 -   使用 Qwen3.8-Omni-Flash 进行内容分析时，支持音频最长3小时、视频最长2小时。
 -   支持工具调用（Function Calling）：Qwen3.8-Omni-Flash-Realtime、Qwen3.8-Omni-Flash、Qwen3.5-Omni Plus / Flash（文本输出）、Qwen3.5-Omni-Realtime、Qwen3-Omni-Flash、Qwen-Audio Realtime。

@@ -52,7 +52,7 @@
 
 是
 
-9 个内置工具，按需勾选。详见 [Agent 工具配置](raw/application-user-guide/agent-development/managed-agents/managed-agents-agent/managed-agents-builtin-tools.md)
+内置工具，按需勾选。详见 [Agent 工具配置](raw/application-user-guide/agent-development/managed-agents/managed-agents-agent/managed-agents-builtin-tools.md)
 
 MCP 服务器
 
@@ -217,6 +217,18 @@ qwen3.6-flash
 
 DeepSeek
 
+deepseek-v4.1-flash
+
+推理模型、视觉理解、文本生成
+
+DeepSeek
+
+deepseek-v4.1-flash-1017
+
+推理模型、视觉理解、文本生成
+
+DeepSeek
+
 deepseek-v4-pro
 
 推理模型、文本生成
@@ -224,6 +236,12 @@ deepseek-v4-pro
 DeepSeek
 
 deepseek-v4-flash-0731
+
+推理模型、文本生成
+
+智谱 AI
+
+glm-5.3
 
 推理模型、文本生成
 
