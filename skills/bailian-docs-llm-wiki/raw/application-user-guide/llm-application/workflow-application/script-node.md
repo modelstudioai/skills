@@ -56,6 +56,8 @@ Python
 
 支持 Python 标准库，适用于数据处理和计算。
 
+**说明**脚本节点在隔离的沙箱环境中执行，**无法直接访问公网**（包括外部 HTTP/HTTPS 请求、DNS 解析等）。如需调用外部服务，使用 [API 节点](raw/application-user-guide/llm-application/workflow-application/api-node.md)、[插件节点](raw/application-user-guide/llm-application/workflow-application/plugin-node.md)或 [MCP 节点](raw/application-user-guide/llm-application/workflow-application/mcp-node.md)。
+
 ### 失败时重试
 
 默认关闭。节点运行超时或异常时自动重试。关闭后，节点失败将直接报错。

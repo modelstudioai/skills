@@ -29,7 +29,7 @@
 
 工具
 
-7 个内置工具默认全选：`bash`、`read`、`write`、`edit`、`glob`、`grep`、`mark_artifacts`。按需取消勾选
+内置工具默认全选：`bash`、`write`、`read`、`edit`、`glob`、`grep`、`web_search`、`web_fetch`、`todo_write`、`mark_artifacts`。按需取消勾选
 
 Skill / MCP
 

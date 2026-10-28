@@ -28,7 +28,7 @@
 #### 请求接口
 
 ```
-GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks{task_id}
+GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}
 ```
 
 #### 入参描述
@@ -201,7 +201,7 @@ Object
 #### curl
 
 ```
-curl -X GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks73205176-xxxx-xxxx-xxxx-16bd5d902219' \
+curl -X GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/73205176-xxxx-xxxx-xxxx-16bd5d902219' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
@@ -686,7 +686,7 @@ dashscope video-synthesis list --status RUNNING -s 10
 #### 请求接口
 
 ```
-POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks{task_id}/cancel
+POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}/cancel
 ```
 
 #### 入参描述
@@ -766,7 +766,7 @@ String
 #### curl
 
 ```
-curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks73205176-xxxx-xxxx-xxxx-16bd5d902219/cancel' \
+curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/73205176-xxxx-xxxx-xxxx-16bd5d902219/cancel' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 

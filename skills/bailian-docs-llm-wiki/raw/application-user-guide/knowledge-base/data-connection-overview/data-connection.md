@@ -1501,7 +1501,7 @@ VSwitch ID
 
 创建知识库导入数据源内容，用于后续检索：[创建和使用知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
 
-应用配置和使用指南：[应用类型介绍](raw/application-user-guide/llm-application/application-introduction.md)。
+应用配置和使用指南：[应用类型](raw/application-user-guide/llm-application/llm-application-start-using/flow-agent-introduction.md)。
 
 ## 常见问题
 

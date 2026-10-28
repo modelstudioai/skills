@@ -1,41 +1,67 @@
 # agent context
 
-agent context 是百炼平台中用于增强 Agent 推理能力的上下文管理机制，支持将外部知识、历史记忆、结构化数据源等动态注入到 LLM 的 [prompt](prompt.md) 中。它通过统一的抽象层解耦数据接入与模型调用，是构建可靠、可追溯、可调试 Agent 应用的核心基础设施。其设计兼顾灵活性与可控性，适用于 RAG、长期记忆、多源数据融合等典型场景。
+agent context 是百炼平台中用于定义 Agent 运行时环境与外部信息输入的关键机制，它决定了 Agent 能够感知和利用哪些上下文数据（如知识库、历史对话、外部系统连接等）。该机制通过结构化参数注入实现，直接影响 Agent 的推理准确性与任务执行能力。其设计兼顾灵活性与可控性，支持开发者按需组合多种上下文源。
 
-## 支持的模型与功能
+## 支持的模型/功能
 
-- **模型兼容性**：当前仅支持 `qwen-max`、`qwen-plus` 及 `qwen-turbo` 系列模型（v2024.06 起），其他模型调用时将忽略 context 字段；[Agent 上下文](../../raw/application-user-guide/agent-context.md) 明确指出该限制。
-- **核心功能模块**：
-  - **RAG 检索结果注入**：自动拼接知识库召回片段，支持按 relevance score 过滤与截断；
-  - **Memory 回溯**：集成 [Memory](../../raw/application-user-guide/agent-context/memory-library-overview.md) 模块，可指定 session_id 加载最近 N 轮对话历史；
-  - **Connector 数据桥接**：通过预注册的 [Connector](../../raw/application-user-guide/agent-context/overview.md) 实时拉取数据库、API 或文件系统数据；
-  - **ParseX 结构化解析**：支持对上传文档（PDF/Word/Excel）执行字段级提取，并作为结构化 context 输入。
+当前 agent context 机制在以下模型与功能中可用：
+- 所有支持 `agent` 模式调用的百炼大模型（包括 Qwen-Max、Qwen-Plus、Qwen-Turbo）；
+- RAG 增强型 Agent（依赖 [RAG](../../raw/application-user-guide/knowledge-base.md) 模块）；
+- 具备[长期记忆](../concepts/long-term-memory.md)能力的 Agent（依赖 [Memory](../../raw/application-user-guide/agent-context/memory-library-overview.md) 库）；
+- 集成第三方系统的 Connector Agent（依赖 [Connector](../../raw/application-user-guide/agent-context/overview.md) 框架）；
+- 使用 ParseX 进行非结构化内容解析的上下文预处理场景（见 [ParseX](../../raw/application-user-guide/agent-context/getting-started-overview.md)）。
+
+> **注意**：Qwen-Turbo 的 agent context 最大 token 限制为 8192，而 Qwen-Max 和 Qwen-Plus 在 v3.2+ 版本中已支持 up to 32768；旧版文档未明确区分，需以控制台模型详情页实际配置为准。
 
 ## 关键参数
 
-| 参数名 | 类型 | 必填 | 说明 |
-|--------|------|------|------|
-| `context` | object | 否 | 主容器对象，包含 `rag`、`memory`、`connector`、`parsx` 四个子字段（任选其一或组合） |
-| `context.rag.knowledge_base_id` | string | 是（若启用 rag） | 知识库 ID，需已在控制台发布 |
-| `context.memory.session_id` | string | 是（若启用 memory） | 会话唯一标识，长度 ≤ 64 字符 |
-| `context.connector.id` | string | 是（若启用 connector） | Connector 配置 ID，需已授权并启用 |
-| `context.parsx.file_id` | string | 是（若启用 parsx） | 文件上传后返回的 `file_id`，有效期 24 小时 |
+调用时需在 `messages` 或 `tools` 请求体中显式传入 `context` 字段（类型为 `object`），主要子字段包括：
 
-> **注意**：`context.memory.max_turns` 默认为 5，但 [Memory](../../raw/application-user-guide/agent-context/memory-library-overview.md) 文档中旧版示例误写为 `max_history`，应以 SDK 参数签名和 API 文档为准。
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `knowledge_base_ids` | `string[]` | 否 | 关联的知识库 ID 列表，触发 RAG 检索 |
+| `memory_id` | `string` | 否 | 指定 memory 实例 ID，启用对话历史回溯 |
+| `connector_config` | `object` | 否 | Connector 认证与调用配置，格式由 connector 类型决定 |
+| `parsex_config` | `object` | 否 | ParseX 解析规则（如 `file_type`, `chunk_size`），仅当启用 ParseX 预处理时有效 |
+
+所有参数均不自动继承，必须显式声明；空对象 `{}` 不等价于省略该字段。
 
 ## 使用方式
 
-1. 在 `/v1/chat/completions` 请求体中，于 `messages` 外层同级传入 `context` 对象；
-2. 每个子模块独立生效，不相互覆盖（例如同时启用 `rag` 和 `memory`，两者内容将合并注入 system [prompt](prompt.md) 前置区）；
-3. 上下文内容在 LLM 输入前完成拼接与长度裁剪（按 token 计，上限 8192，超出部分从最早条目开始丢弃）；
-4. 开发者可通过 `debug: true` 参数在响应中查看实际注入的 context 片段（含来源标注与 token 统计）。
+1. **API 调用示例（JSON）**：
+   ```json
+   {
+     "model": "qwen-max",
+     "messages": [{"role": "user", "content": "帮我查一下上季度销售报告"}],
+     "context": {
+       "knowledge_base_ids": ["kb-abc123"],
+       "memory_id": "mem-def456",
+       "connector_config": {"type": "notion", "page_id": "xxx"}
+     }
+   }
+   ```
+
+2. **SDK 调用（Python）**：
+   ```python
+   client.chat.completions.create(
+       model="qwen-plus",
+       messages=[{"role": "user", "content": "总结会议纪要"}],
+       context={
+           "knowledge_base_ids": ["kb-789"],
+           "parsex_config": {"file_type": "pdf", "chunk_size": 512}
+       }
+   )
+   ```
+
+3. 多上下文源可同时启用，但需确保各模块已正确授权并处于启用状态（参见 [Connector](../../raw/application-user-guide/agent-context/overview.md) 和 [Memory](../../raw/application-user-guide/agent-context/memory-library-overview.md) 文档）。
 
 ## 限制和注意事项
 
-- 单次请求最多启用 **3 个 context 子模块**（如 `rag + memory + connector`），超出将返回 `400 Bad Request`；
-- `context.parsx` 仅支持已通过 `/v1/files/upload` 上传且状态为 `processed` 的文件，[ParseX](../../raw/application-user-guide/agent-context/getting-started-overview.md) 文档强调此前提；
-- 所有 context 数据均在服务端完成注入，**不会透出原始凭证或敏感字段值**（如数据库密码、API Key），但需确保 Connector 配置本身已做最小权限隔离；
-- 不支持在流式响应（`stream: true`）中动态更新 context —— context 内容在首次 chunk 发送前即已固化。
+- 单次请求中 `context` 总大小（含嵌套 JSON 序列化后）不得超过 2MB；
+- `knowledge_base_ids` 中每个知识库须已发布且对当前 API Key 可见；
+- `memory_id` 对应的 memory 实例必须由同一用户创建，跨账号不可共享；
+- 若同时启用 RAG 与 ParseX，系统默认先执行 ParseX 解析，再将结果注入 RAG 检索流程（详见 [ParseX](../../raw/application-user-guide/agent-context/getting-started-overview.md)）；
+- 当前不支持在流式响应（`stream: true`）中动态更新 `context` 字段，变更需发起新请求。
 
 ## 来源文档
 

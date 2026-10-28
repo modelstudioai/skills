@@ -52,6 +52,10 @@ TTS 音色名称。3.1 Plus/Flash 的默认值为 `longanqian_v3.1`，3.0 Plus/F
 }
 ```
 
+**speech\_rate**`float`（可选）
+
+模型音频输出语速。取值范围：`[0.5, 2.0]`，默认值：`1.0`。值越小，语速越慢；值越大，语速越快。适用于 `qwen-audio-3.1-realtime-plus`、`qwen-audio-3.1-realtime-flash`、`qwen-audio-3.0-realtime-plus`、`qwen-audio-3.0-realtime-flash`。
+
 **enable\_speech\_emotion**`boolean`（可选）
 
 是否开启情绪增强功能。开启后，回复音色的情绪变化更明显。默认值：`true`。可选值：`true`、`false`。
@@ -87,9 +91,6 @@ TTS 音色名称。3.1 Plus/Flash 的默认值为 `longanqian_v3.1`，3.0 Plus/F
 -   `vi`：越南语
 -   `th`：泰语
 -   `id`：印尼语
--   `ms`：马来语
--   `tl`：菲律宾语
--   `hi`：印地语
 -   `ar`：阿拉伯语
 -   `fr`：法语
 -   `de`：德语
@@ -97,19 +98,6 @@ TTS 音色名称。3.1 Plus/Flash 的默认值为 `longanqian_v3.1`，3.0 Plus/F
 -   `pt`：葡萄牙语
 -   `ru`：俄语
 -   `it`：意大利语
--   `nl`：荷兰语
--   `sv`：瑞典语
--   `da`：丹麦语
--   `fi`：芬兰语
--   `no`：挪威语
--   `el`：希腊语
--   `pl`：波兰语
--   `cs`：捷克语
--   `hu`：匈牙利语
--   `ro`：罗马尼亚语
--   `bg`：保加利亚语
--   `hr`：克罗地亚语
--   `sk`：斯洛伐克语
 
 **output\_audio**`object`（可选）
 
@@ -138,8 +126,6 @@ TTS 音色名称。3.1 Plus/Flash 的默认值为 `longanqian_v3.1`，3.0 Plus/F
 -   `vi`：越南语
 -   `es`：西班牙语
 -   `it`：意大利语
--   `ms`：马来语
--   `fil`：菲律宾语
 -   `ar`：阿拉伯语
 
 **max\_history\_turns**`integer`（可选）
@@ -152,7 +138,7 @@ TTS 音色名称。3.1 Plus/Flash 的默认值为 `longanqian_v3.1`，3.0 Plus/F
 
 是否开启联网搜索。默认值：`false`。开启后，模型可根据实时问题自主判断是否进行联网搜索。
 
-> `tools` 与 `enable_search` 不可同时启用。
+> `qwen-audio-3.1-realtime-flash` 支持同时启用 `tools` 和 `enable_search`；`qwen-audio-3.1-realtime-plus`、`qwen-audio-3.0-realtime-plus` 和 `qwen-audio-3.0-realtime-flash` 不支持同时启用。
 
 **search\_options**`object`（可选）
 
@@ -214,22 +200,23 @@ VAD 类型，可选值：
 
 -   `server_vad`（默认值）：基于声学特征检测语音起止，自动触发推理。
 -   `smart_turn`：融合声学感知与语义理解的智能轮次检测，通过声学与语义双重判断轮次边界。无语义的声音（如”嗯”、”啊”）不会触发对话轮或打断模型播报。
+-   `smart_turn_v2`（推荐使用）：在 `smart_turn` 基础上增强对话上下文理解，更好地判断多人场景中的交互意图。减少旁人说话或无关插话造成的误回复、误打断。
 
 **threshold**`float`（可选）
 
-VAD灵敏度，仅在 server\_vad 模式下生效（smart\_turn 模式下无效）。值越低，VAD越灵敏，越容易将微弱声音（包括背景噪音）识别为语音；值越高，越不灵敏，需要更清晰、音量更大的语音才能触发。
+VAD 灵敏度。适用于 `server_vad`、`smart_turn` 和 `smart_turn_v2`。值越低，越容易将微弱声音（包括背景噪音）识别为语音；值越高，越需要清晰、响亮的语音才能触发检测。
 
 取值范围为\[-1.0, 1.0\]，默认值为 0.5。
 
 **silence\_duration\_ms**`integer`（可选）
 
-语音结束后需保持静音的最短时间（毫秒），仅在 server\_vad 模式下生效（smart\_turn 模式下无效）。超时即触发模型响应。值越低，响应越快，但可能在短暂停顿时误触发。
+语音结束后的最短静音时间（毫秒）。仅在 server\_vad 模式下生效（smart\_turn / smart\_turn\_v2 模式下无效）。静音达到该时长后，触发模型响应。值越低，响应越快，但短暂停顿也可能误触发。
 
 取值范围为\[200, 6000\]，默认值为 800。对话场景推荐 400-800。
 
 **voiceprint\_audio\_urls**`array`（可选）
 
-**仅在 smart\_turn 模式下生效。**目标用户预录音频的公网可访问 URL 列表，用于说话人增强。传入后，模型将在双工对话中精准锁定目标说话人，有效忽略旁人声音与背景噪声。最多支持 5 个 URL。音频格式要求：16kHz PCM 或 WAV。
+**仅在 smart\_turn / smart\_turn\_v2 模式下生效。**目标用户预录音频的公网可访问 URL 列表，用于说话人增强。模型通过这些音频在双工对话中锁定目标说话人，忽略旁人声音和背景噪声。最多支持 5 个 URL。音频格式要求：16kHz PCM 或 WAV。
 
 **重要**该参数仅在**第一次**发送 `session.update` 事件时可配置，后续传入该字段将被忽略。
 
@@ -244,6 +231,7 @@ VAD灵敏度，仅在 server\_vad 模式下生效（smart\_turn 模式下无效�
             "audio"
         ],
         "voice": "longanqian_v3.1",
+        "speech_rate": 1.2,
         "turn_detection": {
             "type": "server_vad",
             "threshold": 0.5,
@@ -316,7 +304,7 @@ Function Calling：
     "type": "session.update",
     "session": {
         "turn_detection": {
-            "type": "smart_turn",
+            "type": "smart_turn_v2",
             "voiceprint_audio_urls": [
                 "https://example.com/speaker1.pcm",
                 "https://example.com/speaker2.wav"
@@ -349,7 +337,7 @@ Base64 编码的音频数据。
 
 **说明**：**仅 push-to-talk 模式。**将缓冲区音频提交为一条用户消息。提交后不会自动触发推理，需要发送 `response.create` 手动触发。
 
-server\_vad / smart\_turn 模式下此事件被忽略。
+server\_vad / smart\_turn / smart\_turn\_v2 模式下此事件被忽略。
 
 **type**`string`**（必选）**
 
@@ -363,7 +351,7 @@ server\_vad / smart\_turn 模式下此事件被忽略。
 
 ## input\_audio\_buffer.clear
 
-**说明**：**仅 push-to-talk 模式。**清空缓冲区中尚未提交的音频。server\_vad / smart\_turn 模式下此事件被忽略。服务端以 `input_audio_buffer.cleared` 事件响应。
+**说明**：**仅 push-to-talk 模式。**清空缓冲区中尚未提交的音频。server\_vad / smart\_turn / smart\_turn\_v2 模式下此事件被忽略。服务端以 `input_audio_buffer.cleared` 事件响应。
 
 **type**`string`**（必选）**
 
@@ -523,11 +511,11 @@ server\_vad / smart\_turn 模式下此事件被忽略。
 
 -   **push-to-talk 模式**：必须手动调用，需先通过 `input_audio_buffer.commit` 提交缓冲区音频或写入 `function_call_output` 后触发。当前有响应正在生成时不允许重复触发。
 -   **server\_vad 模式**：通常由服务端自动触发。当前无响应正在生成时，客户端也允许手动调用；有响应正在生成时不允许重复触发。
--   **smart\_turn 模式**：等待用户下一轮输入时允许调用。当前处于一个 turn 内时（收到 `input_audio_buffer.speech_started` 到 `response.done` 期间）不允许重复触发。
+-   **smart\_turn / smart\_turn\_v2 模式**：等待用户下一轮输入时允许调用。当前处于一个 turn 内时（收到 `input_audio_buffer.speech_started` 到 `response.done` 期间）不允许重复触发。
 
 `response` 字段可选，用于覆盖本轮推理的会话默认配置。Function Calling 场景下，客户端写入 `function_call_output` 后也通过该事件触发二轮推理。
 
-**说明**server\_vad / smart\_turn 模式下，手动触发的推理仍可能被新语音打断。
+**说明**server\_vad / smart\_turn / smart\_turn\_v2 模式下，手动触发的推理仍可能被新语音打断。
 
 **type**`string`**（必选）**
 

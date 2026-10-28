@@ -13,7 +13,7 @@
 开始前，请确保您已完成以下操作：
 
 1.  已[获取 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
-2.  已创建[工作流应用](raw/application-user-guide/llm-application/workflow-application.md)，并在[应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)页面的应用卡片上获取 APP\_ID。
+2.  已创建[工作流应用](raw/application-user-guide/llm-application/workflow-application.md)，并在[应用管理](https://bailian.console.aliyun.com/flow-agent/app-center)页面的应用卡片上获取 APP\_ID。
 3.  若通过DashScope SDK调用，需要[安装DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
 ## 快速开始
@@ -4462,9 +4462,9 @@ func main() {
 
 1.  **构建支持文件问答的工作流**
     
-    1.  **配置开始节点**：在**开始**节点中，添加一个自定义参数，用于接收文件 URL。例如：将其命名为 `file_url`，类型选择 `File`（多文件可选择`Array[File]`）。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8577255671/p1032582.png)
+    1.  **配置开始节点**：在**开始**节点中，添加一个自定义参数，用于接收文件 URL。例如：将其命名为 `file_url`，类型选择 `File`（多文件可选择`Array[File]`）。
         
-    2.  **（可选）添加解析节点**：添加一个合适的文件解析节点，并将`file_url`作为该节点的输入变量。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8577255671/p1032583.png)
+    2.  **（可选）添加解析节点**：添加一个合适的文件解析节点，并将`file_url`作为该节点的输入变量。
         
     3.  **配置大模型节点：**
         -   **引用解析输出变量**：如果配置了解析节点，可将其文本输出变量（如 `markdownContent`、`ASRInfo`等）添加到后续节点（如**大模型节点**）中，以便对文件内容进行处理。
@@ -4482,7 +4482,7 @@ func main() {
     
     1.  **通过控制台测试**
         
-        在应用详情页的**测试**窗，进入入参变量配置，为 `file_url` 参数上传**本地文件**或**粘贴文件 URL**，进行快速测试。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8577255671/p1032595.png)
+        在应用详情页的**测试**窗，进入入参变量配置，为 `file_url` 参数上传**本地文件**或**粘贴文件 URL**，进行快速测试。
         
     2.  **通过 API 调用**
         

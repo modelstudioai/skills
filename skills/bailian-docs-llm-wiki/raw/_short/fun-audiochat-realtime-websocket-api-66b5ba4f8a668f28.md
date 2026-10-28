@@ -95,9 +95,9 @@ Qwen-Audio Realtime API 支持三种交互模式，通过 `session.update` 事�
 
 免提对话、语音助手
 
-**smart\_turn**
+**智能语义轮次**
 
-`smart_turn`
+`smart_turn`、`smart_turn_v2`（推荐）
 
 融合声学感知与语义理解判断轮次边界，而非仅依赖人声信号。无语义的声音（如”嗯”、”啊”）不会触发对话轮或打断模型播报。
 
@@ -142,15 +142,17 @@ Qwen-Audio Realtime API 支持三种交互模式，通过 `session.update` 事�
 
 ![111](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7268354871/p1088435.svg)
 
-### smart\_turn 模式
+### smart\_turn / smart\_turn\_v2 模式
 
 融合声学感知与语义理解检测语音结束，可过滤回应语、背景音等无意义声音。无语义的声音通过 `conversation.item.ambient_audio_transcription.delta` 事件透传，不触发对话轮。
 
-**启用方式：**配置 `session.update` 事件的 `turn_detection.type` 为 `smart_turn`。
+**启用方式：**配置 `session.update` 事件的 `turn_detection.type` 为 `smart_turn` 或 `smart_turn_v2`。
+
+`smart_turn_v2`（推荐使用）：在 `smart_turn` 基础上增强对话上下文理解，更好地判断多人场景中的交互意图。减少旁人说话或无关插话造成的误回复、误打断。
 
 #### 一轮完整对话
 
-下图展示了 smart\_turn 模式下的典型交互时序：
+下图展示了 smart\_turn / smart\_turn\_v2 模式下的典型交互时序：
 
 ![111](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7268354871/p1088441.svg)
 
@@ -174,7 +176,7 @@ Qwen-Audio Realtime API 支持三种交互模式，通过 `session.update` 事�
 
 ### 说话人增强配置流程
 
-在 smart\_turn 模式下，首次 `session.update` 中传入 `voiceprint_audio_urls` 时，服务端将异步执行声纹注册（加载目标说话人音频特征），并通过事件通知注册进度。声纹注册失败不阻塞正常对话流程。
+在 smart\_turn / smart\_turn\_v2 模式下，首次 `session.update` 中传入 `voiceprint_audio_urls` 时，服务端将异步执行声纹注册（加载目标说话人音频特征），并通过事件通知注册进度。声纹注册失败不阻塞正常对话流程。
 
 按时间顺序，声纹注册的交互流程如下：
 
@@ -224,7 +226,7 @@ Qwen-Audio Realtime API 支持三种交互模式，通过 `session.update` 事�
 
 **server\_vad**
 
-**smart\_turn**
+**smart\_turn / smart\_turn\_v2**
 
 session.update
 

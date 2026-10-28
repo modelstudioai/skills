@@ -496,11 +496,15 @@ public final class RealtimeVoiceChatClient {
 
 ### 切换交互模式
 
-server\_vad 适合按静音时长判停；smart\_turn 结合声学与语义判断轮次；按键模式将 turn\_detection 设为 null。turn\_detection 只能在首次发送音频前修改，切换模式时应重新建立会话。
+server\_vad 适合按静音时长判停。smart\_turn 和 smart\_turn\_v2 结合声学与语义判断轮次，推荐使用 smart\_turn\_v2。按键模式将 turn\_detection 设为 null。turn\_detection 只能在首次发送音频前修改。切换模式时，应重新建立会话。
 
 ### 切换音色
 
 在首次 session.update 中设置 session.voice。不同模型支持的系统音色可能不同；支持的音色与声音复刻用法请参见[实时语音对话（Qwen-Audio-Realtime）](https://help.aliyun.com/zh/model-studio/fun-audiochat-realtime)。
+
+### 设置音频输出语速
+
+在 `session.update` 的 `session` 中设置 `speech_rate`，控制模型音频输出语速。取值范围为 `[0.5, 2.0]`，默认值为 `1.0`。参数说明和配置示例见[音频输出语速](https://help.aliyun.com/zh/model-studio/qwen-audio-realtime-user-guides#fc60speechrate01)。
 
 ### 扬声器或听筒
 

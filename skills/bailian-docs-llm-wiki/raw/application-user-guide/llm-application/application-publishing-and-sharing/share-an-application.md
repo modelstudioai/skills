@@ -12,7 +12,7 @@
 
 ## 分享或发布百炼应用
 
-1.  访问百炼控制台的**[应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)**页面，单击目标智能体应用卡片区域的**发布**。
+1.  访问百炼控制台的**[应用管理](https://bailian.console.aliyun.com/flow-agent/app-center)**页面，单击目标智能体应用卡片区域的**发布**。
 
 **智能体应用（Agent 1.0）**支持以下四种分享或发布方式。
 
@@ -164,7 +164,7 @@
     
     **开发者ID（AppID）**的获取方法：访问[微信公众号后台](https://mp.weixin.qq.com/)，在左侧菜单选择**设置与开发>开发接口管理**。选择基本配置页签，获取 AppID。
     
-4.  微信公众号AI机器人创建完成后，在**发布渠道**页签，将鼠标悬浮至**微信公众号**右侧的![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3719962371/p877475.png)图标，您可以按需将二维码分享给目标用户。配置完成后，微信公众号卡片显示 **已创建** 状态，提示已生成微信客服二维码。单击 **扫码使用** 按钮，通过微信扫码体验AI机器人客服功能。
+4.  微信公众号AI机器人创建完成后，在**发布渠道**页签，将鼠标悬浮至**微信公众号**右侧的图标，您可以按需将二维码分享给目标用户。配置完成后，微信公众号卡片显示 **已创建** 状态，提示已生成微信客服二维码。单击 **扫码使用** 按钮，通过微信扫码体验AI机器人客服功能。
     
 
 ### 发布应用为组件
@@ -239,7 +239,7 @@
     
     在智能体应用中引用组件
     
-    1.  在阿里云百炼的[应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)页面，创建[智能体应用（Agent 1.0）](raw/application-user-guide/llm-application/single-agent-application.md)时，在**技能**中选择组件。
+    1.  在阿里云百炼的[应用管理](https://bailian.console.aliyun.com/flow-agent/app-center)页面，创建[智能体应用（Agent 1.0）](raw/application-user-guide/llm-application/single-agent-application.md)时，在**技能**中选择组件。
         
         仅支持选择已发布的智能体组件。
         
@@ -252,7 +252,7 @@
     
     在工作流应用中引用组件
     
-    1.  在阿里云百炼的[应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)页面，创建[工作流应用](raw/application-user-guide/llm-application/workflow-application.md)时，将**组件**节点拖入画布，再选择组件。
+    1.  在阿里云百炼的[应用管理](https://bailian.console.aliyun.com/flow-agent/app-center)页面，创建[工作流应用](raw/application-user-guide/llm-application/workflow-application.md)时，将**组件**节点拖入画布，再选择组件。
         
         支持选择已发布的智能体组件或工作流组件。
         
@@ -268,7 +268,7 @@
     
 2.  在**查看API-KEY**配置向导页，选中目标API KEY，单击**确定**。
     
-3.  点击右上角![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3275016571/p1000851.png)，生成临时体验二维码，通过手机微信/钉钉/浏览器扫码体验交互效果。
+3.  点击右上角图标，生成临时体验二维码，通过手机微信/钉钉/浏览器扫码体验交互效果。
     
     二维码有效期为24小时，也可点击**复制链接**直接分享体验链接。
     

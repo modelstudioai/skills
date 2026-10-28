@@ -4,8 +4,6 @@
 
 ## 工作流程
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1340161871/CAEQZhiBgICczru.2hkiIGNhZjkzMjM4YWJlZjRhOGU5NzA1Mzk1MWFkNGI1MzBh4867389_20250110113852.335.svg)
-
 1.  **创建/导入插件：**定义插件的基础信息，或直接从云市场导入。
 2.  **添加工具**（导入插件无需此步）**：**为插件配置具体的 API 路径、请求参数和返回数据。
 3.  **调试与发布：**在线测试 API 的连通性，确保功能正常后发布。
@@ -17,7 +15,7 @@
 
 ### 步骤一：创建插件
 
-1.  访问[**插件**](https://bailian.console.aliyun.com/?tab=app#/component-manage)页面，单击**创建插件**。
+1.  访问[**插件管理**](https://bailian.console.aliyun.com/flow-agent/plugin-manage)页面，点击**创建插件**。
     
 2.  填写插件信息。
     
@@ -144,7 +142,7 @@
     
     **类型**：指参数类型。
     
-    Object类型下的子属性不能为空。请单击该对象行末的![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1891396371/p905454.png)图标新增子属性。
+    Object类型下的子属性不能为空。请单击该对象行末的图标新增子属性。
     
     **传参方式**：要设置准确。
     
@@ -163,7 +161,7 @@
     
     出参与入参一样，需要尽可能精简和准确描述，嵌套的层级也尽可能少。
     
-    无论请求方式是GET还是POST，参数都支持Object类型。但Object类型下的子属性不能为空。请单击该对象行末的![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1891396371/p905454.png)图标新增子属性。
+    无论请求方式是GET还是POST，参数都支持Object类型。但Object类型下的子属性不能为空。请单击该对象行末的图标新增子属性。
     
     高级配置（可选）
     
@@ -192,7 +190,7 @@
 
 云市场提供了丰富的API，您可在云市场开通需要的API并将其导入至阿里云百炼插件列表中，以便应用进行调用。
 
-1.  访问[**插件**](https://bailian.console.aliyun.com/?tab=app#/component-manage)页面，单击**从云市场导入**。
+1.  访问[**插件管理**](https://bailian.console.aliyun.com/flow-agent/plugin-manage)页面，点击**从云市场导入**。
     
 2.  首次在阿里云百炼平台上导入云市场 API 作为插件，需要先进行服务关联角色授权。
     
@@ -306,15 +304,15 @@
         
         -   无鉴权：您可以在输入框中与大模型进行对话，测试插件使用效果。
             
-        -   用户级鉴权、服务级鉴权：您需要在开启对话前，单击![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1891396371/p905403.png)配置需要传入的鉴权Token。如果不离开当前页面，可以只配置一次。
+        -   用户级鉴权、服务级鉴权：您需要在开启对话前，点击对应图标配置需要传入的鉴权Token。如果不离开当前页面，可以只配置一次。
             
             > 从云市场导入的插件，不需要在当前页面输入鉴权Token。
             
-        -   工具入参的**传参方式**选择了**业务透传**：您需要在开启对话前，单击![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1891396371/p905403.png)配置需要传入的变量值。如果不离开当前页面，可以只输入一次。
+        -   工具入参的**传参方式**选择了**业务透传**：您需要在开启对话前，点击对应图标配置需要传入的变量值。如果不离开当前页面，可以只输入一次。
             
     4.  测试完成后，**发布**应用。
         
--   **方式二**：在[**应用管理**](https://bailian.console.aliyun.com/#/app-center)页面中，进入**智能体应用**的编排页面，在**MCP**区块中添加MCP服务，测试插件使用效果，并**发布**应用。
+-   **方式二**：在[**应用管理**](https://bailian.console.aliyun.com/flow-agent/app-center)页面中，进入**智能体应用**的编排页面，在**MCP**区块中添加MCP服务，测试插件使用效果，并**发布**应用。
     
 
 #### API
@@ -324,8 +322,8 @@
 工具ID用于标识具体的工具。通过API调用工具时，需要正确传递工具ID，以确保请求能够被正确识别。
 
 1.  在**插件列表**中，找到工具所属的插件，单击**查看详情**。
-2.  将鼠标悬浮于工具名称旁边的![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1891396371/p902180.png)图标上。
-3.  单击![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1891396371/p902183.png)图标，复制工具ID。
+2.  将鼠标悬浮于工具名称旁边的图标上。
+3.  点击图标，复制工具ID。
 
 -   当通过API调用应用时，如果应用中关联的插件存在业务透传参数或开启了**用户级鉴权**，则需要通过参数`biz_params`传递鉴权信息或透传参数信息。具体操作请参见[工作流与旧版智能体应用 API应用 DashScope API 参考](raw/_short/agent-and-workflow-application-api-reference-81f0d3ecfd878b1f.md)。
 -   通过Assistant API调用工具。请在[Assistant API文档](https://help.aliyun.com/zh/model-studio/quick-start-of-assistant-api)中搜索`tools`关键字，查看如何使用Assistant API调用工具。
@@ -387,7 +385,7 @@ xx缺少参数描述信息
 
 可能原因一：输入参数或输出参数中的Object类型参数子属性为空。
 
-解决方案：请点击该对象行末的![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1891396371/p905454.png)图标新增子属性。
+解决方案：请点击该对象行末的图标新增子属性。
 
 可能原因二：请求方法选择了GET，但输入参数配置时，存在参数为Object类型。
 

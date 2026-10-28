@@ -64,7 +64,7 @@ pip3 install alibabacloud_endpoint_util alibabacloud_tea_openapi alibabacloud_qu
 
 ### 可选：发布工作流为组件
 
-您可以将工作流应用发布为组件，以供其他智能体或工作流应用使用。具体操作，请参见[发布为组件](https://help.aliyun.com/zh/model-studio/workflow-application#cff002ee1f73o)。
+您可以将工作流应用发布为组件，以供其他智能体或工作流应用使用。具体操作，请参见[发布为组件](https://help.aliyun.com/zh/model-studio/workflow/introduction#cff002ee1f73o)。
 
 ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1015919471/p962778.png) ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1015919471/p962783.png)
 

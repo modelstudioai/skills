@@ -1,11 +1,10 @@
 # Flow Agent
 
 -   [开始使用](raw/application-user-guide/llm-application/llm-application-start-using.md)
--   [应用类型介绍](raw/application-user-guide/llm-application/application-introduction.md)
 -   [新版智能体应用（Agent 2.0）](raw/application-user-guide/llm-application/new-single-agent-application.md)
 -   [智能体应用（Agent 1.0）](raw/application-user-guide/llm-application/single-agent-application.md)
 -   [工作流应用](raw/application-user-guide/llm-application/workflow-application.md)
--   [高代码应用](raw/application-user-guide/llm-application/rich-code-application.md)
+-   [任务中心](raw/application-user-guide/llm-application/flow-agent-task-center.md)
 -   [文件问答](raw/application-user-guide/llm-application/file-q-a.md)
 -   [Prompt](raw/application-user-guide/prompt.md)
 -   [插件](raw/application-user-guide/plug-in.md)

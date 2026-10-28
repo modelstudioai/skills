@@ -9,7 +9,7 @@ Qwen-Audio 是端到端实时语音交互大模型，支持低延迟语音对话
 该模型除 WebSocket 协议外，还支持通过 AOQ 和 WebRTC 协议接入；如果是客户端对接，且更看重稳定的延迟、弱网下的交互能力、实时双工的降噪与回声消除，可优先考虑 AOQ，协议对比与选型请参见[模型/应用支持力度](https://help.aliyun.com/zh/model-studio/realtime-api-overview#rtov-s02h2)。
 
 -   支持 Function Calling 工具调用，模型可自主判断是否需要调用外部工具获取信息
--   支持联网搜索，模型可根据实时问题自主判断是否搜索并返回搜索结果来源（不可与 Function Calling 同时启用）
+-   支持联网搜索，模型可根据实时问题自主判断是否搜索并返回搜索结果来源。`qwen-audio-3.1-realtime-flash` 可同时启用联网搜索和 Function Calling；3.1 Plus 和 3.0 Plus/Flash 不可同时启用
 -   支持对话上下文管理（创建、查询、删除对话项），灵活注入历史上下文或清理无关对话项
 -   高表现力语音输出，根据对话语境动态调整语气、节奏和情感表达
 -   支持系统音色与声音复刻音色，可通过声音复刻创建专属 AI 音色用于语音对话输出
@@ -18,9 +18,9 @@ Qwen-Audio 是端到端实时语音交互大模型，支持低延迟语音对话
 
 以下交互模式和说话人增强说明适用于 `qwen-audio-3.1-realtime-plus`、`qwen-audio-3.1-realtime-flash`、`qwen-audio-3.0-realtime-plus` 和 `qwen-audio-3.0-realtime-flash`。
 
--   支持三种交互模式：声学 VAD（server\_vad）、智能语义轮次（smart\_turn）和手动控制（push-to-talk）
--   独有的 smart\_turn 模式融合声学感知与语义理解判断轮次边界，无意义附和声（如“嗯”“啊”）不会打断对话
--   smart\_turn 模式下支持说话人增强，传入目标用户预录音频后，模型可在双工对话中精准锁定目标说话人，有效屏蔽旁人声音与背景噪声
+-   支持三种交互模式：声学 VAD（server\_vad）、智能语义轮次（smart\_turn、smart\_turn\_v2，推荐后者）和手动控制（push-to-talk）
+-   smart\_turn / smart\_turn\_v2 模式融合声学感知与语义理解判断轮次边界，无意义附和声（如“嗯”“啊”）不会打断对话
+-   smart\_turn / smart\_turn\_v2 模式下支持说话人增强，传入目标用户预录音频后，模型可在双工对话中精准锁定目标说话人，有效屏蔽旁人声音与背景噪声
 
 ### 工作原理
 
@@ -52,7 +52,8 @@ PCM
 
 实时语音对话支持以下语种和中文方言：
 
--   语种：德语（de）、英语（en）、西班牙语（es）、法语（fr）、印尼语（id）、意大利语（it）、日语（ja）、韩语（ko）、葡萄牙语（pt）、俄语（ru）、中文（zh）。
+-   语种（`qwen-audio-3.1-realtime-plus`、`qwen-audio-3.1-realtime-flash`）：德语（de）、英语（en）、西班牙语（es）、法语（fr）、印尼语（id）、意大利语（it）、日语（ja）、韩语（ko）、葡萄牙语（pt）、俄语（ru）、中文（zh）、泰语（th）、越南语（vi）、阿拉伯语（ar）。
+-   语种（`qwen-audio-3.0-realtime-plus`、`qwen-audio-3.0-realtime-flash`）：德语（de）、英语（en）、西班牙语（es）、法语（fr）、印尼语（id）、意大利语（it）、日语（ja）、韩语（ko）、葡萄牙语（pt）、俄语（ru）、中文（zh）。
 -   中文及方言：普通话、广东话、重庆话、东北话、甘肃话、贵州话、浙江话、河北话、河南话、湖北话、湖南话、江西话、宁波话、宁夏话、青岛话、陕西话、山西话、山东话、上海话、四川话、云南话。
 
 使用 `qwen-audio-3.1-realtime-plus` 或 `qwen-audio-3.1-realtime-flash` 时，可通过 `session.input_audio_transcription.language` 和 `session.output_audio.language` 分别指定输入音频源语种和输出音频目标语种。两个参数的可选语言代码分别见[客户端事件](https://help.aliyun.com/zh/model-studio/fun-audiochat-client-events#fc65a1b2c3d5f)。其中 `session.output_audio.language` 作用于语音合成（TTS），会尽可能让语音输出使用目标语种，但不保证一定生效，也不会改变模型回复文本的语种。
@@ -320,7 +321,7 @@ from B64PCMPlayer import B64PCMPlayer
 
 class TurnDetectionMode(Enum):
     SERVER_VAD = "server_vad"
-    SEMANTIC_VAD = "smart_turn"
+    SEMANTIC_VAD = "smart_turn_v2"
     MANUAL = "manual"
 
 class FunRealtimeClient:
@@ -395,7 +396,7 @@ class FunRealtimeClient:
             await self.update_session(session_config)
         elif self.turn_detection_mode == TurnDetectionMode.SEMANTIC_VAD:
             session_config['turn_detection'] = {
-                "type": "smart_turn"
+                "type": "smart_turn_v2"
             }
             await self.update_session(session_config)
         else:
@@ -593,13 +594,13 @@ if __name__ == "__main__":
 
 运行 `python realtime_demo.py`，对着麦克风说话即可与模型实时对话。系统会自动检测语音起止并触发响应。
 
-**说明**以上示例使用 server\_vad 模式（服务端声学 VAD 自动检测语音起止）。如需使用 smart\_turn（智能语义轮次）或 push-to-talk（手动控制）模式，请参见[交互模式](https://help.aliyun.com/zh/model-studio/qwen-audio-realtime-user-guides#fc60h301)。
+**说明**以上示例使用 server\_vad 模式（服务端声学 VAD 自动检测语音起止）。如需使用 smart\_turn / smart\_turn\_v2（智能语义轮次，推荐 smart\_turn\_v2）或 push-to-talk（手动控制）模式，请参见[交互模式](https://help.aliyun.com/zh/model-studio/qwen-audio-realtime-user-guides#fc60h301)。
 
 ## 会话配置
 
 ### 交互模式
 
-Qwen-Audio 支持三种交互模式：`server_vad`（声学 VAD 自动检测语音起止）、`smart_turn`（智能语义轮次，声学与语义融合判断）和 push-to-talk（客户端手动控制）。各模式的详细说明及事件交互时序（含时序图），请参见[交互模式](https://help.aliyun.com/zh/model-studio/fun-audiochat-realtime-websocket-api#fc63modes01h2)。
+Qwen-Audio 支持三种交互模式：`server_vad`（声学 VAD 自动检测语音起止）、`smart_turn`（智能语义轮次，声学与语义融合判断；推荐使用 `smart_turn_v2`）和 push-to-talk（客户端手动控制）。各模式的详细说明及事件交互时序（含时序图），请参见[交互模式](https://help.aliyun.com/zh/model-studio/fun-audiochat-realtime-websocket-api#fc63modes01h2)。
 
 **说明**`turn_detection` 仅在首次发送音频之前（IDLE 状态）允许修改。会话建立后切换交互模式需要重新连接。
 
@@ -620,14 +621,16 @@ Qwen-Audio 支持三种交互模式：`server_vad`（声学 VAD 自动检测语�
 }
 ```
 
--   **smart\_turn**：
+-   **smart\_turn / smart\_turn\_v2**：
+
+`smart_turn_v2`（推荐使用）：在 `smart_turn` 基础上增强对话上下文理解，更好地判断多人场景中的交互意图。减少旁人说话或无关插话造成的误回复、误打断。将 `type` 设为 `smart_turn`，仍可使用原版智能轮次检测。
 
 ```
 {
     "type": "session.update",
     "session": {
         "turn_detection": {
-            "type": "smart_turn"
+            "type": "smart_turn_v2"
         }
     }
 }
@@ -874,6 +877,20 @@ finally:
 }
 ```
 
+### 音频输出语速
+
+通过 `session.update`，在 `session` 对象中设置 `speech_rate`，控制模型音频输出语速。取值范围为 `[0.5, 2.0]`，默认值为 `1.0`。值越小，语速越慢；值越大，语速越快。适用于 `qwen-audio-3.1-realtime-plus`、`qwen-audio-3.1-realtime-flash`、`qwen-audio-3.0-realtime-plus`、`qwen-audio-3.0-realtime-flash`。以下示例将该参数设为 `1.2`：
+
+```
+{
+    "type": "session.update",
+    "session": {
+        "modalities": ["audio", "text"],
+        "speech_rate": 1.2
+    }
+}
+```
+
 ### 输出模态
 
 通过 `modalities` 参数控制模型输出的内容类型：
@@ -905,7 +922,7 @@ finally:
 
 ### VAD 配置
 
-server\_vad 模式下，可通过以下参数调整 VAD 行为（smart\_turn 模式下这些参数无效）。参数在 `session.turn_detection` 对象中配置：
+在 `session.turn_detection` 中配置 VAD 参数。`threshold` 适用于 `server_vad`、`smart_turn` 和 `smart_turn_v2`。`silence_duration_ms` 仅适用于 `server_vad`。
 
 **参数**
 
@@ -1044,7 +1061,7 @@ from B64PCMPlayer import B64PCMPlayer
 
 class TurnDetectionMode(Enum):
     SERVER_VAD = "server_vad"
-    SEMANTIC_VAD = "smart_turn"
+    SEMANTIC_VAD = "smart_turn_v2"
     MANUAL = "manual"
 
 # ============ 工具函数定义 ============
@@ -1175,7 +1192,7 @@ class FunRealtimeClient:
             await self.update_session(session_config)
         elif self.turn_detection_mode == TurnDetectionMode.SEMANTIC_VAD:
             session_config['turn_detection'] = {
-                "type": "smart_turn"
+                "type": "smart_turn_v2"
             }
             await self.update_session(session_config)
         else:
@@ -1464,7 +1481,7 @@ Qwen-Audio 支持通过客户端事件管理对话上下文中的对话项（Con
 
 ### 环境音转写
 
-**仅 smart\_turn 模式**。当 VAD 检测到语音活动但语义判定为非有效轮次（如噪声、“嗯”“啊”等无语义内容）时，服务端不会触发对话轮，而是将 ASR 识别结果以 `ambient_audio_transcription` 事件透传给客户端。该转写结果不会写入对话上下文。
+**仅 smart\_turn / smart\_turn\_v2 模式**。当 VAD 检测到语音活动但语义判定为非有效轮次（如噪声、“嗯”“啊”等无语义内容）时，服务端不会触发对话轮，而是将 ASR 识别结果以 `ambient_audio_transcription` 事件透传给客户端。该转写结果不会写入对话上下文。
 
 ```
 {
@@ -1479,7 +1496,7 @@ Qwen-Audio 支持通过客户端事件管理对话上下文中的对话项（Con
 
 ### 说话人增强
 
-**仅 smart\_turn 模式**。在 `session.update` 中传入目标用户提前录制的音频 URL，模型将在双工对话中精准锁定该说话人，有效忽略旁人声音与背景噪声，实现开放场景下的流畅双工交互。
+**仅 smart\_turn / smart\_turn\_v2 模式**。在 `session.update` 中传入目标用户提前录制的音频 URL，模型将在双工对话中精准锁定该说话人，有效忽略旁人声音与背景噪声，实现开放场景下的流畅双工交互。
 
 **配置方式**：在第一次 `session.update` 的 `turn_detection.voiceprint_audio_urls` 中传入声纹音频的公网可访问 URL。
 
@@ -1488,7 +1505,7 @@ Qwen-Audio 支持通过客户端事件管理对话上下文中的对话项（Con
     "type": "session.update",
     "session": {
         "turn_detection": {
-            "type": "smart_turn",
+            "type": "smart_turn_v2",
             "voiceprint_audio_urls": [
                 "https://example.com/speaker.wav"
             ]
@@ -1514,7 +1531,7 @@ Qwen-Audio 支持通过客户端事件管理对话上下文中的对话项（Con
 
 -   **客户端重连**：客户端应实现断线自动重连机制，以应对网络抖动。建议在 `on_error` 回调中设置重连信号，使用指数退避策略（如等待 1s → 2s → 4s）重试。
 -   **错误分类处理**：客户端错误（`invalid_request_error`）不中断连接，仅需记录日志或调整参数；服务端错误（`server_error`）会终止连接，需触发重连。
--   **打断处理**：server\_vad / smart\_turn 模式下，用户新语音会自动打断正在进行的模型回复（`response.done` 返回 `status=cancelled`）。客户端应在收到 `input_audio_buffer.speech_started` 时立即停止播放已缓存的音频，避免语音叠加。
+-   **打断处理**：server\_vad / smart\_turn / smart\_turn\_v2 模式下，用户新语音会自动打断正在进行的模型回复（`response.done` 返回 `status=cancelled`）。客户端应在收到 `input_audio_buffer.speech_started` 时立即停止播放已缓存的音频，避免语音叠加。
 
 ### 连接生命周期
 

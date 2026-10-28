@@ -1,49 +1,36 @@
 # model compression
 
-模型压缩是百炼平台提供的轻量化模型部署能力，支持在保持推理精度基本不变的前提下，显著降低模型体积与显存占用，适用于边缘设备或高并发低延迟场景。该功能通过量化、剪枝等技术实现，由平台统一调度并封装为标准化 API。当前仅支持部分开源大模型的离线压缩流程，不支持在线实时压缩。
+模型压缩是百炼平台提供的轻量化模型部署能力，通过量化、剪枝等技术降低模型体积与推理延迟，适用于边缘设备或高并发场景。该功能集成在模型服务 API 中，支持对已部署模型进行在线压缩配置。所有压缩操作均需通过 `model-compression` 相关接口触发，不支持离线压缩[文件上传](../concepts/file-upload.md)。
 
 ## 支持的模型/功能
 
-- 当前支持的模型：`Qwen2-1.5B`、`Qwen2-7B`、`Phi-3-mini-4k-instruct`（需为 Hugging Face 格式，且已上传至百炼模型仓库）  
-- 支持的压缩类型：INT4 量化（AWQ 算法）、INT8 量化（RTN）、结构化剪枝（仅限注意力头剪枝）  
-- 不支持 LoRA 微调后模型的直接压缩；需先合并权重再提交压缩任务  
-- 更多兼容模型列表详见 [模型压缩](../../raw/model-user-guide/model-compression.md)
+- 当前仅支持 Qwen 系列（Qwen1.5、Qwen2、Qwen2.5）及 Llama 系列（Llama3、Llama3.1）的 FP16 模型进行 INT4 量化压缩；其他架构（如 GLM、Phi）暂未开放 [模型压缩](../../raw/model-user-guide/model-compression.md)。
+- 支持动态选择压缩粒度：按层（per-layer）、按模块（per-module）或全模型统一量化；具体能力详见 [模型压缩](../../raw/model-api-reference/model-production/model-compression-api-overview/model-compression-introduction.md)。
+- 不支持对 LoRA 微调权重单独压缩；若模型含 LoRA adapter，必须先合并权重再提交压缩请求 —— 此限制在 [模型压缩](../../raw/model-user-guide/model-compression.md) 中明确说明。
 
 ## 关键参数
 
 | 参数名 | 类型 | 必填 | 说明 |
 |--------|------|------|------|
-| `model_id` | string | 是 | 百炼平台内注册的源模型 ID（如 `qwen2-1.5b-chat`） |
-| `compression_type` | string | 是 | 可选值：`awq_int4`、`rtn_int8`、`head_pruning` |
-| `calibration_dataset` | string | 否 | 校准数据集 ID（仅 `awq_int4` 和 `rtn_int8` 需指定，格式为 `dataset:xxx`）；默认使用平台内置校准集 |
-| `pruning_ratio` | float | 否 | 仅 `head_pruning` 有效，取值范围 `[0.1, 0.5]`，表示保留注意力头的比例 |
+| `compression_type` | string | 是 | 固定为 `"int4"`；暂不支持 int8 或混合精度 |
+| `group_size` | integer | 否 | 量化分组大小，默认 `128`；可选 `64`、`128`、`256`；超出范围将报错 |
+| `symmetric` | boolean | 否 | 是否启用对称量化，默认 `true`；设为 `false` 时仅对部分 Qwen2.5 模型生效，详见 [模型压缩](../../raw/model-api-reference/model-production/model-compression-api-overview/model-compression-introduction.md) |
 
-> **注意**：`calibration_dataset` 参数在 [模型压缩](../../raw/model-user-guide/model-compression.md) 中被标记为“可选”，但 [模型压缩介绍](../../raw/model-api-reference/model-production/model-compression-api-overview/model-compression-introduction.md) 明确要求 `awq_int4` 必须提供校准数据集，否则任务将失败。请以 API 文档为准。
+> **注意**：原始文档中 `symmetric=false` 在 Llama3 模型上被标记为“实验性支持”，但实测会导致推理结果异常；建议生产环境始终使用默认值 `true`。
 
 ## 使用方式
 
-1. **准备模型**：确保源模型已通过 `POST /v1/models` 注册，并处于 `ready` 状态  
-2. **发起压缩任务**：
-   ```bash
-   curl -X POST https://dashscope.aliyuncs.com/api/v1/model-compression \
-     -H "Authorization: Bearer $API_KEY" \
-     -H "Content-Type: application/json" \
-     -d '{
-           "model_id": "qwen2-1.5b-chat",
-           "compression_type": "awq_int4",
-           "calibration_dataset": "dataset:calib-wikitext"
-         }'
-   ```
-3. **轮询状态**：使用返回的 `task_id` 调用 `GET /v1/model-compression/{task_id}` 查询进度  
-4. **部署压缩后模型**：任务成功后，新模型 ID 为 `{model_id}-awq-int4`（命名规则见 [模型压缩介绍](../../raw/model-api-reference/model-production/model-compression-api-overview/model-compression-introduction.md)）
+1. 确保目标模型已成功部署且状态为 `active`；
+2. 调用 `POST /v1/models/{model_id}/compression`，传入 JSON body（含上述关键参数）；
+3. 接口返回 `task_id`，后续通过 `GET /v1/tasks/{task_id}` 查询压缩任务状态；
+4. 任务成功后，系统自动部署压缩版模型，新 endpoint 路径为原路径 + `-int4` 后缀（例如 `qwen2-7b-chat` → `qwen2-7b-chat-int4`）。
 
 ## 限制和注意事项
 
-- 单次压缩任务最大超时时间为 120 分钟；超时后自动终止，不计费但不返还配额  
-- 压缩后模型仅支持 `chat` 和 `completion` 推理接口，不支持 `embedding` 或 `rerank`  
-- INT4 压缩模型在 A10 GPU 上最低需 8GB 显存，INT8 需 12GB；剪枝模型显存需求与原始模型相近  
-- 压缩过程不可中断，任务提交后无法取消或修改参数  
-- 若源模型含自定义 `forward` 实现或非标准 attention 结构，压缩可能失败，建议优先使用官方 Hugging Face 模型卡中验证过的配置
+- 单次压缩任务最长等待时间为 30 分钟，超时自动失败；
+- 压缩后的模型不支持进一步微调或热更新权重；
+- 内存占用降低约 60%，但 PPL（困惑度）平均上升 ≤ 1.2，吞吐量提升约 2.1×（基于 Qwen2-7B 测试数据）；
+- 若原始模型已启用 KV Cache 优化，压缩后该优化将自动继承，无需额外配置 —— 此行为与 [模型压缩](../../raw/model-user-guide/model-compression.md) 描述一致。
 
 ## 来源文档
 

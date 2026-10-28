@@ -34,7 +34,7 @@
           "count_limit": 300,
           "async_task_timeout": 180,
           "type": "model-default",
-          "async_user_concurrency_limit": 10
+          "async_user_concurrency_limit": 5
         },
         "model-default": {
           "count_limit_period": 60,
@@ -42,7 +42,7 @@
           "count_limit": 300,
           "async_task_timeout": 180,
           "type": "model-default",
-          "async_user_concurrency_limit": 10
+          "async_user_concurrency_limit": 5
         }
       },
       "priceTimeBands": [],
@@ -157,7 +157,7 @@
           "count_limit": 300,
           "async_task_timeout": 180,
           "type": "model-default",
-          "async_user_concurrency_limit": 10
+          "async_user_concurrency_limit": 5
         },
         "model-default": {
           "count_limit_period": 60,
@@ -165,7 +165,7 @@
           "count_limit": 300,
           "async_task_timeout": 180,
           "type": "model-default",
-          "async_user_concurrency_limit": 10
+          "async_user_concurrency_limit": 5
         }
       },
       "priceTimeBands": [],
@@ -219,7 +219,7 @@
           "count_limit": 300,
           "async_task_timeout": 180,
           "type": "model-default",
-          "async_user_concurrency_limit": 10
+          "async_user_concurrency_limit": 5
         },
         "model-default": {
           "count_limit_period": 60,
@@ -227,7 +227,7 @@
           "count_limit": 300,
           "async_task_timeout": 180,
           "type": "model-default",
-          "async_user_concurrency_limit": 10
+          "async_user_concurrency_limit": 5
         }
       },
       "priceTimeBands": [],
@@ -280,7 +280,7 @@
           "count_limit": 300,
           "async_task_timeout": 180,
           "type": "model-default",
-          "async_user_concurrency_limit": 10
+          "async_user_concurrency_limit": 5
         },
         "model-default": {
           "count_limit_period": 60,
@@ -288,7 +288,7 @@
           "count_limit": 300,
           "async_task_timeout": 180,
           "type": "model-default",
-          "async_user_concurrency_limit": 10
+          "async_user_concurrency_limit": 5
         }
       },
       "priceTimeBands": [],
@@ -342,7 +342,7 @@
           "count_limit": 300,
           "async_task_timeout": 180,
           "type": "model-default",
-          "async_user_concurrency_limit": 10
+          "async_user_concurrency_limit": 5
         },
         "model-default": {
           "count_limit_period": 60,
@@ -350,7 +350,7 @@
           "count_limit": 300,
           "async_task_timeout": 180,
           "type": "model-default",
-          "async_user_concurrency_limit": 10
+          "async_user_concurrency_limit": 5
         }
       },
       "priceTimeBands": [],
@@ -403,7 +403,7 @@
           "count_limit": 300,
           "async_task_timeout": 180,
           "type": "model-default",
-          "async_user_concurrency_limit": 10
+          "async_user_concurrency_limit": 5
         },
         "model-default": {
           "count_limit_period": 60,
@@ -411,7 +411,7 @@
           "count_limit": 300,
           "async_task_timeout": 180,
           "type": "model-default",
-          "async_user_concurrency_limit": 10
+          "async_user_concurrency_limit": 5
         }
       },
       "priceTimeBands": [],
@@ -464,7 +464,7 @@
           "count_limit": 300,
           "async_task_timeout": 180,
           "type": "model-default",
-          "async_user_concurrency_limit": 10
+          "async_user_concurrency_limit": 5
         },
         "model-default": {
           "count_limit_period": 60,
@@ -472,7 +472,7 @@
           "count_limit": 300,
           "async_task_timeout": 180,
           "type": "model-default",
-          "async_user_concurrency_limit": 10
+          "async_user_concurrency_limit": 5
         }
       },
       "priceTimeBands": [],
@@ -525,7 +525,7 @@
           "count_limit": 300,
           "async_task_timeout": 180,
           "type": "model-default",
-          "async_user_concurrency_limit": 10
+          "async_user_concurrency_limit": 5
         },
         "model-default": {
           "count_limit_period": 60,
@@ -533,7 +533,7 @@
           "count_limit": 300,
           "async_task_timeout": 180,
           "type": "model-default",
-          "async_user_concurrency_limit": 10
+          "async_user_concurrency_limit": 5
         }
       },
       "priceTimeBands": [],
@@ -584,7 +584,7 @@
           "count_limit": 300,
           "async_task_timeout": 180,
           "type": "model-default",
-          "async_user_concurrency_limit": 10
+          "async_user_concurrency_limit": 5
         },
         "model-default": {
           "count_limit_period": 60,
@@ -592,7 +592,7 @@
           "count_limit": 300,
           "async_task_timeout": 180,
           "type": "model-default",
-          "async_user_concurrency_limit": 10
+          "async_user_concurrency_limit": 5
         }
       },
       "priceTimeBands": [],
@@ -645,7 +645,7 @@
           "count_limit": 300,
           "async_task_timeout": 180,
           "type": "model-default",
-          "async_user_concurrency_limit": 10
+          "async_user_concurrency_limit": 5
         },
         "model-default": {
           "count_limit_period": 60,
@@ -653,7 +653,7 @@
           "count_limit": 300,
           "async_task_timeout": 180,
           "type": "model-default",
-          "async_user_concurrency_limit": 10
+          "async_user_concurrency_limit": 5
         }
       },
       "priceTimeBands": [],
@@ -706,7 +706,7 @@
           "count_limit": 300,
           "async_task_timeout": 180,
           "type": "model-default",
-          "async_user_concurrency_limit": 10
+          "async_user_concurrency_limit": 5
         },
         "model-default": {
           "count_limit_period": 60,
@@ -714,7 +714,7 @@
           "count_limit": 300,
           "async_task_timeout": 180,
           "type": "model-default",
-          "async_user_concurrency_limit": 10
+          "async_user_concurrency_limit": 5
         }
       },
       "priceTimeBands": [],

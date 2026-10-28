@@ -1,43 +1,44 @@
 # 流式输出
 
-流式输出（Streaming Output）是百炼平台提供的一种响应模式，允许模型在生成过程中持续、分块地返回结果，而非等待全部内容完成后再一次性返回。该机制显著降低端到端延迟，提升用户交互实时性，适用于对话、语音助手、长文本生成、实时音视频处理等对响应速度敏感的场景。
+流式输出（Streaming Output）是指模型服务将生成结果以增量方式、按 token 或语义单元分块返回给客户端的通信模式，而非等待全部内容生成完毕后一次性返回。该机制显著降低端到端延迟，提升用户感知响应速度，是构建实时对话、语音交互、长文本生成等低延迟场景的核心能力。
 
-## 在百炼平台的不同场景中如何使用
+## 在百炼平台的不同场景中，这个概念如何使用
 
-- **标准模型 API（Chat/Completions）**：通过在请求体中设置 `stream=true`，调用 `/v1/chat/completions` 或 `/v1/completions` 接口。服务端以 Server-Sent Events（SSE）格式逐条推送 `data: {...}` 帧，每帧包含 `delta`（增量文本）、`finish_reason` 等字段。客户端需按 SSE 协议解析，不可直接 `JSON.parse` 整个响应体。
-
-- **Realtime API（WebSocket）**：专为低延迟设计，**强制启用流式**（`stream` 固定为 `true`）。通过 WebSocket 连接持续收发二进制/JSON 帧，支持 `text_delta`、`audio_chunk`、`event`（如 `speech_start`）等细粒度响应类型，适用于语音转写、实时目标检测等流式媒体场景。
-
-- **Omni Realtime API**：基于会话（session）的多模态流式交互，支持同时输出文本与音频流。通过 `modalities: ["text", "audio"]` 显式声明输出模态，并配合 `audio.output.voice`、采样率等参数控制合成效果；所有响应均以事件驱动方式（如 `content_part`、`audio_part`）实时推送。
-
-- **Application Call（智能体/工作流调用）**：支持同步、异步与流式三种模式。启用 `stream=true` 后，需额外在 HTTP Header 中添加 `X-DashScope-SSE: enable`（DashScope 协议）或遵循 Responses 协议的 JSON Lines 格式。流式下可结合 `incremental_output=true` 实现纯增量文本（后续 chunk 不重复前序内容），避免客户端自行去重。
-
-- **[OpenAI 兼容接口](openai-compatible-interface.md)**：完全兼容 OpenAI 的 `stream` 行为，包括 SSE 格式、`[DONE]` 结束标识、`delta.content` 字段语义等，便于现有 OpenAI 生态工具无缝迁移。
+- **标准大模型 API（`/v1/chat/completions`）**：通过设置 `stream: true` 启用流式响应，服务端以 Server-Sent Events（SSE）格式逐 chunk 返回 `delta.content`，适用于 Web 控制台、聊天应用等需“边打字边显示”的场景。  
+- **Realtime API（WebSocket）**：原生流式设计，不支持同步调用；通过 `output.text.delta` 等事件实时推送 token、音频片段或中间状态，专用于语音转写、视频帧理解等毫秒级交互场景。  
+- **Application Call（智能体/工作流调用）**：`stream: true` 可启用应用级流式输出，但需满足前置条件——工作流节点必须在控制台显式开启“流式输出”开关并重新发布；新版智能体默认支持，旧版智能体与工作流需确认模型及节点配置兼容。  
+- **Audio API（语音合成/识别等）**：使用 `enable_stream: true` 参数（注意参数名与模型 API 不同），配合 `Accept: text/event-stream` Header，以 SSE 方式流式返回音频二进制分片（如 TTS 的 WAV chunk）或识别文本片段（如 ASR 的实时字幕）。  
+- **Test 1 服务**：同样支持 `stream: true`，但需注意：流式调用不参与部分资源包抵扣，且 `max_tokens` 实际截断行为受服务端缓冲策略影响，建议预留余量。
 
 ## 关键参数和配置
 
-| 参数 | 类型 | 说明 | 默认值 | 注意事项 |
-|------|------|------|--------|----------|
-| `stream` | boolean | 全局开关，启用流式响应 | `false` | 所有协议均支持；设为 `true` 后，响应格式、解析方式、超时策略均发生变化 |
-| `X-DashScope-SSE` | string header | DashScope 协议下启用 SSE 解析的显式标识 | 无 | HTTP 调用流式 Application 或原生 API 时**必须设置为 `enable`**，否则返回 400 |
-| `incremental_output` | boolean | DashScope 流式专属：是否返回纯增量文本（即 `delta.content` 不含历史内容） | `false` | 仅 DashScope 协议支持；OpenAI/Anthropic/Responses 协议默认行为即为增量 |
-| `modalities` | array | Omni Realtime 专用：声明输出模态组合 | `["text","audio"]` | 必须为 `["text"]` 或 `["text","audio"]`；影响服务端响应事件类型与结构 |
+| 接口类型         | 参数名           | 类型    | 默认值 | 说明 |
+|------------------|------------------|---------|--------|------|
+| 模型 API / Application Call（DashScope） | `stream` | boolean | `false` | 必须显式设为 `true` 才启用流式；响应格式为 SSE（`text/event-stream`）。 |
+| Application Call（OpenAI 兼容 Responses API） | `stream` | boolean | `false` | 行为与 OpenAI 一致；注意 `background=true` 时不可设为 `true`。 |
+| Realtime API     | `stream`         | query string（固定 `true`） | — | URL 查询参数，不可省略；实际流式行为由 WebSocket 协议承载。 |
+| Audio API        | `enable_stream`  | boolean | `false` | 注意命名差异；启用后需设置 `Accept: text/event-stream` 并按 SSE 解析。 |
+| 所有流式接口     | `response_format` | string | `delta`（Realtime）、`json`（其他） | Realtime API 中 `delta` 表示 token 级增量，`json` 表示完整响应；其他接口通常忽略此参数或仅影响非流式路径。 |
 
-> ⚠️ 重要提醒：
-> - 流式响应**不改变计费逻辑**：按实际生成的 token 总数计费，与是否流式无关；
-> - 流式请求**仍受 `max_tokens` 硬上限约束**，超限将被截断并返回 `finish_reason="length"`；
-> - 客户端必须实现健壮的流式解析器（推荐使用百炼官方 SDK），避免因网络抖动、帧乱序或连接中断导致数据丢失；
-> - Realtime/Omni Realtime 场景下，流式是唯一模式，无需手动设 `stream`，但需严格遵循帧协议与心跳机制。
+> ⚠️ 重要限制：  
+> - 流式响应不支持异步调用（`background=true`）；  
+> - 流式连接超时后需主动重连（Realtime API 单连接 ≤300 秒，RESTful 流式无硬性超时但建议客户端设置 60s+ 超时）；  
+> - 流式调用的 `max_tokens` 是软上限，服务端可能因缓冲策略提前终止，建议设置比预期多 10% 的余量。
 
----  
-*本文档面向开发者，聚焦「流式输出」概念本身。具体模型能力、地域接入、配额限制等，请参考对应主题文档。*
+## 面向开发者，简洁实用
+
+- ✅ **快速启用**：只需在请求 body（或 URL query）中加入 `"stream": true`，并确保请求头含 `Accept: text/event-stream`（RESTful）或建立 WebSocket 连接（Realtime）。  
+- ✅ **解析建议**：使用标准 SSE 客户端库（如 `eventsource`、`fetch` + `ReadableStream`）处理 `data:` 字段；聚合 `delta.content` 即可获得完整文本，无需手动拼接 event type。  
+- ✅ **错误处理**：监听 `error` 事件与 HTTP 4xx/5xx 响应；Realtime API 遇 `4290` 错误需指数退避重连（初始间隔 ≥1s）。  
+- ❌ **避免陷阱**：不要在流式响应中依赖 `usage` 字段（它只在最后 `done` 事件中出现）；不要对流式响应做同步阻塞渲染（应使用增量更新 UI）。  
+- 📦 **调试工具**：`curl -N` 可直接观察流式原始输出；浏览器 DevTools 的 Network → Response 面板支持 SSE 流式预览。
 
 ## 关联主题页
 
 - [get started with models](../guides/get-started-with-models.md)
-- [qwen api reference](../api/qwen-api-reference.md)
+- [test 1](../guides/test-1.md)
 - [realtime api user guide](../api/realtime-api-user-guide.md)
-- [omni realtime api](../api/omni-realtime-api.md)
 - [application call](../api/application-call.md)
+- [audio api references](../api/audio-api-references.md)
 
 

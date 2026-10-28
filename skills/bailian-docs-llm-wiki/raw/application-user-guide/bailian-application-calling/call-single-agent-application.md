@@ -8,7 +8,7 @@
 
 1.  **获取凭证**
     -   API Key：前往[密钥管理](https://bailian.console.aliyun.com/?tab=model#/api-key)页面，创建并[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
-    -   阿里云百炼应用ID：前往[应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)页面创建[智能体应用（Agent 1.0）](raw/application-user-guide/llm-application/single-agent-application.md)，并在应用卡片上复制其APP\_ID。
+    -   阿里云百炼应用ID：前往[应用管理](https://bailian.console.aliyun.com/flow-agent/app-center)页面创建[智能体应用（Agent 1.0）](raw/application-user-guide/llm-application/single-agent-application.md)，并在应用卡片上复制其APP\_ID。
 2.  **安装DashScope SDK**
     
     > HTTP接口调用跳过此步骤。
@@ -6078,7 +6078,7 @@ data:{"output":{"thoughts":[{"action":"reasoning","thought":"","action_type":"re
 
 **步骤 1: 激活**[长期记忆](https://help.aliyun.com/zh/model-studio/long-term-memory)**功能**
 
-访问**[应用管理](https://bailian.console.aliyun.com/#/app-center)**页面，找到您的智能体应用，打开**长期记忆**功能开关，并**发布**应用。
+访问**[应用管理](https://bailian.console.aliyun.com/flow-agent/app-center)**页面，找到您的智能体应用，打开**长期记忆**功能开关，并**发布**应用。
 
 **步骤 2: 创建长期记忆体**
 
@@ -7029,7 +7029,7 @@ API方式操作请参阅以下内容。
 1.  通过本文的[通过API接口获取会话文件ID](https://help.aliyun.com/zh/model-studio/call-single-agent-application#2ad4ec64f2dwv)获取以“file\_session”开头的会话文件ID；
 2.  验证文件状态为FILE\_IS\_READY。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4136485871/CAEQWhiBgICSiLDquBkiIDA3ODdmMzY4NTMyNTQ5OGE4NWM4MThjNTM5YTMwZjE05224266_20250529113200.258.svg)**步骤三：API调用应用**
+**步骤三：API调用应用**
 
 1.  在控制台**智能体应用**内选择任一模型，开启**动态文件解析**开关，并**发布**应用。
     
@@ -7846,17 +7846,9 @@ API方式操作请参阅以下内容。
     
     上一步操作成功后，文档将暂存于阿里云百炼的临时存储空间内 12 小时，通过[在线调试](https://api.aliyun.com/api/bailian/2023-12-29/AddFile)AddFile接口获取会话文件ID。
     
-    **配置图示**
-    
-    **重要参数说明**
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1194987471/p958862.png)
-    
-    **LeaseId**：第一步接口响应中的`Data.FileUploadLeaseId`字段值。
-    
-    **CategoryId**: 务必填写default。
-    
-    **CategoryType**: 务必填写SESSION\_FILE。
+    -   LeaseId：第一步接口响应中的Data.FileUploadLeaseId字段值。
+    -   CategoryId: 务必填写default。
+    -   CategoryType: 务必填写SESSION\_FILE。
     
     **调用成功响应**
     

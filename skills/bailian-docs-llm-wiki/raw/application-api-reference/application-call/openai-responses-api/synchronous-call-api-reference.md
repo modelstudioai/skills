@@ -12,7 +12,7 @@
 ## 前提条件
 
 -   已[获取 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
--   已创建[阿里云百炼应用](raw/application-user-guide/llm-application/application-introduction.md)，并已获取应用ID：在[应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)页面的应用卡片上复制其ID。
+-   已创建[阿里云百炼应用](raw/application-user-guide/llm-application/llm-application-start-using/flow-agent-introduction.md)，并已获取应用ID：在[应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)页面的应用卡片上复制其ID。
 -   如果通过SDK调用，还需要[安装OpenAI Python SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
 使用SDK调用时需配置的`base_url`：`https://dashscope.aliyuncs.com/api/v2/apps/agent/{APP_ID}/compatible-mode/v1`

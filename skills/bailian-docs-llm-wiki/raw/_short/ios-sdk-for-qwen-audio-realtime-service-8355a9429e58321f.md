@@ -322,6 +322,7 @@ VAD 类型，可选值：
 
 -   `server_vad`（默认值）：基于声学特征检测语音起止，自动触发推理。
 -   `smart_turn`：融合声学感知与语义理解的智能轮次检测，通过声学与语义双重判断轮次边界。无语义的声音（如”嗯”、”啊”）不会触发对话轮或打断模型播报。
+-   `smart_turn_v2`（推荐使用）：在 `smart_turn` 基础上增强对话上下文理解，更好地判断多人场景中的交互意图。减少旁人说话或无关插话造成的误回复、误打断。
 
 nls\_config.turn\_detection.threshold
 
@@ -329,7 +330,7 @@ float
 
 否
 
-VAD灵敏度，**仅在 server\_vad 模式下生效（smart\_turn 模式下无效）**。值越低，VAD越灵敏，越容易将微弱声音（包括背景噪音）识别为语音；值越高，越不灵敏，需要更清晰、音量更大的语音才能触发。  
+VAD 灵敏度。适用于 `server_vad`、`smart_turn` 和 `smart_turn_v2`。值越低，越容易将微弱声音（包括背景噪音）识别为语音；值越高，越需要清晰、响亮的语音才能触发检测。  
 取值范围为\[-1.0, 1.0\]，默认值为 0.5。
 
 nls\_config.turn\_detection.silence\_duration\_ms
@@ -338,7 +339,7 @@ nls\_config.turn\_detection.silence\_duration\_ms
 
 否
 
-语音结束后需保持静音的最短时间（毫秒），**仅在 server\_vad 模式下生效（smart\_turn 模式下无效）**。超时即触发模型响应。值越低，响应越快，但可能在短暂停顿时误触发。  
+语音结束后的最短静音时间（毫秒）。**仅在 server\_vad 模式下生效（smart\_turn 和 smart\_turn\_v2 模式下无效）**。静音达到该时长后，触发模型响应。值越低，响应越快，但短暂停顿也可能误触发。  
 取值范围为\[200, 6000\]，默认值为 800。对话场景推荐 400-800。
 
 nls\_config.turn\_detection.voiceprint\_audio\_urls
@@ -347,7 +348,7 @@ nls\_config.turn\_detection.voiceprint\_audio\_urls
 
 否
 
-array形式的字符串。**仅在 smart\_turn 模式下生效。**目标用户预录音频的公网可访问 URL 列表，用于说话人增强。传入后，模型将在双工对话中精准锁定目标说话人，有效忽略旁人声音与背景噪声。最多支持 5 个 URL。音频格式要求：16kHz PCM 或 WAV。
+array形式的字符串。**在 smart\_turn 和 smart\_turn\_v2 模式下生效。**目标用户预录音频的公网可访问 URL 列表，用于说话人增强。模型通过这些音频在双工对话中锁定目标说话人，忽略旁人声音和背景噪声。最多支持 5 个 URL。音频格式要求：16kHz PCM 或 WAV。
 
 ## 关键接口
 

@@ -152,10 +152,6 @@ plt.show()
 
 大模型应用具备了执行Python代码的能力，能够对数据进行可视化分析。
 
-![python不插.jpeg](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7689504271/p834102.jpeg)
-
-![python插.jpeg](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7689504271/p834103.jpeg)
-
 > Python代码解释器插件不支持对外访问网络以及上传本地文件，可用依赖：json5~=0.9.6、jupyter\_client~=8.1.0、ipykernel~=6.25.0、seaborn、sympy、pydantic~=1.10.8、pillow~=9.4.0、fastapi~=0.101.1、dynaconf~=3.2.1、oss2~=2.18.1、matplotlib、starlette~=0.27.0、uvicorn~=0.23.2、requests~=2.31.0、scipy、html2text、matplotlib、pandas、pdf2image、pdfminer-six、pillow、pypdf、python-pptx、seaborn、sympy、wordcloud。
 
 计算器
@@ -185,10 +181,6 @@ plt.show()
 大模型应用无法直接绘制图片或图形，只能通过文字来描述画面。
 
 大模型应用具备了直接绘制图片的能力，能够按指令生成小狗图片。
-
-![图文.jpeg](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7689504271/p834097.jpeg)
-
-![图文插.jpeg](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7689504271/p834098.jpeg)
 
 夸克搜索
 
@@ -250,11 +242,7 @@ GitHub搜索：通义千问
 
 请根据杭州今天的天气画一幅画并将画的地址生成二维码。
 
-![三插件.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7689504271/p836940.png)
-
-扫描二维码可以下载图片：
-
-![35efefdb-753e-4594-a96d-b33d0aa1bee3-1.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7689504271/p836944.png)
+生成二维码，扫描二维码可下载图片。
 
 ### 调用官方插件
 
@@ -302,7 +290,7 @@ GitHub搜索：通义千问
         
     6.  测试完成后，发布应用。
         
--   **方式二**：访问[**应用管理**](https://bailian.console.aliyun.com/#/app-center)页面，在指定智能体或工作流应用内，添加指定插件，测试插件使用效果，并**发布**应用。具体操作请参见[智能体应用插件能力](https://help.aliyun.com/zh/model-studio/single-agent-application#d1da8df94a98c)、[工作流应用插件节点](raw/application-user-guide/llm-application/workflow-application.md)。
+-   **方式二**：访问[**应用管理**](https://bailian.console.aliyun.com/flow-agent/app-center)页面，在指定智能体或工作流应用内，添加指定插件，测试插件使用效果，并**发布**应用。具体操作请参见[智能体应用插件能力](https://help.aliyun.com/zh/model-studio/single-agent-application#d1da8df94a98c)、[工作流应用插件节点](raw/application-user-guide/llm-application/workflow-application.md)。
     
 -   **方式三**：通过Assistant API调用工具。请在[Assistant API文档](https://help.aliyun.com/zh/model-studio/quick-start-of-assistant-api)中搜索`tools`关键字，查看如何使用Assistant API调用工具。
     
@@ -324,7 +312,7 @@ GitHub搜索：通义千问
 
 ## 常见问题
 
-**夸克搜索和联网搜索（enable\_search）有什么区别？**
+夸克搜索和联网搜索（enable\_search）有什么区别？
 
 -   开启夸克搜索插件时，模型将直接调用插件执行搜索，并将搜索结果以文本形式返回，这些结果可以直接用于生成最终输出。夸克搜索插件目前支持检索出网页标题、关键词和摘要，但不支持直接访问网页详情。
 -   联网搜索（enable\_search）也是基于夸克搜索。联网搜索开启后，模型会尝试利用互联网上的信息来丰富其生成的内容，但不会完全依赖或返回互联网搜索结果。

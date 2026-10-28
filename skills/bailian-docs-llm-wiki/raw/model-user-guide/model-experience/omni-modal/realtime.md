@@ -1,6 +1,6 @@
 # Qwen-Omni-Realtime
 
-Qwen-Omni-Realtime 是千问推出的实时音视频聊天模型。能同时理解流式的音频与图像输入（例如从视频流中实时抽取的连续图像帧），并实时输出高质量的文本与音频。
+通过 WebSocket、WebRTC 使用 Qwen-Omni-Realtime 理解文本、图片、音频和视频，并生成语音回复，适合语音聊天、智能客服等场景。
 
 **支持的地域：**北京、新加坡，需使用各地域的[API Key](raw/model-api-reference/preparations/get-api-key.md)。
 
@@ -14,7 +14,7 @@ Qwen-Omni-Realtime 是千问推出的实时音视频聊天模型。能同时理�
 -   **语音轮次检测**：支持 `semantic_vad`，可过滤附和声、背景音等无意义声音，减少语音轮次误触发。
 -   **多通道音频与视频聚合**：WebSocket 接入支持 1、2、4 声道音频；视频聚合可在不需要细粒度视觉信息时降低计算开销。详见[输入与输出功能](#realtime-advanced-config)。
 -   **语言**：支持 [113 种语种和方言](https://help.aliyun.com/zh/model-studio/qwen-omni#d54e85c641oux)的语音识别，以及 [36 种语种和方言](https://help.aliyun.com/zh/model-studio/qwen-omni#d54e85c641oux)的语音生成。
--   **音色与声音复刻**：默认音色为 `Tina`；可选音色和试听见[音色列表](https://help.aliyun.com/zh/model-studio/omni-voice-list#qwen38-voices)，自定义音色的使用方式见[声音复刻](raw/_short/qwen-omni-voice-cloning-717550bc449e9e29.md)。
+-   **音色与声音复刻**：默认音色为 `Tina`；可选音色和试听见[音色列表](https://help.aliyun.com/zh/model-studio/omni-voice-list#qwen38-voices)，自定义音色的使用方式见[声音复刻](raw/model-user-guide/model-experience/omni-modal/qwen-omni-voice-cloning-user-guide.md)。
 
 > 模型的名称、上下文、价格、快照版本等信息请参见百炼控制台；并发限流条件请参考[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)。
 
@@ -3476,7 +3476,7 @@ conversation.updateSession(config);
 
 以下配置适用于 Qwen3.8-Omni-Flash-Realtime。
 
-默认音色为 `Tina`。新接入使用 `session.audio.output.voice`；如果同时设置了它和兼容字段 `session.voice`，输出音频使用 `session.audio.output.voice` 指定的音色。可选音色和试听见[Qwen3.8 音色](https://help.aliyun.com/zh/model-studio/omni-voice-list#qwen38-voices)，自定义音色见[声音复刻](raw/_short/qwen-omni-voice-cloning-717550bc449e9e29.md)，其他型号见[完整音色列表](raw/model-user-guide/model-experience/omni-modal/omni-voice-list.md)。
+默认音色为 `Tina`。新接入使用 `session.audio.output.voice`；如果同时设置了它和兼容字段 `session.voice`，输出音频使用 `session.audio.output.voice` 指定的音色。可选音色和试听见[Qwen3.8 音色](https://help.aliyun.com/zh/model-studio/omni-voice-list#qwen38-voices)，自定义音色见[声音复刻](raw/model-user-guide/model-experience/omni-modal/qwen-omni-voice-cloning-user-guide.md)，其他型号见[完整音色列表](raw/model-user-guide/model-experience/omni-modal/omni-voice-list.md)。
 
 ## 工具调用与联网搜索
 

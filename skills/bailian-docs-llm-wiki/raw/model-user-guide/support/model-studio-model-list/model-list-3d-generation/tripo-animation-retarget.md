@@ -80,7 +80,7 @@ Function Calling
 
 ## 模型价格
 
-本文仅展示模型调用原价，不包含限时优惠等活动信息，请前往[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)查看活动优惠。价格以积分计，1积分折合0.07元。
+本文仅展示模型调用原价，不包含限时优惠等活动信息，请前往[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)查看活动优惠。价格以积分计，**1积分折合0.07元**。
 
 #### 华北2（北京）
 

@@ -1,54 +1,51 @@
 # audio api references
 
-百炼平台提供统一的音频类 API 接口，覆盖语音合成、语音识别、音频生成、语音对话和语音翻译五大能力。所有接口均通过 RESTful 方式调用，支持流式响应与非流式响应两种模式。开发者需使用有效的 API Key 并遵循各模型的输入格式与配额限制。
+百炼平台的 Audio API 提供语音合成、音频生成、语音识别、语音对话和语音翻译五大核心能力，所有接口均通过统一的 RESTful 方式调用，支持流式响应与非流式响应。各能力由专用模型支撑，需按场景选择对应模型并传入规范参数。详细实现细节请参考 [原文标题](../../raw/model-api-reference/audio-api-references.md)。
 
-## 支持的模型/功能
+## 支持的模型与功能
 
-当前支持以下五类音频处理能力，对应独立的 API 端点与模型标识符：
+| 功能             | 对应模型（示例）                     | 说明 |
+|------------------|----------------------------------------|------|
+| 语音合成         | `qwen-audio-tts-v1`                    | 支持中英文多音色、语速/音调调节，输出 WAV/MP3 格式；详见 [原文标题](../../raw/model-api-reference/audio-api-references/speech-synthesis-api-reference.md) |
+| 音频生成         | `qwen-audio-gen-v1`                    | 文本到背景音/音效/音乐片段生成，支持 [prompt](../guides/prompt.md) 控制风格与时长 |
+| 语音识别         | `qwen-audio-asr-v1`                    | 支持单/多通道音频、带标点和说话人分离（需开启 `diarization=true`），采样率建议 16kHz；参见 [原文标题](../../raw/model-api-reference/audio-api-references/speech-recognition-api-reference.md) |
+| 语音对话         | `qwen-audio-conversation-v1`           | 实时双工语音交互，需配合 WebSocket 长连接，支持中断重连与上下文保持 |
+| 语音翻译         | `qwen-audio-st-v1`                     | 端到端语音→目标语言文本/语音，当前仅支持中↔英互译 |
 
-- **语音合成（TTS）**：支持多语种、多音色，模型如 `qwen2-audio-tts-0.5b`；详见 [语音合成](../../raw/model-api-reference/audio-api-references/speech-synthesis-api-reference.md)  
-- **语音识别（ASR）**：支持长音频分段识别与实时流式识别，模型如 `qwen2-audio-asr-1b`；详见 [语音识别](../../raw/model-api-reference/audio-api-references/speech-recognition-api-reference.md)  
-- **音频生成（Audio Generation）**：支持文本到音频（text-to-audio）、音频风格迁移等，模型如 `qwen2-audio-gen-2b`；详见 [音频生成](../../raw/model-api-reference/audio-api-references/audio-generation-api.md)  
-- **语音对话（Voice Conversation）**：端到端语音交互，含唤醒、理解、合成闭环；详见 [语音对话](../../raw/model-api-reference/audio-api-references/voice-conversation-api-references.md)  
-- **语音翻译（Speech Translation）**：支持源语音→目标文本/目标语音双路径输出，模型如 `qwen2-audio-st-1.5b`；详见 [语音翻译](../../raw/model-api-reference/audio-api-references/speech-translation-api-reference.md)
-
-> **注意**：`qwen2-audio-asr-1b` 在 [语音识别](../../raw/model-api-reference/audio-api-references/speech-recognition-api-reference.md) 中标注为默认模型，但 [语音对话](../../raw/model-api-reference/audio-api-references/voice-conversation-api-references.md) 文档中仍引用已下线的 `qwen-audio-dialog-asr-v1`，请以 ASR 文档为准。
+> **注意**：文档中提及的 `qwen-audio-asr-v2` 模型已在 v2.3.0 版本后下线，实际可用模型以 [原文标题](../../raw/model-api-reference/audio-api-references.md) 中最新列表为准，旧文档中残留的 v2 型号描述已过时。
 
 ## 关键参数
 
-通用必填参数（所有音频 API 共享）：
-- `model`: 字符串，模型 ID（如 `qwen2-audio-tts-0.5b`），不可省略  
-- `input`: 对象，结构依能力而异（如 ASR 为 `{ "audio_url": "..." }`，TTS 为 `{ "text": "..." }`）  
-- `parameters`: 可选对象，控制质量、时长、语速等（例如 `{"voice": "zhiyan", "speed": 1.0}`）  
-
-流式请求需额外设置：
-- `stream: true`（仅部分能力支持，详见各子文档）  
-- `response_format`: 可选 `"mp3"`、`"wav"`、`"pcm"`（TTS 和 Audio Generation 支持；ASR 固定返回 JSON）
+通用必填参数：
+- `model`: 模型标识符（如 `qwen-audio-tts-v1`），不可省略  
+- `input`: 输入结构体，格式依能力而异（如 ASR 的 `audio_url` 或 `audio_bytes`，TTS 的 `text`）  
+- `parameters`: 可选配置对象，常见字段包括：  
+  - `voice`: TTS 专用音色 ID（如 `"zhitian_emo"`）  
+  - `sample_rate`: 输出音频采样率（ASR/TTS 均支持 16000/22050/44100）  
+  - `response_format`: 返回格式（`json` / `wav` / `mp3`）  
+  - `enable_stream`: 是否启用流式响应（`true` / `false`）
 
 ## 使用方式
 
-1. **认证**：在 HTTP Header 中携带 `Authorization: Bearer <api_key>`  
-2. **请求方法**：全部使用 `POST`  
-3. **Endpoint**：统一为 `https://dashscope.aliyuncs.com/api/v1/audio/{service}`，其中 `{service}` 为 `tts`、`asr`、`audio_generation`、`voice_conversation` 或 `speech_translation`  
-4. **示例（TTS）**：
-   ```bash
-   curl -X POST "https://dashscope.aliyuncs.com/api/v1/audio/tts" \
-     -H "Authorization: Bearer YOUR_API_KEY" \
-     -H "Content-Type: application/json" \
-     -d '{
-           "model": "qwen2-audio-tts-0.5b",
-           "input": {"text": "你好，欢迎使用百炼音频 API。"},
-           "parameters": {"voice": "zhiyan"}
-         }'
+1. **认证**：在请求 Header 中携带 `Authorization: Bearer <api_key>`  
+2. **请求地址**：`POST https://dashscope.aliyuncs.com/api/v1/services/aigc/audio/<service_name>`（`<service_name>` 如 `tts`、`asr`）  
+3. **Body 示例（TTS）**：
+   ```json
+   {
+     "model": "qwen-audio-tts-v1",
+     "input": {"text": "你好，欢迎使用百炼语音服务。"},
+     "parameters": {"voice": "zhitian_emo", "sample_rate": 22050}
+   }
    ```
+4. 流式响应需设置 `Accept: text/event-stream`，并按 SSE 协议解析 chunk。
 
 ## 限制和注意事项
 
-- 单次请求音频时长上限：ASR 最长 600 秒，TTS 输出最长 120 秒，Audio Generation 最长 30 秒  
-- 音频格式要求：输入仅支持 `mp3`、`wav`、`flac`、`m4a`（采样率 ≥ 8kHz，位深 ≥ 16bit）；不支持视频容器封装（如 `.mp4` 内嵌音频需先提取）  
-- 流式响应仅支持 `text/event-stream` MIME 类型，客户端需正确处理 SSE 协议  
-- > **注意**：[语音对话](../../raw/model-api-reference/audio-api-references/voice-conversation-api-references.md) 文档中描述的 `session_id` 自动续期机制，与 [语音识别](../../raw/model-api-reference/audio-api-references/speech-recognition-api-reference.md) 中明确要求“每次请求必须新建 session”存在冲突；实际行为以 ASR 文档为准，语音对话暂不支持跨请求 session 复用。  
-- 错误码统一遵循百炼平台标准（如 `400 Bad Request`、`429 Rate Limited`），具体含义见各子文档说明
+- 单次请求音频时长上限：ASR ≤ 600 秒，TTS ≤ 300 秒，音频生成 ≤ 30 秒  
+- [文件上传](../concepts/file-upload.md)方式仅支持 `audio_url`（公网可访问 HTTPS URL）或 Base64 编码的 `audio_bytes`（≤ 25MB）  
+- 语音对话接口要求客户端维持 WebSocket 连接，超时断连后需重新初始化会话  
+- 所有音频输入必须为 PCM/WAV/MP3/OPUS 格式，不支持 AMR、WMA 等非标准格式  
+- > **注意**：部分旧版 SDK 示例中将 `speech_translation` 的 service_name 写为 `st`，但当前 API 路由已统一为 `speech-translation`，务必以 [原文标题](../../raw/model-api-reference/audio-api-references/speech-translation-api-reference.md) 中定义为准。
 
 ## 来源文档
 

@@ -81,7 +81,7 @@ Throttling.BurstRate / limit\_burst\_rate
 
 ### 服务端排队等待（推荐首选）
 
-针对增速/突发限流（Traffic Burst），百炼支持在请求头中声明最大等待时间。服务端收到后，在指定时间内排队重试，直到请求开始处理或超时。相比直接返回 429，该机制可显著提升突发流量下的成功率。
+针对增速/突发限流（Traffic Burst），百炼支持在请求头中声明等待时间上限。服务端收到请求后，会在这个时间窗内择机重试，直到请求开始处理或时间窗内重试结束；该值只是上限，不是等到设定值才重试。相比直接返回 429，该机制可显著提升突发流量下的成功率。
 
 **说明**该功能仅适用于增速/突发限流（Throttling.BurstRate），不适用于 RPM/TPM 绝对值限流。
 
@@ -97,13 +97,15 @@ Throttling.BurstRate / limit\_burst\_rate
 
 X-DashScope-Wait-Timeout
 
-30
+90
 
-突发请求的最大排队等待时间，单位为秒。
+排队等待的时间窗上限，单位为秒。服务端在该时间窗内择机重试请求，而不是等到设定值才开始重试。
 
 -   值为 `0`：不排队，直接返回 429。
     
--   建议值：3~120 秒。
+-   该值仅为上限，实际等待时间可能小于设定值。例如设置为 90 秒，一次调用也可能在 30 秒左右就开始重试；若重试仍未成功，则返回 429。
+    
+-   建议值：3~120 秒。突发流量下建议适当调大，以增加重试机会、提升成功率。
     
 
 **超时时间配置**
@@ -113,7 +115,7 @@ X-DashScope-Wait-Timeout
 -   **非流式请求**（stream: false）：超时时间 = 原基础超时时间 + Wait-Timeout 值。
 -   **流式请求**（stream: true）：超时时间 > Wait-Timeout 值。流式请求在收到首个 chunk 后开始计时，只需确保首次响应超时大于排队时间。
 
-例如：原基础超时时间为 120 秒，Wait-Timeout 设为 30 秒，则非流式请求的超时时间应设为 150 秒。
+例如：原基础超时时间为 120 秒，Wait-Timeout 设为 90 秒，则非流式请求的超时时间应设为 210 秒。
 
 代码示例
 
@@ -126,14 +128,14 @@ from openai import OpenAI
 client = OpenAI(
     base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    timeout=150.0,  # 原超时 120s + 排队等待 30s
+    timeout=210.0,  # 原超时 120s + 排队等待上限 90s
 )
 
 response = client.chat.completions.create(
     model="qwen-plus",
     messages=[{"role": "user", "content": "Hello"}],
     extra_headers={
-        "X-DashScope-Wait-Timeout": "30"  # 最大排队等待 30 秒
+        "X-DashScope-Wait-Timeout": "90"  # 排队等待上限 90 秒
     }
 )
 print(response.choices[0].message.content)
@@ -145,7 +147,7 @@ curl
 curl -X POST "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
-  -H "X-DashScope-Wait-Timeout: 30" \
+  -H "X-DashScope-Wait-Timeout: 90" \
   -d '{
     "model": "qwen-plus",
     "messages": [{"role": "user", "content": "Hello"}]

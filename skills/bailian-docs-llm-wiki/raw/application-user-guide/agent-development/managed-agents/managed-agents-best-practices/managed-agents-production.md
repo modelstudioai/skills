@@ -178,7 +178,7 @@ curl -X POST "$AGENTSTUDIO_URL/agents" \
 export AGENT_ID="agent_xxx"
 ```
 
-如果 MCP 工具之外还要跑脚本（读取凭证、处理文件），给 `tools` 再加一个[入门篇](raw/_short/managed-agents-data-analysis-2249e7a887786f0b.md)讲过的 `builtin_toolkit`（bash/read/write 等），两者并存没有问题。纯 MCP 的 Agent 甚至可以不挂 Environment——Session 的 `environment_id` 留空也能跑。
+如果 MCP 工具之外还要跑脚本（读取凭证、处理文件），给 `tools` 再加一个[入门篇](raw/_short/managed-agents-data-analysis-2249e7a887786f0b.md)讲过的 `builtin_toolkit`（bash/write/read 等），两者并存没有问题。纯 MCP 的 Agent 甚至可以不挂 Environment——Session 的 `environment_id` 留空也能跑。
 
 ## 步骤 4 · 手动试点：建 Session 验证工具与密钥链路
 

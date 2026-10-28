@@ -13,7 +13,7 @@
 
 开始前，请确保您已完成以下操作：
 
-1.  **创建应用：**前往[应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)创建阿里云[百炼应用](raw/application-user-guide/llm-application/application-introduction.md)并获取应用 ID；
+1.  **创建应用：**前往[应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)创建阿里云[百炼应用](raw/application-user-guide/llm-application/llm-application-start-using/flow-agent-introduction.md)并获取应用 ID；
 2.  **获取 API Key：**通过[密钥管理](https://bailian.console.aliyun.com/?tab=app#/api-key)获取，并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
 3.  **安装SDK（可选）：**若使用 SDK 调用，请安装相应语言的[DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
@@ -4923,7 +4923,12 @@ message=Invalid API-key provided.
 
 ## QPM限制
 
-单应用默认QPM（每分钟请求数）为15000。
+应用调用按应用与账号两个维度限流，两个维度独立生效，任一触发都会返回限流错误：
+
+-   **单应用并发**：按应用 ID（`app_id`）统计的每秒请求数，默认上限 **100 QPS**。工作流异步任务的提交请求与同步调用共享该配额。
+-   **账号总流量**：同一阿里云主账号维度统计的每分钟请求数，默认上限 **15000 QPM**。
+
+超出阈值的请求会被拒绝并返回 HTTP 429，错误码为 `Throttling.RateQuota`，通常在一分钟内自动恢复。预计业务并发或调用量将大幅上涨时，建议提前联系阿里云对接商务经理评估并申请扩容。
 
 ## 错误码
 

@@ -2,8 +2,6 @@
 
 本文介绍如何使用 AgentScope-AI 从零开始开发、上传和部署高代码应用的 API 服务。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6792415871/CAEQaxiBgMDoh.XA3RkiIGQ3ODMyNThlYzJiNDRmM2E4NzQxNTBmOTQzZGQxOGY46098517_20260106202118.816.svg)
-
 ## 环境准备
 
 1.  Python 开发环境要求`python >= 3.10`。
@@ -91,21 +89,21 @@ Artifact URL: https://tmp-code-deploy-<workspace>.oss-cn-hangzhou.aliyuncs.com/a
 Resource Name: 我的第一个百炼高代码应用
 Workspace: llm-<workspace_id>
 Deploy Result
-Console URL: https://bailian.console.aliyun.com/?tab=app#/app-center
+Console URL: https://bailian.console.aliyun.com/flow-agent/app-center
 Deploy ID: <deploy_id>
 ```
 
-3.  前往[阿里云百炼-应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)，等待应用发布。应用发布后将会根据部署时长，产生较少的费用。（<0.1元/小时）
+3.  前往[阿里云百炼-应用管理](https://bailian.console.aliyun.com/flow-agent/app-center)，等待应用发布。应用发布后将会根据部署时长，产生较少的费用。（<0.1元/小时）
 
 ## 应用测试
 
-建议前往[阿里云百炼-应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)，在应用详情页测试并查看构建、部署、调用日志。
+建议前往[阿里云百炼-应用管理](https://bailian.console.aliyun.com/flow-agent/app-center)，在应用详情页测试并查看构建、部署、调用日志。
 
 ## 应用更新
 
 当高代码应用需要更新时，可以使用 AgentScope-AI 的更新命令重新上传`.whl` 软件包。软件包上传成功后，高代码应用将自动更新并重新部署运行。
 
-1.  前往[阿里云百炼-应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)，复制应用 ID。
+1.  前往[阿里云百炼-应用管理](https://bailian.console.aliyun.com/flow-agent/app-center)，复制应用 ID。
     
 2.  在本地使用以下命令，上传更新的本地`.whl` 软件包。
     
@@ -123,11 +121,11 @@ runtime-fc-deploy --update <HIGH_CODE_APP_ID> --whl-path <PATH_TO_YOUR_NEW_WHL_F
 INFO:agentscope_runtime.engine.deployers.modelstudio_deployer:Uploading wheel to OSS and generating presigned URL
 INFO:agentscope_runtime.engine.deployers.modelstudio_deployer:Triggering ModelStudio Full-Code deploy for None
 Built wheel at: /Users/<username>/Desktop/test/agentdev_starter_e61c4e2f-0.1.0-py3-none-any.whl
-Artifact URL: https://tmp-code-deploy-llm-enpaqbwxdsmnlfpq.oss-cn-hangzhou.aliyuncs.com/agentdev_starter_e61c4e2f-0.1.0-py3-none-any.whl?x-oss-signature-version=OSS4-HMAC-SHA256&x-oss-date=20250922T085339Z&x-oss-expires=10799&x-oss-credential=YOUR_ACCESS_KEY_ID&x-oss-signature=YOUR_SIGNATURE
+Artifact URL: https://tmp-code-deploy-llm-xxxxxxxxxxxxxxxx.oss-cn-hangzhou.aliyuncs.com/agentdev_starter_e61c4e2f-0.1.0-py3-none-any.whl?x-oss-signature-version=OSS4-HMAC-SHA256&x-oss-date=20250922T085339Z&x-oss-expires=10799&x-oss-credential=YOUR_ACCESS_KEY_ID&x-oss-signature=YOUR_SIGNATURE
 Deploy ID: 44ccb27c-2918-4a64-aa6a-8a0970d88ffb
 Resource Name: None
-Workspace: llm-enpaqbwxdsmnlfpq
-Console Url: https://pre-bailian.console.aliyun.com/?tab=app#/app-center/high-code-detail/d8a48e627a6d49338faef50fdfaf2ef9
+Workspace: llm-xxxxxxxxxxxxxxxx
+Console Url: https://bailian.console.aliyun.com/flow-agent/app-center
 ```
 
 ## 常见问题

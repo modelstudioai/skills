@@ -1,59 +1,63 @@
 # application component api reference
 
-本 API 参考文档面向开发者，系统性地描述了百炼平台 Application Component（应用组件）提供的核心 OpenAPI 接口能力，覆盖数据连接（原应用数据）、知识库两大核心功能模块。所有接口均基于 `bailian/2023-12-29` 版本，采用标准 ROA 签名机制，支持通过官方 SDK 或自签名方式调用。开发者需预先配置 RAM 权限与业务空间上下文方可使用。
+本 API 参考文档面向开发者，系统性地描述了百炼平台中应用组件（Application Component）的核心 OpenAPI 接口能力，覆盖数据连接（原应用数据）、知识库、Prompt 模板等关键模块。所有接口均基于 `bailian/2023-12-29` 版本，采用标准 ROA 签名机制，支持通过官方 SDK 快速集成。开发者需预先配置 RAM 权限与业务空间访问权限方可调用。
 
 ## 支持的模型/功能
 
-Application Component API 主要提供两类核心能力：
+本组件提供三大类核心能力：
 
-1.  **数据连接（原应用数据）**：用于管理非结构化文件和结构化表格数据。支持类目（Category）的增删查、文件（File）的上传（需先申请租约）、导入、查询、标签更新及删除；支持从已授权 OSS Bucket 批量导入文件或更新表格；支持连接器（Connector）的创建与管理；并提供解析器（Parser）配置能力，如为 `.pdf` 文件指定 `DOCMIND_DIGITAL` 解析器 [GetAvailableParserTypes - 获取文件支持的解析器类型](../../raw/_short/api-bailian-2023-12-29-getavailableparsertypes-09561c4e0fb505d5.md)。
-2.  **知识库（Knowledge Base）**：用于构建和管理 RAG 知识库。支持知识库（Index）的创建（`CreateIndex`）、提交构建任务（`SubmitIndexJob`）、追加文档（`SubmitIndexAddDocumentsJob`）、检索（`Retrieve`）、查询列表（`ListIndices`）与删除（`DeleteIndex`）；支持对知识库内文件（`ListIndexDocuments`, `ListIndexFileDetails`）及文本切片（`ListChunks`, `AddChunk`, `UpdateChunk`, `DeleteChunk`）的精细化操作；并提供监控数据（`GetIndexMonitor`）与配置更新（`UpdateIndex`）能力。
+- **数据连接（原应用数据）**：管理非结构化文件与结构化表格的生命周期，包括类目（Category）管理（`AddCategory`、`ListCategory`、`DeleteCategory`）、[文件上传](../concepts/file-upload.md)与元数据操作（`ApplyFileUploadLease`、`AddFile`、`ListFile`、`DescribeFile`、`UpdateFileTag`、`BatchUpdateFileTag`、`DeleteFile`、`DeleteFiles`），以及连接器（Connector）管理（`AddConnector`、`GetConnector`、`UpdateConnector`）。此外支持从已授权 OSS 批量导入文件或更新表格（`AddFilesFromAuthorizedOss`、`UpdateTableFromAuthorizedOss`）。[API概览](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md) 中明确指出，该层不支持通过 API 新增或删除数据表，相关操作需通过控制台完成。
 
-> **注意**：`AddTable` 和 `UpdateTableFromAuthorizedOss` 接口明确仅适用于“表格连接器”，而 `AddCategory` 等类目接口的 `CategoryType` 参数在文档中仅列出 `UNSTRUCTURED`，且多处强调“暂不支持通过 API 查询数据表” [ListCategory](../../raw/_short/api-bailian-2023-12-29-listcategory-2521532ef3e828b3.md)，表明结构化数据管理与非结构化数据管理是分离的两条路径，不可混用。
+- **知识库（Knowledge Base）**：支持创建、查询、更新和删除两类知识库（非结构化 `unstructured` 与结构化 `structured`），并提供完整的索引构建、检索与细粒度管理能力。关键流程为：先调用 `CreateIndex` 初始化，再通过 `SubmitIndexJob` 提交创建任务；追加文档使用 `SubmitIndexAddDocumentsJob`；检索使用 `Retrieve`；查询状态使用 `GetIndexJobStatus`；管理文件列表使用 `ListIndexDocuments` 和 `ListIndexFileDetails`；管理底层文本切片（Chunk）使用 `ListChunks`、`AddChunk`、`UpdateChunk` 和 `DeleteChunk`。[知识库](../../raw/_short/api-bailian-2023-12-29-dir-knowledge-base-f6f202ad9694348f.md) 文档汇总了全部相关接口。
+
+- **[Prompt 工程](../concepts/prompt-engineering.md)**：提供 Prompt 模板的全生命周期管理，包括创建、获取、更新、删除及列表查询（`CreatePromptTemplate`、`GetPromptTemplate`、`UpdatePromptTemplate`、`DeletePromptTemplate`、`ListPromptTemplates`），用于标准化提示词复用与版本控制。
+
+> **注意**：`AddChunk` 和 `UpdateChunk` 接口的文档存在矛盾。文档 38 明确说明 `AddChunk` 支持文档搜索、数据查询、图片问答三类知识库；而文档 39 的 `UpdateChunk` 则明确限定“仅支持文档搜索类知识库，不支持数据查询和图片问答类知识库”。此为设计上的功能不对称，开发者在更新结构化知识库内容时，应优先使用 `SubmitIndexAddDocumentsJob` 或 `UpdateTableFromAuthorizedOss` 等替代方案。
 
 ## 关键参数
 
-所有 API 均要求在请求路径中传入 `WorkspaceId`（业务空间 ID），这是资源隔离与权限控制的基础。其他关键参数按功能域划分：
-
-*   **数据连接通用参数**：
-    *   `CategoryId`: 类目 ID，由 `AddCategory` 返回，用于文件归属与解析设置。
-    *   `FileId`: 文件 ID，由 `AddFile` 返回，用于文件详情查询（`DescribeFile`）、标签更新（`UpdateFileTag`）及删除（`DeleteFile`）。
-    *   `LeaseId`: 上传租约 ID，由 `ApplyFileUploadLease` 返回，是调用 `AddFile` 的前置必要参数。
-    *   `ConnectorId`: 连接器 ID，用于关联类目与底层存储（如 OSS）。
-*   **知识库通用参数**：
-    *   `IndexId`: 知识库 ID，由 `CreateIndex` 返回，是几乎所有知识库操作（`SubmitIndexJob`, `Retrieve`, `ListIndexDocuments`, `DeleteIndexDocument` 等）的必需参数。
-    *   `JobId`: 任务 ID，由 `SubmitIndexJob` 或 `SubmitIndexAddDocumentsJob` 返回，用于轮询任务状态（`GetIndexJobStatus`）。
-    *   `ChunkId`: 文本切片 ID，由 `ListChunks` 返回，用于切片的修改（`UpdateChunk`）与删除（`DeleteChunk`）。
-*   **分页与过滤参数**：
-    *   `MaxResults` / `PageSize` / `PageNumber`: 用于 `ListCategory`, `ListFile`, `ListIndices`, `ListChunks` 等列表接口的分页。
-    *   `NextToken`: 用于 `ListCategory`, `ListFile` 等接口的游标分页。
-    *   `DocumentName` / `EnableNameLike`: 用于 `ListIndexDocuments`, `ListIndexFileDetails` 的文件名精确或模糊过滤。
+- **通用路径参数**：几乎所有接口均要求 `WorkspaceId`（业务空间 ID），需通过控制台获取，是资源隔离与权限控制的基础。
+- **类目与文件标识**：`CategoryId`（来自 `AddCategory` 返回）、`FileId`（来自 `AddFile` 返回）、`ConnectorId`（来自 `AddConnector` 返回）是操作关联资源的必需字段。
+- **知识库标识**：`IndexId`（来自 `CreateIndex` 返回）是所有知识库操作的核心标识符；`JobId`（来自 `SubmitIndexJob` 返回）用于轮询任务状态。
+- **分页与过滤**：`List*` 类接口普遍支持 `MaxResults`/`PageSize`、`NextToken`/`PageNumber` 进行分页；支持按名称（`FileName`、`DocumentName`）、状态（`DocumentStatus`）、标签等进行过滤。
+- **解析器控制**：`AddFile` 和 `ChangeParseSetting` 接口中的 `Parser` 参数（如 `DOCMIND`、`AUTO_SELECT`）决定了文件内容的解析策略，其可选值需结合 `GetAvailableParserTypes` 接口动态查询。
 
 ## 使用方式
 
-1.  **环境准备**：首先，您需要一个阿里云账号，并遵循最小权限原则，创建具备 `AliyunBailianDataFullAccess`（读写）或 `AliyunBailianDataReadOnlyAccess`（只读）策略的 RAM 用户，获取其 AccessKey。详细步骤请参见 [API概览](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md) 中的“账号与安全准备”章节。
-2.  **接入点选择**：根据您的地域需求，选择对应的公网或 VPC 接入地址，例如华北2（北京）的公网地址为 `bailian.cn-beijing.aliyuncs.com` [服务接入点](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-endpoint.md)。
-3.  **SDK 调用（推荐）**：下载并集成对应语言的最新版百炼 SDK（版本 `2023-12-29`），SDK 会自动处理签名、重试等细节。所有接口文档均提供了 OpenAPI Explorer 的在线调试链接，可一键生成各语言 SDK 示例代码。
-4.  **自签名调用（高级）**：若需自定义签名，必须严格遵循 ROA 签名规范。由于其复杂性，官方强烈建议加入钉钉群（147535001692）寻求技术支持，以避免因签名错误导致的接入失败。
+1. **环境准备**：
+   - 获取阿里云账号或 RAM 子账号的 AccessKey（建议遵循最小权限原则，使用 RAM 用户并授予 `AliyunBailianDataFullAccess` 策略）。
+   - 确认服务接入点：根据地域选择公网或 VPC 地址，例如北京地域为 `bailian.cn-beijing.aliyuncs.com` [服务接入点](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-endpoint.md)。
+   - 将业务空间 ID (`WorkspaceId`) 加入 RAM 用户的授权范围。
+
+2. **典型工作流（以构建知识库为例）**：
+   - 调用 `AddCategory` 创建文件分类目录。
+   - 调用 `ApplyFileUploadLease` 获取上传租约。
+   - 将[文件上传](../concepts/file-upload.md)至租约指定地址。
+   - 调用 `AddFile` 将文件正式导入应用数据。
+   - 调用 `CreateIndex` 初始化知识库。
+   - 调用 `SubmitIndexJob` 提交创建任务。
+   - 调用 `GetIndexJobStatus` 轮询任务状态直至完成。
+
+3. **SDK 集成**：强烈推荐使用官方 SDK（[下载链接](https://api.aliyun.com/api-tools/sdk/bailian?version=2023-12-29)），它自动处理签名、重试、错误解析等细节，大幅降低接入成本。
 
 ## 限制和注意事项
 
-*   **限流策略**：所有接口均有严格的 QPS 限制，开发者必须在代码中实现合理的重试与降级逻辑。常见限制包括：`DeleteCategory`（5次/秒）、`ApplyFileUploadLease`（10次/秒）、`ListFile`（5次/秒）、`Retrieve`（无明确说明，但需考虑响应延迟）[DeleteCategory - 删除类目](../../raw/_short/api-bailian-2023-12-29-deletecategory-9838436bd2db3113.md)。
-*   **幂等性**：并非所有接口都具备幂等性。`CreateIndex`, `SubmitIndexJob`, `ApplyFileUploadLease`, `AddFile` 等接口不具备幂等性，重复调用可能导致资源重复创建或错误；而 `List*`, `Describe*`, `Delete*`, `Update*` 等多数查询与变更操作则具备幂等性。开发者应仔细阅读各接口文档中的“接口说明”部分。
-*   **数据一致性**：`DeleteFile` 仅删除应用数据中的文件，**不会**影响已构建好的知识库；反之，`DeleteIndexDocument` 仅删除知识库中的索引，**不会**删除应用数据中的原始文件。两者是完全独立的操作，需根据业务目标谨慎选择。
-*   **功能边界**：API 不支持直接删除数据表（`DeleteTable`），此操作必须通过控制台完成；`AddCategory` 等接口不支持新增数据表；`DeleteIndex` 接口要求知识库必须先与应用解除关联，此解绑操作也仅能在控制台完成。
+- **限流策略**：各接口有独立的 QPS 限制（如 `ListCategory` 为 5 次/秒，`Retrieve` 为 15 次/秒），超出将返回限流错误。请在客户端实现指数退避重试逻辑。
+- **幂等性**：多数查询类（`List*`, `Describe*`, `Get*`）和部分操作类（`Delete*`, `Update*`）接口具有幂等性，但 `Add*`、`Apply*`、`Submit*` 等初始化类接口不具备，重复调用可能导致资源冗余。
+- **数据一致性**：`DeleteFile` 仅删除应用数据中的文件，不影响已构建的知识库；反之，`DeleteIndexDocument` 仅删除知识库索引，不影响应用数据中的源文件。二者需按需组合使用。
+- **安全与权限**：所有 API 调用必须携带有效 AccessKey，并确保 RAM 策略中已精确授予对应 `Action`（如 `sfm:ListCategory`），否则将返回权限拒绝错误。
+- **国际站支持**：`UpdateIndex` 和 `GetIndexMonitor` 接口明确声明不支持国际站，中国站用户需确认地域配置。
 
 ## 来源文档
 
 - [API概览](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md)
-- [授权信息](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-ram.md)
-- [API目录](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md)
-- [数据连接（原应用数据）](../../raw/_short/api-bailian-2023-12-29-dir-data-connection-origi-a1f7f2601bd6f7cf.md)
 - [服务接入点](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-endpoint.md)
+- [授权信息](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-ram.md)
+- [ListCategory](../../raw/_short/api-bailian-2023-12-29-listcategory-2521532ef3e828b3.md)
 - [DeleteCategory - 删除类目](../../raw/_short/api-bailian-2023-12-29-deletecategory-9838436bd2db3113.md)
-- [ApplyFileUploadLease](../../raw/_short/api-bailian-2023-12-29-applyfileuploadlease-39e8ca15e0e9561a.md)
+- [数据连接（原应用数据）](../../raw/_short/api-bailian-2023-12-29-dir-data-connection-origi-a1f7f2601bd6f7cf.md)
 - [AddFile](../../raw/_short/api-bailian-2023-12-29-addfile-8c254b3500bc50bc.md)
-- [AddFilesFromAuthorizedOss](../../raw/_short/api-bailian-2023-12-29-addfilesfromauthorizedoss-879556d685a301b3.md)
+- [AddCategory](../../raw/_short/api-bailian-2023-12-29-addcategory-e2fe0e0435ed504e.md)
 - [ListFile](../../raw/_short/api-bailian-2023-12-29-listfile-360209e3a2479f14.md)
 - [DescribeFile](../../raw/_short/api-bailian-2023-12-29-describefile-020886c28a208bf2.md)
 - [UpdateFileTag](../../raw/_short/api-bailian-2023-12-29-updatefiletag-f84d2af6a45d6553.md)
@@ -61,42 +65,43 @@ Application Component API 主要提供两类核心能力：
 - [DeleteFile](../../raw/_short/api-bailian-2023-12-29-deletefile-7e0409a458195fe2.md)
 - [DeleteFiles](../../raw/_short/api-bailian-2023-12-29-deletefiles-96ef0815114e4e37.md)
 - [GetParseSettings - 获取类目解析设置](../../raw/_short/api-bailian-2023-12-29-getparsesettings-522514560c54f49f.md)
-- [AddCategory](../../raw/_short/api-bailian-2023-12-29-addcategory-e2fe0e0435ed504e.md)
+- [GetAvailableParserTypes - 获取文件支持的解析器类型](../../raw/_short/api-bailian-2023-12-29-getavailableparsertypes-09561c4e0fb505d5.md)
 - [ChangeParseSetting](../../raw/_short/api-bailian-2023-12-29-changeparsesetting-59a7c69675f499ad.md)
 - [AddTable](../../raw/_short/api-bailian-2023-12-29-addtable-6726351659db288d.md)
+- [ApplyFileUploadLease](../../raw/_short/api-bailian-2023-12-29-applyfileuploadlease-39e8ca15e0e9561a.md)
 - [UpdateTableFromAuthorizedOss](../../raw/_short/api-bailian-2023-12-29-updatetablefromauthorized-d7436828bcf51602.md)
 - [AddConnector](../../raw/_short/api-bailian-2023-12-29-addconnector-7a3c9650409710fe.md)
+- [AddFilesFromAuthorizedOss](../../raw/_short/api-bailian-2023-12-29-addfilesfromauthorizedoss-879556d685a301b3.md)
 - [GetConnector](../../raw/_short/api-bailian-2023-12-29-getconnector-cb2e485a0efd52f7.md)
 - [UpdateConnector](../../raw/_short/api-bailian-2023-12-29-updateconnector-6a24905a7d201597.md)
-- [知识库](../../raw/_short/api-bailian-2023-12-29-dir-knowledge-base-f6f202ad9694348f.md)
-- [ListCategory](../../raw/_short/api-bailian-2023-12-29-listcategory-2521532ef3e828b3.md)
-- [GetAvailableParserTypes - 获取文件支持的解析器类型](../../raw/_short/api-bailian-2023-12-29-getavailableparsertypes-09561c4e0fb505d5.md)
 - [CreateIndex](../../raw/_short/api-bailian-2023-12-29-createindex-8bc613c75f8af371.md)
 - [GetIndexJobStatus](../../raw/_short/api-bailian-2023-12-29-getindexjobstatus-1e88b6ccfffe0fe4.md)
+- [知识库](../../raw/_short/api-bailian-2023-12-29-dir-knowledge-base-f6f202ad9694348f.md)
 - [SubmitIndexAddDocumentsJob](../../raw/_short/api-bailian-2023-12-29-submitindexadddocumentsjo-ec4f5cf285e2c447.md)
-- [Retrieve](../../raw/_short/api-bailian-2023-12-29-retrieve-c8e6b8d718a30a84.md)
 - [SubmitIndexJob - 提交知识库创建任务](../../raw/_short/api-bailian-2023-12-29-submitindexjob-63b38294171880d4.md)
+- [Retrieve](../../raw/_short/api-bailian-2023-12-29-retrieve-c8e6b8d718a30a84.md)
 - [ListIndexDocuments](../../raw/_short/api-bailian-2023-12-29-listindexdocuments-9f0db0388c421903.md)
 - [ListIndexFileDetails](../../raw/_short/api-bailian-2023-12-29-listindexfiledetails-0e2036d0ef0d8fe8.md)
-- [UpdateIndex - 更新知识库](../../raw/_short/api-bailian-2023-12-29-updateindex-551997e1d335e340.md)
 - [DeleteIndexDocument - 删除知识库下的文件](../../raw/_short/api-bailian-2023-12-29-deleteindexdocument-0792a83f5a741348.md)
+- [UpdateIndex - 更新知识库](../../raw/_short/api-bailian-2023-12-29-updateindex-551997e1d335e340.md)
 - [ListIndices](../../raw/_short/api-bailian-2023-12-29-listindices-c555173be752eaaf.md)
 - [DeleteIndex - 删除知识库](../../raw/_short/api-bailian-2023-12-29-deleteindex-500502bd6df1c49c.md)
-- [AddChunk](../../raw/_short/api-bailian-2023-12-29-addchunk-1607bcddf6713fd9.md)
 - [ListChunks - 查询索引下的分片列表](../../raw/_short/api-bailian-2023-12-29-listchunks-30a6c87b93a583c6.md)
+- [AddChunk](../../raw/_short/api-bailian-2023-12-29-addchunk-1607bcddf6713fd9.md)
 - [UpdateChunk - 修改切片](../../raw/_short/api-bailian-2023-12-29-updatechunk-589b46fcc24261f8.md)
 - [DeleteChunk - 删除切片](../../raw/_short/api-bailian-2023-12-29-deletechunk-d249422088735d90.md)
-- [GetIndexMonitor - 获取知识库监控数据](../../raw/_short/api-bailian-2023-12-29-getindexmonitor-3a609181d5c9c034.md)
 - [Prompt 模板](../../raw/_short/api-bailian-2023-12-29-dir-prompt-engineering-11ee962a5f5d5d1e.md)
-- [GetPromptTemplate - 获取Prompt模板](../../raw/_short/api-bailian-2023-12-29-getprompttemplate-584c357dd7cb48d6.md)
+- [GetIndexMonitor - 获取知识库监控数据](../../raw/_short/api-bailian-2023-12-29-getindexmonitor-3a609181d5c9c034.md)
 - [CreatePromptTemplate - 创建Prompt模板](../../raw/_short/api-bailian-2023-12-29-createprompttemplate-1194e536beb0529a.md)
 - [UpdatePromptTemplate - 更新Prompt模板](../../raw/_short/api-bailian-2023-12-29-updateprompttemplate-519fb4af5ea50522.md)
-- [ListPromptTemplates - 获取Prompt模板列表](../../raw/_short/api-bailian-2023-12-29-listprompttemplates-ab5ba5362e93cfcd.md)
 - [DeletePromptTemplate - 删除Prompt模板](../../raw/_short/api-bailian-2023-12-29-deleteprompttemplate-b441fa1b9c777b81.md)
+- [GetPromptTemplate - 获取Prompt模板](../../raw/_short/api-bailian-2023-12-29-getprompttemplate-584c357dd7cb48d6.md)
 - [其他](../../raw/_short/api-bailian-2023-12-29-dir-others-b9c3a16db11771f5.md)
+- [ListPromptTemplates - 获取Prompt模板列表](../../raw/_short/api-bailian-2023-12-29-listprompttemplates-ab5ba5362e93cfcd.md)
 - [GetAlipayUrl - 获取支付宝打赏URL](../../raw/_short/api-bailian-2023-12-29-getalipayurl-e6e9715d5164f74a.md)
 - [GetAlipayTransferStatus - 查询支付宝打赏状态](../../raw/_short/api-bailian-2023-12-29-getalipaytransferstatus-04aa88852762fd85.md)
-- [ApplyTempStorageLease - 申请临时文件上传许可](../../raw/_short/api-bailian-2023-12-29-applytempstoragelease-5a38ce0eefc66408.md)
 - [版本说明](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-changeset.md)
+- [ApplyTempStorageLease - 申请临时文件上传许可](../../raw/_short/api-bailian-2023-12-29-applytempstoragelease-5a38ce0eefc66408.md)
+- [API目录](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md)
 
 

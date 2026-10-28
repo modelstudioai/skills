@@ -18,7 +18,7 @@
 
 > 如果已创建插件工具或已导入了插件，请跳过此步骤。
 
-1.  创建自定义插件：访问百炼控制台的**[插件](https://bailian.console.aliyun.com/?tab=app#/component-manage)**页面，单击**新增自定义插件**，填写插件信息，如需要鉴权请打开**是否鉴权**开关，填写鉴权配置信息。
+1.  创建自定义插件：在左侧导航栏选择**工具** > **插件管理**，进入[插件管理](https://bailian.console.aliyun.com/flow-agent/plugin-manage)页面，点击**创建插件**，填写插件信息，如需鉴权请打开**是否鉴权**开关，填写鉴权配置信息。
     
     > 示例插件描述：寝室公约查询工具，可以根据输入的数字索引查询特定条目。
     
@@ -1008,7 +1008,7 @@
 
 #### 步骤一：自定义节点参数
 
-访问百炼控制台的**[应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)**页面，选择**工作流应用**并自定义**开始节点**的参数（示例设置String类型变量city），同时在**Prompt**中插入变量city和变量query，并**发布**应用。
+访问百炼控制台的**[应用管理](https://bailian.console.aliyun.com/flow-agent/app-center)**页面，选择**工作流应用**并自定义**开始节点**的参数（示例设置String类型变量city），同时在**Prompt**中插入变量city和变量query，并**发布**应用。
 
 #### 步骤二：API调用
 

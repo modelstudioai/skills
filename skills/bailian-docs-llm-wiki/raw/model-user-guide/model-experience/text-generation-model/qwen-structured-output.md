@@ -115,7 +115,7 @@ Qwen 大部分模型、Kimi、GLM、DeepSeek、Stepfun
 
 #### Stepfun
 
-混合思考模式：stepfun/step-3.7-flash、stepfun/step-5-preview
+仅思考模式：stepfun/step-3.7-flash、stepfun/step-5-preview
 
 #### JSON Schema
 

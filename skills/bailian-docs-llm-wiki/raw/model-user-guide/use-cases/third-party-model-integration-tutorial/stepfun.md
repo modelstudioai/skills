@@ -6,7 +6,7 @@
 
 ## 快速开始
 
-stepfun/step-3.7-flash 和 stepfun/step-5-preview 是阶跃星辰直供的多模态推理模型，**默认关闭思考模式**，您可以通过设置 `enable_thinking` 为 `true` 开启思考模式。开启后，模型的推理过程通过 `reasoning_content` 字段返回，您可以通过 `reasoning_effort` 参数（可选值：`low`、`medium`、`high`）控制推理深度。运行以下代码快速调用模型（示例使用 stepfun/step-3.7-flash，可替换为 stepfun/step-5-preview）。
+stepfun/step-3.7-flash 和 stepfun/step-5-preview 是阶跃星辰直供的多模态推理模型，**默认开启思考模式且不支持关闭**，无需设置 `enable_thinking` 参数。模型的推理过程通过 `reasoning_content` 字段返回，您可以通过可选的 `reasoning_effort` 参数（可选值：`low`、`medium`、`high`）控制推理深度。运行以下代码快速调用模型（示例使用 stepfun/step-3.7-flash，可替换为 stepfun/step-5-preview）。
 
 需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，需要[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
@@ -33,9 +33,6 @@ completion = client.chat.completions.create(
     stream=True,
     stream_options={
         "include_usage": True
-    },
-    extra_body={
-        "enable_thinking": True
     }
 )
 
@@ -115,8 +112,7 @@ async function main() {
             stream: true,
             stream_options: {
                 include_usage: true
-            },
-            enable_thinking: true
+            }
         });
 
         console.log('\n' + '='.repeat(20) + '思考过程' + '='.repeat(20) + '\n');
@@ -196,8 +192,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
     "stream": true,
     "stream_options": {
         "include_usage": true
-    },
-    "enable_thinking": true
+    }
 }'
 ```
 
@@ -462,7 +457,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 支持
 
-思考模式下需在每轮 assistant 消息中保留 `reasoning_content` 字段，否则会报错
+需在每轮 assistant 消息中保留 `reasoning_content` 字段，否则会报错
 
 [Function Calling](https://help.aliyun.com/zh/model-studio/qwen-function-calling#dd5a3dca390k9)
 
@@ -532,7 +527,7 @@ stepfun/step-3.7-flash 和 stepfun/step-5-preview 不支持以下参数：`tool_
 
 控制 DeepSeek-V4 系列模型的推理力度，可选值 `high`/`max`
 
-可选值为 `low`、`medium`、`high`，用于控制推理深度，需开启思考模式后生效
+可选值为 `low`、`medium`、`high`，用于控制推理深度
 
 `stream_options`
 
@@ -554,13 +549,13 @@ stepfun/step-3.7-flash 和 stepfun/step-5-preview 不支持以下参数：`tool_
 
 ## 模型列表与计费
 
-Step 系列模型是阶跃星辰直供的多模态推理模型，支持文本、图像和视频输入，支持通过 `enable_thinking` 开启思考模式。
+Step 系列模型是阶跃星辰直供的多模态推理模型，支持文本、图像和视频输入，默认开启思考模式且不支持关闭。
 
 模型上下文长度与价格信息请参见[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)。
 
 按照模型的输入与输出 Token 计费。
 
-> 思考模式下，思维链按照输出 Token 计费。
+> 思维链按照输出 Token 计费。
 
 ## 错误码
 

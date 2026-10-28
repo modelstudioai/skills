@@ -15,40 +15,29 @@
 
 ### 方式一：自定义创建
 
-1.  访问[提示词](https://bailian.console.aliyun.com/?tab=app#/component-manage/prompt)页面，单击**创建提示词**，配置以下信息。
+1.  在左侧导航栏选择**工具** > **提示词管理**，进入[提示词管理](https://bailian.console.aliyun.com/flow-agent/prompt-manage)页面，点击**创建提示词**，配置以下信息。
     
-    1.  **模板名称**：自定义填写。
+    1.  **模板名称**：自定义填写（最多 20 个字符）。
         
-    2.  **基础信息**：选择**文本生成**。
+    2.  **基础信息**：选择**文本生成**或**图片生成**。
         
     3.  **输入模式**：选择**自定义创建**。
         
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3440607471/p953717.png)
-    4.  在文本框中输入您需要优化的提示词，单击**优化Prompt**，即可优化提示词。
+    4.  在**模版内容及优化**区域的文本输入框中输入 Prompt 内容，点击右上角**优化**，即可优化提示词。
         
         > 示例：文本框中输入`请帮我写一封100字销售数据分析报告`。
         
-        **优化前**
-        
-        **优化后**
-        
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0332300471/p907855.png)
-        
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0332300471/p907856.png)
-        
-2.  优化完成后，单击**保存**，即创建成功。
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4212191371/p853680.png)
+2.  优化完成后，点击**保存**，即创建成功。
     
 
 ### 方式二：基于Prompt工程创建
 
-1.  访问[提示词](https://bailian.console.aliyun.com/?tab=app#/component-manage/prompt)页面，单击**创建提示词**，并配置以下信息：
+1.  在左侧导航栏选择**工具** > **提示词管理**，进入[提示词管理](https://bailian.console.aliyun.com/flow-agent/prompt-manage)页面，点击**创建提示词**，并配置以下信息：
     
-    1.  **模板名称**：自定义填写。
-    2.  **基础信息**：选择**文本生成**。
+    1.  **模板名称**：自定义填写（最多 20 个字符）。
+    2.  **基础信息**：选择**文本生成**或**图片生成**。
     3.  **输入模式**：选择**基于Prompt工程创建**。
-2.  选择一种**Prompt优化方法**，不同框架适用于不同复杂度的任务，可参阅文末[Prompt工程框架详解](https://help.aliyun.com/zh/model-studio/prompt-custom-template#26ffef3c19aj1)。
+2.  在**Prompt优化方法**中选择一种 **Prompt 工程框架**（ICIO / CRISPE / RASCEF），不同框架适用于不同复杂度的任务，参阅文末[Prompt工程框架详解](https://help.aliyun.com/zh/model-studio/prompt-custom-template#26ffef3c19aj1)。每个框架的全部输入项均为 0/2000 字符，其中带 \* 的字段为必填。
     
 3.  根据所选框架的结构，在对应的输入框中填写内容。
     
@@ -59,29 +48,18 @@
     -   补充数据（Input Data）：当前全球正面临能源危机，人们对环境友好型能源解决方案的兴趣日益增加。文章应该涵盖可持续能源的基本概念、主要类型以及它们如何帮助减少碳足迹。
     -   输出格式（Output Indicator）：文章应该结构清晰，包含引言、主题和结论。使用易于理解的语言，避免过多的技术术语。确保文章包含事实性数据和引用，以增强说服力。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3440607471/p953751.png)
-4.  单击**优化Prompt**，系统将对输入的内容进行智能润色和增强。
+4.  点击**优化Prompt**，打开 Prompt 样例优化面板：可添加**期望样例**（用户输入 + 模型输出），点击**开始优化**后系统根据样例对 Prompt 进行优化；也可直接点击**复制完整prompt**获取框架组合后的完整 Prompt 内容。
     
-    **优化前**
-    
-    **优化后**
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0332300471/p907909.png)
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0332300471/p907913.png)
-    
-5.  优化完成后，单击**保存**，即创建成功。
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4212191371/p853680.png)
+5.  优化或填写完成后，点击**保存**，即创建成功。
     
 
 ## 创建图片生成模板
 
 主要用于图像创作场景。支持分别定义正向和负向提示词，以控制画面内容和风格。
 
-1.  访问[提示词](https://bailian.console.aliyun.com/?tab=app#/component-manage/prompt)页面，单击**创建提示词**，并配置以下信息：
+1.  在左侧导航栏选择**工具** > **提示词管理**，进入[提示词管理](https://bailian.console.aliyun.com/flow-agent/prompt-manage)页面，点击**创建提示词**，并配置以下信息：
     
-    1.  **模板名称**：自定义填写。
+    1.  **模板名称**：自定义填写（最多 20 个字符）。
     2.  **基础信息**：选择**图片生成**。
 2.  分别输入**正向Prompt**和**负向Prompt**。
     
@@ -91,11 +69,7 @@
     
     -   正向Prompt：生成一幅色彩鲜艳的夜空，星星闪烁，流星划过，背景是一个宁静的湖面，湖水倒映出星星的光辉，画面给人一种宁静和梦想的感觉。
     -   负向Prompt：不要生成任何阴暗或模糊的背景，避免使用黑色或深灰色。画面中不要有城市建筑、干枯的树木或任何显得压抑的元素，确保整体氛围是明亮和愉悦的。
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4212191371/p853787.png)
-3.  输入完成后，单击**保存**，即创建成功。
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4212191371/p853680.png)
+3.  输入完成后，点击**保存**，即创建成功。
     
 
 ## Prompt工程框架详解
@@ -166,7 +140,7 @@ CRISPE
 
 候选人目前有其他工作机会，他们期望获得更高的薪资。然而，我们公司有固定的薪资预算，但可以提供其他福利，如灵活的工作时间、股票期权和职业发展机会。
 
-Statement（任务）
+指令（Statement）
 
 直接说明AI需要执行的任务，确保其理解并执行用户的请求。
 

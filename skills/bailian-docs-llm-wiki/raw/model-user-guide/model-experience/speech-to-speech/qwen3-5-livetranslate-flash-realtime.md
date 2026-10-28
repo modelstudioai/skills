@@ -564,7 +564,7 @@ def send_audio():
 
 **实时复刻**：`qwen3.8-livetranslate-flash-realtime` 和 `qwen3.5-livetranslate-flash-realtime` 在翻译过程中从输入音频复刻音色，不额外收取复刻费用；模型调用仍按 Token 用量计费。
 
-**提前创建音色**：通过[声音复刻 API](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning#b819f697047nb)提前创建音色，按 **0.01 元/个**计费，创建失败不计费；免费额度的地域、次数与有效期见该计费说明。使用已创建的音色翻译时，仍按模型调用的 Token 用量计费。
+**提前创建音色**：通过[声音复刻 API](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning-user-guide#b819f697047nb)提前创建音色，按 **0.01 元/个**计费，创建失败不计费；免费额度的地域、次数与有效期见该计费说明。使用已创建的音色翻译时，仍按模型调用的 Token 用量计费。
 
 在 [session.update](https://help.aliyun.com/zh/model-studio/live-translator-client-events#af43722339yva) 中设置以下参数启用：
 
@@ -835,7 +835,7 @@ session.finished
 
 **实时复刻**：`qwen3.8-livetranslate-flash-realtime` 和 `qwen3.5-livetranslate-flash-realtime` 在翻译过程中从输入音频复刻音色，不额外收取复刻费用；模型调用仍按 Token 用量计费。
 
-**提前创建音色**：通过[声音复刻 API](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning#b819f697047nb)提前创建音色，按 **0.01 元/个**计费，创建失败不计费；免费额度的地域、次数与有效期见该计费说明。使用已创建的音色翻译时，仍按模型调用的 Token 用量计费。
+**提前创建音色**：通过[声音复刻 API](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning-user-guide#b819f697047nb)提前创建音色，按 **0.01 元/个**计费，创建失败不计费；免费额度的地域、次数与有效期见该计费说明。使用已创建的音色翻译时，仍按模型调用的 Token 用量计费。
 
 ## 限流说明
 
