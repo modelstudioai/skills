@@ -1,4 +1,4 @@
-# 事实记忆
+# 记忆管理
 
 -   [添加记忆](raw/application-api-reference/long-term-memory-new/fragments-overview/add-memory.md)
 -   [异步添加记忆](raw/application-api-reference/long-term-memory-new/fragments-overview/add-memory-async.md)

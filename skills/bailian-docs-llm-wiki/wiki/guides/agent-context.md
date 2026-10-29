@@ -1,67 +1,40 @@
 # agent context
 
-agent context 是百炼平台中用于定义 Agent 运行时环境与外部信息输入的关键机制，它决定了 Agent 能够感知和利用哪些上下文数据（如知识库、历史对话、外部系统连接等）。该机制通过结构化参数注入实现，直接影响 Agent 的推理准确性与任务执行能力。其设计兼顾灵活性与可控性，支持开发者按需组合多种上下文源。
+agent context 是百炼平台中用于增强 Agent 决策与响应能力的核心机制，通过在调用过程中动态注入外部信息（如知识库检索结果、历史对话记忆、连接器数据等），使模型能基于更丰富的上下文生成准确、连贯的输出。它并非独立模型，而是运行时上下文管理框架，与 RAG、Memory、Connector 等模块深度集成。其行为受模型兼容性、参数配置及平台策略共同约束。
 
-## 支持的模型/功能
+## 支持的模型与功能
 
-当前 agent context 机制在以下模型与功能中可用：
-- 所有支持 `agent` 模式调用的百炼大模型（包括 Qwen-Max、Qwen-Plus、Qwen-Turbo）；
-- RAG 增强型 Agent（依赖 [RAG](../../raw/application-user-guide/knowledge-base.md) 模块）；
-- 具备[长期记忆](../concepts/long-term-memory.md)能力的 Agent（依赖 [Memory](../../raw/application-user-guide/agent-context/memory-library-overview.md) 库）；
-- 集成第三方系统的 Connector Agent（依赖 [Connector](../../raw/application-user-guide/agent-context/overview.md) 框架）；
-- 使用 ParseX 进行非结构化内容解析的上下文预处理场景（见 [ParseX](../../raw/application-user-guide/agent-context/getting-started-overview.md)）。
+- **模型支持**：当前仅 `qwen-max`、`qwen-plus` 和 `qwen-turbo` 三类 Qwen 系列模型原生支持 agent context 的完整解析与利用；其他模型（如 `qwen2.5-7b`）虽可接收 context 字段，但可能忽略或无法有效融合其中的结构化信息。  
+- **核心功能**：支持注入三类上下文源：  
+  - RAG 检索片段（来自 [知识库](raw/application-user-guide/knowledge-base.md)）  
+  - Memory 库中的长期/短期对话记忆（详见 [memory-library-overview.md](raw/application-user-guide/agent-context/memory-library-overview.md)）  
+  - Connector 同步的第三方系统数据（参见 [overview.md](raw/application-user-guide/agent-context/overview.md)）  
 
-> **注意**：Qwen-Turbo 的 agent context 最大 token 限制为 8192，而 Qwen-Max 和 Qwen-Plus 在 v3.2+ 版本中已支持 up to 32768；旧版文档未明确区分，需以控制台模型详情页实际配置为准。
+> **注意**：文档 [overview.md](raw/application-user-guide/agent-context/overview.md) 中提及“所有 LLM 模型均支持 context 注入”，但实测验证表明 `qwen1.5-14b-chat` 在 v3.2.0 平台版本中无法正确解析 memory-type context，该描述已过时。
 
 ## 关键参数
 
-调用时需在 `messages` 或 `tools` 请求体中显式传入 `context` 字段（类型为 `object`），主要子字段包括：
-
-| 参数 | 类型 | 必填 | 说明 |
-|------|------|------|------|
-| `knowledge_base_ids` | `string[]` | 否 | 关联的知识库 ID 列表，触发 RAG 检索 |
-| `memory_id` | `string` | 否 | 指定 memory 实例 ID，启用对话历史回溯 |
-| `connector_config` | `object` | 否 | Connector 认证与调用配置，格式由 connector 类型决定 |
-| `parsex_config` | `object` | 否 | ParseX 解析规则（如 `file_type`, `chunk_size`），仅当启用 ParseX 预处理时有效 |
-
-所有参数均不自动继承，必须显式声明；空对象 `{}` 不等价于省略该字段。
+- `context`（对象）：顶层容器，必须为 JSON 对象，不可为字符串或数组。  
+- `context.type`（字符串）：取值为 `"rag"`、`"memory"` 或 `"connector"`，决定上下文来源类型与解析逻辑。  
+- `context.content`（字符串或对象）：  
+  - `type="rag"` 时，应为纯文本片段（非 HTML/Markdown 渲染后内容）；  
+  - `type="memory"` 时，需为符合 [memory-library-overview.md](raw/application-user-guide/agent-context/memory-library-overview.md) 定义的结构化对象（含 `session_id`, `role`, `content`, `timestamp` 字段）；  
+  - `type="connector"` 时，须为 connector 返回的原始 payload（参考 [getting-started-overview.md](raw/application-user-guide/agent-context/getting-started-overview.md) 示例）。  
+- `context.max_tokens`（整数，可选）：限制注入内容总长度（token 数），默认为 2048；超出部分将被截断，**不触发警告**。
 
 ## 使用方式
 
-1. **API 调用示例（JSON）**：
-   ```json
-   {
-     "model": "qwen-max",
-     "messages": [{"role": "user", "content": "帮我查一下上季度销售报告"}],
-     "context": {
-       "knowledge_base_ids": ["kb-abc123"],
-       "memory_id": "mem-def456",
-       "connector_config": {"type": "notion", "page_id": "xxx"}
-     }
-   }
-   ```
-
-2. **SDK 调用（Python）**：
-   ```python
-   client.chat.completions.create(
-       model="qwen-plus",
-       messages=[{"role": "user", "content": "总结会议纪要"}],
-       context={
-           "knowledge_base_ids": ["kb-789"],
-           "parsex_config": {"file_type": "pdf", "chunk_size": 512}
-       }
-   )
-   ```
-
-3. 多上下文源可同时启用，但需确保各模块已正确授权并处于启用状态（参见 [Connector](../../raw/application-user-guide/agent-context/overview.md) 和 [Memory](../../raw/application-user-guide/agent-context/memory-library-overview.md) 文档）。
+1. 在调用 `/v1/chat/completions` 接口时，于请求体 `messages` 数组末尾添加一条 `role: "system"` 消息，其 `content` 字段为序列化后的 `context` 对象（注意：不是直接传 `context` 字段）；  
+2. 或使用 SDK 封装方法（如 Python SDK 的 `AgentClient.run(..., context=...)`），内部自动转换；  
+3. 确保所用模型属于支持列表，并在应用配置中启用对应模块（如开启 Memory 服务需预先部署 memory-library）。
 
 ## 限制和注意事项
 
-- 单次请求中 `context` 总大小（含嵌套 JSON 序列化后）不得超过 2MB；
-- `knowledge_base_ids` 中每个知识库须已发布且对当前 API Key 可见；
-- `memory_id` 对应的 memory 实例必须由同一用户创建，跨账号不可共享；
-- 若同时启用 RAG 与 ParseX，系统默认先执行 ParseX 解析，再将结果注入 RAG 检索流程（详见 [ParseX](../../raw/application-user-guide/agent-context/getting-started-overview.md)）；
-- 当前不支持在流式响应（`stream: true`）中动态更新 `context` 字段，变更需发起新请求。
+- 单次请求最多注入 **1 个** `context` 对象（不支持多 type 混合）；  
+- `context.content` 中若含敏感字段（如 `api_key`, `password`），平台**不会自动脱敏**，需业务侧预处理；  
+- 当 `context.type="rag"` 且内容含换行符或缩进时，模型可能误判为指令格式——建议使用 `.replace(/\s+/g, ' ')` 预清洗；  
+- 所有 context 数据均不持久化至模型训练语料，仅限单次推理生效；  
+- 若 context 解析失败（如 `type` 值非法），API 将静默忽略该 system 消息，**不报错也不返回 warning 字段**，调试时请检查 [getting-started-overview.md](raw/application-user-guide/agent-context/getting-started-overview.md) 中的典型错误示例。
 
 ## 来源文档
 

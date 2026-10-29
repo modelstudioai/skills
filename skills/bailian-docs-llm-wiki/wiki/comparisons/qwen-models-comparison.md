@@ -1,54 +1,72 @@
-# 通义千问模型能力对比：Qwen API、Qwen-MT 与决策模型
+# 通义千问模型能力对比：基础Qwen API、MT翻译模型与决策模型
 
-本文旨在为百炼平台开发者提供清晰、可落地的技术选型参考，系统对比三类面向不同任务范式的通义千问能力服务：**通用大模型调用接口（Qwen API）**、**全模态智能翻译服务（Qwen-MT-Uni）** 和 **结构化决策推理服务（Decision Model）**。随着业务场景日益细分，单一“大模型通用接口”已难以兼顾翻译保真度、决策确定性与多模态工程效率。本对比基于最新正式文档（截至2024年10月），聚焦实际开发中高频关注的协议兼容性、输入输出约束、计费逻辑与部署适配性，帮助团队规避常见误用（如用 Qwen API 做合规审核、用 Qwen-MT 处理非翻译类文本生成等），提升集成效率与服务稳定性。
+## 背景与目的  
+在百炼平台中，通义千问系列模型面向不同业务目标提供了三类高度专业化的能力路径：  
+- **基础Qwen API**：通用大语言模型服务，强调对话理解、多模态感知与复杂推理；  
+- **Qwen-MT-Uni 翻译模型**：全模态、格式保真的端到端翻译引擎，聚焦跨语言语义对齐与文档结构还原；  
+- **决策模型（`decision-model-preview`）**：轻量级结构化推理模型，专为低延迟、高确定性、零文本生成的决策任务设计。  
 
-## 关键能力维度对比
+本对比旨在帮助开发者基于**输入类型、输出需求、性能约束、集成成本与计费逻辑**等核心维度，快速识别最适合当前场景的模型方案，避免误用通用模型处理专用任务（如用 Qwen3.7-plus 做工单分级导致延迟高、成本高、结果不可控），提升工程效率与业务效果。
 
-| 维度 | Qwen API | Qwen-MT-Uni | 决策模型 |
-|------|----------|-------------|-----------|
-| **核心定位** | 通用大模型能力网关（文本生成、多模态理解、Agent 工具调用） | 全模态高保真翻译专用模型（支持文本/图像/音频/文档格式保持） | 结构化轻量推理服务（单次前向、确定性输出分类标签与置信度） |
-| **输入格式** | `messages`（Chat）、`input`（Responses）、`system`+`messages`（Anthropic）或 `input`（DashScope）；支持文本、Base64 图像、URL 视频等；需按协议规范组织 | `input.source_texts`（字符串或数组）或 `input.fileUrl`（HTTPS URL）；支持 PDF/DOCX/PPTX/XLSX/HTML/Markdown/TXT/JPG/PNG/MP3/WAV；**不支持纯 JSON Schema 或函数定义输入** | `input`（纯文本字符串，≤8192 tokens） + `system_prompt`（非空字符串，≤512 字符）；**仅支持文本，不接受文件、图像、音频或多轮对话历史** |
-| **输出格式** | 非结构化文本流（`content`）、工具调用请求（`tool_calls`）、多模态响应（`image_url`/`audio_url`）；需解析 `choices[0].message.content` 或 `tool_calls` 字段 | 同构输出：输入为字符串数组 → 输出同形状字符串数组；输入为 PDF → 输出 PDF URL；输入为 JPG → 输出 JPG URL；结果封装在 `output.Data` 下，含 `TranslatedTexts` 或 `TranslatedFileUrl` | 严格结构化 JSON：固定字段 `label`（string）、`score`（float, 0–1）、`is_true`（bool）、`probabilities`（object 数组）、`confidence`（float）；**无自由文本生成，无 content 字段** |
-| **支持模型** | 多模型统一接入：<br>• 文本：`qwen3.8-max`, `qwen3.7-plus`, `qwen3.5-flash`<br>• 多模态：`Qwen-VL`, `Qwen-Omni`, `Qwen-Audio`（仅 DashScope）<br>• 第三方：`DeepSeek`, `Kimi`, `GLM`, `MiniMax`（北京地域限定） | **仅 `qwen-mt-uni` 单一模型**；无版本别名（如 `qwen-mt-base` 等均为过时表述） | **仅 `decision-model`（GA 版）**；预览版 `decision-model-preview` 不承诺 SLA，不建议生产使用 |
-| **API 端点（推荐新域名）** | • OpenAI Chat：`/{WorkspaceId}.{region}.maas.aliyuncs.com/compatible-mode/v1/chat/completions`<br>• Responses（Agent）：`/.../compatible-mode/v1/responses`<br>• Anthropic Messages：`/.../apps/anthropic/v1/messages`<br>• DashScope 原生：`/.../api/v1/services/aigc/text-generation/generation`（文本）或 `/multimodal-generation/generation`（多模态） | `/{WorkspaceId}.{region}.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`（同步）<br>异步需加 Header `X-DashScope-Async: enable`，结果轮询 `/api/v1/tasks/{task_id}` | `/{WorkspaceId}.{region}.maas.aliyuncs.com/v1/models/decision-model:predict`（System One 协议） |
-| **计费方式** | 按 **token 使用量** 计费：<br>• `input_tokens` + `output_tokens`（基础文本）<br>• 多模态额外计费项（如 `image_tokens`, `video_frames`）<br>• 工具调用（`web_search`, `code_interpreter`）按次/时长计费 | 按 **`input_tokens`** 计费，但细粒度拆分：<br>• `character_tokens`（文本）<br>• `document_tokens`（PDF/DOCX 等）<br>• `image_tokens`（JPG/PNG）<br>• `audio_tokens`（MP3/WAV）<br>• **无 output_tokens 费用** | 按 **单次调用（per request）** 计费；与输入长度无关（只要 ≤8192 tokens）；**不按 token、不按输出、不按工具调用计费** |
-| **典型场景** | • 智能客服对话机器人<br>• 多文档摘要与问答<br>• 视频内容理解与描述生成<br>• Agent 自动执行搜索/代码/网页抓取任务 | • 多语言产品文档本地化（PDF/DOCX 保持排版）<br>• 客服工单图片/语音转译（含水印区域控制）<br>• 网页/Markdown 技术博客批量双语发布 | • 内容安全审核（涉政/暴恐/色情标签判定）<br>• 金融风控初筛（欺诈/逾期/套现风险识别）<br>• A/B 测试策略路由（基于用户行为特征决策） |
-| **关键限制** | • 上下文窗口因模型而异（如 `qwen3.8-max` 为 32K）<br>• Responses API 输入上下文 ≈ 模型窗口 × 80%（预留工具空间）<br>• `max_frames` 仅 DashScope 支持；`Qwen-Audio` 仅 DashScope 可用 | • 单文件 ≤100 MB；PDF/DOCX/PPTX ≤200 页；音频 3s–60min<br>• `fileUrl` 不得含中文字符；旧版 `.doc`/`.ppt` 需转 OOXML<br>• `domainHint` 必须为纯英文 | • 输入 `input` >8192 tokens 静默截断（不报错）<br>• `system_prompt` 超长同样截断<br>• 不支持 streaming、logprobs、function calling、多模态输入 |
+---
 
-## 各方案适用场景建议
+## 关键维度对比表
 
-### ✅ 推荐使用 Qwen API 当：
-- 业务需要**灵活的多轮对话、自由文本生成或复杂推理链路**（如“先查天气，再推荐穿搭，最后生成购物清单”）；
-- 已有 OpenAI/Anthropic SDK 生态，希望**零改造迁移**至百炼（利用兼容协议）；
-- 需要调用**联网搜索、代码解释器、网页抓取等内置工具**完成闭环任务；
-- 处理**视频理解、图文混合问答、音频转写+摘要**等跨模态任务，且对帧数控制（`max_frames`）或像素精度（`min_pixels`）有硬性要求。
+| 维度 | 基础Qwen API | MT翻译模型（`qwen-mt-uni`） | 决策模型（`decision-model-preview`） |
+|------|--------------|-----------------------------|----------------------------------------|
+| **核心定位** | 通用大模型能力底座（对话、创作、工具调用、多模态理解） | 全模态高保真翻译引擎（文本/图像/音视频/文档） | 结构化轻量决策引擎（分类/是非/打分，不生成文本） |
+| **输入格式** | • `messages` 数组（Chat/Anthropic）<br>• `input` 字符串或数组（Responses）<br>• 支持 `image_url`/`video_url`/`input_audio` 等多模态内容<br>• 支持 `system` 角色与工具声明 | • `input.fileUrl`（HTTPS URL）<br>• 或 `input.source_texts`（字符串或字符串数组）<br>• 支持 PDF/DOCX/PPTX/XLSX/TXT/HTML/Markdown/JPG/PNG/MP3/WAV 等10+格式<br>• 需显式指定 `target_lang` | • `state`：任意结构化上下文（字符串、JSON 对象、数组），最大 65536 token<br>• `questions`：定义问题类型（`choice`/`noul`/`score`）及判定标准（`criteria`）<br>• 最多 16 个问题 |
+| **输出格式** | • JSON 格式响应，含 `choices[0].message.content`（文本）或 `choices[0].message.content` + 多模态附件<br>• Responses 协议支持结构化 `output_config.format` 输出<br>• Anthropic 协议支持 `tool_use`/`tool_result` 工具交互流 | • 同步：`output.Data.TranslatedTexts`（文本）或 `output.Data.TranslatedFileUrl`（文件下载链接）<br>• 异步：通过 `task_id` 查询，成功后返回相同结构<br>• 严格保持输入格式（如 DOCX → DOCX，JPG → JPG） | • 纯结构化 JSON：<br> – `choice`: `{ "selected": "option_a", "probabilities": {"option_a": 0.82, ...}, "confidence": 0.93 }`<br> – `noul`: `{ "noul": 0.74 }`（P(yes)）<br> – `score`: `{ "score": 2.25, "probabilities": [0.1, 0.65, 0.25], "confidence": 0.88 }`<br>• **无任何自由文本生成字段** |
+| **支持模型** | `qwen3.8-max`, `qwen3.7-plus`, `qwen3-vl-plus`, `qwen3-coder-flash`, `qwen3.7` 等全系主流 Qwen 模型（含多模态与代码专用版） | 仅 `qwen-mt-uni`（当前唯一发布版本） | 仅 `decision-model-preview`（预览版，功能稳定，接口冻结） |
+| **API 端点（典型）** | • OpenAI 兼容：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions`<br>• DashScope 原生：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation` | `POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`<br>（同步）<br>或添加 Header `X-DashScope-Async: enable`（异步） | `POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/systemone`<br>（TypeSafe System One 兼容协议） |
+| **计费方式** | • 按 `input_tokens` + `output_tokens` 计费<br>• 多模态输入按像素/帧/音频时长折算为 token（如 `image_tokens`, `video_tokens`）<br>• 不同模型单价不同（如 `qwen3.8-max` > `qwen3.7-plus`） | • 仅按 `input_tokens` 计费（不含输出）<br>• 细粒度拆分：`document_tokens` / `image_tokens` / `audio_tokens` / `character_tokens`<br>• 文件解析、OCR、格式重构等隐式处理均计入 `input_tokens` | • 按**单次请求**计费（固定单价），与 `state` 长度、问题数量、选项规模无关<br>• 无 `token` 概念，不因输出变长而增费<br>• 成本极低且可预测（适合高频调用） |
+| **典型场景** | • 智能客服对话机器人<br>• 多轮 Agent 编排（联网搜索+代码执行+文档摘要）<br>• 图像/视频内容理解与描述<br>• 技术文档生成与润色 | • 多语言产品说明书批量翻译（PDF→PDF）<br>• 客服录音转文字+实时翻译（MP3→TXT）<br>• PPT 汇报稿中英双语自动排版（PPTX→PPTX）<br>• 扫描件图片中的表格文字精准翻译（JPG→JPG） | • 工单智能分流（“归属团队：A/B/C/other”）<br>• 内容安全审核（“是否涉政：yes/no/uncertain”）<br>• 智能体任务完成度校验（“完成度：1~5 分”）<br>• 用户意图置信度分级（“购买意向：low/medium/high”） |
+| **多轮对话支持** | • Chat：需手动维护 `messages` 数组<br>• Responses：支持 `previous_response_id` 自动拼接或 `x-dashscope-session-cache` 缓存<br>• Anthropic：依赖消息顺序，无内置状态管理 | ❌ 不支持多轮；每次调用为独立翻译任务 | ❌ 不支持多轮；每次请求为独立决策快照 |
+| **工具调用能力** | ✅ 支持（Responses 协议内置 `web_search`/`code_interpreter`；Anthropic 协议支持 `tool_use`） | ❌ 不支持工具调用；所有翻译逻辑内建封装 | ❌ 不支持工具调用；纯前向推理，无外部交互 |
 
-### ✅ 推荐使用 Qwen-MT-Uni 当：
-- 核心诉求是**格式无损、语义保真、领域可控的翻译**，而非通用文本生成；
-- 输入源多样：既有用户粘贴的文本片段，又有待发布的 PDF 手册、PPT 产品介绍、客服录音 MP3、带水印的截图 JPG；
-- 需要**术语强一致**（通过 `glossary`）和**敏感词保留原文**（通过 `sensitives`）；
-- 对延迟容忍度高：小文本/图片用同步，大文件/长音频用异步（`task_id` 24 小时有效，需主动轮询下载）；
-- **不接受“翻译腔”或自由发挥**——Qwen-MT 的设计目标就是消除生成不确定性。
+---
 
-### ✅ 推荐使用 决策模型 当：
-- 任务本质是**二分类/多分类信号提取**（如“是否违规？”、“属于哪类风险？”、“应路由至哪个策略组？”），而非生成解释性文字；
-- 要求**毫秒级响应、100% 确定性输出**（`temperature=0.0` 强制禁用采样）；
-- 输入数据结构清晰（如日志字段拼接、表单文本、规则引擎前置输出），无需多轮上下文；
-- 需要**可解释的置信度**（`score`）和**完整概率分布**（`probabilities`）用于后续阈值调控或模型监控；
-- 希望**成本可预测**——按次计费，避免因输入长度波动导致账单不可控。
+## 适用场景建议（面向开发者的技术选型指南）
 
-## 开发者技术选型参考
+### ✅ 选择 **基础Qwen API** 当：
+- 你需要**开放域生成能力**（如写文案、编代码、讲故事）；  
+- 输入/输出需**强交互性与灵活性**（如多轮对话、用户随时中断重试）；  
+- 任务涉及**多步骤协同**（例如：先看图识物 → 再搜索商品 → 最后比价推荐）；  
+- 你已有 OpenAI/Anthropic 生态技术栈，希望**最小改造迁移**；  
+- 可接受毫秒级至数秒级延迟，且愿意为高质量生成支付对应 token 成本。
 
-| 选型问题 | 推荐方案 | 关键依据 |
-|----------|----------|----------|
-| **我的应用需要同时做客服对话 + 产品文档翻译 + 内容审核，该用几个服务？** | **三者并用** | Qwen API（对话）、Qwen-MT-Uni（文档翻译）、决策模型（审核）职责正交，混用无耦合风险；强行用 Qwen API 做翻译易失格式、做审核难保证确定性。 |
-| **我已有 OpenAI SDK，想快速接入百炼，但需调用 Qwen-Audio** | **DashScope 原生协议** | Qwen-Audio 明确不支持 OpenAI 兼容协议；必须切换至 DashScope SDK 并使用 `/multimodal-generation/generation` 端点。 |
-| **我需要翻译一份 150 页的 PDF，且要求保留目录层级和表格样式** | **Qwen-MT-Uni 异步模式** | 同步调用超页数限制（200 页上限内可行），但异步模式专为大文件设计；输出 PDF 与输入完全同构，格式保真度由模型原生保障。 |
-| **我做金融风控，需对每笔贷款申请返回“HIGH_RISK/MEDIUM_RISK/LOW_RISK”及对应概率，延迟要求 <500ms** | **决策模型** | Qwen API 即使用 `qwen3.7-plus` 也存在生成不确定性、输出格式不统一、token 成本随输入长度飙升等问题；决策模型原生输出结构化三元组，SLA 保障低延迟。 |
-| **我想用 Qwen-MT 翻译一段含数学公式的 LaTeX 文本** | **Qwen API（`qwen3-math`） + 后处理** | Qwen-MT-Uni 不解析 LaTeX 语义，会将 `$E=mc^2$` 当普通字符串直译；应选用 `qwen3-math` 模型，通过 DashScope 协议调用，并启用 `format: "latex"` 参数确保公式完整性。 |
-| **我的系统需支持中→英、英→日、日→中三段式翻译流水线，能否复用一个模型？** | **Qwen-MT-Uni 单次调用即可** | `qwen-mt-uni` 原生支持任意源/目标语言对（见[语种列表](https://help.aliyun.com/zh/model-studio/qwen-mt-uni-api#uni-languages)），无需链式调用；三段式应改为“中→日”单步直达，避免误差累积。 |
+> ⚠️ 注意避坑：勿用于高并发、低延迟、确定性要求强的决策任务（如每秒万次工单路由），Qwen API 的非确定性输出、长尾延迟与 token 成本将显著抬高系统负担。
 
-> **重要提醒**：所有服务均需配置百炼业务空间专属域名（`{WorkspaceId}.{region}.maas.aliyuncs.com`），旧域名（如 `dashscope.aliyuncs.com`）虽兼容但性能与稳定性不达新标准，**新项目务必使用新域名**。SDK 配置请严格参照各协议文档的 `base_url` / `workspace` / `region` 设置说明，参数命名与必填性因协议而异（如 `messages` 在 OpenAI Chat 中必填，在 Decision Model 中不存在）。
+---
+
+### ✅ 选择 **Qwen-MT-Uni 翻译模型** 当：
+- 核心诉求是**跨语言语义准确 + 格式完全一致**（如合同翻译必须保留页眉页脚、表格行列、图片位置）；  
+- 输入源为**真实业务文档**（PDF 报告、Word 合同、PPT 方案、扫描件 JPG）；  
+- 需要**领域适配**（如医疗术语、金融条款）或**敏感词/术语强管控**；  
+- 文件体积较大（>10 MB）或处理耗时较长（>10 秒），需使用**异步模式**并管理 `task_id` 生命周期；  
+- 你追求**翻译质量稳定性**，而非创造性表达（该模型不“润色”，只“精准转译”。
+
+> ⚠️ 注意避坑：勿用于纯文本简单短句翻译（如 UI 字符串），此时基础 Qwen API 更轻量、更经济；勿尝试用其做 OCR 或语音识别——它只处理已知模态内容，不替代 ASR/Vision 前处理。
+
+---
+
+### ✅ 选择 **决策模型** 当：
+- 你的问题是**封闭、结构化、有明确定义答案空间**的（如：3 个选项、2 种判断、5 级量表）；  
+- 业务要求**亚秒级响应、100% 确定性输出、零文本幻觉**（如风控拦截必须返回明确 yes/no）；  
+- 你已在下游构建了**阈值过滤、置信度融合、AB 测试分流**等决策链路；  
+- 调用量极大（日均百万+），需要**可预测、线性扩展、无 token 波动**的成本模型；  
+- 你愿意用少量配置（`criteria` 描述）换取开箱即用的统计级可靠性，而非自行微调 LLM。
+
+> ⚠️ 注意避坑：勿用于开放式问答（如“请解释量子计算原理”）、创意生成（如“写一首唐诗”）或需要上下文记忆的任务；该模型无 stateful 能力，每次请求必须携带完整 `state`。
+
+---
+
+## 总结：一句话选型口诀  
+> **要“说人话”——选基础 Qwen API；  
+> 要“翻得准”——选 Qwen-MT-Uni；  
+> 要“判得快、判得稳、判得省”——选 decision-model-preview。**  
+
+所有模型均运行于百炼平台统一基础设施，共享 Workspace 域名、API Key 认证与监控告警体系。建议新项目优先采用业务空间专属域名（`https://{WorkspaceId}.{region}.maas.aliyuncs.com`），以获得最佳性能与长期兼容性保障。
 
 ## 被对比主题页
 

@@ -1,20 +1,15 @@
-# Qwen-Audio-3.x-ASR-Flash-Filetrans/Fun-ASR非实时语音识别Java SDK
+# Fun-ASR非实时语音识别Java SDK
 
-本文介绍Qwen-Audio-3.x-ASR-Flash-Filetrans/Fun-ASR非实时语音识别Java SDK的参数和接口细节。
+本文介绍Fun-ASR非实时语音识别Java SDK的参数和接口细节。
 
-**用户指南：**[非实时语音识别](raw/model-user-guide/model-experience/speech-recognition/non-realtime-speech-recognition-user-guide.md)。关于支持的音频格式、文件大小限制、时长限制等输入要求，请参见[音频规格](https://help.aliyun.com/zh/model-studio/asr-model#asr_audio_spec02)。
+关于支持的音频格式、文件大小限制、时长限制等输入要求，请参见[音频规格](https://help.aliyun.com/zh/model-studio/asr-model#asr_audio_spec02)。
 
 ## 前提条件
 
-已开通服务并[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。请[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)，而非硬编码在代码中，防范因代码泄露导致的安全风险。
-
-**说明**当您需要为第三方应用或用户提供临时访问权限，或者希望严格控制敏感数据访问、删除等高风险操作时，建议使用[临时鉴权Token](raw/model-api-reference/more-about-models/generate-temporary-api-key.md)。
-
-与长期有效的 API Key 相比，临时鉴权 Token 具备时效性短（60秒）、安全性高的特点，适用于临时调用场景，能有效降低API Key泄露的风险。
-
-使用方式：在代码中，将原本用于鉴权的 API Key 替换为获取到的临时鉴权 Token 即可。
-
+-   已开通服务并[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。请配置API Key到环境变量，而非硬编码在代码中，防范因代码泄露导致的安全风险。
+    
 -   [安装最新版DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
+    
 
 ## 快速开始
 
@@ -23,29 +18,27 @@
 -   异步提交任务+同步等待任务结束：提交任务后，阻塞当前线程直到任务结束并获取识别结果。
 -   异步提交任务+异步查询任务执行结果：提交任务后，在需要的时候通过调用查询任务接口获取任务的执行结果。
 
-### 异步提交任务+同步等待任务结束
+#### 异步提交任务+同步等待任务结束
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2369765871/CAEQURiBgMCO2_fRpxkiIDBlNzI4YmMyNTU3ODRlM2Y4NjUxZWU4YmUxNjliMmFl4709861_20241015153444.149.svg)
+![提交任务并同步等待](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/zh/images/6a4b3c2d1e0f93bd.png)
 
-1.  配置[请求参数](https://help.aliyun.com/zh/model-studio/fun-asr-recorded-speech-recognition-java-sdk#48ea212b1d08r)。
+1.  配置请求参数。
     
-2.  实例化[核心类（Transcription）](https://help.aliyun.com/zh/model-studio/fun-asr-recorded-speech-recognition-java-sdk#adcb5e9bddbyq)。
+2.  实例化核心类（Transcription）。
     
-3.  调用[核心类（Transcription）](https://help.aliyun.com/zh/model-studio/fun-asr-recorded-speech-recognition-java-sdk#adcb5e9bddbyq)的`asyncCall`方法异步提交任务。
+3.  调用核心类（Transcription）的`asyncCall`方法异步提交任务。
     
     **说明**
     
     -   文件转写服务对通过API提交的任务采取尽力服务原则进行处理。任务提交后将进入排队（`PENDING`）状态，排队时间取决于队列长度和文件时长，无法明确给出，通常在数分钟内。任务开始处理后，语音识别将以数百倍加速完成。
     -   每一个任务完成后，识别结果和URL下载链接有效期为24小时，超时后无法查询任务或通过先前查询结果中的URL下载结果。
     
-4.  调用[核心类（Transcription）](https://help.aliyun.com/zh/model-studio/fun-asr-recorded-speech-recognition-java-sdk#adcb5e9bddbyq)的`wait`方法同步等待任务结束。
+4.  调用核心类（Transcription）的`wait`方法同步等待任务结束。
     
     任务的状态包括`PENDING`、`RUNNING`、`SUCCEEDED`和`FAILED`。当任务处于`PENDING`或`RUNNING`状态时，`wait`接口将被阻塞。当任务处于`SUCCEEDED`或`FAILED`状态时，`wait`接口不再阻塞并返回任务的执行结果。
     
-    `wait`返回[任务执行结果（TranscriptionResult）](https://help.aliyun.com/zh/model-studio/fun-asr-recorded-speech-recognition-java-sdk#11a082e1d9ijq)。
+    `wait`返回任务执行结果（TranscriptionResult）。
     
-
-点击查看完整示例
 
 ```
 import com.alibaba.dashscope.audio.asr.transcription.*;
@@ -64,7 +57,7 @@ public class Main {
                         // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
                         // 若没有配置环境变量，请用百炼API Key将下行替换为：.apiKey("sk-xxx")
                         //.apiKey("apikey")
-                        .model("qwen-audio-3.1-asr-flash-filetrans") // 此处以qwen-audio-3.1-asr-flash-filetrans为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
+                        .model("fun-asr") // 此处以fun-asr为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
                         .fileUrls(
                                 Arrays.asList(
                                         "{YOUR_AUDIO_URL}"))
@@ -87,29 +80,27 @@ public class Main {
 }
 ```
 
-### 异步提交任务+异步查询任务执行结果
+#### 异步提交任务+异步查询任务执行结果
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2369765871/CAEQURiBgIDnxvjRpxkiIGI1NjJjOTgyNTVhMTRiMjM4OWVjYzFmZTExNGZjYzE14709861_20241015153444.149.svg)
+![提交任务并主动轮询](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/zh/images/6a4b3c2d1e0f93bc.png)
 
-1.  配置[请求参数](https://help.aliyun.com/zh/model-studio/fun-asr-recorded-speech-recognition-java-sdk#48ea212b1d08r)。
+1.  配置请求参数。
     
-2.  实例化[核心类（Transcription）](https://help.aliyun.com/zh/model-studio/fun-asr-recorded-speech-recognition-java-sdk#adcb5e9bddbyq)。
+2.  实例化核心类（Transcription）。
     
-3.  调用[核心类（Transcription）](https://help.aliyun.com/zh/model-studio/fun-asr-recorded-speech-recognition-java-sdk#adcb5e9bddbyq)的`asyncCall`方法异步提交任务。
+3.  调用核心类（Transcription）的`asyncCall`方法异步提交任务。
     
     **说明**
     
     -   文件转写服务对通过API提交的任务采取尽力服务原则进行处理。任务提交后将进入排队（`PENDING`）状态，排队时间取决于队列长度和文件时长，无法明确给出，通常在数分钟内。任务开始处理后，语音识别将以数百倍加速完成。
     -   每一个任务完成后，识别结果和URL下载链接有效期为24小时，超时后无法查询任务或通过先前查询结果中的URL下载结果。
     
-4.  循环调用[核心类（Transcription）](https://help.aliyun.com/zh/model-studio/fun-asr-recorded-speech-recognition-java-sdk#adcb5e9bddbyq)的`fetch`方法直到获取最终的任务结果。
+4.  循环调用核心类（Transcription）的`fetch`方法直到获取最终的任务结果。
     
     当任务状态为`SUCCEEDED`或`FAILED`时，停止轮询并处理结果。
     
-    `fetch`返回[任务执行结果（TranscriptionResult）](https://help.aliyun.com/zh/model-studio/fun-asr-recorded-speech-recognition-java-sdk#11a082e1d9ijq)。
+    `fetch`返回任务执行结果（TranscriptionResult）。
     
-
-点击查看完整示例
 
 ```
 import com.alibaba.dashscope.audio.asr.transcription.*;
@@ -129,7 +120,7 @@ public class Main {
                         // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
                         // 若没有配置环境变量，请用百炼API Key将下行替换为：.apiKey("sk-xxx")
                         //.apiKey("apikey")
-                        .model("qwen-audio-3.1-asr-flash-filetrans") // 此处以qwen-audio-3.1-asr-flash-filetrans为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
+                        .model("fun-asr") // 此处以fun-asr为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
                         .fileUrls(
                                 Arrays.asList(
                                         "{YOUR_AUDIO_URL}"))
@@ -178,17 +169,6 @@ SDK 默认使用**北京地域**的接口地址。如需切换到其他地域，
 -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
 -   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
 
-`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。现有域名仍可正常使用。
-
-**切换到新加坡地域**：
-
-```
-import com.alibaba.dashscope.utils.Constants;
-
-// 在代码开头设置
-Constants.baseHttpApiUrl = "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1";
-```
-
 **注意**：
 
 -   不同地域的 API Key 不同，请确保使用对应地域的 API Key
@@ -198,11 +178,9 @@ Constants.baseHttpApiUrl = "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.c
 
 请求参数通过`TranscriptionParam`的链式方法进行配置。
 
-点击查看示例
-
 ```
 TranscriptionParam param = TranscriptionParam.builder()
-  .model("qwen-audio-3.1-asr-flash-filetrans")
+  .model("fun-asr")
   .fileUrls(
           Arrays.asList(
                   "{YOUR_AUDIO_URL}"))
@@ -217,15 +195,15 @@ TranscriptionParam param = TranscriptionParam.builder()
 
 **说明**
 
-model
+`model`
 
-String
+`String`
 
 是
 
-指定模型名。支持Qwen-Audio-3.x-ASR-Flash-Filetrans和Fun-ASR系列模型，详情请参见[支持的模型与地域](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#4a43cc1bb7kxg)。
+模型名称。
 
-fileUrls
+`fileUrls`
 
 List<String>
 
@@ -248,17 +226,9 @@ List<String>
     SDK不支持对请求头进行配置。
     
 
-keep\_dialect
+`vocabularyId`
 
-boolean
-
-否
-
-仅 `qwen-audio-3.1-asr-flash-filetrans` 支持。默认 `false`，将方言转写为普通话；设为 `true` 时保留方言表达。通过 `.parameter("keep_dialect", value)` 设置。完整参数说明请参见[API 参考](raw/_short/fun-asr-recorded-speech-recognition-http-api-52f7db644c1e5209.md)。
-
-vocabularyId
-
-String
+`String`
 
 否
 
@@ -270,23 +240,17 @@ String
 
 使用方法请参见[预编译热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_precompiled_h3)。
 
-vocabulary
+`vocabulary`
 
 Map<String, Integer>
 
 否
 
-即时热词。
+即时热词。以键值对形式传入，键为热词文本（`string`），值为整数权重（`integer`），无需预先创建热词列表。
 
-以键值对形式传入，键为热词文本（`string`），值为热词权重（`integer`），无需预先创建热词列表。权重取值范围为 \[1, 5\] 或 50：取 \[1, 5\] 时值越大模型越倾向输出该词；取 50 时为超级热词，召回率大幅提升，但超级热词数量最多不超过 50 个。
+使用方法请参见[即时热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_instant_h3)。
 
-适用于临时性、会话级别的热词优化。
-
-与预编译热词同时配置时，系统会合并两类热词；合并后超过 2000 个时，随机选择 2000 个使用。使用方法请参见[即时热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_instant_h3)。
-
-**重要**仅`qwen-audio-3.1-asr-flash-filetrans`、`qwen-audio-3.0-asr-flash-filetrans`支持即时热词。
-
-**说明**`vocabulary`需要通过`TranscriptionParam`实例的`parameter`方法或者`parameters`方法进行设置：
+`vocabulary`需要通过`TranscriptionParam`实例的`parameter`方法或者`parameters`方法进行设置：
 
 通过parameter设置
 
@@ -296,7 +260,7 @@ vocab.put("张三", 5);
 vocab.put("李四", 5);
 
 TranscriptionParam param = TranscriptionParam.builder()
-  .model("qwen-audio-3.1-asr-flash-filetrans")
+  .model("fun-asr")
   .parameter("vocabulary", vocab)
   .build();
 ```
@@ -309,12 +273,12 @@ vocab.put("张三", 5);
 vocab.put("李四", 5);
 
 TranscriptionParam param = TranscriptionParam.builder()
-  .model("qwen-audio-3.1-asr-flash-filetrans")
+  .model("fun-asr")
   .parameters(Collections.singletonMap("vocabulary", vocab))
   .build();
 ```
 
-channelId
+`channelId`
 
 List<Integer>
 
@@ -326,17 +290,17 @@ List<Integer>
 
 默认值：\[0\]。
 
-specialWordFilter
+`specialWordFilter`
 
-String
+`String`
 
 否
 
 指定在语音识别过程中需要处理的敏感词，并支持对不同敏感词设置不同的处理方式。详情请参见[敏感词过滤](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#nrt03_sensitive_h3)。
 
-diarizationEnabled
+`diarizationEnabled`
 
-Boolean
+`Boolean`
 
 否
 
@@ -350,11 +314,11 @@ Boolean
 
 默认值：false。
 
-有关`speaker_id`的示例，请参见[识别结果说明](https://help.aliyun.com/zh/model-studio/fun-asr-recorded-speech-recognition-java-sdk#a9021178ccl7s)。
+有关`speaker_id`的示例，请参见识别结果说明。
 
-speakerCount
+`speakerCount`
 
-Integer
+`Integer`
 
 否
 
@@ -366,58 +330,56 @@ Integer
 
 无默认值。
 
-language\_hints
+`language_hints`
 
-String\[\]
+`String[]`
 
 否
 
 设置待识别语言代码。如果无法提前确定语种，可不设置，模型会自动识别语种。
 
-对于 Qwen-Audio-3.x-ASR-Flash-Filetrans 系列模型，最多支持设置 4 个值，即便设置超出 4 个，也仅前 4 个生效；对于 Fun-ASR 系列模型，仅支持设置 1 个值，即便设置多个，也仅第一个生效。
+最多支持设置 1 个值，超出时仅前 1 个生效。
 
 点击查看支持的语言代码
 
--   qwen-audio-3.1-asr-flash-filetrans、qwen-audio-3.0-asr-flash-filetrans、fun-asr：
-    
-    -   zh: 中文
-    -   en: 英文
-    -   ja: 日语
-    -   ko：韩语
-    -   vi：越南语
-    -   th：泰语
-    -   id：印尼语
-    -   ms：马来语
-    -   tl：菲律宾语
-    -   hi：印地语
-    -   ar：阿拉伯语
-    -   fr：法语
-    -   de：德语
-    -   es：西班牙语
-    -   pt：葡萄牙语
-    -   ru：俄语
-    -   it：意大利语
-    -   nl：荷兰语
-    -   sv：瑞典语
-    -   da：丹麦语
-    -   fi：芬兰语
-    -   no：挪威语
-    -   el：希腊语
-    -   pl：波兰语
-    -   cs：捷克语
-    -   hu：匈牙利语
-    -   ro：罗马尼亚语
-    -   bg：保加利亚语
-    -   hr：克罗地亚语
-    -   sk：斯洛伐克语
+-   zh: 中文
+-   en: 英文
+-   ja: 日语
+-   ko：韩语
+-   vi：越南语
+-   th：泰语
+-   id：印尼语
+-   ms：马来语
+-   tl：菲律宾语
+-   hi：印地语
+-   ar：阿拉伯语
+-   fr：法语
+-   de：德语
+-   es：西班牙语
+-   pt：葡萄牙语
+-   ru：俄语
+-   it：意大利语
+-   nl：荷兰语
+-   sv：瑞典语
+-   da：丹麦语
+-   fi：芬兰语
+-   no：挪威语
+-   el：希腊语
+-   pl：波兰语
+-   cs：捷克语
+-   hu：匈牙利语
+-   ro：罗马尼亚语
+-   bg：保加利亚语
+-   hr：克罗地亚语
+-   sk：斯洛伐克语
 
-**说明**`language_hints`需要通过`TranscriptionParam`实例的`parameter`方法或者`parameters`方法进行设置：
+`language_hints`需要通过`TranscriptionParam`实例的`parameter`方法或者`parameters`方法进行设置：
 
 通过parameter设置
 
 ```
 TranscriptionParam param = TranscriptionParam.builder()
-  .model("qwen-audio-3.1-asr-flash-filetrans")
+  .model("fun-asr")
   .parameter("language_hints", new String[]{"zh"})
   .build();
 ```
@@ -426,14 +388,14 @@ TranscriptionParam param = TranscriptionParam.builder()
 
 ```
 TranscriptionParam param = TranscriptionParam.builder()
-  .model("qwen-audio-3.1-asr-flash-filetrans")
+  .model("fun-asr")
   .parameters(Collections.singletonMap("language_hints", new String[]{"zh"}))
   .build();
 ```
 
-apiKey
+`apiKey`
 
-String
+`String`
 
 否
 
@@ -493,9 +455,9 @@ public List<TranscriptionTaskResult> getResults()
 
 无
 
-[子任务执行结果（TranscriptionTaskResult）](https://help.aliyun.com/zh/model-studio/fun-asr-recorded-speech-recognition-java-sdk#86b568aa3asuj)
+子任务执行结果（TranscriptionTaskResult）
 
-获取[子任务执行结果（TranscriptionTaskResult）](https://help.aliyun.com/zh/model-studio/fun-asr-recorded-speech-recognition-java-sdk#86b568aa3asuj)。
+获取子任务执行结果（TranscriptionTaskResult）。
 
 每个任务对一个或多个音频文件进行识别，不同音频文件在不同的子任务中处理，因此每个任务对应一到多个子任务。
 
@@ -537,7 +499,7 @@ public JsonObject getOutput()
 ```
 **异常示例**
 
-“`code`”为错误码，“`message`”为错误信息，只有异常情况才有这两个字段，您可以通过这两个字段，对照[错误码](https://help.aliyun.com/zh/model-studio/fun-asr-recorded-speech-recognition-java-sdk#a370386972oa4)排查问题。
+`code`为错误码，`message`为错误信息，只有异常情况才有这两个字段，您可以通过这两个字段，对照错误码排查问题。
 
 ```
 {
@@ -596,7 +558,7 @@ public String getTranscriptionUrl()
 
 识别结果保存为JSON文件，您可以通过上述链接下载该文件或直接通过HTTP请求读取该文件中的内容。
 
-JSON数据中各字段含义请参见[识别结果说明](https://help.aliyun.com/zh/model-studio/fun-asr-recorded-speech-recognition-java-sdk#a9021178ccl7s)。
+JSON数据中各字段含义请参见识别结果说明。
 
 ```
 public TaskStatus getSubTaskStatus()
@@ -625,8 +587,6 @@ public String getMessage()
 ### 识别结果说明
 
 识别结果保存为JSON文件。
-
-点击查看识别结果示例
 
 ```
 {
@@ -681,91 +641,91 @@ public String getMessage()
 
 **说明**
 
-audio\_format
+`audio_format`
 
-string
+`string`
 
 源文件中音频的格式。
 
-channels
+`channels`
 
 array\[integer\]
 
 源文件中音频的音轨索引信息，对单轨音频返回\[0\]，对双轨音频返回\[0, 1\]，以此类推。
 
-original\_sampling\_rate
+`original_sampling_rate`
 
-integer
+`integer`
 
 源文件中音频的采样率（Hz）。
 
-original\_duration\_in\_milliseconds
+`original_duration_in_milliseconds`
 
-integer
+`integer`
 
 源文件中的原始音频时长（ms）。
 
-channel\_id
+`channel_id`
 
-integer
+`integer`
 
 转写结果的音轨索引，以0为起始。
 
-content\_duration
+`content_duration`
 
-integer
+`integer`
 
 音轨中被判定为语音内容的时长（ms）。
 
 语音识别模型服务仅对音轨中被判定为语音内容的时长进行语音转写，并据此进行计量计费，非语音内容不计量、不计费。通常情况下语音内容时长会短于原始音频时长。由于对是否存在语音内容的判定是由AI模型给出的，可能与实际情况存在一定误差。
 
-transcript
+`transcript`
 
-string
+`string`
 
 段落级别的语音转写结果。
 
-sentences
+`sentences`
 
-array
+`array`
 
 句子级别的语音转写结果。
 
-words
+`words`
 
-array
+`array`
 
 词级别的语音转写结果。
 
-begin\_time
+`begin_time`
 
-integer
+`integer`
 
 开始时间戳（ms）。
 
-end\_time
+`end_time`
 
-integer
+`integer`
 
 结束时间戳（ms）。
 
-text
+`text`
 
-string
+`string`
 
 语音转写结果。
 
-speaker\_id
+`speaker_id`
 
-integer
+`integer`
 
 当前说话人的索引，以0为起始，用于区分不同的说话人。
 
 仅在启用说话人分离功能时，该字段才会显示于识别结果中。
 
-punctuation
+`punctuation`
 
-string
+`string`
 
 预测出的词之后的标点符号（如有）。
 
@@ -777,15 +737,13 @@ string
 
 通过静态方法`FromTranscriptionParam`创建`TranscriptionQueryParam`实例。
 
-点击查看示例
-
 ```
 // 创建转写请求参数
 TranscriptionParam param =
         TranscriptionParam.builder()
                 // 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key
                 //.apiKey("apikey")
-                .model("qwen-audio-3.0-asr-flash-filetrans")
+                .model("fun-asr")
                 .fileUrls(
                         Arrays.asList(
                                 "{YOUR_AUDIO_URL}"))
@@ -823,7 +781,7 @@ public static TranscriptionQueryParam FromTranscriptionParam(TranscriptionParam 
 
 ### 核心类（`Transcription`）
 
-`Transcription`可以通过“`import com.alibaba.dashscope.audio.asr.transcription.*;`”方式引入。它的关键接口如下：
+`Transcription`可以通过`import com.alibaba.dashscope.audio.asr.transcription.*;`方式引入。它的关键接口如下：
 
 **接口/方法**
 
@@ -839,7 +797,7 @@ public TranscriptionResult asyncCall(TranscriptionParam param)
 
 `param`：语音识别相关参数，`TranscriptionParam`实例
 
-[任务执行结果（TranscriptionResult）](https://help.aliyun.com/zh/model-studio/fun-asr-recorded-speech-recognition-java-sdk#11a082e1d9ijq)
+任务执行结果（TranscriptionResult）
 
 异步提交语音识别任务。
 
@@ -849,7 +807,7 @@ public TranscriptionResult wait(TranscriptionQueryParam queryParam)
 
 `queryParam`：`TranscriptionQueryParam`实例
 
-[任务执行结果（TranscriptionResult）](https://help.aliyun.com/zh/model-studio/fun-asr-recorded-speech-recognition-java-sdk#11a082e1d9ijq)
+任务执行结果（TranscriptionResult）
 
 阻塞当前线程直到异步任务结束（任务状态为`SUCCEEDED`或`FAILED`）。
 
@@ -859,7 +817,7 @@ public TranscriptionResult fetch(TranscriptionQueryParam queryParam)
 
 `queryParam`：`TranscriptionQueryParam`实例
 
-[任务执行结果（TranscriptionResult）](https://help.aliyun.com/zh/model-studio/fun-asr-recorded-speech-recognition-java-sdk#11a082e1d9ijq)
+任务执行结果（TranscriptionResult）
 
 异步查询当前任务执行结果。
 
@@ -978,7 +936,7 @@ public TranscriptionResult fetch(TranscriptionQueryParam queryParam)
 
 ### 故障排查
 
-如遇代码报错问题，请根据[错误码](https://help.aliyun.com/zh/model-studio/fun-asr-recorded-speech-recognition-java-sdk#a370386972oa4)中的信息进行排查。
+如遇代码报错问题，请根据错误码中的信息进行排查。
 
 #### Q：一直轮询不到结果？
 

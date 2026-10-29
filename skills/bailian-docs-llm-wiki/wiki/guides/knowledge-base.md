@@ -1,36 +1,41 @@
 # knowledge base
 
-百炼平台的 knowledge base 是面向企业级场景的 RAG（检索增强生成）服务，支持私有文档的自动解析、切片、向量化与索引构建，并提供低延迟检索与流式大模型问答能力。开发者可通过控制台或 API 快速接入，实现知识驱动的应用构建。该能力深度集成于百炼模型生态，是构建智能客服、内部知识助手等场景的核心基础设施。
+百炼平台的 knowledge base 是面向企业级场景的 RAG（检索增强生成）服务，支持私有文档的自动解析、切片、向量化与索引构建，并提供多路召回检索与流式大模型问答能力。开发者可通过控制台或 API 快速接入，将结构化/非结构化数据转化为可调用的知识服务。该能力深度集成于百炼模型生态，适用于客服、内部知识助手、合规审查等高精度垂域场景。
 
-## 支持的模型/功能
+## 支持的模型与功能
 
-- **默认支持模型**：Qwen 系列（Qwen2、Qwen2.5、Qwen3）、Qwen-Audio（音频文档）、Qwen-VL（多模态文档），具体以 [RAG 简介](../../raw/application-user-guide/knowledge-base.md) 中“核心概念”章节说明为准。  
-- **关键功能**：多路召回（BM25 + 向量混合）、Agentic 多轮检索、流式问答、异步文档处理、细粒度切片策略（按段落、标题、语义边界）。  
-- **数据源支持**：本地文件（PDF/DOCX/TXT/MD/CSV/XLSX）、OSS、MySQL、PostgreSQL、飞书、钉钉等，详见 [数据集](../../raw/application-user-guide/knowledge-base/data-connection-overview/data-connection.md) 文档。
+- **默认模型**：知识检索与问答默认使用 `qwen-max` 或 `qwen-plus`（具体以控制台配置为准），支持通过 `model_id` 参数显式指定其他已授权的大模型；  
+- **核心功能**：包括文档自动解析（PDF/Word/Excel/TXT/Markdown 等）、语义切片（支持按段落、标题、固定 token 长度等策略）、双路向量索引（稠密向量 + 关键词倒排）、多路召回（向量+关键词+重排序）、Agentic 多轮检索（[RAG 简介](../../raw/application-user-guide/knowledge-base.md) 中明确提及）及流式问答响应；  
+- **扩展能力**：支持与 MCP 协议、Skill 编排、自定义 [Prompt 工程](../concepts/prompt-engineering.md)联动，详见 [应用集成](../../raw/application-user-guide/knowledge-base/integration/channels.md)。
 
 ## 关键参数
 
-| 参数 | 说明 | 示例值 | 来源 |
-|------|------|--------|------|
-| `chunk_size` | 切片最大字符数（非 token 数） | `512`（默认），范围 `128–2048` | [创建知识库](../../raw/application-user-guide/knowledge-base/rag-knowledge-base.md) |
-| `chunk_overlap` | 相邻切片重叠字符数 | `64`（默认） | 同上 |
-| `retrieval_top_k` | 检索返回的 Top-K 片段数 | `3`（问答默认），最大 `10` | [知识检索](../../raw/application-user-guide/knowledge-base/rag-knowledge-retrieval.md) |
-| `enable_rerank` | 是否启用重排序（需额外计费） | `true` / `false` | [RAG API 参考](../../raw/application-api-reference/rag-api/rag-api-overview.md) |
+| 参数 | 类型 | 说明 | 示例 |
+|------|------|------|------|
+| `knowledge_id` | string | 知识库唯一标识，创建后由平台分配 | `kb-abc123xyz` |
+| `top_k` | int | 检索返回的最相关切片数（单次请求上限为 50） | `5` |
+| `retrieval_strategy` | string | 可选 `hybrid`（默认）、`vector_only`、`keyword_only` | `"hybrid"` |
+| `stream` | bool | 是否启用流式问答（仅 `rag-knowledge-qa` 接口支持） | `true` |
+| `model_id` | string | 显式指定问答所用大模型 ID，需在当前项目中已开通权限 | `"qwen-plus"` |
 
-> **注意**：`chunk_size` 在 [RAG 简介](../../raw/application-user-guide/knowledge-base.md) 中被描述为“按语义自适应切分”，但实际配置仍以 `chunk_size` + `chunk_overlap` 为硬约束；语义切分仅在 `chunk_strategy=semantic` 时作为辅助优化，不替代参数控制。
+> **注意**：`top_k` 在 [RAG API 参考](../../raw/application-api-reference/rag-api/rag-api-overview.md) 中定义为最大 50，但部分旧版 SDK 示例中误写为 100，应以 API 文档为准。
 
 ## 使用方式
 
-1. **控制台快速验证**：通过 [Playground](../../raw/application-user-guide/knowledge-base/playground.md) 上传单个文档，实时调试检索与问答效果；  
-2. **API 集成**：调用 `/knowledge_bases/{kb_id}/retrieve` 进行纯检索，或 `/knowledge_bases/{kb_id}/chat` 发起流式问答（需传入 `model_id`）；  
-3. **批量部署**：使用 CLI 或 MCP 协议批量创建知识库与导入文档，参考 [应用集成](../../raw/application-user-guide/knowledge-base/integration/channels.md)。
+1. **创建知识库**：通过控制台「知识库」→「新建」或调用 `/v1/knowledge_bases` 接口，选择解析策略与切片规则（参考 [创建知识库](../../raw/application-user-guide/knowledge-base/rag-knowledge-base.md)）；  
+2. **上传文档**：支持单文件上传或批量导入（OSS/MySQL/表格等），系统自动触发解析与索引构建；  
+3. **发起检索或问答**：  
+   - 检索：调用 `/v1/knowledge_bases/{kb_id}/retrieve`，传入 query 与 `top_k`；  
+   - 问答：调用 `/v1/knowledge_bases/{kb_id}/chat`，启用 `stream=true` 可获得 SSE 流式响应；  
+4. **调试验证**：推荐先使用 [Playground](../../raw/application-user-guide/knowledge-base/playground.md) 实时观察检索质量与问答效果，再集成至生产链路。
 
 ## 限制和注意事项
 
-- 单知识库最大文档数：10,000 份；单文档最大体积：200 MB（PDF/DOCX）或 50 MB（其他格式）；  
-- 向量索引更新非实时：文档上传后约 30–120 秒完成索引就绪，期间检索可能命中旧版本；  
-- 流式问答响应中 `answer` 字段为模型生成结果，`retrieved_chunks` 字段为原始切片内容（含 `source_file_name` 和 `page_number`），二者需独立校验；  
-- > **注意**：[知识问答](../../raw/application-user-guide/knowledge-base/service/rag-knowledge-qa.md) 明确要求 `model_id` 必须与知识库所选 embedding 模型兼容（如 `text-embedding-v3` 对应 `qwen3`），但 [RAG API 参考](../../raw/application-api-reference/rag-api/rag-api-overview.md) 未强调此约束，生产环境务必校验模型对齐。
+- 单个知识库最多支持 100 万切片（chunk），超限后新增文档将被拒绝；  
+- PDF 解析不支持加密文档及扫描件 OCR（需预处理为可选中文本）；  
+- 向量化延迟：小规模文档（<100 页）通常在 1–3 分钟内完成索引，大规模批量导入建议异步轮询 `status` 字段；  
+- 所有 API 调用均受项目级 QPS 与 [Token](../concepts/token.md) 总量配额约束，详情见配额管理页面；  
+- > **注意**：[RAG 简介](../../raw/application-user-guide/knowledge-base.md) 中称“支持 MySQL 数据源”，但当前版本仅支持 MySQL 作为元数据存储（非知识内容源），实际数据接入仍需通过文件或 OSS 导入——该描述存在歧义，应以 [数据集](../../raw/application-user-guide/knowledge-base/data-connection-overview/data-connection.md) 文档为准。
 
 ## 来源文档
 

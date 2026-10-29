@@ -32,6 +32,8 @@
 
 结论：9.9 大于 9.11。
 
+你也可以在百炼控制台的[体验中心](https://bailian.console.aliyun.com/model/experience/text)选择模型并开启深度思考，直接查看思考过程。
+
 ## 使用方式
 
 百炼深度思考模型分为两种模式：
@@ -179,6 +181,10 @@
 #### Stepfun
 
 仅思考模式：stepfun/step-3.7-flash、stepfun/step-5-preview
+
+#### Ling
+
+混合思考模式，默认开启思考模式：antdigital/Ling-3.1-flash
 
 ## 快速开始
 
@@ -1161,465 +1167,44 @@ data:{"output":{"choices":[{"message":{"content":"","reasoning_content":"","role
 
 ### 限制思考长度
 
-深度思考模型有时会生成冗长的推理过程，增加等待时间并消耗更多 Token。通过`thinking_budget`参数可设置推理过程的最大 Token 数，超过限制后模型立即输出回复。
+深度思考模型有时会生成冗长的推理过程，增加等待时间并消耗更多 Token。通过 `thinking_budget` 参数可设置推理过程的最大 Token 数，超过限制后模型立即输出回复。
 
-> `thinking_budget` 默认值为模型的最大思维链长度，请参见百炼控制台的模型卡片。
+支持的模型及各模型的默认值，请参见 [Chat Completions 参数说明](https://help.aliyun.com/zh/model-studio/qwen-api-via-openai-chat-completions#afcd41d2b57zf) 和 [DashScope 参数说明](https://help.aliyun.com/zh/model-studio/qwen-api-via-dashscope#2a1c410015otp)。
 
-**重要**`thinking_budget`参数用于设置思考过程的最大 Token 数。适用于Qwen3.8、Qwen3.7、Qwen3.6、Qwen3.5、Qwen3-VL、Qwen3、GLM（阿里云直供）、Kimi（阿里云直供）系列模型，其中 kimi-k3 不支持该参数。
-
-### 控制台体验深度思考
-
-1.  登录大模型服务平台百炼控制台。
-2.  在左侧导航栏选择**体验中心** > **文本模型**。
-3.  页面默认展示 Qwen3.7-Max 模型，也可单击模型名称，在下拉列表中选择其他 Qwen3 系列模型。
-4.  在输入框底部单击**深度思考**，开启推理模式，查看模型的思考过程。
-5.  单击右上角的**模型调试**，在打开的配置面板中设置`thinking_budget`参数，控制思维链输出的最大 Token 数量，取值范围 1～32768，默认值 4000。如需体验更多模型，可前往百炼模型广场。
+以下仅列出关键参数，完整的流式调用代码请参见[快速开始](#0be77a07d89w8)。
 
 #### OpenAI兼容
 
-#### Python
-
-### 示例代码
-
 ```
-from openai import OpenAI
-import os
-
-# 初始化OpenAI客户端
-client = OpenAI(
-    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key="sk-xxx"
-    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的配置不同。
-    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
-)
-
-messages = [{"role": "user", "content": "你是谁"}]
-
 completion = client.chat.completions.create(
     model="qwen3.8-max",
     messages=messages,
-    # enable_thinking 参数开启思考过程，thinking_budget 参数设置最大推理过程 Token 数
-    extra_body={
-        "enable_thinking": True,
-        "thinking_budget": 50
-        },
+    # thinking_budget 设置思考过程的最大 Token 数
+    extra_body={"enable_thinking": True, "thinking_budget": 50},
     stream=True,
-    stream_options={
-        "include_usage": True
-    },
 )
-
-reasoning_content = ""  # 完整思考过程
-answer_content = ""  # 完整回复
-is_answering = False  # 是否进入回复阶段
-print("\n" + "=" * 20 + "思考过程" + "=" * 20 + "\n")
-
-for chunk in completion:
-    if not chunk.choices:
-        print("\nUsage:")
-        print(chunk.usage)
-        continue
-
-    delta = chunk.choices[0].delta
-
-    # 只收集思考内容
-    if hasattr(delta, "reasoning_content") and delta.reasoning_content is not None:
-        if not is_answering:
-            print(delta.reasoning_content, end="", flush=True)
-        reasoning_content += delta.reasoning_content
-
-    # 收到content，开始进行回复
-    if hasattr(delta, "content") and delta.content:
-        if not is_answering:
-            print("\n" + "=" * 20 + "完整回复" + "=" * 20 + "\n")
-            is_answering = True
-        print(delta.content, end="", flush=True)
-        answer_content += delta.content
-```
-
-### 返回结果
-
-```
-====================思考过程====================
-
-好的，用户问“你是谁”，我需要给出一个清晰且友好的回答。首先，应该明确自己的身份，即千问，由阿里巴巴集团旗下的通义实验室研发。接下来，要说明自己的主要功能，比如回答
-====================完整回复====================
-
-我是千问，是阿里巴巴集团旗下的通义实验室研发的超大规模语言模型。我能够回答问题、创作文字、逻辑推理、编程等，旨在为用户提供帮助和便利。有什么我可以帮您的吗？
-```
-
-#### Node.js
-
-### 示例代码
-
-```
-import OpenAI from "openai";
-import process from 'process';
-
-// 初始化 openai 客户端
-const openai = new OpenAI({
-    // 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    apiKey: process.env.DASHSCOPE_API_KEY, // 从环境变量读取
-    // 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的配置不同。
-    baseURL: 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1'
-});
-
-let reasoningContent = '';
-let answerContent = '';
-let isAnswering = false;
-
-async function main() {
-    try {
-        const messages = [{ role: 'user', content: '你是谁' }];
-        const stream = await openai.chat.completions.create({
-            model: 'qwen3.8-max',
-            messages,
-            stream: true,
-            // enable_thinking 参数开启思考过程，thinking_budget 参数设置最大推理过程 Token 数
-            enable_thinking: true,
-            thinking_budget: 50
-        });
-        console.log('\n' + '='.repeat(20) + '思考过程' + '='.repeat(20) + '\n');
-
-        for await (const chunk of stream) {
-            if (!chunk.choices?.length) {
-                console.log('\nUsage:');
-                console.log(chunk.usage);
-                continue;
-            }
-
-            const delta = chunk.choices[0].delta;
-
-            // 只收集思考内容
-            if (delta.reasoning_content !== undefined && delta.reasoning_content !== null) {
-                if (!isAnswering) {
-                    process.stdout.write(delta.reasoning_content);
-                }
-                reasoningContent += delta.reasoning_content;
-            }
-
-            // 收到content，开始进行回复
-            if (delta.content !== undefined && delta.content) {
-                if (!isAnswering) {
-                    console.log('\n' + '='.repeat(20) + '完整回复' + '='.repeat(20) + '\n');
-                    isAnswering = true;
-                }
-                process.stdout.write(delta.content);
-                answerContent += delta.content;
-            }
-        }
-    } catch (error) {
-        console.error('Error:', error);
-    }
-}
-
-main();
-```
-
-### 返回结果
-
-```
-====================思考过程====================
-
-好的，用户问“你是谁”，我需要给出一个清晰准确的回答。首先，我应该介绍自己的身份，即千问，由阿里巴巴集团旗下的通义实验室研发。接下来，要说明我的主要功能，比如回答问题
-====================完整回复====================
-
-我是千问，是阿里巴巴集团旗下的通义实验室自主研发的超大规模语言模型。我能够回答问题、创作文字、逻辑推理、编程等多种任务。如果你有任何问题或需要帮助，欢迎随时告诉我！
-```
-
-#### HTTP
-
-### 示例代码
-
-#### curl
-
-```
-# ======= 重要提示 =======
-# 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的配置不同。
-# === 执行时请删除该注释 ===
-curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
--H "Authorization: Bearer $DASHSCOPE_API_KEY" \
--H "Content-Type: application/json" \
--d '{
-    "model": "qwen3.8-max",
-    "messages": [
-        {
-            "role": "user",
-            "content": "你是谁"
-        }
-    ],
-    "stream": true,
-    "stream_options": {
-        "include_usage": true
-    },
-    "enable_thinking": true,
-    "thinking_budget": 50
-}'
-```
-
-### 返回结果
-
-```
-data: {"choices":[{"delta":{"content":null,"role":"assistant","reasoning_content":""},"index":0,"logprobs":null,"finish_reason":null}],"object":"chat.completion.chunk","usage":null,"created":1745485391,"system_fingerprint":null,"model":"qwen3.8-max","id":"chatcmpl-e2edaf2c-8aaf-9e54-90e2-b21dd5045503"}
-
-.....
-
-data: {"choices":[{"finish_reason":"stop","delta":{"content":"","reasoning_content":null},"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1745485391,"system_fingerprint":null,"model":"qwen3.8-max","id":"chatcmpl-e2edaf2c-8aaf-9e54-90e2-b21dd5045503"}
-
-data: {"choices":[],"object":"chat.completion.chunk","usage":{"prompt_tokens":10,"completion_tokens":360,"total_tokens":370,"completion_tokens_details":{"reasoning_tokens":50}},"created":1745485391,"system_fingerprint":null,"model":"qwen3.8-max","id":"chatcmpl-e2edaf2c-8aaf-9e54-90e2-b21dd5045503"}
-
-data: [DONE]
 ```
 
 #### DashScope
 
-> Qwen3.5 系列的 DashScope API采用多模态接口，以下示例会报错 `url error` ，调用方式请参见 [开启/关闭思考模式](https://help.aliyun.com/zh/model-studio/vision#bc67a9a2bd2of) 。
-
-#### Python
-
-### 示例代码
-
 ```
-import os
-import dashscope
-
-# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
-client = dashscope.Client(
-    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
-    workspace="{WorkspaceId}",
-    region="cn-beijing",
-)
-
-messages = [{"role": "user", "content": [{"text": "你是谁？"}]}]
-
 completion = client.multimodal.chat.create(
     model="qwen3.8-max",
     messages=messages,
     enable_thinking=True,
-    # 设置最大推理过程 Token 数
+    # thinking_budget 设置思考过程的最大 Token 数
     thinking_budget=50,
     stream=True,
-    # 流式输出默认为增量模式：每个数据块仅包含新生成的内容。
 )
-
-# 定义完整思考过程
-reasoning_content = ""
-# 定义完整回复
-answer_content = ""
-# 判断是否结束思考过程并开始回复
-is_answering = False
-
-print("=" * 20 + "思考过程" + "=" * 20)
-
-for chunk in completion:
-    # 获取当前chunk的内容（流式输出默认为增量模式）
-    content_text = chunk.choices[0].delta.content or ""
-    reasoning_text = chunk.choices[0].delta.reasoning_content or ""
-    # 如果思考过程与回复皆为空，则忽略
-    if content_text == "" and reasoning_text == "":
-        pass
-    else:
-        # 如果当前为思考过程
-        if reasoning_text != "" and content_text == "":
-            print(reasoning_text, end="", flush=True)
-            reasoning_content += reasoning_text
-        # 如果当前为回复
-        elif content_text != "":
-            if not is_answering:
-                print("\n" + "=" * 20 + "完整回复" + "=" * 20)
-                is_answering = True
-            print(content_text, end="", flush=True)
-            answer_content += content_text
-
-# 如果您需要打印完整思考过程与完整回复，请将以下代码解除注释后运行
-# print("=" * 20 + "完整思考过程" + "=" * 20 + "\n")
-# print(f"{reasoning_content}")
-# print("=" * 20 + "完整回复" + "=" * 20 + "\n")
-# print(f"{answer_content}")
-```
-
-### 返回结果
-
-```
-====================思考过程====================
-好的，用户问“你是谁？”，我需要给出一个清晰且友好的回答。首先，我要介绍自己的身份，也就是千问，由阿里巴巴集团旗下的通义实验室研发。接下来，应该说明我的主要功能，比如
-====================完整回复====================
-我是千问，是阿里巴巴集团旗下的通义实验室自主研发的超大规模语言模型。我能够回答问题、创作文字、逻辑推理、编程等，旨在为用户提供全面、准确和有用的信息与帮助。有什么我可以帮您的吗？
-```
-
-#### Java
-
-### 示例代码
-
-```
-// dashscope SDK的版本 >= 2.19.4
-import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;
-import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationParam;
-import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationResult;
-import com.alibaba.dashscope.common.MultiModalMessage;
-import java.util.Collections;
-import com.alibaba.dashscope.common.Role;
-import com.alibaba.dashscope.exception.ApiException;
-import com.alibaba.dashscope.exception.InputRequiredException;
-import com.alibaba.dashscope.exception.NoApiKeyException;
-import com.alibaba.dashscope.exception.UploadFileException;
-import com.alibaba.dashscope.utils.Constants;
-import io.reactivex.Flowable;
-import java.lang.System;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-public class Main {
-    private static final Logger logger = LoggerFactory.getLogger(Main.class);
-    private static StringBuilder reasoningContent = new StringBuilder();
-    private static StringBuilder finalContent = new StringBuilder();
-    private static boolean isFirstPrint = true;
-    // 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的配置不同。
-    static {Constants.baseHttpApiUrl="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";}
-
-    private static void handleMultiModalConversationResult(MultiModalConversationResult message) {
-        String reasoning = message.getOutput().getChoices().get(0).getMessage().getReasoningContent();
-        List<Map<String, Object>> contentList = (List<Map<String, Object>>) message.getOutput().getChoices().get(0).getMessage().getContent();
-        String content = (contentList != null && !contentList.isEmpty()) ? (String) contentList.get(0).get("text") : "";
-
-        if (!reasoning.isEmpty()) {
-            reasoningContent.append(reasoning);
-            if (isFirstPrint) {
-                System.out.println("====================思考过程====================");
-                isFirstPrint = false;
-            }
-            System.out.print(reasoning);
-        }
-
-        if (!content.isEmpty()) {
-            finalContent.append(content);
-            if (!isFirstPrint) {
-                System.out.println("\n====================完整回复====================");
-                isFirstPrint = true;
-            }
-            System.out.print(content);
-        }
-    }
-    private static MultiModalConversationParam buildMultiModalConversationParam(MultiModalMessage userMsg) {
-        return MultiModalConversationParam.builder()
-                // 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-                // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：.apiKey("sk-xxx")
-                .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-                .model("qwen3.8-max")
-                .enableThinking(true)
-                .thinkingBudget(50)
-                .incrementalOutput(true)
-                .messages(Arrays.asList(userMsg))
-                .build();
-    }
-    public static void streamCallWithMessage(MultiModalConversation conv, MultiModalMessage userMsg)
-            throws NoApiKeyException, ApiException, InputRequiredException, UploadFileException {
-        MultiModalConversationParam param = buildMultiModalConversationParam(userMsg);
-        Flowable<MultiModalConversationResult> result = conv.streamCall(param);
-        result.blockingForEach(message -> handleMultiModalConversationResult(message));
-    }
-
-    public static void main(String[] args) {
-        try {
-            MultiModalConversation conv = new MultiModalConversation();
-            MultiModalMessage userMsg = MultiModalMessage.builder().role(Role.USER.getValue()).content(Arrays.asList(Collections.singletonMap("text", "你是谁？"))).build();
-            streamCallWithMessage(conv, userMsg);
-//             打印最终结果
-//            if (reasoningContent.length() > 0) {
-//                System.out.println("\n====================完整回复====================");
-//                System.out.println(finalContent.toString());
-//            }
-        } catch (ApiException | NoApiKeyException | InputRequiredException | UploadFileException e) {
-            logger.error("An exception occurred: {}", e.getMessage());
-        }
-        System.exit(0);
-    }
-}
-```
-
-### 返回结果
-
-```
-====================思考过程====================
-好的，用户问“你是谁？”，我需要给出一个清晰且友好的回答。首先，我要介绍自己的身份，也就是千问，由阿里巴巴集团旗下的通义实验室研发。接下来，应该说明我的主要功能，比如
-====================完整回复====================
-我是千问，是阿里巴巴集团旗下的通义实验室自主研发的超大规模语言模型。我能够回答问题、创作文字、逻辑推理、编程等，旨在为用户提供全面、准确和有用的信息与帮助。有什么我可以帮您的吗？
-```
-
-#### HTTP
-
-### 示例代码
-
-#### curl
-
-```
-# ======= 重要提示 =======
-# 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的配置不同。
-# === 执行时请删除该注释 ===
-curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation" \
--H "Authorization: Bearer $DASHSCOPE_API_KEY" \
--H "Content-Type: application/json" \
--H "X-DashScope-SSE: enable" \
--d '{
-    "model": "qwen3.8-max",
-    "input":{
-        "messages":[
-            {
-                "role": "user",
-                "content": [{"text": "你是谁？"}]
-            }
-        ]
-    },
-    "parameters":{
-        "enable_thinking": true,
-        "thinking_budget": 50,
-        "incremental_output": true,
-        "result_format": "message"
-    }
-}'
-```
-
-### 返回结果
-
-```
-id:1
-event:result
-:HTTP_STATUS/200
-data:{"output":{"choices":[{"message":{"content":"","reasoning_content":"好的","role":"assistant"},"finish_reason":"null"}]},"usage":{"total_tokens":14,"output_tokens":3,"input_tokens":11,"output_tokens_details":{"reasoning_tokens":1}},"request_id":"2ce91085-3602-9c32-9c8b-fe3d583a2c38"}
-
-id:2
-event:result
-:HTTP_STATUS/200
-data:{"output":{"choices":[{"message":{"content":"","reasoning_content":"，","role":"assistant"},"finish_reason":"null"}]},"usage":{"total_tokens":15,"output_tokens":4,"input_tokens":11,"output_tokens_details":{"reasoning_tokens":2}},"request_id":"2ce91085-3602-9c32-9c8b-fe3d583a2c38"}
-
-......
-
-id:133
-event:result
-:HTTP_STATUS/200
-data:{"output":{"choices":[{"message":{"content":"！","reasoning_content":"","role":"assistant"},"finish_reason":"null"}]},"usage":{"total_tokens":149,"output_tokens":138,"input_tokens":11,"output_tokens_details":{"reasoning_tokens":50}},"request_id":"2ce91085-3602-9c32-9c8b-fe3d583a2c38"}
-
-id:134
-event:result
-:HTTP_STATUS/200
-data:{"output":{"choices":[{"message":{"content":"","reasoning_content":"","role":"assistant"},"finish_reason":"stop"}]},"usage":{"total_tokens":149,"output_tokens":138,"input_tokens":11,"output_tokens_details":{"reasoning_tokens":50}},"request_id":"2ce91085-3602-9c32-9c8b-fe3d583a2c38"}
 ```
 
 ### 传递思考过程
 
 多轮对话中，`preserve_thinking` 控制模型是否读取历史 assistant 消息中的 `reasoning_content`。设为 `true` 后，这些思考内容会拼接到下一轮输入。客户端需在请求的 `messages` 中提供历史 assistant 消息及其 `reasoning_content`。各型号的默认值以[Chat Completions 参数说明](raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)为准。
 
-**重要**`preserve_thinking`参数仅支持 qwen3.8-max、qwen3.8-max-0902、qwen3.8-omni-flash（默认开启）、qwen3.7-max、qwen3.7-max-2026-05-20、qwen3.7-max-2026-06-08、qwen3.7-max-preview、qwen3.7-max-2026-05-17、qwen3.7-plus、qwen3.7-plus-2026-05-26、qwen3.6-plus、qwen3.6-plus-2026-04-02、qwen3.7-flash、qwen3.7-flash-2026-07-15、kimi-k2.7-code（阿里云百炼部署）、kimi-k2.6（阿里云百炼部署）、kimi/kimi-k3.1-pro（月之暗面部署）、kimi/kimi-k3.1-pro-highspeed（月之暗面部署）、kimi/kimi-k3（月之暗面部署）、kimi/kimi-k2.7-code-highspeed（月之暗面部署）、kimi/kimi-k2.7-code（月之暗面部署）、kimi/kimi-k2.6（月之暗面部署）。
+**重要**支持的模型及各模型的默认值，请参见 [Chat Completions 参数说明](https://help.aliyun.com/zh/model-studio/qwen-api-via-openai-chat-completions#afcd41d2b57zf) 和 [DashScope 参数说明](https://help.aliyun.com/zh/model-studio/qwen-api-via-dashscope#2a1c410015otp)。
 
-> 对于上述支持此参数的 Qwen3.8 Max、Qwen3.7、Qwen3.6 和 Kimi 型号，若历史消息中不包含 `reasoning_content`，开启此参数不会报错。
+> 对于支持此参数的 Qwen3.8 Max、Qwen3.7、Qwen3.6 和 Kimi 型号，若历史消息中不包含 `reasoning_content`，开启此参数不会报错。
 
 > 开启后，历史对话中的 `reasoning_content` 会计入输入 Token 数量和计费。
 

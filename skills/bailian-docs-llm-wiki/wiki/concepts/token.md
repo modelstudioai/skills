@@ -1,49 +1,41 @@
 # Token
 
-Token 是百炼平台中用于计量模型输入与输出文本长度的基本单位，也是资源配额、计费、限流与监控的核心度量基准。1 个 Token 通常对应一个子词（subword）或标点符号，具体切分由模型底层 tokenizer 决定（如 Qwen 系列使用 QwenTokenizer），而非简单按字符或字数计算。
+Token 是百炼平台中用于计量模型输入与输出内容长度的基本单位，也是资源配额、计费、限流与监控的核心度量基准。它并非原始字符或字节，而是由百炼平台统一 tokenizer 对文本、图像描述、音频转录等内容进行语义化切分后得到的离散单元，其数量直接反映模型处理的计算负载。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **模型调用与配额控制**：所有同步/异步模型请求（如 `/v1/chat/completions`、`/v1/coding/completions`）均按实际消耗的 **Input Tokens + Output Tokens** 总和计费与扣减配额。Token Plan（如 `personal`/`team`/`coding`）直接约束该总量，超出即触发截断（返回 `truncated: true`）或拒绝（403/429）。
-  
-- **API 请求参数约束**：`max_tokens` 显式限制生成长度（Output Tokens 上限）；`input.messages` 的总长度受模型上下文窗口限制（如 `qwen-plus` 最大 `max_context_length = 32768`，含 system/user/assistant 所有 tokens）；超长输入将被服务端静默截断或报错。
-
-- **流式响应计费**：启用 `stream: true` 时，Token 按实际逐 chunk 返回的 tokens 累计计费，非预估值；首 Token 延迟（Time to First Token）和总延迟均以 token 级粒度监控。
-
-- **用量监控与告警**：模型监控系统提供 `TotalToken` 指标（分钟级聚合），支持按 API Key、模型、时间精度筛选，可用于成本审计与异常告警（例如“1 分钟内 TotalToken > 10000”）。
-
-- **文件多模态调用**：上传图片/音频等本地文件获取临时 URL 时，需指定 `model` 参数；该 model 必须与后续调用一致，否则因 tokenizer 不匹配导致 token 计算错误或调用失败。
-
-- **临时凭证与子空间隔离**：临时 API Key、子业务空间调用均继承源账号的 token 配额与计费归属，Token 消耗始终绑定到发起调用的 API Key 所属主体（个人账号或组织席位）。
+- **模型调用与推理**：每次 API 请求的 `prompt`（输入）和 `completion`（输出）均被转换为 Token 序列；`max_tokens` 参数限制单次响应最大生成 Token 数，而模型上下文窗口（如 `qwen-max` 为 32768 tokens）则约束总输入+输出长度上限。
+- **Token Plan 配额管理**：Token 是 Token Plan 的计量基础——`quota`（日配额）、`burst`（突发容量）、`max_tokens`（单次硬截断）均以 Token 为单位；配额校验仅在请求经百炼标准路由（如 `/v1/services/aigc/text-generation/generation`）转发时生效。
+- **费用与用量统计**：所有按 Token 计费的模型调用（含文本生成、多模态理解、向量嵌入等），其账单与监控指标（如「调用量（Token 总量）」）均基于百炼内部 tokenizer 统计，不依赖客户端估算。
+- **模型评测**：在「大模型评估」维度中，裁判模型的评分过程本身会产生额外 Token 消耗，该部分费用独立于被评测模型，需在评测配置中明确选择裁判模型（如 `qwen-max`）并纳入成本考量。
+- **模型监控与告警**：`调用量（Token 总量）` 是核心可观测指标，支持配置实时告警（如“Token 成本突增”）；失败率、限流次数（429）等健康指标也隐式关联 Token 使用强度。
+- **SDK 与 API 集成**：DashScope SDK 2.0 及 [OpenAI 兼容接口](openai-compatible-interface.md)中，`max_tokens`、`stream` 等关键参数均围绕 Token 行为设计；流式响应中每个 `delta.content` 片段对应若干 Token，开发者需按 Token 粒度处理增量输出。
 
 ## 关键参数和配置
 
-| 参数 | 作用 | 注意事项 |
-|------|------|----------|
-| `max_tokens` | 控制模型最多生成的 Output Tokens 数量 | 默认 1024，最大 8192；受所选 `plan` 总配额限制，超限将被截断；流式响应中实际返回数可能略低于该值 |
-| `plan` | 显式声明 Token Plan 类型（必填） | 取值为 `personal` / `team` / `coding`（大小写敏感）；必须与 `model` 兼容（如 `qwen-max` 不支持 `personal`）；不共享配额，切换 plan 后历史消耗不累计 |
-| `input.messages` | 包含所有角色消息的数组，其总 token 数计入 Input Tokens | 单次请求总 tokens ≤ 模型 `max_context_length`（可通过 `/models/{model_id}` 接口查询）；system [prompt](../guides/prompt.md) 也计入 token |
-| `stream` | 是否启用流式响应 | `true` 时 token 按实际返回量实时计费；建议预留约 10% 余量应对服务端缓冲策略影响 |
-
-> ⚠️ 重要提示：  
-> - Token 计算以服务端 tokenizer 实际切分为准，开发者应使用百炼官方 SDK（如 `dashscope` Python SDK）的 `count_tokens()` 工具函数预估，避免自行按字符估算；  
-> - 所有 token 配额按自然日 UTC+0 00:00 重置，非北京时间；  
-> - 审计日志中记录的 `input_tokens` 和 `output_tokens` 字段为最终计费依据，可用于对账。
+- `max_tokens`：单次请求允许生成的最大 Token 数（不含 [prompt](../guides/prompt.md)），超限将被服务端强制截断。不同模型有各自上限（如 `qwen-turbo` ≤4096，`qwen-max` ≤8192），须查阅对应模型文档。
+- Token 计算一致性：所有 Token 数均以百炼平台内部 tokenizer 为准，与 HuggingFace tokenizer 或本地估算可能存在 ±5% 偏差；实际计数不开放调试接口，建议通过监控数据反向验证。
+- 地域隔离性：Token Plan 配额、监控数据、推理日志均按地域隔离（如华东1 创建的 Plan 不在华北2 生效），Token 消耗不跨 region 累计。
+- 安全与合规约束：含敏感词或违法内容的请求会被内容安全策略拦截，返回 400 错误且**不计入 Token 配额**，但会记录在监控的「内容安全拦截次数」中。
 
 ## 面向开发者，简洁实用
 
-- ✅ **快速验证 token 消耗**：调用后检查响应头 `X-DashScope-Usage`（JSON 格式），含 `"input_tokens"` 和 `"output_tokens"` 字段；  
-- ✅ **预估输入长度**：Python SDK 中 `dashscope.get_tokenizer(model='qwen-plus').count_tokens(messages)`；  
-- ✅ **避免配额超限**：生产环境务必显式传入 `plan`，并监听响应中的 `truncated` 字段；  
-- ✅ **排查 token 相关错误**：403（plan/model 不匹配）、429（配额耗尽）、400（missing plan）、截断响应（`truncated:true`）均与 token 管理强相关；  
-- ❌ **不要假设**：不同模型 tokenizer 结果不同（如 `qwen-turbo` 与 `qwen-vl` token 数不可直接换算）；token 数 ≠ 字符数 ≠ 中文词语数。
+- ✅ **务必校验实际 Token 消耗**：使用控制台「模型监控 → 用量统计」查看真实 Token 数，而非依赖本地 tokenizer 估算；尤其在多模态（图片 URL、视频描述）场景下偏差更明显。
+- ✅ **配额调试技巧**：若遇 `429 Too Many Requests`，优先检查 `X-DashScope-Token-Plan-ID` Header 是否正确传递，再确认 `quota`/`burst` 设置及是否已过期（自然日重置）。
+- ✅ **流式开发注意**：启用 `stream=true` 时，`max_tokens` 仍作用于整次响应；每个 `chunk` 的 `delta.content` 长度不可预测，应以 Token 累计逻辑（非字符串长度）做缓冲控制。
+- ❌ **避免常见错误**：
+  - 不要混用各地域 API Key 或 Base URL，会导致 Token 计费归属错乱；
+  - 不要将 `max_tokens` 设为超过模型上下文窗口（context window）的值，否则触发 `400 InvalidParameter`；
+  - 不要通过 DashScope 原生 SDK 直接调用 `dashscope` 裸 API（如 `/api/v1/chat/completions`），Token Plan 将失效——必须走百炼网关路由（`/v1/services/...`）。
+- 📌 **生产建议**：高并发场景下，结合 `burst` + `burst_window_seconds` 缓冲瞬时峰值，同时用监控告警盯住 `TPM`（Tokens Per Minute）趋势，提前扩容或优化 [prompt](../guides/prompt.md) 长度。
 
 ## 关联主题页
 
 - [token plan guide](../guides/token-plan-guide.md)
 - [token plan api](../api/token-plan-api.md)
+- [preparations](../api/preparations.md)
 - [get started with models](../guides/get-started-with-models.md)
+- [model evaluation introduction](../guides/model-evaluation-introduction.md)
 - [model monitoring](../guides/model-monitoring.md)
-- [more about models](../api/more-about-models.md)
 
 

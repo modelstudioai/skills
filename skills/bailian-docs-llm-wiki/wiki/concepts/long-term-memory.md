@@ -1,69 +1,51 @@
 # 长期记忆
 
-长期记忆（Long Term Memory, LTM）是百炼平台提供的结构化、持久化记忆管理能力，用于在多轮对话与智能体运行过程中跨请求存储和检索用户事实性信息、行为偏好与上下文锚点。它独立于单次会话生命周期，由平台统一索引与向量检索，为模型提供低延迟、高相关性的上下文增强。
+长期记忆（Long Term Memory）是百炼平台提供的结构化、持久化记忆管理服务，用于跨会话、跨用户地存储和检索事实性信息、可复用技能及用户画像等高价值语义知识。它不是简单的键值存储，而是具备语义理解、异步抽取、类型化建模与向量检索能力的智能记忆中枢。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-长期记忆在百炼平台中存在**两类并行但隔离的实现路径**，开发者需根据技术栈严格区分：
+长期记忆在百炼平台中以**两种互补形态**存在，服务于不同架构层级的智能体应用：
 
-- **API 调用层（推荐新项目使用）**：通过 `application call` 或 `flow agent api` 的 **应用调用类接口**（如 `/apps/{app_id}/completion`）启用。只需在 `messages` 中嵌入 `memory` 字段（JSON 对象），即可在单次请求中完成写入、更新或删除；模型在生成响应前自动检索匹配记忆并注入上下文。适用于智能体应用、工作流及 OpenAI 兼容模式，无需额外 SDK 或签名。
+- **面向开发者 API 层（推荐新版本）**：通过 `long-term-memory-new` 接口族（如 `/add-async`、`/memory_nodes/search`）直接管理结构化记忆节点。适用于需精细控制抽取逻辑、多项目隔离、或构建自定义记忆增强型 Agent 的场景。支持三类原生记忆类型：
+  - `observation`：从对话消息中抽取的用户意图、日程、偏好等事实；
+  - `skill`：从工具调用或结构化指令中提取的带元数据（`skill_name`、`skill_description`、`skill_tags`）的可复用流程；
+  - `user_profile`：基于预定义 schema 异步提取的用户属性（如“职级”“常用设备”“决策风格”），需配合 `profile_schemas` 管理。
 
-- **组件管理层（旧版/高级运维场景）**：通过 `flow agent api` 的 **组件类接口**（如 `POST /{workspaceId}/memories`）进行显式生命周期管理。需使用阿里云 AccessKey 签名（ACS3-HMAC-SHA256），调用 `CreateMemory` 获取 `memoryId`，再通过 `CreateMemoryNode` 写入片段。该方式适用于需要精细控制记忆体粒度、批量操作或与 Flow Agent 工作流深度集成的场景，但不支持用户画像建模，且所有接口有 ≥1 秒限流要求。
+- **面向低代码/托管运行时层**：  
+  - 在 **Flow Agent 应用** 中，通过 `memoryId` 将预建的记忆库注入智能体调用上下文，使 Agent 在推理时自动引用其中内容；  
+  - 在 **Managed Agents（托管智能体）** 中，作为 `resources` 类型挂载至会话（`"type": "memory", "memory_id": "..."`），供沙箱内 Agent 跨步骤持续读写；  
+  - 在 **Agent Context 机制** 中，当 `context.type = "memory"` 时，平台将自动注入匹配 `session_id` 和 `user_id` 的近期记忆片段（含 `role`、`content`、`timestamp`），实现轻量级上下文增强。
 
-> ⚠️ 注意：两类路径**完全隔离**——API 调用层写入的记忆无法通过组件层 API 查询，反之亦然；同一 `app_id` 下的长期记忆也**不跨 workspace 共享**。
+> ⚠️ 注意：`long-term-memory-new`（新）与 `flow-agent-api` 中的旧版长期记忆接口**不互通**，数据隔离、鉴权方式、参数体系均不同。新项目请统一使用 `long-term-memory-new`；旧版仅限存量 Flow Agent 应用维护。
 
 ## 关键参数和配置
 
-### 1. API 调用层（`messages` 内嵌 `memory`）
-```json
-{
-  "role": "user",
-  "content": "请记住我的偏好。",
-  "memory": {
-    "type": "fact",
-    "id": "user_birthday_123",
-    "content": "用户生日是1992年5月3日",
-    "metadata": {
-      "source": "user_input",
-      "ttl_seconds": 31536000
-    }
-  }
-}
-```
-- `type`：必填，取值 `"fact"`（可验证事实）、`"profile"`（用户画像标签）、`"generic"`（临时上下文块），影响检索权重与存储策略；
-- `id`：必填，全局唯一字符串，重复提交将覆盖旧记录（无版本回溯）；
-- `content`：必填，纯文本内容，≤ 2048 字符；
-- `metadata.ttl_seconds`：可选整数，指定自动过期时间（最小 3600 秒），超时后不可检索；
-- 单次请求最多携带 **5 条 memory 记录**（含 `type: "delete"`），超出部分静默截断；
-- `memory` 字段**仅允许出现在 `system` 或 `user` 消息中**，不可置于 `assistant` 消息。
-
-### 2. 组件管理层（OpenAPI 接口）
-- `workspaceId`：所有接口必填路径参数，标识业务空间；
-- `memoryId`：由 `CreateMemory` 返回，作为后续所有操作的根标识；
-- `memoryNodeId`：由 `CreateMemoryNode` 返回，用于精确操作单个记忆片段；
-- `content`：`MemoryNode` 核心字段，长度限制为 **1–200 字符**，仅支持 ASCII 字母、数字及 `_`, `-`, `.`, `:`；
-- 分页参数：`maxResults`（1–50，默认 10）、`nextToken`（空表示结束）。
+| 参数 | 说明 | 必填 | 备注 |
+|------|------|------|------|
+| `user_id` | 子用户唯一标识，用于严格隔离用户级记忆 | 是 | 所有写入/检索操作强制要求，不可为空或占位符 |
+| `memory_library_id` | 记忆库 ID | 否 | 不传则使用默认库；建议显式指定以提升 `ListMemory` 等接口性能 |
+| `project_id` / `project_ids` | 项目 ID（最多 5 个） | 否 | 用于二级业务隔离；决定抽取 `observation` 或 `skill`；与 `custom_content` 互斥 |
+| `profile_schema` | 用户画像模板 ID | 否（仅画像抽取必需） | 必须与 `messages` 同时传入，否则画像任务静默失败 |
+| `plan_version` | 计费计划：`pro`（默认）或 `lite` | 否 | 影响 `SearchMemory` 的 `min_score` 过滤能力（仅 `pro` 生效）及抽取模型质量 |
+| `min_score` | 检索最小相似度阈值 | 否（默认 `0.3`） | 仅 `plan_version=pro` 时生效；低于该值的结果被过滤，不返回 |
 
 ## 面向开发者，简洁实用
 
-- ✅ **优先选用 API 调用层**：新项目直接在 `messages` 中传 `memory`，零配置、免签名、自动注入，兼容 DashScope 和 OpenAI Responses API；
-- ✅ **敏感信息必须脱敏**：长期记忆基于语义向量检索，**不保证精确关键词匹配**（如身份证号、手机号），写入前务必自行哈希或掩码；
-- ✅ **用户画像需显式构造**：当前无自动聚类能力，`type: "profile"` 必须配合 `metadata` 中的明确标签（如 `"interests": ["AI", "travel"]`）；
-- ❌ **避免混用两套体系**：不要在同一个应用中既用 `memory` 字段又调用 `CreateMemoryNode`，会导致记忆碎片化且无法协同；
-- ⚠️ **容量与性能红线**：
-  - 单应用上限：100 万条记录；
-  - 单条 `content`：≤ 2048 字符（API 层） / ≤ 200 字符（组件层）；
-  - 向量检索对长文本、代码、公式等非自然语言内容效果下降，建议拆分为语义清晰的短句；
-- 🔁 **删除操作**：API 层用 `{"type": "delete", "id": "xxx"}`；组件层用 `DeleteMemoryNode` 或 `DeleteMemory`。
-
-> 提示：调试时可通过 `ListMemoryNodes`（组件层）或观察模型生成内容是否包含预期记忆（API 层）快速验证写入是否生效。
+- ✅ **首选异步写入**：用 `POST /add-async` 提交任务，轮询 `GET /events/{event_id}` 获取结果。同步 `/add` 仅适用于极简短文本，且 `intelligent` 模式下易超时。
+- ✅ **检索即用**：`POST /memory_nodes/search` 支持 `top_k`、`memory_types: ["observation","skill"]`、`filter`（JSONPath 表达式）等精准筛选，返回已向量化的内容与元数据。
+- ✅ **画像闭环**：先 `POST /profile_schemas` 创建模板 → 写入时传 `profile_schema` 触发抽取 → 查询用 `GET /profile_schemas/{id}/user_profile?user_id=...`。
+- ✅ **环境准备**：设置 `DASHSCOPE_API_KEY`，并用业务空间专属域名（`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory`）调用，`{WorkspaceId}` 从控制台复制。
+- ❌ **避坑提示**：
+  - `extract_mode=profile_only` 必须同时传 `profile_schema` 和 `messages`，缺一不可；
+  - `context.type="memory"` 注入时，`context.content` 必须是符合 memory-library 结构的 JSON 对象（非字符串）；
+  - 新版长期记忆**不支持** `flow-agent-api` 的 `CreateMemory` 流程，勿混用 `memoryId` 与 `memory_library_id`。
 
 ## 关联主题页
 
 - [long term memory new](../api/long-term-memory-new.md)
-- [flow agent api](../api/flow-agent-api.md)
-- [application call](../api/application-call.md)
 - [agent context](../guides/agent-context.md)
+- [flow agent api](../api/flow-agent-api.md)
+- [llm application](../guides/llm-application.md)
 - [agent development](../guides/agent-development.md)
 
 

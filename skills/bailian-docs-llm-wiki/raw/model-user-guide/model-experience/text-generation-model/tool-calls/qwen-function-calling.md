@@ -113,6 +113,14 @@ Function Calling 通过应用程序与大模型之间的多步骤交互实现：
 
 > MiniMax/MiniMax-M3.1-Flash 不支持通过 `parallel_tool_calls` 控制工具调用的并行性。设置为 `false` 也不能保证串行调用，模型仍可能在一轮中返回多个 `tool_calls`，请按实际返回结果处理。`tool_choice` 仅支持 `auto`；其他取值可能报错或不生效，指定函数名称不能保证模型调用该函数。进行多轮 Function Calling 时，必须将模型返回的完整 assistant 消息加入对话历史，包括 `reasoning_content` 和 `tool_calls` 字段。不要手工重建或丢弃其中的字段。
 
+#### Ling
+
+-   蚂蚁数科部署
+    
+    -   antdigital/Ling-3.1-flash
+
+> antdigital/Ling-3.1-flash 不支持 `parallel_tool_calls` 参数。
+
 ## 快速开始
 
 您需要已获取与配置 API Key并配置API Key到环境变量。如果通过 OpenAI SDK或 DashScope SDK调用，还需安装SDK。

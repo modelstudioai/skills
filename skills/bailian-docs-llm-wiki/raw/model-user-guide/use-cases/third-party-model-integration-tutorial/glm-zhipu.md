@@ -17,7 +17,7 @@
 
 ## 快速开始
 
-ZHIPU/GLM-5.3 是 GLM 系列最新模型，支持真正可用的 1M 上下文。运行以下代码快速调用思考模式的 ZHIPU/GLM-5.3 模型。
+ZHIPU/GLM-5.3 是 GLM 系列模型，支持真正可用的 1M 上下文。运行以下代码快速调用思考模式的 ZHIPU/GLM-5.3 模型。
 
 需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，需要[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
 

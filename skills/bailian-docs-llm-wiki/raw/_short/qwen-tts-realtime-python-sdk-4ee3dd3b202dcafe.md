@@ -1,8 +1,6 @@
 # Python SDK
 
-本文介绍 DashScope Python SDK 调用[实时语音合成](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)时的关键接口与请求参数。
-
-**用户指南**：关于模型介绍和选型建议请参见[实时语音合成](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)或[非实时语音合成](raw/model-user-guide/model-experience/speech-synthesis/non-realtime-tts-user-guide.md)。
+本文介绍 DashScope Python SDK 调用 Qwen-TTS-Realtime 系列模型时的关键接口与请求参数。
 
 ## 前期准备
 
@@ -57,17 +55,13 @@ if __name__  == '__main__':
 
     # 创建实时语音合成会话：进入 with 上下文时自动建立连接
     with client.audio.realtime.connect(
-            # 如需使用指令控制功能，请将model替换为qwen3.5-omni-plus-realtime
             model='qwen3-tts-flash-realtime',
     ) as session:
         session.update_session(
             output_modalities=['audio'],
             voice='Cherry',
-            format='pcm',
+            response_format='pcm',
             sample_rate=24000,
-            # 如需使用指令控制功能，请取消下方注释，并将model替换为qwen3.5-omni-plus-realtime
-            # instructions='语速较快，带有明显的上扬语调，适合介绍时尚产品。',
-            # optimize_instructions=True,
             mode='server_commit'
         )
         with ThreadPoolExecutor(max_workers=1) as pool:
@@ -129,17 +123,13 @@ if __name__  == '__main__':
 
     # 创建实时语音合成会话：进入 with 上下文时自动建立连接
     with client.audio.realtime.connect(
-            # 如需使用指令控制功能，请将model替换为qwen3.5-omni-plus-realtime
             model='qwen3-tts-flash-realtime',
     ) as session:
         session.update_session(
             output_modalities=['audio'],
             voice='Cherry',
-            format='pcm',
+            response_format='pcm',
             sample_rate=24000,
-            # 如需使用指令控制功能，请取消下方注释，并将model替换为qwen3.5-omni-plus-realtime
-            # instructions='语速较快，带有明显的上扬语调，适合介绍时尚产品。',
-            # optimize_instructions=True,
             mode='commit'
         )
         with ThreadPoolExecutor(max_workers=1) as pool:
@@ -186,7 +176,7 @@ str
 
 否
 
-会话端点。缺省时由[Client](raw/model-api-reference/preparations/install-sdk.md)构造参数`workspace`/`region`自动推导（华北2（北京）地域：`wss//{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime`；新加坡地域：`wss//{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime`）。
+会话端点。缺省时由[Client](raw/model-api-reference/preparations/install-sdk.md)构造参数`workspace`/`region`自动推导（华北2（北京）地域：`wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime`；新加坡地域：`wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime`）。
 
 下述请求参数可以通过会话的`update_session`方法配置（具名参数直接传入，其余参数透传至session.update事件的session对象）。
 
@@ -204,18 +194,7 @@ str
 
 是
 
-语音合成所使用的音色。参见[支持的音色](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#bac280ddf5a1u)。
-
-支持系统音色和专属音色：
-
--   **系统音色**：仅限千问3-TTS-Instruct-Flash-Realtime、千问3-TTS-Flash-Realtime和千问-TTS-Realtime系列模型。音色效果请参见：[支持的音色](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#bac280ddf5a1u)。
-    
--   **专属音色**
-    
-    -   [声音复刻（Qwen）](https://help.aliyun.com/zh/model-studio/qwen-tts-voice-cloning)功能定制的音色：仅限千问3-TTS-VC-Realtime系列模型
-        
-    -   [声音设计（Qwen）](https://help.aliyun.com/zh/model-studio/qwen-tts-voice-design)功能定制的音色：仅限千问3-TTS-VD-Realtime系列模型
-        
+语音合成所使用的音色。参见[Qwen-TTS音色列表](raw/model-user-guide/model-experience/speech-synthesis/tts-voice-list/qwen-tts-voice-list.md)。
 
 language\_type
 
@@ -263,7 +242,7 @@ str
 -   `commit`：客户端手动触发合成，延迟最低，但需自行管理句子完整性
     
 
-format
+response\_format
 
 str
 
@@ -281,8 +260,6 @@ str
     
 -   `opus`
     
-
-千问-TTS-Realtime（参见[支持的模型](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)）仅支持`pcm`。
 
 sample\_rate
 
@@ -303,8 +280,6 @@ int
 -   48000
     
 
-千问-TTS-Realtime（参见[支持的模型](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)）仅支持24000。
-
 speech\_rate
 
 float
@@ -317,8 +292,6 @@ float
 
 取值范围：\[0.5, 2.0\]。
 
-千问-TTS-Realtime（参见[支持的模型](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)）不支持该参数。
-
 volume
 
 int
@@ -327,11 +300,7 @@ int
 
 音频的音量。
 
-默认值：50。
-
 取值范围：\[0, 100\]。
-
-千问-TTS-Realtime（参见[支持的模型](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)）不支持该参数。
 
 pitch\_rate
 
@@ -345,8 +314,6 @@ float
 
 取值范围：\[0.5, 2.0\]。
 
-千问-TTS-Realtime（参见[支持的模型](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)）不支持该参数。
-
 bit\_rate
 
 int
@@ -358,42 +325,6 @@ int
 默认值：128。
 
 取值范围：\[6, 510\]。
-
-千问-TTS-Realtime（参见[支持的模型](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)）不支持该参数。
-
-instructions
-
-str
-
-否
-
-设置指令，参见[指令控制](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#12884a10929p9)。
-
-默认值：无默认值，不设置不生效。
-
-长度限制：长度不得超过 1600 Token。
-
-支持语言：仅支持中文和英文。
-
-适用范围：该功能仅适用于千问3-TTS-Instruct-Flash-Realtime系列模型。
-
-optimize\_instructions
-
-bool
-
-否
-
-是否对 `instructions` 进行优化，以提升语音合成的自然度和表现力。
-
-默认值：False
-
-行为说明：当设置为 True 时，系统将对 `instructions` 的内容进行语义增强与重写，生成更适合语音合成的内部指令。
-
-适用场景：推荐在追求高品质、精细化语音表达的场景下开启。
-
-依赖关系：此参数依赖于 `instructions` 参数被设置。如果 `instructions` 为空，此参数不生效。
-
-适用范围：该功能仅适用于千问3-TTS-Instruct-Flash-Realtime系列模型。
 
 ## 关键接口
 
@@ -426,7 +357,6 @@ def update_session(self,
                    output_modalities: List[str],
                    *,
                    voice: str = None,
-                   input_audio_transcription_model: str = None,
                    **kwargs) -> None
 ```
 

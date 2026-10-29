@@ -32,7 +32,7 @@
 
 API 是否存在限流？
 
-全部接口总计不超过 3000 QPM（阿里云账号级别）。事实记忆 add 接口 120 QPM，事实记忆 search 接口 300 QPM。详见[限流说明](raw/application-user-guide/agent-context/memory-library-overview/integration-overview/limits.md)。
+全部接口总计不超过 3000 QPM（阿里云账号级别）。add 接口 120 QPM，search 接口 300 QPM。详见[限流说明](raw/application-user-guide/agent-context/memory-library-overview/integration-overview/limits.md)。
 
 Pro 和 Lite 策略版本有什么区别？如何选择？
 

@@ -117,6 +117,12 @@ Qwen 大部分模型、Kimi、GLM、DeepSeek、Stepfun
 
 仅思考模式：stepfun/step-3.7-flash、stepfun/step-5-preview
 
+#### Ling
+
+-   蚂蚁数科部署
+    
+    -   antdigital/Ling-3.1-flash
+
 #### JSON Schema
 
 Qwen3.7-Plus 系列、Qwen3.8-Flash 系列、Qwen3.7-Flash 系列、Qwen3.7-Max 系列、Qwen3.8-Max 系列模型
@@ -2202,85 +2208,6 @@ print(f"姓名：{json_object['name']}，年龄：{json_object['age']}")
     console.log(completion.choices[0].message.parsed);
     ```
     
-
-## 常见问题
-
-### Q：Qwen 的思考模式模型如何结构化输出？
-
-A：标注为"非思考模式"的模型，在思考模式下返回的内容可能不是严格的标准 JSON 字符串，可采用以下两步法进行修复：先调用思考模型获取高质量输出，再将格式不正确的 JSON 传给支持 JSON Mode 的模型进行修复。
-
-1.  **获取思考模式下的输出**
-    
-    调用思考模式模型获取高质量输出。输出结果可能不是标准JSON字符串。
-    
-    > 说明：开启思考模式时设置 `response_format` 参数为 `{"type": "json_object"}` 不会报错。以下为兜底示例，仅在模型返回内容不是标准 JSON 时用于演示两步修复法，因此步骤中未设置 `response_format` 参数。
-    
-
-```
-completion = client.chat.completions.create(
-    model="qwen3.8-max",
-    messages=[
-        {"role": "system", "content": system_prompt},
-        {
-            "role": "user",
-            "content": [{"type": "text", "text": "大家好，我叫刘五，今年34岁，邮箱是liuwu@example.com，平时喜欢打篮球和旅游"}],
-        },
-    ],
-    # 开启思考模式；本兜底示例未设置response_format参数（直接设置response_format不会报错）
-    extra_body={"enable_thinking": True},
-    # 思考模式下需要开启流式输出
-    stream=True
-)
-# 提取并打印模型生成的JSON结果
-json_string = ""
-for chunk in completion:
-    if not chunk.choices:
-        continue
-    if chunk.choices[0].delta.content is not None:
-        json_string += chunk.choices[0].delta.content
-```
-
-2.  **校验并修复输出**
-    
-    尝试解析上一步获取的 `json_string`：
-    
-    -   若模型返回了有效的 JSON，直接解析使用即可。
-    -   若模型返回了无效 JSON，可调用支持结构化输出的模型进行修复（建议选择速度快、成本低的模型，如非思考模式的 qwen-flash）。
-
-```
-import json
-from openai import OpenAI
-import os
-
-# 初始化OpenAI客户端（如果前面的代码块未定义client变量，请取消下面的注释）
-# client = OpenAI(
-#     api_key=os.getenv("DASHSCOPE_API_KEY"),
-#     base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
-# )
-
-try:
-    json_object_from_thinking_model = json.loads(json_string)
-    print("生成标准格式JSON字符串")
-except json.JSONDecodeError:
-    print("未生成标准格式JSON字符串，通过支持结构化输出的模型进行修复")
-    completion = client.chat.completions.create(
-        model="qwen-flash",
-        # 使用非思考模式
-        extra_body={"enable_thinking": False},
-        messages=[
-            {
-                "role": "system",
-                "content": "你是一个json格式修复专家，请将用户输入的json字符串修复为标准格式",
-            },
-            {
-                "role": "user",
-                "content": json_string,
-            },
-        ],
-        response_format={"type": "json_object"},
-    )
-    json_object_from_thinking_model = json.loads(completion.choices[0].message.content)
-```
 
 ## 错误码
 

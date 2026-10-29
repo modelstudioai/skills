@@ -307,7 +307,7 @@ string
 
 即时热词在识别请求中直接传入 `vocabulary` 键值对，本质上也是一组带权重的热词（与预编译热词的词表内容对应），区别仅在于随请求内联传入、无需预先创建热词列表。适用于临时性、会话级别的热词优化。
 
-**重要**即时热词仅支持 Qwen-Audio-ASR-Message、Qwen-Audio-ASR-Streaming、Qwen-Audio-ASR-Filetrans 和 Qwen-Audio-ASR 系列模型。对于这些模型，同时配置预编译热词和即时热词时，系统会合并两类热词；合并后超过 2,000 个时，随机选择 2,000 个使用。
+**重要**即时热词支持 Qwen-Audio-ASR-Message、Qwen-Audio-ASR-Streaming、Qwen-Audio-ASR-Filetrans、Qwen-Audio-ASR 系列模型和 Fun-ASR（`fun-asr`）。对于上述 Qwen-Audio 系列模型，同时配置预编译热词和即时热词时，系统会合并两类热词；合并后超过 2,000 个时，随机选择 2,000 个使用。
 
 ### 支持的模型与地域
 
@@ -323,6 +323,7 @@ string
     
     -   **Qwen-Audio-ASR-Filetrans**：qwen-audio-3.1-asr-flash-filetrans、qwen-audio-3.0-asr-flash-filetrans
     -   **Qwen-Audio-ASR**：qwen-audio-3.1-asr-flash、qwen-audio-3.0-asr-flash
+    -   **Fun-ASR**：fun-asr
 
 #### 新加坡
 
@@ -336,6 +337,7 @@ string
     
     -   **Qwen-Audio-ASR-Filetrans**：qwen-audio-3.1-asr-flash-filetrans、qwen-audio-3.0-asr-flash-filetrans
     -   **Qwen-Audio-ASR**：qwen-audio-3.1-asr-flash、qwen-audio-3.0-asr-flash
+    -   **Fun-ASR**：fun-asr
 
 ### 快速开始
 
@@ -752,7 +754,8 @@ recognizer.getDuplexApi().close(1000, "bye");
 -   [实时语音识别-Fun-ASR-Realtime API参考](raw/_short/fun-asr-real-time-speech-recognition-api-referen-16635189e873e42b.md)
 -   [实时语音识别-Qwen-ASR API参考](raw/_short/qwen-asr-realtime-api-18aa3c2b3386c250.md)
 -   [实时语音识别-Paraformer API参考](raw/_short/paraformer-real-time-speech-recognition-api-refe-79877d5c8ef469f7.md)
--   [非实时语音识别-Qwen-Audio-ASR-Filetrans/Fun-ASR API参考](raw/_short/fun-asr-recorded-speech-recognition-api-referenc-cdd1d2e565f281cc.md)
+-   [非实时语音识别-Qwen-Audio-ASR-Filetrans API参考](raw/_short/qwen-audio-asr-filetrans-api-c91600a5bccc788c.md)
+-   [非实时语音识别-Fun-ASR API参考](raw/_short/fun-asr-recorded-speech-recognition-api-referenc-cdd1d2e565f281cc.md)
 -   [非实时语音识别-Qwen-Audio-ASR/Fun-ASR-Flash API参考](raw/_short/fun-asr-flash-recorded-speech-recognition-http-a-ba2d322512e386cb.md)
 -   [非实时语音识别-Qwen-ASR API参考](raw/_short/qwen-asr-api-reference-60b7c9eb88d7f83b.md)
 -   [非实时语音识别-Paraformer API参考](raw/_short/paraformer-recorded-speech-recognition-api-refer-8ca94e9578cc12b7.md)

@@ -1,0 +1,162 @@
+{
+  "name": "Qwen3-Omni-Flash",
+  "description": "Qwen3-Omni-Flash多模态大模型，基于Thinker–Talker混合专家（MoE）架构，支持文本、图像、音频、视频的高效理解与语音生成能力，可进行119种语言文本交互和20种语言语音交互，生成类人语音实现跨语言精准沟通。模型具备强大指令跟随与系统提示定制功能，灵活适配对话风格与角色设定，广泛应用于文本创作、语音助手、多媒体分析等场景，提供自然流畅的多模态交互体验。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Text",
+          "Audio"
+        ],
+        "request_modality": [
+          "Text",
+          "Image",
+          "Video",
+          "Audio"
+        ]
+      },
+      "description": "千问3-Omni-Flash多模态大模型，基于Thinker–Talker混合专家（MoE）架构，支持文本、图像、音频、视频的高效理解与语音生成能力，可进行119种语言文本交互和20种语言语音交互，生成类人语音实现跨语言精准沟通。模型具备强大指令跟随与系统提示定制功能，灵活适配对话风格与角色设定，广泛应用于文本创作、语音助手、多媒体分析等场景，提供自然流畅的多模态交互体验。",
+      "collectionTag": "qwen3",
+      "features": [
+        "model-experience",
+        "function-calling"
+      ],
+      "provider": "qwen",
+      "model": "qwen3-omni-flash",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "1.8",
+          "timeBand": "standard",
+          "ntmAmountType": "text_input_token",
+          "type": "text_input_token",
+          "priceName": "输入：文本"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "15.8",
+          "timeBand": "standard",
+          "ntmAmountType": "audio_input_token",
+          "type": "audio_input_token",
+          "priceName": "输入：音频"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "3.3",
+          "timeBand": "standard",
+          "ntmAmountType": "vision_input_token",
+          "type": "vision_input_token",
+          "priceName": "输入：图片/视频"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "6.9",
+          "timeBand": "standard",
+          "ntmAmountType": "purein_text_output_token",
+          "type": "purein_text_output_token",
+          "priceName": "输出：文本（输入仅包含文本时）"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "12.7",
+          "timeBand": "standard",
+          "ntmAmountType": "multiin_text_output_token",
+          "type": "multiin_text_output_token",
+          "priceName": "输出：文本（输入包含图片/音频/视频时）"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "62.6",
+          "timeBand": "standard",
+          "ntmAmountType": "multi_output_token",
+          "type": "multi_output_token",
+          "priceName": "输出：文本+音频（输出的文本不计费）"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "1.8",
+          "timeBand": "standard",
+          "ntmAmountType": "thinking_text_input_token",
+          "type": "thinking_text_input_token",
+          "priceName": "输入：文本（思考）"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "15.8",
+          "timeBand": "standard",
+          "ntmAmountType": "thinking_audio_input_token",
+          "type": "thinking_audio_input_token",
+          "priceName": "输入：音频（思考）"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "3.3",
+          "timeBand": "standard",
+          "ntmAmountType": "thinking_vision_input_token",
+          "type": "thinking_vision_input_token",
+          "priceName": "输入：图片/视频（思考）"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "6.9",
+          "timeBand": "standard",
+          "ntmAmountType": "thinking_purein_text_output_token",
+          "type": "thinking_purein_text_output_token",
+          "priceName": "输出：文本（思考模式下，输入仅包含文本时）"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "12.7",
+          "timeBand": "standard",
+          "ntmAmountType": "thinking_multiin_text_output_token",
+          "type": "thinking_multiin_text_output_token",
+          "priceName": "输出：文本（思考模式下，输入包含图片/音频/视频时）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "usage_limit": 100000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 60,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "usage_limit": 100000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 60,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        }
+      },
+      "priceTimeBands": [
+        "standard"
+      ],
+      "capabilities": [
+        "Multimodal-Omni"
+      ],
+      "modelAlias": "qwen3-omni-flash",
+      "versionTag": "MAJOR",
+      "equivalentSnapshot": "qwen3-omni-flash-2025-12-01",
+      "maxOutputTokens": 16384,
+      "latestOnlineAt": "2025-12-03T16:00:00.000+00:00",
+      "contextWindow": 65536,
+      "maxInputTokens": 49152,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen3-Omni-Flash",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-omni",
+      "samples": {
+        "openai": {
+          "default": {
+            "curl": "curl -X POST https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"qwen3-omni-flash\",\n    \"messages\": [\n        {\n            \"role\": \"user\", \n            \"content\": \"你是谁？\"\n        }\n    ],\n    \"stream\":true,\n    \"stream_options\":{\n        \"include_usage\":true\n    },\n    \"modalities\":[\"text\",\"audio\"],\n    \"audio\":{\"voice\":\"Ethan\",\"format\":\"wav\"}\n}'",
+            "python": "import os\nfrom openai import OpenAI\n\nclient = OpenAI(\n    # 新加坡和北京地域的API Key不同。获取API Key：https://www.alibabacloud.com/help/zh/model-studio/get-api-key\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"qwen3-omni-flash\",\n    messages=[{\"role\": \"user\", \"content\": \"你是谁\"}],\n    # 设置输出数据的模态，当前支持两种：[\"text\",\"audio\"]、[\"text\"]\n    modalities=[\"text\", \"audio\"],\n    audio={\"voice\": \"Ethan\", \"format\": \"wav\"},\n    # stream 必须设置为 True，否则会报错\n    stream=True,\n    stream_options={\"include_usage\": True},\n)\n\nfor chunk in completion:\n    if chunk.choices:\n        print(chunk.choices[0].delta)\n    else:\n        print(chunk.usage)",
+            "nodejs": "import OpenAI from \"openai\";\n\nconst openai = new OpenAI(\n    {\n        // 新加坡和北京地域的API Key不同。获取API Key：https://www.alibabacloud.com/help/zh/model-studio/get-api-key\n        apiKey: process.env.DASHSCOPE_API_KEY,\n        baseURL: \"https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1\"\n    }\n);\nconst completion = await openai.chat.completions.create({\n    model: \"qwen3-omni-flash\",\n    messages: [\n        { role: \"user\", content: \"你是谁？\" }\n    ],\n    stream: true,\n    stream_options: {\n        include_usage: true\n    },\n    modalities: [\"text\", \"audio\"],\n    audio: { voice: \"Ethan\", format: \"wav\" }\n});\n\nfor await (const chunk of completion) {\n    if (Array.isArray(chunk.choices) && chunk.choices.length > 0) {\n        console.log(chunk.choices[0].delta);\n    } else {\n        console.log(chunk.usage);\n    }\n}",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-omni"
+          }
+        }
+      }
+    }
+  ]
+}

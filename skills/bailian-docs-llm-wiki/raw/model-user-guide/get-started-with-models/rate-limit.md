@@ -2628,15 +2628,11 @@ qwen3.5-35b-a3b
 
 deepseek-v4.1-flash-1017
 
-15,000
-
-1,200,000
+[动态限流](raw/model-user-guide/get-started-with-models/quota-management.md)
 
 deepseek-v4.1-flash
 
-15,000
-
-1,200,000
+[动态限流](raw/model-user-guide/get-started-with-models/quota-management.md)
 
 deepseek-v4-pro
 
@@ -2758,17 +2754,13 @@ deepseek-v4.1-flash-1017
 
 国际
 
-10,000
-
-1,200,000
+[动态限流](raw/model-user-guide/get-started-with-models/quota-management.md)
 
 deepseek-v4.1-flash
 
 国际
 
-10,000
-
-1,200,000
+[动态限流](raw/model-user-guide/get-started-with-models/quota-management.md)
 
 deepseek-v4-pro
 
@@ -3364,9 +3356,7 @@ kimi/kimi-k2.5
 
 glm-5.3
 
-15,000
-
-5,000,000
+[动态限流](raw/model-user-guide/get-started-with-models/quota-management.md)
 
 glm-5.2
 
@@ -3534,9 +3524,7 @@ glm-5.3
 
 国际
 
-10,000
-
-5,000,000
+[动态限流](raw/model-user-guide/get-started-with-models/quota-management.md)
 
 glm-5.2
 
@@ -3775,6 +3763,28 @@ unisound/unisound-u2
 300
 
 3,000,000
+
+### Ling-蚂蚁数科直供
+
+#### 华北2（北京）
+
+**模型名称**
+
+**限流条件（超出任一数值时触发限流）**
+
+> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
+
+**每分钟调用次数（RPM）**
+
+**每分钟消耗Token数（TPM）**
+
+> **含输入与输出Token**
+
+antdigital/Ling-3.1-flash
+
+300
+
+10,000,000
 
 ## 图像生成
 

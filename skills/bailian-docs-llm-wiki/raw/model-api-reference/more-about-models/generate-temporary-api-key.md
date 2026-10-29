@@ -12,14 +12,14 @@
 
 临时API Key 默认有效期为 60 秒，支持通过 `expire_in_seconds` 参数设置有效期（TTL），范围为 \[1, 1800\] 秒。
 
-```
-curl -X POST "https://dashscope.aliyuncs.com/api/v1/tokens?expire_in_seconds=1800" \
--H "Authorization: Bearer $DASHSCOPE_API_KEY"
-```
-
 > 各地域的API Key 不同。
 
-> 以下示例使用新加坡地域的 Endpoint，调用时请将WorkspaceId替换为真实的业务空间ID。如需使用北京地域，请将URL替换为：[https://dashscope.aliyuncs.com/api/v1/tokens?expire\_in\_seconds=1800](https://dashscope.aliyuncs.com/api/v1/tokens?expire_in_seconds=1800)
+> 以下示例使用北京地域的 Endpoint，调用时请将 `WorkspaceId` 替换为真实的[业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
+
+```
+curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tokens?expire_in_seconds=1800" \
+-H "Authorization: Bearer $DASHSCOPE_API_KEY"
+```
 
 ## 响应示例
 

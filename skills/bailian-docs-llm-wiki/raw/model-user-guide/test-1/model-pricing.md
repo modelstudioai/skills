@@ -100,7 +100,7 @@ qwen3.7-max-2026-06-08
 
 36元
 
-100万Token
+无
 
 qwen3.7-max-2026-05-20
 
@@ -112,7 +112,7 @@ qwen3.7-max-2026-05-20
 
 36元
 
-100万Token
+无
 
 qwen3.7-max-preview
 
@@ -126,7 +126,7 @@ qwen3.7-max-preview
 
 36元
 
-100万Token
+无
 
 qwen3.7-max-2026-05-17
 
@@ -138,7 +138,7 @@ qwen3.7-max-2026-05-17
 
 36元
 
-100万Token
+无
 
 ##### 更多模型
 
@@ -166,7 +166,7 @@ qwen-max
 
 9.6元
 
-100万Token
+无
 
 #### 美国（弗吉尼亚）
 
@@ -550,6 +550,90 @@ qwen3.7-max-2026-05-20
 
 36元
 
+#### 中国香港
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**模式**
+
+**单次请求的输入Token数**
+
+**输入单价（每百万Token）**
+
+**输出单价（每百万Token）**
+
+> **思维链+回答**
+
+qwen3.8-max
+
+> [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
+
+全球
+
+非思考和思考模式
+
+0<Token≤1M
+
+12元
+
+36元
+
+qwen3.8-max-0902
+
+> [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
+
+全球
+
+非思考和思考模式
+
+0<Token≤1M
+
+12元
+
+36元
+
+qwen3.7-max
+
+> 当前能力等同于qwen3.7-max-2026-05-20
+
+> [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
+
+全球
+
+非思考和思考模式
+
+0<Token≤1M
+
+12元
+
+36元
+
+qwen3.7-max-2026-06-08
+
+全球
+
+非思考和思考模式
+
+0<Token≤1M
+
+12元
+
+36元
+
+qwen3.7-max-2026-05-20
+
+全球
+
+非思考和思考模式
+
+0<Token≤1M
+
+12元
+
+36元
+
 ### 千问Plus
 
 计费规则：按输入Token和输出Token计费。
@@ -614,7 +698,7 @@ qwen3.7-plus-2026-05-26
 
 8元
 
-100万Token
+无
 
 256K<Token≤1M
 
@@ -636,7 +720,7 @@ qwen3.6-plus
 
 12元
 
-100万Token
+无
 
 256K<Token≤1M
 
@@ -656,7 +740,7 @@ qwen3.6-plus-2026-04-02
 
 12元
 
-100万Token
+无
 
 256K<Token≤1M
 
@@ -678,7 +762,7 @@ qwen3.5-plus
 
 4.8元
 
-100万Token
+无
 
 128K<Token≤256K
 
@@ -706,7 +790,7 @@ qwen3.5-plus-2026-04-20
 
 4.8元
 
-100万Token
+无
 
 128K<Token≤256K
 
@@ -734,7 +818,7 @@ qwen3.5-plus-2026-02-15
 
 4.8元
 
-100万Token
+无
 
 128K<Token≤256K
 
@@ -766,7 +850,7 @@ qwen-plus
 
 8元
 
-100万Token
+无
 
 128K<Token≤256K
 
@@ -796,7 +880,7 @@ qwen-plus-latest
 
 8元
 
-100万Token
+无
 
 128K<Token≤256K
 
@@ -824,7 +908,7 @@ qwen-plus-2025-12-01
 
 8元
 
-100万Token
+无
 
 128K<Token≤256K
 
@@ -852,7 +936,7 @@ qwen-plus-2025-07-14
 
 8元
 
-100万Token
+无
 
 qwen-plus-2025-04-28
 
@@ -864,7 +948,7 @@ qwen-plus-2025-04-28
 
 8元
 
-100万Token
+无
 
 ##### 更多模型
 
@@ -888,7 +972,7 @@ qwen-plus-2025-01-25
 
 2元
 
-100万Token
+无
 
 qwen-plus-2025-01-12
 
@@ -1882,6 +1966,124 @@ qwen3.6-plus-2026-04-02
 
 48元
 
+#### 中国香港
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**单次请求的输入Token范围**
+
+**输入单价 （每百万Token）**
+
+**输出单价 （每百万Token）**
+
+**非思考模式**
+
+**思考模式（思维链+回答）**
+
+qwen3.7-plus
+
+> 当前能力等同于qwen3.7-plus-2026-05-26
+
+> [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
+
+全球
+
+0<Token≤256K
+
+原价2元**（限时8折）**
+
+原价8元**（限时8折）**
+
+原价8元**（限时8折）**
+
+256K<Token≤1M
+
+原价6元**（限时8折）**
+
+原价24元**（限时8折）**
+
+原价24元**（限时8折）**
+
+qwen3.7-plus-2026-05-26
+
+> [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
+
+全球
+
+0<Token≤256K
+
+2元
+
+8元
+
+8元
+
+256K<Token≤1M
+
+6元
+
+24元
+
+24元
+
+qwen3.6-plus
+
+> 当前能力等同于qwen3.6-plus-2026-04-02
+
+全球
+
+0<Token≤256K
+
+2元
+
+12元
+
+12元
+
+256K<Token≤1M
+
+8元
+
+48元
+
+48元
+
+qwen-plus
+
+> 当前能力等同于qwen-plus-2025-12-01
+
+中国香港
+
+不区分阶梯
+
+8.75元
+
+26.25元
+
+87.501元
+
+qwen-plus-2025-12-01
+
+中国香港
+
+0<Token≤256K
+
+2.917元
+
+8.75元
+
+29.167元
+
+256K<Token≤1M
+
+8.75元
+
+26.25元
+
+87.501元
+
 ### 千问Flash
 
 计费规则：按输入Token和输出Token计费。
@@ -1962,7 +2164,7 @@ qwen3.7-flash-2026-07-15
 
 0.8元
 
-100万Token
+无
 
 32K<Token≤256K
 
@@ -1992,7 +2194,7 @@ qwen3.6-flash
 
 7.2元
 
-100万Token
+无
 
 256K<Token≤1M
 
@@ -2010,7 +2212,7 @@ qwen3.6-flash-2026-04-16
 
 7.2元
 
-100万Token
+无
 
 256K<Token≤1M
 
@@ -2034,7 +2236,7 @@ qwen3.5-flash
 
 2元
 
-100万Token
+无
 
 128K<Token≤256K
 
@@ -2058,7 +2260,7 @@ qwen3.5-flash-2026-02-23
 
 2元
 
-100万Token
+无
 
 128K<Token≤256K
 
@@ -2088,7 +2290,7 @@ qwen-flash
 
 1.5元
 
-100万Token
+无
 
 128K<Token≤256K
 
@@ -2112,7 +2314,7 @@ qwen-flash-2025-07-28
 
 1.5元
 
-100万Token
+无
 
 128K<Token≤256K
 
@@ -3056,6 +3258,108 @@ qwen3.8-flash
 
 2.7元
 
+qwen3.7-flash
+
+> 当前能力等同于qwen3.7-flash-2026-07-15
+
+> [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
+
+全球
+
+非思考和思考模式
+
+0<Token≤32K
+
+0.2元
+
+0.8元
+
+32K<Token≤256K
+
+0.6元
+
+2.4元
+
+256K<Token≤1M
+
+1.2元
+
+4.8元
+
+qwen3.7-flash-2026-07-15
+
+全球
+
+非思考和思考模式
+
+0<Token≤32K
+
+0.2元
+
+0.8元
+
+32K<Token≤256K
+
+0.6元
+
+2.4元
+
+256K<Token≤1M
+
+1.2元
+
+4.8元
+
+qwen3.6-flash
+
+> 当前能力等同于qwen3.6-flash-2026-04-16
+
+> [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
+
+全球
+
+非思考和思考模式
+
+0<Token≤256K
+
+1.2元
+
+7.2元
+
+256K<Token≤1M
+
+4.8元
+
+28.8元
+
+qwen3.5-flash
+
+> 当前能力等同于qwen3.5-flash-2026-02-23
+
+> [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
+
+中国香港
+
+非思考和思考模式
+
+0<Token≤1M
+
+0.729元
+
+2.917元
+
+qwen3.5-flash-2026-02-23
+
+中国香港
+
+非思考和思考模式
+
+0<Token≤1M
+
+0.729元
+
+2.917元
+
 ### 千问Long
 
 计费规则：按输入Token和输出Token计费。
@@ -3082,7 +3386,7 @@ qwen-long
 
 2元
 
-100万Token
+无
 
 ### 千问Omni
 
@@ -3158,7 +3462,7 @@ qwen3.5-omni-plus-2026-03-15
 
 213元
 
-100万Token
+无
 
 qwen3.5-omni-flash
 
@@ -3172,7 +3476,7 @@ qwen3.5-omni-flash
 
 72元
 
-100万Token
+无
 
 qwen3.5-omni-flash-2026-03-15
 
@@ -3184,7 +3488,7 @@ qwen3.5-omni-flash-2026-03-15
 
 72元
 
-100万Token
+无
 
 更多模型
 
@@ -3234,7 +3538,7 @@ qwen3-omni-flash
 
 62.6元
 
-100万Token
+无
 
 #### 新加坡
 
@@ -3550,7 +3854,7 @@ qwen3.5-omni-plus-realtime-2026-03-15
 
 300元
 
-100万Token
+无
 
 qwen3.5-omni-flash-realtime
 
@@ -3564,7 +3868,7 @@ qwen3.5-omni-flash-realtime
 
 107元
 
-100万Token
+无
 
 qwen3.5-omni-flash-realtime-2026-03-15
 
@@ -3576,7 +3880,7 @@ qwen3.5-omni-flash-realtime-2026-03-15
 
 107元
 
-100万Token
+无
 
 更多模型
 
@@ -3622,7 +3926,7 @@ qwen3-omni-flash-realtime-2025-09-15
 
 75.1元
 
-100万Token
+无
 
 #### 新加坡
 
@@ -3966,6 +4270,48 @@ qwen3-vl-plus
 
 35.972元
 
+#### 中国香港
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**模式**
+
+**单次请求的输入Token数**
+
+**输入单价（每百万Token）**
+
+**输出单价（每百万Token）**
+
+> **思维链+回答**
+
+qwen3-vl-plus
+
+> [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
+
+中国香港
+
+非思考和思考模式
+
+0<Token≤32K
+
+1.458元
+
+11.667元
+
+32K<Token≤128K
+
+2.188元
+
+17.5元
+
+128K<Token≤256K
+
+4.375元
+
+35元
+
 ### 千问OCR
 
 计费规则：按输入Token和输出Token计费。
@@ -4012,7 +4358,7 @@ qwen-vl-ocr-2025-11-20
 
 0.5元
 
-100万Token
+无
 
 qwen-vl-ocr-2024-10-28
 
@@ -4134,13 +4480,19 @@ qwen-audio-turbo
 
 qwen-audio-turbo-latest
 
+目前仅供免费体验。
+
+> 免费额度用完后不可调用，推荐使用[全模态（Qwen-Omni）](raw/model-user-guide/model-experience/omni-modal/qwen-omni.md)作为替代模型
+
+10万Token
+
 ### 千问Coder
 
 计费规则：按输入Token和输出Token计费。
 
 影响计费的因素：若模型支持[上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)，仅输入Token享有折扣。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**以下模型所有地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -4166,7 +4518,7 @@ qwen3-coder-flash
 
 4元
 
-100万Token
+无
 
 32K<Token≤128K
 
@@ -4194,7 +4546,7 @@ qwen3-coder-flash-2025-07-28
 
 4元
 
-100万Token
+无
 
 32K<Token≤128K
 
@@ -4654,7 +5006,7 @@ qwen-doc-turbo
 
 1元
 
-无免费额度
+无
 
 ### 千问深入研究模型
 
@@ -4676,7 +5028,7 @@ qwen-deep-research
 
 163元
 
-无免费额度
+无
 
 qwen-deep-research-2025-12-15
 
@@ -4684,7 +5036,7 @@ qwen-deep-research-2025-12-15
 
 236元
 
-无免费额度
+无
 
 ### 通义晓蜜对话分析模型
 
@@ -4826,7 +5178,7 @@ qwen3.8-27b
 
 计费规则：按输入Token和输出Token计费。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**以下模型所有地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -4856,7 +5208,7 @@ qwen3.6-35b-a3b
 
 10.8元
 
-100万Token
+无
 
 qwen3.6-27b
 
@@ -4868,7 +5220,7 @@ qwen3.6-27b
 
 18元
 
-100万Token
+无
 
 #### 美国（弗吉尼亚）
 
@@ -4970,7 +5322,7 @@ qwen3.6-35b-a3b
 
 计费规则：按输入Token和输出Token计费。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**以下模型所有地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -5000,7 +5352,7 @@ qwen3.5-397b-a17b
 
 7.2元
 
-100万Token
+无
 
 128K<Token≤256K
 
@@ -5020,7 +5372,7 @@ qwen3.5-122b-a10b
 
 6.4元
 
-100万Token
+无
 
 128K<Token≤256K
 
@@ -5040,7 +5392,7 @@ qwen3.5-27b
 
 4.8元
 
-100万Token
+无
 
 128K<Token≤256K
 
@@ -5060,7 +5412,7 @@ qwen3.5-35b-a3b
 
 3.2元
 
-100万Token
+无
 
 128K<Token≤256K
 
@@ -5352,6 +5704,12 @@ qwen2-audio-instruct
 
 qwen-audio-chat
 
+目前仅供免费体验。
+
+> 免费额度用完后不可调用，推荐使用[全模态（Qwen-Omni）](raw/model-user-guide/model-experience/omni-modal/qwen-omni.md)作为替代模型。
+
+10万Token
+
 ## 文本生成-第三方模型
 
 ### DeepSeek
@@ -5362,7 +5720,7 @@ qwen-audio-chat
 
 影响计费的因素：若模型支持[Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)，其输入和输出Token单价均按实时推理价格的50%计费。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**以下模型所有地域均无免费额度。
 
 **说明**DeepSeek-V4-Flash-0731 已于 2026-08-17 00:00 起调整为峰谷定价模式，调整后单价可见下表，更多信息详见[DeepSeek-V4-Flash-0731 模型涨价通知](https://www.aliyun.com/notice/118555)。
 
@@ -5844,6 +6202,48 @@ deepseek-v4.1-flash-1017
 
 闲时 4元
 
+deepseek-v4.1-flash
+
+> [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
+
+全球
+
+忙时 2元
+
+闲时 1元
+
+忙时 8元
+
+闲时 4元
+
+deepseek-v4-flash-0731
+
+> [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
+
+全球
+
+忙时 3元
+
+闲时 1.5元
+
+忙时 9元
+
+闲时 4.5元
+
+deepseek-v4-pro-0813
+
+> [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
+
+全球
+
+忙时 9元
+
+闲时 4.5元
+
+忙时 27元
+
+闲时 13.5元
+
 ### DeepSeek-硅基流动
 
 #### 华北2（北京）
@@ -5872,17 +6272,23 @@ siliconflow/deepseek-v3.1-terminus
 
 12元
 
+无
+
 siliconflow/deepseek-r1-0528
 
 4元
 
 16元
 
+无
+
 siliconflow/deepseek-v3-0324
 
 2元
 
 8元
+
+无
 
 ### DeepSeek-快手万擎
 
@@ -5916,6 +6322,8 @@ vanchin/deepseek-v3.1-terminus
 
 12元
 
+无
+
 vanchin/deepseek-r1
 
 > [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
@@ -5923,6 +6331,8 @@ vanchin/deepseek-r1
 4元
 
 16元
+
+无
 
 vanchin/deepseek-v3
 
@@ -5932,11 +6342,15 @@ vanchin/deepseek-v3
 
 8元
 
+无
+
 vanchin/deepseek-ocr
 
 0.216元
 
 0.216元
+
+无
 
 vanchin/deepseek-v4-pro
 
@@ -5946,6 +6360,8 @@ vanchin/deepseek-v4-pro
 
 24元
 
+无
+
 vanchin/deepseek-v4-pro-0813
 
 > [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
@@ -5954,6 +6370,8 @@ vanchin/deepseek-v4-pro-0813
 
 27元
 
+无
+
 vanchin/deepseek-v4.1-flash
 
 > [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
@@ -5961,6 +6379,8 @@ vanchin/deepseek-v4.1-flash
 2元
 
 8元
+
+无
 
 ### Kimi
 
@@ -6010,7 +6430,7 @@ kimi-k2.6
 
 27元
 
-100万Token
+无
 
 kimi-k2.5
 
@@ -6020,7 +6440,7 @@ kimi-k2.5
 
 21元
 
-100万Token
+无
 
 #### 美国（弗吉尼亚）
 
@@ -6194,6 +6614,38 @@ kimi-k2.7-code
 
 29.977元
 
+#### 中国香港
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**模式**
+
+**输入单价（每百万Token）**
+
+**输出单价（每百万Token）**
+
+kimi-k3
+
+全球
+
+仅思考模式
+
+20元
+
+100元
+
+kimi-k2.7-code
+
+全球
+
+仅思考模式
+
+6.5元
+
+27元
+
 ### Kimi-月之暗面
 
 计费规则：按输入Token和输出Token计费。
@@ -6228,6 +6680,8 @@ kimi/kimi-k3.1-pro
 
 68元
 
+无
+
 kimi/kimi-k3
 
 > [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
@@ -6235,6 +6689,8 @@ kimi/kimi-k3
 20元
 
 100元
+
+无
 
 kimi/kimi-k2.7-code-highspeed
 
@@ -6244,6 +6700,8 @@ kimi/kimi-k2.7-code-highspeed
 
 54元
 
+无
+
 kimi/kimi-k2.7-code
 
 > [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
@@ -6251,6 +6709,8 @@ kimi/kimi-k2.7-code
 6.5元
 
 27元
+
+无
 
 kimi/kimi-k2.6
 
@@ -6260,6 +6720,8 @@ kimi/kimi-k2.6
 
 27元
 
+无
+
 kimi/kimi-k2.5
 
 > [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
@@ -6267,6 +6729,8 @@ kimi/kimi-k2.5
 4元
 
 21元
+
+无
 
 ### GLM
 
@@ -6314,7 +6778,7 @@ glm-5.2
 
 28元
 
-100万Token
+无
 
 glm-5.2-fast-preview
 
@@ -6350,7 +6814,7 @@ glm-5.1
 
 24元
 
-100万Token
+无
 
 32K<Token≤200K
 
@@ -6368,7 +6832,7 @@ glm-5
 
 18元
 
-100万Token
+无
 
 32K<Token≤198K
 
@@ -6504,7 +6968,7 @@ glm-5.2
 
 32.974元
 
-100万Token
+无
 
 glm-5.2-fast-preview
 
@@ -6532,7 +6996,7 @@ glm-5.1
 
 32.974元
 
-100万Token
+无
 
 #### 德国（法兰克福）
 
@@ -6635,6 +7099,34 @@ glm-5.1
 24元
 
 32K<Token≤200K
+
+8元
+
+28元
+
+#### 中国香港
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**模式**
+
+**单次请求的输入Token数**
+
+**输入单价（每百万Token）**
+
+**输出单价（每百万Token）**
+
+> **思维链和回答**
+
+glm-5.2
+
+全球
+
+非思考和思考模式
+
+不区分阶梯
 
 8元
 
@@ -6804,6 +7296,8 @@ MiniMax/MiniMax-M2.7
 
 8.4元
 
+无
+
 MiniMax/MiniMax-M2.5
 
 > [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
@@ -6814,6 +7308,8 @@ MiniMax/MiniMax-M2.5
 
 8.4元
 
+无
+
 MiniMax/MiniMax-M2.1
 
 > [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
@@ -6823,6 +7319,8 @@ MiniMax/MiniMax-M2.1
 2.1元
 
 8.4元
+
+无
 
 ### MiMo-小米
 
@@ -6917,6 +7415,28 @@ unisound/unisound-u2
 1元
 
 2元
+
+无
+
+### Ling-蚂蚁数科
+
+#### 华北2（北京）
+
+**模型 ID（Model ID）**
+
+**输入单价（每百万Token）**
+
+**输出单价（每百万Token）**
+
+> **思维链和回答**
+
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
+
+antdigital/Ling-3.1-flash
+
+2元
+
+6元
 
 无
 
@@ -7104,6 +7624,46 @@ qwen-image-3.0
 0.18元/张
 
 #### 日本（东京）
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**输出图像分辨率**
+
+**输入单价**
+
+**输出单价**
+
+qwen-image-3.0-pro
+
+全球
+
+1k
+
+0.02元/张
+
+0.25元/张
+
+2k
+
+0.5元/张
+
+qwen-image-3.0
+
+全球
+
+1k
+
+0.02元/张
+
+0.18元/张
+
+2k
+
+0.18元/张
+
+#### 中国香港
 
 **模型 ID（Model ID）**
 
@@ -7423,7 +7983,7 @@ z-image-turbo
 
 > 仅输出计费，计费规则请参见[图像生成](https://help.aliyun.com/zh/model-studio/model-pricing#26310bc5cf4do)。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**以下模型所有地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -7439,49 +7999,49 @@ wan2.6-t2i
 
 0.20元/张
 
-50张
+无
 
 wan2.5-t2i-preview
 
 0.20元/张
 
-50张
+无
 
 wan2.2-t2i-plus
 
 0.20元/张
 
-100张
+无
 
 wan2.2-t2i-flash
 
 0.14元/张
 
-100张
+无
 
 wanx2.1-t2i-plus
 
 0.20元/张
 
-500张
+无
 
 wanx2.1-t2i-turbo
 
 0.14元/张
 
-500张
+无
 
 wanx2.0-t2i-turbo
 
 0.04元/张
 
-500张
+无
 
 wanx-v1
 
 0.16元/张
 
-500张
+无
 
 #### 美国（弗吉尼亚）
 
@@ -7587,7 +8147,7 @@ wan2.6-image
 
 0.20元/张
 
-50张
+无
 
 #### 美国（弗吉尼亚）
 
@@ -7647,7 +8207,7 @@ wan2.6-image
 
 > 仅输出计费，计费规则请参见[图像生成](https://help.aliyun.com/zh/model-studio/model-pricing#26310bc5cf4do)。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**以下模型所有地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -7663,13 +8223,13 @@ wan2.5-i2i-preview
 
 0.20元/张
 
-50张
+无
 
 wanx2.1-imageedit
 
 0.14元/张
 
-500张
+无
 
 #### 新加坡
 
@@ -7811,9 +8371,15 @@ wanx-virtualmodel
 
 > 免费额度用完后不可调用，推荐参考[图像编辑-千问](raw/model-user-guide/model-experience/image-model/image-edit-guide/qwen-image-edit-guide.md)或[图像编辑-万相2.1](raw/model-user-guide/model-experience/image-model/image-edit-guide/wanx-image-edit.md)获取替代方案。
 
-各500张
+500张
 
 virtualmodel-v2
+
+目前仅供免费体验。
+
+> 免费额度用完后不可调用，推荐参考[图像编辑-千问](raw/model-user-guide/model-experience/image-model/image-edit-guide/qwen-image-edit-guide.md)或[图像编辑-万相2.1](raw/model-user-guide/model-experience/image-model/image-edit-guide/wanx-image-edit.md)获取替代方案。
+
+500张
 
 ### 鞋靴模特
 
@@ -7872,6 +8438,8 @@ wanx-poster-generation-v1
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
 
+有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
+
 facechain-facedetect
 
 限时免费
@@ -7883,8 +8451,6 @@ facechain-finetune
 2.5元/次
 
 50次
-
-有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
 ## 图像生成-第三方模型
 
@@ -7908,7 +8474,7 @@ kling/kling-v3-image-generation
 
 0.2元/张
 
-无免费额度
+无
 
 2K
 
@@ -7919,6 +8485,8 @@ kling/kling-v3-omni-image-generation
 1K
 
 0.2元/张
+
+无
 
 2K
 
@@ -7948,7 +8516,7 @@ vidu/vidu-image\_reference2image
 
 0.625元/张
 
-无免费额度
+无
 
 2K
 
@@ -7964,6 +8532,8 @@ vidu/vidu-image-pro\_reference2image
 
 1.6875元/张
 
+无
+
 2K
 
 3.1875元/张
@@ -7977,6 +8547,8 @@ vidu/vidu-image-lite\_reference2image
 1K
 
 0.3125元/张
+
+无
 
 2K
 
@@ -7992,6 +8564,8 @@ vidu/viduq3-fast\_reference2image
 
 0.46875元/张
 
+无
+
 2K
 
 0.78125元/张
@@ -8006,6 +8580,8 @@ vidu/viduq2-pro\_reference2image
 
 0.9375元/张
 
+无
+
 2K
 
 0.9375元/张
@@ -8019,6 +8595,8 @@ vidu/viduq2-fast\_reference2image
 1K
 
 0.28125元/张
+
+无
 
 ## 音频生成
 
@@ -8075,11 +8653,13 @@ fun-music-preview
 
 0.005元
 
-1,000秒
+无
 
 fun-music-v1
 
 0.002元
+
+1,000秒
 
 ## 语音合成（文本转语音）
 
@@ -8133,13 +8713,13 @@ qwen-audio-3.0-tts-plus
 
 1.4元
 
-1万字符
+无
 
 qwen-audio-3.0-tts-flash
 
 1元
 
-1万字符
+无
 
 #### 新加坡
 
@@ -8363,19 +8943,19 @@ cosyvoice-v3-plus
 
 2元
 
-1万字符
+无
 
 cosyvoice-v3-flash
 
 1元
 
-1万字符
+无
 
 cosyvoice-v2
 
 2元
 
-1万字符
+无
 
 #### 新加坡
 
@@ -8449,13 +9029,31 @@ MiniMax/speech-02-hd
 
 3.5元
 
+9.9元
+
+（在首次使用复刻出来的音色进行语音合成的时候收取）
+
+无
+
 MiniMax/speech-2.8-turbo
 
 2元
 
+9.9元
+
+（在首次使用复刻出来的音色进行语音合成的时候收取）
+
+无
+
 MiniMax/speech-02-turbo
 
 2元
+
+9.9元
+
+（在首次使用复刻出来的音色进行语音合成的时候收取）
+
+无
 
 ## 语音识别（语音转文本）与翻译（语音转成指定语种的文本）
 
@@ -8507,7 +9105,7 @@ qwen3.5-livetranslate-flash-realtime
 
 160元
 
-100万Token
+无
 
 qwen3.5-livetranslate-flash-realtime-2026-05-19
 
@@ -8519,7 +9117,7 @@ qwen3.5-livetranslate-flash-realtime-2026-05-19
 
 160元
 
-100万Token
+无
 
 #### 新加坡
 
@@ -8623,7 +9221,7 @@ qwen3-livetranslate-flash-2025-12-01
 
 40元
 
-100万Token
+无
 
 #### 新加坡
 
@@ -8667,7 +9265,7 @@ qwen3-livetranslate-flash-2025-12-01
 
 46.292元
 
-### Qwen-Audio-3.1-ASR-Flash-Message
+### Qwen-Audio-ASR-Message
 
 计费规则：按输入和输出 Token 数计费。
 
@@ -8711,7 +9309,7 @@ qwen-audio-3.1-asr-flash-message
 
 5.104元
 
-### Qwen-Audio-3.x-ASR-Flash-Streaming
+### Qwen-Audio-ASR-Streaming
 
 计费规则：
 
@@ -8746,7 +9344,7 @@ qwen-audio-3.0-asr-flash-streaming
 
 不计费
 
-36,000秒（10小时）
+无
 
 #### 新加坡
 
@@ -8774,7 +9372,7 @@ qwen-audio-3.0-asr-flash-streaming
 
 不计费
 
-### Qwen-Audio-3.x-ASR-Flash-Filetrans
+### Qwen-Audio-ASR-Filetrans
 
 计费规则：
 
@@ -8809,7 +9407,7 @@ qwen-audio-3.0-asr-flash-filetrans
 
 不计费
 
-36,000秒（10小时）
+无
 
 #### 新加坡
 
@@ -8837,7 +9435,7 @@ qwen-audio-3.0-asr-flash-filetrans
 
 不计费
 
-### Qwen-Audio-3.x-ASR-Flash
+### Qwen-Audio-ASR
 
 计费规则：
 
@@ -8872,7 +9470,7 @@ qwen-audio-3.0-asr-flash
 
 不计费
 
-36,000秒（10小时）
+无
 
 #### 新加坡
 
@@ -8928,6 +9526,10 @@ qwen3-asr-flash-filetrans
 
 qwen3-asr-flash
 
+0.00022元/秒
+
+不计费
+
 36,000秒（10小时）
 
 #### 美国（弗吉尼亚）
@@ -8975,6 +9577,8 @@ qwen3-asr-flash
 国际
 
 0.00026元/秒
+
+不计费
 
 ### 千问ASR-Realtime
 
@@ -9084,11 +9688,15 @@ fun-asr-realtime
 
 fun-asr-realtime-2026-02-28
 
-36,000秒（10小时）
+0.00033元/秒
+
+无
 
 fun-asr-mtl-realtime-2025-12-10
 
-36,000秒（10小时）
+0.00033元/秒
+
+无
 
 fun-asr-flash-8k-realtime
 
@@ -9100,7 +9708,9 @@ fun-asr-flash-8k-realtime
 
 fun-asr-flash-8k-realtime-2026-01-28
 
-36,000秒（10小时）
+0.00022元/秒
+
+无
 
 #### 新加坡
 
@@ -9142,6 +9752,14 @@ paraformer-v2
 
 paraformer-8k-v2
 
+0.00008元/秒
+
+36,000秒（10小时）
+
+每月1日0点自动发放
+
+有效期1个月
+
 #### 实时语音识别
 
 计费规则：按输入音频的秒数计费，输出不计费。
@@ -9165,6 +9783,14 @@ paraformer-realtime-v2
 有效期1个月
 
 paraformer-realtime-8k-v2
+
+0.00024元/秒
+
+36,000秒（10小时）
+
+每月1日0点自动发放
+
+有效期1个月
 
 ## 语音对话
 
@@ -9239,7 +9865,7 @@ qwen-audio-3.0-realtime-plus
 
 150元
 
-100万Token
+无
 
 qwen-audio-3.0-realtime-flash
 
@@ -9251,7 +9877,7 @@ qwen-audio-3.0-realtime-flash
 
 12元
 
-100万Token
+无
 
 #### 新加坡
 
@@ -9373,7 +9999,7 @@ happyhorse-1.0-t2v
 
 0.9元/秒
 
-10秒
+无
 
 1080P
 
@@ -9559,7 +10185,7 @@ happyhorse-1.0-i2v
 
 0.9元/秒
 
-10秒
+无
 
 1080P
 
@@ -9745,7 +10371,7 @@ happyhorse-1.0-r2v
 
 0.9元/秒
 
-无免费额度
+无
 
 1080P
 
@@ -10047,7 +10673,7 @@ wan3.0-video-prime
 
 0.45元/秒
 
-30秒
+无
 
 720P
 
@@ -10287,7 +10913,7 @@ wan3.0-video
 
 > 仅输出计费，计费规则请参见[视频生成](https://help.aliyun.com/zh/model-studio/model-pricing#d809366847gza)。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**以下模型所有地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -10307,7 +10933,7 @@ wan2.7-t2v-2026-06-12
 
 0.6元/秒
 
-50秒
+无
 
 1080P
 
@@ -10319,7 +10945,7 @@ wan2.7-t2v-2026-04-25
 
 0.6元/秒
 
-50秒
+无
 
 1080P
 
@@ -10331,7 +10957,7 @@ wan2.7-t2v
 
 0.6元/秒
 
-50秒
+无
 
 1080P
 
@@ -10343,7 +10969,7 @@ wan2.6-t2v
 
 0.6元/秒
 
-50秒
+无
 
 1080P
 
@@ -10355,7 +10981,7 @@ wan2.5-t2v-preview
 
 0.3元/秒
 
-50秒
+无
 
 720P
 
@@ -10371,7 +10997,7 @@ wan2.2-t2v-plus
 
 0.14元/秒
 
-50秒
+无
 
 1080P
 
@@ -10383,7 +11009,7 @@ wanx2.1-t2v-turbo
 
 0.24元/秒
 
-200秒
+无
 
 720P
 
@@ -10395,7 +11021,7 @@ wanx2.1-t2v-plus
 
 0.70元/秒
 
-200秒
+无
 
 #### 美国（弗吉尼亚）
 
@@ -10563,7 +11189,7 @@ wan2.6-t2v
 
 > 仅输出计费，计费规则请参见[视频生成](https://help.aliyun.com/zh/model-studio/model-pricing#d809366847gza)。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**以下模型所有地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -10587,7 +11213,7 @@ wan2.7-i2v-2026-04-25
 
 0.6元/秒
 
-50秒
+无
 
 1080P
 
@@ -10601,7 +11227,7 @@ wan2.7-i2v
 
 0.6元/秒
 
-50秒
+无
 
 1080P
 
@@ -10651,7 +11277,7 @@ wan2.7-i2v
 
 > 仅输出计费，计费规则请参见[视频生成](https://help.aliyun.com/zh/model-studio/model-pricing#d809366847gza)。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**以下模型所有地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -10677,7 +11303,7 @@ wan2.6-i2v-flash
 
 0.3元/秒
 
-50秒
+无
 
 1080P
 
@@ -10703,7 +11329,7 @@ wan2.6-i2v
 
 0.6元/秒
 
-50秒
+无
 
 1080P
 
@@ -10717,7 +11343,7 @@ wan2.5-i2v-preview
 
 0.3元/秒
 
-50秒
+无
 
 720P
 
@@ -10735,7 +11361,7 @@ wan2.2-i2v-flash
 
 0.10元/秒
 
-50秒
+无
 
 720P
 
@@ -10753,7 +11379,7 @@ wan2.2-i2v-plus
 
 0.14元/秒
 
-50秒
+无
 
 1080P
 
@@ -10767,7 +11393,7 @@ wanx2.1-i2v-turbo
 
 0.24元/秒
 
-200秒
+无
 
 720P
 
@@ -10781,7 +11407,7 @@ wanx2.1-i2v-plus
 
 0.70元/秒
 
-200秒
+无
 
 #### 美国（弗吉尼亚）
 
@@ -10977,7 +11603,7 @@ wan2.6-i2v
 
 > 仅输出计费，计费规则请参见[视频生成](https://help.aliyun.com/zh/model-studio/model-pricing#d809366847gza)。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**以下模型所有地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -10997,7 +11623,7 @@ wan2.2-kf2v-flash
 
 0.10元/秒
 
-50秒
+无
 
 720P
 
@@ -11013,7 +11639,7 @@ wanx2.1-kf2v-plus
 
 0.70元/秒
 
-200秒
+无
 
 #### 新加坡
 
@@ -11064,7 +11690,7 @@ wan2.7-r2v-2026-06-12
 
 0.6元/秒
 
-50秒
+无
 
 1080P
 
@@ -11078,7 +11704,7 @@ wan2.7-r2v
 
 0.6元/秒
 
-50秒
+无
 
 1080P
 
@@ -11094,7 +11720,7 @@ wan2.6-r2v-flash
 
 0.3元/秒
 
-50秒
+无
 
 1080P
 
@@ -11120,7 +11746,7 @@ wan2.6-r2v
 
 0.6元/秒
 
-50秒
+无
 
 1080P
 
@@ -11262,7 +11888,7 @@ wan2.6-r2v
 
 ### 万相-视频编辑
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**以下模型所有地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -11284,7 +11910,7 @@ wan2.7-videoedit
 
 0.6元/秒
 
-50秒
+无
 
 1080P
 
@@ -11308,7 +11934,7 @@ wanx2.1-vace-plus
 
 0.70元/秒
 
-50秒
+无
 
 #### 新加坡
 
@@ -11371,7 +11997,7 @@ wan2.2-s2v-detect
 
 输入图像：0.004元/张
 
-200张
+无
 
 wan2.2-s2v
 
@@ -11382,13 +12008,13 @@ wan2.2-s2v
 -   720P：0.9元/秒
     
 
-100秒
+无
 
 ### 万相-图生动作
 
 > 仅输出计费，计费规则请参见[视频生成](https://help.aliyun.com/zh/model-studio/model-pricing#d809366847gza)。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**以下模型所有地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -11408,9 +12034,7 @@ wan2.2-animate-move
 
 0.4元/秒
 
-50秒
-
-有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
+无
 
 专业模式`wan-pro`
 
@@ -11442,7 +12066,7 @@ wan2.2-animate-move
 
 > 仅输出计费，计费规则请参见[视频生成](https://help.aliyun.com/zh/model-studio/model-pricing#d809366847gza)。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**以下模型所有地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -11462,9 +12086,7 @@ wan2.2-animate-mix
 
 0.6元/秒
 
-50秒
-
-有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
+无
 
 专业模式`wan-pro`
 
@@ -11568,7 +12190,7 @@ pixverse/pixverse-c1-t2v
 
 0.24元/秒
 
-无免费额度
+无
 
 540P
 
@@ -11612,7 +12234,7 @@ pixverse/pixverse-v6-t2v
 
 0.21元/秒
 
-无免费额度
+无
 
 540P
 
@@ -11656,7 +12278,7 @@ pixverse/pixverse-v5.6-t2v
 
 0.47元/秒
 
-无免费额度
+无
 
 540P
 
@@ -11700,7 +12322,7 @@ pixverse/pixverse-v5.6-it2v
 
 0.47元/秒
 
-无免费额度
+无
 
 540P
 
@@ -11760,7 +12382,7 @@ pixverse/pixverse-c1-it2v
 
 0.24元/秒
 
-无免费额度
+无
 
 540P
 
@@ -11804,7 +12426,7 @@ pixverse/pixverse-v6-it2v
 
 0.21元/秒
 
-无免费额度
+无
 
 540P
 
@@ -11848,7 +12470,7 @@ pixverse/pixverse-v5.6-it2v
 
 0.47元/秒
 
-无免费额度
+无
 
 540P
 
@@ -11908,7 +12530,7 @@ pixverse/pixverse-c1-kf2v
 
 0.24元/秒
 
-无免费额度
+无
 
 540P
 
@@ -11952,7 +12574,7 @@ pixverse/pixverse-v6-kf2v
 
 0.21元/秒
 
-无免费额度
+无
 
 540P
 
@@ -11996,7 +12618,7 @@ pixverse/pixverse-v5.6-kf2v
 
 0.47元/秒
 
-无免费额度
+无
 
 540P
 
@@ -12060,7 +12682,7 @@ pixverse/pixverse-v6-r2v-omni
 
 0.42元/秒
 
-无免费额度
+无
 
 540P
 
@@ -12156,7 +12778,7 @@ pixverse/pixverse-v6-r2v
 
 0.21元/秒
 
-无免费额度
+无
 
 540P
 
@@ -12200,7 +12822,7 @@ pixverse/pixverse-c1-r2v
 
 0.24元/秒
 
-无免费额度
+无
 
 540P
 
@@ -12244,7 +12866,7 @@ pixverse/pixverse-v5.6-r2v
 
 0.47元/秒
 
-无免费额度
+无
 
 540P
 
@@ -12294,7 +12916,7 @@ pixverse/pixverse-lipsync
 
 0.12元/秒
 
-无免费额度
+无
 
 ### 爱诗-视频动作模仿
 
@@ -12316,7 +12938,7 @@ pixverse/pixverse-motioncontrol
 
 0.27元/秒
 
-无免费额度
+无
 
 540P
 
@@ -12342,7 +12964,7 @@ pixverse/pixverse-upscale
 
 0.15元/秒
 
-无免费额度
+无
 
 ### 可灵-视频生成
 
@@ -12368,7 +12990,7 @@ kling/kling-v3-turbo-video-generation
 
 0.8元/秒
 
-无免费额度
+无
 
 1080P
 
@@ -12382,7 +13004,7 @@ kling/kling-v3-video-generation
 
 0.6元/秒
 
-无免费额度
+无
 
 1080P
 
@@ -12414,7 +13036,7 @@ kling/kling-v3-omni-video-generation
 
 0.6元/秒
 
-无免费额度
+无
 
 1080P
 
@@ -12472,7 +13094,7 @@ vidu/viduq3-pro\_text2video
 
 0.3125元/秒
 
-无免费额度
+无
 
 720P
 
@@ -12488,7 +13110,7 @@ vidu/viduq3-turbo\_text2video
 
 0.25元/秒
 
-无免费额度
+无
 
 720P
 
@@ -12504,7 +13126,7 @@ vidu/viduq2\_text2video
 
 0.1125元/秒
 
-无免费额度
+无
 
 720P
 
@@ -12534,7 +13156,7 @@ vidu/viduq3-pro-fast\_img2video
 
 0.375元/秒
 
-无免费额度
+无
 
 1080P
 
@@ -12546,7 +13168,7 @@ vidu/viduq3-pro\_img2video
 
 0.3125元/秒
 
-无免费额度
+无
 
 720P
 
@@ -12562,7 +13184,7 @@ vidu/viduq3-turbo\_img2video
 
 0.25元/秒
 
-无免费额度
+无
 
 720P
 
@@ -12578,7 +13200,7 @@ vidu/viduq2-pro\_img2video
 
 0.15625元/秒
 
-无免费额度
+无
 
 720P
 
@@ -12594,7 +13216,7 @@ vidu/viduq2-turbo\_img2video
 
 0.0875元/秒
 
-无免费额度
+无
 
 720P
 
@@ -12610,7 +13232,7 @@ vidu/viduq2-pro-fast\_img2video
 
 0.1元/秒
 
-无免费额度
+无
 
 1080P
 
@@ -12636,7 +13258,7 @@ vidu/viduq3-pro\_start-end2video
 
 0.3125元/秒
 
-无免费额度
+无
 
 720P
 
@@ -12652,7 +13274,7 @@ vidu/viduq3-turbo\_start-end2video
 
 0.25元/秒
 
-无免费额度
+无
 
 720P
 
@@ -12668,7 +13290,7 @@ vidu/viduq2-pro\_start-end2video
 
 0.15625元/秒
 
-无免费额度
+无
 
 720P
 
@@ -12684,7 +13306,7 @@ vidu/viduq2-turbo\_start-end2video
 
 0.0875元/秒
 
-无免费额度
+无
 
 720P
 
@@ -12714,7 +13336,7 @@ vidu/viduq3-ad\_reference2video
 
 0.75元/秒
 
-无免费额度
+无
 
 1080P
 
@@ -12726,7 +13348,7 @@ vidu/viduq3-drama\_reference2video
 
 0.875元/秒
 
-无免费额度
+无
 
 1080P
 
@@ -12738,7 +13360,7 @@ vidu/viduq3-mix\_reference2video
 
 0.78125元/秒
 
-无免费额度
+无
 
 1080P
 
@@ -12750,7 +13372,7 @@ vidu/viduq3\_reference2video
 
 0.3125元/秒
 
-无免费额度
+无
 
 720P
 
@@ -12766,7 +13388,7 @@ vidu/viduq3-turbo\_reference2video
 
 0.15625元/秒
 
-无免费额度
+无
 
 720P
 
@@ -12782,7 +13404,7 @@ vidu/viduq2-pro\_reference2video
 
 0.25元/秒
 
-无免费额度
+无
 
 720P
 
@@ -12798,7 +13420,7 @@ vidu/viduq2\_reference2video
 
 0.21875元/秒
 
-无免费额度
+无
 
 720P
 
@@ -12830,7 +13452,7 @@ MiniMax/MiniMax-H3
 
 0.80元/秒
 
-无免费额度
+无
 
 768P
 
@@ -13338,7 +13960,7 @@ text-embedding-v3
 
 0.5元
 
-50万Token
+无
 
 text-embedding-v2
 
@@ -13346,7 +13968,7 @@ text-embedding-v2
 
 0.7元
 
-50万Token
+无
 
 text-embedding-v1
 
@@ -13354,7 +13976,7 @@ text-embedding-v1
 
 0.7元
 
-50万Token
+无
 
 text-embedding-async-v2
 
@@ -13366,7 +13988,7 @@ text-embedding-async-v1
 
 0.7元
 
-2000万Token
+无
 
 #### 新加坡
 
@@ -13393,6 +14015,20 @@ text-embedding-v3
 国际
 
 0.514元
+
+#### 中国香港
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**输入单价（每百万Token）**
+
+text-embedding-v4
+
+中国香港
+
+0.51元
 
 ## 多模态向量
 
@@ -13422,7 +14058,11 @@ qwen3-vl-embedding
 
 qwen2.5-vl-embedding
 
-100万Token
+0.7元
+
+1.8元
+
+无
 
 tongyi-embedding-vision-plus
 
@@ -13446,7 +14086,7 @@ multimodal-embedding-v1
 
 0.9元
 
-100万Token
+无
 
 ## 排序模型
 
@@ -13490,7 +14130,7 @@ gte-rerank-v2
 
 文本输入：0.8元
 
-100万Token
+无
 
 #### 新加坡
 
@@ -13578,7 +14218,7 @@ qwen-flash-character-2026-02-26
 
 1.5元
 
-100万Token
+无
 
 #### 新加坡
 
@@ -13680,6 +14320,24 @@ qwen-plus-character
 
 2元
 
+#### 中国香港
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**输入单价 （每百万Token）**
+
+**输出单价 （每百万Token）**
+
+qwen-plus-character
+
+全球
+
+0.8元
+
+2元
+
 ### 界面交互
 
 计费规则：按输入Token和输出Token计费。
@@ -13705,6 +14363,12 @@ gui-plus
 100万Token
 
 gui-plus-2026-02-26
+
+1.5元
+
+4.5元
+
+无
 
 ### 决策模型
 

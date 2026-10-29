@@ -952,6 +952,7 @@ while True:
     -   MiMo（小米部署）：xiaomi/mimo-v2.6-pro-ultraspeed、xiaomi/mimo-v2.5-pro
     -   Stepfun（阶跃星辰部署）：stepfun/step-3.7-flash、stepfun/step-5-preview
     -   Unisound（云知声部署）：unisound/unisound-u2
+    -   Ling（蚂蚁数科部署）：antdigital/Ling-3.1-flash
 -   **视觉理解模型**
     -   千问 VL：qwen3-vl-plus
 -   **行业模型**
@@ -1135,6 +1136,7 @@ while True:
 -   MiniMax（稀宇科技部署）：MiniMax/MiniMax-M3.1-Flash、MiniMax/MiniMax-M2.5、MiniMax/MiniMax-M2.1 为 **10%**，MiniMax/MiniMax-M3、MiniMax/MiniMax-M2.7 为 **20%**
 -   GLM（智谱部署）：ZHIPU/GLM-5.3、ZHIPU/GLM-5.2、ZHIPU/GLM-5.1、ZHIPU/GLM-5 均为 **25%**；ZHIPU/GLM-5.3-Flash 为 **28.75%**；ZHIPU/GLM-5.3-FlashX 为 **28.5%**
 -   Stepfun（阶跃星辰部署）：stepfun/step-5-preview 为 **5%**
+-   Ling（蚂蚁数科部署）：antdigital/Ling-3.1-flash 为 **20%**
 
 示例：某请求包含 10,000 个输入 Token，其中 5,000 个命中缓存。费用计算如下：
 

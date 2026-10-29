@@ -1,6 +1,6 @@
 # 语音合成
 
--   [语音合成概述](raw/model-user-guide/model-experience/speech-synthesis/tts-model.md)
+-   [概述](raw/model-user-guide/model-experience/speech-synthesis/tts-model.md)
 -   [实时语音合成](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)
 -   [非实时语音合成](raw/model-user-guide/model-experience/speech-synthesis/non-realtime-tts-user-guide.md)
 -   [声音复刻](raw/model-user-guide/model-experience/speech-synthesis/voice-cloning-user-guide.md)

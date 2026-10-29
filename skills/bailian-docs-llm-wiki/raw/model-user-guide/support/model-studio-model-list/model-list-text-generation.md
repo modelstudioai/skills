@@ -80,3 +80,4 @@
 -   [MiniMax/MiniMax-M2.1](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/minimax-m2-1-by-minimax.md)
 -   [MiniMax/MiniMax-M2.5](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/minimax-m2-5-by-minimax.md)
 -   [unisound/unisound-u2](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/unisound-u2-by-unisound.md)
+-   [antdigital/Ling-3.1-flash](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/ling-3-1-flash-by-antdigital.md)

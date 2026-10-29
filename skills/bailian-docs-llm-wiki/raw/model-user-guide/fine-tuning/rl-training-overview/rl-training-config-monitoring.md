@@ -813,10 +813,12 @@ hyper_parameters = {
 平台默认 GSPO；切换需带明确动机（复现 / 长 CoT / 收敛异常）。
 
 -   **GRPO**（DeepSeekMath 2024）：**Token 级**重要性采样 + 组内相对优势，去 critic
--   **GSPO**（Qwen 2025，**平台默认**）：**Sequence 级**重要性采样，方差更低，MoE 训练稳定
+-   **GSPO**（Qwen 2025，**平台默认**）：**Sequence 级**重要性采样，方差更低，长序列训练稳定性更优
 -   **DAPO**：GRPO + Clip-Higher（0.2/0.28）+ Dynamic Sampling + Token-level Loss + Overlong Reward Shaping，长 CoT 推理优化
 -   **SAPO**（[arXiv 2511.20347](https://arxiv.org/abs/2511.20347)）：用平滑门控替代 PPO 的硬裁剪——重要性比值 r 偏离 1 后梯度平滑衰减，而非像硬裁剪那样直接归零；门控温度越大衰减越快、越接近硬裁剪，越小越平缓、越接近不裁剪的 PG
 -   **CISPO**（[arXiv 2506.13585](https://arxiv.org/abs/2506.13585)）：截断重要性采样权重而非更新本身——r 超出上界的 token 梯度仍然保留（PPO 会将这些 token 的梯度置 0）
+
+**R3（专家路由回放）**：所有 RL 算法（GSPO / GRPO / DAPO / SAPO / CISPO）**默认启用**——Rollout 推理时记录 MoE 专家路由、训练时回放该路由，显著缩小训推两侧的 logprob 偏差（logprob diff），端到端精度相应提升。默认生效、无需配置，暂不提供关闭选项（技术背景见 [arXiv 2510.11370](https://arxiv.org/abs/2510.11370) 与 [verl Router Replay](https://github.com/verl-project/verl/blob/main/examples/router_replay/README.md)）。
 
 维度
 
@@ -870,13 +872,13 @@ MoE 稳定性
 
 短回复 / 入门
 
-通用首选 / MoE
+通用首选 / 长序列
 
 长链推理 / 数学 / 代码
 
 **选型决策路径**：
 
--   默认 GSPO（平台默认对齐）；MoE（qwen3.5-35b-a3b）几乎只选 GSPO
+-   默认 GSPO（平台默认对齐）；MoE（qwen3.5-35b-a3b）建议优先 GSPO，其优势更多体现在长序列训练稳定性
 -   切 GRPO：需 Token 级细粒度信号 / 与社区 GRPO 实现对齐
 -   切 DAPO：响应长度 > 4K / Reward 全对全错塌缩 / 后期 entropy 崩
 -   切 SAPO：希望策略更新幅度平滑可控（无硬裁剪），配合 `tau_pos` / `tau_neg` 分别调节正 / 负优势 token 更新的保守程度

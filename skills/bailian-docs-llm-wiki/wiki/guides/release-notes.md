@@ -1,53 +1,32 @@
 # release notes
 
-百炼平台的 Release Notes 汇总了模型上下架、平台功能迭代、计费策略调整等关键变更，面向开发者提供可落地的操作依据。所有变更均遵循明确的时间节点与通知机制，核心模型生命周期（上架、升级、下线）和平台能力演进（API、部署、评测、RAG 等）均在此同步。开发者应定期查阅本页，并结合[模型下线机制说明](../../raw/model-user-guide/release-notes/model-depreciation.md)评估服务连续性。
+百炼平台的 Release Notes 汇总了模型上下架、平台功能迭代、计费策略调整等关键变更，面向开发者提供可操作的版本演进信息。所有变更均遵循明确的时间节点与通知机制，建议通过[模型监控](https://bailian.console.aliyun.com/cn-beijing/model/telemetry)定期核查所用模型状态，并关注控制台公告与邮件通知。模型生命周期管理（含下线）与平台能力更新均以稳定性、兼容性及开发者体验为优先。
 
 ## 支持的模型/功能
 
-- **新上线模型（2026年重点）**：涵盖多模态理解与生成全栈能力，包括 `qwen3.8-max`（2.4T MoE 旗舰）、`qwen-audio-3.1-realtime-flash`（实时双工语音）、`Tripo/Tripo-AutoRig`（AI 自动绑骨）、`qwen-mt-uni`（全模态翻译）、`happyoyster-1.0-adventure`（开放式世界模型）等；新增模型均支持 1M 上下文、多档思考深度及 Function Calling。
-- **模型类型标识**：正式版模型提供系列名（如 `qwen-max`）、日期后缀（如 `qwen-max-2025-01-25`）和 `-latest` 别名三种形态；预览版模型 ID 含 `preview`/`beta`/`experimental` 标识或文档明确标注，更新快、可能快速下线。
-- **平台级功能扩展**：
-  - RAG：知识检索与问答服务（2026-06-23）、多知识库联合检索与混合排序；
-  - 部署：PTU 长输入与前缀缓存（2026-06-15）、新增美国/德国/日本地域（2026-06-12）；
-  - 调优：强化学习训练（邀约制，2026-05-31）、支持图像/视频/视觉理解模型微调（2026-05/01）；
-  - API：Responses API 异步调用（2026-06-01）、新版 DashScope Agent API（2026-05-11）、Spring AI Alibaba 集成文档（2026-06-01）；
-  - SDK：Linux C++ / Android / iOS Lite / RTOS C 多端多模态 SDK 全面覆盖（2026-02 至 04 月）。
-
-> **注意**：文档 2 中列出的 `kimi/kimi-k3`（2026-07-17）与 `kimi-k3`（2026-08-19）参数描述存在不一致（前者称“2.8 万亿参数”，后者称“全球首个开源的 3 万亿级别模型”），实际以控制台模型详情页或 [模型下线机制说明](../../raw/model-user-guide/release-notes/model-depreciation.md) 中发布的权威规格为准。
+- **新上线模型**：2026年8月起密集发布多模态与垂类模型，包括 `qwen3.8-flash`（原生百万上下文、OpenAI/Anthropic 协议兼容）、`MiniMax/MiniMax-M3.1-Flash`（Agentic 任务优化）、`Tripo/Tripo-AutoRig`（3D 自动绑骨）、`qwen-mt-uni`（跨模态统一翻译）、`happyoyster-1.0-adventure`（开放式世界模型）等；语音方向新增 `qwen-audio-3.1-tts-plus`（专业级音色）、`qwen-audio-3.1-asr-flash-streaming`（低延迟流式识别）；图像生成新增 `qwen-image-3.0-pro`（高保真细节渲染）与 `vidu/vidu-image-pro_reference2image`（参考图精准还原）。
+- **平台功能扩展**：2026年6月起全面支持异步调用（`background=true`）、事件总线 HTTP 回调与 RocketMQ 主动推送；新增智能体托管运行时 API、知识检索与问答服务、数据连接模块（MySQL/语雀/OSS）、Skill 能力包、多模态交互开发套件全栈 SDK（Android/iOS/Linux C++/RTOS C）；模型部署支持 PTU 长输入与前缀缓存、按模型单元（MU）时长计费；模型调优新增 RL 训练（邀约制）、0 代码安全合规强化、视频/图像/视觉理解模型类型支持。
+- **模型类型区分**：正式版模型（如 `qwen-max`、`qwen-max-2025-01-25`、`qwen-max-latest`）面向生产环境，预览版模型（ID 含 `preview`/`beta`/`experimental`）用于公测验证，详见 [模型下线机制说明](../../raw/model-user-guide/release-notes/model-depreciation.md)。
 
 ## 关键参数
 
-- **上下文窗口**：主流新模型（如 `qwen3.8-max`、`deepseek-v4.1-flash`、`glm-5.3`）统一支持 **1,000,000 [Token](../concepts/token.md)** 输入；
-- **输出长度**：`deepseek-v4.1-flash` 系列支持最大 **384K [Token](../concepts/token.md)** 输出；`GLM-5.3-FlashX` 支持 **128K**；
-- **推理速度**：`qwen-audio-3.0-realtime-flash` 与 `qwen-audio-3.1-realtime-flash` 侧重低延迟双工交互；`GLM-5.3-FlashX` 达 **200 tokens/s**；`MiniMax-M3.1-Flash` 约 **170 tokens/s**；
-- **架构特性**：`qwen3.8-2.4t-a95b`（2.4T MoE，激活 ~95B）、`deepseek-v4-pro-0813`（1.6T MoE，激活 49B）、`stepfun/step-5-preview`（600B MoE，激活 27B）；
-- **多模态能力**：`qwen3.8-omni-flash`、`qwen3.8-omni-flash-realtime`、`xiaomi/mimo-v2.6-pro-ultraspeed` 均原生支持文本/图片/音频/视频输入。
+- **上下文窗口**：主流新模型（如 `qwen3.8-flash`、`deepseek-v4.1-flash`、`glm-5.3-flash`）普遍支持 **1M [Token](../concepts/token.md)** 上下文；部分模型（如 `qwen-audio-3.1-realtime-flash`）为 **262,144 [Token](../concepts/token.md)**；`qwen-image-3.0` 支持最大 **4.5k token 输入**。
+- **输出能力**：`deepseek-v4.1-flash-1017` 最大输出 **384K tokens**；`GLM-5.3-FlashX` 支持 **128K 输出**；`qwen3.8-2.4t-a95b` 在 GPQA Diamond 等基准达 **92.6 分**。
+- **性能指标**：`qwen-audio-3.1-tts-flash` 侧重低延迟实时合成；`ZHIPU/GLM-5.3-FlashX` 推理速度达 **200 tokens/s**；`xiaomi/mimo-v2.6-pro-ultraspeed` 相比原模型输出速度提升 **约 10 倍**。
+- **多模态支持**：`qwen3.8-omni-flash`、`MiniMax-H3`、`kimi-k3` 等支持文本/图片/音频/视频输入；`qwen-mt-uni` 自动识别并处理文本/文档/PDF/图片/音频等多模态输入。
 
 ## 使用方式
 
-- **模型调用**：通过标准 REST API（兼容 OpenAI Anthropic 协议）或 SDK（Java/Android/iOS/C++/RTOS）接入；实时语音类模型需使用 WebSocket/WebRTC/AOQ 协议；
-- **新功能启用**：
-  - 异步任务：在 Responses API 请求中添加 `background=true` 参数（2026-06-01 起）；
-  - 记忆库 2.0：自动提取对话记忆并支持跨应用共享（2026-03-20）；
-  - 知识库检索：`Retrieve` 接口支持指定排序模型与指令干预模式（2026-02-05）；
-- **资源管理**：
-  - [Token](../concepts/token.md) Plan 团队版支持跨坐席共享 Credits 弹性用量包（2026-06-30）；
-  - 新增生成临时 API Key 文档，用于不可信环境安全调用（2026-06-03）；
-- **模型切换**：下线模型迁移需参考[模型下线机制说明](../../raw/model-user-guide/release-notes/model-depreciation.md)中的替代模型建议，并在模型监控页面验证调用情况。
+- **模型调用**：正式版模型推荐使用带日期后缀的稳定快照（如 `qwen3.8-max-2026-09-02`）或 `-latest` 别名；预览版需在控制台或文档中确认标注；API 调用需适配对应协议（如 OpenAI Responses 或 Anthropic Messages），详见 [模型平台功能更新](../../raw/model-user-guide/release-notes/model-release-notes.md) 中的接口分类说明。
+- **功能接入**：新功能（如异步调用、事件总线回调、智能体托管运行时）需查阅对应 API 文档（如 `raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md`）；SDK 接入请参考各平台（Android/iOS/Linux C++/RTOS C）的官方文档。
+- **模型迁移**：若依赖模型即将下线，须在启动下线后 3 个月内完成切换；建议先在测试环境验证替代模型效果，再灰度上线。操作指引见 [模型下线机制说明](../../raw/model-user-guide/release-notes/model-depreciation.md) 的“操作建议”章节。
 
 ## 限制和注意事项
 
-- **模型下线节奏**：
-  - 正式版模型：启动下线后 **3 个月**停止服务（EoS），期间逐步缩减 QPM/TPM 并停止新购（EoM）；
-  - 预览版模型：启动下线后仅 **14 天**即停止服务，无 EoM 阶段；
-  - 所有下线通知均不晚于 EoS 前 3 个月（正式版）或 14 天（预览版）发布。
-- **功能兼容性**：
-  - `qwen-turbo` 资源包已于 2026-06-28 启动退市（见[模型平台功能更新](../../raw/model-user-guide/release-notes/model-release-notes.md)）；
-  - 企业知识库（旧）已于 2026-07-16 下线，需迁移至新版知识库；
-  - 部分老旧长尾模型下线通知（2026-07-09）与部分老旧模型下线通知（2026-07-10）存在重叠，具体清单以官网公告为准。
-- **关键风险提示**：
-  > **注意**：文档 3 中“7月6日 部分老旧模型延期下线通知”与文档 1 中“2026年10月10日已下线”列表存在时间矛盾——文档 1 明确将 2026-10-10 列为“已下线”，而文档 3 的延期通知发生在 2026-07-06，逻辑上无法覆盖该日期。请以[模型下线机制说明](../../raw/model-user-guide/release-notes/model-depreciation.md)中“下线模型列表”及对应官网公告（如 [https://www.aliyun.com/notice/118177](https://www.aliyun.com/notice/118177)）为最终依据。
-- **其他限制**：预览版模型不承诺 SLA，不适用于生产环境；所有模型限流默认值参见[默认限流](../../raw/model-user-guide/get-started-with-models/rate-limit.md)；模型压缩、RL 训练等功能当前为邀约制或受限开放。
+- > **注意**：文档 2 中列出的 `qwen3.8-max-0902`（别名 `qwen3.8-max-2026-09-02`）与文档 3 中 2026 年 8 月发布的 `qwen3.8-max` 存在命名逻辑冲突——前者为快照版本，后者为持续演进的正式版主干；实际使用应以控制台显示的模型 ID 及其状态为准，避免硬编码日期后缀导致意外降级。
+- > **注意**：文档 3 明确列出 `2026年7月16日` 企业知识库（旧）下线通知，但未说明迁移路径；而文档 1 未覆盖此非模型类组件下线规则。开发者需同步查阅 [企业知识库（旧）下线通知](https://www.aliyun.com/notice/118448) 原文，及时迁移到新版知识库服务。
+- 预览版模型下线周期极短（EoS 前仅 14 天通知），且不设“停止新购”节点，一旦启动下线即逐步限流并快速终止服务；正式版模型虽有 3 个月缓冲期，但自启动下线日起即停止新用户接入并下调 QPM/TPM，已扩容用户将被恢复至[默认限流](../../raw/model-user-guide/get-started-with-models/rate-limit.md)值。
+- 模型下线计划可能因特殊情况暂停、延期或中止，公告内容会动态更新并附“变更说明”；开发者应订阅官网公告与邮件通知，不可仅依赖历史发布时间表。详情参见 [模型下线机制说明](../../raw/model-user-guide/release-notes/model-depreciation.md) 的“下线计划的调整”章节。
 
 ## 来源文档
 
