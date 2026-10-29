@@ -1,8 +1,6 @@
-# Qwen-Audio-3.x-ASR-Flash-Filetrans/Fun-ASR非实时语音识别HarmonyOS SDK
+# Fun-ASR非实时语音识别HarmonyOS SDK
 
-使用Qwen-Audio-3.x-ASR-Flash-Filetrans/Fun-ASR非实时语音识别HarmonyOS SDK将音视频文件转换为文本。
-
-**用户指南：** 参见[非实时语音识别](raw/model-user-guide/model-experience/speech-recognition/non-realtime-speech-recognition-user-guide.md)。关于支持的音频格式、文件大小限制和时长限制等输入要求，请参见[音频规格](https://help.aliyun.com/zh/model-studio/asr-model#asr_audio_spec02)。
+使用Fun-ASR非实时语音识别HarmonyOS SDK将音视频文件转换为文本。
 
 ## 快速开始
 
@@ -36,7 +34,11 @@
 
 ### 连接与控制参数
 
-在 [initializeFileTrans](#initializefiletrans) 接口的 `parameters` 参数中传入 JSON 字符串进行配置。 **参数示例：**以下为 JSON 字符串示例，参数未完整列出。请按实际需求在编码时补充：
+在 `initializeFileTrans` 接口的 `parameters` 参数中传入 JSON 字符串进行配置。
+
+**参数示例**
+
+以下为 JSON 字符串示例，参数未完整列出。请按实际需求在编码时补充：
 
 ```
 {
@@ -47,7 +49,7 @@
 }
 ```
 
--   **参数说明**
+**参数说明**
 
 **参数**
 
@@ -95,7 +97,7 @@ API Key。建议使用时效性短、安全性更高的[临时API Key](raw/model
 
 否
 
-日志文件的存储路径。 此参数仅在调用[initializeFileTrans](#initializefiletrans)接口时将`save_log`设为true时生效。此时必须设置日志文件路径，否则将报错。 本地最多保留两个日志文件。
+日志文件的存储路径。 此参数仅在调用`initializeFileTrans`接口时将`save_log`设为true时生效。此时必须设置日志文件路径，否则将报错。 本地最多保留两个日志文件。
 
 `max_log_file_size`
 
@@ -103,11 +105,15 @@ API Key。建议使用时效性短、安全性更高的[临时API Key](raw/model
 
 否
 
-设定日志文件的最大字节数。 此参数仅在调用[initializeFileTrans](#initializefiletrans)接口时将`save_log`设为true时生效。 默认值：104857600（100 \* 1024 \* 1024 字节, 即 100MiB）。
+设定日志文件的最大字节数。 此参数仅在调用`initializeFileTrans`接口时将`save_log`设为true时生效。 默认值：104857600（100 \* 1024 \* 1024 字节, 即 100MiB）。
 
 ### 语音识别效果参数
 
-通过 [setParams](#setparams) 接口配置 `nls_config` 参数，或者通过 [startFileTranscriber](#startfiletranscriber) 接口配置所有语音识别效果参数。 **参数示例：**以下为 JSON 字符串示例，参数未完整列出。请按实际需求在编码时补充：
+通过 `setParams` 接口配置 `nls_config` 参数，或者通过 `startFileTranscriber` 接口配置所有语音识别效果参数。
+
+**参数示例**
+
+以下为 JSON 字符串示例，参数未完整列出。请按实际需求在编码时补充：
 
 ```
 {
@@ -116,7 +122,7 @@ API Key。建议使用时效性短、安全性更高的[临时API Key](raw/model
     ],
     "async_request": false,
     "nls_config": {
-        "model":"qwen-audio-3.0-asr-flash-filetrans",
+        "model":"fun-asr",
         "diarization_enabled": false,
         "parameters": {
             "speech_noise_threshold": 0.0
@@ -125,7 +131,7 @@ API Key。建议使用时效性短、安全性更高的[临时API Key](raw/model
 }
 ```
 
--   **参数说明**
+**参数说明**
 
 **参数**
 
@@ -146,10 +152,13 @@ API Key。建议使用时效性短、安全性更高的[临时API Key](raw/model
 **重要**
 
 -   临时 URL 有效期48小时，过期后无法使用，**请勿用于生产环境。**
+    
 -   文件上传凭证接口限流为 100 QPS 且不支持扩容，**请勿用于生产环境、高并发及压测场景。**
+    
 -   生产环境建议使用[阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss) 等稳定存储，确保文件长期可用并规避限流问题。
+    
 
-\- 录音文件URL设置成OSS临时公网访问不通该如何处理？请求头中将`X-DashScope-OssResourceResolve`设为`enable`（不推荐该方式）。 SDK不支持对请求头进行配置。
+-   录音文件URL设置成OSS临时公网访问不通该如何处理？请求头中将`X-DashScope-OssResourceResolve`设为`enable`（不推荐该方式）。 SDK不支持对请求头进行配置。
 
 `async_request`
 
@@ -165,7 +174,7 @@ API Key。建议使用时效性短、安全性更高的[临时API Key](raw/model
 
 否
 
-如果[连接与控制参数](#%E8%BF%9E%E6%8E%A5%E4%B8%8E%E6%8E%A7%E5%88%B6%E5%8F%82%E6%95%B0)的`apikey`使用的是[临时API Key](raw/model-api-reference/more-about-models/generate-temporary-api-key.md)，可在此处进行更新，以免超时失效。
+如果连接与控制参数的`apikey`使用的是[临时API Key](raw/model-api-reference/more-about-models/generate-temporary-api-key.md)，可在此处进行更新，以免超时失效。
 
 `nls_config`
 
@@ -181,7 +190,7 @@ API Key。建议使用时效性短、安全性更高的[临时API Key](raw/model
 
 是
 
-指定示例调用的模型。模型信息请参见[支持的模型与地域](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#4a43cc1bb7kxg)。
+模型名称。
 
 `nls_config.special_word_filter`
 
@@ -239,7 +248,40 @@ API Key。建议使用时效性短、安全性更高的[临时API Key](raw/model
 
 否
 
-设置待识别语言代码。如果无法提前确定语种，可不设置，模型会自动识别语种。 对于 Qwen-Audio-3.x-ASR-Flash-Filetrans 系列模型，最多支持设置 4 个值，即便设置超出 4 个，也仅前 4 个生效；对于 Fun-ASR 系列模型，仅支持设置 1 个值，即便设置多个，也仅第一个生效。 点击查看支持的语言代码 - Qwen-Audio-3.x-ASR-Flash-Filetrans、fun-asr： - zh: 中文 - en: 英文 - ja: 日语 - ko：韩语 - vi：越南语 - th：泰语 - id：印尼语 - ms：马来语 - tl：菲律宾语 - hi：印地语 - ar：阿拉伯语 - fr：法语 - de：德语 - es：西班牙语 - pt：葡萄牙语 - ru：俄语 - it：意大利语 - nl：荷兰语 - sv：瑞典语 - da：丹麦语 - fi：芬兰语 - no：挪威语 - el：希腊语 - pl：波兰语 - cs：捷克语 - hu：匈牙利语 - ro：罗马尼亚语 - bg：保加利亚语 - hr：克罗地亚语 - sk：斯洛伐克语
+设置待识别语言代码。如果无法提前确定语种，可不设置，模型会自动识别语种。最多支持设置 1 个值，超出时仅前 1 个生效。
+
+点击查看支持的语言代码
+
+-   zh: 中文
+-   en: 英文
+-   ja: 日语
+-   ko：韩语
+-   vi：越南语
+-   th：泰语
+-   id：印尼语
+-   ms：马来语
+-   tl：菲律宾语
+-   hi：印地语
+-   ar：阿拉伯语
+-   fr：法语
+-   de：德语
+-   es：西班牙语
+-   pt：葡萄牙语
+-   ru：俄语
+-   it：意大利语
+-   nl：荷兰语
+-   sv：瑞典语
+-   da：丹麦语
+-   fi：芬兰语
+-   no：挪威语
+-   el：希腊语
+-   pl：波兰语
+-   cs：捷克语
+-   hu：匈牙利语
+-   ro：罗马尼亚语
+-   bg：保加利亚语
+-   hr：克罗地亚语
+-   sk：斯洛伐克语
 
 `nls_config.parameters`
 
@@ -255,13 +297,13 @@ API Key。建议使用时效性短、安全性更高的[临时API Key](raw/model
 
 #### initializeFileTrans
 
-初始化语音转录 SDK 实例。在调用 [release](#release) 前禁止重复初始化。
+初始化语音转录 SDK 实例。在调用 `release` 前禁止重复初始化。
 
-**说明**与实时语音识别不同，非实时（录音文件）转录必须使用 `initializeFileTrans` 方法并传入 [INativeFileTransCallback](#inativefiletranscallback) 回调，而不是 `initialize`。
+**说明**与实时语音识别不同，非实时（录音文件）转录必须使用 `initializeFileTrans` 方法并传入 `INativeFileTransCallback` 回调，而不是 `initialize`。
 
 该接口会阻塞调用线程，请在非 UI 线程中调用。
 
--   **方法签名**
+**方法签名**
 
 ```
 public initializeFileTrans(callback: INativeFileTransCallback,
@@ -270,7 +312,7 @@ public initializeFileTrans(callback: INativeFileTransCallback,
                            save_log: boolean = false): number
 ```
 
--   **参数说明**
+**参数说明**
 
 **参数**
 
@@ -288,33 +330,31 @@ public initializeFileTrans(callback: INativeFileTransCallback,
 
 `string`
 
-JSON字符串，包含鉴权、连接和调试参数。参见[连接与控制参数](#%E8%BF%9E%E6%8E%A5%E4%B8%8E%E6%8E%A7%E5%88%B6%E5%8F%82%E6%95%B0)。
+JSON字符串，包含鉴权、连接和调试参数。参见连接与控制参数。
 
 `level`
 
 `number`
 
-控制SDK自身日志的打印级别，取值为[Constants.LogLevel](#constants-loglevel)枚举。
+控制SDK自身日志的打印级别，取值为`Constants.LogLevel`枚举。
 
 `save_log`
 
 `boolean`
 
-是否保存本地日志。若为`true`，须在[连接与控制参数](#%E8%BF%9E%E6%8E%A5%E4%B8%8E%E6%8E%A7%E5%88%B6%E5%8F%82%E6%95%B0)中通过`debug_path`指定路径，并可通过`max_log_file_size`设置文件大小。
-
--   **返回值说明**
+是否保存本地日志。若为`true`，须在连接与控制参数中通过`debug_path`指定路径，并可通过`max_log_file_size`设置文件大小。
 
 #### setParams
 
-此接口用于独立设置或更新 `nls_config` 参数。如果所有参数都在[startFileTranscriber](#startfiletranscriber)中一次性提供，则无需调用此方法。
+此接口用于独立设置或更新 `nls_config` 参数。如果所有参数都在`startFileTranscriber`中一次性提供，则无需调用此方法。
 
--   **方法签名**
+**方法签名**
 
 ```
 public setParams(params: string): number
 ```
 
--   **参数说明**
+**参数说明**
 
 **参数**
 
@@ -326,21 +366,19 @@ public setParams(params: string): number
 
 `string`
 
-[语音识别效果参数](#%E8%AF%AD%E9%9F%B3%E8%AF%86%E5%88%AB%E6%95%88%E6%9E%9C%E5%8F%82%E6%95%B0)中的`nls_config`参数，`nls_config`之外的参数不支持通过该方法进行设置。 示例： `{ "nls_config": { "model":"qwen-audio-3.0-asr-flash-filetrans", "diarization_enabled": false } }`
-
--   **返回值说明**
+语音识别效果参数中的`nls_config`参数，`nls_config`之外的参数不支持通过该方法进行设置。 示例： `{ "nls_config": { "model":"fun-asr", "diarization_enabled": false } }`
 
 #### startFileTranscriber
 
 开始识别。
 
--   **方法签名**
+**方法签名**
 
 ```
 public startFileTranscriber(params: string, task_id: ArrayBuffer): number
 ```
 
--   **参数说明**
+**参数说明**
 
 **参数**
 
@@ -352,7 +390,7 @@ public startFileTranscriber(params: string, task_id: ArrayBuffer): number
 
 `string`
 
-[语音识别效果参数](#%E8%AF%AD%E9%9F%B3%E8%AF%86%E5%88%AB%E6%95%88%E6%9E%9C%E5%8F%82%E6%95%B0)。 示例： `{ "file_urls": [ "{YOUR_AUDIO_URL}" ], "async_request": false, "nls_config": { "model":"qwen-audio-3.0-asr-flash-filetrans", "diarization_enabled": false } }`
+语音识别效果参数。 示例： `{ "file_urls": [ "{YOUR_AUDIO_URL}" ], "async_request": false, "nls_config": { "model":"fun-asr", "diarization_enabled": false } }`
 
 `task_id`
 
@@ -360,19 +398,17 @@ public startFileTranscriber(params: string, task_id: ArrayBuffer): number
 
 任务ID缓冲区。SDK会将内部生成的随机任务ID字符串写入该缓冲区，要求缓冲区字节长度必须大于或等于33字节（示例中使用 `new ArrayBuffer(64)`）。调用成功后可通过转码获取该任务的`task_id`。
 
--   **返回值说明**
-
 #### queryFileTranscriber
 
 此接口用于主动查询一个异步任务的当前状态和结果。调用成功后，结果将通过`onFileTransEventCallback`回调中的 `EVENT_FILE_TRANS_QUERY_RESULT` 事件返回。
 
--   **方法签名**
+**方法签名**
 
 ```
 public queryFileTranscriber(task_id: string): number
 ```
 
--   **参数说明**
+**参数说明**
 
 **参数**
 
@@ -386,19 +422,17 @@ public queryFileTranscriber(task_id: string): number
 
 待查询的任务ID（由 `startFileTranscriber` 写入缓冲区获得）。
 
--   **返回值说明**
-
 #### cancelFileTranscriber
 
 立即取消当前任务。
 
--   **方法签名**
+**方法签名**
 
 ```
 public cancelFileTranscriber(task_id: string): number
 ```
 
--   **参数说明**
+**参数说明**
 
 **参数**
 
@@ -412,31 +446,27 @@ public cancelFileTranscriber(task_id: string): number
 
 待取消的任务ID。
 
--   **返回值说明**
-
 #### release
 
-释放 SDK 的所有内部资源。调用后，SDK 实例将不可用；如需再次使用，必须重新调用 [initializeFileTrans](#initializefiletrans) 进行初始化。
+释放 SDK 的所有内部资源。调用后，SDK 实例将不可用；如需再次使用，必须重新调用 `initializeFileTrans` 进行初始化。
 
--   **方法签名**
+**方法签名**
 
 ```
 public release(): number
 ```
 
--   **返回值说明**
-
 #### GetVersion
 
 获取当前 SDK 版本信息。
 
--   **方法签名**
+**方法签名**
 
 ```
 public GetVersion(): string
 ```
 
--   **返回值说明**
+**返回值说明**
 
 当前 SDK 版本信息。
 
@@ -448,14 +478,14 @@ public GetVersion(): string
 
 监听文件转录事件并获取语音识别结果。
 
--   **方法签名**
+**方法签名**
 
 ```
 onFileTransEventCallback: (event: Constants.NuiEvent, resultCode: number, finish: number,
                            asrResult: AsrResult, taskId: string) => void;
 ```
 
--   **参数说明**
+**参数说明**
 
 **参数**
 

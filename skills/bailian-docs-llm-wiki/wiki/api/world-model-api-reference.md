@@ -1,47 +1,42 @@
 # world model api reference
 
-世界模型 API 提供面向叙事与交互场景的多模态建模能力，支持剧情生成、角色行为决策、环境状态演化等核心功能。当前以 HappyOyster 系列模型为主力实现，覆盖 Adventure（冒险叙事）、Directing（导演式控制）和 Acting（角色实时动作）三类子任务。所有接口均基于 RESTful 设计，需通过 API Key 鉴权调用。
+世界模型 API 提供面向叙事与交互式内容生成的专用能力，涵盖冒险（Adventure）、导演（Directing）和表演（Acting）三类核心功能。该 API 当前以邀测形式开放，需申请权限后使用。所有接口均基于 RESTful 设计，支持 JSON 请求/响应格式，并遵循统一的鉴权与错误码规范。
 
 ## 支持的模型/功能
 
-- **HappyOyster Adventure**：用于长程剧情规划与分支逻辑生成，适用于游戏叙事引擎、互动小说等场景。详见 [Adventure Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-adventure-openapi-reference.md)。
-- **HappyOyster Directing**：提供高层意图到场景指令的映射，支持镜头调度、节奏控制、冲突强度调节等导演级干预能力。详见 [Directing Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-directing-openapi-reference.md)。
-- **HappyOyster Acting（邀测中）**：面向单角色实时响应建模，输出符合性格、状态与上下文的动作/台词序列。该能力尚未全量开放，接口细节请参阅 [Acting Open API参考（邀测中）](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-acting-openapi-reference.md)。
+世界模型当前提供以下三类功能模块，分别对应不同创作阶段：
 
-> **注意**：文档中“Acting”标注为“邀测中”，但部分 SDK v2.3+ 已默认启用该 endpoint；实际调用前请确认所用 API Key 是否已获邀测白名单权限，否则将返回 `403 Forbidden`。
+- **Adventure**：用于生成动态世界观、角色关系图谱与剧情分支逻辑，适用于游戏叙事或互动小说初始化；参考 [Adventure Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-adventure-openapi-reference.md)  
+- **Directing**：用于多角色协同调度、镜头语言编排与节奏控制，适用于影视化叙事或虚拟演出编导；参考 [Directing Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-directing-openapi-reference.md)  
+- **Acting**（邀测中）：用于单角色实时情绪建模、台词演绎与微表情驱动，需单独申请权限；参考 [Acting Open API参考（邀测中）](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-acting-openapi-reference.md)
+
+> **注意**：文档中“Acting”模块标注为“邀测中”，但部分内部 SDK 示例代码已默认启用该 endpoint，实际调用前请务必确认账号权限状态，避免 403 错误。
 
 ## 关键参数
 
-| 参数名 | 类型 | 必填 | 说明 |
-|--------|------|------|------|
-| `scene_state` | object | 是 | 当前世界状态快照，含角色位置、情绪、物品持有等字段，结构见 [Adventure Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-adventure-openapi-reference.md) 中 `SceneStateSchema` 定义 |
-| `intent` | string | 否 | 高层目标描述（如 `"阻止反派启动装置"`），仅 Directing 和 Acting 接口有效 |
-| `max_steps` | integer | 否 | 最大推理步数，默认 5，上限 20；超过将截断并返回 partial result |
+所有请求需包含以下通用头部参数：
+- `Authorization: Bearer <access_token>`（OAuth2.0 访问令牌）
+- `Content-Type: application/json`
+- `x-world-model-version: v1`（必需，当前仅支持 v1）
+
+各功能模块共用以下请求体字段（JSON）：
+- `scene_id`（string, 必填）：场景唯一标识，长度 ≤ 64 字符，仅支持字母、数字、下划线
+- `context`（object, 可选）：上下文快照，结构见 [Adventure Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-adventure-openapi-reference.md) 中的 `ContextSchema`
+- `timeout_ms`（integer, 默认 15000）：单次推理超时毫秒数，范围 5000–30000
 
 ## 使用方式
 
-1. 构造 POST 请求，`Content-Type: application/json`  
-2. 请求体包含 `scene_state` 及可选参数（如 `intent`, `max_steps`）  
-3. 设置请求头 `Authorization: Bearer <your_api_key>`  
-4. 调用对应 endpoint（例如 `/v1/world-model/adventure`）
-
-示例（cURL）：
-```bash
-curl -X POST https://dashscope.aliyuncs.com/api/v1/world-model/adventure \
-  -H "Authorization: Bearer sk-xxx" \
-  -H "Content-Type: application/json" \
-  -d '{
-        "scene_state": {"characters": [{"id": "hero", "mood": "anxious"}]},
-        "max_steps": 8
-      }'
-```
+1. 获取 access_token：通过 `/v1/auth/token` 接口使用 client_id/client_secret 交换令牌  
+2. 构造请求：向对应 endpoint 发送 POST 请求，例如 Adventure 模块 endpoint 为 `/v1/adventure/generate`  
+3. 解析响应：成功返回 `200 OK`，含 `result` 字段（结构化输出）与 `trace_id`（用于问题排查）  
+4. 错误处理：关注 `error.code`（如 `INVALID_SCENE_ID`, `CONTEXT_TOO_LARGE`），详见 [Directing Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-directing-openapi-reference.md) 的错误码附录  
 
 ## 限制和注意事项
 
-- 单次请求 `scene_state` JSON 大小不得超过 256 KB；超限将返回 `413 Payload Too Large`  
-- Adventure 接口响应延迟中位值约 1.2s（P95 < 3.5s），Directing 与 Acting 因计算复杂度更高，建议设置 5s+ 超时  
-- 所有接口均不支持流式响应（`stream=false` 为唯一合法值）  
-- > **注意**：原始文档未明确说明 rate limit，但生产环境实际限制为 10 QPS / key；该数值在 [Directing Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-directing-openapi-reference.md) 的 “Rate Limits” 小节中有补充说明，应以此为准。
+- 单账号 QPS 限流：5 次/秒（所有模块共享），突发流量将触发 `429 Too Many Requests`  
+- `context` 字段总字符数上限为 8192；超出将被截断并返回警告字段 `warnings: ["context_truncated"]`  
+- Acting 模块暂不支持流式响应（`stream=false` 强制生效），且不兼容 `response_format=delta` 参数  
+- 所有模型输入禁止包含可执行代码、系统指令或越权操作描述，违者触发 `400 Bad Request` 并记录审计日志
 
 ## 来源文档
 

@@ -28,7 +28,9 @@ Content-Type
 
 **重要**记忆库将于 **2026 年 8 月 20 日 10:00**（北京时间）正式商业化计费。Add 和 Search 调用均区分 **Pro** 和 **Lite** 版本：Add 的版本对应不同质量的记忆抽取模型，Search 的版本决定是否开启 Rerank。详见[计费说明](raw/application-user-guide/agent-context/memory-library-overview/integration-overview/billing.md)。
 
-**事实记忆**：
+**记忆管理**：
+
+记忆节点的类型（`memory_type`）为事实记忆 `observation` 或技能记忆 `skill`，写入时抽取哪一类由 `project_id` 对应的记忆规则决定；传入 `profile_schema` 时额外抽取用户画像，画像通过下方的用户画像接口读取。
 
 接口名称
 
@@ -44,7 +46,7 @@ POST
 
 `/add`
 
-添加事实记忆
+同步添加记忆，在响应中直接返回抽取结果
 
 [AddMemoryAsync](raw/application-api-reference/long-term-memory-new/fragments-overview/add-memory-async.md)
 
@@ -68,7 +70,7 @@ GET
 
 `/memory_nodes`
 
-列出事实记忆
+分页列出记忆节点
 
 [SearchMemory](raw/application-api-reference/long-term-memory-new/fragments-overview/search-memory.md)
 
@@ -76,7 +78,7 @@ POST
 
 `/memory_nodes/search`
 
-搜索事实记忆
+相似度检索记忆节点，默认仅检索事实记忆
 
 [GetMemoryNode](raw/application-api-reference/long-term-memory-new/fragments-overview/get-memory-node.md)
 
@@ -100,7 +102,7 @@ PATCH
 
 `/memory_nodes/{memory_node_id}`
 
-更新事实记忆
+更新记忆节点内容
 
 [DeleteMemory](raw/application-api-reference/long-term-memory-new/fragments-overview/delete-memory.md)
 
@@ -108,7 +110,7 @@ DELETE
 
 `/memory_nodes/{memory_node_id}`
 
-删除事实记忆
+删除记忆节点
 
 **用户画像**：
 
@@ -172,11 +174,11 @@ API 接口
 
 总计不超过 3000 QPM
 
-事实记忆 add 接口
+add 接口
 
 120 QPM
 
-事实记忆 search 接口
+search 接口
 
 300 QPM
 

@@ -13,3 +13,4 @@
 -   [MiMo-小米](raw/model-user-guide/use-cases/third-party-model-integration-tutorial/mimo.md)
 -   [Stepfun-阶跃星辰](raw/model-user-guide/use-cases/third-party-model-integration-tutorial/stepfun.md)
 -   [Unisound-云知声](raw/model-user-guide/use-cases/third-party-model-integration-tutorial/unisound-cloud-sound.md)
+-   [Ling-蚂蚁数科](raw/model-user-guide/use-cases/third-party-model-integration-tutorial/antdigital.md)

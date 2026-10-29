@@ -1,4 +1,4 @@
-# Qwen-Audio-3.x-ASR-Flash-Filetrans/Fun-ASR
+# Fun-ASR
 
 -   [HTTP API](raw/_short/fun-asr-recorded-speech-recognition-http-api-52f7db644c1e5209.md)
 -   [Python SDK](raw/_short/funauidio-asr-recorded-speech-recognition-python-f44d2effa30022be.md)

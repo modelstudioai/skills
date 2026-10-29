@@ -12,43 +12,34 @@ Managed Agents API **不直接调用大模型**，而是提供对 Agent 运行�
 - `Skill` 注册与动态绑定（支持 HTTP Webhook 和内置工具）  
 - `Vault` 与 `Credential` 安全管理敏感凭证  
 
-> **注意**：原始文档中 `skills-api.md` 描述的“本地 Python 函数注册”能力已在 v2.3 版本中移除，当前仅支持 Webhook 类型 Skill；请以 [Skill API](../../raw/application-api-reference/managed-agents-api/skills-api.md) 的最新修订版为准。
+> **注意**：文档中提及的 `qwen-turbo` 在最新版平台中已下线，实际可用模型请以 [Managed Agent API 概览](../../raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md) 的 `supported_models` 字段为准，避免使用已废弃标识符。
 
 ## 关键参数
 
-所有 POST/PUT 请求需包含以下必需 Header：  
-- `Authorization: Bearer <token>`（参见 [认证](../../raw/application-api-reference/managed-agents-api/managed-agents-api-authentication.md)）  
+所有写操作（如 `POST /v1/agents`）必须包含以下标头：  
+- `Authorization: Bearer <access_token>`（参见 [认证](../../raw/application-api-reference/managed-agents-api/managed-agents-api-authentication.md)）  
 - `Content-Type: application/json`  
 
-关键请求体字段示例（以创建 Agent 为例）：  
-```json
-{
-  "name": "customer-support-agent",
-  "model": "qwen-plus",
-  "environment_id": "env-prod-789",
-  "skills": ["skill-ticket-create", "skill-kb-search"],
-  "memory_store": { "ttl_seconds": 3600 }
-}
-```
-其中 `environment_id` 必须已存在（通过 `/environments` 创建），`skills` 列表中的 ID 需提前在 `/skills` 中注册。
+关键请求体字段示例：  
+- `agent.runtime.model`: 必填，指定基础模型 ID（如 `"qwen-plus"`）  
+- `environment.id`: 可选，显式绑定环境；未指定则使用默认环境  
+- `session.ttl_seconds`: 控制会话自动过期时间（默认 3600，最大 86400）  
+- `memory_store.enabled`: 布尔值，启用后自动挂载内存存储实例  
 
 ## 使用方式
 
-1. **初始化环境**：先调用 `/environments` 创建隔离环境（含模型配置、系统提示词模板）  
-2. **注册技能**：向 `/skills` 提交 Webhook URL 或内置工具定义  
-3. **创建 Agent**：POST `/agents`，关联环境与技能  
-4. **启动会话**：POST `/sessions` 获取 `session_id`，再向 `/sessions/{id}/messages` 发送用户输入  
-5. **监听事件（可选）**：通过 `/webhooks` 配置事件回调，或轮询 `/sessions/{id}/events`  
-
-详细步骤见 [快速开始](../../raw/application-api-reference/managed-agents-api/managed-agents-quickstart.md)，各子资源的完整接口定义参见对应文档（如 [Session and Event](../../raw/application-api-reference/managed-agents-api/session-api.md)）。
+1. **快速验证**：参考 [快速开始](../../raw/application-api-reference/managed-agents-api/managed-agents-quickstart.md) 中的 `curl` 示例，完成 Agent 创建 → Session 启动 → 消息发送三步流程  
+2. **生产集成**：建议使用官方 SDK（Python/Node.js），自动处理重试、鉴权与事件解析  
+3. **事件驱动开发**：通过 `POST /v1/webhooks` 注册回调地址，监听 `agent_step` 事件实现自定义日志或审计  
 
 ## 限制和注意事项
 
-- 单个 Agent 最多绑定 20 个 Skill；单个 Environment 下最多运行 100 个 Agent 实例  
-- `Memory Store` 单条记录最大 1MB，Key 长度上限 256 字符  
-- Session 事件流默认保留 24 小时，超时后不可查询（可通过 `keep_alive` 参数延长）  
-- 所有[文件上传](../concepts/file-upload.md)（`/files`）必须经 `vault_id` 关联权限上下文，未授权 vault 将拒绝写入  
-- 错误响应统一遵循 [错误码规范](../../raw/application-api-reference/managed-agents-api/managed-agents-api-errors.md)，常见如 `AGENT_ENV_NOT_FOUND (400)`、`SKILL_EXECUTION_TIMEOUT (504)`
+- 单个账户最多创建 100 个 Agent 实例，单个 Environment 最多承载 50 个并发 Session  
+- `File` API 仅支持上传 `< 100MB` 的文本类文件（`.txt`, `.json`, `.csv`, `.pdf`），且 PDF 解析依赖异步 OCR，延迟约 2–10 秒  
+- 所有 `Credential` 存储内容均经 KMS 加密，但 `vault` 中的明文字段（如 `description`）不加密，请勿存放敏感信息  
+- `Deployment` 接口仅支持蓝绿发布模式，回滚需显式调用 `/v1/deployments/{id}/rollback`，不可自动触发  
+
+> **注意**：`Session` 的 `max_steps` 默认为 50，但部分旧版文档误标为 100；实际生效值以 [Session and Event](../../raw/application-api-reference/managed-agents-api/session-api.md) 中 `limits.max_steps` 的最新定义为准。
 
 ## 来源文档
 

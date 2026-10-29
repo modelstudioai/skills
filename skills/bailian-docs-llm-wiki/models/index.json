@@ -1,23 +1,23 @@
 {
-  "updatedAt": "2026-10-29",
-  "totalFamilies": 123,
-  "totalModels": 332,
+  "updatedAt": "2026-10-30",
+  "totalFamilies": 124,
+  "totalModels": 333,
   "profileCoverage": {
-    "full": 286,
-    "partial": 42,
-    "structured-only": 4,
+    "full": 289,
+    "partial": 37,
+    "structured-only": 7,
     "none": 0
   },
   "capabilityDistribution": {
-    "TG": 29,
+    "TG": 30,
     "VG": 17,
     "IG": 17,
-    "ASR": 11,
     "Reasoning": 10,
+    "ASR": 10,
     "TTS": 9,
     "Realtime-ASR": 6,
     "VU": 5,
-    "Multimodal-Omni": 4,
+    "Multimodal-Omni": 5,
     "Realtime-Omni": 4,
     "ME": 2,
     "Realtime-Chatting": 2,
@@ -28,7 +28,7 @@
     "3D-generation": 1
   },
   "providerDistribution": {
-    "qwen": 61,
+    "qwen": 62,
     "qwen-domain-model": 26,
     "wan": 13,
     "mini-max": 4,
@@ -437,21 +437,6 @@
         "MiniMax/MiniMax-M3.1-Flash"
       ],
       "maxContextWindow": 1048576
-    },
-    {
-      "slug": "paraformer-8k-v2",
-      "name": "Paraformer语音识别-8k-v2",
-      "primaryCapability": "ASR",
-      "capabilities": [
-        "ASR"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "paraformer-8k-v2"
-      ]
     },
     {
       "slug": "paraformer-realtime-8k-v2",
@@ -1174,6 +1159,22 @@
       "maxContextWindow": 65536
     },
     {
+      "slug": "qwen3-omni-flash",
+      "name": "Qwen3-Omni-Flash",
+      "primaryCapability": "Multimodal-Omni",
+      "capabilities": [
+        "Multimodal-Omni"
+      ],
+      "providers": [
+        "qwen"
+      ],
+      "itemCount": 1,
+      "items": [
+        "qwen3-omni-flash"
+      ],
+      "maxContextWindow": 65536
+    },
+    {
       "slug": "qwen3-tts-flash-realtime",
       "name": "Qwen3-TTS-Flash-Realtime",
       "primaryCapability": "TTS",
@@ -1333,6 +1334,24 @@
         "qwen3.5-omni-plus"
       ],
       "maxContextWindow": 262144
+    },
+    {
+      "slug": "qwen3.5-plus",
+      "name": "Qwen3.5-Plus",
+      "primaryCapability": "TG",
+      "capabilities": [
+        "TG",
+        "Reasoning",
+        "VU"
+      ],
+      "providers": [
+        "qwen"
+      ],
+      "itemCount": 1,
+      "items": [
+        "qwen3.5-plus"
+      ],
+      "maxContextWindow": 1000000
     },
     {
       "slug": "qwen3.5",

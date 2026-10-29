@@ -12,11 +12,11 @@ API 接口
 
 总计不超过 3000 QPM
 
-事实记忆 add 接口
+add 接口
 
 120 QPM
 
-事实记忆 search 接口
+search 接口
 
 300 QPM
 

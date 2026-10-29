@@ -1,6 +1,6 @@
 # xiaomi/mimo-v2.5-pro
 
-MiMo-V2.5-Pro 是小米发布的最新旗舰模型。与前代模型相比，它在通用智能体能力、复杂软件工程以及长程任务等方面都有显著提升，在 ClawEval、GDPVal 和 SWE-bench Pro 等基准测试中均位列前茅。它能够独立且完全自主地完成需要人类专家耗时数天甚至数周的专业任务，涉及上千次工具调用。其高达 100 万 token 的上下文长度，非常适合集成到各种智能体框架中使用。
+MiMo-V2.5-Pro 是小米发布的旗舰模型。与前代模型相比，它在通用智能体能力、复杂软件工程以及长程任务等方面都有显著提升，在 ClawEval、GDPVal 和 SWE-bench Pro 等基准测试中均位列前茅。它能够独立且完全自主地完成需要人类专家耗时数天甚至数周的专业任务，涉及上千次工具调用。其高达 100 万 token 的上下文长度，非常适合集成到各种智能体框架中使用。
 
 **重要**xiaomi/mimo-v2.5-pro 将于2026年10月21日下线，推荐使用 [xiaomi/mimo-v2.6-pro-ultraspeed](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/mimo-v2-6-pro-ultraspeed.md) 替代。
 

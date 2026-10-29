@@ -1,6 +1,6 @@
 # 添加记忆
 
-将对话存储为事实记忆，自动提取关键信息
+将对话或自定义内容同步写入记忆，自动提取关键信息
 
 将对话记录或自定义内容同步保存为记忆，并在响应中直接返回提取结果。当前主推[异步添加记忆](raw/application-api-reference/long-term-memory-new/fragments-overview/add-memory-async.md)；同步接口适合在 `efficient` 模式下对实时性要求较高的场景，在 `intelligent` 模式下可能超时。
 

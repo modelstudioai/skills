@@ -1077,40 +1077,46 @@ dashscope generation create -m qwen-plus -p "你好"
 
 完整地域表见 [Base URL 总览](raw/model-user-guide/get-started-with-models/base-url.md)。
 
-## 图像、视频数据处理
-
-多模态模型支持处理图像、视频等非文本数据，可用于视觉问答、事件检测等任务。其调用方式与纯文本模型主要有以下不同：
-
--   **用户消息（user message）的构造方式**：多模态模型的用户消息不仅包含文本，还包含图片、音频等多模态信息。
--   **DashScope SDK接口：**使用 DashScope Python SDK 2.0 时，需调用 `client.multimodal.chat.create` 接口；使用DashScope Java SDK时，需调用 `MultiModalConversation` 类。
-
-> 图片、视频文件限制请参见 [图像与视频理解](raw/model-user-guide/model-experience/vision-model/vision.md) 。
-
-#### OpenAI兼容-Chat Completions API
+#### 多模态接口
 
 #### Python
 
 ```
 import os
 import dashscope
+from dashscope.v2 import DashScopeError
 
 # 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
 client = dashscope.Client(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
     # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
     workspace="{WorkspaceId}",
     region="cn-beijing",
 )
-
 messages = [
     {"role": "system", "content": [{"text": "You are a helpful assistant."}]},
     {"role": "user", "content": [{"text": "你是谁？"}]},
 ]
-response = client.multimodal.chat.create(
-    model='qwen3.6-plus',   # 可按需更换为其它多模态模型，并修改相应的 messages
-    messages=messages)
-print(response.output_text)
+try:
+    response = client.multimodal.chat.create(
+        model="qwen3.8-max",  # 可按需更换为其他多模态模型
+        messages=messages,
+    )
+    print(response.output_text)
+    # 如需查看完整响应，请取消下列注释
+    # print(response.model_dump_json(indent=2))
+except DashScopeError as e:
+    print(f"HTTP返回码：{e.status_code}")
+    print(f"错误码：{e.code}")
+    print(f"错误信息：{e.message}")
+    print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
+```
+
+#### 返回结果
+
+```
+我是千问，阿里巴巴集团旗下的通义实验室自主研发的超大规模语言模型。我可以帮助你回答问题、创作文字，比如写故事、写公文、写邮件、写剧本、逻辑推理、编程等等，还能表达观点，玩游戏等。如果你有任何问题或需要帮助，欢迎随时告诉我！
 ```
 
 #### Java

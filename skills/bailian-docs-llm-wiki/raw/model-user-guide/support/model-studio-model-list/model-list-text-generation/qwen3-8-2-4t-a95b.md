@@ -1,6 +1,6 @@
 # qwen3.8-2.4t-a95b
 
-Qwen3.8-2.4T-A95B 是通义千问最新旗舰系列的开源版本，2026 年 8 月发布。采用稀疏 MoE 架构，总参数 2.4 万亿，每步激活约 950 亿，配合混合注意力机制，支持 100 万 Token 上下文。核心基准：GPQA Diamond 92.6、PaperBench 93.0、OSWorld 86.1、BabyVision 82.0，CodeArena 全球第 4。
+Qwen3.8-2.4T-A95B 是通义千问旗舰系列的开源版本，2026 年 8 月发布。采用稀疏 MoE 架构，总参数 2.4 万亿，每步激活约 950 亿，配合混合注意力机制，支持 100 万 Token 上下文。核心基准：GPQA Diamond 92.6、PaperBench 93.0、OSWorld 86.1、BabyVision 82.0，CodeArena 全球第 4。
 
 ## 推理服务供应商
 

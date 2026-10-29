@@ -6,7 +6,9 @@
 
 ## 适用范围
 
--   **支持的模型**：模型列表中的所有模型均支持查看用量，包括基于它们[调优后的模型](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)。
+-   **地域**：支持查看各地域的模型调用用量。美国（弗吉尼亚）地域暂不展示调用次数。
+-   **模型**：模型列表中的全部模型均支持查看用量，包括基于它们[调优后的模型](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)。
+-   **统计范围**：Token 等用量用于核对费用，仅统计按 Token 后付费的模型调用，不含模型训练、预置吞吐单元、独占吞吐单元等调用；调用次数包含预置吞吐单元、独占吞吐单元等调用。模型调用产生的工具调用用量单独统计。
 
 ## 查看免费额度使用情况
 
@@ -25,42 +27,29 @@
 
 ## 查看模型用量
 
-在[模型用量](https://bailian.console.aliyun.com/cn-beijing/costing-balance/usage-statistics)页面查看。数据按[业务空间](https://help.aliyun.com/zh/model-studio/use-workspace)维度统计，不支持按阿里云账号维度统计（[如何解决](raw/model-user-guide/model-monitoring/model-usage-statistics.md)）。数据延迟**约为 1 小时**。
+在[模型用量](https://bailian.console.aliyun.com/cn-beijing/costing-balance/usage-statistics)页面查看。数据按[业务空间](https://help.aliyun.com/zh/model-studio/use-workspace)维度统计，不支持按阿里云账号维度统计（[如何解决](#common-questions)）。调用次数统计延迟通常低于其他用量指标：调用后约 1 分钟可看到调用次数，Token 用量和费用可能延迟约 10 分钟。批量离线推理和批量在线推理不展示调用次数。
 
-1.  进入页面后，选择对应的模型类型页签（**概览**、**大语言模型**、**视觉模型**、**全模态模型**、**语音模型**、**向量模型**），再按需选择时间范围。页面将汇总展示所选时间段内，该推理类型下所有已调用过模型的用量。
-    
-    > **统计时间范围：**不支持查看**30**天以前的统计数据。如需查询更早的用量信息，请通过[费用与成本](https://billing-cost.console.aliyun.com/finance/expense-report/expense-detail-by-instance?month=2025-02&statisticItem=DEFAULT_CHARGE_ITEM&commodityCode%5BfilterMode%5D=IN&commodityCode%5Bvalues%5D=sfm_deployment_public_cn%26sfm_inference_public_cn%26sfm_training_public_cn&statisticCycle=MONTHLY_SUMMARY)页面查询。
-    
-    > **按推理类型筛选：**仅「大语言模型」页签支持按推理类型（[实时推理](https://help.aliyun.com/zh/model-studio/model-usage-statistics#fbcfa652edg9s) 或 [批量推理](https://help.aliyun.com/zh/model-studio/model-usage-statistics#fbcfa652edg9s)）筛选；若该空间下从未产生过「批量推理」用量数据，推理类型下拉框只会显示「实时推理」。
-    
-    > **时间精度：**支持按**分钟**、**小时**、**天**三种精度查看。时间跨度超过 1 天时分钟精度不可选，超过 7 天时仅支持按天查看。
-    
-    > **按 API-KEY 筛选：**可通过 API-KEY 下拉框筛选指定 API Key 调用产生的用量。
-    
-2.  如需查询某个具体模型的用量，可在页面右侧搜索框输入模型名称（如`qwen-plus`）筛选对应数据。
-    
-    > 可前往模型列表查询模型名称。
-    
-3.  页面底部「总调用成功次数 Top 10 模型」区域汇总展示调用次数最多的 10 个模型，支持全屏查看和下载数据。
-    
+1.  选择统计周期和起止时间。支持按分钟、按小时、按天、按月查看：按分钟最多查询 1 天，按小时最多查询 7 天，按天最多查询 31 天，按月最多查询 12 个月。按分钟或按小时查看时，趋势图不支持分组。
+2.  选择分组维度：按模型、API Key、业务空间、地域、服务区域或规格分组。规格包括输入/输出/缓存命中、上下文长度、是否开启思考模式、视频生成分辨率等影响单价的因素。
+3.  按需筛选模型、API Key、业务空间、地域、服务区域、调用来源和推理类型。推理类型包括在线推理、批量离线推理（Batch File）和批量在线推理（Batch Chat）；当前业务空间没有批量调用数据时，仅显示在线推理。
+4.  查看指标卡片：调用次数、Tokens 用量、图片数量、视频/语音时长、语音合成字数、工具调用次数等。卡片按收费量纲汇聚，例如文本模型和全模态模型都按 Token 计费，均计入 Tokens 用量。可在「总量」和「平均单次用量」之间切换；平均单次用量为用量除以成功调用次数。
+5.  在「模型用量明细」表格中查看各模型的模型类型、调用次数、模型用量和工具用量。点击「详情」查看该模型不同类型用量的汇总、趋势和工具用量；点击「查看费用」查看这些用量对应的应付金额。
+6.  页面底部「总调用成功次数」区域按调用次数从多到少展示全部模型，支持全屏查看和下载。
 
-「调用模型」表格按模型 Code 列出各模型的调用量、Token 用量等用量指标（指标列随所选模型类型不同而不同）。表格与图表区域的常用操作：
+**说明**
 
--   点击单行**查看详情**，进入模型用量详情页查看该模型更细粒度的调用趋势。
--   筛选条件较多时可用**重置**清空，并按需**收起/展开**筛选区域。
--   「概览」页签以四张指标卡片汇总关键用量：**调用模型数**、**调用成功总次数**、**Token总量**、**平均单次请求Token量**，并支持**本周期**与**上周期**切换对比。
+-   失败次数、失败率、限流错误次数和内容安全拦截次数已移至[模型监控](raw/model-user-guide/model-monitoring/model-telemetry.md)页面，不再在模型用量详情中展示。
+-   旧版「批量推理」现拆分为批量离线推理（Batch File）和批量在线推理（Batch Chat）。
+
+**说明**页面仅支持查询 2026 年 9 月 1 日及之后的用量数据；更早的数据请通过[费用与成本](https://usercenter2.aliyun.com/finance/expense-report/expense-detail)查看。
 
 ## 查看费用概览
 
-在[费用概览](https://bailian.console.aliyun.com/cn-beijing/costing-balance/overview)页面，可查看百炼服务的费用汇总信息，包括：
-
--   **费用卡片**：展示当前账期的总消费金额、订阅购买费用和账单费用，并可跳转查看明细。
--   **账单趋势**：以图表或列表形式展示费用趋势，支持按月或按天统计，可按产品分类、API Key ID、模型筛选。
--   **费用告警**：可设置费用告警，在费用异常时及时收到通知。
+在[费用概览](https://bailian.console.aliyun.com/cn-beijing/costing-balance/overview)页面查看模型调用和模型训练产生的费用，包括总消费金额、订阅购买费用、账单费用和账单趋势。费用概览的详细说明请参见[账单查询与成本管理](https://help.aliyun.com/zh/model-studio/bill-query-and-cost-management#a309aa68b2rxe)。
 
 ## 模型用量统计单位说明
 
-在阿里云百炼，不同模型的用量统计口径如下：
+模型用量页面的指标卡片按收费量纲汇聚，不同模型的统计单位如下：
 
 **类型**
 
@@ -163,9 +152,9 @@ Token 是模型处理输入和输出的基本单位。一个 Token 可能是：
 
 每个模型都有最大输入和输出 Token 数（详见模型列表），超过限制会导致请求失败。
 
-**实时推理**
+**在线推理**
 
-指对模型的所有直接和间接调用，主要涵盖以下场景：
+指对模型的全部直接和间接调用，主要涵盖以下场景：
 
 -   API调用
     
@@ -182,9 +171,13 @@ Token 是模型处理输入和输出的基本单位。一个 Token 可能是：
 -   [模型评测](raw/model-user-guide/model-evaluation-introduction/model-evaluation-overview.md)
     
 
-**批量推理**
+**批量离线推理（Batch File）**
 
 对于无需实时响应的场景，通过[OpenAI兼容-Batch（文件输入）](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)接口以离线方式进行的大规模数据处理。
+
+**批量在线推理（Batch Chat）**
+
+通过 Batch Chat 接口发起的批量在线调用。
 
 ## 常见问题
 
@@ -201,3 +194,14 @@ A: 使用阿里云账号（主账号）访问[账单详情](https://usercenter2.
 **Q: 可以在阿里云 App 查看免费额度和模型用量吗？**
 
 A: 暂不支持。阿里云 App 目前不支持查看百炼的免费额度使用情况和模型用量数据。请登录 PC 端，进入百炼控制台的[免费额度](https://bailian.console.aliyun.com/cn-beijing/costing-balance/free-quota)或[模型用量](https://bailian.console.aliyun.com/cn-beijing/costing-balance/usage-statistics)页面查看。
+
+为什么图表或明细中会出现“-”或空值？
+
+按模型、API Key、业务空间等维度查看时，部分数据可能显示“-”或为空，常见原因如下：
+
+-   “-”可能表示模型不支持该计量方式。
+-   细分维度的数据有延迟，刚产生调用时可能显示“-”，几分钟或十几分钟后显示实际值。
+-   API Key 为空通常表示调用来自控制台页面。
+-   通过 Batch Chat 发起的调用，API Key ID 相关数据为空。
+-   部分模型的地域信息为空。
+-   语音模型的调用方式为空。

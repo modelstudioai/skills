@@ -1,42 +1,43 @@
 # realtime api user guide
 
-Realtime API 是百炼平台提供的低延迟、流式交互式模型调用接口，适用于语音转写、实时对话、音视频流处理等场景。它基于 WebSocket 协议实现双向通信，支持模型响应的逐 token 流式返回与客户端指令的实时注入。该接口不兼容传统 REST 同步调用模式，需按事件驱动方式设计客户端逻辑。
+Realtime API 是百炼平台提供的低延迟、流式语音交互接口，适用于实时语音识别（ASR）、语音合成（TTS）与多模态对话等场景。它基于 WebSocket 协议实现双向流式通信，支持端到端毫秒级响应。该接口不经过传统 REST 请求-响应周期，需按协议规范建立并维护长连接。
 
 ## 支持的模型与功能
 
-当前 Realtime API 支持以下模型（以 `qwen-audio-realtime` 和 `qwen-vl-realtime` 为主，后续将逐步扩展）：
-- 音频流实时 ASR + LLM 推理（如语音会议实时摘要）
-- 多模态流式理解（如摄像头视频帧+语音同步输入）
-- 客户端可动态插入 `input_audio`、`cancel`、`pause` 等控制事件  
-详细模型能力清单见 [Realtime API](../../raw/model-api-reference/realtime-api-user-guide.md) 的“接入模型与应用”章节。
+当前 Realtime API 支持以下核心能力：
+- 实时语音识别（ASR）：支持中文普通话、英文及部分方言，采样率 16kHz，PCM/WAV 格式输入；
+- 实时语音合成（TTS）：支持情感化、多音色合成，输出为 PCM 流；
+- 混合模式（ASR+TTS+LLM）：在单次会话中串联识别、大模型推理与合成，适用于智能座舱、客服机器人等闭环场景。
+
+所支持的具体模型列表详见 [Realtime API](../../raw/model-api-reference/realtime-api-user-guide.md) 的“接入模型与应用”章节，其中明确列出 `qwen-audio-realtime-v1` 和 `qwen-tts-realtime-v2` 为当前 GA 版本模型。
 
 ## 关键参数
 
-建立 WebSocket 连接时需在 URL 中携带以下必需查询参数：
-- `model`: 模型标识符（如 `qwen-audio-realtime-202408`），必须与 [AOQ客户端SDK](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-aoq-api.md) 兼容
-- `api_key`: 项目级 API Key（非用户 [Token](../concepts/token.md)）
-- `stream`: 固定为 `true`
-- `response_format`: 可选 `json` 或 `delta`（默认 `delta`，用于流式 token 解析）
+建立 WebSocket 连接时，必须携带以下查询参数（区分大小写）：
 
-> **注意**：文档中提及的 `temperature` 参数在 Realtime API 中**不生效**；温度控制由服务端预设策略统一管理，客户端不可覆盖 —— 此行为与 [快速开始](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide.md) 中旧版示例存在矛盾，以当前运行时行为为准。
+| 参数名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| `model` | string | 是 | 模型标识符，如 `qwen-audio-realtime-v1`；值必须与 [Realtime API](../../raw/model-api-reference/realtime-api-user-guide.md) 中“接入模型与应用”章节所列一致 |
+| `api_key` | string | 是 | 百炼平台颁发的短期有效凭证（JWT），有效期 5 分钟，需通过 `/v1/auth/token` 接口获取 |
+| `sample_rate` | integer | 否 | 输入音频采样率，默认 `16000`；若非标准值，必须显式声明，否则连接将被拒绝 |
+
+> **注意**：原始文档中 [快速开始](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide.md) 示例代码误将 `api_key` 写作 `access_token`，实际参数名应为 `api_key` —— 请以 [Realtime API](../../raw/model-api-reference/realtime-api-user-guide.md) 主文档为准。
 
 ## 使用方式
 
-1. 建立 WebSocket 连接：`wss://dashscope.aliyuncs.com/realtime/v1/chat?model=...&api_key=...`  
-2. 发送 `session.update` 事件配置会话上下文（如 system [prompt](../guides/prompt.md)、input format）  
-3. 通过 `input.audio` 事件持续推送音频 chunk（Base64 编码 PCM，16kHz 单声道）  
-4. 监听 `output.text.delta` 事件接收流式响应，聚合后渲染  
-完整事件协议与序列示例参见 [Realtime API](../../raw/model-api-reference/realtime-api-user-guide.md) 的“AOQ客户端SDK”子文档。
+1. **建立连接**：向 `wss://dashscope.aliyuncs.com/api/v1/realtime` 发起 WebSocket 连接，附带上述查询参数；
+2. **发送控制帧**：首次消息须为 `{"type": "session.update", ...}`，用于配置 `input_audio_format`、`output_audio_format` 等会话级参数；
+3. **流式收发**：后续按帧发送音频数据（Base64 编码的 PCM chunk）或接收结构化响应（含 `type: "response.audio.delta"` 或 `"response.text"`）；
+4. **结束会话**：发送 `{"type": "session.end"}` 或关闭连接，服务端将在 3 秒内释放资源。
+
+完整交互序列与事件类型定义参见 [Realtime API](../../raw/model-api-reference/realtime-api-user-guide.md) 的“AOQ客户端SDK”子文档，该文档同时提供 Python/JS SDK 的初始化与错误重连示例。
 
 ## 限制和注意事项
 
-- 单连接最大时长：300 秒（含握手与空闲），超时后需重连  
-- 音频输入采样率严格限定为 16kHz，其他采样率将被静音或截断  
-- 不支持 `function calling` 和 `tool use`，所有交互必须通过 `input.text` / `input.audio` 显式触发  
-- 错误码 `4290` 表示流控拒绝，此时应退避重试（指数退避，初始间隔 ≥ 1s）  
-- 客户端必须实现 `ping/pong` 心跳（建议 20s 间隔），否则服务端可能主动断连  
-
-请务必参考 [概述](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-overview.md) 中的生命周期图谱，避免在 `session.ended` 后继续发送事件。
+- 单连接最大持续时长：15 分钟（超时后需重连）；
+- 音频输入帧大小建议 ≤ 20ms（即 320 字节 @16kHz/16bit），过大帧将导致 ASR 延迟上升；
+- 不支持跨区域 token 复用：华东1（`cn-shanghai`）签发的 `api_key` 无法用于华北2（`cn-beijing`）节点；
+- 所有音频数据在传输中默认加密（TLS 1.3），但服务端**不持久化存储**原始音频流 —— 此行为与 [概述](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-overview.md) 中“数据合规性”条款一致。
 
 ## 来源文档
 

@@ -1,60 +1,67 @@
 # flow agent api
 
-Flow Agent API 是百炼平台提供的面向智能体（Agent）开发的接口集合，分为应用调用类与组件管理类两大类别。前者用于运行已发布的 Flow Agent 应用，后者用于管理 Prompt 模板、[长期记忆](../concepts/long-term-memory.md)等底层组件。两类接口在鉴权方式、Endpoint 和响应结构上存在显著差异，开发者需严格区分使用场景。
+Flow Agent API 是百炼平台面向智能体（Agent）应用开发提供的核心接口集合，分为两类：一类是通过 DashScope 应用网关调用已发布的智能体/工作流应用的**应用调用接口**；另一类是管理 Prompt 模板、[长期记忆](../concepts/long-term-memory.md)等组件的**OpenAPI 组件类接口**。两类接口在鉴权方式、Base URL、错误响应格式上均不同，开发者需严格区分使用场景。
 
 ## 支持的模型/功能
 
-- **应用调用功能**：支持通过 DashScope 应用网关调用已发布的智能体应用与工作流应用，适用于对话推理、任务编排等运行时场景。
-- **组件管理功能**：提供完整的[长期记忆](../concepts/long-term-memory.md)（Long-term Memory）生命周期管理能力，包括创建、查询、更新、删除[长期记忆](../concepts/long-term-memory.md)体（`Memory`）及其下属的记忆片段（`MemoryNode`）。该能力当前以 [长期记忆（旧）](../../raw/application-api-reference/flow-agent-api/api-bailian-2023-12-29-dir-long-term-memory.md) 文档体系为主，覆盖 `CreateMemory`、`ListMemories`、`GetMemoryNode` 等共 10 个核心接口。
-- > **注意**：文档中多次提及“长期记忆体尚不支持存储与管理用户画像”，且明确要求“通过控制台进行相关操作”[CreateMemory - 创建长期记忆体](../../raw/_short/api-bailian-2023-12-29-creatememory-71d9eb60188e5ed4.md)，表明该 API 不具备用户画像建模能力，不可用于替代用户中心服务。
+- **应用调用能力**：支持调用已发布的智能体应用（Agent App）与工作流应用（Workflow App），底层可对接百炼托管的多种大模型（如 Qwen 系列），具体模型能力由应用配置决定，不直接暴露模型选择参数。
+- **[长期记忆](../concepts/long-term-memory.md)（Long-term Memory）管理**：提供完整的 CRUD 接口，包括 `CreateMemory`、`GetMemory`、`UpdateMemory`、`DeleteMemory` 和 `ListMemories`，以及记忆片段（MemoryNode）的 `CreateMemoryNode` 等 10 个操作 [长期记忆（旧）](../../raw/application-api-reference/flow-agent-api/api-bailian-2023-12-29-dir-long-term-memory.md)。> **注意**：文档 1 明确指出“[长期记忆](../concepts/long-term-memory.md)（旧）”为历史命名，当前功能已稳定，但控制台侧用户画像类记忆仍需人工配置，API 不支持 [概览](../../raw/application-api-reference/flow-agent-api/flow-agent-api-overview.md)。
+- **其他组件**：Prompt 模板等能力通过百炼 OpenAPI 提供，但本文档聚焦 Flow Agent 相关接口，模板类接口不在本范围。
 
 ## 关键参数
 
-- `workspaceId`：所有组件类接口（如长期记忆）的必填路径参数，标识业务空间，获取方式见[如何使用业务空间](https://help.aliyun.com/zh/model-studio/use-workspace)。
-- `memoryId`：长期记忆体唯一标识，由 `CreateMemory` 接口返回，后续所有 `Memory` 及 `MemoryNode` 操作均需传入。
-- `memoryNodeId`：记忆片段唯一标识，由 `CreateMemoryNode` 返回，用于精确操作单个片段。
-- `maxResults` / `nextToken`：分页参数，适用于 `ListMemories` 和 `ListMemoryNodes`，`maxResults` 取值范围为 `[1, 50]`，默认 `10`；`nextToken` 为空时表示结果已全部返回。
-- `content`：`MemoryNode` 的核心字段，长度限制为 `1–200` 字符，仅支持中文、英文、数字及 `_`, `-`, `.`, `:` 等有限符号。
+- **通用路径参数**：
+  - `workspaceId`：业务空间 ID，所有组件类接口（长期记忆等）必需，获取方式见[如何使用业务空间](https://help.aliyun.com/zh/model-studio/use-workspace)。
+- **长期记忆相关参数**：
+  - `memoryId`：由 `CreateMemory` 返回，用于所有后续 Memory 操作（如 `GetMemory`、`CreateMemoryNode`），必须妥善持久化。
+  - `memoryNodeId`：由 `CreateMemoryNode` 返回，用于 MemoryNode 的读写删操作。
+  - `description`（Memory 级）：长度 1–50 字符，支持中英文、数字及 `:`, `_`, `.`, `-`。
+  - `content`（MemoryNode 级）：长度 1–200 字符，同上字符集限制。
+- **分页参数（List 接口）**：
+  - `maxResults`：每页最大条数，取值范围 `[1, 50]`，默认 `10`。
+  - `nextToken`：分页凭证，首次请求不传；后续请求需传入上一次响应中的 `nextToken` 值。
 
 ## 使用方式
 
-- **认证方式分离**：
-  - 应用调用接口（如运行智能体）使用 **DashScope API Key**，Header 为 `Authorization: Bearer <your-api-key>`；
-  - 组件类接口（含全部长期记忆接口）属于阿里云 OpenAPI，**必须使用 AccessKey 签名（ACS3-HMAC-SHA256）**，不支持 `Bearer` 方式。推荐使用阿里云 SDK 或 [OpenAPI Explorer](https://api.aliyun.com/) 调用，避免手动签名错误 [认证](../../raw/application-api-reference/flow-agent-api/flow-agent-api-authentication.md)。
-- **Endpoint 区分**：
-  - 应用调用：`https://{workspaceId}.cn-beijing.maas.aliyuncs.com`
-  - 组件类（长期记忆等）：`https://bailian.{regionId}.aliyuncs.com`（如 `bailian.cn-beijing.aliyuncs.com`），路径前缀含 `{workspaceId}`，例如 `PUT /{workspaceId}/memories/{memoryId}`。
+- **应用调用接口**：
+  - Base URL：`https://{workspaceId}.cn-beijing.maas.aliyuncs.com`
+  - 鉴权：使用百炼 API Key，Header 中携带 `Authorization: Bearer <your-api-key>` [认证](../../raw/application-api-reference/flow-agent-api/flow-agent-api-authentication.md)。
+- **组件类接口（长期记忆等）**：
+  - Base URL：`https://bailian.{regionId}.aliyuncs.com`（如 `bailian.cn-beijing.aliyuncs.com`）
+  - 鉴权：**必须**使用阿里云 AccessKey 签名（ACS3-HMAC-SHA256），不支持 `Bearer` [Token](../concepts/token.md)；强烈推荐使用阿里云官方 SDK 或 [OpenAPI Explorer](https://api.aliyun.com/) 自动生成签名与代码 [认证](../../raw/application-api-reference/flow-agent-api/flow-agent-api-authentication.md)。
 - **典型流程**：
-  1. 调用 `CreateMemory` 获取 `memoryId`；
-  2. （可选）调用 `CreateMemoryNode` 向该 `memoryId` 下写入初始记忆；
-  3. 在调用智能体应用时，将 `memoryId` 作为参数传入，使 Agent 在推理中引用该长期记忆；
-  4. 日常维护使用 `GetMemory`/`ListMemoryNodes` 查询，`UpdateMemoryNode` 修改内容，`DeleteMemory` 彻底清理。
+  1. 调用 `CreateMemory` 创建长期记忆体，获取 `memoryId`；
+  2. （可选）调用 `CreateMemoryNode` 向该记忆体注入初始知识；
+  3. 调用智能体应用时，在请求 payload 中传入 `memoryId`，使 Agent 在对话中引用该记忆；
+  4. 按需调用 `ListMemoryNodes`、`UpdateMemoryNode` 等维护记忆内容。
 
 ## 限制和注意事项
 
-- **限流策略**：所有长期记忆组件接口（`CreateMemory`、`GetMemory`、`ListMemories` 等）均要求两次请求间隔 **≥ 1 秒**，否则可能触发限流并返回 `429 Too Many Requests` [错误码](../../raw/application-api-reference/flow-agent-api/flow-agent-api-errors.md)。
-- **幂等性**：`GetMemory`、`UpdateMemory`、`DeleteMemory`、`ListMemories` 等读写操作均为幂等；但 `CreateMemory` **不具备幂等性**，重复调用将创建多个独立记忆体。
+- **限流策略**：所有长期记忆类接口（`CreateMemory`、`ListMemories` 等）均要求两次请求间隔 ≥ 1 秒，否则可能触发限流并返回 `429` 错误 [CreateMemory - 创建长期记忆体](../../raw/_short/api-bailian-2023-12-29-creatememory-71d9eb60188e5ed4.md)。
+- **幂等性**：`CreateMemory` **不具备幂等性**；而 `UpdateMemory`、`GetMemory`、`DeleteMemory`、`ListMemories` 及所有 MemoryNode 接口均具备幂等性 [UpdateMemory - 更新长期记忆体](../../raw/_short/api-bailian-2023-12-29-updatememory-b92bc2a2bf604c38.md)。
 - **错误处理**：
-  - 应用调用接口返回标准 `request_id` + 自定义错误码/信息；
-  - 组件类接口遵循阿里云 OpenAPI 规范，错误时返回 `Code` 与 `Message` 字段；
-  - 常见 HTTP 状态码含义统一：`400`（参数错误）、`401`（凭证无效）、`403`（权限不足）、`404`（资源不存在）、`429`（限流）、`500`（服务异常）。
-- > **注意**：文档 2（[长期记忆（旧）](../../raw/application-api-reference/flow-agent-api/api-bailian-2023-12-29-dir-long-term-memory.md)）标题含“（旧）”，而其余 10 篇子文档（如 `CreateMemory`）发布日期均为 `2023-12-29`，未见更新标记；结合文档 14 中“长期记忆（旧）”的显式命名，应视为当前稳定但非最新演进版本，新项目需关注平台是否已发布替代方案。
+  - 应用调用接口错误响应含 `request_id`，便于排查；
+  - 组件类接口遵循阿里云 OpenAPI 标准，错误时返回 `Code` 和 `Message` 字段 [错误码](../../raw/application-api-reference/flow-agent-api/flow-agent-api-errors.md)。
+- **关键约束**：
+  - `DeleteMemory` 为**永久删除**，不可恢复，且会级联删除其下所有 `MemoryNode`；
+  - `description` 和 `content` 参数对 Unicode 字符有明确限制，超长或含非法字符将返回 `400 Memory.DescriptionInvalid` 或 `400 Memory.MemoryNodeContentInvalid`；
+  - 所有 `memoryId` / `memoryNodeId` 必须真实存在且授权，否则返回 `404 Memory.MemoryIdNotFound`。
 
 ## 来源文档
 
-- [错误码](../../raw/application-api-reference/flow-agent-api/flow-agent-api-errors.md)
-- [长期记忆（旧）](../../raw/application-api-reference/flow-agent-api/api-bailian-2023-12-29-dir-long-term-memory.md)
-- [CreateMemory - 创建长期记忆体](../../raw/_short/api-bailian-2023-12-29-creatememory-71d9eb60188e5ed4.md)
-- [GetMemory - 获取长期记忆体](../../raw/_short/api-bailian-2023-12-29-getmemory-93a2074c0e9ce4e8.md)
-- [UpdateMemory - 更新长期记忆体](../../raw/_short/api-bailian-2023-12-29-updatememory-b92bc2a2bf604c38.md)
-- [DeleteMemory - 删除长期记忆体](../../raw/_short/api-bailian-2023-12-29-deletememory-2e39ced8c987fad3.md)
+- [概览](../../raw/application-api-reference/flow-agent-api/flow-agent-api-overview.md)
 - [认证](../../raw/application-api-reference/flow-agent-api/flow-agent-api-authentication.md)
+- [错误码](../../raw/application-api-reference/flow-agent-api/flow-agent-api-errors.md)
+- [CreateMemory - 创建长期记忆体](../../raw/_short/api-bailian-2023-12-29-creatememory-71d9eb60188e5ed4.md)
+- [UpdateMemory - 更新长期记忆体](../../raw/_short/api-bailian-2023-12-29-updatememory-b92bc2a2bf604c38.md)
+- [GetMemory - 获取长期记忆体](../../raw/_short/api-bailian-2023-12-29-getmemory-93a2074c0e9ce4e8.md)
+- [DeleteMemory - 删除长期记忆体](../../raw/_short/api-bailian-2023-12-29-deletememory-2e39ced8c987fad3.md)
 - [ListMemories - 获取长期记忆体列表](../../raw/_short/api-bailian-2023-12-29-listmemories-ca86cf5601eec468.md)
 - [CreateMemoryNode - 创建记忆片段](../../raw/_short/api-bailian-2023-12-29-creatememorynode-7e5dec47c8bf17cc.md)
 - [GetMemoryNode - 获取记忆片段](../../raw/_short/api-bailian-2023-12-29-getmemorynode-c43110862c1879b6.md)
-- [DeleteMemoryNode - 删除记忆片段](../../raw/_short/api-bailian-2023-12-29-deletememorynode-21f72ddcbaecd822.md)
 - [UpdateMemoryNode - 更新记忆片段](../../raw/_short/api-bailian-2023-12-29-updatememorynode-c71c6bef92b1ecc3.md)
+- [DeleteMemoryNode - 删除记忆片段](../../raw/_short/api-bailian-2023-12-29-deletememorynode-21f72ddcbaecd822.md)
 - [ListMemoryNodes - 获取记忆片段列表](../../raw/_short/api-bailian-2023-12-29-listmemorynodes-ec6bee0a62fb4cb8.md)
-- [概览](../../raw/application-api-reference/flow-agent-api/flow-agent-api-overview.md)
+- [长期记忆（旧）](../../raw/application-api-reference/flow-agent-api/api-bailian-2023-12-29-dir-long-term-memory.md)
 
 

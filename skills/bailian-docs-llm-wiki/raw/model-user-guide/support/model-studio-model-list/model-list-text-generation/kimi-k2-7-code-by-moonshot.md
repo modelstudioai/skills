@@ -1,6 +1,6 @@
 # kimi/kimi-k2.7-code
 
-Kimi K2.7 Code 是月之暗面 Kimi发布并开源的新一代编程专用模型，定位为 Kimi 迄今最智能的 Coding 模型。Kimi K2.7 Code 是一个以编码为中心的智能体模型（coding-focused agentic model），专为长程软件工程任务优化。它擅长跨多文件重构、功能实现、长会话调试等需要可靠指令遵循和端到端完成率的复杂工作流。
+Kimi K2.7 Code 是月之暗面 Kimi发布并开源的新一代编程专用模型，定位为 Kimi Coding 模型。Kimi K2.7 Code 是一个以编码为中心的智能体模型（coding-focused agentic model），专为长程软件工程任务优化。它擅长跨多文件重构、功能实现、长会话调试等需要可靠指令遵循和端到端完成率的复杂工作流。
 
 ## 推理服务供应商
 

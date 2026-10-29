@@ -222,7 +222,7 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 
 ### 指令控制
 
-在请求的 `input` 中增加 `instruction`，用自然语言描述语速、情感或说话方式，控制合成语音的表现。
+在请求的 `input` 中增加 `instruction`，用自然语言说明要合成的语种，描述语速、情感或说话方式，控制合成语音的表现。
 
 **说明**如需创建具有特定性别、年龄或音色特质的新音色，或参考声音描述的编写建议与示例，请参见[声音设计](raw/model-user-guide/model-experience/speech-synthesis/voice-design-user-guide.md)。
 
@@ -230,10 +230,10 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 
 `qwen-audio-3.1-tts-plus`、`qwen-audio-3.1-tts-flash`、`qwen-audio-3.0-tts-plus`、`qwen-audio-3.0-tts-flash` 的系统音色、复刻音色和设计音色均支持在合成请求中通过 `instruction` 设置自然语言指令。
 
-在 Qwen-Audio-TTS 的开始使用示例中，为 `input` 增加以下字段，可放慢语速：
+建议在 `instruction` 中说明合成语种和所需效果，以提升合成质量。指令中指定的语种须与待合成文本的语种一致。例如，合成荷兰语文本时，可设置：
 
 ```
-{"instruction": "请用非常缓慢的语速说话，每个字都慢慢说。"}
+{"instruction": "请用荷兰话说，每个字都慢慢说"}
 ```
 
 #### CosyVoice

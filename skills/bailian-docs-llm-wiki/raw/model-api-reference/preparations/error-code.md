@@ -197,7 +197,7 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **原因：** 使用[结构化输出](raw/model-user-guide/model-experience/text-generation-model/qwen-structured-output.md)时开启了模型的思考模式。
 
-**解决方案：** 请在使用结构化输出时，将`enable_thinking`设为`false`关闭思考模式。也可参见常见问题[思考模式模型如何结构化输出？](https://help.aliyun.com/zh/model-studio/qwen-structured-output#2f7ba877d3hle)
+**解决方案：** 请在使用结构化输出时，将`enable_thinking`设为`false`关闭思考模式。也可参见常见问题[思考模式模型如何结构化输出？](raw/model-user-guide/model-experience/text-generation-model/qwen-structured-output.md)
 
 ### Tool names are not allowed to be \[search\]
 

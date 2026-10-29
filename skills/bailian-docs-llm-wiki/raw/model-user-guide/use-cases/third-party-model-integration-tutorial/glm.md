@@ -170,7 +170,7 @@ client = dashscope.Client(workspace="{WorkspaceId}", region="cn-hongkong")
 
 ## 快速开始
 
-glm-5.3、glm-5.2 和 glm-5.2-fast-preview 是 GLM 系列最新模型，上下文长度 1M。glm-5.2 与 glm-5.2-fast-preview 支持通过`enable_thinking`参数设置思考与非思考模式；glm-5.3 仅支持思考模式，不支持关闭思考。运行以下代码快速调用思考模式的 glm-5.2 模型。
+glm-5.3、glm-5.2 和 glm-5.2-fast-preview 是 GLM 系列模型，上下文长度 1M。glm-5.2 与 glm-5.2-fast-preview 支持通过`enable_thinking`参数设置思考与非思考模式；glm-5.3 仅支持思考模式，不支持关闭思考。运行以下代码快速调用思考模式的 glm-5.2 模型。
 
 需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，需要[安装 OpenAI 或 DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
@@ -1347,7 +1347,7 @@ true
 
 GLM 系列模型是智谱AI专为智能体设计的混合推理模型，提供思考与非思考两种模式。
 
--   glm-5.3：GLM 系列最新模型，上下文长度 1M，支持 Function Calling、结构化输出及隐式缓存。支持 OpenAI 兼容、DashScope 及 Anthropic 兼容接口调用。
+-   glm-5.3：GLM 系列模型，上下文长度 1M，支持 Function Calling、结构化输出及隐式缓存。支持 OpenAI 兼容、DashScope 及 Anthropic 兼容接口调用。
 -   glm-5.2：上下文长度 1M，支持 Function Calling、结构化输出及隐式缓存。支持 OpenAI 兼容、DashScope 及 Anthropic 兼容接口调用。
 -   glm-5.2-fast-preview：glm-5.2模型的快速模式，详情请参考[优速模式（Prime）](raw/model-user-guide/model-high-speed-inference/prime-mode.md)。
 

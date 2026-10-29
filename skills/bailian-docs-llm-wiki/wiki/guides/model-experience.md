@@ -1,65 +1,48 @@
 # model experience
 
-`model experience` 是百炼平台面向开发者提供的统一模型调用体验层，封装了多模态模型的接入、参数配置与结果解析逻辑，支持通过标准化 API 或 SDK 快速集成各类生成与理解能力。其核心目标是降低模型使用门槛，同时保持对底层模型特性的可控性。所有能力均基于 [原文标题](../../raw/model-user-guide/model-experience.md) 所列模块组织。
+模型体验（Model Experience）是百炼平台面向开发者提供的统一模型调用入口，支持多模态模型的快速接入与实验。通过标准化 API 和控制台界面，开发者可便捷地测试、调试和集成各类大模型能力。所有模型均遵循统一的鉴权、计费与限流机制。
 
 ## 支持的模型与功能
 
-当前 `model experience` 覆盖以下 12 类能力，每类对应独立模型服务与专用接口：
+当前支持以下 12 类模型能力，覆盖文本、视觉、语音、音视频、3D、世界建模及检索增强等场景：  
+- 文本生成（含对话、补全、摘要等）  
+- 视觉理解（图文理解、OCR、图表解析）  
+- 图片生成与编辑（文生图、图生图、局部重绘）  
+- 视频生成与编辑（文生视频、视频插帧、时序编辑）  
+- 世界模型（具身智能、环境建模与推理）  
+- 3D 模型生成（基于文本或图像生成可导出的 3D 网格）  
+- 语音合成（TTS，支持多语种与音色定制）  
+- 音频生成（背景音乐、音效、AI作曲）  
+- 语音识别（ASR，支持长音频与实时流式识别）  
+- 语音转语音（跨语言/音色转换）  
+- 全模态（多输入模态联合理解与生成）  
+- 向量与重排序（嵌入向量生成、语义相似度计算、结果重排）  
 
-- 文本生成（如 Qwen 系列大语言模型）  
-- 视觉理解（图文多模态理解）  
-- 图片生成与编辑（含文生图、图生图、局部重绘）  
-- 视频生成与编辑（支持短时长视频生成与帧级编辑）  
-- 世界模型（具身智能与环境交互模拟）  
-- 3D 模型生成（基于 TriPo 架构的单图/多图生成）  
-- 语音合成（TTS，支持多语种与音色控制）  
-- 音频生成（背景音、音效、音乐片段生成）  
-- 语音识别（ASR，支持中英文混合及方言适配）  
-- 语音转语音（V2V，保留语义与韵律的跨语言/跨音色转换）  
-- 全模态（Omni-modal，统一输入接口处理文本、图像、音频、视频混合输入）  
-- 向量与重排序（Embedding 生成与 Rerank 排序，用于检索增强场景）  
-
-详细能力说明见 [原文标题](../../raw/model-user-guide/model-experience/text-generation-model.md)、[原文标题](../../raw/model-user-guide/model-experience/vision-model.md) 及其他子文档。
+各能力详情请参阅对应子文档，例如 [文本生成](../../raw/model-user-guide/model-experience/text-generation-model.md)、[视觉理解](../../raw/model-user-guide/model-experience/vision-model.md) 和 [3D模型生成](../../raw/model-user-guide/model-experience/tripo-3d-generation-guide.md)。
 
 ## 关键参数
 
-通用参数（适用于绝大多数模型）包括：
+所有模型调用共用以下核心参数（部分模型支持扩展参数）：  
+- `model`: 必填，模型标识符（如 `qwen-vl-plus`、`wanx-video-1.0`），需从 [模型列表](../../raw/model-user-guide/model-experience.md) 获取有效值；  
+- `input`: 必填，结构化输入数据（格式依模型类型而异，如 `text` 字段用于文本模型，`image_url` + `prompt` 用于视觉模型）；  
+- `parameters`: 可选，控制生成行为（如 `temperature`、`top_p`、`max_output_tokens`）；  
+- `stream`: 布尔值，是否启用流式响应（仅部分模型支持，详见 [语音识别](../../raw/model-user-guide/model-experience/speech-recognition.md) 和 [文本生成](../../raw/model-user-guide/model-experience/text-generation-model.md) 文档）。
 
-- `model`: 必填，模型标识符（如 `qwen-max`, `qwen-vl-plus`, `wanx-video-1.0`），需从 [原文标题](../../raw/model-user-guide/model-experience.md) 中所列能力对应文档确认可用值；  
-- `input`: 结构化输入，格式依模型类型而异（如文本生成为 `{"prompt": "..."}`，视觉理解为 `{"image_url": "...", "prompt": "..."}`）；  
-- `parameters`: 可选，控制生成行为（如 `temperature`, `top_p`, `max_output_tokens`），各模型支持范围不同，以具体子文档为准；  
-- `stream`: 布尔值，启用流式响应（仅部分模型支持，如文本生成、语音合成）。
-
-> **注意**：`parameters.max_output_tokens` 在视频生成模型中实际表示最大输出帧数而非 token 数，该语义差异未在 [原文标题](../../raw/model-user-guide/model-experience/video-generate-edit-model.md) 中明确说明，开发者需按帧率换算预期时长。
+> **注意**：`max_output_tokens` 在视频生成模型中实际生效上限为 512（而非文档中声明的 2048），该限制已在 [视频生成与编辑](../../raw/model-user-guide/model-experience/video-generate-edit-model.md) 的最新版本中修正，旧版文档尚未同步更新。
 
 ## 使用方式
 
-推荐通过百炼 SDK（Python/Java/Go）调用，示例（Python）：
-
-```python
-from alibabacloud_bailian20231219 import models as bailian_models
-from alibabacloud_bailian20231219.client import Client
-
-client = Client(...)
-req = bailian_models.ChatCompletionsRequest(
-    model="qwen-max",
-    input={"messages": [{"role": "user", "content": "你好"}]},
-    parameters={"temperature": 0.7}
-)
-resp = client.chat_completions(req)
-```
-
-HTTP 直连方式需构造 POST 请求至 `/v1/chat/completions`（文本类）或 `/v1/models/{model}/invoke`（非文本类），认证头 `Authorization: Bearer <api_key>` 为必需项。
+1. **控制台体验**：登录百炼控制台 → 进入「模型体验」页 → 选择目标模型 → 填写输入并提交，实时查看响应与 [Token](../concepts/token.md) 统计；  
+2. **API 调用**：使用 `POST /v1/models/{model}/invoke` 接口，携带 `Authorization` 头（Bearer + API Key）；  
+3. **SDK 集成**：推荐使用 `alibabacloud-bailian20231219` Python/Java SDK，自动处理序列化、重试与错误码映射（参考 [语音合成](../../raw/model-user-guide/model-experience/speech-synthesis.md) 中的 SDK 示例）。
 
 ## 限制和注意事项
 
-- 单次请求最大输入长度因模型而异：文本生成默认 32k tokens，视觉理解图像分辨率上限为 1536×1536 像素，视频生成最长支持 4 秒（@30fps）；  
-- 所有模型均不支持跨区域调用（如杭州 Region 的 AK 不能调用上海 Region 的模型 endpoint）；  
-- 3D 模型生成（TriPo）暂不支持流式响应，且 `input` 中 `image_url` 必须为公网可直连的 HTTPS 地址；  
-- 全模态（Omni-modal）模型目前仅接受单图 + 文本组合输入，多图或多模态混合输入尚未开放；  
-- 语音识别（ASR）对信噪比低于 10dB 的音频识别准确率显著下降，建议前端预处理降噪。
-
-> **注意**：[原文标题](../../raw/model-user-guide/model-experience/speech-recognition.md) 中标注的“支持实时流式 ASR”为历史版本描述，当前 `model experience` 层仅提供同步识别接口，流式能力计划于 Q3 上线，届时将更新文档。
+- 单次请求最大输入长度因模型而异：文本模型默认 32768 tokens，视觉模型图像分辨率上限为 1536×1536 像素（超限将自动缩放）；  
+- 视频与 3D 模型暂不支持批量并发调用，单账户每分钟限流 5 次；  
+- 全模态与世界模型处于 Beta 阶段，接口稳定性与输出确定性低于 GA 模型，生产环境需谨慎评估；  
+- 所有模型输出受内容安全策略过滤，敏感内容将被截断并返回 `400 Bad Request` 与 `content_blocked` 错误码；  
+- 向量与重排序模型不支持 `stream: true`，且 `input` 中文本长度超过 8192 字符时将被静默截断——该行为与 [嵌入与重排序](../../raw/model-user-guide/model-experience/embedding-rerank-model.md) 文档描述一致，但未在控制台提示中体现，建议预处理输入。
 
 ## 来源文档
 

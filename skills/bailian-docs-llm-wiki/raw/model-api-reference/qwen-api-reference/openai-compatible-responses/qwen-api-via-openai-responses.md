@@ -768,6 +768,66 @@ OCR 定制任务参数。仅适用于 `qwen3.5-ocr` 模型。通过此参数可�
 
 上述型号的最小值为16。生成的 Token 数达到所设置的上限时，生成将提前停止，状态为`incomplete`。
 
+**text** `object` （可选）
+
+文本输出配置，用于控制模型输出纯文本或结构化 JSON 数据。
+
+属性
+
+**format** `object` （可选）
+
+指定模型必须输出的格式。默认值为 `{"type": "text"}`。
+
+以下类型之一：
+
+**ResponseFormatText** `{ type }`
+
+默认值，输出文字。
+
+属性
+
+**type** `string` **（必选）**
+
+固定为 `text`。
+
+**ResponseFormatTextJSONSchemaConfig** `{ type, json_schema }`
+
+输出严格符合指定 JSON Schema 的 JSON 字符串，可精确控制输出结构与字段类型。适用于 qwen3.8 系列、deepseek-v4 系列、glm-5 系列等模型；deepseek-v4.1 系列即将支持。使用该类型时，提示词无需包含 JSON 关键词。
+
+属性
+
+**type** `string` **（必选）**
+
+固定为 `json_schema`。
+
+**json\_schema** `object` **（必选）**
+
+JSON Schema 配置。
+
+属性
+
+**name** `string` **（必选）**
+
+Schema 的名称。
+
+**schema** `object` **（必选）**
+
+描述输出结构的 JSON Schema 对象。通过 `properties` 定义字段结构，通过 `required` 声明必填字段列表，通过 `additionalProperties` 控制是否允许输出未在 Schema 中定义的字段（推荐设置为 `false`，即只输出已定义的字段）。支持的数据类型：string、number、integer、boolean、object、array、enum。相关文档：[配置指南](https://help.aliyun.com/zh/model-studio/qwen-structured-output#001cb6ae072tc)。
+
+**strict** `boolean` （可选）
+
+是否严格遵循 `schema` 定义的结构。推荐设置为 `true`。
+
+**ResponseFormatJSONObject** `{ type }`
+
+输出标准格式的 JSON 字符串。适用于 qwen3.8 系列、deepseek-v4 系列、deepseek-v4.1 系列、glm-5 系列模型。使用该类型时，需在提示词中明确指示模型输出 JSON，如：“请按照json格式输出”，否则会报错。
+
+属性
+
+**type** `string` **（必选）**
+
+固定为 `json_object`。
+
 #### 基础调用
 
 Python
