@@ -1,43 +1,44 @@
 # model management
 
-模型管理功能允许开发者通过 API 查询和配置百炼平台中已部署模型的访问权限、调用配额等运行时策略。该能力不涉及模型训练或部署，仅作用于已上线模型的治理层。所有操作均需具备对应模型的 `model.admin` 或 `tenant.admin` 权限。
+模型管理是百炼平台为开发者提供的核心能力，用于统一查看、配置和控制所使用大模型的访问权限与调用配额。通过 RESTful API 可实现自动化运维，适用于多租户、多模型场景下的精细化治理。所有操作均需具备对应模型的 `model:manage` 权限。
 
 ## 支持的模型与功能
 
-- **支持模型范围**：仅对已在百炼控制台「模型中心」完成部署并处于 `active` 状态的模型生效（包括系统预置模型如 `qwen-max`、`qwen-plus` 及用户自部署的 `custom-*` 模型）。
-- **核心功能**：
-  - 查询模型列表：获取当前租户下所有可管理模型的元信息 [模型管理](../../raw/model-api-reference/model-management.md)
-  - 查询/更新模型限流：按模型粒度设置 QPS 和总调用量配额 [查询模型限流](../../raw/model-api-reference/model-management/list-quotas.md)
-  - 查询/更新模型授权：控制指定用户组或应用 ID 对特定模型的调用权限 [查询模型授权](../../raw/model-api-reference/model-management/list-model-permissions.md)
+当前支持对平台已接入的全部托管模型（包括 `qwen-max`、`qwen-plus`、`qwen-turbo` 等通义系列模型及部分第三方合作模型）进行以下管理操作：  
+- 查询模型列表（含状态、版本、支持的输入/输出格式）  
+- 查询与更新模型级限流策略（按 QPS 或 TPS 限制）  
+- 查询与更新模型级授权策略（指定用户/角色/应用 ID 的调用权限）  
+
+详细接口定义请参阅 [模型管理](../../raw/model-api-reference/model-management.md) 文档。
 
 ## 关键参数
 
 | 参数 | 类型 | 必填 | 说明 |
 |------|------|------|------|
-| `model_id` | string | 是 | 模型唯一标识，格式如 `qwen-max` 或 `custom-abc123`；必须与 [模型管理](../../raw/model-api-reference/model-management.md) 中返回的 `id` 字段严格一致 |
-| `quota_type` | string | 否 | 限流类型，取值 `qps` 或 `total`；默认为 `qps`，详见 [查询模型限流](../../raw/model-api-reference/model-management/list-quotas.md) |
-| `principal_type` | string | 是（授权接口） | 授权主体类型，`user` / `group` / `app`；注意 `app` 类型需使用应用的 `client_id` 而非名称 |
+| `model_id` | string | 是 | 模型唯一标识，如 `qwen-max`；必须为 [查询模型列表](../../raw/model-api-reference/model-management/list-models.md) 返回的有效 ID |
+| `quota_type` | string | 是 | 限流类型，仅支持 `qps`（每秒请求数）或 `tps`（每秒 token 数） |
+| `scope` | string | 是 | 授权范围，取值为 `user`、`role` 或 `app`，对应 [查询模型授权](../../raw/model-api-reference/model-management/list-model-permissions.md) 中定义的粒度 |
 
-> **注意**：`update-model-rate-limits` 接口的 `reset_time` 参数在 [更新模型限流](../../raw/model-api-reference/model-management/update-model-rate-limits.md) 文档中定义为 UNIX timestamp（秒级），但实测要求毫秒级时间戳，否则返回 `400 Bad Request`。请以实际 API 响应为准。
+> **注意**：`update-model-rate-limits` 接口的 `reset_time` 字段在 v2.3+ 版本中已弃用，新策略将立即生效，旧文档中提及的“重置窗口”逻辑不再适用。
 
 ## 使用方式
 
-1. **认证**：使用 `Bearer <access_token>` 请求头，`access_token` 需含 `model:manage` scope；
-2. **请求示例（更新限流）**：
+1. **认证**：使用 `Bearer <access_token>` 请求头，[Token](../concepts/token.md) 需含目标模型的 `model:manage` 权限  
+2. **调用示例（更新限流）**：  
    ```bash
-   curl -X POST "https://dashscope.aliyuncs.com/api/v1/models/qwen-max/rate-limits" \
+   curl -X POST https://dashscope.aliyuncs.com/api/v1/models/qwen-max/rate-limits \
      -H "Authorization: Bearer $TOKEN" \
      -H "Content-Type: application/json" \
-     -d '{"qps": 5, "total": 10000}'
+     -d '{"quota_type":"qps","limit":5}'
    ```
-3. 所有端点均遵循 RESTful 设计，路径为 `/api/v1/models/{model_id}/[quotas\|permissions]`，具体细节参见 [模型管理](../../raw/model-api-reference/model-management.md)。
+3. 所有管理接口均遵循 `/api/v1/models/{model_id}/[subpath]` 路径规范，完整路径结构见 [模型管理](../../raw/model-api-reference/model-management.md)。
 
 ## 限制和注意事项
 
-- 单租户最多可为同一模型配置 100 条独立授权规则（`principal_type=app` 时按 `client_id` 去重计数）；
-- 限流策略变更后 **最长 30 秒内生效**，无热更新保障；
-- 自部署模型（`custom-*`）的授权策略仅影响百炼 API 调用，不影响其后端服务自身的鉴权逻辑；
-- `list-models` 接口默认仅返回 `active` 状态模型；若需包含 `inactive` 模型，须显式传参 `status=all` —— 此行为与 [查询模型列表](../../raw/model-api-reference/model-management/list-models.md) 文档描述一致，但部分旧版 SDK 默认忽略该参数，建议显式声明。
+- 单个模型最多配置 100 条独立授权规则（`user` + `role` + `app` 合计）  
+- 限流策略变更后，全量生效延迟 ≤ 3 秒，不支持秒级灰度  
+- `list-models` 接口默认仅返回启用状态（`status=enabled`）的模型；如需包含测试中或已下线模型，须显式传入 `status=all` 参数 —— 此行为与早期文档描述不一致，请以 [查询模型列表](../../raw/model-api-reference/model-management/list-models.md) 最新版为准  
+- 非阿里云主账号创建的应用无法调用 `update-model-permissions` 修改跨租户授权策略
 
 ## 来源文档
 

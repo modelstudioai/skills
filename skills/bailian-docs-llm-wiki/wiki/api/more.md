@@ -1,45 +1,41 @@
 # more
 
-`more` 是百炼平台提供的扩展能力集合，涵盖服务权限管理、安全认证机制与高级检索控制三大类功能。它不构成独立服务，而是支撑工作流编排、知识库检索、数据接入、监控分析等核心场景的底层基础设施。开发者需根据具体使用场景按需启用对应能力，并严格遵循权限最小化原则配置服务关联角色或临时凭证。
+`more` 是百炼平台提供的扩展能力集合，涵盖服务权限管理、安全认证机制与高级检索控制三大类功能。它不直接提供模型推理能力，而是支撑工作流编排、知识库精准检索、可观测性集成等关键场景的底层基础设施。开发者需根据具体使用场景（如调用函数计算、访问OSS数据、生成临时凭证或过滤RAG结果）选择对应能力并配置相应权限或参数。
 
 ## 支持的模型/功能
 
-`more` 本身不提供模型，而是为以下功能提供关键支撑能力：
+`more` 本身**不提供模型**，而是为以下平台功能提供支撑能力：
 
-- **服务集成**：通过服务关联角色（SLR）实现与 FC、OSS、ADB-PG、MNS、SLS、CMS、OpenTelemetry、内容安全、DTS、CPFS 等云服务的安全对接，支撑[工作流应用](raw/application-user-guide/llm-application/workflow-application.md)、[流程编排](https://help.aliyun.com/zh/model-studio/what-is-process-orchestration-old)、[数据管理](https://help.aliyun.com/zh/model-studio/manage-data)、[安全存储空间](raw/model-user-guide/security-and-compliance/secure-storage.md)、[创建和使用知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)、[用量监控与性能分析](raw/application-user-guide/agent-governance/agenteval/agenteval-observability/agenteval-observation.md)等场景 [服务关联角色 (raw/application-api-reference/more/bailian-service-linked-role.md)](../../raw/application-api-reference/more/bailian-service-linked-role.md)。
-- **安全调用**：提供生成临时 API Key 的能力，用于在浏览器、移动 App 等不可信前端环境安全调用后端模型服务 [生成临时API Key (raw/application-api-reference/more/application-obtain-temporary-authentication-token.md)](../../raw/application-api-reference/more/application-obtain-temporary-authentication-token.md)。
-- **精准检索**：支持在知识库 `Retrieve` 接口请求中传入 `searchFilters`，对语义检索结果进行结构化过滤，提升 RAG 效果 [知识库SearchFilters (raw/application-api-reference/more/how-to-use-search-filters.md)](../../raw/application-api-reference/more/how-to-use-search-filters.md)。
+- **服务关联角色（SLR）**：支撑工作流应用调用函数计算（FC）、数据管理接入OSS/MNS、安全存储空间连接ADB-PG、用量监控对接OpenTelemetry/SLS/CMS、内容安全审核、DTS数据同步、模型调优访问CPFS/OSS等 [服务关联角色 (raw/application-api-reference/more/bailian-service-linked-role.md)](../../raw/application-api-reference/more/bailian-service-linked-role.md)。
+- **临时API Key**：为前端/移动端等不可信环境提供短期、可管控的访问凭证，用于调用模型服务或知识库API [生成临时API Key (raw/application-api-reference/more/application-obtain-temporary-authentication-token.md)](../../raw/application-api-reference/more/application-obtain-temporary-authentication-token.md)。
+- **SearchFilters**：在知识库 `Retrieve` 接口请求中嵌入结构化过滤条件，实现对语义检索结果的字段级精准筛选（如按姓名、岗位、年龄范围等过滤），显著提升RAG召回质量 [知识库SearchFilters (raw/application-api-reference/more/how-to-use-search-filters.md)](../../raw/application-api-reference/more/how-to-use-search-filters.md)。
 
-> **注意**：文档 1 中列出的 `AliyunServiceRoleForSFMAccessFC` 权限范围（仅 `fc:ListFunctions` 和 `fc:InvokeFunction`）与实际工作流中函数节点可能需要的 `fc:GetFunction`、`fc:CreateFunction` 等管理类操作存在潜在不一致；生产环境应以控制台实际策略绑定为准，必要时通过自定义策略补充。
+> **注意**：文档1中列出的 `AliyunServiceRoleForSFMTelemetry` 权限策略内容被截断（末尾缺失完整JSON），实际策略应以RAM控制台或最新版帮助文档为准；其他SLR策略均完整给出，可直接参考。
 
 ## 关键参数
 
-| 功能 | 参数名 | 类型 | 必填 | 说明 | 示例 |
-|------|--------|------|------|------|------|
-| 临时 API Key | `expire_in_seconds` | Integer | 否 | 有效期（秒），取值范围 `[1, 1800]`，默认 `60` | `1800` |
-| 知识库检索 | `searchFilters` | Array of Object | 否 | 检索过滤条件数组，每个元素为一个子分组（AND 关系），子分组内字段默认 AND，可设 `_operator: "OR"` | `[{"姓名": "张三"}, {"岗位": "技术员"}]` |
-| 知识库检索（RAG API） | `_conditions` | Array of Object | 否 | 子分组内嵌套条件数组，支持同一字段多条件（如 `eq` + `like`） | `[{"department": "Corporate"}, {"department": {"like": "%Research%"}}]` |
+| 功能 | 参数名 | 类型 | 必填 | 说明 | 取值范围 |
+|------|--------|------|------|------|-----------|
+| 临时API Key | `expire_in_seconds` | Integer | 否 | 指定临时[Token](../concepts/token.md)有效期（TTL） | `[1, 1800]` 秒（默认60秒） |
+| SearchFilters（OpenAPI） | `searchFilters` | Array of Object | 否 | 过滤条件数组，每个元素为一个Key-Value Map（支持 `_operator: "OR"`） | 单层Map，不支持 `_conditions` 嵌套 |
+| SearchFilters（RAG API / Spring AI SDK） | `search_filters` | Array of Object | 否 | 过滤条件数组，支持 `_operator` + `_conditions` 嵌套结构 | 支持 `eq`, `neq`, `gt`, `gte`, `lt`, `lte`, `like` 等操作符 |
 
 ## 使用方式
 
-- **服务关联角色**：首次在控制台启用对应功能（如添加函数计算节点、导入 OSS 数据、配置 ADB-PG 安全存储）时，系统自动创建所需 SLR；无需手动调用 API。角色名称与策略已预置，详见 [服务关联角色 (raw/application-api-reference/more/bailian-service-linked-role.md)](../../raw/application-api-reference/more/bailian-service-linked-role.md)。
-- **临时 API Key**：向 `https://dashscope.aliyuncs.com/api/v1/tokens` 发起带 `Authorization: Bearer <永久AK>` 的 POST 请求，可选 `?expire_in_seconds=N` 查询参数。响应返回 `token`（临时密钥）和 `expires_at`（Unix 时间戳）。
+- **服务关联角色**：首次启用对应功能（如创建函数计算节点、配置OSS数据源）时，系统自动创建SLR；无需手动调用API。角色名称与权限策略已固化，详见 [服务关联角色 (raw/application-api-reference/more/bailian-service-linked-role.md)](../../raw/application-api-reference/more/bailian-service-linked-role.md)。
+- **临时API Key**：通过 `POST https://dashscope.aliyuncs.com/api/v1/tokens` 接口调用，需在Header中携带 `Authorization: Bearer <永久API Key>`，支持地域Endpoint切换（北京/新加坡/弗吉尼亚/中国香港）。
 - **SearchFilters**：
-  - OpenAPI Retrieve（`bailian.cn-beijing.aliyuncs.com/{WorkspaceId}/index/retrieve`）：`searchFilters` 为平铺 Map 数组，支持 `_operator` 控制子分组内逻辑，**不支持嵌套 `_conditions`**。
-  - RAG API / Spring AI Alibaba SDK（`{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/indices/rag/index/retrieve`）：支持 `_conditions` 嵌套及 `like`/`eq`/`gte` 等丰富操作符，推荐用于复杂过滤场景。
+  - OpenAPI Retrieve：在 `RetrieveRequest.search_filters` 中传入平铺Map数组（如 `[{"姓名": "张三"}, {"岗位": "技术员"}]`）；
+  - RAG API 或 Spring AI SDK：支持更复杂语法，例如 `{"_operator": "OR", "_conditions": [{"部门": "Corporate"}, {"部门": {"like": "%Research%"}}]}`。
 
 ## 限制和注意事项
 
-- **服务关联角色**：
-  - 删除 SLR 前必须先解除所有依赖该角色的功能（如删除函数计算节点、断开 OSS/ADB-PG 连接、停止数据导入任务），否则对应功能将立即失效 [服务关联角色 (raw/application-api-reference/more/bailian-service-linked-role.md)](../../raw/application-api-reference/more/bailian-service-linked-role.md)。
-  - `AliyunServiceRoleForSFMAccessingMNS` 明确禁止手动修改或删除，因其由平台内部托管。
-- **临时 API Key**：
-  - 临时 Key 继承生成它的永久 AK 的**全部权限**（含模型访问、知识库读写等），务必确保源 AK 权限最小化。
-  - 无法主动撤销，仅能等待过期；最长 TTL 为 1800 秒（30 分钟）。
-- **SearchFilters**：
-  - OpenAPI SDK 的 `SearchFilters` 字段类型为 `Map<String, String>`，若传入嵌套 JSON 或重复字段名，将被静默忽略或导致未预期行为，**必须使用平铺结构**。
-  - 字段名必须与知识库 Schema 中定义的字段完全一致（区分大小写），且仅支持已开启“参与检索”的字段。
-  - 标签（Tag）查询仅适用于文档搜索、音视频搜索类知识库，不适用于数据表类知识库。
+- **SLR删除风险**：删除任一服务关联角色将导致其关联功能完全失效（如删除 `AliyunServiceRoleForSFMAccessFC` 后，工作流中所有函数计算节点无法调用）。删除前必须先解除依赖（如删除节点、断开OSS/ADB连接、停止导入任务）。
+- **临时API Key不可撤销**：生成后无法主动删除或禁用，仅能等待过期；其权限严格继承自签发用的永久API Key，**切勿在客户端硬编码永久Key生成临时[Token](../concepts/token.md)**。
+- **SearchFilters兼容性差异**：
+  - OpenAPI SDK 仅支持平铺Map，**不支持 `_conditions` 嵌套**；若误传嵌套结构，请求可能成功但过滤逻辑不生效；
+  - RAG API 和 Spring AI SDK 支持完整语法，包括同一字段多条件OR（如 `{"department": {"like": "%A%"}, "department": {"like": "%B%"}}` 需置于同一 `_conditions` 数组内）。
+- **权限最小化原则**：SLR策略已按功能最小化设计（如 `AliyunServiceRoleForSFMDataHubOSSImport` 仅允许读取带特定Bucket Tag的OSS资源），但开发者仍需定期审计RAM角色策略，避免过度授权。
 
 ## 来源文档
 

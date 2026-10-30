@@ -21,11 +21,11 @@
 
 ## 快速开始
 
-**重要**非实时语音识别中，Qwen-Audio-ASR-Filetrans、Fun-ASR、Qwen3-ASR-Filetrans和Paraformer为**异步调用**，请求头需设置 `X-DashScope-Async: enable`，提交任务后通过查询接口轮询获取结果；其他模型（如Fun-ASR-Flash、Qwen3-ASR-Flash）为**同步调用**。
+**重要**以下示例使用 `qwen-audio-3.1-asr-flash-filetrans` 和 `qwen-audio-3.1-asr-flash`。前者采用异步调用，提交请求时需设置 `X-DashScope-Async: enable`，然后查询任务结果；后者采用同步调用，支持流式或非流式返回结果。
 
 如果您调用**独享部署**的模型服务时收到报错 `current user api does not support asynchronous calls`，表示该部署仅支持**同步调用**，请将请求头改为 `X-DashScope-Async: disable`（其余调用方式保持不变）。
 
-#### Qwen-Audio-ASR-Filetrans/ Fun-ASR
+#### Qwen-Audio-ASR-Filetrans
 
 音视频文件较大，文件转写 API 采用异步调用：提交任务后通过查询接口轮询状态，任务完成后获取识别结果。
 
@@ -252,9 +252,9 @@ public class Main {
 }
 ```
 
-#### Qwen-Audio-ASR/ Fun-ASR-Flash
+#### Qwen-Audio-ASR
 
-Qwen-Audio-ASR/Fun-ASR-Flash 系列模型支持同步调用，适用于 5 分钟以内的音频文件，可流式或非流式返回识别结果。
+Qwen-Audio-ASR 系列模型支持同步调用，适用于 5 分钟以内的音频文件，可流式或非流式返回识别结果。
 
 以下为华北2（北京）地域的配置，调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)，各地域的配置不同。
 
@@ -287,409 +287,23 @@ curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.c
 }'
 ```
 
-**重要****注意**：Qwen-Audio-ASR/Fun-ASR-Flash 系列模型通过 DashScope 同步调用接口（multimodal-generation 端点）返回的响应结构与标准 DashScope 多模态接口格式不同。实际返回结构为：
+**重要**`qwen-audio-3.1-asr-flash` 的 HTTP 响应不包含 `choices` 字段，识别结果结构如下：
 
 ```
 {
   "output": {
-    "output": {
-      "sentence": {
-        "text": "识别文本内容"
-      }
+    "sentence": {
+      "text": "识别文本内容"
     },
-    "text": "Hello World，这里是阿里巴巴语音实验室。"
+    "text": "识别文本内容"
   },
   "request_id": "..."
 }
 ```
 
-其中 `output.output.sentence.text` 和顶层 `output.text` 为识别文本字段，无 `choices` 字段。请据此解析响应。
-
-#### Paraformer
-
-Paraformer示例代码和Fun-ASR的异步调用相似，将model替换成Paraformer模型名即可。
+识别文本位于 `output.sentence.text` 和 `output.text`。
 
 ## 进阶功能
-
-### 使用OpenAI兼容API
-
-**重要**美国地域不支持OpenAI兼容模式。
-
-仅 Qwen3-ASR-Flash 系列模型支持OpenAI兼容方式调用。OpenAI兼容方式仅允许输入公网可访问的音频文件URL，不支持输入本地音频文件绝对路径。
-
-OpenAI Python SDK 版本应不低于1.52.0， Node.js SDK 版本应不低于 4.68.0。安装/升级命令：
-
-```
-# Python
-pip install -U "openai>=1.52.0"
-
-# Node.js
-npm install openai@^4.68.0
-```
-
-`asr_options`非OpenAI标准参数。使用 OpenAI Python SDK 时，请通过 `extra_body` 传入；使用 Node.js OpenAI SDK 时，直接将 `asr_options` 作为请求体的顶层参数传入。
-
-#### 输入内容：音频文件URL
-
-#### Python SDK
-
-```
-from openai import OpenAI
-import os
-
-try:
-    client = OpenAI(
-        # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-        # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
-        api_key=os.getenv("DASHSCOPE_API_KEY"),
-        # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-        base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
-    )
-
-    stream_enabled = False  # 是否开启流式输出
-    completion = client.chat.completions.create(
-        model="qwen3-asr-flash",
-        messages=[
-            {
-                "content": [
-                    {
-                        "type": "input_audio",
-                        "input_audio": {
-                            "data": "{YOUR_AUDIO_URL}"
-                        }
-                    }
-                ],
-                "role": "user"
-            }
-        ],
-        stream=stream_enabled,
-        # stream设为False时，不能设置stream_options参数
-        # stream_options={"include_usage": True},
-        extra_body={
-            "asr_options": {
-                # "language": "zh",
-                "enable_itn": False
-            }
-        }
-    )
-    if stream_enabled:
-        full_content = ""
-        print("流式输出内容为：")
-        for chunk in completion:
-            # 如果stream_options.include_usage为True，则最后一个chunk的choices字段为空列表，需要跳过（可以通过chunk.usage获取 Token 使用量）
-            print(chunk)
-            if chunk.choices and chunk.choices[0].delta.content:
-                full_content += chunk.choices[0].delta.content
-        print(f"完整内容为：{full_content}")
-    else:
-        print(f"非流式输出内容为：{completion.choices[0].message.content}")
-except Exception as e:
-    print(f"错误信息：{e}")
-```
-
-#### Node.js SDK
-
-```
-// 运行前的准备工作:
-// Windows/Mac/Linux 通用:
-// 1. 确保已安装 Node.js (建议版本 >= 14)
-// 2. 运行以下命令安装必要的依赖: npm install openai
-
-import OpenAI from "openai";
-
-const client = new OpenAI({
-  // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-  // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
-  apiKey: process.env.DASHSCOPE_API_KEY,
-  // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-  baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
-});
-
-async function main() {
-  try {
-    const streamEnabled = false; // 是否开启流式输出
-    const completion = await client.chat.completions.create({
-      model: "qwen3-asr-flash",
-      messages: [
-        {
-          role: "user",
-          content: [
-            {
-              type: "input_audio",
-              input_audio: {
-                data: "{YOUR_AUDIO_URL}"
-              }
-            }
-          ]
-        }
-      ],
-      stream: streamEnabled,
-      // stream设为False时，不能设置stream_options参数
-      // stream_options: {
-      //   "include_usage": true
-      // },
-      asr_options: {
-        // language: "zh",
-        enable_itn: false
-      }
-    });
-
-    if (streamEnabled) {
-      let fullContent = "";
-      console.log("流式输出内容为：");
-      for await (const chunk of completion) {
-        console.log(JSON.stringify(chunk));
-        if (chunk.choices && chunk.choices.length > 0) {
-          const delta = chunk.choices[0].delta;
-          if (delta && delta.content) {
-            fullContent += delta.content;
-          }
-        }
-      }
-      console.log(`完整内容为：${fullContent}`);
-    } else {
-      console.log(`非流式输出内容为：${completion.choices[0].message.content}`);
-    }
-  } catch (err) {
-    console.error(`错误信息：${err}`);
-  }
-}
-
-main();
-```
-
-#### cURL
-
-以下为华北2（北京）地域的配置，调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)，各地域的配置不同。
-
-```
-curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions' \
--H "Authorization: Bearer $DASHSCOPE_API_KEY" \
--H "Content-Type: application/json" \
--d '{
-    "model": "qwen3-asr-flash",
-    "messages": [
-        {
-            "content": [
-                {
-                    "type": "input_audio",
-                    "input_audio": {
-                        "data": "{YOUR_AUDIO_URL}"
-                    }
-                }
-            ],
-            "role": "user"
-        }
-    ],
-    "stream":false,
-    "asr_options": {
-        "enable_itn": false
-    }
-}'
-```
-
-#### 输入内容：Base64编码的音频文件
-
-可输入Base64编码数据（[Data URL](https://www.rfc-editor.org/rfc/rfc2397)），格式为：`data:<mediatype>;base64,<data>`。
-
--   `<mediatype>`：MIME类型
-    
-    因音频格式而异，例如：
-    
-    -   WAV：`audio/wav`
-    -   MP3：`audio/mpeg`
--   `<data>`：音频转成的Base64编码的字符串
-    
-    Base64 编码会增大数据体积，音频文件的大小和时长限制请参见[音频规格](https://help.aliyun.com/zh/model-studio/asr-model#asr_audio_spec02)。
-    
--   示例：`data:audio/mpeg;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjI5LjEwMAAAAAAAAAAAAAAA//PAxABQ/BXRbMPe4IQAhl9`
-    
-    点击查看示例代码
-    
-    python
-    
-    ```
-    import base64, pathlib
-    
-    # input.mp3为待识别的本地音频文件，请替换为自己的音频文件路径，确保其符合音频要求
-    file_path = pathlib.Path("{YOUR_AUDIO_FILE}")
-    base64_str = base64.b64encode(file_path.read_bytes()).decode()
-    data_uri = f"data:audio/mpeg;base64,{base64_str}"
-    ```
-    
-    java
-    
-    ```
-    import java.nio.file.*;
-    import java.util.Base64;
-    
-    public class Main {
-        /**
-         * filePath为待识别的本地音频文件，请替换为自己的音频文件路径，确保其符合音频要求
-         */
-        public static String toDataUrl(String filePath) throws Exception {
-            byte[] bytes = Files.readAllBytes(Paths.get(filePath));
-            String encoded = Base64.getEncoder().encodeToString(bytes);
-            return "data:audio/mpeg;base64," + encoded;
-        }
-    
-        // 使用示例
-        public static void main(String[] args) throws Exception {
-            System.out.println(toDataUrl("{YOUR_AUDIO_FILE}"));
-        }
-    }
-    ```
-    
-
-Python SDK
-
-```
-import base64
-from openai import OpenAI
-import os
-import pathlib
-
-try:
-    # 请替换为实际的音频文件路径
-    file_path = "{YOUR_AUDIO_FILE}"
-    # 请替换为实际的音频文件MIME类型
-    audio_mime_type = "audio/mpeg"
-
-    file_path_obj = pathlib.Path(file_path)
-    if not file_path_obj.exists():
-        raise FileNotFoundError(f"音频文件不存在: {file_path}")
-
-    base64_str = base64.b64encode(file_path_obj.read_bytes()).decode()
-    data_uri = f"data:{audio_mime_type};base64,{base64_str}"
-
-    client = OpenAI(
-        # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-        # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
-        api_key=os.getenv("DASHSCOPE_API_KEY"),
-        # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-        base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
-    )
-
-    stream_enabled = False  # 是否开启流式输出
-    completion = client.chat.completions.create(
-        model="qwen3-asr-flash",
-        messages=[
-            {
-                "content": [
-                    {
-                        "type": "input_audio",
-                        "input_audio": {
-                            "data": data_uri
-                        }
-                    }
-                ],
-                "role": "user"
-            }
-        ],
-        stream=stream_enabled,
-        # stream设为False时，不能设置stream_options参数
-        # stream_options={"include_usage": True},
-        extra_body={
-            "asr_options": {
-                # "language": "zh",
-                "enable_itn": False
-            }
-        }
-    )
-    if stream_enabled:
-        full_content = ""
-        print("流式输出内容为：")
-        for chunk in completion:
-            # 如果stream_options.include_usage为True，则最后一个chunk的choices字段为空列表，需要跳过（可以通过chunk.usage获取 Token 使用量）
-            print(chunk)
-            if chunk.choices and chunk.choices[0].delta.content:
-                full_content += chunk.choices[0].delta.content
-        print(f"完整内容为：{full_content}")
-    else:
-        print(f"非流式输出内容为：{completion.choices[0].message.content}")
-except Exception as e:
-    print(f"错误信息：{e}")
-```
-
-Node.js SDK
-
-```
-// 运行前的准备工作:
-// Windows/Mac/Linux 通用:
-// 1. 确保已安装 Node.js (建议版本 >= 14)
-// 2. 运行以下命令安装必要的依赖: npm install openai
-
-import OpenAI from "openai";
-import { readFileSync } from 'fs';
-
-const client = new OpenAI({
-  // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-  // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
-  apiKey: process.env.DASHSCOPE_API_KEY,
-  // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-  baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
-});
-
-const encodeAudioFile = (audioFilePath) => {
-    const audioFile = readFileSync(audioFilePath);
-    return audioFile.toString('base64');
-};
-
-// 请替换为实际的音频文件路径
-const dataUri = `data:audio/mpeg;base64,${encodeAudioFile("{YOUR_AUDIO_FILE}")}`;
-
-async function main() {
-  try {
-    const streamEnabled = false; // 是否开启流式输出
-    const completion = await client.chat.completions.create({
-      model: "qwen3-asr-flash",
-      messages: [
-        {
-          role: "user",
-          content: [
-            {
-              type: "input_audio",
-              input_audio: {
-                data: dataUri
-              }
-            }
-          ]
-        }
-      ],
-      stream: streamEnabled,
-      // stream设为False时，不能设置stream_options参数
-      // stream_options: {
-      //   "include_usage": true
-      // },
-      asr_options: {
-        // language: "zh",
-        enable_itn: false
-      }
-    });
-
-    if (streamEnabled) {
-      let fullContent = "";
-      console.log("流式输出内容为：");
-      for await (const chunk of completion) {
-        console.log(JSON.stringify(chunk));
-        if (chunk.choices && chunk.choices.length > 0) {
-          const delta = chunk.choices[0].delta;
-          if (delta && delta.content) {
-            fullContent += delta.content;
-          }
-        }
-      }
-      console.log(`完整内容为：${fullContent}`);
-    } else {
-      console.log(`非流式输出内容为：${completion.choices[0].message.content}`);
-    }
-  } catch (err) {
-    console.error(`错误信息：${err}`);
-  }
-}
-
-main();
-```
 
 ### 长音频文件处理
 
@@ -699,7 +313,7 @@ main();
 
 -   **Qwen-Audio-ASR-Filetrans**/**Fun-ASR / Qwen3-ASR-Filetrans / Paraformer：**单个音频文件大小不超过 2GB，时长不超过 12 小时。
 -   **Qwen-Audio-ASR、Fun-ASR-Flash：**单个音频文件大小不超过 2GB，时长不超过 5 分钟。
--   **Qwen3-ASR-Flash：**单个音频文件大小不超过 10MB，时长不超过 5 分钟。对于较长音频，请使用 Qwen-Audio-ASR-Filetrans、Fun-ASR 或 Qwen3-ASR-Filetrans。
+-   **Qwen3-ASR-Flash：**单个音频文件大小不超过 10MB，时长不超过 5 分钟。对于较长音频，请使用 Qwen-Audio-ASR-Filetrans。
 -   **启用说话人分离时**：建议音频时长不超过 2 小时，否则可能导致识别失败或超时。详见[说话人分离](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#nrt03_diarization_h3)。
 
 **调用方式**：长音频转写采用异步任务模式，分三步：
@@ -708,11 +322,11 @@ main();
 2.  通过轮询接口查询任务状态（或使用 SDK 的等待方法阻塞等待）。
 3.  任务完成后从返回的 URL 下载识别结果 JSON。
 
-具体代码示例请参见[Qwen3-ASR-Filetrans](raw/model-user-guide/model-experience/speech-recognition/non-realtime-speech-recognition-user-guide.md)的快速开始代码。
+具体代码示例请参见[Qwen-Audio-ASR-Filetrans](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#7818a3bc466d6)的快速开始代码。
 
 ### 流式输出
 
-Qwen-Audio-ASR/Fun-ASR-Flash/Qwen3-ASR-Flash 支持流式输出：边识别边返回中间结果，适用于需要实时反馈进度的场景。 Qwen-Audio-ASR 和 Fun-ASR-Flash 的 HTTP SSE 调用方式及返回结构，请参见[HTTP API](raw/_short/fun-asr-flash-recorded-speech-recognition-http-a-ba2d322512e386cb.md)。
+Qwen-Audio-ASR/Fun-ASR-Flash/Qwen3-ASR-Flash 支持流式输出：边识别边返回中间结果，适用于需要实时反馈进度的场景。 Qwen-Audio-ASR 和 Fun-ASR-Flash 的 HTTP SSE 调用方式及返回结构，请参见[Qwen-Audio-ASR HTTP API](raw/_short/qwen-audio-asr-http-api-b304ee1b83ae18cd.md)和[Fun-ASR-Flash HTTP API](raw/_short/fun-asr-flash-recorded-speech-recognition-http-a-ba2d322512e386cb.md)。
 
 Qwen-Audio-ASR-Filetrans、Fun-ASR、Qwen3-ASR-Filetrans、Paraformer 等异步转写模型不支持流式输出，需通过任务轮询获取最终结果（详见[长音频文件处理](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#nrt03_longaudio_h3)）。
 
@@ -721,9 +335,6 @@ Qwen-Audio-ASR-Filetrans、Fun-ASR、Qwen3-ASR-Filetrans、Paraformer 等异步�
 -   DashScope Python SDK：设置 `stream` 参数为 `True`。
 -   DashScope Java SDK：通过 `streamCall` 接口调用。
 -   DashScope HTTP：在 Header 中设置 `X-DashScope-SSE` 为 `enable`。
--   OpenAI 兼容 SDK：设置 `stream` 参数为 `True`。
-
-Qwen3-ASR-Flash 的流式输出示例请参见[调用示例](https://help.aliyun.com/zh/model-studio/qwen-asr-api-reference#qwen-asr-sync-examples)，选择“流式输出”标签。
 
 ### 使用热词提升准确率
 
@@ -737,7 +348,7 @@ Qwen3-ASR-Flash 的流式输出示例请参见[调用示例](https://help.aliyun
 
 ### 说话人分离
 
-`qwen-audio-3.1-asr-flash` 使用 `speaker_diarization_enabled` 开启说话人分离，其参数和返回结构请参见 [HTTP API](raw/_short/fun-asr-flash-recorded-speech-recognition-http-a-ba2d322512e386cb.md)。
+`qwen-audio-3.1-asr-flash` 使用 `speaker_diarization_enabled` 开启说话人分离，其参数和返回结构请参见 [HTTP API](raw/_short/qwen-audio-asr-http-api-b304ee1b83ae18cd.md)。
 
 说话人分离可自动识别音频中不同说话人，并在转写结果中为每个句子标注说话人标签，适用于多人会议、访谈录音等场景。
 
@@ -798,46 +409,14 @@ Qwen3-ASR-Flash 的流式输出示例请参见[调用示例](https://help.aliyun
 
 不同 SDK 暴露上述参数的命名习惯不同（如字典 key、对象属性、方法等），完整字段对照请参见 API参考。
 
-### 情感识别
-
-Qwen3-ASR-Filetrans 与 Qwen3-ASR-Flash 系列模型固定开启情感识别，无需额外配置。识别结果中会附带说话人的情绪标签，取值为 7 类细粒度情绪：`surprised`（惊讶）、`neutral`（平静）、`happy`（愉快）、`sad`（悲伤）、`disgusted`（厌恶）、`angry`（愤怒）、`fearful`（恐惧）。
-
-**字段路径**（因接口而异）：
-
--   **OpenAI 兼容接口**（Qwen3-ASR-Flash 实时转写）：嵌套在 `choices[].delta.annotations[].emotion`（流式输出）或 `choices[].message.annotations[].emotion`（非流式）。
--   **DashScope 同步调用接口**（Qwen3-ASR-Flash）：嵌套在 `output.choices[].message.annotations[].emotion`。
--   **DashScope 异步任务接口**（Qwen3-ASR-Filetrans 录音文件转写）：嵌套在 `transcripts[].sentences[].emotion`，与时间戳、说话人等字段并列在每个句子对象中。
-
-返回结构示例（DashScope 异步任务接口节选）：
-
-```
-{
-  "transcripts": [{
-    "sentences": [{
-      "begin_time": 0,
-      "end_time": 1440,
-      "text": "欢迎使用阿里云。",
-      "emotion": "neutral",
-      "language": "zh"
-    }]
-  }]
-}
-```
-
-不同 SDK 暴露上述字段的命名习惯不同（如字典 key、对象属性、方法等），完整字段对照请参见API参考。
-
-**重要**Qwen-Audio-ASR-Filetrans、Qwen-Audio-ASR、Fun-ASR-Flash、Fun-ASR 和 Paraformer 非实时模型暂不支持情感识别功能。如需在实时识别中使用情感识别，可参考 [实时语音识别](raw/model-user-guide/model-experience/speech-recognition/real-time-speech-recognition-user-guide.md) 的对应章节。
-
 ### 获取时间戳
 
-Flash 流式结果的时间戳稳定条件及字段路径请参见 [HTTP API 响应说明](https://help.aliyun.com/zh/model-studio/fun-asr-flash-recorded-speech-recognition-http-api#h-fl-stream-logic)。
+Flash 流式结果的时间戳稳定条件及字段路径请参见 [Qwen-Audio-ASR HTTP API](https://help.aliyun.com/zh/model-studio/qwen-audio-asr-http-api#h-fl-stream-logic)和[Fun-ASR-Flash HTTP API](https://help.aliyun.com/zh/model-studio/fun-asr-flash-recorded-speech-recognition-http-api#h-fl-stream-logic)。
 
 非实时语音识别支持在转写结果中输出时间戳，便于字幕生成、关键词高亮、音视频剪辑等场景。Qwen-Audio-ASR-Filetrans、Qwen-Audio-ASR、Fun-ASR、Fun-ASR-Flash、Qwen3-ASR-Filetrans、Paraformer 均支持，但各模型的时间戳默认行为和控制方式不同：
 
 -   **Qwen-Audio-ASR-Filetrans/Qwen-Audio-ASR/Fun-ASR/Fun-ASR-Flash/Paraformer**：时间戳功能固定开启，不可关闭。
 -   **Qwen3-ASR-Filetrans**：仅 DashScope 异步调用方式支持时间戳，时间戳功能固定开启。可通过请求参数 `enable_words` 控制时间戳级别：设为 `false`（默认）返回句级时间戳，设为 `true` 返回字级时间戳。字级别时间戳仅支持以下语种：中文、英语、日语、韩语、德语、法语、西班牙语、意大利语、葡萄牙语、俄语，其他语种可能无法保证准确性。
-
-**重要**Qwen3-ASR-Flash 通过 OpenAI 兼容接口调用时，输出形态为 `chat.completion`，不返回时间戳字段。如需时间戳，请使用Qwen3-ASR-Filetrans（异步任务接口）。
 
 时间戳单位均为毫秒，分两个层级返回：
 
@@ -933,7 +512,7 @@ Qwen3-ASR-Filetrans
 -   **异步轮询：**长音频转写采用异步模式，建议设置合理的轮询间隔（如 2~5 秒），避免频繁查询消耗配额。如需突破 20–100 QPS 查询上限，可改用事件回调通知，详见[高并发场景：使用回调替代轮询](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#nrt03_callback_h3)。
 -   **错误处理：**实现完善的重试机制；网络超时或服务端临时错误（5xx）按指数退避策略重试。
 -   **降噪处理：**噪声较大的音频建议先用 FFmpeg 等工具预处理后再提交识别。
--   **模型选择：**根据音频时长选择合适的模型。5 分钟以内的短音频使用Qwen3-ASR-Flash，超过 5 分钟的长音频使用 Qwen-Audio-ASR-Filetrans、Fun-ASR 或Qwen3-ASR-Filetrans。
+-   **模型选择：**5 分钟以内的短音频使用 Qwen-Audio-ASR；长音频或需要异步处理时使用 Qwen-Audio-ASR-Filetrans。
 
 ## 支持的模型与地域
 
@@ -970,7 +549,8 @@ Qwen3-ASR-Filetrans
 
 -   [非实时语音识别-Qwen-Audio-ASR-Filetrans API参考](raw/_short/qwen-audio-asr-filetrans-api-c91600a5bccc788c.md)
 -   [非实时语音识别-Fun-ASR API参考](raw/_short/fun-asr-recorded-speech-recognition-api-referenc-cdd1d2e565f281cc.md)
--   [非实时语音识别-Qwen-Audio-ASR/Fun-ASR-Flash API参考](raw/_short/fun-asr-flash-recorded-speech-recognition-http-a-ba2d322512e386cb.md)
+-   [非实时语音识别-Qwen-Audio-ASR API参考](raw/_short/qwen-audio-asr-api-12cd76f68a22ae50.md)
+-   [非实时语音识别-Fun-ASR-Flash API参考](raw/_short/non-real-time-speech-recognition-for-fun-asr-fla-a39568e6f8404553.md)
 -   [非实时语音识别-Qwen-ASR API参考](raw/_short/qwen-asr-api-reference-60b7c9eb88d7f83b.md)
 -   [非实时语音识别-Paraformer API参考](raw/_short/paraformer-recorded-speech-recognition-api-refer-8ca94e9578cc12b7.md)
 

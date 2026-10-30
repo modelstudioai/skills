@@ -15,6 +15,8 @@
     > 提示词无需包含 JSON 关键词。
     
 
+> 以上参数适用于 Chat Completions API。如果使用 Responses API，请改为设置 `text.format`，取值格式相同，示例见下文。JSON Object 模式下，Responses API 同样要求提示词包含 "JSON" 关键词，否则返回 400 错误。
+
 功能对比：
 
 **特性**
@@ -61,6 +63,8 @@ Qwen 大部分模型、Kimi、GLM、DeepSeek、Stepfun
 
 ## 支持的模型
 
+**说明**标注为"非思考模式"的模型，仅在非思考模式下支持结构化输出。
+
 #### JSON Object
 
 #### 千问
@@ -85,8 +89,6 @@ Qwen 大部分模型、Kimi、GLM、DeepSeek、Stepfun
     -   千问VL（非思考模式）：Qwen3-VL-Plus系列、Qwen3-VL-Flash系列、Qwen-VL-Max系列（不包括最新版与快照版模型）、Qwen-VL-Plus系列（不包括最新版与快照版模型）
     -   千问Omni：Qwen3.8-Omni-Flash、Qwen3.5-Omni-Plus系列
     -   Qwen3-VL 开源系列（非思考模式）
-
-**说明**标注为"非思考模式"的模型，在思考模式下设置 `response_format` 为 `{"type": "json_object"}` 不会报错，但结构化输出可能失效，如需稳定获取标准 JSON，可参考"常见问题"中的处理方式。
 
 #### Kimi
 
@@ -135,7 +137,7 @@ Qwen3.7-Plus 系列、Qwen3.8-Flash 系列、Qwen3.7-Flash 系列、Qwen3.7-Max 
 
 您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过OpenAI SDK或DashScope SDK进行调用，还需要[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
-#### OpenAI兼容
+#### OpenAI兼容-Chat Completions API
 
 #### Python
 
@@ -281,7 +283,134 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }
 ```
 
-#### DashScope
+#### OpenAI兼容-Responses API
+
+Responses API 是 Chat Completions API 的演进版本，结构化输出通过 `text.format` 参数设置，参数说明和迁移指南请参见 [OpenAI兼容-Responses](raw/model-api-reference/toolkits-and-frameworks/compatibility-with-openai-responses-api.md)。
+
+#### Python
+
+```
+from openai import OpenAI
+import os
+
+client = OpenAI(
+    # 如果没有配置环境变量，请用API Key将下行替换为：api_key="sk-xxx"
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    # 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
+)
+
+response = client.responses.create(
+    model="qwen3.8-max",
+    input="大家好，我叫刘五，今年34岁，邮箱是liuwu@example.com，平时喜欢打篮球和旅游。请抽取姓名与年龄信息，以JSON格式返回",
+    text={"format": {"type": "json_object"}},
+)
+
+print(response.output_text)
+```
+
+### 返回结果
+
+```
+{"姓名": "刘五", "年龄": 34}
+```
+
+#### Node.js
+
+```
+import OpenAI from "openai";
+
+const openai = new OpenAI({
+    // 如果没有配置环境变量，请用API Key将下行替换为：apiKey: "sk-xxx"
+    apiKey: process.env.DASHSCOPE_API_KEY,
+    baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
+});
+
+const response = await openai.responses.create({
+    model: "qwen3.8-max",
+    input: "大家好，我叫刘五，今年34岁，邮箱是liuwu@example.com，平时喜欢打篮球和旅游。请抽取姓名与年龄信息，以JSON格式返回",
+    text: { format: { type: "json_object" } }
+});
+
+console.log(response.output_text);
+```
+
+### 返回结果
+
+```
+{"姓名": "刘五", "年龄": 34}
+```
+
+#### curl
+
+```
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses \
+-H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+-H "Content-Type: application/json" \
+-d '{
+    "model": "qwen3.8-max",
+    "input": "大家好，我叫刘五，今年34岁，邮箱是liuwu@example.com，平时喜欢打篮球和旅游。请抽取姓名与年龄信息，以JSON格式返回",
+    "text": {
+        "format": {
+            "type": "json_object"
+        }
+    }
+}'
+```
+
+### 返回结果
+
+```
+{
+    "id": "resp_3b59521f-fbef-9873-9c54-c3fdc94da946",
+    "created_at": 1793277220,
+    "model": "qwen3.8-max",
+    "object": "response",
+    "output": [
+        {
+            "id": "reasoning_3a4a1e6d-2a2f-4c3f-a3ea-0f0a5c1b9f11",
+            "summary": [
+                {
+                    "text": "We need answer user request. Need output JSON only.",
+                    "type": "summary_text"
+                }
+            ],
+            "type": "reasoning"
+        },
+        {
+            "id": "msg_acbe8467-497c-4c09-8584-dae4a1c97f9b",
+            "content": [
+                {
+                    "annotations": [],
+                    "text": "{\"姓名\": \"刘五\", \"年龄\": 34}",
+                    "type": "output_text",
+                    "logprobs": null
+                }
+            ],
+            "role": "assistant",
+            "status": "completed",
+            "type": "message"
+        }
+    ],
+    "status": "completed",
+    "text": {
+        "format": {
+            "type": "json_object"
+        },
+        "verbosity": null
+    },
+    "usage": {
+        "input_tokens": 123,
+        "output_tokens": 118,
+        "output_tokens_details": {
+            "reasoning_tokens": 95
+        },
+        "total_tokens": 241
+    }
+}
+```
+
+#### DashScope API
 
 #### Python
 
@@ -447,6 +576,8 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
     "request_id": "xxx-xxx-xxx-xxx-xxx"
 }
 ```
+
+> 思考模型（如 qwen3.8-max）默认开启深度思考，使用结构化输出时无需额外设置 `enable_thinking`。如需在流式输出中区分思考过程与回复内容，请参见[思考模型的流式输出](https://help.aliyun.com/zh/model-studio/stream#ae5fd8099d208)。
 
 ## 图片、视频数据处理
 
@@ -876,477 +1007,6 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
   },
   "request_id": "b129dce1-0d5d-4772-b8b5-bd3a1d5cde63"
 }
-```
-
-## 思考模型的结构化输出
-
-启用思考模型的结构化输出后，模型会先进行推理再生成 JSON，输出结果通常比非思考模型更准确。
-
-#### OpenAI兼容
-
-#### Python
-
-### 示例代码
-
-```
-from openai import OpenAI
-import os
-
-# 初始化OpenAI客户端
-client = OpenAI(
-    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key="sk-xxx"
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
-    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
-)
-
-messages=[
-    {
-        "role": "system",
-        "content": [{"type": "text", "text": "请抽取用户的姓名与年龄信息，以JSON格式返回"}]
-    },
-    {
-        "role": "user",
-        "content": [{"type": "text", "text": "大家好，我叫刘五，今年34岁，邮箱是liuwu@example.com，平时喜欢打篮球和旅游"}],
-    },
-]
-
-completion = client.chat.completions.create(
-    model="qwen3.8-max",
-    messages=messages,
-    extra_body={"enable_thinking": True},
-    stream=True,
-    stream_options={
-        "include_usage": True
-    },
-    response_format={"type": "json_object"}
-)
-
-reasoning_content = ""  # 完整思考过程
-answer_content = ""  # 完整回复
-is_answering = False  # 是否进入回复阶段
-print("\n" + "=" * 20 + "思考过程" + "=" * 20 + "\n")
-
-for chunk in completion:
-    if not chunk.choices:
-        print("\nUsage:")
-        print(chunk.usage)
-        continue
-
-    delta = chunk.choices[0].delta
-
-    # 只收集思考内容
-    if hasattr(delta, "reasoning_content") and delta.reasoning_content is not None:
-        if not is_answering:
-            print(delta.reasoning_content, end="", flush=True)
-        reasoning_content += delta.reasoning_content
-
-    # 收到content，开始进行回复
-    if hasattr(delta, "content") and delta.content:
-        if not is_answering:
-            print("\n" + "=" * 20 + "完整回复" + "=" * 20 + "\n")
-            is_answering = True
-        print(delta.content, end="", flush=True)
-        answer_content += delta.content
-```
-
-### 返回结果
-
-```
-====================思考过程====================
-
-用户要求抽取姓名与年龄信息，并以JSON格式返回。
-
-从文本中可以看到：
-- 姓名：刘五
-- 年龄：34
-- 邮箱：liuwu@example.com（但用户只要求姓名和年龄）
-- 爱好：打篮球和旅游（但用户只要求姓名和年龄）
-
-根据要求，只需要提取姓名和年龄信息，并以JSON格式返回。
-
-JSON格式应该是：
-{
-  "姓名": "刘五",
-  "年龄": 34
-}
-
-或者使用英文键名：
-{
-  "name": "刘五",
-  "age": 34
-}
-
-考虑到用户使用的是中文提问，使用中文键名可能更合适。不过通常JSON键名使用英文也是常见做法。这里我采用中文键名，因为用户的指令是中文的，且提取的信息也是中文语境下的。
-
-最终输出：
-{
-  "姓名": "刘五",
-  "年龄": 34
-}
-====================完整回复====================
-
-{"姓名":"刘五","年龄":34}
-Usage:
-CompletionUsage(completion_tokens=203, prompt_tokens=48, total_tokens=251, completion_tokens_details=CompletionTokensDetails(accepted_prediction_tokens=None, audio_tokens=None, reasoning_tokens=190, rejected_prediction_tokens=None), prompt_tokens_details=None)
-```
-
-#### Node.js
-
-### 示例代码
-
-```
-import OpenAI from "openai";
-import process from 'process';
-
-// 初始化 openai 客户端
-const openai = new OpenAI({
-    apiKey: process.env.DASHSCOPE_API_KEY, // 从环境变量读取
-    baseURL: 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1'
-});
-
-let reasoningContent = '';
-let answerContent = '';
-let isAnswering = false;
-
-async function main() {
-    try {
-        const messages = [
-            {
-                "role": "system",
-                "content": [{"type": "text", "text": "请抽取用户的姓名与年龄信息，以JSON格式返回"}]
-            },
-            {
-                "role": "user",
-                "content": [{"type": "text", "text": "大家好，我叫刘五，今年34岁，邮箱是liuwu@example.com，平时喜欢打篮球和旅游"}],
-            },
-        ];
-        const stream = await openai.chat.completions.create({
-            model: 'qwen3.8-max',
-            messages,
-            stream: true,
-            enable_thinking: true,
-            response_format: {type: 'json_object'},
-        });
-        console.log('\n' + '='.repeat(20) + '思考过程' + '='.repeat(20) + '\n');
-
-        for await (const chunk of stream) {
-            if (!chunk.choices?.length) {
-                console.log('\nUsage:');
-                console.log(chunk.usage);
-                continue;
-            }
-
-            const delta = chunk.choices[0].delta;
-
-            // 只收集思考内容
-            if (delta.reasoning_content !== undefined && delta.reasoning_content !== null) {
-                if (!isAnswering) {
-                    process.stdout.write(delta.reasoning_content);
-                }
-                reasoningContent += delta.reasoning_content;
-            }
-
-            // 收到content，开始进行回复
-            if (delta.content !== undefined && delta.content) {
-                if (!isAnswering) {
-                    console.log('\n' + '='.repeat(20) + '完整回复' + '='.repeat(20) + '\n');
-                    isAnswering = true;
-                }
-                process.stdout.write(delta.content);
-                answerContent += delta.content;
-            }
-        }
-    } catch (error) {
-        console.error('Error:', error);
-    }
-}
-
-main();
-```
-
-### 返回结果
-
-```
-====================思考过程====================
-
-1.  **分析用户请求：**
-    *   **核心任务：** 从给定文本中提取特定信息。
-    *   **目标信息：** “姓名”和“年龄”。
-    *   **输入文本：** “大家好，我叫刘五，今年34岁，邮箱是liuwu@example.com，平时喜欢打篮球和旅游”
-    *   **输出格式：** “JSON格式”。
-
-2.  **将输入文本分解为关键信息片段：**
-......
-    *   我应该以一个干净、不包含额外文本、可直接使用的JSON格式呈现最终答案。除非用户另有说明，否则无需向JSON本身添加对话性填充内容。
-
-这个过程从理解请求、分解输入、提取数据、选择正确的格式和结构，到最终组装，确保了满足用户的所有约束条件。
-====================完整回复====================
-
-{  "姓名": "刘五",
-  "年龄": 34
-}
-```
-
-#### HTTP
-
-### 示例代码
-
-#### curl
-
-```
-curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
--H "Authorization: Bearer $DASHSCOPE_API_KEY" \
--H "Content-Type: application/json" \
--d '{
-    "model": "qwen3.8-max",
-    "messages": [
-    {
-            "role": "system",
-            "content": [{"type": "text", "text": "请抽取用户的姓名与年龄信息，以JSON格式返回"}]
-        },
-        {
-            "role": "user",
-            "content": [{"type": "text", "text": "大家好，我叫刘五，今年34岁，邮箱是liuwu@example.com，平时喜欢打篮球和旅游"}]
-        }
-    ],
-    "stream": true,
-    "stream_options": {
-        "include_usage": true
-    },
-    "enable_thinking": true,
-    "response_format": {
-        "type": "json_object"
-    }
-}'
-```
-
-#### DashScope
-
-#### Python
-
-### 示例代码
-
-```
-import os
-import dashscope
-
-client = dashscope.Client(
-    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
-)
-
-messages = [
-    {
-        "role": "system",
-        "content": [{"text": "请抽取用户的姓名与年龄信息，以JSON格式返回"}]
-    },
-    {"role": "user", "content": [{"text": "大家好，我叫刘五，今年34岁，邮箱是liuwu@example.com，平时喜欢打篮球和旅游"}]}
-]
-
-stream = client.multimodal.chat.create(
-    model="qwen3.8-max",
-    messages=messages,
-    enable_thinking=True,
-    response_format={"type": "json_object"},
-    stream=True,
-)
-
-# 定义完整思考过程
-reasoning_content = ""
-# 定义完整回复
-answer_content = ""
-# 判断是否结束思考过程并开始回复
-is_answering = False
-
-print("=" * 20 + "思考过程" + "=" * 20)
-
-for chunk in stream:
-    # 获取当前chunk的内容（流式输出默认为增量模式）
-    content_text = chunk.choices[0].delta.content or ""
-    reasoning_text = chunk.choices[0].delta.reasoning_content or ""
-    # 如果思考过程与回复皆为空，则忽略
-    if content_text == "" and reasoning_text == "":
-        pass
-    else:
-        # 如果当前为思考过程
-        if reasoning_text != "" and content_text == "":
-            print(reasoning_text, end="", flush=True)
-            reasoning_content += reasoning_text
-        # 如果当前为回复
-        elif content_text != "":
-            if not is_answering:
-                print("\n" + "=" * 20 + "完整回复" + "=" * 20)
-                is_answering = True
-            print(content_text, end="", flush=True)
-            answer_content += content_text
-```
-
-### 返回结果
-
-```
-====================思考过程====================
-1.  **识别用户目标：**用户希望我从他们的句子中提取特定的信息（姓名和年龄），并以特定的格式（JSON）返回。
-...
-7.  **最终审查：**
-    *   JSON是否包含姓名“刘五”？是的。
-    *   JSON是否包含年龄34？是的。
-    *   格式是有效的JSON吗？是的。
-    *   它是否直接回答了用户的请求？是的。
-
-这个过程很简单，因为它是一个直接的信息提取任务。关键在于解析中文句子以找到模式（“我叫...”，“今年...岁”），然后按照要求正确格式化提取的数据。
-====================完整回复====================
-{  "姓名": "刘五",
-  "年龄": 34
-}
-```
-
-#### Java
-
-### 示例代码
-
-```
-// dashscope SDK的版本 >= 2.22.1
-import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;
-import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationParam;
-import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationResult;
-import com.alibaba.dashscope.common.MultiModalMessage;
-import com.alibaba.dashscope.common.Role;
-import com.alibaba.dashscope.exception.ApiException;
-import com.alibaba.dashscope.exception.NoApiKeyException;
-import com.alibaba.dashscope.exception.UploadFileException;
-import io.reactivex.Flowable;
-import java.lang.System;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import com.alibaba.dashscope.common.ResponseFormat;
-
-public class Main {
-    private static final Logger logger = LoggerFactory.getLogger(Main.class);
-    private static StringBuilder reasoningContent = new StringBuilder();
-    private static StringBuilder finalContent = new StringBuilder();
-    private static boolean isFirstPrint = true;
-
-    private static void handleResult(MultiModalConversationResult message) {
-        String reasoning = message.getOutput().getChoices().get(0).getMessage().getReasoningContent();
-        List<Map<String, Object>> content = message.getOutput().getChoices().get(0).getMessage().getContent();
-
-        if (reasoning != null && !reasoning.isEmpty()) {
-            reasoningContent.append(reasoning);
-            if (isFirstPrint) {
-                System.out.println("====================思考过程====================");
-                isFirstPrint = false;
-            }
-            System.out.print(reasoning);
-        }
-
-        if (content != null && !content.isEmpty()) {
-            String text = (String) content.get(0).get("text");
-            finalContent.append(text);
-            if (!isFirstPrint) {
-                System.out.println("\n====================完整回复====================");
-                isFirstPrint = true;
-            }
-            System.out.print(text);
-        }
-    }
-    private static MultiModalConversationParam buildParam(List<MultiModalMessage> msgs) {
-        ResponseFormat jsonMode = ResponseFormat.builder().type("json_object").build();
-        return MultiModalConversationParam.builder()
-                // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：.apiKey("sk-xxx")
-                .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-                .model("qwen3.8-max")
-                .enableThinking(true)
-                .incrementalOutput(true)
-                .messages(msgs)
-                .responseFormat(jsonMode)
-                .build();
-    }
-    public static void streamCall(MultiModalConversation conv, List<MultiModalMessage> msgs)
-            throws NoApiKeyException, ApiException, UploadFileException {
-        MultiModalConversationParam param = buildParam(msgs);
-        Flowable<MultiModalConversationResult> result = conv.streamCall(param);
-        result.blockingForEach(message -> handleResult(message));
-    }
-
-    public static void main(String[] args) {
-        try {
-            MultiModalConversation conv = new MultiModalConversation();
-            MultiModalMessage systemMsg = MultiModalMessage.builder().role(Role.SYSTEM.getValue())
-                    .content(Arrays.asList(Collections.singletonMap("text", "请抽取用户的姓名与年龄信息，以JSON格式返回"))).build();
-            MultiModalMessage userMsg = MultiModalMessage.builder().role(Role.USER.getValue())
-                    .content(Arrays.asList(Collections.singletonMap("text", "大家好，我叫刘五，今年34岁，邮箱是liuwu@example.com，平时喜欢打篮球和旅游"))).build();
-            List<MultiModalMessage> msgs = Arrays.asList(systemMsg, userMsg);
-            streamCall(conv, msgs);
-        } catch (ApiException | NoApiKeyException | UploadFileException e) {
-            logger.error("An exception occurred: {}", e.getMessage());
-        }
-    }
-}
-```
-
-### 返回结果
-
-```
-====================思考过程====================
-1.  **分析用户的请求。**
-    *   **用户的输入：** "大家好，我叫刘五，今年34岁，邮箱是liuwu@example.com，平时喜欢打篮球和旅游" （大家好，我叫刘五，我今年34岁，我的邮箱是 liuwu@example.com，我喜欢打篮球和旅游。）
-    *   **核心任务：** "请抽取用户的姓名与年龄信息" （请提取用户的姓名和年龄信息。）
-    *   **输出格式：** "以JSON格式返回" （以JSON格式返回）。
-...
-6.  **审查和优化输出。**
-    *   JSON格式正确吗？是的，它有花括号、双引号包裹的键、正确的值（字符串加引号，数字不加）以及键值对之间的逗号。
-    *   它是否按要求包含了*仅*姓名和年龄？是的。
-    *   摘取的信息是否准确？是的，“刘五”和“34”直接来自用户的文本。
-    *   输出可以直接使用。无需额外的解释，除非我想增加一些礼貌性。像“好的，已为您提取信息：”这样的简单短语是很好的客户服务。我们加上这个吧。
-    *   最终的响应应该是：
-        *   一段简短、礼貌的开场白。
-        *   包含在 ```json ... ``` 代码块中的JSON对象，以实现良好的格式化并防止转义问题。
-
-这个思考过程从理解高层级需求，到分析输入、提取特定数据、设计输出格式、构建它，最后再为清晰和正确性进行审查。这是一个系统性的方法，确保准确性并遵循用户指令。
-====================完整回复====================
-{  "姓名": "刘五",
-  "年龄": 34
-}
-```
-
-#### HTTP
-
-### 示例代码
-
-#### curl
-
-```
-curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation" \
--H "Authorization: Bearer $DASHSCOPE_API_KEY" \
--H "Content-Type: application/json" \
--H "X-DashScope-SSE: enable" \
--d '{
-    "model": "qwen3.8-max",
-    "input":{
-        "messages":[
-            {
-                "role": "system",
-                "content": [{"text": "请抽取用户的姓名与年龄信息，以JSON格式返回"}]
-            },
-            {
-                "role": "user",
-                "content": [{"text": "大家好，我叫刘五，今年34岁，邮箱是liuwu@example.com，平时喜欢打篮球和旅游"}]
-            }
-        ]
-    },
-    "parameters":{
-        "enable_thinking": true,
-        "incremental_output": true,
-        "response_format": {
-            "type": "json_object"
-        }
-    }
-}'
 ```
 
 ## 优化提示词
@@ -1858,7 +1518,7 @@ A：{"info":{"name":"王五","age":"40岁","email":"wangwu@example.com"}}"""))).
 
 通过 OpenAI SDK 的 `parse` 方法，可直接传入 Python Pydantic 类或 Node.js Zod 对象。SDK 会自动将其转换为 JSON Schema，无需手动编写复杂 JSON。DashScope SDK 需参考上文格式，手动构造 JSON Schema。
 
-#### OpenAI 兼容
+#### OpenAI兼容-Chat Completions API
 
 Python
 
@@ -1930,7 +1590,44 @@ console.log(`年龄：${userInfo.age}`);
 姓名：刘五，年龄：25
 ```
 
-#### DashScope
+#### OpenAI兼容-Responses API
+
+Responses API 通过 `text.format` 参数设置结构化输出，支持 `json_schema` 和 `json_object` 两种类型。OpenAI SDK 的 `parse` 方法同样可用，通过 `text_format` 传入 Pydantic 类或 Zod 对象。
+
+```
+from pydantic import BaseModel, Field
+from openai import OpenAI
+import os
+
+client = OpenAI(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
+)
+
+class UserInfo(BaseModel):
+    name: str = Field(description="用户的姓名")
+    age: int = Field(description="用户的年龄，单位为岁")
+
+response = client.responses.parse(
+    model="qwen3.8-max",
+    input="我叫刘五，今年25岁。",
+    text_format=UserInfo,
+)
+
+result = response.output_parsed
+print(f"姓名：{result.name}，年龄：{result.age}")
+```
+
+运行代码可获得以下输出：
+
+```
+姓名：刘五，年龄：25
+```
+
+参数说明请参见 [Responses API 的 text 参数](raw/model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)。
+
+#### DashScope API
 
 > 暂不支持 Java SDK。
 

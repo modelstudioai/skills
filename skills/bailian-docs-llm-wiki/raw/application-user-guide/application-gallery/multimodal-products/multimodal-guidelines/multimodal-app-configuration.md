@@ -132,7 +132,7 @@
 
 如未填写，则使用通用Prompt，适用于常见的口语对话场景。
 
-支持使用阿里云百炼的Prompt[模板概述](raw/application-user-guide/prompt/prompt-template.md)和Prompt[自动优化](raw/application-user-guide/prompt/optimize-prompt.md)功能。
+支持使用阿里云百炼的Prompt[模板概述](raw/application-user-guide/agent-development/llm-application/prompt/prompt-template.md)和Prompt[自动优化](raw/application-user-guide/agent-development/llm-application/prompt/optimize-prompt.md)功能。
 
 提示词编辑区支持使用 `##` 标题分段组织内容（如 **##角色**、**##系统条件**、**##风格**），变量使用 `${变量名}` 格式插入（如 `${location}`、`${date}`），字数上限为 8000 字。
 
@@ -164,7 +164,7 @@
 
 开启知识库后，通过在提示词中手动输入「/」来添加变量。
 
-具体操作可查看[创建和使用知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)说明文档。
+具体操作可查看[创建和使用知识库](raw/application-user-guide/agent-context/knowledge-base/data-connection-overview/rag-knowledge-base.md)说明文档。
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2655897471/p958293.png)
 

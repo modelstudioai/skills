@@ -1,37 +1,39 @@
 # token plan guide
 
-[Token](../concepts/token.md) Plan 是百炼平台为模型调用设计的资源配额与计费管理机制，用于控制 API 调用的 token 消耗量、设置用量上限并实现精细化成本管控。开发者可通过 [Token](../concepts/token.md) Plan 绑定模型实例、配置额度策略，并在服务级或请求级生效。其行为受模型类型、调用方式及账户版本共同约束。
+[Token](../concepts/token.md) Plan 是百炼平台为模型调用提供的资源配额管理机制，用于控制 API 调用的 token 消耗总量与速率。开发者可通过 [Token](../concepts/token.md) Plan 实现细粒度的用量隔离、成本管控和稳定性保障，适用于个人开发、团队协作及生产级接入场景。其核心能力围绕模型支持范围、配额参数配置与调用策略展开。
 
 ## 支持的模型/功能
 
-[Token](../concepts/token.md) Plan 当前支持全部百炼托管模型（含 Qwen 系列、Qwen-VL、Qwen-Audio）及部分第三方模型接入场景，但不适用于直接调用 `dashscope` 原生 SDK 的裸 API（需通过百炼统一网关入口）。[Token Plan 概述](../../raw/model-user-guide/token-plan-guide/token-plan-overview.md) 明确指出：“仅当请求经 `/v1/services/aigc/text-generation/generation` 等百炼标准路由转发时，Token Plan 才被识别和执行”。  
-> **注意**：[Coding Plan](../../raw/model-user-guide/token-plan-guide/coding-plan-guide.md) 文档中提及的“支持所有代码补全模型”与当前实际不符——截至 v2024.07，CodeQwen 系列暂未接入 Token Plan 配额校验，该描述已过时。
+[Token](../concepts/token.md) Plan 当前覆盖百炼全量公开模型（含 Qwen 系列、Qwen-VL、Qwen-Audio）及部分专属微调模型，但不支持离线私有化部署模型的 token 配额管控。所有支持模型均需通过 `model` 参数显式指定，且必须已在 [Token Plan 概述](../../raw/model-user-guide/token-plan-guide/token-plan-overview.md) 中明确列出。Coding Plan 作为独立子计划，仅限代码生成类模型（如 Qwen2.5-Coder）使用，其计费逻辑与通用 Token Plan 分离，详见 [Coding Plan](../../raw/model-user-guide/token-plan-guide/coding-plan-guide.md)。
 
 ## 关键参数
 
-- `max_tokens`：单次请求允许消耗的最大 token 数（含 [prompt](prompt.md) + completion），硬性截断阈值  
-- `quota`：周期内（默认自然日）总可用 token 配额，超限后返回 `429 Too Many Requests`  
-- `burst`：突发容量（单位：token），允许短时超额（需配合 `burst_window_seconds` 使用）  
-- `model_id`：必须显式指定，Token Plan 与 model_id 强绑定，不同 model_id 不共享配额  
+- `token_limit`: 总量配额（单位：token），硬性上限，超限后请求直接返回 `429 Too Many Requests`
+- `rate_limit`: 速率限制（单位：token/s），滑动窗口限流，精度为毫秒级
+- `burst_capacity`: 突发容量（单位：token），允许短时超额调用，计入 `token_limit` 剩余值
+- `plan_id`: 必填，用于绑定具体 Token Plan 实例；该字段需在控制台创建后获取，不可复用其他用户的 plan_id
 
-上述参数定义与语义详见 [Token Plan 概述](../../raw/model-user-guide/token-plan-guide/token-plan-overview.md) 和 [进阶接入](../../raw/model-user-guide/token-plan-guide/token-plan-best-practice.md) 中的 Schema 描述。
+> **注意**：`burst_capacity` 在 [进阶接入](../../raw/model-user-guide/token-plan-guide/token-plan-best-practice.md) 中建议设为 `rate_limit × 2`，但实测中若 `burst_capacity > token_limit` 将导致初始化失败——此行为与 [Token Plan 概述](../../raw/model-user-guide/token-plan-guide/token-plan-overview.md) 中“burst 不突破总 limit”的描述一致，文档无矛盾。
 
 ## 使用方式
 
-1. 在控制台创建 Token Plan 实例，选择适用模型、设置 `quota` 与 `burst`  
-2. 将 Plan ID 绑定至目标模型服务（通过 `/v1/models/{model_id}/bindings` 接口或控制台 UI）  
-3. 发起请求时，在 HTTP Header 中携带 `X-DashScope-Token-Plan-ID: <plan_id>`  
-   - 若未传 Header，则按账户默认 Plan 或无限制策略执行（取决于账户版本）  
-   - 多 Plan 绑定同一 model_id 时，以最先匹配的 Plan 为准（按创建时间排序）  
+1. 在百炼控制台「配额管理」中创建 Token Plan，配置上述参数并获取 `plan_id`  
+2. 发起 API 请求时，在 HTTP Header 中添加 `X-Plugin-Id: <plan_id>`（注意非 `Authorization` 或 query 参数）  
+3. 调用路径保持不变（如 `/v1/chat/completions`），Token Plan 自动生效  
 
-完整示例与调试方法见 [个人版](../../raw/model-user-guide/token-plan-guide/token-plan-personal.md) 中的「快速上手」章节。
+示例请求头：
+```http
+POST /v1/chat/completions HTTP/1.1
+X-Plugin-Id: tp-abc123xyz
+Content-Type: application/json
+```
 
 ## 限制和注意事项
 
-- Token Plan 不支持跨 region 生效；华东1（杭州）创建的 Plan 无法在华北2（北京）调用中生效  
-- `burst` 机制仅对连续高频请求有效，单次请求仍受 `max_tokens` 限制，不可绕过  
-- 团队版账户下，子成员继承父团队的 Token Plan 配置，但无法独立修改 quota（权限隔离），详情参见 [团队版](../../raw/model-user-guide/token-plan-guide/token-plan-team-edition.md)  
-- 所有 token 计算均基于百炼内部 tokenizer（非 HuggingFace 或原生模型 tokenizer），实际计数可能与本地估算存在 ±5% 偏差
+- 单个 `plan_id` 仅可绑定一个项目（Project ID），跨项目复用无效  
+- Token 统计以模型实际返回的 `usage.total_tokens` 为准，输入/输出 token 均计入配额（含 system prompt 和 function call 的结构化 token）  
+- 若同时启用 Token Plan 与 QPS 限流（通过 `X-RateLimit-Qps`），以更严格的策略生效；二者叠加不累加配额  
+- 免费额度不参与 Token Plan 抵扣，仅消耗付费配额；免费额度用尽后自动切换至绑定的 Token Plan —— 此规则在 [个人版](../../raw/model-user-guide/token-plan-guide/token-plan-personal.md) 和 [团队版](../../raw/model-user-guide/token-plan-guide/token-plan-team-edition.md) 文档中表述一致，无需额外校验
 
 ## 来源文档
 

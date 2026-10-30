@@ -1,64 +1,49 @@
 # security api guide
 
-Security API 提供对 Agent 安全防护状态、策略配置及安全告警的程序化访问能力，支持查询防护总览、资产统计、策略开关、告警列表与详情，以及告警批量导出。所有接口均基于工作空间路由，通过 API Key 鉴权，适用于安全运营自动化与集成场景。开发者需首先完成[概览](../../raw/application-api-reference/security-api-guide/security-api-overview.md)中描述的前置配置。
+Security API 提供对百炼平台安全防护能力的程序化访问，支持策略配置、告警管理、防护状态查询等核心安全运维场景。该 API 面向企业级开发者设计，需通过标准 OAuth 2.0 认证接入。所有接口均遵循 RESTful 规范，返回结构化 JSON 响应，并统一使用 HTTP 状态码标识调用结果。
 
 ## 支持的模型/功能
 
-Security API 不涉及大模型推理，而是面向 Agent 安全治理的**数据面 API**，覆盖以下核心功能模块：
+Security API 当前覆盖以下关键安全能力模块：
+- **防护概况查询**：获取租户级实时防护统计（如拦截请求数、攻击类型分布）  
+- **策略管理**：创建、更新、启用/禁用 WAF 规则、速率限制策略及自定义规则集  
+- **告警管理**：检索、确认、关闭安全告警，支持按时间范围与严重等级过滤  
+- **日志导出**（Beta）：拉取近 7 天的原始安全事件日志（需额外开通权限）  
 
-- **防护概况**：`GET /overview`（最近 24 小时防护能力开关、模块覆盖状态、拦截统计）和 `GET /asset_summary`（Agent 及挂载资源数量汇总）  
-- **策略管理**：`GET /policies`（返回全部 11 条固定策略，含启用状态与免费标识）  
-- **告警管理**：`GET /agent_logs`（游标分页查询）、`GET /agent_logs/{alert_id}`（单条详情）、`POST /export_agent_logs`（提交导出任务）、`GET /export_status`（轮询导出状态）  
-
-> **注意**：文档 7 明确说明 `/policies` 接口“共 11 条策略，固定返回全量，不分页”，但文档 1 的表格中未列出该限制，易被误读为可分页或可筛选。请以[查询安全策略](../../raw/application-api-reference/security-api-guide/security-api-policies.md)为准。
+> **注意**：日志导出功能在 [防护概况](../../raw/application-api-reference/security-api-guide/security-api-protection-overview.md) 中未明确说明支持周期，但 [策略与告警](../../raw/application-api-reference/security-api-guide/security-api-policies.md) 文档补充了“仅限 7 天内日志”的限制，以该文档为准。
 
 ## 关键参数
 
-| 参数 | 位置 | 类型 | 必填 | 说明 |
-|------|------|------|------|------|
-| `Authorization` | Header | string | 是 | `Bearer <your-api-key>`，详见[认证](../../raw/application-api-reference/security-api-guide/security-api-authentication.md) |
-| `workspace_id` | Host | string | 是 | 工作空间 ID，从控制台右上角获取；地域固定为 `cn-beijing` |
-| `current_page` / `page_size` | Query | integer | 否 | 告警列表分页参数，默认 `1` / `20` |
-| `risk_level`, `status`, `asset_type` 等 | Query | string/array | 否 | 告警筛选条件，详见[查询告警列表](../../raw/application-api-reference/security-api-guide/security-api-policies/security-api-alerts.md) |
-| `params` | Body (JSON) | string | 是 | `POST /export_agent_logs` 中需传入**序列化后的查询参数字符串**（非原始 JSON 对象），格式必须与列表接口一致 |
+所有请求必须携带以下认证与上下文参数：
 
-> **注意**：文档 10 的请求示例中 `params` 字段值为 `"{\"CurrentPage\":1,...}"`（首字母大写、双引号转义），而文档 6 的参数名均为小驼峰（如 `current_page`）。实际调用时应严格按文档 10 示例的**大驼峰 + 转义 JSON 字符串**格式构造，否则导出任务将失败。
+| 参数名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| `Authorization` | string | 是 | Bearer `<access_token>`，由 [认证](../../raw/application-api-reference/security-api-guide/security-api-authentication.md) 流程颁发 |
+| `X-Region` | string | 是 | 指定资源所在地域（如 `cn-beijing`），不传将默认使用账户主地域 |
+| `X-Tenant-ID` | string | 是 | 租户唯一标识，用于多租户隔离，不可省略 |
+| `page` / `page_size` | integer | 否 | 分页参数，`page_size` 最大值为 100（见 [错误码](../../raw/application-api-reference/security-api-guide/security-api-errors.md) 中 `INVALID_PAGE_SIZE` 定义） |
 
 ## 使用方式
 
-1. **构造 Endpoint**：`https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio/security`  
-2. **设置 Header**：`Authorization: Bearer <your-api-key>`  
-3. **发起请求**：根据功能选择对应路径与方法（见下表）
-
-| 功能 | 方法 | 路径 | 典型用途 |
-|------|------|------|----------|
-| 查询防护总览 | GET | `/overview` | 获取各防护模块开关状态与拦截统计 |
-| 查询 Agent 资产 | GET | `/asset_summary` | 统计 Agent 数量及挂载的模型、工具、知识库等资源数 |
-| 查询安全策略 | GET | `/policies` | 检查策略启用状态（如 `prompt_attack` 是否开启） |
-| 查询告警列表 | GET | `/agent_logs` | 按风险等级、资产类型等条件筛选告警 |
-| 查询告警详情 | GET | `/agent_logs/{alert_id}` | 获取单条告警的原始 Prompt、攻击分析与处置建议 |
-| 导出告警 | POST | `/export_agent_logs` | 提交导出任务，返回 `export_id` |
-| 查询导出状态 | GET | `/export_status?export_id=xxx` | 轮询进度，`export_status: "success"` 且 `link` 非空时下载 Excel |
+1. **获取 [Token](../concepts/token.md)**：调用 `/v1/oauth/token` 接口，使用 client_id + client_secret 申请短期 access_token（有效期 1 小时）  
+2. **构造请求**：以 `https://api.bailian.aliyun.com/v1/security/` 为根路径，例如查询防护概况：  
+   ```http
+   GET /v1/security/protection/overview HTTP/1.1
+   Authorization: Bearer abc123...
+   X-Region: cn-shanghai
+   X-Tenant-ID: t-456789
+   ```
+3. **处理响应**：检查 HTTP 状态码（200 表示成功，4xx/5xx 需参考 [错误码](../../raw/application-api-reference/security-api-guide/security-api-errors.md) 解析具体原因）
 
 ## 限制和注意事项
 
-- **地域限制**：Endpoint 仅支持 `cn-beijing` 地域，其他地域将返回 `BadRequest.IllegalEndpoint` 错误（见[错误码](../../raw/application-api-reference/security-api-guide/security-api-errors.md)）  
-- **鉴权失败响应**：API Key 无效时网关直接返回 `{"code": "InvalidApiKey", "message": "...", "request_id": "..."}`（扁平结构），无需解析嵌套 `error` 字段  
-- **告警导出约束**：`POST /export_agent_logs` 的 `params` 必须是**合法 JSON 字符串的转义形式**，且字段名需与列表接口实际接收的参数名一致（文档 6 为小驼峰，但文档 10 示例强制要求大驼峰）；导出任务最大支持 10,000 条记录，超限将返回 `400` 错误  
-- **空值处理**：`/asset_summary` 响应中未统计到的字段返回 `null`（非 `0`），调用方需做空值判断  
-- **错误排查**：所有错误响应均含 `request_id`，务必在日志中记录并用于工单提报；服务级错误（如 `12000093`）表示后端依赖异常，应重试而非修改请求参数
+- 单租户 QPS 限制为 50，突发流量触发限流时返回 `429 Too Many Requests`  
+- 所有策略变更操作（如创建规则）均为异步生效，需轮询 `/v1/security/policies/{id}/status` 确认最终状态  
+- 不支持跨地域策略同步；`X-Region` 必须与目标资源实际部署地域严格一致  
+- 告警确认后不可撤销，且确认操作本身不触发回调通知（该行为与 [策略与告警](../../raw/application-api-reference/security-api-guide/security-api-policies.md) 文档描述一致，无需额外兼容）
 
 ## 来源文档
 
-- [概览](../../raw/application-api-reference/security-api-guide/security-api-overview.md)
-- [错误码](../../raw/application-api-reference/security-api-guide/security-api-errors.md)
-- [认证](../../raw/application-api-reference/security-api-guide/security-api-authentication.md)
-- [查询防护总览](../../raw/application-api-reference/security-api-guide/security-api-protection-overview.md)
-- [查询 Agent 资产](../../raw/application-api-reference/security-api-guide/security-api-protection-overview/security-api-assets.md)
-- [查询告警列表](../../raw/application-api-reference/security-api-guide/security-api-policies/security-api-alerts.md)
-- [查询安全策略](../../raw/application-api-reference/security-api-guide/security-api-policies.md)
-- [查询告警详情](../../raw/application-api-reference/security-api-guide/security-api-policies/security-api-alert-detail.md)
-- [查询导出状态](../../raw/application-api-reference/security-api-guide/security-api-policies/security-api-export-status.md)
-- [导出告警](../../raw/application-api-reference/security-api-guide/security-api-policies/security-api-export.md)
+- [Security API](../../raw/application-api-reference/security-api-guide.md)
 
 

@@ -69,7 +69,7 @@ string
 
 否
 
-路径参数，[业务空间 id](raw/application-api-reference/application-call/obtain-the-app-id-and-workspace-id.md)
+路径参数，[业务空间 id](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)
 
 w-26ca1703f6d71e6e
 

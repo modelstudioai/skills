@@ -1,8 +1,8 @@
-# 非实时语音识别（Qwen-Audio-3.x-ASR-Flash/Fun-ASR-Flash）Android SDK
+# 非实时语音识别（Fun-ASR-Flash）Android SDK
 
-Qwen-Audio-3.x-ASR-Flash/Fun-ASR-Flash非实时语音识别Android SDK可将语音转换为文本。
+Fun-ASR-Flash非实时语音识别Android SDK可将语音转换为文本。
 
-**用户指南：**[非实时语音识别](raw/model-user-guide/model-experience/speech-recognition/non-realtime-speech-recognition-user-guide.md)。关于支持的音频格式、文件大小限制、时长限制等输入要求，请参见[音频规格](https://help.aliyun.com/zh/model-studio/asr-model#asr_audio_spec02)。
+关于支持的音频格式、文件大小限制、时长限制等输入要求，请参见[音频规格](https://help.aliyun.com/zh/model-studio/asr-model#asr_audio_spec02)。
 
 ## 快速开始
 
@@ -31,7 +31,7 @@ Qwen-Audio-3.x-ASR-Flash/Fun-ASR-Flash非实时语音识别Android SDK可将语�
 
 ### 连接与控制参数
 
-通过在[initialize](#initialize)接口的`parameters`参数中传入一个JSON字符串来配置。
+通过在`initialize`接口的`parameters`参数中传入一个JSON字符串来配置。
 
 **参数示例：**以下为 JSON 字符串示例，参数未完整列出。请按实际需求在编码时补充：
 
@@ -59,13 +59,14 @@ Qwen-Audio-3.x-ASR-Flash/Fun-ASR-Flash非实时语音识别Android SDK可将语�
 
 是
 
-服务地址：  
+服务地址：
 
 -   `wss://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
--   华北2（北京）：`wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`/api/v1/services/aigc/multimodal-generation/generation
+-   华北2（北京）：`wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
+    
 -   新加坡：`wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
+    
 
-  
 调用时，请将 `{WorkspaceId}` 替换为真实的 [Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
 `apikey`
@@ -98,7 +99,7 @@ API Key。
 
 否
 
-日志文件的存储路径。 此参数仅在调用[initialize](#initialize)接口时将`save_log`设为true时生效。此时必须设置日志文件路径，否则将报错。 本地最多保留两个日志文件。
+日志文件的存储路径。 此参数仅在调用`initialize`接口时将`save_log`设为true时生效。此时必须设置日志文件路径，否则将报错。 本地最多保留两个日志文件。
 
 `max_log_file_size`
 
@@ -106,7 +107,7 @@ API Key。
 
 否
 
-设定日志文件的最大字节数。 此参数仅在调用[initialize](#initialize)接口时将`save_log`设为true时生效。 默认值：104857600（100 \* 1024 \* 1024 字节, 即 100MiB）。
+设定日志文件的最大字节数。 此参数仅在调用`initialize`接口时将`save_log`设为true时生效。 默认值：104857600（100 \* 1024 \* 1024 字节, 即 100MiB）。
 
 `log_track_level`
 
@@ -114,11 +115,20 @@ API Key。
 
 否
 
-控制通过日志回调（`onFileTransLogTrackCallback`）对外发送的日志内容的过滤级别。 默认值：2。 取值范围： - 0：LOG\_LEVEL\_VERBOSE - 1：LOG\_LEVEL\_DEBUG - 2：LOG\_LEVEL\_INFO - 3：LOG\_LEVEL\_WARNING - 4：LOG\_LEVEL\_ERROR - 5：LOG\_LEVEL\_NONE（表示关闭此功能） 注意：`log_track_level`与`level`（通过[initialize](#initialize)接口设置）共同决定最终回调的日志。一条日志的级别数值必须同时大于或等于`log_track_level`和`level`的值，才会被回调。例如，`log_track_level`设为2 (INFO)，`level`设为3 (WARNING)，则只有WARNING及以上级别（数值>=3）的日志才会被回调。
+控制通过日志回调（`onFileTransLogTrackCallback`）对外发送的日志内容的过滤级别。 默认值：2。 取值范围：
+
+-   0： LOG\_LEVEL\_VERBOSE
+-   1： LOG\_LEVEL\_DEBUG
+-   2： LOG\_LEVEL\_INFO
+-   3： LOG\_LEVEL\_WARNING
+-   4： LOG\_LEVEL\_ERROR
+-   5： LOG\_LEVEL\_NONE（表示关闭此功能）
+
+**说明**`log_track_level`与`level`（通过`initialize`接口设置）共同决定最终回调的日志。一条日志的级别数值必须同时大于或等于`log_track_level`和`level`的值，才会被回调。例如，`log_track_level`设为2 (INFO)，`level`设为3 (WARNING)，则只有WARNING及以上级别（数值>=3）的日志才会被回调。
 
 ### 语音识别效果参数
 
-通过[startFileTranscriber](#startfiletranscriber)接口配置所有语音识别效果参数。
+通过`startFileTranscriber`接口配置所有语音识别效果参数。
 
 **参数示例：**以下为 JSON 字符串示例，参数未完整列出。请按实际需求在编码时补充：
 
@@ -140,7 +150,7 @@ API Key。
   ],
   "nls_config": {
     "format": "mp3",
-    "model": "qwen-audio-3.0-asr-flash"
+    "model": "fun-asr-flash-2026-06-15"
   }
 }
 ```
@@ -160,7 +170,7 @@ API Key。
 
 否
 
-如果[连接与控制参数](#connection-parameters)的`apikey`使用的是[临时API Key](raw/model-api-reference/more-about-models/generate-temporary-api-key.md)，可在此处进行更新，以免超时失效。
+如果连接与控制参数的`apikey`使用的是[临时API Key](raw/model-api-reference/more-about-models/generate-temporary-api-key.md)，可在此处进行更新，以免超时失效。
 
 `nls_config`
 
@@ -176,7 +186,7 @@ API Key。
 
 是
 
-指定示例调用的模型。模型信息请参见[支持的模型与地域](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#4a43cc1bb7kxg)。
+模型名称。
 
 `nls_config.format`
 
@@ -202,82 +212,62 @@ API Key。
 
 预编译热词列表 ID。 需预先调用创建热词列表接口生成，识别时传入该 ID 即可使用列表中的热词。 适用于词汇已知且相对稳定、需要跨请求复用同一词表的场景。 使用方法请参见[预编译热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_precompiled_h3)。
 
-`nls_config.instant_vocabulary`
-
-`object`
-
-否
-
-即时热词。  
-以键值对形式传入，键为热词文本（`string`），值为热词权重（`integer`），无需预先创建热词列表。权重取值范围为 \[1, 5\] 或 50：取 \[1, 5\] 时值越大模型越倾向输出该词；取 50 时为超级热词，召回率大幅提升，但超级热词数量最多不超过 50 个。  
-适用于临时性、会话级别的热词优化。  
-与预编译热词同时配置时，系统会合并两类热词；合并后超过 2000 个时，随机选择 2000 个使用。使用方法请参见[即时热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_instant_h3)。  
-
-**重要**即时热词的适用模型及限制请参见[即时热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_instant_h3)。
-
-  
-```
-{
-  "张三": 5,
-  "李四": 5
-}
-```
-
 `nls_config.language_hints`
 
 `array[string]`
 
 否
 
-设置待识别语言代码。如果无法提前确定语种，可不设置，模型会自动识别语种。  
-对于 Qwen-Audio-3.x-ASR-Flash 系列模型，最多支持设置 4 个值，即便设置超出 4 个，也仅前 4 个生效；对于 Fun-ASR-Flash 系列模型，仅支持设置 1 个值，即便设置多个，也仅第一个生效。  
+设置待识别语言代码。如果无法提前确定语种，可不设置，模型会自动识别语种。最多支持设置 1 个值，超出时仅前 1 个生效。
 
--   Qwen-Audio-3.x-ASR-Flash、fun-asr-flash-2026-06-15：
+支持的语言代码
+
 -   zh: 中文
 -   en: 英文
 -   ja: 日语
--   ko：韩语
--   vi：越南语
--   th：泰语
--   id：印尼语
--   ms：马来语
--   tl：菲律宾语
--   hi：印地语
--   ar：阿拉伯语
--   fr：法语
--   de：德语
--   es：西班牙语
--   pt：葡萄牙语
--   ru：俄语
--   it：意大利语
--   nl：荷兰语
--   sv：瑞典语
--   da：丹麦语
--   fi：芬兰语
--   no：挪威语
--   el：希腊语
--   pl：波兰语
--   cs：捷克语
--   hu：匈牙利语
--   ro：罗马尼亚语
--   bg：保加利亚语
--   hr：克罗地亚语
--   sk：斯洛伐克语
+-   ko: 韩语
+-   vi: 越南语
+-   th: 泰语
+-   id: 印尼语
+-   ms: 马来语
+-   tl: 菲律宾语
+-   hi: 印地语
+-   ar: 阿拉伯语
+-   fr: 法语
+-   de: 德语
+-   es: 西班牙语
+-   pt: 葡萄牙语
+-   ru: 俄语
+-   it: 意大利语
+-   nl: 荷兰语
+-   sv: 瑞典语
+-   da: 丹麦语
+-   fi: 芬兰语
+-   no: 挪威语
+-   el: 希腊语
+-   pl: 波兰语
+-   cs: 捷克语
+-   hu: 匈牙利语
+-   ro: 罗马尼亚语
+-   bg: 保加利亚语
+-   hr: 克罗地亚语
+-   sk: 斯洛伐克语
 
-messages
+`messages`
 
 `array[object]`
 
 是
 
-消息列表。包含当前待识别的音频，以及可选的对话上下文（用于提升识别效果）。  
+消息列表。包含当前待识别的音频，以及可选的对话上下文（用于提升识别效果）。
+
 **详见如下说明。**
 
 **messages参数说明：**
 
 **重要**上下文功能用于提升专有词汇的识别准确率，使用方法详见[上下文增强](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#ctx_enhance_h2)。
 
-**约束**：上下文消息（`input_text` 和 `text` 类型）各最多 5 条，超出时保留最近的 5 条。每轮上下文文本总长度（`user` 和 `assistant` 的 `text` 字段长度之和）不超过 400 个字符（按字符数计算，每个字符计为 1），超出部分从末尾截断。
+上下文消息（`input_text` 和 `text` 类型）各最多 5 条，超出时保留最近的 5 条。每轮上下文文本总长度（`user` 和 `assistant` 的 `text` 字段长度之和）不超过 400 个字符（按字符数计算，每个字符计为 1），超出部分从末尾截断。
 
 **重要**携带上下文时，`messages` 中的消息顺序有要求：上下文消息必须按对话轮次排列，每轮中 `user`（`input_text` 类型）必须在对应的 `assistant`（`text` 类型）之前；包含 `input_audio` 的 `user` 消息必须放在 `messages` 数组的最后。
 
@@ -289,18 +279,20 @@ messages
 
 **说明**
 
-role
+`role`
 
 `string`
 
 是
 
-消息角色。取值范围：  
+消息角色。取值范围：
 
 -   `user`（必选）：用户消息。type为`input_audio`时表示当前待识别的音频；type为`input_text`时表示前几轮的识别结果或领域相关的词表（可选，上下文）。
+    
 -   `assistant`（可选，上下文）：前几轮大语言模型的回复内容。
+    
 
-content
+`content`
 
 `array[object]`
 
@@ -318,19 +310,22 @@ content
 
 **说明**
 
-type
+`type`
 
 `string`
 
 是
 
-内容类型。每个请求至少需要一条`input_audio`类型的消息。取值范围：  
+内容类型。每个请求至少需要一条`input_audio`类型的消息。取值范围：
 
 -   `input_audio`（必选）：当前待识别的音频输入（role为user），需同时传入`input_audio`对象。
+    
 -   `input_text`（可选，上下文）：前几轮用户语音的识别结果或领域相关的词表（role为user），需同时传入`text`字段。
+    
 -   `text`（可选，上下文）：前几轮大语言模型的回复内容（role为assistant），需同时传入`text`字段。
+    
 
-input\_audio
+`input_audio`
 
 `object`
 
@@ -338,22 +333,24 @@ input\_audio
 
 当`type`为`input_audio`时必填。
 
-input\_audio.data
+`input_audio.data`
 
-string
+`string`
 
 是
 
-待识别音频数据。关于支持的音频格式、文件大小限制、时长限制等输入要求，请参见[音频规格](https://help.aliyun.com/zh/model-studio/asr-model#asr_audio_spec02)。支持以下两种方式：  
+待识别音频数据。关于支持的音频格式、文件大小限制、时长限制等输入要求，请参见[音频规格](https://help.aliyun.com/zh/model-studio/asr-model#asr_audio_spec02)。支持以下两种方式：
 
 -   **音频文件URL**：直接传入可公开访问的音频文件地址。
+    
 -   **Base64 Data URI**：采用Data URI格式传入Base64编码的音频数据，值由`data:{MIME_TYPE};base64,`前缀与Base64编码的音频数据拼接而成。支持的MIME类型包括`audio/wav`、`audio/mp3`等。
+    
 
-  
-示例（URL方式）：`[https://example.com/audio/sample.wav](https://example.com/audio/sample.wav)`  
+示例（URL方式）：`[https://example.com/audio/sample.wav](https://example.com/audio/sample.wav)`
+
 示例（Base64方式）：`data:audio/wav;base64,{BASE64_ENCODED_DATA}`
 
-text
+`text`
 
 `string`
 
@@ -367,7 +364,7 @@ text
 
 #### initialize
 
-初始化语音识别SDK实例。SDK为单例模式，在调用[release](#release)前禁止重复初始化。
+初始化语音识别SDK实例。SDK为单例模式，在调用`release`前禁止重复初始化。
 
 此接口会引起阻塞，应在非UI线程调用。
 
@@ -396,7 +393,7 @@ public synchronized int initialize(final INativeFileTransCallback callback,
 
 `String`
 
-JSON字符串，包含鉴权、连接和调试参数。参见[连接与控制参数](#connection-parameters)。
+JSON字符串，包含鉴权、连接和调试参数。参见连接与控制参数。
 
 `level`
 
@@ -408,11 +405,11 @@ JSON字符串，包含鉴权、连接和调试参数。参见[连接与控制参
 
 `boolean`
 
-是否保存本地日志。若为`true`，须在[连接与控制参数](#connection-parameters)中通过`debug_path`指定路径，并可通过`max_log_file_size`设置文件大小。
+是否保存本地日志。若为`true`，须在连接与控制参数中通过`debug_path`指定路径，并可通过`max_log_file_size`设置文件大小。
 
 #### setParams
 
-此接口用于独立设置或更新 `nls_config` 参数。如果所有参数都在[startFileTranscriber](#startfiletranscriber)中一次性提供，则无需调用此方法。
+此接口用于独立设置或更新 `nls_config` 参数。如果所有参数都在`startFileTranscriber`中一次性提供，则无需调用此方法。
 
 **方法签名**
 ```
@@ -430,8 +427,9 @@ public synchronized int setParams(String params);
 
 `String`
 
-[语音识别效果参数](#recognition-parameters)中的`nls_config`和messages参数。  
-示例：  
+语音识别效果参数中的`nls_config`和messages参数。
+
+示例：
 
 ```
 {
@@ -450,7 +448,7 @@ public synchronized int setParams(String params);
   ],
   "nls_config": {
     "format": "mp3",
-    "model": "qwen-audio-3.0-asr-flash"
+    "model": "fun-asr-flash-2026-06-15"
   }
 }
 ```
@@ -475,7 +473,7 @@ public synchronized int startFileTranscriber(String params, byte[ ] task_id)
 
 `String`
 
-[语音识别效果参数](#recognition-parameters)。 示例：  
+语音识别效果参数。 示例：
 
 ```
 {
@@ -495,7 +493,7 @@ public synchronized int startFileTranscriber(String params, byte[ ] task_id)
   ],
   "nls_config": {
     "format": "mp3",
-    "model": "qwen-audio-3.0-asr-flash"
+    "model": "fun-asr-flash-2026-06-15"
   }
 }
 ```
@@ -534,7 +532,7 @@ public synchronized int cancelFileTranscriber(String task_id)
 
 #### release
 
-释放SDK所有内部资源。此方法调用后，SDK实例将变为不可用状态，如需再次使用，必须重新调用[initialize](#initialize)进行初始化。
+释放SDK所有内部资源。此方法调用后，SDK实例将变为不可用状态，如需再次使用，必须重新调用`initialize`进行初始化。
 
 **方法签名**
 ```
@@ -613,18 +611,18 @@ default void onFileTransLogTrackCallback(Constants.LogLevel level, String log)
 
 **说明**
 
-EVENT\_FILE\_TRANS\_CONNECTED
+`EVENT_FILE_TRANS_CONNECTED`
 
 连接服务成功。
 
-EVENT\_FILE\_TRANS\_UPLOADED
+`EVENT_FILE_TRANS_UPLOADED`
 
 上传待识别音频文件成功，此时可获得当前任务的task\_id。
 
-EVENT\_FILE\_TRANS\_RESULT
+`EVENT_FILE_TRANS_RESULT`
 
 识别最终结果。
 
-EVENT\_ASR\_ERROR
+`EVENT_ASR_ERROR`
 
 语音识别过程中出现错误。
