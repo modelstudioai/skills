@@ -4,42 +4,44 @@ Managed Agents API 是百炼平台提供的用于构建、部署和管理可编�
 
 ## 支持的模型与功能
 
-Managed Agents API **不直接调用大模型**，而是提供对 Agent 运行时基础设施的编排能力；底层模型由用户在 `Agent` 配置中指定（如 `qwen-max`、`qwen-plus` 等），并受 [Managed Agent API 概览](../../raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md) 中定义的模型兼容性约束。支持的核心功能包括：  
-- Agent 实例的创建、更新与生命周期管理（含 `status` 查询与强制终止）  
-- 独立 `Environment` 隔离（支持多租户、多版本配置）  
-- 基于 `Session` 的有状态交互与事件流订阅（`event_type=agent_step`, `agent_finish`）  
-- `Memory Store` 提供结构化记忆持久化（键值对 + TTL）  
-- `Skill` 注册与动态绑定（支持 HTTP Webhook 和内置工具）  
-- `Vault` 与 `Credential` 安全管理敏感凭证  
+Managed Agents API **不直接绑定特定大模型**，而是通过 `agent` 资源中的 `model_id` 字段指定所用模型（如 `qwen-max`、`qwen-plus` 等），模型能力由底层 Model API 提供。核心功能模块包括：  
+- Agent 定义与版本管理（含 prompt、tools、memory 配置）  
+- Environment 隔离运行时上下文（如 sandbox、prod）  
+- Session 与 Event 驱动的交互流控制（支持 streaming 响应）  
+- File 上传/引用、Memory Store 键值持久化、Skill 复用封装  
+- Vault 与 Credential 安全凭证管理，以及 Deployment 灰度发布能力  
 
-> **注意**：文档中提及的 `qwen-turbo` 在最新版平台中已下线，实际可用模型请以 [Managed Agent API 概览](../../raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md) 的 `supported_models` 字段为准，避免使用已废弃标识符。
+详细接口说明请参阅 [Managed Agent API](../../raw/application-api-reference/managed-agents-api.md) 的子章节结构。
 
 ## 关键参数
 
-所有写操作（如 `POST /v1/agents`）必须包含以下标头：  
-- `Authorization: Bearer <access_token>`（参见 [认证](../../raw/application-api-reference/managed-agents-api/managed-agents-api-authentication.md)）  
-- `Content-Type: application/json`  
+所有 POST/PUT 请求需在 `Content-Type: application/json` 下提交以下必需字段（部分接口有额外要求）：
 
-关键请求体字段示例：  
-- `agent.runtime.model`: 必填，指定基础模型 ID（如 `"qwen-plus"`）  
-- `environment.id`: 可选，显式绑定环境；未指定则使用默认环境  
-- `session.ttl_seconds`: 控制会话自动过期时间（默认 3600，最大 86400）  
-- `memory_store.enabled`: 布尔值，启用后自动挂载内存存储实例  
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `name` | string | 是 | Agent 或资源唯一标识符（仅限字母、数字、下划线、短横线，长度 1–64） |
+| `model_id` | string | 是 | 所用模型 ID，必须已在当前项目中启用；不支持自定义模型别名 |
+| `environment_id` | string | 否（默认 `default`） | 指定运行环境，需提前通过 [Environment API](../../raw/application-api-reference/managed-agents-api/environment-api.md) 创建 |
+| `stream` | boolean | 否（默认 `false`） | 设为 `true` 时返回 SSE 流式响应，仅适用于 `/v1/agents/{id}/chat` 等会话接口 |
+
+> **注意**：`model_id` 的合法取值范围以 [Model API 文档](../../raw/model-api-reference/model-list.md) 为准；若文档中未列出某模型但 API 返回 400 错误，应优先参考该文档而非本页示例。
 
 ## 使用方式
 
-1. **快速验证**：参考 [快速开始](../../raw/application-api-reference/managed-agents-api/managed-agents-quickstart.md) 中的 `curl` 示例，完成 Agent 创建 → Session 启动 → 消息发送三步流程  
-2. **生产集成**：建议使用官方 SDK（Python/Node.js），自动处理重试、鉴权与事件解析  
-3. **事件驱动开发**：通过 `POST /v1/webhooks` 注册回调地址，监听 `agent_step` 事件实现自定义日志或审计  
+1. **认证**：在请求头中携带 `Authorization: Bearer <access_token>`，[Token](../concepts/token.md) 通过 [认证文档](../../raw/application-api-reference/managed-agents-api/managed-agents-api-authentication.md) 中描述的 OAuth2 流程获取；  
+2. **创建 Agent**：`POST /v1/agents`，传入基础配置（含 `model_id`、`prompt`、`skills` 列表）；  
+3. **启动会话**：`POST /v1/agents/{agent_id}/sessions` 获取 `session_id`，再调用 `/v1/agents/{agent_id}/chat` 发送消息；  
+4. **调试建议**：首次集成推荐从 [快速开始](../../raw/application-api-reference/managed-agents-api/managed-agents-quickstart.md) 文档的 cURL 示例入手，验证基础链路。
 
 ## 限制和注意事项
 
-- 单个账户最多创建 100 个 Agent 实例，单个 Environment 最多承载 50 个并发 Session  
-- `File` API 仅支持上传 `< 100MB` 的文本类文件（`.txt`, `.json`, `.csv`, `.pdf`），且 PDF 解析依赖异步 OCR，延迟约 2–10 秒  
-- 所有 `Credential` 存储内容均经 KMS 加密，但 `vault` 中的明文字段（如 `description`）不加密，请勿存放敏感信息  
-- `Deployment` 接口仅支持蓝绿发布模式，回滚需显式调用 `/v1/deployments/{id}/rollback`，不可自动触发  
+- 单次 `chat` 请求最大输入 tokens 为 32768（受模型本身限制约束）；  
+- Memory Store 单个 key 最大 1MB，总容量按项目配额计费；  
+- Webhook 回调 URL 必须为 HTTPS，且需在 5 秒内返回 2xx 响应，否则视为失败并触发重试（最多 3 次）；  
+- Agent 部署后不可修改 `model_id`，如需切换模型，须新建 Agent 并重新部署；  
+- 文件上传接口（`/v1/files`）暂不支持分片上传，单文件上限 100MB。  
 
-> **注意**：`Session` 的 `max_steps` 默认为 50，但部分旧版文档误标为 100；实际生效值以 [Session and Event](../../raw/application-api-reference/managed-agents-api/session-api.md) 中 `limits.max_steps` 的最新定义为准。
+如遇非预期错误，请对照 [错误码文档](../../raw/application-api-reference/managed-agents-api/managed-agents-api-errors.md) 进行定位。
 
 ## 来源文档
 

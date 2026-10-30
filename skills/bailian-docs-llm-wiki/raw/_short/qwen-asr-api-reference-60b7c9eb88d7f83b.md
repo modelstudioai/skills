@@ -45,8 +45,6 @@ SDK调用配置的base\_url：`https://{WorkspaceId}.ap-southeast-1.maas.aliyunc
 -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
 -   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
 
-`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。现有域名仍可正常使用。
-
 ### 请求参数
 
 **model**`string`**（必选）**
@@ -85,11 +83,11 @@ User Message`object`**（必选）**
 
 固定为`input_audio`，代表输入的是音频。
 
-**input\_audio**`string`**（必选）**
+**input\_audio**`object`**（必选）**
 
 待识别音频。具体用法请参见[调用示例](https://help.aliyun.com/zh/model-studio/qwen-asr-api-reference#qwen-asr-openai-examples)。
 
-千问3-ASR-Flash模型在OpenAI兼容模式下支持两种输入形式：Base64编码的文件和公网可访问的待识别文件URL。
+`input_audio.data` 支持公网可访问的音频文件 URL 和 Base64 Data URI，不支持直接传入本地文件绝对路径。本地音频文件需先读取并编码为 Data URI。
 
 使用SDK时，若录音文件存储在[阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/simple-upload#a632b50f190j8)，不支持使用以 `oss://`为前缀的临时 URL。
 
@@ -109,7 +107,7 @@ User Message`object`**（必选）**
 
 用来指定某些功能是否启用。
 
-> `asr_options`非OpenAI标准参数，若使用OpenAI SDK，请通过`extra_body`传入。
+**说明**`asr_options` 非 OpenAI 标准参数。使用 OpenAI Python SDK 时，通过 `extra_body` 传入；使用 Node.js SDK 时，将 `asr_options` 作为请求体的顶层参数传入。
 
 属性
 
@@ -188,9 +186,11 @@ User Message`object`**（必选）**
 -   `true`：包含；
 -   `false`：不包含。
 
-> 流式输出时，Token 消耗信息仅可出现在响应的最后一个数据块。
+**说明**流式输出时，Token 消耗信息仅可出现在响应的最后一个数据块。
 
 ### 调用示例
+
+**说明**OpenAI Python SDK 版本需不低于 `1.52.0`，Node.js SDK 版本需不低于 `4.68.0`。
 
 #### 输入内容：音频文件URL
 
@@ -374,7 +374,7 @@ curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode
     ```
     import base64, pathlib
     
-    # input.mp3为用于声音复刻的本地音频文件，请替换为自己的音频文件路径，确保其符合音频要求
+    # 将文件路径替换为待识别的本地音频文件路径，并确保文件符合音频要求。
     file_path = pathlib.Path("{YOUR_AUDIO_FILE}")
     base64_str = base64.b64encode(file_path.read_bytes()).decode()
     data_uri = f"data:audio/mpeg;base64,{base64_str}"
@@ -388,7 +388,7 @@ curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode
     
     public class Main {
         /**
-         * filePath为用于声音复刻的本地音频文件，请替换为自己的音频文件路径，确保其符合音频要求
+         * 将文件路径替换为待识别的本地音频文件路径，并确保文件符合音频要求。
          */
         public static String toDataUrl(String filePath) throws Exception {
             byte[] bytes = Files.readAllBytes(Paths.get(filePath));
@@ -556,6 +556,10 @@ main();
 
 ### 响应参数
 
+**说明**Qwen3-ASR-Flash 通过 OpenAI 兼容接口调用时不返回时间戳。如需时间戳，请使用 Qwen-Audio-ASR-Filetrans 系列模型，调用方式请参见 [HTTP API](raw/_short/qwen-audio-asr-filetrans-http-api-2ccf5d603a3ac5e9.md)。
+
+流式输出的情感标签位于 `choices[].delta.annotations[].emotion`，非流式输出位于 `choices[].message.annotations[].emotion`。
+
 **id**`string`
 
 本次调用的唯一标识符。
@@ -588,7 +592,7 @@ main();
 
 输出消息的角色，固定为assistant。
 
-**content**`array`
+**content**`string`
 
 语音识别结果。
 
@@ -638,7 +642,7 @@ main();
 
 **emotion**`string`
 
-被识别音频的情感。支持的情感如下：
+被识别音频的情感。情感识别固定开启，无需额外配置。支持的情感如下：
 
 -   `surprised`：惊讶
 -   `neutral`：平静
@@ -798,8 +802,6 @@ SDK调用配置的base\_url：`https://{WorkspaceId}.us-east-1.maas.aliyuncs.com
 -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
 -   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
 
-`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。现有域名仍可正常使用。
-
 ### 请求参数
 
 **model**`string`**（必选）**
@@ -810,7 +812,7 @@ SDK调用配置的base\_url：`https://{WorkspaceId}.us-east-1.maas.aliyuncs.com
 
 消息列表。
 
-> 通过HTTP调用时，请将**messages**放入 **input** 对象中。
+**说明**通过HTTP调用时，请将`messages`放入 `input` 对象中。
 
 消息类型
 
@@ -1483,7 +1485,7 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 
 本次调用的唯一标识符。
 
-> Java SDK返回参数为**requestId。**
+**说明**Java SDK返回参数为`requestId`。
 
 **output**`object`
 
@@ -1571,7 +1573,7 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 
 **emotion**`string`
 
-被识别音频的情感。支持的情感如下：
+被识别音频的情感。情感识别固定开启，无需额外配置。支持的情感如下：
 
 -   `surprised`：惊讶
 -   `neutral`：平静
@@ -2054,8 +2056,6 @@ SDK调用配置的base\_url：`https://{WorkspaceId}.ap-southeast-1.maas.aliyunc
 -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
 -   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
 
-`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。现有域名仍可正常使用。
-
 #### 请求参数
 
 **model**`string`**（必选）**
@@ -2386,8 +2386,6 @@ SDK调用配置的base\_url：`https://{WorkspaceId}.ap-southeast-1.maas.aliyunc
 -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
 -   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
 
-`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。现有域名仍可正常使用。
-
 #### 请求参数
 
 **task\_id**`string`**（必选）**
@@ -2709,7 +2707,7 @@ FAILED
 
 **emotion**`string`
 
-被识别音频的情感。支持的情感如下：
+被识别音频的情感。情感识别固定开启，无需额外配置。支持的情感如下：
 
 -   `surprised`：惊讶
 -   `neutral`：平静

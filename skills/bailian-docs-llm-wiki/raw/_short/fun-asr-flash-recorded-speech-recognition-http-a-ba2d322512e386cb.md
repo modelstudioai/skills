@@ -1,8 +1,8 @@
-# 非实时语音识别（Qwen-Audio-3.x-ASR-Flash/Fun-ASR-Flash） HTTP API
+# 非实时语音识别（Fun-ASR-Flash）HTTP API
 
-本文介绍Qwen-Audio-3.x-ASR-Flash/Fun-ASR-Flash非实时语音识别HTTP API的参数和接口细节。
+本文介绍Fun-ASR-Flash非实时语音识别HTTP API的参数和接口细节。
 
-**用户指南：**[非实时语音识别](raw/model-user-guide/model-experience/speech-recognition/non-realtime-speech-recognition-user-guide.md)。关于支持的音频格式、文件大小限制、时长限制等输入要求，请参见[音频规格](https://help.aliyun.com/zh/model-studio/asr-model#asr_audio_spec02)。
+关于支持的音频格式、文件大小限制、时长限制等输入要求，请参见[音频规格](https://help.aliyun.com/zh/model-studio/asr-model#asr_audio_spec02)。
 
 ## 接口地址
 
@@ -23,8 +23,6 @@
 -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
 -   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
 
-`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。现有域名仍可正常使用。
-
 ## 请求头
 
 **参数**
@@ -35,27 +33,27 @@
 
 **说明**
 
-Authorization
+`Authorization`
 
-string
+`string`
 
 是
 
 鉴权令牌，格式为`Bearer <your_api_key>`，使用时将"`<your_api_key>`"替换为实际的API Key。
 
-Content-Type
+`Content-Type`
 
-string
+`string`
 
 是
 
 请求参数的媒体类型，固定为`application/json`。
 
-X-DashScope-SSE
+`X-DashScope-SSE`
 
-string
+`string`
 
-是
+否
 
 用于控制是否以SSE流式方式返回结果。设置为`enable`时开启SSE流式返回模式。仅当音频时长不少于1分钟时，服务端才会分多次返回中间识别结果和最终结果；设置为`disable`或不传该参数则仅返回最终结果。
 
@@ -63,7 +61,7 @@ string
 
 **model**`string`**（必选）**
 
-指定模型名。支持Qwen-Audio-3.x-ASR-Flash和Fun-ASR-Flash系列模型，详情请参见[支持的模型与地域](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#4a43cc1bb7kxg)。
+模型名称。
 
 **input**`object`**（必选）**
 
@@ -77,7 +75,7 @@ string
 
 **重要**上下文功能用于提升专有词汇的识别准确率，使用方法详见[上下文增强](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#ctx_enhance_h2)。
 
-**约束**：上下文消息（`input_text` 和 `text` 类型）各最多 5 条，超出时保留最近的 5 条。每轮上下文文本总长度（`user` 和 `assistant` 的 `text` 字段长度之和）不超过 400 个字符（按字符数计算，每个字符计为 1），超出部分从末尾截断。
+上下文消息（`input_text` 和 `text` 类型）各最多 5 条，超出时保留最近的 5 条。每轮上下文文本总长度（`user` 和 `assistant` 的 `text` 字段长度之和）不超过 400 个字符（按字符数计算，每个字符计为 1），超出部分从末尾截断。
 
 **重要**携带上下文时，`messages` 中的消息顺序有要求：上下文消息必须按对话轮次排列，每轮中 `user`（`input_text` 类型）必须在对应的 `assistant`（`text` 类型）之前；包含 `input_audio` 的 `user` 消息必须放在 `messages` 数组的最后。
 
@@ -129,19 +127,11 @@ string
 
 模型参数。
 
-**说明**Qwen-Audio-3.0-ASR-Flash 和 Fun-ASR-Flash 的润色顺滑功能默认关闭，**暂未开放。**Qwen-Audio-3.1-ASR-Flash 支持原生文本润色。
+**说明**润色顺滑功能默认关闭，暂未开放。
 
 润色顺滑：模型在识别语音的同时，自动清理无意义语气词和口吃重复，处理说话过程中的自我纠正，理顺口语表达，并规范标点与文本格式。输出结果更加简洁、流畅、易读，同时尽可能保留用户的最终意图和关键信息。
 
 属性
-
-**speaker\_diarization\_enabled** `boolean`（可选）
-
-仅 `qwen-audio-3.1-asr-flash` 支持。是否启用说话人分离，默认值为 `false`。设为 `true` 时，通过响应中的 `speaker_id` 区分说话人，并返回 `output.sentences`。开启后，`keep_dialect` 和 `language_hints` 不生效。
-
-**keep\_dialect** `boolean`（可选）
-
-仅 `qwen-audio-3.1-asr-flash` 支持。是否保留方言表达，默认值为 `false`。`false`：将方言转写为普通话文本；`true`：保留方言表达。
 
 **format**`string`**（必选）**
 
@@ -161,58 +151,42 @@ string
 
 使用方法请参见[预编译热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_precompiled_h3)。
 
-**vocabulary**`object`（可选）
-
-即时热词。
-
-以键值对形式传入，键为热词文本（`string`），值为热词权重（`integer`），无需预先创建热词列表。权重取值范围为 \[1, 5\] 或 50：取 \[1, 5\] 时值越大模型越倾向输出该词；取 50 时为超级热词，召回率大幅提升，但超级热词数量最多不超过 50 个。
-
-适用于临时性、会话级别的热词优化。
-
-与预编译热词同时配置时，系统会合并两类热词；合并后超过 2000 个时，随机选择 2000 个使用。使用方法请参见[即时热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_instant_h3)。
-
-**重要**仅`qwen-audio-3.1-asr-flash`、`qwen-audio-3.0-asr-flash`支持即时热词。
-
 **language\_hints** `array[string]`（可选）
 
-设置待识别语言代码。如果无法提前确定语种，可不设置，模型会自动识别语种。
+设置待识别语言代码。如果无法提前确定语种，可不设置，模型会自动识别语种。最多支持设置 1 个值，超出时仅前 1 个生效。
 
-对于 Qwen-Audio-3.x-ASR-Flash 系列模型，最多支持设置 4 个值，即便设置超出 4 个，也仅前 4 个生效；对于 Fun-ASR-Flash 系列模型，仅支持设置 1 个值，即便设置多个，也仅第一个生效。
+支持的语言代码
 
-点击查看支持的语言代码
-
--   qwen-audio-3.1-asr-flash、qwen-audio-3.0-asr-flash、fun-asr-flash-2026-06-15：
-    
-    -   zh: 中文
-    -   en: 英文
-    -   ja: 日语
-    -   ko：韩语
-    -   vi：越南语
-    -   th：泰语
-    -   id：印尼语
-    -   ms：马来语
-    -   tl：菲律宾语
-    -   hi：印地语
-    -   ar：阿拉伯语
-    -   fr：法语
-    -   de：德语
-    -   es：西班牙语
-    -   pt：葡萄牙语
-    -   ru：俄语
-    -   it：意大利语
-    -   nl：荷兰语
-    -   sv：瑞典语
-    -   da：丹麦语
-    -   fi：芬兰语
-    -   no：挪威语
-    -   el：希腊语
-    -   pl：波兰语
-    -   cs：捷克语
-    -   hu：匈牙利语
-    -   ro：罗马尼亚语
-    -   bg：保加利亚语
-    -   hr：克罗地亚语
-    -   sk：斯洛伐克语
+-   zh: 中文
+-   en: 英文
+-   ja: 日语
+-   ko: 韩语
+-   vi: 越南语
+-   th: 泰语
+-   id: 印尼语
+-   ms: 马来语
+-   tl: 菲律宾语
+-   hi: 印地语
+-   ar: 阿拉伯语
+-   fr: 法语
+-   de: 德语
+-   es: 西班牙语
+-   pt: 葡萄牙语
+-   ru: 俄语
+-   it: 意大利语
+-   nl: 荷兰语
+-   sv: 瑞典语
+-   da: 丹麦语
+-   fi: 芬兰语
+-   no: 挪威语
+-   el: 希腊语
+-   pl: 波兰语
+-   cs: 捷克语
+-   hu: 匈牙利语
+-   ro: 罗马尼亚语
+-   bg: 保加利亚语
+-   hr: 克罗地亚语
+-   sk: 斯洛伐克语
 
 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
 
@@ -224,7 +198,7 @@ curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.c
      --header "Content-Type: application/json" \
      --header "X-DashScope-SSE: disable" \
      --data '{
-    "model": "qwen-audio-3.1-asr-flash",
+    "model": "fun-asr-flash-2026-06-15",
     "input": {
         "messages": [
             {
@@ -255,7 +229,7 @@ curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.c
      --header "Content-Type: application/json" \
      --header "X-DashScope-SSE: enable" \
      --data '{
-    "model": "qwen-audio-3.1-asr-flash",
+    "model": "fun-asr-flash-2026-06-15",
     "input": {
         "messages": [
             {
@@ -286,7 +260,7 @@ curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.c
      --header "Content-Type: application/json" \
      --header "X-DashScope-SSE: disable" \
      --data '{
-    "model": "qwen-audio-3.1-asr-flash",
+    "model": "fun-asr-flash-2026-06-15",
     "input": {
         "messages": [
             {
@@ -335,7 +309,7 @@ curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.c
      --header "Content-Type: application/json" \
      --header "X-DashScope-SSE: enable" \
      --data '{
-    "model": "qwen-audio-3.1-asr-flash",
+    "model": "fun-asr-flash-2026-06-15",
     "input": {
         "messages": [
             {
@@ -392,8 +366,6 @@ curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.c
     
 -   示例：`data:audio/wav;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjI5LjEwMAAAAAAAAAAAAAAA//PAxABQ/BXRbMPe4IQAhl9`
     
-    点击查看示例代码
-    
     python
     
     ```
@@ -447,7 +419,7 @@ headers = {
 }
 
 payload = {
-    "model": "qwen-audio-3.1-asr-flash",
+    "model": "fun-asr-flash-2026-06-15",
     "input": {
         "messages": [
             {
@@ -474,38 +446,6 @@ print(response.status_code)
 print(response.json())
 ```
 
-#### 即时热词
-
-```
-curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
-     --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
-     --header "Content-Type: application/json" \
-     --header "X-DashScope-SSE: disable" \
-     --data '{
-    "model": "qwen-audio-3.1-asr-flash",
-    "input": {
-        "messages": [
-            {
-                "role": "user",
-                "content": [
-                    {
-                        "type": "input_audio",
-                        "input_audio": {
-                            "data": "{YOUR_AUDIO_URL}"
-                        }
-                    }
-                ]
-            }
-        ]
-    },
-    "parameters": {
-        "format": "wav",
-        "sample_rate": "16000",
-        "vocabulary": {"张三": 5, "李四": 5}
-    }
-}'
-```
-
 ## 响应参数
 
 **request\_id**`string`
@@ -522,19 +462,11 @@ curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.c
 
 当前累积的完整识别文本。
 
-**sentences** `array[object]`
-
-仅 `qwen-audio-3.1-asr-flash` 开启说话人分离时返回。包含当前及历史句子的识别结果，每个元素的结构与 `sentence` 相同。
-
 **sentence**`object`
 
 当前句子的详细信息。
 
 属性
-
-**speaker\_id** `integer | null`
-
-说话人编号，用于区分不同说话人。`qwen-audio-3.1-asr-flash` 开启说话人分离时返回编号，未开启时为 `null`。
 
 **sentence\_id**`integer`
 
@@ -566,10 +498,6 @@ curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.c
 
 属性
 
-**speaker\_id** `integer | null`
-
-词对应的说话人编号。`qwen-audio-3.1-asr-flash` 开启说话人分离时返回编号，未开启时为 `null`。
-
 **text**`string`
 
 词文本。
@@ -599,18 +527,6 @@ curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.c
 **duration**`integer`
 
 已处理的音频时长，单位秒。
-
-**input\_tokens**`integer`
-
-本次调用消耗的输入 Token 数。仅适用于 `qwen-audio-3.1-asr-flash`。
-
-**output\_tokens**`integer`
-
-本次调用消耗的输出 Token 数。仅适用于 `qwen-audio-3.1-asr-flash`。
-
-**total\_tokens**`integer`
-
-本次调用消耗的总 Token 数，等于 `input_tokens` 与 `output_tokens` 之和。仅适用于 `qwen-audio-3.1-asr-flash`。
 
 #### 非流式
 
@@ -644,7 +560,7 @@ curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.c
 
 #### 流式
 
-仅当音频时长不少于1分钟且设置`X-DashScope-SSE: enable`时，服务端才会以Server-Sent Events协议返回识别结果。SSE事件格式如下：
+SSE 流式响应的事件格式如下：
 
 ```
 id:{序列号}
@@ -667,7 +583,5 @@ data:{"output":{"sentence":{"sentence_id":1,"sentence_end":true,"end_time":3800,
 在流式模式下，客户端需关注以下处理要点：
 
 1.  每收到一个SSE事件，解析`data`字段中的JSON。
-2.  对于 Qwen-Audio-3.0-ASR-Flash 和 Fun-ASR-Flash，通过`output.sentence.sentence_end`判断当前句子是否结束：当该值为`true`时，该句识别完成，词级时间戳已稳定，可作为最终结果使用；当该值为`false`时，识别仍在进行中，文本和时间戳可能在后续事件中更新。
-3.  `usage`信息仅在句子结束事件中返回，包含音频处理时长。对于 `qwen-audio-3.1-asr-flash`，还包含本次调用的输入、输出和总 Token 数，该模型按 Token 计费。
-
-对于 `qwen-audio-3.1-asr-flash`，未开启说话人分离时，词级时间戳在 `output.sentence.words[i].fixed` 为 `true` 后才固定；在此之前，时间戳仍可能调整。开启说话人分离时，应读取 `output.sentences` 中当前及历史句子的结果。
+2.  通过 `output.sentence.sentence_end` 判断当前句子是否结束：当该值为 `true` 时，该句识别完成，词级时间戳已稳定，可作为最终结果使用；当该值为 `false` 时，识别仍在进行中，文本和时间戳可能在后续事件中更新。
+3.  `usage` 信息仅在句子结束事件中返回，包含音频处理时长。

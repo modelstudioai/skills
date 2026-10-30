@@ -68,15 +68,15 @@ Function Calling
 
 最大输入长度
 
-7168 Token
+\-
 
 最大输出长度
 
-1024 Token
+\-
 
 上下文长度
 
-8192 Token
+\-
 
 ## 模型价格
 
@@ -151,4 +151,4 @@ RPM（每分钟请求数）
 ## 调用方式
 
 -   [非实时语音识别](raw/model-user-guide/model-experience/speech-recognition/non-realtime-speech-recognition-user-guide.md)
--   [HTTP API](raw/_short/fun-asr-flash-recorded-speech-recognition-http-a-ba2d322512e386cb.md)
+-   [HTTP API](raw/_short/qwen-audio-asr-http-api-b304ee1b83ae18cd.md)

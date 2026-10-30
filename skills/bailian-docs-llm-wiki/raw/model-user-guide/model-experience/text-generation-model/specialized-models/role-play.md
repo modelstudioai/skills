@@ -314,7 +314,7 @@ qwen-plus-character
 
 使用 Character 模型进行角色扮演时，可以对 System Message 的以下方面进行配置：
 
-> 通过优化 Prompt 模板，可以使大模型更准确、可靠地执行特定任务。详情请参考[Prompt自动优化](raw/application-user-guide/prompt/optimize-prompt.md)。
+> 通过优化 Prompt 模板，可以使大模型更准确、可靠地执行特定任务。详情请参考[Prompt自动优化](raw/application-user-guide/agent-development/llm-application/prompt/optimize-prompt.md)。
 
 -   角色的详细信息
     
@@ -3866,7 +3866,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 启用知识搜索后，模型可从指定知识库中检索相关内容并据此生成回答，适用于私有领域知识问答场景。
 
-> 创建知识库计费请参见[知识库计费说明](raw/application-user-guide/knowledge-base/reference/billing-for-knowledge-base.md)。
+> 创建知识库计费请参见[知识库计费说明](raw/application-user-guide/agent-context/knowledge-base/reference/billing-for-knowledge-base.md)。
 
 > 知识搜索功能依赖`character_options`参数，暂不支持Responses API。
 

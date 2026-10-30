@@ -532,7 +532,7 @@ curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/a
 
 #### 非实时语音识别
 
-通过 `input.messages` 传入上下文。其中 `user` 角色 + `input_text` 类型用于传入前几轮的识别结果或领域相关的词表，`assistant` 角色用于传入前几轮大模型的回复内容（可选）。上下文消息置于音频消息之前，详见[非实时语音识别（Qwen-Audio-ASR/Fun-ASR-Flash）](raw/_short/fun-asr-flash-recorded-speech-recognition-http-a-ba2d322512e386cb.md)。
+通过 `input.messages` 传入上下文。其中 `user` 角色 + `input_text` 类型用于传入前几轮的识别结果或领域相关的词表，`assistant` 角色用于传入前几轮大模型的回复内容（可选）。上下文消息置于音频消息之前，详见[Qwen-Audio-ASR HTTP API](raw/_short/qwen-audio-asr-http-api-b304ee1b83ae18cd.md)和[Fun-ASR-Flash HTTP API](raw/_short/fun-asr-flash-recorded-speech-recognition-http-a-ba2d322512e386cb.md)。
 
 传入前几轮的识别结果（`user` / `input_text`）和大模型回复（`assistant` / `text`）。若只需传入领域术语或词表，省略其中的对话历史（`assistant` 消息）即可。
 
@@ -756,7 +756,8 @@ recognizer.getDuplexApi().close(1000, "bye");
 -   [实时语音识别-Paraformer API参考](raw/_short/paraformer-real-time-speech-recognition-api-refe-79877d5c8ef469f7.md)
 -   [非实时语音识别-Qwen-Audio-ASR-Filetrans API参考](raw/_short/qwen-audio-asr-filetrans-api-c91600a5bccc788c.md)
 -   [非实时语音识别-Fun-ASR API参考](raw/_short/fun-asr-recorded-speech-recognition-api-referenc-cdd1d2e565f281cc.md)
--   [非实时语音识别-Qwen-Audio-ASR/Fun-ASR-Flash API参考](raw/_short/fun-asr-flash-recorded-speech-recognition-http-a-ba2d322512e386cb.md)
+-   [非实时语音识别-Qwen-Audio-ASR API参考](raw/_short/qwen-audio-asr-api-12cd76f68a22ae50.md)
+-   [非实时语音识别-Fun-ASR-Flash API参考](raw/_short/non-real-time-speech-recognition-for-fun-asr-fla-a39568e6f8404553.md)
 -   [非实时语音识别-Qwen-ASR API参考](raw/_short/qwen-asr-api-reference-60b7c9eb88d7f83b.md)
 -   [非实时语音识别-Paraformer API参考](raw/_short/paraformer-recorded-speech-recognition-api-refer-8ca94e9578cc12b7.md)
 

@@ -1,70 +1,42 @@
 # 函数调用
 
-函数调用是百炼平台中模型或智能体主动触发外部能力（如插件、内置工具、MCP服务）执行具体任务的核心机制，本质是将自然语言指令解析为结构化工具请求，并同步/异步完成执行与结果回传。
+函数调用（Function Calling）是百炼平台支持的一种结构化工具调用机制，允许大模型在推理过程中自主识别用户意图、生成符合 OpenAI 兼容 Schema 的 `tool_calls` 请求，并交由外部系统执行具体操作（如查询数据库、调用 API、检索知识库等），再将结果注入后续对话上下文。该能力不改变模型核心生成逻辑，而是通过标准化的输入/输出协议实现 LLM 与现实世界服务的安全、可控协同。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-函数调用并非独立功能，而是贯穿于多个运行时环境的底层交互范式，其触发方式、控制粒度和上下文依赖因场景而异：
+- **应用层调用（`application support`）**：在 `/apps/{app_id}/chat/completions` 接口请求中，通过 `tools` 参数传入工具定义列表（JSON Schema 格式），模型将根据用户输入自动决定是否调用、调用哪个工具及传入何参数；调用结果需由开发者在客户端侧解析 `tool_calls` 并执行，再以 `tool_result` 形式发起下一轮请求（即多轮 tool-augmented 对话）。  
+- **Agent 开发（`agent development`）**：Managed Agent 和 Flow Agent 原生集成函数调用能力，无需手动构造 `tools` 或处理 `tool_calls`——平台自动完成工具发现、参数提取、异步执行、错误重试与结果注入；Sandbox 模式则需开发者在 `main()` 函数中自行解析 `event.tools` 和 `event.tool_calls` 字段，调用对应函数并返回结构化响应。  
+- **基础模型 API（`preparations` & `more about models`）**：所有公开模型（如 `qwen-max`、`qwen3-vl-plus`）均支持函数调用，但需确保 SDK 版本 ≥ v1.18.0（Python）或 Java SDK ≥ v2.5.0；多模态模型调用时，若工具涉及图像/视频处理，需配合 `X-DashScope-OssResourceResolve: enable` Header 解析 OSS URL。  
 
-- **插件（Plug-in）场景**：在智能体应用或工作流中，模型根据用户意图自动识别并调用已绑定的插件（如 `calculator`、`quark_search`）。调用由大模型生成符合 OpenAPI Schema 的参数，经平台校验后转发至插件服务端；支持“大模型识别”（自动抽取）和“业务透传”（通过 `biz_params.user_defined_params` 显式注入）两种参数来源。
-  
-- **智能体应用（LLM Application / Agent 1.0 & 2.0）**：函数调用表现为插件节点的执行。工作流画布中，插件作为独立节点被编排；Agent 应用中，调用由模型自主决策发起，平台负责参数构造、鉴权透传与错误重试。注意：Agent 2.0 默认启用记忆，历史调用结果可参与后续推理。
-
-- **托管智能体（Managed Agents）**：函数调用更底层、更可控——不仅支持插件，还直接暴露沙箱级内置工具（如 `bash`、`read`、`web_fetch`）及 MCP 协议服务。开发者需在 `tools` 配置中**显式启用每个工具**（`"enabled": true`），否则模型无法发现；调用过程在隔离沙箱中执行，支持多步交互、文件读写与状态持久化。
-
-- **API 调用层（Application Call / Flow Agent API）**：函数调用能力通过 `biz_params` 向下透传。例如，在 `/v1/apps/{app_id}/completion` 接口中，通过 `biz_params.user_defined_params` 将参数精准注入指定插件；在 Managed Agents 会话中，则通过 `tools` 配置与 `resources` 挂载共同定义可调用函数集。
-
-> ✅ 关键区别：插件调用强调“模型驱动+标准化接入”，适用于快速扩展能力；托管智能体工具调用强调“开发者强控+沙箱执行”，适用于复杂、有状态、需调试的任务。
+> ⚠️ 注意：函数调用本身不执行任何实际操作——它仅生成调用指令。**执行权始终在开发者侧**，平台不代为调用外部服务，也不托管工具代码。
 
 ## 关键参数和配置
 
-函数调用的可靠性高度依赖以下参数的正确定义与传递：
+| 参数 | 位置 | 类型 | 说明 |
+|------|------|------|------|
+| `tools` | 请求体（`application support` / 基础 API） | array | 必填（启用函数调用时）；每个元素为 OpenAI 兼容的工具定义对象，含 `type="function"`、`function.name`、`function.description`、`function.parameters`（JSON Schema）；最多支持 10 个工具。 |
+| `tool_choice` | 请求体（可选） | string 或 object | 控制调用策略：<br>• `"auto"`（默认）：由模型自主决策是否调用；<br>• `"none"`：禁用函数调用；<br>• `{"type": "function", "function": {"name": "xxx"}}`：强制调用指定工具。 |
+| `enable_tracing` | Agent 配置（`agent development`） | boolean | 启用后，全链路追踪日志将包含完整的 `tool_calls` 输入、执行耗时、原始返回及注入后的上下文，便于调试工具逻辑。 |
+| `max_iterations` | Agent 配置（`agent development`） | integer | 管控函数调用循环深度：Managed Agent 默认 10 轮，Flow Agent 默认 5 轮；超出后终止流程并返回最终响应（不报错）。 |
 
-- **工具标识**  
-  - `tool_id`（插件）：唯一字符串，如 `"calculator"`，必须与控制台发布的插件工具 ID 完全一致；  
-  - `name`（托管智能体内置工具）：如 `"bash"`，需在 `tools` 数组中声明并设 `enabled: true`。
-
-- **输入参数**  
-  - 类型严格：支持 `string`、`number`、`boolean`、`object`；`object` 类型子字段不可为空；  
-  - 透传路径：  
-    - 插件场景 → `biz_params.user_defined_params.{tool_id}`；  
-    - 托管智能体场景 → 由模型生成或通过 `tools` 配置预设 `default_input`；  
-  - 示例值建议：在插件配置中设置 `Value` 示例（如 `{"query": "杭州天气"}`），显著提升参数构造准确率。
-
-- **鉴权与网络**  
-  - 自定义插件需配置鉴权方式（`Header` 或 `Query`），`Type` 可选 `bearer`/`basic`/`appcode`；  
-  - 托管智能体环境需提前配置 `environment_id` 并确保网络策略（如 `unrestricted`）允许工具访问目标服务。
-
-- **调用控制**  
-  - `stream`：启用流式响应（SSE），便于实时展示调用过程；  
-  - `debug: {}`：启用后返回完整工具调用日志、参数快照与执行耗时，强烈推荐调试阶段开启；  
-  - `flow_stream_mode`（工作流专用）：设为 `"message_format_plus"` 可清晰分离工具调用请求与结果事件。
+- **安全要求**：所有工具执行必须在可信环境内完成，禁止在前端暴露工具凭证；建议通过百炼「连接器」统一管理外部服务认证信息。  
+- **错误处理**：工具执行失败时，API 默认返回空 `tool_calls` 数组（而非抛出异常），开发者需主动检查 `response.message.tool_calls` 是否为空，并根据业务逻辑降级或提示用户。  
 
 ## 面向开发者，简洁实用
 
-- ✅ **必做三件事**：  
-  1. 确认模型兼容性——`qwen-plus`/`qwen-max` 支持插件；`qwen3.8-max`/`deepseek-v4.1-flash` 等支持托管智能体工具；  
-  2. 显式启用工具——尤其在 Managed Agents 中，`default_config.enabled: true` 不生效，必须逐个设 `enabled: true`；  
-  3. 用 `debug` 模式验证首次调用——检查 `user_defined_params` 是否到达、参数是否被截断、鉴权 Header 是否正确注入。
+- ✅ **快速启用**：只需在请求中添加 `tools` 数组，无需修改模型或部署配置。  
+- ✅ **兼容 OpenAI**：工具 Schema 完全兼容 `openai>=1.0.0` 格式，已有 OpenAI 工具可直接复用。  
+- ✅ **流式支持**：启用 `stream=true` 时，`tool_calls` 将作为独立 chunk 流式返回（`delta.tool_calls`），便于实时渲染调用状态。  
+- ❌ **不支持嵌套调用**：单次模型响应最多触发一次 `tool_calls`；如需多步工具协作，请在客户端控制调用顺序。  
+- 📏 **长度限制**：单次 `tool_calls` 中所有参数 JSON 序列化后总长 ≤ 1MB；超限将导致 `400 Bad Request`。  
 
-- ⚠️ **避坑提醒**：  
-  - GET 类插件不支持 `object` 输入参数；  
-  - `code_interpreter` 沙箱无外网访问能力，勿尝试 `requests.get("https://...")`；  
-  - 删除插件或工具将导致所有关联应用失效，且操作不可逆；  
-  - 工作流应用仅支持华北2（北京）地域，且不支持文生图类大模型。
-
-- 🚀 **进阶提示**：  
-  - 多智能体协作中，函数调用可跨 agent 分发（如 coordinator 调用 `web_search`，worker 调用 `bash` 处理结果）；  
-  - 结合[长期记忆](long-term-memory.md)（`memory_id`），让工具调用结果自动沉淀为后续对话的知识依据；  
-  - 使用 `biz_params` 实现用户级鉴权透传（如将用户 OAuth [Token](token.md) 注入插件请求头），实现租户隔离。
+> 提示：本地调试推荐使用 `bailian-cli --tool-mode` 模拟工具注册与调用闭环；生产环境务必设置 `timeout_ms`（Agent）或 `timeout`（SDK）防止工具阻塞。
 
 ## 关联主题页
 
-- [plug in](../guides/plug-in.md)
-- [llm application](../guides/llm-application.md)
+- [preparations](../api/preparations.md)
 - [agent development](../guides/agent-development.md)
-- [flow agent api](../api/flow-agent-api.md)
-- [application call](../api/application-call.md)
-- [bailian application calling](../guides/bailian-application-calling.md)
+- [more about models](../api/more-about-models.md)
+- [application support](../guides/application-support.md)
 
 

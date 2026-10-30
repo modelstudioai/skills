@@ -68,15 +68,15 @@ Function Calling
 
 最大输入长度
 
-7168 Token
+\-
 
 最大输出长度
 
-1024 Token
+\-
 
 上下文长度
 
-8192 Token
+\-
 
 ## 模型价格
 

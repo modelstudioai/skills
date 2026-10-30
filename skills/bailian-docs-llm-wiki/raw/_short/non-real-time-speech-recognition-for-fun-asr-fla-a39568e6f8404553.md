@@ -1,4 +1,4 @@
-# Qwen-Audio-3.x-ASR-Flash/Fun-ASR-Flash
+# Fun-ASR-Flash
 
 -   [HTTP API](raw/_short/fun-asr-flash-recorded-speech-recognition-http-a-ba2d322512e386cb.md)
 -   [Android SDK](raw/_short/fun-asr-flash-recorded-speech-recognition-androi-8b9a638b20deba59.md)

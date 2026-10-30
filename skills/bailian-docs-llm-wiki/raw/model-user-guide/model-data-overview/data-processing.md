@@ -119,7 +119,7 @@
         
 2.  输入**任务名称**，选择**模型数据**作为**数据来源**，并从列表中选择要处理的训练集。
     
-    > 若无可用训练集，请单击**去管理**前往**[模型数据](https://bailian.console.aliyun.com/cn-beijing/model/data)**上传一个训练集。具体操作，请参见[训练集与评测集](raw/model-user-guide/model-evaluation-introduction/training-set-and-evaluation-set.md)。
+    > 若无可用训练集，请单击**去管理**前往**[模型数据](https://bailian.console.aliyun.com/cn-beijing/model/data)**上传一个训练集。具体操作，请参见[训练集与评测集](raw/model-user-guide/model-data-overview/training-set-and-evaluation-set.md)。
     
     > **[模型数据](https://bailian.console.aliyun.com/cn-beijing/model/data)**提供了训练集的版本管理能力，您的训练集将在清洗或增强后自动生成一个新版本。新版本独立保存，不会覆盖原训练集。
     

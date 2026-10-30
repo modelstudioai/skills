@@ -1,56 +1,52 @@
 # rag api
 
-RAG API 是阿里云百炼平台提供的知识库全生命周期管理与语义检索/问答能力的编程接口，覆盖知识库创建、文档导入、切片管理、监控、Agent 配置及运行时调用。所有接口通过 DashScope 网关统一提供服务，基于业务空间（`workspace_id`）和 API Key 进行鉴权与路由。开发者可通过该 API 实现知识库自动化构建、策略化检索与可集成的智能问答。
+RAG API 是百炼平台提供的知识库全生命周期管理与语义检索/问答服务接口集合，覆盖知识库创建、文档导入、切片管理、监控、Agent 封装及运行时调用等核心能力。所有接口通过统一的业务空间 Endpoint 提供 HTTPS 服务，采用 API Key 鉴权，请求与响应均为 UTF-8 编码的 JSON 格式。开发者可通过该 API 实现知识库自动化构建、策略化检索与智能问答集成。
 
 ## 支持的模型/功能
 
-RAG API 本身不直接暴露大模型推理能力，而是通过 **Agent 配置**与 **知识库元数据**间接绑定模型与向量能力：
-- **嵌入模型**：在创建知识库（`/api/v1/indices/rag/index/create_v2`）时通过 `embeddingModelName`（如 `text-embedding-v4`）或 `multimodalEmbeddingModelName`（如 `qwen3-vl-embedding`）指定，影响向量化质量 [创建知识库并导入](../../raw/application-api-reference/rag-api/rag-api-knowledge-base/rag-api-create-index.md)。
-- **重排序模型**：知识库级配置 `rerankModelName`（如 `qwen3-rerank`），用于检索后结果精排；全局混排策略则在 Agent 的 `hybrid_rerank` 中定义 [查询知识库列表](../../raw/application-api-reference/rag-api/rag-api-knowledge-base/rag-api-list-indices.md)。
-- **问答/检索模型**：由 Agent 的 `agent_model` 字段控制（如 `qwen3.7-plus`），在创建或更新 Agent 时配置，决定最终生成阶段的 LLM [创建 Agent](../../raw/application-api-reference/rag-api/rag-api-agents/rag-api-agent-create.md)。
-- **核心功能分三类**：
-  - **知识库管理**：CRUD 知识库、文档、切片（`/api/v1/indices/rag/...`）；
-  - **数据导入**：类目/文件/连接器管理（`/api/v1/connector/dash/...`）；
-  - **运行时服务**：知识检索（`/api/v1/indices/knowledge/search`）与知识问答（`/api/v2/apps/knowledge/chat`），需先发布 Agent。
+RAG API 不直接暴露大模型调用，而是通过预置模型能力支撑上层功能：
 
-> **注意**：文档 34 和文档 35 均指出知识检索与问答接口属于 DashScope 应用网关体系，其 Base URL 与 OpenAPI 一致，但鉴权方式、限流策略（默认 25 QPS）及参数结构（如 `agent_id`）与知识库管理接口有本质差异，不可混用。
+- **嵌入模型（Embedding）**：支持 `text-embedding-v4` 等文本向量化模型，可在创建知识库时通过 `embeddingModelName` 指定；多模态场景（如图片问答、视觉理解）需显式配置 `multimodalEmbeddingModelName`（例如 `qwen3-vl-embedding`），详见[创建知识库并导入](../../raw/application-api-reference/rag-api/rag-api-knowledge-base/rag-api-create-index.md)。
+- **重排序模型（Rerank）**：默认使用 `qwen3-rerank`，可在知识库创建或更新时通过 `rerankModelName` 覆盖；检索服务（`knowledge/search`）中混排策略由 Agent 配置中的 `hybrid_rerank` 控制。
+- **Agent 封装能力**：知识检索与问答均以 RAG Agent 为运行主体，其 `agent_config` 可配置 `agent_model`（如 `qwen3.7-plus`）、`agent_policy`（`turbo` 或 `agentic`）及安全策略（防泄漏、拒答、引用标注等），详见[创建 Agent](../../raw/application-api-reference/rag-api/rag-api-agents/rag-api-agent-create.md) 和 [更新 Agent](../../raw/application-api-reference/rag-api/rag-api-agents/rag-api-agent-update.md)。
+
+> **注意**：文档中提及的 `visual_document_qa` 场景虽在[创建知识库并导入](../../raw/application-api-reference/rag-api/rag-api-knowledge-base/rag-api-create-index.md)中列为可选值，但明确标注“控制台已不再提供该入口”，建议避免在生产环境使用。
 
 ## 关键参数
 
-| 参数名 | 所属接口 | 必填 | 类型 | 说明 |
-|--------|----------|------|------|------|
-| `workspace_id` | 全局 | 是 | string | 业务空间 ID，格式如 `llm-xxxxxxxxxxxx`，拼入 Base URL 构成 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com` [概览](../../raw/application-api-reference/rag-api/rag-api-overview.md) |
-| `Authorization: Bearer <API-Key>` | 全局 | 是 | header | API Key 鉴权凭证，需在控制台 [API Key 页面](https://bailian.console.aliyun.com/?tab=model#/api-key) 获取 [认证](../../raw/application-api-reference/rag-api/rag-api-authentication.md) |
-| `docIds` | `/create_v2`, `/job/create` | 是 | array<string> | 文件 ID 列表，用于批量导入；注意参数名是 `docIds`，非 `file_ids` 或 `fileIds` [创建知识库并导入](../../raw/application-api-reference/rag-api/rag-api-knowledge-base/rag-api-create-index.md) |
-| `index_id` / `indexId` | 多个接口 | 是 | string | 知识库 ID，但命名不一致：删除知识库用 `index_id`（snake_case），而查询切片列表用 `indexId`（camelCase）；传错将返回 `Index.InvalidParameter` [删除知识库](../../raw/application-api-reference/rag-api/rag-api-knowledge-base/rag-api-delete-index.md)、[查询切片列表](../../raw/application-api-reference/rag-api/rag-api-chunks/rag-api-list-chunks.md) |
-| `agent_id` | `/knowledge/search`, `/knowledge/chat` | 是 | string | 已发布 Agent 的唯一标识，必须通过 Agent 管理 API 创建并发布后获得，非知识库 ID [知识检索](../../raw/application-api-reference/rag-api/knowledge/knowledgesearch.md) |
+- **认证与路由**：所有请求必须携带 `Authorization: Bearer <API-Key>` 头，并使用形如 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com` 的 Base URL，其中 `{workspace_id}` 为业务空间 ID（如 `llm-xxxxxxxxxxxx`），在[业务空间管理](https://bailian.console.aliyun.com/?tab=globalset#/efm/business_management)页面获取。
+- **知识库标识**：知识库 ID 统一称作 `pipelineId`（部分接口误用 `index_id` 或 `id`），是创建知识库（`create_v2`）返回的 `data.pipelineId`，也是后续所有操作的核心路径参数或请求体字段。
+- **命名不一致警告**：
+  - 知识库管理接口（如 `/update`）使用 `id` 字段传入知识库 ID；
+  - 文档管理接口（如 `/delete_file`）使用 `index_id`；
+  - 切片与同步任务接口（如 `/chunklist`, `/job/create`）使用 `indexId` 或 `pipelineId`；
+  - 数据导入接口（如 `/addFile`, `/applyFileUploadLease`）中类目 ID 参数名为 `category`，而非 `categoryId`（见[注册文件](../../raw/application-api-reference/rag-api/rag-api-data-import/rag-api-add-file.md)和[申请上传租约](../../raw/application-api-reference/rag-api/rag-api-data-import/rag-api-upload-lease.md)）。
+- **分页与过滤**：查询类接口（如 `/list`, `/files`）普遍支持 `page_number`/`page_size`；部分接口（如 `/listCategory`）使用 `maxResult`（单数）且忽略 `maxResults`（复数）。
 
 ## 使用方式
 
-1. **准备环境**：获取 `workspace_id`（控制台 > 业务空间管理）和 `API-Key`（控制台 > API Key 页面），设置环境变量 `BAILIAN_API_KEY`。
+1. **初始化**：获取 API Key（[认证](../../raw/application-api-reference/rag-api/rag-api-authentication.md)）与业务空间 ID，构造 Base URL。
 2. **构建知识库**：
-   - （可选）调用数据导入接口（如 `/api/v1/connector/dash/addCategory`）准备类目；
-   - 调用 `/api/v1/indices/rag/index/create_v2` 创建知识库并导入文件，获取 `pipelineId`（即知识库 ID）；
-   - 或先创建空知识库，再通过 `/api/v1/indices/rag/index/job/create` 追加导入。
-3. **配置运行时服务**：
-   - 调用 Agent 管理 API（如 `/api/v1/indices/rag/app/create`）创建 Agent，绑定知识库并配置 `agent_config`；
-   - 调用 `/api/v1/indices/rag/app/deploy` 发布 Agent，获取 `agent_id`。
-4. **发起检索/问答**：
-   - **检索**：`POST /api/v1/indices/knowledge/search`，传 `agent_id` 和 `query`/`images`；
-   - **问答**：`POST /api/v2/apps/knowledge/chat`，传 `agent_id`、`messages` 及 `stream=true`（强制流式）。
-
-所有请求使用 HTTPS + JSON，GET 接口参数通过 query string 传递（如 `/list?page_number=1`），POST 接口参数在 request body 中。
+   - （可选）通过数据导入接口（`/connector/dash/` 前缀）管理类目、上传文件；
+   - 调用 `/api/v1/indices/rag/index/create_v2` 创建知识库并导入文档，获取 `pipelineId`。
+3. **管理内容**：
+   - 文档：通过 `/index/files`（列表）、`/list/index/file/details`（详情）、`/index/delete_file`（删除）管理；
+   - 切片：通过 `/index/chunklist`（列表）、`/index/chunk/create`（新增）、`/index/chunk/update`（更新）、`/index/chunk/delete`（删除）精细控制；
+   - 同步任务：通过 `/index/job/create`（提交）与 `/index_job/status`（查状态）跟踪导入进度。
+4. **封装与发布服务**：
+   - 调用 Agent 管理 API（`/app/` 前缀）创建、配置、发布 `search` 或 `chat` 场景的 Agent，获取 `agent_id`；
+   - 发布后，即可调用运行时接口 `/api/v1/indices/knowledge/search`（检索）或 `/api/v2/apps/knowledge/chat`（问答）。
+5. **监控与运维**：调用 `/index/monitor` 获取知识库存储用量与 QPS 监控数据。
 
 ## 限制和注意事项
 
-- **限流**：知识库管理接口有严格 QPS 限制，例如检索（`/rag/index/retrieve`）上限为 2000 QPS，而获取监控数据（`/rag/index/monitor`）仅 1 QPS；数据导入接口普遍为 10 QPS [限流](../../raw/application-api-reference/rag-api/rag-api-rate-limits.md)。超出时返回 HTTP `429`，需按 `Retry-After` 头或指数退避重试。
-- **不可逆操作**：删除知识库（`/delete`）、删除文档（`/delete_file`）、删除切片（`/chunk/delete`）均为永久删除，无回收站，调用前必须确认 [删除知识库](../../raw/application-api-reference/rag-api/rag-api-knowledge-base/rag-api-delete-index.md)。
-- **参数命名不一致**：多个接口存在 snake_case 与 camelCase 混用问题。例如：
-  - 删除文档接口要求 `index_id` 和 `doc_ids`（snake_case）；
-  - 查询切片列表接口要求 `indexId` 和 `pageNum`（camelCase）；
-  - 传错名称（如 `IndexId`）将导致 `Index.InvalidParameter` 错误 [删除文档](../../raw/application-api-reference/rag-api/rag-api-documents/rag-api-delete-document.md)。
-- **Agent 版本管理**：`agent_config` 仅允许修改 `beta` 草稿版本；已发布版本只能修改描述（`agent_version_desc`），如需更新配置，必须先 `update` 草稿再 `deploy` 新版本 [更新 Agent](../../raw/application-api-reference/rag-api/rag-api-agents/rag-api-agent-update.md)。
-- **文件上传流程**：三步式（申请租约 → OSS PUT 上传 → 注册文件），其中 `applyFileUploadLease` 的 `sizeBytes` 必须传字符串（如 `"1048576"`），`addFile` 的 `category` 参数名非 `categoryId`，需特别注意 [申请上传租约](../../raw/application-api-reference/rag-api/rag-api-data-import/rag-api-upload-lease.md)、[注册文件](../../raw/application-api-reference/rag-api/rag-api-data-import/rag-api-add-file.md)。
+- **限流规则**：知识库管理接口有严格 QPS 限制，例如检索（`/retrieve`）上限 2000 QPS，而监控接口（`/monitor`）仅 1 QPS；Agent 运行时接口（`/knowledge/search`, `/knowledge/chat`）默认用户维度 25 QPS。超限返回 `429`，需按 `Retry-After` 头或指数退避重试（见[限流](../../raw/application-api-reference/rag-api/rag-api-rate-limits.md)）。
+- **不可逆操作**：删除知识库（`/index/delete`）、删除文档（`/index/delete_file`）、删除切片（`/index/chunk/delete`）、删除类目（`/deleteCategory`）均为软删除但逻辑不可逆，操作前务必确认。
+- **参数格式陷阱**：
+  - 文件大小 `sizeBytes` 在 `applyFileUploadLease` 中必须为字符串（如 `"1048576"`），传数字将失败；
+  - `kb_search_configs` 中的 `search_filters` 语法复杂，需参考[知识库 SearchFilters](../../raw/application-api-reference/more/how-to-use-search-filters.md)；
+  - 错误响应结构统一，但部分接口（如 `/addCategory`）业务失败时 HTTP 状态码仍为 `200`，需检查响应体中的 `status` 字段（见[错误码](../../raw/application-api-reference/rag-api/rag-api-errors.md)）。
+- **Agent 生命周期约束**：`agent_config` 仅允许修改 `beta` 草稿版本；已发布版本（如 `1`, `2`）只能更新 `agent_version_desc`，如需变更配置，必须先 `update` 草稿再 `deploy` 新版本（见[更新 Agent](../../raw/application-api-reference/rag-api/rag-api-agents/rag-api-agent-update.md)）。
 
 ## 来源文档
 
@@ -58,12 +54,13 @@ RAG API 本身不直接暴露大模型推理能力，而是通过 **Agent 配置
 - [认证](../../raw/application-api-reference/rag-api/rag-api-authentication.md)
 - [错误码](../../raw/application-api-reference/rag-api/rag-api-errors.md)
 - [限流](../../raw/application-api-reference/rag-api/rag-api-rate-limits.md)
-- [创建知识库并导入](../../raw/application-api-reference/rag-api/rag-api-knowledge-base/rag-api-create-index.md)
+- [知识库](../../raw/application-api-reference/rag-api/rag-api-knowledge-base.md)
 - [查询知识库列表](../../raw/application-api-reference/rag-api/rag-api-knowledge-base/rag-api-list-indices.md)
-- [更新知识库](../../raw/application-api-reference/rag-api/rag-api-knowledge-base/rag-api-update-index.md)
+- [创建知识库并导入](../../raw/application-api-reference/rag-api/rag-api-knowledge-base/rag-api-create-index.md)
 - [删除知识库](../../raw/application-api-reference/rag-api/rag-api-knowledge-base/rag-api-delete-index.md)
-- [获取知识库监控数据](../../raw/application-api-reference/rag-api/rag-api-knowledge-base/rag-api-get-index-monitor.md)
+- [更新知识库](../../raw/application-api-reference/rag-api/rag-api-knowledge-base/rag-api-update-index.md)
 - [文档管理](../../raw/application-api-reference/rag-api/rag-api-documents.md)
+- [获取知识库监控数据](../../raw/application-api-reference/rag-api/rag-api-knowledge-base/rag-api-get-index-monitor.md)
 - [查询文档列表](../../raw/application-api-reference/rag-api/rag-api-documents/rag-api-list-documents.md)
 - [查询文件详情列表](../../raw/application-api-reference/rag-api/rag-api-documents/rag-api-list-file-details.md)
 - [删除文档](../../raw/application-api-reference/rag-api/rag-api-documents/rag-api-delete-document.md)
@@ -72,18 +69,17 @@ RAG API 本身不直接暴露大模型推理能力，而是通过 **Agent 配置
 - [更新切片](../../raw/application-api-reference/rag-api/rag-api-chunks/rag-api-update-chunk.md)
 - [删除切片](../../raw/application-api-reference/rag-api/rag-api-chunks/rag-api-delete-chunk.md)
 - [同步任务](../../raw/application-api-reference/rag-api/rag-api-sync-jobs.md)
-- [提交导入任务](../../raw/application-api-reference/rag-api/rag-api-sync-jobs/rag-api-submit-sync-job.md)
-- [知识库](../../raw/application-api-reference/rag-api/rag-api-knowledge-base.md)
 - [查询任务状态](../../raw/application-api-reference/rag-api/rag-api-sync-jobs/rag-api-get-sync-job-status.md)
-- [查询类目列表](../../raw/application-api-reference/rag-api/rag-api-data-import/rag-api-list-category.md)
-- [新增类目](../../raw/application-api-reference/rag-api/rag-api-data-import/rag-api-add-category.md)
-- [新增切片](../../raw/application-api-reference/rag-api/rag-api-chunks/rag-api-add-chunk.md)
 - [数据导入](../../raw/application-api-reference/rag-api/rag-api-data-import.md)
-- [查询文件详情](../../raw/application-api-reference/rag-api/rag-api-data-import/rag-api-describe-file.md)
+- [查询类目列表](../../raw/application-api-reference/rag-api/rag-api-data-import/rag-api-list-category.md)
+- [提交导入任务](../../raw/application-api-reference/rag-api/rag-api-sync-jobs/rag-api-submit-sync-job.md)
+- [新增类目](../../raw/application-api-reference/rag-api/rag-api-data-import/rag-api-add-category.md)
 - [删除类目](../../raw/application-api-reference/rag-api/rag-api-data-import/rag-api-delete-category.md)
+- [查询文件详情](../../raw/application-api-reference/rag-api/rag-api-data-import/rag-api-describe-file.md)
 - [删除文件](../../raw/application-api-reference/rag-api/rag-api-data-import/rag-api-delete-file.md)
+- [新增切片](../../raw/application-api-reference/rag-api/rag-api-chunks/rag-api-add-chunk.md)
 - [批量更新文件标签](../../raw/application-api-reference/rag-api/rag-api-data-import/rag-api-batch-update-tag.md)
-- [申请上传租约](../../raw/application-api-reference/rag-api/rag-api-data-import/rag-api-upload-lease.md)
+- [注册文件](../../raw/application-api-reference/rag-api/rag-api-data-import/rag-api-add-file.md)
 - [从 OSS 批量导入](../../raw/application-api-reference/rag-api/rag-api-data-import/rag-api-oss-import.md)
 - [新增连接器](../../raw/application-api-reference/rag-api/rag-api-data-import/rag-api-add-connector.md)
 - [查询连接器](../../raw/application-api-reference/rag-api/rag-api-data-import/rag-api-get-connector.md)
@@ -94,12 +90,12 @@ RAG API 本身不直接暴露大模型推理能力，而是通过 **Agent 配置
 - [Agent 管理概述](../../raw/application-api-reference/rag-api/rag-api-agents/rag-api-agent-overview.md)
 - [创建 Agent](../../raw/application-api-reference/rag-api/rag-api-agents/rag-api-agent-create.md)
 - [更新 Agent](../../raw/application-api-reference/rag-api/rag-api-agents/rag-api-agent-update.md)
+- [申请上传租约](../../raw/application-api-reference/rag-api/rag-api-data-import/rag-api-upload-lease.md)
 - [发布 Agent](../../raw/application-api-reference/rag-api/rag-api-agents/rag-api-agent-deploy.md)
+- [Agent 管理](../../raw/application-api-reference/rag-api/rag-api-agents.md)
 - [删除 Agent](../../raw/application-api-reference/rag-api/rag-api-agents/rag-api-agent-delete.md)
-- [查询 Agent 列表](../../raw/application-api-reference/rag-api/rag-api-agents/rag-api-agent-list.md)
 - [查询 Agent 详情](../../raw/application-api-reference/rag-api/rag-api-agents/rag-api-agent-get.md)
 - [复制 Agent](../../raw/application-api-reference/rag-api/rag-api-agents/rag-api-agent-copy.md)
-- [注册文件](../../raw/application-api-reference/rag-api/rag-api-data-import/rag-api-add-file.md)
-- [Agent 管理](../../raw/application-api-reference/rag-api/rag-api-agents.md)
+- [查询 Agent 列表](../../raw/application-api-reference/rag-api/rag-api-agents/rag-api-agent-list.md)
 
 
