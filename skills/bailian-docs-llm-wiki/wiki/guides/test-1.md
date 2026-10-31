@@ -1,45 +1,48 @@
 # test 1
 
-`test 1` 是阿里云百炼平台面向开发者提供的核心计费与资源管理能力集合，涵盖新人免费额度、吞吐预留（TPM）、模型调用、训练与部署、节省计划、账单成本管控及预算管理等全链路能力。本文档结构化梳理其关键机制，聚焦可操作性信息，帮助开发者快速选型、配置并规避常见陷阱。
+`test 1` 是阿里云百炼平台面向开发者提供的核心计费与成本管理主题，涵盖模型训练、模型部署、吞吐预留、节省计划、账单查询及预算控制等全链路费用场景。本文档整合官方最新规则，聚焦可执行的技术细节，不包含营销性描述，所有价格与参数均以原始文档为准，并明确标注矛盾或过时信息。
 
 ## 支持的模型/功能
 
-- **免费额度适用模型**：仅华北2（北京）地域的指定模型享有新人免费额度（通常为 100 万 [Token](../concepts/token.md)），且不同模型（含快照版本如 `qwen-max-2025-01-25` 与 `qwen-max`）额度完全独立、不互通 [原文标题](../../raw/model-user-guide/test-1/new-free-quota.md)。
-- **吞吐预留（TPM）支持模型**：包括 `qwen3.8-max`、`qwen3.7-flash-2026-07-15`、`glm-5.2`、`deepseek-v4-pro` 等，分标准模式（同TPS）与高速模式（1.5~2倍TPS），支持华北2（北京）和新加坡地域 [原文标题](../../raw/model-user-guide/test-1/tpm-reservation-billing.md)。
-- **模型调用覆盖范围**：按量计费支持全部公开模型，但免费额度**仅抵扣实时推理**，明确排除 Batch 调用、模型调优、模型部署、PAI-DSW、OSS 存储等费用 [原文标题](../../raw/model-user-guide/test-1/new-free-quota.md)。
-- **节省计划覆盖模型**：AI 通用型节省计划可抵扣 A 类（千问、向量、排序等）、B 类（图像、语音、视频）、C 类（DeepSeek、Kimi、GLM 等阿里直供版）模型的调用费用；但**三方直供模型不支持抵扣**，需以控制台实际展示为准 [原文标题](../../raw/model-user-guide/test-1/savings-plan-and-resource-package.md)。
+`test 1` 覆盖百炼平台主流模型类型的计费能力，包括文本生成（千问系列）、多模态（千问VL、万相）、语音（CosyVoice、Qwen-TTS/ASR）及视频生成模型。其中：
+
+- **文本生成模型**（如 `qwen3.8-max`、`qwen3.7-plus-2026-05-26`）支持按 Token 调用计费、吞吐预留（PTU/DTU）、AI 通用型节省计划等多种模式，是当前最成熟、覆盖最广的计费类型 [原文标题](../../raw/model-user-guide/test-1/model-pricing.md)。
+- **图像与视频生成模型**（如 `wan2.7-i2v`、`qwen-image-2.0-pro`）采用基于 `max_pixels`、`n_epochs` 或 `计费时长` 的 Token 估算公式，计费逻辑与文本模型差异显著，且部分模型（如 `wan2.7-i2v`）已下架免费额度 [原文标题](../../raw/model-user-guide/test-1/new-free-quota.md)。
+- **语音合成模型**（如 `cosyvoice-v3-plus`）仅支持华北2（北京）地域，训练计费公式为 `(lm_max_epoch + fm_max_epoch) × 25 × 总时长（秒）`，不参与通用节省计划抵扣 [原文标题](../../raw/model-user-guide/test-1/model-training-and-deployment-billing.md)。
+
+> **注意**：文档 2 明确列出 `wan2.7-i2v` 已于 2026-10-29 下架免费额度；而文档 1 中仍将其列为有效训练模型并给出价格（2元/千Token）。实际使用中，该模型**不再享有新人免费额度**，但训练服务本身仍可用，需按量付费。
 
 ## 关键参数
 
-- **免费额度有效期**：90 天，自开通百炼、模型发布或申请通过之日三者中**最晚者**起算；2025年9月8日前开通用户有效期可能不足90天 [原文标题](../../raw/model-user-guide/test-1/new-free-quota.md)。
-- **TPM 容量单位**：输入按 **万TPM/天** 报价，输出按 **千TPM/天** 报价；购买时输入起步 200 kTPM，输出起步 20 kTPM [原文标题](../../raw/model-user-guide/test-1/tpm-reservation-billing.md)。
-- **长输入折算系数**：不同模型阶梯规则差异大，例如 `qwen3.7-flash-2026-07-15` 对 (32K,256K] 输入段采用 3x 系数，而 `glm-5.1` 对同一区间输入采用 1.33x，输出采用 1.17x [原文标题](../../raw/model-user-guide/test-1/tpm-reservation-billing.md)。
-- **模型调用阶梯计费**：以 `qwen3.7-plus-2026-05-26` 为例，输入 [Token](../concepts/token.md) ≤256K 时输入单价 ¥2/百万，>256K 时升至 ¥6/百万，**整次请求所有 [Token](../concepts/token.md) 均按高阶单价结算** [原文标题](../../raw/model-user-guide/test-1/model-pricing.md)。
-- **预算管理范围**：**仅限 API 按调用量付费产生的费用**，明确排除模型训练、预置吞吐（PTU）、模型单元（DTU）等费用 [原文标题](../../raw/model-user-guide/test-1/budget-management.md)。
+不同计费模式依赖特定参数组合，开发者必须准确配置以避免误计费：
 
-> **注意**：文档 4 中 `qwen3.7-plus` 的价格表标注“当前能力等同于 `qwen3.7-plus-2026-05-26`”，但文档 3 的模型部署计费表中 `qwen3.7-plus-2026-05-26` 的最长输入 Token 为 256K，而文档 4 中 `qwen3.7-plus` 的输入单价描述未体现该限制，存在潜在歧义。开发者应以模型部署页或控制台实际参数为准。
+- **模型训练**：关键参数包括 `max_steps`（t2i/i2i）、`n_epochs`（图像/视频）、`max_pixels`（图像/视频）、`generation_type`（t2i/i2i）、`计费时长`（视频，取 `min(10, 四舍五入后时长)`），以及 `GPU系数`（动态值，实际用量以 API 返回 `usage` 字段为准）[原文标题](../../raw/model-user-guide/test-1/model-training-and-deployment-billing.md)。
+- **吞吐预留（PTU）**：关键参数为 `输入kTPM`（起步200，步长10）、`输出kTPM`（起步20，步长1）、`购买时长`（1–365天）、`性能模式`（标准/高速）及 `容量换算系数`（长输入阶梯系数、缓存折算系数）。例如 `qwen3.7-flash-2026-07-15` 输入阶梯系数为 `(0,32K] 1x, (32K,256K] 3x, (256K,1M] 6x` [原文标题](../../raw/model-user-guide/test-1/tpm-reservation-billing.md)。
+- **节省计划**：关键参数为 `月承诺消费金额`（1000元起）、`购买时长`（3/6/12/24个月）、`付款方式`（全预付/零预付）及 `地域`（华北2（北京）等6地，**不跨地域抵扣**）[原文标题](../../raw/model-user-guide/test-1/savings-plan-and-resource-package.md)。
 
 ## 使用方式
 
-- **免费额度启用**：开通百炼并完成实名认证后自动发放，无需手动领取；额度在华北2（北京）地域模型列表中以蓝色额度条标识，两小时内生效 [原文标题](../../raw/model-user-guide/test-1/new-free-quota.md)。
-- **吞吐预留调用**：创建成功后生成专属模型 Code（如 `qwen3.8-max-ptu-xxxx`），需在 API 请求中将 `model` 参数替换为此 Code 才能命中预留容量 [原文标题](../../raw/model-user-guide/test-1/tpm-reservation-billing.md)。
-- **节省计划生效**：购买后使用**百炼通用 API Key 与 Base URL** 接入，费用在结算时自动抵扣，**仅抵扣生效后产生的费用**，购买前已产生费用无法追溯 [原文标题](../../raw/model-user-guide/test-1/savings-plan-and-resource-package.md)。
-- **预算自动停用**：开启「达到预算后立即停止」后，费用达阈值时 API 调用返回 HTTP 429 错误；但 PTU 溢出部分及应用产生的调用暂不支持此自动停止机制 [原文标题](../../raw/model-user-guide/test-1/budget-management.md)。
+开发者应根据业务稳定性与成本敏感度选择合适模式：
+
+- **按量调用**：适用于低频、不可预测流量。调用时使用通用 API Key 和 Base URL，费用实时计入账单。**必须注意**：免费额度仅限华北2（北京）地域，且仅抵扣实时推理（非 Batch、非训练、非部署）[原文标题](../../raw/model-user-guide/test-1/new-free-quota.md)。
+- **吞吐预留（PTU）**：适用于高并发、确定性 SLA 场景。创建后获得专属模型 Code（需替换 API `model` 参数），预留容量内调用不额外收费，溢出按策略处理（自动切换按量或返回 429）[原文标题](../../raw/model-user-guide/test-1/tpm-reservation-billing.md)。
+- **AI 通用型节省计划**：**推荐作为绝大多数场景首选**。承诺月消费金额换取阶梯折扣（最高5.3折），覆盖绝大部分阿里直供模型（A/B/C类），购买后自动生效，无需修改代码 [原文标题](../../raw/model-user-guide/test-1/savings-plan-and-resource-package.md)。
+- **资源包/Token Plan**：适用于用量小或高度集中于单一模型的场景（如仅用 `qwen3.5-plus`），或 AI 编程工具集成（Token Plan 需配置专属 API Key）[原文标题](../../raw/model-user-guide/test-1/savings-plan-and-resource-package.md)。
 
 ## 限制和注意事项
 
-- **免费额度地域强约束**：仅华北2（北京）地域模型可用，其他地域（如美国、新加坡）无任何免费额度 [原文标题](../../raw/model-user-guide/test-1/new-free-quota.md)。
-- **TPM 预留“生效即计费”**：创建成功即开始计费，与是否调用无关；容量费用按购买量全额计收，不因实际用量减免 [原文标题](../../raw/model-user-guide/test-1/tpm-reservation-billing.md)。
-- **模型部署溢出行为差异**：当输入超最长 Token 或 TPM 超额时，若选择「自动溢出」策略，调用将切换为按量付费并返回 Header `x-dashscope-ptu-overflow:true`；若选择「仅使用 PTU 容量」则直接返回 429 [原文标题](../../raw/model-user-guide/test-1/model-training-and-deployment-billing.md)。
-- **账单出账延迟**：大模型推理账单为分钟级出账（通常 2–10 分钟），批量推理、模型训练等为小时级出账；查询账单时需等待系统出账完成，刚调用后查不到属正常现象 [原文标题](../../raw/model-user-guide/test-1/bill-query-and-cost-management.md)。
-- **入门型节省计划退订限制**：一经支付，**不支持退订**，购买前需确认档位和需求 [原文标题](../../raw/model-user-guide/test-1/savings-plan-and-resource-package.md)。
+- **地域隔离严格**：免费额度、节省计划、吞吐预留均按地域独立生效。在华北2（北京）购买的节省计划，**无法抵扣**美国（弗吉尼亚）产生的调用费用 [原文标题](../../raw/model-user-guide/test-1/savings-plan-and-resource-package.md)。
+- **免费额度非全局共享**：主账号与 RAM 子账号共享额度，但不同模型（含带日期后缀的快照版本）额度完全独立。`qwen3.7-plus-2026-05-26` 与 `qwen3.7-plus` 视为两个模型，各自拥有 100 万 Token 免费额度 [原文标题](../../raw/model-user-guide/test-1/new-free-quota.md)。
+- **账单延迟与出账逻辑**：模型推理账单通常延迟 2–10 分钟出账，批量/训练/知识库为小时级出账。**费用概览页面数据存在延迟，权威数据源为 [阿里云费用与成本](https://billing-cost.console.aliyun.com/home)** [原文标题](../../raw/model-user-guide/test-1/bill-query-and-cost-management.md)。
+- **预算管理范围有限**：仅管控 API 按调用量付费费用，**明确不包含**模型训练、模型部署（PTU/DTU）、知识库规格费等 [原文标题](../../raw/model-user-guide/test-1/budget-management.md)。
+- **“达到预算后立即停止”风险提示**：生产环境**不建议开启**。该功能触发后返回 HTTP 429，且 PTU 溢出调用、应用调用暂不支持自动停止，服务停止亦有延迟，延迟期内费用仍正常收取 [原文标题](../../raw/model-user-guide/test-1/budget-management.md)。
 
 ## 来源文档
 
-- [新人免费额度](../../raw/model-user-guide/test-1/new-free-quota.md)
-- [吞吐预留计费](../../raw/model-user-guide/test-1/tpm-reservation-billing.md)
 - [模型训练与部署计费](../../raw/model-user-guide/test-1/model-training-and-deployment-billing.md)
+- [新人免费额度](../../raw/model-user-guide/test-1/new-free-quota.md)
 - [模型调用价格](../../raw/model-user-guide/test-1/model-pricing.md)
+- [吞吐预留计费](../../raw/model-user-guide/test-1/tpm-reservation-billing.md)
 - [节省计划与资源包](../../raw/model-user-guide/test-1/savings-plan-and-resource-package.md)
 - [账单查询与成本管理](../../raw/model-user-guide/test-1/bill-query-and-cost-management.md)
 - [预算管理](../../raw/model-user-guide/test-1/budget-management.md)

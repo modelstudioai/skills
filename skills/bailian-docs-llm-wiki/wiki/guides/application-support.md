@@ -1,43 +1,43 @@
 # application [support](support.md)
 
-`application support` 是百炼平台为应用层调用提供的基础服务支持能力，涵盖模型接入、功能扩展、参数配置与生命周期管理等核心环节。它面向开发者提供统一的 API 接口和 SDK 封装，用于构建生产级 AI 应用。该能力不直接暴露底层模型训练细节，而是聚焦于推理服务的稳定性、可配置性与可观测性。
+`application support` 指百炼平台为开发者在构建、调试、部署和运维 AI 应用过程中提供的技术支撑能力，涵盖插件集成、RAG 检索增强、[流式输出](../concepts/streaming-output.md)控制、文件与数据管理，以及售后响应机制等核心环节。该支持体系面向生产环境需求设计，强调可配置性、可观测性和边界清晰的服务范围。所有功能均需通过百炼控制台或标准 API 调用启用，不依赖前端渲染逻辑。
 
 ## 支持的模型/功能
 
-- 支持调用百炼平台托管的全部公开模型（如 Qwen 系列、Qwen-VL、Qwen-Audio）及用户私有微调模型（需完成模型部署并授权）  
-- 提供标准功能：文本生成、流式响应、[函数调用](../concepts/function-calling.md)（Function Calling）、多轮对话状态管理、输入/输出内容安全过滤（默认启用）  
-- 不支持直接访问模型权重或自定义前/后处理算子；如需定制化预处理逻辑，须通过 [应用网关插件](../../raw/application-user-guide/application-support.md) 实现。该文档明确指出：“所有预处理必须在请求进入 application [support](support.md) 服务前完成”。
+- **插件能力**：官方提供六类内置插件：Python 代码解释器、计算器、图片生成、夸克搜索、生成二维码、GitHub 搜索；其中部分需申请开通 [常见问题](../../raw/application-user-guide/application-support/application-faq.md)。  
+- **RAG 检索增强**：支持多知识库并行检索（按用户配置策略执行），再基于相关性得分聚合 TopN 结果，适用于问答系统、客户服务、教育等场景 [常见问题](../../raw/application-user-guide/application-support/application-faq.md)。  
+- **结构化数据导入**：支持 Excel/CSV 等格式结构化数据导入，但存在空行截断策略（首行为空则视为无效文件）[常见问题](../../raw/application-user-guide/application-support/application-faq.md)。  
+- **[流式输出](../concepts/streaming-output.md)控制**：支持 `stream=True` 全量[流式输出](../concepts/streaming-output.md)；如需增量式（即仅返回本次新增 token），须显式设置 `incremental_output=True`。
+
+> **注意**：文档 1 中第 4 条称 “Agent 和 Assistant API 的最大区别是用户可自行开发插件模型”，但该描述未定义“插件模型”具体指代（是自定义 LLM 还是插件编排逻辑？）。当前平台实际不支持用户替换底层推理模型，仅支持插件调用与 RAG 配置。此条表述易引发歧义，应以控制台实际能力为准。
 
 ## 关键参数
 
-| 参数名 | 类型 | 必填 | 说明 |
-|--------|------|------|------|
-| `model` | string | 是 | 模型 ID，例如 `qwen-max` 或 `my-finetuned-model-202405`；必须已在控制台完成部署并处于 `ACTIVE` 状态 |
-| `stream` | boolean | 否 | 默认 `false`；设为 `true` 时返回 SSE 流式响应；注意流式模式下 `max_tokens` 为硬限制，超限将中断流 |
-| `top_p` / `temperature` | float | 否 | 控制生成多样性；二者不可同时为 0（否则触发确定性采样冲突），详见 [售后说明](../../raw/application-user-guide/application-support/application-after-sales-service-scope.md) 中“参数组合约束”章节 |
-| `tools` | array | 否 | [函数调用](../concepts/function-calling.md)工具列表，格式遵循 OpenAI 兼容 schema；工具执行失败时默认返回 `tool_calls` 字段为空数组，而非抛出错误 |
-
-> **注意**：原始文档 [常见问题](../../raw/application-user-guide/application-support/application-faq.md) 中称 `n` 参数可用于并行生成多条结果，但该功能已于 v2.3.0 版本移除，当前 API 返回 `400 Bad Request`；请改用客户端并发请求实现类似效果。
+| 参数名 | 类型 | 说明 | 是否必需 |
+|--------|------|------|----------|
+| `stream` | bool | 启用流式响应（SSE 格式） | 否，默认 `False` |
+| `incremental_output` | bool | 在 `stream=True` 下启用增量 token 输出（避免重复返回历史内容） | 否，默认 `False` |
+| `MD5` | string | 文件上传时必填，用于校验文件完整性 | 是（见 [常见问题](../../raw/application-user-guide/application-support/application-faq.md)） |
+| `authorization` | string | 自定义插件调用时唯一允许透传的 Header 字段 | 是（其他 Header 将被丢弃） |
 
 ## 使用方式
 
-1. **HTTP 调用**：向 `https://dashscope.aliyuncs.com/api/v1/apps/{app_id}/chat/completions` 发送 POST 请求（需携带 `Authorization: Bearer <api_key>`）  
-2. **SDK 调用**（推荐）：使用 `dashscope` Python SDK v1.18.0+，示例：
-   ```python
-   from dashscope import Application
-   resp = Application.call(app_id='app-xxx', model='qwen-plus', messages=[{'role': 'user', 'content': '你好'}])
-   ```
-3. 所有请求均需通过应用 ID（`app_id`）路由，该 ID 在控制台「应用管理」中创建并绑定模型；未绑定模型的应用调用将返回 `404 Not Found`，而非模型加载失败提示。
+- **插件调用**：通过 Assistant API 提交带 `tools` 定义的请求，模型自动选择并填充参数；自定义插件需符合 OpenAPI 3.0 协议，且仅支持 `authorization` Header 透传。  
+- **RAG 测试优化**：若检索结果不准确，可通过界面“问题反馈”按钮提交，或复制 `RequestId` 提交工单 [常见问题](../../raw/application-user-guide/application-support/application-faq.md)。  
+- **文件上传**：PDF 文件后缀必须为小写 `pdf`，否则返回错误码 `140010`；单业务空间上限 10 万文档，超限时需提交工单扩容。  
+- **售后接入**：7×24 小时支持通过电话（95187）、阿里云 APP 或标准工单获取；基础服务覆盖 API 故障诊断、SDK 使用、控制台问题等 [阿里云百炼平台售后服务范围说明](../../raw/application-user-guide/application-support/application-after-sales-service-scope.md)。
 
 ## 限制和注意事项
 
-- 单次请求最大上下文长度受所选模型原生限制约束（如 `qwen-max` 为 32768 tokens），`application support` 层不额外截断，但超出模型上限将导致 `400` 错误  
-- 流式响应中 `usage` 字段仅在流结束时的 final chunk 中返回；中间 chunk 的 `usage` 均为 `null` —— 此行为与 [相关协议](../../raw/application-user-guide/application-support/application-related-agreements.md) 第 4.2 条一致  
-- 每个应用默认 QPS 限制为 5，可通过提交工单申请提升；突发流量超过配额时，服务返回 `429 Too Many Requests`，不进行排队或降级  
-- 不支持跨区域调用：`app_id` 所属地域必须与 API Endpoint 地域一致（如华东1区应用不可调用华北2区 endpoint）
+- **插件 Header 限制**：自定义插件调用**不支持透传任意自定义 Header**，仅 `Authorization` 字段有效；其他字段（如 `X-User-ID`、`X-Tenant`）将被服务端静默忽略。  
+- **第三方工具责任边界**：阿里云仅对百炼服务端（API 可用性、计费记录、SDK 示例）提供支持；第三方工具（如 Cursor、Windsurf）的安装、配置、本地网络/代理/防火墙问题等，不在售后范围内 [阿里云百炼平台售后服务范围说明](../../raw/application-user-guide/application-support/application-after-sales-service-scope.md)。  
+- **协议约束**：使用前须接受《阿里云百炼服务协议》及《体验功能特别说明》，开源模型还需遵守对应 [开源模型协议条款说明](../../raw/application-user-guide/application-support/application-related-agreements.md)。  
+- **Markdown 渲染**：模型输出中的 `**text**` 等 Markdown 语法需由前端自行解析渲染，百炼 API 不做 HTML 转义或富文本转换。
 
 ## 来源文档
 
-- [服务支持](../../raw/application-user-guide/application-support.md)
+- [常见问题](../../raw/application-user-guide/application-support/application-faq.md)
+- [相关协议](../../raw/application-user-guide/application-support/application-related-agreements.md)
+- [阿里云百炼平台售后服务范围说明](../../raw/application-user-guide/application-support/application-after-sales-service-scope.md)
 
 

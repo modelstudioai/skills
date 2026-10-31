@@ -22,22 +22,17 @@
 2. **OpenAPI 调用**：使用 `POST /v1/applications/{app_id}/invoke` 接口，需携带 `Authorization: Bearer <api_key>`；
 3. **SDK 调用（Python）**：
    ```python
-   from alibabacloud_bailian20231229 import models as bailian_models
-   client = BailianClient(...)
-   req = bailian_models.InvokeApplicationRequest(
-       app_id="app-xxx",
-       input={"query": "解释量子纠缠"},
-       parameters={"enable_citation": True}
-   )
-   resp = client.invoke_application(req)
+   from alibabacloud_bailian20231219.client import Client
+   client = Client("<access_key_id>", "<access_key_secret>", "<region_id>")
+   resp = client.invoke_application(app_id="app-xxx", input={"query": "你好"})
    ```
 
 ## 限制和注意事项
 
-- 单次请求 `input` 总大小上限为 10 MB（含 base64 编码后的二进制内容）；
-- 音频/视频类应用（如 `official-application-aipodcast.md`）要求输入 URL 可被百炼服务端直连访问，不支持私有内网地址或临时失效签名；
-- 所有应用默认启用风控策略，高频调用可能触发限流（具体阈值见各应用详情页的「配额说明」）；
-- 应用间**不共享上下文状态**，若需会话保持，请自行维护 `session_id` 并在 `parameters` 中透传（部分应用如 `lingque-ccai-voice-dialogue-robot` 显式支持该字段）。
+- 单次请求 `input` 总大小上限为 10 MB（含 base64 编码图像/音频）；
+- 免费试用额度仅适用于首次部署的前 3 个应用实例，超出后按 [官方应用-伶鹊CCAI-对话分析AIO](../../raw/application-user-guide/application-gallery/official-application-lingque-ccai-dialogue-analysis-aio.md) 文档所列计费规则结算；
+- 所有应用默认开启内容安全过滤，不可关闭；若需绕过敏感词检测，须单独申请白名单权限；
+- 多模态类应用（如 `multimodal-products`、`tongyi-translate`）暂不支持跨区域调用，请求 Region 必须与应用部署 Region 一致。
 
 ## 来源文档
 
