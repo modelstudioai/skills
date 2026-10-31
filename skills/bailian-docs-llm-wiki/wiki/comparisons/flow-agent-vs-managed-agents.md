@@ -1,63 +1,68 @@
-# 流程型智能体与托管智能体对比
+# 流程型 Agent 与托管型 Agent 对比
 
-本文旨在帮助百炼平台开发者清晰理解两类核心智能体能力——**流程型智能体（Flow Agent）** 与**托管智能体（Managed Agent）** 的技术定位、能力边界与适用场景，为架构设计与 API 选型提供客观、可落地的技术参考。随着百炼平台智能体能力持续演进，二者在抽象层级、控制粒度、运维模式及集成方式上已形成明确分工：流程型智能体面向“应用级快速交付”，强调开箱即用与低代码编排；托管智能体则面向“工程化深度定制”，强调运行时可控性、环境隔离与全生命周期管理。正确区分二者，可避免重复建设、降低维护成本，并提升系统稳定性与可扩展性。
+## 背景与目的  
+在百炼平台智能体开发实践中，开发者常面临两种核心架构路径的选择：**流程型 Agent（Flow Agent）** 侧重于低代码/可视化编排与开箱即用的应用集成；而 **托管型 Agent（Managed Agent）** 则面向需要深度编程控制、运行时可观察性与多租户隔离能力的中高阶场景。本对比旨在帮助开发者基于技术目标、团队能力与业务需求，清晰识别二者在能力边界、使用范式与运维成本上的本质差异，避免因选型偏差导致后期重构或扩展瓶颈。
+
+---
 
 ## 关键维度对比
 
-| 维度 | 流程型智能体（Flow Agent） | 托管智能体（Managed Agent） |
-|------|---------------------------|------------------------------|
-| **核心定位** | 应用/工作流的**发布态调用接口**，聚焦“执行”与“编排结果消费” | 智能体的**定义-部署-运行时管理接口**，聚焦“构建”与“可控执行” |
-| **输入格式** | • 同步/异步/流式调用均支持 `prompt`（字符串）或 `messages`（标准角色消息数组：<br> `[{ "role": "system", "content": "..." }, { "role": "user", "content": "..." }]`）<br>• 支持 `session_id` 恢复历史（1 小时有效期） | • 严格要求 `messages` 数组（含 `system`/`user`/`assistant` 角色），不接受单字段 `prompt`<br>• 首次会话需先创建 `session`，后续请求通过 `session_id` 绑定上下文<br>• 支持事件驱动输入（如 `event: tool_call_result`） |
-| **输出格式** | • 同步响应：标准 JSON，含 `output.text`、`output.choices[0].message.content` 等字段<br>• 流式响应（SSE）：按 chunk 返回增量文本（`incremental_output=false` 时为累计文本；`true` 时为纯增量） | • 同步响应：结构化 JSON，含 `response.type`（`text`/`tool_use`/`file` 等）、`response.content`、`response.tool_calls` 等语义化字段<br>• 流式响应（SSE）：严格按事件类型分块（`event: text_delta`, `event: tool_use`, `event: memory_update`），支持细粒度前端渲染与状态同步 |
-| **支持模型** | • 由应用发布时绑定，调用侧**不可动态切换**<br>• 实际可用模型取决于控制台中该应用所选模型（如 `qwen-max`, `qwen-plus`），API 层无显式 `model_id` 参数 | • **必须显式指定 `model_id`**（如 `"qwen-max"`、`"qwen-plus"`）作为 Agent 创建/更新参数<br>• 模型列表与兼容性以 [Model API 文档](../../raw/model-api-reference/model-list.md) 为准，支持运行时多模型共存（不同 Agent 可用不同模型） |
-| **API 端点与协议** | • **双网关分离**：<br> – 应用调用：`https://dashscope.aliyuncs.com/api/v1/apps/{APP_ID}/completion`（DashScope 网关）<br> – 组件管理：`https://{workspaceId}.cn-beijing.maas.aliyuncs.com/{workspaceId}/...`（OpenAPI 网关）<br>• HTTP/1.1，需区分鉴权方式 | • **统一 RESTful 端点**：<br> `https://dashscope.aliyuncs.com/api/v1/agents/{id}/chat` 等（全路径基于 DashScope 域名）<br>• 完整支持 HTTP/1.1 与 HTTP/2（推荐流式场景启用 HTTP/2） |
-| **鉴权方式** | • **应用调用类接口**：`Authorization: Bearer <API_KEY>`（百炼平台 API Key）<br>• **组件类接口**（Prompt/Memory）：阿里云 AccessKey 签名（ACS3-HMAC-SHA256），**不兼容 Bearer [Token](../concepts/token.md)** | • **统一 Bearer [Token](../concepts/token.md) 认证**：<br> `Authorization: Bearer <access_token>`<br>• [Token](../concepts/token.md) 通过 OAuth2 流程获取，支持短期有效、权限精细化控制（如仅限 `agent:read`） |
-| **计费方式** | • 按**调用量计费**（每次 `/completion` 或 `/responses` 请求计为 1 次调用）<br>• 模型推理费用另计（依据实际 tokens 消耗，与调用次数解耦）<br>• Prompt 模板、[长期记忆](../concepts/long-term-memory.md)（旧）等组件操作**不单独计费** | • 按**Agent 实例运行时资源消耗计费**：<br> – 基础：Agent 部署实例时长（小时）<br> – 增量：Tokens 消耗、Memory Store 存储量、文件存储量<br>• API 调用本身（如 `/chat`, `/sessions`）**不产生额外调用费** |
-| **典型场景** | • 快速上线客服机器人、FAQ 助手、营销文案生成等标准化应用<br>• 与现有业务系统（如 CRM、ERP）做轻量级 AI 能力嵌入（通过 APP_ID 直接调用）<br>• 需要复用控制台已配置的工作流（Workflow）逻辑 | • 构建具备复杂工具调用链、多步骤决策、状态持久化的专业 Agent（如投研分析助手、IT 运维巡检 Agent）<br>• 需要环境隔离（dev/staging/prod）与灰度发布的 SaaS 类产品<br>• 要求对会话状态、记忆更新、文件引用等进行编程式监听与干预（如 Webhook 回调） |
-| **[长期记忆](../concepts/long-term-memory.md)能力** | • 仅支持已标记为“**旧**”的[长期记忆](../concepts/long-term-memory.md)（Legacy Memory），功能受限且**不推荐新项目使用**<br>• 无原生 Memory Store 键值管理能力 | • 内置 **Memory Store**：支持键值对形式的持久化存储（单 key ≤1MB），自动关联 session/agent 粒度<br>• 支持 `memory_update` 流式事件，便于实时同步上下文变更 |
-| **文件处理** | • 依赖外部临时文件上传许可（通过辅助接口申请），无原生文件管理能力<br>• 文件内容需预处理为文本后传入 `prompt`/`messages` | • 原生支持 `/v1/files` 上传（≤100MB，非分片）<br>• 文件可直接在 `messages` 中以 `{"type": "file", "file_id": "xxx"}` 引用，Agent 自动解析内容 |
+| 维度 | 流程型 Agent（Flow Agent API） | 托管型 Agent（Managed Agents API） |
+|------|-------------------------------|-----------------------------------|
+| **定位与设计哲学** | 应用交付导向：以“发布即服务”为核心，聚焦快速上线预构建智能体与工作流 | 运行时基础设施导向：提供可编程 Agent 生命周期管理，强调细粒度控制与可观察性 |
+| **输入格式** | 支持 `prompt`（字符串）或 `messages`（OpenAI-style 消息数组）；`session_id` 控制上下文加载 | 必须通过 `POST /v1/sessions` 发起会话，输入为结构化 JSON（含 `input`, `memory`, `files` 等字段），支持 Jinja2 模板变量注入 |
+| **输出格式** | 同步返回 `output` 字段（含 `text` 或 `choices`）；流式响应为 SSE 格式，增量模式（`incremental_output=true`）返回连续 token 片段 | 异步事件驱动：通过 `/v1/sessions/{id}/events` 订阅 `agent_step`、`tool_call`、`agent_finish` 等结构化事件；支持 SSE 或轮询获取 |
+| **支持模型** | 透明封装：调用时无需指定模型，由应用配置决定（如新版智能体绑定 `qwen-max`）；不支持运行时动态切换 | 显式声明：创建 Agent 时必须指定 `model` 字段（如 `"qwen-plus"`），且需在项目已开通模型列表内；支持 per-Agent 粒度模型隔离 |
+| **API 端点与认证** | **双协议体系**：<br>• 应用调用：DashScope 网关（`https://dashscope.aliyuncs.com/api/v1/...`），Bearer Token 鉴权<br>• 组件管理：阿里云 OpenAPI（`https://{workspace}.aliyuncs.com/...`），AccessKey 签名鉴权 | **统一协议**：<br>全量 RESTful 接口（`https://bailian.aliyuncs.com/api/v1/...`），统一 Bearer Token 鉴权（通过百炼平台 OAuth2 获取） |
+| **[长期记忆](../concepts/long-term-memory.md)能力** | 提供“[长期记忆](../concepts/long-term-memory.md)（旧）”接口（`Memory`/`MemoryNode`），但文档明确标注为**遗留方案**，新项目不推荐使用 | 提供现代化 `Memory Store`：键值对存储 + TTL 自动过期 + 多 Session 共享/隔离策略，支持结构化查询（`GET /v1/memory_stores/{id}/keys`） |
+| **技能（Skill）扩展** | 依赖工作流节点或智能体内置插件（如支付宝打赏），无标准 Skill 注册机制 | 原生支持 Skill 编排：可注册 Webhook 类 Skill（HTTP 回调），动态绑定至 Agent；支持事件透传与错误重试策略配置 |
+| **环境与隔离** | 通过 `workspace` 参数实现业务空间隔离（如德国、新加坡子空间），但无运行时环境版本管理 | 内置 `Environment` 概念：支持多环境（dev/staging/prod）、配置灰度、版本快照与回滚，天然适配 CI/CD 流程 |
+| **计费方式** | 按调用量计费（如每次 `application-call` 请求），与底层模型调用解耦；Prompt 模板/记忆等组件管理免费 | 按 Agent 实例运行时长 + 事件处理量计费；`Session` 存活期间持续计费（最长 24 小时），Skill 调用按 HTTP 请求计费 |
+| **典型场景** | • 客服对话机器人（标准问答+工单跳转）<br>• 内部提效工具（会议纪要生成、周报自动汇总）<br>• 快速验证 MVP 的轻量级工作流 | • 金融风控决策引擎（多步骤推理+人工审核介入）<br>• 企业级 AI 助手（跨系统凭证安全调用+审计日志）<br>• 多租户 SaaS 应用（环境隔离+定制化 Skill 生态） |
 
-## 各方案的适用场景建议
+---
 
-### ✅ 推荐选用 **流程型智能体（Flow Agent）** 当：
-- 你已通过百炼控制台完成智能体或工作流的可视化编排，并希望**快速对外提供 API 服务**；
-- 集成方系统简单，只需“输入文本 → 获取回复”这一单向交互，**无需感知会话生命周期或内部状态**；
-- 项目处于 PoC 或 MVP 阶段，追求**最低开发成本与最快上线速度**；
-- 你使用的是标准 Prompt + 少量 Tools 的轻量级应用，且**无跨会话强状态依赖需求**。
+## 适用场景建议
 
-### ✅ 推荐选用 **托管智能体（Managed Agent）** 当：
-- 你需要**完全掌控 Agent 的定义、部署、版本迭代与运行时行为**（如动态加载 Skill、切换 Environment）；
-- 应用逻辑复杂，涉及**多轮工具调用、条件分支、状态暂存与外部系统回调**（如支付确认后触发工单创建）；
-- 要求**生产环境高可靠性**：需环境隔离、灰度发布、细粒度监控（Memory 使用率、Tool 调用成功率）及 Webhook 事件通知；
-- 你正在构建一个**可复用、可组合、可治理的 Agent 平台或中间件层**，而非单点应用。
+### ✅ 推荐选择 **流程型 Agent** 当：
+- 业务逻辑相对固定，80% 场景可通过可视化工作流或 Prompt 工程覆盖；
+- 团队以产品/运营为主导，开发资源有限，追求“天级上线”；
+- 无需深度干预 Agent 内部执行链路（如跳过某一步骤、注入临时变量、拦截工具调用）；
+- 已有大量历史 Prompt 模板或工作流资产，希望复用并快速迁移。
 
-### ⚠️ 不建议混用或迁移的典型情况：
-- 已上线的流程型智能体应用**不应强行迁移到托管智能体**，除非有明确的工程化治理诉求（如需 Memory Store 或环境隔离）；
-- 托管智能体**不可直接复用流程型智能体的 Prompt 模板或 Legacy Memory**，二者数据体系不互通；
-- 若仅需调用已有工作流（Workflow），请坚持使用 Flow Agent 的 `/responses` 接口，托管智能体不提供 Workflow 兼容模式。
+### ✅ 推荐选择 **托管型 Agent** 当：
+- 需要完整掌控 Agent 的生命周期（启动/暂停/终止/状态诊断）；
+- 业务涉及敏感数据流转，要求 `Vault` 加密凭证、`Environment` 级别配置隔离、完整事件审计；
+- 存在复杂状态机逻辑（如“用户上传合同 → OCR 解析 → 法务规则校验 → 人工复核 → 归档”）；
+- 计划构建可复用的 Skill 市场、支持第三方开发者接入，或需对接内部微服务网关。
 
-## 面向开发者的技术选型参考
+> ⚠️ **重要提醒**：若当前使用“[长期记忆](../concepts/long-term-memory.md)（旧）”，请务必规划迁移至托管型 Agent 的 `Memory Store` 或百炼平台新推出的统一记忆服务（详见《记忆能力演进路线图》），该遗留接口未来将逐步下线。
 
-作为开发者，在启动新项目前，请按以下决策树进行判断：
+---
 
+## 技术选型参考（面向开发者）
+
+| 评估项 | 流程型 Agent | 托管型 Agent | 选型建议 |
+|---------|--------------|----------------|-----------|
+| **学习成本** | 低：熟悉 DashScope 协议 + 控制台操作即可上手 | 中高：需理解 Environment/Session/Event 模型，掌握事件解析与错误处理 | 快速验证选 Flow；长期演进选 Managed |
+| **调试能力** | 仅提供最终输出与基础错误码（如 `InvalidParameter`）；无中间步骤日志 | 全链路事件追踪：可精确查看每个 `agent_step` 的输入/输出、耗时、调用的 Skill 及返回结果 | 需要可观测性 → 必选 Managed |
+| **扩展性** | 扩展依赖工作流节点或平台内置插件，自定义能力受限 | 支持 Webhook Skill、文件上传、结构化 Memory、多环境部署，扩展边界更广 | 有定制化集成需求 → 选 Managed |
+| **地域支持** | 当前**仅限华北2（北京）**，暂不支持多地域部署 | 全地域可用（与百炼平台服务地域一致），`Environment` 可绑定指定地域资源 | 需海外合规部署 → 选 Managed |
+| **SDK 支持** | DashScope SDK（通用大模型 SDK）可调用，但组件管理需额外接入阿里云 OpenAPI SDK | 提供专用 SDK（Python/Node.js），内置 Session 管理、事件流解析、重试逻辑 | 生产环境稳定性要求高 → 优先用 Managed SDK |
+
+**最终决策树**：  
 ```mermaid
 graph TD
-    A[新项目启动] --> B{是否已在控制台完成可视化编排？}
-    B -->|是| C[优先 Flow Agent：调用 /completion 或 /responses]
-    B -->|否| D{是否需要精细控制运行时？<br>（如：自定义 Memory、Webhook、多环境）}
-    D -->|是| E[选择 Managed Agent：<br>定义 → 部署 → /chat]
-    D -->|否| F[仍可选 Flow Agent：<br>通过 SDK 创建 Prompt 模板 + 调用]
-    C --> G[注意：组件类能力<br>（Prompt/Memory）需 OpenAPI 签名]
-    E --> H[注意：必须 OAuth2 获取 Token<br>且 model_id 不可运行时修改]
+    A[是否需要运行时状态控制？] -->|是| B[是否需多环境/多租户隔离？]
+    A -->|否| C[选 Flow Agent]
+    B -->|是| D[选 Managed Agent]
+    B -->|否| E[是否需完整事件审计与 Skill 编排？]
+    E -->|是| D
+    E -->|否| C
 ```
 
-**关键实践提示：**
-- **调试阶段**：Flow Agent 推荐使用 DashScope SDK 的 `Completion` 方法；Managed Agent 推荐从 `cURL` 快速开始文档入手，验证基础链路；
-- **流式体验**：二者均支持 SSE，但 Managed Agent 的事件类型更丰富（`tool_use`/`memory_update`），适合构建高级 UI；
-- **错误排查**：Flow Agent 应用调用返回 `request_id`；Managed Agent 返回标准 `trace_id`，均需结合百炼控制台「调用日志」定位；
-- **未来演进**：长期记忆（旧）已明确标记为“旧”，新项目请统一采用 Managed Agent 的 Memory Store；Prompt 模板能力在两者中并存，但托管智能体支持更灵活的变量注入与运行时覆盖。
-
-选择没有绝对优劣，只有是否匹配你的**当前阶段目标**与**长期架构愿景**。百炼平台将持续增强两类能力的协同性（如未来支持托管智能体一键发布为 Flow Agent 应用），建议关注平台 Release Notes 获取最新集成能力。
+---  
+*本文档依据百炼平台 v2.5 文档集编写，最新能力请以控制台实际功能及 [API 变更日志](https://help.aliyun.com/zh/bailian/release-notes) 为准。*
 
 ## 被对比主题页
 

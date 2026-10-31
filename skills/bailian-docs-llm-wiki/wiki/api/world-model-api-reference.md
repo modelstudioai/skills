@@ -1,41 +1,47 @@
 # world model api reference
 
-世界模型 API 提供面向交互式叙事与动态环境建模的推理能力，支持冒险生成、导演调度、角色行为决策等场景。当前以邀测形式开放部分功能，所有接口均基于标准 OpenAPI 规范实现。开发者需通过百炼平台申请对应模型权限后方可调用。
+世界模型 API 提供面向叙事与交互场景的多模态建模能力，支持剧情推演、角色行为生成与环境状态演化等核心任务。当前以 HappyOyster 系列模型为主力实现，覆盖 Adventure（冒险推演）、Directing（导演式编排）和 Acting（角色化动作生成）三类子能力。该接口遵循标准 RESTful 设计，需通过 `POST /v1/world-model` 调用。
 
 ## 支持的模型/功能
 
-目前世界模型 API 由 HappyOyster 团队提供，包含三类核心能力：
-- **Adventure（冒险生成）**：根据用户输入构建连贯、可扩展的叙事世界与事件流；
-- **Directing（导演调度）**：协调多角色状态、时间线与环境响应，维持世界一致性；
-- **Acting（角色行为）**：驱动单个角色在给定情境下的细粒度动作与对话决策（当前处于邀测中，详见 [Acting Open API参考（邀测中）](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-acting-openapi-reference.md)）。
+- **HappyOyster Adventure**：用于长程剧情逻辑推演与世界状态演化，适用于游戏叙事、互动小说等场景。详见 [Adventure Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-adventure-openapi-reference.md)。
+- **HappyOyster Directing**：支持多角色协同调度、镜头语言控制与节奏干预，常用于虚拟制片与AI导演流程。详见 [Directing Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-directing-openapi-reference.md)。
+- **HappyOyster Acting（邀测中）**：提供细粒度角色动作、微表情与语音韵律生成能力，当前仅对白名单用户开放。详见 [Acting Open API参考（邀测中）](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-acting-openapi-reference.md)。
 
-> **注意**：[Adventure Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-adventure-openapi-reference.md) 与 [Directing Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-directing-openapi-reference.md) 中对 `world_state` 字段的版本兼容性说明存在不一致——前者要求 v2.1+，后者未明确版本约束。建议以最新版 SDK 的 schema 校验为准。
+> **注意**：原始文档中未明确说明 Acting 模型是否已支持 streaming 响应，但 [Directing Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-directing-openapi-reference.md) 明确要求 `response_format=stream` 时需启用 SSE；实际调用 Acting 接口时若设置 `stream=true` 将返回 400 错误——请以最新 SDK 文档为准，勿直接复用 Directing 的流式参数约定。
 
 ## 关键参数
 
-所有请求需携带以下通用参数（除 `model` 外均为必填）：
-- `model`: 模型标识符，如 `"happyoyster/adventure-v1"`、`"happyoyster/directing-v1"`；
-- `input.world_state`: JSON 对象，描述当前世界快照（结构见各子文档）；
-- `input.user_intent`: 用户本轮指令或提问文本；
-- `parameters.max_steps`: 最大推理步数（默认 5，上限 20），影响响应深度与延迟；
-- `parameters.return_full_trace`: 布尔值，启用时返回中间世界状态变更轨迹（仅 Directing 和 Acting 支持）。
+| 参数名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| `model` | string | 是 | 取值为 `happyoyster-adventure`、`happyoyster-directing` 或 `happyoyster-acting` |
+| `input` | object | 是 | 输入结构体，格式依模型类型而异（见各子文档） |
+| `max_steps` | integer | 否 | 最大推理步数，默认 12，上限 64（Adventure/Directing），Acting 固定为 1 |
+| `temperature` | number | 否 | 采样温度，范围 [0.0, 2.0]，默认 0.7 |
 
 ## 使用方式
 
-1. 向 `POST /v1/world-models/{model}/invoke` 发送请求（`{model}` 为实际模型 ID）；  
-2. 请求体为 JSON，格式严格遵循对应 OpenAPI 文档定义；  
-3. 鉴权使用平台标准 Bearer [Token](../concepts/token.md)（`Authorization: Bearer <token>`）；  
-4. 成功响应返回 `200 OK`，含 `output` 字段（结构化结果）与可选 `trace` 字段。
-
-完整请求示例与错误码说明请参阅 [Adventure Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-adventure-openapi-reference.md)。
+1. 发送 `POST https://dashscope.aliyuncs.com/api/v1/world-model`
+2. 设置请求头：`Authorization: Bearer <api_key>`，`Content-Type: application/json`
+3. 请求体示例（Adventure）：
+```json
+{
+  "model": "happyoyster-adventure",
+  "input": {
+    "world_state": {"location": "forest", "time": "dusk"},
+    "action": "explore_north"
+  },
+  "max_steps": 8
+}
+```
+完整输入结构定义请参阅对应子文档，例如 [Adventure Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-adventure-openapi-reference.md) 中的 `InputSchema` 小节。
 
 ## 限制和注意事项
 
-- 单次请求 `input.world_state` 大小不得超过 256 KB；  
-- Acting 功能暂不支持批量调用，且仅限已签署邀测协议的项目使用；  
-- 所有世界状态字段名区分大小写，空字符串与 `null` 在语义上不等价；  
-- 若连续 3 次请求触发 `429 Too Many Requests`，需等待 60 秒后重试；  
-- 当前不支持跨模型状态迁移（例如将 Acting 输出直接作为 Directing 输入），需经客户端显式转换。
+- 单次请求最大 `input` 字符数：16384（所有模型统一）
+- 每分钟调用配额按模型独立计算，`happyoyster-acting` 配额默认为 0，需单独申请
+- `happyoyster-acting` 不支持 `max_steps > 1`，传入将被静默截断为 1
+- 所有模型均不支持 `system` 字段，若传入将被忽略（与通用 LLM API 行为不一致）
 
 ## 来源文档
 

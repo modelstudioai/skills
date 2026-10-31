@@ -1,20 +1,20 @@
 {
-  "updatedAt": "2026-10-31",
+  "updatedAt": "2026-11-01",
   "totalFamilies": 124,
   "totalModels": 333,
   "profileCoverage": {
-    "full": 272,
+    "full": 280,
     "partial": 47,
-    "structured-only": 14,
+    "structured-only": 6,
     "none": 0
   },
   "capabilityDistribution": {
     "TG": 30,
     "VG": 17,
     "IG": 17,
-    "ASR": 11,
     "Reasoning": 10,
-    "TTS": 8,
+    "ASR": 10,
+    "TTS": 9,
     "Realtime-ASR": 6,
     "VU": 5,
     "Multimodal-Omni": 5,
@@ -437,21 +437,6 @@
         "MiniMax/MiniMax-M3.1-Flash"
       ],
       "maxContextWindow": 1048576
-    },
-    {
-      "slug": "paraformer-8k-v2",
-      "name": "Paraformer语音识别-8k-v2",
-      "primaryCapability": "ASR",
-      "capabilities": [
-        "ASR"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "paraformer-8k-v2"
-      ]
     },
     {
       "slug": "paraformer-realtime-8k-v2",
@@ -1064,6 +1049,21 @@
         "qwen-vl-ocr"
       ],
       "maxContextWindow": 38192
+    },
+    {
+      "slug": "qwen-voice-enrollment",
+      "name": "Qwen-声音复刻",
+      "primaryCapability": "TTS",
+      "capabilities": [
+        "TTS"
+      ],
+      "providers": [
+        "qwen"
+      ],
+      "itemCount": 1,
+      "items": [
+        "qwen-voice-enrollment"
+      ]
     },
     {
       "slug": "qwen3-asr-flash-filetrans",

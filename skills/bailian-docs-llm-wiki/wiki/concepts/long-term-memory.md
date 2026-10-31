@@ -1,47 +1,49 @@
 # 长期记忆
 
-长期记忆（Long Term Memory）是百炼平台提供的结构化、跨会话、可检索的持久化记忆服务，用于存储和管理用户事实性信息（如偏好、日程）、技能知识（如工具调用流程）及结构化用户画像。它独立于单次对话生命周期，支持按用户、项目维度隔离，并通过语义向量检索实现高相关性召回。
+长期记忆（Long Term Memory）是百炼平台提供的结构化、持久化状态管理服务，用于在 Agent 应用中跨会话保存和复用用户事实、技能知识与个性化画像，支撑上下文感知、个性化响应与行为持续进化。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **Agent 上下文（`context.memory`）中**：作为 `agent context` 的一个可选模块，提供轻量级、自动化的会话状态缓存能力。当启用 `context.memory` 且配置 `auto_memory_summary: true` 时，系统会在非流式调用中自动将本轮 RAG 结果或关键对话摘要写入长期记忆；读取则在每次 Agent 调用时按 `user_id` 和 `project_id` 注入上下文，增强响应连贯性与个性化。
+- **Agent 应用（Managed/Flow/Sandbox）**：通过 `memory_session_id` 显式注入到 `context` 中，使 Agent 在每次调用时自动加载关联的长期记忆（如用户偏好、历史决策、已掌握技能），实现“记住用户”的能力。注意：仅 `qwen-max`、`qwen-plus` 及 `qwen-turbo`（v20240915+）原生支持该注入；其他模型忽略 memory 字段。
+  
+- **Flow Agent API（旧版）**：提供 `Memory` 与 `MemoryNode` 两级接口，支持基础 CRUD 和会话级记忆管理，但已被标记为**遗留方案**，新项目应优先采用「长期记忆新版本」。
 
-- **长期记忆新 API（`/api/v2/apps/memory/`）中**：作为独立的 PaaS 服务，面向开发者提供完整的 CRUD + 检索能力。支持同步/异步写入（推荐 `AddMemoryAsync`）、多模态内容解析、`observation`/`skill`/`user_profile` 三类记忆节点建模，以及基于语义相似度的 `SearchMemory`。适用于需精细控制记忆生命周期、支持画像建模或对接复杂业务逻辑的场景。
+- **长期记忆新版本（推荐）**：作为独立服务，按三类结构化节点组织记忆：
+  - `observation`：从对话自动抽取的事实（如“用户每周三健身”），适用于行为建模；
+  - `skill`：显式注册的可复用能力（含 `skill_name`/`skill_description`/`skill_tags`），支持导出元信息供 Agent 动态调用；
+  - `user_profile`：基于预定义 `ProfileSchema` 模板抽取的结构化用户画像（如年龄、职业、兴趣标签），需先创建模板再写入。
 
-- **Flow Agent API（旧版记忆接口）中**：提供基础的 `CreateMemory`/`GetMemory` 等 OpenAPI 接口，但文档明确标注为“长期记忆（旧）”，功能受限（如无语义检索、无画像支持、无 TTL 控制），**不建议新项目采用**，仅用于存量应用兼容。
+- **多模态场景**：`messages` 中可携带 `image_url`，若业务空间已开通多模态能力，则图像内容参与记忆抽取（文本始终支持）。
 
-- **Agent 开发范式中**：在 Managed Agent 和 Flow Agent 中，长期记忆通过 `context.memory` 自动集成；在 Sandbox 沙箱中，开发者可直接调用长期记忆新 API（需自行处理鉴权与重试），实现自定义记忆策略（如条件写入、多源融合、事件驱动更新）。
+> ⚠️ 注意：`session_id`（Flow Agent 中的会话 ID）与 `memory_session_id`（Agent Context 中的记忆会话 ID）**语义不同、不可混用**；前者仅触发短期上下文缓存（1 小时失效），后者绑定长期记忆库并支持冷存档（7 天无访问后解冻延迟 2–3s）。
 
 ## 关键参数和配置
 
-| 参数 | 作用域 | 类型 | 说明 |
-|------|--------|------|------|
-| `context.memory.read_only` | Agent Context | boolean | `true`：仅读取已有记忆，禁止写入；`false`（默认）：允许自动摘要写入（需配合 `auto_memory_summary`） |
-| `context.memory.ttl_seconds` | Agent Context | integer | 记忆项过期时间（秒），最小值 60；超时后自动清理，避免陈旧信息干扰 |
-| `user_id` | 长期记忆新 API | string | **必填**，用于用户级隔离，是所有写入/检索操作的主键 |
-| `project_id` 或 `project_ids` | 长期记忆新 API | string / string[] | 二级隔离键，常用于按 Agent 实例、会话 ID 或业务场景分组；与 `custom_content` 互斥 |
-| `memory_types` | `SearchMemory` 请求体 | string[] | 指定检索类型，支持 `["observation", "skill"]`；默认仅查 `["observation"]` |
-| `profile_schema` | `AddMemory*` 请求体 | string | 画像模板 ID；传入后触发用户画像字段抽取（如年龄、兴趣标签等） |
-| `plan_version` | `SearchMemory` / 画像 API | string | `"pro"`（支持 `min_score` 过滤、高级抽取）或 `"lite"`（基础能力）；大小写不敏感 |
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `user_id` | string | 是 | 记忆隔离的核心标识，所有读写操作（Add/Search/Get）均需指定，建议与业务系统用户 ID 对齐。 |
+| `memory_library_id` | string | 否 | 指定自定义记忆库；不传则使用默认库（每个 Workspace 一个默认库）。 |
+| `profile_schema` | string | `user_profile` 类型必填 | 已创建的有效画像模板 ID，配合 `extract_mode: "profile_only"` 可精准触发画像抽取。 |
+| `skill_name` / `skill_description` / `skill_tags` | string / string / array[string] | `skill` 类型必填（异步写入） | 定义技能元信息，用于后续语义搜索与技能发现。 |
+| `extract_scene` | `"efficient"` \| `"intelligent"` | 否（默认 `"efficient"`） | 控制抽取精度与延迟：`efficient` 适合实时写入；`intelligent` 推荐仅用于异步接口（`AddMemoryAsync`），同步调用可能超时。 |
+| `plan_version` | `"lite"` \| `"pro"` | 否（默认 `"lite"`） | 影响搜索能力：`pro` 支持 `min_score` 过滤与 Rerank；`lite` 下 `min_score` 不生效。 |
+| `min_score` | float | 否（默认 `0.3`） | 仅 `plan_version="pro"` 时有效，用于过滤低相关性搜索结果（范围 `[0.0, 1.0]`）。 |
 
-> ⚠️ 注意：  
-> - 所有长期记忆新 API 必须通过 `Authorization: Bearer $DASHSCOPE_API_KEY` 鉴权，且 Key 需归属目标业务空间；  
-> - Agent Context 中的 `context.memory` 仅在 `qwen-plus`/`qwen-max`/`qwen-turbo` 等 Qwen 系列模型上完整生效；  
-> - 单次请求总 context 大小（含 memory 注入内容）不得超过 128 KB。
+## 面向开发者的关键实践建议
 
-## 面向开发者，简洁实用
+- ✅ **优先使用新版本 API**：`AddMemoryAsync` + `SearchMemory` 组合替代旧版 `MemoryNode`，获得结构化、可检索、可扩展的记忆能力。
+- ✅ **异步写入是常态**：对 `intelligent` 抽取、多类型混合写入（如同时更新 skill + profile）、含图片内容等场景，必须使用 `AddMemoryAsync` 并轮询 `GetEvent`。
+- ✅ **认证与 Endpoint 严格匹配**：长期记忆新版本使用 `DASHSCOPE_API_KEY` + `MEMORY_SERVICE_ENDPOINT`（格式：`https://<workspace-id>.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory`），**末尾不带 `/`**；勿与 Flow Agent 的 AccessKey 签名方式混淆。
+- ❌ **避免同步写入 `intelligent` 模式**：文档明确提示该模式下同步接口可能超时，生产环境请规避。
+- ❌ **不要复用 `session_id` 作为 `memory_session_id`**：二者归属不同系统，混用将导致记忆加载失败或数据错位。
 
-- ✅ **新项目首选**：使用长期记忆新 API（`/add-async` + `/memory_nodes/search`），搭配 `profile_schema` 构建用户画像闭环；  
-- ✅ **快速集成 Agent**：在 `/v1/agents/{id}/chat` 请求中启用 `context.memory`，设置 `read_only: false` 和合理 `ttl_seconds`，开启 `auto_memory_summary` 实现零代码记忆沉淀；  
-- ❌ **避免使用**：Flow Agent API 中的旧版 `/memories` 接口（已标记为“旧”，无语义检索与画像能力）；  
-- 📦 **SDK 提示**：Python 开发者优先使用 `agentscope-runtime>=0.4.0`，内置 `LongTermMemoryClient` 封装了异步写入、轮询与检索全流程；  
-- 🔍 **调试技巧**：检索前先用 `GET /memory_nodes?user_id=xxx` 查看原始记忆列表，确认数据已成功写入再调 `SearchMemory`。
+> 提示：控制台入口 → [百炼控制台 > 记忆管理](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/memory/list)，可查看记忆库、模板、任务事件及调试日志。
 
 ## 关联主题页
 
-- [agent context](../guides/agent-context.md)
 - [long term memory new](../api/long-term-memory-new.md)
 - [flow agent api](../api/flow-agent-api.md)
+- [agent context](../guides/agent-context.md)
 - [agent development](../guides/agent-development.md)
 
 
