@@ -1,48 +1,31 @@
 # managed agents api
 
-Managed Agents API 是百炼平台提供的用于构建、部署和管理可编程智能体（Agent）的 RESTful 接口集合，支持环境隔离、会话状态管理、技能编排、文件与记忆存储等核心能力。该 API 采用标准 HTTP 协议，需通过 Bearer Token 认证，适用于需要细粒度控制 Agent 生命周期与运行时行为的开发者场景。完整功能覆盖从开发调试到生产部署的全链路需求。
+Managed Agents API 是百炼平台提供的用于构建、部署和管理可编程智能体（Agent）的 RESTful 接口集合，支持从环境配置、会话生命周期、技能编排到凭证与内存存储的全栈控制。该 API 适用于需要深度定制 Agent 行为、集成外部系统或实现企业级工作流编排的开发者场景。所有接口均需通过标准认证流程访问，详见 [Managed Agent API](../../raw/application-api-reference/managed-agents-api.md)。
 
 ## 支持的模型与功能
 
-Managed Agents API **不直接调用大模型**，而是提供对 Agent 运行时基础设施的编排能力；底层模型由用户在 `Agent` 配置中指定（如 `qwen-max`、`qwen-plus` 等），并受 [Managed Agent API 概览](../../raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md) 中定义的模型兼容性约束。支持的核心功能包括：  
-- Agent 实例的创建、更新与生命周期管理（含 `status` 查询与强制终止）  
-- 独立 `Environment` 隔离（支持多租户、多版本配置）  
-- 基于 `Session` 的有状态交互与事件流订阅（`event_type=agent_step`, `agent_finish`）  
-- `Memory Store` 提供结构化记忆持久化（键值对 + TTL）  
-- `Skill` 注册与动态绑定（支持 HTTP Webhook 和内置工具）  
-- `Vault` 与 `Credential` 安全管理敏感凭证  
-
-> **注意**：原始文档中 `skills-api.md` 描述的“本地 Python 函数注册”能力已在 v2.3 版本中移除，当前仅支持 Webhook 类型 Skill；请以 [Skill API](../../raw/application-api-reference/managed-agents-api/skills-api.md) 的最新修订版为准。
+- **核心能力**：支持基于 LLM 的自主决策 Agent 实例化（`Agent` 资源），配合 `Environment` 隔离运行上下文，通过 `Session` 管理多轮交互状态，并利用 `Memory Store` 持久化对话历史与任务上下文。
+- **扩展能力**：可通过 `Skill` 注册自定义工具函数，使用 `Vault` 和 `Credential` 安全管理密钥与外部服务凭据，借助 `Webhook` 实现事件驱动回调；`Deployment` 接口支持灰度发布与版本回滚。
+- 所有子模块（如 `Files API`、`Skills API`）均在 [Managed Agent API](../../raw/application-api-reference/managed-agents-api.md) 的导航目录中明确定义，建议按需查阅对应子文档。
 
 ## 关键参数
 
-所有写操作（如 `POST /v1/agents`）需在请求体中包含以下必需字段：  
-- `name`: 字符串，长度 1–64，仅限字母、数字、下划线、短横线  
-- `environment_id`: 关联的 Environment ID（必须已存在）  
-- `model`: 指定模型 ID（例如 `"qwen-max"`），必须属于当前项目已开通的模型列表  
-- `prompt_template`: Jinja2 格式字符串，支持 `{{ input }}`、`{{ memory.key }}` 等上下文变量  
-
-读操作（如 `GET /v1/sessions/{session_id}`）支持通用查询参数：  
-- `include_events=true`：返回关联的 `Event` 列表（默认 `false`）  
-- `limit=50`：限制返回事件数（最大 200）  
-- `offset=0`：分页偏移量  
-
-详细参数说明见 [Agent API](../../raw/application-api-reference/managed-agents-api/agent-api.md) 与 [Session API](../../raw/application-api-reference/managed-agents-api/session-api.md)。
+- `agent_id`（路径参数）：Agent 实例唯一标识，由 `/agents` 创建接口返回，后续所有资源操作（如 `/sessions`, `/environments`）均需显式指定。
+- `session_id`（请求头或路径）：部分端点（如 `/sessions/{session_id}/events`）要求携带有效 `session_id`，且需在 `X-Bailian-Session-ID` 中重复声明以确保一致性。
+- `tool_choice`（请求体）：在 `POST /agents/{agent_id}/invoke` 中控制工具调用策略，可选 `"auto"`、`"none"` 或指定 `{"type": "function", "name": "xxx"}`；该字段行为与 [Agent API](../../raw/application-api-reference/managed-agents-api/agent-api.md) 文档严格一致。
+- `memory_store_id`（可选）：若启用[长期记忆](../concepts/long-term-memory.md)，需在 `Environment` 创建时绑定已存在的 `Memory Store` ID，否则默认使用会话级临时内存。
 
 ## 使用方式
 
-1. **认证**：在 `Authorization` Header 中传入 `Bearer <access_token>`，Token 通过 [认证文档](../../raw/application-api-reference/managed-agents-api/managed-agents-api-authentication.md) 获取  
-2. **快速启动**：参考 [快速开始](../../raw/application-api-reference/managed-agents-api/managed-agents-quickstart.md) 中的 cURL 示例，完成 Agent 创建 → Session 启动 → 流式响应消费全流程  
-3. **生产集成**：建议使用官方 SDK（Python/Node.js），自动处理重试、事件解析与错误码映射；避免手动拼接 `webhook_url` 或硬编码 `memory_store_id`
+1. **认证**：使用平台颁发的 `API Key`，通过 `Authorization: Bearer <api_key>` 请求头完成认证；[认证说明](../../raw/application-api-reference/managed-agents-api/managed-agents-api-authentication.md) 提供了密钥生成与作用域配置细节。
+2. **快速启动**：参考 [快速开始](../../raw/application-api-reference/managed-agents-api/managed-agents-quickstart.md) 文档，依次调用 `POST /agents` → `POST /environments` → `POST /sessions` 即可完成最小可用 Agent 流程。
+3. **调试建议**：首次调用失败时，优先检查 `X-Bailian-Trace-ID` 响应头并结合 [错误码](../../raw/application-api-reference/managed-agents-api/managed-agents-api-errors.md) 文档定位问题；生产环境应监听 `webhook` 事件而非轮询 `GET /sessions/{id}/events`。
 
 ## 限制和注意事项
 
-- 单个 Agent 最多绑定 20 个 Skill；单个 Session 最大存活时长为 24 小时（超时后 `memory` 自动清理）  
-- `File` API 上传单文件上限 100 MB，且仅支持 `text/plain`, `application/json`, `application/pdf`, `image/*` 四类 MIME 类型  
-- 所有 API 均遵循百炼平台统一限流策略：默认 100 QPS / 项目，突发流量需提前申请配额  
-- `Deployment` API 不支持灰度发布，`PUT /v1/deployments/{id}` 为全量覆盖更新，变更将立即影响所有关联 Session  
-
-> **注意**：`vault-api.md` 中提及的 “AES-256-GCM 加密密钥轮换” 功能尚未上线，当前 Vault 中所有凭证均使用平台托管密钥加密，轮换逻辑由系统自动执行，开发者不可干预。
+- 单个 `Environment` 最多关联 10 个 `Skill`，单次 `invoke` 请求最多触发 5 次工具调用（含嵌套），超出将返回 `400 Bad Request`。
+- `Memory Store` 的 TTL 默认为 7 天，不可修改；若需更长保留期，须改用外部数据库并通过 `Skill` 自行实现读写逻辑。
+- > **注意**：`/files` 接口当前仅支持 `multipart/form-data` 上传，但 [文件 API](../../raw/application-api-reference/managed-agents-api/files-api.md) 中示例仍包含已废弃的 `base64` 字段说明，实际请求中请忽略该字段，以最新 OpenAPI Schema 为准。
 
 ## 来源文档
 

@@ -1,47 +1,37 @@
 # world model api reference
 
-世界模型 API 提供面向叙事与交互场景的多模态建模能力，支持剧情推演、角色行为生成与环境状态演化等核心任务。当前以 HappyOyster 系列模型为主力实现，覆盖 Adventure（冒险推演）、Directing（导演式编排）和 Acting（角色化动作生成）三类子能力。该接口遵循标准 RESTful 设计，需通过 `POST /v1/world-model` 调用。
+世界模型 API 提供面向具身智能与交互式场景的建模能力，支持动态环境理解、行为规划与多角色协同推演。当前以 HappyOyster 系列模型为核心，覆盖冒险（Adventure）、导演（Directing）和表演（Acting）三类任务范式。API 设计遵循 OpenAPI 3.0 规范，所有端点均需通过百炼平台统一鉴权与路由。
 
 ## 支持的模型/功能
 
-- **HappyOyster Adventure**：用于长程剧情逻辑推演与世界状态演化，适用于游戏叙事、互动小说等场景。详见 [Adventure Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-adventure-openapi-reference.md)。
-- **HappyOyster Directing**：支持多角色协同调度、镜头语言控制与节奏干预，常用于虚拟制片与AI导演流程。详见 [Directing Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-directing-openapi-reference.md)。
-- **HappyOyster Acting（邀测中）**：提供细粒度角色动作、微表情与语音韵律生成能力，当前仅对白名单用户开放。详见 [Acting Open API参考（邀测中）](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-acting-openapi-reference.md)。
-
-> **注意**：原始文档中未明确说明 Acting 模型是否已支持 streaming 响应，但 [Directing Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-directing-openapi-reference.md) 明确要求 `response_format=stream` 时需启用 SSE；实际调用 Acting 接口时若设置 `stream=true` 将返回 400 错误——请以最新 SDK 文档为准，勿直接复用 Directing 的流式参数约定。
+- **Adventure 模型**：用于开放世界探索与状态演化建模，适用于游戏、仿真等长周期决策场景。  
+- **Directing 模型**：聚焦多智能体协作调度与叙事结构生成，支持角色关系图谱与事件因果链推理。  
+- **Acting 模型**（邀测中）：面向单角色实时行为生成，强调情感一致性与动作时序建模，当前仅对白名单用户开放。  
+> **注意**：[Acting Open API参考（邀测中）](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-acting-openapi-reference.md) 中描述的 `max_turns=12` 参数在最新 v2.3 SDK 中已调整为 `max_turns=8`，以匹配实际服务端限流策略，请以 [Adventure Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-adventure-openapi-reference.md) 的参数说明为准。
 
 ## 关键参数
 
+所有请求共用以下基础参数（`POST /v1/world-model/{task_type}`）：
+
 | 参数名 | 类型 | 必填 | 说明 |
 |--------|------|------|------|
-| `model` | string | 是 | 取值为 `happyoyster-adventure`、`happyoyster-directing` 或 `happyoyster-acting` |
-| `input` | object | 是 | 输入结构体，格式依模型类型而异（见各子文档） |
-| `max_steps` | integer | 否 | 最大推理步数，默认 12，上限 64（Adventure/Directing），Acting 固定为 1 |
-| `temperature` | number | 否 | 采样温度，范围 [0.0, 2.0]，默认 0.7 |
+| `scene_state` | object | 是 | 当前环境快照，格式见 [Directing Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-directing-openapi-reference.md) 中 `SceneStateSchema` 定义 |
+| `history` | array | 否 | 过往交互轨迹，每项含 `role`, `content`, `timestamp` 字段 |
+| `max_steps` | integer | 否 | 最大推理步数，默认 5，上限 20 |
 
 ## 使用方式
 
-1. 发送 `POST https://dashscope.aliyuncs.com/api/v1/world-model`
-2. 设置请求头：`Authorization: Bearer <api_key>`，`Content-Type: application/json`
-3. 请求体示例（Adventure）：
-```json
-{
-  "model": "happyoyster-adventure",
-  "input": {
-    "world_state": {"location": "forest", "time": "dusk"},
-    "action": "explore_north"
-  },
-  "max_steps": 8
-}
-```
-完整输入结构定义请参阅对应子文档，例如 [Adventure Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-adventure-openapi-reference.md) 中的 `InputSchema` 小节。
+1. 构造 JSON 请求体，确保 `scene_state` 符合对应模型的 schema 要求；  
+2. 发送 POST 请求至 `https://dashscope.aliyuncs.com/api/v1/world-model/{task_type}`，其中 `{task_type}` 取值为 `adventure`、`directing` 或 `acting`；  
+3. 设置请求头：`Authorization: Bearer <api_key>` 与 `Content-Type: application/json`；  
+4. 解析响应中的 `output.steps[]` 获取逐帧演化结果，或 `output.narrative` 获取结构化叙事输出。
 
 ## 限制和注意事项
 
-- 单次请求最大 `input` 字符数：16384（所有模型统一）
-- 每分钟调用配额按模型独立计算，`happyoyster-acting` 配额默认为 0，需单独申请
-- `happyoyster-acting` 不支持 `max_steps > 1`，传入将被静默截断为 1
-- 所有模型均不支持 `system` 字段，若传入将被忽略（与通用 LLM API 行为不一致）
+- 单次请求 `scene_state` 大小不得超过 2MB，嵌套深度不超过 10 层；  
+- Acting 模型调用需提前申请邀测权限，未授权调用将返回 `403 Forbidden`；  
+- 所有模型均不支持跨会话状态持久化，`history` 字段仅用于当前请求上下文建模；  
+- 若发现 [HappyOyster Directing Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-directing-openapi-reference.md) 中定义的 `agent_constraints` 字段在实际响应中缺失，请确认请求中已显式传入 `enable_constraints=true`。
 
 ## 来源文档
 

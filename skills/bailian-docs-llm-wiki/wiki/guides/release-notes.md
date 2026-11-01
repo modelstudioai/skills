@@ -1,41 +1,51 @@
 # release notes
 
-百炼平台的 Release Notes 汇总了模型上下架、平台功能迭代、服务策略变更等关键更新，面向开发者提供可落地的版本演进信息。所有变更均以生产环境生效时间为准，建议通过控制台「模型监控」和「通知中心」主动订阅变更。模型生命周期管理（如上下线）与平台能力升级（如 API、部署、评测）遵循独立但协同的发布节奏。
+百炼平台的 Release Notes 汇总了模型上下架、功能迭代、参数变更及服务调整等关键变更信息，面向开发者提供可落地的操作依据。所有变更均遵循明确的时间节点与通知机制，建议开发者定期查阅并及时适配。核心变更包括模型生命周期管理（上架/下线）、平台能力扩展（如异步调用、多模态 SDK）、计费与部署模式更新（如 MU 计费、[Token](../concepts/token.md) Plan 团队版）等。
 
 ## 支持的模型/功能
 
-- **新增模型**：2026年9–10月集中上线多类模型，包括实时语音对话模型 `qwen-audio-3.1-realtime-flash`、3D生成全栈能力（如 `Tripo/Tripo-SmartSegmentation`、`Tripo/Tripo-AutoRig`）、多模态翻译模型 `qwen-mt-uni`、世界模型 `happyoyster-1.0-adventure` 及决策模型 `decision-model-preview`。完整清单详见 [模型上下架与更新](../../raw/model-user-guide/release-notes/newly-released-models.md)。
-- **模型类型覆盖**：当前支持文本生成、视觉理解、语音识别（ASR）、语音合成（TTS）、视频生成、3D生成、多模态翻译、排序（rerank）、文本向量（embedding）、决策推理、世界建模等11类任务模型。
-- **平台功能扩展**：2026年6月起全面支持知识库 RAG 的联合检索与问答服务；7月上线 Managed Agent 商业化运行时；8月新增模型升级通知机制；9月起支持 WebSocket、WebRTC 和 AOQ 多协议接入实时全模态模型（如 `qwen3.8-omni-flash-realtime`）。
+- **新模型上架**：持续引入多模态、垂直领域及高性能模型，例如 `qwen3.8-max`（2.4T MoE 旗舰）、`qwen-audio-3.1-realtime-flash`（实时双工语音）、`Tripo/Tripo-AutoRig`（3D 自动绑骨）、`decision-model-preview`（结构化决策）等，覆盖文本、视觉、音频、视频、3D、翻译、排序、向量等全模态类型。详情见 [模型上下架与更新](../../raw/model-user-guide/release-notes/newly-released-models.md)。
+- **功能模块升级**：
+  - 异步能力：Responses API 新增 `background=true` 异步调用模式；[异步任务](../concepts/asynchronous-task.md)支持 EventBridge HTTP 回调与 RocketMQ 主动推送。
+  - 知识库 RAG：上线知识检索与知识问答服务，支持多知识库联合检索、混合排序及指令干预模式。
+  - 智能体托管：新增 Managed Agent 托管运行时 API，统一管理会话与工具执行。
+  - 模型调优：新增强化学习（RL）训练（邀约制）、0 代码安全合规强化、图像/视频/视觉理解模型类型支持。
+  - 多模态开发套件：新增 Linux C++、Android/iOS Lite、RTOS C SDK 及服务端 Java SDK。
+- **平台服务调整**：企业知识库（旧）已于 2026 年 7 月 16 日下线；记忆库于 2026 年 3 月 20 日升级为 Memory 2.0，支持[长期记忆](../concepts/long-term-memory.md)与多应用共享。
 
-> **注意**：文档 2 中列出的 `qwen-audio-3.1-tts-next` 定义为“不再局限于传统 TTS 的单一语音合成”，而文档 3 的 2026年9月功能动态中未提及该模型的配套 SDK 或 API 支持，实际集成前请以 [模型平台功能更新](../../raw/model-user-guide/release-notes/model-release-notes.md) 中最新 API 文档为准。
+> **注意**：文档 2 中“2026年7月16日 企业知识库（旧）下线通知”与文档 3 未提及该服务，但文档 2 明确标注其已下线，应以文档 2 的公告为准；文档 3 仅聚焦模型维度，不覆盖平台服务下线。
 
 ## 关键参数
 
-- **上下文窗口**：主流新模型（如 `qwen3.8-max`、`MiniMax-M3.1-Flash`、`ZHIPU/GLM-5.3-FlashX`）统一支持 **1M Token** 上下文；部分轻量模型（如 `qwen3.7-text-embedding-flash`）支持 128K；语音/视频模型上下文按帧或 Token 等效折算（如 `qwen-audio-3.1-realtime-flash` 为 262,144 Token）。
-- **输出长度**：`deepseek-v4.1-flash-1017`、`qwen3.8-max` 等旗舰模型最大输出达 **384K Token**；`GLM-5.3-FlashX` 为 128K；TTS/ASR 类模型以音频时长（秒）或转写文本长度为约束。
-- **性能指标**：`qwen3.8-flash` 推理吞吐达约 170 tokens/s；`ZHIPU/GLM-5.3-FlashX` 达 200 tokens/s；`qwen-audio-3.1-asr-flash-streaming` 强调低延迟流式识别，端到端延迟 <300ms（典型场景）。
+- **模型版本标识**：正式版模型支持三种形态：系列名（如 `qwen-max`）、带日期后缀的快照名（如 `qwen-max-2025-01-25`）、`-latest` 别名（如 `qwen-max-latest`）。预览版模型 ID 含 `preview`/`beta`/`experimental` 等标识。
+- **上下文与输出限制**：主流新模型（如 `qwen3.8-max`、`deepseek-v4.1-flash`、`GLM-5.3-FlashX`）普遍支持 **1M [Token](../concepts/token.md) 上下文窗口**，最大输出长度达 **128K–384K [Token](../concepts/token.md)**。
+- **性能指标**：`qwen-audio-3.1-tts-flash` 面向低延迟场景，`GLM-5.3-Flash` 推理速度达 200 tokens/s，`qwen3.8-flash` 兼容 OpenAI 与 Anthropic 协议。
+- **计费单元**：模型部署新增按模型单元（MU）时长计费模式；Token Plan 团队版支持跨坐席共享 Credits 弹性用量包。
 
 ## 使用方式
 
-- **模型调用**：所有正式版模型均支持 [OpenAI 兼容接口](../concepts/openai-compatible-interface.md)（`/v1/chat/completions`）与 Anthropic Messages 协议；实时语音、3D、视频等专用模型需使用对应领域 API（如 `/v1/audio/realtime`、`/v1/3d/segment`），具体参见各模型文档页。
-- **部署与接入**：
-  - 预置模型可通过控制台一键部署，或调用 [模型部署 API](../../raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-quick-start.md)；
-  - 自定义模型支持 OSS 导入 LoRA 微调结果（[模型导入功能国际站上线](../../raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-import.md)）；
-  - 多模态交互支持 Android/iOS/Lite/RTOS/C++/Java 全端 SDK（见文档 3 2026年2–4月条目）。
-- **通知与监控**：启用模型升级/下线通知需在控制台「账号设置 > 通知偏好」中开启邮件/站内信；用量与调用日志可通过 [模型监控](https://bailian.console.aliyun.com/cn-beijing/model/telemetry) 实时查看。
+- **模型调用**：通过标准 API（如 `/v1/chat/completions`）调用，支持 OpenAI、Anthropic 兼容接口；新模型需使用对应 Model ID（如 `qwen3.8-flash`），不可复用旧别名。
+- **功能接入**：
+  - [异步任务](../concepts/asynchronous-task.md)：在请求中添加 `background=true`，后续通过轮询或 EventBridge 回调获取结果；
+  - 知识库服务：调用 `/v1/knowledge_retrieval` 或 `/v1/knowledge_qa` 接口；
+  - 智能体托管：使用 `managed-agents-api` 文档中定义的运行时 API；
+  - 模型导入：通过 `model-fine-tuning-text-generation-api/custom-models-api` 提交 LoRA 微调模型。
+- **配置与监控**：使用 [模型监控](https://bailian.console.aliyun.com/cn-beijing/model/telemetry) 页面检查模型调用情况；用量与免费额度统计看板位于 [模型用量](../../raw/model-user-guide/model-monitoring/model-usage-statistics.md)。
 
 ## 限制和注意事项
 
-- **模型生命周期**：正式版模型下线遵循「启动下线 → 停止新购（EoM）→ 停止服务（EoS）」三阶段流程，其中 EoS 不晚于启动下线后 **3 个月**；预览版模型 EoS 不晚于启动下线后 **14 天**。详情请严格参照 [模型下线机制说明](../../raw/model-user-guide/release-notes/model-depreciation.md)。
-- **兼容性风险**：`-latest` 别名（如 `qwen-max-latest`）指向最新正式版，但不保证 ABI 兼容；生产环境强烈建议使用带日期后缀的固定版本（如 `qwen-max-2025-01-25`）。
-- **地域与协议限制**：2026年6月起新增美国、德国、日本地域接入，但部分模型（如 `Tripo/*`、`kling/*`）暂未在全部地域部署；WebSocket 接入仅适用于 `qwen3.8-omni-flash-realtime` 等明确标注「realtime」的模型。
-- **资源包与计费**：`qwen-turbo` 资源包已于 2026年6月28日启动退市（见文档 3），存量资源包到期后不可续购；企业知识库（旧）已于 2026年7月16日下线，需迁移至新版知识库服务。
+- **模型下线强制迁移**：正式版模型自“启动下线”起逐步限流，3 个月后停止服务（EoS）；预览版仅 14 天窗口期。已调用待下线模型的用户将收到邮件/短信/站内信通知。详见 [模型下线机制说明](../../raw/model-user-guide/release-notes/model-depreciation.md)。
+- **预览版风险**：预览版模型（含 `preview`/`beta` 标识）更新频繁、无长期 SLA 保障，可能随时下线，**禁止用于生产环境**。
+- **地域与协议约束**：部分新功能（如多模态交互 SDK）存在平台/OS 适配限制；WebSocket 协议仅适用于通义听悟 Agent 工业指令转写等特定场景。
+- **兼容性提醒**：`qwen-turbo` 资源包已于 2026 年 6 月 28 日启动退市；`qwen3.8-max` 等新模型不兼容旧版 Prompt 工程模板语法，需按 [Prompt 工程 API](../../raw/application-api-reference/flow-agent-api/api-bailian-2023-12-29-dir-prompt-engineering.md) 重构。
+- **临时凭证安全**：在不可信环境调用 API 时，应使用 [生成临时 API Key](../../raw/application-api-reference/more/application-obtain-temporary-authentication-token.md) 文档所述方式，避免永久密钥泄露。
+
+> **注意**：文档 1 明确规定“正式版模型下线通知不晚于 EoS 前 3 个月”，但文档 2 中“2026年7月10日 部分老旧模型下线通知”（公告号 118434）与文档 1 列出的“2026年10月10日已下线”存在时间逻辑矛盾——若 7 月已发通知，则 EoS 应不早于 10 月，而文档 1 将其列为“已下线”，表明实际 EoS 可能早于通知发布时间。开发者应以官网公告原文时间戳为准，而非文档 1 的汇总列表。
 
 ## 来源文档
 
 - [模型下线机制说明](../../raw/model-user-guide/release-notes/model-depreciation.md)
-- [模型上下架与更新](../../raw/model-user-guide/release-notes/newly-released-models.md)
 - [模型平台功能更新](../../raw/model-user-guide/release-notes/model-release-notes.md)
+- [模型上下架与更新](../../raw/model-user-guide/release-notes/newly-released-models.md)
 
 

@@ -20,19 +20,16 @@
 
 1. **控制台调用**：进入「应用广场」页面，点击目标应用 → 「在线调试」，填写 input 并提交；
 2. **OpenAPI 调用**：使用 `POST /v1/applications/{app_id}/invoke` 接口，需携带 `Authorization: Bearer <api_key>`；
-3. **SDK 调用（Python）**：
-   ```python
-   from alibabacloud_bailian20231219.client import Client
-   client = Client("<access_key_id>", "<access_key_secret>", "<region_id>")
-   resp = client.invoke_application(app_id="app-xxx", input={"query": "你好"})
-   ```
+3. **嵌入 SDK**：Python SDK 中调用 `client.applications.invoke(app_id=..., input={...})`（要求 `dashscope>=1.20.0`）。
+
+所有应用均遵循统一鉴权与配额体系，调用频次受项目级 QPS 与 [Token](../concepts/token.md) 总量限制。
 
 ## 限制和注意事项
 
-- 单次请求 `input` 总大小上限为 10 MB（含 base64 编码图像/音频）；
-- 免费试用额度仅适用于首次部署的前 3 个应用实例，超出后按 [官方应用-伶鹊CCAI-对话分析AIO](../../raw/application-user-guide/application-gallery/official-application-lingque-ccai-dialogue-analysis-aio.md) 文档所列计费规则结算；
-- 所有应用默认开启内容安全过滤，不可关闭；若需绕过敏感词检测，须单独申请白名单权限；
-- 多模态类应用（如 `multimodal-products`、`tongyi-translate`）暂不支持跨区域调用，请求 Region 必须与应用部署 Region 一致。
+- 应用输入内容长度受底层模型上下文窗口约束（如 `tongyi-farui` 最大输入为 32k tokens，`xiyan-gbi` 为 8k tokens），超长内容将被截断且不报错；
+- 音视频类应用（如 `official-application-aipodcast.md`）要求媒体 URL 可公开访问且响应头含 `Content-Type`，内网地址或需鉴权的 CDN 链接将失败；
+- 多模态应用（如 `multimodal-products.md`）暂不支持批量并发处理图像列表，单次请求仅接受 ≤10 张图片；
+- 所有应用输出默认不保留中间步骤日志，如需 trace 分析，须在 `parameters` 中显式设置 `"debug": true`（仅限调试环境启用）。
 
 ## 来源文档
 

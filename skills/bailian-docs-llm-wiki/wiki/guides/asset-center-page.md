@@ -1,41 +1,43 @@
 # asset center page
 
-资产中心是百炼平台统一管理模型生成图片与视频资产的核心控制台页面，提供筛选、收藏、删除、OSS 转存及 API 引用等完整生命周期能力。所有资产默认保存于百炼平台存储（限时免费），用户可自主配置自动转存至自有 OSS Bucket 并选择是否释放平台副本。该功能面向已开通百炼服务的开发者，需在控制台显式开通后方可使用，详见 [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md)。
+资产中心是百炼平台统一管理模型生成图片与视频资产的核心控制台页面，提供筛选、收藏、删除、OSS 转存及 API 引用等能力。所有资产默认持久化于百炼平台存储（限时免费），用户可通过控制台或 API 全生命周期管理生成内容。详细功能与行为规范请参考 [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md)。
 
 ## 支持的模型/功能
 
-资产中心当前支持以下模型生成的图片与视频资产：  
+资产中心当前支持管理以下模型生成的**图片与视频资产**（不支持音频）：  
 `qwen-image-3.0-pro`、`qwen-image-3.0`、`qwen-image-2.0-pro-2026-06-22`、`qwen-image-2.0-pro-2026-04-22`、`qwen-image-2.0-pro`、`qwen-image-2.0`、`qwen-image-2.0-2026-03-03`、`z-image-turbo`、`wan2.7-image-pro`、`wan2.7-image`、`wan2.7-videoedit`、`wan2.7-r2v`、`wan2.7-i2v`、`wan2.7-t2v`。  
-> **注意**：支持模型列表动态更新，实际可用模型请以 [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md) 控制台实时展示为准；音频资产暂不支持，该限制未在文档其他位置明确说明，但与正文“暂不支持音频资产”一致。
+> **注意**：模型列表以控制台资产中心页面实时展示为准，[资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md) 中所列版本号（如 `2026-06-22`）为快照标识，实际可用模型可能因灰度发布而存在滞后，建议以控制台下拉菜单为准。
 
-核心功能包括：按类型/模型/时间/提示词筛选、收藏与“只看收藏”视图、批量删除与回收站管理（保留 30 天）、OSS 全局转存配置、以及通过 `asset_id` 在生图/生视频 API 中直接引用资产——该能力显著简化输入参数构造，避免重复上传，具体用法见 [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md) “在 API 中使用资产”章节。
+核心功能包括：  
+- 多维筛选（类型、模型、时间、提示词关键词）  
+- 收藏/取消收藏、批量删除、回收站恢复与永久清除  
+- OSS 自动转存（含路径模板、释放平台副本策略）  
+- 通过 `asset_id` 在生图/生视频 API 中直接引用已有资产（替代 `image_url` 或 `image_base64`）
 
 ## 关键参数
 
-- `asset_id`：每个资产唯一标识符，用于 API 输入（替代 `image_url` 或 `image_base64`），可在资产详情弹窗中直接复制。  
-- OSS 路径模板：默认 `{workspace}/{yyyy}/{mm}/{model}/{id}.{ext}`，其中 `{workspace}` 为当前业务空间标识，不可自定义替换逻辑。  
-- 转存范围策略：支持“全部资产”或“N 天前资产”，并强制要求选择是否“释放平台存储”（即删除平台副本）。若启用释放，该资产将不再出现在资产中心列表中。  
-- 平台存储配额：默认 5 GB 免费额度，超限部分按 0.15 元/GB/月计费；回收站内资产在 30 天保留期内仍计入已用容量。
+| 参数 | 说明 | 来源 |
+|------|------|------|
+| `asset_id` | 资产唯一标识符，用于 API 输入引用；在资产详情弹窗中可见 | [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md) |
+| `{workspace}/{yyyy}/{mm}/{model}/{id}.{ext}` | 默认 OSS 路径模板，其中 `{workspace}` 为当前业务空间 ID | [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md) |
+| `AliyunServiceRoleForBailianAssetForward` | OSS 转存必需的服务关联角色（SLR），授权后自动创建 | [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md) |
+
+> **注意**：OSS 转存**不支持已开启版本控制的 Bucket**，否则同步失败；该限制未在控制台配置页显式提示，需开发者主动校验 Bucket 配置。
 
 ## 使用方式
 
-1. **开通与访问**：首次使用需访问 [资产中心](https://bailian.console.aliyun.com/cn-beijing/model/asset-center) 并点击“立即开通”。  
-2. **OSS 绑定**：右上角点击“绑定 OSS”，依次完成 SLR 角色授权（`AliyunServiceRoleForBailianAssetForward`）、Bucket 与路径选择、转存范围及释放策略配置。  
-3. **资产操作**：  
-   - 筛选：顶部统计栏下方支持按类型、模型、日期、提示词搜索；  
-   - 收藏：悬停卡片点击星标，勾选“只看收藏”过滤；  
-   - 删除：勾选后点击删除按钮，进入回收站（非永久）；  
-   - 查看详情：点击卡片弹出完整元数据（含提示词、参数、生成时间）。  
-4. **API 集成**：调用 `qwen-image-*` 或 `wan2.7-*` 系列模型时，在对应输入字段（如 `reference_image`、`first_frame`）中传入 `"asset_id": "xxx"` 即可。
+1. **开通与访问**：首次使用需访问 [资产中心](https://bailian.console.aliyun.com/cn-beijing/model/asset-center) 并点击「立即开通」；开通后入口固定，无需重复操作。  
+2. **OSS 绑定**：右上角「绑定 OSS」→ 授权 SLR → 选择地域/Bucket/目录 → 设置路径模板与转存范围（全部 or N 天前）→ 选择是否「释放平台存储」。  
+3. **API 引用**：调用 `qwen-image-*` 或 `wan2.7-*` 等模型 API 时，在对应输入字段（如 `control_image`、`first_frame`）中传入 `"asset_id": "xxx"`，**不可与其他输入方式（URL/Base64）共存**。  
+4. **回收站操作**：删除资产后进入回收站，30 天内可恢复；超期自动永久清除且不可逆。
 
 ## 限制和注意事项
 
-- OSS 转存**不支持已开启版本控制的 Bucket**，否则任务失败且重试无效；必须使用未开启版本控制的标准 Bucket。  
-- OSS 配置为**全局生效**，不随业务空间切换而变更；但资产列表仅显示当前业务空间下的生成结果。  
-- 回收站资产保留期严格为 **30 天**，到期自动永久清除且不可恢复；手动永久删除亦不可逆。  
-- 平台存储计费以自然月为周期，删除至回收站的资产在保留期内持续计费；仅当明确选择“释放平台存储”或 OSS 转存成功且勾选释放后，才停止占用配额。  
-- 权限隔离依赖 RAM 策略：普通用户需 `AliyunBailianAssetCenterReader`，OSS 配置权限需 `AliyunBailianAssetCenterAdmin`。  
-> **注意**：文档中“平台存储目前限时免费使用”与“正式商用后将按以下规则计费”存在隐含时效矛盾，当前无明确截止时间说明；建议开发者同步关注控制台公告及 [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md) 最新修订记录。
+- **存储限制**：平台存储默认 5 GB 免费额度，超量按 0.15 元/GB/月计费；**回收站中的资产在保留期内仍占用配额**，释放需手动清空或等待自动清理。  
+- **OSS 全局性**：转存配置对账号全局生效，不随业务空间切换而变更；但资产列表仅显示当前业务空间下的生成结果。  
+- **权限隔离**：`AliyunBailianAssetCenterReader` 仅允许浏览与删除，`AliyunBailianAssetCenterAdmin` 才可配置 OSS；子账号无权限时将隐藏「绑定 OSS」按钮。  
+- **数据安全责任**：转存至自有 OSS 后，存储费用、ACL 控制、加密策略及合规责任均由用户承担，详见《阿里云存储服务协议》。  
+- **关键风险提示**：平台不承诺数据长期保存，因欠费、服务终止或回收站超期导致的资产丢失**不可恢复**，强烈建议重要资产及时转存至自有 OSS 或本地备份。
 
 ## 来源文档
 

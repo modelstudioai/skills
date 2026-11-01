@@ -1,63 +1,52 @@
 # model experience
 
-模型体验（Model Experience）是百炼平台面向开发者提供的统一模型调用入口，支持多模态模型的快速接入与实验。通过标准化 API 和控制台界面，开发者可便捷地测试、调试和集成各类大模型能力。所有模型均遵循统一的鉴权、计费与限流机制。
+`model experience` 是百炼平台面向开发者提供的统一模型调用体验层，封装了多模态模型的接入、参数配置与结果解析逻辑，支持通过标准化 API 或 SDK 快速集成各类生成与理解能力。其核心目标是降低模型使用门槛，同时保持对底层模型特性的可控性。所有能力均基于 [原文标题](../../raw/model-user-guide/model-experience.md) 所列模块组织。
 
 ## 支持的模型与功能
 
-当前支持以下 12 类模型能力，覆盖文本、视觉、语音、音视频、3D、世界建模及检索增强等场景：
+当前 `model experience` 覆盖以下 12 类模型能力，每类对应独立文档说明具体输入输出格式、适用场景及典型示例：
 
-- 文本生成（如 Qwen 系列、Baichuan 等 LLM）
-- 视觉理解（图文理解、OCR、图表解析）
-- 图片生成与编辑（文生图、图生图、局部重绘）
-- 视频生成与编辑（短视频生成、帧插值、剪辑指令执行）
-- 世界模型（具身推理、环境模拟与交互预测）
-- 3D 模型生成（TriPo 等单图生成 3D 网格与纹理）  
-- 语音合成（TTS，支持多语种与情感控制）
-- 音频生成（背景音、音效、音乐生成）
-- 语音识别（ASR，支持中英文混合与方言适配）
-- 语音转语音（跨语言/音色迁移）
-- 全模态（Omni-Modal）：支持文本、图像、音频、视频任意组合输入与输出
-- 向量与重排序（Embedding 与 Rerank 模型，用于 RAG 流水线）
+- 文本生成（含对话、补全、摘要等）  
+- 视觉理解（图文理解、OCR、图像分类）  
+- 图片生成与编辑（文生图、图生图、局部重绘）  
+- 视频生成与编辑（文生视频、视频扩时、关键帧控制）  
+- 世界模型（具身推理、环境交互模拟）  
+- 3D 模型生成（单图生成网格、支持 GLB 输出）  
+- 语音合成（TTS，支持多音色、语速/语调调节）  
+- 音频生成（背景音、音效、音乐片段生成）  
+- 语音识别（ASR，支持多语种、带标点和时间戳）  
+- 语音转语音（V2V，保留语义与情感的跨语言/音色转换）  
+- 全模态（多模态联合理解与生成，如“看图说话+生成配图”）  
+- 向量与重排序（文本嵌入、多向量检索、交叉重排）
 
-各子类能力详情请参阅 [文本生成](../../raw/model-user-guide/model-experience/text-generation-model.md)、[视觉理解](../../raw/model-user-guide/model-experience/vision-model.md) 和 [全模态](../../raw/model-user-guide/model-experience/omni-modal.md) 等对应文档。
+详细能力清单与入口说明见 [原文标题](../../raw/model-user-guide/model-experience.md)。
 
 ## 关键参数
 
-所有模型调用共用以下核心参数（部分模型支持扩展参数）：
+通用参数（适用于绝大多数模型）包括：
 
-| 参数名 | 类型 | 必填 | 说明 |
-|--------|------|------|------|
-| `model` | string | 是 | 模型 ID，如 `qwen-max`、`wanx-v1`、`speech-tts-1`；需从 [模型列表](../../raw/model-user-guide/model-experience.md) 获取有效值 |
-| `input` | object | 是 | 输入数据结构，格式依模型类型而异（如文本生成为 `{ "prompt": "..." }`，视觉理解为 `{ "image_url": "...", "prompt": "..." }`） |
-| `parameters` | object | 否 | 模型级超参，如 `temperature`、`top_p`、`seed`（文本类），或 `style`、`resolution`（图像类） |
-| `enable_streaming` | boolean | 否 | 是否启用流式响应（仅部分文本/语音模型支持） |
+- `model`: 必填，模型标识符（如 `qwen-vl-plus`、`wanx-video-1.0`），需与 [原文标题](../../raw/model-user-guide/model-experience.md) 中各子模块文档所列型号严格一致；  
+- `input`: 结构化输入对象，格式因模型类型而异（如视觉理解需 `{"image": "base64...", "text": "描述"}`，语音识别需 `{"audio_url": "https://..."}`）；  
+- `parameters`: 可选，控制生成质量与行为（如 `temperature`, `top_p`, `max_output_tokens`, `seed`），具体支持项以各子模块文档为准；  
+- `stream`: 布尔值，仅部分文本/语音类模型支持流式响应。
 
-> **注意**：`parameters` 中的 `max_tokens` 在部分旧版文档中被误标为 `max_output_tokens`，实际以 [文本生成](../../raw/model-user-guide/model-experience/text-generation-model.md) 中定义为准；其他模态模型不支持该参数。
+> **注意**：`parameters` 中 `max_output_tokens` 在文本生成模型中表示最大 token 数，但在视频生成模型中实际约束为最大帧数（非 token），该不一致性已在 [原文标题](../../raw/model-user-guide/model-experience/video-generate-edit-model.md) 中明确，但未在顶层文档同步更新，请以子模块文档为准。
 
 ## 使用方式
 
-1. **API 调用**：使用 `POST /v1/models/{model}/invoke` 接口，携带 `Authorization: Bearer <api_key>` 头；
-2. **控制台调试**：登录百炼控制台 →「模型体验」页 → 选择模型 → 填写输入 → 点击「运行」；
-3. **SDK 调用**：Python SDK 示例：
-   ```python
-   from alibabacloud_bailian20231219 import models as bailian_models
-   client = BailianClient(...)
-   response = client.invoke_model(
-       model_id="qwen-plus",
-       input={"prompt": "你好"},
-       parameters={"temperature": 0.7}
-   )
-   ```
+1. **API 调用**：向 `/v1/models/{model}/invoke` 发送 POST 请求，`Content-Type: application/json`，请求体包含 `input` 和 `parameters`；  
+2. **SDK 调用**（Python/Java/Go）：使用 `ModelClient.invoke()` 方法，传入 `model`, `input`, `parameters` 字典；  
+3. **批量调用**：仅支持文本生成、嵌入、ASR 等低延迟模型，需通过 `/v1/batch/invoke` 接口，详见各子模块文档。
 
-完整请求/响应格式与错误码详见 [模型体验](../../raw/model-user-guide/model-experience.md) 主文档。
+所有调用均需携带有效的 `Authorization: Bearer <api_key>` 头。完整请求示例与错误码说明请参考 [原文标题](../../raw/model-user-guide/model-experience.md)。
 
 ## 限制和注意事项
 
-- 单次请求最大输入长度因模型而异：文本类默认 32K tokens，视觉类图像 URL 需可公开访问且尺寸 ≤ 4096×4096px，视频类时长 ≤ 60 秒；
-- 所有模型默认启用并发限流（免费版 1 QPS，企业版按配额配置），超限返回 `429 Too Many Requests`；
-- 世界模型与 TriPo 3D 生成暂不支持流式响应和 `enable_streaming` 参数；
-- 音频/视频类模型输出为 base64 编码或 OSS 直链（由 `response_format` 控制），需在调用前明确指定；
-- > **注意**：[语音转语音](../../raw/model-user-guide/model-experience/speech-to-speech.md) 文档中提及的“实时低延迟模式”尚未全量上线，当前所有语音转语音请求均为离线批处理模式，实际延迟约 2–5 秒。
+- 单次请求 `input` 总大小上限为 50 MB（视频/音频类模型单独限制为 200 MB）；  
+- 流式响应仅返回 `delta` 字段，不包含完整历史上下文，客户端需自行拼接；  
+- 视觉理解与图片生成模型对图像分辨率有隐式要求（如不低于 256×256，不超过 2048×2048），超出将被自动缩放，可能影响精度；  
+- 世界模型与全模态模型暂不支持[异步任务](../concepts/asynchronous-task.md)模式，超时时间为 120 秒，超时后连接关闭且不保证结果完整性；  
+- 所有模型调用均受项目级 QPS 与总 [Token](../concepts/token.md)/Frame 配额限制，配额策略以控制台实时显示为准。
 
 ## 来源文档
 
