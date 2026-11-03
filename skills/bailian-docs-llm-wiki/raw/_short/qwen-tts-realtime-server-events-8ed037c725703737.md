@@ -2,7 +2,7 @@
 
 本文介绍 Qwen-TTS-Realtime API 的服务端事件。
 
-> 相关文档：[实时语音合成](raw/model-user-guide/model-experience/speech-synthesis/realtime-tts-user-guide.md)。
+> 相关文档：[实时语音合成](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/realtime-tts-user-guide.md)。
 
 ## error
 

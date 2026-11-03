@@ -332,7 +332,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 -   **用户消息（user message）的构造方式**：多模态模型的用户消息不仅包含文本，还包含图片、音频等多模态信息。
 -   **DashScope SDK接口：**使用 DashScope Python SDK 2.0 时，需调用 `client.multimodal.chat.create` 接口；如需异步调用，请使用`dashscope.AsyncClient`。使用DashScope Java SDK 时，需调用 `MultiModalConversation` 类。
 
-> 多模态模型请参见：[图像与视频理解](raw/model-user-guide/model-experience/vision-model/vision.md)、[界面交互](raw/model-user-guide/model-experience/text-generation-model/specialized-models/gui-automation.md)、[Kimi](raw/model-user-guide/use-cases/third-party-model-integration-tutorial/kimi-api.md)。`Qwen-Omni`的实现方法请参见[非实时（Qwen-Omni）](raw/model-user-guide/model-experience/omni-modal/qwen-omni.md)。Qwen-VL-OCR、Qwen3-Omni-Captioner是为特定单轮任务设计的模型，不支持多轮对话。
+> 多模态模型请参见：[图像与视频理解](raw/model-user-guide/model-experience/text-generation-model/vision.md)、[界面交互](raw/model-user-guide/model-experience/text-generation-model/specialized-models/gui-automation.md)、[Kimi](raw/model-user-guide/use-cases/third-party-model-integration-tutorial/kimi-api.md)。`Qwen-Omni`的实现方法请参见[非实时（Qwen-Omni）](raw/model-user-guide/model-experience/omni-modal/qwen-omni.md)。Qwen-VL-OCR、Qwen3-Omni-Captioner是为特定单轮任务设计的模型，不支持多轮对话。
 
 #### OpenAI兼容
 
@@ -677,7 +677,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 ]
 ```
 
-> 思考模型详情参见：[深度思考](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md)、[图像与视频理解](raw/model-user-guide/model-experience/vision-model/vision.md)。
+> 思考模型详情参见：[深度思考](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md)、[图像与视频理解](raw/model-user-guide/model-experience/text-generation-model/vision.md)。
 
 > Qwen3-Omni-Flash（思考模式）实现多轮对话请参见[全模态](https://help.aliyun.com/zh/model-studio/qwen-omni#4d96cc766ehhi)。
 

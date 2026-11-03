@@ -13,7 +13,7 @@ DashScope SDK Expert（下称 SDK Expert）是 dashscope Python SDK（≥1.27.3�
     export DASHSCOPE_HTTP_BASE_URL=https://{workspace-id}.{region}.maas.aliyuncs.com/api/v1
     ```
     
-    各 region 的 base\_url 不同，域名对照见 [Base URL 总览](raw/model-user-guide/get-started-with-models/base-url.md)。
+    各 region 的 base\_url 不同，域名对照见 [Base URL 总览](raw/model-api-reference/preparations/base-url.md)。
     
 2.  **安装/升级 SDK**：SDK Expert 随 dashscope Python SDK 1.27.3 引入。
     

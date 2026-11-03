@@ -16,44 +16,48 @@
 
 ## 关键参数
 
-所有音频 API 共享以下通用参数（部分参数为特定接口必需）：
+通用请求头（必填）：
+- `Authorization: Bearer <api_key>`
+- `Content-Type: application/json`
 
-| 参数名 | 类型 | 必填 | 说明 |
-|--------|------|------|------|
-| `model` | string | 是 | 模型标识符，如 `qwen2-audio-asr`；必须与所选功能匹配 |
-| `audio_url` 或 `audio` | string / binary | 是 | 音频源：`audio_url` 指向公网可访问的 WAV/MP3/FLAC 文件（≤100MB），或直接以 `audio` 字段提交 base64 编码二进制数据（≤25MB） |
-| `response_format` | string | 否 | 返回格式，可选 `json`（默认）或 `wav`（仅 TTS 和 Audio Generation 支持） |
-| `stream` | boolean | 否 | 是否启用流式响应（仅 ASR、TTS、Conversation 支持）；设为 `true` 时返回 `text/event-stream` |
+核心请求体字段（按功能略有差异）：
+- `model`: 模型标识符（如 `"qwen2-audio-asr"`），不可省略  
+- `input`: 音频数据载体，支持 `audio_url`（公网可访问 HTTPS URL）或 `audio_base64`（需 Base64 编码且 ≤ 25 MB）  
+- `parameters`: 对象，常见字段包括：  
+  - `language`: 输入/输出语言代码（如 `"zh"`、`"en"`），ASR 和 ST 必填  
+  - `response_format`: `"json"` 或 `"text"`（仅部分接口支持）  
+  - `stream`: `true` / `false`，控制是否启用 SSE 流式响应  
+  - `voice`: TTS 专用，指定音色 ID（如 `"zhiyuan"`）  
 
-> **注意**：`audio_generation` 接口的 `prompt` 字段在 [音频生成](../../raw/model-api-reference/audio-api-references/audio-generation-api.md) 中定义为必填，但最新 SDK v2.3+ 已允许空 prompt 生成无条件音频——请以该文档为准，避免因旧版文档遗漏导致 400 错误。
+> **注意**：`audio_base64` 字段在 [音频生成](../../raw/model-api-reference/audio-api-references/audio-generation-api.md) 中要求必须为 PCM 编码（16-bit, 16kHz, mono），而 [语音识别](../../raw/model-api-reference/audio-api-references/speech-recognition-api-reference.md) 文档未明确此限制，实际调用时若传入 MP3 Base64 将返回 `400 Bad Request` —— 请以 [语音识别](../../raw/model-api-reference/audio-api-references/speech-recognition-api-reference.md) 的最新行为为准。
 
 ## 使用方式
 
-1. **认证**：在 HTTP Header 中携带 `Authorization: Bearer <api_key>`  
-2. **请求**：向 `https://dashscope.aliyuncs.com/api/v1/audio/{endpoint}` 发送 POST 请求，其中 `{endpoint}` 为对应功能路径（如 `/asr`, `/tts`, `/st`）  
-3. **示例（ASR）**：
-   ```bash
-   curl -X POST "https://dashscope.aliyuncs.com/api/v1/audio/asr" \
-     -H "Authorization: Bearer YOUR_API_KEY" \
-     -H "Content-Type: application/json" \
-     -d '{
-           "model": "qwen2-audio-asr",
-           "audio_url": "https://example.com/audio.wav",
-           "language": "zh"
-         }'
-   ```
+1. 构造 POST 请求至对应 endpoint（例如 ASR：`https://dashscope.aliyuncs.com/api/v1/services/aigc/audio/asr`）  
+2. 在请求体中传入 `model`、`input` 和必要 `parameters`  
+3. 解析响应：非流式返回 JSON；流式响应需按 SSE 协议解析 `data:` 行  
+4. 错误处理：关注 `HTTP status code`（如 `429` 表示限流）及响应体中 `code` 字段（如 `"InvalidParameter"`）
 
-完整调用示例与错误码说明参见 [语音对话](../../raw/model-api-reference/audio-api-references/voice-conversation-api-references.md) 文档。
+示例（ASR 简单调用）：
+```bash
+curl -X POST "https://dashscope.aliyuncs.com/api/v1/services/aigc/audio/asr" \
+  -H "Authorization: Bearer $API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+        "model": "qwen2-audio-asr",
+        "input": {"audio_url": "https://example.com/audio.wav"},
+        "parameters": {"language": "zh"}
+      }'
+```
 
 ## 限制和注意事项
 
-- 单次请求音频时长上限：ASR ≤ 600 秒，TTS ≤ 300 秒，Audio Generation ≤ 120 秒，ST ≤ 300 秒  
-- 音频采样率要求：WAV/FLAC 建议 16kHz/16bit 单声道；MP3 建议 ≤ 192kbps  
-- 流式响应下，ASR 的 `partial_result` 可能包含未最终确认文本，需监听 `is_final: true` 字段  
-- 所有音频接口均不支持实时麦克风流输入（即 WebRTC 直连），仅接受文件 URL 或 base64 数据  
-- 跨区域调用（如杭州节点调用上海模型）可能导致延迟升高，建议就近选择 endpoint  
+- 单次请求音频时长上限：ASR 和 ST ≤ 600 秒；TTS 输入文本 ≤ 5000 字符；Audio Generation 输入文本 ≤ 200 字符  
+- 音频格式要求：WAV/MP3/FLAC/M4A（采样率 8–48 kHz，位深 16-bit），不支持视频容器（如 MP4 中的音频轨需先提取）  
+- 计费单位：ASR/ST 按音频秒数计费；TTS/Audio Generation 按输出音频秒数计费；Voice Conversation 按会话时长（秒）计费  
+- 所有接口均不支持跨区域调用（例如华东 region 的 key 不可调用华北 endpoint）  
 
-如遇模型不可用或参数校验失败，请优先核对 [语音合成](../../raw/model-api-reference/audio-api-references/speech-synthesis-api-reference.md) 中的模型兼容性表格。
+请务必参考各子功能的原始文档确认最新兼容性，例如 [语音对话](../../raw/model-api-reference/audio-api-references/voice-conversation-api-references.md) 中关于 WebSocket 连接保活机制的说明已更新，旧版 SDK 可能存在超时断连问题。
 
 ## 来源文档
 

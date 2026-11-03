@@ -16,7 +16,7 @@
 -   **图像色彩处理**：图像上色（黑白或灰度图像转为彩色图像）。
 -   **基于参考图像生成**：线稿生图（先提取输入图像的线稿，再参考线稿生成图像）、参考卡通形象生图。
 
-**相关指南**：[图像编辑-万相2.1](raw/model-user-guide/model-experience/image-model/image-edit-guide/wanx-image-edit.md)
+**相关指南**：[图像编辑-万相2.1](raw/model-user-guide/use-cases/legacy-resources/legacy-image-generation/wanx-image-edit.md)
 
 ## 模型概览
 

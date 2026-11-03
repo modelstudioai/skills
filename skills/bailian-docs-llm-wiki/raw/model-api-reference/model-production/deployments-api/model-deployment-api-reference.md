@@ -2,7 +2,7 @@
 
 本文档以千问模型的部署为例进行说明，使用 API（HTTP）调用方式帮助您使用阿里云百炼提供的模型部署功能。
 
-**重要**模型部署 API 的开放地域因部署方式而异——模型单元（MU）与 DTU 独占算力部署支持华北2（北京）；预置吞吐（PTU）等部署方式支持北京与新加坡地域。
+**重要**模型部署 API 的开放地域因部署方式而异——模型单元（MU）与 独占吞吐（DTU）支持华北2（北京）；预置吞吐（PTU）等部署方式支持北京与新加坡地域。
 
 ## 前提条件
 
@@ -10,7 +10,7 @@
 -   已配置百炼的 API-KEY， 请参考[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
 -   DTU（DTU 独占算力）部署使用同一组部署接口，请求中以 `plan="dtu"` 区分部署形式。DTU 部署的请求需使用部署所在业务空间、地域对应的 `maas.aliyuncs.com` 业务空间域名（例如 `ws-vxxx.cn-beijing.maas.aliyuncs.com`）和该业务空间的 API Key，而不是 `dashscope.aliyuncs.com`。
 -   请求域名因地域而异：北京地域使用 `dashscope.aliyuncs.com`，新加坡地域使用 `dashscope-intl.aliyuncs.com`；业务空间专属域名（`{WorkspaceId}.{region}.maas.aliyuncs.com`）各地域均可用。各地域完整域名信息请参见[各地域接入信息](https://help.aliyun.com/zh/model-studio/regions#h2_cc92e61c)。
--   DTU 部署仅支持预付费（`charge_type="pre_paid"`），不支持后付费创建；续费与自动续费变更目前仅支持在控制台操作。DTU 接口不支持 `AssumedRoleUser` 角色身份。使用 DTU 前需在控制台开通 DTU 功能并申请资源额度，详见[DTU 独占算力部署](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-modes/dtu-model-deployment.md)。
+-   DTU 部署仅支持预付费（`charge_type="pre_paid"`），不支持后付费创建；续费与自动续费变更目前仅支持在控制台操作。DTU 接口不支持 `AssumedRoleUser` 角色身份。使用 DTU 前需在控制台开通 DTU 功能并申请资源额度，详见[独占吞吐（DTU）](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-modes/dtu-model-deployment.md)。
 
 ## 获取可以部署的模型列表
 
@@ -380,7 +380,7 @@ POST https://dashscope.aliyuncs.com/api/v1/deployments
 
 ### 请求示例
 
-#### DTU 独占算力部署
+#### 独占吞吐（DTU）
 
 预付费，按输入/输出 TPM 购买容量（需使用业务空间域名；`sku_code`、`template_code` 及容量范围通过获取可以部署的模型列表 `plan=dtu` 查询）。DTU 为模型单元（MU）的继任方案，新购独占部署优先选择 DTU：
 
@@ -2507,7 +2507,7 @@ path
 
 ## 删除模型部署任务
 
-**说明**仅当服务状态为 STOPPED 或 FAILED 时可调用删除。RUNNING 状态的服务需先调用API 详情接口。DTU（dtu）部署暂不支持通过本接口删除，请在控制台退订，详见[DTU 独占算力部署](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-modes/dtu-model-deployment.md)。
+**说明**仅当服务状态为 STOPPED 或 FAILED 时可调用删除。RUNNING 状态的服务需先调用API 详情接口。DTU（dtu）部署暂不支持通过本接口删除，请在控制台退订，详见[独占吞吐（DTU）](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-modes/dtu-model-deployment.md)。
 
 ```
 DELETE https://dashscope.aliyuncs.com/api/v1/deployments/{deployed_model}

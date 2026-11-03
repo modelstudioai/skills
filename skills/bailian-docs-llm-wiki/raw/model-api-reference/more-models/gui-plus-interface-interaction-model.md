@@ -80,7 +80,7 @@ User Message`object`**（必选）**
 
 **url** `string`**（必选）**
 
-图片的 URL或 Base64 Data URL。传入本地文件请参考[传入本地文件](raw/model-user-guide/model-experience/vision-model/vision.md)。
+图片的 URL或 Base64 Data URL。传入本地文件请参考[传入本地文件](raw/model-user-guide/model-experience/text-generation-model/vision.md)。
 
 **min\_pixels**`integer`（可选）
 
@@ -998,7 +998,7 @@ User Message`object`**（必选）**
 
 **image**`string`（可选）
 
-传入的图片文件。可以为图片的URL或本地路径。传入本地文件请参见[传入本地文件](raw/model-user-guide/model-experience/vision-model/vision.md)。
+传入的图片文件。可以为图片的URL或本地路径。传入本地文件请参见[传入本地文件](raw/model-user-guide/model-experience/text-generation-model/vision.md)。
 
 示例值：{"image":"[](https://xxxx.jpeg)[https://xxxx.jpeg](https://xxxx.jpeg)","max-pixels":1280_28_28}
 

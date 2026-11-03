@@ -4,7 +4,7 @@
 
 ## 创建百炼工作流
 
-1.创建百炼工作流，详细介绍可参考[工作流应用](raw/application-user-guide/agent-development/llm-application/workflow-application.md)。
+1.创建百炼工作流，详细介绍可参考[工作流应用](raw/application-user-guide/llm-application/workflow-application.md)。
 
 2.创建一个名为【自助食堂】的工作流。
 

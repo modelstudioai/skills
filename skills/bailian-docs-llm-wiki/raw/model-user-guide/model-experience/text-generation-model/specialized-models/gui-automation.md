@@ -5625,10 +5625,10 @@ if __name__ == '__main__':
 
 ## 更多用法
 
--   [开启/关闭思考模式](raw/model-user-guide/model-experience/vision-model/vision.md)
+-   [开启/关闭思考模式](raw/model-user-guide/model-experience/text-generation-model/vision.md)
 -   [流式输出](https://help.aliyun.com/zh/model-studio/stream#e98db795e87q9)
 -   [多轮对话](https://help.aliyun.com/zh/model-studio/multi-round-conversation#36eaa79f55dz7)
--   [传入本地文件](raw/model-user-guide/model-experience/vision-model/vision.md)
+-   [传入本地文件](raw/model-user-guide/model-experience/text-generation-model/vision.md)
 
 ## 使用说明
 
@@ -5680,7 +5680,7 @@ if __name__ == '__main__':
     
     image/heic
     
--   **图像大小：**单个图像的大小不超过10 MB。如果传入 Base64编码的图像，需保证编码后的字符串小于10MB，详情请参见[传入本地文件](https://help.aliyun.com/zh/model-studio/vision#d987f8de5395x)。如需压缩文件体积请参见[图像或视频压缩方法](raw/model-user-guide/model-experience/vision-model/vision.md)。
+-   **图像大小：**单个图像的大小不超过10 MB。如果传入 Base64编码的图像，需保证编码后的字符串小于10MB，详情请参见[传入本地文件](https://help.aliyun.com/zh/model-studio/vision#d987f8de5395x)。如需压缩文件体积请参见[图像或视频压缩方法](raw/model-user-guide/model-experience/text-generation-model/vision.md)。
     
 -   **尺寸与比例：**图像的宽度和高度均需大于 10 像素，图像的宽高比（长边与短边的比值）不得超过 200。
     

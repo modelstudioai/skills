@@ -2,7 +2,7 @@
 
 万相2.7-文生视频模型基于 文本提示词 ，生成一段流畅的视频。
 
-**相关文档**：[使用指南](raw/model-user-guide/model-experience/video-generate-edit-model/text-to-video-guide.md)
+**相关文档**：[使用指南](raw/_short/text-to-video-guide-99fbc872809463c8.md)
 
 ## 适用范围
 
@@ -43,7 +43,7 @@
 **说明**
 
 -   创建成功后，使用接口返回的 `task_id` 查询结果，task\_id 有效期为 24 小时。**请勿重复创建任务**，轮询获取即可。
--   新手指引请参见[Postman](raw/model-user-guide/use-chat-client-or-development-tool/first-call-to-image-and-video-api.md)。
+-   新手指引请参见[Postman](https://help.aliyun.com/zh/model-studio/first-call-to-image-and-video-api)。
 
 #### 请求参数
 
@@ -335,7 +335,7 @@ dashscope video-synthesis create -m wan2.7-t2v -p "小猫在奔跑"
 
 [DashScope SDK Expert](raw/model-api-reference/preparations/dashscope-sdk-expert.md)。
 
-完整地域表见 [Base URL 总览](raw/model-user-guide/get-started-with-models/base-url.md)。
+完整地域表见 [Base URL 总览](raw/model-api-reference/preparations/base-url.md)。
 
 #### 响应参数
 

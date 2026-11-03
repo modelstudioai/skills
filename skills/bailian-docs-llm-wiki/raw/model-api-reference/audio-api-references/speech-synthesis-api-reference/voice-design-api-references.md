@@ -2,7 +2,7 @@
 
 本文介绍声音设计的HTTP API接口详情，包括创建音色、查询音色列表、查询音色详情和删除音色四个操作。
 
-**用户指南：**[声音设计](raw/model-user-guide/model-experience/speech-synthesis/voice-design-user-guide.md)。
+**用户指南：**[声音设计](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-design-user-guide.md)。
 
 ## 接口地址
 

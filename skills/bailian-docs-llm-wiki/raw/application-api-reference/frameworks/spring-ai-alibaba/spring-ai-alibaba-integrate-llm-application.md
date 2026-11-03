@@ -2,7 +2,7 @@
 
 阿里云百炼推出的大模型应用，有效解决了大模型在处理私有领域问题、获取最新信息、遵循固定流程以及自动规划复杂项目等方面的局限，显著拓展了其应用范围。
 
-本文介绍如何通过[Spring AI Alibaba](https://java2ai.com/?spm=4347728f.638c0b20.0.0.23f87982NTcSMy)集成阿里云百炼大模型应用（仅支持集成[智能体应用（Agent 1.0）](raw/application-user-guide/agent-development/llm-application/single-agent-application.md)和[工作流应用](raw/application-user-guide/agent-development/llm-application/workflow-application.md)）。
+本文介绍如何通过[Spring AI Alibaba](https://java2ai.com/?spm=4347728f.638c0b20.0.0.23f87982NTcSMy)集成阿里云百炼大模型应用（仅支持集成[智能体应用（Agent 1.0）](raw/application-user-guide/llm-application/single-agent-application.md)和[工作流应用](raw/application-user-guide/llm-application/workflow-application.md)）。
 
 ## 前期准备
 
@@ -13,7 +13,7 @@
     创建以下任一类型应用并获取应用ID，并将应用ID配置到环境变量（推荐使用“`APP_ID`”作为环境变量名）：
     
     -   [创建智能体应用](https://help.aliyun.com/zh/model-studio/single-agent-application#a9de1b3f7enzm)
-    -   [创建工作流应用](raw/application-user-guide/agent-development/llm-application/workflow-application.md)
+    -   [创建工作流应用](raw/application-user-guide/llm-application/workflow-application.md)
 3.  如果是在子业务空间创建的阿里云百炼大模型应用，需要[获取业务空间 ID](https://help.aliyun.com/zh/model-studio/use-workspace)，并将其配置到环境变量（推荐使用“`WORKSPACE_ID`”作为环境变量名）。
     
 
@@ -255,5 +255,5 @@ public class BailianAgentApplication {
 ## 了解更多
 
 -   [Spring AI Alibaba](https://java2ai.com/?spm=4347728f.638c0b20.0.0.23f87982NTcSMy)：提供文档教程、实战博客和开发者社区，帮助您快速开发Java生成式AI应用。
--   [工作流与旧版智能体应用 API应用 DashScope API 参考](raw/_short/agent-and-workflow-application-api-reference-ab48d043a951dcb2.md)：提供应用调用相关的接口说明与调用示例。
+-   [工作流与旧版智能体应用 API应用 DashScope API 参考](raw/_short/agent-and-workflow-application-api-reference-81f0d3ecfd878b1f.md)：提供应用调用相关的接口说明与调用示例。
 -   [spring-ai-alibaba-examples](https://github.com/springaialibaba/spring-ai-alibaba-examples/tree/main/spring-ai-alibaba-rag-example?spm=4347728f.4b30b334.0.0.63ed66f4GcFkdj)：更多Spring AI Alibaba示例代码的Github仓库地址。

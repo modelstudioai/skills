@@ -1,25 +1,23 @@
-# 声音复刻
+# Omni 声音复刻用户指南
 
-上传录音创建音色，再用于 Qwen-Omni 或 Qwen-Omni-Realtime 对话。本文介绍支持的语言、音频要求、复刻步骤、费用和音色管理规则。
+使用参考音频创建 Omni 复刻音色，并在实时或非实时全模态调用中使用；包含完整示例、音频要求、配额和计费。
 
-接口参数、请求和返回值请参见[声音复刻 API 参考](raw/_short/qwen-omni-voice-cloning-717550bc449e9e29.md)。
+**用户指南**：关于模型介绍和选型建议请参见[实时（Qwen-Omni-Realtime）](raw/model-user-guide/model-experience/omni-modal/realtime.md)或[非实时（Qwen-Omni）](raw/model-user-guide/model-experience/omni-modal/qwen-omni.md)。
 
-**相关模型**：模型介绍和选型见[实时（Qwen-Omni-Realtime）](raw/model-user-guide/model-experience/omni-modal/realtime.md)或[非实时（Qwen-Omni）](raw/model-user-guide/model-experience/omni-modal/qwen-omni.md)。
+**重要**本文档专用于千问Omni和千问Omni-Realtime声音复刻接口；若您使用的是语音合成模型，请参见[语音合成](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference.md)。
 
-**重要**本文介绍千问Omni和千问Omni-Realtime的声音复刻。语音合成模型请参见[语音合成](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference.md)。
-
-**重要**华北2（北京）和新加坡地域提供业务空间专属域名，可提高推理性能和稳定性。建议迁移至新域名：
+**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
 
 -   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
 -   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
 
-`{WorkspaceId}` 是业务空间 ID，可在百炼控制台的**业务空间详情**页面查看。旧域名仍可使用。
+其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
+
+请求参数、响应和错误说明见[声音复刻 API 参考](raw/_short/qwen-omni-voice-cloning-717550bc449e9e29.md)。
 
 ## 音频要求
 
-录音质量影响复刻效果。
-
-系统音色与声音复刻支持的方言范围不同。复刻支持的语言和方言见下表，系统音色见[音色列表](raw/model-user-guide/model-experience/omni-modal/omni-voice-list.md)。
+高质量的输入音频是获得优质复刻效果的基础。
 
 **项目**
 
@@ -57,30 +55,32 @@ WAV (16bit)、MP3、M4A
 
 ## 快速开始：复刻与使用音色
 
+先创建音色，再调用模型使用音色：
+
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2365984871/CAEQbxiBgICd6_Do8BkiIDM3NjYwZDQxMGIyMTQzMDdhOGMyY2YwNWFhMmM2NjVi5899512_20251120114927.389.svg)
 
 ### 1\. 工作流程
 
-先创建音色，再调用模型使用音色：
+声音复刻与模型调用是紧密关联的两个独立步骤，遵循“先创建，后使用”的流程：
 
 1.  创建音色
     
-    调用[创建音色](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning#1eaa57d82did9)接口上传录音。系统分析录音并创建音色。**必须指定 `target_model`，确定后续使用该音色的全模态模型。**
+    调用[创建音色](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning#1eaa57d82did9)接口，上传一段音频。系统会分析该音频，创建一个专属的复刻音色。**此步骤必须指定**`target_model`**，声明创建的音色将由哪个全模态模型驱动。**
     
-    已有音色可跳过此步，通过[查询音色列表](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning#401d33226330i)接口查看。
+    若已有创建好的音色（调用[查询音色列表](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning#401d33226330i)接口查看），可跳过这一步直接进行下一步。
     
 2.  使用音色进行对话
     
-    调用 Omni 接口（实时或非实时），传入创建的音色。**调用的全模态模型必须与 `target_model` 一致。**
+    调用 Omni 接口（实时或非实时），传入上一步获得的音色。**此步骤指定的全模态模型必须和上一步的**`target_model`**一致。**
     
 
 ### 2\. 模型配置与准备工作
 
-先选择模型，再完成准备工作。
+选择合适的模型并完成准备工作。
 
 #### 模型配置
 
-声音复刻需指定两个模型：
+声音复刻时需要指定以下两个模型：
 
 -   声音复刻模型：qwen-voice-enrollment
     
@@ -94,33 +94,32 @@ WAV (16bit)、MP3、M4A
 
 #### 准备工作
 
-1.  **获取API Key**：[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。建议将 API Key 配置到环境变量，避免写入代码。
-2.  **安装SDK**：[安装最新版DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
+1.  **获取API Key**：[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)，为安全起见，推荐将API Key配置到环境变量。
+2.  **安装SDK**：确保已[安装最新版DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
 3.  **准备待复刻音频**：音频需符合[音频要求](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning-user-guide#fe3daa6c3f7jw)。
 
 ### 3\. 端到端示例
 
-以下示例创建音色，再用该音色进行对话。
+以下示例演示了如何在对话中使用声音复刻生成的专属音色，实现与原音高度相似的输出效果。
 
 -   **关键原则**：声音复刻时，`target_model`（驱动音色的全模态模型）必须与后续调用 Omni 接口时指定的模型一致，否则会合成失败。
--   运行前，将示例文件 `voice.mp3` 替换为自己的录音。
+-   示例使用本地音频文件 `voice.mp3` 进行声音复刻，运行代码时，请注意替换。
 
 #### 实时
 
-适用于千问Omni-Realtime系列模型，详见[实时（Qwen-Omni-Realtime）](raw/model-user-guide/model-experience/omni-modal/realtime.md)。
+适用于千问Omni-Realtime系列模型，更多说明请参见[实时（Qwen-Omni-Realtime）](raw/model-user-guide/model-experience/omni-modal/realtime.md)。
 
 Python
 
 ```
-# 依赖：dashscope >= 2.0.1，pyaudio
+# 依赖：dashscope >= 1.26.5，pyaudio
 import os
 import requests
 import base64
 import pathlib
 import time
 import pyaudio
-from concurrent.futures import ThreadPoolExecutor
-
+from dashscope.audio.qwen_omni import MultiModality, OmniRealtimeCallback, OmniRealtimeConversation
 import dashscope
 
 # ======= 常量配置 =======
@@ -128,14 +127,6 @@ DEFAULT_TARGET_MODEL = "qwen3.8-omni-flash-realtime"  # 声音复刻、实时对
 DEFAULT_PREFERRED_NAME = "guanyu"
 DEFAULT_AUDIO_MIME_TYPE = "audio/mpeg"
 VOICE_FILE_PATH = "voice.mp3"  # 用于声音复刻的本地音频文件的相对路径
-
-# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-client = dashscope.Client(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
-    workspace="{WorkspaceId}",
-    region="cn-beijing",
-)
 
 def create_voice(file_path: str,
                  url: str,
@@ -179,59 +170,58 @@ def create_voice(file_path: str,
     except (KeyError, ValueError) as e:
         raise RuntimeError(f"解析 voice 响应失败: {e}")
 
-# 1. 初始化音频设备与输出流
-pya = pyaudio.PyAudio()
-out = pya.open(format=pyaudio.paInt16, channels=1, rate=24000, output=True)
-
-# 2. 接收线程：迭代服务端事件，播放音频并打印文本
-def receive_events(session):
-    for response in session.events():
+class SimpleCallback(OmniRealtimeCallback):
+    def __init__(self, pya):
+        self.pya = pya
+        self.out = None
+    def on_open(self):
+        self.out = self.pya.open(
+            format=pyaudio.paInt16,
+            channels=1,
+            rate=24000,
+            output=True
+        )
+    def on_event(self, response):
         if response['type'] == 'response.audio.delta':
-            # 播放音频
-            out.write(base64.b64decode(response['delta']))
+            self.out.write(base64.b64decode(response['delta']))
         elif response['type'] == 'conversation.item.input_audio_transcription.completed':
             print(f"[User] {response['transcript']}")
         elif response['type'] == 'response.audio_transcript.done':
             print(f"[LLM] {response['transcript']}")
 
 if __name__ == '__main__':
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：dashscope.api_key = "sk-xxx"
+    dashscope.api_key = os.getenv("DASHSCOPE_API_KEY")
     # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
     base_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com"
+    ws_url = base_url.replace("https://", "wss://") + "/api-ws/v1/realtime"
 
     # 1. 声音复刻：创建专属音色
     voice = create_voice(VOICE_FILE_PATH, url=f"{base_url}/api/v1/services/audio/tts/customization")
     print(f"声音复刻完成，音色: {voice}")
 
     # 2. 使用复刻音色进行实时对话
-    # 3. 创建会话（进入 with 上下文时自动建立连接）并配置
-    with client.audio.realtime.connect(model=DEFAULT_TARGET_MODEL) as session:
-        session.update_session(
-            output_modalities=['audio', 'text'],
-            voice=voice  # 使用复刻生成的专属音色
-        )
-        # 4. 初始化音频输入流
-        mic = pya.open(format=pyaudio.paInt16, channels=1, rate=16000, input=True)
-        # 5. 主循环处理音频输入
-        print("对话已开始，对着麦克风说话 (Ctrl+C 退出)...")
-        try:
-            with ThreadPoolExecutor(max_workers=1) as pool:
-                try:
-                    receiver = pool.submit(receive_events, session)
-                    while True:
-                        audio_data = mic.read(3200, exception_on_overflow=False)
-                        # bytes 会自动 Base64 编码后发送
-                        session.append_audio(audio_data)
-                        time.sleep(0.01)
-                except KeyboardInterrupt:
-                    pass
-                finally:
-                    # 先关闭会话，解除接收线程的等待，再退出线程池。
-                    session.close()
-        finally:
-            mic.close()
-            out.close()
-            pya.terminate()
-            print("\n对话结束")
+    pya = pyaudio.PyAudio()
+    callback = SimpleCallback(pya)
+    conv = OmniRealtimeConversation(model=DEFAULT_TARGET_MODEL, callback=callback, url=ws_url)
+    conv.connect()
+    conv.update_session(
+        output_modalities=[MultiModality.AUDIO, MultiModality.TEXT],
+        voice=voice  # 使用复刻生成的专属音色
+    )
+    mic = pya.open(format=pyaudio.paInt16, channels=1, rate=16000, input=True)
+    print("对话已开始，对着麦克风说话 (Ctrl+C 退出)...")
+    try:
+        while True:
+            audio_data = mic.read(3200, exception_on_overflow=False)
+            conv.append_audio(base64.b64encode(audio_data).decode())
+            time.sleep(0.01)
+    except KeyboardInterrupt:
+        conv.close()
+        mic.close()
+        callback.out.close()
+        pya.terminate()
+        print("\n对话结束")
 ```
 
 Java
@@ -239,6 +229,7 @@ Java
 ```
 import com.alibaba.dashscope.audio.omni.*;
 import com.alibaba.dashscope.exception.NoApiKeyException;
+import com.alibaba.dashscope.utils.Constants;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -434,7 +425,7 @@ public class Main {
 
 #### 非实时
 
-适用于千问Omni系列模型，详见[非实时（Qwen-Omni）](raw/model-user-guide/model-experience/omni-modal/qwen-omni.md)。
+适用于千问Omni系列模型，更多说明请参见[非实时（Qwen-Omni）](raw/model-user-guide/model-experience/omni-modal/qwen-omni.md)。
 
 Python
 
@@ -707,13 +698,17 @@ public class Main {
 }
 ```
 
+## 对话使用
+
+如何使用声音复刻生成的专属音色进行对话，请参见[快速开始：复刻与使用音色](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning-user-guide#bb60d81324wsu)。
+
 ## 音色配额与自动清理规则
 
 -   **总数限制**：1000个音色/账号
     
-    > 当前没有音色数量查询接口，可调用[查询音色列表](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning#401d33226330i)接口统计音色数量
+    > 当前接口不提供音色数量查询功能，可通过调用[查询音色列表](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning#401d33226330i)接口自行统计音色数目
     
--   **自动清理**：音色一年内未用于任何模型调用请求，系统会自动删除
+-   **自动清理**：若单个音色在过去一年内未被用于任何模型调用请求，系统将自动将其删除
     
 
 ## 计费说明
@@ -729,18 +724,18 @@ public class Main {
     -   删除音色不会恢复免费次数。
     -   免费额度用完或超出 90 天有效期后，创建音色将按0.01 元/个的价格计费。
     
--   使用复刻音色对话：按模型调用的 token 用量计费，详见[模型调用计费](raw/model-user-guide/test-1/model-pricing.md)
+-   使用复刻生成的专属音色进行对话：按模型调用的 token 用量计费，详情请参见[模型调用计费](raw/model-user-guide/test-1/model-pricing.md)
     
 
 ## 版权与合法性
 
-您需对提供声音的所有权及合法使用权负责，请阅读[服务协议](https://terms.alicdn.com/legal-agreement/terms/b_platform_service_agreement/20240229113512917/20240229113512917.html)。
+您需对所提供声音的所有权及合法使用权负责，请注意阅读[服务协议](https://terms.alicdn.com/legal-agreement/terms/b_platform_service_agreement/20240229113512917/20240229113512917.html)。
 
 ## 录音操作指南
 
 ### 录音设备
 
-建议使用降噪麦克风，或在安静环境中用手机近距离录音。
+推荐使用具备降噪功能的麦克风，或在安静环境下使用手机近距离录音，以保证音源纯净。
 
 ### 录音环境
 
@@ -759,14 +754,14 @@ public class Main {
 
 -   混响会导致声音模糊、清晰度下降。
 -   减少光滑表面反射：拉上窗帘、打开衣柜门、铺放衣物或床单覆盖桌面/柜面。
--   利用书架、软包家具等不规则物体分散声波反射。
+-   利用不规则物体（如书架、软包家具）实现声波漫反射。
 
 ### 录音文案
 
--   文案可自由选择，建议贴合应用场景。例如，客服场景可使用客服对话。文案不得包含敏感或非法词汇（如政治、色情、暴力相关内容），否则复刻会失败。
+-   文案内容灵活，建议与目标应用场景一致（例如，若用于客服场景，文案应为客服对话风格），但必须确保不包含任何敏感或非法词汇（如政治、色情、暴力相关内容），否则会导致复刻失败。
 -   避免短句（如“你好”、“是的”），应使用完整句子。
 -   保持语义连贯，朗读时避免频繁停顿（建议至少连续 3 秒无中断）。
--   可带入亲切、严肃等目标情绪。保持语调自然，避免过度夸张的戏剧化朗读。
+-   可带入目标情绪（如亲切、严肃），但需避免过度夸张的戏剧化朗读，保持语调自然。
 
 ### 操作建议
 
@@ -778,3 +773,7 @@ public class Main {
 4.  在桌面铺放衣物或毛毯，降低桌面反射。
 5.  提前熟悉文案，设定角色语气，自然演绎。
 6.  与录音设备保持约 10 厘米距离，避免喷麦或信号过弱。
+
+## 错误信息
+
+如遇报错问题，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行排查。

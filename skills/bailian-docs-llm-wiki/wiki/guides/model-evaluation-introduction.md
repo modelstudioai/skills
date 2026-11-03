@@ -1,33 +1,34 @@
 # model evaluation introduction
 
-模型评测是百炼平台提供的核心能力之一，用于系统性评估大语言模型在特定任务或数据集上的表现。它支持自动化指标计算、多模型横向对比及结果可视化，适用于模型选型、迭代优化与效果归因分析。所有评测功能均通过 API 调用或控制台交互触发，底层统一调用评测引擎执行。
+模型评测是百炼平台提供的核心能力之一，用于系统性评估大语言模型在各类任务上的性能表现。它支持自动化指标计算、人工标注验证及多维度横向对比，帮助开发者快速定位模型优劣并指导迭代优化。该功能面向所有已部署或待选型的模型，覆盖从单次推理到批量任务的全场景评测需求。
 
 ## 支持的模型/功能
 
-- 支持对百炼托管模型（如 qwen-max、qwen-plus）及用户自部署的 [OpenAI 兼容接口](../concepts/openai-compatible-interface.md)模型进行评测  
-- 支持的评测类型包括：单轮问答（QA）、多轮对话（Chat）、指令遵循（Instruction Following）、事实一致性（Factuality）等，具体维度详见 [评测维度](../../raw/model-user-guide/model-evaluation-introduction/evaluation-metrics.md)  
-- 提供内置基准数据集（如 CMMLU、C-Eval 子集）和自定义数据集上传能力；自定义数据格式需符合 JSONL 规范，每行包含 `input` 和 `expected_output` 字段  
+- 支持对百炼平台托管的全部 LLM（含通义千问系列、第三方接入模型）进行评测；  
+- 提供三大评测维度：[大模型评估](../../raw/model-user-guide/model-evaluation-introduction/evaluation-dimension-introduction/evaluation-dimension-llm.md)（基于预设 [prompt](prompt.md) 的自动打分）、[规则评估](../../raw/model-user-guide/model-evaluation-introduction/evaluation-dimension-introduction/evaluation-dimension-rule.md)（正则/关键词/逻辑校验）、[人工评估](../../raw/model-user-guide/model-evaluation-introduction/evaluation-dimension-introduction/evaluation-dimension-manual.md)（支持多人标注与一致性分析）；  
+- 支持创建自定义评测任务和基线评测任务，便于 A/B 对比与版本回溯。
 
 ## 关键参数
 
-- `model_id`：必填，指定待评测模型 ID（如 `qwen-max`），不支持别名或版本通配符  
-- `dataset_id`：必填，可为平台内置数据集 ID（如 `cmmlu-v1.0`）或用户上传数据集的 UUID  
-- `metrics`：可选数组，指定计算的指标（如 `["accuracy", "rouge_l", "faithfulness"]`）；若为空则使用该数据集默认指标集  
-- `max_workers`：并发请求数上限，默认 5，最大支持 20；超过限制将被限流，详见 [模型评测](../../raw/model-user-guide/model-evaluation-introduction/model-evaluation-overview.md)  
+- `dataset_id`：必填，指定评测数据集（需提前上传并结构化为 JSONL 格式，每行含 `input` 和 `reference` 字段）；  
+- `model_id` 或 `endpoint`：指定被测模型，支持平台内模型 ID 或自定义 API endpoint；  
+- `metrics`：可选列表，如 `["accuracy", "bleu", "rouge-l", "custom_rule"]`，具体取值需与所选评测维度匹配；  
+- `evaluation_dimension`：必填，取值为 `"llm"`、`"rule"` 或 `"manual"`，决定底层执行逻辑；  
+- `timeout`：单条样本最大处理时长（秒），默认 60，规则评估中不可超 10 秒。
 
 ## 使用方式
 
-1. **API 调用**：向 `POST /v1/evaluations` 提交评测任务配置，响应返回 `evaluation_id`，后续通过 `GET /v1/evaluations/{id}` 查询状态与结果  
-2. **控制台操作**：进入「模型管理 → 模型评测」页面，选择模型、数据集、指标后点击「启动评测」  
-3. 结果以结构化 JSON 返回，含 `summary`（整体指标）、`details`（逐样本预测与得分）、`error_cases`（低分样本抽样）三部分；原始日志可通过 `evaluation_id` 在对象存储中按路径 `eval-logs/{evaluation_id}/raw.jsonl` 获取，该路径约定见 [模型评测](../../raw/model-user-guide/model-evaluation-introduction/model-evaluation-overview.md)  
+1. 通过控制台「模型评测」入口新建任务，或调用 `/v1/evaluations` REST API 提交评测请求；  
+2. 选择数据集、目标模型、评测维度及指标组合；  
+3. 启动后系统自动调度执行，结果可通过 [查看评测结果](../../raw/model-user-guide/model-evaluation-introduction/evaluation-task-introduction/view-evaluation-results.md) 页面实时追踪；  
+4. 人工标注类任务需额外配置标注员角色与质检规则，详见 [人工标注评测](../../raw/model-user-guide/model-evaluation-introduction/evaluation-task-introduction/evaluation-manual-annotation.md)。
 
 ## 限制和注意事项
 
-- 单次评测任务最多支持 10,000 条样本；超量需分批提交  
-- 自定义数据集上传大小上限为 50 MB，且 `input` 字段长度不得超过 8192 token（按模型 tokenizer 计算）  
-- > **注意**：文档 [模型评测](../../raw/model-user-guide/model-evaluation-introduction/model-evaluation-overview.md) 中提及“支持流式返回中间结果”，但当前 v2.3.0 API 实际仅支持全量结果一次性返回，流式能力计划于 v2.4.0 版本上线  
-- 评测任务默认保留 30 天，过期后 `evaluation_id` 不再可查；如需长期存档，请及时导出 JSON 结果  
-- 所有评测均基于同步推理调用，不启用缓存；若模型响应超时（默认 120s），该样本标记为 `timeout` 并计入 `error_cases`
+- 单次评测任务最多支持 10,000 条样本；超过需分批提交；  
+- 规则评估不支持动态上下文依赖（如跨轮对话状态判断），仅适用于单轮静态输出校验；  
+- > **注意**：文档中提及的 [排行榜](../../raw/model-user-guide/model-evaluation-introduction/evaluation-task-introduction/evaluation-leaderboard.md) 功能当前仅对平台公开榜单开放，私有任务暂不支持自动入榜——该说明与控制台最新 UI 不一致，以实际接口返回字段 `leaderboard_enabled: false` 为准；  
+- 所有评测任务默认保留 90 天，过期后原始日志与中间结果将被清理，建议及时导出关键指标。
 
 ## 来源文档
 

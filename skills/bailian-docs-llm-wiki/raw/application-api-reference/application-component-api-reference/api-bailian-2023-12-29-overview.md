@@ -260,31 +260,31 @@ API
 
 API概述
 
-[CreatePromptTemplate](raw/_short/api-bailian-2023-12-29-createprompttemplate-5d322a6c80396e15.md)
+[CreatePromptTemplate](raw/_short/api-bailian-2023-12-29-createprompttemplate-1194e536beb0529a.md)
 
 创建Prompt模板
 
 创建Prompt模板。
 
-[GetPromptTemplate](raw/_short/api-bailian-2023-12-29-getprompttemplate-33268b72d11a1cac.md)
+[GetPromptTemplate](raw/_short/api-bailian-2023-12-29-getprompttemplate-584c357dd7cb48d6.md)
 
 获取Prompt模板
 
 基于模板Id获取Prompt模板。
 
-[UpdatePromptTemplate](raw/_short/api-bailian-2023-12-29-updateprompttemplate-e09e2567b2b8646d.md)
+[UpdatePromptTemplate](raw/_short/api-bailian-2023-12-29-updateprompttemplate-519fb4af5ea50522.md)
 
 更新Prompt模板
 
 基于模板Id增量更新Prompt模板。
 
-[DeletePromptTemplate](raw/_short/api-bailian-2023-12-29-deleteprompttemplate-e7dac02713c2120e.md)
+[DeletePromptTemplate](raw/_short/api-bailian-2023-12-29-deleteprompttemplate-b441fa1b9c777b81.md)
 
 删除Prompt模板
 
 基于模板Id删除Prompt模板。
 
-[ListPromptTemplates](raw/_short/api-bailian-2023-12-29-listprompttemplates-16aa76e6889fef61.md)
+[ListPromptTemplates](raw/_short/api-bailian-2023-12-29-listprompttemplates-ab5ba5362e93cfcd.md)
 
 获取Prompt模板列表
 
@@ -362,19 +362,19 @@ API概述
 
 获取记忆片段列表。
 
-[GetAlipayTransferStatus](raw/_short/api-bailian-2023-12-29-getalipaytransferstatus-1e6bc508cb390a4f.md)
+[GetAlipayTransferStatus](raw/_short/api-bailian-2023-12-29-getalipaytransferstatus-04aa88852762fd85.md)
 
 查询支付宝打赏状态
 
 查询应用中绑定的支付宝钱包的打赏状态。
 
-[GetAlipayUrl](raw/application-api-reference/flow-agent-api/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-getalipayurl.md)
+[GetAlipayUrl](raw/_short/api-bailian-2023-12-29-getalipayurl-e6e9715d5164f74a.md)
 
 获取支付宝打赏URL
 
 获取应用上支付宝的打赏链接。
 
-[ApplyTempStorageLease](raw/_short/api-bailian-2023-12-29-applytempstoragelease-23a13524c8ed9f9d.md)
+[ApplyTempStorageLease](raw/_short/api-bailian-2023-12-29-applytempstoragelease-5a38ce0eefc66408.md)
 
 申请临时文件上传许可
 

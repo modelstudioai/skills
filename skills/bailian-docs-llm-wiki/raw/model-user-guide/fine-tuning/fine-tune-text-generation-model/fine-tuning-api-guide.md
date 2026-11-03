@@ -38,7 +38,7 @@ jsonl（纯文本 {text}）
 
 评测集
 
-xlsx
+xlsx（prompt&completion）/ jsonl、xls、xlsx（ChatML-messages）
 
 也可以前往[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/data/createDataAss)下载数据模板。
 

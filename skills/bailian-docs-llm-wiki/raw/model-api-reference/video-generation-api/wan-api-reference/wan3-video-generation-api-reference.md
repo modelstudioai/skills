@@ -2,7 +2,7 @@
 
 万相3.0是全能参考视频生成模型（All-in-One），统一支持 文生视频 、 图生视频 （首帧/首尾帧）和 参考生视频 等多种用法。最长可生成30秒视频，输出帧率为30fps。
 
-使用指南请参见[万相3.0-视频生成](raw/model-user-guide/model-experience/video-generate-edit-model/wan3-video-generation-guide.md)。
+使用指南请参见[万相3.0-视频生成](raw/_short/wan3-video-generation-guide-0e56f533d7040652.md)。
 
 ## 适用范围
 
@@ -49,7 +49,7 @@
 **说明**
 
 -   创建成功后，使用接口返回的 `task_id` 查询结果，task\_id 有效期为 24 小时。**请勿重复创建任务**，轮询获取即可。
--   新手指引请参见[Postman](raw/model-user-guide/use-chat-client-or-development-tool/first-call-to-image-and-video-api.md)。
+-   新手指引请参见[Postman](https://help.aliyun.com/zh/model-studio/first-call-to-image-and-video-api)。
 
 #### 请求参数
 
@@ -1037,4 +1037,4 @@ task\_id查询有效期为 24 小时，超时后将无法查询，返回以下�
 
 万相3.0 的首帧/首尾帧模式仅支持传入 `first_frame` 和 `last_frame`，不可同时传入音频等其他类型（详见[素材组合](#w30media_combo_t)）。
 
-与[万相2.7图生视频系列](raw/model-user-guide/model-experience/video-generate-edit-model/wan-image-to-video-guide.md)的区别：wan2.7 首帧/首尾帧模式支持同时传入 `driving_audio` 驱动音频；万相3.0 首帧/首尾帧模式不支持，如需音频驱动，请使用全模态参考模式（`reference_image` + `reference_audio` 组合）替代首尾帧模式。具体用法请参见[万相3.0-视频生成使用指南](raw/model-user-guide/model-experience/video-generate-edit-model/wan3-video-generation-guide.md)。
+与[万相2.7图生视频系列](raw/_short/wan-image-to-video-guide-5ad4d6cc1d9411ab.md)的区别：wan2.7 首帧/首尾帧模式支持同时传入 `driving_audio` 驱动音频；万相3.0 首帧/首尾帧模式不支持，如需音频驱动，请使用全模态参考模式（`reference_image` + `reference_audio` 组合）替代首尾帧模式。具体用法请参见[万相3.0-视频生成使用指南](raw/_short/wan3-video-generation-guide-0e56f533d7040652.md)。

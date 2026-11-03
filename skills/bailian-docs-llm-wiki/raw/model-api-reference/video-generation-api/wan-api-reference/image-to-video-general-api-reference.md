@@ -2,7 +2,7 @@
 
 万相2.7-图生视频模型全新升级，支持 多模态输入 （文本/图像/音频/视频），可完成 首帧生视频、首尾帧生视频、视频续写 三大任务。
 
-**相关文档**：[使用指南](raw/model-user-guide/model-experience/video-generate-edit-model/wan-image-to-video-guide.md)
+**相关文档**：[使用指南](raw/_short/wan-image-to-video-guide-5ad4d6cc1d9411ab.md)
 
 **说明**全新推出的**图生视频 API**（wan2.7模型）支持上述三大任务，**推荐优先选用**。
 
@@ -12,7 +12,7 @@
 
 为确保调用成功，请务必保证模型、endpoint URL 和 API Key 均属于**同一地域**。跨地域调用将会失败。
 
--   [**选择模型**](raw/model-user-guide/model-experience/video-generate-edit-model.md)：确认模型所属的地域。
+-   [**选择模型**](raw/model-user-guide/model-experience/image-and-video-generation/video-generate-edit-model.md)：确认模型所属的地域。
 -   **选择 URL**：选择对应的地域 Endpoint URL，支持HTTP URL或 DashScope SDK URL。
 -   **配置 API Key**：获取该地域的[API Key](raw/model-api-reference/preparations/get-api-key.md)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
 -   **安装 SDK**：如需通过SDK进行调用，请[安装DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
@@ -47,7 +47,7 @@
 **说明**
 
 -   创建成功后，使用接口返回的 `task_id` 查询结果，task\_id 有效期为 24 小时。**请勿重复创建任务**，轮询获取即可。
--   新手指引请参见[Postman](raw/model-user-guide/use-chat-client-or-development-tool/first-call-to-image-and-video-api.md)。
+-   新手指引请参见[Postman](https://help.aliyun.com/zh/model-studio/first-call-to-image-and-video-api)。
 
 #### 请求参数
 

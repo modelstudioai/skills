@@ -132,15 +132,21 @@ engine = AoqClientEngine.createEngine(config, this, context);
 调用 `startAudioCapture` 与 `startAudioPlayer` 启动本地音频采集与播放；调用 `startVideoCapture` 启动摄像头，并通过 `setLocalView` 将 SDK 渲染目标绑定到业务侧的预览控件。
 
 **iOS：**
+
+使用扬声器通话时，在启动采集和播放前，将两侧的 `isVoipMode` 都设为 `true`，启用硬件回声消除。播放模型回复时保持麦克风采集，让 VAD 能检测到用户插话并触发打断。
+
 ```
 // 音频采集
 let capCfg = AoqAudioCaptureConfig()
 capCfg.channel = 1; capCfg.isExternal = false
+capCfg.isVoipMode = true
 engine.startAudioCapture(capCfg)
 
 // 音频播放
 let playCfg = AoqAudioPlaybackConfig()
 playCfg.channel = 1; playCfg.isExternal = false
+playCfg.isVoipMode = true
+playCfg.isDefaultSpeaker = true
 engine.startAudioPlayer(playCfg)
 
 // 视频采集

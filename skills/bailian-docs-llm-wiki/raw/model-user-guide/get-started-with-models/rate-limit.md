@@ -7184,4 +7184,4 @@ decision-model-preview
 
 ## 已下线模型
 
-详细信息，请参见 [模型下线机制说明](raw/model-user-guide/release-notes/model-depreciation.md) 。
+详细信息，请参见 [模型下线机制说明](https://help.aliyun.com/zh/model-studio/model-depreciation) 。

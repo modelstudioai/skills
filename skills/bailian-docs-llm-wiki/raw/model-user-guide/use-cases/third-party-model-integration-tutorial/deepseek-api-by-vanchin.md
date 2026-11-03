@@ -434,7 +434,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 ### 文件传入方式
 
 -   公网 URL：一个公网可访问的图像地址，支持 HTTP 或 HTTPS 协议。
--   Base64 编码：将图像文件转换为 Base64 编码字符串，详情请参见[Base64 编码上传](raw/model-user-guide/model-experience/vision-model/qwen-vl-ocr.md)。
+-   Base64 编码：将图像文件转换为 Base64 编码字符串，详情请参见[Base64 编码上传](raw/model-user-guide/model-experience/text-generation-model/specialized-models/qwen-vl-ocr.md)。
 
 ### 图像限制
 

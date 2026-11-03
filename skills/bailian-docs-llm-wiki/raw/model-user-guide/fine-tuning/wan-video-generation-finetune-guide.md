@@ -1142,7 +1142,7 @@ s86b5p 或 m01aa
 
 ##### 借助 AI 生成  Prompt
 
-为了获得质量较高的Prompt，推荐使用[Qwen-VL](raw/model-user-guide/model-experience/vision-model/vision.md)等多模态大模型来辅助生成视频的Prompt。
+为了获得质量较高的Prompt，推荐使用[Qwen-VL](raw/model-user-guide/model-experience/text-generation-model/vision.md)等多模态大模型来辅助生成视频的Prompt。
 
 1.  **使用 AI 辅助生成初始描述**
     1.  自由发散（寻找灵感）：如果不知道该如何描述特效，可以先让 AI 自由发挥。
@@ -1153,7 +1153,7 @@ s86b5p 或 m01aa
         
         示例代码
         
-        > 代码调用详见[图像与视频理解](raw/model-user-guide/model-experience/vision-model/vision.md)。
+        > 代码调用详见[图像与视频理解](raw/model-user-guide/model-experience/text-generation-model/vision.md)。
         
         ```
         import os

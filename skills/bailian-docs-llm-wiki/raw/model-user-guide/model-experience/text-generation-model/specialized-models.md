@@ -8,3 +8,4 @@
 -   [深入研究（Qwen-Deep-Research）](raw/model-user-guide/model-experience/text-generation-model/specialized-models/qwen-deep-research.md)
 -   [对话分析（Tongyi-Xiaomi-Analysis）](raw/model-user-guide/model-experience/text-generation-model/specialized-models/dialogue-analysis.md)
 -   [界面交互](raw/model-user-guide/model-experience/text-generation-model/specialized-models/gui-automation.md)
+-   [文字提取](raw/model-user-guide/model-experience/text-generation-model/specialized-models/qwen-vl-ocr.md)

@@ -16,3 +16,4 @@
 -   [三方模型调用教程](raw/model-user-guide/use-cases/third-party-model-integration-tutorial.md)
 -   [实时音视频接入](raw/model-user-guide/use-cases/realtime-audio-video-integration.md)
 -   [技术解决方案](raw/model-user-guide/use-cases/technical-solutions.md)
+-   [历史模型指南](raw/model-user-guide/use-cases/legacy-resources.md)

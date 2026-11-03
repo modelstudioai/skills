@@ -32,8 +32,8 @@
     -   千问 Flash：qwen3.8-flash、qwen3.7-flash、qwen3.6-flash、qwen3.5-flash、qwen-flash
     -   千问 Long：qwen-long
 -   **多模态模型**
-    -   [图像与视频理解](raw/model-user-guide/model-experience/vision-model/vision.md)：qwen3.8-max、qwen3.8-flash、qwen3.7-plus、qwen3.6-plus、qwen3.7-flash、qwen3.6-flash、qwen3.5-plus、qwen3.5-flash、qwen3-vl-plus
-    -   [文字提取](raw/model-user-guide/model-experience/vision-model/qwen-vl-ocr.md)：qwen-vl-ocr
+    -   [图像与视频理解](raw/model-user-guide/model-experience/text-generation-model/vision.md)：qwen3.8-max、qwen3.8-flash、qwen3.7-plus、qwen3.6-plus、qwen3.7-flash、qwen3.6-flash、qwen3.5-plus、qwen3.5-flash、qwen3-vl-plus
+    -   [文字提取](raw/model-user-guide/model-experience/text-generation-model/specialized-models/qwen-vl-ocr.md)：qwen-vl-ocr
     -   [全模态](raw/model-user-guide/model-experience/omni-modal/qwen-omni.md)：qwen3.5-omni-plus
 -   [**向量模型**](https://help.aliyun.com/zh/model-studio/user-guide/embedding)**：**text-embedding-v1、text-embedding-v2、text-embedding-v3、text-embedding-v4、qwen3.7-text-embedding、qwen3.7-text-embedding-flash
     
@@ -46,7 +46,7 @@
     -   千问 Max：qwen-max
     -   千问 Plus：qwen3.7-plus、qwen-plus
 -   **多模态模型**
-    -   [图像与视频理解](raw/model-user-guide/model-experience/vision-model/vision.md)：qwen3.8-max（**当前仅支持多模态输入，暂不支持纯文本输入**）、qwen3.7-plus
+    -   [图像与视频理解](raw/model-user-guide/model-experience/text-generation-model/vision.md)：qwen3.8-max（**当前仅支持多模态输入，暂不支持纯文本输入**）、qwen3.7-plus
 
 **重要**
 

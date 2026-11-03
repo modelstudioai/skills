@@ -117,7 +117,7 @@ create
 
 sfm:GetAlipayUrl
 
-[GetAlipayUrl](raw/application-api-reference/flow-agent-api/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-getalipayurl.md)
+[GetAlipayUrl](raw/_short/api-bailian-2023-12-29-getalipayurl-e6e9715d5164f74a.md)
 
 none
 
@@ -383,7 +383,7 @@ delete
 
 sfm:DeletePromptTemplate
 
-[DeletePromptTemplate](raw/_short/api-bailian-2023-12-29-deleteprompttemplate-e7dac02713c2120e.md)
+[DeletePromptTemplate](raw/_short/api-bailian-2023-12-29-deleteprompttemplate-b441fa1b9c777b81.md)
 
 delete
 
@@ -439,7 +439,7 @@ get
 
 sfm:UpdatePromptTemplate
 
-[UpdatePromptTemplate](raw/_short/api-bailian-2023-12-29-updateprompttemplate-e09e2567b2b8646d.md)
+[UpdatePromptTemplate](raw/_short/api-bailian-2023-12-29-updateprompttemplate-519fb4af5ea50522.md)
 
 update
 
@@ -481,7 +481,7 @@ get
 
 sfm:ApplyTempStorageLease
 
-[ApplyTempStorageLease](raw/_short/api-bailian-2023-12-29-applytempstoragelease-23a13524c8ed9f9d.md)
+[ApplyTempStorageLease](raw/_short/api-bailian-2023-12-29-applytempstoragelease-5a38ce0eefc66408.md)
 
 none
 
@@ -593,7 +593,7 @@ get
 
 sfm:GetAlipayUrl
 
-[GetAlipayUrl](raw/application-api-reference/flow-agent-api/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-getalipayurl.md)
+[GetAlipayUrl](raw/_short/api-bailian-2023-12-29-getalipayurl-e6e9715d5164f74a.md)
 
 none
 
@@ -929,7 +929,7 @@ delete
 
 sfm:DeletePromptTemplate
 
-[DeletePromptTemplate](raw/_short/api-bailian-2023-12-29-deleteprompttemplate-e7dac02713c2120e.md)
+[DeletePromptTemplate](raw/_short/api-bailian-2023-12-29-deleteprompttemplate-b441fa1b9c777b81.md)
 
 delete
 
@@ -943,7 +943,7 @@ delete
 
 sfm:UpdatePromptTemplate
 
-[UpdatePromptTemplate](raw/_short/api-bailian-2023-12-29-updateprompttemplate-e09e2567b2b8646d.md)
+[UpdatePromptTemplate](raw/_short/api-bailian-2023-12-29-updateprompttemplate-519fb4af5ea50522.md)
 
 update
 
@@ -1013,7 +1013,7 @@ update
 
 sfm:ApplyTempStorageLease
 
-[ApplyTempStorageLease](raw/_short/api-bailian-2023-12-29-applytempstoragelease-23a13524c8ed9f9d.md)
+[ApplyTempStorageLease](raw/_short/api-bailian-2023-12-29-applytempstoragelease-5a38ce0eefc66408.md)
 
 none
 
@@ -1111,7 +1111,7 @@ update
 
 sfm:GetPromptTemplate
 
-[GetPromptTemplate](raw/_short/api-bailian-2023-12-29-getprompttemplate-33268b72d11a1cac.md)
+[GetPromptTemplate](raw/_short/api-bailian-2023-12-29-getprompttemplate-584c357dd7cb48d6.md)
 
 get
 
@@ -1139,7 +1139,7 @@ create
 
 sfm:ListPromptTemplates
 
-[ListPromptTemplates](raw/_short/api-bailian-2023-12-29-listprompttemplates-16aa76e6889fef61.md)
+[ListPromptTemplates](raw/_short/api-bailian-2023-12-29-listprompttemplates-ab5ba5362e93cfcd.md)
 
 list
 
@@ -1279,7 +1279,7 @@ create
 
 sfm:CreatePromptTemplate
 
-[CreatePromptTemplate](raw/_short/api-bailian-2023-12-29-createprompttemplate-5d322a6c80396e15.md)
+[CreatePromptTemplate](raw/_short/api-bailian-2023-12-29-createprompttemplate-1194e536beb0529a.md)
 
 create
 
@@ -1293,7 +1293,7 @@ create
 
 sfm:GetAlipayTransferStatus
 
-[GetAlipayTransferStatus](raw/_short/api-bailian-2023-12-29-getalipaytransferstatus-1e6bc508cb390a4f.md)
+[GetAlipayTransferStatus](raw/_short/api-bailian-2023-12-29-getalipaytransferstatus-04aa88852762fd85.md)
 
 none
 

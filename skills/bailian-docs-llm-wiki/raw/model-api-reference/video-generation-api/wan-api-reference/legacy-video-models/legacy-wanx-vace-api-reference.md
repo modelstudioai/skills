@@ -2,7 +2,7 @@
 
 万相2.1-视频编辑统一模型支持文本、图像、视频等多种模态输入，可执行多种视频生成与编辑任务。
 
-**相关文档**：[使用指南](raw/model-user-guide/model-experience/video-generate-edit-model/wan-video-editing/wan-vace-guide.md)
+**相关文档**：[使用指南](raw/model-user-guide/use-cases/legacy-resources/legacy-video-generation/wan-vace-guide.md)
 
 ## 适用范围
 

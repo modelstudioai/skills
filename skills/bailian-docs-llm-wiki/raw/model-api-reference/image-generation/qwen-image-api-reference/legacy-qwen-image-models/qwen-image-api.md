@@ -2,7 +2,7 @@
 
 千问-文生图模型（Qwen-Image）是一款通用图像生成模型，支持多种艺术风格，尤其擅长 复杂文本渲染 。模型支持多行布局、段落级文本生成以及细粒度细节刻画，可实现复杂的图文混合布局设计。
 
-**快速入口：**[使用指南](raw/model-user-guide/model-experience/image-model/text-to-image.md) | 在线体验（[北京](https://bailian.console.aliyun.com/cn-beijing/model/experience/vision/imageGenerate?modelId=qwen-image-2.0-pro) | [新加坡](https://bailian.console.aliyun.com/ap-southeast-1/model/experience/vision/imageGenerate?modelId=qwen-image-2.0-pro)） | [技术博客](https://qwen.ai/blog?id=9467b4bff9c638e847f08443802c6b96ab116a87&from=research.research-list)
+**快速入口：**[使用指南](raw/model-user-guide/model-experience/image-and-video-generation/image-model/text-to-image.md) | 在线体验（[北京](https://bailian.console.aliyun.com/cn-beijing/model/experience/vision/imageGenerate?modelId=qwen-image-2.0-pro) | [新加坡](https://bailian.console.aliyun.com/ap-southeast-1/model/experience/vision/imageGenerate?modelId=qwen-image-2.0-pro)） | [技术博客](https://qwen.ai/blog?id=9467b4bff9c638e847f08443802c6b96ab116a87&from=research.research-list)
 
 ## 效果展示
 

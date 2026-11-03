@@ -809,15 +809,15 @@ deepseek-v4-pro 在编程、数学和通用任务方面表现出色，deepseek-v
 
 #### Cherry Studio
 
-请参见[Cherry Studio](raw/model-user-guide/use-chat-client-or-development-tool/cherry-studio.md)。
+请参见[Cherry Studio](https://help.aliyun.com/zh/model-studio/cherry-studio)。
 
 #### Dify
 
-请参见[Dify](raw/model-user-guide/use-chat-client-or-development-tool/dify.md)。
+请参见[Dify](https://help.aliyun.com/zh/model-studio/dify)。
 
 ### 可以上传图片或文档进行提问吗？
 
-`deepseek-v4.1-flash` 与 `deepseek-v4.1-flash-1017` 支持文本和图片输入，输出文本。其他模型的输入模态以对应模型信息页为准。图片输入也可使用[千问VL](raw/model-user-guide/model-experience/vision-model/vision.md)模型；文档输入可使用[Qwen-Long](raw/model-user-guide/model-experience/text-generation-model/specialized-models/long-context-qwen-long.md)模型。
+`deepseek-v4.1-flash` 与 `deepseek-v4.1-flash-1017` 支持文本和图片输入，输出文本。其他模型的输入模态以对应模型信息页为准。图片输入也可使用[千问VL](raw/model-user-guide/model-experience/text-generation-model/vision.md)模型；文档输入可使用[Qwen-Long](raw/model-user-guide/model-experience/text-generation-model/specialized-models/long-context-qwen-long.md)模型。
 
 ### 如何查看Token消耗量及调用次数？
 
@@ -831,7 +831,7 @@ deepseek-v4-pro 在编程、数学和通用任务方面表现出色，deepseek-v
 
 1.  在线体验：访问[模型广场](https://bailian.console.aliyun.com/model/market)。
 2.  通过API或客户端（如Chatbox）调用模型：请参考本文内容。
-3.  0代码构建大模型应用：请参考[智能体应用（Agent 1.0）](raw/application-user-guide/agent-development/llm-application/single-agent-application.md)或[工作流应用](raw/application-user-guide/agent-development/llm-application/workflow-application.md)。
+3.  0代码构建大模型应用：请参考[智能体应用（Agent 1.0）](raw/application-user-guide/llm-application/single-agent-application.md)或[工作流应用](raw/application-user-guide/llm-application/workflow-application.md)。
 
 如需自行部署DeepSeek，请参考[技术解决方案](https://www.aliyun.com/solution/tech-solution/deepseek-r1-for-platforms)。
 

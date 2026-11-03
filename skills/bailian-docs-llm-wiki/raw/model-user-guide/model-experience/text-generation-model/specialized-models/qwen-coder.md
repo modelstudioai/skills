@@ -1280,9 +1280,9 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 
 ### 使用Qwen Code、Claude Code等开发工具时，为什么会消耗大量 Token？
 
-通过外部开发工具调用 Qwen-Coder 模型处理问题时，该工具可能会多次调用 API，从而消耗大量 Token。关于具体的监控和减少Token消耗的方法，请参考[Qwen Code](raw/model-user-guide/use-chat-client-or-development-tool/qwen-code.md)和[Claude Code](raw/model-user-guide/use-chat-client-or-development-tool/claude-code.md)文档。您可开启[免费额度用完即停](https://help.aliyun.com/zh/model-studio/new-free-quota#d1cb80ac11i92)功能，以避免免费额度耗尽后产生额外费用。
+通过外部开发工具调用 Qwen-Coder 模型处理问题时，该工具可能会多次调用 API，从而消耗大量 Token。关于具体的监控和减少Token消耗的方法，请参考[Qwen Code](https://help.aliyun.com/zh/model-studio/qwen-code)和[Claude Code](https://help.aliyun.com/zh/model-studio/claude-code)文档。您可开启[免费额度用完即停](https://help.aliyun.com/zh/model-studio/new-free-quota#d1cb80ac11i92)功能，以避免免费额度耗尽后产生额外费用。
 
-您也可以购买 AI 编码套餐，采用固定月费，提供月度请求额度，支持在AI工具中使用，详情请参见[Coding Plan概述](raw/model-user-guide/token-plan-guide/coding-plan-guide/coding-plan.md)。
+您也可以购买 AI 编码套餐，采用固定月费，提供月度请求额度，支持在AI工具中使用，详情请参见[Coding Plan概述](https://help.aliyun.com/zh/model-studio/coding-plan)。
 
 ### 如何查看模型调用量？
 

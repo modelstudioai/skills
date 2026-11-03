@@ -1,46 +1,35 @@
 # qwen mt translation models
 
-Qwen-MT 系列模型是阿里云百炼平台提供的专业机器翻译能力集合，覆盖文本、图像、文档、音频等多模态输入场景，支持术语干预、领域提示、翻译记忆、敏感词过滤等企业级定制功能。所有模型均通过统一的 DashScope API 协议提供服务，兼容 OpenAI SDK 调用方式，适用于本地化、技术文档、电商客服、内容出海等高要求翻译任务。
+Qwen-MT 系列是百炼平台提供的[多模态](../concepts/multi-modal.md)翻译模型族，覆盖文本、图片及混合模态输入的高质量翻译能力。模型统一基于 Qwen 大语言模型底座，针对翻译任务进行专项优化，支持 [OpenAI 兼容接口](../concepts/openai-compatible-api.md)与 DashScope 原生 API。所有模型均需通过百炼控制台开通对应服务后调用。
 
 ## 支持的模型/功能
 
-- **`qwen-mt-plus`**：纯文本翻译模型，支持中英等主流语种互译，提供 `translation_options` 参数启用术语干预（`terms`）、翻译记忆（`tm_list`）和领域提示（`domains`）。详见 [Qwen-MT API参考](../../raw/model-api-reference/qwen-mt-translation-models/qwen-mt-api.md)。
-- **`qwen-mt-image` / `qwen-mt-image-2.0`**：图像翻译专用模型，可精准识别并翻译图片内文字，保留原始排版与图文关系；支持图像主体分割（`imageSegment`）、敏感词过滤（`sensitives`）及术语干预（`terminologies`）。`qwen-mt-image-2.0` 支持全部 55 种语言互译，而 `qwen-mt-image` 仅支持源/目标语种至少一方为中文或英文。详见 [千问-图像翻译API参考](../../raw/model-api-reference/qwen-mt-translation-models/qwen-mt-image-api.md)。
-- **`qwen-mt-uni`**：全模态统一翻译模型，支持文本（字符串/数组）、PDF/DOCX/PPTX/XLSX/TXT/HTML/Markdown、JPG/PNG、MP3/WAV 等多种格式输入，并自动重构为同格式输出。同步/异步双模式，内置格式感知路由与跨模态翻译链路。详见 [Qwen-MT-Uni API参考](../../raw/model-api-reference/qwen-mt-translation-models/qwen-mt-uni-api.md)。
-
-> **注意**：`qwen-mt-plus` 的领域提示参数名为 `domains`（见 [Qwen-MT API参考](../../raw/model-api-reference/qwen-mt-translation-models/qwen-mt-api.md)），而 `qwen-mt-image` 和 `qwen-mt-uni` 均使用 `domainHint` 且**仅支持英文描述**。三者参数命名与语义不一致，开发时需按模型分别适配。
+- **Qwen-MT**：纯文本翻译模型，支持中英等 100+ 语种互译，适用于 API 批量翻译、实时对话翻译等场景；详见 [翻译模型](../../raw/model-api-reference/qwen-mt-translation-models.md)。  
+- **Qwen-MT-Image**：图片翻译模型，可识别图中文字并保持原始排版结构（如表格、多栏、图文混排），输出带坐标信息的翻译结果；该能力在 [翻译模型](../../raw/model-api-reference/qwen-mt-translation-models.md) 中有简要说明，完整参数见其关联文档。  
+- **Qwen-MT-Uni**：全模态翻译模型，支持文本、PDF/DOCX 文档、JPG/PNG 图片、MP3/WAV 音频等多种输入格式，自动识别内容类型并执行端到端翻译；其设计目标与能力边界在 [翻译模型](../../raw/model-api-reference/qwen-mt-translation-models.md) 中首次明确列出。
 
 ## 关键参数
 
-| 参数名 | 类型 | 说明 | 模型支持 |
-|--------|------|------|----------|
-| `source_lang` / `target_lang` | `string` | 源/目标语种（支持全称如 `"Chinese"`、编码如 `"zh"` 或 `"auto"`） | 全部 |
-| `terms` / `terminologies` / `glossary` | `array` | 术语干预列表；`qwen-mt-plus` 用 `terms`（字段 `source`/`target`），`qwen-mt-image` 用 `terminologies`（字段 `src`/`tgt`），`qwen-mt-uni` 用 `glossary`（字段 `src`/`tgt`） | 各自专属 |
-| `tm_list` | `array` | 翻译记忆对列表（仅 `qwen-mt-plus` 支持） | `qwen-mt-plus` |
-| `domainHint` / `domains` | `string` | 领域提示（英文，≤200 单词）；`qwen-mt-plus` 使用 `domains`，其余模型使用 `domainHint` | 全部（命名不同） |
-| `sensitives` / `sensitives` | `array` | 敏感词列表（完全匹配、大小写敏感）；`qwen-mt-image` 和 `qwen-mt-uni` 均支持，但 `qwen-mt-plus` 不支持 | `qwen-mt-image`, `qwen-mt-uni` |
-| `imageSegment` | `bool` | 是否跳过图像主体（人物/商品/Logo）上的文字翻译；`qwen-mt-image` 和 `qwen-mt-uni` 支持，`qwen-mt-plus` 不适用 | `qwen-mt-image`, `qwen-mt-uni` |
+- `source_language` / `target_language`：必填，ISO 639-1 代码（如 `"zh"`, `"en"`），不支持自动检测（Qwen-MT-Uni 的 `auto` 检测仅限于输入模态类型，非语种）。  
+- `input_type`：对 Qwen-MT-Uni 必填，取值为 `"text"` / `"image"` / `"document"` / `"audio"`；Qwen-MT 和 Qwen-MT-Image 不接受此参数。  
+- `preserve_layout`：仅 Qwen-MT-Image 和 Qwen-MT-Uni（当 `input_type="image"`）支持，布尔值，默认 `true`。  
+- `response_format`：支持 `"json"`（含原文位置、置信度等元信息）和 `"text"`（纯翻译文本），默认 `"text"`。
 
 ## 使用方式
 
-- **文本翻译（`qwen-mt-plus`）**：使用 [OpenAI 兼容接口](../concepts/openai-compatible-interface.md)，`POST /compatible-mode/v1/chat/completions`，将 `translation_options` 作为 `extra_body`（Python）或顶层字段（Node.js/curl）传入。必须配置地域专属 `base_url`（如 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`）。
-- **图像翻译（`qwen-mt-image-*`）**：调用 `POST /api/v1/services/aigc/image2image/image-synthesis`，`input` 中指定 `image_url`、`source_lang`、`target_lang`；同步模式直接返回 `output.image_url`，异步模式需加请求头 `X-DashScope-Async: enable` 并轮询 `/api/v1/tasks/{task_id}`。
-- **全模态翻译（`qwen-mt-uni`）**：调用 `POST /api/v1/services/aigc/multimodal-generation/generation`，`input` 中二选一：`fileUrl`（文档/图片/音频 URL）或 `source_texts`（字符串或数组）；同步/异步行为与 `qwen-mt-image` 一致，但响应结构统一为 `output.Data` 包含 `TranslatedFileUrl` 或 `TranslatedTexts`。
-
-> **注意**：`qwen-mt-image` 模型**必须**使用异步模式（即强制设置 `X-DashScope-Async: enable`），而 `qwen-mt-image-2.0` 和 `qwen-mt-uni` 同步/异步均可。该限制在 [千问-图像翻译API参考](../../raw/model-api-reference/qwen-mt-translation-models/qwen-mt-image-api.md) 中明确说明，但未在 `qwen-mt-uni` 文档中强调，开发者需主动规避同步调用 `qwen-mt-image`。
+- 所有模型均通过 `/v1/services/aigc/mt` 接口调用（DashScope 协议），或使用 OpenAI 兼容 endpoint `/v1/chat/completions`（仅 Qwen-MT 支持，需设置 `model="qwen-mt"`）。  
+- 图片与文档需以 base64 编码或 OSS URL 形式传入 `input` 字段；音频需为 PCM 或标准编码格式，且时长 ≤ 300 秒。  
+- 认证方式统一使用 `Authorization: Bearer <api_key>`，API Key 需在百炼控制台「模型服务」中开通对应模型权限后获取。
 
 ## 限制和注意事项
 
-- **地域与域名**：推荐使用业务空间专属域名（如 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`），旧 DashScope 公共域名（`dashscope.aliyuncs.com`）虽仍可用，但性能与稳定性较低，详见 [Qwen-MT API参考](../../raw/model-api-reference/qwen-mt-translation-models/qwen-mt-api.md)。
-- **文件限制**：`qwen-mt-image` 仅支持 JPG 格式；`qwen-mt-uni` 支持 JPG/PNG/MP3/WAV 等 10+ 格式，但单文件 ≤100 MB、文档 ≤200 页、音频 3 秒–60 分钟；所有 URL 不得含中文字符。
-- **术语与敏感词**：`qwen-mt-plus` 不支持敏感词过滤；`qwen-mt-image` 和 `qwen-mt-uni` 的 `sensitives` 对大小写敏感，且仅做完全匹配过滤；`glossary`（`qwen-mt-uni`）最多 100 组，`terminologies`（`qwen-mt-image`）无显式上限但建议 ≤50。
-- **领域提示**：`domainHint`（`qwen-mt-image`/`qwen-mt-uni`）和 `domains`（`qwen-mt-plus`）均**仅支持英文输入**，中文提示将导致效果下降或报错。
-- **认证与 Key**：所有模型均需 `DASHSCOPE_API_KEY`，且北京/新加坡/弗吉尼亚地域的 Key **不通用**，须按地域分别获取与配置。
+- Qwen-MT-Uni 当前不支持视频文件输入（尽管 [翻译模型](../../raw/model-api-reference/qwen-mt-translation-models.md) 中“全模态”描述易引发误解，实际未开放 video 解析能力）。  
+- > **注意**：Qwen-MT-Image 的 `preserve_layout=true` 在处理复杂 PDF 表格时可能丢失部分边框线信息，建议结合 OCR 后处理校验；该行为与早期 [翻译模型](../../raw/model-api-reference/qwen-mt-translation-models.md) 中“精准还原排版”的表述存在实践偏差。  
+- 单次请求最大 token 数：Qwen-MT 为 8192，Qwen-MT-Image 为 2048（受限于图像编码器），Qwen-MT-Uni 视输入模态动态调整（文档类上限 4096 tokens，音频按 16kHz 采样率折算约 120 秒）。  
+- 所有模型暂不支持流式响应（`stream=true` 参数将被忽略）。
 
 ## 来源文档
 
-- [Qwen-MT API参考](../../raw/model-api-reference/qwen-mt-translation-models/qwen-mt-api.md)
-- [千问-图像翻译API参考](../../raw/model-api-reference/qwen-mt-translation-models/qwen-mt-image-api.md)
-- [Qwen-MT-Uni API参考](../../raw/model-api-reference/qwen-mt-translation-models/qwen-mt-uni-api.md)
+- [翻译模型](../../raw/model-api-reference/qwen-mt-translation-models.md)
 
 

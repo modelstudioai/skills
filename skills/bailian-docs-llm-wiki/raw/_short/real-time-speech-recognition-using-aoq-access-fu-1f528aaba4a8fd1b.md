@@ -16,7 +16,7 @@ fun-asr-realtime 将音频流实时转写为带标点的文本。AOQ SDK 将媒�
 ## 准备工作
 
 1.  开通阿里云百炼，并按[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。API Key 只保存在业务 AppServer，不要写入客户端代码或提交到代码仓库。
-2.  根据业务部署地域确认 AOQ Endpoint。地域和接入地址的选择方法请参见[选择地域、服务部署范围和接入域名](raw/model-user-guide/get-started-with-models/regions.md)。
+2.  根据业务部署地域确认 AOQ Endpoint。地域和接入地址的选择方法请参见[选择地域、服务部署范围和接入域名](raw/model-api-reference/preparations/regions.md)。
 3.  从[SDK 下载](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-sdk-download.md)获取最新版 AOQ Client SDK。本文传输 Opus 音频，需先导入 Opus 插件。
 4.  搭建业务 AppServer，并按[Token 鉴权](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-token-authentication.md)实现 AOQ Inference 协议的服务端代理鉴权。每次建立新连接前，客户端都应从 AppServer 获取新的连接凭证。
 
@@ -633,10 +633,10 @@ Android 加载 SDK 失败
 如需查询完整参数、事件字段或其他平台接口，请参见：
 
 -   [获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)
--   [选择地域、服务部署范围和接入域名](raw/model-user-guide/get-started-with-models/regions.md)
+-   [选择地域、服务部署范围和接入域名](raw/model-api-reference/preparations/regions.md)
 -   [SDK 简介](raw/model-api-reference/realtime-api-user-guide/realtime-api-aoq-api/realtime-api-aoq-sdk-desc.md)
 -   [SDK 下载](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-sdk-download.md)
 -   [Token 鉴权](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-token-authentication.md)
--   [实时语音识别](raw/model-user-guide/model-experience/speech-recognition/real-time-speech-recognition-user-guide.md)
+-   [实时语音识别](raw/model-user-guide/model-experience/speech-and-audio/speech-recognition/real-time-speech-recognition-user-guide.md)
 -   [客户端事件](raw/_short/fun-asr-client-events-997ba24ade1a8a48.md)
 -   [服务端事件](raw/_short/fun-asr-server-events-666d2f9990cd5ae1.md)

@@ -2,7 +2,7 @@
 
 万相-通用图像编辑wan2.5模型仅需文本指令，即可基于单张或多张参考图像，实现主体一致的图像编辑、多图融合等能力。
 
-**快速入口**：[使用指南](raw/model-user-guide/model-experience/image-model/image-edit-guide/wan-image-edit.md)
+**快速入口**：[使用指南](raw/model-user-guide/model-experience/image-and-video-generation/image-model/image-edit-guide/wan-image-edit.md)
 
 ## 模型概览
 
@@ -85,7 +85,7 @@ wan2.5-i2i-preview
 **说明**
 
 -   创建成功后，使用接口返回的 `task_id` 查询结果，task\_id 有效期为 24 小时。**请勿重复创建任务**，轮询获取即可。
--   新手指引请参见[Postman](raw/model-user-guide/use-chat-client-or-development-tool/first-call-to-image-and-video-api.md)。
+-   新手指引请参见[Postman](https://help.aliyun.com/zh/model-studio/first-call-to-image-and-video-api)。
 
 #### 请求参数
 

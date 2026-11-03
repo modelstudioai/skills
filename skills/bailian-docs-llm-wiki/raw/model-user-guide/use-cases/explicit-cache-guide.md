@@ -35,7 +35,7 @@ claude
 -   Coding Plan：`https://coding.dashscope.aliyuncs.com/apps/anthropic`
 -   按量计费：`https://dashscope.aliyuncs.com/apps/anthropic`
 
-详见 [Claude Code](raw/model-user-guide/use-chat-client-or-development-tool/claude-code.md)。
+详见 [Claude Code](https://help.aliyun.com/zh/model-studio/claude-code)。
 
 **可选：提升跨会话命中率**
 
@@ -97,7 +97,7 @@ opencode run -m "bailian/qwen3.7-max" "..."
 -   Token Plan 团队版：`https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic/v1`
 -   Coding Plan：`https://coding.dashscope.aliyuncs.com/apps/anthropic/v1`
 
-详见 [OpenCode](raw/model-user-guide/use-chat-client-or-development-tool/opencode.md)。
+详见 [OpenCode](https://help.aliyun.com/zh/model-studio/opencode)。
 
 #### OpenClaw
 
@@ -117,7 +117,7 @@ curl -fsSL https://openclaw.ai/install.sh | bash
 -   Coding Plan：`https://coding.dashscope.aliyuncs.com/apps/anthropic/v1`
 -   按量计费：`https://dashscope.aliyuncs.com/apps/anthropic/v1`
 
-详见 [OpenClaw](raw/model-user-guide/use-chat-client-or-development-tool/openclaw.md)。
+详见 [OpenClaw](https://help.aliyun.com/zh/model-studio/openclaw)。
 
 **可选：自定义缓存边界**
 
@@ -144,7 +144,7 @@ curl -fsSL https://openclaw.ai/install.sh | bash
 -   Coding Plan：`https://coding.dashscope.aliyuncs.com/apps/anthropic/v1`
 -   按量计费：`https://dashscope.aliyuncs.com/apps/anthropic/v1`
 
-详见 [Hermes Agent](raw/model-user-guide/use-chat-client-or-development-tool/hermes-agent.md)。
+详见 [Hermes Agent](https://help.aliyun.com/zh/model-studio/hermes-agent)。
 
 ## API 接入
 

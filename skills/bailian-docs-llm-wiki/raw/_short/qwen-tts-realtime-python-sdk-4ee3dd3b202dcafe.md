@@ -194,7 +194,7 @@ str
 
 是
 
-语音合成所使用的音色。参见[Qwen-TTS音色列表](raw/model-user-guide/model-experience/speech-synthesis/tts-voice-list/qwen-tts-voice-list.md)。
+语音合成所使用的音色。参见[Qwen-TTS音色列表](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/tts-voice-list/qwen-tts-voice-list.md)。
 
 language\_type
 

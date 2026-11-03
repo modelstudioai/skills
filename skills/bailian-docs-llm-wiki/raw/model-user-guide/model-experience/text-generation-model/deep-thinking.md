@@ -1771,15 +1771,15 @@ Q：如何接入 Chatbox 、 Cherry Studio 、 Cline 或 Dify ？
 
 #### Cherry Studio
 
-请参见[Cherry Studio](raw/model-user-guide/use-chat-client-or-development-tool/cherry-studio.md)。
+请参见[Cherry Studio](https://help.aliyun.com/zh/model-studio/cherry-studio)。
 
 #### Cline
 
-请参见[Cline](raw/model-user-guide/use-chat-client-or-development-tool/cline.md)。
+请参见[Cline](https://help.aliyun.com/zh/model-studio/cline)。
 
 #### Dify
 
-请参见[Dify](raw/model-user-guide/use-chat-client-or-development-tool/dify.md)。
+请参见[Dify](https://help.aliyun.com/zh/model-studio/dify)。
 
 Q： 可以上传图片或文档进行提问吗 ？
 

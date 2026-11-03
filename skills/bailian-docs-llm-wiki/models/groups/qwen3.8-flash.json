@@ -235,6 +235,11 @@
       "latestOnlineAt": "2026-08-25T12:16:04.000+00:00",
       "contextWindow": 1000000,
       "maxInputTokens": 991808,
+      "trainingTypes": {
+        "sft": [
+          "full"
+        ]
+      },
       "inferenceProvider": "aliyun-bailian",
       "name": "Qwen3.8-Flash",
       "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-api-via-openai-chat-completions",

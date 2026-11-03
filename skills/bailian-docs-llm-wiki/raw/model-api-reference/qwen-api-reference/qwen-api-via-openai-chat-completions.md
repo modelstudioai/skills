@@ -136,7 +136,7 @@ User Message`object`**（必选）**
 
 **url** `string`**（必选）**
 
-图片的 URL或 Base64 Data URL。传入本地文件请参考[图像与视频理解](raw/model-user-guide/model-experience/vision-model/vision.md)。
+图片的 URL或 Base64 Data URL。传入本地文件请参考[图像与视频理解](raw/model-user-guide/model-experience/text-generation-model/vision.md)。
 
 **input\_audio**`object`
 
@@ -191,7 +191,7 @@ fps有两个功能：
 
 -   输入视频文件时，控制抽帧频率，每 `1/fps` 秒抽取一帧。
     
-    > 适用于 [Qwen-VL 与 QVQ](raw/model-user-guide/model-experience/vision-model/vision.md)、[MiniMax/MiniMax-M3.1-Flash 和 MiniMax/MiniMax-M3](raw/model-user-guide/use-cases/third-party-model-integration-tutorial/minimax-api-by-minimax.md) 模型。
+    > 适用于 [Qwen-VL 与 QVQ](raw/model-user-guide/model-experience/text-generation-model/vision.md)、[MiniMax/MiniMax-M3.1-Flash 和 MiniMax/MiniMax-M3](raw/model-user-guide/use-cases/third-party-model-integration-tutorial/minimax-api-by-minimax.md) 模型。
     
 -   告知模型相邻帧之间的时间间隔，帮助其更好地理解视频的时间动态。同时适用于输入视频文件与图像列表时。该功能同时支持视频文件和图像列表输入，适用于事件时间定位或分段内容摘要等场景。
     
@@ -690,7 +690,7 @@ GLM 模型的默认值与最大值见 `max_tokens` 参数中的表格，其他�
 
 **vl\_high\_resolution\_images**`boolean`（可选）默认值为`false`
 
-是否将输入图像的像素上限提升至 16384 Token 对应的像素值。相关文档：[处理高分辨率图像](raw/model-user-guide/model-experience/vision-model/vision.md)。
+是否将输入图像的像素上限提升至 16384 Token 对应的像素值。相关文档：[处理高分辨率图像](raw/model-user-guide/model-experience/text-generation-model/vision.md)。
 
 -   `vl_high_resolution_images：true`，使用固定分辨率策略，忽略 `max_pixels` 设置，超过此分辨率时会将图像总像素缩小至此上限内。
     
@@ -1499,7 +1499,7 @@ curl --location "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 
 #### 图像输入
 
-> 相关文档：[图像与视频理解](raw/model-user-guide/model-experience/vision-model/vision.md)。
+> 相关文档：[图像与视频理解](raw/model-user-guide/model-experience/text-generation-model/vision.md)。
 
 Python
 

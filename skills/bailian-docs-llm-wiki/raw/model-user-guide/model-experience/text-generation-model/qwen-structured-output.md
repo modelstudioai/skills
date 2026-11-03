@@ -583,7 +583,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 
 多模态模型同样支持对图像和视频数据进行结构化输出。通过JSON Mode，可以从视觉内容中提取结构化数据，例如票据字段、图像中的目标位置或视频中的事件信息。
 
-> 图片、视频文件限制请参见 [图像与视频理解](raw/model-user-guide/model-experience/vision-model/vision.md) 。
+> 图片、视频文件限制请参见 [图像与视频理解](raw/model-user-guide/model-experience/text-generation-model/vision.md) 。
 
 #### OpenAI兼容
 

@@ -13,7 +13,7 @@
 
 为确保调用成功，请务必保证**模型、Endpoint URL 和 API Key 均属于同一地域**。跨地域调用将会失败。
 
--   [**选择模型**](raw/model-user-guide/model-experience/video-generate-edit-model.md)：确认模型所属的地域。
+-   [**选择模型**](raw/model-user-guide/model-experience/image-and-video-generation/video-generate-edit-model.md)：确认模型所属的地域。
 -   **选择 URL**：选择对应的地域 Endpoint URL，支持HTTP URL或 DashScope SDK URL。
 -   **配置 API Key**：选择地域并[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
 
@@ -30,7 +30,7 @@
 **说明**
 
 -   创建成功后，使用接口返回的 `task_id` 查询结果，task\_id 有效期为 24 小时。**请勿重复创建任务**，轮询获取即可。
--   新手指引请参见[Postman](raw/model-user-guide/use-chat-client-or-development-tool/first-call-to-image-and-video-api.md)。
+-   新手指引请参见[Postman](https://help.aliyun.com/zh/model-studio/first-call-to-image-and-video-api)。
 
 #### 请求参数
 
@@ -54,7 +54,7 @@
 
 **model** `string` **（必选）**
 
-模型名称。模型输出规格请参见[模型列表](raw/model-user-guide/model-experience/video-generate-edit-model.md)。
+模型名称。模型输出规格请参见[模型列表](raw/model-user-guide/model-experience/image-and-video-generation/video-generate-edit-model.md)。
 
 可选值：
 

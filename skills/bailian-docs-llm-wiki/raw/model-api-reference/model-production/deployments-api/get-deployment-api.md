@@ -10,7 +10,7 @@
 
 **说明**DTU 计费模式的部署使用同一组部署接口创建与管理，请求中以
 
-`plan="dtu"` 区分部署形式（创建、查询、扩缩容、修改限流与更新模型），DTU 相关参数、状态与域名说明详见 [模型部署 API 参考](raw/model-api-reference/model-production/deployments-api/model-deployment-api-reference.md)。续费与自动续费变更请在控制台操作，详见 [DTU 独占算力部署](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-modes/dtu-model-deployment.md)。
+`plan="dtu"` 区分部署形式（创建、查询、扩缩容、修改限流与更新模型），DTU 相关参数、状态与域名说明详见 [模型部署 API 参考](raw/model-api-reference/model-production/deployments-api/model-deployment-api-reference.md)。续费与自动续费变更请在控制台操作，详见 [独占吞吐（DTU）](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-modes/dtu-model-deployment.md)。
 
 ## 查询部署模型状态
 

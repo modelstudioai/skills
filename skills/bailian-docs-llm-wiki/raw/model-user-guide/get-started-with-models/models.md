@@ -2,7 +2,9 @@
 
 阿里云百炼提供千问及第三方模型服务，覆盖文本、图像、音频、视频等多种模态。
 
-## 文本生成
+## 文本
+
+### 文本生成
 
 [
 
@@ -74,9 +76,7 @@
 
 [查看更多](raw/model-user-guide/model-experience/text-generation-model.md)
 
-## 图像与视频
-
-### 理解
+### 视觉理解
 
 分析图片和视频内容，返回文本描述或结构化结果
 
@@ -106,9 +106,25 @@
 
 ](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/kimi%2Fkimi-k3)
 
-[查看更多](raw/model-user-guide/model-experience/vision-model.md)
+[查看更多](raw/model-user-guide/model-experience/text-generation-model.md)
 
-### 生成
+### 决策模型
+
+面向高频业务判断的结构化决策模型，一次前向完成分类、是非判断与评分，并返回概率分布与置信度。
+
+[
+
+**decision-model-preview**
+
+结构化决策
+
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/decision-model-preview)
+
+[查看更多](raw/model-user-guide/support/model-studio-model-list/model-list-decision/decision-model-preview.md)
+
+## 视觉
+
+### 图像与视频生成
 
 通过文本或图片生成图像与视频，支持编辑、参考与高分辨率输出
 
@@ -156,9 +172,29 @@
 
 ](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/wan3.0-video)
 
-[查看更多](raw/model-user-guide/model-experience/image-model.md)
+[查看更多](raw/model-user-guide/model-experience/image-and-video-generation/image-model.md)
 
-## 世界模型
+### 3D模型生成
+
+文生3D模型或图生3D模型，构建三维资产
+
+[
+
+**Tripo/Tripo-H3.1**
+
+3D生成
+
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/Tripo%2FTripo-H3.1)[
+
+**Tripo/Tripo-P1.0**
+
+3D生成
+
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/Tripo%2FTripo-P1.0)
+
+[查看更多](raw/model-user-guide/model-experience/image-and-video-generation/3d-model/tripo-3d-generation-guide.md)
+
+### 世界模型
 
 实时交互的开放式世界模型，覆盖世界探索、实时导演、角色演绎三种模式
 
@@ -182,61 +218,7 @@
 
 [查看更多](raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-overview.md)
 
-## 3D模型生成
-
-文生3D模型或图生3D模型，构建三维资产
-
-[
-
-**Tripo/Tripo-H3.1**
-
-3D生成
-
-](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/Tripo%2FTripo-H3.1)[
-
-**Tripo/Tripo-P1.0**
-
-3D生成
-
-](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/Tripo%2FTripo-P1.0)
-
-[查看更多](raw/model-user-guide/model-experience/tripo-3d-generation-guide.md)
-
-## 音频与语音
-
-### 音频生成
-
-生成人声、音效和环境音等音频内容
-
-[
-
-**qwen-audio-3.1-tts-next**
-
-完整场景声音生成
-
-](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen-audio-3.1-tts-next)
-
-[查看更多](raw/model-user-guide/model-experience/audio-generation.md)
-
-### 语音合成
-
-适用于有声阅读、语音播报、虚拟人等场景
-
-[
-
-**qwen-audio-3.1-tts-plus**
-
-实时、非实时
-
-](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen-audio-3.1-tts-plus)[
-
-**qwen-audio-3.1-tts-flash**
-
-实时、非实时
-
-](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen-audio-3.1-tts-flash)
-
-[查看更多](raw/model-user-guide/model-experience/speech-synthesis/tts-model.md)
+## 语音
 
 ### 语音识别
 
@@ -268,7 +250,27 @@
 
 ](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen-audio-3.1-asr-flash-filetrans)
 
-[查看更多](raw/model-user-guide/model-experience/speech-recognition/asr-model.md)
+[查看更多](raw/model-user-guide/model-experience/speech-and-audio/speech-recognition/asr-model.md)
+
+### 语音合成
+
+适用于有声阅读、语音播报、虚拟人等场景
+
+[
+
+**qwen-audio-3.1-tts-plus**
+
+实时、非实时
+
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen-audio-3.1-tts-plus)[
+
+**qwen-audio-3.1-tts-flash**
+
+实时、非实时
+
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen-audio-3.1-tts-flash)
+
+[查看更多](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/tts-model.md)
 
 ### 语音转语音
 
@@ -300,31 +302,25 @@
 
 ](raw/model-user-guide/support/model-studio-model-list/model-list-speech-to-speech/qwen-audio-3-1-realtime-flash.md)
 
-[查看更多](raw/model-user-guide/model-experience/speech-to-speech/s2s-model.md)
+[查看更多](raw/model-user-guide/model-experience/speech-and-audio/speech-to-speech/s2s-model.md)
 
-## 全模态
+### 音频生成
 
-融合文本、图像、音频、视频等多种模态的理解与生成能力。音视频分析与文本生成选择 [qwen3.8-omni-flash](https://help.aliyun.com/zh/model-studio/qwen-omni#qwen38-offline)，通过 Chat Completions 或 Responses 调用；实时音视频对话选择 [qwen3.8-omni-flash-realtime](https://help.aliyun.com/zh/model-studio/realtime#qwen38-realtime)。
-
-**说明**如需离线语音输出，请使用 [qwen3.5-omni-plus](raw/model-user-guide/support/model-studio-model-list/model-list-omni/qwen3-5-omni-plus.md)。
+生成人声、音效和环境音等音频内容
 
 [
 
-**qwen3.8-omni-flash-realtime**
+**qwen-audio-3.1-tts-next**
 
-全模态
+完整场景声音生成
 
-](raw/model-user-guide/support/model-studio-model-list/model-list-omni/qwen3-8-omni-flash-realtime.md)[
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen-audio-3.1-tts-next)
 
-**qwen3.8-omni-flash**
+[查看更多](raw/model-user-guide/model-experience/speech-and-audio/audio-generation.md)
 
-全模态
+## 向量
 
-](raw/model-user-guide/support/model-studio-model-list/model-list-omni/qwen3-8-omni-flash.md)
-
-[查看更多](raw/model-user-guide/model-experience/omni-modal/omni.md)
-
-## 向量与重排序
+### 向量与重排序
 
 文本或图文向量化，配合重排序提升检索精度
 
@@ -356,19 +352,27 @@
 
 [查看更多](raw/model-user-guide/model-experience/embedding-rerank-model.md)
 
-## 决策模型
+## 全模态
 
-面向高频业务判断的结构化决策模型，一次前向完成分类、是非判断与评分，并返回概率分布与置信度。
+融合文本、图像、音频、视频等多种模态的理解与生成能力。音视频分析与文本生成选择 [qwen3.8-omni-flash](https://help.aliyun.com/zh/model-studio/qwen-omni#qwen38-offline)，通过 Chat Completions 或 Responses 调用；实时音视频对话选择 [qwen3.8-omni-flash-realtime](https://help.aliyun.com/zh/model-studio/realtime#qwen38-realtime)。
+
+**说明**如需离线语音输出，请使用 [qwen3.5-omni-plus](raw/model-user-guide/support/model-studio-model-list/model-list-omni/qwen3-5-omni-plus.md)。
 
 [
 
-**decision-model-preview**
+**qwen3.8-omni-flash-realtime**
 
-结构化决策
+全模态
 
-](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/decision-model-preview)
+](raw/model-user-guide/support/model-studio-model-list/model-list-omni/qwen3-8-omni-flash-realtime.md)[
 
-[查看更多](raw/model-user-guide/support/model-studio-model-list/model-list-decision/decision-model-preview.md)
+**qwen3.8-omni-flash**
+
+全模态
+
+](raw/model-user-guide/support/model-studio-model-list/model-list-omni/qwen3-8-omni-flash.md)
+
+[查看更多](raw/model-user-guide/model-experience/omni-modal/omni.md)
 
 ## 查看所有模型
 

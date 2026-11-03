@@ -502,7 +502,7 @@ data:{"output":{"choices":[{"message":{"content":"","role":"assistant"},"finish_
 -   **用户消息（user message）的构造方式**：多模态模型的输入不仅包括文本，还包含图片、音频等多模态信息。
 -   **DashScope SDK接口：**使用 DashScope Python SDK 2.0 时，需调用 `client.multimodal.chat.create` 接口；使用DashScope Java SDK 时，则调用 MultiModalConversation 类。
 
-> 多模态模型请参见：[图像与视频理解](raw/model-user-guide/model-experience/vision-model/vision.md)、[文字提取](raw/model-user-guide/model-experience/vision-model/qwen-vl-ocr.md)、[界面交互](raw/model-user-guide/model-experience/text-generation-model/specialized-models/gui-automation.md)、[音频理解-Qwen3-Omni-Captioner](https://help.aliyun.com/zh/model-studio/qwen3-omni-captioner)、[Kimi](raw/model-user-guide/use-cases/third-party-model-integration-tutorial/kimi-api.md)等，Qwen3.5-Omni、Qwen3-Omni-Flash **仅支持流式输出**，因其输出可包含**文本**或**音频**等多模态内容，结果解析方式与其他模型不同，具体请参见[全模态](https://help.aliyun.com/zh/model-studio/qwen-omni#b6a6667a65zvt)。
+> 多模态模型请参见：[图像与视频理解](raw/model-user-guide/model-experience/text-generation-model/vision.md)、[文字提取](raw/model-user-guide/model-experience/text-generation-model/specialized-models/qwen-vl-ocr.md)、[界面交互](raw/model-user-guide/model-experience/text-generation-model/specialized-models/gui-automation.md)、[音频理解-Qwen3-Omni-Captioner](https://help.aliyun.com/zh/model-studio/qwen3-omni-captioner)、[Kimi](raw/model-user-guide/use-cases/third-party-model-integration-tutorial/kimi-api.md)等，Qwen3.5-Omni、Qwen3-Omni-Flash **仅支持流式输出**，因其输出可包含**文本**或**音频**等多模态内容，结果解析方式与其他模型不同，具体请参见[全模态](https://help.aliyun.com/zh/model-studio/qwen-omni#b6a6667a65zvt)。
 
 #### OpenAI兼容
 
@@ -756,7 +756,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 
 思考模型会先返回`reasoning_content`（思考过程），再返回`content`（回复内容）。可根据数据包状态判断当前为思考或是回复阶段。
 
-> 思考模型详情参见：[深度思考](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md)、[图像与视频理解](raw/model-user-guide/model-experience/vision-model/vision.md)。
+> 思考模型详情参见：[深度思考](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md)、[图像与视频理解](raw/model-user-guide/model-experience/text-generation-model/vision.md)。
 
 > Qwen3-Omni-Flash（思考模式）实现流式输出请参见[全模态](https://help.aliyun.com/zh/model-studio/qwen-omni#bc67a9a2bd2of)。
 

@@ -6,7 +6,7 @@
 
 `{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。现有域名仍可正常使用。
 
-**用户指南：**[非实时语音识别](raw/model-user-guide/model-experience/speech-recognition/non-realtime-speech-recognition-user-guide.md)
+**用户指南：**[非实时语音识别](raw/model-user-guide/model-experience/speech-and-audio/speech-recognition/non-realtime-speech-recognition-user-guide.md)
 
 ## 前提条件
 
@@ -87,7 +87,7 @@ dashscope transcription list
 
 [DashScope SDK Expert](raw/model-api-reference/preparations/dashscope-sdk-expert.md)。
 
-完整地域表见 [Base URL 总览](raw/model-user-guide/get-started-with-models/base-url.md)。
+完整地域表见 [Base URL 总览](raw/model-api-reference/preparations/base-url.md)。
 
 ### 异步提交任务+异步查询任务执行结果
 

@@ -128,4 +128,4 @@ WAV、MP3、OGG Opus；不支持裸 PCM
 
 ## 调用方式
 
-通过 HTTPS API 调用，返回完整音频文件。效果与提示词写法请参见[音频生成](raw/model-user-guide/model-experience/audio-generation.md)，请求参数及示例请参见[音频生成 API参考](raw/model-api-reference/audio-api-references/audio-generation-api.md)。
+通过 HTTPS API 调用，返回完整音频文件。效果与提示词写法请参见[音频生成](raw/model-user-guide/model-experience/speech-and-audio/audio-generation.md)，请求参数及示例请参见[音频生成 API参考](raw/model-api-reference/audio-api-references/audio-generation-api.md)。

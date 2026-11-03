@@ -2,7 +2,7 @@
 
 使用Paraformer非实时语音识别HarmonyOS SDK将音视频文件转换为文本。
 
-**用户指南：** 参见[非实时语音识别](raw/model-user-guide/model-experience/speech-recognition/non-realtime-speech-recognition-user-guide.md)。
+**用户指南：** 参见[非实时语音识别](raw/model-user-guide/model-experience/speech-and-audio/speech-recognition/non-realtime-speech-recognition-user-guide.md)。
 
 ## 快速开始
 

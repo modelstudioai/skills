@@ -16,7 +16,7 @@
 
 ## 配置 API Key 到环境变量
 
--   **方式一：在**[**第三方工具**](raw/model-user-guide/use-chat-client-or-development-tool.md)**中进行配置**
+-   **方式一：在**[**第三方工具**](https://help.aliyun.com/zh/model-studio/use-chat-client-or-development-tool)**中进行配置**
     
     如果在 Chatbox 等工具或平台中调用模型，您可能需要输入三个信息：
     
@@ -25,11 +25,11 @@
     -   Base URL：
         
         -   华北2（北京）：`https://dashscope.aliyuncs.com/compatible-mode/v1`
-        -   其他地域：请参见[Base URL 总览](raw/model-user-guide/get-started-with-models/base-url.md)
+        -   其他地域：请参见[Base URL 总览](raw/model-api-reference/preparations/base-url.md)
     -   模型名称，如 qwen-plus、qwen-max、deepseek-v4-pro 等。
         
     
-    我们也提供了一些常用工具的配置方法：[Dify](raw/model-user-guide/use-chat-client-or-development-tool/dify.md)、[Chatbox](raw/model-user-guide/use-chat-client-or-development-tool/chatbox.md)、[Cline](raw/model-user-guide/use-chat-client-or-development-tool/cline.md)、[Claude Code](raw/model-user-guide/use-chat-client-or-development-tool/claude-code.md)、[Postman](raw/model-user-guide/use-chat-client-or-development-tool/first-call-to-image-and-video-api.md)。
+    我们也提供了一些常用工具的配置方法：[Dify](https://help.aliyun.com/zh/model-studio/dify)、[Chatbox](https://help.aliyun.com/zh/model-studio/chatbox)、[Cline](https://help.aliyun.com/zh/model-studio/cline)、[Claude Code](https://help.aliyun.com/zh/model-studio/claude-code)、[Postman](https://help.aliyun.com/zh/model-studio/first-call-to-image-and-video-api)。
     
 -   **方式二：配置 API Key 到环境变量，后续支持 cURL 和代码调用**
     
@@ -202,7 +202,12 @@
 
 API Key 没有失效时间限制，若需要有时效性的 API Key，可生成[临时 API Key](raw/model-api-reference/more-about-models/generate-temporary-api-key.md)（最长 1800 秒）。
 
-API Key 的状态随账号操作而变化：
+API Key 的状态随账号操作而变化。主账号和具备该业务空间 API Key 权限的 RAM 用户均可删除 API Key。
+
+**说明**
+
+-   2026年3月25日前由 RAM 用户创建的 API Key 与 RAM 用户绑定。在 RAM 控制台删除该 RAM 用户时，百炼会同步删除这些 API Key，且不可恢复。删除 RAM 用户前，请确认其名下 API Key 的使用情况；如需保留调用能力，请使用主账号或其他账号重新创建 API Key，并更新业务配置。
+-   2026年3月25日及之后创建的 API Key 不与 RAM 用户级联。删除 RAM 用户后，这些 API Key 仍然保留并可继续使用。
 
 **触发操作**
 
@@ -212,9 +217,9 @@ API Key 的状态随账号操作而变化：
 
 **主动删除 API Key**
 
-删除后立即失效，不可恢复
+支持（主账号默认具备权限；RAM 用户需具备所属业务空间的 API Key 管理权限）。删除后立即失效，不可恢复。
 
-删除后立即失效，不可恢复
+支持（主账号默认具备权限；RAM 用户需具备所属业务空间的 API Key 管理权限）。删除后立即失效，不可恢复。
 
 **将账号移出业务空间**
 
@@ -226,7 +231,9 @@ API Key 的状态随账号操作而变化：
 
 —
 
-删除后立即失效，不可恢复
+2026年3月25日前创建的 API Key：同步删除，不可恢复。
+
+2026年3月25日及之后创建的 API Key：不受影响，继续有效。
 
 ### 删除 API Key 后的异步任务
 
@@ -259,7 +266,7 @@ API Key 的创建需使用[超级管理员](https://help.aliyun.com/zh/model-stu
 
 API Key 的调用权限完全由其**归属业务空间**决定。**同一空间内的 API Key 权限相同**，无需为不同模型（如文生文、文生图、语音合成）创建不同的 API Key。
 
--   **默认业务空间下的 API Key：**可调用所有[标准模型](raw/model-user-guide/get-started-with-models/models.md)，以及默认业务空间内的[应用](raw/application-user-guide/agent-development/llm-application/llm-application-start-using/flow-agent-introduction.md)。
+-   **默认业务空间下的 API Key：**可调用所有[标准模型](raw/model-user-guide/get-started-with-models/models.md)，以及默认业务空间内的[应用](raw/application-user-guide/llm-application/llm-application-start-using/flow-agent-introduction.md)。
 -   **子业务空间下的 API Key：**可调用该子业务空间已获得[模型调用授权](raw/model-user-guide/security-and-compliance/permission-management-overview.md)的标准模型，以及该业务空间内的应用。
 
 **调用在阿里云百炼**[**调优后的模型**](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)**：**此类模型部署成功后，仅能用其所在业务空间的API Key调用。

@@ -2,7 +2,7 @@
 
 本文介绍人物实例分割模型的输入输出参数。人物实例分割运用了检测和分割技术，不仅能够在图像中识别出不同的对象，而且还能准确地画出每一个对象边界的像素级掩码（mask）。
 
-**相关指南**：[人物实例分割](raw/model-user-guide/model-experience/image-model/image-instance-segmentation.md)
+**相关指南**：[人物实例分割](raw/model-user-guide/use-cases/legacy-resources/legacy-image-generation/image-instance-segmentation.md)
 
 **重要**
 
