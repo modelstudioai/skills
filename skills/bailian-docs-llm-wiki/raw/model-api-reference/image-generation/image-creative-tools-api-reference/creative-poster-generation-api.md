@@ -2,12 +2,12 @@
 
 本文介绍创意海报生成模型的输入输出参数。根据要求自动生成海报的背景和文字排版，支持多种海报风格。无需设计基础，轻松制作出彩作品，让创意触手可及。
 
-**相关指南**：[创意海报生成](raw/model-user-guide/model-experience/image-model/creative-poster-generation-overview.md)
+**相关指南**：[创意海报生成](raw/model-user-guide/use-cases/legacy-resources/legacy-image-generation/creative-poster-generation-overview.md)
 
 **重要**
 
 -   本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)。
--   wanx-poster-generation-v1 模型当前仅提供**免费体验**，免费额度用完后不可调用且不支持付费，推荐参考[文本生成图像](raw/model-user-guide/model-experience/image-model/text-to-image.md)获取替代方案。
+-   wanx-poster-generation-v1 模型当前仅提供**免费体验**，免费额度用完后不可调用且不支持付费，推荐参考[文本生成图像](raw/model-user-guide/model-experience/image-and-video-generation/image-model/text-to-image.md)获取替代方案。
 
 ## 模型概览
 
@@ -29,7 +29,7 @@ wanx-poster-generation-v1
 
 目前仅供免费体验。
 
-> 免费额度用完后不可调用，推荐参考[文本生成图像](raw/model-user-guide/model-experience/image-model/text-to-image.md)获取替代方案。
+> 免费额度用完后不可调用，推荐参考[文本生成图像](raw/model-user-guide/model-experience/image-and-video-generation/image-model/text-to-image.md)获取替代方案。
 
 2
 

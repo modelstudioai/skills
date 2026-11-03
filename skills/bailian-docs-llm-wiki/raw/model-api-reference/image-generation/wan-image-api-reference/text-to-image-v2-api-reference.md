@@ -2,7 +2,7 @@
 
 万相-文生图模型基于文本生成图像，支持多种艺术风格与写实摄影效果，满足多样化创意需求。
 
-**快速入口：**在线体验（[北京](https://bailian.console.aliyun.com/model/experience/vision/imageGenerate?modelId=wan2.6-t2i) | [新加坡](https://bailian.console.aliyun.com/model/experience/vision/imageGenerate)| [弗吉尼亚](https://bailian.console.aliyun.com/us-east-1/model/experience/vision/imageGenerate?modelId=wan2.6-t2i)） | [万相官网](https://tongyi.aliyun.com/wan/generate/image/text-to-image) | [文生图使用指南](raw/model-user-guide/model-experience/image-model/text-to-image.md)
+**快速入口：**在线体验（[北京](https://bailian.console.aliyun.com/model/experience/vision/imageGenerate?modelId=wan2.6-t2i) | [新加坡](https://bailian.console.aliyun.com/model/experience/vision/imageGenerate)| [弗吉尼亚](https://bailian.console.aliyun.com/us-east-1/model/experience/vision/imageGenerate?modelId=wan2.6-t2i)） | [万相官网](https://tongyi.aliyun.com/wan/generate/image/text-to-image) | [文生图使用指南](raw/model-user-guide/model-experience/image-and-video-generation/image-model/text-to-image.md)
 
 **说明**万相官网的功能与API支持的能力可能存在差异。本文档以API的实际能力为准，并会随功能更新及时同步。
 
@@ -72,7 +72,7 @@ wanx2.0-t2i-turbo
 
 在调用前，先[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如需通过SDK进行调用，请[安装DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
-**重要**华北2（北京）、新加坡和美国（弗吉尼亚）地域拥有独立的 **API Key**与**请求地址**，不可混用，跨地域调用将导致鉴权失败或服务报错，详情请参见[选择地域、服务部署范围和接入域名](raw/model-user-guide/get-started-with-models/regions.md)。
+**重要**华北2（北京）、新加坡和美国（弗吉尼亚）地域拥有独立的 **API Key**与**请求地址**，不可混用，跨地域调用将导致鉴权失败或服务报错，详情请参见[选择地域、服务部署范围和接入域名](raw/model-api-reference/preparations/regions.md)。
 
 **重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
 
@@ -414,7 +414,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 **说明**
 
 -   创建成功后，使用接口返回的 `task_id` 查询结果，task\_id 有效期为 24 小时。**请勿重复创建任务**，轮询获取即可。
--   新手指引请参见[Postman](raw/model-user-guide/use-chat-client-or-development-tool/first-call-to-image-and-video-api.md)。
+-   新手指引请参见[Postman](https://help.aliyun.com/zh/model-studio/first-call-to-image-and-video-api)。
 
 #### 请求参数
 
@@ -883,7 +883,7 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 **说明**
 
 -   创建成功后，使用接口返回的 `task_id` 查询结果，task\_id 有效期为 24 小时。**请勿重复创建任务**，轮询获取即可。
--   新手指引请参见[Postman](raw/model-user-guide/use-chat-client-or-development-tool/first-call-to-image-and-video-api.md)。
+-   新手指引请参见[Postman](https://help.aliyun.com/zh/model-studio/first-call-to-image-and-video-api)。
 
 #### 请求参数
 

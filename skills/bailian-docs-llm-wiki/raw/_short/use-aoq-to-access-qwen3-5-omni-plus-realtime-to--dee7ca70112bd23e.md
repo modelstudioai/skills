@@ -603,7 +603,7 @@ final class ManualPushToTalkClient: NSObject, AoqEngineDelegate {
 如需查看完整参数、事件字段或其他平台接口，请参见：
 
 -   [获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)
--   [选择地域、服务部署范围和接入域名](raw/model-user-guide/get-started-with-models/regions.md)
+-   [选择地域、服务部署范围和接入域名](raw/model-api-reference/preparations/regions.md)
 -   [AOQ Client SDK 简介](raw/model-api-reference/realtime-api-user-guide/realtime-api-aoq-api/realtime-api-aoq-sdk-desc.md)
 -   [SDK 下载](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-sdk-download.md)
 -   [Token 鉴权](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-token-authentication.md)

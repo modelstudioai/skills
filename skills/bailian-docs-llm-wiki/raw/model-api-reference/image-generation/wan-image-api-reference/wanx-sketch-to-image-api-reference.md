@@ -2,7 +2,7 @@
 
 本文介绍万相-涂鸦作画模型的API输入输出参数。
 
-**相关指南**：[涂鸦作画](raw/model-user-guide/model-experience/image-model/sketch-to-image.md)
+**相关指南**：[涂鸦作画](raw/model-user-guide/use-cases/legacy-resources/legacy-image-generation/sketch-to-image.md)
 
 **重要**本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)。
 

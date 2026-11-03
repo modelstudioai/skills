@@ -171,7 +171,7 @@ if __name__ == '__main__':
     
     是
     
-    指定要使用的[模型](raw/model-user-guide/model-experience/speech-recognition/real-time-speech-recognition-user-guide.md)名称。
+    指定要使用的[模型](raw/model-user-guide/model-experience/speech-and-audio/speech-recognition/real-time-speech-recognition-user-guide.md)名称。
     
     `ws_url`
     

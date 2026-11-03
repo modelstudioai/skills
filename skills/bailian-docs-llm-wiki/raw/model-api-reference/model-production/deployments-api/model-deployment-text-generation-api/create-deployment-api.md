@@ -4,7 +4,7 @@
 
 ## 适用范围
 
--   **适用地域**：模型部署 API 的开放地域因部署方式而异——模型单元（MU）与 DTU 独占算力部署支持**华北2（北京）**；预置吞吐（PTU）等部署方式支持**北京与新加坡**地域。如您使用的地域未开放对应部署方式，请通过该地域的百炼控制台完成模型部署操作。
+-   **适用地域**：模型部署 API 的开放地域因部署方式而异——模型单元（MU）与 独占吞吐（DTU）支持**华北2（北京）**；预置吞吐（PTU）等部署方式支持**北京与新加坡**地域。如您使用的地域未开放对应部署方式，请通过该地域的百炼控制台完成模型部署操作。
 -   **开通账号权限**：若使用[阿里云子账号](raw/model-user-guide/security-and-compliance/permission-management-overview.md)（[RAM用户](https://help.aliyun.com/zh/ram/user-guide/overview-of-ram-users)），需要为子账号授予模型调用、训练和部署[权限](https://help.aliyun.com/zh/model-studio/use-workspace)。
 -   **配置环境变量**：已成功[获取 API Key](raw/model-api-reference/preparations/get-api-key.md)，并[配置到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
 -   **阅读部署文档**：建议先阅读[专属部署概述](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)和[使用 API 创建模型部署任务](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-quick-start.md)，了解模型部署的使用方法和基本步骤。
@@ -57,7 +57,7 @@ API Key 鉴权，格式为 `Bearer sk-xxxx`。
 
 #### 按DTU独占算力计费
 
-DTU 独占算力部署为预付费（按月）计费，按输入/输出 TPM 购买容量，独占 GPU 资源，是模型单元（MU）的继任方案，新购独占部署优先选择。使用前需在控制台开通 DTU 功能并申请资源额度，详见[DTU 独占算力部署](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-modes/dtu-model-deployment.md)。
+独占吞吐（DTU）为预付费（按月）计费，按输入/输出 TPM 购买容量，独占 GPU 资源，是模型单元（MU）的继任方案，新购独占部署优先选择。使用前需在控制台开通 DTU 功能并申请资源额度，详见[独占吞吐（DTU）](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-modes/dtu-model-deployment.md)。
 
 > DTU 部署的 API 请求需使用部署所在业务空间的 `maas.aliyuncs.com` 域名（例如 `ws-vxxx.cn-beijing.maas.aliyuncs.com`）和该业务空间的 API Key；`sku_code`、`template_code` 与容量范围通过可部署模型列表接口 `plan=dtu` 查询。完整参数、扩缩容、修改限流与更新模型等接口详见[模型部署 API 参考](raw/model-api-reference/model-production/deployments-api/model-deployment-api-reference.md)。
 

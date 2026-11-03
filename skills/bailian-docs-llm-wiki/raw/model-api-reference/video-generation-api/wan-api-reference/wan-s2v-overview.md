@@ -29,7 +29,7 @@
 
 本文的示例图片已通过图像检测，以下展示视频生成的示例代码。
 
-**说明**HTTP 请求分两步：先创建任务，再获取结果。初学者建议使用 [Postman](raw/model-user-guide/use-chat-client-or-development-tool/first-call-to-image-and-video-api.md)调用API。
+**说明**HTTP 请求分两步：先创建任务，再获取结果。初学者建议使用 [Postman](https://help.aliyun.com/zh/model-studio/first-call-to-image-and-video-api)调用API。
 
 ##### 步骤1：创建任务获取任务ID
 

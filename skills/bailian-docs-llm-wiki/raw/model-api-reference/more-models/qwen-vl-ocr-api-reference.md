@@ -2,7 +2,7 @@
 
 本文介绍通过OpenAI兼容接口 或 DashScopeAPI 调用通义千问OCR 模型的输入与输出参数。
 
-> 相关文档：[文字提取（Qwen-OCR）](raw/model-user-guide/model-experience/vision-model/qwen-vl-ocr.md)
+> 相关文档：[文字提取（Qwen-OCR）](raw/model-user-guide/model-experience/text-generation-model/specialized-models/qwen-vl-ocr.md)
 
 ## OpenAI 兼容
 

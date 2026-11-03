@@ -414,7 +414,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 ### Q：支持的图片格式有哪些？支持哪些图片传入方式？
 
-A：请参见：[图像与视频理解](raw/model-user-guide/model-experience/vision-model/vision.md)与[文件传入方式](https://help.aliyun.com/zh/model-studio/vision#531707ed76i06)。
+A：请参见：[图像与视频理解](raw/model-user-guide/model-experience/text-generation-model/vision.md)与[文件传入方式](https://help.aliyun.com/zh/model-studio/vision#531707ed76i06)。
 
 > OpenAI SDK 不支持本地路径传入。
 

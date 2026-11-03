@@ -2,7 +2,7 @@
 
 万相-图生视频模型根据 首帧图像 和 文本提示词 ，生成一段流畅的视频。
 
-**相关文档**：[使用指南](raw/model-user-guide/model-experience/video-generate-edit-model/image-to-video-guide.md)
+**相关文档**：[使用指南](raw/model-user-guide/use-cases/legacy-resources/legacy-video-generation/image-to-video-guide.md)
 
 **说明**全新推出的[万相2.7-图生视频](raw/model-api-reference/video-generation-api/wan-api-reference/image-to-video-general-api-reference.md)支持首帧生视频、首尾帧生视频、视频续写三大任务，**推荐优先选用**。
 
@@ -53,7 +53,7 @@
 **说明**
 
 -   创建成功后，使用接口返回的 `task_id` 查询结果，task\_id 有效期为 24 小时。**请勿重复创建任务**，轮询获取即可。
--   新手指引请参见[Postman](raw/model-user-guide/use-chat-client-or-development-tool/first-call-to-image-and-video-api.md)。
+-   新手指引请参见[Postman](https://help.aliyun.com/zh/model-studio/first-call-to-image-and-video-api)。
 
 #### 请求参数
 

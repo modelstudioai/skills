@@ -2,7 +2,7 @@
 
 Tripo 3D模型生成支持文生3D模型、单图生3D模型和多图生3D模型。
 
-**相关文档**：[使用指南](raw/model-user-guide/model-experience/tripo-3d-generation-guide.md)
+**相关文档**：[使用指南](raw/model-user-guide/model-experience/image-and-video-generation/3d-model/tripo-3d-generation-guide.md)
 
 **重要**本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)。
 
@@ -24,7 +24,7 @@ Tripo 3D模型生成支持文生3D模型、单图生3D模型和多图生3D模型
 **说明**
 
 -   创建成功后，使用接口返回的 `task_id` 查询结果，task\_id 有效期为 24 小时。**请勿重复创建任务**，轮询获取即可。
--   新手指引请参见[Postman](raw/model-user-guide/use-chat-client-or-development-tool/first-call-to-image-and-video-api.md)。
+-   新手指引请参见[Postman](https://help.aliyun.com/zh/model-studio/first-call-to-image-and-video-api)。
 
 #### 请求参数
 

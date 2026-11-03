@@ -176,6 +176,6 @@ WebSocket 并发连接数
 
 ## 调用方式
 
--   [实时语音对话指南](raw/model-user-guide/model-experience/speech-to-speech/qwen-audio-realtime-user-guides.md)
+-   [实时语音对话指南](raw/model-user-guide/model-experience/speech-and-audio/speech-to-speech/qwen-audio-realtime-user-guides.md)
 -   [模型接入方式](raw/_short/qwen-audio-realtime-model-access-82f1eed54dbb343f.md)
 -   [客户端事件](raw/_short/fun-audiochat-client-events-613371219df1f107.md)

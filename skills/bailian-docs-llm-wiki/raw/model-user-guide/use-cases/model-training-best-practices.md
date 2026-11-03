@@ -125,7 +125,7 @@
 2.  点击**新增数据集**，通过填写如下表单创建**训练集**和**评测集**：
     
     1.  **数据集名称**：用以标识数据集的名称，可按需创建。
-    2.  **数据集类型**：包含**训练集**和**评测集**。每次新增数据集时，您只能选择一种类型的数据集。**训练集**由一轮或多轮的Prompt+Completion数据组成，而**评测集**仅包含Prompt数据。您需要分别创建这两种数据集。
+    2.  **数据集类型**：包含**训练集**和**评测集**。每次新增数据集时，您只能选择一种类型的数据集。**训练集**由一轮或多轮的Prompt+Completion数据组成，**评测集**支持单轮 Prompt+Completion 与多轮 ChatML 对话两种样本格式。您需要分别创建这两种数据集。
     3.  **存储位置**：默认为**平台OSS存储**。
     4.  **导入方式**：默认为**本地上传**。
     5.  数据导入：您可以在这里上传训练数据，打开文件浏览器或直接拖拽数据到上传区域里。阿里云百炼支持批量上传，一次最多导入10个文件，还提供了各种数据格式的模板供参考。
@@ -407,6 +407,6 @@ Validation Token Acc代表针对验证集学习的准确程度，曲线一般呈
 
 至此，本篇已经介绍了自定义模型调优、部署与评测的全生命周期管理。阅读完本篇后，您可以自行创建一个自定义模型，并能够在业务场景中调用该自定义模型。
 
-如果您需要将自定义模型投入到阿里云百炼的自定义应用中，请参考[应用类型](raw/application-user-guide/agent-development/llm-application/llm-application-start-using/flow-agent-introduction.md)选择并构建应用。
+如果您需要将自定义模型投入到阿里云百炼的自定义应用中，请参考[应用类型](raw/application-user-guide/llm-application/llm-application-start-using/flow-agent-introduction.md)选择并构建应用。
 
 本篇涉及的所有计费信息，请参考[产品计费](https://help.aliyun.com/zh/model-studio/billing-for-model-studio)。

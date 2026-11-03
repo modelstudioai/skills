@@ -2,7 +2,7 @@
 
 本文介绍千问实时语音/音视频翻译 API 的客户端事件，包括事件类型、参数和示例。
 
-> 相关文档：[实时语音/音视频翻译-千问](raw/model-user-guide/model-experience/speech-to-speech/qwen3-5-livetranslate-flash-realtime.md)。
+> 相关文档：[实时语音/音视频翻译-千问](raw/model-user-guide/model-experience/omni-modal/qwen3-5-livetranslate-flash-realtime.md)。
 
 ## session.update
 
@@ -35,6 +35,20 @@
 输入音频配置。
 
 属性
+
+**format**`object`（可选）
+
+输入音频格式。
+
+属性
+
+**type**`string`（可选）
+
+音频格式，可选值为 `pcm`（默认）和 `opus`。
+
+**sample\_rate**`integer`（可选）
+
+输入音频的采样率，单位为 Hz，默认为 16000。
 
 **turn\_detection**`object`（可选）
 
@@ -225,6 +239,10 @@ VAD 检测灵敏度。值越低，越容易将微弱声音（包括背景噪音�
     ],
     "audio": {
       "input": {
+        "format": {
+          "type": "pcm",
+          "sample_rate": 16000
+        },
         "turn_detection": {
           "type": "speaker_detection",
           "threshold": 0.5

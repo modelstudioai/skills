@@ -1604,7 +1604,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 
 #### OpenAI兼容
 
-Base64 编码方式传入需要构建 [Data URL](https://www.rfc-editor.org/rfc/rfc2397)，构建方法请参见[构建 Data URL](raw/model-user-guide/model-experience/vision-model/vision.md)。
+Base64 编码方式传入需要构建 [Data URL](https://www.rfc-editor.org/rfc/rfc2397)，构建方法请参见[构建 Data URL](raw/model-user-guide/model-experience/text-generation-model/vision.md)。
 
 Python
 
@@ -1711,7 +1711,7 @@ main();
 
 #### Base64 编码方式
 
-Base64 编码方式传入需要构建 [Data URL](https://www.rfc-editor.org/rfc/rfc2397)，构建方法请参见[构建 Data URL](raw/model-user-guide/model-experience/vision-model/vision.md)。
+Base64 编码方式传入需要构建 [Data URL](https://www.rfc-editor.org/rfc/rfc2397)，构建方法请参见[构建 Data URL](raw/model-user-guide/model-experience/text-generation-model/vision.md)。
 
 Python
 
@@ -2048,7 +2048,7 @@ public class Main {
     -   以公网 URL 和本地路径传入时：单个图像的大小不超过`10MB`。
     -   以 Base64 编码传入时：编码后的字符串不超过`10MB`。
     
-    > 如需压缩文件体积请参见[如何将图像或视频压缩到满足要求的大小](raw/model-user-guide/model-experience/vision-model/vision.md)。
+    > 如需压缩文件体积请参见[如何将图像或视频压缩到满足要求的大小](raw/model-user-guide/model-experience/text-generation-model/vision.md)。
     
 -   **支持传入的图片数量：**传入多张图像时，图片数量受模型的最大输入的限制，所有图片和文本的总 Token 数必须小于模型的最大输入。
     

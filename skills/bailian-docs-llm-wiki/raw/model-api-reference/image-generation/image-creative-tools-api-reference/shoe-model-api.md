@@ -2,7 +2,7 @@
 
 本文介绍鞋靴模特模型的输入输出参数。鞋靴模特模型支持输入多视角鞋靴系列图片，同时对输入模特模板图的鞋子区域进行鞋靴AI试穿，实现模特鞋靴布局重绘生成，最终生成图片的效果布局自然、细节丰富、画面细腻、试穿结果逼真。可用于模特商品图设计、新鞋AI试穿、模特穿戴布局重绘等场景。
 
-**相关指南**：[鞋靴模特](raw/model-user-guide/model-experience/image-model/shoes-and-boots-model.md)
+**相关指南**：[鞋靴模特](raw/model-user-guide/use-cases/legacy-resources/legacy-image-generation/shoes-and-boots-model.md)
 
 **重要**
 

@@ -221,9 +221,13 @@ API Key 管理
 
 单个 API Key 只能归属一个地域内的一个业务空间和一个用户，且不能转移给其他业务空间或其他用户。API Key 的可调用的功能和模型限流与**归属业务空间**的权限保持一致**，**不受**用户（账号）控制台权限管理**的影响，也无需为不同模型（如文生文、文生图、语音合成）创建不同的API Key。
 
-API Key 的状态随归属用户（账号）操作的变化：
+API Key 的状态随归属用户（账号）操作的变化如下。主账号和具备该业务空间 API Key 权限的 RAM 用户均可删除 API Key。
 
-**说明**自 2026年3月25日开始，**华北2（北京）**地域的所有新创建的 API Key 均归属主账号。
+**说明**
+
+-   自 2026年3月25日开始，**华北2（北京）**地域的所有新创建的 API Key 均归属主账号。
+-   2026年3月25日前由 RAM 用户创建的 API Key 与 RAM 用户绑定。在 RAM 控制台删除该 RAM 用户时，百炼会同步删除这些 API Key，且不可恢复。删除 RAM 用户前，请确认其名下 API Key 的使用情况；如需保留调用能力，请使用主账号或其他账号重新创建 API Key，并更新业务配置。
+-   2026年3月25日及之后创建的 API Key 不与 RAM 用户级联。删除 RAM 用户后，这些 API Key 仍然保留并可继续使用。
 
 **触发操作**
 
@@ -233,15 +237,15 @@ API Key 的状态随归属用户（账号）操作的变化：
 
 **主动删除 API Key**
 
-不支持 失效，不可恢复
+支持（主账号默认具备权限；RAM 用户需具备所属业务空间的 API Key 管理权限）。删除后立即失效，不可恢复。
 
-不支持 失效，不可恢复
+支持（主账号默认具备权限；RAM 用户需具备所属业务空间的 API Key 管理权限）。删除后立即失效，不可恢复。
 
 **将账号移出业务空间**
 
 —
 
-不支持 失效
+API Key 失效
 
 > 重新加入业务空间后 API Key 恢复生效
 
@@ -249,7 +253,9 @@ API Key 的状态随归属用户（账号）操作的变化：
 
 —
 
-不支持 失效，不可恢复
+2026年3月25日前创建的 API Key：同步删除，不可恢复。
+
+2026年3月25日及之后创建的 API Key：不受影响，继续有效。
 
 **为 API Key 设置 IP 访问白名单**
 
@@ -676,7 +682,7 @@ AliyunBSSOrderAccess
 
 ### 3\. 如何使用特定业务空间的应用？
 
-使用 API 管理、调用特定业务空间的应用需要同时设置 [APP ID 和 Workspace ID](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)。
+使用 API 管理、调用特定业务空间的应用需要同时设置 [APP ID 和 Workspace ID](raw/application-api-reference/application-call/obtain-the-app-id-and-workspace-id.md)。
 
 ### 4\. 已配置 AliyunBailianFullAccess 但仍无法管理业务空间怎么办？
 

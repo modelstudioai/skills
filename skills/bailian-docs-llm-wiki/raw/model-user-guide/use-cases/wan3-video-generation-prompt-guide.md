@@ -1345,6 +1345,6 @@ wan3.0 一句话即可成片，但描述越完整、精确，成片越贴近预�
 
 ## 相关文档
 
--   [万相3.0-视频生成](raw/model-user-guide/model-experience/video-generate-edit-model/wan3-video-generation-guide.md)
+-   [万相3.0-视频生成](raw/_short/wan3-video-generation-guide-0e56f533d7040652.md)
 -   [万相3.0-视频生成 API参考](raw/model-api-reference/video-generation-api/wan-api-reference/wan3-video-generation-api-reference.md)
 -   [文生视频/图生视频 提示词指南](raw/model-user-guide/use-cases/text-to-video-prompt.md)

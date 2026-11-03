@@ -704,7 +704,7 @@ curl -X POST $DASHSCOPE_BASE_URL/chat/completions \
         
 -   图片的宽度和高度均应大于 10 像素，宽高比不应超过 200:1 或 1:200
     
--   支持的图片类型请参见[图像与视频理解](raw/model-user-guide/model-experience/vision-model/vision.md)
+-   支持的图片类型请参见[图像与视频理解](raw/model-user-guide/model-experience/text-generation-model/vision.md)
     
 
 #### 音频输入

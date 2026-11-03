@@ -28,7 +28,7 @@ wan2.6-image
 
 您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
 
-**重要**华北2（北京）、新加坡和美国（弗吉尼亚）地域拥有独立的 **API Key**与**请求地址**，不可混用，跨地域调用将导致鉴权失败或服务报错，详情请参见[选择地域、服务部署范围和接入域名](raw/model-user-guide/get-started-with-models/regions.md)。
+**重要**华北2（北京）、新加坡和美国（弗吉尼亚）地域拥有独立的 **API Key**与**请求地址**，不可混用，跨地域调用将导致鉴权失败或服务报错，详情请参见[选择地域、服务部署范围和接入域名](raw/model-api-reference/preparations/regions.md)。
 
 **重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
 
@@ -366,7 +366,7 @@ dashscope image-generation create -m wan2.6-t2i -t "一只可爱的猫"
 
 [DashScope SDK Expert](raw/model-api-reference/preparations/dashscope-sdk-expert.md)。
 
-完整地域表见 [Base URL 总览](raw/model-user-guide/get-started-with-models/base-url.md)。
+完整地域表见 [Base URL 总览](raw/model-api-reference/preparations/base-url.md)。
 
 #### 响应参数
 
@@ -570,7 +570,7 @@ dashscope image-generation create -m wan2.6-t2i -t "一只可爱的猫"
 **说明**
 
 -   创建成功后，使用接口返回的 `task_id` 查询结果，task\_id 有效期为 24 小时。**请勿重复创建任务**，轮询获取即可。
--   新手指引请参见[Postman](raw/model-user-guide/use-chat-client-or-development-tool/first-call-to-image-and-video-api.md)。
+-   新手指引请参见[Postman](https://help.aliyun.com/zh/model-studio/first-call-to-image-and-video-api)。
 
 #### 请求参数
 

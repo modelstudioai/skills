@@ -1,6 +1,6 @@
 # 在控制台进行模型调优
 
-本文介绍如何在控制台进行模型调优任务，并帮助您选择正确的调优方式与参数。模型调优包含模型微调（SFT）、继续预训练（CPT）、模型偏好训练（DPO）三种模型训练方式。
+本文介绍如何在控制台进行模型调优任务，并帮助您选择正确的调优方式与参数。控制台创建训练任务支持五种训练方式：SFT 微调训练、DPO 偏好训练、CPT 继续预训练、RL 强化学习与 OPD 蒸馏训练。
 
 ## 模型调优流程
 
@@ -10,7 +10,33 @@
 
 前往[模型调优](https://bailian.console.aliyun.com/cn-beijing/model/tuning)页面，点击”**创建训练任务**”按钮。
 
-进入创建训练任务页面后，在**训练配置**区域可选择**训练方法**为**高效训练**或**全参训练**。页面右侧**训练任务摘要**面板实时显示当前任务的模型、优先级、计费方式等配置概览。
+进入创建训练任务页面后，在**训练配置**区域的**训练方式**卡片中选择训练方式，控制台提供五种训练方式：
+
+训练方式
+
+说明
+
+**SFT 微调训练**
+
+有监督微调，增强模型指令跟随的能力，提供全参和高效训练方式
+
+**DPO 偏好训练**
+
+引入负反馈，降低幻觉，使得模型输出更符合人类偏好
+
+**CPT 继续预训练**
+
+通过无标注数据进行无监督继续预训练，强化或新增模型特定能力
+
+**RL 强化学习**
+
+通过奖励信号优化策略，提升模型的推理与决策能力，详见[强化学习](raw/model-user-guide/fine-tuning/rl-overview/rl-training-overview.md)
+
+**OPD 蒸馏训练**
+
+在线策略蒸馏，让学生模型在自身采样轨迹上对齐教师模型，低成本继承强模型能力，详见 [OPD 蒸馏训练](raw/model-user-guide/fine-tuning/opd-overview/opd-training-overview.md)
+
+选择 SFT 微调训练时可进一步选择**高效训练**或**全参训练**。页面右侧**训练任务摘要**面板实时显示当前任务的模型、优先级、计费方式等配置概览。
 
 在**基础信息**区域，可以设置**任务名称**和**任务优先级**。任务优先级分为 L0、L1、L2、L3 四级，优先级从高到低排列，影响训练任务的调度顺序。优先级越高，训练任务越早被调度执行。
 
@@ -18,7 +44,7 @@
 
 CPT（继续预训练，Continual Pre-Training）目的是通过海量的无标记训练数据，**提升模型在特定行业的表现。**
 
-除了 CPT、SFT、DPO 三种训练方式外，百炼还支持**RL（强化学习）**训练方式。RL 通过奖励信号优化模型行为，适用于需要通过人类反馈或自动评分持续提升模型表现的场景。RL 训练的详细操作请参见[强化学习](raw/model-user-guide/fine-tuning/rl-training-overview.md)。
+除 CPT、SFT、DPO 外，**RL（强化学习）**适用于需要通过人类反馈或自动评分持续提升模型表现、以及提升推理与决策能力的场景，详见[强化学习](raw/model-user-guide/fine-tuning/rl-overview/rl-training-overview.md)；**OPD 蒸馏训练**适用于低成本继承更强教师模型能力的场景，详见 [OPD 蒸馏训练](raw/model-user-guide/fine-tuning/opd-overview/opd-training-overview.md)。
 
 SFT-有监督-模型微调（_Supervised Fine-Tuning_）目的是通过针对性的数据集和训练，**提升模型在特定业务的表现。**
 
@@ -61,6 +87,8 @@ DPO-有监督-直接偏好优化（_Direct Preference Optimization_）训练数�
 如果您是因为模型训练效果不好需要再次训练某个模型，请选择**我的模型 > 您需要二次训练的模型。**
 
 选择模型后，部分模型会显示**训练模态**选项（如文本生成、视觉理解），请根据您的业务场景选择对应的模态。如果模型支持，还会显示**思考模式**选项（如 Instruct、Thinking），请根据需要选择。
+
+在模型下拉列表中搜索 **decision** 可选择**决策模型（预览版）**进行决策模型微调，详见[决策模型微调最佳实践](raw/model-user-guide/fine-tuning/decision-model-tuning-guide.md)。
 
 ### 全参训练与高效训练
 
@@ -352,7 +380,7 @@ LoRA训练中的低秩矩阵的秩大小。秩越大调优效果会更好一点�
     
     -   **耗时较长**，包括：拥有一个大规模（最少 0.5亿 token）CPT 数据集、构建一个有效（1000+）SFT 数据集、收集足够的（100+）Bad Case 构建有效 DPO 数据集、模型优化迭代速度慢等。
     -   **费用较高，**调优后的模型部署后才能使用，[模型部署计费](https://help.aliyun.com/zh/model-studio/model-training-and-deployment-billing#0c4e677c48lrp)较高。
--   阿里云百炼推荐您在考虑使用文本生成模型调优前**先尝试使用**的 [Prompt 工程](raw/model-user-guide/use-cases/prompt-engineering-guide.md)**（_Prompt Engineering_）或**[插件调用](raw/application-user-guide/agent-development/llm-application/plug-in/plug-in-overview.md)**（_Function Calling_）**定制化您的应用，**模型调优也通常作为改进模型表现“最后的手段”**。因为：
+-   阿里云百炼推荐您在考虑使用文本生成模型调优前**先尝试使用**的 [Prompt 工程](raw/model-user-guide/use-cases/prompt-engineering-guide.md)**（_Prompt Engineering_）或**[插件调用](raw/application-user-guide/plug-in/plug-in-overview.md)**（_Function Calling_）**定制化您的应用，**模型调优也通常作为改进模型表现“最后的手段”**。因为：
     
     1.  在许多任务中，模型最初可能表现不佳，但通过应用正确的 Prompt 技巧可以改进结果，不一定需要使用模型调优。
     2.  迭代优化 Prompt、插件，比模型调优的迭代更敏捷、成本更低，因为模型调优的迭代可能需要重新收集数据、清洗优化数据、收集 bad case、发起客户调研等。

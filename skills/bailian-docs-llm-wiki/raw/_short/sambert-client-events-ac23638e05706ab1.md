@@ -1,6 +1,6 @@
 # Sambert客户端事件
 
-**用户指南：**关于模型介绍和选型建议请参见[语音合成](raw/model-user-guide/model-experience/speech-synthesis/tts-model.md)。
+**用户指南：**关于模型介绍和选型建议请参见[语音合成](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/tts-model.md)。
 
 **重要**Sambert仅支持在北京地域使用。
 

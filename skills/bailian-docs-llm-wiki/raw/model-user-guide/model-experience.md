@@ -1,14 +1,7 @@
-# 模型体验
+# 模型调用
 
--   [文本生成](raw/model-user-guide/model-experience/text-generation-model.md)
--   [视觉理解](raw/model-user-guide/model-experience/vision-model.md)
--   [图片生成与编辑](raw/model-user-guide/model-experience/image-model.md)
--   [视频生成与编辑](raw/model-user-guide/model-experience/video-generate-edit-model.md)
--   [世界模型](raw/model-user-guide/model-experience/world-model.md)
--   [3D模型生成](raw/model-user-guide/model-experience/tripo-3d-generation-guide.md)
--   [语音合成](raw/model-user-guide/model-experience/speech-synthesis.md)
--   [音频生成](raw/model-user-guide/model-experience/audio-generation.md)
--   [语音识别](raw/model-user-guide/model-experience/speech-recognition.md)
--   [语音转语音](raw/model-user-guide/model-experience/speech-to-speech.md)
+-   [文本](raw/model-user-guide/model-experience/text-generation-model.md)
+-   [视觉](raw/model-user-guide/model-experience/image-and-video-generation.md)
+-   [语音](raw/model-user-guide/model-experience/speech-and-audio.md)
+-   [向量](raw/model-user-guide/model-experience/embedding-rerank-model.md)
 -   [全模态](raw/model-user-guide/model-experience/omni-modal.md)
--   [向量与重排序](raw/model-user-guide/model-experience/embedding-rerank-model.md)

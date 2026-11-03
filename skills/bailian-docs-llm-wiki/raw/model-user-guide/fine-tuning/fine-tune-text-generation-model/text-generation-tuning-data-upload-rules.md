@@ -14,7 +14,7 @@
 -   数据集类型创建后不可变更。
 -   切换类型、场景或训练方式会清空已上传文件。
 
-管理类操作（创建参数、版本管理、评测集管理规则、导入方式选型、数据清洗、安全合规）引导到同级文档，详见[训练集与评测集](raw/model-user-guide/model-data-overview/training-set-and-evaluation-set.md)、[模型调优简介](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)等。建议在创建数据集页面下载对应场景的数据模板，按模板结构准备数据可避免导入失败。
+管理类操作（创建参数、版本管理、评测集管理规则、导入方式选型、数据清洗、安全合规）引导到同级文档，详见[训练集与评测集](raw/model-user-guide/model-evaluation-introduction/training-set-and-evaluation-set.md)、[模型调优简介](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)等。建议在创建数据集页面下载对应场景的数据模板，按模板结构准备数据可避免导入失败。
 
 数据集构建建议（推荐数据规模、多样性与均衡、数据扩充策略）详见[模型调优简介-数据集构建技巧](https://help.aliyun.com/zh/model-studio/model-training-overview#aebd25a7f1g2v)。
 
@@ -165,19 +165,29 @@ SFT 文本生成支持以下样例格式，各样例的完整 JSON 结构见对�
 
 评测集仅服务文本生成场景，与 SFT/DPO/CPT 训练方式无关——DPO/CPT 训练后的模型同样使用文本生成评测集进行评测，不区分训练方式。
 
+评测集支持两种样本格式，创建数据集时在数据格式的训练场景中选择：
+
+-   **文本生成（prompt&completion）**：单轮格式，每条样本由 Prompt（用户问题）与 Completion（参考答案）组成。本地上传仅支持 xls、xlsx 文件（单文件最大 20 MB），列结构见控制台提供的数据模板。
+-   **文本生成（ChatML-messages）**：多轮对话格式，每条样本为 messages 数组，由 system、user、assistant 角色消息组成，参考答案为 messages 中最后一条 assistant 消息。本地上传支持 jsonl、xls、xlsx 文件（单文件最大 200 MB），样例文件可在创建数据集时下载。
+
+ChatML 格式每行为一条 jsonl 样本，单轮与多轮可混合，示例如下：
+
+```
+{"messages": [{"role": "system", "content": "You are a helpful assistant"}, {"role": "user", "content": "谁在文艺复兴时期绘制人体?"}, {"role": "assistant", "content": "文艺复兴时期是一个关于艺术、文化和学术的复兴运动，在这个时期，许多艺术家都绘制了人体。"}]}
+{"messages": [{"role": "system", "content": "You are a helpful assistant"}, {"role": "user", "content": "谁在文艺复兴时期绘制人体?"}, {"role": "assistant", "content": "文艺复兴时期是一个关于艺术、文化和学术的复兴运动，在这个时期，许多艺术家都绘制了人体。"},{"role": "user", "content": "那雕塑方面如何呢？"}, {"role": "assistant", "content": "文艺复兴时期的雕塑也非常有名，几位世界级的雕塑大师都出自于这个时期"}]}
+```
+
+ChatML 格式字段说明：
+
+-   messages：消息数组。system 消息可选且位于最前，user 与 assistant 消息交替排列；多轮对话继续追加 user/assistant 消息对，最后一条 assistant 消息即该样本的参考答案。
+-   assistant 消息的 content 可包含模型思考内容：思考文本置于答案前，以 `</think>` 标记分隔（评测推理模型时使用）。
+-   extra：可选的自定义扩展字段，支持对象、数组、数值等类型，可按业务需要为样本附加自定义数据；部分规则评估预置模板（包含全部子串、包含任意子串、正则匹配）以该字段作为评估入参。
+
 评测集规格：
 
--   文件格式 xlsx，列结构见控制台下载模板。
 -   入库方式：本地上传、日志回流；不支持对象存储（OSS）导入与云存储挂载。
 -   仅历史创建的草稿版本支持在线编辑（Prompt/Completion），已发布版本不可编辑。
-
-本地上传文件格式为 xlsx（列结构见控制台下载模板），每条评测数据为一组 Prompt/Completion 内容，示例如下：
-
-```
-{"prompt": "谁在文艺复兴时期绘制人体?", "completion": "文艺复兴时期是一个关于艺术、文化和学术的复兴运动,在这个时期,许多艺术家都绘制了人体。"}
-{"prompt": "为什么太阳会发光发热?", "completion": "太阳是由氢原子核在高温高压下聚变而产生的巨大能量。这种聚变反应释放出大量的光和热能。"}
-{"prompt": "为什么天空是蓝色的?", "completion": "阳光照射到地球大气层中时,波长较短的蓝光会被大气中的气体分子散射开来,形成我们看到的蓝天。"}
-```
+-   ChatML 格式数据集在数据集详情的文件预览中以 jsonl 逐条展示完整 messages 内容。
 
 日志回流入库限制：
 
@@ -186,9 +196,9 @@ SFT 文本生成支持以下样例格式，各样例的完整 JSON 结构见对�
 -   需授权服务关联角色并指定 API Key 与模型筛选条件。
 -   训练集仅 SFT 文本生成场景可用（评测集文本生成亦支持）。
 
-日志回流导入方式详情见[日志回流](raw/model-user-guide/model-data-overview/model-log-backflow.md)。
+日志回流导入方式详情见[日志回流](https://help.aliyun.com/zh/model-studio/model-log-backflow)。
 
-评测集应准备数据不重叠的独立集合，用于客观评估模型泛化能力。评测集管理规则详见[训练集与评测集](raw/model-user-guide/model-data-overview/training-set-and-evaluation-set.md)。
+评测集应准备数据不重叠的独立集合，用于客观评估模型泛化能力。评测集管理规则详见[训练集与评测集](raw/model-user-guide/model-evaluation-introduction/training-set-and-evaluation-set.md)。
 
 ## 文本生成 - DPO 格式
 
@@ -198,7 +208,7 @@ DPO 文本生成训练数据采用 jsonl 格式，基于 ChatML messages 多轮�
 
 loss\_weight （邀测）参数支持 chosen 模块，取值范围 0.0 至 1.0，数值越大训练重要性越高，详见[文本生成 - SFT 格式](https://help.aliyun.com/zh/model-studio/text-generation-tuning-data-upload-rules#i6j5k410vt000)。
 
-DPO 训练数据单文件大小上限为 200 MB，与 SFT 文本生成一致。DPO 定义详见[模型调优简介](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)，版本管理与发布操作见[训练集与评测集](raw/model-user-guide/model-data-overview/training-set-and-evaluation-set.md)。
+DPO 训练数据单文件大小上限为 200 MB，与 SFT 文本生成一致。DPO 定义详见[模型调优简介](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)，版本管理与发布操作见[训练集与评测集](raw/model-user-guide/model-evaluation-introduction/training-set-and-evaluation-set.md)。
 
 DPO 文本生成训练数据样例见下文代码块：
 
@@ -246,7 +256,7 @@ CPT 训练数据约束：
 
 -   建议至少 5000 万 Token，单文件大小上限 300 MB。
 
-CPT 定义详见[模型调优简介](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)，版本管理与发布操作见[训练集与评测集](raw/model-user-guide/model-data-overview/training-set-and-evaluation-set.md)。CPT 纯文本样例完整 JSON 结构见下文代码块。
+CPT 定义详见[模型调优简介](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)，版本管理与发布操作见[训练集与评测集](raw/model-user-guide/model-evaluation-introduction/training-set-and-evaluation-set.md)。CPT 纯文本样例完整 JSON 结构见下文代码块。
 
 {text} 纯文本格式样例（每行一个 jsonl 纯文本对象）：
 
@@ -279,7 +289,7 @@ resized\_width 与 resized\_height 为可选的目标缩放控制参数，用于
 -   **视频文件路径模式**：video 字段为字符串（如 "video1.mp4"），由平台处理抽帧。适用于使用完整视频文件的场景。
 -   **图片帧列表模式**：video 字段为图片文件名列表（如 \["0.jpg","1.jpg"\]），用户自行准备帧序列。适用于已有抽帧图片的场景。
 
-**说明**训练数据中的图片与视频须同时满足模型调用的输入限制（如图像分辨率、视频时长、帧率等），调用限制详见[视频限制](raw/model-user-guide/model-experience/vision-model/vision.md)。
+**说明**训练数据中的图片与视频须同时满足模型调用的输入限制（如图像分辨率、视频时长、帧率等），调用限制详见[视频限制](raw/model-user-guide/model-experience/text-generation-model/vision.md)。
 
 视频消耗 token 计算详见[图像与视频理解-计费与限流](https://help.aliyun.com/zh/model-studio/vision#dabab9c6413c9)。
 
@@ -538,7 +548,7 @@ RL 数据约束：
 
 -   数据量需大于 `batch_size`（默认 64）。几十至几百条可验证方案；正式训练数学推理 500~2000 条、Agent ≥1000 条、代码 ≥1000 题，数据量越大效果越优。
 -   训练集与验证集为两个独立 jsonl 文件，分别通过 `TrainingDataset`/`ValidationDataset` 上传（验证集可选）。
--   RL 通过 SDK 上传（`AgenticRL.run()`），非控制台打包通道；计费按 MTU 模型训练单元，非 Token。SDK 字段与提交方式详见[强化学习训练配置](raw/model-user-guide/fine-tuning/rl-training-overview/rl-training-config-monitoring.md)。
+-   RL 通过 SDK 上传（`AgenticRL.run()`），非控制台打包通道；计费按 MTU 模型训练单元，非 Token。SDK 字段与提交方式详见[强化学习训练配置](raw/model-user-guide/fine-tuning/rl-overview/rl-training-config-monitoring.md)。
 
 ## 多模态压缩包打包规则
 
@@ -552,7 +562,7 @@ RL 数据约束：
 
 云存储挂载不支持 zip 压缩包。使用云存储挂载加载数据集时，须将未经压缩的数据集文件夹整体上传到 OSS Bucket，通过 MountStorage 的 file\_path 指定 data.jsonl 文件路径；包含多文件时只需指定 data.jsonl 路径，其余同目录文件自动挂载。云存储挂载详见[使用 API 进行模型调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/fine-tuning-api-guide.md)。
 
-命名示例与目录结构见下文代码块。云存储挂载授权操作见[在控制台进行模型调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-on-console.md)，OSS 导入 Bucket 标签打标操作见[训练集与评测集](raw/model-user-guide/model-data-overview/training-set-and-evaluation-set.md)。
+命名示例与目录结构见下文代码块。云存储挂载授权操作见[在控制台进行模型调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-on-console.md)，OSS 导入 Bucket 标签打标操作见[训练集与评测集](raw/model-user-guide/model-evaluation-introduction/training-set-and-evaluation-set.md)。
 
 ```
 # 单层目录（推荐）
@@ -766,7 +776,7 @@ OSS 导入与云存储挂载的差异对比如下：
 
 问题：文件扩展名不在 supportedExtension 列表，前端弹出 warning 并拒绝上传。
 
-**定位：**扩展名须在支持列表内——文本训练用 jsonl，评测集用 xlsx，多模态图片支持 bmp/jpeg/jpg/png/tif/tiff/webp，多模态视频支持 mp4 等格式。
+**定位：**扩展名须在支持列表内——文本训练用 jsonl，评测集按样本格式区分（prompt&completion 用 xls/xlsx，ChatML-messages 支持 jsonl/xls/xlsx），多模态图片支持 bmp/jpeg/jpg/png/tif/tiff/webp，多模态视频支持 mp4 等格式。
 
 **处置：**按以下方式调整后重传：
 
@@ -792,6 +802,6 @@ OSS 导入与云存储挂载的差异对比如下：
 
 验证集自动切分会从训练集中随机抽取 10% 数据作为验证集，减少实际训练数据量。小数据集建议选择独立验证集，验证集配置操作见[在控制台进行模型调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-on-console.md)。
 
-建议先下载对应场景的数据模板，按模板结构准备数据可避免导入失败，数据模板下载建议见[概述](https://help.aliyun.com/zh/model-studio/text-generation-tuning-data-upload-rules#ew7a7senrgj00)。常见问题排障详见下文折叠项。历史草稿版本数据清洗与增强操作见[数据清洗或增强](raw/model-user-guide/model-data-overview/data-processing.md)，安全合规数据领域见[0 代码强化大模型安全合规能力](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/enhance-the-security-compliance-of-large-models.md)。
+建议先下载对应场景的数据模板，按模板结构准备数据可避免导入失败，数据模板下载建议见[概述](https://help.aliyun.com/zh/model-studio/text-generation-tuning-data-upload-rules#ew7a7senrgj00)。常见问题排障详见下文折叠项。历史草稿版本数据清洗与增强操作见[数据清洗或增强](https://help.aliyun.com/zh/model-studio/data-processing)，安全合规数据领域见[0 代码强化大模型安全合规能力](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/enhance-the-security-compliance-of-large-models.md)。
 
 上传校验失败时，可前往控制台[新增数据集](https://bailian.console.aliyun.com/model/data/createDataAss)页面核对文件格式与准入规则。

@@ -2,7 +2,7 @@
 
 本文介绍万相-文生图V1版模型的输入输出参数。
 
-**相关指南**：[文本生成图像](raw/model-user-guide/model-experience/image-model/text-to-image.md)
+**相关指南**：[文本生成图像](raw/model-user-guide/model-experience/image-and-video-generation/image-model/text-to-image.md)
 
 **重要**
 
@@ -322,7 +322,7 @@ dashscope image-synthesis create -m wanx2.1-t2i-turbo -p "一只可爱的猫" -n
 
 [DashScope SDK Expert](raw/model-api-reference/preparations/dashscope-sdk-expert.md)。
 
-完整地域表见 [Base URL 总览](raw/model-user-guide/get-started-with-models/base-url.md)。
+完整地域表见 [Base URL 总览](raw/model-api-reference/preparations/base-url.md)。
 
 #### 响应参数
 

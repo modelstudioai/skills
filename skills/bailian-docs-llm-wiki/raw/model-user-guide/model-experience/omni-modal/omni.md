@@ -68,13 +68,13 @@ Qwen3.5-Omni
 
 Qwen3.8-LiveTranslate-Flash-Realtime
 
-[实时语音/音视频翻译-千问](raw/model-user-guide/model-experience/speech-to-speech/qwen3-5-livetranslate-flash-realtime.md)
+[实时语音/音视频翻译-千问](raw/model-user-guide/model-experience/omni-modal/qwen3-5-livetranslate-flash-realtime.md)
 
 **音视频文件翻译**：上传音频/视频文件翻译为目标语言（视频配音、播客翻译）
 
 Qwen3-Livetranslate
 
-[音视频文件翻译-千问](raw/model-user-guide/model-experience/speech-to-speech/qwen3-livetranslate-flash.md)
+[音视频文件翻译-千问](raw/model-user-guide/model-experience/omni-modal/qwen3-livetranslate-flash.md)
 
 **声音复刻**：提供参考音频，AI用该音色生成语音回复
 

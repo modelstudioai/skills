@@ -2,11 +2,11 @@
 
 本文以 Android 平台为例，介绍如何接入 AOQ Client SDK，使用 qwen3.8-livetranslate-flash-realtime 实现语音的实时翻译。其他平台的接入流程和模型事件处理方式类似，使用对应平台的 SDK 接口即可；下文客户端代码统一使用 Java。
 
-**说明**模型能力详情请参考[实时语音/音视频翻译模型说明](raw/model-user-guide/model-experience/speech-to-speech/qwen3-5-livetranslate-flash-realtime.md)，媒体与模型事件的分工请参考 [AOQ 接入](raw/model-api-reference/realtime-api-user-guide/realtime-model-connection/realtime-aoq-access.md)。
+**说明**模型能力详情请参考[实时语音/音视频翻译模型说明](raw/model-user-guide/model-experience/omni-modal/qwen3-5-livetranslate-flash-realtime.md)，媒体与模型事件的分工请参考 [AOQ 接入](raw/model-api-reference/realtime-api-user-guide/realtime-model-connection/realtime-aoq-access.md)。
 
 ## SDK 获取
 
-AOQ Client SDK 及音频 Opus 插件请参见 [SDK 下载](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-sdk-download.md)。本文的音频传输示例使用 Opus，需要同时导入对应平台的插件。模型支持的地域、语种、计费和限流以[实时语音/音视频翻译模型说明](raw/model-user-guide/model-experience/speech-to-speech/qwen3-5-livetranslate-flash-realtime.md)为准。
+AOQ Client SDK 及音频 Opus 插件请参见 [SDK 下载](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-sdk-download.md)。本文的音频传输示例使用 Opus，需要同时导入对应平台的插件。模型支持的地域、语种、计费和限流以[实时语音/音视频翻译模型说明](raw/model-user-guide/model-experience/omni-modal/qwen3-5-livetranslate-flash-realtime.md)为准。
 
 ## SDK 导入
 
@@ -337,7 +337,7 @@ engine.connect(connectConfig);
 }
 ```
 
-交互流程请参考[实时翻译模型说明](raw/model-user-guide/model-experience/speech-to-speech/qwen3-5-livetranslate-flash-realtime.md)，`session.update` 完整参数请参考[实时翻译客户端事件](raw/_short/live-translator-client-events-666da53ef8b3942d.md)。
+交互流程请参考[实时翻译模型说明](raw/model-user-guide/model-experience/omni-modal/qwen3-5-livetranslate-flash-realtime.md)，`session.update` 完整参数请参考[实时翻译客户端事件](raw/_short/live-translator-client-events-666da53ef8b3942d.md)。
 
 将上述 JSON 编码为 UTF-8 字节，通过 `sendDataMsg` 发送。
 
@@ -424,7 +424,7 @@ AoqClientEngine.destroy();
 
 ## 相关文档
 
--   [实时语音/音视频翻译](raw/model-user-guide/model-experience/speech-to-speech/qwen3-5-livetranslate-flash-realtime.md)
+-   [实时语音/音视频翻译](raw/model-user-guide/model-experience/omni-modal/qwen3-5-livetranslate-flash-realtime.md)
 -   [客户端事件](raw/_short/live-translator-client-events-666da53ef8b3942d.md)
 -   [服务端事件](raw/_short/live-translator-server-events-e9db9578a7b303d5.md)
 -   [AOQ 接入](raw/model-api-reference/realtime-api-user-guide/realtime-model-connection/realtime-aoq-access.md)

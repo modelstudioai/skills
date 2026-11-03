@@ -117,6 +117,28 @@
 
 ## 训练提交
 
+决策模型微调支持两种提交方式：在控制台提交（推荐，无需编写代码）或通过 OpenAPI 提交。
+
+### 在控制台提交
+
+**说明**控制台提交目前支持华北2（北京）地域，且需开通决策模型服务（白名单），请联系商务经理开通。
+
+1.  前往[百炼控制台模型调优](https://bailian.console.aliyun.com/cn-beijing/model/tuning)页面，点击**创建训练任务**。
+2.  **训练方式**选择**SFT微调训练**。
+3.  **选择模型**：在模型下拉中搜索并选择**决策模型（预览版）-2026-09-24**，点击**确定**。
+4.  **训练方法**：仅支持**高效训练**，全参训练不可选。
+5.  **超参配置**：仅 `batch_size`（范围 \[1,1024\]）、`learning_rate`、`n_epochs`（范围 \[1,200\]）三项，含义与默认值见[通过 OpenAPI 提交](https://help.aliyun.com/zh/model-studio/decision-model-tuning-guide#decision-api)中的超参数表。
+6.  **数据配置**：
+    -   **训练集**：支持**数据集选择**（选择已有数据集，含通过 OpenAPI 上传的数据集）与**数据集挂载**（挂载 OSS 中的数据文件）。
+    -   **验证集**：支持**选择数据集**与**从当前训练集随机分割**（按比例从训练集切分）。
+7.  **训练资源配置**：选择计费方式——按 Token 计费（限时 0 元/千 token）、训练单元·预付费或训练单元·后付费。
+8.  **训练产出**：设置模型名称（默认自动生成）、导出数量上限与 Checkpoint 保存间隔，可开启模型加密。
+9.  点击**开始训练**。
+
+提交后在任务列表查看进展：决策模型任务的基础模型列为**决策模型（预览版）-2026-09-24**，训练方法列为**SFT-高效训练**。任务详情页分**指标**、**日志**、**产出**三个页签，指标口径见[训练指标](https://help.aliyun.com/zh/model-studio/decision-model-tuning-guide#decision-metrics)。
+
+### 通过 OpenAPI 提交
+
 数据集通过百炼 OpenAPI 上传（JSONL 格式），获得 `file_id` 后在微调请求中引用。中国站地址 `https://dashscope.aliyuncs.com`，新加坡站 `https://dashscope-intl.aliyuncs.com`，API Key 与站点对应：
 
 ```
@@ -254,7 +276,7 @@ Integer
 
 ### 训练指标
 
-任务提交后，可在[百炼控制台模型调优](https://bailian.console.aliyun.com/cn-beijing/model/training)查看训练进展与产物。指标页分三组：
+任务提交后，可在[百炼控制台模型调优](https://bailian.console.aliyun.com/cn-beijing/model/tuning)查看训练进展与产物。指标页分三组：
 
 **组**
 
@@ -449,7 +471,7 @@ print(resp.json()["answers"]["department"])
 
 **Q：微调支持从 OSS 导入吗？**
 
-不支持。当前只能通过百炼 OpenAPI 上传数据集（前端上传暂不支持）。
+支持。在控制台创建训练任务时，训练集可选择**数据集挂载**方式直接挂载 OSS 中的数据文件；通过 OpenAPI 提交时，数据集需先上传获得 `file_id` 后在微调请求中引用。
 
 **Q：数据里有 unknowable 会影响准确率吗？**
 
@@ -459,7 +481,7 @@ print(resp.json()["answers"]["department"])
 
 **Q：微调需要自己准备 GPU 吗？**
 
-不需要。百炼托管训练，你只需通过 API 提交数据和超参。
+不需要。百炼托管训练，您只需通过控制台或 OpenAPI 提交数据和超参。
 
 **Q：微调支持继续训练吗？**
 
@@ -523,7 +545,7 @@ MU5×1。后付费 21 元/小时（最小计费分钟），预付费 10139 元/�
 
 **Q：微调支持什么地域？**
 
-北京（`dashscope.aliyuncs.com`）和新加坡（`dashscope-intl.aliyuncs.com`），API Key 与站点对应。
+控制台提交支持华北2（北京）。OpenAPI 提交支持北京（`dashscope.aliyuncs.com`）和新加坡（`dashscope-intl.aliyuncs.com`），API Key 与站点对应。
 
 **Q：微调后能改问题定义吗？**
 

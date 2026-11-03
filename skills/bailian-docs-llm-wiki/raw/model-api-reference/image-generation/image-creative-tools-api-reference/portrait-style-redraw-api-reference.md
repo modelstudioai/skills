@@ -8,7 +8,7 @@
 
 其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
-**快速入口：**[使用指南](raw/model-user-guide/model-experience/image-model/style-repaint.md) ｜ [HTTP调用新手指南](raw/model-user-guide/use-chat-client-or-development-tool/first-call-to-image-and-video-api.md) ｜ [新人免费额度](raw/model-user-guide/test-1/new-free-quota.md) ｜ [计费与限流](https://help.aliyun.com/zh/model-studio/style-repaint#d34d4c23aew5n)
+**快速入口：**[使用指南](raw/model-user-guide/use-cases/legacy-resources/legacy-image-generation/style-repaint.md) ｜ [HTTP调用新手指南](https://help.aliyun.com/zh/model-studio/first-call-to-image-and-video-api) ｜ [新人免费额度](raw/model-user-guide/test-1/new-free-quota.md) ｜ [计费与限流](https://help.aliyun.com/zh/model-studio/style-repaint#d34d4c23aew5n)
 
 ## 模型概览
 
@@ -48,8 +48,8 @@ wanx-style-repaint-v1
 **说明**
 
 -   创建任务后，系统将立即返回一个 `task_id`。在步骤2中使用该 `task_id` 查询任务结果，有效期24小时。
--   如需集成至现有项目，需自行实现对应语言的 HTTP 调用逻辑。部分示例代码请参见[人像风格重绘](raw/model-user-guide/model-experience/image-model/style-repaint.md)。
--   HTTP调用新手指南请参见[Postman](raw/model-user-guide/use-chat-client-or-development-tool/first-call-to-image-and-video-api.md)。
+-   如需集成至现有项目，需自行实现对应语言的 HTTP 调用逻辑。部分示例代码请参见[人像风格重绘](raw/model-user-guide/use-cases/legacy-resources/legacy-image-generation/style-repaint.md)。
+-   HTTP调用新手指南请参见[Postman](https://help.aliyun.com/zh/model-studio/first-call-to-image-and-video-api)。
 
 ### 步骤1：创建任务获取任务ID
 
@@ -108,7 +108,7 @@ wanx-style-repaint-v1
 
 **style\_index** `integer` **（必选）**
 
-选择一个预置的风格索引值，即可生成风格化人像。风格化效果请参考[使用指南](raw/model-user-guide/model-experience/image-model/style-repaint.md)。
+选择一个预置的风格索引值，即可生成风格化人像。风格化效果请参考[使用指南](raw/model-user-guide/use-cases/legacy-resources/legacy-image-generation/style-repaint.md)。
 
 -   \-1：使用参考图像风格（需提供`style_ref_url`）
 -   0：复古漫画
@@ -139,7 +139,7 @@ wanx-style-repaint-v1
 
 当`style_index=-1`时，必须传入，其他风格无需传入。
 
-风格参考图像URL地址。风格参考效果请参考[使用指南](raw/model-user-guide/model-experience/image-model/style-repaint.md)。
+风格参考图像URL地址。风格参考效果请参考[使用指南](raw/model-user-guide/use-cases/legacy-resources/legacy-image-generation/style-repaint.md)。
 
 -   支持公网可访问的HTTP/HTTPS地址，不包含中文字符。
     

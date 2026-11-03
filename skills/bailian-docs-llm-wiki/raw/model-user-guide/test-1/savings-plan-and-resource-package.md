@@ -6,7 +6,7 @@
 
 百炼平台默认采用**按量后付费**模式，不支持直接提前赠送 Token 额度。如需降低模型调用成本，推荐选择 [AI 通用型节省计划](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package#ghoteqo7uv9wa)**（推荐）**：通过承诺每月消费金额来换取阶梯式折扣，最高可享 5.3 折优惠。该方案可抵扣[阿里直供](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package#c14b3d84925t1)的绝大部分模型，灵活性最高，**是绝大多数场景下的首选**。
 
-其他优惠方案适用于特定场景：用量较小或需求高度集中于特定模型时，可按需选用[其他模型节省计划](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package#0d5644e5e3su8)或[资源包](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package#636b1d18d5lhl)，详见文末对应章节；希望在 AI 编程和智能体工具中以订阅方式使用模型时，可选择 [Token Plan](raw/model-user-guide/token-plan-guide/token-plan-overview.md)（个人版面向个人开发者，团队版面向团队）。节省计划和资源包购买后如何开始使用，参见[使用方式](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package#h2-usage)。
+其他优惠方案适用于特定场景：用量较小或需求高度集中于特定模型时，可按需选用[其他模型节省计划](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package#0d5644e5e3su8)或[资源包](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package#636b1d18d5lhl)，详见文末对应章节；希望在 AI 编程和智能体工具中以订阅方式使用模型时，可选择 [Token Plan](https://help.aliyun.com/zh/model-studio/token-plan-overview)（个人版面向个人开发者，团队版面向团队）。节省计划和资源包购买后如何开始使用，参见[使用方式](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package#h2-usage)。
 
 **维度**
 
@@ -50,9 +50,9 @@ AI 编程与智能体工具使用（个人版/团队版）
 
 ## 使用方式
 
-节省计划和资源包购买后自动生效，使用**百炼通用 API Key** 与 Base URL 接入，模型调用产生的费用在结算时按[抵扣顺序](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package#h3-deduction-order)自动抵扣，且**仅抵扣生效后产生的费用**，购买前已产生的费用无法追溯抵扣。可通过百炼控制台体验中心、API 代码调用或接入第三方工具（如[OpenClaw](raw/model-user-guide/use-chat-client-or-development-tool/openclaw.md)等，填写按量计费接入凭证）调用模型。
+节省计划和资源包购买后自动生效，使用**百炼通用 API Key** 与 Base URL 接入，模型调用产生的费用在结算时按[抵扣顺序](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package#h3-deduction-order)自动抵扣，且**仅抵扣生效后产生的费用**，购买前已产生的费用无法追溯抵扣。可通过百炼控制台体验中心、API 代码调用或接入第三方工具（如[OpenClaw](https://help.aliyun.com/zh/model-studio/openclaw)等，填写按量计费接入凭证）调用模型。
 
-API Key 与 Base URL 的获取和配置方法，参见[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)和[Base URL 总览](raw/model-user-guide/get-started-with-models/base-url.md)。
+API Key 与 Base URL 的获取和配置方法，参见[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)和[Base URL 总览](raw/model-api-reference/preparations/base-url.md)。
 
 ## AI 通用型节省计划
 

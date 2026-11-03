@@ -191,7 +191,7 @@ session.last_response
 
 语音合成所使用的音色。
 
--   **系统音色**：参见[Qwen-Audio-TTS音色列表](raw/model-user-guide/model-experience/speech-synthesis/tts-voice-list/qwen-audio-tts-voice-list.md)
+-   **系统音色**：参见[Qwen-Audio-TTS音色列表](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/tts-voice-list/qwen-audio-tts-voice-list.md)
 -   **复刻音色**：通过声音复刻功能定制
 -   **声音设计音色**：通过声音设计功能定制
 
@@ -276,7 +276,7 @@ audio = client.audio.tts.synthesize(
 
 默认值：false。
 
-仅在流式输出模式下可用。支持复刻音色；支持的系统音色请参见[Qwen-Audio-TTS音色列表](raw/model-user-guide/model-experience/speech-synthesis/tts-voice-list/qwen-audio-tts-voice-list.md)。
+仅在流式输出模式下可用。支持复刻音色；支持的系统音色请参见[Qwen-Audio-TTS音色列表](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/tts-voice-list/qwen-audio-tts-voice-list.md)。
 
 `word_timestamp_enabled`需要通过`parameters`字典进行设置：
 
@@ -615,7 +615,7 @@ dashscope speech-synthesis create -m qwen-audio-3.0-tts-flash -t "你好世界" 
 
 [DashScope SDK Expert](raw/model-api-reference/preparations/dashscope-sdk-expert.md)。
 
-完整地域表见 [Base URL 总览](raw/model-user-guide/get-started-with-models/base-url.md)。
+完整地域表见 [Base URL 总览](raw/model-api-reference/preparations/base-url.md)。
 
 #### 单向流式调用
 

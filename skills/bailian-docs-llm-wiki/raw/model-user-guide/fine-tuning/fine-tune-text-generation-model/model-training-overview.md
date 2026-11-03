@@ -510,7 +510,7 @@ CPT 之后，DPO 之前
 
 通常在 SFT 之后，作为对齐的最后一步
 
-除上述三种方式外，百炼还支持**RL（强化学习）**训练方式。RL 通过奖励信号持续优化模型行为，适用于需要通过人类反馈或自动评分提升模型表现的场景。控制台训练方法列可选「RL - 全参训练」。RL 训练的完整操作流程和配置说明请参见[强化学习](raw/model-user-guide/fine-tuning/rl-training-overview.md)。
+除上述三种方式外，百炼还支持**RL（强化学习）**训练方式。RL 通过奖励信号持续优化模型行为，适用于需要通过人类反馈或自动评分提升模型表现的场景。控制台训练方法列可选「RL - 全参训练」。RL 训练的完整操作流程和配置说明请参见[强化学习](raw/model-user-guide/fine-tuning/rl-overview/rl-training-overview.md)。
 
 #### 训练模式对比
 
@@ -747,7 +747,7 @@ qwen-plus-character-2025-11-06
         
     -   宽高比：原图及缩放后的图像，长边与短边的比值不得超过 `200:1`。
         
-        > 图像缩放逻辑请参见 [计算图像的Token](raw/model-user-guide/model-experience/vision-model/vision.md) 中 `smart_resize` 函数。
+        > 图像缩放逻辑请参见 [计算图像的Token](raw/model-user-guide/model-experience/text-generation-model/vision.md) 中 `smart_resize` 函数。
         
     -   像素上限：
         
@@ -809,7 +809,7 @@ qwen-plus-character-2025-11-06
     
     上述限制取决于所选模型，不支持通过购买高级套餐或升级模型版本提升。
     
-    > 如需压缩文件体积请参见 [如何将图像或视频压缩到满足要求的大小](raw/model-user-guide/model-experience/vision-model/vision.md) 。
+    > 如需压缩文件体积请参见 [如何将图像或视频压缩到满足要求的大小](raw/model-user-guide/model-experience/text-generation-model/vision.md) 。
     
 -   **图片数量限制：**多图输入时根据传入方式不同，支持的图片数量上限有所区别：
     
@@ -845,7 +845,7 @@ qwen-plus-character-2025-11-06
         -   以本地文件路径传入时：视频本身不超过 100MB。
             
         
-        > 如需压缩文件体积请参见 [如何将图像或视频压缩到满足要求的大小](raw/model-user-guide/model-experience/vision-model/vision.md) 。
+        > 如需压缩文件体积请参见 [如何将图像或视频压缩到满足要求的大小](raw/model-user-guide/model-experience/text-generation-model/vision.md) 。
         
     -   **视频时长：**
         -   `qwen3.8`系列、`qwen3.7`系列、`qwen3.6`系列、`qwen3.5` 系列：2秒至2小时；
@@ -873,7 +873,7 @@ qwen-plus-character-2025-11-06
 -   **本地文件路径传入（仅限 DashScope SDK）：**传入本地文件的路径。
     
 
-> 关于文件传入方式的建议，请参见 [如何选择文件上传方式？](raw/model-user-guide/model-experience/vision-model/vision.md)
+> 关于文件传入方式的建议，请参见 [如何选择文件上传方式？](raw/model-user-guide/model-experience/text-generation-model/vision.md)
 
 计算图像与视频的Token
 
@@ -1260,7 +1260,7 @@ if __name__ == "__main__":
     
     -   **耗时较长**，包括：拥有一个大规模（最少 0.5亿 token）CPT 数据集、构建一个有效（1000+）SFT 数据集、收集足够的（100+）Bad Case 构建有效 DPO 数据集、模型优化迭代速度慢等。
     -   **费用较高，**调优后的模型部署后才能使用，[模型部署计费](https://help.aliyun.com/zh/model-studio/model-training-and-deployment-billing#0c4e677c48lrp)较高。
--   阿里云百炼推荐您在考虑使用文本生成模型调优前**先尝试使用**的 [Prompt 工程](raw/model-user-guide/use-cases/prompt-engineering-guide.md)**（_Prompt Engineering_）或**[插件调用](raw/application-user-guide/agent-development/llm-application/plug-in/plug-in-overview.md)**（_Function Calling_）**定制化您的应用，**模型调优也通常作为改进模型表现“最后的手段”**。因为：
+-   阿里云百炼推荐您在考虑使用文本生成模型调优前**先尝试使用**的 [Prompt 工程](raw/model-user-guide/use-cases/prompt-engineering-guide.md)**（_Prompt Engineering_）或**[插件调用](raw/application-user-guide/plug-in/plug-in-overview.md)**（_Function Calling_）**定制化您的应用，**模型调优也通常作为改进模型表现“最后的手段”**。因为：
     
     1.  在许多任务中，模型最初可能表现不佳，但通过应用正确的 Prompt 技巧可以改进结果，不一定需要使用模型调优。
     2.  迭代优化 Prompt、插件，比模型调优的迭代更敏捷、成本更低，因为模型调优的迭代可能需要重新收集数据、清洗优化数据、收集 bad case、发起客户调研等。
@@ -1365,7 +1365,7 @@ jsonl（纯文本 {text}）
 
 评测集
 
-xlsx
+xlsx（prompt&completion）/ jsonl、xls、xlsx（ChatML-messages）
 
 ## 数据集构建技巧
 
@@ -1373,7 +1373,7 @@ xlsx
 
 对于CPT来说，数据集最少需要**五千万Token优质预训练数据**；对于 SFT 来说，数据集最少需要**上千条优质调优数据**；对于 DPO 来说，数据集一般需要**上百条人类偏好数据**。如果数据调优后的模型评测结果不佳，最简单的改进方法是收集更多数据进行训练。
 
-如果您缺乏数据，建议构建[智能体应用（Agent 1.0）](raw/application-user-guide/agent-development/llm-application/single-agent-application.md)，使用知识库索引来增强模型能力。当然在很多复杂的业务场景，可以综合采用模型调优和知识库检索结合的技术方案。
+如果您缺乏数据，建议构建[智能体应用（Agent 1.0）](raw/application-user-guide/llm-application/single-agent-application.md)，使用知识库索引来增强模型能力。当然在很多复杂的业务场景，可以综合采用模型调优和知识库检索结合的技术方案。
 
 以客服场景为例，可以借助模型调优解决客服回答的语气、表达习惯、自我认知等问题，场景涉及的专业知识可以结合知识库，动态引入到模型上下文中。
 

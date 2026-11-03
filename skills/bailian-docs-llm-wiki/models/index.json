@@ -1,11 +1,11 @@
 {
-  "updatedAt": "2026-11-02",
-  "totalFamilies": 124,
-  "totalModels": 333,
+  "updatedAt": "2026-11-04",
+  "totalFamilies": 125,
+  "totalModels": 334,
   "profileCoverage": {
-    "full": 297,
-    "partial": 34,
-    "structured-only": 2,
+    "full": 294,
+    "partial": 40,
+    "structured-only": 0,
     "none": 0
   },
   "capabilityDistribution": {
@@ -18,7 +18,7 @@
     "Realtime-ASR": 6,
     "VU": 5,
     "Multimodal-Omni": 5,
-    "Realtime-Omni": 3,
+    "Realtime-Omni": 4,
     "ME": 2,
     "Realtime-Chatting": 2,
     "TR": 2,
@@ -28,7 +28,7 @@
     "3D-generation": 1
   },
   "providerDistribution": {
-    "qwen": 62,
+    "qwen": 63,
     "qwen-domain-model": 26,
     "wan": 13,
     "mini-max": 4,
@@ -1156,6 +1156,22 @@
         "qwen3-livetranslate-flash"
       ],
       "maxContextWindow": 53248
+    },
+    {
+      "slug": "qwen3-omni-flash-realtime",
+      "name": "Qwen3-Omni-Flash-Realtime",
+      "primaryCapability": "Realtime-Omni",
+      "capabilities": [
+        "Realtime-Omni"
+      ],
+      "providers": [
+        "qwen"
+      ],
+      "itemCount": 1,
+      "items": [
+        "qwen3-omni-flash-realtime-2025-09-15"
+      ],
+      "maxContextWindow": 65536
     },
     {
       "slug": "qwen3-omni-flash",

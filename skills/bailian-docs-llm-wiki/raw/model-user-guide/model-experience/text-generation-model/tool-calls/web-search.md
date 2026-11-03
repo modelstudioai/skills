@@ -219,7 +219,7 @@ public class Main {
 
 #### 全球
 
-美国（弗吉尼亚）、中国香港、日本（东京）、德国（法兰克福）地域支持以下模型。其中中国香港、日本（东京）、德国（法兰克福）需使用服务部署范围为**全球**的业务空间调用，参见[选择地域、服务部署范围和接入域名](raw/model-user-guide/get-started-with-models/regions.md)。
+美国（弗吉尼亚）、中国香港、日本（东京）、德国（法兰克福）地域支持以下模型。其中中国香港、日本（东京）、德国（法兰克福）需使用服务部署范围为**全球**的业务空间调用，参见[选择地域、服务部署范围和接入域名](raw/model-api-reference/preparations/regions.md)。
 
 -   **DeepSeek**：`deepseek-v4.1-flash-1017` 支持模型原生联网搜索、Responses API 内置 `web_search` 和 Anthropic 兼容 API 内置 `web_search`，适用于中国（北京）、新加坡（国际部署范围），以及美国（弗吉尼亚）、德国（法兰克福）、日本（东京）、中国香港（全球部署范围）。
     
@@ -3487,7 +3487,7 @@ for item in response.output:
 
 ## 计费说明
 
-**说明**本文所述“联网搜索”为模型内置的联网搜索功能，其计费如下方所示，本身不提供免费调用额度。它与百炼 MCP 广场提供的“联网搜索 MCP”服务是相互独立的两个功能，计费也相互独立：联网搜索 MCP 全部用户前 2000 次调用免费，免费额度用尽后按 29 元/千次计费，详情请参见[接入 Harness 工具](raw/model-user-guide/token-plan-guide/token-plan-personal/token-plan-harness-tool.md)。
+**说明**本文所述“联网搜索”为模型内置的联网搜索功能，其计费如下方所示，本身不提供免费调用额度。它与百炼 MCP 广场提供的“联网搜索 MCP”服务是相互独立的两个功能，计费也相互独立：联网搜索 MCP 全部用户前 2000 次调用免费，免费额度用尽后按 29 元/千次计费，详情请参见[接入 Harness 工具](https://help.aliyun.com/zh/model-studio/token-plan-harness-tool)。
 
 联网搜索的费用包含两部分：
 
@@ -3582,7 +3582,7 @@ A：使用 qwen3.7-max 或更新版本的模型。qwen3.7-max 能识别非交易
 
 ### Q：如何让 Kimi 系列模型执行联网搜索？
 
-A：Kimi 系列模型（kimi-k3）仅支持通过[Responses API](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y)的 `web_search` 工具联网搜索，不支持 `enable_search` 参数。如需更灵活的检索方式，也可在百炼控制台创建智能体应用，并通过**工具 > MCP 服务**添加联网搜索 MCP 工具（如 `bailian_web_search`）。联网搜索 MCP 与内置联网搜索是相互独立的两个功能，计费也相互独立，详情请参见[接入 Harness 工具](raw/model-user-guide/token-plan-guide/token-plan-personal/token-plan-harness-tool.md)。
+A：Kimi 系列模型（kimi-k3）仅支持通过[Responses API](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y)的 `web_search` 工具联网搜索，不支持 `enable_search` 参数。如需更灵活的检索方式，也可在百炼控制台创建智能体应用，并通过**工具 > MCP 服务**添加联网搜索 MCP 工具（如 `bailian_web_search`）。联网搜索 MCP 与内置联网搜索是相互独立的两个功能，计费也相互独立，详情请参见[接入 Harness 工具](https://help.aliyun.com/zh/model-studio/token-plan-harness-tool)。
 
 ## 错误信息
 

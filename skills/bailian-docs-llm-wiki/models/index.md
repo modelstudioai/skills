@@ -1,6 +1,6 @@
 # 百炼模型市场索引
 
-> 自动生成 · 共 124 个模型家族 · 333 个主干模型 · 更新于 2026-11-02
+> 自动生成 · 共 125 个模型家族 · 334 个主干模型 · 更新于 2026-11-04
 
 **机器查询走结构化文件**：
 
@@ -264,8 +264,10 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [Qwen3.8-Omni-Flash](groups/qwen3.8-omni-flash.json) — Qwen3.8-Omni-Flash 是面向多模态理解与实时交互的新一代全模态模型，支持文本、图像、音频和视频输入。模型具备百万级上下文窗口，支持深度思考、流式输出及 OpenAI 兼容接口。离线模式…
   - 模型：`qwen3.8-omni-flash`
 
-## 实时全模态 `Realtime-Omni` — 3 个家族
+## 实时全模态 `Realtime-Omni` — 4 个家族
 
+- [Qwen3-Omni-Flash-Realtime](groups/qwen3-omni-flash-realtime.json) — Qwen3-Omni-Flash-Realtime多模态大模型的实时版，基于Thinker–Talker混合专家（MoE）架构，支持文本、图像、音频、视频的高效理解与语音生成能力，可进行119种语言文…
+  - 模型：`qwen3-omni-flash-realtime-2025-09-15`
 - [Qwen3.5-Omni-Flash-Realtime](groups/qwen3.5-omni-flash-realtime.json) — Qwen3.5-Omni是Qwen最新一代全模态大模型，支持文本，图片，音频，音视频理解与交互。作为 Qwen3-Omni 的全面进化版本，支持60+种语言音频输入，30+语言语音输出以及可控语音对话…
   - 模型：`qwen3.5-omni-flash-realtime`
 - [Qwen3.5-Omni-Plus-Realtime](groups/qwen3.5-omni-plus-realtime.json) — Qwen3.5-Omni是Qwen最新一代全模态大模型，支持文本，图片，音频，音视频理解与交互。作为 Qwen3-Omni 的全面进化版本，支持60+种语言音频输入，30+语言语音输出以及可控语音对话…

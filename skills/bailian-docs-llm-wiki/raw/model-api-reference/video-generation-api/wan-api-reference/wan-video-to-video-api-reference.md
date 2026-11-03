@@ -2,7 +2,7 @@
 
 万相-参考生视频模型支持 多模态输入 （图片、视频、音频），生成保持角色形象和音色一致性的视频，适用于单角色表演或多角色互动场景。
 
-**相关文档**：[使用指南](raw/model-user-guide/model-experience/video-generate-edit-model/video-to-video-guide.md)
+**相关文档**：[使用指南](raw/_short/video-to-video-guide-f63917cdae4414ac.md)
 
 ## 适用范围
 
@@ -42,7 +42,7 @@
 **说明**
 
 -   创建成功后，使用接口返回的 `task_id` 查询结果，task\_id 有效期为 24 小时。**请勿重复创建任务**，轮询获取即可。
--   新手指引请参见[Postman](raw/model-user-guide/use-chat-client-or-development-tool/first-call-to-image-and-video-api.md)。
+-   新手指引请参见[Postman](https://help.aliyun.com/zh/model-studio/first-call-to-image-and-video-api)。
 
 #### 请求参数
 

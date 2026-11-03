@@ -600,7 +600,7 @@ API-Key 的创建和管理，请在百炼控制台的系统管理中操作。
 
 API-Key 被删除后的展示规则与审计日志一致（列表不展示描述，详情仅展示 ID）。
 
-推理日志可回流为训练数据集，详细信息请参见[日志回流](raw/model-user-guide/model-data-overview/model-log-backflow.md)。
+推理日志可回流为训练数据集，详细信息请参见[日志回流](https://help.aliyun.com/zh/model-studio/model-log-backflow)。
 
 **重要**推理日志记录完整 Prompt/Response，适合复现异常请求、调试模型输出与排查偶发问题。
 

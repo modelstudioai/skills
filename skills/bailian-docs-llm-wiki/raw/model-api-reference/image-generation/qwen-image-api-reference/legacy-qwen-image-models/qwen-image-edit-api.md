@@ -2,7 +2,7 @@
 
 千问-图像编辑模型支持多图输入和多图输出，可精确修改图内文字、增删或移动物体、改变主体动作、迁移图片风格及增强画面细节。
 
-**快速入口：**[使用指南](raw/model-user-guide/model-experience/image-model/image-edit-guide/qwen-image-edit-guide.md) | [技术博客](https://qwen.ai/blog?id=1675c295dc29dd31073e5b3f72876e9d684e41c6&from=research.research-list) | [在线体验](https://bailian.console.aliyun.com/model/experience/vision/imageGenerate?modelId=qwen-image-edit-3.0-pro)
+**快速入口：**[使用指南](raw/model-user-guide/model-experience/image-and-video-generation/image-model/image-edit-guide/qwen-image-edit-guide.md) | [技术博客](https://qwen.ai/blog?id=1675c295dc29dd31073e5b3f72876e9d684e41c6&from=research.research-list) | [在线体验](https://bailian.console.aliyun.com/model/experience/vision/imageGenerate?modelId=qwen-image-edit-3.0-pro)
 
 ## 模型概览
 

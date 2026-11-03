@@ -196,7 +196,7 @@ session.last_response
 
 语音合成所使用的音色。
 
--   **系统音色**：参见[CosyVoice音色列表](raw/model-user-guide/model-experience/speech-synthesis/tts-voice-list/cosyvoice-voice-list.md)
+-   **系统音色**：参见[CosyVoice音色列表](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/tts-voice-list/cosyvoice-voice-list.md)
 -   **复刻音色**：通过声音复刻功能定制
 -   **声音设计音色**：通过声音设计功能定制
 
@@ -281,7 +281,7 @@ audio = client.audio.tts.synthesize(
 
 默认值：false。
 
-仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2模型的复刻音色，以及[CosyVoice音色列表](raw/model-user-guide/model-experience/speech-synthesis/tts-voice-list/cosyvoice-voice-list.md)中标记为支持的系统音色。其他模型的复刻音色不支持此功能。
+仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2模型的复刻音色，以及[CosyVoice音色列表](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/tts-voice-list/cosyvoice-voice-list.md)中标记为支持的系统音色。其他模型的复刻音色不支持此功能。
 
 `word_timestamp_enabled`需要通过`parameters`字典进行设置：
 
@@ -634,7 +634,7 @@ dashscope speech-synthesis create -m cosyvoice-v2 -t "你好世界" --voice long
 
 [DashScope SDK Expert](raw/model-api-reference/preparations/dashscope-sdk-expert.md)。
 
-完整地域表见 [Base URL 总览](raw/model-user-guide/get-started-with-models/base-url.md)。
+完整地域表见 [Base URL 总览](raw/model-api-reference/preparations/base-url.md)。
 
 #### 单向流式调用
 

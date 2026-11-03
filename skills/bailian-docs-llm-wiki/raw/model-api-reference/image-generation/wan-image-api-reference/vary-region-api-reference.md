@@ -2,12 +2,12 @@
 
 本文介绍万相-图像局部重绘模型的输入输出参数。
 
-**相关指南**：[图像局部重绘](raw/model-user-guide/model-experience/image-model/vary-region.md)
+**相关指南**：[图像局部重绘](raw/model-user-guide/use-cases/legacy-resources/legacy-image-generation/vary-region.md)
 
 **重要**
 
 -   本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)。
--   wanx-x-painting 模型当前仅提供**免费体验**，免费额度用完后不可调用且不支持付费，推荐参考[图像编辑-千问](raw/model-user-guide/model-experience/image-model/image-edit-guide/qwen-image-edit-guide.md)或[图像编辑-万相2.1](raw/model-user-guide/model-experience/image-model/image-edit-guide/wanx-image-edit.md)获取替代方案。
+-   wanx-x-painting 模型当前仅提供**免费体验**，免费额度用完后不可调用且不支持付费，推荐参考[图像编辑-千问](raw/model-user-guide/model-experience/image-and-video-generation/image-model/image-edit-guide/qwen-image-edit-guide.md)或[图像编辑-万相2.1](raw/model-user-guide/use-cases/legacy-resources/legacy-image-generation/wanx-image-edit.md)获取替代方案。
 
 **重要**阿里云百炼为华北2（北京）地域推出了业务空间专属域名 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`，**能够为推理请求提供卓越的性能和更高的稳定性**，建议从 `https://dashscope.aliyuncs.com` 迁移至新域名。
 
@@ -47,7 +47,7 @@ wanx-x-painting
 
 目前仅供免费体验。
 
-> 免费额度用完后不可调用，推荐参考[图像编辑-千问](raw/model-user-guide/model-experience/image-model/image-edit-guide/qwen-image-edit-guide.md)或[图像编辑-万相2.1](raw/model-user-guide/model-experience/image-model/image-edit-guide/wanx-image-edit.md)获取替代方案。
+> 免费额度用完后不可调用，推荐参考[图像编辑-千问](raw/model-user-guide/model-experience/image-and-video-generation/image-model/image-edit-guide/qwen-image-edit-guide.md)或[图像编辑-万相2.1](raw/model-user-guide/use-cases/legacy-resources/legacy-image-generation/wanx-image-edit.md)获取替代方案。
 
 2
 

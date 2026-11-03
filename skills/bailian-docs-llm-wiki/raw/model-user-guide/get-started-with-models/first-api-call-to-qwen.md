@@ -1272,11 +1272,7 @@ A：请根据您的使用情况参考以下步骤：
 
 #### Cline
 
-请参见[Cline](raw/model-user-guide/use-chat-client-or-development-tool/cline.md)。
-
-#### Dify
-
-请参见[Dify](raw/model-user-guide/use-chat-client-or-development-tool/dify.md)。
+请参见[Cline](https://help.aliyun.com/zh/model-studio/cline)。
 
 ## 下一步
 

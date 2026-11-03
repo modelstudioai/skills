@@ -2,12 +2,12 @@
 
 本文介绍万相-虚拟模特模型的输入输出参数。该模型可以对上传的真人或者人台实拍商品展示图进行智能生成，将其中的模特和背景替换为心仪的内容。在保持人物姿态不变的情况下，使用虚拟模特对商品进行更加精美、多样的展示。同时支持各种与模特产生互动的商品，如手持小商品、服装、鞋靴、配饰等。
 
-**相关指南**：[虚拟模特生成](raw/model-user-guide/model-experience/image-model/virtual-model-generation.md)
+**相关指南**：[虚拟模特生成](raw/model-user-guide/use-cases/legacy-resources/legacy-image-generation/virtual-model-generation.md)
 
 **重要**
 
 -   本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)。
--   wanx-virtualmodel、virtualmodel-v2 模型当前仅提供**免费体验**，免费额度用完后不可调用且不支持付费，推荐参考[图像编辑-千问](raw/model-user-guide/model-experience/image-model/image-edit-guide/qwen-image-edit-guide.md)或[图像编辑-万相2.1](raw/model-user-guide/model-experience/image-model/image-edit-guide/wanx-image-edit.md)获取替代方案。
+-   wanx-virtualmodel、virtualmodel-v2 模型当前仅提供**免费体验**，免费额度用完后不可调用且不支持付费，推荐参考[图像编辑-千问](raw/model-user-guide/model-experience/image-and-video-generation/image-model/image-edit-guide/qwen-image-edit-guide.md)或[图像编辑-万相2.1](raw/model-user-guide/use-cases/legacy-resources/legacy-image-generation/wanx-image-edit.md)获取替代方案。
 
 ## 模型概览
 
@@ -64,7 +64,7 @@ wanx-virtualmodel
 
 目前仅供免费体验。
 
-> 免费额度用完后不可调用，推荐参考[图像编辑-千问](raw/model-user-guide/model-experience/image-model/image-edit-guide/qwen-image-edit-guide.md)或[图像编辑-万相2.1](raw/model-user-guide/model-experience/image-model/image-edit-guide/wanx-image-edit.md)获取替代方案。
+> 免费额度用完后不可调用，推荐参考[图像编辑-千问](raw/model-user-guide/model-experience/image-and-video-generation/image-model/image-edit-guide/qwen-image-edit-guide.md)或[图像编辑-万相2.1](raw/model-user-guide/use-cases/legacy-resources/legacy-image-generation/wanx-image-edit.md)获取替代方案。
 
 2
 

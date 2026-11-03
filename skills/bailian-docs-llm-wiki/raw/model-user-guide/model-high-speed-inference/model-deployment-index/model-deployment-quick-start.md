@@ -151,7 +151,7 @@ dashscope deployments create -m qwen2.5-7b-instruct -s tst -c 1 --plan ptu
 
 [DashScope SDK Expert](raw/model-api-reference/preparations/dashscope-sdk-expert.md)。
 
-完整地域表见 [Base URL 总览](raw/model-user-guide/get-started-with-models/base-url.md)。
+完整地域表见 [Base URL 总览](raw/model-api-reference/preparations/base-url.md)。
 
 命令执行成功后，返回如下结果：（以模型单元部署为例）
 

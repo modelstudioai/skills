@@ -1047,7 +1047,7 @@ dashscope multimodal-embedding create -m tongyi-embedding-vision-plus --text "�
 
 [DashScope SDK Expert](raw/model-api-reference/preparations/dashscope-sdk-expert.md)。
 
-完整地域表见 [Base URL 总览](raw/model-user-guide/get-started-with-models/base-url.md)。
+完整地域表见 [Base URL 总览](raw/model-api-reference/preparations/base-url.md)。
 
 ### 输出示例
 

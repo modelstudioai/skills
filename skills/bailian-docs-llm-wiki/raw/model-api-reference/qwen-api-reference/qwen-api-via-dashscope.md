@@ -301,13 +301,13 @@ User Message`object`**（必选）**
 -   图片的 Base64 编码，格式为 `data:image/<format>;base64,<data>`
 -   本地文件：本地文件的绝对路径
 
-适用模型：[Qwen-VL、QVQ](raw/model-user-guide/model-experience/vision-model/vision.md)
+适用模型：[Qwen-VL、QVQ](raw/model-user-guide/model-experience/text-generation-model/vision.md)
 
 示例值：`{"image":"https://xxxx.jpeg"}`
 
 **video**`array 或 string`（可选）
 
-使用[Qwen-VL 或 QVQ 模型](raw/model-user-guide/model-experience/vision-model/vision.md)传入的视频。
+使用[Qwen-VL 或 QVQ 模型](raw/model-user-guide/model-experience/text-generation-model/vision.md)传入的视频。
 
 -   若传入图像列表，则为`array`类型；
 -   若传入视频文件，则为`string`类型\*。\*
@@ -329,7 +329,7 @@ fps有两个功能：
 
 -   输入视频文件时，控制抽帧频率，每 f p s 1 ​秒抽取一帧。
     
-    > 适用于[Qwen-VL 与 QVQ 模型](raw/model-user-guide/model-experience/vision-model/vision.md)。
+    > 适用于[Qwen-VL 与 QVQ 模型](raw/model-user-guide/model-experience/text-generation-model/vision.md)。
     
 -   告知模型相邻帧之间的时间间隔，帮助其更好地理解视频的时间动态。同时适用于输入视频文件与图像列表时。该功能同时支持视频文件和图像列表输入，适用于事件时间定位或分段内容摘要等场景。
     
@@ -824,7 +824,7 @@ MiniMax系列（阿里云直供）：MiniMax-M2.5: 0.0；
 
 **vl\_high\_resolution\_images**`boolean`（可选）默认值为`false`
 
-是否将输入图像的像素上限提升至 16384 Token 对应的像素值。相关文档：[处理高分辨率图像](raw/model-user-guide/model-experience/vision-model/vision.md)。
+是否将输入图像的像素上限提升至 16384 Token 对应的像素值。相关文档：[处理高分辨率图像](raw/model-user-guide/model-experience/text-generation-model/vision.md)。
 
 -   `vl_high_resolution_images：true`，使用固定分辨率策略，忽略 `max_pixels` 设置，超过此分辨率时会将图像总像素缩小至此上限内。
     
@@ -842,7 +842,7 @@ MiniMax系列（阿里云直供）：MiniMax-M2.5: 0.0；
 
 **vl\_enable\_image\_hw\_output**`boolean`（可选）默认值为 `false`
 
-是否返回图像缩放后的尺寸。模型会对输入的图像进行缩放处理，配置为 True 时会返回图像缩放后的高度和宽度，开启流式输出时，该信息在最后一个数据块（chunk）中返回。支持[Qwen-VL模型](raw/model-user-guide/model-experience/vision-model/vision.md)。
+是否返回图像缩放后的尺寸。模型会对输入的图像进行缩放处理，配置为 True 时会返回图像缩放后的高度和宽度，开启流式输出时，该信息在最后一个数据块（chunk）中返回。支持[Qwen-VL模型](raw/model-user-guide/model-experience/text-generation-model/vision.md)。
 
 > Java SDK中为 **vlEnableImageHwOutput**，Java SDK最低版本为2.20.8\*。\*通过HTTP调用时，请将 **vl\_enable\_image\_hw\_output**放入 **parameters** 对象中。
 
@@ -932,7 +932,7 @@ seed默认值
 
 > Qwen3商业版（思考模式）、Qwen3开源版、QwQ、QVQ只支持流式输出。
 
-**incremental\_output**`boolean`（可选）默认为`false`（Qwen3-Max、Qwen3-VL、[Qwen3 开源版](raw/model-user-guide/get-started-with-models/models.md)、[QwQ](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md) 、[QVQ](raw/model-user-guide/model-experience/vision-model/vision.md)模型默认值为 `true`）
+**incremental\_output**`boolean`（可选）默认为`false`（Qwen3-Max、Qwen3-VL、[Qwen3 开源版](raw/model-user-guide/get-started-with-models/models.md)、[QwQ](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md) 、[QVQ](raw/model-user-guide/model-experience/text-generation-model/vision.md)模型默认值为 `true`）
 
 在流式输出模式下是否开启增量输出。推荐您优先设置为`true`。
 
@@ -1703,7 +1703,7 @@ dashscope generation create -m qwen-plus -p "你好"
 
 [DashScope SDK Expert](raw/model-api-reference/preparations/dashscope-sdk-expert.md)。
 
-完整地域表见 [Base URL 总览](raw/model-user-guide/get-started-with-models/base-url.md)。
+完整地域表见 [Base URL 总览](raw/model-api-reference/preparations/base-url.md)。
 
 #### 流式输出
 
@@ -1963,7 +1963,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 
 #### 图像输入
 
-> 关于大模型分析图像的更多用法，请参见[图像与视频理解](raw/model-user-guide/model-experience/vision-model/vision.md)。
+> 关于大模型分析图像的更多用法，请参见[图像与视频理解](raw/model-user-guide/model-experience/text-generation-model/vision.md)。
 
 Python
 
