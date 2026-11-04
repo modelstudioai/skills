@@ -24,4 +24,4 @@ search 接口
 
 如需扩容限流额度，请[提交工单](https://smartservice.console.aliyun.com/service/create-ticket)申请。
 
-**重要**计费规则参见[计费说明](raw/application-user-guide/agent-context/memory-library-overview/integration-overview/billing.md)。
+**重要**计费规则参见[计费说明](raw/application-user-guide/agent-billing/billing.md)。

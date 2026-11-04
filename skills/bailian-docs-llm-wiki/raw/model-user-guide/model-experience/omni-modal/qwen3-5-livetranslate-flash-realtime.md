@@ -1219,6 +1219,15 @@ uk
 
 ## 常见问题
 
+### 连接着但不说话，也会计费吗？
+
+保持连接本身不计费。上传的静音是否计入音频输入用量，取决于所用模式：
+
+-   **服务端语音检测**：被服务端过滤的静音不会计入音频输入用量。
+-   **Manual 模式**：客户端手动提交的静音会计入音频输入用量。
+
+音频输入 Token 数记录在 [response.done](raw/_short/live-translator-server-events-e9db9578a7b303d5.md) 事件中，字段位置为 `response` → `usage` → `input_tokens_details` → `audio_tokens`。模型按输入、输出 Token 计费，单价和计量规则见[计费说明](#e02a82e668y2c)。
+
 ### 如何迁移Gummy模型到Livetranslate？
 
 `gummy-realtime-v1` 和 `qwen3.8-livetranslate-flash-realtime` 使用不同的协议，只换模型名无法完成迁移。下面以 Python SDK 输出英文字幕为例。已有的 16 kHz 单声道、16 位 PCM 录音可以直接用。

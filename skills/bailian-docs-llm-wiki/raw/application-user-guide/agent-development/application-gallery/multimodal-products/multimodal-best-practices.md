@@ -1,0 +1,16 @@
+# 最佳实践
+
+-   [接入多模态备忘录Agent](raw/_short/multimodal-memo-agent-243b387c1001b198.md)
+-   [接入百炼及三方Agent](raw/_short/bailian-and-tripartite-agent-0becda1ff551a69e.md)
+-   [接入拍照问答Agent](raw/_short/vqa-agent-1cc7bd7c417f3824.md)
+-   [接入图像生成Agent](raw/_short/generateimgagent-8151394c7801d463.md)
+-   [接入音乐电台Agent](raw/_short/music-agent-a9913e80d6436ddd.md)
+-   [接入视频通话Agent](raw/_short/live-api-integration-c17bacbcc3a0f42e.md)
+-   [接入听悟智能纪要Agent](raw/_short/fast-integrate-tingwu-meeting-agent-fc40c58a52f8b60f.md)
+-   [接入物理世界感知Agent](raw/_short/physical-world-perception-agent-c74e53bcc88301f5.md)
+-   [动作情绪控制实践](raw/_short/action-emotion-control-practice-92906cfe946ce822.md)
+-   [自定义对话角色实践](raw/_short/custom-role-c4d9828202bd1b6a.md)
+-   [自定义指令实践](raw/_short/custom-directive-dcbb03bf90592430.md)
+-   [声音复刻及声音设计实践](raw/_short/voice-cloning-and-voice-design-98fea69baef9443c.md)
+-   [音频采集和播放说明](raw/_short/audio-capture-and-playback-instructions-73592f9927f41ea9.md)
+-   [设备端C SDK最佳实践](raw/_short/rtos-c-sdk-best-practices-4c1ef3a920a059f8.md)

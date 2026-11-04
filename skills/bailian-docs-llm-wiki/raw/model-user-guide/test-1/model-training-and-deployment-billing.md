@@ -6,7 +6,7 @@
 
 ### 文本生成模型-千问
 
-**说明**模型训练流程请参见[模型调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)。训练完成后的新模型需先完成**模型部署**，才能评测和调用。
+**说明**模型训练流程请参见[模型调优](https://help.aliyun.com/zh/model-studio/model-training-overview)。训练完成后的新模型需先完成**模型部署**，才能评测和调用。
 
 **计费方式**
 
@@ -204,7 +204,7 @@ qwen-plus-character-2025-11-06
 
 ### 图像生成模型-万相
 
-**说明**模型训练流程请参见[图像生成模型调优](raw/model-user-guide/fine-tuning/wan-image-generation-finetune-guide.md)。训练完成后的新模型需先完成**模型部署**，才能调用。
+**说明**模型训练流程请参见[图像生成模型调优](https://help.aliyun.com/zh/model-studio/wan-image-generation-finetune-guide)。训练完成后的新模型需先完成**模型部署**，才能调用。
 
 **计费方式**
 
@@ -283,7 +283,7 @@ wan2.7-image
 
 ### 图像生成模型-千问
 
-**说明**模型训练流程请参见[图像生成模型调优](raw/model-user-guide/fine-tuning/wan-image-generation-finetune-guide.md)。训练完成后的新模型需先完成**模型部署**，才能调用。
+**说明**模型训练流程请参见[图像生成模型调优](https://help.aliyun.com/zh/model-studio/wan-image-generation-finetune-guide)。训练完成后的新模型需先完成**模型部署**，才能调用。
 
 **计费方式**
 
@@ -396,7 +396,7 @@ qwen-image-2.0-pro
 
 ### 视频生成模型-万相
 
-**说明**模型训练流程请参见[模型调优](raw/model-user-guide/fine-tuning/wan-video-generation-finetune-guide.md)。训练完成后的新模型需先完成**模型部署**，才能调用。
+**说明**模型训练流程请参见[模型调优](https://help.aliyun.com/zh/model-studio/wan-video-generation-finetune-guide)。训练完成后的新模型需先完成**模型部署**，才能调用。
 
 **计费方式**
 
@@ -571,7 +571,7 @@ wan2.2-kf2v-flash
 
 ### 语音合成模型-CosyVoice
 
-**说明**CosyVoice 模型调优服务仅支持**华北2（北京）**地域。模型训练流程请参见[CosyVoice模型调优](raw/model-user-guide/fine-tuning/fine-tune-speech-synthesis-model/fine-tune-speech-synthesis-model-by-api.md)。训练完成后的新模型需先完成**模型部署**，才能调用。
+**说明**CosyVoice 模型调优服务仅支持**华北2（北京）**地域。模型训练流程请参见[CosyVoice模型调优](https://help.aliyun.com/zh/model-studio/fine-tune-speech-synthesis-model-by-api)。训练完成后的新模型需先完成**模型部署**，才能调用。
 
 **计费方式**
 
@@ -2655,7 +2655,7 @@ MU5
 
 ### 图像生成模型-万相
 
-经过SFT-LoRA高效微调的万相图像生成模型，部署免费，调用按微调的基础模型的标准调用价格计费。模型训练和部署流程请参见[图像生成模型调优](raw/model-user-guide/fine-tuning/wan-image-generation-finetune-guide.md)。
+经过SFT-LoRA高效微调的万相图像生成模型，部署免费，调用按微调的基础模型的标准调用价格计费。模型训练和部署流程请参见[图像生成模型调优](https://help.aliyun.com/zh/model-studio/wan-image-generation-finetune-guide)。
 
 **模型名称**
 
@@ -2671,7 +2671,7 @@ wan2.7-image
 
 ### 图像生成模型-千问
 
-经过SFT-LoRA高效微调的千问图像生成模型，部署免费，调用按微调的基础模型的标准调用价格计费。模型训练和部署流程请参见[图像生成模型调优](raw/model-user-guide/fine-tuning/wan-image-generation-finetune-guide.md)。
+经过SFT-LoRA高效微调的千问图像生成模型，部署免费，调用按微调的基础模型的标准调用价格计费。模型训练和部署流程请参见[图像生成模型调优](https://help.aliyun.com/zh/model-studio/wan-image-generation-finetune-guide)。
 
 **模型名称**
 

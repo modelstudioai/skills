@@ -2,6 +2,34 @@
 
 通过控制台完成服务授权、创建模版、生成 API Key 并发起首次调用，几分钟内启动第一个沙箱。
 
+## 沙箱完成路径
+
+[
+
+**1\. 完成服务授权**
+
+确认 SLR 与数据访问协议。
+
+](#h-sandbox-qs-slr)[
+
+**2\. 创建模版**
+
+选择镜像、资源与生命周期。
+
+](#h-sandbox-qs-template)[
+
+**3\. 获取 API Key**
+
+准备目标工作空间的鉴权凭证。
+
+](#h-sandbox-qs-apikey)[
+
+**4\. 执行并读回文件**
+
+创建实例，运行命令并核对文件内容。
+
+](#h-sandbox-qs-first-call)
+
 ## 前置准备
 
 -   已开通[阿里云百炼](https://bailian.console.aliyun.com/)。
@@ -71,6 +99,15 @@ pip install "e2b==2.31.0"
 pip install "e2b-code-interpreter==2.8.1"
 ```
 
+创建实例前，替换下方示例中的输入：
+
+-   `{workspace_id}`：按 [Sandbox API 前提条件](https://help.aliyun.com/zh/model-studio/sandbox-api-overview#h-sandbox-api-prereq)在控制台右上角查看实际工作空间 ID；也可参考[获取业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#6cc9270e83h9d)。API Key 与模版应属于此工作空间。
+-   `ALIYUN_UID`：登录[阿里云官网](https://www.aliyun.com/)，在右上角头像菜单查看**账号 ID**，将 `your aliyunUid` 替换为该 UID。
+-   `BAILIAN_API_KEY`：替换为步骤 3 获取的实际 API Key。
+-   `template`：将 `你的模版 code` 替换为步骤 2 记录的 `templateCode`。运行此例可选择 `code-interpreter-v1` 镜像。
+
+**说明**`api_key` 是 E2B SDK 的必填参数，只需满足 `e2b_` 后跟十六进制字符的格式即可，推荐填写 `e2b_${ALIYUN_UID}`。阿里云百炼侧的真实鉴权使用 `Authorization: Bearer <阿里云百炼 API Key>`，不使用 `api_key`。
+
 创建实例并执行：
 
 ```
@@ -95,10 +132,28 @@ sbx.files.write("/home/user/workspace/hello.md", "hello bailian")
 print(sbx.files.read("/home/user/workspace/hello.md"))
 ```
 
-**说明**`api_key` 是 E2B SDK 的必填参数，只需满足 `e2b_` 后跟十六进制字符的格式即可，推荐填写 `e2b_${ALIYUN_UID}`。阿里云百炼侧的真实鉴权使用 `Authorization: Bearer <阿里云百炼 API Key>`，不使用 `api_key`。
+**说明**`result.stdout` 输出沙箱内的 Python 版本；文件读回输出 `hello bailian`，可用于核对命令执行与文件写入、读取是否完成。Python 版本以所选模版内的实际输出为准。
+
+体验后按[实例管理与使用](raw/application-user-guide/agent-development/sandbox/sandbox-sdk.md)管理实例生命周期与资源释放，结合模版的空闲超时或最大存活时间设置处理不再需要的实例。费用规则见[Sandbox 计费](raw/application-user-guide/agent-billing/sandbox-billing.md)。
 
 ## 下一步
 
--   [模版管理](raw/application-user-guide/agent-development/sandbox/sandbox-templates.md)：配置镜像、资源规格与生命周期
--   [实例管理与使用](raw/application-user-guide/agent-development/sandbox/sandbox-sdk.md)：实例生命周期与数据面操作
--   [Sandbox API](raw/application-api-reference/sandbox-api/sandbox-api-overview.md)：兼容 E2B 协议的 REST API
+[
+
+**管理模版**
+
+配置镜像、资源规格与生命周期。
+
+](raw/application-user-guide/agent-development/sandbox/sandbox-templates.md)[
+
+**管理与释放实例**
+
+查看实例生命周期与数据面操作。
+
+](raw/application-user-guide/agent-development/sandbox/sandbox-sdk.md)[
+
+**接入 Sandbox API**
+
+使用兼容 E2B 协议的 REST API。
+
+](raw/application-api-reference/sandbox-api/sandbox-api-overview.md)

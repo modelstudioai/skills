@@ -43,10 +43,10 @@
 **支持的模型**：
 
 -   **文本生成模型**
-    -   千问 Max：qwen-max
+    -   千问 Max：qwen3.8-max、qwen-max
     -   千问 Plus：qwen3.7-plus、qwen-plus
 -   **多模态模型**
-    -   [图像与视频理解](raw/model-user-guide/model-experience/text-generation-model/vision.md)：qwen3.8-max（**当前仅支持多模态输入，暂不支持纯文本输入**）、qwen3.7-plus
+    -   [图像与视频理解](raw/model-user-guide/model-experience/text-generation-model/vision.md)：qwen3.8-max、qwen3.7-plus
 
 **重要**
 

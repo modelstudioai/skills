@@ -72,7 +72,7 @@ Managed Agents 提供内置工具，覆盖任务规划、命令执行、文件�
 
 供业务侧按需下载或展示最终交付物
 
-**说明**`web_search` 与 `web_fetch` 单独计费：`web_search` 按调用次数计费（0.03 元/次）；`web_fetch` 限时免费，后续收费计划以控制台展示为准。计费口径详见[计费说明](raw/application-user-guide/agent-development/managed-agents/managed-agents-billing.md)。
+**说明**`web_search` 与 `web_fetch` 单独计费：`web_search` 按调用次数计费（0.03 元/次）；`web_fetch` 限时免费，后续收费计划以控制台展示为准。计费口径详见[计费说明](raw/application-user-guide/agent-billing/managed-agents-billing.md)。
 
 ## 执行机制
 

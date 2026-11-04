@@ -179,6 +179,14 @@ Kimi-K2.6
 
 ¥27.22
 
+[kimi-k3.1-pro](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
+
+仅支持按天预付费的标准模式。
+
+¥131.00
+
+¥68.54
+
 #### 高速模式
 
 **模型名称**

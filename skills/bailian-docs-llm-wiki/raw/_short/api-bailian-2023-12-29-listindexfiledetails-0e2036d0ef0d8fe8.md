@@ -1,4 +1,4 @@
-# ListIndexFileDetails
+# ListIndexFileDetails - 查询知识库文件详情
 
 获取指定知识库中的文件，以及它们的详细信息。
 

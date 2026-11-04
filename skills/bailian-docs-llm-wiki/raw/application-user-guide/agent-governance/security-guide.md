@@ -8,6 +8,6 @@ Security 安全防护导航
 -   [Agent 资产](raw/application-user-guide/agent-governance/security-guide/section-assets/assets.md)
 -   [安全策略](raw/application-user-guide/agent-governance/security-guide/section-adv/policy.md)
 -   [风险与审计](raw/application-user-guide/agent-governance/security-guide/section-adv/audit.md)
--   [计费说明](raw/application-user-guide/agent-governance/security-guide/section-ref/billing.md)
+-   [计费说明](raw/application-user-guide/agent-billing/billing.md)
 -   [API 参考](raw/application-user-guide/agent-governance/security-guide/section-ref/api.md)
--   [更新日志](raw/application-user-guide/agent-governance/security-guide/changelog.md)
+-   [更新日志](https://help.aliyun.com/zh/model-studio/application-release-notes#h-arn-module-changelogs)

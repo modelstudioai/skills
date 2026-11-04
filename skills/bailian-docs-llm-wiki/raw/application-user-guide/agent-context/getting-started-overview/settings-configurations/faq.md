@@ -40,7 +40,7 @@ Extract 返回 missing 或 conflict 是否代表任务失败？
 
 ParseX 如何计量？
 
-Parse 和 Extract 分项记录用量。可在控制台查看用量信息；具体计量口径、价格、额度和结算规则以[计量与计费](raw/application-user-guide/agent-context/getting-started-overview/settings-configurations/pricing.md)页面为准。
+Parse 和 Extract 分项记录用量。可在控制台查看用量信息；具体计量口径、价格、额度和结算规则以[计量与计费](raw/application-user-guide/agent-billing/pricing.md)页面为准。
 
 为什么切换 Workspace 后看不到原来的配置或任务？
 

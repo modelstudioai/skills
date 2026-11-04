@@ -492,7 +492,7 @@ curl -X GET "$AGENTSTUDIO_URL/sessions/$SESSION_ID" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
-一轮典型运行的 `stats` 为 `{ "active_seconds": 113.7, "duration_seconds": 139.6 }`，`usage` 为 `{ "input_tokens": 118011, "output_tokens": 4431, "cache_read_input_tokens": 104152, "cache_creation_input_tokens": 13793 }`。多次运行落在 110~185 秒 / 115k~171k input tokens 区间，取决于 Agent 中间返工了几次。input 里 82%~88% 是缓存命中——多轮工具调用会把同一段上下文反复带上，缓存命中率对成本影响很大。计费口径见[计费说明](raw/application-user-guide/agent-development/managed-agents/managed-agents-billing.md)。
+一轮典型运行的 `stats` 为 `{ "active_seconds": 113.7, "duration_seconds": 139.6 }`，`usage` 为 `{ "input_tokens": 118011, "output_tokens": 4431, "cache_read_input_tokens": 104152, "cache_creation_input_tokens": 13793 }`。多次运行落在 110~185 秒 / 115k~171k input tokens 区间，取决于 Agent 中间返工了几次。input 里 82%~88% 是缓存命中——多轮工具调用会把同一段上下文反复带上，缓存命中率对成本影响很大。计费口径见[计费说明](raw/application-user-guide/agent-billing/managed-agents-billing.md)。
 
 ## 步骤 7：清理（归档）
 

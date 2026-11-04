@@ -650,7 +650,7 @@ kimi/kimi-k3.1-pro 和 kimi/kimi-k3.1-pro-highspeed 支持此参数，默认关�
 
 **thinking\_budget** `integer` （可选）
 
-思考过程的最大长度。适用于Qwen3.8、Qwen3.7、Qwen3.6、Qwen3.5、Qwen3-VL、Qwen3、GLM（阿里云直供）、Kimi（阿里云直供）系列模型，其中 kimi-k3 不支持该参数。相关文档：[限制思考长度](https://help.aliyun.com/zh/model-studio/deep-thinking#e7c0002fe4meu)。
+思考过程的最大长度。适用于Qwen3.8、Qwen3.7、Qwen3.6、Qwen3.5、Qwen3-VL、Qwen3、GLM（阿里云直供）、Kimi（阿里云直供）系列模型，其中 kimi-k3 和 kimi-k3.1-pro 不支持该参数。相关文档：[限制思考长度](https://help.aliyun.com/zh/model-studio/deep-thinking#e7c0002fe4meu)。
 
 默认值为模型最大思维链长度，请参见：[选择模型](raw/model-user-guide/get-started-with-models/models.md)
 
@@ -661,6 +661,15 @@ kimi/kimi-k3.1-pro 和 kimi/kimi-k3.1-pro-highspeed 支持此参数，默认关�
 **reasoning\_effort** `string` （可选）
 
 控制模型的推理力度，不同模型支持的可选值和默认值不同。
+
+**kimi-k3.1-pro（阿里云百炼部署）**：默认值为 `max`。
+
+-   `max`（默认）：深度推理
+-   `high`：增强推理
+-   `medium`：中度推理
+-   `low`：轻度推理
+
+`enable_thinking` 默认为 `true`。支持设为 `false` 关闭思考，但建议保持开启，关闭会显著影响模型输出效果。
 
 **DeepSeek-V4、GLM 系列**（默认值为 `high`）
 

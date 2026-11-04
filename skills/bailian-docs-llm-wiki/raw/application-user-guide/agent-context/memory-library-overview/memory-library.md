@@ -12,7 +12,7 @@
 
 记忆库提供开放的 API 接口，可接入任意应用，也支持多应用共享同一记忆库。产品概念与工作原理详见[核心概念](raw/application-user-guide/agent-context/memory-library-overview/overview/concepts.md)。
 
-**警告**记忆库将于 **2026 年 8 月 20 日 10:00**（北京时间）正式开始商业化计费，Add 和 Search 调用区分 **Pro** 和 **Lite** 策略版本。详见[计费说明](raw/application-user-guide/agent-context/memory-library-overview/integration-overview/billing.md)。
+**警告**记忆库将于 **2026 年 8 月 20 日 10:00**（北京时间）正式开始商业化计费，Add 和 Search 调用区分 **Pro** 和 **Lite** 策略版本。详见[计费说明](raw/application-user-guide/agent-billing/billing.md)。
 
 ## 控制台功能入口
 
@@ -93,5 +93,5 @@ Playground
 -   [集成方式概览](raw/application-user-guide/agent-context/memory-library-overview/integration-overview.md)
 -   [长期记忆 API](raw/application-user-guide/agent-context/memory-library-overview/long-term-memory-2-0.md)
 -   [长期记忆 API 参考](raw/application-api-reference/long-term-memory-new/long-term-memory-api-reference.md)
--   [计费说明](raw/application-user-guide/agent-context/memory-library-overview/integration-overview/billing.md)
+-   [计费说明](raw/application-user-guide/agent-billing/billing.md)
 -   [常见问题](raw/application-user-guide/agent-context/memory-library-overview/integration-overview/faq.md)

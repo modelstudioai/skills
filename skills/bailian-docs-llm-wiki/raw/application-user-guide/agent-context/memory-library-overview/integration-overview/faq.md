@@ -36,7 +36,7 @@ API 是否存在限流？
 
 Pro 和 Lite 策略版本有什么区别？如何选择？
 
-Pro 版检索时开启 Rerank（结果重排序），检索质量更高但成本也更高；Lite 版关闭 Rerank，成本更低。对回答准确性要求高的场景用 Pro，高频调用且成本敏感的场景用 Lite。Add 调用的策略版本由记忆规则配置决定，Search 调用的策略版本由请求参数 `plan_version` 独立控制。详见[计费说明](raw/application-user-guide/agent-context/memory-library-overview/integration-overview/billing.md)。
+Pro 版检索时开启 Rerank（结果重排序），检索质量更高但成本也更高；Lite 版关闭 Rerank，成本更低。对回答准确性要求高的场景用 Pro，高频调用且成本敏感的场景用 Lite。Add 调用的策略版本由记忆规则配置决定，Search 调用的策略版本由请求参数 `plan_version` 独立控制。详见[计费说明](raw/application-user-guide/agent-billing/billing.md)。
 
 免费额度有效期多久？
 

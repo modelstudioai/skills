@@ -720,6 +720,8 @@ GLM 模型的默认值与最大值见 `max_tokens` 参数中的表格，其他�
 
 **enable\_thinking** `boolean` （可选）
 
+kimi-k3.1-pro（阿里云百炼部署）默认值为 `true`，可设为 `false` 关闭思考，但强烈建议保持开启，关闭会显著影响输出效果。
+
 使用混合思考（回复前既可思考也可不思考）模型时，是否开启思考模式。适用于 Qwen3.8、Qwen3.7、Qwen3.6、Qwen3.5、Qwen3、Qwen3.8-Omni-Flash、Qwen3-Omni-Flash、Qwen3-VL模型，以及 DeepSeek-V4.1-Flash、DeepSeek-V4-Pro/V4-Flash 系列（阿里云直供）、DeepSeek-V3.2/V3.2-exp/V3.1 系列（阿里云直供、硅基流动直供、快手万擎直供）、Kimi-K2.7-code（仅思考模型）、Kimi-K2.6/K2.5 系列（阿里云直供、月之暗面直供）、GLM 系列。DeepSeek-V4 系列默认开启思考，可通过 `reasoning_effort` 参数调整推理力度。
 
 可选值：
@@ -763,6 +765,8 @@ GLM 模型的默认值与最大值见 `max_tokens` 参数中的表格，其他�
 
 是否将对话历史中 assistant 消息的 reasoning\_content 拼接至模型输入。适用于需要模型参考历史思考过程的场景。
 
+kimi-k3.1-pro 和 kimi-k3（阿里云百炼部署）默认保留客户端传入的历史 `reasoning_content`。建议在 `messages` 中完整回传历史 assistant 消息及其 `reasoning_content`。
+
 kimi/kimi-k3.1-pro 和 kimi/kimi-k3.1-pro-highspeed 支持此参数，默认关闭。
 
 需要参考上一轮思考时，将其放在历史 assistant 消息的 `reasoning_content` 字段中随 `messages` 回传。用法见[传递思考过程](https://help.aliyun.com/zh/model-studio/deep-thinking#jln7docdq5et5)。
@@ -778,7 +782,7 @@ kimi/kimi-k3.1-pro 和 kimi/kimi-k3.1-pro-highspeed 支持此参数，默认关�
 
 **thinking\_budget** `integer` （可选）
 
-思考过程的最大 Token 数。适用于 `qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`，以及Qwen3.7、Qwen3.6、Qwen3.5、Qwen3-VL、Qwen3、GLM（阿里云直供）、Kimi（阿里云直供）系列模型，其中 kimi-k3 不支持该参数。相关文档：[限制思考长度](https://help.aliyun.com/zh/model-studio/deep-thinking#e7c0002fe4meu)。
+思考过程的最大 Token 数。适用于 `qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`，以及Qwen3.7、Qwen3.6、Qwen3.5、Qwen3-VL、Qwen3、GLM（阿里云直供）、Kimi（阿里云直供）系列模型，其中 kimi-k3.1-pro 和 kimi-k3 不支持该参数。相关文档：[限制思考长度](https://help.aliyun.com/zh/model-studio/deep-thinking#e7c0002fe4meu)。
 
 上述型号的默认值为模型最大思维链长度，请参见：模型列表
 
@@ -791,6 +795,13 @@ kimi/kimi-k3.1-pro 和 kimi/kimi-k3.1-pro-highspeed 支持此参数，默认关�
 **reasoning\_effort** `string` （可选）
 
 控制模型的推理力度，不同模型支持的可选值和默认值不同。
+
+**kimi-k3.1-pro（阿里云百炼部署）**（默认值为 `max`）
+
+-   `max`（默认）：深度推理
+-   `high`：增强推理
+-   `medium`：中度推理
+-   `low`：轻度推理
 
 **MiniMax/MiniMax-M3.1-Flash**（默认值为 `max`）
 
@@ -1031,7 +1042,7 @@ seed默认值
 
 **enable\_search** `boolean`（可选）默认值为 `false`
 
-是否开启联网搜索。相关文档：[联网搜索](raw/model-user-guide/model-experience/text-generation-model/tool-calls/web-search.md)
+是否开启联网搜索。kimi-k3.1-pro（阿里云百炼部署）支持此参数，适用于北京、新加坡、美国（弗吉尼亚）、德国（法兰克福）、日本（东京）和中国香港。相关文档：[联网搜索](raw/model-user-guide/model-experience/text-generation-model/tool-calls/web-search.md)
 
 可选值：
 

@@ -6402,6 +6402,18 @@ vanchin/deepseek-v4.1-flash
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
+[kimi-k3.1-pro](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
+
+思考与非思考（默认开启思考）
+
+13元
+
+缓存命中输入：1.3元
+
+68元
+
+输入与输出合计100万Token
+
 kimi-k3
 
 仅思考模式
@@ -6454,6 +6466,18 @@ kimi-k2.5
 
 **输出单价（每百万Token）**
 
+[kimi-k3.1-pro](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
+
+全球
+
+思考与非思考（默认开启思考）
+
+13元
+
+缓存命中输入：1.3元
+
+68元
+
 kimi-k3
 
 全球
@@ -6463,6 +6487,18 @@ kimi-k3
 20元
 
 100元
+
+[kimi-k3.1-pro](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
+
+美国
+
+思考与非思考（默认开启思考）
+
+14.583元
+
+缓存命中输入：1.458元
+
+72.917元
 
 kimi-k3
 
@@ -6506,6 +6542,18 @@ kimi-k2.5
 
 **输出单价（每百万Token）**
 
+[kimi-k3.1-pro](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
+
+全球
+
+思考与非思考（默认开启思考）
+
+13元
+
+缓存命中输入：1.3元
+
+68元
+
 kimi-k3
 
 全球
@@ -6547,6 +6595,18 @@ kimi-k2.5
 **输入单价（每百万Token）**
 
 **输出单价（每百万Token）**
+
+[kimi-k3.1-pro](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
+
+全球
+
+思考与非思考（默认开启思考）
+
+13元
+
+缓存命中输入：1.3元
+
+68元
 
 kimi-k3
 
@@ -6594,6 +6654,18 @@ kimi-k2.5
 
 **输出单价（每百万Token）**
 
+[kimi-k3.1-pro](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
+
+国际
+
+思考与非思考（默认开启思考）
+
+14.583元
+
+缓存命中输入：1.458元
+
+72.917元
+
 kimi-k3
 
 国际
@@ -6625,6 +6697,18 @@ kimi-k2.7-code
 **输入单价（每百万Token）**
 
 **输出单价（每百万Token）**
+
+[kimi-k3.1-pro](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
+
+全球
+
+思考与非思考（默认开启思考）
+
+13元
+
+缓存命中输入：1.3元
+
+68元
 
 kimi-k3
 

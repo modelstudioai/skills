@@ -1,552 +1,639 @@
 # 提升识别准确率
 
-阿里云百炼语音识别提供预编译热词、即时热词和上下文增强三种方式，提升专业术语、产品名称等特定词汇的识别准确率。本文介绍三种方式的适用范围与使用方法。
+通过热词（即时热词、预编译热词）和上下文增强，改善人名、产品名、行业术语等词汇的语音识别效果。
 
-**重要**新加坡地域的子业务空间暂不支持热词功能。
+## 选择优化方式
 
-## 概述
+人名、产品名和行业术语可能与常用词发音相近，识别时容易出现同音字或词语错误。热词和上下文增强可为模型补充这些词汇的准确写法或相关背景，帮助改善识别效果。
 
-部分业务词汇（如产品名、专有名词、行业术语）不在模型通用词表中，识别准确率较低。阿里云百炼语音识别提供预编译热词、即时热词和上下文增强三种方式，提升这类词汇的识别效果。
+选择优化方式时，先看业务已有的信息：有明确的术语清单，可使用热词；已有对话历史或业务说明，可使用上下文增强。热词再按词表是否需要跨请求复用，分为即时热词和预编译热词。使用前确认[支持的模型与地域](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#supported-models)。
 
-### 预编译热词、即时热词与上下文增强的区别
+**方式**
 
-自定义热词分为预编译热词和即时热词两种。下表对比三种方式的差异，适用模型和接口不同：
+**适用情况**
 
-**维度**
+**使用方法**
 
-**预编译热词**
+[即时热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_instant_h3)
 
-**即时热词**
+待识别的人名、产品名等随请求变化，或只有少量临时术语，不需要保存和管理词表。
 
-**上下文增强**
+在每次识别请求中直接传入“词语：权重”对象。应用需准备待识别词语的准确写法，可通过权重调整模型对这些词语的偏好。
 
-**原理**
+[预编译热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_precompiled_h3)
 
-预先创建带权重的词汇表，模型在解码时提升匹配概率
+已有业务词库，或一组术语会在多次识别中反复使用，希望统一维护词表。
 
-请求中直接携带带权重的热词，模型在解码时提升匹配概率
+先创建包含词语、权重和可选语种的热词列表，识别时引用列表 ID。词库有变化时更新列表，无需在每个识别请求中重复提交词条。
 
-传入对话历史或领域语料，模型利用上下文修正识别结果
+[上下文增强](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#ctx_enhance_h2)
 
-**适用模型**
+应用已保存前几轮对话、业务说明或领域文本，希望直接利用这些内容辅助识别。
 
-参见[支持的模型与地域](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#4a43cc1bb7kxg)
+将相关文本作为上下文消息随音频传入，无需先提取词条或逐词设置权重。上下文应包含待识别术语的准确写法；只有明确的术语清单时，也可以使用热词解决同类问题。
 
-参见[支持的模型与地域](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#9e6ae47c992d7)
+## 使用热词
 
-参见[支持的模型与地域](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#ctx_scope_h3)
+运行示例前，请先下载[示例音频](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/zh/audios/6a4b3c2d1e0f9093.wav)并准备 API Key（可在[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key)获取）。音频内容：“请把祺元项目的报告发给洛柯，下周我们要上线璇枢系统。”
 
-**适用场景**
+### 即时热词
 
-词汇已知且相对稳定，需要跨请求复用同一词表（如产品名、医学术语）
+即时热词适合随请求变化的词语。在识别请求的 `parameters.vocabulary` 中传入 JSON 对象：键为热词文本（`string`），值为权重（`integer`），无需预先创建词表。
 
-临时性、会话级别的热词，无需跨请求复用（如单次会话中的人名、临时术语）
-
-词汇随对话动态变化，或需要通过上下文帮助模型理解专有名词（如会议纪要中的参会人、客服对话中的业务术语）
-
-**配置方式**
-
-预先创建热词列表，调用时传入列表 ID
-
-请求中直接传入 `vocabulary` 键值对，无需创建列表
-
-每次请求时传入对话历史或领域文本。非实时通过 `input.messages`，实时通过 `input.context`
-
-## 前提条件
-
--   已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并将其[配置到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
--   如果通过 DashScope SDK 调用，需要[安装最新版SDK](raw/model-api-reference/preparations/install-sdk.md)。
-
-## 预编译热词
-
-预先创建热词列表并获得列表 ID，识别时传入该 ID。适用于词汇已知且相对稳定、需要跨请求复用同一词表的场景（如产品名、医学术语）。如需更新热词列表，建议两次更新操作至少间隔 5 分钟，否则更新后的热词可能不生效。
-
-### 支持的模型与地域
-
-#### 华北2（北京）
-
-调用以下模型时，请选择北京地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)：
-
--   **实时语音识别**：
+1.  **不配置热词，识别原始音频**
     
-    -   **Qwen-Audio-ASR-Message：**qwen-audio-3.1-asr-flash-message
-    -   **Qwen-Audio-ASR-Streaming：**qwen-audio-3.1-asr-flash-streaming、qwen-audio-3.0-asr-flash-streaming
-    -   **Fun-ASR-Realtime**：fun-asr-realtime、fun-asr-realtime-2026-02-28、fun-asr-flash-8k-realtime、fun-asr-flash-8k-realtime-2026-01-28
-    -   **Paraformer**：paraformer-realtime-v2、paraformer-realtime-8k-v2
--   **非实时语音识别**：
+    未配置热词时，本例中的三个名称识别不准确。原始识别结果可通过以下请求获取。
     
-    -   **Qwen-Audio-ASR-Filetrans：**qwen-audio-3.1-asr-flash-filetrans、qwen-audio-3.0-asr-flash-filetrans
-    -   **Qwen-Audio-ASR**：qwen-audio-3.1-asr-flash、qwen-audio-3.0-asr-flash
-    -   **Fun-ASR-Flash**：fun-asr-flash-2026-06-15
-    -   **Fun-ASR**：fun-asr
-    -   **Paraformer：**paraformer-v2、paraformer-8k-v2
-
-#### 新加坡
-
-调用以下模型时，请选择新加坡地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)：
-
--   **实时语音识别**：
+    ```
+    curl --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
+      --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
+      --header "Content-Type: application/json" \
+      --header "X-DashScope-SSE: disable" \
+      --data '
+    {
+      "model": "qwen-audio-3.1-asr-flash",
+      "input": {
+        "messages": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_audio",
+                "input_audio": {
+                  "data": "https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/zh/audios/6a4b3c2d1e0f9093.wav"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "parameters": {
+        "format": "wav",
+        "sample_rate": 16000
+      }
+    }
+    '
+    ```
     
-    -   **Qwen-Audio-ASR-Message：**qwen-audio-3.1-asr-flash-message
-    -   **Qwen-Audio-ASR-Streaming：**qwen-audio-3.1-asr-flash-streaming、qwen-audio-3.0-asr-flash-streaming
-    -   **Fun-ASR-Realtime**：fun-asr-realtime
--   **非实时语音识别**：
+2.  **随请求加入即时热词**
     
-    -   **Qwen-Audio-ASR-Filetrans：**qwen-audio-3.1-asr-flash-filetrans、qwen-audio-3.0-asr-flash-filetrans
-    -   **Qwen-Audio-ASR**：qwen-audio-3.1-asr-flash、qwen-audio-3.0-asr-flash
-    -   **Fun-ASR-Flash**：fun-asr-flash-2026-06-15
-    -   **Fun-ASR**：fun-asr
-
-### 快速开始
-
-#### 工作流程
-
-先创建热词列表，再在语音识别时引用其 ID：
-
-1.  **创建热词列表。**
+    在相同请求中加入“祺元”“洛柯”“璇枢”，权重均设为 4，其余输入保持一致。权重范围和调整方法参见[调整热词权重](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw08_weight_h3)。
     
-    调用创建热词列表接口，必须指定 `target_model`（Java 中为 `targetModel`），表明该列表所属的语音识别模型。
+    ```
+    curl --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
+      --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
+      --header "Content-Type: application/json" \
+      --header "X-DashScope-SSE: disable" \
+      --data '
+    {
+      "model": "qwen-audio-3.1-asr-flash",
+      "input": {
+        "messages": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_audio",
+                "input_audio": {
+                  "data": "https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/zh/audios/6a4b3c2d1e0f9093.wav"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "parameters": {
+        "format": "wav",
+        "sample_rate": 16000,
+        "vocabulary": {
+          "祺元": 4,
+          "洛柯": 4,
+          "璇枢": 4
+        }
+      }
+    }
+    '
+    ```
     
-    如已有热词列表（可通过查询所有热词列表接口查看），跳过此步。
+
+配置前后的识别文本示例如下：
+
+**配置**
+
+**识别文本示例**
+
+未配置
+
+请把漆园项目的报告发给罗科，下周我们要上线玄枢系统。
+
+配置后
+
+请把祺元项目的报告发给洛柯，下周我们要上线璇枢系统。
+
+### 预编译热词
+
+预编译热词适合需要跨请求复用的业务词表。预先创建热词列表后，在识别请求中传入 `vocabulary_id`，无需每次重复提交词条。
+
+创建时以 JSON 数组提交词条，每个元素的字段如下：
+
+**字段**
+
+**类型**
+
+**必填**
+
+**说明**
+
+`text`
+
+string
+
+是
+
+实际词语，语种须在所选模型的支持范围内。长度要求参见[热词文本规范](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw10_limit_h2)。
+
+`weight`
+
+integer
+
+是
+
+普通热词取值为 1～5，推荐从 4 起调。部分模型支持超级热词权重 50，详见[调整热词权重](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw08_weight_h3)。
+
+`lang`
+
+string
+
+否
+
+语种代码，限定词条作用的语种；语种未知时可省略。与识别接口 `language_hints` 的关系参见[组织与维护词表](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw08_design_h3)。
+
+创建热词列表时指定的目标模型须与实际识别模型一致。
+
+**说明**热词管理与语音识别必须使用同一账号，否则识别接口无法访问对应的热词列表。
+
+#### HTTP / cURL
+
+1.  **创建热词列表**
     
-2.  **调用语音识别接口并传入热词列表 ID。**
+    以下示例使用 `qwen-audio-3.1-asr-flash`，通过 `target_model` 指定目标模型。保存响应中 `output.vocabulary_id` 的值。
     
-    语音识别使用的模型必须与创建时指定的 `target_model`（Java 中为 `targetModel`）一致，否则热词不生效。
+    ```
+    curl --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/asr/customization' \
+      --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
+      --header "Content-Type: application/json" \
+      --data @- <<EOF
+    {
+      "model": "speech-biasing",
+      "input": {
+        "action": "create_vocabulary",
+        "target_model": "qwen-audio-3.1-asr-flash",
+        "prefix": "testpfx",
+        "vocabulary": [
+          {
+            "text": "祺元",
+            "weight": 4,
+            "lang": "zh"
+          },
+          {
+            "text": "洛柯",
+            "weight": 4,
+            "lang": "zh"
+          },
+          {
+            "text": "璇枢",
+            "weight": 4,
+            "lang": "zh"
+          }
+        ]
+      }
+    }
+    EOF
+    ```
+    
+2.  **确认列表可用**
+    
+    将 `<vocabulary_id>` 替换为创建接口返回的列表 ID，再查询状态。确认响应中的 `output.status` 为 `OK` 后进行识别。
+    
+    ```
+    export VOCABULARY_ID="<vocabulary_id>"
+    
+    curl --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/asr/customization' \
+      --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
+      --header "Content-Type: application/json" \
+      --data @- <<EOF
+    {
+      "model": "speech-biasing",
+      "input": {
+        "action": "query_vocabulary",
+        "vocabulary_id": "$VOCABULARY_ID"
+      }
+    }
+    EOF
+    ```
+    
+3.  **在识别请求中引用列表**
+    
+    在识别请求中通过 `parameters.vocabulary_id` 引用该列表，无需重复传入词条。
+    
+    ```
+    curl --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
+      --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
+      --header "Content-Type: application/json" \
+      --header "X-DashScope-SSE: disable" \
+      --data @- <<EOF
+    {
+      "model": "qwen-audio-3.1-asr-flash",
+      "input": {
+        "messages": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_audio",
+                "input_audio": {
+                  "data": "https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/zh/audios/6a4b3c2d1e0f9093.wav"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "parameters": {
+        "format": "wav",
+        "sample_rate": 16000,
+        "vocabulary_id": "$VOCABULARY_ID"
+      }
+    }
+    EOF
+    ```
+    
+4.  **复用或删除列表**
+    
+    后续请求可继续引用同一 ID。仅在不再需要此列表时调用以下删除接口，释放列表配额。
+    
+    ```
+    curl --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/asr/customization' \
+      --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
+      --header "Content-Type: application/json" \
+      --data @- <<EOF
+    {
+      "model": "speech-biasing",
+      "input": {
+        "action": "delete_vocabulary",
+        "vocabulary_id": "$VOCABULARY_ID"
+      }
+    }
+    EOF
+    ```
     
 
-#### 示例代码
+#### SDK
 
-完整流程示例：创建热词列表 → 调用语音识别 → 删除列表。
+**说明**SDK 示例使用 DashScope Python SDK 2.0.1 及以上版本或 Java SDK 2.22.23 及以上版本，安装方法参见[安装 SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
-**说明**热词管理 API 与语音识别 API 必须使用同一账号，否则识别接口无法访问对应的热词列表。
-
-Python
-
-```
-import dashscope
-import os
-
-# 北京与新加坡地域的 API Key 不同。获取 API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 未配置环境变量时，将下行替换为：api_key="sk-xxx"
-client = dashscope.Client(
-    api_key=os.environ.get('DASHSCOPE_API_KEY'),
-    # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-    workspace="{WorkspaceId}",
-    region="cn-beijing",
-)
-
-prefix = 'testpfx'
-target_model = "qwen-audio-3.1-asr-flash-streaming"
-
-my_vocabulary = [
-    {"text": "语音实验室", "weight": 4}
-]
-
-vocabulary = client.audio.vocabularies.create(
-    prefix=prefix,
-    target_model=target_model,
-    vocabulary=my_vocabulary)
-vocabulary_id = vocabulary.vocabulary_id
-
-try:
-    if client.audio.vocabularies.get(vocabulary_id).status == 'OK':
-        # 识别本地语音文件，vocabulary_id 引用刚创建的热词列表
-        for event in client.audio.asr.recognize_file(
-                '{YOUR_AUDIO_FILE}',
-                model=target_model,
-                format='wav',
-                sample_rate=16000,
-                vocabulary_id=vocabulary_id):
-            payload = event.get('payload') or {}
-            sentence = (payload.get('output') or {}).get('sentence') or {}
-            if sentence.get('text') and not sentence.get('heartbeat'):
-                print(sentence['text'])
-finally:
-    # 无论识别成功与否都删除热词列表，避免占用配额
-    client.audio.vocabularies.delete(vocabulary_id)
-```
+以下 Java、Python 示例使用 `qwen-audio-3.1-asr-flash-streaming`，完成创建、状态查询、识别和删除。`finally` 中的删除用于清理演示资源；生产环境需要复用时，保留列表及其 ID。
 
 Java
 
 ```
 import com.alibaba.dashscope.audio.asr.recognition.Recognition;
 import com.alibaba.dashscope.audio.asr.recognition.RecognitionParam;
+import com.alibaba.dashscope.utils.Constants;
+import java.io.File;
+import java.util.Arrays;
 import com.alibaba.dashscope.audio.asr.vocabulary.Vocabulary;
 import com.alibaba.dashscope.audio.asr.vocabulary.VocabularyService;
-import com.alibaba.dashscope.exception.InputRequiredException;
-import com.alibaba.dashscope.exception.NoApiKeyException;
-import com.alibaba.dashscope.utils.Constants;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
 public class Main {
-    // 北京与新加坡地域的 API Key 不同。获取 API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    // 未配置环境变量时，将下行替换为：public static String apiKey = "sk-xxx"
-    public static String apiKey = System.getenv("DASHSCOPE_API_KEY");
-
-    public static void main(String[] args) throws NoApiKeyException, InputRequiredException {
-        // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+    public static void main(String[] args) throws Exception {
+        String apiKey = System.getenv("DASHSCOPE_API_KEY");
         Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
-        // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
         Constants.baseWebsocketApiUrl = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference";
-
-        String targetModel = "qwen-audio-3.1-asr-flash-streaming";
-
-        JsonArray vocabularyJson = new JsonArray();
-        List<Hotword> wordList = new ArrayList<>();
-        wordList.add(new Hotword("语音实验室", 4));
-
-        for (Hotword word : wordList) {
-            JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("text", word.text);
-            jsonObject.addProperty("weight", word.weight);
-            vocabularyJson.add(jsonObject);
+        String model = "qwen-audio-3.1-asr-flash-streaming";
+        JsonArray words = new JsonArray();
+        for (String text : Arrays.asList("祺元", "洛柯", "璇枢")) {
+            JsonObject word = new JsonObject();
+            word.addProperty("text", text);
+            word.addProperty("weight", 4);
+            words.add(word);
         }
-
         VocabularyService service = new VocabularyService(apiKey);
-        Vocabulary vocabulary = service.createVocabulary(targetModel, "testpfx", vocabularyJson);
-
+        // targetModel must match the model used for recognition.
+        Vocabulary vocabulary = service.createVocabulary(model, "testpfx", words);
         try {
-            if ("OK".equals(service.queryVocabulary(vocabulary.getVocabularyId()).getStatus())) {
-                Recognition recognizer = new Recognition();
-                RecognitionParam param =
-                        RecognitionParam.builder()
-                                .model(targetModel)
-                                .apiKey(apiKey)
-                                .format("wav")
-                                .sampleRate(16000)
-                                .vocabularyId(vocabulary.getVocabularyId())
-                                .build();
-
-                try {
-                    System.out.println("识别结果：" + recognizer.call(param, new File("{YOUR_AUDIO_FILE}")));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    // 关闭 WebSocket 连接
-                    recognizer.getDuplexApi().close(1000, "bye");
-                }
+            if (!"OK".equals(service.queryVocabulary(vocabulary.getVocabularyId()).getStatus())) {
+                throw new IllegalStateException("Vocabulary is not ready");
+            }
+            Recognition recognizer = new Recognition();
+            try {
+                RecognitionParam param = RecognitionParam.builder()
+                        .model(model).apiKey(apiKey).format("wav").sampleRate(16000)
+                        .vocabularyId(vocabulary.getVocabularyId()).build();
+                System.out.println(recognizer.call(param, new File("asr-accuracy-example.wav")));
+            } finally {
+                recognizer.getDuplexApi().close(1000, "bye");
             }
         } finally {
-            // 无论识别成功与否都删除热词列表，避免占用配额
             service.deleteVocabulary(vocabulary.getVocabularyId());
         }
         System.exit(0);
     }
 }
+```
 
-class Hotword {
-    String text;
-    int weight;
+Python
 
-    public Hotword(String text, int weight) {
-        this.text = text;
-        this.weight = weight;
+```
+import os
+import dashscope
+
+client = dashscope.Client(
+    api_key=os.environ["DASHSCOPE_API_KEY"],
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
+model = "qwen-audio-3.1-asr-flash-streaming"
+vocabulary = client.audio.vocabularies.create(
+    prefix="testpfx",
+    target_model=model,
+    vocabulary=[{"text": word, "weight": 4} for word in ["祺元", "洛柯", "璇枢"]],
+)
+try:
+    if client.audio.vocabularies.get(vocabulary.vocabulary_id).status != "OK":
+        raise RuntimeError("Vocabulary is not ready")
+    for event in client.audio.asr.recognize_file(
+        "asr-accuracy-example.wav", model=model, format="wav", sample_rate=16000,
+        vocabulary_id=vocabulary.vocabulary_id,
+    ):
+        sentence = ((event.get("payload") or {}).get("output") or {}).get("sentence") or {}
+        if sentence.get("text") and not sentence.get("heartbeat"):
+            print(sentence["text"])
+finally:
+    client.audio.vocabularies.delete(vocabulary.vocabulary_id)
+```
+
+## 使用上下文增强
+
+上下文增强可以直接利用已有对话历史或领域文本。与热词要求应用提供词语和权重不同，上下文以文本消息传入，不需要先把业务资料拆成词条。两种方式都可能改善专有名词的识别，应根据应用已有的信息选择。
+
+### 准备上下文
+
+沿用上述音频：如果应用已有“祺元项目、璇枢系统、同事洛柯”的业务信息，可直接传入包含这些准确名称的文本。常见的上下文来源有以下两种。
+
+#### 业务背景或领域文本
+
+例如已有的项目说明或行业资料。将相关文本放入 `role=user`、`type=input_text` 的消息中，无需为此构造对话或添加回复。以下数组可作为上下文传入：
+
+```
+[
+  {
+    "role": "user",
+    "content": [
+      {
+        "type": "input_text",
+        "text": "我在祺元项目工作，负责璇枢系统。我的同事叫洛柯。"
+      }
+    ]
+  }
+]
+```
+
+#### 历史对话
+
+使用已有的用户识别文本和大模型回复：用户文本使用 `role=user`、`type=input_text`，回复使用 `role=assistant`、`type=text`。以下对话中已出现待识别名称，可直接作为后续识别的背景：
+
+```
+[
+  {
+    "role": "user",
+    "content": [
+      {
+        "type": "input_text",
+        "text": "我在祺元项目工作，负责璇枢系统。我的同事叫洛柯。"
+      }
+    ]
+  },
+  {
+    "role": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "好的，我们继续讨论祺元项目、璇枢系统和洛柯的工作。"
+      }
+    ]
+  }
+]
+```
+
+**说明**`assistant` 消息可省略。使用历史对话时，按轮次排列，每轮 `user` 在对应 `assistant` 之前。文本长度和保留轮数参见[使用限制](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw10_limit_h2)。
+
+### 配置与调用
+
+使用准备好的上下文识别同一段音频，按模型系列选择调用示例。
+
+#### Qwen-Audio-ASR
+
+以下示例使用 `qwen-audio-3.1-asr-flash`，在 `input.messages` 中按顺序放入上下文消息，并将包含 `input_audio` 的当前音频消息放在最后。
+
+```
+curl --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
+  --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
+  --header "Content-Type: application/json" \
+  --header "X-DashScope-SSE: disable" \
+  --data '
+{
+  "model": "qwen-audio-3.1-asr-flash",
+  "input": {
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "input_text",
+            "text": "我在祺元项目工作，负责璇枢系统。我的同事叫洛柯。"
+          }
+        ]
+      },
+      {
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": "好的，我们继续讨论祺元项目、璇枢系统和洛柯的工作。"
+          }
+        ]
+      },
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "input_audio",
+            "input_audio": {
+              "data": "https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/zh/audios/6a4b3c2d1e0f9093.wav"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "parameters": {
+    "format": "wav",
+    "sample_rate": 16000
+  }
+}
+'
+```
+
+#### Qwen-Audio-ASR-Message / Qwen-Audio-ASR-Streaming
+
+以下示例使用 `qwen-audio-3.1-asr-flash-streaming`（也可替换为 `qwen-audio-3.1-asr-flash-message`），在启动任务时通过 `input.context` 传入上下文。
+
+**说明**SDK 示例使用 DashScope Python SDK 2.0.1 及以上版本或 Java SDK 2.22.23 及以上版本，安装方法参见[安装 SDK](raw/model-api-reference/preparations/install-sdk.md)。
+
+Java
+
+```
+import com.alibaba.dashscope.audio.asr.recognition.Recognition;
+import com.alibaba.dashscope.audio.asr.recognition.RecognitionParam;
+import com.alibaba.dashscope.utils.Constants;
+import java.io.File;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
+public class Main {
+    public static void main(String[] args) throws Exception {
+        Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
+        Constants.baseWebsocketApiUrl = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference";
+        Map<String, Object> userContent = new HashMap<>();
+        userContent.put("type", "input_text");
+        userContent.put("text", "我在祺元项目工作，负责璇枢系统。我的同事叫洛柯。");
+        Map<String, Object> user = new HashMap<>();
+        user.put("role", "user");
+        user.put("content", Arrays.asList(userContent));
+        Map<String, Object> assistantContent = new HashMap<>();
+        assistantContent.put("type", "text");
+        assistantContent.put("text", "好的，我们继续讨论祺元项目、璇枢系统和洛柯的工作。");
+        Map<String, Object> assistant = new HashMap<>();
+        assistant.put("role", "assistant");
+        assistant.put("content", Arrays.asList(assistantContent));
+        Map<String, Object> input = new HashMap<>();
+        input.put("context", Arrays.asList(user, assistant));
+        RecognitionParam param = RecognitionParam.builder()
+                .model("qwen-audio-3.1-asr-flash-streaming")
+                .apiKey(System.getenv("DASHSCOPE_API_KEY"))
+                .format("wav").sampleRate(16000).input(input).build();
+        Recognition recognizer = new Recognition();
+        try {
+            System.out.println(recognizer.call(param, new File("asr-accuracy-example.wav")));
+        } finally {
+            recognizer.getDuplexApi().close(1000, "bye");
+        }
+        System.exit(0);
     }
 }
 ```
 
-### 热词格式
-
-热词以 JSON 数组提交，数组元素定义单个热词及其属性。
-
-**示例**：提升电影名称的识别率。
+Python
 
 ```
-[
-    {"text": "赛德克巴莱", "weight": 4, "lang": "zh"},
-    {"text": "Seediq Bale", "weight": 4, "lang": "en"},
-    {"text": "夏洛特烦恼", "weight": 4, "lang": "zh"},
-    {"text": "Goodbye Mr. Loser", "weight": 4, "lang": "en"},
-    {"text": "阙里人家", "weight": 4, "lang": "zh"},
-    {"text": "Confucius' Family", "weight": 4, "lang": "en"}
-]
-```
+import os
+import time
+import dashscope
+from concurrent.futures import ThreadPoolExecutor
 
-**字段说明**：
-
-**字段**
-
-**类型**
-
-**是否必填**
-
-**说明**
-
-text
-
-string
-
-是
-
-热词文本，需为实际词语而非任意字符组合，且语言必须在所选模型的支持范围内。长度限制参见[热词文本规范](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw08_text_rules_h3)。
-
-weight
-
-int
-
-是
-
-热词权重。取值范围 \[1, 5\]，推荐 4。权重越高，模型越倾向于输出该词。使用 Qwen-Audio-ASR-Message、Qwen-Audio-ASR-Streaming、Qwen-Audio-ASR-Filetrans、Qwen-Audio-ASR 系列模型时，还支持 `weight=50`（超级热词），召回率大幅提升，但超级热词数量最多不超过 50 个。调优参见[调整热词权重](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw08_weight_h3)。
-
-lang
-
-string
-
-否
-
-语言代码，限定该热词作用的语种。语种未知时可省略。
-
-注意：`language_hints` 是语音识别接口的参数（非热词接口），用于声明音频语种。一旦设置，仅匹配 `language_hints` 所指定语种的热词生效，其他语种的热词将被忽略。
-
-## 即时热词
-
-即时热词在识别请求中直接传入 `vocabulary` 键值对，本质上也是一组带权重的热词（与预编译热词的词表内容对应），区别仅在于随请求内联传入、无需预先创建热词列表。适用于临时性、会话级别的热词优化。
-
-**重要**即时热词支持 Qwen-Audio-ASR-Message、Qwen-Audio-ASR-Streaming、Qwen-Audio-ASR-Filetrans、Qwen-Audio-ASR 系列模型和 Fun-ASR（`fun-asr`）。对于上述 Qwen-Audio 系列模型，同时配置预编译热词和即时热词时，系统会合并两类热词；合并后超过 2,000 个时，随机选择 2,000 个使用。
-
-### 支持的模型与地域
-
-#### 华北2（北京）
-
-调用以下模型时，请选择北京地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)：
-
--   **实时语音识别**：
-    
-    -   **Qwen-Audio-ASR-Message**：qwen-audio-3.1-asr-flash-message
-    -   **Qwen-Audio-ASR-Streaming**：qwen-audio-3.1-asr-flash-streaming、qwen-audio-3.0-asr-flash-streaming
--   **非实时语音识别**：
-    
-    -   **Qwen-Audio-ASR-Filetrans**：qwen-audio-3.1-asr-flash-filetrans、qwen-audio-3.0-asr-flash-filetrans
-    -   **Qwen-Audio-ASR**：qwen-audio-3.1-asr-flash、qwen-audio-3.0-asr-flash
-    -   **Fun-ASR**：fun-asr
-
-#### 新加坡
-
-调用以下模型时，请选择新加坡地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)：
-
--   **实时语音识别**：
-    
-    -   **Qwen-Audio-ASR-Message**：qwen-audio-3.1-asr-flash-message
-    -   **Qwen-Audio-ASR-Streaming**：qwen-audio-3.1-asr-flash-streaming、qwen-audio-3.0-asr-flash-streaming
--   **非实时语音识别**：
-    
-    -   **Qwen-Audio-ASR-Filetrans**：qwen-audio-3.1-asr-flash-filetrans、qwen-audio-3.0-asr-flash-filetrans
-    -   **Qwen-Audio-ASR**：qwen-audio-3.1-asr-flash、qwen-audio-3.0-asr-flash
-    -   **Fun-ASR**：fun-asr
-
-### 快速开始
-
-在语音识别请求的 `parameters` 中传入 `vocabulary`，无需创建热词列表。各接口的详细用法参见[语音识别](raw/model-user-guide/model-experience/speech-and-audio/speech-recognition/asr-model.md)下的 API 参考。
-
-**示例**（非实时语音识别）：
-
-```
-curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
-     --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
-     --header "Content-Type: application/json" \
-     --header "X-DashScope-SSE: disable" \
-     --data '{
-    "model": "qwen-audio-3.1-asr-flash",
-    "input": {
-        "messages": [
+client = dashscope.Client(
+    api_key=os.environ["DASHSCOPE_API_KEY"],
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
+context = [
+    {
+        "role": "user",
+        "content": [
             {
-                "role": "user",
-                "content": [
-                    {
-                        "type": "input_audio",
-                        "input_audio": {
-                            "data": "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav"
-                        }
-                    }
-                ]
+                "type": "input_text",
+                "text": "我在祺元项目工作，负责璇枢系统。我的同事叫洛柯。"
             }
         ]
     },
-    "parameters": {
-        "format": "wav",
-        "sample_rate": 16000,
-        "vocabulary": {"张三": 5, "李四": 5}
+    {
+        "role": "assistant",
+        "content": [
+            {
+                "type": "text",
+                "text": "好的，我们继续讨论祺元项目、璇枢系统和洛柯的工作。"
+            }
+        ]
     }
-}'
+]
+
+def receive_events(recognition):
+    for event in recognition.events():
+        sentence = ((event.get("payload") or {}).get("output") or {}).get("sentence") or {}
+        if sentence.get("text") and not sentence.get("heartbeat"):
+            print(sentence["text"])
+
+with client.audio.asr.recognize(
+    model="qwen-audio-3.1-asr-flash-streaming",
+    format="wav", sample_rate=16000,
+    input={"context": context},
+) as recognition:
+    with ThreadPoolExecutor(max_workers=1) as pool:
+        receiver = pool.submit(receive_events, recognition)
+        try:
+            with open("asr-accuracy-example.wav", "rb") as audio:
+                while True:
+                    chunk = audio.read(3200)
+                    if not chunk:
+                        break
+                    recognition.send_audio_frame(chunk)
+                    time.sleep(0.1)
+            recognition.stop()
+            receiver.result()
+        finally:
+            recognition.close()
 ```
 
-示例使用华北2（北京）地域的 DashScope 域名；也可替换为业务空间专属域名（形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com，与预编译热词示例一致），无需修改其他请求内容。
+#### Qwen-Audio-ASR-Filetrans
 
-### 热词格式
-
-即时热词以 JSON 对象（键值对）传入：键为热词文本（`string`），值为热词权重（`integer`）。热词文本规范参见[热词文本规范](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw08_text_rules_h3)。
-
-**示例**：
+以下示例使用 `qwen-audio-3.1-asr-flash-filetrans`，在 `input.file_urls` 中提供音频 URL，在 `input.context` 中提供上下文，然后异步提交任务、查询状态并下载结果。
 
 ```
-{"张三": 5, "李四": 5, "语音实验室": 50}
-```
+import json
+import os
+import time
+import urllib.request
 
-权重取值范围为 **\[1, 5\] 或 50**：取 \[1, 5\] 为普通热词，值越大偏好越强；取 50 为超级热词，召回率大幅提升，但超级热词数量最多不超过 50 个。权重调优参见[调整热词权重](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw08_weight_h3)。
+base_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+headers = {"Authorization": "Bearer " + os.environ["DASHSCOPE_API_KEY"]}
 
-## 热词调优与规范
+def request_json(url, body=None, extra_headers=None):
+    request_headers = {**headers, **(extra_headers or {})}
+    data = None
+    if body is not None:
+        data = json.dumps(body, ensure_ascii=False).encode("utf-8")
+        request_headers["Content-Type"] = "application/json"
+    req = urllib.request.Request(url, data=data, headers=request_headers)
+    with urllib.request.urlopen(req) as response:
+        return json.load(response)
 
-以下热词文本规范与调优建议对预编译热词和即时热词均适用。
-
-### 热词文本规范
-
-热词文本必须为实际词语，长度限制如下：
-
--   **含非 ASCII 字符时**：总字符数（汉字、日文假名、韩文谚文、西里尔字母等非 ASCII 字符与 ASCII 字符合计）不超过 15 个。
-    
-    示例：
-    
-    -   符合要求：`"厄洛替尼盐酸盐"`（7 字符）
-    -   符合要求：`"EGFR抑制剂"`（7 字符，其中 EGFR 占 4 个 ASCII 字符）
-    -   符合要求：`"こんにちは"`（5 字符）
-    -   符合要求：`"Фенибут Белфарм"`（15 字符，含中间空格）
-    -   不符合要求：`"Клофелин Белмедпрепараты"`（24 字符）
--   **纯 ASCII 字符时**：按空格切分后的片段数不超过 7 个。
-    
-    示例：
-    
-    -   符合要求：`"Exothermic reaction"` → 2 个片段
-    -   符合要求：`"Human immunodeficiency virus type 1"` → 5 个片段
-    -   不符合要求：`"The effect of temperature variations on enzyme activity in biochemical reactions"` → 11 个片段
-
-### 调整热词权重
-
-权重控制模型对热词的偏好程度，合理设置可在提升目标词识别率的同时避免误识别。
-
-**权重**
-
-**效果**
-
-**适用场景**
-
-1~2
-
-轻微偏好
-
-热词与常用词发音相似，需避免过度纠偏
-
-3~4
-
-明显偏好（推荐）
-
-大多数场景的最佳起始值
-
-5
-
-强制偏好
-
-该词在音频中频繁出现且几乎不会与其他词混淆。权重过高可能导致发音相近的其他词被错误识别为热词。
-
-建议从 `weight=4` 起测，根据识别效果逐步调整。
-
-**超级热词（**`weight=50`**）**：预编译热词和即时热词均支持超级热词，但仅 Qwen-Audio-ASR-Message、Qwen-Audio-ASR-Streaming、Qwen-Audio-ASR-Filetrans、Qwen-Audio-ASR 系列模型支持。设为 50 时召回率大幅提升，但超级热词数量最多不超过 50 个。
-
-### 设计建议
-
--   **按场景分组**：为不同业务场景分别组织热词（如医疗术语、产品名称各成一组），便于维护与复用。预编译热词可为每个场景建立独立的热词列表。
--   **多语种混合（预编译热词）**：同一热词列表可混入不同语种的热词，通过 `lang` 字段区分。语音识别时指定 `language_hints` 后，仅匹配该语种的热词生效。
--   **定期清理（预编译热词）**：删除不再使用的热词列表以释放额度。
-
-## 热词限制与计费
-
-**限制项**
-
-**说明**
-
-热词列表数量（预编译热词）
-
-热词列表是预编译热词预先创建的持久化词表（对应一个 vocabulary\_id）。每账号最多 50 个，所有模型共享。
-
-热词数量上限（预编译热词 / 即时热词）
-
-热词数量上限取决于语音识别所用的模型：
-
--   Qwen-Audio-ASR-Message、Qwen-Audio-ASR-Streaming、Qwen-Audio-ASR-Filetrans、Qwen-Audio-ASR 系列：最多 2000 个。
-    
--   Fun-ASR-Realtime、Fun-ASR-Flash、Fun-ASR 系列主版本模型：最多 2000 个。
-    
--   Fun-ASR-Realtime、Fun-ASR-Flash、Fun-ASR 系列其他模型、Paraformer 系列：最多 500 个。
-    
-
-其中，预编译热词按单个热词列表计数；即时热词按单次请求传入的热词数计数。
-
-超级热词数量（预编译热词 / 即时热词）
-
-权重为 50 的超级热词最多 50 个。
-
-计费
-
-预编译热词与即时热词均免费。
-
-## 上下文增强
-
-### 支持的模型与地域
-
-#### 华北2（北京）
-
-调用以下模型时，请选择北京地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)：
-
--   **实时语音识别**：
-    
-    -   **Qwen-Audio-ASR-Streaming：**qwen-audio-3.1-asr-flash-streaming、qwen-audio-3.0-asr-flash-streaming
-    -   **Fun-ASR-Realtime**：fun-asr-realtime
--   **非实时语音识别**：
-    
-    -   **Qwen-Audio-ASR-Filetrans：**qwen-audio-3.1-asr-flash-filetrans、qwen-audio-3.0-asr-flash-filetrans
-    -   **Qwen-Audio-ASR**：qwen-audio-3.1-asr-flash、qwen-audio-3.0-asr-flash
-    -   **Fun-ASR-Flash**：fun-asr-flash-2026-06-15
-
-#### 新加坡
-
-调用以下模型时，请选择新加坡地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)：
-
--   **实时语音识别**：
-    
-    -   **Qwen-Audio-ASR-Streaming：**qwen-audio-3.1-asr-flash-streaming、qwen-audio-3.0-asr-flash-streaming
-    -   **Fun-ASR-Realtime**：fun-asr-realtime
--   **非实时语音识别**：
-    
-    -   **Qwen-Audio-ASR-Filetrans：**qwen-audio-3.1-asr-flash-filetrans、qwen-audio-3.0-asr-flash-filetrans
-    -   **Qwen-Audio-ASR**：qwen-audio-3.1-asr-flash、qwen-audio-3.0-asr-flash
-    -   **Fun-ASR-Flash**：fun-asr-flash-2026-06-15
-
-### 快速开始
-
-上下文增强无需预先创建资源，在语音识别请求中直接传入上下文参数即可生效：
-
--   **非实时语音识别：**在 HTTP 请求的 `input.messages` 中传入上下文消息，置于音频消息之前。
--   **实时语音识别：**在 WebSocket `run-task` 事件的 `input.context` 中传入上下文消息。DashScope SDK 已封装该协议，通过参数直接传入即可。
-
-**使用场景：**通过传入对话历史或领域术语作为上下文，可显著提升专有词汇（人名、地名、产品术语等）的转写准确率。上下文既可以是多轮对话历史（前几轮的识别结果与大模型回复），也可以只是一组领域术语或词表。
-
-**重要**
-
--   **消息条数限制：**引擎最多保留最近 5 轮的上下文内容。仅传入领域术语或词表时通常只需 1 条消息，不受此限制影响。超出时，早期消息会被自动忽略，不会报错。
--   **文本长度限制：**每轮上下文的文本总长度（同一轮中所有 `user` 和 `assistant` 消息的 `text` 字段长度之和）不超过 400 个字符（按字符数计算，每个字符计为 1，包括字母、汉字、数字、空格和标点等）。超出部分会从末尾截断，不会返回错误。多轮上下文中，每轮独立计算，互不影响。
--   **上下文机制：**上下文主要通过词表匹配方式生效，`text` 字段中需包含音频里待识别的原词（如“Kubernetes”、“Bulge Bracket”）。仅传入语义相关但不包含原词的描述，纠正效果有限。
-
-#### 非实时语音识别
-
-通过 `input.messages` 传入上下文。其中 `user` 角色 + `input_text` 类型用于传入前几轮的识别结果或领域相关的词表，`assistant` 角色用于传入前几轮大模型的回复内容（可选）。上下文消息置于音频消息之前，详见[Qwen-Audio-ASR HTTP API](raw/_short/qwen-audio-asr-http-api-b304ee1b83ae18cd.md)和[Fun-ASR-Flash HTTP API](raw/_short/fun-asr-flash-recorded-speech-recognition-http-a-ba2d322512e386cb.md)。
-
-传入前几轮的识别结果（`user` / `input_text`）和大模型回复（`assistant` / `text`）。若只需传入领域术语或词表，省略其中的对话历史（`assistant` 消息）即可。
-
-```
-{
-    "model": "qwen-audio-3.1-asr-flash",
+body = {
+    "model": "qwen-audio-3.1-asr-flash-filetrans",
     "input": {
-        "messages": [
+        "file_urls": [
+            "https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/zh/audios/6a4b3c2d1e0f9093.wav"
+        ],
+        "context": [
             {
                 "role": "user",
                 "content": [
                     {
                         "type": "input_text",
-                        "text": "前轮用户语音的识别结果"
+                        "text": "我在祺元项目工作，负责璇枢系统。我的同事叫洛柯。"
                     }
                 ]
             },
@@ -555,18 +642,7 @@ curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/a
                 "content": [
                     {
                         "type": "text",
-                        "text": "前轮大模型的回复内容"
-                    }
-                ]
-            },
-            {
-                "role": "user",
-                "content": [
-                    {
-                        "type": "input_audio",
-                        "input_audio": {
-                            "data": "当前待识别的音频URL或Base64"
-                        }
+                        "text": "好的，我们继续讨论祺元项目、璇枢系统和洛柯的工作。"
                     }
                 ]
             }
@@ -574,217 +650,342 @@ curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/a
     },
     "parameters": {}
 }
+task = request_json(
+    base_url + "/services/audio/asr/transcription", body,
+    {"X-DashScope-Async": "enable"},
+)
+task_id = task["output"]["task_id"]
+while True:
+    result = request_json(base_url + "/tasks/" + task_id)
+    status = result["output"]["task_status"]
+    if status == "SUCCEEDED":
+        break
+    if status in ("FAILED", "CANCELED"):
+        raise RuntimeError(result)
+    time.sleep(1)
+
+for item in result["output"]["results"]:
+    if item["subtask_status"] != "SUCCEEDED":
+        raise RuntimeError(item)
+    with urllib.request.urlopen(item["transcription_url"]) as response:
+        transcription = json.load(response)
+    for transcript in transcription["transcripts"]:
+        print(transcript["text"])
 ```
 
-#### 实时语音识别
+移除示例中的上下文配置，再识别同一段音频，即可对比配置前后的结果。以下为识别文本示例：
 
-实时语音识别通过 `input.context` 传入上下文，音频通过 WebSocket 二进制帧发送。对于支持在任务执行中更新上下文的模型，发送 `continue-task` 事件。WebSocket 事件格式详见[Qwen-Audio-ASR-Streaming 客户端事件](raw/_short/qwen-audio-asr-streaming-client-events-1bae8548d2be6bc5.md) / [Fun-ASR-Realtime 客户端事件](raw/_short/fun-asr-client-events-997ba24ade1a8a48.md)，DashScope SDK 参数详见[Qwen-Audio-ASR-Streaming Python SDK](raw/_short/qwen-audio-asr-streaming-python-sdk-d09b6005cff4b207.md) / [Fun-ASR-Realtime Python SDK](raw/_short/fun-asr-realtime-python-sdk-c8b5a715c3e66b70.md)（≥ 2.0.1）和[Qwen-Audio-ASR-Streaming Java SDK](raw/_short/qwen-audio-asr-streaming-java-sdk-0a79c28a0694d86f.md) / [Fun-ASR-Realtime Java SDK](raw/_short/fun-asr-realtime-java-sdk-1f6304ff694438f5.md)（≥ 2.22.23）。
+**配置**
 
-#### 多轮对话上下文
+**识别文本示例**
 
-传入前几轮的识别结果（`user` / `input_text`）和大模型回复（`assistant` / `text`）。若只需传入领域术语或词表，省略其中的对话历史（`assistant` 消息）即可。
+未配置
 
-WebSocket
+请把漆园项目的报告发给罗科，下周我们要上线玄枢系统。
 
-```
-{
-    "header": {
-        "action": "run-task",
-        "task_id": "2bf83b9a-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-        "streaming": "duplex"
-    },
-    "payload": {
-        "task_group": "audio",
-        "task": "asr",
-        "function": "recognition",
-        "model": "qwen-audio-3.1-asr-flash-streaming",
-        "parameters": {
-            "format": "pcm",
-            "sample_rate": 16000
-        },
-        "input": {
-            "context": [
-                {
-                    "role": "user",
-                    "content": [
-                        {
-                            "type": "input_text",
-                            "text": "前轮用户语音的识别结果"
-                        }
-                    ]
-                },
-                {
-                    "role": "assistant",
-                    "content": [
-                        {
-                            "type": "text",
-                            "text": "前轮大模型的回复内容"
-                        }
-                    ]
-                }
-            ]
-        }
-    }
-}
-```
+配置后
 
-Python SDK
+请把祺元项目的报告发给洛柯，下周我们要上线璇枢系统。
 
-```
-import os
-import time
-import dashscope
-from concurrent.futures import ThreadPoolExecutor
+## 效果调优与排查
 
-client = dashscope.Client(api_key=os.getenv("DASHSCOPE_API_KEY"))
+使用同一音频对比配置前后的结果，再调整词条、权重或上下文内容。热词调优同时适用于即时热词和预编译热词。
 
-context = {
-    "context": [
-        {
-            "role": "user",
-            "content": [
-                {
-                    "type": "input_text",
-                    "text": "前轮用户语音的识别结果"
-                }
-            ]
-        },
-        {
-            "role": "assistant",
-            "content": [
-                {
-                    "type": "text",
-                    "text": "前轮大模型的回复内容"
-                }
-            ]
-        }
-    ]
-}
+### 调整热词权重
 
-# Real-time speech recognition event receiver
-def receive_events(rec):
-    for event in rec.events():
-        payload = event.get('payload') or {}
-        sentence = (payload.get('output') or {}).get('sentence') or {}
-        if sentence.get('text') and not sentence.get('heartbeat'):
-            print(sentence['text'])
+普通热词的权重范围为 1～5，建议从 `weight=4` 起调。权重越高，模型越倾向于输出该词；权重过高可能把其他发音相近的词错误替换为热词。
 
-# 创建识别会话时通过 input 参数传入上下文
-with client.audio.asr.recognize(
-        model='qwen-audio-3.1-asr-flash-streaming',
-        format='wav',
-        sample_rate=16000,
-        input=context,
-) as recognition:
-    with ThreadPoolExecutor(max_workers=1) as pool:
-        receiver = pool.submit(receive_events, recognition)
-        try:
-            with open('audio.wav', 'rb') as f:
-                while True:
-                    chunk = f.read(3200)
-                    if not chunk:
-                        break
-                    recognition.send_audio_frame(chunk)
-                    time.sleep(0.1)
-            recognition.stop()
-            receiver.result()
-        finally:
-            # close must run inside the pool context to unblock the receiver
-            recognition.close()
-```
+**权重**
 
-Java SDK
+**偏好程度**
 
-```
-Map<String, Object> userContent = new HashMap<>();
-userContent.put("type", "input_text");
-userContent.put("text", "前轮用户语音的识别结果");
+**适用情况**
 
-Map<String, Object> assistantContent = new HashMap<>();
-assistantContent.put("type", "text");
-assistantContent.put("text", "前轮大模型的回复内容");
+1～2
 
-Map<String, Object> userMessage = new HashMap<>();
-userMessage.put("role", "user");
-userMessage.put("content", Arrays.asList(userContent));
+较弱
 
-Map<String, Object> assistantMessage = new HashMap<>();
-assistantMessage.put("role", "assistant");
-assistantMessage.put("content", Arrays.asList(assistantContent));
+与常用词发音相近，需要避免过度纠偏
 
-Map<String, Object> input = new HashMap<>();
-input.put("context", Arrays.asList(userMessage, assistantMessage));
+3～4
 
-RecognitionParam param = RecognitionParam.builder()
-        .model("qwen-audio-3.1-asr-flash-streaming")
-        .format("wav")
-        .sampleRate(16000)
-        .input(input)
-        .build();
+较明显
 
-Recognition recognizer = new Recognition();
-System.out.println(recognizer.call(param, new File("audio.wav")));
-recognizer.getDuplexApi().close(1000, "bye");
-```
+推荐作为大多数场景的起始配置
 
-### 效果示例
+5
 
-上下文的 `text` 字段内容格式灵活，可以是词表、自然语言段落或两者的混合，对无关文本的容错性极高。
+较强
 
-某段音频正确识别结果应该为“投行圈内部的那些黑话，你了解哪些？首先，外资九大投行，Bulge Bracket，BB ...”。
+音频中频繁出现、较少与其他词混淆的术语
 
-**不使用上下文增强**
+**超级热词**：Qwen-Audio-ASR-Message、Qwen-Audio-ASR-Streaming、Qwen-Audio-ASR-Filetrans 和 Qwen-Audio-ASR 系列的即时热词、预编译热词还支持 `weight=50`，可提高目标词召回率，每个词表或请求最多 50 个。
 
-未使用上下文增强时，部分投行公司名称识别有误，例如 “Bird Rock” 正确应为 “Bulge Bracket”。
+### 组织与维护词表
 
-识别结果：“投行圈内部的那些黑话，你了解哪些？首先，外资九大投行，Bird Rock，BB ...”
+-   **按场景分组**：预编译热词可为不同业务场景创建独立列表，例如分别维护医疗术语和产品名称，减少无关词条。
+    
+-   **区分词条语种与音频语种**：预编译词表可混入不同语种的词条，通过 `lang` 区分。`language_hints` 属于识别接口，用于声明音频语种；设置后，仅语种匹配的热词生效，其他语种的热词被忽略。
+    
+-   **定期维护**：按业务需要更新词条，删除不再使用的列表以释放配额。
+    
 
-**使用上下文增强**
+**说明**建议两次热词列表更新至少间隔 5 分钟，否则更新后的热词可能不生效。
 
-使用上下文增强，对投行公司名称识别正确。
+### 排查识别效果
 
-识别结果：“投行圈内部的那些黑话，你了解哪些？首先，外资九大投行，Bulge Bracket，BB ...”
+先区分是配置未生效、词语纠偏过强，还是音频本身难以识别，再检查相应项目。
 
-上述示例中，在上下文的 `text` 字段中加入包含“Bulge Bracket”等专业术语的词表或自然语言段落即可实现增强效果。
+**现象**
 
-## API参考
+**检查与处理**
 
--   [预编译热词 API 参考](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/custom-hot-words.md)
--   [实时语音识别-Qwen-Audio-ASR-Streaming API参考](raw/_short/qwen-audio-asr-streaming-api-920ae4c45b135f2a.md)
--   [实时语音识别-Fun-ASR-Realtime API参考](raw/_short/fun-asr-real-time-speech-recognition-api-referen-16635189e873e42b.md)
--   [实时语音识别-Qwen-ASR API参考](raw/_short/qwen-asr-realtime-api-18aa3c2b3386c250.md)
--   [实时语音识别-Paraformer API参考](raw/_short/paraformer-real-time-speech-recognition-api-refe-79877d5c8ef469f7.md)
--   [非实时语音识别-Qwen-Audio-ASR-Filetrans API参考](raw/_short/qwen-audio-asr-filetrans-api-c91600a5bccc788c.md)
--   [非实时语音识别-Fun-ASR API参考](raw/_short/fun-asr-recorded-speech-recognition-api-referenc-cdd1d2e565f281cc.md)
--   [非实时语音识别-Qwen-Audio-ASR API参考](raw/_short/qwen-audio-asr-api-12cd76f68a22ae50.md)
--   [非实时语音识别-Fun-ASR-Flash API参考](raw/_short/non-real-time-speech-recognition-for-fun-asr-fla-a39568e6f8404553.md)
--   [非实时语音识别-Qwen-ASR API参考](raw/_short/qwen-asr-api-reference-60b7c9eb88d7f83b.md)
--   [非实时语音识别-Paraformer API参考](raw/_short/paraformer-recorded-speech-recognition-api-refer-8ca94e9578cc12b7.md)
+热词未按预期识别
 
-## 常见问题
+先确认[支持的模型与地域](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#supported-models)。即时热词应位于 `parameters.vocabulary`；预编译热词需核对账号、`vocabulary_id`、`status=OK`，以及创建列表时的 `target_model` 是否与当前模型一致。
 
-### Q：设置热词后识别效果没有改善？
+在支持范围内调大热词权重，并对比同一音频的结果，判断是否为权重偏低导致。
 
-依次排查：
+其他词被误识别为热词
 
-1.  **模型是否匹配（预编译热词）**：创建热词列表时指定的 `target_model` 必须与语音识别接口使用的模型一致。两者不一致时接口不会报错，识别仍能返回结果，但热词不生效；识别结果未命中预期热词时应优先排查此项。
-2.  **模型是否支持**
-3.  **权重是否合适**：将权重从 4 提到 5 观察效果。如果出现发音相近的其他词被误识别为热词，回调到 4。
-4.  **热词列表状态（预编译热词）**：通过查询接口确认 `status` 为 `OK`。
+在支持范围内调小热词权重，并按业务场景减少无关词条。检查 `lang` 与识别接口 `language_hints` 是否匹配，避免使用不属于当前语种的词条。
 
-### Q：预编译热词在实时和非实时语音识别中的使用方式是否相同？
+上下文没有改善目标词
 
-创建方式相同，调用时存在差异：
+检查文本是否包含术语的准确写法，并核对消息角色、类型、顺序和所用接口的传入位置。超过长度或轮数限制的文本可能被截断或丢弃，规则参见[使用限制](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw10_limit_h2)。
 
--   **实时语音识别**：在 Recognition 或 WebSocket 连接参数中传入 `vocabulary_id`。
--   **录音文件识别**：在 Transcription 请求参数中传入 `vocabulary_id`。
+普通词也大量识别错误
 
-两种场景的 `target_model` 都必须与实际调用的语音识别模型一致。即时热词无需创建列表和指定 `target_model`，直接在请求参数中传入 `vocabulary` 键值对即可。对于支持即时热词的 Qwen-Audio-ASR-Message、Qwen-Audio-ASR-Streaming、Qwen-Audio-ASR-Filetrans 和 Qwen-Audio-ASR 系列模型，同时配置预编译热词和即时热词时，系统会合并两类热词；合并后超过 2,000 个时，随机选择 2,000 个使用。
+检查音频格式、采样率是否符合模型要求，并降低背景噪声。单语种音频可通过识别接口的 `language_hints` 声明语种。模型选型与音频要求参见[语音识别概述](raw/model-user-guide/model-experience/speech-and-audio/speech-recognition/asr-model.md)。
 
-### Q：除了热词和上下文增强，还有哪些方式可以提升识别准确率？
+## 支持的模型与地域
 
-还可从以下方向优化：
+#### 预编译热词
 
--   **音频质量**：采样率匹配模型要求（16 kHz 或 8 kHz），降低背景噪声。
--   **选择合适的模型**：不同场景适用模型不同，详见[语音识别](raw/model-user-guide/model-experience/speech-and-audio/speech-recognition/asr-model.md)选型指南。
--   **指定语种**：通过 `language_hints` 声明音频语种，可提升单语种场景的准确率。
+#### 华北2（北京）
+
+-   **Qwen-Audio-ASR-Message**：qwen-audio-3.1-asr-flash-message
+    
+-   **Qwen-Audio-ASR-Streaming**：qwen-audio-3.1-asr-flash-streaming、qwen-audio-3.0-asr-flash-streaming
+    
+-   **Qwen-Audio-ASR-Filetrans**：qwen-audio-3.1-asr-flash-filetrans、qwen-audio-3.0-asr-flash-filetrans
+    
+-   **Qwen-Audio-ASR**：qwen-audio-3.1-asr-flash、qwen-audio-3.0-asr-flash
+    
+-   **Fun-ASR-Realtime**：fun-asr-realtime、fun-asr-realtime-2026-02-28、fun-asr-flash-8k-realtime、fun-asr-flash-8k-realtime-2026-01-28
+    
+-   **Fun-ASR-Flash**：fun-asr-flash-2026-06-15
+    
+-   **Fun-ASR**：fun-asr
+    
+-   **Paraformer-Realtime**：paraformer-realtime-v2、paraformer-realtime-8k-v2
+    
+-   **Paraformer**：paraformer-v2、paraformer-8k-v2
+    
+
+#### 新加坡
+
+**说明**新加坡地域的子业务空间暂不支持热词功能。
+
+-   **Qwen-Audio-ASR-Message**：qwen-audio-3.1-asr-flash-message
+    
+-   **Qwen-Audio-ASR-Streaming**：qwen-audio-3.1-asr-flash-streaming、qwen-audio-3.0-asr-flash-streaming
+    
+-   **Qwen-Audio-ASR-Filetrans**：qwen-audio-3.1-asr-flash-filetrans、qwen-audio-3.0-asr-flash-filetrans
+    
+-   **Qwen-Audio-ASR**：qwen-audio-3.1-asr-flash、qwen-audio-3.0-asr-flash
+    
+-   **Fun-ASR-Realtime**：fun-asr-realtime
+    
+-   **Fun-ASR-Flash**：fun-asr-flash-2026-06-15
+    
+-   **Fun-ASR**：fun-asr
+    
+
+#### 即时热词
+
+#### 华北2（北京）
+
+-   **Qwen-Audio-ASR-Message**：qwen-audio-3.1-asr-flash-message
+    
+-   **Qwen-Audio-ASR-Streaming**：qwen-audio-3.1-asr-flash-streaming、qwen-audio-3.0-asr-flash-streaming
+    
+-   **Qwen-Audio-ASR-Filetrans**：qwen-audio-3.1-asr-flash-filetrans、qwen-audio-3.0-asr-flash-filetrans
+    
+-   **Qwen-Audio-ASR**：qwen-audio-3.1-asr-flash、qwen-audio-3.0-asr-flash
+    
+-   **Fun-ASR**：fun-asr
+    
+
+#### 新加坡
+
+**说明**新加坡地域的子业务空间暂不支持热词功能。
+
+-   **Qwen-Audio-ASR-Message**：qwen-audio-3.1-asr-flash-message
+    
+-   **Qwen-Audio-ASR-Streaming**：qwen-audio-3.1-asr-flash-streaming、qwen-audio-3.0-asr-flash-streaming
+    
+-   **Qwen-Audio-ASR-Filetrans**：qwen-audio-3.1-asr-flash-filetrans、qwen-audio-3.0-asr-flash-filetrans
+    
+-   **Qwen-Audio-ASR**：qwen-audio-3.1-asr-flash、qwen-audio-3.0-asr-flash
+    
+-   **Fun-ASR**：fun-asr
+    
+
+#### 上下文增强
+
+#### 华北2（北京）
+
+-   **Qwen-Audio-ASR-Message**：qwen-audio-3.1-asr-flash-message
+    
+-   **Qwen-Audio-ASR-Streaming**：qwen-audio-3.1-asr-flash-streaming、qwen-audio-3.0-asr-flash-streaming
+    
+-   **Qwen-Audio-ASR-Filetrans**：qwen-audio-3.1-asr-flash-filetrans、qwen-audio-3.0-asr-flash-filetrans
+    
+-   **Qwen-Audio-ASR**：qwen-audio-3.1-asr-flash、qwen-audio-3.0-asr-flash
+    
+-   **Fun-ASR-Realtime**：fun-asr-realtime
+    
+-   **Fun-ASR-Flash**：fun-asr-flash-2026-06-15
+    
+
+#### 新加坡
+
+-   **Qwen-Audio-ASR-Message**：qwen-audio-3.1-asr-flash-message
+    
+-   **Qwen-Audio-ASR-Streaming**：qwen-audio-3.1-asr-flash-streaming、qwen-audio-3.0-asr-flash-streaming
+    
+-   **Qwen-Audio-ASR-Filetrans**：qwen-audio-3.1-asr-flash-filetrans、qwen-audio-3.0-asr-flash-filetrans
+    
+-   **Qwen-Audio-ASR**：qwen-audio-3.1-asr-flash、qwen-audio-3.0-asr-flash
+    
+-   **Fun-ASR-Realtime**：fun-asr-realtime
+    
+-   **Fun-ASR-Flash**：fun-asr-flash-2026-06-15
+    
+
+## 使用限制
+
+#### 热词限制
+
+**限制项**
+
+**说明**
+
+热词列表数量
+
+每账号最多 50 个预编译热词列表，所有模型共享。每个列表对应一个 `vocabulary_id`。
+
+热词数量
+
+Qwen-Audio-ASR-Message、Qwen-Audio-ASR-Streaming、Qwen-Audio-ASR-Filetrans、Qwen-Audio-ASR 系列：最多 2000 个。
+
+Fun-ASR-Realtime、Fun-ASR-Flash、Fun-ASR 系列主版本模型：最多 2000 个；上述系列的其他模型以及 Paraformer 系列：最多 500 个。
+
+预编译热词按单个列表计数，即时热词按单次请求计数。
+
+超级热词数量
+
+权重为 50 的词条最多 50 个。
+
+**说明**对于 Qwen-Audio-ASR-Message、Qwen-Audio-ASR-Streaming、Qwen-Audio-ASR-Filetrans 和 Qwen-Audio-ASR 系列模型，同时配置预编译热词和即时热词时，系统会合并两类热词；合并后超过 2000 个时，随机选择 2000 个使用。
+
+#### 热词文本规范
+
+热词须为实际词语，且语种在模型支持范围内；即时热词和预编译热词均遵循以下规范。
+
+#### 包含非 ASCII 字符
+
+包含汉字、日文假名、韩文谚文、西里尔字母等非 ASCII 字符时，与 ASCII 字符合计不超过 15 个字符，空格计入字符数。
+
+**文本**
+
+**计数**
+
+**是否符合长度要求**
+
+`"厄洛替尼盐酸盐"`
+
+7 字符
+
+是
+
+`"EGFR抑制剂"`
+
+7 字符
+
+是
+
+`"こんにちは"`
+
+5 字符
+
+是
+
+`"Фенибут Белфарм"`
+
+15 字符
+
+是
+
+`"Клофелин Белмедпрепараты"`
+
+24 字符
+
+否
+
+#### 仅包含 ASCII 字符
+
+仅包含 ASCII 字符时，按空格切分后不超过 7 个片段。
+
+**文本**
+
+**计数**
+
+**是否符合长度要求**
+
+`"Exothermic reaction"`
+
+2 片段
+
+是
+
+`"Human immunodeficiency virus type 1"`
+
+5 片段
+
+是
+
+`"The effect of temperature variations on enzyme activity in biochemical reactions"`
+
+11 片段
+
+否
+
+#### 上下文限制
+
+**限制项**
+
+**说明**
+
+上下文轮数
+
+最多保留最近 5 轮；`input_text` 和 `text` 类型的上下文消息各最多 5 条，超出时忽略早期消息，不报错。仅传领域文本时也需遵循文本长度限制。
+
+每轮文本长度
+
+同一轮所有 `user` 和 `assistant` 消息的 `text` 字段长度之和不超过 400 个字符。字母、汉字、数字、空格和标点均各计 1 个字符。超出部分从末尾截断，不报错；各轮独立计算。
+
+**说明**Qwen-Audio-ASR-Message 还支持在任务运行中通过 `continue-task` 更新上下文，格式参见[Message 客户端事件](https://help.aliyun.com/zh/model-studio/qwen-asr-message-client-events#h-continue-task)。
+
+## 功能计费
+
+即时热词和预编译热词功能本身免费。使用热词或上下文增强的模型调用费用，请参见[计费规则](raw/model-user-guide/test-1/model-pricing.md)。
+
+## 相关 API
+
+-   热词列表的创建、查询、更新和删除等操作，参见[热词管理 API](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/custom-hot-words/vocabulary-http-api.md)。
+    
+-   热词管理 SDK：[Java SDK](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/custom-hot-words/vocabulary-java-sdk.md)、[Python SDK](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/custom-hot-words/vocabulary-python-sdk.md)。
+    
+-   模型调用 API：[Qwen-Audio-ASR-Message 客户端事件](raw/_short/qwen-asr-message-client-events-0be34a3639cdd40b.md)、[Qwen-Audio-ASR-Streaming 客户端事件](raw/_short/qwen-audio-asr-streaming-client-events-1bae8548d2be6bc5.md)、[Qwen-Audio-ASR-Filetrans HTTP API](raw/_short/qwen-audio-asr-filetrans-http-api-2ccf5d603a3ac5e9.md)、[Qwen-Audio-ASR HTTP API](raw/_short/qwen-audio-asr-http-api-b304ee1b83ae18cd.md)。

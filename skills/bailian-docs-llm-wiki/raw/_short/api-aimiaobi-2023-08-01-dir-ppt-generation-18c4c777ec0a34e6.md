@@ -1,0 +1,15 @@
+# PPT生成
+
+-   [ListEnterprisePptTemplates](raw/_short/api-aimiaobi-2023-08-01-listenterpriseppttemplat-0f6af38d590d2725.md)
+-   [InitiatePptCreationV2](raw/_short/api-aimiaobi-2023-08-01-initiatepptcreationv2-89f1190e9dc82ba3.md)
+-   [ListPptTemplates](raw/_short/api-aimiaobi-2023-08-01-listppttemplates-88c8fe161f29a68f.md)
+-   [GetPptTemplateSelector](raw/_short/api-aimiaobi-2023-08-01-getppttemplateselector-5b8157ba87d36c80.md)
+-   [GetPptArtifactExportResult](raw/_short/api-aimiaobi-2023-08-01-getpptartifactexportresu-16475c338abc9043.md)
+-   [ExportPptArtifact](raw/_short/api-aimiaobi-2023-08-01-exportpptartifact-fdb00f37b4c36d44.md)
+-   [GetPptArtifact](raw/_short/api-aimiaobi-2023-08-01-getpptartifact-0f24541bb6f0fb00.md)
+-   [ListPptArtifacts](raw/_short/api-aimiaobi-2023-08-01-listpptartifacts-f05d5c55d265b07f.md)
+-   [RunPptOutlineGeneration](raw/_short/api-aimiaobi-2023-08-01-runpptoutlinegeneration-7bb578387e9124a4.md)
+-   [InitiatePptCreation](raw/_short/api-aimiaobi-2023-08-01-initiatepptcreation-5737c5ef27fa268d.md)
+-   [GetPptConfig](raw/_short/api-aimiaobi-2023-08-01-getpptconfig-f664f98d565e54f9.md)
+-   [BindPptArtifact](raw/_short/api-aimiaobi-2023-08-01-bindpptartifact-9ab377fb301d3f3f.md)
+-   [DeletePptArtifact](raw/_short/api-aimiaobi-2023-08-01-deletepptartifact-2c9c2c6cefcc45cd.md)

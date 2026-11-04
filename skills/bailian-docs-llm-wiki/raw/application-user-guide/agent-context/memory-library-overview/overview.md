@@ -4,7 +4,7 @@
 
 大模型受上下文窗口限制，跨会话无法保留信息。记忆库自动从对话中提取关键信息并持久化存储，在后续对话中基于语义检索相关记忆并注入上下文，使智能体持续理解用户偏好和历史信息。
 
-**说明**记忆库将于 **2026 年 8 月 20 日 10:00**（北京时间）正式开始商业化计费。详见[计费说明](raw/application-user-guide/agent-context/memory-library-overview/integration-overview/billing.md)。
+**说明**记忆库将于 **2026 年 8 月 20 日 10:00**（北京时间）正式开始商业化计费。详见[计费说明](raw/application-user-guide/agent-billing/billing.md)。
 
 -   [快速开始](raw/application-user-guide/agent-context/memory-library-overview/overview/quickstart.md)：3 步体验记忆的写入、查看和检索
 -   [核心概念](raw/application-user-guide/agent-context/memory-library-overview/overview/concepts.md)：事实记忆、用户画像与工作原理
@@ -14,5 +14,5 @@
 -   [记忆观测](raw/application-user-guide/agent-context/memory-library-overview/observability/observation.md)：对照会话内容与关联的记忆变更
 -   [记忆审计](raw/application-user-guide/agent-context/memory-library-overview/observability/audit.md)：筛选变更事件并比较前后快照
 -   [集成方式](raw/application-user-guide/agent-context/memory-library-overview/integration-overview.md)：Agent Harness 与插件两种集成路径
--   [计费说明](raw/application-user-guide/agent-context/memory-library-overview/integration-overview/billing.md)：Pro/Lite 策略版本定价、免费额度与计费示例
+-   [计费说明](raw/application-user-guide/agent-billing/billing.md)：Pro/Lite 策略版本定价、免费额度与计费示例
 -   [API 参考](raw/application-api-reference/long-term-memory-new/api-overview.md)：全部接口的参数说明

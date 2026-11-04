@@ -1,56 +1,55 @@
 # 流式输出
 
-流式输出（Streaming Output）是百炼平台中一种低延迟、增量式的数据返回机制，服务端在模型推理过程中边生成边发送结果片段，而非等待全部内容完成后再一次性返回。它适用于对实时性敏感的交互场景（如语音助手、实时会议摘要、长文本生成），可显著降低端到端响应延迟，并支持客户端即时渲染、中断控制与自然停顿。
+流式输出（Streaming Output）是百炼平台提供的一种实时、增量式响应机制，服务端在模型推理过程中持续生成并分块推送结果（如 token、音频帧、文本片段），而非等待全部计算完成后再返回完整响应。该机制显著降低端到端延迟，提升交互自然度，是构建低延迟对话、语音助手、实时音视频应用的核心能力。
 
-## 在百炼平台的不同场景中，这个概念如何使用
+## 在百炼平台的不同场景中如何使用
 
-流式输出在百炼平台中以三种协议形态统一支持，适配不同技术栈和业务需求：
+流式输出并非统一接口，而是根据调用协议与业务场景，通过不同技术路径实现：
 
-- **WebSocket 流式（Realtime 类 API）**：用于 `omni realtime api` 和 `realtime api user guide` 所述的实时语音/[多模态](multi-modal.md)交互。服务端通过结构化事件（如 `text.delta`、`audio.delta`、`tool_call.delta`）持续推送增量内容，客户端按事件类型解析并合成最终响应。典型用于语音助手、智能客服等需亚秒级反馈的场景。
+- **Model Experience（RESTful /v1/models/{model_id}/invoke）**  
+  适用于文本生成、部分全模态及 TTS 模型。启用方式：在请求 `body` 中设置 `"enable_streaming": true`。响应为标准 SSE（Server-Sent Events）格式，`Content-Type: text/event-stream`，每行以 `data:` 开头，需按 SSE 协议解析（如 `data: {"output": {"text": "Hello"}}`）。支持模型包括 `qwen-max`、`qwen-plus`、`wanx-v1`（TTS）、`qwen3-omni-flash-realtime`（部分能力）等。
 
-- **SSE 流式（Server-Sent Events）**：用于 `audio api references` 和 `model experience` 中的 RESTful 接口（如 `/v1/models/{model}/invoke`）。当请求中设置 `"parameters": {"stream": true}` 时，响应头为 `Content-Type: text/event-stream`，每行以 `data: {...}` 格式携带 JSON 片段（如 `{"type":"content","delta":"你好"}` 或 `{"type":"finish","usage":{"output_tokens":12}}`）。适用于 Web 前端、CLI 工具等支持 SSE 的环境。
+- **Realtime API（WebSocket）**  
+  面向强实时交互场景（如语音对话、多轮上下文感知），**强制流式**（`stream: true` 固定开启）。客户端通过 WebSocket 连接，接收结构化事件（如 `output.text.delta`、`output.audio.chunk`、`tool_calls`），支持输入流式注入（`input.audio`/`input.text` 分片）、运行时中断（`input.interrupt`）和会话状态保持。典型模型：`qwen-audio-realtime-v1`、`qwen2.5-7b-instruct-realtime`、`qwen-vl-realtime-v1`。
 
-- **OpenAI 兼容流式（Toolkits & Frameworks）**：在 [OpenAI 兼容接口](openai-compatible-api.md)（如 `chat.completions.create()`）中，通过 `stream=True` 参数启用。返回标准 OpenAI 流式格式（`{"choices":[{"delta":{"content":"..."}}]}`），兼容各类开源 SDK 和 LLM 工具链（LangChain、LlamaIndex 等），便于快速迁移已有应用。
+- **Omni Realtime API（WebSocket/AOQ/WebRTC）**  
+  多模态流式交互的增强形态，专为音视频同步生成设计。通过 `session.update` 配置 `modalities: ["text", "audio"]` 启用双模态流式输出；服务端逐帧返回 `response.text.delta` 和 `response.audio.chunk`，并支持语义 VAD、平滑输出（`smooth_output`）等高级控制。仅限 `qwen3.8-omni-flash-realtime` 等指定模型。
 
-> ⚠️ 注意：`qwen-audio` 系列模型（如 ASR/TTS）**不支持 OpenAI 兼容协议**，仅可通过 DashScope 原生 WebSocket 或 RESTful SSE 接口启用流式；全模态模型（如 `qwen3.8-omni-flash`）在 [OpenAI 兼容接口](openai-compatible-api.md)中暂不支持流式，需使用 `model experience` 或 `omni realtime api`。
+- **Audio API（RESTful）**  
+  音频类模型（ASR、TTS、Audio Generation）支持可选流式。TTS 和 ASR 接口在请求中设置 `stream: true`（注意：此字段名与 Model Experience 的 `enable_streaming` 不同），响应体为 `application/octet-stream` 二进制流（如 PCM 音频流或识别文本流），需按 chunk 边接收边处理。不支持流式的模型（如部分语音翻译）将返回完整 JSON。
+
+- **Qwen 兼容协议（OpenAI/Anthropic/DashScope）**  
+  OpenAI 兼容 `/chat/completions` 接口通过 `stream: true` 启用流式；DashScope 原生协议对应 `enable_streaming: true`；Anthropic 兼容 Messages API 则原生支持流式（无需额外参数）。所有协议下，流式响应均为 SSE 格式，结构与 Model Experience 一致，便于 SDK 统一适配。
+
+> ⚠️ 注意：向量模型（embedding/rerank）和部分旧版视觉生成模型**不支持流式输出**，请求中传入流式参数将被忽略或报错。
 
 ## 关键参数和配置
 
-| 参数 | 位置 | 类型 | 说明 | 是否必需 |
-|------|------|------|------|----------|
-| `stream` | `parameters` 对象内（所有 RESTful / Model Experience 接口） | `boolean` | 启用流式响应；设为 `true` 时返回 SSE；`false` 或省略则为非流式 JSON | 否（默认 `false`） |
-| `stream` | [OpenAI 兼容接口](openai-compatible-api.md)函数参数（如 `chat.completions.create(stream=True)`） | `boolean` | 同上，语义一致 | 否（默认 `false`） |
-| — | WebSocket 连接建立时（Realtime API） | — | 流式为默认行为，无需显式开关；所有响应均以事件流形式下发 | — |
-| `enable_interim_results` | `realtime api user guide` 的 query string 或 session config | `boolean` | ASR 场景专用：控制是否返回中间识别结果（如 `"我今天"` → `"我今天想"`）；仅影响 `text` 事件，不影响 `audio` 流 | 否（默认 `false`） |
-| `smooth_output` | `omni realtime api` 的 `session.update` 参数（Qwen3.8+ 预发布模型） | `boolean` | 控制文本输出风格：`true` 启用口语化分段（适合 TTS 播放），`false` 返回紧凑书面语 | 否（默认 `false`） |
+| 参数 | 所属协议 | 类型 | 说明 | 是否必需 |
+|------|----------|------|------|-----------|
+| `enable_streaming` | Model Experience, DashScope 原生 | boolean | 启用 SSE 流式响应 | 否（默认 `false`） |
+| `stream` | Realtime API, Audio API, OpenAI 兼容 | boolean | 启用流式（Realtime API 中固定为 `true`） | 是（Realtime）/ 否（Audio/OpenAI） |
+| `modalities` | Omni Realtime API | string[] | 指定输出模态，`["text"]` 或 `["text","audio"]` | 是（决定是否输出音频流） |
+| `audio.output.format.sample_rate` | Omni Realtime API | integer | 输出音频采样率（8000–48000 Hz），影响流式音频 chunk 质量 | 否（有默认值） |
 
-> ✅ 实用提示：
-> - 流式响应超时固定为 **60 秒**（不可配置），超时后连接关闭，需由客户端实现重连逻辑；
-> - 所有流式接口均**不支持跨 session 上下文继承**，如需多轮对话，请复用同一 WebSocket 连接（Realtime）或在 `model experience` 中显式维护 `messages` 历史；
-> - 解析流式响应时，请始终检查 `type` 字段（如 `content`/`tool_call`/`finish`）或 OpenAI 的 `finish_reason`，避免将中间片段误判为终态。
+- **超时设置**：所有流式请求需客户端显式配置长超时（建议 ≥ 300 秒），避免连接被中间代理或 SDK 默认策略中断。
+- **错误处理**：流式响应中可能夹杂 `event: error` 事件（SSE）或 `error` 字段（WebSocket），需监听并终止当前流。
+- **Token 边界**：文本流中 `text.delta` 为 UTF-8 字符串，**不保证按词/字粒度切分**，应用层需自行累积拼接；音频流为原始 PCM/WAV 帧，需按 `sample_rate`/`channels` 解码。
 
-## 面向开发者，简洁实用
+## 面向开发者：简洁实用提示
 
-- **首选方案**：  
-  - 实时语音/音视频交互 → 用 `omni realtime api`（WebSocket）；  
-  - 通用文本/[多模态](multi-modal.md)流式 → 用 `model experience`（SSE） + `stream=true`；  
-  - 快速集成/已有 OpenAI 生态 → 用 `toolkits and frameworks`（OpenAI 兼容）。
-
-- **调试建议**：  
-  使用 `curl -N` 或浏览器 DevTools 的 Network → EventStream 查看原始流；避免用 `json.loads()` 直接解析整条响应——应逐行读取、剥离 `data:` 前缀、再 `json.loads()` 单帧。
-
-- **错误防御**：  
-  流式响应中可能混入 `error` 事件（Realtime）或 `{"error":{...}}`（SSE），务必监听并处理；不要假设流一定以 `finish` 结束——网络中断、超时、模型异常均可能导致连接意外关闭。
-
-- **性能注意**：  
-  流式不降低单 token 计算开销，但可减少用户感知延迟；若追求极致吞吐（如批量离线生成），请改用非流式接口。
+- ✅ **首选 SSE 解析库**：Node.js 用 `eventsource-parser`，Python 用 `sseclient-py`，浏览器用原生 `EventSource`，避免手动解析 `data:` 行。
+- ✅ **WebSocket 流务必处理重连**：Realtime/Omni Realtime 连接有 300 秒生命周期限制，建议结合 `session_id` 或 `sequence_id` 实现断点续传。
+- ✅ **TTS/ASR 流式响应无 JSON 封装**：直接接收二进制数据，勿尝试 `JSON.parse()`；可用 `Uint8Array` 或 `Blob` 处理。
+- ❌ **勿混用流式与非流式参数**：如在 Model Experience 中同时传 `enable_streaming=true` 和 `max_tokens=1`（过小），可能导致流提前终止。
+- 📌 **调试技巧**：用 `curl -N` 查看原始 SSE 流；WebSocket 场景使用 [AOQ 客户端 SDK](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-aoq-api.md) 可自动处理序列号、buffer 和重试。
 
 ## 关联主题页
 
-- [omni realtime api](../api/omni-realtime-api.md)
-- [realtime api user guide](../api/realtime-api-user-guide.md)
-- [audio api references](../api/audio-api-references.md)
 - [model experience](../guides/model-experience.md)
-- [toolkits and frameworks](../api/toolkits-and-frameworks.md)
+- [realtime api user guide](../api/realtime-api-user-guide.md)
+- [omni realtime api](../api/omni-realtime-api.md)
+- [audio api references](../api/audio-api-references.md)
+- [qwen api reference](../api/qwen-api-reference.md)
 
 

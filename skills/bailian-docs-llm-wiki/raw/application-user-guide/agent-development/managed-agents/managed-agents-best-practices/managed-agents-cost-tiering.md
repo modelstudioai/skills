@@ -114,7 +114,7 @@ curl -X POST "$AGENTSTUDIO_URL/agents" \
 
 **路径一：事件流逐次归组（事后可查，不需要额外设施）。** 每次模型调用都产生一条 `model_request_end` 事件，载荷带 `model`、`input_tokens` / `output_tokens` / `cache_read_input_tokens` / `cache_creation_input_tokens`，且事件顶层带 `thread_id`。按 `thread_id` 分桶就是「协调者线程开销 vs 各 worker 线程开销」；按 `data.model` 分桶就是「旗舰栏 vs 廉价栏」——两张账单直接从事件流里读出来。
 
-**路径二：时间窗 × 模型 ID。** 在工作空间维度的用量数据里，按运行时间窗和模型 ID 两个维度取数：团队那次出现两行（旗舰 + 廉价），单旗舰对照那次只有旗舰一行。操作顺序：跑完团队记下时间窗，再跑对照记下时间窗，分别取数。用量与计价口径以[计费说明](raw/application-user-guide/agent-development/managed-agents/managed-agents-billing.md)为准。
+**路径二：时间窗 × 模型 ID。** 在工作空间维度的用量数据里，按运行时间窗和模型 ID 两个维度取数：团队那次出现两行（旗舰 + 廉价），单旗舰对照那次只有旗舰一行。操作顺序：跑完团队记下时间窗，再跑对照记下时间窗，分别取数。用量与计价口径以[计费说明](raw/application-user-guide/agent-billing/managed-agents-billing.md)为准。
 
 **说明**联网工具调用次数单独计费（`web_search` 按次计费，`web_fetch` 当前限时免费），与模型推理费用分开核算——把旧 MCP 配置换成内置工具会改变工具费用这一部分，两组成本需要重新测量。
 
@@ -124,7 +124,7 @@ curl -X POST "$AGENTSTUDIO_URL/agents" \
 
 ### 反事实估算
 
-想看「假如全部阅读按旗舰费率计价」，拿团队运行的 token 计数统一乘旗舰费率，与真实拆分（阅读部分按廉价费率）对比。缓存相关的费率倍率（写 / 读）以[计费说明](raw/application-user-guide/agent-development/managed-agents/managed-agents-billing.md)为准——`model_request_end` 里的 `cache_read_input_tokens` / `cache_creation_input_tokens` 就是做这类核算的原始字段。
+想看「假如全部阅读按旗舰费率计价」，拿团队运行的 token 计数统一乘旗舰费率，与真实拆分（阅读部分按廉价费率）对比。缓存相关的费率倍率（写 / 读）以[计费说明](raw/application-user-guide/agent-billing/managed-agents-billing.md)为准——`model_request_end` 里的 `cache_read_input_tokens` / `cache_creation_input_tokens` 就是做这类核算的原始字段。
 
 需要验证的假设是：在保持答案质量的同时，把大部分阅读 token 转移到廉价 worker 上。统一核实要求能让对比有意义，但不保证两组消耗一样的 token，也不保证团队总价更低；实际 token 量、委派开销和工具费用都要分别测量。
 
@@ -164,4 +164,4 @@ Session 没有 budget / 花费上限字段，护栏落在三层：
 
 -   [进阶：多智能体定制复杂提案](raw/_short/managed-agents-multiagent-proposal-c42cf9fd6aca491d.md)：本篇架构的完整搭建链路。
 -   [Agent 工具配置](raw/application-user-guide/agent-development/managed-agents/managed-agents-agent/managed-agents-builtin-tools.md)：内置工具集与逐工具启用的完整字段。
--   [计费说明](raw/application-user-guide/agent-development/managed-agents/managed-agents-billing.md)：模型费率、缓存与联网工具的计费口径。
+-   [计费说明](raw/application-user-guide/agent-billing/managed-agents-billing.md)：模型费率、缓存与联网工具的计费口径。
