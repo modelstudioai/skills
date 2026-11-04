@@ -34,7 +34,7 @@ Security 为 Agent 提供内生的安全防护能力。
 
 -   默认防护为百炼原生能力，使用百炼 Agent Studio 即自动获得，无需额外开通。
 -   防护在 Agent 使用对应模块后自动生效。例如，Agent 接入 RAG 知识库后，知识库内容安全防护自动启用。
--   高级防护需完成服务授权后开通，当前处于限时免费阶段，计费规则参见[计费说明](raw/application-user-guide/agent-governance/security-guide/section-ref/billing.md)。
+-   高级防护需完成服务授权后开通，当前处于限时免费阶段，计费规则参见[计费说明](raw/application-user-guide/agent-billing/billing.md)。
 -   安全策略配置对账号下全部 Agent 全局生效，不区分业务空间。
 
 ## 下一步

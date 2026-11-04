@@ -86,6 +86,6 @@ Header
 
 页码，从 1 开始
 
-**说明**记忆库将于 **2026 年 8 月 20 日** 正式商业化计费。Add 和 Search 调用区分 **Pro** 和 **Lite** 两个策略版本。详见[计费说明](raw/application-user-guide/agent-context/memory-library-overview/integration-overview/billing.md)。
+**说明**记忆库将于 **2026 年 8 月 20 日** 正式商业化计费。Add 和 Search 调用区分 **Pro** 和 **Lite** 两个策略版本。详见[计费说明](raw/application-user-guide/agent-billing/billing.md)。
 
 **重要**准备好凭证后，查看 [AddMemory 接口](raw/application-api-reference/long-term-memory-new/fragments-overview/add-memory.md)。

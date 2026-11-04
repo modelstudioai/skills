@@ -1,4 +1,4 @@
-# AddChunk
+# AddChunk - 新增切片
 
 使用此API可为文档搜索类（document）、数据查询类（table）、图片问答类（image）知识库添加切片。
 

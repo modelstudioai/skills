@@ -3088,6 +3088,12 @@ vanchin/deepseek-v4.1-flash
 
 > **含输入与输出Token**
 
+[kimi-k3.1-pro](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
+
+15,000
+
+[动态限流](raw/model-user-guide/get-started-with-models/quota-management.md)
+
 kimi-k3
 
 [动态限流](raw/model-user-guide/get-started-with-models/quota-management.md)
@@ -3128,11 +3134,19 @@ kimi-k2.5
 
 kimi-k3
 
+[kimi-k3.1-pro](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
+
 全球
 
 15,000
 
 1,200,000
+
+[kimi-k3.1-pro](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
+
+美国
+
+限流值以所选业务空间的实际配置为准。
 
 kimi-k3
 
@@ -3176,6 +3190,8 @@ kimi-k2.5
 
 kimi-k3
 
+[kimi-k3.1-pro](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
+
 全球
 
 15,000
@@ -3216,6 +3232,8 @@ kimi-k2.5
 
 kimi-k3
 
+[kimi-k3.1-pro](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
+
 全球
 
 15,000
@@ -3254,6 +3272,14 @@ kimi-k2.5
 
 > **含输入与输出Token**
 
+[kimi-k3.1-pro](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
+
+国际
+
+10,000
+
+[动态限流](raw/model-user-guide/get-started-with-models/quota-management.md)
+
 kimi-k3
 
 国际
@@ -3285,6 +3311,8 @@ kimi-k2.7-code
 > **含输入与输出Token**
 
 kimi-k3
+
+[kimi-k3.1-pro](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
 
 全球
 

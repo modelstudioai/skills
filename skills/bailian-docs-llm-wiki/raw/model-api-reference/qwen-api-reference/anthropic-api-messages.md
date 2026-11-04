@@ -103,7 +103,7 @@ temperature 取值范围
 
 **第三方模型**
 
-deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731、kimi-k3、kimi-k2.7-code、kimi-k2.6、kimi-k2.5、glm-5.3、glm-5.2、glm-5.1、glm-5、MiniMax-M2.5、deepseek-v4.1-flash-1017
+deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731、kimi-k3.1-pro、kimi-k3、kimi-k2.7-code、kimi-k2.6、kimi-k2.5、glm-5.3、glm-5.2、glm-5.1、glm-5、MiniMax-M2.5、deepseek-v4.1-flash-1017
 
 **max\_tokens** `integer` **（必选）**
 
@@ -304,7 +304,7 @@ Base64 编码的视频数据。当 `type` 为 `base64` 时必填。
 
 深度思考配置。开启后，模型会在生成回复前先进行推理，以提升回答准确度。开启后，响应会包含 `thinking` 类型的内容块。
 
-未传入该参数时，是否进行思考由模型默认行为决定：qwen3.8-max、qwen3.8-flash、deepseek-v4 系列、glm 系列默认开启思考；kimi-k2.6、kimi-k2.5 默认关闭思考；kimi-k2.7-code、MiniMax-M2.5 仅支持思考模式（无法关闭）。各模型对思考模式的支持情况与默认开关，请参见[深度思考](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md)。
+未传入该参数时，是否进行思考由模型默认行为决定：qwen3.8-max、qwen3.8-flash、deepseek-v4 系列、glm 系列、kimi-k3.1-pro 默认开启思考；kimi-k2.6、kimi-k2.5 默认关闭思考；kimi-k2.7-code、MiniMax-M2.5 仅支持思考模式（无法关闭）。各模型对思考模式的支持情况与默认开关，请参见[深度思考](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md)。
 
 属性
 
@@ -354,7 +354,9 @@ tools 数组元素
 
 > 使用 Anthropic SDK 或 HTTP 直接调用时，**必须**在 `system` 中传入客户端标识 `x-anthropic-billing-header: cc_entrypoint=cli;`，否则联网搜索不生效。面向 Claude Code 等 Anthropic 官方客户端时无需额外配置。详见 [联网搜索](raw/model-user-guide/model-experience/text-generation-model/tool-calls/web-search.md)。
 
-> 支持以下模型：Qwen3.8 Max、Flash 与开源系列（不含 Omni）；Qwen3.7 Max、Plus、Flash 系列；Qwen3.6-Plus、Qwen3.6-Flash 系列；Qwen3.5-Plus、Qwen3.5-Flash 系列；deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731、deepseek-v4.1-flash-1017；glm-5.2；kimi-k3。联网搜索的计费与 agent 策略相同，参见 [计费说明](https://help.aliyun.com/zh/model-studio/web-search#92ce83df3a599)。
+> 支持以下模型：Qwen3.8 Max、Flash 与开源系列（不含 Omni）；Qwen3.7 Max、Plus、Flash 系列；Qwen3.6-Plus、Qwen3.6-Flash 系列；Qwen3.5-Plus、Qwen3.5-Flash 系列；deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731、deepseek-v4.1-flash-1017；glm-5.2；kimi-k3；kimi-k3.1-pro。联网搜索的计费与 agent 策略相同，参见 [计费说明](https://help.aliyun.com/zh/model-studio/web-search#92ce83df3a599)。
+
+`kimi-k3.1-pro`（阿里云百炼部署）在北京、新加坡、美国（弗吉尼亚）、德国（法兰克福）、日本（东京）和中国香港均支持 `web_search` 和 `web_fetch`。
 
 `deepseek-v4.1-flash-1017` 还支持网页抓取工具 `web_fetch`。Anthropic 兼容的请求要求及示例请参见[网页抓取](./web-extractor)。
 
@@ -376,6 +378,8 @@ tools 数组元素
 **effort** `string` （可选）
 
 控制模型的推理力度。
+
+kimi-k3.1-pro（阿里云百炼部署）默认值为 `max`，支持 `max`（深度推理）、`high`（增强推理）、`medium`（中度推理）和 `low`（轻度推理）。
 
 -   glm-5.3（默认值为 `max`）：
     

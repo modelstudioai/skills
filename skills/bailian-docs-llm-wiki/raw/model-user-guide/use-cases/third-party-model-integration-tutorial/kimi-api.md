@@ -6,6 +6,8 @@
 
 **模型体验：**您可以前往[体验中心](https://bailian.console.aliyun.com/cn-beijing/model/experience/text)体验 Kimi 模型效果。
 
+`kimi-k3.1-pro` 支持 [OpenAI Chat Completions](raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)、[OpenAI Responses](raw/model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)、[Anthropic Messages](raw/model-api-reference/qwen-api-reference/anthropic-api-messages.md) 和 DashScope 原生 API。
+
 不同地域的服务接入地址不同，请根据您选择的地域配置对应的 Base URL。
 
 #### OpenAI兼容
@@ -44,7 +46,7 @@ HTTP 请求地址：`POST https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com
 
 #### 华北2（北京）
 
-多模态模型（如 kimi-k3、kimi-k2.7-code、kimi-k2.6、kimi-k2.5）的 HTTP 请求地址为`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
+多模态模型（如 kimi-k3.1-pro、kimi-k3、kimi-k2.7-code、kimi-k2.6、kimi-k2.5）的 HTTP 请求地址为`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
 SDK调用配置的`region`：
 
@@ -77,7 +79,7 @@ Constants.baseHttpApiUrl="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api
 
 #### 美国（弗吉尼亚）
 
-多模态模型（如 kimi-k3、kimi-k2.7-code、kimi-k2.6、kimi-k2.5）的 HTTP 请求地址为`POST https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
+多模态模型（如 kimi-k3.1-pro、kimi-k3、kimi-k2.7-code、kimi-k2.6、kimi-k2.5）的 HTTP 请求地址为`POST https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
 SDK调用配置的`region`：
 
@@ -107,7 +109,7 @@ Constants.baseHttpApiUrl="https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/
 
 #### 德国（法兰克福）
 
-多模态模型（如 kimi-k3、kimi-k2.7-code、kimi-k2.6、kimi-k2.5）的 HTTP 请求地址为`POST https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
+多模态模型（如 kimi-k3.1-pro、kimi-k3、kimi-k2.7-code、kimi-k2.6、kimi-k2.5）的 HTTP 请求地址为`POST https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
 SDK调用配置的`region`：
 
@@ -137,7 +139,7 @@ Constants.baseHttpApiUrl="https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/a
 
 #### 新加坡
 
-多模态模型（如 kimi-k3、kimi-k2.7-code、kimi-k2.6、kimi-k2.5）的 HTTP 请求地址为`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
+多模态模型（如 kimi-k3.1-pro、kimi-k3、kimi-k2.7-code、kimi-k2.6、kimi-k2.5）的 HTTP 请求地址为`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
 SDK调用配置的`region`：
 
@@ -170,7 +172,7 @@ Constants.baseHttpApiUrl="https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com
 
 #### 日本（东京）
 
-多模态模型（如 kimi-k3、kimi-k2.7-code、kimi-k2.6、kimi-k2.5）的 HTTP 请求地址为`POST https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
+多模态模型（如 kimi-k3.1-pro、kimi-k3、kimi-k2.7-code、kimi-k2.6、kimi-k2.5）的 HTTP 请求地址为`POST https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
 SDK调用配置的`region`：
 
@@ -200,7 +202,7 @@ Constants.baseHttpApiUrl="https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com
 
 #### 中国香港
 
-多模态模型（如 kimi-k3、kimi-k2.7-code、kimi-k2.6、kimi-k2.5）的 HTTP 请求地址为`POST https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
+多模态模型（如 kimi-k3.1-pro、kimi-k3、kimi-k2.7-code、kimi-k2.6、kimi-k2.5）的 HTTP 请求地址为`POST https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
 SDK调用配置的`region`：
 
@@ -717,7 +719,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/v
 
 ## 多模态调用示例
 
-kimi-k2.7-code、kimi-k2.6、kimi-k2.5、kimi-k3 支持同时处理文本、图像或视频输入（kimi-k3 暂不支持视频输入），并可通过 `enable_thinking` 参数开启思考模式。以下示例展示如何调用多模态能力。
+kimi-k3.1-pro、kimi-k2.7-code、kimi-k2.6、kimi-k2.5、kimi-k3 支持同时处理文本、图像或视频输入（kimi-k3.1-pro 和 kimi-k3 不支持视频输入），并可通过 `enable_thinking` 参数开启思考模式。以下示例展示如何调用多模态能力。
 
 ### 开启或关闭思考模式
 
@@ -726,7 +728,9 @@ kimi-k2.6、kimi-k2.5属于混合思考模型，模型可以在思考后回复�
 -   `true`：开启思考模式
 -   `false`（默认）：关闭思考模式
 
-kimi-k2.7-code 与 kimi-k3为仅思考模型，始终开启思考模式（`enable_thinking`默认为 `true`，不可关闭），`preserve_thinking`默认为 `true`。
+kimi-k2.7-code 为仅思考模型，始终开启思考模式（`enable_thinking` 默认为 `true`，不可关闭），`preserve_thinking` 默认为 `true`。
+
+kimi-k3.1-pro 与 kimi-k3 默认开启思考（`enable_thinking=true`），可设为 `false` 关闭，但建议保持开启。kimi-k3.1-pro 关闭思考会显著影响输出效果，强烈建议保持开启。两者默认保留客户端传入的历史 `reasoning_content`，建议在多轮请求中完整回传历史 assistant 消息的 `reasoning_content`。
 
 kimi-k2.6 支持通过 `preserve_thinking` 参数在多轮对话中传递思考过程，详情请参见[传递思考过程](https://help.aliyun.com/zh/model-studio/deep-thinking#jln7docdq5et5)。
 
@@ -2089,6 +2093,22 @@ public class Main {
 
 [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)
 
+kimi-k3.1-pro
+
+支持
+
+支持
+
+支持
+
+支持（JSON Mode）
+
+支持
+
+不支持
+
+支持（隐式缓存）
+
 kimi-k3
 
 支持
@@ -2290,7 +2310,7 @@ API 层面没有专门的工具搜索接口。如果工具数量很多，可以�
 
 kimi-k3
 
-true（仅思考模式，不可关闭）
+true（可关闭，建议保持开启）
 
 1.0
 
@@ -2350,18 +2370,36 @@ false
 
 “-" 表示没有默认值，也不支持设置。
 
+模型
+
+`enable_thinking` 默认值
+
+`reasoning_effort` 默认值
+
+kimi-k3.1-pro
+
+`true`（可关闭，强烈建议保持开启）
+
+`max`
+
+`reasoning_effort` 以下档位仅适用于 kimi-k3.1-pro：
+
+-   `max`（默认）：深度推理
+-   `high`：增强推理
+-   `medium`：中度推理
+-   `low`：轻度推理
+
 ## 模型列表与计费
 
 Kimi 系列模型是由月之暗面公司（Moonshot AI）推出的大语言模型。
 
--   kimi-k3：Kimi 旗舰模型，始终进行推理并采用保留式思考（仅思考模式）。支持文本与图片输入（暂不支持视频输入）、对话与 Agent 任务，并支持动态加载工具。
+-   [kimi-k3.1-pro](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)：支持文本与图片输入、文本输出，不支持视频输入、Batch 和微调。
+-   kimi-k3：Kimi 旗舰模型，默认进行推理并采用保留式思考。支持文本与图片输入（暂不支持视频输入）、对话与 Agent 任务，并支持动态加载工具。
 -   kimi-k2.7-code：Kimi 最强编程模型，长上下文指令遵循更可靠，编程任务成功率更高。支持文本、图片与视频输入、思考模式、对话与 Agent 任务。
 -   kimi-k2.6：Kimi最新最智能的模型，具备更强更稳的长程代码编写能力，指令遵循和自我纠错能力显著提升。同时支持文本、图片与视频输入、思考与非思考模式、对话与 Agent 任务。
 -   kimi-k2.5：在 Agent、代码生成、视觉理解及一系列通用智能任务上取得开源 SOTA 表现。同时支持图像、视频与文本输入、思考与非思考模式、对话与 Agent 任务。
 
-**说明**kimi-k3 不支持 `thinking_budget` 参数，思考长度不可通过该参数限制。
-
-kimi-k3 暂不支持 OpenAI 兼容 Responses 接口（coming soon），请使用 OpenAI 兼容 Chat Completions 接口调用。
+**说明**kimi-k3.1-pro 和 kimi-k3 不支持 `thinking_budget` 参数，思考长度不可通过该参数限制。
 
 > 价格信息请参见[模型调用计费](raw/model-user-guide/test-1/model-pricing.md)。
 

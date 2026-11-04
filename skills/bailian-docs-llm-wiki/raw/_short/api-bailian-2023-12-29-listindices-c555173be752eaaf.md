@@ -1,4 +1,4 @@
-# ListIndices
+# ListIndices - 查询知识库列表
 
 获取指定业务空间下知识库列表。
 
@@ -482,6 +482,35 @@ boolean
 
 true
 
+PipelineCommercialType
+
+string
+
+知识库的规格类型。可能值：
+
+-   standard：标准版。
+    
+-   enterprise：旗舰版。
+    
+
+standard
+
+PipelineCommercialCu
+
+integer
+
+知识库的 RCU 数量，仅对旗舰版知识库有效。
+
+1
+
+PipelineStorageUsage
+
+number
+
+知识库的存储使用量，单位为 GB。
+
+0.03
+
 Code
 
 string
@@ -560,7 +589,10 @@ string
             "IsSearch": true,
             "IsRecall": true
           }
-        ]
+        ],
+        "PipelineCommercialType": "standard",
+        "PipelineCommercialCu": 1,
+        "PipelineStorageUsage": 0.03
       }
     ]
   },

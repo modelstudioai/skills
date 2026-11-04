@@ -3926,7 +3926,16 @@ if __name__ == "__main__":
 
 模型限流规则请参见[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)。
 
-## 常见问题与错误处理
+## 常见问题
+
+### 连接着但不说话，也会计费吗？
+
+保持连接本身不计费。上传的静音是否计入音频输入用量，取决于所用模式：
+
+-   **服务端 VAD**：被服务端过滤的静音不会计入音频输入用量。
+-   **Manual 模式**：客户端手动提交的静音会计入音频输入用量。
+
+音频输入 Token 数记录在 [response.done](raw/model-api-reference/omni-realtime-api/server-events.md) 事件中，字段位置为 `response` → `usage` → `input_tokens_details` → `audio_tokens`。模型按输入、输出 Token 计费，详细规则见[计费规则](#cfba3898e4d0h)。
 
 ### RPM 限制什么？是否限制同时保持的连接总数？
 

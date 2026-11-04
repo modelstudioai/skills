@@ -1,37 +1,49 @@
 # more
 
-`more` 是百炼平台提供的扩展能力集合，涵盖服务关联角色管理、临时认证机制与高级知识库检索控制等关键基础设施功能。这些能力不直接暴露为独立模型或 API，而是支撑工作流编排、安全存储、RAG 精准检索及可观测性等核心场景的底层依赖。开发者需按需启用并理解其权限边界与生命周期约束。
+`more` 是百炼平台提供的扩展能力集合，涵盖服务权限管理、安全认证机制与高级检索控制等关键功能。它不构成独立服务，而是支撑工作流编排、知识库检索、数据接入、监控分析等核心场景的底层基础设施。开发者需根据具体使用场景按需启用并正确配置相关组件。
 
 ## 支持的模型/功能
 
-`more` 本身不提供模型推理能力，但为以下功能模块提供必要支撑：
+`more` 本身不提供模型，但为以下功能提供必要支撑：
 
-- **服务关联角色（SLR）**：自动创建并托管跨云服务访问权限，支撑[工作流应用](raw/application-user-guide/llm-application/workflow-application.md)调用函数计算（FC）、[数据管理](https://help.aliyun.com/zh/model-studio/manage-data)导入 OSS 数据、[安全存储空间](raw/model-user-guide/security-and-compliance/secure-storage.md)对接 ADB-PG 与 OSS、[用量监控与性能分析](raw/application-user-guide/agent-governance/agenteval/agenteval-observability/agenteval-observation.md)集成 OpenTelemetry 等场景。
-- **临时 API Key**：用于不可信前端环境的安全鉴权，避免永久密钥泄露，适用于浏览器、移动 App 等客户端直连调用。
-- **知识库 SearchFilters**：在 `Retrieve` 接口上提供结构化过滤能力，支持单值、多值、范围、模糊及标签查询，显著提升 RAG 检索精度，尤其适用于员工信息表等结构化数据场景。
+- **服务关联角色（SLR）**：自动创建并管理百炼访问其他阿里云服务所需的最小权限角色，如函数计算（FC）、OSS、ADB-PG、MNS、OpenTelemetry 等。例如，[工作流应用](raw/application-user-guide/agent-development/llm-application/workflow-application.md)依赖 `AliyunServiceRoleForSFMAccessFC` 调用 FC 函数；[安全存储空间](raw/model-user-guide/security-and-compliance/secure-storage.md)依赖 `AliyunServiceRoleForAccessOSS` 和 `AliyunServiceRoleForSFMAccessADB` 访问 OSS 与 ADB-PG 实例；[用量监控与性能分析](raw/application-user-guide/agent-governance/agenteval/agenteval-observability/agenteval-observation.md)依赖 `AliyunServiceRoleForSFMTelemetry` 接入 OpenTelemetry。  
+- **临时 API Key 生成**：面向不可信前端环境（如浏览器、App）的安全鉴权方案，通过后端调用 `/api/v1/tokens` 接口签发短期有效凭证。  
+- **知识库检索过滤（SearchFilters）**：在 `Retrieve` 接口请求中传入结构化过滤条件，对语义检索结果进行字段级精准筛选，显著提升 RAG 场景下结构化数据的召回准确率。
+
+> **注意**：文档 1 中 `AliyunServiceRoleForSFMAccessingMNS` 的说明称“本策略由大模型服务平台百炼定义并使用，请勿修改、删除”，但其他 SLR（如 `AliyunServiceRoleForSFMAccessFC`）均明确允许用户在满足前提条件下删除。该表述存在一致性风险，实际操作应以各角色章节的「删除服务关联角色」子节为准，而非通用声明。
 
 ## 关键参数
 
-| 功能 | 参数名 | 类型 | 必填 | 说明 | 取值范围 |
-|------|--------|------|------|------|-----------|
-| 临时 API Key | `expire_in_seconds` | integer | 否 | 临时 [Token](../concepts/token.md) 有效期（TTL） | `[1, 1800]` 秒（默认 60） |
-| SearchFilters（OpenAPI） | `searchFilters` | array of object | 否 | 过滤条件数组，每个元素为平铺 key-value Map | 子分组内字段默认 `AND`；支持 `_operator: "OR"` |
-| SearchFilters（RAG API / Spring AI SDK） | `_operator`, `_conditions` | string, array | 否 | 支持嵌套条件与多条件 OR，如 `{ "_operator": "OR", "_conditions": [{ "field": "val" }, { "field": { "like": "%x%" } }] }` | `_operator` 可为 `"AND"` 或 `"OR"`（大小写不敏感） |
-
-> **注意**：OpenAPI Retrieve 的 `searchFilters` 不支持嵌套 `_conditions`；若传入嵌套结构，请求可能成功但**实际不生效**，结果未按预期过滤 —— 详见 [知识库SearchFilters](raw/application-api-reference/more/how-to-use-search-filters.md) 文档中“语法说明”章节。
+| 功能 | 参数名 | 类型 | 说明 | 取值范围 | 来源 |
+|------|--------|------|------|-----------|------|
+| 临时 API Key | `expire_in_seconds` | Integer | 临时 Token 有效期（TTL） | `[1, 1800]` 秒（默认 60） | [生成临时API Key](../../raw/application-api-reference/more/application-obtain-temporary-authentication-token.md) |
+| SearchFilters（OpenAPI） | `_operator` | String | 同一子分组内多字段逻辑关系 | `"AND"`（默认）、`"OR"` | [知识库SearchFilters](../../raw/application-api-reference/more/how-to-use-search-filters.md) |
+| SearchFilters（RAG API / Spring AI） | `_conditions` | Array | 支持嵌套的多条件数组，可混合等值、模糊、范围查询 | 见语法说明 | [知识库SearchFilters](../../raw/application-api-reference/more/how-to-use-search-filters.md) |
+| SearchFilters（通用） | 字段值 | String / Number / Array / Object | 支持单值、多值（JSON 数组字符串）、`{"like": "..."}`、`{"gte": x, "lte": y}` 等格式 | 依字段 Schema 而定 | [知识库SearchFilters](../../raw/application-api-reference/more/how-to-use-search-filters.md) |
 
 ## 使用方式
 
-- **服务关联角色**：无需手动创建。当您首次在控制台启用对应功能（如添加函数计算节点、配置 OSS 数据源、开启安全存储空间）时，百炼自动为您创建所需 SLR。角色名称与策略均预置，权限最小化且不可修改。详情请参阅 [服务关联角色](raw/application-api-reference/more/bailian-service-linked-role.md)。
-- **生成临时 API Key**：通过后端服务向 `https://dashscope.aliyuncs.com/api/v1/tokens` 发起带 `Authorization: Bearer <permanent_key>` 的 POST 请求，可选 `expire_in_seconds` 查询参数。响应返回 `token` 与 `expires_at`（UNIX 时间戳）。该能力在 [生成临时API Key](raw/application-api-reference/more/application-obtain-temporary-authentication-token.md) 中有完整示例。
-- **使用 SearchFilters**：在调用 `Retrieve` 接口时，将过滤条件以 JSON 数组形式赋值给 `searchFilters` 字段。注意根据调用方式（OpenAPI / RAG API / Spring AI SDK）选择对应语法：OpenAPI 仅支持平铺 Map；RAG API 与 Spring AI SDK 支持 `_conditions` 嵌套与 `_operator` 控制逻辑关系。
+- **服务关联角色**：首次在控制台启用对应功能（如添加函数计算节点、配置 OSS 数据源、开启安全存储空间）时，系统自动创建 SLR。无需手动调用 API，但需确保主账号或具备 `ram:CreateServiceLinkedRole` 权限的 RAM 用户执行开通操作。  
+- **临时 API Key**：后端服务向 `https://dashscope.aliyuncs.com/api/v1/tokens` 发起带 `Authorization: Bearer <永久AK>` 的 POST 请求，可选传 `expire_in_seconds`。响应返回 `token` 与 `expires_at`（UNIX 时间戳）。  
+- **SearchFilters**：在 `Retrieve` 请求体中以 JSON 数组形式传入 `searchFilters` 字段。**必须注意调用方式与语法的严格匹配**：  
+  - OpenAPI SDK（`bailian20231229`）仅支持平铺 Map，不支持 `_conditions` 嵌套；  
+  - RAG API 与 Spring AI Alibaba SDK 支持完整嵌套语法（`_operator` + `_conditions`）；  
+  - 同一字段多条件 OR 查询在 OpenAPI 中需通过 `_operator: "OR"` 并列字段实现，在 RAG API 中需放入 `_conditions` 数组。
 
 ## 限制和注意事项
 
-- **服务关联角色不可手动删除**：部分 SLR（如 `AliyunServiceRoleForSFMAccessingMNS`）明确声明“请勿修改、删除，或将其授予除服务关联角色之外的任何 RAM 身份”。其他 SLR 删除前必须先解除所有依赖（如删除函数计算节点、断开 OSS/ADB-PG 连接、停止数据导入任务），否则功能立即中断。
-- **临时 API Key 无法主动撤销**：其生命周期完全由 `expire_in_seconds` 决定，到期自动失效，不支持手动吊销或提前删除。
-- **SearchFilters 字段类型强约束**：单值/多值查询仅支持 `string` 或数值（`long`/`double`）；范围查询（`gt`/`gte` 等）仅支持数值；模糊查询（`like`）仅支持 `string`；标签查询仅限文档/音视频类知识库。字段名必须与知识库 Schema 中定义的字段严格一致。
-- **地域隔离**：临时 API Key 的生成 Endpoint 与所用永久 API Key 所属地域强绑定（北京、新加坡、弗吉尼亚、中国香港），跨地域调用将返回 `InvalidApiKey` 错误 —— 此限制在 [生成临时API Key](raw/application-api-reference/more/application-obtain-temporary-authentication-token.md) 中已强调。
+- **服务关联角色**：  
+  - 删除 SLR 前**必须**解除其依赖功能（如删除函数计算节点、断开 OSS/ADB-PG 连接、停止数据导入任务），否则对应功能将立即失效；  
+  - `AliyunServiceRoleForSFMAccessingMNS` 明确禁止用户删除（见文档 1），而其他 SLR 均提供删除指引，此差异需特别关注；  
+  - 所有 SLR 均绑定特定服务主体（如 `fc.sfm.aliyuncs.com`），不可复用或手动附加至其他服务。  
+- **临时 API Key**：  
+  - 无法提前撤销，仅能等待自然过期；  
+  - 权限完全继承自签发所用的永久 API Key，**切勿使用高权限 AK 签发前端可用 Token**；  
+  - 各地域 Endpoint 独立（北京、新加坡、弗吉尼亚、中国香港），密钥不互通。  
+- **SearchFilters**：  
+  - OpenAPI SDK 不支持同一字段多个独立条件（如 `{"age": {"gt": 25}}` 和 `{"age": {"lt": 35}}` 需合并为 `{"age": {"gt": 25, "lt": 35}}` 或使用 RAG API）；  
+  - 字段名必须与知识库 Schema 中定义的字段名**完全一致**（区分大小写）；  
+  - 多值查询需传入 JSON 字符串（如 `json.dumps(["张三", "李四"])`），而非原生数组。
 
 ## 来源文档
 

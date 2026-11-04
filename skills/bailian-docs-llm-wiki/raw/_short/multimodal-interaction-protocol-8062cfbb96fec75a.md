@@ -602,7 +602,7 @@ json object
 
 否
 
-设置需要透传给agent 和 mcp 服务的参数，各类agent传递的参数参考[调用官方Agent](raw/application-user-guide/application-gallery/multimodal-products/multimodal-api-references/official-agent.md)文档说明， mcp 传递参数依照 mcp 服务本身所需的参数。可以在extra\_config子节点中设置对话扩展参数，目前支持：1. enable\_web\_search，表示是否开启联网搜索。这里的设置优先级更高，会覆盖管控台配置；2. agent\_timeout，表示agent连接超时的时间，传值范围是10秒到120秒。如果不传，则默认为10秒。
+设置需要透传给agent 和 mcp 服务的参数，各类agent传递的参数参考[调用官方Agent](raw/_short/official-agent-297b22931e69e622.md)文档说明， mcp 传递参数依照 mcp 服务本身所需的参数。可以在extra\_config子节点中设置对话扩展参数，目前支持：1. enable\_web\_search，表示是否开启联网搜索。这里的设置优先级更高，会覆盖管控台配置；2. agent\_timeout，表示agent连接超时的时间，传值范围是10秒到120秒。如果不传，则默认为10秒。
 
 user\_prompt\_params
 
@@ -1351,7 +1351,7 @@ string
 
 要处理的文本，非null。
 
--   调用部分agent时，text可以是""空字符串，服务端只需要使用parameters中的images或者biz\_params参数即可处理。具体参考[调用官方Agent](raw/application-user-guide/application-gallery/multimodal-products/multimodal-api-references/official-agent.md)。
+-   调用部分agent时，text可以是""空字符串，服务端只需要使用parameters中的images或者biz\_params参数即可处理。具体参考[调用官方Agent](raw/_short/official-agent-297b22931e69e622.md)。
     
 
 parameters
@@ -1851,7 +1851,7 @@ object
 
 其他扩展信息，目前支持：
 
--   commands: 命令字符串，**此字段为JSON字符串，需要进行二次解析。**各类agent使用的命令字符串可以参考[调用官方Agent](raw/application-user-guide/application-gallery/multimodal-products/multimodal-api-references/official-agent.md)的说明。
+-   commands: 命令字符串，**此字段为JSON字符串，需要进行二次解析。**各类agent使用的命令字符串可以参考[调用官方Agent](raw/_short/official-agent-297b22931e69e622.md)的说明。
     
 -   agent\_info: 智能体信息
     
@@ -2183,7 +2183,7 @@ string
 
 ### 错误码
 
-如遇报错问题，请参见[多模态交互套件-错误码](raw/application-user-guide/application-gallery/multimodal-products/multimodal-api-references/multimodal-error-code.md)进行排查。
+如遇报错问题，请参见[多模态交互套件-错误码](raw/_short/multimodal-error-code-27e8073eb3267722.md)进行排查。
 
 若问题仍未解决，请联系技术支持，反馈遇到的问题，并提供完整的request\_id和dialog\_id，以便进一步排查问题。
 

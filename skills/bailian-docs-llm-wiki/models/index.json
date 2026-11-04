@@ -1,19 +1,19 @@
 {
-  "updatedAt": "2026-11-04",
-  "totalFamilies": 125,
-  "totalModels": 334,
+  "updatedAt": "2026-11-05",
+  "totalFamilies": 126,
+  "totalModels": 336,
   "profileCoverage": {
-    "full": 294,
-    "partial": 40,
-    "structured-only": 0,
+    "full": 273,
+    "partial": 48,
+    "structured-only": 15,
     "none": 0
   },
   "capabilityDistribution": {
     "TG": 30,
     "VG": 17,
     "IG": 17,
+    "Reasoning": 11,
     "ASR": 11,
-    "Reasoning": 10,
     "TTS": 9,
     "Realtime-ASR": 6,
     "VU": 5,
@@ -38,6 +38,7 @@
     "moonshot-ai": 2,
     "happyhorse": 2,
     "vidu": 2,
+    "antdigital": 1,
     "happyoyster": 1,
     "kling": 1,
     "stepfun": 1,
@@ -49,21 +50,22 @@
     {
       "slug": "Kimi-K2",
       "name": "Kimi",
-      "primaryCapability": "TG",
+      "primaryCapability": "Reasoning",
       "capabilities": [
-        "TG",
+        "Reasoning",
         "VU",
-        "Reasoning"
+        "TG"
       ],
       "providers": [
         "moonshot-ai"
       ],
-      "itemCount": 4,
+      "itemCount": 5,
       "items": [
         "kimi-k2.5",
         "kimi-k2.6",
         "kimi-k2.7-code",
-        "kimi-k3"
+        "kimi-k3",
+        "kimi-k3.1-pro"
       ],
       "maxContextWindow": 1000000
     },
@@ -116,6 +118,23 @@
       "items": [
         "MiniMax/MiniMax-H3"
       ]
+    },
+    {
+      "slug": "antdigital-models-market-place",
+      "name": "AntDigital",
+      "primaryCapability": "TG",
+      "capabilities": [
+        "TG",
+        "Reasoning"
+      ],
+      "providers": [
+        "antdigital"
+      ],
+      "itemCount": 1,
+      "items": [
+        "antdigital/Ling-3.1-flash"
+      ],
+      "maxContextWindow": 1048576
     },
     {
       "slug": "cosyvoice",

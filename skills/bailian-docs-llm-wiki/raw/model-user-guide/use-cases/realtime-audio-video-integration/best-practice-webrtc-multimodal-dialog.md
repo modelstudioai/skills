@@ -9,8 +9,8 @@
 1.  已在百炼控制台完成以下准备：
     
     -   已[配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并将其[设置到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
-    -   创建多模态交互应用，获取 **Workspace ID** 和 **App ID**（详情请参见[应用创建](raw/application-user-guide/application-gallery/multimodal-products/multimodal-guidelines/multimodal-app-creation.md)）。
-    -   在应用中完成模型、音色、提示词、Agent/插件等配置（详情请参见[应用配置](raw/application-user-guide/application-gallery/multimodal-products/multimodal-guidelines/multimodal-app-configuration.md)）。
+    -   创建多模态交互应用，获取 **Workspace ID** 和 **App ID**（详情请参见[应用创建](raw/_short/multimodal-app-creation-ef194a004f7549d5.md)）。
+    -   在应用中完成模型、音色、提示词、Agent/插件等配置（详情请参见[应用配置](raw/_short/multimodal-app-configuration-8919f99b339e17da.md)）。
 2.  使用支持 WebRTC 的现代浏览器（Chrome、Edge、Firefox、Safari 等）。
     
 3.  浏览器需要麦克风权限；如需视频交互，还需摄像头权限。
@@ -464,8 +464,8 @@ function endSession() {
 
 ## 相关文档
 
--   [通义多模态交互开发套件产品概述](raw/application-user-guide/application-gallery/multimodal-products/multimodal-products-overview.md)
--   [多模态交互套件使用指南](raw/application-user-guide/application-gallery/multimodal-products/multimodal-guidelines.md)
+-   [通义多模态交互开发套件产品概述](raw/application-user-guide/agent-development/application-gallery/multimodal-products/multimodal-products-overview.md)
+-   [多模态交互套件使用指南](raw/application-user-guide/agent-development/application-gallery/multimodal-products/multimodal-guidelines.md)
 -   [多模态交互 SDK（Python/Java）GitHub 示例代码](https://github.com/aliyun/alibabacloud-bailian-speech-demo/tree/master/samples/conversation/multimodal_dialog)
 -   [WebRTC API (MDN)](https://developer.mozilla.org/zh-CN/docs/Web/API/WebRTC_API)
 -   [WebRTC 接入模型/应用](https://help.aliyun.com/zh/model-studio/realtime-connect-model#conn-rtc-title)

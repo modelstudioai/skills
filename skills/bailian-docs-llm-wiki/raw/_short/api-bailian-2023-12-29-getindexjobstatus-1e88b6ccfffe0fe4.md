@@ -1,4 +1,4 @@
-# GetIndexJobStatus
+# GetIndexJobStatus - 查询知识库创建或追加任务状态
 
 查询指定的知识库创建任务或知识库追加任务的当前状态。
 
@@ -226,6 +226,10 @@ RUNNING
 GmtModified
 
 integer
+
+文件最后修改时间，使用毫秒级 Unix 时间戳。
+
+1782209511000
 
 JobId
 

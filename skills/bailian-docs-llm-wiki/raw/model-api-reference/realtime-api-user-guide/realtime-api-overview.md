@@ -172,7 +172,7 @@ Qwen-Livetranslate-Realtime 系列模型
 
 支持
 
-[多模态开发套件](raw/application-user-guide/application-gallery/multimodal-products/multimodal-products-overview.md)
+[多模态开发套件](raw/application-user-guide/agent-development/application-gallery/multimodal-products/multimodal-products-overview.md)
 
 multimodal-dialog
 

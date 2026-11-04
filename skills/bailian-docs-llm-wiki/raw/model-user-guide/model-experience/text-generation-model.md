@@ -113,6 +113,18 @@ Plus、Max、Flash 均可接收文本、图像和视频，并以文本回答。�
 
 支持
 
+`kimi-k3.1-pro`
+
+1M
+
+支持
+
+支持
+
+支持（Responses）
+
+支持（JSON Mode）
+
 `kimi-k3`
 
 1M

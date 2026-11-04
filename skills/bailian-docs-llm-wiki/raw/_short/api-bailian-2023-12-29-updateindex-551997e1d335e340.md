@@ -4,7 +4,9 @@
 
 ## 接口说明
 
-本接口不支持国际站。
+-   RAM 用户（子账号）需要首先获取阿里云百炼的 [API 权限](raw/model-user-guide/security-and-compliance/permission-management-overview.md)（需要`AliyunBailianDataFullAccess`），并加入一个业务空间后，方可调用本接口。阿里云账号（主账号）可直接调用无须授权。建议您通过最新版[阿里云百炼 SDK](https://api.aliyun.com/api-tools/sdk/bailian?version=2023-12-29)来调用本接口。
+-   调用本接口前，请确保您的知识库已经创建完成且未被删除（即知识库 ID `Id` 有效）。
+-   本接口具有幂等性。
 
 ## 调试
 

@@ -4,11 +4,45 @@
 
 这篇指南用文件连接器走一遍完整流程：创建连接、确认自动生成的工具、把 Connector 接入客户端并发起第一次调用。全程大约 10 分钟。
 
+## 文件连接器完成路径
+
+[
+
+**1\. 创建连接**
+
+连接文件 App，填写名称与描述。
+
+](#h-connector-qs-connect)[
+
+**2\. 确认工具**
+
+查看自动生成的搜索与获取工具。
+
+](#h-connector-qs-tools)[
+
+**3\. 导入文件**
+
+按类目上传文档并等待解析。
+
+](#h-connector-qs-import)[
+
+**4\. 接入客户端**
+
+配置 MCP 或使用一键安装。
+
+](#h-connector-qs-client)[
+
+**5\. 首次调用**
+
+查找文件并核对下载链接。
+
+](#h-connector-qs-call)
+
 ## 前置条件
 
 -   一个阿里云账号，且已开通阿里云百炼。
--   一个阿里云百炼业务空间，以及该空间的业务空间 ID，形如 `llm-xxxxxxxxxxxx`。
--   一个 DashScope API Key。在阿里云百炼控制台的 **API-KEY** 页面创建。
+-   一个阿里云百炼业务空间，以及该空间的业务空间 ID，形如 `llm-xxxxxxxxxxxx`。获取方式见[获取业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#6cc9270e83h9d)。
+-   一个 DashScope API Key。在阿里云百炼控制台的 **API-KEY** 页面创建；获取方式见[获取 API Key](raw/model-api-reference/preparations/get-api-key.md)。Key 须属于连接器所在业务空间。
 -   一个支持 MCP 的客户端，例如 Qoder。
 
 **说明**RAM 用户需要主账号先完成授权才能使用 Connector。
@@ -98,6 +132,8 @@
 
 Connector 通过一个 MCP 地址对外提供服务，这个地址覆盖当前业务空间下全部已连接的 App。
 
+**警告**API Key 属于敏感凭证，不要分享给他人或提交到代码仓库。如果客户端支持环境变量注入，优先使用该方式，避免密钥以明文形式保存在配置文件里。
+
 1.  **找到 MCP 配置入口**：在你使用的客户端中找到 MCP 或连接器配置入口。
     
 2.  **添加 MCP 服务器**。把下面的配置加入客户端的 MCP 配置文件：
@@ -120,9 +156,6 @@ Connector 通过一个 MCP 地址对外提供服务，这个地址覆盖当前�
     
     -   `${workspaceId}` 替换为你的阿里云百炼业务空间 ID。
     -   `${DASHSCOPE_API_KEY}` 替换为你的 DashScope API Key。
-    
-    **警告**API Key 属于敏感凭证，不要分享给他人或提交到代码仓库。如果客户端支持环境变量注入，优先使用该方式，避免密钥以明文形式保存在配置文件里。
-    
 4.  **验证连接**：保存配置并重启或刷新客户端。在 MCP 服务器列表中确认 `bailian-connector-mcp` 显示为已连接，展开后能看到 Connector 提供的工具。
     
 
@@ -136,7 +169,7 @@ Connector 通过一个 MCP 地址对外提供服务，这个地址覆盖当前�
 帮我在产品文档里找一下和计费相关的文件
 ```
 
-客户端会调用搜索文件工具，返回匹配的文件列表和下载链接。
+**说明**客户端会调用搜索文件工具，返回匹配的文件列表和下载链接。核对返回的文件是否来自已导入的类目，标题是否包含计费相关关键词。该工具按文件标题搜索；未匹配时，先检查文件标题与解析状态，再调整问题。
 
 ## 连接失败怎么排查
 
@@ -162,7 +195,24 @@ MCP 地址填写有误，检查路径是否为 `/api/v2/connector/mcp`
 
 ## 下一步
 
--   [核心概念](raw/application-user-guide/agent-context/overview/connector-start-using/concepts.md)：理解 App、连接器实例与工具的层级关系。
--   [连接更多 App](raw/application-user-guide/agent-context/overview/apps-guide/apps-overview.md)：连接钉钉、语雀、数据库等真实业务系统。
--   [身份验证](raw/application-user-guide/agent-context/overview/auth-guide/auth-overview.md)：连接语雀、Salesforce 前，先建好身份验证配置。
--   [管理文件与类目](raw/application-user-guide/agent-context/overview/apps-guide/file.md)：用类目组织文件，按需从本地或 OSS 批量导入。
+[
+
+**连接更多 App**
+
+连接钉钉、语雀、数据库等真实业务系统。
+
+](raw/application-user-guide/agent-context/overview/apps-guide/apps-overview.md)[
+
+**准备身份验证**
+
+连接语雀、Salesforce 前，先建好身份验证配置。
+
+](raw/application-user-guide/agent-context/overview/auth-guide/auth-overview.md)[
+
+**管理文件与类目**
+
+用类目组织文件，按需从本地或 OSS 批量导入。
+
+](raw/application-user-guide/agent-context/overview/apps-guide/file.md)
+
+[核心概念](raw/application-user-guide/agent-context/overview/connector-start-using/concepts.md)：理解 App、连接器实例与工具的层级关系。

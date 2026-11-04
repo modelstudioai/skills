@@ -40,6 +40,7 @@
 -   [siliconflow/deepseek-v3.1-terminus](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/deepseek-v3-1-terminus.md)
 -   [deepseek-r1-distill-qwen-1.5b](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/deepseek-r1-distill-qwen-1-5b.md)
 -   [vanchin/deepseek-ocr](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/deepseek-ocr.md)
+-   [kimi-k3.1-pro](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
 -   [kimi-k3](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k3.md)
 -   [kimi-k2.7-code](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k2-7-code.md)
 -   [kimi/kimi-k2.7-code-highspeed](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k2-7-code-highspeed.md)

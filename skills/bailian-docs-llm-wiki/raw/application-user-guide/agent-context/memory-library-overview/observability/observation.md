@@ -13,7 +13,7 @@
 -   已有可用的记忆库，并已完成对话记忆抽取。可通过 Playground 对话产生记忆；创建与规则配置参见[创建记忆库](raw/application-user-guide/agent-context/memory-library-overview/create-memory.md)和[配置记忆规则](raw/application-user-guide/agent-context/memory-library-overview/create-memory/configure-rules.md)。
 -   进入产生记忆时使用的业务空间。
 
-使用 Playground 体验时，先选择记忆库和记忆规则，再发送对话。体验会消耗免费额度或产生按量费用，参见[计费说明](raw/application-user-guide/agent-context/memory-library-overview/integration-overview/billing.md)。
+使用 Playground 体验时，先选择记忆库和记忆规则，再发送对话。体验会消耗免费额度或产生按量费用，参见[计费说明](raw/application-user-guide/agent-billing/billing.md)。
 
 **说明**记忆抽取异步进行。对话回复完成后，可等待抽取结束，再查看观测记录和记忆详情，确认实际保存的内容。
 

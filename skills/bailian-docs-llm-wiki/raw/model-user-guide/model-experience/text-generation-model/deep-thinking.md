@@ -128,7 +128,8 @@
 -   阿里云百炼部署
     
     -   混合思考模式，默认关闭思考模式：kimi-k2.6、kimi-k2.5
-    -   仅思考模式：kimi-k3、kimi-k2.7-code
+    -   混合思考模式，默认开启思考模式：kimi-k3.1-pro、kimi-k3
+    -   仅思考模式：kimi-k2.7-code
 -   月之暗面部署
     
     -   混合思考模式，默认开启思考模式：kimi/kimi-k2.6、kimi/kimi-k2.5
@@ -1167,7 +1168,7 @@ data:{"output":{"choices":[{"message":{"content":"","reasoning_content":"","role
 
 ### 限制思考长度
 
-深度思考模型有时会生成冗长的推理过程，增加等待时间并消耗更多 Token。通过 `thinking_budget` 参数可设置推理过程的最大 Token 数，超过限制后模型立即输出回复。
+深度思考模型有时会生成冗长的推理过程，增加等待时间并消耗更多 Token。通过 `thinking_budget` 参数可设置推理过程的最大 Token 数，超过限制后模型立即输出回复。kimi-k3.1-pro 和 kimi-k3 不支持该参数，不能通过它限制思考长度。
 
 支持的模型及各模型的默认值，请参见 [Chat Completions 参数说明](https://help.aliyun.com/zh/model-studio/qwen-api-via-openai-chat-completions#afcd41d2b57zf) 和 [DashScope 参数说明](https://help.aliyun.com/zh/model-studio/qwen-api-via-dashscope#2a1c410015otp)。
 
@@ -1199,6 +1200,8 @@ completion = client.multimodal.chat.create(
 ```
 
 ### 传递思考过程
+
+kimi-k3.1-pro 和 kimi-k3（阿里云百炼部署）默认保留客户端传入的历史 `reasoning_content`。建议在多轮请求中完整回传历史 assistant 消息及其 `reasoning_content`。
 
 多轮对话中，`preserve_thinking` 控制模型是否读取历史 assistant 消息中的 `reasoning_content`。设为 `true` 后，这些思考内容会拼接到下一轮输入。客户端需在请求的 `messages` 中提供历史 assistant 消息及其 `reasoning_content`。各型号的默认值以[Chat Completions 参数说明](raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)为准。
 
@@ -1675,7 +1678,8 @@ Q：怎么关闭思考模式？
 是否能关闭思考模式取决于所用模型：
 
 -   混合思考模式模型（如 qwen3.6-plus、deepseek-v4-pro）：将 `enable_thinking` 设为 `false` 即可关闭；
--   仅思考模式模型（如 glm-5.3、kimi-k3）：无法关闭。
+-   仅思考模式模型（如 glm-5.3、kimi-k2.7-code）：无法关闭。
+-   kimi-k3.1-pro 和 kimi-k3 默认开启思考，可通过 `enable_thinking=false` 关闭，但建议保持开启。kimi-k3.1-pro 关闭思考会显著影响输出效果，强烈建议保持开启。
 
 `enable_thinking` 是百炼的扩展参数，不属于 OpenAI 标准字段。使用 OpenAI Java SDK 时，`ChatCompletionCreateParams` 不原生支持该字段，需通过 `extraBody` 方法传入：
 

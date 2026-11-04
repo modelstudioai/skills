@@ -1,4 +1,4 @@
-# ListIndexDocuments
+# ListIndexDocuments - 查询知识库文件列表
 
 获取指定知识库中的文件，以及它们的概要信息。
 
@@ -77,7 +77,7 @@ string
 
 是
 
-知识库所属的业务空间 ID。获取方式请参见[如何使用业务空间](https://help.aliyun.com/zh/model-studio/use-workspace)。
+知识库所属的业务空间 ID。获取方式请参见[如何使用业务空间](https://help.aliyun.com/zh/model-studio/use-workspace)。当前版本（2023-12-29）未提供用于枚举业务空间的 API，调用前需在阿里云百炼控制台获取业务空间 ID。
 
 llm-3z7uw7fwz0vexxxx
 

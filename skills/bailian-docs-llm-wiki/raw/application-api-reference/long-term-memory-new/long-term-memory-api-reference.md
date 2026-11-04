@@ -26,7 +26,7 @@ Content-Type
 
 ## 接口概览
 
-**重要**记忆库将于 **2026 年 8 月 20 日 10:00**（北京时间）正式商业化计费。Add 和 Search 调用均区分 **Pro** 和 **Lite** 版本：Add 的版本对应不同质量的记忆抽取模型，Search 的版本决定是否开启 Rerank。详见[计费说明](raw/application-user-guide/agent-context/memory-library-overview/integration-overview/billing.md)。
+**重要**记忆库将于 **2026 年 8 月 20 日 10:00**（北京时间）正式商业化计费。Add 和 Search 调用均区分 **Pro** 和 **Lite** 版本：Add 的版本对应不同质量的记忆抽取模型，Search 的版本决定是否开启 Rerank。详见[计费说明](raw/application-user-guide/agent-billing/billing.md)。
 
 **记忆管理**：
 

@@ -4,7 +4,9 @@ Qwen-Omni-Realtime API的客户端事件参考。
 
 ## session.update
 
-建立 WebSocket 连接后，发送此事件更新会话的默认配置。服务端收到 `session.update` 事件后校验参数，若参数不合法则返回错误，若参数合法则应用更改并返回会话配置。
+建立 WebSocket 连接后，可以发送 `session.update` 来设置会话配置。后续需要调整配置时，只需传入要修改的配置，其他配置会保持不变。
+
+服务端会校验传入的参数。校验通过后，会通过 `session.updated` 返回更新后的完整会话配置；校验失败时，则返回 `error` 事件。
 
 **type**`string`**（必选）**
 
@@ -146,11 +148,11 @@ Qwen3.8-Omni-Flash-Realtime 的输出音色，默认为 `Tina`。支持的音色
 
 **instructions**`string`（可选）
 
-系统消息，用于设定模型的目标或角色。
+系统消息，用于设定模型的目标或角色。更新时，新传入的 `instructions` 会完整替换原来的 `instructions`，不会自动追加。如果需要保留原有角色设定并增加新要求，请将两部分内容合并后一起发送。
 
 **turn\_detection**`object`（可选）
 
-语音活动检测（VAD）配置。设为 `null` 可禁用 VAD，改为手动触发模型响应。若不提供此字段，系统将使用默认参数启用 VAD。
+语音活动检测（VAD）配置。首次配置会话时，若未提供此字段，系统会使用默认参数启用 VAD。将此字段设为 `null`，即可禁用 VAD，改由客户端手动触发模型响应。
 
 属性
 

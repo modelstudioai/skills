@@ -1,0 +1,15 @@
+# 其他
+
+-   [RunVideoScriptGenerate - AI生成视频剪辑脚本](raw/_short/api-aimiaobi-2023-08-01-runvideoscriptgenerate-3bc899c41f140c1f.md)
+-   [GetSmartClipTask - 获取智能剪辑任务结果](raw/_short/api-aimiaobi-2023-08-01-getsmartcliptask-c9166cfc941760b9.md)
+-   [SubmitSmartClipTask - 提交智能一键成片任务](raw/_short/api-aimiaobi-2023-08-01-submitsmartcliptask-f428eaea1e0c51a0.md)
+-   [SaveOrUpdateOssConfig](raw/_short/api-aimiaobi-2023-08-01-saveorupdateossconfig-90d3b00a842fbe4f.md)
+-   [CreateDataPermissions](raw/_short/api-aimiaobi-2023-08-01-createdatapermissions-92bb8122d208ea90.md)
+-   [DeleteDataPermissions](raw/_short/api-aimiaobi-2023-08-01-deletedatapermissions-ea275f3378d861c1.md)
+-   [ListDataPermissions](raw/_short/api-aimiaobi-2023-08-01-listdatapermissions-221440708fc649f4.md)
+-   [GenerateViewPoint](raw/_short/api-aimiaobi-2023-08-01-generateviewpoint-2bad7e470e8c9975.md)
+-   [GetPptInfo](raw/_short/api-aimiaobi-2023-08-01-getpptinfo-204afb4585337757.md)
+-   [FetchParseDocumentLayoutTask](raw/_short/api-aimiaobi-2023-08-01-fetchparsedocumentlayout-4560135ea6cda4ce.md)
+-   [CancelAuditTask - 取消审核任务](raw/_short/api-aimiaobi-2023-08-01-cancelaudittask-2c8ab9606eeda99c.md)
+-   [QueryAuditTask - 查询审核结果](raw/_short/api-aimiaobi-2023-08-01-queryaudittask-4649ac6969ac59fc.md)
+-   [SubmitAuditTask](raw/_short/api-aimiaobi-2023-08-01-submitaudittask-c89e9e79c8c2943f.md)

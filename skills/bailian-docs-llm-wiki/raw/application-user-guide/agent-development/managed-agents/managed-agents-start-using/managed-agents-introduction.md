@@ -1,6 +1,22 @@
 # 概述
 
-Managed Agents 是阿里云百炼提供的智能体托管运行时，适用于多步工具调用、代码执行、文件处理等长时运行任务。平台托管会话状态、沙箱环境和工具执行，智能体在独立沙箱中自主执行命令、读写文件、安装依赖并处理数据，事件历史在服务端持久化。
+Managed Agents 是阿里云百炼的智能体托管运行时，托管会话状态、沙箱环境和工具执行。
+
+## 适用场景
+
+智能体在独立沙箱中自主执行命令、读写文件、安装依赖并处理数据，事件历史在服务端持久化。
+
+**长时运行与有状态会话**
+
+多步工具调用任务可持续数分钟到数小时，跨多轮交互保持上下文和文件系统状态。
+
+**代码执行与文件处理**
+
+在沙箱中运行脚本、安装依赖、调试程序，并读写、搜索、编辑沙箱内文件。
+
+**快速开发与低运维开销**
+
+专注于 Agent 逻辑，而非从零开始构建和维护代理循环、沙箱编排或工具执行基础设施。
 
 ## 与智能体应用的区别
 
@@ -82,20 +98,32 @@ Managed Agents 是阿里云百炼提供的智能体托管运行时，适用于�
 4.  **发送事件，接收响应**：发送用户消息，智能体自主执行工具调用，通过 SSE 事件流推送结果。事件历史在服务端持久化。
 5.  **干预或中断**：在执行过程中发送新事件引导方向，或中断当前任务。
 
-## 适用场景
-
--   **长时运行**：任务涉及多步工具调用，持续数分钟到数小时。
--   **代码执行**：在沙箱中运行脚本、安装依赖、调试程序。
--   **文件处理**：读写、搜索、编辑沙箱内文件。
--   **有状态会话**：跨多轮交互保持上下文和文件系统状态。
--   **快速开发 / 低运维开销**：专注于 Agent 逻辑，而非从零开始构建和维护代理循环、沙箱编排或工具执行基础设施。
-
 ## 下一步
 
--   [快速开始](raw/application-user-guide/agent-development/managed-agents/managed-agents-start-using/managed-agents-quick-start.md)：创建第一个智能体并发起会话
--   [管理会话与事件](raw/application-user-guide/agent-development/managed-agents/managed-agents-session.md)：创建会话、发送消息与事件流
--   [智能体](raw/application-user-guide/agent-development/managed-agents/managed-agents-agent.md)：配置模型、提示词与工具
--   [概览](raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md)：接口总览、认证与可用 API
--   [记忆库](raw/application-user-guide/agent-development/managed-agents/managed-agents-context/managed-agents-memory-store.md)：跨会话保留智能体的工作笔记
--   [定时任务](raw/application-user-guide/agent-development/managed-agents/managed-agents-session/managed-agents-deployment.md)：定时或手动触发智能体运行
--   [CLI](raw/application-user-guide/agent-development/managed-agents/managed-agents-start-using/managed-agents-cli.md)：以基础设施即代码方式在终端管理 Agent 与会话
+[
+
+**控制台快速开始**
+
+创建第一个智能体、配置环境并发起会话。
+
+](raw/application-user-guide/agent-development/managed-agents/managed-agents-start-using/managed-agents-quick-start.md)[
+
+**API 快速开始**
+
+创建 Agent 与 Environment、开启 Session、提交任务并流式接收结果。
+
+](raw/application-api-reference/managed-agents-api/managed-agents-quickstart.md)[
+
+**管理会话与事件**
+
+创建会话、发送消息并接收事件流。
+
+](raw/application-user-guide/agent-development/managed-agents/managed-agents-session.md)
+
+### 配置与 API 参考
+
+-   [配置智能体](raw/application-user-guide/agent-development/managed-agents/managed-agents-agent.md)：配置模型、提示词与工具
+-   [API 总览与认证](raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md)：接口总览、认证与可用 API
+-   [管理记忆库](raw/application-user-guide/agent-development/managed-agents/managed-agents-context/managed-agents-memory-store.md)：跨会话保留智能体的工作笔记
+-   [配置定时任务](raw/application-user-guide/agent-development/managed-agents/managed-agents-session/managed-agents-deployment.md)：定时或手动触发智能体运行
+-   [通过 CLI 管理 Agent 与会话](raw/application-user-guide/agent-development/managed-agents/managed-agents-start-using/managed-agents-cli.md)：以基础设施即代码方式在终端管理 Agent 与会话

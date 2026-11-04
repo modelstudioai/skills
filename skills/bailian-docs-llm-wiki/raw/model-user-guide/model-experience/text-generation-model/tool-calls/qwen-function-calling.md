@@ -88,6 +88,7 @@ Function Calling 通过应用程序与大模型之间的多步骤交互实现：
 
 -   阿里云百炼部署
     
+    -   kimi-k3.1-pro
     -   kimi-k3
     -   kimi-k2.7-code
     -   kimi-k2.6

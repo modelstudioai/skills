@@ -195,7 +195,7 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/files \
 
 将purpose指定为`fine-tune`，输入文件必须是jsonl文件且符合[输入文件大小与格式要求](https://help.aliyun.com/zh/model-studio/model-customization-file-management-service)，上传调优数据集/训练集的单个文件最大为300 MB。
 
-> 关于使用 API 进行模型调优的更多用法，请参考[模型调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/fine-tuning-api-guide.md)
+> 关于使用 API 进行模型调优的更多用法，请参考[模型调优](https://help.aliyun.com/zh/model-studio/fine-tuning-api-guide)
 
 #### 请求示例
 
@@ -565,7 +565,7 @@ curl -X  DELETE https://dashscope.aliyuncs.com/compatible-mode/v1/files/file-bat
 ## 应用于生产环境
 
 -   **定期清理**：定期删除不再使用的文件，避免达到10000个文件上限。
--   **状态检查**：上传后检查文件状态，确保`status`为`processed`后再使用。
+-   **状态检查**：上传后检查文件状态。`status`为`processed`表示文件已上传完成、可用于引用，但不代表解析已完成；解析完成前调用可能返回`File parsing in progress`，请稍后重试。
 -   **限流检查**：上传文件接口的QPS（每秒请求数）限制为3。查询文件信息、查询文件列表、删除文件接口的QPS总和限制为10。
 -   **错误处理**：实现完整的异常处理机制，包括网络错误、API错误等。
 
@@ -599,6 +599,10 @@ curl -X  DELETE https://dashscope.aliyuncs.com/compatible-mode/v1/files/file-bat
 
 -   `file-extract`：用于文档分析场景，配合Qwen-Long或Qwen-Doc-Turbo使用
 -   `batch`：用于批量推理任务，文件必须是符合格式要求的JSONL文件
+
+### 6\. status 为 "processed" 后调用 Qwen-Long 仍提示文件解析中怎么办？
+
+`status` 为 `processed` 仅表示文件已上传完成、可用于引用，不代表解析已完成。如果调用 Qwen-Long 时返回 `File parsing in progress, please try again later.`，请稍后重试，待文件解析完成后即可正常调用。
 
 ## 参数说明
 
@@ -782,7 +786,7 @@ status
 
 _String_
 
-文件的当前状态。可能的状态有：`uploaded`（已上传，等待解析）, `processing`（解析中，需等待解析完成后再引用）, `processed`（解析完成，可正常引用调用）, `error`（解析失败）。
+文件的当前状态。可能的状态有：`uploaded`（已上传，等待处理）, `processing`（处理中）, `processed`（上传已完成，可用于引用；不代表解析已完成）, `error`（处理失败）。
 
 "processed"
 

@@ -85,4 +85,4 @@
 
 例如，发现某天抽取页数明显增加，可以到任务记录中筛选当天的抽取任务，核对新增文件和单次处理量。
 
-完成后，你应能确定主要用量来源和需要进一步检查的日期。费用计算规则见[计量与计费](raw/application-user-guide/agent-context/getting-started-overview/settings-configurations/pricing.md)。
+完成后，你应能确定主要用量来源和需要进一步检查的日期。费用计算规则见[计量与计费](raw/application-user-guide/agent-billing/pricing.md)。

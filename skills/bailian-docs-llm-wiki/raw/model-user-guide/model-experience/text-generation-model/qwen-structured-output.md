@@ -94,6 +94,7 @@ Qwen 大部分模型、Kimi、GLM、DeepSeek、Stepfun
 
 -   阿里云百炼部署
     
+    -   kimi-k3.1-pro
     -   kimi-k3
 -   月之暗面部署
     

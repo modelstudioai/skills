@@ -1,0 +1,17 @@
+# 系统配置-干预配置
+
+-   [ListInterveneCnt - 获得所有干预项的数量](raw/_short/api-aimiaobi-2023-08-01-listintervenecnt-2d93b76026d1ed5f.md)
+-   [ListIntervenes - 列出干预项](raw/_short/api-aimiaobi-2023-08-01-listintervenes-aeda2abf29c49a64.md)
+-   [ImportInterveneFile - 同步导入干预项文件](raw/_short/api-aimiaobi-2023-08-01-importintervenefile-a4d65125f35c2f6b.md)
+-   [InsertInterveneGlobalReply - 插入干预全局回复项](raw/_short/api-aimiaobi-2023-08-01-insertinterveneglobalrep-298cfcee20646204.md)
+-   [ImportInterveneFileAsync - 异步导入干预项文件](raw/_short/api-aimiaobi-2023-08-01-importintervenefileasync-34c43150e55a6512.md)
+-   [GetInterveneTemplateFileUrl - 获得干预导入模版文件地址](raw/_short/api-aimiaobi-2023-08-01-getintervenetemplatefile-fe147f4cb14c0790.md)
+-   [ClearIntervenes - 清除所有干预项](raw/_short/api-aimiaobi-2023-08-01-clearintervenes-aa9df2177225ab48.md)
+-   [GetInterveneGlobalReply - 获得干预全局回复内容](raw/_short/api-aimiaobi-2023-08-01-getinterveneglobalreply-cea7cb5dcdfaf5ab.md)
+-   [ListInterveneRules - 列出干预规则](raw/_short/api-aimiaobi-2023-08-01-listintervenerules-b783831749be3506.md)
+-   [ListInterveneImportTasks - 列出干预项导入任务](raw/_short/api-aimiaobi-2023-08-01-listinterveneimporttasks-e3b269367d9de10e.md)
+-   [InsertInterveneRule - 插入干预规则](raw/_short/api-aimiaobi-2023-08-01-insertintervenerule-5f3a709565c0df27.md)
+-   [GetInterveneRuleDetail - 获得干预规则的详情](raw/_short/api-aimiaobi-2023-08-01-getinterveneruledetail-2a38c8e60d5f6b9b.md)
+-   [DeleteInterveneRule - 删除干预规则](raw/_short/api-aimiaobi-2023-08-01-deleteintervenerule-85d7c16bea7a6615.md)
+-   [ExportIntervenes - 导出干预项内容](raw/_short/api-aimiaobi-2023-08-01-exportintervenes-665adb0369561931.md)
+-   [GetInterveneImportTaskInfo - 获得干预项目导入任务信息](raw/_short/api-aimiaobi-2023-08-01-getinterveneimporttaskin-3a75bb78582f514b.md)
