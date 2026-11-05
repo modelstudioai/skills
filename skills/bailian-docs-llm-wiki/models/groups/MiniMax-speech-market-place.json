@@ -42,14 +42,6 @@
           "count_limit": 20,
           "usage_limit_period": 60,
           "type": "model-default"
-        },
-        "model-default": {
-          "count_limit_period": 60,
-          "usage_limit": 20000,
-          "usage_limit_field": "characters",
-          "count_limit": 20,
-          "usage_limit_period": 60,
-          "type": "model-default"
         }
       },
       "priceTimeBands": [
@@ -107,14 +99,6 @@
       ],
       "qpmInfo": {
         "model-default-actual": {
-          "count_limit_period": 60,
-          "usage_limit": 20000,
-          "usage_limit_field": "characters",
-          "count_limit": 20,
-          "usage_limit_period": 60,
-          "type": "model-default"
-        },
-        "model-default": {
           "count_limit_period": 60,
           "usage_limit": 20000,
           "usage_limit_field": "characters",
@@ -184,14 +168,6 @@
           "count_limit": 20,
           "usage_limit_period": 60,
           "type": "model-default"
-        },
-        "model-default": {
-          "count_limit_period": 60,
-          "usage_limit": 20000,
-          "usage_limit_field": "characters",
-          "count_limit": 20,
-          "usage_limit_period": 60,
-          "type": "model-default"
         }
       },
       "priceTimeBands": [
@@ -249,14 +225,6 @@
       ],
       "qpmInfo": {
         "model-default-actual": {
-          "count_limit_period": 60,
-          "usage_limit": 20000,
-          "usage_limit_field": "characters",
-          "count_limit": 20,
-          "usage_limit_period": 60,
-          "type": "model-default"
-        },
-        "model-default": {
           "count_limit_period": 60,
           "usage_limit": 20000,
           "usage_limit_field": "characters",

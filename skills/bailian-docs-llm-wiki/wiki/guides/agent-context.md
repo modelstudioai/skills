@@ -1,62 +1,46 @@
 # agent context
 
-`agent context` 是百炼平台中用于增强 Agent 推理能力的上下文注入机制，支持将外部知识、历史记忆、连接器配置等结构化信息动态注入到 LLM 的 prompt 中。它不改变模型本身，而是通过预处理阶段构建高质量上下文片段，提升 Agent 在复杂任务（如多跳问答、状态感知对话）中的准确性和一致性。该机制深度集成于百炼 Agent Runtime，开发者可通过声明式配置或 API 参数控制其行为。
+`agent context` 是百炼平台中用于增强 Agent 推理能力的上下文注入机制，支持将外部知识、历史记忆、结构化数据源等动态注入到 LLM 的 [prompt](prompt.md) 中。它不依赖模型微调，而是通过运行时上下文拼接实现领域适配与状态感知，是构建生产级 Agent 的核心基础设施之一。其设计与 [RAG](raw/application-user-guide/knowledge-base.md)、[Memory](raw/application-user-guide/agent-context/memory-library-overview.md) 和 [Connector](raw/application-user-guide/agent-context/overview.md) 深度协同。
 
 ## 支持的模型与功能
 
-当前 `agent context` 仅对百炼平台托管的 **Qwen 系列大模型（Qwen1.5、Qwen2、Qwen2.5）** 及 **Qwen-Agent 系列专用模型** 提供原生支持；其他第三方模型（如 Llama 3、Gemma）虽可接入，但需手动拼接 context 字段，且不保证 memory 或 RAG 的自动截断与重排序逻辑生效。核心功能包括：  
-- 基于知识库的 RAG 检索结果注入（见 [Agent 上下文](../../raw/application-user-guide/agent-context.md)）  
-- [长期记忆](../concepts/long-term-memory.md)（Memory）的版本化快照加载与时间窗口过滤  
-- Connector 配置元数据自动序列化（如数据库 schema、API endpoint 描述）  
-- ParseX 解析结果的结构化嵌入（如 PDF 表格转 JSON 后作为 context 片段）
+- **模型兼容性**：当前仅支持百炼托管的 `qwen-max`、`qwen-plus` 及 `qwen-turbo`（v20240815+）；开源模型（如本地部署的 Qwen2-7B）暂不支持自动 context 注入，需手动拼接。
+- **上下文类型**：
+  - 知识库检索结果（对接 RAG pipeline）
+  - [长期记忆](../concepts/long-term-memory.md)（基于 Memory Library 的会话级/用户级记忆）
+  - 外部系统数据（通过 Connector 同步的数据库、API 或文件内容）
+  - 结构化输入（ParseX 解析后的 JSON 表单、表格或日志片段）
+
+> **注意**：文档 [ParseX](raw/application-user-guide/agent-context/getting-started-overview.md) 中提及“支持任意文本格式解析”，但实际仅支持 JSON Schema 明确声明的字段；未声明字段将被静默丢弃，该限制未在原文中说明。
 
 ## 关键参数
 
-| 参数名 | 类型 | 默认值 | 说明 |
-|--------|------|--------|------|
-| `context_type` | string | `"auto"` | 可选 `"rag"`, `"memory"`, `"connector"`, `"parsex"` 或 `"auto"`（由 runtime 自动推断） |
-| `context_max_tokens` | int | `2048` | 整体 context 的 token 上限（含分隔符），超出时按优先级截断（RAG > memory > connector） |
-| `memory_window` | int | `5` | 仅当 `context_type=memory` 时生效，表示最多回溯最近 N 轮对话历史 |
-| `rag_top_k` | int | `3` | RAG 检索返回的最大 chunk 数量（见 [RAG](../../raw/application-user-guide/agent-context/knowledge-base.md)） |
-
-> **注意**：`context_max_tokens` 在 v2.3.0+ 版本中已替代旧版 `max_context_length` 参数；若在 [Memory](../../raw/application-user-guide/agent-context/memory-library-overview.md) 文档中仍看到后者，属过时描述，请以本表为准。
+| 参数名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| `context_sources` | array | 是 | 指定上下文来源列表，元素为 `{ "type": "knowledge_base", "id": "kb-xxx" }` 等格式，详见 [Connector](raw/application-user-guide/agent-context/overview.md) 定义 |
+| `context_max_tokens` | integer | 否 | 总上下文 token 上限（含 [prompt](prompt.md)），默认 4096，超出部分按 LRU 截断 |
+| `memory_enabled` | boolean | 否 | 是否启用 Memory Library 自动注入，默认 `true`；设为 `false` 时需显式传入 `memory_history` |
 
 ## 使用方式
 
-### 方式一：API 请求体中显式指定
-```json
-{
-  "model": "qwen2.5-72b-instruct",
-  "messages": [...],
-  "extra_parameters": {
-    "agent_context": {
-      "context_type": "rag",
-      "knowledge_base_id": "kb-xxx",
-      "rag_top_k": 5
-    }
-  }
-}
-```
-
-### 方式二：在 Agent 编排 YAML 中声明（推荐）
-```yaml
-steps:
-- type: llm
-  model: qwen2.5-72b-instruct
-  context:
-    type: rag
-    source: knowledge_base
-    id: kb-xxx
-    top_k: 3
-```
-该方式会自动触发 [Connector](../../raw/application-user-guide/agent-context/overview.md) 的元数据同步与 [ParseX](../../raw/application-user-guide/agent-context/getting-started-overview.md) 的预处理流水线。
+1. 在 Agent 配置 YAML 中声明 `context_sources`：
+   ```yaml
+   context_sources:
+     - type: knowledge_base
+       id: kb-12345
+     - type: memory
+       scope: user
+   ```
+2. 调用 SDK 时传入 runtime context（如用户 ID、会话 ID），触发 Memory 和 Connector 动态加载；
+3. 系统自动完成 RAG 检索、Memory 查询、Connector 数据拉取，并按优先级合并去重后注入 [prompt](prompt.md) —— 全过程对模型透明，无需修改提示词模板。
 
 ## 限制和注意事项
 
-- 单次请求中 `agent context` 总 token 数（含原始 prompt）不得超过所选模型的 `max_position_embeddings`，否则触发 400 错误；Qwen2.5-72b 的硬上限为 32768，但建议 `context_max_tokens ≤ 8192` 以保留足够生成空间。  
-- RAG context 与 Memory context **不可同时启用**：若两者均配置，runtime 将优先采用 RAG，静默忽略 memory 配置（无 warning 日志）。  
-- 所有 context 片段在注入前会进行敏感词过滤与 HTML/XML 标签剥离，因此不建议在 context 中嵌入可执行代码或富文本格式。  
-- 当使用 `context_type: "auto"` 时，系统依据 `messages` 中的 `tool_calls` 和 `user_intent` 字段自动匹配 context 类型，该行为依赖于最新版 [Getting Started Overview](../../raw/application-user-guide/agent-context/getting-started-overview.md) 中定义的意图识别规则。
+- 单次请求最多支持 5 个 `context_sources`，超过将报错 `CONTEXT_SOURCE_LIMIT_EXCEEDED`；
+- Knowledge Base 源仅支持已发布（Published）状态的知识库，草稿库不可用；
+- Memory 注入默认仅包含最近 10 轮交互（可配置 `memory_window_size`），但 [Memory](raw/application-user-guide/agent-context/memory-library-overview.md) 文档未明确说明该默认值；
+- 所有 context 内容在注入前经敏感词过滤与长度归一化处理，原始格式可能丢失（如 Markdown 表格转为纯文本）；
+- 不支持跨 workspace 的 context source 引用（例如 workspace A 的 knowledge_base 无法在 workspace B 的 Agent 中直接引用）。
 
 ## 来源文档
 

@@ -957,7 +957,7 @@ while True:
     -   千问 VL：qwen3-vl-plus
 -   **行业模型**
     -   [数据挖掘](raw/model-user-guide/model-experience/text-generation-model/specialized-models/data-mining-qwen-doc.md)：qwen-doc-turbo
-    -   [对话分析](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/tongyi-xiaomi-analysis-pro.md)：tongyi-xiaomi-analysis-pro、tongyi-xiaomi-analysis-flash
+    -   [对话分析](raw/_short/tongyi-xiaomi-analysis-pro-972391ee7b0391a7.md)：tongyi-xiaomi-analysis-pro、tongyi-xiaomi-analysis-flash
 
 #### 新加坡
 

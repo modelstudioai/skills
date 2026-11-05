@@ -53,6 +53,10 @@
 
 按[REST API 接入](raw/application-user-guide/agent-context/getting-started-overview/integration-overview/rest-api.md)中的结果查询流程获取数据
 
+在终端或脚本中取用
+
+用 `bl parsex extract result --biz-id <biz-id> --follow` 查询抽取结果，详见[使用 CLI](raw/application-user-guide/agent-context/getting-started-overview/integration-overview/cli.md)
+
 对应应用字段
 
 将返回字段映射到 Agent 使用的数据结构

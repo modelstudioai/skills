@@ -10,7 +10,7 @@ Plus、Max、Flash 均可接收文本、图像和视频，并以文本回答。�
 -   **效果优先**：`qwen3.8-max`，适合对推理和理解能力要求更高的任务。
 -   **成本优先**：`qwen3.8-flash`，使用前确认效果满足需求。
 
-如偏好第三方模型，长程编程可选 [kimi-k3](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k3.md)，编程与智能体任务可选 [glm-5.3](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/glm-5-3.md)。具体输入模态、功能和地域可用性，请查看对应模型文档。
+如偏好第三方模型，长程编程可选 [kimi-k3](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-text-generation/kimi-k3.md)，编程与智能体任务可选 [glm-5.3](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-text-generation/glm-5-3.md)。具体输入模态、功能和地域可用性，请查看对应模型文档。
 
 调用方式参见[文本生成](raw/model-user-guide/model-experience/text-generation-model/text-generation.md)和[图像与视频理解](raw/model-user-guide/model-experience/text-generation-model/vision.md)。
 

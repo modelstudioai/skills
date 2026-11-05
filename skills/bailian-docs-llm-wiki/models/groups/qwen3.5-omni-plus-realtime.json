@@ -82,14 +82,6 @@
           "count_limit": 60,
           "usage_limit_period": 60,
           "type": "model-default"
-        },
-        "model-default": {
-          "count_limit_period": 60,
-          "usage_limit": 100000,
-          "usage_limit_field": "total_tokens",
-          "count_limit": 60,
-          "usage_limit_period": 60,
-          "type": "model-default"
         }
       },
       "priceTimeBands": [

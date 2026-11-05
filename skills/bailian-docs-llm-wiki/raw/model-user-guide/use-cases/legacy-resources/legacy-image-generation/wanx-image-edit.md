@@ -26,30 +26,6 @@
 
 > 更多示例请参见[关键能力](https://help.aliyun.com/zh/model-studio/wanx-image-edit#3529413499zph)。
 
-**模型与价格**
-
-**模型名称**
-
-**计费单价**
-
-**限流（主账号与RAM子账号共用）**
-
-**免费额度**[（查看）](raw/model-user-guide/test-1/new-free-quota.md)
-
-**任务下发接口RPS限制**
-
-**同时处理中任务数量**
-
-wanx2.1-imageedit
-
-0.14元/张
-
-2
-
-2
-
-500张
-
 ## 快速开始
 
 #### 前提条件

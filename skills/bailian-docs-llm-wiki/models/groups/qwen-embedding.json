@@ -45,14 +45,6 @@
           "count_limit": 2400,
           "usage_limit_period": 6,
           "type": "model-default"
-        },
-        "model-default": {
-          "count_limit_period": 6,
-          "usage_limit": 100000,
-          "usage_limit_field": "total_tokens",
-          "count_limit": 2400,
-          "usage_limit_period": 6,
-          "type": "model-default"
         }
       },
       "priceTimeBands": [
@@ -115,14 +107,6 @@
       ],
       "qpmInfo": {
         "model-default-actual": {
-          "count_limit_period": 6,
-          "usage_limit": 100000,
-          "usage_limit_field": "total_tokens",
-          "count_limit": 2400,
-          "usage_limit_period": 6,
-          "type": "model-default"
-        },
-        "model-default": {
           "count_limit_period": 6,
           "usage_limit": 100000,
           "usage_limit_field": "total_tokens",
@@ -197,14 +181,6 @@
           "count_limit": 30,
           "usage_limit_period": 60,
           "type": "model-default"
-        },
-        "model-default": {
-          "count_limit_period": 1,
-          "usage_limit": 1200000,
-          "usage_limit_field": "total_tokens",
-          "count_limit": 30,
-          "usage_limit_period": 60,
-          "type": "model-default"
         }
       },
       "priceTimeBands": [
@@ -262,14 +238,6 @@
       ],
       "qpmInfo": {
         "model-default-actual": {
-          "count_limit_period": 1,
-          "usage_limit": 120000,
-          "usage_limit_field": "total_tokens",
-          "count_limit": 30,
-          "usage_limit_period": 6,
-          "type": "model-default"
-        },
-        "model-default": {
           "count_limit_period": 1,
           "usage_limit": 120000,
           "usage_limit_field": "total_tokens",
@@ -337,14 +305,6 @@
           "count_limit": 30,
           "usage_limit_period": 6,
           "type": "model-default"
-        },
-        "model-default": {
-          "count_limit_period": 1,
-          "usage_limit": 120000,
-          "usage_limit_field": "total_tokens",
-          "count_limit": 30,
-          "usage_limit_period": 6,
-          "type": "model-default"
         }
       },
       "priceTimeBands": [
@@ -400,14 +360,6 @@
       ],
       "qpmInfo": {
         "model-default-actual": {
-          "count_limit_period": 1,
-          "usage_limit": 120000,
-          "usage_limit_field": "total_tokens",
-          "count_limit": 30,
-          "usage_limit_period": 6,
-          "type": "model-default"
-        },
-        "model-default": {
           "count_limit_period": 1,
           "usage_limit": 120000,
           "usage_limit_field": "total_tokens",

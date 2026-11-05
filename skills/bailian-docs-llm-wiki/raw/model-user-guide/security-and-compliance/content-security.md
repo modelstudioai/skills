@@ -1,4 +1,4 @@
-# 输⼊输出AI安全护栏
+# 输入输出AI安全护栏
 
 大模型的输入输出中可能包含敏感或高风险内容，例如涉黄、涉政和广告等。大模型自有的合规检查机制通常能够提供有效的内容安全保障。此外，阿里云百炼支持接入 AI 安全护栏服务，进一步识别输入输出内容的违规信息，保障安全与合规性。
 
@@ -6,7 +6,9 @@
 
 调用阿里云百炼的大模型时，会根据模型自动匹配对应的 AI 安全护栏服务。
 
-> 目前支持文本和图片类型的模型，模型与 AI 安全护栏服务的对应关系，以及计费信息，请参见[面向阿里云百炼用户的AI安全护栏服务](https://help.aliyun.com/zh/document_detail/2923687.html)。
+**说明**AI 安全护栏服务仅华北2（北京）地域可用，其他地域暂不支持接入。
+
+目前支持文本和图片类型的模型，模型与护栏服务的对应关系请参见[服务与模型对应关系](https://help.aliyun.com/zh/model-studio/content-security#h2-service-mapping)，计费信息请参见[计费说明](https://help.aliyun.com/zh/model-studio/content-security#3f5435b893mfi)。
 
 ### 步骤一：开通 AI 安全护栏服务
 
@@ -14,7 +16,7 @@
 
 ### 步骤二：授权 AI 安全护栏
 
-1.  访问**[安全管理](https://bailian.console.aliyun.com/settings/security?globalset=1)**页面。
+1.  访问**[安全管理](https://bailian.console.aliyun.com/cn-beijing/settings/security?globalset=1)**页面。`安全管理`入口仅在华北2（北京）地域下显示，其他地域的左栏**管理**分组中无此菜单。
     
     若您访问上述链接进入的页面如下所示，说明此前已进行过授权操作，请跳转[步骤三：设置请求头header](https://help.aliyun.com/zh/model-studio/content-security#efe2cfd8148qy)。
     
@@ -27,7 +29,7 @@
 
 ### 步骤三：设置请求头header
 
-调用阿里云百炼时，在请求头header设置以下参数，接入 AI 安全护栏服务。注意：参数值为 JSON 字符串，而非嵌套 JSON 对象。
+调用阿里云百炼时，在请求头header设置以下参数，接入 AI 安全护栏服务。若不想修改调用代码，可改用[业务空间维度开关](https://help.aliyun.com/zh/model-studio/content-security#h2-workspace-switch)。注意：参数值为 JSON 字符串，而非嵌套 JSON 对象。
 
 ```
 {
@@ -311,6 +313,99 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation
 登录[AI 安全护栏控制台](https://yundun.console.aliyun.com/?spm=a2c4g.11186623.0.0.7129eb8bc4Mksa&p=guardrail#/overview)，在**检测结果结果查询**页签页面查看审核结果，以进一步分析文本内容中高频的违规类型，审核结果示例如下。
 
 结果查询页面包含筛选栏（支持按条件、文本内容、时间范围搜索）和结果表格。表格列包括**文本内容**、**服务Service**、**风险等级**、**返回标签（释义）**、**反馈结果**、**请求时间**和**操作**。示例中两条记录分别对应`bailian_query_check`（请求检查）和`bailian_response_check`（响应检查）服务，均被标记为**高风险**，返回标签为`contraband_act（疑似其他的刑事犯罪）:100`，每行可单击**详情**或**反馈**进行操作。
+
+## 业务空间维度开关
+
+在百炼控制台的**[业务空间管理](https://bailian.console.aliyun.com/cn-beijing/settings/workspace)**页面，您可以在**新建业务空间**或**编辑业务空间**时为该空间单独开启护栏，无需修改调用代码：
+
+1.  找到目标业务空间，单击**编辑**。
+2.  在**高级配置**的**AI安全护栏**区域，按需打开**输入检测**或**输出检测**开关。两个开关相互独立，默认均为关闭。
+3.  单击**确定**保存。开关对业务空间下所有 API Key 的模型调用生效，网关将在推理链路自动注入 `X-DashScope-DataInspection` 请求头触发检测。
+
+**说明**
+
+-   若开关不可用并提示「请先前往AI安全护栏，授权开通本功能」，请先完成[步骤一：开通 AI 安全护栏服务](https://help.aliyun.com/zh/model-studio/content-security#abaf0de6f4dcq)和[步骤二：授权 AI 安全护栏](https://help.aliyun.com/zh/model-studio/content-security#eb68bf7575xkc)。
+-   开启开关后，护栏服务将按实际调用量计费，计费规则请参见[计费说明](https://help.aliyun.com/zh/model-studio/content-security#3f5435b893mfi)。
+-   业务空间开关与请求头传参双通道并存：当请求中已设置 `X-DashScope-DataInspection` 时，以请求头的设置为准。
+
+## 服务与模型对应关系
+
+调用时在请求头传入 `cip` 标识后，系统会根据所用模型自动匹配以下护栏服务：
+
+**服务名称**
+
+**service 标识**
+
+**适用模型**
+
+**检测内容**
+
+百炼输入内容安全护栏
+
+`qwen_query_check`、`bl_query_guard`
+
+百炼主流模型（不含 Qwen3-Max、Qwen-Max、Qwen-VL-Max）
+
+输入中的底线类违规（涉黄、涉政、涉暴）、不良诱导信息及部分诱导性敏感话题
+
+百炼输出内容安全护栏
+
+`qwen_response_check`、`bl_response_guard`
+
+百炼主流模型（不含 Qwen3-Max、Qwen-Max、Qwen-VL-Max）
+
+输出中的底线类违规、不良诱导信息，以及辱骂、偏见、不良价值观内容
+
+百炼输入内容安全护栏（Pro）
+
+`qwen_query_check_pro`、`bl_query_guard_pro`
+
+仅 Qwen3-Max、Qwen-Max、Qwen-VL-Max
+
+检测范围同输入护栏，基于 Qwen3-Max 系列历史模型定向调优
+
+百炼输出内容安全护栏（Pro）
+
+`qwen_response_check_pro`、`bl_response_guard_pro`
+
+仅 Qwen3-Max、Qwen-Max、Qwen-VL-Max
+
+检测范围同输出护栏，基于 Qwen3-Max 系列历史模型定向调优
+
+百炼输入图片安全护栏
+
+`bl_img_query_guard`
+
+图片类模型，与模型系列无关
+
+输入图片的内容合规风险
+
+百炼输出图片安全护栏
+
+`bl_img_response_guard`
+
+图片类模型，与模型系列无关
+
+输出图片的内容合规风险
+
+## 风险标签管理
+
+护栏检测结果中的风险标签置信分为 0~100，分数越高置信度越高，主要覆盖以下类别：
+
+-   色情内容（如 `pornographic_adult`、`sexual_prompts`）
+-   涉政（如 `political_figure`、`political_prompts`）
+-   暴力极端（如 `violent_extremist`、`violent_prompts`）
+-   违禁（如 `contraband_drug`、`contraband_act`）
+-   不当内容（如 `inappropriate_discrimination`、`inappropriate_profanity`）
+-   引流广告（如 `pt_to_sites`、`pt_to_contact`）
+-   宗教（如 `religion_b`、`religion_c`）
+-   自定义（`customized`，命中自定义词库）
+
+完整标签列表、各标签的细分检测范围及自定义词库配置，可在 AI 安全护栏控制台的**模型防护**页面查看和管理：顶部菜单栏切换地域，找到目标服务后单击**管理**，进入防护维度的**配置管理**编辑细分场景的检测状态。除红线管控标签外，其余风险标签均可开关；配置修改后约 2~5 分钟生效。
+
+## 通过 AI 网关使用护栏
+
+如果您通过 AI 网关调用 Model API，可以在 AI 网关控制台按消费者维度配置护栏的检查策略与拦截策略（支持内容合规、提示词攻击、敏感信息、模型幻觉、恶意 URL 等防护维度，各维度可设置低、中、高防护等级）。详细操作请参见[如何在AI网关开启使用AI安全护栏产品服务](https://help.aliyun.com/zh/document_detail/2980055.html)。
 
 ## 知识库检索场景安全拦截
 

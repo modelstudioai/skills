@@ -201,7 +201,7 @@ public class Main {
 -   **第三方模型**
     -   DeepSeek：deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731、`deepseek-v4.1-flash-1017`（其中 deepseek-v4 系列同时支持[Responses API](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y)）
     -   GLM：glm-5.2（仅支持通过[Responses API](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y)联网搜索）
-    -   Kimi：kimi-k3.1-pro（支持 Chat Completions `enable_search`、Responses `web_search` 和 Anthropic `web_search`）；kimi-k3（仅支持通过[Responses API](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y)联网搜索）
+    -   Kimi：kimi-k3.1-pro（支持 Responses `web_search` 和 Anthropic `web_search`，不支持 Chat Completions `enable_search`）；kimi-k3（仅支持通过[Responses API](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y)联网搜索）
 
 #### 新加坡
 
@@ -215,13 +215,13 @@ public class Main {
 -   **第三方模型**
     -   DeepSeek：deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731、`deepseek-v4.1-flash-1017`（其中 deepseek-v4 系列同时支持[Responses API](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y)）
     -   GLM：glm-5.2（仅支持通过[Responses API](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y)联网搜索）
-    -   Kimi：kimi-k3.1-pro（支持 Chat Completions `enable_search`、Responses `web_search` 和 Anthropic `web_search`）；kimi-k3（仅支持通过[Responses API](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y)联网搜索）
+    -   Kimi：kimi-k3.1-pro（支持 Responses `web_search` 和 Anthropic `web_search`，不支持 Chat Completions `enable_search`）；kimi-k3（仅支持通过[Responses API](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y)联网搜索）
 
 #### 全球
 
 美国（弗吉尼亚）、中国香港、日本（东京）、德国（法兰克福）地域支持以下模型。其中中国香港、日本（东京）、德国（法兰克福）需使用服务部署范围为**全球**的业务空间调用，参见[选择地域、服务部署范围和接入域名](raw/model-api-reference/preparations/regions.md)。
 
--   **Kimi**：`kimi-k3.1-pro` 支持 Chat Completions `enable_search`、Responses `web_search` 和 Anthropic `web_search`，适用于本标签页的全部四个地域。
+-   **Kimi**：`kimi-k3.1-pro` 支持 Responses `web_search` 和 Anthropic `web_search`，不支持 Chat Completions `enable_search`，适用于本标签页的全部四个地域。
     
 -   **DeepSeek**：`deepseek-v4.1-flash-1017` 支持模型原生联网搜索、Responses API 内置 `web_search` 和 Anthropic 兼容 API 内置 `web_search`，适用于中国（北京）、新加坡（国际部署范围），以及美国（弗吉尼亚）、德国（法兰克福）、日本（东京）、中国香港（全球部署范围）。
     
@@ -3584,7 +3584,7 @@ A：使用 qwen3.7-max 或更新版本的模型。qwen3.7-max 能识别非交易
 
 ### Q：如何让 Kimi 系列模型执行联网搜索？
 
-A：kimi-k3.1-pro（阿里云百炼部署）在北京、新加坡、美国（弗吉尼亚）、德国（法兰克福）、日本（东京）和中国香港均支持 Chat Completions `enable_search`、Responses `web_search` 和 Anthropic `web_search`。
+A：kimi-k3.1-pro（阿里云百炼部署）在北京、新加坡、美国（弗吉尼亚）、德国（法兰克福）、日本（东京）和中国香港均支持 Responses `web_search` 和 Anthropic `web_search`，不支持 Chat Completions `enable_search`。
 
 kimi-k3 仅支持通过[Responses API](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y)的 `web_search` 工具联网搜索，不支持 `enable_search` 参数。如需更灵活的检索方式，也可在百炼控制台创建智能体应用，并通过**工具 > MCP 服务**添加联网搜索 MCP 工具（如 `bailian_web_search`）。联网搜索 MCP 与内置联网搜索是相互独立的两个功能，计费也相互独立，详情请参见[接入 Harness 工具](https://help.aliyun.com/zh/model-studio/token-plan-harness-tool)。
 

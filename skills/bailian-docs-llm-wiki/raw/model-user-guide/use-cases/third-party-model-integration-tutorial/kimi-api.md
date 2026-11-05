@@ -42,6 +42,14 @@ SDK 调用配置的`base_url`：`https://{WorkspaceId}.ap-northeast-1.maas.aliyu
 
 HTTP 请求地址：`POST https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
 
+#### 中国香港
+
+SDK 调用配置的`base_url`：`https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/compatible-mode/v1`
+
+HTTP 请求地址：`POST https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
+
+调用 OpenAI Responses 时，可复用同地域的上述 `base_url`；HTTP 请求地址为 `POST https://{WorkspaceId}.{region}.maas.aliyuncs.com/compatible-mode/v1/responses`，其中 `{region}` 替换为对应地域标识（如 `cn-beijing`）。接口参数与调用示例请参见[OpenAI Responses API 参考](raw/model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)。
+
 #### DashScope
 
 #### 华北2（北京）
@@ -246,13 +254,13 @@ SDK 调用配置的`base_url`：`https://{WorkspaceId}.ap-northeast-1.maas.aliyu
 
 HTTP 请求地址：`POST https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/apps/anthropic/v1/messages`
 
-Anthropic兼容接口仅支持 Messages 接口（`/v1/messages`）。更多接口限制和调用说明，请参见[Anthropic兼容-Messages](raw/model-api-reference/qwen-api-reference/anthropic-api-messages.md)。
-
 #### 中国香港
 
-SDK 调用配置的`base_url`：`https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/compatible-mode/v1`
+SDK 调用配置的`base_url`：`https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/apps/anthropic`
 
-HTTP 请求地址：`POST https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
+HTTP 请求地址：`POST https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/apps/anthropic/v1/messages`
+
+Anthropic兼容接口仅支持 Messages 接口（`/v1/messages`）。更多接口限制和调用说明，请参见[Anthropic兼容-Messages](raw/model-api-reference/qwen-api-reference/anthropic-api-messages.md)。
 
 调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
@@ -719,7 +727,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/v
 
 ## 多模态调用示例
 
-kimi-k3.1-pro、kimi-k2.7-code、kimi-k2.6、kimi-k2.5、kimi-k3 支持同时处理文本、图像或视频输入（kimi-k3.1-pro 和 kimi-k3 不支持视频输入），并可通过 `enable_thinking` 参数开启思考模式。以下示例展示如何调用多模态能力。
+kimi-k3.1-pro、kimi-k3、kimi-k2.7-code、kimi-k2.6、kimi-k2.5 支持同时处理文本与图像输入。视频输入仅 kimi-k2.7-code、kimi-k2.6、kimi-k2.5 支持，kimi-k3.1-pro 和 kimi-k3 不支持视频输入。可通过 `enable_thinking` 参数开启思考模式。以下示例展示如何调用多模态能力。
 
 ### 开启或关闭思考模式
 
@@ -1155,13 +1163,13 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 
 ### 视频理解
 
-**说明**kimi-k3 暂不支持视频输入（仅支持文本与图片输入），本节视频理解示例不适用于 kimi-k3。
+**说明**kimi-k3.1-pro 和 kimi-k3 不支持视频输入（仅支持文本与图片输入），本节视频理解示例及 `fps`、`max_frames` 参数均不适用于这两个型号。
 
 #### 视频文件
 
 kimi-k2.7-code、kimi-k2.6、kimi-k2.5模型通过从视频中提取帧序列进行内容分析。您可以通过以下两个参数控制抽帧策略：
 
--   **fps**：控制抽帧频率，每隔 f p s 1 ​秒抽取一帧。取值范围为 \[0.1, 10\]，默认值为 2.0。
+-   **fps**：控制抽帧频率，每隔 1/fps 秒抽取一帧。取值范围为 \[0.1, 10\]，默认值为 2.0。
     
     -   高速运动场景：建议设置较高的 fps 值，以捕捉更多细节
     -   静态或长视频：建议设置较低的 fps 值，以提高处理效率
@@ -1387,7 +1395,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 
 #### 图像列表
 
-当视频以图像列表（即预先抽取的视频帧）传入时，可通过`fps`参数告知模型视频帧之间的时间间隔，这能帮助模型更准确地理解事件的顺序、持续时间和动态变化。模型支持通过 `fps` 参数指定原始视频的抽帧率，表示视频帧是每隔f p s 1 ​秒从原始视频中抽取的。
+当视频以图像列表（即预先抽取的视频帧）传入时，可通过`fps`参数告知模型视频帧之间的时间间隔，这能帮助模型更准确地理解事件的顺序、持续时间和动态变化。模型支持通过 `fps` 参数指定原始视频的抽帧率，表示视频帧是每隔 1/fps 秒从原始视频中抽取的。
 
 #### OpenAI兼容
 
@@ -2059,6 +2067,8 @@ public class Main {
 
 #### 视频限制
 
+以下视频限制仅适用于 kimi-k2.7-code、kimi-k2.6、kimi-k2.5；kimi-k3.1-pro 和 kimi-k3 不支持视频输入。
+
 -   **以图像列表传入：**最少传入 4 张图片，最多 2000 张图片
     
 -   **以视频文件传入时：**
@@ -2119,7 +2129,7 @@ kimi-k3
 
 支持
 
-不支持
+支持（Responses API）
 
 支持
 
@@ -2173,13 +2183,13 @@ kimi-k2.5
 
 支持
 
-## 动态加载工具（Kimi-K3）
+## 动态加载工具
 
 当应用需要挂载大量工具时，如果把所有工具的声明一次性放进请求顶层的`tools`字段，会遇到工具定义膨胀（Tool Definition Bloat）问题：每个请求都要携带全部工具的描述和参数 Schema，Token 消耗高；候选工具越多，模型也越容易选错工具、构造出错误的调用参数。
 
 动态加载工具（Dynamically Loaded Tools）允许在对话过程中按需注入工具：先只挂载少量核心工具，当对话进展到需要某个工具时，再把它动态插入`messages`中，从而降低 Token 消耗、提升工具选择的准确性。
 
-**说明**动态加载工具目前仅 kimi-k3 支持，在其他模型（如 kimi-k2.6）上请求会返回`tokenization failed`错误。
+**说明**动态加载工具目前支持 kimi-k3.1-pro 和 kimi-k3，在其他模型（如 kimi-k2.6）上请求会返回`tokenization failed`错误。以下在 `system` 消息中使用 `tools` 字段的格式针对 OpenAI Chat Completions 接口。
 
 ### 在 messages 中注入工具声明
 
@@ -2279,7 +2289,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 API 层面没有专门的工具搜索接口。如果工具数量很多，可以组合"自定义搜索工具 + 动态加载工具"实现按需加载：
 
 1.  会话开始时，在请求顶层`tools`中只声明一个由应用后端实现的`search_tools`工具（按关键词返回匹配的工具名称和简介），以及少量每轮都可能用到的核心工具。
-2.  在 System Prompt 中声明可被搜索的关键词（例如工具目录、领域标签），引导模型在需要工具时先调用`search_tools`。首轮请求可设置`tool_choice: "required"`强制模型先检索再回答，检索完成后将`tool_choice`恢复为`"auto"`。修改`tool_choice`不会破坏前缀缓存。
+2.  在 System Prompt 中声明可被搜索的关键词（例如工具目录、领域标签），引导模型在需要工具时先调用`search_tools`。首轮请求可设置 `tool_choice: "required"` 强制模型调用至少一个工具，但不保证调用的是 `search_tools`。如果必须先检索，将 `tool_choice` 设为 `{"type": "function", "function": {"name": "search_tools"}}`，明确指定调用 `search_tools`；检索完成后将 `tool_choice` 恢复为 `"auto"`。修改 `tool_choice` 不会破坏前缀缓存。
 3.  根据`search_tools`返回的结果，由应用把对应工具的完整声明通过一条携带`tools`的`system`消息动态插入`messages`。
 4.  模型即可在后续生成中直接调用这些新加载的工具。
 
@@ -2307,6 +2317,20 @@ API 层面没有专门的工具搜索接口。如果工具数量很多，可以�
 **fps**
 
 **max\_frames**
+
+kimi-k3.1-pro
+
+true（可关闭，但强烈建议保持开启）
+
+1.0
+
+0.95
+
+0.0
+
+\-
+
+\-
 
 kimi-k3
 
@@ -2370,33 +2394,30 @@ false
 
 “-" 表示没有默认值，也不支持设置。
 
-模型
-
-`enable_thinking` 默认值
-
-`reasoning_effort` 默认值
-
-kimi-k3.1-pro
-
-`true`（可关闭，强烈建议保持开启）
-
-`max`
-
-`reasoning_effort` 以下档位仅适用于 kimi-k3.1-pro：
+以下推理强度档位仅适用于 kimi-k3.1-pro：
 
 -   `max`（默认）：深度推理
 -   `high`：增强推理
 -   `medium`：中度推理
 -   `low`：轻度推理
 
+不同协议的推理强度参数位置如下：
+
+-   OpenAI Chat Completions：请求顶层 `reasoning_effort`；使用 OpenAI Python SDK 时，通过 `extra_body` 传入该平台扩展参数，例如 `extra_body={"reasoning_effort": "max"}`。
+-   DashScope：SDK 使用 `reasoning_effort`，HTTP 请求使用 `parameters.reasoning_effort`。
+-   OpenAI Responses：使用 `reasoning.effort`。
+-   Anthropic Messages：使用 `output_config.effort`。
+
+kimi-k3.1-pro 的 `temperature`、`top_p`、`presence_penalty` 仅支持默认值，分别为 `1.0`、`0.95`、`0.0`；传入非默认值会报错。kimi-k3.1-pro 和 kimi-k3 不支持视频输入，`fps` 和 `max_frames` 不适用。
+
 ## 模型列表与计费
 
 Kimi 系列模型是由月之暗面公司（Moonshot AI）推出的大语言模型。
 
--   [kimi-k3.1-pro](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)：支持文本与图片输入、文本输出，不支持视频输入、Batch 和微调。
+-   [kimi-k3.1-pro](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)：支持文本与图片输入、文本输出和动态加载工具，不支持视频输入、Batch 和微调。
 -   kimi-k3：Kimi 旗舰模型，默认进行推理并采用保留式思考。支持文本与图片输入（暂不支持视频输入）、对话与 Agent 任务，并支持动态加载工具。
--   kimi-k2.7-code：Kimi 最强编程模型，长上下文指令遵循更可靠，编程任务成功率更高。支持文本、图片与视频输入、思考模式、对话与 Agent 任务。
--   kimi-k2.6：Kimi最新最智能的模型，具备更强更稳的长程代码编写能力，指令遵循和自我纠错能力显著提升。同时支持文本、图片与视频输入、思考与非思考模式、对话与 Agent 任务。
+-   kimi-k2.7-code：Kimi 编程模型，长上下文指令遵循更可靠，编程任务成功率更高。支持文本、图片与视频输入、思考模式、对话与 Agent 任务。
+-   kimi-k2.6：具备更强更稳的长程代码编写能力，指令遵循和自我纠错能力显著提升。同时支持文本、图片与视频输入、思考与非思考模式、对话与 Agent 任务。
 -   kimi-k2.5：在 Agent、代码生成、视觉理解及一系列通用智能任务上取得开源 SOTA 表现。同时支持图像、视频与文本输入、思考与非思考模式、对话与 Agent 任务。
 
 **说明**kimi-k3.1-pro 和 kimi-k3 不支持 `thinking_budget` 参数，思考长度不可通过该参数限制。

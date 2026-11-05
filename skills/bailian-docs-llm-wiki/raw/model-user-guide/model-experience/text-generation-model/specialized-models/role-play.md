@@ -314,7 +314,7 @@ qwen-plus-character
 
 使用 Character 模型进行角色扮演时，可以对 System Message 的以下方面进行配置：
 
-> 通过优化 Prompt 模板，可以使大模型更准确、可靠地执行特定任务。详情请参考[Prompt自动优化](raw/application-user-guide/agent-development/llm-application/prompt/optimize-prompt.md)。
+> 通过优化 Prompt 模板，可以使大模型更准确、可靠地执行特定任务。详情请参考[Prompt自动优化](raw/application-user-guide/prompt/optimize-prompt.md)。
 
 -   角色的详细信息
     
@@ -4102,13 +4102,13 @@ print(completion.choices[0].message.content)
 
 ### 模型调优
 
-角色扮演模型支持模型调优功能，您可以通过微调来提升模型在特定角色或场景下的表现。详情请参见[模型调优简介](https://help.aliyun.com/zh/model-studio/model-training-overview)。
+角色扮演模型支持模型调优功能，您可以通过微调来提升模型在特定角色或场景下的表现。详情请参见[模型调优简介](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)。
 
 ## 场景特殊需求
 
 ### 模型内容审核尺度调整
 
-大模型的输入输出中可能包含敏感或高风险内容，例如涉黄、涉政和广告等。大模型自有的合规检查机制通常能够提供有效的内容安全保障。此外，阿里云百炼支持接入内容安全服务，进一步识别输入输出内容的违规信息，保障输入输出内容的安全与合规性。如果调整相关的内容审核尺度，请参考[输⼊输出 AI 安全护栏](raw/model-user-guide/security-and-compliance/content-security.md)。
+大模型的输入输出中可能包含敏感或高风险内容，例如涉黄、涉政和广告等。大模型自有的合规检查机制通常能够提供有效的内容安全保障。此外，阿里云百炼支持接入内容安全服务，进一步识别输入输出内容的违规信息，保障输入输出内容的安全与合规性。如果调整相关的内容审核尺度，请参考[输入输出 AI 安全护栏](raw/model-user-guide/security-and-compliance/content-security.md)。
 
 ### 启用session cache提升缓存命中
 

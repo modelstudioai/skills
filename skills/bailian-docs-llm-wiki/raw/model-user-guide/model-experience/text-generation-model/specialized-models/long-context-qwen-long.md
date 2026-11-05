@@ -979,9 +979,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 
 2元
 
-各100万Token
-
-有效期：百炼开通后90天内
+无免费额度
 
 在[体验中心](https://bailian.console.aliyun.com/model/experience/text?modelId=qwen-long)页面，您可以上传文档，在线提问。
 
@@ -1027,6 +1025,4 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
     -   最大输出长度为 32,768 Token。
 -   **文件共享：**
     -   `file-id` 仅在生成它的阿里云主账号内有效，不支持跨账号或通过 RAM 用户 API Key 调用。
--   **免费额度：**100万Token的免费额度仅在阿里云百炼开通后的90天内有效。使用超出免费额度的部分将按照相应的输入输出成本收费。
-    
 -   **限流**：关于模型的限流条件，请参见[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)。

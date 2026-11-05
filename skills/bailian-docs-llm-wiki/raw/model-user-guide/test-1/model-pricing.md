@@ -6402,7 +6402,7 @@ vanchin/deepseek-v4.1-flash
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
-[kimi-k3.1-pro](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
+[kimi-k3.1-pro](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
 
 思考与非思考（默认开启思考）
 
@@ -6466,7 +6466,7 @@ kimi-k2.5
 
 **输出单价（每百万Token）**
 
-[kimi-k3.1-pro](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
+[kimi-k3.1-pro](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
 
 全球
 
@@ -6488,7 +6488,7 @@ kimi-k3
 
 100元
 
-[kimi-k3.1-pro](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
+[kimi-k3.1-pro](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
 
 美国
 
@@ -6542,7 +6542,7 @@ kimi-k2.5
 
 **输出单价（每百万Token）**
 
-[kimi-k3.1-pro](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
+[kimi-k3.1-pro](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
 
 全球
 
@@ -6596,7 +6596,7 @@ kimi-k2.5
 
 **输出单价（每百万Token）**
 
-[kimi-k3.1-pro](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
+[kimi-k3.1-pro](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
 
 全球
 
@@ -6654,7 +6654,7 @@ kimi-k2.5
 
 **输出单价（每百万Token）**
 
-[kimi-k3.1-pro](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
+[kimi-k3.1-pro](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
 
 国际
 
@@ -6698,7 +6698,7 @@ kimi-k2.7-code
 
 **输出单价（每百万Token）**
 
-[kimi-k3.1-pro](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
+[kimi-k3.1-pro](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
 
 全球
 

@@ -1,44 +1,45 @@
 # get started with agents
 
-百炼平台的 Agents 功能支持开发者快速构建具备规划、工具调用和多步推理能力的智能体应用。它基于大模型驱动，提供标准化的运行时接口与可扩展的插件机制，适用于客服助手、数据查询、自动化工作流等场景。本文档汇总关键配置项、调用方式及常见约束，帮助开发者在 5 分钟内完成首个 Agent 实例部署。
+Agent 是百炼平台提供的可编程智能体服务，支持开发者快速构建具备规划、工具调用和多轮推理能力的应用。本文档指导你完成 Agent 的初始化配置、核心参数设置及基础调用流程。所有操作均基于百炼 API v3 接口，需配合有效的 API Key 和模型授权。
 
 ## 支持的模型与功能
 
-当前仅支持 `qwen-max`、`qwen-plus` 和 `qwen-turbo` 三款 Qwen 系列模型作为 Agent 的底层推理引擎；其他模型（如 `qwen2-72b`）虽可在基础 chat 接口使用，但**不支持 Agent 模式下的 tool calling 与 step-by-step planning**。Agent 内置功能包括：自动工具选择（基于 OpenAPI Schema）、多轮状态保持、结构化输出强制校验，以及内置 `web_search`、`calculator` 和 `code_interpreter` 三个默认工具。详细能力说明见 [开始使用](../../raw/application-user-guide/get-started-with-agents.md)。
+当前 Agent 服务仅支持 `qwen-plus` 和 `qwen-max` 两款模型（详见 [开始使用](../../raw/application-user-guide/get-started-with-agents.md)）。不支持 `qwen-turbo` 或历史版本如 `qwen-1.5-72b`。Agent 内置以下关键能力：  
+- 自动工具选择（Tool Calling）  
+- 多步任务分解与执行（Plan-and-Execute）  
+- 基于用户输入动态生成[函数调用](../concepts/function-calling.md)参数  
+- 支持自定义工具 Schema（OpenAPI 格式）
+
+> **注意**：原始文档中提及的 “支持所有 Qwen 系列模型” 已过时；实际可用模型以控制台「Agent 配置页」实时列表为准，该限制在 [Agent 服务概览](../../raw/application-user-guide/get-started-with-agents/agent-overview.md) 中有明确说明。
 
 ## 关键参数
 
-调用 Agent 接口时，必需参数为 `model`（值必须为上述三款支持模型之一）和 `input`（字符串或对象格式的用户初始请求）。可选参数包括：
-- `tools`: 工具列表，每个工具需含 `name`、`description` 和 `parameters`（遵循 JSON Schema v7）；
-- `tool_choice`: 控制工具调用策略，可选 `"auto"`（默认）、`"none"` 或指定工具名；
-- `max_iterations`: 最大执行步数，默认为 8，上限为 12；
-- `stream`: 布尔值，启用流式响应时需设为 `true`，此时响应结构与非流式不同（见 [Agent 服务概览](../../raw/application-user-guide/get-started-with-agents/agent-overview.md)）。
+调用 Agent 必须传入以下参数（JSON body）：
 
-> **注意**：原始文档中 `temperature` 和 `top_p` 被列为“Agent 特有参数”，但实际测试表明它们对 Agent 行为无影响，仅作用于底层模型生成阶段；该描述已在最新 SDK 中移除，以 [Agent 服务概览](../../raw/application-user-guide/get-started-with-agents/agent-overview.md) 为准。
+| 参数名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| `model` | string | 是 | 仅限 `qwen-plus` 或 `qwen-max`，大小写敏感 |
+| `input` | object | 是 | 包含 `messages`（对话历史数组）和可选 `tools`（工具列表） |
+| `tools` | array | 否 | 工具定义数组，每个元素需含 `function.name`、`function.description` 和 `function.parameters`（JSON Schema） |
+| `stream` | boolean | 否 | 设为 `true` 可启用流式响应（仅支持 SSE） |
+
+注意：`input.messages` 中首条消息必须为 `role: "user"`，且 `content` 字段不可为空字符串——该约束在 [开始使用](../../raw/application-user-guide/get-started-with-agents.md) 中未明确强调，但实测会返回 `400 Bad Request`。
 
 ## 使用方式
 
-推荐通过百炼 SDK（v3.0.0+）调用：
-```python
-from aliyun_bailian import AgentClient
+1. **准备工具定义**：按 OpenAPI 3.0 规范编写工具 Schema，确保 `parameters` 为合法 JSON Schema（非 Swagger 2.0）；  
+2. **构造请求体**：将工具列表嵌入 `input.tools`，对话历史放入 `input.messages`；  
+3. **发起 POST 请求**：目标 URL 为 `https://dashscope.aliyuncs.com/api/v3/agents`，Header 中携带 `Authorization: Bearer <api_key>`；  
+4. **处理响应**：成功时返回 `output.choices[0].message`，其中可能包含 `tool_calls` 数组或最终文本回复。
 
-client = AgentClient(api_key="YOUR_API_KEY", endpoint="https://dashscope.aliyuncs.com/api/v1")
-response = client.run(
-    model="qwen-plus",
-    input="查一下上海今天最高气温，并换算成华氏度",
-    tools=[{"name": "web_search", "description": "...", "parameters": {...}}, ...]
-)
-print(response.output)
-```
-HTTP 直接调用需 POST 至 `/agents/run`，Content-Type 为 `application/json`，Body 结构与 SDK 参数一致。完整请求示例参见 [开始使用](../../raw/application-user-guide/get-started-with-agents.md)。
+完整示例见 [Agent 服务概览](../../raw/application-user-guide/get-started-with-agents/agent-overview.md) 中的「快速调用示例」章节。
 
 ## 限制和注意事项
 
-- 单次请求最大输入长度为 32,768 token，超出将被截断且不报错；
-- `tools` 数量上限为 20 个，单个工具 `parameters` Schema 总字符数不得超过 4,096；
-- Agent 不支持 `system` 消息字段，所有指令需通过 `input` 或工具描述注入；
-- 流式响应中，`event: tool_calls` 类型事件可能重复触发同一工具（已知竞态问题），建议客户端按 `call_id` 去重处理；
-- 所有日志与 trace 数据默认保留 7 天，如需长期审计，请自行集成 OpenTelemetry 上报——该要求在 [Agent 服务概览](../../raw/application-user-guide/get-started-with-agents/agent-overview.md) 中有明确说明。
+- 单次请求最大 token 数为 32768（含 [prompt](prompt.md) + tools + response），超出将触发截断并返回警告字段 `truncated: true`；  
+- 工具调用深度限制为 8 层（即最多连续 8 次 tool_call → observation → LLM 回应循环）；  
+- 不支持上传文件或图像作为输入；所有 `input.messages` 中的 `content` 必须为纯文本或结构化 JSON（无 base64 编码）；  
+- 流式响应（`stream: true`）下，`tool_calls` 事件仅在 final message 中完整返回，中间 chunk 不含 `delta.tool_calls` 字段——此行为与常规 chat 接口不同，已在 [开始使用](../../raw/application-user-guide/get-started-with-agents.md) 的附注中确认。
 
 ## 来源文档
 

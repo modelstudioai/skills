@@ -104,6 +104,14 @@ integer
 
 文档切片大小（字符数）。建议值 300-800
 
+`metaExtractColumns`
+
+否
+
+`array<object>`
+
+元数据抽取配置，最多 5 个字段。仅在创建知识库时生效，创建后不能通过更新知识库补配。数组元素字段见 [Metadata 抽取配置](#h-ragapi-create-index-metadata)
+
 `docIds`
 
 是
@@ -199,6 +207,129 @@ structureType
   "dataSources": [{ "sourceType": "DATA_CENTER_FILE" }]
 }
 ```
+
+## Metadata 抽取配置
+
+`metaExtractColumns` 用于在创建知识库、构建索引时为文档生成 Meta 信息。每个数组元素支持以下字段：
+
+字段
+
+必填
+
+类型
+
+说明
+
+`key`
+
+是
+
+string
+
+元数据字段名，长度为 1-50 个字符，仅支持英文和下划线
+
+`desc`
+
+否
+
+string
+
+元数据字段的中文描述，长度为 0-1000 个字符，默认为空。支持中文、英文、数字、下划线（\_）、短划线（-）、半角句号（.）和半角冒号（:）
+
+`type`
+
+是
+
+string
+
+取值方法：`constant`（常量）、`variable`（变量）、`custom_prompt`（大模型）、`regular`（正则）或 `keywords`（关键词搜索）
+
+`value`
+
+是
+
+string
+
+与 `type` 对应的取值规则，具体要求见下表
+
+`enableSearch`
+
+否
+
+boolean
+
+是否让元数据字段和值随文本切片参与知识库检索，默认为 `false`
+
+`enableLlm`
+
+否
+
+boolean
+
+是否将元数据字段和值作为大模型回答的输入，默认为 `false`
+
+`type`
+
+`value` 说明
+
+示例
+
+`constant`
+
+为知识库中的所有文件设置相同的固定值
+
+`meta_test`
+
+`variable`
+
+文件变量：`file_name` 表示文件名称，`cat_name` 表示文件所在类目的名称
+
+`file_name`
+
+`custom_prompt`
+
+实体描述，大模型据此从每个文件中抽取相关信息
+
+`文档主产品的产品名称，只提取一个完整产品名`
+
+`regular`
+
+用于匹配并提取文档内容的正则表达式
+
+`星澜 X1`
+
+`keywords`
+
+预设关键词，多个关键词使用英文逗号分隔；仅返回文档中实际匹配的关键词
+
+`智能手机,续航,防水`
+
+以下请求体片段与 `name`、`docIds` 等创建参数同级：
+
+```
+{
+  "metaExtractColumns": [
+    {
+      "key": "source_file_name",
+      "desc": "源文件名",
+      "type": "variable",
+      "value": "file_name",
+      "enableSearch": true,
+      "enableLlm": true
+    },
+    {
+      "key": "product_name",
+      "desc": "产品名称",
+      "type": "custom_prompt",
+      "value": "文档主产品的产品名称，只提取一个完整产品名",
+      "enableSearch": true,
+      "enableLlm": true
+    }
+  ]
+}
+```
+
+**说明**`enableSearch`、`enableLlm` 与查询时的 `metadata_filter` 作用不同。通过 API 调用应用时，如需按元数据过滤文档，应在 `rag_options` 中同时指定 `pipeline_ids` 和 `metadata_filter`，详见[应用调用参数](raw/_short/agent-and-workflow-application-api-reference-81f0d3ecfd878b1f.md)。索引构建完成后，可通过[查询文件详情](raw/application-api-reference/rag-api/rag-api-documents/rag-api-list-file-details.md) API 的 `meta_extract_info` 检查实际抽取结果。
 
 ## 请求示例
 

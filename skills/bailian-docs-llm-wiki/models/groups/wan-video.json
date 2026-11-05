@@ -54,15 +54,6 @@
           "async_task_timeout": 480,
           "type": "model-default",
           "async_user_concurrency_limit": 10
-        },
-        "model-default": {
-          "count_limit_period": 60,
-          "async_user_queue_limit": 500,
-          "async_task_pending_timeout": 1440,
-          "count_limit": 300,
-          "async_task_timeout": 480,
-          "type": "model-default",
-          "async_user_concurrency_limit": 10
         }
       },
       "priceTimeBands": [
@@ -140,15 +131,6 @@
       ],
       "qpmInfo": {
         "model-default-actual": {
-          "count_limit_period": 60,
-          "async_user_queue_limit": 500,
-          "async_task_pending_timeout": 1440,
-          "count_limit": 300,
-          "async_task_timeout": 480,
-          "type": "model-default",
-          "async_user_concurrency_limit": 5
-        },
-        "model-default": {
           "count_limit_period": 60,
           "async_user_queue_limit": 500,
           "async_task_pending_timeout": 1440,

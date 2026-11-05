@@ -44,7 +44,7 @@
 
 **model**`string`**（必选）**
 
-模型名，设置为 `qwen-audio-3.1-asr-flash-message`。模型信息请参见[Qwen-Audio-3.1-ASR-Flash-Message](raw/model-user-guide/support/model-studio-model-list/model-list-speech-recognition/qwen-audio-3-1-asr-flash-message.md)。
+模型名，设置为 `qwen-audio-3.1-asr-flash-message`。模型信息请参见[Qwen-Audio-3.1-ASR-Flash-Message](raw/_short/qwen-audio-3-1-asr-flash-message-43636fd6377af26e.md)。
 
 **input**`object`**（必选）**
 

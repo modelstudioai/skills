@@ -1,49 +1,74 @@
 # file management api
 
-百炼平台的文件管理 API 提供上传、查询、列举和删除文件的能力，支持多用途文件复用（如 fine-tune、file-extract、batch）。该接口采用 RESTful 设计，基于 `https://dashscope.aliyuncs.com/api/v1/files` 路径提供服务。**注意：当前接口主要用于兼容历史场景，推荐优先使用 [OpenAI 兼容的 File 接口](raw/model-api-reference/toolkits-and-frameworks/openai-file-interface.md)**，详见 [原文标题](../../raw/model-api-reference/file-management-api/get-file-api.md) 和 [原文标题](../../raw/model-api-reference/file-management-api/upload-file-api.md)。
+百炼平台的文件管理 API 提供文件上传、查询、列举和删除等基础能力，支持多用途文件复用（如微调、内容提取、Batch 任务）。该 API 为历史兼容接口，**推荐开发者优先使用 [OpenAI 兼容的 File 接口](../../raw/model-api-reference/toolkits-and-frameworks/openai-file-interface.md)**，以获得更统一的体验和持续的功能演进。所有操作均需通过 `Authorization: Bearer ${DASHSCOPE_API_KEY}` 认证。
 
 ## 支持的模型/功能
 
-- **上传文件**：支持单次多文件上传，按 `purpose` 分类（`fine-tune`、`file-extract`、`batch`），上传后生成唯一 `file_id` 供后续任务引用。
-- **查询文件**：通过 `GET /files/{file_id}` 获取指定文件元信息与可下载 URL。
-- **列举文件**：分页获取当前账户下所有有效文件列表，支持按 `page_no` 和 `page_size` 控制返回范围。
-- **删除文件**：通过 `DELETE /files/{file_id}` 异步删除文件（删除后不可恢复）。
+文件管理 API 本身不绑定具体模型，而是按 `purpose` 字段区分使用场景，不同 purpose 决定文件后续可接入的服务类型：
 
-> **注意**：文档 1 中声明“当前文件管理 API 仅在北京 Region 开放”，但文档 2 未提及 Region 限制；实际调用时若在非北京 Region 遇到 404 或权限错误，请优先确认所用 endpoint 是否匹配所在 Region，或改用对应 Region 的控制台操作 —— 此不一致已在 [原文标题](../../raw/model-api-reference/file-management-api/get-file-api.md) 明确标注。
+- `fine-tune`：用于模型微调，支持 `.jsonl`（文本微调）和 `.zip`（视频/图像生成模型微调，单个 zip ≤ 1 GB）；文件在控制台「模型调优」页与 API 中均可见可用。  
+- `file-extract`：用于内容解析与结构化提取（如 PDF/Word 文本抽取）。  
+- `batch`：用于创建 [Batch 任务](../../raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)，批量处理提示词请求。  
+
+> **注意**：文档 1 中说明“视频/图像生成模型微调的训练数据需以 .zip 格式上传”，但文档 2 的列举接口返回示例中明确包含 `purpose: "file-extract"` 的 `.mp4` 文件（`sdsdsd.mp4`），且未限制非 zip 视频格式。这表明 `purpose` 仅约束下游服务调用权限，**不限制上传文件类型本身**；实际支持的 MIME 类型由对应下游服务（如 file-extract 或 fine-tune）各自校验，API 层不做预过滤。
 
 ## 关键参数
 
-| 参数名 | 类型 | 位置 | 必选 | 说明 |
-|--------|------|------|------|------|
-| `file_id` | String | path | 是（查询/删除） | 文件唯一标识，由上传接口返回，见 [原文标题](../../raw/model-api-reference/file-management-api/upload-file-api.md) |
-| `page_no` | Number | query | 是（列举） | 当前页码，最小值为 1，默认为 1 |
-| `page_size` | Number | query | 是（列举） | 每页数量，取值范围 1–100，默认为 10 |
-| `purpose` | String | multipart/form-data | 否（上传） | 指定文件用途：`fine-tune`（最大 300MB）、`file-extract`（最大 150MB）、`batch`（最大 500MB）；不传则默认无用途标记 |
-| `files` | 文件流 | multipart/form-data | 是（上传） | 支持多次 `--form 'files=@...'` 上传多个文件 |
-| `descriptions` | String | multipart/form-data | 否（上传） | 文件描述文本，建议简明说明内容用途 |
+| 参数 | 类型 | 传参方式 | 必选 | 说明 |
+|------|------|----------|------|------|
+| `files` | 文件流 | `multipart/form-data` | 是 | 支持一次上传多个文件，每个 `files` 字段对应一个文件流 |
+| `purpose` | 字符串 | `multipart/form-data` | 否 | 指定用途，取值为 `fine-tune` / `file-extract` / `batch`；不传则默认无用途，但仍可上传成功（[上传文件](../../raw/model-api-reference/file-management-api/upload-file-api.md)） |
+| `descriptions` | 字符串 | `multipart/form-data` | 否 | 文件描述信息，仅作元数据存储，不影响功能 |
+| `file_id` | 字符串 | path（URL 路径） | 是（查询/删除时） | 通过上传或列举接口获取，是文件唯一标识（[查询和管理文件](../../raw/model-api-reference/file-management-api/get-file-api.md)） |
+| `page_no`, `page_size` | 数字 | query | 是（列举时） | 分页参数，`page_size` 最大为 100（[查询和管理文件](../../raw/model-api-reference/file-management-api/get-file-api.md)） |
 
 ## 使用方式
 
-- **上传**：`POST /api/v1/files`，`Content-Type: multipart/form-data`，需携带 `files` 和可选 `purpose`、`descriptions` 字段。
-- **查询**：`GET /api/v1/files/{file_id}`，需在 Header 中提供 `Authorization: Bearer ${DASHSCOPE_API_KEY}`。
-- **列举**：`GET /api/v1/files?page_no=1&page_size=20`，同上鉴权。
-- **删除**：`DELETE /api/v1/files/{file_id}`，同上鉴权。
+### 上传文件（POST `/api/v1/files`）
+```bash
+curl --request POST "https://dashscope.aliyuncs.com/api/v1/files" \
+  --header "Authorization: Bearer ${DASHSCOPE_API_KEY}" \
+  --form 'files=@"/path/to/file1.jsonl"' \
+  --form 'purpose="fine-tune"' \
+  --form 'descriptions="qwen fine-tune data"' \
+  --form 'files=@"/path/to/file2.pdf"' \
+  --form 'purpose="file-extract"'
+```
 
-所有请求均需使用有效的 DashScope API Key，并确保其具备文件管理权限。返回体中 `request_id` 用于问题排查与日志追踪。
+### 查询单个文件（GET `/api/v1/files/{file_id}`）
+```bash
+curl --request GET "https://dashscope.aliyuncs.com/api/v1/files/9G2EaQtq7p1fw7oRhYXdHTtDFYAMVQSh95432B38CAB211EDB8F952C2E8001733" \
+  --header "Authorization: Bearer ${DASHSCOPE_API_KEY}"
+```
+
+### 列举所有文件（GET `/api/v1/files`）
+```bash
+curl --request GET "https://dashscope.aliyuncs.com/api/v1/files?page_no=1&page_size=50" \
+  --header "Authorization: Bearer ${DASHSCOPE_API_KEY}"
+```
+
+### 删除文件（DELETE `/api/v1/files/{file_id}`）
+```bash
+curl --request DELETE "https://dashscope.aliyuncs.com/api/v1/files/9G2EaQtq7p1fw7oRhYXdHTtDFYAMVQSh95432B38CAB211EDB8F952C2E8001733" \
+  --header "Authorization: Bearer ${DASHSCOPE_API_KEY}"
+```
 
 ## 限制和注意事项
 
-- **配额限制**：
-  - 单个文件大小上限依 `purpose` 而异（`file-extract`: ≤150MB；`batch`: ≤500MB；`fine-tune`: ≤300MB；视频/图像微调训练数据需以 `.zip` 格式上传，单包 ≤1GB）；
-  - 有效文件总数量上限：10,000 个；
-  - 有效文件总存储空间上限：100 GB。
-- **地域限制**：API 仅在北京 Region 可用，其他 Region 用户应通过控制台操作或切换至对应 Region 的兼容接口。
-- **兼容性提示**：两个原始文档均强调“推荐优先使用 OpenAI 兼容的 File 接口”，该接口路径为 `/compatible-mode/v1/files`，语义与 OpenAI v1 Files API 对齐，更适合新项目集成。
-- **文件生命周期**：已删除文件无法恢复，且其 `file_id` 不再可用于任何 API 调用（包括查询或作为任务输入）。
+- **配额限制**：  
+  - 单文件大小上限依 `purpose` 而异：`file-extract` ≤ 150 MB，`batch` ≤ 500 MB，`fine-tune` ≤ 300 MB（[上传文件](../../raw/model-api-reference/file-management-api/upload-file-api.md)）；  
+  - 总有效文件数 ≤ 10,000 个；  
+  - 总有效文件存储空间 ≤ 100 GB。  
+
+- **地域限制**：当前文件管理 API **仅在北京 Region 开放**；其他 Region 用户需通过对应 Region 的百炼控制台管理文件（[查询和管理文件](../../raw/model-api-reference/file-management-api/get-file-api.md)）。  
+
+- **兼容性声明**：两篇原始文档均强调“当前接口主要用于兼容历史场景，推荐优先使用 [OpenAI 兼容的 File 接口](../../raw/model-api-reference/toolkits-and-frameworks/openai-file-interface.md)”，该建议具有一致性，开发者应以此为设计基准。  
+
+- **错误处理**：非 200 响应表示失败，返回体含 `code`（错误码）、`message`（错误详情）和 `request_id`（用于问题排查）；上传失败时，响应中 `data.failed_uploads` 明确列出各失败文件的 `code` 与 `message`（如 `BadRequest.TooLarge`、`BadRequest.TooMany`）。
 
 ## 来源文档
 
-- [查询和管理文件](../../raw/model-api-reference/file-management-api/get-file-api.md)
 - [上传文件](../../raw/model-api-reference/file-management-api/upload-file-api.md)
+- [查询和管理文件](../../raw/model-api-reference/file-management-api/get-file-api.md)
 
 

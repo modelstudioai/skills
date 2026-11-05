@@ -96,7 +96,7 @@ PTU（[模型部署](raw/model-user-guide/model-high-speed-inference/model-deplo
 -   DeepSeek-v4-Pro
 -   DeepSeek-v4-Pro-0813
 -   Kimi-K2.6
--   [kimi-k3.1-pro](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)：仅支持按天预付费的标准模式。
+-   [kimi-k3.1-pro](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)：仅支持按天预付费的标准模式。
 
 #### 新加坡
 

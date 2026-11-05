@@ -66,6 +66,8 @@
 -   Parse：[提交解析任务](raw/application-api-reference/api-overview/document-parsing/parse-submit.md) → [查询解析结果](raw/application-api-reference/api-overview/document-parsing/parse-result.md)。
 -   Extract：[提交抽取任务](raw/application-api-reference/api-overview/field-extraction/extract-submit.md) → [查询抽取结果](raw/application-api-reference/api-overview/field-extraction/extract-result.md)。
 
+**重要**也可通过阿里云百炼 CLI 完成任务：`bl parsex parse submit --workspace-id <workspace-id> --file-url "https://example.com/document.pdf" --output json`，再用 `bl parsex parse result --biz-id <biz-id> --follow` 获取结果；字段抽取使用 `bl parsex extract submit` 和 `bl parsex extract result`。详见[使用 CLI](raw/application-user-guide/agent-context/getting-started-overview/integration-overview/cli.md)。
+
 ## 步骤 5：查看任务
 
 控制台操作可在“任务记录”中查看页面提供的状态、结果和用量，参见[任务记录](raw/application-user-guide/agent-context/getting-started-overview/settings-configurations/tasks.md)。API 提交后保存返回的 `biz_id`，通过对应结果接口轮询处理状态。

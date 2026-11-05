@@ -1,142 +1,291 @@
 # 限流
 
-百炼按主账号维度对模型调用设置限流，账号下所有RAM子账号、业务空间和API Key 的调用量合并计算。超出限制时请求会被拒绝，通常在一分钟内自动恢复。
+百炼模型限流规则与各模型限流额度。主流生成模型采用动态限流（软限流），TPM 限流值随百炼月消费档位按月调整，实际可用 TPM 不低于限流值；其余模型与地域为静态限流，超出限制时请求被拒绝，通常在一分钟内自动恢复。限流按主账号维度计算，RAM 子账号、业务空间和 API Key 调用量合并。
 
 ## 限流规则
 
 -   **账号级别限流**：限流按主账号维度计算，账号下所有RAM子账号、业务空间和API Key 的调用量合并计算。
 -   **模型独立限流**：不同模型限流额度相互独立，具体参见下方表格。
+-   **限流形态**：主流生成模型（如 qwen3.8-max、qwen3.8-flash、deepseek-v4-pro-0813、kimi-k3 等）采用**动态限流**，TPM 限流值随百炼月消费档位按月动态调整，实际可用 TPM 不低于限流值，详见[动态限流](#dynamic-rate-limiting)；其余模型与地域采用**静态限流**，规则详见[静态限流规则](#static-rate-limit-rules)。
 
-**说明**部分模型，如 qwen3.8-max、qwen3.8-flash 采用 [动态限流（新）](raw/model-user-guide/get-started-with-models/quota-management.md)的方式，根据百炼月消费档位进行软限流。
+## 动态限流
 
-## FAQ
+### 动态限流机制
 
-### 为什么触发限流？
+百炼对部分模型采用动态限流机制，核心要点如下：
 
-根据错误信息判断触发了哪类限流：
+-   **限流值**：按用户在百炼的月消费额度分档确定，作为吞吐的保证基线，每月调整。
+-   **软限流**：当调用量达到限流值时，若平台仍有剩余资源，则不会触发限流，因此**实际可用 TPM** 不低于限流值；调用时观察到的实际限流值可能高于该限流值，属预期行为。
+-   **限流粒度**：按账号 + 模型，主账号下所有 RAM 子账号、业务空间、API Key 的调用量合并计入该账号对该模型的 TPM 配额，共享同一限额。
+-   **业务空间**：可为模型单独设置限流值，未单独设置的业务空间共享账号级配额。
+-   **RPM**：动态限流机制下模型具备较高的 RPM 限额，用户无需单独设置，正常使用不会触发 RPM 限流。
+-   **更多说明**：业务空间限流设置见[权限管理](raw/model-user-guide/security-and-compliance/permission-management-overview.md)。
 
--   `Requests rate limit exceeded` 或 `You exceeded your current requests list`：触发了每分钟请求数（RPM）限流。
--   `Allocated quota exceeded` 或 `You exceeded your current quota`：触发了每分钟 Token 消耗（TPM）限流。
--   `Request rate increased too quickly`：请求频率在短时间内激增，触发了系统稳定性保护——即使总调用量未达到 RPM 或 TPM 上限也会触发。
--   其他报错，参见[错误码](raw/model-api-reference/preparations/error-code.md)确认原因。
+### 模型与限流档位
 
-除 RPM 和 TPM 外，限流策略可能按秒级 RPS（RPM/60）与 TPS（TPM/60）执行。即使每分钟总调用量未超限，短时间内的请求爆发也可能触发限流。
+TPM 限流值按**百炼平台月消费金额**分档，支持的模型在不同地域的分档如下（数值以控制台实际展示为准）：
 
-### 如何查看模型调用量？
+#### 华北2（北京）
 
-模型调用发生后**分钟级**即可在监控图表查看。登录模型监控页面（[北京](https://bailian.console.aliyun.com/cn-beijing/model/telemetry)或[新加坡](https://bailian.console.aliyun.com/ap-southeast-1/model/telemetry)），在左侧导航栏选择**运维管理** > **模型监控**进入监控概览页，设置查询条件（例如，选择时间范围、业务空间等），再在**模型列表**区域找到目标模型并单击**查看详情**，即可查看该模型的调用统计结果。具体请参见[监控告警](raw/model-user-guide/model-monitoring/model-telemetry.md)文档。
+**百炼平台月消费：**
 
-> 监控数据按分钟级更新，仅供参考，不作为计费依据。
+**等级1（当前）≤¥10万**
 
-### 遇到限流后多久恢复？
+**等级2 ¥10万~¥100万**
 
-通常在一分钟内恢复。如出现其他报错，参见[错误码](raw/model-api-reference/preparations/error-code.md)进行处理。
+**等级3 >¥100万**
 
-### 模型响应速度与付费有关吗？
+**支持的模型**
 
-模型输出速度与是否付费无关。免费额度和付费调用使用相同的模型服务基础设施，同一模型的生成速度相同。免费额度仅控制请求是否被接受——额度耗尽时返回 403 错误（开通**免费额度用完即停**后），不会降低已接受请求的生成速度。
+**TPM 限流档位**
 
-### 什么因素影响模型响应速度？
+**qwen3.8-max**
 
--   **模型类型**：轻量模型（如 qwen-flash）比大型模型（如 qwen-max）生成更快。
--   **输出长度**：输出 Token 越多，总耗时越长。
--   **服务器负载**：高峰期可能略有波动。
+500万
 
-### 限流会降低已接受请求的生成速度吗？
+1000万
 
-不会。限流（RPM/TPM）仅导致超出限制的请求被拒绝（返回 429 错误）。免费额度耗尽时（开通**免费额度用完即停**）返回 403 错误，同样不影响已接受请求的速度。429 为速率限制，403 为配额耗尽，两者均为拒绝机制。
+2000万
 
-### 如何避免限流？
+**qwen3.8-max-0902**
 
-1.  **选用高限流模型**
-    -   优先使用 [qwen-plus](raw/model-user-guide/get-started-with-models/models.md) 等限流额度更高的模型。
-    -   稳定版或最新版比带日期的快照版本限流更宽松。
-2.  **优化调用策略**
-    -   **降低调用频率**：收到 `Requests rate limit exceeded` 或 `You exceeded your current requests list` 时，降低API调用频率。
-    -   **减少 Token 消耗**：收到 `Allocated quota exceeded` 或 `You exceeded your current quota` 时，缩短输入或限制输出长度。
-    -   **平滑请求速率**：收到 `Request rate increased too quickly` 时，采用匀速调度、指数退避或请求队列将请求均匀分散，避免瞬时高峰。
-3.  **添加备选模型**
-    
-    触发限流后切换到备用模型继续生成，可降低失败概率、提升吞吐量。以下代码在调用 `qwen-plus` 触发限流后，自动改用 `qwen-flash` 重试。也可以选择不同系列的模型（如 qwen-flash）作为备选模型，进一步降低主备模型同时限流的风险。
-    
-    示例代码
-    
-    ```
-    import os
-    import asyncio
-    from openai import AsyncOpenAI, APIStatusError
-    
-    # 配置
-    API_KEY = os.getenv("DASHSCOPE_API_KEY")
-    # 主用模型
-    MODEL = "qwen-plus"
-    # 备选模型
-    BACKUP_MODEL = "qwen-flash"
-    # 测试问题
-    QUESTION = "你是谁？"
-    # 并发设置
-    NUM_REQUESTS = 10
-    
-    client = AsyncOpenAI(
-        api_key=API_KEY,
-        # 以下为华北2（北京）地域的URL，请将WorkspaceId替换为真实的业务空间ID。
-        base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
-    )
-    
-    async def send_request(model):
-        """发送单个请求"""
-        try:
-            await client.chat.completions.create(
-                model=model,
-                messages=[{"role": "user", "content": QUESTION}]
-            )
-            return True
-        except APIStatusError as e:
-            if e.status_code == 429:
-                print(f"[限流触发] 模型 {model}")
-                return False
-            raise
-        except Exception as e:
-            print(f"[请求失败] 模型 {model}，错误：{e}")
-            return False
-    
-    async def task(i):
-        # 尝试主模型
-        if await send_request(MODEL):
-            return True
-        # 限流时尝试备用模型
-        return await send_request(BACKUP_MODEL)
-    
-    async def main():
-        results = await asyncio.gather(*(task(i) for i in range(NUM_REQUESTS)))
-        print(f"成功请求: {sum(results)}, 失败请求: {len(results) - sum(results)}")
-    
-    if __name__ == "__main__":
-        asyncio.run(main())
-    ```
-    
-4.  **拆分任务**：长对话或大型文档会快速消耗大量 Token。将大批量任务拆分为小批次，分时段提交。
-    
-5.  **批量推理**：无需实时响应时，使用[批量推理](raw/model-user-guide/model-high-speed-inference/batch-inference.md)（Batch API）。批量请求不受实时限流约束，但需考虑排队和处理时间。
-    
+150万
 
-### 如何控制 Token 用量或费用支出？
+150万
 
-限流仅约束单位时间内的调用速率，不限制累计用量。如需控制 Token 用量或费用支出，可通过以下方式管理：
+150万
 
--   **设置消费限额与费用告警**：在**账单费用**卡片设置**费用告警**，开启月度消费限额并配置阈值通知，达到阈值即提醒，避免超额支出。详见[账单查询与成本管理](raw/model-user-guide/test-1/bill-query-and-cost-management.md)。
--   **开启免费额度用完即停**：对支持免费额度的模型，可开启**免费额度用完即停**，免费额度耗尽后自动停止调用，避免产生额外费用。详见[新人免费额度](raw/model-user-guide/test-1/new-free-quota.md)。
--   **监控模型调用量**：定期查看各模型的 Token 用量，及时发现异常增长，参见上文[如何查看模型调用量？](https://help.aliyun.com/zh/model-studio/rate-limit#2c4544e8d8wy6)。
+**qwen3.8-flash**
 
-### 充值后是否还会被限流？
+500万
 
-充值不改变模型默认的 RPM 和 TPM 限流阈值。限流按阿里云主账号维度配置，与计费相互独立；充值（按量付费）仅确保账号不因欠费停服，不会提升限流值。
+1000万
 
-如需更高的限流额度，请联系商务经理申请。
+2000万
 
-## 文本生成-千问
+**qwen3.8-omni-flash**
 
-### 千问语言模型
+200万
+
+500万
+
+1000万
+
+**qwen3.8-2.4t-a95b**
+
+500万
+
+500万
+
+500万
+
+**deepseek-v4.1-flash-1017**
+
+120万
+
+120万
+
+120万
+
+**deepseek-v4.1-flash**
+
+120万
+
+120万
+
+120万
+
+**deepseek-v4-pro-0813**
+
+120万
+
+1000万
+
+2000万
+
+**kimi-k3**
+
+**kimi-k3.1-pro**
+
+120万
+
+500万
+
+1000万
+
+**glm-5.3**
+
+500万
+
+500万
+
+500万
+
+**glm-5.3-prime**
+
+200万
+
+200万
+
+200万
+
+**qwen3.8-27b**
+
+500万
+
+500万
+
+500万
+
+#### 新加坡
+
+**百炼平台月消费：**
+
+**等级1（当前）≤¥10万**
+
+**等级2 ¥10万~¥100万**
+
+**等级3 >¥100万**
+
+**支持的模型**
+
+**TPM 限流档位**
+
+**qwen3.8-max**
+
+200万
+
+500万
+
+1000万
+
+**qwen3.8-max-0902**
+
+150万
+
+150万
+
+150万
+
+**qwen3.8-flash**
+
+250万
+
+500万
+
+1000万
+
+**qwen3.8-omni-flash**
+
+200万
+
+500万
+
+1000万
+
+**qwen3.8-2.4t-a95b**
+
+500万
+
+500万
+
+500万
+
+**deepseek-v4.1-flash-1017**
+
+120万
+
+120万
+
+120万
+
+**deepseek-v4.1-flash**
+
+120万
+
+120万
+
+120万
+
+**deepseek-v4-pro-0813**
+
+120万
+
+500万
+
+1000万
+
+**kimi-k3**
+
+**kimi-k3.1-pro**
+
+120万
+
+500万
+
+1000万
+
+**glm-5.3**
+
+500万
+
+500万
+
+500万
+
+**glm-5.3-prime**
+
+200万
+
+200万
+
+200万
+
+**qwen3.8-27b**
+
+500万
+
+500万
+
+500万
+
+以华北2（北京）为例：某账号上一自然月百炼消费金额为 50 万元，落入等级2（¥10万~¥100万）档位，对应 qwen3.8-max 的 TPM 限流值为 1000万。
+
+### 额度展示
+
+登录[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/costing-balance/quota-managements)，在左侧导航栏，选择**模型限额**进入模型限额页。
+
+模型限额页为只读展示页，展示支持动态限流的**模型**、当前 **TPM 限流值**与**百炼消费档位**。页面顶部展示当前**生效周期**（如 2026-08-15 ～ 2026-09-15）、**上月消费**（按上月自然月统计，如 8 月 1 日—8 月 31 日）与**本月消费**金额，可通过**查看消费详情**查看消费明细，点击**查看规则**可查看限流档位规则说明。下方表格列出各模型的 TPM 限流档位。
+
+**说明**若 TPM 限流值无法满足业务需求，可联系商务经理申请提额。
+
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7706865871/p1092125.png)
+
+### 限流动态调整策略
+
+限流档位按以下规则动态调整：
+
+-   **分档依据**：百炼平台消费金额。
+-   **测算周期**：按自然月账单周期测算。
+-   **通知**：每月 10 日向调整用户发送通知。
+-   **生效时点**：每月 15 日新档位生效，有效期至次月 15 日。
+-   **调整方向**：低档→高档（升级）或持平不变。
+
+## 静态限流明细
+
+以下按模型类别列出各模型的限流值：标注[动态限流](#sec-tier-h2)的模型，其 TPM 限流值随百炼月消费档位调整，参见[模型与限流档位](#sec-tier-h2)；其余模型为静态限流，规则参见[静态限流规则](#static-rate-limit-rules)。
+
+### 静态限流规则
+
+未纳入动态限流的模型采用静态限流，规则如下：
+
+-   **固定限流值**：每个模型有固定的 RPM 与 TPM 限流值，各模型相互独立。
+-   **秒级执行**：限流除按分钟级 RPM/TPM 外，还可能按秒级 RPS（RPM/60）与 TPS（TPM/60）执行，短时间内的请求爆发即使未超出分钟级上限也可能触发限流。
+-   **触发与恢复**：超出限制时请求被拒绝并返回 429 错误，通常在一分钟内自动恢复，具体错误信息分类参见[为什么触发限流？](#08b8421697cff)与[错误码](raw/model-api-reference/preparations/error-code.md)。
+
+### 文本生成
+
+#### 千问语言模型
 
 #### 华北2（北京）
 
@@ -156,17 +305,17 @@ qwen3.8-max
 
 > 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
 
-[动态限流](raw/model-user-guide/get-started-with-models/quota-management.md)
+[动态限流](#sec-tier-h2)
 
 qwen3.8-max-0902
 
-[动态限流](raw/model-user-guide/get-started-with-models/quota-management.md)
+[动态限流](#sec-tier-h2)
 
 qwen3.8-flash
 
 > 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
 
-[动态限流](raw/model-user-guide/get-started-with-models/quota-management.md)
+[动态限流](#sec-tier-h2)
 
 qwen3.7-max
 
@@ -656,19 +805,19 @@ qwen3.8-max
 
 国际
 
-[动态限流](raw/model-user-guide/get-started-with-models/quota-management.md)
+[动态限流](#sec-tier-h2)
 
 qwen3.8-max-0902
 
 国际
 
-[动态限流](raw/model-user-guide/get-started-with-models/quota-management.md)
+[动态限流](#sec-tier-h2)
 
 qwen3.8-flash
 
 国际
 
-[动态限流](raw/model-user-guide/get-started-with-models/quota-management.md)
+[动态限流](#sec-tier-h2)
 
 qwen3.7-max
 
@@ -1350,7 +1499,7 @@ qwen3.5-flash-2026-02-23
 
 1,000,000
 
-### 千问VL（视觉理解/图生文）
+#### 千问VL（视觉理解/图生文）
 
 #### 华北2（北京）
 
@@ -1478,7 +1627,7 @@ qwen3-vl-plus
 
 1,000,000
 
-### 千问Omni
+#### 千问Omni
 
 #### 华北2（北京）
 
@@ -1498,7 +1647,7 @@ qwen3.8-omni-flash
 
 30000
 
-[动态限流](https://help.aliyun.com/zh/model-studio/quota-management#sec-tier-h2)
+[动态限流](#sec-tier-h2)
 
 qwen3.5-omni-plus
 
@@ -1552,7 +1701,7 @@ qwen3.8-omni-flash
 
 30000
 
-[动态限流](https://help.aliyun.com/zh/model-studio/quota-management#sec-tier-h2)
+[动态限流](#sec-tier-h2)
 
 qwen3.5-omni-plus
 
@@ -1690,7 +1839,7 @@ qwen3.8-omni-flash
 
 2000000
 
-### 千问Omni-Realtime
+#### 千问Omni-Realtime
 
 通过 WebSocket 接入时，RPM 限制每分钟的建连请求次数。同一连接内的多轮响应不重复计数；重连计为新请求。目前没有单独限制同时保持的连接总数，但仍受 TPM 限制。各型号限额见下方表格。
 
@@ -1808,7 +1957,7 @@ qwen3-omni-flash-realtime-2025-09-15
 
 100,000
 
-### 千问OCR（文字提取）
+#### 千问OCR（文字提取）
 
 #### 华北2（北京）
 
@@ -1946,7 +2095,7 @@ qwen-vl-ocr-2025-11-20
 
 6,000,000
 
-### 千问Audio（音频理解）
+#### 千问Audio（音频理解）
 
 #### 华北2（北京）
 
@@ -1974,7 +2123,7 @@ qwen-audio-turbo-latest
 
 无 TPM 限制
 
-### 千问Coder
+#### 千问Coder
 
 #### 华北2（北京）
 
@@ -2098,7 +2247,7 @@ qwen3-coder-flash-2025-07-28
 
 1,000,000
 
-### 千问翻译模型
+#### 千问翻译模型
 
 #### 华北2（北京）
 
@@ -2260,7 +2409,7 @@ qwen-mt-lite
 
 100,000
 
-### Qwen-MT-Uni
+#### Qwen-MT-Uni
 
 #### 华北2（北京）
 
@@ -2286,7 +2435,7 @@ qwen-mt-uni
 
 500
 
-### 千问数据挖掘模型
+#### 千问数据挖掘模型
 
 #### 华北2（北京）
 
@@ -2308,7 +2457,7 @@ qwen-doc-turbo
 
 3,000,000
 
-### 千问深入研究模型
+#### 千问深入研究模型
 
 #### 华北2（北京）
 
@@ -2330,7 +2479,7 @@ qwen-deep-research
 
 1,200,000
 
-### 通义晓蜜对话分析模型
+#### 通义晓蜜对话分析模型
 
 #### 华北2（北京）
 
@@ -2358,9 +2507,7 @@ tongyi-xiaomi-analysis-pro
 
 1,000,000
 
-## 文本生成-千问-开源版
-
-### 千问语言模型开源版
+#### 千问语言模型开源版
 
 #### 华北2（北京）
 
@@ -2378,11 +2525,11 @@ tongyi-xiaomi-analysis-pro
 
 qwen3.8-2.4t-a95b
 
-[动态限流](raw/model-user-guide/get-started-with-models/quota-management.md)
+[动态限流](#sec-tier-h2)
 
 qwen3.8-27b
 
-[动态限流](raw/model-user-guide/get-started-with-models/quota-management.md)
+[动态限流](#sec-tier-h2)
 
 qwen3.6-35b-a3b
 
@@ -2496,13 +2643,13 @@ qwen3.8-2.4t-a95b
 
 国际
 
-[动态限流](raw/model-user-guide/get-started-with-models/quota-management.md)
+[动态限流](#sec-tier-h2)
 
 qwen3.8-27b
 
 国际
 
-[动态限流](raw/model-user-guide/get-started-with-models/quota-management.md)
+[动态限流](#sec-tier-h2)
 
 qwen3.6-35b-a3b
 
@@ -2608,9 +2755,7 @@ qwen3.5-35b-a3b
 
 1,000,000
 
-## 文本生成-第三方模型
-
-### DeepSeek
+#### DeepSeek
 
 #### 华北2（北京）
 
@@ -2628,11 +2773,11 @@ qwen3.5-35b-a3b
 
 deepseek-v4.1-flash-1017
 
-[动态限流](raw/model-user-guide/get-started-with-models/quota-management.md)
+[动态限流](#sec-tier-h2)
 
 deepseek-v4.1-flash
 
-[动态限流](raw/model-user-guide/get-started-with-models/quota-management.md)
+[动态限流](#sec-tier-h2)
 
 deepseek-v4-pro
 
@@ -2642,7 +2787,7 @@ deepseek-v4-pro
 
 deepseek-v4-pro-0813
 
-[动态限流](raw/model-user-guide/get-started-with-models/quota-management.md)
+[动态限流](#sec-tier-h2)
 
 deepseek-v4-flash-0731
 
@@ -2754,13 +2899,13 @@ deepseek-v4.1-flash-1017
 
 国际
 
-[动态限流](raw/model-user-guide/get-started-with-models/quota-management.md)
+[动态限流](#sec-tier-h2)
 
 deepseek-v4.1-flash
 
 国际
 
-[动态限流](raw/model-user-guide/get-started-with-models/quota-management.md)
+[动态限流](#sec-tier-h2)
 
 deepseek-v4-pro
 
@@ -2774,7 +2919,7 @@ deepseek-v4-pro-0813
 
 国际
 
-[动态限流](raw/model-user-guide/get-started-with-models/quota-management.md)
+[动态限流](#sec-tier-h2)
 
 deepseek-v4-flash-0731
 
@@ -2968,7 +3113,7 @@ deepseek-v4-pro-0813
 
 1,200,000
 
-### DeepSeek-硅基流动直供
+#### DeepSeek-硅基流动直供
 
 #### 华北2（北京）
 
@@ -3008,7 +3153,7 @@ siliconflow/deepseek-v3-0324
 
 500,000
 
-### DeepSeek-快手万擎直供
+#### DeepSeek-快手万擎直供
 
 #### 华北2（北京）
 
@@ -3072,7 +3217,7 @@ vanchin/deepseek-v4.1-flash
 
 600,000
 
-### Kimi
+#### Kimi
 
 #### 华北2（北京）
 
@@ -3088,15 +3233,15 @@ vanchin/deepseek-v4.1-flash
 
 > **含输入与输出Token**
 
-[kimi-k3.1-pro](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
+[kimi-k3.1-pro](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
 
 15,000
 
-[动态限流](raw/model-user-guide/get-started-with-models/quota-management.md)
+[动态限流](#sec-tier-h2)
 
 kimi-k3
 
-[动态限流](raw/model-user-guide/get-started-with-models/quota-management.md)
+[动态限流](#sec-tier-h2)
 
 kimi-k2.7-code
 
@@ -3134,7 +3279,7 @@ kimi-k2.5
 
 kimi-k3
 
-[kimi-k3.1-pro](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
+[kimi-k3.1-pro](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
 
 全球
 
@@ -3142,7 +3287,7 @@ kimi-k3
 
 1,200,000
 
-[kimi-k3.1-pro](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
+[kimi-k3.1-pro](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
 
 美国
 
@@ -3190,7 +3335,7 @@ kimi-k2.5
 
 kimi-k3
 
-[kimi-k3.1-pro](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
+[kimi-k3.1-pro](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
 
 全球
 
@@ -3232,7 +3377,7 @@ kimi-k2.5
 
 kimi-k3
 
-[kimi-k3.1-pro](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
+[kimi-k3.1-pro](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
 
 全球
 
@@ -3272,19 +3417,19 @@ kimi-k2.5
 
 > **含输入与输出Token**
 
-[kimi-k3.1-pro](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
+[kimi-k3.1-pro](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
 
 国际
 
 10,000
 
-[动态限流](raw/model-user-guide/get-started-with-models/quota-management.md)
+[动态限流](#sec-tier-h2)
 
 kimi-k3
 
 国际
 
-[动态限流](raw/model-user-guide/get-started-with-models/quota-management.md)
+[动态限流](#sec-tier-h2)
 
 kimi-k2.7-code
 
@@ -3312,7 +3457,7 @@ kimi-k2.7-code
 
 kimi-k3
 
-[kimi-k3.1-pro](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
+[kimi-k3.1-pro](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
 
 全球
 
@@ -3328,7 +3473,7 @@ kimi-k2.7-code
 
 1,000,000
 
-### Kimi-月之暗面直供
+#### Kimi-月之暗面直供
 
 #### 华北2（北京）
 
@@ -3366,7 +3511,7 @@ kimi/kimi-k2.6
 
 kimi/kimi-k2.5
 
-### GLM
+#### GLM
 
 #### 华北2（北京）
 
@@ -3384,7 +3529,7 @@ kimi/kimi-k2.5
 
 glm-5.3
 
-[动态限流](raw/model-user-guide/get-started-with-models/quota-management.md)
+[动态限流](#sec-tier-h2)
 
 glm-5.2
 
@@ -3552,7 +3697,7 @@ glm-5.3
 
 国际
 
-[动态限流](raw/model-user-guide/get-started-with-models/quota-management.md)
+[动态限流](#sec-tier-h2)
 
 glm-5.2
 
@@ -3594,7 +3739,7 @@ glm-5.2
 
 1,000,000
 
-### GLM-智谱直供
+#### GLM-智谱直供
 
 #### 华北2（北京）
 
@@ -3646,7 +3791,7 @@ ZHIPU/GLM-5
 
 3,000,000
 
-### MiniMax
+#### MiniMax
 
 #### 华北2（北京）
 
@@ -3668,7 +3813,7 @@ MiniMax-M2.5
 
 1,000,000
 
-### MiniMax-稀宇科技直供
+#### MiniMax-稀宇科技直供
 
 #### 华北2（北京）
 
@@ -3714,7 +3859,7 @@ MiniMax/MiniMax-M2.1
 
 20,000,000
 
-### MiMo-小米直供
+#### MiMo-小米直供
 
 #### 华北2（北京）
 
@@ -3742,7 +3887,7 @@ xiaomi/mimo-v2.5-pro
 
 10,000,000
 
-### Stepfun-阶跃星辰直供
+#### Stepfun-阶跃星辰直供
 
 #### 华北2（北京）
 
@@ -3770,7 +3915,7 @@ stepfun/step-5-preview
 
 10,000,000
 
-### Unisound-云知声直供
+#### Unisound-云知声直供
 
 #### 华北2（北京）
 
@@ -3792,7 +3937,7 @@ unisound/unisound-u2
 
 3,000,000
 
-### Ling-蚂蚁数科直供
+#### Ling-蚂蚁数科直供
 
 #### 华北2（北京）
 
@@ -3814,9 +3959,9 @@ antdigital/Ling-3.1-flash
 
 10,000,000
 
-## 图像生成
+### 图像生成
 
-### 千问（Qwen-Image）
+#### 千问（Qwen-Image）
 
 #### 华北2（北京）
 
@@ -4176,7 +4321,7 @@ qwen-image-2.1-turbo
 
 同步接口无限制 / 异步接口 10
 
-### 文生图-Z-Image
+#### 文生图-Z-Image
 
 #### 华北2（北京）
 
@@ -4214,7 +4359,7 @@ z-image-turbo
 
 同步接口无限制
 
-### 万相
+#### 万相
 
 #### 华北2（北京）
 
@@ -4464,7 +4609,7 @@ wan2.6-image
 
 5
 
-### 图像编辑与生成
+#### 图像编辑与生成
 
 #### 华北2（北京）
 
@@ -4518,7 +4663,7 @@ image-erase-completion
 
 1
 
-### 人物写真生成-FaceChain
+#### 人物写真生成-FaceChain
 
 #### 华北2（北京）
 
@@ -4542,9 +4687,7 @@ facechain-finetune
 
 1
 
-## 图像生成-第三方模型
-
-### 可灵系列
+#### 可灵系列
 
 #### 华北2（北京）
 
@@ -4566,7 +4709,7 @@ kling/kling-v3-omni-image-generation
 
 kling/kling-v3-image-generation
 
-### Vidu系列
+#### Vidu系列
 
 #### 华北2（北京）
 
@@ -4596,7 +4739,7 @@ vidu/viduq2-pro\_reference2image
 
 vidu/viduq2-fast\_reference2image
 
-## 音频生成
+### 音频与音乐生成
 
 #### 华北2（北京）
 
@@ -4618,8 +4761,6 @@ qwen-audio-3.1-tts-next
 
 180
 
-## 音乐生成
-
 #### 华北2（北京）
 
 **模型名称**
@@ -4634,9 +4775,9 @@ fun-music-v1
 
 180
 
-## 语音对话
+### 语音
 
-### 实时语音对话
+#### 实时语音对话
 
 通过 WebSocket 接入时，RPM 限制每分钟的建连请求次数。同一连接内的多轮响应不重复计数；重连计为新请求。目前没有单独限制同时保持的连接总数，但仍受 TPM 限制。各型号限额见下方表格。
 
@@ -4726,9 +4867,7 @@ qwen-audio-3.0-realtime-flash
 
 100,000
 
-## 语音合成（文本转语音）
-
-### Qwen-Audio-TTS
+#### Qwen-Audio-TTS
 
 #### 华北2（北京）
 
@@ -4784,7 +4923,7 @@ qwen-audio-3.0-tts-flash
 
 180
 
-### Qwen3-TTS
+#### Qwen3-TTS
 
 #### 华北2（北京）
 
@@ -4814,7 +4953,7 @@ qwen3-tts-flash
 
 180
 
-### Qwen3-TTS-Realtime
+#### Qwen3-TTS-Realtime
 
 #### 华北2（北京）
 
@@ -4844,7 +4983,7 @@ qwen3-tts-flash-realtime
 
 180
 
-### Qwen3-TTS声音复刻
+#### Qwen3-TTS声音复刻
 
 #### 华北2（北京）
 
@@ -4870,7 +5009,7 @@ qwen-voice-enrollment
 
 180
 
-### CosyVoice
+#### CosyVoice
 
 #### 华北2（北京）
 
@@ -4908,7 +5047,7 @@ cosyvoice-v3-flash
 
 国际
 
-### Qwen-Audio-TTS/CosyVoice声音复刻/设计
+#### Qwen-Audio-TTS/CosyVoice声音复刻/设计
 
 Qwen-Audio-TTS/CosyVoice声音复刻/设计共用一个模型，共用限流额度。
 
@@ -4936,7 +5075,7 @@ voice-enrollment
 
 10
 
-### Sambert
+#### Sambert
 
 #### 华北2（北京）
 
@@ -4948,9 +5087,7 @@ Sambert系列模型
 
 20
 
-## 语音合成（文本转语音）-第三方模型
-
-### MiniMax-稀宇科技直供
+#### MiniMax-稀宇科技直供
 
 #### 华北2（北京）
 
@@ -4988,9 +5125,7 @@ MiniMax/speech-02-turbo
 
 20,000
 
-## 语音识别（语音转文本）与翻译（语音转成指定语种的文本）
-
-### Qwen3-LiveTranslate-Flash
+#### Qwen3-LiveTranslate-Flash
 
 #### 华北2（北京）
 
@@ -5042,7 +5177,7 @@ qwen3-livetranslate-flash-2025-12-01
 
 国际
 
-### Qwen-LiveTranslate-Flash-Realtime
+#### Qwen-LiveTranslate-Flash-Realtime
 
 通过 WebSocket 接入时，RPM 限制每分钟的建连请求次数。同一连接内的多轮响应不重复计数；重连计为新请求。目前没有单独限制同时保持的连接总数，但仍受 TPM 限制。各型号限额见下方表格。
 
@@ -5102,7 +5237,7 @@ qwen3.5-livetranslate-flash-realtime-2026-05-19
 
 国际
 
-### Qwen-Audio-ASR-Message
+#### Qwen-Audio-ASR-Message
 
 #### 华北2（北京）
 
@@ -5128,7 +5263,7 @@ qwen-audio-3.1-asr-flash-message
 
 1200
 
-### Qwen-Audio-ASR-Streaming
+#### Qwen-Audio-ASR-Streaming
 
 #### 华北2（北京）
 
@@ -5160,7 +5295,7 @@ qwen-audio-3.0-asr-flash-streaming
 
 国际
 
-### Qwen-Audio-ASR-Filetrans
+#### Qwen-Audio-ASR-Filetrans
 
 #### 华北2（北京）
 
@@ -5196,7 +5331,7 @@ qwen-audio-3.0-asr-flash-filetrans
 
 600
 
-### Qwen-Audio-ASR
+#### Qwen-Audio-ASR
 
 #### 华北2（北京）
 
@@ -5232,7 +5367,7 @@ qwen-audio-3.0-asr-flash
 
 600
 
-### Qwen3-ASR
+#### Qwen3-ASR
 
 #### 华北2（北京）
 
@@ -5300,7 +5435,7 @@ qwen3-asr-flash
 
 100
 
-### Qwen3-ASR-Realtime
+#### Qwen3-ASR-Realtime
 
 #### 华北2（北京）
 
@@ -5326,7 +5461,7 @@ qwen3-asr-flash-realtime
 
 20
 
-### Fun-ASR
+#### Fun-ASR
 
 #### 华北2（北京）
 
@@ -5360,7 +5495,7 @@ fun-asr-flash-2026-06-15
 
 600
 
-### Fun-ASR-Realtime
+#### Fun-ASR-Realtime
 
 #### 华北2（北京）
 
@@ -5392,7 +5527,7 @@ fun-asr-realtime
 
 20
 
-### Paraformer
+#### Paraformer
 
 #### 华北2（北京）
 
@@ -5426,9 +5561,9 @@ paraformer-8k-v2
 
 100
 
-## 视频生成
+### 视频生成
 
-### HappyHorse系列
+#### HappyHorse系列
 
 #### 华北2（北京）
 
@@ -5730,7 +5865,7 @@ happyhorse-1.0-video-edit
 
 5
 
-### 万相系列
+#### 万相系列
 
 #### 华北2（北京）
 
@@ -6332,7 +6467,7 @@ wan3.0-video
 
 5
 
-### 舞动人像AnimateAnyone
+#### 舞动人像AnimateAnyone
 
 #### 华北2（北京）
 
@@ -6354,7 +6489,7 @@ animate-anyone
 
 1算力单元支持1并发
 
-### 声动人像VideoRetalk
+#### 声动人像VideoRetalk
 
 #### 华北2（北京）
 
@@ -6372,7 +6507,7 @@ videoretalk
 
 在同一时刻，只有1个作业实际处于运行状态，其他队列中的作业处于排队状态。
 
-### 视频风格重绘
+#### 视频风格重绘
 
 #### 华北2（北京）
 
@@ -6390,9 +6525,7 @@ video-style-transform
 
 在同一时刻，只有1个作业实际处于运行状态，其他队列中的作业处于排队状态。
 
-## 视频生成-第三方模型
-
-### 爱诗系列
+#### 爱诗系列
 
 #### 华北2（北京）
 
@@ -6472,7 +6605,7 @@ pixverse/pixverse-v5.6-kf2v
 
 pixverse/pixverse-v5.6-r2v
 
-### 可灵系列
+#### 可灵系列
 
 #### 华北2（北京）
 
@@ -6496,7 +6629,7 @@ kling/kling-v3-turbo-video-generation
 
 kling/kling-v3-video-generation
 
-### Vidu系列
+#### Vidu系列
 
 #### 华北2（北京）
 
@@ -6592,7 +6725,7 @@ vidu/viduq2\_reference2video
 
 5
 
-### MiniMax系列
+#### MiniMax系列
 
 #### 华北2（北京）
 
@@ -6610,9 +6743,9 @@ MiniMax/MiniMax-H3
 
 5
 
-## 3D模型生成-第三方模型
+### 3D模型生成
 
-### Tripo系列
+#### Tripo系列
 
 #### 华北2（北京）
 
@@ -6690,9 +6823,9 @@ Tripo/Tripo-Retopology
 
 300
 
-## 向量模型
+### 向量与排序模型
 
-### 文本向量
+#### 文本向量
 
 #### 华北2（北京）
 
@@ -6830,7 +6963,7 @@ text-embedding-v4
 
 1,200,000
 
-### 多模态向量
+#### 多模态向量
 
 #### 华北2（北京）
 
@@ -6888,9 +7021,7 @@ multimodal-embedding-v1
 
 1,000,000
 
-## 排序模型
-
-### 排序模型
+#### 排序模型
 
 #### 华北2（北京）
 
@@ -6962,9 +7093,9 @@ gte-rerank-v2
 
 4,980,000,000
 
-## 行业
+### 行业
 
-### 意图理解
+#### 意图理解
 
 #### 华北2（北京）
 
@@ -6986,7 +7117,7 @@ tongyi-intent-detect-v3
 
 1,000,000
 
-### 角色扮演
+#### 角色扮演
 
 #### 华北2（北京）
 
@@ -7140,7 +7271,7 @@ qwen-plus-character
 
 5,000,000
 
-### 界面交互
+#### 界面交互
 
 #### 华北2（北京）
 
@@ -7168,7 +7299,7 @@ gui-plus-2026-02-26
 
 540,000
 
-### 决策模型
+#### 决策模型
 
 #### 华北2（北京）
 
@@ -7210,6 +7341,131 @@ decision-model-preview
 
 2,000,000
 
-## 已下线模型
+### 已下线模型
 
 详细信息，请参见 [模型下线机制说明](https://help.aliyun.com/zh/model-studio/model-depreciation) 。
+
+## FAQ
+
+### 为什么触发限流？
+
+根据错误信息判断触发了哪类限流：
+
+-   `Requests rate limit exceeded` 或 `You exceeded your current requests list`：触发了每分钟请求数（RPM）限流。
+-   `Allocated quota exceeded` 或 `You exceeded your current quota`：触发了每分钟 Token 消耗（TPM）限流。
+-   `Request rate increased too quickly`：请求频率在短时间内激增，触发了系统稳定性保护——即使总调用量未达到 RPM 或 TPM 上限也会触发。
+-   其他报错，参见[错误码](raw/model-api-reference/preparations/error-code.md)确认原因。
+
+短时间内的请求爆发即使未超出分钟级上限也可能触发限流，秒级执行口径参见[静态限流规则](#static-rate-limit-rules)。
+
+### 如何查看模型调用量？
+
+模型调用发生后**分钟级**即可在监控图表查看。登录模型监控页面（[北京](https://bailian.console.aliyun.com/cn-beijing/model/telemetry)或[新加坡](https://bailian.console.aliyun.com/ap-southeast-1/model/telemetry)），在左侧导航栏选择**运维管理** > **模型监控**进入监控概览页，设置查询条件（例如，选择时间范围、业务空间等），再在**模型列表**区域找到目标模型并单击**查看详情**，即可查看该模型的调用统计结果。具体请参见[监控告警](raw/model-user-guide/model-monitoring/model-telemetry.md)文档。
+
+> 监控数据按分钟级更新，仅供参考，不作为计费依据。
+
+### 遇到限流后多久恢复？
+
+通常在一分钟内恢复。如出现其他报错，参见[错误码](raw/model-api-reference/preparations/error-code.md)进行处理。
+
+### 模型响应速度与付费有关吗？
+
+模型输出速度与是否付费无关。免费额度和付费调用使用相同的模型服务基础设施，同一模型的生成速度相同。免费额度仅控制请求是否被接受——额度耗尽时返回 403 错误（开通**免费额度用完即停**后），不会降低已接受请求的生成速度。
+
+### 什么因素影响模型响应速度？
+
+-   **模型类型**：轻量模型（如 qwen-flash）比大型模型（如 qwen-max）生成更快。
+-   **输出长度**：输出 Token 越多，总耗时越长。
+-   **服务器负载**：高峰期可能略有波动。
+
+### 限流会降低已接受请求的生成速度吗？
+
+不会。限流（RPM/TPM）仅导致超出限制的请求被拒绝（返回 429 错误）。免费额度耗尽时（开通**免费额度用完即停**）返回 403 错误，同样不影响已接受请求的速度。429 为速率限制，403 为配额耗尽，两者均为拒绝机制。
+
+### 如何避免限流？
+
+1.  **选用高限流模型**
+    -   优先使用 [qwen-plus](raw/model-user-guide/get-started-with-models/models.md) 等限流额度更高的模型。
+    -   稳定版或最新版比带日期的快照版本限流更宽松。
+2.  **优化调用策略**
+    -   **降低调用频率**：收到 `Requests rate limit exceeded` 或 `You exceeded your current requests list` 时，降低API调用频率。
+    -   **减少 Token 消耗**：收到 `Allocated quota exceeded` 或 `You exceeded your current quota` 时，缩短输入或限制输出长度。
+    -   **平滑请求速率**：收到 `Request rate increased too quickly` 时，采用匀速调度、指数退避或请求队列将请求均匀分散，避免瞬时高峰。
+3.  **添加备选模型**
+    
+    触发限流后切换到备用模型继续生成，可降低失败概率、提升吞吐量。以下代码在调用 `qwen-plus` 触发限流后，自动改用 `qwen-flash` 重试。也可以选择不同系列的模型（如 qwen-flash）作为备选模型，进一步降低主备模型同时限流的风险。
+    
+    示例代码
+    
+    ```
+    import os
+    import asyncio
+    from openai import AsyncOpenAI, APIStatusError
+    
+    # 配置
+    API_KEY = os.getenv("DASHSCOPE_API_KEY")
+    # 主用模型
+    MODEL = "qwen-plus"
+    # 备选模型
+    BACKUP_MODEL = "qwen-flash"
+    # 测试问题
+    QUESTION = "你是谁？"
+    # 并发设置
+    NUM_REQUESTS = 10
+    
+    client = AsyncOpenAI(
+        api_key=API_KEY,
+        # 以下为华北2（北京）地域的URL，请将WorkspaceId替换为真实的业务空间ID。
+        base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
+    )
+    
+    async def send_request(model):
+        """发送单个请求"""
+        try:
+            await client.chat.completions.create(
+                model=model,
+                messages=[{"role": "user", "content": QUESTION}]
+            )
+            return True
+        except APIStatusError as e:
+            if e.status_code == 429:
+                print(f"[限流触发] 模型 {model}")
+                return False
+            raise
+        except Exception as e:
+            print(f"[请求失败] 模型 {model}，错误：{e}")
+            return False
+    
+    async def task(i):
+        # 尝试主模型
+        if await send_request(MODEL):
+            return True
+        # 限流时尝试备用模型
+        return await send_request(BACKUP_MODEL)
+    
+    async def main():
+        results = await asyncio.gather(*(task(i) for i in range(NUM_REQUESTS)))
+        print(f"成功请求: {sum(results)}, 失败请求: {len(results) - sum(results)}")
+    
+    if __name__ == "__main__":
+        asyncio.run(main())
+    ```
+    
+4.  **拆分任务**：长对话或大型文档会快速消耗大量 Token。将大批量任务拆分为小批次，分时段提交。
+    
+5.  **批量推理**：无需实时响应时，使用[批量推理](raw/model-user-guide/model-high-speed-inference/batch-inference.md)（Batch API）。批量请求不受实时限流约束，但需考虑排队和处理时间。
+    
+
+### 如何控制 Token 用量或费用支出？
+
+限流仅约束单位时间内的调用速率，不限制累计用量。如需控制 Token 用量或费用支出，可通过以下方式管理：
+
+-   **设置消费限额与费用告警**：在**账单费用**卡片设置**费用告警**，开启月度消费限额并配置阈值通知，达到阈值即提醒，避免超额支出。详见[账单查询与成本管理](raw/model-user-guide/test-1/bill-query-and-cost-management.md)。
+-   **开启免费额度用完即停**：对支持免费额度的模型，可开启**免费额度用完即停**，免费额度耗尽后自动停止调用，避免产生额外费用。详见[新人免费额度](raw/model-user-guide/test-1/new-free-quota.md)。
+-   **监控模型调用量**：定期查看各模型的 Token 用量，及时发现异常增长，参见上文[如何查看模型调用量？](https://help.aliyun.com/zh/model-studio/rate-limit#2c4544e8d8wy6)。
+
+### 充值后是否还会被限流？
+
+充值不改变静态限流模型的 RPM 和 TPM 限流阈值。限流按阿里云主账号维度配置，与计费相互独立；充值（按量付费）仅确保账号不因欠费停服，不会提升静态限流值。采用[动态限流](#sec-mechanism-h2)的模型，TPM 限流档位随百炼月消费金额自动调整，消费提升后档位可随之升级，调整规则参见[限流动态调整策略](#sec-adjust-tier-h2)。
+
+如需更高的限流额度，请联系商务经理申请。

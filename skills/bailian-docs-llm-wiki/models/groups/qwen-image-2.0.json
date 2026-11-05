@@ -34,11 +34,6 @@
           "count_limit_period": 60,
           "count_limit": 2,
           "type": "model-default"
-        },
-        "model-default": {
-          "count_limit_period": 60,
-          "count_limit": 2,
-          "type": "model-default"
         }
       },
       "priceTimeBands": [
@@ -99,11 +94,6 @@
       ],
       "qpmInfo": {
         "model-default-actual": {
-          "count_limit_period": 1,
-          "count_limit": 2,
-          "type": "model-default"
-        },
-        "model-default": {
           "count_limit_period": 1,
           "count_limit": 2,
           "type": "model-default"

@@ -37,7 +37,7 @@ Prompt反馈优化功能将做以下工作：
 1.  将**样例数据**添加到Prompt中。
 2.  对prompt在**评测数据**上的结果（由推理模型生成）进行多轮自动化评估、反思和优化，总结生成内容提示。
 
-相较于[Prompt自动优化](raw/application-user-guide/agent-development/llm-application/prompt/optimize-prompt.md)，由于Prompt反馈优化将用户提供的**数据**作为优化的评估标准，使得prompt在用户实际场景中的回复质量更高。
+相较于[Prompt自动优化](raw/application-user-guide/prompt/optimize-prompt.md)，由于Prompt反馈优化将用户提供的**数据**作为优化的评估标准，使得prompt在用户实际场景中的回复质量更高。
 
 **说明**推理模型推荐选择千问-max。
 

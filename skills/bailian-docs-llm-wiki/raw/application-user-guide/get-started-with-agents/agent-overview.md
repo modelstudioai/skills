@@ -18,7 +18,7 @@
 
 编排智能体与工作流应用。
 
-](raw/application-user-guide/agent-development/llm-application/llm-application-start-using/flow-agent-introduction.md)[
+](raw/application-user-guide/llm-application/llm-application-start-using/flow-agent-introduction.md)[
 
 **Sandbox**
 
@@ -36,7 +36,7 @@
 
 知识库检索与问答。
 
-](raw/application-user-guide/agent-context/knowledge-base/rag-start-using/quickstart.md)[
+](raw/application-user-guide/knowledge-base/rag-start-using/quickstart.md)[
 
 **Memory**
 
@@ -106,4 +106,4 @@
 
 通过 API 调用 Agent 并接入业务系统。
 
-](raw/application-api-reference/agent-api-start-using/agent-api-guide.md)
+](raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md)

@@ -32,14 +32,6 @@
           "count_limit": 15000,
           "usage_limit_period": 30,
           "type": "model-default"
-        },
-        "model-default": {
-          "count_limit_period": 30,
-          "usage_limit": 2500000,
-          "usage_limit_field": "total_tokens",
-          "count_limit": 15000,
-          "usage_limit_period": 30,
-          "type": "model-default"
         }
       },
       "priceTimeBands": [
@@ -566,14 +558,6 @@
       "model": "qwen-plus-latest",
       "qpmInfo": {
         "model-default-actual": {
-          "count_limit_period": 30,
-          "usage_limit": 200000,
-          "usage_limit_field": "total_tokens",
-          "count_limit": 7500,
-          "usage_limit_period": 10,
-          "type": "model-default"
-        },
-        "model-default": {
           "count_limit_period": 30,
           "usage_limit": 200000,
           "usage_limit_field": "total_tokens",

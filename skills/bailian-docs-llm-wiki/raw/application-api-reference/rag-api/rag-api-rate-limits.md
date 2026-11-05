@@ -1,8 +1,8 @@
 # 限流
 
-RAG API 各接口的请求频率限制（QPS）与超限处理建议。
+RAG API 各接口的请求频率限制与超限处理建议。
 
-为保障服务稳定性，各接口设有请求频率限制（QPS，每秒请求数）。超出限制时返回 HTTP `429 Too Many Requests`。
+为保障服务稳定性，各接口设有请求频率限制。知识库管理和数据导入接口按 QPS（每秒请求数）限流，知识检索与问答接口按每 10 秒的请求数限流。超出限制时返回 HTTP `429 Too Many Requests`。
 
 ## 知识库管理接口
 
@@ -178,7 +178,25 @@ QPS 上限
 
 ## 知识检索与问答
 
-[知识检索](raw/application-api-reference/rag-api/knowledge/knowledgesearch.md)（`/knowledge/search`）和[知识问答](raw/application-api-reference/rag-api/knowledge/knowledgechat.md)（`/knowledge/chat`）的限流规则暂未公布，后续更新。
+默认按用户维度限流。
+
+接口
+
+端点
+
+每 10 秒请求数上限
+
+[知识检索](raw/application-api-reference/rag-api/knowledge/knowledgesearch.md)
+
+`/knowledge/search`
+
+10
+
+[知识问答](raw/application-api-reference/rag-api/knowledge/knowledgechat.md)
+
+`/knowledge/chat`
+
+10
 
 ## 超限处理
 

@@ -37,3 +37,4 @@ PDF、Office 文档、图片等图文材料
 -   [使用体验控制台](raw/application-user-guide/agent-context/getting-started-overview/overview/playground-parse.md)：获得访问权限后，从正式授权入口进入，了解控制台中的输入、输出和增强选项。
 -   [配置文档解析](raw/application-user-guide/agent-context/getting-started-overview/overview/configuration.md)：配置文件信息、解析范围、增强选项和结果格式。
 -   [获取文档解析结果](raw/application-user-guide/agent-context/getting-started-overview/overview/results-and-best-practices.md)：轮询并校验结果，建立稳定的存储和质量检查流程。
+-   [使用 CLI](raw/application-user-guide/agent-context/getting-started-overview/integration-overview/cli.md)：在终端用 `bl parsex parse` 提交解析任务并查询结果。

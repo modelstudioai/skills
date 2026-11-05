@@ -88,14 +88,6 @@
           "async_task_timeout": 180,
           "type": "model-default",
           "async_user_concurrency_limit": 5
-        },
-        "model-default": {
-          "count_limit_period": 1,
-          "async_user_queue_limit": 500,
-          "count_limit": 5,
-          "async_task_timeout": 180,
-          "type": "model-default",
-          "async_user_concurrency_limit": 5
         }
       },
       "priceTimeBands": [
@@ -198,14 +190,6 @@
       ],
       "qpmInfo": {
         "model-default-actual": {
-          "count_limit_period": 1,
-          "async_user_queue_limit": 500,
-          "count_limit": 5,
-          "async_task_timeout": 180,
-          "type": "model-default",
-          "async_user_concurrency_limit": 5
-        },
-        "model-default": {
           "count_limit_period": 1,
           "async_user_queue_limit": 500,
           "count_limit": 5,
@@ -321,14 +305,6 @@
           "async_task_timeout": 180,
           "type": "model-default",
           "async_user_concurrency_limit": 5
-        },
-        "model-default": {
-          "count_limit_period": 1,
-          "async_user_queue_limit": 500,
-          "count_limit": 5,
-          "async_task_timeout": 180,
-          "type": "model-default",
-          "async_user_concurrency_limit": 5
         }
       },
       "priceTimeBands": [
@@ -432,13 +408,6 @@
       ],
       "qpmInfo": {
         "model-default-actual": {
-          "count_limit_period": 1,
-          "async_user_queue_limit": 500,
-          "count_limit": 5,
-          "type": "model-default",
-          "async_user_concurrency_limit": 5
-        },
-        "model-default": {
           "count_limit_period": 1,
           "async_user_queue_limit": 500,
           "count_limit": 5,
