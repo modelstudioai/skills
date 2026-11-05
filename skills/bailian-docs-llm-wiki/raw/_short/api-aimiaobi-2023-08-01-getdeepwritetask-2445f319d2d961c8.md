@@ -65,7 +65,7 @@ string
 
 否
 
-[业务空间 ID](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)
+[业务空间 ID](raw/application-api-reference/application-call/obtain-the-app-id-and-workspace-id.md)
 
 llm-odl2p61i4vfbph4g
 

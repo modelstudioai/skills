@@ -1,4 +1,4 @@
-# 产品计费
+# 模型计费
 
 -   [新人免费额度](raw/model-user-guide/test-1/new-free-quota.md)
 -   [模型调用计费](raw/model-user-guide/test-1/model-pricing.md)

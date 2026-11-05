@@ -34,7 +34,7 @@ qwen3.7-text-embedding
 
 中文、英语、西班牙语、法语、葡萄牙语、印尼语、日语、韩语、德语、俄罗斯语等201种主流语种与方言
 
-各100万Token
+100万Token
 
 有效期：百炼开通后90天内
 
@@ -52,6 +52,10 @@ qwen3.7-text-embedding-flash
 
 中文、英语、西班牙语、法语、葡萄牙语、印尼语、日语、韩语、德语、俄罗斯语等201种主流语种与方言
 
+100万Token
+
+有效期：百炼开通后90天内
+
 text-embedding-v4
 
 > 属于[Qwen3-Embedding](https://qwenlm.github.io/zh/blog/qwen3-embedding/)系列
@@ -68,11 +72,17 @@ text-embedding-v4
 
 中文、英语、西班牙语、法语、葡萄牙语、印尼语、日语、韩语、德语、俄罗斯语等100+主流语种及多种编程语言
 
+100万Token
+
+有效期：百炼开通后90天内
+
 text-embedding-v3
 
 1,024（默认）、768、512、256、128或64
 
 中文、英语、西班牙语、法语、葡萄牙语、印尼语、日语、韩语、德语、俄罗斯语等50+主流语种
+
+无免费额度
 
 text-embedding-v2
 
@@ -88,9 +98,7 @@ text-embedding-v2
 
 中文、英语、西班牙语、法语、葡萄牙语、印尼语、日语、韩语、德语、俄罗斯语
 
-各50万Token
-
-有效期：百炼开通后90天内
+无免费额度
 
 text-embedding-v1
 
@@ -148,9 +156,7 @@ text-embedding-v3
 
 中文、英语、西班牙语、法语、葡萄牙语、印尼语、日语、韩语、德语、俄罗斯语等50+主流语种
 
-50万Token
-
-有效期：百炼开通后90天内
+无免费额度
 
 关于模型限流，请参考[限流](https://help.aliyun.com/zh/model-studio/rate-limit#953ddcd76495l)。
 

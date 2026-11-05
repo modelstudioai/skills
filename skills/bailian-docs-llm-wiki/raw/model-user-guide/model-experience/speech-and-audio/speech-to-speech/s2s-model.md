@@ -79,7 +79,7 @@ Gemini 3.5 Live Translate (Preview)
 
 实时音视频对话
 
-[qwen3.8-omni-flash-realtime](raw/model-user-guide/support/model-studio-model-list/model-list-omni/qwen3-8-omni-flash-realtime.md)
+[qwen3.8-omni-flash-realtime](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-omni/qwen3-8-omni-flash-realtime.md)
 
 Realtime API
 
@@ -135,7 +135,7 @@ Realtime API
 
 以下模型系列均支持语音翻译：
 
--   **Qwen3.8-Livetranslate**：支持 60 种源语言和 29 种语言的语音输出，支持音频与图像输入。详见[模型信息](raw/model-user-guide/support/model-studio-model-list/model-list-speech-to-speech/qwen3-8-livetranslate-flash-realtime.md)。
+-   **Qwen3.8-Livetranslate**：支持 60 种源语言和 29 种语言的语音输出，支持音频与图像输入。详见[模型信息](raw/_short/qwen3-8-livetranslate-flash-realtime-ff0ad972469d86fe.md)。
 -   **Qwen3.5-Livetranslate**：支持 60 种语言互译，其中 29 种支持音频+文本输出、31 种仅支持文本输出，覆盖中文、英语、法语、德语、俄语、日语、韩语、西班牙语、葡萄牙语、阿拉伯语等主流语种。
 -   **Qwen3-Livetranslate**：支持18种语言 + 5种中文方言，约3秒延迟，开箱即用。文件模式支持输入视频以获得上下文感知的翻译精度。其中7种语言仅输出文本（不输出语音）。
 -   **Qwen3.8-Omni-Flash-Realtime**：支持实时语音翻译，语音生成语种与 Qwen3.5-Omni-Realtime 一致，支持36种语种和方言，各音色支持范围见[音色列表](https://help.aliyun.com/zh/model-studio/omni-voice-list#qwen38-voices)。
@@ -1132,7 +1132,7 @@ Chat Completions
 
 **语言数**
 
-[qwen3.8-livetranslate-flash-realtime](raw/model-user-guide/support/model-studio-model-list/model-list-speech-to-speech/qwen3-8-livetranslate-flash-realtime.md)
+[qwen3.8-livetranslate-flash-realtime](raw/_short/qwen3-8-livetranslate-flash-realtime-ff0ad972469d86fe.md)
 
 Realtime API
 

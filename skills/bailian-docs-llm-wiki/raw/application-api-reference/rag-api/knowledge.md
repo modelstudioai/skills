@@ -12,7 +12,7 @@
 
 路径
 
-[知识检索](raw/application-user-guide/agent-context/knowledge-base/service/rag-knowledge-retrieval.md)
+[知识检索](raw/application-user-guide/knowledge-base/rag-knowledge-retrieval.md)
 
 跨多个知识库执行联合语义检索，返回按相关性排序的切片。
 
@@ -26,4 +26,4 @@ POST /api/v2/apps/knowledge/chat
 
 **鉴权**：所有请求须在请求头携带 `Authorization: Bearer <API-Key>`与使用业务空间ID拼接的Base URL。API Key 在控制台 [API Key 页面](https://bailian.console.aliyun.com/?tab=model#/api-key)获取，业务空间在控制台[业务空间管理](https://bailian.console.aliyun.com/cn-beijing?tab=globalset#/efm/business_management)获取。
 
-**限流**：默认用户维度 25 QPS。如遇限流，请稍后重试。
+**限流**：默认按用户维度限流，每 10 秒最多 10 次请求。如遇限流，请稍后重试。

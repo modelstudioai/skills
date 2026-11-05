@@ -18,32 +18,6 @@
 
 **相关指南**：[图像编辑-万相2.1](raw/model-user-guide/use-cases/legacy-resources/legacy-image-generation/wanx-image-edit.md)
 
-## 模型概览
-
-**模型名称**
-
-**计费单价**
-
-**限流（主账号与RAM子账号共用）**
-
-**免费额度**[（查看）](raw/model-user-guide/test-1/new-free-quota.md)
-
-**任务下发接口RPS限制**
-
-**同时处理中任务数量**
-
-wanx2.1-imageedit
-
-0.14元/张
-
-2
-
-2
-
-500张
-
-更多说明请参见[模型计费与限流](https://help.aliyun.com/zh/model-studio/image-faq#3436cf2280fnh)。
-
 ## 模型效果
 
 **模型功能**

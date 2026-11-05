@@ -14,13 +14,10 @@
 
 ## 支持的模型
 
-**图片**
-
-qwen-image-3.0-pro、qwen-image-3.0、qwen-image-2.0-pro-2026-06-22、qwen-image-2.0-pro-2026-04-22、qwen-image-2.0-pro、qwen-image-2.0、qwen-image-2.0-2026-03-03、z-image-turbo、wan2.7-image-pro、wan2.7-image
-
-**视频**
-
-wan3.0-video、wan3.0-video-prime、happyhorse1.1-t2v、happyhorse1.1-i2v、happyhorse1.1-r2v、wan2.7-r2v、wan2.7-i2v、wan2.7-t2v
+-   **图片**： qwen-image-3.0-pro、qwen-image-3.0、qwen-image-2.0-pro-2026-06-22、qwen-image-2.0-pro-2026-04-22、qwen-image-2.0-pro、qwen-image-2.0、qwen-image-2.0-2026-03-03、z-image-turbo、wan2.7-image-pro、wan2.7-image
+    
+-   **视频**： wan3.0-video、wan3.0-video-prime、happyhorse1.1-t2v、happyhorse1.1-i2v、happyhorse1.1-r2v、wan2.7-r2v、wan2.7-i2v、wan2.7-t2v
+    
 
 **说明**当前资产中心支持管理图片和视频资产，暂不支持音频资产。
 

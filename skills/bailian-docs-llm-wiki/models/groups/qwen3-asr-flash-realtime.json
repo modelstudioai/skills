@@ -31,11 +31,6 @@
           "count_limit_period": 1,
           "count_limit": 20,
           "type": "model-default"
-        },
-        "model-default": {
-          "count_limit_period": 1,
-          "count_limit": 20,
-          "type": "model-default"
         }
       },
       "priceTimeBands": [

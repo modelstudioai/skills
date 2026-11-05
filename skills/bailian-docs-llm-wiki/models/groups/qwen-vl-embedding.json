@@ -42,14 +42,6 @@
           "count_limit": 40,
           "usage_limit_period": 6,
           "type": "model-default"
-        },
-        "model-default": {
-          "count_limit_period": 1,
-          "usage_limit": 120000,
-          "usage_limit_field": "total_usage",
-          "count_limit": 40,
-          "usage_limit_period": 6,
-          "type": "model-default"
         }
       },
       "priceTimeBands": [
@@ -108,14 +100,6 @@
       ],
       "qpmInfo": {
         "model-default-actual": {
-          "count_limit_period": 1,
-          "usage_limit": 60000,
-          "usage_limit_field": "total_usage",
-          "count_limit": 20,
-          "usage_limit_period": 6,
-          "type": "model-default"
-        },
-        "model-default": {
           "count_limit_period": 1,
           "usage_limit": 60000,
           "usage_limit_field": "total_usage",

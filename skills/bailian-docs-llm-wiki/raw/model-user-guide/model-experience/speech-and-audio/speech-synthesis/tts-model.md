@@ -14,13 +14,13 @@
 
 语音助手、实时对话、智能客服
 
-[`qwen-audio-3.1-tts-flash`](raw/model-user-guide/support/model-studio-model-list/model-list-speech-synthesis/qwen-audio-3-1-tts-flash.md)
+[`qwen-audio-3.1-tts-flash`](raw/_short/qwen-audio-3-1-tts-flash-e5865533dd0cb436.md)
 
 面向低延迟交互场景，支持系统音色、声音复刻、声音设计、自然语言指令及情感与富语言标签。
 
 有声书、影视配音、品牌声音与内容制作
 
-[`qwen-audio-3.1-tts-plus`](raw/model-user-guide/support/model-studio-model-list/model-list-speech-synthesis/qwen-audio-3-1-tts-plus.md)
+[`qwen-audio-3.1-tts-plus`](raw/_short/qwen-audio-3-1-tts-plus-897ef4dc179edd29.md)
 
 侧重音质、自然度和细节表现，支持系统音色、声音复刻、声音设计及丰富的表达控制。
 

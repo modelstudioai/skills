@@ -1,55 +1,56 @@
 # 流式输出
 
-流式输出（Streaming Output）是百炼平台提供的一种实时、增量式响应机制，服务端在模型推理过程中持续生成并分块推送结果（如 token、音频帧、文本片段），而非等待全部计算完成后再返回完整响应。该机制显著降低端到端延迟，提升交互自然度，是构建低延迟对话、语音助手、实时音视频应用的核心能力。
+流式输出（Streaming Output）是指模型服务将响应内容以增量、分块（chunk）的方式持续返回给客户端，而非等待整个响应生成完毕后一次性返回完整结果。这种方式显著降低端到端延迟，提升用户感知的响应实时性，是构建低延迟交互应用（如实时对话、语音助手、长文本生成）的关键能力。
 
 ## 在百炼平台的不同场景中如何使用
 
-流式输出并非统一接口，而是根据调用协议与业务场景，通过不同技术路径实现：
+流式输出在百炼平台中并非单一接口特性，而是贯穿多个调用协议与产品形态的通用能力，具体使用方式因场景而异：
 
-- **Model Experience（RESTful /v1/models/{model_id}/invoke）**  
-  适用于文本生成、部分全模态及 TTS 模型。启用方式：在请求 `body` 中设置 `"enable_streaming": true`。响应为标准 SSE（Server-Sent Events）格式，`Content-Type: text/event-stream`，每行以 `data:` 开头，需按 SSE 协议解析（如 `data: {"output": {"text": "Hello"}}`）。支持模型包括 `qwen-max`、`qwen-plus`、`wanx-v1`（TTS）、`qwen3-omni-flash-realtime`（部分能力）等。
+- **Qwen API（模型直调）**：  
+  OpenAI 兼容协议下，通过 `stream=true` 参数启用；DashScope 原生协议需额外设置请求头 `X-DashScope-SSE: enable`；Anthropic 兼容协议默认支持流式（`messages` 接口），无需显式开关。所有协议均返回 `text_delta` 类型的 SSE 或 JSONL 响应块，客户端需按序拼接。
 
-- **Realtime API（WebSocket）**  
-  面向强实时交互场景（如语音对话、多轮上下文感知），**强制流式**（`stream: true` 固定开启）。客户端通过 WebSocket 连接，接收结构化事件（如 `output.text.delta`、`output.audio.chunk`、`tool_calls`），支持输入流式注入（`input.audio`/`input.text` 分片）、运行时中断（`input.interrupt`）和会话状态保持。典型模型：`qwen-audio-realtime-v1`、`qwen2.5-7b-instruct-realtime`、`qwen-vl-realtime-v1`。
+- **Application Call（智能体/工作流调用）**：  
+  支持同步流式（`stream=true`）与增量流式（`incremental_output=true`）。后者确保每个 chunk 仅包含本次新增内容（不重复前序），适合前端逐字渲染；工作流还支持 `flow_stream_mode=message_format_plus`，可分离工具调用、思考链与最终回复事件。
 
-- **Omni Realtime API（WebSocket/AOQ/WebRTC）**  
-  多模态流式交互的增强形态，专为音视频同步生成设计。通过 `session.update` 配置 `modalities: ["text", "audio"]` 启用双模态流式输出；服务端逐帧返回 `response.text.delta` 和 `response.audio.chunk`，并支持语义 VAD、平滑输出（`smooth_output`）等高级控制。仅限 `qwen3.8-omni-flash-realtime` 等指定模型。
+- **Realtime API（实时音视频流）**：  
+  **强制流式**，无非流式选项。通过 WebSocket 二进制帧+JSON 事件帧混合传输，服务端持续推送 `event: "text_delta"`、`event: "audio_chunk"` 等类型帧，客户端需实时解码、缓冲与合成。
 
-- **Audio API（RESTful）**  
-  音频类模型（ASR、TTS、Audio Generation）支持可选流式。TTS 和 ASR 接口在请求中设置 `stream: true`（注意：此字段名与 Model Experience 的 `enable_streaming` 不同），响应体为 `application/octet-stream` 二进制流（如 PCM 音频流或识别文本流），需按 chunk 边接收边处理。不支持流式的模型（如部分语音翻译）将返回完整 JSON。
+- **Omni Realtime API（多模态实时交互）**：  
+  同样为强制流式，但支持更细粒度的模态控制：当 `modalities=["text","audio"]` 时，文本与音频 chunk 可并行到达；VAD（语音活动检测）触发的静音间隙会暂停 `text_delta` 输出，保障语义连贯性。
 
-- **Qwen 兼容协议（OpenAI/Anthropic/DashScope）**  
-  OpenAI 兼容 `/chat/completions` 接口通过 `stream: true` 启用流式；DashScope 原生协议对应 `enable_streaming: true`；Anthropic 兼容 Messages API 则原生支持流式（无需额外参数）。所有协议下，流式响应均为 SSE 格式，结构与 Model Experience 一致，便于 SDK 统一适配。
-
-> ⚠️ 注意：向量模型（embedding/rerank）和部分旧版视觉生成模型**不支持流式输出**，请求中传入流式参数将被忽略或报错。
+- **Frameworks（框架集成）**：  
+  LlamaIndex 和 Spring AI Alibaba 均透传底层流式能力。例如 LlamaIndex 中调用 `llm.stream("...")` 即触发百炼流式请求，返回 `StreamingResponse` 迭代器；Spring AI 的 `chatClient.stream(...)` 同理，开发者无需处理协议细节。
 
 ## 关键参数和配置
 
-| 参数 | 所属协议 | 类型 | 说明 | 是否必需 |
-|------|----------|------|------|-----------|
-| `enable_streaming` | Model Experience, DashScope 原生 | boolean | 启用 SSE 流式响应 | 否（默认 `false`） |
-| `stream` | Realtime API, Audio API, OpenAI 兼容 | boolean | 启用流式（Realtime API 中固定为 `true`） | 是（Realtime）/ 否（Audio/OpenAI） |
-| `modalities` | Omni Realtime API | string[] | 指定输出模态，`["text"]` 或 `["text","audio"]` | 是（决定是否输出音频流） |
-| `audio.output.format.sample_rate` | Omni Realtime API | integer | 输出音频采样率（8000–48000 Hz），影响流式音频 chunk 质量 | 否（有默认值） |
+| 参数 / 配置项 | 所属场景 | 说明 | 示例值 |
+|----------------|------------|------|----------|
+| `stream` | Qwen API、Application Call、Frameworks | 启用流式响应的布尔开关 | `true` |
+| `X-DashScope-SSE: enable` | DashScope 原生协议（Qwen/API/Application） | 必须配合 `stream=true` 使用，否则返回 400 | Header 值 |
+| `incremental_output` | Application Call（DashScope 协议） | 控制是否增量输出（`true`：每 chunk 仅新内容；`false`：累计内容） | `true` |
+| `flow_stream_mode` | Application Call（工作流） | 工作流专用流式格式，推荐 `message_format_plus`（结构化事件） | `"message_format_plus"` |
+| `modalities` | Omni Realtime API | 指定输出模态组合，决定流式内容类型 | `["text","audio"]` |
+| `turn_detection.type` | Omni Realtime API | VAD 类型影响 `text_delta` 的分块节奏与停顿行为 | `"semantic_vad"` |
 
-- **超时设置**：所有流式请求需客户端显式配置长超时（建议 ≥ 300 秒），避免连接被中间代理或 SDK 默认策略中断。
-- **错误处理**：流式响应中可能夹杂 `event: error` 事件（SSE）或 `error` 字段（WebSocket），需监听并终止当前流。
-- **Token 边界**：文本流中 `text.delta` 为 UTF-8 字符串，**不保证按词/字粒度切分**，应用层需自行累积拼接；音频流为原始 PCM/WAV 帧，需按 `sample_rate`/`channels` 解码。
+> ⚠️ 注意：  
+> - Anthropic 兼容协议中 `stream` 参数无效，流式为默认行为；  
+> - Realtime 与 Omni Realtime API **不接受 `stream=false`**，所有调用均为流式；  
+> - 流式响应中若含思考链（`thought`）、工具调用（`function_call`）等中间产物，其字段名与结构依协议而异（详见各 API 参考文档）。
 
-## 面向开发者：简洁实用提示
+## 面向开发者：简洁实用建议
 
-- ✅ **首选 SSE 解析库**：Node.js 用 `eventsource-parser`，Python 用 `sseclient-py`，浏览器用原生 `EventSource`，避免手动解析 `data:` 行。
-- ✅ **WebSocket 流务必处理重连**：Realtime/Omni Realtime 连接有 300 秒生命周期限制，建议结合 `session_id` 或 `sequence_id` 实现断点续传。
-- ✅ **TTS/ASR 流式响应无 JSON 封装**：直接接收二进制数据，勿尝试 `JSON.parse()`；可用 `Uint8Array` 或 `Blob` 处理。
-- ❌ **勿混用流式与非流式参数**：如在 Model Experience 中同时传 `enable_streaming=true` 和 `max_tokens=1`（过小），可能导致流提前终止。
-- 📌 **调试技巧**：用 `curl -N` 查看原始 SSE 流；WebSocket 场景使用 [AOQ 客户端 SDK](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-aoq-api.md) 可自动处理序列号、buffer 和重试。
+- ✅ **首选增量流式**：对 UI 渲染类应用（如聊天框打字效果），务必启用 `incremental_output=true`（Application Call）或使用框架的 `stream()` 方法，避免重复拼接。
+- ✅ **正确处理流式终止**：所有流式响应均以 `event: "done"`（SSE）或 `{"object":"chat.completion.chunk","finish_reason":"stop"}`（OpenAI 兼容）标识结束，**不可依赖空 chunk 或超时判断**。
+- ✅ **错误处理需流式感知**：流式过程中可能返回 `event: "error"` 或含 `"error"` 字段的 chunk，客户端应监听并中断当前流，而非等待结束。
+- ❌ **避免在流式中修改 session 状态**：`session_id`、`memory_id` 等状态参数应在首次请求时设定，流式过程中服务端不支持动态更新上下文。
+- 🛠️ **调试技巧**：使用 `curl -N` 或 Postman 的 SSE 模式直接测试；Realtime/Omni Realtime 建议优先使用 AOQ SDK（自动处理重连、心跳、编码适配）。
 
 ## 关联主题页
 
-- [model experience](../guides/model-experience.md)
+- [qwen api reference](../api/qwen-api-reference.md)
+- [application call](../api/application-call.md)
 - [realtime api user guide](../api/realtime-api-user-guide.md)
 - [omni realtime api](../api/omni-realtime-api.md)
-- [audio api references](../api/audio-api-references.md)
-- [qwen api reference](../api/qwen-api-reference.md)
+- [frameworks](../api/frameworks.md)
 
 

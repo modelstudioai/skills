@@ -99,7 +99,7 @@ response = client.multimodal.chat.create(
 
 ## 适用范围
 
-`deepseek-v4.1-flash-1017` 支持 Responses API 内置 `code_interpreter`，适用于[模型页面](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/deepseek-v4-1-flash.md)所列的全部六个地域及对应部署范围。
+`deepseek-v4.1-flash-1017` 支持 Responses API 内置 `code_interpreter`，适用于[模型页面](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-text-generation/deepseek-v4-1-flash.md)所列的全部六个地域及对应部署范围。
 
 `kimi-k3.1-pro`（阿里云百炼部署）支持 Responses API 内置 `code_interpreter`，适用于北京、新加坡、美国（弗吉尼亚）、德国（法兰克福）、日本（东京）和中国香港。
 

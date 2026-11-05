@@ -18,3 +18,4 @@
 -   [在控制台中使用](raw/application-user-guide/agent-context/getting-started-overview/extract-overview/playground-extract.md)：上传样例、编辑字段、运行抽取并检查结果。
 -   [配置字段抽取](raw/application-user-guide/agent-context/getting-started-overview/extract-overview/extract-configuration.md)：了解 Schema 以及抽取配置。
 -   [获取抽取结果](raw/application-user-guide/agent-context/getting-started-overview/extract-overview/extract-results.md)：获取并查看字段抽取的结果。
+-   [使用 CLI](raw/application-user-guide/agent-context/getting-started-overview/integration-overview/cli.md)：在终端用 `bl parsex extract` 提交抽取任务并查询结果。

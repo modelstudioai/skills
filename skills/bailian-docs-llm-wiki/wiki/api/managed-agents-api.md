@@ -1,33 +1,47 @@
 # managed agents api
 
-Managed Agents API 是百炼平台提供的托管式智能体服务接口，用于创建、配置和运行具备[长期记忆](../concepts/long-term-memory.md)、工具调用、多步推理能力的 AI Agent。该 API 封装了环境管理、会话生命周期、文件与凭证安全存储、技能编排等核心能力，开发者无需自行维护底层基础设施。所有接口均需通过 OAuth 2.0 认证，并遵循统一的 RESTful 设计规范。
+Managed Agents API 是百炼平台提供的用于构建、部署和管理智能体（Agent）的 RESTful 接口集合，支持从环境配置、会话生命周期、技能编排到凭证与内存存储的全栈控制。该 API 采用标准 HTTP 协议，需通过 Bearer [Token](../concepts/token.md) 认证，适用于需要细粒度控制 Agent 行为的中高级开发者场景。详细设计原则与架构约束请参阅 [Managed Agent API](../../raw/application-api-reference/managed-agents-api.md)。
 
 ## 支持的模型与功能
 
-- **模型支持**：当前仅支持 `qwen-max`、`qwen-plus` 和 `qwen-turbo` 三款 Qwen 系列大模型作为 Agent 的推理引擎；其他模型（如 `qwen-vl` 或第三方模型）暂未开放接入。  
-- **核心功能模块**包括：Agent 实例管理、隔离式 Environment 配置、Session 生命周期控制、结构化 Memory Store、基于 YAML 的 Skill 定义、加密 Vault 存储、细粒度 Credential 绑定，以及 Webhook 事件回调。完整能力清单详见 [Managed Agent API](../../raw/application-api-reference/managed-agents-api.md) 的子目录导航。
+Managed Agents API **不直接调用大模型**，而是提供对 Agent 运行时基础设施的编排能力。其核心功能模块包括：
+- `Agent`：定义 Agent 的行为逻辑、工具绑定与执行策略；
+- `Environment`：隔离运行上下文（如 sandbox、prod），支持多版本并行部署；
+- `Session` 和 `Event`：管理用户会话状态与事件驱动流程（如 `session.created`、`tool_executed`）；
+- `Memory Store`：持久化短期记忆（如对话历史）与长期知识（需配合 Vault）；
+- `Skill` 与 `Credential`：封装可复用的能力单元及安全凭据，支持 RBAC 级别授权。
+
+所有模块均在 [Managed Agent API](../../raw/application-api-reference/managed-agents-api.md) 的子页面中分项定义，例如 [Agent](../../raw/application-api-reference/managed-agents-api/agent-api.md) 和 [Memory Store](../../raw/application-api-reference/managed-agents-api/memory-store-api.md)。
 
 ## 关键参数
 
-- `agent_id`（路径参数）：全局唯一标识符，由平台在创建时生成，不可自定义。  
-- `session_id`（请求体或查询参数）：用于关联用户上下文，若未提供则自动创建新会话；重复使用同一 `session_id` 可延续 Memory Store 中的历史状态。  
-- `tool_choice`（可选）：指定工具调用策略，取值为 `"auto"`（默认）、`"none"` 或具体工具名（如 `"web_search"`），详见 [Agent](../../raw/application-api-reference/managed-agents-api/agent-api.md) 接口文档。  
-- `memory_ttl_seconds`（可选）：Memory Store 条目的存活时间，默认 `3600` 秒（1 小时），最大支持 `86400` 秒（24 小时）。
+请求必须携带以下通用头部：
+- `Authorization: Bearer <token>`（认证方式详见 [Managed Agents API](../../raw/application-api-reference/managed-agents-api.md) 中的 [认证](../../raw/application-api-reference/managed-agents-api/managed-agents-api-authentication.md) 小节）；
+- `X-App-ID: <app_id>`：标识所属应用，用于配额与审计；
+- `Content-Type: application/json`（仅 `POST`/`PUT` 请求）。
+
+部分端点要求必填路径参数（如 `/v1/agents/{agent_id}/sessions` 中的 `agent_id`）或查询参数（如 `?environment=staging`）。所有参数语义与示例均在对应子文档中明确定义，例如 [Session and Event](../../raw/application-api-reference/managed-agents-api/session-api.md) 明确了 `session_id` 的生成规则与幂等性保障。
+
+> **注意**：原始文档中 `Environment` 接口的 `region` 字段在 v2.3+ 版本已弃用，实际应使用 `location`；该变更未同步更新至 [Environment](../../raw/application-api-reference/managed-agents-api/environment-api.md) 页面，开发者请以 OpenAPI Schema 为准。
 
 ## 使用方式
 
-1. 通过 `POST /v1/agents` 创建 Agent 实例，传入 `name`、`description`、`model` 及初始 `skills` 列表；  
-2. 调用 `POST /v1/agents/{agent_id}/sessions` 启动会话，获取 `session_id`；  
-3. 使用 `POST /v1/agents/{agent_id}/sessions/{session_id}/chat` 发送用户消息，Agent 自动调度工具、检索 Memory 并流式返回响应；  
-4. 所有资源操作（如上传文件、绑定凭证）均通过对应子资源接口完成，例如文件上传需调用 `/v1/agents/{agent_id}/files`。快速上手流程请参考 [Managed Agents Quickstart](../../raw/application-api-reference/managed-agents-api/managed-agents-quickstart.md)。
+1. **初始化**：调用 `/v1/agents` 创建 Agent 实例，传入 `skills`、`memory_store_id` 等配置；
+2. **启动会话**：向 `/v1/agents/{id}/sessions` 发送 `POST`，获取 `session_id`；
+3. **交互**：向 `/v1/sessions/{session_id}/messages` 发送用户消息，接收结构化响应（含 `tool_calls`、`memory_updates` 等字段）；
+4. **监控与调试**：通过 `/v1/sessions/{id}/events` 流式拉取事件日志，或调用 `/v1/deployments/{id}/logs` 查看部署级日志。
+
+完整端到端流程见 [快速开始](../../raw/application-api-reference/managed-agents-api/managed-agents-quickstart.md)，其中包含 cURL 与 Python SDK 示例。
 
 ## 限制和注意事项
 
-- 单个 Agent 最多绑定 50 个 Skill，单次会话中 Memory Store 总容量上限为 10 MB；  
-- Session 默认有效期为 24 小时，超时后关联的 Memory 和临时文件将被自动清理；  
-- > **注意**：[Managed Agents API Overview](../../raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md) 中提及的 “支持自定义 LLM adapter” 属于已下线功能，当前版本不支持外部模型接入，以 [Agent API](../../raw/application-api-reference/managed-agents-api/agent-api.md) 文档中 `model` 字段的枚举值为准；  
-- Webhook 事件投递最多重试 3 次，失败后不再重发，建议业务侧实现幂等处理；  
-- 所有敏感操作（如 `DELETE /vaults/{id}`）均需显式启用 `X-Bailian-Confirm: true` 请求头，否则返回 `400 Bad Request`。
+- 单次 `messages` 请求最大输入长度为 32768 字符，超长内容需预处理切分；
+- `Memory Store` 写入单条记录上限为 8KB，且 TTL 最小值为 300 秒；
+- 所有 Webhook 回调必须在 5 秒内返回 `2xx`，否则视为失败并触发重试（最多 3 次）；
+- Agent 配置变更（如更新 `skills`）需重新部署（`/v1/deployments`），**不支持热更新**；
+- 错误响应统一遵循 [错误码](../../raw/application-api-reference/managed-agents-api/managed-agents-api-errors.md) 规范，常见如 `AGENT_NOT_FOUND (404)`、`SESSION_EXPIRED (410)`。
+
+请始终参考 [Managed Agent API](../../raw/application-api-reference/managed-agents-api.md) 主页获取最新目录结构与版本兼容性说明。
 
 ## 来源文档
 

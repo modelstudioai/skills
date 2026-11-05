@@ -163,6 +163,12 @@ qwen3.5-livetranslate-flash-realtime：响应事件差异
 
 **重要**`qwen3.5-livetranslate-flash-realtime` 使用 `response.text.text` 事件返回增量文本，与全双工语音对话（Omni）模型的 `response.text.delta` 事件不同，两者字段结构和语义有差异，请勿混用。
 
+**关联原文和译文**
+
+同时展示原文和译文时，可通过译文的 `conversation.item.created` 事件建立对应关系。其中，`item.id` 是译文 ID，事件顶层的 `previous_item_id` 是对应的原文 ID。
+
+原文和译文的到达顺序并不固定。应用可先分别保存结果，再按上述关系配对，并根据各自的 `item_id` 更新对应字幕。字段说明参见[原文、译文关联](https://help.aliyun.com/zh/model-studio/live-translator-server-events#ltitemcreated001h2)。
+
 ### 5\. 结束会话
 
 音频发送完毕后，客户端必须发送 [session.finish](https://help.aliyun.com/zh/model-studio/live-translator-client-events#f8075550b26jf) 事件通知服务端，然后等待服务端返回 `session.finished` 事件后再关闭 WebSocket 连接。
@@ -185,7 +191,7 @@ qwen3.5-livetranslate-flash-realtime：响应事件差异
 
 **（Token数）**
 
-**[qwen3.8-livetranslate-flash-realtime](raw/model-user-guide/support/model-studio-model-list/model-list-speech-to-speech/qwen3-8-livetranslate-flash-realtime.md)**
+**[qwen3.8-livetranslate-flash-realtime](raw/_short/qwen3-8-livetranslate-flash-realtime-ff0ad972469d86fe.md)**
 
 稳定版
 
@@ -831,7 +837,11 @@ session.finished
 
 -   **Qwen3.8-LiveTranslate-Flash-Realtime、Qwen3.5-LiveTranslate-Flash-Realtime**
     -   **音频**：输入每秒音频消耗 7 Token，输出每秒音频消耗 12.5 Token。
+        
+        使用服务端语音检测时，按过滤后送入模型的音频时长计算，被过滤的静音不计入该时长。实际音频输入 Token 数可查看 `response.done` 事件中的 `response.usage.input_tokens_details.audio_tokens`。
+        
     -   **图片**：每输入 32\*32 像素消耗 0.5 Token。 各模型的 Token 单价请参见[模型调用计费](raw/model-user-guide/test-1/model-pricing.md)。
+        
 
 **实时复刻**：`qwen3.8-livetranslate-flash-realtime` 和 `qwen3.5-livetranslate-flash-realtime` 在翻译过程中从输入音频复刻音色，不额外收取复刻费用；模型调用仍按 Token 用量计费。
 

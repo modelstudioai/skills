@@ -45,13 +45,6 @@
           "count_limit": 300,
           "type": "model-default",
           "async_user_concurrency_limit": 5
-        },
-        "model-default": {
-          "count_limit_period": 60,
-          "async_user_queue_limit": 500,
-          "count_limit": 300,
-          "type": "model-default",
-          "async_user_concurrency_limit": 5
         }
       },
       "priceTimeBands": [],

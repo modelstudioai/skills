@@ -179,7 +179,7 @@ Kimi-K2.6
 
 ¥27.22
 
-[kimi-k3.1-pro](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
+[kimi-k3.1-pro](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
 
 仅支持按天预付费的标准模式。
 

@@ -66,7 +66,7 @@
 
 文本生成
 
-](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/minimax-m3-1-flash.md)[
+](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-text-generation/minimax-m3-1-flash.md)[
 
 **mimo-v2.6-pro-ultraspeed**
 
@@ -98,7 +98,7 @@
 
 视觉理解
 
-](raw/model-user-guide/support/model-studio-model-list/model-list-omni/qwen3-8-omni-flash.md)[
+](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-omni/qwen3-8-omni-flash.md)[
 
 **kimi/kimi-k3**
 
@@ -120,7 +120,7 @@
 
 ](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/decision-model-preview)
 
-[查看更多](raw/model-user-guide/support/model-studio-model-list/model-list-decision/decision-model-preview.md)
+[查看更多](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-decision/decision-model-preview.md)
 
 ## 视觉
 
@@ -294,13 +294,13 @@
 
 语音转语音
 
-](raw/model-user-guide/support/model-studio-model-list/model-list-omni/qwen3-8-omni-flash-realtime.md)[
+](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-omni/qwen3-8-omni-flash-realtime.md)[
 
 **qwen-audio-3.1-realtime-flash**
 
 语音转语音
 
-](raw/model-user-guide/support/model-studio-model-list/model-list-speech-to-speech/qwen-audio-3-1-realtime-flash.md)
+](raw/_short/qwen-audio-3-1-realtime-flash-5b9fe71827656bd5.md)
 
 [查看更多](raw/model-user-guide/model-experience/speech-and-audio/speech-to-speech/s2s-model.md)
 
@@ -356,7 +356,7 @@
 
 融合文本、图像、音频、视频等多种模态的理解与生成能力。音视频分析与文本生成选择 [qwen3.8-omni-flash](https://help.aliyun.com/zh/model-studio/qwen-omni#qwen38-offline)，通过 Chat Completions 或 Responses 调用；实时音视频对话选择 [qwen3.8-omni-flash-realtime](https://help.aliyun.com/zh/model-studio/realtime#qwen38-realtime)。
 
-**说明**如需离线语音输出，请使用 [qwen3.5-omni-plus](raw/model-user-guide/support/model-studio-model-list/model-list-omni/qwen3-5-omni-plus.md)。
+**说明**如需离线语音输出，请使用 [qwen3.5-omni-plus](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-omni/qwen3-5-omni-plus.md)。
 
 [
 
@@ -364,13 +364,13 @@
 
 全模态
 
-](raw/model-user-guide/support/model-studio-model-list/model-list-omni/qwen3-8-omni-flash-realtime.md)[
+](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-omni/qwen3-8-omni-flash-realtime.md)[
 
 **qwen3.8-omni-flash**
 
 全模态
 
-](raw/model-user-guide/support/model-studio-model-list/model-list-omni/qwen3-8-omni-flash.md)
+](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-omni/qwen3-8-omni-flash.md)
 
 [查看更多](raw/model-user-guide/model-experience/omni-modal/omni.md)
 

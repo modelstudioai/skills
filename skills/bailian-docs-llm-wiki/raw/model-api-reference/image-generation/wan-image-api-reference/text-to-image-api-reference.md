@@ -32,30 +32,6 @@ wanx-v1
 -   支持输入参考图片，进行内容或风格迁移，实现更加丰富的风格、主题及派别。
     
 
-**模型说明**
-
-**模型名称**
-
-**计费单价**
-
-**限流（主账号与RAM子账号共用）**
-
-**免费额度**[（查看）](raw/model-user-guide/test-1/new-free-quota.md)
-
-**任务下发接口QPS限制**
-
-**同时处理中任务数量**
-
-wanx-v1
-
-0.16元/张
-
-2
-
-1
-
-500张
-
 更多说明请参见[模型计费及限流](https://help.aliyun.com/zh/model-studio/text-to-image-api-reference#b8457b7223zhp)。
 
 ## 前提条件

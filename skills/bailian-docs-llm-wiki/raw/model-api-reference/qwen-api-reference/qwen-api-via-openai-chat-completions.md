@@ -1122,7 +1122,7 @@ seed默认值
 
 通过 Python SDK 调用时请通过`extra_headers`配置：`extra_headers={'X-DashScope-DataInspection': '{"input":"cip","output":"cip"}'}`。
 
-详细使用方法请参见[输⼊输出 AI 安全护栏](raw/model-user-guide/security-and-compliance/content-security.md)。
+详细使用方法请参见[输入输出 AI 安全护栏](raw/model-user-guide/security-and-compliance/content-security.md)；若不想修改调用代码，可通过[业务空间维度开关](https://help.aliyun.com/zh/model-studio/content-security#h2-workspace-switch)启用护栏。
 
 > 不支持通过 Node.js SDK设置。
 

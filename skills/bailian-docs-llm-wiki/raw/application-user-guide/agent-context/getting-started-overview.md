@@ -102,3 +102,7 @@ Agent 需要阅读材料、理解上下文
 3.  **固定并复用配置**
     
     将验证通过的定义保存为配置，后续调用时可以复用该配置
+    
+4.  **通过 API 或 CLI 调用**
+    
+    按 [REST API 接入](raw/application-user-guide/agent-context/getting-started-overview/integration-overview/rest-api.md)提交任务并查询结果；也可在终端用 `bl parsex parse submit` / `bl parsex extract submit` 提交，详见[使用 CLI](raw/application-user-guide/agent-context/getting-started-overview/integration-overview/cli.md)。

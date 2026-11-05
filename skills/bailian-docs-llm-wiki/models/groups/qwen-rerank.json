@@ -34,14 +34,6 @@
           "count_limit": 300,
           "usage_limit_period": 6,
           "type": "model-default"
-        },
-        "model-default": {
-          "count_limit_period": 6,
-          "usage_limit": 900000,
-          "usage_limit_field": "total_tokens",
-          "count_limit": 300,
-          "usage_limit_period": 6,
-          "type": "model-default"
         }
       },
       "priceTimeBands": [
@@ -108,14 +100,6 @@
           "count_limit": 10,
           "usage_limit_period": 60,
           "type": "model-default"
-        },
-        "model-default": {
-          "count_limit_period": 1,
-          "usage_limit": 9000000,
-          "usage_limit_field": "total_tokens",
-          "count_limit": 10,
-          "usage_limit_period": 60,
-          "type": "model-default"
         }
       },
       "priceTimeBands": [
@@ -164,14 +148,6 @@
       ],
       "qpmInfo": {
         "model-default-actual": {
-          "count_limit_period": 10,
-          "usage_limit": 5000000000,
-          "usage_limit_field": "total_tokens",
-          "count_limit": 900,
-          "usage_limit_period": 60,
-          "type": "model-default"
-        },
-        "model-default": {
           "count_limit_period": 10,
           "usage_limit": 5000000000,
           "usage_limit_field": "total_tokens",
@@ -228,14 +204,6 @@
       ],
       "qpmInfo": {
         "model-default-actual": {
-          "count_limit_period": 1,
-          "usage_limit": 83000000,
-          "usage_limit_field": "total_tokens",
-          "count_limit": 84,
-          "usage_limit_period": 1,
-          "type": "model-default"
-        },
-        "model-default": {
           "count_limit_period": 1,
           "usage_limit": 83000000,
           "usage_limit_field": "total_tokens",

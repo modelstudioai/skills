@@ -9,32 +9,6 @@
 
 **重要**本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)。
 
-## 模型与价格
-
-**模型名称**
-
-**计费单价**
-
-**限流（主账号与RAM子账号共用）**
-
-**免费额度**[（查看）](raw/model-user-guide/test-1/new-free-quota.md)
-
-**任务下发接口RPS限制**
-
-**同时处理中任务数量**
-
-wan2.2-s2v
-
-480P：0.5元/秒
-
-720P：0.9元/秒
-
-5
-
-1
-
-100秒
-
 ## HTTP调用接口
 
 ### 前提条件

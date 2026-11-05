@@ -537,9 +537,7 @@ text-embedding-v3
 
 [Batch接口调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)：0.00025元
 
-各50万Token
-
-有效期：自开通百炼/模型发布/申请通过之日起90天（以较晚者为准）
+无免费额度
 
 中文、英语、西班牙语、法语、葡萄牙语、印尼语、日语、韩语、德语、俄罗斯语等50+主流语种
 
@@ -574,6 +572,8 @@ text-embedding-async-v2
 中文、英语、西班牙语、法语、葡萄牙语、印尼语、日语、韩语、德语、俄罗斯语
 
 text-embedding-async-v1
+
+无免费额度
 
 中文、英语、西班牙语、法语、葡萄牙语、印尼语
 
@@ -702,6 +702,8 @@ qwen2.5-vl-embedding
 
 单张大小不超过**5 MB**
 
+无免费额度
+
 tongyi-embedding-vision-plus-2026-03-06
 
 1152（默认）, 1024, 512, 256, 128, 64
@@ -716,11 +718,15 @@ tongyi-embedding-vision-plus-2026-03-06
 
 0.0005元
 
+无免费额度
+
 tongyi-embedding-vision-flash-2026-03-06
 
 768（默认）, 512, 256, 128, 64
 
 0.00015元
+
+无免费额度
 
 tongyi-embedding-vision-plus
 
@@ -732,11 +738,19 @@ tongyi-embedding-vision-plus
 
 0.0005元
 
+100万Token
+
+有效期：自开通百炼/模型发布/申请通过之日起90天（以较晚者为准）
+
 tongyi-embedding-vision-flash
 
 768
 
 0.00015元
+
+100万Token
+
+有效期：自开通百炼/模型发布/申请通过之日起90天（以较晚者为准）
 
 multimodal-embedding-v1
 
@@ -751,6 +765,8 @@ multimodal-embedding-v1
 图片/视频：0.0009 元
 
 文本：0.0007 元
+
+无免费额度
 
 #### 新加坡
 

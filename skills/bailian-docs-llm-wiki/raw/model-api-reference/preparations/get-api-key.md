@@ -14,6 +14,8 @@
 3.  点击新创建的 API Key 旁的![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8412544571/p994217.png)图标复制 API Key。
     
 
+若需通过程序自动化创建或管理 API Key（如 CreateApiKey、ListApiKeys），可调用[ModelStudio OpenAPI](https://next.api.aliyun.com/api/ModelStudio/2026-02-10)：使用阿里云主账号或 RAM 用户的 AccessKey 发起调用，RAM 用户需具备 `AliyunBailianFullAccess` 系统策略或包含 `modelstudio:CreateApiKey` 等相应权限的自定义策略（OpenAPI 路径的 RAM 权限与控制台创建所需的[超级管理员或业务空间管理员](https://help.aliyun.com/zh/model-studio/permission-management-overview#982297bd47p3i)角色相互独立）。
+
 ## 配置 API Key 到环境变量
 
 -   **方式一：在**[**第三方工具**](https://help.aliyun.com/zh/model-studio/use-chat-client-or-development-tool)**中进行配置**
@@ -266,10 +268,10 @@ API Key 的创建需使用[超级管理员](https://help.aliyun.com/zh/model-stu
 
 API Key 的调用权限完全由其**归属业务空间**决定。**同一空间内的 API Key 权限相同**，无需为不同模型（如文生文、文生图、语音合成）创建不同的 API Key。
 
--   **默认业务空间下的 API Key：**可调用所有[标准模型](raw/model-user-guide/get-started-with-models/models.md)，以及默认业务空间内的[应用](raw/application-user-guide/agent-development/llm-application/llm-application-start-using/flow-agent-introduction.md)。
+-   **默认业务空间下的 API Key：**可调用所有[标准模型](raw/model-user-guide/get-started-with-models/models.md)，以及默认业务空间内的[应用](raw/application-user-guide/llm-application/llm-application-start-using/flow-agent-introduction.md)。
 -   **子业务空间下的 API Key：**可调用该子业务空间已获得[模型调用授权](raw/model-user-guide/security-and-compliance/permission-management-overview.md)的标准模型，以及该业务空间内的应用。
 
-**调用在阿里云百炼**[**调优后的模型**](https://help.aliyun.com/zh/model-studio/model-training-overview)**：**此类模型部署成功后，仅能用其所在业务空间的API Key调用。
+**调用在阿里云百炼**[**调优后的模型**](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)**：**此类模型部署成功后，仅能用其所在业务空间的API Key调用。
 
 如需在业务空间之外做更细粒度的控制，可在创建或编辑 API Key 时将**权限**切换为**自定义**，配置：
 

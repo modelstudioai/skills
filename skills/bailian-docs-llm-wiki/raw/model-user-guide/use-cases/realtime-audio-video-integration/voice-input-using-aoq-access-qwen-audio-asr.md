@@ -519,6 +519,6 @@ sendRunTask();
 -   [客户端事件](raw/_short/qwen-audio-asr-streaming-client-events-1bae8548d2be6bc5.md)
 -   [服务端事件](raw/_short/qwen-audio-asr-streaming-server-events-b134164fc4410c2a.md)
 -   [AOQ SDK Android API 参考](raw/_short/aoq-android-sdk-reference-6ae7f381f2485386.md)
--   [qwen-audio-3.1-asr-flash-streaming 模型信息](raw/model-user-guide/support/model-studio-model-list/model-list-speech-recognition/qwen-audio-3-1-asr-flash-streaming.md)
+-   [qwen-audio-3.1-asr-flash-streaming 模型信息](raw/_short/qwen-audio-3-1-asr-flash-streaming-5a2483d4eed63d1c.md)
 -   [使用 AOQ 接入 fun-asr-realtime 实现实时语音识别](raw/_short/real-time-speech-recognition-using-aoq-access-fu-1f528aaba4a8fd1b.md)
 -   [AOQ 接入指南](raw/model-api-reference/realtime-api-user-guide/realtime-model-connection/realtime-aoq-access.md)

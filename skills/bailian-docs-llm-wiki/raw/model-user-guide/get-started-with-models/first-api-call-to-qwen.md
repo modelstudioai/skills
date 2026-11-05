@@ -1294,7 +1294,7 @@ A：请根据您的使用情况参考以下步骤：
 
 **0代码进行大模型微调**
 
-通常来说，对大模型微调需要有人工智能知识背景与工程能力，阿里云百炼提供了0代码对大模型进行微调的功能，您仅需提供数据集即可。详情请参见[在控制台进行模型调优](https://help.aliyun.com/zh/model-studio/model-training-on-console)。
+通常来说，对大模型微调需要有人工智能知识背景与工程能力，阿里云百炼提供了0代码对大模型进行微调的功能，您仅需提供数据集即可。详情请参见[在控制台进行模型调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-on-console.md)。
 
 **调用自训练模型**
 

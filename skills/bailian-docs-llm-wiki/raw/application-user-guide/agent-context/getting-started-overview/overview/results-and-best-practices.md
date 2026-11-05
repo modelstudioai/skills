@@ -125,6 +125,10 @@ JSON
 
 在[信息抽取控制台](raw/application-user-guide/agent-context/getting-started-overview/extract-overview/playground-extract.md)选择可复用的已解析文档
 
+在终端或脚本中取用
+
+用 `bl parsex parse result --biz-id <biz-id> --follow` 查询结果，详见[使用 CLI](raw/application-user-guide/agent-context/getting-started-overview/integration-overview/cli.md)
+
 ## 相关指南
 
 -   [文档解析概览](raw/application-user-guide/agent-context/getting-started-overview/overview.md)：回顾文档解析能力与完整任务流程。

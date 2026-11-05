@@ -14,13 +14,13 @@
 
 [Gemini 3.8 Flash](https://ai.google.dev/gemini-api/docs/audio)
 
-[qwen3.8-omni-flash](raw/model-user-guide/support/model-studio-model-list/model-list-omni/qwen3-8-omni-flash.md)
+[qwen3.8-omni-flash](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-omni/qwen3-8-omni-flash.md)
 
 实时语音对话
 
 [gpt-realtime-2.1](https://developers.openai.com/api/docs/models/gpt-realtime-2.1)
 
-[qwen3.8-omni-flash-realtime](raw/model-user-guide/support/model-studio-model-list/model-list-omni/qwen3-8-omni-flash-realtime.md)
+[qwen3.8-omni-flash-realtime](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-omni/qwen3-8-omni-flash-realtime.md)
 
 实时翻译
 
@@ -28,7 +28,7 @@
 
 [gpt-realtime-translate](https://developers.openai.com/api/docs/models/gpt-realtime-translate)
 
-[qwen3.8-livetranslate-flash-realtime](raw/model-user-guide/support/model-studio-model-list/model-list-speech-to-speech/qwen3-8-livetranslate-flash-realtime.md)
+[qwen3.8-livetranslate-flash-realtime](raw/_short/qwen3-8-livetranslate-flash-realtime-ff0ad972469d86fe.md)
 
 ## 使用场景
 
@@ -978,7 +978,7 @@ Function Calling
 
 联网搜索
 
-[qwen3.8-omni-flash](raw/model-user-guide/support/model-studio-model-list/model-list-omni/qwen3-8-omni-flash.md)
+[qwen3.8-omni-flash](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-omni/qwen3-8-omni-flash.md)
 
 Chat Completions / Responses
 
@@ -990,7 +990,7 @@ Chat Completions / Responses
 
 支持
 
-[qwen3.8-omni-flash-realtime](raw/model-user-guide/support/model-studio-model-list/model-list-omni/qwen3-8-omni-flash-realtime.md)
+[qwen3.8-omni-flash-realtime](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-omni/qwen3-8-omni-flash-realtime.md)
 
 Realtime API
 
@@ -1164,7 +1164,7 @@ API
 
 语言数
 
-[qwen3.8-livetranslate-flash-realtime](raw/model-user-guide/support/model-studio-model-list/model-list-speech-to-speech/qwen3-8-livetranslate-flash-realtime.md)
+[qwen3.8-livetranslate-flash-realtime](raw/_short/qwen3-8-livetranslate-flash-realtime-ff0ad972469d86fe.md)
 
 [Realtime API](raw/model-api-reference/realtime-api-user-guide/realtime-api-overview.md)
 

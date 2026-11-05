@@ -33,13 +33,6 @@
           "count_limit": 20,
           "type": "model-default",
           "async_user_concurrency_limit": 10
-        },
-        "model-default": {
-          "count_limit_period": 60,
-          "async_user_queue_limit": 200,
-          "count_limit": 20,
-          "type": "model-default",
-          "async_user_concurrency_limit": 10
         }
       },
       "priceTimeBands": [
@@ -89,13 +82,6 @@
       ],
       "qpmInfo": {
         "model-default-actual": {
-          "count_limit_period": 60,
-          "async_user_queue_limit": 200,
-          "count_limit": 120,
-          "type": "model-default",
-          "async_user_concurrency_limit": 10
-        },
-        "model-default": {
           "count_limit_period": 60,
           "async_user_queue_limit": 200,
           "count_limit": 120,

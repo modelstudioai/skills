@@ -237,7 +237,7 @@ antdigital/Ling-3.1-flash 不支持以下参数：`thinking_budget`、`reasoning
 
 说明
 
-[antdigital/Ling-3.1-flash](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/ling-3-1-flash-by-antdigital.md)
+[antdigital/Ling-3.1-flash](raw/_short/ling-3-1-flash-by-antdigital-d1ed99fc07a3c7b1.md)
 
 混合思考模型，默认开启思考模式，上下文长度为 1048576 Token
 

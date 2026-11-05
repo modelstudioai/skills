@@ -1,0 +1,9 @@
+# 全模态
+
+-   [qwen3.8-omni-flash](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-omni/qwen3-8-omni-flash.md)
+-   [qwen3.8-omni-flash-realtime](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-omni/qwen3-8-omni-flash-realtime.md)
+-   [qwen3.5-omni-plus](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-omni/qwen3-5-omni-plus.md)
+-   [qwen3.5-omni-flash](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-omni/qwen3-5-omni-flash.md)
+-   [qwen3-omni-flash](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-omni/qwen3-omni-flash.md)
+-   [qwen3.5-omni-plus-realtime](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-omni/qwen3-5-omni-plus-realtime.md)
+-   [qwen3.5-omni-flash-realtime](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-omni/qwen3-5-omni-flash-realtime.md)

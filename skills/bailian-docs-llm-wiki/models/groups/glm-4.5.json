@@ -80,12 +80,6 @@
           "usage_limit_field": "total_tokens",
           "usage_limit_period": 6,
           "type": "model-default"
-        },
-        "model-default": {
-          "usage_limit": 500000,
-          "usage_limit_field": "total_tokens",
-          "usage_limit_period": 6,
-          "type": "model-default"
         }
       },
       "priceTimeBands": [
@@ -242,14 +236,6 @@
           "count_limit": 50,
           "usage_limit_period": 60,
           "type": "model-default"
-        },
-        "model-default": {
-          "count_limit_period": 6,
-          "usage_limit": 2000000,
-          "usage_limit_field": "total_tokens",
-          "count_limit": 50,
-          "usage_limit_period": 60,
-          "type": "model-default"
         }
       },
       "priceTimeBands": [
@@ -309,14 +295,6 @@
       "model": "glm-5.1",
       "qpmInfo": {
         "model-default-actual": {
-          "count_limit_period": 6,
-          "usage_limit": 100000,
-          "usage_limit_field": "total_tokens",
-          "count_limit": 50,
-          "usage_limit_period": 6,
-          "type": "model-default"
-        },
-        "model-default": {
           "count_limit_period": 6,
           "usage_limit": 100000,
           "usage_limit_field": "total_tokens",
@@ -476,14 +454,6 @@
       "model": "glm-5",
       "qpmInfo": {
         "model-default-actual": {
-          "count_limit_period": 6,
-          "usage_limit": 100000,
-          "usage_limit_field": "total_tokens",
-          "count_limit": 50,
-          "usage_limit_period": 6,
-          "type": "model-default"
-        },
-        "model-default": {
           "count_limit_period": 6,
           "usage_limit": 100000,
           "usage_limit_field": "total_tokens",
@@ -665,12 +635,6 @@
       ],
       "qpmInfo": {
         "model-default-actual": {
-          "usage_limit": 200000,
-          "usage_limit_field": "total_tokens",
-          "usage_limit_period": 6,
-          "type": "model-default"
-        },
-        "model-default": {
           "usage_limit": 200000,
           "usage_limit_field": "total_tokens",
           "usage_limit_period": 6,

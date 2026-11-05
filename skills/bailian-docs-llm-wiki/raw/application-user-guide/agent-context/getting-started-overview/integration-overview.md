@@ -1,6 +1,6 @@
 # 服务渠道
 
-了解已定稿但生产入口待发布的 REST 字段协议，以及 Skill 的产品规划状态。
+了解 REST API、Agent Skill 与 CLI 三种接入方式，以及 Skill 的产品规划状态。
 
 ## 接入方式对比
 
@@ -19,6 +19,14 @@ REST
 自有后端服务
 
 DashScope HTTP 接口
+
+**CLI**
+
+命令行
+
+本地调试 / 脚本
+
+`bailian-cli`，用 `bl parsex` 提交和查询任务
 
 **Agent Skill**
 
@@ -85,6 +93,17 @@ API Key 在[**控制台 API Key 页**](raw/model-api-reference/preparations/get-
 查询 Extract 状态与结果
 
 完整接口列表见 [**API 参考**](raw/application-api-reference/api-overview.md)。
+
+## CLI
+
+阿里云百炼 CLI 把 ParseX 的解析与字段抽取封装为命令。安装与鉴权见[安装与鉴权](https://help.aliyun.com/zh/model-studio/cli/installation)，操作步骤和示例见[使用 CLI](raw/application-user-guide/agent-context/getting-started-overview/integration-overview/cli.md)。
+
+```
+bl parsex parse submit --workspace-id <workspace-id> --file-url "https://example.com/document.pdf" --output-file-format markdown --output json
+bl parsex parse result --workspace-id <workspace-id> --biz-id <parse-biz-id> --follow --output json
+```
+
+完整参数见 [ParseX 命令参考](https://help.aliyun.com/zh/model-studio/cli/parsex)。
 
 ## **Agent Skill**
 

@@ -103,8 +103,10 @@ API Key 管理
 2.  对所有[业务空间](https://help.aliyun.com/zh/model-studio/permission-management-overview#dac6676deelh2)进行模型管理、模型限流。
 3.  对所有业务空间进行账号（用户）管理。
 4.  管理所有的 API Key。
+5.  在业务空间管理中为业务空间开启 [AI 安全护栏](https://help.aliyun.com/zh/model-studio/content-security#h2-workspace-switch)的输入检测/输出检测开关（仅北京地域）。
+6.  通过[ModelStudio OpenAPI](https://next.api.aliyun.com/api/ModelStudio/2026-02-10)管理业务空间（创建、查询、删除业务空间，以及配置模型授权与限流）。
 
-**说明**如需开通 [AI 安全护栏服务](https://help.aliyun.com/zh/document_detail/2923687.html)、[模型监控](raw/model-user-guide/model-monitoring/model-telemetry.md)、[应用观测](https://help.aliyun.com/zh/model-studio/agenteval-observation#h-agenteval-obs-start)等功能，建议使用**阿里云主账号**在控制台进行一次性授权和开通。
+**说明**如需开通 [AI 安全护栏服务](raw/model-user-guide/security-and-compliance/content-security.md)（仅北京地域可用）、[模型监控](raw/model-user-guide/model-monitoring/model-telemetry.md)、[应用观测](https://help.aliyun.com/zh/model-studio/agenteval-observation#h-agenteval-obs-start)等功能，建议使用**阿里云主账号**在控制台进行一次性授权和开通。
 
 ### 业务空间管理员
 
@@ -682,7 +684,7 @@ AliyunBSSOrderAccess
 
 ### 3\. 如何使用特定业务空间的应用？
 
-使用 API 管理、调用特定业务空间的应用需要同时设置 [APP ID 和 Workspace ID](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)。
+使用 API 管理、调用特定业务空间的应用需要同时设置 [APP ID 和 Workspace ID](raw/application-api-reference/application-call/obtain-the-app-id-and-workspace-id.md)。
 
 ### 4\. 已配置 AliyunBailianFullAccess 但仍无法管理业务空间怎么办？
 

@@ -1,56 +1,46 @@
 # 异步调用
 
-异步调用是百炼平台对长耗时任务（通常 >3 秒）的标准执行模式：客户端发起请求后立即返回任务标识符（如 `task_id` 或 `biz_id`），服务端后台执行任务，结果需通过轮询或事件通知方式获取。该模式解耦请求与响应，保障 API 网关稳定性，适用于图像生成、视频合成、3D 建模、语音转写、文档/音视频解析等计算密集型场景。
+异步调用是百炼平台对长耗时、高资源消耗类模型任务（如文档/音视频解析、视频生成、3D建模等）采用的标准交互模式：客户端提交任务后立即返回唯一任务标识（如 `biz_id` 或 `task_id`），不阻塞等待结果；后续通过轮询查询或事件回调方式获取最终输出。该模式解耦请求与响应，保障服务稳定性与高并发能力。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **图像生成**：`wanx-virtualmodel`、`shoemodel-v1`、`creative-poster-generation-v1`、`wanx-x-painting` 等编辑与垂直工具类模型强制异步；调用 `POST /api/v1/services/aigc/multimodal-generation/generation` 创建任务，返回 `task_id`，24 小时内可轮询 `GET /api/v1/tasks/{task_id}` 查询状态与结果。
+- **文档与音视频解析（ParseX）**：调用 `/parse/submit` 或 `/extract/submit` 接口提交任务，返回 `biz_id`；再通过 `/parse/result?biz_id=xxx` 或 `/extract/result?biz_id=xxx` 轮询状态（`init` → `processing` → `success`/`failed`）。解析结果默认保留 30 天，抽取复用需在 7 天内。
   
-- **视频生成**：所有视频模型（HappyHorse、WanX、PixVerse、Vidu、Kling 等）**仅支持异步调用**，必须在请求头中显式设置 `X-DashScope-Async: enable`，否则报错；任务创建后通过 `task_id` 轮询，支持事件总线（EventBridge）回调接收完成通知。
+- **视频生成（Video Generation）**：所有视频 API（万相、PixVerse、Vidu、Kling 等）强制启用异步模式，请求头必须携带 `X-DashScope-Async: enable`；成功响应返回 `task_id`，需调用通用任务查询接口 `/api/v1/tasks/{task_id}` 获取结果。注意：未带该 Header 将直接报错 `"current user api does not support synchronous calls"`。
 
-- **3D 生成**：Tripo 全系列模型（文生3D、图生Splat、网格重拓扑、贴图生成、自动绑骨等）**仅限异步**，且目前仅华北2（北京）地域可用；同样依赖 `X-DashScope-Async: enable` 请求头和 `task_id` 生命周期管理。
+- **3D 生成（Tripo）**：全部接口均为异步，同样要求 `X-DashScope-Async: enable` 请求头；任务创建后返回 `task_id`，通过统一任务管理接口轮询；**仅支持华北2（北京）地域**，且 Endpoint 必须使用业务空间专属域名（如 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`）。
 
-- **语音与多模态处理**：语音转写模型（如 `paraformer-16k-1`）、图像理解类长流程任务（如多步编辑链）均归入异步任务体系，统一由 `/api/v1/tasks/{task_id}` 接口管理。
+- **其他异步模型**：包括图像生成（如 `wanx2.1-t2i-turbo`）、语音转写（`paraformer-16k-1`）等，均纳入统一异步任务管理体系，支持任务查询（`/api/v1/tasks/{task_id}`）、批量列表（`/api/v1/tasks`）和取消（仅限 `PENDING` 状态）。
 
-- **结构化解析（ParseX）**：文档与音视频解析、基于 Schema 的字段抽取全部采用异步范式，使用 `biz_id` 作为任务凭证；提交 `/parse/submit` 或 `/extract/submit` 后，通过 `/parse/result` 或 `/extract/result` 轮询，结果保留期为 30 天（复用场景要求 7 天内）。
-
-> ✅ 统一特征：所有异步任务均返回唯一 ID、支持状态查询（`PENDING`/`RUNNING`/`SUCCEEDED`/`FAILED`/`CANCELED`）、支持取消（仅 `PENDING` 状态）、结果有效期明确（24 小时至 30 天不等）。
+> ✅ **最佳实践**：避免高频轮询（默认限流 20 QPS/账号），建议按任务类型设置合理间隔——视频/3D 类任务推荐 3–10 秒轮询，文档解析可设为 1–2 秒；生产环境强烈推荐配置 HTTP 回调 URL 或接入 EventBridge，由平台主动推送 `TASK_COMPLETED` 事件，彻底规避轮询开销与限流风险。
 
 ## 关键参数和配置
 
-| 参数/配置项 | 位置 | 说明 | 注意事项 |
-|-------------|------|------|----------|
-| `X-DashScope-Async` | HTTP 请求头 | **强制启用异步模式的开关**，值必须为 `"enable"` | 缺失或值错误将导致 `400 Bad Request`（如视频 API 明确报 `"current user api does not support synchronous calls"`） |
-| `task_id` / `biz_id` | 响应体 & 后续请求路径/体 | 任务全局唯一标识（UUID 格式），用于轮询、取消、结果获取 | 不可跨接口混用（如 `task_id` 不能用于 ParseX 的 `/parse/result`）；不可自行构造或猜测 |
-| `status` 字段 | 轮询响应体（如 `data.status`） | 当前任务状态，典型值：`PENDING`, `RUNNING`, `SUCCEEDED`, `FAILED`, `CANCELED` | `SUCCEEDED` 表示主任务成功（子任务可能部分失败）；`FAILED` 时 `code` 和 `message` 提供具体错误原因 |
-| 轮询间隔策略 | 客户端逻辑 | 建议采用指数退避（如 1s → 2s → 4s → 8s），避免高频轮询触发 QPS 限流（默认 20 QPS） | 对图像/视频等长任务，初始间隔建议 ≥2s；文本类可缩短至 500ms |
-| 事件通知（EventBridge） | 平台侧配置 | 配置 HTTP 回调 URL 或 RocketMQ Topic，接收 `dashscope:System:AsyncTaskFinish` 事件 | 比轮询更高效、实时、免限流，**高并发或生产环境强烈推荐**；需自行实现幂等处理 |
+| 参数 | 位置 | 是否必填 | 说明 |
+|------|------|----------|------|
+| `X-DashScope-Async` | HTTP 请求头 | 是（视频、3D、通用异步任务） | 值必须为 `"enable"`；缺失或值错误将导致调用失败。ParseX 类接口虽未显式要求此 Header，但其 `biz_id` 机制本质等价于异步语义。 |
+| `biz_id` / `task_id` | 响应体（JSON） | 是（返回值） | 任务唯一标识符，用于后续结果查询或管理操作；生命周期依服务而异（ParseX 的 `biz_id` 有效期与结果保留期一致；通用 `task_id` 默认 24 小时）。 |
+| `model` | 请求体 JSON | 是（视频、3D、通用异步任务） | 明确指定模型全名（如 `wanx3.0-video-generation`、`Tripo/Tripo-H3.1`），决定输入格式、能力边界与计费策略。 |
+| `callback_url` | 请求体 JSON（可选） | 否 | 配置 HTTP 回调地址，任务完成后平台将 POST 结果到该 URL（含签名验证），替代轮询；需确保公网可达且能处理重复通知。 |
+
+> ⚠️ 注意：异步任务不支持同步返回结果；若误用同步 SDK 方法（如 `client.chat.completions.create(..., stream=False)`）调用异步模型，将触发协议不匹配错误。请始终使用对应异步接口路径与参数规范。
 
 ## 面向开发者，简洁实用
 
-- ✅ **必做三件事**：  
-  1. 请求头加 `X-DashScope-Async: enable`（图像/视频/3D/ParseX 全部必需）；  
-  2. 保存响应中的 `task_id` 或 `biz_id`；  
-  3. 用该 ID 轮询或配置事件通知，**不要等待同步响应**。
-
-- ⚠️ **常见踩坑点**：  
-  - 忘记设 `X-DashScope-Async` → 直接报错，尤其视频 API 会明确拒绝；  
-  - 混用 `task_id` 和 `biz_id` → 返回 `404 Not Found` 或 `InvalidParameter`；  
-  - 轮询超时未处理 `ResultNotReady` → 导致任务“卡住”，应持续重试直至终态；  
-  - 未校验 `status === 'SUCCEEDED'` 就直接读取 `output` 字段 → 可能为空或结构异常。
-
-- 🚀 **最佳实践建议**：  
-  - 生产环境优先配置 EventBridge HTTP 回调，降低客户端复杂度与资源消耗；  
-  - 使用 SDK 封装的异步方法（如 Python SDK 的 `client.async_generate()`）自动处理轮询逻辑；  
-  - 为每个异步任务添加业务上下文标签（如 `trace_id`），便于日志追踪与问题定位；  
-  - 设置任务超时兜底（如轮询 5 分钟无终态则主动取消并告警）。
+- **一句话判断是否为异步任务**：看接口文档是否提及“轮询”、“`task_id`”、“`biz_id`”、“`X-DashScope-Async`”，或明确标注“异步模型”。
+- **调试技巧**：CLI 中 `bl video-synthesis submit` 支持 `--wait` 参数自动轮询至完成；其他异步任务建议先用 `curl` 提交，再用 `bl task fetch --task-id xxx` 快速验证。
+- **错误排查重点**：
+  - `400 Bad Request` + `"X-DashScope-Async header is required"` → 检查 Header 拼写与值；
+  - `404 Not Found` → 确认 Endpoint 地域与 WorkspaceId 匹配，且模型已开通；
+  - `429 Too Many Requests` → 降低轮询频率，或改用回调；
+  - `TASK_EXPIRED` / `ParseResultExpired` → 检查任务 ID 生命周期与结果保留策略。
+- **生产就绪建议**：启用回调 + 本地任务状态缓存 + 重试退避（指数退避至最大 30 秒），并监控 `task_status` 变更链路完整性。
 
 ## 关联主题页
 
-- [more about models](../api/more-about-models.md)
-- [image generation](../api/image-generation.md)
+- [api overview](../api/api-overview.md)
 - [video generation api](../api/video-generation-api.md)
 - [3d generation](../api/3d-generation.md)
-- [api overview](../api/api-overview.md)
+- [more about models](../api/more-about-models.md)
 
 
