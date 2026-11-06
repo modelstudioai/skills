@@ -18,7 +18,7 @@
 
 ## 前提条件
 
-必须先阅读[实时多模态交互协议（WebSocket）](raw/_short/multimodal-interaction-protocol-8062cfbb96fec75a.md) ，了解实时多模态交互的整体WebSocket协议。
+必须先阅读[实时多模态交互协议（WebSocket）](raw/model-api-reference/realtime-api-directory/multimodal-interaction-protocol.md) ，了解实时多模态交互的整体WebSocket协议。
 
 ### 开通阿里云百炼模型服务并获取API KEY
 
@@ -278,5 +278,5 @@ string
 
 **重要**
 
-1.  header中的参数定义见[实时多模态交互协议（WebSocket）](raw/_short/multimodal-interaction-protocol-8062cfbb96fec75a.md)相关说明
-2.  时序图中的其他流程见[实时多模态交互协议（WebSocket）](raw/_short/multimodal-interaction-protocol-8062cfbb96fec75a.md)相关说明
+1.  header中的参数定义见[实时多模态交互协议（WebSocket）](raw/model-api-reference/realtime-api-directory/multimodal-interaction-protocol.md)相关说明
+2.  时序图中的其他流程见[实时多模态交互协议（WebSocket）](raw/model-api-reference/realtime-api-directory/multimodal-interaction-protocol.md)相关说明

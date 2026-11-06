@@ -2,7 +2,7 @@
 
 您可以使用阿里云百炼官方的 DashScope SDK（支持 Python 和 Java），也可以通过 OpenAI 官方提供的多语言 SDK（如 Python、Node.js、Java、Go）来调用阿里云百炼的 OpenAI 兼容接口。
 
-**说明**如需通过 AOQ 调用 Realtime API 支持的实时语音或多模态模型，请参见[AOQ SDK 下载](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-sdk-download.md)。支持的模型及协议请参见[模型与协议支持范围](https://help.aliyun.com/zh/model-studio/realtime-api-overview#rtov-s02h2)。
+**说明**如需通过 AOQ 调用 Realtime API 支持的实时语音或多模态模型，请参见[AOQ SDK 下载](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/realtime-sdk-download.md)。支持的模型及协议请参见[模型与协议支持范围](https://help.aliyun.com/zh/model-studio/realtime-api-overview#rtov-s02h2)。
 
 ## 安装SDK
 
@@ -138,5 +138,5 @@ import (
 成功完成 SDK 的安装后，您可以：
 
 -   查阅百炼控制台选择适合您业务场景的模型。
--   使用[文本生成模型](raw/model-api-reference/qwen-api-reference.md)、[图像生成模型](raw/model-api-reference/image-generation/wan-image-api-reference/text-to-image-v2-api-reference.md)、[视频生成模型](raw/_short/legacy-image-to-video-api-reference-8b02dd673da405f1.md)、[语音合成模型](raw/_short/cosyvoice-python-sdk-c20dfd31499fc83c.md)、[语音识别模型](raw/_short/paraformer-real-time-speech-recognition-python-s-145dc2b30661b050.md)、[向量模型](raw/model-api-reference/vector-and-sort/general-text-vector/text-embedding-synchronous-api.md)、[排序模型](raw/model-api-reference/vector-and-sort/rerank-model/text-rerank-api.md)开始构建您的应用。
+-   使用[文本生成模型](raw/model-api-reference/qwen-api-reference.md)、[图像生成模型](raw/model-api-reference/image-generation/wan-image-api-reference/text-to-image-v2-api-reference.md)、[视频生成模型](raw/_short/legacy-image-to-video-api-reference-8b02dd673da405f1.md)、[语音合成模型](raw/_short/cosyvoice-python-sdk-c75c9dda4df376a5.md)、[语音识别模型](raw/_short/paraformer-real-time-speech-recognition-python-s-4fe6480e11b3dae6.md)、[向量模型](raw/model-api-reference/vector-and-sort/general-text-vector/text-embedding-synchronous-api.md)、[排序模型](raw/model-api-reference/vector-and-sort/rerank-model/text-rerank-api.md)开始构建您的应用。
 -   了解 [与 OpenAI API 的兼容性详情](raw/model-api-reference/toolkits-and-frameworks/compatibility-of-openai-with-dashscope.md)。

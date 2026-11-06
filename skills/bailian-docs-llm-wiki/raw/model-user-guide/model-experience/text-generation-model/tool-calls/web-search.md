@@ -219,7 +219,7 @@ public class Main {
 
 #### 全球
 
-美国（弗吉尼亚）、中国香港、日本（东京）、德国（法兰克福）地域支持以下模型。其中中国香港、日本（东京）、德国（法兰克福）需使用服务部署范围为**全球**的业务空间调用，参见[选择地域、服务部署范围和接入域名](raw/model-api-reference/preparations/regions.md)。
+美国（弗吉尼亚）、中国香港、日本（东京）、德国（法兰克福）地域支持以下模型。其中中国香港、日本（东京）、德国（法兰克福）需使用服务部署范围为**全球**的业务空间调用，参见[选择地域、服务部署范围和接入域名](raw/model-user-guide/get-started-with-models/regions.md)。
 
 -   **Kimi**：`kimi-k3.1-pro` 支持 Responses `web_search` 和 Anthropic `web_search`，不支持 Chat Completions `enable_search`，适用于本标签页的全部四个地域。
     

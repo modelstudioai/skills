@@ -326,7 +326,7 @@ curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.c
 
 ### 流式输出
 
-Qwen-Audio-ASR/Fun-ASR-Flash/Qwen3-ASR-Flash 支持流式输出：边识别边返回中间结果，适用于需要实时反馈进度的场景。 Qwen-Audio-ASR 和 Fun-ASR-Flash 的 HTTP SSE 调用方式及返回结构，请参见[Qwen-Audio-ASR HTTP API](raw/_short/qwen-audio-asr-http-api-b304ee1b83ae18cd.md)和[Fun-ASR-Flash HTTP API](raw/_short/fun-asr-flash-recorded-speech-recognition-http-a-ba2d322512e386cb.md)。
+Qwen-Audio-ASR/Fun-ASR-Flash/Qwen3-ASR-Flash 支持流式输出：边识别边返回中间结果，适用于需要实时反馈进度的场景。 Qwen-Audio-ASR 和 Fun-ASR-Flash 的 HTTP SSE 调用方式及返回结构，请参见[Qwen-Audio-ASR HTTP API](raw/_short/qwen-audio-asr-http-api-90b9d62787e911f4.md)和[Fun-ASR-Flash HTTP API](raw/_short/fun-asr-flash-recorded-speech-recognition-http-a-7716e5d27dfd9a7b.md)。
 
 Qwen-Audio-ASR-Filetrans、Fun-ASR、Qwen3-ASR-Filetrans、Paraformer 等异步转写模型不支持流式输出，需通过任务轮询获取最终结果（详见[长音频文件处理](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#nrt03_longaudio_h3)）。
 
@@ -348,7 +348,7 @@ Qwen-Audio-ASR-Filetrans、Fun-ASR、Qwen3-ASR-Filetrans、Paraformer 等异步�
 
 ### 说话人分离
 
-`qwen-audio-3.1-asr-flash` 使用 `speaker_diarization_enabled` 开启说话人分离，其参数和返回结构请参见 [HTTP API](raw/_short/qwen-audio-asr-http-api-b304ee1b83ae18cd.md)。
+`qwen-audio-3.1-asr-flash` 使用 `speaker_diarization_enabled` 开启说话人分离，其参数和返回结构请参见 [HTTP API](raw/_short/qwen-audio-asr-http-api-90b9d62787e911f4.md)。
 
 说话人分离可自动识别音频中不同说话人，并在转写结果中为每个句子标注说话人标签，适用于多人会议、访谈录音等场景。
 
@@ -547,12 +547,12 @@ Qwen3-ASR-Filetrans
 
 ## API参考
 
--   [非实时语音识别-Qwen-Audio-ASR-Filetrans API参考](raw/_short/qwen-audio-asr-filetrans-api-c91600a5bccc788c.md)
--   [非实时语音识别-Fun-ASR API参考](raw/_short/fun-asr-recorded-speech-recognition-api-referenc-cdd1d2e565f281cc.md)
--   [非实时语音识别-Qwen-Audio-ASR API参考](raw/_short/qwen-audio-asr-api-12cd76f68a22ae50.md)
--   [非实时语音识别-Fun-ASR-Flash API参考](raw/_short/non-real-time-speech-recognition-for-fun-asr-fla-a39568e6f8404553.md)
--   [非实时语音识别-Qwen-ASR API参考](raw/_short/qwen-asr-api-reference-60b7c9eb88d7f83b.md)
--   [非实时语音识别-Paraformer API参考](raw/_short/paraformer-recorded-speech-recognition-api-refer-8ca94e9578cc12b7.md)
+-   [非实时语音识别-Qwen-Audio-ASR-Filetrans API参考](raw/model-api-reference/audio-api-directory/speech-recognition-api-reference/qwen-audio-asr-filetrans-api.md)
+-   [非实时语音识别-Fun-ASR API参考](raw/_short/fun-asr-recorded-speech-recognition-api-referenc-b0273c90bb44d4cc.md)
+-   [非实时语音识别-Qwen-Audio-ASR API参考](raw/model-api-reference/audio-api-directory/speech-recognition-api-reference/qwen-audio-asr-api.md)
+-   [非实时语音识别-Fun-ASR-Flash API参考](raw/_short/non-real-time-speech-recognition-for-fun-asr-fla-650fa37d535f17b4.md)
+-   [非实时语音识别-Qwen-ASR API参考](raw/_short/qwen-asr-api-reference-6234af32190b8ba9.md)
+-   [非实时语音识别-Paraformer API参考](raw/_short/paraformer-recorded-speech-recognition-api-refer-3f19f98cbb4ce26b.md)
 
 ## 常见问题
 

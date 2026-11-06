@@ -137,5 +137,5 @@
 
 ## 接入与费用
 
--   接口参数、鉴权、参考音频提交方式，请参见[音频生成 API参考](raw/model-api-reference/audio-api-references/audio-generation-api.md)。
+-   接口参数、鉴权、参考音频提交方式，请参见[音频生成 API参考](raw/model-api-reference/audio-api-directory/audio-generation-api.md)。
 -   按生成音频原始时长计费，调整语速不改变计费时长。价格请参见[模型调用计费](https://help.aliyun.com/zh/model-studio/model-pricing#audio-generation-pricing)。

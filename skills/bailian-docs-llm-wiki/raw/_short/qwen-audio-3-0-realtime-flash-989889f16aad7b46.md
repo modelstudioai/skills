@@ -191,3 +191,8 @@ RPM（每分钟请求数）
 TPM（每分钟tokens）
 
 100,000
+
+## 调用方式
+
+-   [接入指南](raw/model-user-guide/model-experience/speech-and-audio/speech-to-speech/qwen-audio-realtime-user-guides.md)
+-   [API 参考](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/voice-conversation-api-references.md)

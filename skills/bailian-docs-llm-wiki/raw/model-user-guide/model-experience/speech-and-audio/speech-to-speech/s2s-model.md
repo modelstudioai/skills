@@ -63,7 +63,7 @@ Gemini 3.5 Live Translate (Preview)
 
 -   **实时**：适用于语音助手、呼叫中心、同声传译等实时语音交互场景。音频流式输入，语音流式输出。
 
-**说明**Realtime API 提供 WebSocket、WebRTC 和 AOQ 三种接入方式，各型号支持范围和协议选型见 [Realtime API 概述](raw/model-api-reference/realtime-api-user-guide/realtime-api-overview.md)。
+**说明**Realtime API 提供 WebSocket、WebRTC 和 AOQ 三种接入方式，各型号支持范围和协议选型见 [Realtime API 概述](raw/model-api-reference/realtime-api-directory/realtime-api-overview.md)。
 
 -   **文件模式（HTTP）**：可以用延迟换取更好的效果，适用于视频配音、播客翻译、离线内容处理等场景。文件模式下还支持 Function Calling、联网搜索、思考模式、视频上下文等附带能力（详见下方“S2S 单模型的附带能力”）。
 

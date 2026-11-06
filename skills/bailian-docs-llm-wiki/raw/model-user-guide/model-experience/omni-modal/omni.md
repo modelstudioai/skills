@@ -1166,7 +1166,7 @@ API
 
 [qwen3.8-livetranslate-flash-realtime](raw/_short/qwen3-8-livetranslate-flash-realtime-ff0ad972469d86fe.md)
 
-[Realtime API](raw/model-api-reference/realtime-api-user-guide/realtime-api-overview.md)
+[Realtime API](raw/model-api-reference/realtime-api-directory/realtime-api-overview.md)
 
 音频、图片
 

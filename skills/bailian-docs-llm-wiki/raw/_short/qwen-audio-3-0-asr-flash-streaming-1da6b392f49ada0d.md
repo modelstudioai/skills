@@ -135,3 +135,9 @@ RPM（每分钟请求数）
 RPM（每分钟请求数）
 
 1200
+
+## 调用方式
+
+-   [客户端事件](raw/_short/qwen-audio-asr-streaming-client-events-3240c8efa3976e48.md)
+-   [WebSocket 接入](raw/_short/qwen-audio-asr-streaming-websocket-api-779f1056a08e5525.md)
+-   [AOQ 接入](raw/_short/qwen-audio-asr-streaming-aoq-access-7b2cf295190f6172.md)

@@ -1,32 +1,35 @@
 # get started with models
 
-百炼平台提供统一的模型调用入口，支持通过 REST API 或 SDK 快速接入通义千问等大模型。本文档指导开发者完成模型服务的初始化配置、参数设置与首次调用，并明确关键约束条件。所有操作均需先完成 [API Key 配置](../../raw/model-user-guide/get-started-with-models.md) 和身份认证。
+本文档面向开发者，介绍如何快速接入和调用百炼平台提供的大模型服务。你将了解当前支持的模型类型、关键请求参数、标准调用方式，以及必须注意的服务限制与兼容性事项。所有操作均基于 RESTful API 接口，无需安装额外 SDK 即可开始。
 
-## 支持的模型与功能
+## 支持的模型与核心功能
 
-当前平台支持通义千问系列（Qwen1.5、Qwen2、Qwen2.5、Qwen3）、Qwen-VL 多模态模型及部分开源微调模型，具体以 [模型列表](../../raw/model-user-guide/get-started-with-models/model-studio-model-list.md) 为准。基础能力包括文本生成、对话补全、[函数调用](../concepts/function-calling.md)（tool calling）和流式响应；多模态模型支持图像理解与图文生成。注意：部分旧版文档中提及的 `qwen-max` 已于 2024 年 Q3 下线，实际可用模型请严格以 [模型列表](../../raw/model-user-guide/get-started-with-models/model-studio-model-list.md) 中的 `status: active` 条目为准。
+百炼平台提供多种开源与自研大语言模型（如 Qwen 系列）、多模态模型及推理优化版本（如 `qwen-max`、`qwen-plus`、`qwen-turbo`），覆盖通用对话、长文本理解、代码生成等场景。模型能力与部署状态可通过 [模型列表](../../raw/model-user-guide/get-started-with-models/model-studio-model-list.md) 实时查询。部分模型还支持流式响应、[函数调用](../concepts/function-calling.md)（Function Calling）和系统提示词（system prompt）定制，具体能力以 [选择模型](../../raw/model-user-guide/get-started-with-models/models.md) 文档为准。
+
+> **注意**：[模型服务概览](../../raw/model-user-guide/get-started-with-models/what-is-model-studio.md) 中提及的“本地模型沙箱调试”功能已在 v2.3 版本中移除，当前仅支持云上托管模型调用，请以 [首次调用千问API](../../raw/model-user-guide/get-started-with-models/first-api-call-to-qwen.md) 的流程为准。
 
 ## 关键参数
 
-- `model`: 必填，字符串，取值必须来自 [模型列表](../../raw/model-user-guide/get-started-with-models/model-studio-model-list.md) 的 `model_id` 字段（如 `qwen-plus`、`qwen2.5-72b-instruct`），不支持别名或模糊匹配  
-- `input.messages`: 必填，消息数组，每条消息含 `role`（`system`/`user`/`assistant`）和 `content`（字符串或结构化内容）  
-- `parameters.temperature`: 可选，浮点数（0.0–2.0），默认 1.0；低于 0.1 时可能触发强制 deterministic 模式  
-- `stream`: 布尔值，启用流式响应时设为 `true`，需按 SSE 协议解析事件流  
+调用模型 API 时，必需参数包括：
+- `model`：模型 ID（如 `qwen-turbo`），必须与 [模型列表](../../raw/model-user-guide/get-started-with-models/model-studio-model-list.md) 中公布的 ID 完全一致；
+- `input.messages`：非空消息数组，至少包含一个 `user` 角色消息；
+- `parameters.temperature`：控制输出随机性（0.0–2.0），默认为 1.0；  
+其他常用参数包括 `top_p`、`max_tokens`、`stream`（布尔值）等，完整定义见 [首次调用千问API](../../raw/model-user-guide/get-started-with-models/first-api-call-to-qwen.md)。
 
 ## 使用方式
 
-1. **获取凭证**：在控制台「API 密钥」页生成有效 API Key（需绑定项目）  
-2. **构造请求**：向 `https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation` 发送 POST 请求（[首次调用千问API](../../raw/model-user-guide/get-started-with-models/first-api-call-to-qwen.md) 提供完整 cURL 示例）  
-3. **处理响应**：同步调用返回 JSON，含 `output.text` 或 `output.choices[0].message.content`；流式响应需监听 `event: message` 事件并拼接 `data` 字段  
-
-> **注意**：原始文档中 [选择模型](../../raw/model-user-guide/get-started-with-models/models.md) 提到可通过 `model_type` 参数动态路由，该机制已于 v2.3.0 版本废弃，现仅支持显式指定 `model` 字段，否则返回 `InvalidParameter.Model` 错误。
+1. 在百炼控制台开通模型服务并获取 API Key；
+2. 构造 HTTP POST 请求，目标 URL 为 `https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation`；
+3. 设置请求头：`Authorization: Bearer <your_api_key>`，`Content-Type: application/json`；
+4. 发送 JSON payload（参考 [首次调用千问API](../../raw/model-user-guide/get-started-with-models/first-api-call-to-qwen.md) 中的示例）；
+5. 解析响应体中的 `output.text` 或流式 chunk 数据。
 
 ## 限制和注意事项
 
-- 单次请求最大 `input.messages` 长度为 32768 token（按模型 tokenizer 计算），超限将返回 `400 Bad Request`（见 [错误码](../../raw/model-user-guide/get-started-with-models/error-code-start.md)）  
-- 免费试用额度为 1000 次/日，超出后按 [限流](../../raw/model-user-guide/get-started-with-models/rate-limit.md) 规则拒绝请求（HTTP 429）  
-- 系统角色（`system`）消息仅在部分模型（如 `qwen2.5-*`）生效，`qwen-plus` 等模型会忽略该字段，建议优先使用用户消息引导行为  
-- 所有模型均不支持自定义 stop words，`stop` 参数传入将被静默丢弃（参见 [模型服务概览](../../raw/model-user-guide/get-started-with-models/what-is-model-studio.md) 的“能力边界”章节）
+- 单次请求 `input.messages` 总 token 数上限因模型而异（例如 `qwen-turbo` 为 8K，`qwen-max` 为 32K），超出将返回 `400 Bad Request` 错误；
+- 默认调用频次限制为 10 QPS / 账号，突发流量需提前申请配额，详见 [限流](../../raw/model-user-guide/get-started-with-models/rate-limit.md)；
+- 模型服务按地域部署，调用时需确保 API Endpoint 与所选 [地域和服务部署范围](../../raw/model-user-guide/get-started-with-models/regions.md) 一致，否则可能返回 `404 Not Found`；
+- 所有错误码含义请查阅 [错误码](../../raw/model-user-guide/get-started-with-models/error-code-start.md)，其中 `InvalidParameter.ModelNotFound` 表示模型 ID 不存在或未授权。
 
 ## 来源文档
 

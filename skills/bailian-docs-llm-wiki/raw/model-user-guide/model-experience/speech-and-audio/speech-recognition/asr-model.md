@@ -44,7 +44,7 @@ OpenAI gpt-4o-transcribe、Whisper
 
 客户端接入如需稳定的延迟、弱网适应能力，以及实时双工的降噪与回声消除，可参考 [Realtime API 概述](https://help.aliyun.com/zh/model-studio/realtime-api-overview#rtov-s02h2)中的 AOQ 协议选型及支持范围。
 
-各模型的 HTTP、WebSocket 接口和 SDK 接入方式，请参见[语音识别 API 参考](raw/model-api-reference/audio-api-references/speech-recognition-api-reference.md)。SDK 支持的模型和参数以对应 SDK 文档为准。
+各模型的 HTTP、WebSocket 接口和 SDK 接入方式，请参见[语音识别 API 参考](raw/model-api-reference/audio-api-directory/speech-recognition-api-reference.md)。SDK 支持的模型和参数以对应 SDK 文档为准。
 
 选择实时接入请参考[实时语音识别](raw/model-user-guide/model-experience/speech-and-audio/speech-recognition/real-time-speech-recognition-user-guide.md)，选择非实时接入请参考[非实时语音识别](raw/model-user-guide/model-experience/speech-and-audio/speech-recognition/non-realtime-speech-recognition-user-guide.md)。
 
@@ -55,7 +55,7 @@ OpenAI gpt-4o-transcribe、Whisper
 1.  **Prompt上下文注入**：在系统提示词中描述您的领域背景，无需预配置。模型在每次请求时自适应。推荐使用 `qwen-audio-3.1-asr-flash-streaming`、`qwen-audio-3.1-asr-flash-filetrans` 和 `qwen-audio-3.1-asr-flash` 模型。
 2.  **热词**：提供带权重的词汇表。推荐使用 `qwen-audio-3.1-asr-flash-streaming`、`qwen-audio-3.1-asr-flash-filetrans` 和 `qwen-audio-3.1-asr-flash` 模型。
 
-`qwen-audio-3.1-asr-flash-message` 支持即时热词、预编译热词以及对话上下文增强。通过 `vocabulary` 或 `vocabulary_id` 配置热词；通过 `input.context` 传入前几轮用户转写与助手回复。参数定义请参见 [客户端事件](raw/_short/qwen-asr-message-client-events-0be34a3639cdd40b.md)。
+`qwen-audio-3.1-asr-flash-message` 支持即时热词、预编译热词以及对话上下文增强。通过 `vocabulary` 或 `vocabulary_id` 配置热词；通过 `input.context` 传入前几轮用户转写与助手回复。参数定义请参见 [客户端事件](raw/_short/qwen-asr-message-client-events-1721a061cc8750e6.md)。
 
 ### 说话人分离
 

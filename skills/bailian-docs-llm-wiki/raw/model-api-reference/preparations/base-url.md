@@ -157,4 +157,4 @@ Base URL 是模型 API 的调用地址。Base URL必须与同一计费方案的 
 ## 相关文档
 
 -   [获取API Key](raw/model-api-reference/preparations/get-api-key.md)
--   [选择地域、服务部署范围和接入域名](raw/model-api-reference/preparations/regions.md)
+-   [选择地域、服务部署范围和接入域名](raw/model-user-guide/get-started-with-models/regions.md)

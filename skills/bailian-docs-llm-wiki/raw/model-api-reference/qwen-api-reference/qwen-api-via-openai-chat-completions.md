@@ -878,8 +878,6 @@ glm-5.3 系列模型始终开启思考，`enable_thinking` 仅支持 `true`，�
 
 可直接选择 `low`、`medium`、`xhigh` 三档思考力度。兼容取值中，`minimal` 映射为 `low`，`high` 和 `max` 映射为 `xhigh`，`none` 表示关闭思考。
 
-> `reasoning_effort` 是 OpenAI 标准参数。通过 Python SDK 调用时，直接传入 `reasoning_effort="high"`，无需放入 `extra_body`。
-
 **tool\_stream** `boolean` （可选）默认值为 `false`
 
 仅在`stream=true`时生效。当前仅Qwen和GLM系列支持。

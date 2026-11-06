@@ -803,7 +803,7 @@ public class Kf2vAsync {
 ## 使用限制
 
 -   **数据时效**：任务`task_id`和 视频`video_url`均只保留 24 小时，过期后将无法查询或下载。
--   **音频支持**：当前仅支持生成无声视频，不支持音频输出。如有需要，可通过[语音合成](raw/model-api-reference/audio-api-references/speech-recognition-api-reference.md)生成音频。
+-   **音频支持**：当前仅支持生成无声视频，不支持音频输出。如有需要，可通过[语音合成](raw/model-api-reference/audio-api-directory/speech-recognition-api-reference.md)生成音频。
 -   **内容审核**：输入prompt 和图像、输出视频均会经过内容安全审核，含违规内容将返回 “IPInfringementSuspect”或“DataInspectionFailed”错误，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
 
 ## 错误码

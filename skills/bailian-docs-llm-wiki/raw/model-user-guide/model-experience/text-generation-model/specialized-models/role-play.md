@@ -314,7 +314,7 @@ qwen-plus-character
 
 使用 Character 模型进行角色扮演时，可以对 System Message 的以下方面进行配置：
 
-> 通过优化 Prompt 模板，可以使大模型更准确、可靠地执行特定任务。详情请参考[Prompt自动优化](raw/application-user-guide/prompt/optimize-prompt.md)。
+> 通过优化 Prompt 模板，可以使大模型更准确、可靠地执行特定任务。详情请参考[Prompt自动优化](raw/application-user-guide/agent-development/llm-application/prompt/optimize-prompt.md)。
 
 -   角色的详细信息
     
@@ -4102,7 +4102,7 @@ print(completion.choices[0].message.content)
 
 ### 模型调优
 
-角色扮演模型支持模型调优功能，您可以通过微调来提升模型在特定角色或场景下的表现。详情请参见[模型调优简介](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)。
+角色扮演模型支持模型调优功能，您可以通过微调来提升模型在特定角色或场景下的表现。详情请参见[模型调优简介](https://help.aliyun.com/zh/model-studio/model-training-overview)。
 
 ## 场景特殊需求
 

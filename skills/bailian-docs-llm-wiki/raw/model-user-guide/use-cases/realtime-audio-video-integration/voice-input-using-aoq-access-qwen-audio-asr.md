@@ -17,12 +17,12 @@
 
 1.  开通阿里云百炼，并按[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)获取 API Key。API Key 只保存在业务 AppServer，不要写入客户端代码或提交到代码仓库。
 2.  `{endpoint}` 使用华北2（北京）的 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com` 或新加坡的 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，替换为实际业务空间 ID，并使用对应地域和业务空间的 API Key。
-3.  从 [SDK 下载](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-sdk-download.md)获取最新版 AOQ Client SDK。
-4.  搭建业务 AppServer，并按 [Token 鉴权](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-token-authentication.md)实现服务端代理鉴权。每次建立新连接前，客户端都应从 AppServer 获取新的连接凭证。
+3.  从 [SDK 下载](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/realtime-sdk-download.md)获取最新版 AOQ Client SDK。
+4.  按 [Qwen-Audio-ASR-Streaming 的 AOQ 鉴权步骤](https://help.aliyun.com/zh/model-studio/qwen-audio-asr-streaming-aoq-access#authentication)搭建业务 AppServer。每次建立新连接前，客户端都应从 AppServer 获取新的连接凭证。
 
 ### 导入 SDK
 
-从 [SDK 下载](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-sdk-download.md)获取最新版 AOQ Client SDK 后，根据开发平台导入对应 SDK。后续客户端代码以 Android 为例，其他平台使用相同的接口设计和事件流程。
+从 [SDK 下载](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/realtime-sdk-download.md)获取最新版 AOQ Client SDK 后，根据开发平台导入对应 SDK。后续客户端代码以 Android 为例，其他平台使用相同的接口设计和事件流程。
 
 #### Android
 
@@ -101,7 +101,7 @@
 
 ## AppServer 获取 Token
 
-客户端通过 AppServer 获取连接凭证。按 [Token 鉴权](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-token-authentication.md)实现服务端代理鉴权，AppServer 调用百炼分配接口，返回 SDK 连接所需的 Token、SID、Relay 端点等信息。
+AppServer 调用百炼分配接口，将 SDK 建连所需的 Token、SID 和 Relay 接入点等信息返回客户端。
 
 ```
 curl -X POST \
@@ -262,7 +262,7 @@ engine.connect(config);
 
 连接成功后，每轮语音输入生成一个新的 `task_id`，例如使用 `UUID.randomUUID().toString()`。在连接成功回调中，通过 `sendDataMsg` 发送下列 JSON；同一轮只发送一次 `run-task`。
 
-run-task 事件结构如下，任务 ID 为示例值，实际应替换为本轮新生成的值。具体事件请参考[客户端事件](raw/_short/qwen-audio-asr-streaming-client-events-1bae8548d2be6bc5.md)。
+run-task 事件结构如下，任务 ID 为示例值，实际应替换为本轮新生成的值。具体事件请参考[客户端事件](raw/_short/qwen-audio-asr-streaming-client-events-3240c8efa3976e48.md)。
 
 ```
 {
@@ -323,9 +323,9 @@ engine.sendDataMsg(msg);
 }
 ```
 
-以上为事件关键字段示例，其余响应字段可按业务需要读取，具体事件请参考[服务端事件](raw/_short/qwen-audio-asr-streaming-server-events-b134164fc4410c2a.md)。此时音频缓存通常已经积累了“凭证申请 + AOQ 建连 + 模型任务启动”期间采集到的音频。对带有 `task_id` 的响应核对当前任务 ID；重复的 `task-started` 不应启动第二个发送循环。
+以上为事件关键字段示例，其余响应字段可按业务需要读取，具体事件请参考[服务端事件](raw/_short/qwen-audio-asr-streaming-server-events-4757090610f208c7.md)。此时音频缓存通常已经积累了“凭证申请 + AOQ 建连 + 模型任务启动”期间采集到的音频。对带有 `task_id` 的响应核对当前任务 ID；重复的 `task-started` 不应启动第二个发送循环。
 
-**音频数据封装格式：** qwen-audio-3.1-asr-flash-streaming 的 Inference 协议（[客户端事件](raw/_short/qwen-audio-asr-streaming-client-events-1bae8548d2be6bc5.md)）只定义了 `run-task`、`finish-task` 两种控制事件，音频数据本身不是通过 JSON 事件发送的。但通过 AOQ Data 通道传输时，音频数据需要以 JSON 消息形式发送。为此，AOQ 在 SDK 层面封装了 `input_audio_buffer.append` 事件，用于承载音频数据：
+**音频数据封装格式：** qwen-audio-3.1-asr-flash-streaming 的 Inference 协议（[客户端事件](raw/_short/qwen-audio-asr-streaming-client-events-3240c8efa3976e48.md)）只定义了 `run-task`、`finish-task` 两种控制事件，音频数据本身不是通过 JSON 事件发送的。但通过 AOQ Data 通道传输时，音频数据需要以 JSON 消息形式发送。为此，AOQ 在 SDK 层面封装了 `input_audio_buffer.append` 事件，用于承载音频数据：
 
 **字段**
 
@@ -382,7 +382,7 @@ if (pcm != null) {
 
 **处理服务端事件：**
 
-在 `onDataMsg` 回调中解析服务端事件，收到 `task-started` 后启动音频发送，收到 `result-generated` 后解析识别结果，具体事件请参考[服务端事件](raw/_short/qwen-audio-asr-streaming-server-events-b134164fc4410c2a.md)。
+在 `onDataMsg` 回调中解析服务端事件，收到 `task-started` 后启动音频发送，收到 `result-generated` 后解析识别结果，具体事件请参考[服务端事件](raw/_short/qwen-audio-asr-streaming-server-events-4757090610f208c7.md)。
 
 ```
 JSONObject root = new JSONObject(new String(msg.data, StandardCharsets.UTF_8));
@@ -408,7 +408,7 @@ if ("task-started".equals(event)) {
 
 ### 6\. 处理识别结果并显示
 
-`result-generated` 事件携带识别句子，包含 `text`、`sentence_end` 等字段。中间结果实时展示，最终结果追加到输入框。具体事件定义请参考[服务端事件](raw/_short/qwen-audio-asr-streaming-server-events-b134164fc4410c2a.md)。
+`result-generated` 事件携带识别句子，包含 `text`、`sentence_end` 等字段。中间结果实时展示，最终结果追加到输入框。具体事件定义请参考[服务端事件](raw/_short/qwen-audio-asr-streaming-server-events-4757090610f208c7.md)。
 
 ```
 private void handleRecognitionResult(JSONObject root) {
@@ -428,7 +428,7 @@ private void handleRecognitionResult(JSONObject root) {
 
 ### 7\. 发送 finish-task 结束识别任务
 
-用户点击结束后，先调用 `engine.stopAudioCapture()` 停止采集，等待缓存中剩余的 PCM 数据排空后，发送 [finish-task](raw/_short/qwen-audio-asr-streaming-client-events-1bae8548d2be6bc5.md) 通知服务端音频已发送完毕，具体事件定义请参考[客户端事件](raw/_short/qwen-audio-asr-streaming-client-events-1bae8548d2be6bc5.md)。
+用户点击结束后，先调用 `engine.stopAudioCapture()` 停止采集，等待缓存中剩余的 PCM 数据排空后，发送 [finish-task](raw/_short/qwen-audio-asr-streaming-client-events-3240c8efa3976e48.md) 通知服务端音频已发送完毕，具体事件定义请参考[客户端事件](raw/_short/qwen-audio-asr-streaming-client-events-3240c8efa3976e48.md)。
 
 **说明**`task_id` 必须与本轮 `run-task` 一致。
 
@@ -516,9 +516,9 @@ sendRunTask();
 
 ## 相关文档
 
--   [客户端事件](raw/_short/qwen-audio-asr-streaming-client-events-1bae8548d2be6bc5.md)
--   [服务端事件](raw/_short/qwen-audio-asr-streaming-server-events-b134164fc4410c2a.md)
--   [AOQ SDK Android API 参考](raw/_short/aoq-android-sdk-reference-6ae7f381f2485386.md)
+-   [客户端事件](raw/_short/qwen-audio-asr-streaming-client-events-3240c8efa3976e48.md)
+-   [服务端事件](raw/_short/qwen-audio-asr-streaming-server-events-4757090610f208c7.md)
+-   [AOQ SDK Android API 参考](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/aoq-android-sdk-reference.md)
 -   [qwen-audio-3.1-asr-flash-streaming 模型信息](raw/_short/qwen-audio-3-1-asr-flash-streaming-5a2483d4eed63d1c.md)
 -   [使用 AOQ 接入 fun-asr-realtime 实现实时语音识别](raw/_short/real-time-speech-recognition-using-aoq-access-fu-1f528aaba4a8fd1b.md)
--   [AOQ 接入指南](raw/model-api-reference/realtime-api-user-guide/realtime-model-connection/realtime-aoq-access.md)
+-   [Qwen-Audio-ASR-Streaming AOQ 接入](raw/_short/qwen-audio-asr-streaming-aoq-access-7b2cf295190f6172.md)

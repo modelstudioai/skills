@@ -150,4 +150,6 @@ RPM（每分钟请求数）
 
 ## 调用方式
 
--   [模型接入方式](raw/_short/qwen-asr-message-model-access-353e08817f836f55.md)
+-   [客户端事件](raw/_short/qwen-asr-message-client-events-1721a061cc8750e6.md)
+-   [WebSocket 接入](raw/_short/qwen-asr-message-websocket-api-8b78d8662335cafa.md)
+-   [AOQ 接入](raw/_short/qwen-asr-message-aoq-access-7699c2c24f2a0149.md)

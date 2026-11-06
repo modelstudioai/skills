@@ -2,37 +2,33 @@
 
 查询百炼平台上可用的模型列表，支持按模型作者、模态类型、模型能力、部署模式等条件筛选，并获取模型的定价和上下文长度等信息。
 
-## 请求地址
+## 请求说明
 
 调用时请将 `{WorkspaceId}` 替换为业务空间 ID，并在请求 Header 中设置 `Authorization: Bearer YOUR_API_KEY`，其中 `YOUR_API_KEY` 需替换为在[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key)获取的 API Key。
 
 #### 华北2（北京）
 
-https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com
+GET`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/models`
 
 #### 新加坡
 
-https://dashscope-intl.aliyuncs.com
+GET`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/models`
 
 #### 中国香港
 
-https://cn-hongkong.dashscope.aliyuncs.com
+GET`https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/api/v1/models`
 
 #### 日本（东京）
 
-https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com
+GET`https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/api/v1/models`
 
 #### 德国（法兰克福）
 
-https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com
+GET`https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1/models`
 
 #### 美国（弗吉尼亚）
 
-https://{WorkspaceId}.us-east-1.maas.aliyuncs.com
-
-## 请求参数
-
-GET`/api/v1/models`
+GET`https://dashscope-us.aliyuncs.com/api/v1/models`
 
 所有参数均通过 Query String 传递。
 
@@ -246,7 +242,7 @@ curl --get "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/models" \
     --data-urlencode "page_size=100"
 ```
 
-## 返回参数
+## 返回说明
 
 `request_id`String
 

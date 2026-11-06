@@ -48,8 +48,8 @@ turn\_detection 为 null
 
 1.  开通阿里云百炼，并按[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。API Key 只保存在业务 AppServer，不要写入客户端代码或提交到代码仓库。
 2.  `{endpoint}` 使用华北2（北京）的 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com` 或新加坡的 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，替换为实际业务空间 ID，并使用对应地域和业务空间的 API Key。
-3.  从[SDK 下载](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-sdk-download.md)获取最新版 AOQ Client SDK。
-4.  搭建业务 AppServer，并按[Token 鉴权](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-token-authentication.md)实现服务端代理鉴权。每次建立新连接前，客户端都应从 AppServer 获取新的连接凭证。
+3.  从[SDK 下载](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/realtime-sdk-download.md)获取最新版 AOQ Client SDK。
+4.  按 [Qwen-Omni-Realtime 的 AOQ 鉴权步骤](https://help.aliyun.com/zh/model-studio/omni-realtime-aoq-access#authentication)搭建业务 AppServer。每次建立新连接前，客户端都应从 AppServer 获取新的连接凭证。
 
 ### 导入 SDK
 
@@ -166,7 +166,7 @@ curl -X POST \
 
 **说明**如果 AppServer 无法获取客户端真实公网 IP，请删除 clientIp 字段，不要传空字符串。
 
-AppServer 将响应中的以下字段返回客户端。生产环境中不要把 API Key 返回客户端。完整请求和响应字段请参见[Token 鉴权](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-token-authentication.md)。
+AppServer 将响应中的以下字段返回客户端。API Key 仅保存在 AppServer。
 
 **响应字段**
 
@@ -302,7 +302,7 @@ connectConfig.subscribeTracks = [subscribeAudioTrack, subscribeDataTrack]
 
 ### 4\. 配置 Manual 会话
 
-连接成功后，调用 sendDataMsg 发送 session.update 事件。客户需要把 turn\_detection 设为 null，并按业务选择音色、系统指令和输出模态。示例中的音频参数需要与 SDK 编解码配置保持一致。完整字段请参见[客户端事件](raw/model-api-reference/omni-realtime-api/client-events.md)。
+连接成功后，调用 sendDataMsg 发送 session.update 事件。客户需要把 turn\_detection 设为 null，并按业务选择音色、系统指令和输出模态。示例中的音频参数需要与 SDK 编解码配置保持一致。完整字段请参见[客户端事件](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md)。
 
 ```
 private func sendSessionUpdate() {
@@ -589,7 +589,7 @@ final class ManualPushToTalkClient: NSObject, AoqEngineDelegate {
 2.  松开按钮后依次收到 input\_audio\_buffer.committed、response.created 和 response.done，模型语音通过订阅的 Audio 轨播放。
 3.  选择单张图片方案时，模型结合本轮图片与语音作答；选择持续视频方案时，模型使用最新视频画面。
 
-服务端事件字段和完整响应结构请参见[服务端事件](raw/model-api-reference/omni-realtime-api/server-events.md)。
+服务端事件字段和完整响应结构请参见[服务端事件](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md)。
 
 ## 注意事项
 
@@ -603,11 +603,11 @@ final class ManualPushToTalkClient: NSObject, AoqEngineDelegate {
 如需查看完整参数、事件字段或其他平台接口，请参见：
 
 -   [获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)
--   [选择地域、服务部署范围和接入域名](raw/model-api-reference/preparations/regions.md)
--   [AOQ Client SDK 简介](raw/model-api-reference/realtime-api-user-guide/realtime-api-aoq-api/realtime-api-aoq-sdk-desc.md)
--   [SDK 下载](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-sdk-download.md)
--   [Token 鉴权](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-token-authentication.md)
+-   [选择地域、服务部署范围和接入域名](raw/model-user-guide/get-started-with-models/regions.md)
+-   [AOQ Client SDK 简介](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/realtime-api-aoq-sdk-desc.md)
+-   [SDK 下载](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/realtime-sdk-download.md)
+-   [Qwen-Omni-Realtime AOQ 接入](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/omni-realtime-aoq-access.md)
 -   [Qwen-Omni-Realtime 用户指南](raw/model-user-guide/model-experience/omni-modal/realtime.md)
 -   [通过 AOQ 实现 VAD 模式实时通话](raw/model-user-guide/use-cases/realtime-audio-video-integration/best-practice-aoq-omni-realtime.md)
--   [客户端事件](raw/model-api-reference/omni-realtime-api/client-events.md)
--   [服务端事件](raw/model-api-reference/omni-realtime-api/server-events.md)
+-   [客户端事件](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md)
+-   [服务端事件](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md)

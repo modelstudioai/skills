@@ -4,14 +4,161 @@
 
 ## 快速开始
 
-通过 OpenAI 兼容 API 完成首次调用。
+使用 OpenAI/Anthropic 兼容接口调用模型
 
-[首次调用](raw/model-user-guide/get-started-with-models/first-api-call-to-qwen.md)[获取 API Key](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key)
+[获取 API Key 和 Base URL](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key)
+
+#### Responses
 
 curl
 
 ```
-curl https://trial.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
+curl "$OPENAI_BASE_URL/responses" \
+  -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "qwen3.8-max",
+    "input": "你是谁？"
+  }'
+```
+
+Python
+
+```
+import os
+from openai import OpenAI
+
+client = OpenAI(
+    api_key=os.environ["DASHSCOPE_API_KEY"],
+    base_url=os.environ["OPENAI_BASE_URL"],
+)
+response = client.responses.create(
+    model="qwen3.8-max",
+    input="你是谁？",
+)
+print(response.output_text)
+```
+
+JavaScript/TypeScript
+
+```
+import OpenAI from "openai";
+
+const client = new OpenAI({
+    apiKey: process.env.DASHSCOPE_API_KEY,
+    baseURL: process.env.OPENAI_BASE_URL,
+});
+const response = await client.responses.create({
+    model: "qwen3.8-max",
+    input: "你是谁？",
+});
+console.log(response.output_text);
+```
+
+Java
+
+```
+import com.openai.client.OpenAIClient;
+import com.openai.client.okhttp.OpenAIOkHttpClient;
+import com.openai.models.responses.Response;
+import com.openai.models.responses.ResponseCreateParams;
+
+public class Main {
+    public static void main(String[] args) {
+        OpenAIClient client = OpenAIOkHttpClient.builder()
+            .apiKey(System.getenv("DASHSCOPE_API_KEY"))
+            .baseUrl(System.getenv("OPENAI_BASE_URL"))
+            .build();
+        ResponseCreateParams params = ResponseCreateParams.builder()
+            .model("qwen3.8-max")
+            .input("你是谁？")
+            .build();
+        Response response = client.responses().create(params);
+        response.output().stream()
+            .flatMap(item -> item.message().stream())
+            .flatMap(message -> message.content().stream())
+            .flatMap(content -> content.outputText().stream())
+            .forEach(text -> System.out.println(text.text()));
+    }
+}
+```
+
+Go
+
+```
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+
+    "github.com/openai/openai-go/v3"
+    "github.com/openai/openai-go/v3/option"
+    "github.com/openai/openai-go/v3/responses"
+)
+
+func main() {
+    client := openai.NewClient(
+        option.WithAPIKey(os.Getenv("DASHSCOPE_API_KEY")),
+        option.WithBaseURL(os.Getenv("OPENAI_BASE_URL")),
+    )
+    response, err := client.Responses.New(context.Background(), responses.ResponseNewParams{
+        Model: "qwen3.8-max",
+        Input: responses.ResponseNewParamsInputUnion{OfString: openai.String("你是谁？")},
+    })
+    if err != nil {
+        panic(err)
+    }
+    fmt.Println(response.OutputText())
+}
+```
+
+C#
+
+```
+#pragma warning disable OPENAI001
+
+using System;
+using System.ClientModel;
+using OpenAI.Responses;
+
+ResponsesClient client = new(
+    new ApiKeyCredential(Environment.GetEnvironmentVariable("DASHSCOPE_API_KEY")!),
+    new ResponsesClientOptions
+    {
+        Endpoint = new Uri(Environment.GetEnvironmentVariable("OPENAI_BASE_URL"))
+    });
+ResponseResult response = client.CreateResponse(new CreateResponseOptions
+{
+    Model = "qwen3.8-max",
+    InputItems = { ResponseItem.CreateUserMessageItem("你是谁？") }
+});
+Console.WriteLine(response.GetOutputText());
+```
+
+Ruby
+
+```
+require "openai"
+
+client = OpenAI::Client.new(
+  api_key: ENV.fetch("DASHSCOPE_API_KEY"),
+  base_url: ENV.fetch("OPENAI_BASE_URL")
+)
+response = client.responses.create(
+  model: "qwen3.8-max",
+  input: "你是谁？"
+)
+puts response.output_text
+```
+
+#### Chat Completions
+
+curl
+
+```
+curl "$OPENAI_BASE_URL/chat/completions" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -27,30 +174,305 @@ import os
 from openai import OpenAI
 
 client = OpenAI(
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
-    base_url="https://trial.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
+    api_key=os.environ["DASHSCOPE_API_KEY"],
+    base_url=os.environ["OPENAI_BASE_URL"],
 )
 response = client.chat.completions.create(
     model="qwen3.8-max",
-    messages=[{"role": "user", "content": "你是谁？"}],
+    messages=[{"role": "user", "content": "你是谁？"}]
 )
 print(response.choices[0].message.content)
 ```
 
-JavaScript
+JavaScript/TypeScript
 
 ```
 import OpenAI from "openai";
 
 const client = new OpenAI({
     apiKey: process.env.DASHSCOPE_API_KEY,
-    baseURL: "https://trial.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
+    baseURL: process.env.OPENAI_BASE_URL,
 });
 const response = await client.chat.completions.create({
     model: "qwen3.8-max",
-    messages: [{ role: "user", content: "你是谁？" }],
+    messages: [{ role: "user", content: "你是谁？" }]
 });
 console.log(response.choices[0].message.content);
+```
+
+Java
+
+```
+import com.openai.client.OpenAIClient;
+import com.openai.client.okhttp.OpenAIOkHttpClient;
+import com.openai.models.chat.completions.ChatCompletion;
+import com.openai.models.chat.completions.ChatCompletionCreateParams;
+
+public class Main {
+    public static void main(String[] args) {
+        OpenAIClient client = OpenAIOkHttpClient.builder()
+            .apiKey(System.getenv("DASHSCOPE_API_KEY"))
+            .baseUrl(System.getenv("OPENAI_BASE_URL"))
+            .build();
+        ChatCompletionCreateParams params = ChatCompletionCreateParams.builder()
+            .model("qwen3.8-max")
+            .addUserMessage("你是谁？")
+            .build();
+        ChatCompletion response = client.chat().completions().create(params);
+        System.out.println(response.choices().get(0).message().content().orElse(""));
+    }
+}
+```
+
+Go
+
+```
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+
+    "github.com/openai/openai-go/v3"
+    "github.com/openai/openai-go/v3/option"
+)
+
+func main() {
+    client := openai.NewClient(
+        option.WithAPIKey(os.Getenv("DASHSCOPE_API_KEY")),
+        option.WithBaseURL(os.Getenv("OPENAI_BASE_URL")),
+    )
+    response, err := client.Chat.Completions.New(context.Background(), openai.ChatCompletionNewParams{
+        Model: "qwen3.8-max",
+        Messages: []openai.ChatCompletionMessageParamUnion{
+            openai.UserMessage("你是谁？"),
+        },
+    })
+    if err != nil {
+        panic(err)
+    }
+    fmt.Println(response.Choices[0].Message.Content)
+}
+```
+
+C#
+
+```
+using System;
+using System.ClientModel;
+using OpenAI;
+using OpenAI.Chat;
+
+ChatClient client = new(
+    model: "qwen3.8-max",
+    credential: new ApiKeyCredential(Environment.GetEnvironmentVariable("DASHSCOPE_API_KEY")!),
+    options: new OpenAIClientOptions
+    {
+        Endpoint = new Uri(Environment.GetEnvironmentVariable("OPENAI_BASE_URL"))
+    });
+ChatCompletion response = client.CompleteChat("你是谁？");
+Console.WriteLine(response.Content[0].Text);
+```
+
+Ruby
+
+```
+require "openai"
+
+client = OpenAI::Client.new(
+  api_key: ENV.fetch("DASHSCOPE_API_KEY"),
+  base_url: ENV.fetch("OPENAI_BASE_URL")
+)
+response = client.chat.completions.create(
+  model: "qwen3.8-max",
+  messages: [{role: "user", content: "你是谁？"}]
+)
+puts response.choices.first.message.content
+```
+
+#### Messages
+
+curl
+
+```
+curl "$ANTHROPIC_BASE_URL/v1/messages" \
+  -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "qwen3.8-max",
+    "max_tokens": 1024,
+    "messages": [{"role": "user", "content": "你是谁？"}]
+  }'
+```
+
+Python
+
+```
+import os
+from anthropic import Anthropic
+
+client = Anthropic(
+    api_key=os.environ["DASHSCOPE_API_KEY"],
+    base_url=os.environ["ANTHROPIC_BASE_URL"],
+)
+response = client.messages.create(
+    model="qwen3.8-max",
+    max_tokens=1024,
+    messages=[{"role": "user", "content": "你是谁？"}]
+)
+for block in response.content:
+    if block.type == "text":
+        print(block.text)
+```
+
+JavaScript/TypeScript
+
+```
+import Anthropic from "@anthropic-ai/sdk";
+
+const client = new Anthropic({
+    apiKey: process.env.DASHSCOPE_API_KEY,
+    baseURL: process.env.ANTHROPIC_BASE_URL,
+});
+const response = await client.messages.create({
+    model: "qwen3.8-max",
+    max_tokens: 1024,
+    messages: [{ role: "user", content: "你是谁？" }]
+});
+for (const block of response.content) {
+    if (block.type === "text") console.log(block.text);
+}
+```
+
+Java
+
+```
+import com.anthropic.client.AnthropicClient;
+import com.anthropic.client.okhttp.AnthropicOkHttpClient;
+import com.anthropic.models.messages.Message;
+import com.anthropic.models.messages.MessageCreateParams;
+
+public class Main {
+    public static void main(String[] args) {
+        AnthropicClient client = AnthropicOkHttpClient.builder()
+            .apiKey(System.getenv("DASHSCOPE_API_KEY"))
+            .baseUrl(System.getenv("ANTHROPIC_BASE_URL"))
+            .build();
+        MessageCreateParams params = MessageCreateParams.builder()
+            .model("qwen3.8-max")
+            .maxTokens(1024L)
+            .addUserMessage("你是谁？")
+            .build();
+        Message response = client.messages().create(params);
+        response.content().stream()
+            .flatMap(block -> block.text().stream())
+            .forEach(text -> System.out.println(text.text()));
+    }
+}
+```
+
+Go
+
+```
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+
+    "github.com/anthropics/anthropic-sdk-go/v2"
+    "github.com/anthropics/anthropic-sdk-go/v2/option"
+)
+
+func main() {
+    client := anthropic.NewClient(
+        option.WithAPIKey(os.Getenv("DASHSCOPE_API_KEY")),
+        option.WithBaseURL(os.Getenv("ANTHROPIC_BASE_URL")),
+    )
+    response, err := client.Messages.New(context.Background(), anthropic.MessageNewParams{
+        Model: "qwen3.8-max",
+        MaxTokens: 1024,
+        Messages: []anthropic.MessageParam{
+            anthropic.NewUserMessage(anthropic.NewTextBlock("你是谁？")),
+        },
+    })
+    if err != nil {
+        panic(err)
+    }
+    for _, block := range response.Content {
+        if block.Type == "text" {
+            fmt.Println(block.Text)
+        }
+    }
+}
+```
+
+C#
+
+```
+using System;
+using Anthropic;
+using Anthropic.Models.Messages;
+
+AnthropicClient client = new()
+{
+    ApiKey = Environment.GetEnvironmentVariable("DASHSCOPE_API_KEY"),
+    BaseUrl = Environment.GetEnvironmentVariable("ANTHROPIC_BASE_URL")
+};
+MessageCreateParams parameters = new()
+{
+    Model = "qwen3.8-max",
+    MaxTokens = 1024,
+    Messages = [new UserMessageParam("你是谁？")]
+};
+var response = await client.Messages.Create(parameters);
+foreach (var block in response.Content)
+{
+    if (block.TryPickText(out var text)) Console.WriteLine(text.Text);
+}
+```
+
+Ruby
+
+```
+require "anthropic"
+
+client = Anthropic::Client.new(
+  api_key: ENV.fetch("DASHSCOPE_API_KEY"),
+  base_url: ENV.fetch("ANTHROPIC_BASE_URL")
+)
+response = client.messages.create(
+  model: "qwen3.8-max",
+  max_tokens: 1024,
+  messages: [{role: "user", content: "你是谁？"}]
+)
+response.content.each do |block|
+  puts block.text if block.type == :text
+end
+```
+
+PHP
+
+```
+<?php
+require __DIR__ . "/vendor/autoload.php";
+
+use Anthropic\Client;
+
+$client = new Client(
+    apiKey: getenv("DASHSCOPE_API_KEY"),
+    baseUrl: getenv("ANTHROPIC_BASE_URL")
+);
+$response = $client->messages->create(
+    model: "qwen3.8-max",
+    maxTokens: 1024,
+    messages: [["role" => "user", "content" => "你是谁？"]]
+);
+foreach ($response->content as $block) {
+    if ($block->type === "text") echo $block->text . PHP_EOL;
+}
 ```
 
 ## 模型

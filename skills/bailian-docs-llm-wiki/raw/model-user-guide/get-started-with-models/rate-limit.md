@@ -18,7 +18,7 @@
 -   **软限流**：当调用量达到限流值时，若平台仍有剩余资源，则不会触发限流，因此**实际可用 TPM** 不低于限流值；调用时观察到的实际限流值可能高于该限流值，属预期行为。
 -   **限流粒度**：按账号 + 模型，主账号下所有 RAM 子账号、业务空间、API Key 的调用量合并计入该账号对该模型的 TPM 配额，共享同一限额。
 -   **业务空间**：可为模型单独设置限流值，未单独设置的业务空间共享账号级配额。
--   **RPM**：动态限流机制下模型具备较高的 RPM 限额，用户无需单独设置，正常使用不会触发 RPM 限流。
+-   **触发限流表现**：触发动态限流时返回 429 错误（错误码为 Throttling.ResourceExhausted 或 Throttling.ServiceOverloaded，报错信息为 Too many requests.）；平台资源不足时可能返回 503 错误（ServiceUnavailable），该情况与限流额度无关，稍后重试即可。错误处理建议参见[错误码](raw/model-api-reference/preparations/error-code.md)。
 -   **更多说明**：业务空间限流设置见[权限管理](raw/model-user-guide/security-and-compliance/permission-management-overview.md)。
 
 ### 模型与限流档位

@@ -627,7 +627,7 @@ Token 费用请参见[选择模型](raw/model-user-guide/get-started-with-models
 
 ## API 参考
 
-qwen3-livetranslate-flash 模型的输入输出参数请参见[音视频翻译-通义千问](raw/_short/qwen3-livetranslate-flash-api-75fa76c959634163.md)。
+qwen3-livetranslate-flash 模型的输入输出参数请参见[音视频翻译-通义千问](raw/model-api-reference/audio-api-directory/qwen3-livetranslate-flash-api.md)。
 
 ## 支持的语种
 

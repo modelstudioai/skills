@@ -879,13 +879,13 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 #### request timeout after 23 seconds.
 
-**原因：** 超过23秒未向服务发送数据。该报错信息在使用[实时语音合成（Sambert）](raw/_short/sambert-speech-synthesis-60d77f54e64567a1.md)、[语音识别（Paraformer）](raw/_short/paraformer-real-time-speech-recognition-api-refe-79877d5c8ef469f7.md)和[实时语音合成（Qwen-Audio-TTS/CosyVoice）](raw/_short/cosyvoice-large-model-for-speech-synthesis-c25d07a9b3ba6047.md)时产生。
+**原因：** 超过23秒未向服务发送数据。该报错信息在使用[实时语音合成（Sambert）](raw/_short/sambert-speech-synthesis-32c5c56b36543707.md)、[语音识别（Paraformer）](raw/_short/paraformer-real-time-speech-recognition-api-refe-fcf57d84158b854c.md)和[实时语音合成（Qwen-Audio-TTS/CosyVoice）](raw/model-api-reference/realtime-api-directory/realtime-tts-model-apis/cosyvoice-large-model-for-speech-synthesis.md)时产生。
 
 **解决方案：** 请检查为什么长时间未向服务器发送数据。如果长时间（超过23秒）不向服务端发送消息，请及时结束任务。
 
 #### Please ensure input text is valid.
 
-**原因：** 若您使用[实时语音合成（Qwen-Audio-TTS/CosyVoice）](raw/_short/cosyvoice-large-model-for-speech-synthesis-c25d07a9b3ba6047.md)，此错误通常是由于未发送待合成文本引起的。可能原因包括：参数遗漏（未为 `text` 参数赋值）或代码异常（导致对 `text` 参数的赋值失败）。
+**原因：** 若您使用[实时语音合成（Qwen-Audio-TTS/CosyVoice）](raw/model-api-reference/realtime-api-directory/realtime-tts-model-apis/cosyvoice-large-model-for-speech-synthesis.md)，此错误通常是由于未发送待合成文本引起的。可能原因包括：参数遗漏（未为 `text` 参数赋值）或代码异常（导致对 `text` 参数的赋值失败）。
 
 **解决方案：** 请排查代码，确保 `text` 参数被正确赋值并发送。
 
@@ -921,22 +921,22 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 #### \[tts:\]Engine return error code: 418
 
-**原因：** 使用[实时语音合成（Qwen-Audio-TTS/CosyVoice）](raw/_short/cosyvoice-large-model-for-speech-synthesis-c25d07a9b3ba6047.md)，请求参数 `voice`（音色）不正确，或 `model`（模型）与 `voice`（音色）版本不匹配。
+**原因：** 使用[实时语音合成（Qwen-Audio-TTS/CosyVoice）](raw/model-api-reference/realtime-api-directory/realtime-tts-model-apis/cosyvoice-large-model-for-speech-synthesis.md)，请求参数 `voice`（音色）不正确，或 `model`（模型）与 `voice`（音色）版本不匹配。
 
 **解决方案：**
 
 1.  **检查** `voice` **参数赋值**：
     
-    -   如果使用的是默认音色，请对照[Python SDK](raw/_short/cosyvoice-python-sdk-c20dfd31499fc83c.md)中的“voice参数”进行确认。
+    -   如果使用的是默认音色，请对照[Python SDK](raw/_short/cosyvoice-python-sdk-c75c9dda4df376a5.md)中的“voice参数”进行确认。
     -   如果使用的是声音复刻音色，请通过[CosyVoice声音复刻/设计API](https://help.aliyun.com/zh/model-studio/cosyvoice-clone-design-api)接口确认音色状态为“OK”，并确保音色归属账号与调用账号一致。
 2.  **检查版本匹配**：v2模型只能使用v2的音色，v1模型只能使用v1的音色，两者不可混用。
     
 
 #### Request voice is invalid!
 
-**原因：** 若您使用[实时语音合成（Qwen-Audio-TTS/CosyVoice）](raw/_short/cosyvoice-large-model-for-speech-synthesis-c25d07a9b3ba6047.md)，此错误通常是因为未设置音色。
+**原因：** 若您使用[实时语音合成（Qwen-Audio-TTS/CosyVoice）](raw/model-api-reference/realtime-api-directory/realtime-tts-model-apis/cosyvoice-large-model-for-speech-synthesis.md)，此错误通常是因为未设置音色。
 
-**解决方案：** 请检查是否对`voice`参数赋值。若您使用[WebSocket API参考](raw/_short/cosyvoice-websocket-api-615049d40629caf7.md)，请参照API文档按照正确JSON格式配置参数。
+**解决方案：** 请检查是否对`voice`参数赋值。若您使用[WebSocket API参考](raw/_short/cosyvoice-websocket-api-5929268331632771.md)，请参照API文档按照正确JSON格式配置参数。
 
 #### ref\_images\_url and obj\_or\_bg must be the same length.
 
@@ -1017,7 +1017,7 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 #### Text request limit violated, expected 1.
 
-**原因：**在调用CosyVoice语音合成的[WebSocket API参考](raw/_short/cosyvoice-websocket-api-615049d40629caf7.md)时，将`enable_ssml`设为`true`后多次发送continue-task指令。
+**原因：**在调用CosyVoice语音合成的[WebSocket API参考](raw/_short/cosyvoice-websocket-api-5929268331632771.md)时，将`enable_ssml`设为`true`后多次发送continue-task指令。
 
 **解决方案：** `enable_ssml`设为`true`后，只允许发送一次continue-task指令。
 
@@ -1157,7 +1157,7 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 #### The audio file cannot be downloaded.
 
-**原因：** 使用[语音识别（Paraformer）](raw/_short/paraformer-real-time-speech-recognition-api-refe-79877d5c8ef469f7.md)录音文件识别，待识别文件下载失败。
+**原因：** 使用[语音识别（Paraformer）](raw/_short/paraformer-real-time-speech-recognition-api-refe-fcf57d84158b854c.md)录音文件识别，待识别文件下载失败。
 
 **解决方案：** 请检查待识别音频文件URL是否可通过公网访问。
 
@@ -1635,7 +1635,7 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 **原因：**
 
 -   [CosyVoice声音复刻](https://help.aliyun.com/zh/model-studio/voice-replica-1)更新、查询或删除接口调用时，对应音色不存在。
--   使用[定制热词（Paraformer）](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/custom-hot-words.md)时，更新、查询或删除接口调用的热词资源不存在。
+-   使用[定制热词（Paraformer）](raw/model-api-reference/audio-api-directory/speech-recognition-api-reference/custom-hot-words.md)时，更新、查询或删除接口调用的热词资源不存在。
 
 ### Throttling.AllocationQuota
 
@@ -2576,7 +2576,7 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **原因：** 语音合成中使用的音色不存在。
 
-**解决方案：** 请检查`voice`参数，确保指定了正确的音色名称。可用音色请参见[实时语音合成（Qwen-Audio-TTS/CosyVoice）](raw/_short/cosyvoice-large-model-for-speech-synthesis-c25d07a9b3ba6047.md)。
+**解决方案：** 请检查`voice`参数，确保指定了正确的音色名称。可用音色请参见[实时语音合成（Qwen-Audio-TTS/CosyVoice）](raw/model-api-reference/realtime-api-directory/realtime-tts-model-apis/cosyvoice-large-model-for-speech-synthesis.md)。
 
 #### An internal error has occurred, please try again later.
 
@@ -2970,7 +2970,7 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 #### Cannot resolve symbol 'ttsv2'
 
-**原因：** 若您使用[实时语音合成（Qwen-Audio-TTS/CosyVoice）](raw/_short/cosyvoice-large-model-for-speech-synthesis-c25d07a9b3ba6047.md)，出现该问题的原因是DashScope SDK版本过低。
+**原因：** 若您使用[实时语音合成（Qwen-Audio-TTS/CosyVoice）](raw/model-api-reference/realtime-api-directory/realtime-tts-model-apis/cosyvoice-large-model-for-speech-synthesis.md)，出现该问题的原因是DashScope SDK版本过低。
 
 **解决方案：** 请[安装最新版 DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
@@ -2990,7 +2990,7 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 #### InputRequiredException: Parameter invalid: text is null
 
-**原因**：使用[实时语音合成（Qwen-Audio-TTS/CosyVoice）](raw/_short/cosyvoice-large-model-for-speech-synthesis-c25d07a9b3ba6047.md)时未发送待合成文本。
+**原因**：使用[实时语音合成（Qwen-Audio-TTS/CosyVoice）](raw/model-api-reference/realtime-api-directory/realtime-tts-model-apis/cosyvoice-large-model-for-speech-synthesis.md)时未发送待合成文本。
 
 **解决方案：**调用语音合成接口时为 `text` 参数赋值。
 

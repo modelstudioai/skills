@@ -12,7 +12,7 @@
 
 -   [获取 API Key](raw/model-api-reference/preparations/get-api-key.md)，并将其[配置到环境变量](https://help.aliyun.com/zh/model-studio/get-api-key#20b17d4430qvt) `DASHSCOPE_API_KEY`。
     
--   获取业务空间 ID，将示例中的 `YOUR_WORKSPACE_ID` 替换为真实值。获取方式请参见[选择地域、服务部署范围和接入域名](raw/model-api-reference/preparations/regions.md)。
+-   获取业务空间 ID，将示例中的 `YOUR_WORKSPACE_ID` 替换为真实值。获取方式请参见[选择地域、服务部署范围和接入域名](raw/model-user-guide/get-started-with-models/regions.md)。
     
 -   安装 [DashScope SDK](raw/model-api-reference/preparations/install-sdk.md) 和 `requests`：
     
@@ -73,7 +73,7 @@ with open("output.wav", "wb") as f:
 
 运行示例后，`preview.wav` 为预览音频，`output.wav` 为合成音频。保存打印的音色 ID，后续可使用该 ID 调用语音合成。
 
-HTTP 请求示例、可选参数和返回字段请参见[声音设计 API 参考](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/voice-design-api-references.md)；合成参数请参见 [Qwen-Audio-TTS 客户端事件](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-client-events#h3runtask)。
+HTTP 请求示例、可选参数和返回字段请参见[声音设计 API 参考](raw/model-api-reference/voice-customization-api-directory/voice-design-api-references.md)；合成参数请参见 [Qwen-Audio-TTS 客户端事件](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-client-events#h3runtask)。
 
 ## 声音描述指南
 
@@ -137,7 +137,7 @@ HTTP 请求示例、可选参数和返回字段请参见[声音设计 API 参考
 -   **查询音色详情**：查看音色绑定的模型、状态等信息。
 -   **删除音色**：删除不再使用的音色，释放配额。
 
-接口与参数说明请参见[声音设计 API 参考](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/voice-design-api-references.md)。
+接口与参数说明请参见[声音设计 API 参考](raw/model-api-reference/voice-customization-api-directory/voice-design-api-references.md)。
 
 ## 支持模型
 
