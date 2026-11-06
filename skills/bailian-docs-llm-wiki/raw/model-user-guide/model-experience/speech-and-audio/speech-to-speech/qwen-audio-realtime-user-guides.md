@@ -6,7 +6,7 @@ Qwen-Audio 是端到端实时语音交互大模型，支持低延迟语音对话
 
 实现实时音频到语音/文本的转换，支持流式音频输入和流式语音与文本输出。
 
-该模型除 WebSocket 协议外，还支持通过 AOQ 和 WebRTC 协议接入；如果是客户端对接，且更看重稳定的延迟、弱网下的交互能力、实时双工的降噪与回声消除，可优先考虑 AOQ，协议对比与选型请参见[模型/应用支持力度](https://help.aliyun.com/zh/model-studio/realtime-api-overview#rtov-s02h2)。
+该模型除 WebSocket 协议外，还支持通过 AOQ 和 WebRTC 协议接入；如果是客户端对接，且更看重稳定的延迟、弱网下的交互能力、实时双工的降噪与回声消除，可优先考虑 AOQ，协议对比与选型请参见[API 参考](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/voice-conversation-api-references.md)。
 
 -   支持 Function Calling 工具调用，模型可自主判断是否需要调用外部工具获取信息
 -   支持联网搜索，模型可根据实时问题自主判断是否搜索并返回搜索结果来源。`qwen-audio-3.1-realtime-flash` 可同时启用联网搜索和 Function Calling；3.1 Plus 和 3.0 Plus/Flash 不可同时启用
@@ -99,7 +99,7 @@ qwen-audio-3.0-realtime-flash
 ## 前提条件
 
 -   已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并将其[配置到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
--   如果通过 AOQ 协议接入，需要下载并集成 AOQ 客户端 SDK，详见[AOQ SDK 简介](raw/model-api-reference/realtime-api-user-guide/realtime-api-aoq-api/realtime-api-aoq-sdk-desc.md)。
+-   如果通过 AOQ 协议接入，需要下载并集成 AOQ 客户端 SDK，详见[AOQ SDK 简介](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/realtime-api-aoq-sdk-desc.md)。
 
 ## 快速开始
 
@@ -109,7 +109,7 @@ qwen-audio-3.0-realtime-flash
 
 #### WebSocket 原生
 
-**说明**各模式下客户端与服务端的 WebSocket 事件交互时序，请参见[事件交互流程](https://help.aliyun.com/zh/model-studio/fun-audiochat-realtime-websocket-api#fc63flow01h2)。
+**说明**各模式下客户端与服务端的 WebSocket 事件交互时序，请参见[事件交互流程](https://help.aliyun.com/zh/model-studio/audio-realtime-websocket-access#fc63flow01h2)。
 
 以下示例通过 WebSocket 原生连接，使用 server\_vad 模式实现麦克风实时对话。运行前需安装依赖：
 
@@ -600,7 +600,7 @@ if __name__ == "__main__":
 
 ### 交互模式
 
-Qwen-Audio 支持三种交互模式：`server_vad`（声学 VAD 自动检测语音起止）、`smart_turn`（智能语义轮次，声学与语义融合判断；推荐使用 `smart_turn_v2`）和 push-to-talk（客户端手动控制）。各模式的详细说明及事件交互时序（含时序图），请参见[交互模式](https://help.aliyun.com/zh/model-studio/fun-audiochat-realtime-websocket-api#fc63modes01h2)。
+Qwen-Audio 支持三种交互模式：`server_vad`（声学 VAD 自动检测语音起止）、`smart_turn`（智能语义轮次，声学与语义融合判断；推荐使用 `smart_turn_v2`）和 push-to-talk（客户端手动控制）。各模式的详细说明及事件交互时序（含时序图），请参见[交互模式](https://help.aliyun.com/zh/model-studio/audio-realtime-websocket-access#fc63modes01h2)。
 
 **说明**`turn_detection` 仅在首次发送音频之前（IDLE 状态）允许修改。会话建立后切换交互模式需要重新连接。
 
@@ -866,7 +866,7 @@ finally:
 }
 ```
 
-**声音复刻音色**：通过[声音复刻](https://help.aliyun.com/zh/model-studio/voice-cloning-user-guide#qat_vc_h3)方式创建音色（创建时将 `target_model` 设为 `qwen-audio-3.1-realtime-plus`、`qwen-audio-3.1-realtime-flash`、`qwen-audio-3.0-realtime-plus` 或 `qwen-audio-3.0-realtime-flash`），再将接口返回的 `voice_id` 填入 `voice` 参数。
+**声音复刻音色**：通过[声音复刻](https://help.aliyun.com/zh/model-studio/voice-cloning-user-guide#qar_vc_h3)方式创建音色（创建时将 `target_model` 设为 `qwen-audio-3.1-realtime-plus`、`qwen-audio-3.1-realtime-flash`、`qwen-audio-3.0-realtime-plus` 或 `qwen-audio-3.0-realtime-flash`），再将接口返回的 `voice_id` 填入 `voice` 参数。
 
 ```
 {
@@ -1576,9 +1576,9 @@ RPM 限制每分钟的 WebSocket 建连请求次数。同一连接内的多轮�
 
 ## API 参考
 
-通过 AOQ 接入的流程和示例，请参见[AOQ 接入](raw/model-api-reference/realtime-api-user-guide/realtime-model-connection/realtime-aoq-access.md)。支持的模型及版本请参见[模型与协议支持范围](https://help.aliyun.com/zh/model-studio/realtime-api-overview#rtov-s02h2)。
+通过 AOQ 接入的流程和示例，请参见[AOQ 接入](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/audio-realtime-aoq-access.md)。协议选型和参考入口请参见[API 参考](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/voice-conversation-api-references.md)。
 
--   [WebSocket API](raw/_short/fun-audiochat-realtime-websocket-api-66b5ba4f8a668f28.md)
--   [客户端事件](raw/_short/fun-audiochat-client-events-613371219df1f107.md)
--   [服务端事件](raw/_short/qwen-audio-realtime-server-events-570d84e54a56325a.md)
--   [Realtime API 概述](raw/model-api-reference/realtime-api-user-guide/realtime-api-overview.md)（WebRTC 协议说明）
+-   [WebSocket API](raw/_short/audio-realtime-websocket-access-5f0da4977f0f021b.md)
+-   [客户端事件](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/fun-audiochat-client-events.md)
+-   [服务端事件](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/qwen-audio-realtime-server-events.md)
+-   [WebRTC 接入](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/audio-realtime-webrtc-access.md)

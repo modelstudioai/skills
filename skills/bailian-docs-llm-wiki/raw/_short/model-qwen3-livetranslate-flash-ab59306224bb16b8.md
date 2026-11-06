@@ -146,6 +146,11 @@ TPM（每分钟tokens）
 
 100,000
 
+## 调用方式
+
+-   [接入指南](raw/model-user-guide/model-experience/omni-modal/qwen3-livetranslate-flash.md)
+-   [HTTP API 参考](raw/model-api-reference/audio-api-directory/qwen3-livetranslate-flash-api.md)
+
 ## 快照版本
 
 ### qwen3-livetranslate-flash-2025-12-01

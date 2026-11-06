@@ -35,8 +35,6 @@ kimi 系列模型均支持输入文本、图像或视频：
 
 #### OpenAI兼容
 
-**说明**`reasoning_effort`非 OpenAI 标准参数，OpenAI Python SDK 通过 `extra_body`传入，Node.js SDK 作为顶层参数传入。
-
 #### Python
 
 ```
@@ -52,8 +50,8 @@ client = OpenAI(
 completion = client.chat.completions.create(
     model="kimi/kimi-k3",
     messages=[{"role": "user", "content": "1+1等于多少？"}],
-    # 通过 extra_body 设置 reasoning_effort 开启思考模式
-    extra_body={"reasoning_effort": "max"}
+    # 通过 reasoning_effort 设置思考强度
+    reasoning_effort="max"
 )
 
 msg = completion.choices[0].message
@@ -211,7 +209,7 @@ completion = client.chat.completions.create(
             ]
         }
     ],
-    extra_body={"reasoning_effort":"max"}  # 开启思考模式
+    reasoning_effort="max"  # 开启思考模式
 )
 
 # 输出思考过程
@@ -242,7 +240,7 @@ print(completion.choices[0].message.content)
 #             ]
 #         }
 #     ],
-#     extra_body={"reasoning_effort":"max"}
+#     reasoning_effort="max"
 # )
 #
 # # 输出思考过程和回复

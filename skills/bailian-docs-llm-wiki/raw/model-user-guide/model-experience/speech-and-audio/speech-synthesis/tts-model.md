@@ -104,7 +104,7 @@
 
 -   **非实时合成**：一次提交完整文本，可选择非流式或流式获取音频，参见[非实时语音合成](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/non-realtime-tts-user-guide.md)。
     
--   **实时合成**：分段或持续提交文本，也可一次提交完整文本，参见[实时语音合成](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/realtime-tts-user-guide.md)。对于移动端等实时交互应用，可按 [Realtime API 概述](raw/model-api-reference/realtime-api-user-guide/realtime-api-overview.md)选择可用的接入协议。其中，AOQ（AI over QUIC）针对低延迟和弱网传输进行优化，并内置回声消除和降噪能力。
+-   **实时合成**：分段或持续提交文本，也可一次提交完整文本，参见[实时语音合成](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/realtime-tts-user-guide.md)。对于移动端等实时交互应用，可按 [Realtime API 概述](raw/model-api-reference/realtime-api-directory/realtime-api-overview.md)选择可用的接入协议。其中，AOQ（AI over QUIC）针对低延迟和弱网传输进行优化，并内置回声消除和降噪能力。
     
 
 ## 合成效果控制

@@ -62,4 +62,4 @@ ConvRetCode ret = conversation->SendResponseData(Json::writeString(writer, root)
 
 **说明**百炼多模交互输出的对话结果文本支持「流式输出」，推荐您调用的三方 TTS服务也支持「流式合成」。即将多模态对话输出的多个文本片段流式发送给语音合成服务，语音合成服务流式返回合成音频。这种调用方式可以显著的提升系统的交互速度。
 
-参考接口：百炼CosyVoice 语音合成 [Java SDK](raw/_short/cosyvoice-java-sdk-4cad5c0351587943.md)。
+参考接口：百炼CosyVoice 语音合成 [Java SDK](raw/_short/cosyvoice-java-sdk-08d4eee39fa05656.md)。

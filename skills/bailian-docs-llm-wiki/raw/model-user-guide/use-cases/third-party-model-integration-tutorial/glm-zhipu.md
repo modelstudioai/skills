@@ -47,7 +47,8 @@ completion = client.chat.completions.create(
     messages=messages,
     # 通过 extra_body 设置 enable_thinking 开启思考模式
     # reasoning_effort 控制思考深度，可选值：max（默认）、high、low
-    extra_body={"enable_thinking": True, "reasoning_effort": "max"},
+    extra_body={"enable_thinking": True},
+    reasoning_effort="max",
     stream=True,
     stream_options={
         "include_usage": True

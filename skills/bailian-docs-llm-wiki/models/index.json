@@ -1,11 +1,11 @@
 {
-  "updatedAt": "2026-11-06",
-  "totalFamilies": 126,
-  "totalModels": 336,
+  "updatedAt": "2026-11-07",
+  "totalFamilies": 125,
+  "totalModels": 335,
   "profileCoverage": {
-    "full": 281,
-    "partial": 49,
-    "structured-only": 6,
+    "full": 287,
+    "partial": 47,
+    "structured-only": 1,
     "none": 0
   },
   "capabilityDistribution": {
@@ -14,7 +14,7 @@
     "IG": 17,
     "Reasoning": 11,
     "ASR": 11,
-    "TTS": 9,
+    "TTS": 8,
     "Realtime-ASR": 6,
     "VU": 5,
     "Multimodal-Omni": 5,
@@ -28,7 +28,7 @@
     "3D-generation": 1
   },
   "providerDistribution": {
-    "qwen": 63,
+    "qwen": 62,
     "qwen-domain-model": 26,
     "wan": 13,
     "mini-max": 4,
@@ -1083,21 +1083,6 @@
         "qwen-vl-ocr"
       ],
       "maxContextWindow": 38192
-    },
-    {
-      "slug": "qwen-voice-enrollment",
-      "name": "Qwen-声音复刻",
-      "primaryCapability": "TTS",
-      "capabilities": [
-        "TTS"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "qwen-voice-enrollment"
-      ]
     },
     {
       "slug": "qwen3-asr-flash-filetrans",

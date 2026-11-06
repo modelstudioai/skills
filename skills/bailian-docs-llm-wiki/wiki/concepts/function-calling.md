@@ -1,53 +1,47 @@
 # 函数调用
 
-函数调用（Function Calling）是百炼平台中大模型主动识别用户意图、生成结构化工具调用请求的核心能力。它使模型能根据对话上下文，自主决定是否调用外部工具、选择具体工具，并精确构造符合 OpenAPI 规范的参数，从而突破纯文本生成的边界，实现搜索、计算、代码执行、API 集成等真实世界操作。
+函数调用（Function Calling）是百炼平台中实现大模型与外部能力协同的核心机制，指由大模型在推理过程中自主识别用户意图、生成结构化工具请求，并交由平台执行指定函数（如 MCP 服务、Skill 或自定义代码逻辑）的过程。该机制使 LLM 不再仅输出文本，而是可主动触发真实世界操作，构成 Agent 智能体“感知-决策-执行”闭环的关键一环。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-函数调用不是独立服务，而是贯穿多个能力层的底层机制，其行为和控制粒度因使用场景而异：
+函数调用在百炼平台并非单一 API 能力，而是贯穿多个抽象层级的统一语义行为，具体体现为：
 
-- **Agent（智能体）场景**：模型自动触发函数调用。开发者通过 `input.tools` 提供工具 Schema（含 `function.name`、`description` 和 `parameters`），模型在推理过程中动态生成 `tool_calls` 数组（含 `name` 和 `arguments`）。调用结果需由开发者或平台注入 `observation` 后，模型继续推理，形成「规划→调用→观察→反思」闭环。深度限制为 8 层嵌套调用。
+- **Agent 场景（Managed / Flow / Sandbox）**：  
+  当用户输入涉及工具需求（如“查北京今天天气”“解析附件表格”），LLM 会生成符合协议的函数调用请求（含 `name` 和 `arguments`）。平台根据 `tools` 参数配置自动路由至对应 MCP 服务或 Skill；Flow Agent 还支持在流程图中显式添加「函数节点」，手动绑定函数并传入上游节点输出作为参数——此时函数调用由编排逻辑驱动，而非纯模型决策。
 
-- **插件（Plug-in）场景**：函数调用即“工具调用”，插件是工具的集合封装。官方/三方插件以预置工具 ID（如 `"search"`、`"calculator"`）形式注册；自定义插件则需明确定义 `tool_path`、`in_params`（含 `passing_method` 区分“大模型识别”或“业务透传”）和 `out_params`。调用时，参数可由模型生成（智能体模式），也可由工作流节点或 API 显式传入（确定性编排模式）。
+- **MCP 服务集成**：  
+  MCP 是函数调用的标准化载体。每个 MCP 服务注册后即成为一个可被调用的函数，其 `name`（如 `web_search`）、`description`（功能说明）和 `parameters`（JSON Schema 定义）共同构成函数签名。模型依据此签名生成合法调用，平台负责协议转换（如将 MCP 的 SSE 流转为模型可理解的 JSON 响应）。
 
-- **Application Call（应用调用）场景**：函数调用作为高级功能被集成。在调用已发布的 Agent 或 Workflow 时，可通过 `biz_params` 或 `extra_body.biz_params` 透传插件所需参数（如用户级 [Token](token.md)、业务上下文），平台自动完成工具路由与鉴权，无需在请求体中重复定义工具 Schema。
+- **Sandbox 模式**：  
+  开发者可在 `main.py` 中定义任意 Python 函数（如 `def get_stock_price(symbol: str) -> dict:`），并通过 `@tool` 装饰器或 `register_tool()` 注册为可调用函数。Sandbox 运行时内置函数调度器，接收模型生成的调用请求，执行函数并返回结果——这是最灵活的函数调用形式，支持复杂状态、多步交互与异常处理。
 
-- **Toolkits & Frameworks（工具包）场景**：[OpenAI 兼容接口](openai-compatibility.md)（如 `/v1/chat/completions`）原生支持 `tools` 和 `tool_choice` 参数，行为与 Agent 场景一致。百炼兼容该协议，开发者可直接复用 LangChain 等生态的 `bind_tools`、`with_structured_output` 等模式，零改造迁移已有函数调用逻辑。
+- **Skill 调用**：  
+  Skill 本质是预封装的函数包。当用户上传文件并发出匹配 `SKILL.md` 中 `description` 的指令（如“把 PDF 转成 Word”），平台自动触发对应 Skill 的执行函数，完成文件解析、转换等操作。调用过程对开发者透明，但需确保 `description` 描述精准以提升触发准确率。
 
-- **Sandbox Agent（沙箱智能体）场景**：函数调用完全由开发者代码控制。`main.py` 中的 `run()` 函数可自由调用任意 HTTP API、本地库或平台提供的 SDK（如 `dashscope`），无需依赖模型生成 `tool_calls`。此时“函数调用”退化为常规编程调用，但需自行处理超时、错误、结果解析与上下文传递。
+> ⚠️ 注意：函数调用始终是**同步阻塞式**（当前所有 Agent 类型均不支持异步回调或后台任务）。模型必须等待函数执行完成并返回结果后，才能继续生成后续响应。
 
 ## 关键参数和配置
 
-函数调用的有效性高度依赖以下关键配置项：
-
-- **工具定义（必填）**  
-  - `function.name`：工具唯一标识符，仅限字母、数字、下划线，长度 ≤ 64 字符；  
-  - `function.description`：简洁说明工具用途（≤ 512 字符），直接影响模型调用准确率；  
-  - `function.parameters`：标准 JSON Schema（非 Swagger），必须为 `object` 类型，`required` 字段需显式声明；Object 子属性不可为空，否则发布失败（错误码 130022）。
-
-- **调用控制（可选）**  
-  - `tool_choice`：控制调用策略，可选 `"auto"`（默认）、`"none"`（禁用）或 `{"type": "function", "function": {"name": "xxx"}}`（强制指定）；  
-  - `passing_method`（插件专用）：设为 `"大模型识别"` 时，参数由模型从用户输入中提取；设为 `"业务透传"` 时，参数由 `biz_params` 或工作流节点固定传入，不依赖模型理解；  
-  - `stream` + `incremental_output`：流式响应下，`tool_calls` 仅在最终 chunk 中完整返回，中间 chunk 不含 `delta.tool_calls` 字段。
-
-- **安全与鉴权（按需）**  
-  - 插件级鉴权：通过 `plugin_url` 拼接路径，并配置 `Header`（如 `Authorization: Bearer <token>`）或 `Query`（如 `?api_key=xxx`）方式；  
-  - 业务透传参数：通过 `biz_params.user_defined_params`（DashScope API）或 `extra_body.biz_params`（Responses API）传递，适用于动态 [Token](token.md)、用户 ID 等敏感信息。
+| 参数/配置 | 位置 | 说明 |
+|-----------|------|------|
+| `tools` | Agent API 请求体（`/v1/agents/{agent_id}/chat`） | 必填数组，声明本次对话中可用的函数列表。格式为 `[{ "type": "mcp", "name": "xxx" }]` 或 `[{ "type": "skill", "skill_id": "yyy" }]`。`type` 决定函数来源，`name`/`skill_id` 为唯一标识。 |
+| `function_call` | （可选）Agent API 请求体 | 控制调用行为：<br>• `"auto"`（默认）：模型自主决定是否调用及调用哪个函数；<br>• `{"name": "xxx"}`：强制模型仅调用指定函数（适用于确定性工作流）；<br>• `"none"`：禁用函数调用，仅文本生成。 |
+| `parameters`（JSON Schema） | MCP/Skill 元信息 | 定义函数入参结构。MCP 在服务注册时通过 OpenAPI Spec 声明；Skill 在 `SKILL.md` 中用 YAML 描述。模型严格按此 Schema 生成 `arguments` 字符串。 |
+| `timeout_ms` | Agent 创建或调用参数 | 函数执行超时时间（毫秒）。Flow Agent 默认 30s，Sandbox 最高支持 120s。超时将中断执行并返回错误。 |
+| `enable_sandbox` | Agent 配置项 | 若函数需在 Sandbox 中运行（如自定义 Python 函数），必须显式设置为 `true`，否则调用失败。 |
 
 ## 面向开发者，简洁实用
 
-- ✅ **起步最快**：用 `qwen-plus` 或 `qwen-max` 模型 + 符合 OpenAPI 3.0 的工具 Schema，即可启用自动函数调用；  
-- ✅ **调试要点**：若模型未触发调用，优先检查 `description` 是否清晰、`parameters` 是否为合法 JSON Schema、首条 `messages` 是否为 `role: "user"` 且 `content` 非空；  
-- ✅ **生产建议**：对关键业务参数，采用 `"业务透传"` 模式而非依赖模型提取，避免幻觉；对复杂 Object 输入，提供 `user_input → expected_payload` 示例对提升准确率；  
-- ⚠️ **避坑提醒**：单个智能体最多关联 10 个工具；GET 请求不支持 Object 类型参数；删除插件将级联删除其所有工具并导致已关联应用立即失效；  
-- 📌 **终极控制权**：当自动调用不可控时，切换至 Sandbox Agent 或工作流节点，用代码 100% 掌握调用时机、参数与重试逻辑。
+- ✅ **调试建议**：开启 `enable_tracing: true`，查看完整调用链路（模型生成的 `function_call` → 平台分发日志 → 函数执行耗时与返回值），快速定位是模型未识别意图、参数生成错误，还是函数本身异常。
+- ✅ **参数安全**：所有函数调用参数均经平台校验。若模型生成的 `arguments` 不符合 `parameters` Schema，平台将自动重试或返回 `invalid_function_call` 错误，无需在函数内做二次校验。
+- ✅ **错误处理**：函数执行失败（如网络超时、HTTP 4xx/5xx）时，平台统一返回结构化错误信息（含 `error_code` 和 `message`），模型可据此生成友好提示（如“天气服务暂时不可用，请稍后再试”）。
+- ❌ **禁止行为**：不得在函数内部发起新的函数调用（禁止嵌套调用）；避免在函数中执行长耗时计算（建议拆分为[异步任务](asynchronous-task.md)+轮询）；禁止访问 `/tmp` 以外的本地路径或内网地址。
 
 ## 关联主题页
 
 - [get started with agents](../guides/get-started-with-agents.md)
-- [plug in](../guides/plug-in.md)
 - [agent development](../guides/agent-development.md)
-- [application call](../api/application-call.md)
-- [toolkits and frameworks](../api/toolkits-and-frameworks.md)
+- [agent store](../guides/agent-store.md)
+- [more about models](../api/more-about-models.md)
 
 

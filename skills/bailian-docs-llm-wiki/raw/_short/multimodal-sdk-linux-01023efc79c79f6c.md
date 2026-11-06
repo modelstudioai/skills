@@ -774,7 +774,7 @@ String
 
 否
 
-合成语音的音色，支持范围取决于用户在[管控台](https://bailian.console.aliyun.com/?tab=app#/app/app-market/multi-modal-app)的应用配置中选择的TTS模型和可选音色。具体选择范围可参考[Python SDK](raw/_short/cosyvoice-python-sdk-c20dfd31499fc83c.md)。
+合成语音的音色，支持范围取决于用户在[管控台](https://bailian.console.aliyun.com/?tab=app#/app/app-market/multi-modal-app)的应用配置中选择的TTS模型和可选音色。具体选择范围可参考[Python SDK](raw/_short/cosyvoice-python-sdk-c75c9dda4df376a5.md)。
 
 sample\_rate
 

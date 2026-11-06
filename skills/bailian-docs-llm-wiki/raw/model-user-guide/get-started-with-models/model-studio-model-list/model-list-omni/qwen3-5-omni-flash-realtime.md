@@ -180,6 +180,11 @@ TPM（每分钟tokens）
 
 100,000
 
+## 调用方式
+
+-   [接入指南](raw/model-user-guide/model-experience/omni-modal/realtime.md)
+-   [API 参考](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/omni-realtime-api.md)
+
 ## 快照版本
 
 ### qwen3.5-omni-flash-realtime-2026-03-15

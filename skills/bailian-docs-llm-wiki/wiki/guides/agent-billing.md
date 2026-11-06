@@ -1,53 +1,58 @@
 # agent billing
 
-百炼平台的 Agent 计费体系采用多维度、按需计量模式，覆盖 Sandbox 运行、智能体/工作流执行、Managed Agents、知识库、ParseX、安全高级防护等核心能力。费用由运行时长、模型 [Token](../concepts/token.md)、组件调用次数、存储占用、安全席位等多种计费项独立构成，支持免费额度、资源包与节省计划抵扣。所有计费均以实际用量为准，按小时出账。
+Agent 计费采用多维度、按需计费模式，费用由运行时资源、模型调用、工具/MCP 服务、知识库、解析组件及安全防护等独立计费项构成。各组件价格与免费额度相互隔离，不跨项抵扣；实际费用以控制台账单为准，支持按小时出账与分段计费。开发者需根据应用形态（Managed Agents / Flow Agent / Sandbox）和启用能力（如高级防护、知识库路由、Rerank 排序等）主动评估成本。
 
 ## 支持的模型/功能
 
-Agent 相关计费覆盖以下主要能力模块：
+Agent 相关计费覆盖以下核心能力模块：
 
-- **Sandbox**：提供基础款、进阶款、旗舰款三种规格，按实际运行秒级计费；暂停或保存 Snapshot 时产生数据保留费 [计费说明 (raw/application-user-guide/agent-billing/sandbox-billing.md)](../../raw/application-user-guide/agent-billing/sandbox-billing.md)。
-- **Flow Agent（智能体/工作流应用）**：编排本身不收费，费用来自所调用的模型（如 Qwen 系列）、知识库、MCP（如文生图、语音合成）及内置工具（如 `web_search`）。模型调用按输入/输出 [Token](../concepts/token.md) 计费；知识库和 MCP 按各自标准独立计费 [计费说明 (raw/application-user-guide/agent-billing/flow-agent-billing.md)](../../raw/application-user-guide/agent-billing/flow-agent-billing.md)。
-- **Managed Agents**：自 2026-08-17 起商业化，费用含三部分：会话运行时费（0.5 元/小时）、模型调用费（按所选模型 [Token](../concepts/token.md) 标准）、工具/MCP 调用费（如 `web_search` 0.03 元/次） [计费说明 (raw/application-user-guide/agent-billing/managed-agents-billing.md)](../../raw/application-user-guide/agent-billing/managed-agents-billing.md)。
-- **知识库（RAG）**：规格费用（标准版 0.03 元/知识库/小时，旗舰版 0.2 元/RCU/小时） + 模型调用费用（向量、排序、路由、问答模型均按 Token 计费），二者完全独立 [知识库计费说明 (raw/application-user-guide/agent-billing/billing-for-knowledge-base.md)](../../raw/application-user-guide/agent-billing/billing-for-knowledge-base.md)。
-- **ParseX**：图文按页、音视频按秒计量，支持解析与字段抽取分项计费，新文档直接抽取单价已含解析成本 [计量与计费 (raw/application-user-guide/agent-billing/pricing.md)](../../raw/application-user-guide/agent-billing/pricing.md)。
-- **Agent 安全高级防护**：限时免费中，正式计费后按“防御席位费（0.42 元/席位·小时）+ 超额 Credits（0.0015 元/Credit）”组合计费，Credit 按自然日重置且不可跨席位共享 [计费说明 (raw/application-user-guide/agent-billing/billing.md)](../../raw/application-user-guide/agent-billing/billing.md)。
+- **Managed Agents**：按会话运行时长（0.5 元/小时）、所调用大模型 [Token](../concepts/token.md)（如 `qwen-plus` 输入 0.004 元/千 [Token](../concepts/token.md)）、工具/MCP 调用（如 `web_search` 0.03 元/次）三类独立计费 [计费说明](../../raw/application-user-guide/agent-billing/managed-agents-billing.md)。
+- **Flow Agent（智能体/工作流应用）**：编排本身不收费，费用来自实际执行的模型调用、知识库、MCP 及联网搜索等节点；其中知识库召回文本切片会增加模型输入 [Token](../concepts/token.md)，间接推高模型调用费 [计费说明](../../raw/application-user-guide/agent-billing/flow-agent-billing.md)。
+- **Sandbox**：按秒计量，分为会话运行费（基础款 0.156 元/小时）与数据保留费（0.0021 元/GiB·小时），暂停或 Snapshot 均产生保留费用 [计费说明](../../raw/application-user-guide/agent-billing/sandbox-billing.md)。
+- **知识库（RAG）**：规格费用（标准版 0.03 元/知识库/小时，旗舰版按 RCU 计费）与模型调用费用（向量、排序、路由、问答模型）分离；排序费用取决于**初步召回总切片数**，而非最终返回数量 [知识库计费说明](../../raw/application-user-guide/agent-billing/billing-for-knowledge-base.md)。
+- **ParseX 解析服务**：图文按页（¥0.02/页）、音视频按秒（音频 ¥0.00035/秒，视频 ¥0.002/秒）计量；字段抽取分“新文档直接抽取”（¥0.06/页）与“复用解析结果抽取”（¥0.04/页）两种计价 [计量与计费](../../raw/application-user-guide/agent-billing/pricing.md)。
+- **Agent 安全高级防护**：限时免费中，正式计费后按“防御席位费（0.42 元/席位·小时）+ 超额 Credits（0.0015 元/Credit）”组合计费；每个席位每日默认 300 Credits，额度不结转、不共享 [计费说明](../../raw/application-user-guide/agent-billing/billing.md)。
 
-> **注意**：文档 4 和文档 7 内容完全重复，均为 `raw/application-user-guide/agent-billing/billing.md` 的副本，以该路径唯一文档为准，避免引用歧义。
+> **注意**：文档 4 和文档 7 内容完全重复，均为 `raw/application-user-guide/agent-billing/billing.md` 的副本，以该路径最新版本为准；文档 2 中提及“智能模式各档位的缓存费用见[智能模式计费明细](https://help.aliyun.com/zh/model-studio/new-single-agent-application#66b7273195ors)”为外部链接，非百炼平台内原始文档，未纳入本 Wiki 引用范围。
 
 ## 关键参数
 
-| 参数 | 说明 | 示例值/范围 |
-|--------|------|-------------|
-| `RCU`（知识库） | 检索计算单元，1 RCU ≈ 支撑 50 QPS；旗舰版按 RCU 数量计费 | 1–200 RCU 可调 |
-| `TopK`（知识库检索） | 初步召回切片数，直接影响排序模型 Token 消耗量 | 向量 TopK（默认 50）、关键词 TopK（默认 50） |
-| `席位`（安全防护） | 一个处于运行中且启用高级防护的 Agent 实例 | 席位数 = 启用高级防护的 Agent 数量 |
-| `Credit`（安全防护） | 安全检测消耗单位，按被检内容 Token 换算；每个席位每日 300 Credit 免费 | 有效期 24 小时，不结转 |
-| `GiB·小时`（Sandbox 数据保留） | 暂停状态下的内存/磁盘快照占用量与时长乘积 | 单价 0.0021 元/GiB·小时 |
+| 参数 | 说明 | 影响范围 |
+|------|------|----------|
+| `会话运行时长` | Managed Agents/Sandbox 按实际启用时间计费，空闲状态不计费；Sandbox 暂停后仍产生数据保留费 | 运行时费、数据保留费 |
+| `RCU（Retrieval Compute Unit）` | 知识库旗舰版并发能力单位，1 RCU ≈ 支撑 50 QPS；变配按发生时间分段计费 | 知识库规格费用 |
+| `初步召回 TopK` | 知识库检索中“向量检索 TopK”与“关键词检索 TopK”之和，决定送入 Rerank 模型的切片总数 | Rerank 模型费用（主要成本项） |
+| `Credit` | 安全高级防护中内容检测消耗单位，按 Token 换算；每个席位每日 300 Credits，超限部分按 0.0015 元/Credit 计费 | 超额 Credits 用量 |
+| `嵌套调用深度` | Flow Agent 工作流中，若模型节点输出触发下游多个 MCP 或知识库调用，费用叠加计算 | 总费用 = 各执行路径节点费用之和 |
 
 ## 使用方式
 
-- **Sandbox**：创建即开始计费；暂停后仅产生数据保留费；删除实例立即停止所有计费。
-- **Flow Agent**：发布应用后，每次调用按执行路径上实际触发的计费节点汇总计费（如模型节点、知识库节点、MCP 节点）；未进入执行路径的节点不计费。
-- **Managed Agents**：调用 `CreateSession` 后即开始计收运行时费；需主动调用 `TerminateSession` 终止会话以停止计费。
-- **知识库**：创建成功即开始计收规格费用；模型调用费在知识管理（上传/更新）、检索（Query 向量化、Rerank 排序、路由判断）、问答（生成回答）等环节实时产生。
-- **ParseX**：调用 `ParseDocument` 或 `ExtractFields` API 即触发计量；复用已有解析结果可降低抽取成本（¥0.04/页 vs ¥0.06/页）。
-- **安全高级防护**：需在控制台 Security > 高级防护 > 安全策略页面完成服务授权开通；仅对启用该功能的运行中 Agent 计费。
+- **开通与配置**：  
+  - Managed Agents、Sandbox、知识库、ParseX 均在控制台对应页面开通，默认启用后付费；知识库可购买资源包（如[标准版资源包](https://common-buy.aliyun.com/?commodityCode=sfm_ragservicestandard_dp_cn)）实现预付费抵扣。  
+  - Agent 安全高级防护需在 **Security > 高级防护 > 安全策略** 页面手动开通并授权服务角色 [计费说明](../../raw/application-user-guide/agent-billing/billing.md)。  
+
+- **费用控制操作**：  
+  - 终止闲置会话、删除不再使用的知识库或 Sandbox，立即停止对应运行时/规格费用。  
+  - 知识库检索阶段可关闭 Rerank 排序或降低 TopK 值以显著降低成本；智能体应用中可禁用知识库路由减少 `qwen-plus` 调用。  
+  - ParseX 复用已有解析结果进行字段抽取，单价更低（¥0.04/页 vs ¥0.06/页）。  
+
+- **账单查询**：  
+  - 所有费用统一归集至「大模型服务平台阿里云百炼」产品下，按小时聚合出账。  
+  - 知识库规格费用查账单中商品名为「阿里云百炼知识库（RAG）- 后付费」；模型 Token 消耗查「阿里云百炼大模型推理」，实例 ID 含 `embedding` 或 `rerank` 可区分用途 [知识库计费说明](../../raw/application-user-guide/agent-billing/billing-for-knowledge-base.md)。  
 
 ## 限制和注意事项
 
-- **免费额度不可叠加或转移**：新人免费额度、知识库 720 小时额度、ParseX 一次性赠送额度均按账户/实例独立发放，不跨产品、不跨账号、不结转。老用户知识库免费额度统一于 2026-02-03 失效 [知识库计费说明 (raw/application-user-guide/agent-billing/billing-for-knowledge-base.md)](../../raw/application-user-guide/agent-billing/billing-for-knowledge-base.md)。
-- **模型调用费始终独立于组件规格费**：例如知识库的规格费用（0.03 元/小时）与其中使用的 `text-embedding-v4` 向量模型费用（0.0005 元/千 Token）分别计费、分别抵扣，节省计划仅适用于后者。
-- **Rerank 排序费用取决于初步召回总量，而非最终返回数量**：若初步召回 100 个切片（平均 500 Token/切片），则排序 Token 消耗为 50,000，即使最终只返回 5 个切片，费用仍按 50,000 Token 计算。
-- **Sandbox 系统盘不计费，但超出部分需付费**：每个 Sandbox 默认含 15 GiB 免费系统盘；额外挂载的云盘或 Snapshot 占用空间按 `GiB·小时` 单独计费。
-- **高级防护 Credit 按自然日清零**：每日 00:00 重置各席位额度，未用完的 Credit 不累计至次日。
-- **工作流中“图片解析”节点存在计费差异**：选择 Qwen-VL 解析会产生模型调用费；选择内置大模型文档解析则暂不计费 —— 开发者需在节点配置中明确选择 [计费说明 (raw/application-user-guide/agent-billing/flow-agent-billing.md)](../../raw/application-user-guide/agent-billing/flow-agent-billing.md)。
+- **免费额度不可跨项、跨资源类型使用**：Managed Agents 的 10 小时运行时免费额度仅抵扣运行时费，不抵扣模型或工具费；知识库 720 小时免费额度仅适用于标准版规格费用，且老用户有效期截至 2026-02-03 [知识库计费说明](../../raw/application-user-guide/agent-billing/billing-for-knowledge-base.md)。  
+- **模型调用费用始终独立于宿主服务**：无论通过 Managed Agents、Flow Agent 还是 Sandbox 调用 `qwen-plus`，均按统一 Token 价格计费；知识库路由、Rerank、问答生成等场景产生的 Token 消耗均计入模型账单，不包含在知识库规格费中。  
+- **Sandbox 数据保留费易被忽略**：暂停 Sandbox 或保存 Snapshot 后，即使未运行，只要数据占用磁盘空间，即按 GiB·小时持续计费；系统盘 15 GiB 免费，超出部分及快照均计费 [计费说明](../../raw/application-user-guide/agent-billing/sandbox-billing.md)。  
+- **高级防护 Credit 按自然日重置**：每个席位 Credit 有效期严格为 24 小时（00:00–23:59），不结转；多 Agent 场景下额度不共享，需按席位分别监控 [计费说明](../../raw/application-user-guide/agent-billing/billing.md)。  
+- **知识库多实例调用放大效应**：同一 Query 在挂载的 N 个知识库中默认各执行一次完整检索（含向量化 + Rerank），Token 消耗量线性增长；无法通过配置关闭单库检索 [知识库计费说明](../../raw/application-user-guide/agent-billing/billing-for-knowledge-base.md)。
 
 ## 来源文档
 
-- [计费说明](../../raw/application-user-guide/agent-billing/sandbox-billing.md)
-- [计费说明](../../raw/application-user-guide/agent-billing/flow-agent-billing.md)
 - [计费说明](../../raw/application-user-guide/agent-billing/managed-agents-billing.md)
+- [计费说明](../../raw/application-user-guide/agent-billing/flow-agent-billing.md)
+- [计费说明](../../raw/application-user-guide/agent-billing/sandbox-billing.md)
 - [计费说明](../../raw/application-user-guide/agent-billing/billing.md)
 - [知识库计费说明](../../raw/application-user-guide/agent-billing/billing-for-knowledge-base.md)
 - [计量与计费](../../raw/application-user-guide/agent-billing/pricing.md)

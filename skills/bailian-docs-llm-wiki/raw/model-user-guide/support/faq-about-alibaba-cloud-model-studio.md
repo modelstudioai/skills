@@ -71,7 +71,7 @@ curl --location 'https://bailian.aliyuncs.com/v2/app/completions' \
     
     DashScope SDK 支持 Java 和 Python。详情请参见[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
     
-    多模态交互模型的 SDK 详情请参见 [Realtime API](raw/model-api-reference/realtime-api-user-guide/realtime-api-overview.md)。
+    多模态交互模型的 SDK 详情请参见 [Realtime API](raw/model-api-reference/realtime-api-directory/realtime-api-overview.md)。
     
 4.  **Assistant API 调用 function call ，用户需要依次调用两个本地函数，现在支持吗？**
     

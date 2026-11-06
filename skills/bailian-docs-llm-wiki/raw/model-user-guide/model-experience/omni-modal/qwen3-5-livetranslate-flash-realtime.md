@@ -23,7 +23,7 @@
 
 通过 WebSocket 接入时，需要以下配置项：
 
-**说明**支持通过 AOQ、WebRTC 和 WebSocket 协议接入。如果是客户端对接，且更看重稳定的延迟、弱网下的交互能力、实时双工的降噪与回声消除，可优先考虑 AOQ，协议对比与选型请参见[Realtime API 概述](https://help.aliyun.com/zh/model-studio/realtime-api-overview#rtov-s02h2)。
+**说明**支持通过 AOQ、WebRTC 和 WebSocket 协议接入。如果是客户端对接，且更看重稳定的延迟、弱网下的交互能力、实时双工的降噪与回声消除，可优先考虑 AOQ，协议对比与选型请参见[API 参考](raw/model-api-reference/realtime-api-directory/livetranslate-realtime-api-directory/live-translator-api.md)。
 
 **配置项**
 
@@ -96,9 +96,9 @@ ws.run_forever()
     
     **说明**使用 `qwen3.5-livetranslate-flash-realtime` 时，输出模态字段为 `session.modalities`，可选值及默认值相同。
     
--   **原文识别**：使用 `qwen3.8-livetranslate-flash-realtime` 时，原文识别始终开启，不支持关闭。通过 `conversation.item.input_audio_transcription.delta` 接收识别增量，通过 `conversation.item.input_audio_transcription.completed` 接收完整结果。
+-   **原文识别**：使用 `qwen3.8-livetranslate-flash-realtime` 时，原文识别始终开启，不支持关闭。原文由同传模型直接输出，图片中的相关信息可以帮助模型消除歧义。通过 `conversation.item.input_audio_transcription.delta` 接收识别增量，通过 `conversation.item.input_audio_transcription.completed` 接收完整结果。
     
-    **说明**使用 `qwen3.5-livetranslate-flash-realtime` 时，原文识别默认开启。如需调整，需通过 `session.input_audio_transcription.model` 配置：`qwen3-asr-flash-realtime` 表示开启，`null` 表示关闭。识别增量通过 `conversation.item.input_audio_transcription.text` 返回，完整结果通过 `conversation.item.input_audio_transcription.completed` 返回。
+    **说明**使用 `qwen3.5-livetranslate-flash-realtime` 时，原文识别默认开启。原文由独立的 ASR 模型根据输入音频生成。如需调整，需通过 `session.input_audio_transcription.model` 配置：`qwen3-asr-flash-realtime` 表示开启，`null` 表示关闭。识别增量通过 `conversation.item.input_audio_transcription.text` 返回，完整结果通过 `conversation.item.input_audio_transcription.completed` 返回。
     
 -   **音频与音色**：使用 `qwen3.8-livetranslate-flash-realtime` 时，默认输入为 16000 Hz PCM，输出为 24000 Hz PCM，默认音色为 `Tina`。也可输入 Opus 音频，需将 `session.audio.input.format.type` 设为 `opus`。可通过 [session.created](https://help.aliyun.com/zh/model-studio/live-translator-server-events#39689ed6e90ag) 返回的 `session.audio.output.voice` 查看音色。如需保留说话人的音色，参见[声音复刻](#8q75hr4eu55j0)。
     
@@ -119,7 +119,7 @@ ws.run_forever()
 
 qwen3.5-livetranslate-flash-realtime：VAD 与 Manual 模式
 
-模型判断一段语音"说完了"的方式，取决于[turn\_detection](raw/_short/live-translator-client-events-666da53ef8b3942d.md)参数配置的 VAD 模式或 Manual 模式：
+模型判断一段语音"说完了"的方式，取决于[turn\_detection](raw/model-api-reference/realtime-api-directory/livetranslate-realtime-api-directory/live-translator-client-events.md)参数配置的 VAD 模式或 Manual 模式：
 
 -   **VAD 模式**（默认）：客户端持续发送[input\_audio\_buffer.append](https://help.aliyun.com/zh/model-studio/live-translator-client-events#8d11313f2198k)事件；服务端检测到语音开始/结束时，分别返回[input\_audio\_buffer.speech\_started](https://help.aliyun.com/zh/model-studio/live-translator-server-events#vad001speechstartedh2)、[input\_audio\_buffer.speech\_stopped](https://help.aliyun.com/zh/model-studio/live-translator-server-events#vad002speechstoppedh2)事件，并自动提交音频缓冲区、触发翻译。翻译响应基于流式语音同步生成，通常在语音输入过程中就已开始，无需等待语音结束。
 -   **Manual 模式**：将`session.turn_detection`设为`null`。客户端发送完一段完整的语音后，主动发送[input\_audio\_buffer.commit](https://help.aliyun.com/zh/model-studio/live-translator-client-events#ltcommit001h2)事件提交音频缓冲区；服务端返回[input\_audio\_buffer.committed](https://help.aliyun.com/zh/model-studio/live-translator-server-events#ltcommitted001h2)事件确认后，自动开始生成翻译响应，客户端无需再发送其他事件触发响应。提交前若需清空未提交的音频，可发送[input\_audio\_buffer.clear](https://help.aliyun.com/zh/model-studio/live-translator-client-events#ltclear001h2)事件。
@@ -128,7 +128,7 @@ qwen3.5-livetranslate-flash-realtime：VAD 与 Manual 模式
 
 使用 `qwen3.8-livetranslate-flash-realtime` 时，根据输出模态接收响应：
 
--   **仅文本**：累加 `response.text.delta` 的 `delta` 字段获得译文。
+-   **仅文本**：将 `response.text.delta` 的 `delta` 字段按顺序追加到字幕末尾，不覆盖已显示的文本。
 -   **文本和音频**：累加 `response.audio_transcript.delta` 的 `delta` 字段获得译文，并对 `response.audio.delta` 的 `delta` 字段进行 Base64 解码，获取音频分片。
 
 收到 `response.done` 表示本次响应结束。事件字段参见[服务端事件](https://help.aliyun.com/zh/model-studio/live-translator-server-events#text-delta)。
@@ -150,6 +150,8 @@ qwen3.5-livetranslate-flash-realtime：响应事件差异
 -   **仅输出文本**
     
     服务端通过[response.text.text](https://help.aliyun.com/zh/model-studio/live-translator-server-events#0c54be63e0c3w)事件流式返回增量翻译文本（含已确认文本和待确认的预测文本）；翻译完成后，通过[response.text.done](https://help.aliyun.com/zh/model-studio/live-translator-server-events#d675635a94jfb)事件返回完整的翻译文本。
+    
+    `stash` 是临时译文，能让字幕更早显示，但后续可能被改写。可根据需要在客户端展示 `text` 与 `stash` 的拼接结果，或只显示已确认的 `text`。按 `item_id` 更新对应字幕，收到 `response.text.done` 后再显示完整译文。
     
 -   **输出文本+音频**
     -   **文本**
@@ -570,7 +572,7 @@ def send_audio():
 
 **实时复刻**：`qwen3.8-livetranslate-flash-realtime` 和 `qwen3.5-livetranslate-flash-realtime` 在翻译过程中从输入音频复刻音色，不额外收取复刻费用；模型调用仍按 Token 用量计费。
 
-**提前创建音色**：通过[声音复刻 API](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning-user-guide#b819f697047nb)提前创建音色，按 **0.01 元/个**计费，创建失败不计费；免费额度的地域、次数与有效期见该计费说明。使用已创建的音色翻译时，仍按模型调用的 Token 用量计费。
+**提前创建音色**：通过[声音复刻 API](https://help.aliyun.com/zh/model-studio/voice-clone-design-http-api#h2-create)提前创建音色，按 **0.01 元/个**计费，创建失败不计费；免费额度的地域、次数与有效期见[计费说明](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning-user-guide#b819f697047nb)。使用已创建的音色翻译时，仍按模型调用的 Token 用量计费。
 
 在 [session.update](https://help.aliyun.com/zh/model-studio/live-translator-client-events#af43722339yva) 中设置以下参数启用：
 
@@ -584,7 +586,7 @@ def send_audio():
 -   `session.voice`：指定输出音色，取值取决于 `frequency` 的设置。
     
     -   设置为 `default`：搭配 `frequency` 为 `once` 或 `always` 使用，复刻输入音频的音色，复刻完成前使用默认音色过渡。
-    -   设置为用户复刻的音色 ID（如 `qwen-translate-vc-xxx-yyy-zzz`）：搭配 `frequency` 为 `never` 使用。需提前通过[声音复刻API](raw/_short/qwen-omni-voice-cloning-717550bc449e9e29.md)准备音色，`target_model` 需指定为实际使用的翻译模型。
+    -   设置为用户复刻的音色 ID（如 `qwen-translate-vc-xxx-yyy-zzz`）：搭配 `frequency` 为 `never` 使用。需提前通过[声音复刻API](https://help.aliyun.com/zh/model-studio/voice-clone-design-http-api#h2-create)准备音色，`target_model` 需指定为实际使用的翻译模型。
 
 > 当 `frequency` 为 `once` 或 `always` 时，`voice` 必须设置为 `default`，不可设置为其他预设音色，否则服务端会返回错误。
 
@@ -672,7 +674,7 @@ def send_audio():
 
 ## 交互流程
 
-使用 `qwen3.8-livetranslate-flash-realtime` 时，默认通过服务端断句生成响应，主要交互环节如下。事件字段详见[服务端事件](raw/_short/live-translator-server-events-e9db9578a7b303d5.md)。
+使用 `qwen3.8-livetranslate-flash-realtime` 时，默认通过服务端断句生成响应，主要交互环节如下。事件字段详见[服务端事件](raw/model-api-reference/realtime-api-directory/livetranslate-realtime-api-directory/live-translator-server-events.md)。
 
 **阶段**
 
@@ -828,10 +830,10 @@ session.finished
 
 ## API 参考
 
-通过 AOQ 接入的流程和示例，请参见[AOQ 接入](raw/model-api-reference/realtime-api-user-guide/realtime-model-connection/realtime-aoq-access.md)。支持的模型及版本请参见[模型与协议支持范围](https://help.aliyun.com/zh/model-studio/realtime-api-overview#rtov-s02h2)。
+通过 AOQ 接入的流程和示例，请参见[AOQ 接入](raw/model-api-reference/realtime-api-directory/livetranslate-realtime-api-directory/livetranslate-realtime-aoq-access.md)。协议选型和参考入口请参见[API 参考](raw/model-api-reference/realtime-api-directory/livetranslate-realtime-api-directory/live-translator-api.md)。
 
--   [实时音视频翻译（Qwen-Livetranslate-Realtime）](raw/_short/live-translator-api-efee346dbf16a776.md)。
--   [Realtime API 概述](raw/model-api-reference/realtime-api-user-guide/realtime-api-overview.md)（WebRTC 协议说明）
+-   [实时音视频翻译（Qwen-LiveTranslate-Realtime）](raw/model-api-reference/realtime-api-directory/livetranslate-realtime-api-directory/live-translator-api.md)。
+-   [WebRTC 接入](raw/_short/livetranslate-realtime-webrtc-access-ddb4e390439cd632.md)
 
 ## 计费说明
 
@@ -845,7 +847,7 @@ session.finished
 
 **实时复刻**：`qwen3.8-livetranslate-flash-realtime` 和 `qwen3.5-livetranslate-flash-realtime` 在翻译过程中从输入音频复刻音色，不额外收取复刻费用；模型调用仍按 Token 用量计费。
 
-**提前创建音色**：通过[声音复刻 API](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning-user-guide#b819f697047nb)提前创建音色，按 **0.01 元/个**计费，创建失败不计费；免费额度的地域、次数与有效期见该计费说明。使用已创建的音色翻译时，仍按模型调用的 Token 用量计费。
+**提前创建音色**：通过[声音复刻 API](https://help.aliyun.com/zh/model-studio/voice-clone-design-http-api#h2-create)提前创建音色，按 **0.01 元/个**计费，创建失败不计费；免费额度的地域、次数与有效期见[计费说明](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning-user-guide#b819f697047nb)。使用已创建的音色翻译时，仍按模型调用的 Token 用量计费。
 
 ## 限流说明
 
@@ -1236,7 +1238,7 @@ uk
 -   **服务端语音检测**：被服务端过滤的静音不会计入音频输入用量。
 -   **Manual 模式**：客户端手动提交的静音会计入音频输入用量。
 
-音频输入 Token 数记录在 [response.done](raw/_short/live-translator-server-events-e9db9578a7b303d5.md) 事件中，字段位置为 `response` → `usage` → `input_tokens_details` → `audio_tokens`。模型按输入、输出 Token 计费，单价和计量规则见[计费说明](#e02a82e668y2c)。
+音频输入 Token 数记录在 [response.done](raw/model-api-reference/realtime-api-directory/livetranslate-realtime-api-directory/live-translator-server-events.md) 事件中，字段位置为 `response` → `usage` → `input_tokens_details` → `audio_tokens`。模型按输入、输出 Token 计费，单价和计量规则见[计费说明](#e02a82e668y2c)。
 
 ### 如何迁移Gummy模型到Livetranslate？
 
@@ -1367,3 +1369,13 @@ if __name__ == "__main__":
 RPM 限制每分钟的 WebSocket 建连请求次数。同一连接内的多轮响应不重复计数；重连计为新请求。目前没有单独限制同时保持的连接总数。
 
 建连时，若 WebSocket 以 `1007` 关闭，且原因为 `Requests rate limit exceeded, please try again later.`，说明触发了请求速率限流。降低建连频率，并采用指数退避重连。
+
+### 翻译中断后如何恢复？
+
+收到 `no semantic result after merged audio exceeded 60s` 并断开 WebSocket 连接时，需要新建会话后继续翻译：
+
+1.  停止向旧连接发送音频。
+2.  重新建立连接，发送 `session.update`，恢复目标语种、输出模态等配置。
+3.  收到 `session.updated` 后，再继续发送音频。
+
+参数错误且连接未断开时，修正请求后可继续使用原连接。使用 `dashscope.Client()` 时，还需[恢复事件接收](https://help.aliyun.com/zh/model-studio/qwen-livetranslate-python-sdk#lt-sdk-error-receive)。

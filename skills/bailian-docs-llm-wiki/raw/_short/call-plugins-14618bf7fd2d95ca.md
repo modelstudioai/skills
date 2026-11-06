@@ -17,7 +17,7 @@
 2.  **插件广场中的插件**
 3.  **自定义插件**
 
-插件广场和自定义插件介绍请参见[插件概述](raw/application-user-guide/plug-in/plug-in-overview.md)。
+插件广场和自定义插件介绍请参见[插件概述](raw/application-user-guide/agent-development/llm-application/plug-in/plug-in-overview.md)。
 
 ## 接入流程
 
@@ -27,7 +27,7 @@
     
 -   **自定义插件**：
     
-    1.  创建插件：详情请参见[自定义插件](raw/application-user-guide/plug-in/custom-plug-ins.md)。
+    1.  创建插件：详情请参见[自定义插件](raw/application-user-guide/agent-development/llm-application/plug-in/custom-plug-ins.md)。
         
         注意，需要确保【创建插件】和【创建工具】两个步骤均完成并发布。如果您返回到多模态交互控制台，在自定义插件中无法选中自己刚创建的插件，可优先检查是否未完成【创建工具】并【发布】操作。
         
@@ -89,7 +89,7 @@ user\_defined\_params
 
 your\_plugin\_code
 
-导入的百炼应用 id，参考[自定义插件](raw/application-user-guide/plug-in/custom-plug-ins.md)获取工具ID
+导入的百炼应用 id，参考[自定义插件](raw/application-user-guide/agent-development/llm-application/plug-in/custom-plug-ins.md)获取工具ID
 
 your\_plugin\_param
 

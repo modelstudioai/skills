@@ -270,6 +270,11 @@ TPM（每分钟tokens）
 
 100,000
 
+## 调用方式
+
+-   [接入指南](https://help.aliyun.com/zh/model-studio/qwen-omni#4abec8391fmn9)
+-   [Chat Completions API 参考](raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)
+
 ## 快照版本
 
 ### qwen3.5-omni-flash-2026-03-15

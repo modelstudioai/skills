@@ -22,7 +22,7 @@
 -   使用业务空间专属域名时，将代码中的 `{WorkspaceId}` 替换为该地域的[业务空间 ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 -   [安装 DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)，选择 Python 或 Java 示例。
 
-**说明**对延迟和弱网下音频传输稳定性要求较高的移动端应用，可使用 AOQ 协议。AOQ 的接入方式，以及 AOQ、WebRTC 和 WebSocket 的差异与模型支持范围，请参见 [Realtime API 概述](raw/model-api-reference/realtime-api-user-guide/realtime-api-overview.md)。
+**说明**对延迟和弱网下音频传输稳定性要求较高的移动端应用，可使用 AOQ 协议。AOQ 的接入方式，以及 AOQ、WebRTC 和 WebSocket 的差异与模型支持范围，请参见 [Realtime API 概述](raw/model-api-reference/realtime-api-directory/realtime-api-overview.md)。
 
 #### Qwen-Audio-TTS（推荐）
 
@@ -219,7 +219,7 @@ public class Main {
 
 使用 CosyVoice 的 LaTeX 公式朗读功能，将支持的数学公式转换为中文语音。
 
-参数适用模型和配置方法请参见 [Qwen-Audio-TTS API](raw/_short/qwen-audio-tts-client-events-81541f7ec0ef1c33.md)或 [CosyVoice API](raw/_short/cosyvoice-client-events-a63a525ab07e6693.md)；SSML 与 LaTeX 的适用模型、音色、接口及用法请参见 [SSML 与 LaTeX](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/ssml-latex-user-guide.md)。
+参数适用模型和配置方法请参见 [Qwen-Audio-TTS API](raw/_short/qwen-audio-tts-client-events-26c1ffacfaed1e62.md)或 [CosyVoice API](raw/_short/cosyvoice-client-events-480a8821d2d60e18.md)；SSML 与 LaTeX 的适用模型、音色、接口及用法请参见 [SSML 与 LaTeX](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/ssml-latex-user-guide.md)。
 
 **说明**使用 SSML 时，需要一次提交完整的 SSML 文本，再逐段接收音频，不支持分段输入。
 
@@ -536,7 +536,7 @@ Qwen3-TTS
 
 在当前会话中继续发送 `input_text_buffer.append`。根据会话模式，由服务端触发合成或发送 `input_text_buffer.commit`；全部文本发送完毕后再发送 `session.finish` 结束会话。
 
-SDK 对象池的配置与完整示例请参见[语音合成高并发最佳实践](raw/model-user-guide/use-cases/tts-high-concurrency-best-practices.md)。Qwen3-TTS 的会话流程请参见 [WebSocket API](raw/_short/interactive-process-of-qwen-tts-realtime-synthes-3c96d28349bb779a.md)。
+SDK 对象池的配置与完整示例请参见[语音合成高并发最佳实践](raw/model-user-guide/use-cases/tts-high-concurrency-best-practices.md)。Qwen3-TTS 的会话流程请参见 [WebSocket API](raw/_short/interactive-process-of-qwen-tts-realtime-synthes-4a35095f0ac8788f.md)。
 
 Qwen-Audio-TTS、CosyVoice、Sambert 任务结束后 60 秒内没有新任务时，连接会自动断开。连接已关闭或任务状态异常时，应重新建立连接。
 
@@ -552,7 +552,7 @@ Qwen-Audio-TTS、CosyVoice、Sambert 任务结束后 60 秒内没有新任务时
 
 #### 华北2（北京）
 
-使用该地域的 [API Key](raw/model-api-reference/preparations/get-api-key.md) 和[接入域名](raw/model-api-reference/preparations/regions.md)调用以下模型：
+使用该地域的 [API Key](raw/model-api-reference/preparations/get-api-key.md) 和[接入域名](raw/model-user-guide/get-started-with-models/regions.md)调用以下模型：
 
 -   **Qwen-Audio-TTS**：qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash
 -   **CosyVoice**：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-plus、cosyvoice-v3-flash、cosyvoice-v2
@@ -561,7 +561,7 @@ Qwen-Audio-TTS、CosyVoice、Sambert 任务结束后 60 秒内没有新任务时
 
 #### 新加坡
 
-使用该地域的 [API Key](raw/model-api-reference/preparations/get-api-key.md) 和[接入域名](raw/model-api-reference/preparations/regions.md)调用以下模型：
+使用该地域的 [API Key](raw/model-api-reference/preparations/get-api-key.md) 和[接入域名](raw/model-user-guide/get-started-with-models/regions.md)调用以下模型：
 
 -   **Qwen-Audio-TTS**：qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash
 -   **CosyVoice**：cosyvoice-v3-plus、cosyvoice-v3-flash
@@ -571,12 +571,12 @@ Qwen-Audio-TTS、CosyVoice、Sambert 任务结束后 60 秒内没有新任务时
 
 ## API 参考
 
-通过 AOQ 接入的流程和示例，请参见[AOQ 接入](raw/model-api-reference/realtime-api-user-guide/realtime-model-connection/realtime-aoq-access.md)。支持的模型及版本请参见[模型与协议支持范围](https://help.aliyun.com/zh/model-studio/realtime-api-overview#rtov-s02h2)。
+通过 AOQ 接入时，请参见 [Qwen-Audio-TTS AOQ 接入](raw/model-api-reference/realtime-api-directory/realtime-tts-model-apis/qwen-audio-tts-api/qwen-audio-tts-aoq-access.md)或 [CosyVoice AOQ 接入](raw/_short/cosyvoice-aoq-access-c0e8e4035486f433.md)。具体支持范围参见[模型与协议支持范围](https://help.aliyun.com/zh/model-studio/realtime-api-overview#rtov-s02h2)。
 
--   [实时语音合成-Qwen-Audio-TTS API参考](raw/_short/qwen-audio-tts-api-2a5997e924bff673.md)
--   [实时语音合成-CosyVoice API参考](raw/_short/cosyvoice-large-model-for-speech-synthesis-c25d07a9b3ba6047.md)
--   [实时语音合成-千问API参考](raw/_short/qwen-tts-realtime-api-reference-5bfb7590608ff1dc.md)
--   [实时语音合成-Sambert API参考](raw/_short/sambert-speech-synthesis-60d77f54e64567a1.md)
+-   [Qwen-Audio-TTS API 参考](raw/_short/qwen-audio-tts-client-events-26c1ffacfaed1e62.md)
+-   [CosyVoice API 参考](raw/_short/cosyvoice-client-events-480a8821d2d60e18.md)
+-   [Qwen-TTS-Realtime API 参考](raw/_short/qwen-tts-realtime-client-events-3c4f9162971ee712.md)
+-   [Sambert API 参考](raw/_short/sambert-client-events-5cb2642604d71e01.md)
 
 WebSocket 原始协议的完整调用示例见以下文档。
 

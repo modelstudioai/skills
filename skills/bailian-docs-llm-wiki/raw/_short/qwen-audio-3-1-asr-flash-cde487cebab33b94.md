@@ -150,5 +150,4 @@ RPM（每分钟请求数）
 
 ## 调用方式
 
--   [非实时语音识别](raw/model-user-guide/model-experience/speech-and-audio/speech-recognition/non-realtime-speech-recognition-user-guide.md)
--   [HTTP API](raw/_short/qwen-audio-asr-http-api-b304ee1b83ae18cd.md)
+-   [HTTP API](raw/_short/qwen-audio-asr-http-api-90b9d62787e911f4.md)

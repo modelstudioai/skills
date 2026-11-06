@@ -337,7 +337,7 @@ print("语音合成完成，所有合成结果已被接收：" + get_timestamp()
 
 #### Java
 
-Java 开发建议使用 Java DashScope SDK，详情请参见[Java SDK](raw/_short/cosyvoice-java-sdk-4cad5c0351587943.md)。
+Java 开发建议使用 Java DashScope SDK，详情请参见[Java SDK](raw/_short/cosyvoice-java-sdk-08d4eee39fa05656.md)。
 
 以下是Java WebSocket的调用示例。在运行示例前，请确保已导入以下依赖：
 
@@ -526,7 +526,7 @@ public class TTSWebSocketClient extends WebSocketClient {
 
 #### Python
 
-Python 开发建议使用 Python DashScope SDK，详情请参见[Python SDK](raw/_short/cosyvoice-python-sdk-c20dfd31499fc83c.md)。
+Python 开发建议使用 Python DashScope SDK，详情请参见[Python SDK](raw/_short/cosyvoice-python-sdk-c75c9dda4df376a5.md)。
 
 以下是Python WebSocket的调用示例。在运行示例前，请确保通过如下方式导入依赖：
 

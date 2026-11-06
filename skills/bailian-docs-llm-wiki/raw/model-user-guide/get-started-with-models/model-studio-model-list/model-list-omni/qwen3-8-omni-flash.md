@@ -85,3 +85,9 @@ Function Calling
 ## 限流
 
 模型调用的限流说明请参见[限流](https://help.aliyun.com/zh/model-studio/rate-limit#5b7c656e788u8)。
+
+## 调用方式
+
+-   [接入指南](https://help.aliyun.com/zh/model-studio/qwen-omni#qwen38-offline)
+-   [Chat Completions API 参考](raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)
+-   [Responses API 参考](raw/model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)

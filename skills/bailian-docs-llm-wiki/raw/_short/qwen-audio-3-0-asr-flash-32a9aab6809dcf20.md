@@ -135,3 +135,7 @@ RPM（每分钟请求数）
 RPM（每分钟请求数）
 
 600
+
+## 调用方式
+
+-   [HTTP API](raw/_short/qwen-audio-asr-http-api-90b9d62787e911f4.md)

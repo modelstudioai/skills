@@ -135,3 +135,11 @@ RPM（每分钟请求数）
 RPM（每分钟请求数）
 
 180
+
+## 调用方式
+
+-   [客户端事件](raw/_short/cosyvoice-client-events-480a8821d2d60e18.md)
+-   [WebSocket 接入](raw/_short/cosyvoice-websocket-api-5929268331632771.md)
+-   [AOQ 接入](raw/_short/cosyvoice-aoq-access-c0e8e4035486f433.md)
+-   [非实时 HTTP API](raw/_short/cosyvoice-tts-http-api-63e05680db50f996.md)
+-   [CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list#39a40bbc5dxp3)

@@ -180,6 +180,11 @@ TPM（每分钟tokens）
 
 100,000
 
+## 调用方式
+
+-   [接入指南](https://help.aliyun.com/zh/model-studio/qwen3-5-livetranslate-flash-realtime#7e1da95c25ej6)
+-   [API 参考](raw/model-api-reference/realtime-api-directory/livetranslate-realtime-api-directory/live-translator-api.md)
+
 ## 快照版本
 
 ### qwen3.5-livetranslate-flash-realtime-2026-05-19

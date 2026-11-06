@@ -216,7 +216,7 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 
 ### 语言与发音
 
-数字、缩写或符号的读法不符合预期时，可通过 `language_hints` 指定合成目标语言，或通过 `hot_fix` 定义词语发音与文本替换。参数适用模型和配置方法请参见对应的 [Qwen-Audio-TTS API](raw/_short/qwen-audio-tts-http-api-6a5232db21a53ba2.md)或 [CosyVoice API](raw/_short/cosyvoice-tts-http-api-5bce129a0403d285.md)。
+数字、缩写或符号的读法不符合预期时，可通过 `language_hints` 指定合成目标语言，或通过 `hot_fix` 定义词语发音与文本替换。参数适用模型和配置方法请参见对应的 [Qwen-Audio-TTS API](raw/_short/qwen-audio-tts-http-api-ee05f9b13900b687.md)或 [CosyVoice API](raw/_short/cosyvoice-tts-http-api-63e05680db50f996.md)。
 
 需要控制停顿、数字读法或字词发音时，可使用 SSML。Qwen-Audio-TTS 和 CosyVoice 的适用模型、音色、接口与标签用法，请参见 [SSML 与 LaTeX](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/ssml-latex-user-guide.md)。
 
@@ -282,7 +282,7 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 
 中文、英文、法语、德语、日语、韩语、俄语。
 
-MiniMax 通过 `input.voice_setting.speed`、`pitch` 和 `emotion` 设置语速、音调和情感，具体取值请参见 [API 参考](raw/_short/minimax-synchronous-speech-synthesis-api-bbe4c9f0093c0534.md)。
+MiniMax 通过 `input.voice_setting.speed`、`pitch` 和 `emotion` 设置语速、音调和情感，具体取值请参见 [API 参考](raw/_short/minimax-synchronous-speech-synthesis-api-cddb40af595ff320.md)。
 
 ### 方言
 
@@ -480,7 +480,7 @@ ASMR 轻声
 
 #### 华北2（北京）
 
-使用该地域的 [API Key](raw/model-api-reference/preparations/get-api-key.md) 和[接入域名](raw/model-api-reference/preparations/regions.md)调用以下模型：
+使用该地域的 [API Key](raw/model-api-reference/preparations/get-api-key.md) 和[接入域名](raw/model-user-guide/get-started-with-models/regions.md)调用以下模型：
 
 -   **Qwen-Audio-TTS**：`qwen-audio-3.1-tts-plus`、`qwen-audio-3.1-tts-flash`、`qwen-audio-3.0-tts-plus`、`qwen-audio-3.0-tts-flash`
 -   **CosyVoice**：`cosyvoice-v3.5-plus`、`cosyvoice-v3.5-flash`、`cosyvoice-v3-plus`、`cosyvoice-v3-flash`、`cosyvoice-v2`
@@ -489,7 +489,7 @@ ASMR 轻声
 
 #### 新加坡
 
-使用该地域的 [API Key](raw/model-api-reference/preparations/get-api-key.md) 和[接入域名](raw/model-api-reference/preparations/regions.md)调用以下模型：
+使用该地域的 [API Key](raw/model-api-reference/preparations/get-api-key.md) 和[接入域名](raw/model-user-guide/get-started-with-models/regions.md)调用以下模型：
 
 -   **Qwen-Audio-TTS**：`qwen-audio-3.1-tts-plus`、`qwen-audio-3.1-tts-flash`、`qwen-audio-3.0-tts-plus`、`qwen-audio-3.0-tts-flash`
 -   **Qwen3-TTS**：`qwen3-tts-flash`
@@ -498,7 +498,7 @@ ASMR 轻声
 
 ## API 参考
 
--   [Qwen-Audio-TTS HTTP API](raw/_short/qwen-audio-tts-http-api-6a5232db21a53ba2.md)
--   [CosyVoice HTTP API](raw/_short/cosyvoice-tts-http-api-5bce129a0403d285.md)
--   [Qwen3-TTS API](raw/_short/qwen-tts-api-88cc336b17a3a583.md)
--   [MiniMax 同步语音合成 API](raw/_short/minimax-synchronous-speech-synthesis-api-bbe4c9f0093c0534.md)
+-   [Qwen-Audio-TTS HTTP API](raw/_short/qwen-audio-tts-http-api-ee05f9b13900b687.md)
+-   [CosyVoice HTTP API](raw/_short/cosyvoice-tts-http-api-63e05680db50f996.md)
+-   [Qwen3-TTS API](raw/_short/qwen-tts-api-3dac64d546223453.md)
+-   [MiniMax 同步语音合成 API](raw/_short/minimax-synchronous-speech-synthesis-api-cddb40af595ff320.md)

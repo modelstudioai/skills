@@ -984,8 +984,8 @@ Fun-ASR-Realtime、Fun-ASR-Flash、Fun-ASR 系列主版本模型：最多 2000 �
 
 ## 相关 API
 
--   热词列表的创建、查询、更新和删除等操作，参见[热词管理 API](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/custom-hot-words/vocabulary-http-api.md)。
+-   热词列表的创建、查询、更新和删除等操作，参见[热词管理 API](raw/model-api-reference/audio-api-directory/speech-recognition-api-reference/custom-hot-words/vocabulary-http-api.md)。
     
--   热词管理 SDK：[Java SDK](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/custom-hot-words/vocabulary-java-sdk.md)、[Python SDK](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/custom-hot-words/vocabulary-python-sdk.md)。
+-   热词管理 SDK：[Java SDK](raw/model-api-reference/audio-api-directory/speech-recognition-api-reference/custom-hot-words/vocabulary-java-sdk.md)、[Python SDK](raw/model-api-reference/audio-api-directory/speech-recognition-api-reference/custom-hot-words/vocabulary-python-sdk.md)。
     
--   模型调用 API：[Qwen-Audio-ASR-Message 客户端事件](raw/_short/qwen-asr-message-client-events-0be34a3639cdd40b.md)、[Qwen-Audio-ASR-Streaming 客户端事件](raw/_short/qwen-audio-asr-streaming-client-events-1bae8548d2be6bc5.md)、[Qwen-Audio-ASR-Filetrans HTTP API](raw/_short/qwen-audio-asr-filetrans-http-api-2ccf5d603a3ac5e9.md)、[Qwen-Audio-ASR HTTP API](raw/_short/qwen-audio-asr-http-api-b304ee1b83ae18cd.md)。
+-   模型调用 API：[Qwen-Audio-ASR-Message 客户端事件](raw/_short/qwen-asr-message-client-events-1721a061cc8750e6.md)、[Qwen-Audio-ASR-Streaming 客户端事件](raw/_short/qwen-audio-asr-streaming-client-events-3240c8efa3976e48.md)、[Qwen-Audio-ASR-Filetrans HTTP API](raw/_short/qwen-audio-asr-filetrans-http-api-e0184f38f9d98459.md)、[Qwen-Audio-ASR HTTP API](raw/_short/qwen-audio-asr-http-api-90b9d62787e911f4.md)。

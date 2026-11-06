@@ -135,3 +135,7 @@ RPM（每分钟请求数）
 RPM（每分钟请求数）
 
 600
+
+## 调用方式
+
+-   [HTTP API](raw/_short/qwen-audio-asr-filetrans-http-api-e0184f38f9d98459.md)

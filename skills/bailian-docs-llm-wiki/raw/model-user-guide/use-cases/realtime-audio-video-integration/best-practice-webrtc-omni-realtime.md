@@ -347,6 +347,6 @@ function endSession(silent = false) {
 
 -   [WebRTC API (MDN)](https://developer.mozilla.org/zh-CN/docs/Web/API/WebRTC_API)
 -   [RTCPeerConnection (MDN)](https://developer.mozilla.org/zh-CN/docs/Web/API/RTCPeerConnection)
--   qwen3.8-omni-flash-realtime 模型客户端事件：[客户端事件](raw/model-api-reference/omni-realtime-api/client-events.md)
--   qwen3.8-omni-flash-realtime 模型服务端事件：[服务端事件](raw/model-api-reference/omni-realtime-api/server-events.md)
--   [WebRTC 接入模型/应用](https://help.aliyun.com/zh/model-studio/realtime-connect-model#conn-rtc-title)
+-   qwen3.8-omni-flash-realtime 模型客户端事件：[客户端事件](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md)
+-   qwen3.8-omni-flash-realtime 模型服务端事件：[服务端事件](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md)
+-   [WebRTC 接入模型/应用](https://help.aliyun.com/zh/model-studio/realtime-api-overview#conn-rtc-title)

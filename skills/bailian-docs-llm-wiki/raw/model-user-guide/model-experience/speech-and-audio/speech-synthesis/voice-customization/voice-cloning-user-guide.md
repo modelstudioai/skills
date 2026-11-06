@@ -12,7 +12,7 @@
 
 -   [获取 API Key](raw/model-api-reference/preparations/get-api-key.md)，并将其[配置到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables) `DASHSCOPE_API_KEY`。
     
--   获取业务空间 ID，将示例中的 `YOUR_WORKSPACE_ID`（SDK 示例中的 `{WorkspaceId}`）替换为真实值。获取方式请参见[地域与接入域名](raw/model-api-reference/preparations/regions.md)。
+-   获取业务空间 ID，将示例中的 `YOUR_WORKSPACE_ID`（SDK 示例中的 `{WorkspaceId}`）替换为真实值。获取方式请参见[地域与接入域名](raw/model-user-guide/get-started-with-models/regions.md)。
     
 -   使用 HTTP 方式时，安装 Python HTTP 库 `requests`：
     
@@ -292,14 +292,14 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-gen
 }'
 ```
 
-更多声音复刻参数与示例请参见 [HTTP API](raw/_short/voice-clone-design-http-api-8f39943e5a676aae.md)、[Python SDK](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/sound-reengraving/voice-clone-python-sdk.md)和 [Java SDK](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/sound-reengraving/voice-clone-java-sdk.md)。
+更多声音复刻参数与示例请参见 [HTTP API](raw/model-api-reference/voice-customization-api-directory/sound-reengraving/voice-clone-design-http-api.md)、[Python SDK](raw/model-api-reference/voice-customization-api-directory/sound-reengraving/voice-clone-python-sdk.md)和 [Java SDK](raw/model-api-reference/voice-customization-api-directory/sound-reengraving/voice-clone-java-sdk.md)。
 
 使用复刻音色进行语音合成或实时语音对话的调用方式，请参见：
 
--   **Qwen-Audio-TTS**：[模型接入方式](raw/_short/qwen-audio-tts-model-access-6e664ddb54b00e5d.md)
--   **CosyVoice**：[模型接入方式](raw/_short/cosyvoice-model-access-80a06b5339b1723a.md)
--   **Qwen-Audio-Realtime**：[模型接入方式](raw/_short/qwen-audio-realtime-model-access-82f1eed54dbb343f.md)
--   **MiniMax**：[非实时语音合成 API 参考](raw/_short/minimax-speech-synthesis-36f3b02a593324ef.md)
+-   **Qwen-Audio-TTS**：[WebSocket 接入](raw/_short/qwen-audio-tts-websocket-api-6f9e2d20cf04ea96.md)、[AOQ 接入](raw/model-api-reference/realtime-api-directory/realtime-tts-model-apis/qwen-audio-tts-api/qwen-audio-tts-aoq-access.md)
+-   **CosyVoice**：[WebSocket 接入](raw/_short/cosyvoice-websocket-api-5929268331632771.md)、[AOQ 接入](raw/_short/cosyvoice-aoq-access-c0e8e4035486f433.md)
+-   **Qwen-Audio-Realtime**：[WebSocket 接入](raw/_short/audio-realtime-websocket-access-5f0da4977f0f021b.md)、[WebRTC 接入](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/audio-realtime-webrtc-access.md)、[AOQ 接入](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/audio-realtime-aoq-access.md)
+-   **MiniMax**：[非实时语音合成 API 参考](raw/_short/minimax-speech-synthesis-9ac5812df734fd8c.md)
 
 ## 音频要求
 
@@ -417,7 +417,7 @@ MP3、M4A、WAV
 
 ## 音色管理
 
-Qwen-Audio-TTS、Qwen-Audio-Realtime 和 CosyVoice 使用相同的音色查询、更新与删除接口。具体接口与参数请参见[声音复刻 HTTP API 参考](raw/_short/voice-clone-design-http-api-8f39943e5a676aae.md)。
+Qwen-Audio-TTS、Qwen-Audio-Realtime 和 CosyVoice 使用相同的音色查询、更新与删除接口。具体接口与参数请参见[声音复刻 HTTP API 参考](raw/model-api-reference/voice-customization-api-directory/sound-reengraving/voice-clone-design-http-api.md)。
 
 -   **查询音色列表**：查看账号下已有的自定义音色。
 -   **查询音色详情**：查看创建时间、绑定模型等信息。

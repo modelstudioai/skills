@@ -2403,7 +2403,7 @@ false
 
 不同协议的推理强度参数位置如下：
 
--   OpenAI Chat Completions：请求顶层 `reasoning_effort`；使用 OpenAI Python SDK 时，通过 `extra_body` 传入该平台扩展参数，例如 `extra_body={"reasoning_effort": "max"}`。
+-   OpenAI Chat Completions：请求顶层的 `reasoning_effort`；使用 OpenAI Python SDK 时，直接传入 `reasoning_effort="max"`。
 -   DashScope：SDK 使用 `reasoning_effort`，HTTP 请求使用 `parameters.reasoning_effort`。
 -   OpenAI Responses：使用 `reasoning.effort`。
 -   Anthropic Messages：使用 `output_config.effort`。

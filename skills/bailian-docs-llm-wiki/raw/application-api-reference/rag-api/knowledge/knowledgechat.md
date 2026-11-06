@@ -132,6 +132,69 @@ boolean
 
 true
 
+### 按文档标签过滤
+
+在 `parameters.agent_options.kb_search_configs` 中为指定知识库传入 `search_filters`，可在问答时按文档标签动态收窄检索范围。
+
+名称
+
+类型
+
+必填
+
+说明
+
+`parameters.agent_options.kb_search_configs`
+
+array<object>
+
+否
+
+按知识库设置请求时过滤配置，每个元素对应一个知识库。
+
+`kb_search_configs[].id`
+
+string
+
+是
+
+当前问答服务已绑定的知识库 ID。每个元素均须传入该字段。
+
+`kb_search_configs[].search_filters`
+
+array<object>
+
+否
+
+请求时检索过滤条件，使用 `tags` 按文档标签过滤。
+
+以下仅展示 `parameters` 片段，`input` 和 `stream` 按完整示例传入。将 `agent_id` 替换为问答服务 ID，`id` 替换为该服务已绑定的知识库 ID：
+
+```
+{
+  "parameters": {
+    "agent_options": {
+      "agent_id": "aid-xxxxxxxxxxxxxxxx",
+      "kb_search_configs": [
+        {
+          "id": "kb_xxxxxxxx",
+          "search_filters": [
+            {"tags": ["标签A", "标签B"]}
+          ]
+        }
+      ]
+    }
+  }
+}
+```
+
+**说明**
+
+-   `search_filters` 必须放在 `kb_search_configs` 元素内，不能放在请求顶层；顶层传入会被忽略。`id` 对应的知识库未绑定到当前问答服务时，请求返回 HTTP 400，错误码为 `ParamValue.Error`。
+-   文档搜索等非结构化知识库仅支持 `tags` 和 `meta` 键。`tags` 的值必须为数组，不能传入标量；传入标量时可能返回空检索结果，不能依赖接口报错发现该问题。每个知识库的 `search_filters` 最多包含 20 个过滤条件。
+-   同一条件中的多个标签为 OR 关系，切片命中任意一个标签即可通过；多个过滤条件之间为 AND 关系。例如，`[{"tags": ["标签A", "标签B"]}]` 表示命中任意一个标签，`[{"tags": ["标签A"]}, {"tags": ["标签B"]}]` 表示同时包含两个标签。
+-   问答服务中预设的过滤条件与本次 chat 请求传入的过滤条件按 AND 关系共同生效，请求时条件只能进一步收窄检索范围。预设条件可通过控制台或 Agent 创建、更新 API 配置。请求时传入 `search_filters: []` 等同于不追加条件，不会清除服务预设条件。
+
 ## 响应参数
 
 **顶层字段**
@@ -530,12 +593,6 @@ qwen3.6-plus（当前默认）
 
 不支持
 
-qwen3.6-flash
-
-支持
-
-不支持
-
 qwen3.7-plus
 
 支持
@@ -648,6 +705,12 @@ HTTP 状态码
 错误码
 
 说明
+
+400
+
+ParamValue.Error
+
+请求参数业务校验失败，例如知识库未绑定到问答服务，或单个知识库的过滤条件超过 20 个。
 
 401
 

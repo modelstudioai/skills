@@ -326,7 +326,7 @@ public abstract class MultiModalDialogCallback {
 
 #### Start建联请求参数
 
-[Start - Input Message](raw/_short/multimodal-interaction-protocol-8062cfbb96fec75a.md)
+[Start - Input Message](raw/model-api-reference/realtime-api-directory/multimodal-interaction-protocol.md)
 
 一级参数
 

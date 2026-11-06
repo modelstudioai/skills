@@ -72,12 +72,17 @@ WebSocket 的 RPM 按连接请求次数统计，与模型响应次数无关；�
 
 `qwen-audio-3.1-realtime-plus`
 
-5.995元
+5.833元
 
-47.963元
+46.667元
 
-47.963元
+46.667元
 
-179.861元
+175.002元
 
 限流：RPM 60，TPM 100,000。
+
+## 调用方式
+
+-   [接入指南](raw/model-user-guide/model-experience/speech-and-audio/speech-to-speech/qwen-audio-realtime-user-guides.md)
+-   [API 参考](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/voice-conversation-api-references.md)

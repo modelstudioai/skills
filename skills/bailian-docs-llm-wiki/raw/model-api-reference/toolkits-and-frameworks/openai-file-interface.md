@@ -195,7 +195,7 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/files \
 
 将purpose指定为`fine-tune`，输入文件必须是jsonl文件且符合[输入文件大小与格式要求](https://help.aliyun.com/zh/model-studio/model-customization-file-management-service)，上传调优数据集/训练集的单个文件最大为300 MB。
 
-> 关于使用 API 进行模型调优的更多用法，请参考[模型调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/fine-tuning-api-guide.md)
+> 关于使用 API 进行模型调优的更多用法，请参考[模型调优](https://help.aliyun.com/zh/model-studio/fine-tuning-api-guide)
 
 #### 请求示例
 

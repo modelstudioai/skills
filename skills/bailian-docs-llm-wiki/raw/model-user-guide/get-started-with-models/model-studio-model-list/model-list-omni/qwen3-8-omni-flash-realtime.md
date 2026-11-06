@@ -153,3 +153,8 @@ WebSocket 接入支持 1、2、4 声道；多通道使用 16 kHz PCM
 ## 限流
 
 北京、新加坡的限流均为 60 RPM、2,000,000 TPM。模型调用的限流说明请参见[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)。
+
+## 调用方式
+
+-   [接入指南](https://help.aliyun.com/zh/model-studio/realtime#qwen38-realtime)
+-   [API 参考](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/omni-realtime-api.md)

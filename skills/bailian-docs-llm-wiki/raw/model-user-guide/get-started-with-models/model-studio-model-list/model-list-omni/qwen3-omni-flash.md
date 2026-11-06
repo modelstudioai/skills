@@ -329,3 +329,8 @@ RPM（每分钟请求数）
 TPM（每分钟tokens）
 
 100,000
+
+## 调用方式
+
+-   [接入指南](raw/model-user-guide/model-experience/omni-modal/qwen-omni.md)
+-   [Chat Completions API 参考](raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)

@@ -775,9 +775,9 @@ qwen-max的实时推理服务（[非思考模式](raw/model-user-guide/model-exp
     -   仅支持抵扣单次请求输入在`0<Token≤128K`阶梯范围内的实时推理费用（[非思考模式](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md)，包含输入和输出）。
     -   不支持抵扣的费用包括：
         -   单次请求输入在`Token>128K`阶梯范围产生的费用。
-        -   [Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)、[上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)、[模型调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)、[模型部署](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)产生的费用。
+        -   [Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)、[上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)、[模型调优](https://help.aliyun.com/zh/model-studio/model-training-overview)、[模型部署](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)产生的费用。
 -   **qwen-max**
-    -   仅支持抵扣实时推理产生的费用（[非思考模式](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md)，包含输入和输出），不支持抵扣[Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)、[上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)、[模型调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)、[模型部署](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)产生的费用。
+    -   仅支持抵扣实时推理产生的费用（[非思考模式](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md)，包含输入和输出），不支持抵扣[Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)、[上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)、[模型调优](https://help.aliyun.com/zh/model-studio/model-training-overview)、[模型部署](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)产生的费用。
 
 ### 使用说明
 
@@ -850,7 +850,7 @@ qwen-max的实时推理服务（[非思考模式](raw/model-user-guide/model-exp
 常见原因如下：
 
 1.  **模型不匹配**：购买了其他节省计划，但调用的模型不在适用范围内。例如：购买了大语言模型节省计划，却调用了万相系列模型或向量模型（embedding）、排序模型（rerank）。又如：购买了万相模型节省计划，但调用了 wan2.7-r2v 等属于“百炼大模型-万相模型”商品的视频生成模型。可以选择购买 [AI 通用型节省计划](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package#ghoteqo7uv9wa)以实现跨模型抵扣。
-2.  **使用了不支持的功能**：[模型调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)、[模型部署](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)费用不在任何节省计划的抵扣范围内；上下文缓存、批量推理、工具调用等仅 AI 通用型节省计划支持抵扣，详见[使用说明](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package#5rzwfh7emp50y)。
+2.  **使用了不支持的功能**：[模型调优](https://help.aliyun.com/zh/model-studio/model-training-overview)、[模型部署](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)费用不在任何节省计划的抵扣范围内；上下文缓存、批量推理、工具调用等仅 AI 通用型节省计划支持抵扣，详见[使用说明](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package#5rzwfh7emp50y)。
 3.  **免费额度未用完**：免费额度优先抵扣，用尽后才开始抵扣节省计划，见[抵扣顺序](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package#h3-deduction-order)。
 4.  **按分钟出费**：百炼按分钟计费，账单中的计费时间区间精确到分钟（例如 17:20:00–17:25:00），且不与整点对齐。购买节省计划后，自下一分钟产生的用量起开始抵扣，因此购买时刻正在计量的那个分钟区间可能仍按按量付费出账。
 5.  **额度已用完**：节省计划的承诺额度用尽后，超出部分按量付费出账。可在[节省计划总览页面](https://usercenter2.aliyun.com/resource/spn/overview)查看剩余金额，确认额度是否已耗尽。

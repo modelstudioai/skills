@@ -1,50 +1,50 @@
 # [more](more.md) models
 
-百炼平台提供一系列面向垂直场景的专用模型，包括机器翻译（Qwen-MT）、意图理解（tongyi-intent-detect-v3）、深度研究（Qwen-Deep-Research）、OCR识别（Qwen-OCR）和界面交互（GUI-Plus）。这些模型通过统一的 [OpenAI 兼容接口](../concepts/openai-compatibility.md)或 DashScope SDK 调用，支持多地域部署与精细化参数控制，适用于对准确性、领域适配性或交互能力有强需求的生产场景。
+百炼平台提供一系列面向特定任务的专用模型，包括深度研究（Qwen-Deep-Research）、意图理解（tongyi-intent-detect-v3）、OCR识别（Qwen-OCR系列）和界面交互（GUI-Plus）。这些模型通过 DashScope 或 [OpenAI 兼容接口](../concepts/openai-compatible-api.md)调用，支持多地域部署与精细化参数控制，适用于研究分析、智能路由、文档解析与自动化操作等场景。所有模型均需配置业务空间专属域名及对应 API Key。
 
 ## 支持的模型/功能
 
-- **Qwen-MT**：专用于高质量机器翻译，支持源/目标语言自动检测、术语干预、翻译记忆（TM）和领域提示（如 IT、金融等），[Qwen-MT API参考](../../raw/model-api-reference/more-models/qwen-mt-api.md)。
-- **tongyi-intent-detect-v3**：毫秒级意图识别模型，支持两种模式：① 输出结构化[函数调用](../concepts/function-calling.md)（`INTENT_MODE`），② 仅输出预定义意图标签（可简化为单 [Token](../concepts/token.md) 提升性能），[意图理解能力](../../raw/model-api-reference/more-models/intent-detect-capability.md)。
-- **Qwen-Deep-Research**：两阶段研究型模型（反问确认 → 深入分析），支持联网检索、引用溯源与多格式报告生成（`model_detailed_report` / `model_summary_report`），**仅限华北2（北京）地域且仅支持 DashScope Python SDK**，[Qwen-Deep-Research API 参考](../../raw/model-api-reference/more-models/qwen-deep-research-api.md)。
-- **Qwen-OCR**（含 `qwen3.5-ocr` 等）：支持图像文本提取与结构化信息抽取（如车票、合同），兼容多分辨率输入（`min_pixels`/`max_pixels` 控制缩放），支持[流式输出](../concepts/streaming-output.md)与 [Token](../concepts/token.md) 统计，[Qwen-OCR API参考](../../raw/model-api-reference/more-models/qwen-vl-ocr-api-reference.md)。
-- **GUI-Plus**：面向桌面 GUI 自动化任务的视觉-语言模型，支持工具调用（如 `computer_use`）、高分辨率图像处理（`vl_high_resolution_images`）及可选思考链（`enable_thinking`），[GUI-Plus API参考](../../raw/model-api-reference/more-models/gui-plus-interface-interaction-model.md)。
+- **Qwen-Deep-Research**：两阶段深度研究模型，支持反问确认 → 网络搜索 → 报告生成全流程，输出含参考文献与研究过程元数据。仅限华北2（北京）地域，且**仅支持 DashScope Python SDK**，不支持 Java SDK 与 [OpenAI 兼容接口](../concepts/openai-compatible-api.md) [Qwen-Deep-Research API 参考](../../raw/model-api-reference/more-models/qwen-deep-research-api.md)。
+- **tongyi-intent-detect-v3**：毫秒级意图识别模型，支持两种模式：① `INTENT_MODE` 下同时输出意图标签与[函数调用](../concepts/function-calling.md) JSON；② 纯意图分类模式（返回单个 tag）。支持多地域，推荐使用业务空间专属域名 [意图理解能力](../../raw/model-api-reference/more-models/intent-detect-capability.md)。
+- **Qwen-OCR 系列**（如 `qwen3.5-ocr`, `qwen-vl-ocr`）：多模态 OCR 模型，支持图像文本提取与结构化信息抽取。支持 [OpenAI 兼容接口](../concepts/openai-compatible-api.md)与 DashScope API，覆盖华北2（北京）、新加坡、美国（弗吉尼亚）三地 [Qwen-OCR API参考](../../raw/model-api-reference/more-models/qwen-vl-ocr-api-reference.md)。
+- **GUI-Plus 系列**（如 `gui-plus-2026-02-26`）：专用于 GUI 自动化操作的视觉语言模型，支持截图理解、工具调用与混合思考（`enable_thinking`），需传入屏幕截图与系统指令 [GUI-Plus API参考](../../raw/model-api-reference/more-models/gui-plus-interface-interaction-model.md)。
 
-> **注意**：文档 4 和文档 5 中关于 `max_pixels` 默认值的描述存在不一致。文档 4（Qwen-OCR）明确说明 `qwen-vl-ocr` 及之前模型的 `min_pixels` 默认值为 `3136`（即 `4×28×28`），而文档 5（GUI-Plus）在 `min_pixels` 描述中重复该值但未区分模型版本；同时文档 5 对 `max_pixels` 的默认值描述依赖于 `vl_high_resolution_images` 开关状态，而文档 4 则按模型版本给出具体数值（如 `qwen3.5-ocr` 默认 `8388608`）。实际使用时请以各模型对应文档为准，并优先参考最新模型（如 `qwen3.5-ocr`）的参数说明。
+> **注意**：文档 2 和文档 3 均提及“建议迁移至业务空间专属域名”，但文档 2 明确列出新加坡、中国香港两地，而文档 3 仅列出华北2（北京）、新加坡两地，**中国香港地域未在 OCR 文档中确认支持**，实际调用前请以控制台业务空间详情页为准。
 
 ## 关键参数
 
-| 参数 | 适用模型 | 说明 | 示例/默认值 |
-|------|----------|------|-------------|
-| `base_url` | 所有 OpenAI 兼容模型 | 必须使用业务空间专属域名，地域决定 endpoint：<br>北京：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`<br>新加坡：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`<br>美国（弗吉尼亚）：`https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/compatible-mode/v1` | `{WorkspaceId}` 在控制台「业务空间详情」获取 |
-| `translation_options` | Qwen-MT | 包含 `source_lang`, `target_lang`, `terms`（术语表）, `tm_list`（翻译记忆）, `domains`（领域提示） | `{"source_lang": "Chinese", "target_lang": "English", "terms": [{"source":"生物传感器","target":"biological sensor"}]}` |
-| `output_format` | Qwen-Deep-Research | 控制报告详略程度 | `"model_detailed_report"`（默认，~6000 [Token](../concepts/token.md)）或 `"model_summary_report"`（~1500–2000 Token） |
-| `min_pixels` / `max_pixels` | Qwen-OCR, GUI-Plus | 图像预处理像素阈值，单位为像素；不同模型每 Token 对应像素不同（如 `qwen3.5-ocr`: `32×32`） | `qwen3.5-ocr`: `min_pixels=3072`, `max_pixels=8388608` |
-| `vl_high_resolution_images` | GUI-Plus | 启用后忽略 `max_pixels`，固定上限为 `12845056` 像素 | `true` 或 `false`（默认） |
-| `enable_thinking` | GUI-Plus（仅 `gui-plus-2026-02-26`） | 开启后返回 `reasoning_content` 字段 | `true`（需置于 `extra_body`） |
+| 参数 | 适用模型 | 说明 | 默认值 |
+|------|----------|------|--------|
+| `output_format` | Qwen-Deep-Research | 控制报告格式：`model_detailed_report`（约6000 [Token](../concepts/token.md)）或 `model_summary_report`（1500–2000 [Token](../concepts/token.md)） | `model_detailed_report` |
+| `min_pixels` / `max_pixels` | Qwen-OCR、GUI-Plus | 图像预处理像素阈值，单位为像素；不同模型每 [Token](../concepts/token.md) 对应像素不同（如 `qwen3.5-ocr`: 32×32） | `qwen3.5-ocr`: 3072 / 8388608；GUI-Plus: 3136 / 1003520（`vl_high_resolution_images=false`） |
+| `vl_high_resolution_images` | GUI-Plus | 启用高分辨率图像处理（固定上限 12845056 像素），设为 `true` 时忽略 `max_pixels` | `false` |
+| `enable_thinking` | GUI-Plus（仅 `gui-plus-2026-02-26`） | 开启思考模式，输出将包含 `reasoning_content` 字段 | `false` |
+| `temperature` / `top_p` | Qwen-OCR、GUI-Plus | 控制生成多样性，二者互斥，建议只设其一 | `qwen3.5-ocr`: 0.01 / 0.001；GUI-Plus: 0.01 / 0.01 |
 
 ## 使用方式
 
-- **认证与初始化**：所有模型均需 [获取与配置 API Key](../../raw/model-api-reference/preparations/get-api-key.md)，推荐通过环境变量 `DASHSCOPE_API_KEY` 设置；OpenAI SDK 需显式传入 `base_url`，DashScope SDK 需设置 `workspace` 和 `region`。
-- **请求构造**：
-  - Qwen-MT、Qwen-OCR、GUI-Plus：使用 `chat/completions` 接口，`messages` 中 `content` 为数组（支持 `text` + `image_url` 混合）。
-  - tongyi-intent-detect-v3：`messages[0]` 必须为 `system` 角色，内容需包含 `Response in INTENT_MODE.` 或 `just reply with the chosen tag.` 指令。
-  - Qwen-Deep-Research：**仅支持 DashScope `Generation.call`**，使用 `services/aigc/text-generation/generation` endpoint，且必须分两步调用（反问 → 深入）。
-- **流式响应**：Qwen-OCR 和 GUI-Plus 支持 `stream=true`；Qwen-Deep-Research 原生[流式输出](../concepts/streaming-output.md)各阶段（`ResearchPlanning`, `WebResearch`, `answer`），需解析 `phase` 字段；Qwen-MT 和 intent 模型暂不提供原生流式支持。
+- **地域与域名**：所有模型均推荐使用业务空间专属域名（如 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`），其中 `{WorkspaceId}` 需替换为控制台获取的真实 ID。华北2（北京）为 Qwen-Deep-Research 唯一支持地域。
+- **SDK 选择**：
+  - Qwen-Deep-Research：**必须使用 DashScope Python SDK**，且需显式设置 `dashscope.base_http_api_url`（见 [Qwen-Deep-Research API 参考](../../raw/model-api-reference/more-models/qwen-deep-research-api.md)）；
+  - 其他模型：支持 DashScope SDK 与 OpenAI SDK（兼容 `openai>=1.0`），OpenAI SDK 需配置 `base_url` 为对应地域的 `/compatible-mode/v1` 端点。
+- **消息结构**：
+  - Qwen-Deep-Research：`messages` 必须按两阶段构造（初始 user → assistant 回复 → 新 user 澄清），且 `role` 严格为 `user`/`assistant`；
+  - Qwen-OCR / GUI-Plus：`messages[0].content` 为 `array`，支持 `text` + `image_url` 混合输入；
+  - tongyi-intent-detect-v3：**必须设置 system message**，分别指定 `Response in INTENT_MODE.` 或 `just reply with the chosen tag.`。
+- **流式响应**：Qwen-Deep-Research、Qwen-OCR、GUI-Plus 均支持 `stream=true`；意图模型暂未明确说明流式支持，建议非流式调用。
 
 ## 限制和注意事项
 
-- **地域限制**：Qwen-Deep-Research **仅支持华北2（北京）地域**，其他模型虽支持多地域，但 API Key 与 `base_url` 必须匹配（例如北京地域 Key 不可用于新加坡 endpoint）。
-- **SDK 限制**：Qwen-Deep-Research **不支持 [OpenAI 兼容接口](../concepts/openai-compatibility.md)和 Java SDK**，仅可通过 DashScope Python SDK 调用；GUI-Plus 的 `enable_thinking` 和 `vl_high_resolution_images` 等非标准参数，在 Python SDK 中必须放入 `extra_body`，Node.js/HTTP 中作为顶层参数。
-- **输入规范**：Qwen-OCR 和 GUI-Plus 的 `image_url` 支持 HTTP URL 或 Base64 Data URL；本地文件需先上传至可公开访问地址或使用百炼控制台提供的临时上传服务。
-- **成本与额度**：tongyi-intent-detect-v3 提供开通后 90 天内 100 万 Token 免费额度，详见其文档；其他模型按实际输入/输出 Token 计费，`usage` 字段在响应中返回（Qwen-Deep-Research 在 `output.usage`，Qwen-OCR/GUI-Plus 在流式末块或非流式响应中）。
-- **稳定性建议**：所有模型均**强烈建议迁移至业务空间专属域名**（如 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`），旧域名（`dashscope.aliyuncs.com`）虽仍可用，但性能与稳定性不及新域名。
+- **地域限制**：Qwen-Deep-Research 仅支持华北2（北京）地域，其他模型虽支持多地域，但部分功能（如 `vl_high_resolution_images`）可能因地域而异。
+- **SDK 限制**：Qwen-Deep-Research 不支持 Java SDK 与 OpenAI 兼容接口，此限制在 [Qwen-Deep-Research API 参考](../../raw/model-api-reference/more-models/qwen-deep-research-api.md) 中明确强调。
+- **图像参数差异**：Qwen-OCR 与 GUI-Plus 的 `min_pixels`/`max_pixels` 默认值与取值范围不同，且 GUI-Plus 的 `max_pixels` 行为受 `vl_high_resolution_images` 控制，不可直接复用 OCR 参数配置。
+- **意图模型输出解析**：tongyi-intent-detect-v3 在 `INTENT_MODE` 下返回 `<tags>...</tags><tool_call>...</tool_call><content>...</content>` 格式，**必须使用正则解析**（见 [意图理解能力](../../raw/model-api-reference/more-models/intent-detect-capability.md) 中的 `parse_text` 示例），不可直接 JSON 解析。
+- **Token 成本与配额**：tongyi-intent-detect-v3 提供 90 天内 100 万 Token 免费额度；Qwen-Deep-Research 与 GUI-Plus 无明确免费额度说明，需关注控制台计费项。
 
 ## 来源文档
 
-- [Qwen-MT API参考](../../raw/model-api-reference/more-models/qwen-mt-api.md)
-- [意图理解能力](../../raw/model-api-reference/more-models/intent-detect-capability.md)
 - [Qwen-Deep-Research API 参考](../../raw/model-api-reference/more-models/qwen-deep-research-api.md)
+- [意图理解能力](../../raw/model-api-reference/more-models/intent-detect-capability.md)
 - [Qwen-OCR API参考](../../raw/model-api-reference/more-models/qwen-vl-ocr-api-reference.md)
 - [GUI-Plus API参考](../../raw/model-api-reference/more-models/gui-plus-interface-interaction-model.md)
 

@@ -1,46 +1,42 @@
 # world model api reference
 
-世界模型 API 提供面向仿真、游戏和交互式叙事场景的多模态建模能力，支持动态环境建模、角色行为生成与剧情推演。当前以 HappyOyster 系列为主要实现，涵盖 Adventure、Directing 和 Acting 三类子模型。所有接口均通过标准 HTTP POST 调用，需携带认证 token 并遵循 JSON Schema 请求体规范。
+世界模型 API 提供面向叙事与交互场景的多模态建模能力，支持剧情推演、角色行为生成与环境状态演化等核心任务。当前以 HappyOyster 系列为主要实现，涵盖 Adventure、Directing 和 Acting 三类子模型。所有接口均通过标准 HTTP POST 调用，返回结构化 JSON 响应。
 
 ## 支持的模型/功能
 
-- **Adventure 模型**：用于开放世界状态演化与事件触发，适用于沙盒式探索场景。参考 [Adventure Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-adventure-openapi-reference.md)  
-- **Directing 模型**：负责全局叙事节奏控制、镜头调度与多角色协同编排。参考 [Directing Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-directing-openapi-reference.md)  
-- **Acting 模型**（邀测中）：聚焦单角色实时动作生成与情绪响应，尚未全量开放。参考 [Acting Open API参考（邀测中）](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-acting-openapi-reference.md)
-
-> **注意**：Acting 模型的 `max_response_tokens` 参数在 [Acting Open API参考（邀测中）](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-acting-openapi-reference.md) 中声明为必填，但实际调用时若未提供仍可成功返回（v0.3.1），该不一致将在下个版本修复。
+- **Adventure 模型**：用于开放世界状态演化与剧情分支预测，适用于游戏引擎集成与互动叙事系统。  
+- **Directing 模型**：聚焦镜头调度、节奏控制与多角色协同编排，常用于虚拟制片与AI导演工作流。  
+- **Acting 模型**（邀测中）：支持细粒度角色动作、微表情与语音韵律生成，需申请白名单权限。  
+详细能力边界与输入输出格式请参阅 [Adventure Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-adventure-openapi-reference.md)、[Directing Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-directing-openapi-reference.md) 和 [Acting Open API参考（邀测中）](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-acting-openapi-reference.md)。
 
 ## 关键参数
 
 | 参数名 | 类型 | 必填 | 说明 |
 |--------|------|------|------|
-| `model` | string | 是 | 固定值：`happyoyster-adventure` / `happyoyster-directing` / `happyoyster-acting` |
-| `input` | object | 是 | 包含 `world_state`（JSON）、`prompt`（string）及可选 `history`（array） |
-| `temperature` | number | 否 | 默认 0.7，范围 [0.0, 1.5]；Acting 模型建议 ≤0.4 以保障行为稳定性 |
-| `stream` | boolean | 否 | 仅 Adventure 和 Directing 支持 true；Acting 模型暂不支持流式响应 |
+| `scene_state` | object | 是 | 当前世界状态快照，含环境、角色、时间戳等字段；结构定义见 [Adventure Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-adventure-openapi-reference.md) |
+| `intent` | string | 是 | 用户或系统意图描述（如 `"advance_plot"`、`"recenter_focus"`），影响模型决策倾向 |
+| `max_steps` | integer | 否 | 最大推演步数，默认为 1；Acting 模型不支持该参数 |
+
+> **注意**：`scene_state` 的 schema 在 [Directing Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-directing-openapi-reference.md) 中定义了额外的 `camera_plan` 字段，但该字段在 Adventure 模型中被忽略——实际调用时请按目标模型文档严格构造请求体。
 
 ## 使用方式
 
-1. 构造请求体（示例：Adventure 模型）：
+1. 向 `https://dashscope.aliyuncs.com/api/v1/services/aigc/world-model/{model_type}` 发起 POST 请求  
+2. 设置 `Authorization: Bearer <api_key>` 与 `Content-Type: application/json`  
+3. 请求体示例（Adventure）：
 ```json
 {
-  "model": "happyoyster-adventure",
-  "input": {
-    "world_state": {"location": "forest", "time_of_day": "dawn", "entities": ["player", "wolf"]},
-    "prompt": "玩家向狼投掷火把"
-  },
-  "temperature": 0.6
+  "scene_state": {"world_time": "2024-06-15T14:22:00Z", "characters": [{"id": "hero", "x": 12.3, "y": 4.7}]},
+  "intent": "advance_plot",
+  "max_steps": 1
 }
 ```
-2. 发送 POST 请求至 `https://dashscope.aliyuncs.com/api/v1/services/aigc/world-model`  
-3. 解析响应中的 `output.action_sequence`（Adventure/Directing）或 `output.animation_clip_id`（Acting）
 
 ## 限制和注意事项
 
-- 单次请求 `input.world_state` JSON 大小上限为 128 KB；超限将返回 `400 Bad Request`  
-- Acting 模型当前仅支持华东1（杭州）Region，其他地域调用将返回 `403 Forbidden`  
-- 所有模型均不支持跨会话状态持久化，`input.history` 仅用于当前请求上下文建模，不会写入服务端状态  
-- 若需长期世界状态管理，请自行实现外部存储，并在每次请求中显式传入最新 `world_state` —— 此设计已在 [Adventure Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-adventure-openapi-reference.md) 中明确说明
+- 单次请求最大 `scene_state` 大小为 256KB；超限将返回 `413 Payload Too Large`  
+- Acting 模型暂不支持流式响应，且仅接受 `application/json` 格式输入（不兼容 `multipart/form-data`）  
+- 所有模型均要求 `scene_state` 中的 `world_time` 为 ISO 8601 UTC 时间格式，否则触发校验失败 —— 此约束在 [Adventure Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-adventure-openapi-reference.md) 中明确，但 [Directing Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-directing-openapi-reference.md) 未强调，建议统一遵循。
 
 ## 来源文档
 

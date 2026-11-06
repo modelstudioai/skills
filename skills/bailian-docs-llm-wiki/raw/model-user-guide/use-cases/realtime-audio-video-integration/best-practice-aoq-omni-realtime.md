@@ -4,7 +4,7 @@
 
 ## SDK 获取
 
-AOQ Client SDK 及音频 Opus 插件请参见[SDK下载](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-sdk-download.md)。本示例使用 Opus 编码，需导入对应插件。
+AOQ Client SDK 及音频 Opus 插件请参见[SDK下载](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/realtime-sdk-download.md)。本示例使用 Opus 编码，需导入对应插件。
 
 ## SDK 导入
 
@@ -96,7 +96,7 @@ dependencies {
 
 `{endpoint}` 使用华北2（北京）的 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com` 或新加坡的 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，替换为实际业务空间 ID，并使用对应地域和业务空间的 API Key。
 
-请按照[Token鉴权](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-token-authentication.md)的 AOQ 章节搭建获取 Token 的 AppServer。每次通话前，客户端需要向业务侧 AppServer 请求一次 Token。
+按 [Qwen-Omni-Realtime 的 AOQ 鉴权步骤](https://help.aliyun.com/zh/model-studio/omni-realtime-aoq-access#authentication)搭建 AppServer。每次通话前，客户端向 AppServer 申请新的连接凭证。
 
 ## 实现 AI 音视频通话
 
@@ -204,13 +204,13 @@ engine.setLocalView(AoqTrackType.AoqTrackTypeVideo, canvas);
 
 ### 获取连接凭证
 
-由业务 AppServer 代理百炼请求，参见[Token鉴权](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-token-authentication.md)。
+客户端向业务 AppServer 请求[连接凭证](#bpaoq-token-title)。
 
 ### 设置编解码及建立连接
 
 设置编解码参数后调用 `connect`。
 
-注意：qwen3.8-omni-flash-realtime 要求客户端在收到服务端的 `session.updated` 之后才能开始发送媒体数据。为避免 `connect` 建联成功到 `session.updated` 到达之间的空档期误推媒体，在 `connect` 之前对上行音频与视频轨道分别调用 `enableSendMediaStream(trackType, false)`，将上行推流暂时关闭。WebSocket事件说明详见[客户端事件](raw/model-api-reference/omni-realtime-api/client-events.md)。
+注意：qwen3.8-omni-flash-realtime 要求客户端在收到服务端的 `session.updated` 之后才能开始发送媒体数据。为避免 `connect` 建联成功到 `session.updated` 到达之间的空档期误推媒体，在 `connect` 之前对上行音频与视频轨道分别调用 `enableSendMediaStream(trackType, false)`，将上行推流暂时关闭。WebSocket事件说明详见[客户端事件](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md)。
 
 **iOS：**
 ```
@@ -300,7 +300,7 @@ engine.connect(conn);
 
 ### 配置 AI 会话
 
-在 `onConnectionStatusChange(Connected)` 回调中通过 `sendDataMsg` 发送 `session.update` 消息（业务自定义 JSON，包含 modalities、voice、instructions、turn\_detection 等会话参数），完成会话握手，WebSocket事件说明详见[客户端事件](raw/model-api-reference/omni-realtime-api/client-events.md)。
+在 `onConnectionStatusChange(Connected)` 回调中通过 `sendDataMsg` 发送 `session.update` 消息（业务自定义 JSON，包含 modalities、voice、instructions、turn\_detection 等会话参数），完成会话握手，WebSocket事件说明详见[客户端事件](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md)。
 
 **iOS：**
 ```
@@ -381,7 +381,7 @@ private sendSessionUpdate(): void {
 
 ### 收到 session.updated 后开启媒体发送
 
-在 `onDataMsg` 回调中解析下行消息，收到模型回复 `session.updated` 的时候，对上一步禁推的每个轨道类型调用 `enableSendMediaStream(trackType, true)` 放开推流。下面为代码示例，WebSocket事件说明详见[服务端事件](raw/model-api-reference/omni-realtime-api/server-events.md)。
+在 `onDataMsg` 回调中解析下行消息，收到模型回复 `session.updated` 的时候，对上一步禁推的每个轨道类型调用 `enableSendMediaStream(trackType, true)` 放开推流。下面为代码示例，WebSocket事件说明详见[服务端事件](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md)。
 
 **iOS：**
 ```
@@ -472,7 +472,7 @@ engine.switchCamera(AoqCameraDirection.AoqCameraDirectionBack);
 
 ### 通话字幕与ASR结果显示
 
-服务端通过下行数据消息推送 ASR 结果与 AI 文本回复。业务侧在 `onDataMsg` 回调中根据 `type` 字段分流即可。WebSocket事件说明详见[服务端事件](raw/model-api-reference/omni-realtime-api/server-events.md)。
+服务端通过下行数据消息推送 ASR 结果与 AI 文本回复。业务侧在 `onDataMsg` 回调中根据 `type` 字段分流即可。WebSocket事件说明详见[服务端事件](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md)。
 
 ## 注意事项
 
@@ -496,6 +496,6 @@ engine.switchCamera(AoqCameraDirection.AoqCameraDirectionBack);
 
 ## 相关文档
 
--   AOQ Client SDK 详细 API：[SDK简介](raw/model-api-reference/realtime-api-user-guide/realtime-api-aoq-api/realtime-api-aoq-sdk-desc.md)
--   qwen3.8-omni-flash-realtime 模型客户端事件：[客户端事件](raw/model-api-reference/omni-realtime-api/client-events.md)
--   qwen3.8-omni-flash-realtime 模型服务端事件：[服务端事件](raw/model-api-reference/omni-realtime-api/server-events.md)
+-   AOQ Client SDK 详细 API：[SDK简介](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/realtime-api-aoq-sdk-desc.md)
+-   qwen3.8-omni-flash-realtime 模型客户端事件：[客户端事件](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md)
+-   qwen3.8-omni-flash-realtime 模型服务端事件：[服务端事件](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md)

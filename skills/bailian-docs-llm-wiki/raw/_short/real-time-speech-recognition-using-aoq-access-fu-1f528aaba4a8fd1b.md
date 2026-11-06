@@ -16,9 +16,9 @@ fun-asr-realtime 将音频流实时转写为带标点的文本。AOQ SDK 将媒�
 ## 准备工作
 
 1.  开通阿里云百炼，并按[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。API Key 只保存在业务 AppServer，不要写入客户端代码或提交到代码仓库。
-2.  根据业务部署地域确认 AOQ Endpoint。地域和接入地址的选择方法请参见[选择地域、服务部署范围和接入域名](raw/model-api-reference/preparations/regions.md)。
-3.  从[SDK 下载](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-sdk-download.md)获取最新版 AOQ Client SDK。本文传输 Opus 音频，需先导入 Opus 插件。
-4.  搭建业务 AppServer，并按[Token 鉴权](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-token-authentication.md)实现 AOQ Inference 协议的服务端代理鉴权。每次建立新连接前，客户端都应从 AppServer 获取新的连接凭证。
+2.  根据业务部署地域确认 AOQ Endpoint。地域和接入地址的选择方法请参见[选择地域、服务部署范围和接入域名](raw/model-user-guide/get-started-with-models/regions.md)。
+3.  从[SDK 下载](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/realtime-sdk-download.md)获取最新版 AOQ Client SDK。本文传输 Opus 音频，需先导入 Opus 插件。
+4.  按 [Fun-ASR-Realtime 的 AOQ 鉴权步骤](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-aoq-access#authentication)搭建业务 AppServer。每次建立新连接前，客户端都应从 AppServer 获取新的连接凭证。
 
 ### 导入 SDK
 
@@ -131,7 +131,7 @@ curl -X POST \
 
 **说明**如果 AppServer 无法获取终端真实公网 IP，请从请求体中删除 clientIp 字段，不要传空字符串。
 
-AppServer 将响应中的以下字段返回客户端。生产环境中不要把 API Key 返回客户端。完整请求参数和响应字段请参见[Token 鉴权](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-token-authentication.md)。
+AppServer 将响应中的以下字段返回客户端。API Key 仅保存在 AppServer。
 
 **响应字段**
 
@@ -235,7 +235,7 @@ engine.connect(connectConfig);
 
 ### 5\. 启动识别任务
 
-连接成功后生成任务 ID，并发送 run-task 启动识别。请根据实际使用的模型和音频输入配置 model、format、sample\_rate 及其他任务参数，完整说明请参见[客户端事件](raw/_short/fun-asr-client-events-997ba24ade1a8a48.md)。
+连接成功后生成任务 ID，并发送 run-task 启动识别。请根据实际使用的模型和音频输入配置 model、format、sample\_rate 及其他任务参数，完整说明请参见[客户端事件](raw/_short/fun-asr-client-events-a037d05e99747fff.md)。
 
 ```
 taskId = UUID.randomUUID().toString();
@@ -255,7 +255,7 @@ send(new JSONObject().put("header", header).put("payload", payload));
 
 ### 6\. 处理服务端事件
 
-处理任务状态、识别结果和错误事件，并将结果传递给业务层。请根据应用的展示和状态管理需求实现回调逻辑；收到 task-started 后再发送音频，展示结果时过滤心跳事件。完整响应结构请参见[服务端事件](raw/_short/fun-asr-server-events-666d2f9990cd5ae1.md)。
+处理任务状态、识别结果和错误事件，并将结果传递给业务层。请根据应用的展示和状态管理需求实现回调逻辑；收到 task-started 后再发送音频，展示结果时过滤心跳事件。完整响应结构请参见[服务端事件](raw/_short/fun-asr-server-events-83aa266f52f1f8c7.md)。
 
 ```
 String eventName = header.optString("event", "");
@@ -286,7 +286,7 @@ if ("task-started".equals(eventName)) {
 
 ### 7\. 结束识别任务
 
-用户结束本轮录音时，停止音频上行并发送 finish-task。保持连接直至收到最终识别结果和 task-finished；后续可按业务需要启动新任务或释放连接。事件格式请参见[客户端事件](raw/_short/fun-asr-client-events-997ba24ade1a8a48.md)。
+用户结束本轮录音时，停止音频上行并发送 finish-task。保持连接直至收到最终识别结果和 task-finished；后续可按业务需要启动新任务或释放连接。事件格式请参见[客户端事件](raw/_short/fun-asr-client-events-a037d05e99747fff.md)。
 
 ```
 engine.enableSendMediaStream(
@@ -633,10 +633,10 @@ Android 加载 SDK 失败
 如需查询完整参数、事件字段或其他平台接口，请参见：
 
 -   [获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)
--   [选择地域、服务部署范围和接入域名](raw/model-api-reference/preparations/regions.md)
--   [SDK 简介](raw/model-api-reference/realtime-api-user-guide/realtime-api-aoq-api/realtime-api-aoq-sdk-desc.md)
--   [SDK 下载](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-sdk-download.md)
--   [Token 鉴权](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-token-authentication.md)
+-   [选择地域、服务部署范围和接入域名](raw/model-user-guide/get-started-with-models/regions.md)
+-   [SDK 简介](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/realtime-api-aoq-sdk-desc.md)
+-   [SDK 下载](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/realtime-sdk-download.md)
+-   [Fun-ASR-Realtime AOQ 接入](raw/_short/fun-asr-realtime-aoq-access-18b59bd85ad6d915.md)
 -   [实时语音识别](raw/model-user-guide/model-experience/speech-and-audio/speech-recognition/real-time-speech-recognition-user-guide.md)
--   [客户端事件](raw/_short/fun-asr-client-events-997ba24ade1a8a48.md)
--   [服务端事件](raw/_short/fun-asr-server-events-666d2f9990cd5ae1.md)
+-   [客户端事件](raw/_short/fun-asr-client-events-a037d05e99747fff.md)
+-   [服务端事件](raw/_short/fun-asr-server-events-83aa266f52f1f8c7.md)

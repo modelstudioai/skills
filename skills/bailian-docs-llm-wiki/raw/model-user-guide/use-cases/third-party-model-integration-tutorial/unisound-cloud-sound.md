@@ -10,7 +10,7 @@ unisound/unisound-u2 是云知声直供的推理模型，默认开启思考模�
 
 需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。如果通过SDK调用，需要[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
-**说明**`thinking` 与 `reasoning_effort` 非 OpenAI 标准参数，OpenAI Python SDK 通过 `extra_body` 传入，Node.js SDK 作为顶层参数传入。
+**说明**`thinking` 非 OpenAI 标准参数，OpenAI Python SDK 通过 `extra_body` 传入，Node.js SDK 作为顶层参数传入。`reasoning_effort` 是 OpenAI 标准参数，使用 OpenAI Python SDK 时直接传入，例如 `reasoning_effort="xhigh"`。
 
 #### Python
 
@@ -38,9 +38,9 @@ completion = client.chat.completions.create(
     },
     # unisound-u2 默认开启思考模式，如需关闭可将 thinking 改为 {"type": "disabled"}
     extra_body={
-        "thinking": {"type": "enabled"},
-        "reasoning_effort": "xhigh"
-    }
+        "thinking": {"type": "enabled"}
+    },
+    reasoning_effort="xhigh"
 )
 
 reasoning_content = ""  # 完整思考过程

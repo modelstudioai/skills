@@ -99,7 +99,7 @@ MP4, AVI, MOV（仅支持URL）
 
 调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
-> 本节介绍 DashScope HTTP 接口。
+> 本节介绍 DashScope HTTP 接口。`qwen3-rerank`和`qwen3.7-text-rerank`还支持 OpenAI 兼容接口，参见[OpenAI 兼容接口](#openai-compatible-rerank)。
 
 ### 请求
 
@@ -465,6 +465,67 @@ qwen3-vl-rerank / gte-rerank-v2
     "request_id":"fb53c4ec-1c12-4fc4-a580-cdb7c3261fc1"
 }
 ```
+
+## OpenAI 兼容接口
+
+`qwen3-rerank`和`qwen3.7-text-rerank`支持通过 OpenAI 兼容接口调用；`gte-rerank-v2`和`qwen3-vl-rerank`不支持，调用时会返回`model_not_supported`错误。
+
+请求地址：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-api/v1/reranks`
+
+与 DashScope HTTP 接口的差异：
+
+-   请求体为扁平结构，`query`、`documents`、`top_n`、`instruct`、`return_documents`与`model`同级，不嵌套在`input`和`parameters`中。
+-   排序结果位于响应的`results`数组中，每项包含`index`（文档在请求中的序号）和`relevance_score`（相关性得分）；`return_documents`为`true`时额外返回`document.text`。
+
+### 请求示例
+
+```
+curl --request POST \
+  --url https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-api/v1/reranks \
+  --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
+  --header "Content-Type: application/json" \
+  --data '{
+    "model": "qwen3-rerank",
+    "query": "什么是重排序模型",
+    "documents": [
+      "重排序模型广泛应用于搜索引擎和推荐系统",
+      "量子计算是计算科学的前沿领域"
+    ],
+    "top_n": 2,
+    "return_documents": true
+}'
+```
+
+### 响应示例
+
+```
+{
+  "object": "list",
+  "results": [
+    {
+      "document": {
+        "text": "重排序模型广泛应用于搜索引擎和推荐系统"
+      },
+      "index": 0,
+      "relevance_score": 0.8019987834170111
+    },
+    {
+      "document": {
+        "text": "量子计算是计算科学的前沿领域"
+      },
+      "index": 1,
+      "relevance_score": 0.33869324986016763
+    }
+  ],
+  "model": "qwen3-rerank",
+  "id": "1a295f99-89ff-901f-a57f-9a38a6d963fa",
+  "usage": {
+    "total_tokens": 59
+  }
+}
+```
+
+Python 和 Node.js 调用示例请参见[重排序](raw/model-user-guide/model-experience/embedding-rerank-model/rerank.md)。
 
 ## SDK调用
 

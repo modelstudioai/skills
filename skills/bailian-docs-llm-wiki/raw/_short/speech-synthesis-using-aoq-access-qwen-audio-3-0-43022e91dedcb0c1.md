@@ -11,9 +11,9 @@ qwen-audio-3.0-tts-flash 支持 AOQ Inference 事件协议。本教程选择该�
 ## 准备工作
 
 1.  开通阿里云百炼，并按[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。API Key 只保存在业务 AppServer，不要写入客户端代码或提交到代码仓库。
-2.  根据业务部署地域确认 AOQ Endpoint。地域和接入地址的选择方法请参见[选择地域、服务部署范围和接入域名](raw/model-api-reference/preparations/regions.md)。
-3.  从[SDK 下载](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-sdk-download.md)获取最新版 AOQ Client SDK。
-4.  搭建业务 AppServer，并按[Token 鉴权](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-token-authentication.md)实现服务端代理鉴权。每次建立新连接前，客户端都应从 AppServer 获取新的连接凭证。
+2.  根据业务部署地域确认 AOQ Endpoint。地域和接入地址的选择方法请参见[选择地域、服务部署范围和接入域名](raw/model-user-guide/get-started-with-models/regions.md)。
+3.  从[SDK 下载](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/realtime-sdk-download.md)获取最新版 AOQ Client SDK。
+4.  按 [Qwen-Audio-TTS 的 AOQ 鉴权步骤](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-aoq-access#authentication)搭建业务 AppServer。每次建立新连接前，客户端都应从 AppServer 获取新的连接凭证。
 
 ### 导入 SDK
 
@@ -119,7 +119,7 @@ curl -X POST \
 
 **说明**如果 AppServer 无法获取客户端真实公网 IP，请删除 clientIp 字段，不要传空字符串。
 
-AppServer 将响应中的以下字段返回客户端。生产环境中不要把 API Key 返回客户端。完整请求和响应字段请参见[Token 鉴权](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-token-authentication.md)。
+AppServer 将响应中的以下字段返回客户端。API Key 仅保存在 AppServer。
 
 **响应字段**
 
@@ -213,7 +213,7 @@ engine.connect(connectConfig);
 
 ### 4\. 调用 sendDataMsg 发送 run-task 事件
 
-连接成功后为本轮生成新的 UUID task\_id，并配置模型、音色、文本类型、音频格式和采样率。其他可选参数请参见[客户端事件](raw/_short/cosyvoice-client-events-a63a525ab07e6693.md)。
+连接成功后为本轮生成新的 UUID task\_id，并配置模型、音色、文本类型、音频格式和采样率。其他可选参数请参见[客户端事件](raw/_short/cosyvoice-client-events-480a8821d2d60e18.md)。
 
 ```
 taskId = UUID.randomUUID().toString();
@@ -260,7 +260,7 @@ engine.sendDataMsg(dataMessage);
 
 ### 6\. 处理服务端事件
 
-在 onDataMsg 中读取 header.event，维护任务状态并处理失败。result-generated 只表示句子已合成，音频仍通过 Audio 轨返回。完整字段请参见[服务端事件](raw/_short/cosyvoice-server-events-388da422580d5c78.md)。
+在 onDataMsg 中读取 header.event，维护任务状态并处理失败。result-generated 只表示句子已合成，音频仍通过 Audio 轨返回。完整字段请参见[服务端事件](raw/_short/cosyvoice-server-events-81793da4414e2646.md)。
 
 ```
 JSONObject header = event.optJSONObject("header");
@@ -281,7 +281,7 @@ if ("task-started".equals(name)) {
 
 ### 7\. 调用 sendDataMsg 发送 finish-task 事件
 
-发送完全部文本后立即发送 finish-task，以合成服务端缓存的不完整语句，并等待 task-finished。详细规则请参见[客户端事件](raw/_short/cosyvoice-client-events-a63a525ab07e6693.md)。
+发送完全部文本后立即发送 finish-task，以合成服务端缓存的不完整语句，并等待 task-finished。详细规则请参见[客户端事件](raw/_short/cosyvoice-client-events-480a8821d2d60e18.md)。
 
 ```
 JSONObject finishHeader = new JSONObject()
@@ -548,10 +548,10 @@ continue-task 被拒绝
 如需查看完整参数、事件字段或其他平台接口，请参见：
 
 -   [获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)
--   [选择地域、服务部署范围和接入域名](raw/model-api-reference/preparations/regions.md)
--   [AOQ Client SDK 简介](raw/model-api-reference/realtime-api-user-guide/realtime-api-aoq-api/realtime-api-aoq-sdk-desc.md)
--   [SDK 下载](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-sdk-download.md)
--   [Token 鉴权](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-token-authentication.md)
+-   [选择地域、服务部署范围和接入域名](raw/model-user-guide/get-started-with-models/regions.md)
+-   [AOQ Client SDK 简介](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/realtime-api-aoq-sdk-desc.md)
+-   [SDK 下载](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/realtime-sdk-download.md)
+-   [Qwen-Audio-TTS AOQ 接入](raw/model-api-reference/realtime-api-directory/realtime-tts-model-apis/qwen-audio-tts-api/qwen-audio-tts-aoq-access.md)
 -   [Qwen-Audio-TTS 用户指南](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/tts-model.md)
--   [客户端事件](raw/_short/cosyvoice-client-events-a63a525ab07e6693.md)
--   [服务端事件](raw/_short/cosyvoice-server-events-388da422580d5c78.md)
+-   [客户端事件](raw/_short/cosyvoice-client-events-480a8821d2d60e18.md)
+-   [服务端事件](raw/_short/cosyvoice-server-events-81793da4414e2646.md)
