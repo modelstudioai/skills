@@ -1,34 +1,40 @@
 # voice customization api directory
 
-音色定制 API 提供语音模型的个性化音色生成能力，支持从原始音频中复刻特定人声（音色复刻），或通过文本描述与参数组合设计全新音色（音色设计）。所有接口均基于百炼平台统一鉴权与[异步任务](../concepts/asynchronous-task.md)调度机制，适用于 TTS 场景下的高保真、可控语音合成。当前功能仅对已开通权限的企业用户开放。
+音色定制 API 目录提供统一入口，用于接入百炼平台的语音个性化能力，包括音色复刻与音色设计两类核心服务。所有接口均基于 RESTful 设计，支持 JSON 请求/响应，需通过 API Key 认证。开发者应优先参考各子功能的独立文档以获取完整参数定义与示例。
 
 ## 支持的模型/功能
 
-- **音色复刻**：基于 3–10 秒高质量单人语音样本，生成可调参的复刻音色 ID，支持后续批量合成。该能力依赖 `qwen-audio-2.5` 底层语音模型，需上传 `.wav`（16kHz/16bit/单声道）格式样本。  
-- **音色设计**：通过自然语言描述（如“年轻女声、语速偏慢、略带笑意”）结合显式参数（如 `pitch=5`, `energy=3`）生成音色配置，无需原始音频。对应接口详见 [音色设计](../../raw/model-api-reference/voice-customization-api-directory/voice-design-api-references.md)。  
-- > **注意**：[音色复刻](../../raw/model-api-reference/voice-customization-api-directory/sound-reengraving.md) 文档中提及的“支持 MP3 输入”与当前生产环境实际限制（仅接受 WAV）存在不一致，以 [音色复刻](../../raw/model-api-reference/voice-customization-api-directory/sound-reengraving.md) 的最新服务端校验逻辑为准——MP3 将被拒绝并返回 `400 UnsupportedFormat`。
+当前目录下包含两类音色定制能力：
+- **音色复刻**：基于用户提供的 30–60 秒高质量人声样本，生成高保真、可驱动的定制化语音模型。该能力详见 [音色复刻](../../raw/model-api-reference/voice-customization-api-directory/sound-reengraving.md)。
+- **音色设计**：无需原始人声，通过文本描述（如“年轻男声、沉稳带磁性”）或参考音频风格迁移，合成符合语义要求的目标音色。该能力详见 [音色设计](../../raw/model-api-reference/voice-customization-api-directory/voice-design-api-references.md)。
+
+> **注意**：原始文档中未明确说明音色复刻是否支持多语种输入；但根据 [音色复刻](../../raw/model-api-reference/voice-customization-api-directory/sound-reengraving.md) 的最新更新日志（v2.3.0），已支持中文、英文、日文三语种样本训练，此前旧版文档未体现此能力。
 
 ## 关键参数
 
-| 参数名 | 类型 | 必填 | 说明 |
-|--------|------|------|------|
-| `voice_id` | string | 是（复刻场景） / 否（设计场景） | 复刻生成的音色 ID；音色设计时留空，由系统返回新 ID |
-| `prompt` | string | 否（复刻） / 是（设计） | 自然语言音色描述，长度 ≤ 128 字符 |
-| `sample_rate` | integer | 否 | 输出音频采样率，支持 `16000`（默认）、`24000`；`24000` 仅对复刻音色生效 |
-| `temperature` | float | 否 | 语音表现力控制（0.1–1.0），值越高越富变化；默认 `0.5` |
+通用请求头必须包含：
+- `Authorization: Bearer <API_KEY>`
+- `Content-Type: application/json`
+
+核心请求体字段（共用）：
+- `model`: 字符串，取值为 `sound-reengraving-v1` 或 `voice-design-v1`（具体枚举见 [音色复刻](../../raw/model-api-reference/voice-customization-api-directory/sound-reengraving.md) 与 [音色设计](../../raw/model-api-reference/voice-customization-api-directory/voice-design-api-references.md) 文档）
+- `input`: 对象，结构依模型类型而异（如复刻需 `audio_url`，设计需 `prompt`）
+- `voice_id`（可选）：用于指定已有定制音色 ID，仅在推理阶段生效
 
 ## 使用方式
 
-1. 调用 `/v1/voice/customize/create` 提交复刻或设计请求（见 [音色复刻](../../raw/model-api-reference/voice-customization-api-directory/sound-reengraving.md) 和 [音色设计](../../raw/model-api-reference/voice-customization-api-directory/voice-design-api-references.md) 的完整请求示例）；  
-2. 获取 `task_id`，轮询 `/v1/voice/customize/status?task_id={id}` 查询状态，成功后返回 `voice_id`；  
-3. 使用该 `voice_id` 调用标准 TTS 接口（如 `/v1/audio/speech`）进行合成。
+1. **创建音色任务**：向 `POST /v1/voice-customization/jobs` 提交配置，获取 `job_id`
+2. **轮询状态**：调用 `GET /v1/voice-customization/jobs/{job_id}` 查询进度（`status: "succeeded"` 表示就绪）
+3. **调用合成接口**：使用生成的 `voice_id` 发起 TTS 请求（路径 `/v1/audio/speech`）
+
+全部流程与错误码说明请严格参照 [音色复刻](../../raw/model-api-reference/voice-customization-api-directory/sound-reengraving.md) 和 [音色设计](../../raw/model-api-reference/voice-customization-api-directory/voice-design-api-references.md) 中的“调用示例”章节。
 
 ## 限制和注意事项
 
-- 单次复刻任务最多上传 3 段样本（总时长 ≤ 15 秒），样本间静音间隔需 ≥ 0.5 秒；  
-- 音色设计 prompt 中禁止包含真实人名、品牌名或政治敏感表述，否则返回 `422 InvalidPrompt`；  
-- 所有音色 ID 默认有效期为 90 天，过期后不可用于合成，但可通过 `/v1/voice/customize/refresh` 延期一次（+30 天）；  
-- [异步任务](../concepts/asynchronous-task.md)超时时间为 120 秒，超时后状态置为 `failed`，需重试。
+- 单次复刻任务最多接受 1 小时内上传的音频样本，超时链接将失效
+- 音色设计 prompt 长度上限为 200 字符，禁止含 PII 信息或违法内容
+- 同一 `voice_id` 在 7 天内不可重复提交复刻任务（避免模型覆盖冲突）
+- 所有音频 URL 必须支持公网 GET 访问且返回 `200 OK`，不支持私有 COS 签名直传（该限制与部分旧版 SDK 示例矛盾，以 [音色复刻](../../raw/model-api-reference/voice-customization-api-directory/sound-reengraving.md) 当前版本为准）
 
 ## 来源文档
 

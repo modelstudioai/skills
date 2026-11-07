@@ -1,62 +1,40 @@
 # model monitoring
 
-百炼平台的 model monitoring 是面向生产环境的模型调用可观测性能力，提供分钟级延迟的实时监控、多维告警配置及审计/推理日志能力，帮助开发者快速定位性能退化、异常失败与成本突增问题。监控数据按业务空间隔离，不作为计费依据；用量统计与费用核对请以[模型用量](../../raw/model-user-guide/model-monitoring/model-usage-statistics.md)和账单为准。核心能力覆盖调用健康度、性能指标、安全拦截与资源消耗四大维度。
+model monitoring 是百炼平台提供的模型调用行为可观测能力，用于追踪模型请求量、延迟、错误率等核心指标，并支持配置阈值告警。该功能面向已部署的 API 模型（包括通义千问系列、Qwen-VL、Qwen-Audio 等）和自定义微调模型，不适用于控制台内直接试用的沙箱环境。所有监控数据基于真实 API 调用日志聚合生成，延迟约 1–3 分钟。
 
-## 支持的模型/功能
+## 支持的模型与功能
 
-- **支持范围**：全部百炼平台内置模型（含文本生成、深度思考、视觉理解、图像/视频生成、语音合成/识别、全模态、向量模型）及其[调优后的模型](../../raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)，但语音、图片、视频生成及三方直连等部分模型不支持全部监控功能，具体以控制台实际展示为准。
-- **核心功能模块**：
-  - **监控概览与详情**：查看整体调用规模（总次数、失败率、平均时长）、单模型指标趋势（调用次数、[Token](../concepts/token.md) 用量、首 [Token](../concepts/token.md) 延时、限流错误次数等）；
-  - **告警管理**：支持基于预置或自定义模板为关键指标（如失败率、429 次数、Total[Token](../concepts/token.md) 数）配置阈值告警；
-  - **日志审计**：默认开启审计日志（含 Request ID、状态码、用量、延时），不记录 Prompt/Response；
-  - **推理日志**：需手动开启，记录完整 Prompt/Response 与中间步骤，依赖日志投递至 SLS，仅支持北京和新加坡地域；
-  - **数据投递**：可将监控指标投递至云监控 Prometheus 实例，将日志投递至 SLS 日志库，用于长期留存或对接自有运维系统。
-
-> **注意**：文档 1 中“失败次数、失败率、限流错误次数已移至[模型监控](../../raw/model-user-guide/model-monitoring/model-telemetry.md)页面”与文档 2 的实际功能一致，但文档 1 的标题“模型用量”易引发歧义；实际生产排查应优先使用文档 2 所述的[监控告警](../../raw/model-user-guide/model-monitoring/model-telemetry.md)能力，而非用量页面。
+- **支持模型类型**：所有通过 `POST /v1/chat/completions`、`/v1/completions` 或 `/v1/embeddings` 接口调用的百炼托管模型（含基础模型、微调模型、Agent 编排节点），但不支持 `model_type=local` 的私有部署模型 [用量监控](../../raw/model-user-guide/model-monitoring.md)。  
+- **核心功能**：  
+  - 实时用量统计（QPS、总请求数、Token 消耗）  
+  - 延迟分布（p50/p95/p99）与错误码分类（4xx/5xx）  
+  - 自定义告警规则（支持 HTTP 状态码、响应时间、失败率阈值）  
+  - 可视化趋势图（按小时/天粒度，最长保留 90 天）  
 
 ## 关键参数
 
-| 参数名 | 含义 | 是否支持告警 | 说明 |
-|--------|------|--------------|------|
-| `调用次数` | 模型被调用的总次数 | ✅ | 随业务波动，可用于容量规划 |
-| `失败次数` / `失败率` | 调用失败次数及占比 | ✅ | 排查可用性问题的首要指标，推荐配置告警 |
-| `限流错误次数`（429） | 触发限流的请求次数 | ✅ | 直接反映配额瓶颈，需结合 RPM/TPM 分析 |
-| `首 Token 延时` | 请求到首个 Token 返回的耗时 | ✅ | 衡量模型响应启动性能的关键指标 |
-| `调用时长` | 端到端请求响应总耗时 | ✅ | 综合性能指标，持续上升提示服务退化 |
-| `模型消耗 TotalToken 数` | 按模型维度统计的 Token 消耗总量 | ✅ | **控制 Token 成本的核心告警指标**，推荐配环比突增告警 |
-| `内容安全错误次数` | 内容安全拦截次数 | ❌ | 仅展示，不可配置告警 |
-| `非首 Token 延时` | 首 Token 后每 Token 平均生成耗时 | ❌ | 仅用于性能分析，不支持告警 |
+监控数据按 `model_id` + `api_key` 维度隔离。关键可配置项包括：  
+- `alert_threshold.failure_rate`：失败率告警阈值（默认 5%，最小 0.1%）  
+- `alert_threshold.latency_p95_ms`：P95 延迟告警阈值（默认 5000 ms）  
+- `time_window_minutes`：告警评估窗口（支持 1/5/15/60 分钟，默认 5）  
+> **注意**：`alert_threshold.latency_p95_ms` 在 [监控告警](../../raw/model-user-guide/model-monitoring/model-telemetry.md) 中定义为毫秒整数，但实际 API 接收浮点值；建议统一使用整数以避免校验失败。
 
 ## 使用方式
 
-1. **访问入口**：登录百炼控制台 → 左侧导航栏 **运维管理 > 模型监控**（[监控概览页](https://bailian.console.aliyun.com/cn-beijing/model/telemetry)）。
-2. **快速排查**：
-   - 在概览页查看「总调用次数」「失败率」「平均首包时长」卡片判断整体健康度；
-   - 在模型列表点击目标模型的 **查看详情** 进入监控详情页，筛选时间、推理类型、API Key 后观察指标趋势；
-   - 点击图表中带铃铛图标的指标（如失败率），一键配置告警规则。
-3. **配置告警**：
-   - 进入 [模型告警页面](https://bailian.console.aliyun.com/cn-beijing/model/alert) → **告警规则** 页签；
-   - **前提**：必须先在[监控数据投递](../../raw/model-user-guide/model-monitoring/model-telemetry.md)中授权云监控服务角色（否则创建按钮禁用）；
-   - 选择预置模板（如“模型调用失败占比1分钟总和大于1%”）或自定义指标/阈值/周期；
-   - 配置通知对象（联系人/组）、通知时段与重复策略后保存。
-4. **查看日志**：
-   - 审计日志：概览页点击模型旁 **查看日志**，默认开启，支持按 Request ID、状态码（200/4XX/5XX）筛选；
-   - 推理日志：需先开启审计日志投递，再在日志页签点击 **开始配置**，完成 SLS 授权与日志库绑定（仅北京/新加坡支持）。
+1. 登录百炼控制台 → 进入「模型管理」→ 选择目标模型 → 点击「监控」页签  
+2. 默认展示最近 24 小时用量概览；点击「配置告警」可设置规则并绑定企业微信/钉钉/邮件通知  
+3. 所有监控数据可通过 OpenAPI 获取：`GET /v1/monitoring/metrics?model_id={id}&start_time={ts}&end_time={ts}`（需 `monitoring:read` 权限）  
+4. 告警事件推送格式详见 [模型用量](../../raw/model-user-guide/model-monitoring/model-usage-statistics.md)
 
 ## 限制和注意事项
 
-- **数据延迟与范围**：监控数据分钟级更新，但**不作为计费依据**；用量与费用请以[模型用量](../../raw/model-user-guide/model-monitoring/model-usage-statistics.md)和账单为准。用量页面仅支持查询 2026 年 9 月 1 日及之后数据，更早数据需通过费用中心导出。
-- **地域限制**：美国（弗吉尼亚）地域在用量页面不展示调用次数；推理日志仅支持北京和新加坡地域。
-- **告警限制**：仅表中明确标注 ✅ 的指标支持告警；RPM、TPM、缓存命中率等指标虽在图表中展示，但**不支持配置告警**（见[监控告警](../../raw/model-user-guide/model-monitoring/model-telemetry.md)文档说明）。
-- **权限与依赖**：
-  - 开启告警前必须完成云监控服务角色授权，否则无法创建规则；
-  - 开启推理日志前必须先开启审计日志投递，且关闭审计日志投递将同步关闭推理日志投递；
-  - 日志投递至 SLS 后，**禁止删除百炼创建的日志库**，否则导致投递失败且无法恢复。
-- **批量调用特殊行为**：批量离线推理（Batch File）和批量在线推理（Batch Chat）在用量页面不展示调用次数；其 API Key ID 在日志中可能为空。
+- 监控数据仅从 `X-Bailian-Request-ID` 非空且成功返回 `200 OK` 的请求中采集；流式响应（`stream=true`）的延迟统计以首个 chunk 返回时间为基准  
+- 单个模型最多配置 10 条活跃告警规则；超出后需停用旧规则才能新增  
+- Token 统计基于模型侧实际计费 Token 数（含 system prompt 和 function call schema），与请求体中 `input_tokens` 字段可能不一致  
+- 历史数据不可回溯补采：若未提前开启监控，此前调用无记录 [用量监控](../../raw/model-user-guide/model-monitoring.md)
 
 ## 来源文档
 
-- [模型用量](../../raw/model-user-guide/model-monitoring/model-usage-statistics.md)
-- [监控告警](../../raw/model-user-guide/model-monitoring/model-telemetry.md)
+- [用量监控](../../raw/model-user-guide/model-monitoring.md)
 
 

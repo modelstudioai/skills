@@ -8682,82 +8682,14 @@ vidu/viduq2-fast\_reference2image
 
 无
 
-## 音频生成
+## 语音识别
 
-按输入和输出 Token 数分别计费。
+### Qwen-Audio-ASR
 
-#### 华北2（北京）
+计费规则：
 
-模型 ID
-
-输入单价（元/百万 Token）
-
-输出单价（元/百万 Token）
-
-免费额度[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)  
-有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
-
-qwen-audio-3.1-tts-next
-
-6
-
-12
-
-100万Token
-
-#### 新加坡
-
-模型 ID
-
-输入单价（元/百万 Token）
-
-输出单价（元/百万 Token）
-
-qwen-audio-3.1-tts-next
-
-6.781
-
-5.104
-
-## 音乐生成
-
-计费规则：按输出音频的秒数计费，输入不计费。
-
-#### 华北2（北京）
-
-**模型 ID（Model ID）**
-
-**输出单价（每秒）**
-
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
-
-有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
-
-fun-music-preview
-
-0.005元
-
-无
-
-fun-music-v1
-
-0.002元
-
-1,000秒
-
-## 语音合成（文本转语音）
-
-**字符计算规则**：本节中按字符数计费的模型（输入单价按「每万字符」计），其输入文本的字符数按以下规则统计：
-
--   一个汉字（包括简体汉字、繁体汉字、日文汉字和韩文汉字）计为 2 个字符。
--   其他字符（如一个英文字母、一个数字、一个标点符号、一个空格、一个日文假名、一个韩文字母）计为 1 个字符。
--   使用 SSML 时，SSML 标签本身不计入字符数，仅统计待合成的文本内容。
-
-**示例**：“你好”为 4 个字符（2+2）；“中A文123”为 8 个字符（2+1+2+1+1+1）；“中文。”为 5 个字符（2+2+1）；“中 文。”为 6 个字符（2+1+2+1）。
-
-### Qwen-Audio-TTS
-
-计费规则：qwen-audio-3.1-tts-flash 按输入和输出的 Token 数分别计费；其他模型按输入文本的字符数计费，输出不计费。
+-   `qwen-audio-3.1-asr-flash`：按输入和输出 Token 数分别计费。
+-   `qwen-audio-3.0-asr-flash`：按输入音频的秒数计费，输出不计费。
 
 **说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
@@ -8765,633 +8697,55 @@ fun-music-v1
 
 **模型 ID（Model ID）**
 
-**输入单价（每百万 Token）**
+**输入单价**
 
-**输出单价（每百万 Token）**
+**输出单价**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
 
-有效期：自开通百炼或模型发布之日起90天内（以较晚者为准）
+有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
-qwen-audio-3.1-tts-flash
+qwen-audio-3.1-asr-flash
 
-1.5元
+0.8元/百万 Token
 
-12元
+2.7元/百万 Token
 
 100万 Token
 
-**模型 ID（Model ID）**
+qwen-audio-3.0-asr-flash
 
-**输入单价（每万字符）**
-
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)有效期：自开通百炼或模型发布之日起90天内（以较晚者为准）
-
-qwen-audio-3.1-tts-plus
-
-1.4元
-
-1万字符
-
-qwen-audio-3.0-tts-plus
-
-1.4元
-
-无
-
-qwen-audio-3.0-tts-flash
-
-1元
-
-无
-
-#### 新加坡
-
-**模型 ID（Model ID）**
-
-**输入单价（每百万 Token）**
-
-**输出单价（每百万 Token）**
-
-qwen-audio-3.1-tts-flash
-
-1.677元
-
-13.636元
-
-**模型 ID（Model ID）**
-
-**服务部署范围**
-
-**输入单价（每万字符）**
-
-qwen-audio-3.1-tts-plus
-
-国际
-
-2.19元
-
-qwen-audio-3.0-tts-plus
-
-国际
-
-1.49884元
-
-qwen-audio-3.0-tts-flash
-
-国际
-
-1.12413元
-
-### Qwen-TTS
-
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
-
-#### 华北2（北京）
-
-#### 千问3-TTS-Flash
-
-计费规则：按输入文本的字符数计费，输出不计费。
-
-**模型 ID（Model ID）**
-
-**输入单价（每万字符）**
-
-**输出单价**
-
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
-
-有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
-
-qwen3-tts-flash
-
-0.8元
+0.00022元/秒
 
 不计费
 
-1万字符
-
-#### 千问-TTS
-
-计费规则：按输入Token和输出Token计费。
-
-**模型 ID（Model ID）**
-
-**输入单价（每百万Token）**
-
-**输出单价（每百万Token）**
-
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
-
-有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
-
-qwen-tts-flash
-
-1.6元
-
-10元
-
-100万Token
+无
 
 #### 新加坡
-
-#### 千问3-TTS-Flash
-
-计费规则：按输入文本的字符数计费，输出不计费。
 
 **模型 ID（Model ID）**
 
 **服务部署范围**
 
-**输入单价（每万字符）**
-
-qwen3-tts-flash
-
-国际
-
-0.733924元
-
-### Qwen-TTS-Realtime
-
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
-
-#### 华北2（北京）
-
-#### 千问3-TTS-Flash-Realtime
-
-计费规则：按输入文本的字符数计费，输出不计费。
-
-**模型 ID（Model ID）**
-
-**输入单价（每万字符）**
+**输入单价**
 
 **输出单价**
 
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
+qwen-audio-3.1-asr-flash
 
-有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
+国际
 
-qwen3-tts-flash-realtime
+1.094元/百万 Token
 
-1元
+3.427元/百万 Token
+
+qwen-audio-3.0-asr-flash
+
+国际
+
+0.00026元/秒
 
 不计费
-
-2025年11月13日0点后开通阿里云百炼：1万字符
-
-#### 新加坡
-
-#### 千问3-TTS-Flash-Realtime
-
-计费规则：按输入文本的字符数计费，输出不计费。
-
-**模型 ID（Model ID）**
-
-**服务部署范围**
-
-**输入单价（每万字符）**
-
-qwen3-tts-flash-realtime
-
-国际
-
-0.954101元
-
-### Qwen-TTS声音复刻
-
-计费规则：按新建音色个数计费。
-
-创建失败不计费，也不占用免费次数；删除音色不会恢复免费次数。
-
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
-
-#### 华北2（北京）
-
-**模型 ID（Model ID）**
-
-**单价（每个音色）**
-
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
-
-有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
-
-qwen-voice-enrollment
-
-0.01元
-
-1000个音色/账号
-
-#### 新加坡
-
-**模型 ID（Model ID）**
-
-**服务部署范围**
-
-**单价（每个音色）**
-
-qwen-voice-enrollment
-
-国际
-
-0.01元
-
-### CosyVoice
-
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
-
-#### 华北2（北京）
-
-计费规则：按输入文本的字符数计费，输出不计费。
-
-**模型 ID（Model ID）**
-
-**输入单价（每万字符）**
-
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
-
-有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
-
-cosyvoice-v3.5-plus
-
-1.5元
-
-1万字符
-
-cosyvoice-v3.5-flash
-
-0.8元
-
-1万字符
-
-cosyvoice-v3-plus
-
-2元
-
-无
-
-cosyvoice-v3-flash
-
-1元
-
-无
-
-cosyvoice-v2
-
-2元
-
-无
-
-#### 新加坡
-
-计费规则：按输入文本的字符数计费，输出不计费。
-
-**模型 ID（Model ID）**
-
-**服务部署范围**
-
-**输入单价（每万字符）**
-
-cosyvoice-v3-plus
-
-国际
-
-1.9082元
-
-cosyvoice-v3-flash
-
-国际
-
-0.9541元
-
-`CosyVoice` 模型目前仅提供按量付费模式，暂无单独的用量套餐或资源包。
-
-### Sambert
-
-计费规则：按输入文本的字符数计费，输出不计费。
-
-#### 华北2（北京）
-
-**模型 ID（Model ID）**
-
-**输入单价（每万字符）**
-
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
-
-参见[模型列表](https://help.aliyun.com/zh/model-studio/sambert-java-sdk#57d33631f7doi)
-
-1元
-
-每主账号每模型每月3万字符。
-
-### MiniMax
-
-计费规则：按输入文本的字符数计费，输出不计费。
-
-复刻音色收取一次性费用，费用在首次使用该音色进行语音合成的时候，与语音合成的费用一同出账。
-
-#### 华北2（北京）
-
-**模型名称**
-
-**语音合成单价（每万字符）**
-
-[复刻一个音色](https://help.aliyun.com/zh/model-studio/mini-clone-api)
-
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
-
-MiniMax/speech-2.8-hd
-
-3.5元
-
-9.9元
-
-（在首次使用复刻出来的音色进行语音合成的时候收取）
-
-无
-
-MiniMax/speech-02-hd
-
-3.5元
-
-9.9元
-
-（在首次使用复刻出来的音色进行语音合成的时候收取）
-
-无
-
-MiniMax/speech-2.8-turbo
-
-2元
-
-9.9元
-
-（在首次使用复刻出来的音色进行语音合成的时候收取）
-
-无
-
-MiniMax/speech-02-turbo
-
-2元
-
-9.9元
-
-（在首次使用复刻出来的音色进行语音合成的时候收取）
-
-无
-
-## 语音识别（语音转文本）与翻译（语音转成指定语种的文本）
-
-### 千问-LiveTranslate-Flash-Realtime
-
-计费规则：按输入Token和输出Token计费。不同模态的Token计算规则请参见[计费说明](https://help.aliyun.com/zh/model-studio/qwen3-5-livetranslate-flash-realtime#e02a82e668y2c)。
-
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
-
-#### 华北2（北京）
-
-**模型 ID（Model ID）**
-
-**输入单价（每百万Token）**
-
-**输出单价（每百万Token）**
-
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
-
-有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
-
-**输入：音频**
-
-**输入：图片**
-
-**输出：文本**
-
-**输出：音频**
-
-qwen3.8-livetranslate-flash-realtime
-
-40元
-
-3.3元
-
-100元
-
-160元
-
-100万Token
-
-qwen3.5-livetranslate-flash-realtime
-
-40元
-
-3.3元
-
-100元
-
-160元
-
-无
-
-qwen3.5-livetranslate-flash-realtime-2026-05-19
-
-40元
-
-3.3元
-
-100元
-
-160元
-
-无
-
-#### 新加坡
-
-**模型 ID（Model ID）**
-
-**服务部署范围**
-
-**输入单价 (每百万 Token)**
-
-**输出单价 (每百万 Token)**
-
-**输入：音频**
-
-**输入：图片**
-
-**输出：文本**
-
-**输出：音频**
-
-qwen3.8-livetranslate-flash-realtime
-
-国际
-
-54.688元
-
-4.01元
-
-145.835元
-
-218.752元
-
-qwen3.5-livetranslate-flash-realtime
-
-国际
-
-56.207元
-
-4.122元
-
-149.884元
-
-224.826元
-
-qwen3.5-livetranslate-flash-realtime-2026-05-19
-
-国际
-
-56.207元
-
-4.122元
-
-149.884元
-
-224.826元
-
-### 千问-LiveTranslate-Flash
-
-计费规则：按输入Token和输出Token计费。不同模态的Token计算规则请参见[计费说明](https://help.aliyun.com/zh/model-studio/qwen3-livetranslate-flash#e02a82e668y2c)。
-
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
-
-#### 华北2（北京）
-
-**模型 ID（Model ID）**
-
-**输入单价（每百万Token）**
-
-**输出单价（每百万Token）**
-
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
-
-有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
-
-**输入：音频**
-
-**输入：图片**
-
-**输出：文本**
-
-**输出：音频**
-
-qwen3-livetranslate-flash
-
-10元
-
-4元
-
-10元
-
-40元
-
-100万Token
-
-qwen3-livetranslate-flash-2025-12-01
-
-10元
-
-4元
-
-10元
-
-40元
-
-无
-
-#### 新加坡
-
-**模型 ID（Model ID）**
-
-**服务部署范围**
-
-**输入单价 (每百万 Token)**
-
-**输出单价 (每百万 Token)**
-
-**输入：音频**
-
-**输入：图片**
-
-**输出：文本**
-
-**输出：音频**
-
-qwen3-livetranslate-flash
-
-国际
-
-11.573元
-
-4.629元
-
-11.573元
-
-46.292元
-
-qwen3-livetranslate-flash-2025-12-01
-
-国际
-
-11.573元
-
-4.629元
-
-11.573元
-
-46.292元
-
-### Qwen-Audio-ASR-Message
-
-计费规则：按输入和输出 Token 数计费。
-
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
-
-#### 华北2（北京）
-
-模型 ID（Model ID）
-
-输入单价（每百万Token）
-
-输出单价（每百万Token）
-
-免费额度[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
-
-有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
-
-qwen-audio-3.1-asr-flash-message
-
-6元
-
-4.5元
-
-100万Token
-
-#### 新加坡
-
-模型 ID（Model ID）
-
-服务部署范围
-
-输入单价（每百万Token）
-
-输出单价（每百万Token）
-
-qwen-audio-3.1-asr-flash-message
-
-国际
-
-6.781元
-
-5.104元
 
 ### Qwen-Audio-ASR-Streaming
 
@@ -9519,68 +8873,49 @@ qwen-audio-3.0-asr-flash-filetrans
 
 不计费
 
-### Qwen-Audio-ASR
+### Qwen-Audio-ASR-Message
 
-计费规则：
-
--   `qwen-audio-3.1-asr-flash`：按输入和输出 Token 数分别计费。
--   `qwen-audio-3.0-asr-flash`：按输入音频的秒数计费，输出不计费。
+计费规则：按输入和输出 Token 数计费。
 
 **说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
-**模型 ID（Model ID）**
+模型 ID（Model ID）
 
-**输入单价**
+输入单价（每百万Token）
 
-**输出单价**
+输出单价（每百万Token）
 
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
+免费额度[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
-qwen-audio-3.1-asr-flash
+qwen-audio-3.1-asr-flash-message
 
-0.8元/百万 Token
+6元
 
-2.7元/百万 Token
+4.5元
 
-100万 Token
-
-qwen-audio-3.0-asr-flash
-
-0.00022元/秒
-
-不计费
-
-无
+100万Token
 
 #### 新加坡
 
-**模型 ID（Model ID）**
+模型 ID（Model ID）
 
-**服务部署范围**
+服务部署范围
 
-**输入单价**
+输入单价（每百万Token）
 
-**输出单价**
+输出单价（每百万Token）
 
-qwen-audio-3.1-asr-flash
-
-国际
-
-1.094元/百万 Token
-
-3.427元/百万 Token
-
-qwen-audio-3.0-asr-flash
+qwen-audio-3.1-asr-flash-message
 
 国际
 
-0.00026元/秒
+6.781元
 
-不计费
+5.104元
 
 ### 千问ASR
 
@@ -9876,9 +9211,404 @@ paraformer-realtime-8k-v2
 
 有效期1个月
 
+## 语音合成
+
+**字符计算规则**：本节中按字符数计费的模型（输入单价按「每万字符」计），其输入文本的字符数按以下规则统计：
+
+-   一个汉字（包括简体汉字、繁体汉字、日文汉字和韩文汉字）计为 2 个字符。
+-   其他字符（如一个英文字母、一个数字、一个标点符号、一个空格、一个日文假名、一个韩文字母）计为 1 个字符。
+-   使用 SSML 时，SSML 标签本身不计入字符数，仅统计待合成的文本内容。
+
+**示例**：“你好”为 4 个字符（2+2）；“中A文123”为 8 个字符（2+1+2+1+1+1）；“中文。”为 5 个字符（2+2+1）；“中 文。”为 6 个字符（2+1+2+1）。
+
+### Qwen-Audio-TTS
+
+计费规则：qwen-audio-3.1-tts-flash 按输入和输出的 Token 数分别计费；其他模型按输入文本的字符数计费，输出不计费。
+
+**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+
+#### 华北2（北京）
+
+**模型 ID（Model ID）**
+
+**输入单价（每百万 Token）**
+
+**输出单价（每百万 Token）**
+
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
+
+有效期：自开通百炼或模型发布之日起90天内（以较晚者为准）
+
+qwen-audio-3.1-tts-flash
+
+1.5元
+
+12元
+
+100万 Token
+
+**模型 ID（Model ID）**
+
+**输入单价（每万字符）**
+
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)有效期：自开通百炼或模型发布之日起90天内（以较晚者为准）
+
+qwen-audio-3.1-tts-plus
+
+1.4元
+
+1万字符
+
+qwen-audio-3.0-tts-plus
+
+1.4元
+
+无
+
+qwen-audio-3.0-tts-flash
+
+1元
+
+无
+
+#### 新加坡
+
+**模型 ID（Model ID）**
+
+**输入单价（每百万 Token）**
+
+**输出单价（每百万 Token）**
+
+qwen-audio-3.1-tts-flash
+
+1.677元
+
+13.636元
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**输入单价（每万字符）**
+
+qwen-audio-3.1-tts-plus
+
+国际
+
+2.19元
+
+qwen-audio-3.0-tts-plus
+
+国际
+
+1.49884元
+
+qwen-audio-3.0-tts-flash
+
+国际
+
+1.12413元
+
+### CosyVoice
+
+**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+
+#### 华北2（北京）
+
+计费规则：按输入文本的字符数计费，输出不计费。
+
+**模型 ID（Model ID）**
+
+**输入单价（每万字符）**
+
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
+
+有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
+
+cosyvoice-v3.5-plus
+
+1.5元
+
+1万字符
+
+cosyvoice-v3.5-flash
+
+0.8元
+
+1万字符
+
+cosyvoice-v3-plus
+
+2元
+
+无
+
+cosyvoice-v3-flash
+
+1元
+
+无
+
+cosyvoice-v2
+
+2元
+
+无
+
+#### 新加坡
+
+计费规则：按输入文本的字符数计费，输出不计费。
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**输入单价（每万字符）**
+
+cosyvoice-v3-plus
+
+国际
+
+1.9082元
+
+cosyvoice-v3-flash
+
+国际
+
+0.9541元
+
+`CosyVoice` 模型目前仅提供按量付费模式，暂无单独的用量套餐或资源包。
+
+### MiniMax
+
+计费规则：按输入文本的字符数计费，输出不计费。
+
+复刻音色收取一次性费用，费用在首次使用该音色进行语音合成的时候，与语音合成的费用一同出账。
+
+#### 华北2（北京）
+
+**模型名称**
+
+**语音合成单价（每万字符）**
+
+[复刻一个音色](https://help.aliyun.com/zh/model-studio/mini-clone-api)
+
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
+
+MiniMax/speech-2.8-hd
+
+3.5元
+
+9.9元
+
+（在首次使用复刻出来的音色进行语音合成的时候收取）
+
+无
+
+MiniMax/speech-02-hd
+
+3.5元
+
+9.9元
+
+（在首次使用复刻出来的音色进行语音合成的时候收取）
+
+无
+
+MiniMax/speech-2.8-turbo
+
+2元
+
+9.9元
+
+（在首次使用复刻出来的音色进行语音合成的时候收取）
+
+无
+
+MiniMax/speech-02-turbo
+
+2元
+
+9.9元
+
+（在首次使用复刻出来的音色进行语音合成的时候收取）
+
+无
+
+### Qwen-TTS
+
+**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+
+#### 华北2（北京）
+
+#### 千问3-TTS-Flash
+
+计费规则：按输入文本的字符数计费，输出不计费。
+
+**模型 ID（Model ID）**
+
+**输入单价（每万字符）**
+
+**输出单价**
+
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
+
+有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
+
+qwen3-tts-flash
+
+0.8元
+
+不计费
+
+1万字符
+
+#### 千问-TTS
+
+计费规则：按输入Token和输出Token计费。
+
+**模型 ID（Model ID）**
+
+**输入单价（每百万Token）**
+
+**输出单价（每百万Token）**
+
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
+
+有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
+
+qwen-tts-flash
+
+1.6元
+
+10元
+
+100万Token
+
+#### 新加坡
+
+#### 千问3-TTS-Flash
+
+计费规则：按输入文本的字符数计费，输出不计费。
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**输入单价（每万字符）**
+
+qwen3-tts-flash
+
+国际
+
+0.733924元
+
+### Qwen-TTS-Realtime
+
+**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+
+#### 华北2（北京）
+
+#### 千问3-TTS-Flash-Realtime
+
+计费规则：按输入文本的字符数计费，输出不计费。
+
+**模型 ID（Model ID）**
+
+**输入单价（每万字符）**
+
+**输出单价**
+
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
+
+有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
+
+qwen3-tts-flash-realtime
+
+1元
+
+不计费
+
+2025年11月13日0点后开通阿里云百炼：1万字符
+
+#### 新加坡
+
+#### 千问3-TTS-Flash-Realtime
+
+计费规则：按输入文本的字符数计费，输出不计费。
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**输入单价（每万字符）**
+
+qwen3-tts-flash-realtime
+
+国际
+
+0.954101元
+
+### Sambert
+
+计费规则：按输入文本的字符数计费，输出不计费。
+
+#### 华北2（北京）
+
+**模型 ID（Model ID）**
+
+**输入单价（每万字符）**
+
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
+
+参见[模型列表](https://help.aliyun.com/zh/model-studio/sambert-java-sdk#57d33631f7doi)
+
+1元
+
+每主账号每模型每月3万字符。
+
+## 音频生成
+
+### Qwen-Audio-TTS-Next
+
+按输入和输出 Token 数分别计费。
+
+#### 华北2（北京）
+
+模型 ID
+
+输入单价（元/百万 Token）
+
+输出单价（元/百万 Token）
+
+免费额度[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)  
+有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
+
+qwen-audio-3.1-tts-next
+
+6
+
+12
+
+100万Token
+
+#### 新加坡
+
+模型 ID
+
+输入单价（元/百万 Token）
+
+输出单价（元/百万 Token）
+
+qwen-audio-3.1-tts-next
+
+6.781
+
+5.104
+
 ## 语音对话
 
-### 实时语音对话
+### Qwen-Audio-Realtime
 
 实时语音对话模型支持文本和音频的输入与输出，按输入 Token 和输出 Token 分别计费。音频 Token 按时长折算：`总 Token 数 = 音频时长（单位：秒）* 12.5`，不足 1 秒按 1 秒计算。
 
@@ -10028,6 +9758,284 @@ qwen-audio-3.0-realtime-flash
 5.104元
 
 13.636元
+
+## 音视频翻译
+
+### 千问-LiveTranslate-Flash-Realtime
+
+计费规则：按输入Token和输出Token计费。不同模态的Token计算规则请参见[计费说明](https://help.aliyun.com/zh/model-studio/qwen3-5-livetranslate-flash-realtime#e02a82e668y2c)。
+
+**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+
+#### 华北2（北京）
+
+**模型 ID（Model ID）**
+
+**输入单价（每百万Token）**
+
+**输出单价（每百万Token）**
+
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
+
+有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
+
+**输入：音频**
+
+**输入：图片**
+
+**输出：文本**
+
+**输出：音频**
+
+qwen3.8-livetranslate-flash-realtime
+
+40元
+
+3.3元
+
+100元
+
+160元
+
+100万Token
+
+qwen3.5-livetranslate-flash-realtime
+
+40元
+
+3.3元
+
+100元
+
+160元
+
+无
+
+qwen3.5-livetranslate-flash-realtime-2026-05-19
+
+40元
+
+3.3元
+
+100元
+
+160元
+
+无
+
+#### 新加坡
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**输入单价 (每百万 Token)**
+
+**输出单价 (每百万 Token)**
+
+**输入：音频**
+
+**输入：图片**
+
+**输出：文本**
+
+**输出：音频**
+
+qwen3.8-livetranslate-flash-realtime
+
+国际
+
+54.688元
+
+4.01元
+
+145.835元
+
+218.752元
+
+qwen3.5-livetranslate-flash-realtime
+
+国际
+
+56.207元
+
+4.122元
+
+149.884元
+
+224.826元
+
+qwen3.5-livetranslate-flash-realtime-2026-05-19
+
+国际
+
+56.207元
+
+4.122元
+
+149.884元
+
+224.826元
+
+### 千问-LiveTranslate-Flash
+
+计费规则：按输入Token和输出Token计费。不同模态的Token计算规则请参见[计费说明](https://help.aliyun.com/zh/model-studio/qwen3-livetranslate-flash#e02a82e668y2c)。
+
+**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+
+#### 华北2（北京）
+
+**模型 ID（Model ID）**
+
+**输入单价（每百万Token）**
+
+**输出单价（每百万Token）**
+
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
+
+有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
+
+**输入：音频**
+
+**输入：图片**
+
+**输出：文本**
+
+**输出：音频**
+
+qwen3-livetranslate-flash
+
+10元
+
+4元
+
+10元
+
+40元
+
+100万Token
+
+qwen3-livetranslate-flash-2025-12-01
+
+10元
+
+4元
+
+10元
+
+40元
+
+无
+
+#### 新加坡
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**输入单价 (每百万 Token)**
+
+**输出单价 (每百万 Token)**
+
+**输入：音频**
+
+**输入：图片**
+
+**输出：文本**
+
+**输出：音频**
+
+qwen3-livetranslate-flash
+
+国际
+
+11.573元
+
+4.629元
+
+11.573元
+
+46.292元
+
+qwen3-livetranslate-flash-2025-12-01
+
+国际
+
+11.573元
+
+4.629元
+
+11.573元
+
+46.292元
+
+## 音色复刻/设计
+
+### Qwen-TTS声音复刻
+
+计费规则：按新建音色个数计费。
+
+创建失败不计费，也不占用免费次数；删除音色不会恢复免费次数。
+
+**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+
+#### 华北2（北京）
+
+**模型 ID（Model ID）**
+
+**单价（每个音色）**
+
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
+
+有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
+
+qwen-voice-enrollment
+
+0.01元
+
+1000个音色/账号
+
+#### 新加坡
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**单价（每个音色）**
+
+qwen-voice-enrollment
+
+国际
+
+0.01元
+
+## 音乐生成
+
+### Fun-Music
+
+计费规则：按输出音频的秒数计费，输入不计费。
+
+#### 华北2（北京）
+
+**模型 ID（Model ID）**
+
+**输出单价（每秒）**
+
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
+
+有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
+
+fun-music-preview
+
+0.005元
+
+无
+
+fun-music-v1
+
+0.002元
+
+1,000秒
 
 ## 视频生成
 

@@ -4739,27 +4739,9 @@ vidu/viduq2-pro\_reference2image
 
 vidu/viduq2-fast\_reference2image
 
-### 音频与音乐生成
+### 语音识别
 
-#### 华北2（北京）
-
-模型名称
-
-每分钟调用次数（RPM）
-
-qwen-audio-3.1-tts-next
-
-180
-
-#### 新加坡
-
-模型名称
-
-每分钟调用次数（RPM）
-
-qwen-audio-3.1-tts-next
-
-180
+#### Qwen-Audio-ASR
 
 #### 华北2（北京）
 
@@ -4767,129 +4749,13 @@ qwen-audio-3.1-tts-next
 
 **每分钟调用次数（RPM）**
 
-fun-music-preview
+qwen-audio-3.1-asr-flash
 
-180
+600
 
-fun-music-v1
+qwen-audio-3.0-asr-flash
 
-180
-
-### 语音
-
-#### 实时语音对话
-
-通过 WebSocket 接入时，RPM 限制每分钟的建连请求次数。同一连接内的多轮响应不重复计数；重连计为新请求。目前没有单独限制同时保持的连接总数，但仍受 TPM 限制。各型号限额见下方表格。
-
-#### 华北2（北京）
-
-**模型名称**
-
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen-audio-3.1-realtime-plus
-
-60
-
-100,000
-
-qwen-audio-3.1-realtime-flash
-
-60
-
-100,000
-
-qwen-audio-3.0-realtime-plus
-
-60
-
-100,000
-
-qwen-audio-3.0-realtime-flash
-
-60
-
-100,000
-
-#### 新加坡
-
-**模型名称**
-
-**服务部署范围**
-
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen-audio-3.1-realtime-plus
-
-国际
-
-60
-
-100,000
-
-qwen-audio-3.1-realtime-flash
-
-国际
-
-60
-
-100,000
-
-qwen-audio-3.0-realtime-plus
-
-国际
-
-60
-
-100,000
-
-qwen-audio-3.0-realtime-flash
-
-国际
-
-60
-
-100,000
-
-#### Qwen-Audio-TTS
-
-#### 华北2（北京）
-
-**模型名称**
-
-**每分钟调用次数（RPM）**
-
-qwen-audio-3.1-tts-plus
-
-180
-
-qwen-audio-3.1-tts-flash
-
-180
-
-qwen-audio-3.0-tts-plus
-
-180
-
-qwen-audio-3.0-tts-flash
-
-180
+600
 
 #### 新加坡
 
@@ -4899,369 +4765,17 @@ qwen-audio-3.0-tts-flash
 
 **每分钟调用次数（RPM）**
 
-qwen-audio-3.1-tts-plus
+qwen-audio-3.1-asr-flash
 
 国际
 
-180
+600
 
-qwen-audio-3.1-tts-flash
-
-国际
-
-180
-
-qwen-audio-3.0-tts-plus
+qwen-audio-3.0-asr-flash
 
 国际
 
-180
-
-qwen-audio-3.0-tts-flash
-
-国际
-
-180
-
-#### Qwen3-TTS
-
-#### 华北2（北京）
-
-#### Qwen3-TTS-Flash
-
-**模型名称**
-
-**每分钟调用次数（RPM）**
-
-qwen3-tts-flash
-
-180
-
-#### 新加坡
-
-#### Qwen3-TTS-Flash
-
-**模型名称**
-
-**服务部署范围**
-
-**每分钟调用次数（RPM）**
-
-qwen3-tts-flash
-
-国际
-
-180
-
-#### Qwen3-TTS-Realtime
-
-#### 华北2（北京）
-
-#### Qwen3-TTS-Flash-Realtime
-
-**模型名称**
-
-**每分钟调用次数（RPM）**
-
-qwen3-tts-flash-realtime
-
-180
-
-#### 新加坡
-
-#### Qwen3-TTS-Flash-Realtime
-
-**模型名称**
-
-**服务部署范围**
-
-**每分钟调用次数（RPM）**
-
-qwen3-tts-flash-realtime
-
-国际
-
-180
-
-#### Qwen3-TTS声音复刻
-
-#### 华北2（北京）
-
-**模型名称**
-
-**每分钟调用次数（RPM）**
-
-qwen-voice-enrollment
-
-180
-
-#### 新加坡
-
-**模型名称**
-
-**服务部署范围**
-
-**每分钟调用次数（RPM）**
-
-qwen-voice-enrollment
-
-国际
-
-180
-
-#### CosyVoice
-
-#### 华北2（北京）
-
-**模型名称**
-
-**每秒钟调用次数（RPS）**
-
-cosyvoice-v3.5-plus
-
-3
-
-cosyvoice-v3.5-flash
-
-cosyvoice-v3-plus
-
-cosyvoice-v3-flash
-
-cosyvoice-v2
-
-#### 新加坡
-
-**模型名称**
-
-**服务部署范围**
-
-**每秒钟调用次数（RPS）**
-
-cosyvoice-v3-plus
-
-国际
-
-3
-
-cosyvoice-v3-flash
-
-国际
-
-#### Qwen-Audio-TTS/CosyVoice声音复刻/设计
-
-Qwen-Audio-TTS/CosyVoice声音复刻/设计共用一个模型，共用限流额度。
-
-#### 华北2（北京）
-
-**模型名称**
-
-**每秒钟调用次数（RPS）**
-
-voice-enrollment
-
-10
-
-#### 新加坡
-
-**模型名称**
-
-**服务部署范围**
-
-**每秒钟调用次数（RPS）**
-
-voice-enrollment
-
-国际
-
-10
-
-#### Sambert
-
-#### 华北2（北京）
-
-**模型服务**
-
-**每秒钟调用次数（RPS）**
-
-Sambert系列模型
-
-20
-
-#### MiniMax-稀宇科技直供
-
-#### 华北2（北京）
-
-**模型名称**
-
-**限流条件（超出任一数值时触发限流）**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗字符数**
-
-> **仅含输入字符数**
-
-MiniMax/speech-2.8-hd
-
-20
-
-20,000
-
-MiniMax/speech-02-hd
-
-20
-
-20,000
-
-MiniMax/speech-2.8-turbo
-
-20
-
-20,000
-
-MiniMax/speech-02-turbo
-
-20
-
-20,000
-
-#### Qwen3-LiveTranslate-Flash
-
-#### 华北2（北京）
-
-**模型名称**
-
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen3-livetranslate-flash
-
-100
-
-100,000
-
-qwen3-livetranslate-flash-2025-12-01
-
-#### 新加坡
-
-**模型名称**
-
-**服务部署范围**
-
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen3-livetranslate-flash
-
-国际
-
-100
-
-100,000
-
-qwen3-livetranslate-flash-2025-12-01
-
-国际
-
-#### Qwen-LiveTranslate-Flash-Realtime
-
-通过 WebSocket 接入时，RPM 限制每分钟的建连请求次数。同一连接内的多轮响应不重复计数；重连计为新请求。目前没有单独限制同时保持的连接总数，但仍受 TPM 限制。各型号限额见下方表格。
-
-#### 华北2（北京）
-
-**模型名称**
-
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen3.8-livetranslate-flash-realtime
-
-10
-
-100,000
-
-qwen3.5-livetranslate-flash-realtime
-
-qwen3.5-livetranslate-flash-realtime-2026-05-19
-
-#### 新加坡
-
-**模型名称**
-
-**服务部署范围**
-
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen3.8-livetranslate-flash-realtime
-
-国际
-
-10
-
-100,000
-
-qwen3.5-livetranslate-flash-realtime
-
-国际
-
-qwen3.5-livetranslate-flash-realtime-2026-05-19
-
-国际
-
-#### Qwen-Audio-ASR-Message
-
-#### 华北2（北京）
-
-模型名称
-
-每分钟调用次数（RPM）
-
-qwen-audio-3.1-asr-flash-message
-
-1200
-
-#### 新加坡
-
-模型名称
-
-服务部署范围
-
-每分钟调用次数（RPM）
-
-qwen-audio-3.1-asr-flash-message
-
-国际
-
-1200
+600
 
 #### Qwen-Audio-ASR-Streaming
 
@@ -5331,41 +4845,31 @@ qwen-audio-3.0-asr-flash-filetrans
 
 600
 
-#### Qwen-Audio-ASR
+#### Qwen-Audio-ASR-Message
 
 #### 华北2（北京）
 
-**模型名称**
+模型名称
 
-**每分钟调用次数（RPM）**
+每分钟调用次数（RPM）
 
-qwen-audio-3.1-asr-flash
+qwen-audio-3.1-asr-flash-message
 
-600
-
-qwen-audio-3.0-asr-flash
-
-600
+1200
 
 #### 新加坡
 
-**模型名称**
+模型名称
 
-**服务部署范围**
+服务部署范围
 
-**每分钟调用次数（RPM）**
+每分钟调用次数（RPM）
 
-qwen-audio-3.1-asr-flash
-
-国际
-
-600
-
-qwen-audio-3.0-asr-flash
+qwen-audio-3.1-asr-flash-message
 
 国际
 
-600
+1200
 
 #### Qwen3-ASR
 
@@ -5560,6 +5064,516 @@ paraformer-8k-v2
 20
 
 100
+
+### 语音合成
+
+#### Qwen-Audio-TTS
+
+#### 华北2（北京）
+
+**模型名称**
+
+**每分钟调用次数（RPM）**
+
+qwen-audio-3.1-tts-plus
+
+180
+
+qwen-audio-3.1-tts-flash
+
+180
+
+qwen-audio-3.0-tts-plus
+
+180
+
+qwen-audio-3.0-tts-flash
+
+180
+
+#### 新加坡
+
+**模型名称**
+
+**服务部署范围**
+
+**每分钟调用次数（RPM）**
+
+qwen-audio-3.1-tts-plus
+
+国际
+
+180
+
+qwen-audio-3.1-tts-flash
+
+国际
+
+180
+
+qwen-audio-3.0-tts-plus
+
+国际
+
+180
+
+qwen-audio-3.0-tts-flash
+
+国际
+
+180
+
+#### CosyVoice
+
+#### 华北2（北京）
+
+**模型名称**
+
+**每秒钟调用次数（RPS）**
+
+cosyvoice-v3.5-plus
+
+3
+
+cosyvoice-v3.5-flash
+
+cosyvoice-v3-plus
+
+cosyvoice-v3-flash
+
+cosyvoice-v2
+
+#### 新加坡
+
+**模型名称**
+
+**服务部署范围**
+
+**每秒钟调用次数（RPS）**
+
+cosyvoice-v3-plus
+
+国际
+
+3
+
+cosyvoice-v3-flash
+
+国际
+
+#### MiniMax-稀宇科技直供
+
+#### 华北2（北京）
+
+**模型名称**
+
+**限流条件（超出任一数值时触发限流）**
+
+**每分钟调用次数（RPM）**
+
+**每分钟消耗字符数**
+
+> **仅含输入字符数**
+
+MiniMax/speech-2.8-hd
+
+20
+
+20,000
+
+MiniMax/speech-02-hd
+
+20
+
+20,000
+
+MiniMax/speech-2.8-turbo
+
+20
+
+20,000
+
+MiniMax/speech-02-turbo
+
+20
+
+20,000
+
+#### Qwen3-TTS
+
+#### 华北2（北京）
+
+#### Qwen3-TTS-Flash
+
+**模型名称**
+
+**每分钟调用次数（RPM）**
+
+qwen3-tts-flash
+
+180
+
+#### 新加坡
+
+#### Qwen3-TTS-Flash
+
+**模型名称**
+
+**服务部署范围**
+
+**每分钟调用次数（RPM）**
+
+qwen3-tts-flash
+
+国际
+
+180
+
+#### Qwen3-TTS-Realtime
+
+#### 华北2（北京）
+
+#### Qwen3-TTS-Flash-Realtime
+
+**模型名称**
+
+**每分钟调用次数（RPM）**
+
+qwen3-tts-flash-realtime
+
+180
+
+#### 新加坡
+
+#### Qwen3-TTS-Flash-Realtime
+
+**模型名称**
+
+**服务部署范围**
+
+**每分钟调用次数（RPM）**
+
+qwen3-tts-flash-realtime
+
+国际
+
+180
+
+#### Sambert
+
+#### 华北2（北京）
+
+**模型服务**
+
+**每秒钟调用次数（RPS）**
+
+Sambert系列模型
+
+20
+
+### 音频生成
+
+#### Qwen-Audio-TTS-Next
+
+#### 华北2（北京）
+
+模型名称
+
+每分钟调用次数（RPM）
+
+qwen-audio-3.1-tts-next
+
+180
+
+#### 新加坡
+
+模型名称
+
+每分钟调用次数（RPM）
+
+qwen-audio-3.1-tts-next
+
+180
+
+### 语音对话
+
+#### Qwen-Audio-Realtime
+
+通过 WebSocket 接入时，RPM 限制每分钟的建连请求次数。同一连接内的多轮响应不重复计数；重连计为新请求。目前没有单独限制同时保持的连接总数，但仍受 TPM 限制。各型号限额见下方表格。
+
+#### 华北2（北京）
+
+**模型名称**
+
+**限流条件（超出任一数值时触发限流）**
+
+> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
+
+**每分钟调用次数（RPM）**
+
+**每分钟消耗Token数（TPM）**
+
+> **含输入与输出Token**
+
+qwen-audio-3.1-realtime-plus
+
+60
+
+100,000
+
+qwen-audio-3.1-realtime-flash
+
+60
+
+100,000
+
+qwen-audio-3.0-realtime-plus
+
+60
+
+100,000
+
+qwen-audio-3.0-realtime-flash
+
+60
+
+100,000
+
+#### 新加坡
+
+**模型名称**
+
+**服务部署范围**
+
+**限流条件（超出任一数值时触发限流）**
+
+> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
+
+**每分钟调用次数（RPM）**
+
+**每分钟消耗Token数（TPM）**
+
+> **含输入与输出Token**
+
+qwen-audio-3.1-realtime-plus
+
+国际
+
+60
+
+100,000
+
+qwen-audio-3.1-realtime-flash
+
+国际
+
+60
+
+100,000
+
+qwen-audio-3.0-realtime-plus
+
+国际
+
+60
+
+100,000
+
+qwen-audio-3.0-realtime-flash
+
+国际
+
+60
+
+100,000
+
+### 音视频翻译
+
+#### Qwen3-LiveTranslate-Flash
+
+#### 华北2（北京）
+
+**模型名称**
+
+**限流条件（超出任一数值时触发限流）**
+
+> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
+
+**每分钟调用次数（RPM）**
+
+**每分钟消耗Token数（TPM）**
+
+> **含输入与输出Token**
+
+qwen3-livetranslate-flash
+
+100
+
+100,000
+
+qwen3-livetranslate-flash-2025-12-01
+
+#### 新加坡
+
+**模型名称**
+
+**服务部署范围**
+
+**限流条件（超出任一数值时触发限流）**
+
+> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
+
+**每分钟调用次数（RPM）**
+
+**每分钟消耗Token数（TPM）**
+
+> **含输入与输出Token**
+
+qwen3-livetranslate-flash
+
+国际
+
+100
+
+100,000
+
+qwen3-livetranslate-flash-2025-12-01
+
+国际
+
+#### Qwen-LiveTranslate-Flash-Realtime
+
+通过 WebSocket 接入时，RPM 限制每分钟的建连请求次数。同一连接内的多轮响应不重复计数；重连计为新请求。目前没有单独限制同时保持的连接总数，但仍受 TPM 限制。各型号限额见下方表格。
+
+#### 华北2（北京）
+
+**模型名称**
+
+**限流条件（超出任一数值时触发限流）**
+
+> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
+
+**每分钟调用次数（RPM）**
+
+**每分钟消耗Token数（TPM）**
+
+> **含输入与输出Token**
+
+qwen3.8-livetranslate-flash-realtime
+
+10
+
+100,000
+
+qwen3.5-livetranslate-flash-realtime
+
+qwen3.5-livetranslate-flash-realtime-2026-05-19
+
+#### 新加坡
+
+**模型名称**
+
+**服务部署范围**
+
+**限流条件（超出任一数值时触发限流）**
+
+> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
+
+**每分钟调用次数（RPM）**
+
+**每分钟消耗Token数（TPM）**
+
+> **含输入与输出Token**
+
+qwen3.8-livetranslate-flash-realtime
+
+国际
+
+10
+
+100,000
+
+qwen3.5-livetranslate-flash-realtime
+
+国际
+
+qwen3.5-livetranslate-flash-realtime-2026-05-19
+
+国际
+
+### 音色复刻/设计
+
+#### Qwen-Audio-TTS/CosyVoice声音复刻/设计
+
+Qwen-Audio-TTS/CosyVoice声音复刻/设计共用一个模型，共用限流额度。
+
+#### 华北2（北京）
+
+**模型名称**
+
+**每秒钟调用次数（RPS）**
+
+voice-enrollment
+
+10
+
+#### 新加坡
+
+**模型名称**
+
+**服务部署范围**
+
+**每秒钟调用次数（RPS）**
+
+voice-enrollment
+
+国际
+
+10
+
+#### Qwen3-TTS声音复刻
+
+#### 华北2（北京）
+
+**模型名称**
+
+**每分钟调用次数（RPM）**
+
+qwen-voice-enrollment
+
+180
+
+#### 新加坡
+
+**模型名称**
+
+**服务部署范围**
+
+**每分钟调用次数（RPM）**
+
+qwen-voice-enrollment
+
+国际
+
+180
+
+### 音乐生成
+
+#### Fun-Music
+
+#### 华北2（北京）
+
+**模型名称**
+
+**每分钟调用次数（RPM）**
+
+fun-music-preview
+
+180
+
+fun-music-v1
+
+180
 
 ### 视频生成
 

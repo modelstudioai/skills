@@ -7,31 +7,31 @@ Agent 是百炼平台提供的可编程智能体运行与编排能力，支持�
 Agent 服务本身不绑定特定大模型，而是通过 `model_id` 参数动态指定底层 LLM（如 `qwen-max`、`qwen-plus` 等），模型能力由 [Agent 服务概览](../../raw/application-user-guide/get-started-with-agents/agent-overview.md) 中的“开发与运行”模块统一承载。当前支持三类核心运行形态：  
 - **Managed Agent**：托管会话生命周期、工具执行与环境隔离，适合对话式应用；  
 - **Flow Agent**：基于可视化节点编排多步逻辑与条件分支，适用于复杂工作流；  
-- **Sandbox**：提供沙箱化代码执行、浏览器自动化与文件解析能力，需显式启用。  
-上下文增强能力（RAG、Memory、Connector、ParseX）和工具扩展能力（MCP、Skill）均为可插拔模块，按需组合使用，详见 [Agent 服务概览](../../raw/application-user-guide/get-started-with-agents/agent-overview.md)。
+- **Sandbox**：提供代码解释器、浏览器自动化与文件解析沙箱，保障不可信代码安全执行。  
+上下文增强能力（RAG、Memory、Connector、ParseX）和工具扩展能力（MCP、Skill）均为可插拔模块，按需启用。
 
 ## 关键参数
 
-调用 Agent 时必须指定以下参数（API 或控制台均适用）：  
-- `agent_id`：Agent 的唯一标识符，创建后生成；  
-- `model_id`：所用大模型 ID，必须为当前项目已开通的模型；  
+调用 Agent 时必须指定以下参数（以 Managed Agent API 为例）：  
+- `agent_id`：平台生成的唯一 Agent 标识，创建后固定；  
+- `model_id`：所用大模型 ID，需与 Agent 配置中声明的兼容模型一致；  
 - `input`：用户输入文本，类型为 `string`；  
-- `enable_memory`：布尔值，启用[长期记忆](../concepts/long-term-memory.md)需设为 `true`，且对应 Memory 实例已配置；  
-- `tools`：工具列表，格式为 `[{ "type": "mcp", "name": "xxx" }]` 或 `[{ "type": "skill", "id": "yyy" }]`。  
-> **注意**：`tools` 参数中 `type` 字段在 [Agent 服务概览](../../raw/application-user-guide/get-started-with-agents/agent-overview.md) 中同时列出 `mcp` 和 `skill`，但实际 API 文档要求 `skill` 类型必须使用 `skill_id` 字段而非 `id`，该不一致已在 [Managed Agents API 概览](../../raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md) 中修正。
+- `enable_memory`：布尔值，启用后自动读写[长期记忆](../concepts/long-term-memory.md)（依赖 [Agent 服务概览](../../raw/application-user-guide/get-started-with-agents/agent-overview.md) 中 Memory 模块配置）；  
+- `tools`：显式声明需调用的工具列表（如 `["mcp://calculator", "connector://crm"]`），未声明则不触发工具调用。  
+> **注意**：`tools` 参数在 Flow Agent 中被 `nodes` 配置替代，详见 [Agent 服务概览](../../raw/application-user-guide/get-started-with-agents/agent-overview.md) 的“Flow Agent”链接指向文档，二者参数体系不兼容，不可混用。
 
 ## 使用方式
 
-1. **控制台快速体验**：访问 [体验 Agent](https://bailian.console.aliyun.com/cn-beijing/playground?agent=template_01M4QREF0RGXZVYRF49DQMSBJ8)，选择模板并对话，无需编码；  
-2. **API 接入业务系统**：调用 `/v1/agents/{agent_id}/chat` 接口，传入必要参数（参考 [Managed Agents API 概览](../../raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md)）；  
-3. **集成上下文与工具**：在控制台 Agent 编辑页中，依次配置 Knowledge Base（RAG）、Memory 实例、Connector 或 MCP 工具，配置项实时生效，无需重启。
+1. **控制台快速体验**：访问 [体验 Agent](https://bailian.console.aliyun.com/cn-beijing/playground?agent=template_01M4QREF0RGXZVYRF49DQMSBJ8) 页面，选择模板并直接对话，无需编码；  
+2. **API 接入生产系统**：参考 [Agent 服务概览](../../raw/application-user-guide/get-started-with-agents/agent-overview.md) 中“通过 API 接入”链接指向的 [Managed Agents API 概览](../../raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md)，使用 `POST /agents/{agent_id}/invoke` 发起调用；  
+3. **自定义开发**：通过控制台创建 Agent 后，在“上下文”和“工具与能力包”中分别配置 RAG 知识库、Memory 实例、MCP 工具服务等，所有配置项均实时生效。
 
 ## 限制和注意事项
 
-- 单次请求最大 `input` 长度为 32768 字符，超长内容需预处理截断或分块；  
-- Sandbox 沙箱默认禁用，需在 Agent 配置中显式开启 `enable_sandbox: true`，且仅支持 Python 3.9 运行时；  
-- RAG 检索结果默认最多返回 5 个 chunk，不可通过参数调整，如需更多上下文需自行调用 Knowledge API 后拼接；  
-- 所有工具调用（MCP/Skill）均受账户级 QPS 与并发数限制，具体配额见控制台「配额管理」，超出将返回 `429 Too Many Requests`。
+- 单次请求最大 `input` 长度为 32,768 字符，超长内容需预处理截断或分片；  
+- Sandbox 沙箱内 Python 执行超时默认为 30 秒，不可修改；浏览器操作（Puppeteer）仅支持 Chromium 内核，不支持插件或 localStorage 持久化；  
+- MCP 工具注册后需手动授权调用权限，且仅支持 HTTP/HTTPS 协议的 OpenAPI 3.0 描述；  
+- Memory 模块的[长期记忆](../concepts/long-term-memory.md)存储容量上限为 100 MB / Agent 实例，超出后写入失败（错误码 `MEMORY_QUOTA_EXCEEDED`）。
 
 ## 来源文档
 

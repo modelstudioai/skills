@@ -764,13 +764,13 @@ for item in result["output"]["results"]:
 
 #### 华北2（北京）
 
--   **Qwen-Audio-ASR-Message**：qwen-audio-3.1-asr-flash-message
+-   **Qwen-Audio-ASR**：qwen-audio-3.1-asr-flash、qwen-audio-3.0-asr-flash
     
 -   **Qwen-Audio-ASR-Streaming**：qwen-audio-3.1-asr-flash-streaming、qwen-audio-3.0-asr-flash-streaming
     
 -   **Qwen-Audio-ASR-Filetrans**：qwen-audio-3.1-asr-flash-filetrans、qwen-audio-3.0-asr-flash-filetrans
     
--   **Qwen-Audio-ASR**：qwen-audio-3.1-asr-flash、qwen-audio-3.0-asr-flash
+-   **Qwen-Audio-ASR-Message**：qwen-audio-3.1-asr-flash-message
     
 -   **Fun-ASR-Realtime**：fun-asr-realtime、fun-asr-realtime-2026-02-28、fun-asr-flash-8k-realtime、fun-asr-flash-8k-realtime-2026-01-28
     
@@ -787,13 +787,13 @@ for item in result["output"]["results"]:
 
 **说明**新加坡地域的子业务空间暂不支持热词功能。
 
--   **Qwen-Audio-ASR-Message**：qwen-audio-3.1-asr-flash-message
+-   **Qwen-Audio-ASR**：qwen-audio-3.1-asr-flash、qwen-audio-3.0-asr-flash
     
 -   **Qwen-Audio-ASR-Streaming**：qwen-audio-3.1-asr-flash-streaming、qwen-audio-3.0-asr-flash-streaming
     
 -   **Qwen-Audio-ASR-Filetrans**：qwen-audio-3.1-asr-flash-filetrans、qwen-audio-3.0-asr-flash-filetrans
     
--   **Qwen-Audio-ASR**：qwen-audio-3.1-asr-flash、qwen-audio-3.0-asr-flash
+-   **Qwen-Audio-ASR-Message**：qwen-audio-3.1-asr-flash-message
     
 -   **Fun-ASR-Realtime**：fun-asr-realtime
     
@@ -806,13 +806,13 @@ for item in result["output"]["results"]:
 
 #### 华北2（北京）
 
--   **Qwen-Audio-ASR-Message**：qwen-audio-3.1-asr-flash-message
+-   **Qwen-Audio-ASR**：qwen-audio-3.1-asr-flash、qwen-audio-3.0-asr-flash
     
 -   **Qwen-Audio-ASR-Streaming**：qwen-audio-3.1-asr-flash-streaming、qwen-audio-3.0-asr-flash-streaming
     
 -   **Qwen-Audio-ASR-Filetrans**：qwen-audio-3.1-asr-flash-filetrans、qwen-audio-3.0-asr-flash-filetrans
     
--   **Qwen-Audio-ASR**：qwen-audio-3.1-asr-flash、qwen-audio-3.0-asr-flash
+-   **Qwen-Audio-ASR-Message**：qwen-audio-3.1-asr-flash-message
     
 -   **Fun-ASR**：fun-asr
     
@@ -821,13 +821,13 @@ for item in result["output"]["results"]:
 
 **说明**新加坡地域的子业务空间暂不支持热词功能。
 
--   **Qwen-Audio-ASR-Message**：qwen-audio-3.1-asr-flash-message
+-   **Qwen-Audio-ASR**：qwen-audio-3.1-asr-flash、qwen-audio-3.0-asr-flash
     
 -   **Qwen-Audio-ASR-Streaming**：qwen-audio-3.1-asr-flash-streaming、qwen-audio-3.0-asr-flash-streaming
     
 -   **Qwen-Audio-ASR-Filetrans**：qwen-audio-3.1-asr-flash-filetrans、qwen-audio-3.0-asr-flash-filetrans
     
--   **Qwen-Audio-ASR**：qwen-audio-3.1-asr-flash、qwen-audio-3.0-asr-flash
+-   **Qwen-Audio-ASR-Message**：qwen-audio-3.1-asr-flash-message
     
 -   **Fun-ASR**：fun-asr
     
@@ -836,13 +836,13 @@ for item in result["output"]["results"]:
 
 #### 华北2（北京）
 
--   **Qwen-Audio-ASR-Message**：qwen-audio-3.1-asr-flash-message
+-   **Qwen-Audio-ASR**：qwen-audio-3.1-asr-flash、qwen-audio-3.0-asr-flash
     
 -   **Qwen-Audio-ASR-Streaming**：qwen-audio-3.1-asr-flash-streaming、qwen-audio-3.0-asr-flash-streaming
     
 -   **Qwen-Audio-ASR-Filetrans**：qwen-audio-3.1-asr-flash-filetrans、qwen-audio-3.0-asr-flash-filetrans
     
--   **Qwen-Audio-ASR**：qwen-audio-3.1-asr-flash、qwen-audio-3.0-asr-flash
+-   **Qwen-Audio-ASR-Message**：qwen-audio-3.1-asr-flash-message
     
 -   **Fun-ASR-Realtime**：fun-asr-realtime
     
@@ -851,13 +851,13 @@ for item in result["output"]["results"]:
 
 #### 新加坡
 
--   **Qwen-Audio-ASR-Message**：qwen-audio-3.1-asr-flash-message
+-   **Qwen-Audio-ASR**：qwen-audio-3.1-asr-flash、qwen-audio-3.0-asr-flash
     
 -   **Qwen-Audio-ASR-Streaming**：qwen-audio-3.1-asr-flash-streaming、qwen-audio-3.0-asr-flash-streaming
     
 -   **Qwen-Audio-ASR-Filetrans**：qwen-audio-3.1-asr-flash-filetrans、qwen-audio-3.0-asr-flash-filetrans
     
--   **Qwen-Audio-ASR**：qwen-audio-3.1-asr-flash、qwen-audio-3.0-asr-flash
+-   **Qwen-Audio-ASR-Message**：qwen-audio-3.1-asr-flash-message
     
 -   **Fun-ASR-Realtime**：fun-asr-realtime
     
