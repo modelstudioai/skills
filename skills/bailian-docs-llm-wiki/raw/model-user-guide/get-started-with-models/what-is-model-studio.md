@@ -4,13 +4,13 @@
 
 ## 快速开始
 
-使用 OpenAI/Anthropic 兼容接口调用模型
+OpenAI/Anthropic 兼容接口调用
 
 [获取 API Key 和 Base URL](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key)
 
-#### Responses
+![](https://unpkg.com/@lobehub/icons-static-svg@latest/icons/openai.svg)Responses
 
-curl
+curlPythonJavaScript/TypeScriptJavaGoC#Ruby
 
 ```
 curl "$OPENAI_BASE_URL/responses" \
@@ -21,8 +21,6 @@ curl "$OPENAI_BASE_URL/responses" \
     "input": "你是谁？"
   }'
 ```
-
-Python
 
 ```
 import os
@@ -39,8 +37,6 @@ response = client.responses.create(
 print(response.output_text)
 ```
 
-JavaScript/TypeScript
-
 ```
 import OpenAI from "openai";
 
@@ -54,8 +50,6 @@ const response = await client.responses.create({
 });
 console.log(response.output_text);
 ```
-
-Java
 
 ```
 import com.openai.client.OpenAIClient;
@@ -82,8 +76,6 @@ public class Main {
     }
 }
 ```
-
-Go
 
 ```
 package main
@@ -114,8 +106,6 @@ func main() {
 }
 ```
 
-C#
-
 ```
 #pragma warning disable OPENAI001
 
@@ -137,8 +127,6 @@ ResponseResult response = client.CreateResponse(new CreateResponseOptions
 Console.WriteLine(response.GetOutputText());
 ```
 
-Ruby
-
 ```
 require "openai"
 
@@ -153,9 +141,9 @@ response = client.responses.create(
 puts response.output_text
 ```
 
-#### Chat Completions
+![](https://unpkg.com/@lobehub/icons-static-svg@latest/icons/openai.svg)Chat Completions
 
-curl
+curlPythonJavaScript/TypeScriptJavaGoC#Ruby
 
 ```
 curl "$OPENAI_BASE_URL/chat/completions" \
@@ -166,8 +154,6 @@ curl "$OPENAI_BASE_URL/chat/completions" \
     "messages": [{"role": "user", "content": "你是谁？"}]
   }'
 ```
-
-Python
 
 ```
 import os
@@ -184,8 +170,6 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
-JavaScript/TypeScript
-
 ```
 import OpenAI from "openai";
 
@@ -199,8 +183,6 @@ const response = await client.chat.completions.create({
 });
 console.log(response.choices[0].message.content);
 ```
-
-Java
 
 ```
 import com.openai.client.OpenAIClient;
@@ -223,8 +205,6 @@ public class Main {
     }
 }
 ```
-
-Go
 
 ```
 package main
@@ -256,8 +236,6 @@ func main() {
 }
 ```
 
-C#
-
 ```
 using System;
 using System.ClientModel;
@@ -275,8 +253,6 @@ ChatCompletion response = client.CompleteChat("你是谁？");
 Console.WriteLine(response.Content[0].Text);
 ```
 
-Ruby
-
 ```
 require "openai"
 
@@ -291,9 +267,9 @@ response = client.chat.completions.create(
 puts response.choices.first.message.content
 ```
 
-#### Messages
+![](https://unpkg.com/@lobehub/icons-static-svg@latest/icons/anthropic.svg)Messages
 
-curl
+curlPythonJavaScript/TypeScriptJavaGoC#RubyPHP
 
 ```
 curl "$ANTHROPIC_BASE_URL/v1/messages" \
@@ -305,8 +281,6 @@ curl "$ANTHROPIC_BASE_URL/v1/messages" \
     "messages": [{"role": "user", "content": "你是谁？"}]
   }'
 ```
-
-Python
 
 ```
 import os
@@ -326,8 +300,6 @@ for block in response.content:
         print(block.text)
 ```
 
-JavaScript/TypeScript
-
 ```
 import Anthropic from "@anthropic-ai/sdk";
 
@@ -344,8 +316,6 @@ for (const block of response.content) {
     if (block.type === "text") console.log(block.text);
 }
 ```
-
-Java
 
 ```
 import com.anthropic.client.AnthropicClient;
@@ -371,8 +341,6 @@ public class Main {
     }
 }
 ```
-
-Go
 
 ```
 package main
@@ -409,8 +377,6 @@ func main() {
 }
 ```
 
-C#
-
 ```
 using System;
 using Anthropic;
@@ -434,8 +400,6 @@ foreach (var block in response.Content)
 }
 ```
 
-Ruby
-
 ```
 require "anthropic"
 
@@ -452,8 +416,6 @@ response.content.each do |block|
   puts block.text if block.type == :text
 end
 ```
-
-PHP
 
 ```
 <?php

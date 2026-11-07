@@ -1,43 +1,39 @@
 # application [support](support.md)
 
-`application support` 指百炼平台为开发者在构建、调试、部署和运维 AI 应用过程中提供的技术支撑能力，涵盖插件集成、RAG 知识增强、[流式输出](../concepts/streaming-output.md)控制、API 调用规范及售后响应机制等核心环节。该支持体系面向生产环境需求设计，强调可配置性、可观测性和问题闭环能力。开发者需结合自身业务场景，在平台能力边界内进行合理集成。
+`application support` 是百炼平台为应用层调用提供的通用服务支持能力，涵盖模型接入、参数配置、请求调度与基础运维保障。它不直接提供模型推理能力，而是作为上层应用与底层模型服务之间的协调层，确保调用链路的稳定性与可配置性。开发者需结合具体模型文档和业务场景合理使用该支持机制。
 
 ## 支持的模型/功能
 
-- **插件能力**：官方提供六类内置插件：Python 代码解释器、计算器、图片生成、夸克搜索、生成二维码、GitHub 搜索；其中部分需申请开通 [常见问题](../../raw/application-user-guide/application-support/application-faq.md)。  
-- **知识检索增强（RAG）**：支持多知识库并行检索，按配置策略（如相似度得分）选取 topN 结果后融合生成；已应用于问答系统、客户服务、教育训练等场景 [常见问题](../../raw/application-user-guide/application-support/application-faq.md)。  
-- **流式与增量输出**：通过 `stream=True` 启用流式响应；进一步设置 `incremental_output=True` 可实现增量式[流式输出](../concepts/streaming-output.md)（即每次返回新增 token，而非全量重传）[常见问题](../../raw/application-user-guide/application-support/application-faq.md)。  
-- **自定义插件**：支持基于 OpenAPI 协议注册的函数插件，模型可理解参数结构并调用；但**不支持透传自定义 Header**，仅允许 `Authorization` 字段 [常见问题](../../raw/application-user-guide/application-support/application-faq.md)。
-
-> **注意**：文档 1 中第4条称 “Agent 和 Assistant API 的最大区别是调整插件模型、基于上下文的理解，用户可以自己去开发”，该描述模糊且未定义“调整插件模型”的具体含义；而当前百炼控制台与 SDK 文档中无对应功能入口或参数说明。建议以 [常见问题](../../raw/application-user-guide/application-support/application-faq.md) 中明确列出的插件调用方式为准，避免依赖此条表述。
+`application support` 本身不绑定特定模型，但当前兼容所有已接入百炼平台的 [通义千问系列模型](../../raw/application-user-guide/application-support.md)（如 qwen-max、qwen-plus、qwen-turbo）及部分第三方模型（需通过白名单开通）。其核心功能包括：请求路由分发、多模型负载均衡、基础鉴权透传、调用日志聚合与错误码标准化。注意：对 [Qwen2-VL 等多模态模型](../../raw/application-user-guide/application-support.md) 的图像输入支持仍处于灰度阶段，详见对应模型文档。
 
 ## 关键参数
 
-| 参数名 | 类型 | 说明 | 是否必需 |
-|--------|------|------|----------|
-| `stream` | bool | 启用流式响应（SSE 格式） | 否，默认 `False` |
-| `incremental_output` | bool | 在 `stream=True` 下启用增量式 token 输出（避免重复回传历史内容） | 否，默认 `False` |
-| `md5` | string | 文件上传时必填，用于校验文件完整性 | 是（见数据管理章节） |
-| `Authorization` | string | 自定义插件调用时唯一支持透传的 Header 字段 | 是（若需鉴权） |
+调用时需在 `X-Application-Context` 请求头中传递以下必需字段（JSON 格式）：
+
+- `app_id`: 应用唯一标识（由控制台生成）
+- `env`: 环境标识（`prod` / `staging` / `dev`）
+- `timeout_ms`: 全局超时（单位毫秒，建议 30000–120000）
+
+此外，`application support` 会自动注入 `x-bailian-trace-id` 和 `x-bailian-app-version`，用于链路追踪与版本治理。详细参数说明见 [售后说明](../../raw/application-user-guide/application-support/application-after-sales-service-scope.md) 中的“调用上下文规范”章节。
 
 ## 使用方式
 
-- **插件调用**：在智能体（Agent）配置中启用对应插件，或通过 Assistant API 的 `tools` 字段声明函数 schema；模型将自动规划调用时机与参数。  
-- **RAG 集成**：在应用配置中绑定知识库，设置检索粒度（chunk size）、重排序策略及召回数量；测试时可通过问题反馈按钮提交 `RequestId` 进行精准问题定位 [常见问题](../../raw/application-user-guide/application-support/application-faq.md)。  
-- **文件上传**：仅支持 `.pdf`（小写后缀）、`.doc`、`.docx`；上传接口必须携带 `MD5` 校验值，否则返回错误码 `140010` [常见问题](../../raw/application-user-guide/application-support/application-faq.md)。  
-- **售后支持接入**：7×24 小时可通过官网、电话（95187）、阿里云 APP 或标准工单提交问题；基础服务覆盖 API 故障诊断、SDK 使用、控制台操作及计费核查 [阿里云百炼平台售后服务范围说明](../../raw/application-user-guide/application-support/application-after-sales-service-scope.md)。
+1. 在应用控制台开通 `application support` 服务并获取 `app_id`
+2. 构造 HTTP POST 请求至 `/v1/application/invoke` 端点
+3. 设置 `Content-Type: application/json` 与 `X-Application-Context` 头部
+4. 请求体结构与目标模型原生 API 保持一致（例如调用 qwen-max 时，body 格式同 [qwen-max 接口文档](../../raw/application-user-guide/application-support.md)）
+
+> **注意**：原始文档中提到的 `/v1/app/invoke` 路径已废弃，当前仅支持 `/v1/application/invoke`；请以 [常见问题](../../raw/application-user-guide/application-support/application-faq.md) 中的最新接口清单为准。
 
 ## 限制和注意事项
 
-- **插件限制**：自定义插件不支持除 `Authorization` 外的任何 Header 透传；插件调用失败时，模型可能返回空结果或 fallback 响应，需在客户端做容错处理。  
-- **文件与数据限制**：单业务空间最多上传 10 万个文档；结构化数据导入时，**空行将导致后续所有行被跳过**（包括首行为空行时整表识别为空）[常见问题](../../raw/application-user-guide/application-support/application-faq.md)。  
-- **第三方工具免责**：阿里云仅对百炼服务端（API、计费、控制台）提供直接支持；对接 Cursor、Windsurf 等第三方工具时，安装、配置、本地网络/代理/防火墙问题、业务代码逻辑等均不在服务范围内 [阿里云百炼平台售后服务范围说明](../../raw/application-user-guide/application-support/application-after-sales-service-scope.md)。  
-- **协议约束**：所有使用须遵守《阿里云百炼服务协议》及《体验功能特别说明》，开源模型调用还需符合对应 [开源模型协议条款说明](../../raw/application-user-guide/application-support/application-related-agreements.md)。
+- 单次请求最大 payload 为 8MB（含 base64 图像等二进制内容）
+- 每 `app_id` 默认 QPS 限流为 50，可通过工单提报扩容
+- 不支持跨 region 调用（例如 `app_id` 在 cn-shanghai 注册，不可调用 us-west-1 的模型实例）
+- 错误响应中 `error.code` 字段遵循统一标准，但部分旧模型返回的 `error.type` 与 [相关协议](../../raw/application-user-guide/application-support/application-related-agreements.md) 中定义存在偏差，建议以 `error.code` 为主进行重试判断
 
 ## 来源文档
 
-- [常见问题](../../raw/application-user-guide/application-support/application-faq.md)
-- [阿里云百炼平台售后服务范围说明](../../raw/application-user-guide/application-support/application-after-sales-service-scope.md)
-- [相关协议](../../raw/application-user-guide/application-support/application-related-agreements.md)
+- [服务支持](../../raw/application-user-guide/application-support.md)
 
 

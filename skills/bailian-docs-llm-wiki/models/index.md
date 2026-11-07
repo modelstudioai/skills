@@ -1,6 +1,6 @@
 # 百炼模型市场索引
 
-> 自动生成 · 共 125 个模型家族 · 335 个主干模型 · 更新于 2026-11-07
+> 自动生成 · 共 126 个模型家族 · 336 个主干模型 · 更新于 2026-11-08
 
 **机器查询走结构化文件**：
 
@@ -204,7 +204,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [语音识别热词](groups/speech-biasing.json) — 热词是指用户可以预先定义的一组特定词汇或短语，这些词汇或短语在识别、翻译过程中会被赋予更高的优先级。针对您的特定业务领域，如果有部分词汇的语音识别、翻译效果不够好，可以将这些关键词或短语添加为热词进行…
   - 模型：`speech-biasing`
 
-## 语音合成 `TTS` — 8 个家族
+## 语音合成 `TTS` — 9 个家族
 
 - [CosyVoice大模型](groups/cosyvoice.json) — 基于新一代生成式语音大模型，CosyVoice将文本理解和语音生成技术深度融合，能够精准解析并诠释各种文本内容，将其转化为如同真人发声般的自然语音，带来高度拟人化的自然语音合成体验。
   - 模型：`cosyvoice-v2`, `cosyvoice-v3-flash`, `cosyvoice-v3-plus`, `cosyvoice-v3.5-flash`, `cosyvoice-v3.5-plus`
@@ -214,6 +214,8 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`qwen-audio-3.1-tts-flash`, `qwen-audio-3.1-tts-plus`
 - [Qwen-Audio-3.1-TTS-Next](groups/qwen-audio-3.1-tts-next.json) — qwen-audio-3.1-tts-next 是一款面向统一音频生成的 Audiogen 模型，不再局限于传统 TTS 的单一语音合成，而是能够围绕文本、时间戳和参考音频等输入，一次生成完整的音频内…
   - 模型：`qwen-audio-3.1-tts-next`
+- [Qwen-声音复刻](groups/qwen-voice-enrollment.json) — 千问voice-enrollment模型是千问语音模型的声音复刻系列模型，仅需5s以上的音频，即可迅速复刻高相似度声音。结合qwen3-tts-vc-realtime模型使用，可将一个人的声音高保真复…
+  - 模型：`qwen-voice-enrollment`
 - [Qwen3-TTS-Flash](groups/qwen3-tts-flash.json) — Qwen3-TTS-Flash模型是通义实验室最新推出的离线语音合成大模型，不仅拥有17种高表现力的拟人音色，且能低延迟高稳定地合成音频；同时支持多种语言，方言，支持同一音色多语言输出。该模型经过海量…
   - 模型：`qwen3-tts-flash`
 - [Qwen3-TTS-Flash-Realtime](groups/qwen3-tts-flash-realtime.json) — Qwen3-TTS-Flash-Realtime模型是通义实验室最新的实时语音合成大模型，不仅拥有17种高表现力的拟人音色，且能低延迟高稳定地实时合成音频；同时支持多种语言，方言，支持同一音色多语言输…

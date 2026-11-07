@@ -1,47 +1,58 @@
-# Token
+# Token 计量与计费
 
-Token 是百炼平台中用于衡量模型输入与输出文本（或多媒体内容）处理粒度的基本计量单位，也是计费、限流与性能监控的核心依据。一个 Token 通常对应一个子词（subword）、标点、空格或特殊控制符；对中文而言，平均约 1–2 个汉字构成 1 个 Token，具体数值由底层分词器（如 Qwen 的 tokenizer）动态确定。
+Token 计量与计费是百炼平台对大模型相关服务（含文本、视觉、语音、向量等）进行资源消耗量化与费用结算的核心机制。平台按实际消耗的输入/输出 Token 数量（以千 Token 为计费单位）精确计量，费用实时生成并纳入统一账单体系，不按请求次数或调用时长计费。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **模型调用与请求限制**：  
-  每次 API 请求的 `input.messages`（含 system/user/assistant 消息）和生成的 `output.text` 均按 Token 统计总长度。不同模型有明确的 **单次请求最大 Token 数限制**（例如 `qwen-turbo` 为 8K，`qwen-max` 为 32K），超出将返回 `400 Bad Request` 错误。该限制包含 prompt + completion 的全部 Token。
+- **模型调用（`model experience`）**：所有同步/异步模型调用（包括文本生成、VL 多模态、ASR、TTS、Embedding、Rerank 等）均按实际 token 消耗计费。`usage` 字段在响应体中明确返回 `input_tokens` 和 `output_tokens`，开发者可据此监控和优化成本。例如：
+  - 文本模型：按 prompt + completion 的 token 总数计费；
+  - 视觉/语音模型：输入图像/音频经编码后折算为等效 token（具体换算规则见各子文档）；
+  - 向量模型（embedding）：按输入文本长度（字符数或分词后 token 数）计费，不依赖输出维度；
+  - 全模态模型：多模态输入统一归一化为 token 当量，按总当量计费。
 
-- **计费与用量统计**：  
-  平台按 **实际消耗的 TotalToken 数** 计费（输入 Token + 输出 Token），精确到个位。用量数据在「模型用量」页面按日/小时展示，并同步至账单；注意：监控页面中的 `模型消耗 TotalToken 数` 仅用于告警与趋势分析，**不作为计费依据**，最终费用以账单为准。
+- **知识库（RAG）**：Token 消耗发生在多个环节：
+  - **向量化**：文档切片后送入 embedding 模型产生的输入 token；
+  - **重排序（rerank）**：对召回结果做精排时的 query + document pair 输入 token；
+  - **问答生成**：LLM 基于检索结果生成答案时的 prompt（含上下文）+ output token；
+  > 注意：多个知识库并行检索时，token 消耗量按知识库数量线性叠加。
 
-- **性能监控与告警**：  
-  在「模型监控」中，`TotalToken 数` 是核心可观测指标，支持配置环比突增、阈值超限等告警规则，帮助识别异常 Prompt、低效提示工程或成本失控风险。同时，`首 Token 延时` 和 `非首 Token 延时` 直接反映 Token 级别的响应效率。
+- **Flow Agent / Managed Agents**：Agent 自身不单独计费，但其执行过程中触发的模型调用（如 LLM 路由、工具参数生成、最终回答生成）均计入对应模型的 token 消耗，并体现在账单中“阿里云百炼大模型推理”类目下。
 
-- **多模态模型扩展**：  
-  图像、视频、音频等非文本输入经编码后也会转化为等效 Token（如一张 1024×1024 图像在 Qwen-VL 中约等价于 1,500–3,000 Tokens），计入总 Token 配额与用量。上传文件前需确认目标模型的多模态 Token 上限（见各模态文档）。
+- **ParseX 文档解析**：虽主要按页/秒计量，但若启用“智能字段抽取”等依赖大模型的高级能力，该部分将额外产生 token 费用（归属模型调用类目），与基础解析费用分离。
+
+- **安全高级防护**：内容安全检测（如敏感词、价值观、幻觉识别）按 Credit 计费，而 1 Credit ≈ 固定 token 当量（具体换算比以控制台实时显示为准），本质仍是 token 消耗的抽象计量形式。
 
 ## 关键参数和配置
 
-- `max_tokens`（请求参数）：  
-  控制模型最多生成的 Token 数（不含输入部分）。设为 `1024` 表示最多输出 1024 个 Token；若设为 `0` 或省略，平台将根据模型上下文窗口自动截断。**不保证恰好输出该数量**，实际受 stop words、EOS token 等影响。
-
-- `input.messages` 内容长度：  
-  开发者需自行预估或通过 SDK 提供的 `count_tokens()` 工具（如 Python SDK 的 `dashscope.Tokenizer.count_tokens()`）计算消息数组的 Token 数，避免超限。
-
-- Token 计数一致性：  
-  百炼所有服务（API、监控、计费）均使用与模型一致的 tokenizer（如 Qwen 系列使用 `QwenTokenizer`），确保输入/输出 Token 数可复现、可验证。不建议依赖第三方 tokenizer 进行配额预估。
-
-- [异步任务](asynchronous-task.md)与批量调用：  
-  批量推理（Batch Chat / Batch File）同样按实际消耗 Token 计费，但其 Token 用量**不在「模型监控」图表中展示**，仅可在「模型用量」页面查询。
+- **计量精度**：Token 数量以整数计，账单按 **千 Token（kToken）四舍五入**，不足 1 kToken 按 1 kToken 计。
+- **响应必含字段**：所有模型调用成功响应的 `usage` 对象中均包含：
+  ```json
+  "usage": {
+    "input_tokens": 1234,
+    "output_tokens": 567,
+    "total_tokens": 1801
+  }
+  ```
+- **计费模型标识**：Token 单价与所选 `model_id` 强绑定，不同模型（如 `qwen-max` vs `qwen-plus`）、不同地域（北京/新加坡等）单价可能不同，需以控制台「计费中心」实时价格为准。
+- **免费额度抵扣**：新人/新功能赠送的免费 token 额度（如 Flow Agent 新人额度）自动优先抵扣模型调用费用，无需手动配置；额度有效期以控制台显示为准。
+- **用量查询入口**：
+  - 实时用量：控制台「用量中心」→「模型调用」页，支持按 `model_id`、`API Key`、时间范围筛选；
+  - 历史账单：通过 Billing API 的 `GetBillingTrend` 接口，指定 `groupBy: [{"code": "BASE_MODEL"}]` 可获取各模型 token 费用明细。
 
 ## 面向开发者，简洁实用
 
-- ✅ **必做**：调用前用官方 tokenizer 预估 Token 数，尤其对长文档、多图、代码块等高密度内容；  
-- ✅ **推荐**：在监控中为 `TotalToken 数` 配置「24 小时环比增长 > 200%」类告警，及时发现 Prompt 泄漏或循环生成；  
-- ⚠️ **注意**：`max_tokens` 仅限制输出，不限制输入；总 Token = 输入 Token + 输出 Token，两者共同受模型上下文窗口约束；  
-- 🔍 **调试技巧**：开启「推理日志」后，响应体中 `usage.input_tokens` 和 `usage.output_tokens` 字段可精确查看本次调用的实际 Token 消耗。
+- ✅ **务必解析响应中的 `usage` 字段**：这是唯一权威的 token 消耗依据，不可依赖请求长度或经验估算。
+- ✅ **流式响应同样完整计费**：即使中断流式读取，已生成的 output tokens 仍会计费。
+- ✅ **多模态输入需关注编码开销**：一张高分辨率图或一段长音频，其 token 当量可能远超文本，建议在生产环境预估并压测。
+- ⚠️ **避免无效 token 浪费**：精简 prompt 中冗余说明、限制 `max_tokens`、启用 `stop` 参数截断无关输出，可显著降本。
+- ⚠️ **注意跨模型 token 定义差异**：Embedding 模型按输入字符/分词计，VL 模型按图像 patch 编码后 token 计——务必查阅对应模型子文档的「Token 计算规则」章节。
+- 🔍 **排查费用异常？**：先查用量中心确认 token 消耗量，再结合 Billing API 按 `API_KEY_ID` 分组，定位高消耗调用方。
 
 ## 关联主题页
 
-- [get started with models](../guides/get-started-with-models.md)
-- [model monitoring](../guides/model-monitoring.md)
+- [agent billing](../guides/agent-billing.md)
 - [model experience](../guides/model-experience.md)
 - [more about models](../api/more-about-models.md)
+- [billing api](../api/billing-api.md)
 
 
