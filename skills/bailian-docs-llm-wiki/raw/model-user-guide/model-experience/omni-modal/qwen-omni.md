@@ -1074,6 +1074,31 @@ curl -X POST $DASHSCOPE_BASE_URL/chat/completions \
 -   视频文件中的视觉信息与音频信息会分开计费。
     
 
+视频解码失败时如何处理
+
+如果请求提示视频解码失败，例如 `Invalid data found when processing input`，可先在本地检查文件，再重新编码。以下命令需要安装 FFmpeg，并支持 `libx264` 编码器。
+
+1.  检查整个文件能否正常解码。`-xerror` 会在遇到错误时停止，`-f null -` 表示不生成输出文件。命令正常结束且没有报错，说明本次解码检查通过。
+    
+    ```
+    ffmpeg -v error -xerror -i input.mp4 -f null -
+    ```
+    
+2.  重新编码为 H.264 视频和 AAC 音频，写入新文件，保留原文件。
+    
+    ```
+    ffmpeg -i input.mp4 -c:v libx264 -c:a aac reencoded.mp4
+    ```
+    
+3.  再次检查新文件。确认检查通过、时长符合预期、画面和声音正常后，重新上传并调用模型。
+    
+    ```
+    ffmpeg -v error -xerror -i reencoded.mp4 -f null -
+    ```
+    
+
+重新编码无法补回已经丢失的内容。如果仍有缺帧、花屏或声音缺失，请从原始素材重新导出。
+
 #### 图片列表形式
 
 python

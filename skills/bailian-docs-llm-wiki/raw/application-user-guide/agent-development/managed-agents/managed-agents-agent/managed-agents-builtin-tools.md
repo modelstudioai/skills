@@ -1,6 +1,6 @@
 # Agent 工具配置
 
-Managed Agents 提供内置工具，覆盖任务规划、命令执行、文件操作、网络访问与产出物标记，全部在会话绑定的运行环境中执行。
+Managed Agents 提供内置工具，覆盖任务规划、命令执行、文件操作、网络访问、知识检索与产出物标记。除知识检索调用平台服务外，其余工具在会话绑定的运行环境中执行。
 
 ## 工具列表
 
@@ -72,13 +72,46 @@ Managed Agents 提供内置工具，覆盖任务规划、命令执行、文件�
 
 供业务侧按需下载或展示最终交付物
 
+**说明**`search_knowledgebases` 不在**工具**列表中展示，通过**知识库-检索策略**配置，详见[知识检索](#h-bt-knowledge)。
+
 **说明**`web_search` 与 `web_fetch` 单独计费：`web_search` 按调用次数计费（0.03 元/次）；`web_fetch` 限时免费，后续收费计划以控制台展示为准。计费口径详见[计费说明](raw/application-user-guide/agent-billing/managed-agents-billing.md)。
 
 ## 执行机制
 
-全部内置工具在会话绑定的[运行环境](raw/application-user-guide/agent-development/managed-agents/managed-agents-environment.md)中执行，工具产生的文件、安装的依赖在该会话生命周期内持久保留。
+`search_knowledgebases` 调用平台知识检索服务，其余内置工具在会话绑定的[运行环境](raw/application-user-guide/agent-development/managed-agents/managed-agents-environment.md)中执行。工具产生的文件、安装的依赖在该会话生命周期内持久保留。
 
 智能体根据系统提示词和当前消息自主决定调用哪个工具，调用过程通过事件面板实时可见。
+
+## 知识检索
+
+`search_knowledgebases` 用于检索[知识检索服务](raw/application-user-guide/knowledge-base/rag-knowledge-retrieval.md)中的知识库。启用后，模型按需调用，并结合多轮对话生成检索问题；未启用时不进行检索。一个智能体最多配置一个该工具。
+
+在智能体编辑页的**知识库-检索策略**区域点击**配置**或**立即配置**，在**配置检索服务**面板中选择检索服务并点击**关联**，然后保存智能体。通过 API 配置时，在 `builtin_toolkit.configs[]` 中启用 `search_knowledgebases`，并通过 `params.knowledge_application_id` 指定知识检索服务：
+
+```
+{
+  "tools": [
+    {
+      "type": "builtin_toolkit",
+      "configs": [
+        {
+          "name": "search_knowledgebases",
+          "enabled": true,
+          "params": {
+            "knowledge_application_id": "aid-xxxxxxxx"
+          }
+        }
+      ]
+    }
+  ]
+}
+```
+
+-   `knowledge_application_id` 是知识检索服务 ID（形如 `aid-...`），不是单个知识库 ID。
+-   `params` 与 `name`、`enabled`、`permission_policy` 同级；启用该工具时必须提供非空的 `knowledge_application_id`，缺少或为空时创建 Agent 返回 400。
+-   `permission_policy` 可省略。通过 API 配置时沿用[审批策略](#h-bt-approval)的规则；控制台的**知识库-检索策略**区域不单独提供该工具的审批设置。
+
+更新已有智能体时，保留其他仍在使用的工具配置。
 
 ## 审批策略
 

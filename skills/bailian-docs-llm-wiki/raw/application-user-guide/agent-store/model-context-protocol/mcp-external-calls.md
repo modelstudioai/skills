@@ -2,7 +2,7 @@
 
 阿里云百炼提供了全周期 MCP 服务，既支持在平台内部（如智能体、工作流）进行配置，也支持通过外部调用集成至第三方应用或个人项目。针对外部调用场景，可以选择以下两种方式：
 
--   集成至第三方应用：支持一键自动配置到第三方应用，快速实现外部调用。
+-   集成至第三方应用：支持将 MCP 服务安装到 Qoder、Codex、Claude Code 和 Cursor，也可手动添加到其他 MCP 客户端。
 -   集成至个人项目：通过 MCP SDK 调用，实现灵活编码和深度定制。
 
 **重要**也可通过阿里云百炼 CLI 外部调用 MCP 服务：`bl mcp list` 查看已开通服务，`bl mcp call --target <名称>.<工具>` 直接调用。详见[使用 CLI](https://help.aliyun.com/zh/model-studio/cli/mcp-skill)。
@@ -13,7 +13,7 @@
 
 #### 首次开通（新用户）
 
-1.  前往[阿里云百炼 MCP 广场](https://bailian.console.aliyun.com/cn-beijing/?spm=5176.21213303.aillm.1.1a232f3dAFihmQ&tab=app&scm=20140722.S_%E7%99%BE%E7%82%BCprompt._.RL_%E7%99%BE%E7%82%BCprompt-LOC_aillm-OR_chat-V_3-RC_llm#/mcp-market)选择 MCP 服务。以 Amap Maps 服务为例，点击卡片。
+1.  前往[阿里云百炼 MCP 广场](https://bailian.console.aliyun.com/cn-beijing/store/mcp)选择 MCP 服务。以 Amap Maps 服务为例，点击卡片。
     
 2.  点击**立即开通**，点击**确认开通**后即可开通 Amap Maps MCP 服务。
     
@@ -24,52 +24,46 @@
 
 #### 升级协议（已开通用户）
 
-1.  前往[阿里云百炼 MCP 广场](https://bailian.console.aliyun.com/cn-beijing/?spm=5176.21213303.aillm.1.1a232f3dAFihmQ&tab=app&scm=20140722.S_%E7%99%BE%E7%82%BCprompt._.RL_%E7%99%BE%E7%82%BCprompt-LOC_aillm-OR_chat-V_3-RC_llm#/mcp-market)选择 MCP 服务。以 Amap Maps 服务为例，点击卡片。
+1.  前往[阿里云百炼 MCP 广场](https://bailian.console.aliyun.com/cn-beijing/store/mcp)选择 MCP 服务。以 Amap Maps 服务为例，点击卡片。
 2.  点击右侧**取消开通**，再点击**立即开通**，**确认开通**后即可更新 Amap Maps MCP 服务。
 
 ## 外部调用 MCP 服务
 
 ### 集成至第三方应用
 
-阿里云百炼支持配置 MCP 服务至 Cherry Studio 和 Cursor，支持自动配置和手动配置。以 Amap Maps 服务为例。
+阿里云百炼支持将 MCP 服务安装到 Qoder、Codex、Claude Code 和 Cursor。以 Amap Maps 服务为例。
 
-#### Cherry Studio
+#### Qoder
 
-1.  安装 [Cherry Studio](https://www.cherry-ai.com/)。
-    
-2.  进入 [Amap Maps MCP](https://bailian.console.aliyun.com/?tab=mcp&scm=20140722.S_%E7%99%BE%E7%82%BCprompt._.RL_%E7%99%BE%E7%82%BCprompt-LOC_aillm-OR_chat-V_3-RC_llm#/mcp-market/detail/amap-maps) 服务界面，在**外部调用**界面中选择 **Cherry Studio**。
-    
-    页面显示两种配置方式：**方法1 自动配置**，点击**一键配置至 Cherry Studio** 按钮；**方法2 手动配置**，获取 DASHSCOPE\_API\_KEY 并替换配置文件中的对应变量。
-    
-3.  点击**一键配置至 Cherry Studio**，选择 API Key，点击**确定**。
-    
-    弹出**选择 API Key 并配置至 Cherry Studio** 对话框，在列表中选择要使用的 API Key，点击**确定**。可以在弹出的 Cherry Studio 界面中看到所配置的 MCP 服务的详细信息。其中显示服务名称为 **AliyunBailianMCP\_amap-maps**，类型为**服务器发送事件 (sse)**，URL 为 MCP 服务地址，开关已开启。
-    
-4.  也可以手动配置 MCP 服务。在**外部调用**界面获取 DASHSCOPE\_API\_KEY 并复制配置文件。在 Cherry Studio 的 **MCP 设置**页面点击**添加服务器**\>**从JSON导入**，粘贴配置信息，点击**确定**。可以看到已配置的 MCP 服务列表，其中 **AliyunBailianMCP\_amap-maps** 已成功添加并启用。
-    
-5.  在 Cherry Studio 中使用 MCP 服务。新建话题，在下方选择**AliyunBailianMCP\_amap-maps** 服务。
-    
-    在弹出的 MCP 服务列表中，勾选 **AliyunBailianMCP\_amap-maps** 服务并确认。
-    
-6.  在对话框中输入`现在出发，从杭州萧山国际机场到杭州西湖景区。请你提供三种公共交通出行方案`，可以看到大模型成功调用了 MCP 工具来规划路线。
-    
-    > 若模型无法调用 MCP，请参考[常见问题](https://help.aliyun.com/zh/model-studio/mcp-external-calls#71be503ed7ucy)。
-    
+1.  前往 [Amap Maps MCP](https://bailian.console.aliyun.com/cn-beijing/store/mcp/detail/amap-maps) 服务详情页，在**安装**区域选择**客户端**。
+2.  点击 **Qoder** 图标，复制安装命令。
+3.  将命令中的 `${DASHSCOPE_API_KEY}` 替换为实际 API Key，或先设置同名环境变量，再执行命令。
+4.  在 Qoder 中确认 MCP 服务已添加并启用。
+
+#### Codex
+
+1.  前往 [Amap Maps MCP](https://bailian.console.aliyun.com/cn-beijing/store/mcp/detail/amap-maps) 服务详情页，在**安装**区域选择**客户端**。
+2.  点击 **Codex** 图标，复制安装命令。
+3.  将命令中的 `${DASHSCOPE_API_KEY}` 替换为实际 API Key，或先设置同名环境变量，再执行命令。
+4.  在 Codex 中确认 MCP 服务已添加并启用。
+
+#### Claude Code
+
+1.  前往 [Amap Maps MCP](https://bailian.console.aliyun.com/cn-beijing/store/mcp/detail/amap-maps) 服务详情页，在**安装**区域选择**客户端**。
+2.  点击 **Claude Code** 图标，复制安装命令。
+3.  将命令中的 `${DASHSCOPE_API_KEY}` 替换为实际 API Key，或先设置同名环境变量，再执行命令。
+4.  在 Claude Code 中确认 MCP 服务已添加并启用。
 
 #### Cursor
 
 1.  安装 [Cursor](https://cursor.com/)。
-    
-2.  进入 [Amap Maps MCP](https://bailian.console.aliyun.com/?tab=mcp&scm=20140722.S_%E7%99%BE%E7%82%BCprompt._.RL_%E7%99%BE%E7%82%BCprompt-LOC_aillm-OR_chat-V_3-RC_llm#/mcp-market/detail/amap-maps) 服务界面，在**外部调用**界面中选择 **Cursor**。
-    
-    页面显示两种配置方式：**方法1 自动配置**，点击**一键配置至 Cursor** 按钮；**方法2 手动配置**，获取 DASHSCOPE\_API\_KEY 并替换配置文件中的对应变量。
-    
-3.  点击**一键配置至Cursor**，选择 API Key，点击**确定**。在弹出的 Cursor 界面中点击 **Install**。
-    
-    界面显示 MCP Server 配置信息，包括名称 **AliyunBailianMCP\_amap-maps**、类型 **stdio**、命令 **npx** 等，确认无误后点击 **Install**。
-    
-    头像右下角状态显示为绿色即为安装成功。
-    
+2.  前往 [Amap Maps MCP](https://bailian.console.aliyun.com/cn-beijing/store/mcp/detail/amap-maps) 服务详情页，在**安装**区域选择**客户端**。
+3.  点击 **Cursor** 图标，在打开的 Cursor 界面中确认 MCP Server 配置，按提示完成安装。
+4.  若配置中的 API Key 为 `${DASHSCOPE_API_KEY}` 占位符，替换为实际 API Key。
+
+**说明**Cherry Studio、Cline 等客户端暂不支持一键安装。安装对应客户端后，在**安装**区域复制 MCP 服务地址，在客户端中手动添加 MCP 服务（类型选择 Streamable HTTP，地址以 `/sse` 结尾时选择 SSE），并在请求头中添加 `Authorization: Bearer ${DASHSCOPE_API_KEY}`。
+
+> 若模型无法调用 MCP，请参考[常见问题](https://help.aliyun.com/zh/model-studio/mcp-external-calls#71be503ed7ucy)。
 
 ### 通过 SDK 进行开发集成
 
@@ -169,7 +163,7 @@ pip install openai mcp
 阿里云百炼 MCP（Model Context Protocol）是一项新推出的服务，允许用户在百炼平台上统一接入和管理 MCP 服务。最新进展包括：
 1. 支持通过 MCP 广场一键开通多种 MCP 服务（如 Amap Maps、联网搜索等）。
 2. 提供 Streamable HTTP 协议，支持外部应用通过标准 HTTP 调用。
-3. 已与 Cherry Studio、Cursor 等主流工具集成，支持自动配置。
+3. 已与 Qoder、Cursor 等主流工具集成，支持快捷安装。
 4. 开发者可通过 MCP SDK 灵活编码集成至自有项目。
 ```
 

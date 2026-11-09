@@ -1,11 +1,11 @@
 {
-  "updatedAt": "2026-11-08",
-  "totalFamilies": 126,
-  "totalModels": 336,
+  "updatedAt": "2026-11-10",
+  "totalFamilies": 125,
+  "totalModels": 335,
   "profileCoverage": {
-    "full": 274,
-    "partial": 53,
-    "structured-only": 9,
+    "full": 271,
+    "partial": 54,
+    "structured-only": 10,
     "none": 0
   },
   "capabilityDistribution": {
@@ -14,7 +14,7 @@
     "IG": 17,
     "Reasoning": 11,
     "ASR": 11,
-    "TTS": 9,
+    "TTS": 8,
     "Realtime-ASR": 6,
     "VU": 5,
     "Multimodal-Omni": 5,
@@ -28,7 +28,7 @@
     "3D-generation": 1
   },
   "providerDistribution": {
-    "qwen": 63,
+    "qwen": 62,
     "qwen-domain-model": 26,
     "wan": 13,
     "mini-max": 4,
@@ -1960,21 +1960,6 @@
       "itemCount": 1,
       "items": [
         "virtualmodel-v2"
-      ]
-    },
-    {
-      "slug": "voice-enrollment",
-      "name": "大模型声音复刻及声音设计",
-      "primaryCapability": "TTS",
-      "capabilities": [
-        "TTS"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "voice-enrollment"
       ]
     },
     {

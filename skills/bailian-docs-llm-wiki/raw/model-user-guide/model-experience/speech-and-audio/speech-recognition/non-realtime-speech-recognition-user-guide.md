@@ -16,7 +16,7 @@
 
 ## 前提条件
 
--   已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并将其[配置到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
+-   已[获取 API Key](raw/model-api-reference/preparations/get-api-key.md)，并将其配置到环境变量。
 -   如果通过 DashScope SDK 调用，需要[安装最新版SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
 ## 快速开始

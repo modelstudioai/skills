@@ -58,7 +58,7 @@ string
 
 array<object>
 
-工具包列表，按类型分组。每项含 `type`（`builtin_toolkit` / `mcp_toolkit`）、`default_config`（含 `enabled` 与 `permission_policy`）、`configs`（逐工具配置，覆盖 `default_config`），MCP 类还需 `mcp_server_name`。`builtin_toolkit` 至多一项，`mcp_toolkit` 可多项
+工具包列表，按类型分组。每项含 `type`（`builtin_toolkit` / `mcp_toolkit`）、`default_config`（含 `enabled` 与 `permission_policy`）、`configs`（逐工具配置，覆盖 `default_config`；单个工具配置支持 `params` 传工具专属参数），MCP 类还需 `mcp_server_name`。`builtin_toolkit` 至多一项，`mcp_toolkit` 可多项
 
 `mcp_servers`
 
@@ -93,6 +93,8 @@ object
 业务自定义键值，不影响模型行为
 
 `permission_policy.type` 取值 `always_allow`（直接执行） / `always_ask`（每次调用前暂停等待人工确认）。工具审批仅支持主智能体，不支持在子智能体中使用。MCP 工具的审批策略配置在 `tools[].type=mcp_toolkit` 项的 `default_config` / `configs` 中，不在 `mcp_servers[]` 中设置。
+
+`configs[].params` 与 `name`、`enabled`、`permission_policy` 同级，用于传入工具专属参数。启用 `search_knowledgebases` 时，必须提供非空的 `params.knowledge_application_id`，值为知识检索服务 ID，不是单个知识库 ID；缺少或为空时创建 Agent 返回 400。一个智能体最多配置一个该工具。
 
 ## 请求示例
 
@@ -171,6 +173,31 @@ Agent agent = client.agents().create(AgentCreateParam.builder()
 System.out.println(agent.getId());       // "agent_xxx"
 System.out.println(agent.getVersion());  // 1
 ```
+
+### 知识检索配置示例
+
+在 `builtin_toolkit.configs[]` 中启用 `search_knowledgebases`，并通过 `params.knowledge_application_id` 指定知识检索服务（ID 形如 `aid-...`）：
+
+```
+{
+  "tools": [
+    {
+      "type": "builtin_toolkit",
+      "configs": [
+        {
+          "name": "search_knowledgebases",
+          "enabled": true,
+          "params": {
+            "knowledge_application_id": "aid-xxxxxxxx"
+          }
+        }
+      ]
+    }
+  ]
+}
+```
+
+`search_knowledgebases` 未配置时不启用检索。模型按需调用，并结合多轮对话生成检索问题。使用前需先创建知识检索服务，详见[知识检索](raw/application-user-guide/knowledge-base/rag-knowledge-retrieval.md)。更新已有智能体时，保留其他仍在使用的工具配置。使用方式详见 [Agent 工具配置](https://help.aliyun.com/zh/model-studio/managed-agents-builtin-tools#h-bt-knowledge)。
 
 ## 响应示例
 

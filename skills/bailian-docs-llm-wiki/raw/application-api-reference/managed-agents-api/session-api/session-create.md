@@ -4,7 +4,7 @@
 
 ## 前提
 
-已完成 Endpoint 与鉴权配置，详见[API 总览与认证](raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md)。创建会话前需先有智能体和运行环境，分别详见[Agent](raw/application-api-reference/managed-agents-api/agent-api.md)与[Environment](raw/application-api-reference/managed-agents-api/environment-api.md)。
+已完成 Endpoint 与鉴权配置，详见[API 总览与认证](raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md)。创建会话前需先有智能体和运行环境，分别详见[Agent](raw/application-api-reference/managed-agents-api/agent-api.md)与[Environment](raw/application-api-reference/managed-agents-api/environment-api.md)。挂载百炼记忆库时，需已开通百炼记忆服务。
 
 ## 接口
 
@@ -50,7 +50,7 @@ string
 
 array
 
-创建时挂载的资源列表。文件项含 `type`（固定为 `file`）、`file_id`（已上传的文件 ID）、`mount_path`（挂载路径，必须以 `/uploads/` 开头，实际路径会加上 `/mnt/session` 前缀）；记忆库项含 `type`（固定为 `memory_store`）、`memory_store_id`、`access`（`read_only` / `read_write`，默认 `read_write`）、`instructions`（挂载说明，最长 4096 字符），挂载路径由服务端按记忆库名称生成。详见[记忆库](raw/application-user-guide/agent-development/managed-agents/managed-agents-context/managed-agents-memory-store.md)
+创建时挂载的资源列表。文件项含 `type`（固定为 `file`）、`file_id`（已上传的文件 ID）、`mount_path`（挂载路径，必须以 `/uploads/` 开头，实际路径会加上 `/mnt/session` 前缀）；记忆项含 `type`（固定为 `memory_store`）、`provider`（`default` / `agentstudio_memory`，省略时为 `default`）、`memory_store_id`（必填）、`entity_id`（百炼记忆必填）、`access`（`read_only` / `read_write`，默认 `read_write`）、`description`（百炼记忆的挂载用途描述）、`project_ids`（百炼事实和技能记忆规则 ID，每条挂载合计最多 5 个）、`profile_schema`（百炼画像模板 ID，最多一个）、`instructions`（内置记忆的挂载说明，最长 4096 字符）。内置记忆的挂载路径由服务端生成；百炼记忆无挂载路径。详见[记忆库](raw/application-user-guide/agent-development/managed-agents/managed-agents-context/managed-agents-memory-store.md)
 
 `vault_ids`
 
@@ -83,6 +83,8 @@ object
 array
 
 会话级 MCP 请求头，独立于 `agent`，见[会话级 MCP 请求头](#h-sc-mcp)。省略时为空数组
+
+记忆资源中，`provider` 只接受 `default` 或 `agentstudio_memory`，显式传 `null`、空串或其他值会返回参数错误。`entity_id` 仅用于百炼记忆，是挂载绑定的实体 ID，不是云账号 UID，也不是 Session 顶层字段。`project_ids` 省略或为空数组时使用百炼默认记忆规则；`profile_schema` 省略时不启用画像能力，且不计入 5 条规则。内置记忆沿用 `memory_store_id`、`access` 和 `instructions` 字段。
 
 **说明**同一会话绑定多个 Vault 时，不同 Vault 之间的 `secret_name` 不能重复，也不要使用前缀相同的名称（例如 `API_KEY` 与 `API_KEY_V2`），否则创建会话返回 400 `invalid_parameter`（Invalid request）。
 
@@ -149,6 +151,34 @@ Session session = client.sessions().create(SessionCreateParam.builder()
     .build());
 System.out.println(session.getId() + " " + session.getStatus());
 ```
+
+### 百炼记忆挂载示例
+
+挂载百炼记忆库时，将 `provider` 设为 `agentstudio_memory`，并填写 `entity_id`：
+
+```
+{
+  "agent": {
+    "type": "agent",
+    "id": "agent_xxx"
+  },
+  "environment_id": "env_xxx",
+  "resources": [
+    {
+      "type": "memory_store",
+      "provider": "agentstudio_memory",
+      "memory_store_id": "0123456789abcdef0123456789abcdef",
+      "entity_id": "customer_001",
+      "access": "read_write",
+      "description": "保存客户确认的业务约定、可复用经验和沟通偏好",
+      "project_ids": ["fact_rule_demo", "skill_rule_demo"],
+      "profile_schema": "profile_schema_demo"
+    }
+  ]
+}
+```
+
+`memory_store_id` 是百炼记忆库 ID，不要求 `memstore_` 前缀。规则与画像模板的默认行为详见[记忆库](https://help.aliyun.com/zh/model-studio/managed-agents-memory-store#h-ms-bailian)。
 
 ## 会话级配置覆盖
 
@@ -378,7 +408,7 @@ string
 
 array
 
-挂载的资源列表。文件项含 `id`（资源 ID）、`type`、`file_id`（内部副本 ID）、`mount_path`（含前缀的完整路径）；记忆库项含 `id`、`type`、`file_id`（固定为 `null`）、`memory_store_id`、`name` / `description`（记忆库元数据）、`access`、`instructions`、`mount_path`（服务端生成，如 `/mnt/memory/<名称>`）
+挂载的资源列表。文件项含 `id`（资源 ID）、`type`、`file_id`（内部副本 ID）、`mount_path`（含前缀的完整路径）；记忆项含 `id`（服务端生成的挂载 ID，与 `memory_store_id` 不同，创建时不传）、`type`、`provider`、`memory_store_id`、`name`（可选，可能为空）、`access`。百炼记忆项另含 `entity_id`、`project_ids`、`profile_schema`、`description`（创建时保存的挂载描述，未填时可为空）；内置记忆项另含 `file_id`（固定为 `null`）、`description`（记忆库元数据）、`instructions`、`mount_path`（服务端生成，如 `/mnt/memory/<名称>`）。百炼记忆不返回 `mount_path`
 
 `title` / `metadata`
 
@@ -409,6 +439,8 @@ string
 object
 
 会话运行时注入的环境变量，字符串键值对，沙箱代码中可直接按名读取
+
+百炼记忆挂载只返回创建时选择的规则和画像模板 ID，不补入默认规则或模板；不返回记忆正文、画像值或完整规则定义。
 
 本响应不含 `mcp_configs`；通过[获取 Session](raw/application-api-reference/managed-agents-api/session-api/session-get.md)查询。
 

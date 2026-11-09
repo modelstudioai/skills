@@ -1,104 +1,54 @@
 # sandbox api
 
-Sandbox API 是阿里云百炼提供的沙箱环境生命周期管理接口，兼容 E2B 协议，支持沙箱实例与模版的创建、查询、更新和销毁。所有请求需通过阿里云百炼 API Key 鉴权，并经由工作空间专属 Endpoint 转发。该 API 适用于需要动态执行代码、隔离运行环境或构建 Agent 工具链的开发者场景。
+Sandbox API 是阿里云百炼提供的沙箱环境生命周期管理接口，兼容 E2B 协议，支持沙箱实例与模版的创建、查询、更新和销毁。所有请求需通过阿里云百炼 API Key 鉴权，并经由工作空间专属 Endpoint 转发。管控面能力（如模版构建、文件上传）与数据面访问（如连接、执行）分离，开发者需按阶段分步调用。
 
 ## 支持的模型/功能
 
-Sandbox API 不直接提供“模型”推理能力，而是提供**可编程沙箱环境**（即轻量级容器化运行时），其核心能力包括：
+- **沙箱实例管理**：支持创建、列举、获取详情、连接、暂停、恢复和释放实例，全部兼容 E2B 协议语义（如 `connect()` 对应 `/sandboxes/{sandboxID}/connect`）。详见 [创建实例](raw/application-api-reference/sandbox-api/sandbox-api-instances/sandbox-api-create.md) 和 [实例管理](raw/application-api-reference/sandbox-api/sandbox-api-instances.md)。
+- **沙箱模版管理**：支持创建、列举、获取、更新、查询构建状态及删除模版；其中更新模版为阿里云百炼扩展协议，不完全兼容 E2B v2 Update Template。模版构建完成后状态需为 `ready` 才可创建实例，参见 [获取构建状态](raw/application-api-reference/sandbox-api/sandbox-api-templates/sandbox-api-template-build-status.md)。
+- **文件挂载能力**：仅支持通过 `source=sandbox_template` 上传的文件用于模版挂载（如 `mntConfig`），且文件状态必须为 `available`。不支持 `.csv`、`.yml`、`.sh`、`.whl`、`.tar.gz` 等扩展名，完整限制见 [概览](raw/application-api-reference/sandbox-api/sandbox-api-overview.md)。
 
-- **实例管理**：创建、列举、获取、连接、暂停、恢复和释放沙箱实例；
-- **模版管理**：创建、列举、获取、更新、查询构建状态和删除沙箱模版；
-- **文件挂载**：通过预上传的 `sandbox_template` 类型文件注入配置、脚本或依赖（如 `config.json`、`requirements.txt`）；
-- **网络与生命周期控制**：支持出口白名单/黑名单、公网访问开关、超时自动暂停（`autoPause`）或自动释放（`maxRunningTimeout`）。
-
-模版底层基于 envd 构建，官方预置镜像包括 `code-interpreter-v1`、`browser` 和 `all-in-one`，均托管于 `fc-e2b-registry.cn-beijing.cr.aliyuncs.com/runtime/`。详细模版能力说明见 [模版管理](../../raw/application-api-reference/sandbox-api/sandbox-api-templates.md)。
-
-> **注意**：文档中多次提及 `POST /templates` 为兼容路由，但实际推荐使用 `/v3/templates`（见 [创建模版](../../raw/application-api-reference/sandbox-api/sandbox-api-templates/sandbox-api-template-create.md)），因 `/v3` 路径明确要求资源规格校验且响应字段更稳定；而 `/templates` 在部分旧文档中未声明此约束，存在歧义。
+> **注意**：文档中 `mntConfig.mountPath` 的路径要求存在不一致说明——[创建模版](raw/application-api-reference/sandbox-api/sandbox-api-templates/sandbox-api-template-create.md) 和 [更新模版](raw/application-api-reference/sandbox-api/sandbox-api-templates/sandbox-api-template-update.md) 均明确要求 `mountPath` 必须以 `/home/user/workspace/uploads/` 开头；但 [概览](raw/application-api-reference/sandbox-api/sandbox-api-overview.md) 仅提示“推荐写完整文件路径”，未强调强制前缀。实际调用时请严格遵循前缀要求，否则文件不会出现在实例中。
 
 ## 关键参数
 
-| 参数 | 位置 | 必填 | 类型 | 说明 |
-|------|------|------|------|------|
-| `Authorization` | Header | 是 | string | `Bearer <your-api-key>`，来自 [认证](../../raw/application-api-reference/sandbox-api/sandbox-api-authentication.md) 页面创建的百炼 API Key |
-| `workspace_id` | Endpoint 路径 | 是 | string | 控制台右上角获取，形如 `ws-xxx`；拼入 Base URL：`https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio/sandbox` |
-| `templateID` | 请求体（创建实例）或路径（模版操作） | 是 | string | 模版唯一标识，必须已构建完成（`status=ready`），否则创建实例返回 409 |
-| `sandboxID` | 路径 | 是 | string | 实例唯一 ID，格式如 `sbx-xxx`，由创建接口返回 |
-| `originFileId` | `mntConfig` 数组内 | 是 | string | 文件 ID，**必须**是通过 `source=sandbox_template` 上传且 `status=available` 的文件（见 [概览](../../raw/application-api-reference/sandbox-api/sandbox-api-overview.md)） |
-| `mountPath` | `mntConfig` 数组内 | 是 | string | 必须以 `/home/user/workspace/uploads/` 开头；非此路径下挂载将被忽略 |
-| `timeout` | 请求体（创建/连接/恢复） | 否 | integer | 取值范围 `[300, 604800]`（5 分钟 ~ 7 天），单位秒；超时后行为由 `lifecycle.on_timeout` 或 `autoPause` 决定 |
+| 参数 | 位置 | 类型 | 说明 |
+|------|------|------|------|
+| `Authorization: Bearer <API_KEY>` | Header | string | 阿里云百炼 API Key，非 E2B SDK 所需的 `X-API-Key`；后者仅用于协议占位，[认证](raw/application-api-reference/sandbox-api/sandbox-api-authentication.md) 文档已明确说明。 |
+| `templateID` | 请求体（创建实例） / 路径（模版操作） | string | 模版唯一标识，创建实例前必须确保其构建状态为 `ready`；模版更新后 `templateID` 不变，但 `version` 递增。 |
+| `timeout` | 请求体（创建/连接/恢复实例） | integer | 实例生命周期或连接会话超时时间，单位秒，取值范围 `[300, 604800]`（5 分钟至 7 天）。 |
+| `mntConfig` | 请求体（创建/更新模版） | array<object> | 文件挂载配置，`originFileId` 必须指向 `source=sandbox_template` 且 `status=available` 的文件；`mountPath` 必须以 `/home/user/workspace/uploads/` 开头。 |
+| `autoPauseTime` / `maxRunningTimeout` | 请求体（创建/更新模版） | integer | 控制模版级自动行为：仅设 `autoPauseTime` 则到期暂停；两者均设则 `maxRunningTimeout` 优先生效（到期直接释放）。 |
 
 ## 使用方式
 
-### 1. 前置准备
-- 开通百炼服务并[创建 API Key](../../raw/application-api-reference/sandbox-api/sandbox-api-authentication.md)；
-- 在控制台完成 **SLR 授权**（首次使用必需），详见 [快速开始](../../raw/application-user-guide/agent-development/sandbox/sandbox-start-using/sandbox-quick-start.md)；
-- 获取 `workspace_id` 并确认地域为 `cn-beijing`（当前唯一支持地域）。
-
-### 2. 典型流程（模版 → 实例）
-1. **上传文件**（如 `config.json`）：
-   ```bash
-   curl -X POST "$BASE_URL/api/v1/agentstudio/files" \
-     -H "Authorization: Bearer $API_KEY" \
-     -F "file=@./config.json" \
-     -F "source=sandbox_template"
-   ```
-   轮询至 `status=available` 后记录 `id`。
-2. **创建模版**（指定 `originFileId`）：
-   ```bash
-   curl -X POST "$BASE_URL/v3/templates" \
-     -H "Authorization: Bearer $API_KEY" \
-     -H "Content-Type: application/json" \
-     -d '{
-       "name": "my-py-env",
-       "cpuCount": 1,
-       "memoryMB": 2048,
-       "mntConfig": [{
-         "originFileId": "file_xxx",
-         "mountPath": "/home/user/workspace/uploads/config.json"
-       }]
-     }'
-   ```
-   记录返回的 `templateID` 和 `buildID`。
-3. **等待构建就绪**：
-   ```bash
-   curl "$BASE_URL/templates/{templateID}/builds/{buildID}/status" \
-     -H "Authorization: Bearer $API_KEY"
-   ```
-   直至 `status=ready`。
-4. **创建实例**：
-   ```bash
-   curl -X POST "$BASE_URL/sandboxes" \
-     -H "Authorization: Bearer $API_KEY" \
-     -H "Content-Type: application/json" \
-     -d '{"templateID": "tmpl-xxx", "timeout": 3600}'
-   ```
-
-### 3. SDK 支持
-可直接使用 [E2B 官方 SDK](https://docs.e2b.dev/sdk)（如 Python `e2b` 包），仅需将 `api_key` 设为占位符（如 `e2b_${ALIYUN_UID}`），真实鉴权仍依赖 HTTP Header 中的百炼 API Key。详情见 [实例管理与使用](../../raw/application-user-guide/agent-development/sandbox/sandbox-sdk.md)。
+1. **前置准备**：开通百炼服务，[创建 API Key](raw/application-api-reference/sandbox-api/sandbox-api-authentication.md)，完成 SLR 授权（见[快速开始](raw/application-user-guide/agent-development/sandbox/sandbox-start-using/sandbox-quick-start.md)），并获取 `workspace_id`。
+2. **Endpoint 构造**：使用固定格式 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio/sandbox`（当前仅支持 `cn-beijing` 地域）。
+3. **文件上传（如需挂载）**：
+   - 小文件：表单上传，`source=sandbox_template`；
+   - 大文件：预签名地址上传，需调用 `/files` 获取 `upload_url`，PUT 后调用 `/files/{file_id}/complete` 并轮询至 `status=available`。
+4. **模版构建**：调用 `/v3/templates` 创建模版 → 用返回的 `buildID` 轮询 `/templates/{templateCode}/builds/{buildID}/status` 直至 `status=ready`。
+5. **实例操作**：基于就绪模版调用 `/sandboxes` 创建实例 → 使用 `/sandboxes/{sandboxID}/connect` 获取数据面凭证 → 按需调用 `/pause`、`/resume` 或 `/sandboxes/{sandboxID}`（DELETE）管理生命周期。
 
 ## 限制和注意事项
 
-- **地域限制**：当前仅支持 `cn-beijing`，Endpoint 中 `region` 字段不可替换为其他值；
-- **文件限制**：
-  - 单文件 ≤ 50 MB，工作空间总容量 ≤ 100 GB，保存时效 30 天；
-  - 仅 `.yaml` 明确支持；`.csv`、`.yml`、`.sh`、`.whl`、`.tar.gz`、`.ts` 等**不支持**（见 [概览](../../raw/application-api-reference/sandbox-api/sandbox-api-overview.md)）；
-  - 文件必须带 `source=sandbox_template` 且状态为 `available`，否则模版创建/更新失败（错误码 `11900024`）；
-- **模版与实例强绑定**：删除模版前，必须确保无 `running` 或 `paused` 实例（否则返回 409），见 [删除模版](../../raw/application-api-reference/sandbox-api/sandbox-api-templates/sandbox-api-template-delete.md)；
-- **错误处理**：兼容 E2B 协议的接口**不封装为百炼统一 `Result<T>` 结构**，错误响应直接返回 `{code, message, requestID}`，HTTP 状态码语义与 [错误码](../../raw/application-api-reference/sandbox-api/sandbox-api-errors.md) 文档一致；
-- **网络配置差异**：`denyOut` 仅支持 IPv4/IPv6/CIDR，**不支持域名**（`allowOut` 支持），此限制在 `networkConfig` 和 `mntConfig` 的文档中均未显式强调，需特别注意。
+- **地域限制**：当前仅支持 `cn-beijing` 地域，Endpoint 中 `region` 字段不可替换为其他值。
+- **文件限制**：单文件 ≤ 50 MB，工作空间总容量 ≤ 100 GB，保存时效 30 天；不支持 `.csv`、`.yml`、`.sh`、`.whl`、`.tar.gz` 等类型（[概览](raw/application-api-reference/sandbox-api/sandbox-api-overview.md) 明确列出）。
+- **错误处理**：兼容 E2B 协议的接口不返回阿里云百炼标准 `Result<T>` 结构，错误响应贴近 E2B 原生格式；通用错误码见 [错误码](raw/application-api-reference/sandbox-api/sandbox-api-errors.md)，文件类错误码以 `119000xx` 开头。
+- **模版删除约束**：若模版关联任何运行中或暂停中的实例，`DELETE /templates/{templateCode}` 将返回 409 错误，并在响应体中携带 `sandboxId` 和 `sandboxInstanceId`，需先释放实例再删除模版（[删除模版](raw/application-api-reference/sandbox-api/sandbox-api-templates/sandbox-api-template-delete.md)）。
+- **SDK 兼容性**：E2B 官方 SDK 可直接接入，但需注意：`api_key` 参数应填 `e2b_${ALIYUN_UID}` 占位，真实鉴权依赖 Header 中的 `Authorization`（[认证](raw/application-api-reference/sandbox-api/sandbox-api-authentication.md)）。
 
 ## 来源文档
 
 - [概览](../../raw/application-api-reference/sandbox-api/sandbox-api-overview.md)
 - [认证](../../raw/application-api-reference/sandbox-api/sandbox-api-authentication.md)
 - [错误码](../../raw/application-api-reference/sandbox-api/sandbox-api-errors.md)
-- [实例管理](../../raw/application-api-reference/sandbox-api/sandbox-api-instances.md)
 - [创建实例](../../raw/application-api-reference/sandbox-api/sandbox-api-instances/sandbox-api-create.md)
 - [列举实例](../../raw/application-api-reference/sandbox-api/sandbox-api-instances/sandbox-api-list.md)
 - [获取实例](../../raw/application-api-reference/sandbox-api/sandbox-api-instances/sandbox-api-get.md)
 - [连接实例](../../raw/application-api-reference/sandbox-api/sandbox-api-instances/sandbox-api-connect.md)
-- [恢复实例](../../raw/application-api-reference/sandbox-api/sandbox-api-instances/sandbox-api-resume.md)
 - [暂停实例](../../raw/application-api-reference/sandbox-api/sandbox-api-instances/sandbox-api-pause.md)
+- [恢复实例](../../raw/application-api-reference/sandbox-api/sandbox-api-instances/sandbox-api-resume.md)
 - [释放实例](../../raw/application-api-reference/sandbox-api/sandbox-api-instances/sandbox-api-delete.md)
 - [模版管理](../../raw/application-api-reference/sandbox-api/sandbox-api-templates.md)
 - [创建模版](../../raw/application-api-reference/sandbox-api/sandbox-api-templates/sandbox-api-template-create.md)
@@ -107,5 +57,6 @@ Sandbox API 不直接提供“模型”推理能力，而是提供**可编程沙
 - [更新模版](../../raw/application-api-reference/sandbox-api/sandbox-api-templates/sandbox-api-template-update.md)
 - [获取构建状态](../../raw/application-api-reference/sandbox-api/sandbox-api-templates/sandbox-api-template-build-status.md)
 - [删除模版](../../raw/application-api-reference/sandbox-api/sandbox-api-templates/sandbox-api-template-delete.md)
+- [实例管理](../../raw/application-api-reference/sandbox-api/sandbox-api-instances.md)
 
 

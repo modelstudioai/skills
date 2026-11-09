@@ -7518,9 +7518,9 @@ unisound/unisound-u2
 
 antdigital/Ling-3.1-flash
 
-2元
+原价2元**（限时2.5折）**
 
-6元
+原价6元**（限时2.5折）**
 
 无
 

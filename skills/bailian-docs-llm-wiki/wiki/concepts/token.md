@@ -1,58 +1,42 @@
-# Token 计量与计费
+# Token
 
-Token 计量与计费是百炼平台对大模型相关服务（含文本、视觉、语音、向量等）进行资源消耗量化与费用结算的核心机制。平台按实际消耗的输入/输出 Token 数量（以千 Token 为计费单位）精确计量，费用实时生成并纳入统一账单体系，不按请求次数或调用时长计费。
+Token 是百炼平台中用于衡量模型输入与输出内容长度的基本计量单位，也是计费、限流、性能监控和资源调度的核心依据。它并非简单等同于字符或词，而是由模型 tokenizer 对文本（及图像、音频等多模态内容）进行子词切分后生成的离散单元。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **模型调用（`model experience`）**：所有同步/异步模型调用（包括文本生成、VL 多模态、ASR、TTS、Embedding、Rerank 等）均按实际 token 消耗计费。`usage` 字段在响应体中明确返回 `input_tokens` 和 `output_tokens`，开发者可据此监控和优化成本。例如：
-  - 文本模型：按 prompt + completion 的 token 总数计费；
-  - 视觉/语音模型：输入图像/音频经编码后折算为等效 token（具体换算规则见各子文档）；
-  - 向量模型（embedding）：按输入文本长度（字符数或分词后 token 数）计费，不依赖输出维度；
-  - 全模态模型：多模态输入统一归一化为 token 当量，按总当量计费。
-
-- **知识库（RAG）**：Token 消耗发生在多个环节：
-  - **向量化**：文档切片后送入 embedding 模型产生的输入 token；
-  - **重排序（rerank）**：对召回结果做精排时的 query + document pair 输入 token；
-  - **问答生成**：LLM 基于检索结果生成答案时的 prompt（含上下文）+ output token；
-  > 注意：多个知识库并行检索时，token 消耗量按知识库数量线性叠加。
-
-- **Flow Agent / Managed Agents**：Agent 自身不单独计费，但其执行过程中触发的模型调用（如 LLM 路由、工具参数生成、最终回答生成）均计入对应模型的 token 消耗，并体现在账单中“阿里云百炼大模型推理”类目下。
-
-- **ParseX 文档解析**：虽主要按页/秒计量，但若启用“智能字段抽取”等依赖大模型的高级能力，该部分将额外产生 token 费用（归属模型调用类目），与基础解析费用分离。
-
-- **安全高级防护**：内容安全检测（如敏感词、价值观、幻觉识别）按 Credit 计费，而 1 Credit ≈ 固定 token 当量（具体换算比以控制台实时显示为准），本质仍是 token 消耗的抽象计量形式。
+- **模型调用**：`max_tokens` 参数控制模型生成内容的最大 Token 数（不包含输入部分）；`input.messages` 的总长度以 Token 数（非字符数）为上限（Qwen2 系列默认上限 32768 tokens），超限将直接拒绝请求（HTTP 400）。
+- **计费计量**：所有模型服务（包括大语言模型、向量模型、排序模型、路由模型等）均按 **输入 Token 数 + 输出 Token 数** 分别计费。例如 `text-embedding-v4` 按 0.0005 元/千 Token 计费，知识库 Rerank 费用取决于初步召回切片的总 Token 数，而非最终返回数量。
+- **监控告警**：`模型消耗 TotalToken 数` 是模型监控的核心指标，支持配置环比突增、阈值越界等告警，是识别异常调用、排查成本飙升的首要依据。
+- **限流控制**：配额（如 5 QPS / 账号）和吞吐能力（如独占吞吐单元）均以 Token 处理速率（tokens/s）为底层约束；流式响应中 `max_tokens` 的实际生效值可能略低于设定值，系因 token 分片边界与 chunk 切分策略导致，属正常行为。
+- **多模态处理**：图像、音视频等非文本输入经预处理后同样被编码为 Token 序列参与计算（如 `qwen3-vl-plus` 的图像 patch 会被 tokenizer 映射为视觉 token），其 Token 消耗计入总用量并计费。
 
 ## 关键参数和配置
 
-- **计量精度**：Token 数量以整数计，账单按 **千 Token（kToken）四舍五入**，不足 1 kToken 按 1 kToken 计。
-- **响应必含字段**：所有模型调用成功响应的 `usage` 对象中均包含：
-  ```json
-  "usage": {
-    "input_tokens": 1234,
-    "output_tokens": 567,
-    "total_tokens": 1801
-  }
-  ```
-- **计费模型标识**：Token 单价与所选 `model_id` 强绑定，不同模型（如 `qwen-max` vs `qwen-plus`）、不同地域（北京/新加坡等）单价可能不同，需以控制台「计费中心」实时价格为准。
-- **免费额度抵扣**：新人/新功能赠送的免费 token 额度（如 Flow Agent 新人额度）自动优先抵扣模型调用费用，无需手动配置；额度有效期以控制台显示为准。
-- **用量查询入口**：
-  - 实时用量：控制台「用量中心」→「模型调用」页，支持按 `model_id`、`API Key`、时间范围筛选；
-  - 历史账单：通过 Billing API 的 `GetBillingTrend` 接口，指定 `groupBy: [{"code": "BASE_MODEL"}]` 可获取各模型 token 费用明细。
+| 参数名 | 所在接口 | 类型 | 说明 | 常见取值 |
+|--------|----------|------|------|-----------|
+| `max_tokens` | 所有模型 API（DashScope 原生、OpenAI 兼容、Anthropic 兼容） | integer | 模型生成内容的最大 Token 数（仅输出侧） | `1024`（默认）、`2048`、`8192` |
+| `input.messages` 长度限制 | DashScope 原生接口 | — | 请求体中 `messages` 内容总 Token 数上限（含 system/user/assistant） | `32768`（Qwen2 系列） |
+| `TotalToken 数` | 监控系统（`model-telemetry`） | numeric | 单次调用中 `input_tokens + output_tokens` 总和，用于计费与告警 | 由平台自动统计，不可设置 |
+| `top_k` / `repetition_penalty` | DashScope 原生接口（高级控制） | integer / number | 影响 token 采样过程的参数，间接调控输出 token 的多样性与重复性 | `top_k=50`, `repetition_penalty=1.1` |
+
+> ⚠️ 注意：`max_tokens` 仅限制生成长度，**不控制输入长度**；输入超限需自行截断或分块；流式响应下该参数仍生效，但首 Token 延迟和 chunk 边界不受其影响。
 
 ## 面向开发者，简洁实用
 
-- ✅ **务必解析响应中的 `usage` 字段**：这是唯一权威的 token 消耗依据，不可依赖请求长度或经验估算。
-- ✅ **流式响应同样完整计费**：即使中断流式读取，已生成的 output tokens 仍会计费。
-- ✅ **多模态输入需关注编码开销**：一张高分辨率图或一段长音频，其 token 当量可能远超文本，建议在生产环境预估并压测。
-- ⚠️ **避免无效 token 浪费**：精简 prompt 中冗余说明、限制 `max_tokens`、启用 `stop` 参数截断无关输出，可显著降本。
-- ⚠️ **注意跨模型 token 定义差异**：Embedding 模型按输入字符/分词计，VL 模型按图像 patch 编码后 token 计——务必查阅对应模型子文档的「Token 计算规则」章节。
-- 🔍 **排查费用异常？**：先查用量中心确认 token 消耗量，再结合 Billing API 按 `API_KEY_ID` 分组，定位高消耗调用方。
+- **必查响应中的 `usage` 字段**：每次成功调用返回的 JSON 中均含 `"usage": {"input_tokens": N, "output_tokens": M, "total_tokens": N+M}`，这是验证实际 Token 消耗、调试截断逻辑、核对账单的唯一可信来源。
+- **调试建议**：本地开发时，使用 `dashscope` SDK 的 `get_tokenizer()` 工具（如 `dashscope.Tokenizer.get_instance('qwen-max')`）可精确估算输入文本的 Token 数，避免线上超限。
+- **成本优化重点**：
+  - 减少冗余 system prompt 和历史消息；
+  - 知识库检索时降低 `vector_topk` 和 `keyword_topk`，直接减少送入 Rerank 的切片 Token 总量；
+  - 流式场景下，若只需摘要，可设较小 `max_tokens` 并配合 `stop` 参数提前终止。
+- **不要混淆**：Token ≠ 字符（中文常 1 字 ≈ 1–2 token，英文单词常拆为 subword）、≠ 词（无空格分隔时仍可切分）、≠ 行数。一切以 `usage` 字段和 tokenizer 实测为准。
 
 ## 关联主题页
 
+- [get started with models](../guides/get-started-with-models.md)
+- [qwen api reference](../api/qwen-api-reference.md)
 - [agent billing](../guides/agent-billing.md)
-- [model experience](../guides/model-experience.md)
+- [model monitoring](../guides/model-monitoring.md)
 - [more about models](../api/more-about-models.md)
-- [billing api](../api/billing-api.md)
 
 

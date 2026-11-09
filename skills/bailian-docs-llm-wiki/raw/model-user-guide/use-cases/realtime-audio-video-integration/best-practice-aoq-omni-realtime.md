@@ -131,6 +131,8 @@ engine = AoqClientEngine.createEngine(config, this, context);
 
 调用 `startAudioCapture` 与 `startAudioPlayer` 启动本地音频采集与播放；调用 `startVideoCapture` 启动摄像头，并通过 `setLocalView` 将 SDK 渲染目标绑定到业务侧的预览控件。
 
+以下示例由 SDK 自动播放音频。如需先审核再播放，请在 `startAudioPlayer` 的播放配置中将 `isExternal` 设为 `true`，关闭 SDK 自动播放，并开启播放音频帧回调。应用可复制并缓存回调中的 PCM 音频，审核后再决定播放或丢弃。配置方法见[自定义音频播放](raw/_short/aoq-custom-audio-playback-d7aa8527189532a2.md)。
+
 **iOS：**
 
 使用扬声器通话时，在启动采集和播放前，将两侧的 `isVoipMode` 都设为 `true`，启用硬件回声消除。播放模型回复时保持麦克风采集，让 VAD 能检测到用户插话并触发打断。

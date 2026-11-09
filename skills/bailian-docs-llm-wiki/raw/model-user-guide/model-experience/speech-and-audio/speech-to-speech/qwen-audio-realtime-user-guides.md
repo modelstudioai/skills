@@ -9,7 +9,7 @@ Qwen-Audio 是端到端实时语音交互大模型，支持低延迟语音对话
 该模型除 WebSocket 协议外，还支持通过 AOQ 和 WebRTC 协议接入；如果是客户端对接，且更看重稳定的延迟、弱网下的交互能力、实时双工的降噪与回声消除，可优先考虑 AOQ，协议对比与选型请参见[API 参考](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/voice-conversation-api-references.md)。
 
 -   支持 Function Calling 工具调用，模型可自主判断是否需要调用外部工具获取信息
--   支持联网搜索，模型可根据实时问题自主判断是否搜索并返回搜索结果来源。`qwen-audio-3.1-realtime-flash` 可同时启用联网搜索和 Function Calling；3.1 Plus 和 3.0 Plus/Flash 不可同时启用
+-   支持[联网搜索](#audio-realtime-web-search)，模型可根据实时问题自主判断是否搜索并返回搜索结果来源。`qwen-audio-3.1-realtime-flash` 可同时启用联网搜索和 Function Calling；3.1 Plus 和 3.0 Plus/Flash 不可同时启用
 -   支持对话上下文管理（创建、查询、删除对话项），灵活注入历史上下文或清理无关对话项
 -   高表现力语音输出，根据对话语境动态调整语气、节奏和情感表达
 -   支持系统音色与声音复刻音色，可通过声音复刻创建专属 AI 音色用于语音对话输出
@@ -1418,6 +1418,45 @@ if __name__ == "__main__":
 
 运行 `python realtime_fc_demo.py`，对着麦克风说话即可体验带有 Function Calling 的实时对话。例如，询问“杭州天气怎么样”或“北京到上海的火车票多少钱”，模型会自动调用对应的工具函数并基于结果回复。
 
+### 联网搜索
+
+查询天气、新闻等即时信息时，可启用联网搜索，让模型检索实时资料后生成回复。联网搜索默认关闭；开启后，模型会自主判断是否需要搜索，并非每轮对话都会触发。
+
+**说明**联网搜索采用 `agent` 策略，计费请参考[计费说明](https://help.aliyun.com/zh/model-studio/web-search#92ce83df3a599)。
+
+`qwen-audio-3.1-realtime-flash` 可同时启用联网搜索和 Function Calling；`qwen-audio-3.1-realtime-plus`、`qwen-audio-3.0-realtime-plus` 和 `qwen-audio-3.0-realtime-flash` 不可同时启用两者。
+
+**1\. 启用联网搜索**
+
+通过 `session.update` 事件，在 `session` 中设置以下参数：
+
+-   `enable_search`：设为 `true` 开启联网搜索。
+-   `search_options.enable_source`：设为 `true` 返回搜索结果来源。
+
+```
+{
+    "type": "session.update",
+    "session": {
+        "enable_search": true,
+        "search_options": {
+            "enable_source": true
+        }
+    }
+}
+```
+
+参数详情请参见[session.update](https://help.aliyun.com/zh/model-studio/fun-audiochat-client-events#fc65a1b2c3d5f)。
+
+**2\. 读取搜索来源与计量**
+
+模型回复仍通过文本和音频事件接收。执行搜索后，可从 `response.done` 事件的 `response` 对象中读取：
+
+-   `search_info.search_results`：搜索结果来源列表，每项包含来源序号 `index`、标题 `title` 和链接 `url`。
+-   `usage.plugins.search.count`：搜索次数，不应以来源条数代替。
+-   `usage.plugins.search.strategy`：搜索策略，值为 `agent`。
+
+响应事件说明请参见[response.done](https://help.aliyun.com/zh/model-studio/qwen-audio-realtime-server-events#fs66j1k1l1m2o)。
+
 ### 对话上下文管理
 
 Qwen-Audio 支持通过客户端事件管理对话上下文中的对话项（Conversation Item），可用于注入历史上下文、补充文本信息或清理无关对话项。
@@ -1541,6 +1580,8 @@ Qwen-Audio 支持通过客户端事件管理对话上下文中的对话项（Con
 2.  **配置**：客户端发送 `session.update` 设置交互模式、音色、工具等参数。此步骤必须在首次发送音频之前完成。
 3.  **交互**：客户端持续发送音频流（`input_audio_buffer.append`），服务端根据 VAD 检测或手动触发进行推理，流式返回语音和文本。
 4.  **关闭**：客户端主动关闭 WebSocket 连接。若连接空闲时间过长，服务端也可能主动断开。
+
+**说明**如需保留最后一轮转写，可等待对应 `item_id` 的[转写完成](https://help.aliyun.com/zh/model-studio/qwen-audio-realtime-server-events#fs66e2f2g2h3j)或[转写失败](https://help.aliyun.com/zh/model-studio/qwen-audio-realtime-server-events#fs66e3f3g3h4j)事件后再关闭连接。`response.done` 只表示模型回复结束，转写结果可能稍后返回。
 
 ### 延迟优化
 
