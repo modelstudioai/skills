@@ -10,7 +10,7 @@
 
 ## 准备工作
 
--   [获取 API Key](raw/model-api-reference/preparations/get-api-key.md)，并将其[配置到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables) `DASHSCOPE_API_KEY`。
+-   [获取 API Key](raw/model-api-reference/preparations/get-api-key.md)，并将其配置到环境变量 `DASHSCOPE_API_KEY`。
     
 -   获取业务空间 ID，将示例中的 `YOUR_WORKSPACE_ID`（SDK 示例中的 `{WorkspaceId}`）替换为真实值。获取方式请参见[地域与接入域名](raw/model-user-guide/get-started-with-models/regions.md)。
     

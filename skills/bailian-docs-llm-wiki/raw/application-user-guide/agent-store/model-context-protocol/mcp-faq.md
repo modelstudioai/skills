@@ -44,7 +44,7 @@
     
 4.  **阿里云百炼 MCP 服务能在其他 MCP 客户端 （Cline、Cherry Studio）中使用吗？**
     
-    支持。MCP 既支持在平台内部（如智能体、工作流）进行配置，也支持通过外部调用集成至第三方应用（Cherry Studio、Cursor），详见[外部调用](raw/application-user-guide/agent-store/model-context-protocol/mcp-external-calls.md)。
+    支持。可以在 MCP 服务详情页的**安装**区域复制 MCP 服务地址，在支持 Streamable HTTP 或 SSE 的客户端中手动添加，并配置 `Authorization: Bearer ${DASHSCOPE_API_KEY}` 请求头。控制台支持快捷安装到 Qoder、Codex、Claude Code 和 Cursor。详见[外部调用](raw/application-user-guide/agent-store/model-context-protocol/mcp-external-calls.md)。
     
 5.  **阿里云百炼 MCP 服务能访问本地数据库吗？**
     

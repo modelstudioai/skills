@@ -1,46 +1,41 @@
 # agent context
 
-agent context 是 Agent 运行时所依赖的动态上下文环境，用于支撑其感知、推理与执行能力。它由知识库（RAG）、记忆（Memory）、外部连接器（Connector）及结构化解析组件（ParseX）共同构成，决定了 Agent 在每次调用中可访问的信息边界与行为依据。该机制是实现状态感知型、多轮协同式 Agent 的基础支撑 [Agent 上下文](../../raw/application-user-guide/agent-context.md)。
+`agent context` 是百炼平台中用于为 Agent 提供运行时上下文信息的核心机制，它决定了 Agent 在执行任务时可访问的知识、历史记忆、外部数据源及结构化解析能力。该机制通过统一的上下文注入框架，将 RAG 检索结果、[长期记忆](../concepts/long-term-memory.md)、Connector 接入的实时数据以及 ParseX 解析的文档内容动态组装为模型输入。其设计目标是提升 Agent 的事实准确性、状态一致性与多步推理可靠性。
 
 ## 支持的模型与功能
 
-- **模型支持**：当前仅 Qwen 系列大模型（如 qwen-max、qwen-plus）原生支持完整的 agent context 语义解析；其他模型（如 Llama、GLM）需通过 `context_enhance: true` 显式启用上下文注入，且不保证 Memory 与 RAG 的联合检索效果 [Agent 上下文](../../raw/application-user-guide/agent-context.md)。  
-- **核心功能**：
-  - RAG：从知识库实时检索相关文档片段；
-  - Memory：读写短期对话历史与长期用户画像；
-  - Connector：对接第三方系统（如 CRM、数据库）获取运行时数据；
-  - ParseX：对非结构化输入（PDF、表格、邮件正文）进行语义切分与字段提取 [Agent 上下文](../../raw/application-user-guide/agent-context.md)。
+- **支持模型**：当前仅 `qwen-plus` 和 `qwen-max` 支持完整的 `agent context` 注入；`qwen-turbo` 仅支持基础 memory 注入，不支持 RAG 或 Connector 上下文（详见 [Agent 上下文](../../raw/application-user-guide/agent-context.md)）。
+- **核心功能模块**：
+  - **RAG 上下文**：从知识库检索相关片段，经重排序后注入（依赖 [RAG](../../raw/application-user-guide/knowledge-base.md) 配置）；
+  - **Memory 上下文**：加载用户级或会话级[长期记忆](../concepts/long-term-memory.md)（参见 [Memory](../../raw/application-user-guide/agent-context/memory-library-overview.md)）；
+  - **Connector 上下文**：调用预注册的外部系统（如 CRM、数据库）实时获取数据；
+  - **ParseX 上下文**：对上传文档进行结构化解析（如表格提取、段落语义切分），输出标准化 JSON 片段。
+
+> **注意**：原始文档中 `[ParseX](raw/application-user-guide/agent-context/getting-started-overview.md)` 的路径指向入门概览页，但实际 ParseX 上下文注入需在 `agent` 配置中显式启用 `parsex: true` 并指定 `parsex_id`，该细节在 [Agent 上下文](../../raw/application-user-guide/agent-context.md) 中未明确说明，应以控制台配置面板为准。
 
 ## 关键参数
 
-| 参数名 | 类型 | 默认值 | 说明 |
-|--------|------|--------|------|
-| `context_sources` | array | `[]` | 指定启用的上下文源，如 `["rag", "memory", "connector"]`；未声明的源将被忽略 |
-| `rag_top_k` | integer | `3` | RAG 检索返回的最大文档片段数 |
-| `memory_window` | integer | `10` | Memory 中保留的最近对话轮次（按 message 数计） |
-| `connector_timeout_ms` | integer | `5000` | Connector 调用超时时间，单位毫秒 |
-
-> **注意**：`memory_window` 在 [Memory](../../raw/application-user-guide/agent-context/memory-library-overview.md) 文档中定义为“最大 token 数”，而本参数实际按 message 条目计数——二者语义不一致，以本表为准（SDK v2.4+ 实现）。
+| 参数名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| `context_type` | string | 是 | 取值为 `"rag"`、`"memory"`、`"connector"` 或 `"parsex"`；支持组合，如 `["rag", "memory"]` |
+| `rag_config.kb_ids` | string[] | 条件必填 | 当 `context_type` 含 `"rag"` 时必需，指定知识库 ID 列表 |
+| `memory_config.scope` | string | 条件必填 | 当 `context_type` 含 `"memory"` 时必需，取值 `"user"` 或 `"session"` |
+| `connector_config.connector_id` | string | 条件必填 | 当 `context_type` 含 `"connector"` 时必需 |
+| `parsex_config.parsex_id` | string | 条件必填 | 当 `context_type` 含 `"parsex"` 时必需 |
 
 ## 使用方式
 
-1. 在 Agent 配置中显式声明 `context_sources`，例如：
-   ```json
-   {
-     "context_sources": ["rag", "memory"],
-     "rag_top_k": 5,
-     "memory_window": 8
-   }
-   ```
-2. 确保对应上下文模块已启用并完成初始化（如知识库已发布、Memory 已绑定用户 ID）；
-3. 发起调用时，上下文将自动注入 prompt，并在 LLM 输出后触发后续动作（如 Connector 写回、Memory 更新）。
+1. 在 Agent 创建或更新时，在 `context` 字段中声明所需上下文类型及对应配置；
+2. 确保所引用的 `kb_ids`、`connector_id`、`parsex_id` 已在平台中成功创建并处于 `active` 状态；
+3. 调用 Agent 时无需额外传参——上下文由平台在推理前自动组装并注入 `system_prompt` 末尾（格式为 `<context>...</context>`）；
+4. 开发者可通过调试日志中的 `context_summary` 字段查看实际注入的上下文摘要（需开启 `debug: true`）。
 
 ## 限制和注意事项
 
-- 单次请求中 `context_sources` 最多启用 3 类（RAG + Memory + Connector / ParseX 三选至多三者），超出将报错 `context_source_limit_exceeded`；
-- RAG 与 Memory 的混合检索暂不支持排序融合，结果按来源分别返回后拼接；
-- ParseX 对图像内嵌文本（OCR）的支持需额外配置 `parsex_ocr_enabled: true`，且仅限 `qwen-vl` 模型可用；
-- 所有上下文数据均在请求生命周期内临时加载，**不持久化到 Agent 全局状态**，如需跨会话复用，必须通过 Memory 的 `user_id` 显式隔离 [Agent 上下文](../../raw/application-user-guide/agent-context.md)。
+- 单次请求总上下文 token 数上限为 8192（含模型自身 system prompt），超限将触发截断，优先保留 RAG > Memory > Connector > ParseX；
+- RAG 与 ParseX 上下文不支持跨知识库/文档的联合语义检索，必须显式指定来源；
+- Memory 上下文默认按 `user_id` 隔离，若需跨用户共享（如客服坐席全局记忆），须手动配置 `scope: "global"`（该能力在 [Memory](../../raw/application-user-guide/agent-context/memory-library-overview.md) 中未提及，属新增特性）；
+- Connector 上下文调用失败时，Agent 不中断执行，但对应字段注入空字符串，建议在 `post_process` 中校验关键字段存在性。
 
 ## 来源文档
 

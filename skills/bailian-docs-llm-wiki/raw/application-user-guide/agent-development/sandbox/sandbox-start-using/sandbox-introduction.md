@@ -63,8 +63,13 @@ Sandbox 为 AI 智能体提供云端隔离运行环境。每个实例拥有独�
 -   **E2B SDK**：使用 E2B 官方 SDK，配合阿里云百炼沙箱接入地址与 API Key 调用，详见 [实例管理与使用](raw/application-user-guide/agent-development/sandbox/sandbox-sdk.md)。
 -   **API**：通过兼容 E2B 协议的 REST API 管理实例与模版，详见 [Sandbox API](raw/application-api-reference/sandbox-api/sandbox-api-overview.md)。
 
+## 相关产品：高代码应用
+
+与 Sandbox 同属一个控制台分区（左侧导航 **Sandbox > 高代码**）的还有**高代码应用**：基于 AgentScope 与 AgentScope-Runtime，以 Python 全代码方式构建模块化 Agent 并部署为云上 API 服务。两者相互独立，详见[高代码应用](raw/application-user-guide/agent-development/sandbox/rich-code-application.md)。
+
 ## 下一步
 
 -   [快速开始](raw/application-user-guide/agent-development/sandbox/sandbox-start-using/sandbox-quick-start.md)：创建模版、生成密钥并完成首次调用
+-   [高代码应用](raw/application-user-guide/agent-development/sandbox/rich-code-application.md)：用 Python 全代码构建并部署 Agent 服务
 -   [模版管理](raw/application-user-guide/agent-development/sandbox/sandbox-templates.md)：配置镜像、资源规格与生命周期
 -   [实例管理与使用](raw/application-user-guide/agent-development/sandbox/sandbox-sdk.md)：使用 E2B SDK 管理实例与数据面操作

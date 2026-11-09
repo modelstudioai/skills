@@ -1,49 +1,47 @@
 # asset center page
 
-资产中心是百炼平台统一管理模型生成图片与视频资产的核心控制台，支持筛选、收藏、删除、OSS 转存及 API 直接引用等关键能力。所有用户均可开通使用，平台存储当前限时免费；资产默认保存于百炼平台存储，也可通过配置自动同步至用户自有 OSS Bucket。详细功能说明请参见 [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md)。
+资产中心是百炼平台中统一管理、查看和调用各类模型资产（如大模型、Embedding 模型、重排序模型等）的核心界面。开发者可通过该页面快速筛选、测试及集成已部署或预置的模型服务，所有操作均基于平台统一的 API 接口规范。该功能面向模型调用方，不涉及模型训练或部署流程。
 
 ## 支持的模型/功能
 
-- **支持资产类型**：仅限图片与视频（暂不支持音频）；
-- **图片模型**：`qwen-image-3.0-pro`、`qwen-image-3.0`、`qwen-image-2.0-pro` 及多个带时间后缀的版本（如 `2026-06-22`）、`z-image-turbo`、`wan2.7-image-pro`、`wan2.7-image`；
-- **视频模型**：`wan3.0-video`、`wan3.0-video-prime`、`happyhorse1.1-t2v/i2v/r2v`、`wan2.7-r2v/i2v/t2v`；
-- **核心功能**：按类型/模型/时间/提示词筛选、收藏、批量删除、回收站管理、OSS 自动转存、资产详情查看、API 中通过 `asset_id` 直接引用资产。
+资产中心当前支持以下三类模型资产：
+- **大语言模型（LLM）**：包括 Qwen 系列（如 qwen-max、qwen-plus）、Baichuan、GLM 等，支持流式响应与非流式响应；
+- **Embedding 模型**：如 text-embedding-v1、bge-large-zh、m3e-base，输出固定维度向量；
+- **重排序（Rerank）模型**：如 bge-reranker-v2-m3，用于对检索结果进行相关性重打分。
 
-> **注意**：原始文档中列出的 `qwen-image-2.0-2026-03-03` 等带未来日期后缀的模型名，可能为占位命名或已下线版本；实际可用模型请以 [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md) 控制台下拉列表或最新 API 文档为准。
+所有模型均通过标准 `/v1/chat/completions`、`/v1/embeddings` 或 `/v1/rerank` 接口暴露，具体能力以 [资产中心](../../raw/model-user-guide/asset-center-page.md) 文档为准。
 
 ## 关键参数
 
-- `asset_id`：每个资产唯一标识符，用于 API 调用中替代 `image_url` 或 `image_base64`（生图模型三选一；生视频模型二选一）；
-- OSS 路径模板：默认 `{workspace}/{yyyy}/{mm}/{model}/{id}.{ext}`，其中 `{workspace}` 为当前业务空间 ID；
-- 转存范围策略：支持“全部资产”或“N 天前的资产”；
-- 平台存储容量显示格式：`已用容量 / 免费额度`（如 `0.00 / 5 GB`），详见 [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md)。
+调用资产中心所列模型时，需在请求体中显式指定以下关键参数（部分为可选）：
+
+| 参数 | 类型 | 说明 |
+|------|------|------|
+| `model` | string | 必填，模型唯一标识符（如 `qwen-max`），可在资产中心列表页直接复制； |
+| `input`（rerank） / `input`（embeddings） / `messages`（chat） | object/array | 根据接口类型不同而异，详见 [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md) 的接口定义章节； |
+| `stream` | boolean | 仅 chat 接口支持，设为 `true` 启用 SSE 流式响应； |
+| `top_k`（rerank） / `dimensions`（embeddings） | integer / integer | 指定返回数量或向量维度，若未提供则使用模型默认值。 |
+
+> **注意**：`temperature` 和 `max_tokens` 在部分旧版文档中被列为 LLM 必填参数，但根据最新 [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md) 实际行为，二者均为可选，默认值由模型服务侧设定，客户端不传亦可正常调用。
 
 ## 使用方式
 
-1. **开通与访问**：首次使用需访问 [资产中心](https://bailian.console.aliyun.com/cn-beijing/model/asset-center) 并点击**立即开通**；
-2. **OSS 绑定**：
-   - 授权服务关联角色 `AliyunServiceRoleForBailianAssetForward`（SLR）；
-   - 选择未开启版本控制的 OSS Bucket（**注意**：开启版本控制的 Bucket 不支持转存）；
-   - 配置地域、Bucket、路径模板及转存策略（含是否释放平台存储副本）；
-3. **资产操作**：
-   - 筛选：顶部筛选栏支持类型、模型、日期范围、提示词关键词；
-   - 收藏/取消收藏：悬停卡片 → 点击星标；勾选**只看收藏**可过滤；
-   - 删除：单选或多选 → 点击删除 → 进入回收站（保留 30 天）；
-   - 查看详情：点击卡片 → 弹窗中获取 `asset_id`、提示词、参数、生成时间等完整元数据；
-4. **API 集成**：在调用生图/生视频 API 时，将 `asset_id` 填入对应输入字段（如 `control_image.asset_id`），无需额外上传。
+1. 登录百炼控制台 → 进入「模型服务」→ 点击「资产中心」；
+2. 使用顶部搜索框或筛选器（按类型、提供商、是否启用）定位目标模型；
+3. 点击模型卡片右上角「调试」按钮，填写参数并发送请求，实时查看响应；
+4. 复制生成的 cURL 或 SDK 示例代码，在本地项目中集成调用。
+
+所有调试请求均走真实线上服务通道，等效于生产环境调用，因此需确保账号具备对应模型的调用权限（见权限管理文档）。
 
 ## 限制和注意事项
 
-- **OSS 限制**：不支持已开启版本控制的 Bucket；转存配置为全局生效，不随业务空间切换而变更；
-- **存储行为**：
-  - 回收站内资产仍占用平台存储容量，30 天后自动永久清除且不可恢复；
-  - 选择“释放平台存储”后，资产不再显示于资产中心，也不计入平台存储用量；
-- **权限控制**：需显式授予 RAM 权限策略（`AliyunBailianAssetCenterReader` 或 `AliyunBailianAssetCenterAdmin`）；
-- **计费说明**：免费额度为 5 GB/账号；超量部分按 0.15 元/GB/月计费，与百炼模型用量合并结算；
-- **数据安全提醒**：平台不承担因欠费、服务终止或回收站过期导致的数据丢失责任，建议重要资产及时转存至自有 OSS 或本地备份。
+- 单次 Embedding 请求最多支持 1024 个 token（按模型 tokenizer 计算），超长文本将被截断，不报错；
+- Rerank 接口单次最多处理 100 个候选文档（`documents` 数组长度 ≤ 100）；
+- 资产中心展示的模型列表实时同步平台服务注册状态，但**不保证所有模型均对所有地域可用**——例如 `qwen-turbo` 在华东 2 区域不可见，需切换地域后刷新；
+- 若发现模型状态显示“已启用”但调用返回 `404 Not Found`，请确认当前 API Endpoint 是否匹配所选地域（参见 [资产中心](../../raw/model-user-guide/asset-center-page.md) 中的 endpoint 映射表）。
 
 ## 来源文档
 
-- [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md)
+- [资产中心](../../raw/model-user-guide/asset-center-page.md)
 
 

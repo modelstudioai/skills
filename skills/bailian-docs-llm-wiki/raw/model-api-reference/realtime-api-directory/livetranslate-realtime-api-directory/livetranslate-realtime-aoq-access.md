@@ -21,6 +21,8 @@ AOQ 将媒体与模型事件分轨传输。SDK 负责媒体采集、编解码、
 
 ## 鉴权与连接凭证
 
+**说明**如需提前获取 Token，或了解完整的鉴权流程，请参见[建连鉴权详解](https://help.aliyun.com/zh/model-studio/realtime-api-overview#tkauth-auth-detail-title)。
+
 由业务 AppServer 发起以下请求。请先[配置 API Key 到环境变量](https://help.aliyun.com/zh/model-studio/get-api-key#20b17d4430qvt)，并将以下域名中的 `{WorkspaceId}` 替换为实际业务空间 ID；其他地域使用上文对应的域名。`clientIp` 选填，不填时使用请求网关的 IP。
 
 ```

@@ -702,7 +702,53 @@ VAD 检测到新一轮语音开始时，是否打断当前正在生成的翻译�
 
 **usage** `object`
 
-本次响应的 Token 消耗信息。
+会话截至当前响应的累计 Token 用量。每次 `response.done` 都会返回当前累计值。统计整个会话时，取最后一次的 `usage`，无需将各次结果相加。
+
+属性
+
+**total\_tokens** `integer`
+
+输入与输出 Token 总数，即 `input_tokens` 与 `output_tokens` 之和。
+
+**input\_tokens** `integer`
+
+输入 Token 数。
+
+**output\_tokens** `integer`
+
+输出 Token 数。
+
+**input\_tokens\_details** `object`
+
+输入 Token 的分类统计。
+
+属性
+
+**text\_tokens** `integer`
+
+模型固定系统提示词中的文本 Token 数，不计费。
+
+**audio\_tokens** `integer`
+
+输入音频 Token 数。
+
+**video\_tokens** `integer`
+
+输入图片 Token 数，按图片输入计费。
+
+**output\_tokens\_details** `object`
+
+输出 Token 的分类统计。
+
+属性
+
+**text\_tokens** `integer`
+
+输出文本 Token 数。
+
+**audio\_tokens** `integer`
+
+输出音频 Token 数。
 
 ```
 {

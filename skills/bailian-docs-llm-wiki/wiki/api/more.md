@@ -1,34 +1,33 @@
 # more
 
-`more` 是百炼平台提供的扩展能力集合，用于支持服务授权、临时凭证分发、知识库高级检索等关键场景。它不提供独立的模型推理接口，而是作为应用层 API 的补充功能模块，需配合主 API（如 `chat` 或 `embeddings`）协同使用。开发者应根据具体业务需求选择对应子功能，并注意各功能的权限与调用约束。
+`more` 是百炼平台提供的扩展能力集合，用于支持服务权限管理、临时凭证分发、知识库高级检索等进阶场景。它不构成独立 API 接口，而是以配套功能模块形式补充核心应用能力。开发者需结合具体使用场景按需调用对应子功能。
 
 ## 支持的模型/功能
 
-`more` 本身不封装任何大语言模型或嵌入模型，其下辖功能均为平台级基础设施能力：
-- **服务关联角色（SLR）**：用于授予百炼服务访问其他阿里云资源（如 OSS、KMS）所需的最小权限，避免手动配置 RAM 策略；详见 [服务关联角色](../../raw/application-api-reference/more/bailian-service-linked-role.md)。
-- **生成临时 API Key**：为前端 SDK 或不可信客户端安全分发短期有效凭证，支持细粒度权限控制和自动过期；详见 [生成临时API Key](../../raw/application-api-reference/more/application-obtain-temporary-authentication-token.md)。
-- **知识库 SearchFilters**：在 `retrieval` 或 `chat` 请求中通过 `filters` 字段对知识库文档元数据进行布尔组合过滤（如 `source_type == "pdf" AND updated_at > "2024-01-01"`），提升召回精准度；详见 [知识库SearchFilters](../../raw/application-api-reference/more/how-to-use-search-filters.md)。
+`more` 当前包含以下三类关键扩展功能：
+- **服务关联角色（SLR）**：用于授予百炼服务访问其他阿里云资源（如 OSS、VPC）所需的最小权限，避免手动创建自定义角色；详情见 [服务关联角色](../../raw/application-api-reference/more/bailian-service-linked-role.md)。
+- **生成临时 API Key**：为前端 SDK 或第三方系统提供短期、可撤回的身份凭证，适用于无服务端代理的轻量集成；参考 [生成临时API Key](../../raw/application-api-reference/more/application-obtain-temporary-authentication-token.md)。
+- **知识库 SearchFilters**：在 `knowledge_search` 调用中支持字段级过滤（如 `source_id`, `doc_type`, `update_time`），提升检索精准度；用法说明见 [知识库SearchFilters](../../raw/application-api-reference/more/how-to-use-search-filters.md)。
 
 ## 关键参数
 
-- `temporary_token_ttl_seconds`（仅限临时 Token 接口）：指定 Token 有效期，取值范围 900–3600 秒（15–60 分钟），默认 3600；超出范围将返回 `InvalidParameter.TTLSecondsOutOfRange` 错误。
-- `filters`（仅限知识库相关接口）：JSON 对象，遵循 [Elasticsearch Query DSL 子集语法](../../raw/application-api-reference/more/how-to-use-search-filters.md)，不支持全文检索字段（如 `_text`）直接参与过滤。
-- `role_name`（仅限 SLR 接口）：固定为 `AliyunServiceRoleForBailian`，不可自定义；调用前需确保主账号已同意创建该角色。
+各子功能参数独立定义，无全局共享参数：
+- SLR 创建无需传参，通过 RAM 控制台或 `CreateServiceLinkedRole` API 触发；
+- 临时 API Key 接口要求必填 `application_id` 和 `expires_in_seconds`（最大 3600），返回 `access_token` 与 `expires_at`；
+- SearchFilters 以 JSON 对象形式嵌入 `knowledge_search` 请求体的 `filters` 字段，仅支持 `eq`, `in`, `gt`, `lt` 四种操作符，详见 [知识库SearchFilters](../../raw/application-api-reference/more/how-to-use-search-filters.md)。
 
 ## 使用方式
 
-所有 `more` 功能均通过独立 HTTP 接口调用，路径格式为 `POST /api/v1/more/{subpath}`，例如：
-- 创建临时 Token：`POST /api/v1/more/temporary-authentication-token`
-- 查询当前 SLR 状态：`GET /api/v1/more/service-linked-role`
-- 验证 SearchFilters 语法：`POST /api/v1/more/validate-search-filters`
-
-请求需携带主账号长期 AccessKey（或 STS Token），且调用方 Identity 必须具备 `bailian:CreateTemporaryToken`、`bailian:GetServiceLinkedRole` 等对应 `bailian:*` 权限。> **注意**：[生成临时API Key](../../raw/application-api-reference/more/application-obtain-temporary-authentication-token.md) 文档中示例使用的 `POST /v1/temporary-token` 路径已过时，正确路径为 `/api/v1/more/temporary-authentication-token`，请以 OpenAPI Spec 为准。
+- SLR 需在首次调用依赖资源的 API 前完成绑定（如启用知识库自动同步 OSS 文件时）；
+- 临时 API Key 必须通过服务端调用 `/v1/applications/{app_id}/temporary-tokens` 获取，禁止前端直连；
+- SearchFilters 仅在 `knowledge_search` 的 `POST /v1/knowledge_search` 请求中生效，不适用于 `chat` 或 `completion` 接口。
 
 ## 限制和注意事项
 
-- 每个百炼应用每日最多创建 10,000 个临时 Token；单次请求最多生成 100 个，超出将返回 `Throttling.TooManyTokensPerRequest`。
-- SearchFilters 仅在知识库 ID 显式传入且启用向量检索时生效；若请求中未指定 `knowledge_id` 或设置 `enable_retrieval: false`，`filters` 将被静默忽略。
-- SLR 仅支持主账号首次调用时自动创建，RAM 用户无法触发创建流程；若文档 [服务关联角色](../../raw/application-api-reference/more/bailian-service-linked-role.md) 中提及“子用户可操作”，该描述与当前 v2.3.0 平台行为不符，属过时信息。
+- 单个应用最多同时存在 100 个有效临时 [Token](../concepts/token.md)；超期后自动失效，不可刷新；
+- SearchFilters 不支持全文检索字段（如 `content`）上的过滤，仅作用于元数据字段；
+- > **注意**：[生成临时API Key](../../raw/application-api-reference/more/application-obtain-temporary-authentication-token.md) 文档中示例的 `scope` 参数在 v2.3+ 版本已废弃，实际请求中应忽略该字段，否则将返回 400 错误；
+- > **注意**：[服务关联角色](../../raw/application-api-reference/more/bailian-service-linked-role.md) 描述的默认策略权限范围较宽，生产环境建议基于最小权限原则，通过自定义策略进一步收紧（如限定特定 OSS Bucket）。
 
 ## 来源文档
 

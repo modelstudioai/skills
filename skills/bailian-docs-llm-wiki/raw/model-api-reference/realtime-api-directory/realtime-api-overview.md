@@ -188,36 +188,43 @@ multimodal-dialog
 
 ## 接入准备
 
-确认[调用地域和接入域名](raw/model-user-guide/get-started-with-models/regions.md)，获取该地域和业务空间对应的 [API Key](raw/model-api-reference/preparations/get-api-key.md)。
+确认[调用地域和接入域名](raw/model-user-guide/get-started-with-models/regions.md)，获取该地域和业务空间对应的 [API Key](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key)。
 
-在上表点击所选模型和协议对应的「支持」，按接入文档完成鉴权、建连和事件交互。使用 AOQ 时，按客户端平台下载 [AOQ SDK](https://help.aliyun.com/zh/model-studio/realtime-sdk-download#sdkdl-h2-aoq)。
+**说明**首次使用时，按控制台提示开通服务。创建后请立即复制并妥善保存 API Key，通过环境变量管理，勿嵌入客户端或提交到代码仓库。
+
+使用 AOQ 时，按客户端平台下载 [AOQ SDK](https://help.aliyun.com/zh/model-studio/realtime-sdk-download#sdkdl-h2-aoq)。
 
 ### 鉴权方式
 
 Realtime API 使用 API Key 进行身份认证。无论选择 AOQ、WebRTC 还是 WebSocket 协议接入，均通过 HTTP 请求头中的 `Authorization` 字段携带 Bearer Token 完成身份验证。
 
-鉴权仅发生在**建连阶段**，连接建立后的数据传输无需重复鉴权。
-
-### 获取 API Key
-
-#### 步骤 1：开通百炼服务
-
-1.  访问[阿里云百炼控制台](https://bailian.console.aliyun.com/cn-beijing/)并登录您的阿里云账号。
-2.  如果是首次使用，按照页面提示完成服务开通。
-
-#### 步骤 2：创建 [API Key](raw/model-api-reference/preparations/get-api-key.md)
-
-1.  在控制台左侧导航栏中，选择 **API Key**。
-2.  点击 **创建 API Key**，选择关联的业务空间。
-3.  创建完成后，请**立即复制并妥善保存** API Key。
-
-**重要****安全提示**：API Key 是您访问服务的唯一凭证，请勿将其硬编码到客户端代码中或提交到代码仓库。建议通过环境变量或后端服务下发的方式管理。
+WebRTC 和 WebSocket 在建连时鉴权；AOQ 在 AppServer 请求连接凭证时使用 API Key 鉴权，客户端随后使用临时 Token 建连。连接建立后的数据传输无需重复鉴权。
 
 ### 建连鉴权详解
 
-#### AOQ 协议鉴权
+#### AOQ
 
 AOQ 采用**服务端代理鉴权**模式：API Key 仅在业务 AppServer 侧使用，客户端通过网关返回的临时 Token 建连，避免 API Key 暴露在客户端。
+
+#### 获取连接凭证
+
+AOQ 支持即时鉴权和预鉴权两种方式：即时鉴权在业务需要建连时获取凭证，随即建立媒体连接；预鉴权提前获取并缓存凭证，业务需要时再建连，减少建连时等待信令 HTTP 请求的耗时。
+
+#### 即时鉴权
+
+业务需要媒体连接时，由 AppServer 请求连接凭证并返回客户端，客户端随即调用 `connect(config)` 建连。
+
+![AOQ 即时鉴权与媒体建连时序](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/zh/images/6a4b3c2d1e0f90b0.png)
+
+#### 预鉴权
+
+AppServer 提前请求连接凭证，客户端缓存完整连接参数，业务需要媒体连接时再调用 `connect(config)`。
+
+Token 的默认有效期为 5 分钟；如需延长，请联系售后支持。Token 过期后，需重新获取连接凭证。
+
+![AOQ 预鉴权与按需媒体建连时序](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/zh/images/6a4b3c2d1e0f90bc.png)
+
+#### 请求路径
 
 模型系列
 
@@ -231,13 +238,140 @@ Qwen-Audio-TTS、CosyVoice、Qwen-Audio-ASR-Streaming、Qwen-Audio-ASR-Message�
 
 `/api/v1/webrtc/inference`
 
-![Token鉴权](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3935914871/p1088069.jpg)
+#### 请求说明
 
--   [Qwen-Omni-Realtime](https://help.aliyun.com/zh/model-studio/omni-realtime-aoq-access#authentication)
--   [Qwen-Audio-Realtime](https://help.aliyun.com/zh/model-studio/audio-realtime-aoq-access#authentication)
--   [Qwen-LiveTranslate-Realtime](https://help.aliyun.com/zh/model-studio/livetranslate-realtime-aoq-access#authentication)
+参数
 
-#### WebRTC 协议鉴权
+位置与类型
+
+说明
+
+`{endpoint}`
+
+URL · `string`
+
+必填。使用所选地域和业务空间的[接入域名](raw/model-user-guide/get-started-with-models/regions.md)。使用 Token Plan 时，域名中的 `WorkspaceId` 固定为 `token-plan`。
+
+`model`
+
+查询参数 · `string`
+
+必填。待调用的模型 ID，建连路径按上表中的模型系列选择。
+
+`Authorization`
+
+请求头 · `string`
+
+必填。格式为 `Bearer <API_KEY>`，使用与接入域名对应的 API Key。
+
+`Content-Type`
+
+请求头 · `string`
+
+必填。固定为 `application/json`。
+
+`x-dashscope-rtc-transport`
+
+请求头 · `string`
+
+必填。固定为 `moq`，指定使用 AOQ 协议。
+
+`clientIp`
+
+请求体 · `string`
+
+选填。客户端真实公网 IP，用于选择 Relay 接入点；不传时使用请求来源 IP。
+
+`serverPassiveConnect`
+
+请求体 · `boolean`
+
+选填。传 `true` 时使用预鉴权模式；不传时使用即时鉴权模式。此参数仅用于请求网关，无需在 `AoqConnectConfig` 中新增字段。
+
+以下以 qwen3.8-omni-flash-realtime 为例，使用对应的 `{endpoint}` 和环境变量 `DASHSCOPE_API_KEY`。调用 Inference 路径的模型时，将请求路径改为 `/api/v1/webrtc/inference`，并设置对应的 `model`。
+
+#### 即时鉴权请求
+
+```
+curl -X POST \
+  "https://{endpoint}/api/v1/webrtc/realtime?model=qwen3.8-omni-flash-realtime" \
+  -H "Authorization: Bearer ${DASHSCOPE_API_KEY}" \
+  -H "Content-Type: application/json" \
+  -H "x-dashscope-rtc-transport: moq" \
+  -d '{}'
+```
+
+#### 预鉴权请求
+
+```
+curl -X POST \
+  "https://{endpoint}/api/v1/webrtc/realtime?model=qwen3.8-omni-flash-realtime" \
+  -H "Authorization: Bearer ${DASHSCOPE_API_KEY}" \
+  -H "Content-Type: application/json" \
+  -H "x-dashscope-rtc-transport: moq" \
+  -d '{"serverPassiveConnect":true}'
+```
+
+#### 返回说明
+
+字段
+
+类型
+
+说明与 SDK 映射
+
+`sid`
+
+`string`
+
+会话唯一标识，填入 `AoqConnectConfig.sid`。
+
+`aoqTokenForClient`
+
+`string`
+
+客户端临时连接 Token，填入 `AoqConnectConfig.token`。
+
+`clientRelayEndpoints`
+
+`array`
+
+Relay 接入点数组，填入 `relayEndpoints`。每项包含 `endpoint`、`port` 和 `route_index`；将 `route_index` 映射为 SDK 的 `routeIndex`，缺省时使用数组下标。
+
+`clientRelayCertFingerprint`
+
+`string`
+
+Relay TLS 证书指纹，填入 `AoqConnectConfig.certFingerprint`。
+
+`sidExpiresInSecs`
+
+`integer`
+
+会话有效期，单位为秒。不能用它代替预获取 Token 的可用时间。
+
+`extraInfo.workspaceIdHash`
+
+`string`
+
+业务空间 ID 的哈希值，填入 `AoqConnectConfig.workspaceIdHash`。
+
+两种模式的响应结构相同。下例为即时鉴权的响应示例，字段值以实际返回为准。
+
+```
+{
+  "sid": "<session_id>",
+  "aoqTokenForClient": "<token>",
+  "clientRelayEndpoints": [
+    {"endpoint": "192.0.2.1", "port": 8443, "route_index": 0}
+  ],
+  "clientRelayCertFingerprint": "sha256/<fingerprint>",
+  "sidExpiresInSecs": 7200,
+  "extraInfo": {"workspaceIdHash": "<workspace_id_hash>"}
+}
+```
+
+#### WebRTC
 
 WebRTC 通过 HTTP POST 请求完成 SDP 交换，鉴权在此阶段完成。客户端将 Offer SDP 发送至服务端，服务端返回 Answer SDP。
 
@@ -245,7 +379,7 @@ WebRTC 通过 HTTP POST 请求完成 SDP 交换，鉴权在此阶段完成。客
 -   [Qwen-Audio-Realtime](https://help.aliyun.com/zh/model-studio/audio-realtime-webrtc-access#authentication)
 -   [Qwen-LiveTranslate-Realtime](https://help.aliyun.com/zh/model-studio/livetranslate-realtime-webrtc-access#authentication)
 
-#### WebSocket 协议鉴权
+#### WebSocket
 
 WebSocket 的鉴权方式最为简单，在建立连接时直接通过 HTTP Header 携带 API Key 即可。
 

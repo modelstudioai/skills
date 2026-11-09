@@ -631,10 +631,10 @@ WebSocket 原始协议的完整调用示例见以下文档。
 
 ### 如何限制 API Key 仅用于语音合成服务（权限隔离）？
 
-通过新建业务空间并仅授权特定模型，可限制 API Key 的使用范围。请参见[业务空间管理](https://help.aliyun.com/zh/model-studio/use-workspace)。
+通过新建业务空间并仅授权特定模型，可限制 API Key 的使用范围。请参见[业务空间管理](https://help.aliyun.com/zh/model-studio/permission-management-overview#dac6676deelh2)。
 
 ### 子业务空间的 API Key 能否调用 Qwen-Audio-TTS/CosyVoice 模型？
 
 默认业务空间下，所有模型均可调用。
 
-子业务空间下，需要为 API Key 对应的子业务空间进行[模型授权](https://help.aliyun.com/zh/model-studio/model-authentication-instructions)。请参见[子业务空间的模型调用](raw/model-api-reference/more-about-models/model-calling-in-sub-workspace.md)。
+子业务空间下，需要为 API Key 对应的子业务空间进行[模型授权](https://help.aliyun.com/zh/model-studio/permission-management-overview#f642213a1f38l)。请参见[子业务空间的模型调用](raw/model-api-reference/more-about-models/model-calling-in-sub-workspace.md)。

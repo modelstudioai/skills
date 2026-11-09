@@ -1,54 +1,53 @@
 # 检索增强生成
 
-检索增强生成（Retrieval-Augmented Generation，RAG）是一种将大语言模型（LLM）的生成能力与外部知识源的精准检索能力相结合的技术范式。它通过在模型推理前动态检索相关文档片段，并将其作为上下文注入提示（prompt），显著提升回答的事实准确性、领域专业性和私有知识覆盖能力，同时降低幻觉风险。
+检索增强生成（Retrieval-Augmented Generation，简称 RAG）是百炼平台的核心能力范式，指在大模型生成响应前，先从结构化或非结构化知识源中实时检索相关片段，并将检索结果作为上下文注入提示词，从而提升回答的事实准确性、时效性与领域专业性。它不是独立模型，而是一套可配置、可编排的端到端流水线，涵盖知识接入、语义索引、混合检索、重排序与条件化生成。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-在百炼平台中，RAG 不是单一功能模块，而是贯穿多个核心能力层的横切技术底座，具体体现为以下三类典型应用方式：
+RAG 在百炼中以**服务化、模块化、多模态化**方式深度集成，具体体现为以下四类典型用法：
 
-- **RAG API 独立服务**：面向需要端到端知识管理能力的开发者，提供完整的知识库生命周期控制（创建/上传/同步）、可配置切片（按段落、语义边界或固定 token 长度）、向量检索（HNSW/IVF 索引）与生成式问答一体化接口。适用于构建私有知识助手、客服知识中枢等标准化 RAG 应用。
+- **知识库问答服务（/api/v2/apps/knowledge/chat）**：最常用场景。用户提问后，系统自动触发知识库检索 → 重排 → 将 Top-K 切片拼入 Prompt → 调用绑定的生成模型（如 `qwen3.6-plus`）生成带引用的自然语言回答。支持文档、表格、图片、音视频四类知识库类型，对应不同 `knowledgeType` 和 `knowledgeScene`。
 
-- **Agent 上下文（Agent Context）中的 RAG 子源**：作为 `context_sources` 的可选组件之一，RAG 与 Memory、Connector 等协同构成 Agent 运行时动态上下文。此时 RAG 检索结果与其他上下文数据按来源分别注入 prompt，不参与混合排序，但支持多轮对话中持续调用，适用于状态感知型智能体（如销售顾问、IT 支持机器人）。
+- **Agent 运行时上下文注入（`agent context`）**：当 Agent 配置 `context_type: ["rag"]` 时，RAG 不再独立调用，而是作为上下文组装环节嵌入 Agent 执行流。平台自动根据 `rag_config.kb_ids` 检索并注入内容，与 Memory、Connector 等上下文并列，统一由 `system_prompt` 封装传递给模型。
 
-- **应用级集成（Application Use Cases）中的默认增强机制**：在企业微信、钉钉、公众号、网站等渠道的 AI 助手方案中，RAG 是开箱即用的核心能力。用户上传的 PDF/DOCX/TXT/XLSX 等文件经“文档智能解析”自动切片并嵌入，所有问答请求默认触发知识检索，无需额外编码即可实现私域知识赋能。
+- **低代码应用集成（Application Use Cases）**：在网站、企业微信、钉钉等渠道部署 AI 助手时，“配置知识库”即启用 RAG。无需写代码，控制台一键关联知识库至应用，所有渠道请求均自动走 RAG 流水线；本地 RAG 方案还支持完全离线运行，使用自定义切分器和本地嵌入模型（如 `GTE-Chinese-Large`）。
 
-> ⚠️ 注意：RAG 能力依赖模型兼容性——仅 `qwen-max`、`qwen-plus`、`qwen3.5-plus` 等 Qwen 系列模型原生支持完整 RAG 问答；其他模型（如 `qwen-turbo`、三方模型）仅可用于 embedding 生成，不可直接用于 `/v1/knowledge/query` 或 Agent RAG 问答阶段。
+- **底层检索 API（/api/v1/indices/rag/index/retrieve）**：面向需要精细控制的开发者。直接传 `index_id` 和 `query`，跳过重排与生成，返回原始向量召回结果（含 `score`、`content`、`metadata`），适用于构建自定义排序逻辑、A/B 测试或调试切片质量。
 
 ## 关键参数和配置
 
-RAG 行为由一组轻量、正交的参数控制，不同接入方式对应不同参数名，但语义一致：
+RAG 行为由多个层级的参数协同控制，开发者需按需显式配置（未配置则使用平台默认值）：
 
-| 场景 | 参数名 | 类型 | 默认值 | 说明 | 典型取值建议 |
-|------|--------|------|--------|------|--------------|
-| RAG API（`/v1/knowledge/query`） | `top_k` | integer | `3` | 检索返回的最相关文本片段数量 | `3–5`（平衡精度与噪声）；最大 `50` |
-| | `score_threshold` | float | `0.3` | 向量相似度过滤阈值（0.0–1.0），低于此值的片段被丢弃 | `0.3–0.6`（生产环境推荐）；设 `0.0` 表示不过滤 |
-| | `enable_rerank` | boolean | `false` | 是否启用 cross-encoder 重排序（提升相关性，增加 300–800ms 延迟） | `true`（对精度敏感场景）；`false`（低延迟优先） |
-| Agent Context | `rag_top_k` | integer | `3` | 同 `top_k`，作用于 Agent 中 RAG 子源 | 与 `top_k` 保持一致即可 |
-| 应用集成控制台 | “召回片段数” | integer | `3` | 控制台可视化配置项，映射至 `top_k` | 同上 |
-| | “相似度阈值” | float | `0`（即无过滤） | 控制台可视化配置项，映射至 `score_threshold` | `0.3–0.6` |
+| 类别 | 参数名 | 说明 | 常见取值 | 是否可变 |
+|------|--------|------|----------|----------|
+| **知识库创建期** | `embeddingModelName` | 向量化模型，决定语义检索质量 | `"text-embedding-v4"`（文本）、`"qwen3-vl-embedding"`（多模态） | ❌ 创建后不可修改 |
+|  | `chunkingStrategy` / `maxChunkLength` | 切片策略与最大长度（token） | `"smart"` / `600`（默认） | ❌ 创建后不可修改 |
+|  | `metadataFields` | 自定义元数据抽取字段（用于过滤） | `["product_id", "version"]` | ❌ 创建后不可补配 |
+| **检索服务期** | `top_k`（召回数） | 向量检索初步召回数量 | `10`（范围 1–100） | ✅ 可在服务配置中调整 |
+|  | `similarityThreshold` | 相似度阈值（低于此值的结果被剔除） | `0.35`（范围 0.01–1.0） | ✅ 可调 |
+|  | `rerankModelName` | 重排模型（精排阶段使用） | `"qwen3-rerank"`（文本）、`"qwen3-vl-rerank"`（多模态） | ✅ 可切换 |
+|  | `hybrid_rerank` | 是否启用混合重排（向量+关键词） | `true` / `false` | ✅ 可开关 |
+| **运行时调用期** | `search_filters` | 按 `tags`、`doc_id` 或自定义 metadata 过滤 | `[{"tags": ["v2"]}]` | ✅ 每次请求可传 |
+|  | `kb_search_configs`（Agent） | 多知识库权重、路由策略 | `[{ "kb_id": "kb-xxx", "weight": 0.8 }]` | ✅ Agent 配置中定义 |
 
-> ✅ 提示：  
-> - 所有参数均在请求级生效，无需全局配置；  
-> - `score_threshold` 实际效果受向量索引类型影响（HNSW 更稳定，IVF 对阈值更敏感），调试时建议结合 `retrieved_chunks` 返回的 `score` 字段观察分布；  
-> - 切片长度（chunk size）虽非运行时参数，但直接影响 RAG 效果——默认 `512 tokens`，最小 `64`；过短易割裂语义，过长则降低检索粒度，推荐根据文档结构选择“按段落”或“语义切分”。
+> ⚠️ 注意：`knowledgeScene=visual_perception_qa` 时必须显式传 `multimodalEmbeddingModelName`，否则可能降级为默认模型，影响效果一致性。
 
 ## 面向开发者，简洁实用
 
-- **快速起步**：只需三步——① 创建知识库获取 `knowledge_id`；② 上传文档并等待 `sync_job` 完成；③ 调用 `/v1/knowledge/query` 即可获得带溯源的答案。  
-- **调试技巧**：响应中 `retrieved_chunks` 字段明确列出每个片段的 `content`、`source_document_name` 和 `score`，是验证检索质量的第一手依据。  
-- **性能权衡**：启用 `enable_rerank` 可提升 top-3 结果相关性约 15–25%，但延迟增加明显；若业务允许少量噪声，优先调优 `top_k` 与 `score_threshold`。  
-- **避坑指南**：  
-  - 不要混用模型：`qwen-turbo` 不能用于 RAG 问答，仅支持 embedding；  
-  - 文档上传后需等待 1–6 分钟同步完成，期间查询将返回空结果；  
-  - API Key 与应用必须处于同一业务空间，否则鉴权失败（错误码 `401` 或 `403`）。  
-
-RAG 是百炼平台连接私有知识与大模型智能的“神经突触”。善用其参数组合，你无需训练模型，即可让 LLM 精准说出你文档里写下的每一句话。
+- **快速验证**：用控制台 Playground → 选择知识库 → 切换“知识问答”模式，5 秒内看到 RAG 效果。
+- **API 调试**：优先使用 `/api/v1/indices/knowledge/search`（需 `agent_id`），它已内置重排与混排，比底层 `/retrieve` 更贴近真实业务。
+- **避免踩坑**：
+  - 知识库创建后，嵌入模型、切片策略、metadata 字段均**不可修改**——出错请重建，勿尝试 PATCH。
+  - `index_id`、`pipelineId`、`agent_id` 是三个不同 ID，分别用于知识库管理、切片操作、服务调用，混用必报 `InvalidParameter`。
+  - 微信公众号等有 5 秒超时限制的渠道，请设 `temperature=0.1` + `max_tokens=256` + 选用 `qwen-turbo`，并关闭非必要 RAG 上下文。
+- **进阶控制**：如需完全掌控 RAG 流程（例如自定义重排逻辑或融合外部搜索），建议使用本地 RAG 方案，通过 Python SDK 接入百炼嵌入模型 API，自行组装检索与生成链路。
 
 ## 关联主题页
 
 - [rag api](../api/rag-api.md)
-- [agent context](../guides/agent-context.md)
+- [knowledge base](../guides/knowledge-base.md)
 - [application use cases](../guides/application-use-cases.md)
+- [agent context](../guides/agent-context.md)
 - [use cases](../guides/use-cases.md)
 
 

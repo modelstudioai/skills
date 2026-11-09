@@ -78,7 +78,7 @@ System.out.println(session.getId() + " " + session.getStatus());
 
 在会话页面的**资源**区上传或挂载已有文件，智能体在工具调用中按 `mount_path` 读写。详见[文件上传与挂载](raw/application-user-guide/agent-development/managed-agents/managed-agents-context/managed-agents-file.md)。运行时也可通过 API 动态挂载、查询与卸载文件资源，详见 [Session API](raw/application-api-reference/managed-agents-api/session-api.md)。
 
-记忆库在创建会话时于**资源**区点击 **+** 挂载，配置记忆库、权限与说明；创建后不可新增、卸载或修改。详见[记忆库](raw/application-user-guide/agent-development/managed-agents/managed-agents-context/managed-agents-memory-store.md)。
+记忆库在创建会话时于**资源**区点击 **+** 挂载。可以选择内置记忆或百炼记忆库（需先开通百炼记忆服务），并配置记忆库、实体 ID（百炼记忆）、权限与挂载信息（说明或描述）；创建后不可新增、卸载或修改。具体配置与限制详见[记忆库](raw/application-user-guide/agent-development/managed-agents/managed-agents-context/managed-agents-memory-store.md)。
 
 ### 归档与删除
 

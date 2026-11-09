@@ -329,7 +329,7 @@ boolean
 }
 ```
 
-**说明**`enableSearch`、`enableLlm` 与查询时的 `metadata_filter` 作用不同。通过 API 调用应用时，如需按元数据过滤文档，应在 `rag_options` 中同时指定 `pipeline_ids` 和 `metadata_filter`，详见[应用调用参数](raw/_short/agent-and-workflow-application-api-reference-ab48d043a951dcb2.md)。索引构建完成后，可通过[查询文件详情](raw/application-api-reference/rag-api/rag-api-documents/rag-api-list-file-details.md) API 的 `meta_extract_info` 检查实际抽取结果。
+**说明**`enableSearch`、`enableLlm` 与查询时的 `metadata_filter` 作用不同。通过 API 调用应用时，如需按元数据过滤文档，应在 `rag_options` 中同时指定 `pipeline_ids` 和 `metadata_filter`，详见[应用调用参数](raw/_short/agent-and-workflow-application-api-reference-81f0d3ecfd878b1f.md)。索引构建完成后，可通过[查询文件详情](raw/application-api-reference/rag-api/rag-api-documents/rag-api-list-file-details.md) API 的 `meta_extract_info` 检查实际抽取结果。
 
 ## 请求示例
 

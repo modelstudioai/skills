@@ -12,6 +12,8 @@
 
 ## 1\. 获取连接凭证
 
+**说明**如需提前获取 Token，或了解完整的鉴权流程，请参见[建连鉴权详解](https://help.aliyun.com/zh/model-studio/realtime-api-overview#tkauth-auth-detail-title)。
+
 在 AppServer 设置环境变量 `DASHSCOPE_API_KEY`，用[所选地域及业务空间的接入域名](raw/model-user-guide/get-started-with-models/regions.md)替换 `{endpoint}`。Fun-ASR-Realtime 使用 Inference 建连路径，以下以 `fun-asr-realtime` 为例。
 
 ```
