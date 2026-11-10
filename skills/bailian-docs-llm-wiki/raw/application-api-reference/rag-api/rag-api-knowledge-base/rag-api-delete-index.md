@@ -30,7 +30,7 @@
 
 string
 
-要删除的知识库 ID，即[创建知识库并导入](raw/application-api-reference/rag-api/rag-api-knowledge-base/rag-api-create-index.md)接口返回的 `data.pipelineId`
+要删除的知识库 ID，即[创建知识库并导入](raw/application-api-reference/rag-api/rag-api-knowledge-base/rag-api-create-index.md)接口返回的 `data.id`
 
 ## 请求示例
 

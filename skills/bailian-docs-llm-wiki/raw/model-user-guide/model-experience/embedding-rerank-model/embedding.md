@@ -730,7 +730,7 @@ tongyi-embedding-vision-flash-2026-03-06
 
 tongyi-embedding-vision-plus
 
-1152
+1152（默认）, 1024, 512, 256, 128, 64
 
 单张大小不超过**3 MB**。支持多图，最多支持输入**8张**
 
@@ -744,7 +744,7 @@ tongyi-embedding-vision-plus
 
 tongyi-embedding-vision-flash
 
-768
+768（默认）, 512, 256, 128, 64
 
 0.00015元
 
@@ -784,7 +784,7 @@ multimodal-embedding-v1
 
 tongyi-embedding-vision-plus
 
-1152
+1152（默认）, 1024, 512, 256, 128, 64
 
 1,024 Token
 
@@ -796,7 +796,7 @@ tongyi-embedding-vision-plus
 
 tongyi-embedding-vision-flash
 
-768
+768（默认）, 512, 256, 128, 64
 
 1,024 Token
 
@@ -892,7 +892,7 @@ JPG, PNG, BMP (支持URL或Base64)
 
 ### 切换向量维度
 
-`qwen3.7-text-embedding`、`qwen3.7-text-embedding-flash`、`text-embedding-v4` 、 `text-embedding-v3`、`tongyi-embedding-vision-plus-2026-03-06`、`tongyi-embedding-vision-flash-2026-03-06`、`qwen3-vl-embedding`和`qwen2.5-vl-embedding`支持自定义向量维度。更高的维度能保留更丰富的语义信息，但也会相应增加存储和计算成本。
+`qwen3.7-text-embedding`、`qwen3.7-text-embedding-flash`、`text-embedding-v4` 、 `text-embedding-v3`、`tongyi-embedding-vision-plus`、`tongyi-embedding-vision-flash`、`tongyi-embedding-vision-plus-2026-03-06`、`tongyi-embedding-vision-flash-2026-03-06`、`qwen3-vl-embedding`和`qwen2.5-vl-embedding`支持自定义向量维度。更高的维度能保留更丰富的语义信息，但也会相应增加存储和计算成本。
 
 -   **通用场景（推荐）**：1024 维度是性能与成本的最佳平衡点，适用于绝大多数语义检索任务。
 -   **追求精度**：对于高精度要求领域，可选择 1536 或 2048 维度。这会带来一定的精度提升，但存储和计算开销会显著增加。

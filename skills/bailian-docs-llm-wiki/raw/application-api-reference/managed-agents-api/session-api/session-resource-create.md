@@ -64,7 +64,7 @@ string
 
 ## 请求示例
 
-bash
+curl
 
 ```
 curl -X POST "$AGENTSTUDIO_URL/sessions/sesn_xxx/resources" \

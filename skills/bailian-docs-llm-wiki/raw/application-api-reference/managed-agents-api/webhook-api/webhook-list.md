@@ -12,7 +12,7 @@
 
 ## 请求示例
 
-bash
+curl
 
 ```
 curl "$AGENTSTUDIO_URL/webhook_endpoints" \

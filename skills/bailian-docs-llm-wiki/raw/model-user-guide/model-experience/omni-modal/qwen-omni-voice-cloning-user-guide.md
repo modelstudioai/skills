@@ -13,7 +13,7 @@
 
 其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
-请求参数、响应和错误说明见[声音复刻 API 参考](raw/model-api-reference/voice-customization-api-directory/sound-reengraving/voice-clone-design-http-api.md)。
+请求参数、响应和错误说明见[声音复刻 API 参考](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning)。
 
 ## 音频要求
 
@@ -65,9 +65,9 @@ WAV (16bit)、MP3、M4A
 
 1.  创建音色
     
-    调用[创建音色](https://help.aliyun.com/zh/model-studio/voice-clone-design-http-api#1eaa57d82did9)接口，上传一段音频。系统会分析该音频，创建一个专属的复刻音色。**此步骤必须指定**`target_model`**，声明创建的音色将由哪个全模态模型驱动。**
+    调用[创建音色](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning#1eaa57d82did9)接口，上传一段音频。系统会分析该音频，创建一个专属的复刻音色。**此步骤必须指定**`target_model`**，声明创建的音色将由哪个全模态模型驱动。**
     
-    若已有创建好的音色（调用[查询音色列表](https://help.aliyun.com/zh/model-studio/voice-clone-design-http-api#401d33226330i)接口查看），可跳过这一步直接进行下一步。
+    若已有创建好的音色（调用[查询音色列表](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning#401d33226330i)接口查看），可跳过这一步直接进行下一步。
     
 2.  使用音色进行对话
     
@@ -706,7 +706,7 @@ public class Main {
 
 -   **总数限制**：1000个音色/账号
     
-    > 当前接口不提供音色数量查询功能，可通过调用[查询音色列表](https://help.aliyun.com/zh/model-studio/voice-clone-design-http-api#401d33226330i)接口自行统计音色数目
+    > 当前接口不提供音色数量查询功能，可通过调用[查询音色列表](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning#401d33226330i)接口自行统计音色数目
     
 -   **自动清理**：若单个音色在过去一年内未被用于任何模型调用请求，系统将自动将其删除
     
@@ -715,7 +715,7 @@ public class Main {
 
 声音复刻和模型调用分开计费：
 
--   声音复刻：[创建音色](https://help.aliyun.com/zh/model-studio/voice-clone-design-http-api#1eaa57d82did9)按0.01 元/个计费，创建失败不计费
+-   声音复刻：[创建音色](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning#1eaa57d82did9)按0.01 元/个计费，创建失败不计费
     
     **说明**免费额度说明（仅中国站北京地域和国际站新加坡地域有免费额度）：
     

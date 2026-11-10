@@ -294,7 +294,11 @@
       "latestOnlineAt": "2026-06-17T11:23:33.000+00:00",
       "contextWindow": 262144,
       "maxInputTokens": 262144,
-      "offlineInfo": {},
+      "offlineInfo": {
+        "inference": {
+          "offlineTime": "2026-12-31 23:59:59"
+        }
+      },
       "inferenceProvider": "moonshot-ai",
       "name": "kimi/kimi-k2.7-code-highspeed",
       "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/kimi-api-by-moonshot-ai",
@@ -449,7 +453,11 @@
       "latestOnlineAt": "2026-06-15T01:49:13.000+00:00",
       "contextWindow": 262144,
       "maxInputTokens": 262144,
-      "offlineInfo": {},
+      "offlineInfo": {
+        "inference": {
+          "offlineTime": "2026-12-31 23:59:59"
+        }
+      },
       "inferenceProvider": "moonshot-ai",
       "name": "kimi/kimi-k2.7-code",
       "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/kimi-api-by-moonshot-ai",
@@ -533,7 +541,11 @@
       "latestOnlineAt": "2026-04-26T08:54:45.000+00:00",
       "contextWindow": 262144,
       "maxInputTokens": 262144,
-      "offlineInfo": {},
+      "offlineInfo": {
+        "inference": {
+          "offlineTime": "2026-12-31 23:59:59"
+        }
+      },
       "inferenceProvider": "moonshot-ai",
       "name": "Kimi/Kimi K2.6",
       "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/kimi-api-by-moonshot-ai",

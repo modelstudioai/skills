@@ -4,7 +4,7 @@
 
 推理服务供应商为阿里云百炼。默认音色为 `longanqian_v3.1`。接入方式、支持音色和参数详见[实时语音对话指南](raw/model-user-guide/model-experience/speech-and-audio/speech-to-speech/qwen-audio-realtime-user-guides.md)。
 
-联网搜索通过 `enable_search` 开启，不能与 Function Calling 同时启用。
+联网搜索通过 `enable_search` 开启，可与 Function Calling 同时启用。
 
 ## 上下文限制
 

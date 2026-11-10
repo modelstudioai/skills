@@ -12,20 +12,20 @@
 
 ## 请求示例
 
-bash
+curl
 
 ```
 curl -X DELETE "$AGENTSTUDIO_URL/sessions/sesn_xxx" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
-python
+Python
 
 ```
 client.sessions.delete("sesn_xxx")
 ```
 
-java
+Java
 
 ```
 client.sessions().delete("sesn_xxx");

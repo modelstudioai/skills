@@ -158,7 +158,7 @@ MCP 工具执行结果
 
 ## 订阅示例
 
-bash
+curl
 
 ```
 curl -N "$AGENTSTUDIO_URL/sessions/sesn_xxx/events/stream" \
@@ -166,7 +166,7 @@ curl -N "$AGENTSTUDIO_URL/sessions/sesn_xxx/events/stream" \
   -H "Accept: text/event-stream"
 ```
 
-python
+Python
 
 ```
 with client.sessions.events.stream("sesn_xxx", timeout=120.0) as stream:
@@ -180,7 +180,7 @@ with client.sessions.events.stream("sesn_xxx", timeout=120.0) as stream:
                 break
 ```
 
-java
+Java
 
 ```
 try (AgentStudioEventStream stream = client.sessions().events().stream("sesn_xxx", 120_000L)) {

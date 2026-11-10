@@ -129,7 +129,7 @@ string
 
 object
 
-业务数据。子字段 `page_number`（integer，当前页码）、`total_count`（integer，文档总数）、`rows`（array<object>，文档列表。元素字段：`doc_id`（string，文档唯一标识）、`doc_name`（string，文档名称）、`doc_type`（string，文档类型，如 `pdf`、`docx`、`txt`）、`code`（string，细粒度处理状态码，如 `FINISH`、`PARSE_FAILED`、`PIPELINE_JOB_RETRY_IMPORT_ERROR` 等）、`status`（string，粗粒度处理状态，如 `FINISH`、`PARSE_FAILED`、`INSERT_ERROR` 等，与 `code` 多数情况下一致，`code` 提供更细的错误归类）、`message`（string，处理状态描述，失败时为错误原因）、`size`（integer，文件大小，单位字节）、`gmt_modified`（integer，最后修改时间，毫秒级 Unix 时间戳）、`dataSync`（boolean，是否为增量同步数据）、`categoryId`（string，所属类目 ID）、`categoryName`（string，所属类目名称）、`connectorId`（string，所属连接器 ID）、`source_id`（string，数据源 ID）、`ingestion_id`（string，导入任务 ID）、`tags`（array<string>，文档标签列表）、`meta_extract_info`（array，元数据抽取信息）、`canDelete`（boolean，是否可删除））
+业务数据。子字段 `page_number`（integer，当前页码）、`total_count`（integer，文档总数）、`rows`（array<object>，文档列表。元素字段：`doc_id`（string，文档唯一标识）、`doc_name`（string，文档名称）、`doc_type`（string，文档类型，如 `pdf`、`docx`、`txt`）、`code`（string，细粒度处理状态码，如 `FINISH`、`PARSE_FAILED`、`PIPELINE_JOB_RETRY_IMPORT_ERROR` 等）、`status`（string，粗粒度处理状态，如 `FINISH`、`PARSE_FAILED`、`INSERT_ERROR` 等，与 `code` 多数情况下一致，`code` 提供更细的错误归类）、`message`（string，处理状态描述，失败时为错误原因）、`size`（integer，文件大小，单位字节）、`gmt_modified`（integer，最后修改时间，毫秒级 Unix 时间戳）、`dataSync`（boolean，是否为增量同步数据）、`categoryId`（string，所属类目 ID）、`categoryName`（string，所属类目名称）、`connectorId`（string，所属数据集 ID）、`source_id`（string，数据源 ID）、`ingestion_id`（string，导入任务 ID）、`tags`（array<string>，文档标签列表）、`meta_extract_info`（array，元数据抽取信息）、`canDelete`（boolean，是否可删除））
 
 `success`
 

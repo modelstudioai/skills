@@ -12,20 +12,20 @@
 
 ## 请求示例
 
-bash
+curl
 
 ```
 curl "$AGENTSTUDIO_URL/environments/env_xxx" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
-python
+Python
 
 ```
 env = client.environments.retrieve("env_xxx")
 ```
 
-java
+Java
 
 ```
 Environment env = client.environments().retrieve("env_xxx");

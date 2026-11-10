@@ -89,18 +89,18 @@
 
 ## 创建预建音色
 
-使用[创建预建音色 API](https://help.aliyun.com/zh/model-studio/voice-clone-design-http-api#h2-create)。`target_model` 须与之后翻译会话使用的模型一致。
+使用[创建预建音色 API](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning#h2-create)。`target_model` 须与之后翻译会话使用的模型一致。
 
 ### 请求体
 
-字段定义参见[预建音色 API](https://help.aliyun.com/zh/model-studio/voice-clone-design-http-api#h2-create)。
+字段定义参见[预建音色 API](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning#h2-create)。
 
 ### 请求示例
 
-完整请求与响应示例参见[创建预建音色](https://help.aliyun.com/zh/model-studio/voice-clone-design-http-api#h2-create)。
+完整请求与响应示例参见[创建预建音色](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning#h2-create)。
 
 ## 删除预建音色
 
-参见[删除预建音色 API](https://help.aliyun.com/zh/model-studio/voice-clone-design-http-api#h2-delete)。
+参见[删除预建音色 API](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning#h2-delete)。
 
 更多交互步骤参见[实时语音/音视频翻译](https://help.aliyun.com/zh/model-studio/qwen3-5-livetranslate-flash-realtime#8q75hr4eu55j0)。

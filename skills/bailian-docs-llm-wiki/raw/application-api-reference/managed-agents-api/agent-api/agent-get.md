@@ -30,7 +30,7 @@ int
 
 ## 请求示例
 
-bash
+curl
 
 ```
 # 默认返回最新版本
@@ -42,7 +42,7 @@ curl "$AGENTSTUDIO_URL/agents/agent_xxx?version=3" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
-python
+Python
 
 ```
 # 默认返回最新版本
@@ -52,7 +52,7 @@ agent = client.agents.retrieve("agent_xxx")
 agent = client.agents.retrieve("agent_xxx", version=3)
 ```
 
-java
+Java
 
 ```
 // 默认返回最新版本

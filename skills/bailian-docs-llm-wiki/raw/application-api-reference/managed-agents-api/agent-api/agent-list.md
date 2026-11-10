@@ -46,21 +46,21 @@ bool
 
 ## 请求示例
 
-bash
+curl
 
 ```
 curl "$AGENTSTUDIO_URL/agents?limit=20&include_archived=true" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
-python
+Python
 
 ```
 for agent in client.agents.list(limit=20, include_archived=True):
     print(agent.id, agent.name, agent.model['id'])
 ```
 
-java
+Java
 
 ```
 CursorPage<Agent> page = client.agents().list(AgentListParam.builder()

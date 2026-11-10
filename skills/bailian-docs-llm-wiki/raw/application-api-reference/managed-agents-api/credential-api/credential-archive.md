@@ -38,7 +38,7 @@ Credential ID，格式 cred\_xxx
 
 ## 请求示例
 
-bash
+curl
 
 ```
 curl -X POST "$AGENTSTUDIO_URL/vaults/vlt_xxx/credentials/cred_xxx/archive" \

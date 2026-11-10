@@ -1,6 +1,6 @@
-# 查询连接器
+# 查询数据集
 
-查询指定连接器的详细信息。可通过连接器 ID 或名称查询，至少传入其中一个参数。
+查询指定数据集的详细信息。可通过数据集 ID 或名称查询，至少传入其中一个参数。
 
 ## 前提
 
@@ -10,7 +10,7 @@
 
 **POST** `/api/v1/connector/dash/getConnector`
 
-查询指定连接器的详细信息。可通过连接器 ID 或名称查询，至少传入其中一个参数。
+查询指定数据集的详细信息。可通过数据集 ID 或名称查询，至少传入其中一个参数。
 
 **说明**`connectorId` 和 `connectorName` 至少需要传入一个。两者都传入时，以 `connectorId` 为准。
 
@@ -30,7 +30,7 @@
 
 string
 
-连接器 ID，与 connectorName 至少传入一个。
+数据集 ID，与 connectorName 至少传入一个。
 
 `connectorName`
 
@@ -38,7 +38,7 @@ string
 
 string
 
-连接器名称，与 connectorId 至少传入一个，最长 20 个字符。
+数据集名称，与 connectorId 至少传入一个，最长 20 个字符。
 
 ## 请求示例
 
@@ -65,10 +65,10 @@ curl -X POST "$BASE_URL/api/v1/connector/dash/getConnector" \
   "requestId": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
   "data": {
     "connectorId": "conn_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx_xxxxxx",
-    "connectorName": "默认文件连接器",
+    "connectorName": "默认文件数据集",
     "connectorType": "FILE",
     "connectorSubType": "UNSTRUCTURED",
-    "description": "默认文件类型连接器",
+    "description": "默认文件类型数据集",
     "gmtCreate": "2026-03-16 16:13:26",
     "gmtModified": "2026-03-16 16:13:26"
   },
@@ -106,7 +106,7 @@ string
 
 object
 
-连接器详情。子字段 `connectorId`（string，连接器 ID）、`connectorType`（string，连接器类型，当前仅支持 FILE）、`connectorName`（string，连接器名称）、`description`（string，连接器描述）、`connectorSubType`（string，连接器子类型，如 `UNSTRUCTURED`）、`gmtCreate`（string，创建时间，格式 `YYYY-MM-DD HH:mm:ss`）、`gmtModified`（string，最后修改时间，格式 `YYYY-MM-DD HH:mm:ss`）。
+数据集详情。子字段 `connectorId`（string，数据集 ID）、`connectorType`（string，数据集类型，当前仅支持 FILE）、`connectorName`（string，数据集名称）、`description`（string，数据集描述）、`connectorSubType`（string，数据集子类型，如 `UNSTRUCTURED`）、`gmtCreate`（string，创建时间，格式 `YYYY-MM-DD HH:mm:ss`）、`gmtModified`（string，最后修改时间，格式 `YYYY-MM-DD HH:mm:ss`）。
 
 `status`
 

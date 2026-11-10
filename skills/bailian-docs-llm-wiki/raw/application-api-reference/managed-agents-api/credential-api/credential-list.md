@@ -64,7 +64,7 @@ string
 
 ## 请求示例
 
-bash
+curl
 
 ```
 curl "$AGENTSTUDIO_URL/vaults/vlt_xxx/credentials?include_archived=true&limit=20" \

@@ -572,7 +572,7 @@ def send_audio():
 
 **实时复刻**：`qwen3.8-livetranslate-flash-realtime` 和 `qwen3.5-livetranslate-flash-realtime` 在翻译过程中从输入音频复刻音色，不额外收取复刻费用；模型调用仍按 Token 用量计费。
 
-**提前创建音色**：通过[声音复刻 API](https://help.aliyun.com/zh/model-studio/voice-clone-design-http-api#h2-create)提前创建音色，按 **0.01 元/个**计费，创建失败不计费；免费额度的地域、次数与有效期见[计费说明](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning-user-guide#b819f697047nb)。使用已创建的音色翻译时，仍按模型调用的 Token 用量计费。
+**提前创建音色**：通过[声音复刻 API](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning#h2-create)提前创建音色，按 **0.01 元/个**计费，创建失败不计费；免费额度的地域、次数与有效期见[计费说明](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning-user-guide#b819f697047nb)。使用已创建的音色翻译时，仍按模型调用的 Token 用量计费。
 
 在 [session.update](https://help.aliyun.com/zh/model-studio/live-translator-client-events#af43722339yva) 中设置以下参数启用：
 
@@ -586,7 +586,7 @@ def send_audio():
 -   `session.voice`：指定输出音色，取值取决于 `frequency` 的设置。
     
     -   设置为 `default`：搭配 `frequency` 为 `once` 或 `always` 使用，复刻输入音频的音色，复刻完成前使用默认音色过渡。
-    -   设置为用户复刻的音色 ID（如 `qwen-translate-vc-xxx-yyy-zzz`）：搭配 `frequency` 为 `never` 使用。需提前通过[声音复刻API](https://help.aliyun.com/zh/model-studio/voice-clone-design-http-api#h2-create)准备音色，`target_model` 需指定为实际使用的翻译模型。
+    -   设置为用户复刻的音色 ID（如 `qwen-translate-vc-xxx-yyy-zzz`）：搭配 `frequency` 为 `never` 使用。需提前通过[声音复刻API](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning#h2-create)准备音色，`target_model` 需指定为实际使用的翻译模型。
 
 > 当 `frequency` 为 `once` 或 `always` 时，`voice` 必须设置为 `default`，不可设置为其他预设音色，否则服务端会返回错误。
 
@@ -847,7 +847,7 @@ session.finished
 
 **实时复刻**：`qwen3.8-livetranslate-flash-realtime` 和 `qwen3.5-livetranslate-flash-realtime` 在翻译过程中从输入音频复刻音色，不额外收取复刻费用；模型调用仍按 Token 用量计费。
 
-**提前创建音色**：通过[声音复刻 API](https://help.aliyun.com/zh/model-studio/voice-clone-design-http-api#h2-create)提前创建音色，按 **0.01 元/个**计费，创建失败不计费；免费额度的地域、次数与有效期见[计费说明](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning-user-guide#b819f697047nb)。使用已创建的音色翻译时，仍按模型调用的 Token 用量计费。
+**提前创建音色**：通过[声音复刻 API](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning#h2-create)提前创建音色，按 **0.01 元/个**计费，创建失败不计费；免费额度的地域、次数与有效期见[计费说明](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning-user-guide#b819f697047nb)。使用已创建的音色翻译时，仍按模型调用的 Token 用量计费。
 
 ## 限流说明
 

@@ -259,7 +259,7 @@ object
 
 number
 
-重排序最低分数阈值，范围 \[0, 1\]，分数低于此值的切片会被过滤。
+重排序最低分数阈值，范围 \[0, 1\]，分数低于此值的切片会被过滤。注意：search 场景下应显式配置 `rerank_min_score`、`rerank_top_n`、`dense_similarity_top_k`、`sparse_similarity_top_k` 等检索参数；缺失时服务发布后查询会报缺参错误（如 `rerank_min_score is required`、`dense_similarity_top_k missing or invalid`）。
 
 `rerank_top_n`
 

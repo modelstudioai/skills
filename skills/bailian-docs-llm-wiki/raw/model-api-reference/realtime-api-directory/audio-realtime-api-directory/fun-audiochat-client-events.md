@@ -142,7 +142,7 @@ TTS 音色名称。3.1 Plus/Flash 的默认值为 `longanqian_v3.1`，3.0 Plus/F
 
 是否开启联网搜索。默认值：`false`。开启后，模型可根据实时问题自主判断是否进行联网搜索。
 
-> `qwen-audio-3.1-realtime-flash` 支持同时启用 `tools` 和 `enable_search`；`qwen-audio-3.1-realtime-plus`、`qwen-audio-3.0-realtime-plus` 和 `qwen-audio-3.0-realtime-flash` 不支持同时启用。
+可在同一会话中将 `enable_search` 设为 `true`，并通过 `tools` 配置 Function Calling 工具。
 
 **search\_options**`object`（可选）
 

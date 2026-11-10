@@ -10,5 +10,5 @@
 -   [申请上传租约](raw/application-api-reference/rag-api/rag-api-data-import/rag-api-upload-lease.md)
 -   [注册文件](raw/application-api-reference/rag-api/rag-api-data-import/rag-api-add-file.md)
 -   [OSS 批量导入](raw/application-api-reference/rag-api/rag-api-data-import/rag-api-oss-import.md)
--   [新增连接器](raw/application-api-reference/rag-api/rag-api-data-import/rag-api-add-connector.md)
--   [查询连接器](raw/application-api-reference/rag-api/rag-api-data-import/rag-api-get-connector.md)
+-   [新增数据集](raw/application-api-reference/rag-api/rag-api-data-import/rag-api-add-connector.md)
+-   [查询数据集](raw/application-api-reference/rag-api/rag-api-data-import/rag-api-get-connector.md)

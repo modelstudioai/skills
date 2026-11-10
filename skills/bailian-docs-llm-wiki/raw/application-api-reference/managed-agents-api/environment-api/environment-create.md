@@ -78,7 +78,7 @@ object
 
 ## 请求示例
 
-bash
+curl
 
 ```
 curl -X POST "$AGENTSTUDIO_URL/environments" \
@@ -100,7 +100,7 @@ curl -X POST "$AGENTSTUDIO_URL/environments" \
   }'
 ```
 
-python
+Python
 
 ```
 env = client.environments.create(
@@ -119,7 +119,7 @@ env = client.environments.create(
 )
 ```
 
-java
+Java
 
 ```
 Environment env = client.environments().create(EnvironmentCreateParam.builder()

@@ -97,6 +97,6 @@ AOQ（AI over QUIC）Client SDK 提供 Android、iOS、HarmonyOS、Windows、mac
 
 ## 音色
 
--   [音色复刻 API](https://help.aliyun.com/zh/model-studio/voice-clone-design-http-api#h2-create)
+-   [音色复刻 API](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning#h2-create)
 
 三种协议均可用于 Token Plan。可用模型和地域以 [Token Plan 个人版](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview#tpp01-h-models)及[团队版](https://help.aliyun.com/zh/model-studio/token-plan-team-overview#tpt01-h-models)的说明为准。

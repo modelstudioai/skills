@@ -14,7 +14,7 @@
 
 ## 请求示例
 
-bash
+curl
 
 ```
 curl -X POST "$AGENTSTUDIO_URL/skills" \
@@ -23,14 +23,14 @@ curl -X POST "$AGENTSTUDIO_URL/skills" \
   -d '{"file_id": "file_xxx"}'
 ```
 
-python
+Python
 
 ```
 skill = client.skills.create(file_id="file_xxx")
 print(skill.id)
 ```
 
-java
+Java
 
 ```
 Skill skill = client.skills().create(SkillCreateParam.builder()

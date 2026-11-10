@@ -179,7 +179,7 @@ voice(String)
 取值范围：
 
 -   系统音色：参见[Qwen-Audio-TTS音色列表](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/tts-voice-list/qwen-audio-tts-voice-list.md)
--   声音复刻音色：如何创建音色请参见[声音复刻HTTP API参考](raw/model-api-reference/voice-customization-api-directory/sound-reengraving/voice-clone-design-http-api.md)
+-   声音复刻音色：如何创建音色请参见[声音复刻HTTP API参考](raw/_short/voice-clone-design-http-api-b6a5abbe2d5d2730.md)
 -   声音设计音色：如何创建音色请参见[声音设计API参考](raw/model-api-reference/voice-customization-api-directory/voice-design-api-references.md)
 
 format(String)

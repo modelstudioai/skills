@@ -77,7 +77,7 @@
 pip install openai mcp
 ```
 
-2.  [配置阿里云百炼 API Key 到环境变量](https://help.aliyun.com/zh/model-studio/first-api-call-to-qwen#fcceb7b5d2pqx)。
+2.  [配置阿里云百炼 API Key 到环境变量](https://help.aliyun.com/zh/model-studio/get-api-key#20b17d4430qvt)。
     
 3.  代码示例如下：
     

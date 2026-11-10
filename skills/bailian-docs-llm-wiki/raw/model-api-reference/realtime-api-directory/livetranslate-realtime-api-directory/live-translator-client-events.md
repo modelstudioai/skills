@@ -91,7 +91,7 @@ WebSocket SDK 用法参见 [Python SDK](raw/_short/qwen-livetranslate-python-sdk
 
 **enable\_voice\_clone**`boolean`（可选）
 
-是否启用声音复刻。默认值为`false`。启用后，可在翻译时实时复刻输入音频的音色，也可使用预先复刻的音色。此时`voice`不再使用系统预设音色，需设置为`default`或用户预先通过[声音复刻 API](https://help.aliyun.com/zh/model-studio/voice-clone-design-http-api#h2-create)复刻的音色 ID。
+是否启用声音复刻。默认值为`false`。启用后，可在翻译时实时复刻输入音频的音色，也可使用预先复刻的音色。此时`voice`不再使用系统预设音色，需设置为`default`或用户预先通过[声音复刻 API](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning#h2-create)复刻的音色 ID。
 
 **voice\_clone\_options**`object`（可选）
 

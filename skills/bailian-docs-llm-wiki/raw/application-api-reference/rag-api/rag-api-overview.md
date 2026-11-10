@@ -34,7 +34,7 @@ RAG API 包含三组接口，路径前缀不同：
 
 `/api/v1/connector/dash/`
 
-类目管理、文件上传、连接器配置
+类目管理、文件上传、数据集配置
 
 知识问答
 
@@ -290,13 +290,13 @@ Request Body
 
 从已授权的阿里云 OSS Bucket 批量导入文件到数据中心
 
-[新增连接器](raw/application-api-reference/rag-api/rag-api-data-import/rag-api-add-connector.md)
+[新增数据集](raw/application-api-reference/rag-api/rag-api-data-import/rag-api-add-connector.md)
 
-创建新的数据连接器，用于管理数据导入来源
+创建新的数据集，用于管理数据导入来源
 
-[查询连接器](raw/application-api-reference/rag-api/rag-api-data-import/rag-api-get-connector.md)
+[查询数据集](raw/application-api-reference/rag-api/rag-api-data-import/rag-api-get-connector.md)
 
-查询指定连接器的详细信息
+查询指定数据集的详细信息
 
 ### 知识检索与问答
 

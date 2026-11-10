@@ -31,7 +31,7 @@
 -   首次使用需开通记忆库服务：进入[百炼控制台记忆库页面](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/memory/list)，点击**立即开通**
 -   已获取 `DASHSCOPE_API_KEY`，获取方式见[获取 API Key](raw/model-api-reference/preparations/get-api-key.md)
 -   已获取[业务空间 ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)，并将下文请求地址中的 `{WorkspaceId}` 替换为该 ID。API Key 须属于同一业务空间
--   如使用 Python SDK，先安装：`pip install agentscope-runtime`，并设置服务地址：`export MEMORY_SERVICE_ENDPOINT="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory"`
+-   如使用 Python SDK，先安装：`pip install agentscope-runtime`，并设置服务地址：`export MEMORY_SERVICE_ENDPOINT="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory"` 注意：agentscope-runtime 依赖 `mcp.server.fastmcp`，该模块在 mcp 2.x 中已移除；若环境中 mcp 为 2.x 版本，需一并约束：`pip install agentscope-runtime "mcp<2"`，否则 import 时会报 `No module named 'mcp.server.fastmcp'`。
 
 在运行示例的终端中显式设置 API Key；先替换占位值，不要将真实密钥提交到仓库：
 

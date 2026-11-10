@@ -127,12 +127,12 @@ string
     
     专业版
     
--   mt-turbo :
+-   mt-flash :
     
     轻量版
     
 
-mt-turbo
+mt-flash
 
 ext
 

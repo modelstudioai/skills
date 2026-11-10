@@ -64,7 +64,7 @@ array<string>
 
 ## 请求示例
 
-bash
+curl
 
 ```
 curl -X PUT "$AGENTSTUDIO_URL/webhook_endpoints/wep_01JXX7YQGPRPV1BZXA35QE7WDP" \

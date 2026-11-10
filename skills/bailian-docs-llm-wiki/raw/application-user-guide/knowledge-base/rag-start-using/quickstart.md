@@ -34,11 +34,11 @@
 
 ### 1\. 创建知识库并上传文档
 
-进入控制台 [**知识管理**](https://bailian.console.aliyun.com/cn-beijing/rag/knowledge/list)，点击 **创建知识库**。
+进入控制台 [**知识管理**](https://bailian.console.aliyun.com/cn-beijing/rag/knowledge/list)，点击 **创建** 并选择 **标准版**。
 
 1.  填写名称和描述，知识库类型选择 **文档搜索**，使用场景选择 **基础文档问答**，点击 **下一步**。
 2.  数据来源选择 **上传文件**，拖拽或点击上传一份 PDF / Word / Markdown 文件。
-3.  索引设置保持默认，点击 **创建知识库**。
+3.  索引设置保持默认，点击 **完成**。
 
 系统自动完成解析、切片、向量化与索引构建。知识库状态变为 **已就绪** 即可检索。
 
@@ -48,7 +48,7 @@
 
 点击左侧 **Playground**，选择刚创建的知识库，在顶部切换到 **知识问答**，输入准备好的问题。
 
-系统先检索相关切片，再调用大模型生成带引用的回答。可切换不同模型（Qwen / DeepSeek）对比效果。对照原文核对回答与引用。
+系统先检索相关切片，再调用大模型生成带引用的回答。可切换不同模型（如 qwen3.6-plus / qwen3.7-plus）对比效果。对照原文核对回答与引用。
 
 ### 3\. 通过 API 接入应用
 
@@ -75,7 +75,7 @@ curl -X POST https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/indices/
 
 **说明**返回的 `nodes` 数组包含命中切片，按相关性分数倒序排列。检查切片是否对应问题和原文；API 检索返回的是相关内容，不是大模型生成的回答。带引用的回答在第 2 步的控制台知识问答中查看。
 
-**重要**也可通过阿里云百炼 CLI 快速检索：`bl knowledge retrieve --index-id <知识库ID> --query "查询内容" --top-k 5`。详见[使用 CLI](raw/application-user-guide/knowledge-base/integration/cli.md)。
+**重要**也可通过阿里云百炼 CLI 检索：`bl knowledge search --agent-id <检索服务ID> --query "查询内容"`。检索服务需在[知识检索](raw/application-user-guide/knowledge-base/rag-knowledge-retrieval.md)页面创建并发布；CLI 2.5.0 起不再提供按知识库 ID 直接检索的 `bl knowledge retrieve`。详见[使用 CLI](raw/application-user-guide/knowledge-base/integration/cli.md)。
 
 ## 下一步
 

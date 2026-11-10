@@ -104,7 +104,7 @@ string
 
 string
 
-记忆状态
+记忆状态：`valid`（有效）或 `delete`（已删除，软删除标记，历史仍可查询）
 
 `memory_node.project_id`
 

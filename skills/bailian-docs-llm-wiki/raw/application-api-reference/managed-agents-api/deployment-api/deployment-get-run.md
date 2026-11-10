@@ -30,7 +30,7 @@ Deployment Run ID
 
 ## 请求示例
 
-bash
+curl
 
 ```
 curl "$AGENTSTUDIO_URL/deployment_runs/drun_xxx" \

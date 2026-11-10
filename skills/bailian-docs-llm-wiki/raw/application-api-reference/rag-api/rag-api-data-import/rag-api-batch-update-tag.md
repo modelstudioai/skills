@@ -65,7 +65,12 @@ curl -X POST "$BASE_URL/api/v1/connector/dash/batchUpdateFileTag" \
 {
   "code": "Success",
   "status_code": 200,
-  "data": {},
+  "data": {
+    "results": [
+      {"fileId": "file_abc123", "success": true},
+      {"fileId": "file_def456", "success": true}
+    ]
+  },
   "requestId": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 }
 ```

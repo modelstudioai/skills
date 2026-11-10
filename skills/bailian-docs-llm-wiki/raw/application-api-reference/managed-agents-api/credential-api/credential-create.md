@@ -116,7 +116,7 @@ boolean
 
 ## 请求示例
 
-bash
+curl
 
 ```
 curl -X POST "$AGENTSTUDIO_URL/vaults/vlt_xxx/credentials" \

@@ -1,31 +1,32 @@
 # agent development
 
-百炼平台提供多种 Agent 开发范式，支持从低代码编排到全代码自定义的完整链路。开发者可根据业务复杂度和控制粒度需求，选择 Managed Agent、Flow Agent 或 Sandbox 模式进行构建与部署。所有模式均基于百炼统一的运行时与调度框架，确保一致的可观测性与扩展能力。
+百炼平台提供多种 Agent 开发与运行模式，支持从低代码编排到高自由度沙箱环境的全栈开发路径。开发者可根据业务复杂度、可控性需求和运维能力选择合适范式，所有模式均基于统一的底层执行引擎。核心能力覆盖意图识别、[工具调用](../concepts/tool-calling.md)、多步推理与状态管理。
 
-## 支持的模型与功能
+## 支持的模型/功能
 
-- **Managed Agent**：面向业务逻辑封装，支持通过自然语言配置工具调用、记忆管理、多轮对话状态维护；底层自动适配 Qwen 系列大模型（如 qwen-plus、qwen-max），无需手动指定推理参数。详见 [Agent 开发运行](../../raw/application-user-guide/agent-development.md)。
-- **Flow Agent**：基于可视化流程图构建 LLM 应用，支持条件分支、并行调用、自定义函数节点及外部 API 集成；适用于需要精细编排但不希望写代码的场景。其能力边界与配置项在 [Flow Agent 文档](../../raw/application-user-guide/llm-application.md) 中明确定义。
-- **Sandbox**：提供 Python 运行沙箱环境，允许开发者完全自主编写 `run()` 函数，直接调用百炼 SDK（如 `dashscope.Generation.call`）、访问上下文变量、实现异步工具调用等高级能力。详细约束见 [Sandbox](../../raw/application-user-guide/agent-development/sandbox.md)。
+- **Managed Agent**：平台托管的标准化 Agent，内置预置工具链（如搜索、计算、知识库检索），适合快速上线轻量级智能助手；其行为逻辑由平台配置驱动，不开放代码编辑。详见 [Agent 开发运行](../../raw/application-user-guide/agent-development.md)。
+- **Flow Agent**：基于可视化流程图的 LLM 应用编排方式，支持节点化组合 LLM 调用、条件分支、变量传递与自定义函数；适用于中等复杂度的业务逻辑闭环。该模式在 [Flow Agent 文档](../../raw/application-user-guide/llm-application.md) 中有完整说明。
+- **Sandbox Agent**：完全开放的 Python 沙箱环境，允许开发者编写任意逻辑（包括异步 I/O、第三方 SDK 调用、本地状态维护），通过 `@tool` 装饰器注册工具，由平台调度执行。详细约束见 [Sandbox](../../raw/application-user-guide/agent-development/sandbox.md)。
 
 ## 关键参数
 
-- `model`: 仅 Flow Agent 和 Sandbox 显式支持；Managed Agent 由平台自动选型，**不可覆盖**。若在 Flow Agent 中指定非百炼托管模型（如第三方 API 地址），将导致部署失败。
-- `max_iterations`: 默认为 10，控制 Agent 最大自主思考步数；Sandbox 模式下该参数无效，需在代码中自行实现终止逻辑。
-- `enable_memory`: 仅 Managed Agent 和 Flow Agent 支持；设为 `true` 时启用会话级[长期记忆](../concepts/long-term-memory.md)（基于向量库），默认关闭。
-- > **注意**：原始文档 [Agent 开发运行](../../raw/application-user-guide/agent-development.md) 中列出的“应用广场”链接指向低代码模板市场，但该页面当前已下线，实际模板需通过控制台「新建应用 → 从模板开始」入口访问，相关说明以控制台 UI 为准。
+- `model_id`：必须指定，仅支持百炼已发布的 Agent 专用模型（如 `qwen-max-agentic`、`qwen-plus-agentic`），通用大模型（如 `qwen-max`）不支持 Agent 模式。
+- `enable_thinking`：布尔值，启用后开启多步推理规划（默认 `true`）；设为 `false` 时退化为单轮 prompt 响应，丧失[工具调用](../concepts/tool-calling.md)能力。
+- `max_iterations`：最大推理步数，取值范围 `[1, 20]`，超限将强制终止并返回 `STOPPED` 状态；注意该参数在 [Sandbox](../../raw/application-user-guide/agent-development/sandbox.md) 中同样生效，但沙箱内可通过 `self.stop()` 主动退出。
 
 ## 使用方式
 
-1. **Managed Agent**：在控制台选择「Agent 应用」→「新建 Managed Agent」，填写描述、配置工具集后保存即部署，无需编码。
-2. **Flow Agent**：进入「LLM 应用」→「新建 Flow」，拖拽节点构建流程，双击节点配置模型、提示词或函数参数，最后发布。
-3. **Sandbox**：选择「Agent 应用」→「新建 Sandbox Agent」，在编辑器中编写符合签名 `def run(inputs: dict) -> dict:` 的 Python 函数，支持导入 `dashscope`, `json`, `requests` 等白名单库。
+1. 创建应用时选择「Agent」类型；
+2. 根据模式选择「Managed」「Flow」或「Sandbox」模板；
+3. 配置模型、提示词（Prompt）、工具列表（Managed/Flow 可视化配置，Sandbox 需在代码中声明）；
+4. 调用时传入 `input` 字符串或结构化 `input_object`（需与 Prompt 中变量名一致）；
+5. 响应体含 `output`（最终结果）、`trace`（执行步骤日志）和 `status`（`SUCCESS`/`FAILED`/`STOPPED`）。
 
 ## 限制和注意事项
 
-- Sandbox 模式单次执行超时为 60 秒，内存上限 2GB；禁止 fork 进程、读写文件系统、监听端口或执行 shell 命令。
-- 所有 Agent 类型均不支持跨账号共享会话 memory；会话 ID 必须由调用方显式传入（`session_id` 字段），否则视为新会话。
-- > **注意**：[Sandbox](../../raw/application-user-guide/agent-development/sandbox.md) 文档中提及“支持 `async def run()`”，但当前运行时仅同步执行，异步函数将被静默降级为同步调用——此行为将在 v2.3 版本中修正，当前请始终使用同步 `def run()`。
+- Managed Agent 不支持自定义 Python 逻辑或外部依赖，所有工具必须从平台预置列表中选取；若需扩展能力，应切换至 Flow 或 Sandbox 模式。
+- Flow Agent 的节点执行超时为 30 秒/节点，总流程超时为 120 秒；Sandbox 单次执行总时长上限为 60 秒，内存限制 2GB —— 这些硬性限制在 [Sandbox](../../raw/application-user-guide/agent-development/sandbox.md) 和 [Flow Agent 文档](../../raw/application-user-guide/llm-application.md) 中分别明确，但二者数值不一致，实际以调用时平台返回的 `422 Unprocessable Entity` 错误详情为准。
+- > **注意**：原始文档中 [Agent 开发运行](../../raw/application-user-guide/agent-development.md) 将「应用广场」列为一种开发模式，但该入口仅提供可复用的成品 Agent 模板，**不支持二次开发或源码导出**，不应被归类为开发模式；开发者应将其视为部署参考而非开发路径。
 
 ## 来源文档
 

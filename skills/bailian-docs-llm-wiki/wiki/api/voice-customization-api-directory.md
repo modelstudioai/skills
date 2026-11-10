@@ -1,70 +1,72 @@
 # voice customization api directory
 
-本目录汇总百炼平台提供的音色定制能力，涵盖音色复刻（voice cloning）与音色设计（voice design）两类核心 API。所有接口均通过统一的 `/api/v1/services/audio/tts/customization` 路径提供，但模型参数、输入结构及支持的操作因目标语音模型而异。开发者需根据所用语音合成模型（如 Qwen-Audio-TTS、CosyVoice、Qwen-Omni 等）严格匹配对应参数和流程。
+本目录汇总百炼平台支持的音色定制化能力 API，涵盖音色复刻（voice cloning）与音色设计（voice design）两类核心功能。所有接口均通过统一的 `/api/v1/services/audio/tts/customization` 路径提供，由 `model=voice-enrollment` 标识，并按 `target_model` 和操作类型（`create_voice`/`list_voice` 等）区分行为。开发者需先[获取 API Key](raw/model-api-reference/preparations/get-api-key.md)并配置地域专属 Workspace ID。
 
-## 支持的模型/功能
+## 支持的模型与功能
 
-音色定制能力按目标语音模型划分为两类：
+当前支持两大类音色定制方式：
 
-- **音色复刻（Voice Cloning）**：基于用户提供的参考音频生成专属音色，适用于 Qwen-Audio-TTS、Qwen-Audio-Realtime、CosyVoice、Qwen-Omni、Qwen-Omni-Realtime、Qwen-LiveTranslate-Realtime 和 MiniMax 模型。各模型支持的操作不同：
-  - Qwen-Audio-TTS / Qwen-Audio-Realtime / CosyVoice：支持创建、查询列表、查询详情、更新、删除 [音色复刻 (raw/model-api-reference/voice-customization-api-directory/sound-reengraving.md)](../../raw/model-api-reference/voice-customization-api-directory/sound-reengraving.md)。
-  - Qwen-Omni / Qwen-Omni-Realtime：支持创建、查询列表、删除（不支持更新）。
-  - Qwen-LiveTranslate-Realtime：仅支持创建预建音色、删除预建音色。
-  - MiniMax：仅支持创建（生成试听音频），不支持查询或管理音色生命周期。
-- **音色设计（Voice Design）**：通过文本描述（如“沉稳的中年男性”）生成音色，当前仅支持 Qwen-Audio-TTS 和 CosyVoice 模型，支持创建、查询列表、查询详情、删除四类操作，详见 [音色设计 API 参考](../../raw/model-api-reference/voice-customization-api-directory/voice-design-api-references.md)。
+- **音色复刻**：基于参考音频生成高度相似的个性化音色，适用于 Qwen-Audio-TTS、Qwen-Audio-Realtime 及 CosyVoice 系列模型。具体支持型号包括：
+  - `qwen-audio-3.0/3.1-tts-plus/flash`
+  - `qwen-audio-3.0/3.1-realtime-plus/flash`
+  - `cosyvoice-v3/v3.5-plus/flash`
+  
+  详细支持列表见 [Qwen-Audio 与 CosyVoice 音色复刻 HTTP API 参考](../../raw/_short/voice-clone-design-http-api-b6a5abbe2d5d2730.md)。
 
-> **注意**：文档 2 中将 `Qwen-LiveTranslate-Realtime` 归类为支持“创建音色、查询音色列表、删除音色”，但文档 5 明确其仅支持“创建预建音色、删除预建音色”，且文档 2 的“查询音色列表”表格中未列出该模型。实际行为以文档 5 和控制台行为为准，**Qwen-LiveTranslate-Realtime 不支持查询音色列表或详情**。
+- **音色设计**：通过文本描述（`voice_prompt`）和预览文本（`preview_text`）生成全新音色，目前仅支持 CosyVoice 和 Qwen-Audio-TTS 模型（如 `cosyvoice-v3.5-plus`），不依赖参考音频。该能力在 [音色设计 API 参考](../../raw/model-api-reference/voice-customization-api-directory/voice-design-api-references.md) 中完整定义。
+
+> **注意**：文档 1 中列出的 `Qwen-Omni/Livetranslate` 和 `MiniMax` 链接已过时或迁移。`Qwen-Omni/Livetranslate` 的音色复刻能力已整合至 Qwen-Audio-Realtime 流程；`MiniMax` 接口已下线，其历史说明已归档至 [Qwen-Audio 与 CosyVoice 音色复刻 HTTP API 参考](../../raw/_short/voice-clone-design-http-api-b6a5abbe2d5d2730.md) 底部备注，不再作为主推路径。
 
 ## 关键参数
 
-核心参数因模型类型和操作而异，以下为高频必选/关键字段：
+所有操作共用以下核心参数结构（`input` 对象内）：
 
-| 参数 | 类型 | 适用场景 | 说明 |
-|------|------|----------|------|
-| `model` | `string` | 全部 | 复刻固定为 `voice-enrollment`（Qwen/CosyVoice）或 `qwen-voice-enrollment`（Qwen-Omni）；设计固定为 `voice-enrollment`；MiniMax 为具体语音模型名（如 `MiniMax/speech-2.8-hd`）。 |
-| `input.action` | `string` | 全部 | 复刻：`create_voice`（Qwen/CosyVoice）、`create`（Qwen-Omni）、`voice_clone`（MiniMax）；设计：`create_voice`、`list_voice`、`query_voice`、`delete_voice`。 |
-| `target_model` | `string` | 全部 | 必须与后续调用语音合成时使用的模型完全一致，否则失败。例如 `cosyvoice-v3.5-plus`、`qwen3.5-omni-flash-realtime`。 |
-| `audio` / `url` / `audio_url` | `string` | 复刻 | 复刻必需：Qwen/CosyVoice/Omni 接受 URL 或 Data URI；MiniMax 仅接受 `audio_url`（公网可访问）。设计不使用此参数。 |
-| `voice_prompt` | `string` | 设计 | 必需，500 字符内中文/英文描述音色特征。 |
-| `preview_text` | `string` | 设计 | 必需，15–200 字符，用于生成预览音频的文本。 |
-| `prefix` | `string` | 复刻（Qwen/CosyVoice） & 设计 | 必需，≤10 字符，英文字母/数字，参与生成音色 ID。设计音色 ID 格式为 `{target_model}-vd-{prefix}-...`。 |
-| `preferred_name` | `string` | 复刻（Qwen-Omni） | 必需，≤16 字符，英文字母/数字/下划线，用于标识音色。 |
-| `text` | `string` | 复刻（Qwen-Omni） | 可选，与 `audio.data` 内容匹配的文本，用于服务端校验。 |
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `action` | string | 是 | 操作类型：`create_voice`、`list_voice`、`query_voice`、`update_voice`、`delete_voice` |
+| `target_model` | string | 创建/更新时必填 | 目标语音模型 ID，**必须与后续合成调用时一致**，否则失败 |
+| `prefix` | string | 创建时必填 | 音色名称前缀（字母+数字，≤10 字符）；查询时可选作筛选条件 |
+| `voice_id` | string | 查询/更新/删除时必填 | 音色唯一标识符 |
 
-其他常用可选参数包括 `language_hints`（复刻语种提示）、`max_prompt_audio_length`（复刻最大音频时长）、`enable_preprocess`（是否降噪）、`sample_rate` / `response_format`（设计预览音频格式）等，详见各 SDK 文档。
+**创建专用参数**：
+- **复刻模式**：`audio`（Base64 Data URI 或公网 URL）为必填；`url` 为兼容旧参数，**已标记为逐步废弃**（见 [Qwen-Audio 与 CosyVoice 音色复刻 HTTP API 参考](../../raw/_short/voice-clone-design-http-api-b6a5abbe2d5d2730.md)）。
+- **设计模式**：`voice_prompt`（≤500 字符）、`preview_text`（15–200 字符）为必填；`language_hints` 仅影响发音倾向，且**必须与 `preview_text` 语种一致**。
+- **通用可选参数**：`language_hints`（单元素数组，默认 `["zh"]`）、`max_prompt_audio_length`（3.0–30.0 秒）、`enable_preprocess`（bool）、`enable_volume_normalization`（string `"true"`/`"false"`，注意 Java SDK 传字符串，Python SDK 传 bool）。
 
 ## 使用方式
 
-### 域名与鉴权
-- **推荐域名**：华北2（北京）使用 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1`；新加坡使用 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1`。`{WorkspaceId}` 需替换为控制台业务空间详情页获取的实际 ID。
-- **旧域名兼容**：`dashscope.aliyuncs.com`（国内）和 `dashscope-intl.aliyuncs.com`（国际）仍可用，但 MiniMax 模型**仅支持旧域名** [音色复刻 HTTP API 参考](../../raw/model-api-reference/voice-customization-api-directory/sound-reengraving/voice-clone-design-http-api.md)。
-- **鉴权**：请求头 `Authorization: Bearer <your_api_key>`，API Key 需与所选地域匹配。
+### 1. 统一接入点
+所有请求均使用 POST 方法，地址格式为：  
+`POST https://{WorkspaceId}.{region}.maas.aliyuncs.com/api/v1/services/audio/tts/customization`  
+其中 `{WorkspaceId}` 需替换为控制台业务空间详情页中的真实 ID，`{region}` 为 `cn-beijing` 或 `ap-southeast-1`。
 
-### SDK 快速接入
-- **Java**：使用 `VoiceEnrollmentService` 类（包路径 `com.alibaba.dashscope.audio.ttsv2.enrollment`），通过 `createVoice()` 等方法操作音色 [音色复刻 Java SDK 参考](../../raw/model-api-reference/voice-customization-api-directory/sound-reengraving/voice-clone-java-sdk.md)。
-- **Python**：使用 `client.audio.voices` 资源，调用 `create()`、`list()` 等方法，`workspace` 和 `region` 参数决定地域 [音色复刻 Python SDK 参考](../../raw/model-api-reference/voice-customization-api-directory/sound-reengraving/voice-clone-python-sdk.md)。
-- **HTTP**：统一 POST 到 `/api/v1/services/audio/tts/customization`，按模型要求构造 `model` 和 `input` 对象。
+### 2. 鉴权与头信息
+- `Authorization: Bearer <your_api_key>`（API Key 来自对应地域）
+- `Content-Type: application/json`
 
-### 音频提交方式
-- **URL**：推荐上传至 OSS 后提供公网可访问 URL。
-- **Data URI**：格式 `data:<mediatype>;base64,<base64_data>`，如 `data:audio/wav;base64,...`。注意 Base64 编码后体积增大，原始文件需 ≤10 MB（Qwen-Omni）或 ≤20 MB（MiniMax）。
+### 3. SDK 快速集成
+- **Python**：使用 `dashscope.Client(audio.voices)` 操作，详见 [Qwen-Audio 与 CosyVoice 音色复刻 Python SDK 参考](../../raw/_short/voice-clone-python-sdk-e1dda5eb4e730d8e.md)。
+- **Java**：使用 `VoiceEnrollmentService` 类，注意需全局设置 `Constants.baseHttpApiUrl`，详见 [Qwen-Audio 与 CosyVoice 音色复刻 Java SDK 参考](../../raw/_short/voice-clone-java-sdk-d83b31cde2e2050b.md)。
+
+### 4. 地域与域名迁移
+华北2（北京）和新加坡地域**强烈建议**使用业务空间专属域名（`{WorkspaceId}.cn-beijing.maas.aliyuncs.com` 等），以获得更高性能与稳定性。旧域名（`dashscope.aliyuncs.com`）仍可用，但属过渡期。
 
 ## 限制和注意事项
 
-- **配额与计费**：Qwen-Audio-Realtime 复刻免费，其余模型按调用次数或音频时长计费；MiniMax 复刻会额外收取试听音频的语音合成费用 [音色复刻 HTTP API 参考](../../raw/model-api-reference/voice-customization-api-directory/sound-reengraving/voice-clone-design-http-api.md)。
-- **音频要求**：
-  - Qwen-Audio/CosyVoice：推荐 10–20 秒清晰朗读，避免背景噪音；Qwen-Omni：10–60 秒，单声道，≥24 kHz 采样率，无音乐/他人声。
-  - MiniMax：音频 ≥10 秒且 ≤5 分钟，格式 mp3/m4a/wav，≤20 MB。
-- **地域隔离**：不同地域（北京/新加坡/国际）的 Workspace ID 和 API Key **完全独立**，不可混用。
-- **音色 ID 唯一性**：MiniMax 要求 `voice_id` 全局唯一且符合命名规范（8–256 字符，首字母开头，末字符非 `-`/`_`）；其他模型由服务端自动生成。
-- **状态管理**：音色设计生成后需等待 `status: "OK"` 才可使用；复刻音色创建即生效，无审核状态。
+- **配额与计费**：音色创建免费，但模型调用（TTS/Realtime）按目标模型单独计费；具体配额限制见 [声音复刻用户指南](https://help.aliyun.com/zh/model-studio/voice-cloning-user-guide#vc07_quota_h2)。
+- **音频要求**：复刻模式要求参考音频清晰、无强背景噪音；推荐时长 10–30 秒；格式支持 WAV/MP3/FLAC（详见 [声音复刻用户指南](https://help.aliyun.com/zh/model-studio/voice-cloning-user-guide#vc02_audio_h2)）。
+- **状态流转**：新创建音色初始状态为 `DEPLOYING`（审核中），仅当 `status == "OK"` 时方可用于合成；`UNDEPLOYED` 表示审核失败，不可用。
+- **跨模型约束**：`target_model` 在创建时指定后不可更改，且后续 TTS/Realtime 请求必须使用完全相同的模型 ID，否则报错。
+- **语言提示一致性**：`language_hints` 若设置，其值必须与实际音频（复刻）或 `preview_text`（设计）语种严格匹配，否则被忽略。
+- **SDK 参数差异**：`enable_volume_normalization` 在 HTTP API 和 Java SDK 中为字符串（`"true"`/`"false"`），而在 Python SDK 中为布尔值（`True`/`False`），调用时需注意类型匹配。
 
 ## 来源文档
 
 - [音色复刻](../../raw/model-api-reference/voice-customization-api-directory/sound-reengraving.md)
-- [音色复刻 HTTP API 参考](../../raw/model-api-reference/voice-customization-api-directory/sound-reengraving/voice-clone-design-http-api.md)
-- [音色复刻 Java SDK 参考](../../raw/model-api-reference/voice-customization-api-directory/sound-reengraving/voice-clone-java-sdk.md)
-- [音色复刻 Python SDK 参考](../../raw/model-api-reference/voice-customization-api-directory/sound-reengraving/voice-clone-python-sdk.md)
+- [Qwen-Audio/Cosyvoice](../../raw/model-api-reference/voice-customization-api-directory/sound-reengraving/audio-voice-cloning-api-directory.md)
+- [Qwen-Audio 与 CosyVoice 音色复刻 HTTP API 参考](../../raw/_short/voice-clone-design-http-api-b6a5abbe2d5d2730.md)
+- [Qwen-Audio 与 CosyVoice 音色复刻 Python SDK 参考](../../raw/_short/voice-clone-python-sdk-e1dda5eb4e730d8e.md)
+- [Qwen-Audio 与 CosyVoice 音色复刻 Java SDK 参考](../../raw/_short/voice-clone-java-sdk-d83b31cde2e2050b.md)
 - [音色设计 API 参考](../../raw/model-api-reference/voice-customization-api-directory/voice-design-api-references.md)
 
 
