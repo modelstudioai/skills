@@ -256,7 +256,7 @@ HTTPS 证书校验或主机名校验失败
 
 ## 验签示例
 
-python
+Python
 
 ```
 import base64
@@ -286,7 +286,7 @@ def verify_webhook(raw_body: bytes, webhook_id: str, timestamp: str, signature_h
         return False
 ```
 
-javascript
+Node.js
 
 ```
 import crypto from "node:crypto"

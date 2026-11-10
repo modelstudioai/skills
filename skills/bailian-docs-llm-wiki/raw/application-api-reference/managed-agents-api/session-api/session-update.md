@@ -96,7 +96,7 @@ array
 
 ## 请求示例
 
-bash
+curl
 
 ```
 curl -X POST "$AGENTSTUDIO_URL/sessions/sesn_xxx" \
@@ -116,7 +116,7 @@ curl -X POST "$AGENTSTUDIO_URL/sessions/sesn_xxx" \
   }'
 ```
 
-python
+Python
 
 ```
 session = client.sessions.update(
@@ -129,7 +129,7 @@ session = client.sessions.update(
 )
 ```
 
-java
+Java
 
 ```
 Map<String, String> metadata = new HashMap<>();

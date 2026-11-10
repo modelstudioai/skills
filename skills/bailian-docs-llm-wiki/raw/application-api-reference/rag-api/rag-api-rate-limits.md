@@ -152,7 +152,7 @@ QPS 上限
 
 5
 
-[查询连接器](raw/application-api-reference/rag-api/rag-api-data-import/rag-api-get-connector.md)
+[查询数据集](raw/application-api-reference/rag-api/rag-api-data-import/rag-api-get-connector.md)
 
 `/getConnector`
 
@@ -164,7 +164,7 @@ QPS 上限
 
 5
 
-[新增连接器](raw/application-api-reference/rag-api/rag-api-data-import/rag-api-add-connector.md)
+[新增数据集](raw/application-api-reference/rag-api/rag-api-data-import/rag-api-add-connector.md)
 
 `/addConnector`
 

@@ -72,7 +72,7 @@ object
 
 ## 请求示例
 
-bash
+curl
 
 ```
 curl -X POST "$AGENTSTUDIO_URL/memory_stores/memstore_xxx/memories/mem_xxx" \

@@ -38,21 +38,21 @@ string
 
 ## 请求示例
 
-bash
+curl
 
 ```
 curl "$AGENTSTUDIO_URL/agents/agent_xxx/versions" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
-python
+Python
 
 ```
 for version in client.agents.list_versions("agent_xxx", limit=10):
     print(version.version, version.created_at)
 ```
 
-java
+Java
 
 ```
 CursorPage<AgentVersion> versions = client.agents().listVersions(

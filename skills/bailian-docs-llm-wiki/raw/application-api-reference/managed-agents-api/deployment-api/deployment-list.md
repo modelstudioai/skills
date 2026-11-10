@@ -86,7 +86,7 @@ string
 
 ## 请求示例
 
-bash
+curl
 
 ```
 curl "$AGENTSTUDIO_URL/deployments?agent_id=agent_xxx&keyword=data&status=active&include_archived=true&limit=20" \

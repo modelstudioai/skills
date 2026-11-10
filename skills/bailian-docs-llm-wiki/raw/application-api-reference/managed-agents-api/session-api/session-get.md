@@ -12,21 +12,21 @@
 
 ## 请求示例
 
-bash
+curl
 
 ```
 curl "$AGENTSTUDIO_URL/sessions/sesn_xxx" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
-python
+Python
 
 ```
 session = client.sessions.retrieve("sesn_xxx")
 print(session.id, session.status, session.title)
 ```
 
-java
+Java
 
 ```
 Session session = client.sessions().retrieve("sesn_xxx");

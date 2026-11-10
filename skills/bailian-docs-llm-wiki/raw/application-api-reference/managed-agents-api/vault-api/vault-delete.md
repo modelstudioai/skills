@@ -30,7 +30,7 @@ Vault ID，格式 vlt\_xxx
 
 ## 请求示例
 
-bash
+curl
 
 ```
 curl -X DELETE "$AGENTSTUDIO_URL/vaults/vlt_xxx" \

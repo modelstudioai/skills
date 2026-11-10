@@ -1,5 +1,5 @@
 # 音色复刻
 
--   [HTTP API](raw/model-api-reference/voice-customization-api-directory/sound-reengraving/voice-clone-design-http-api.md)
--   [Java SDK](raw/model-api-reference/voice-customization-api-directory/sound-reengraving/voice-clone-java-sdk.md)
--   [Python SDK](raw/model-api-reference/voice-customization-api-directory/sound-reengraving/voice-clone-python-sdk.md)
+-   [Qwen-Audio/Cosyvoice](raw/model-api-reference/voice-customization-api-directory/sound-reengraving/audio-voice-cloning-api-directory.md)
+-   [Qwen-Omni/Livetranslate](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning)
+-   [MiniMax](https://help.aliyun.com/zh/model-studio/mini-clone-api)

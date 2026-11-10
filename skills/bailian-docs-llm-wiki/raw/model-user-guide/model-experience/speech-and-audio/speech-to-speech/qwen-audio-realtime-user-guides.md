@@ -9,7 +9,7 @@ Qwen-Audio 是端到端实时语音交互大模型，支持低延迟语音对话
 该模型除 WebSocket 协议外，还支持通过 AOQ 和 WebRTC 协议接入；如果是客户端对接，且更看重稳定的延迟、弱网下的交互能力、实时双工的降噪与回声消除，可优先考虑 AOQ，协议对比与选型请参见[API 参考](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/voice-conversation-api-references.md)。
 
 -   支持 Function Calling 工具调用，模型可自主判断是否需要调用外部工具获取信息
--   支持[联网搜索](#audio-realtime-web-search)，模型可根据实时问题自主判断是否搜索并返回搜索结果来源。`qwen-audio-3.1-realtime-flash` 可同时启用联网搜索和 Function Calling；3.1 Plus 和 3.0 Plus/Flash 不可同时启用
+-   支持[联网搜索](#audio-realtime-web-search)，模型可根据实时问题自主判断是否搜索并返回搜索结果来源，可与 Function Calling 同时启用
 -   支持对话上下文管理（创建、查询、删除对话项），灵活注入历史上下文或清理无关对话项
 -   高表现力语音输出，根据对话语境动态调整语气、节奏和情感表达
 -   支持系统音色与声音复刻音色，可通过声音复刻创建专属 AI 音色用于语音对话输出
@@ -1422,9 +1422,9 @@ if __name__ == "__main__":
 
 查询天气、新闻等即时信息时，可启用联网搜索，让模型检索实时资料后生成回复。联网搜索默认关闭；开启后，模型会自主判断是否需要搜索，并非每轮对话都会触发。
 
-**说明**联网搜索采用 `agent` 策略，计费请参考[计费说明](https://help.aliyun.com/zh/model-studio/web-search#92ce83df3a599)。
+联网搜索与 Function Calling 可在同一会话中启用，适用于 `qwen-audio-3.1-realtime-plus`、`qwen-audio-3.1-realtime-flash`、`qwen-audio-3.0-realtime-plus` 和 `qwen-audio-3.0-realtime-flash`。
 
-`qwen-audio-3.1-realtime-flash` 可同时启用联网搜索和 Function Calling；`qwen-audio-3.1-realtime-plus`、`qwen-audio-3.0-realtime-plus` 和 `qwen-audio-3.0-realtime-flash` 不可同时启用两者。
+**说明**联网搜索采用 `agent` 策略，计费请参考[计费说明](https://help.aliyun.com/zh/model-studio/web-search#92ce83df3a599)。
 
 **1\. 启用联网搜索**
 
@@ -1444,6 +1444,8 @@ if __name__ == "__main__":
     }
 }
 ```
+
+如需同时使用 Function Calling，在上述 `session` 对象中增加 `tools` 工具定义即可。工具定义及调用结果回填方式请参见 [Function Calling](#fc60h303)。
 
 参数详情请参见[session.update](https://help.aliyun.com/zh/model-studio/fun-audiochat-client-events#fc65a1b2c3d5f)。
 

@@ -61,7 +61,8 @@ curl -X POST "$BASE_URL/api/v1/connector/dash/describeFile" \
     "parser": "DOCMIND_DIGITAL",
     "sizeBytes": 21,
     "uploadTime": "2026-04-01 16:03:45",
-    "category": "cate_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx_xxxxxx"
+    "category": "cate_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx_xxxxxx",
+    "tags": ["产品", "指南"]
   },
   "status": 200
 }
@@ -97,7 +98,7 @@ string
 
 object
 
-文件详情。子字段 `fileId`（string，文件 ID）、`fileName`（string，文件名）、`fileType`（string，文件类型，如 pdf、md、docx）、`category`（string，所属类目 ID）、`status`（string，文件状态。枚举：`INIT`、`PARSING`、`PARSE_SUCCESS`、`FAIL`）、`sizeBytes`（integer，文件大小（字节），最小为 1）、`parser`（string，解析方式，如 DASHSCOPE\_DOCMIND）、`uploadTime`（string，上传时间）。
+文件详情。子字段 `fileId`（string，文件 ID）、`fileName`（string，文件名）、`fileType`（string，文件类型，如 pdf、md、docx）、`category`（string，所属类目 ID）、`status`（string，文件状态。枚举：`INIT`、`PARSING`、`PARSE_SUCCESS`、`FAIL`）、`sizeBytes`（integer，文件大小（字节），最小为 1）、`parser`（string，解析方式，如 DASHSCOPE\_DOCMIND）、`uploadTime`（string，上传时间）、`tags`（array<string>，文件标签列表）。
 
 `status`
 

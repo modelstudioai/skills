@@ -12,21 +12,21 @@
 
 ## 请求示例
 
-bash
+curl
 
 ```
 curl "$AGENTSTUDIO_URL/skills/skill_xxx" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
-python
+Python
 
 ```
 skill = client.skills.retrieve("skill_xxx")
 print(skill.name, skill.latest_version)
 ```
 
-java
+Java
 
 ```
 Skill s = client.skills().retrieve("skill_xxx");

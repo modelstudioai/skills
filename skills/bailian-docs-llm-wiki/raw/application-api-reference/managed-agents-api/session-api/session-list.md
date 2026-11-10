@@ -62,14 +62,14 @@ string
 
 ## 请求示例
 
-bash
+curl
 
 ```
 curl "$AGENTSTUDIO_URL/sessions?agent_id=agent_xxx&statuses[]=idle&limit=20" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
-python
+Python
 
 ```
 for session in client.sessions.list(
@@ -80,7 +80,7 @@ for session in client.sessions.list(
     print(session.id, session.status, session.title)
 ```
 
-java
+Java
 
 ```
 CursorPage<Session> page = client.sessions().list(SessionListParam.builder()

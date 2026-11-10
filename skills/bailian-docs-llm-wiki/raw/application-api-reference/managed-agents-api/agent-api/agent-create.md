@@ -98,7 +98,7 @@ object
 
 ## 请求示例
 
-bash
+curl
 
 ```
 curl -X POST "$AGENTSTUDIO_URL/agents" \
@@ -135,7 +135,7 @@ curl -X POST "$AGENTSTUDIO_URL/agents" \
   }'
 ```
 
-python
+Python
 
 ```
 agent = client.agents.create(
@@ -160,7 +160,7 @@ print(agent.id)       # "agent_xxx"
 print(agent.version)  # 1
 ```
 
-java
+Java
 
 ```
 Agent agent = client.agents().create(AgentCreateParam.builder()

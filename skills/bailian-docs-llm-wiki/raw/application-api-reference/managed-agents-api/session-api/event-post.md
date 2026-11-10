@@ -120,7 +120,7 @@ type
 
 ## 示例：发送文本消息
 
-bash
+curl
 
 ```
 curl -X POST "$AGENTSTUDIO_URL/sessions/sesn_01K8ZQX3/events" \
@@ -139,7 +139,7 @@ curl -X POST "$AGENTSTUDIO_URL/sessions/sesn_01K8ZQX3/events" \
   }'
 ```
 
-python
+Python
 
 ```
 client.sessions.events.send(
@@ -148,7 +148,7 @@ client.sessions.events.send(
 )
 ```
 
-java
+Java
 
 ```
 client.sessions().events().send("sesn_01K8ZQX3",

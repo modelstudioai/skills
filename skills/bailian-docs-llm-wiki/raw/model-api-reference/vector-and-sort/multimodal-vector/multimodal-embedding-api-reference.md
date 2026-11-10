@@ -97,7 +97,7 @@ tongyi-embedding-vision-flash-2026-03-06
 
 tongyi-embedding-vision-plus
 
-1152
+1152（默认）, 1024, 512, 256, 128, 64
 
 单张大小不超过**3 MB**。支持多图，最多支持输入**8张**
 
@@ -111,7 +111,7 @@ tongyi-embedding-vision-plus
 
 tongyi-embedding-vision-flash
 
-768
+768（默认）, 512, 256, 128, 64
 
 0.00015元
 
@@ -151,7 +151,7 @@ multimodal-embedding-v1
 
 tongyi-embedding-vision-plus
 
-1152
+1152（默认）, 1024, 512, 256, 128, 64
 
 1,024 Token
 
@@ -163,7 +163,7 @@ tongyi-embedding-vision-plus
 
 tongyi-embedding-vision-flash
 
-768
+768（默认）, 512, 256, 128, 64
 
 1,024 Token
 
@@ -475,7 +475,7 @@ contents`array`**（必选）**
 
 **output\_type** `string` （可选）
 
-用户指定输出向量表示格式，目前仅支持dense。
+用户指定输出向量表示格式，目前仅支持dense。传入其他取值时不报错，该参数被忽略，按 dense 返回。
 
 **dimension** `integer` （可选）
 
@@ -483,15 +483,15 @@ contents`array`**（必选）**
 
 -   `qwen3-vl-embedding` 支持 2560、2048、1536、1024、768、512、256，默认值为 2560；
 -   `qwen2.5-vl-embedding` 支持 2048、1024、768、512，默认值为 1024；
--   `tongyi-embedding-vision-plus` 不支持此参数，固定返回 1152 维向量。
--   `tongyi-embedding-vision-flash` 不支持此参数，固定返回 768 维向量。
+-   `tongyi-embedding-vision-plus` 支持 64、128、256、512、1024、1152，默认值为 1152；
+-   `tongyi-embedding-vision-flash` 支持 64、128、256、512、768，默认值为 768；
 -   `tongyi-embedding-vision-plus-2026-03-06` 支持 64、128、256、512、1024、1152，默认值为 1152；
 -   `tongyi-embedding-vision-flash-2026-03-06` 支持 64、128、256、512、768，默认值为 768；
 -   `multimodal-embedding-v1` 不支持此参数，固定返回 1024 维向量。
 
 **fps** `float` （可选）
 
-控制视频的帧数，比例越小，实际抽取的帧数越少，范围为 \[0,1\]。默认值为1.0。
+控制视频的帧数，比例越小，实际抽取的帧数越少，范围为 \[0,1\]。默认值为1.0。取值超出该范围时不报错。
 
 **instruct** `string` （可选）
 
@@ -632,7 +632,7 @@ API Key 无效或已过期，返回 `Invalid API-key provided.`
 
 400
 
-`input.contents` 缺失或为空数组，返回 `input can not be empty: input.contents` 或 `contents input can not be empty: input.contents`
+`input.contents` 缺失或为空数组，返回 `input can not be empty: input.contents` 或 `contents input can not be empty: input.contents`。tongyi-embedding-vision 系列模型（含 2026-03-06 快照版本）不校验该项，返回 200 和空向量数组
 
 确认 `input.contents` 存在且为非空数组，数组中每个元素包含有效的 `text`、`image` 或 `video` 键。
 
@@ -644,11 +644,19 @@ API Key 无效或已过期，返回 `Invalid API-key provided.`
 
 按本文模型列表中该模型支持的向量维度取值；`multimodal-embedding-v1` 不支持 `dimension` 参数，固定为 1024 维。
 
+`BadRequest`
+
+400
+
+`input.contents` 元素取值类型错误，如 `text` 传入数字。
+
+按本文请求参数说明修正元素取值类型，例如 `text` 的取值应为字符串。
+
 `InternalError.Algo`
 
 500
 
-请求体结构不完整或 `input.contents` 元素格式异常，导致服务端处理失败。
+服务端内部处理失败。
 
 检查请求体结构，确认 `input` 及 `input.contents` 字段存在且元素格式符合本文请求参数说明；结构无误仍持续报错时，携带 `request_id` 联系技术支持。
 

@@ -30,7 +30,7 @@
 
 string
 
-上传租约 ID，即 `applyFileUploadLease` 接口返回的 `fileUploadLeaseId`。
+上传租约 ID，即 `applyFileUploadLease` 接口返回的 `leaseId`。
 
 `category`
 
@@ -62,7 +62,7 @@ string
 
 array<string>
 
-文件关联的标签列表，默认为空（不设置标签）。最多传入 100 个标签，所有标签字符长度总和不超过 700，单个标签最多 32 个字符。
+文件关联的标签列表，默认为空（不设置标签）。最多传入 100 个标签，所有标签字符长度总和不超过 700，单个标签最多 64 个字符。
 
 `originalFileUrl`
 

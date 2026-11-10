@@ -24,7 +24,7 @@
 
 ## 请求示例
 
-bash
+curl
 
 ```
 curl -X POST "$AGENTSTUDIO_URL/environments/env_xxx" \
@@ -43,7 +43,7 @@ curl -X POST "$AGENTSTUDIO_URL/environments/env_xxx" \
   }'
 ```
 
-python
+Python
 
 ```
 env = client.environments.update(
@@ -59,7 +59,7 @@ env = client.environments.update(
 )
 ```
 
-java
+Java
 
 ```
 Environment u = client.environments().update("env_xxx",

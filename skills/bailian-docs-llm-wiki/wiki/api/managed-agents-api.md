@@ -6,43 +6,47 @@ Managed Agents API 是百炼平台提供的用于构建、部署和管理可编�
 
 Managed Agents API **不直接调用大模型**，而是提供对 Agent 运行时基础设施的编排能力；底层模型由用户在 `Agent` 配置中指定（如 `qwen-max`、`qwen-plus` 等），并受 [Managed Agent API 概览](../../raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md) 中定义的模型兼容性约束。支持的核心功能包括：  
 - Agent 实例的创建、更新与生命周期管理（含 `status` 查询与强制终止）  
-- 独立 `Environment` 资源，用于隔离依赖、配置与权限上下文  
-- 基于 `Session` 的有状态交互，支持事件流（`Event`）订阅与回溯  
-- `File` 和 `Memory Store` 双通道持久化，分别面向临时文件上传与结构化记忆检索  
-- `Skill` 注册与组合、`Vault` 密钥托管、`Credential` 安全注入，以及 `Webhook` 异步回调通知  
+- 独立 `Environment` 隔离（支持多租户、多版本配置）  
+- 基于 `Session` 的有状态交互与事件流订阅（`event_type=agent_step`, `agent_finish`）  
+- `Memory Store` 提供结构化记忆持久化（键值对 + TTL）  
+- `Skill` 注册与动态绑定（支持 HTTP Webhook 和内置工具）  
+- `Vault` 与 `Credential` 安全管理敏感凭证  
 
-> **注意**：文档中提及的 `Deployment` 资源当前仅用于灰度发布控制，其 `scale` 字段在 [Deployment API](../../raw/application-api-reference/managed-agents-api/deployment-api.md) 中声明为只读，与早期快速开始指南中的示例参数存在不一致，请以实际 API 响应为准。
+> **注意**：原始文档中 `skills-api.md` 描述的“本地 Python 函数注册”能力已在 v2.3 版本中移除，当前仅支持 Webhook 类型 Skill；请以 [Skill API](../../raw/application-api-reference/managed-agents-api/skills-api.md) 的最新修订版为准。
 
 ## 关键参数
 
-所有写操作（`POST`/`PUT`/`PATCH`）均需在请求头中携带：  
-- `Authorization: Bearer <access_token>`（参见 [认证](../../raw/application-api-reference/managed-agents-api/managed-agents-api-authentication.md)）  
+所有 POST/PUT 请求需包含以下必需 Header：  
+- `Authorization: Bearer <token>`（参见 [认证](../../raw/application-api-reference/managed-agents-api/managed-agents-api-authentication.md)）  
 - `Content-Type: application/json`  
 
-关键路径参数与请求体字段示例：  
-- `agent_id`：全局唯一标识，由平台生成，不可自定义  
-- `environment_id`：必须提前创建，`Agent` 创建时显式绑定  
-- `session_id`：首次调用 `/v1/agents/{agent_id}/sessions` 时由服务返回，后续交互必需  
-- `event_types`（在 `Session` 创建或 `Webhook` 配置中）：支持 `["agent_started", "tool_called", "agent_finished"]`，详见 [Session and Event](../../raw/application-api-reference/managed-agents-api/session-api.md)  
+关键请求体字段示例（以创建 Agent 为例）：  
+```json
+{
+  "name": "customer-support-agent",
+  "model": "qwen-plus",
+  "environment_id": "env-prod-789",
+  "skills": ["skill-ticket-create", "skill-kb-search"],
+  "memory_store": { "ttl_seconds": 3600 }
+}
+```
+其中 `environment_id` 必须已存在（通过 `/environments` 创建），`skills` 列表中的 ID 需提前在 `/skills` 中注册。
 
 ## 使用方式
 
-1. **初始化环境**：先调用 `POST /v1/environments` 创建 `Environment`，获取 `environment_id`  
-2. **部署 Agent**：`POST /v1/agents`，传入 `environment_id`、模型名称、技能列表及初始配置  
-3. **启动会话**：`POST /v1/agents/{agent_id}/sessions`，可选携带 `input`（初始用户消息）与 `memory_id`  
-4. **交互与监听**：  
-   - 同步：`POST /v1/sessions/{session_id}/messages` 发送消息  
-   - 异步：配置 `Webhook` 接收 `Event` 流（推荐用于长任务）  
+1. **快速验证**：参考 [快速开始](../../raw/application-api-reference/managed-agents-api/managed-agents-quickstart.md) 文档，使用 `curl` 或 Postman 调用 `/agents` 创建首个 Agent 并发起会话  
+2. **集成开发**：调用 `/sessions` 创建会话后，向 `POST /sessions/{session_id}/messages` 发送用户消息，接收流式响应（SSE）或轮询 `GET /sessions/{session_id}` 获取状态  
+3. **生产部署**：通过 `/deployments` 创建灰度/全量部署，结合 `/webhooks` 配置事件回调（如 `agent_finish` 后触发 CRM 更新）  
 
-完整流程示例见 [快速开始](../../raw/application-api-reference/managed-agents-api/managed-agents-quickstart.md)。
+所有资源路径均遵循 `/v1/{resource}` 格式（如 `/v1/agents`, `/v1/files`），版本号不可省略。
 
 ## 限制和注意事项
 
-- 单个 `Environment` 最多关联 50 个 `Agent`；单个 `Agent` 最多支持 1000 个并发 `Session`  
-- `File` 上传大小上限为 100 MB，`Memory Store` 单条记录最大 1 MB，总容量受项目配额限制  
-- 所有 API 均遵循 60 秒超时，`Session` 消息处理若超过 30 秒未响应将自动标记为 `timeout` 状态  
-- 错误响应统一返回标准结构，含 `code`（如 `INVALID_ARGUMENT`）、`message` 与 `request_id`，详细码表见 [错误码](../../raw/application-api-reference/managed-agents-api/managed-agents-api-errors.md)  
-- `Credential` 和 `Vault` 内容**不可被 Agent 运行时直接读取明文**，仅支持通过 Skill 插件安全注入至工具调用上下文
+- 单个 Agent 最多绑定 20 个 Skill；单次会话最大上下文长度为 32K tokens（含系统提示、历史消息、Memory 内容）  
+- `Memory Store` 键名仅支持 ASCII 字母、数字及 `-` `_` `.`，长度 ≤ 128 字符；值大小上限 1MB  
+- 文件上传（`/files`）仅支持 `multipart/form-data`，单文件 ≤ 50MB，且仅在 `session` 生命周期内有效（除非显式调用 `/files/{file_id}/pin`）  
+- 所有 API 均有速率限制：默认 100 QPS / 租户，突发容量 300；超出返回 `429 Too Many Requests`（详见 [错误码](../../raw/application-api-reference/managed-agents-api/managed-agents-api-errors.md)）  
+- `Credential` 加密存储后仅支持在 Skill 执行时由平台自动注入，**无法通过 API 读取明文值**
 
 ## 来源文档
 

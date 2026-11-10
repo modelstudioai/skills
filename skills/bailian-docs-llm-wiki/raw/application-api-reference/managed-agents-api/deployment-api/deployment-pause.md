@@ -30,7 +30,7 @@ Deployment ID
 
 ## 请求示例
 
-bash
+curl
 
 ```
 curl -X POST "$AGENTSTUDIO_URL/deployments/depl_xxx/pause" \

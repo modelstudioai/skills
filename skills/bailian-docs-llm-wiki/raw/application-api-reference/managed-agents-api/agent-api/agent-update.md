@@ -108,7 +108,7 @@ object
 
 ## 请求示例
 
-bash
+curl
 
 ```
 curl -X POST "$AGENTSTUDIO_URL/agents/agent_xxx" \
@@ -134,7 +134,7 @@ curl -X POST "$AGENTSTUDIO_URL/agents/agent_xxx" \
   }'
 ```
 
-python
+Python
 
 ```
 current = client.agents.retrieve("agent_xxx")
@@ -152,7 +152,7 @@ agent = client.agents.update(
 )
 ```
 
-java
+Java
 
 ```
 Agent current = client.agents().retrieve("agent_xxx");

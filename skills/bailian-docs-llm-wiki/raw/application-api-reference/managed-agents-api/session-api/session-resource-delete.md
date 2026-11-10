@@ -38,7 +38,7 @@ string
 
 ## 请求示例
 
-bash
+curl
 
 ```
 curl -X DELETE "$AGENTSTUDIO_URL/sessions/sesn_xxx/resources/sesrsc_xxx" \

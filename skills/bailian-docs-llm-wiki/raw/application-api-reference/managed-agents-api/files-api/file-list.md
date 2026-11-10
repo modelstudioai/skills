@@ -46,14 +46,14 @@ string
 
 ## 请求示例
 
-bash
+curl
 
 ```
 curl "$AGENTSTUDIO_URL/files?limit=20" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
-python
+Python
 
 ```
 for file in client.files.list(limit=20):
@@ -73,7 +73,7 @@ result = client.files.list(page_no=1, page_size=10)
 print(result.files)
 ```
 
-java
+Java
 
 ```
 CursorPage<AgentStudioFile> page = client.files().list(

@@ -253,12 +253,75 @@
 
 云工开物 300 元抵扣金可以抵扣哪些百炼费用？
 
-可用于以下两种场景：
+**支持抵扣：**
 
--   **购买 50 元[高校 AI 通行证](https://opc.aliyun.com/summer-2026)模型资源包**：抵扣范围与 [AI 通用型节省计划](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package#nqdi1bsux4qx0)相同（档位折扣为节省计划专属，该资源包不享受折扣）；单人可使用抵扣金抵扣 1 次，首次自费购买可享 5 折补贴，具体以活动页为准。
--   **抵扣后付费模型服务**：可抵扣商品名称为**百炼大模型训练**、**百炼大模型推理**、**百炼大模型部署**、**百炼知识库 RAG** 的后付费费用。部分模型的商品名称与上述名称不同，例如**百炼大模型-千问全模态模型**、**百炼大模型-万相模型**，此类费用不支持抵扣。您可前往[账单详情](https://billing-cost.console.aliyun.com/finance/expense-report/expense-detail-by-instance)页查看对应商品名称。
+-   **购买 50 元[高校 AI 通行证](https://opc.aliyun.com/summer-2026)模型节省计划**：抵扣范围与 [AI 通用型节省计划](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package#nqdi1bsux4qx0)相同，但不享受其档位折扣；单人可使用抵扣金抵扣 1 次，首次自费购买可享 5 折补贴，具体以活动页为准。
+-   **抵扣后付费模型服务**：可抵扣商品名称为**百炼大模型训练**、**百炼大模型推理**、**百炼大模型部署**、**百炼知识库 RAG** 的后付费费用。您可前往[账单详情](https://billing-cost.console.aliyun.com/finance/expense-report/expense-detail-by-instance)页查看对应商品名称。
 
-某个模型处于活动折扣价期间，该模型的按量计费调用无法使用抵扣金抵扣；如需调用，建议购买模型资源包。
+**不支持抵扣：**
+
+1.  **三方直供模型及指定商品的后付费费用**：2026年7月14日之后领取的云工开物 300 元抵扣金，不支持抵扣以下后付费费用；2026年7月14日之前领取的抵扣金不受此项限制：
+    
+    -   **三方直供模型**的后付费费用：账单明细中的**所属产品**为**云市场三方**。
+        
+    -   以下商品名称对应的后付费费用：
+        
+        -   **百炼大模型Happy系列**
+        -   **百炼大模型-万相模型**
+        -   **阿里云百炼大模型-向量排序模型**
+        -   **百炼大模型-垂类模型**
+        -   **百炼大模型-百聆语音模型**
+        -   **百炼大模型-千问语音模型**
+        -   **百炼大模型-千问全模态模型**
+        
+        请在[账单详情](https://billing-cost.console.aliyun.com/finance/expense-report/expense-detail-by-instance)中核对**商品名称**，对应模型示例见下方参考表。
+        
+        参考：不支持抵扣的后付费商品与模型示例
+        
+        各商品名称下包含的模型会持续更新，下表仅列举部分模型作为参考，并非完整清单。**是否支持抵扣以账单中的商品名称为准，不能仅凭模型是否出现在表中判断**。
+        
+        后付费商品名称
+        
+        模型示例（仅供参考，不穷举）
+        
+        百炼大模型Happy系列
+        
+        happyhorse-1.0-i2v、happyhorse-1.0-t2v、happyhorse-1.0-video-edit、happyhorse-1.0-r2v、happyhorse-1.1-t2v、happyhorse-1.1-i2v、happyhorse-1.1-r2v
+        
+        百炼大模型-万相模型
+        
+        wan2.7-image、wan2.7-image-pro、wan2.7-t2v、wan2.7-i2v、wan2.7-r2v、wan2.7-videoedit、wan3.0-video、wan3.0-video-prime、wan2.7-t2v-2026-04-25、wan2.7-i2v-2026-04-25、wan2.7-t2v-2026-06-12、wan2.7-r2v-2026-06-12
+        
+        阿里云百炼大模型-向量排序模型
+        
+        qwen3.7-text-embedding、qwen3.7-text-embedding-flash、qwen3.7-text-rerank、qwen3-vl-embedding、qwen3-vl-rerank、tongyi-embedding-vision-flash-2026-03-06、tongyi-embedding-vision-plus-2026-03-06
+        
+        百炼大模型-垂类模型
+        
+        qwen-mt-image-2.0、qwen-flash-character、farui-flash、qwen-mt-uni、qwen3.8-livetranslate-flash-realtime、tongyi-xiaomi-analysis-pro、tongyi-xiaomi-analysis-flash、qwen-flash-character-2026-02-26、qwen3.5-livetranslate-flash-realtime-2026-05-19、qwen3.5-ocr
+        
+        百炼大模型-百聆语音模型
+        
+        fun-asr-flash-8k-realtime、qwen-audio-3.0-asr-flash、qwen-audio-3.0-asr-flash-streaming、qwen-audio-3.0-asr-flash-filetrans、fun-asr-flash-8k-realtime-2026-01-28、fun-asr-realtime-2026-02-28、fun-music-v1、fun-music-preview、fun-asr-flash-2026-06-15、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash、qwen-audio-3.1-realtime-plus、qwen-audio-3.1-asr-flash、qwen-audio-3.1-asr-flash-filetrans、qwen-audio-3.1-asr-flash-streaming、qwen-audio-3.1-asr-flash-message、qwen-audio-3.1-tts-flash、qwen-audio-3.1-tts-next、cosyvoice-v3.5-flash、fun-cosyvoice-v3.6-flash、fun-cosyvoice-v3.6-plus、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、qwen-audio-3.1-tts-plus、cosyvoice-v3.5-plus
+        
+        百炼大模型-千问语音模型
+        
+        qwen3-asr-flash-realtime-2026-02-10、qwen3-asr-flash-2026-02-10、qwen3-tts-instruct-flash-realtime、qwen3-tts-instruct-flash-realtime-2026-01-22、qwen3-tts-instruct-flash、qwen3-tts-instruct-flash-2026-01-26、qwen3-tts-vc-2026-01-22、qwen3-tts-vd-2026-01-26
+        
+        百炼大模型-千问全模态模型
+        
+        qwen3.5-omni-plus-realtime-2026-03-15、qwen3.8-omni-flash、qwen3.8-omni-flash-realtime、qwen3.5-omni-flash-realtime、qwen3.5-omni-flash-realtime-2026-03-15、qwen3.5-omni-flash-2026-03-15、qwen3.5-omni-flash、qwen3.5-omni-plus、qwen3.5-omni-plus-realtime、qwen3.5-omni-plus-2026-03-15
+        
+2.  **已享受折扣或优惠的账单**：无论抵扣金何时领取，均不支持抵扣。
+    
+    -   **判断方法**：查看账单明细的**优惠**字段，若有优惠内容，说明该账单已享受折扣或优惠。
+    -   **学生与教师认证**：同时完成学生和教师认证后，享受教师认证 5 折优惠的账单无法再使用云工开物 300 元抵扣金抵扣。
+    -   **模型活动折扣**：某个模型处于活动折扣价期间，该模型的按量计费调用也无法使用抵扣金抵扣；如需调用，建议购买节省计划。
+
+**购买节省计划与抵扣后付费费用分开判断：**
+
+-   **购买 50 元[高校 AI 通行证](https://opc.aliyun.com/summer-2026)模型节省计划**：可使用云工开物 300 元抵扣金抵扣购买费用，HappyHorse 等适用模型的调用费用由节省计划额度抵扣。
+-   **节省计划额度用完后**：超出部分转为后付费，能否使用抵扣金抵扣需按上述后付费规则判断。例如，HappyHorse 的后付费费用按**百炼大模型Happy系列**出账，2026年7月14日之后领取的云工开物 300 元抵扣金无法抵扣。
 
 完整活动规则参见[“云工开物”高校计划](https://help.aliyun.com/zh/model-studio/introduction-to-yungongkaiwu)。
 

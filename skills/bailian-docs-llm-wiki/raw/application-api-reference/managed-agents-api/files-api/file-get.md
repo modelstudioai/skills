@@ -18,14 +18,14 @@
 
 ## 请求示例
 
-bash
+curl
 
 ```
 curl "$AGENTSTUDIO_URL/files/file_xxx" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
-python
+Python
 
 ```
 file = client.files.retrieve("file_xxx")
@@ -45,7 +45,7 @@ result = client.files.get('file-xxx')
 print(result.file_id, result.name, result.size)
 ```
 
-java
+Java
 
 ```
 AgentStudioFile f = client.files().retrieve("file_xxx");

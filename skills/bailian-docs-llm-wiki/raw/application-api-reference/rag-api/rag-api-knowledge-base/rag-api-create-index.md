@@ -1,6 +1,6 @@
 # 创建知识库并导入
 
-一步完成创建知识库和导入文件（合并了 CreateIndex 和 SubmitIndexJob）。创建成功后返回知识库 ID（pipelineId）与导入任务 ID（ingestionId）。
+一步完成创建知识库和导入文件（合并了 CreateIndex 和 SubmitIndexJob）。创建成功后返回知识库 ID（data.id）；导入任务 ID（ingestionId）需通过 submit-sync-job 接口获取。
 
 ## 前提
 
@@ -363,9 +363,8 @@ curl -X POST "$BASE_URL/api/v1/indices/rag/index/create_v2" \
   "success": true,
   "message": "success",
   "data": {
-    "pipelineId": "your-kb-id",
-    "ingestionId": "your-ingestion-id",
-    "status": "PENDING",
+    "id": "h6a85zj8oc",
+    "pipeline_name": "audit-kb-01",
     "created_at": 1783657930436,
     "updated_at": 1783657930436
   },
@@ -422,7 +421,7 @@ string
 
 object
 
-响应数据。子字段 `pipelineId`（string，知识库 ID）、`ingestionId`（string，导入任务 ID）、`status`（string，任务状态，创建后为 `PENDING`）、`created_at`（integer，知识库创建时间，Unix 毫秒时间戳）、`updated_at`（integer，知识库最近更新时间，Unix 毫秒时间戳）
+响应数据。子字段 `id`（string，知识库 ID，后续接口的知识库标识均使用该值）、`pipeline_name`（string，知识库名称）、`created_at`（integer，知识库创建时间，Unix 毫秒时间戳）、`updated_at`（integer，知识库最近更新时间，Unix 毫秒时间戳）。注意：本接口不返回导入任务 ID；传入 `docIds` 时的导入任务 ID 通过[提交导入任务](raw/application-api-reference/rag-api/rag-api-sync-jobs/rag-api-submit-sync-job.md)接口获取（返回 `ingestionId`）
 
 ## 错误码
 

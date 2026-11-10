@@ -138,7 +138,7 @@ string
 
 object
 
-业务数据。子字段 `page_number`（integer，当前页码）、`page_size`（integer，当前每页条数，与请求一致）、`total_count`（integer，文档总数）、`rows`（array<object>，文件详情列表。元素字段：`doc_id`（string，文档唯一标识）、`doc_name`（string，文档名称）、`doc_type`（string，文档类型，如 pdf、docx、txt）、`status`（string，文档处理状态：`INIT`（初始化）、`PARSING`（解析中）、`PARSE_SUCCESS`（解析成功）、`FAIL`（失败））、`size`（integer，文档大小，单位字节）、`gmt_modified`（integer，最后修改时间，毫秒级 Unix 时间戳）、`categoryId`（string，所属类目 ID）、`categoryName`（string，所属类目名称）、`connectorId`（string，所属连接器 ID）、`source_id`（string，数据源 ID）、`ingestion_id`（string，导入任务 ID）、`tags`（array<string>，文档标签列表）、`canDelete`（boolean，是否可删除）、`chunkSize`（integer，切片大小）、`overlapSize`（integer，切片重叠大小）、`separator`（string，切片分隔符）、`chunkMode`（string，切片模式）、`dataSync`（boolean，该文件是否参与数据同步）、`meta_extract_info`（object，元数据抽取结果。键为 Meta 字段名，值为该字段抽取到的字符串数组））
+业务数据。子字段 `page_number`（integer，当前页码）、`page_size`（integer，当前每页条数，与请求一致）、`total_count`（integer，文档总数）、`rows`（array<object>，文件详情列表。元素字段：`doc_id`（string，文档唯一标识）、`doc_name`（string，文档名称）、`doc_type`（string，文档类型，如 pdf、docx、txt）、`status`（string，文档处理状态：`INIT`（初始化）、`PARSING`（解析中）、`PARSE_SUCCESS`（解析成功）、`FAIL`（失败））、`size`（integer，文档大小，单位字节）、`gmt_modified`（integer，最后修改时间，毫秒级 Unix 时间戳）、`categoryId`（string，所属类目 ID）、`categoryName`（string，所属类目名称）、`connectorId`（string，所属数据集 ID）、`source_id`（string，数据源 ID）、`ingestion_id`（string，导入任务 ID）、`tags`（array<string>，文档标签列表）、`canDelete`（boolean，是否可删除）、`chunkSize`（integer，切片大小）、`overlapSize`（integer，切片重叠大小）、`separator`（string，切片分隔符）、`chunkMode`（string，切片模式）、`dataSync`（boolean，该文件是否参与数据同步）、`meta_extract_info`（object，元数据抽取结果。键为 Meta 字段名，值为该字段抽取到的字符串数组））
 
 `success`
 

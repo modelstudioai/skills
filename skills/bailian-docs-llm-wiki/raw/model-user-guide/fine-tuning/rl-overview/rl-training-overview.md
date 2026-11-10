@@ -168,7 +168,7 @@ export LOG_LEVEL="info"
 
 ## 准备数据与代码
 
-1.  下载 Demo 包[agentic-rl-example.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm/zh/files/6a4b3c2d1e0f9098.zip)。（该 Demo 运行最低要求 24 个 IV 型模型训练单元）
+1.  下载 Demo 包[agentic-rl-example.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm/zh/files/6a4b3c2d1e0f90c0.zip)。（该 Demo 运行最低要求 24 个 IV 型模型训练单元）
 2.  **下载完成后需要安装 DashScope SDK**（要求 Python >= 3.10）：请按照 Demo 包中附带的指引安装相关依赖：
 
 ```

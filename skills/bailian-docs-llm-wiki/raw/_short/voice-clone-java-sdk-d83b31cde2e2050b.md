@@ -1,6 +1,6 @@
-# 音色复刻 Java SDK 参考
+# Qwen-Audio 与 CosyVoice 音色复刻 Java SDK 参考
 
-本文介绍声音复刻的Java SDK使用方法。
+使用 DashScope Java SDK 创建和管理 Qwen-Audio 与 CosyVoice 复刻音色。
 
 ## 接口地址
 

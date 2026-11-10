@@ -1,6 +1,6 @@
-# 新增连接器
+# 新增数据集
 
-创建新的数据连接器，用于管理数据导入来源。
+创建新的数据集，用于管理数据导入来源。
 
 ## 前提
 
@@ -10,7 +10,7 @@
 
 **POST** `/api/v1/connector/dash/addConnector`
 
-创建新的数据连接器，用于管理数据导入来源。
+创建新的数据集，用于管理数据导入来源。
 
 **说明**当前 `connectorType` 仅支持 `FILE` 类型。`storeType` 为 `CUSTOM` 时需要额外传入 `regionId` 和 `bucketName`。
 
@@ -30,7 +30,7 @@
 
 string
 
-连接器类型，当前仅支持 `FILE`。
+数据集类型，当前仅支持 `FILE`。
 
 `connectorName`
 
@@ -38,7 +38,7 @@ string
 
 string
 
-连接器名称，长度 1~20 个字符。
+数据集名称，长度 1~20 个字符。
 
 `description`
 
@@ -46,7 +46,7 @@ string
 
 string
 
-连接器描述信息，长度 1~200 个字符。
+数据集描述信息，长度 1~200 个字符。
 
 `fileConnectorConfig`
 
@@ -54,7 +54,7 @@ string
 
 object
 
-文件连接器配置。子字段 `storeType`（string，必填，存储类型：`PLATFORM`（平台托管）或 `CUSTOM`（自定义 OSS））、`regionId`（string，OSS 地域 ID，当 storeType 为 `CUSTOM` 时需要）、`bucketName`（string，OSS Bucket 名称，当 storeType 为 `CUSTOM` 时需要）。
+文件数据集配置。子字段 `storeType`（string，必填，存储类型：`PLATFORM`（平台托管）或 `CUSTOM`（自定义 OSS））、`regionId`（string，OSS 地域 ID，当 storeType 为 `CUSTOM` 时需要）、`bucketName`（string，OSS Bucket 名称，当 storeType 为 `CUSTOM` 时需要）。
 
 ## 请求示例
 
@@ -64,8 +64,8 @@ curl -X POST "$BASE_URL/api/v1/connector/dash/addConnector" \
   -H "Content-Type: application/json" \
   -d '{
     "connectorType": "FILE",
-    "connectorName": "产品文档连接器",
-    "description": "用于导入产品文档的文件连接器",
+    "connectorName": "产品文档数据集",
+    "description": "用于导入产品文档的文件数据集",
     "fileConnectorConfig": {
       "storeType": "PLATFORM"
     }
@@ -119,7 +119,7 @@ string
 
 object
 
-创建结果。子字段 `connectorId`（string，新创建的连接器 ID）。
+创建结果。子字段 `connectorId`（string，新创建的数据集 ID）。
 
 `status`
 

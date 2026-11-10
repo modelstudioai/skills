@@ -90,7 +90,7 @@ array
 
 ## 请求示例
 
-bash
+curl
 
 ```
 curl -X POST "$AGENTSTUDIO_URL/sessions" \
@@ -109,7 +109,7 @@ curl -X POST "$AGENTSTUDIO_URL/sessions" \
   }'
 ```
 
-python
+Python
 
 ```
 session = client.sessions.create(
@@ -126,7 +126,7 @@ session = client.sessions.create(
 print(session.id, session.status)
 ```
 
-java
+Java
 
 ```
 Map<String, String> metadata = new HashMap<>();
@@ -276,7 +276,7 @@ array / null
 
 创建与更新的完整请求示例：
 
-bash
+curl
 
 ```
 curl -X POST "$AGENTSTUDIO_URL/sessions" \
@@ -295,7 +295,7 @@ curl -X POST "$AGENTSTUDIO_URL/sessions" \
   }'
 ```
 
-python
+Python
 
 ```
 session = client.sessions.create(
@@ -306,7 +306,7 @@ session = client.sessions.create(
 )
 ```
 
-java
+Java
 
 ```
 Map<String, Object> agentOverride = Map.of(

@@ -16,20 +16,20 @@
 
 ## 请求示例
 
-bash
+curl
 
 ```
 curl -X POST "$AGENTSTUDIO_URL/agents/agent_xxx/archive" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
-python
+Python
 
 ```
 client.agents.archive("agent_xxx")
 ```
 
-java
+Java
 
 ```
 client.agents().archive("agent_xxx");

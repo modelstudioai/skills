@@ -8,7 +8,7 @@
 
 ## 前提条件
 
--   开通阿里云百炼账号。具体操作，请参见[开通阿里云百炼](raw/model-user-guide/get-started-with-models/first-api-call-to-qwen.md)。
+-   开通阿里云百炼账号。具体操作，请参见[开通阿里云百炼](raw/model-user-guide/get-started-with-models/what-is-model-studio.md)。
 -   开通函数计算（FC）。具体操作，请参见[什么是函数计算](https://help.aliyun.com/zh/functioncompute/what-is-function-compute)。
 
 ## 操作步骤

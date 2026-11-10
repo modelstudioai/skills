@@ -4,3 +4,4 @@
 -   [实时语音识别](raw/model-user-guide/model-experience/speech-and-audio/speech-recognition/real-time-speech-recognition-user-guide.md)
 -   [非实时语音识别](raw/model-user-guide/model-experience/speech-and-audio/speech-recognition/non-realtime-speech-recognition-user-guide.md)
 -   [提升识别准确率](raw/model-user-guide/model-experience/speech-and-audio/speech-recognition/improve-asr-accuracy.md)
+-   [语音识别最佳实践](raw/model-user-guide/model-experience/speech-and-audio/speech-recognition/speech-recognition-best-practices.md)

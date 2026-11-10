@@ -1,54 +1,54 @@
 # plug in
 
-插件是百炼平台用于扩展大模型能力的核心机制，通过将外部工具（如计算、搜索、图像生成等 API）以标准化方式接入，弥补大模型在实时信息获取、精确计算、多模态生成等方面的固有局限。开发者可直接调用官方/三方插件，或创建自定义插件以对接私有服务。插件调用由大模型自主规划（智能体/Assistant API）或显式编排（工作流）驱动。
+插件是百炼平台用于扩展大模型能力的核心机制，通过将外部工具（如计算、搜索、图像生成等）以标准化方式接入，弥补大模型在实时信息获取、精确计算、多模态输出等方面的固有局限。插件可被智能体应用、工作流应用或 Assistant API 主动调用，实现“规划-调用-推理”闭环。所有插件均需在控制台完成授权、配置与发布后方可使用。
 
-## 支持的模型与功能
+## 支持的模型/功能
 
-- **支持模型**：当前仅 `qwen-plus` 和 `qwen-max` 两个模型支持插件调用，其他模型暂不兼容。具体兼容性请以[选择模型](raw/model-user-guide/get-started-with-models/models.md)文档及控制台实际执行结果为准。
-- **功能类型**：
-  - **官方插件**：预置于组件广场，开箱即用，无需配置参数。包括 `code_interpreter`（Python 执行）、`calculator`（复杂数学计算）、`text_to_image`（文生图）、`quark_search`（实时网络搜索）、`generate_qrcode`（URL 转二维码）、`github_search`（GitHub 项目检索）等。详情见 [官方和第三方插件](../../raw/application-user-guide/plug-in/plugins.md)。
-  - **三方插件**：来自云市场，覆盖商业服务、教育、音视频等领域，开通后即可调用，无需额外配置。使用说明参见 [官方和第三方插件](../../raw/application-user-guide/plug-in/plugins.md)。
-  - **自定义插件**：支持从零创建或从云市场导入，可对接任意 HTTP API。需明确定义插件 URL、工具路径、输入/输出参数及鉴权方式。完整流程详见 [自定义插件](../../raw/application-user-guide/plug-in/custom-plug-ins.md)。
+- **支持模型**：当前仅 `qwen-plus` 和 `qwen-max` 两个模型支持插件调用，其他模型暂不兼容。具体兼容性请以[选择模型](raw/model-user-guide/get-started-with-models/models.md)文档及控制台实际执行结果为准。  
+- **插件类型**：  
+  - **官方插件**：预置于组件广场，开箱即用，无需配置参数。包括 `code_interpreter`（Python 执行）、`calculator`（数学计算）、`text_to_image`（文生图）、`quark_search`（实时搜索）、`generate_qrcode`（二维码生成）、`github_search`（GitHub 搜索）等。详情见 [插件概述](../../raw/application-user-guide/plug-in/plug-in-overview.md)。  
+  - **三方插件**：来自阿里云云市场，覆盖商业服务、教育、音视频等领域，需开通后使用。  
+  - **自定义插件**：支持用户通过 API 接入自有服务，支持鉴权（Header/Query）、多工具路径、复杂参数映射与在线调试。完整流程详见 [自定义插件](../../raw/application-user-guide/plug-in/custom-plug-ins.md)。  
 
-> **注意**：文档 1 中称“各模型对插件的兼容性可能有差异”，而文档 3 未明确列出兼容模型；但两文档均一致指出 `qwen-plus` 和 `qwen-max` 是当前支持插件的模型，因此以该范围为准，其他模型标识符（如 `qwen-turbo`）不在支持列表内。
+> **注意**：文档 1 中称“各模型对插件的兼容性可能有差异”，但未明确列出不支持的模型；文档 2 和 3 均未提及其他模型支持状态。建议开发者以控制台实际可用模型列表为准，避免依赖未验证的模型标识符。
 
 ## 关键参数
 
-- **插件级参数**：
-  - `插件URL`：工具路径的根域名，例如 `https://example.com`；所有工具路径均以此为前缀拼接。
-  - `是否鉴权`：启用后需配置鉴权类型（`basic`/`bearer`/`appcode`）、位置（`Header` 或 `Query`）及 `Token`（服务级）或 `参数名`（用户级）。
-- **工具级参数**：
-  - `工具路径`：必须以 `/` 开头的相对路径（如 `/query`），与插件 URL 拼接构成完整请求地址。
-  - `输入参数`：需定义 `参数名称`、`参数描述`（自然语言，含示例更佳）、`类型`（`String`/`Number`/`Object` 等）、`传参方式`（`大模型识别` 或 `业务透传`）。
-  - `输出参数`：必填，用于指导大模型解析 API 响应；嵌套层级应尽量扁平，避免空子属性（见 [自定义插件](../../raw/application-user-guide/plug-in/custom-plug-ins.md) 错误码 130022）。
-- **高级配置（可选）**：提供 `Value` 字段填写用户 Query 与期望入参的映射示例（如 `"查询杭州明天天气" → {"city": "杭州", "date": "2025-04-25"}`），显著提升大模型参数提取准确率。
+- **工具 ID**：唯一标识一个工具，API 调用时必需。可在插件详情页的“插件工具”区域悬停工具名称图标复制（见 [官方和第三方插件](../../raw/application-user-guide/plug-in/plugins.md)）。  
+- **输入参数**：  
+  - `传参方式` 必须准确设置为 `大模型识别`（从用户输入中抽取）或 `业务透传`（由外部传入，需通过 `biz_params` 或 `user_defined_params` 传递）；  
+  - `参数描述` 必须清晰、含示例（如 `city: "杭州"`），直接影响大模型参数提取准确率；  
+  - Object 类型参数的子属性**不能为空**，否则发布失败（错误码 130022，见 [自定义插件](../../raw/application-user-guide/plug-in/custom-plug-ins.md)）。  
+- **输出参数**：所有出参均为必填，定义应精简、扁平化（避免深层嵌套），便于大模型筛选重组后生成最终回复。  
+- **鉴权配置**：支持 `basic`/`bearer`/`appcode` 三种 Type，[Token](../concepts/token.md) 位置可选 Header 或 Query；若开启鉴权，调试与 API 调用时均需提供有效凭证。
 
 ## 使用方式
 
-- **控制台集成**：
-  - 官方/三方插件：在 [插件](https://bailian.console.aliyun.com/#/plugin-market) 页面点击 **添加至智能体**，选择目标智能体应用（注意：官方插件仅支持同业务空间的应用），最多添加 10 个工具。
-  - 自定义插件：需先发布为 MCP 服务，再在智能体编排页的 **MCP 区块**中添加；若含 `业务透传` 参数或 `用户级鉴权`，需在对话前手动配置 `biz_params` 或 [Token](../concepts/token.md)。
-- **API 集成**：
-  - 通过 Assistant API 调用：在 `tools` 字段中声明工具 ID，并在 `tool_choice` 中指定策略（`auto`/`required`/具体 ID）。参考 [Assistant API 文档](https://help.aliyun.com/zh/model-studio/quick-start-of-assistant-api)。
-  - 通过 DashScope SDK 或 HTTP 接口调用智能体/工作流应用时，`biz_params` 用于传递业务透传参数或用户级鉴权信息（见 [应用的参数传递](raw/application-user-guide/bailian-application-calling/pass-through-of-application-parameters.md)）。
-- **工作流应用**：将插件作为独立节点拖入画布，按需配置输入输出映射，不依赖大模型自动决策。
+1. **控制台集成（推荐快速验证）**：  
+   - 官方/三方插件：在 [插件市场](https://bailian.console.aliyun.com/#/plugin-market) 授权后，通过“添加至智能体”关联到同业务空间的智能体应用（最多 10 个工具）；  
+   - 自定义插件：需先发布为 MCP 服务，再在智能体编排页面的 **MCP 区块** 中添加（见 [自定义插件](../../raw/application-user-guide/plug-in/custom-plug-ins.md)）；  
+2. **工作流应用**：将插件作为独立节点拖入画布，按需编排执行顺序，不依赖大模型自动规划；  
+3. **API 调用**：  
+   - Assistant API：在 `tools` 字段中声明工具 ID 及描述，系统自动触发调用（参考 [Assistant API 文档](https://help.aliyun.com/zh/model-studio/quick-start-of-assistant-api)）；  
+   - DashScope SDK / HTTP：需在请求中显式传入 `tool_choice` 及 `tools`，业务透传参数与鉴权信息通过 `biz_params` 传递（见 [应用的参数传递](raw/application-user-guide/bailian-application-calling/pass-through-of-application-parameters.md)）。
 
 ## 限制和注意事项
 
-- **权限限制**：首次访问插件市场需授权服务关联角色 `AliyunServiceRoleForSFMAccessCloudAPI`。主账号可直接授权；RAM 用户（子账号）需主账号预先授予 `ram:CreateServiceLinkedRole` 权限（详见 [官方和第三方插件](../../raw/application-user-guide/plug-in/plugins.md) 和 [自定义插件](../../raw/application-user-guide/plug-in/custom-plug-ins.md)）。
-- **功能限制**：
-  - `code_interpreter` 插件禁止网络访问与本地文件上传，仅支持预装依赖（如 `pandas`, `matplotlib`, `sympy` 等）。
-  - `quark_search` 和 `github_search` 仅返回网页/项目标题、关键词、摘要，**不支持访问原始网页或仓库详情页**（文档 1 和文档 3 均明确强调此限制）。
-  - `text_to_image` 和 `quark_search` 为限时免费，需单独申请开通。
-- **配置限制**：
-  - 工具名称长度 ≤ 20 字符（超长将导致发布失败，见 [自定义插件](../../raw/application-user-guide/plug-in/custom-plug-ins.md)）。
-  - GET 请求不支持 `Object` 类型输入参数（错误码 130022）。
-- **运维风险**：删除插件将**不可逆地移除其下所有工具**，并导致已关联的应用失效；编辑插件 URL 或鉴权配置后，必须重新测试并发布工具方可生效。
+- **权限要求**：首次使用插件前，主账号或 RAM 子账号必须授权服务关联角色 `AliyunServiceRoleForSFMAccessCloudAPI`；子账号需额外授予 `ram:CreateServiceLinkedRole` 权限（见 [官方和第三方插件](../../raw/application-user-guide/plug-in/plugins.md)）。  
+- **功能限制**：  
+  - `code_interpreter` 不支持网络访问、本地文件上传，依赖库版本固定（如 `matplotlib`, `pandas`, `sympy` 等）；  
+  - `quark_search` 和 `github_search` 仅返回网页标题、关键词、摘要，**不支持访问原始网页或项目详情页**；  
+  - 自定义插件的工具路径必须以 `/` 开头，且同一插件下所有工具共享插件 URL 域名；  
+- **发布约束**：  
+  - 工具名称长度 ≤ 20 字符，超长将导致发布失败（错误码提示 `22/20`）；  
+  - 工具必须处于 **已发布** 且 **调试成功** 状态才可被调用；  
+  - 删除插件或工具将导致关联应用立即失效，操作不可逆。  
+- **计费说明**：官方插件中 `text_to_image` 和 `quark_search` 为限时免费，需单独申请开通；其余官方插件及已开通的三方插件按实际调用量计费。
 
 ## 来源文档
 
 - [插件概述](../../raw/application-user-guide/plug-in/plug-in-overview.md)
-- [自定义插件](../../raw/application-user-guide/plug-in/custom-plug-ins.md)
 - [官方和第三方插件](../../raw/application-user-guide/plug-in/plugins.md)
+- [自定义插件](../../raw/application-user-guide/plug-in/custom-plug-ins.md)
 
 

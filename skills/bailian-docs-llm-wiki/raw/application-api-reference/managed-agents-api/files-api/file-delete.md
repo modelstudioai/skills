@@ -12,14 +12,14 @@
 
 ## 请求示例
 
-bash
+curl
 
 ```
 curl -X DELETE "$AGENTSTUDIO_URL/files/file_xxx" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
-python
+Python
 
 ```
 client.files.delete("file_xxx")
@@ -38,7 +38,7 @@ result = client.files.delete('file-xxx')
 print(result.deleted)
 ```
 
-java
+Java
 
 ```
 client.files().delete("file_xxx");

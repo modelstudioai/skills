@@ -32,14 +32,6 @@ RAG 问答
 
 `--message` 消息内容、`--agent-id` 问答服务 ID
 
-直接检索（已弃用）
-
-`bl knowledge retrieve`
-
-直接对知识库检索，建议改用 `search`
-
-`--index-id` 知识库 ID、`--query` 查询内容
-
 需要初始化知识库或同步本地目录时，使用 `bl knowledge init`、`bl knowledge doc sync` 或 `bl knowledge doc import`；完整参数见 [RAG 命令参考](https://help.aliyun.com/zh/model-studio/cli/rag)。
 
 ## 示例
@@ -50,3 +42,5 @@ bl knowledge chat --message "如何配置切片策略？" --agent-id <问答服�
 ```
 
 任意命令追加 `--help` 查看完整参数。控制台 [**服务渠道**](https://bailian.console.aliyun.com/cn-beijing/rag/channel) 页面提供安装命令和使用示例。
+
+**说明**`bl knowledge retrieve`（按知识库 ID 直接检索）已从百炼 CLI 2.5.0 起移除，请改用 `bl knowledge search`（传已发布检索服务的 `--agent-id`），详见 [RAG 命令参考](https://help.aliyun.com/zh/model-studio/cli/rag)。

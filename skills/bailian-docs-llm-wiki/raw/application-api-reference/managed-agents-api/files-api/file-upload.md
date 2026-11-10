@@ -20,7 +20,7 @@
 
 ## 请求示例
 
-bash
+curl
 
 ```
 curl -X POST "$AGENTSTUDIO_URL/files" \
@@ -28,7 +28,7 @@ curl -X POST "$AGENTSTUDIO_URL/files" \
   -F "file=@./sales_2025.csv"
 ```
 
-python
+Python
 
 ```
 file = client.files.upload("sales_2025.csv")
@@ -51,7 +51,7 @@ result = client.files.upload(
 print(result.file_id, result.name)
 ```
 
-java
+Java
 
 ```
 AgentStudioFile file = client.files().upload(Paths.get("sales_2025.csv"), "text/csv");

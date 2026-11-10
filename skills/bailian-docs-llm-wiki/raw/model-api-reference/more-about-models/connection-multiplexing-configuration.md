@@ -96,7 +96,7 @@ maximumAsyncRequestsPerHost
 
 ### 代码示例
 
-运行代码前，请[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/first-api-call-to-qwen#fcceb7b5d2pqx)并[安装最新版SDK](https://help.aliyun.com/zh/model-studio/install-sdk#75aa2ffbb2afo)。
+运行代码前，请[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/get-api-key#20b17d4430qvt)并[安装最新版SDK](https://help.aliyun.com/zh/model-studio/install-sdk#75aa2ffbb2afo)。
 
 以下代码示例展示了如何配置连接池相关参数（如超时时间、最大连接数等），并调用大模型服务。您可以根据实际需求调整相关参数，以优化并发性能和资源利用率。
 
@@ -206,7 +206,7 @@ keepalive\_expiry
 
 #### 代码示例
 
-运行代码前，请[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/first-api-call-to-qwen#fcceb7b5d2pqx)并[安装最新版SDK](https://help.aliyun.com/zh/model-studio/install-sdk#75aa2ffbb2afo)。
+运行代码前，请[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/get-api-key#20b17d4430qvt)并[安装最新版SDK](https://help.aliyun.com/zh/model-studio/install-sdk#75aa2ffbb2afo)。
 
 以下代码示例展示了如何在异步场景下配置连接复用，并调用大模型服务：
 
@@ -246,7 +246,7 @@ asyncio.run(main())
 
 #### 代码示例
 
-运行代码前，请[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/first-api-call-to-qwen#fcceb7b5d2pqx)并[安装最新版SDK](https://help.aliyun.com/zh/model-studio/install-sdk#75aa2ffbb2afo)。
+运行代码前，请[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/get-api-key#20b17d4430qvt)并[安装最新版SDK](https://help.aliyun.com/zh/model-studio/install-sdk#75aa2ffbb2afo)。
 
 以下代码示例展示了如何在同步场景下配置连接复用，并调用大模型服务：
 

@@ -15,7 +15,7 @@
     
     > **注意：**调用在阿里云百炼[调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)并部署的模型，**无需模型调用授权**，但此类模型仅能由其所在业务空间的 API Key 调用。
     
-3.  **选择开发语言：**[选择您熟悉的语言和SDK](https://help.aliyun.com/zh/model-studio/first-api-call-to-qwen#831702e17ff6u)，用于调用大模型API。
+3.  **选择开发语言：**[选择您熟悉的语言和SDK](raw/model-user-guide/get-started-with-models/what-is-model-studio.md)，用于调用大模型API。
     
 
 ## 开始调用

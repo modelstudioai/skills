@@ -46,7 +46,7 @@ string
 
 ## 请求示例
 
-bash
+curl
 
 ```
 curl "$AGENTSTUDIO_URL/vaults?include_archived=true&limit=20" \

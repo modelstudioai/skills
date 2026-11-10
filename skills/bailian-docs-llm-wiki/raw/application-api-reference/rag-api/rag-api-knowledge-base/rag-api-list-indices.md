@@ -305,7 +305,7 @@ object
 
 string
 
-关联的连接器 ID
+关联的数据集 ID
 
 `enableRewrite`
 

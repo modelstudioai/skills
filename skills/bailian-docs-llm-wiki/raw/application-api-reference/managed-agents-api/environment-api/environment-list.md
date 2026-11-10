@@ -46,21 +46,21 @@ false
 
 ## 请求示例
 
-bash
+curl
 
 ```
 curl "$AGENTSTUDIO_URL/environments?limit=20" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
-python
+Python
 
 ```
 for env in client.environments.list(include_archived=False, limit=20):
     print(env.id, env.name)
 ```
 
-java
+Java
 
 ```
 CursorPage<Environment> page = client.environments().list(EnvironmentListParam.builder()

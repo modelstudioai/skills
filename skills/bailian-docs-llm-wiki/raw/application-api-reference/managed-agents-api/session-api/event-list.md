@@ -64,14 +64,14 @@ string
 
 ## 请求示例
 
-bash
+curl
 
 ```
 curl "$AGENTSTUDIO_URL/sessions/sesn_xxx/events?order=asc&limit=100" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
-python
+Python
 
 ```
 for event in client.sessions.events.list(
@@ -82,7 +82,7 @@ for event in client.sessions.events.list(
     print(event.type, event.created_at)
 ```
 
-java
+Java
 
 ```
 CursorPage<SessionEvent> events = client.sessions().events().list("sesn_xxx",

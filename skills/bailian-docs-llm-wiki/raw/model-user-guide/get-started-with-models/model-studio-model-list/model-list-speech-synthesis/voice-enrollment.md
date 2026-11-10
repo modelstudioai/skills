@@ -162,4 +162,4 @@ RPM（每分钟请求数）
 
 ## 调用方式
 
--   [音色复刻 HTTP API 参考](raw/model-api-reference/voice-customization-api-directory/sound-reengraving/voice-clone-design-http-api.md)
+-   [音色复刻 HTTP API 参考](raw/_short/voice-clone-design-http-api-b6a5abbe2d5d2730.md)

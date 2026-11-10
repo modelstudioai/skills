@@ -46,21 +46,21 @@ string
 
 ## 请求示例
 
-bash
+curl
 
 ```
 curl "$AGENTSTUDIO_URL/skills?source=customer&limit=20" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
-python
+Python
 
 ```
 for skill in client.skills.list(source="customer", limit=20):
     print(skill.id, skill.name)
 ```
 
-java
+Java
 
 ```
 CursorPage<Skill> page = client.skills().list(SkillListParam.builder()

@@ -32,7 +32,7 @@
 
 string
 
-知识库 ID，对应创建知识库时返回的 `pipelineId`
+知识库 ID，对应创建知识库时返回的 `data.id`
 
 `job_id`
 
@@ -296,7 +296,7 @@ string
 
 string
 
-关联的连接器 ID，未使用连接器时为空字符串
+关联的数据集 ID，未使用数据集时为空字符串
 
 `categoryId`
 

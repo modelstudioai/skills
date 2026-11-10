@@ -1,6 +1,6 @@
-# 音色复刻 Python SDK 参考
+# Qwen-Audio 与 CosyVoice 音色复刻 Python SDK 参考
 
-本文介绍声音复刻的Python SDK使用方法。
+使用 DashScope Python SDK 创建和管理 Qwen-Audio 与 CosyVoice 复刻音色。
 
 ## 接口地址
 
@@ -29,8 +29,6 @@ SDK的接口地址由Client构造参数`workspace`/`region`决定（对应下方
 -   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
 
 ## 核心资源（`client.audio.voices`）
-
-**资源路径**：`client.audio.voices`
 
 **功能**：管理 Qwen-Audio-TTS、Qwen-Audio-Realtime 和 CosyVoice 复刻音色的生命周期（创建、查询、更新、删除）。
 
@@ -351,7 +349,7 @@ print(f"Request ID: {voice.request_id}")
 print(f"Voice ID: {voice.voice_id}")
 ```
 
-使用本地 WAV 音频时，将上述 `url` 赋值替换为以下代码，再调用 `create_voice`。更新音色时，也通过 `update_voice` 的 `url` 参数传入 Data URI。将 `sample.wav` 替换为本地音频路径。
+使用本地 WAV 音频时，将上述 `url` 赋值替换为以下代码，再调用 `client.audio.voices.create()`。更新音色时，也通过 `client.audio.voices.update()` 的 `url` 参数传入 Data URI。将 `sample.wav` 替换为本地音频路径。
 
 ```
 import base64

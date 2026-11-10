@@ -1,6 +1,6 @@
 # 百炼模型市场索引
 
-> 自动生成 · 共 125 个模型家族 · 335 个主干模型 · 更新于 2026-11-10
+> 自动生成 · 共 126 个模型家族 · 336 个主干模型 · 更新于 2026-11-11
 
 **机器查询走结构化文件**：
 
@@ -204,7 +204,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [语音识别热词](groups/speech-biasing.json) — 热词是指用户可以预先定义的一组特定词汇或短语，这些词汇或短语在识别、翻译过程中会被赋予更高的优先级。针对您的特定业务领域，如果有部分词汇的语音识别、翻译效果不够好，可以将这些关键词或短语添加为热词进行…
   - 模型：`speech-biasing`
 
-## 语音合成 `TTS` — 8 个家族
+## 语音合成 `TTS` — 9 个家族
 
 - [CosyVoice大模型](groups/cosyvoice.json) — 基于新一代生成式语音大模型，CosyVoice将文本理解和语音生成技术深度融合，能够精准解析并诠释各种文本内容，将其转化为如同真人发声般的自然语音，带来高度拟人化的自然语音合成体验。
   - 模型：`cosyvoice-v2`, `cosyvoice-v3-flash`, `cosyvoice-v3-plus`, `cosyvoice-v3.5-flash`, `cosyvoice-v3.5-plus`
@@ -222,6 +222,8 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`qwen3-tts-flash-realtime`
 - [Sambert语音合成](groups/sambert.json) — 提供高效的文字转语音服务。该技术具备推理速度快、合成效果卓越、读音精准、韵律自然、声音还原度高以及表现力强等优点。此外，用户可以选择开启字级别和音素级别的时间戳，用于生成字幕或驱动数字人的嘴型。
   - 模型：`sambert-beth-v1`, `sambert-betty-v1`, `sambert-brian-v1`, `sambert-cally-v1`, `sambert-camila-v1`, `sambert-cindy-v1`, `sambert-clara-v1`, `sambert-donna-v1`, `sambert-eva-v1`, `sambert-hanna-v1`, `sambert-indah-v1`, `sambert-perla-v1`, `sambert-waan-v1`, `sambert-zhichu-v1`, `sambert-zhida-v1`, `sambert-zhide-v1`, `sambert-zhifei-v1`, `sambert-zhigui-v1`, `sambert-zhihao-v1`, `sambert-zhijia-v1`, `sambert-zhijing-v1`, `sambert-zhilun-v1`, `sambert-zhimao-v1`, `sambert-zhimiao-emo-v1`, `sambert-zhiming-v1`, `sambert-zhimo-v1`, `sambert-zhina-v1`, `sambert-zhinan-v1`, `sambert-zhiqi-v1`, `sambert-zhiqian-v1`, `sambert-zhiru-v1`, `sambert-zhishu-v1`, `sambert-zhishuo-v1`, `sambert-zhistella-v1`, `sambert-zhiting-v1`, `sambert-zhiwei-v1`, `sambert-zhixiang-v1`, `sambert-zhixiao-v1`, `sambert-zhiya-v1`, `sambert-zhiye-v1`, `sambert-zhiying-v1`, `sambert-zhiyuan-v1`, `sambert-zhiyue-v1`
+- [大模型声音复刻及声音设计](groups/voice-enrollment.json) — 大模型声音复刻服务依托先进的大模型技术进行特征提取，无需训练过程就可以完成声音的复刻。仅需提供极短的音频，即可迅速生成高度相似且听感自然的定制声音。 大模型声音设计使用FunAudioGen-VD模型…
+  - 模型：`voice-enrollment`
 
 ## 实时语音识别 `Realtime-ASR` — 6 个家族
 

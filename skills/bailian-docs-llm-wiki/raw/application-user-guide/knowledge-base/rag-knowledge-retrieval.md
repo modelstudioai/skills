@@ -34,7 +34,7 @@
 
 混排模型
 
-qwen3-rerank / qwen3-rerank(hybrid) / qwen3-vl-rerank / 不使用模型
+qwen3-rerank / qwen3-rerank-hybrid / qwen3-vl-rerank / 不使用模型
 
 开启后使用混排模型对多知识库结果统一排序；关闭后各知识库独立排序。纯文本知识库可选 qwen3-rerank 系列；多模态知识库可选 qwen3-vl-rerank
 
@@ -126,14 +126,13 @@ curl -X POST https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/indices/
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "index_id": "<知识库ID>",
-    "query": "如何配置切片策略？",
-    "top_k": 5
+    "agent_id": "<检索服务ID>",
+    "query": "如何配置切片策略？"
   }'
 ```
 
 返回的 `nodes` 数组包含命中切片，含原文内容、相关性分数与来源元数据。
 
-**重要**也可通过阿里云百炼 CLI 调用这一底层接口：`bl knowledge retrieve --index-id <知识库ID> --query "如何配置切片策略？" --top-k 5`（已弃用，建议改用已发布检索服务的 `bl knowledge search --agent-id`）。详见[使用 CLI](raw/application-user-guide/knowledge-base/integration/cli.md)。
+**重要**也可通过阿里云百炼 CLI 调用：`bl knowledge search --agent-id <检索服务ID> --query "如何配置切片策略？"`。详见[使用 CLI](raw/application-user-guide/knowledge-base/integration/cli.md)。
 
-**说明**这是单知识库底层检索接口，直接返回向量 + 关键词召回结果，不在此层做重排。如需 Rerank 精排，在创建检索服务时配置混排模型（见上方**全局检索配置**），通过检索服务的 API 调用。
+**说明**`agent_id` 是已发布知识检索服务的实例 ID（格式如 `aid-xxxxxxxxxxxxxxxx`），在控制台**知识检索**页面创建并发布服务后获取，不是知识库 ID。检索策略（混排模型、最大召回数量等）已在服务发布时配置，请求中无需传入。未发布的服务调用时返回 Agent 未发布错误。

@@ -525,15 +525,14 @@ temperature越高，生成的文本更多样，反之，生成的文本更确定
 temperature默认值
 
 -   qwen3.8-max/qwen3.8-flash（思考模式）：视觉理解0.6，文本输入1.0，0.6以下的temperature值会默认改为0.6
--   Qwen3.8（非思考模式）、Qwen3.7（非思考模式）、Qwen3.6（非思考模式）、Qwen3.5-Omni、Qwen3.5（非思考模式）、Qwen3（非思考模式）、Qwen3-Instruct系列、Qwen3-Coder系列、qwen-max系列、qwen-plus系列（非思考模式）、qwen-flash系列（非思考模式）、qwen开源系列、qwen-coder系列、qwen-doc-turbo、Qwen3-VL（非思考）：0.7；
+-   Qwen3.8（非思考模式）、Qwen3.7（非思考模式）、Qwen3.6（非思考模式）、Qwen3.5（非思考模式）、Qwen3（非思考模式）、Qwen3-Instruct系列、Qwen3-Coder系列、qwen-max系列、qwen-plus系列（非思考模式）、qwen-flash系列（非思考模式）、qwen开源系列、qwen-coder系列、qwen-doc-turbo、Qwen3-VL（非思考）：0.7；
 -   QVQ系列 : 0.5；
 -   qwen-audio-turbo系列：0.00001；
 -   qwen-vl系列：0.01；
 -   qwen-math系列：0；
--   Qwen3.7（思考模式）、Qwen3.6（思考模式）、Qwen3.5（思考模式）、Qwen3（思考模式）、Qwen3-Thinking、Qwen3-Omni-Captioner、QwQ 系列：0.6；
+-   Qwen3.7（思考模式）、Qwen3.6（思考模式）、Qwen3.5（思考模式）、Qwen3（思考模式）、Qwen3-Thinking、QwQ 系列：0.6；
 -   qwen-long系列： 1.0；
 -   qwen-plus-character：0.92
--   qwen3-omni-flash系列：0.9
 -   Qwen3-VL（思考模式）：0.8
 -   DeepSeek系列（阿里云直供）：deepseek-v4.1-flash、deepseek-v4-pro: 1.0；deepseek-r1-distill-qwen 蒸馏版: 0.6；
 -   DeepSeek系列（硅基流动直供）：siliconflow/deepseek-v3.2、siliconflow/deepseek-v3.1-terminus、siliconflow/deepseek-r1-0528、siliconflow/deepseek-v3-0324: 1.0；
@@ -560,13 +559,13 @@ top\_p越高，生成的文本更多样。反之，生成的文本更确定。
 
 top\_p默认值
 
-Qwen3.8（非思考模式）、Qwen3.7（非思考模式）、Qwen3.6（非思考模式）、Qwen3.5-Omni、Qwen3.5（非思考模式）、Qwen3（非思考模式）、Qwen3-Instruct系列、Qwen3-Coder系列、qwen-max系列、qwen-plus系列（非思考模式）、qwen-flash系列（非思考模式）、Qwen 2.5开源系列、qwen-coder系列、qwen-long、qwen-doc-turbo、Qwen3-VL（非思考）：0.8；
+Qwen3.8（非思考模式）、Qwen3.7（非思考模式）、Qwen3.6（非思考模式）、Qwen3.5（非思考模式）、Qwen3（非思考模式）、Qwen3-Instruct系列、Qwen3-Coder系列、qwen-max系列、qwen-plus系列（非思考模式）、qwen-flash系列（非思考模式）、Qwen 2.5开源系列、qwen-coder系列、qwen-long、qwen-doc-turbo、Qwen3-VL（非思考）：0.8；
 
 QVQ系列 : 0.5；
 
-qwen-math系列、Qwen3-Omni-Flash系列：1.0；
+qwen-math系列：1.0；
 
-Qwen3.8（思考模式）、Qwen3.7（思考模式）、Qwen3.6（思考模式）、Qwen3.5（思考模式）、Qwen3（思考模式）、Qwen3-VL（思考模式）、Qwen3-Thinking、QwQ 系列、Qwen3-Omni-Captioner、qwen-plus-character：0.95
+Qwen3.8（思考模式）、Qwen3.7（思考模式）、Qwen3.6（思考模式）、Qwen3.5（思考模式）、Qwen3（思考模式）、Qwen3-VL（思考模式）、Qwen3-Thinking、QwQ 系列、qwen-plus-character：0.95
 
 DeepSeek系列（阿里云直供）：deepseek-v4-pro、deepseek-r1-distill-qwen 蒸馏版: 0.95；
 
@@ -797,7 +796,7 @@ repetition\_penalty默认值
 
 presence\_penalty默认值
 
-Qwen3.8（非思考模式）、Qwen3.7（非思考模式）、Qwen3.6（非思考模式）、Qwen3.5-Omni、Qwen3.5（非思考模式）、Qwen3（非思考模式）、Qwen3-Instruct系列/1.7b/4b（思考模式）、QVQ系列、qwen-max、qwen2.5-vl系列、Qwen3-VL（非思考）：1.5；
+Qwen3.8（非思考模式）、Qwen3.7（非思考模式）、Qwen3.6（非思考模式）、Qwen3.5（非思考模式）、Qwen3（非思考模式）、Qwen3-Instruct系列/1.7b/4b（思考模式）、QVQ系列、qwen-max、qwen2.5-vl系列、Qwen3-VL（非思考）：1.5；
 
 qwen-plus/qwen-plus-latest/2025-04-28（思考模式）：0.5；
 
@@ -2203,118 +2202,6 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
       }
     ]
   }
-}'
-```
-
-#### 音频输入
-
-#### 音频理解
-
-> 关于大模型分析音频的更多用法，请参见[音频理解-Qwen-Audio](https://help.aliyun.com/zh/model-studio/audio-language-model)。
-
-Python
-
-```
-import os
-import dashscope
-
-# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
-client = dashscope.Client(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    api_key=os.getenv('DASHSCOPE_API_KEY'),
-    workspace="{WorkspaceId}",
-    region="cn-beijing",
-)
-
-messages = [
-    {
-        "role": "user",
-        "content": [
-            {"audio": "https://dashscope.oss-cn-beijing.aliyuncs.com/audios/welcome.mp3"},
-            {"text": "这段音频在说什么?"}
-        ]
-    }
-]
-response = client.multimodal.chat.create(
-    # 此处以qwen-audio-turbo为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
-    model='qwen3.5-omni-plus',
-    messages=messages
-    )
-print(response)
-```
-
-Java
-
-```
-import java.util.Arrays;
-import java.util.Collections;
-import java.lang.System;
-import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;
-import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationParam;
-import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationResult;
-import com.alibaba.dashscope.common.MultiModalMessage;
-import com.alibaba.dashscope.common.Role;
-import com.alibaba.dashscope.exception.ApiException;
-import com.alibaba.dashscope.exception.NoApiKeyException;
-import com.alibaba.dashscope.exception.UploadFileException;
-import com.alibaba.dashscope.utils.JsonUtils;
-import com.alibaba.dashscope.utils.Constants;
-public class Main {
-    static {Constants.baseHttpApiUrl="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";}
-    public static void simpleMultiModalConversationCall()
-            throws ApiException, NoApiKeyException, UploadFileException {
-        MultiModalConversation conv = new MultiModalConversation();
-        MultiModalMessage userMessage = MultiModalMessage.builder().role(Role.USER.getValue())
-                .content(Arrays.asList(Collections.singletonMap("audio", "https://dashscope.oss-cn-beijing.aliyuncs.com/audios/welcome.mp3"),
-                        Collections.singletonMap("text", "这段音频在说什么?"))).build();
-        MultiModalConversationParam param = MultiModalConversationParam.builder()
-                // 若没有配置环境变量，请用百炼API Key将下行替换为：.apiKey("sk-xxx")
-                .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-                // 此处以qwen-audio-turbo为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
-                .model("qwen3.5-omni-plus")
-                .message(userMessage)
-                .build();
-        MultiModalConversationResult result = conv.call(param);
-        System.out.println(JsonUtils.toJson(result));
-    }
-
-    public static void main(String[] args) {
-        try {
-            simpleMultiModalConversationCall();
-        } catch (ApiException | NoApiKeyException | UploadFileException e) {
-            System.out.println(e.getMessage());
-        }
-        System.exit(0);
-    }
-}
-```
-
-curl
-
-```
-curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
---header "Authorization: Bearer $DASHSCOPE_API_KEY" \
---header 'Content-Type: application/json' \
---data '{
-    "model": "qwen3.5-omni-plus",
-    "input":{
-        "messages":[
-            {
-                "role": "system",
-                "content": [
-                    {"text": "You are a helpful assistant."}
-                ]
-            },
-            {
-                "role": "user",
-                "content": [
-                    {"audio": "https://dashscope.oss-cn-beijing.aliyuncs.com/audios/welcome.mp3"},
-                    {"text": "这段音频在说什么?"}
-                ]
-            }
-        ]
-    }
 }'
 ```
 

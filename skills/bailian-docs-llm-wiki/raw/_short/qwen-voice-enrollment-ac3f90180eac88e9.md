@@ -138,4 +138,4 @@ RPM（每分钟请求数）
 
 ## 调用方式
 
--   [音色复刻 HTTP API 参考](raw/model-api-reference/voice-customization-api-directory/sound-reengraving/voice-clone-design-http-api.md)
+-   [音色复刻 HTTP API 参考](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning)

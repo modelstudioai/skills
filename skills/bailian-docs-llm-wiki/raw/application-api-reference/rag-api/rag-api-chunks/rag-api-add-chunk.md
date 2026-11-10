@@ -12,7 +12,9 @@
 
 向指定知识库添加切片内容。
 
-**说明**支持文档搜索类（document）、数据查询类（table）、图片问答类（image）知识库；不支持音视频搜索类（multimedia）。数据查询和图片问答类知识库仅支持表格连接器（Excel）数据源。本接口具有幂等性，频繁调用会被限流，频率请勿超过 10 次/秒。
+**说明**支持文档搜索类（document）、数据查询类（table）、图片问答类（image）知识库；不支持音视频搜索类（multimedia）。数据查询和图片问答类知识库仅支持表格数据集（Excel）数据源。本接口具有幂等性，频繁调用会被限流，频率请勿超过 10 次/秒。
+
+**说明**目标文档须已完成导入（[查询文档列表](raw/application-api-reference/rag-api/rag-api-documents/rag-api-list-documents.md)中状态为 `FINISH`）后才能添加切片。文档尚在导入时调用本接口会返回 `Required parameter(dataId) missing or invalid`，该错误信息不代表 `dataId` 参数本身有误。
 
 ## 请求体
 

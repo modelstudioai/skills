@@ -38,7 +38,7 @@ string
 
 ## 请求示例
 
-bash
+curl
 
 ```
 curl "$AGENTSTUDIO_URL/memory_stores/memstore_xxx/memory_versions/memver_xxx" \

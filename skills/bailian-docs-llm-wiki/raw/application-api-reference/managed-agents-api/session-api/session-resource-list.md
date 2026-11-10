@@ -56,7 +56,7 @@ string
 
 ## 请求示例
 
-bash
+curl
 
 ```
 curl "$AGENTSTUDIO_URL/sessions/sesn_xxx/resources?limit=20" \

@@ -40,21 +40,21 @@ string
 
 ## 请求示例
 
-bash
+curl
 
 ```
 curl "$AGENTSTUDIO_URL/skills/skill_xxx/versions?limit=20" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
-python
+Python
 
 ```
 for sv in client.skills.versions.list("skill_xxx", limit=20):
     print(sv.version, sv.created_at)
 ```
 
-java
+Java
 
 ```
 CursorPage<SkillVersion> versions = client.skills().listVersions(
