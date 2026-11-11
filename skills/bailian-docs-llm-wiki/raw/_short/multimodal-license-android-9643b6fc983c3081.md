@@ -1167,7 +1167,7 @@ DeviceIdentityManager.getInstance().clearCache(context);
 
 本文档中出现的 `<版本号>`为占位符，请替换为您实际拿到的文件名。
 
-各版本的变更内容与升级影响请查阅 10 节「版本发布记录」。
+各版本的变更内容与升级影响请查阅 10 节“版本发布记录”。
 
 ### 4.1. Gradle 集成步骤
 
@@ -1377,10 +1377,10 @@ SHA-256派生
 
 如果多个应用需要共享同一个设备标识（例如同一厂商的多个应用共用设备注册记录），可采用以下方案：
 
-1.  **相同 namespace + 相同签名**：多个应用调用 `getDeviceIdentity(context, "相同的namespace")` 传入相同的自定义 namespace，且各应用使用**相同的签名**（Android 8.0+ 的 `ANDROID_ID` 按「设备 + 应用签名」隔离，签名不同的应用取到的 ANDROID\_ID 不同，会导致派生结果不一致）。
+1.  **相同 namespace + 相同签名**：多个应用调用 `getDeviceIdentity(context, "相同的namespace")` 传入相同的自定义 namespace，且各应用使用**相同的签名**（Android 8.0+ 的 `ANDROID_ID` 按“设备 + 应用签名”隔离，签名不同的应用取到的 ANDROID\_ID 不同，会导致派生结果不一致）。
 2.  **服务端统一下发**：由接入方服务端生成统一设备 ID，各应用启动后通过 `DeviceIdentityManager.getInstance().setCustomIdentity(id)` 注入，作为最高优先级标识按原值使用。
 
-**Android 8.0+ ANDROID\_ID 签名隔离机制说明**：自 Android 8.0（API 26）起，`Settings.Secure.ANDROID_ID` 的取值与「设备 + 应用签名密钥 + 用户」绑定，同一设备上不同签名的应用获取到的 ANDROID\_ID 不同。因此跨应用共享标识时，要么保证签名一致，要么采用服务端下发（`setCustomIdentity`）方案。
+**Android 8.0+ ANDROID\_ID 签名隔离机制说明**：自 Android 8.0（API 26）起，`Settings.Secure.ANDROID_ID` 的取值与“设备 + 应用签名密钥 + 用户”绑定，同一设备上不同签名的应用获取到的 ANDROID\_ID 不同。因此跨应用共享标识时，要么保证签名一致，要么采用服务端下发（`setCustomIdentity`）方案。
 
 ## 9\. 常见问题 FAQ
 

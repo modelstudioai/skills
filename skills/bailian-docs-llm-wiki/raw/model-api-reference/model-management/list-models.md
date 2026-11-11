@@ -4,8 +4,6 @@
 
 ## 请求说明
 
-调用时请将 `{WorkspaceId}` 替换为业务空间 ID，并在请求 Header 中设置 `Authorization: Bearer YOUR_API_KEY`，其中 `YOUR_API_KEY` 需替换为在[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key)获取的 API Key。
-
 #### 华北2（北京）
 
 GET`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/models`
@@ -29,6 +27,8 @@ GET`https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1/models`
 #### 美国（弗吉尼亚）
 
 GET`https://dashscope-us.aliyuncs.com/api/v1/models`
+
+调用时请将 `{WorkspaceId}` 替换为业务空间 ID，并在请求 Header 中设置 `Authorization: Bearer YOUR_API_KEY`，其中 `YOUR_API_KEY` 需替换为在[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key)获取的 API Key。
 
 所有参数均通过 Query String 传递。
 
@@ -172,8 +172,6 @@ GET`https://dashscope-us.aliyuncs.com/api/v1/models`
 
 #### 查询所有模型
 
-不设置筛选条件。示例查询第一页；如需获取所有模型，请递增 `page_no`，直到获取完模型总数（HTTP 接口返回 `output.total`；Python SDK 2.0 取 `resp.total_count`）。
-
 curl
 
 ```
@@ -190,7 +188,10 @@ Python
 import os
 import dashscope
 
-client = dashscope.Client(api_key=os.getenv('DASHSCOPE_API_KEY'))
+client = dashscope.Client(
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1",
+)
 
 resp = client.models.list(
     page_no=1,
@@ -200,11 +201,11 @@ resp = client.models.list(
 print(resp.models)
 ```
 
+不设置筛选条件。示例查询第一页；如需获取所有模型，请递增 `page_no`，直到获取完模型总数（HTTP 接口返回 `output.total`；Python SDK 2.0 取 `resp.total_count`）。
+
 **说明**DashScope Python SDK 的 `client.models.list()` 方法仅支持 `page_no`、`page_size` 与 `provider` 参数（`provider` 在客户端侧按当前页过滤），不支持按 `capabilities`、`features` 等条件筛选。如需筛选模型，请使用 HTTP API。Python 示例查询第一页，递增 `page_no` 可获取后续页面。
 
 #### 按模型 ID 查询
-
-设置 `model=qwen3.8-max`，按模型 ID 精确查询。
 
 ```
 curl --get "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/models" \
@@ -215,9 +216,9 @@ curl --get "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/models" \
     --data-urlencode "page_size=20"
 ```
 
-#### 查询所有文本生成模型
+设置 `model=qwen3.8-max`，按模型 ID 精确查询。
 
-设置 `capabilities=TG`，查询文本生成模型。示例查询第一页，递增 `page_no` 可获取后续页面。
+#### 查询所有文本生成模型
 
 ```
 curl --get "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/models" \
@@ -228,9 +229,9 @@ curl --get "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/models" \
     --data-urlencode "page_size=20"
 ```
 
-#### 查询 Qwen 系列的推理模型
+设置 `capabilities=TG`，查询文本生成模型。示例查询第一页，递增 `page_no` 可获取后续页面。
 
-设置 `providers=qwen` 和 `capabilities=Reasoning`，查询 Qwen 系列的推理模型。示例查询第一页，递增 `page_no` 可获取后续页面。
+#### 查询 Qwen 系列的推理模型
 
 ```
 curl --get "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/models" \
@@ -241,6 +242,8 @@ curl --get "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/models" \
     --data-urlencode "page_no=1" \
     --data-urlencode "page_size=100"
 ```
+
+设置 `providers=qwen` 和 `capabilities=Reasoning`，查询 Qwen 系列的推理模型。示例查询第一页，递增 `page_no` 可获取后续页面。
 
 ## 返回说明
 
@@ -333,8 +336,6 @@ curl --get "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/models" \
 
 预计下线时间
 
-以下示例用于展示返回结构，模型信息和价格以实际返回结果为准。
-
 ```
 {
     "code": null,
@@ -420,6 +421,8 @@ curl --get "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/models" \
     "request_id": "d5f5201f-ee7a-9e3d-8569-bc0eedec21f9"
 }
 ```
+
+以下示例用于展示返回结构，模型信息和价格以实际返回结果为准。
 
 ## 错误码
 

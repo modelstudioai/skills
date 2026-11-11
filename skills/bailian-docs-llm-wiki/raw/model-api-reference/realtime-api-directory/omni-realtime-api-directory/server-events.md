@@ -10,33 +10,33 @@ WebSocket SDK 用法参见 [Python SDK](raw/_short/omni-realtime-python-sdk-0d3c
 
 服务端返回的错误信息。
 
-**event\_id**`string`
+`event_id`string
 
 本次事件唯一标识符。
 
-**type**`string`
+`type`string
 
 事件类型，固定为`error`。
 
-**error**`object`
+`error`object
 
 错误的详细信息。
 
 属性
 
-**type**`string`
+`type`string
 
 错误类型。
 
-**code**`string`
+`code`string
 
 错误码。
 
-**message**`string`
+`message`string
 
 错误信息。
 
-**param**`string`
+`param`string
 
 与错误相关的参数，如`session.modalities`。
 
@@ -57,85 +57,85 @@ WebSocket SDK 用法参见 [Python SDK](raw/_short/omni-realtime-python-sdk-0d3c
 
 客户端连接后，服务端返回的第一个事件，包含本次连接的默认配置信息。
 
-**event\_id**`string`
+`event_id`string
 
 本次事件唯一标识符。
 
-**type**`string`
+`type`string
 
 事件类型，固定为`session.created`。
 
-**session**`object`
+`session`object
 
 会话的配置信息。
 
 属性
 
-**object**`string`
+`object`string
 
 固定为`realtime.session`。
 
-**model**`string`
+`model`string
 
 使用的模型。
 
-**modalities**`array`
+`modalities`array
 
 模型输出模态设置。
 
-**voice**`string`
+`voice`string
 
 模型生成音频的音色。
 
-**input\_audio\_format**`string`
+`input_audio_format`string
 
 用户输入音频的格式，当前仅支持设为`pcm`。输入音频要求为16 kHz采样率的PCM音频流。
 
-**output\_audio\_format**`string`
+`output_audio_format`string
 
 模型输出音频的格式，当前仅支持设为`pcm`。输出音频为24 kHz采样率的PCM音频流。当前不支持自定义输出采样率。
 
-**input\_audio\_transcription**`object`
+`input_audio_transcription`object
 
 语音转录的配置。
 
 属性
 
-**model**`string`
+`model`string
 
 语音转录模型，固定为`qwen3-asr-flash-realtime`，不支持修改。
 
-**turn\_detection**`object`
+`turn_detection`object
 
 语音活动检测（VAD）的配置。
 
 属性
 
-**type**`string`
+`type`string
 
 VAD类型。取值：`server_vad`（默认值）、`semantic_vad` 或 `semantic_vad_ec`。其中，`semantic_vad_ec` 适用于 Qwen3.8-Omni-Flash-Realtime 系列模型。详情请参见[客户端事件](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md)。
 
-**threshold**`float`
+`threshold`float
 
 VAD检测阈值。
 
-**silence\_duration\_ms**`integer`
+`silence_duration_ms`integer
 
 检测语音停止的静音持续时间。
 
-**idle\_timeout\_ms**`integer`
+`idle_timeout_ms`integer
 
 静默超时时间（毫秒）。仅在 `server_vad` 模式下，使用 `qwen3.5-omni-plus-realtime` 或 `qwen3.5-omni-flash-realtime` 模型时返回。
 
-**enable\_search**`boolean`
+`enable_search`boolean
 
 是否启用联网搜索功能。Qwen3.8-Omni-Flash-Realtime 和 Qwen3.5-Omni-Realtime 系列模型支持。
 
-**search\_options**`object`
+`search_options`object
 
 联网搜索选项配置。
 
-**temperature**`float`
+`temperature`float
 
 模型的温度参数。
 
@@ -175,163 +175,183 @@ VAD检测阈值。
 
 收到用户的 `session.update` 请求后，若处理成功，则返回此事件；若出错，则返回 `error` 事件。
 
-**event\_id**`string`
+`event_id`string
 
 本次事件唯一标识符。
 
-**type**`string`
+`type`string
 
 事件类型，固定为`session.updated`。
 
-**session**`object`
+`session`object
 
 会话的配置信息。
 
 属性
 
-**temperature**`float`
+`temperature`float
 
 模型的温度参数。
 
-**modalities**`array`
+`modalities`array
 
 模型输出模态设置。
 
-**voice**`string`
+`voice`string
 
 模型生成音频的音色。
 
-**instructions**`string`
+`instructions`string
 
 模型的目标与角色。
 
-**audio**`object`
+`audio`object
 
 回显的音频格式配置。若客户端传入了 `session.audio.input.format` / `session.audio.output.format`，服务端将在 `session.updated` 中按相同嵌套结构回显。未使用嵌套字段的客户端，服务端事件结构保持原有行为。
 
 属性
 
-**audio.input.format.type**`string`
+`input`object
+
+属性
+
+`format`object
+
+属性
+
+`type`string
 
 用户输入音频格式。可选值：`pcm`（默认值）、`wav`。
 
-**audio.input.format.sample\_rate**`integer`
+`sample_rate`integer
 
 用户输入音频采样率，单位为 Hz。
 
-**audio.output.format.type**`string`
+`output`object
+
+属性
+
+`format`object
+
+属性
+
+`type`string
 
 模型输出音频格式。可选值：`pcm`（默认值）、`wav`。
 
-**audio.output.format.sample\_rate**`integer`
+`sample_rate`integer
 
 模型输出音频采样率，单位为 Hz。
 
-**input\_audio\_format**`string`
+`input_audio_format`string
 
 历史兼容字段，回显客户端配置的输入音频格式。
 
-**output\_audio\_format**`string`
+`output_audio_format`string
 
 历史兼容字段，回显客户端配置的输出音频格式。
 
-**input\_audio\_transcription**`object`
+`input_audio_transcription`object
 
 语音转录的配置。
 
 属性
 
-**model**`string`
+`model`string
 
 语音转录模型，固定为`qwen3-asr-flash-realtime`，不支持修改。
 
-**turn\_detection**`object`
+`turn_detection`object
 
 语音活动检测（VAD）的配置。
 
 属性
 
-**type**`string`
+`type`string
 
 VAD类型。取值：`server_vad`（默认值）、`semantic_vad` 或 `semantic_vad_ec`。其中，`semantic_vad_ec` 适用于 Qwen3.8-Omni-Flash-Realtime 系列模型。详情请参见[客户端事件](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md)。
 
-**threshold**`float`
+`threshold`float
 
 VAD检测阈值。
 
-**silence\_duration\_ms**`integer`
+`silence_duration_ms`integer
 
 检测语音停止的静音持续时间。
 
-**idle\_timeout\_ms**`integer`
+`idle_timeout_ms`integer
 
 静默超时时间（毫秒）。仅在 `server_vad` 模式下，使用 `qwen3.5-omni-plus-realtime` 或 `qwen3.5-omni-flash-realtime` 模型时返回。
 
-**enable\_search**`boolean`（可选）
+`enable_search`boolean（可选）
 
 是否启用联网搜索功能。Qwen3.8-Omni-Flash-Realtime 和 Qwen3.5-Omni-Realtime 系列模型支持。
 
-**search\_options**`object`（可选）
+`search_options`object（可选）
 
 联网搜索选项配置。
 
-**tools**`array`（可选）
+`tools`array（可选）
 
 工具定义列表。以下属性描述 `type="function"` 的 Function Calling 工具。Qwen3.8-Omni-Flash-Realtime 的 MCP 配置字段见[客户端工具配置](https://help.aliyun.com/zh/model-studio/client-events#session-tools-mcp)；MCP 连接地址和凭证不会在 `session.updated` 中回显。
 
 属性
 
-**type**`string`（必选）
+`type`string（必选）
 
 固定为 `function`。
 
-**function.name**`string`（必选）
+`function`object
+
+属性
+
+`name`string（必选）
 
 自定义的工具函数名称，建议使用与函数相同的名称，如`get_current_weather`或`get_current_time`。
 
-**function.description**`string`（可选）
+`description`string（可选）
 
 对工具函数功能的描述，大模型会参考该字段来选择是否使用该工具函数。
 
-**function.parameters**`object`（可选）
+`parameters`object（可选）
 
 对工具函数入参的描述，大模型会参考该字段来进行入参的提取。如果工具函数不需要输入参数，则无需指定。
 
 属性
 
-**type**`string`（必选）
+`type`string（必选）
 
 固定为 `object`。
 
-**properties**`object`（可选）
+`properties`object（可选）
 
 描述各入参的名称、数据类型与描述。Key 值为入参的名称，Value 值为包含数据类型（`type`）与描述（`description`）的对象。
 
-**required**`array`（可选）
+`required`array（可选）
 
 指定哪些入参为必填项。
 
-**top\_p**`float`
+`top_p`float
 
 核采样的概率阈值。
 
-**top\_k**`integer`
+`top_k`integer
 
 模型生成过程中，采样候选集的大小。
 
-**max\_tokens**`integer`
+`max_tokens`integer
 
 模型在本次请求返回的最大 Token 数。
 
-**repetition\_penalty**`float`
+`repetition_penalty`float
 
 控制模型生成时，连续序列中的重复度\*。\*
 
-**presence\_penalty**`float`
+`presence_penalty`float
 
 控制模型在生成内容时的重复度。
 
-**seed**`integer`
+`seed`integer
 
 模型在每次请求时，运行结果一致性程度。
 
@@ -413,19 +433,19 @@ VAD检测阈值。
 
 > 若服务端尚未检测到语音，则每次向缓冲区添加音频时都可能触发此事件。
 
-**event\_id**`string`
+`event_id`string
 
 本次事件唯一标识符。
 
-**type**`string`
+`type`string
 
 事件类型，固定为`input_audio_buffer.speech_started`。
 
-**audio\_start\_ms**`integer`
+`audio_start_ms`integer
 
 从音频开始写入缓冲区到首次检测到语音所经过的毫秒数。
 
-**item\_id**`string`
+`item_id`string
 
 语音停止时将创建的用户消息项的 ID。
 
@@ -446,19 +466,19 @@ VAD检测阈值。
 
 同时，服务端还会返回一个 `conversation.item.created` 事件，以创建对应的用户消息项。
 
-**event\_id**`string`
+`event_id`string
 
 本次事件唯一标识符。
 
-**type**`string`
+`type`string
 
 事件类型，固定为`input_audio_buffer.speech_stopped`。
 
-**audio\_end\_ms**`integer`
+`audio_end_ms`integer
 
 语音停止时刻距会话开始经过的毫秒数。
 
-**item\_id**`string`
+`item_id`string
 
 将创建的用户消息项的 ID。
 
@@ -478,15 +498,15 @@ VAD检测阈值。
 -   在VAD模式下，当检测到用户说话结束时，服务端会自动提交音频缓冲区并返回此事件。
 -   在 Manual 模式下，当客户端发送`input_audio_buffer.commit`事件后，服务端返回此事件。
 
-**event\_id**`string`
+`event_id`string
 
 本次事件唯一标识符。
 
-**type**`string`
+`type`string
 
 事件类型，固定为`input_audio_buffer.committed`。
 
-**item\_id**`string`
+`item_id`string
 
 将创建的用户消息项的 ID。
 
@@ -502,11 +522,11 @@ VAD检测阈值。
 
 客户端发送`input_audio_buffer.clear`事件后，服务端将返回此事件。
 
-**event\_id**`string`
+`event_id`string
 
 本次事件唯一标识符。
 
-**type**`string`
+`type`string
 
 事件类型，固定为`input_audio_buffer.cleared`。
 
@@ -521,71 +541,71 @@ VAD检测阈值。
 
 当对话项创建时返回此事件。
 
-**event\_id**`string`
+`event_id`string
 
 本次事件唯一标识符。
 
-**type**`string`
+`type`string
 
 事件类型，固定为`conversation.item.created`。
 
-**response\_id**`string`（条件必填）
+`response_id`string（条件必填）
 
 仅当 `item.type` 为 `mcp_approval_request` 时返回；生成本次 MCP 调用的父 Response ID。
 
-**item\_id**`string`（条件必填）
+`item_id`string（条件必填）
 
 仅当 `item.type` 为 `mcp_approval_request` 时返回；审批请求 item ID，与 `item.id` 相同。
 
-**previous\_item\_id**`string`（条件必填）
+`previous_item_id`string（条件必填）
 
 仅当 `item.type` 为 `mcp_approval_request` 时返回；被审批的 `mcp_call` item ID。
 
-**item**`object`
+`item`object
 
 要添加到对话中的项。
 
 属性
 
-**id**`string`
+`id`string
 
 对话项的唯一ID。
 
-**object**`string`
+`object`string
 
 `message` 和 `function_call` 项固定为 `realtime.item`；MCP 项若返回该字段，值也为 `realtime.item`。
 
-**status**`string`
+`status`string
 
 若返回该字段，表示对话项的状态。`mcp_call` 初始项必填，值为 `in_progress`。
 
-**role**`string`
+`role`string
 
 仅消息项包含，表示消息的角色。
 
-**content**`array[object]`
+`content`array\[object\]
 
 消息的内容。当 type 为 `message` 时存在。下列字段对应本页示例中的数组元素。
 
 数组元素
 
-**type**`string`
+`type`string
 
 内容片段的类型；本页示例为 `input_audio`。
 
-**type**`string`
+`type`string
 
 对话项的类型包括 `message`（常规消息）和 `function_call`（工具调用）。Qwen3.8-Omni-Flash-Realtime 还可返回 `mcp_list_tools`、`mcp_call`、`mcp_approval_request`，事件示例见[MCP 对话项](#mcp-items)。
 
-**name**`string`
+`name`string
 
 当 type 为 `function_call` 时，被调用的函数名称。
 
-**call\_id**`string`
+`call_id`string
 
 当 type 为 `function_call` 时，本次函数调用的唯一 ID。
 
-**arguments**`string`
+`arguments`string
 
 当 type 为 `function_call` 时，函数调用的参数（JSON 字符串）。
 
@@ -593,107 +613,107 @@ type=mcp\_list\_tools
 
 该类型的 `item.id` 与工具发现状态事件的 `item_id` 相同。
 
-**server\_label**`string`（必填）
+`server_label`string（必填）
 
 MCP Server 标识。
 
-**tools**`array[object]`（必填）
+`tools`array\[object\]（必填）
 
 经校验和 `allowed_tools` 过滤的工具定义，发现失败时为空数组。
 
 数组元素
 
-**name**`string`（必填）
+`name`string（必填）
 
 工具原始名称，1～64 位，仅允许字母、数字、下划线、点和连字符。
 
-**description**`string`（可选）
+`description`string（可选）
 
 MCP Server 提供的工具说明。
 
-**input\_schema**`object`（必填）
+`input_schema`object（必填）
 
 MCP Server 提供的 JSON Schema。服务端不执行完整的 JSON Schema 语义校验，最终由 MCP Server 校验工具参数。
 
 属性
 
-**type**`string`（必填）
+`type`string（必填）
 
 根节点固定为 `object`。
 
-**properties**`object`（可选）
+`properties`object（可选）
 
 按自定义名称列出各参数。例如下方 [mcp\_list\_tools 示例](#mcp-list-tools-item) 中的 `city` 是参数名，其 `type` 和 `description` 分别说明数据类型和用途；各参数的 JSON Schema 由 MCP Server 定义。
 
-**required**`array[string]`（可选）
+`required`array\[string\]（可选）
 
 必填参数名列表。
 
 `additionalProperties`、`$defs`、`oneOf`、`anyOf`、`allOf` 等其他标准 JSON Schema 字段按原始 schema 保留并传递。
 
-**annotations**`object`（可选）
+`annotations`object（可选）
 
 MCP Server 提供的 ToolAnnotations。以下是 MCP 标准中的可选提示字段，实际返回内容由 MCP Server 决定。
 
 属性
 
-**title**`string`（可选）
+`title`string（可选）
 
 工具的显示名称。
 
-**readOnlyHint**`boolean`（可选）
+`readOnlyHint`boolean（可选）
 
 提示工具是否只读。
 
-**destructiveHint**`boolean`（可选）
+`destructiveHint`boolean（可选）
 
 提示工具是否可能执行破坏性修改。
 
-**idempotentHint**`boolean`（可选）
+`idempotentHint`boolean（可选）
 
 提示重复调用是否不会产生额外效果。
 
-**openWorldHint**`boolean`（可选）
+`openWorldHint`boolean（可选）
 
 提示工具是否可能与外部系统交互。这些字段均为提示，不应作为安全判断依据。
 
-**error**`object`（可选）
+`error`object（可选）
 
 工具发现失败时出现。
 
 属性
 
-**type**`string`（必填）
+`type`string（必填）
 
 固定为 `tool_execution_error`。
 
-**message**`string`（必填）
+`message`string（必填）
 
 面向客户端的安全错误描述，不包含上游敏感响应体。
 
 type=mcp\_call（初始项）
 
-**object**`string`（必填）
+`object`string（必填）
 
 固定为 `realtime.item`。
 
-**status**`string`（必填）
+`status`string（必填）
 
 初始为 `in_progress`。
 
-**server\_label**`string`（必填）
+`server_label`string（必填）
 
 实际执行工具的 MCP Server 标识。
 
-**name**`string`（必填）
+`name`string（必填）
 
 工具原始名称。
 
-**call\_id**`string`（必填）
+`call_id`string（必填）
 
 本次调用的唯一 ID。
 
-**arguments**`string`（必填）
+`arguments`string（必填）
 
 初始通常为空字符串；完整参数以后续事件及最终项为准。
 
@@ -701,19 +721,19 @@ type=mcp\_approval\_request
 
 审批请求的 `item.id` 应在审批回复中原样填入 `approval_request_id`。
 
-**server\_label**`string`（必填）
+`server_label`string（必填）
 
 待执行工具所属的 MCP Server 标识。
 
-**name**`string`（必填）
+`name`string（必填）
 
 待执行工具的原始名称。
 
-**arguments**`string`（必填）
+`arguments`string（必填）
 
 待审批调用的完整参数 JSON 字符串。
 
-**call\_id**`string`（必填）
+`call_id`string（必填）
 
 被审批的工具调用 ID。
 
@@ -756,35 +776,35 @@ type=mcp\_approval\_request
 
 开启输入音频转录后，此事件会在用户说话过程中高频发送，用于展示实时识别的中间结果。您可以通过拼接 `text` + `stash` 获取当前最完整的句子预览。
 
-**event\_id**`string`
+`event_id`string
 
 本次事件唯一标识符。
 
-**type**`string`
+`type`string
 
 事件类型，固定为`conversation.item.input_audio_transcription.delta`。
 
-**item\_id**`string`
+`item_id`string
 
 关联的对话项 ID。
 
-**content\_index**`integer`
+`content_index`integer
 
 包含音频的内容部分的索引。
 
-**text**`string`
+`text`string
 
 已确认的文本前缀。这是当前句子中，模型已确认不会再变更的部分。
 
-**stash**`string`
+`stash`string
 
 预识别的文本后缀。这是紧跟在已确认部分之后，模型仍在处理、可能会被修正的临时草稿。
 
-**language**`string`
+`language`string
 
 被识别音频的语种。
 
-**emotion**`string`
+`emotion`string
 
 被识别音频的情感。可选值：`neutral`（平静）、`happy`（愉快）、`sad`（悲伤）、`angry`（愤怒）、`surprised`（惊讶）、`disgusted`（厌恶）、`fearful`（恐惧）。
 
@@ -896,23 +916,23 @@ T7
 
 > 语音识别模型生成的转录文本可能与 Qwen-Omni-Realtime 模型的理解存在差异，仅供参考。
 
-**event\_id**`string`
+`event_id`string
 
 本次事件唯一标识符。
 
-**type**`string`
+`type`string
 
 事件类型，固定为`conversation.item.input_audio_transcription.completed`。
 
-**item\_id**`string`
+`item_id`string
 
 用户消息项的 ID。
 
-**content\_index**_integer_
+`content_index`integer
 
 当前固定为0。
 
-**transcript**`string`
+`transcript`string
 
 转录的文本内容。
 
@@ -930,37 +950,37 @@ T7
 
 启用输入音频转录后，若用户音频转录失败，服务端会返回此事件。此事件独立于 `error` 事件，便于客户端识别。
 
-**event\_id**`string`
+`event_id`string
 
 本次事件唯一标识符。
 
-**type**`string`
+`type`string
 
 事件类型，固定为`conversation.item.input_audio_transcription.failed`。
 
-**item\_id**`string`
+`item_id`string
 
 用户消息项的 ID。
 
-**content\_index**`integer`
+`content_index`integer
 
 当前固定为0。
 
-**error**`object`
+`error`object
 
 错误信息。
 
 属性
 
-**code** `string`
+`code`string
 
 错误码。
 
-**message** `string`
+`message`string
 
 错误消息。
 
-**param** `string`
+`param`string
 
 错误相关的参数。
 
@@ -981,45 +1001,45 @@ T7
 
 当服务端生成新的模型响应时，会返回此事件。
 
-**event\_id**`string`
+`event_id`string
 
 本次事件唯一标识符。
 
-**type**`string`
+`type`string
 
 事件类型，固定为`response.created`。
 
-**response**`object`
+`response`object
 
 响应对象。
 
 属性
 
-**id** `string`
+`id`string
 
 响应的唯一 ID。
 
-**conversation\_id** `string`
+`conversation_id`string
 
 当前会话的唯一ID。
 
-**object** `string`
+`object`string
 
 对象类型，此事件下固定为`realtime.response`。
 
-**status** `string`
+`status`string
 
 响应的状态。在`[completed, failed, in_progress, or incomplete]`范围内。
 
-**modalities** `array`
+`modalities`array
 
 响应的模态。
 
-**voice** `string`
+`voice`string
 
 模型生成音频的音色。
 
-**output** `array`
+`output`array
 
 此事件下目前为空。
 
@@ -1047,185 +1067,185 @@ T7
 
 响应生成完成后，服务端会返回此事件。事件中的 `response` 对象包含除原始音频数据外的全部输出项。
 
-**event\_id**`string`
+`event_id`string
 
 本次事件唯一标识符。
 
-**type**`string`
+`type`string
 
 事件类型，固定为`response.done`。
 
-**response**`object`
+`response`object
 
 响应对象。
 
 属性
 
-**id** `string`
+`id`string
 
 响应的唯一 ID。
 
-**conversation\_id** `string`
+`conversation_id`string
 
 当前会话的唯一ID。
 
-**object** `string`
+`object`string
 
 对象类型，此事件下固定为`realtime.response`。
 
-**status** `string`
+`status`string
 
 响应的状态。
 
-**modalities** `array`
+`modalities`array
 
 响应的模态。
 
-**voice** `string`
+`voice`string
 
 模型生成音频的音色。
 
-**output** `array`
+`output`array
 
 响应的输出项数组；每个元素是对话项对象。
 
 数组元素
 
-**id** `string`
+`id`string
 
 响应输出对应的ID。
 
-**type** `string`
+`type`string
 
 输出项的类型，可选值包括 `message`（常规消息）、`function_call`（工具调用），Qwen3.8-Omni-Flash-Realtime 还支持 `mcp_call`，事件示例见[MCP 对话项](#mcp-items)。
 
-**object** `string`
+`object`string
 
 `message` 和 `function_call` 项固定为 `realtime.item`；MCP 项若返回该字段，值也为 `realtime.item`。
 
-**status** `string`
+`status`string
 
 输出项的状态。
 
-**role** `string`
+`role`string
 
 仅消息项包含，表示消息的角色。
 
-**content** `array`
+`content`array
 
 输出项的内容。当 type 为 `message` 时存在；每个元素是输出内容对象。
 
 数组元素
 
-**type** `string`
+`type`string
 
 输出内容的类型。输出为纯文本时，为`text`；输出包含音频时，为`audio`。
 
-**text** `string`
+`text`string
 
 输出的文本内容。
 
-**transcript** `string`
+`transcript`string
 
 音频转录为文字后的内容。
 
-**name** `string`
+`name`string
 
 当 type 为 `function_call` 时，被调用的函数名称。
 
-**call\_id** `string`
+`call_id`string
 
 当 type 为 `function_call` 时，函数调用的唯一 ID。
 
-**arguments** `string`
+`arguments`string
 
 当 type 为 `function_call` 时，函数调用的完整参数（JSON 字符串）。
 
 type=mcp\_call（最终项）
 
-**status**`string`（必填）
+`status`string（必填）
 
 `completed` 或 `failed`。
 
-**server\_label**`string`（必填）
+`server_label`string（必填）
 
 实际执行工具的 MCP Server 标识。
 
-**name**`string`（必填）
+`name`string（必填）
 
 工具原始名称。
 
-**call\_id**`string`（必填）
+`call_id`string（必填）
 
 本次调用的唯一 ID。
 
-**arguments**`string`（必填）
+`arguments`string（必填）
 
 完整参数 JSON 字符串。
 
-**output**`string`（可选）
+`output`string（可选）
 
 MCP `tools/call.result` 对象序列化后的 JSON 字符串；部分失败场景也可能出现。
 
-**error**`object`（可选）
+`error`object（可选）
 
 调用失败时出现。
 
 属性
 
-**type**`string`（必填）
+`type`string（必填）
 
 固定为 `tool_execution_error`。
 
-**message**`string`（必填）
+`message`string（必填）
 
 面向客户端的安全错误描述，不包含上游敏感响应体。
 
 MCP Server 返回 `isError=true` 时最终状态为 `failed`，也可能保留原始 `output`。
 
-**usage** `object`
+`usage`object
 
 本次响应的 Token 消耗信息。
 
 属性
 
-**total\_tokens** `integer`
+`total_tokens`integer
 
 本次响应消耗的总 Token 数。
 
-**input\_tokens** `integer`
+`input_tokens`integer
 
 输入 Token 数。
 
-**output\_tokens** `integer`
+`output_tokens`integer
 
 输出 Token 数。
 
-**input\_tokens\_details** `object`
+`input_tokens_details`object
 
 输入 Token 的分项详情，包含 `text_tokens`（文本 Token 数）和 `audio_tokens`（音频 Token 数）。
 
-**output\_tokens\_details** `object`
+`output_tokens_details`object
 
 输出 Token 的分项详情，包含 `text_tokens`（文本 Token 数）和 `audio_tokens`（音频 Token 数）。
 
-**plugins** `object`（可选）
+`plugins`object（可选）
 
 插件使用计量信息。启用联网搜索（`enable_search`）时返回。
 
 属性
 
-**search** `object`
+`search`object
 
 联网搜索计量信息。
 
 属性
 
-**count** `integer`
+`count`integer
 
 搜索次数。
 
-**strategy** `string`
+`strategy`string
 
 搜索策略。
 
@@ -1325,31 +1345,31 @@ MCP Server 返回 `isError=true` 时最终状态为 `failed`，也可能保留�
 
 当输出模态仅包含文本，且模型增量生成新的文本时，服务端将返回此事件。
 
-**event\_id**`string`
+`event_id`string
 
 本次事件唯一标识符。
 
-**type**`string`
+`type`string
 
 事件类型，固定为`response.text.delta`。
 
-**delta**`string`
+`delta`string
 
 返回的增量文本。
 
-**response\_id**`string`
+`response_id`string
 
 回复的ID。
 
-**item\_id**`string`
+`item_id`string
 
 消息项ID，可以关联同一个消息项。
 
-**output\_index**`integer`
+`output_index`integer
 
 响应中输出项的索引, 目前固定为 0。
 
-**content\_index**`integer`
+`content_index`integer
 
 响应中输出项中内部部分的索引, 目前固定为 0。
 
@@ -1371,31 +1391,31 @@ MCP Server 返回 `isError=true` 时最终状态为 `failed`，也可能保留�
 
 > 当响应中断、不完整或取消时，也会返回此事件。
 
-**event\_id**`string`
+`event_id`string
 
 本次事件唯一标识符。
 
-**type**`string`
+`type`string
 
 事件类型，固定为`response.text.done`。
 
-**response\_id**`string`
+`response_id`string
 
 响应的ID。
 
-**item\_id**`string`
+`item_id`string
 
 消息项ID。
 
-**output\_index**`integer`
+`output_index`integer
 
 响应输出项的索引。
 
-**content\_index**`integer`
+`content_index`integer
 
 响应输出项的索引。
 
-**text** `string`
+`text`string
 
 模型输出的完整文本。
 
@@ -1415,31 +1435,31 @@ MCP Server 返回 `isError=true` 时最终状态为 `failed`，也可能保留�
 
 WebSocket 接入时，当输出模态包含音频，且模型增量生成新的音频数据时，服务端返回此事件。WebRTC 接入时，音频通过 RTP 音频轨道传输，不返回此事件。
 
-**event\_id**`string`
+`event_id`string
 
 本次事件唯一标识符。
 
-**type**`string`
+`type`string
 
 事件类型，固定为`response.audio.delta`。
 
-**response\_id**`string`
+`response_id`string
 
 响应的ID。
 
-**item\_id**`string`
+`item_id`string
 
 消息项ID。
 
-**output\_index**`integer`
+`output_index`integer
 
 响应输出项的索引。
 
-**content\_index**`integer`
+`content_index`integer
 
 响应输出项的索引。
 
-**delta** `string`
+`delta`string
 
 模型增量输出的音频数据，使用Base64编码。
 
@@ -1461,27 +1481,27 @@ WebSocket 接入时，当输出模态包含音频，且模型增量生成新的�
 
 > 当响应中断、不完整或取消时，也会返回此事件。
 
-**event\_id**`string`
+`event_id`string
 
 本次事件唯一标识符。
 
-**type**`string`
+`type`string
 
 事件类型，固定为`response.audio.done`。
 
-**response\_id**`string`
+`response_id`string
 
 响应的ID。
 
-**item\_id**`string`
+`item_id`string
 
 消息项ID。
 
-**output\_index**`integer`
+`output_index`integer
 
 响应输出项的索引。
 
-**content\_index**`integer`
+`content_index`integer
 
 响应输出项的索引。
 
@@ -1500,31 +1520,31 @@ WebSocket 接入时，当输出模态包含音频，且模型增量生成新的�
 
 当输出模态包含音频，且模型增量生成新的音频对应的文本时，服务端将返回 `response.audio_transcript.delta` 事件。
 
-**event\_id**`string`
+`event_id`string
 
 本次事件唯一标识符。
 
-**type**`string`
+`type`string
 
 事件类型，固定为`response.audio_transcript.delta`。
 
-**response\_id**`string`
+`response_id`string
 
 响应的ID。
 
-**item\_id**`string`
+`item_id`string
 
 消息项ID。
 
-**output\_index**`integer`
+`output_index`integer
 
 响应输出项的索引。
 
-**content\_index**`integer`
+`content_index`integer
 
 响应输出项的索引。
 
-**delta**`string`
+`delta`string
 
 增量文本。
 
@@ -1544,31 +1564,31 @@ WebSocket 接入时，当输出模态包含音频，且模型增量生成新的�
 
 当输出模态包含音频，且模型完成音频转录后，服务端将返回 `response.audio_transcript.done` 事件。
 
-**event\_id**`string`
+`event_id`string
 
 本次事件唯一标识符。
 
-**type**`string`
+`type`string
 
 事件类型，固定为`response.audio_transcript.done`。
 
-**response\_id**`string`
+`response_id`string
 
 响应的ID。
 
-**item\_id**`string`
+`item_id`string
 
 消息项ID。
 
-**output\_index**`integer`
+`output_index`integer
 
 响应输出项的索引。
 
-**content\_index**`integer`
+`content_index`integer
 
 响应输出项的索引。
 
-**transcript**`string`
+`transcript`string
 
 完整文本。
 
@@ -1588,31 +1608,31 @@ WebSocket 接入时，当输出模态包含音频，且模型增量生成新的�
 
 当模型以流式方式生成函数调用的参数字符串时，每产生一段新内容，服务端推送一次本事件。客户端应按接收顺序将各事件中的 `delta` 字段拼接，得到与当前进度一致的参数文本；完整内容以随后的 `response.function_call_arguments.done` 为准。
 
-**event\_id**`string`
+`event_id`string
 
 本次事件唯一标识符。
 
-**type**`string`
+`type`string
 
 事件类型，固定为`response.function_call_arguments.delta`。
 
-**response\_id**`string`
+`response_id`string
 
 响应的ID。
 
-**item\_id**`string`
+`item_id`string
 
 消息项ID。
 
-**output\_index**`integer`
+`output_index`integer
 
 该响应中输出项的索引。
 
-**call\_id**`string`
+`call_id`string
 
 本次函数调用的唯一 ID，与同一轮中的 `done` 事件保持一致。
 
-**delta**`string`
+`delta`string
 
 本段新增的参数字符串片段（增量）。需按顺序拼接。
 
@@ -1632,35 +1652,35 @@ WebSocket 接入时，当输出模态包含音频，且模型增量生成新的�
 
 函数调用参数已全部生成完毕。本事件中的 `arguments` 为完整的参数字符串。客户端可在收到本事件后解析参数并调用本地工具函数；应以本事件中的完整 `arguments` 为准，而非 `delta` 拼接结果。
 
-**event\_id**`string`
+`event_id`string
 
 本次事件唯一标识符。
 
-**type**`string`
+`type`string
 
 事件类型，固定为`response.function_call_arguments.done`。
 
-**response\_id**`string`
+`response_id`string
 
 响应的ID。
 
-**item\_id**`string`
+`item_id`string
 
 消息项ID。
 
-**output\_index**`integer`
+`output_index`integer
 
 该响应中输出项的索引。
 
-**call\_id**`string`
+`call_id`string
 
 本次函数调用的唯一 ID。
 
-**name**`string`
+`name`string
 
 被调用的函数名称。
 
-**arguments**`string`
+`arguments`string
 
 函数调用的完整参数，一般以 JSON 字符串形式表示。
 
@@ -1681,87 +1701,87 @@ WebSocket 接入时，当输出模态包含音频，且模型增量生成新的�
 
 在响应生成过程中创建新项目时，服务端返回此事件。项目类型可以是 `message`（常规消息）、`function_call`（工具调用），Qwen3.8-Omni-Flash-Realtime 还支持 `mcp_call`，事件示例见[MCP 对话项](#mcp-items)。
 
-**event\_id**`string`
+`event_id`string
 
 本次事件唯一标识符。
 
-**type**`string`
+`type`string
 
 事件类型，固定为`response.output_item.added`。
 
-**response\_id**`string`
+`response_id`string
 
 响应的ID。
 
-**output\_index**`integer`
+`output_index`integer
 
 响应输出项的索引。
 
-**item**`object`
+`item`object
 
 输出项信息。
 
 属性
 
-**id**`string`
+`id`string
 
 输出项的唯一ID。
 
-**object**`string`
+`object`string
 
 `message` 和 `function_call` 项固定为 `realtime.item`；MCP 项若返回该字段，值也为 `realtime.item`。
 
-**status**`string`
+`status`string
 
 输出项的状态。
 
-**role**`string`
+`role`string
 
 仅消息项包含，表示消息的角色。
 
-**content**`array`
+`content`array
 
 消息的内容。当 type 为 `message` 时存在。本页示例中初始为空数组；完成项的内容见 `response.output_item.done` 示例。
 
-**type**`string`
+`type`string
 
 输出项的类型。可选值包括 `message`（常规消息）、`function_call`（工具调用），Qwen3.8-Omni-Flash-Realtime 还支持 `mcp_call`，事件示例见[MCP 对话项](#mcp-items)。
 
-**name**`string`
+`name`string
 
 当 type 为 `function_call` 时，被调用的函数名称。
 
-**call\_id**`string`
+`call_id`string
 
 当 type 为 `function_call` 时，本次函数调用的唯一 ID。
 
-**arguments**`string`
+`arguments`string
 
 当 type 为 `function_call` 时，函数调用的参数（JSON 字符串）。在 added 事件中初始为空字符串。
 
 type=mcp\_call（初始项）
 
-**object**`string`（必填）
+`object`string（必填）
 
 固定为 `realtime.item`。
 
-**status**`string`（必填）
+`status`string（必填）
 
 初始为 `in_progress`。
 
-**server\_label**`string`（必填）
+`server_label`string（必填）
 
 实际执行工具的 MCP Server 标识。
 
-**name**`string`（必填）
+`name`string（必填）
 
 工具原始名称。
 
-**call\_id**`string`（必填）
+`call_id`string（必填）
 
 本次调用的唯一 ID。
 
-**arguments**`string`（必填）
+`arguments`string（必填）
 
 初始通常为空字符串；完整参数以 `response.mcp_call_arguments.done` 和最终项为准。
 
@@ -1802,111 +1822,111 @@ type=mcp\_call（初始项）
 
 当新的项目输出完成时，服务端返回此事件。
 
-**event\_id**`string`
+`event_id`string
 
 本次事件唯一标识符。
 
-**type**`string`
+`type`string
 
 事件类型，固定为`response.output_item.done`。
 
-**response\_id**`string`
+`response_id`string
 
 响应的ID。
 
-**output\_index**`integer`
+`output_index`integer
 
 响应输出项的索引。
 
-**item**`object`
+`item`object
 
 输出项信息。
 
 属性
 
-**id**`string`
+`id`string
 
 输出项的唯一ID。
 
-**object**`string`
+`object`string
 
 `message` 和 `function_call` 项固定为 `realtime.item`；MCP 项若返回该字段，值也为 `realtime.item`。
 
-**status**`string`
+`status`string
 
 输出项的状态。
 
-**role**`string`
+`role`string
 
 仅消息项包含，表示消息的角色。
 
-**content**`array[object]`
+`content`array\[object\]
 
 消息的内容。当 type 为 `message` 时存在。下列字段对应本页示例中的数组元素。
 
 数组元素
 
-**type**`string`
+`type`string
 
 内容片段的类型；本页示例为 `audio`。
 
-**text**`string`
+`text`string
 
 本页示例中的文本内容。
 
-**type**`string`
+`type`string
 
 输出项的类型。可选值包括 `message`（常规消息）、`function_call`（工具调用），Qwen3.8-Omni-Flash-Realtime 还支持 `mcp_call`，事件示例见[MCP 对话项](#mcp-items)。
 
-**name**`string`
+`name`string
 
 当 type 为 `function_call` 时，被调用的函数名称。
 
-**call\_id**`string`
+`call_id`string
 
 当 type 为 `function_call` 时，本次函数调用的唯一 ID。
 
-**arguments**`string`
+`arguments`string
 
 当 type 为 `function_call` 时，函数调用的完整参数（JSON 字符串）。
 
 type=mcp\_call（最终项）
 
-**status**`string`（必填）
+`status`string（必填）
 
 `completed` 或 `failed`。
 
-**server\_label**`string`（必填）
+`server_label`string（必填）
 
 实际执行工具的 MCP Server 标识。
 
-**name**`string`（必填）
+`name`string（必填）
 
 工具原始名称。
 
-**call\_id**`string`（必填）
+`call_id`string（必填）
 
 本次调用的唯一 ID。
 
-**arguments**`string`（必填）
+`arguments`string（必填）
 
 完整参数 JSON 字符串。
 
-**output**`string`（可选）
+`output`string（可选）
 
 MCP `tools/call.result` 对象序列化后的 JSON 字符串；部分失败场景也可能出现。
 
-**error**`object`（可选）
+`error`object（可选）
 
 调用失败时出现。
 
 属性
 
-**type**`string`（必填）
+`type`string（必填）
 
 固定为 `tool_execution_error`。
 
-**message**`string`（必填）
+`message`string（必填）
 
 面向客户端的安全错误描述，不包含上游敏感响应体。
 
@@ -1954,41 +1974,41 @@ MCP Server 返回 `isError=true` 时最终状态为 `failed`，也可能保留�
 
 在响应生成过程中，向助手消息项中添加新内容部分时，服务端返回此事件。
 
-**event\_id**`string`
+`event_id`string
 
 本次事件唯一标识符。
 
-**type**`string`
+`type`string
 
 事件类型，固定为`response.content_part.added`。
 
-**response\_id**`string`
+`response_id`string
 
 响应的ID。
 
-**item\_id**`string`
+`item_id`string
 
 消息项ID。
 
-**output\_index**`integer`
+`output_index`integer
 
 响应输出项的索引，目前固定为 0。
 
-**content\_index**`integer`
+`content_index`integer
 
 响应输出项中内部部分的索引, 目前固定为 0。
 
-**part**`object`
+`part`object
 
 输出项信息。
 
 属性
 
-**type**`string`
+`type`string
 
 内容部分的类型。
 
-**text**`string`
+`text`string
 
 内容部分的文本。
 
@@ -2011,41 +2031,41 @@ MCP Server 返回 `isError=true` 时最终状态为 `failed`，也可能保留�
 
 在助手消息项中的内容部分完成流式传输时，服务端返回此事件。
 
-**event\_id**`string`
+`event_id`string
 
 本次事件唯一标识符。
 
-**type**`string`
+`type`string
 
 事件类型，固定为`response.content_part.done`。
 
-**response\_id**`string`
+`response_id`string
 
 响应的ID。
 
-**item\_id**`string`
+`item_id`string
 
 消息项ID。
 
-**output\_index**`integer`
+`output_index`integer
 
 响应输出项的索引，目前固定为 0。
 
-**content\_index**`integer`
+`content_index`integer
 
 该项内容数组中内容部分的索引，目前固定为 0。
 
-**part**`object`
+`part`object
 
 输出项信息。
 
 属性
 
-**type**`string`
+`type`string
 
 内容部分的类型。
 
-**text**`string`
+`text`string
 
 内容部分的文本。
 
@@ -2088,35 +2108,15 @@ mcp\_list\_tools.failed
 
 工具发现失败、超时或结果超过服务限制
 
-字段路径
-
-类型
-
-必填
-
-说明
-
-event\_id
-
-string
-
-是
+`event_id`string（必选）
 
 本条服务端事件的唯一 ID
 
-type
-
-string
-
-是
+`type`string（必选）
 
 上表中的固定事件类型
 
-item\_id
-
-string
-
-是
+`item_id`string（必选）
 
 本次工具发现对应的 mcp\_list\_tools item ID
 
@@ -2134,67 +2134,31 @@ string
 
 ### response.mcp\_call\_arguments.delta
 
-字段路径
-
-类型
-
-必填
-
-说明
-
-event\_id
-
-string
-
-是
+`event_id`string（必选）
 
 本条服务端事件的唯一 ID
 
-type
-
-string
-
-是
+`type`string（必选）
 
 固定为 response.mcp\_call\_arguments.delta
 
-response\_id
-
-string
-
-是
+`response_id`string（必选）
 
 父 Response ID
 
-item\_id
-
-string
-
-是
+`item_id`string（必选）
 
 当前 mcp\_call item ID
 
-output\_index
-
-integer
-
-是
+`output_index`integer（必选）
 
 当前 item 在父 Response output 数组中的零基索引
 
-delta
-
-string
-
-是
+`delta`string（必选）
 
 工具参数 JSON 字符串的本次增量片段，按事件顺序拼接
 
-obfuscation
-
-string
-
-否
+`obfuscation`string（可选）
 
 可选混淆字符串；客户端可以忽略，不影响 delta 拼接和参数解析
 
@@ -2214,59 +2178,27 @@ string
 
 ### response.mcp\_call\_arguments.done
 
-字段路径
-
-类型
-
-必填
-
-说明
-
-event\_id
-
-string
-
-是
+`event_id`string（必选）
 
 本条服务端事件的唯一 ID
 
-type
-
-string
-
-是
+`type`string（必选）
 
 固定为 response.mcp\_call\_arguments.done
 
-response\_id
-
-string
-
-是
+`response_id`string（必选）
 
 父 Response ID
 
-item\_id
-
-string
-
-是
+`item_id`string（必选）
 
 当前 mcp\_call item ID
 
-output\_index
-
-integer
-
-是
+`output_index`integer（必选）
 
 当前 item 在父 Response output 数组中的零基索引
 
-arguments
-
-string
-
-是
+`arguments`string（必选）
 
 完整工具参数，内容为 JSON 字符串；客户端应以本字段为准
 
@@ -2303,43 +2235,19 @@ response.mcp\_call.failed
 
 三个事件均使用以下字段：
 
-字段路径
-
-类型
-
-必填
-
-说明
-
-event\_id
-
-string
-
-是
+`event_id`string（必选）
 
 本条服务端事件的唯一 ID
 
-type
-
-string
-
-是
+`type`string（必选）
 
 上表中的固定事件类型
 
-item\_id
-
-string
-
-是
+`item_id`string（必选）
 
 当前 mcp\_call item ID
 
-output\_index
-
-integer
-
-是
+`output_index`integer（必选）
 
 当前 item 在父 Response output 数组中的零基索引
 
@@ -2445,6 +2353,8 @@ integer
 
 MCP 调用进入终态后，该对象出现在 `response.output_item.done.item` 中，并进入父 `response.done.response.output` 的最终快照；字段见 [response.output\_item.done](#f580421f45w3h) 和 [response.done](#f2333c777d9s4) 的对应分支。
 
+#### 成功
+
 成功示例：
 
 ```
@@ -2465,6 +2375,8 @@ MCP 调用进入终态后，该对象出现在 `response.output_item.done.item` 
   }
 }
 ```
+
+#### 失败
 
 失败示例：
 

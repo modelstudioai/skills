@@ -86,7 +86,7 @@ stream = client.chat.completions.create(
 
 > 只添加网页抓取工具而未添加联网搜索工具时，请求返回 `InvalidParameter` 错误：`The web_extractor tool must be executed with web_search tool.`
 
-> 支持以下模型：Qwen3.8 Max、Flash 与开源系列（不含 Omni）；Qwen3.7 Max、Plus、Flash 系列；Qwen3.6-Plus、Qwen3.6-Flash 系列；Qwen3.5-Plus、Qwen3.5-Flash 系列；deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731、`deepseek-v4.1-flash-1017`；glm-5.2；kimi-k3；kimi-k3.1-pro。
+> 支持以下模型：Qwen4-Max 系列（[仅 Token Plan](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview)）；Qwen3.8 Max、Flash 与开源系列（不含 Omni）；Qwen3.7 Max、Plus、Flash 系列；Qwen3.6-Plus、Qwen3.6-Flash 系列；Qwen3.5-Plus、Qwen3.5-Flash 系列；deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731、`deepseek-v4.1-flash-1017`；glm-5.2；kimi-k3；kimi-k3.1-pro。
 
 ```
 # 导入依赖与创建客户端...
@@ -117,7 +117,7 @@ message = client.messages.create(
 
 #### Responses API
 
-千问Max：Qwen3.8-Max系列、Qwen3.7-Max系列
+千问Max：qwen4-max-preview（[仅 Token Plan](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview)）、Qwen3.8-Max系列、Qwen3.7-Max系列
 
 千问Plus：Qwen3.7-Plus系列、Qwen3.6-Plus系列、Qwen3.5-Plus系列
 

@@ -85,6 +85,10 @@
 
 ## 支持的模型
 
+#### Qwen4
+
+**千问4-Max 系列**（预览版，混合思考模式，**默认开启思考模式**）：qwen4-max-preview（[仅 Token Plan](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview)）
+
 #### Qwen3.8
 
 **千问3.8 Max系列**（混合思考模式，**默认开启思考模式**）：qwen3.8-max、qwen3.8-max-0902

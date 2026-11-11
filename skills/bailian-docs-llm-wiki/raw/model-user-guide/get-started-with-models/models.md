@@ -8,11 +8,11 @@
 
 [
 
-**qwen3.8-max**
+**qwen4-max-preview**
 
-复杂推理与编程
+复杂推理与编程（Token Plan）
 
-](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.8-max)[
+](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview)[
 
 **qwen3.7-plus**
 
@@ -82,11 +82,11 @@
 
 [
 
-**qwen3.8-max**
+**qwen4-max-preview**
 
-视觉理解
+视觉理解（Token Plan）
 
-](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.8-max)[
+](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview)[
 
 **qwen3.7-plus**
 

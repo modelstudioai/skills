@@ -79,7 +79,7 @@ string
 
 是
 
-[业务空间唯一标识](raw/application-api-reference/application-call/obtain-the-app-id-and-workspace-id.md)
+[业务空间唯一标识](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)
 
 llm-xxx
 

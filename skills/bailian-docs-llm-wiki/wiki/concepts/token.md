@@ -1,39 +1,43 @@
-# Token
+# Token 计量与管理
 
-Token 是百炼平台中用于计量模型输入与输出内容的基本单位，代表模型处理的最小语义片段（如子词、标点或符号）。在计费、限流、性能监控与资源配额等核心环节，Token 是统一的度量基准。
+Token 计量与管理是百炼平台对大模型调用中输入（prompt）与输出（completion）文本进行标准化量化、实时统计、成本归因与资源调控的核心机制。它既是计费结算的原子单位，也是性能监控、限流控制和成本优化的关键依据。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **计费与用量统计**：所有模型调用按实际消耗的 `input_tokens`（提示词/上下文）和 `output_tokens`（生成结果）计费；费用明细、账单汇总及用量报表均以 Token 为单位呈现。  
-- **限流控制**：业务空间可配置 `token_per_second_limit`（每秒 Token 消耗上限），用于防止突发流量冲击；该限制作用于整个空间内所有模型调用的 Token 总和。  
-- **模型监控**：监控系统自动采集并展示每分钟输入/输出 Token 总量（`input_token_count`, `output_token_count`），支持趋势分析与异常检测；自定义模型需返回标准 `x-bailian-token-count` Header 才能被准确统计。  
-- **推理参数约束**：`max_tokens` 参数直接限制单次响应的最大输出 Token 数，取值范围为 `[1, 模型最大输出 Token]`（如 `qwen-max` 当前上限为 8192）；超出将触发 `InvalidParameter` 错误。  
-- **吞吐预留（DTU/PTU）**：专属部署容量以 TPM（Tokens Per Minute）为单位购买和分配，`input_tpm` 与 `output_tpm` 分别对应输入/输出 Token 的每分钟保障额度。
+- **模型调用（基础 API / RAG 问答）**：每次请求的 `input_tokens`（Prompt 长度）与 `output_tokens`（生成内容长度）由平台自动解析并累加，计入对应模型的用量统计与账单；RAG 场景中，向量化（embedding）、重排序（rerank）、最终问答（LLM generation）各阶段均独立计量 Token，例如启用 `enable_rerank=true` 会额外触发一次 cross-encoder 模型调用，产生独立 Token 消耗。
+
+- **Agent 运行（Managed Agents / Flow Agent）**：Agent 内部所有 LLM 节点（如规划、工具调用、总结）均按实际输入/输出 Token 精确计费；知识库检索中的 `top_k` 参数直接影响 rerank 阶段 Token 消耗——`top_k=50` 比 `top_k=10` 多消耗约 5 倍 rerank Token；多知识库挂载时，Token 消耗呈线性叠加。
+
+- **模型生产（微调与部署）**：微调任务的训练数据量（以 Token 计）、验证集评估 Token 数影响训练时长与费用；部署后，`lora`/`mu`/`ptu_v2` 等部署模式均以实际服务调用的 `TotalToken` 为计费或配额依据；PTU（预置吞吐）容量单位 `kTPM`（千 Token/分钟）直接绑定 Token 生成速率上限。
+
+- **监控与告警**：`模型消耗 TotalToken 数` 是核心可观测指标，支持分钟级聚合、趋势分析与阈值告警（如“单日 TotalToken 超 1000 万触发告警”），但不用于实时限流——限流基于 RPM/TPM 等策略，Token 用量仅作事后归因与成本审计。
+
+- **计费与账单**：Token 是模型类服务的最小计费单元，费用 = 实际消耗 Token 数 × 对应模型单价（如 `qwen-plus` ¥0.02/1K tokens）；所有 Token 消耗均遵循“免费额度优先抵扣 → 资源包次之 → 后付费兜底”规则，且在 Billing API 中以 `model_type=text-generation` 等维度聚合呈现。
 
 ## 关键参数和配置
 
-| 参数 | 说明 | 注意事项 |
-|------|------|----------|
-| `max_tokens` | 单次请求允许生成的最大输出 Token 数 | 必须 ≤ 模型能力上限；设为 `0` 或负数将报错；不设则使用模型默认值（通常为 2048） |
-| `token_per_second_limit` | 业务空间级每秒 Token 消耗硬上限 | 仅对非默认业务空间生效；设为 `0` 表示不限流；超限请求立即返回 `429 Too Many Requests` |
-| `input_tpm` / `output_tpm` | DTU/PTU 部署的输入/输出 Token 每分钟保障额度 | 创建时需为模型基准 TPM 的整数倍；实际使用中超出部分可能被限速或拒绝 |
-| `x-bailian-token-count`（响应 Header） | 自定义模型必须返回的 Token 统计 Header | 格式为 `{"input":123,"output":456}`；缺失则监控中 Token 字段恒为 `0` |
-
-> ⚠️ 提示：Token 计数由百炼服务端统一计算（基于模型 tokenizer），开发者无需自行分词；但若使用 `response_format={"type":"json_object"}`，需注意其对 `max_tokens` 的实际占用（JSON 结构本身也计入 Token）。
+| 参数 | 所属场景 | 说明 | 开发者操作建议 |
+|------|----------|------|----------------|
+| `input_tokens` / `output_tokens` | 所有模型 API 响应（含 RAG `/query`） | 响应体 `usage` 字段中返回，精确到整数；`total_tokens = input_tokens + output_tokens` | 必须解析响应中的 `usage` 字段进行本地用量校验；避免依赖字符串长度估算（编码差异导致偏差）。 |
+| `top_k` | RAG API、知识库配置 | 控制检索返回片段数，直接影响 rerank 模型 Token 消耗（近似正比关系） | 生产环境建议设为 `3–10`；高精度需求可设 `20`，避免盲目设 `50` 导致 rerank 成本激增。 |
+| `max_length`（微调） / `max_tokens`（推理） | 微调超参、API 请求体 | 限制模型最大生成长度，硬性约束 `output_tokens` 上限 | 微调时合理设置 `max_length` 防止 OOM；推理时显式传 `max_tokens` 避免意外长输出推高费用。 |
+| `kTPM`（PTU 容量） | 模型部署（`plan=ptu`） | 预置吞吐单位，1 kTPM = 1000 Tokens/分钟；决定服务最大并发生成能力 | 根据 QPS × 平均响应 Token 数预估所需 kTPM，预留 20% 余量应对峰值。 |
+| `free quota`（免费额度） | 全局账户级 | 按模型类型分配（如 `qwen-turbo` 100 万 tokens/月），自动抵扣，不可结转 | 在控制台「费用中心 > 免费额度」查看实时余额；额度耗尽前及时采购资源包或开通后付费。 |
 
 ## 面向开发者，简洁实用
 
-- ✅ **快速验证 Token 消耗**：发起一次最简请求后，检查响应中的 `usage` 字段（[OpenAI 兼容接口](openai-compatible-interface.md)）或 `output.usage`（DashScope 原生接口），获取 `prompt_tokens` 和 `completion_tokens`。  
-- ✅ **调试限流问题**：若遇到 `429` 错误，优先检查 `token_per_second_limit` 配置，并用监控页查看实时 Token 消耗曲线。  
-- ✅ **优化成本**：长上下文场景下，`input_tokens` 占比高，可考虑摘要预处理或启用前缀缓存（DTU/PTU 支持）降低重复计算开销。  
-- ❌ **避免误区**：Token ≠ 字符数 ≠ 词数；不同模型 tokenizer 差异大（如 `qwen3` 与 `glm-5` 的分词结果不一致），切勿跨模型估算。  
-- 📌 **工具推荐**：使用百炼控制台「模型体验」页的 Token 计数器，或调用 `/v1/tokenize` 接口（需开通权限）进行离线预估。
+- ✅ **必做**：所有模型调用后，务必检查响应 `usage` 字段，记录 `total_tokens` 并关联业务请求 ID，用于成本归因与异常排查。  
+- ✅ **必控**：在 RAG 和 Agent 中，将 `top_k`、`max_tokens`、`max_length` 等参数设为显式、合理值，禁用无限制生成。  
+- ✅ **必查**：通过「模型监控 > 用量统计」页面按天/小时下钻查看 Token 消耗分布，识别高消耗模型或异常请求（如 prompt 过长、循环生成）。  
+- ⚠️ **注意**：Token 计量基于模型 tokenizer 实际分词结果，非字符数或字节数；中文、emoji、特殊符号的 Token 占用需以平台实际返回 `usage` 为准。  
+- 💡 **优化提示**：压缩 prompt（移除冗余说明、用占位符替代长上下文）、启用流式响应（早发现截断）、复用 ParseX 解析结果（避免重复解析）均可显著降低 Token 消耗。
 
 ## 关联主题页
 
-- [preparations](../api/preparations.md)
-- [model high speed inference](../guides/model-high-speed-inference.md)
-- [application permission management](../guides/application-permission-management.md)
+- [agent billing](../guides/agent-billing.md)
+- [rag api](../api/rag-api.md)
 - [model monitoring](../guides/model-monitoring.md)
+- [billing api](../api/billing-api.md)
+- [model production](../api/model-production.md)
 
 

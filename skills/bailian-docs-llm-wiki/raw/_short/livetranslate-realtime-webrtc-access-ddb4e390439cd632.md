@@ -10,7 +10,7 @@ WebRTC 使用媒体轨道传输音频，使用 DataChannel 传输模型事件和
 
 本文面向 Qwen-LiveTranslate-Realtime。现有指南列有 `qwen3.8-livetranslate-flash-realtime` 和 `qwen3.5-livetranslate-flash-realtime`，两者的配置和事件字段不同，详见[客户端事件](raw/model-api-reference/realtime-api-directory/livetranslate-realtime-api-directory/live-translator-client-events.md)。本文示例使用 `qwen3.8-livetranslate-flash-realtime`。
 
--   使用所选地域和业务空间对应的 [API Key](raw/model-api-reference/preparations/get-api-key.md) 与 [Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+-   使用所选地域和业务空间对应的 [API Key](raw/model-api-reference/preparations/get-api-key.md) 与 [API Host](https://bailian.console.aliyun.com/cn-beijing/settings/workspace)（不含协议和路径）。
 -   北京域名：`{WorkspaceId}.cn-beijing.maas.aliyuncs.com`；新加坡域名：`{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
 -   长期 API Key 由服务端保管，不放入浏览器或移动端应用。临时 API Key 的生成方式和权限说明参见[生成临时 API Key](raw/model-api-reference/more-about-models/generate-temporary-api-key.md)。
 
@@ -21,11 +21,16 @@ WebRTC 使用媒体轨道传输音频，使用 DataChannel 传输模型事件和
 浏览器向业务 AppServer 提交 Offer SDP。AppServer 使用 API Key 转发以下请求，并将 Answer SDP 原样返回浏览器；长期 API Key 不进入前端。
 
 -   方法：`POST`
--   北京地址：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/webrtc/realtime?model=qwen3.8-livetranslate-flash-realtime`
 -   新加坡地址：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/webrtc/realtime?model=qwen3.8-livetranslate-flash-realtime`
 -   请求头：`Authorization: Bearer <API_KEY>`、`Content-Type: application/sdp`
 -   请求体：Offer SDP 字符串。
 -   成功响应：HTTP 200，正文为 Answer SDP；失败返回 4xx。
+
+以下地址默认为北京地域，请将域名替换为业务空间对应的 API Host：
+
+```
+https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/webrtc/realtime?model=qwen3.8-livetranslate-flash-realtime
+```
 
 WebRTC 在 SDP 交换时鉴权，不需要先申请 AOQ Token。下文示例中的 `/api/realtime/sdp` 是业务 AppServer 的自建接口，需要实现上述转发，不是百炼提供的 URL。
 

@@ -21,6 +21,12 @@
 
 连接时通过 `model` 指定[支持的模型](#8f2355abeb4ei)。以下连接示例使用 `qwen3.8-livetranslate-flash-realtime`。
 
+获取并配置 API Host
+
+从控制台[获取API Host](https://bailian.console.aliyun.com/cn-beijing/settings/workspace)并填入下方，本文其他可编辑地址会同步更新。
+
+{WorkspaceId}.cn-beijing.maas.aliyuncs.com
+
 通过 WebSocket 接入时，需要以下配置项：
 
 **说明**支持通过 AOQ、WebRTC 和 WebSocket 协议接入。如果是客户端对接，且更看重稳定的延迟、弱网下的交互能力、实时双工的降噪与回声消除，可优先考虑 AOQ，协议对比与选型请参见[API 参考](raw/model-api-reference/realtime-api-directory/livetranslate-realtime-api-directory/live-translator-api.md)。
@@ -58,7 +64,7 @@ import websocket
 import os
 
 API_KEY=os.getenv("DASHSCOPE_API_KEY")
-# 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+# 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
 API_URL = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime?model=qwen3.8-livetranslate-flash-realtime"
 
 headers = [
@@ -254,7 +260,7 @@ qwen3.5-livetranslate-flash-realtime-2026-05-19
 2.  设置以下环境变量，API Key 和业务空间需属于连接地址所用的地域：
     
     -   `DASHSCOPE_API_KEY`： 对应地域和业务空间的 API Key，获取方式见[获取 API Key](raw/model-api-reference/preparations/get-api-key.md)。
-    -   `DASHSCOPE_WORKSPACE_ID`： 业务空间 ID，详见[业务空间与地域](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+    -   `DASHSCOPE_WORKSPACE_ID`：仅在未填写 API Host、使用默认占位地址时需要，填写实际[业务空间 ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 3.  将下面的代码保存为 `livetranslate_client.py`，运行 `python livetranslate_client.py`，然后对着麦克风说话。
     
 

@@ -212,11 +212,11 @@ fps有两个功能：
 取值范围
 
 -   **输入图像：**
-    -   `qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、Qwen3.7、Qwen3.6、Qwen3.5、Qwen3-VL：默认值和最小值均为：`65536`
+    -   `qwen4-max-preview`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、Qwen3.7、Qwen3.6、Qwen3.5、Qwen3-VL：默认值和最小值均为：`65536`
     -   `qwen3.8-omni-flash`、Qwen3.5-Omni ：默认值和最小值均为： `24576`
     -   `Qwen2.5-VL`开源系列及`QVQ`系列模型：默认值和最小值均为`3136`
 -   **输入视频文件或图像列表：**
-    -   `qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、`qwen3.8-omni-flash`、Qwen3.7、Qwen3.6、Qwen3.5、`Qwen3.5-Omni`、Qwen3-VL（包括商业版和开源版）：默认值为`65536`，最小值为`4096`
+    -   `qwen4-max-preview`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、`qwen3.8-omni-flash`、Qwen3.7、Qwen3.6、Qwen3.5、`Qwen3.5-Omni`、Qwen3-VL（包括商业版和开源版）：默认值为`65536`，最小值为`4096`
     -   `Qwen2.5-VL`开源系列及`QVQ`系列模型：默认值为`50176`，最小值为`3136`
 
 示例值
@@ -237,15 +237,15 @@ fps有两个功能：
     
     -   当`vl_high_resolution_images`为`False`时：
         
-        -   `qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、Qwen3.7、 Qwen3.6 、 Qwen3.5 、 Qwen3-VL ：默认值为 `2621440` ，最大值为： `16777216`
+        -   `qwen4-max-preview`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、Qwen3.7、 Qwen3.6 、 Qwen3.5 、 Qwen3-VL ：默认值为 `2621440` ，最大值为： `16777216`
         -   `qwen3.8-omni-flash`、Qwen3.5-Omni ：默认值为 `1310720` ，最大值为： `16777216`
         -   `Qwen2.5-VL` 开源系列及 `QVQ` 系列模型：默认值为 `1003520` ，最大值为 `12845056`
     -   当`vl_high_resolution_images`为`True`时：
         
-        -   `qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、`qwen3.8-omni-flash`、Qwen3.7、 Qwen3.6 、 Qwen3.5-Omni 、 Qwen3.5 、 Qwen3-VL ： `max_pixels` 无效，输入图像的最大像素固定为 `16777216`
+        -   `qwen4-max-preview`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、`qwen3.8-omni-flash`、Qwen3.7、 Qwen3.6 、 Qwen3.5-Omni 、 Qwen3.5 、 Qwen3-VL ： `max_pixels` 无效，输入图像的最大像素固定为 `16777216`
         -   `Qwen2.5-VL` 开源系列及 `QVQ` 系列模型： `max_pixels` 无效，输入图像的最大像素固定为 `12845056`
 -   **输入视频文件或图像列表：**
-    -   `qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、`qwen3.8-omni-flash`、Qwen3.7、Qwen3.6、Qwen3.5、Qwen3.5-Omni、Qwen3-VL闭源系列：默认值为`655360`，最大值为`2048000`
+    -   `qwen4-max-preview`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、`qwen3.8-omni-flash`、Qwen3.7、Qwen3.6、Qwen3.5、Qwen3.5-Omni、Qwen3-VL闭源系列：默认值为`655360`，最大值为`2048000`
     -   其他`Qwen3-VL`开源模型：默认值`655360`，最大值为`786432`
     -   `Qwen2.5-VL`开源系列及`QVQ`系列模型：默认值为`501760`，最大值为`602112`
 
@@ -263,7 +263,7 @@ fps有两个功能：
 
 取值范围
 
--   `qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、Qwen3.7、Qwen3.6、Qwen3.5系列 ：默认值和最大值均为 `819200000` ，该值对应 `800000` 个图像 Token（每 32×32 像素对应 1 个图像 Token）。
+-   `qwen4-max-preview`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、Qwen3.7、Qwen3.6、Qwen3.5系列 ：默认值和最大值均为 `819200000` ，该值对应 `800000` 个图像 Token（每 32×32 像素对应 1 个图像 Token）。
 -   Qwen3-VL闭源系列 ：默认值和最大值均为 `134217728` ，该值对应 `131072` 个图像 Token（每 32×32 像素对应 1 个图像 Token）。
 -   `qwen3.8-omni-flash`、`Qwen3.5-Omni` ：默认值和最小值均为 `184549376` ，该值对应 `180224` 个图像 Token（每 32×32 像素对应 1 个图像 Token）。
 -   其他`Qwen3-VL`开源模型：默认值和最小值均为`67108864`，该值对应 `65536` 个图像 Token（每 32×32 像素对应 1 个图像 Token）。
@@ -432,9 +432,9 @@ temperature与top\_p均可以控制生成文本的多样性，建议只设置其
 
 temperature默认值
 
--   qwen3.8-max/qwen3.8-flash（思考模式）：视觉理解0.6，文本输入1.0，0.6以下的temperature值会默认改为0.6
+-   qwen4-max-preview/qwen3.8-max/qwen3.8-flash（思考模式）：视觉理解0.6，文本输入1.0，0.6以下的temperature值会默认改为0.6
 -   Qwen3.8-Omni-Flash：思考模式为 0.6，非思考模式为 0.7；
--   Qwen3.8（非思考模式）、Qwen3.7（非思考模式）、Qwen3.6（非思考模式）、Qwen3.5-Omni、Qwen3.5（非思考模式）、Qwen3（非思考模式）、Qwen3-Instruct系列、Qwen3-Coder系列、qwen-max系列、qwen-plus系列（非思考模式）、qwen-flash系列（非思考模式）、qwen开源系列、qwen-coder系列、qwen-doc-turbo、Qwen3-VL（非思考）：0.7；
+-   Qwen4（非思考模式）、Qwen3.8（非思考模式）、Qwen3.7（非思考模式）、Qwen3.6（非思考模式）、Qwen3.5-Omni、Qwen3.5（非思考模式）、Qwen3（非思考模式）、Qwen3-Instruct系列、Qwen3-Coder系列、qwen-max系列、qwen-plus系列（非思考模式）、qwen-flash系列（非思考模式）、qwen开源系列、qwen-coder系列、qwen-doc-turbo、Qwen3-VL（非思考）：0.7；
 -   QVQ系列 : 0.5；
 -   qwen-audio-turbo系列：0.00001；
 -   qwen-vl系列：0.01；
@@ -471,7 +471,7 @@ temperature与top\_p均可以控制生成文本的多样性，建议只设置其
 
 top\_p默认值
 
-非思考模式下的以下型号（`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`）、Qwen3.7（非思考模式）、Qwen3.6（非思考模式）、Qwen3.5-Omni、Qwen3.5（非思考模式）、Qwen3（非思考模式）、Qwen3-Instruct系列、Qwen3-Coder系列、qwen-max系列、qwen-plus系列（非思考模式）、qwen-flash系列（非思考模式）、Qwen 2.5开源系列、qwen-coder系列、qwen-long、qwen-doc-turbo、Qwen3-VL（非思考）：0.8；
+非思考模式下的以下型号（`qwen4-max-preview`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`）、Qwen3.7（非思考模式）、Qwen3.6（非思考模式）、Qwen3.5-Omni、Qwen3.5（非思考模式）、Qwen3（非思考模式）、Qwen3-Instruct系列、Qwen3-Coder系列、qwen-max系列、qwen-plus系列（非思考模式）、qwen-flash系列（非思考模式）、Qwen 2.5开源系列、qwen-coder系列、qwen-long、qwen-doc-turbo、Qwen3-VL（非思考）：0.8；
 
 Qwen3.8-Omni-Flash：思考模式为 0.95，非思考模式为 0.8；
 
@@ -479,7 +479,7 @@ QVQ系列 : 0.5；
 
 qwen-math系列、Qwen3-Omni-Flash系列：1.0；
 
-思考模式下的以下型号（`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`）、Qwen3.7（思考模式）、Qwen3.6（思考模式）、Qwen3.5（思考模式）、Qwen3（思考模式）、Qwen3-VL（思考模式）、Qwen3-Thinking、QwQ 系列、Qwen3-Omni-Captioner、qwen-plus-character：0.95
+思考模式下的以下型号（`qwen4-max-preview`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`）、Qwen3.7（思考模式）、Qwen3.6（思考模式）、Qwen3.5（思考模式）、Qwen3（思考模式）、Qwen3-VL（思考模式）、Qwen3-Thinking、QwQ 系列、Qwen3-Omni-Captioner、qwen-plus-character：0.95
 
 DeepSeek系列（阿里云直供）：deepseek-v4-pro、deepseek-r1-distill-qwen 蒸馏版: 0.95；
 
@@ -533,7 +533,7 @@ DeepSeek/Kimi/MiniMax系列均不支持top\_k参数。
 
 repetition\_penalty默认值
 
--   `qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、qwen-max、qwen-math系列、qwen-audio-turbo系列、QVQ系列、QwQ系列、Qwen3-VL： 1.0；
+-   `qwen4-max-preview`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、qwen-max、qwen-math系列、qwen-audio-turbo系列、QVQ系列、QwQ系列、Qwen3-VL： 1.0；
 -   qwen-coder系列、qwen2-1.5b-instruct、qwen2-0.5b-instruct：1.1；
 -   其余模型为1.05。
 -   GLM系列（阿里云直供）：1.0；
@@ -553,7 +553,7 @@ repetition\_penalty默认值
 
 presence\_penalty默认值
 
-非思考模式下的以下型号（`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`）、Qwen3.7（非思考模式）、Qwen3.6（非思考模式）、Qwen3.5-Omni、Qwen3.5（非思考模式）、Qwen3（非思考模式）、Qwen3-Instruct系列/1.7b/4b（思考模式）、QVQ系列、qwen-max、qwen2.5-vl系列、Qwen3-VL（非思考）：1.5；
+非思考模式下的以下型号（`qwen4-max-preview`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`）、Qwen3.7（非思考模式）、Qwen3.6（非思考模式）、Qwen3.5-Omni、Qwen3.5（非思考模式）、Qwen3（非思考模式）、Qwen3-Instruct系列/1.7b/4b（思考模式）、QVQ系列、qwen-max、qwen2.5-vl系列、Qwen3-VL（非思考）：1.5；
 
 Qwen3.8-Omni-Flash：思考模式为 0.0，非思考模式为 1.5；
 
@@ -635,7 +635,7 @@ Schema 的名称。
 
 该参数的含义随模型不同，具体如下：
 
--   deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731：模型回答与思维链内容之和的最大 Token 数。模型输出超过此值时生成将提前停止，返回的 `finish_reason` 为 `length`。
+-   qwen4-max-preview、deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731：模型回答与思维链内容之和的最大 Token 数，`max_tokens` 与 `max_completion_tokens` 等价。模型输出超过此值时生成将提前停止，返回的 `finish_reason` 为 `length`。
 -   glm-5.3：`max_tokens` 为模型回答与思维链内容之和的最大 Token 数，模型输出超过此值时生成将提前停止，返回的 `finish_reason` 为 `length`。glm-5.3 会忽略 `thinking_budget` 参数。
 -   glm-5.2：不传入 `thinking_budget` 参数时，`max_tokens` 为模型回答与思维链内容之和的最大 Token 数，模型输出超过此值时生成将提前停止，返回的 `finish_reason` 为 `length`；传入 `thinking_budget` 参数时，`max_tokens` 仅为模型回答的最大 Token 数，思维链部分的 Token 数由 `thinking_budget` 单独控制。
 -   其他模型：模型回答的最大 Token 数（不包含思维链）。若生成内容超过此值，生成将提前停止，返回的 `finish_reason` 为 `length`。
@@ -722,7 +722,7 @@ GLM 模型的默认值与最大值见 `max_tokens` 参数中的表格，其他�
 
 kimi-k3.1-pro（阿里云百炼部署）默认值为 `true`，可设为 `false` 关闭思考，但强烈建议保持开启，关闭会显著影响输出效果。
 
-使用混合思考（回复前既可思考也可不思考）模型时，是否开启思考模式。适用于 Qwen3.8、Qwen3.7、Qwen3.6、Qwen3.5、Qwen3、Qwen3.8-Omni-Flash、Qwen3-Omni-Flash、Qwen3-VL模型，以及 DeepSeek-V4.1-Flash、DeepSeek-V4-Pro/V4-Flash 系列（阿里云直供）、DeepSeek-V3.2/V3.2-exp/V3.1 系列（阿里云直供、硅基流动直供、快手万擎直供）、Kimi-K2.7-code（仅思考模型）、Kimi-K2.6/K2.5 系列（阿里云直供、月之暗面直供）、GLM 系列。DeepSeek-V4 系列默认开启思考，可通过 `reasoning_effort` 参数调整推理力度。
+使用混合思考（回复前既可思考也可不思考）模型时，是否开启思考模式。适用于 Qwen4、Qwen3.8、Qwen3.7、Qwen3.6、Qwen3.5、Qwen3、Qwen3.8-Omni-Flash、Qwen3-Omni-Flash、Qwen3-VL模型，以及 DeepSeek-V4.1-Flash、DeepSeek-V4-Pro/V4-Flash 系列（阿里云直供）、DeepSeek-V3.2/V3.2-exp/V3.1 系列（阿里云直供、硅基流动直供、快手万擎直供）、Kimi-K2.7-code（仅思考模型）、Kimi-K2.6/K2.5 系列（阿里云直供、月之暗面直供）、GLM 系列。DeepSeek-V4 系列默认开启思考，可通过 `reasoning_effort` 参数调整推理力度。
 
 可选值：
 
@@ -771,18 +771,18 @@ kimi/kimi-k3.1-pro 和 kimi/kimi-k3.1-pro-highspeed 支持此参数，默认关�
 
 需要参考上一轮思考时，将其放在历史 assistant 消息的 `reasoning_content` 字段中随 `messages` 回传。用法见[传递思考过程](https://help.aliyun.com/zh/model-studio/deep-thinking#jln7docdq5et5)。
 
-目前支持qwen3.8-max、qwen3.8-max-0902、qwen3.8-flash（默认开启）、qwen3.8-omni-flash（默认开启）、qwen3.7-max、qwen3.7-max-2026-05-20以及后续快照、qwen3.7-plus、qwen3.7-plus-2026-05-26、qwen3.6-plus、qwen3.6-plus-2026-04-02、qwen3.7-flash、qwen3.7-flash-2026-07-15、qwen3.6-flash、qwen3.6-flash-2026-04-16、kimi-k2.6（阿里云百炼部署）、kimi-k2.7-code（阿里云百炼部署，默认开启）、kimi/kimi-k2.7-code-highspeed（月之暗面直供，默认开启）、kimi/kimi-k2.7-code（月之暗面直供，默认开启）。
+目前支持qwen4-max-preview（默认开启）、qwen3.8-max、qwen3.8-max-0902、qwen3.8-flash（默认开启）、qwen3.8-omni-flash（默认开启）、qwen3.7-max、qwen3.7-max-2026-05-20以及后续快照、qwen3.7-plus、qwen3.7-plus-2026-05-26、qwen3.6-plus、qwen3.6-plus-2026-04-02、qwen3.7-flash、qwen3.7-flash-2026-07-15、qwen3.6-flash、qwen3.6-flash-2026-04-16、kimi-k2.6（阿里云百炼部署）、kimi-k2.7-code（阿里云百炼部署，默认开启）、kimi/kimi-k2.7-code-highspeed（月之暗面直供，默认开启）、kimi/kimi-k2.7-code（月之暗面直供，默认开启）。
 
-> **重要：**使用 qwen3.8-max/qwen3.8-flash 时，preserve\_thinking 默认为 true，必须将历史对话中所有的 reasoning\_content 完整回传。**不支持将 reasoning\_content 拼接到 content 字段中回传。**
+> **重要：**使用 qwen4-max-preview、qwen3.8-max/qwen3.8-flash 时，preserve\_thinking 默认为 true，必须将历史对话中所有的 reasoning\_content 完整回传。**不支持将 reasoning\_content 拼接到 content 字段中回传。**
 
--   对于上述支持此参数的 `qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、Qwen3.7、Qwen3.6 和 Kimi 型号，若历史消息中不包含 `reasoning_content`，开启此参数不会报错。
+-   对于上述支持此参数的 `qwen4-max-preview`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、Qwen3.7、Qwen3.6 和 Kimi 型号，若历史消息中不包含 `reasoning_content`，开启此参数不会报错。
 -   开启后，历史对话中的 reasoning\_content 会计入输入 Token 数量并计费。
 
 > 该参数非OpenAI标准参数。通过 Python SDK调用时，请放入 **extra\_body** 对象中。配置方式为：`extra_body={"preserve_thinking": True}`。
 
 **thinking\_budget** `integer` （可选）
 
-思考过程的最大 Token 数。适用于 `qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`，以及Qwen3.7、Qwen3.6、Qwen3.5、Qwen3-VL、Qwen3、GLM（阿里云直供）、Kimi（阿里云直供）系列模型，其中 kimi-k3.1-pro 和 kimi-k3 不支持该参数。相关文档：[限制思考长度](https://help.aliyun.com/zh/model-studio/deep-thinking#e7c0002fe4meu)。
+思考过程的最大 Token 数。适用于 `qwen4-max-preview`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`，以及Qwen3.7、Qwen3.6、Qwen3.5、Qwen3-VL、Qwen3、GLM（阿里云直供）、Kimi（阿里云直供）系列模型，其中 kimi-k3.1-pro 和 kimi-k3 不支持该参数。相关文档：[限制思考长度](https://help.aliyun.com/zh/model-studio/deep-thinking#e7c0002fe4meu)。
 
 上述型号的默认值为模型最大思维链长度，请参见：模型列表
 
@@ -854,7 +854,7 @@ glm-5.3 系列模型始终开启思考，`enable_thinking` 仅支持 `true`，�
 
 `minimal` 映射为 `low`，`medium` 和 `xhigh` 映射为 `high`，`ultra` 映射为 `max`。
 
-**`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`：默认值为**`xhigh`
+**`qwen4-max-preview`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`：默认值为**`xhigh`
 
 可选值：
 
@@ -866,7 +866,7 @@ glm-5.3 系列模型始终开启思考，`enable_thinking` 仅支持 `true`，�
 
 > 设置上述可选值及映射值以外的值将会报错。
 
-**重要：**`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`不支持 reasoning\_effort 与 thinking\_budget 同时设置，同时设置会报错。但两者支持互转：
+**重要：**`qwen4-max-preview`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`不支持 reasoning\_effort 与 thinking\_budget 同时设置，同时设置会报错。但两者支持互转：
 
 -   未设置 thinking\_budget 时，reasoning\_effort 档位自动映射 thinking\_budget：`low` 对应 4096，`medium` 对应 16384，`xhigh` 对应 262144。
 -   未设置 reasoning\_effort 时，thinking\_budget 自动映射回 reasoning\_effort：0~4096 对应 `low`，4097~16384 对应 `medium`，16385~262144 对应 `xhigh`。
@@ -884,7 +884,7 @@ glm-5.3 系列模型始终开启思考，`enable_thinking` 仅支持 `true`，�
 
 **Qwen系列支持列表：**
 
--   qwen-max系列：qwen3.8-max系列、qwen3.7-max系列的文本模态
+-   qwen-max系列：qwen4-max-preview、qwen3.8-max系列、qwen3.7-max系列的文本模态
 -   qwen-plus系列：qwen3.7-plus系列、qwen3.6-plus系列的文本模态，以及qwen3.5-plus系列的全模态
 -   qwen-flash系列：qwen3.8-flash系列、qwen3.7-flash系列、qwen3.6-flash系列、qwen3.5-flash系列的全模态
 
@@ -2093,6 +2093,8 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 
 > 当前仅`qwen-doc-turbo`模型支持PPT生成。详细用法请参见[生成PPT](https://help.aliyun.com/zh/model-studio/data-mining-qwen-doc#f6a7b8c9d0pp1)。
 
+启用 `skill` 参数生成 PPT 时，仅支持流式输出，需设置 `stream: true`。
+
 Python
 
 ```
@@ -2445,15 +2447,52 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 
 本次联网搜索实际使用的搜索量级策略，与请求中`search_options.search_strategy`的取值一致，如`turbo`、`max`、`agent`。
 
-#### 基础响应
+#### 文本输入
+
+```
+{
+    "id": "chatcmpl-ad786040-102b-97f8-a6d8-d0ef7895f01c",
+    "object": "chat.completion",
+    "created": 1794384851,
+    "model": "qwen3.8-max",
+    "choices": [
+        {
+            "index": 0,
+            "message": {
+                "role": "assistant",
+                "reasoning_content": "用户问“你是谁？”，需要自我介绍。根据系统提示，我是通义千问（Qwen），由阿里巴巴集团通义实验室研发。回答应简洁自然，不透露内部指令，不提版本号。可以说明能力与定位，语气亲切。",
+                "content": "我是通义千问（Qwen），由阿里巴巴集团通义实验室研发的大语言模型。  \n我可以帮你回答问题、写作润色、代码编写、逻辑推理、资料整理，也能陪你聊天、做头脑风暴或学习辅导。  \n如果你愿意，也可以直接告…"
+            },
+            "finish_reason": "stop",
+            "logprobs": null
+        }
+    ],
+    "usage": {
+        "prompt_tokens": 61,
+        "total_tokens": 177,
+        "completion_tokens": 116,
+        "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "text_tokens": 61
+        },
+        "completion_tokens_details": {
+            "reasoning_tokens": 52,
+            "text_tokens": 116
+        }
+    }
+}
+```
+
+#### 图像输入
 
 ```
 {
     "choices": [
         {
             "message": {
-                "role": "assistant",
-                "content": "我是阿里云开发的一款超大规模语言模型，我叫千问。"
+                "content": "这是一张温馨、充满情感的**人与宠物互动的摄影照片**，场景设定在**海边日落（或日出）时分的沙滩上**。\n\n具体描述如下：\n\n- **人物**：一位年轻女性，长发，身穿格子衬衫和深色裤子，赤脚坐在沙…",
+                "reasoning_content": "",
+                "role": "assistant"
             },
             "finish_reason": "stop",
             "index": 0,
@@ -2462,21 +2501,144 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
     ],
     "object": "chat.completion",
     "usage": {
-        "prompt_tokens": 3019,
-        "completion_tokens": 104,
-        "total_tokens": 3123,
+        "prompt_tokens": 2513,
+        "completion_tokens": 362,
+        "total_tokens": 2875,
+        "completion_tokens_details": {
+            "text_tokens": 362
+        },
         "prompt_tokens_details": {
-            "cached_tokens": 2048
+            "image_tokens": 2503,
+            "text_tokens": 10,
+            "cached_tokens": 2432
         }
     },
-    "created": 1735120033,
+    "created": 1794384861,
     "system_fingerprint": null,
-    "model": "qwen3.8-max",
-    "id": "chatcmpl-6ada9ed2-7f33-9de2-8bb0-78bd4035025a"
+    "model": "qwen3-vl-plus",
+    "id": "chatcmpl-0c630178-32a5-91a4-9e4a-740f73b1ec5e"
 }
 ```
 
-#### 联网搜索响应
+#### 视频输入
+
+```
+{
+    "choices": [
+        {
+            "message": {
+                "content": "这个视频片段展现了一场夜间足球比赛中的关键射门与扑救瞬间，视角独特——**从球门网内向外拍摄**（即“球门视角”），营造出强烈的临场感和紧张氛围。以下是具体过程的分步描述：\n\n---\n\n\ud83d\udd39 **0.0…",
+                "reasoning_content": "",
+                "role": "assistant"
+            },
+            "finish_reason": "stop",
+            "index": 0,
+            "logprobs": null
+        }
+    ],
+    "object": "chat.completion",
+    "usage": {
+        "prompt_tokens": 1208,
+        "completion_tokens": 756,
+        "total_tokens": 1964,
+        "completion_tokens_details": {
+            "text_tokens": 756
+        },
+        "prompt_tokens_details": {
+            "text_tokens": 18,
+            "video_tokens": 1190,
+            "cached_tokens": 0
+        }
+    },
+    "created": 1794384874,
+    "system_fingerprint": null,
+    "model": "qwen3-vl-plus",
+    "id": "chatcmpl-4aaa644b-b37d-90df-984c-c138b47bf972"
+}
+```
+
+#### 工具调用
+
+```
+{
+    "id": "chatcmpl-5cc0b5ec-42bf-99e8-ae83-1fd676eec9bf",
+    "object": "chat.completion",
+    "created": 1794384861,
+    "model": "qwen3.8-max",
+    "choices": [
+        {
+            "index": 0,
+            "message": {
+                "role": "assistant",
+                "reasoning_content": "The user asks about Hangzhou weather. I should call the weather tool.",
+                "content": "",
+                "tool_calls": [
+                    {
+                        "id": "call_7355c2deaffc4131ba015924",
+                        "type": "function",
+                        "function": {
+                            "name": "get_current_weather",
+                            "arguments": "{\"location\": \"杭州市\"}"
+                        },
+                        "index": 0
+                    }
+                ]
+            },
+            "finish_reason": "tool_calls",
+            "logprobs": null
+        }
+    ],
+    "usage": {
+        "prompt_tokens": 375,
+        "total_tokens": 419,
+        "completion_tokens": 44,
+        "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "text_tokens": 375
+        },
+        "completion_tokens_details": {
+            "reasoning_tokens": 15,
+            "text_tokens": 44
+        }
+    }
+}
+```
+
+#### 联网搜索
+
+```
+{
+    "id": "chatcmpl-0df41ee2-49c9-9ee8-a614-fdec17347b6a",
+    "object": "chat.completion",
+    "created": 1794384861,
+    "model": "qwen3.8-max",
+    "choices": [
+        {
+            "index": 0,
+            "message": {
+                "role": "assistant",
+                "reasoning_content": "用户问：“中国队在巴黎奥运会获得了多少枚金牌”。需要直接回答。知识库多处明确：2024巴黎奥运会中国体育代表团获得40金27银24铜，金牌数境外最佳。需要简洁中文回答。",
+                "content": "中国队在2024年巴黎奥运会上共获得了 **40枚金牌**。"
+            },
+            "finish_reason": "stop",
+            "logprobs": null
+        }
+    ],
+    "usage": {
+        "prompt_tokens": 2883,
+        "total_tokens": 2954,
+        "completion_tokens": 71,
+        "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "text_tokens": 2883
+        },
+        "completion_tokens_details": {
+            "reasoning_tokens": 50,
+            "text_tokens": 71
+        }
+    }
+}
+```
 
 设置`include_tool_usage`为`true`并实际触发联网搜索时，`usage`中会增加`x_tools`字段：
 
@@ -2514,6 +2676,10 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
     }
 }
 ```
+
+#### 异步调用
+
+异步调用使用 OpenAI SDK，响应对象与文本输入相同；它不对应单独的 curl 异步接口。
 
 ## chat响应chunk对象（流式输出）
 
@@ -2780,23 +2946,67 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 
 本次联网搜索实际使用的搜索量级策略，与请求中`search_options.search_strategy`的取值一致，如`turbo`、`max`、`agent`。
 
+#### 流式输出
+
+curl 的流式响应采用 SSE 格式，每个事件以 `data:` 开头，事件间以空行分隔，最后以 `data: [DONE]` 结束。以下省略重复的中间分片，保留角色、思考、正文、结束及用量事件；SDK 会解析 SSE，不会输出 `data:` 和 `[DONE]`。
+
+curl
+
+```
+data: {"model":"qwen3.8-max","id":"chatcmpl-730609ad-25b4-9809-8bd2-29b3fb280cb9","created":1794384852,"object":"chat.completion.chunk","usage":null,"choices":[{"logprobs":null,"index":0,"delta":{"reasoning_content":"","content":"","role":"assistant"},"finish_reason":null}]}
+
+data: {"id":"chatcmpl-730609ad-25b4-9809-8bd2-29b3fb280cb9","object":"chat.completion.chunk","created":1794384852,"model":"qwen3.8-max","choices":[{"index":0,"delta":{"content":"","reasoning_content":"用户"},"logprobs":null,"finish_reason":null}],"usage":null}
+
+data: {"id":"chatcmpl-730609ad-25b4-9809-8bd2-29b3fb280cb9","object":"chat.completion.chunk","created":1794384858,"model":"qwen3.8-max","choices":[{"index":0,"delta":{"content":"我是通义","reasoning_content":""},"logprobs":null,"finish_reason":null}],"usage":null}
+
+data: {"id":"chatcmpl-730609ad-25b4-9809-8bd2-29b3fb280cb9","object":"chat.completion.chunk","created":1794384861,"model":"qwen3.8-max","choices":[{"index":0,"delta":{"content":"","reasoning_content":""},"finish_reason":"stop","logprobs":null}],"usage":null}
+
+data: {"id":"chatcmpl-730609ad-25b4-9809-8bd2-29b3fb280cb9","object":"chat.completion.chunk","created":1794384861,"model":"qwen3.8-max","choices":[],"usage":{"prompt_tokens":61,"total_tokens":346,"completion_tokens":285,"prompt_tokens_details":{"cached_tokens":0,"text_tokens":61},"completion_tokens_details":{"reasoning_tokens":195,"text_tokens":285}}}
+
+data: [DONE]
+```
+
+Python / Node.js
+
 ```
 {"id":"chatcmpl-e30f5ae7-3063-93c4-90fe-beb5f900bd57","choices":[{"delta":{"content":"","function_call":null,"refusal":null,"role":"assistant","tool_calls":null},"finish_reason":null,"index":0,"logprobs":null}],"created":1735113344,"model":"qwen3.8-max","object":"chat.completion.chunk","service_tier":null,"system_fingerprint":null,"usage":null}
 {"id":"chatcmpl-e30f5ae7-3063-93c4-90fe-beb5f900bd57","choices":[{"delta":{"content":"我是","function_call":null,"refusal":null,"role":null,"tool_calls":null},"finish_reason":null,"index":0,"logprobs":null}],"created":1735113344,"model":"qwen3.8-max","object":"chat.completion.chunk","service_tier":null,"system_fingerprint":null,"usage":null}
-{"id":"chatcmpl-e30f5ae7-3063-93c4-90fe-beb5f900bd57","choices":[{"delta":{"content":"来自","function_call":null,"refusal":null,"role":null,"tool_calls":null},"finish_reason":null,"index":0,"logprobs":null}],"created":1735113344,"model":"qwen3.8-max","object":"chat.completion.chunk","service_tier":null,"system_fingerprint":null,"usage":null}
-{"id":"chatcmpl-e30f5ae7-3063-93c4-90fe-beb5f900bd57","choices":[{"delta":{"content":"阿里","function_call":null,"refusal":null,"role":null,"tool_calls":null},"finish_reason":null,"index":0,"logprobs":null}],"created":1735113344,"model":"qwen3.8-max","object":"chat.completion.chunk","service_tier":null,"system_fingerprint":null,"usage":null}
-{"id":"chatcmpl-e30f5ae7-3063-93c4-90fe-beb5f900bd57","choices":[{"delta":{"content":"云的超大规模","function_call":null,"refusal":null,"role":null,"tool_calls":null},"finish_reason":null,"index":0,"logprobs":null}],"created":1735113344,"model":"qwen3.8-max","object":"chat.completion.chunk","service_tier":null,"system_fingerprint":null,"usage":null}
-{"id":"chatcmpl-e30f5ae7-3063-93c4-90fe-beb5f900bd57","choices":[{"delta":{"content":"语言模型，我","function_call":null,"refusal":null,"role":null,"tool_calls":null},"finish_reason":null,"index":0,"logprobs":null}],"created":1735113344,"model":"qwen3.8-max","object":"chat.completion.chunk","service_tier":null,"system_fingerprint":null,"usage":null}
-{"id":"chatcmpl-e30f5ae7-3063-93c4-90fe-beb5f900bd57","choices":[{"delta":{"content":"叫千问千","function_call":null,"refusal":null,"role":null,"tool_calls":null},"finish_reason":null,"index":0,"logprobs":null}],"created":1735113344,"model":"qwen3.8-max","object":"chat.completion.chunk","service_tier":null,"system_fingerprint":null,"usage":null}
-{"id":"chatcmpl-e30f5ae7-3063-93c4-90fe-beb5f900bd57","choices":[{"delta":{"content":"问。","function_call":null,"refusal":null,"role":null,"tool_calls":null},"finish_reason":null,"index":0,"logprobs":null}],"created":1735113344,"model":"qwen3.8-max","object":"chat.completion.chunk","service_tier":null,"system_fingerprint":null,"usage":null}
 {"id":"chatcmpl-e30f5ae7-3063-93c4-90fe-beb5f900bd57","choices":[{"delta":{"content":"","function_call":null,"refusal":null,"role":null,"tool_calls":null},"finish_reason":"stop","index":0,"logprobs":null}],"created":1735113344,"model":"qwen3.8-max","object":"chat.completion.chunk","service_tier":null,"system_fingerprint":null,"usage":null}
 {"id":"chatcmpl-e30f5ae7-3063-93c4-90fe-beb5f900bd57","choices":[],"created":1735113344,"model":"qwen3.8-max","object":"chat.completion.chunk","service_tier":null,"system_fingerprint":null,"usage":{"completion_tokens":17,"prompt_tokens":22,"total_tokens":39,"completion_tokens_details":null,"prompt_tokens_details":{"audio_tokens":null,"cached_tokens":0}}}
 ```
 
-设置`include_tool_usage`为`true`并实际触发联网搜索时，最后一个 chunk 的`usage`中会增加`x_tools`字段：
+#### 文档理解
+
+将请求中的文件 ID 替换为上传文档后返回的文件 ID。
 
 ```
-{"id":"chatcmpl-6076672d-ea69-9497-86bc-a5a9c9354662","object":"chat.completion.chunk","created":1792037303,"model":"qwen3.8-max","choices":[],"usage":{"prompt_tokens":1905,"total_tokens":1984,"completion_tokens":79,"prompt_tokens_details":{"cached_tokens":0,"text_tokens":1905},"x_tools":{"search":{"count":1,"strategy":"turbo"}}}}
+data: {"choices":[{"delta":{"content":"","role":"assistant"},"finish_reason":null,"index":0,"logprobs":null}],"usage":null,"created":1794384917,"system_fingerprint":null,"object":"chat.completion.chunk","model":"qwen-long","id":"chatcmpl-dd003860-d3ed-9996-8a46-0c50d416bb63"}
+
+data: {"choices":[{"delta":{"content":"这篇文章","role":"assistant"},"finish_reason":null,"index":0,"logprobs":null}],"usage":null,"created":1794384917,"system_fingerprint":null,"object":"chat.completion.chunk","model":"qwen-long","id":"chatcmpl-dd003860-d3ed-9996-8a46-0c50d416bb63"}
+
+data: {"choices":[{"delta":{"content":""},"finish_reason":"stop","index":0,"logprobs":null}],"usage":null,"created":1794384919,"system_fingerprint":null,"object":"chat.completion.chunk","model":"qwen-long","id":"chatcmpl-dd003860-d3ed-9996-8a46-0c50d416bb63"}
+
+data: {"choices":[],"usage":{"prompt_tokens":59,"completion_tokens":107,"total_tokens":166},"created":1794384919,"system_fingerprint":null,"object":"chat.completion.chunk","model":"qwen-long","id":"chatcmpl-dd003860-d3ed-9996-8a46-0c50d416bb63"}
+
+data: [DONE]
+```
+
+#### PPT生成
+
+```
+data: {"choices":[{"delta":{"content":null,"role":"assistant","reasoning_content":""},"index":0,"logprobs":null,"finish_reason":null}],"object":"chat.completion.chunk","usage":null,"created":1794385034,"system_fingerprint":null,"model":"qwen-doc-turbo","id":"chatcmpl-fea338d0-e90f-93d3-9106-78b8132278e3"}
+
+data: {"choices":[{"finish_reason":null,"logprobs":null,"delta":{"content":null,"reasoning_content":"大纲生成成功：ppt_overview = # 【PPT内容大纲与详细设计】\n\n## 第1页：封面\n**大纲要点：**\n- 主标题：AI智能体系统架构\n- 副标题：基于大模型驱动的自动化解决方案\n- …"},"index":0}],"object":"chat.completion.chunk","usage":null,"created":1794385034,"system_fingerprint":null,"model":"qwen-doc-turbo","id":"chatcmpl-fea338d0-e90f-93d3-9106-78b8132278e3"}
+```
+
+#### 联网搜索
+
+设置 `include_tool_usage` 为 `true` 并实际触发联网搜索时，最后一个 chunk 的 `usage` 中会增加 `x_tools` 字段：
+
+```
+data: {"id":"chatcmpl-3d720785-fa18-9207-ac31-666fd4fb1ba3","object":"chat.completion.chunk","created":1794396212,"model":"qwen3.8-max","choices":[],"usage":{"prompt_tokens":2883,"total_tokens":2962,"completion_tokens":79,"prompt_tokens_details":{"cached_tokens":0,"text_tokens":2883},"completion_tokens_details":{"reasoning_tokens":58,"text_tokens":79},"x_tools":{"search":{"count":1,"strategy":"turbo"}}}}
+
+data: [DONE]
 ```
 
 ## 错误码

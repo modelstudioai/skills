@@ -1,12 +1,12 @@
 # PDF理解
 
-PDF理解功能使模型能够解析并理解PDF文档，提取文档中的文字与图片内容进行分析。您可以通过 OpenAI 兼容的 Chat Completions 接口或 DashScope 接口，以 URL 或 Base64 编码方式传入 PDF 文件。
-
-> 当前 PDF 理解功能支持华北2（北京）与新加坡地域调用（其中 qwen3.8-27b 仅在华北2（北京）地域支持 PDF 理解，新加坡地域暂不支持）。暂不支持通过 Responses API 调用——使用 Responses API 传入 PDF 时，请求会返回 HTTP 200，但文件不会传递给模型。
+PDF理解功能使模型能够解析PDF文档中的文字与图片，通过 Chat Completions、Responses API、DashScope 或 Anthropic 兼容接口进行分析。
 
 ## 支持的模型
 
-qwen3.8-max、qwen3.8-max-0902、qwen3.8-flash、qwen3.8-27b
+qwen4-max-preview（[仅 Token Plan](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview)）、qwen3.8-max、qwen3.8-max-0902、qwen3.8-flash、qwen3.8-27b
+
+qwen3.8-27b 仅支持在北京地域通过 Chat Completions 或 DashScope 调用 PDF 理解。
 
 ## 快速开始
 
@@ -234,6 +234,137 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 }'
 ```
 
+#### Responses API
+
+Responses API 支持通过 `input_file.file_url` 传入 PDF。qwen3.8-27b 不支持此方式。
+
+以下示例使用北京地域的业务空间专属域名；请替换 `{WorkspaceId}`，并按所选地域及部署范围配置对应的 API Key 和域名，详见[接入信息](raw/model-user-guide/get-started-with-models/regions.md)。
+
+Python
+
+```
+import os
+from openai import OpenAI
+
+client = OpenAI(
+    api_key=os.environ["DASHSCOPE_API_KEY"],
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
+    timeout=300.0,
+)
+
+response = client.responses.create(
+    model="qwen3.8-flash",
+    input=[{
+        "role": "user",
+        "content": [
+            {"type": "input_file", "file_url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260616/qmycjl/1506.02640v5.pdf"},
+            {"type": "input_text", "text": "总结这个PDF文档的内容。"},
+        ],
+    }],
+    extra_body={"include_tool_usage": True},
+)
+
+print(response.output_text)
+```
+
+HTTP
+
+```
+curl 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses' \
+  -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "qwen3.8-flash",
+    "input": [{
+      "role": "user",
+      "content": [
+        {"type": "input_file", "file_url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260616/qmycjl/1506.02640v5.pdf"},
+        {"type": "input_text", "text": "总结这个PDF文档的内容。"}
+      ]
+    }],
+    "include_tool_usage": true
+  }'
+```
+
+#### Anthropic
+
+Anthropic 兼容接口目前仅支持 Base64 PDF 输入，不支持 `document.source.type="url"`。
+
+Anthropic 兼容接口支持通过 `document.source` 传入 Base64 PDF。下载[示例 PDF](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260616/qmycjl/1506.02640v5.pdf)并保存为 `report.pdf`，或替换为自己的 PDF 文件。Python 示例需要安装 `anthropic` SDK。
+
+以下示例使用北京地域的业务空间专属域名；请替换 `{WorkspaceId}`，并按所选地域及部署范围配置对应的 API Key 和域名，详见[接入信息](raw/model-user-guide/get-started-with-models/regions.md)。
+
+Python
+
+```
+import os
+import base64
+from anthropic import Anthropic
+
+client = Anthropic(
+    api_key=os.environ["DASHSCOPE_API_KEY"],
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic",
+    timeout=300.0,
+)
+
+with open("report.pdf", "rb") as file:
+    pdf_base64 = base64.b64encode(file.read()).decode("utf-8")
+
+response = client.messages.create(
+    model="qwen3.8-flash",
+    max_tokens=1024,
+    messages=[{
+        "role": "user",
+        "content": [
+            {
+                "type": "document",
+                "source": {
+                    "type": "base64",
+                    "media_type": "application/pdf",
+                    "data": pdf_base64,
+                },
+            },
+            {"type": "text", "text": "总结这个PDF文档的内容。"},
+        ],
+    }],
+    extra_body={"include_tool_usage": True},
+)
+
+for block in response.content:
+    if block.type == "text":
+        print(block.text)
+```
+
+HTTP
+
+```
+PDF_BASE64=$(base64 < report.pdf | tr -d '\n')
+curl 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/v1/messages' \
+  -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+  -H "Content-Type: application/json" \
+  --data-binary @- <<EOF
+{
+  "model": "qwen3.8-flash",
+  "max_tokens": 1024,
+  "messages": [{
+    "role": "user",
+    "content": [
+      {
+        "type": "document",
+        "source": {
+          "type": "base64",
+          "media_type": "application/pdf",
+          "data": "$PDF_BASE64"
+        }
+      },
+      {"type": "text", "text": "总结这个PDF文档的内容。"}
+    ]
+  }],
+  "include_tool_usage": true
+}
+EOF
+```
+
 ## 使用Base64输入
 
 如果无法提供文件的URL地址，也可以将PDF文件以Base64编码字符串的形式传入。使用 `file_data` 时，`filename` 字段为必填项。
@@ -323,7 +454,7 @@ print(response.output.choices[0].message.content[0]["text"])
 
 ## 请求参数
 
-文件输入通过content数组中的元素指定，OpenAI兼容协议使用 `type: "file"` 类型，DashScope协议使用包含 `file_url`/`file_data` 的元素。
+以下参数表适用于 Chat Completions。Responses API 使用 `type: "input_file"` 和 `file_url`；Anthropic 兼容接口使用 `type: "document"`，并在 `source` 中设置 `type: "base64"`、`media_type: "application/pdf"` 和 `data`（不含 Data URI 前缀的 Base64 字符串）。 DashScope 使用 `content` 数组中包含 `file_url` 或 `file_data` 的元素传入文件。
 
 **说明**协议中 URL 部分仅支持字符串输入，不支持 list（数组）形式。
 
@@ -388,13 +519,13 @@ string
 计费涉及以下方面：
 
 -   **模型调用费用**：PDF文件解析出的文字与图片会计入模型的输入Token，按照模型的标准输入价格计费。
--   **文档解析费用**：按PDF文档解析的页数计费，各地域单价不同：华北2（北京）0.02元/页，新加坡0.024元/页。
+-   **文档解析费用**：按PDF文档解析的页数计费，各地域单价不同：华北2（北京）0.02元/页，新加坡0.024元/页。全球部署模式：0.02 元/页。
 
 各模型的输入输出单价请参见[模型调用计费](raw/model-user-guide/test-1/model-pricing.md)。
 
 ### 查看PDF解析页数
 
-如需在响应中查看本次请求的 PDF 解析页数，可通过 `usage` 字段中的 `pdf_page_parser.count` 获取，两种协议的行为略有不同：
+Chat Completions 与 Responses API 可在请求体顶层传入 `include_tool_usage: true`，从 `usage.x_tools.pdf_page_parser.count` 查看解析页数；DashScope 从 `usage.plugins.pdf_page_parser.count` 查看。Anthropic 兼容接口返回的解析页数位于响应顶层 `x_tools.pdf_page_parser.count`。解析计数未返回时，不表示本次未产生解析费用。
 
 OpenAI 兼容
 
@@ -425,6 +556,19 @@ DashScope
                 "count": 10,
                 "strategy": "normal"
             }
+        }
+    }
+}
+```
+
+Anthropic
+
+```
+{
+    "x_tools": {
+        "pdf_page_parser": {
+            "count": 10,
+            "strategy": "normal"
         }
     }
 }

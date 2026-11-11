@@ -104,7 +104,7 @@ Token Plan
 
 ## 模型与协议支持
 
-下表列出各模型和应用支持的协议。点击「支持」查看对应的接入文档。
+下表列出各模型和应用支持的协议。点击“支持”查看对应的接入文档。
 
 **模型/应用类型**
 
@@ -148,11 +148,19 @@ CosyVoice系列模型
 
 qwen-audio-3.1-asr-flash-message、qwen-audio-3.1-asr-flash-streaming、qwen-audio-3.0-asr-flash-streaming、Fun-ASR-Realtime系列模型
 
-[支持](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide#c09d428f2crac)
+[Qwen-Audio-ASR-Message](raw/_short/qwen-asr-message-aoq-access-7699c2c24f2a0149.md)
+
+[Qwen-Audio-ASR-Streaming](raw/_short/qwen-audio-asr-streaming-aoq-access-7b2cf295190f6172.md)
+
+[Fun-ASR-Realtime](raw/_short/fun-asr-realtime-aoq-access-18b59bd85ad6d915.md)
 
 不支持
 
-[支持](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide#rt03_websocket_h3)
+[Qwen-Audio-ASR-Message](raw/_short/qwen-asr-message-websocket-api-8b78d8662335cafa.md)
+
+[Qwen-Audio-ASR-Streaming](raw/_short/qwen-audio-asr-streaming-websocket-api-779f1056a08e5525.md)
+
+[Fun-ASR-Realtime](raw/_short/fun-asr-realtime-websocket-api-ba4d50025cae8d1c.md)
 
 [实时语音对话](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory.md)
 

@@ -6,7 +6,7 @@
 
 ## 你将完成什么
 
-一次「进入世界 → 实时视频体验 → 互动 → 结束」的最小闭环。运行时入口是全局的 `HappyOysterEngine.shared`，以及它创建出的单次会话句柄 `OysterTravel`。
+一次“进入世界 → 实时视频体验 → 互动 → 结束”的最小闭环。运行时入口是全局的 `HappyOysterEngine.shared`，以及它创建出的单次会话句柄 `OysterTravel`。
 
 ```
 OysterStream.register()
@@ -176,7 +176,7 @@ let data = try await travel.start()
 
 **说明**`start(maxExperienceTimeSec:)` 只对 `adventure` 生效，`directing` 与 `acting` 忽略该参数。
 
-本次 travel 的世界 mode 必须与 Step 2 `initialize` 传入的 `model` 匹配。模型按 mode 拆分后（`happyoyster-1.0-adventure` / `-directing` / `-acting`），每个模型是一条独立的网关应用路由，一次 `initialize` 只服务一种 mode 的世界；`ticket` 由你的服务端在「该世界 mode 对应的模型」路由下签发，`start()` 会把它发往当前 `model` 那条路由，两者不一致时本步失败。
+本次 travel 的世界 mode 必须与 Step 2 `initialize` 传入的 `model` 匹配。模型按 mode 拆分后（`happyoyster-1.0-adventure` / `-directing` / `-acting`），每个模型是一条独立的网关应用路由，一次 `initialize` 只服务一种 mode 的世界；`ticket` 由你的服务端在“该世界 mode 对应的模型”路由下签发，`start()` 会把它发往当前 `model` 那条路由，两者不一致时本步失败。
 
 进入另一种 mode 的世界之前，用对应模型再 `initialize()` 一次——不需要 `cleanup()`，也不需要重新 `updateToken`：
 
@@ -306,7 +306,7 @@ struct TravelScreen: View {
 
 -   **生命周期**：App 启动尽早 `OysterStream.register()` + `initialize()`，全局各一次；离开体验页时务必 `end()`，确保实时连接与资源释放；`OysterTravel` 是**单次使用**的，到终态后需重新 `createTravel`。
 -   **token 续期**：进体验前确保 HTTP token 新鲜；收到鉴权类错误（`101001` / `101002`）后重新获取并 `updateToken`（非致命，不终止体验）。
--   **错误分级**：致命错误 SDK 会自动终止本次体验，经 `events` 的 `.error` 透出、并以状态机终态（`failed`）收尾，你应回到「开始体验」前的界面；非致命错误仅透出，可重试。错误码总表见 [API Reference](raw/model-api-reference/world-model-api-reference/happyoyster/client-sdk/ios-sdk-2/happyoyster-ios-sdk-api-reference.md)。
+-   **错误分级**：致命错误 SDK 会自动终止本次体验，经 `events` 的 `.error` 透出、并以状态机终态（`failed`）收尾，你应回到“开始体验”前的界面；非致命错误仅透出，可重试。错误码总表见 [API Reference](raw/model-api-reference/world-model-api-reference/happyoyster/client-sdk/ios-sdk-2/happyoyster-ios-sdk-api-reference.md)。
 -   **模式适配**：实时导演与角色演绎模式展示文本输入（`sendInstruct`），世界探索模式展示操控控件（`sendCommand`）；回溯入口只在实时导演模式展示。角色演绎世界按 `aspectRatio` 决定播放器方向（默认竖屏 `9:16`）。
 
 ## 下一步

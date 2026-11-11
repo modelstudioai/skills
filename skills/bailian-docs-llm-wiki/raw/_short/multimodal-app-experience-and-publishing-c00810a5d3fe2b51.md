@@ -23,7 +23,7 @@
 -   在首次体验前，需要您为当前页面授予摄像头、麦克风的使用权限。
     
     -   ![image.jpeg](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8855897471/p958687.jpeg)
--   您可以选择预置的「系统音色」体验，也可以「复刻音色」。点击控制台右上角的音色名称，选择需要的系统音色或者复刻需要的音色即可。
+-   您可以选择预置的“系统音色”体验，也可以“复刻音色”。点击控制台右上角的音色名称，选择需要的系统音色或者复刻需要的音色即可。
     
     -   ![截屏2026-06-03 14](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7128995871/p1076826.png)
     -   ![截屏2026-06-03 14](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7128995871/p1076836.png)
@@ -31,7 +31,7 @@
 -   若配置应用时未开启语音交互，右侧仅支持文本交互体验。
     
     -   ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3986570571/p977082.png)
--   管控台页面支持显示端到端延迟信息。端到端首包延迟，可以理解为「ASR识别出最后一个字 - TTS播报第一个字」之间的时间间隔，也就是用户体感的等待时间。
+-   管控台页面支持显示端到端延迟信息。端到端首包延迟，可以理解为“ASR识别出最后一个字 - TTS播报第一个字”之间的时间间隔，也就是用户体感的等待时间。
     
     -   ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3759579671/p1041272.png)
 

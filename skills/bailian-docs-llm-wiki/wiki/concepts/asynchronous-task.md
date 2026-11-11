@@ -1,57 +1,59 @@
-# 异步任务
+# 异步任务模式
 
-异步任务是百炼平台中处理高耗时、长周期模型推理的标准执行模式：客户端提交请求后立即获得唯一任务标识（如 `biz_id` 或 `task_id`），服务端后台执行实际计算，客户端通过轮询或回调方式获取最终结果。该模式解耦了请求与响应，避免连接超时，适用于文档解析、视频生成、3D建模、大文件翻译等资源密集型场景。
+异步任务模式是百炼平台对计算密集型、耗时较长的模型服务（如视频生成、3D建模、音视频/文档解析等）所采用的标准调用范式：客户端提交任务后立即返回任务标识符，服务端后台执行并持久化结果，客户端通过轮询或事件通知方式获取最终输出。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **ParseX 文档与字段处理**：所有 `/parse/submit` 和 `/extract/submit` 接口均强制异步。提交后返回 `biz_id`，需持续调用 `/parse/result` 或 `/extract/result` 查询 `data.status`（`success`/`failed`）；解析结果保留 30 天，但仅 7 天内可复用于字段抽取。
-  
-- **Video Generation（视频生成）**：全部模型（HappyHorse、万相、爱诗、Vidu 等）必须启用异步——请求头必须包含 `X-DashScope-Async: enable`，否则报错 `"current user api does not support synchronous calls"`。成功响应含 `task_id`（24 小时有效），通过 `GET /api/v1/tasks/{task_id}` 轮询状态，`SUCCESS` 时返回 `output.video_url`。
+- **视频生成**：所有视频类 API（文生视频、图生视频、数字人、口型替换等）强制启用异步模式，需在请求头中显式设置 `X-DashScope-Async: enable`；调用返回 `task_id`，后续通过 `/api/v1/tasks/{task_id}` 查询状态与结果，典型耗时 1–5 分钟。
+- **ParseX 文档与音视频解析**：统一采用 `biz_id` 作为任务唯一标识，提交 `/parse/submit` 或 `/extract/submit` 后，轮询 `/parse/result` 或 `/extract/result` 获取结构化输出；结果默认保留 30 天，支持复用（7 天内同类型解析结果可直接用于字段抽取）。
+- **3D 生成（Tripo）**：全部接口仅支持华北2（北京）地域，必须携带 `X-DashScope-Async: enable`；任务创建后返回 `task_id`，通过标准 `/api/v1/tasks/{task_id}` 接口轮询，建议首次延迟 10 秒、后续间隔 15–30 秒。
+- **其他计算密集型模型**：包括高分辨率图像生成、长文本语音转写（如 `paraformer-8k-v2`）、多图输入的复杂推理等，默认启用异步机制；是否启用由模型能力决定，不依赖用户选择——若接口文档未明确声明“同步支持”，即视为仅支持异步。
 
-- **3D Generation（Tripo）**：所有接口仅支持异步，且**严格限定华北2（北京）地域**。请求头需含 `X-DashScope-Async: enable`，响应返回 `task_id`；后处理任务（如贴图、分割）常需引用前序任务的 `task_id` 作为 `original_model_task_id`，实现链式调用。
-
-- **Qwen-MT-Uni 翻译**：提供同步与异步双模式。对大文档（≤200页）、长音频（3秒–60分钟）等高耗时输入，**必须设置 `X-DashScope-Async: enable` 头**，否则可能超时失败；异步响应返回 `task_id`，轮询 `/api/v1/tasks/{task_id}` 获取 `output.Data`（含 `TranslatedFileUrl` 或 `TranslatedTexts`）。
-
-- **通用异步任务管理**：平台提供统一异步任务生命周期能力，包括任务提交（`async-generation` 路径）、状态查询、取消、HTTP 回调配置（`callback_url`）及结果拉取。任务默认保留 7 天，回调失败最多重试 3 次（间隔 1s/5s/15s）。
+> ✅ 统一行为：所有异步任务均**不可取消**（除 `PENDING` 状态外），结果保留期以各服务文档为准（通常为 24–30 小时），超期后查询返回空或过期错误。
 
 ## 关键参数和配置
 
-- **必需请求头**：
-  - `X-DashScope-Async: enable` —— 所有异步接口的开关，缺失即报错（如视频、3D、Qwen-MT 异步模式）。
-  - `Authorization: Bearer <API_KEY>` —— 地域需与模型 Endpoint 严格匹配（如华北2 的 Tripo 不接受华东1 Key）。
-  - `Content-Type: application/json`
+- **强制请求头**：  
+  `X-DashScope-Async: enable` —— 缺失将直接报错 `"current user api does not support synchronous calls"`。该头是异步模式的开关凭证，与模型类型强绑定，不可省略或设为 `disable`。
 
-- **核心标识字段**：
-  - `biz_id`：ParseX 独有，用于关联解析/抽取任务，全局唯一。
-  - `task_id`：视频、3D、Qwen-MT、通用异步任务统一使用，24 小时有效（除通用任务默认 7 天）。
+- **任务标识符**：  
+  - 视频/3D/通用模型：返回 `task_id`（字符串），用于 `/api/v1/tasks/{task_id}` 查询；  
+  - ParseX 解析与抽取：返回 `biz_id`（字符串），用于 `/parse/result?biz_id=...` 或 `/extract/result?biz_id=...` 查询。
 
-- **回调配置（可选但推荐）**：
-  - `callback_url`：HTTPS 地址，需公网可达；任务完成时平台主动 POST 结果，避免轮询开销。
-  - 需在请求体或独立接口中传入，详见 [配置异步任务回调](../../raw/model-api-reference/more-about-models/async-task-api.md)。
+- **轮询建议策略**（面向开发者）：  
+  | 任务类型         | 首次查询延迟 | 后续轮询间隔 | 状态检查字段       |  
+  |------------------|--------------|----------------|--------------------|  
+  | 文本/轻量推理     | 1–2 秒       | 1–3 秒         | `data.status == "success"` |  
+  | 图像生成          | 3–5 秒       | 5–10 秒        | `data.status in ["success", "failed"]` |  
+  | 视频/3D/音视频解析 | 10 秒        | 15–30 秒       | `data.status`（值为 `success` / `failed` / `processing`） |  
+  > ⚠️ 避免高频轮询：单 IP 或 API Key 下轮询 QPS 超过 20 可能触发限流；推荐优先使用 [HTTP 回调或 EventBridge 事件通知](../../raw/model-api-reference/more-about-models/async-task-api.md) 替代轮询。
 
-- **轮询建议**：
-  - 初始延迟：ParseX 建议首次查询延后 1–3 秒；3D 任务建议 ≥10 秒；视频任务 ≥5 秒。
-  - 间隔策略：状态为 `PENDING`/`RUNNING` 时，建议 5–30 秒间隔；临近预期完成时间可缩短至 2–3 秒。
-  - 终止条件：`task_status` 为 `SUCCEEDED` 或 `FAILED`，或 `status` 为 `success`/`failed`；不依赖 `output` 字段是否存在，而应以状态码为准。
+- **结果保留与清理**：  
+  - 通用异步任务：结果默认保留 **24 小时**（以 `/api/v1/tasks/{task_id}` 返回的 `created_at` 时间戳起算）；  
+  - ParseX 解析结果：保留 **30 天**，抽取复用窗口为 **7 天**；  
+  - 所有结果超期后无法恢复，不提供手动清理接口。
 
-- **错误处理关键点**：
-  - `ParseResultNotReusable`（ParseX）：复用解析结果超 7 天窗口期。
-  - `FileSizeExceeded`/`PageCountExceeded`：文件超限，需预检。
-  - `FileDownloadTimeout`：可重试；`FileDownloadFailed`：不可重试，需修复 URL 权限。
-  - `InvalidParameter`：常见于 `glossary` 格式错误、`domainHint` 非英文等。
+## 面向开发者，简洁实用
 
-面向开发者，请始终：  
-✅ 显式添加 `X-DashScope-Async: enable` 头（除非明确使用同步模式）；  
-✅ 用 `task_id`/`biz_id` 做幂等性控制，避免重复提交；  
-✅ 实现带退避的轮询或优先配置 `callback_url`；  
-✅ 根据文档明确的保留期（7天/24小时/30天）设计结果缓存与清理逻辑。
+- ✅ **必做三件事**：  
+  1. 请求头务必包含 `X-DashScope-Async: enable`；  
+  2. 检查响应体中的 `task_id` 或 `biz_id`，并安全存储；  
+  3. 使用标准任务查询接口轮询（或配置回调），**不要尝试重放原始请求体**（会创建新任务）。
+
+- ❌ **常见错误规避**：  
+  - 混用旧版路径（如 `/api/v1/services/aigc/image2video/video-synthesis`）与新版异步头 —— 路径与协议需严格匹配模型文档；  
+  - 对 `failed` 状态任务重复轮询 —— 应记录错误码（如 `FileSizeExceeded`, `ServiceQuotaExhausted`）并针对性修复；  
+  - 在前端直传临时 API Key + 异步轮询 —— 临时密钥有效期短、限流严，**仅限调试，严禁生产使用**。
+
+- 🚀 **进阶建议**：  
+  - 生产环境优先接入 [EventBridge 事件总线](../../raw/model-api-reference/more-about-models/async-task-api.md)，订阅 `dashscope:System:AsyncTaskFinish` 事件，实现零轮询、低延迟结果消费；  
+  - SDK 用户请复用 HTTP 客户端连接池（Python：传入 `httpx.AsyncClient`；Java：配置 `connectionPoolSize`），避免每轮询新建连接。
 
 ## 关联主题页
 
-- [api overview](../api/api-overview.md)
 - [video generation api](../api/video-generation-api.md)
+- [api overview](../api/api-overview.md)
 - [3d generation](../api/3d-generation.md)
-- [qwen mt translation models](../api/qwen-mt-translation-models.md)
 - [more about models](../api/more-about-models.md)
 
 

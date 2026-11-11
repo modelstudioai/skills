@@ -189,7 +189,7 @@ API Key 鉴权。仅支持**主 API Key**，以 `sk-` 开头，如 `sk-xxx`。�
 -   需要全部合成版本时，可在 `composeStatus != ready` 时继续轮询。
 -   `video.withInstructionAndWatermark` 是推荐的对外交付版本。
 -   四个视频变体共用同一时长解析结果，因此同一次响应中已就绪且时长可解析的变体会返回一致的 `durationSec`。
--   不要将 `404000` 一律展示为「尚未完成」：请先通过[查询Travel状态](raw/_short/happyoyster-directing-query-travel-status-api-re-d536083e25c2aee5.md)或[查询Travel列表](raw/_short/happyoyster-directing-query-travel-list-api-refe-d243ea07e641f43d.md)读取 `status` 与 `errorCode`；对 `failed` 的 Travel 展示失败原因。
+-   不要将 `404000` 一律展示为“尚未完成”：请先通过[查询Travel状态](raw/_short/happyoyster-directing-query-travel-status-api-re-d536083e25c2aee5.md)或[查询Travel列表](raw/_short/happyoyster-directing-query-travel-list-api-refe-d243ea07e641f43d.md)读取 `status` 与 `errorCode`；对 `failed` 的 Travel 展示失败原因。
 
 ##### 404000 场景
 

@@ -150,7 +150,7 @@ data: {"type":"session_status","content":[{"type":"data","data":{"session_status
 处理要点：
 
 -   **审批卡片来自 `tool_approval_request`**，其 `data.batch_id` + `data.call_id` 共同标识一次审批。请以该事件为准归拢待审批调用，不要从历史 `tool_call` 或请求 / 响应的数量反推。
--   **当前待裁决项以 `session_status` 的 `stop_reason.pending_call_ids` 为准**。逐条裁决后状态仍为 `requires_action`，`pending_call_ids` 仅缩减为剩余项，直到全部裁决收齐后这些待审批（`always_ask`）工具才执行、模型才恢复（`always_allow` 工具不受此屏障约束，见下方「批量与逐条裁决」）。
+-   **当前待裁决项以 `session_status` 的 `stop_reason.pending_call_ids` 为准**。逐条裁决后状态仍为 `requires_action`，`pending_call_ids` 仅缩减为剩余项，直到全部裁决收齐后这些待审批（`always_ask`）工具才执行、模型才恢复（`always_allow` 工具不受此屏障约束，见下方“批量与逐条裁决”）。
 -   `session_status` 为 `terminated` 时结束；`stop_reason` 为 `end_turn` / `retries_exhausted` 时本轮真正结束。
 
 **警告**`POST /events` 是异步接口，HTTP 200 只表示事件已入队受理，**不代表** agent 已开始处理或裁决已生效。下列错误都是本次运行随后产生的**事件/终态**（`type=error`），而非本次 POST 的同步 4xx，需通过 SSE 事件流或 `GET /events?types=error` 观察。

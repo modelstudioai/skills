@@ -1,57 +1,54 @@
 # 流式输出
 
-流式输出（Streaming Output）是百炼平台提供的一种实时响应机制，允许模型服务将生成结果以增量方式分块返回，而非等待完整响应后一次性输出。该机制显著降低端到端延迟，提升用户交互体验，尤其适用于对话界面、实时语音处理、长文本生成等对响应速度敏感的场景。
+流式输出（Streaming Output）是指模型服务在生成结果过程中，将响应内容分块、实时、渐进式地返回给客户端，而非等待全部结果生成完毕后一次性返回。这种方式显著降低端到端延迟，提升用户感知的响应速度与交互自然度，是构建实时对话、语音合成、长文本生成等体验的关键能力。
 
-## 在百炼平台的不同场景中如何使用
+## 在百炼平台的不同场景中，这个概念如何使用
 
-- **标准文本生成 API（Qwen 系列）**：  
-  通过 `stream=true` 参数启用流式响应。[OpenAI 兼容接口](openai-compatible-interface.md)返回 `delta.content` 字段；DashScope 原生接口返回 `output.text` 的增量片段；Anthropic 兼容接口返回 `content` 数组中的 `text` delta。所有接口均需客户端按事件流（EventStream）解析 `data:` 行。
+流式输出在百炼平台中按调用协议和业务场景分为两类实现方式，适用范围明确，不可混用：
 
-- **框架集成（Frameworks）**：  
-  - LlamaIndex：在 `QwenModel` 初始化或调用时显式设置 `stream=True`（默认为 `False`），配合 `ChatEngine.stream_chat()` 使用；注意其 `AsyncLLM` 尚不支持异步流式。  
-  - Spring AI Alibaba：`AlibabaAIClient` 默认启用流式（`stream=true`），`ChatClient` 调用自动返回 `Flux<ChatResponse>`，可直接订阅 token 流。
+- **HTTP 流式（`stream=true`）**：适用于 `model experience` 和 `get started with models` 等 RESTful 接口。启用后，API 返回 `Content-Type: text/event-stream` 的 SSE（Server-Sent Events）响应，每生成一个 token（文本）或部分结构化片段（如[函数调用](function-calling.md)参数），即推送一条 `data: {...}` 事件。适用于 Web 前端、CLI 工具等需低门槛接入流式能力的场景。当前仅支持**文本生成类模型**（如 `qwen-max`、`qwen2.5-7b-chat`）及**部分语音模型**（ASR/TTS，需查阅具体模型文档确认支持状态）；视觉、向量、视频生成等模态不支持。
 
-- **Realtime API（WebSocket 场景）**：  
-  所有 Realtime 接口（ASR/TTS/音频对话/多模态）天然基于流式设计。服务端通过 WebSocket 消息持续推送 `response.text.delta`、`response.audio.delta` 或 `input.intermediate` 等事件，无需额外参数开启，但可通过 `enable_intermediate_results` 控制是否返回中间态（如 ASR 的 partial transcript）。
+- **WebSocket 流式（Realtime API）**：专为超低延迟、双向实时交互设计，是 `realtime api directory` 的唯一通信模式。所有 Realtime 接口（如 `asr`、`tts`、`omni`）**强制启用流式**（`stream` 参数必须为 `true`），基于 WebSocket 协议传输二进制音频帧、文本增量（`output.text.delta`）、状态事件（`session.ended`）等细粒度消息。适用于智能座舱、实时翻译、多模态对话机器人等对端到端延迟敏感（毫秒级）的生产级应用。
 
-- **应用层控制（Application Support）**：  
-  支持两种流式模式协同使用：  
-  - `stream=True`：启用基础流式（逐 token 返回）；  
-  - `incremental_output=True`（需与 `stream=True` 同时设置）：仅返回本次新增 token，避免重复回传历史内容，适用于前端需精确控制渲染节奏的场景（如打字机效果）。
+> ⚠️ 注意：两种流式机制互不兼容——HTTP 流式无法传输原始音频流，WebSocket 流式不支持 HTTP 轮询或 SSE 格式。请根据延迟要求、数据类型（纯文本 vs 音频/图像帧）和客户端环境（浏览器 SSE 支持 vs 移动端 WebSocket 封装）选择对应路径。
 
 ## 关键参数和配置
 
-| 参数名 | 类型 | 必填 | 说明 | 默认值 |
-|--------|------|------|------|--------|
-| `stream` | boolean | 否 | 启用流式响应模式 | `false`（Qwen API / LlamaIndex）；`true`（Spring AI Alibaba） |
-| `incremental_output` | boolean | 否 | 启用增量式流式（仅返回新 token），必须与 `stream=true` 共同使用 | `false` |
-| `enable_intermediate_results` | boolean | 否 | Realtime API 中启用中间结果流（如 ASR 实时转写片段） | `false` |
+| 参数名 | 所属协议 | 类型 | 必填 | 说明 |
+|--------|----------|------|------|------|
+| `stream` | 全部 HTTP 接口（`model experience` / `get started` / `Qwen API`） | boolean | 否（默认 `false`） | 启用流式响应。设为 `true` 后，响应头为 `Content-Type: text/event-stream`，响应体为 SSE 格式。仅对支持流式的模型生效。 |
+| `stream` | Realtime API（WebSocket） | boolean | 是（必须为 `true`） | Realtime 接口强制流式，该参数用于会话初始化时显式声明，不可省略或设为 `false`。 |
+| `response_format` | Realtime API | string | 否（默认 `"json"`） | 控制输出格式：`"json"`（结构化事件，含 `type`/`delta`/`final` 字段）或 `"binary"`（原始 PCM 音频流，仅 TTS/LiveTranslate 支持）。 |
+| `output_config.effort`（Anthropic） / `reasoning.effort`（Responses） | Qwen API（OpenAI/Anthropic 兼容） | string | 否 | 影响流式输出节奏：高推理强度（如 `"high"`）可能导致首 token 延迟增加，但后续 token 更连贯；低强度（如 `"none"`）则优先降低首 token 延迟。 |
 
-> ⚠️ 注意：  
-> - `incremental_output` 仅 DashScope 原生接口和部分 Realtime 场景支持，[OpenAI 兼容接口](openai-compatible-interface.md)不识别该参数；  
-> - 流式响应下，`max_tokens` 仍生效，达到上限时服务端将发送 `done` 事件并终止流；  
-> - 错误发生时（如鉴权失败、超时），服务端会立即推送 `error` 事件，客户端应监听并中断流处理。
+- **HTTP 流式响应解析要点**：  
+  - 每行以 `data:` 开头，JSON 内容需手动去除前缀并 `JSON.parse()`；  
+  - 完整响应以 `data: [DONE]` 结束；  
+  - 错误仍通过 HTTP 状态码（如 `400`）返回，不走 `data:` 流。
 
-## 面向开发者：实用建议
+- **Realtime 流式连接要点**：  
+  - 必须先发送 `session.update` 消息完成鉴权与参数协商；  
+  - 文本流事件为 `output.text.delta`（增量）和 `output.text.final`（终稿）；  
+  - 音频流事件为 `output.audio.chunk`（二进制 PCM 数据块），需客户端拼接播放。
 
-- **解析流式响应**：  
-  - HTTP 流式：检查响应头 `Content-Type: text/event-stream`，逐行读取 `data: {...}`，忽略空行和注释行（`:` 开头）；  
-  - WebSocket 流式：监听 `message` 事件，解析 JSON 中的 `event` 字段（如 `"response.text.delta"`），提取 `delta` 或 `text` 字段拼接。
+## 面向开发者，简洁实用
 
-- **前端渲染优化**：  
-  使用 `incremental_output=true` 可避免重复渲染，结合 `AbortController` 支持用户中断请求；推荐对 `response.text.delta` 做防抖合并（如 50ms 内连续 delta 合并为一次更新），减少 DOM 频繁操作。
-
-- **错误处理**：  
-  流式请求失败不会返回 HTTP 2xx，而是直接关闭连接或发送 `error` 事件。务必实现 `onerror` / `onclose` 回调，并记录 `RequestId` 用于问题排查。
-
-- **性能提示**：  
-  流式不降低单 token 计算开销，但可显著改善感知延迟。若关注首 token 延迟（Time to First [Token](token.md)），请优先调优 `temperature`（降低至 0.1–0.3）、禁用非必要插件（如 `enable_web_search=false`），并选用 `qwen-turbo` 等轻量模型。
+- ✅ **快速启用 HTTP 流式**：在请求 body 中添加 `"stream": true`，用 `curl -N` 或前端 `EventSource` 直接消费；检查模型文档确认支持状态（如 `qwen2.5-7b-chat` 支持，`qwen-vl-plus` 不支持）。
+- ✅ **Realtime 必须用 WebSocket**：不要尝试用 HTTP 请求 Realtime 接口；使用官方 AOQ SDK 或标准 WebSocket 库，严格遵循 [Realtime API 概述](../../raw/model-api-reference/realtime-api-directory/realtime-api-overview.md) 的消息协议。
+- ❌ **避免常见错误**：  
+  - 对向量模型（embedding/rerank）传 `stream=true` → 无效且可能报错；  
+  - 在 Realtime 连接中发送 `stream=false` → 连接被拒绝；  
+  - 解析 HTTP 流式响应时未处理 `data:` 前缀或 `[DONE]` → JSON 解析失败。
+- 🛠️ **调试建议**：  
+  - HTTP 流式：用 `curl -v -N -d '{"stream":true,...}' <url>` 查看原始响应流；  
+  - Realtime：使用 `wscat -c "wss://..."` 手动发送 `session.update` 并观察事件流；  
+  - 所有流式调用均需设置合理超时（HTTP 流式建议 120s+，Realtime 单连接上限 30 分钟）。
 
 ## 关联主题页
 
-- [frameworks](../api/frameworks.md)
-- [qwen api reference](../api/qwen-api-reference.md)
+- [model experience](../guides/model-experience.md)
 - [realtime api directory](../api/realtime-api-directory.md)
-- [application support](../guides/application-support.md)
+- [get started with models](../guides/get-started-with-models.md)
+- [qwen api reference](../api/qwen-api-reference.md)
 
 

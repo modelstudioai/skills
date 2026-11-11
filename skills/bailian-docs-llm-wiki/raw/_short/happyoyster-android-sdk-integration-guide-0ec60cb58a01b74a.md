@@ -2,7 +2,7 @@
 
 本文面向集成方 Android 开发者，覆盖安装、鉴权、完整接入流程、事件处理与最佳实践，说明如何稳定接入 HappyOyster Android SDK。
 
-HappyOyster 是一个 AI 世界探索产品。通过集成 HappyOyster Android SDK，你的 App 可以进入由 AI 实时生成的「世界」，以**世界探索（adventure）**、**实时导演（directing）**或**角色演绎（acting）**三种模式进行实时互动视频体验。
+HappyOyster 是一个 AI 世界探索产品。通过集成 HappyOyster Android SDK，你的 App 可以进入由 AI 实时生成的“世界”，以**世界探索（adventure）**、**实时导演（directing）**或**角色演绎（acting）**三种模式进行实时互动视频体验。
 
 本文面向集成方 Android 开发者，覆盖安装、鉴权、完整接入流程、事件处理与最佳实践，说明如何稳定接入。具体 API（签名、参数、返回、错误码、数据模型）请参考 [HappyOyster Android SDK API Reference](raw/_short/happyoyster-android-sdk-api-reference-2e55bd454caa0124.md)。
 
@@ -17,7 +17,7 @@ HappyOyster 是一个 AI 世界探索产品。通过集成 HappyOyster Android S
 -   **过程控制**：暂停 / 恢复（实时导演与角色演绎）、回溯（仅实时导演）、结束（三种模式均可）。
 -   **状态与错误回调**：通过事件监听实时感知体验状态与异常。
 
-**说明**SDK 不负责世界的创建与管理，也不直接暴露底层实时通信细节——这些由你的服务端或 SDK 内部处理。你只需聚焦「开始体验 → 播放 → 互动 → 结束」。
+**说明**SDK 不负责世界的创建与管理，也不直接暴露底层实时通信细节——这些由你的服务端或 SDK 内部处理。你只需聚焦“开始体验 → 播放 → 互动 → 结束”。
 
 ## 安装
 
@@ -87,7 +87,7 @@ SDK 库自身仅声明 `INTERNET`。实时通信引擎会自动合并少量网�
 <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 ```
 
-**世界探索模式（`sendCommand`）建议声明录音权限**：世界探索模式的实时控制指令通过一路**静音音频流**建立「推流者身份」并承载上行通道，SDK **不会录制或上传你的真实音频**。`RECORD_AUDIO` **并非 DataChannel 的硬前置**——即使未授予，静音流仍以推流者身份存在、上行通道通常可用。但为兼顾各机型的稳定性，仍**建议**：如果你的 App 会用到 `sendCommand`，在宿主 `AndroidManifest.xml` 声明该权限，并在调用前于运行时申请。
+**世界探索模式（`sendCommand`）建议声明录音权限**：世界探索模式的实时控制指令通过一路**静音音频流**建立“推流者身份”并承载上行通道，SDK **不会录制或上传你的真实音频**。`RECORD_AUDIO` **并非 DataChannel 的硬前置**——即使未授予，静音流仍以推流者身份存在、上行通道通常可用。但为兼顾各机型的稳定性，仍**建议**：如果你的 App 会用到 `sendCommand`，在宿主 `AndroidManifest.xml` 声明该权限，并在调用前于运行时申请。
 
 ```
 <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -104,7 +104,7 @@ SDK **不获取、不刷新** token，保持轻量。鉴权分两层：
 1.  **百炼网关 API Key**：由你的 App 通过 `updateToken(token)` 注入为 Bearer token。SDK 只保存最新一个，不持久化、不刷新；Key 变化后由你再次注入。网关要求包括 `startTravel` 在内的 SDK 请求均使用此 Bearer。Bearer Key 过期或无效时，SDK 抛出 `SDKError(101002)`；此时应重新获取并注入 Bearer Key（`updateToken`），而非重新换取 ticket。**验证 / Demo 阶段**可直接用主百炼 API Key 作为 Bearer（`updateToken`）跑通流程。**生产环境**务必改用你的服务端签发的**短期 token**，切勿把长期 API Key 打包进 App 分发。
 2.  **一次性体验凭证 `ticket`**：由你的服务端调用开放平台换取并下发给客户端，仅用于一次 `startTravel`；体验结束（正常或异常）后即失效，不可复用。ticket 级别的凭证错误由六位服务端 code 标识（如 `401010` = ticket 无效 / 过期，`401011` = ticket 已使用），SDK 原样透传。
 
-你的服务端负责创建 / 管理 World、换取 Travel ticket 并下发给客户端；Android SDK 只消费 token 与 ticket，不提供 World 管理接口。初始化时必须通过 `SDKConfig.apiHost` 传入你账号的百炼 **API Host**（形如 `llm-xxxx.cn-beijing.maas.aliyuncs.com`，在百炼控制台 API Key 页的「API Host」处复制），并通过无默认值的必填参数 `SDKConfig.model` 传入拆分后的模型名（`happyoyster-1.0-directing` / `happyoyster-1.0-acting` / `happyoyster-1.0-adventure`，与所用 Open API 入口一致）。SDK 将请求地址补全为 `https://{apiHost}/api/v2/apps/{model}/openapi/v1/{endpoint}`，你无需自行拼接。
+你的服务端负责创建 / 管理 World、换取 Travel ticket 并下发给客户端；Android SDK 只消费 token 与 ticket，不提供 World 管理接口。初始化时必须通过 `SDKConfig.apiHost` 传入你账号的百炼 **API Host**（形如 `llm-xxxx.cn-beijing.maas.aliyuncs.com`，在百炼控制台 API Key 页的“API Host”处复制），并通过无默认值的必填参数 `SDKConfig.model` 传入拆分后的模型名（`happyoyster-1.0-directing` / `happyoyster-1.0-acting` / `happyoyster-1.0-adventure`，与所用 Open API 入口一致）。SDK 将请求地址补全为 `https://{apiHost}/api/v2/apps/{model}/openapi/v1/{endpoint}`，你无需自行拼接。
 
 构造 `SDKConfig` 时遗漏 `model` 会编译失败；传入空白 `model` 时，`initialize` 同步抛出 `SDKError(100002)`（`raw = "SDKConfig.model must not be blank"`），不会创建或替换 runtime，也不会发起网络请求。**API Host、model 与注入的 API Key 必须匹配所需的账号、区域和模型授权**，否则网关通常返回 AccessDenied（运行期以 `SDKError(106003)` 抛出，`AccessDenied` 原文见 `SDKError.raw`；排查清单见 API Reference 错误码表 `106003` 行）。出于安全，强烈建议客户端注入**服务端签发的短期 token**作为 Bearer，而非把长期 API Key 打包进 App 或写入代码仓库。
 
@@ -247,7 +247,7 @@ lifecycleScope.launch { HappyOyster.endTravel() }
 
 **适用模式**：暂停 / 恢复适用于**实时导演**与**角色演绎**，两者行为完全一致（含下面的 3 s 屏障）；**回溯仅实时导演**。世界探索模式下调用 `pauseTravel` / `resumeTravel` / `rewindTravel` 会被 SDK 以 `103003` 拒绝。此外服务端下发的 `version` 必须是本模式的 v2 标识（实时导演 `storyV2`、角色演绎 `actingV2`），否则暂停 / 恢复返回 `103002`。
 
-**暂停是异步的**：`pauseTravel` 方法返回仅代表受理，真正暂停以 `onStatusChanged(Paused)` 为准。在「调用 `pauseTravel`」到「收到 `Paused` 回调」之间，宿主可将本地体验状态标记为 `pausing`；只有收到 `Paused` 后，才应允许调用 `resumeTravel` 或依赖 `paused` 态的 `rewindTravel`。
+**暂停是异步的**：`pauseTravel` 方法返回仅代表受理，真正暂停以 `onStatusChanged(Paused)` 为准。在“调用 `pauseTravel`”到“收到 `Paused` 回调”之间，宿主可将本地体验状态标记为 `pausing`；只有收到 `Paused` 后，才应允许调用 `resumeTravel` 或依赖 `paused` 态的 `rewindTravel`。
 
 **SDK 内部 pause→reopen 屏障**：收到 `Paused` 后即可按契约调用 `resumeTravel` / `rewindTravel`；若调用发生在暂停确认后的 3 s settle 窗口内，SDK 的 suspend 方法会先等待剩余时间，再向服务端发送会重新打开实时房间的请求。宿主无需另加 pause→resume 延时；自然等待已满 3 s 时 SDK 不增加延迟。
 
@@ -427,7 +427,7 @@ SDK 版本
 
 会话 `travelId`
 
-出问题会话的 `encryptedTravelId`（见「会话相关 ID」）
+出问题会话的 `encryptedTravelId`（见“会话相关 ID”）
 
 发生时间
 
@@ -447,7 +447,7 @@ SDK 版本
 
 日志文件
 
-「采集日志」步骤采集的 `HappyOysterSDK` 日志（建议 `DEBUG`/`VERBOSE`）
+“采集日志”步骤采集的 `HappyOysterSDK` 日志（建议 `DEBUG`/`VERBOSE`）
 
 ### 关于脱敏与日志可分享性
 

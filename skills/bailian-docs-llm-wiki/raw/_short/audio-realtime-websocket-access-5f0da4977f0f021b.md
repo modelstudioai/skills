@@ -35,35 +35,15 @@ WebSocket URL 固定如下，通过查询参数 `model` 指定要调用的模型
 
 请求头中需添加如下信息：
 
-**参数**
-
-**类型**
-
-**是否必选**
-
-**说明**
-
-Authorization
-
-string
-
-是
+`Authorization`string是否必选: 是
 
 鉴权令牌，格式为 `Bearer <your_api_key>`，将 `<your_api_key>` 替换为实际的 API Key。
 
-user-agent
-
-string
-
-否
+`user-agent`string是否必选: 否
 
 客户端标识，便于服务端追踪来源。
 
-X-DashScope-WorkSpace
-
-string
-
-否
+`X-DashScope-WorkSpace`string是否必选: 否
 
 阿里云百炼业务空间 ID。
 

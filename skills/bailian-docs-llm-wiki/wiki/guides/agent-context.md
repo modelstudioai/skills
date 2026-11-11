@@ -1,51 +1,38 @@
 # agent context
 
-`agent context` 是百炼平台中用于增强 Agent 推理能力的核心机制，通过动态注入外部信息（如知识库、历史记忆、连接器数据等）来扩展模型的上下文感知范围。它不改变模型本身，而是控制 LLM 输入前的上下文拼接逻辑与生命周期管理。该机制深度集成于百炼 Agent 框架，支持运行时按需加载与过滤。
+agent context 是百炼平台中用于定义 Agent 运行时环境与外部信息输入的关键机制，它决定了 Agent 在执行任务过程中可感知的知识范围、历史交互记忆及可访问的外部数据源。通过合理配置上下文，开发者可显著提升 Agent 的准确性、连贯性与领域适应性。其核心由知识库（RAG）、记忆（Memory）和连接器（Connector）三类组件协同构成。
 
-## 支持的模型/功能
+## 支持的模型与功能
 
-- **模型兼容性**：所有百炼平台支持的 Agent 模型（包括 `qwen-max`、`qwen-plus`、`qwen-turbo` 及自定义微调模型）均原生支持 `agent context`，无需额外适配。
-- **核心功能模块**：
-  - RAG：从知识库检索相关片段并注入上下文，详见 [Agent 上下文 (raw/application-user-guide/agent-context.md)](../../raw/application-user-guide/agent-context.md)；
-  - Memory：维护会话级或用户级[长期记忆](../concepts/long-term-memory.md)，支持向量检索与 TTL 管理；
-  - Connector：对接第三方系统（如 CRM、数据库），实时拉取结构化数据并转换为上下文文本；
-  - ParseX：对上传文件（PDF/Word/Excel 等）进行解析与分块，生成可检索的上下文源。
+- 所有支持 `agent` 类型调用的模型（如 `qwen-plus`、`qwen-max`、`qwen2.5-72b` 等）均原生兼容 agent context 机制；  
+- 功能上覆盖：基于知识库的实时检索增强（RAG）、多轮对话状态维护（Memory）、第三方系统/数据库/API 的安全接入（Connector），以及结构化文档解析能力（ParseX）；  
+- 各功能模块可独立启用或组合使用，具体能力边界详见 [Agent 上下文](../../raw/application-user-guide/agent-context.md)。
 
 ## 关键参数
 
-| 参数名 | 类型 | 默认值 | 说明 |
-|--------|------|--------|------|
-| `context_sources` | array of object | `[]` | 指定上下文来源列表，每个对象含 `type`（`rag`/`memory`/`connector`/`parsex`）、`id`（资源 ID）和可选 `filter`（如 `{"user_id": "{{user_id}}"}`） |
-| `max_context_tokens` | integer | `2048` | 向 LLM 实际注入的上下文最大 token 数（含 prompt），超出部分按相关性截断 |
-| `context_ttl_seconds` | integer | `3600` | 内存类上下文（如 `memory`）的缓存有效期，仅对启用缓存的场景生效 |
+在创建或更新 Agent 时，需通过 `context` 字段显式声明上下文配置，主要参数包括：
 
-> **注意**：`max_context_tokens` 的实际生效值受所选模型最大上下文长度限制；例如 `qwen-turbo` 最大输入为 8192 tokens，但若设置 `max_context_tokens: 10000`，将被静默截断为 8192 —— 此行为在 [Agent 上下文 (raw/application-user-guide/agent-context.md)](../../raw/application-user-guide/agent-context.md) 中未明确说明，需以模型规格文档为准。
+| 参数 | 类型 | 说明 |
+|------|------|------|
+| `knowledge_base_ids` | string[] | 指定关联的知识库 ID 列表，用于 RAG 检索；支持最多 5 个知识库同时生效 |
+| `memory_config.enabled` | boolean | 是否启用对话记忆；若为 `true`，需配合 `memory_config.ttl_seconds`（默认 3600）控制生命周期 |
+| `connectors` | object[] | 定义 Connector 配置数组，每个对象含 `id`、`auth_type` 和 `config` 字段；详情见 [Connector](../../raw/application-user-guide/agent-context/overview.md) |
+| `parsex_enabled` | boolean | 是否启用 ParseX 文档解析（仅对上传文件类输入生效）；该参数在 [ParseX](../../raw/application-user-guide/agent-context/getting-started-overview.md) 中有完整说明 |
+
+> **注意**：`memory_config.ttl_seconds` 最大值为 86400（24 小时），但部分旧版 SDK 示例中误标为 172800，应以 [Memory](../../raw/application-user-guide/agent-context/memory-library-overview.md) 文档为准。
 
 ## 使用方式
 
-1. 在 Agent 配置 YAML 或 API 请求体中声明 `context_sources`，例如：
-
-```yaml
-context_sources:
-  - type: rag
-    id: kb_abc123
-    filter: { tags: ["public"] }
-  - type: memory
-    id: user_mem
-    filter: { user_id: "{{user_id}}" }
-```
-
-2. 调用 `/v1/agents/{agent_id}/chat` 时传入运行时变量（如 `user_id`），系统自动解析 `filter` 并加载对应上下文；
-3. 上下文内容经标准化清洗（去重、去噪、格式归一）后，与 system prompt 和用户消息拼接，送入模型推理流程。
-
-完整配置示例与字段约束请参考 [Agent 上下文 (raw/application-user-guide/agent-context.md)](../../raw/application-user-guide/agent-context.md)。
+1. **API 调用**：在 `POST /v1/agents/{agent_id}/invoke` 请求体中，将上下文配置嵌入 `input.context` 字段（非顶层 `context`）；  
+2. **控制台配置**：在 Agent 编辑页的「上下文」标签页中，可视化勾选知识库、开启记忆、添加 Connector 并保存；  
+3. **动态覆盖**：每次调用均可传入临时 `context`，优先级高于 Agent 全局配置，适用于多租户场景下的上下文隔离。
 
 ## 限制和注意事项
 
-- 单次请求最多支持 5 个 `context_sources`，超限将返回 `400 Bad Request`；
-- `connector` 类型上下文需提前在控制台完成认证与字段映射配置，否则加载失败且无 fallback；
-- `parsex` 上下文仅在首次调用时触发解析，后续请求复用已索引结果；若原始文件更新，需手动触发 `reindex`；
-- 所有上下文内容在进入模型前均经过敏感词过滤与长度截断，**不保证原始格式保留**（如表格结构、代码缩进可能丢失）。
+- 单次 RAG 检索最大返回 chunk 数为 10，总 token 上限约 4096（受模型 context window 限制）；  
+- Memory 仅保留当前 session 内的用户与 Agent 交互历史，不跨 session 共享；  
+- Connector 的认证凭据（如 API Key）必须通过百炼密钥管理服务注入，禁止硬编码；  
+- 当同时启用 RAG 与 ParseX 且输入含文件时，ParseX 解析结果会作为额外上下文参与 RAG 检索——该行为已在 [RAG](../../raw/application-user-guide/agent-context/knowledge-base.md) 文档中明确说明，但未在早期版本的 overview 中体现，需特别留意。
 
 ## 来源文档
 

@@ -1430,7 +1430,7 @@ DTU 按输入/输出 TPM 售卖，所购 TPM 即每分钟可处理的最大 toke
 
 部署列表展示已购买的输入/输出 TPM 额度，详情页展示 TPM 容量详情。
 
-扩缩容：在部署列表中点击「扩缩容」修改输入/输出 TPM 容量。扩容显示需补交金额，缩容显示预计退款金额。输入和输出需同增或同减，不能一增一减。也可通过 API 扩缩容，详见[模型部署 API 参考](raw/model-api-reference/model-production/deployments-api/model-deployment-api-reference.md)。仅运行中的部署可操作。
+扩缩容：在部署列表中点击“扩缩容”修改输入/输出 TPM 容量。扩容显示需补交金额，缩容显示预计退款金额。输入和输出需同增或同减，不能一增一减。也可通过 API 扩缩容，详见[模型部署 API 参考](raw/model-api-reference/model-production/deployments-api/model-deployment-api-reference.md)。仅运行中的部署可操作。
 
 续费：预付费包月到期可续费，详情页续费按钮进入续费流程，支持自动续费开关与单次续费时长。
 

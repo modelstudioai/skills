@@ -6,7 +6,7 @@ DashScope SDK Expert（下称 SDK Expert）是 dashscope Python SDK（≥1.27.3�
 
 ## 快速开始
 
-1.  **准备 API Key 与 base\_url**：在[百炼控制台](https://bailian.console.aliyun.com)「API Key」创建 Key（`sk-` 前缀），各地域 Key 独立。配置环境变量或会话内 `/setup`：
+1.  **准备 API Key 与 base\_url**：在[百炼控制台](https://bailian.console.aliyun.com)“API Key”创建 Key（`sk-` 前缀），各地域 Key 独立。配置环境变量或会话内 `/setup`：
     
     ```
     export DASHSCOPE_API_KEY=sk-xxxxxxxx

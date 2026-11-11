@@ -192,7 +192,7 @@ Directing 不支持 SDK 环境动作控制，固定返回空数组；`failed` �
 -   `running` 状态可按 `creationModel` 调用支持的控制接口：普通模式可 `instruct`、`pause`、`resume`、`rewind`、`end`；剧本模式可 `update-script`、`pause`、`resume`、`rewind`、`end`。
 -   本接口不返回 `mode`、`aspectRatio`、`playUrl`、`bgmUrl` 或 `sessionId`；播流配置以[进入房间](raw/_short/happyoyster-directing-enter-travel-api-reference-094ec4d460aff9ef.md)响应为准。
 -   `clientStreamStatus` 是客户端播放侧心跳，`rtcStatus` 是服务端推流侧状态，两者不可互相替代。
--   `failed` 是终态，不会再产生成片；请按 `errorCode` 展示失败原因，不要展示为「尚未完成」。
+-   `failed` 是终态，不会再产生成片；请按 `errorCode` 展示失败原因，不要展示为“尚未完成”。
 
 ## 错误码
 

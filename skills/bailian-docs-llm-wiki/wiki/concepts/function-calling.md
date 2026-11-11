@@ -1,51 +1,51 @@
 # 函数调用
 
-函数调用（Function Calling）是百炼平台中大模型主动识别用户意图、生成结构化[工具调用](tool-calling.md)请求，并交由外部系统执行的关键能力。它使模型从“纯文本生成器”升级为可操作真实世界的智能代理，支撑搜索、计算、多模态生成、系统集成等扩展行为。
+函数调用（Function Calling）是百炼平台中实现模型与外部系统能力协同的核心机制：模型在推理过程中，可自主识别用户意图、生成结构化工具调用请求（含函数名与参数），由平台或 SDK 负责安全执行、结果注入并继续推理，从而完成搜索、计算、OCR、GUI操作等超出纯语言生成范畴的任务。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-函数调用在百炼平台中并非单一接口特性，而是贯穿模型能力、插件机制与应用范式的横切能力，具体体现为以下三类实践方式：
+- **[OpenAI 兼容接口](openai-compatible-interface.md)（`/chat/completions`）**：通过 `tools` 数组注册函数定义，设置 `tool_choice` 控制调用策略（如 `"auto"` 或指定函数名）。模型返回 `{"tool_calls": [...]}`，SDK 自动解析、执行并拼接 `tool_message` 后续调用。适用于通用文本+工具混合任务（如查天气、调用数据库）。
 
-- **模型原生[工具调用](tool-calling.md)**：`qwen-max` 和 `qwen-plus` 等支持模型可在一次推理中直接输出符合 OpenAI 或 Anthropic 规范的 `tool_calls` 结构（如 `{"name": "quark_search", "arguments": "{\"query\":\"杭州天气\"}"}`）。DashScope 原生接口则通过 `enable_web_search`、`enable_code_interpreter` 等布尔开关或 `tools` 参数显式启用，模型据此自主规划是否调用及调用哪个工具。
+- **意图理解模型（`tongyi-intent-detect-v3`）**：不直接执行函数，而是作为“函数调用前置决策器”——输入用户消息后，输出标准化意图标签（如 `SEARCH_PRODUCT`）及结构化参数（如 `{"keyword": "无线耳机"}`），供业务层路由至对应工具或服务。需严格配置 System Message 以启用 `INTENT_MODE`。
 
-- **插件驱动的函数调用**：在智能体（Agent 2.0）或工作流中，插件（如 `calculator`、`text_to_image`、自定义 MCP 服务）被注册为可调用函数。模型根据系统提示词中声明的工具签名（名称、描述、参数 schema），结合用户输入生成调用请求；平台负责参数校验、鉴权转发、结果注入与错误重试。
+- **Agent 框架（Managed / Flow / Sandbox）**：  
+  - *Managed Agent*：工具由控制台预绑定，模型自动触发，开发者无需透传 `tools`；  
+  - *Flow Agent*：工具调用作为独立节点嵌入工作流，支持条件分支与多工具串行/并行；  
+  - *Sandbox Agent*：在 Python `run()` 函数内，通过 `self.call_tool(name, **kwargs)` 显式发起调用，完全掌控执行逻辑与错误处理。
 
-- **专用模型的结构化输出**：部分垂直模型将函数调用作为标准输出格式。例如，`tongyi-intent-detect-v3` 在 `INTENT_MODE` 下不返回自然语言，而是直接输出 JSON 格式的函数调用对象（含 `function_name` 和 `parameters`），供下游路由至对应业务服务；`gui-plus` 模型则在系统消息中声明 `computer_use` 工具后，输出带 `action`/`target`/`value` 字段的操作指令。
+- **GUI 自动化模型（`gui-plus` 系列）**：必须配合 `computer_use` 工具函数使用。模型接收截图后，输出 `tool_calls` 调用 `computer_use` 并传入操作指令（如 `{"action": "click", "x": 120, "y": 340}`），平台执行真实鼠标键盘操作并返回屏幕变化结果。
 
-> ⚠️ 注意：`qwen-turbo`、`qwen-mt-plus`、`qwen-deep-research` 等模型**不支持自动函数调用**；其中 `qwen-deep-research` 虽具备联网检索能力，但该能力内置于模型内部，不可拆解为用户可控的独立函数调用。
+> ⚠️ 注意：`qwen-deep-research` 等专用模型**不支持标准 `function_call` 协议**，其“研究路径规划”和“网络搜索”为内置能力，不可自定义工具；OCR/GUI 类模型虽支持 `tool_calls`，但仅限平台预置的专用工具（如 `ocr_extract`, `computer_use`），不接受任意第三方函数注册。
 
 ## 关键参数和配置
 
-函数调用的启用与行为控制依赖以下核心参数（按作用层级组织）：
+| 参数 | 作用 | 适用场景 | 示例值 |
+|------|------|----------|--------|
+| `tools` | 定义可用函数列表，含 `name`、`description`、`parameters`（JSON Schema） | [OpenAI 兼容接口](openai-compatible-interface.md)、Flow Agent、Sandbox Agent | `[{"name": "get_weather", "description": "查询城市天气", "parameters": {"type": "object", "properties": {"city": {"type": "string"}}}}]` |
+| `tool_choice` | 控制模型是否及如何调用函数 | [OpenAI 兼容接口](openai-compatible-interface.md) | `"auto"`（默认）、`"none"`、`{"type": "function", "function": {"name": "get_weather"}}` |
+| `enable_thinking` | 是否启用带推理链的工具调用（返回 `reasoning_content` 字段） | `gui-plus`、Batch 接口 | `true`（开启后响应含思考过程，计费更高） |
+| `system` message 中的指令 | 触发特定函数调用模式的关键开关 | 意图理解模型、OpenAI 兼容接口 | `"Response in INTENT_MODE."`（意图模型）、`"You are a helpful assistant that can call functions."`（通用模型） |
 
-| 参数 | 作用范围 | 必填 | 说明 |
-|------|----------|------|------|
-| `tools` | OpenAI 兼容 / DashScope / Assistant API | 否（启用调用时必填） | JSON Schema 数组，定义可用函数的 `name`、`description`、`parameters`（OpenAPI 3.0 兼容）。模型据此理解工具能力边界。 |
-| `tool_choice` | OpenAI 兼容 / Anthropic 兼容 / DashScope | 否（推荐显式指定） | 控制调用策略：<br>• `"auto"`（默认）：模型自主决定是否调用及调用哪个；<br>• `"none"`：禁用调用；<br>• `{"type": "function", "function": {"name": "xxx"}}`：强制调用指定函数。 |
-| `enable_web_search` / `enable_code_interpreter` | DashScope 原生接口 | 否 | 布尔开关，快速启用内置工具。比 `tools` 更轻量，但灵活性低（无参数定制）。 |
-| `biz_params` / `user_defined_params` | 插件调用（API/SDK） | 否（透传场景必填） | 用于向插件传递业务上下文参数（如用户 ID、会话 ID），不参与模型推理，但影响工具执行逻辑。 |
-| `system`（Anthropic） / `messages[0].content`（OpenAI） | 所有兼容接口 | 推荐 | 在系统消息中清晰描述可用工具及其用途，是提升调用准确率的关键提示工程实践。 |
-
-- **参数验证要求**：所有 `tools` 中定义的 `parameters` schema 必须为有效 JSON Schema；Object 类型参数的每个子属性必须设置 `description`（否则自定义插件发布失败）。
-- **安全约束**：函数调用仅在模型明确输出 `tool_calls` 字段时触发；平台**不会**执行未经声明的工具或未授权的 URL 请求。
+- **必填约束**：所有工具调用均要求 `parameters` 符合 JSON Schema 校验；若传入非法参数，平台将返回 `400 Bad Request` 并提示具体字段错误。
+- **安全限制**：工具执行环境严格隔离（Sandbox 沙箱、Connector 白名单域名、MCP 权限管控），禁止直接访问内网、本地文件系统或未授权 API。
 
 ## 面向开发者，简洁实用
 
-- ✅ **快速启动**：若只需基础搜索/计算，优先使用 DashScope 的 `enable_web_search=true` 或 `enable_code_interpreter=true`，无需写 schema。
-- ✅ **精准控制**：需调用自有服务时，用 `tools` + `tool_choice` 显式声明；在系统提示词中用自然语言+JSON 示例说明工具用法（如 `"调用 weather_api 时，务必传入 city 字段，例如：{ 'city': '北京' }"`）。
-- ✅ **调试技巧**：开启 `enable_thinking=true`（工作流）或 `thinking_mode`（API），查看模型的思考链（reasoning trace），定位调用失败是因参数提取不准，还是工具描述模糊。
-- ❌ **避免踩坑**：
-  - 不要混用 `enable_web_search` 和 `tools` —— 二者互斥，后者优先级更高；
-  - `qwen-turbo` 等轻量模型不支持任何函数调用，勿在 `tools` 中声明；
-  - 流式响应中，`tool_calls` 仅在完整响应结束时一次性返回，不支持增量解析。
-
-函数调用是构建可靠 AI 应用的基石。始终以「最小可行工具集 + 清晰系统提示 + 显式 tool_choice」为起点，再逐步扩展复杂度。
+- ✅ **快速验证**：用 Playground 测试 `qwen3.8-max` + `tools`，观察 `tool_calls` 输出格式；再换 `tongyi-intent-detect-v3` 对比意图标签输出差异。  
+- ✅ **生产建议**：  
+  - 优先使用 Managed Agent 封装高频工具（如订单查询），降低维护成本；  
+  - 复杂逻辑（如多步骤表单填写）用 Sandbox Agent 自行 `call_tool` 并处理异常；  
+  - GUI 自动化务必搭配 `vl_high_resolution_images: true` 提升截图定位精度。  
+- ❌ **避坑提示**：  
+  - 不要对 `qwen-deep-research` 传 `tools` 参数——会被忽略且可能引发兼容性警告；  
+  - `tools` 数组长度无硬性上限，但超过 20 个函数会显著增加模型推理延迟，建议按场景分组注册；  
+  - 所有工具调用结果均以 `tool_message` 形式注入下一轮 `messages`，勿遗漏该消息体否则上下文断裂。
 
 ## 关联主题页
 
-- [qwen api reference](../api/qwen-api-reference.md)
 - [more models](../api/more-models.md)
-- [plug in](../guides/plug-in.md)
-- [llm application](../guides/llm-application.md)
+- [get started with agents](../guides/get-started-with-agents.md)
+- [agent development](../guides/agent-development.md)
+- [toolkits and frameworks](../api/toolkits-and-frameworks.md)
 
 

@@ -5,3 +5,4 @@
 这里收录记忆库接入真实产品的实践案例，持续更新。
 
 -   [为 OpenClaw 配置长期记忆插件](raw/application-user-guide/agent-context/memory-library-overview/best-practices/modelstudio-memory-for-openclaw.md)：通过长期记忆插件，让 OpenClaw Agent 跨会话记住用户偏好与上下文
+-   [处理时效性记忆](raw/application-user-guide/agent-context/memory-library-overview/best-practices/time-sensitive-memories.md)：利用记忆自带的时间戳，让模型感知记忆的记录时间，避免把过期状态当作当前事实

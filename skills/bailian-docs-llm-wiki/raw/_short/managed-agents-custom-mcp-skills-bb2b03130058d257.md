@@ -4,14 +4,14 @@
 
 ## 概述
 
-内置工具集（[入门篇](raw/_short/managed-agents-data-analysis-2249e7a887786f0b.md)）、MCP 市场服务（[生产化篇](raw/application-user-guide/agent-development/managed-agents/managed-agents-best-practices/managed-agents-production.md)）都是「平台给的」能力；本篇讲反方向——**把已有的能力挂上 Agent**：已经跑着的 MCP Server 注册进阿里云百炼（自定义 MCP），团队的作业流程打包上传（Skills）。
+内置工具集（[入门篇](raw/_short/managed-agents-data-analysis-2249e7a887786f0b.md)）、MCP 市场服务（[生产化篇](raw/application-user-guide/agent-development/managed-agents/managed-agents-best-practices/managed-agents-production.md)）都是“平台给的”能力；本篇讲反方向——**把已有的能力挂上 Agent**：已经跑着的 MCP Server 注册进阿里云百炼（自定义 MCP），团队的作业流程打包上传（Skills）。
 
 ## 场景：鹿鸣出版的审读助手
 
-「鹿鸣出版」是一家虚构的图书出版公司，内容运营部每个月要处理大量来稿。他们有两样现成的资产：
+“鹿鸣出版”是一家虚构的图书出版公司，内容运营部每个月要处理大量来稿。他们有两样现成的资产：
 
 1.  **一套编辑规范知识库**——早已建在阿里云百炼知识索引（RAG）上，对外暴露的就是一个标准的 MCP 端点。痛点：这个知识库以前只有应用侧能查，Managed Agent 用不上。
-2.  **一个稿件体检流程**——老编辑的「三看」经验：看标题层级、看段落长度、看绝对化用语。以前是人肉 checklist，想变成 Agent 自动执行。
+2.  **一个稿件体检流程**——老编辑的“三看”经验：看标题层级、看段落长度、看绝对化用语。以前是人肉 checklist，想变成 Agent 自动执行。
 
 诉求很清晰：**知识库的 MCP 端点是现成的，让 Agent 能查它；体检流程是现成的，让 Agent 照着做。**这正好对应本篇两个主题：自定义 MCP（注册已有服务）与自定义 Skills（上传自有流程）。
 
@@ -55,9 +55,9 @@ MCP 市场服务
 
 阿里云百炼的 MCP 管理分两个标签页：**市场**（阿里云百炼托管，开箱即用，`WebSearch` 就在这）和**自定义**（接入自己的 MCP 服务器或第三方服务）。自定义支持四种接入类型：**插件**、**脚本部署**、**AI 网关**、**阿里云 OpenAPI**。
 
-本篇的重点场景是：**MCP Server 已经在跑了**（鹿鸣的知识库 RAG 端点），只差「在阿里云百炼登记一笔」。这种情况选**脚本部署**里的 **HTTP 部署**（安装方式选 `http`）——注意，这一步只是**注册**（把端点地址、鉴权方式告诉阿里云百炼），不会真正部署任何东西，**不产生部署费用**。
+本篇的重点场景是：**MCP Server 已经在跑了**（鹿鸣的知识库 RAG 端点），只差“在阿里云百炼登记一笔”。这种情况选**脚本部署**里的 **HTTP 部署**（安装方式选 `http`）——注意，这一步只是**注册**（把端点地址、鉴权方式告诉阿里云百炼），不会真正部署任何东西，**不产生部署费用**。
 
-进入控制台「Managed Agent → MCP」的**自定义**标签页，点击右上角**创建MCP服务**，在弹出的类型选择里选**脚本部署**。
+进入控制台“Managed Agent → MCP”的**自定义**标签页，点击右上角**创建MCP服务**，在弹出的类型选择里选**脚本部署**。
 
 **说明**选择脚本部署后，表单的**安装方式**有 `npx` / `uvx` / `http` 三种。`npx` / `uvx` 会把服务真正部署到函数计算（Function Compute），按调用时长和次数计费；**`http` 是纯注册**——只登记现成端点，表单里的部署方式、部署地域字段会收起，不产生部署费用。
 
@@ -87,7 +87,7 @@ MCP 市场服务
 -   `url` 里的 `${workspaceId}` 是阿里云百炼工作空间 ID（控制台右上角可见，形如 `llm-xxxx`）；
 -   `headers` 里带鉴权——RAG 端点用的是普通 API Key（Bearer）。**注意：注册时填写的密钥存在阿里云百炼侧的 MCP 配置里，Agent 调用时由平台代为带上**，不用在 Agent 的 system 提示词或 vault 里再放一份。
 
-**说明**这个例子反过来也说明一件常被误解的事：**「自定义 MCP」不要求从零写一个 MCP Server**。任何已经在运行的、暴露了 MCP 协议端点的服务——自研的业务系统 API 网关、第三方 SaaS 的 MCP 接口、甚至另一个云产品（如阿里云百炼知识索引）——都可以这样注册进来。阿里云百炼做的是「登记 + 代理调用」，不是「托管运行」。
+**说明**这个例子反过来也说明一件常被误解的事：**“自定义 MCP”不要求从零写一个 MCP Server**。任何已经在运行的、暴露了 MCP 协议端点的服务——自研的业务系统 API 网关、第三方 SaaS 的 MCP 接口、甚至另一个云产品（如阿里云百炼知识索引）——都可以这样注册进来。阿里云百炼做的是“登记 + 代理调用”，不是“托管运行”。
 
 提交部署后，自定义列表里出现新服务；进入详情页，可在概览、工具、外部调用标签页查看服务状态与调用信息。
 
@@ -123,7 +123,7 @@ curl -s -X POST "$AGENTSTUDIO_URL/agents" \
 
 失败表现
 
-运行时工具静默缺失，Agent 回复「没有可用工具」
+运行时工具静默缺失，Agent 回复“没有可用工具”
 
 创建即报错：`AGENT_010 "MCP Server 校验失败: 查询MCP详情异常"`
 
@@ -213,13 +213,13 @@ object，必填
 
 ## Skills：把团队流程打包上传
 
-MCP 解决「Agent 能调你的服务」，Skills 解决「Agent 会按你的流程干活」。一个 Skill 就是一个 zip 包：里面放着一份**说明书**（SKILL.md）加**随包资源**（脚本、模板、参考文件），打包上传、过审、挂到 Agent 上。SKILL.md 的完整编写规范见[技能](raw/application-user-guide/agent-development/managed-agents/managed-agents-agent/managed-agents-skill.md)。
+MCP 解决“Agent 能调你的服务”，Skills 解决“Agent 会按你的流程干活”。一个 Skill 就是一个 zip 包：里面放着一份**说明书**（SKILL.md）加**随包资源**（脚本、模板、参考文件），打包上传、过审、挂到 Agent 上。SKILL.md 的完整编写规范见[技能](raw/application-user-guide/agent-development/managed-agents/managed-agents-agent/managed-agents-skill.md)。
 
 ### 打包
 
 zip 包不超过 **10 MB**，**根目录必须有 SKILL.md**。frontmatter 声明 `name` 和 `description`——**智能体根据 description 决定何时调用这个技能**。
 
-鹿鸣的「稿件体检」技能，两个文件打包：
+鹿鸣的“稿件体检”技能，两个文件打包：
 
 **SKILL.md**（说明书）：
 
@@ -339,7 +339,7 @@ curl -s -X POST "$AGENTSTUDIO_URL/skills" \
 
 状态机：`checking` → `active`（可挂载）/ `rejected`（不可挂载，版本详情里有按文件路径列出的问题）→ `deleted`。
 
-**审核不是秒级的**——脚本化上传时不要假设「传完立刻可挂载」，要么轮询 `GET /skills/{skill_id}` 等 `active`，要么把上传做成异步流水线（上传 → 通知 → 挂载）。
+**审核不是秒级的**——脚本化上传时不要假设“传完立刻可挂载”，要么轮询 `GET /skills/{skill_id}` 等 `active`，要么把上传做成异步流水线（上传 → 通知 → 挂载）。
 
 **第四步：挂载到 Agent**：
 
@@ -363,7 +363,7 @@ curl -s -X POST "$AGENTSTUDIO_URL/agents" \
 -   挂 `checking` 状态的技能 → `400 AGENT_010 "Skill 不存在或正在接受安全扫描: skill_xxx@1.0"`
 -   挂 active 技能但版本号写 `9.9` → 同样的 400（错误信息把 `skill_id@version` 拼在一起，方便定位是哪一对没对上）
 
-### 运行时：技能是怎么被「用」起来的
+### 运行时：技能是怎么被“用”起来的
 
 发一篇问题稿件（标题跳级 + 禁用词 + 超长段落）给挂了技能的 Agent，事件历史里能完整看到技能的工作机制：
 
@@ -379,8 +379,8 @@ curl -s -X POST "$AGENTSTUDIO_URL/agents" \
 逐条解读：
 
 1.  **技能不预注入系统提示词。**Agent 收到消息后，模型自己决定调用一个**隐藏工具** `activate_skill`，参数就是技能名——SKILL.md 全文（说明书）这时才进入对话上下文。好处显而易见：挂十个技能也不会撑爆系统提示词，按需加载。
-2.  **zip 包被解压到沙箱** `/root/workspace/skills/<技能名>/` 目录（目录名 = SKILL.md 的 name），说明书里引用的脚本直接用 bash 跑。SKILL.md 正文里的路径要写「相对技能目录」的用法（如上例直接 `manuscript_check.py`），Agent 自己会先 `cd` 过去。
-3.  **说明书决定行为，脚本决定事实。**Agent 拿到脚本输出的 JSON 后做的是「整理 + 判断」：「第一章 绪论」触发了禁用词「第一」的机械匹配，Agent 的处理是——「系章节序号用词触发，建议与审校确认序号类『第一』是否属于豁免情形」。**脚本管扫描，模型管裁量**，这是设计技能时最值得想清楚的分界线。
+2.  **zip 包被解压到沙箱** `/root/workspace/skills/<技能名>/` 目录（目录名 = SKILL.md 的 name），说明书里引用的脚本直接用 bash 跑。SKILL.md 正文里的路径要写“相对技能目录”的用法（如上例直接 `manuscript_check.py`），Agent 自己会先 `cd` 过去。
+3.  **说明书决定行为，脚本决定事实。**Agent 拿到脚本输出的 JSON 后做的是“整理 + 判断”：“第一章 绪论”触发了禁用词“第一”的机械匹配，Agent 的处理是——“系章节序号用词触发，建议与审校确认序号类『第一』是否属于豁免情形”。**脚本管扫描，模型管裁量**，这是设计技能时最值得想清楚的分界线。
 
 ### 版本管理
 
@@ -402,7 +402,7 @@ curl -s -X POST "$AGENTSTUDIO_URL/skills/skill_MWY3ZTY5ZDE3MGIzNDFkZWI2Zj/versio
 -   **版本号 0.1 步进自动分配**：`1.0` → `1.1` → `1.2`……（创建响应里 `version` 是 null，但版本列表立即出现新版本）；
 -   新版本同样要过安全扫描（checking → active，耗时与首发同量级）；
 -   **挂载锁定**：新版本 `1.1` 变为 active 后，已挂载 `1.0` 的 Agent 配置纹丝不动（GET /agents 复核 `skills[0].version == "1.0"`）。要让 Agent 用新版，必须显式更新 Agent 配置——与 Agent 版本锁定（[入门篇](raw/_short/managed-agents-data-analysis-2249e7a887786f0b.md)、[进阶：提示词版本管理与回滚](raw/_short/managed-agents-prompt-versioning-b2a756840e400199.md)）同一哲学：**运行中的东西不被后台变更波及**；
--   **当前升级窗口的两个实际行为**（新版本审核期间，实测约数分钟）：`latest_version` 在新版本**进入 checking 时即推进**到 `1.1`，而非审核通过后；且该窗口内**新建 Agent 挂载旧的 active 版本 `1.0` 会被拒**（400「Skill 不存在或正在接受安全扫描: ...@1.0」），已挂载的 Agent 运行也可能报错。窗口结束后不改动任何配置即可恢复。计划升级时避开这个窗口建新 Agent，或等新版本 active 后再操作；
+-   **当前升级窗口的两个实际行为**（新版本审核期间，实测约数分钟）：`latest_version` 在新版本**进入 checking 时即推进**到 `1.1`，而非审核通过后；且该窗口内**新建 Agent 挂载旧的 active 版本 `1.0` 会被拒**（400“Skill 不存在或正在接受安全扫描: ...@1.0”），已挂载的 Agent 运行也可能报错。窗口结束后不改动任何配置即可恢复。计划升级时避开这个窗口建新 Agent，或等新版本 active 后再操作；
 -   版本列表 `GET /skills/{id}/versions` 按新到旧排列；
 -   `GET /skills/{id}/versions/{version}/content` 返回 **OSS 预签名下载 URL**——可以把当年上传的包原样拿回来（审计利器：技能内容可追溯）。
 
@@ -463,7 +463,7 @@ curl -s -X DELETE "$AGENTSTUDIO_URL/skills/skill_xxx" -H "Authorization: Bearer 
 
 MCP 与 Skills 的分工：**MCP 决定 Agent 能调用什么服务，Skill 决定 Agent 按什么流程执行**。鹿鸣的审读助手两者都挂载：RAG MCP 让它能查编辑规范，manuscript-check 技能让它按稿件体检流程完成检查。
 
-工程清单（按优先级）：SKILL.md 的 description 写清「何时用」（模型靠它路由）→ 上传流水线预留审核等待（分钟级）→ 挂载锁定具体版本（不追随 latest）→ 说明书里脚本路径写相对用法 → 删除前评估已挂载引用。
+工程清单（按优先级）：SKILL.md 的 description 写清“何时用”（模型靠它路由）→ 上传流水线预留审核等待（分钟级）→ 挂载锁定具体版本（不追随 latest）→ 说明书里脚本路径写相对用法 → 删除前评估已挂载引用。
 
 ## 下一步
 

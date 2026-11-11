@@ -4,7 +4,7 @@
 
 ## 概述
 
-本教程用 curl 走通 Managed Agents 的 REST API：创建 Agent 与 Environment、上传并挂载一份掺了脏数据的订单流水、开启 Session 让 Agent 自主完成「体检 → 清洗 → 算指标 → 写报告」，最后取回产物并归档资源。
+本教程用 curl 走通 Managed Agents 的 REST API：创建 Agent 与 Environment、上传并挂载一份掺了脏数据的订单流水、开启 Session 让 Agent 自主完成“体检 → 清洗 → 算指标 → 写报告”，最后取回产物并归档资源。
 
 选数据分析场景，是因为它天然带一个反馈闭环：Agent 必须先自己发现数据有什么问题，才能算对指标；算完还得回头验证数字自不自洽。这个例子覆盖了后续所有教程都会用到的 API 形态：Agent / Environment / Session、文件挂载、事件流、产物取回、归档。
 
@@ -33,11 +33,11 @@ Agent 和 Environment 创建一次，可以在多个 Session 里复用。每个 
 
 ## 步骤 1：创建 Agent
 
-数据分析 Agent 的产出质量，关键在 system prompt 上。这里不写「怎么做」的流程，而是写**工作纪律**——先验数据再下结论、清洗要保守、结论必须带数字。剩下的让 Agent 自己摸索。
+数据分析 Agent 的产出质量，关键在 system prompt 上。这里不写“怎么做”的流程，而是写**工作纪律**——先验数据再下结论、清洗要保守、结论必须带数字。剩下的让 Agent 自己摸索。
 
 工具用内置工具集，`type` 为 `builtin_toolkit`（一个 Agent 最多挂 1 个内置工具集）。本例开启 6 个核心工具：`bash`、`write`、`read`、`edit`、`glob`、`grep`，足以覆盖全程离线分析；内置工具集还提供 `web_search` 与 `web_fetch` 两个联网工具，本例不需要。`mark_artifacts` 由平台运行时自动注入，用于登记产物文件，无需声明（显式列出也不影响调用）；`download_file` 已下线，不要再配置，取产物走 Files API（见 步骤 6）。
 
-**警告****最常见的配置错误**：`default_config.enabled: true` 并不会把工具真的发给模型。必须在 `configs[ ]` 里把每个要用的工具**逐个显式列出**并置 `enabled: true`。只写 `default_config.enabled: true` 而不列 `configs`，Agent 拿到的工具列表只有平台自动注入的 `mark_artifacts`，随后任何 `bash` 调用都会回 `TOOL_NOT_FOUND: Tool 'bash' not found. Available tools: ['mark_artifacts']`，回合以「没有工具可用」结束。
+**警告****最常见的配置错误**：`default_config.enabled: true` 并不会把工具真的发给模型。必须在 `configs[ ]` 里把每个要用的工具**逐个显式列出**并置 `enabled: true`。只写 `default_config.enabled: true` 而不列 `configs`，Agent 拿到的工具列表只有平台自动注入的 `mark_artifacts`，随后任何 `bash` 调用都会回 `TOOL_NOT_FOUND: Tool 'bash' not found. Available tools: ['mark_artifacts']`，回合以“没有工具可用”结束。
 
 模型选 `qwen3.8-max`。Managed Agents 接受的模型 ID 是 `qwen3.8-max` / `qwen3.7-max` / `qwen3.7-plus` / `qwen3.6-plus` / `qwen3.6-flash` 这一代命名；`qwen3-max` 这类 DashScope 旧版常规 ID 会被直接拒绝（`400 AGENT_010 模型不存在`）。具体可用列表以控制台下拉为准。
 
@@ -84,8 +84,8 @@ export AGENT_ID="agent_xxxxxxxx"
 
 这段 prompt 里有两条是本例的关键：
 
--   **「先做一次数据质量体检」**：缺少这句时，模型容易直接读取数据并开始计算，脏数据会被静默带入结论。
--   **「看起来极端但内部自洽的数据……不要删掉」**：这是防**过度清洗**的护栏。数据里埋了一笔金额畸大但完全合规的批发订单，占总营收一半以上。少了这句，模型很可能把它当异常值剔掉，报出一个「更漂亮」但错误的大盘。
+-   **“先做一次数据质量体检”**：缺少这句时，模型容易直接读取数据并开始计算，脏数据会被静默带入结论。
+-   **“看起来极端但内部自洽的数据……不要删掉”**：这是防**过度清洗**的护栏。数据里埋了一笔金额畸大但完全合规的批发订单，占总营收一半以上。少了这句，模型很可能把它当异常值剔掉，报出一个“更漂亮”但错误的大盘。
 
 **说明**`builtin_toolkit` 有两级开关——`default_config.{enabled, permission_policy}` 与 `configs[ ].{name, enabled, permission_policy}`。`permission_policy` 接受 `{"type": "always_allow"}`（直接执行）或 `{"type": "always_ask"}`（每次调用前等待确认）。如果某次工具调用需要人工批准，SSE 流会出现 `stop_reason.type == "requires_action"`（带 `pending_batch_id` 与 `pending_call_ids`），此时按 `batch_id` + `call_id` 回填一条 `tool_approval_response` 事件即可，详见[会话事件流](raw/application-user-guide/agent-development/managed-agents/managed-agents-session/managed-agents-event-stream.md)。本例全程 `always_allow`。
 
@@ -127,13 +127,13 @@ curl -X POST "$AGENTSTUDIO_URL/environments" \
 export ENV_ID="env_xxxxxxxx"
 ```
 
-响应会把 `config.packages` 原样回显（并额外加一个 `"type": "packages"` 字段）。预装是否生效，可以在 步骤 5 的任务里让 Agent 打印版本号确认——沙箱里 pandas 就绪，且全程没有执行过任何 `pip install`。Environment 的完整字段说明见[云端托管环境](raw/application-user-guide/agent-development/managed-agents/managed-agents-environment/managed-agents-cloud-hosting.md)；带预装包的环境创建后可能需要预热时间，未完成前创建会话会被拒绝，详见该页「环境预热」。
+响应会把 `config.packages` 原样回显（并额外加一个 `"type": "packages"` 字段）。预装是否生效，可以在 步骤 5 的任务里让 Agent 打印版本号确认——沙箱里 pandas 就绪，且全程没有执行过任何 `pip install`。Environment 的完整字段说明见[云端托管环境](raw/application-user-guide/agent-development/managed-agents/managed-agents-environment/managed-agents-cloud-hosting.md)；带预装包的环境创建后可能需要预热时间，未完成前创建会话会被拒绝，详见该页“环境预热”。
 
 **说明**Environment 的网络策略当前取值为 `{"type": "unrestricted"}`（全部出网放行）。本例逻辑上不需要网络——包已预装好，分析全程离线。出网链路的行为细节（网关 MITM、TLS 校验）见[进阶：密钥库安全注入与出网网关](raw/_short/managed-agents-credential-security-b5df5e4f8be278e5.md)。
 
 ## 步骤 3：上传数据集
 
-准备一份 26 行的订单流水，里面埋了三类脏数据和一个「陷阱」：
+准备一份 26 行的订单流水，里面埋了三类脏数据和一个“陷阱”：
 
 ```
 order_id,order_date,region,category,unit_price,quantity,amount
@@ -282,7 +282,7 @@ export SESSION_ID="sesn_xxxxxxxx"
 
 这一步分两步走：先发一个 `message` 事件带上任务，然后读事件流直到回合结束。
 
-Session 创建时不携带初始输入，因此驱动 Agent 需要两步——先创建 Session，再单独 POST 一条 `message` 事件。（如果希望「触发即带首条消息」，用 [部署](raw/application-user-guide/agent-development/managed-agents/managed-agents-session/managed-agents-deployment.md)，它支持 `initial_events`，会在触发时下发。）
+Session 创建时不携带初始输入，因此驱动 Agent 需要两步——先创建 Session，再单独 POST 一条 `message` 事件。（如果希望“触发即带首条消息”，用 [部署](raw/application-user-guide/agent-development/managed-agents/managed-agents-session/managed-agents-deployment.md)，它支持 `initial_events`，会在触发时下发。）
 
 事件流是一条 SSE 连接（比轮询更适合实时观察 Agent 迭代，本例约 2~3 分钟）。有两个要点：
 
@@ -417,9 +417,9 @@ if d["type"] == "session_status":
 9.  `mark_artifacts` **一次调用登记两个产物**，返回各自的 `file_id`；
 10.  assistant 总结 → `end_turn`。
 
-第 4 步和第 8 步集中体现了 Agent 的自主迭代：两次都没有提示 `inspect.py` 会与标准库同名、也没有提示 pandas API 的用法，是 Agent 自己从报错中发现问题、修改后重新运行。这两处正是「迭代」发生的位置。具体问题每次不同，但「运行 → 查看结果 → 修改后重跑」的循环是稳定的，最终数字多次运行完全一致。
+第 4 步和第 8 步集中体现了 Agent 的自主迭代：两次都没有提示 `inspect.py` 会与标准库同名、也没有提示 pandas API 的用法，是 Agent 自己从报错中发现问题、修改后重新运行。这两处正是“迭代”发生的位置。具体问题每次不同，但“运行 → 查看结果 → 修改后重跑”的循环是稳定的，最终数字多次运行完全一致。
 
-**说明**去重与重组：SSE 流当前不提供游标 / 续传 token，断连后重新建流时，按事件 `id` 去重。流式 assistant 文本理论上按 `sequence_number` 累积，但该字段常为 `null`、文本以整条 `completed` 消息下发，解析时按「有 `sequence_number` 就累积、没有就当整条」处理。
+**说明**去重与重组：SSE 流当前不提供游标 / 续传 token，断连后重新建流时，按事件 `id` 去重。流式 assistant 文本理论上按 `sequence_number` 累积，但该字段常为 `null`、文本以整条 `completed` 消息下发，解析时按“有 `sequence_number` 就累积、没有就当整条”处理。
 
 ## 步骤 6：取回产物并核对
 
@@ -477,11 +477,11 @@ EOF
 
 **说明**注意：Agent 常用 `to_csv(..., encoding="utf-8-sig")`，取回的 CSV 带 BOM，`csv.DictReader` 拿到的第一个列名会是 `\ufefforder_id` 而不是 `order_id`。要按 `order_id` 取值就用 `open(..., encoding="utf-8-sig")`。
 
-最值得看的是报告里多出来的一节——Agent 没有删掉那笔畸大的订单 `1025`，而是把它单独拎出来说明，还补了一段稳健性分析（措辞每次不同，但「保留 + 单独标注」这个处理稳定出现）：
+最值得看的是报告里多出来的一节——Agent 没有删掉那笔畸大的订单 `1025`，而是把它单独拎出来说明，还补了一段稳健性分析（措辞每次不同，但“保留 + 单独标注”这个处理稳定出现）：
 
-> 订单 1025 一笔即贡献过半营收……若剔除该笔：East 营收为 13,590、仍是第一；Electronics 营收为 14,700、仍是第一。即两个排名结论对该极端订单不敏感，但「East 占 82.51%」「Electronics 占 84.94%」这类占比数字高度依赖它，引用时应注明。
+> 订单 1025 一笔即贡献过半营收……若剔除该笔：East 营收为 13,590、仍是第一；Electronics 营收为 14,700、仍是第一。即两个排名结论对该极端订单不敏感，但“East 占 82.51%”“Electronics 占 84.94%”这类占比数字高度依赖它，引用时应注明。
 
-这正是 步骤 1 里那条「极端但自洽的数据不要删」起的作用。
+这正是 步骤 1 里那条“极端但自洽的数据不要删”起的作用。
 
 ### 查看本次运行的用量
 
@@ -515,14 +515,14 @@ curl -X POST "$AGENTSTUDIO_URL/agents/$AGENT_ID/archive" \
 
 ## 原理小结
 
--   **Agent / Environment / Session 三层解耦**：Agent 是可版本化的「人设+工具」，Environment 是可复用的「沙箱模板」，Session 是一次自包含运行。前两者建一次、多次复用。
+-   **Agent / Environment / Session 三层解耦**：Agent 是可版本化的“人设+工具”，Environment 是可复用的“沙箱模板”，Session 是一次自包含运行。前两者建一次、多次复用。
 -   **依赖装在 Environment 里，不要装在回合里**：`config.packages.pip` 声明的包在容器启动时就绪，Agent 不用花 token 和时间跑 `pip install`。
 -   **工具要逐个显式开启**：`default_config.enabled: true` 只是工具集总开关，真正决定模型能拿到哪些工具的是 `configs[ ]` 里逐条 `enabled: true`。漏了这一步，Agent 只有 `mark_artifacts` 可用。
 -   **文件是只读挂载 + 可写工作区**：上传文件挂在 `/mnt/session/uploads/`（只读），Agent 必须先拷到 `/mnt/user` 或 `/tmp` 才能改，产物写 `/mnt/session/outputs/`。`/mnt/user` 与 `/mnt/session/outputs` 在新容器里可能尚不存在，拷贝前先用 `mkdir -p` 创建。
 -   **产物从 `/mnt/session/outputs/` 出关**：写进该目录的文件会被平台扫描，回合结束后在 session 作用域的文件列表里可见、可下载。`mark_artifacts` 的价值是**即时**拿到 `file_id` 并附上 description——不用等扫描、不用事后翻列表，一次调用还能登记多个产物。
 -   **驱动靠事件、观测靠 SSE**：发 `message` 事件让 Agent 进入 `running`，SSE 流实时回传 assistant 文本与工具调用；用 `session_status` + `stop_reason` 判断何时结束。
--   **idle 需要消歧**：会话状态 `idle` 在「回合结束（`end_turn`）」和「需要回填工具结果（`requires_action`）」两种情况下都会触发，务必用 `stop_reason.type` 区分，只有 `end_turn` 才退出。
--   **护栏写在 system prompt 里**：「先体检再下结论」「极端但自洽的数据不要删」这两条决定了本例的成败——它们比任何流程描述都管用。
+-   **idle 需要消歧**：会话状态 `idle` 在“回合结束（`end_turn`）”和“需要回填工具结果（`requires_action`）”两种情况下都会触发，务必用 `stop_reason.type` 区分，只有 `end_turn` 才退出。
+-   **护栏写在 system prompt 里**：“先体检再下结论”“极端但自洽的数据不要删”这两条决定了本例的成败——它们比任何流程描述都管用。
 
 ## 附：用轮询替代流式
 
@@ -559,7 +559,7 @@ curl -X GET "$AGENTSTUDIO_URL/sessions/$SESSION_ID/events?order=desc&limit=1" \
 -   **流式（SSE）**：适合实时看 Agent 工作，代价是要维持长连接（进程必须一直活着，断网即掉流）。
 -   **轮询**：无状态、能扛进程重启、和队列/定时任务组合得很好，代价是有延迟、进度不可见。
 
-生产环境里，当 Agent 要跑几分钟、而 handler 不能维持长连接时，用轮询。生产里「等待人工审批（HITL）」的场景也不依赖事件推送——用「轮询历史事件 + `requires_action` stop\_reason」，或「部署（cron / 手动 `/run`）+ 事后查询 runs」组合即可，见[进阶：生产化定时晨报机器人](raw/application-user-guide/agent-development/managed-agents/managed-agents-best-practices/managed-agents-production.md)。平台侧的事件推送（Webhook）见[进阶：Webhook 事件通知](raw/_short/managed-agents-webhook-notifications-508b7232092b6608.md)。
+生产环境里，当 Agent 要跑几分钟、而 handler 不能维持长连接时，用轮询。生产里“等待人工审批（HITL）”的场景也不依赖事件推送——用“轮询历史事件 + `requires_action` stop\_reason”，或“部署（cron / 手动 `/run`）+ 事后查询 runs”组合即可，见[进阶：生产化定时晨报机器人](raw/application-user-guide/agent-development/managed-agents/managed-agents-best-practices/managed-agents-production.md)。平台侧的事件推送（Webhook）见[进阶：Webhook 事件通知](raw/_short/managed-agents-webhook-notifications-508b7232092b6608.md)。
 
 ## 速查表
 

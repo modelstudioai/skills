@@ -95,8 +95,14 @@ WAV (16bit)、MP3、M4A
 #### 准备工作
 
 1.  **获取API Key**：[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)，为安全起见，推荐将API Key配置到环境变量。
-2.  **安装SDK**：确保已[安装最新版DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
-3.  **准备待复刻音频**：音频需符合[音频要求](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning-user-guide#fe3daa6c3f7jw)。
+2.  获取并配置 API Host
+    
+    从控制台[获取API Host](https://bailian.console.aliyun.com/cn-beijing/settings/workspace)并填入下方，本文其他可编辑地址会同步更新。
+    
+    {WorkspaceId}.cn-beijing.maas.aliyuncs.com
+    
+3.  **安装SDK**：确保已[安装最新版DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
+4.  **准备待复刻音频**：音频需符合[音频要求](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning-user-guide#fe3daa6c3f7jw)。
 
 ### 3\. 端到端示例
 
@@ -192,7 +198,7 @@ class SimpleCallback(OmniRealtimeCallback):
 if __name__ == '__main__':
     # 若没有配置环境变量，请用百炼API Key将下行替换为：dashscope.api_key = "sk-xxx"
     dashscope.api_key = os.getenv("DASHSCOPE_API_KEY")
-    # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+    # 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
     base_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com"
     ws_url = base_url.replace("https://", "wss://") + "/api-ws/v1/realtime"
 
@@ -254,7 +260,7 @@ public class Main {
     // 用于声音复刻的本地音频文件的相对路径
     private static final String AUDIO_FILE = "voice.mp3";
     private static final String AUDIO_MIME_TYPE = "audio/mpeg";
-    // 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+    // 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
     private static final String BASE_URL = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com";
 
     // 生成 data URI
@@ -488,7 +494,7 @@ def create_voice(file_path: str,
         raise RuntimeError(f"解析 voice 响应失败: {e}")
 
 if __name__ == '__main__':
-    # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+    # 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
     dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
 
     # 1. 声音复刻：创建专属音色
@@ -552,7 +558,7 @@ public class Main {
     // 用于声音复刻的本地音频文件的相对路径
     private static final String AUDIO_FILE = "voice.mp3";
     private static final String AUDIO_MIME_TYPE = "audio/mpeg";
-    // 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+    // 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
     private static final String BASE_URL = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com";
 
     // 将 PCM 数据写入标准 WAV 文件

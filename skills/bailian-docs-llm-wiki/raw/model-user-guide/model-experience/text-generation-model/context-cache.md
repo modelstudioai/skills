@@ -99,7 +99,7 @@
 
 #### 华北2（北京）
 
-千问 Max：qwen3.8-max、qwen3.8-max-0902、qwen3.7-max、qwen3.7-max-2026-05-20、qwen3.7-max-2026-06-08
+千问 Max：qwen4-max-preview（[仅 Token Plan](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview)）、qwen3.8-max、qwen3.8-max-0902、qwen3.7-max、qwen3.7-max-2026-05-20、qwen3.7-max-2026-06-08
 
 千问开源：qwen3.8-2.4t-a95b、qwen3.8-27b
 
@@ -935,7 +935,7 @@ while True:
 -   **全模态模型**
     -   千问 Omni：`qwen3.8-omni-flash`
 -   **文本生成模型**
-    -   千问 Max：qwen3.8-max、qwen3.8-max-0902、qwen3.7-max、qwen3.7-max-2026-05-20、qwen3.7-max-2026-06-08、qwen-max
+    -   千问 Max：qwen4-max-preview（[仅 Token Plan](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview)）、qwen3.8-max、qwen3.8-max-0902、qwen3.7-max、qwen3.7-max-2026-05-20、qwen3.7-max-2026-06-08、qwen-max
     -   千问 Plus：qwen3.7-plus、qwen3.7-plus-2026-05-26、qwen-plus
     -   千问 Flash：qwen3.8-flash、qwen3.7-flash、qwen3.7-flash-2026-07-15、qwen-flash
     -   千问 Coder：qwen3-coder-flash
@@ -1127,7 +1127,8 @@ while True:
 -   阿里云百炼部署的模型（deepseek-v4.1-flash、deepseek-v4.1-flash-1017、deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731、qwen3.8-max、qwen3.8-max-0902、qwen3.8-flash、qwen3.8-2.4t-a95b、qwen3.8-omni-flash 除外）：`cached_token` 单价为 `input_token` 单价的 **20%**
 -   qwen3.8-omni-flash：命中缓存的输入 Token 按固定单价计费，各地域单价见[模型价格](https://help.aliyun.com/zh/model-studio/model-pricing#4c2e910ce4pcq)。
 -   deepseek-v4-pro：`cached_token` 单价不是 `input_token` 单价的 20%，具体价格请参见百炼控制台
--   deepseek-v4.1-flash、deepseek-v4.1-flash-1017、deepseek-v4-pro-0813、deepseek-v4-flash-0731：`cached_token` 单价为 `input_token` 单价的 **10%**。其中，`deepseek-v4.1-flash-1017` 在上述六个地域的繁忙、闲时时段均适用，按对应地域和时段的输入单价计算。
+-   deepseek-v4.1-flash、deepseek-v4.1-flash-1017：`cached_token` 单价为 `input_token` 单价的 **2%**。其中，`deepseek-v4.1-flash-1017` 在上述六个地域的繁忙、闲时时段均适用，按对应地域和时段的输入单价计算。
+-   deepseek-v4-pro-0813、deepseek-v4-flash-0731：`cached_token` 单价为 `input_token` 单价的 **10%**
 -   qwen3.8-max、qwen3.8-max-0902、qwen3.8-flash、qwen3.8-2.4t-a95b：`cached_token` 单价不是 `input_token` 单价的 20%，具体价格请参见百炼控制台
 -   DeepSeek（快手万擎部署）：vanchin/deepseek-v4.1-flash 为 **2%**；vanchin/deepseek-v4-pro-0813 为 **3.33%**；vanchin/deepseek-v4-pro 为 **8.33%**；vanchin/deepseek-v3.2-think 为 **10%**；vanchin/deepseek-v3.1-terminus、vanchin/deepseek-r1、vanchin/deepseek-v3 为 **40%**
 -   Kimi（阿里云百炼部署）：kimi-k3 为 **10%**
@@ -1505,5 +1506,5 @@ A：为了确保模型输出效果，后端服务会在用户提供的提示词�
 
 A：可通过以下方式获取指定时间段内的缓存命中数据：
 
--   **模型监控：**在百炼控制台「[模型监控](https://bailian.console.aliyun.com/cn-beijing/model/telemetry)」页面，选择目标模型和时间范围，查看 `cache_tokens` 指标（支持按分钟/按小时精度统计）。
--   **账单明细：**在百炼控制台「账单详情」页面导出账单明细，按计费类型筛选"缓存命中"（`cache`）相关记录，按日期分组汇总，可获取每日的缓存命中 Token 计量数据。详细操作请参见[账单查询与成本管理](raw/model-user-guide/test-1/bill-query-and-cost-management.md)。
+-   **模型监控：**在百炼控制台“[模型监控](https://bailian.console.aliyun.com/cn-beijing/model/telemetry)”页面，选择目标模型和时间范围，查看 `cache_tokens` 指标（支持按分钟/按小时精度统计）。
+-   **账单明细：**在百炼控制台“账单详情”页面导出账单明细，按计费类型筛选"缓存命中"（`cache`）相关记录，按日期分组汇总，可获取每日的缓存命中 Token 计量数据。详细操作请参见[账单查询与成本管理](raw/model-user-guide/test-1/bill-query-and-cost-management.md)。

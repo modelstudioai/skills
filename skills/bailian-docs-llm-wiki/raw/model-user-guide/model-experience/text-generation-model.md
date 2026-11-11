@@ -6,8 +6,8 @@
 
 Plus、Max、Flash 均可接收文本、图像和视频，并以文本回答。文本生成用于根据输入生成或处理文字；图像与视频理解用于理解画面内容并回答问题，也可以结合文字指令完成任务。
 
--   **默认选择**：`qwen3.7-plus`，兼顾能力与成本。
--   **效果优先**：`qwen3.8-max`，适合对推理和理解能力要求更高的任务。
+-   **效果优先**：`qwen4-max-preview`（[仅 Token Plan](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview)），适合对推理和理解能力要求更高的任务。
+-   **均衡之选**：`qwen3.7-plus`，兼顾能力与成本。
 -   **成本优先**：`qwen3.8-flash`，使用前确认效果满足需求。
 
 如偏好第三方模型，长程编程可选 [kimi-k3](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-text-generation/kimi-k3.md)，编程与智能体任务可选 [glm-5.3](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-text-generation/glm-5-3.md)。具体输入模态、功能和地域可用性，请查看对应模型文档。
@@ -52,6 +52,18 @@ Plus、Max、Flash 均可接收文本、图像和视频，并以文本回答。�
 **内置工具**
 
 **结构化输出**
+
+`qwen4-max-preview`
+
+1M
+
+支持
+
+支持
+
+支持
+
+支持
 
 `qwen3.8-max`
 
@@ -196,6 +208,28 @@ Plus、Max、Flash 均可接收文本、图像和视频，并以文本回答。�
 **内置工具**
 
 **结构化输出**
+
+`qwen4-max-preview`
+
+1M
+
+393,216（思考+输出）
+
+16M
+
+2小时
+
+2GB
+
+2048
+
+64
+
+支持
+
+支持
+
+支持
 
 `qwen3.8-max`
 

@@ -82,7 +82,7 @@
     
     会话端点。缺省时由[Client](raw/model-api-reference/preparations/install-sdk.md)构造参数`workspace`/`region`自动推导实时翻译服务地址（华北2（北京）：`wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime`；新加坡：`wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime`）。
     
-    调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+    指定 `ws_url` 时，将域名替换为业务空间对应的 [API Host](https://bailian.console.aliyun.com/cn-beijing/settings/workspace)，保留协议和路径。
     
 -   以下参数通过会话的`update_session`方法设置。
     

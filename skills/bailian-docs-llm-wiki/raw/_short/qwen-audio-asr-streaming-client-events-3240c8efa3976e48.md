@@ -233,7 +233,17 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
 
 **special\_word\_filter** `string`（可选）
 
-指定在语音识别过程中需要处理的敏感词，并支持对不同敏感词设置不同的处理方式。详情请参见[敏感词过滤](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide#rt03_sensitive_h3)。
+敏感词过滤规则，用于将识别结果中的指定词汇替换为等长的星号，或从结果中移除。值为规则对象序列化后的 JSON 字符串。最多可设置 32 个敏感词；未传入该参数时不进行过滤。
+
+-   `filter_with_signed.word_list`：字符串数组。匹配的词替换为等长的星号。
+-   `filter_with_empty.word_list`：字符串数组。匹配的词从结果中移除。
+-   `system_reserved_filter`：布尔值，默认 `false`。控制是否使用系统预置词表；自定义的替换、移除规则分别由上述两个列表配置。
+
+```
+{
+  "special_word_filter": "{\"filter_with_signed\":{\"word_list\":[\"项目\"]},\"filter_with_empty\":{\"word_list\":[\"报告\"]},\"system_reserved_filter\":false}"
+}
+```
 
 基本请求
 

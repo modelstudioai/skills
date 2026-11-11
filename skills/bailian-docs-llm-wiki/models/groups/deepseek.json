@@ -93,7 +93,6 @@
           "priceUnit": "每百万tokens",
           "price": "1",
           "timeBand": "offpeak",
-          "docUrl": "",
           "ntmAmountType": "input_token_offpeak",
           "type": "input_token",
           "priceName": "输入"
@@ -102,7 +101,6 @@
           "priceUnit": "每百万tokens",
           "price": "2",
           "timeBand": "peak",
-          "docUrl": "",
           "ntmAmountType": "input_token_peak",
           "type": "input_token",
           "priceName": "输入"
@@ -111,7 +109,6 @@
           "priceUnit": "每百万tokens",
           "price": "4",
           "timeBand": "offpeak",
-          "docUrl": "",
           "ntmAmountType": "output_token_offpeak",
           "type": "output_token",
           "priceName": "输出"
@@ -120,25 +117,22 @@
           "priceUnit": "每百万tokens",
           "price": "8",
           "timeBand": "peak",
-          "docUrl": "",
           "ntmAmountType": "output_token_peak",
           "type": "output_token",
           "priceName": "输出"
         },
         {
           "priceUnit": "每百万tokens",
-          "price": "0.1",
+          "price": "0.02",
           "timeBand": "offpeak",
-          "docUrl": "",
           "ntmAmountType": "input_token_cache_offpeak",
           "type": "input_token_cache",
           "priceName": "输入（缓存命中）"
         },
         {
           "priceUnit": "每百万tokens",
-          "price": "0.2",
+          "price": "0.04",
           "timeBand": "peak",
-          "docUrl": "",
           "ntmAmountType": "input_token_cache_peak",
           "type": "input_token_cache",
           "priceName": "输入（缓存命中）"
@@ -287,6 +281,7 @@
           "priceUnit": "每百万tokens",
           "price": "1",
           "timeBand": "offpeak",
+          "docUrl": "",
           "ntmAmountType": "input_token_offpeak",
           "type": "input_token",
           "priceName": "输入"
@@ -295,6 +290,7 @@
           "priceUnit": "每百万tokens",
           "price": "2",
           "timeBand": "peak",
+          "docUrl": "",
           "ntmAmountType": "input_token_peak",
           "type": "input_token",
           "priceName": "输入"
@@ -303,6 +299,7 @@
           "priceUnit": "每百万tokens",
           "price": "4",
           "timeBand": "offpeak",
+          "docUrl": "",
           "ntmAmountType": "output_token_offpeak",
           "type": "output_token",
           "priceName": "输出"
@@ -311,22 +308,25 @@
           "priceUnit": "每百万tokens",
           "price": "8",
           "timeBand": "peak",
+          "docUrl": "",
           "ntmAmountType": "output_token_peak",
           "type": "output_token",
           "priceName": "输出"
         },
         {
           "priceUnit": "每百万tokens",
-          "price": "0.1",
+          "price": "0.02",
           "timeBand": "offpeak",
+          "docUrl": "",
           "ntmAmountType": "input_token_cache_offpeak",
           "type": "input_token_cache",
           "priceName": "输入（缓存命中）"
         },
         {
           "priceUnit": "每百万tokens",
-          "price": "0.2",
+          "price": "0.04",
           "timeBand": "peak",
+          "docUrl": "",
           "ntmAmountType": "input_token_cache_peak",
           "type": "input_token_cache",
           "priceName": "输入（缓存命中）"

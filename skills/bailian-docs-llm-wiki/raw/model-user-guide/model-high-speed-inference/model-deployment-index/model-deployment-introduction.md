@@ -124,7 +124,7 @@ DTU 是模型单元(MU)的继任方案（计量粒度由单元数改为输入/�
 
 各部署模式支持的模型与价格详见对应模式页：
 
-**说明**预置吞吐单元（PTU）的创建与管理现已支持在「吞吐预留」页面进行，支持叠加容量包等更完整的容量管理功能。详见[吞吐预留](raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)。
+**说明**预置吞吐单元（PTU）的创建与管理现已支持在“吞吐预留”页面进行，支持叠加容量包等更完整的容量管理功能。详见[吞吐预留](raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)。
 
 -   [PTU预置吞吐部署](raw/_short/ptu-long-input-and-cache-f0b1f22118ea9791.md)
 -   [独占算力部署](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-modes/dtu-model-deployment.md)
@@ -142,7 +142,7 @@ DTU 是模型单元(MU)的继任方案（计量粒度由单元数改为输入/�
     
 3.  填写**服务名称**，完成**选择模型**与**计费方式**，其他配置保持默认，单击**确认**。
     
-    > 需先完成[模型调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-on-console.md)，方可部署大部分模型。
+    > 需先完成[模型调优](https://help.aliyun.com/zh/model-studio/model-training-on-console)，方可部署大部分模型。
     
 4.  返回部署列表，部署状态变为**运行中**时，代表该模型已部署成功。
     

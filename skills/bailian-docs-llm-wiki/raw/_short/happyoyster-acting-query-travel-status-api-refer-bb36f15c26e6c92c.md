@@ -193,7 +193,7 @@ Acting 不支持 SDK 环境动作控制，返回空数组；`failed` 时为 `nul
 -   本接口不返回 `mode`、`aspectRatio`、`playUrl`、`bgmUrl` 或 `sessionId`；播流配置与播放器方向以[进入房间](raw/_short/happyoyster-acting-enter-travel-api-reference-56ea4df0a872fdb7.md)响应为准。
 -   `clientStreamStatus` 是客户端播放侧心跳，`rtcStatus` 是服务端推流侧状态，两者不可互相替代。
 -   Acting 不支持 SDK `sendCommand`，不要根据两个空动作数组构造方向或动作控制。
--   `failed` 是终态，不会再产生成片；请按 `errorCode` 展示失败原因，不要展示为「尚未完成」。
+-   `failed` 是终态，不会再产生成片；请按 `errorCode` 展示失败原因，不要展示为“尚未完成”。
 
 ## 错误码
 

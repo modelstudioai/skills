@@ -4,15 +4,15 @@
 
 ## 概念
 
-定时任务（Scheduled Task，API 与 CLI 中的资源名为 Deployment）绑定一个智能体并配置触发方式：定时触发按 cron 表达式自动执行，手动触发在点击「运行」时执行。每次触发创建一个会话，向智能体发送创建时固定的初始消息，执行过程与结果记录为一条运行记录（Run）。
+定时任务（Scheduled Task，API 与 CLI 中的资源名为 Deployment）绑定一个智能体并配置触发方式：定时触发按 cron 表达式自动执行，手动触发在点击“运行”时执行。每次触发创建一个会话，向智能体发送创建时固定的初始消息，执行过程与结果记录为一条运行记录（Run）。
 
-控制台侧边栏的「部署」页即定时任务的管理入口；API 与 CLI 中的资源名仍为 Deployment。
+控制台侧边栏的“部署”页即定时任务的管理入口；API 与 CLI 中的资源名仍为 Deployment。
 
 适合无人值守的周期性任务：每日数据汇总、定期巡检、按小时同步。需要多轮交互的任务参见[委派任务给 Agent](raw/application-user-guide/agent-development/managed-agents/managed-agents-session.md)。
 
 ## 创建定时任务
 
-在控制台[「部署」](https://bailian.console.aliyun.com/managed-agent/deployment)页面点击**创建**，在弹窗中配置：
+在控制台[“部署”](https://bailian.console.aliyun.com/managed-agent/deployment)页面点击**创建**，在弹窗中配置：
 
 **配置项**
 

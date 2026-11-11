@@ -26,7 +26,7 @@
     ```
     OmniRealtimeParam param = OmniRealtimeParam.builder()
             .model("qwen3.5-livetranslate-flash-realtime")
-            // 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+            // 默认北京地址：将域名替换为业务空间对应的 API Host。
             .url("wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime")
             // 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
             // 若没有配置环境变量，请用百炼API Key将下行替换为：.apikey("sk-xxx")
@@ -61,7 +61,7 @@
     -   华北2（北京）：`wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime`
     -   新加坡：`wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime`
     
-    调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+    将地址中的域名替换为业务空间对应的 [API Host](https://bailian.console.aliyun.com/cn-beijing/settings/workspace)，保留协议和路径。
     
     `apikey`
     

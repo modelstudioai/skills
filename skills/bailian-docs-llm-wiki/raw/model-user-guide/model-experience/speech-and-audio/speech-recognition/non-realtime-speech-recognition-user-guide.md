@@ -387,8 +387,8 @@ Qwen-Audio-ASR-Filetrans、Fun-ASR、Qwen3-ASR-Filetrans、Paraformer 等异步�
 
 **自定义配置**：`special_word_filter` 是 JSON 对象，包含三个子字段：
 
--   `filter_with_signed.word_list`：字符串数组，列出需要被替换为等长 `*` 的敏感词。例如 `["测试"]`，「帮我测试一下」会变成「帮我\*\*一下」。
--   `filter_with_empty.word_list`：字符串数组，列出需要从结果中完全移除的敏感词。例如 `["开始"]`，「比赛这就要开始了吗」会变成「比赛这就要了吗」。
+-   `filter_with_signed.word_list`：字符串数组，列出需要被替换为等长 `*` 的敏感词。例如 `["测试"]`，“帮我测试一下”会变成“帮我\*\*一下”。
+-   `filter_with_empty.word_list`：字符串数组，列出需要从结果中完全移除的敏感词。例如 `["开始"]`，“比赛这就要开始了吗”会变成“比赛这就要了吗”。
 -   `system_reserved_filter`：布尔值，默认 `true`。是否同时启用系统预置敏感词表（与自定义词表叠加生效）。
 
 配置示例：

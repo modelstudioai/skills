@@ -1,6 +1,6 @@
 # managed agents api
 
-Managed Agents API 是百炼平台提供的用于构建、部署和管理可编程智能体（Agent）的 RESTful 接口集合，支持环境隔离、会话状态管理、技能编排、文件与记忆存储等核心能力。该 API 采用标准 HTTP 协议，需通过 Bearer [Token](../concepts/token.md) 认证，适用于需要细粒度控制 Agent 生命周期与运行时行为的开发者场景。完整功能覆盖从开发调试到生产部署的全链路需求。
+Managed Agents API 是百炼平台提供的用于构建、部署和管理可编程智能体（Agent）的 RESTful 接口集合，支持环境隔离、会话状态管理、技能编排、文件与记忆存储等核心能力。该 API 采用标准 HTTP 协议，需通过 Bearer Token 认证，适用于需要细粒度控制 Agent 生命周期与运行时行为的开发者场景。完整功能覆盖从开发调试到生产部署的全链路需求。
 
 ## 支持的模型与功能
 
@@ -16,37 +16,32 @@ Managed Agents API **不直接调用大模型**，而是提供对 Agent 运行�
 
 ## 关键参数
 
-所有 POST/PUT 请求需包含以下必需 Header：  
-- `Authorization: Bearer <token>`（参见 [认证](../../raw/application-api-reference/managed-agents-api/managed-agents-api-authentication.md)）  
-- `Content-Type: application/json`  
+所有写操作（如 `POST /v1/agents`）需在请求体中包含以下必需字段：  
+- `name`: 字符串，长度 1–64，仅限字母、数字、下划线、短横线  
+- `environment_id`: 关联的 Environment ID（必须已存在）  
+- `model`: 指定模型 ID（例如 `"qwen-max"`），必须属于当前项目已开通的模型列表  
+- `prompt_template`: Jinja2 格式字符串，支持 `{{ input }}`、`{{ memory.key }}` 等上下文变量  
 
-关键请求体字段示例（以创建 Agent 为例）：  
-```json
-{
-  "name": "customer-support-agent",
-  "model": "qwen-plus",
-  "environment_id": "env-prod-789",
-  "skills": ["skill-ticket-create", "skill-kb-search"],
-  "memory_store": { "ttl_seconds": 3600 }
-}
-```
-其中 `environment_id` 必须已存在（通过 `/environments` 创建），`skills` 列表中的 ID 需提前在 `/skills` 中注册。
+读操作（如 `GET /v1/sessions/{session_id}`）支持通用查询参数：  
+- `include_events=true`：返回关联的 `Event` 列表（默认 `false`）  
+- `limit=50`：限制返回事件数（最大 200）  
+- `offset=0`：分页偏移量  
+
+详细参数说明见 [Agent API](../../raw/application-api-reference/managed-agents-api/agent-api.md) 与 [Session API](../../raw/application-api-reference/managed-agents-api/session-api.md)。
 
 ## 使用方式
 
-1. **快速验证**：参考 [快速开始](../../raw/application-api-reference/managed-agents-api/managed-agents-quickstart.md) 文档，使用 `curl` 或 Postman 调用 `/agents` 创建首个 Agent 并发起会话  
-2. **集成开发**：调用 `/sessions` 创建会话后，向 `POST /sessions/{session_id}/messages` 发送用户消息，接收流式响应（SSE）或轮询 `GET /sessions/{session_id}` 获取状态  
-3. **生产部署**：通过 `/deployments` 创建灰度/全量部署，结合 `/webhooks` 配置事件回调（如 `agent_finish` 后触发 CRM 更新）  
-
-所有资源路径均遵循 `/v1/{resource}` 格式（如 `/v1/agents`, `/v1/files`），版本号不可省略。
+1. **认证**：在 `Authorization` Header 中传入 `Bearer <access_token>`，Token 通过 [认证文档](../../raw/application-api-reference/managed-agents-api/managed-agents-api-authentication.md) 获取  
+2. **快速启动**：参考 [快速开始](../../raw/application-api-reference/managed-agents-api/managed-agents-quickstart.md) 中的 cURL 示例，完成 Agent 创建 → Session 启动 → 流式响应消费全流程  
+3. **生产集成**：建议使用 `webhook-api.md` 配置异步事件回调，并通过 `deployment-api.md` 管理灰度发布与版本回滚  
 
 ## 限制和注意事项
 
-- 单个 Agent 最多绑定 20 个 Skill；单次会话最大上下文长度为 32K tokens（含系统提示、历史消息、Memory 内容）  
-- `Memory Store` 键名仅支持 ASCII 字母、数字及 `-` `_` `.`，长度 ≤ 128 字符；值大小上限 1MB  
-- 文件上传（`/files`）仅支持 `multipart/form-data`，单文件 ≤ 50MB，且仅在 `session` 生命周期内有效（除非显式调用 `/files/{file_id}/pin`）  
-- 所有 API 均有速率限制：默认 100 QPS / 租户，突发容量 300；超出返回 `429 Too Many Requests`（详见 [错误码](../../raw/application-api-reference/managed-agents-api/managed-agents-api-errors.md)）  
-- `Credential` 加密存储后仅支持在 Skill 执行时由平台自动注入，**无法通过 API 读取明文值**
+- 单个 Agent 最多绑定 20 个 Skill；单个 Session 最大存活时长为 24 小时（超时自动清理）  
+- `Memory Store` 单条记录最大 1MB，总容量按项目配额限制（默认 10GB）  
+- 所有 API 均遵循 429 限流策略：每秒 10 次写请求 / 每分钟 600 次读请求（按 project_id 维度统计）  
+- 文件上传（`files-api.md`）仅支持 `multipart/form-data`，且单文件 ≤ 100MB；不支持断点续传  
+- `Vault` 中存储的凭证不可被 Agent 运行时直接读取，必须通过显式绑定的 `Credential` 实例注入到 Skill 执行上下文中
 
 ## 来源文档
 

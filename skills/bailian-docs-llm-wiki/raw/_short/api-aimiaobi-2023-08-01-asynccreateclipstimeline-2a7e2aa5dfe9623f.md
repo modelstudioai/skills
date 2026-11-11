@@ -89,7 +89,7 @@ string
 
 是
 
-[百炼工作空间 Id](raw/application-api-reference/application-call/obtain-the-app-id-and-workspace-id.md)
+[百炼工作空间 Id](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)
 
 llm-2setzb9x4ewsd
 
@@ -151,7 +151,7 @@ string
 
 否
 
-请从输入的音乐演出视频中，自动识别并提取出「最具视觉冲击力、情感爆发力或独特吸引力」...
+请从输入的音乐演出视频中，自动识别并提取出“最具视觉冲击力、情感爆发力或独特吸引力”...
 
 HtHighQualityLabel
 

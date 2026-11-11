@@ -25,6 +25,7 @@
 ## 支持的模型
 
 -   **文本生成模型**
+    -   Qwen4-Max 系列（[仅 Token Plan](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview)）：`qwen4-max-preview`
     -   千问Max（非思考模式）：Qwen3.8-Max系列、Qwen3.7-Max系列、Qwen3.6-Max系列、Qwen3-Max系列、Qwen-Max系列
     -   千问Plus（非思考模式）：Qwen3.7-Plus系列、Qwen3.6-Plus系列、Qwen3.5-Plus系列、Qwen-Plus系列
     -   千问Flash（非思考模式）：Qwen3.7-Flash系列、Qwen3.6-Flash系列、Qwen3.5-Flash系列、Qwen-Flash系列

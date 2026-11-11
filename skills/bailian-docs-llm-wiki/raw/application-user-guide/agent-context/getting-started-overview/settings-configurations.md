@@ -8,17 +8,17 @@
 
 先登录 [ParseX 控制台](https://bailian.console.aliyun.com/cn-beijing/parsex/document-parse)。首次保存前，在解析或抽取工作台准备需要复用的设置；查看和编辑已有配置前，应已创建对应配置。
 
-首次保存从工作台的「保存配置」进入；日常管理从左侧「配置」进入。首次体验可先阅读[快速开始](raw/application-user-guide/agent-context/getting-started-overview/parse-start-using/quickstart.md)。
+首次保存从工作台的“保存配置”进入；日常管理从左侧“配置”进入。首次体验可先阅读[快速开始](raw/application-user-guide/agent-context/getting-started-overview/parse-start-using/quickstart.md)。
 
 ## 操作步骤
 
 ### 首次保存配置
 
 1.  在文档解析或字段抽取工作台中，准备要重复使用的设置。
-2.  点击「保存配置」。
-3.  在配置创建弹窗中填写「配置名称」，最多 200 个字符。名称为空时，「创建配置」按钮不可用。
-4.  点击「创建配置」，并查看页面反馈；暂时不创建时点击「取消」。
-5.  从左侧进入「配置」，找到刚保存的配置，核对名称、类型和设置。
+2.  点击“保存配置”。
+3.  在配置创建弹窗中填写“配置名称”，最多 200 个字符。名称为空时，“创建配置”按钮不可用。
+4.  点击“创建配置”，并查看页面反馈；暂时不创建时点击“取消”。
+5.  从左侧进入“配置”，找到刚保存的配置，核对名称、类型和设置。
 
 ### 查找、编辑和测试
 
@@ -30,19 +30,19 @@
 
 查找
 
-选择「全部」「文档解析」或「字段抽取」；有配置 ID 时输入搜索框
+选择“全部”“文档解析”或“字段抽取”；有配置 ID 时输入搜索框
 
 名称、类型和 ID 与目标配置一致
 
 编辑
 
-点击「编辑」，调整名称或选项，点击「保存配置」
+点击“编辑”，调整名称或选项，点击“保存配置”
 
 重新打开配置，核对保存后的设置
 
 测试
 
-点击「测试」，使用有代表性的文件检查处理效果
+点击“测试”，使用有代表性的文件检查处理效果
 
 结果符合后续应用的使用要求
 
@@ -60,4 +60,4 @@
 
 ## 当前配置与历史任务的关系
 
-编辑配置用于后续任务，历史任务保留各自运行时的设置。历史任务使用的设置可在任务详情的「配置快照」中查看，操作方法见[任务记录](raw/application-user-guide/agent-context/getting-started-overview/settings-configurations/tasks.md)
+编辑配置用于后续任务，历史任务保留各自运行时的设置。历史任务使用的设置可在任务详情的“配置快照”中查看，操作方法见[任务记录](raw/application-user-guide/agent-context/getting-started-overview/settings-configurations/tasks.md)

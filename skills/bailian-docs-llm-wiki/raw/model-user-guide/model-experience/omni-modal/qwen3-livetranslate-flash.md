@@ -97,6 +97,12 @@ qwen3-livetranslate-flash 模型支持音频或视频输入，并输出文本与
 
 请确保已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。若通过OpenAI SDK调用，需[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
+获取并配置 API Host
+
+从控制台[获取API Host](https://bailian.console.aliyun.com/cn-beijing/settings/workspace)并填入下方，本文其他可编辑地址会同步更新。
+
+{WorkspaceId}.cn-beijing.maas.aliyuncs.com
+
 以下示例使用音频输入。如需输入视频，请取消对应代码的注释。
 
 python
@@ -109,7 +115,7 @@ client = OpenAI(
     # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+    # 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
     base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
@@ -167,7 +173,7 @@ const client = new OpenAI({
     // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
     // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     apiKey: process.env.DASHSCOPE_API_KEY,
-    // 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+    // 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
     baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 });
 
@@ -226,7 +232,7 @@ bash
 ```
 # ======= 重要提示 =======
 # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+# 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
 # === 执行时请删除该注释 ===
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -298,7 +304,7 @@ import soundfile as sf
 client = OpenAI(
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+    # 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
     base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 messages = [
@@ -395,7 +401,7 @@ import OpenAI from "openai";
 const client = new OpenAI({
     // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
     apiKey: process.env.DASHSCOPE_API_KEY,
-    // 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+    // 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
     baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 });
 

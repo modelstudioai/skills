@@ -129,7 +129,7 @@ HappyOyster SDK
 
 业务前端 → HappyOyster SDK
 
-见下文「SDK 启动子链路」
+见下文“SDK 启动子链路”
 
 `new HappyOysterEngine/updateToken` → `createTravel` → `start()`
 
@@ -228,7 +228,7 @@ Directing（`2`）
 
 ## SDK 核心概念
 
-在端到端链路中，SDK 只承担「进入 Travel → 播放 → 操控 → 结束」段。两个核心对象：
+在端到端链路中，SDK 只承担“进入 Travel → 播放 → 操控 → 结束”段。两个核心对象：
 
 **对象**
 
@@ -252,7 +252,7 @@ idle ──start()──► prepare ──video 可播放──► running ⇄ p
 
 -   每个 Engine 同时只允许一个 active Travel
 -   `videoElement` 必须在 `createTravel` 时传入
--   百炼临时 api-key token 与 travel ticket 用途不同（见「故事链路」阶段 ④⑤ 与「双凭证模型」）
+-   百炼临时 api-key token 与 travel ticket 用途不同（见“故事链路”阶段 ④⑤ 与“双凭证模型”）
 
 ## 初始化与 Token 管理
 
@@ -385,7 +385,7 @@ Travel 的单次游玩凭证
 
 **推荐**
 
--   失败后走「end → 清理监听 → 从故事链路 ③ 或 ⑤ 重试」
+-   失败后走“end → 清理监听 → 从故事链路 ③ 或 ⑤ 重试”
 -   重试时重新申请体验凭证（若一次性）
 
 **避免**

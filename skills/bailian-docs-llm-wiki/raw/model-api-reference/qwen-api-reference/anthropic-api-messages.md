@@ -89,7 +89,7 @@ temperature 取值范围
 
 支持的模型列表
 
-**千问Max**：qwen3.8-max、qwen3.8-max-0902、qwen3.7-max、qwen3.7-max-2026-05-20、qwen3.7-max-2026-06-08
+**千问Max**：qwen4-max-preview（[仅 Token Plan](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview)）、qwen3.8-max、qwen3.8-max-0902、qwen3.7-max、qwen3.7-max-2026-05-20、qwen3.7-max-2026-06-08
 
 **千问Plus**：qwen3.7-plus、qwen3.7-plus-2026-05-26、qwen3.6-plus、qwen3.6-plus-2026-04-02、qwen3.5-plus、qwen3.5-plus-2026-04-20、qwen3.5-plus-2026-02-15、qwen-plus、qwen-plus-latest
 
@@ -107,7 +107,7 @@ deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash
 
 **max\_tokens** `integer` **（必选）**
 
--   deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731、qwen3.8-max、qwen3.8-flash：模型回复内容和思维链内容之和的最大Token数，模型输出超过此值时生成将提前停止，`stop_reason` 为 `max_tokens`。
+-   qwen4-max-preview、deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731、qwen3.8-max、qwen3.8-flash：模型回复内容和思维链内容之和的最大Token数，模型输出超过此值时生成将提前停止，`stop_reason` 为 `max_tokens`。
     
     > `max_tokens` 限制模型回复内容+思考过程的长度。开启深度思考时，`max_tokens` > `thinking.budget_tokens`
     
@@ -304,7 +304,7 @@ Base64 编码的视频数据。当 `type` 为 `base64` 时必填。
 
 深度思考配置。开启后，模型会在生成回复前先进行推理，以提升回答准确度。开启后，响应会包含 `thinking` 类型的内容块。
 
-未传入该参数时，是否进行思考由模型默认行为决定：qwen3.8-max、qwen3.8-flash、deepseek-v4 系列、glm 系列、kimi-k3.1-pro 默认开启思考；kimi-k2.6、kimi-k2.5 默认关闭思考；kimi-k2.7-code、MiniMax-M2.5 仅支持思考模式（无法关闭）。各模型对思考模式的支持情况与默认开关，请参见[深度思考](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md)。
+未传入该参数时，是否进行思考由模型默认行为决定：qwen4-max-preview、qwen3.8-max、qwen3.8-flash、deepseek-v4 系列、glm 系列、kimi-k3.1-pro 默认开启思考；kimi-k2.6、kimi-k2.5 默认关闭思考；kimi-k2.7-code、MiniMax-M2.5 仅支持思考模式（无法关闭）。各模型对思考模式的支持情况与默认开关，请参见[深度思考](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md)。
 
 属性
 
@@ -316,7 +316,7 @@ Base64 编码的视频数据。当 `type` 为 `base64` 时必填。
 
 > 该参数即将废弃，并将在后续模型中逐步停止支持，新接入建议使用 `effort`控制模型的思考强度。
 
-思考过程可使用的最大 Token 数，与 `max_tokens` 互不重叠：本参数限制思考，`max_tokens` 限制最终回复。预算越大，在复杂问题上的分析越充分。当 `type` 为 `enabled` 时生效。
+思考过程可使用的最大 Token 数，与 `max_tokens` 的关系因模型而异，详见 `max_tokens` 参数说明。预算越大，在复杂问题上的分析越充分。当 `type` 为 `enabled` 时生效。
 
 **tools** `array` （可选）
 
@@ -354,7 +354,7 @@ tools 数组元素
 
 > 使用 Anthropic SDK 或 HTTP 直接调用时，**必须**在 `system` 中传入客户端标识 `x-anthropic-billing-header: cc_entrypoint=cli;`，否则联网搜索不生效。面向 Claude Code 等 Anthropic 官方客户端时无需额外配置。详见 [联网搜索](raw/model-user-guide/model-experience/text-generation-model/tool-calls/web-search.md)。
 
-> 支持以下模型：Qwen3.8 Max、Flash 与开源系列（不含 Omni）；Qwen3.7 Max、Plus、Flash 系列；Qwen3.6-Plus、Qwen3.6-Flash 系列；Qwen3.5-Plus、Qwen3.5-Flash 系列；deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731、deepseek-v4.1-flash-1017；glm-5.2；kimi-k3；kimi-k3.1-pro。联网搜索的计费与 agent 策略相同，参见 [计费说明](https://help.aliyun.com/zh/model-studio/web-search#92ce83df3a599)。
+> 支持以下模型：Qwen4-Max 系列；Qwen3.8 Max、Flash 与开源系列（不含 Omni）；Qwen3.7 Max、Plus、Flash 系列；Qwen3.6-Plus、Qwen3.6-Flash 系列；Qwen3.5-Plus、Qwen3.5-Flash 系列；deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731、deepseek-v4.1-flash-1017；glm-5.2；kimi-k3；kimi-k3.1-pro。联网搜索的计费与 agent 策略相同，参见 [计费说明](https://help.aliyun.com/zh/model-studio/web-search#92ce83df3a599)。
 
 `kimi-k3.1-pro`（阿里云百炼部署）在北京、新加坡、美国（弗吉尼亚）、德国（法兰克福）、日本（东京）和中国香港均支持 `web_search` 和 `web_fetch`。
 
@@ -400,7 +400,7 @@ kimi-k3.1-pro（阿里云百炼部署）默认值为 `max`，支持 `max`（深�
     
     `low`和`medium`映射为`high`，`xhigh`映射为`max`。
     
--   qwen3.8-max/qwen3.8-flash（默认值为 `xhigh`）：
+-   qwen4-max-preview、qwen3.8-max/qwen3.8-flash（默认值为 `xhigh`）：
     
     可选值：
     
@@ -417,7 +417,7 @@ kimi-k3.1-pro（阿里云百炼部署）默认值为 `max`，支持 `max`（深�
 
 `deepseek-v4.1-flash`、`deepseek-v4.1-flash-1017` 不支持该参数，传入后返回 400 错误。
 
--   **严格结构化输出**：适用于 qwen3.8 系列、qwen3.7 系列、deepseek 系列（不含 `deepseek-v4.1-flash`、`deepseek-v4.1-flash-1017`、`deepseek-v4-flash-0731`、`deepseek-v4-pro-0813`）、glm 系列模型。模型严格按照传入的 JSON Schema 进行强约束输出，确保字段类型与层级完全一致。
+-   **严格结构化输出**：适用于 qwen4-max-preview、qwen3.8 系列、qwen3.7 系列、deepseek 系列（不含 `deepseek-v4.1-flash`、`deepseek-v4.1-flash-1017`、`deepseek-v4-flash-0731`、`deepseek-v4-pro-0813`）、glm 系列模型。模型严格按照传入的 JSON Schema 进行强约束输出，确保字段类型与层级完全一致。
 -   **普通结构化输出**：适用于上述以外的其他模型。Schema 的具体字段约束默认不生效，API 会自动将其转换为普通 JSON 模式（仅保证输出为合法的 JSON 字符串）。触发普通 JSON 模式时，请求必须同时满足以下两点约束：1、显式传入 `output_config` 参数；2、`system` 或 `messages` 的内容中必须包含不区分大小写的 "JSON" 关键词。若提示词中未包含 "JSON" 关键词，API将抛出异常：`'messages' must contain the word 'json' in some form`。
 
 属性

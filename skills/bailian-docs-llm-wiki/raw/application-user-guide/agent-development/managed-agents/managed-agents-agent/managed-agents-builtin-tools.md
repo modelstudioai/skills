@@ -84,7 +84,7 @@ Managed Agents 提供内置工具，覆盖任务规划、命令执行、文件�
 
 ## 知识检索
 
-`search_knowledgebases` 用于检索[知识检索服务](raw/application-user-guide/knowledge-base/rag-knowledge-retrieval.md)中的知识库。启用后，模型按需调用，并结合多轮对话生成检索问题；未启用时不进行检索。一个智能体最多配置一个该工具。
+`search_knowledgebases` 用于检索[知识检索服务](raw/application-user-guide/agent-context/knowledge-base/service/rag-knowledge-retrieval.md)中的知识库。启用后，模型按需调用，并结合多轮对话生成检索问题；未启用时不进行检索。一个智能体最多配置一个该工具。
 
 在智能体编辑页的**知识库-检索策略**区域点击**配置**或**立即配置**，在**配置检索服务**面板中选择检索服务并点击**关联**，然后保存智能体。通过 API 配置时，在 `builtin_toolkit.configs[]` 中启用 `search_knowledgebases`，并通过 `params.knowledge_application_id` 指定知识检索服务：
 

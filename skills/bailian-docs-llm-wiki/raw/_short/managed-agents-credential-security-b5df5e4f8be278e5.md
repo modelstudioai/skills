@@ -12,13 +12,13 @@ Vault 的基础用法（创建、存凭证、挂载）见[密钥库](raw/applica
 
 -   Agent 运行时要调外部 API（自有服务、第三方 SaaS），需要带 API Key / Token；
 -   不希望密钥明文出现在：应用代码、Agent 配置与版本历史、沙箱进程、模型上下文、事件流日志；
--   在做安全合规评审，需要讲清楚「密钥到底在链路的哪些位置以什么形态存在」。
+-   在做安全合规评审，需要讲清楚“密钥到底在链路的哪些位置以什么形态存在”。
 
 不需要密钥、只想传**非敏感配置**（API 地址、日志级别、功能开关）的，直接用[会话环境变量](#h-cs-selection)，不用读完整篇。
 
 ## 原理：占位符注入模型
 
-Vault 凭证的安全模型是「**密钥永不进沙箱，用时在网关替换**」：
+Vault 凭证的安全模型是“**密钥永不进沙箱，用时在网关替换**”：
 
 阶段
 
@@ -118,7 +118,7 @@ Deployment 支持
 
 -   一个阿里云百炼工作空间及其 ID、一把 DashScope API Key；
 -   一个带 bash 工具的 Agent（内置工具集的 `configs[]` 里逐个启用了 bash，见[入门篇](raw/_short/managed-agents-data-analysis-2249e7a887786f0b.md)的建 Agent 步骤）；
--   一个用于验证的外部回显服务（本篇用 `httpbin.org`——`/get` 端点会把发出的请求头原样回显，正好用来观测「对方到底收到了什么」）。
+-   一个用于验证的外部回显服务（本篇用 `httpbin.org`——`/get` 端点会把发出的请求头原样回显，正好用来观测“对方到底收到了什么”）。
 
 约定环境变量：
 
@@ -172,13 +172,13 @@ curl -X POST "$AGENTSTUDIO_URL/vaults/$VAULT_ID/credentials" \
 
 -   `secret_name`：环境变量名，沙箱里 `os.environ` 用这个名字取到**占位符**。
 -   `secret_value`：真实密钥。**只写不回显**——GET 回来时 `auth` 里只有 `secret_name` / `type` / `networking`。
--   `networking.allowed_hosts`：**出口白名单，必填**。支持通配（`*.example.com`）。**这就是「配置时一次声明密钥只能发往哪些域名」**。
+-   `networking.allowed_hosts`：**出口白名单，必填**。支持通配（`*.example.com`）。**这就是“配置时一次声明密钥只能发往哪些域名”**。
 -   `networking.type`：可选（传 `limited` 也会被接受），行为由 `allowed_hosts` 决定。
 -   响应 `id` 前缀 `vcrd_`（不是 `cred_`）。
 
 两个常见错误：
 
-**警告****漏传 `allowed_hosts`** → 409 `CREDENTIAL_AUTH_NETWORKING_ERROR`「出口网络地址不能为空」。旧结构（只有 `networking: {type: "unrestricted"}`、顶层 `allowed_hosts`、或不带 networking）全部被拒。
+**警告****漏传 `allowed_hosts`** → 409 `CREDENTIAL_AUTH_NETWORKING_ERROR`“出口网络地址不能为空”。旧结构（只有 `networking: {type: "unrestricted"}`、顶层 `allowed_hosts`、或不带 networking）全部被拒。
 
 **警告**`auth.type` 仍只支持 `environment_variable`（传 `secret` / `static_bearer` / `mcp_oauth` 均 409 `CREDENTIAL_AUTH_TYPE_ERROR`）。
 
@@ -223,7 +223,7 @@ curl -X POST "$AGENTSTUDIO_URL/sessions/$SESSION_ID/events" \
 {"stdout":"BMA_SECRET_PLACEHOLDER_MY_API_KEY\n","stderr":"","exit_code":0,"interrupted":false}
 ```
 
-**这就是预期行为**——沙箱里只有占位符。所以「验证密钥注入成功」不能靠 `printenv` 读真实值，正确的验证方式是步骤 5 的端到端请求验证。
+**这就是预期行为**——沙箱里只有占位符。所以“验证密钥注入成功”不能靠 `printenv` 读真实值，正确的验证方式是步骤 5 的端到端请求验证。
 
 ## 步骤 5 · 验证二：出网请求被网关替换（正路径）
 
@@ -270,7 +270,7 @@ stdout（httpbin 把收到的请求头原样回显）：
 }
 ```
 
-对方只拿到无意义的占位符，**真实密钥未泄露**。请求本身没有被拦截（HTTP 200 照常返回）——白名单的语义是「密钥替换生效的 host 范围」，而非「网络连通范围」。
+对方只拿到无意义的占位符，**真实密钥未泄露**。请求本身没有被拦截（HTTP 200 照常返回）——白名单的语义是“密钥替换生效的 host 范围”，而非“网络连通范围”。
 
 ### 出网 TLS 校验：默认可直接通过
 
@@ -306,7 +306,7 @@ curl -X POST "$AGENTSTUDIO_URL/sessions" \
 -   创建响应与 `GET /sessions/{id}` 均**原样回显**该字段（和 `metadata` 同级）——注意这意味着它对有会话读权限的人可见，只放非敏感内容；
 -   **Deployment 不支持**：`POST /deployments` 传 `environment_variables` 不报错但被静默忽略，触发生成的 session 里没有这些变量。定时链路的注入只能走 `vault_ids`。
 
-给 Agent 写提示词时直接引用变量名即可，例如：「调用 `$API_BASE_URL` 提供的接口，日志级别按 `$LOG_LEVEL`」。
+给 Agent 写提示词时直接引用变量名即可，例如：“调用 `$API_BASE_URL` 提供的接口，日志级别按 `$LOG_LEVEL`”。
 
 ## 步骤 7 · 运维与清理
 
@@ -322,13 +322,13 @@ curl -X POST "$AGENTSTUDIO_URL/sessions" \
 
 解法
 
-建凭证报 409 `CREDENTIAL_AUTH_NETWORKING_ERROR`「出口网络地址不能为空」
+建凭证报 409 `CREDENTIAL_AUTH_NETWORKING_ERROR`“出口网络地址不能为空”
 
 `allowed_hosts` 缺失或没嵌在 `auth.networking` 里
 
 按结构写：`"networking": {"allowed_hosts": ["api.example.com"]}`
 
-`printenv` 打出来是 `BMA_SECRET_PLACEHOLDER_*`，怀疑「注入失败」
+`printenv` 打出来是 `BMA_SECRET_PLACEHOLDER_*`，怀疑“注入失败”
 
 这就是新模型的正确行为
 

@@ -6,29 +6,29 @@
 
 根据输出需求选择示例：文本分析使用 Qwen3.8-Omni-Flash，生成语音使用 Qwen3.5-Omni。
 
-两种输出示例都需要配置 `DASHSCOPE_BASE_URL`。将其设为业务空间对应的 [Chat Completions 服务地址](raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)中的 `base_url`，并使用对应地域的 [API Key](raw/model-api-reference/preparations/get-api-key.md)。将下方地址中的 `{WorkspaceId}` 替换为实际业务空间 ID；不同地域的服务地址不同。
-
-```
-export DASHSCOPE_BASE_URL="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
-```
-
 #### 文本输出（Qwen3.8-Omni-Flash）
 
 **前提条件**
 
--   已[配置API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
+-   已[配置API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)，API Key 需与 API Host 属于同一地域。
+-   获取并配置 API Host
+    
+    从控制台[获取API Host](https://bailian.console.aliyun.com/cn-beijing/settings/workspace)并填入下方，本文其他可编辑地址会同步更新。
+    
+    {WorkspaceId}.cn-beijing.maas.aliyuncs.com
+    
 -   以下示例使用 OpenAI 兼容方式调用，需要[安装最新版SDK](raw/model-api-reference/preparations/install-sdk.md)。OpenAI Python SDK最低版本为 1.52.0，Node.js SDK最低版本为 4.68.0。
 
 **说明**运行前安装依赖：`pip install openai`（Python）或 `npm install openai`（Node.js）。
 
-将 `AUDIO_URL` 设为可访问的 WAV 音频 URL。下方命令安装 Python 依赖并设置音频地址；服务地址按上方共用步骤配置，`DASHSCOPE_API_KEY` 按前提条件中的链接配置。
+将 `AUDIO_URL` 设为可访问的 WAV 音频 URL。下方命令安装 Python 依赖并设置音频地址；服务地址直接在各示例代码中填写，`DASHSCOPE_API_KEY` 按前提条件中的链接配置。
 
 ```
 python3 -m pip install openai
 export AUDIO_URL="<accessible-wav-url>"
 ```
 
-python
+PythonJavaScriptcURL
 
 ```
 import os
@@ -36,7 +36,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key=os.environ["DASHSCOPE_API_KEY"],
-    base_url=os.environ["DASHSCOPE_BASE_URL"],
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 completion = client.chat.completions.create(
     model="qwen3.8-omni-flash",
@@ -72,15 +72,13 @@ for chunk in completion:
         print(delta.content, end="", flush=True)
 ```
 
-javascript
-
 ```
 import OpenAI from "openai";
 
 const openai = new OpenAI({
     apiKey: process.env.DASHSCOPE_API_KEY,
-    // DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-    baseURL: process.env.DASHSCOPE_BASE_URL
+    // 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+    baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
 });
 
 const completion = await openai.chat.completions.create({
@@ -132,11 +130,9 @@ for await (const chunk of completion) {
 }
 ```
 
-bash
-
 ```
-# DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-curl -X POST $DASHSCOPE_BASE_URL/chat/completions \
+# 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions" \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -193,7 +189,13 @@ data: {"id":"chatcmpl-f18000e6-40e2-96cd-992a-29bd6aba315a","object":"chat.compl
 
 **前提条件**
 
--   已[配置API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
+-   已[配置API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)，API Key 需与 API Host 属于同一地域。
+-   获取并配置 API Host
+    
+    从控制台[获取API Host](https://bailian.console.aliyun.com/cn-beijing/settings/workspace)并填入下方，本文其他可编辑地址会同步更新。
+    
+    {WorkspaceId}.cn-beijing.maas.aliyuncs.com
+    
 -   以下语音输出示例使用 OpenAI 兼容方式调用，需要[安装最新版SDK](raw/model-api-reference/preparations/install-sdk.md)。OpenAI Python SDK最低版本为 1.52.0，Node.js SDK最低版本为 4.68.0。
 
 **说明**运行前安装依赖：`pip install numpy soundfile openai`（Python）或 `npm install openai wav`（Node.js）。
@@ -216,8 +218,8 @@ from openai import OpenAI
 # 1. 初始化客户端
 client = OpenAI(
     api_key=os.getenv("DASHSCOPE_API_KEY"),  # 确认已配置环境变量
-    # DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-    base_url=os.environ["DASHSCOPE_BASE_URL"],
+    # 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
 # 2. 发起请求
@@ -306,8 +308,8 @@ const openai = new OpenAI(
     {
         // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
         apiKey: process.env.DASHSCOPE_API_KEY,
-        // DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-        baseURL: process.env.DASHSCOPE_BASE_URL
+        // 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+        baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
     }
 );
 // 2. 发起请求
@@ -351,8 +353,8 @@ convertAudio(audioString, "audio_assistant.wav");
 bash
 
 ```
-# DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-curl -X POST $DASHSCOPE_BASE_URL/chat/completions \
+# 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions" \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -568,8 +570,8 @@ client = OpenAI(
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
     # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-    base_url=os.environ["DASHSCOPE_BASE_URL"],
+    # 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
 completion = client.chat.completions.create(
@@ -614,8 +616,8 @@ const openai = new OpenAI(
         // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
         // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
         apiKey: process.env.DASHSCOPE_API_KEY,
-        // DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-        baseURL: process.env.DASHSCOPE_BASE_URL
+        // 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+        baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
     }
 );
 const completion = await openai.chat.completions.create({
@@ -649,13 +651,8 @@ for await (const chunk of completion) {
 bash
 
 ```
-# ======= 重要提示 =======
-# 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
-# === 执行时请删除该注释 ===
-
-# DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-curl -X POST $DASHSCOPE_BASE_URL/chat/completions \
+# 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions" \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -722,8 +719,8 @@ client = OpenAI(
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
     # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-    base_url=os.environ["DASHSCOPE_BASE_URL"],
+    # 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
 completion = client.chat.completions.create(
@@ -768,8 +765,8 @@ const openai = new OpenAI({
      // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey:"sk-xxx",
     // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     apiKey: process.env.DASHSCOPE_API_KEY,
-    // DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-    baseURL: process.env.DASHSCOPE_BASE_URL
+    // 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+    baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
 });
 
 const completion = await openai.chat.completions.create({
@@ -803,13 +800,8 @@ for await (const chunk of completion) {
 bash
 
 ```
-# ======= 重要提示 =======
-# 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
-# === 执行时请删除该注释 ===
-
-# DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-curl -X POST $DASHSCOPE_BASE_URL/chat/completions \
+# 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions" \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -882,7 +874,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key=os.environ["DASHSCOPE_API_KEY"],
-    base_url=os.environ["DASHSCOPE_BASE_URL"],
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 completion = client.chat.completions.create(
     model="qwen3.8-omni-flash",
@@ -934,8 +926,8 @@ client = OpenAI(
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
     # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-    base_url=os.environ["DASHSCOPE_BASE_URL"],
+    # 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
 completion = client.chat.completions.create(
@@ -977,8 +969,8 @@ const openai = new OpenAI(
     {
         // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
         apiKey: process.env.DASHSCOPE_API_KEY,
-        // DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-        baseURL: process.env.DASHSCOPE_BASE_URL
+        // 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+        baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
     }
 );
 const completion = await openai.chat.completions.create({
@@ -1012,13 +1004,8 @@ for await (const chunk of completion) {
 bash
 
 ```
-# ======= 重要提示 =======
-# 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
-# === 执行时请删除该注释 ===
-
-# DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-curl -X POST $DASHSCOPE_BASE_URL/chat/completions \
+# 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions" \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -1112,8 +1099,8 @@ client = OpenAI(
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
     # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-    base_url=os.environ["DASHSCOPE_BASE_URL"],
+    # 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
 completion = client.chat.completions.create(
@@ -1158,8 +1145,8 @@ const openai = new OpenAI({
      // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
     // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     apiKey: process.env.DASHSCOPE_API_KEY,
-    // DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-    baseURL: process.env.DASHSCOPE_BASE_URL
+    // 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+    baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
 });
 
 const completion = await openai.chat.completions.create({
@@ -1202,13 +1189,8 @@ for await (const chunk of completion) {
 bash
 
 ```
-# ======= 重要提示 =======
-# 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
-# === 执行时请删除该注释 ===
-
-# DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-curl -X POST $DASHSCOPE_BASE_URL/chat/completions \
+# 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions" \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -1260,8 +1242,8 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-    base_url=os.environ["DASHSCOPE_BASE_URL"],
+    # 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
 completion = client.chat.completions.create(
@@ -1308,8 +1290,8 @@ import OpenAI from "openai";
 const openai = new OpenAI(
     {
         apiKey: process.env.DASHSCOPE_API_KEY,
-        // DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-        baseURL: process.env.DASHSCOPE_BASE_URL
+        // 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+        baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
     }
 );
 
@@ -1354,8 +1336,8 @@ for await (const chunk of completion) {
 bash
 
 ```
-# DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-curl -X POST $DASHSCOPE_BASE_URL/chat/completions \
+# 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions" \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -1656,8 +1638,8 @@ client = OpenAI(
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
     # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-    base_url=os.environ["DASHSCOPE_BASE_URL"],
+    # 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
 completion = client.chat.completions.create(
@@ -1742,8 +1724,8 @@ const openai = new OpenAI({
      // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey:"sk-xxx",
     // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     apiKey: process.env.DASHSCOPE_API_KEY,
-    // DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-    baseURL: process.env.DASHSCOPE_BASE_URL
+    // 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+    baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
 });
 
 const completion = await openai.chat.completions.create({
@@ -1869,8 +1851,8 @@ import threading
 client = OpenAI(
     # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-    base_url=os.environ["DASHSCOPE_BASE_URL"],
+    # 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
 # 方式2 完整示例：边生成边解码并实时播放（与方式1 二选一运行）
@@ -1992,8 +1974,8 @@ client = OpenAI(
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
     # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-    base_url=os.environ["DASHSCOPE_BASE_URL"],
+    # 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
 completion = client.chat.completions.create(
@@ -2029,8 +2011,8 @@ const openai = new OpenAI({
      // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey:"sk-xxx",
     // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     apiKey: process.env.DASHSCOPE_API_KEY,
-    // DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-    baseURL: process.env.DASHSCOPE_BASE_URL
+    // 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+    baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
 });
 
 const completion = await openai.chat.completions.create({
@@ -2063,13 +2045,8 @@ for await (const chunk of completion) {
 bash
 
 ```
-# ======= 重要提示 =======
-# 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
-# === 执行时请删除该注释 ===
-
-# DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-curl -X POST $DASHSCOPE_BASE_URL/chat/completions \
+# 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions" \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -2122,8 +2099,8 @@ from openai import OpenAI
 # 初始化客户端
 client = OpenAI(
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-    base_url=os.environ["DASHSCOPE_BASE_URL"],
+    # 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
 # 发起请求（开启联网搜索）
@@ -2165,8 +2142,8 @@ import OpenAI from "openai";
 // 初始化客户端
 const openai = new OpenAI({
     apiKey: process.env.DASHSCOPE_API_KEY,
-    // DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-    baseURL: process.env.DASHSCOPE_BASE_URL
+    // 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+    baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
 });
 
 // 发起请求（开启联网搜索）
@@ -2201,8 +2178,8 @@ console.log();
 bash
 
 ```
-# DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-curl -X POST $DASHSCOPE_BASE_URL/chat/completions \
+# 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions" \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -2253,8 +2230,8 @@ client = OpenAI(
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
     # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-    base_url=os.environ["DASHSCOPE_BASE_URL"],
+    # 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
 completion = client.chat.completions.create(
@@ -2306,8 +2283,8 @@ const openai = new OpenAI({
      // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
     // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     apiKey: process.env.DASHSCOPE_API_KEY,
-    // DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-    baseURL: process.env.DASHSCOPE_BASE_URL
+    // 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+    baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
 });
 
 const completion = await openai.chat.completions.create({
@@ -2354,13 +2331,8 @@ for await (const chunk of completion) {
 bash
 
 ```
-# ======= 重要提示 =======
-# 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
-# === 执行时请删除该注释 ===
-
-# DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-curl -X POST $DASHSCOPE_BASE_URL/chat/completions \
+# 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions" \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -2427,8 +2399,8 @@ from openai import OpenAI
 client = OpenAI(
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-    base_url=os.environ["DASHSCOPE_BASE_URL"],
+    # 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
 completion = client.chat.completions.create(
@@ -2462,8 +2434,8 @@ const openai = new OpenAI(
     {
         // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
         apiKey: process.env.DASHSCOPE_API_KEY,
-        // DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-        baseURL: process.env.DASHSCOPE_BASE_URL
+        // 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+        baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
     }
 );
 const completion = await openai.chat.completions.create({
@@ -2493,8 +2465,8 @@ for await (const chunk of completion) {
 bash
 
 ```
-# DASHSCOPE_BASE_URL 为业务空间服务地址，配置见快速开始；华北2（北京）形如 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，各地域不同。
-curl -X POST $DASHSCOPE_BASE_URL/chat/completions \
+# 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions" \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -2530,7 +2502,7 @@ curl -X POST $DASHSCOPE_BASE_URL/chat/completions \
 
 **说明**Qwen3.8-Omni-Flash 不支持 JSON Schema 模式。JSON Mode 只保证 JSON 格式，字段约束需由提示词定义并在客户端校验。支持范围见[结构化输出](raw/model-user-guide/model-experience/text-generation-model/qwen-structured-output.md)。
 
-准备一段单人录音，保存为 WAV 文件。沿用[快速开始](#qwen38-offline)中的 `DASHSCOPE_API_KEY` 和 `DASHSCOPE_BASE_URL`，安装依赖并设置文件路径：
+准备一段单人录音，保存为 WAV 文件。沿用[快速开始](#qwen38-offline)中的 `DASHSCOPE_API_KEY`，安装依赖并设置文件路径：
 
 ```
 pip install -U openai jsonschema
@@ -2564,7 +2536,7 @@ JSON Schema：
 
 client = OpenAI(
     api_key=os.environ["DASHSCOPE_API_KEY"],
-    base_url=os.environ["DASHSCOPE_BASE_URL"],
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 audio_base64 = base64.b64encode(Path(os.environ["AUDIO_PATH"]).read_bytes()).decode()
 completion = client.chat.completions.create(
@@ -2621,7 +2593,7 @@ Qwen3.8-Omni-Flash 支持 Responses API，可通过 `previous_response_id` 关�
 
 #### 基础使用
 
-安装最新版 [OpenAI Python SDK](raw/model-api-reference/preparations/install-sdk.md)，并沿用[快速开始](#qwen38-offline)示例的 API Key、`DASHSCOPE_BASE_URL` 和 `AUDIO_URL`。Responses 请求使用 `input`，其中音频 URL 放在 `audio_url`，与 Chat Completions 的 `input_audio.data` 结构不同。音频和视频输入仅允许出现在 `user` 消息中。
+安装最新版 [OpenAI Python SDK](raw/model-api-reference/preparations/install-sdk.md)，并沿用[快速开始](#qwen38-offline)示例的 API Key 和 `AUDIO_URL`。Responses 请求使用 `input`，其中音频 URL 放在 `audio_url`，与 Chat Completions 的 `input_audio.data` 结构不同。音频和视频输入仅允许出现在 `user` 消息中。
 
 ```
 import os
@@ -2629,7 +2601,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key=os.environ["DASHSCOPE_API_KEY"],
-    base_url=os.environ["DASHSCOPE_BASE_URL"],
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 audio_input = {"type": "input_audio", "audio_url": os.environ["AUDIO_URL"], "format": "wav"}
 response = client.responses.create(

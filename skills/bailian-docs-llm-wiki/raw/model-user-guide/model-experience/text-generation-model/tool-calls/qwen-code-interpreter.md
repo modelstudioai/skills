@@ -107,7 +107,7 @@ response = client.multimodal.chat.create(
 
 #### Responses API
 
-千问Max：Qwen3.8-Max系列、Qwen3.7-Max系列
+千问Max：qwen4-max-preview（[仅 Token Plan](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview)）、Qwen3.8-Max系列、Qwen3.7-Max系列
 
 千问Plus：Qwen3.7-Plus系列、Qwen3.6-Plus系列、Qwen3.5-Plus系列
 

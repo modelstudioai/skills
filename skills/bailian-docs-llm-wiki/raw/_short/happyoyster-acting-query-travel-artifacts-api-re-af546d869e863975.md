@@ -191,7 +191,7 @@ API Key 鉴权。仅支持**主 API Key**，以 `sk-` 开头，如 `sk-xxx`。�
 -   对外交付推荐读取 `video.withInstructionAndWatermark`；如业务只需要原片，可继续读取 `video.original.url`。
 -   四个视频变体共用同一时长解析结果，因此同一次响应中已就绪且时长可解析的变体会返回一致的 `durationSec`。
 -   使用 `TRAVEL_NO_STREAM_AUTO_END` 结束的 Travel 为 `failed`，不会生成可查询产物。
--   收到 `404000` 时不要一律展示为「尚未完成」：请先通过[查询Travel状态](raw/_short/happyoyster-acting-query-travel-status-api-refer-bb36f15c26e6c92c.md)或[查询Travel列表](raw/_short/happyoyster-acting-query-travel-list-api-referen-643c3b55678ff459.md)读取 `status` 与 `errorCode`，`failed` 的 Travel 应展示失败原因。
+-   收到 `404000` 时不要一律展示为“尚未完成”：请先通过[查询Travel状态](raw/_short/happyoyster-acting-query-travel-status-api-refer-bb36f15c26e6c92c.md)或[查询Travel列表](raw/_short/happyoyster-acting-query-travel-list-api-referen-643c3b55678ff459.md)读取 `status` 与 `errorCode`，`failed` 的 Travel 应展示失败原因。
 
 ##### 404000 场景
 
