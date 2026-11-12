@@ -1,61 +1,90 @@
 # rag api
 
-RAG API 是百炼平台提供的面向[检索增强生成](../concepts/rag.md)（RAG）场景的核心服务接口，支持知识库构建、文档切片、异步同步、语义检索与问答等端到端能力。开发者可通过该 API 快速集成私有知识检索功能，无需自行搭建向量数据库或编排检索流程。所有接口均需通过 Bearer Token 认证，详见 [RAG API](../../raw/application-api-reference/rag-api.md)。
+RAG API 是百炼平台提供的知识库管理与检索服务接口，支持开发者以编程方式完成知识库的创建、文档导入、切片管理、联合检索及智能问答。所有接口通过统一的业务空间 Endpoint 提供 HTTPS 服务，并采用 API Key 鉴权。
 
-## 支持的模型与功能
+## 支持的模型/功能
 
-- **基础模型支持**：当前仅支持 `qwen-max` 和 `qwen-plus` 作为 RAG 问答阶段的 LLM 后端；其他模型（如 `qwen-turbo`）暂不支持生成式问答，仅可用于向量化（embedding）任务。
-- **核心功能模块**：
-  - 知识库生命周期管理（创建/删除/更新）
-  - 文档上传与元数据标注（支持 PDF/DOCX/TXT/MD 等格式）
-  - 自动切片（chunking）与可配置分块策略（按段落、固定长度、语义边界）
-  - 异步知识同步任务（`sync_job`）状态轮询与结果获取
-  - 检索增强问答（`/v1/knowledge/query`），支持 `top_k`、`score_threshold`、`enable_rerank` 等控制参数  
-  > **注意**：[知识检索与问答](../../raw/application-api-reference/rag-api/knowledge.md) 中提及的 `qwen-14b-chat` 已于 v2.3 版本下线，实际调用将返回 400 错误；请以 [RAG API](../../raw/application-api-reference/rag-api.md) 的“支持模型”章节为准。
+RAG API 支持多模态与文本混合检索能力，底层依赖向量嵌入模型（如 `text-embedding-v4`、`qwen3-vl-embedding`）和重排序模型（如 `qwen3-rerank`）。知识库类型覆盖 `document`（文档搜索）、`table`（数据查询）、`image`（图片问答）、`multimedia`（音视频搜索），对应不同结构类型（`unstructured`/`structured`）与使用场景（如 `lite_document_qa`、`visual_perception_qa`、`basic_table_qa`）。检索与问答能力封装在 RAG Agent 中，需先通过 [Agent 管理](raw/application-api-reference/rag-api/rag-api-agents.md) 创建并发布，再调用运行时接口。
+
+知识库管理功能包括：创建（[创建知识库并导入](raw/application-api-reference/rag-api/rag-api-knowledge-base/rag-api-create-index.md)）、查询列表（[查询知识库列表](raw/application-api-reference/rag-api/rag-api-knowledge-base/rag-api-list-indices.md)）、更新（[更新知识库](raw/application-api-reference/rag-api/rag-api-knowledge-base/rag-api-update-index.md)）、删除（[删除知识库](raw/application-api-reference/rag-api/rag-api-knowledge-base/rag-api-delete-index.md)）及监控（[获取知识库监控数据](raw/application-api-reference/rag-api/rag-api-knowledge-base/rag-api-get-index-monitor.md)）。文档与切片支持全生命周期操作，包括导入、查询、更新与删除；数据源管理涵盖类目、文件、OSS 批量导入及数据集配置。
+
+> **注意**：文档 46 明确指出“新增切片”接口不支持 `multimedia` 类型知识库，但文档 4 中 `knowledgeType` 字段说明中将 `multimedia` 列为合法取值且与 `unstructured` 搭配。该矛盾表明 `multimedia` 类型知识库的切片级直接操作未被当前 API 支持，应优先使用标准导入流程。
 
 ## 关键参数
 
-| 参数名 | 类型 | 必填 | 说明 |
-|--------|------|------|------|
-| `knowledge_id` | string | 是 | 知识库唯一标识，由 `/v1/knowledge_bases` 创建后返回 |
-| `query` | string | 是 | 用户自然语言问题，最大长度 2048 字符 |
-| `top_k` | integer | 否 | 检索返回的最相关片段数，默认 3，范围 1–50 |
-| `score_threshold` | float | 否 | 向量相似度阈值（0.0–1.0），低于此值的片段将被过滤，默认 0.3 |
-| `enable_rerank` | boolean | 否 | 是否启用重排序（cross-encoder），默认 `false`；启用后延迟增加约 300–800ms |
-
-> **注意**：`score_threshold` 的实际生效逻辑依赖于向量索引类型（HNSW vs IVF），详细行为请参考 [RAG API](../../raw/application-api-reference/rag-api.md) 中“检索原理”附录。
+- **认证参数**：所有请求必须携带 `Authorization: Bearer <API-Key>` 头，API Key 在 [控制台 API Key 页面](https://bailian.console.aliyun.com/?tab=model#/api-key) 获取。
+- **业务空间标识**：Endpoint 格式为 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com`，其中 `{workspace_id}` 为业务空间 ID，可在 [业务空间管理](https://bailian.console.aliyun.com/?tab=globalset#/efm/business_management) 查看。
+- **知识库标识**：多数接口使用 `indexId` 或 `pipelineId`（二者等价，均为创建知识库返回的 `data.id`）；但部分接口使用 `index_id`（snake_case），例如 [删除知识库](raw/application-api-reference/rag-api/rag-api-knowledge-base/rag-api-delete-index.md) 和 [删除文档](raw/application-api-reference/rag-api/rag-api-documents/rag-api-delete-document.md)，需严格区分命名风格。
+- **Agent 标识**：知识检索（`/api/v1/indices/knowledge/search`）与知识问答（`/api/v2/apps/knowledge/chat`）均需传入已发布的 `agent_id`，该 ID 由 [Agent 管理](raw/application-api-reference/rag-api/rag-api-agents.md) 接口创建并发布后获得。
+- **分页与过滤**：通用分页参数为 `page_number`（从 1 开始）与 `page_size`（默认 10，上限 100）；模糊过滤常用 `pipeline_name`（知识库名）或 `fileName`（文件名）；精确匹配使用 `index_id`、`fileId`、`agent_id` 等 ID 字段。
 
 ## 使用方式
 
-1. **前置准备**：  
-   - 创建知识库（`POST /v1/knowledge_bases`）→ 获取 `knowledge_id`  
-   - 上传文档（`POST /v1/knowledge_bases/{kb_id}/documents`）→ 触发自动切片与嵌入  
-   - 等待同步任务完成（轮询 `GET /v1/sync_jobs/{job_id}`，状态为 `succeeded`）
-
-2. **发起问答请求**：  
-   ```bash
-   curl -X POST https://dashscope.aliyuncs.com/api/v1/knowledge/query \
-     -H "Authorization: Bearer $API_KEY" \
-     -H "Content-Type: application/json" \
-     -d '{
-           "knowledge_id": "kb-xxx",
-           "query": "百炼平台如何配置RAG应用？",
-           "top_k": 5,
-           "enable_rerank": true
-         }'
-   ```
-
-3. **响应结构**：包含 `answer`（LLM生成答案）、`references`（来源片段列表，含 `chunk_id`、`content`、`score`、`document_title`）和 `usage`（token消耗统计）。
+1. **准备凭证**：获取 API Key 并设置环境变量（如 `BAILIAN_API_KEY`），避免硬编码。
+2. **管理知识库**：调用 `/api/v1/indices/rag/index/create_v2` 创建知识库；通过 `/api/v1/indices/rag/index/list` 查询列表；使用 `/api/v1/indices/rag/index/update` 修改配置。
+3. **导入数据**：
+   - 文件上传三步法：先调用 `/api/v1/connector/dash/applyFileUploadLease` 获取 OSS 租约，再 PUT 上传至预签名 URL，最后用 `/api/v1/connector/dash/addFile` 注册；
+   - 或直接批量导入：调用 `/api/v1/connector/dash/addFilesFromAuthorizedOss` 从授权 OSS Bucket 导入。
+4. **构建 Agent**：使用 `/api/v1/indices/rag/app/create` 创建 Agent，通过 `/api/v1/indices/rag/app/update` 编辑草稿配置，最后用 `/api/v1/indices/rag/app/deploy` 发布。
+5. **运行时调用**：
+   - 检索：`POST /api/v1/indices/knowledge/search`，传 `agent_id` 与 `query`/`images`；
+   - 问答：`POST /api/v2/apps/knowledge/chat`，传 `agent_id` 与 `messages` 历史，`stream` 必须为 `true`。
 
 ## 限制和注意事项
 
-- **配额限制**：单次问答请求最大 `top_k=50`；单知识库最多容纳 100 万切片；详见 [限流](../../raw/application-api-reference/rag-api/rag-api-rate-limits.md) 文档。
-- **文档处理限制**：PDF 文件最大 100MB，且不支持加密或扫描版（需 OCR 预处理）；DOCX 中的复杂表格可能解析异常。
-- **异步任务超时**：同步任务（如文档解析）默认超时 30 分钟，超时后状态置为 `failed`，需检查 [数据导入](../../raw/application-api-reference/rag-api/rag-api-data-import.md) 中的错误日志字段。
-- **调试建议**：首次集成时，建议先调用 `/v1/knowledge/query?debug=true` 获取中间检索结果（`retrieved_chunks`），验证切片质量与相关性。
+- **限流策略**：知识库管理接口按 QPS 限流（如 `/rag/index/list` 上限 10 QPS），检索与问答接口按每 10 秒请求数限流（默认 10 次/10 秒）。超限返回 HTTP `429`，需按 `Retry-After` 头或指数退避重试（1s/2s/4s）。
+- **不可逆操作**：删除知识库（[删除知识库](raw/application-api-reference/rag-api/rag-api-knowledge-base/rag-api-delete-index.md)）、删除文档（[删除文档](raw/application-api-reference/rag-api/rag-api-documents/rag-api-delete-document.md)）、删除类目（[删除类目](raw/application-api-reference/rag-api/rag-api-data-import/rag-api-delete-category.md)）均为软删除或永久移除，无恢复机制。
+- **参数兼容性**：文档管理接口存在命名不一致问题——[查询文档列表](raw/application-api-reference/rag-api/rag-api-documents/rag-api-list-documents.md) 使用 `index_id`（snake_case），而 [查询文件详情列表](raw/application-api-reference/rag-api/rag-api-documents/rag-api-list-file-details.md) 使用 `indexId`（camelCase），调用时需严格匹配接口文档要求。
+- **安全建议**：API Key 具有账号级权限，禁止提交至代码仓库；建议按应用拆分 Key 并定期轮转；生产环境使用 RAM 子账号并授予最小必要权限（如 `AliyunBailianDataFullAccess`）。
 
 ## 来源文档
 
-- [RAG API](../../raw/application-api-reference/rag-api.md)
+- [认证](../../raw/application-api-reference/rag-api/rag-api-authentication.md)
+- [错误码](../../raw/application-api-reference/rag-api/rag-api-errors.md)
+- [限流](../../raw/application-api-reference/rag-api/rag-api-rate-limits.md)
+- [创建知识库并导入](../../raw/application-api-reference/rag-api/rag-api-knowledge-base/rag-api-create-index.md)
+- [查询知识库列表](../../raw/application-api-reference/rag-api/rag-api-knowledge-base/rag-api-list-indices.md)
+- [更新知识库](../../raw/application-api-reference/rag-api/rag-api-knowledge-base/rag-api-update-index.md)
+- [删除知识库](../../raw/application-api-reference/rag-api/rag-api-knowledge-base/rag-api-delete-index.md)
+- [获取知识库监控数据](../../raw/application-api-reference/rag-api/rag-api-knowledge-base/rag-api-get-index-monitor.md)
+- [文档管理](../../raw/application-api-reference/rag-api/rag-api-documents.md)
+- [查询文档列表](../../raw/application-api-reference/rag-api/rag-api-documents/rag-api-list-documents.md)
+- [查询文件详情列表](../../raw/application-api-reference/rag-api/rag-api-documents/rag-api-list-file-details.md)
+- [知识库](../../raw/application-api-reference/rag-api/rag-api-knowledge-base.md)
+- [切片管理](../../raw/application-api-reference/rag-api/rag-api-chunks.md)
+- [删除文档](../../raw/application-api-reference/rag-api/rag-api-documents/rag-api-delete-document.md)
+- [查询切片列表](../../raw/application-api-reference/rag-api/rag-api-chunks/rag-api-list-chunks.md)
+- [更新切片](../../raw/application-api-reference/rag-api/rag-api-chunks/rag-api-update-chunk.md)
+- [删除切片](../../raw/application-api-reference/rag-api/rag-api-chunks/rag-api-delete-chunk.md)
+- [同步任务](../../raw/application-api-reference/rag-api/rag-api-sync-jobs.md)
+- [提交导入任务](../../raw/application-api-reference/rag-api/rag-api-sync-jobs/rag-api-submit-sync-job.md)
+- [查询任务状态](../../raw/application-api-reference/rag-api/rag-api-sync-jobs/rag-api-get-sync-job-status.md)
+- [数据导入](../../raw/application-api-reference/rag-api/rag-api-data-import.md)
+- [查询类目列表](../../raw/application-api-reference/rag-api/rag-api-data-import/rag-api-list-category.md)
+- [新增类目](../../raw/application-api-reference/rag-api/rag-api-data-import/rag-api-add-category.md)
+- [删除类目](../../raw/application-api-reference/rag-api/rag-api-data-import/rag-api-delete-category.md)
+- [查询文件列表](../../raw/application-api-reference/rag-api/rag-api-data-import/rag-api-list-file.md)
+- [概览](../../raw/application-api-reference/rag-api/rag-api-overview.md)
+- [查询文件详情](../../raw/application-api-reference/rag-api/rag-api-data-import/rag-api-describe-file.md)
+- [删除文件](../../raw/application-api-reference/rag-api/rag-api-data-import/rag-api-delete-file.md)
+- [批量更新文件标签](../../raw/application-api-reference/rag-api/rag-api-data-import/rag-api-batch-update-tag.md)
+- [申请上传租约](../../raw/application-api-reference/rag-api/rag-api-data-import/rag-api-upload-lease.md)
+- [注册文件](../../raw/application-api-reference/rag-api/rag-api-data-import/rag-api-add-file.md)
+- [从 OSS 批量导入](../../raw/application-api-reference/rag-api/rag-api-data-import/rag-api-oss-import.md)
+- [新增数据集](../../raw/application-api-reference/rag-api/rag-api-data-import/rag-api-add-connector.md)
+- [查询数据集](../../raw/application-api-reference/rag-api/rag-api-data-import/rag-api-get-connector.md)
+- [知识检索与问答](../../raw/application-api-reference/rag-api/knowledge.md)
+- [知识检索](../../raw/application-api-reference/rag-api/knowledge/knowledgesearch.md)
+- [Agent 管理](../../raw/application-api-reference/rag-api/rag-api-agents.md)
+- [Agent 管理概述](../../raw/application-api-reference/rag-api/rag-api-agents/rag-api-agent-overview.md)
+- [创建 Agent](../../raw/application-api-reference/rag-api/rag-api-agents/rag-api-agent-create.md)
+- [更新 Agent](../../raw/application-api-reference/rag-api/rag-api-agents/rag-api-agent-update.md)
+- [发布 Agent](../../raw/application-api-reference/rag-api/rag-api-agents/rag-api-agent-deploy.md)
+- [删除 Agent](../../raw/application-api-reference/rag-api/rag-api-agents/rag-api-agent-delete.md)
+- [查询 Agent 列表](../../raw/application-api-reference/rag-api/rag-api-agents/rag-api-agent-list.md)
+- [查询 Agent 详情](../../raw/application-api-reference/rag-api/rag-api-agents/rag-api-agent-get.md)
+- [复制 Agent](../../raw/application-api-reference/rag-api/rag-api-agents/rag-api-agent-copy.md)
+- [新增切片](../../raw/application-api-reference/rag-api/rag-api-chunks/rag-api-add-chunk.md)
+- [知识问答](../../raw/application-api-reference/rag-api/knowledge/knowledgechat.md)
 
 

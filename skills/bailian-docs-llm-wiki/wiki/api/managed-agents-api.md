@@ -1,47 +1,46 @@
 # managed agents api
 
-Managed Agents API 是百炼平台提供的用于构建、部署和管理可编程智能体（Agent）的 RESTful 接口集合，支持环境隔离、会话状态管理、技能编排、文件与记忆存储等核心能力。该 API 采用标准 HTTP 协议，需通过 Bearer Token 认证，适用于需要细粒度控制 Agent 生命周期与运行时行为的开发者场景。完整功能覆盖从开发调试到生产部署的全链路需求。
+Managed Agents API 是百炼平台提供的托管式智能体服务接口，用于创建、配置和管理具备[长期记忆](../concepts/long-term-memory.md)、工具调用、多轮会话与环境隔离能力的 AI Agent。该 API 以 RESTful 形式提供，支持细粒度资源控制（如 Environment、Session、Memory Store）和可扩展能力（如 Skill、Vault、Webhook）。开发者可通过它构建生产级自动化工作流，无需自行维护底层推理与状态管理逻辑。
 
 ## 支持的模型与功能
 
-Managed Agents API **不直接调用大模型**，而是提供对 Agent 运行时基础设施的编排能力；底层模型由用户在 `Agent` 配置中指定（如 `qwen-max`、`qwen-plus` 等），并受 [Managed Agent API 概览](../../raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md) 中定义的模型兼容性约束。支持的核心功能包括：  
-- Agent 实例的创建、更新与生命周期管理（含 `status` 查询与强制终止）  
-- 独立 `Environment` 隔离（支持多租户、多版本配置）  
-- 基于 `Session` 的有状态交互与事件流订阅（`event_type=agent_step`, `agent_finish`）  
-- `Memory Store` 提供结构化记忆持久化（键值对 + TTL）  
-- `Skill` 注册与动态绑定（支持 HTTP Webhook 和内置工具）  
-- `Vault` 与 `Credential` 安全管理敏感凭证  
+- **模型支持**：当前仅支持百炼平台托管的 `qwen-max`、`qwen-plus` 和 `qwen-turbo` 系统模型；自定义模型暂不支持接入 Managed Agents —— 此限制在 [Managed Agent API](../../raw/application-api-reference/managed-agents-api.md) 的概览章节中明确说明。
+- **核心功能**：
+  - 多会话生命周期管理（Session + Event）
+  - 持久化记忆存储（Memory Store，支持向量+结构化混合索引）
+  - 安全凭证与密钥管理（Credential + Vault）
+  - 可插拔技能注册与编排（Skill API）
+  - 文件上传与上下文注入（Files API）
+  - 部署与扩缩容控制（Deployment API）
 
-> **注意**：原始文档中 `skills-api.md` 描述的“本地 Python 函数注册”能力已在 v2.3 版本中移除，当前仅支持 Webhook 类型 Skill；请以 [Skill API](../../raw/application-api-reference/managed-agents-api/skills-api.md) 的最新修订版为准。
+> **注意**：原始文档中 [Environment](../../raw/application-api-reference/managed-agents-api/environment-api.md) 描述其支持“跨区域部署”，但最新 [Deployment API](../../raw/application-api-reference/managed-agents-api/deployment-api.md) 明确限定为单可用区部署，且不支持跨 region 调度。请以 Deployment API 文档为准。
 
 ## 关键参数
 
-所有写操作（如 `POST /v1/agents`）需在请求体中包含以下必需字段：  
-- `name`: 字符串，长度 1–64，仅限字母、数字、下划线、短横线  
-- `environment_id`: 关联的 Environment ID（必须已存在）  
-- `model`: 指定模型 ID（例如 `"qwen-max"`），必须属于当前项目已开通的模型列表  
-- `prompt_template`: Jinja2 格式字符串，支持 `{{ input }}`、`{{ memory.key }}` 等上下文变量  
+所有 Agent 创建请求必须包含以下字段：
 
-读操作（如 `GET /v1/sessions/{session_id}`）支持通用查询参数：  
-- `include_events=true`：返回关联的 `Event` 列表（默认 `false`）  
-- `limit=50`：限制返回事件数（最大 200）  
-- `offset=0`：分页偏移量  
-
-详细参数说明见 [Agent API](../../raw/application-api-reference/managed-agents-api/agent-api.md) 与 [Session API](../../raw/application-api-reference/managed-agents-api/session-api.md)。
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `model_id` | string | ✓ | 必须为 `qwen-max` / `qwen-plus` / `qwen-turbo` 之一；其他值将返回 `400 Bad Request` |
+| `name` | string | ✓ | 长度 1–64 字符，仅支持字母、数字、下划线、短横线 |
+| `environment_id` | string | ✓ | 必须引用已存在的 Environment 资源 ID（通过 [Environment API](../../raw/application-api-reference/managed-agents-api/environment-api.md) 创建） |
+| `memory_store_id` | string | ✗（默认自动创建） | 若指定，需确保该 Memory Store 已存在且归属同一 Environment |
 
 ## 使用方式
 
-1. **认证**：在 `Authorization` Header 中传入 `Bearer <access_token>`，Token 通过 [认证文档](../../raw/application-api-reference/managed-agents-api/managed-agents-api-authentication.md) 获取  
-2. **快速启动**：参考 [快速开始](../../raw/application-api-reference/managed-agents-api/managed-agents-quickstart.md) 中的 cURL 示例，完成 Agent 创建 → Session 启动 → 流式响应消费全流程  
-3. **生产集成**：建议使用 `webhook-api.md` 配置异步事件回调，并通过 `deployment-api.md` 管理灰度发布与版本回滚  
+1. **认证**：使用 Bearer [Token](../concepts/token.md)，通过 `Authorization: Bearer <api_key>` 传入；API Key 需具备 `managed_agents:full_access` 权限（参见 [Managed Agent API](../../raw/application-api-reference/managed-agents-api.md) 中的认证章节）。
+2. **快速启动**：参考 [Managed Agents Quickstart](../../raw/application-api-reference/managed-agents-api/managed-agents-quickstart.md) 可在 5 分钟内完成 Agent 创建、Session 初始化与首条消息发送。
+3. **典型流程**：  
+   `POST /v1/agents` → 获取 `agent_id`  
+   `POST /v1/environments/{env_id}/sessions` → 获取 `session_id`  
+   `POST /v1/sessions/{session_id}/messages` → 发起交互  
 
 ## 限制和注意事项
 
-- 单个 Agent 最多绑定 20 个 Skill；单个 Session 最大存活时长为 24 小时（超时自动清理）  
-- `Memory Store` 单条记录最大 1MB，总容量按项目配额限制（默认 10GB）  
-- 所有 API 均遵循 429 限流策略：每秒 10 次写请求 / 每分钟 600 次读请求（按 project_id 维度统计）  
-- 文件上传（`files-api.md`）仅支持 `multipart/form-data`，且单文件 ≤ 100MB；不支持断点续传  
-- `Vault` 中存储的凭证不可被 Agent 运行时直接读取，必须通过显式绑定的 `Credential` 实例注入到 Skill 执行上下文中
+- 单个 Agent 最多关联 100 个 Skill；超出需先解绑。
+- Session 生命周期默认 24 小时，超时后自动清理内存与事件日志（可配置，详见 [Session and Event](../../raw/application-api-reference/managed-agents-api/session-api.md)）。
+- 文件上传大小上限为 100 MB，且仅支持 `text/plain`, `application/pdf`, `application/vnd.openxmlformats-officedocument.wordprocessingml.document` 等白名单 MIME 类型。
+- 所有 API 均遵循百炼平台统一配额策略：默认 QPS 为 10，突发容量 50；如需提升，请提交工单申请。
 
 ## 来源文档
 

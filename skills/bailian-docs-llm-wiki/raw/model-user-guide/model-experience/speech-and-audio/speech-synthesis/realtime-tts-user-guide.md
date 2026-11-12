@@ -18,45 +18,11 @@
 
 ## 开始使用
 
--   [获取 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置到环境变量](https://help.aliyun.com/zh/model-studio/get-api-key#20b17d4430qvt) `DASHSCOPE_API_KEY`。使用与示例地域对应的 API Key。
--   使用业务空间专属域名时，将代码中的 `{WorkspaceId}` 替换为该地域的[业务空间 ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
--   [安装 DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)，选择 Python 或 Java 示例。
-
-**说明**对延迟和弱网下音频传输稳定性要求较高的移动端应用，可使用 AOQ 协议。AOQ 的接入方式，以及 AOQ、WebRTC 和 WebSocket 的差异与模型支持范围，请参见 [Realtime API 概述](raw/model-api-reference/realtime-api-directory/realtime-api-overview.md)。
+[安装 DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)，在控制台[获取 API Key](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key)，并配置 `DASHSCOPE_API_KEY` 环境变量。
 
 #### Qwen-Audio-TTS（推荐）
 
-以下使用北京地域的 `qwen-audio-3.1-tts-flash` 和系统音色 `longanhuan_v3.1`，分段发送文本并将返回音频保存为 `output.mp3`。
-
-Python
-
-```
-import os
-import dashscope
-
-# 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx"
-# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID。
-client = dashscope.Client(
-    api_key=os.environ["DASHSCOPE_API_KEY"],
-    workspace="{WorkspaceId}",
-    region="cn-beijing",
-)
-
-with open("output.mp3", "wb") as audio:
-    # 分段发送文本，逐段接收音频
-    with client.audio.tts.connect(
-        model="qwen-audio-3.1-tts-flash",
-        voice="longanhuan_v3.1",
-        format="mp3",
-        sample_rate=24000,
-    ) as session:
-        for text in ["你好，欢迎使用阿里云百炼。", "文本可以分段发送，音频会逐段返回。"]:
-            session.send_text(text)
-        session.flush()  # 触发已缓冲文本的合成（不结束输入）
-        session.stop()   # 结束输入，等待剩余音频返回
-        for chunk in session.audio_chunks():
-            audio.write(chunk)
-```
+以下使用北京地域的 qwen-audio-3.1-tts-flash 和系统音色 `longanhuan_v3.1`，分段发送文本并将返回音频保存为 `output.mp3`。
 
 Java
 
@@ -109,10 +75,6 @@ public class Main {
 }
 ```
 
-#### CosyVoice
-
-以下使用北京地域的 `cosyvoice-v3-flash` 和系统音色 `longanyang`，分段发送文本并将返回音频保存为 `output.mp3`。
-
 Python
 
 ```
@@ -120,6 +82,7 @@ import os
 import dashscope
 
 # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx"
+# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID。
 client = dashscope.Client(
     api_key=os.environ["DASHSCOPE_API_KEY"],
     workspace="{WorkspaceId}",
@@ -129,8 +92,8 @@ client = dashscope.Client(
 with open("output.mp3", "wb") as audio:
     # 分段发送文本，逐段接收音频
     with client.audio.tts.connect(
-        model="cosyvoice-v3-flash",
-        voice="longanyang",
+        model="qwen-audio-3.1-tts-flash",
+        voice="longanhuan_v3.1",
         format="mp3",
         sample_rate=24000,
     ) as session:
@@ -141,6 +104,10 @@ with open("output.mp3", "wb") as audio:
         for chunk in session.audio_chunks():
             audio.write(chunk)
 ```
+
+#### CosyVoice
+
+以下使用北京地域的 cosyvoice-v3-flash 和系统音色 `longanyang`，分段发送文本并将返回音频保存为 `output.mp3`。
 
 Java
 
@@ -193,6 +160,35 @@ public class Main {
 }
 ```
 
+Python
+
+```
+import os
+import dashscope
+
+# 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx"
+client = dashscope.Client(
+    api_key=os.environ["DASHSCOPE_API_KEY"],
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
+
+with open("output.mp3", "wb") as audio:
+    # 分段发送文本，逐段接收音频
+    with client.audio.tts.connect(
+        model="cosyvoice-v3-flash",
+        voice="longanyang",
+        format="mp3",
+        sample_rate=24000,
+    ) as session:
+        for text in ["你好，欢迎使用阿里云百炼。", "文本可以分段发送，音频会逐段返回。"]:
+            session.send_text(text)
+        session.flush()  # 触发已缓冲文本的合成（不结束输入）
+        session.stop()   # 结束输入，等待剩余音频返回
+        for chunk in session.audio_chunks():
+            audio.write(chunk)
+```
+
 ## 合成效果优化
 
 ### 语言与发音
@@ -231,7 +227,7 @@ public class Main {
 
 #### Qwen-Audio-TTS
 
-`qwen-audio-3.1-tts-plus`、`qwen-audio-3.1-tts-flash`、`qwen-audio-3.0-tts-plus`、`qwen-audio-3.0-tts-flash` 的系统音色、复刻音色和设计音色均支持在合成请求中通过 `instruction` 设置自然语言指令。
+qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash 的系统音色、复刻音色和设计音色均支持在合成请求中通过 `instruction` 设置自然语言指令。
 
 建议在 `instruction` 中说明合成语种和所需效果，以提升合成质量。指令中指定的语种须与待合成文本的语种一致。例如，合成荷兰语文本时，可设置：
 
@@ -251,7 +247,7 @@ public class Main {
 
 **指令文本语言**
 
-`cosyvoice-v3.5-plus`、`cosyvoice-v3.5-flash`
+cosyvoice-v3.5-plus、cosyvoice-v3.5-flash
 
 复刻音色、设计音色
 
@@ -261,7 +257,7 @@ public class Main {
 
 中文、英文、法语、德语、日语、韩语、俄语、葡萄牙语、泰语、印尼语、越南语。
 
-`cosyvoice-v3-plus`
+cosyvoice-v3-plus
 
 系统音色
 
@@ -271,7 +267,7 @@ public class Main {
 
 按[音色列表](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/tts-voice-list/cosyvoice-voice-list.md)指定的语言填写。
 
-`cosyvoice-v3-flash`
+cosyvoice-v3-flash
 
 系统音色
 
@@ -320,7 +316,7 @@ with client.audio.tts.connect(
 
 ### 情感与富语言标签
 
-**说明**适用于 `qwen-audio-3.1-tts-plus`、`qwen-audio-3.1-tts-flash`、`qwen-audio-3.0-tts-plus` 和 `qwen-audio-3.0-tts-flash`。
+**说明**适用于 qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus 和 qwen-audio-3.0-tts-flash。
 
 情感与富语言标签可控制语音的情感和风格，并在指定位置加入笑声、叹息等拟声效果。将标签直接写入待合成文本 `text`，无需额外参数。
 
@@ -552,16 +548,12 @@ Qwen-Audio-TTS、CosyVoice、Sambert 任务结束后 60 秒内没有新任务时
 
 #### 华北2（北京）
 
-使用该地域的 [API Key](raw/model-api-reference/preparations/get-api-key.md) 和[接入域名](raw/model-user-guide/get-started-with-models/regions.md)调用以下模型：
-
 -   **Qwen-Audio-TTS**：qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash
 -   **CosyVoice**：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-plus、cosyvoice-v3-flash、cosyvoice-v2
 -   **Qwen3-TTS**：qwen3-tts-flash-realtime
 -   **Sambert**：sambert-zhinan-v1、sambert-zhiqi-v1、sambert-zhichu-v1、sambert-zhide-v1、sambert-zhijia-v1、sambert-zhiru-v1、sambert-zhiqian-v1、sambert-zhixiang-v1、sambert-zhiwei-v1、sambert-zhihao-v1、sambert-zhijing-v1、sambert-zhiming-v1、sambert-zhimo-v1、sambert-zhina-v1、sambert-zhishu-v1、sambert-zhistella-v1、sambert-zhiting-v1、sambert-zhixiao-v1、sambert-zhiya-v1、sambert-zhiye-v1、sambert-zhiying-v1、sambert-zhiyuan-v1、sambert-zhiyue-v1、sambert-zhigui-v1、sambert-zhishuo-v1、sambert-zhimiao-emo-v1、sambert-zhimao-v1、sambert-zhilun-v1、sambert-zhifei-v1、sambert-zhida-v1、sambert-camila-v1、sambert-perla-v1、sambert-indah-v1、sambert-clara-v1、sambert-hanna-v1、sambert-beth-v1、sambert-betty-v1、sambert-cally-v1、sambert-cindy-v1、sambert-eva-v1、sambert-donna-v1、sambert-brian-v1、sambert-waan-v1，请参见[Sambert模型列表](https://help.aliyun.com/zh/model-studio/sambert-java-sdk#57d33631f7doi)
 
 #### 新加坡
-
-使用该地域的 [API Key](raw/model-api-reference/preparations/get-api-key.md) 和[接入域名](raw/model-user-guide/get-started-with-models/regions.md)调用以下模型：
 
 -   **Qwen-Audio-TTS**：qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash
 -   **CosyVoice**：cosyvoice-v3-plus、cosyvoice-v3-flash
@@ -571,23 +563,12 @@ Qwen-Audio-TTS、CosyVoice、Sambert 任务结束后 60 秒内没有新任务时
 
 ## API 参考
 
-通过 AOQ 接入时，请参见 [Qwen-Audio-TTS AOQ 接入](raw/model-api-reference/realtime-api-directory/realtime-tts-model-apis/qwen-audio-tts-api/qwen-audio-tts-aoq-access.md)或 [CosyVoice AOQ 接入](raw/_short/cosyvoice-aoq-access-c0e8e4035486f433.md)。具体支持范围参见[模型与协议支持范围](https://help.aliyun.com/zh/model-studio/realtime-api-overview#rtov-s02h2)。
+对延迟和弱网下音频传输稳定性要求较高的移动端应用，可使用 AOQ 协议。AOQ 的接入方式，以及 AOQ、WebRTC 和 WebSocket 的差异与模型支持范围，请参见 [Realtime API 概述](raw/model-api-reference/realtime-api-directory/realtime-api-overview.md)。
 
--   [Qwen-Audio-TTS API 参考](raw/_short/qwen-audio-tts-client-events-26c1ffacfaed1e62.md)
--   [CosyVoice API 参考](raw/_short/cosyvoice-client-events-480a8821d2d60e18.md)
--   [Qwen-TTS-Realtime API 参考](raw/_short/qwen-tts-realtime-client-events-3c4f9162971ee712.md)
--   [Sambert API 参考](raw/_short/sambert-client-events-5cb2642604d71e01.md)
-
-WebSocket 原始协议的完整调用示例见以下文档。
-
--   [Qwen-Audio-TTS WebSocket](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-websocket-api#ws-examples)
-    
--   [CosyVoice WebSocket](https://help.aliyun.com/zh/model-studio/cosyvoice-websocket-api#ws-examples)
-    
--   [Qwen3-TTS WebSocket](https://help.aliyun.com/zh/model-studio/interactive-process-of-qwen-tts-realtime-synthesis#ws-examples)
-    
--   [Sambert WebSocket](https://help.aliyun.com/zh/model-studio/sambert-websocket-api#ws-examples)
-    
+-   [Qwen-Audio-TTS API 参考](raw/model-api-reference/realtime-api-directory/realtime-tts-model-apis/qwen-audio-tts-api.md)
+-   [CosyVoice API 参考](raw/model-api-reference/realtime-api-directory/realtime-tts-model-apis/cosyvoice-large-model-for-speech-synthesis.md)
+-   [Qwen3-TTS API 参考](raw/_short/qwen-tts-realtime-api-reference-d4cd30fb5f0577aa.md)
+-   [Sambert API 参考](raw/_short/sambert-speech-synthesis-32c5c56b36543707.md)
 
 ## 常见问题
 

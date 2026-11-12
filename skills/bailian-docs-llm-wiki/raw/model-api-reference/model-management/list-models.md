@@ -2,35 +2,37 @@
 
 查询百炼平台上可用的模型列表，支持按模型作者、模态类型、模型能力、部署模式等条件筛选，并获取模型的定价和上下文长度等信息。
 
-## 请求说明
-
 #### 华北2（北京）
 
-GET`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/models`
+GET`https://WorkspaceId.cn-beijing.maas.aliyuncs.com/api/v1/models`
 
 #### 新加坡
 
-GET`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/models`
+GET`https://WorkspaceId.ap-southeast-1.maas.aliyuncs.com/api/v1/models`
 
 #### 中国香港
 
-GET`https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/api/v1/models`
+GET`https://WorkspaceId.cn-hongkong.maas.aliyuncs.com/api/v1/models`
 
 #### 日本（东京）
 
-GET`https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/api/v1/models`
+GET`https://WorkspaceId.ap-northeast-1.maas.aliyuncs.com/api/v1/models`
 
 #### 德国（法兰克福）
 
-GET`https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1/models`
+GET`https://WorkspaceId.eu-central-1.maas.aliyuncs.com/api/v1/models`
 
 #### 美国（弗吉尼亚）
 
 GET`https://dashscope-us.aliyuncs.com/api/v1/models`
 
-调用时请将 `{WorkspaceId}` 替换为业务空间 ID，并在请求 Header 中设置 `Authorization: Bearer YOUR_API_KEY`，其中 `YOUR_API_KEY` 需替换为在[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key)获取的 API Key。
+## 请求头
 
-所有参数均通过 Query String 传递。
+`Authorization`String必填
+
+格式为 `Bearer <API Key>`。在所选地域的 [API Key 管理](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key)页面选择业务空间并获取 API Key。
+
+## 查询参数
 
 `name`String可选
 
@@ -42,11 +44,14 @@ GET`https://dashscope-us.aliyuncs.com/api/v1/models`
 
 `language`String可选
 
-返回结果的语言。可选值：`zh-CN`（中文）、`en-US`（英文）。
+返回结果的语言。
+
+-   `zh-CN`：中文
+-   `en-US`：英文
 
 `page_no`Integer可选
 
-页码，从 1 开始。默认值：`1`。
+页码，从 1 开始。默认值：`1`。查询后续页时递增 `page_no`，根据响应中 `output` 下的 `total` 字段判断是否读完。
 
 `page_size`Integer可选
 
@@ -54,7 +59,7 @@ GET`https://dashscope-us.aliyuncs.com/api/v1/models`
 
 `providers`Array\[String\]可选
 
-按模型供应商筛选。
+按模型作者筛选。DashScope Python SDK 2.x 的 `provider` 参数只在客户端筛选当前页，返回对象的 `total_count` 仍为筛选前的总数。
 
 点击查看可选值
 
@@ -93,7 +98,7 @@ GET`https://dashscope-us.aliyuncs.com/api/v1/models`
 
 `capabilities`Array\[String\]可选
 
-按模型类型筛选。
+按文本生成、深度思考等模型能力筛选。此参数需通过 HTTP API 使用。
 
 点击查看可选值
 
@@ -118,9 +123,7 @@ GET`https://dashscope-us.aliyuncs.com/api/v1/models`
 
 `features`Array\[String\]可选
 
-按模型能力筛选。
-
-点击查看可选值
+按模型特性筛选，如 function calling 和结构化输出。 此参数需通过 HTTP API 使用。
 
 -   `model-experience`：模型体验
 -   `function-calling`：function calling
@@ -139,8 +142,6 @@ GET`https://dashscope-us.aliyuncs.com/api/v1/models`
 
 按部署模式筛选。不传时返回所有部署模式的模型。
 
-点击查看可选值
-
 -   `global`：全球
 -   `international`：国际
 -   `asia-pacific-china`：中国
@@ -153,8 +154,6 @@ GET`https://dashscope-us.aliyuncs.com/api/v1/models`
 
 按模型支持的应用场景筛选。默认值：`inference`。
 
-点击查看可选值
-
 -   `inference`：支持推理的模型
 -   `deploy`：支持部署的模型
 
@@ -162,110 +161,49 @@ GET`https://dashscope-us.aliyuncs.com/api/v1/models`
 
 按部署方式筛选。
 
-点击查看可选值
-
 -   `ptu`：预置吞吐量（Provisioned Throughput Unit）
 
 `deployment_ptu_service_tiers`Array\[String\]可选
 
 按 PTU 类型筛选，使用时需同时设置 `deployment_methods` 包含 `ptu`。
 
-#### 查询所有模型
+## 返回参数
 
-curl
+`code`String | null
 
-```
-curl --get "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/models" \
-    --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
-    --header "Content-Type: application/json" \
-    --data-urlencode "page_no=1" \
-    --data-urlencode "page_size=20"
-```
+错误码。查询成功时为 `null`。
 
-Python
+`message`String | null
 
-```
-import os
-import dashscope
+错误信息。查询成功时为 `null`。
 
-client = dashscope.Client(
-    api_key=os.getenv('DASHSCOPE_API_KEY'),
-    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1",
-)
+`success`Boolean
 
-resp = client.models.list(
-    page_no=1,
-    page_size=20,
-)
-# 返回分页对象：resp.models 为当前页模型列表，resp.total_count 为符合条件的模型总数
-print(resp.models)
-```
+查询是否成功。
 
-不设置筛选条件。示例查询第一页；如需获取所有模型，请递增 `page_no`，直到获取完模型总数（HTTP 接口返回 `output.total`；Python SDK 2.0 取 `resp.total_count`）。
+`output`Object
 
-**说明**DashScope Python SDK 的 `client.models.list()` 方法仅支持 `page_no`、`page_size` 与 `provider` 参数（`provider` 在客户端侧按当前页过滤），不支持按 `capabilities`、`features` 等条件筛选。如需筛选模型，请使用 HTTP API。Python 示例查询第一页，递增 `page_no` 可获取后续页面。
+模型列表及分页信息。
 
-#### 按模型 ID 查询
+查看子字段
 
-```
-curl --get "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/models" \
-    --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
-    --header "Content-Type: application/json" \
-    --data-urlencode "model=qwen3.8-max" \
-    --data-urlencode "page_no=1" \
-    --data-urlencode "page_size=20"
-```
+`total`Number
 
-设置 `model=qwen3.8-max`，按模型 ID 精确查询。
+符合条件的模型总数。DashScope Python SDK 2.x 在返回对象的 `total_count` 字段中提供该值。
 
-#### 查询所有文本生成模型
-
-```
-curl --get "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/models" \
-    --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
-    --header "Content-Type: application/json" \
-    --data-urlencode "capabilities=TG" \
-    --data-urlencode "page_no=1" \
-    --data-urlencode "page_size=20"
-```
-
-设置 `capabilities=TG`，查询文本生成模型。示例查询第一页，递增 `page_no` 可获取后续页面。
-
-#### 查询 Qwen 系列的推理模型
-
-```
-curl --get "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/models" \
-    --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
-    --header "Content-Type: application/json" \
-    --data-urlencode "providers=qwen" \
-    --data-urlencode "capabilities=Reasoning" \
-    --data-urlencode "page_no=1" \
-    --data-urlencode "page_size=100"
-```
-
-设置 `providers=qwen` 和 `capabilities=Reasoning`，查询 Qwen 系列的推理模型。示例查询第一页，递增 `page_no` 可获取后续页面。
-
-## 返回说明
-
-`request_id`String
-
-请求 ID，用于问题排查。
-
-`output.total`Number
-
-符合条件的模型总数。
-
-`output.page_no`Number
+`page_no`Number
 
 当前页码。
 
-`output.page_size`Number
+`page_size`Number
 
 每页条数。
 
-`output.models[]`Array\[Object\]
+`models`Array\[Object\]
 
-模型列表，每个元素为一个模型对象。
+模型列表，每个元素为一个模型对象。分页响应示例仅保留一条模型记录。
+
+查看子字段
 
 `model`String
 
@@ -283,17 +221,39 @@ curl --get "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/models" \
 
 模型作者，如 `qwen`。
 
+`capabilities`Array\[String\]
+
+模型支持的能力，取值与查询参数 `capabilities` 一致。
+
 `inference_provider`String
 
 推理服务供应商，如 `aliyun-bailian`。
 
-`capabilities`Array\[String\]
-
-模型支持的模态类型，取值与请求参数 `capabilities` 一致。
-
 `features`Array\[String\]
 
-模型支持的能力列表，取值与请求参数 `features` 一致。
+模型支持的特性，取值与查询参数 `features` 一致。
+
+`prices`Array\[Object\]
+
+模型定价信息，按计费区间返回。
+
+查看子字段
+
+`prices`Array\[Object\]
+
+该计费区间的价格列表。
+
+查看子字段
+
+-   `type`：计费项。
+-   `price`：单价。
+-   `price_unit`：单位，如“每百万tokens”。
+-   `price_name`：价格描述，如“输入”。
+-   `time_band`（String）：该价格条目的时段标识。示例值为 `standard`。
+
+`range_name`String
+
+分段名称。无分段计费时为 `Default`，有分段计费时为具体区间，如 `32k<Input<=128k`。
 
 `published_time`String
 
@@ -301,14 +261,25 @@ curl --get "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/models" \
 
 `inference_metadata`Object
 
-模型的输入输出模态信息，包含以下字段：
+模型的输入输出模态信息。
 
--   `request_modality`（Array\[String\]）：输入模态，可选值为 `Text`、`Image`、`Audio`、`Video`。
--   `response_modality`（Array\[String\]）：输出模态，可选值同上。
+查看子字段
+
+-   `response_modality`（Array\[String\]）：输出模态。
+-   `request_modality`（Array\[String\]）：输入模态。
+
+输入和输出模态的可选值：
+
+-   `Text`
+-   `Image`
+-   `Audio`
+-   `Video`
 
 `model_info`Object
 
-模型的上下文长度信息，包含以下字段（值为 `null` 表示无限制或不适用）：
+模型的上下文长度信息。字段值为 `null` 表示无限制或不适用。
+
+查看子字段
 
 -   `context_window`（Integer）：上下文窗口总长度
 -   `max_input_tokens`（Integer）：最大输入 Token 数
@@ -317,24 +288,55 @@ curl --get "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/models" \
 -   `reasoning_max_input_tokens`（Integer）：最大输入（思考）
 -   `reasoning_max_output_tokens`（Integer）：最大输出（思考）
 
-`prices`Array\[Object\]
-
-模型定价信息。每个元素包含：
-
--   `range_name`（String）：分段名称。如无分段计费则为 `Default`，如有分段则为具体区间（如 `32k<Input<=128k`）。
--   `prices`（Array\[Object\]）：价格列表，每项包含 `type`（计费项）、`price`（单价）、`price_unit`（单位，如"每百万tokens"）、`price_name`（价格描述，如"输入"）。
-
 `equivalent_snapshot`String
 
 对应的快照模型
 
 `inference_offline_info`Object
 
-推理场景下线信息
+推理场景下线信息。
 
-`inference_offline_info.$.offline_time`Date
+查看子字段
 
-预计下线时间
+下线信息条目（`$`）包含以下字段。
+
+`offline_time`Date
+
+预计下线时间。
+
+`request_id`String
+
+请求 ID，用于问题排查。
+
+#### 默认查询
+
+curl
+
+```
+curl --get "https://WorkspaceId.cn-beijing.maas.aliyuncs.com/api/v1/models" \
+    -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+    -d "page_no=1" \
+    -d "page_size=20"
+```
+
+Python
+
+```
+import os
+import dashscope
+
+client = dashscope.Client(
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    base_url="https://WorkspaceId.cn-beijing.maas.aliyuncs.com/api/v1",
+)
+
+resp = client.models.list(
+    page_no=1,
+    page_size=20,
+)
+# 返回分页对象：resp.models 为当前页模型列表，resp.total_count 为符合条件的模型总数
+print(resp.models)
+```
 
 ```
 {
@@ -342,87 +344,282 @@ curl --get "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/models" \
     "message": null,
     "success": true,
     "output": {
-        "total": 168,
+        "total": 373,
         "page_no": 1,
-        "page_size": 10,
+        "page_size": 20,
         "models": [
             {
                 "model": "qwen3.8-max",
-                "name": "通义千问3.8-Max",
-                "description": "通义千问3系列Max模型，适配场景更加复杂的智能体需求。",
-                "features": [
-                    "function-calling",
-                    "structured-outputs",
-                    "web-search"
-                ],
+                "name": "Qwen3.8-Max",
+                "description": "2.4万亿参数MoE旗舰，编程与办公能力全面跃升，可自主编程十数天交付完整项目。胜任法律、金融、设计等数百种专业任务，一次对话端到端交付生产级成果。原生视觉理解贯穿规划、执行与验证全流程，支持超长文档与长视频的深度语义解析。长程任务中自主规划与闭环迭代，持续进化。",
+                "provider": "qwen",
+                "capabilities": ["Reasoning", "VU", "TG"],
+                "inference_provider": "aliyun-bailian",
+                "features": ["cache", "function-calling"],
                 "prices": [
                     {
                         "prices": [
                             {
                                 "type": "input_token",
-                                "price": "2",
+                                "price": "12",
                                 "price_unit": "每百万tokens",
-                                "price_name": "输入"
+                                "price_name": "输入",
+                                "time_band": "standard"
                             },
                             {
                                 "type": "output_token",
-                                "price": "8",
+                                "price": "36",
                                 "price_unit": "每百万tokens",
-                                "price_name": "输出"
+                                "price_name": "输出",
+                                "time_band": "standard"
                             }
                         ],
                         "range_name": "Default"
                     }
                 ],
-                "published_time": "2025-11-11 12:00:00",
+                "published_time": "2026-08-02 12:14:32",
                 "inference_metadata": {
                     "response_modality": ["Text"],
-                    "request_modality": ["Text"]
+                    "request_modality": ["Image", "Text", "Video"]
                 },
                 "model_info": {
-                    "context_window": 131072,
-                    "max_input_tokens": 130048,
-                    "max_output_tokens": 16384,
-                    "max_reasoning_tokens": null
-                }
-            },
-            {
-                "model": "qwen-image-3.0-pro",
-                "name": "Qwen-Image-3.0-Pro",
-                "description": "通义千问图像生成模型Max系列。",
-                "features": ["model-experience"],
-                "prices": [
-                    {
-                        "prices": [
-                            {
-                                "type": "image_number",
-                                "price": "0.075",
-                                "price_unit": "每张",
-                                "price_name": "图像生成"
-                            }
-                        ],
-                        "range_name": "Default"
-                    }
-                ],
-                "published_time": null,
-                "inference_metadata": {
-                    "response_modality": ["Image"],
-                    "request_modality": ["Text"]
-                },
-                "model_info": {
-                    "context_window": null,
-                    "max_input_tokens": null,
-                    "max_output_tokens": null,
-                    "max_reasoning_tokens": null
+                    "context_window": 1000000,
+                    "max_input_tokens": 991808,
+                    "max_output_tokens": 131072,
+                    "max_reasoning_tokens": 262144,
+                    "reasoning_max_input_tokens": 983616,
+                    "reasoning_max_output_tokens": 131072
                 }
             }
         ]
     },
-    "request_id": "d5f5201f-ee7a-9e3d-8569-bc0eedec21f9"
+    "request_id": "实际请求 ID"
 }
 ```
 
-以下示例用于展示返回结构，模型信息和价格以实际返回结果为准。
+#### 按模型 ID 查询
+
+curl
+
+```
+curl --get "https://WorkspaceId.cn-beijing.maas.aliyuncs.com/api/v1/models" \
+    -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+    -d "model=qwen3.8-max" \
+    -d "page_no=1" \
+    -d "page_size=20"
+```
+
+Python
+
+```
+import os
+import dashscope
+
+client = dashscope.Client(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    base_url="https://WorkspaceId.cn-beijing.maas.aliyuncs.com/api/v1",
+)
+
+model = client.models.get("qwen3.8-max")
+print(model)
+```
+
+```
+{
+    "code": null,
+    "message": null,
+    "success": true,
+    "output": {
+        "total": 1,
+        "page_no": 1,
+        "page_size": 20,
+        "models": [
+            {
+                "model": "qwen3.8-max",
+                "name": "Qwen3.8-Max",
+                "description": "2.4万亿参数MoE旗舰，编程与办公能力全面跃升，可自主编程十数天交付完整项目。胜任法律、金融、设计等数百种专业任务，一次对话端到端交付生产级成果。原生视觉理解贯穿规划、执行与验证全流程，支持超长文档与长视频的深度语义解析。长程任务中自主规划与闭环迭代，持续进化。",
+                "provider": "qwen",
+                "capabilities": ["Reasoning", "VU", "TG"],
+                "inference_provider": "aliyun-bailian",
+                "features": ["cache", "function-calling"],
+                "prices": [
+                    {
+                        "prices": [
+                            {
+                                "type": "input_token",
+                                "price": "12",
+                                "price_unit": "每百万tokens",
+                                "price_name": "输入",
+                                "time_band": "standard"
+                            },
+                            {
+                                "type": "output_token",
+                                "price": "36",
+                                "price_unit": "每百万tokens",
+                                "price_name": "输出",
+                                "time_band": "standard"
+                            }
+                        ],
+                        "range_name": "Default"
+                    }
+                ],
+                "published_time": "2026-08-02 12:14:32",
+                "inference_metadata": {
+                    "response_modality": ["Text"],
+                    "request_modality": ["Image", "Text", "Video"]
+                },
+                "model_info": {
+                    "context_window": 1000000,
+                    "max_input_tokens": 991808,
+                    "max_output_tokens": 131072,
+                    "max_reasoning_tokens": 262144,
+                    "reasoning_max_input_tokens": 983616,
+                    "reasoning_max_output_tokens": 131072
+                }
+            }
+        ]
+    },
+    "request_id": "实际请求 ID"
+}
+```
+
+#### 按模型作者查询
+
+```
+curl --get "https://WorkspaceId.cn-beijing.maas.aliyuncs.com/api/v1/models" \
+    -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+    -d "providers=qwen" \
+    -d "page_no=1" \
+    -d "page_size=100"
+```
+
+```
+{
+    "code": null,
+    "message": null,
+    "success": true,
+    "output": {
+        "total": 147,
+        "page_no": 1,
+        "page_size": 100,
+        "models": [
+            {
+                "model": "qwen3.8-max",
+                "name": "Qwen3.8-Max",
+                "description": "2.4万亿参数MoE旗舰，编程与办公能力全面跃升，可自主编程十数天交付完整项目。胜任法律、金融、设计等数百种专业任务，一次对话端到端交付生产级成果。原生视觉理解贯穿规划、执行与验证全流程，支持超长文档与长视频的深度语义解析。长程任务中自主规划与闭环迭代，持续进化。",
+                "provider": "qwen",
+                "capabilities": ["Reasoning", "VU", "TG"],
+                "inference_provider": "aliyun-bailian",
+                "features": ["cache", "function-calling"],
+                "prices": [
+                    {
+                        "prices": [
+                            {
+                                "type": "input_token",
+                                "price": "12",
+                                "price_unit": "每百万tokens",
+                                "price_name": "输入",
+                                "time_band": "standard"
+                            },
+                            {
+                                "type": "output_token",
+                                "price": "36",
+                                "price_unit": "每百万tokens",
+                                "price_name": "输出",
+                                "time_band": "standard"
+                            }
+                        ],
+                        "range_name": "Default"
+                    }
+                ],
+                "published_time": "2026-08-02 12:14:32",
+                "inference_metadata": {
+                    "response_modality": ["Text"],
+                    "request_modality": ["Image", "Text", "Video"]
+                },
+                "model_info": {
+                    "context_window": 1000000,
+                    "max_input_tokens": 991808,
+                    "max_output_tokens": 131072,
+                    "max_reasoning_tokens": 262144,
+                    "reasoning_max_input_tokens": 983616,
+                    "reasoning_max_output_tokens": 131072
+                }
+            }
+        ]
+    },
+    "request_id": "实际请求 ID"
+}
+```
+
+#### 按能力查询
+
+```
+curl --get "https://WorkspaceId.cn-beijing.maas.aliyuncs.com/api/v1/models" \
+    -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+    -d "capabilities=TG" \
+    -d "page_no=1" \
+    -d "page_size=20"
+```
+
+```
+{
+    "code": null,
+    "message": null,
+    "success": true,
+    "output": {
+        "total": 108,
+        "page_no": 1,
+        "page_size": 20,
+        "models": [
+            {
+                "model": "qwen3.8-max",
+                "name": "Qwen3.8-Max",
+                "description": "2.4万亿参数MoE旗舰，编程与办公能力全面跃升，可自主编程十数天交付完整项目。胜任法律、金融、设计等数百种专业任务，一次对话端到端交付生产级成果。原生视觉理解贯穿规划、执行与验证全流程，支持超长文档与长视频的深度语义解析。长程任务中自主规划与闭环迭代，持续进化。",
+                "provider": "qwen",
+                "capabilities": ["Reasoning", "VU", "TG"],
+                "inference_provider": "aliyun-bailian",
+                "features": ["cache", "function-calling"],
+                "prices": [
+                    {
+                        "prices": [
+                            {
+                                "type": "input_token",
+                                "price": "12",
+                                "price_unit": "每百万tokens",
+                                "price_name": "输入",
+                                "time_band": "standard"
+                            },
+                            {
+                                "type": "output_token",
+                                "price": "36",
+                                "price_unit": "每百万tokens",
+                                "price_name": "输出",
+                                "time_band": "standard"
+                            }
+                        ],
+                        "range_name": "Default"
+                    }
+                ],
+                "published_time": "2026-08-02 12:14:32",
+                "inference_metadata": {
+                    "response_modality": ["Text"],
+                    "request_modality": ["Image", "Text", "Video"]
+                },
+                "model_info": {
+                    "context_window": 1000000,
+                    "max_input_tokens": 991808,
+                    "max_output_tokens": 131072,
+                    "max_reasoning_tokens": 262144,
+                    "reasoning_max_input_tokens": 983616,
+                    "reasoning_max_output_tokens": 131072
+                }
+            }
+        ]
+    },
+    "request_id": "实际请求 ID"
+}
+```
 
 ## 错误码
 

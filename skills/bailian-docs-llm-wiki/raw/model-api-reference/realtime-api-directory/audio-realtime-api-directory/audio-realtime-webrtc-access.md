@@ -20,9 +20,10 @@ WebRTC 使用媒体轨道传输音频，使用 DataChannel 传输模型事件和
 
 浏览器向业务 AppServer 提交 Offer SDP。AppServer 使用 API Key 转发以下请求，并将 Answer SDP 原样返回浏览器；长期 API Key 不进入前端。
 
--   方法：`POST`
--   北京地址：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/webrtc/realtime?model=qwen-audio-3.1-realtime-plus`
--   新加坡地址：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/webrtc/realtime?model=qwen-audio-3.1-realtime-plus`
+POST`https://WorkspaceId.cn-beijing.maas.aliyuncs.com/api/v1/webrtc/realtime?model=qwen-audio-3.1-realtime-plus`
+
+POST`https://WorkspaceId.ap-southeast-1.maas.aliyuncs.com/api/v1/webrtc/realtime?model=qwen-audio-3.1-realtime-plus`
+
 -   请求头：`Authorization: Bearer <API_KEY>`、`Content-Type: application/sdp`
 -   请求体：Offer SDP 字符串。
 -   成功响应：HTTP 200，正文为 Answer SDP；失败返回 4xx。

@@ -122,9 +122,9 @@ string
 枚举值：
 
 -   mt-plus：专业版。
--   mt-turbo：轻量版。
+-   mt-flash：轻量版。
 
-mt-turbo
+mt-flash
 
 ext
 

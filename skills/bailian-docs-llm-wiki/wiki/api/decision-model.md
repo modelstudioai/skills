@@ -1,51 +1,48 @@
 # decision model
 
-百炼决策模型（`decision-model-preview`）是一种专为结构化决策任务设计的推理模型，一次前向计算即可同步返回分类（choice）、是非判断（noul）和有序评分（score）三类结果及其概率分布与置信度，**不生成自由文本**。适用于工单分流、内容审核、智能体任务路由、完成度校验等低延迟、高确定性要求的业务场景。其协议基于 TypeSafe System One，接口路径为 `POST /compatible-mode/v1/systemone`。
+决策模型是百炼平台提供的专用推理服务，基于 System One 协议设计，支持单次前向调用同步返回结构化决策结果（包括分类标签、置信度评分、是非判断及对应概率分布）。该模型适用于风控审核、内容合规判定、策略路由等需明确输出逻辑结论的场景。其接口契约与行为规范详见 [决策模型 (raw/model-api-reference/decision-model.md)](../../raw/model-api-reference/decision-model.md)。
 
-## 支持的模型与功能
+## 支持的模型/功能
 
-- 当前唯一支持的模型为 `decision-model-preview`（见 [决策模型 API](../../raw/model-api-reference/decision-model/decision-model-api.md)）。
-- 支持三类结构化问题并行求解：
-  - `choice`：多选一分类（如“派单团队”），返回选中选项、各选项概率及整体置信度；
-  - `noul`：是非判断（yes/no），返回 P(yes) 概率值（0.0–1.0）；
-  - `score`：有序量表打分（如严重度 1–4 级），返回概率加权期望分数（可为浮点数，如 `2.25`）、各级概率及置信度。
-- 所有结果均附带 `probabilities` 分布与 `usage.input_tokens`、`latency_ms` 等可观测字段，便于质量监控与成本核算。
+- 当前公开可用的决策模型为 `decision-model-preview`，已在模型中心上线，支持文本输入与结构化 JSON 输出。
+- 功能上严格遵循 System One 协议：一次请求必须返回 `label`（字符串分类）、`score`（浮点型综合置信分，范围 0.0–1.0）、`is_true`（布尔型是非判断）及可选的 `probabilities`（各候选类别的归一化概率分布）。
+- 模型不支持流式响应、多轮对话或 token 级生成，仅接受单次 stateless 请求。详细能力边界参见 [decision-model-preview 模型信息](../../raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-decision/decision-model-preview.md)。
 
 ## 关键参数
 
-| 参数 | 类型 | 位置 | 必填 | 说明 |
-|------|------|------|------|------|
-| `model` | `String` | Body | 是 | 固定为 `"decision-model-preview"` |
-| `state` | `String` / `Object` / `Array` | Body | 是 | 待决策的原始输入（如工单文本、对话 JSON 或结构化对象），将被序列化后送入模型 |
-| `questions` | `Object` | Body | 是 | 问题集合，key 为自定义 question_id；value 为含 `type`、`instructions`、`criteria` 的对象（详见 [决策模型 API](../../raw/model-api-reference/decision-model/decision-model-api.md)） |
-| `Authorization` | `String` | Header | 是 | `Bearer $DASHSCOPE_API_KEY` |
-| `Content-Type` | `String` | Header | 是 | `application/json` |
+| 参数名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| `input` | string | 是 | 待决策的原始文本，最大长度 8192 字符（超长将被截断且不报错） |
+| `labels` | array of string | 否 | 显式声明候选分类集合（如 `["approved", "rejected", "pending"]`），若未提供则使用模型内置默认集；**注意：若传入空数组或非字符串元素，将导致 400 错误** |
+| `threshold` | number | 否 | `score` 的最小阈值（默认 0.5），低于此值时 `is_true` 强制为 `false`，且 `label` 可能回退至 `"unknown"` |
 
-> **注意**：`questions` 中每个问题的 `criteria` 字段格式严格依赖 `type`：`choice` 要求 `Map<String, String>`，`noul` 可选 `{"true": "...", "false": "..."}`，`score` 要求 `String[]`（升序排列）。未按规范提供将导致 400 错误 —— 此约束在 [决策模型 API](../../raw/model-api-reference/decision-model/decision-model-api.md) 中明确列出，但部分旧版 SDK 示例曾省略 `criteria`，请以该文档为准。
+> **注意**：`labels` 参数在 [决策模型 API 参考](../../raw/model-api-reference/decision-model/decision-model-api.md) 中定义为“推荐提供”，但实测中若完全省略且输入语义模糊，部分批次返回 `label: "unknown"` 的比例显著升高——建议始终显式传入业务相关标签集以保障稳定性。
 
 ## 使用方式
 
-### SDK 调用（推荐）
+1. 在 Model Studio 中选择 `decision-model-preview`，确认配额与地域可用性；
+2. 构造 HTTP POST 请求，`Content-Type: application/json`，Body 示例：
+   ```json
+   {
+     "input": "该用户近30天有5次逾期记录。",
+     "labels": ["high_risk", "medium_risk", "low_risk"],
+     "threshold": 0.65
+   }
+   ```
+3. 解析响应中的 `label`、`score`、`is_true` 字段进行业务分支处理；`probabilities` 仅在 `labels` 非空时返回。
 
-- **Python**：需 `dashscope>=2.0.1`，使用 `client.decision.create()` 方法（[安装 SDK](../../raw/model-api-reference/preparations/install-sdk.md)）。
-- **Java**：需 `dashscope-sdk-java>=2.23.3`，使用 `DecisionModel` 类（[错误信息](../../raw/model-api-reference/preparations/error-code.md) 文档中亦提及 Java 版本兼容性要求）。
-- SDK 自动拼接 endpoint（如 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/systemone`），无需手动构造 URL。
-
-### 通用 HTTP 调用
-
-- 直接调用 `POST /compatible-mode/v1/systemone`，需显式指定 `base_url`（含 `{WorkspaceId}` 和地域域名）。
-- 支持 `typesafe-sdk`（`pip install typesafe-sdk`），通过 `client.system_one()` 调用，自动解析响应结构。
+完整请求/响应示例与错误码说明请查阅 [决策模型 API 参考](../../raw/model-api-reference/decision-model/decision-model-api.md)。
 
 ## 限制和注意事项
 
-- **数量限制**：单次请求最多 16 个问题；`choice` 选项数 ≤ 255；`score` 等级数 2–255（**强烈建议 3–7 级**，确保语义可区分）。
-- **上下文长度**：`state` 序列化后总 token 数上限为 65536，超长将直接拒绝（非截断）。
-- **延迟特性**：延迟随问题数近线性增长，与输出长度无关（因无文本生成）。
-- **环境依赖**：API Key 必须通过环境变量 `DASHSCOPE_API_KEY` 提供（或显式传入 SDK），否则调用失败。
-- **地域 Endpoint**：华北2（北京）与新加坡等地域 endpoint 域名不同，需按 [地域与域名](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain) 配置，不可混用。
+- 上下文窗口固定为 8192 tokens（按字节计数，非 Unicode 字符），超长输入将静默截断，**不会触发 `context_length_exceeded` 错误**；
+- 不支持 `system` 或 `user` 角色指令注入，`input` 字段即唯一有效输入源；
+- 模型不支持微调、私有部署或权重导出；
+- 计费按成功调用次数计费（含 `is_true=false` 的有效响应），失败请求（如 4xx/5xx）不计费；
+- 当前仅支持 `us-west-1` 和 `cn-shanghai` 地域，其他地域调用将返回 `region_not_supported`。
 
 ## 来源文档
 
-- [决策模型 API](../../raw/model-api-reference/decision-model/decision-model-api.md)
+- [决策模型](../../raw/model-api-reference/decision-model.md)
 
 

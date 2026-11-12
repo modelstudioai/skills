@@ -602,6 +602,10 @@ AI 通用型节省计划是针对大模型按量付费使用场景设计的折�
 
 不支持向量模型（embedding）和排序模型（rerank）。如需抵扣这些模型，请参考[AI 通用型节省计划](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package#ghoteqo7uv9wa)或[向量及排序模型节省计划](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package#0d5644e5e3su8)。
 
+**说明**仅支持阿里直供模型，不支持三方直供版本。模型 ID 带 provider 前缀（如
+
+`kimi/`）的版本不在抵扣范围。
+
 #### 千问语音模型
 
 **购买方式**

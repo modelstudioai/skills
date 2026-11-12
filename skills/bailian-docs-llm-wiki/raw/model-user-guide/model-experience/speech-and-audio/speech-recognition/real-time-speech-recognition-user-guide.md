@@ -23,19 +23,19 @@
 
 会议、课堂、字幕等持续转写
 
-qwen-audio-3.1-asr-flash-streaming
+[qwen-audio-3.1-asr-flash-streaming](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen-audio-3.1-asr-flash-streaming)
 
 返回中间结果与最终结果，适合边说边查看和更新文本。
 
 语音输入法、语音消息等短段语音输入
 
-qwen-audio-3.1-asr-flash-message
+[qwen-audio-3.1-asr-flash-message](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen-audio-3.1-asr-flash-message)
 
 默认返回句子最终结果，可分别开启中间结果和文本润色。
 
 ## 开始使用
 
-[安装 DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)，并在控制台[获取 API Key 和 Base URL](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key)，分别配置环境变量 `DASHSCOPE_API_KEY` 和 `DASHSCOPE_BASE_URL`。
+[安装 DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)，在控制台[获取 API Key](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key)，并配置 `DASHSCOPE_API_KEY` 环境变量。
 
 下载[示例音频](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/zh/audios/6a4b3c2d1e0f9093.wav)，在运行目录中保存为 `asr_example.wav`。该音频为 16 kHz、单声道、16-bit PCM 编码的 WAV 文件。以下示例从文件分块发送音频，模拟实时输入，无需麦克风。
 
@@ -53,7 +53,6 @@ import com.alibaba.dashscope.common.ResultCallback;
 import com.alibaba.dashscope.utils.Constants;
 
 import java.io.InputStream;
-import java.net.URI;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -62,8 +61,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class Main {
     public static void main(String[] args) throws Exception {
         Constants.baseWebsocketApiUrl =
-            "wss://" + URI.create(System.getenv("DASHSCOPE_BASE_URL")).getHost()
-            + "/api-ws/v1/inference";
+            "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference";
         RecognitionParam param = RecognitionParam.builder()
             .apiKey(System.getenv("DASHSCOPE_API_KEY"))
             .model("qwen-audio-3.1-asr-flash-streaming")
@@ -116,11 +114,10 @@ import os
 import time
 from concurrent.futures import ThreadPoolExecutor
 import dashscope
-from urllib.parse import urlsplit
 
 client = dashscope.Client(
     api_key=os.environ["DASHSCOPE_API_KEY"],
-    base_url=os.environ["DASHSCOPE_BASE_URL"],
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1",
 )
 
 def receive_results(recognition):
@@ -131,7 +128,7 @@ def receive_results(recognition):
             print(sentence)
 
 with client.audio.asr.recognize(
-    ws_url=f"wss://{urlsplit(os.environ['DASHSCOPE_BASE_URL']).netloc}/api-ws/v1/inference",
+    ws_url="wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference",
     model="qwen-audio-3.1-asr-flash-streaming",
     format="wav",
     sample_rate=16000,
@@ -163,7 +160,6 @@ import com.alibaba.dashscope.common.ResultCallback;
 import com.alibaba.dashscope.utils.Constants;
 
 import java.io.InputStream;
-import java.net.URI;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -172,8 +168,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class Main {
     public static void main(String[] args) throws Exception {
         Constants.baseWebsocketApiUrl =
-            "wss://" + URI.create(System.getenv("DASHSCOPE_BASE_URL")).getHost()
-            + "/api-ws/v1/inference";
+            "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference";
         RecognitionParam param = RecognitionParam.builder()
             .apiKey(System.getenv("DASHSCOPE_API_KEY"))
             .model("qwen-audio-3.1-asr-flash-message")
@@ -226,11 +221,10 @@ import os
 import time
 from concurrent.futures import ThreadPoolExecutor
 import dashscope
-from urllib.parse import urlsplit
 
 client = dashscope.Client(
     api_key=os.environ["DASHSCOPE_API_KEY"],
-    base_url=os.environ["DASHSCOPE_BASE_URL"],
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1",
 )
 
 def receive_results(recognition):
@@ -241,7 +235,7 @@ def receive_results(recognition):
             print(sentence)
 
 with client.audio.asr.recognize(
-    ws_url=f"wss://{urlsplit(os.environ['DASHSCOPE_BASE_URL']).netloc}/api-ws/v1/inference",
+    ws_url="wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference",
     model="qwen-audio-3.1-asr-flash-message",
     format="wav",
     sample_rate=16000,
@@ -328,8 +322,6 @@ qwen-audio-3.1-asr-flash-streaming 和 qwen-audio-3.1-asr-flash-message 通过 `
 
 #### 华北2（北京）
 
-调用以下模型时，请选择北京地域的[API Key](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key)：
-
 -   **Qwen-Audio-ASR-Message**：qwen-audio-3.1-asr-flash-message
     
 -   **Qwen-Audio-ASR-Streaming**：qwen-audio-3.1-asr-flash-streaming、qwen-audio-3.0-asr-flash-streaming
@@ -344,8 +336,6 @@ qwen-audio-3.1-asr-flash-streaming 和 qwen-audio-3.1-asr-flash-message 通过 `
     
 
 #### 新加坡
-
-调用以下模型时，请选择新加坡地域的[API Key](https://bailian.console.aliyun.com/ap-southeast-1/model/settings/api-key)：
 
 -   **Qwen-Audio-ASR-Message**：qwen-audio-3.1-asr-flash-message
 -   **Qwen-Audio-ASR-Streaming**：qwen-audio-3.1-asr-flash-streaming、qwen-audio-3.0-asr-flash-streaming

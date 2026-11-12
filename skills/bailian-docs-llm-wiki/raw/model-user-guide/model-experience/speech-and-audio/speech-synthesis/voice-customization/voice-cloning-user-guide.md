@@ -36,7 +36,7 @@
 
 #### Qwen-Audio-TTS / CosyVoice
 
-Qwen-Audio-TTS 和 CosyVoice 使用相同的音色创建和基础合成流程。以下以 `qwen-audio-3.1-tts-plus` 为例。
+Qwen-Audio-TTS 和 CosyVoice 使用相同的音色创建和基础合成流程。以下以 qwen-audio-3.1-tts-plus 为例。
 
 1.  **创建音色**：传入参考音频 URL（HTTP 方式还支持 Base64 Data URI，SDK 方式使用公网 URL），`target_model` 指定目标模型，`prefix` 为音色名称前缀。
 2.  **合成语音**：将返回的音色 ID 传入 `voice`，使用同一个目标模型合成语音并保存音频。
@@ -155,7 +155,7 @@ with open("output.wav", "wb") as f:
 
 #### Qwen-Audio-Realtime
 
-Qwen-Audio-Realtime 的复刻音色用于自定义实时语音对话的回复声音。以下以 `qwen-audio-3.1-realtime-plus` 为例创建音色。
+Qwen-Audio-Realtime 的复刻音色用于自定义实时语音对话的回复声音。以下以 qwen-audio-3.1-realtime-plus 为例创建音色。
 
 #### Python SDK
 
@@ -299,7 +299,7 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-gen
 -   **Qwen-Audio-TTS**：[WebSocket 接入](raw/_short/qwen-audio-tts-websocket-api-6f9e2d20cf04ea96.md)、[AOQ 接入](raw/model-api-reference/realtime-api-directory/realtime-tts-model-apis/qwen-audio-tts-api/qwen-audio-tts-aoq-access.md)
 -   **CosyVoice**：[WebSocket 接入](raw/_short/cosyvoice-websocket-api-5929268331632771.md)、[AOQ 接入](raw/_short/cosyvoice-aoq-access-c0e8e4035486f433.md)
 -   **Qwen-Audio-Realtime**：[WebSocket 接入](raw/_short/audio-realtime-websocket-access-5f0da4977f0f021b.md)、[WebRTC 接入](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/audio-realtime-webrtc-access.md)、[AOQ 接入](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/audio-realtime-aoq-access.md)
--   **MiniMax**：[非实时语音合成 API 参考](raw/_short/minimax-speech-synthesis-9ac5812df734fd8c.md)
+-   **MiniMax**：[非实时语音合成 API 参考](raw/_short/minimax-synchronous-speech-synthesis-api-cddb40af595ff320.md)
 
 ## 音频要求
 
@@ -432,8 +432,6 @@ Qwen-Audio-TTS、Qwen-Audio-Realtime 和 CosyVoice 使用相同的音色查询�
 
 #### 华北2（北京）
 
-使用该地域的 [API Key](https://bailian.console.aliyun.com/model/settings/api-key) 调用以下模型：
-
 -   **Qwen-Audio-TTS**：qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash
     
 -   **Qwen-Audio-Realtime**：qwen-audio-3.1-realtime-plus、qwen-audio-3.1-realtime-flash、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash
@@ -444,8 +442,6 @@ Qwen-Audio-TTS、Qwen-Audio-Realtime 和 CosyVoice 使用相同的音色查询�
     
 
 #### 新加坡
-
-使用该地域的 [API Key](https://bailian.console.aliyun.com/model/settings/api-key) 调用以下模型：
 
 -   **Qwen-Audio-TTS**：qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash
     

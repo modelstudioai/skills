@@ -4,7 +4,7 @@
 
 ## 功能概述
 
-通过 TPM（Tokens Per Minute）预留，您可以为指定模型锁定专属的推理吞吐量，预留容量内的调用不受公共资源限流影响。
+通过吞吐预留，您可以为指定模型锁定专属的推理吞吐量，预留容量内的调用不受公共资源限流影响。
 
 -   容量保障：预留的 TPM 容量为您的业务专属，不与其他用户共享。
 -   专属模型 code：创建 吞吐预留后，系统自动生成专属模型 code，您需要将 API 请求中的 `model` 参数替换为该 code。
@@ -89,14 +89,12 @@ PTU（[模型部署](raw/model-user-guide/model-high-speed-inference/model-deplo
 -   Qwen3.6-Flash-2026-04-16
 -   GLM-5.3
 -   GLM-5.2
--   GLM-5.1
 -   DeepSeek-v4.1-Flash
 -   DeepSeek-v4-Flash
 -   DeepSeek-v4-Flash-0731
 -   DeepSeek-v4-Pro
 -   DeepSeek-v4-Pro-0813
 -   Kimi-K2.6
--   [kimi-k3.1-pro](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)：仅支持按天预付费的标准模式。
 
 #### 新加坡
 
@@ -106,13 +104,10 @@ PTU（[模型部署](raw/model-user-guide/model-high-speed-inference/model-deplo
 -   Qwen3.7-Plus-2026-05-26
 -   Qwen3.6-Flash-2026-04-16
 -   GLM-5.3
--   GLM-5.2
--   GLM-5.1
 -   DeepSeek-v4.1-Flash
 -   DeepSeek-v4-Flash
 -   DeepSeek-v4-Flash-0731
 -   DeepSeek-v4-Pro
--   DeepSeek-v4-Pro-0813
 
 ## 计费与使用说明
 
@@ -330,7 +325,7 @@ RPM 越大，建议购买的输入和输出 TPM 同比增大。
 
 #### 叠加容量包
 
-吞吐预留页统一管理 TPM 预留与 PTU（预置吞吐单元）两类容量实例，叠加容量包对两者均适用。在预留列表页目标卡片的“生效中的容量实例”区域，单击**叠加容量包**，可在现有预留基础上追加购买容量实例。叠加后，该预留的总容量为基础预留与所有叠加容量包容量之和，专属模型 code 保持不变，API 调用无需改动。
+吞吐预留页统一管理吞吐预留与 PTU（预置吞吐单元）两类容量实例，叠加容量包对两者均适用。在预留列表页目标卡片的“生效中的容量实例”区域，单击**叠加容量包**，可在现有预留基础上追加购买容量实例。叠加后，该预留的总容量为基础预留与所有叠加容量包容量之和，专属模型 code 保持不变，API 调用无需改动。
 
 弹窗顶部展示基础预留的以下信息：
 

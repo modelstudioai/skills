@@ -23,7 +23,11 @@ AOQ 将音视频媒体与模型事件分轨传输。SDK 负责媒体采集、编
 
 **说明**如需提前获取 Token，或了解完整的鉴权流程，请参见[建连鉴权详解](https://help.aliyun.com/zh/model-studio/realtime-api-overview#tkauth-auth-detail-title)。
 
-由业务 AppServer 发起以下请求。请先[配置 API Key 到环境变量](https://help.aliyun.com/zh/model-studio/get-api-key#20b17d4430qvt)，并将 `ENDPOINT` 替换为业务空间对应的 API Host（默认北京地址）。`clientIp` 选填，不填时使用请求网关的 IP。
+由业务 AppServer 发起以下请求。请先[配置 API Key 到环境变量](https://help.aliyun.com/zh/model-studio/get-api-key#20b17d4430qvt)。`clientIp` 选填，不填时使用请求网关的 IP。
+
+POST`https://WorkspaceId.cn-beijing.maas.aliyuncs.com/api/v1/webrtc/realtime?model=qwen3.8-omni-flash-realtime`
+
+POST`https://WorkspaceId.ap-southeast-1.maas.aliyuncs.com/api/v1/webrtc/realtime?model=qwen3.8-omni-flash-realtime`
 
 #### 参数说明
 

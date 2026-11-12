@@ -1127,7 +1127,7 @@ while True:
 -   阿里云百炼部署的模型（deepseek-v4.1-flash、deepseek-v4.1-flash-1017、deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731、qwen3.8-max、qwen3.8-max-0902、qwen3.8-flash、qwen3.8-2.4t-a95b、qwen3.8-omni-flash 除外）：`cached_token` 单价为 `input_token` 单价的 **20%**
 -   qwen3.8-omni-flash：命中缓存的输入 Token 按固定单价计费，各地域单价见[模型价格](https://help.aliyun.com/zh/model-studio/model-pricing#4c2e910ce4pcq)。
 -   deepseek-v4-pro：`cached_token` 单价不是 `input_token` 单价的 20%，具体价格请参见百炼控制台
--   deepseek-v4.1-flash、deepseek-v4.1-flash-1017：`cached_token` 单价为 `input_token` 单价的 **2%**。其中，`deepseek-v4.1-flash-1017` 在上述六个地域的繁忙、闲时时段均适用，按对应地域和时段的输入单价计算。
+-   deepseek-v4.1-flash、deepseek-v4.1-flash-1017：`cached_token` 单价为 `input_token` 单价的 **2%**。在华北2（北京）、新加坡、美国（弗吉尼亚）、德国（法兰克福）、日本（东京）和中国香港六个地域的繁忙、闲时时段均适用，按对应地域和时段的输入单价计算。
 -   deepseek-v4-pro-0813、deepseek-v4-flash-0731：`cached_token` 单价为 `input_token` 单价的 **10%**
 -   qwen3.8-max、qwen3.8-max-0902、qwen3.8-flash、qwen3.8-2.4t-a95b：`cached_token` 单价不是 `input_token` 单价的 20%，具体价格请参见百炼控制台
 -   DeepSeek（快手万擎部署）：vanchin/deepseek-v4.1-flash 为 **2%**；vanchin/deepseek-v4-pro-0813 为 **3.33%**；vanchin/deepseek-v4-pro 为 **8.33%**；vanchin/deepseek-v3.2-think 为 **10%**；vanchin/deepseek-v3.1-terminus、vanchin/deepseek-r1、vanchin/deepseek-v3 为 **40%**

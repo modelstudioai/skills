@@ -630,7 +630,7 @@ deepseek-v4.1-flash-1017
 
 支持（隐式缓存）
 
-支持 JSON Object，不支持 JSON Schema
+支持
 
 不支持
 
@@ -644,7 +644,7 @@ deepseek-v4.1-flash
 
 支持
 
-支持 JSON Object，不支持 JSON Schema
+支持
 
 不支持
 

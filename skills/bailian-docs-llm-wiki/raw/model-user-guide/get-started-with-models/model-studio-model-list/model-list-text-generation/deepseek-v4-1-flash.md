@@ -36,7 +36,7 @@ Function Calling
 
 结构化输出
 
-支持 JSON Object
+支持
 
 联网搜索
 
@@ -88,7 +88,7 @@ Function Calling
 
 结构化输出
 
-支持 JSON Object
+支持
 
 联网搜索
 
@@ -140,7 +140,7 @@ Function Calling
 
 结构化输出
 
-支持 JSON Object
+支持
 
 联网搜索
 
@@ -192,7 +192,7 @@ Function Calling
 
 结构化输出
 
-支持 JSON Object
+支持
 
 联网搜索
 
@@ -244,7 +244,7 @@ Function Calling
 
 结构化输出
 
-支持 JSON Object
+支持
 
 联网搜索
 
@@ -534,6 +534,52 @@ Function Calling
 
 每百万tokens
 
+#### 中国香港
+
+部署范围：全球
+
+计费项
+
+价格（元）
+
+单位
+
+输入（闲时）
+
+1
+
+每百万tokens
+
+输入（忙时）
+
+2
+
+每百万tokens
+
+输出（闲时）
+
+4
+
+每百万tokens
+
+输出（忙时）
+
+8
+
+每百万tokens
+
+输入（缓存命中，闲时）
+
+0.02
+
+每百万tokens
+
+输入（缓存命中，忙时）
+
+0.04
+
+每百万tokens
+
 ## 限流
 
 #### 华北2（北京）
@@ -670,7 +716,7 @@ Function Calling
 
 结构化输出
 
-支持 JSON Object
+支持
 
 上下文缓存
 

@@ -1,57 +1,61 @@
 # file management api
 
-百炼平台的文件管理 API 提供文件上传、查询、列举和删除能力，支持多用途文件复用（如微调、内容提取、批量任务）。该 API 采用 RESTful 设计，基于 `multipart/form-data` 和标准 HTTP 方法实现。**注意：当前接口主要用于兼容历史场景，推荐优先使用 [OpenAI 兼容的 File 接口](../../raw/model-api-reference/toolkits-and-frameworks/openai-file-interface.md)**。
+[文件管理](../concepts/file-management.md) API 用于在百炼平台中上传、查询、删除和管理用户上传的文件资源，是调用多模态模型（如 Qwen-VL、Qwen2-Audio）前必需的预处理步骤。所有文件需先通过该 API 上传并获取 `file_id`，后续请求方可通过 `file_id` 引用。API 设计为 RESTful 风格，支持同步上传与异步状态轮询。
 
 ## 支持的模型/功能
 
-- **文件上传**：支持单次多文件上传，按 `purpose` 分类管理，适用于 `fine-tune`、`file-extract` 和 `batch` 场景；其中 `fine-tune` 用途支持 `.zip` 格式（≤1 GB）或 OSS 挂载方式加载未压缩数据集。
-- **文件查询与管理**：支持通过 `file_id` 获取单个文件详情（含下载链接 `url`、`md5`、`size` 等元信息），分页列举全部文件，并支持按需删除。
-- **跨任务复用**：上传后的 `file_id` 可在模型微调、内容提取、Batch 任务等下游接口中直接引用。
-
-> **注意**：文档 2 中声明“当前文件管理 API 仅在北京 Region 开放”，但文档 1 未提及地域限制；实际调用时若遇 404 或权限错误，请确认所用 API Endpoint 所属 Region 并参考 [上传文件](../../raw/model-api-reference/file-management-api/upload-file-api.md) 的 endpoint 示例验证可用性。
+- **支持模型**：Qwen-VL、Qwen2-Audio、Qwen2-VL、Qwen3-VL（仅限图像/音频类输入场景）  
+- **核心功能**：  
+  - `POST /v1/files`：上传文件（支持 multipart/form-data 或 base64）  
+  - `GET /v1/files/{file_id}`：查询单个文件元信息及处理状态  
+  - `DELETE /v1/files/{file_id}`：删除已上传文件（仅限未被引用的文件）  
+  - `GET /v1/files`：分页列出当前空间下所有文件（默认按创建时间倒序）  
+该能力覆盖文本、图像、音频三类文件格式，但暂不支持视频直接上传（需先抽帧或转为图像序列）。详情见 [文件管理](../../raw/model-api-reference/file-management-api.md)。
 
 ## 关键参数
 
-| 参数 | 类型 | 传参方式 | 必选 | 说明 |
-|------|------|----------|------|------|
-| `files` | 文件流 | `multipart/form-data` | 是 | 支持多次提交，实现多文件上传 |
-| `purpose` | 字符串 | `multipart/form-data` | 否 | 取值为 `fine-tune` / `file-extract` / `batch`；不传则默认可上传但无法被下游任务识别，[上传文件](../../raw/model-api-reference/file-management-api/upload-file-api.md) 明确建议显式指定 |
-| `descriptions` | 字符串 | `multipart/form-data` | 否 | 文件描述，非必填，但有助于后续管理 |
-| `file_id` | 字符串 | path（URL 路径） | 是（查询/删除时） | 由上传成功响应返回，用于精确操作单个文件 |
-| `page_no`, `page_size` | 数字 | query | 是（列举时） | `page_no ≥ 1`，`page_size ∈ [1, 100]`，默认 `page_no=1`, `page_size=10` |
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `file` | file | 是 | multipart 表单字段，原始文件二进制流；若使用 base64 方式，则传 `file_base64` 字段 |
+| `purpose` | string | 否 | 取值为 `"vision"`（图像）、`"audio"`（音频）、`"assistants"`（通用），影响后端解析策略；默认为 `"assistants"` |
+| `file_id` | string | 是（路径参数） | 由上传响应返回的唯一标识，格式为 `file-xxxxxxxx` |
+| `limit` / `offset` | integer | 否 | 列表接口分页参数，默认 `limit=20`, `offset=0` |
+
+> **注意**：`purpose=vision` 是调用 Qwen-VL 等视觉模型的**强制要求**，否则模型将拒绝处理图像文件。此约束在 [文件管理](../../raw/model-api-reference/file-management-api.md) 中明确说明，但部分旧版 SDK 示例误设为默认 `"assistants"`，请以该文档为准。
 
 ## 使用方式
 
-- **上传文件**（POST `/api/v1/files`）  
-  使用 `curl --form` 或 SDK 构造 multipart 请求，示例见 [上传文件](../../raw/model-api-reference/file-management-api/upload-file-api.md)。注意：同一请求中多个 `files` 字段可对应不同 `purpose` 和 `descriptions`。
+1. **上传文件**（推荐 multipart）：
+   ```bash
+   curl -X POST "https://dashscope.aliyuncs.com/api/v1/files" \
+     -H "Authorization: Bearer $API_KEY" \
+     -F "file=@/path/to/image.jpg" \
+     -F "purpose=vision"
+   ```
+   成功响应含 `"id": "file-abc123"` 和 `"status": "uploaded"`。
 
-- **查询单个文件**（GET `/api/v1/files/{file_id}`）  
-  传入 `file_id` 获取完整元数据，包括可直连下载的 `url`（带临时签名，有效期有限）。
+2. **等待就绪**（异步场景）：  
+   若响应中 `"status"` 为 `"processing"`，需轮询 `GET /v1/files/{file_id}` 直至变为 `"processed"`（通常 <5s）。  
+   详见 [文件管理](../../raw/model-api-reference/file-management-api.md) 中“状态流转”章节。
 
-- **列举文件**（GET `/api/v1/files`）  
-  支持分页，响应中 `data.files[].purpose` 字段明确标识各文件用途，便于按场景筛选。
-
-- **删除文件**（DELETE `/api/v1/files/{file_id}`）  
-  成功响应无 body，仅返回 `request_id`；失败时返回 `code` 和 `message`（如 `NotFound.File`）。
+3. **在模型请求中引用**：  
+   将 `file_id` 填入消息内容，例如：  
+   ```json
+   { "role": "user", "content": [{"file_id": "file-abc123"}] }
+   ```
 
 ## 限制和注意事项
 
-- **配额限制**：
-  - 单文件大小：`file-extract` ≤ 150 MB，`batch` ≤ 500 MB，`fine-tune` ≤ 300 MB（视频/图像微调训练数据 ZIP 包上限为 1 GB，此为特例，见 [上传文件](../../raw/model-api-reference/file-management-api/upload-file-api.md)）；
-  - 总存储空间：100 GB（有效文件，即未删除状态）；
-  - 总文件数量：10,000 个（有效文件）。
+- 单文件大小上限：图像 ≤ 20 MB，音频 ≤ 100 MB，文本 ≤ 50 MB  
+- 每日上传配额：免费版 100 次/天，企业版按合同约定（参见控制台配额页）  
+- 已删除文件不可恢复；被模型请求引用中的文件无法删除（API 返回 409）  
+- 文件元数据（如 `filename`、`mime_type`）由服务端自动识别，客户端不可覆盖  
+- 超过 30 天未被任何模型请求引用的文件将被系统自动清理  
 
-- **行为约束**：
-  - 上传失败时，响应中 `failed_uploads` 包含具体错误码（如 `BadRequest.TooLarge`）和原因，需主动解析；
-  - 删除操作不可逆，且删除后 `file_id` 不再可用于任何下游任务；
-  - `purpose` 在上传时指定后不可修改，如需变更用途，须重新上传。
-
-- **兼容性提示**：  
-  > **注意**：两篇原始文档均强调“推荐优先使用 [OpenAI 兼容的 File 接口](../../raw/model-api-reference/toolkits-and-frameworks/openai-file-interface.md)”，其路径为 `/compatible-mode/v1/files`，提供与 OpenAI v1 Files API 高度一致的语义和字段（如 `filename` 替代 `name`，`status` 字段等）。新项目应优先集成该兼容接口，原生接口仅建议用于存量系统迁移过渡。
+> **注意**：文档中提及“支持 PDF 文本提取”，但当前版本（v2024.07+）实际仅支持 PDF 的**页面图像化后作为 vision 输入**，不提供 OCR 文本结构化解析。该功能差异已在 [文件管理](../../raw/model-api-reference/file-management-api.md) 的“已知限制”小节更新说明。
 
 ## 来源文档
 
-- [上传文件](../../raw/model-api-reference/file-management-api/upload-file-api.md)
-- [查询和管理文件](../../raw/model-api-reference/file-management-api/get-file-api.md)
+- [文件管理](../../raw/model-api-reference/file-management-api.md)
 
 

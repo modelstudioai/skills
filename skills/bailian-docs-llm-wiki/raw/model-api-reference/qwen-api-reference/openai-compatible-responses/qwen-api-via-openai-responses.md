@@ -1969,6 +1969,52 @@ MCP 服务标签。仅当 `type` 为 `mcp_call` 时存在。标识本次调用�
 
 匹配到的文档内容片段。
 
+**tool\_usage** `object`
+
+统计本次请求的工具使用情况，与 `usage` 中的模型 Token 使用情况分开记录。没有工具调用时，默认返回空对象 `{}`。
+
+属性
+
+**web\_search** `object`
+
+属性
+
+**num\_requests** `integer`
+
+计费搜索次数。
+
+**code\_interpreter** `object`
+
+属性
+
+**num\_requests** `integer`
+
+代码解释器的执行次数。
+
+**web\_extractor** `object`
+
+属性
+
+**num\_requests** `integer`
+
+网页内容抓取次数。
+
+**image\_search** `object`
+
+属性
+
+**num\_requests** `integer`
+
+图搜图片的次数。
+
+**web\_search\_image** `object`
+
+属性
+
+**num\_requests** `integer`
+
+文搜图片的次数。
+
 **usage** `object`
 
 本次请求的 Token 消耗信息。
@@ -2152,6 +2198,7 @@ MCP 服务标签。仅当 `type` 为 `mcp_call` 时存在。标识本次调用�
     "status": "completed",
     "tool_choice": "auto",
     "tools": [],
+    "tool_usage": {},
     "usage": {
         "input_tokens": 55,
         "input_tokens_details": {

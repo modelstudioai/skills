@@ -128,7 +128,9 @@ Qwen 大部分模型、Kimi、GLM、DeepSeek、Stepfun
 
 #### JSON Schema
 
-Qwen4-Max 系列（[仅 Token Plan](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview)）、Qwen3.7-Plus 系列、Qwen3.8-Flash 系列、Qwen3.7-Flash 系列、Qwen3.7-Max 系列、Qwen3.8-Max 系列
+Qwen4-Max 系列（[仅 Token Plan](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview)）、Qwen3.7-Plus 系列、Qwen3.8-Flash 系列、Qwen3.7-Flash 系列、Qwen3.7-Max 系列、Qwen3.8-Max 系列，以及 DeepSeek：deepseek-v4.1-flash、deepseek-v4.1-flash-1017、deepseek-v4-pro
+
+阿里云百炼部署的 `deepseek-v4.1-flash`、`deepseek-v4.1-flash-1017`：北京地域的 OpenAI 兼容 Chat Completions API 支持 JSON Schema 模式，思考模式与非思考模式均支持。
 
 ## 快速开始
 

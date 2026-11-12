@@ -11,16 +11,8 @@
 
 ## 准备工作
 
--   [获取 API Key](raw/model-api-reference/preparations/get-api-key.md)并配置 `DASHSCOPE_API_KEY`，使用与调用地域对应的 API Key。
+-   [获取 API Key](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key)并配置 `DASHSCOPE_API_KEY`，使用与调用地域对应的 API Key。
 -   将示例中的 `{WorkspaceId}` 替换为对应地域的[业务空间 ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)，并按地域设置 WebSocket 地址。
-
-#### Python SDK
-
-Qwen-Audio-TTS、CosyVoice 的对象池需要 DashScope Python SDK 2.0.1 及以上版本：
-
-```
-pip install "dashscope>=2.0.1"
-```
 
 #### Java SDK
 
@@ -53,6 +45,14 @@ dependencies {
     implementation 'com.alibaba:dashscope-sdk-java:2.23.2'
     implementation 'org.apache.commons:commons-pool2:2.12.0'
 }
+```
+
+#### Python SDK
+
+Qwen-Audio-TTS、CosyVoice 的对象池需要 DashScope Python SDK 2.0.1 及以上版本：
+
+```
+pip install "dashscope>=2.0.1"
 ```
 
 ## 配置并发与资源池
@@ -164,63 +164,7 @@ Sambert
 
 ### Qwen-Audio-TTS/CosyVoice
 
-以下示例使用 `qwen-audio-3.1-tts-flash` 和 `longanhuan_v3.1`，并发执行 3 次合成。使用 CosyVoice 时，可将模型和音色分别改为 `cosyvoice-v3-flash` 和 `longanyang`；其他模型选择与音色要求参见[实时语音合成](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#4a43cc1bb7kxg)。
-
-#### Python SDK
-
-```
-import os
-import threading
-from concurrent.futures import ThreadPoolExecutor
-import dashscope
-from dashscope.audio.tts_v2 import SpeechSynthesizerObjectPool, ResultCallback, AudioFormat
-
-dashscope.api_key = os.environ["DASHSCOPE_API_KEY"]
-dashscope.base_websocket_api_url = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference"
-pool = SpeechSynthesizerObjectPool(max_size=3)
-
-def synthesize(index):
-    done = threading.Event()
-    errors = []
-    with open(f"output_{index}.mp3", "wb") as audio:
-        class Callback(ResultCallback):
-            def on_data(self, data: bytes):
-                audio.write(data)
-
-            def on_complete(self):
-                done.set()
-
-            def on_error(self, message):
-                errors.append(message)
-                done.set()
-
-        synthesizer = pool.borrow_synthesizer(
-            model="qwen-audio-3.1-tts-flash",
-            voice="longanhuan_v3.1",
-            format=AudioFormat.MP3_24000HZ_MONO_256KBPS,
-            callback=Callback(),
-        )
-        successful = False
-        try:
-            synthesizer.streaming_call("你好，欢迎使用阿里云百炼。")
-            synthesizer.streaming_complete(60000)
-            if not done.wait(60):
-                raise TimeoutError("Synthesis timed out")
-            if errors:
-                raise RuntimeError(errors[0])
-            successful = True
-        finally:
-            if successful:
-                pool.return_synthesizer(synthesizer)
-            else:
-                synthesizer.close()
-
-try:
-    with ThreadPoolExecutor(max_workers=3) as executor:
-        list(executor.map(synthesize, range(3)))
-finally:
-    pool.shutdown()
-```
+以下示例使用 qwen-audio-3.1-tts-flash 和 `longanhuan_v3.1`，并发执行 3 次合成。使用 CosyVoice 时，可将模型和音色分别改为 cosyvoice-v3-flash 和 `longanyang`；其他模型选择与音色要求参见[实时语音合成](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#4a43cc1bb7kxg)。
 
 #### Java SDK
 
@@ -310,6 +254,62 @@ public class PooledTts {
         }
     }
 }
+```
+
+#### Python SDK
+
+```
+import os
+import threading
+from concurrent.futures import ThreadPoolExecutor
+import dashscope
+from dashscope.audio.tts_v2 import SpeechSynthesizerObjectPool, ResultCallback, AudioFormat
+
+dashscope.api_key = os.environ["DASHSCOPE_API_KEY"]
+dashscope.base_websocket_api_url = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference"
+pool = SpeechSynthesizerObjectPool(max_size=3)
+
+def synthesize(index):
+    done = threading.Event()
+    errors = []
+    with open(f"output_{index}.mp3", "wb") as audio:
+        class Callback(ResultCallback):
+            def on_data(self, data: bytes):
+                audio.write(data)
+
+            def on_complete(self):
+                done.set()
+
+            def on_error(self, message):
+                errors.append(message)
+                done.set()
+
+        synthesizer = pool.borrow_synthesizer(
+            model="qwen-audio-3.1-tts-flash",
+            voice="longanhuan_v3.1",
+            format=AudioFormat.MP3_24000HZ_MONO_256KBPS,
+            callback=Callback(),
+        )
+        successful = False
+        try:
+            synthesizer.streaming_call("你好，欢迎使用阿里云百炼。")
+            synthesizer.streaming_complete(60000)
+            if not done.wait(60):
+                raise TimeoutError("Synthesis timed out")
+            if errors:
+                raise RuntimeError(errors[0])
+            successful = True
+        finally:
+            if successful:
+                pool.return_synthesizer(synthesizer)
+            else:
+                synthesizer.close()
+
+try:
+    with ThreadPoolExecutor(max_workers=3) as executor:
+        list(executor.map(synthesize, range(3)))
+finally:
+    pool.shutdown()
 ```
 
 ### Sambert

@@ -51,7 +51,7 @@ Evolution 为开发者提供全链路执行过程的可视化观测能力，完�
 
 ## 评测
 
-Evolution 为开发者提供系统化的评测能力，能够对应用的输出与 Agent 执行轨迹进行评测。可以通过分析实验结果，深入研究异常案例，并进行有针对性的优化。
+Evolution 为开发者提供系统化的评测能力，能够对应用的输出、Agent 执行轨迹与多模态内容进行评测。可以通过分析实验结果，深入研究异常案例，并进行有针对性的优化。
 
 **最小准备**：准备输入样本与期望结果、对应评测集和评分维度。评测集必须[发布后再使用](https://help.aliyun.com/zh/model-studio/agenteval-evaluation-set#h-agenteval-set-publish)，草稿不能用于评测。任务中选择评测集的已发布版本与目标应用；为评估器的所有变量配置映射，变量与评测集字段或应用输出的数据类型须一致，详见[评估器映射](https://help.aliyun.com/zh/model-studio/agenteval-evaluation-task#h-agenteval-task-create-grader)。
 

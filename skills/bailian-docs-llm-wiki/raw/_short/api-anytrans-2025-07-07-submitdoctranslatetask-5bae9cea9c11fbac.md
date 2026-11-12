@@ -126,9 +126,9 @@ string
 枚举值：
 
 -   mt-plus：mt-plus。
--   mt-turbo：mt-turbo。
+-   mt-flash：mt-flash。
 
-mt-turbo
+mt-flash
 
 ext
 

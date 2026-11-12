@@ -12,13 +12,11 @@ Qwen-Omni-Realtime WebSocket 接入
 
 ## 地址与鉴权
 
-以下地址默认为北京地域，请将域名替换为业务空间对应的 API Host，并按需修改模型名称。
+通过查询参数 `model` 指定要调用的模型。
 
-```
-wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime?model=qwen3.8-omni-flash-realtime
-```
+WebSocket`wss://WorkspaceId.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime?model=qwen3.8-omni-flash-realtime`
 
-新加坡：`wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime?model=qwen3.8-omni-flash-realtime`
+WebSocket`wss://WorkspaceId.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime?model=qwen3.8-omni-flash-realtime`
 
 `qwen3.8-omni-flash-realtime` 必须使用业务空间专属域名。旧型号可继续使用原域名：北京为 `wss://dashscope.aliyuncs.com`，新加坡为 `wss://dashscope-intl.aliyuncs.com`。详情参见 [Python SDK](raw/_short/omni-realtime-python-sdk-0d3c931c58118ee5.md)。
 

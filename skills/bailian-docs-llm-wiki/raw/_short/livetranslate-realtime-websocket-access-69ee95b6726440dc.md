@@ -12,13 +12,11 @@ Qwen-LiveTranslate-Realtime WebSocket 接入
 
 ## 地址与鉴权
 
-以下地址默认为北京地域，请将域名替换为业务空间对应的 API Host，并按需修改模型名称。
+通过查询参数 `model` 指定要调用的模型。
 
-```
-wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime?model=qwen3.8-livetranslate-flash-realtime
-```
+WebSocket`wss://WorkspaceId.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime?model=qwen3.8-livetranslate-flash-realtime`
 
-新加坡：`wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime?model=qwen3.8-livetranslate-flash-realtime`
+WebSocket`wss://WorkspaceId.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime?model=qwen3.8-livetranslate-flash-realtime`
 
 其他域名的说明请参见 [Python SDK](https://help.aliyun.com/zh/model-studio/qwen-livetranslate-python-sdk#lt001prereqh2)。
 

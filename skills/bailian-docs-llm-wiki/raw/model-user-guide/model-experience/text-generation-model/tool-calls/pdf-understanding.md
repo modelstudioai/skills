@@ -286,90 +286,13 @@ curl 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/resp
   }'
 ```
 
-#### Anthropic
-
-Anthropic 兼容接口目前仅支持 Base64 PDF 输入，不支持 `document.source.type="url"`。
-
-Anthropic 兼容接口支持通过 `document.source` 传入 Base64 PDF。下载[示例 PDF](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260616/qmycjl/1506.02640v5.pdf)并保存为 `report.pdf`，或替换为自己的 PDF 文件。Python 示例需要安装 `anthropic` SDK。
-
-以下示例使用北京地域的业务空间专属域名；请替换 `{WorkspaceId}`，并按所选地域及部署范围配置对应的 API Key 和域名，详见[接入信息](raw/model-user-guide/get-started-with-models/regions.md)。
-
-Python
-
-```
-import os
-import base64
-from anthropic import Anthropic
-
-client = Anthropic(
-    api_key=os.environ["DASHSCOPE_API_KEY"],
-    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic",
-    timeout=300.0,
-)
-
-with open("report.pdf", "rb") as file:
-    pdf_base64 = base64.b64encode(file.read()).decode("utf-8")
-
-response = client.messages.create(
-    model="qwen3.8-flash",
-    max_tokens=1024,
-    messages=[{
-        "role": "user",
-        "content": [
-            {
-                "type": "document",
-                "source": {
-                    "type": "base64",
-                    "media_type": "application/pdf",
-                    "data": pdf_base64,
-                },
-            },
-            {"type": "text", "text": "总结这个PDF文档的内容。"},
-        ],
-    }],
-    extra_body={"include_tool_usage": True},
-)
-
-for block in response.content:
-    if block.type == "text":
-        print(block.text)
-```
-
-HTTP
-
-```
-PDF_BASE64=$(base64 < report.pdf | tr -d '\n')
-curl 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/v1/messages' \
-  -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
-  -H "Content-Type: application/json" \
-  --data-binary @- <<EOF
-{
-  "model": "qwen3.8-flash",
-  "max_tokens": 1024,
-  "messages": [{
-    "role": "user",
-    "content": [
-      {
-        "type": "document",
-        "source": {
-          "type": "base64",
-          "media_type": "application/pdf",
-          "data": "$PDF_BASE64"
-        }
-      },
-      {"type": "text", "text": "总结这个PDF文档的内容。"}
-    ]
-  }],
-  "include_tool_usage": true
-}
-EOF
-```
-
 ## 使用Base64输入
 
 如果无法提供文件的URL地址，也可以将PDF文件以Base64编码字符串的形式传入。使用 `file_data` 时，`filename` 字段为必填项。
 
 **说明**Base64 编码会使数据体积增大约 1/3，例如 150MB 的文件编码后约 200MB，会超出请求体大小上限。大文件请改用 URL 方式传入。
+
+#### Chat Completions / DashScope
 
 OpenAI 兼容
 
@@ -450,6 +373,85 @@ response = MultiModalConversation.call(
 )
 
 print(response.output.choices[0].message.content[0]["text"])
+```
+
+#### Anthropic
+
+Anthropic 兼容接口目前仅支持 Base64 PDF 输入，不支持 `document.source.type="url"`。
+
+Anthropic 兼容接口支持通过 `document.source` 传入 Base64 PDF。下载[示例 PDF](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260616/qmycjl/1506.02640v5.pdf)并保存为 `report.pdf`，或替换为自己的 PDF 文件。Python 示例需要安装 `anthropic` SDK。
+
+以下示例使用北京地域的业务空间专属域名；请替换 `{WorkspaceId}`，并按所选地域及部署范围配置对应的 API Key 和域名，详见[接入信息](raw/model-user-guide/get-started-with-models/regions.md)。
+
+Python
+
+```
+import os
+import base64
+from anthropic import Anthropic
+
+client = Anthropic(
+    api_key=os.environ["DASHSCOPE_API_KEY"],
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic",
+    timeout=300.0,
+)
+
+with open("report.pdf", "rb") as file:
+    pdf_base64 = base64.b64encode(file.read()).decode("utf-8")
+
+response = client.messages.create(
+    model="qwen3.8-flash",
+    max_tokens=1024,
+    messages=[{
+        "role": "user",
+        "content": [
+            {
+                "type": "document",
+                "source": {
+                    "type": "base64",
+                    "media_type": "application/pdf",
+                    "data": pdf_base64,
+                },
+            },
+            {"type": "text", "text": "总结这个PDF文档的内容。"},
+        ],
+    }],
+    extra_body={"include_tool_usage": True},
+)
+
+for block in response.content:
+    if block.type == "text":
+        print(block.text)
+```
+
+HTTP
+
+```
+PDF_BASE64=$(base64 < report.pdf | tr -d '\n')
+curl 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/v1/messages' \
+  -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+  -H "Content-Type: application/json" \
+  --data-binary @- <<EOF
+{
+  "model": "qwen3.8-flash",
+  "max_tokens": 1024,
+  "messages": [{
+    "role": "user",
+    "content": [
+      {
+        "type": "document",
+        "source": {
+          "type": "base64",
+          "media_type": "application/pdf",
+          "data": "$PDF_BASE64"
+        }
+      },
+      {"type": "text", "text": "总结这个PDF文档的内容。"}
+    ]
+  }],
+  "include_tool_usage": true
+}
+EOF
 ```
 
 ## 请求参数

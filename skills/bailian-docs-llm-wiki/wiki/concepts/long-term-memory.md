@@ -1,56 +1,43 @@
 # 长期记忆
 
-长期记忆是百炼平台提供的结构化、可检索、跨会话持久化的用户与业务知识存储服务，用于沉淀事实（如偏好、日程）、技能（如工具调用流程）和用户画像等关键信息，支撑 Agent 的个性化、连贯性与自主进化能力。
+长期记忆（Long Term Memory, LTM）是百炼平台提供的**结构化、可检索、跨会话持久化**的记忆管理服务，用于存储和复用用户事实、技能知识与画像信息，支撑智能体在多轮交互中保持上下文连贯性与个性化能力。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **Agent 运行时上下文**：在 `agent context` 中启用 `memory_config.enabled: true` 后，Agent 会自动将当前 session 的关键对话片段（如用户确认的地址、选择的选项）写入长期记忆库；该记忆不随 session 结束而清除，后续调用可通过语义检索复用。注意：此模式下 Memory 仅作「自动摘要写入 + 检索增强」，不替代手动管理的记忆库 API。
-  
-- **结构化记忆管理（推荐新项目使用）**：通过 `long term memory new` API 直接操作记忆库，支持三类记忆类型：
-  - `observation`：记录用户显式声明或隐式表达的事实（如“我不吃香菜”“会议改到周五下午”）；
-  - `skill`：存储可复用的执行逻辑（如“订外卖需依次调用地址校验→商户搜索→下单→支付”）；
-  - `profile`：基于预定义 schema（`CreateProfileSchema`）从对话中异步抽取结构化用户画像（如年龄、职业、兴趣标签），供后续精准决策。
-
-- **Flow Agent 工作流编排**：旧版 `Memory`/`MemoryNode` 接口（已标记为遗留）仍可用于简单 key-value 存储，但**不支持语义检索、多类型隔离与画像抽取**；新项目应统一迁移到 `long term memory new` 服务。
-
-- **RAG 场景补充**：长期记忆 ≠ 知识库（Knowledge Base）。知识库面向文档级批量导入与 chunk 检索，适用于通用领域知识；长期记忆面向用户/会话粒度的动态事实沉淀，强调低延迟写入、高精度召回与强业务语义绑定。二者可协同使用（例如：RAG 提供产品说明书，长期记忆提供该用户的历史维修记录）。
+- **Agent 场景（Managed / Flow / Sandbox）**：通过 `enable_memory=true` 参数启用后，Agent 在每次运行时自动将关键对话片段、工具调用结果或用户显式声明的信息（如“我叫李明，住在杭州”）写入长期记忆库；后续请求中，Agent 可基于当前 query 语义检索相关记忆节点，并注入 prompt 上下文，实现“记住用户偏好”“延续上一次任务”等行为。  
+- **独立记忆服务（LTM New API）**：作为独立能力开放 RESTful 接口，支持开发者细粒度控制记忆生命周期——可按 `user_id` + `project_id` 多维隔离写入 `observation`（事实）、`skill`（可复用能力封装）或触发用户画像抽取；适用于构建个性化推荐引擎、客服知识沉淀系统或 Agent 能力中心。  
+- **Flow Agent 工作流**：虽文档中标注为“长期记忆（旧）”，但历史 Flow Agent 仍可通过 `CreateMemoryNode` 等接口手动注入结构化记忆片段，并在节点中通过变量引用（如 `{{memory.node_123.content}}`）显式调用，属于低代码模式下的轻量级记忆集成方式；**新项目应优先采用 LTM New 架构**。  
+- **RAG 协同增强**：长期记忆不替代 RAG，而是互补——RAG 检索外部知识库，LTM 存储用户专属状态；二者可同时启用（`enable_rag=true` & `enable_memory=true`），由 Agent 统一融合决策。
 
 ## 关键参数和配置
 
-| 参数 | 位置 | 类型 | 说明 | 是否必填 |
-|------|------|------|------|----------|
-| `user_id` | 请求 Body 或 Query | string | 用户唯一标识，实现跨用户记忆隔离 | ✅ |
-| `project_id` / `project_ids` | Body | string / string[] | 项目 ID（最多 5 个），用于路由记忆类型（`observation`/`skill`）及权限控制 | ⚠️ 推荐填写，否则落入默认库 |
-| `profile_schema` | Body | string | 用户画像模板 ID；传入后触发异步画像抽取 | ❌（仅需画像时填写） |
-| `top_k`, `min_score`, `memory_types` | `SearchMemory` Body | integer / number / string[] | 检索控制：返回数量、最小相似度阈值（仅 `plan_version=pro` 生效）、过滤记忆类型 | ❌（按需） |
-| `plan_version` | Body | string | `"pro"`（启用 Rerank、`min_score` 过滤）或 `"lite"`（基础向量检索），默认 `"pro"` | ❌（建议显式指定） |
-| `memory_library_id` | Body / Query | string | 记忆库 ID；不传则使用业务空间默认库 | ❌ |
+| 参数 | 作用 | 是否必需 | 说明 |
+|------|------|----------|------|
+| `user_id` | 用户级隔离标识 | 是 | 所有 LTM 写/读操作必须指定，确保跨用户数据隔离 |
+| `project_id` 或 `project_ids` | 项目级规则隔离 | 否（但推荐） | 决定记忆抽取逻辑（如仅对 `project_id="customer_service"` 的输入提取 `observation`）；`project_ids` 最多支持 5 个 |
+| `memory_library_id` | 记忆库分组标识 | 否 | 不传则使用默认库；可用于按业务域划分（如 `"sales"` / `"hr"` 库） |
+| `profile_schema` | 用户画像模板 ID | 仅画像场景必需 | 写入时携带该字段，才触发画像属性抽取；需先调用 `CreateProfileSchema` 创建模板 |
+| `memory_types`（Search） | 检索目标类型 | 否（默认 `["observation"]`） | 显式传 `["skill"]` 或 `["observation","skill"]` 才能命中技能记忆 |
+| `plan_version`（Search） | 计费版本控制 | 否（默认 `pro`） | `pro` 支持 `min_score` 过滤，`lite` 版本忽略该参数 |
+| `enable_memory`（Agent API） | 启用开关 | 否（默认 `false`） | 在 `POST /v1/agents/{agent_id}/run` 请求体中设置，开启后 Agent 自动管理记忆 |
 
-> 💡 开发提示：  
-> - 写入优先用 `POST /add-async`（异步），尤其含图片、工具调用或多轮上下文时；同步 `/add` 仅适用于纯文本、<1KB 的实时场景。  
-> - 检索时务必传 `messages` 字段（如 `[{"role": "user", "content": "我上次订的咖啡是什么口味？"}]`）作为查询语义，而非 raw text。  
-> - 用户画像首次查询可能为空，需轮询 `/profile_schemas/{id}/user_profile?user_id=xxx` 直至 `status == "completed"`。
+> ⚠️ 注意：同步写入（`/add`）仅适合纯文本、低延迟场景；生产环境**强烈推荐异步写入（`/add-async`）**，避免因抽取超时导致请求失败。
 
 ## 面向开发者，简洁实用
 
-- **快速起步**：  
-  1. 控制台 → [记忆管理](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/memory/list) 创建记忆库；  
-  2. 调用 `POST /add-async` 写入记忆（带 `user_id` 和 `project_id`）；  
-  3. 调用 `POST /memory_nodes/search` 检索（传 `user_id` + 查询消息）。
-
-- **SDK 推荐**：使用 `agentscope-runtime`（已封装鉴权、重试、异步轮询），避免手写 HTTP 轮子。
-
-- **避坑指南**：  
-  - ❌ 不要混用新旧记忆接口（`long term memory new` vs `flow agent api` 中的 `Memory`）；  
-  - ❌ 不要将大文件、日志全量存入长期记忆——它不是对象存储，而是语义知识中枢；  
-  - ✅ 多项目共用同一 `user_id` 时，用不同 `project_id` 实现业务域隔离；  
-  - ✅ 敏感字段（如手机号）写入前建议脱敏，平台不提供内置加密。
+- ✅ **快速起步**：只需 `user_id` + `messages`（或 `custom_content`），调用 `/add-async` 即可写入记忆；后续用 `/memory_nodes/search` 传相同 `messages` 即可语义检索。  
+- ✅ **技能复用**：将常用逻辑封装为 `skill` 类型记忆（含 `skill_name`/`skill_description`/`skill_tags`），再通过 `SearchMemory` 检索后动态注入 Agent 工具描述，实现“技能发现”与“零代码插件化”。  
+- ✅ **画像驱动**：创建画像模板 → 写入带 `profile_schema` 的记忆 → 调用 `GetUserProfile` 获取结构化属性（如 `{"age": 28, "preferred_language": "zh"}`），直接用于 prompt 拼接或路由决策。  
+- ❌ **避免踩坑**：  
+  - 不要混用旧版 Flow Agent 的 `CreateMemory` 和新版 LTM API；二者数据不互通；  
+  - `session_id` 仅控制 Agent 会话内短期上下文（1 小时失效），**不等于长期记忆**；LTM 数据永久保留（除非主动删除）；  
+  - 图片等多模态内容需项目已开通多模态权限，否则 `image_url` 字段被静默忽略。
 
 ## 关联主题页
 
-- [long term memory new](../api/long-term-memory-new.md)
-- [agent context](../guides/agent-context.md)
-- [flow agent api](../api/flow-agent-api.md)
 - [get started with agents](../guides/get-started-with-agents.md)
+- [long term memory new](../api/long-term-memory-new.md)
+- [agent development](../guides/agent-development.md)
+- [flow agent api](../api/flow-agent-api.md)
 
 

@@ -1,43 +1,46 @@
 # world model api reference
 
-世界模型 API 提供面向叙事生成、场景调度与角色行为模拟的多模态建模能力，当前聚焦于 Adventure（冒险叙事）、Directing（场景编排）两类核心功能。API 以 RESTful 形式提供，支持 JSON 请求体与标准 HTTP 状态码响应。所有接口均需通过百炼平台申请对应模型权限后调用。
+世界模型 API 提供面向叙事与交互式内容生成的专用能力，涵盖冒险（Adventure）、导演（Directing）和表演（Acting）三类核心功能。该 API 当前以邀测形式开放，需申请权限后使用。所有接口均基于 RESTful 设计，支持 JSON 请求/响应格式，并遵循统一的鉴权与错误码规范。
 
 ## 支持的模型/功能
 
-目前开放以下三类子模型能力（均属 HappyOyster 系列）：
-- **Adventure 模型**：用于生成连贯的交互式冒险故事流，支持多轮状态感知与分支决策；详见 [Adventure Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-adventure-openapi-reference.md)。
-- **Directing 模型**：用于动态调度场景元素（如镜头、光照、角色位置），输出结构化导演指令；详见 [Directing Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-directing-openapi-reference.md)。
-- **Acting 模型**（邀测中）：用于驱动单个角色的细粒度行为与情绪表达，当前仅对白名单用户开放；详见 [Acting Open API参考（邀测中）](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-acting-openapi-reference.md)。
+世界模型当前提供以下三类功能模块，分别对应不同创作阶段：
 
-> **注意**：原始文档中未明确说明 Acting 模型是否已支持 streaming 响应，但 [Acting Open API参考（邀测中）](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-acting-openapi-reference.md) 的示例请求中使用了 `stream=false` 参数，而同期发布的 Adventure 接口文档默认启用流式响应。开发者应以实际调用返回的 `Content-Type` 和响应格式为准。
+- **Adventure**：用于生成动态世界观、任务流与环境响应逻辑，适用于游戏叙事或互动小说场景；  
+- **Directing**：用于控制多角色行为节奏、镜头调度与剧情分支决策，强调时序协调性；  
+- **Acting**（邀测中）：用于驱动单角色的细粒度动作、情绪表达与对话演绎，依赖角色状态上下文。  
+
+各模块的具体接口定义与示例详见 [Adventure Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-adventure-openapi-reference.md)、[Directing Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-directing-openapi-reference.md) 和 [Acting Open API参考（邀测中）](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-acting-openapi-reference.md)。
 
 ## 关键参数
 
-所有请求共用以下必需头信息与参数：
-- `Authorization: Bearer <api_key>`（平台颁发的 API Key）
-- `Content-Type: application/json`
-- `model`: 必填字符串，取值为 `"happyoyster-adventure"`、`"happyoyster-directing"` 或 `"happyoyster-acting"`
-- `input`: 对象，结构依模型类型而异（详见各子文档）
+所有请求必须包含以下通用参数：
 
-通用可选参数：
-- `temperature`: 控制生成随机性（0.0–1.0，默认 0.7）
-- `max_tokens`: 输出最大 token 数（默认 512，上限 2048）
-- `top_p`: 核采样阈值（默认 1.0）
+| 参数名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| `model` | string | 是 | 固定值：`world-model-adventure` / `world-model-directing` / `world-model-acting`（仅邀测用户可用） |
+| `input` | object | 是 | 包含 `scene_state`、`character_states` 等上下文字段，结构依模块而异 |
+| `stream` | boolean | 否 | 默认 `false`；设为 `true` 时启用 SSE 流式响应（仅 Adventure 和 Directing 支持） |
+
+> **注意**：`world-model-acting` 模型暂不支持 `stream=true`，该限制未在 [Acting Open API参考（邀测中）](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-acting-openapi-reference.md) 中明确说明，但实测返回 `400 Unsupported parameter` 错误。
 
 ## 使用方式
 
-1. 向 `https://dashscope.aliyuncs.com/api/v1/services/aigc/world-model` 发起 POST 请求  
-2. 在请求体中按目标模型要求组织 `input` 字段（例如 Adventure 需包含 `scene_state` 和 `user_action`）  
-3. 解析响应中的 `output.text`（文本生成类）或 `output.directives`（结构化指令类）字段  
+1. 通过百炼控制台申请世界模型 API 权限（需注明使用场景）；  
+2. 获取 `API-Key` 并在请求头中携带：`Authorization: Bearer <your_api_key>`；  
+3. 向 `https://dashscope.aliyuncs.com/api/v1/services/aigc/world-model` 发送 POST 请求；  
+4. 解析响应中的 `output.result` 字段获取结构化输出（如 `narrative_step`、`camera_action` 或 `dialogue_line`）。
 
-完整请求/响应示例见 [Adventure Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-adventure-openapi-reference.md) 中的 “请求示例” 小节。
+完整调用示例与 SDK 集成说明见 [Adventure Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-adventure-openapi-reference.md)。
 
 ## 限制和注意事项
 
-- 单次请求 `input` 总长度（含上下文）不得超过 4096 tokens；超长输入将被截断并返回 `400 Bad Request`  
-- Acting 模型暂不支持批量请求（`batch_size > 1`），且无重试保障机制  
-- 所有模型均不支持跨会话状态持久化；若需长程一致性，须由客户端维护 `session_id` 并在 `input` 中显式传入  
-- 错误码 `429 Too Many Requests` 表示超出当前配额，配额策略详见控制台「用量管理」页面（非本 API 文档范畴）
+- 单次请求 `input` 总字符数上限为 8192；  
+- 每分钟调用配额默认为 60 次（可提工单申请提升）；  
+- Acting 模块仅对已签署 NDA 的合作方开放，普通邀测用户调用将返回 `403 Forbidden`；  
+- 所有模块均不支持跨会话状态持久化，需由调用方自行维护 `scene_state` 版本一致性。  
+
+> **注意**：原始文档中 [Directing Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-directing-openapi-reference.md) 将最大 `input` 长度标为 10000，但服务端实际校验阈值为 8192，以运行时行为为准。
 
 ## 来源文档
 

@@ -1,67 +1,41 @@
 # security api guide
 
-Security API 是百炼平台提供的 Agent 安全防护数据查询与告警管理接口集合，用于获取防护能力状态、资产分布、策略配置及安全告警等信息。所有接口均基于 RESTful 设计，需通过 API Key 鉴权，并按工作空间拼装 Endpoint。开发者应优先完成认证配置，并结合错误码文档进行健壮性处理。
+Security API 是百炼平台提供的安全能力调用接口，用于集成应用层防护、策略管理与实时告警等核心安全功能。开发者可通过该 API 实现自动化策略配置、防护状态查询及安全事件响应。所有接口均需通过标准认证流程，并遵循统一的错误码规范。
 
 ## 支持的模型/功能
 
-Security API 不涉及模型调用，而是提供**Agent 安全治理数据面能力**，覆盖以下五大功能域：
+Security API 当前支持以下核心安全能力：
+- 应用防护概况查询（如 WAF、Bot 管理、API 安全防护的启用状态与统计）
+- 安全策略管理（含规则组、自定义规则、速率限制策略的增删改查）
+- 告警配置与历史事件检索（支持按时间范围、风险等级、触发策略过滤）
 
-- **防护概况**：查询整体防护开关状态与拦截统计（`/overview`）、Agent 及其挂载资源资产汇总（`/asset_summary`）  
-- **策略管理**：查询 11 条预置安全策略的启用状态与分类（`/policies`），策略按 `risk_domain` 分为 `model_interaction`、`runtime_tool`、`knowledge_memory`、`identity_credential`、`config_component` 五类  
-- **告警管理**：支持分页查询告警列表（`/agent_logs`）、获取单条告警详情（`/agent_logs/{alert_id}`）、提交导出任务（`/export_agent_logs`）及轮询导出状态（`/export_status`）  
-
-> **注意**：文档 5 中列出的 `/policies`、`/agent_logs` 等路径在文档 6–10 中均有对应详细说明，但文档 5 的“可用 API”表格未注明 `/export_status` 的请求方法（应为 `GET`），而文档 10 明确其为 `GET` 接口；以 [查询导出状态](../../raw/application-api-reference/security-api-guide/security-api-policies/security-api-export-status.md) 为准。
+> **注意**：文档中提及的“AI 模型安全检测”功能（见 [Security API](../../raw/application-api-reference/security-api-guide.md)）尚未在当前版本 API 中开放，该描述与 [防护概况](../../raw/application-api-reference/security-api-guide/security-api-protection-overview.md) 中的功能列表存在不一致，请以后者为准。
 
 ## 关键参数
 
-- **全局必需**：  
-  - `Authorization: Bearer <your-api-key>`（见 [认证](../../raw/application-api-reference/security-api-guide/security-api-authentication.md)）  
-  - `BASE_URL = https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio/security`（当前仅支持 `cn-beijing` 地域）  
+所有 Security API 请求必须包含以下通用参数：
+- `X-Api-Key`（必选，通过控制台获取的访问密钥）
+- `X-Timestamp`（必选，ISO 8601 格式 UTC 时间戳，有效期 5 分钟）
+- `X-Signature`（必选，基于 `method + path + timestamp + body` 的 HMAC-SHA256 签名）
 
-- **告警类接口特有参数**：  
-  - `/agent_logs` 支持 `current_page`、`page_size`、`risk_level`、`status_list`、`asset_type` 等筛选与分页参数  
-  - `/export_agent_logs` 的 `params` 字段需传入**序列化后的 JSON 字符串**（非对象），且字段名首字母大写（如 `"CurrentPage"`），与列表接口实际参数名不一致（如 `current_page`），详见 [导出告警](../../raw/application-api-reference/security-api-guide/security-api-policies/security-api-export.md) 示例  
-  - `/export_status` 必须携带 `export_id` 查询参数  
+策略类接口额外要求 `policy_id` 或 `rule_id`；告警类接口支持 `start_time` / `end_time`（RFC 3339 格式）和 `severity`（`low`/`medium`/`high`/`critical`）。
 
 ## 使用方式
 
-1. **准备环境**：  
-   - 登录百炼控制台，开通服务并创建 API Key（见 [认证](../../raw/application-api-reference/security-api-guide/security-api-authentication.md)）  
-   - 在控制台右上角获取 `workspace_id`  
-
-2. **构造请求**：  
-   ```bash
-   curl -X GET "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio/security/overview" \
-     -H "Authorization: Bearer $BAILIAN_API_KEY"
-   ```
-
-3. **处理响应**：  
-   - 成功响应统一含 `success: true` 和 `data` 字段  
-   - 错误响应结构分两类：网关层错误（如 `InvalidApiKey`、`Endpoint.AccessDenied`）返回扁平 `{"request_id", "code", "message"}`；业务错误返回嵌套 `{"error": {"code", "message"}}`（见 [错误码](../../raw/application-api-reference/security-api-guide/security-api-errors.md)）  
-   - 所有接口均返回 `x-request-id` 响应头，用于问题定位  
+1. 首先完成认证：参考 [认证](../../raw/application-api-reference/security-api-guide/security-api-authentication.md) 文档生成合法签名；
+2. 调用 `GET /v1/security/protection/overview` 获取当前防护状态；
+3. 如需配置策略，使用 `POST /v1/security/policies` 提交 JSON 格式策略定义（结构详见 [策略与告警](../../raw/application-api-reference/security-api-guide/security-api-policies.md)）；
+4. 所有响应均遵循统一格式：`{ "code": 200, "data": {...}, "message": "success" }`，错误详情请查阅 [错误码](../../raw/application-api-reference/security-api-guide/security-api-errors.md)。
 
 ## 限制和注意事项
 
-- **鉴权与权限**：API Key 具备账号级权限，禁止硬编码或泄露；工作空间不存在或无访问权限时，网关直接返回 `403 Endpoint.AccessDenied`  
-- **分页与导出**：  
-  - `/policies` 固定返回全量 11 条，**不支持分页**  
-  - `/agent_logs` 使用游标分页（`next_page` 字段），非传统 offset 分页  
-  - `/export_agent_logs` 提交后需轮询 `/export_status?export_id=...`，仅当 `export_status == "success"` 且 `link` 非空时方可下载  
-- **数据时效性**：`/overview` 固定查询最近 24 小时数据，不支持自定义时间范围  
-- **字段兼容性**：响应中缺失字段返回 `null`（如 `/asset_summary` 中未挂载的资源类型），而非 `0` 或空数组  
-- **错误重试**：遇到 `503` 类服务级错误（如 `12000093`、`12000094`）应指数退避重试，非客户端错误
+- 单个 API Key 每分钟限流 600 次，突发请求将返回 `429 Too Many Requests`；
+- 策略更新操作为最终一致性，变更生效延迟不超过 30 秒；
+- `body` 中禁止提交 base64 编码的二进制内容（如证书文件），仅支持纯文本 JSON 结构；
+- 所有时间参数必须为 UTC，本地时区转换需由客户端完成。
 
 ## 来源文档
 
-- [认证](../../raw/application-api-reference/security-api-guide/security-api-authentication.md)
-- [错误码](../../raw/application-api-reference/security-api-guide/security-api-errors.md)
-- [查询防护总览](../../raw/application-api-reference/security-api-guide/security-api-protection-overview.md)
-- [查询 Agent 资产](../../raw/application-api-reference/security-api-guide/security-api-protection-overview/security-api-assets.md)
-- [概览](../../raw/application-api-reference/security-api-guide/security-api-overview.md)
-- [查询安全策略](../../raw/application-api-reference/security-api-guide/security-api-policies.md)
-- [查询告警列表](../../raw/application-api-reference/security-api-guide/security-api-policies/security-api-alerts.md)
-- [查询告警详情](../../raw/application-api-reference/security-api-guide/security-api-policies/security-api-alert-detail.md)
-- [导出告警](../../raw/application-api-reference/security-api-guide/security-api-policies/security-api-export.md)
-- [查询导出状态](../../raw/application-api-reference/security-api-guide/security-api-policies/security-api-export-status.md)
+- [Security API](../../raw/application-api-reference/security-api-guide.md)
 
 

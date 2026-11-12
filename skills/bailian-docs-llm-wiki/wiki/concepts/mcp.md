@@ -1,45 +1,47 @@
 # 模型上下文协议（MCP）
 
-模型上下文协议（MCP，Model Context Protocol）是百炼平台定义的标准化工具集成协议，用于将外部服务（如 API、云资源、自建系统）以统一语义和接口规范注入大模型上下文，使其在推理过程中可被自动识别、参数化调用并融合结果。MCP 不是模型能力本身，而是平台层提供的**工具接入标准与运行时桥接机制**，仅在智能体（Agent）或工作流（Workflow）应用内部生效，不可直接用于千问 API 的裸调用。
+模型上下文协议（Model Context Protocol，简称 MCP）是百炼平台定义的标准化工具通信协议，用于在智能体（Agent）运行时安全、可靠地调用外部能力服务。它通过统一的接口契约与运行时适配机制，将大模型的工具调用意图（tool call）转化为对真实服务（如地图、搜索、数据库、API 网关等）的结构化请求，并将响应结果以符合模型理解的方式注入上下文，从而扩展模型的实时感知与执行边界。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **智能体（Agent）中**：MCP 服务作为“工具”注册后，由大模型根据用户意图自动选择并调用（如“查北京天气”触发 `maps_weather`）。开发者在控制台「应用配置 → MCP 服务」中最多添加 5 个，无需修改提示词或代码逻辑；Sandbox Agent 可通过 `self.tools` 动态注册 MCP 工具。
-  
-- **工作流（Workflow）中**：MCP 以独立节点形式存在，需手动拖入画布、指定目标工具名（如 `websearch`）及输入参数（常由前置 LLM 节点提取结构化参数），实现确定性、可编排的工具链路。
+MCP 不是独立运行的服务，而是**专为智能体应用设计的上下文扩展协议**，仅在以下两类场景中生效：
 
-- **Agent Store 管理中**：MCP 是 `agent store` 的两大核心能力之一（另一为 Skill），支持两类部署形态：
-  - **官方 MCP 服务**：开箱即用，如 Amap Maps、WebSearch、Firecrawl，开通即生效；
-  - **自定义 MCP 服务**：支持三种接入方式——脚本部署（`npx`/`uvx` 托管至函数计算 FC）、AI 网关导入（封装现有 RESTful API）、阿里云 OpenAPI 导入（操作 OSS/ECS 等资源）。
+- **Managed Agent（托管智能体）**：在 Agent 配置中启用 MCP 服务后，模型可根据用户输入自动识别是否需要调用（例如“查北京今天天气”触发 `weather` 工具），无需显式编写调用逻辑；`tool_choice` 参数控制调用策略（`auto`/`none`/指定工具名）。
+- **Flow Agent（工作流智能体）**：作为独立节点接入流程图，每个 MCP 节点需手动绑定一个已注册的 MCP 服务（如 `amap-maps.maps_weather`），并由前置 LLM 节点解析参数后传递给该节点执行；适用于需精确控制调用时机与输入构造的编排场景。
 
-- **外部系统集成中**：可通过 CLI（`bl mcp call --target maps.weather`）或 SDK（如 `mcp.client.streamable_http`）从第三方客户端（Qoder/Cursor）或自有项目调用已部署的 MCP 服务，实现跨平台能力复用。
-
-> ⚠️ 注意：MCP 服务**不能在调用 `/v1/chat/completions` 千问原生 API 时直接接入**；必须嵌入 Agent 或 Workflow 应用上下文中使用。
+> ⚠️ 注意：MCP **不支持直接集成到千问原生 API（如 `/v1/services/aigc/text-generation`）调用中**，也不适用于 Sandbox 模式下的本地代码执行。它仅作用于平台级 Agent 运行时框架，是智能体“上下文感知+工具执行”能力的核心协议层。
 
 ## 关键参数和配置
 
-| 参数 | 类型 | 说明 | 必填 |
-|------|------|------|------|
-| `type` | string | 协议类型，必须与端点严格匹配：`"sse"` 对应 `/sse` 端点（事件流），`"streamableHttp"` 对应 `/mcp` 端点（HTTP JSON-RPC 风格）；不匹配将返回错误码 `11200058`。 | 是 |
-| `deployment_mode` | string | 仅云部署服务支持：`"basic"`（按调用时长计费，有冷启动）或 `"ultra"`（常驻在线，额外部署费）。 | 否，默认 `basic` |
-| `name` | string | MCP 服务唯一标识符（如 `websearch`），全平台内唯一，用于工具调用路由。 | 是 |
-| `description` | string | 工具功能描述，直接影响大模型是否准确识别调用意图，建议包含支持操作、输入约束与典型用例。 | 是 |
-| `parameters` | object | OpenAPI 3.0 兼容的 JSON Schema，定义工具所需参数（名称、类型、是否必需、示例等），用于参数提取与校验。 | 是 |
+| 参数 | 类型 | 说明 | 示例值 |
+|------|------|------|--------|
+| `type` | string | MCP 服务部署类型，决定通信方式与端点匹配规则 | `"streamableHttp"`（推荐）、`"stdio"`、`"sse"` |
+| `tool_choice` | string | Agent 级工具调用策略（仅 Managed Agent 有效） | `"auto"`（默认）、`"none"`、`"weather"`（显式指定） |
+| `DASHSCOPE_API_KEY` | string | 全局鉴权凭证，所有 MCP 服务（含 One Key 官方服务）共用，**无需单独申请子密钥** | `sk-xxx`（控制台获取） |
+| `timeout_ms` | integer | 单次 MCP 调用超时时间（毫秒），建议设为 10000–30000 | `15000` |
+| `max_retries` | integer | 失败重试次数（仅对 HTTP 类型生效） | `2` |
 
-自定义 MCP 服务还需提供符合 [MCP Schema](https://help.aliyun.com/zh/bailian/developer-reference/mcp-schema) 的完整配置 JSON，例如 `npx` 启动需指定 `"command": "npx"` 和有效包名（如 `"package": "@mcp/websearch"`）。
+- ✅ **必配项**：`type`（决定协议兼容性）、`DASHSCOPE_API_KEY`（全局认证）  
+- ✅ **推荐显式配置**：`timeout_ms`（避免长阻塞影响 Agent 响应）、`tool_choice`（明确控制调用行为）  
+- ❌ **不支持**：自定义 Header、Bearer [Token](token.md) 覆盖、私有证书、本地文件路径访问（MCP 服务必须可公网或 VPC 内访问）
 
 ## 面向开发者，简洁实用
 
-- ✅ **快速上手**：优先选用官方 MCP 服务（如 WebSearch），控制台一键开通，5 分钟内完成接入；调试可用 CLI `bl mcp call` 直接测试端点。
-- ✅ **自定义开发**：推荐使用 `npx` 方式部署轻量 MCP 服务（如封装内部 HTTP 接口），无需运维服务器；确保服务响应符合 [MCP 规范](https://help.aliyun.com/zh/bailian/developer-reference/mcp-spec)，尤其注意 `type` 与端点路径一致性。
-- ✅ **生产注意**：自定义 MCP 无法访问本地资源；函数计算 FC 出口 IP 不固定，访问云数据库需配白名单或 VPC；所有 MCP 返回内容计入输入 Token，影响计费与长度限制。
-- ❌ **避免踩坑**：不要尝试将 MCP 配置到千问 API 的 `tools` 字段中——该字段仅接受百炼平台纳管的工具定义，MCP 必须先在 Agent/Workflow 中注册生效。
+- **快速上手**：前往 [MCP 广场](https://bailian.console.aliyun.com/?tab=mcp#/mcp-market)，点击「One Key」服务即可开通，首次调用即生效；非 One Key 服务需手动开通并完成健康检查。
+- **调试技巧**：  
+  - 使用 CLI 快速验证：`bl mcp call --target amap-maps.maps_weather --params '{"city": "北京"}'`  
+  - 查看调用日志：控制台 → Agent 应用详情页 → 「调用追踪」Tab，筛选 `MCP` 类型事件  
+- **错误排查优先级**：  
+  1. 检查 `type` 是否与服务实际启动方式一致（如用 `npx mcp-server` 启动却配置 `type: streamableHttp` → 报错 `11200058`）  
+  2. 确认 `DASHSCOPE_API_KEY` 已正确设置且未过期  
+  3. 查看服务健康状态（控制台 MCP 列表页显示「在线」/「离线」）  
+- **成本提示**：每次 MCP 调用均单独计费（如 `web_search` ¥0.03/次），且返回内容计入模型输入上下文，可能间接增加输出 token 消耗——建议在 Flow Agent 中对 MCP 节点添加条件分支，避免无谓调用。
 
 ## 关联主题页
 
+- [get started with agents](../guides/get-started-with-agents.md)
 - [agent store](../guides/agent-store.md)
 - [agent development](../guides/agent-development.md)
-- [get started with agents](../guides/get-started-with-agents.md)
-- [agent governance](../guides/agent-governance.md)
+- [agent billing](../guides/agent-billing.md)
 
 

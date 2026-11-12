@@ -19,6 +19,10 @@
 
 ## 请求参数
 
+WebSocket`wss://WorkspaceId.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime`
+
+WebSocket`wss://WorkspaceId.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime`
+
 -   以下参数通过`OmniRealtimeParam`的链式方法设置。
     
     点击查看示例代码
@@ -26,7 +30,7 @@
     ```
     OmniRealtimeParam param = OmniRealtimeParam.builder()
             .model("qwen3.5-livetranslate-flash-realtime")
-            // 默认北京地址：将域名替换为业务空间对应的 API Host。
+            // 使用请求地址所选地域和业务空间的 API Key。
             .url("wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime")
             // 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
             // 若没有配置环境变量，请用百炼API Key将下行替换为：.apikey("sk-xxx")
@@ -56,12 +60,7 @@
     
     是
     
-    实时翻译服务地址：
-    
-    -   华北2（北京）：`wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime`
-    -   新加坡：`wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime`
-    
-    将地址中的域名替换为业务空间对应的 [API Host](https://bailian.console.aliyun.com/cn-beijing/settings/workspace)，保留协议和路径。
+    实时翻译服务的 WebSocket 地址。见[请求参数](#lt002paramsh2)中的连接地址。
     
     `apikey`
     

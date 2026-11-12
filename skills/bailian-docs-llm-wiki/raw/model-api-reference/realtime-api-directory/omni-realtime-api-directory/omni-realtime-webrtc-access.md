@@ -20,17 +20,13 @@ WebRTC 使用媒体轨道传输音视频，使用 DataChannel 传输模型事件
 
 浏览器向业务 AppServer 提交 Offer SDP。AppServer 使用 API Key 转发以下请求，并将 Answer SDP 原样返回浏览器；长期 API Key 不进入前端。
 
--   方法：`POST`
--   新加坡地址：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/webrtc/realtime?model=qwen3.8-omni-flash-realtime`
+POST`https://WorkspaceId.cn-beijing.maas.aliyuncs.com/api/v1/webrtc/realtime?model=qwen3.8-omni-flash-realtime`
+
+POST`https://WorkspaceId.ap-southeast-1.maas.aliyuncs.com/api/v1/webrtc/realtime?model=qwen3.8-omni-flash-realtime`
+
 -   请求头：`Authorization: Bearer <API_KEY>`、`Content-Type: application/sdp`
 -   请求体：Offer SDP 字符串。
 -   成功响应：HTTP 200，正文为 Answer SDP；失败返回 4xx。
-
-以下地址默认为北京地域，请将域名替换为业务空间对应的 API Host：
-
-```
-https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/webrtc/realtime?model=qwen3.8-omni-flash-realtime
-```
 
 WebRTC 在 SDP 交换时鉴权，不需要先申请 AOQ Token。下文示例中的 `/api/realtime/sdp` 是业务 AppServer 的自建接口，需要实现上述转发，不是百炼提供的 URL。
 

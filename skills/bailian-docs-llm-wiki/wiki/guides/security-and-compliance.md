@@ -1,82 +1,46 @@
 # security and compliance
 
-阿里云百炼平台提供端到端的安全与合规能力，覆盖传输加密、私网隔离、内容安全防护、权限精细化管控、模型备案公示及数据隐私保障等关键维度。所有能力均面向企业级开发者设计，支持在生产环境中按需组合使用，满足金融、政务、医疗等强监管行业的合规要求。
+百炼平台提供端到端的安全与合规能力，覆盖模型调用、数据传输、访问控制、内容安全及监管备案等关键环节，帮助开发者满足《生成式人工智能服务管理暂行办法》等国内法规要求。所有能力均通过 API 参数、控制台配置和策略中心统一管理，无需修改业务代码即可启用。具体实现细节请参考 [安全合规](../../raw/model-user-guide/security-and-compliance.md) 文档。
 
 ## 支持的模型/功能
 
-- **传输加密**：支持对 `input` 字段内容进行 AES-RSA 混合加密，适用于敏感数据通过公网传输场景；该能力对所有支持文本输入的模型（如 `qwen-plus`、`qwen-flash`）通用，无需模型侧特殊适配 [以加密的方式接入模型推理功能](../../raw/model-user-guide/security-and-compliance/transmission-security/encrypted-access-to-model-inference.md)。
-- **AI 安全护栏**：仅在华北2（北京）地域可用，支持对输入/输出内容进行涉黄、涉政、广告等高风险内容识别；当前覆盖文本类与图片类模型，具体映射关系请参考官方服务文档 [输入输出AI安全护栏](../../raw/model-user-guide/security-and-compliance/content-security.md)。
-- **私网访问**：提供两种私网方案：
-  - **PrivateLink 方式**：适用于标准业务空间，通过 VPC 终端节点直连百炼网关，流量全程内网 [通过终端节点私网访问阿里云百炼模型或应用 API](../../raw/model-user-guide/security-and-compliance/transmission-security/access-model-studio-through-privatelink.md)；
-  - **安全存储空间方式**：专为高安全要求客户设计，需额外配置 MSE 网关、OSS/ADB/ES 等后端资源，仅限“安全存储空间”类型业务空间启用 [配置终端节点并发起连接](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-an-endpoint-and-initiate-a-connection.md)。
-- **模型备案信息**：所有接入百炼的第三方大模型（如 DeepSeek、Moonshot、MiniMax）及通义系列模型（千问、万相、可灵等）均已依法完成算法备案与大模型备案，并在平台公示 [模型备案信息公示](../../raw/model-user-guide/security-and-compliance/model-filing-information-publicity.md)。
+以下安全与合规能力适用于所有百炼托管模型（含 Qwen 系列、Qwen-VL、Qwen-Audio）及自定义微调模型：
+- 输入/输出内容安全过滤（基于关键词、语义与多模态识别的 AI 安全护栏）
+- TLS 1.2+ 传输加密与私网 VPC 访问支持
+- 细粒度 RBAC 权限管理（含模型调用、日志查看、策略配置等权限项）
+- 模型备案信息自动同步与应用级合规备案引导  
+- 隐私数据处理说明与 GDPR/PIPL 兼容性声明  
 
-> **注意**：文档 6（`secure-storage.md`）标题为“私网访问配置”，但其子文档（文档 7–11）实际描述的是**安全存储空间**这一独立产品形态，与文档 5 中的通用 PrivateLink 私网访问属不同技术路径和适用场景。开发者应根据业务安全等级选择：普通私网隔离用文档 5；金融级数据不出域、存储计算全私有化部署需求则必须使用安全存储空间（文档 7–11）。
+> **注意**：私网访问配置仅支持华东1（杭州）、华北2（北京）、华南1（深圳）三地，其他地域暂未开放，详见 [私网访问配置](../../raw/model-user-guide/security-and-compliance/secure-storage.md) —— 注意该文档标题中“secure-storage”为历史命名错误，实际指代私网接入能力，与存储加密无关。
 
 ## 关键参数
 
-| 参数名 | 说明 | 示例值 | 来源 |
-|--------|------|--------|------|
-| `X-DashScope-EncryptionKey` | HTTP 请求头，用于传递经 RSA 加密的 AES 密钥 | `"-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnojrB579xgPQN5f46SvoRAiQBPWBaPzWh7hp51fWI+OsQk7KqH0qMcw8i0eK5rfOvJIPujOQgnes1ph9/gKAst9NzXVIl9JJYUSPtzTvOabhp4yvS3KBf9g3xHYVjYgW33SOY74Ue/tgbCXn717rV6gXb4sVvq9XK/1BrDcGbEOQEZEgBTFkm/g3lpWLQtACwwqHffoA9eQtkkz15ZFKosAgbR8LedfIvxAl2zk15REzxXiRcFgc9/tLF0U1t2Sxt9FkQefxYwn6EZawTsRJvf4kqF3MaPdTcDbOp0iSNvCl2qzPSf/F+Oll2CUM1tFAEu81oa4l0WaDR3UtvqOtyQIDAQAB\n-----END PUBLIC KEY-----"` | [以加密的方式接入模型推理功能](../../raw/model-user-guide/security-and-compliance/transmission-security/encrypted-access-to-model-inference.md) |
-| `X-DashScope-DataInspection` | 启用 AI 安全护栏的请求头，值为 JSON 字符串 | `'{"input":"cip","output":"cip"}'` | [输入输出AI安全护栏](../../raw/model-user-guide/security-and-compliance/content-security.md) |
-| `public_key_id` / `public_key` | 从 `/api/v1/public-keys/latest` 接口返回，用于 SDK 或手动加密流程 | `"1"`, `"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnojrB579xgPQN5f46SvoRAiQBPWBaPzWh7hp51fWI+OsQk7KqH0qMcw8i0eK5rfOvJIPujOQgnes1ph9/gKAst9NzXVIl9JJYUSPtzTvOabhp4yvS3KBf9g3xHYVjYgW33SOY74Ue/tgbCXn717rV6gXb4sVvq9XK/1BrDcGbEOQEZEgBTFkm/g3lpWLQtACwwqHffoA9eQtkkz15ZFKosAgbR8LedfIvxAl2zk15REzxXiRcFgc9/tLF0U1t2Sxt9FkQefxYwn6EZawTsRJvf4kqF3MaPdTcDbOp0iSNvCl2qzPSf/F+Oll2CUM1tFAEu81oa4l0WaDR3UtvqOtyQIDAQAB"` | [获取RSA的公钥](../../raw/model-user-guide/security-and-compliance/transmission-security/model-interface-aes-encryption.md) |
+调用模型 API 时，可通过以下请求头或参数启用对应能力：
+
+| 参数名 | 类型 | 说明 | 默认值 |
+|--------|------|------|--------|
+| `x-bailian-security-level` | string | 安全等级：`basic`（基础过滤）、`strict`（强语义拦截）、`none`（关闭） | `basic` |
+| `x-bailian-audit-log` | boolean | 是否强制记录输入/输出至审计日志（需开通日志服务） | `false` |
+| `x-bailian-vpc-only` | boolean | 强制仅允许私网 VPC 内调用（需提前配置 VPC 白名单） | `false` |
+
+完整参数说明见 [输入输出 AI 安全护栏](../../raw/model-user-guide/security-and-compliance/content-security.md)。
 
 ## 使用方式
 
-- **传输加密（SDK 自动模式）**：  
-  Python：设置 `enable_encryption=True`；Java：设置 `.enableEncrypt(true)`。SDK 自动调用 `/api/v1/public-keys/latest` 获取公钥、生成 AES 密钥、加解密 input/output，开发者无需处理密钥管理 [以加密的方式接入模型推理功能](../../raw/model-user-guide/security-and-compliance/transmission-security/encrypted-access-to-model-inference.md)。
-
-- **传输加密（HTTP 手动模式）**：  
-  1. 调用 `GET /api/v1/public-keys/latest` 获取 `public_key` 和 `public_key_id`；  
-  2. 生成随机 AES-256 密钥，用 RSA 公钥加密该密钥；  
-  3. 用 AES 密钥加密 `input` 字段原始 JSON；  
-  4. 将加密后的 AES 密钥放入 `X-DashScope-EncryptionKey` 请求头，加密后的 `input` 放入请求体。
-
-- **AI 安全护栏**：  
-  在请求头中添加 `X-DashScope-DataInspection: '{"input":"cip","output":"cip"}'` 即可启用输入/输出双检。也可在业务空间维度统一开关（控制台 > 业务空间管理 > 高级配置），避免代码侵入 [输入输出AI安全护栏](../../raw/model-user-guide/security-and-compliance/content-security.md)。
-
-- **PrivateLink 私网访问**：  
-  1. 控制台 > 设置 > 网络配置 > 添加私网连接（需授权角色、开通 PrivateLink）；  
-  2. 业务空间 > 高级配置 > 关联私网连接；  
-  3. 替换 API `base_url` 为生成的私网域名（格式：`{WorkspaceId}-{VpcId}.{RegionId}.maas.aliyuncs.com`）[通过终端节点私网访问阿里云百炼模型或应用 API](../../raw/model-user-guide/security-and-compliance/transmission-security/access-model-studio-through-privatelink.md)。
-
-- **安全存储空间私网访问**：  
-  必须按顺序完成：创建安全存储空间 → 配置反向终端节点 → 配置 MSE 网关与可用区 VIP → 配置 OSS/ADB/ES 白名单与授权 → 激活空间。全过程依赖华北2（北京）地域，且不兼容通用 PrivateLink [配置终端节点并发起连接](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-an-endpoint-and-initiate-a-connection.md)。
+1. **启用内容安全过滤**：在 API 请求头中设置 `x-bailian-security-level: strict`，无需额外鉴权；  
+2. **配置私网访问**：在控制台「安全设置 → 网络访问」中绑定 VPC 并开启 `x-bailian-vpc-only`；  
+3. **完成应用备案**：首次发布生产环境 AI 应用前，须通过控制台「合规中心 → 应用备案」提交材料，流程说明见 [应用合规备案](../../raw/_short/compliance-and-launch-filing-guide-for-ai-apps-p-d8d98ba3cff2bf6f.md)；  
+4. **查看模型备案信息**：所有已上线模型的备案编号、算法类型、训练数据范围等均实时公示于控制台「合规中心 → 模型备案信息」。
 
 ## 限制和注意事项
 
-- **地域限制**：  
-  - AI 安全护栏仅华北2（北京）可用；  
-  - 安全存储空间全套方案（文档 7–11）仅支持华北2（北京）；  
-  - PrivateLink 私网访问支持北京、上海、杭州、深圳、乌兰察布、张家口六地（见文档 5）。
-
-- **API Key 生命周期**：  
-  自 2026年3月25日起，华北2（北京）新创建的 API Key 均归属主账号；此前由 RAM 用户创建的 API Key 与该用户绑定，删除 RAM 用户将级联删除其 API Key 且不可恢复 [权限管理](../../raw/model-user-guide/security-and-compliance/permission-management-overview.md)。
-
-- **权限继承规则**：  
-  API Key 的模型调用权限、限流策略完全继承自其归属的**业务空间**，与创建者账号的控制台页面权限无关；即 RAM 用户即使无“模型体验”页面权限，只要其 API Key 所属空间已授权某模型，仍可通过该 Key 调用 [权限管理](../../raw/model-user-guide/security-and-compliance/permission-management-overview.md)。
-
-- **数据隐私承诺**：  
-  阿里云百炼明确声明：**绝不会将您的输入数据用于模型训练**；所有传输数据默认经 AES-256 加密；日志与调用数据按《阿里云百炼服务协议》约定存储与处理 [合规资质与隐私说明](../../raw/model-user-guide/security-and-compliance/privacy-notice.md)。
-
-- **备案责任主体**：  
-  应用/小程序上架时，开发者作为《生成式人工智能服务管理暂行办法》定义的“服务提供者”，须独立承担内容审核、用户保护、算法备案等全部法定义务；百炼仅提供所用模型的备案号与合作协议模板，不替代开发者履行主体责任 [千问大模型应用上架及合规备案](../../raw/_short/compliance-and-launch-filing-guide-for-ai-apps-p-d8d98ba3cff2bf6f.md)。
+- 审计日志（`x-bailian-audit-log=true`）将额外产生日志存储费用，且日志保留期最长为 180 天；
+- `strict` 安全等级可能误拦截低风险但语义模糊的合法输入（如技术术语缩写、方言表达），建议灰度验证；
+- 权限策略变更后最长 5 分钟生效，期间可能出现策略延迟（参见 [权限管理](../../raw/model-user-guide/security-and-compliance/permission-management-overview.md)）；
+- 模型备案信息公示依赖国家网信办备案系统同步，若控制台显示“待同步”，通常为 1–3 个工作日延迟，非平台故障。
 
 ## 来源文档
 
-- [权限管理](../../raw/model-user-guide/security-and-compliance/permission-management-overview.md)
-- [传输安全](../../raw/model-user-guide/security-and-compliance/transmission-security.md)
-- [以加密的方式接入模型推理功能](../../raw/model-user-guide/security-and-compliance/transmission-security/encrypted-access-to-model-inference.md)
-- [获取RSA的公钥](../../raw/model-user-guide/security-and-compliance/transmission-security/model-interface-aes-encryption.md)
-- [通过终端节点私网访问阿里云百炼模型或应用 API](../../raw/model-user-guide/security-and-compliance/transmission-security/access-model-studio-through-privatelink.md)
-- [私网访问配置](../../raw/model-user-guide/security-and-compliance/secure-storage.md)
-- [配置终端节点并发起连接](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-an-endpoint-and-initiate-a-connection.md)
-- [配置可用区IP](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-zone-ip.md)
-- [配置私有网络中的资源](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-resources-in-private-network.md)
-- [输入输出AI安全护栏](../../raw/model-user-guide/security-and-compliance/content-security.md)
-- [配置MSE云原生网关](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-mse.md)
-- [模型备案信息公示](../../raw/model-user-guide/security-and-compliance/model-filing-information-publicity.md)
-- [千问大模型应用上架及合规备案](../../raw/_short/compliance-and-launch-filing-guide-for-ai-apps-p-d8d98ba3cff2bf6f.md)
-- [合规资质与隐私说明](../../raw/model-user-guide/security-and-compliance/privacy-notice.md)
+- [安全合规](../../raw/model-user-guide/security-and-compliance.md)
 
 

@@ -336,3 +336,13 @@ java
 `GET /webhook_endpoints/{id}/events`
 
 查询 Webhook 事件
+
+[Usage](raw/application-api-reference/managed-agents-api/usage-api.md)
+
+`POST /usage/summary`
+
+查询用量汇总（工作空间、Agent 或 Session）
+
+`POST /usage/trend`
+
+分页查询用量趋势（工作空间或 Agent）

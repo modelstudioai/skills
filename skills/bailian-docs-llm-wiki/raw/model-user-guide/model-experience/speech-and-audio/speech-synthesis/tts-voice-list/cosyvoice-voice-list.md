@@ -3545,7 +3545,7 @@ Instruct：不支持
 各音色支持的功能以表格中的“特性支持”列为准：
 
 -   **SSML**：在 `text` 中填写 SSML 内容，标签用法请参见[SSML 标记语言介绍](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide#sl01_tagref_h3)。
--   **指令控制（Instruct）**：通过 `instruction` 设置指令。音色有指定格式时，须按该音色的折叠说明填写；未指定格式时，可使用自然语言指令。详情请参见[实时语音合成](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/realtime-tts-user-guide.md)和[非实时语音合成](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/non-realtime-tts-user-guide.md)的指令控制说明。
+-   **指令控制（Instruct）**：通过 `instruction` 设置指令。音色有指定格式时，须按该音色的折叠说明填写；未指定格式时，可使用自然语言指令。详情请参见[实时语音合成](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#12884a10929p9)和[非实时语音合成](https://help.aliyun.com/zh/model-studio/non-realtime-tts-user-guide#nrt_instruct_h3)的指令控制说明。
 -   **时间戳**：通过 `word_timestamp_enabled` 开启；Java SDK 对应参数为 `enableWordTimestamp`。
 
 如需专属音色，请参见[声音复刻](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-cloning-user-guide.md)。

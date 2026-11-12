@@ -11,12 +11,6 @@
 **前提条件**
 
 -   已[配置API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)，API Key 需与 API Host 属于同一地域。
--   获取并配置 API Host
-    
-    从控制台[获取API Host](https://bailian.console.aliyun.com/cn-beijing/settings/workspace)并填入下方，本文其他可编辑地址会同步更新。
-    
-    {WorkspaceId}.cn-beijing.maas.aliyuncs.com
-    
 -   以下示例使用 OpenAI 兼容方式调用，需要[安装最新版SDK](raw/model-api-reference/preparations/install-sdk.md)。OpenAI Python SDK最低版本为 1.52.0，Node.js SDK最低版本为 4.68.0。
 
 **说明**运行前安装依赖：`pip install openai`（Python）或 `npm install openai`（Node.js）。
@@ -77,7 +71,7 @@ import OpenAI from "openai";
 
 const openai = new OpenAI({
     apiKey: process.env.DASHSCOPE_API_KEY,
-    // 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+    // 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
     baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
 });
 
@@ -131,7 +125,7 @@ for await (const chunk of completion) {
 ```
 
 ```
-# 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+# 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
 curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions" \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
@@ -190,12 +184,6 @@ data: {"id":"chatcmpl-f18000e6-40e2-96cd-992a-29bd6aba315a","object":"chat.compl
 **前提条件**
 
 -   已[配置API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)，API Key 需与 API Host 属于同一地域。
--   获取并配置 API Host
-    
-    从控制台[获取API Host](https://bailian.console.aliyun.com/cn-beijing/settings/workspace)并填入下方，本文其他可编辑地址会同步更新。
-    
-    {WorkspaceId}.cn-beijing.maas.aliyuncs.com
-    
 -   以下语音输出示例使用 OpenAI 兼容方式调用，需要[安装最新版SDK](raw/model-api-reference/preparations/install-sdk.md)。OpenAI Python SDK最低版本为 1.52.0，Node.js SDK最低版本为 4.68.0。
 
 **说明**运行前安装依赖：`pip install numpy soundfile openai`（Python）或 `npm install openai wav`（Node.js）。
@@ -218,7 +206,7 @@ from openai import OpenAI
 # 1. 初始化客户端
 client = OpenAI(
     api_key=os.getenv("DASHSCOPE_API_KEY"),  # 确认已配置环境变量
-    # 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+    # 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
     base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
@@ -308,7 +296,7 @@ const openai = new OpenAI(
     {
         // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
         apiKey: process.env.DASHSCOPE_API_KEY,
-        // 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+        // 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
         baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
     }
 );
@@ -353,7 +341,7 @@ convertAudio(audioString, "audio_assistant.wav");
 bash
 
 ```
-# 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+# 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
 curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions" \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
@@ -570,7 +558,7 @@ client = OpenAI(
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
     # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+    # 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
     base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
@@ -616,7 +604,7 @@ const openai = new OpenAI(
         // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
         // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
         apiKey: process.env.DASHSCOPE_API_KEY,
-        // 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+        // 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
         baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
     }
 );
@@ -651,7 +639,7 @@ for await (const chunk of completion) {
 bash
 
 ```
-# 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+# 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
 curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions" \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
@@ -719,7 +707,7 @@ client = OpenAI(
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
     # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+    # 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
     base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
@@ -765,7 +753,7 @@ const openai = new OpenAI({
      // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey:"sk-xxx",
     // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     apiKey: process.env.DASHSCOPE_API_KEY,
-    // 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+    // 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
     baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
 });
 
@@ -800,7 +788,7 @@ for await (const chunk of completion) {
 bash
 
 ```
-# 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+# 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
 curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions" \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
@@ -926,7 +914,7 @@ client = OpenAI(
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
     # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+    # 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
     base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
@@ -969,7 +957,7 @@ const openai = new OpenAI(
     {
         // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
         apiKey: process.env.DASHSCOPE_API_KEY,
-        // 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+        // 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
         baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
     }
 );
@@ -1004,7 +992,7 @@ for await (const chunk of completion) {
 bash
 
 ```
-# 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+# 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
 curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions" \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
@@ -1099,7 +1087,7 @@ client = OpenAI(
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
     # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+    # 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
     base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
@@ -1145,7 +1133,7 @@ const openai = new OpenAI({
      // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
     // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     apiKey: process.env.DASHSCOPE_API_KEY,
-    // 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+    // 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
     baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
 });
 
@@ -1189,7 +1177,7 @@ for await (const chunk of completion) {
 bash
 
 ```
-# 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+# 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
 curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions" \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
@@ -1242,7 +1230,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+    # 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
     base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
@@ -1290,7 +1278,7 @@ import OpenAI from "openai";
 const openai = new OpenAI(
     {
         apiKey: process.env.DASHSCOPE_API_KEY,
-        // 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+        // 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
         baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
     }
 );
@@ -1336,7 +1324,7 @@ for await (const chunk of completion) {
 bash
 
 ```
-# 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+# 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
 curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions" \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
@@ -1638,7 +1626,7 @@ client = OpenAI(
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
     # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+    # 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
     base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
@@ -1724,7 +1712,7 @@ const openai = new OpenAI({
      // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey:"sk-xxx",
     // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     apiKey: process.env.DASHSCOPE_API_KEY,
-    // 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+    // 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
     baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
 });
 
@@ -1851,7 +1839,7 @@ import threading
 client = OpenAI(
     # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+    # 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
     base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
@@ -1974,7 +1962,7 @@ client = OpenAI(
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
     # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+    # 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
     base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
@@ -2011,7 +1999,7 @@ const openai = new OpenAI({
      // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey:"sk-xxx",
     // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     apiKey: process.env.DASHSCOPE_API_KEY,
-    // 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+    // 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
     baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
 });
 
@@ -2045,7 +2033,7 @@ for await (const chunk of completion) {
 bash
 
 ```
-# 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+# 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
 curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions" \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
@@ -2099,7 +2087,7 @@ from openai import OpenAI
 # 初始化客户端
 client = OpenAI(
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+    # 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
     base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
@@ -2142,7 +2130,7 @@ import OpenAI from "openai";
 // 初始化客户端
 const openai = new OpenAI({
     apiKey: process.env.DASHSCOPE_API_KEY,
-    // 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+    // 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
     baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
 });
 
@@ -2178,7 +2166,7 @@ console.log();
 bash
 
 ```
-# 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+# 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
 curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions" \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
@@ -2230,7 +2218,7 @@ client = OpenAI(
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
     # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+    # 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
     base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
@@ -2283,7 +2271,7 @@ const openai = new OpenAI({
      // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
     // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     apiKey: process.env.DASHSCOPE_API_KEY,
-    // 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+    // 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
     baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
 });
 
@@ -2331,7 +2319,7 @@ for await (const chunk of completion) {
 bash
 
 ```
-# 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+# 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
 curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions" \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
@@ -2399,7 +2387,7 @@ from openai import OpenAI
 client = OpenAI(
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+    # 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
     base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
@@ -2434,7 +2422,7 @@ const openai = new OpenAI(
     {
         // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
         apiKey: process.env.DASHSCOPE_API_KEY,
-        // 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+        // 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
         baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
     }
 );
@@ -2465,7 +2453,7 @@ for await (const chunk of completion) {
 bash
 
 ```
-# 默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。
+# 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
 curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions" \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
