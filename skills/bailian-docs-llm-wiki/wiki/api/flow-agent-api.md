@@ -1,63 +1,92 @@
 # flow agent api
 
-Flow Agent API 是百炼平台提供的两类核心接口集合：一类用于调用已发布的智能体/工作流应用（应用调用接口），另一类用于管理 Prompt 模板、[长期记忆](../concepts/long-term-memory.md)等底层组件（组件类接口）。两类接口在 Base URL、鉴权方式、错误响应格式上均存在显著差异，开发者需严格区分使用场景与调用规范。
+Flow Agent API 是阿里云百炼平台提供的核心接口集合，用于调用已发布的智能体（Agent）与工作流（Workflow）应用，并管理 Prompt 模板、[长期记忆](../concepts/long-term-memory.md)等底层组件。API 分为两类：面向应用调用的 DashScope 网关接口（Bearer 鉴权）和面向组件管理的百炼 OpenAPI（AccessKey 签名鉴权），二者在认证方式、Endpoint 和功能边界上严格分离。
 
 ## 支持的模型/功能
 
-Flow Agent API 本身不直接提供模型推理能力，而是作为**智能体应用调度与组件管理的控制平面**：
+Flow Agent API 本身不直接暴露模型选择能力，而是通过**预配置的应用实例**间接使用模型。支持的功能包括：
 
-- **应用调用功能**：支持通过 DashScope 应用网关调用已发布的智能体应用与工作流应用，适用于生产环境的端到端对话服务集成。
-- **组件管理功能**：提供[长期记忆](../concepts/long-term-memory.md)（旧）全生命周期操作（含创建、读取、更新、删除记忆体及记忆片段），详见 [长期记忆（旧）](../../raw/application-api-reference/flow-agent-api/api-bailian-2023-12-29-dir-long-term-memory.md)。该能力基于百炼 OpenAPI（`bailian.{regionId}.aliyuncs.com`），当前**不支持用户画像存储与管理**，相关操作需通过控制台完成。
+- **应用调用**：同步/异步调用新版智能体（Agent 2.0）、旧版智能体及工作流应用，支持多轮对话（`messages`）、会话状态（`session_id`）、[流式输出](../concepts/streaming-output.md)（`stream=true`）与增量流式（`incremental_output=true`）；  
+- **Prompt 工程**：通过 [CreatePromptTemplate](../../raw/_short/api-bailian-2023-12-29-createprompttemplate-5d322a6c80396e15.md) 等接口全生命周期管理 Prompt 模板，支持变量插值（如 `${theme}`）；  
+- **[长期记忆](../concepts/long-term-memory.md)（旧）**：通过 `CreateMemory` / `CreateMemoryNode` 等接口构建结构化记忆体与记忆片段，供智能体在后续调用中显式引用；  
+- **辅助能力**：支付宝打赏链接生成、临时文件上传许可申请等扩展功能（见 [其他](../../raw/application-api-reference/flow-agent-api/api-bailian-2023-12-29-dir-others.md)）。
 
-> **注意**：文档中多次提及“[长期记忆](../concepts/long-term-memory.md)（旧）”，表明该能力已被标记为遗留方案；新项目应优先评估平台推荐的长期记忆替代方案（如向量知识库或新版记忆服务），但本文档范围仅覆盖当前公开的旧版 API。
+> **注意**：文档中多次提及“[长期记忆](../concepts/long-term-memory.md)（旧）”，表明该能力已被新架构替代，官方文档未提供迁移路径或新接口说明，建议优先评估新版记忆方案。
 
 ## 关键参数
 
-| 参数名 | 类型 | 必填 | 说明 | 来源示例 |
-|--------|------|------|------|----------|
-| `workspaceId` | string | 是 | 业务空间 ID，所有组件类接口（如长期记忆）均需显式传入，获取方式见[如何使用业务空间](https://help.aliyun.com/zh/model-studio/use-workspace)。应用调用接口的 Base URL 中已嵌入 workspaceId。 | [CreateMemory - 创建长期记忆体](../../raw/_short/api-bailian-2023-12-29-creatememory-71d9eb60188e5ed4.md) |
-| `memoryId` | string | 是（部分接口） | 长期记忆体唯一标识，由 `CreateMemory` 接口返回，后续所有对该记忆体的操作（如 `GetMemory`, `UpdateMemoryNode`）均需传入。 | [GetMemory - 获取长期记忆体](../../raw/_short/api-bailian-2023-12-29-getmemory-93a2074c0e9ce4e8.md) |
-| `content` | string | 是（`CreateMemoryNode` 等） | 记忆片段内容，长度限制为 1–200 字符，仅支持中文、英文、数字及 `:`, `_`, `.`, `-`。 | [CreateMemoryNode - 创建记忆片段](../../raw/_short/api-bailian-2023-12-29-creatememorynode-7e5dec47c8bf17cc.md) |
-| `maxResults` / `nextToken` | integer / string | 否（分页） | 用于 `ListMemories` 和 `ListMemoryNodes` 的分页控制，`maxResults` 取值范围为 `[1, 50]`，默认 `10`。 | [ListMemories - 获取长期记忆体列表](../../raw/_short/api-bailian-2023-12-29-listmemories-ca86cf5601eec468.md) |
+| 参数 | 类型 | 必填 | 说明 | 所属接口类型 |
+|------|------|------|------|--------------|
+| `app_id` | string | 是 | 应用唯一标识，从控制台获取 | 应用调用（DashScope/API） |
+| `prompt` 或 `input` | string/array | 是 | 单轮文本或消息数组（含 `system`/`user` 角色） | 应用调用 |
+| `session_id` | string | 否 | 会话 ID，启用云端历史上下文（1 小时失效） | 应用调用（DashScope） |
+| `workspace` / `workspaceId` | string | 条件必填 | 子业务空间 ID；默认空间可省略。注意：DashScope 接口 Header 传 `X-DashScope-WorkSpace`，OpenAPI 路径中作为 `{workspaceId}` | 两类接口均需 |
+| `stream` | boolean | 否 | 是否启用 Server-Sent Events 流式响应（默认 `false`） | 应用调用（DashScope） |
+| `incremental_output` | boolean | 否 | 仅 `stream=true` 时有效，控制是否增量返回（推荐 `true`） | 应用调用（DashScope） |
+| `background` | boolean | 否 | Responses API 异步模式开关（设为 `true` 时立即返回任务 ID） | 应用调用（Responses） |
 
 ## 使用方式
 
-### 1. 鉴权方式（关键区分点）
-- **应用调用接口**（如调用智能体）：使用 **API Key** 鉴权，Header 中携带 `Authorization: Bearer <your-api-key>`。API Key 在[控制台](https://bailian.console.aliyun.com/?tab=model#/api-key)创建。
-- **组件类接口**（如长期记忆、Prompt 模板）：使用 **AccessKey 签名（ACS3-HMAC-SHA256）**，不支持 `Bearer` 方式。强烈推荐使用阿里云 SDK 或 [OpenAPI Explorer](https://api.aliyun.com/) 自动签名，避免手动计算。
+### 1. 认证方式
+- **应用调用接口**（如 `/apps/{APP_ID}/completion`）：使用阿里云百炼 API Key，Header 中传 `Authorization: Bearer <your-api-key>`；  
+- **组件类接口**（如 Prompt 模板、长期记忆）：属于阿里云 OpenAPI，必须使用 AccessKey 进行 `ACS3-HMAC-SHA256` 签名，[不支持 Bearer 方式](../../raw/application-api-reference/flow-agent-api/flow-agent-api-authentication.md)。推荐使用阿里云 SDK 或 [OpenAPI Explorer](https://api.aliyun.com/) 自动生成代码。
 
-### 2. 典型调用流程（长期记忆）
-1. 调用 `CreateMemory` 创建长期记忆体，获取 `memoryId`；
-2. （可选）调用 `CreateMemoryNode` 向该记忆体写入具体信息；
-3. 调用智能体应用时，在请求 Body 中传入 `memoryId`，使智能体在对话中引用该记忆；
-4. 日常维护可通过 `ListMemories` / `ListMemoryNodes` 查询，`UpdateMemory` / `UpdateMemoryNode` 修改，`DeleteMemory` / `DeleteMemoryNode` 清理。
+### 2. Endpoint 与地域约束
+- **应用调用 Base URL**：`https://dashscope.aliyuncs.com/api/v1/apps/{APP_ID}/completion`（DashScope）或 `https://dashscope.aliyuncs.com/api/v2/apps/agent/{APP_ID}/compatible-mode/v1/responses`（Responses）；  
+- **组件类 Base URL**：`https://bailian.{region}.aliyuncs.com`，路径含 `{workspaceId}`（如 `/llm-us9hjmt32nysdxxx/promptTemplates`）；  
+- **重要限制**：所有应用调用接口（DashScope/Responses）当前**仅支持华北2（北京）地域**，跨地域调用将失败。
 
-### 3. 错误处理
-- **应用调用接口**：错误响应含 `request_id` 字段，便于问题定位；HTTP 状态码含义见 [错误码](../../raw/application-api-reference/flow-agent-api/flow-agent-api-errors.md)。
-- **组件类接口**：遵循阿里云 OpenAPI 统一结构，出错时返回 `Code` 和 `Message` 字段。
+### 3. 典型调用流程
+1. 在控制台获取 `APP_ID` 和（若需要）`Workspace ID`（见 [获取APP ID和Workspace ID](../../raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)）；  
+2. 根据场景选择协议：  
+   - 实时交互 → 使用 DashScope 同步接口或 Responses 同步 API；  
+   - 长耗时任务（如报告生成）→ 使用 Responses 异步 API（`background=true`），再轮询 `retrieve`；  
+3. 组件管理（如创建 Prompt 模板）→ 调用 OpenAPI，确保签名正确且 `workspaceId` 路径匹配。
 
 ## 限制和注意事项
 
-- **限流策略**：所有长期记忆类接口（`CreateMemory`, `GetMemory`, `ListMemories`, `CreateMemoryNode` 等）均要求**两次请求间隔至少 1 秒**，否则可能触发限流（HTTP 429）。建议在客户端添加退避逻辑。
-- **幂等性**：`GetMemory`, `ListMemories`, `UpdateMemory`, `DeleteMemory` 等读/删/改接口具有幂等性；但 `CreateMemory` **不具备幂等性**，重复调用将创建多个独立记忆体。
-- **资源依赖**：`CreateMemoryNode`、`GetMemoryNode` 等接口必须依赖有效的 `memoryId`；若 `memoryId` 不存在或无权限，将返回 `404 Memory.MemoryIdNotFound` 错误。
-- **路径与域名分离**：应用调用接口 Base URL 为 `https://{workspaceId}.cn-beijing.maas.aliyuncs.com`；组件类接口 Base URL 为 `https://bailian.{regionId}.aliyuncs.com`（如 `bailian.cn-beijing.aliyuncs.com`），二者不可混用。
+- **地域锁定**：所有应用调用接口（DashScope/Responses）强制限定于华北2（北京），其他地域（如德国法兰克福、新加坡）的请求将被拒绝；  
+- **异步限制**：Responses API 的异步模式（`background=true`）**不支持[流式输出](../concepts/streaming-output.md)**（`stream=true` 会被忽略）；  
+- **会话时效性**：`session_id` 对应的云端对话历史在连续 1 小时无请求后自动失效，不可恢复；  
+- **权限要求**：  
+  - 查询全部业务空间需主账号或具备 `AliyunBailianFullAccess` 权限的 RAM 子账号；  
+  - 普通子账号默认只能查看其已加入的业务空间 ID；  
+- **错误处理**：两类接口错误码体系不同——应用调用返回 `request_id` + 自定义错误码，组件类接口遵循阿里云 OpenAPI 统一格式（`Code`/`Message` 字段），详见 [错误码](../../raw/application-api-reference/flow-agent-api/flow-agent-api-errors.md)；  
+- **API Key 与 AccessKey 不可混用**：向 DashScope 接口发送 AccessKey 签名请求，或向 OpenAPI 发送 Bearer [Token](../concepts/token.md)，均会导致 `401 Unauthorized`。
 
 ## 来源文档
 
-- [概览](../../raw/application-api-reference/flow-agent-api/flow-agent-api-overview.md)
+- [认证](../../raw/application-api-reference/flow-agent-api/flow-agent-api-authentication.md)
 - [错误码](../../raw/application-api-reference/flow-agent-api/flow-agent-api-errors.md)
+- [应用调用](../../raw/application-api-reference/flow-agent-api/application-call.md)
+- [获取APP ID和Workspace ID](../../raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)
+- [DashScope API](../../raw/application-api-reference/flow-agent-api/application-call/application-dashscope-api-reference.md)
+- [新版智能体应用 API 参考](../../raw/_short/new-agent-application-api-reference-be3bf785ec80b8bd.md)
+- [工作流与旧版智能体应用 API](../../raw/_short/agent-and-workflow-application-api-reference-ab48d043a951dcb2.md)
+- [Responses API](../../raw/application-api-reference/flow-agent-api/application-call/openai-responses-api.md)
+- [同步调用 API 参考](../../raw/application-api-reference/flow-agent-api/application-call/openai-responses-api/synchronous-call-api-reference.md)
+- [异步调用API参考](../../raw/application-api-reference/flow-agent-api/application-call/openai-responses-api/asynchronous-call-api-reference.md)
+- [Prompt 模板](../../raw/application-api-reference/flow-agent-api/api-bailian-2023-12-29-dir-prompt-engineering.md)
+- [CreatePromptTemplate - 创建Prompt模板](../../raw/_short/api-bailian-2023-12-29-createprompttemplate-5d322a6c80396e15.md)
+- [UpdatePromptTemplate - 更新Prompt模板](../../raw/_short/api-bailian-2023-12-29-updateprompttemplate-e09e2567b2b8646d.md)
+- [ListPromptTemplates - 获取Prompt模板列表](../../raw/_short/api-bailian-2023-12-29-listprompttemplates-16aa76e6889fef61.md)
 - [长期记忆（旧）](../../raw/application-api-reference/flow-agent-api/api-bailian-2023-12-29-dir-long-term-memory.md)
 - [CreateMemory - 创建长期记忆体](../../raw/_short/api-bailian-2023-12-29-creatememory-71d9eb60188e5ed4.md)
 - [GetMemory - 获取长期记忆体](../../raw/_short/api-bailian-2023-12-29-getmemory-93a2074c0e9ce4e8.md)
-- [认证](../../raw/application-api-reference/flow-agent-api/flow-agent-api-authentication.md)
+- [UpdateMemory - 更新长期记忆体](../../raw/_short/api-bailian-2023-12-29-updatememory-b92bc2a2bf604c38.md)
+- [DeleteMemory - 删除长期记忆体](../../raw/_short/api-bailian-2023-12-29-deletememory-2e39ced8c987fad3.md)
 - [ListMemories - 获取长期记忆体列表](../../raw/_short/api-bailian-2023-12-29-listmemories-ca86cf5601eec468.md)
 - [CreateMemoryNode - 创建记忆片段](../../raw/_short/api-bailian-2023-12-29-creatememorynode-7e5dec47c8bf17cc.md)
 - [GetMemoryNode - 获取记忆片段](../../raw/_short/api-bailian-2023-12-29-getmemorynode-c43110862c1879b6.md)
 - [UpdateMemoryNode - 更新记忆片段](../../raw/_short/api-bailian-2023-12-29-updatememorynode-c71c6bef92b1ecc3.md)
 - [DeleteMemoryNode - 删除记忆片段](../../raw/_short/api-bailian-2023-12-29-deletememorynode-21f72ddcbaecd822.md)
+- [GetPromptTemplate - 获取Prompt模板](../../raw/_short/api-bailian-2023-12-29-getprompttemplate-33268b72d11a1cac.md)
 - [ListMemoryNodes - 获取记忆片段列表](../../raw/_short/api-bailian-2023-12-29-listmemorynodes-ec6bee0a62fb4cb8.md)
-- [UpdateMemory - 更新长期记忆体](../../raw/_short/api-bailian-2023-12-29-updatememory-b92bc2a2bf604c38.md)
-- [DeleteMemory - 删除长期记忆体](../../raw/_short/api-bailian-2023-12-29-deletememory-2e39ced8c987fad3.md)
+- [其他](../../raw/application-api-reference/flow-agent-api/api-bailian-2023-12-29-dir-others.md)
+- [GetAlipayUrl - 获取支付宝打赏URL](../../raw/application-api-reference/flow-agent-api/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-getalipayurl.md)
+- [GetAlipayTransferStatus - 查询支付宝打赏状态](../../raw/_short/api-bailian-2023-12-29-getalipaytransferstatus-1e6bc508cb390a4f.md)
+- [DeletePromptTemplate - 删除Prompt模板](../../raw/_short/api-bailian-2023-12-29-deleteprompttemplate-e7dac02713c2120e.md)
+- [ApplyTempStorageLease - 申请临时文件上传许可](../../raw/_short/api-bailian-2023-12-29-applytempstoragelease-23a13524c8ed9f9d.md)
+- [概览](../../raw/application-api-reference/flow-agent-api/flow-agent-api-overview.md)
 
 

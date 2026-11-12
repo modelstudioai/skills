@@ -6,14 +6,14 @@
 
 OpenAI/Anthropic 兼容接口调用
 
-[获取 API Key 和 Base URL](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key)
+[获取 API Key](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key)
 
 ![](https://unpkg.com/@lobehub/icons-static-svg@latest/icons/openai.svg)Responses
 
 curlPythonJavaScript/TypeScriptJavaGoC#Ruby
 
 ```
-curl "$OPENAI_BASE_URL/responses" \
+curl "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -28,7 +28,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key=os.environ["DASHSCOPE_API_KEY"],
-    base_url=os.environ["OPENAI_BASE_URL"],
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 response = client.responses.create(
     model="qwen3.8-max",
@@ -42,7 +42,7 @@ import OpenAI from "openai";
 
 const client = new OpenAI({
     apiKey: process.env.DASHSCOPE_API_KEY,
-    baseURL: process.env.OPENAI_BASE_URL,
+    baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 });
 const response = await client.responses.create({
     model: "qwen3.8-max",
@@ -61,7 +61,7 @@ public class Main {
     public static void main(String[] args) {
         OpenAIClient client = OpenAIOkHttpClient.builder()
             .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-            .baseUrl(System.getenv("OPENAI_BASE_URL"))
+            .baseUrl("https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1")
             .build();
         ResponseCreateParams params = ResponseCreateParams.builder()
             .model("qwen3.8-max")
@@ -93,7 +93,7 @@ import (
 func main() {
     client := openai.NewClient(
         option.WithAPIKey(os.Getenv("DASHSCOPE_API_KEY")),
-        option.WithBaseURL(os.Getenv("OPENAI_BASE_URL")),
+        option.WithBaseURL("https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"),
     )
     response, err := client.Responses.New(context.Background(), responses.ResponseNewParams{
         Model: "qwen3.8-max",
@@ -117,7 +117,7 @@ ResponsesClient client = new(
     new ApiKeyCredential(Environment.GetEnvironmentVariable("DASHSCOPE_API_KEY")!),
     new ResponsesClientOptions
     {
-        Endpoint = new Uri(Environment.GetEnvironmentVariable("OPENAI_BASE_URL"))
+        Endpoint = new Uri("https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1")
     });
 ResponseResult response = client.CreateResponse(new CreateResponseOptions
 {
@@ -132,7 +132,7 @@ require "openai"
 
 client = OpenAI::Client.new(
   api_key: ENV.fetch("DASHSCOPE_API_KEY"),
-  base_url: ENV.fetch("OPENAI_BASE_URL")
+  base_url: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
 )
 response = client.responses.create(
   model: "qwen3.8-max",
@@ -146,7 +146,7 @@ puts response.output_text
 curlPythonJavaScript/TypeScriptJavaGoC#Ruby
 
 ```
-curl "$OPENAI_BASE_URL/chat/completions" \
+curl "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -161,7 +161,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key=os.environ["DASHSCOPE_API_KEY"],
-    base_url=os.environ["OPENAI_BASE_URL"],
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 response = client.chat.completions.create(
     model="qwen3.8-max",
@@ -175,7 +175,7 @@ import OpenAI from "openai";
 
 const client = new OpenAI({
     apiKey: process.env.DASHSCOPE_API_KEY,
-    baseURL: process.env.OPENAI_BASE_URL,
+    baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 });
 const response = await client.chat.completions.create({
     model: "qwen3.8-max",
@@ -194,7 +194,7 @@ public class Main {
     public static void main(String[] args) {
         OpenAIClient client = OpenAIOkHttpClient.builder()
             .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-            .baseUrl(System.getenv("OPENAI_BASE_URL"))
+            .baseUrl("https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1")
             .build();
         ChatCompletionCreateParams params = ChatCompletionCreateParams.builder()
             .model("qwen3.8-max")
@@ -221,7 +221,7 @@ import (
 func main() {
     client := openai.NewClient(
         option.WithAPIKey(os.Getenv("DASHSCOPE_API_KEY")),
-        option.WithBaseURL(os.Getenv("OPENAI_BASE_URL")),
+        option.WithBaseURL("https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"),
     )
     response, err := client.Chat.Completions.New(context.Background(), openai.ChatCompletionNewParams{
         Model: "qwen3.8-max",
@@ -247,7 +247,7 @@ ChatClient client = new(
     credential: new ApiKeyCredential(Environment.GetEnvironmentVariable("DASHSCOPE_API_KEY")!),
     options: new OpenAIClientOptions
     {
-        Endpoint = new Uri(Environment.GetEnvironmentVariable("OPENAI_BASE_URL"))
+        Endpoint = new Uri("https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1")
     });
 ChatCompletion response = client.CompleteChat("你是谁？");
 Console.WriteLine(response.Content[0].Text);
@@ -258,7 +258,7 @@ require "openai"
 
 client = OpenAI::Client.new(
   api_key: ENV.fetch("DASHSCOPE_API_KEY"),
-  base_url: ENV.fetch("OPENAI_BASE_URL")
+  base_url: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
 )
 response = client.chat.completions.create(
   model: "qwen3.8-max",
@@ -272,7 +272,7 @@ puts response.choices.first.message.content
 curlPythonJavaScript/TypeScriptJavaGoC#RubyPHP
 
 ```
-curl "$ANTHROPIC_BASE_URL/v1/messages" \
+curl "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/v1/messages" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -288,7 +288,7 @@ from anthropic import Anthropic
 
 client = Anthropic(
     api_key=os.environ["DASHSCOPE_API_KEY"],
-    base_url=os.environ["ANTHROPIC_BASE_URL"],
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic",
 )
 response = client.messages.create(
     model="qwen3.8-max",
@@ -305,7 +305,7 @@ import Anthropic from "@anthropic-ai/sdk";
 
 const client = new Anthropic({
     apiKey: process.env.DASHSCOPE_API_KEY,
-    baseURL: process.env.ANTHROPIC_BASE_URL,
+    baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic",
 });
 const response = await client.messages.create({
     model: "qwen3.8-max",
@@ -327,7 +327,7 @@ public class Main {
     public static void main(String[] args) {
         AnthropicClient client = AnthropicOkHttpClient.builder()
             .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-            .baseUrl(System.getenv("ANTHROPIC_BASE_URL"))
+            .baseUrl("https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic")
             .build();
         MessageCreateParams params = MessageCreateParams.builder()
             .model("qwen3.8-max")
@@ -357,7 +357,7 @@ import (
 func main() {
     client := anthropic.NewClient(
         option.WithAPIKey(os.Getenv("DASHSCOPE_API_KEY")),
-        option.WithBaseURL(os.Getenv("ANTHROPIC_BASE_URL")),
+        option.WithBaseURL("https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic"),
     )
     response, err := client.Messages.New(context.Background(), anthropic.MessageNewParams{
         Model: "qwen3.8-max",
@@ -385,7 +385,7 @@ using Anthropic.Models.Messages;
 AnthropicClient client = new()
 {
     ApiKey = Environment.GetEnvironmentVariable("DASHSCOPE_API_KEY"),
-    BaseUrl = Environment.GetEnvironmentVariable("ANTHROPIC_BASE_URL")
+    BaseUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic"
 };
 MessageCreateParams parameters = new()
 {
@@ -405,7 +405,7 @@ require "anthropic"
 
 client = Anthropic::Client.new(
   api_key: ENV.fetch("DASHSCOPE_API_KEY"),
-  base_url: ENV.fetch("ANTHROPIC_BASE_URL")
+  base_url: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic"
 )
 response = client.messages.create(
   model: "qwen3.8-max",
@@ -425,7 +425,7 @@ use Anthropic\Client;
 
 $client = new Client(
     apiKey: getenv("DASHSCOPE_API_KEY"),
-    baseUrl: getenv("ANTHROPIC_BASE_URL")
+    baseUrl: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic"
 );
 $response = $client->messages->create(
     model: "qwen3.8-max",
@@ -443,11 +443,11 @@ foreach ($response->content as $block) {
 
 [
 
-**Qwen3.8-Max**
+**Qwen4-Max-Preview**
 
 旗舰与最强效果
 
-](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.8-max?serviceSite=asia-pacific-china&ref=list)
+](raw/model-user-guide/get-started-with-models/qwen4-max-preview.md)
 
 [
 
@@ -471,36 +471,106 @@ foreach ($response->content as $block) {
 
 **文本生成与视觉理解**
 
-生成文本，理解图像与视频内容。
+生成文本，理解图像与视频内容
 
 ](raw/model-user-guide/model-experience/text-generation-model.md)[
 
 **图像生成**
 
-从文字描述生成图像。
+从文字描述生成图像
 
 ](raw/model-user-guide/model-experience/image-and-video-generation/image-model/text-to-image.md)[
 
 **视频生成**
 
-从文字或图像生成视频。
+从文字或图像生成视频
 
 ](raw/_short/wan3-video-generation-guide-0e56f533d7040652.md)[
 
 **语音与音频**
 
-识别、合成语音，接入实时对话。
+识别、合成语音，接入实时对话
 
 ](raw/model-user-guide/model-experience/speech-and-audio.md)[
 
 **全模态**
 
-结合文本、视觉与音频进行交互。
+结合文本、视觉与音频进行交互
 
 ](raw/model-user-guide/model-experience/omni-modal.md)[
 
 **向量与检索**
 
-使用向量与重排序提升检索效果。
+使用向量与重排序提升检索效果
 
 ](raw/model-user-guide/model-experience/embedding-rerank-model.md)
+
+## 模型推理
+
+[
+
+**Prime 模式**
+
+为对输出速度敏感的场景提供高速推理
+
+](raw/model-user-guide/model-high-speed-inference/prime-mode.md)[
+
+**吞吐预留**
+
+预留指定模型的推理容量，保障高峰期吞吐
+
+](raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)[
+
+**批量推理**
+
+异步处理无需实时响应的大批量请求
+
+](raw/model-user-guide/model-high-speed-inference/batch-inference.md)[
+
+**专属部署**
+
+为高并发、低延迟场景配置专属推理服务
+
+](raw/model-user-guide/model-high-speed-inference/model-deployment-index.md)[
+
+**智能路由**
+
+根据请求内容自动匹配合适的模型
+
+](raw/model-user-guide/model-high-speed-inference/model-routing.md)
+
+## 模型训练
+
+[
+
+**数据管理**
+
+管理训练集与评测集，清洗和增强数据
+
+](https://help.aliyun.com/zh/model-studio/model-data-overview)[
+
+**模型调优**
+
+使用业务数据训练模型，改善特定场景的表现
+
+](https://help.aliyun.com/zh/model-studio/fine-tuning)[
+
+**模型评测**
+
+评估模型表现，支持模型选型与调优验证
+
+](https://help.aliyun.com/zh/model-studio/model-evaluation-introduction)[
+
+**模型压缩**
+
+量化调优后的模型，降低推理部署成本
+
+](https://help.aliyun.com/zh/model-studio/model-compression-introduction)
+
+[
+
+**我的模型**
+
+管理调优及导入的模型，衔接推理部署
+
+](https://help.aliyun.com/zh/model-studio/my-model-center)

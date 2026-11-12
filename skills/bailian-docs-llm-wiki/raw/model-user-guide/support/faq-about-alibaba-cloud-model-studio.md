@@ -251,7 +251,7 @@ curl --location 'https://bailian.aliyuncs.com/v2/app/completions' \
     执行 `bl auth status --output json` 查看当前凭据（脱敏输出）；执行 `bl config list` 查看全部 Profile，`bl config use --name <profile>` 切换当前 Profile。
     
 
-CLI 安装、Skills 与报错排查的更多问答见 [安装与鉴权](https://help.aliyun.com/zh/model-studio/cli/installation) 页的「常见问题」。
+CLI 安装、Skills 与报错排查的更多问答见 [安装与鉴权](https://help.aliyun.com/zh/model-studio/cli/installation) 页的“常见问题”。
 
 ## 如何联系我们
 

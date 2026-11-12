@@ -58,7 +58,7 @@ import websocket
 import os
 
 API_KEY=os.getenv("DASHSCOPE_API_KEY")
-# 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+# 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
 API_URL = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime?model=qwen3.8-livetranslate-flash-realtime"
 
 headers = [
@@ -251,10 +251,8 @@ qwen3.5-livetranslate-flash-realtime-2026-05-19
     
     安装 WebSocket 依赖：`pip install websocket-client`。
     
-2.  设置以下环境变量，API Key 和业务空间需属于连接地址所用的地域：
+2.  设置环境变量 `DASHSCOPE_API_KEY`，并在下面的连接地址中填写同地域的业务空间 ID。获取方式见[获取 API Key](raw/model-api-reference/preparations/get-api-key.md)。
     
-    -   `DASHSCOPE_API_KEY`： 对应地域和业务空间的 API Key，获取方式见[获取 API Key](raw/model-api-reference/preparations/get-api-key.md)。
-    -   `DASHSCOPE_WORKSPACE_ID`： 业务空间 ID，详见[业务空间与地域](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 3.  将下面的代码保存为 `livetranslate_client.py`，运行 `python livetranslate_client.py`，然后对着麦克风说话。
     
 
@@ -272,10 +270,9 @@ import pyaudio
 import websocket
 
 model = "qwen3.8-livetranslate-flash-realtime"
-workspace_id = os.environ["DASHSCOPE_WORKSPACE_ID"]
 api_key = os.environ["DASHSCOPE_API_KEY"]
 url = (
-    f"wss://{workspace_id}.cn-beijing.maas.aliyuncs.com"
+    "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com"
     f"/api-ws/v1/realtime?model={model}"
 )
 stop_recording = False

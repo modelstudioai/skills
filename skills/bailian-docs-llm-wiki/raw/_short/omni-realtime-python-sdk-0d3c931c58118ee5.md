@@ -58,7 +58,7 @@ str
 -   北京地域：wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime
     
 
-调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
+指定完整地址时，将域名替换为业务空间对应的 [API Host](https://bailian.console.aliyun.com/cn-beijing/settings/workspace)，保留协议和路径。
 
 **重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
 

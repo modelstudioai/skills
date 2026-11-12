@@ -12,7 +12,7 @@ SSML 是基于 XML 的语音合成标记语言，可设置音色、语速、音�
 
 #### SSML
 
--   **支持模型：** `qwen-audio-3.1-tts-plus`、`qwen-audio-3.1-tts-flash`、`qwen-audio-3.0-tts-flash`、`qwen-audio-3.0-tts-plus`、`cosyvoice-v3.5-flash`、`cosyvoice-v3.5-plus`、`cosyvoice-v3-flash`、`cosyvoice-v3-plus`、`cosyvoice-v2`
+-   **支持模型：** qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-flash、qwen-audio-3.0-tts-plus、cosyvoice-v3.5-flash、cosyvoice-v3.5-plus、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2
     
 -   **音色：** 仅复刻音色，以及[Qwen-Audio-TTS音色列表](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/tts-voice-list/qwen-audio-tts-voice-list.md)和[CosyVoice音色列表](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/tts-voice-list/cosyvoice-voice-list.md)中标注为支持 SSML 的系统音色可用。
     
@@ -24,7 +24,7 @@ SSML 是基于 XML 的语音合成标记语言，可设置音色、语速、音�
 
 #### LaTeX
 
--   **支持模型：** `cosyvoice-v3.5-plus`、`cosyvoice-v3.5-flash`、`cosyvoice-v3-plus`、`cosyvoice-v3-flash`、`cosyvoice-v2`
+-   **支持模型：** cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-plus、cosyvoice-v3-flash、cosyvoice-v2
     
 -   **语种：**仅支持中文。
     
@@ -47,7 +47,7 @@ SSML 是基于 XML 的语音合成标记语言，可设置音色、语速、音�
 1.  [获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)
 2.  安装 DashScope SDK（Python 2.0.1 及以上版本，Java 2.20.3 及以上版本）。详情请参见[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
-**重要**`cosyvoice-v3.5-plus` 和 `cosyvoice-v3.5-flash` 模型目前仅在北京地域可用，专用于声音复刻场景（不提供系统音色）。使用前，请先参见[声音复刻](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-cloning-user-guide.md)创建目标音色。
+**重要**cosyvoice-v3.5-plus 和 cosyvoice-v3.5-flash 不提供系统音色。在本节 SSML 示例中使用这两个模型时，需先通过[声音复刻](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-cloning-user-guide.md)创建复刻音色。
 
 #### Java SDK
 

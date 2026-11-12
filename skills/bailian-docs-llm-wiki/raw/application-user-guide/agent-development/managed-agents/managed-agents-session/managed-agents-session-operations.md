@@ -46,7 +46,7 @@
 
 查看事件历史；新建会话继续
 
-会话处于 `idle` 时，`session_status` 事件（及 `GET /sessions/{session_id}`）携带 `stop_reason` 说明原因。`stop_reason` 仅在会话状态为 `idle` 时用于判断交互状态：刚创建且尚无结束原因时为 `null`，其余取 `end_turn`、`retries_exhausted` 或 `requires_action`。`running` 时为 `null`；`terminated` 是终态，客户端不应依赖或解释其 `stop_reason`。客户端应按下表把四种 `idle` 投影映射到界面操作，判断可交互性时以「是否为 `requires_action`」为准，而非仅看 `idle`：
+会话处于 `idle` 时，`session_status` 事件（及 `GET /sessions/{session_id}`）携带 `stop_reason` 说明原因。`stop_reason` 仅在会话状态为 `idle` 时用于判断交互状态：刚创建且尚无结束原因时为 `null`，其余取 `end_turn`、`retries_exhausted` 或 `requires_action`。`running` 时为 `null`；`terminated` 是终态，客户端不应依赖或解释其 `stop_reason`。客户端应按下表把四种 `idle` 投影映射到界面操作，判断可交互性时以“是否为 `requires_action`”为准，而非仅看 `idle`：
 
 `stop_reason`
 

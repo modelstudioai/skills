@@ -10,17 +10,17 @@
 
 ## 配置应用
 
-1.  在控制台应用配置页中，您可以通过「百炼应用」-「添加应用」-「应用模板」前往阿里云百炼应用广场选择需要的应用模板。
+1.  在控制台应用配置页中，您可以通过“百炼应用”-“添加应用”-“应用模板”前往阿里云百炼应用广场选择需要的应用模板。
 
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3208379671/p1050122.png)2\. 在[阿里云百炼](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/app-market/all)的「应用开发」—「全部应用」列表中找到需要的应用模板，或者通过搜索框搜索相应的应用模板。更推荐在[AI硬件方案专区](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/app-market/app-template-recommendation/share/AIHardwareSolutions)找到需要的应用模板，该专区提供视觉、语音等多模态套件模板，开箱即用，轻松适配各类智能硬件。
+![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3208379671/p1050122.png)2\. 在[阿里云百炼](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/app-market/all)的“应用开发”—“全部应用”列表中找到需要的应用模板，或者通过搜索框搜索相应的应用模板。更推荐在[AI硬件方案专区](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/app-market/app-template-recommendation/share/AIHardwareSolutions)找到需要的应用模板，该专区提供视觉、语音等多模态套件模板，开箱即用，轻松适配各类智能硬件。
 
 ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3208379671/p1050126.png) ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3208379671/p1050119.png) ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3208379671/p1050123.png)
 
-1.  您可以进入应用模板查看应用详情并点击「复制此应用」，然后在弹窗中点击「复制」即可发布应用。
+1.  您可以进入应用模板查看应用详情并点击“复制此应用”，然后在弹窗中点击“复制”即可发布应用。
 
 ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3208379671/p1050125.png) ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3208379671/p1050132.png)
 
-1.  应用复制完成后，回到多模态交互套件控制台配置页，通过「百炼应用」-「添加应用」-「我的应用」查看之前已复制的应用模板并勾选，然后点击「确定」即可添加该应用。
+1.  应用复制完成后，回到多模态交互套件控制台配置页，通过“百炼应用”-“添加应用”-“我的应用”查看之前已复制的应用模板并勾选，然后点击“确定”即可添加该应用。
 
 ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3208379671/p1050121.png)
 

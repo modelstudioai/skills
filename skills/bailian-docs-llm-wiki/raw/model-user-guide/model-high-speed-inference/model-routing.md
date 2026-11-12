@@ -4,7 +4,7 @@
 
 ## 概述
 
-智能路由的 model-code 固定为 `auto-model` 前缀，后接 8 位随机字符（如 `auto-model-abcd1234`）。客户端通过该 model-code 发起请求 → 路由服务动态分析请求内容并从备选集中自动匹配最合适的模型 → 实际模型推理 → 响应返回（`x-dashscope-resolved-model` 标注实际模型，保留真实 token 用量）。
+智能路由的 model-code 固定为 `auto-model` 前缀，后接 8 位随机字符（如 `auto-model-abcd1234`）。客户端通过该 model-code 发起请求 → 路由服务动态分析请求内容并从备选集中自动匹配最合适的模型 → 实际模型推理 → 响应返回（响应体标注实际执行模型，保留真实 token 用量）。
 
 **适用范围**：
 
@@ -22,11 +22,11 @@
 
 调用协议
 
-仅支持 OpenAI 兼容接口（Chat Completions），不支持 DashScope 协议与 Anthropic 协议
+支持 OpenAI 兼容接口（Chat Completions、Responses）与 Anthropic 协议（Messages），不支持 DashScope 原生协议
 
 访问域名
 
-仅支持 `maas.aliyuncs.com`（`https://{WorkspaceId}.{region}.maas.aliyuncs.com/compatible-mode/v1`，region 为 `cn-beijing` 或 `ap-southeast-1`），不支持 `dashscope.aliyuncs.com`（含 compatible-mode）
+仅支持 `maas.aliyuncs.com`（OpenAI 兼容与 Responses 协议：`https://{WorkspaceId}.{region}.maas.aliyuncs.com/compatible-mode/v1`；Anthropic 协议：`https://{WorkspaceId}.{region}.maas.aliyuncs.com/apps/anthropic`；region 为 `cn-beijing` 或 `ap-southeast-1`），不支持 `dashscope.aliyuncs.com`（含 compatible-mode）
 
 计费
 
@@ -39,13 +39,13 @@
 **主要优势**：
 
 -   **最大化模型效果**：针对不同任务自动匹配最优模型，尤其适配对效果有极致需求的用户。
--   **精准降低成本**：简单任务自动路由至轻量模型，复杂任务匹配高阶模型，避免「大材小用」的资源浪费，实现成本与需求的精准适配。
+-   **精准降低成本**：简单任务自动路由至轻量模型，复杂任务匹配高阶模型，避免“大材小用”的资源浪费，实现成本与需求的精准适配。
 -   **化解模型选择难题**：无需用户手动开展复杂的模型评测与对比，平台全程自动筛选最优解，大幅降低模型选型门槛。
 -   **极简使用体验**：与常规模型接入流程完全一致，通过 model-code 即可调用，无需额外修改代码。
 
 ## 创建智能路由
 
-在[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/smart-routing)「模型推理 > 智能路由」下，点击「**新建智能路由**」进入创建页。
+在[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/smart-routing)“模型推理 > 智能路由”下，点击“**新建智能路由**”进入创建页。
 
 ### 前提条件
 
@@ -56,7 +56,7 @@
 
 1.  填写**服务名称**（必填，最长 50 字符）。
 2.  在**路由模型版本**下拉中选择一个已发布版本（由平台维护）。
-3.  在**路由策略**中选择「效果优先」或「成本优先」。
+3.  在**路由策略**中选择“效果优先”或“成本优先”。
 4.  在**模型备选集**中勾选备选模型（至少 2 个）。
 5.  点击**确认部署**完成创建。
 
@@ -86,7 +86,7 @@
 
 ### 备选模型配置
 
-备选模型集是路由服务选模时可挑选的范围。创建智能路由时，在「**模型备选集**」区域从备选列表中勾选参与路由的模型，**至少选择 2 个备选模型**，否则无法部署。
+备选模型集是路由服务选模时可挑选的范围。创建智能路由时，在“**模型备选集**”区域从备选列表中勾选参与路由的模型，**至少选择 2 个备选模型**，否则无法部署。
 
 **说明**RAM 用户只能勾选其已获
 
@@ -216,9 +216,9 @@
 
 ## 调用智能路由
 
-智能路由创建后，调用方式与普通模型一致——仅需将请求中的 `model` 参数替换为智能路由的 `model-code`（如 `auto-model-abcd1234`），客户端零代码改动接入。
+智能路由创建后，调用方式与普通模型一致——仅需将请求中的 `model` 参数替换为智能路由的 `model-code`（如 `auto-model-abcd1234`），客户端零代码改动接入。支持 OpenAI 兼容接口（Chat Completions、Responses）与 Anthropic 协议三种调用方式，调用示例按调用协议分页签展示。
 
-调用示例：
+#### OpenAI 兼容（Chat Completions）
 
 curl
 
@@ -290,7 +290,81 @@ console.log(resp.choices[0].message.content);
 console.log(resp.model); // 实际执行的模型名
 ```
 
-**响应**：响应头 `x-dashscope-resolved-model` 值为实际调用模型的标识，可验证路由是否生效；响应体保留实际执行模型名与真实 token 用量，计费按实际路由到的模型。
+#### OpenAI 兼容（Responses）
+
+curl
+
+```
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses \
+  -H "Authorization: Bearer $API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "auto-model-abcd1234",
+    "input": "你好"
+  }'
+```
+
+OpenAI SDK
+
+```
+# OpenAI SDK
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="YOUR_DASHSCOPE_API_KEY",
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
+)
+resp = client.responses.create(
+    model="auto-model-abcd1234",
+    input="你好",
+)
+# output 为消息块列表，逐块取文本
+for item in resp.output:
+    if item.type == "message":
+        for block in item.content:
+            print(block.text)
+print(resp.model)  # 实际执行的模型名
+```
+
+#### Anthropic 协议
+
+curl
+
+```
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/v1/messages \
+  -H "x-api-key: $API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "auto-model-abcd1234",
+    "max_tokens": 1024,
+    "messages": [{"role": "user", "content": "你好"}]
+  }'
+```
+
+Anthropic SDK
+
+```
+# Anthropic SDK（需先安装 pip install anthropic）
+# base_url 指向百炼 Anthropic 兼容端点，调用时请将{WorkspaceId}替换为真实的业务空间ID
+from anthropic import Anthropic
+
+client = Anthropic(
+    api_key="YOUR_DASHSCOPE_API_KEY",
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic",
+)
+resp = client.messages.create(
+    model="auto-model-abcd1234",
+    max_tokens=1024,
+    messages=[{"role": "user", "content": "你好"}],
+)
+# 备选模型开启思考时响应会先返回思考块，此处仅输出文本块
+for block in resp.content:
+    if block.type == "text":
+        print(block.text)
+print(resp.model)  # 实际执行的模型名
+```
+
+**响应**：响应体 `model` 字段为实际执行模型的标识，可验证路由是否生效；响应体保留真实 token 用量，计费按实际路由到的模型。
 
 **计费**：按实际路由到的模型计费，智能路由服务本身暂不收费。
 
@@ -325,11 +399,11 @@ console.log(resp.model); // 实际执行的模型名
 
 调用协议
 
-仅 OpenAI 兼容接口
+OpenAI 兼容接口（Chat Completions、Responses）与 Anthropic 协议（Messages）；不支持 DashScope 原生协议
 
 请求类型
 
-仅支持文本 Chat Completions 输入；不支持图片、视频输入、图像生成（文生图）、Batch 批量推理、Embedding/Rerank 等非生成接口
+仅支持文本输入（Chat Completions、Responses、Messages 三种接口均可）；不支持图片、视频输入、图像生成（文生图）、Batch 批量推理、Embedding/Rerank 等非生成接口
 
 上下文长度
 
@@ -340,6 +414,10 @@ console.log(resp.model); // 实际执行的模型名
 按实际路由模型在账号和业务空间的 RPM/TPM 限流；故障自动切换时只计最终成功模型的消耗
 
 ### 参数说明
+
+智能路由按请求参数对备选集做实时过滤，并拒绝不支持的参数（返回 400 错误，形如 `does not support parameter(s): <参数名>`）。三种调用协议的参数支持情况不同，分述如下：
+
+#### OpenAI 兼容（Chat Completions）
 
 -   `response_format`：只路由到支持该参数的备选模型。
 -   `enable_search`：只路由到支持该参数的备选模型。
@@ -397,6 +475,63 @@ token 偏置
 
 思考预算长度
 
+#### OpenAI 兼容（Responses）
+
+-   `max_output_tokens`：输出长度上限。
+-   `instructions`：系统指令。
+-   `reasoning.effort`：思考强度控制。
+-   多轮对话通过 `input` 传入历史消息数组。
+
+以下参数不支持使用，设置会导致运行报错：
+
+参数
+
+说明
+
+`temperature`
+
+采样温度
+
+`top_p`
+
+核采样
+
+`n`
+
+生成数量
+
+`stop`
+
+停止序列
+
+`tools`
+
+工具定义
+
+#### Anthropic 协议
+
+-   `max_tokens`：输出长度上限，**必填**（缺失会返回 400 错误）。
+-   `temperature`、`top_k`、`system`、`tools`：可用。
+-   多轮对话通过 `messages` 传入历史消息数组。
+
+以下参数不支持使用，设置会导致运行报错：
+
+参数
+
+说明
+
+`top_p`
+
+核采样
+
+`stop_sequences`
+
+停止序列
+
+`thinking`
+
+思考控制
+
 ### 缓存
 
 智能路由不支持显式缓存参数：
@@ -419,7 +554,7 @@ token 偏置
 
 ### 修改路由配置
 
-在详情页「路由配置」区域点击「编辑」，可修改路由模型版本、路由策略与备选模型。切换路由版本时备选模型集随之变更，修改后几分钟内生效、不影响线上请求。
+在详情页“路由配置”区域点击“编辑”，可修改路由模型版本、路由策略与备选模型。切换路由版本时备选模型集随之变更，修改后几分钟内生效、不影响线上请求。
 
 选定具体版本后，线上业务的路由行为将保持长期稳定；升级版本前请务必做全面评估，避免对业务产生影响。当前版本为 `model-router-2026-0908`。路由版本默认不自动更新。
 
@@ -429,11 +564,11 @@ token 偏置
 
 ## 智能路由效果
 
-本章介绍智能路由的运行效果指标与监控方式。效果指标在详情页「智能路由效果」标签页查看，调用监控在模型监控页面查看。
+本章介绍智能路由的运行效果指标与监控方式。效果指标在详情页“智能路由效果”标签页查看，调用监控在模型监控页面查看。
 
 ### 路由效果指标
 
-在详情页「智能路由效果」标签页查看以下指标。页面显示的指标为预估值，仅供参考，不能用于出账，实际账单以「费用用量」为准：
+在详情页“智能路由效果”标签页查看以下指标。页面显示的指标为预估值，仅供参考，不能用于出账，实际账单以“费用用量”为准：
 
 **指标**
 
@@ -485,7 +620,7 @@ token 偏置
 
 ### 成本说明
 
-成本分析数据约有 1 小时延迟，非实时统计。 上述成本均按目录价估算全量成本，不含账号折扣优惠与免费额度，仅供衡量智能路由节约效果参考。 阶梯计费模型取最低档目录价，峰谷定价模型取峰值价格。 实际账单金额可在「费用用量」中查看。
+成本分析数据约有 1 小时延迟，非实时统计。 上述成本均按目录价估算全量成本，不含账号折扣优惠与免费额度，仅供衡量智能路由节约效果参考。 阶梯计费模型取最低档目录价，峰谷定价模型取峰值价格。 实际账单金额可在“费用用量”中查看。
 
 ### 模型监控
 

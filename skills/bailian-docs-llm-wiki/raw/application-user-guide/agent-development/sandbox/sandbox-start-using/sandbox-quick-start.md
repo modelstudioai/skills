@@ -39,7 +39,7 @@
 
 首次使用 Sandbox 时，需完成服务关联角色（SLR）授权，以便阿里云百炼创建与管理沙箱运行环境。
 
-进入[阿里云百炼控制台 > Sandbox](https://bailian.console.aliyun.com/cn-beijing/sandbox/quick-start)，首次创建模版时弹出「阿里云服务授权」对话框：
+进入[阿里云百炼控制台 > Sandbox](https://bailian.console.aliyun.com/cn-beijing/sandbox/quick-start)，首次创建模版时弹出“阿里云服务授权”对话框：
 
 **字段**
 

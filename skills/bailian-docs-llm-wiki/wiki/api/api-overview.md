@@ -1,48 +1,51 @@
 # api overview
 
-ParseX API 提供文档、图片及音视频的结构化解析与字段抽取能力，采用[异步任务](../concepts/asynchronous-task.md)模型。所有接口均需通过 API Key 鉴权，调用流程统一为：提交任务 → 获取 `biz_id` → 轮询查询结果。本页汇总核心能力、参数规范、调用方式及关键约束，适用于快速集成。
+ParseX API 提供文档/音视频解析与结构化字段抽取两大核心能力，采用异步任务模型：先提交任务获取 `biz_id`，再轮询查询结果。所有接口均需通过 API Key 鉴权，支持 RESTful 调用及百炼 CLI 工具。整体设计面向企业级文档智能处理场景，强调可复用性、配置灵活性与错误可观测性。
 
 ## 支持的模型/功能
 
-ParseX API 当前提供两类核心能力：
+- **文档解析**：支持 PDF、Word、Excel、PPT、图片（PNG/JPG）等格式，输出结构化布局（`layouts`）、Markdown、表格等内容；支持页码范围、页眉页脚、坐标定位、图片描述等精细化控制。  
+- **音视频解析**：支持 MP4、MOV 等主流格式，提供人声分离（Diarization）、剧情解析（Synopsis）、分段（Segments）、抽帧（Frame Extraction）及多模态描述能力。  
+- **字段抽取**：基于 JSON Schema 从图文材料中提取结构化字段，支持引用溯源（`citations`）、推断开关（`allow_inference`）和复用已解析结果（需在 7 天保留期内），但**不支持音视频直接作为抽取输入**（详见[错误码](../../raw/application-api-reference/api-overview/errors.md)中 `UnsupportedFileType` 错误说明）。  
+- **配置复用**：两类任务均支持 `config_id`（预存配置）与内联 `processing` 对象两种定义方式；当二者共存时，内联配置优先生效（见[提交解析任务](../../raw/application-api-reference/api-overview/document-parsing/parse-submit.md)与[提交抽取任务](../../raw/application-api-reference/api-overview/field-extraction/extract-submit.md)示例）。
 
-- **文档解析（Document Parsing）**：支持 PDF、Word、Excel、PPT、图片（JPG/PNG）、音视频（MP4/MOV/MP3/WAV）等格式，输出结构化布局（`layouts`）、Markdown 内容、帧图像、ASR 文本、剧情摘要（`synopsis_summary`）及分段（`synopsis_segments`）等。详见 [文档解析 API](../../raw/application-api-reference/api-overview/document-parsing.md)。
-- **字段抽取（Field Extraction）**：基于用户提供的 JSON Schema，从已解析文档或原始文件中抽取结构化字段，支持引用定位（`citations`）与推断（`allow_inference`）。**注意**：抽取不支持直接输入音视频；若复用解析结果，该结果必须在 7 天保留期内且类型匹配 —— 否则将返回 `ParseResultNotReusable` 错误（见 [错误码](../../raw/application-api-reference/api-overview/errors.md)）。
-
-> **注意**：文档 7 明确指出“抽取不支持音视频输入”，而文档 2 和 4 中音视频解析示例未说明其结果能否用于抽取。经交叉验证，文档 7 的警告具有权威性，且文档 3 中 `UnsupportedFileType` 错误码明确指向抽取场景，因此音视频解析结果**不可用于后续字段抽取**。
+> **注意**：文档 7 明确指出“复用的解析结果若已超过 7 天保留期或类型不匹配，接口会返回对应错误”，而文档 2 的 `ParseResultNotReusable` 错误码说明中提到“解析结果不可复用……因输入是音频/视频或类型不匹配”，但未明确提及 7 天期限；此处以文档 7 的明确时限为准。
 
 ## 关键参数
 
-所有提交类接口（`/parse/submit`、`/extract/submit`）均遵循统一参数设计原则：
-
-- **身份与来源**：必填 `file_url` 或 `parsed_file_biz_id`（二选一）；`file_name` 与 `file_name_extension` 亦为二选一，用于辅助类型识别。
-- **处理配置**：支持 `config_id`（预设配置）或内联 `processing` 对象（优先级更高）。其中：
-  - 解析接口的 `processing` 包含 `doc_processing_config`（文档）或 `media_processing_config`（音视频）；
-  - 抽取接口的 `processing` 必须包含 `extract_processing_config`，且其中 `extract_schema` 为必需 JSON 对象（非字符串）—— 文档 7 示例中 `extract_schema` 直接写为对象而非转义字符串，与文档 7 正文描述一致，**文档 7 的代码示例存在误导性**（其 curl 示例中错误地将 `extract_schema` 写作嵌套 JSON 字符串，实际应为原生 JSON 对象）。
-- **输出控制**：`output.output_file_format`（如 `["markdown"]`）、`output.oss_config`（用于持久化结果至客户 OSS）。
+| 参数类别 | 关键字段 | 说明 |
+|----------|----------|------|
+| **通用鉴权** | `Authorization: Bearer $DASHSCOPE_API_KEY` | 必须通过 Header 传递，API Key 由百炼控制台获取（见[认证](../../raw/application-api-reference/api-overview/authentication.md)） |
+| **任务标识** | `biz_id` | 所有异步任务的核心 ID，由 `/parse/submit` 或 `/extract/submit` 返回，用于后续 `/parse/result` 或 `/extract/result` 查询 |
+| **输入源** | `file_url` / `parsed_file_biz_id` | 二选一：`file_url` 指向原始文件；`parsed_file_biz_id` 复用已有解析结果（仅限文档类，且需 ≤7 天） |
+| **处理配置** | `processing.*_config` | 文档解析用 `doc_processing_config`，音视频用 `media_processing_config`，抽取用 `extract_processing_config`；内联配置优先级高于 `config_id` |
+| **Schema 定义** | `processing.extract_processing_config.extract_schema` | 字段抽取必需，为 JSON 对象（非字符串），示例中已修正转义问题（见[提交抽取任务](../../raw/application-api-reference/api-overview/field-extraction/extract-submit.md)代码块） |
+| **输出控制** | `output.output_file_format`, `output.oss_config` | 控制 Markdown 输出、OSS 回写等；OSS 凭证可随请求传入，也可在控制台预设 |
 
 ## 使用方式
 
-1. **认证准备**：获取 `DASHSCOPE_API_KEY` 并通过环境变量或 `Authorization: Bearer <key>` Header 传递。详见 [认证](../../raw/application-api-reference/api-overview/authentication.md)。
-2. **异步调用流程**：
-   - 提交任务（`POST /parse/submit` 或 `POST /extract/submit`），获得 `biz_id`；
-   - 持续轮询 `POST /parse/result` 或 `POST /extract/result`，检查 `data.status`；
-   - 状态为 `success` 时读取 `data.output_format_result`（解析）或 `data.extract_result_json`（抽取）；
-   - 状态为 `failed` 时，依据 `code` 字段查 [错误码](../../raw/application-api-reference/api-overview/errors.md) 定位原因。
-3. **CLI 辅助**：支持百炼 CLI 快速验证，命令为 `bl parsex parse submit` / `bl parsex extract submit` 等，详见 [文档解析 API](../../raw/application-api-reference/api-overview/document-parsing.md) 和 [字段解析 API](../../raw/application-api-reference/api-overview/field-extraction.md)。
+1. **准备凭证**：在百炼控制台获取 `DASHSCOPE_API_KEY` 并配置为环境变量（见[认证](../../raw/application-api-reference/api-overview/authentication.md)）；  
+2. **提交任务**：  
+   - 解析任务：调用 `/api/v2/apps/parse-x/parse/submit`，传入 `file_url` 及可选 `processing` 配置；  
+   - 抽取任务：调用 `/api/v2/apps/parse-x/extract/submit`，传入 `file_url` 或 `parsed_file_biz_id` 及 `extract_schema`；  
+3. **轮询结果**：  
+   - 解析结果：调用 `/api/v2/apps/parse-x/parse/result`，检查 `data.status`（`success`/`failed`/`processing`）；  
+   - 抽取结果：调用 `/api/v2/apps/parse-x/extract/result`，解析 `extract_result_json` 或细粒度 `fields`；  
+4. **CLI 辅助**：支持 `bl parsex parse submit` / `bl parsex extract result` 等命令（见[文档解析 API](../../raw/application-api-reference/api-overview/document-parsing.md)与[字段解析 API](../../raw/application-api-reference/api-overview/field-extraction.md)说明）。
 
 ## 限制和注意事项
 
-- **文件限制**：单文件大小、页数、时长均有上限，具体配额以控制台为准；超限将返回 `FileSizeExceeded` 或 `PageCountExceeded`（见 [错误码](../../raw/application-api-reference/api-overview/errors.md)）。
-- **结果保留期**：解析结果默认保留 30 天（`ParseResultExpired`），但**仅解析结果可复用于抽取的窗口期为 7 天**（文档 7 警告）；超过后调用抽取将失败。
-- **重试策略**：`FileDownloadTimeout` 可重试；`FileDownloadFailed` 不可重试，需修复 URL 或权限。
-- **安全要求**：API Key 必须通过环境变量管理，禁止硬编码或提交至仓库；建议按应用分配独立 Key 并定期轮转（见 [认证](../../raw/application-api-reference/api-overview/authentication.md)）。
+- **文件限制**：单文件大小、页数、时长等受配额约束，具体数值以[支持的文件与限制](raw/application-user-guide/agent-context/getting-started-overview/settings-configurations/supported-files-and-limits.md)为准；超限时返回 `FileSizeExceeded` 或 `PageCountExceeded`（见[错误码](../../raw/application-api-reference/api-overview/errors.md)）；  
+- **保留期**：解析结果默认保留 30 天（`ParseResultExpired` 错误），但**仅前 7 天支持被抽取任务复用**；音视频解析结果的 `segments` 和 `frames` 也适用此复用窗口；  
+- **重试策略**：`FileDownloadTimeout` 可重试，`FileDownloadFailed` 不可重试；`ResultNotReady` 需持续轮询，非错误；  
+- **安全要求**：API Key 必须通过环境变量管理，禁止硬编码；建议按应用拆分 Key 并定期轮转（见[认证](../../raw/application-api-reference/api-overview/authentication.md)安全建议）；  
+- **错误处理**：所有失败响应均含 `request_id` 和标准 `code`/`message`，需结合[错误码](../../raw/application-api-reference/api-overview/errors.md)文档定位根因，例如 `InvalidSchema` 表示 JSON Schema 格式非法，`ProcessingTimeout` 属服务端内部超时。
 
 ## 来源文档
 
 - [认证](../../raw/application-api-reference/api-overview/authentication.md)
-- [文档解析 API](../../raw/application-api-reference/api-overview/document-parsing.md)
 - [错误码](../../raw/application-api-reference/api-overview/errors.md)
+- [文档解析 API](../../raw/application-api-reference/api-overview/document-parsing.md)
 - [提交解析任务](../../raw/application-api-reference/api-overview/document-parsing/parse-submit.md)
 - [查询解析结果](../../raw/application-api-reference/api-overview/document-parsing/parse-result.md)
 - [字段解析 API](../../raw/application-api-reference/api-overview/field-extraction.md)

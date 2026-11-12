@@ -12,7 +12,7 @@
 
 协调者模式拆开这两种负载：旗舰协调者负责规划研究、拆解子问题、综合答案，**不直接接触原始网页**；廉价 worker 在各自并行的线程里做全部阅读，只回传提炼后的发现。同样多的阅读 token，计费费率从旗舰换成廉价档——这就是成本分层的全部要点。
 
-同样的成本逻辑适用于任何「廉价模型足以承担 token 密集处理」的负载：文档评审、日志分析、代码库扫描。
+同样的成本逻辑适用于任何“廉价模型足以承担 token 密集处理”的负载：文档评审、日志分析、代码库扫描。
 
 ## 架构：阅读留在 worker 线程
 
@@ -112,7 +112,7 @@ curl -X POST "$AGENTSTUDIO_URL/agents" \
 
 核算这套架构的成本收益，有两条数据路径：
 
-**路径一：事件流逐次归组（事后可查，不需要额外设施）。** 每次模型调用都产生一条 `model_request_end` 事件，载荷带 `model`、`input_tokens` / `output_tokens` / `cache_read_input_tokens` / `cache_creation_input_tokens`，且事件顶层带 `thread_id`。按 `thread_id` 分桶就是「协调者线程开销 vs 各 worker 线程开销」；按 `data.model` 分桶就是「旗舰栏 vs 廉价栏」——两张账单直接从事件流里读出来。
+**路径一：事件流逐次归组（事后可查，不需要额外设施）。** 每次模型调用都产生一条 `model_request_end` 事件，载荷带 `model`、`input_tokens` / `output_tokens` / `cache_read_input_tokens` / `cache_creation_input_tokens`，且事件顶层带 `thread_id`。按 `thread_id` 分桶就是“协调者线程开销 vs 各 worker 线程开销”；按 `data.model` 分桶就是“旗舰栏 vs 廉价栏”——两张账单直接从事件流里读出来。
 
 **路径二：时间窗 × 模型 ID。** 在工作空间维度的用量数据里，按运行时间窗和模型 ID 两个维度取数：团队那次出现两行（旗舰 + 廉价），单旗舰对照那次只有旗舰一行。操作顺序：跑完团队记下时间窗，再跑对照记下时间窗，分别取数。用量与计价口径以[计费说明](raw/application-user-guide/agent-billing/managed-agents-billing.md)为准。
 
@@ -120,11 +120,11 @@ curl -X POST "$AGENTSTUDIO_URL/agents" \
 
 ### 对照实验的公平性设计
 
-要回答「不用这个模式要花多少」，合理的对照组是**单个旗舰 agent 挂同样的内置联网工具**（工具配置与 worker 完全一致，只把模型 ID 换成旗舰）。一个关键差异决定这个对比是否有效：**核实标准必须匹配**。放任旗舰自行判断时，成本确实更低——每个事实只读取单一来源即可交付——但核实严格度也随之降低，不能视为「同样的工作换了价格」。对照的 prompt 要明确提出团队已经在做的事：每个事实至少两次独立核实、两源分歧时重取并标记、答案里给每个事实两个来源 URL。
+要回答“不用这个模式要花多少”，合理的对照组是**单个旗舰 agent 挂同样的内置联网工具**（工具配置与 worker 完全一致，只把模型 ID 换成旗舰）。一个关键差异决定这个对比是否有效：**核实标准必须匹配**。放任旗舰自行判断时，成本确实更低——每个事实只读取单一来源即可交付——但核实严格度也随之降低，不能视为“同样的工作换了价格”。对照的 prompt 要明确提出团队已经在做的事：每个事实至少两次独立核实、两源分歧时重取并标记、答案里给每个事实两个来源 URL。
 
 ### 反事实估算
 
-想看「假如全部阅读按旗舰费率计价」，拿团队运行的 token 计数统一乘旗舰费率，与真实拆分（阅读部分按廉价费率）对比。缓存相关的费率倍率（写 / 读）以[计费说明](raw/application-user-guide/agent-billing/managed-agents-billing.md)为准——`model_request_end` 里的 `cache_read_input_tokens` / `cache_creation_input_tokens` 就是做这类核算的原始字段。
+想看“假如全部阅读按旗舰费率计价”，拿团队运行的 token 计数统一乘旗舰费率，与真实拆分（阅读部分按廉价费率）对比。缓存相关的费率倍率（写 / 读）以[计费说明](raw/application-user-guide/agent-billing/managed-agents-billing.md)为准——`model_request_end` 里的 `cache_read_input_tokens` / `cache_creation_input_tokens` 就是做这类核算的原始字段。
 
 需要验证的假设是：在保持答案质量的同时，把大部分阅读 token 转移到廉价 worker 上。统一核实要求能让对比有意义，但不保证两组消耗一样的 token，也不保证团队总价更低；实际 token 量、委派开销和工具费用都要分别测量。
 

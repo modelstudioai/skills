@@ -204,7 +204,7 @@ Adventure 不支持 HTTP `instruct`，探索动作也不会回显到该字段；
 -   本接口不返回 `mode`、`playUrl`、`bgmUrl` 或 `sessionId`；播流配置以[进入房间](raw/_short/happyoyster-adventure-enter-travel-api-reference-3eb107188008bbaf.md)响应为准。
 -   `clientStreamStatus` 是客户端播放侧心跳，`rtcStatus` 是服务端推流侧状态，两者不可互相替代。
 -   Adventure 不支持 HTTP `instruct`、`pause`、`resume`、`rewind`、`update-script`；不要把以下路径作为可用 HTTP 能力集成：`/travels/instruct`、`/travels/pause`、`/travels/resume`、`/travels/rewind`、`/travels/update-script`。
--   `failed` 是终态，不会再产生成片；请按 `errorCode` 展示失败原因，不要展示为「尚未完成」。
+-   `failed` 是终态，不会再产生成片；请按 `errorCode` 展示失败原因，不要展示为“尚未完成”。
 
 ## 错误码
 

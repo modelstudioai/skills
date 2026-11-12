@@ -408,7 +408,7 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **原因：** `messages` 数组中某条消息的 `content` 字段包含了不受支持的元素类型。当 `content` 为数组时，其中每个元素必须是字符串，或符合规范的对象（如 `{"type": "text", "text": "..."}`、`{"type": "image_url", ...}` 等）；若数组中混入了数字、布尔值、嵌套数组，或 `type` 取值不受支持的对象，则会触发该错误。该错误对应的 HTTP 状态码为 400，错误码为 `InternalError.Algo.InvalidParameter`。
 
-**常见场景：**使用纯文本模型（如 Qwen-Max 文本系列，包括 `qwen3.7-max`）时，若 `messages`（尤其是多轮对话历史）中包含图片（`image_url`）等多模态 `content` 元素时，由于纯文本模型不支持图片等模态输入，同样会触发该错误（在部分接入工具/智能体中，该报错可能被转述为「模型服务商返回空内容」等提示）。
+**常见场景：**使用纯文本模型（如 Qwen-Max 文本系列，包括 `qwen3.7-max`）时，若 `messages`（尤其是多轮对话历史）中包含图片（`image_url`）等多模态 `content` 元素时，由于纯文本模型不支持图片等模态输入，同样会触发该错误（在部分接入工具/智能体中，该报错可能被转述为“模型服务商返回空内容”等提示）。
 
 **解决方案：**
 
@@ -2387,7 +2387,7 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 请参考[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)，控制调用频率。
 
-**说明：** 若单次调用即返回 429，请检查请求头是否设置了 `X-DashScope-Async: enable`。部分模型（如 `qwen-image-3.0-pro`）不支持异步调用，设置该请求头时即使单次请求也会返回 429。请移除 `X-DashScope-Async` 请求头，或将其值设为 `disable`，然后使用同步调用重试。详情请参见本文档中「**403-**AccessDenied/access\_denied」下「**Current user api does not support asynchronous calls.**」条目。
+**说明：** 若单次调用即返回 429，请检查请求头是否设置了 `X-DashScope-Async: enable`。部分模型（如 `qwen-image-3.0-pro`）不支持异步调用，设置该请求头时即使单次请求也会返回 429。请移除 `X-DashScope-Async` 请求头，或将其值设为 `disable`，然后使用同步调用重试。详情请参见本文档中“**403-**AccessDenied/access\_denied”下“**Current user api does not support asynchronous calls.**”条目。
 
 ### Throttling.BurstRate/limit\_burst\_rate
 
@@ -2473,9 +2473,9 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 #### The budget configured in Budget Management has been exhausted. You will be unable to make further API calls until the budget limit is increased or reset.
 
-**原因：** 您在[预算管理](raw/model-user-guide/test-1/budget-management.md)中设置的预算额度已用尽，且开启了「达预算即停」。
+**原因：** 您在[预算管理](raw/model-user-guide/test-1/budget-management.md)中设置的预算额度已用尽，且开启了“达预算即停”。
 
-**解决方案：** 在[预算管理](https://bailian.console.aliyun.com/cn-beijing/costing-balance/budget)页面提高预算额度或关闭「达预算即停」，即可恢复调用。
+**解决方案：** 在[预算管理](https://bailian.console.aliyun.com/cn-beijing/costing-balance/budget)页面提高预算额度或关闭“达预算即停”，即可恢复调用。
 
 **警告**服务停止存在一定延迟，延迟时段内产生的费仍将正常收取。若已达预算阈值触发停机后，又发放了免费额度，停机不会自动恢复，需手动调整预算阈值。
 

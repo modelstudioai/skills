@@ -561,7 +561,7 @@ stopVideoCapture(): number
 
 打开/关闭视频采集设备。macOS 需在 `Info.plist` 中声明 `NSCameraUsageDescription`。当 `config.isExternal=true` 时不打开摄像头，由 `pushExternalVideoCapturedFrame` 送帧。
 
-**说明**Electron renderer 为 Chromium 环境，无法嵌入原生视图，因此未提供 `setLocalView / setRemoteView / switchCamera`；预览请使用「帧观察者 + YUVCanvasRenderer」（见 2.13）。
+**说明**Electron renderer 为 Chromium 环境，无法嵌入原生视图，因此未提供 `setLocalView / setRemoteView / switchCamera`；预览请使用“帧观察者 + YUVCanvasRenderer”（见 2.13）。
 
 ### 视频编解码与外部输入
 

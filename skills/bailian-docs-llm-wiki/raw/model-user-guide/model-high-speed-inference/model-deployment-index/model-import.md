@@ -62,7 +62,7 @@
 
 训练方式可选项取决于所选基础模型的声明，选择基础模型后训练方式字段自动渲染可选项并默认选中第一项。当前版本支持导入 LoRA 模型，全参微调模型不可导入。
 
-导入来源为「从 OSS 导入」，表单中默认选中，暂不支持从其他渠道导入模型。
+导入来源为“从 OSS 导入”，表单中默认选中，暂不支持从其他渠道导入模型。
 
 导入成功后的模型状态为创建成功，可在[我的模型](https://bailian.console.aliyun.com/cn-beijing/model/custom)列表中部署服务；从 OSS 导入的模型不支持增量训练，如需迭代请重新训练后再次导入。导入后将使用百炼提供的免费存储空间存放模型记录。
 
@@ -70,25 +70,25 @@
 
 首次从 OSS 导入模型前，须完成 OSS 服务关联角色授权，并为目标 Bucket 添加访问标签。授权通过导入页一键完成，授权后系统自动创建服务关联角色 AliyunServiceRoleForSFMDataHubOSSImport（服务名 datahub.sfm.aliyuncs.com，权限策略 AliyunServiceRolePolicyForSFMDataHubOSSImport），通常秒级生效。服务关联角色说明详见[OSS 服务关联角色](raw/application-api-reference/more/bailian-service-linked-role.md)，主账号与子账号的概念与区别详见[主账号与子账号](raw/model-user-guide/security-and-compliance/permission-management-overview.md)。
 
-在[导入模型页](https://bailian.console.aliyun.com/cn-beijing/model/custom/import_model)的「导入来源」选择「从 OSS 导入」后，若未授权，OSS 字段区会提示「您还未授权OSS」并显示「前往授权」链接，确定按钮在未授权时不可用。主账号与子账号的授权路径不同，请按账号类型选择。
+在[导入模型页](https://bailian.console.aliyun.com/cn-beijing/model/custom/import_model)的“导入来源”选择“从 OSS 导入”后，若未授权，OSS 字段区会提示“您还未授权OSS”并显示“前往授权”链接，确定按钮在未授权时不可用。主账号与子账号的授权路径不同，请按账号类型选择。
 
 #### 使用主账号
 
-1.  在导入模型页「导入来源」选择「从 OSS 导入」后，页面提示「您还未授权OSS」，在提示栏右侧点击「前往授权」。
-2.  在弹出的对话框中点击「立即授权」，系统自动创建服务关联角色 AliyunServiceRoleForSFMDataHubOSSImport，通常秒级生效，服务高峰期可能稍有延迟。
-3.  为目标 OSS Bucket 添加标签：访问 OSS 管理控制台的 Bucket 列表，找到目标 Bucket，悬停标签列图标并点击「前往编辑」→「创建标签」，添加标签名 bailian-datahub-access、标签值 read，保存。
+1.  在导入模型页“导入来源”选择“从 OSS 导入”后，页面提示“您还未授权OSS”，在提示栏右侧点击“前往授权”。
+2.  在弹出的对话框中点击“立即授权”，系统自动创建服务关联角色 AliyunServiceRoleForSFMDataHubOSSImport，通常秒级生效，服务高峰期可能稍有延迟。
+3.  为目标 OSS Bucket 添加标签：访问 OSS 管理控制台的 Bucket 列表，找到目标 Bucket，悬停标签列图标并点击“前往编辑”→“创建标签”，添加标签名 bailian-datahub-access、标签值 read，保存。
 4.  返回导入模型页，重新选择目标 Bucket 再尝试导入。百炼不支持访问 Bucket 根目录下的文件，须选择 Bucket 下已有的子目录或新建子目录。
 
 #### 使用子账号
 
-1.  在导入模型页「导入来源」选择「从 OSS 导入」后，页面提示「您还未授权OSS」，点击「前往授权」。
+1.  在导入模型页“导入来源”选择“从 OSS 导入”后，页面提示“您还未授权OSS”，点击“前往授权”。
     
-2.  在弹出的对话框中点击「立即授权」，界面提示「授权失败：当前用户没有创建服务关联角色的权限」。对话框显示 Service Name 为 datahub.sfm.aliyuncs.com，服务关联角色名称为 AliyunServiceRoleForSFMDataHubOSSImport，所需用户权限为 ram:CreateServiceLinkedRole。须先由主账号授予子账号创建服务关联角色的权限，再由子账号完成授权。
+2.  在弹出的对话框中点击“立即授权”，界面提示“授权失败：当前用户没有创建服务关联角色的权限”。对话框显示 Service Name 为 datahub.sfm.aliyuncs.com，服务关联角色名称为 AliyunServiceRoleForSFMDataHubOSSImport，所需用户权限为 ram:CreateServiceLinkedRole。须先由主账号授予子账号创建服务关联角色的权限，再由子账号完成授权。
     
 3.  由主账号授予子账号创建服务关联角色的权限：
     
-    1.  主账号登录 RAM 控制台，在左侧导航栏选择「权限管理 → 权限策略」，点击「创建权限策略」。
-    2.  选择「脚本编辑」，在 Effect、Action、Resource、Condition 中分别输入以下脚本内容，点击「确定」：
+    1.  主账号登录 RAM 控制台，在左侧导航栏选择“权限管理 → 权限策略”，点击“创建权限策略”。
+    2.  选择“脚本编辑”，在 Effect、Action、Resource、Condition 中分别输入以下脚本内容，点击“确定”：
 
 ```
 {
@@ -105,10 +105,10 @@
 }
 ```
 
-3.  输入权限策略名称（示例：服务关联角色）后点击「确定」。
-4.  在左侧导航栏选择「身份管理 → 用户」，找到待授权的子账号，点击操作列**新增授权**。
-5.  选择刚才创建的自定义权限策略，点击「确认新增授权」，子账号即拥有创建服务关联角色的权限。
-6.  返回导入模型页点击「前往授权」，在弹出的对话框中点击「立即授权」，系统自动创建服务关联角色，通常秒级生效。
+3.  输入权限策略名称（示例：服务关联角色）后点击“确定”。
+4.  在左侧导航栏选择“身份管理 → 用户”，找到待授权的子账号，点击操作列**新增授权**。
+5.  选择刚才创建的自定义权限策略，点击“确认新增授权”，子账号即拥有创建服务关联角色的权限。
+6.  返回导入模型页点击“前往授权”，在弹出的对话框中点击“立即授权”，系统自动创建服务关联角色，通常秒级生效。
 7.  为目标 OSS Bucket 添加 bailian-datahub-access=read 标签（操作同主账号步骤 3），然后返回导入模型页重新选择目标 Bucket。百炼不支持访问 Bucket 根目录下的文件。
 
 授权后须为目标 OSS Bucket 添加标签：标签名为 bailian-datahub-access，标签值为 read。该标签用于标记百炼可访问的 Bucket，未添加此标签的 Bucket 在下拉列表中不可选，须到[OSS 管理控制台](https://oss.console.aliyun.com/)添加标签后重新选择。Bucket 下拉列表按当前地域筛选：当前地域为华北2（北京）时，展示国内所有地域的 Bucket；当前地域为新加坡时，展示国内所有地域及新加坡地域的 Bucket。
@@ -117,11 +117,11 @@ OSS Bucket 存储类型不支持归档、冷归档或深度冷归档，服务端
 
 ### 旧授权方式升级
 
-若您此前使用的是旧授权方式，导入页 Bucket 字段下方会提示「建议转换为新的 Bucket 授权方式，提升安全性」并提供「直接转换」链接。点击后弹出确认框，确认即可升级为服务关联角色授权方式，升级不影响原有数据。
+若您此前使用的是旧授权方式，导入页 Bucket 字段下方会提示“建议转换为新的 Bucket 授权方式，提升安全性”并提供“直接转换”链接。点击后弹出确认框，确认即可升级为服务关联角色授权方式，升级不影响原有数据。
 
 ### 未开通 OSS 产品
 
-若主账号尚未开通对象存储 OSS，导入页会提示「您还未开通OSS」并提供前往购买的链接。须由主账号前往 OSS 控制台开通 OSS 后返回导入页重新授权。
+若主账号尚未开通对象存储 OSS，导入页会提示“您还未开通OSS”并提供前往购买的链接。须由主账号前往 OSS 控制台开通 OSS 后返回导入页重新授权。
 
 ## 准备 LoRA 模型文件
 
@@ -180,9 +180,9 @@ if __name__ == "__main__":
 
 ## 导入 LoRA 模型
 
-完成 OSS 授权并准备好模型文件后，在[百炼控制台·我的模型](https://bailian.console.aliyun.com/cn-beijing/model/custom)页面点击右上角「导入模型」按钮进入创建页，按以下步骤完成导入。
+完成 OSS 授权并准备好模型文件后，在[百炼控制台·我的模型](https://bailian.console.aliyun.com/cn-beijing/model/custom)页面点击右上角“导入模型”按钮进入创建页，按以下步骤完成导入。
 
-1.  在「我的模型」页面，点击右上角的「导入模型」按钮进入导入模型创建页。
+1.  在“我的模型”页面，点击右上角的“导入模型”按钮进入导入模型创建页。
 2.  按下方表格填写模型信息，其中基础模型须与 LoRA 训练时的基座一致，Bucket 须已添加 bailian-datahub-access=read 标签，模型目录选中后系统会自动校验文件。
 3.  确认信息无误后点击确定提交，系统自动验证文件格式和完整性，通过后开始导入；如需放弃点击取消返回列表页。导入后可在[管理导入的模型](https://help.aliyun.com/zh/model-studio/model-import#h2-manage)查看状态。
 
@@ -214,7 +214,7 @@ if __name__ == "__main__":
 
 导入来源
 
-为「从 OSS 导入」，无其他选项。
+为“从 OSS 导入”，无其他选项。
 
 只读，默认选中
 
@@ -248,9 +248,9 @@ Bucket
 
 模型状态包括创建中、创建成功、创建失败和已失效。创建中表示正在导入；创建成功表示导入完成可部署；创建失败表示导入未成功；已失效表示创建成功后 OSS 源模型文件发生变更。列表对处于创建中状态的模型每 3 秒自动静默刷新，属正常行为，非接口异常。
 
-创建失败状态旁附「详情」链接，悬停可查看失败错误码（如 AvailableModelFileNotFound）与对应的 oss://bucket/path 路径，用于定位失败文件。
+创建失败状态旁附“详情”链接，悬停可查看失败错误码（如 AvailableModelFileNotFound）与对应的 oss://bucket/path 路径，用于定位失败文件。
 
-已失效状态可悬停查看弹出框，展示「如下文件检测到更新」及发生变更的源文件名列表，提示须重新导入。
+已失效状态可悬停查看弹出框，展示“如下文件检测到更新”及发生变更的源文件名列表，提示须重新导入。
 
 ### 操作列可用性
 
@@ -264,7 +264,7 @@ Bucket
 
 **Important**删除操作不可恢复：仅移除百炼侧的模型记录，须重新导入才能恢复；不会删除 OSS 中的源文件。
 
-列表顶部搜索框可按模型名称筛选模型，支持清空重置。**来源**列按导入来源渲染：OSS 导入显示 oss://bucket/path，训练任务显示来源任务 ID（已删除则显示「训练任务已删除」）。**支持部署方式**列展示模型支持的部署方式和训练方式标签（如全参、LoRA 或量化标签），以及计费方式（如按 Token 计费、按模型单元计费），无可选部署方式时显示「-」。通过 API 调用已部署模型详见[使用 API 进行模型部署](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-quick-start.md)。
+列表顶部搜索框可按模型名称筛选模型，支持清空重置。**来源**列按导入来源渲染：OSS 导入显示 oss://bucket/path，训练任务显示来源任务 ID（已删除则显示“训练任务已删除”）。**支持部署方式**列展示模型支持的部署方式和训练方式标签（如全参、LoRA 或量化标签），以及计费方式（如按 Token 计费、按模型单元计费），无可选部署方式时显示“-”。通过 API 调用已部署模型详见[使用 API 进行模型部署](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-quick-start.md)。
 
 所有操作按单个模型进行，不支持批量删除或批量部署。
 
@@ -276,11 +276,11 @@ Bucket
 
 该错误表示模型目录文件校验未通过（格式或完整性问题），不是单纯重传文件可解决。请检查所选目录是否包含齐全合规的 adapter\_model.safetensors、adapter\_config.json、config.json，并确认 rank、词汇表、chat\_template 等约束均满足，修正后重新选择目录提交。
 
-模型状态显示「已失效」是怎么回事？
+模型状态显示“已失效”是怎么回事？
 
 已失效表示该模型创建成功后，OSS 源模型文件发生了变更，属正常检测行为而非故障。将鼠标悬停在已失效状态上可查看发生变更的文件名列表，需重新导入模型方可恢复可用。
 
-遇到「10041495」报错怎么办？
+遇到“10041495”报错怎么办？
 
 一般是由于主账号尚未开通对象存储服务 OSS。须由主账号前往 OSS 管理控制台按界面指引开通 OSS，再返回百炼导入模型界面重新尝试授权。
 

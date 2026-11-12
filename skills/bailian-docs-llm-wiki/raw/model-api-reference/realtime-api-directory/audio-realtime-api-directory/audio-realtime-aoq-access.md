@@ -23,7 +23,43 @@ AOQ 将音频媒体与模型事件分轨传输。SDK 负责音频采集、编解
 
 **说明**如需提前获取 Token，或了解完整的鉴权流程，请参见[建连鉴权详解](https://help.aliyun.com/zh/model-studio/realtime-api-overview#tkauth-auth-detail-title)。
 
-由业务 AppServer 发起以下请求。请先[配置 API Key 到环境变量](https://help.aliyun.com/zh/model-studio/get-api-key#20b17d4430qvt)，并将以下域名中的 `{WorkspaceId}` 替换为实际业务空间 ID；其他地域使用上文对应的域名。`clientIp` 选填，不填时使用请求网关的 IP。
+由业务 AppServer 发起以下请求。请先[配置 API Key 到环境变量](https://help.aliyun.com/zh/model-studio/get-api-key#20b17d4430qvt)。`clientIp` 选填，不填时使用请求网关的 IP。
+
+POST`https://WorkspaceId.cn-beijing.maas.aliyuncs.com/api/v1/webrtc/realtime?model=qwen-audio-3.1-realtime-plus`
+
+POST`https://WorkspaceId.ap-southeast-1.maas.aliyuncs.com/api/v1/webrtc/realtime?model=qwen-audio-3.1-realtime-plus`
+
+#### 参数说明
+
+`endpoint`
+
+值: 根据业务情况选择接入域名
+
+指定对应的接入域名，详情请参见[选择地域、服务部署范围和接入域名](raw/model-user-guide/get-started-with-models/regions.md)。如果使用[Token Plan](https://help.aliyun.com/zh/model-studio/token-plan-overview)，接入域名中的 `WorkspaceId` 固定为 `token-plan`。
+
+`Content-Type`
+
+值: `application/json`
+
+指定消息类型
+
+`Authorization`
+
+值: `Bearer <YOUR_API_KEY>`
+
+填写API Key
+
+`x-dashscope-rtc-transport`
+
+值: `moq`
+
+指定使用 AOQ 协议
+
+`clientIp`
+
+值: 客户端真实公网 IP
+
+选填。不填写时，默认使用请求百炼网关的 IP；填写后以 clientIp 为准。服务 会根据客户端 IP 分配最佳的 Relay 接入点
 
 ```
 export ENDPOINT="{WorkspaceId}.cn-beijing.maas.aliyuncs.com"
@@ -37,43 +73,51 @@ curl -X POST \
 
 如需指定客户端公网 IP，将请求体中的 `-d '{}'` 替换为 `-d '{"clientIp":"<客户端公网 IP>"}'`。
 
-#### 参数说明
+#### 响应参数说明
 
-**配置项**
+`sid`
 
-**值**
+会话唯一标识
 
-**说明**
+`aoqTokenForClient`
 
-endpoint
+客户端连接令牌，传给 SDK 的 token 字段
 
-根据业务情况选择接入域名
+`clientRelayEndpoints`
 
-指定对应的接入域名，详情请参见[选择地域、服务部署范围和接入域名](raw/model-user-guide/get-started-with-models/regions.md)。如果使用[Token Plan](https://help.aliyun.com/zh/model-studio/token-plan-overview)，接入域名中的 `WorkspaceId` 固定为 `token-plan`。
+Relay 接入点数组。响应示例中的数组元素包含以下字段：
 
-Content-Type
+属性
 
-`application/json`
+`endpoint`
 
-指定消息类型
+Relay 接入点地址。
 
-Authorization
+`port`
 
-`Bearer <YOUR_API_KEY>`
+Relay 接入点端口。
 
-填写API Key
+`route_index`
 
-x-dashscope-rtc-transport
+下方 iOS 示例在该字段缺省时使用数组下标。
 
-`moq`
+`clientRelayCertFingerprint`
 
-指定使用 AOQ 协议
+Relay TLS 证书指纹
 
-clientIp
+`sidExpiresInSecs`
 
-客户端真实公网 IP
+会话过期时间（秒）
 
-选填。不填写时，默认使用请求百炼网关的 IP；填写后以 clientIp 为准。服务 会根据客户端 IP 分配最佳的 Relay 接入点
+`extraInfo`
+
+附加信息。
+
+属性
+
+`workspaceIdHash`
+
+工作区 ID 哈希。
 
 #### 响应示例
 
@@ -87,56 +131,6 @@ clientIp
     "extraInfo": {"workspaceIdHash": "2021b6f98cea4cff"}
 }
 ```
-
-#### 响应参数说明
-
-**字段**
-
-**说明**
-
-sid
-
-会话唯一标识
-
-aoqTokenForClient
-
-客户端连接令牌，传给 SDK 的 token 字段
-
-clientRelayEndpoints
-
-Relay 接入点数组。响应示例中的数组元素包含以下字段：
-
-属性
-
-**endpoint**
-
-Relay 接入点地址。
-
-**port**
-
-Relay 接入点端口。
-
-**route\_index**
-
-下方 iOS 示例在该字段缺省时使用数组下标。
-
-clientRelayCertFingerprint
-
-Relay TLS 证书指纹
-
-sidExpiresInSecs
-
-会话过期时间（秒）
-
-extraInfo
-
-附加信息。
-
-属性
-
-**workspaceIdHash**
-
-工作区 ID 哈希。
 
 #### AOQ Client SDK 连接示例
 

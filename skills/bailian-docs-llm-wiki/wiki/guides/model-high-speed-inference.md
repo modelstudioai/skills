@@ -1,65 +1,50 @@
 # model high speed inference
 
-百炼平台提供多种面向高吞吐、低延迟与确定性性能的推理加速能力，覆盖实时高速响应（Prime 模式）、专属容量保障（吞吐预留/PTU/DTU）、异步批量处理（Batch）及智能模型调度（智能路由）等场景。所有方案均兼容 OpenAI 接口，开发者可通过统一 API 调用，按需选择成本、性能与运维复杂度的最优平衡点。
+百炼平台提供多种面向高吞吐、低延迟与成本优化场景的推理加速能力，包括 Prime 模式（轻量级提速）、吞吐预留/PTU（专属容量保障）、批量推理（异步降本）、专属部署（DTU/MU）及智能路由（动态选模）。所有方案均兼容 OpenAI 接口，开发者可根据流量特征、SLA 要求与预算灵活组合使用。
 
 ## 支持的模型/功能
 
-百炼为不同性能目标提供分层能力：
+- **Prime 模式**：专为输出速度敏感场景设计，TPS 提升 1.5~2 倍，支持 `glm-5.2-fast-preview`、`glm-5.3-prime`、`wan3.0-video-prime` 等模型，能力与原版模型一致，无需额外参数，仅需指定对应 model ID 即可启用 [Prime 模式](../../raw/model-user-guide/model-high-speed-inference/prime-mode.md)。  
+- **吞吐预留（含 PTU）**：通过预置输入/输出 TPM 容量锁定专属推理资源，保障高峰期不被限流；支持“高速模式”（即 PTU），提供 1.5~2 倍 TPS 提升；支持模型包括 `Qwen3.8-Max`、`GLM-5.3`、`DeepSeek-v4-Pro` 等数十种主流模型 [吞吐预留](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)。  
+- **批量推理（Batch）**：适用于非实时场景，成本约为实时推理的 50%，支持 `qwen3.8-max`、`qwen3-vl-plus`、`text-embedding-v4` 等文本、多模态与向量模型，单次请求上下文最大支持 256K token [批量推理](../../raw/model-user-guide/model-high-speed-inference/batch-inference.md)。  
+- **专属部署（DTU/MU）**：提供物理隔离的独占 GPU 资源，DTU 按输入/输出 TPM 计费，MU 按模型单元数量计费；支持基础模型与 LoRA 微调模型，性能指标（如首字延迟、每 token 延迟）在文档中有明确基准数据 [独占吞吐（DTU）](../../raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-modes/dtu-model-deployment.md)。  
+- **智能路由**：基于请求内容自动匹配备选模型集中的最优模型，支持 `qwen3.8-flash`、`glm-5.2`、`deepseek-v4-pro-0813` 等多档位模型，按实际执行模型计费，调用时仅需传入 `auto-model-xxxxxx` code [智能路由](../../raw/model-user-guide/model-high-speed-inference/model-routing.md)。
 
-- **Prime 模式**：面向输出速度敏感场景（如 AI 编程助手、Agent 多步推理），通过底层优化将 TPS 提升至标准 API 的 1.5~2 倍。支持 `glm-5.2-fast-preview`、`glm-5.3-prime`、`wan3.0-video-prime` 等专用模型标识，无需额外参数，仅需指定对应 model ID 即可启用 [Prime 模式](../../raw/model-user-guide/model-high-speed-inference/prime-mode.md)。
-  
-- **吞吐预留（TPM 预留）与 PTU/DTU 部署**：提供刚性容量保障。吞吐预留支持标准模式与高速模式（即 PTU），适用于流量可预估且不能接受限流的生产环境；DTU（独占吞吐）与 PTU（预置吞吐）均以输入/输出 TPM 为计量单位，底层独占 GPU 资源，支持长输入与前缀缓存优化 [吞吐预留](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)。DTU 是 MU（模型单元）的继任方案，新购部署应优先选用 DTU [独占吞吐（DTU）](../../raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-modes/dtu-model-deployment.md)。
-
-- **批量推理（Batch）**：适用于非实时场景（如模型评测、数据标注），成本约为实时推理的 50%。支持华北2（北京）和新加坡地域的千问系列（`qwen3.8-max`、`qwen3.7-plus` 等）、多模态模型（`qwen3-vl-plus`）及向量模型（`text-embedding-v3`）[批量推理](../../raw/model-user-guide/model-high-speed-inference/batch-inference.md)。
-
-- **智能路由**：动态分析请求内容，在预设备选模型集中自动匹配最优模型（如 `qwen3.8-flash` 或 `glm-5.2`），兼顾效果与成本。仅支持 [OpenAI 兼容接口](../concepts/openai-compatible-interface.md)与文本 Chat Completions 请求，不支持流式、Batch 或非生成类接口 [智能路由](../../raw/model-user-guide/model-high-speed-inference/model-routing.md)。
-
-> **注意**：文档中“PTU 预置吞吐”在控制台已统一迁移至[吞吐预留](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)页面管理，专属部署页面仅提供入口。旧文档中单独描述的 PTU 页面（如 `model-deployment-modes/ptu-long-input-and-cache.md`）内容已整合，开发者应以吞吐预留文档为准。
+> **注意**：文档 9 明确指出“PTU 的创建与管理已迁移至[吞吐预留](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)页面”，而文档 6 仍称“PTU 可在专属部署页面操作”。以文档 9 为准，PTU 已统一归入吞吐预留体系，专属部署页仅提供跳转入口。
 
 ## 关键参数
 
-| 参数 | 说明 | 使用约束 |
-|------|------|----------|
-| `model` | 指定推理模型或服务标识 | Prime 模式需填 `glm-5.2-fast-preview`；吞吐预留/DTU/PTU 需填专属模型 code；智能路由固定为 `auto-model-xxxxxx`；Batch 不支持思考字段，即使设置 `enable_thinking=true`，结果文件中也不含 `reasoning_content` [批量推理](../../raw/model-user-guide/model-high-speed-inference/batch-inference.md) |
-| `stream` | 是否启用流式响应 | Prime 模式下[流式输出](../concepts/streaming-output.md)时，思考内容与回答内容分别通过 `delta.reasoning_content` 与 `delta.content` 推送 [Prime 模式](../../raw/model-user-guide/model-high-speed-inference/prime-mode.md) |
-| `enable_thinking` | 控制是否启用深度思考模式 | Batch 场景下该参数对结果文件无影响；实时 API 中需显式设置 `true`/`false`，且必须与 `model` 同级传入，不可置于 `extra_body` 中 [批量推理](../../raw/model-user-guide/model-high-speed-inference/batch-inference.md) |
-| `input_tpm` / `output_tpm` | 吞吐预留或 DTU/PTU 的容量配额 | 创建时需为基准 TPM 的整数倍，各模型有固定基准值（如 `qwen3.7-plus-2026-05-26` 基准输入 TPM 为 1,372,000） [独占吞吐（DTU）](../../raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-modes/dtu-model-deployment.md) |
-| `response_format` / `max_tokens` | 智能路由的路由过滤条件 | 设置后仅路由到支持该参数的备选模型；`max_tokens` 会自动转为 `max_completion_tokens` [智能路由](../../raw/model-user-guide/model-high-speed-inference/model-routing.md) |
+| 参数 | 说明 | 示例值 | 注意事项 |
+|------|------|--------|----------|
+| `model` | 指定推理模型或服务标识 | `"glm-5.2-fast-preview"`（Prime）、`"your-dedicated-model-code"`（吞吐预留）、`"auto-model-abcd1234"`（智能路由） | 必须与所选方案匹配；吞吐预留和专属部署生成的 model code 具有唯一性，不可复用 |
+| `input_tpm` / `output_tpm` | 吞吐预留/PTU/DTU 的容量配额（单位：kTPM） | `10000`, `1000` | DTU 购买需为基准 TPM 的整数倍；PTU 支持长输入阶梯系数与缓存折扣计算 [高速容量（PTU）](../../raw/_short/ptu-long-input-and-cache-f0b1f22118ea9791.md) |
+| `enable_thinking` | 控制是否启用深度思考模式 | `true` / `false` | Batch 场景下即使设为 `true`，结果文件中也不返回 `reasoning_content` 字段；流式 API 中需通过 `delta.reasoning_content` 获取 [批量推理](../../raw/model-user-guide/model-high-speed-inference/batch-inference.md) |
+| `stream` | 是否启用流式响应 | `true` | Prime 模式下流式响应需分别处理 `delta.reasoning_content` 与 `delta.content` 字段 [Prime 模式](../../raw/model-user-guide/model-high-speed-inference/prime-mode.md) |
+| `plan` | API 部署时指定计费方式 | `"ptu"`, `"mu"`, `"lora"` | `"lora"` 仅支持 LoRA 微调模型，且 `capacity` 参数无效但必须填写 [API 部署指南](../../raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-quick-start.md) |
 
 ## 使用方式
 
-- **Prime 模式**：直接调用标准 `/v1/chat/completions` 接口，`model` 设为 `glm-5.2-fast-preview` 等 Prime 模型 ID，接入域名使用 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1` [Prime 模式](../../raw/model-user-guide/model-high-speed-inference/prime-mode.md)。
-  
-- **吞吐预留/PTU/DTU**：在控制台创建预留或部署服务后，获取专属 `model code`，替换 API 请求中的 `model` 参数。例如：
-  ```bash
-  curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \
-    -H "Authorization: Bearer $API_KEY" \
-    -d '{"model":"your-dedicated-model-code","messages":[{"role":"user","content":"你好"}]}'
-  ```
-
-- **批量推理**：构造符合规范的 JSONL 文件（每行一个 `POST /v1/chat/completions` 请求），通过控制台或 API 提交任务；结果文件为独立下载项，不包含 `reasoning_content` 字段 [批量推理](../../raw/model-user-guide/model-high-speed-inference/batch-inference.md)。
-
-- **智能路由**：将 `model` 设为 `auto-model-xxxxxx`，其余参数与普通 Chat Completions 一致；响应头 `x-dashscope-resolved-model` 返回实际执行模型，计费按该模型单价结算 [智能路由](../../raw/model-user-guide/model-high-speed-inference/model-routing.md)。
+- **Prime 模式**：直接调用标准 `/v1/chat/completions` 接口，将 `model` 设为 Prime 模型 ID（如 `glm-5.2-fast-preview`），接入域名使用 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`。  
+- **吞吐预留/PTU**：在控制台创建预留后获取专属 `model code`，替换 API 请求中的 `model` 参数即可；支持自动溢出（超量转按量）或仅限预留容量（超量返回 429）两种策略。  
+- **批量推理**：上传 JSONL 文件（每行一个 POST 请求对象），通过 `/v1/batches` 接口提交任务；文件需符合格式规范（UTF-8、≤50,000 行、每行 ≤1 MB），媒体 URL 必须公网可访问。  
+- **专属部署（DTU/MU）**：通过控制台或 API（`POST /api/v1/deployments`）部署，指定 `plan` 为 `"dtu"` 或 `"mu"`，并传入对应容量参数；部署成功后使用返回的 `deployed_model` code 调用。  
+- **智能路由**：调用时 `model` 设为 `auto-model-xxxxxx`，必须使用 `maas.aliyuncs.com` 域名（如 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`），不支持 `dashscope.aliyuncs.com`。
 
 ## 限制和注意事项
 
-- **容量费用刚性计费**：吞吐预留、PTU、DTU、MU 均为预付费模式，创建成功即开始计费，与是否调用无关；即使未发起任何请求，费用也全额产生 [吞吐预留](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)。
-  
-- **模型能力一致性**：Prime 模式、吞吐预留、DTU/PTU 所支持的模型能力（如思考模式、上下文长度、缓存支持）与原版模型完全相同，但部分参数（如 GLM-5.2 的 `thinking_budget`）在特定部署下不生效 [Prime 模式](../../raw/model-user-guide/model-high-speed-inference/prime-mode.md)。
-
-- **协议与地域限制**：智能路由仅支持 [OpenAI 兼容接口](../concepts/openai-compatible-interface.md)、`maas.aliyuncs.com` 域名及北京/新加坡地域；不支持 DashScope 协议、`dashscope.aliyuncs.com` 域名、图片/视频输入、Batch 或 Embedding 接口 [智能路由](../../raw/model-user-guide/model-high-speed-inference/model-routing.md)。
-
-- **缓存行为差异**：Prime 模式与吞吐预留支持前缀缓存并提供缓存折扣（如 `glm-5.1` 缓存命中部分按 20% 折算容量）；智能路由仅依赖实际调用模型的隐式缓存，不保障命中率，且忽略用户显式缓存参数 [吞吐预留](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)。
-
-- **错误处理策略**：吞吐预留/PTU/DTU 在溢出时可选「自动溢出至按量计费」（默认，服务不中断）或「仅使用预留容量」（超限返回 429）；智能路由故障自动切换仅对模型不可用生效，对 429（限流）、400/403/500 等确定性错误不触发 [吞吐预留](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)。
+- **容量与计费刚性**：吞吐预留、DTU、MU 均为预付费模式，创建成功即开始计费，与实际调用量无关；未调用也全额收费，且提前退订按 1.2 倍系数结算 [吞吐预留](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)。  
+- **模型兼容性限制**：[Token](../concepts/token.md) 按量部署仅支持 LoRA 微调模型，不支持全参微调或原始基础模型；批量推理不返回 `reasoning_content`，如需思考过程请改用实时 API [批量推理](../../raw/model-user-guide/model-high-speed-inference/batch-inference.md)。  
+- **地域与协议约束**：智能路由仅支持北京（`cn-beijing`）和新加坡（`ap-southeast-1`）地域，且仅限 `maas.aliyuncs.com` 域名；不支持 DashScope 原生协议，仅支持 [OpenAI 兼容接口](../concepts/openai-compatible-interface.md)与 Anthropic 协议 [智能路由](../../raw/model-user-guide/model-high-speed-inference/model-routing.md)。  
+- **预热与稳定性**：吞吐预留实例在流量快速拉升时需短暂预热，期间可能出现延迟波动，建议客户端实现请求排队或重试机制 [吞吐预留](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)。  
+- **OSS 导入限制**：LoRA 模型导入要求 `adapter_model.safetensors` 中不含 `visual.*` 类参数（即 VIT 必须冻结），且 `rank` 必须为 8/16/32/64 之一；不支持归档类 OSS 存储类型 [模型导入](../../raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-import.md)。
 
 ## 来源文档
 
 - [Prime 模式](../../raw/model-user-guide/model-high-speed-inference/prime-mode.md)
 - [吞吐预留](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)
 - [批量推理](../../raw/model-user-guide/model-high-speed-inference/batch-inference.md)
-- [模型部署](../../raw/model-user-guide/model-high-speed-inference/model-deployment-index.md)
 - [模型导入](../../raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-import.md)
+- [模型部署](../../raw/model-user-guide/model-high-speed-inference/model-deployment-index.md)
 - [专属部署概述](../../raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)
 - [部署模式](../../raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-modes.md)
 - [独占吞吐（DTU）](../../raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-modes/dtu-model-deployment.md)

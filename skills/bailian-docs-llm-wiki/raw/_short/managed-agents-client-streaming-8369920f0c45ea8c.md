@@ -44,7 +44,7 @@ curl -N --no-buffer --get "$AGENTSTUDIO_URL/sessions/$SESSION_ID/events/stream" 
 工程细节：
 
 -   前端可以立即回显输入；等待答案时，后端报告已经确认的阶段（正在连接、已提交、运行中）；
--   及时刷新下游输出流，并关闭代理的响应缓冲——缓冲会吞掉「流式」效果；
+-   及时刷新下游输出流，并关闭代理的响应缓冲——缓冲会吞掉“流式”效果；
 -   连接超时、首个业务事件超时、空闲超时和整轮总超时分别设置；保活注释不代表业务取得进展；
 -   按帧解析 SSE：忽略注释行，接受 `data:` 与 `data:` （带空格）两种写法；先合并多行 `data`，再解码 JSON，按 JSON 中的 `type` 分发。
 
@@ -209,12 +209,12 @@ curl -s -X DELETE "$AGENTSTUDIO_URL/sessions/$SESSION_ID/resources/$RESOURCE_ID"
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
-在核对以下两层状态时，UI 显示「移除中」：
+在核对以下两层状态时，UI 显示“移除中”：
 
 1.  分页查询 `GET /sessions/{id}/resources`，确认资源 ID 已不存在；
 2.  在后续回合让 Agent 在截止时间内等待完整路径消失，并明确要求它**不要自行删除文件**，否则可能掩盖卸载失败。
 
-两项检查都已实测通过。若超时，保留相关 ID 并提供状态恢复，不要直接显示移除成功。卸载的是 Session 中的挂载副本，不是上传的源文件；已经读入对话的信息和派生产物仍会保留——「已移除」只表示附件不再挂载，不表示 Agent 已经忘记其内容。
+两项检查都已实测通过。若超时，保留相关 ID 并提供状态恢复，不要直接显示移除成功。卸载的是 Session 中的挂载副本，不是上传的源文件；已经读入对话的信息和派生产物仍会保留——“已移除”只表示附件不再挂载，不表示 Agent 已经忘记其内容。
 
 **说明**记忆库（Memory Store）需要在创建会话时挂载，不走这条动态挂载流程，见[进阶：跨会话工作记忆交接](raw/_short/managed-agents-memory-handoff-090f3657c5cd11c0.md)。
 

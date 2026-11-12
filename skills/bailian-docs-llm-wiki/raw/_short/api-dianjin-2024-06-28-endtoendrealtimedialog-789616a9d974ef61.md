@@ -283,7 +283,7 @@ timestamp:1752922002409
 -   sessionId：业务会会话唯一标识
 -   openingRemarks：开场白内容；文本内容。
 
-## TranscriptionResultChanged（转写文本变化「ASR 结果」）
+## TranscriptionResultChanged（转写文本变化“ASR 结果”）
 
 ```
 type:TranscriptionResultChanged
@@ -299,7 +299,7 @@ timestamp:1754659632826
 -   content：当前转写文本内容
 -   messageId：消息唯一标识
 
-## SentenceEnd（一句话转写完成「流式返回客服回复的音频数据」）
+## SentenceEnd（一句话转写完成“流式返回客服回复的音频数据”）
 
 ```
 type:SentenceEnd
@@ -343,7 +343,7 @@ timestamp: 1754659629166
 
 -   主要输出意图识别相关文本内容，输出字段描述请参考 API: RealTimeDialog
 
-## SentenceInterrupted（句子中断「需清理音频缓存」）
+## SentenceInterrupted（句子中断“需清理音频缓存”）
 
 ```
 type:SentenceInterrupted
@@ -355,7 +355,7 @@ timestamp: 1754659635543
 
 -   body 内容为空 收到此消息需清空音频缓存、终止播放之前的音频内容，以实现打断效果。
 
-## TranscriptionEnd（转录结束「会话建议结束：智能体判断会话可结束」）
+## TranscriptionEnd（转录结束“会话建议结束：智能体判断会话可结束”）
 
 ```
 type:TranscriptionEnd

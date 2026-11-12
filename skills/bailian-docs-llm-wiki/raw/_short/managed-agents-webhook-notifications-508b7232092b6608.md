@@ -1,16 +1,16 @@
 # 进阶：Webhook 事件通知
 
-把「事件发生」（会话跑完、部署执行结束、资源变更）变成一次主动的 HTTP 推送：接收端工程、验签、投递语义与重试禁用规则的完整实践。
+把“事件发生”（会话跑完、部署执行结束、资源变更）变成一次主动的 HTTP 推送：接收端工程、验签、投递语义与重试禁用规则的完整实践。
 
 ## 概述
 
-本篇讲 Managed Agents 的 Webhook 机制：把「事件发生」（会话跑完、部署执行结束、资源变更）变成一次主动的 HTTP 推送，而不是不停轮询。
+本篇讲 Managed Agents 的 Webhook 机制：把“事件发生”（会话跑完、部署执行结束、资源变更）变成一次主动的 HTTP 推送，而不是不停轮询。
 
-与系列其他篇的关系：[生产化篇](raw/application-user-guide/agent-development/managed-agents/managed-agents-best-practices/managed-agents-production.md)的 Deployment 面向「按计划运行」，[多智能体篇](raw/_short/managed-agents-multiagent-proposal-c42cf9fd6aca491d.md)的 SSE 面向「人工实时查看」，本篇面向「运行完成后主动通知」——三者组合构成完整的无人值守闭环。事件订阅的基础用法见[Webhook 事件订阅](raw/application-user-guide/agent-development/managed-agents/managed-agents-session/managed-agents-webhook.md)，本篇深入接收端的工程细节。
+与系列其他篇的关系：[生产化篇](raw/application-user-guide/agent-development/managed-agents/managed-agents-best-practices/managed-agents-production.md)的 Deployment 面向“按计划运行”，[多智能体篇](raw/_short/managed-agents-multiagent-proposal-c42cf9fd6aca491d.md)的 SSE 面向“人工实时查看”，本篇面向“运行完成后主动通知”——三者组合构成完整的无人值守闭环。事件订阅的基础用法见[Webhook 事件订阅](raw/application-user-guide/agent-development/managed-agents/managed-agents-session/managed-agents-webhook.md)，本篇深入接收端的工程细节。
 
 ## 场景：拾贝电商的对账通知
 
-「拾贝电商」是一家虚构的跨境电商，每晚要对账：一个对账机器人（Deployment 定时触发）核对当天的订单流水。运维同学的诉求很朴素：
+“拾贝电商”是一家虚构的跨境电商，每晚要对账：一个对账机器人（Deployment 定时触发）核对当天的订单流水。运维同学的诉求很朴素：
 
 > 任务跑完不用盯着，运行完成或运行失败，给服务器发个通知。
 
@@ -339,7 +339,7 @@ for line in open("/root/webhook_hits.jsonl"):
 
 同一事件可能被投递不止一轮——重试中的失败会计入计数，例如 `consecutive_fail` 从 0 跳到 2。
 
-**按外层 `id`（= `webhook-id`）做幂等去重不是「最佳实践」，是入门要求**。接收端应记录已处理的 event id，重复到达直接丢弃。
+**按外层 `id`（= `webhook-id`）做幂等去重不是“最佳实践”，是入门要求**。接收端应记录已处理的 event id，重复到达直接丢弃。
 
 ### 重试与禁用（响应码语义表）
 
@@ -386,7 +386,7 @@ HTTPS 证书/主机名校验失败
 
 **警告****当前行为：`deployment_run.*` 事件暂不投递**。创建接口接受 `deployment_run.started / succeeded / failed` 订阅名，但触发 deployment run 后这些事件本身不会投递；其产生的 session 事件（`session.status_run_started` / `session.status_idled`）正常投递。
 
-对「任务跑完通知我」这个场景的落地建议：**用 `session.status_idled`（`data.id` 为该 run 创建的 session）作为完成信号，再按需反查 runs 接口拿状态**，是当前可靠的路径；任何事件类型在成为生产依赖前，先用自己的接收端验证一遍。
+对“任务跑完通知我”这个场景的落地建议：**用 `session.status_idled`（`data.id` 为该 run 创建的 session）作为完成信号，再按需反查 runs 接口拿状态**，是当前可靠的路径；任何事件类型在成为生产依赖前，先用自己的接收端验证一遍。
 
 ## 日常运维
 
@@ -432,7 +432,7 @@ Webhook 给信号（`data.id`），反查接口拿内容
 
 接收端工程清单（按优先级）：验签（剥前缀解码 key + 原始字节 + 时间窗 + 恒定时间比较）→ 幂等去重（按 event id）→ 按需反查（`data.id`）→ 5 秒内响应、重活异步 → systemd 常驻（不要依赖 nohup）→ 监控 `consecutive_fail`。
 
-Webhook 是各资源状态变更的统一出口：session、agent、deployment、environment、vault 的管控面动作都有对应事件。把本篇的接收端骨架加上路由分发，就能长成一个轻量的「资源变更总线」。
+Webhook 是各资源状态变更的统一出口：session、agent、deployment、environment、vault 的管控面动作都有对应事件。把本篇的接收端骨架加上路由分发，就能长成一个轻量的“资源变更总线”。
 
 ## 下一步
 

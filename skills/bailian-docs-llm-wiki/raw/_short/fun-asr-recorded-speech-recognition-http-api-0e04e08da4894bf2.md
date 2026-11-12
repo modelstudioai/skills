@@ -145,7 +145,21 @@
 
 **special\_word\_filter** `string`（可选）
 
-指定在语音识别过程中需要处理的敏感词，并支持对不同敏感词设置不同的处理方式。详情请参见[敏感词过滤](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#nrt03_sensitive_h3)。
+配置需要替换或移除的词语。参数值为 JSON 字符串，包含以下字段：
+
+-   `filter_with_signed.word_list`：字符串数组，将匹配词替换为等长的 `*`。
+-   `filter_with_empty.word_list`：字符串数组，将匹配词从结果中移除。
+-   `system_reserved_filter`：布尔值，默认 `true`，控制是否同时使用系统预置词表；设为 `false` 时，自定义规则仍生效。
+
+未传入该参数时，使用系统内置的[阿里云百炼敏感词表](https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/%E7%99%BE%E7%82%BC%E6%95%8F%E6%84%9F%E8%AF%8D%E5%88%97%E8%A1%A8_20230716.words.txt)，将匹配词替换为等长的 `*`。
+
+例如，以等长星号替换“测试”，并移除“开始”，参数值如下：
+
+```
+{
+  "special_word_filter": "{\"filter_with_signed\":{\"word_list\":[\"测试\"]},\"filter_with_empty\":{\"word_list\":[\"开始\",\"发生\"]},\"system_reserved_filter\":true}"
+}
+```
 
 **diarization\_enabled** `boolean`（可选）
 

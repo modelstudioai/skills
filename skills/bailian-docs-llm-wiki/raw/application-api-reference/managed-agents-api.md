@@ -14,3 +14,4 @@
 -   [Credential](raw/application-api-reference/managed-agents-api/credential-api.md)
 -   [Deployment](raw/application-api-reference/managed-agents-api/deployment-api.md)
 -   [Webhook](raw/application-api-reference/managed-agents-api/webhook-api.md)
+-   [Usage](raw/application-api-reference/managed-agents-api/usage-api.md)

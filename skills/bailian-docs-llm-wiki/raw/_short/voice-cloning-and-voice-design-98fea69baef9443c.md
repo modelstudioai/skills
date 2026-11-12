@@ -19,15 +19,15 @@
 
 **重要**控制台中需选中以上其中一个语音合成模型才可进行后续声音复刻操作。
 
-在控制台填好左侧配置项后，您可以点击「立即运行」并完成API-KEY授权。
+在控制台填好左侧配置项后，您可以点击“立即运行”并完成API-KEY授权。
 
 ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2218843871/p1086154.png)
 
-授权完成后，您可以点击应用体验区右上角的音色名称，在展开的面板中点击「复刻音色」进行操作。
+授权完成后，您可以点击应用体验区右上角的音色名称，在展开的面板中点击“复刻音色”进行操作。
 
 ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2218843871/p1086152.png) ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2218843871/p1086155.png)
 
-使用声音复刻能力，生成的音色将会同步至当前列表，您可以通过填写Prefix值获取对应音色列表，然后选择需要的音色点击「确定」即可。
+使用声音复刻能力，生成的音色将会同步至当前列表，您可以通过填写Prefix值获取对应音色列表，然后选择需要的音色点击“确定”即可。
 
 **说明**同步音色列表前，您需要先创建音色列表，参考[声音复刻](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-cloning-user-guide.md)文档。
 
@@ -52,14 +52,14 @@
 
 与声音复刻的操作步骤一致，唯一的区别在于音色列表是通过声音设计而生成的。
 
-在控制台填好左侧配置项后，您可以点击「立即运行」并完成API-KEY授权。
+在控制台填好左侧配置项后，您可以点击“立即运行”并完成API-KEY授权。
 
 ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2218843871/p1086165.png)
 
-授权完成后，您可以点击应用体验区右上角的「选择音色」，在展开的面板中点击「设计音色」进行操作。
+授权完成后，您可以点击应用体验区右上角的“选择音色”，在展开的面板中点击“设计音色”进行操作。
 
 ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2218843871/p1086164.png) ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2218843871/p1086166.png)
 
-使用声音设计能力，生成的音色将会同步至当前列表，您可以通过搜索获取对应音色列表，然后选择需要的音色点击「确定」即可。
+使用声音设计能力，生成的音色将会同步至当前列表，您可以通过搜索获取对应音色列表，然后选择需要的音色点击“确定”即可。
 
 **说明**同步音色列表前，您需要先创建音色列表，创建音色列表请参考[声音设计](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-design-user-guide.md)文档。

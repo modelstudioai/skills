@@ -12,11 +12,11 @@ Webhook 是 Workspace 级独立资源，与会话、智能体、环境平级。�
 
 ## 在控制台创建
 
-进入控制台「Webhook 通知」页，点击「注册端点」，在弹窗中填写：
+进入控制台“Webhook 通知”页，点击“注册端点”，在弹窗中填写：
 
 -   **端点 URL**：接收投递的回调地址。
 -   **描述**（可选）：便于区分用途。
--   **订阅事件类型**：按 Session、Vault、Agent、Deployment、Deployment run、Environment 分组勾选，每组支持「全选」。
+-   **订阅事件类型**：按 Session、Vault、Agent、Deployment、Deployment run、Environment 分组勾选，每组支持“全选”。
 
 创建成功后弹窗展示一次 **Signing Secret**，并附验签步骤与 Node.js/Python 示例代码。
 

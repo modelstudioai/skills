@@ -112,7 +112,7 @@ boolean
 
 是否启用请求头替换，固定传 true
 
-**说明**同一 Vault 内 `secret_name` 不能重复，否则返回 409 `CREDENTIAL_SECRET_NAME_DUPLICATE`「该Vault下已存在相同变量名称的凭证」。
+**说明**同一 Vault 内 `secret_name` 不能重复，否则返回 409 `CREDENTIAL_SECRET_NAME_DUPLICATE`“该Vault下已存在相同变量名称的凭证”。
 
 ## 请求示例
 

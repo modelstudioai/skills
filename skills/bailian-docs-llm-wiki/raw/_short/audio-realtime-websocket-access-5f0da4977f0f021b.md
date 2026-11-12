@@ -17,17 +17,9 @@ Qwen-Audio-Realtime WebSocket 接入
 
 WebSocket URL 固定如下，通过查询参数 `model` 指定要调用的模型名称（将 `<model_name>` 替换为实际的模型）：
 
-#### 华北2（北京）
+WebSocket`wss://WorkspaceId.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime?model=<model_name>`
 
-`wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime?model=<model_name>`
-
-调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
-
-#### 新加坡
-
-`wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime?model=<model_name>`
-
-调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+WebSocket`wss://WorkspaceId.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime?model=<model_name>`
 
 **重要**URL 必须使用 `wss://` 协议。Authorization 在请求头中设置，模型通过 URL 查询参数 `model` 指定。
 
@@ -35,35 +27,15 @@ WebSocket URL 固定如下，通过查询参数 `model` 指定要调用的模型
 
 请求头中需添加如下信息：
 
-**参数**
-
-**类型**
-
-**是否必选**
-
-**说明**
-
-Authorization
-
-string
-
-是
+`Authorization`string是否必选: 是
 
 鉴权令牌，格式为 `Bearer <your_api_key>`，将 `<your_api_key>` 替换为实际的 API Key。
 
-user-agent
-
-string
-
-否
+`user-agent`string是否必选: 否
 
 客户端标识，便于服务端追踪来源。
 
-X-DashScope-WorkSpace
-
-string
-
-否
+`X-DashScope-WorkSpace`string是否必选: 否
 
 阿里云百炼业务空间 ID。
 

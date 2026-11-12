@@ -25,7 +25,7 @@ print(response.output_text)
 
 千问Plus：Qwen3.7-Plus系列、Qwen3.6-Plus系列、Qwen3.5-Plus系列
 
-千问Max：Qwen3.8-Max系列、qwen3.7-max-2026-06-08
+千问Max：qwen4-max-preview（[仅 Token Plan](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview)）、Qwen3.8-Max系列、qwen3.7-max-2026-06-08
 
 qwen3.8-27b
 

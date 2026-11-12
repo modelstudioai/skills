@@ -2,28 +2,23 @@
 
 通过自然语言描述创建自定义音色，试听预览后用于语音合成。
 
-## 功能介绍
-
 声音设计适用于快速原型验证、创意内容生产、游戏角色配音等场景。
 
 **说明**创建音色无需提供音频样本。如需根据已有音频样本还原其声音，请使用[声音复刻](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-cloning-user-guide.md)。
 
 ## 准备工作
 
--   [获取 API Key](raw/model-api-reference/preparations/get-api-key.md)，并将其[配置到环境变量](https://help.aliyun.com/zh/model-studio/get-api-key#20b17d4430qvt) `DASHSCOPE_API_KEY`。
-    
--   获取业务空间 ID，将示例中的 `YOUR_WORKSPACE_ID` 替换为真实值。获取方式请参见[选择地域、服务部署范围和接入域名](raw/model-user-guide/get-started-with-models/regions.md)。
-    
--   安装 [DashScope SDK](raw/model-api-reference/preparations/install-sdk.md) 和 `requests`：
-    
-    ```
-    pip install -U dashscope requests
-    ```
-    
+在控制台[获取 API Key](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key)，并配置 `DASHSCOPE_API_KEY` 环境变量。
+
+安装 [DashScope SDK](raw/model-api-reference/preparations/install-sdk.md) 和 `requests`：
+
+```
+pip install -U dashscope requests
+```
 
 ## 开始使用
 
-Qwen-Audio-TTS 和 CosyVoice 使用相同的音色创建、预览和基础合成流程。以下以 `qwen-audio-3.1-tts-flash` 为例。
+Qwen-Audio-TTS 和 CosyVoice 使用相同的音色创建、预览和基础合成流程。以下以 qwen-audio-3.1-tts-flash 为例。
 
 1.  **创建音色**：设置声音描述 `voice_prompt`、预览文本 `preview_text` 和目标模型 `target_model`，获取音色 ID。
 2.  **保存预览音频**：解码返回的 `preview_audio.data`，保存为 WAV 文件，用于试听。
@@ -73,7 +68,7 @@ with open("output.wav", "wb") as f:
 
 运行示例后，`preview.wav` 为预览音频，`output.wav` 为合成音频。保存打印的音色 ID，后续可使用该 ID 调用语音合成。
 
-HTTP 请求示例、可选参数和返回字段请参见[声音设计 API 参考](raw/model-api-reference/voice-customization-api-directory/voice-design-api-references.md)；合成参数请参见 [Qwen-Audio-TTS 客户端事件](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-client-events#h3runtask)。
+HTTP 请求示例、可选参数和返回字段请参见[声音设计 API 参考](raw/model-api-reference/voice-customization-api-directory/voice-design-api-references.md)；合成参数请参见 [Qwen-Audio-TTS Python SDK](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-python-sdk#h3-cv-params)。
 
 ## 声音描述指南
 
@@ -142,8 +137,6 @@ HTTP 请求示例、可选参数和返回字段请参见[声音设计 API 参考
 ## 支持模型
 
 #### 华北2（北京）
-
-使用该地域的 [API Key](https://bailian.console.aliyun.com/model/settings/api-key) 调用以下模型：
 
 -   **Qwen-Audio-TTS**：qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash
     

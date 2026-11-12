@@ -249,7 +249,7 @@ parameters: {
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8859485671/p1034440.png)
 
--   详细内容可以查看项目文件，其路径为「./tingwu-web/docs/ARCHITECTURE.md」
+-   详细内容可以查看项目文件，其路径为“./tingwu-web/docs/ARCHITECTURE.md”
 
 ### 项目结构
 

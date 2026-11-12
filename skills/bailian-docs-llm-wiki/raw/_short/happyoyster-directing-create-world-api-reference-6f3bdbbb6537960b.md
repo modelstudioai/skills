@@ -549,7 +549,7 @@ World 首帧 URL；尚未生成时为 `null`。
 
 ## 补充说明
 
--   **字数计算**：文档中的「最长 N 字」按字符数（Unicode 字符）统计，不区分中英文——中文汉字、英文字母、数字、空格和标点符号均各算 1 个字符。
+-   **字数计算**：文档中的“最长 N 字”按字符数（Unicode 字符）统计，不区分中英文——中文汉字、英文字母、数字、空格和标点符号均各算 1 个字符。
     
 -   **ScriptList 提交要求**：创建 World 时 `acts` 最多 45 条，不要求恰好 45 条；Travel 中调用 [update-script](raw/_short/happyoyster-directing-update-script-api-referenc-559783f11176cb54.md) 时才要求完整提交 45 条。
     

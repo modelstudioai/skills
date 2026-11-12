@@ -62,7 +62,7 @@
 
 ## 额度消耗规则
 
-一次额度消耗说明：生成大纲完成后，点击「基于大纲生成PPT」即产生一次额度消耗。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2552595671/p1035050.png)
+一次额度消耗说明：生成大纲完成后，点击“基于大纲生成PPT”即产生一次额度消耗。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2552595671/p1035050.png)
 
 ## 常见问题
 

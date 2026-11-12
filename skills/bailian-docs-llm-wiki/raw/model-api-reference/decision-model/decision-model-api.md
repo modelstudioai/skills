@@ -91,7 +91,7 @@ DashScope SDK 已支持决策模型（兼容 TypeSafe System One 协议）：
 
 #### 工单分流示例
 
-一次请求同时完成「派单团队 choice」「是否升级 noul」「严重度 score」三项决策。以下以华北2（北京）地域为例。
+一次请求同时完成“派单团队 choice”“是否升级 noul”“严重度 score”三项决策。以下以华北2（北京）地域为例。
 
 #### DashScope Python
 

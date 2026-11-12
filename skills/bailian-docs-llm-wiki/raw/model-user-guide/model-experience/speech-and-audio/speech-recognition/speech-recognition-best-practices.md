@@ -417,7 +417,9 @@ public class RecognitionPoolExample {
 
 ## 管理异步转写作业
 
-高并发批量转写优先通过回调接收任务完成通知，减少轮询请求。回调配置、消息结构及结果获取方式参见[配置异步任务回调](raw/model-api-reference/more-about-models/async-task-api.md)。
+高并发批量转写优先通过回调接收任务完成通知，减少轮询请求。回调配置和事件格式参见[配置异步任务回调](raw/model-api-reference/more-about-models/async-task-api.md)。
+
+收到完成通知后，使用 `data.task_id` 关联业务任务，并检查 `data.task_status`。任务成功且通知中未包含所需结果时，按[对应模型的 HTTP API](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#55d72db0d5jgx)查询任务结果，再[下载并保存转写文件](#results)。
 
 ### 控制提交、查询与上传频率
 

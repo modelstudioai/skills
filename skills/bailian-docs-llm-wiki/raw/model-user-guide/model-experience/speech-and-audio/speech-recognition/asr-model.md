@@ -1,746 +1,128 @@
 # 语音识别概述
 
-选择适合实时语音识别、录音文件识别等场景的模型。
+百炼语音识别支持实时音频和录音文件转写，提供多语言与方言、热词与上下文、文本润色、说话人分离等能力。
 
-## 从闭源模型迁移到百炼?
+## 功能介绍
 
-如果你正在使用 Whisper、Deepgram 或 Google 的语音识别服务，可参考下表选择对应的百炼模型。
+语音识别将音视频中的语音转换为文本，可用于语音输入、实时字幕、会议记录和通话分析等场景。百炼支持持续输入音频的实时识别，以及提交完整音频文件的非实时识别；不同模型支持的语言、方言和增强能力有所不同。
+
+## 模型选型
+
+按音频输入方式、业务场景和结果返回需求选择模型。以下推荐使用 Qwen-Audio 3.1 系列。
+
+**类型**
 
 **使用场景**
 
-**闭源模型代表**
+**推荐模型**
 
-**百炼推荐**
+**主要区别**
 
-实时识别
+实时
 
-Deepgram Nova-3、Google Chirp 3
+实时字幕、会议记录等持续转写
 
-输入法、语音消息：`qwen-audio-3.1-asr-flash-message`  
-持续转写：`qwen-audio-3.1-asr-flash-streaming`
+[qwen-audio-3.1-asr-flash-streaming](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen-audio-3.1-asr-flash-streaming)
 
-非实时 / 文件转写
+持续发送音频，同时接收中间结果和最终结果。
 
-OpenAI gpt-4o-transcribe、Whisper
+输入法、语音消息等短段语音输入
 
-`qwen-audio-3.1-asr-flash-filetrans`、`qwen-audio-3.1-asr-flash`
+[qwen-audio-3.1-asr-flash-message](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen-audio-3.1-asr-flash-message)
 
-本文按“先选维度、再看模型”的顺序帮助您完成选型：先从“[选型决策维度](https://help.aliyun.com/zh/model-studio/asr-model#asr_decide02)”（实时/非实时、专业术语、说话人分离、情感识别）确认场景；再到“[推荐模型](https://help.aliyun.com/zh/model-studio/asr-model#asr_rec02)”查看针对各场景的首选；如需更多版本可在“[所有模型](https://help.aliyun.com/zh/model-studio/asr-model#asr_all02)”按系列展开；最后到“[音频规格](https://help.aliyun.com/zh/model-studio/asr-model#asr_audio_spec02)”核对输入文件约束。各模型支持的语言（含方言）随附在“[所有模型](https://help.aliyun.com/zh/model-studio/asr-model#asr_all02)”的各系列子节内。
+默认返回句子最终结果，可分别开启中间结果和文本润色。
 
-## 选型决策维度
+非实时
 
-从以下 4 个维度逐项确认，每个维度都会推荐适配的模型。
+5 分钟以内的短音频文件
 
-### 实时还是非实时？
+[qwen-audio-3.1-asr-flash](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen-audio-3.1-asr-flash)
 
-实时是指在用户说话的同时输出识别结果，非实时是指录音结束后再进行转写。
+在当前请求中获取识别结果，可选择 SSE 流式输出。
 
--   实时语音识别通过 WebSocket 流式输入音频。按使用场景选择：
+长录音、后台音视频转写
+
+[qwen-audio-3.1-asr-flash-filetrans](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen-audio-3.1-asr-flash-filetrans)
+
+提交异步任务，完成后下载转写结果文件。
+
+## 识别方式
+
+**识别方式**
+
+**音频输入**
+
+**结果返回**
+
+[实时语音识别](raw/model-user-guide/model-experience/speech-and-audio/speech-recognition/real-time-speech-recognition-user-guide.md)
+
+分块持续发送音频，适合在说话过程中展示转写。
+
+发送音频的同时接收识别结果；中间结果、最终结果的返回方式随模型而异。
+
+[非实时语音识别](raw/model-user-guide/model-experience/speech-and-audio/speech-recognition/non-realtime-speech-recognition-user-guide.md)
+
+一次提交完整音频或音视频文件，适合处理已有录音。
+
+同步调用在当前请求中返回结果，支持 SSE 的模型可分次输出；异步调用先返回任务 ID，完成后获取结果文件。
+
+## 识别效果与结果
+
+选定模型后，可根据业务需要改善特定词汇的识别、文本可读性及结构化结果。具体配置方法参见[实时语音识别](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide#rt03_advanced_h2)或[非实时语音识别](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#nrt03_advanced_h2)。
+
+-   **热词与上下文**： 热词提供人名、品牌名等词汇的目标写法；上下文补充前几轮对话及业务背景。使用方法、支持范围和调优参见[提升识别准确率](raw/model-user-guide/model-experience/speech-and-audio/speech-recognition/improve-asr-accuracy.md)。
     
-    -   输入法、语音消息等短段语音输入：推荐 `qwen-audio-3.1-asr-flash-message`，首字和整体延迟较低，支持文本润色，并在一段语音结束后整理最终结果。
-    -   会议、课堂记录等持续转写场景：推荐 `qwen-audio-3.1-asr-flash-streaming`，适合边转写边阅读、对中间结果准确性要求较高的应用。
--   **非实时（录音文件识别）**：基于HTTP协议，提交音频文件获取识别结果。适用于呼叫中心录音、播客和访谈等场景。推荐使用 `qwen-audio-3.1-asr-flash-filetrans`（热词、Prompt上下文、说话人分离）。
+-   **文本润色**： 整理口语中的语气词、重复和自我纠正。qwen-audio-3.1-asr-flash-message 和 qwen-audio-3.1-asr-flash 支持原生文本润色。
+    
+-   **保留方言表达**： qwen-audio-3.1-asr-flash-streaming、qwen-audio-3.1-asr-flash-message、qwen-audio-3.1-asr-flash、qwen-audio-3.1-asr-flash-filetrans 支持保留方言特有表达。识别某种方言与保留其文本表达是不同的能力。
+    
+-   **说话人分离**： 为转写结果标注说话人编号，用于区分会议、访谈中的发言人。qwen-audio-3.1-asr-flash 和 qwen-audio-3.1-asr-flash-filetrans 支持该能力。
+    
+-   **时间戳**： 将句子或字词与音频位置对应，用于字幕对齐、关键词高亮和音频跳转。
+    
+-   **敏感词过滤**： 将指定词汇替换为星号或从转写文本中移除。
     
 
-客户端接入如需稳定的延迟、弱网适应能力，以及实时双工的降噪与回声消除，可参考 [Realtime API 概述](https://help.aliyun.com/zh/model-studio/realtime-api-overview#rtov-s02h2)中的 AOQ 协议选型及支持范围。
+音频准备、连接与并发管理、异步作业及异常处理，参见[语音识别最佳实践](raw/model-user-guide/model-experience/speech-and-audio/speech-recognition/speech-recognition-best-practices.md)。
 
-各模型的 HTTP、WebSocket 接口和 SDK 接入方式，请参见[语音识别 API 参考](raw/model-api-reference/audio-api-directory/speech-recognition-api-reference.md)。SDK 支持的模型和参数以对应 SDK 文档为准。
+## 模型与语言
 
-选择实时接入请参考[实时语音识别](raw/model-user-guide/model-experience/speech-and-audio/speech-recognition/real-time-speech-recognition-user-guide.md)，选择非实时接入请参考[非实时语音识别](raw/model-user-guide/model-experience/speech-and-audio/speech-recognition/non-realtime-speech-recognition-user-guide.md)。
+以下按模型系列和版本列出支持的语言与方言。
 
-### 处理专业术语
+Qwen-Audio-ASR-Streaming
 
-两种方式，按灵活性排序：
+-   qwen-audio-3.1-asr-flash-streaming、qwen-audio-3.0-asr-flash-streaming：中文（普通话、粤语、吴语、闽南语、客家话、赣语、湘语、晋语；并支持中原、西南、冀鲁、江淮、兰银、胶辽、东北、北京、港台等，包括河南、陕西、湖北、四川、重庆、云南、贵州、广东、广西、河北、天津、山东、安徽、南京、江苏、杭州、甘肃、宁夏等地区官话口音）、英语、日语、韩语、越南语、泰语、印尼语、马来语、菲律宾语、印地语、阿拉伯语、法语、德语、西班牙语、葡萄牙语、俄语、意大利语、荷兰语、瑞典语、丹麦语、芬兰语、挪威语、希腊语、波兰语、捷克语、匈牙利语、罗马尼亚语、保加利亚语、克罗地亚语、斯洛伐克语
 
-1.  **Prompt上下文注入**：在系统提示词中描述您的领域背景，无需预配置。模型在每次请求时自适应。推荐使用 `qwen-audio-3.1-asr-flash-streaming`、`qwen-audio-3.1-asr-flash-filetrans` 和 `qwen-audio-3.1-asr-flash` 模型。
-2.  **热词**：提供带权重的词汇表。推荐使用 `qwen-audio-3.1-asr-flash-streaming`、`qwen-audio-3.1-asr-flash-filetrans` 和 `qwen-audio-3.1-asr-flash` 模型。
+Qwen-Audio-ASR-Message
 
-`qwen-audio-3.1-asr-flash-message` 支持即时热词、预编译热词以及对话上下文增强。通过 `vocabulary` 或 `vocabulary_id` 配置热词；通过 `input.context` 传入前几轮用户转写与助手回复。参数定义请参见 [客户端事件](raw/_short/qwen-asr-message-client-events-1721a061cc8750e6.md)。
+-   qwen-audio-3.1-asr-flash-message：中文（普通话、粤语、吴语、闽南语、客家话、赣语、湘语、晋语；并支持中原、西南、冀鲁、江淮、兰银、胶辽、东北、北京、港台等，包括河南、陕西、湖北、四川、重庆、云南、贵州、广东、广西、河北、天津、山东、安徽、南京、江苏、杭州、甘肃、宁夏等地区官话口音）、英语、日语、韩语、越南语、泰语、印尼语、马来语、菲律宾语、印地语、阿拉伯语、法语、德语、西班牙语、葡萄牙语、俄语、意大利语、荷兰语、瑞典语、丹麦语、芬兰语、挪威语、希腊语、波兰语、捷克语、匈牙利语、罗马尼亚语、保加利亚语、克罗地亚语、斯洛伐克语
 
-### 说话人分离
+Qwen-Audio-ASR
 
-`qwen-audio-3.1-asr-flash`、`qwen-audio-3.1-asr-flash-filetrans`、`qwen-audio-3.0-asr-flash-filetrans` 以及 Fun-ASR 系列的非实时模型（`fun-asr`）支持说话人分离。如果您需要区分“谁说了什么”，推荐使用 `qwen-audio-3.1-asr-flash-filetrans`。
+-   qwen-audio-3.1-asr-flash：中文（普通话、粤语、吴语、闽南语、客家话、赣语、湘语、晋语；并支持中原、西南、冀鲁、江淮、兰银、胶辽、东北、北京、港台等，包括河南、陕西、湖北、四川、重庆、云南、贵州、广东、广西、河北、天津、山东、安徽、南京、江苏、杭州、甘肃、宁夏等地区官话口音）、英语、日语、韩语、越南语、泰语、印尼语、马来语、菲律宾语、印地语、阿拉伯语、法语、德语、西班牙语、葡萄牙语、俄语、意大利语、荷兰语、瑞典语、丹麦语、芬兰语、挪威语、希腊语、波兰语、捷克语、匈牙利语、罗马尼亚语、保加利亚语、克罗地亚语、斯洛伐克语、土耳其语、波斯语、马拉地语、马拉雅拉姆语、尼泊尔语、吉尔吉斯语、阿塞拜疆语、格鲁吉亚语、亚美尼亚语、斯洛文尼亚语、阿尔巴尼亚语、爱沙尼亚语、拉脱维亚语、立陶宛语、加泰罗尼亚语、巴斯克语、加利西亚语、奥里亚语、迪维希语、阿萨姆语、库尔德语、提格雷语、西弗里西亚语、巴什基尔语、白俄罗斯语、鞑靼语、国际语、东马里语、道本语
+-   qwen-audio-3.0-asr-flash：中文（普通话、粤语、吴语、闽南语、客家话、赣语、湘语、晋语；并支持中原、西南、冀鲁、江淮、兰银、胶辽、东北、北京、港台等，包括河南、陕西、湖北、四川、重庆、云南、贵州、广东、广西、河北、天津、山东、安徽、南京、江苏、杭州、甘肃、宁夏等地区官话口音）、英语、日语、韩语、越南语、泰语、印尼语、马来语、菲律宾语、印地语、阿拉伯语、法语、德语、西班牙语、葡萄牙语、俄语、意大利语、荷兰语、瑞典语、丹麦语、芬兰语、挪威语、希腊语、波兰语、捷克语、匈牙利语、罗马尼亚语、保加利亚语、克罗地亚语、斯洛伐克语
 
-### 情感识别
+Qwen-Audio-ASR-Filetrans
 
-Qwen-ASR 系列模型在转写的同时支持情感识别。推荐使用 `qwen3-asr-flash-realtime`（实时）或 `qwen3-asr-flash-filetrans`（非实时）。
+-   qwen-audio-3.1-asr-flash-filetrans、qwen-audio-3.0-asr-flash-filetrans：中文（普通话、粤语、吴语、闽南语、客家话、赣语、湘语、晋语；并支持中原、西南、冀鲁、江淮、兰银、胶辽、东北、北京、港台等，包括河南、陕西、湖北、四川、重庆、云南、贵州、广东、广西、河北、天津、山东、安徽、南京、江苏、杭州、甘肃、宁夏等地区官话口音）、英语、日语、韩语、越南语、泰语、印尼语、马来语、菲律宾语、印地语、阿拉伯语、法语、德语、西班牙语、葡萄牙语、俄语、意大利语、荷兰语、瑞典语、丹麦语、芬兰语、挪威语、希腊语、波兰语、捷克语、匈牙利语、罗马尼亚语、保加利亚语、克罗地亚语、斯洛伐克语
 
-## 推荐模型
+Fun-ASR
 
-以下为各场景下最推荐的模型，可前往模型广场查看详情。
+-   fun-asr-realtime：中文（普通话、粤语、吴语、闽南语、客家话、赣语、湘语、晋语；并支持中原、西南、冀鲁、江淮、兰银、胶辽、东北、北京、港台等，包括河南、陕西、湖北、四川、重庆、云南、贵州、广东、广西、河北、天津、山东、安徽、南京、江苏、杭州、甘肃、宁夏等地区官话口音）、英语、日语、韩语、越南语、泰语、印尼语、马来语、菲律宾语、印地语、阿拉伯语、法语、德语、西班牙语、葡萄牙语、俄语、意大利语、荷兰语、瑞典语、丹麦语、芬兰语、挪威语、希腊语、波兰语、捷克语、匈牙利语、罗马尼亚语、保加利亚语、克罗地亚语、斯洛伐克语
+-   fun-asr-realtime-2026-02-28：中文（普通话、粤语、吴语、闽南语、客家话、赣语、湘语、晋语；并支持中原、西南、冀鲁、江淮、兰银、胶辽、东北、北京、港台等，包括河南、陕西、湖北、四川、重庆、云南、贵州、广东、广西、河北、天津、山东、安徽、南京、江苏、杭州、甘肃、宁夏等地区官话口音）、英语、日语
+-   fun-asr-flash-8k-realtime、fun-asr-flash-8k-realtime-2026-01-28：中文
+-   fun-asr：中文（普通话、粤语、吴语、闽南语、客家话、赣语、湘语、晋语；并支持中原、西南、冀鲁、江淮、兰银、胶辽、东北、北京、港台等，包括河南、陕西、湖北、四川、重庆、云南、贵州、广东、广西、河北、天津、山东、安徽、南京、江苏、杭州、甘肃、宁夏等地区官话口音）、英语、日语、韩语、越南语、泰语、印尼语、马来语、菲律宾语、印地语、阿拉伯语、法语、德语、西班牙语、葡萄牙语、俄语、意大利语、荷兰语、瑞典语、丹麦语、芬兰语、挪威语、希腊语、波兰语、捷克语、匈牙利语、罗马尼亚语、保加利亚语、克罗地亚语、斯洛伐克语
+-   fun-asr-flash-2026-06-15：中文（普通话、粤语、吴语、闽南语、客家话、赣语、湘语、晋语；并支持中原、西南、冀鲁、江淮、兰银、胶辽、东北、北京、港台等，包括河南、陕西、湖北、四川、重庆、云南、贵州、广东、广西、河北、天津、山东、安徽、南京、江苏、杭州、甘肃、宁夏等地区官话口音）、英语、日语、韩语、越南语、泰语、印尼语、马来语、菲律宾语、印地语、阿拉伯语、法语、德语、西班牙语、葡萄牙语、俄语、意大利语、荷兰语、瑞典语、丹麦语、芬兰语、挪威语、希腊语、波兰语、捷克语、匈牙利语、罗马尼亚语、保加利亚语、克罗地亚语、斯洛伐克语
 
-**模型ID**
+Qwen3-ASR
 
-**模式**
+-   qwen3-asr-flash-realtime、qwen3-asr-flash-filetrans、qwen3-asr-flash：中文（普通话、四川话、闽南语、吴语、粤语）、英语、日语、德语、韩语、俄语、法语、葡萄牙语、阿拉伯语、意大利语、西班牙语、印地语、印尼语、泰语、土耳其语、乌克兰语、越南语、捷克语、丹麦语、菲律宾语、芬兰语、冰岛语、马来语、挪威语、波兰语、瑞典语。
 
-**API**
+Paraformer
 
-**精度增强**
+-   paraformer-realtime-v2、paraformer-v2：中文（普通话、粤语、吴语、闽南语、东北话、甘肃话、贵州话、河南话、湖北话、湖南话、宁夏话、山西话、陕西话、山东话、四川话、天津话、江西话、云南话、上海话）、英文、日语、韩语、德语、法语、俄语
+-   paraformer-realtime-8k-v2、paraformer-8k-v2：中文普通话
 
-**情感识别**
+## 音频输入要求
 
-**说话人分离**
-
-**支持语言**
-
-**音频最大时长/大小**
-
-`qwen-audio-3.1-asr-flash-message`
-
-实时
-
-WebSocket
-
-热词、上下文
-
-不支持
-
-不支持
-
-多语种及方言
-
-—
-
-`qwen-audio-3.1-asr-flash-streaming`
-
-实时
-
-WebSocket
-
-热词、Prompt上下文
-
-不支持
-
-不支持
-
-多语种及方言
-
-无限制
-
-`qwen-audio-3.1-asr-flash-filetrans`
-
-非实时
-
-HTTP
-
-热词、Prompt上下文
-
-不支持
-
-支持
-
-多语种及方言
-
-12小时 / 2GB
-
-## 所有模型
-
-### Qwen-Audio-ASR-Message
-
-**模型ID**
-
-**模式**
-
-**API**
-
-**精度增强**
-
-**情感识别**
-
-**说话人分离**
-
-**支持语言**
-
-**音频最大时长/大小**
-
-`qwen-audio-3.1-asr-flash-message`
-
-实时
-
-WebSocket
-
-热词、上下文
-
-不支持
-
-不支持
-
-多语种及方言
-
-—
-
-**支持的语言**：
-
--   `qwen-audio-3.1-asr-flash-message`：中文（普通话、粤语、吴语、闽南语、客家话、赣语、湘语、晋语；并支持中原、西南、冀鲁、江淮、兰银、胶辽、东北、北京、港台等，包括河南、陕西、湖北、四川、重庆、云南、贵州、广东、广西、河北、天津、山东、安徽、南京、江苏、杭州、甘肃、宁夏等地区官话口音）、英语、日语、韩语、越南语、泰语、印尼语、马来语、菲律宾语、印地语、阿拉伯语、法语、德语、西班牙语、葡萄牙语、俄语、意大利语、荷兰语、瑞典语、丹麦语、芬兰语、挪威语、希腊语、波兰语、捷克语、匈牙利语、罗马尼亚语、保加利亚语、克罗地亚语、斯洛伐克语
-
-### Qwen-Audio-ASR-Streaming
-
-**模型ID**
-
-**模式**
-
-**API**
-
-**精度增强**
-
-**情感识别**
-
-**说话人分离**
-
-**支持语言**
-
-**音频最大时长/大小**
-
-`qwen-audio-3.1-asr-flash-streaming`
-
-实时
-
-WebSocket
-
-热词、Prompt上下文
-
-不支持
-
-不支持
-
-多语种及方言
-
-无限制
-
-`qwen-audio-3.0-asr-flash-streaming`
-
-实时
-
-WebSocket
-
-热词、Prompt上下文
-
-不支持
-
-不支持
-
-多语种及方言
-
-无限制
-
-**支持的语言（按版本）**：
-
--   `qwen-audio-3.1-asr-flash-streaming`、`qwen-audio-3.0-asr-flash-streaming`：中文（普通话、粤语、吴语、闽南语、客家话、赣语、湘语、晋语；并支持中原、西南、冀鲁、江淮、兰银、胶辽、东北、北京、港台等，包括河南、陕西、湖北、四川、重庆、云南、贵州、广东、广西、河北、天津、山东、安徽、南京、江苏、杭州、甘肃、宁夏等地区官话口音）、英语、日语、韩语、越南语、泰语、印尼语、马来语、菲律宾语、印地语、阿拉伯语、法语、德语、西班牙语、葡萄牙语、俄语、意大利语、荷兰语、瑞典语、丹麦语、芬兰语、挪威语、希腊语、波兰语、捷克语、匈牙利语、罗马尼亚语、保加利亚语、克罗地亚语、斯洛伐克语
-
-### Qwen-Audio-ASR-Filetrans
-
-**模型ID**
-
-**模式**
-
-**API**
-
-**精度增强**
-
-**情感识别**
-
-**说话人分离**
-
-**支持语言**
-
-**音频最大时长/大小**
-
-`qwen-audio-3.1-asr-flash-filetrans`
-
-非实时
-
-HTTP
-
-热词、Prompt上下文
-
-不支持
-
-支持
-
-多语种及方言
-
-12小时 / 2GB
-
-`qwen-audio-3.0-asr-flash-filetrans`
-
-非实时
-
-HTTP
-
-热词、Prompt上下文
-
-不支持
-
-支持
-
-多语种及方言
-
-12小时 / 2GB
-
-**支持的语言（按版本）**：
-
--   `qwen-audio-3.1-asr-flash-filetrans`、`qwen-audio-3.0-asr-flash-filetrans`：中文（普通话、粤语、吴语、闽南语、客家话、赣语、湘语、晋语；并支持中原、西南、冀鲁、江淮、兰银、胶辽、东北、北京、港台等，包括河南、陕西、湖北、四川、重庆、云南、贵州、广东、广西、河北、天津、山东、安徽、南京、江苏、杭州、甘肃、宁夏等地区官话口音）、英语、日语、韩语、越南语、泰语、印尼语、马来语、菲律宾语、印地语、阿拉伯语、法语、德语、西班牙语、葡萄牙语、俄语、意大利语、荷兰语、瑞典语、丹麦语、芬兰语、挪威语、希腊语、波兰语、捷克语、匈牙利语、罗马尼亚语、保加利亚语、克罗地亚语、斯洛伐克语
-
-### Qwen-Audio-ASR
-
-**模型ID**
-
-**模式**
-
-**API**
-
-**精度增强**
-
-**情感识别**
-
-**说话人分离**
-
-**支持语言**
-
-**音频最大时长/大小**
-
-`qwen-audio-3.1-asr-flash`
-
-非实时
-
-HTTP
-
-热词、Prompt上下文
-
-不支持
-
-支持
-
-多语种及方言
-
-5分钟 / 2GB
-
-`qwen-audio-3.0-asr-flash`
-
-非实时
-
-HTTP
-
-热词、Prompt上下文
-
-不支持
-
-不支持
-
-多语种及方言
-
-5分钟 / 2GB
-
-**支持的语言（按版本）**：
-
--   `qwen-audio-3.1-asr-flash`：中文（普通话、粤语、吴语、闽南语、客家话、赣语、湘语、晋语；并支持中原、西南、冀鲁、江淮、兰银、胶辽、东北、北京、港台等，包括河南、陕西、湖北、四川、重庆、云南、贵州、广东、广西、河北、天津、山东、安徽、南京、江苏、杭州、甘肃、宁夏等地区官话口音）、英语、日语、韩语、越南语、泰语、印尼语、马来语、菲律宾语、印地语、阿拉伯语、法语、德语、西班牙语、葡萄牙语、俄语、意大利语、荷兰语、瑞典语、丹麦语、芬兰语、挪威语、希腊语、波兰语、捷克语、匈牙利语、罗马尼亚语、保加利亚语、克罗地亚语、斯洛伐克语、土耳其语、波斯语、马拉地语、马拉雅拉姆语、尼泊尔语、吉尔吉斯语、阿塞拜疆语、格鲁吉亚语、亚美尼亚语、斯洛文尼亚语、阿尔巴尼亚语、爱沙尼亚语、拉脱维亚语、立陶宛语、加泰罗尼亚语、巴斯克语、加利西亚语、奥里亚语、迪维希语、阿萨姆语、库尔德语、提格雷语、西弗里西亚语、巴什基尔语、白俄罗斯语、鞑靼语、国际语、东马里语、道本语
--   `qwen-audio-3.0-asr-flash`：中文（普通话、粤语、吴语、闽南语、客家话、赣语、湘语、晋语；并支持中原、西南、冀鲁、江淮、兰银、胶辽、东北、北京、港台等，包括河南、陕西、湖北、四川、重庆、云南、贵州、广东、广西、河北、天津、山东、安徽、南京、江苏、杭州、甘肃、宁夏等地区官话口音）、英语、日语、韩语、越南语、泰语、印尼语、马来语、菲律宾语、印地语、阿拉伯语、法语、德语、西班牙语、葡萄牙语、俄语、意大利语、荷兰语、瑞典语、丹麦语、芬兰语、挪威语、希腊语、波兰语、捷克语、匈牙利语、罗马尼亚语、保加利亚语、克罗地亚语、斯洛伐克语
-
-### Fun-ASR
-
-**模型ID**
-
-**模式**
-
-**API**
-
-**精度增强**
-
-**情感识别**
-
-**说话人分离**
-
-[**支持语言**](raw/model-user-guide/model-experience/speech-and-audio/speech-recognition/asr-model.md)
-
-**音频最大时长/大小**
-
-`fun-asr-realtime`
-
-实时
-
-WebSocket
-
-热词
-
-不支持
-
-不支持
-
-多语种及方言
-
-无限制
-
-`fun-asr-realtime-2026-02-28`
-
-实时
-
-WebSocket
-
-热词
-
-不支持
-
-不支持
-
-中、英、日及方言
-
-无限制
-
-`fun-asr-flash-8k-realtime`
-
-实时
-
-WebSocket
-
-热词
-
-不支持
-
-不支持
-
-中文
-
-无限制
-
-`fun-asr-flash-8k-realtime-2026-01-28`
-
-实时
-
-WebSocket
-
-热词
-
-不支持
-
-不支持
-
-中文
-
-无限制
-
-`fun-asr`
-
-非实时
-
-HTTP
-
-热词
-
-不支持
-
-支持
-
-多语种及方言
-
-12小时 / 2GB
-
-`fun-asr-flash-2026-06-15`
-
-非实时
-
-HTTP
-
-Prompt上下文
-
-不支持
-
-不支持
-
-多语种及方言
-
-5分钟 / 2GB
-
-**支持的语言（按版本）**：
-
--   **Fun-ASR-Realtime 主版本**（`fun-asr-realtime`）：中文（普通话、粤语、吴语、闽南语、客家话、赣语、湘语、晋语；并支持中原、西南、冀鲁、江淮、兰银、胶辽、东北、北京、港台等，包括河南、陕西、湖北、四川、重庆、云南、贵州、广东、广西、河北、天津、山东、安徽、南京、江苏、杭州、甘肃、宁夏等地区官话口音）、英语、日语、韩语、越南语、泰语、印尼语、马来语、菲律宾语、印地语、阿拉伯语、法语、德语、西班牙语、葡萄牙语、俄语、意大利语、荷兰语、瑞典语、丹麦语、芬兰语、挪威语、希腊语、波兰语、捷克语、匈牙利语、罗马尼亚语、保加利亚语、克罗地亚语、斯洛伐克语
--   `fun-asr-realtime-2026-02-28`：中文（普通话、粤语、吴语、闽南语、客家话、赣语、湘语、晋语；并支持中原、西南、冀鲁、江淮、兰银、胶辽、东北、北京、港台等，包括河南、陕西、湖北、四川、重庆、云南、贵州、广东、广西、河北、天津、山东、安徽、南京、江苏、杭州、甘肃、宁夏等地区官话口音）、英语、日语
--   **Fun-ASR-Flash-Realtime（8K）**（`fun-asr-flash-8k-realtime`、`fun-asr-flash-8k-realtime-2026-01-28`）：中文
--   **Fun-ASR 主版本**（`fun-asr`）：中文（普通话、粤语、吴语、闽南语、客家话、赣语、湘语、晋语；并支持中原、西南、冀鲁、江淮、兰银、胶辽、东北、北京、港台等，包括河南、陕西、湖北、四川、重庆、云南、贵州、广东、广西、河北、天津、山东、安徽、南京、江苏、杭州、甘肃、宁夏等地区官话口音）、英语、日语、韩语、越南语、泰语、印尼语、马来语、菲律宾语、印地语、阿拉伯语、法语、德语、西班牙语、葡萄牙语、俄语、意大利语、荷兰语、瑞典语、丹麦语、芬兰语、挪威语、希腊语、波兰语、捷克语、匈牙利语、罗马尼亚语、保加利亚语、克罗地亚语、斯洛伐克语
--   **Fun-ASR-Flash**（`fun-asr-flash-2026-06-15`）：中文（普通话、粤语、吴语、闽南语、客家话、赣语、湘语、晋语；并支持中原、西南、冀鲁、江淮、兰银、胶辽、东北、北京、港台等，包括河南、陕西、湖北、四川、重庆、云南、贵州、广东、广西、河北、天津、山东、安徽、南京、江苏、杭州、甘肃、宁夏等地区官话口音）、英语、日语、韩语、越南语、泰语、印尼语、马来语、菲律宾语、印地语、阿拉伯语、法语、德语、西班牙语、葡萄牙语、俄语、意大利语、荷兰语、瑞典语、丹麦语、芬兰语、挪威语、希腊语、波兰语、捷克语、匈牙利语、罗马尼亚语、保加利亚语、克罗地亚语、斯洛伐克语
-
-### Qwen-ASR
-
-**模型ID**
-
-**模式**
-
-**API**
-
-**精度增强**
-
-**情感识别**
-
-**说话人分离**
-
-[**支持语言**](raw/model-user-guide/model-experience/speech-and-audio/speech-recognition/asr-model.md)
-
-**音频最大时长/大小**
-
-`qwen3-asr-flash-realtime`
-
-实时
-
-WebSocket
-
-不支持
-
-支持
-
-不支持
-
-多语种及方言
-
-无限制
-
-`qwen3-asr-flash-filetrans`
-
-非实时
-
-HTTP
-
-不支持
-
-支持
-
-不支持
-
-多语种及方言
-
-12小时 / 2GB
-
-`qwen3-asr-flash`
-
-非实时
-
-HTTP（OpenAI兼容）
-
-不支持
-
-支持
-
-不支持
-
-多语种及方言
-
-5分钟 / 10MB
-
-**支持的语言**：所有 Qwen-ASR 系列模型（`qwen3-asr-flash-realtime`、`qwen3-asr-flash-filetrans`、`qwen3-asr-flash`）均支持相同的语言列表：中文（普通话、四川话、闽南语、吴语、粤语）、英语、日语、德语、韩语、俄语、法语、葡萄牙语、阿拉伯语、意大利语、西班牙语、印地语、印尼语、泰语、土耳其语、乌克兰语、越南语、捷克语、丹麦语、菲律宾语、芬兰语、冰岛语、马来语、挪威语、波兰语、瑞典语。
-
-### Paraformer
-
-Paraformer 是较早一代的 ASR 模型，包括实时与非实时两类。若您的业务允许，建议迁移到前文推荐的 Fun-ASR 或 Qwen-ASR。
-
-**模型ID**
-
-**API**
-
-**说明**
-
-`paraformer-realtime-v2`
-
-WebSocket
-
-实时识别，中、英、日、韩、德、法、俄
-
-`paraformer-realtime-8k-v2`
-
-WebSocket
-
-实时识别，8kHz电话场景，中文
-
-`paraformer-v2`
-
-HTTP
-
-录音文件识别，支持说话人分离，中、英、日、韩、德、法、俄
-
-`paraformer-8k-v2`
-
-HTTP
-
-录音文件识别，8kHz电话场景，中文
-
-**支持的语言（按版本）**：
-
--   `paraformer-realtime-v2`、`paraformer-v2`：中文（普通话、粤语、吴语、闽南语、东北话、甘肃话、贵州话、河南话、湖北话、湖南话、宁夏话、山西话、陕西话、山东话、四川话、天津话、江西话、云南话、上海话）、英文、日语、韩语、德语、法语、俄语
--   `paraformer-realtime-8k-v2`、`paraformer-8k-v2`：中文普通话
-
-## 音频规格
-
-下表汇总了**实时**和**非实时**两种模式下的音频规格（输入方式、格式、采样率、大小/时长）。各模型支持的语言（含方言）见上文“[所有模型](https://help.aliyun.com/zh/model-studio/asr-model#asr_all02)”内对应系列子节。
-
-### 实时
-
-**模型ID**
-
-**输入方式**
-
-**音频格式**
-
-**采样率**
-
-**大小/时长**
-
-`qwen-audio-3.1-asr-flash-message`
-
-二进制（Binary）流
-
-`pcm`、`wav`、`mp3`、`opus`、`speex`、`aac`、`amr`
-
-16 kHz
-
-—
-
-`qwen-audio-3.1-asr-flash-streaming`、`qwen-audio-3.0-asr-flash-streaming`
-
-二进制（Binary）流
-
-`pcm`、`wav`、`mp3`、`opus`、`speex`、`aac`、`amr`
-
-任意
-
-不限
-
-**Fun-ASR-Realtime系列**（`fun-asr-realtime`等）
-
-二进制（Binary）流
-
-`pcm`、`wav`、`mp3`、`opus`、`speex`、`aac`、`amr`
-
-任意
-
-不限
-
-**Fun-ASR-Flash-8K-Realtime系列**（`fun-asr-flash-8k-realtime`等）
-
-二进制（Binary）流
-
-同 Fun-ASR-Realtime
-
-8 kHz
-
-不限
-
-`qwen3-asr-flash-realtime`
-
-二进制（Binary）流
-
-`pcm`、`opus`
-
-8 kHz、16 kHz
-
-不限
-
-`paraformer-realtime-v2`、`paraformer-realtime-8k-v2`
-
-二进制（Binary）流
-
-同 Fun-ASR-Realtime
-
-`paraformer-realtime-v2` 任意；`paraformer-realtime-8k-v2` 8 kHz
-
-不限
-
-所有实时模型均为**单声道**输入。
-
-### 非实时
-
-**模型ID**
-
-**输入方式**
-
-**音频格式**
-
-**采样率**
-
-**文件大小/时长**
-
-`qwen-audio-3.1-asr-flash-filetrans`、`qwen-audio-3.0-asr-flash-filetrans`
-
-公网可访问的文件 URL，单次 1 个
-
-`aac`、`amr`、`avi`、`flac`、`flv`、`m4a`、`mkv`、`mov`、`mp3`、`mp4`、`mpeg`、`ogg`、`opus`、`wav`、`webm`、`wma`、`wmv`
-
-任意
-
-≤2 GB；≤12 小时（启用说话人分离建议 ≤2 小时）
-
-`qwen-audio-3.1-asr-flash`
-
-URL / Base64，单次 1 个
-
-`aac`、`amr`、`avi`、`flac`、`flv`、`m4a`、`mkv`、`mov`、`mp3`、`mp4`、`mpeg`、`ogg`、`opus`、`wav`、`webm`、`wma`、`wmv`
-
-任意
-
-≤2 GB；≤5 分钟
-
-`qwen-audio-3.0-asr-flash`
-
-URL / Base64，单次 1 个
-
-`aac`、`amr`、`avi`、`flac`、`flv`、`m4a`、`mkv`、`mov`、`mp3`、`mp4`、`mpeg`、`ogg`、`opus`、`wav`、`webm`、`wma`、`wmv`
-
-任意
-
-≤2 GB；≤5 分钟
-
-`fun-asr`
-
-公网可访问的文件 URL，单次 1 个
-
-`aac`、`amr`、`avi`、`flac`、`flv`、`m4a`、`mkv`、`mov`、`mp3`、`mp4`、`mpeg`、`ogg`、`opus`、`wav`、`webm`、`wma`、`wmv`
-
-任意
-
-≤2 GB；≤12 小时（启用说话人分离建议 ≤2 小时）
-
-`fun-asr-flash-2026-06-15`
-
-URL / Base64，单次 1 个
-
-`aac`、`amr`、`avi`、`flac`、`flv`、`m4a`、`mkv`、`mov`、`mp3`、`mp4`、`mpeg`、`ogg`、`opus`、`wav`、`webm`、`wma`、`wmv`
-
-任意
-
-≤2 GB；≤5 分钟
-
-`fun-asr-realtime`、`fun-asr-realtime-2026-02-28`
-
-URL / Base64，单次 1 个
-
-`aac`、`amr`、`avi`、`flac`、`flv`、`m4a`、`mkv`、`mov`、`mp3`、`mp4`、`mpeg`、`ogg`、`opus`、`wav`、`webm`、`wma`、`wmv`
-
-任意
-
-≤2 GB；≤5 分钟
-
-`paraformer-v2`、`paraformer-8k-v2`
-
-同 Fun-ASR
-
-同 Fun-ASR
-
-`paraformer-v2` 任意；`paraformer-8k-v2` 仅 8 kHz
-
-同 Fun-ASR
-
-`qwen3-asr-flash-filetrans`
-
-公网可访问的文件 URL，单次 1 个
-
-`aac`、`amr`、`avi`、`flac`、`flv`、`m4a`、`mkv`、`mov`、`mp3`、`mp4`、`mpeg`、`ogg`、`opus`、`wav`、`webm`、`wma`、`wmv`
-
-`pcm` 必须 16 kHz；其他格式任意（服务端会重采样为 16 kHz 再识别）
-
-≤2 GB；≤12 小时
-
-`qwen3-asr-flash`
-
-URL / Base64 / 本地文件绝对路径，单次 1 个
-
-`aac`、`amr`、`avi`、`aiff`、`flac`、`flv`、`mkv`、`mp3`、`mpeg`、`ogg`、`opus`、`wav`、`webm`、`wma`、`wmv`
-
-`pcm` 必须 16 kHz；其他格式任意（服务端会重采样为 16 kHz 再识别）
-
-≤10 MB；≤5 分钟
+音频格式、采样率、声道、文件大小和时长等要求，参见 [实时语音识别](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide#usage-limits)或 [非实时语音识别](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#usage-limits)的使用限制。

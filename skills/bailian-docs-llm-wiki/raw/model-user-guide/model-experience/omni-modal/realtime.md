@@ -615,7 +615,7 @@ public class OmniServerVad {
             OmniRealtimeParam param = OmniRealtimeParam.builder()
                     .model("qwen3.5-omni-plus-realtime")
                     .apikey(System.getenv("DASHSCOPE_API_KEY"))
-                    // 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+                    // 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
                     .url("wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime")
                     .build();
 
@@ -876,7 +876,7 @@ public class OmniWithoutServerVad {
         OmniRealtimeParam param = OmniRealtimeParam.builder()
                 .model("qwen3.5-omni-plus-realtime")
                 // .apikey("your-dashscope-api-key")
-                // 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+                // 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
                 .url("wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime")
                 .build();
         AtomicReference<CountDownLatch> responseDoneLatch = new AtomicReference<>(null);
@@ -1345,7 +1345,7 @@ pip install websockets==15.0.1
         player = AudioPlayer(pyaudio_instance=p)
     
         client = OmniRealtimeClient(
-            # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+            # 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
             base_url="wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime",
             api_key=os.environ.get("DASHSCOPE_API_KEY"),
             model="qwen3.5-omni-plus-realtime",
@@ -1689,7 +1689,7 @@ pip install websockets==15.0.1
             audio_player.stop_receiving_data()
     
         realtime_client = OmniRealtimeClient(
-            # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+            # 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
             base_url="wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime",
             api_key=api_key,
             model="qwen3.8-omni-flash-realtime",
@@ -1875,7 +1875,7 @@ pip install aiortc aiohttp sounddevice numpy certifi av
     # 替换为您的 API Key，或通过环境变量 DASHSCOPE_API_KEY 设置
     API_KEY = os.getenv("DASHSCOPE_API_KEY", "your-api-key")
     MODEL = "qwen3.8-omni-flash-realtime"
-    # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+    # 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
     SIGNALING_URL = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/webrtc/realtime?model=" + MODEL
     
     # --------------- 音频帧解析 ---------------
@@ -2294,9 +2294,9 @@ pip install aiortc aiohttp sounddevice numpy certifi av
             <div style="margin-bottom: 8px;">
                 <button id="copyCurlBtn" disabled>复制 curl 命令</button>
             </div>
-            <div class="card-hint" style="margin-bottom: 4px;">以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。</div>
+            <div class="card-hint" style="margin-bottom: 4px;">默认示例为华北2（北京），请使用业务空间对应的 API Host 和同地域的 API Key。</div>
             <textarea id="curlBox" rows="6" placeholder="Offer SDP 生成后自动填充 curl 命令"></textarea>
-            <div class="card-hint">请将 {WorkspaceId} 替换为您的业务空间ID后，复制此命令到终端执行，将返回的 Answer SDP 粘贴到下方</div>
+            <div class="card-hint">确认 API Host 后，复制此命令到终端执行，将返回的 Answer SDP 粘贴到下方</div>
         </div>
     
         <div class="card">
@@ -2633,7 +2633,7 @@ pip install aiortc aiohttp sounddevice numpy certifi av
               setAnswerBtn.disabled = false;
     
               const escapedSdp = sdp.replace(/'/g, "'\\''");
-              // 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+              // 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
               curlBox.value = `curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/webrtc/realtime?model=qwen3.8-omni-flash-realtime' \\\n  -H 'Content-Type: application/sdp' \\\n  -H "Authorization: Bearer $DASHSCOPE_API_KEY" \\\n  --data-binary '${escapedSdp}'`;
               copyCurlBtn.disabled = false;
     
@@ -2800,7 +2800,7 @@ import websocket
 import os
 
 API_KEY=os.getenv("DASHSCOPE_API_KEY")
-# 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+# 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
 API_URL = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime?model=qwen3.8-omni-flash-realtime"
 
 headers = [
@@ -2872,7 +2872,7 @@ public class Main {
         OmniRealtimeParam param = OmniRealtimeParam.builder()
                 .model("qwen3.8-omni-flash-realtime")
                 .apikey(System.getenv("DASHSCOPE_API_KEY"))
-                // 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+                // 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
                 .url("wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime")
                 .build();
 
@@ -2920,7 +2920,7 @@ from aiortc.mediastreams import AudioStreamTrack
 
 API_KEY = "your-api-key"
 MODEL = "qwen3.8-omni-flash-realtime"
-# 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+# 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
 SIGNALING_URL = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/webrtc/realtime?model=" + MODEL
 
 async def connect():
@@ -3644,7 +3644,7 @@ public class OmniSearch {
             OmniRealtimeParam param = OmniRealtimeParam.builder()
                     .model("qwen3.8-omni-flash-realtime")
                     .apikey(System.getenv("DASHSCOPE_API_KEY"))
-                    // 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+                    // 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
                     .url("wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime")
                     .build();
 
@@ -3735,7 +3735,7 @@ import pyaudio
 import threading
 
 API_KEY = os.getenv("DASHSCOPE_API_KEY")
-# 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+# 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
 API_URL = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime?model=qwen3.8-omni-flash-realtime"
 
 pya = pyaudio.PyAudio()

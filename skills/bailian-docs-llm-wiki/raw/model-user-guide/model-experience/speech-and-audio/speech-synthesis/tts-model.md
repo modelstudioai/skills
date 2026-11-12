@@ -14,13 +14,13 @@
 
 语音助手、实时对话、智能客服
 
-[`qwen-audio-3.1-tts-flash`](raw/_short/qwen-audio-3-1-tts-flash-e5865533dd0cb436.md)
+[qwen-audio-3.1-tts-flash](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen-audio-3.1-tts-flash)
 
 面向低延迟交互场景，支持系统音色、声音复刻、声音设计、自然语言指令及情感与富语言标签。
 
 有声书、影视配音、品牌声音与内容制作
 
-[`qwen-audio-3.1-tts-plus`](raw/_short/qwen-audio-3-1-tts-plus-897ef4dc179edd29.md)
+[qwen-audio-3.1-tts-plus](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen-audio-3.1-tts-plus)
 
 侧重音质、自然度和细节表现，支持系统音色、声音复刻、声音设计及丰富的表达控制。
 
@@ -146,16 +146,16 @@
 
 #### 北京
 
--   **Qwen-Audio-TTS**：`qwen-audio-3.1-tts-plus`、`qwen-audio-3.1-tts-flash`、`qwen-audio-3.0-tts-plus`、`qwen-audio-3.0-tts-flash`
--   **CosyVoice**：`cosyvoice-v3.5-plus`、`cosyvoice-v3.5-flash`、`cosyvoice-v3-plus`、`cosyvoice-v3-flash`、`cosyvoice-v2`
--   **Qwen3-TTS**：`qwen3-tts-flash-realtime`、`qwen3-tts-flash`
--   **MiniMax**：`MiniMax/speech-2.8-hd`、`MiniMax/speech-2.8-turbo`、`MiniMax/speech-02-hd`、`MiniMax/speech-02-turbo`
+-   **Qwen-Audio-TTS**：qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash
+-   **CosyVoice**：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-plus、cosyvoice-v3-flash、cosyvoice-v2
+-   **Qwen3-TTS**：qwen3-tts-flash-realtime、qwen3-tts-flash
+-   **MiniMax**：MiniMax/speech-2.8-hd、MiniMax/speech-2.8-turbo、MiniMax/speech-02-hd、MiniMax/speech-02-turbo
 
 #### 新加坡
 
--   **Qwen-Audio-TTS**：`qwen-audio-3.1-tts-plus`、`qwen-audio-3.1-tts-flash`、`qwen-audio-3.0-tts-plus`、`qwen-audio-3.0-tts-flash`
--   **CosyVoice**：`cosyvoice-v3-plus`、`cosyvoice-v3-flash`
--   **Qwen3-TTS**：`qwen3-tts-flash-realtime`、`qwen3-tts-flash`
+-   **Qwen-Audio-TTS**：qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash
+-   **CosyVoice**：cosyvoice-v3-plus、cosyvoice-v3-flash
+-   **Qwen3-TTS**：qwen3-tts-flash-realtime、qwen3-tts-flash
 
 ## 语言与方言支持
 
@@ -175,7 +175,7 @@
 
 中文（普通话、广东话、重庆话、东北话、甘肃话、贵州话、浙江话、河北话、河南话、湖北话、湖南话、江西话、宁波话、宁夏话、青岛话、陕西话、山西话、山东话、上海话、四川话、云南话）、英语、日语、韩语、俄语、法语、德语、葡萄牙语、泰语、印尼语、越南语、西班牙语、意大利语、马来西亚语、菲律宾语、阿拉伯语 （方言通过指令控制功能进行设置）
 
-其他语种（适用于 `qwen-audio-3.1-tts-flash`）：保加利亚语、荷兰语、匈牙利语、罗马尼亚语、丹麦语、克罗地亚语、希腊语、捷克语、挪威语、瑞典语、印地语、斯洛伐克语、芬兰语、乌尔都语、塞尔维亚语、墨西哥西班牙语、立陶宛语、拉脱维亚语、土耳其语、波斯语、希伯来语、蒙古语、斯洛文尼亚语、阿塞拜疆语、波兰语、加泰罗尼亚语、高棉语、巴西葡萄牙语、老挝语、格鲁吉亚语、南非荷兰语、尼泊尔语、白俄罗斯语、马拉雅拉姆语、卢森堡语、阿尔巴尼亚语、泰米尔语、僧伽罗语、泰卢固语、爱沙尼亚语、宿务语、波斯尼亚语、缅甸语、亚美尼亚语、拉丁语、冰岛语、马耳他语、斯瓦希里语、哈萨克语、塞舌尔克里奥尔语、乌克兰语。
+其他语种（适用于 qwen-audio-3.1-tts-flash）：保加利亚语、荷兰语、匈牙利语、罗马尼亚语、丹麦语、克罗地亚语、希腊语、捷克语、挪威语、瑞典语、印地语、斯洛伐克语、芬兰语、乌尔都语、塞尔维亚语、墨西哥西班牙语、立陶宛语、拉脱维亚语、土耳其语、波斯语、希伯来语、蒙古语、斯洛文尼亚语、阿塞拜疆语、波兰语、加泰罗尼亚语、高棉语、巴西葡萄牙语、老挝语、格鲁吉亚语、南非荷兰语、尼泊尔语、白俄罗斯语、马拉雅拉姆语、卢森堡语、阿尔巴尼亚语、泰米尔语、僧伽罗语、泰卢固语、爱沙尼亚语、宿务语、波斯尼亚语、缅甸语、亚美尼亚语、拉丁语、冰岛语、马耳他语、斯瓦希里语、哈萨克语、塞舌尔克里奥尔语、乌克兰语。
 
 设计音色
 
@@ -189,26 +189,26 @@
 
 系统音色
 
--   `cosyvoice-v3.5-plus` / `cosyvoice-v3.5-flash`: 不支持
--   `cosyvoice-v3-plus`（因音色而异）: 中文（普通话）、英文
--   `cosyvoice-v3-flash`（因音色而异，部分方言由系统音色直接支持，部分通过指令控制功能设置）: 中文（普通话、广东话、东北话、河南话、湖南话、陕西话、山东话、四川话、安徽话、闽南话）、英文、日语、韩语、印尼语
--   `cosyvoice-v2`（因音色而异）: 中文（普通话、粤语、东北话、闽南话、陕西话）、英文、日语、韩语
+-   cosyvoice-v3.5-plus / cosyvoice-v3.5-flash: 不支持
+-   cosyvoice-v3-plus（因音色而异）: 中文（普通话）、英文
+-   cosyvoice-v3-flash（因音色而异，部分方言由系统音色直接支持，部分通过指令控制功能设置）: 中文（普通话、广东话、东北话、河南话、湖南话、陕西话、山东话、四川话、安徽话、闽南话）、英文、日语、韩语、印尼语
+-   cosyvoice-v2（因音色而异）: 中文（普通话、粤语、东北话、闽南话、陕西话）、英文、日语、韩语
 
 **说明**系统音色的具体语言、方言和试听参见[CosyVoice 音色列表](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/tts-voice-list/cosyvoice-voice-list.md)。
 
 复刻音色
 
--   `cosyvoice-v3.5-plus` / `cosyvoice-v3.5-flash`（方言通过指令控制功能进行设置）: 中文（普通话、广东话、东北话、甘肃话、贵州话、河南话、湖北话、江西话、闽南话、宁夏话、山西话、陕西话、山东话、上海话、四川话、天津话、云南话）、英文、法语、德语、日语、韩语、俄语、葡萄牙语、泰语、印尼语、越南语
--   `cosyvoice-v3-plus`: 中文（普通话、广东话、东北话、甘肃话、贵州话、河南话、湖北话、江西话、闽南话、宁夏话、山西话、陕西话、山东话、上海话、四川话、天津话、云南话）、英文、法语、德语、日语、韩语、俄语
--   `cosyvoice-v3-flash`（方言通过指令控制功能进行设置）: 中文（普通话、广东话、东北话、甘肃话、贵州话、河南话、湖北话、江西话、闽南话、宁夏话、山西话、陕西话、山东话、上海话、四川话、天津话、云南话）、英文、法语、德语、日语、韩语、俄语、葡萄牙语、泰语、印尼语、越南语
--   `cosyvoice-v2`: 中文（普通话）、英文
+-   cosyvoice-v3.5-plus / cosyvoice-v3.5-flash（方言通过指令控制功能进行设置）: 中文（普通话、广东话、东北话、甘肃话、贵州话、河南话、湖北话、江西话、闽南话、宁夏话、山西话、陕西话、山东话、上海话、四川话、天津话、云南话）、英文、法语、德语、日语、韩语、俄语、葡萄牙语、泰语、印尼语、越南语
+-   cosyvoice-v3-plus: 中文（普通话、广东话、东北话、甘肃话、贵州话、河南话、湖北话、江西话、闽南话、宁夏话、山西话、陕西话、山东话、上海话、四川话、天津话、云南话）、英文、法语、德语、日语、韩语、俄语
+-   cosyvoice-v3-flash（方言通过指令控制功能进行设置）: 中文（普通话、广东话、东北话、甘肃话、贵州话、河南话、湖北话、江西话、闽南话、宁夏话、山西话、陕西话、山东话、上海话、四川话、天津话、云南话）、英文、法语、德语、日语、韩语、俄语、葡萄牙语、泰语、印尼语、越南语
+-   cosyvoice-v2: 中文（普通话）、英文
 
 设计音色
 
--   `cosyvoice-v3.5-plus` / `cosyvoice-v3.5-flash`: 中文（普通话）、英文
--   `cosyvoice-v3-plus`: 中文（普通话）、英文
--   `cosyvoice-v3-flash`: 中文（普通话）、英文
--   `cosyvoice-v2`: 不支持
+-   cosyvoice-v3.5-plus / cosyvoice-v3.5-flash: 中文（普通话）、英文
+-   cosyvoice-v3-plus: 中文（普通话）、英文
+-   cosyvoice-v3-flash: 中文（普通话）、英文
+-   cosyvoice-v2: 不支持
 
 #### Qwen3-TTS
 

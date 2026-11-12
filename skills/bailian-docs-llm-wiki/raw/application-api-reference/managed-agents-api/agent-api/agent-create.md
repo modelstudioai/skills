@@ -197,7 +197,7 @@ System.out.println(agent.getVersion());  // 1
 }
 ```
 
-`search_knowledgebases` 未配置时不启用检索。模型按需调用，并结合多轮对话生成检索问题。使用前需先创建知识检索服务，详见[知识检索](raw/application-user-guide/knowledge-base/rag-knowledge-retrieval.md)。更新已有智能体时，保留其他仍在使用的工具配置。使用方式详见 [Agent 工具配置](https://help.aliyun.com/zh/model-studio/managed-agents-builtin-tools#h-bt-knowledge)。
+`search_knowledgebases` 未配置时不启用检索。模型按需调用，并结合多轮对话生成检索问题。使用前需先创建知识检索服务，详见[知识检索](raw/application-user-guide/agent-context/knowledge-base/service/rag-knowledge-retrieval.md)。更新已有智能体时，保留其他仍在使用的工具配置。使用方式详见 [Agent 工具配置](https://help.aliyun.com/zh/model-studio/managed-agents-builtin-tools#h-bt-knowledge)。
 
 ## 响应示例
 

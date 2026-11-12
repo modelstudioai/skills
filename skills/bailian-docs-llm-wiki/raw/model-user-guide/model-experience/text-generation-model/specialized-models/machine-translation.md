@@ -1659,7 +1659,7 @@ A：[Dify](https://cloud.dify.ai/apps)的最新版通义千问插件已支持 Qw
 
 > 当不确定源语种时，可为 `source_lang` 参数赋值 `auto` 以自动检测。
 
-#### qwen-mt-plus/flash/turbo 支持的语言 (92种)
+#### qwen-mt-plus/flash 支持的语言 (92种)
 
 **语言**
 
@@ -2415,4 +2415,4 @@ fa
 
 ## API参考
 
-Qwen-MT 模型的输入与输出参数请参考[Qwen-MT 翻译模型](raw/model-api-reference/more-models/qwen-mt-api.md)。
+Qwen-MT 模型的输入与输出参数请参考[Qwen-MT 翻译模型](raw/model-api-reference/qwen-mt-translation-models/qwen-mt-api.md)。

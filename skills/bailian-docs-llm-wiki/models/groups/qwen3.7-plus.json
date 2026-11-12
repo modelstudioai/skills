@@ -187,7 +187,7 @@
               "discount": 0.8,
               "ntmAmountType": "context_0-256k_input_token_cache_creation_5m",
               "type": "input_token_cache_creation_5m",
-              "priceName": "显式缓存创建"
+              "priceName": "5分钟显式缓存创建"
             },
             {
               "priceUnit": "每百万tokens",
@@ -273,7 +273,7 @@
               "discount": 0.8,
               "ntmAmountType": "context_256k-1m_input_token_cache_creation_5m",
               "type": "input_token_cache_creation_5m",
-              "priceName": "显式缓存创建"
+              "priceName": "5分钟显式缓存创建"
             },
             {
               "priceUnit": "每百万tokens",

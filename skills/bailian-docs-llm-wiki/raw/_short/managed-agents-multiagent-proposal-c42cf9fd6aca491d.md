@@ -101,7 +101,7 @@ curl -X POST "$AGENTSTUDIO_URL/agents" \
 
 ## 再加一个校验员：写作前的方案自检
 
-三个专家各自只给出局部结论，无人负责判断「三份结论合起来是否自洽」。所以 roster 里再额外放一个 `proposal_checker` 子 Agent：它在协调者动笔之前，把关案例挑选与定价框架是否对齐潜客优先级。
+三个专家各自只给出局部结论，无人负责判断“三份结论合起来是否自洽”。所以 roster 里再额外放一个 `proposal_checker` 子 Agent：它在协调者动笔之前，把关案例挑选与定价框架是否对齐潜客优先级。
 
 它由协调者在写提案前委派一次，读取研究结论、案例挑选、定价框架，判断三者是否互相自洽、是否命中潜客最关心的痛点，然后回传一句判断和修改建议。它是一个和其他专家一样的普通 worker：可被委派、可收发消息、跑在自己的线程和上下文里。
 
@@ -207,7 +207,7 @@ curl -X POST "$AGENTSTUDIO_URL/agents" \
 
 协调者拿到的 `id`（`agent_<ULID>`）记为 `$AGENT_ID`。
 
-**说明****roster 成员的版本语义**：「不带 version」既不是在协调者创建时快照定版，也不是在 Session 创建时定版——协调者不动、把 pricing\_modeler 从 v1 升到 v2 后起 Session，委派出来的 pricing 线程直接用 v2；Session 创建后再升 v3、随后才发消息，线程用的还是 v3。也就是说**改子 Agent 不需要更新协调者**；反过来，想要「团队配置冻结、可复现」，就在成员里显式写 `version`，平台会接受并回显（GET 协调者时成员对象带 `version: N`）。这个语义跟[进阶：提示词版本管理与回滚](raw/_short/managed-agents-prompt-versioning-b2a756840e400199.md)讲的 Session 版本锁定是对偶的：Session 的 `agent` 字段锁协调者自身的版本快照，roster 的 `version` 锁成员引用；都不写就都是「拿最新」。
+**说明****roster 成员的版本语义**：“不带 version”既不是在协调者创建时快照定版，也不是在 Session 创建时定版——协调者不动、把 pricing\_modeler 从 v1 升到 v2 后起 Session，委派出来的 pricing 线程直接用 v2；Session 创建后再升 v3、随后才发消息，线程用的还是 v3。也就是说**改子 Agent 不需要更新协调者**；反过来，想要“团队配置冻结、可复现”，就在成员里显式写 `version`，平台会接受并回显（GET 协调者时成员对象带 `version: N`）。这个语义跟[进阶：提示词版本管理与回滚](raw/_short/managed-agents-prompt-versioning-b2a756840e400199.md)讲的 Session 版本锁定是对偶的：Session 的 `agent` 字段锁协调者自身的版本快照，roster 的 `version` 锁成员引用；都不写就都是“拿最新”。
 
 ### 起 Session（挂 9 个文件资源）
 
@@ -293,7 +293,7 @@ curl -N "$AGENTSTUDIO_URL/sessions/$SESSION_ID/events/stream" \
 { "output": "{\"status\":\"submitted\"}" }
 ```
 
-**说明****worker 的回传通道**：worker 的最终 assistant 文本会自动作为 `thread_message_sent` 回传协调者；`submit_result` 是另一个显式提交工具，二者可能先后各出现一次。**子 Agent 的 system prompt 里不需要写「通过 send\_to\_parent 返回」这类话**——没有叫这个名字的工具，写了反而可能让模型犹豫；直接说「返回严格 JSON」即可。
+**说明****worker 的回传通道**：worker 的最终 assistant 文本会自动作为 `thread_message_sent` 回传协调者；`submit_result` 是另一个显式提交工具，二者可能先后各出现一次。**子 Agent 的 system prompt 里不需要写“通过 send\_to\_parent 返回”这类话**——没有叫这个名字的工具，写了反而可能让模型犹豫；直接说“返回严格 JSON”即可。
 
 **说明**若不想用长连接，也可轮询历史事件：`GET /sessions/$SESSION_ID/events?order=asc`。注意**单页上限 100 条**（`limit` 传更大也只回 100），翻页用响应里的 `next_page` 游标：`...&page=<next_page>`。一个完整的多智能体回合有 168 条事件，要翻两页。
 
@@ -329,14 +329,14 @@ curl "$AGENTSTUDIO_URL/sessions/$SESSION_ID/threads" \
 每个 Thread 对应一个被委派的子 Agent 实例。关键字段：
 
 -   `parent_thread_id`：委派者线程。挂在协调者主线程下是 `thrd_...`；若某个 worker 又委派了自己的子 Agent，那条线程的 parent 会是前者的 `sthr_...`（多级委派）。
--   `agent.version`：**这条线程实际运行的成员版本**——上一节表格里说的「不带 version 就在委派时拿最新」，在这里直接可查。roster 没锁版本、子 Agent 中途升了 v2，新 Session 里这一栏就是 v2。
--   `status`：`running` / `idle` / `terminated`。跑批时轮询这个端点，就是一张实时的「子 Agent 工作台」。
+-   `agent.version`：**这条线程实际运行的成员版本**——上一节表格里说的“不带 version 就在委派时拿最新”，在这里直接可查。roster 没锁版本、子 Agent 中途升了 v2，新 Session 里这一栏就是 v2。
+-   `status`：`running` / `idle` / `terminated`。跑批时轮询这个端点，就是一张实时的“子 Agent 工作台”。
 
 Query 参数 `limit` / `page` 与其他列表一致；已归档 Thread 默认不返回。
 
 **Get：** `GET /sessions/{session_id}/threads/{thread_id}`——单个 Thread 详情，字段与 List 一致（多一个 `request_id`）。两个边界：**协调者主线程（`thrd_` 前缀）不在 threads 集合里**，用它的 id 去 GET 返回 `400 invalid_parameter "Invalid request"`——threads 资源只寻址被委派的子线程，主线程只是事件流上的一个 `thread_id` 值；**已归档的 Thread 也返回同样的 400**（List 里同样没有它）——归档即从可寻址空间移除，但 Thread 的事件仍然可查（见下）。
 
-**Events：** `GET /sessions/{session_id}/threads/{thread_id}/events`——单线程的事件序列，就是上一节那条流按 `thread_id` 切好的一片：从 `thread_created`（收到任务）到 `thread_status`（idle + stop\_reason），中间是它自己的模型调用与工具调用。不带 `limit` 时返回该线程全部事件；带 `limit` 时响应带 `next_page` 游标。**这是「只看某个子 Agent 干了什么」的最短路径**——不用再从 168 条 Session 事件里按 thread\_id 过滤。
+**Events：** `GET /sessions/{session_id}/threads/{thread_id}/events`——单线程的事件序列，就是上一节那条流按 `thread_id` 切好的一片：从 `thread_created`（收到任务）到 `thread_status`（idle + stop\_reason），中间是它自己的模型调用与工具调用。不带 `limit` 时返回该线程全部事件；带 `limit` 时响应带 `next_page` 游标。**这是“只看某个子 Agent 干了什么”的最短路径**——不用再从 168 条 Session 事件里按 thread\_id 过滤。
 
 **Archive：** `POST /sessions/{session_id}/threads/{thread_id}/archive`
 
@@ -365,7 +365,7 @@ body 可省略。成功返回归档后的 Thread 对象（`archived_at` 填充�
 前三节讲的是服务端给的观察面。客户端要消费这条流，核心只有一个数据结构——**以 `thread_id` 为键的分桶字典**，再配合四个行为，渲染逻辑比想象的简单：
 
 1.  **去重按事件 `id`**。SSE 不提供游标 / 续传 token，断线重连后新连接可能重放旧帧，按 `id` 去重即可。
-2.  **assistant 文本整条下发，无需拼接增量**。流式文本以整条 `completed` 消息一帧到位，`sequence_number` 常为 `null`、没有同 id 多帧增量；解析时按「有 `sequence_number` 就按序累积、没有就当整条」处理。多智能体的「实时感」主要来自结构性事件：`thread_created`（线程启动）、`thread_status`（线程结束）、`mcp_call` / `tool_call`（线程执行的动作）。
+2.  **assistant 文本整条下发，无需拼接增量**。流式文本以整条 `completed` 消息一帧到位，`sequence_number` 常为 `null`、没有同 id 多帧增量；解析时按“有 `sequence_number` 就按序累积、没有就当整条”处理。多智能体的“实时感”主要来自结构性事件：`thread_created`（线程启动）、`thread_status`（线程结束）、`mcp_call` / `tool_call`（线程执行的动作）。
 3.  **`session_status` 是唯一的会话级事件**。本回合仅有的 2 条不带 `thread_id` 的事件就是它（running 与 idle+stop\_reason），分流时当会话状态处理，不属于任何线程。
 4.  **主线程没有 `thread_created`**。`thrd_` 在流开始之前就存在了——首次见到某个 `thrd_` 事件时把它注册成 coordinator 即可。
 
@@ -451,7 +451,7 @@ for ln in sys.stdin:                                 # 每帧一行 data:{...}
 
 Session 级 SSE 流 + 分桶字典
 
-一张「谁在跑 / 谁完了」的工作台
+一张“谁在跑 / 谁完了”的工作台
 
 轮询 `GET /sessions/{id}/threads`（status + `agent.version`）
 
@@ -471,12 +471,12 @@ Session 级 SSE 流 + 分桶字典
 
 **一个失败案例**：同一个协调者配置跑两次——
 
--   **Run 1**：三个 worker 全部正确，但协调者写出的 proposal.md 里，案例名变成了案例库里不存在的「Community Health Network」「Bayshore Medical Group」，定价表变成 $39,000/$58,500/$78,000——**协调者在汇总长上下文时幻觉了**。
+-   **Run 1**：三个 worker 全部正确，但协调者写出的 proposal.md 里，案例名变成了案例库里不存在的“Community Health Network”“Bayshore Medical Group”，定价表变成 $39,000/$58,500/$78,000——**协调者在汇总长上下文时幻觉了**。
 -   **Run 2**：同配置同输入，proposal.md 里是正确的 St. Clair Health + Aperture Payments。
 
 两次运行唯一的差异是采样随机性。这给了三个教训：
 
-1.  **worker 对 ≠ 团队对**。多智能体架构把调研/挑选/定价拆给专家后，最后一公里的「汇总写作」本身仍是幻觉高风险区——协调者值得配最强的模型，prompt 里要求「引用专家回传的原文数据、禁止改写数字」也有帮助。
+1.  **worker 对 ≠ 团队对**。多智能体架构把调研/挑选/定价拆给专家后，最后一公里的“汇总写作”本身仍是幻觉高风险区——协调者值得配最强的模型，prompt 里要求“引用专家回传的原文数据、禁止改写数字”也有帮助。
 2.  **归因靠 Threads API**。出问题时，`GET /threads/{id}/events` 逐线程检查：挑选器回传的 picks 是对的、定价员的 options 是对的、错在协调者的 write 参数——**问题精确定位到协调者**。单 Agent 出错时只有一整条日志；多智能体为每个环节保留了独立记录，便于归因。
 3.  **评测要进流程**。[进阶：提示词版本管理与回滚](raw/_short/managed-agents-prompt-versioning-b2a756840e400199.md)的方法论在这里同样适用：上线前用固定的潜客画像跑一轮，对 proposal.md 做断言（案例名必须在案例库白名单里、定价必须命中规则表的计算结果），再决定放行。
 

@@ -7,7 +7,7 @@
 ## 使用前准备
 
 -   确定需要查看的日期范围。
--   登录 [ParseX 控制台](https://bailian.console.aliyun.com/cn-beijing/parsex/document-parse)，从左侧进入「用量」。
+-   登录 [ParseX 控制台](https://bailian.console.aliyun.com/cn-beijing/parsex/document-parse)，从左侧进入“用量”。
 
 ## 查看一段时间的使用情况
 

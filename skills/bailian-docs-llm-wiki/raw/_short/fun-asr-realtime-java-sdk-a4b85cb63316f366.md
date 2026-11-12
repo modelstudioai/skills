@@ -462,7 +462,7 @@ public class Main {
 
 ### 高并发调用
 
-在DashScope Java SDK中，采用了OkHttp3的连接池技术，以减少重复建立连接的开销。详情请参见[高并发最佳实践](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide#rt03_hc_h3)。
+在DashScope Java SDK中，采用了OkHttp3的连接池技术，以减少重复建立连接的开销。详情请参见[高并发最佳实践](https://help.aliyun.com/zh/model-studio/speech-recognition-best-practices#java)。
 
 ## 接口地址
 
@@ -1046,7 +1046,7 @@ reason：关闭原因
 
 true
 
-在任务结束后，无论是否出现异常都需要关闭WebSocket连接，避免造成连接泄漏。关于如何复用连接提升效率请参考[高并发最佳实践](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide#rt03_hc_h3)。
+在任务结束后，无论是否出现异常都需要关闭WebSocket连接，避免造成连接泄漏。关于如何复用连接提升效率请参考[高并发最佳实践](https://help.aliyun.com/zh/model-studio/speech-recognition-best-practices#java)。
 
 ```
 public String getLastRequestId()

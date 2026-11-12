@@ -38,14 +38,14 @@ OSS 托管方案允许客户把文档的处理结果落到**客户自己名下�
 
 ### 创建 RAM 用户（或 RAM 角色）
 
-登录 [RAM 控制台](https://ram.console.aliyun.com/)，选择「身份管理 → 用户」（或「角色」），创建用于访问 OSS 的身份：
+登录 [RAM 控制台](https://ram.console.aliyun.com/)，选择“身份管理 → 用户”（或“角色”），创建用于访问 OSS 的身份：
 
 -   若使用**长期 AccessKey**：创建 RAM 用户，并为其生成 AccessKey ID / AccessKey Secret（`security_token` 留空即可）。
 -   若使用**STS 临时凭证（推荐）**：创建 RAM 角色，后续通过 `AssumeRole` 接口换取临时凭证（含 `security_token`）。
 
 ### 创建最小权限授权策略
 
-在「权限管理 → 权限策略 → 创建权限策略」中，使用脚本编辑方式，配置如下最小权限（示例策略名 `testParseXAccessOss`）：
+在“权限管理 → 权限策略 → 创建权限策略”中，使用脚本编辑方式，配置如下最小权限（示例策略名 `testParseXAccessOss`）：
 
 ```
 {
@@ -100,7 +100,7 @@ OSS 托管方案允许客户把文档的处理结果落到**客户自己名下�
 
 ### 将策略授权给 RAM 用户 / 角色
 
-创建策略后，进入对应 RAM 用户（或角色）的「权限管理 → 新增授权」，选择刚创建的策略（资源范围选择「账号级别」）完成授权。
+创建策略后，进入对应 RAM 用户（或角色）的“权限管理 → 新增授权”，选择刚创建的策略（资源范围选择“账号级别”）完成授权。
 
 ### 获取 STS 临时凭证（推荐）
 
@@ -248,7 +248,7 @@ STS 临时凭证的 SecurityToken；使用长期 AK 时省略
 
 ## OSS 侧配置要求与常见异常排查
 
-> 以下均为「客户 OSS 自身配置」导致「服务使用客户 STS 凭证调用失败」的常见场景。排查时请以最终报错为准，逐一核对。
+> 以下均为“客户 OSS 自身配置”导致“服务使用客户 STS 凭证调用失败”的常见场景。排查时请以最终报错为准，逐一核对。
 
 ### 权限不足（AccessDenied / HTTP 403）
 
@@ -264,11 +264,11 @@ STS 临时凭证的 SecurityToken；使用长期 AK 时省略
 
 **现象**：服务使用 STS 凭证访问客户 Bucket 时被拒绝（403 Forbidden），即使凭证本身有效。
 
-**原因**：客户在 Bucket 或账号级别开启了「阻止公共访问」，会拦截来自公网/非受信条件的访问请求，可能连带影响授权访问。
+**原因**：客户在 Bucket 或账号级别开启了“阻止公共访问”，会拦截来自公网/非受信条件的访问请求，可能连带影响授权访问。
 
 **处理**：
 
--   若必须开启「阻止公共访问」，请确认已放行解析服务的访问来源，或改用同地域**内网 Endpoint**（如 `oss-cn-hangzhou-internal.aliyuncs.com`，需与访问来源同 Region）。
+-   若必须开启“阻止公共访问”，请确认已放行解析服务的访问来源，或改用同地域**内网 Endpoint**（如 `oss-cn-hangzhou-internal.aliyuncs.com`，需与访问来源同 Region）。
 -   如非必需，可临时关闭该功能以验证是否为拦截根因。
 
 ### 防盗链（Referer 校验）
@@ -277,7 +277,7 @@ STS 临时凭证的 SecurityToken；使用长期 AK 时省略
 
 **现象**：服务以 SDK 方式（无 `Referer` 头）读写客户 Bucket 时被拒（403）。
 
-**原因**：客户开启了 OSS 防盗链，并设置了 Referer 白名单 / 勾选了「不允许空 Referer」。服务端 SDK 请求通常不携带 `Referer` 头，会被判定为非法来源而拒绝。
+**原因**：客户开启了 OSS 防盗链，并设置了 Referer 白名单 / 勾选了“不允许空 Referer”。服务端 SDK 请求通常不携带 `Referer` 头，会被判定为非法来源而拒绝。
 
 **处理**：
 
@@ -292,7 +292,7 @@ STS 临时凭证的 SecurityToken；使用长期 AK 时省略
 
 **原因**：CORS 只约束浏览器端跨域请求。若客户的前端直接（不经服务端代理）访问结果 URL，而 Bucket 未配置 CORS 规则，浏览器会拦截。
 
-**处理**：若需要浏览器端直接访问结果，请在 OSS「数据安全 → 跨域设置」中配置 CORS 规则（允许的来源 Origin、方法 GET/PUT、需暴露的响应头）。
+**处理**：若需要浏览器端直接访问结果，请在 OSS“数据安全 → 跨域设置”中配置 CORS 规则（允许的来源 Origin、方法 GET/PUT、需暴露的响应头）。
 
 ### Bucket Policy / 授权策略
 
@@ -300,7 +300,7 @@ STS 临时凭证的 SecurityToken；使用长期 AK 时省略
 
 **原因**：客户 Bucket 上配置了 Bucket Policy（授权策略），显式 `Deny` 了服务端或 STS 主体的访问，或限制了访问来源。
 
-**处理**：核对 Bucket 的「权限管理 → 授权策略」，确认没有 `Deny` 语句阻断服务访问。
+**处理**：核对 Bucket 的“权限管理 → 授权策略”，确认没有 `Deny` 语句阻断服务访问。
 
 ### STS 凭证过期 / Endpoint 不匹配
 
@@ -329,13 +329,13 @@ RAM/Bucket 权限是否覆盖 `GetObject` / `PutObject`
 
 2
 
-是否开启「阻止公共访问」
+是否开启“阻止公共访问”
 
 放行来源或改用内网 Endpoint / 临时关闭验证
 
 3
 
-是否开启「防盗链」且不允许空 Referer
+是否开启“防盗链”且不允许空 Referer
 
 允许空 Referer 或将来源加入白名单
 
@@ -466,7 +466,7 @@ AccessForbidden
 3.  **Endpoint 选择**： 实际以服务提供endpoint为准：
 
 -   公网 Endpoint（`oss-cn-hangzhou.aliyuncs.com`）通用，但流量走公网。
--   内网 Endpoint（`oss-cn-hangzhou-internal.aliyuncs.com`）需与访问来源同 Region，可保证「不出公网」。
+-   内网 Endpoint（`oss-cn-hangzhou-internal.aliyuncs.com`）需与访问来源同 Region，可保证“不出公网”。
 
 4.  **结果目录**：结果写入的具体前缀由服务侧约定，请保证策略中的结果目录 `Resource` 能覆盖该前缀。
-5.  **源文件隐私**：如源文件也需要「不出公网」，可以客户自身 OSS 签名 URL 作为 `file_url` 传入（带有效期），避免源文件对外永久公开。
+5.  **源文件隐私**：如源文件也需要“不出公网”，可以客户自身 OSS 签名 URL 作为 `file_url` 传入（带有效期），避免源文件对外永久公开。

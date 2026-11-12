@@ -1,269 +1,90 @@
 # 非实时语音识别
 
-非实时语音识别模型能将录制好的音频转换为文本，支持多语言识别、歌唱识别、噪声拒识、说话人分离等功能，适用于会议转写、通话分析、字幕生成等场景。
+了解非实时语音识别的模型特性、音频文件调用方式和识别效果优化方法。
 
-## 概述
+## 功能介绍
 
-通过异步任务对录制好的音视频文件进行批量转写。
+非实时语音识别将已录制的音视频文件转换为文本，适用于会议转写、通话分析和字幕生成等场景。短音频可在一次请求中获取结果，长音频可提交异步任务处理。
 
--   支持上下文增强，通过配置上下文提高识别准确率
--   支持自定义热词，通过预设词表提升专有名词识别准确率
--   支持说话人分离、敏感词过滤、句子/词语级时间戳等可配置功能
--   支持单个时长不超过 12 小时、体积不超过 2GB 的音频文件异步转写
--   支持任意采样率，兼容 aac、wav、mp3 等多种主流音视频格式
+-   **多语言与方言**：支持自动语种检测，识别多种语言及中文方言，具体范围参见[语音识别概述](https://help.aliyun.com/zh/model-studio/asr-model#asr_all02)。
+-   **准确率优化**：通过热词辅助识别人名、品牌名等特定词汇，或通过上下文补充对话信息。
+-   **文本处理**：支持文本润色、保留方言表达和敏感词过滤。
+-   **说话人分离**：为不同说话人的转写结果标注编号，便于整理多人会议和访谈记录。
+-   **结构化结果**：返回句子、字词及其时间戳，用于字幕生成、关键词高亮和音频定位。
+-   **音频输入**：支持多种音视频格式，可按模型支持范围选择采样率和声道。
+-   **长音频转写**：支持单个时长不超过 12 小时、大小不超过 2 GB 的音视频文件异步转写。
 
-实时场景（直播字幕、在线会议、语音助手等）可使用[实时语音识别](raw/model-user-guide/model-experience/speech-and-audio/speech-recognition/real-time-speech-recognition-user-guide.md)。各模型选型建议请参见[语音识别](raw/model-user-guide/model-experience/speech-and-audio/speech-recognition/asr-model.md)。
+**说明**各模型支持的能力有所不同，请核对对应功能的适用范围。需要持续输入音频并边说边返回结果时，参见[实时语音识别](raw/model-user-guide/model-experience/speech-and-audio/speech-recognition/real-time-speech-recognition-user-guide.md)。
 
-## 前提条件
+**使用场景**
 
--   已[获取 API Key](raw/model-api-reference/preparations/get-api-key.md)，并将其配置到环境变量。
--   如果通过 DashScope SDK 调用，需要[安装最新版SDK](raw/model-api-reference/preparations/install-sdk.md)。
+**推荐模型**
 
-## 快速开始
+**调用方式**
 
-**重要**以下示例使用 `qwen-audio-3.1-asr-flash-filetrans` 和 `qwen-audio-3.1-asr-flash`。前者采用异步调用，提交请求时需设置 `X-DashScope-Async: enable`，然后查询任务结果；后者采用同步调用，支持流式或非流式返回结果。
+5 分钟以内的短音频，需要直接获取结果
 
-如果您调用**独享部署**的模型服务时收到报错 `current user api does not support asynchronous calls`，表示该部署仅支持**同步调用**，请将请求头改为 `X-DashScope-Async: disable`（其余调用方式保持不变）。
+[qwen-audio-3.1-asr-flash](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen-audio-3.1-asr-flash)
 
-#### Qwen-Audio-ASR-Filetrans
+同步调用，可选择 SSE 流式输出。
 
-音视频文件较大，文件转写 API 采用异步调用：提交任务后通过查询接口轮询状态，任务完成后获取识别结果。
+长录音，或需要异步处理的音视频文件
 
-#### cURL
+[qwen-audio-3.1-asr-flash-filetrans](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen-audio-3.1-asr-flash-filetrans)
 
-使用 cURL 调用时，先提交任务获取 `task_id`，再通过该 ID 查询任务执行结果。
+提交异步任务，完成后下载转写结果。
 
-#### 提交任务
+## 开始使用
 
-以下为华北2（北京）地域的配置，调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)，各地域的配置不同。
+在控制台[获取 API Key](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key)，并配置 `DASHSCOPE_API_KEY` 环境变量。
 
-```
-curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/asr/transcription' \
--H "Authorization: Bearer $DASHSCOPE_API_KEY" \
--H "Content-Type: application/json" \
--H "X-DashScope-Async: enable" \
--d '{
-    "model": "qwen-audio-3.1-asr-flash-filetrans",
-    "input": {
-        "file_urls": [
-            "{YOUR_AUDIO_URL}"
-        ]
-    },
-    "parameters": {
-        "channel_id": [0],
-        "language_hints": ["zh", "en"]
-    }
-}'
-```
-
-#### 获取任务执行结果
-
-此查询接口默认 20 QPS、最高可扩容到 100 QPS。如需更高频次或避免轮询限流，建议配置异步任务回调（参见 [高并发场景：使用回调替代轮询](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#nrt03_callback_h3)）。
-
-以下为华北2（北京）地域的配置，调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)，各地域的配置不同。
-
-```
-curl -X GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}' \
--H "Authorization: Bearer $DASHSCOPE_API_KEY" \
--H "Content-Type: application/json"
-```
-
-#### 下载识别结果
-
-任务成功后，查询接口返回的 `output.results[].transcription_url` 指向公网可下载的 JSON 文件，包含完整识别结果。该 URL 默认在 **24 小时**内有效，请及时下载并落盘保存。
-
-```
-# 将 {transcription_url} 替换为查询接口返回的 transcription_url 值
-curl -sS '{transcription_url}' -o transcription.json
-cat transcription.json | jq .
-```
-
-#### Python
-
-```
-import os
-import json
-import dashscope
-from urllib import request
-
-# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-client = dashscope.Client(
-    # 若没有将API Key配置到环境变量中，请将下行替换为自己的API Key：api_key="sk-xxx"
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
-    workspace="{WorkspaceId}",
-    region="cn-beijing",
-)
-
-# 提交录音文件识别任务并同步等待任务完成
-job = client.audio.asr.transcribe(
-    ['{YOUR_AUDIO_URL}'],
-    model='qwen-audio-3.1-asr-flash-filetrans',
-    # language_hints为可选参数，用于指定待识别音频的语言代码。取值范围请参见API参考文档。
-    parameters={'language_hints': ['zh', 'en']},
-)
-
-for result in job.results:
-    if result.subtask_status == 'SUCCEEDED':
-        url = result.transcription_url
-        transcription = json.loads(request.urlopen(url).read().decode('utf8'))
-        print(json.dumps(transcription, indent=4,
-                        ensure_ascii=False))
-    else:
-        print('transcription failed!')
-        print(result)
-```
-
-#### Java
-
-```
-import com.alibaba.dashscope.audio.asr.transcription.*;
-import com.alibaba.dashscope.utils.Constants;
-import com.google.gson.*;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.Arrays;
-import java.util.List;
-
-public class Main {
-    public static void main(String[] args) {
-        // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-        Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
-        // 创建转写请求参数。
-        TranscriptionParam param =
-                TranscriptionParam.builder()
-                        // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-                        // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：.apiKey("sk-xxx")
-                        .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-                        .model("qwen-audio-3.1-asr-flash-filetrans")
-                        // language_hints为可选参数，用于指定待识别音频的语言代码。取值范围请参见API参考文档。
-                        .parameter("language_hints", new String[]{"zh", "en"})
-                        .fileUrls(
-                                Arrays.asList(
-                                        "{YOUR_AUDIO_URL}"))
-                        .build();
-        try {
-            Transcription transcription = new Transcription();
-            // 提交转写请求
-            TranscriptionResult result = transcription.asyncCall(param);
-            System.out.println("RequestId: " + result.getRequestId());
-            // 检查任务是否提交成功
-            if (result.getTaskId() == null) {
-                System.out.println("Error: " + result.getOutput());
-                System.exit(1);
-            }
-            // 阻塞等待任务完成并获取结果
-            result = transcription.wait(
-                    TranscriptionQueryParam.FromTranscriptionParam(param, result.getTaskId()));
-            // 获取转写结果
-            List<TranscriptionTaskResult> taskResultList = result.getResults();
-            if (taskResultList != null && taskResultList.size() > 0) {
-                for (TranscriptionTaskResult taskResult : taskResultList) {
-                    String transcriptionUrl = taskResult.getTranscriptionUrl();
-                    HttpURLConnection connection =
-                            (HttpURLConnection) new URL(transcriptionUrl).openConnection();
-                    connection.setRequestMethod("GET");
-                    connection.connect();
-                    BufferedReader reader =
-                            new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                    Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                    JsonElement jsonResult = gson.fromJson(reader, JsonObject.class);
-                    System.out.println(gson.toJson(jsonResult));
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("error: " + e);
-        }
-        System.exit(0);
-    }
-}
-```
-
-完整的识别结果会以JSON格式打印在控制台。完整结果包含转换后的文本以及文本在音视频文件中的起始、结束时间（以毫秒为单位）。
-
--   识别结果
-
-```
-{
-    "file_url": "{YOUR_AUDIO_URL}",
-    "properties": {
-        "audio_format": "pcm_s16le",
-        "channels": [
-            0
-        ],
-        "original_sampling_rate": 16000,
-        "original_duration_in_milliseconds": 3834
-    },
-    "transcripts": [
-        {
-            "channel_id": 0,
-            "content_duration_in_milliseconds": 2480,
-            "text": "Hello World，这里是阿里巴巴语音实验室。",
-            "sentences": [
-                {
-                    "begin_time": 760,
-                    "end_time": 3240,
-                    "text": "Hello World，这里是阿里巴巴语音实验室。",
-                    "sentence_id": 1,
-                    "words": [
-                        {
-                            "begin_time": 760,
-                            "end_time": 1000,
-                            "text": "Hello",
-                            "punctuation": ""
-                        },
-                        {
-                            "begin_time": 1000,
-                            "end_time": 1120,
-                            "text": " World",
-                            "punctuation": "，"
-                        },
-                        {
-                            "begin_time": 1400,
-                            "end_time": 1920,
-                            "text": "这里是",
-                            "punctuation": ""
-                        },
-                        {
-                            "begin_time": 1920,
-                            "end_time": 2520,
-                            "text": "阿里巴巴",
-                            "punctuation": ""
-                        },
-                        {
-                            "begin_time": 2520,
-                            "end_time": 2840,
-                            "text": "语音",
-                            "punctuation": ""
-                        },
-                        {
-                            "begin_time": 2840,
-                            "end_time": 3240,
-                            "text": "实验室",
-                            "punctuation": "。"
-                        }
-                    ]
-                }
-            ]
-        }
-    ]
-}
-```
+以下示例使用公网可访问的 16 kHz、单声道 WAV [示例音频](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/zh/audios/6a4b3c2d1e0f9093.wav)。
 
 #### Qwen-Audio-ASR
 
-Qwen-Audio-ASR 系列模型支持同步调用，适用于 5 分钟以内的音频文件，可流式或非流式返回识别结果。
+示例使用 qwen-audio-3.1-asr-flash，一次提交完整音频，在当前请求中获取最终识别结果。
 
-以下为华北2（北京）地域的配置，调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)，各地域的配置不同。
+cURL
 
 ```
-curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
-     --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
-     --header "Content-Type: application/json" \
-     --header "X-DashScope-SSE: disable" \
-     --data '{
+curl \
+  "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation" \
+  -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+  -H "Content-Type: application/json" \
+  -H "X-DashScope-SSE: disable" \
+  -d '{
+  "model": "qwen-audio-3.1-asr-flash",
+  "input": {
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "input_audio",
+            "input_audio": {
+              "data": "https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/zh/audios/6a4b3c2d1e0f9093.wav"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "parameters": {
+    "format": "wav",
+    "sample_rate": "16000"
+  }
+}'
+```
+
+Python
+
+```
+import json
+import os
+from urllib.request import Request, urlopen
+
+api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+body = {
     "model": "qwen-audio-3.1-asr-flash",
     "input": {
         "messages": [
@@ -273,7 +94,7 @@ curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.c
                     {
                         "type": "input_audio",
                         "input_audio": {
-                            "data": "{YOUR_AUDIO_URL}"
+                            "data": "https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/zh/audios/6a4b3c2d1e0f9093.wav"
                         }
                     }
                 ]
@@ -284,337 +105,384 @@ curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.c
         "format": "wav",
         "sample_rate": "16000"
     }
+}
+request = Request(
+    api_url + "/services/aigc/multimodal-generation/generation",
+    data=json.dumps(body).encode(),
+    headers={
+        "Authorization": "Bearer " + os.environ["DASHSCOPE_API_KEY"],
+        "Content-Type": "application/json",
+    },
+)
+with urlopen(request) as response:
+    result = json.load(response)
+print(result["output"]["text"])
+```
+
+#### Qwen-Audio-ASR-Filetrans
+
+示例使用 qwen-audio-3.1-asr-flash-filetrans，先提交任务，再查询任务状态，任务成功后下载转写 JSON。
+
+#### cURL
+
+#### 提交任务
+
+```
+curl \
+  "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/asr/transcription" \
+  -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+  -H "Content-Type: application/json" \
+  -H "X-DashScope-Async: enable" \
+  -d '{
+  "model": "qwen-audio-3.1-asr-flash-filetrans",
+  "input": {
+    "file_urls": [
+      "https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/zh/audios/6a4b3c2d1e0f9093.wav"
+    ]
+  },
+  "parameters": {}
 }'
 ```
 
-**重要**`qwen-audio-3.1-asr-flash` 的 HTTP 响应不包含 `choices` 字段，识别结果结构如下：
+#### 查询任务
+
+将 `{task_id}` 替换为提交接口返回的 `output.task_id`。
+
+-   `PENDING`、`RUNNING`：任务尚未完成，等待后再次查询。
+-   `SUCCEEDED`：检查 `output.results[]` 中各文件的 `subtask_status`，获取成功文件的 `transcription_url`。
+-   `FAILED`、`CANCELED`：任务未成功完成，读取返回的状态及错误信息。
 
 ```
-{
-  "output": {
-    "sentence": {
-      "text": "识别文本内容"
-    },
-    "text": "识别文本内容"
-  },
-  "request_id": "..."
+curl \
+  "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}" \
+  -H "Authorization: Bearer $DASHSCOPE_API_KEY"
+```
+
+#### 下载结果
+
+将 `{transcription_url}` 替换为查询接口返回的结果文件 URL，下载并保存转写 JSON。该 URL 有效期为 24 小时。
+
+```
+curl "{transcription_url}" -o transcription.json
+```
+
+#### Python
+
+```
+import json
+import os
+import time
+from urllib.request import Request, urlopen
+
+api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+headers = {
+    "Authorization": "Bearer " + os.environ["DASHSCOPE_API_KEY"],
+    "Content-Type": "application/json",
 }
+body = {
+    "model": "qwen-audio-3.1-asr-flash-filetrans",
+    "input": {"file_urls": ["https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/zh/audios/6a4b3c2d1e0f9093.wav"]},
+    "parameters": {},
+}
+request = Request(
+    api_url + "/services/audio/asr/transcription",
+    data=json.dumps(body).encode(),
+    headers={**headers, "X-DashScope-Async": "enable"},
+)
+with urlopen(request) as response:
+    task_id = json.load(response)["output"]["task_id"]
+
+while True:
+    query = Request(api_url + "/tasks/" + task_id, headers=headers)
+    with urlopen(query) as response:
+        result = json.load(response)
+    status = result["output"]["task_status"]
+    if status == "SUCCEEDED":
+        break
+    if status in ("FAILED", "CANCELED"):
+        raise RuntimeError(json.dumps(result, ensure_ascii=False))
+    time.sleep(3)
+
+for item in result["output"]["results"]:
+    if item["subtask_status"] != "SUCCEEDED":
+        raise RuntimeError(json.dumps(item, ensure_ascii=False))
+    with urlopen(item["transcription_url"]) as response:
+        transcript = json.load(response)
+    print(json.dumps(transcript, ensure_ascii=False, indent=2))
 ```
 
-识别文本位于 `output.sentence.text` 和 `output.text`。
-
-## 进阶功能
-
-### 长音频文件处理
-
-非实时语音识别支持长音频文件异步转写，适用于会议记录、访谈整理、通话回放等场景。
-
-**限制说明：**
-
--   **Qwen-Audio-ASR-Filetrans**/**Fun-ASR / Qwen3-ASR-Filetrans / Paraformer：**单个音频文件大小不超过 2GB，时长不超过 12 小时。
--   **Qwen-Audio-ASR、Fun-ASR-Flash：**单个音频文件大小不超过 2GB，时长不超过 5 分钟。
--   **Qwen3-ASR-Flash：**单个音频文件大小不超过 10MB，时长不超过 5 分钟。对于较长音频，请使用 Qwen-Audio-ASR-Filetrans。
--   **启用说话人分离时**：建议音频时长不超过 2 小时，否则可能导致识别失败或超时。详见[说话人分离](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#nrt03_diarization_h3)。
-
-**调用方式**：长音频转写采用异步任务模式，分三步：
-
-1.  提交转写任务，获取 `task_id`。
-2.  通过轮询接口查询任务状态（或使用 SDK 的等待方法阻塞等待）。
-3.  任务完成后从返回的 URL 下载识别结果 JSON。
-
-具体代码示例请参见[Qwen-Audio-ASR-Filetrans](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#7818a3bc466d6)的快速开始代码。
-
-### 流式输出
-
-Qwen-Audio-ASR/Fun-ASR-Flash/Qwen3-ASR-Flash 支持流式输出：边识别边返回中间结果，适用于需要实时反馈进度的场景。 Qwen-Audio-ASR 和 Fun-ASR-Flash 的 HTTP SSE 调用方式及返回结构，请参见[Qwen-Audio-ASR HTTP API](raw/_short/qwen-audio-asr-http-api-90b9d62787e911f4.md)和[Fun-ASR-Flash HTTP API](raw/_short/fun-asr-flash-recorded-speech-recognition-http-a-7716e5d27dfd9a7b.md)。
-
-Qwen-Audio-ASR-Filetrans、Fun-ASR、Qwen3-ASR-Filetrans、Paraformer 等异步转写模型不支持流式输出，需通过任务轮询获取最终结果（详见[长音频文件处理](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#nrt03_longaudio_h3)）。
-
-**启用方式：**
-
--   DashScope Python SDK：设置 `stream` 参数为 `True`。
--   DashScope Java SDK：通过 `streamCall` 接口调用。
--   DashScope HTTP：在 Header 中设置 `X-DashScope-SSE` 为 `enable`。
-
-### 使用热词提升准确率
-
-支持通过热词提升特定领域专有名词（人名、地名、产品名等）的识别准确率。详细的创建和使用方法，请参见[提升识别准确率](raw/model-user-guide/model-experience/speech-and-audio/speech-recognition/improve-asr-accuracy.md)。
-
-不同 SDK 暴露上述参数的命名习惯不同（如字典 key、对象属性、方法等），完整字段对照请参见各 SDK 的 API 参考。
-
-### 使用上下文增强提升准确率
-
-支持上下文增强功能，可将对话历史传入 ASR 模型，显著提升专有词汇的转写准确率。详细的使用方法和效果示例，请参见[上下文增强](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#ctx_enhance_h2)。
-
-### 说话人分离
-
-`qwen-audio-3.1-asr-flash` 使用 `speaker_diarization_enabled` 开启说话人分离，其参数和返回结构请参见 [HTTP API](raw/_short/qwen-audio-asr-http-api-90b9d62787e911f4.md)。
-
-说话人分离可自动识别音频中不同说话人，并在转写结果中为每个句子标注说话人标签，适用于多人会议、访谈录音等场景。
-
-**以下配置及示例适用于：**Qwen-Audio-ASR-Filetrans、Fun-ASR 和 Paraformer 系列模型。
-
-**启用方式：**在 API 请求参数中设置 `diarization_enabled` 为 `true`。识别结果中每个句子会包含 `speaker_id` 字段，标识不同说话人。
-
-返回结构示例（节选）：
+异步转写结果示例
 
 ```
 {
+  "file_url": "https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/zh/audios/6a4b3c2d1e0f9093.wav",
+  "properties": {
+    "audio_format": "pcm_s16le",
+    "channels": [
+      0
+    ],
+    "original_sampling_rate": 16000,
+    "original_duration_in_milliseconds": 6228
+  },
   "transcripts": [
     {
+      "channel_id": 0,
+      "content_duration_in_milliseconds": 5920,
+      "text": "请把漆园项目的报告发给罗科，下周我们要上线玄枢系统。",
       "sentences": [
-        { "begin_time": 100, "end_time": 3820, "text": "你好，我们今天讨论项目进度。", "speaker_id": 0 },
-        { "begin_time": 3820, "end_time": 6500, "text": "好的，我先汇报一下。", "speaker_id": 1 }
+        {
+          "begin_time": 160,
+          "end_time": 6080,
+          "text": "请把漆园项目的报告发给罗科，下周我们要上线玄枢系统。",
+          "sentence_id": 1,
+          "words": [
+            {
+              "begin_time": 160,
+              "end_time": 600,
+              "text": "请把",
+              "punctuation": "",
+              "confidence": 1.0
+            },
+            {
+              "begin_time": 600,
+              "end_time": 840,
+              "text": "漆",
+              "punctuation": "",
+              "confidence": 1.0
+            }
+          ]
+        }
       ]
     }
-  ]
-}
-```
-
-不同 SDK 暴露上述字段的命名习惯不同（如字典 key、对象属性、方法等），完整字段对照请参见各 SDK 的 API 参考。
-
-**重要**启用说话人分离功能时，建议音频时长不超过 2 小时，否则可能导致识别失败或超时（不启用时音频长度限制详见[长音频文件处理](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#nrt03_longaudio_h3)）。说话人分离仅支持单声道音频。
-
-完整字段定义请参见API参考。
-
-### 敏感词过滤
-
-敏感词过滤可对识别结果中的敏感词执行替换或移除，适用于客服质检、内容合规、字幕审核等场景。
-
-**支持范围：**Qwen-Audio-ASR-Filetrans、Fun-ASR 与 Paraformer 系列模型。
-
-**默认行为**：未传入 `special_word_filter` 参数时，系统启用内置的[阿里云百炼敏感词表](https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/%E7%99%BE%E7%82%BC%E6%95%8F%E6%84%9F%E8%AF%8D%E5%88%97%E8%A1%A8_20230716.words.txt)，匹配的词语会被替换为等长的 `*`。
-
-**自定义配置**：`special_word_filter` 是 JSON 对象，包含三个子字段：
-
--   `filter_with_signed.word_list`：字符串数组，列出需要被替换为等长 `*` 的敏感词。例如 `["测试"]`，「帮我测试一下」会变成「帮我\*\*一下」。
--   `filter_with_empty.word_list`：字符串数组，列出需要从结果中完全移除的敏感词。例如 `["开始"]`，「比赛这就要开始了吗」会变成「比赛这就要了吗」。
--   `system_reserved_filter`：布尔值，默认 `true`。是否同时启用系统预置敏感词表（与自定义词表叠加生效）。
-
-配置示例：
-
-```
-{
-  "special_word_filter": {
-    "filter_with_signed": {
-      "word_list": ["测试"]
-    },
-    "filter_with_empty": {
-      "word_list": ["开始", "发生"]
-    },
-    "system_reserved_filter": true
+  ],
+  "usage": {
+    "input_tokens": 78,
+    "output_tokens": 16,
+    "total_Tokens": 94
   }
 }
 ```
 
-不同 SDK 暴露上述参数的命名习惯不同（如字典 key、对象属性、方法等），完整字段对照请参见 API参考。
+### 处理识别结果
 
-### 获取时间戳
+-   **同步识别**：Qwen-Audio-ASR 的 `output.text` 是当前累计的完整文本，`output.sentence` 是当前句子的详细结果。保存完整转写时读取 `output.text`。
+    
+-   **异步转写**：任务成功后，下载结果文件，读取 `transcripts[].text` 获取各声道的完整文本；需要字幕或音频定位时，读取 `transcripts[].sentences` 及其中的 `words`。
+    
+-   **时间戳**：句子和字词中的 `begin_time`、`end_time` 以毫秒表示音频中的起止位置；任务查询结果中的 `end_time` 则是任务完成的日期时间。
+    
+    **说明**Qwen-Audio-ASR、Qwen-Audio-ASR-Filetrans、Fun-ASR、Fun-ASR-Flash 和 Paraformer 的时间戳固定开启，不支持关闭。Qwen3-ASR-Filetrans 的异步调用也固定返回时间戳，`enable_words` 控制返回句级或字级时间戳，不用于关闭时间戳。
+    
 
-Flash 流式结果的时间戳稳定条件及字段路径请参见 [Qwen-Audio-ASR HTTP API](https://help.aliyun.com/zh/model-studio/qwen-audio-asr-http-api#h-fl-stream-logic)和[Fun-ASR-Flash HTTP API](https://help.aliyun.com/zh/model-studio/fun-asr-flash-recorded-speech-recognition-http-api#h-fl-stream-logic)。
+## 优化识别效果
 
-非实时语音识别支持在转写结果中输出时间戳，便于字幕生成、关键词高亮、音视频剪辑等场景。Qwen-Audio-ASR-Filetrans、Qwen-Audio-ASR、Fun-ASR、Fun-ASR-Flash、Qwen3-ASR-Filetrans、Paraformer 均支持，但各模型的时间戳默认行为和控制方式不同：
+根据业务需求调整文本可读性、特定词汇识别、说话人标注和结果返回方式。
 
--   **Qwen-Audio-ASR-Filetrans/Qwen-Audio-ASR/Fun-ASR/Fun-ASR-Flash/Paraformer**：时间戳功能固定开启，不可关闭。
--   **Qwen3-ASR-Filetrans**：仅 DashScope 异步调用方式支持时间戳，时间戳功能固定开启。可通过请求参数 `enable_words` 控制时间戳级别：设为 `false`（默认）返回句级时间戳，设为 `true` 返回字级时间戳。字级别时间戳仅支持以下语种：中文、英语、日语、韩语、德语、法语、西班牙语、意大利语、葡萄牙语、俄语，其他语种可能无法保证准确性。
+### 流式输出
 
-时间戳单位均为毫秒，分两个层级返回：
+流式输出在提交完整音频后，通过 SSE 分次返回识别结果，便于在整段音频识别完成前展示转写进度。
 
--   **句级**：`sentences[].begin_time` 与 `sentences[].end_time`，标识每个句子在音频中的起止时刻。
--   **字级**：`sentences[].words[]` 数组，每个元素包含 `begin_time`、`end_time` 与 `text`（该字/词文本）。
+qwen-audio-3.1-asr-flash、Fun-ASR-Flash 和 Qwen3-ASR-Flash 支持流式输出。Qwen-Audio-ASR-Filetrans、Fun-ASR、Qwen3-ASR-Filetrans 和 Paraformer 等异步转写模型在任务完成后提供结果文件，不支持 SSE 流式输出。
 
-返回结构示例（DashScope 异步任务接口节选）：
-
-```
-{
-  "transcripts": [{
-    "sentences": [{
-      "begin_time": 100,
-      "end_time": 3820,
-      "text": "你好，我们今天讨论项目进度。",
-      "words": [
-        { "begin_time": 100, "end_time": 596, "text": "你好" },
-        { "begin_time": 596, "end_time": 844, "text": "我们" }
-      ]
-    }]
-  }]
-}
-```
-
-**重要**音频内时间戳是毫秒整数（如 `100`），与任务级 `end_time`（任务完成时间，字符串日期如 `"2024-09-12 15:11:40.903"`）不是同一字段，请勿混淆。
-
-不同 SDK 暴露上述字段的命名习惯不同（如字典 key、对象属性、方法等），完整字段对照请参见 API参考。
-
-## 应用于生产环境
-
-将非实时语音识别应用于生产环境时，以下最佳实践有助于提升识别效果和系统稳定性。
-
-### 高并发场景：使用回调替代轮询
-
-异步转写任务（Qwen-Audio-ASR-Filetrans、Fun-ASR、Qwen3-ASR-Filetrans、Paraformer）通过 `POST /api/v1/services/audio/asr/transcription` 提交后，通常做法是周期性调用查询接口 `GET /api/v1/tasks/{task_id}` 获取结果。**该查询接口默认 20 QPS、最高可扩容至 100 QPS，在高并发批量场景下，频繁轮询易触发限流。**
-
-通过事件总线 EventBridge 配置回调通知，任务完成时阿里云百炼会自动推送 `dashscope:System:AsyncTaskFinish` 事件至您配置的目标（HTTP/HTTPS 端点或 RocketMQ Topic），消费端收到事件后无需再调用查询接口，从而规避因频繁轮询而被限流的风险。详情请参见[配置 EventBridge 回调通知](raw/model-api-reference/more-about-models/async-task-api.md)。
-
-#### 适用模型
-
--   **适用模型：**Qwen-Audio-ASR-Filetrans、Fun-ASR、Qwen3-ASR-Filetrans、Paraformer（均为异步转写任务）。
--   **不适用：**Qwen3-ASR-Flash（同步/流式调用，不属异步任务范畴）。
-
-#### 回调消息内容
-
-三种模型的回调消息体中 `data.contain_result` 均为 `true`，`data.output_result` 直接携带 `transcription_url`，消费端收到回调后即可获取识别结果，无需再调用 `GET /api/v1/tasks/{task_id}`。但三个模型的结果字段路径与结构不同，详见下表。
-
-**说明**编写消费端时请按使用的模型选择正确路径，不可写死为单一路径。失败场景下 `data.output_result.output` 不再含 `results`/`result`，而是含 `code` 与 `message` 字段，需先判断 `data.task_status` 再取结果。
+**重要**使用 cURL 接收 SSE 时，添加 `--no-buffer`，避免输出缓冲影响结果展示。
 
 **模型**
 
-**提交参数**
+**启用方式**
 
-**结果字段路径（基于回调 Body）**
+**结果处理与注意事项**
 
-**usage 字段**
+qwen-audio-3.1-asr-flash
 
-Qwen-Audio-ASR-Filetrans、Fun-ASR
+`X-DashScope-SSE: enable`
 
-`input.file_urls`（数组，单次仅支持 1 个 URL）
+`output.text` 是累计文本，收到更新时替换已有内容。短音频可能只返回一次结果。未开启说话人分离时，词级时间戳在 `output.sentence.words[i].fixed` 为 `true` 后固定；开启后读取 `output.sentences` 中当前及历史句子的结果。
 
-`data.output_result.output.results[ ].transcription_url`（数组，每个文件一项，含 `subtask_status`；并附 `task_metrics`）
+Qwen3-ASR-Flash
 
-`duration`
+OpenAI 兼容 API：`stream: true`。原生 HTTP API：`X-DashScope-SSE: enable`。
 
-Paraformer
+OpenAI 兼容响应中的 `choices[].delta.content` 为增量文本，按返回顺序拼接。
 
-`input.file_urls`（数组，单次仅支持 1 个 URL）
+Fun-ASR-Flash
 
-同 Qwen-Audio-ASR-Filetrans/Fun-ASR：`data.output_result.output.results[ ].transcription_url`
+`X-DashScope-SSE: enable`
 
-`duration`
+Fun-ASR-Flash 在音频不少于 1 分钟时分次返回结果。
 
-Qwen3-ASR-Filetrans
+### 热词与上下文增强
 
-`input.file_url`（**单对象**，单次仅支持 1 个 URL）
+人名、产品名或专业术语容易被识别成近音词时，可使用热词指定目标写法；需要补充前几轮对话、业务背景或相关词汇时，可使用上下文增强。支持范围、配置方法及效果示例参见[提升识别准确率](raw/model-user-guide/model-experience/speech-and-audio/speech-recognition/improve-asr-accuracy.md)。
 
-`data.output_result.output.result.transcription_url`（**单对象**，无 `results[ ]` / `task_metrics`）
+### 文本润色与方言表达
 
-`seconds`
+qwen-audio-3.1-asr-flash 支持原生文本润色，可整理口语中的语气词、重复和自我纠正，提高转写文本的可读性。
 
-#### 注意事项
+qwen-audio-3.1-asr-flash 和 qwen-audio-3.1-asr-flash-filetrans 默认将方言转写为普通话文本。需要保留方言特有表达时，设置 `keep_dialect: true`。
 
-**安全（HTTP/HTTPS 投递方式）：**生产环境必须校验回调请求头中的 `X-Eventbridge-Signature*` 系列字段后再消费，否则任意外部 IP 都可伪造 `AsyncTaskFinish` 事件，注入虚假识别结果。建议同时为接收端设置至少 5 秒的接收超时。RocketMQ 投递方式无消息级签名，安全性由 RocketMQ 鉴权机制保证。
+### 说话人分离
 
-**投递延迟：**从任务结束（`end_time`）到投递目标（HTTP/HTTPS 端点或 RocketMQ Topic）收到消息，通常约 1–90 秒，具体延迟受 EventBridge 实时负载影响。
+多人会议或访谈需要区分发言人时，可开启说话人分离。识别结果中的 `speaker_id` 用于区分不同说话人。
 
-**幂等性：**同一事件可能因重试而被投递多次。消费端需实现幂等处理，建议以 CloudEvents `data.id` 或 `data.task_id` 作为去重键。
+**模型**
 
-### 生产环境建议
+**开启方式**
 
--   **文件托管：**将音频文件上传至[阿里云 OSS](https://help.aliyun.com/zh/oss/user-guide/simple-upload#a632b50f190j8)，通过 URL 方式调用，避免使用本地文件上传（本地文件调用上限 100 QPS，不支持扩容）。
--   **异步轮询：**长音频转写采用异步模式，建议设置合理的轮询间隔（如 2~5 秒），避免频繁查询消耗配额。如需突破 20–100 QPS 查询上限，可改用事件回调通知，详见[高并发场景：使用回调替代轮询](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#nrt03_callback_h3)。
--   **错误处理：**实现完善的重试机制；网络超时或服务端临时错误（5xx）按指数退避策略重试。
--   **降噪处理：**噪声较大的音频建议先用 FFmpeg 等工具预处理后再提交识别。
--   **模型选择：**5 分钟以内的短音频使用 Qwen-Audio-ASR；长音频或需要异步处理时使用 Qwen-Audio-ASR-Filetrans。
+**结果位置**
+
+qwen-audio-3.1-asr-flash
+
+`speaker_diarization_enabled: true`
+
+`output.sentences[].speaker_id`
+
+Qwen-Audio-ASR-Filetrans、Fun-ASR、Paraformer
+
+`diarization_enabled: true`
+
+`transcripts[].sentences[].speaker_id`
+
+**说明**说话人分离仅支持单声道音频。异步转写启用该功能时，建议音频时长不超过 2 小时，否则可能导致识别失败或超时。qwen-audio-3.1-asr-flash 开启说话人分离后，`keep_dialect` 和 `language_hints` 不生效。
+
+### 敏感词过滤
+
+需要对转写文本中的指定词语进行遮蔽或移除时，可使用敏感词过滤。Qwen-Audio-ASR-Filetrans、Fun-ASR 和 Paraformer 支持通过 `special_word_filter` 配置自定义替换词表、移除词表及系统预置词表。
+
+## 应用于生产环境
+
+批量转写需要管理音频存储、任务提交与查询频率、完成通知和结果保存。输入准备、回调接入、限流与异常重试参见[语音识别最佳实践](raw/model-user-guide/model-experience/speech-and-audio/speech-recognition/speech-recognition-best-practices.md)。
 
 ## 支持的模型与地域
 
 #### 华北2（北京）
 
-调用以下模型时，请选择北京地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)：
-
--   **Qwen-Audio-ASR-Filetrans：**`qwen-audio-3.1-asr-flash-filetrans`、`qwen-audio-3.0-asr-flash-filetrans`
--   **Qwen-Audio-ASR：**`qwen-audio-3.1-asr-flash`、`qwen-audio-3.0-asr-flash`
--   **Fun-ASR：**`fun-asr`（稳定版）
--   **Fun-ASR-Flash：**`fun-asr-flash-2026-06-15`
--   **Qwen3-ASR-Filetrans：**`qwen3-asr-flash-filetrans`（稳定版）
--   **Qwen3-ASR-Flash：**`qwen3-asr-flash`（稳定版）
--   **Paraformer：**`paraformer-v2`、`paraformer-8k-v2`
+-   **Qwen-Audio-ASR：**qwen-audio-3.1-asr-flash、qwen-audio-3.0-asr-flash
+-   **Qwen-Audio-ASR-Filetrans：**qwen-audio-3.1-asr-flash-filetrans、qwen-audio-3.0-asr-flash-filetrans
+-   **Qwen3-ASR-Flash：**qwen3-asr-flash（稳定版）
+-   **Qwen3-ASR-Filetrans：**qwen3-asr-flash-filetrans（稳定版）
+-   **Fun-ASR-Flash：**fun-asr-flash-2026-06-15
+-   **Fun-ASR：**fun-asr（稳定版）
+-   **Paraformer：**paraformer-v2、paraformer-8k-v2
 
 #### 新加坡
 
-调用以下模型时，请选择新加坡地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)：
-
--   **Qwen-Audio-ASR-Filetrans：**`qwen-audio-3.1-asr-flash-filetrans`、`qwen-audio-3.0-asr-flash-filetrans`
--   **Qwen-Audio-ASR：**`qwen-audio-3.1-asr-flash`、`qwen-audio-3.0-asr-flash`
--   **Fun-ASR：**`fun-asr`（稳定版）
--   **Fun-ASR-Flash：**`fun-asr-flash-2026-06-15`
--   **Qwen3-ASR-Filetrans：**`qwen3-asr-flash-filetrans`（稳定版）
--   **Qwen3-ASR-Flash：**`qwen3-asr-flash`（稳定版）
+-   **Qwen-Audio-ASR：**qwen-audio-3.1-asr-flash、qwen-audio-3.0-asr-flash
+-   **Qwen-Audio-ASR-Filetrans：**qwen-audio-3.1-asr-flash-filetrans、qwen-audio-3.0-asr-flash-filetrans
+-   **Qwen3-ASR-Flash：**qwen3-asr-flash（稳定版）
+-   **Qwen3-ASR-Filetrans：**qwen3-asr-flash-filetrans（稳定版）
+-   **Fun-ASR-Flash：**fun-asr-flash-2026-06-15
+-   **Fun-ASR：**fun-asr（稳定版）
 
 #### 美国（弗吉尼亚）
 
-调用以下模型时，请选择美国地域的[API Key](https://bailian.console.aliyun.com/us-east-1/model/settings/api-key)：
+**Qwen3-ASR-Flash：**qwen3-asr-flash（稳定版）
 
-**Qwen3-ASR-Flash：**`qwen3-asr-flash`（稳定版）
+## 使用限制
 
-## API参考
+按模型选择输入方式、音频格式和采样率。传入 `format`、`sample_rate` 等参数时，应与实际文件一致。
 
--   [非实时语音识别-Qwen-Audio-ASR-Filetrans API参考](raw/model-api-reference/audio-api-directory/speech-recognition-api-reference/qwen-audio-asr-filetrans-api.md)
--   [非实时语音识别-Fun-ASR API参考](raw/_short/fun-asr-recorded-speech-recognition-api-referenc-b0273c90bb44d4cc.md)
--   [非实时语音识别-Qwen-Audio-ASR API参考](raw/model-api-reference/audio-api-directory/speech-recognition-api-reference/qwen-audio-asr-api.md)
--   [非实时语音识别-Fun-ASR-Flash API参考](raw/_short/non-real-time-speech-recognition-for-fun-asr-fla-650fa37d535f17b4.md)
--   [非实时语音识别-Qwen-ASR API参考](raw/_short/qwen-asr-api-reference-6234af32190b8ba9.md)
--   [非实时语音识别-Paraformer API参考](raw/_short/paraformer-recorded-speech-recognition-api-refer-3f19f98cbb4ce26b.md)
+**说明**Qwen-Audio-ASR-Filetrans、Fun-ASR 和 Paraformer 启用说话人分离时，建议音频时长不超过 2 小时，否则可能导致识别失败或超时。
 
-## 常见问题
+**模型**
 
-### Q：如何为API提供公网可访问的音频URL？
+**输入方式**
 
-推荐使用[阿里云对象存储OSS](https://help.aliyun.com/zh/oss/user-guide/simple-upload#a632b50f190j8)，它提供了高可用、高可靠的存储服务，并且可以方便地生成公网访问URL。
+**音频格式**
 
-**在公网环境下验证生成的 URL 可正常访问：**可在浏览器或通过 curl 命令访问该 URL，确保音频文件能够成功下载或播放（HTTP状态码为200）。
+**采样率**
 
-### Q：如何检查音频格式是否符合要求？
+**文件大小与时长**
 
-可以使用开源工具[ffprobe](https://ffmpeg.org/ffprobe.html)快速获取音频的详细信息：
+qwen-audio-3.1-asr-flash、qwen-audio-3.0-asr-flash
 
-```
-# 查询音频的容器格式(format_name)、编码(codec_name)、采样率(sample_rate)、声道数(channels)
-ffprobe -v error -show_entries format=format_name -show_entries stream=codec_name,sample_rate,channels -of default=noprint_wrappers=1 your_audio_file.mp3
-```
+URL 或 Base64 Data URI，单次 1 个
 
-### Q：如何处理音频以满足模型要求？
+`aac`、`amr`、`avi`、`flac`、`flv`、`m4a`、`mkv`、`mov`、`mp3`、`mp4`、`mpeg`、`ogg`、`opus`、`wav`、`webm`、`wma`、`wmv`
 
-可以使用开源工具[FFmpeg](https://ffmpeg.org/download.html)对音频进行裁剪或格式转换：
+任意
 
--   **音频裁剪：从长音频中截取片段**
+≤2 GB；≤5 分钟
 
-```
-# -i: 输入文件
-# -ss 00:01:30: 设置裁剪的起始时间 (从1分30秒开始)
-# -t 00:02:00: 设置裁剪的持续时长 (裁剪2分钟)
-# -c copy: 直接复制音频流，不重新编码，速度快
-# output_clip.wav: 输出文件
-ffmpeg -i long_audio.wav -ss 00:01:30 -t 00:02:00 -c copy output_clip.wav
-```
+qwen-audio-3.1-asr-flash-filetrans、qwen-audio-3.0-asr-flash-filetrans
 
--   **格式转换**
-    
-    例如，将任意音频转换为16kHz、16-bit、单声道WAV文件
-    
+公网可访问的文件 URL，单次 1 个
 
-```
-# -i: 输入文件
-# -ac 1: 设置声道数为1 (单声道)
-# -ar 16000: 设置采样率为16000Hz (16kHz)
-# -sample_fmt s16: 设置采样格式为16-bit signed integer PCM
-# output.wav: 输出文件
-ffmpeg -i input.mp3 -ac 1 -ar 16000 -sample_fmt s16 output.wav
-```
+`aac`、`amr`、`avi`、`flac`、`flv`、`m4a`、`mkv`、`mov`、`mp3`、`mp4`、`mpeg`、`ogg`、`opus`、`wav`、`webm`、`wma`、`wmv`
 
-### Q：如何提升识别准确率？
+任意
 
-以下因素影响识别准确率，请逐项排查并针对性优化。
+≤2 GB；≤12 小时
 
-主要影响因素：
+qwen3-asr-flash
 
-1.  声音质量：录音设备品质、采样率及环境噪声直接影响音频清晰度，高质量音频输入是准确识别的基础
-2.  说话人特征：音调、语速、口音和方言差异（尤其少见方言或重口音）增加识别难度
-3.  语言和词汇：多语言混合、专业术语或俚语增加识别难度，可通过配置热词优化特定领域术语的准确率
+URL 或 Base64 Data URI，单次 1 个
 
-优化方法：
+`aac`、`amr`、`avi`、`aiff`、`flac`、`flv`、`mkv`、`mp3`、`mpeg`、`ogg`、`opus`、`wav`、`webm`、`wma`、`wmv`
 
-1.  优化音频质量：使用高性能麦克风，按推荐采样率录音，尽量减少环境噪声与回声
-2.  适配说话人：对于口音较重或方言明显的音频，选用支持对应方言的模型
-3.  配置热词：为专业术语、专有名词等设置热词
+PCM 为 16 kHz；其他格式任意，服务端重采样为 16 kHz
+
+≤10 MB；≤5 分钟
+
+qwen3-asr-flash-filetrans
+
+公网可访问的文件 URL，单次 1 个
+
+`aac`、`amr`、`avi`、`flac`、`flv`、`m4a`、`mkv`、`mov`、`mp3`、`mp4`、`mpeg`、`ogg`、`opus`、`wav`、`webm`、`wma`、`wmv`
+
+PCM 为 16 kHz；其他格式任意，服务端重采样为 16 kHz
+
+≤2 GB；≤12 小时
+
+fun-asr-flash-2026-06-15
+
+URL 或 Base64 Data URI，单次 1 个
+
+`aac`、`amr`、`avi`、`flac`、`flv`、`m4a`、`mkv`、`mov`、`mp3`、`mp4`、`mpeg`、`ogg`、`opus`、`wav`、`webm`、`wma`、`wmv`
+
+任意
+
+≤2 GB；≤5 分钟
+
+fun-asr
+
+公网可访问的文件 URL，单次 1 个
+
+`aac`、`amr`、`avi`、`flac`、`flv`、`m4a`、`mkv`、`mov`、`mp3`、`mp4`、`mpeg`、`ogg`、`opus`、`wav`、`webm`、`wma`、`wmv`
+
+任意
+
+≤2 GB；≤12 小时
+
+paraformer-v2
+
+公网可访问的文件 URL，单次 1 个
+
+`aac`、`amr`、`avi`、`flac`、`flv`、`m4a`、`mkv`、`mov`、`mp3`、`mp4`、`mpeg`、`ogg`、`opus`、`wav`、`webm`、`wma`、`wmv`
+
+任意
+
+≤2 GB；≤12 小时
+
+paraformer-8k-v2
+
+公网可访问的文件 URL，单次 1 个
+
+`aac`、`amr`、`avi`、`flac`、`flv`、`m4a`、`mkv`、`mov`、`mp3`、`mp4`、`mpeg`、`ogg`、`opus`、`wav`、`webm`、`wma`、`wmv`
+
+8 kHz
+
+≤2 GB；≤12 小时
+
+说话人分离使用单声道音频；Paraformer 的 paraformer-8k-v2 仅支持 8 kHz。Qwen3-ASR-Flash 的本地文件输入需由客户端编码或上传，不能将本地路径直接作为 HTTP 音频 URL。
+
+## API 参考
+
+-   [非实时语音识别-Qwen-Audio-ASR API 参考](raw/model-api-reference/audio-api-directory/speech-recognition-api-reference/qwen-audio-asr-api.md)
+-   [非实时语音识别-Qwen-Audio-ASR-Filetrans API 参考](raw/model-api-reference/audio-api-directory/speech-recognition-api-reference/qwen-audio-asr-filetrans-api.md)
+-   [非实时语音识别-Fun-ASR API 参考](raw/_short/fun-asr-recorded-speech-recognition-api-referenc-b0273c90bb44d4cc.md)
+-   [非实时语音识别-Fun-ASR-Flash API 参考](raw/_short/non-real-time-speech-recognition-for-fun-asr-fla-650fa37d535f17b4.md)
+-   [非实时语音识别-Qwen3-ASR API 参考](raw/_short/qwen-asr-api-reference-6234af32190b8ba9.md)
+-   [非实时语音识别-Paraformer API 参考](raw/_short/paraformer-recorded-speech-recognition-api-refer-3f19f98cbb4ce26b.md)
 
 ## 模型应用上架及备案
 

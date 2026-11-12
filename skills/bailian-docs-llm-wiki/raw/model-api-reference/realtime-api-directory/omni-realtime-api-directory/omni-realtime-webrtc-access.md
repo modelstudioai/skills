@@ -10,7 +10,7 @@ WebRTC 使用媒体轨道传输音视频，使用 DataChannel 传输模型事件
 
 本文面向 Qwen-Omni-Realtime。现有接入说明覆盖：qwen3.8-omni-flash-realtime、qwen3.5-omni-plus-realtime、qwen3.5-omni-flash-realtime。示例模型为 `qwen3.8-omni-flash-realtime`。
 
--   使用所选地域和业务空间对应的 [API Key](raw/model-api-reference/preparations/get-api-key.md) 与 [Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+-   使用所选地域和业务空间对应的 [API Key](raw/model-api-reference/preparations/get-api-key.md) 与 [API Host](https://bailian.console.aliyun.com/cn-beijing/settings/workspace)（不含协议和路径）。
 -   北京域名：`{WorkspaceId}.cn-beijing.maas.aliyuncs.com`；新加坡域名：`{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
 -   长期 API Key 由服务端保管，不放入浏览器或移动端应用。临时 API Key 的生成方式和权限说明参见[生成临时 API Key](raw/model-api-reference/more-about-models/generate-temporary-api-key.md)。
 
@@ -20,9 +20,10 @@ WebRTC 使用媒体轨道传输音视频，使用 DataChannel 传输模型事件
 
 浏览器向业务 AppServer 提交 Offer SDP。AppServer 使用 API Key 转发以下请求，并将 Answer SDP 原样返回浏览器；长期 API Key 不进入前端。
 
--   方法：`POST`
--   北京地址：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/webrtc/realtime?model=qwen3.8-omni-flash-realtime`
--   新加坡地址：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/webrtc/realtime?model=qwen3.8-omni-flash-realtime`
+POST`https://WorkspaceId.cn-beijing.maas.aliyuncs.com/api/v1/webrtc/realtime?model=qwen3.8-omni-flash-realtime`
+
+POST`https://WorkspaceId.ap-southeast-1.maas.aliyuncs.com/api/v1/webrtc/realtime?model=qwen3.8-omni-flash-realtime`
+
 -   请求头：`Authorization: Bearer <API_KEY>`、`Content-Type: application/sdp`
 -   请求体：Offer SDP 字符串。
 -   成功响应：HTTP 200，正文为 Answer SDP；失败返回 4xx。

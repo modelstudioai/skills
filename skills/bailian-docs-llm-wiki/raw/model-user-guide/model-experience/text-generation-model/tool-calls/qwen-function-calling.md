@@ -38,7 +38,7 @@ Function Calling 通过应用程序与大模型之间的多步骤交互实现：
 #### 千问
 
 -   **文本生成模型**
-    -   千问Max：Qwen3.8-Max系列、Qwen3.7-Max系列、Qwen3.6-Max系列、Qwen3-Max系列、Qwen-Max系列
+    -   千问Max：Qwen4-Max 系列（[仅 Token Plan](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview)）、Qwen3.8-Max系列、Qwen3.7-Max系列、Qwen3.6-Max系列、Qwen3-Max系列、Qwen-Max系列
     -   千问Plus：Qwen3.7-Plus系列、Qwen3.6-Plus系列、Qwen3.5-Plus系列、Qwen-Plus系列
     -   千问Flash：Qwen3.8-Flash系列、Qwen3.7-Flash系列、Qwen3.6-Flash系列、Qwen3.5-Flash系列、Qwen-Flash系列
     -   千问Coder：Qwen3-Coder系列、Qwen2.5-Coder系列、Qwen-Coder系列

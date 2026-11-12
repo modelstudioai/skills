@@ -433,7 +433,7 @@ AoqConnectConfig
 
 返回值：`0` 表示成功（异步执行）；非 `0` 表示失败。连接结果由 `onConnectionStatusChange` 通知。
 
-**说明**`relayEndpoints` / `publishTracks` / `subscribeTracks` 均为「C 风格数组指针 + 长度」，内存由调用方持有，仅需在 connect 调用期间有效。
+**说明**`relayEndpoints` / `publishTracks` / `subscribeTracks` 均为“C 风格数组指针 + 长度”，内存由调用方持有，仅需在 connect 调用期间有效。
 
 #### disconnect
 
@@ -879,7 +879,7 @@ AoqStats
 
 包含音频 / 视频 / 数据消息的推拉流统计及网络统计
 
-**说明**`AoqStats` 内部为「数组指针 + 计数」结构，指针仅回调期间有效，异步使用需自行拷贝。
+**说明**`AoqStats` 内部为“数组指针 + 计数”结构，指针仅回调期间有效，异步使用需自行拷贝。
 
 #### onAudioDeviceStateChanged
 
@@ -1436,7 +1436,7 @@ size\_t
 
 #### AoqStats
 
-引擎统计信息汇总，通过 `onStats` 周期性上报。采用「数组指针 + 计数」结构，所有指针默认 `nullptr`、计数默认 `0`。
+引擎统计信息汇总，通过 `onStats` 周期性上报。采用“数组指针 + 计数”结构，所有指针默认 `nullptr`、计数默认 `0`。
 
 **字段**
 

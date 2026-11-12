@@ -26,7 +26,7 @@
 
 在监控概览页的模型列表中，找到目标模型，点击**查看详情**进入模型监控详情页。页面顶部的导航路径为：模型监控 > 模型名称。
 
-详情页展示单个模型的调用统计和性能指标图表，并提供告警配置入口：指标图表上的告警铃铛可为当前模型/指标快速配置告警（跨模型的完整规则管理见[告警](https://help.aliyun.com/zh/model-studio/model-telemetry#h2-sec-alert)节）。筛选条件与概览页一致（时间、时间精度、推理类型、API-Key），从概览页进入时保留概览页配置。查看日志请返回概览页模型列表，点击「查看日志」入口进入（见[日志](https://help.aliyun.com/zh/model-studio/model-telemetry#h2-sec-log)节）。
+详情页展示单个模型的调用统计和性能指标图表，并提供告警配置入口：指标图表上的告警铃铛可为当前模型/指标快速配置告警（跨模型的完整规则管理见[告警](https://help.aliyun.com/zh/model-studio/model-telemetry#h2-sec-alert)节）。筛选条件与概览页一致（时间、时间精度、推理类型、API-Key），从概览页进入时保留概览页配置。查看日志请返回概览页模型列表，点击“查看日志”入口进入（见[日志](https://help.aliyun.com/zh/model-studio/model-telemetry#h2-sec-log)节）。
 
 ### 监控指标
 

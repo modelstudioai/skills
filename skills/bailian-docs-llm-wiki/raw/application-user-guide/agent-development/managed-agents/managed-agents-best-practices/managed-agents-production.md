@@ -10,7 +10,7 @@
 
 ## 场景：云岭茶饮的晨报机器人
 
-「云岭茶饮」是一家虚构的连锁茶饮品牌，运营团队每天早上要做的第一件事，是翻一遍行业动态：竞品上了什么新品、供应链有什么风吹草动、有没有涉及茶饮的负面舆情。这件事重复、耗时、容易漏——典型该交给自动化的任务。要搭一个**晨报机器人**，把生产化的几块基础设施全部串起来：
+“云岭茶饮”是一家虚构的连锁茶饮品牌，运营团队每天早上要做的第一件事，是翻一遍行业动态：竞品上了什么新品、供应链有什么风吹草动、有没有涉及茶饮的负面舆情。这件事重复、耗时、容易漏——典型该交给自动化的任务。要搭一个**晨报机器人**，把生产化的几块基础设施全部串起来：
 
 需求
 
@@ -40,7 +40,7 @@
 
 **版本管理 + 资源生命周期**
 
-端到端流程：建 vault、存一枚 GitHub token 密钥、建一个挂 WebSearch 工具集的 Agent → 先手动建 Session 试点验证（工具调用真的发生、密钥链路真的通）→ 再上 Deployment 把「定时 + 触发即跑」交给平台 → 验证版本锁定与运维动词（pause / archive）→ 最后按依赖顺序清理。
+端到端流程：建 vault、存一枚 GitHub token 密钥、建一个挂 WebSearch 工具集的 Agent → 先手动建 Session 试点验证（工具调用真的发生、密钥链路真的通）→ 再上 Deployment 把“定时 + 触发即跑”交给平台 → 验证版本锁定与运维动词（pause / archive）→ 最后按依赖顺序清理。
 
 **说明**为什么定时链路用 Vault 而不是会话环境变量？因为 **Deployment 不支持 `environment_variables`**（传了被静默忽略，触发的 Session 里无此变量）——无人值守链路的凭证注入只有 `vault_ids` 一条路。应用侧自建 Session 的场景优先用环境变量（见 步骤 4）。
 
@@ -48,7 +48,7 @@
 
 -   一个阿里云百炼工作空间，及其工作空间 ID；
 -   一把 DashScope API Key（一把 Key 覆盖工作空间内全部资源）；
--   一枚 GitHub PAT（演示用假值 `GITHUB_TOKEN` 表示——本篇只需要验证「注入」这个动作，用假 token 更安全）。
+-   一枚 GitHub PAT（演示用假值 `GITHUB_TOKEN` 表示——本篇只需要验证“注入”这个动作，用假 token 更安全）。
 
 约定环境变量：
 
@@ -64,7 +64,7 @@ export GITHUB_TOKEN="ghp_DUMMY_TOKEN_FOR_SMOKE_TEST"
 
 给 Agent 扩展能力，生产上真正常用的是两条**互相独立**的线：
 
--   **MCP 工具集**：Agent 声明一个（或多个）阿里云百炼 MCP 市场里的服务，运行时平台代替 Agent 去调那个服务的工具。适合「服务在公网、由阿里云百炼市场托管」的场景——不用管连接细节，也（通常）不用管 key。
+-   **MCP 工具集**：Agent 声明一个（或多个）阿里云百炼 MCP 市场里的服务，运行时平台代替 Agent 去调那个服务的工具。适合“服务在公网、由阿里云百炼市场托管”的场景——不用管连接细节，也（通常）不用管 key。
 -   **配置/凭证注入（两条路，按敏感级分层）**：
     -   **会话环境变量**（`environment_variables`，主推）：建会话时传键值对，**明文直通**沙箱进程，Agent 在 bash / python 里 `os.environ` 拿到真实值。适合非敏感配置与交互式会话——最简单，不用预建任何资源。限制：Deployment 不支持。
     -   **Vault 密钥库**：密钥预先存进 vault，会话只带 `vault_ids`。沙箱内拿到的是**占位符**（`BMA_SECRET_PLACEHOLDER_*`），真实值仅在出网网关命中该密钥的 `allowed_hosts` 白名单时替换请求头中的占位符。适合高敏密钥与无人值守链路。完整安全模型见[进阶：密钥库安全注入与出网网关](raw/_short/managed-agents-credential-security-b5df5e4f8be278e5.md)。
@@ -73,7 +73,7 @@ export GITHUB_TOKEN="ghp_DUMMY_TOKEN_FOR_SMOKE_TEST"
 
 此外还有第三种模式，[入门篇](raw/_short/managed-agents-data-analysis-2249e7a887786f0b.md)没展开：**自定义工具**——自己的服务。Agent 以 `function_call` 事件把调用抛回应用，应用算完再用 `function_call_output` 回填。服务只在内部网络可达时用这条。
 
-本篇再补上**触发线**：入门篇的用法里，Session 由应用创建、消息由应用发——「谁在早上 7:30 把任务发出去」只能靠自写的定时脚本。**Deployment** 把这个角色交给平台：声明式地配好「哪个 Agent、锁哪个版本、触发时下发哪些消息、挂哪些凭证、什么时间表」，之后定时触发、Session 创建、`initial_events` 下发全部由平台完成，应用只需要来看结果。
+本篇再补上**触发线**：入门篇的用法里，Session 由应用创建、消息由应用发——“谁在早上 7:30 把任务发出去”只能靠自写的定时脚本。**Deployment** 把这个角色交给平台：声明式地配好“哪个 Agent、锁哪个版本、触发时下发哪些消息、挂哪些凭证、什么时间表”，之后定时触发、Session 创建、`initial_events` 下发全部由平台完成，应用只需要来看结果。
 
 **说明****安全边界**：token 存进 vault 后**不再进入沙箱**——`printenv` 只能看到占位符；出网时由网关按 `allowed_hosts` 白名单替换。占位符保证覆盖**环境变量与出站请求（替换前）**；被调用服务的**响应体**（例如回显型的测试端点会把请求头原样返回）会作为工具输出进入事件流，这属于外部服务自身行为，不在占位符保证范围内。但注意两条仍然成立的边界：网关只替换请求头中的占位符；沙箱出站 HTTPS 走网关 MITM，但沙箱已预置网关 CA（`SSL_CERT_FILE` / `CURL_CA_BUNDLE` / `REQUESTS_CA_BUNDLE` 均指向它），curl 与 requests 默认校验可直接通过，仅在个别环境证书异常时才需要排查 CA 配置，细节与排查方法见[进阶：密钥库安全注入与出网网关](raw/_short/managed-agents-credential-security-b5df5e4f8be278e5.md)。
 
@@ -104,7 +104,7 @@ export VAULT_ID="vlt_xxx"
 
 凭证挂在 vault 之下，端点是**嵌套**的 `/vaults/{vault_id}/credentials`（没有顶级 `/credentials` 端点，调用返回 404）。
 
-每条凭证 = 变量名 + 值 + **出口白名单**。`auth.type` 当前仅支持 `environment_variable`（传 `static_bearer` / `mcp_oauth` 返回 `CREDENTIAL_AUTH_TYPE_ERROR`）。`allowed_hosts` **必填**且必须嵌在 `auth.networking` 里（漏传 → 409 `CREDENTIAL_AUTH_NETWORKING_ERROR`「出口网络地址不能为空」）：
+每条凭证 = 变量名 + 值 + **出口白名单**。`auth.type` 当前仅支持 `environment_variable`（传 `static_bearer` / `mcp_oauth` 返回 `CREDENTIAL_AUTH_TYPE_ERROR`）。`allowed_hosts` **必填**且必须嵌在 `auth.networking` 里（漏传 → 409 `CREDENTIAL_AUTH_NETWORKING_ERROR`“出口网络地址不能为空”）：
 
 ```
 curl -X POST "$AGENTSTUDIO_URL/vaults/$VAULT_ID/credentials" \
@@ -170,7 +170,7 @@ curl -X POST "$AGENTSTUDIO_URL/agents" \
 
 **说明**`configs` **必须逐工具启用**。`mcp_toolkit` 与 `builtin_toolkit` 同构：光有 `default_config.enabled: true` 不够，要在 `configs[ ]` 里把每个要用的工具（这里是 `bailian_web_search`）显式 `enabled: true`，否则 Agent 运行时**拿不到这个工具**，也不会有任何报错。
 
-**警告**`mcp_servers.name` **声明时不校验存在性**。写一个市场里不存在的名字也能创建成功，运行时工具静默缺失，Agent 会回复「没有可用工具」。排查办法：发一条强制用工具的消息，看事件流里有没有 `mcp_call`。可用服务列表用 CLI 查：`bl mcp list`（列出账号下已激活的 MCP 服务器，含 code / 工具）。
+**警告**`mcp_servers.name` **声明时不校验存在性**。写一个市场里不存在的名字也能创建成功，运行时工具静默缺失，Agent 会回复“没有可用工具”。排查办法：发一条强制用工具的消息，看事件流里有没有 `mcp_call`。可用服务列表用 CLI 查：`bl mcp list`（列出账号下已激活的 MCP 服务器，含 code / 工具）。
 
 市场服务由平台代理调用，endpoint 形如 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/mcps/{code}/sse`，一般不需要提供凭证；需要自己 key 的服务，把 key 存进 vault、在 bash 里带鉴权请求头直连即可（bash 里拿到的是占位符，真实值由出网网关替换）。
 
@@ -221,7 +221,7 @@ curl -X POST "$AGENTSTUDIO_URL/sessions" \
 export SESSION_ID="sesn_xxx"
 ```
 
-**说明**`sessions.create` **不接受初始输入字段**，标准做法是「先创建 Session，再单独 POST 一条 `message` 事件」两步驱动。（若要「触发即带首条消息」，用后文的 Deployment，它支持 `initial_events`。）
+**说明**`sessions.create` **不接受初始输入字段**，标准做法是“先创建 Session，再单独 POST 一条 `message` 事件”两步驱动。（若要“触发即带首条消息”，用后文的 Deployment，它支持 `initial_events`。）
 
 发一条消息验证**占位符注入**——让它原样执行 `printenv GITHUB_TOKEN`：
 
@@ -242,7 +242,7 @@ curl -X POST "$AGENTSTUDIO_URL/sessions/$SESSION_ID/events" \
   }'
 ```
 
-观测走 SSE 实时流（消费方式见[入门篇](raw/_short/managed-agents-data-analysis-2249e7a887786f0b.md)的「先开 SSE 流」，`event:` 行恒为 `message`，注释行有 `:connected` / `:HTTP_STATUS/200` / `:keepalive`）：
+观测走 SSE 实时流（消费方式见[入门篇](raw/_short/managed-agents-data-analysis-2249e7a887786f0b.md)的“先开 SSE 流”，`event:` 行恒为 `message`，注释行有 `:connected` / `:HTTP_STATUS/200` / `:keepalive`）：
 
 ```
 curl -N "$AGENTSTUDIO_URL/sessions/$SESSION_ID/events/stream" \
@@ -264,7 +264,7 @@ session_status   {"stop_reason": {"type": "end_turn"}, "session_status": "idle"}
 
 **看到占位符就是注入成功的标志**。密钥的端到端验证（出网替换真的发生）：向白名单 host 发请求、看对方收到的是真实值，见[进阶：密钥库安全注入与出网网关](raw/_short/managed-agents-credential-security-b5df5e4f8be278e5.md)。真实链路上 GitHub 推送同理——Agent 把占位符放进请求头调用 `api.github.com`，网关替换成真 PAT，GitHub 鉴权通过。
 
-再发一条消息触发 MCP 工具（「用工具搜索茶饮行业最新动态」），MCP 调用产生的是**专属事件类型**，与 `tool_call` 平行：
+再发一条消息触发 MCP 工具（“用工具搜索茶饮行业最新动态”），MCP 调用产生的是**专属事件类型**，与 `tool_call` 平行：
 
 ```
 mcp_call        role=assistant  data: {"name": "bailian_web_search",
@@ -276,11 +276,11 @@ mcp_call_output role=tool       data: {"output": "<MCP server 返回的 JSON>"}
 
 即：内置工具走 `tool_call` / `tool_call_output`，MCP 工具走 `mcp_call` / `mcp_call_output`。收到 `session_status = idle` 且 `stop_reason.type == end_turn` 时本回合结束。
 
-试点通过，两块地基都没问题。接下来把「每天 7:30 谁来发消息」这件事交给平台。
+试点通过，两块地基都没问题。接下来把“每天 7:30 谁来发消息”这件事交给平台。
 
 ## 步骤 5 · Deployment：把定时任务交给平台
 
-Deployment 是与 Agent / Environment / Session 平级的资源：声明「锁哪个版本的 Agent、触发时下发什么、挂哪些凭证、什么时间表」，之后触发、建 Session、下发 `initial_events` 都由平台完成。控制台操作见[部署](raw/application-user-guide/agent-development/managed-agents/managed-agents-session/managed-agents-deployment.md)。
+Deployment 是与 Agent / Environment / Session 平级的资源：声明“锁哪个版本的 Agent、触发时下发什么、挂哪些凭证、什么时间表”，之后触发、建 Session、下发 `initial_events` 都由平台完成。控制台操作见[部署](raw/application-user-guide/agent-development/managed-agents/managed-agents-session/managed-agents-deployment.md)。
 
 ### 创建：锁版本的 agent + initial\_events + vault\_ids
 
@@ -306,8 +306,8 @@ curl -X POST "$AGENTSTUDIO_URL/deployments" \
   }'
 ```
 
-1.  `agent` **必须传对象** `{id, version}`，不接受 ID 字符串（传字符串返回 `400 PARAMS_ILLEGAL`）。这与 `sessions.create` 不同（Session 传字符串 = 锁最新）。Deployment 是长期资源，创建时就**显式锁死 Agent 版本**——响应里会把该版本的完整快照（system / tools / model）展开回显。版本语义见下文「版本语义：锁死与漂移陷阱」。
-2.  `initial_events` **是触发时下发的输入数组**，形状与给 Session 发消息的 `input` 完全一致。它补上了 `sessions.create` 不接受初始输入的缺口：触发生成的 Session，第一条 user 消息就是它——「触发即跑」，不需要应用再补发一条消息。
+1.  `agent` **必须传对象** `{id, version}`，不接受 ID 字符串（传字符串返回 `400 PARAMS_ILLEGAL`）。这与 `sessions.create` 不同（Session 传字符串 = 锁最新）。Deployment 是长期资源，创建时就**显式锁死 Agent 版本**——响应里会把该版本的完整快照（system / tools / model）展开回显。版本语义见下文“版本语义：锁死与漂移陷阱”。
+2.  `initial_events` **是触发时下发的输入数组**，形状与给 Session 发消息的 `input` 完全一致。它补上了 `sessions.create` 不接受初始输入的缺口：触发生成的 Session，第一条 user 消息就是它——“触发即跑”，不需要应用再补发一条消息。
 3.  `vault_ids` **在 deployment 级配置**：触发生成的每个 Session 都自动携带这些凭证（注入行为与手动建 Session 完全相同）。
 
 不填 `schedule` 就是**手动模式**（只能通过 `POST /run` 触发）；填了就是定时模式（见下文 cron 小节）。创建成功响应（200）回显全部字段，`status` 为 `"active"`，id 形如 `depl_xxx`（前缀 `depl_`）。
@@ -340,7 +340,7 @@ curl -X POST "$AGENTSTUDIO_URL/deployments/$DEPLOYMENT_ID/run" \
 }
 ```
 
-几秒后查触发历史拿 `session_id`（也是生产里判断「跑完了没」的方式——`status` 变 `succeeded`、`finished_at` 有值）：
+几秒后查触发历史拿 `session_id`（也是生产里判断“跑完了没”的方式——`status` 变 `succeeded`、`finished_at` 有值）：
 
 ```
 curl "$AGENTSTUDIO_URL/deployments/$DEPLOYMENT_ID/runs" \
@@ -391,7 +391,7 @@ curl -X POST "$AGENTSTUDIO_URL/deployments/$DEPLOYMENT_ID" \
 
 （显式传 `agent {id, version: 1}` 也可把版本锁回 v1。）
 
-对比记忆：**Session 锁的是「创建那一刻的最新或指定版本」快照；Deployment 锁的是「创建时显式指定的版本」，但 update 时不传 agent 会漂移到最新**。
+对比记忆：**Session 锁的是“创建那一刻的最新或指定版本”快照；Deployment 锁的是“创建时显式指定的版本”，但 update 时不传 agent 会漂移到最新**。
 
 ### cron：定时触发
 
@@ -412,7 +412,7 @@ curl -X POST "$AGENTSTUDIO_URL/deployments" \
 行为（expression `* * * * *`，每分钟）：
 
 -   **整分钟准时自动触发**，runs 列表里出现 `trigger_source: "schedule"` 的新 run，与手动 run 完全同构（同样创建 Session、下发 `initial_events`）。
--   响应的 `schedule` 对象带 `next_run_at` / `last_run_at`——判断「定时任务活着、下次几点跑」不用自己算 cron，查 deployment 对象即可。
+-   响应的 `schedule` 对象带 `next_run_at` / `last_run_at`——判断“定时任务活着、下次几点跑”不用自己算 cron，查 deployment 对象即可。
 -   正式的晨报场景：`"expression": "30 7 * * *"`（每天 07:30）、`"timezone": "Asia/Shanghai"`。
 
 ### 运维动词：pause / unpause / archive
@@ -445,7 +445,7 @@ curl -X POST "$AGENTSTUDIO_URL/deployments" \
 
 `DELETE /deployments/{id}`
 
-**405 不支持**——与 Agent 同款「只能归档不能删」
+**405 不支持**——与 Agent 同款“只能归档不能删”
 
 三个容易混淆的点：
 
@@ -475,17 +475,17 @@ run 的 `session_id` → `GET /sessions/{id}/events`（或 SSE）
 
 run 的 `error` 字段 + session 事件流的 `session_status`
 
-对「跑完了要通知我」这类需求，本篇的做法是**主动查询**（轮询 runs / 查 deployment 对象）；平台侧的事件推送（Webhook）见[进阶：Webhook 事件通知](raw/_short/managed-agents-webhook-notifications-508b7232092b6608.md)——订阅 `session.status_idled` 等事件，让平台主动 POST 接收端。
+对“跑完了要通知我”这类需求，本篇的做法是**主动查询**（轮询 runs / 查 deployment 对象）；平台侧的事件推送（Webhook）见[进阶：Webhook 事件通知](raw/_short/managed-agents-webhook-notifications-508b7232092b6608.md)——订阅 `session.status_idled` 等事件，让平台主动 POST 接收端。
 
 ## 步骤 6 · 生产里的人审（HITL）
 
 生产环境里的人审（HITL）不应该依赖长连接。人工审核的等待窗口可能是几分钟到几小时，如果这段时间一直靠 SSE 长连接挂着，既不好横向扩展（连接与实例绑定，无法自由调度），也扛不住服务重启（一次发布就丢掉全部在途审批）。正确的形态是：**让 Session 停在等待状态，由服务在需要时再去取状态、做决定、回填结果。**
 
-Managed Agents 的 Session 天然支持这种「停下来等」的语义——当 Agent 需要人工确认某次工具调用时，Session 会转为 `idle` 并给出 `requires_action`，然后一直保持这个状态，直到回填确认结果。
+Managed Agents 的 Session 天然支持这种“停下来等”的语义——当 Agent 需要人工确认某次工具调用时，Session 会转为 `idle` 并给出 `requires_action`，然后一直保持这个状态，直到回填确认结果。
 
 ### 方案 A：轮询历史事件 + `requires_action`
 
-由服务定时拉取历史事件，判断 Session 是否停在「需要人工/工具介入」的状态。处于该状态时，最后一条事件的 `session_status` 为 `idle`、`stop_reason` 为 `requires_action`，并带上 `pending_batch_id` 与待处理的 `pending_call_ids`。
+由服务定时拉取历史事件，判断 Session 是否停在“需要人工/工具介入”的状态。处于该状态时，最后一条事件的 `session_status` 为 `idle`、`stop_reason` 为 `requires_action`，并带上 `pending_batch_id` 与待处理的 `pending_call_ids`。
 
 ```
 # 拉最新历史事件（倒序取最后一条）
@@ -534,19 +534,19 @@ curl -X POST "$AGENTSTUDIO_URL/sessions/$SESSION_ID/events" \
 
 拒绝时把 `result` 改为 `deny`。同一批次有多条待审批调用时，逐条回填（每条一个 `call_id`），全部收齐后工具才会执行。若是自托管函数结果的回填，则用 `function_call_output`（带 `call_id` + `output`）。
 
-放到晨报场景：晨报 Agent 发现疑似重大负面舆情、要往公司 repo 写「舆情预警」之前，让它调用一个需要确认的动作（自定义工具或写入前确认），Session 停在 `requires_action`，服务轮询发现后推给运营值班群，人点「允许/拒绝」，回填 `tool_approval_response`，Agent 继续。工具审批的配置方式见[内置工具](raw/application-user-guide/agent-development/managed-agents/managed-agents-agent/managed-agents-builtin-tools.md)。
+放到晨报场景：晨报 Agent 发现疑似重大负面舆情、要往公司 repo 写“舆情预警”之前，让它调用一个需要确认的动作（自定义工具或写入前确认），Session 停在 `requires_action`，服务轮询发现后推给运营值班群，人点“允许/拒绝”，回填 `tool_approval_response`，Agent 继续。工具审批的配置方式见[内置工具](raw/application-user-guide/agent-development/managed-agents/managed-agents-agent/managed-agents-builtin-tools.md)。
 
 **说明**关于成本上限：Session 当前**不提供成本上限（budget）字段**，也没有触达上限时的通知事件。成本控制建议放到 Deployment 层做触发频率与并发限流，再配合事后用量核对作为补充。
 
 ### 方案 B：Deployment 触发 + 事后查询
 
-如果触发场景是「定时」或「由外部系统手动触发一次任务」，直接用 步骤 5 的 Deployment：外部系统只需要 `POST /deployments/{id}/run`（或直接交给 cron），事后用 `GET /deployments/{id}/runs` 收结果——`status` 到 `succeeded` 只代表执行完成，还要用程序核验产物内容（例如逐条校验晨报资讯的发布日期是否落在时间窗内、来源 URL 是否可解析），不能以 run 状态代替内容验收。`session_id` 用于查询产物。全程无长连接。
+如果触发场景是“定时”或“由外部系统手动触发一次任务”，直接用 步骤 5 的 Deployment：外部系统只需要 `POST /deployments/{id}/run`（或直接交给 cron），事后用 `GET /deployments/{id}/runs` 收结果——`status` 到 `succeeded` 只代表执行完成，还要用程序核验产物内容（例如逐条校验晨报资讯的发布日期是否落在时间窗内、来源 URL 是否可解析），不能以 run 状态代替内容验收。`session_id` 用于查询产物。全程无长连接。
 
 ## 步骤 7 · 数据驻留与区域
 
 当前行为说明：Managed Agents 为**单区域部署（`cn-beijing`）**，Agent 推理与沙箱运行都发生在该区域。因此不提供推理区域选择参数，也不提供在 `sessions.create` 时对单个 Session 做区域覆盖的配置。
 
-这一节**无需任何额外配置**：数据驻留由「单区域部署」这一事实保证。如果合规要求是「数据不出某个区域」，当前形态已经满足；如需多区域选择，以官方后续发布的能力为准。
+这一节**无需任何额外配置**：数据驻留由“单区域部署”这一事实保证。如果合规要求是“数据不出某个区域”，当前形态已经满足；如需多区域选择，以官方后续发布的能力为准。
 
 ## 步骤 8 · 资源生命周期：list / retrieve / update / archive / delete
 

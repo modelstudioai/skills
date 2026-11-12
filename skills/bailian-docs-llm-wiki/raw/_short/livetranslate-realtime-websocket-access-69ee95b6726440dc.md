@@ -6,19 +6,21 @@ Qwen-LiveTranslate-Realtime WebSocket 接入
 
 本文面向 Qwen-LiveTranslate-Realtime，示例模型为 `qwen3.8-livetranslate-flash-realtime`。系列指南还列有 `qwen3.5-livetranslate-flash-realtime` 和快照版 `qwen3.5-livetranslate-flash-realtime-2026-05-19`。3.8 与 3.5 的配置和事件字段不同，按所选型号查阅事件参考。
 
--   使用所选地域和业务空间对应的 [API Key](raw/model-api-reference/preparations/get-api-key.md) 与 [Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+-   使用所选地域和业务空间对应的 [API Key](raw/model-api-reference/preparations/get-api-key.md) 与 [API Host](https://bailian.console.aliyun.com/cn-beijing/settings/workspace)（不含协议和路径）。
 -   北京域名：`{WorkspaceId}.cn-beijing.maas.aliyuncs.com`；新加坡域名：`{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
 -   长期 API Key 保存在服务端，不放入浏览器或移动端应用。
 
 ## 地址与鉴权
 
-北京：`wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime?model=qwen3.8-livetranslate-flash-realtime`
+通过查询参数 `model` 指定要调用的模型。
 
-新加坡：`wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime?model=qwen3.8-livetranslate-flash-realtime`
+WebSocket`wss://WorkspaceId.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime?model=qwen3.8-livetranslate-flash-realtime`
+
+WebSocket`wss://WorkspaceId.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime?model=qwen3.8-livetranslate-flash-realtime`
 
 其他域名的说明请参见 [Python SDK](https://help.aliyun.com/zh/model-studio/qwen-livetranslate-python-sdk#lt001prereqh2)。
 
-在 WebSocket 握手请求头中设置 `Authorization: Bearer <API_KEY>`。替换业务空间 ID 和实际模型名称；不要把长期 API Key 放入浏览器或移动端。
+在 WebSocket 握手请求头中设置 `Authorization: Bearer <API_KEY>`。不要把长期 API Key 放入浏览器或移动端。
 
 可选的 `user-agent` 请求头用于标识客户端。通用 WebSocket 接入资料还列有 `X-DashScope-WorkSpace`（业务空间 ID）和 `X-DashScope-DataInspection`（数据合规检查配置），这两个请求头按模型要求使用。
 

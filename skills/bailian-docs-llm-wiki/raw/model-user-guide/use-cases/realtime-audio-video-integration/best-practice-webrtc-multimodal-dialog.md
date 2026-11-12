@@ -284,13 +284,13 @@ function generateTaskId() {
 
 string
 
-百炼工作空间 ID，在控制台「应用管理」中获取
+百炼工作空间 ID，在控制台“应用管理”中获取
 
 `payload.input.app_id`
 
 string
 
-多模态交互应用 ID，在控制台「应用管理」中获取
+多模态交互应用 ID，在控制台“应用管理”中获取
 
 `payload.input.directive`
 

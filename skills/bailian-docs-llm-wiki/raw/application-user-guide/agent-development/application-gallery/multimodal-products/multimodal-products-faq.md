@@ -38,7 +38,7 @@ Duplex（全双工）模式：支持同时双向通信，可实现边听边说�
 
 #### 如何拼接特殊业务逻辑进提示词，一起传给大模型？
 
-在配置提示词时，您可以通过「自定义变量」实现这一功能，配置方法请参考[提示词](https://help.aliyun.com/zh/model-studio/multimodal-app-configuration#cbbc5f73caixw)。
+在配置提示词时，您可以通过“自定义变量”实现这一功能，配置方法请参考[提示词](https://help.aliyun.com/zh/model-studio/multimodal-app-configuration#cbbc5f73caixw)。
 
 #### 能支持哪些类型的百炼工作空间？
 
@@ -69,7 +69,7 @@ Tap2Talk/Duplex 模式使用云端 VAD（Voice Activity Detection，语音活动
 
 #### 为什么视频通话和视觉类 Agent 没有遵循指令？
 
-目前「理解与生成」模块的提示词不直接对 Agent 生效，您可以在「视频通话」和「拍照问答」Agent 中，设置对应的提示词。支持一键导入「理解与生成」模块的提示词及对应变量配置。
+目前“理解与生成”模块的提示词不直接对 Agent 生效，您可以在“视频通话”和“拍照问答”Agent 中，设置对应的提示词。支持一键导入“理解与生成”模块的提示词及对应变量配置。
 
 ## 计费
 

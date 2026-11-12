@@ -81,3 +81,7 @@ Managed Agents 的费用由三部分组成，分别独立计费。
 **11.4 元**
 
 如有计费工具类调用，需在此基础上加上工具调用费用。
+
+## 查看用量
+
+在控制台 [用量](https://bailian.console.aliyun.com/managed-agent/usage) 页面查看运行时长、交互轮数、Token 用量、模型用量和工具调用明细。也可调用 [Usage API](raw/application-api-reference/managed-agents-api/usage-api.md) 获取相同口径的数据：`POST /usage/summary` 获取工作空间、Agent 或 Session 的汇总，`POST /usage/trend` 按小时、UTC+8 自然日或自然月查看变化。实际费用以控制台账单为准。

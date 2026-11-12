@@ -684,7 +684,7 @@ AliyunBSSOrderAccess
 
 ### 3\. 如何使用特定业务空间的应用？
 
-使用 API 管理、调用特定业务空间的应用需要同时设置 [APP ID 和 Workspace ID](raw/application-api-reference/application-call/obtain-the-app-id-and-workspace-id.md)。
+使用 API 管理、调用特定业务空间的应用需要同时设置 [APP ID 和 Workspace ID](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)。
 
 ### 4\. 已配置 AliyunBailianFullAccess 但仍无法管理业务空间怎么办？
 
@@ -777,4 +777,4 @@ RAG 知识库
 }
 ```
 
-创建策略后，将其附加到 RAM 子用户，即可授予知识库和记忆库的**最小 CRUD 权限**。完整 Action 列表请参考「授权信息」。
+创建策略后，将其附加到 RAM 子用户，即可授予知识库和记忆库的**最小 CRUD 权限**。完整 Action 列表请参考“授权信息”。

@@ -40,7 +40,7 @@ AI 世界，含角色、场景。由你的服务端创建与管理，SDK 不涉�
 
 ## 概览
 
-集成本 SDK 后，你的 App 可进入由 AI 实时生成的「世界」，以**世界探索模式（adventure）**、**实时导演模式（directing）**或**角色演绎模式（acting）**进行实时互动视频体验：开始体验 → 实时播放 → 实时互动 → 过程控制（暂停/恢复/回溯/结束）→ 状态与错误回调。
+集成本 SDK 后，你的 App 可进入由 AI 实时生成的“世界”，以**世界探索模式（adventure）**、**实时导演模式（directing）**或**角色演绎模式（acting）**进行实时互动视频体验：开始体验 → 实时播放 → 实时互动 → 过程控制（暂停/恢复/回溯/结束）→ 状态与错误回调。
 
 各模式可用的能力不同，请按 `start()` 返回的 `mode` 决定 UI：
 
@@ -496,7 +496,7 @@ public final class OysterTravel: ObservableObject {
 
 #### videoView / OysterVideoView(travel:)
 
-远端画面渲染入口，「SDK 出视图、宿主摆放」。UIKit 取 `travel.videoView`；SwiftUI 用 `OysterVideoView(travel:)`。
+远端画面渲染入口，“SDK 出视图、宿主摆放”。UIKit 取 `travel.videoView`；SwiftUI 用 `OysterVideoView(travel:)`。
 
 **使用时机**：句柄创建后即可取（多次访问返回同一视图），挂进任意层级，引擎就绪**自动渲染**，`start()` 前后挂载均可、不黑屏。
 
@@ -528,7 +528,7 @@ public var events: AsyncStream<OysterTravelEvent> { get }
 
 用 create 时捕获的 `ticket` 换取 travel + RTC 入会配置并建连播放。成功后 SDK **自动建立实时连接并开始内部状态轮询**，状态经 `events` 透出。
 
-**注意（无推流自动结束）**：服务端下发「无推流超时」（默认约 30s）。若建连后在该时长内仍未收到推流（迟迟不进 `running`），SDK **自动结束本次体验**，状态转 `failed`、经 `events` 的 `.error` 透出 **`105006`**（致命，按回到开始前界面处理，无需自行计时）。
+**注意（无推流自动结束）**：服务端下发“无推流超时”（默认约 30s）。若建连后在该时长内仍未收到推流（迟迟不进 `running`），SDK **自动结束本次体验**，状态转 `failed`、经 `events` 的 `.error` 透出 **`105006`**（致命，按回到开始前界面处理，无需自行计时）。
 
 ##### 签名
 
@@ -759,7 +759,7 @@ Travel 不存在
 #### sendCommand(\_:) / flushCommands()（世界探索模式）
 
 -   `sendCommand`：发送方向/视角/动作控制指令（见"数据模型"章节 `OysterAdventureCommand`，fire-and-forget，无返回、不 throws）。仅**世界探索模式**、`running` 时有效。**外部可每帧高频持续输入，SDK 内部做节流**（latest-wins 采样、按 RTC 线速合帧），宿主无需自行节流。注意服务端对指令的响应本身有延迟，实际生效时间不固定。
--   `flushCommands`：「松键 / 输入释放」瞬间调用，立即补发队列里**已等待的最后一条**指令；无待发指令时为纯 no-op，不生成新指令。
+-   `flushCommands`：“松键 / 输入释放”瞬间调用，立即补发队列里**已等待的最后一条**指令；无待发指令时为纯 no-op，不生成新指令。
 
 ##### 签名
 
@@ -863,7 +863,7 @@ create 后、start 前
 
 暂停已受理、等待服务端确认
 
-展示「暂停中…」
+展示“暂停中…”
 
 `paused`
 
@@ -984,7 +984,7 @@ public enum OysterErrorKind: Equatable, Sendable {
 
 ## 错误码
 
-SDK **统一以** `OysterSDKError` 报错，类型一律通过 `code` 区分，**不要依据「从哪条路径拿到的错误」判断类型**——同一个 `code` 既可能从业务方法（`async throws`）抛出、也可能经 `events` 的 `.error` 透出。需要类型化匹配时用 `error.kind`（见"数据模型"章节 `OysterErrorKind`）。
+SDK **统一以** `OysterSDKError` 报错，类型一律通过 `code` 区分，**不要依据“从哪条路径拿到的错误”判断类型**——同一个 `code` 既可能从业务方法（`async throws`）抛出、也可能经 `events` 的 `.error` 透出。需要类型化匹配时用 `error.kind`（见"数据模型"章节 `OysterErrorKind`）。
 
 错误码：**服务端**`4xxxxx`/`5xxxxx`，**客户端本地**`1xxxxx`。
 
@@ -1232,9 +1232,9 @@ HTTP 鉴权 token 无效 / 被拒
 
 按 `raw` 提示用户；版本过低时引导升级
 
-**致命性怎么判断**：致命性**不再以布尔字段暴露**（`OysterSDKError` 没有 `isFatal`）。语义上「致命」专指 **SDK 是否主动终止会话**（断开 RTC、释放整次会话）——
+**致命性怎么判断**：致命性**不再以布尔字段暴露**（`OysterSDKError` 没有 `isFatal`）。语义上“致命”专指 **SDK 是否主动终止会话**（断开 RTC、释放整次会话）——
 
--   **会自动终止会话的错误**（如 `105001/105002/105003/105006/108001`）：宿主从**状态机终态**感知（`status → failed`，经 `events` 的 `.statusChanged` 透出），据此回到「开始体验」前的界面即可，无需自行判定致命性。
+-   **会自动终止会话的错误**（如 `105001/105002/105003/105006/108001`）：宿主从**状态机终态**感知（`status → failed`，经 `events` 的 `.statusChanged` 透出），据此回到“开始体验”前的界面即可，无需自行判定致命性。
 -   **调用拒绝类错误**（`100001/103001/103002/103003/103004`）：在你主动调用时同步抛出 / 拒绝该次调用，**不**终止会话。
 -   **其余非致命错误**（如 `101001/101002/105005/106001/106003`）：不终止会话，按建议重试或重新注入 token 后继续。
 

@@ -324,7 +324,7 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation
 
 **说明**
 
--   若页面提示「请先前往**安全管理**授权开通本功能」，请先完成[步骤一：开通 AI 安全护栏服务](https://help.aliyun.com/zh/model-studio/content-security#abaf0de6f4dcq)和[步骤二：授权 AI 安全护栏](https://help.aliyun.com/zh/model-studio/content-security#eb68bf7575xkc)；防护配置管理请至[AI安全护栏控制台](https://yundun.console.aliyun.com/?p=guardrail)。
+-   若页面提示“请先前往**安全管理**授权开通本功能”，请先完成[步骤一：开通 AI 安全护栏服务](https://help.aliyun.com/zh/model-studio/content-security#abaf0de6f4dcq)和[步骤二：授权 AI 安全护栏](https://help.aliyun.com/zh/model-studio/content-security#eb68bf7575xkc)；防护配置管理请至[AI安全护栏控制台](https://yundun.console.aliyun.com/?p=guardrail)。
 -   开启开关后，护栏服务将按实际调用量计费，计费规则请参见[计费说明](https://help.aliyun.com/zh/model-studio/content-security#3f5435b893mfi)。
 -   业务空间开关与请求头传参双通道并存：当请求中已设置 `X-DashScope-DataInspection` 时，以请求头的设置为准。
 
