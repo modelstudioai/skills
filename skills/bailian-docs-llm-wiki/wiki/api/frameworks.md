@@ -1,111 +1,70 @@
 # frameworks
 
-阿里云百炼平台提供对主流 AI 开发框架的深度集成支持，重点覆盖 LlamaIndex 和 Spring AI Alibaba 两大生态。通过官方适配的 SDK 和插件，开发者可便捷地调用百炼的大模型服务、知识库检索、文档解析、嵌入向量生成等能力，无需自行维护底层基础设施。所有集成均基于百炼统一的 API Key 认证体系，并与控制台中的业务空间（Workspace）模型保持一致。
+阿里云百炼平台提供多套主流 AI 开发框架的官方集成支持，重点覆盖 LlamaIndex 和 Spring AI Alibaba 两大生态。通过标准化 SDK、适配器和云原生组件（如 `DashScopeCloudIndex`、`DashScopeDocumentRetriever`），开发者可快速构建 RAG 应用、调用大模型服务或检索云端知识库，无需从零实现底层能力。所有集成均基于百炼统一的 API 认证与计费体系。
 
 ## 支持的模型/功能
 
-百炼在 LlamaIndex 框架中提供以下核心能力模块：
+- **大模型调用**：支持全部百炼文本生成模型（如 `qwen-max`、`qwen-plus`），可通过 `DashScope` 或 OpenAI-like 封装两种方式接入 LlamaIndex [使用百炼大模型](../../raw/application-api-reference/frameworks/llamaindex/dashscopellm-in-llamaindex.md)。
+- **Embedding 模型**：提供 `text-embedding-v1`/`v2`/`v3` 三款向量模型，其中 `v3` 在 CMTEB Retrieval 任务上达 73.23 分，推荐用于高精度语义检索 [使用 Embedding 模型](../../raw/application-api-reference/frameworks/llamaindex/dashscopeembedding-in-llamaindex.md)。
+- **重排（Rerank）模型**：默认启用 `gte-rerank`，支持 `gte-rerank-hybrid`；适用于对初步检索结果进行语义精排 [DashScopeRerank](../../raw/application-api-reference/frameworks/llamaindex/dashscopererank.md)。
+- **文档解析与切分**：`DashScopeParse` 支持 PDF/DOCX/TXT 等 9 种格式智能解析（仅 PDF/DOC/DOCX 启用文档结构识别）；`DashScopeJsonNodeParser` 提供基于通义文本切分模型的细粒度分块能力 [DashScopeParse](../../raw/application-api-reference/frameworks/llamaindex/dashscopeparse.md)。
+- **云端知识库服务**：`DashScopeCloudIndex` 封装百炼云端索引全生命周期管理（上传、解析、建索引、检索），支持自动智能切分与官方向量模型，但**不支持自定义切分逻辑或嵌入模型** [通过 DashScopeCloudIndex（DashScopeCloudRetriever）构建阿里云百炼云端知识库并使用云端知识索引服务](../../raw/application-api-reference/frameworks/llamaindex/dashscopecloudindex-and-dashscopecloudretriever.md)。
+- **Spring 生态集成**：`Spring AI Alibaba` 提供 `DashScopeAgent`（调用百炼应用）和 `DashScopeDocumentRetriever`（检索知识库）两类核心组件，支持非流式/流式调用及 `SearchFilters` 条件过滤 [Spring AI Alibaba](../../raw/application-api-reference/frameworks/spring-ai-alibaba.md)。
 
-- **大模型调用**：支持 `DashScope`（原生百炼模型）和 `OpenAILike`（OpenAI 兼容模式）两种封装方式，覆盖 `qwen-max`、`qwen-plus` 等全部文本生成模型 [使用百炼大模型](../../raw/application-api-reference/frameworks/llamaindex/dashscopellm-in-llamaindex.md)。
-- **嵌入模型（Embedding）**：提供 `text-embedding-v1/v2/v3` 系列模型，支持中文语义检索优化，其中 `text-embedding-v3` 在 CMTEB 检索任务上达 73.23 分 [使用 Embedding 模型](../../raw/application-api-reference/frameworks/llamaindex/dashscopeembedding-in-llamaindex.md)。
-- **智能文档解析**：`DashScopeParse` 基于“文档智能（DocMind）”服务，支持 PDF/DOCX/TXT 等格式的结构化解析（仅 PDF/DOC/DOCX 启用智能解析） [DashScopeParse](../../raw/application-api-reference/frameworks/llamaindex/dashscopeparse.md)。
-- **云端知识库管理**：`DashScopeCloudIndex` 实现从本地文件上传、云端智能切分、索引构建到检索引擎初始化的一站式流程 [通过 DashScopeCloudIndex（DashScopeCloudRetriever）构建阿里云百炼云端知识库并使用云端知识索引服务](../../raw/application-api-reference/frameworks/llamaindex/dashscopecloudindex-and-dashscopecloudretriever.md)。
-- **重排序（Rerank）**：`DashScopeRerank` 集成 `gte-rerank` 系列模型，用于对初始检索结果进行语义精排 [DashScopeRerank](../../raw/application-api-reference/frameworks/llamaindex/dashscopererank.md)。
-- **文本切分**：`DashScopeJsonNodeParser` 对 `DashScopeParse` 的 JSON 输出进行高质量分块，支持按中文标点及换行符自定义切分逻辑 [DashScopeJsonNodeParser](../../raw/application-api-reference/frameworks/llamaindex/dashscopejsonnodeparser.md)。
-
-Spring AI Alibaba 方面，支持两类集成：
-- 调用百炼已发布的 **智能体应用（Agent 1.0）和工作流应用** [使用Spring AI Alibaba集成阿里云百炼大模型应用](../../raw/application-api-reference/frameworks/spring-ai-alibaba/spring-ai-alibaba-integrate-llm-application.md)；
-- 直接 **检索百炼云端知识库**，支持 `searchFilters` 多条件过滤 [通过Spring AI Alibaba检索阿里云百炼知识库](../../raw/application-api-reference/frameworks/spring-ai-alibaba/spring-ai-alibaba-integrate-knowledge-base.md)。
-
-> **注意**：文档 1 明确指出“本方案将知识库部署在云端，使用默认的智能文档切分与官方向量模型，不支持自定义文档切分方式或自定义嵌入模型”，而文档 5 和文档 8 分别提供了 `DashScopeJsonNodeParser` 和 `DashScopeEmbedding` 以支持自定义切分与嵌入。这表明：**云端知识库（DashScopeCloudIndex）本身不开放自定义切分/嵌入，但开发者可通过 LlamaIndex 本地索引路径（如 `VectorStoreIndex.from_documents` + `DashScopeEmbedding`）完全掌控切分与嵌入流程**。
+> **注意**：文档 1 明确声明“不支持自定义文档切分方式或自定义嵌入模型”，而文档 3 和文档 10 分别提供了本地化 Embedding 和 NodeParser 的完整示例。二者适用场景不同：前者为纯云端托管方案（免运维），后者为本地可控方案（需自行部署依赖）。开发者应根据数据敏感性、定制化需求与运维能力选择路径。
 
 ## 关键参数
 
-| 组件 | 关键参数 | 说明 | 默认值 |
-|--------|-----------|------|---------|
-| `DashScopeLLM` | `model_name` | 指定调用的百炼大模型，如 `"qwen-max"` | — |
-| `DashScopeEmbedding` | `model_name` | 指定嵌入模型，如 `"text-embedding-v3"` | — |
-| `DashScopeCloudIndex.from_documents()` | `name` | 云端知识库名称（需全局唯一） | — |
-| `DashScopeCloudRetriever` / `index.as_retriever()` | `dense_similarity_top_k`, `sparse_similarity_top_k` | 向量/文本检索召回数量 | `100` |
-| | `enable_reranking`, `rerank_model_name`, `rerank_top_n` | 是否启用重排、重排模型、返回节点数 | `True`, `"gte-rerank-hybrid"`, `5` |
-| `DashScopeRerank` | `top_n`, `model` | 重排后返回 Top-N 结果、重排模型 | `3`, `"gte-rerank"` |
-| `DashScopeJsonNodeParser` | `chunk_size`, `overlap_size`, `separator` | 分块大小、重叠大小、切分符正则表达式 | `500`, `100`, `" \|,\|，\|。\|？\|！\|\n\|\?\|!"` |
+| 组件 | 参数名 | 类型 | 默认值 | 说明 |
+|--------|--------|------|--------|------|
+| `DashScopeLLM` | `model_name` | string | — | 必填，如 `"qwen-max"`；详见[选择模型](raw/model-user-guide/get-started-with-models/models.md) |
+| `DashScopeEmbedding` | `model_name` | string | `"text-embedding-v2"` | 推荐使用 `v3` 提升检索质量 |
+| `DashScopeRerank` | `model`, `top_n` | string, int | `"gte-rerank"`, `3` | `top_n` 控制返回结果数，超限则返回全部候选 |
+| `DashScopeCloudRetriever` | `dense_similarity_top_k`, `enable_reranking`, `rerank_top_n` | int, bool, int | `100`, `True`, `5` | `dense_similarity_top_k` 影响向量召回数量；`rerank_top_n` 是重排后最终返回数 |
+| `DashScopeJsonNodeParser` | `chunk_size`, `separator` | int, string | `500`, `" \|,\|，\|。\|？\|！\|\n\|\?\|!"` | `separator` 支持正则表达式，中文场景建议保留 `\n` 和标点 |
 
 ## 使用方式
 
-### LlamaIndex（Python）
-
-1. **安装依赖**（按需组合）：
+### LlamaIndex 集成（Python）
+1. **安装依赖**：按需安装对应模块，例如：
    ```bash
-   pip install llama-index-core
-   pip install llama-index-llms-dashscope          # 大模型
-   pip install llama-index-embeddings-dashscope    # 嵌入
-   pip install llama-index-readers-dashscope       # 文档解析
+   pip install llama-index-llms-dashscope  # 大模型
+   pip install llama-index-embeddings-dashscope  # Embedding
    pip install llama-index-indices-managed-dashscope  # 云端知识库
-   pip install llama-index-postprocessor-dashscope-rerank  # 重排
-   pip install llama-index-node-parser-dashscope   # 文本切分
    ```
+2. **配置认证**：设置环境变量 `DASHSCOPE_API_KEY`（必填）和 `DASHSCOPE_WORKSPACE_ID`（子空间时必填）。
+3. **初始化组件**：
+   - 云端知识库：`index = DashScopeCloudIndex("my_index_name")`
+   - 本地向量索引：`index = VectorStoreIndex.from_documents(documents, embed_model=DashScopeEmbedding(model_name="text-embedding-v3"))`
+   - 检索引擎：`query_engine = index.as_query_engine(node_postprocessors=[DashScopeRerank(top_n=3)])`
 
-2. **环境配置**（必须）：
-   ```bash
-   export DASHSCOPE_API_KEY=your_api_key
-   export DASHSCOPE_WORKSPACE_ID=your_workspace_id  # 如使用非默认业务空间
-   ```
-
-3. **典型流程**（云端 RAG）：
-   - 用 `DashScopeParse` 解析本地文件 → `documents`
-   - 用 `DashScopeCloudIndex.from_documents(documents, "my_index")` 构建云端知识库
-   - 用 `DashScopeCloudIndex("my_index").as_query_engine(...)` 创建带重排的查询引擎
-   - 调用 `query_engine.query("问题")`
-
-> **注意**：文档 6 中 `DashScopeCloudIndex.from_documents()` 示例代码未显式传入 `workspace_id`，但其前提条件明确要求 `DASHSCOPE_WORKSPACE_ID` 必须通过环境变量设置；而文档 11 的 `DashScopeCloudRetriever` 构造函数直接接受 `index_name` 字符串，且示例中亦通过 `os.environ` 设置 `WORKSPACE_ID`。二者行为一致，**`workspace_id` 必须由环境变量注入，不可通过构造参数覆盖**。
-
-### Spring AI Alibaba（Java）
-
-1. **添加依赖**（Maven）：
-   ```xml
-   <dependency>
-       <groupId>com.alibaba.cloud.ai</groupId>
-       <artifactId>spring-ai-alibaba-starter-dashscope</artifactId>
-       <version>1.0.0.2</version>
-   </dependency>
-   ```
-
-2. **配置 `application.yml`**：
-   ```yaml
-   spring:
-     ai:
-       dashscope:
-         api-key: ${DASHSCOPE_API_KEY}
-         # workspace-id: ${WORKSPACE_ID}  # 可选
-         agent:
-           app-id: ${APP_ID}  # 调用应用时必需
-   ```
-
-3. **调用方式**：
-   - **调用大模型应用**：注入 `DashScopeAgent`，调用 `agent.call(prompt)`
-   - **检索知识库**：配置 `DashScopeDocumentRetriever` 并注入 `DocumentRetrievalAdvisor`
+### Spring AI Alibaba 集成（Java）
+1. **添加依赖**：在 `pom.xml` 中引入 `spring-ai-alibaba-starter-dashscope`。
+2. **配置参数**：在 `application.yml` 中设置 `spring.ai.dashscope.api-key` 和 `spring.ai.dashscope.agent.app-id`（调用应用时）或 `spring.ai.dashscope.document-retriever.index-name`（检索知识库时）。
+3. **调用服务**：
+   - 调用应用：注入 `DashScopeAgent` 并执行 `agent.call(new Prompt("问题"))`。
+   - 检索知识库：通过 `DashScopeDocumentRetriever` 配置 `searchFilters` 实现字段级条件过滤，再交由 `DocumentRetrievalAdvisor` 自动注入上下文 [通过Spring AI Alibaba检索阿里云百炼知识库](../../raw/application-api-reference/frameworks/spring-ai-alibaba/spring-ai-alibaba-integrate-knowledge-base.md)。
 
 ## 限制和注意事项
 
-- **文件限制**：`DashScopeParse` 仅对 PDF/DOC/DOCX 进行智能解析；单文件 ≤100MB 或 1000 页；一次上传 ≤200 个文件 [DashScopeParse](../../raw/application-api-reference/frameworks/llamaindex/dashscopeparse.md)。
-- **云端知识库不可定制**：`DashScopeCloudIndex` 使用百炼托管的切分与嵌入策略，不支持用户指定切分规则或嵌入模型 [通过LlamaIndex API构建RAG应用](../../raw/application-api-reference/frameworks/llamaindex.md)。
-- **业务空间强依赖**：所有云端操作（`DashScopeCloudIndex`、`DashScopeCloudRetriever`、Spring AI Alibaba 知识库检索）均需正确配置 `DASHSCOPE_WORKSPACE_ID`，否则报错。
-- **模型兼容性**：`OpenAILike` 封装仅支持百炼的文本生成模型（非所有模型），完整列表见 [OpenAI 兼容模式支持的模型列表](https://help.aliyun.com/zh/model-studio/compatibility-of-openai-with-dashscope#eadfc13038jd5)。
-- **Spring Boot 版本要求**：Spring AI Alibaba 要求 Spring Boot 3.x + JDK 17+，HTTP 直调 RAG API 需 Spring Framework 6.1+（即 Spring Boot 3.2+）[通过Spring AI Alibaba检索阿里云百炼知识库](../../raw/application-api-reference/frameworks/spring-ai-alibaba/spring-ai-alibaba-integrate-knowledge-base.md)。
+- **文件解析限制**：`DashScopeParse` 仅对 PDF、DOC、DOCX 文件执行智能解析（提取表格、标题、段落结构）；TXT/MD/PPT 等格式仅原样上传，不解析语义结构 [DashScopeParse](../../raw/application-api-reference/frameworks/llamaindex/dashscopeparse.md)。
+- **云端知识库约束**：`DashScopeCloudIndex` 构建的知识库强制使用百炼默认的智能文档切分策略与官方向量模型，无法替换为自定义切分器或第三方 Embedding 模型 [通过LlamaIndex API构建RAG应用](../../raw/application-api-reference/frameworks/llamaindex.md)。
+- **业务空间要求**：所有云端操作（`DashScopeCloudIndex`、`DashScopeCloudRetriever`、Spring AI Alibaba 子空间调用）均需显式配置 `DASHSCOPE_WORKSPACE_ID` 环境变量，IDE 中需额外确认该变量已加载至运行时上下文。
+- **模型兼容性**：OpenAI-like 封装仅支持百炼的文本生成类模型（如 `qwen-*`），不支持 `qwen-audio`、`qwen-vl` 等多模态模型；多模态场景请直接使用 DashScope 原生 SDK。
+- **HTTP 直调 RAG API**：若选择绕过 Spring AI Alibaba SDK 直接调用 RAG API，必须使用 `workspace_id` 拼接完整 URL（如 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/indices/rag/index/retrieve`），且请求体需传 `index_id` 而非 `indexName` —— 二者不可混用 [通过Spring AI Alibaba检索阿里云百炼知识库](../../raw/application-api-reference/frameworks/spring-ai-alibaba/spring-ai-alibaba-integrate-knowledge-base.md)。
 
 ## 来源文档
 
 - [通过LlamaIndex API构建RAG应用](../../raw/application-api-reference/frameworks/llamaindex.md)
 - [使用百炼大模型](../../raw/application-api-reference/frameworks/llamaindex/dashscopellm-in-llamaindex.md)
-- [DashScopeRerank](../../raw/application-api-reference/frameworks/llamaindex/dashscopererank.md)
-- [DashScopeParse](../../raw/application-api-reference/frameworks/llamaindex/dashscopeparse.md)
-- [DashScopeJsonNodeParser](../../raw/application-api-reference/frameworks/llamaindex/dashscopejsonnodeparser.md)
-- [通过 DashScopeCloudIndex（DashScopeCloudRetriever）构建阿里云百炼云端知识库并使用云端知识索引服务](../../raw/application-api-reference/frameworks/llamaindex/dashscopecloudindex-and-dashscopecloudretriever.md)
-- [Spring AI Alibaba](../../raw/application-api-reference/frameworks/spring-ai-alibaba.md)
 - [使用 Embedding 模型](../../raw/application-api-reference/frameworks/llamaindex/dashscopeembedding-in-llamaindex.md)
-- [通过Spring AI Alibaba检索阿里云百炼知识库](../../raw/application-api-reference/frameworks/spring-ai-alibaba/spring-ai-alibaba-integrate-knowledge-base.md)
-- [使用Spring AI Alibaba集成阿里云百炼大模型应用](../../raw/application-api-reference/frameworks/spring-ai-alibaba/spring-ai-alibaba-integrate-llm-application.md)
+- [DashScopeRerank](../../raw/application-api-reference/frameworks/llamaindex/dashscopererank.md)
+- [通过 DashScopeCloudIndex（DashScopeCloudRetriever）构建阿里云百炼云端知识库并使用云端知识索引服务](../../raw/application-api-reference/frameworks/llamaindex/dashscopecloudindex-and-dashscopecloudretriever.md)
+- [DashScopeParse](../../raw/application-api-reference/frameworks/llamaindex/dashscopeparse.md)
 - [DashScopeCloudRetriever](../../raw/application-api-reference/frameworks/llamaindex/dashscopecloudretriever.md)
+- [Spring AI Alibaba](../../raw/application-api-reference/frameworks/spring-ai-alibaba.md)
+- [使用Spring AI Alibaba集成阿里云百炼大模型应用](../../raw/application-api-reference/frameworks/spring-ai-alibaba/spring-ai-alibaba-integrate-llm-application.md)
+- [DashScopeJsonNodeParser](../../raw/application-api-reference/frameworks/llamaindex/dashscopejsonnodeparser.md)
+- [通过Spring AI Alibaba检索阿里云百炼知识库](../../raw/application-api-reference/frameworks/spring-ai-alibaba/spring-ai-alibaba-integrate-knowledge-base.md)
 
 

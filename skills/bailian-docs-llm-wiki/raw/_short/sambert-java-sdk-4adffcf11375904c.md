@@ -222,7 +222,7 @@ public class Main {
 
 ### 高并发调用
 
-对象池配置、并发调用完整示例及异常处理请参见[语音合成高并发最佳实践](https://help.aliyun.com/zh/model-studio/tts-high-concurrency-best-practices#sambert-java)。
+对象池配置、并发调用完整示例及异常处理请参见[语音合成最佳实践](https://help.aliyun.com/zh/model-studio/tts-high-concurrency-best-practices#sambert-java)。
 
 ## 请求参数
 

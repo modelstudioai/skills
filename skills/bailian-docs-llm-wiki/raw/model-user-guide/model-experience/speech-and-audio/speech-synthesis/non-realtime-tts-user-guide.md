@@ -8,7 +8,7 @@
 
 -   **多语言与方言**：根据目标语言选择模型和音色，也可通过指令指定方言。参见[方言](https://help.aliyun.com/zh/model-studio/non-realtime-tts-user-guide#8a7604d333kut)。
 -   **表现力控制**：通过自然语言指令调整语速、情感等表达，或在文本中插入情感与富语言标签。参见[指令控制](https://help.aliyun.com/zh/model-studio/non-realtime-tts-user-guide#nrt_instruct_h3)和[情感与富语言标签](https://help.aliyun.com/zh/model-studio/non-realtime-tts-user-guide#nrt_emtag_h3)。
--   **自定义音色**：通过[声音复刻](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-cloning-user-guide.md)从音频样本创建音色，或通过[声音设计](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-design-user-guide.md)使用文字描述创建音色。
+-   **自定义音色**：通过[音色复刻](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-cloning-user-guide.md)从音频样本创建音色，或通过[音色设计](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-design-user-guide.md)使用文字描述创建音色。
 -   **精细控制与公式朗读**：使用 [SSML 与 LaTeX](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/ssml-latex-user-guide.md)控制停顿、发音等效果，或将公式转换为语音。
 
 **说明**
@@ -221,7 +221,7 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 
 在请求的 `input` 中增加 `instruction`，用自然语言说明要合成的语种，描述语速、情感或说话方式，控制合成语音的表现。
 
-**说明**如需创建具有特定性别、年龄或音色特质的新音色，或参考声音描述的编写建议与示例，请参见[声音设计](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-design-user-guide.md)。
+**说明**如需创建具有特定性别、年龄或音色特质的新音色，或参考声音描述的编写建议与示例，请参见[音色设计](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-design-user-guide.md)。
 
 #### Qwen-Audio-TTS
 

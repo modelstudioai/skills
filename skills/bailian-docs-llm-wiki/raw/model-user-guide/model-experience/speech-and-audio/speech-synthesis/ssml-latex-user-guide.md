@@ -47,7 +47,7 @@ SSML 是基于 XML 的语音合成标记语言，可设置音色、语速、音�
 1.  [获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)
 2.  安装 DashScope SDK（Python 2.0.1 及以上版本，Java 2.20.3 及以上版本）。详情请参见[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
-**重要**cosyvoice-v3.5-plus 和 cosyvoice-v3.5-flash 不提供系统音色。在本节 SSML 示例中使用这两个模型时，需先通过[声音复刻](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-cloning-user-guide.md)创建复刻音色。
+**重要**cosyvoice-v3.5-plus 和 cosyvoice-v3.5-flash 不提供系统音色。在本节 SSML 示例中使用这两个模型时，需先通过[音色复刻](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-cloning-user-guide.md)创建复刻音色。
 
 #### Java SDK
 

@@ -1,6 +1,6 @@
 # 语音合成概述
 
-百炼语音合成可将文本转换为语音，支持系统音色，也可通过声音复刻、声音设计创建自定义音色，并可控制语速、情感、发音等合成效果。
+百炼语音合成可将文本转换为语音，支持系统音色，也可通过音色复刻、音色设计创建自定义音色，并可控制语速、情感、发音等合成效果。
 
 ## 模型选型
 
@@ -16,13 +16,13 @@
 
 [qwen-audio-3.1-tts-flash](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen-audio-3.1-tts-flash)
 
-面向低延迟交互场景，支持系统音色、声音复刻、声音设计、自然语言指令及情感与富语言标签。
+面向低延迟交互场景，支持系统音色、音色复刻、音色设计、自然语言指令及情感与富语言标签。
 
 有声书、影视配音、品牌声音与内容制作
 
 [qwen-audio-3.1-tts-plus](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen-audio-3.1-tts-plus)
 
-侧重音质、自然度和细节表现，支持系统音色、声音复刻、声音设计及丰富的表达控制。
+侧重音质、自然度和细节表现，支持系统音色、音色复刻、音色设计及丰富的表达控制。
 
 各系列的模型 ID 参见[支持模型](#tts_supported_models)。
 
@@ -54,7 +54,7 @@
 
 复用品牌代言人、主播等已有声音，创建个性化语音助手或虚拟主播。
 
-[声音复刻](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-cloning-user-guide.md)
+[音色复刻](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-cloning-user-guide.md)
 
 设计音色
 
@@ -62,9 +62,9 @@
 
 没有录音素材，需要为品牌、游戏或动画角色创建新音色。
 
-[声音设计](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-design-user-guide.md)
+[音色设计](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-design-user-guide.md)
 
-声音设计用于创建可重复使用的音色。如果只需在单次合成中调整语速、情感或说话方式，可使用[指令控制](#tts_synthesis_controls)。
+音色设计用于创建可重复使用的音色。如果只需在单次合成中调整语速、情感或说话方式，可使用[指令控制](#tts_synthesis_controls)。
 
 ## 合成方式
 

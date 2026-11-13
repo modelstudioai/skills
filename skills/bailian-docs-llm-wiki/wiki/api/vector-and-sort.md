@@ -1,59 +1,45 @@
 # vector and sort
 
-百炼平台提供文本向量（Embedding）、多模态向量（Multimodal Embedding）和文本排序（Rerank）三大核心能力，覆盖语义检索、RAG、跨模态搜索等典型AI应用链路。所有能力均支持同步/异步调用、OpenAI兼容接口及DashScope SDK，并按实际[Token](../concepts/token.md)消耗计费。开发者可根据数据规模、延迟敏感度与模态需求选择对应模型与调用方式。
+百炼平台的 `vector and sort` 功能涵盖文本/多模态向量化（embedding）与语义重排序（rerank）两大核心能力，支撑[检索增强生成](../concepts/rag.md)（RAG）、跨模态搜索、聚类分析等典型AI应用。向量模型将非结构化内容映射至统一语义空间，排序模型则对召回结果进行精细化相关性打分与重排，二者常组合使用以构建高精度检索流水线。
 
-## 支持的模型/功能
+## 支持的模型与功能
 
-### 文本向量化
-- **同步模型**：`qwen3.7-text-embedding`、`text-embedding-v4`、`text-embedding-v3`、`text-embedding-v2`、`qwen3.7-text-embedding-flash`，支持单次最多20–128,000 [Token](../concepts/token.md)输入，维度可配置（如1024、1536、2048等），详见[同步接口API详情](../../raw/model-api-reference/vector-and-sort/general-text-vector/text-embedding-synchronous-api.md)。
-- **异步批处理模型**：`text-embedding-async-v1` 和 `text-embedding-async-v2`，专为超大批量文本（单次最多100,000行，每行≤2,048 [Token](../concepts/token.md)）设计，适用于离线向量化任务。
+- **文本向量模型**：支持同步（`qwen3.7-text-embedding`, `text-embedding-v4` 等）与异步批处理（`text-embedding-async-v2`）两类接口，覆盖从实时单条到百万级批量的向量化需求 [同步接口API详情](../../raw/model-api-reference/vector-and-sort/general-text-vector/text-embedding-synchronous-api.md)。  
+- **多模态向量模型**：支持文本、图像、视频的独立向量与融合向量生成，所有模态共享同一语义空间，可直接计算跨模态余弦相似度 [Multimodal-Embedding API详情](../../raw/model-api-reference/vector-and-sort/multimodal-vector/multimodal-embedding-api-reference.md)。  
+- **排序（Rerank）模型**：提供纯文本（`qwen3-rerank`）、多模态（`qwen3-vl-rerank`）及兼容型（`gte-rerank-v2`）三类模型，支持 query-document 语义相关性精准打分与 top-k 返回 [文本排序](../../raw/model-api-reference/vector-and-sort/rerank-model/text-rerank-api.md)。  
 
-### 多模态向量化
-- **统一语义空间模型**：`qwen3-vl-embedding`（支持独立/融合向量）、`qwen2.5-vl-embedding`（仅融合）、`tongyi-embedding-vision-plus-2026-03-06`（新版Qwen3底座，支持多分辨率与融合）、`multimodal-embedding-v1` 等，支持文本、图像、视频任意组合输入，所有模态向量可直接计算余弦相似度。详细能力对比见[Multi-modal-Embedding API详情](../../raw/model-api-reference/vector-and-sort/multimodal-vector/multimodal-embedding-api-reference.md)。
-
-### 排序（Rerank）
-- **文本排序**：`qwen3.7-text-rerank`（推荐替代已下线的`gte-rerank`）、`qwen3-rerank`，支持最多500个文档排序，单文档最大4,000 Token。
-- **多模态排序**：`qwen3-vl-rerank`，支持文本、图片、视频混合查询与排序，单次最多100文本/40图片/4视频，适用于跨模态检索场景，其使用说明见[文本排序](../../raw/model-api-reference/vector-and-sort/rerank-model/text-rerank-api.md)。
-
-> **注意**：`gte-rerank`系列模型（含`gte-rerank-v2`）虽仍可用，但官方明确标注“将于2026年05月30日下线”，且[文本排序](../../raw/model-api-reference/vector-and-sort/rerank-model/text-rerank-api.md)文档中已强烈建议迁移至`qwen3-rerank`或`qwen3.7-text-rerank`。
+> **注意**：文档中 `gte-rerank` 模型已明确标注将于 2026 年 5 月 30 日下线，且 `gte-rerank-v2` 不支持 [OpenAI 兼容接口](../concepts/openai-compatible-api.md)，而 `qwen3-rerank` 和 `qwen3.7-text-rerank` 均支持 —— 开发者应优先选用 `qwen3-rerank` 作为替代方案。
 
 ## 关键参数
 
-| 参数 | 适用模型 | 说明 |
-|--------|-----------|------|
-| `text_type` | `text-embedding-async-*` | 取值 `document`（默认，用于底库）或 `query`（用于检索查询），影响向量表征方向，对非对称检索任务效果显著。 |
-| `dimensions` | `qwen3.7-text-embedding`, `text-embedding-v4`, `qwen3-vl-embedding` 等 | 指定向量维度（如1024、1536、2048），不同模型支持范围不同；`multimodal-embedding-v1` 固定为1024维，不支持该参数。 |
-| `enable_fusion` | `qwen3-vl-embedding` | `bool`，设为 `true` 时将 `contents` 中所有输入融合为1个向量；其他模型（如 `tongyi-embedding-vision-plus-2026-03-06`）通过将 text/image/video 放入同一 content 对象实现融合，无需此参数。 |
-| `instruct` | `qwen3.7-text-rerank`, `qwen3-rerank`, `qwen3-vl-rerank` | 自定义排序任务指令（如 `"Retrieve semantically similar text."`），直接影响相关性判断逻辑，必须用英文。 |
-| `top_n` | 所有 Rerank 模型 | 返回排序后前 N 个结果，默认返回全部；若 N > 文档总数，则返回全部。 |
+| 参数 | 适用场景 | 说明 |
+|--------|----------|------|
+| `dimensions` | 文本/多模态向量 | 指定向量维度（如 `1024`, `2048`），不同模型支持值不同；`multimodal-embedding-v1` 固定为 1024，不支持该参数。 |
+| `encoding_format` | 同步文本向量 | 控制返回格式（`float` 或 `base64`），但老网关强制返回 `float`，长请求亦会降级至老网关 [同步接口API详情](../../raw/model-api-reference/vector-and-sort/general-text-vector/text-embedding-synchronous-api.md)。 |
+| `enable_fusion` / 同一 content 对象 | 多模态向量 | `qwen3-vl-embedding` 通过 `enable_fusion=true` 开启融合；`tongyi-embedding-vision-plus-2026-03-06` 等新版模型则通过将 `text`/`image`/`video` 放入同一字典实现融合。 |
+| `instruct` | 排序模型 | 指导排序策略（如 `"Given a web search query..."` 或 `"Retrieve semantically similar text."`），仅 `qwen3.7-text-rerank`/`qwen3-rerank`/`qwen3-vl-rerank` 支持。 |
+| `text_type` | 异步文本向量批处理 | 区分 `query`（查询）与 `document`（底库）类型，提升检索任务效果，对称任务（如聚类）可忽略。 |
 
 ## 使用方式
 
-### 调用路径
-- **HTTP 直接调用**：需构造完整 endpoint（含 `{WorkspaceId}` 和地域域名），设置 `Authorization` 和 `Content-Type` 请求头。异步批处理必须携带 `X-DashScope-Async: enable` 头。
-- **[OpenAI 兼容接口](../concepts/openai-compatible-interface.md)**：适用于熟悉 OpenAI 生态的用户，base_url 为 `https://{WorkspaceId}.{region}.maas.aliyuncs.com/compatible-mode/v1`（Embedding）或 `/compatible-api/v1/reranks`（Rerank），请求体结构更扁平。
-- **DashScope SDK（Python/Java）**：封装了同步/异步调用逻辑，推荐使用 `client.embeddings.jobs.create()` + `.wait()` 或 `client.rerank.create()`，自动处理重试与轮询。
-
-### 典型流程示例
-- **批量文本向量化**：先调用 `POST /api/v1/services/embeddings/text-embedding/text-embedding` 创建异步任务 → 获取 `task_id` → 定期 `GET /api/v1/tasks/{task_id}` 查询状态 → 状态为 `SUCCEEDED` 后下载结果URL中的向量文件。
-- **跨模态排序**：对 `qwen3-vl-rerank` 发送请求，`input.query` 传入 `{"image": "url"}`，`input.documents` 传入混合数组（如 `{"text": "..."}, {"video": "url"}`），启用 `return_documents: true` 获取原文。
+- **同步向量调用**：推荐用于低延迟、小批量场景（≤20 条）。使用 OpenAI 兼容 SDK 或 DashScope HTTP 接口，需配置地域专属 `base_url`（如北京：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`）。  
+- **异步向量批处理**：适用于超大批量（最高 100,000 行）或大文件（≤200MB）场景，需两步操作：先 `POST /api/v1/services/embeddings/text-embedding/text-embedding` 创建任务，再 `GET /api/v1/tasks/{task_id}` 轮询结果。  
+- **多模态向量调用**：统一使用 `POST https://dashscope.aliyuncs.com/api/v1/services/embeddings/multimodal-embedding/multimodal-embedding`，`input.contents` 数组内按模态类型（`text`/`image`/`video`/`multi_images`）组织输入。  
+- **排序调用**：支持 DashScope HTTP（`input.query` + `input.documents` 嵌套）与 [OpenAI 兼容接口](../concepts/openai-compatible-api.md)（扁平结构），后者仅限 `qwen3-rerank` 和 `qwen3.7-text-rerank`。  
 
 ## 限制和注意事项
 
-- **并发与配额**：`text-embedding-async-v2` 用户级并发运行任务数上限为3个，排队中+运行中总数不超过50个；同步模型受通用限流策略约束，详见[限流](https://help.aliyun.com/zh/model-studio/rate-limit)。
-- **文件与Token限制**：
-  - 异步批处理：输入文件 ≤ 200 MB，单行 ≤ 2,048 Token，总行数 ≤ 100,000；
-  - `text-embedding-v4` 同步调用：单条文本 ≤ 8,192 Token，列表最多10条；
-  - `qwen3-vl-rerank`：单次请求总输入Token ≤ 120,000（计算公式：`Query Tokens × Document 数量 + Document Tokens 总和`）。
-- **地域差异**：北京、新加坡等地域的 endpoint 域名、免费额度、单价均不同，调用前务必确认业务空间ID与对应地域URL（如 `cn-beijing` 或 `ap-southeast-1`）。
-- **向量格式兼容性**：`encoding_format` 参数在老网关中被忽略，始终返回 `float`；新网关对短请求生效，长请求仍路由至老网关。生产环境建议显式指定并验证响应格式。
-- **模型弃用风险**：`text-embedding-v1`、`text-embedding-v2`、`gte-rerank` 系列无免费额度且部分已标记下线计划，新项目应优先选用 `qwen3.7-text-embedding`、`text-embedding-v4` 或 `qwen3-rerank`。
+- **Token 与行数限制**：`text-embedding-v4` 单行上限 8,192 Token、最多 10 行；`qwen3.7-text-embedding` 单行可达 128,000 Token、最多 20 行；异步批处理 `text-embedding-async-v2` 单行限 2,048 Token、单次最多 100,000 行。  
+- **地域差异**：免费额度、单价、部分模型可用性因地域而异（如北京有 `qwen3.7-text-embedding` 免费额度，新加坡无）；务必核对所选地域的 [模型概览](../../raw/model-api-reference/vector-and-sort/general-text-vector/text-embedding-synchronous-api.md) 表格。  
+- **融合向量兼容性**：`qwen2.5-vl-embedding` 仅支持融合向量，不支持 `enable_fusion` 参数；`tongyi-embedding-vision-plus` 系列旧版仅支持独立向量，新版（`-2026-03-06`）才同时支持两种模式。  
+- **排序模型输入计算**：`qwen3-vl-rerank` 的总 Token 消耗 = `Query Tokens × Document 数量 + 所有 Document Tokens 总和`，该值不可超过 `120,000` 上限，否则报错。  
+- **任务有效期**：异步批处理任务结果 URL 仅保留 24 小时，需及时下载；同步接口响应无此限制。
 
 ## 来源文档
 
 - [通用文本向量](../../raw/model-api-reference/vector-and-sort/general-text-vector.md)
-- [批处理接口API详情](../../raw/model-api-reference/vector-and-sort/general-text-vector/text-embedding-batch-api.md)
 - [同步接口API详情](../../raw/model-api-reference/vector-and-sort/general-text-vector/text-embedding-synchronous-api.md)
+- [批处理接口API详情](../../raw/model-api-reference/vector-and-sort/general-text-vector/text-embedding-batch-api.md)
 - [多模态向量](../../raw/model-api-reference/vector-and-sort/multimodal-vector.md)
 - [Multimodal-Embedding API详情](../../raw/model-api-reference/vector-and-sort/multimodal-vector/multimodal-embedding-api-reference.md)
 - [排序模型（Rerank）](../../raw/model-api-reference/vector-and-sort/rerank-model.md)

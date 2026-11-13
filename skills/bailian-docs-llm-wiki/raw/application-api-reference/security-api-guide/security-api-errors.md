@@ -1,4 +1,4 @@
-# 错误码
+# Security API 错误码
 
 Security API 的错误响应结构与处理建议。
 

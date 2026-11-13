@@ -1,12 +1,12 @@
-# 声音复刻
+# 音色复刻
 
 根据音频样本创建自定义音色，用于语音合成或实时语音对话。
 
 ## 功能介绍
 
-声音复刻适用于个性化语音助手、品牌专属播报和有声内容定制等场景，无需训练模型。
+音色复刻适用于个性化语音助手、品牌专属播报和有声内容定制等场景，无需训练模型。
 
-**说明**如需通过自然语言描述创建音色，无需提供音频样本，请使用[声音设计](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-design-user-guide.md)。
+**说明**如需通过自然语言描述创建音色，无需提供音频样本，请使用[音色设计](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-design-user-guide.md)。
 
 ## 准备工作
 
@@ -292,7 +292,7 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-gen
 }'
 ```
 
-更多声音复刻参数与示例请参见 [HTTP API](raw/_short/voice-clone-design-http-api-b6a5abbe2d5d2730.md)、[Python SDK](raw/_short/voice-clone-python-sdk-e1dda5eb4e730d8e.md)和 [Java SDK](raw/_short/voice-clone-java-sdk-d83b31cde2e2050b.md)。
+更多音色复刻参数与示例请参见 [HTTP API](raw/_short/voice-clone-design-http-api-b6a5abbe2d5d2730.md)、[Python SDK](raw/_short/voice-clone-python-sdk-e1dda5eb4e730d8e.md)和 [Java SDK](raw/_short/voice-clone-java-sdk-d83b31cde2e2050b.md)。
 
 使用复刻音色进行语音合成或实时语音对话的调用方式，请参见：
 
@@ -417,7 +417,7 @@ MP3、M4A、WAV
 
 ## 音色管理
 
-Qwen-Audio-TTS、Qwen-Audio-Realtime 和 CosyVoice 使用相同的音色查询、更新与删除接口。具体接口与参数请参见[声音复刻 HTTP API 参考](raw/_short/voice-clone-design-http-api-b6a5abbe2d5d2730.md)。
+Qwen-Audio-TTS、Qwen-Audio-Realtime 和 CosyVoice 使用相同的音色查询、更新与删除接口。具体接口与参数请参见[音色复刻 HTTP API 参考](raw/_short/voice-clone-design-http-api-b6a5abbe2d5d2730.md)。
 
 -   **查询音色列表**：查看账号下已有的自定义音色。
 -   **查询音色详情**：查看创建时间、绑定模型等信息。
@@ -450,11 +450,11 @@ Qwen-Audio-TTS、Qwen-Audio-Realtime 和 CosyVoice 使用相同的音色查询�
 
 ## 配额与限制
 
--   **音色数量**：每个阿里云百炼账号的自定义音色总数上限为 1000 个。声音复刻和声音设计共用该配额，不按模型分别计算。
+-   **音色数量**：每个阿里云百炼账号的自定义音色总数上限为 1000 个。音色复刻和音色设计共用该配额，不按模型分别计算。
     
     **说明**
     
-    -   达到上限后，新的声音复刻或声音设计创建请求将失败。需先删除不再使用的音色，释放配额后再创建。
+    -   达到上限后，新的音色复刻或音色设计创建请求将失败。需先删除不再使用的音色，释放配额后再创建。
     -   MiniMax 创建的音色不受上述数量配额约束。
     
 
@@ -462,4 +462,4 @@ Qwen-Audio-TTS、Qwen-Audio-Realtime 和 CosyVoice 使用相同的音色查询�
 
 -   **Qwen-Audio-TTS / Qwen-Audio-Realtime / CosyVoice**：创建音色免费。使用复刻音色合成语音或进行实时语音对话时，按目标模型计费。具体费用请参见[模型计费](raw/model-user-guide/test-1/model-pricing.md)。
     
--   **MiniMax**：声音复刻本身不计费。复刻请求生成的试听音频按同步语音合成单价计费；首次使用复刻音色进行语音合成时，扣除 9.9 元音色解锁费用，且无免费额度。
+-   **MiniMax**：音色复刻本身不计费。复刻请求生成的试听音频按同步语音合成单价计费；首次使用复刻音色进行语音合成时，扣除 9.9 元音色解锁费用，且无免费额度。

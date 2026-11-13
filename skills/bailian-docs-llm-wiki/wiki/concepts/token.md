@@ -1,37 +1,40 @@
-# Token
+# Token 计量
 
-Token 是百炼平台对模型输入与输出内容进行细粒度计量的基本单位，用于计费、资源调度、性能监控和容量规划。它并非固定字符数，而是由模型 tokenizer 实际切分出的语言单元（如子词、标点、控制符等），同一段文本在不同模型下产生的 Token 数可能不同。
+Token 计量是百炼平台对模型调用资源消耗的核心度量方式，指将输入文本、输出文本、图像/音视频内容等多模态数据按统一规则切分为基础语义单元（Token），并以此为单位进行用量统计、成本核算与配额控制。所有模型推理类服务（含文本生成、视觉理解、向量嵌入、重排序等）均以 Token 为最小计费粒度。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **实时推理与批量调用**：所有文本生成、对话、代码补全等请求均按实际消耗的输入 Token 和输出 Token 分别计费；Batch 调用单价为实时推理的 50%，但 Token 计量逻辑完全一致。
-- **向量与排序服务**：Embedding 模型按输入文本总 Token 数计费（支持单次最多 128,000 Token）；Rerank 模型按 `query + documents` 的总 Token 数计费（文档数 × 平均每文档 Token 数）。
-- **知识库（RAG）**：向量化阶段（Query/Document）和重排序（Rerank）阶段均产生独立 Token 消耗，且多知识库并行查询会导致 Token 费用线性叠加。
-- **模型训练与部署**：训练费用 = 总训练 Token 数 × 训练轮数；部署计费中的吞吐预留（TPM）以每分钟可处理的 Token 数（kTPM）为单位，输入/输出 TPM 分开报价。
-- **监控与用量分析**：`模型消耗 TotalToken 数` 是核心用量指标，支持告警配置，用于识别成本突增或异常调用；监控数据中的 Token 统计与账单计费结果一致，但存在约 1–2 分钟延迟。
+- **实时推理调用**：每次 `POST /v1/models/{model_id}/invoke` 请求的 `input`（如 prompt、image_url、audio_url）和 `output`（如生成文本、embedding 向量、rerank 分数）均被解析为 Token；输入 Token 和输出 Token 分别计量，价格可能不同（例如 `qwen3.8-max` 输入 ¥12/百万 Token，输出 ¥24/百万 Token）。
+- **Agent 场景**：Managed Agents、Flow Agent 中调用大模型或向量/排序模型时，Token 消耗计入对应模型账单；知识库检索流程中，“向量模型 + 排序模型”两阶段调用产生的 Token 均独立计量，TopK 参数直接影响送入排序模型的文档切片数量，从而显著影响 Token 总量。
+- **[异步任务](asynchronous-task.md)**：生图、生视频等异步模型（如 `wan2.7-i2v`）虽按任务结算，但底层仍基于输入帧数、分辨率、时长等换算为等效 Token 用于资源调度与成本归因。
+- **模型训练与微调**：训练费用按“每千 Token”计价（如 `qwen3-vl-8b-instruct` ¥0.012/千 Token），此处 Token 指训练数据集经 tokenizer 处理后的总 token 数，不含推理阶段的 output。
+- **监控与告警**：模型监控系统提供 `模型消耗 TotalToken 数` 指标，支持配置环比突增告警（如“24 小时内 Token 消耗增长 >200%”），帮助快速识别异常调用或 Prompt 泄露风险。
 
 ## 关键参数和配置
 
-- **Token 计量方式**：输入 Token 与输出 Token 独立计费，免费额度为二者共用总额度；思考模式（Chain-of-Thought）、缓存命中、Batch 调用等均不改变 Token 实际数量，仅影响单价或折扣系数。
-- **TPM（Tokens Per Minute）**：吞吐预留的核心单位，1 kTPM = 1,000 Tokens/分钟；输入按万TPM（10 kTPM）报价，输出按千TPM（1 kTPM）报价；长输入或缓存命中会折算实际占用的 kTPM 容量。
-- **阶梯计费触发**：部分模型（如 `qwen3.7-plus`）按单次请求**输入 Token 总量**分档定价，该次请求所有 Token 均按最高档单价结算。
-- **地域因子影响**：同一模型在不同地域的 Token 单价不同（如 `qwen3.8-max` 华北2为 ¥12/百万输入 Token，美国弗吉尼亚为 ¥14.988），且免费额度仅限华北2（北京）生效。
-- **异步任务计量**：异步接口（如 `text-embedding-async-v1`、生图/生视频）按任务实际完成时的 Token 消耗结算，费用出账略有延迟，需注意预算控制边界。
+- **计费单位**：统一以“千 Token”（kToken）或“百万 Token”（MToken）为计价单位，具体取决于服务类型（推理多用 MToken，训练多用 kToken）。
+- **输入/输出分离计量**：所有模型调用均区分 `input_tokens` 和 `output_tokens`，二者在账单明细中分别列示，不可互相抵扣。
+- **多模态 Token 换算规则**：
+  - 文本：标准 tokenizer（如 Qwen 的 tiktoken）分词结果；
+  - 图像：按 `min_pixels`/`max_pixels` 缩放后，以固定比例映射为视觉 Token（如 Qwen-VL 每 512×512 区域 ≈ 128 tokens）；
+  - 视频：按 `fps` 抽帧后，每帧按图像规则换算，再叠加时序建模开销；
+  - 音频：ASR/TTS 按音频时长 × 采样率 × 编码系数折算为等效文本 Token。
+- **免费额度绑定**：新人免费额度（如 100 万 Token）按模型 ID 精确隔离，`qwen3.8-max` 与 `qwen3.8-max-2026-05-17` 视为两个独立模型，额度不共享。
+- **地域价格差异**：同一模型在不同地域（如北京 vs 弗吉尼亚）Token 单价不同，调用前需确认 `base_url` 对应地域的刊例价。
 
 ## 面向开发者，简洁实用
 
-- ✅ **务必校验 Token 数**：调用前使用 SDK 的 `count_tokens()` 方法（如 DashScope Python SDK 的 `dashscope.get_tokenizer().count_tokens(text)`）预估消耗，避免超预算。
-- ✅ **优化输入结构**：精简 Prompt、移除冗余空格/注释、合理设置 `max_tokens`，可直接降低输出 Token 成本；知识库检索中调低 `topk_vector` 可减少 Rerank 阶段 Token 消耗。
-- ✅ **善用缓存与 Batch**：对重复或相似输入启用上下文缓存（显式/隐式），或改用 Batch 接口，可显著摊薄单 Token 成本。
-- ⚠️ **注意免费额度边界**：免费额度**仅抵扣实时推理调用产生的 Token 费用**，不覆盖模型训练、部署、吞吐预留、Agent 运行时、ParseX 解析等任何其他计费项。
-- ⚠️ **警惕 Token 放大风险**：Flow Agent 中多路径触发同一模型节点、挂载多个知识库、未关闭 Rerank 等，均会导致 Token 消耗非线性增长——建议通过 `/usage/summary` API 或控制台「用量」页面定期核查明细。
+- ✅ **查用量**：控制台 → [用量](https://bailian.console.aliyun.com/managed-agent/usage) 页面查看各模型、各 API Key 的 Token 消耗明细；也可调用 `POST /usage/summary` 获取结构化数据。
+- ✅ **控成本**：通过 `max_tokens` 限制输出长度、精简 Prompt、启用缓存（`cache_enabled: true`）、选择轻量模型（如 `qwen3.6-flash` 替代 `qwen3.8-max`）直接降低 Token 消耗。
+- ✅ **避陷阱**：流式响应（`stream=true`）下，`output` 中每个 `delta` 帧均计入 Token；图片 URL 若返回超大尺寸原图，将触发更高像素换算 —— 建议预处理为 `min_pixels=24576` 合理尺寸。
+- ✅ **对账要点**：账单中“阿里云百炼大模型推理”商品下的实例 ID 后缀（如 `-embedding-`、`-rerank-`）可精准定位 Token 归属模型与用途，勿与“知识库规格费”混淆。
 
 ## 关联主题页
 
-- [test 1](../guides/test-1.md)
 - [agent billing](../guides/agent-billing.md)
-- [vector and sort](../api/vector-and-sort.md)
-- [billing api](../api/billing-api.md)
+- [test 1](../guides/test-1.md)
 - [model monitoring](../guides/model-monitoring.md)
+- [model experience](../guides/model-experience.md)
+- [qwen api reference](../api/qwen-api-reference.md)
 
 

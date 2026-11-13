@@ -56,6 +56,8 @@ PCM
 -   语种（`qwen-audio-3.0-realtime-plus`、`qwen-audio-3.0-realtime-flash`）：德语（de）、英语（en）、西班牙语（es）、法语（fr）、印尼语（id）、意大利语（it）、日语（ja）、韩语（ko）、葡萄牙语（pt）、俄语（ru）、中文（zh）。
 -   中文及方言：普通话、广东话、重庆话、东北话、甘肃话、贵州话、浙江话、河北话、河南话、湖北话、湖南话、江西话、宁波话、宁夏话、青岛话、陕西话、山西话、山东话、上海话、四川话、云南话。
 
+输出特定语种或方言时，请从当前模型的[可选音色](https://help.aliyun.com/zh/model-studio/qwen-audio-realtime-user-guides#fc60h311)中选择支持目标语种或方言的音色。音色的语种和方言说明可参考 [Qwen-Audio-TTS 音色列表](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/tts-voice-list/qwen-audio-tts-voice-list.md)。
+
 使用 `qwen-audio-3.1-realtime-plus` 或 `qwen-audio-3.1-realtime-flash` 时，可通过 `session.input_audio_transcription.language` 和 `session.output_audio.language` 分别指定输入音频源语种和输出音频目标语种。两个参数的可选语言代码分别见[客户端事件](https://help.aliyun.com/zh/model-studio/fun-audiochat-client-events#fc65a1b2c3d5f)。其中 `session.output_audio.language` 作用于语音合成（TTS），会尽可能让语音输出使用目标语种，但不保证一定生效，也不会改变模型回复文本的语种。
 
 ### 上下文容量
@@ -142,7 +144,7 @@ import pyaudio
 import websockets
 
 API_KEY = os.environ["DASHSCOPE_API_KEY"]
-# 以下为华北2（北京）地域的WebSocket URL，调用时请将{WorkspaceId}（含花括号）替换为真实的业务空间ID，各地域的URL不同。
+# 以下为华北2（北京）地域的WebSocket URL，请在示例中填写实际的业务空间 ID，各地域的URL不同。
 URL = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime?model=qwen-audio-3.1-realtime-plus"
 
 pya = pyaudio.PyAudio()
@@ -563,7 +565,7 @@ async def main():
     player = B64PCMPlayer(pya, sample_rate=24000)
 
     client = FunRealtimeClient(
-        # 以下为华北2（北京）地域的WebSocket URL，调用时请将{WorkspaceId}（含花括号）替换为真实的业务空间ID，各地域的URL不同。
+        # 以下为华北2（北京）地域的WebSocket URL，请在示例中填写实际的业务空间 ID，各地域的URL不同。
         base_url="wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime",
         api_key=os.environ['DASHSCOPE_API_KEY'],
         model="qwen-audio-3.1-realtime-plus",
@@ -662,7 +664,7 @@ import pyaudio
 import websocket
 
 API_KEY = os.getenv("DASHSCOPE_API_KEY")
-# 以下为华北2（北京）地域的WebSocket URL，调用时请将{WorkspaceId}（含花括号）替换为真实的业务空间ID，各地域的URL不同。
+# 以下为华北2（北京）地域的WebSocket URL，请在示例中填写实际的业务空间 ID，各地域的URL不同。
 API_URL = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime?model=qwen-audio-3.1-realtime-plus"
 
 pya = pyaudio.PyAudio()
@@ -1386,7 +1388,7 @@ async def main():
     player = B64PCMPlayer(pya, sample_rate=24000)
 
     client = FunRealtimeClient(
-        # 以下为华北2（北京）地域的WebSocket URL，调用时请将{WorkspaceId}（含花括号）替换为真实的业务空间ID，各地域的URL不同。
+        # 以下为华北2（北京）地域的WebSocket URL，请在示例中填写实际的业务空间 ID，各地域的URL不同。
         base_url="wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime",
         api_key=os.environ['DASHSCOPE_API_KEY'],
         model="qwen-audio-3.1-realtime-plus",

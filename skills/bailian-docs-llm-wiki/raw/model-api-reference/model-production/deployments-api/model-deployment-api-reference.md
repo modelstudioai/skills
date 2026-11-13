@@ -9,6 +9,7 @@
 -   您已经阅读了[模型部署](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)和[使用 API 进行模型部署](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-quick-start.md)的相关内容，掌握了模型部署 API 的使用方法，并熟悉了在阿里云百炼平台上进行模型部署的基本步骤。
 -   已配置百炼的 API-KEY， 请参考[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
 -   DTU（DTU 独占算力）部署使用同一组部署接口，请求中以 `plan="dtu"` 区分部署形式。DTU 部署的请求需使用部署所在业务空间、地域对应的 `maas.aliyuncs.com` 业务空间域名（例如 `ws-vxxx.cn-beijing.maas.aliyuncs.com`）和该业务空间的 API Key，而不是 `dashscope.aliyuncs.com`。
+-   智能路由（mr）服务同样调用本页的部署接口（请求以 `plan="mr"` 区分，仅支持后付费），完整接口说明独立成篇，请参见[智能路由 API 参考](raw/model-api-reference/model-production/model-routing-api-reference.md)。
 -   请求域名因地域而异：北京地域使用 `dashscope.aliyuncs.com`，新加坡地域使用 `dashscope-intl.aliyuncs.com`；业务空间专属域名（`{WorkspaceId}.{region}.maas.aliyuncs.com`）各地域均可用。各地域完整域名信息请参见[各地域接入信息](https://help.aliyun.com/zh/model-studio/regions#h2_cc92e61c)。
 -   DTU 部署仅支持预付费（`charge_type="pre_paid"`），不支持后付费创建；续费与自动续费变更目前仅支持在控制台操作。DTU 接口不支持 `AssumedRoleUser` 角色身份。使用 DTU 前需在控制台开通 DTU 功能并申请资源额度，详见[独占吞吐（DTU）](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-modes/dtu-model-deployment.md)。
 
