@@ -31,11 +31,11 @@
 
 调用地址
 
-华北2（北京）地域：wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime
+华北2（北京）地域：`wss://WorkspaceId.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime`
 
-新加坡地域：wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime
+新加坡地域：`wss://WorkspaceId.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime`
 
-调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+调用时，将地址中的 `WorkspaceId` 替换为实际的[业务空间 ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
 查询参数
 
@@ -48,8 +48,6 @@
 > DASHSCOPE\_API\_KEY 是您在百炼上申请的API-KEY。
 
 可通过以下 Python 示例代码建立连接。
-
-WebSocket 连接 Python示例代码
 
 ```
 # pip install websocket-client

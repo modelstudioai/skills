@@ -1,56 +1,56 @@
 # long term memory new
 
-[长期记忆](../concepts/long-term-memory.md)（Long Term Memory, LTM）是百炼平台提供的结构化记忆管理服务，支持事实记忆（`observation`）、技能记忆（`skill`）和用户画像三类数据的写入、检索与生命周期管理。所有操作通过 RESTful API 或 `agentscope-runtime` SDK 完成，需使用业务空间专属域名和 `DASHSCOPE_API_KEY` 鉴权。服务将于 2026 年 8 月 20 日起正式商业化计费，Add 和 Search 接口区分 `pro` 与 `lite` 计划版本。
+[长期记忆](../concepts/long-term-memory.md)（Long Term Memory）是百炼平台提供的结构化记忆管理服务，支持开发者以编程方式写入、检索、更新和删除用户级记忆节点，并可同步抽取事实记忆（observation）、技能记忆（skill）及用户画像（user profile）。所有操作基于业务空间隔离，通过统一 API 网关提供 HTTPS 接口，兼容同步与异步两种写入模式。该能力已于 2024 年全面上线，将于 2026 年 8 月 20 日起正式商业化计费。
 
 ## 支持的模型/功能
 
-- **记忆类型**：支持两类核心记忆节点：
-  - `observation`（事实记忆）：如“用户每天上午11点提醒点外卖”，默认检索目标；
-  - `skill`（技能记忆）：结构化封装可复用能力，含 `skill_name`、`skill_description`、`skill_tags` 字段，需通过 [导出技能记忆](raw/application-api-reference/long-term-memory-new/fragments-overview/get-skill-export.md) 接口获取完整信息。
-- **用户画像**：需先创建画像模板（[CreateProfileSchema](raw/application-api-reference/long-term-memory-new/profiles-overview/create-schema.md)），再在 `AddMemory` 或 `AddMemoryAsync` 中传入 `profile_schema` 参数触发异步抽取；画像属性值通过 [GetUserProfile](raw/application-api-reference/long-term-memory-new/profiles-overview/get-user-profile.md) 查询。
-- **多模态支持**：`messages` 中可传入 `image_url` 类型内容，但仅限已开通多模态能力的项目解析图片；其他项目将忽略图片字段。
-- **抽取模式**：`AddMemory` 支持 `efficient`（低延迟）与 `intelligent`（高精度）两种模式，后者可能超时，推荐优先使用 [异步添加记忆](raw/application-api-reference/long-term-memory-new/fragments-overview/add-memory-async.md)。
+- **记忆类型**：支持 `observation`（事实记忆，如“用户明天要出差”）、`skill`（技能记忆，如“会议纪要整理流程”）两类核心记忆节点；传入 `profile_schema` 时可额外触发用户画像抽取。
+- **抽取模式**：
+  - `efficient`（默认）：低延迟、轻量级抽取，适用于实时性要求高的场景；
+  - `intelligent`：高精度多轮推理抽取，可能超时，需配合异步接口使用。
+- **多模态支持**：当项目配置支持多模态能力时，`messages[].content` 中的 `image_url` 可被解析并参与记忆抽取；否则图片信息将被忽略 [添加记忆](../../raw/application-api-reference/long-term-memory-new/fragments-overview/add-memory.md)。
+- **画像模板驱动**：用户画像非固定字段，由开发者通过 `CreateProfileSchema` 定义属性（如“年龄”“爱好”），抽取结果严格遵循模板结构 [创建画像模板](../../raw/application-api-reference/long-term-memory-new/profiles-overview/create-schema.md)。
 
-> **注意**：文档 6（同步 AddMemory）称 `intelligent` 模式“可能超时”，而文档 7（异步 AddMemory）明确其“支持多项目并行抽取、技能抽取和用户画像抽取”。二者功能存在重叠但语义不一致——实际生产环境应以异步接口为首选，同步接口仅适用于对实时性要求极高且内容简单（如纯文本 `custom_content`）的场景。
+> **注意**：文档中多次出现 `extract_scene` 参数（见 [创建画像模板](../../raw/application-api-reference/long-term-memory-new/profiles-overview/create-schema.md) 和 [更新画像模板](../../raw/application-api-reference/long-term-memory-new/profiles-overview/update-schema.md)），但其在 `AddMemory` 同步接口的参数列表中未被声明为合法字段——实际生效仅依赖画像模板自身的 `extract_scene` 配置，调用方无需在 Add 请求中重复指定。
 
 ## 关键参数
 
-| 参数 | 位置 | 必填 | 说明 |
+| 参数 | 位置 | 类型 | 说明 |
 |------|------|------|------|
-| `user_id` | Query / Body | 是 | 子用户 ID，用于跨用户记忆隔离，所有读写接口均需提供 |
-| `memory_library_id` | Query / Body | 否 | 记忆库 ID；不传则使用默认库；影响 `ListMemory`、`SearchMemory` 等接口范围 |
-| `project_id` / `project_ids` | Query / Body | 否 | 项目级二级隔离标识；`project_ids` 最多支持 5 个，与 `project_id` 互斥；决定记忆抽取规则（如 `observation` 或 `skill`） |
-| `profile_schema` | Body | 否（画像必需） | 用户画像模板 ID；仅当需抽取画像时传入，否则不触发画像流程 |
-| `plan_version` | Body（SearchMemory） | 否 | `pro`（默认）或 `lite`；`pro` 支持 `min_score` 过滤，`lite` 不生效；详见[计费说明](raw/application-user-guide/agent-billing/billing.md) |
-| `memory_types` | Body（SearchMemory） | 否 | 默认 `["observation"]`；显式传入 `["skill"]` 或 `["observation","skill"]` 才能检索技能记忆 |
+| `user_id` | Query / Body | string | **必填**，子用户 ID，用于跨用户记忆隔离；所有读写接口均需提供。 |
+| `memory_library_id` | Query / Body | string | 可选，指定记忆库；不传则使用默认库。 |
+| `project_id` / `project_ids` | Body | string / string[] | 可选，用于二级隔离（如按 Agent 或 Session 分组）；`project_ids` 最多 5 个，与 `project_id` 互斥。 |
+| `profile_schema` | Body | string | 可选，画像模板 ID；传入后触发画像抽取（需搭配 `messages`）。 |
+| `plan_version` | Body (Search) / Body (Schema) | string | 搜索时控制是否启用 `min_score` 过滤（`pro` 生效，`lite` 忽略）；画像模板中控制收费策略。 |
+| `min_score` | Body (Search) | number | 可选，默认 `0.3`；仅 `plan_version=pro` 时生效，用于过滤低相关性结果 [搜索记忆](../../raw/application-api-reference/long-term-memory-new/fragments-overview/search-memory.md)。 |
 
 ## 使用方式
 
-1. **准备凭证**：  
-   - 获取 `DASHSCOPE_API_KEY`（[鉴权](raw/application-api-reference/long-term-memory-new/api-overview/authentication.md)）；  
-   - 获取业务空间 ID（`llm-xxxxxxxxxxxx`），拼接服务地址：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/`。
+1. **认证准备**：  
+   设置环境变量 `DASHSCOPE_API_KEY` 和 `MEMORY_SERVICE_ENDPOINT`（格式为 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory`），其中 `{WorkspaceId}` 从[业务空间管理](https://bailian.console.aliyun.com/cn-beijing/settings/workspace)页面复制 [认证](../../raw/application-api-reference/long-term-memory-new/api-overview/authentication.md)。
 
 2. **写入记忆**：  
-   - **同步写入**（适合简单、实时场景）：调用 `POST /add`，传 `messages` 或 `custom_content`；响应直接返回 `memory_nodes`。  
-   - **异步写入**（推荐）：调用 `POST /add-async`，立即返回 `event_id`；后续用 `GET /events/{event_id}` 轮询状态与结果。
+   - **同步写入**（`/add`）：适合 `efficient` 场景，响应中直接返回 `memory_nodes`；不推荐在 `intelligent` 模式下使用，易超时 [添加记忆](../../raw/application-api-reference/long-term-memory-new/fragments-overview/add-memory.md)。  
+   - **异步写入**（`/add-async`）：推荐主用方式，立即返回 `event_id`，后续通过 `/events/{event_id}` 轮询状态；支持多项目并行、技能抽取与画像联合抽取 [异步添加记忆](../../raw/application-api-reference/long-term-memory-new/fragments-overview/add-memory-async.md)。
 
 3. **检索与管理**：  
-   - **语义搜索**：`POST /memory_nodes/search`，传 `messages` 作为查询向量，指定 `top_k` 和 `memory_types`；  
-   - **列表查询**：`GET /memory_nodes`，支持 `page_num`/`page_size` 分页；  
-   - **单条操作**：`GET /memory_nodes/{id}` 查详情，`PATCH /memory_nodes/{id}` 更新，`DELETE /memory_nodes/{id}` 删除（软删除，`status=delete`）。
-
-4. **用户画像工作流**：  
-   - 创建模板 → `POST /profile_schemas`；  
-   - 写入带 `profile_schema` 的记忆 → `POST /add` 或 `/add-async`；  
-   - 查询画像 → `GET /profile_schemas/{schema_id}/user_profile?user_id=xxx`（首次可能为空，需重试）。
+   - 检索：使用 `POST /memory_nodes/search`，传入 `messages` 和 `user_id`，支持 `top_k`、`memory_types` 等筛选；默认只查 `observation`，查 `skill` 需显式指定。  
+   - 查询单条：`GET /memory_nodes/{memory_node_id}` 获取完整节点详情；`GET /skill/export/{memory_node_id}` 专用于 skill 类型，返回 `skill_name`/`skill_description` 等字段。  
+   - 用户画像：先创建模板 → 写入时传 `profile_schema` → 调用 `GET /profile_schemas/{id}/user_profile?user_id=xxx` 获取结果；首次查询可能为空，需重试 [获取用户画像](../../raw/application-api-reference/long-term-memory-new/profiles-overview/get-user-profile.md)。
 
 ## 限制和注意事项
 
-- **限流**：全接口总计 ≤3000 QPM（阿里云账号级别）；其中 `add` ≤120 QPM，`search` ≤300 QPM。超限返回 HTTP 429，需按指数退避（1s/2s/4s）重试 [错误码](raw/application-api-reference/long-term-memory-new/api-overview/errors.md)。
-- **时效性**：用户画像为异步抽取，`GetUserProfile` 首次调用可能无数据，需按业务逻辑重试；记忆节点与画像本身无自动过期机制。
-- **ID 隔离**：`user_id` 是强制隔离维度，`project_id` 和 `memory_library_id` 为可选二级隔离，三者共同构成数据可见性边界。
-- **安全要求**：API Key 必须通过 `Authorization: Bearer $DASHSCOPE_API_KEY` 传入 Header，严禁硬编码或提交至仓库；建议为不同应用分配独立 Key 并定期轮转。
-- **删除不可逆**：`DELETE /memory_nodes/{id}` 为软删除（标记 `status=delete`），但 `GetMemoryNode` 仍可查到该节点；若需彻底清除，需联系技术支持。
+- **限流规则**（阿里云账号级别）：  
+  - 全部接口总计 ≤ 3000 QPM；  
+  - `add` 接口 ≤ 120 QPM；  
+  - `search` 接口 ≤ 300 QPM；  
+  超限返回 HTTP 429，建议采用指数退避重试（1s/2s/4s）[错误码](../../raw/application-api-reference/long-term-memory-new/api-overview/errors.md)。
+
+- **软删除机制**：`DELETE /memory_nodes/{id}` 为逻辑删除，`status` 置为 `delete`，仍可通过 `ListMemory` 或 `GetMemoryNode` 查询历史记录，但 `SearchMemory` 默认不返回已删除节点。
+
+- **画像提取延迟**：画像抽取为异步过程，`AddMemory` 返回成功不代表画像已就绪；`GetUserProfile` 首次调用可能返回空值，需按业务逻辑重试 [获取用户画像](../../raw/application-api-reference/long-term-memory-new/profiles-overview/get-user-profile.md)。
+
+- **商业化时间点**：所有 `Add` 和 `Search` 调用自 **2026 年 8 月 20 日 10:00（北京时间）** 起区分 `Pro`/`Lite` 版本计费，`Pro` 支持 Rerank 与 `min_score` 过滤，`Lite` 仅基础检索 [长期记忆API](../../raw/application-user-guide/agent-context/memory-library-overview/long-term-memory-2-0.md)。
 
 ## 来源文档
 
@@ -58,21 +58,21 @@
 - [概览](../../raw/application-api-reference/long-term-memory-new/api-overview.md)
 - [认证](../../raw/application-api-reference/long-term-memory-new/api-overview/authentication.md)
 - [记忆管理](../../raw/application-api-reference/long-term-memory-new/fragments-overview.md)
-- [错误码](../../raw/application-api-reference/long-term-memory-new/api-overview/errors.md)
 - [添加记忆](../../raw/application-api-reference/long-term-memory-new/fragments-overview/add-memory.md)
-- [异步添加记忆](../../raw/application-api-reference/long-term-memory-new/fragments-overview/add-memory-async.md)
-- [列出记忆](../../raw/application-api-reference/long-term-memory-new/fragments-overview/list-memory.md)
 - [查询事件](../../raw/application-api-reference/long-term-memory-new/fragments-overview/get-event.md)
-- [搜索记忆](../../raw/application-api-reference/long-term-memory-new/fragments-overview/search-memory.md)
+- [列出记忆](../../raw/application-api-reference/long-term-memory-new/fragments-overview/list-memory.md)
+- [错误码](../../raw/application-api-reference/long-term-memory-new/api-overview/errors.md)
 - [查询记忆节点](../../raw/application-api-reference/long-term-memory-new/fragments-overview/get-memory-node.md)
-- [导出技能记忆](../../raw/application-api-reference/long-term-memory-new/fragments-overview/get-skill-export.md)
+- [异步添加记忆](../../raw/application-api-reference/long-term-memory-new/fragments-overview/add-memory-async.md)
 - [更新记忆](../../raw/application-api-reference/long-term-memory-new/fragments-overview/update-memory.md)
-- [删除记忆](../../raw/application-api-reference/long-term-memory-new/fragments-overview/delete-memory.md)
+- [导出技能记忆](../../raw/application-api-reference/long-term-memory-new/fragments-overview/get-skill-export.md)
 - [用户画像](../../raw/application-api-reference/long-term-memory-new/profiles-overview.md)
-- [列出画像模板](../../raw/application-api-reference/long-term-memory-new/profiles-overview/list-schemas.md)
-- [获取画像模板](../../raw/application-api-reference/long-term-memory-new/profiles-overview/get-schema.md)
+- [删除记忆](../../raw/application-api-reference/long-term-memory-new/fragments-overview/delete-memory.md)
+- [创建画像模板](../../raw/application-api-reference/long-term-memory-new/profiles-overview/create-schema.md)
 - [更新画像模板](../../raw/application-api-reference/long-term-memory-new/profiles-overview/update-schema.md)
 - [获取用户画像](../../raw/application-api-reference/long-term-memory-new/profiles-overview/get-user-profile.md)
-- [创建画像模板](../../raw/application-api-reference/long-term-memory-new/profiles-overview/create-schema.md)
+- [搜索记忆](../../raw/application-api-reference/long-term-memory-new/fragments-overview/search-memory.md)
+- [列出画像模板](../../raw/application-api-reference/long-term-memory-new/profiles-overview/list-schemas.md)
+- [获取画像模板](../../raw/application-api-reference/long-term-memory-new/profiles-overview/get-schema.md)
 
 

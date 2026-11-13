@@ -1,43 +1,50 @@
 # 长期记忆
 
-长期记忆（Long Term Memory, LTM）是百炼平台提供的**结构化、可检索、跨会话持久化**的记忆管理服务，用于存储和复用用户事实、技能知识与画像信息，支撑智能体在多轮交互中保持上下文连贯性与个性化能力。
+长期记忆（Long Term Memory）是百炼平台提供的结构化、用户级记忆管理服务，支持开发者以编程方式持久化存储、智能抽取、精准检索和生命周期管理业务相关的事实、技能与用户画像信息。所有数据按 `user_id` 隔离，并可结合 `project_id` 进行二级分组，适用于构建具备持续认知能力的生产级 AI 应用。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **Agent 场景（Managed / Flow / Sandbox）**：通过 `enable_memory=true` 参数启用后，Agent 在每次运行时自动将关键对话片段、工具调用结果或用户显式声明的信息（如“我叫李明，住在杭州”）写入长期记忆库；后续请求中，Agent 可基于当前 query 语义检索相关记忆节点，并注入 prompt 上下文，实现“记住用户偏好”“延续上一次任务”等行为。  
-- **独立记忆服务（LTM New API）**：作为独立能力开放 RESTful 接口，支持开发者细粒度控制记忆生命周期——可按 `user_id` + `project_id` 多维隔离写入 `observation`（事实）、`skill`（可复用能力封装）或触发用户画像抽取；适用于构建个性化推荐引擎、客服知识沉淀系统或 Agent 能力中心。  
-- **Flow Agent 工作流**：虽文档中标注为“长期记忆（旧）”，但历史 Flow Agent 仍可通过 `CreateMemoryNode` 等接口手动注入结构化记忆片段，并在节点中通过变量引用（如 `{{memory.node_123.content}}`）显式调用，属于低代码模式下的轻量级记忆集成方式；**新项目应优先采用 LTM New 架构**。  
-- **RAG 协同增强**：长期记忆不替代 RAG，而是互补——RAG 检索外部知识库，LTM 存储用户专属状态；二者可同时启用（`enable_rag=true` & `enable_memory=true`），由 Agent 统一融合决策。
+- **Agent 开发（Agent Context）**：在 Agent 的 `context_config` 中设置 `memory_type: "user"`，即可自动将用户级长期记忆注入推理上下文；调用时需在请求 Header 中携带 `X-User-ID`，否则降级为会话级短期记忆。该机制与 RAG、Connector 等上下文模块正交协同，共同增强 LLM 的环境感知能力。
+
+- **Managed Agent / Sandbox / Flow Agent**：可通过 API 主动写入或检索记忆节点（如记录用户偏好、会议纪要流程、出差计划等），不依赖 Agent 自动触发；Sandbox Agent 可在 Python 代码中调用 Long Term Memory API 实现复杂记忆编排（例如：多轮对话后批量更新画像 + 触发技能同步）。
+
+- **独立记忆服务（API 直接调用）**：面向需要精细控制记忆生命周期的场景，提供完整 CRUD 接口：
+  - 同步写入（`/add`）：适用于低延迟事实记忆（`observation`）录入；
+  - 异步写入（`/add-async`）：推荐用于高精度技能抽取（`skill`）或用户画像联合生成；
+  - 检索（`/search`）：支持按类型（`observation`/`skill`）、相关性（`min_score`）、项目分组（`project_ids`）等多维过滤；
+  - 用户画像管理：通过预定义 `profile_schema` 驱动结构化抽取，结果严格遵循模板字段。
+
+> ⚠️ 注意：长期记忆与 Managed Agent 中的 `memory_store_id`（会话级内存）属不同抽象层——前者跨会话、跨 Agent、用户全局可见；后者仅限单次 Session 生命周期内临时缓存，不可跨请求复用。
 
 ## 关键参数和配置
 
-| 参数 | 作用 | 是否必需 | 说明 |
-|------|------|----------|------|
-| `user_id` | 用户级隔离标识 | 是 | 所有 LTM 写/读操作必须指定，确保跨用户数据隔离 |
-| `project_id` 或 `project_ids` | 项目级规则隔离 | 否（但推荐） | 决定记忆抽取逻辑（如仅对 `project_id="customer_service"` 的输入提取 `observation`）；`project_ids` 最多支持 5 个 |
-| `memory_library_id` | 记忆库分组标识 | 否 | 不传则使用默认库；可用于按业务域划分（如 `"sales"` / `"hr"` 库） |
-| `profile_schema` | 用户画像模板 ID | 仅画像场景必需 | 写入时携带该字段，才触发画像属性抽取；需先调用 `CreateProfileSchema` 创建模板 |
-| `memory_types`（Search） | 检索目标类型 | 否（默认 `["observation"]`） | 显式传 `["skill"]` 或 `["observation","skill"]` 才能命中技能记忆 |
-| `plan_version`（Search） | 计费版本控制 | 否（默认 `pro`） | `pro` 支持 `min_score` 过滤，`lite` 版本忽略该参数 |
-| `enable_memory`（Agent API） | 启用开关 | 否（默认 `false`） | 在 `POST /v1/agents/{agent_id}/run` 请求体中设置，开启后 Agent 自动管理记忆 |
+| 参数 | 位置 | 类型 | 必填 | 说明 |
+|------|------|------|------|------|
+| `user_id` | Query / Body | string | ✅ | 用户唯一标识，所有读写操作均以此隔离数据；必须与 Agent 调用时的 `X-User-ID` 一致。 |
+| `memory_types` | Body (Search) | string[] | ❌ | 默认 `["observation"]`；查技能需显式传 `["skill"]` 或 `["observation", "skill"]`。 |
+| `project_ids` | Body (Add/Search) | string[] | ❌ | 最多 5 个，用于按 Agent、Session、任务流等逻辑分组；与 `project_id` 互斥。 |
+| `profile_schema` | Body (Add) | string | ❌ | 画像模板 ID；传入后自动触发用户画像抽取（需配合 `messages` 内容）。 |
+| `extract_mode` | Body (Add) | `"efficient"` \| `"intelligent"` | ❌ | 默认 `"efficient"`；`"intelligent"` 模式必须搭配 `/add-async` 使用。 |
+| `min_score` | Body (Search) | number | ❌ | 默认 `0.3`；仅当 `plan_version="pro"` 时生效，用于过滤低置信度结果。 |
+| `top_k` | Body (Search) | integer | ❌ | 默认 `5`，最大 `50`；控制返回记忆节点数量。 |
 
-> ⚠️ 注意：同步写入（`/add`）仅适合纯文本、低延迟场景；生产环境**强烈推荐异步写入（`/add-async`）**，避免因抽取超时导致请求失败。
+- **认证要求**：需配置 `DASHSCOPE_API_KEY` 和 `MEMORY_SERVICE_ENDPOINT`（格式：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory`）。
+- **多模态支持**：若项目已开通多模态能力，`messages[].content` 中的 `image_url` 将参与记忆抽取；否则图片被忽略。
+- **画像模板驱动**：字段完全由开发者通过 `CreateProfileSchema` 定义（如 `age`, `preferred_language`），抽取结果 100% 结构化，无自由文本。
 
 ## 面向开发者，简洁实用
 
-- ✅ **快速起步**：只需 `user_id` + `messages`（或 `custom_content`），调用 `/add-async` 即可写入记忆；后续用 `/memory_nodes/search` 传相同 `messages` 即可语义检索。  
-- ✅ **技能复用**：将常用逻辑封装为 `skill` 类型记忆（含 `skill_name`/`skill_description`/`skill_tags`），再通过 `SearchMemory` 检索后动态注入 Agent 工具描述，实现“技能发现”与“零代码插件化”。  
-- ✅ **画像驱动**：创建画像模板 → 写入带 `profile_schema` 的记忆 → 调用 `GetUserProfile` 获取结构化属性（如 `{"age": 28, "preferred_language": "zh"}`），直接用于 prompt 拼接或路由决策。  
-- ❌ **避免踩坑**：  
-  - 不要混用旧版 Flow Agent 的 `CreateMemory` 和新版 LTM API；二者数据不互通；  
-  - `session_id` 仅控制 Agent 会话内短期上下文（1 小时失效），**不等于长期记忆**；LTM 数据永久保留（除非主动删除）；  
-  - 图片等多模态内容需项目已开通多模态权限，否则 `image_url` 字段被静默忽略。
+- ✅ **首选异步写入**：对含技能或画像的记忆，一律使用 `/add-async` + 轮询 `/events/{event_id}`，避免超时失败。
+- ✅ **检索前先指定类型**：`/search` 默认不返回 `skill`，务必显式传 `memory_types: ["skill"]`。
+- ✅ **画像抽取 = 模板 + 内容 + `profile_schema`**：三者缺一不可；`extract_scene` 等高级配置仅在模板创建时设定，调用 `AddMemory` 时无需重复传。
+- ❌ **不要混用 `memory_store_id` 和长期记忆**：前者是 Managed Agent 的会话缓存，后者是独立服务，二者数据不互通、不共享。
+- 📌 **计费提示**：长期记忆服务自 2026 年 8 月 20 日起正式商业化，建议在开发阶段通过控制台配额监控用量。
 
 ## 关联主题页
 
-- [get started with agents](../guides/get-started-with-agents.md)
 - [long term memory new](../api/long-term-memory-new.md)
 - [agent development](../guides/agent-development.md)
-- [flow agent api](../api/flow-agent-api.md)
+- [agent context](../guides/agent-context.md)
+- [managed agents api](../api/managed-agents-api.md)
 
 

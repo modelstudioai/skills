@@ -1,4 +1,4 @@
-# 错误码
+# Sandbox API 错误码
 
 Sandbox API 的错误响应与状态码说明。
 

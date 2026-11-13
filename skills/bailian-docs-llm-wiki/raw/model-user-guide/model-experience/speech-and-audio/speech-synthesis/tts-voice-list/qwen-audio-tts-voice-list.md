@@ -7,7 +7,7 @@
 -   所选音色（`voice`）必须属于当前模型（`model`）支持的音色列表，不能跨模型混用。音色不匹配时，服务会返回 `InvalidParameter` 错误，例如 `[cosyvoice:]Engine error [411]: TTS speak operation failed`。
 -   待合成文本（`text`）应使用所选音色支持的语言，否则可能出现发音错误或语音不自然。
 
-如需专属音色，请参见[声音复刻](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-cloning-user-guide.md)或[声音设计](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-design-user-guide.md)。
+如需专属音色，请参见[音色复刻](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-cloning-user-guide.md)或[音色设计](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-design-user-guide.md)。
 
 ## 系统音色
 
@@ -2718,9 +2718,9 @@ SSML: 不支持
 
 ## 基础音色
 
-**说明**建议优先使用系统音色，以获得更稳定的语音合成效果。如需定制音色，可通过[声音复刻](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-cloning-user-guide.md)或[声音设计](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-design-user-guide.md)创建专属音色。基础音色提供更多选择，使用前建议试听并评估其是否符合业务需求。
+**说明**建议优先使用系统音色，以获得更稳定的语音合成效果。如需定制音色，可通过[音色复刻](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-cloning-user-guide.md)或[音色设计](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-design-user-guide.md)创建专属音色。基础音色提供更多选择，使用前建议试听并评估其是否符合业务需求。
 
-除上述系统音色外，qwen-audio-3.0-tts-plus和qwen-audio-3.0-tts-flash各自还提供500余个通过声音复刻生成的基础音色，调用方式与系统音色一致。
+除上述系统音色外，qwen-audio-3.0-tts-plus和qwen-audio-3.0-tts-flash各自还提供500余个通过音色复刻生成的基础音色，调用方式与系统音色一致。
 
 基础音色命名格式为`qwen-audio-3.0-tts-{plus|flash}-{音色后缀}`，两个模型同一后缀对应同一套试听音频。
 

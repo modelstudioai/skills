@@ -1,4 +1,4 @@
-# 错误码
+# ParseX API 错误码
 
 查看 ParseX API 的错误响应格式、HTTP 状态码、错误消息与处理含义。
 

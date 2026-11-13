@@ -1,51 +1,61 @@
 # 函数调用
 
-函数调用（Function Calling）是百炼平台支持的一种结构化工具协同能力，允许大语言模型在推理过程中主动识别用户意图、生成符合规范的工具调用请求（含函数名与参数），并将结果交由外部系统执行，从而扩展模型的能力边界。该机制不依赖客户端硬编码逻辑判断，而是由模型原生理解并生成标准化的调用指令。
+函数调用（Function Calling）是百炼平台中大模型主动识别用户意图、并按需调用外部工具或服务的核心能力。它使模型不再局限于文本生成，而是能动态触发真实世界操作（如查天气、搜网页、解析文件），实现“思考—决策—执行”闭环。
 
-## 在百炼平台的不同场景中如何使用
+## 在百炼平台的不同场景中，这个概念如何使用
 
-函数调用能力在百炼平台中并非全局默认启用，其可用性取决于所选服务类型与接口协议：
+函数调用在百炼平台中**不作为独立 API 功能开放**，而是深度集成于以下两类运行时环境，由平台自动编排：
 
-- **模型 API 层（DashScope 原生接口）**：  
-  通过 `input.tools` 字段声明可用函数列表（JSON Schema 格式），并在 `parameters.tool_choice` 中指定调用策略（`auto` / `none` / 具体函数名）。模型返回结构化 `tool_calls` 字段，包含 `name` 和 `arguments`，开发者需自行解析、执行并注入结果后继续对话。
+- **智能体（Agent）应用**：  
+  - 在 `Managed Agent` 和 `Flow Agent` 中，函数调用通过 `tools` 参数（或 Flow 中的 `nodes[].tool_id`）显式声明可用工具列表；模型根据用户输入和工具 `description` 自动选择并构造结构化调用请求（JSON Schema 格式），平台负责路由、执行、结果注入上下文并生成最终响应。  
+  - **注意**：纯千问系列模型 API（如 `/v2/app/completions`）**不支持函数调用**；该能力仅在 Agent 框架下生效。
 
-- **Qwen 系列模型（Anthropic 兼容 Messages 接口）**：  
-  使用 `tools` 数组 + `tool_choice` 参数，响应中以 `content` 内嵌 `{"type": "tool_use", "name": "...", "input": {...}}` 形式输出调用请求，语义清晰、易于解析，推荐用于需要强结构化工具交互的场景。
+- **Agent Store 扩展能力**：  
+  - 函数调用的实际载体是 **MCP（Model Context Protocol）服务** 和 **Skill（技能包）**。  
+    - MCP 服务提供标准化工具接口（如 `web_search`, `maps_weather`），支持远程 HTTP/SSE/stdio 协议，适用于通用 API 集成；  
+    - Skill 提供文件与结构化数据处理能力（如 `pdf`, `xlsx`），以 ZIP 包形式封装逻辑，适用于文档解析类任务。  
+  - 二者均需在 Agent 配置中启用，并通过 `tools` 字段引用其唯一 ID（如 `"web_search"` 或 `"pdf"`），模型据此生成符合其 Schema 的调用参数。
 
-- **Agent 服务层（Managed Agent / Flow Agent）**：  
-  工具以 MCP 协议注册后，自动纳入 Agent 的可调用能力集；通过 `tool_choice: auto` 启用自动决策，或显式指定 `tool_choice: "weather_query"` 触发特定工具。Agent 运行时自动完成调用、结果注入与多轮编排，无需开发者手动处理中间状态。
-
-- **[OpenAI 兼容接口](openai-compatible-interface.md)（Chat Completions）**：  
-  **不原生支持函数调用**。若需类似能力，必须由客户端自行封装：例如将工具描述拼入 system prompt，再解析模型返回的 JSON-like 文本并做正则/Schema 校验——该方式稳定性低、易出错，不推荐生产使用。
-
-> ✅ 最佳实践：优先选用 DashScope 原生接口或 Anthropic 兼容 Messages 接口进行函数调用开发；Agent 场景下直接配置 `tools` 并启用 `enable_tool_calling`（部分 SDK 封装为布尔开关）即可开箱即用。
+> ⚠️ 重要限制：  
+> - Assistant API 当前**不支持连续调用多个本地函数**；  
+> - **不支持 memory 配置功能**（即无法在函数调用链中自动维护会话状态）；  
+> - MCP/Skill **不可用于纯模型 API 调用场景**，仅限 Agent 或工作流应用内使用。
 
 ## 关键参数和配置
 
-| 参数 | 类型 | 说明 | 是否必需 | 备注 |
-|------|------|------|----------|------|
-| `tools` | array | 工具定义列表，每个元素为 `{ "name": string, "description": string, "parameters": JSON Schema }` | 是（启用函数调用时） | Schema 必须为合法 JSON Schema v7 子集，支持 `string`/`number`/`boolean`/`object`/`array` 及 `required` 字段 |
-| `tool_choice` | string \| object | 调用策略：`"auto"`（模型自主决策）、`"none"`（禁用）、`{"type": "function", "function": {"name": "xxx"}}`（强制指定） | 否（默认 `"auto"`） | 部分 Agent 模式下也支持 `"required"`（必须调用至少一个工具） |
-| `enable_search` | boolean | （仅 DashScope 接口）是否启用内置搜索增强（非函数调用，但常与工具协同） | 否 | 与 `tools` 独立，可同时开启 |
+| 参数 | 类型 | 说明 | 是否必需 |
+|------|------|------|----------|
+| `tools` | array of objects | 声明当前 Agent 允许调用的工具列表，每个对象包含 `type`（`mcp` 或 `skill`）、`name`（工具唯一 ID）及可选 `description`（覆盖默认描述，用于提升调用准确率） | 是（Agent 场景） |
+| `model_id` | string | 必须选用支持函数调用的模型，如 `qwen-max`、`qwen-plus`、`qwen3.5-flash` 等（`qwen3-vl-plus` 暂不支持） | 是 |
+| `enable_memory` | boolean | 控制是否启用会话记忆。**即使设为 `true`，函数调用过程中的中间状态也不会被自动缓存或复用**（平台当前不支持 memory 配置） | 否（但建议设为 `false` 避免误解） |
+| `timeout_ms` | integer | 全局执行超时（含函数调用+模型推理）。Managed/Flow Agent 默认 30000ms，Sandbox 最高支持 60000ms；超时将中断调用并返回错误 | 否（使用默认值即可，高延迟工具建议显式设置） |
 
-> ⚠️ 注意事项：
-> - 所有工具名（`name`）必须为 ASCII 字符，长度 ≤ 64，且不能与保留关键字（如 `system`、`user`）冲突；
-> - `parameters` 中的 `default` 值不会被模型自动填充，未提供的必填字段将导致调用失败；
-> - 若模型返回无效 JSON 或参数类型不符，API 将返回 `400 Bad Request` 并附带校验错误详情，建议在客户端做 `try/catch` + 重试降级（如 fallback 到文本回答）。
+- **工具定义关键字段（MCP/Skill 配置时）**：  
+  - `name`：全局唯一标识符，调用时直接引用（如 `"web_search"`）；  
+  - `description`：**必须清晰描述输入格式、支持动作、触发关键词及边界条件**（例如：“仅支持中文城市名查询，不支持未来日期”），直接影响模型调用准确率；  
+  - `parameters`（MCP）或 `schema`（Skill）：定义 JSON Schema，约束传入参数类型与必填项，平台在调用前校验合法性。
 
-## 面向开发者：快速上手提示
+## 面向开发者，简洁实用
 
-- **调试技巧**：首次集成时，在 `messages` 中加入明确指令（如“请调用天气查询工具获取北京当前温度”），并设置 `tool_choice: "auto"`，观察返回中是否出现 `tool_calls` 字段；
-- **安全边界**：函数调用本身不执行代码，仅生成请求；实际执行必须由你控制的服务端完成，务必对 `arguments` 做白名单校验与输入消毒；
-- **性能优化**：避免在 `tools` 中声明大量低频工具（>10 个），会显著增加模型推理开销；高频工具建议前置，低频工具按需动态注入；
-- **错误恢复**：当工具执行失败时，将错误信息以 `role: tool` 消息形式回传（格式：`{"name": "...", "content": "error: ..."}"`），模型可据此重试或改写响应。
+- ✅ **正确做法**：  
+  - 在控制台创建 Managed/Flow Agent → 在「技能」区域添加 MCP 或 Skill → 在 API 请求中传入 `tools: [{"type": "mcp", "name": "web_search"}]`；  
+  - 使用 CLI 快速测试：`bl mcp call --target web_search --query "杭州天气"`（验证 MCP 服务本身）；  
+  - 通过 `enable_tracing: true` 开启 Trace，查看函数调用是否被触发、耗时及返回内容。
 
-函数调用是构建可靠 AI 应用的关键桥梁——它让模型从“回答者”变为“协作者”。合理设计工具 Schema、精准控制 `tool_choice`、并做好执行层兜底，即可实现安全、可控、可扩展的智能体交互。
+- ❌ **避免踩坑**：  
+  - 不要在 `/v2/app/completions` 等模型直连 API 中尝试 `functions` 参数——该字段被忽略且无报错；  
+  - 不要依赖 `enable_memory` 实现多步函数协作——需自行在 Skill/MCP 逻辑中管理状态或改用 Flow Agent 显式编排；  
+  - 不要省略 `description` 或写模糊描述（如“搜索信息”），否则模型大概率跳过调用或传参错误。
+
+- 💡 **调试提示**：  
+  - 若函数未被调用：检查 `tools` 中 `name` 是否与 Agent Store 中注册的完全一致（大小写敏感）；  
+  - 若调用失败：查看 Trace 日志中的 `tool_call` 事件，确认模型生成的 `function.name` 和 `arguments` 是否合法；  
+  - Token 成本：每次函数调用的输入参数 + 返回结果均计入总 Token，复杂工具需预估开销。
 
 ## 关联主题页
 
-- [get started with models](../guides/get-started-with-models.md)
-- [qwen api reference](../api/qwen-api-reference.md)
+- [support](../guides/support.md)
+- [agent store](../guides/agent-store.md)
 - [get started with agents](../guides/get-started-with-agents.md)
 - [agent development](../guides/agent-development.md)
 

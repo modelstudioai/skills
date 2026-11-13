@@ -1,4 +1,4 @@
-# qwen4-max-preview
+# qwen4-max-preview（最新模型）
 
 了解 Qwen4-Max-Preview 的多模态理解、深度思考、工具调用能力与 Token Plan 接入方式
 

@@ -212,11 +212,11 @@ fps有两个功能：
 取值范围
 
 -   **输入图像：**
-    -   `qwen4-max-preview`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、Qwen3.7、Qwen3.6、Qwen3.5、Qwen3-VL：默认值和最小值均为：`65536`
+    -   `qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、Qwen3.7、Qwen3.6、Qwen3.5、Qwen3-VL：默认值和最小值均为：`65536`
     -   `qwen3.8-omni-flash`、Qwen3.5-Omni ：默认值和最小值均为： `24576`
     -   `Qwen2.5-VL`开源系列及`QVQ`系列模型：默认值和最小值均为`3136`
 -   **输入视频文件或图像列表：**
-    -   `qwen4-max-preview`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、`qwen3.8-omni-flash`、Qwen3.7、Qwen3.6、Qwen3.5、`Qwen3.5-Omni`、Qwen3-VL（包括商业版和开源版）：默认值为`65536`，最小值为`4096`
+    -   `qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、`qwen3.8-omni-flash`、Qwen3.7、Qwen3.6、Qwen3.5、`Qwen3.5-Omni`、Qwen3-VL（包括商业版和开源版）：默认值为`65536`，最小值为`4096`
     -   `Qwen2.5-VL`开源系列及`QVQ`系列模型：默认值为`50176`，最小值为`3136`
 
 示例值
@@ -237,15 +237,15 @@ fps有两个功能：
     
     -   当`vl_high_resolution_images`为`False`时：
         
-        -   `qwen4-max-preview`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、Qwen3.7、 Qwen3.6 、 Qwen3.5 、 Qwen3-VL ：默认值为 `2621440` ，最大值为： `16777216`
+        -   `qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、Qwen3.7、 Qwen3.6 、 Qwen3.5 、 Qwen3-VL ：默认值为 `2621440` ，最大值为： `16777216`
         -   `qwen3.8-omni-flash`、Qwen3.5-Omni ：默认值为 `1310720` ，最大值为： `16777216`
         -   `Qwen2.5-VL` 开源系列及 `QVQ` 系列模型：默认值为 `1003520` ，最大值为 `12845056`
     -   当`vl_high_resolution_images`为`True`时：
         
-        -   `qwen4-max-preview`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、`qwen3.8-omni-flash`、Qwen3.7、 Qwen3.6 、 Qwen3.5-Omni 、 Qwen3.5 、 Qwen3-VL ： `max_pixels` 无效，输入图像的最大像素固定为 `16777216`
+        -   `qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、`qwen3.8-omni-flash`、Qwen3.7、 Qwen3.6 、 Qwen3.5-Omni 、 Qwen3.5 、 Qwen3-VL ： `max_pixels` 无效，输入图像的最大像素固定为 `16777216`
         -   `Qwen2.5-VL` 开源系列及 `QVQ` 系列模型： `max_pixels` 无效，输入图像的最大像素固定为 `12845056`
 -   **输入视频文件或图像列表：**
-    -   `qwen4-max-preview`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、`qwen3.8-omni-flash`、Qwen3.7、Qwen3.6、Qwen3.5、Qwen3.5-Omni、Qwen3-VL闭源系列：默认值为`655360`，最大值为`2048000`
+    -   `qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、`qwen3.8-omni-flash`、Qwen3.7、Qwen3.6、Qwen3.5、Qwen3.5-Omni、Qwen3-VL闭源系列：默认值为`655360`，最大值为`2048000`
     -   其他`Qwen3-VL`开源模型：默认值`655360`，最大值为`786432`
     -   `Qwen2.5-VL`开源系列及`QVQ`系列模型：默认值为`501760`，最大值为`602112`
 
@@ -263,7 +263,7 @@ fps有两个功能：
 
 取值范围
 
--   `qwen4-max-preview`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、Qwen3.7、Qwen3.6、Qwen3.5系列 ：默认值和最大值均为 `819200000` ，该值对应 `800000` 个图像 Token（每 32×32 像素对应 1 个图像 Token）。
+-   `qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、Qwen3.7、Qwen3.6、Qwen3.5系列 ：默认值和最大值均为 `819200000` ，该值对应 `800000` 个图像 Token（每 32×32 像素对应 1 个图像 Token）。
 -   Qwen3-VL闭源系列 ：默认值和最大值均为 `134217728` ，该值对应 `131072` 个图像 Token（每 32×32 像素对应 1 个图像 Token）。
 -   `qwen3.8-omni-flash`、`Qwen3.5-Omni` ：默认值和最小值均为 `184549376` ，该值对应 `180224` 个图像 Token（每 32×32 像素对应 1 个图像 Token）。
 -   其他`Qwen3-VL`开源模型：默认值和最小值均为`67108864`，该值对应 `65536` 个图像 Token（每 32×32 像素对应 1 个图像 Token）。
@@ -432,9 +432,9 @@ temperature与top\_p均可以控制生成文本的多样性，建议只设置其
 
 temperature默认值
 
--   qwen4-max-preview/qwen3.8-max/qwen3.8-flash（思考模式）：视觉理解0.6，文本输入1.0，0.6以下的temperature值会默认改为0.6
+-   qwen3.8-max/qwen3.8-flash（思考模式）：视觉理解0.6，文本输入1.0，0.6以下的temperature值会默认改为0.6
 -   Qwen3.8-Omni-Flash：思考模式为 0.6，非思考模式为 0.7；
--   Qwen4（非思考模式）、Qwen3.8（非思考模式）、Qwen3.7（非思考模式）、Qwen3.6（非思考模式）、Qwen3.5-Omni、Qwen3.5（非思考模式）、Qwen3（非思考模式）、Qwen3-Instruct系列、Qwen3-Coder系列、qwen-max系列、qwen-plus系列（非思考模式）、qwen-flash系列（非思考模式）、qwen开源系列、qwen-coder系列、qwen-doc-turbo、Qwen3-VL（非思考）：0.7；
+-   Qwen3.8（非思考模式）、Qwen3.7（非思考模式）、Qwen3.6（非思考模式）、Qwen3.5-Omni、Qwen3.5（非思考模式）、Qwen3（非思考模式）、Qwen3-Instruct系列、Qwen3-Coder系列、qwen-max系列、qwen-plus系列（非思考模式）、qwen-flash系列（非思考模式）、qwen开源系列、qwen-coder系列、qwen-doc-turbo、Qwen3-VL（非思考）：0.7；
 -   QVQ系列 : 0.5；
 -   qwen-audio-turbo系列：0.00001；
 -   qwen-vl系列：0.01；
@@ -471,7 +471,7 @@ temperature与top\_p均可以控制生成文本的多样性，建议只设置其
 
 top\_p默认值
 
-非思考模式下的以下型号（`qwen4-max-preview`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`）、Qwen3.7（非思考模式）、Qwen3.6（非思考模式）、Qwen3.5-Omni、Qwen3.5（非思考模式）、Qwen3（非思考模式）、Qwen3-Instruct系列、Qwen3-Coder系列、qwen-max系列、qwen-plus系列（非思考模式）、qwen-flash系列（非思考模式）、Qwen 2.5开源系列、qwen-coder系列、qwen-long、qwen-doc-turbo、Qwen3-VL（非思考）：0.8；
+非思考模式下的以下型号（`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`）、Qwen3.7（非思考模式）、Qwen3.6（非思考模式）、Qwen3.5-Omni、Qwen3.5（非思考模式）、Qwen3（非思考模式）、Qwen3-Instruct系列、Qwen3-Coder系列、qwen-max系列、qwen-plus系列（非思考模式）、qwen-flash系列（非思考模式）、Qwen 2.5开源系列、qwen-coder系列、qwen-long、qwen-doc-turbo、Qwen3-VL（非思考）：0.8；
 
 Qwen3.8-Omni-Flash：思考模式为 0.95，非思考模式为 0.8；
 
@@ -479,7 +479,7 @@ QVQ系列 : 0.5；
 
 qwen-math系列、Qwen3-Omni-Flash系列：1.0；
 
-思考模式下的以下型号（`qwen4-max-preview`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`）、Qwen3.7（思考模式）、Qwen3.6（思考模式）、Qwen3.5（思考模式）、Qwen3（思考模式）、Qwen3-VL（思考模式）、Qwen3-Thinking、QwQ 系列、Qwen3-Omni-Captioner、qwen-plus-character：0.95
+思考模式下的以下型号（`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`）、Qwen3.7（思考模式）、Qwen3.6（思考模式）、Qwen3.5（思考模式）、Qwen3（思考模式）、Qwen3-VL（思考模式）、Qwen3-Thinking、QwQ 系列、Qwen3-Omni-Captioner、qwen-plus-character：0.95
 
 DeepSeek系列（阿里云直供）：deepseek-v4-pro、deepseek-r1-distill-qwen 蒸馏版: 0.95；
 
@@ -533,7 +533,7 @@ DeepSeek/Kimi/MiniMax系列均不支持top\_k参数。
 
 repetition\_penalty默认值
 
--   `qwen4-max-preview`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、qwen-max、qwen-math系列、qwen-audio-turbo系列、QVQ系列、QwQ系列、Qwen3-VL： 1.0；
+-   `qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、qwen-max、qwen-math系列、qwen-audio-turbo系列、QVQ系列、QwQ系列、Qwen3-VL： 1.0；
 -   qwen-coder系列、qwen2-1.5b-instruct、qwen2-0.5b-instruct：1.1；
 -   其余模型为1.05。
 -   GLM系列（阿里云直供）：1.0；
@@ -553,7 +553,7 @@ repetition\_penalty默认值
 
 presence\_penalty默认值
 
-非思考模式下的以下型号（`qwen4-max-preview`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`）、Qwen3.7（非思考模式）、Qwen3.6（非思考模式）、Qwen3.5-Omni、Qwen3.5（非思考模式）、Qwen3（非思考模式）、Qwen3-Instruct系列/1.7b/4b（思考模式）、QVQ系列、qwen-max、qwen2.5-vl系列、Qwen3-VL（非思考）：1.5；
+非思考模式下的以下型号（`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`）、Qwen3.7（非思考模式）、Qwen3.6（非思考模式）、Qwen3.5-Omni、Qwen3.5（非思考模式）、Qwen3（非思考模式）、Qwen3-Instruct系列/1.7b/4b（思考模式）、QVQ系列、qwen-max、qwen2.5-vl系列、Qwen3-VL（非思考）：1.5；
 
 Qwen3.8-Omni-Flash：思考模式为 0.0，非思考模式为 1.5；
 
@@ -635,7 +635,7 @@ Schema 的名称。
 
 该参数的含义随模型不同，具体如下：
 
--   qwen4-max-preview、deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731：模型回答与思维链内容之和的最大 Token 数，`max_tokens` 与 `max_completion_tokens` 等价。模型输出超过此值时生成将提前停止，返回的 `finish_reason` 为 `length`。
+-   deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731：模型回答与思维链内容之和的最大 Token 数，`max_tokens` 与 `max_completion_tokens` 等价。模型输出超过此值时生成将提前停止，返回的 `finish_reason` 为 `length`。
 -   glm-5.3：`max_tokens` 为模型回答与思维链内容之和的最大 Token 数，模型输出超过此值时生成将提前停止，返回的 `finish_reason` 为 `length`。glm-5.3 会忽略 `thinking_budget` 参数。
 -   glm-5.2：不传入 `thinking_budget` 参数时，`max_tokens` 为模型回答与思维链内容之和的最大 Token 数，模型输出超过此值时生成将提前停止，返回的 `finish_reason` 为 `length`；传入 `thinking_budget` 参数时，`max_tokens` 仅为模型回答的最大 Token 数，思维链部分的 Token 数由 `thinking_budget` 单独控制。
 -   其他模型：模型回答的最大 Token 数（不包含思维链）。若生成内容超过此值，生成将提前停止，返回的 `finish_reason` 为 `length`。
@@ -722,7 +722,7 @@ GLM 模型的默认值与最大值见 `max_tokens` 参数中的表格，其他�
 
 kimi-k3.1-pro（阿里云百炼部署）默认值为 `true`，可设为 `false` 关闭思考，但强烈建议保持开启，关闭会显著影响输出效果。
 
-使用混合思考（回复前既可思考也可不思考）模型时，是否开启思考模式。适用于 Qwen4、Qwen3.8、Qwen3.7、Qwen3.6、Qwen3.5、Qwen3、Qwen3.8-Omni-Flash、Qwen3-Omni-Flash、Qwen3-VL模型，以及 DeepSeek-V4.1-Flash、DeepSeek-V4-Pro/V4-Flash 系列（阿里云直供）、DeepSeek-V3.2/V3.2-exp/V3.1 系列（阿里云直供、硅基流动直供、快手万擎直供）、Kimi-K2.7-code（仅思考模型）、Kimi-K2.6/K2.5 系列（阿里云直供、月之暗面直供）、GLM 系列。DeepSeek-V4 系列默认开启思考，可通过 `reasoning_effort` 参数调整推理力度。
+使用混合思考（回复前既可思考也可不思考）模型时，是否开启思考模式。适用于 Qwen3.8、Qwen3.7、Qwen3.6、Qwen3.5、Qwen3、Qwen3.8-Omni-Flash、Qwen3-Omni-Flash、Qwen3-VL模型，以及 DeepSeek-V4.1-Flash、DeepSeek-V4-Pro/V4-Flash 系列（阿里云直供）、DeepSeek-V3.2/V3.2-exp/V3.1 系列（阿里云直供、硅基流动直供、快手万擎直供）、Kimi-K2.7-code（仅思考模型）、Kimi-K2.6/K2.5 系列（阿里云直供、月之暗面直供）、GLM 系列。DeepSeek-V4 系列默认开启思考，可通过 `reasoning_effort` 参数调整推理力度。
 
 可选值：
 
@@ -771,18 +771,18 @@ kimi/kimi-k3.1-pro 和 kimi/kimi-k3.1-pro-highspeed 支持此参数，默认关�
 
 需要参考上一轮思考时，将其放在历史 assistant 消息的 `reasoning_content` 字段中随 `messages` 回传。用法见[传递思考过程](https://help.aliyun.com/zh/model-studio/deep-thinking#jln7docdq5et5)。
 
-目前支持qwen4-max-preview（默认开启）、qwen3.8-max、qwen3.8-max-0902、qwen3.8-flash（默认开启）、qwen3.8-omni-flash（默认开启）、qwen3.7-max、qwen3.7-max-2026-05-20以及后续快照、qwen3.7-plus、qwen3.7-plus-2026-05-26、qwen3.6-plus、qwen3.6-plus-2026-04-02、qwen3.7-flash、qwen3.7-flash-2026-07-15、qwen3.6-flash、qwen3.6-flash-2026-04-16、kimi-k2.6（阿里云百炼部署）、kimi-k2.7-code（阿里云百炼部署，默认开启）、kimi/kimi-k2.7-code-highspeed（月之暗面直供，默认开启）、kimi/kimi-k2.7-code（月之暗面直供，默认开启）。
+目前支持qwen3.8-max、qwen3.8-max-0902、qwen3.8-flash（默认开启）、qwen3.8-omni-flash（默认开启）、qwen3.7-max、qwen3.7-max-2026-05-20以及后续快照、qwen3.7-plus、qwen3.7-plus-2026-05-26、qwen3.6-plus、qwen3.6-plus-2026-04-02、qwen3.7-flash、qwen3.7-flash-2026-07-15、qwen3.6-flash、qwen3.6-flash-2026-04-16、kimi-k2.6（阿里云百炼部署）、kimi-k2.7-code（阿里云百炼部署，默认开启）、kimi/kimi-k2.7-code-highspeed（月之暗面直供，默认开启）、kimi/kimi-k2.7-code（月之暗面直供，默认开启）。
 
-> **重要：**使用 qwen4-max-preview、qwen3.8-max/qwen3.8-flash 时，preserve\_thinking 默认为 true，必须将历史对话中所有的 reasoning\_content 完整回传。**不支持将 reasoning\_content 拼接到 content 字段中回传。**
+> **重要：**使用 qwen3.8-max/qwen3.8-flash 时，preserve\_thinking 默认为 true，必须将历史对话中所有的 reasoning\_content 完整回传。**不支持将 reasoning\_content 拼接到 content 字段中回传。**
 
--   对于上述支持此参数的 `qwen4-max-preview`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、Qwen3.7、Qwen3.6 和 Kimi 型号，若历史消息中不包含 `reasoning_content`，开启此参数不会报错。
+-   对于上述支持此参数的 `qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、Qwen3.7、Qwen3.6 和 Kimi 型号，若历史消息中不包含 `reasoning_content`，开启此参数不会报错。
 -   开启后，历史对话中的 reasoning\_content 会计入输入 Token 数量并计费。
 
 > 该参数非OpenAI标准参数。通过 Python SDK调用时，请放入 **extra\_body** 对象中。配置方式为：`extra_body={"preserve_thinking": True}`。
 
 **thinking\_budget** `integer` （可选）
 
-思考过程的最大 Token 数。适用于 `qwen4-max-preview`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`，以及Qwen3.7、Qwen3.6、Qwen3.5、Qwen3-VL、Qwen3、GLM（阿里云直供）、Kimi（阿里云直供）系列模型，其中 kimi-k3.1-pro 和 kimi-k3 不支持该参数。相关文档：[限制思考长度](https://help.aliyun.com/zh/model-studio/deep-thinking#e7c0002fe4meu)。
+思考过程的最大 Token 数。适用于 `qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`，以及Qwen3.7、Qwen3.6、Qwen3.5、Qwen3-VL、Qwen3、GLM（阿里云直供）、Kimi（阿里云直供）系列模型，其中 kimi-k3.1-pro 和 kimi-k3 不支持该参数。相关文档：[限制思考长度](https://help.aliyun.com/zh/model-studio/deep-thinking#e7c0002fe4meu)。
 
 上述型号的默认值为模型最大思维链长度，请参见：模型列表
 
@@ -854,7 +854,7 @@ glm-5.3 系列模型始终开启思考，`enable_thinking` 仅支持 `true`，�
 
 `minimal` 映射为 `low`，`medium` 和 `xhigh` 映射为 `high`，`ultra` 映射为 `max`。
 
-**`qwen4-max-preview`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`：默认值为**`xhigh`
+**`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`：默认值为**`xhigh`
 
 可选值：
 
@@ -866,7 +866,7 @@ glm-5.3 系列模型始终开启思考，`enable_thinking` 仅支持 `true`，�
 
 > 设置上述可选值及映射值以外的值将会报错。
 
-**重要：**`qwen4-max-preview`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`不支持 reasoning\_effort 与 thinking\_budget 同时设置，同时设置会报错。但两者支持互转：
+**重要：**`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`不支持 reasoning\_effort 与 thinking\_budget 同时设置，同时设置会报错。但两者支持互转：
 
 -   未设置 thinking\_budget 时，reasoning\_effort 档位自动映射 thinking\_budget：`low` 对应 4096，`medium` 对应 16384，`xhigh` 对应 262144。
 -   未设置 reasoning\_effort 时，thinking\_budget 自动映射回 reasoning\_effort：0~4096 对应 `low`，4097~16384 对应 `medium`，16385~262144 对应 `xhigh`。
@@ -884,7 +884,7 @@ glm-5.3 系列模型始终开启思考，`enable_thinking` 仅支持 `true`，�
 
 **Qwen系列支持列表：**
 
--   qwen-max系列：qwen4-max-preview、qwen3.8-max系列、qwen3.7-max系列的文本模态
+-   qwen-max系列：qwen3.8-max系列、qwen3.7-max系列的文本模态
 -   qwen-plus系列：qwen3.7-plus系列、qwen3.6-plus系列的文本模态，以及qwen3.5-plus系列的全模态
 -   qwen-flash系列：qwen3.8-flash系列、qwen3.7-flash系列、qwen3.6-flash系列、qwen3.5-flash系列的全模态
 

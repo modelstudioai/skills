@@ -1338,6 +1338,8 @@ curl -X GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{ta
 -   计费详情请参见[模型调用计费](raw/model-user-guide/test-1/model-pricing.md)。
 -   限流详情请参见[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)。
 
+> 调用万相模型时，账户需有可用余额。
+
 ## API文档
 
 [万相3.0-视频生成 API参考](raw/model-api-reference/video-generation-api/wan-api-reference/wan3-video-generation-api-reference.md)

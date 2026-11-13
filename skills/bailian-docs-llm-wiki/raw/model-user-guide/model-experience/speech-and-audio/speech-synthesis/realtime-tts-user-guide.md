@@ -8,7 +8,7 @@
 
 -   **多语言与方言**：根据目标语言选择模型和音色，也可通过指令指定方言。参见[方言](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#tts_rt_dialect_h3)。
 -   **表现力控制**：通过自然语言指令调整语速、情感等表达，或在文本中插入情感与富语言标签。参见[指令控制](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#12884a10929p9)和[情感与富语言标签](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#rt_emtag_h3)。
--   **自定义音色**：通过[声音复刻](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-cloning-user-guide.md)从音频样本创建音色，或通过[声音设计](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-design-user-guide.md)使用文字描述创建音色。
+-   **自定义音色**：通过[音色复刻](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-cloning-user-guide.md)从音频样本创建音色，或通过[音色设计](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-design-user-guide.md)使用文字描述创建音色。
 -   **精细控制与公式朗读**：使用 [SSML 与 LaTeX](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/ssml-latex-user-guide.md)控制停顿、发音等效果，或将公式转换为语音。
 -   **音频控制**：可调节语速、语调、音量和码率，输出 PCM、WAV、MP3、Opus 等主流音频格式，最高支持 48 kHz 采样率。具体取值与支持范围以对应 API 参数说明为准。
 
@@ -223,7 +223,7 @@ with open("output.mp3", "wb") as audio:
 
 通过 `instruction` 参数，用自然语言说明要合成的语种，描述语速、情感或说话方式，控制合成语音的表现。
 
-**说明**如需创建具有特定性别、年龄或音色特质的新音色，或参考声音描述的编写建议与示例，请参见[声音设计](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-design-user-guide.md)。
+**说明**如需创建具有特定性别、年龄或音色特质的新音色，或参考声音描述的编写建议与示例，请参见[音色设计](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-design-user-guide.md)。
 
 #### Qwen-Audio-TTS
 
@@ -532,7 +532,7 @@ Qwen3-TTS
 
 在当前会话中继续发送 `input_text_buffer.append`。根据会话模式，由服务端触发合成或发送 `input_text_buffer.commit`；全部文本发送完毕后再发送 `session.finish` 结束会话。
 
-SDK 对象池的配置与完整示例请参见[语音合成高并发最佳实践](raw/model-user-guide/use-cases/tts-high-concurrency-best-practices.md)。Qwen3-TTS 的会话流程请参见 [WebSocket API](raw/_short/interactive-process-of-qwen-tts-realtime-synthes-4a35095f0ac8788f.md)。
+SDK 对象池的配置与完整示例请参见[语音合成最佳实践](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/tts-high-concurrency-best-practices.md)。Qwen3-TTS 的会话流程请参见 [WebSocket API](raw/_short/interactive-process-of-qwen-tts-realtime-synthes-4a35095f0ac8788f.md)。
 
 Qwen-Audio-TTS、CosyVoice、Sambert 任务结束后 60 秒内没有新任务时，连接会自动断开。连接已关闭或任务状态异常时，应重新建立连接。
 
@@ -542,7 +542,7 @@ Qwen-Audio-TTS、CosyVoice、Sambert 任务结束后 60 秒内没有新任务时
 
 ### 高并发最佳实践
 
-通过对象池复用合成对象与连接，并按业务需求配置并发、预热和异常处理，具体请参见[语音合成高并发最佳实践](raw/model-user-guide/use-cases/tts-high-concurrency-best-practices.md)。
+通过对象池复用合成对象与连接，并按业务需求配置并发、预热和异常处理，具体请参见[语音合成最佳实践](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/tts-high-concurrency-best-practices.md)。
 
 ## 支持模型
 
@@ -574,7 +574,7 @@ Qwen-Audio-TTS、CosyVoice、Sambert 任务结束后 60 秒内没有新任务时
 
 ### 使用复刻音色生成的音频无声音如何排查？
 
-确认 `voice` 为创建成功的音色 ID，创建音色时的 `target_model` 与合成时的 `model` 一致。音色状态、源音频要求及质量建议请参见[声音复刻](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-cloning-user-guide.md)。
+确认 `voice` 为创建成功的音色 ID，创建音色时的 `target_model` 与合成时的 `model` 一致。音色状态、源音频要求及质量建议请参见[音色复刻](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-cloning-user-guide.md)。
 
 ### 为什么语音合成的实际时长与 WAV 文件显示的时长不一致？
 
@@ -608,7 +608,7 @@ Qwen-Audio-TTS、CosyVoice、Sambert 任务结束后 60 秒内没有新任务时
 
 ### 语音合成耗时较长是什么原因？
 
-分段输入时，过长的文本发送间隔会增加合成总时长；首次调用还包含 WebSocket 建连开销。高并发场景下的预热与耗时统计，请参见[语音合成高并发最佳实践](https://help.aliyun.com/zh/model-studio/tts-high-concurrency-best-practices#warm-up)。
+分段输入时，过长的文本发送间隔会增加合成总时长；首次调用还包含 WebSocket 建连开销。高并发场景下的预热与耗时统计，请参见[语音合成最佳实践](https://help.aliyun.com/zh/model-studio/tts-high-concurrency-best-practices#warm-up)。
 
 ### 如何限制 API Key 仅用于语音合成服务（权限隔离）？
 

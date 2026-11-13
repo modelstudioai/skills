@@ -134,7 +134,7 @@ Query String
 
 GET
 
-`page_num`
+`page_number`（从 1 开始）
 
 `page_size`
 
@@ -144,9 +144,9 @@ Query String
 
 POST
 
-`page_num`
+`pageNum`（从 1 开始）
 
-`page_size`
+`pageSize`
 
 Request Body
 

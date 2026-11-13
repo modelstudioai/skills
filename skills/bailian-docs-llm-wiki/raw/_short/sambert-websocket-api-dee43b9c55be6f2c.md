@@ -85,7 +85,7 @@ string
 
 **重要**Sambert 不支持流式输入（streaming 为 `out` 而非 duplex），所有待合成文本必须在 run-task 事件中一次性发送。不支持 continue-task 和 finish-task 指令。
 
-通过 Java SDK 使用对象池并发调用 Sambert 的方法和完整示例，请参见[语音合成高并发最佳实践](https://help.aliyun.com/zh/model-studio/tts-high-concurrency-best-practices#sambert-java)。直接使用 WebSocket 协议时，可按上述流程复用连接。
+通过 Java SDK 使用对象池并发调用 Sambert 的方法和完整示例，请参见[语音合成最佳实践](https://help.aliyun.com/zh/model-studio/tts-high-concurrency-best-practices#sambert-java)。直接使用 WebSocket 协议时，可按上述流程复用连接。
 
 ## 示例代码
 

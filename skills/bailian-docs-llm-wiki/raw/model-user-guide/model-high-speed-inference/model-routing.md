@@ -62,6 +62,8 @@
 
 部署成功后系统生成全局唯一的 `model-code`（形如 `auto-model-XXXXXXXX`），客户端以该 `model-code` 发起调用。`model-code` 删除后不复用。
 
+除控制台外，也可通过 OpenAPI 创建智能路由，接口说明见[智能路由 API 参考](raw/model-api-reference/model-production/model-routing-api-reference.md)。
+
 ### 路由策略
 
 路由策略决定每条请求由备选模型集内哪个模型执行。两种策略均按请求内容动态匹配（非固定路由），创建时选定。
@@ -554,13 +556,47 @@ token 偏置
 
 ### 修改路由配置
 
-在详情页“路由配置”区域点击“编辑”，可修改路由模型版本、路由策略与备选模型。切换路由版本时备选模型集随之变更，修改后几分钟内生效、不影响线上请求。
+在详情页“路由配置”区域点击“编辑”，可修改路由模型版本、路由策略与备选模型。切换路由版本时备选模型集随之变更，修改后几分钟内生效、不影响线上请求。也可通过更新模型部署任务接口（`PUT /api/v1/deployments/{deployed_model}/update`）编辑，语义为完整替换——`routing_config` 三字段全部必填。
 
 选定具体版本后，线上业务的路由行为将保持长期稳定；升级版本前请务必做全面评估，避免对业务产生影响。当前版本为 `model-router-2026-0908`。路由版本默认不自动更新。
 
 ### 删除服务
 
-在专属部署列表中删除智能路由服务。`model-code` 删除后不复用，需重新创建。
+在专属部署列表中删除智能路由服务，或调用删除智能路由服务接口（`DELETE /api/v1/deployments/{deployed_model}`）直接删除。`model-code` 删除后不复用，需重新创建。
+
+### 通过 API 管理
+
+除控制台外，智能路由服务的创建、查询详情、列举、编辑路由配置与删除均支持通过 OpenAPI 完成（仅支持后付费），完整接口说明见[智能路由 API 参考](raw/model-api-reference/model-production/model-routing-api-reference.md)。支持的接口：
+
+功能
+
+接口
+
+获取模型路由版本列表
+
+`GET /api/v1/deployments/model-routing/versions`
+
+创建智能路由服务
+
+`POST /api/v1/deployments`
+
+列举智能路由服务
+
+`GET /api/v1/deployments?plan=mr`
+
+查询智能路由服务详情
+
+`GET /api/v1/deployments/{deployed_model}`
+
+编辑路由配置
+
+`PUT /api/v1/deployments/{deployed_model}/update`
+
+删除智能路由服务
+
+`DELETE /api/v1/deployments/{deployed_model}`
+
+创建或编辑前，先通过「获取模型路由版本列表」接口查询可选的路由模型版本、策略与备选模型。智能路由不支持扩缩容、启停、限流配置与改名等算力类操作。
 
 ## 智能路由效果
 

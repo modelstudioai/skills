@@ -19,7 +19,7 @@ Qwen-Audio-Realtime 用于实时语音对话。模型支持文本和流式音频
     Client SDK 支持 Android、iOS、HarmonyOS、Windows、macOS、Electron 和 Linux。接入文档提供各平台的下载入口和 API 参考。
     
 
-三种协议均可用于 Token Plan。可用模型和地域以 [Token Plan 个人版](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview#tpp01-h-models)及[团队版](https://help.aliyun.com/zh/model-studio/token-plan-team-overview#tpt01-h-models)的说明为准。
+三种协议均可用于 Token Plan。可用模型和地域以 [Token Plan 个人版](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview#tppo-h-models)及[团队版](https://help.aliyun.com/zh/model-studio/token-plan-team-overview#tpto-h-models)的说明为准。
 
 ## 事件及其他参考
 

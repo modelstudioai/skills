@@ -1,10 +1,10 @@
-# 声音设计
+# 音色设计
 
 通过自然语言描述创建自定义音色，试听预览后用于语音合成。
 
-声音设计适用于快速原型验证、创意内容生产、游戏角色配音等场景。
+音色设计适用于快速原型验证、创意内容生产、游戏角色配音等场景。
 
-**说明**创建音色无需提供音频样本。如需根据已有音频样本还原其声音，请使用[声音复刻](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-cloning-user-guide.md)。
+**说明**创建音色无需提供音频样本。如需根据已有音频样本还原其声音，请使用[音色复刻](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-cloning-user-guide.md)。
 
 ## 准备工作
 
@@ -68,7 +68,7 @@ with open("output.wav", "wb") as f:
 
 运行示例后，`preview.wav` 为预览音频，`output.wav` 为合成音频。保存打印的音色 ID，后续可使用该 ID 调用语音合成。
 
-HTTP 请求示例、可选参数和返回字段请参见[声音设计 API 参考](raw/model-api-reference/voice-customization-api-directory/voice-design-api-references.md)；合成参数请参见 [Qwen-Audio-TTS Python SDK](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-python-sdk#h3-cv-params)。
+HTTP 请求示例、可选参数和返回字段请参见[音色设计 API 参考](raw/model-api-reference/voice-customization-api-directory/voice-design-api-references.md)；合成参数请参见 [Qwen-Audio-TTS Python SDK](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-python-sdk#h3-cv-params)。
 
 ## 声音描述指南
 
@@ -132,7 +132,7 @@ HTTP 请求示例、可选参数和返回字段请参见[声音设计 API 参考
 -   **查询音色详情**：查看音色绑定的模型、状态等信息。
 -   **删除音色**：删除不再使用的音色，释放配额。
 
-接口与参数说明请参见[声音设计 API 参考](raw/model-api-reference/voice-customization-api-directory/voice-design-api-references.md)。
+接口与参数说明请参见[音色设计 API 参考](raw/model-api-reference/voice-customization-api-directory/voice-design-api-references.md)。
 
 ## 支持模型
 
@@ -143,13 +143,13 @@ HTTP 请求示例、可选参数和返回字段请参见[声音设计 API 参考
 -   **CosyVoice**：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-plus、cosyvoice-v3-flash
     
 
-**说明**CosyVoice 声音设计基于 FunAudioGen-VD 模型能力。
+**说明**CosyVoice 音色设计基于 FunAudioGen-VD 模型能力。
 
 ## 配额与限制
 
--   **音色数量**：每个阿里云百炼账号的自定义音色总数上限为 1000 个。声音复刻和声音设计共用该配额，不按模型分别计算。
+-   **音色数量**：每个阿里云百炼账号的自定义音色总数上限为 1000 个。音色复刻和音色设计共用该配额，不按模型分别计算。
     
-    **说明**达到上限后，新的声音复刻或声音设计创建请求将失败。需先删除不再使用的音色，释放配额后再创建。
+    **说明**达到上限后，新的音色复刻或音色设计创建请求将失败。需先删除不再使用的音色，释放配额后再创建。
     
 -   **声音描述**：`voice_prompt` 仅支持中文和英文，最大长度为 500 个字符。
     

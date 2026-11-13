@@ -21,7 +21,7 @@ Qwen-LiveTranslate-Realtime 可实时翻译语音，并结合画面辅助理解�
 
 WebRTC 和 AOQ 的画面输入取决于所用型号和场景。
 
-三种协议均可用于 Token Plan。可用模型和地域以 [Token Plan 个人版](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview#tpp01-h-models)及[团队版](https://help.aliyun.com/zh/model-studio/token-plan-team-overview#tpt01-h-models)的说明为准。
+三种协议均可用于 Token Plan。可用模型和地域以 [Token Plan 个人版](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview#tppo-h-models)及[团队版](https://help.aliyun.com/zh/model-studio/token-plan-team-overview#tpto-h-models)的说明为准。
 
 ## 事件及其他参考
 

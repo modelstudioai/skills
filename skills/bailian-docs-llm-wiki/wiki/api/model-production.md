@@ -1,117 +1,81 @@
 # model production
 
-`model production` 是百炼平台面向模型全生命周期管理的核心能力集合，覆盖从模型微调（Fine-tuning）、压缩（Compression）、导入（Import）到部署（Deployment）及吞吐预留（Throughput Reservation）的完整生产链路。所有操作均通过标准化 RESTful API 提供，支持文本、图像、视频、语音等多模态模型，适用于开发者构建高性能、可扩展的 AI 服务。
+`model production` 指在百炼平台完成模型的全生命周期管理，涵盖微调训练、导入、压缩、部署及智能路由等核心环节。该流程支持文本、图像、视频、语音等多种模态，面向开发者提供标准化 API 接口与明确的地域/权限约束。所有操作均需通过百炼 API Key 鉴权，并严格遵循各环节的地域可用性与计费模式要求。
 
 ## 支持的模型/功能
 
-- **微调（Fine-tuning）**：支持文本生成、图像生成、视频生成、语音合成（CosyVoice）四类任务。各模态对应专属 API，如文本生成使用 `/api/v1/fine-tunes` [文本生成-创建调优任务](../../raw/_short/create-fine-tuning-job-api-ec89a5612f9a9ba9.md)，图像生成使用同路径但不同 `model` 和 `hyper_parameters` 配置 [图像生成-创建调优任务](../../raw/_short/image-generation-create-fine-tuning-job-api-ae5bdcbb493e7a3e.md)。
-- **模型导入**：支持将 OSS 中存储的全参或 LoRA 调优模型文件导入平台，仅限华北2（北京）地域 [模型导入](../../raw/model-api-reference/model-production/fine-tuning-jobs-api/model-fine-tuning-text-generation-api/custom-models-api.md)。
-- **模型压缩**：当前仅支持对 `qwen3.5-flash-2026-02-23` 全参调优模型进行量化压缩，不支持 LoRA 或已量化模型 [模型压缩](../../raw/model-api-reference/model-production/model-compression-api-overview/model-compression-api.md)。
-- **部署方式**：支持多种计费与资源模型：
-  - `mu`（模型单元）、`dtu`（独占吞吐）、`ptu_v2`（预置吞吐）、`lora`（LoRA 共享部署）；
-  - DTU 仅支持预付费且需业务空间专属域名；PTU 支持北京与新加坡双地域；MU/LORA 当前仅限北京 [模型部署 API 参考](../../raw/model-api-reference/model-production/deployments-api/model-deployment-api-reference.md)。
-- **吞吐预留**：即原 TPM 预留，通过 `plan=ptu` 创建，支持 `ptu_fast`（高速）与 `ptu_default`（标速）两档性能，后者支持 8 小时时段预付费 [吞吐预留 API参考](../../raw/model-api-reference/model-production/throughput-reservation-api.md)。
-
-> **注意**：文档 15（文本生成-部署模型）称 PTU 等部署方式支持“北京与新加坡”，而文档 18（视频生成-部署模型）、22（图像生成-部署模型）、21（语音合成-部署模型）均明确限定“仅在华北2（北京）地域开放”。实际部署能力以具体模态的部署文档为准——**视频、图像、语音三类模型的部署 API 目前仅在北京可用，不支持新加坡地域**。
+- **微调训练**：支持文本生成（SFT/CPT/DPO）、图像生成（文生图/图生图）、视频生成（首帧/首尾帧图生视频）、语音合成（CosyVoice）四类任务，统一使用 `POST /api/v1/fine-tunes` 接口提交；强化学习（RL）与 OPD 蒸馏训练需通过 DashScope SDK/CLI 提交，**不支持 REST API** [文本生成-创建调优任务](../../raw/_short/create-fine-tuning-job-api-ec89a5612f9a9ba9.md)。
+- **模型导入**：支持将 OSS 中的全参或 LoRA 调优模型文件导入平台，仅限华北2（北京）地域 [模型导入](../../raw/model-api-reference/model-production/fine-tuning-jobs-api/model-fine-tuning-text-generation-api/custom-models-api.md)。
+- **模型压缩**：当前仅支持对 `qwen3.5-flash-2026-02-23` 基础模型的全参调优产出进行量化压缩，LoRA 模型和已量化模型不支持 [模型压缩](../../raw/model-api-reference/model-production/model-compression-api-overview/model-compression-api.md)。
+- **智能路由**：提供效果优先（`EFFECT_FIRST`）与成本优先（`COST_FIRST`）两种策略，动态调度至最优备选模型（如 `qwen3.8-flash`, `qwen3.7-plus`），仅支持后付费 [智能路由 API 参考](../../raw/model-api-reference/model-production/model-routing-api-reference.md)。
+- **部署方式**：覆盖 DTU（独占吞吐，预付费）、MU（模型单元）、PTU（预置吞吐，北京/新加坡）、LoRA 共享部署（按 Token 计费）等多种模式，不同模式适用地域与参数结构差异显著。
 
 ## 关键参数
 
-| 参数 | 类型 | 必填 | 说明 | 示例值 |
-|------|------|------|------|--------|
-| `model_name` | string | 是 | 基础模型 ID（微调时）或微调/导入产出的模型 ID（部署时）；非显示名 | `"qwen3-14b"`, `"wan2.7-i2v-ft-202511111122-xxxx"` |
-| `plan` | string | 是 | 部署方案：`mu`/`dtu`/`ptu_v2`/`lora`/`cu`；不同模态支持范围不同 | `"lora"`, `"dtu"` |
-| `training_type` | string | 是（微调） | 微调方法：文本支持 `sft`/`dpo_lora` 等；图像/视频/语音当前仅支持 `efficient_sft` | `"sft"`, `"efficient_sft"` |
-| `hyper_parameters` | object | 是（微调） | 模型/任务强相关：文本需 `n_epochs`/`batch_size`/`max_length`；图像需 `max_steps`/`generation_type`；语音需分 `lm_*`/`fm_*` 子网络参数 | 见各模态文档 |
-| `ptu_capacity` / `dtu_capacity` / `capacity` | object / integer | 是（部署） | 吞吐/实例数量配置：`ptu_capacity={input_tpm: 10000, output_tpm: 1000}`；`dtu_capacity` 同结构；`capacity` 为整数（如 `1`） | `{ "input_tpm": 10000 }`, `1` |
-| `service_tier` | string | 否（PTU） | PTU 性能档位：`ptu_fast`（默认）或 `ptu_default` | `"ptu_default"` |
+- **地域约束**：绝大多数生产 API（微调、导入、部署、压缩）**仅在华北2（北京）开放**；PTU 与智能路由支持北京+新加坡；DTU 部署必须使用业务空间专属域名（`{WorkspaceId}.{region}.maas.aliyuncs.com`）且仅限北京。
+- **模型标识**：
+  - 微调产出模型名取自响应体 `output.finetuned_output`；
+  - 导入模型名取自 `output.model_name`；
+  - 部署时 `model_name` 必须为上述生成的完整 ID，**不可用基础模型名**（如 `qwen3-14b`）。
+- **部署必填字段**：
+  - `plan`：决定计费与资源模型（`dtu`/`mu`/`lora`/`ptu`/`mr`）；
+  - `charge_type`：DTU 固定为 `pre_paid`，智能路由与 MU/PTU 多为 `post_paid`；
+  - `capacity`：图像/视频/语音部署需显式指定（推荐 1），DTU 则需 `dtu_capacity.{input/output_tpm}`；
+  - `aigc_config`：视频生成部署必需，控制提示词来源与模板 [视频生成-部署模型](../../raw/_short/video-generation-deploy-model-api-83485cc2bfb54b4c.md)。
+- **超参数共性**：`n_epochs`（文本/语音）、`max_steps`（图像）、`batch_size` 等直接影响训练耗时与费用，文档中均标注“**重要**该参数影响[训练计费](raw/model-user-guide/test-1/model-training-and-deployment-billing.md)”。
 
 ## 使用方式
 
-1. **准备环境**：  
-   - 获取并配置 API Key（仅限目标地域），如北京地域必须使用北京 API Key [获取与配置 API Key](../../raw/model-api-reference/preparations/get-api-key.md)；  
-   - 确认账号权限（RAM 用户需授予 `AliyunBailianFullAccess` 或最小化策略）；  
-   - OSS 导入需提前完成 Bucket 授权与文件上传。
+1. **准备环境**：获取并配置北京地域的 API Key，确认子账号已授予 `model:Train`, `model:Deploy`, `model:Invoke` 权限。
+2. **训练/导入模型**：
+   - 文本/图像/视频/语音：调用对应 `/api/v1/fine-tunes` 接口创建任务 → 轮询 `/api/v1/fine-tunes/{job_id}` 直至 `status=SUCCEEDED` → 提取 `output.finetuned_output`；
+   - 自定义模型：调用 `/api/v1/custom_models/import` → 轮询至 `status=SUCCESSED` → 提取 `output.model_name`。
+3. **（可选）压缩模型**：仅限 `qwen3.5-flash-2026-02-23` 全参调优模型，调用 `/api/v1/fine-tunes/compress/jobs` → 轮询至 `SUCCEEDED` → 提取 `output.quantized_output`。
+4. **部署服务**：
+   - 确认目标部署方式（如 `lora` for LoRA, `mu` for CosyVoice, `dtu` for dedicated GPU）；
+   - 构造 `POST /api/v1/deployments` 请求体，填入 `model_name`, `plan`, `capacity`（或 `dtu_capacity`）等必填字段；
+   - 对于 PTU/智能路由，注意切换域名（`dashscope-intl.aliyuncs.com` 或 `maas.aliyuncs.com`）；
+   - 轮询 `/api/v1/deployments/{deployed_model}` 直至 `status=RUNNING`。
+5. **调用服务**：使用 `deployed_model` 作为模型 ID，通过标准推理接口（如 `/api/v1/services/...`）发起请求。
 
-2. **微调流程（以文本为例）**：  
-   ```bash
-   # 1. 创建任务（北京地域）
-   curl -X POST "https://dashscope.aliyuncs.com/api/v1/fine-tunes" \
-     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
-     -H "Content-Type: application/json" \
-     -d '{
-           "model": "qwen3-14b",
-           "training_type": "sft",
-           "hyper_parameters": {
-             "n_epochs": 3,
-             "batch_size": 32,
-             "max_length": 8192
-           }
-         }'
-   # 2. 轮询状态（使用 job_id）
-   curl "https://dashscope.aliyuncs.com/api/v1/fine-tunes/{job_id}" \
-     -H "Authorization: Bearer $DASHSCOPE_API_KEY"
-   # 3. 成功后取 output.finetuned_output 部署
-   ```
-
-3. **部署流程（通用）**：  
-   - 调用 `/api/v1/deployments`，传入 `model_name`、`plan` 及对应容量参数；  
-   - 轮询 `/api/v1/deployments/{deployed_model}` 直至 `status == "RUNNING"` [部署模型管理](../../raw/model-api-reference/model-production/deployments-api/get-deployment-api.md)；  
-   - 使用 `output.deployed_model` 作为模型调用标识。
-
-4. **吞吐预留（PTU）**：  
-   - 使用 `POST /api/v1/deployments` + `plan=ptu` 创建；  
-   - `ptu_capacity` 单位为 kTPM（1000 [Token](../concepts/token.md)s/分钟）；  
-   - 注意 HTTP 200 不代表操作成功，必须检查响应中 `output.operation_status` 字段 [吞吐预留 API参考](../../raw/model-api-reference/model-production/throughput-reservation-api.md)。
+> **注意**：文档 17（文本部署）与文档 18（图像部署）均声明“仅在华北2（北京）地域开放”，但文档 25（模型部署 API 参考）明确指出“PTU 等部署方式支持北京与新加坡地域”。此处存在矛盾——实际应以具体部署方式为准：PTU 和智能路由确支持新加坡，而 MU/DTU/LoRA 部署仍仅限北京。开发者需根据 `plan` 值选择对应地域与域名。
 
 ## 限制和注意事项
 
-- **地域限制严格**：  
-  - 微调（所有模态）、模型导入、模型压缩、视频/图像/语音部署 API **仅限华北2（北京）**；  
-  - 文本部署、PTU 吞吐预留支持北京与新加坡；DTU 部署仅限北京（需业务空间专属域名）。
-
-- **认证与域名**：  
-  - API Key 与地域强绑定，不可跨地域复用；  
-  - DTU 部署必须使用业务空间专属域名（如 `ws-xxx.cn-beijing.maas.aliyuncs.com`），不可用 `dashscope.aliyuncs.com`；  
-  - 新加坡地域部署需使用 `dashscope-intl.aliyuncs.com`。
-
-- **关键校验逻辑**：  
-  - 所有异步操作（微调、部署、吞吐预留）返回 HTTP 200 仅代表请求接收成功，**必须检查响应体中的 `output.status` 或 `output.operation_status` 字段**；  
-  - 微调任务需确认 `status == "SUCCEEDED"` 后再部署；部署任务需确认 `status == "RUNNING"` 后再调用；  
-  - 吞吐预留创建后，需通过 [查询容量操作](../../raw/model-api-reference/model-production/throughput-reservation-api.md#operation-query) 获取最终结果。
-
-- **模型与参数约束**：  
-  - CosyVoice 语音微调仅支持 `cosyvoice-v3-flash` 基准模型；  
-  - 模型压缩仅支持 `qwen3.5-flash-2026-02-23` 全参调优模型；  
-  - `ptu_default` 标速支持 8 小时时段预付费，`ptu_fast` 高速不支持；  
-  - `max_length`（文本）、`max_steps`（图像）、`n_epochs`（视频/语音）等参数直接影响训练费用与效果，需按文档推荐值谨慎设置。
+- **地域强绑定**：API Key、请求域名、OSS Bucket 地域必须一致。例如，北京 API Key 无法调用新加坡 `dashscope-intl.aliyuncs.com` 的微调接口；OSS 挂载训练集时，`region` 参数必须与 API Key 所属地域匹配 [语音合成（CosyVoice）-创建调优任务](../../raw/_short/voice-synthesis-create-fine-tuning-job-api-0ff3893c65aef5a2.md)。
+- **状态轮询必要性**：所有[异步任务](../concepts/asynchronous-task.md)（微调、导入、压缩、部署）均需主动轮询查询状态，HTTP 200 不代表任务成功，必须检查响应体 `output.status` 字段 [调优任务管理](../../raw/model-api-reference/model-production/fine-tuning-jobs-api/get-fine-tuning-job-api.md)。
+- **模型权限隔离**：智能路由返回的 `supported_candidate_model_ids` 仅为平台能力列表，**不保证当前业务空间已获调用授权**；无权限模型会在路由时被实时过滤，调用失败而非静默降级。
+- **部署命名冲突**：`suffix` 参数用于避免部署标识重复，若省略则由系统自动生成；但 `display_name`（文本部署）或 `name`（语音部署）为控制台展示名，不影响调用标识。
+- **DTU 特殊要求**：必须使用业务空间专属域名与对应 Workspace API Key；续费与自动续费变更**仅支持控制台操作**，API 不提供相关接口 [模型部署 API 参考](../../raw/model-api-reference/model-production/deployments-api/model-deployment-api-reference.md)。
 
 ## 来源文档
 
-- [吞吐预留 API参考](../../raw/model-api-reference/model-production/throughput-reservation-api.md)
+- [智能路由 API 参考](../../raw/model-api-reference/model-production/model-routing-api-reference.md)
 - [模型调优](../../raw/model-api-reference/model-production/fine-tuning-jobs-api.md)
 - [文本生成](../../raw/model-api-reference/model-production/fine-tuning-jobs-api/model-fine-tuning-text-generation-api.md)
-- [文本生成-创建调优任务](../../raw/_short/create-fine-tuning-job-api-ec89a5612f9a9ba9.md)
 - [模型导入](../../raw/model-api-reference/model-production/fine-tuning-jobs-api/model-fine-tuning-text-generation-api/custom-models-api.md)
-- [图像生成-创建调优任务](../../raw/_short/image-generation-create-fine-tuning-job-api-ae5bdcbb493e7a3e.md)
+- [文本生成-创建调优任务](../../raw/_short/create-fine-tuning-job-api-ec89a5612f9a9ba9.md)
 - [图像生成](../../raw/model-api-reference/model-production/fine-tuning-jobs-api/model-fine-tuning-image-generation-api.md)
+- [图像生成-创建调优任务](../../raw/_short/image-generation-create-fine-tuning-job-api-ae5bdcbb493e7a3e.md)
 - [视频生成](../../raw/model-api-reference/model-production/fine-tuning-jobs-api/model-fine-tuning-video-generation-api.md)
 - [视频生成-创建调优任务](../../raw/_short/video-generation-create-fine-tuning-job-api-2357b2afaa3e843c.md)
 - [语音合成](../../raw/model-api-reference/model-production/fine-tuning-jobs-api/model-fine-tuning-speech-synthesis-api.md)
-- [调优任务管理](../../raw/model-api-reference/model-production/fine-tuning-jobs-api/get-fine-tuning-job-api.md)
 - [语音合成（CosyVoice）-创建调优任务](../../raw/_short/voice-synthesis-create-fine-tuning-job-api-0ff3893c65aef5a2.md)
-- [模型部署](../../raw/model-api-reference/model-production/deployments-api.md)
+- [调优任务管理](../../raw/model-api-reference/model-production/fine-tuning-jobs-api/get-fine-tuning-job-api.md)
 - [Checkpoint 管理](../../raw/model-api-reference/model-production/fine-tuning-jobs-api/list-checkpoints-api.md)
-- [文本生成-部署模型](../../raw/model-api-reference/model-production/deployments-api/model-deployment-text-generation-api/create-deployment-api.md)
+- [模型部署](../../raw/model-api-reference/model-production/deployments-api.md)
 - [文本生成](../../raw/model-api-reference/model-production/deployments-api/model-deployment-text-generation-api.md)
 - [图像生成](../../raw/model-api-reference/model-production/deployments-api/model-deployment-image-generation-api.md)
-- [视频生成-部署模型](../../raw/_short/video-generation-deploy-model-api-83485cc2bfb54b4c.md)
+- [文本生成-部署模型](../../raw/model-api-reference/model-production/deployments-api/model-deployment-text-generation-api/create-deployment-api.md)
+- [图像生成-部署模型](../../raw/_short/image-generation-deploy-model-api-5319791597a105b6.md)
 - [视频生成](../../raw/model-api-reference/model-production/deployments-api/model-deployment-video-generation-api.md)
+- [视频生成-部署模型](../../raw/_short/video-generation-deploy-model-api-83485cc2bfb54b4c.md)
 - [语音合成](../../raw/model-api-reference/model-production/deployments-api/model-deployment-speech-synthesis-api.md)
 - [语音合成-部署模型](../../raw/model-api-reference/model-production/deployments-api/model-deployment-speech-synthesis-api/tts-deploy-model-api.md)
-- [图像生成-部署模型](../../raw/_short/image-generation-deploy-model-api-5319791597a105b6.md)
-- [模型压缩](../../raw/model-api-reference/model-production/model-compression-api-overview.md)
-- [模型压缩](../../raw/model-api-reference/model-production/model-compression-api-overview/model-compression-api.md)
+- [吞吐预留 API参考](../../raw/model-api-reference/model-production/throughput-reservation-api.md)
 - [部署模型管理](../../raw/model-api-reference/model-production/deployments-api/get-deployment-api.md)
 - [模型部署 API 参考](../../raw/model-api-reference/model-production/deployments-api/model-deployment-api-reference.md)
+- [模型压缩](../../raw/model-api-reference/model-production/model-compression-api-overview.md)
+- [模型压缩](../../raw/model-api-reference/model-production/model-compression-api-overview/model-compression-api.md)
 
 

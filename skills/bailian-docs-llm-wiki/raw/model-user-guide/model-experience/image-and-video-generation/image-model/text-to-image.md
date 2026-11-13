@@ -546,6 +546,13 @@ dashscope image-synthesis create -m qwen-image-3.0-pro -p "一只可爱的猫" -
     -   **内容安全审核**：所有 `prompt` 和 `negative_prompt` 都会经过内容安全审核。若输入内容不合规，请求将被拦截并返回 `DataInspectionFailed` 错误。
     -   **生成内容的版权与合规风险**：请确保您的提示词内容符合相关法律法规。生成包含品牌商标、名人肖像、受版权保护的 IP 形象等内容可能涉及侵权风险，请您自行评估并承担相应责任。
 
+## 计费与限流
+
+-   计费详情请参见[模型调用计费](raw/model-user-guide/test-1/model-pricing.md)。
+-   限流详情请参见[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)。
+
+> 调用万相模型时，账户需有可用余额。
+
 ## API文档
 
 -   [千问-图像生成与编辑](raw/model-api-reference/image-generation/qwen-image-api-reference/qwen-image-generation-and-editing-api-reference.md)
