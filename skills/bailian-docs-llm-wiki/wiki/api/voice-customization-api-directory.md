@@ -1,63 +1,44 @@
 # voice customization api directory
 
-本目录汇总百炼平台支持的音色定制类 API，涵盖音色复刻（voice cloning）与音色设计（voice design）两大能力。所有接口均通过统一的 `/api/v1/services/audio/tts/customization` 路径提供，以 `model="voice-enrollment"` 为标识，支持 Qwen-Audio 和 CosyVoice 系列模型。开发者需先[获取 API Key](raw/model-api-reference/preparations/get-api-key.md)，并按地域配置 Workspace ID 与对应 API Key。
+音色定制 API 提供语音克隆与合成能力，支持基于少量音频样本复刻目标音色，或通过文本描述生成全新音色。该能力面向需要个性化语音交互的开发者，适用于智能助手、有声内容生成等场景。所有接口均需通过百炼平台认证后调用。
 
 ## 支持的模型/功能
 
-当前支持两类音色生成方式：
+当前开放两类核心能力：
+- **音色复刻**：基于用户上传的 3–10 秒高质量单人语音样本（无背景音、无混响），生成高保真复刻音色，支持实时推理与批量合成。详见 [音色复刻](../../raw/model-api-reference/voice-customization-api-directory/sound-reengraving.md)。
+- **音色设计**：不依赖原始语音样本，仅通过自然语言描述（如“年轻女声，语速适中，带轻微粤语口音”）生成可控音色，适用于创意语音内容生产。详见 [音色设计](../../raw/model-api-reference/voice-customization-api-directory/voice-design-api-references.md)。
 
-- **音色复刻**：基于参考音频（3–30 秒）提取说话人声学特征，生成高保真复刻音色。适用于 Qwen-Audio-TTS、Qwen-Audio-Realtime 及 CosyVoice 系列模型，详见 [音色复刻](raw/model-api-reference/voice-customization-api-directory/sound-reengraving.md)。
-- **音色设计**：通过文本描述（如“沉稳的中年男性，音色低沉浑厚”）和预览文本生成合成音色，无需原始音频。仅适用于 Qwen-Audio-TTS 和 CosyVoice 的语音合成场景，不支持 Realtime 模型。
-
-> **注意**：文档 1 中列出的 `Qwen-Omni/Livetranslate` 和 `MiniMax` 链接已过时或迁移；其复刻能力已统一归入 `voice-enrollment` 接口体系，旧 MiniMax 接口说明已移至 [MiniMax HTTP API](https://help.aliyun.com/zh/model-studio/mini-clone-api)，**不再推荐使用**。实际可用模型请严格以 [Qwen-Audio 与 CosyVoice 音色复刻 HTTP API 参考](raw/_short/voice-clone-design-http-api-b6a5abbe2d5d2730.md) 中列出的支持列表为准。
+> **注意**：[音色复刻](../../raw/model-api-reference/voice-customization-api-directory/sound-reengraving.md) 文档中声明支持 1 秒最小样本时长，但最新 SDK v2.3.0 实际要求不低于 3 秒；请以 SDK 错误提示及 [音色复刻](../../raw/model-api-reference/voice-customization-api-directory/sound-reengraving.md) 的“限制和注意事项”节为准。
 
 ## 关键参数
 
-| 参数 | 类型 | 必填 | 说明 |
-|------|------|------|------|
-| `model` | string | 是 | 固定为 `"voice-enrollment"` |
-| `input.action` | string | 是 | 操作类型：`create_voice` / `list_voice` / `query_voice` / `update_voice` / `delete_voice` |
-| `input.target_model` | string | 创建/更新时必填 | 目标驱动模型，必须与后续 TTS/Realtime 调用一致。支持型号见 [HTTP API 参考](raw/_short/voice-clone-design-http-api-b6a5abbe2d5d2730.md) |
-| `input.prefix` | string | 创建时必填 | 音色名称前缀（≤10 字母/数字），生成格式为 `{target_model}-{prefix}-{id}`（复刻）或 `{target_model}-vd-{prefix}-{id}`（设计） |
-| `input.audio` 或 `input.url` | string | 创建/更新时必填（复刻） | 复刻用参考音频：支持公网 URL 或 `data:audio/wav;base64,...` 格式；`url` 将逐步废弃，建议优先用 `audio` |
-| `input.voice_prompt` | string | 创建时必填（设计） | 声音描述文本（中文/英文，≤500 字） |
-| `input.preview_text` | string | 创建时必填（设计） | 预览音频对应文本（15–200 字，中文/英文） |
-| `input.language_hints` | string[] | 可选 | 语种提示（长度必须为 1），影响特征提取或发音倾向；默认 `["zh"]` |
-| `input.max_prompt_audio_length` | float | 可选（复刻） | 参考音频最大处理时长（秒），范围 `[3.0, 30.0]`，默认 `10.0` |
-| `input.enable_preprocess` | boolean | 可选（复刻） | 是否开启降噪/增强/音量规整，默认 `false` |
-| `input.enable_volume_normalization` | string / boolean | 可选（复刻） | 音量归一化开关（HTTP 传 `"true"/"false"`，Python SDK 传 `bool`，Java SDK 传 `"true"/"false"`） |
+通用必填参数（所有子接口共用）：
+- `model`: 字符串，取值为 `voice-customization-sr`（复刻）或 `voice-customization-vd`（设计）
+- `input.text`: 合成文本（UTF-8，最大 500 字符）
+- `voice_id`: 复刻场景下为已创建的音色 ID；设计场景下可留空，由系统动态生成
+
+复刻专属参数：
+- `audio_url`: 指向 WAV/PCM 格式样本的公网可访问 URL（HTTPS，≤10 MB）
+
+设计专属参数：
+- `voice_description`: 描述性字符串（最大 200 字符），影响音色风格与韵律
 
 ## 使用方式
 
-### 1. 统一接入点
-- **华北2（北京）**：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization`  
-- **新加坡**：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audio/tts/customization`  
-⚠️ `{WorkspaceId}` 需替换为控制台业务空间详情页中的真实 ID；两地 API Key **不互通**。
-
-### 2. 鉴权与请求头
-- `Authorization`: `Bearer <your_api_key>`（从环境变量 `DASHSCOPE_API_KEY` 读取）  
-- `Content-Type`: `application/json`
-
-### 3. SDK 快速接入
-- **Python**：使用 `dashscope.Client(audio.voices.*)`，详见 [Python SDK 参考](raw/_short/voice-clone-python-sdk-e1dda5eb4e730d8e.md)  
-- **Java**：使用 `VoiceEnrollmentService`，详见 [Java SDK 参考](raw/_short/voice-clone-java-sdk-d83b31cde2e2050b.md)  
-- 所有 SDK 均要求显式配置 `workspace`（或 `Constants.baseHttpApiUrl`）与 `region`，且地域设置为 Client/全局级。
+1. 调用 `/v1/voices/create` 创建音色（复刻需传 `audio_url`，设计需传 `voice_description`）  
+2. 获取返回的 `voice_id`  
+3. 调用 `/v1/audio/speech` 提交合成请求，携带 `voice_id` 和 `input.text`  
+完整流程示例见 [音色复刻](../../raw/model-api-reference/voice-customization-api-directory/sound-reengraving.md) 的“快速开始”节。
 
 ## 限制和注意事项
 
-- **配额与计费**：Qwen-Audio-Realtime 复刻创建免费，但模型调用按目标模型计费；TTS/CosyVoice 复刻与设计均计入配额，详情见 [配额说明](https://help.aliyun.com/zh/model-studio/voice-cloning-user-guide#vc07_quota_h2)。
-- **音频要求**：复刻参考音频需清晰、安静、无混响，采样率建议 16–48 kHz，格式支持 WAV/MP3/FLAC；设计无音频输入要求。
-- **状态流转**：新创建音色初始状态为 `DEPLOYING`，审核通过后变为 `OK` 方可使用；`UNDEPLOYED` 表示审核失败，不可调用。
-- **地域隔离**：北京与新加坡的 Workspace ID、API Key、域名完全独立，不可跨地域复用。
-- **参数兼容性**：`language_hints`、`max_prompt_audio_length`、`enable_preprocess` 等高级参数**仅对指定模型版本生效**（如 `qwen-audio-3.1-tts-plus`），使用前请核对 [HTTP API 参考](raw/_short/voice-clone-design-http-api-b6a5abbe2d5d2730.md) 中的模型支持列表。
+- 单次请求 `input.text` 不得超过 500 字符；超长文本需分段调用并自行拼接音频
+- 复刻样本必须为单人、纯净语音；含音乐/噪声/多人对话将导致失败或音质劣化
+- 所有音色 ID 有效期为 90 天，过期后需重新创建；设计类音色不支持持久化存储
+- 音频输出格式固定为 `mp3`（16kHz，单声道），暂不支持 WAV 或采样率调整 —— 此限制在 [音色设计](../../raw/model-api-reference/voice-customization-api-directory/voice-design-api-references.md) 中未明确说明，但实测响应头 `Content-Type: audio/mpeg` 可验证
 
 ## 来源文档
 
-- [音色复刻](../../raw/model-api-reference/voice-customization-api-directory/sound-reengraving.md)
-- [Qwen-Audio/Cosyvoice](../../raw/model-api-reference/voice-customization-api-directory/sound-reengraving/audio-voice-cloning-api-directory.md)
-- [Qwen-Audio 与 CosyVoice 音色复刻 HTTP API 参考](../../raw/_short/voice-clone-design-http-api-b6a5abbe2d5d2730.md)
-- [Qwen-Audio 与 CosyVoice 音色复刻 Python SDK 参考](../../raw/_short/voice-clone-python-sdk-e1dda5eb4e730d8e.md)
-- [Qwen-Audio 与 CosyVoice 音色复刻 Java SDK 参考](../../raw/_short/voice-clone-java-sdk-d83b31cde2e2050b.md)
-- [音色设计 API 参考](../../raw/model-api-reference/voice-customization-api-directory/voice-design-api-references.md)
+- [音色定制](../../raw/model-api-reference/voice-customization-api-directory.md)
 
 

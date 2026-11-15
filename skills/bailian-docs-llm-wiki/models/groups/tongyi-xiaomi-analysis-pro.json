@@ -22,6 +22,7 @@
         {
           "priceUnit": "每百万tokens",
           "price": "1",
+          "ntmItemCode": "sfm_inferenceDomain_public_cn",
           "ntmAmountType": "input_token",
           "type": "input_token",
           "priceName": "输入"
@@ -29,6 +30,7 @@
         {
           "priceUnit": "每百万tokens",
           "price": "2.7",
+          "ntmItemCode": "sfm_inferenceDomain_public_cn",
           "ntmAmountType": "output_token",
           "type": "output_token",
           "priceName": "输出"
@@ -36,6 +38,7 @@
         {
           "priceUnit": "每百万tokens",
           "price": "0.2",
+          "ntmItemCode": "sfm_inferenceDomain_public_cn",
           "ntmAmountType": "input_token_cache",
           "type": "input_token_cache",
           "priceName": "输入（缓存命中）"

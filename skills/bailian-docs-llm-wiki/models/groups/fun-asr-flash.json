@@ -19,6 +19,7 @@
         {
           "priceUnit": "每秒",
           "price": "0.00022",
+          "ntmItemCode": "sfm_inferenceFunAudio_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "duration",
           "type": "content_duration",

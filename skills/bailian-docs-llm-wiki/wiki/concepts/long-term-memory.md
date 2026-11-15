@@ -1,50 +1,48 @@
 # 长期记忆
 
-长期记忆（Long Term Memory）是百炼平台提供的结构化、用户级记忆管理服务，支持开发者以编程方式持久化存储、智能抽取、精准检索和生命周期管理业务相关的事实、技能与用户画像信息。所有数据按 `user_id` 隔离，并可结合 `project_id` 进行二级分组，适用于构建具备持续认知能力的生产级 AI 应用。
+长期记忆（Long Term Memory, LTM）是百炼平台提供的**结构化、持久化、可检索的跨会话知识管理服务**，用于在智能体应用中持续积累和复用事实信息、用户特征与自动化技能，支撑上下文延续、个性化响应与行为演化能力。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **Agent 开发（Agent Context）**：在 Agent 的 `context_config` 中设置 `memory_type: "user"`，即可自动将用户级长期记忆注入推理上下文；调用时需在请求 Header 中携带 `X-User-ID`，否则降级为会话级短期记忆。该机制与 RAG、Connector 等上下文模块正交协同，共同增强 LLM 的环境感知能力。
+- **Managed Agents 场景**：作为可选但关键的组件，通过 `memory_store_id` 显式绑定到 Agent 实例。Memory Store 为托管 Agent 提供统一的记忆接入点，其底层由长期记忆（新）服务驱动；Agent 运行时自动将对话历史、工具调用结果等写入关联的 Memory Store，并在后续请求中按需注入上下文（受限于 32KB 会话内存上限）。
 
-- **Managed Agent / Sandbox / Flow Agent**：可通过 API 主动写入或检索记忆节点（如记录用户偏好、会议纪要流程、出差计划等），不依赖 Agent 自动触发；Sandbox Agent 可在 Python 代码中调用 Long Term Memory API 实现复杂记忆编排（例如：多轮对话后批量更新画像 + 触发技能同步）。
+- **Flow Agent 场景**：支持两种记忆路径：
+  - *旧版记忆（Legacy）*：通过 Flow Agent API 的 `/memory` 和 `/memory_nodes` 接口直接管理记忆体与片段，适用于存量应用迁移，但已标记为遗留方案；
+  - *新版记忆（推荐）*：在 Flow 编排中调用 `bailian.memory.add_async()` 或 `bailian.memory.search()` 等 SDK 方法（底层对接 `/add-async` 和 `/memory_nodes/search`），实现与 Managed Agent 一致的结构化记忆能力。
 
-- **独立记忆服务（API 直接调用）**：面向需要精细控制记忆生命周期的场景，提供完整 CRUD 接口：
-  - 同步写入（`/add`）：适用于低延迟事实记忆（`observation`）录入；
-  - 异步写入（`/add-async`）：推荐用于高精度技能抽取（`skill`）或用户画像联合生成；
-  - 检索（`/search`）：支持按类型（`observation`/`skill`）、相关性（`min_score`）、项目分组（`project_ids`）等多维过滤；
-  - 用户画像管理：通过预定义 `profile_schema` 驱动结构化抽取，结果严格遵循模板字段。
+- **Sandbox 场景**：开发者通过 `agentscope-runtime` SDK（如 `bailian.memory.add_async()`、`bailian.memory.search()`）直接集成长期记忆服务，完全自主控制写入时机、内容格式与检索策略，常用于构建需要精细记忆生命周期管理的复杂智能体（如客服知识沉淀、销售过程追踪）。
 
-> ⚠️ 注意：长期记忆与 Managed Agent 中的 `memory_store_id`（会话级内存）属不同抽象层——前者跨会话、跨 Agent、用户全局可见；后者仅限单次 Session 生命周期内临时缓存，不可跨请求复用。
+- **通用适用性**：所有场景均要求显式传入 `user_id` 实现记忆隔离；记忆内容默认**永久保留、无自动过期**，需开发者自行通过 `DELETE /memory_nodes/{id}` 或批量清理接口管理生命周期。
 
 ## 关键参数和配置
 
-| 参数 | 位置 | 类型 | 必填 | 说明 |
-|------|------|------|------|------|
-| `user_id` | Query / Body | string | ✅ | 用户唯一标识，所有读写操作均以此隔离数据；必须与 Agent 调用时的 `X-User-ID` 一致。 |
-| `memory_types` | Body (Search) | string[] | ❌ | 默认 `["observation"]`；查技能需显式传 `["skill"]` 或 `["observation", "skill"]`。 |
-| `project_ids` | Body (Add/Search) | string[] | ❌ | 最多 5 个，用于按 Agent、Session、任务流等逻辑分组；与 `project_id` 互斥。 |
-| `profile_schema` | Body (Add) | string | ❌ | 画像模板 ID；传入后自动触发用户画像抽取（需配合 `messages` 内容）。 |
-| `extract_mode` | Body (Add) | `"efficient"` \| `"intelligent"` | ❌ | 默认 `"efficient"`；`"intelligent"` 模式必须搭配 `/add-async` 使用。 |
-| `min_score` | Body (Search) | number | ❌ | 默认 `0.3`；仅当 `plan_version="pro"` 时生效，用于过滤低置信度结果。 |
-| `top_k` | Body (Search) | integer | ❌ | 默认 `5`，最大 `50`；控制返回记忆节点数量。 |
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `user_id` | string | ✅ | 记忆归属的唯一用户标识，强制用于多租户隔离；不同 `user_id` 的记忆互不可见。 |
+| `project_id` / `project_ids` | string / string[] | ⚠️（至少一者） | 指定记忆所属项目，决定抽取规则（如 `observation`/`skill`/`user_profile`）；`project_ids` 最多 5 个，与 `project_id` 互斥。 |
+| `profile_schema` | string | ❌（仅画像场景） | 用户画像模板 ID，需配合 `messages` 字段触发结构化属性抽取（`custom_content` 不支持）。 |
+| `plan_version` | string | ❌（默认 `lite`） | 可选 `lite`（基础能力）或 `pro`（启用 `min_score` 过滤、高级抽取）；非法值将报错。 |
+| `top_k` | integer | ❌（默认 10） | 检索接口 `/memory_nodes/search` 返回的最大结果数。 |
+| `min_score` | float | ❌（仅 `plan_version=pro` 生效） | 语义检索最低相似度阈值（0.0–1.0），低于此值的结果被过滤。 |
 
-- **认证要求**：需配置 `DASHSCOPE_API_KEY` 和 `MEMORY_SERVICE_ENDPOINT`（格式：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory`）。
-- **多模态支持**：若项目已开通多模态能力，`messages[].content` 中的 `image_url` 将参与记忆抽取；否则图片被忽略。
-- **画像模板驱动**：字段完全由开发者通过 `CreateProfileSchema` 定义（如 `age`, `preferred_language`），抽取结果 100% 结构化，无自由文本。
+> **认证与端点**：  
+> - Header：`Authorization: Bearer $DASHSCOPE_API_KEY`（API Key 必须属于目标业务空间）  
+> - Endpoint：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/`（`{WorkspaceId}` 从控制台「业务空间管理」获取）  
+> - 环境变量建议：`MEMORY_SERVICE_ENDPOINT="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory"`（末尾无 `/`）
 
-## 面向开发者，简洁实用
+## 开发者提示
 
-- ✅ **首选异步写入**：对含技能或画像的记忆，一律使用 `/add-async` + 轮询 `/events/{event_id}`，避免超时失败。
-- ✅ **检索前先指定类型**：`/search` 默认不返回 `skill`，务必显式传 `memory_types: ["skill"]`。
-- ✅ **画像抽取 = 模板 + 内容 + `profile_schema`**：三者缺一不可；`extract_scene` 等高级配置仅在模板创建时设定，调用 `AddMemory` 时无需重复传。
-- ❌ **不要混用 `memory_store_id` 和长期记忆**：前者是 Managed Agent 的会话缓存，后者是独立服务，二者数据不互通、不共享。
-- 📌 **计费提示**：长期记忆服务自 2026 年 8 月 20 日起正式商业化，建议在开发阶段通过控制台配额监控用量。
+- ✅ **优先使用异步写入**：`/add-async` 是主推方式，避免同步 `/add` 在 `intelligent` 模式下的超时风险；轮询 `GET /events/{event_id}` 获取最终结果。
+- ✅ **画像需预置模板**：必须先调用 `/profile_schemas` 创建模板，再在写入请求中传入 `profile_schema` 才能触发结构化抽取。
+- ⚠️ **检索默认仅限 `observation`**：`/memory_nodes/search` 的 `memory_types` 默认为 `["observation"]`，如需检索 `skill` 或 `user_profile`，需显式指定。
+- ⚠️ **注意限流**：全局限流 3000 QPM（账号级），其中 `/add` 接口限 120 QPM，`/search` 限 300 QPM；高并发场景请做好重试与降级。
+- 🚫 **不支持跨业务空间访问**：`WorkspaceId` 与 `DASHSCOPE_API_KEY` 必须匹配同一业务空间。
 
 ## 关联主题页
 
 - [long term memory new](../api/long-term-memory-new.md)
-- [agent development](../guides/agent-development.md)
-- [agent context](../guides/agent-context.md)
 - [managed agents api](../api/managed-agents-api.md)
+- [flow agent api](../api/flow-agent-api.md)
+- [agent development](../guides/agent-development.md)
 
 

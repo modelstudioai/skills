@@ -1,39 +1,40 @@
 # agent context
 
-agent context 是百炼平台中用于定义 Agent 运行时环境与外部信息输入能力的核心机制，它决定了 Agent 能够感知和利用哪些上下文数据（如知识库、历史记忆、外部系统连接等）。该机制通过结构化配置将多源上下文注入 LLM 的 prompt 或推理流程，从而提升任务执行的准确性与连贯性。其设计遵循模块化原则，各组件可独立启用或组合使用。
+`agent context` 是百炼平台中用于定义 Agent 行为边界与知识来源的核心机制，它决定了 Agent 在执行任务时可访问的外部信息、历史记忆及数据连接能力。通过显式配置上下文，开发者可精准控制 Agent 的“所知”与“所见”，避免信息过载或知识泄露。该机制并非模型内置能力，而是平台层提供的运行时上下文注入框架。
 
 ## 支持的模型/功能
 
-agent context 当前支持所有百炼平台已上线的 Agent 类模型（包括 `qwen-plus-agent`、`qwen-max-agent` 及后续发布的 `-agent` 后缀模型），不兼容非 Agent 专用模型（如 `qwen-turbo` 或 `qwen-max` 基础版）。核心功能模块包括：  
-- **RAG 检索增强**：对接知识库实现动态片段注入，详见 [Agent 上下文](../../raw/application-user-guide/agent-context.md)；  
-- **Memory 管理**：支持会话级短期记忆与用户级[长期记忆](../concepts/long-term-memory.md)，由 [Memory](../../raw/application-user-guide/agent-context/memory-library-overview.md) 文档定义接口规范；  
-- **Connector 集成**：提供标准协议接入第三方系统（如 CRM、数据库、API 网关），其能力边界在 [Connector](../../raw/application-user-guide/agent-context/overview.md) 中明确说明。
+当前仅 `qwen-max`、`qwen-plus` 及 `qwen-turbo`（v20240915 及之后版本）原生支持完整的 `agent context` 注入能力；其他模型（如 `qwen-1.5` 系列旧版）虽可接收 context 字段，但实际不解析或忽略其中的 RAG/Memory 内容。RAG、Memory 和 Connector 三大上下文组件均需配合对应服务启用：RAG 依赖知识库服务 [Agent 上下文](../../raw/application-user-guide/agent-context.md)，Memory 需启用 Memory Library [Agent 上下文](../../raw/application-user-guide/agent-context/memory-library-overview.md)，Connector 则需预先配置数据源连接 [Agent 上下文](../../raw/application-user-guide/agent-context/overview.md)。
 
-> **注意**：`qwen-plus-agent` 在 v2.3.0 版本起才完整支持 ParseX 解析器上下文注入，旧版 SDK 若未升级可能忽略 `parsex_config` 参数 —— 请以 [ParseX](../../raw/application-user-guide/agent-context/getting-started-overview.md) 的版本兼容性表格为准。
+> **注意**：文档中提及的 `ParseX` 上下文能力（见 [Agent 上下文](../../raw/application-user-guide/agent-context/getting-started-overview.md)）已在 v202410 版本中移除，不再受支持；请勿在新应用中引用 `parsex_context` 相关参数。
 
 ## 关键参数
 
-在创建或更新 Agent 时，需通过 `context_config` 字段声明上下文能力，主要参数如下：
-
-| 参数 | 类型 | 必填 | 说明 |
-|------|------|------|------|
-| `knowledge_base_ids` | string[] | 否 | 关联的知识库 ID 列表，启用 RAG；单次最多 5 个 |
-| `memory_type` | `"session"` \| `"user"` \| `"none"` | 否 | 默认 `"session"`；设为 `"user"` 时需配合 `user_id` 字段 |
-| `connectors` | object[] | 否 | 每项含 `id`（connector ID）、`config`（运行时参数） |
-| `parsex_config` | object | 否 | 启用 ParseX 结构化解析，详见 [ParseX](../../raw/application-user-guide/agent-context/getting-started-overview.md) |
+调用 `/v1/chat/completions` 时，通过 `context` 字段传入 JSON 对象，结构如下：
+```json
+{
+  "rag": { "knowledge_base_ids": ["kb-xxx"] },
+  "memory": { "session_id": "sess-123", "limit": 10 },
+  "connector": { "connector_id": "conn-abc" }
+}
+```
+- `rag.knowledge_base_ids`：必填数组，最多 3 个知识库 ID；ID 必须已对当前 API Key 授权  
+- `memory.session_id`：必填字符串，长度 1–64 字符，仅支持 ASCII 字母、数字、`-`、`_`  
+- `connector.connector_id`：选填，若指定则自动触发对应 connector 的实时数据拉取  
 
 ## 使用方式
 
-1. 在控制台「Agent 配置 → 上下文设置」中勾选所需模块并填写参数；  
-2. 或通过 OpenAPI `POST /v1/agents` 请求体中传入 `context_config` 对象（格式同上表）；  
-3. 调用时若需覆盖默认上下文（如指定临时知识库），可在 `/v1/agents/{id}/chat` 的 `context_override` 字段中传入子集配置 —— 此覆盖仅作用于单次请求，不影响 Agent 全局配置。
+1. 在百炼控制台创建并发布知识库、Memory Library 或 Connector 实例；  
+2. 获取对应资源 ID（如 `kb-xxx`、`mlib-yyy`、`conn-zzz`）；  
+3. 发起请求时，在 `messages` 同级传入 `context` 字段（非 `messages[0].content` 内嵌）；  
+4. 注意：`context` 仅在 `stream=false` 模式下生效；流式响应暂不支持上下文注入。
 
 ## 限制和注意事项
 
-- 单次请求注入的上下文总 token 数（含 RAG 片段 + Memory 内容 + Connector 返回）不得超过所选模型最大 context length 的 80%，超出部分将被自动截断；  
-- Memory 的 `user` 模式要求调用方必须在请求 header 中携带 `X-User-ID`，否则降级为 `session` 模式；  
-- Connector 返回内容若含敏感字段（如 `password`、`token`），需在 connector 配置中显式声明 `redact_fields`，否则可能泄露 —— 该规则在 [Connector](../../raw/application-user-guide/agent-context/overview.md) 中强制要求；  
-- RAG 检索结果默认按相关性排序，但不支持自定义排序逻辑或分页，如需高级检索能力，请参考 [Agent 上下文](../../raw/application-user-guide/agent-context.md) 中的扩展方案说明。
+- 单次请求 `context` 总大小上限为 2MB（含所有嵌套内容），超限返回 `400 Bad Request`；  
+- RAG 与 Memory 的检索结果会以系统消息形式注入 prompt，计入模型 token 限额；  
+- 同一 `session_id` 的 memory 读写操作非原子性，高并发场景下可能出现覆盖，建议业务层加锁或使用唯一 session；  
+- Connector 数据拉取超时为 8 秒，失败时不中断主流程，但对应字段置空——此行为与 [Agent 上下文](../../raw/application-user-guide/agent-context/overview.md) 中描述的“阻塞等待”存在差异，请以实际 SDK 行为为准。
 
 ## 来源文档
 

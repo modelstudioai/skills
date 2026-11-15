@@ -42,9 +42,9 @@
 
 ## 获取免费额度
 
-开通阿里云百炼前需先完成[实名认证](https://myaccount.console.aliyun.com/cert-info)。访问[阿里云百炼-华北2（北京）地域](https://bailian.console.aliyun.com/model/market)，阅读并同意协议后，系统将自动开通阿里云百炼并发放**免费推理额度**。
+首次使用时，先完成[实名认证](https://myaccount.console.aliyun.com/cert-info)，再使用阿里云主账号或拥有 `AliyunBailianFullAccess` 权限的 RAM 账号登录[百炼控制台](https://bailian.console.aliyun.com/)。系统会自动开通百炼服务，无需单独手动确认。
 
-> 如果未弹出服务协议，表示您已经开通过阿里云百炼且获得免费额度。
+> 免费额度按本文的地域、模型和有效期规则发放。是否获得额度及剩余额度，以控制台展示为准。
 
 首次开通阿里云百炼后由系统自动发放，无需手动领取或购买任何产品。免费额度用完后，如需继续按量付费使用，[充值](https://billing-cost.console.aliyun.com/fortune/fund-management/recharge)后即可继续调用。
 

@@ -21,6 +21,7 @@
         {
           "priceUnit": "每秒",
           "price": "0.45",
+          "ntmItemCode": "sfm_inferenceHH_public_cn",
           "ntmAmountType": "480P",
           "type": "video_ratio_480p",
           "priceName": "视频生成（480P）"
@@ -28,6 +29,7 @@
         {
           "priceUnit": "每秒",
           "price": "0.9",
+          "ntmItemCode": "sfm_inferenceHH_public_cn",
           "ntmAmountType": "720P",
           "type": "video_ratio_720p",
           "priceName": "视频生成（720P）"
@@ -35,6 +37,7 @@
         {
           "priceUnit": "每秒",
           "price": "1.2",
+          "ntmItemCode": "sfm_inferenceHH_public_cn",
           "ntmAmountType": "1080P",
           "type": "video_ratio_1080p",
           "priceName": "视频生成（1080P）"
@@ -89,6 +92,7 @@
         {
           "priceUnit": "每秒",
           "price": "0.45",
+          "ntmItemCode": "sfm_inferenceHH_public_cn",
           "ntmAmountType": "480P",
           "type": "video_ratio_480p",
           "priceName": "视频生成（480P）"
@@ -96,6 +100,7 @@
         {
           "priceUnit": "每秒",
           "price": "0.9",
+          "ntmItemCode": "sfm_inferenceHH_public_cn",
           "ntmAmountType": "720P",
           "type": "video_ratio_720p",
           "priceName": "视频生成（720P）"
@@ -103,6 +108,7 @@
         {
           "priceUnit": "每秒",
           "price": "1.2",
+          "ntmItemCode": "sfm_inferenceHH_public_cn",
           "ntmAmountType": "1080P",
           "type": "video_ratio_1080p",
           "priceName": "视频生成（1080P）"
@@ -157,6 +163,7 @@
         {
           "priceUnit": "每秒",
           "price": "0.45",
+          "ntmItemCode": "sfm_inferenceHH_public_cn",
           "ntmAmountType": "480P",
           "type": "video_ratio_480p",
           "priceName": "视频生成（480P）"
@@ -164,6 +171,7 @@
         {
           "priceUnit": "每秒",
           "price": "0.9",
+          "ntmItemCode": "sfm_inferenceHH_public_cn",
           "ntmAmountType": "720P",
           "type": "video_ratio_720p",
           "priceName": "视频生成（720P）"
@@ -171,6 +179,7 @@
         {
           "priceUnit": "每秒",
           "price": "1.2",
+          "ntmItemCode": "sfm_inferenceHH_public_cn",
           "ntmAmountType": "1080P",
           "type": "video_ratio_1080p",
           "priceName": "视频生成（1080P）"

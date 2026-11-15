@@ -27,6 +27,7 @@
         {
           "priceUnit": "每百万tokens",
           "price": "6",
+          "ntmItemCode": "sfm_inferenceOmni_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "omni_audio_input_token",
           "type": "omni_audio_input_token",
@@ -35,6 +36,7 @@
         {
           "priceUnit": "每百万tokens",
           "price": "4.5",
+          "ntmItemCode": "sfm_inferenceOmni_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "omni_text_output_token",
           "type": "omni_text_output_token",
@@ -43,6 +45,7 @@
         {
           "priceUnit": "每百万tokens",
           "price": "12",
+          "ntmItemCode": "sfm_inferenceOmni_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "omni_audio_output_token",
           "type": "omni_audio_output_token",
@@ -51,6 +54,7 @@
         {
           "priceUnit": "每百万tokens",
           "price": "1.5",
+          "ntmItemCode": "sfm_inferenceOmni_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "omni_no_audio_input_token",
           "type": "omni_no_audio_input_token",

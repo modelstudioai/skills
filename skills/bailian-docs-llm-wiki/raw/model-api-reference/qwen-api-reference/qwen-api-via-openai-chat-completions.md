@@ -216,7 +216,8 @@ fps有两个功能：
     -   `qwen3.8-omni-flash`、Qwen3.5-Omni ：默认值和最小值均为： `24576`
     -   `Qwen2.5-VL`开源系列及`QVQ`系列模型：默认值和最小值均为`3136`
 -   **输入视频文件或图像列表：**
-    -   `qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、`qwen3.8-omni-flash`、Qwen3.7、Qwen3.6、Qwen3.5、`Qwen3.5-Omni`、Qwen3-VL（包括商业版和开源版）：默认值为`65536`，最小值为`4096`
+    -   `qwen3-omni-flash`、`qwen3-vl-plus`、`qwen3.5-122b-a10b`、`qwen3.5-27b`、`qwen3.5-35b-a3b`、`qwen3.5-397b-a17b`、`qwen3.5-flash`、`qwen3.5-flash-2026-02-23`、`qwen3.5-omni-flash`、`qwen3.5-omni-flash-2026-03-15`、`qwen3.5-omni-plus`、`qwen3.5-omni-plus-2026-03-15`、`qwen3.5-plus`、`qwen3.5-plus-2026-02-15`、`qwen3.5-plus-2026-04-20`、`qwen3.6-27b`、`qwen3.6-35b-a3b`、`qwen3.6-flash`、`qwen3.6-flash-2026-04-16`、`qwen3.6-plus`、`qwen3.6-plus-2026-04-02`、`qwen3.7-flash`、`qwen3.7-flash-2026-07-15`、`qwen3.7-max-2026-06-08`、`qwen3.7-plus`、`qwen3.7-plus-2026-05-26`、`qwen3.8-27b`、`qwen3.8-flash`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-omni-flash`：默认值为 `65536`，最小值为 `4096`。
+    -   `kimi-k2.5`、`kimi-k2.6`、`kimi-k2.7-code`：最小值为 `3136`。
     -   `Qwen2.5-VL`开源系列及`QVQ`系列模型：默认值为`50176`，最小值为`3136`
 
 示例值
@@ -245,8 +246,13 @@ fps有两个功能：
         -   `qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、`qwen3.8-omni-flash`、Qwen3.7、 Qwen3.6 、 Qwen3.5-Omni 、 Qwen3.5 、 Qwen3-VL ： `max_pixels` 无效，输入图像的最大像素固定为 `16777216`
         -   `Qwen2.5-VL` 开源系列及 `QVQ` 系列模型： `max_pixels` 无效，输入图像的最大像素固定为 `12845056`
 -   **输入视频文件或图像列表：**
-    -   `qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、`qwen3.8-omni-flash`、Qwen3.7、Qwen3.6、Qwen3.5、Qwen3.5-Omni、Qwen3-VL闭源系列：默认值为`655360`，最大值为`2048000`
+    
+    同时设置 `min_pixels` 和 `max_pixels` 时，`max_pixels` 不得小于 `min_pixels`。
+    
+    -   `qwen3-vl-plus`、`qwen3.5-122b-a10b`、`qwen3.5-27b`、`qwen3.5-35b-a3b`、`qwen3.5-397b-a17b`、`qwen3.5-flash`、`qwen3.5-flash-2026-02-23`、`qwen3.5-omni-flash`、`qwen3.5-omni-flash-2026-03-15`、`qwen3.5-omni-plus`、`qwen3.5-omni-plus-2026-03-15`、`qwen3.5-plus`、`qwen3.5-plus-2026-02-15`、`qwen3.5-plus-2026-04-20`、`qwen3.6-27b`、`qwen3.6-35b-a3b`、`qwen3.6-flash`、`qwen3.6-flash-2026-04-16`、`qwen3.6-plus`、`qwen3.6-plus-2026-04-02`、`qwen3.7-flash`、`qwen3.7-flash-2026-07-15`、`qwen3.7-max-2026-06-08`、`qwen3.7-plus`、`qwen3.7-plus-2026-05-26`、`qwen3.8-27b`、`qwen3.8-flash`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-omni-flash`：默认值为 `655360`，最大值为 `2048000`。
     -   其他`Qwen3-VL`开源模型：默认值`655360`，最大值为`786432`
+    -   `qwen3-omni-flash`：默认值为 `655360`，最大值为 `786432`。
+    -   `kimi-k2.7-code`、`kimi-k2.6`、`kimi-k2.5`：最大值为 `1568000`。
     -   `Qwen2.5-VL`开源系列及`QVQ`系列模型：默认值为`501760`，最大值为`602112`
 
 示例值
@@ -257,17 +263,15 @@ fps有两个功能：
 
 **total\_pixels**`integer`（可选）
 
-用于限制从视频中抽取的所有帧的总像素（单帧图像像素 × 总帧数）。如果视频总像素超过此限制，系统将对视频帧进行缩放，但仍会确保单帧图像的像素值在`[min_pixels, max_pixels]`范围内。适用型号及取值见下方说明。
+视频抽帧后的总像素预算。
 
-对于抽帧数量较多的长视频，可适当降低此值以减少Token消耗和处理时间，但这可能会导致图像细节丢失。
+最大值
 
-取值范围
-
--   `qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、Qwen3.7、Qwen3.6、Qwen3.5系列 ：默认值和最大值均为 `819200000` ，该值对应 `800000` 个图像 Token（每 32×32 像素对应 1 个图像 Token）。
--   Qwen3-VL闭源系列 ：默认值和最大值均为 `134217728` ，该值对应 `131072` 个图像 Token（每 32×32 像素对应 1 个图像 Token）。
--   `qwen3.8-omni-flash`、`Qwen3.5-Omni` ：默认值和最小值均为 `184549376` ，该值对应 `180224` 个图像 Token（每 32×32 像素对应 1 个图像 Token）。
--   其他`Qwen3-VL`开源模型：默认值和最小值均为`67108864`，该值对应 `65536` 个图像 Token（每 32×32 像素对应 1 个图像 Token）。
--   `Qwen2.5-VL`开源系列及`QVQ`系列模型：默认值和最小值均为`51380224`，该值对应 `65536` 个图像 Token（每 28×28 像素对应 1 个图像 Token）。
+-   **`268435456`**：`qwen3.8-max`、`qwen3.8-max-0902`。
+-   **`234881024`**：`qwen3.7-plus`、`qwen3.7-plus-2026-05-26`、`qwen3.7-max-2026-06-08`。
+-   **`819200000`**：`qwen3.8-flash`、`qwen3.8-27b`、`qwen3.7-flash`、`qwen3.7-flash-2026-07-15`、`qwen3.6-flash`。
+-   **`184549376`**：`qwen3.8-omni-flash`。
+-   **`102760448`**：`kimi-k2.5`、`kimi-k2.6`。
 
 示例值
 

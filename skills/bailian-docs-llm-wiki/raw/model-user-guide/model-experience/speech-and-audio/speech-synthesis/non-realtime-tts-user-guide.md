@@ -4,7 +4,7 @@
 
 ## 功能介绍
 
-非实时语音合成通过 HTTP 一次提交完整文本，支持非流式和 SSE 流式输出。非流式返回的音频 URL 有效期为 24 小时，请及时下载保存；链接过期后可重新合成。流式输出逐段返回音频数据。
+非实时语音合成通过 HTTP 一次提交完整文本，支持非流式和 SSE 流式输出。非流式在合成完成后返回完整音频，流式逐段返回音频数据。
 
 -   **多语言与方言**：根据目标语言选择模型和音色，也可通过指令指定方言。参见[方言](https://help.aliyun.com/zh/model-studio/non-realtime-tts-user-guide#8a7604d333kut)。
 -   **表现力控制**：通过自然语言指令调整语速、情感等表达，或在文本中插入情感与富语言标签。参见[指令控制](https://help.aliyun.com/zh/model-studio/non-realtime-tts-user-guide#nrt_instruct_h3)和[情感与富语言标签](https://help.aliyun.com/zh/model-studio/non-realtime-tts-user-guide#nrt_emtag_h3)。
@@ -472,6 +472,10 @@ ASMR 轻声
 `[snorts]`
 
 哼声、嗤笑
+
+## 应用于生产环境
+
+音频下载与保存、格式与播放器适配、并发管理和问题排查，请参见[语音合成最佳实践](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/tts-high-concurrency-best-practices.md)。请求频率和并发数应遵循对应模型的[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)。
 
 ## 支持模型
 

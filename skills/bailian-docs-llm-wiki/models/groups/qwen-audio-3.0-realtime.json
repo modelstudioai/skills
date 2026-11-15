@@ -25,6 +25,7 @@
         {
           "priceUnit": "每百万tokens",
           "price": "40",
+          "ntmItemCode": "sfm_inferenceFunAudio_public_cn",
           "ntmAmountType": "audio_input_token",
           "type": "audio_input_token",
           "priceName": "输入：音频"
@@ -32,6 +33,7 @@
         {
           "priceUnit": "每百万tokens",
           "price": "5",
+          "ntmItemCode": "sfm_inferenceFunAudio_public_cn",
           "ntmAmountType": "audio_text_input_token",
           "type": "audio_text_input_token",
           "priceName": "输入：文本"
@@ -39,6 +41,7 @@
         {
           "priceUnit": "每百万tokens",
           "price": "40",
+          "ntmItemCode": "sfm_inferenceFunAudio_public_cn",
           "ntmAmountType": "audio_text_output_token",
           "type": "audio_text_output_token",
           "priceName": "输出：文本"
@@ -46,6 +49,7 @@
         {
           "priceUnit": "每百万tokens",
           "price": "150",
+          "ntmItemCode": "sfm_inferenceFunAudio_public_cn",
           "ntmAmountType": "audio_output_token",
           "type": "audio_output_token",
           "priceName": "输出：文本+音频（输出的文本不计费）"
@@ -107,6 +111,7 @@
         {
           "priceUnit": "每百万tokens",
           "price": "6",
+          "ntmItemCode": "sfm_inferenceFunAudio_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "audio_input_token",
           "type": "audio_input_token",
@@ -115,6 +120,7 @@
         {
           "priceUnit": "每百万tokens",
           "price": "1.5",
+          "ntmItemCode": "sfm_inferenceFunAudio_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "audio_text_input_token",
           "type": "audio_text_input_token",
@@ -123,6 +129,7 @@
         {
           "priceUnit": "每百万tokens",
           "price": "4.5",
+          "ntmItemCode": "sfm_inferenceFunAudio_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "audio_text_output_token",
           "type": "audio_text_output_token",
@@ -131,6 +138,7 @@
         {
           "priceUnit": "每百万tokens",
           "price": "12",
+          "ntmItemCode": "sfm_inferenceFunAudio_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "audio_output_token",
           "type": "audio_output_token",

@@ -92,7 +92,7 @@ curl --location 'https://bailian.aliyuncs.com/v2/app/completions' \
 
 1.  **如何开通阿里云百炼服务？**
     
-    阿里云百炼服务需要分地域开通。使用**阿里云主账号**或拥有`AliyunBailianFullAccess`权限的**RAM账号**前往[阿里云百炼控制台](https://bailian.console.aliyun.com/model/market)，在控制台右上角切换目标地域，阅读并同意协议后，将自动开通阿里云百炼。如果未弹出服务协议，则表示您已开通该地域的服务。
+    无需单独手动开通。使用**阿里云主账号**或拥有 `AliyunBailianFullAccess` 权限的**RAM 账号**登录[阿里云百炼控制台](https://bailian.console.aliyun.com/)，满足实名认证等使用条件后，系统会自动开通百炼服务，无需单击开通按钮或手动确认。
     
     > 使用RAM账号（RAM用户或RAM角色）开通时，需先由阿里云主账号在[RAM控制台](https://ram.console.aliyun.com/)为其授予`AliyunBailianFullAccess`系统策略（其他管控层权限不可以），否则开通服务时会提示无权限。授权方式请参见[阿里云百炼RAM权限](https://help.aliyun.com/zh/model-studio/bailian-ram-permission)。
     

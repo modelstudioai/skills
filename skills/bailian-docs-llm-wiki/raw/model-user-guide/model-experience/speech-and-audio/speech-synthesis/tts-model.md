@@ -140,6 +140,10 @@
 -   [非实时语音合成](https://help.aliyun.com/zh/model-studio/non-realtime-tts-user-guide#12884a10929p9)
 -   [实时语音合成](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#rt_advanced_h2)
 
+## 应用于生产环境
+
+文本提交、音频接收与播放、连接与并发资源管理，以及性能评估和问题诊断，请参见[语音合成最佳实践](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/tts-high-concurrency-best-practices.md)。
+
 ## 支持模型
 
 选择调用地域，查看各系列的模型 ID。

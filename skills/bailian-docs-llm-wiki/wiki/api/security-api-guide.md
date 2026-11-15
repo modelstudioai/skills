@@ -1,68 +1,80 @@
 # security api guide
 
-Security API 提供 Agent 安全防护数据的查询与告警导出能力，覆盖防护概况、资产统计、策略配置、告警检索与批量导出等核心场景。所有接口均基于工作空间路由，通过 API Key 鉴权，基路径为 `/api/v1/agentstudio/security`。开发者需先完成工作空间 ID 获取与 API Key 配置，方可调用 [概览](../../raw/application-api-reference/security-api-guide/security-api-overview.md) 中定义的全部接口。
+Security API 提供 Agent 安全防护数据的查询与告警导出能力，覆盖防护概况、资产统计、策略配置与安全告警全链路。所有接口均基于工作空间路由，通过 API Key 鉴权，适用于安全运营、合规审计与自动化巡检等开发者场景。完整调用流程需依次完成[认证](../../raw/application-api-reference/security-api-guide/security-api-authentication.md)、Endpoint 拼装与参数构造。
 
 ## 支持的模型/功能
 
-Security API 不涉及大模型推理，而是面向 Agent 安全治理的**数据面 API**，提供以下五类功能：
+Security API 不涉及大模型推理，而是面向 Agent 安全治理的**数据面 API**，提供以下核心功能模块：
 
-- **防护概况**：查询最近 24 小时的防护能力开关状态、模块覆盖情况及拦截统计（如 `content_safety`、`file_scan` 等）；
-- **Agent 资产统计**：按业务空间聚合 Agent 及其挂载资源（模型、工具、技能、知识库等）数量，去重计数；
-- **安全策略管理**：获取全量 11 条策略的启用状态、风险域分类与免费标识（如 `prompt_attack`、`baseline_check`）；
-- **告警生命周期操作**：支持分页查询（`/agent_logs`）、详情查看（`/agent_logs/{alert_id}`）、异步导出（`/export_agent_logs`）及状态轮询（`/export_status`）；
-- **错误诊断支持**：统一错误响应结构，含 `request_id` 与标准化错误码，便于问题定位。
+- **防护概况**：`/overview`（最近 24 小时能力开关与拦截统计）、`/asset_summary`（Agent 及挂载资源数量统计）  
+- **策略管理**：`/policies`（11 条固定策略的启用状态与分类，含免费策略如 `baseline_check`）  
+- **告警全生命周期**：`/agent_logs`（分页查询）、`/agent_logs/{alert_id}`（详情）、`/export_agent_logs`（异步导出）、`/export_status`（进度与下载链接）  
 
-> **注意**：文档 7（查询告警列表）中 `asset_type` 参数说明为 `agent` / `tool` / `skill` / `knowledge_base` / `memory` / `channel`，但文档 8（查询告警详情）响应体中 `asset_type` 示例值为 `app`，且文档 6 明确将 MCP 工具统一归为 `tool`。实际调用应以文档 7 的枚举为准；`app` 属于过时表述，已在最新服务端逻辑中被 `agent` 替代。
+> **注意**：文档 10 中 `policy_code` 列表明确包含 `vulnerability_scan`（免费），但文档 3 的 `capabilities` 字段未列出该能力；实际策略启用状态以 `/policies` 接口返回为准，`capabilities` 仅反映运行时防护能力开关，二者语义不同，不可混用。
 
 ## 关键参数
 
-| 参数 | 位置 | 类型 | 必填 | 说明 |
+| 参数 | 位置 | 类型 | 说明 | 示例 |
 |------|------|------|------|------|
-| `Authorization` | Header | string | 是 | 格式为 `Bearer <your-api-key>`，详见 [认证](../../raw/application-api-reference/security-api-guide/security-api-authentication.md) |
-| `workspace_id` | Host | string | 是 | 工作空间 ID，从百炼控制台右上角下拉菜单获取 |
-| `region` | Host | string | 是 | 固定为 `cn-beijing`，当前仅支持该地域 |
-| `current_page` / `page_size` | Query | integer | 否 | 告警列表分页参数，默认 `current_page=1`, `page_size=20` |
-| `risk_level` | Query | string | 否 | 值为 `high`/`medium`/`low`，用于筛选告警 |
-| `params` | Body (POST) | string | 是 | 导出接口中需传入 JSON 字符串化的查询参数（注意是字符串而非对象），详见 [导出告警](../../raw/application-api-reference/security-api-guide/security-api-policies/security-api-export.md) |
+| `Authorization` | Header | string | 必填，API Key 鉴权凭证 | `Bearer <your-api-key>` |
+| `workspace_id` | Host | string | 必填，从百炼控制台右上角获取 | `ws-abc123` |
+| `region` | Host | string | 固定为 `cn-beijing` | — |
+| `current_page` / `page_size` | Query | integer | 告警列表分页参数，默认 `1` / `20` | `?current_page=1&page_size=50` |
+| `risk_level` | Query | string | 告警筛选：`high` / `medium` / `low` | `&risk_level=high` |
+| `params` | Body (POST) | string | 导出任务中需传入 JSON 字符串化的筛选参数（注意字段名大小写与驼峰） | `{"RiskLevel":"high","OrderBy":"CheckTime"}` |
+| `export_id` | Query | integer | 查询导出状态必需 | `?export_id=131231` |
+
+> **注意**：文档 8 要求 `params` 字段为「JSON 字符串」，而非嵌套对象；若直接传对象会导致 400 错误，详见[导出告警](../../raw/application-api-reference/security-api-guide/security-api-policies/security-api-export.md)示例。
 
 ## 使用方式
 
-1. **构造 Endpoint**：  
-   `https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio/security`
+1. **准备环境**  
+   - 开通百炼服务，创建 API Key（见[认证](../../raw/application-api-reference/security-api-guide/security-api-authentication.md)）  
+   - 获取工作空间 ID（控制台右上角下拉菜单）  
+   - 拼装 Base URL：`https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio/security`
 
-2. **设置鉴权头**：  
-   `Authorization: Bearer <your-api-key>`
-
-3. **发起请求**（以查询防护总览为例）：
+2. **基础调用示例（curl）**  
    ```bash
-   curl -X GET "https://your-workspace-id.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio/security/overview" \
-     -H "Authorization: Bearer your-api-key"
+   # 查询防护总览
+   curl -X GET "https://ws-abc123.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio/security/overview" \
+     -H "Authorization: Bearer YOUR_API_KEY"
+
+   # 查询高风险告警（第1页，每页50条）
+   curl -X GET "https://ws-abc123.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio/security/agent_logs?risk_level=high&current_page=1&page_size=50" \
+     -H "Authorization: Bearer YOUR_API_KEY"
+
+   # 提交导出任务（参数需 JSON 字符串化）
+   curl -X POST "https://ws-abc123.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio/security/export_agent_logs" \
+     -H "Authorization: Bearer YOUR_API_KEY" \
+     -H "Content-Type: application/json" \
+     -d '{"lang":"zh","params":"{\"RiskLevel\":\"high\"}"}'
    ```
 
-4. **处理响应**：  
-   所有成功响应均为 `{ "success": true, "data": {...} }` 结构；失败响应含 `request_id`，可用于问题排查，参考 [Security API 错误码](../../raw/application-api-reference/security-api-guide/security-api-errors.md)。
+3. **轮询导出状态**  
+   使用 `/export_status?export_id={id}` 轮询，当 `export_status == "success"` 且 `link` 非空时，直接下载 Excel 文件。
 
 ## 限制和注意事项
 
-- **地域限制**：Endpoint 中 `region` 仅支持 `cn-beijing`，其他地域返回 `BadRequest.IllegalEndpoint`（400）；
-- **导出参数格式**：`/export_agent_logs` 的 `params` 字段必须是**JSON 字符串**（即双引号需转义），不可直接传 JSON 对象，否则返回 `400 参数校验失败`；
-- **告警分页机制**：`/agent_logs` 使用游标分页（`next_page` 字段），不支持传统 offset 分页；
-- **策略固定返回**：`/policies` 接口始终返回全部 11 条策略，无分页、无过滤参数；
-- **资产统计字段空值**：`/asset_summary` 中未统计到的字段返回 `null` 而非 `0`，需做空值判断；
-- **API Key 安全**：API Key 具备账号级权限，严禁硬编码、提交至 Git 或暴露在前端代码中；
-- **错误码优先级**：网关层错误（如 `InvalidApiKey`、`Endpoint.AccessDenied`）由网关直接返回扁平结构 `{"request_id","code","message"}`；业务错误（如 `12000093`）则嵌套在 `error.code` 中。
+- **地域限制**：当前仅支持 `cn-beijing` 地域，其他 region 将返回 `BadRequest.IllegalEndpoint`（400）错误  
+- **分页机制**：告警列表使用游标分页（`next_page` 字段），不支持 offset 分页；导出任务无分页，按筛选条件导出全量  
+- **响应一致性**：  
+  - 网关层错误（如 `InvalidApiKey`、`Endpoint.AccessDenied`）返回扁平结构 `{"request_id","code","message"}`  
+  - 业务错误（如 `12000093`）返回嵌套结构 `{"error":{"code","message"}}`，详见[Security API 错误码](../../raw/application-api-reference/security-api-guide/security-api-errors.md)  
+- **字段空值处理**：`/asset_summary` 接口对未统计到的字段返回 `null`（非 `0`），调用方需做空值判断  
+- **告警 ID 类型**：`alert_id` 在 `/agent_logs` 中为字符串（如 `"4289016"`），但在 `/export_agent_logs` 的 `params` 中需按原始字符串传递，不可转为整数  
+- **免费策略行为**：`baseline_check` 和 `vulnerability_scan` 的 `free: true` 表示无需开通高级防护即可生效，但其 `enabled` 字段仍可被手动关闭
 
 ## 来源文档
 
 - [概览](../../raw/application-api-reference/security-api-guide/security-api-overview.md)
 - [认证](../../raw/application-api-reference/security-api-guide/security-api-authentication.md)
-- [Security API 错误码](../../raw/application-api-reference/security-api-guide/security-api-errors.md)
 - [查询防护总览](../../raw/application-api-reference/security-api-guide/security-api-protection-overview.md)
+- [Security API 错误码](../../raw/application-api-reference/security-api-guide/security-api-errors.md)
 - [查询 Agent 资产](../../raw/application-api-reference/security-api-guide/security-api-protection-overview/security-api-assets.md)
-- [查询安全策略](../../raw/application-api-reference/security-api-guide/security-api-policies.md)
 - [查询告警列表](../../raw/application-api-reference/security-api-guide/security-api-policies/security-api-alerts.md)
 - [查询告警详情](../../raw/application-api-reference/security-api-guide/security-api-policies/security-api-alert-detail.md)
 - [导出告警](../../raw/application-api-reference/security-api-guide/security-api-policies/security-api-export.md)
 - [查询导出状态](../../raw/application-api-reference/security-api-guide/security-api-policies/security-api-export-status.md)
+- [查询安全策略](../../raw/application-api-reference/security-api-guide/security-api-policies.md)
 
 

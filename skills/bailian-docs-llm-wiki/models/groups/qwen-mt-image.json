@@ -19,6 +19,7 @@
         {
           "priceUnit": "每张",
           "price": "0.004",
+          "ntmItemCode": "sfm_inferenceDomain_public_cn",
           "ntmAmountType": "|images|times|",
           "type": "image_number",
           "priceName": "图片生成"

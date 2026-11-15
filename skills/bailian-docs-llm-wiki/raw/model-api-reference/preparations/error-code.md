@@ -344,7 +344,7 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 **解决方案：**
 
 -   **开通模型服务：**请前往阿里云百炼控制台[模型市场](https://bailian.console.aliyun.com/cn-beijing/model/market)，确认所调用的模型（如 `kimi-k3`）处于已开通状态后再行调用。
--   **开通百炼服务：**若尚未开通阿里云百炼服务，请先开通百炼服务后再调用。
+-   **开通百炼服务：**若尚未开通百炼，请使用阿里云主账号或拥有 `AliyunBailianFullAccess` 权限的 RAM 账号登录[百炼控制台](https://bailian.console.aliyun.com/)，满足使用条件后由系统自动开通，再重试调用。
 
 #### The result\_format parameter must be "message" when enable\_thinking is true
 
@@ -2088,7 +2088,7 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 1.  **注册账号**：如果没有阿里云账号，您需要先[注册](https://account.aliyun.com/register/qr_register.htm?oauth_callback=https%3A%2F%2Fbailian.console.aliyun.com%2F%3FapiKey%3D1)阿里云账号。
     
-2.  **开通阿里云百炼：**使用**阿里云主账号**前往[阿里云百炼大模型服务平台](https://bailian.console.aliyun.com/)，阅读并同意协议后，将自动开通阿里云百炼，如果未弹出服务协议，则表示您已经开通。
+2.  **登录控制台自动开通：**使用**阿里云主账号**或拥有 `AliyunBailianFullAccess` 权限的**RAM 账号**登录[阿里云百炼控制台](https://bailian.console.aliyun.com/)。满足实名认证等使用条件后，系统会自动开通服务，无需单击开通按钮或手动确认。RAM 账号没有开通权限时，请主账号按[阿里云百炼 RAM 权限](https://help.aliyun.com/zh/model-studio/bailian-ram-permission)授予所需权限，然后重新登录并重试调用。
     
     > 如果开通服务时提示“您尚未进行实名认证”，请先进行[实名认证](https://help.aliyun.com/zh/account/verify-your-identity-individual-account)。
     
