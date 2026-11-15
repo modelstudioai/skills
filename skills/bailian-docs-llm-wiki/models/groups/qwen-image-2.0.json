@@ -23,6 +23,7 @@
         {
           "priceUnit": "每张",
           "price": "0.5",
+          "ntmItemCode": "sfm_inference_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "|images|times|",
           "type": "image_number",
@@ -86,6 +87,7 @@
         {
           "priceUnit": "每张",
           "price": "0.2",
+          "ntmItemCode": "sfm_inference_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "|images|times|",
           "type": "image_number",

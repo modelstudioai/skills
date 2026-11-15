@@ -20,6 +20,7 @@
         {
           "priceUnit": "每百万tokens",
           "price": "6",
+          "ntmItemCode": "sfm_inferenceFunAudio_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "tts_input_token",
           "type": "tts_input_token",
@@ -28,6 +29,7 @@
         {
           "priceUnit": "每百万tokens",
           "price": "12",
+          "ntmItemCode": "sfm_inferenceFunAudio_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "tts_output_token",
           "type": "tts_output_token",

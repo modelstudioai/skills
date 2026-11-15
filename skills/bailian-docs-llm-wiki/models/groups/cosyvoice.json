@@ -22,6 +22,7 @@
         {
           "priceUnit": "每万字符",
           "price": "0.8",
+          "ntmItemCode": "sfm_inferenceFunAudio_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "audio_tts",
           "type": "cosy_tts_number",
@@ -76,6 +77,7 @@
         {
           "priceUnit": "每万字符",
           "price": "1.5",
+          "ntmItemCode": "sfm_inferenceFunAudio_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "audio_tts",
           "type": "cosy_tts_number",

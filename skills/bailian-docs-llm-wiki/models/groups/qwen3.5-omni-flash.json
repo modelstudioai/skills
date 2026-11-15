@@ -44,6 +44,7 @@
         {
           "priceUnit": "每百万tokens",
           "price": "18",
+          "ntmItemCode": "sfm_inferenceOmni_public_cn",
           "ntmAmountType": "omni_audio_input_token",
           "type": "omni_audio_input_token",
           "priceName": "输入：音频"
@@ -51,6 +52,7 @@
         {
           "priceUnit": "每百万tokens",
           "price": "72",
+          "ntmItemCode": "sfm_inferenceOmni_public_cn",
           "ntmAmountType": "omni_audio_output_token",
           "type": "omni_audio_output_token",
           "priceName": "输出：文本+音频（输出的文本不计费）"
@@ -58,6 +60,7 @@
         {
           "priceUnit": "每百万tokens",
           "price": "2.2",
+          "ntmItemCode": "sfm_inferenceOmni_public_cn",
           "ntmAmountType": "omni_no_audio_input_token",
           "type": "omni_no_audio_input_token",
           "priceName": "输入：文本/图片/视频"
@@ -65,6 +68,7 @@
         {
           "priceUnit": "每百万tokens",
           "price": "13.3",
+          "ntmItemCode": "sfm_inferenceOmni_public_cn",
           "ntmAmountType": "omni_no_audio_output_token",
           "type": "omni_no_audio_output_token",
           "priceName": "输出：文本"
@@ -72,6 +76,7 @@
         {
           "priceUnit": "每百万tokens",
           "price": "9",
+          "ntmItemCode": "sfm_inference_public_cn",
           "ntmAmountType": "omni_audio_input_token_batch",
           "type": "omni_audio_input_token_batch",
           "priceName": "输入：音频（Batch File）"
@@ -79,6 +84,7 @@
         {
           "priceUnit": "每百万tokens",
           "price": "1.1",
+          "ntmItemCode": "sfm_inference_public_cn",
           "ntmAmountType": "omni_no_audio_input_token_batch",
           "type": "omni_no_audio_input_token_batch",
           "priceName": "输入：文本/图片/视频（Batch File）"
@@ -86,6 +92,7 @@
         {
           "priceUnit": "每百万tokens",
           "price": "6.65",
+          "ntmItemCode": "sfm_inference_public_cn",
           "ntmAmountType": "omni_no_audio_output_token_batch",
           "type": "omni_no_audio_output_token_batch",
           "priceName": "输出：文本（Batch File）"
@@ -93,6 +100,7 @@
         {
           "priceUnit": "每百万tokens",
           "price": "18",
+          "ntmItemCode": "sfm_inference_public_cn",
           "discount": 0.5,
           "ntmAmountType": "omni_audio_input_token_batch",
           "type": "omni_audio_input_token_batch_chat",
@@ -101,6 +109,7 @@
         {
           "priceUnit": "每百万tokens",
           "price": "2.2",
+          "ntmItemCode": "sfm_inference_public_cn",
           "discount": 0.5,
           "ntmAmountType": "omni_no_audio_input_token_batch",
           "type": "omni_no_audio_input_token_batch_chat",
@@ -109,6 +118,7 @@
         {
           "priceUnit": "每百万tokens",
           "price": "13.3",
+          "ntmItemCode": "sfm_inference_public_cn",
           "discount": 0.5,
           "ntmAmountType": "omni_no_audio_output_token_batch",
           "type": "omni_no_audio_output_token_batch_chat",

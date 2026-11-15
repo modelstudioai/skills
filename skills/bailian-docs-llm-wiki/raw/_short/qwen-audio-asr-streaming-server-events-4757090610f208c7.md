@@ -1,178 +1,343 @@
-# 实时语音识别（Qwen-Audio-ASR-Streaming）服务端事件
+# Qwen-Audio-ASR-Streaming服务端事件
 
-本文介绍 Qwen-Audio-ASR-Streaming 实时语音识别服务通过 WebSocket 推送给客户端的服务端事件，包括 task-started、result-generated、task-finished、task-failed 四类事件的数据结构与字段含义。
+Qwen-Audio-ASR-Streaming 服务端事件参考，介绍任务启动、识别结果、任务完成和任务失败的字段及对应请求。
+
+## 事件交互流程
+
+1.  发送 [run-task](https://help.aliyun.com/zh/model-studio/qwen-audio-asr-streaming-client-events#run-task)，收到 [task-started](https://help.aliyun.com/zh/model-studio/qwen-audio-asr-streaming-server-events#task-started) 后开始发送音频。
+2.  持续发送音频，同时接收 [result-generated](https://help.aliyun.com/zh/model-studio/qwen-audio-asr-streaming-server-events#result-generated)。
+3.  音频发送完毕后发送 [finish-task](https://help.aliyun.com/zh/model-studio/qwen-audio-asr-streaming-client-events#finish-task)，继续接收结果，直到收到 [task-finished](https://help.aliyun.com/zh/model-studio/qwen-audio-asr-streaming-server-events#task-finished)；任务失败时返回 [task-failed](https://help.aliyun.com/zh/model-studio/qwen-audio-asr-streaming-server-events#task-failed)。
+
+音频数据不通过 `run-task` 发送：WebSocket 使用二进制帧，AOQ 使用 Audio Track。连接、鉴权和音频传输方式请参见 [WebSocket API](raw/_short/qwen-audio-asr-streaming-websocket-api-779f1056a08e5525.md) 或 [AOQ 接入](raw/_short/qwen-audio-asr-streaming-aoq-access-7b2cf295190f6172.md)。
 
 ## task-started
 
-任务启动成功，客户端可开始发送音频数据。
+任务启动成功，是客户端开始发送音频的信号。
 
-**header**`object`
+**重要****收到 `task-started` 后才能发送音频。** `run-task` 仅用于启动和配置任务，不携带音频数据。
 
-属性
+`header`object
 
-**task\_id**`string`
+`task_id`string
 
 客户端生成的任务 ID（UUID 格式）。
 
-**event**`string`
+`event`string
 
 事件类型，固定为 `task-started`。
 
-**attributes**`object`
+`attributes`object
 
 附加属性（通常为空）。
 
-**payload**`object`
+`payload`object
 
 固定为`{}`。
 
 ```
 {
-    "header": {
-        "task_id": "2bf83b9a-baeb-4fda-8d9a-xxxxxxxxxxxx",
-        "event": "task-started",
-        "attributes": {}
+  "header": {
+    "action": "run-task",
+    "task_id": "3756efcf-8388-41c8-832a-9a70bf046f55",
+    "streaming": "duplex"
+  },
+  "payload": {
+    "task_group": "audio",
+    "task": "asr",
+    "function": "recognition",
+    "model": "qwen-audio-3.1-asr-flash-streaming",
+    "parameters": {
+      "format": "pcm",
+      "sample_rate": 16000
     },
-    "payload": {}
+    "input": {}
+  }
+}
+```
+```
+{
+  "header": {
+    "task_id": "3756efcf-8388-41c8-832a-9a70bf046f55",
+    "task_uuid": "69dc7ec7af9a40118edc548ac3f3d2b4",
+    "event": "task-started",
+    "attributes": {}
+  },
+  "payload": {}
 }
 ```
 
 ## result-generated
 
-识别结果，包含中间结果（sentence\_end=false）和最终结果（sentence\_end=true）。其中，新句子的首个中间结果包含 sentence\_begin=true。
+返回识别结果，包括句子开始、中间结果、句子最终结果和心跳。
 
-**header**`object`
+**重要****`sentence_end=true` 仅表示当前句子结束，不表示任务结束。** 心跳结果（`heartbeat=true`）可跳过；任务是否结束以 `task-finished` 为准。
 
-属性
+`header`object
 
-**task\_id**`string`
+`task_id`string
 
 客户端生成的任务 ID（UUID 格式）。
 
-**event**`string`
+`event`string
 
 事件类型，固定为 `result-generated`。
 
-**payload**`object`
+`payload`object
 
-属性
+`output`object
 
-**output**`object`
+`sentence`object
 
-属性
+`sentence_id`integer
 
-**sentence**`object`
+句子的序号标识。正常识别结果中，`sentence_id` 从 1 开始递增。当 `heartbeat` 为 `true` 时（即心跳包），`sentence_id` 固定为 0。
 
-属性
-
-**begin\_time**`integer`
+`begin_time`integer
 
 句子开始时间（ms）。
 
-**end\_time**`integer`
+`end_time`integer | null
 
-句子结束时间（ms）。
+句子结束时间（ms）。 中间结果或心跳中可能为 `null`。
 
-**text**`string`
+`text`string
 
 识别文本。
 
-**heartbeat**`boolean`
-
-若为 true，可跳过该结果（心跳包）。
-
-**sentence\_begin**`boolean`
+`sentence_begin`boolean
 
 用于标识句子开始。
 
-**sentence\_end**`boolean`
+`sentence_end`boolean
 
-是否句子结束（true=最终结果，false=中间结果）。
+是否句子结束（`true`\=最终结果，`false`\=中间结果）。
 
-**sentence\_id**`integer`
+`heartbeat`boolean
 
-句子的序号标识。正常识别结果中，sentence\_id 从 1 开始递增。当 heartbeat 为 true 时（即心跳包），sentence\_id 固定为 0。
+若为 `true`，可跳过该结果（心跳包）。
 
-**words**`array[object]`
+`words`array\[object\]
 
 字时间戳信息。
 
-属性
-
-**begin\_time**`integer`
+`begin_time`integer
 
 字开始时间（ms）。
 
-**end\_time**`integer`
+`end_time`integer
 
 字结束时间（ms）。
 
-**text**`string`
+`text`string
 
 识别文本。
 
-**punctuation**`string`
+`punctuation`string
 
 标点符号。
 
-**usage**`object`
+`usage`object
 
 当前任务的累计用量。
 
-属性
+**说明**`usage` 为当前任务的累计用量，部分中间结果可能不包含该字段。**不要将各事件中的 `usage` 相加。** qwen-audio-3.0-asr-flash-streaming 按时长计费，qwen-audio-3.1-asr-flash-streaming 按 Token 计费；字段适用范围见下文。
 
-**input\_tokens**`integer`
-
-累计输入 Token 数。
-
-**说明**适用于 `qwen-audio-3.1-asr-flash-streaming`。
-
-**output\_tokens**`integer`
-
-累计输出 Token 数。
-
-**说明**适用于 `qwen-audio-3.1-asr-flash-streaming`。
-
-**total\_tokens**`integer`
-
-累计 Token 总数，为输入和输出 Token 数之和。
-
-**说明**适用于 `qwen-audio-3.1-asr-flash-streaming`。
-
-**duration**`integer`
+`duration`integer
 
 累计音频时长（秒）。
 
-**说明**用于 `qwen-audio-3.0-asr-flash-streaming` 的计费。
+**说明**用于 qwen-audio-3.0-asr-flash-streaming 的计费。
 
-**句子开始结果：**
+`input_tokens`integer
+
+累计输入 Token 数。
+
+**说明**适用于 qwen-audio-3.1-asr-flash-streaming。
+
+`output_tokens`integer
+
+累计输出 Token 数。
+
+**说明**适用于 qwen-audio-3.1-asr-flash-streaming。
+
+`total_tokens`integer
+
+累计 Token 总数，为输入和输出 Token 数之和。
+
+**说明**适用于 qwen-audio-3.1-asr-flash-streaming。
+
+#### 句子开始
+
+收到 `task-started` 后，发送音频。以下示例为服务端随后返回的一条 `result-generated` 事件；音频通过二进制帧（WebSocket）或 Audio Track（AOQ）发送。
+
 ```
 {
   "header": {
-    "task_id": "2bf83b9a-baeb-4fda-8d9a-xxxxxxxxxxxx",
+    "action": "run-task",
+    "task_id": "3756efcf-8388-41c8-832a-9a70bf046f55",
+    "streaming": "duplex"
+  },
+  "payload": {
+    "task_group": "audio",
+    "task": "asr",
+    "function": "recognition",
+    "model": "qwen-audio-3.1-asr-flash-streaming",
+    "parameters": {
+      "format": "pcm",
+      "sample_rate": 16000
+    },
+    "input": {}
+  }
+}
+```
+```
+{
+  "header": {
+    "task_id": "3756efcf-8388-41c8-832a-9a70bf046f55",
     "event": "result-generated",
     "attributes": {}
   },
   "payload": {
     "output": {
       "sentence": {
+        "sentence_id": 1,
         "begin_time": 0,
         "end_time": null,
         "text": "",
-        "sentence_begin": true,
+        "channel_id": 0,
         "sentence_end": false,
-        "sentence_id": 1,
+        "sentence_begin": true,
         "words": []
+      },
+      "text": "",
+      "request_id": "3756efcf-8388-41c8-832a-9a70bf046f55",
+      "output": {
+        "sentence": {
+          "sentence_id": 1,
+          "begin_time": 0,
+          "end_time": null,
+          "text": "",
+          "channel_id": 0,
+          "sentence_end": false,
+          "sentence_begin": true,
+          "words": []
+        },
+        "text": "",
+        "request_id": "3756efcf-8388-41c8-832a-9a70bf046f55"
       }
     }
   }
 }
 ```
-**最终结果：**
+
+#### 中间结果
+
+收到 `task-started` 后，发送音频。以下示例为服务端随后返回的一条 `result-generated` 事件；音频通过二进制帧（WebSocket）或 Audio Track（AOQ）发送。
+
 ```
 {
   "header": {
-    "task_id": "2bf83b9a-baeb-4fda-8d9a-xxxxxxxxxxxx",
+    "action": "run-task",
+    "task_id": "3756efcf-8388-41c8-832a-9a70bf046f55",
+    "streaming": "duplex"
+  },
+  "payload": {
+    "task_group": "audio",
+    "task": "asr",
+    "function": "recognition",
+    "model": "qwen-audio-3.1-asr-flash-streaming",
+    "parameters": {
+      "format": "pcm",
+      "sample_rate": 16000
+    },
+    "input": {}
+  }
+}
+```
+```
+{
+  "header": {
+    "task_id": "3756efcf-8388-41c8-832a-9a70bf046f55",
+    "event": "result-generated",
+    "attributes": {}
+  },
+  "payload": {
+    "output": {
+      "sentence": {
+        "sentence_id": 1,
+        "begin_time": 0,
+        "end_time": null,
+        "text": "情感",
+        "channel_id": 0,
+        "sentence_end": false,
+        "words": [
+          {
+            "begin_time": 0,
+            "end_time": 320,
+            "text": "情感",
+            "punctuation": "",
+            "fixed": false,
+            "speaker_id": null
+          }
+        ]
+      },
+      "text": "情感",
+      "request_id": "3756efcf-8388-41c8-832a-9a70bf046f55",
+      "output": {
+        "sentence": {
+          "sentence_id": 1,
+          "begin_time": 0,
+          "end_time": null,
+          "text": "情感",
+          "channel_id": 0,
+          "sentence_end": false,
+          "words": [
+            {
+              "begin_time": 0,
+              "end_time": 320,
+              "text": "情感",
+              "punctuation": "",
+              "fixed": false,
+              "speaker_id": null
+            }
+          ]
+        },
+        "text": "情感",
+        "request_id": "3756efcf-8388-41c8-832a-9a70bf046f55"
+      }
+    }
+  }
+}
+```
+
+#### 句子最终结果
+
+收到 `task-started` 后，发送音频。以下示例为服务端随后返回的一条 `result-generated` 事件；音频通过二进制帧（WebSocket）或 Audio Track（AOQ）发送。
+
+```
+{
+  "header": {
+    "action": "run-task",
+    "task_id": "3756efcf-8388-41c8-832a-9a70bf046f55",
+    "streaming": "duplex"
+  },
+  "payload": {
+    "task_group": "audio",
+    "task": "asr",
+    "function": "recognition",
+    "model": "qwen-audio-3.1-asr-flash-streaming",
+    "parameters": {
+      "format": "pcm",
+      "sample_rate": 16000
+    },
+    "input": {}
+  }
+}
+```
+```
+{
+  "header": {
+    "task_id": "3756efcf-8388-41c8-832a-9a70bf046f55",
     "event": "result-generated",
     "attributes": {}
   },
@@ -181,32 +346,127 @@
       "sentence": {
         "sentence_id": 1,
         "begin_time": 160,
-        "end_time": 1640,
-        "text": "欢迎使用阿里云。",
+        "end_time": 6360,
+        "text": "请把漆原项目的报告发给罗科，下周我们要上线悬枢系统。",
         "channel_id": 0,
-        "speaker_id": null,
         "sentence_end": true,
         "words": [
           {
             "begin_time": 160,
-            "end_time": 520,
-            "text": "欢迎",
+            "end_time": 600,
+            "text": "请把",
             "punctuation": "",
             "fixed": true,
             "speaker_id": null
           },
           {
-            "begin_time": 520,
-            "end_time": 880,
-            "text": "使用",
+            "begin_time": 600,
+            "end_time": 840,
+            "text": "漆",
             "punctuation": "",
             "fixed": true,
             "speaker_id": null
           },
           {
-            "begin_time": 880,
-            "end_time": 1640,
-            "text": "阿里云",
+            "begin_time": 840,
+            "end_time": 1160,
+            "text": "原",
+            "punctuation": "",
+            "fixed": true,
+            "speaker_id": null
+          },
+          {
+            "begin_time": 1160,
+            "end_time": 1680,
+            "text": "项目的",
+            "punctuation": "",
+            "fixed": true,
+            "speaker_id": null
+          },
+          {
+            "begin_time": 1680,
+            "end_time": 2160,
+            "text": "报告",
+            "punctuation": "",
+            "fixed": true,
+            "speaker_id": null
+          },
+          {
+            "begin_time": 2160,
+            "end_time": 2600,
+            "text": "发给",
+            "punctuation": "",
+            "fixed": true,
+            "speaker_id": null
+          },
+          {
+            "begin_time": 2600,
+            "end_time": 2840,
+            "text": "罗",
+            "punctuation": "",
+            "fixed": true,
+            "speaker_id": null
+          },
+          {
+            "begin_time": 2840,
+            "end_time": 3480,
+            "text": "科",
+            "punctuation": "，",
+            "fixed": true,
+            "speaker_id": null
+          },
+          {
+            "begin_time": 3480,
+            "end_time": 4000,
+            "text": "下周",
+            "punctuation": "",
+            "fixed": true,
+            "speaker_id": null
+          },
+          {
+            "begin_time": 4000,
+            "end_time": 4520,
+            "text": "我们要",
+            "punctuation": "",
+            "fixed": true,
+            "speaker_id": null
+          },
+          {
+            "begin_time": 4520,
+            "end_time": 5160,
+            "text": "上线",
+            "punctuation": "",
+            "fixed": true,
+            "speaker_id": null
+          },
+          {
+            "begin_time": 5160,
+            "end_time": 5440,
+            "text": "悬",
+            "punctuation": "",
+            "fixed": true,
+            "speaker_id": null
+          },
+          {
+            "begin_time": 5440,
+            "end_time": 5680,
+            "text": "枢",
+            "punctuation": "",
+            "fixed": true,
+            "speaker_id": null
+          },
+          {
+            "begin_time": 5680,
+            "end_time": 5900,
+            "text": "系",
+            "punctuation": "",
+            "fixed": true,
+            "speaker_id": null
+          },
+          {
+            "begin_time": 5900,
+            "end_time": 6360,
+            "text": "统",
             "punctuation": "。",
             "fixed": true,
             "speaker_id": null
@@ -215,43 +475,138 @@
         "stash": {
           "sentence_id": 2,
           "text": "",
-          "begin_time": 1640,
-          "current_time": 1640,
+          "begin_time": 6360,
+          "current_time": 6360,
           "words": []
         }
       },
-      "text": "欢迎使用阿里云。",
-      "request_id": "95372ce8e6704bcc8747da94789c15ca",
+      "text": "请把漆原项目的报告发给罗科，下周我们要上线悬枢系统。",
+      "request_id": "3756efcf-8388-41c8-832a-9a70bf046f55",
       "output": {
         "sentence": {
           "sentence_id": 1,
           "begin_time": 160,
-          "end_time": 1640,
-          "text": "欢迎使用阿里云。",
+          "end_time": 6360,
+          "text": "请把漆原项目的报告发给罗科，下周我们要上线悬枢系统。",
           "channel_id": 0,
-          "speaker_id": null,
           "sentence_end": true,
           "words": [
             {
               "begin_time": 160,
-              "end_time": 520,
-              "text": "欢迎",
+              "end_time": 600,
+              "text": "请把",
               "punctuation": "",
               "fixed": true,
               "speaker_id": null
             },
             {
-              "begin_time": 520,
-              "end_time": 880,
-              "text": "使用",
+              "begin_time": 600,
+              "end_time": 840,
+              "text": "漆",
               "punctuation": "",
               "fixed": true,
               "speaker_id": null
             },
             {
-              "begin_time": 880,
-              "end_time": 1640,
-              "text": "阿里云",
+              "begin_time": 840,
+              "end_time": 1160,
+              "text": "原",
+              "punctuation": "",
+              "fixed": true,
+              "speaker_id": null
+            },
+            {
+              "begin_time": 1160,
+              "end_time": 1680,
+              "text": "项目的",
+              "punctuation": "",
+              "fixed": true,
+              "speaker_id": null
+            },
+            {
+              "begin_time": 1680,
+              "end_time": 2160,
+              "text": "报告",
+              "punctuation": "",
+              "fixed": true,
+              "speaker_id": null
+            },
+            {
+              "begin_time": 2160,
+              "end_time": 2600,
+              "text": "发给",
+              "punctuation": "",
+              "fixed": true,
+              "speaker_id": null
+            },
+            {
+              "begin_time": 2600,
+              "end_time": 2840,
+              "text": "罗",
+              "punctuation": "",
+              "fixed": true,
+              "speaker_id": null
+            },
+            {
+              "begin_time": 2840,
+              "end_time": 3480,
+              "text": "科",
+              "punctuation": "，",
+              "fixed": true,
+              "speaker_id": null
+            },
+            {
+              "begin_time": 3480,
+              "end_time": 4000,
+              "text": "下周",
+              "punctuation": "",
+              "fixed": true,
+              "speaker_id": null
+            },
+            {
+              "begin_time": 4000,
+              "end_time": 4520,
+              "text": "我们要",
+              "punctuation": "",
+              "fixed": true,
+              "speaker_id": null
+            },
+            {
+              "begin_time": 4520,
+              "end_time": 5160,
+              "text": "上线",
+              "punctuation": "",
+              "fixed": true,
+              "speaker_id": null
+            },
+            {
+              "begin_time": 5160,
+              "end_time": 5440,
+              "text": "悬",
+              "punctuation": "",
+              "fixed": true,
+              "speaker_id": null
+            },
+            {
+              "begin_time": 5440,
+              "end_time": 5680,
+              "text": "枢",
+              "punctuation": "",
+              "fixed": true,
+              "speaker_id": null
+            },
+            {
+              "begin_time": 5680,
+              "end_time": 5900,
+              "text": "系",
+              "punctuation": "",
+              "fixed": true,
+              "speaker_id": null
+            },
+            {
+              "begin_time": 5900,
+              "end_time": 6360,
+              "text": "统",
               "punctuation": "。",
               "fixed": true,
               "speaker_id": null
@@ -260,26 +615,96 @@
           "stash": {
             "sentence_id": 2,
             "text": "",
-            "begin_time": 1640,
-            "current_time": 1640,
+            "begin_time": 6360,
+            "current_time": 6360,
             "words": []
           }
         },
-        "text": "欢迎使用阿里云。",
-        "request_id": "95372ce8e6704bcc8747da94789c15ca"
+        "text": "请把漆原项目的报告发给罗科，下周我们要上线悬枢系统。",
+        "request_id": "3756efcf-8388-41c8-832a-9a70bf046f55"
       },
       "usage": {
-        "duration": 2,
-        "input_tokens": 85,
-        "output_tokens": 4,
-        "total_tokens": 89
+        "duration": 6,
+        "input_tokens": 80,
+        "output_tokens": 16,
+        "total_tokens": 96
       }
     },
     "usage": {
-      "duration": 2,
-      "input_tokens": 85,
-      "output_tokens": 4,
-      "total_tokens": 89
+      "duration": 6,
+      "input_tokens": 80,
+      "output_tokens": 16,
+      "total_tokens": 96
+    }
+  }
+}
+```
+
+#### 心跳
+
+在 `run-task` 中设置 `heartbeat=true`，持续发送静音音频。以下示例展示服务端返回的心跳事件。
+
+```
+{
+  "header": {
+    "action": "run-task",
+    "task_id": "eac269a3-a31d-417a-979d-51066926d8a6",
+    "streaming": "duplex"
+  },
+  "payload": {
+    "task_group": "audio",
+    "task": "asr",
+    "function": "recognition",
+    "model": "qwen-audio-3.1-asr-flash-streaming",
+    "parameters": {
+      "format": "pcm",
+      "sample_rate": 16000,
+      "heartbeat": true
+    },
+    "input": {}
+  }
+}
+```
+```
+{
+  "header": {
+    "task_id": "eac269a3-a31d-417a-979d-51066926d8a6",
+    "event": "result-generated",
+    "attributes": {}
+  },
+  "payload": {
+    "output": {
+      "sentence": {
+        "sentence_id": 0,
+        "begin_time": 0,
+        "end_time": null,
+        "text": "",
+        "channel_id": 0,
+        "speaker_id": null,
+        "sentence_end": false,
+        "heartbeat": true,
+        "words": []
+      },
+      "text": "",
+      "request_id": "eac269a3-a31d-417a-979d-51066926d8a6",
+      "output": {
+        "sentence": {
+          "sentence_id": 0,
+          "begin_time": 0,
+          "end_time": null,
+          "text": "",
+          "channel_id": 0,
+          "speaker_id": null,
+          "sentence_end": false,
+          "heartbeat": true,
+          "words": []
+        },
+        "text": "",
+        "request_id": "eac269a3-a31d-417a-979d-51066926d8a6"
+      }
+    },
+    "usage": {
+      "duration": 2
     }
   }
 }
@@ -287,42 +712,54 @@
 
 ## task-finished
 
-任务正常结束，可关闭连接或复用连接。
+任务处理完成。收到该事件后，本次任务的识别结果已返回完毕。
 
-**header**`object`
+`header`object
 
-属性
-
-**task\_id**`string`
+`task_id`string
 
 客户端生成的任务 ID（UUID 格式）。
 
-**event**`string`
+`event`string
 
 事件类型，固定为 `task-finished`。
 
-**attributes**`object`
+`attributes`object
 
 附加属性（通常为空）。
 
-**payload.usage**`object`
+`payload`object
 
-任务结束时的累计用量。字段含义与 [result-generated.usage](#usage-fields)相同。
+`usage`object
+
+任务结束时的累计用量。字段含义与 [`result-generated.usage`](#usage-fields)相同。
 
 ```
 {
   "header": {
-    "task_id": "2bf83b9a-baeb-4fda-8d9a-xxxxxxxxxxxx",
+    "action": "finish-task",
+    "task_id": "3756efcf-8388-41c8-832a-9a70bf046f55",
+    "streaming": "duplex"
+  },
+  "payload": {
+    "input": {}
+  }
+}
+```
+```
+{
+  "header": {
+    "task_id": "3756efcf-8388-41c8-832a-9a70bf046f55",
     "event": "task-finished",
     "attributes": {}
   },
   "payload": {
     "output": {},
     "usage": {
-      "duration": 9,
-      "input_tokens": 365,
-      "output_tokens": 12,
-      "total_tokens": 377
+      "duration": 6,
+      "input_tokens": 80,
+      "output_tokens": 16,
+      "total_tokens": 96
     }
   }
 }
@@ -330,45 +767,64 @@
 
 ## task-failed
 
-任务失败，连接会被关闭，无法复用。
+任务失败。通过 `error_code` 和 `error_message` 获取错误原因。WebSocket 连接在任务失败后会被关闭，无法复用。
 
-**header**`object`
+`header`object
 
-属性
-
-**task\_id**`string`
+`task_id`string
 
 客户端生成的任务 ID（UUID 格式）。
 
-**event**`string`
+`event`string
 
 事件类型，固定为 `task-failed`。
 
-**error\_code**`string`
+`error_code`string
 
 错误类型描述。
 
-**error\_message**`string`
+`error_message`string
 
 具体错误原因。
 
-**attributes**`object`
+`attributes`object
 
 附加属性（通常为空）。
 
-**payload**`object`
+`payload`object
 
 固定为`{}`。
 
+以下请求使用不支持的音频格式，用于展示 `task-failed`。错误码和错误信息随失败原因而变化。
+
 ```
 {
-    "header": {
-        "task_id": "2bf83b9a-baeb-4fda-8d9a-xxxxxxxxxxxx",
-        "event": "task-failed",
-        "error_code": "CLIENT_ERROR",
-        "error_message": "request timeout after 23 seconds.",
-        "attributes": {}
+  "header": {
+    "action": "run-task",
+    "task_id": "9272a5a2-8df4-4f2d-af0e-e544c17f3e42",
+    "streaming": "duplex"
+  },
+  "payload": {
+    "task_group": "audio",
+    "task": "asr",
+    "function": "recognition",
+    "model": "qwen-audio-3.1-asr-flash-streaming",
+    "parameters": {
+      "format": "invalid-format",
+      "sample_rate": 16000
     },
-    "payload": {}
+    "input": {}
+  }
+}
+```
+```
+{
+  "header": {
+    "task_id": "9272a5a2-8df4-4f2d-af0e-e544c17f3e42",
+    "event": "task-failed",
+    "error_code": "UNSUPPORTED_FORMAT",
+    "error_message": "UNSUPPORTED_FORMAT"
+  },
+  "payload": {}
 }
 ```

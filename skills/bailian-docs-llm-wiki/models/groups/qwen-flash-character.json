@@ -24,6 +24,7 @@
         {
           "priceUnit": "每百万tokens",
           "price": "0.25",
+          "ntmItemCode": "sfm_inferenceDomain_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "input_token",
           "type": "input_token",
@@ -32,6 +33,7 @@
         {
           "priceUnit": "每百万tokens",
           "price": "1.5",
+          "ntmItemCode": "sfm_inferenceDomain_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "output_token",
           "type": "output_token",
@@ -40,6 +42,7 @@
         {
           "priceUnit": "每百万tokens",
           "price": "0.05",
+          "ntmItemCode": "sfm_inferenceDomain_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "input_token_cache",
           "type": "input_token_cache",

@@ -21,6 +21,7 @@
         {
           "priceUnit": "每秒",
           "price": "0.9",
+          "ntmItemCode": "sfm_inferenceHH_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "720P",
           "type": "video_ratio_720p",
@@ -29,6 +30,7 @@
         {
           "priceUnit": "每秒",
           "price": "1.6",
+          "ntmItemCode": "sfm_inferenceHH_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "1080P",
           "type": "video_ratio_1080p",
@@ -85,6 +87,7 @@
         {
           "priceUnit": "每秒",
           "price": "0.9",
+          "ntmItemCode": "sfm_inferenceHH_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "720P",
           "type": "video_ratio_720p",
@@ -93,6 +96,7 @@
         {
           "priceUnit": "每秒",
           "price": "1.6",
+          "ntmItemCode": "sfm_inferenceHH_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "1080P",
           "type": "video_ratio_1080p",
@@ -150,6 +154,7 @@
         {
           "priceUnit": "每秒",
           "price": "0.9",
+          "ntmItemCode": "sfm_inferenceHH_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "720P",
           "type": "video_ratio_720p",
@@ -158,6 +163,7 @@
         {
           "priceUnit": "每秒",
           "price": "1.6",
+          "ntmItemCode": "sfm_inferenceHH_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "1080P",
           "type": "video_ratio_1080p",
@@ -216,6 +222,7 @@
         {
           "priceUnit": "每秒",
           "price": "0.9",
+          "ntmItemCode": "sfm_inferenceHH_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "720P",
           "type": "video_ratio_720p",
@@ -224,6 +231,7 @@
         {
           "priceUnit": "每秒",
           "price": "1.6",
+          "ntmItemCode": "sfm_inferenceHH_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "1080P",
           "type": "video_ratio_1080p",

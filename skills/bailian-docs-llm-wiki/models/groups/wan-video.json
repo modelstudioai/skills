@@ -23,6 +23,7 @@
         {
           "priceUnit": "每秒",
           "price": "0.45",
+          "ntmItemCode": "sfm_inferenceWan_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "480P",
           "type": "video_ratio_480p",
@@ -31,6 +32,7 @@
         {
           "priceUnit": "每秒",
           "price": "0.9",
+          "ntmItemCode": "sfm_inferenceWan_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "720P",
           "type": "video_ratio_720p",
@@ -39,6 +41,7 @@
         {
           "priceUnit": "每秒",
           "price": "1.8",
+          "ntmItemCode": "sfm_inferenceWan_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "1080P",
           "type": "video_ratio_1080p",
@@ -104,6 +107,7 @@
         {
           "priceUnit": "每秒",
           "price": "0.3",
+          "ntmItemCode": "sfm_inferenceWan_public_cn",
           "timeBand": "standard",
           "discount": 0.7,
           "ntmAmountType": "480P",
@@ -113,6 +117,7 @@
         {
           "priceUnit": "每秒",
           "price": "0.6",
+          "ntmItemCode": "sfm_inferenceWan_public_cn",
           "timeBand": "standard",
           "discount": 0.7,
           "ntmAmountType": "720P",
@@ -122,6 +127,7 @@
         {
           "priceUnit": "每秒",
           "price": "1.2",
+          "ntmItemCode": "sfm_inferenceWan_public_cn",
           "timeBand": "standard",
           "discount": 0.7,
           "ntmAmountType": "1080P",

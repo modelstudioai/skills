@@ -136,6 +136,7 @@
         {
           "priceUnit": "每百万tokens",
           "price": "12",
+          "ntmItemCode": "sfm_inference_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "input_token",
           "type": "input_token",
@@ -144,6 +145,7 @@
         {
           "priceUnit": "每百万tokens",
           "price": "36",
+          "ntmItemCode": "sfm_inference_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "output_token",
           "type": "output_token",
@@ -152,6 +154,7 @@
         {
           "priceUnit": "每百万tokens",
           "price": "1.5",
+          "ntmItemCode": "sfm_inference_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "input_token_cache",
           "type": "input_token_cache",
@@ -160,6 +163,7 @@
         {
           "priceUnit": "每百万tokens",
           "price": "6",
+          "ntmItemCode": "sfm_inference_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "input_token_batch",
           "type": "input_token_batch",
@@ -168,6 +172,7 @@
         {
           "priceUnit": "每百万tokens",
           "price": "18",
+          "ntmItemCode": "sfm_inference_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "output_token_batch",
           "type": "output_token_batch",
@@ -176,6 +181,7 @@
         {
           "priceUnit": "每百万tokens",
           "price": "15",
+          "ntmItemCode": "sfm_inference_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "input_token_cache_creation_5m",
           "type": "input_token_cache_creation_5m",
@@ -184,6 +190,7 @@
         {
           "priceUnit": "每百万tokens",
           "price": "1",
+          "ntmItemCode": "sfm_inference_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "input_token_cache_read",
           "type": "input_token_cache_read",
@@ -192,6 +199,7 @@
         {
           "priceUnit": "每百万tokens",
           "price": "12",
+          "ntmItemCode": "sfm_inference_public_cn",
           "timeBand": "standard",
           "discount": 0.5,
           "ntmAmountType": "input_token_batch",
@@ -201,6 +209,7 @@
         {
           "priceUnit": "每百万tokens",
           "price": "36",
+          "ntmItemCode": "sfm_inference_public_cn",
           "timeBand": "standard",
           "discount": 0.5,
           "ntmAmountType": "output_token_batch",
@@ -400,6 +409,7 @@
         {
           "priceUnit": "每百万tokens",
           "price": "12",
+          "ntmItemCode": "sfm_inference_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "input_token",
           "type": "input_token",
@@ -408,6 +418,7 @@
         {
           "priceUnit": "每百万tokens",
           "price": "36",
+          "ntmItemCode": "sfm_inference_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "output_token",
           "type": "output_token",
@@ -416,6 +427,7 @@
         {
           "priceUnit": "每百万tokens",
           "price": "1.5",
+          "ntmItemCode": "sfm_inference_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "input_token_cache",
           "type": "input_token_cache",
@@ -424,6 +436,7 @@
         {
           "priceUnit": "每百万tokens",
           "price": "15",
+          "ntmItemCode": "sfm_inference_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "input_token_cache_creation_5m",
           "type": "input_token_cache_creation_5m",
@@ -432,6 +445,7 @@
         {
           "priceUnit": "每百万tokens",
           "price": "1",
+          "ntmItemCode": "sfm_inference_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "input_token_cache_read",
           "type": "input_token_cache_read",

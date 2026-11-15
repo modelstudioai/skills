@@ -474,6 +474,8 @@ ASMR 轻声
 
 ## 应用于生产环境
 
+文本发送、音频播放、连接复用、并发管理和性能排查，请参见[语音合成最佳实践](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/tts-high-concurrency-best-practices.md)。请求频率和并发数应遵循对应模型的[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)。
+
 ### 取消任务
 
 使用 Qwen-Audio-TTS 或 CosyVoice 模型时，如需中断当前轮次合成，可发送取消指令。服务端会结束当前任务并返回 `task-finished`。
@@ -501,48 +503,6 @@ WebSocket 原始协议
 无需 SDK
 
 发送 `finish-task` 事件，并在 `input` 中设置 `directive=cancel`。
-
-### WebSocket 连接复用
-
-同一 WebSocket 连接可顺序处理多轮合成，各模型系列开启下一轮的方式如下：
-
-**模型系列**
-
-**本轮结束信号**
-
-**开启下一轮**
-
-Qwen-Audio-TTS、CosyVoice
-
-`task-finished`
-
-必须使用新的 `task_id` 发送 `run-task`，再按该系列的流程发送文本。取消任务后也按此流程复用连接。
-
-**说明**使用 Python SDK 时，`client.audio.tts.connect` 创建的会话在任务结束或取消后默认关闭底层连接。需要复用连接时，可先通过 `client.ws_connection()` 创建共享 WebSocket 连接，并在 `client.audio.tts.connect` 时以 `connection=` 传入，即可在同一连接上顺序执行多轮合成；连接由调用方通过 `WsConnection.close` 关闭。
-
-Sambert
-
-`task-finished`
-
-必须使用新的 `task_id` 发送 `run-task`，并在该事件中携带本轮完整文本，无需发送 `continue-task` 或 `finish-task`。
-
-Qwen3-TTS
-
-`response.done`
-
-在当前会话中继续发送 `input_text_buffer.append`。根据会话模式，由服务端触发合成或发送 `input_text_buffer.commit`；全部文本发送完毕后再发送 `session.finish` 结束会话。
-
-SDK 对象池的配置与完整示例请参见[语音合成最佳实践](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/tts-high-concurrency-best-practices.md)。Qwen3-TTS 的会话流程请参见 [WebSocket API](raw/_short/interactive-process-of-qwen-tts-realtime-synthes-4a35095f0ac8788f.md)。
-
-Qwen-Audio-TTS、CosyVoice、Sambert 任务结束后 60 秒内没有新任务时，连接会自动断开。连接已关闭或任务状态异常时，应重新建立连接。
-
-### 模型限流
-
-按对应模型的限流规则控制请求频率和并发数。限流条件、常见报错及处理方法请参见[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)。
-
-### 高并发最佳实践
-
-通过对象池复用合成对象与连接，并按业务需求配置并发、预热和异常处理，具体请参见[语音合成最佳实践](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/tts-high-concurrency-best-practices.md)。
 
 ## 支持模型
 
@@ -572,49 +532,15 @@ Qwen-Audio-TTS、CosyVoice、Sambert 任务结束后 60 秒内没有新任务时
 
 ## 常见问题
 
-### 使用复刻音色生成的音频无声音如何排查？
+使用复刻音色生成的音频无声音如何排查？
 
 确认 `voice` 为创建成功的音色 ID，创建音色时的 `target_model` 与合成时的 `model` 一致。音色状态、源音频要求及质量建议请参见[音色复刻](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-cloning-user-guide.md)。
 
-### 为什么语音合成的实际时长与 WAV 文件显示的时长不一致？
-
-流式返回 WAV 时，文件头可能无法反映最终音频长度。如需准确的时长信息，可将 `format` 设为 `pcm`，接收完整音频后添加包含实际长度的 WAV 文件头。
-
-### 为什么音频无法播放？
-
-请按以下场景逐一排查：
-
-1.  音频保存为完整文件（如 xx.mp3）的情况
-    
-    1.  音频格式一致性：请求参数中的音频格式须与文件后缀一致（如参数为 wav 则文件须为 .wav）。
-    2.  播放器兼容性：确认播放器支持该音频的格式和采样率。
-2.  流式播放音频的情况
-    
-    1.  将音频流保存为完整文件，尝试用播放器播放。如果文件无法播放，请参考场景 1 的排查方法。
-    2.  如果文件可正常播放，则问题在流式播放实现。请确认播放器支持流式播放（如 ffmpeg、pyaudio、AudioFormat、MediaSource 等）。
-
-### 为什么音频播放卡顿？
-
-请按以下步骤逐一排查：
-
-1.  检查文本发送速度：确保发送间隔合理，避免上段音频播完后下段文本尚未到达。
-    
-2.  检查回调函数性能：
-    
-    -   确认回调函数中无阻塞性业务逻辑。
-    -   回调运行在 WebSocket 线程，阻塞会影响数据接收。建议将音频数据写入独立缓冲区，在其他线程中处理。
-3.  检查网络稳定性：网络波动可能导致音频传输中断或延迟。
-    
-
-### 语音合成耗时较长是什么原因？
-
-分段输入时，过长的文本发送间隔会增加合成总时长；首次调用还包含 WebSocket 建连开销。高并发场景下的预热与耗时统计，请参见[语音合成最佳实践](https://help.aliyun.com/zh/model-studio/tts-high-concurrency-best-practices#warm-up)。
-
-### 如何限制 API Key 仅用于语音合成服务（权限隔离）？
+如何限制 API Key 仅用于语音合成服务（权限隔离）？
 
 通过新建业务空间并仅授权特定模型，可限制 API Key 的使用范围。请参见[业务空间管理](https://help.aliyun.com/zh/model-studio/permission-management-overview#dac6676deelh2)。
 
-### 子业务空间的 API Key 能否调用 Qwen-Audio-TTS/CosyVoice 模型？
+子业务空间的 API Key 能否调用 Qwen-Audio-TTS/CosyVoice 模型？
 
 默认业务空间下，所有模型均可调用。
 

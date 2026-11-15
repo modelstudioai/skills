@@ -21,6 +21,7 @@
         {
           "priceUnit": "每次",
           "price": "0.05",
+          "ntmItemCode": "sfm_inferenceHH_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "ct_wld_adven_user_frame",
           "type": "ct_wld_adven_user_frame",
@@ -29,6 +30,7 @@
         {
           "priceUnit": "每秒",
           "price": "0.2",
+          "ntmItemCode": "sfm_inferenceHH_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "HO_adventure_480P",
           "type": "HO_adventure_480P",

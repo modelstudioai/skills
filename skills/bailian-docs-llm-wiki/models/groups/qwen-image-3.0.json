@@ -22,6 +22,7 @@
         {
           "priceUnit": "每张",
           "price": "0.02",
+          "ntmItemCode": "sfm_inference_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "qima_input_1k",
           "type": "qima_input_1k",
@@ -30,6 +31,7 @@
         {
           "priceUnit": "每张",
           "price": "0.02",
+          "ntmItemCode": "sfm_inference_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "qima_input_2k",
           "type": "qima_input_2k",
@@ -38,6 +40,7 @@
         {
           "priceUnit": "每张",
           "price": "0.18",
+          "ntmItemCode": "sfm_inference_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "qima_output_1k",
           "type": "qima_output_1k",
@@ -46,6 +49,7 @@
         {
           "priceUnit": "每张",
           "price": "0.18",
+          "ntmItemCode": "sfm_inference_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "qima_output_2k",
           "type": "qima_output_2k",
@@ -101,6 +105,7 @@
         {
           "priceUnit": "每张",
           "price": "0.02",
+          "ntmItemCode": "sfm_inference_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "qima_input_1k",
           "type": "qima_input_1k",
@@ -109,6 +114,7 @@
         {
           "priceUnit": "每张",
           "price": "0.02",
+          "ntmItemCode": "sfm_inference_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "qima_input_2k",
           "type": "qima_input_2k",
@@ -117,6 +123,7 @@
         {
           "priceUnit": "每张",
           "price": "0.25",
+          "ntmItemCode": "sfm_inference_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "qima_output_1k",
           "type": "qima_output_1k",
@@ -125,6 +132,7 @@
         {
           "priceUnit": "每张",
           "price": "0.5",
+          "ntmItemCode": "sfm_inference_public_cn",
           "timeBand": "standard",
           "ntmAmountType": "qima_output_2k",
           "type": "qima_output_2k",

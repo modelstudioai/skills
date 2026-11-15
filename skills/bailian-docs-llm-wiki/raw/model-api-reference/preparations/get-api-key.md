@@ -4,7 +4,7 @@
 
 ## 获取 API Key
 
-1.  前往阿里云百炼[API Key](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key)页面，在右上角选择**地域**。每个地域有独立的接入域名、API Key 和模型列表，**不能跨地域混用**，各地域的 API Key 入口和接入域名请参见[各地域接入信息](https://help.aliyun.com/zh/model-studio/regions#h2_cc92e61c)。
+1.  前往目标地域的 API Key 页面，例如[华北2（北京）](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key)。每个地域有独立的接入域名、API Key 和模型列表，**不能跨地域混用**，各地域的 API Key 入口和接入域名请参见[各地域接入信息](https://help.aliyun.com/zh/model-studio/regions#h2_cc92e61c)。
     
 2.  若需创建 API Key，单击**创建 API Key**，在弹窗中配置以下选项后单击**确定**（若无法创建，请联系超级管理员或业务空间管理员）：
     
