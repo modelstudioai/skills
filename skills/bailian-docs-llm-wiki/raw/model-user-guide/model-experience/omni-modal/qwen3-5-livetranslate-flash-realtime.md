@@ -98,7 +98,7 @@ ws.run_forever()
     
     **说明**使用 `qwen3.5-livetranslate-flash-realtime` 时，原文识别默认开启。原文由独立的 ASR 模型根据输入音频生成。如需调整，需通过 `session.input_audio_transcription.model` 配置：`qwen3-asr-flash-realtime` 表示开启，`null` 表示关闭。识别增量通过 `conversation.item.input_audio_transcription.text` 返回，完整结果通过 `conversation.item.input_audio_transcription.completed` 返回。
     
--   **音频与音色**：使用 `qwen3.8-livetranslate-flash-realtime` 时，默认输入为 16000 Hz PCM，输出为 24000 Hz PCM，默认音色为 `Tina`。也可输入 Opus 音频，需将 `session.audio.input.format.type` 设为 `opus`。可通过 [session.created](https://help.aliyun.com/zh/model-studio/live-translator-server-events#39689ed6e90ag) 返回的 `session.audio.output.voice` 查看音色。如需保留说话人的音色，参见[声音复刻](#8q75hr4eu55j0)。
+-   **音频与音色**：使用 `qwen3.8-livetranslate-flash-realtime` 时，默认输入为 16000 Hz PCM，译音以 PCM 输出，采样率固定为 24000 Hz，默认音色为 `Tina`。也可输入 Opus 音频，需将 `session.audio.input.format.type` 设为 `opus`。可通过 [session.created](https://help.aliyun.com/zh/model-studio/live-translator-server-events#39689ed6e90ag) 返回的 `session.audio.output.voice` 查看音色。如需保留说话人的音色，参见[声音复刻](#8q75hr4eu55j0)。
     
     **说明**使用 `qwen3.5-livetranslate-flash-realtime` 时，通过 `session.sample_rate`、`session.input_audio_format` 和 `session.output_audio_format` 配置音频，通过 `session.voice` 配置音色，默认音色同样为 `Tina`。
     
@@ -110,6 +110,8 @@ ws.run_forever()
 ### 3\. 输入音频与图片
 
 客户端通过 [input\_audio\_buffer.append](https://help.aliyun.com/zh/model-studio/live-translator-client-events#8d11313f2198k) 和 [input\_image\_buffer.append](https://help.aliyun.com/zh/model-studio/live-translator-client-events#e27908854eaht) 事件发送 Base64 编码的音频和图片数据。音频输入是必需的；图片输入是可选的。
+
+用 `qwen3.8-livetranslate-flash-realtime` 处理图片时，先在 [session.update](https://help.aliyun.com/zh/model-studio/live-translator-client-events#af43722339yva) 中将 `session.input_modalities` 设为 `["audio", "video"]`。省略此字段时，模型只处理音频。
 
 > 图片可以来自本地文件，或从视频流中实时采集。
 
@@ -516,7 +518,7 @@ def handle_speaker_event(event):
 复用快速开始的麦克风输入和连接配置：
 
 1.  安装图像处理依赖：`pip install Pillow`。
-2.  将目标语种 `translation.language` 改为 `zh`，运行示例时对着麦克风说 `What is mask?`。
+2.  在麦克风示例的 `session.update` 请求中，将 `session.input_modalities` 设为 `["audio", "video"]`，将 `session.translation.language` 改为 `zh`。运行示例时，对着麦克风说 `What is mask?`。
 3.  在麦克风示例的 `def send_audio():` 之前加入下面的图像读取代码，并用新的 `send_audio()` 替换原函数。片段使用已有的 `input_stream`、`stop_recording`、`ws`、`send_errors` 和导入项。
 
 ```

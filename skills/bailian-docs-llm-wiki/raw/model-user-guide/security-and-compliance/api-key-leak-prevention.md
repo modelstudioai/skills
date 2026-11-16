@@ -137,7 +137,7 @@ export DASHSCOPE_API_KEY
 
 平台会周期性扫描公开代码库等公网环境，识别泄漏的 API Key 并主动告知，具体渠道以实际启用的为准（可能包括短信、邮件、站内信等）；同时识别非常用 IP 登录、夜间突发流量、费用异常激增等异常行为。
 
-**说明**平台告警是泄漏检测的补充信号，存在识别与送达时延，不能替代您自行配置的预算告警与监控告警。收到告警后，请按 [API Key 泄漏排查](raw/model-user-guide/security-and-compliance/api-key-leak-investigation.md)定位并处置。
+平台风险检测与告警是平台为提升使用体验而主动提供的异常检测与预警能力，**不在 SLA 约定的服务范围内；受风险场景复杂性所限，不承诺绝对的告警覆盖率，告警的识别与送达也可能存在时延。API Key 等凭据的安全保管与合规使用属于您的责任范畴，请以自行配置的预算告警、模型监控告警与定期轮换作为主要防线；未收到平台告警不代表没有泄漏风险**。发现疑似泄漏或收到告警后，请按 [API Key 泄漏排查](raw/model-user-guide/security-and-compliance/api-key-leak-investigation.md)定位并处置。
 
 ## 上线前检查清单
 

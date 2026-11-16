@@ -8,16 +8,16 @@
 - [agent billing](guides/agent-billing.md) — 7 篇源文档
 - [agent context](guides/agent-context.md) — 1 篇源文档
 - [agent development](guides/agent-development.md) — 1 篇源文档
-- [agent governance](guides/agent-governance.md) — 29 篇源文档
 - [agent governance](guides/agent-governance.md) — 1 篇源文档
-- [agent legacy](guides/agent-legacy.md) — 5 篇源文档
+- [agent governance](guides/agent-governance.md) — 29 篇源文档
 - [agent legacy](guides/agent-legacy.md) — 1 篇源文档
+- [agent legacy](guides/agent-legacy.md) — 5 篇源文档
 - [agent store](guides/agent-store.md) — 8 篇源文档
 - [agent store](guides/agent-store.md) — 1 篇源文档
 - [application support](guides/application-support.md) — 1 篇源文档
 - [application support](guides/application-support.md) — 3 篇源文档
-- [application use cases](guides/application-use-cases.md) — 1 篇源文档
 - [application use cases](guides/application-use-cases.md) — 5 篇源文档
+- [application use cases](guides/application-use-cases.md) — 1 篇源文档
 - [asset center page](guides/asset-center-page.md) — 1 篇源文档
 - [asset center page](guides/asset-center-page.md) — 1 篇源文档
 - [get started with agents](guides/get-started-with-agents.md) — 1 篇源文档
@@ -28,12 +28,12 @@
 - [model high speed inference](guides/model-high-speed-inference.md) — 12 篇源文档
 - [model monitoring](guides/model-monitoring.md) — 1 篇源文档
 - [model monitoring](guides/model-monitoring.md) — 2 篇源文档
-- [security and compliance](guides/security-and-compliance.md) — 16 篇源文档
 - [security and compliance](guides/security-and-compliance.md) — 1 篇源文档
-- [support](guides/support.md) — 1 篇源文档
+- [security and compliance](guides/security-and-compliance.md) — 16 篇源文档
 - [support](guides/support.md) — 3 篇源文档
-- [test 1](guides/test-1.md) — 1 篇源文档
+- [support](guides/support.md) — 1 篇源文档
 - [test 1](guides/test-1.md) — 7 篇源文档
+- [test 1](guides/test-1.md) — 1 篇源文档
 - [use cases](guides/use-cases.md) — 1 篇源文档
 - [use cases](guides/use-cases.md) — 50 篇源文档
 
@@ -72,8 +72,8 @@
 - [more about models](api/more-about-models.md) — 6 篇源文档
 - [more models](api/more-models.md) — 1 篇源文档
 - [more models](api/more-models.md) — 4 篇源文档
-- [preparations](api/preparations.md) — 6 篇源文档
 - [preparations](api/preparations.md) — 1 篇源文档
+- [preparations](api/preparations.md) — 6 篇源文档
 - [qwen api reference](api/qwen-api-reference.md) — 1 篇源文档
 - [qwen api reference](api/qwen-api-reference.md) — 8 篇源文档
 - [qwen mt translation models](api/qwen-mt-translation-models.md) — 1 篇源文档
@@ -83,36 +83,35 @@
 - [realtime api directory](api/realtime-api-directory.md) — 1 篇源文档
 - [sandbox api](api/sandbox-api.md) — 1 篇源文档
 - [sandbox api](api/sandbox-api.md) — 18 篇源文档
-- [security api guide](api/security-api-guide.md) — 1 篇源文档
 - [security api guide](api/security-api-guide.md) — 10 篇源文档
+- [security api guide](api/security-api-guide.md) — 1 篇源文档
 - [toolkits and frameworks](api/toolkits-and-frameworks.md) — 1 篇源文档
 - [toolkits and frameworks](api/toolkits-and-frameworks.md) — 9 篇源文档
-- [vector and sort](api/vector-and-sort.md) — 7 篇源文档
 - [vector and sort](api/vector-and-sort.md) — 1 篇源文档
+- [vector and sort](api/vector-and-sort.md) — 7 篇源文档
 - [video generation api](api/video-generation-api.md) — 1 篇源文档
 - [video generation api](api/video-generation-api.md) — 45 篇源文档
-- [voice customization api directory](api/voice-customization-api-directory.md) — 6 篇源文档
 - [voice customization api directory](api/voice-customization-api-directory.md) — 1 篇源文档
+- [voice customization api directory](api/voice-customization-api-directory.md) — 6 篇源文档
 - [world model api reference](api/world-model-api-reference.md) — 1 篇源文档
 
 ## 横切概念
 
-- [OpenAI 兼容接口](concepts/openai-compatible-interface.md) — 关联 4 个主题
-- [Token 计费与管理](concepts/token.md) — 关联 4 个主题
-- [函数调用](concepts/function-calling.md) — 关联 4 个主题
-- [安全内容过滤](concepts/security-filtering.md) — 关联 4 个主题
-- [异步调用](concepts/asynchronous-invocation.md) — 关联 5 个主题
-- [文件上传与管理](concepts/file-upload.md) — 关联 4 个主题
-- [检索增强生成](concepts/rag.md) — 关联 4 个主题
-- [模型路由与选型](concepts/model-routing.md) — 关联 5 个主题
-- [流式输出](concepts/streaming-output.md) — 关联 4 个主题
-- [长期记忆](concepts/long-term-memory.md) — 关联 4 个主题
+- [OpenAI 兼容接口](concepts/openai-compatible-interface.md) — 关联 5 个主题
+- [Token 计量与管理](concepts/token.md) — 关联 5 个主题
+- [内容安全检测](concepts/security-inspection.md) — 关联 5 个主题
+- [函数调用](concepts/function-calling.md) — 关联 5 个主题
+- [多模态输入支持](concepts/multimodal-input.md) — 关联 5 个主题
+- [异步任务模式](concepts/asynchronous-task.md) — 关联 5 个主题
+- [智能模型路由](concepts/model-routing.md) — 关联 5 个主题
+- [检索增强生成](concepts/rag.md) — 关联 5 个主题
+- [流式输出](concepts/streaming-output.md) — 关联 5 个主题
+- [长期记忆](concepts/long-term-memory.md) — 关联 5 个主题
 
 ## 对比分析
 
-- [RAG 与长期记忆能力对比](comparisons/rag-vs-long-term-memory.md) — 对比 2 个主题
-- [多模态内容生成能力对比：图像、视频与3D生成](comparisons/generation-modalities.md) — 对比 3 个主题
-- [智能体架构方案对比：托管型、流程型与沙箱型](comparisons/agent-architectures.md) — 对比 3 个主题
-- [模型部署方式对比：高并发推理、模型管理与生产化部署](comparisons/model-deployment-options.md) — 对比 3 个主题
-- [音频生成、语音合成与语音识别对比](comparisons/audio-generation-vs-synthesis-vs-recognition.md) — 对比 4 个主题
+- [RAG、长期记忆与向量检索排序能力对比](comparisons/rag-vs-long-term-memory-vs-vector-and-sort.md) — 对比 3 个主题
+- [图像、视频与3D内容生成能力对比](comparisons/generation-modalities-comparison.md) — 对比 3 个主题
+- [模型生产部署、高速推理与模型监控方案对比](comparisons/model-deployment-options.md) — 对比 3 个主题
+- [流程型智能体、托管智能体与传统智能体架构对比](comparisons/agent-types-comparison.md) — 对比 3 个主题
 

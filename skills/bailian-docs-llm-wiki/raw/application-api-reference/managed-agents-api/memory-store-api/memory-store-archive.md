@@ -12,19 +12,7 @@
 
 ## 路径参数
 
-**参数**
-
-**必填**
-
-**类型**
-
-**说明**
-
-`memory_store_id`
-
-是
-
-string
+**memory\_store\_id** `string` **（必选）**
 
 记忆库 ID
 
@@ -36,6 +24,40 @@ curl
 curl -X POST "$AGENTSTUDIO_URL/memory_stores/memstore_xxx/archive" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
+
+### 响应字段
+
+**id** `string`
+
+记忆库 ID，格式 memstore\_xxx
+
+**type** `string`
+
+固定为 memory\_store
+
+**name** `string`
+
+记忆库名称，1-255 字符
+
+**description** `string`
+
+用途说明；未填写时为空字符串
+
+**metadata** `object`
+
+业务自定义键值对元数据
+
+**archived\_at** `string | null`
+
+归档时间，未归档时省略或为 null
+
+**created\_at** `string`
+
+创建时间，ISO 8601 UTC
+
+**updated\_at** `string`
+
+最近更新时间，ISO 8601 UTC
 
 ## 响应
 
@@ -53,62 +75,6 @@ curl -X POST "$AGENTSTUDIO_URL/memory_stores/memstore_xxx/archive" \
   "archived_at": "2026-09-17T09:00:00Z"
 }
 ```
-
-### 响应字段
-
-**字段**
-
-**类型**
-
-**说明**
-
-`id`
-
-string
-
-记忆库 ID，格式 memstore\_xxx
-
-`type`
-
-string
-
-固定为 memory\_store
-
-`name`
-
-string
-
-记忆库名称，1-255 字符
-
-`description`
-
-string
-
-用途说明；未填写时为空字符串
-
-`metadata`
-
-object
-
-业务自定义键值对元数据
-
-`archived_at`
-
-string | null
-
-归档时间，未归档时省略或为 null
-
-`created_at`
-
-string
-
-创建时间，ISO 8601 UTC
-
-`updated_at`
-
-string
-
-最近更新时间，ISO 8601 UTC
 
 ## 错误码
 

@@ -44,6 +44,12 @@ Java
 client.files().delete("file_xxx");
 ```
 
+### 响应字段
+
+**request\_id** `string`
+
+本次请求的唯一标识
+
 ## 响应示例
 
 ```
@@ -51,17 +57,3 @@ client.files().delete("file_xxx");
   "request_id": "xxx"
 }
 ```
-
-### 响应字段
-
-字段
-
-类型
-
-说明
-
-`request_id`
-
-string
-
-本次请求的唯一标识

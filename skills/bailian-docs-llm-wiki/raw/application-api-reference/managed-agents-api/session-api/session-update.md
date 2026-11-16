@@ -14,59 +14,27 @@
 
 ## 请求体
 
-字段
-
-必填
-
-类型
-
-说明
-
-`title`
-
-否
-
-string
+**title** `string` **（可选）**
 
 会话标题。省略保持原值，`null` 不执行更新
 
-`metadata`
-
-否
-
-object
+**metadata** `object` **（可选）**
 
 业务自定义键值。整体替换；省略保持原值，`null` 不执行更新
 
-`environment_variables`
-
-否
-
-object
+**environment\_variables** `object` **（可选）**
 
 会话运行时注入的环境变量，字符串键值对，沙箱代码中可直接按名读取。整体替换；空对象清空，省略保持原值
 
-`vault_ids`
-
-否
-
-array of string
+**vault\_ids** `array of string` **（可选）**
 
 整体替换 Vault 绑定；空数组清空，省略保持原值
 
-`agent`
-
-否
-
-object
+**agent** `object` **（可选）**
 
 会话级智能体配置 patch，只能携带 `system` / `tools` / `mcp_servers` / `skills` 覆盖字段，携带其他字段（如 `type` / `id` / `version` / `model`）返回 invalid\_parameter。见[会话级配置 patch](#h-su-agent)
 
-`mcp_configs`
-
-否
-
-array
+**mcp\_configs** `array` **（可选）**
 
 整体替换会话级 MCP 请求头，结构与[创建 Session](raw/application-api-reference/managed-agents-api/session-api/session-create.md)一致；空数组清空，省略保持原值，`null` 非法
 
@@ -157,6 +125,48 @@ Session updated = client.sessions().update("sesn_xxx",
         .build());
 ```
 
+### 响应字段
+
+**id**`string`
+
+会话 ID
+
+**type**`string`
+
+固定为 `session`
+
+**status**`string`
+
+当前会话状态（更新不改变状态）
+
+**title / metadata**`string / object`
+
+请求体覆盖后的新值
+
+**updated\_at**`string`
+
+最近更新时间，ISO 8601
+
+**request\_id**`string`
+
+本次请求的唯一标识
+
+**environment\_variables**`object`
+
+会话运行时注入的环境变量，字符串键值对，沙箱代码中可直接按名读取
+
+**agent**`object`
+
+更新后的智能体配置快照，会话级覆盖已并入。字段同[获取 Session](raw/application-api-reference/managed-agents-api/session-api/session-get.md)
+
+**vault\_ids**`array of string`
+
+更新后的 Vault 绑定
+
+**mcp\_configs**`array of object`
+
+更新后的会话级 MCP 请求头，每项含 `mcp_server_name` 与 `headers`
+
 ## 响应示例
 
 返回更新后的会话详情：`title` / `metadata` 等覆盖后的新值、`agent`（覆盖已并入的完整快照）、`mcp_configs`、`vault_ids`、`updated_at` 与 `request_id`。
@@ -185,71 +195,3 @@ Session updated = client.sessions().update("sesn_xxx",
   "mcp_configs": [{"mcp_server_name": "crm", "headers": {"X-Tenant-Id": "tenant-demo"}}]
 }
 ```
-
-### 响应字段
-
-字段
-
-类型
-
-说明
-
-`id`
-
-string
-
-会话 ID
-
-`type`
-
-string
-
-固定为 `session`
-
-`status`
-
-string
-
-当前会话状态（更新不改变状态）
-
-`title` / `metadata`
-
-string / object
-
-请求体覆盖后的新值
-
-`updated_at`
-
-string
-
-最近更新时间，ISO 8601
-
-`request_id`
-
-string
-
-本次请求的唯一标识
-
-`environment_variables`
-
-object
-
-会话运行时注入的环境变量，字符串键值对，沙箱代码中可直接按名读取
-
-`agent`
-
-object
-
-更新后的智能体配置快照，会话级覆盖已并入。字段同[获取 Session](raw/application-api-reference/managed-agents-api/session-api/session-get.md)
-
-`vault_ids`
-
-array of string
-
-更新后的 Vault 绑定
-
-`mcp_configs`
-
-array of object
-
-更新后的会话级 MCP 请求头，每项含 `mcp_server_name` 与 `headers`

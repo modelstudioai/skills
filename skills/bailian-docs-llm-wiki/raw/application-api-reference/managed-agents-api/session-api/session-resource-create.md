@@ -12,53 +12,21 @@
 
 ## 路径参数
 
-**参数**
-
-**必填**
-
-**类型**
-
-**说明**
-
-`session_id`
-
-是
-
-string
+**session\_id** `string` **（必选）**
 
 会话 ID，格式 sesn\_<ULID>
 
 ## 请求体
 
-**字段**
-
-**必填**
-
-**类型**
-
-**说明**
-
-`type`
-
-是
-
-string
+**type**`string`**（必选）**
 
 资源类型，固定为 file
 
-`file_id`
-
-是
-
-string
+**file\_id**`string`**（必选）**
 
 已上传的文件 ID
 
-`mount_path`
-
-是
-
-string
+**mount\_path**`string`**（必选）**
 
 挂载路径，以 /uploads 开头
 
@@ -77,6 +45,36 @@ curl -X POST "$AGENTSTUDIO_URL/sessions/sesn_xxx/resources" \
   }'
 ```
 
+### 响应字段
+
+**id**`string`
+
+资源 ID，格式 sesrsc\_<ULID>
+
+**type**`string`
+
+资源类型，固定为 file
+
+**file\_id**`string`
+
+内部副本的文件 ID，与请求中的 file\_id 不同
+
+**mount\_path**`string`
+
+会话内的完整挂载路径
+
+**created\_at**`string`
+
+创建时间，ISO 8601
+
+**updated\_at**`string`
+
+最近更新时间，ISO 8601
+
+**request\_id**`string`
+
+本次请求的唯一标识
+
 ## 响应
 
 ```
@@ -91,56 +89,6 @@ curl -X POST "$AGENTSTUDIO_URL/sessions/sesn_xxx/resources" \
 }
 ```
 
-### 响应字段
-
-**字段**
-
-**类型**
-
-**说明**
-
-`id`
-
-string
-
-资源 ID，格式 sesrsc\_<ULID>
-
-`type`
-
-string
-
-资源类型，固定为 file
-
-`file_id`
-
-string
-
-内部副本的文件 ID，与请求中的 file\_id 不同
-
-`mount_path`
-
-string
-
-会话内的完整挂载路径
-
-`created_at`
-
-string
-
-创建时间，ISO 8601
-
-`updated_at`
-
-string
-
-最近更新时间，ISO 8601
-
-`request_id`
-
-string
-
-本次请求的唯一标识
-
 ## 错误码
 
 **状态码**
@@ -148,15 +96,3 @@ string
 **错误码**
 
 **说明**
-
-400
-
-`InvalidParameter`
-
-Required parameter missing or invalid.
-
-401
-
-`InvalidApiKey`
-
-Invalid API-key provided.

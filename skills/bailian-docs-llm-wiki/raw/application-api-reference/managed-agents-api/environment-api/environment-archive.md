@@ -35,6 +35,34 @@ Java
 client.environments().archive("env_xxx");
 ```
 
+### 响应字段
+
+响应为 Environment 对象，`archived_at` 已填入归档时间。字段如下：
+
+**id** `string`
+
+环境 ID
+
+**type** `string`
+
+固定为 `environment`
+
+**name / description / scope / config / metadata** `string / object`
+
+环境基础属性与完整运行时配置
+
+**archived\_at** `string`
+
+归档时间，ISO 8601；归档接口返回的对象中该字段一定非空
+
+**created\_at / updated\_at** `string`
+
+创建 / 最近更新时间
+
+**requestId** `string`
+
+本次请求的唯一标识
+
 ## 响应示例
 
 ```
@@ -56,49 +84,3 @@ client.environments().archive("env_xxx");
   "requestId": "xxx"
 }
 ```
-
-响应为 Environment 对象，`archived_at` 已填入归档时间。字段如下：
-
-### 响应字段
-
-字段
-
-类型
-
-说明
-
-`id`
-
-string
-
-环境 ID
-
-`type`
-
-string
-
-固定为 `environment`
-
-`name` / `description` / `scope` / `config` / `metadata`
-
-string / object
-
-环境基础属性与完整运行时配置
-
-`archived_at`
-
-string
-
-归档时间，ISO 8601；归档接口返回的对象中该字段一定非空
-
-`created_at` / `updated_at`
-
-string
-
-创建 / 最近更新时间
-
-`requestId`
-
-string
-
-本次请求的唯一标识

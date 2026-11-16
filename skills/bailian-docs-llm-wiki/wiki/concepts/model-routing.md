@@ -1,46 +1,49 @@
-# 模型路由与选型
+# 智能模型路由
 
-模型路由与选型是百炼平台的核心横切能力，指平台根据开发者显式指定或隐式声明的模型标识、能力需求、地域约束、权限状态及运行时上下文，自动将请求分发至最匹配的后端模型实例，并确保调用符合配额、限流与服务可用性要求的过程。它不是单一 API，而是贯穿模型发现、授权、调用、异步调度与多模态适配的统一决策层。
+智能模型路由（Intelligent Model Routing）是百炼平台提供的动态模型调度能力，它基于请求内容、实时负载、模型性能与成本策略，在预配置的多个候选模型间自动选择最优模型执行推理，无需客户端修改调用逻辑。该能力在保障服务质量（如延迟、准确率）的同时，实现单位 Token 成本的帕累托优化。
 
-## 在百炼平台的不同场景中，这个概念如何使用
+## 在百炼平台的不同场景中如何使用
 
-- **快速接入（Get Started）**：开发者在 API 调用中直接传入 `model`（如 `qwen4-max-preview`），平台依据该 ID 进行精确路由；若未指定，则默认路由至工作空间内已授权且支持当前请求类型（如 `chat`）的最优模型（如 `qwen3`），但**不推荐依赖默认行为**，应始终显式选型以保障可复现性与稳定性。  
-- **模型管理（Model Management）**：通过 `/api/v1/models` 查询时，可按 `capabilities=TG&context_window>=32768&providers=qwen` 等条件筛选候选模型列表，为人工选型提供数据支撑；路由决策本身则依赖该接口返回的 `service_site`（如 `cn-beijing`）、`supports`（如 `["stream", "function_calling"]`）等元信息进行实时校验。  
-- **业务场景落地（Use Cases）**：在多源混用场景（如同时调用 `qwen3-vl-plus` 图文理解 + `kimi/kimi-k3.1-pro` 深度推理），选型需兼顾模态兼容性与地域一致性——所有模型必须部署在同一地域（如北京），否则路由失败；思考模式（`enable_thinking`）等非标参数也需在选型时确认目标模型是否支持。  
-- **进阶调用（More About Models）**：异步任务（图像/视频生成）和多模态输入（上传文件）会触发二级路由：先路由至文件预处理服务获取临时 URL，再将带 `X-DashScope-OssResourceResolve: enable` 头的请求路由至对应多模态模型；子业务空间调用则需在路由前完成 workspace-aware 的鉴权与地域绑定。  
-- **统一抽象层（Model Experience）**：所有模型均通过 `/v1/models/{model_id}/invoke` 统一路由入口接入，`model_id` 是路由的唯一键；平台在此层完成 OpenAI 兼容参数到原生能力的自动映射（如 `temperature` → `parameters.temperature`），并拦截不支持 `stream` 的向量模型请求，实现“同接口、多模型、零适配”。
+- **效果优先场景**：适用于对生成质量敏感的业务（如客服对话摘要、法律文书生成）。路由系统根据请求语义复杂度、上下文长度、输出要求等特征，自动匹配高能力模型（如 `qwen3.8-max` 或 `kimi-k3`），并在必要时降级至次优模型以保障可用性。
+- **成本敏感场景**：适用于批量处理、内部工具等对响应速度容忍度较高的任务。系统按预设成本权重，优先调度轻量高效模型（如 `qwen3.8-flash` 或 `glm-5.2`），显著降低 Token 单价，同时维持可接受的效果下限。
+- **忙闲分时调度**：支持结合时段（如工作日 9:00–18:00）与地域负载状态，自动切换主备模型池。例如高峰时段启用高吞吐模型，非高峰时段切至低成本模型，实现资源弹性复用。
+- **灰度发布与A/B测试**：开发者可将新微调模型或第三方模型加入路由池，通过流量比例控制曝光范围，结合效果指标（如人工评分、自动评估分数）快速验证模型迭代收益。
+- **多模态任务兜底**：当前仅支持文本生成类模型（TG 能力），但可作为统一入口接入，后续将扩展至支持具备相同输入/输出 Schema 的多模态模型（如图文理解→文本生成链路）。
+
+> ✅ 注意：智能路由仅支持后付费（`charge_type="post_paid"`），且**仅在北京（华北2）与新加坡（ap-southeast-1）地域可用**；不支持 LoRA 微调模型直连路由池，需先部署为独立服务再纳入调度。
 
 ## 关键参数和配置
 
-- **必选标识**：  
-  - `model`（旧版 API）或 `model_id`（Model Experience 新版）：严格匹配控制台「服务 ID」，大小写敏感，不可模糊（如 `qwen3` ≠ `Qwen3`）；  
-  - `region` / `service_site`：必须与目标模型部署地域一致（如 `cn-beijing`），跨地域请求直接拒绝，不降级路由。  
+| 参数 | 类型 | 必填 | 说明 | 示例值 |
+|------|------|------|------|--------|
+| `model` | string | 是 | 路由实例唯一标识，固定格式为 `auto-model-{8位随机字符}`（由平台分配，不可自定义） | `"auto-model-7f3a9b2c"` |
+| `routing_strategy` | string | 否 | 调度策略：`effectiveness_first`（默认，效果优先）或 `cost_first`（成本优先） | `"cost_first"` |
+| `candidate_models` | array of string | 是 | 预设的候选模型 ID 列表，至少 2 个，须为平台已开通且支持路由的文本生成模型 | `["qwen3.8-flash", "glm-5.2", "kimi-k3"]` |
+| `fallback_model` | string | 否 | 当所有候选模型不可用时的兜底模型（必须在 `candidate_models` 中） | `"qwen3.8-flash"` |
+| `enable_thinking` | boolean | 否 | 是否对支持思考模式的模型启用 `reasoning_content` 输出（仅影响部分模型行为） | `true` |
 
-- **能力约束参数（用于筛选与校验）**：  
-  - `input.messages.role`（文本）、`input.image_url`（视觉）等：决定路由至哪类模态处理器；  
-  - `parameters.enable_thinking`、`parameters.reasoning_effort`：仅对标注 `features: ["reasoning"]` 的模型生效，路由时校验失败将返回 `ModelNotReady`；  
-  - `stream: true`：路由层检查模型是否在 `supports` 中声明 `"stream"`，不支持则静默忽略或报错（依接口版本而定）。  
+- **创建方式**：通过 `/api/v1/deployments` 接口调用，`plan="mr"`，`charge_type="post_paid"`，其余参数按上表填写。
+- **调用方式**：与标准 [OpenAI 兼容接口](openai-compatible-interface.md)完全一致，只需将 `model` 字段替换为路由实例 ID，其余参数（`messages`, `stream`, `temperature` 等）保持不变。
+- **监控与调试**：调用响应头中返回 `X-Bailian-Routed-Model: qwen3.8-flash`，明确本次实际执行模型；可通过控制台「模型路由监控」查看各候选模型的调用量、平均延迟、成功率及路由决策分布。
 
-- **环境与权限配置**：  
-  - `Authorization: Bearer <api_key>`：绑定主账号与业务空间，路由前校验该 Key 是否已获 `inference` 权限；  
-  - `workspace_id`（HTTP Path 或 SDK 配置）：决定路由作用域，子空间无权限的模型不会出现在可选列表中；  
-  - `X-DashScope-OssResourceResolve: enable`（多模态必需）：触发文件资源解析路由分支，缺失则返回 `InvalidParameter`。
+## 面向开发者：简洁实用提示
 
-## 面向开发者，简洁实用
-
-- ✅ **始终显式指定 `model_id`**：避免依赖默认路由，尤其在灰度发布新模型（如 `qwen4-max-preview`）时，显式选型可精准控制流量。  
-- ✅ **选型前查元信息**：首次集成前，用 `GET /v1/models/{model_id}` 确认 `status=ACTIVE`、`service_site` 匹配、`supports` 包含所需能力（如 `["function_calling"]`）。  
-- ✅ **地域强一致**：同一业务流中调用多个模型时，务必确保它们均支持且部署于同一 `service_site`，否则路由链路中断。  
-- ❌ **勿混用新旧标识**：`model_id`（如 `qwen2-72b-chat`）与旧版 `model`（如 `qwen-plus`）不可互换，新版 Model Experience 接口已废弃别名兼容。  
-- ⚠️ **注意三方模型限制**：Kimi、GLM、Stepfun 等模型仅在北京地域可用，且需专用域名（`{WorkspaceId}.cn-beijing.maas.aliyuncs.com`），通用 `dashscope.aliyuncs.com` 域名将路由失败。  
-- 🔧 **调试技巧**：遇到 `400 BadRequest` 或 `404 ModelNotReady`，优先检查 `model_id` 拼写、地域头、API Key 权限（`GET /api/v1/models/permissions`）及模型当前状态（控制台「模型管理」页）。
+- ✅ **起步最快**：在控制台「模型部署」页选择「智能路由」模板，勾选 2–4 个文本模型，点击创建，5 秒获取 `auto-model-xxxx` 实例 ID，直接用于现有 API 请求。
+- ⚠️ **避坑提醒**：
+  - 不要手动构造 `model` 值——`auto-model-*` 必须由平台生成，硬编码将返回 `InvalidModel` 错误；
+  - 路由池中所有模型必须在同一地域开通 `inference` 权限，否则部署失败；
+  - `stream=true` 下，`delta.reasoning_content` 等非标字段行为与所选实际模型一致，无需额外适配。
+- 📈 **优化建议**：
+  - 初始配置推荐 `effectiveness_first` + 3 个模型（1 个高性能 + 1 个均衡型 + 1 个低成本）；
+  - 结合业务日志分析 `X-Bailian-Routed-Model` 分布，若某模型长期未被选中，可移出池子或调整策略权重；
+  - 成本敏感场景可搭配 PTU（预置吞吐）为路由实例单独预留容量，避免公共队列排队影响 SLA。
 
 ## 关联主题页
 
-- [get started with models](../guides/get-started-with-models.md)
+- [model production](../api/model-production.md)
+- [model high speed inference](../guides/model-high-speed-inference.md)
 - [model management](../api/model-management.md)
-- [use cases](../guides/use-cases.md)
 - [more about models](../api/more-about-models.md)
-- [model experience](../guides/model-experience.md)
+- [use cases](../guides/use-cases.md)
 
 

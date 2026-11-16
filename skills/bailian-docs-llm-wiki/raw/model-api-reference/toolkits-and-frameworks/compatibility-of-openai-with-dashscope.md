@@ -91,7 +91,7 @@ def get_response():
         base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
     )
     completion = client.chat.completions.create(
-        model="qwen3.8-max",  # 此处以qwen-plus为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
+        model="qwen4-max",  # 此处以qwen4-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
         messages=[{'role': 'system', 'content': 'You are a helpful assistant.'},
                   {'role': 'user', 'content': '你是谁？'}]
         )
@@ -102,6 +102,8 @@ if __name__ == '__main__':
 ```
 
 运行代码可以获得以下结果：
+
+以下为 `qwen3.8-max` 的历史响应示例，用于说明字段。
 
 ```
 {
@@ -146,7 +148,7 @@ def get_response():
         base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
     )
     completion = client.chat.completions.create(
-        model="qwen3.8-max",  # 此处以qwen-plus为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
+        model="qwen4-max",  # 此处以qwen4-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
         messages=[{'role': 'system', 'content': 'You are a helpful assistant.'},
                   {'role': 'user', 'content': '你是谁？'}],
         stream=True,
@@ -161,6 +163,8 @@ if __name__ == '__main__':
 ```
 
 运行代码可以获得以下结果：
+
+以下为 `qwen3.8-max` 的历史响应示例，用于说明字段。
 
 ```
 {"id":"chatcmpl-xxx","choices":[{"delta":{"content":"","function_call":null,"role":"assistant","tool_calls":null},"finish_reason":null,"index":0,"logprobs":null}],"created":1719286190,"model":"qwen3.8-max","object":"chat.completion.chunk","system_fingerprint":null,"usage":null}
@@ -242,7 +246,7 @@ def get_current_time():
 # 封装模型响应函数
 def get_response(messages):
     completion = client.chat.completions.create(
-        model="qwen3.8-max",  # 此处以qwen-plus为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
+        model="qwen4-max",  # 此处以qwen4-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
         messages=messages,
         tools=tools
         )
@@ -633,7 +637,7 @@ def get_response():
         api_key=os.getenv("DASHSCOPE_API_KEY"),
         # 以下是北京地域base_url
         base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
-        model="qwen3.8-max"    # 此处以qwen-plus为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
+        model="qwen4-max"    # 此处以qwen4-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
         )
     messages = [
         {"role":"system","content":"You are a helpful assistant."},
@@ -687,7 +691,7 @@ def get_response():
         api_key=os.getenv("DASHSCOPE_API_KEY"),
         # 以下是北京地域base_url
         base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
-        model="qwen3.8-max",  # 此处以qwen-plus为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
+        model="qwen4-max",  # 此处以qwen4-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
         stream_usage=True
         )
     messages = [
@@ -753,7 +757,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
 --data '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "messages": [
         {
             "role": "system",
@@ -768,6 +772,8 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 ```
 
 运行命令可得到以下结果：
+
+以下为 `qwen3.8-max` 的历史响应示例，用于说明字段。
 
 ```
 {
@@ -808,7 +814,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
 --data '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "messages": [
         {
             "role": "system",
@@ -824,6 +830,8 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 ```
 
 运行命令可得到以下结果：
+
+以下为 `qwen3.8-max` 的历史响应示例，用于说明字段。
 
 ```
 data: {"choices":[{"delta":{"content":"","role":"assistant"},"index":0,"logprobs":null,"finish_reason":null}],"object":"chat.completion.chunk","usage":null,"created":1715931028,"system_fingerprint":null,"model":"qwen3.8-max","id":"chatcmpl-3bb05cf5cd819fbca5f0b8d67a025022"}

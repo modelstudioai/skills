@@ -9,7 +9,7 @@
 ```
 # 导入依赖与创建客户端...
 response = client.responses.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     input="帮我找一张适合做 PPT 封面的科技感背景图",
     tools=[{"type": "web_search_image"}]
 )
@@ -25,7 +25,7 @@ print(response.output_text)
 
 千问Plus：Qwen3.7-Plus系列、Qwen3.6-Plus系列、Qwen3.5-Plus系列
 
-千问Max：qwen4-max-preview（[仅 Token Plan](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview)）、Qwen3.8-Max系列、qwen3.7-max-2026-06-08
+千问Max：qwen4-max、Qwen3.8-Max系列、qwen3.7-max-2026-06-08
 
 qwen3.8-27b
 
@@ -58,7 +58,7 @@ client = OpenAI(
 )
 
 response = client.responses.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     input="帮我找一张适合做 PPT 封面的科技感背景图",
     tools=[
         {
@@ -105,7 +105,7 @@ const openai = new OpenAI({
 
 async function main() {
     const response = await openai.responses.create({
-        model: "qwen3.8-max",
+        model: "qwen4-max",
         input: "帮我找一张适合做 PPT 封面的科技感背景图",
         tools: [
             { type: "web_search_image" }
@@ -153,7 +153,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input": "帮我找一张适合做 PPT 封面的科技感背景图",
     "tools": [
         {"type": "web_search_image"}
@@ -214,7 +214,7 @@ client = OpenAI(
 )
 
 stream = client.responses.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     input="帮我找一张适合做 PPT 封面的科技感背景图",
     tools=[{"type": "web_search_image"}],
     stream=True
@@ -267,7 +267,7 @@ const openai = new OpenAI({
 
 async function main() {
     const stream = await openai.responses.create({
-        model: "qwen3.8-max",
+        model: "qwen4-max",
         input: "帮我找一张适合做 PPT 封面的科技感背景图",
         tools: [{ type: "web_search_image" }],
         stream: true
@@ -329,7 +329,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input": "帮我找一张适合做 PPT 封面的科技感背景图",
     "tools": [
         {"type": "web_search_image"}

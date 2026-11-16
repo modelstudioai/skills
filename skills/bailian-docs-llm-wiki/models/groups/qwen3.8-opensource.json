@@ -380,6 +380,9 @@
         "sft": [
           "full",
           "lora"
+        ],
+        "cpt": [
+          "full"
         ]
       },
       "inferenceProvider": "aliyun-bailian",

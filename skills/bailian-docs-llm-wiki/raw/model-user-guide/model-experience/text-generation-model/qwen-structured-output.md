@@ -70,7 +70,7 @@ Qwen 大部分模型、Kimi、GLM、DeepSeek、Stepfun
 #### 千问
 
 -   **文本生成模型**
-    -   千问Max：qwen4-max-preview（[仅 Token Plan](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview)）、Qwen3.8-Max系列、Qwen3.7-Max系列
+    -   千问Max：qwen4-max、Qwen3.8-Max系列、Qwen3.7-Max系列
     -   千问Max（非思考模式）：Qwen3.6-Max系列、Qwen3-Max系列、Qwen-Max系列
     -   千问Plus：Qwen3.7-Plus系列
     -   千问Plus（非思考模式）：Qwen3.6-Plus系列、Qwen3.5-Plus系列、Qwen-Plus系列
@@ -128,7 +128,7 @@ Qwen 大部分模型、Kimi、GLM、DeepSeek、Stepfun
 
 #### JSON Schema
 
-Qwen4-Max 系列（[仅 Token Plan](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview)）、Qwen3.7-Plus 系列、Qwen3.8-Flash 系列、Qwen3.7-Flash 系列、Qwen3.7-Max 系列、Qwen3.8-Max 系列，以及 DeepSeek：deepseek-v4.1-flash、deepseek-v4.1-flash-1017、deepseek-v4-pro
+qwen4-max、Qwen3.7-Plus 系列、Qwen3.8-Flash 系列、Qwen3.7-Flash 系列、Qwen3.7-Max 系列、Qwen3.8-Max 系列，以及 DeepSeek：deepseek-v4.1-flash、deepseek-v4.1-flash-1017、deepseek-v4-pro
 
 阿里云百炼部署的 `deepseek-v4.1-flash`、`deepseek-v4.1-flash-1017`：北京地域的 OpenAI 兼容 Chat Completions API 支持 JSON Schema 模式，思考模式与非思考模式均支持。
 
@@ -152,12 +152,12 @@ client = OpenAI(
     # 如果没有配置环境变量，请用API Key将下行替换为：api_key="sk-xxx"
     # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
+    # 以下是北京地域base_url，如果使用华北2（北京）地域的模型，需要将base_url替换为：https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1
     base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
 completion = client.chat.completions.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     messages=[
         {
             "role": "system",
@@ -193,12 +193,12 @@ const openai = new OpenAI({
     // 如果没有配置环境变量，请用API Key将下行替换为：apiKey: "sk-xxx"
     // 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     apiKey: process.env.DASHSCOPE_API_KEY,
-    // 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
+    // 以下是北京地域base_url，如果使用华北2（北京）地域的模型，需要将base_url替换为：https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1
     baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
 });
 
 const completion = await openai.chat.completions.create({
-    model: "qwen3.8-max",
+    model: "qwen4-max",
     messages: [
         {
             role: "system",
@@ -232,13 +232,13 @@ console.log(jsonString);
 ```
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions
+# 以下是北京地域base_url，如果使用华北2（北京）地域的模型，需要将base_url替换为：https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions
 # === 执行时请删除该注释 ===
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "messages": [
         {
             "role": "system",
@@ -256,6 +256,8 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 ```
 
 ### 返回结果
+
+以下为 `qwen3.8-max` 的返回示例，用于说明响应字段。
 
 ```
 {
@@ -299,12 +301,12 @@ import os
 client = OpenAI(
     # 如果没有配置环境变量，请用API Key将下行替换为：api_key="sk-xxx"
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
+    # 以下是北京地域base_url，如果使用华北2（北京）地域的模型，需要将base_url替换为：https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1
     base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
 response = client.responses.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     input="大家好，我叫刘五，今年34岁，邮箱是liuwu@example.com，平时喜欢打篮球和旅游。请抽取姓名与年龄信息，以JSON格式返回",
     text={"format": {"type": "json_object"}},
 )
@@ -330,7 +332,7 @@ const openai = new OpenAI({
 });
 
 const response = await openai.responses.create({
-    model: "qwen3.8-max",
+    model: "qwen4-max",
     input: "大家好，我叫刘五，今年34岁，邮箱是liuwu@example.com，平时喜欢打篮球和旅游。请抽取姓名与年龄信息，以JSON格式返回",
     text: { format: { type: "json_object" } }
 });
@@ -351,7 +353,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input": "大家好，我叫刘五，今年34岁，邮箱是liuwu@example.com，平时喜欢打篮球和旅游。请抽取姓名与年龄信息，以JSON格式返回",
     "text": {
         "format": {
@@ -362,6 +364,8 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 ```
 
 ### 返回结果
+
+以下为 `qwen3.8-max` 的返回示例，用于说明响应字段。
 
 ```
 {
@@ -422,7 +426,7 @@ import os
 import dashscope
 
 # 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
-# 若使用新加坡地域的模型，请将region替换为ap-southeast-1
+# 若使用华北2（北京）地域的模型，请将region替换为cn-beijing
 client = dashscope.Client(
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
     api_key=os.getenv('DASHSCOPE_API_KEY'),
@@ -440,7 +444,7 @@ messages=[
     },
 ]
 response = client.multimodal.chat.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     messages=messages,
     response_format={'type': 'json_object'}
     )
@@ -478,8 +482,8 @@ import com.alibaba.dashscope.common.ResponseFormat;
 import com.alibaba.dashscope.utils.Constants;
 
 public class Main {
-    // 若使用新加坡地域的模型，请释放下列注释
-    // static {Constants.baseHttpApiUrl="https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1";}
+    // 若使用华北2（北京）地域的模型，请释放下列注释
+    // static {Constants.baseHttpApiUrl="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";}
     public static void simpleMultiModalConversationCall()
             throws ApiException, NoApiKeyException, UploadFileException {
         MultiModalConversation conv = new MultiModalConversation();
@@ -493,7 +497,7 @@ public class Main {
         MultiModalConversationParam param = MultiModalConversationParam.builder()
                 // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：.apiKey("sk-xxx")
                 .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-                .model("qwen3.8-max")
+                .model("qwen4-max")
                 .messages(Arrays.asList(systemMessage, userMessage))
                 .responseFormat(jsonMode)
                 .build();
@@ -524,13 +528,13 @@ public class Main {
 ```
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation
+# 以下为北京地域url，若使用华北2（北京）地域的模型，需将url替换为：https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation
 # === 执行时请删除该注释 ===
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input": {
         "messages": [
             {
@@ -600,12 +604,12 @@ client = OpenAI(
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
     # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
+    # 以下是北京地域base_url，如果使用华北2（北京）地域的模型，需要将base_url替换为：https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1
     base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
 completion = client.chat.completions.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     messages=[
         {
             "role": "system",
@@ -661,13 +665,13 @@ const openai = new OpenAI({
   // 若没有配置环境变量，请用百炼API Key将下行替换为：apiKey: "sk-xxx"
   // 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
   apiKey: process.env.DASHSCOPE_API_KEY,
-  // 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
+  // 以下是北京地域base_url，如果使用华北2（北京）地域的模型，需要将base_url替换为：https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1
   baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
 });
 
 async function main() {
   const response = await openai.chat.completions.create({
-    model: "qwen3.8-max",
+    model: "qwen4-max",
     messages: [{
         role: "system",
         content: [{
@@ -725,13 +729,13 @@ main()
 ```
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions
+# 以下是北京地域base_url，如果使用华北2（北京）地域的模型，需要将base_url替换为：https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions
 # === 执行时请删除该注释 ===
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
 --data '{
-  "model": "qwen3.8-max",
+  "model": "qwen4-max",
   "messages": [
   {"role":"system",
   "content":[
@@ -748,6 +752,8 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 ```
 
 ### 返回结果
+
+以下为 `qwen3.8-max` 的返回示例，用于说明响应字段。
 
 ```
 {
@@ -785,7 +791,7 @@ import os
 import dashscope
 
 # 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
-# 若使用新加坡地域的模型，请将region替换为ap-southeast-1
+# 若使用华北2（北京）地域的模型，请将region替换为cn-beijing
 client = dashscope.Client(
     # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
     api_key = os.getenv('DASHSCOPE_API_KEY'),
@@ -805,7 +811,7 @@ messages = [
     {"text": "提取图中ticket(数组类型，包括 travel_date、trains、seat_num、arrival_site、price)和 invoice 的信息（数组类型，包括 invoice_code 和 invoice_number ），请输出包含 ticket 和 invoice 数组的JSON"}]
 }]
 response = client.multimodal.chat.create(
-    model = 'qwen3.8-max',
+    model = 'qwen4-max',
     messages = messages,
     response_format={'type': 'json_object'}
 )
@@ -816,13 +822,13 @@ print(json_string)
 import os
 import dashscope
 
-# 以下为新加坡地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
 # 若使用北京地域的模型，请将region替换为cn-beijing
 client = dashscope.Client(
     # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
     api_key = os.getenv('DASHSCOPE_API_KEY'),
     workspace = "{WorkspaceId}",
-    region = "ap-southeast-1",
+    region = "cn-beijing",
 )
 
 messages = [
@@ -838,7 +844,7 @@ messages = [
     {"text": "提取图中ticket(数组类型，包括 travel_date、trains、seat_num、arrival_site、price)和 invoice 的信息（数组类型，包括 invoice_code 和 invoice_number ），请输出包含 ticket 和 invoice 数组的JSON"}]
 }]
 response = client.multimodal.chat.create(
-    model = 'qwen3.8-max',
+    model = 'qwen4-max',
     messages = messages,
     response_format={'type': 'json_object'}
 )
@@ -888,8 +894,8 @@ import com.alibaba.dashscope.utils.Constants;
 
 public class Main {
 
-    // 若使用新加坡地域的模型，请释放下列注释
-    // static {Constants.baseHttpApiUrl="https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1";}
+    // 若使用华北2（北京）地域的模型，请释放下列注释
+    // static {Constants.baseHttpApiUrl="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";}
 
     public static void simpleMultiModalConversationCall()
             throws ApiException, NoApiKeyException, UploadFileException {
@@ -905,7 +911,7 @@ public class Main {
         MultiModalConversationParam param = MultiModalConversationParam.builder()
                 // 若没有配置环境变量，请用百炼API Key将下行替换为：.apiKey("sk-xxx")
                 .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-                .model("qwen3.8-max")
+                .model("qwen4-max")
                 .messages(Arrays.asList(systemMessage, userMessage))
                 .responseFormat(jsonMode)
                 .build();
@@ -949,13 +955,13 @@ public class Main {
 ```
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation
+# 以下为北京地域url，若使用华北2（北京）地域的模型，需将url替换为：https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation
 # === 执行时请删除该注释 ===
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H 'Content-Type: application/json' \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input":{
         "messages":[
             {"role": "system",
@@ -1063,7 +1069,7 @@ client = OpenAI(
     # 若没有配置环境变量，请将下行替换为：api_key="sk-xxx"
     # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
+    # 以下是北京地域base_url，如果使用华北2（北京）地域的模型，需要将base_url替换为：https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1
     base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
@@ -1110,7 +1116,7 @@ system_prompt = textwrap.dedent(f"""\
 
 # 调用大模型API进行信息提取
 completion = client.chat.completions.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     messages=[
         {
             "role": "system",
@@ -1175,13 +1181,13 @@ const openai = new OpenAI({
     // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
     // 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     apiKey: process.env.DASHSCOPE_API_KEY,
-    // 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
+    // 以下是北京地域base_url，如果使用华北2（北京）地域的模型，需要将base_url替换为：https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1
     baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
 });
 
 // 创建聊天完成请求，使用结构化提示词来提高输出准确性
 const completion = await openai.chat.completions.create({
-    model: "qwen3.8-max",
+    model: "qwen4-max",
     messages: [
         {
             role: "system",
@@ -1264,7 +1270,7 @@ import json
 import dashscope
 
 # 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
-# 若使用新加坡地域的模型，请将region替换为ap-southeast-1
+# 若使用华北2（北京）地域的模型，请将region替换为cn-beijing
 client = dashscope.Client(
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
     api_key=os.getenv('DASHSCOPE_API_KEY'),
@@ -1338,7 +1344,7 @@ A：{example3_response}
         },
     ]
 response = client.multimodal.chat.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     messages=messages,
     response_format={'type': 'json_object'}
     )
@@ -1381,8 +1387,8 @@ import com.alibaba.dashscope.common.ResponseFormat;
 import com.alibaba.dashscope.utils.Constants;
 
 public class Main {
-    // 若使用新加坡地域的模型，请释放下列注释
-    // static {Constants.baseHttpApiUrl="https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1";}
+    // 若使用华北2（北京）地域的模型，请释放下列注释
+    // static {Constants.baseHttpApiUrl="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";}
     public static void simpleMultiModalConversationCall()
             throws ApiException, NoApiKeyException, UploadFileException {
         MultiModalConversation conv = new MultiModalConversation();
@@ -1427,7 +1433,7 @@ A：{"info":{"name":"王五","age":"40岁","email":"wangwu@example.com"}}"""))).
         MultiModalConversationParam param = MultiModalConversationParam.builder()
                 // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：.apiKey("sk-xxx")
                 .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-                .model("qwen3.8-max")
+                .model("qwen4-max")
                 .messages(Arrays.asList(systemMessage, userMessage))
                 .responseFormat(jsonMode)
                 .build();
@@ -1541,7 +1547,7 @@ class UserInfo(BaseModel):
     age: int = Field(description="用户的年龄，单位为岁")
 
 completion = client.chat.completions.parse(
-    model="qwen3.8-max",
+    model="qwen4-max",
     messages=[
         {"role": "system", "content": "提取姓名与年龄信息。"},
         {"role": "user", "content": "我叫刘五，今年25岁。"},
@@ -1574,7 +1580,7 @@ const UserInfo = z.object({
 });
 
 const completion = await openai.chat.completions.parse({
-  model: "qwen3.8-max",
+  model: "qwen4-max",
   messages: [
     { role: "system", content: "提取姓名与年龄信息。" },
     { role: "user", content: "我叫刘五，今年25岁。" },
@@ -1613,7 +1619,7 @@ class UserInfo(BaseModel):
     age: int = Field(description="用户的年龄，单位为岁")
 
 response = client.responses.parse(
-    model="qwen3.8-max",
+    model="qwen4-max",
     input="我叫刘五，今年25岁。",
     text_format=UserInfo,
 )
@@ -1654,7 +1660,7 @@ messages = [
     },
 ]
 response = client.multimodal.chat.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     messages=messages,
     response_format={
         "type": "json_schema",
@@ -1863,7 +1869,7 @@ print(f"姓名：{json_object['name']}，年龄：{json_object['age']}")
         email: Optional[str] = None  # 可选字段
     
     completion = client.chat.completions.parse(
-        model="qwen3.8-max",
+        model="qwen4-max",
         messages=[
             {"role": "system", "content": "提取姓名与年龄信息。"},
             {"role": "user", "content": "我叫刘五，今年25岁。"},
@@ -1897,7 +1903,7 @@ print(f"姓名：{json_object['name']}，年龄：{json_object['age']}")
     });
     
     const completion = await client.chat.completions.parse({
-      model: "qwen3.8-max",
+      model: "qwen4-max",
       messages: [
         { role: "system", content: "提取姓名与年龄信息。" },
         { role: "user", content: "我叫刘五，今年25岁。" },

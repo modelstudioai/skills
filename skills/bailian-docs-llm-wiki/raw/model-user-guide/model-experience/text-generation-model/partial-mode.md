@@ -25,7 +25,7 @@
 ## 支持的模型
 
 -   **文本生成模型**
-    -   Qwen4-Max 系列（[仅 Token Plan](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview)）：`qwen4-max-preview`
+    -   Qwen4-Max 系列：`qwen4-max`
     -   千问Max（非思考模式）：Qwen3.8-Max系列、Qwen3.7-Max系列、Qwen3.6-Max系列、Qwen3-Max系列、Qwen-Max系列
     -   千问Plus（非思考模式）：Qwen3.7-Plus系列、Qwen3.6-Plus系列、Qwen3.5-Plus系列、Qwen-Plus系列
     -   千问Flash（非思考模式）：Qwen3.7-Flash系列、Qwen3.6-Flash系列、Qwen3.5-Flash系列、Qwen-Flash系列
@@ -83,7 +83,7 @@ prefix = """def calculate_fibonacci(n):
 # 3. 发起 Partial Mode 请求
 # 注意：messages 数组的最后一条消息 role 为 "assistant"，并包含 "partial": True
 completion = client.chat.completions.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     messages=[
         {"role": "user", "content": "请补全这个斐波那契函数，勿添加其它内容"},
         {"role": "assistant", "content": prefix, "partial": True},
@@ -128,7 +128,7 @@ const prefix = `def calculate_fibonacci(n):
 `;
 
 const completion = await openai.chat.completions.create({
-    model: "qwen3.8-max",  // 使用代码模型
+    model: "qwen4-max",  // 使用代码模型
     messages: [
         { role: "user", content: "请补全这个斐波那契函数，勿添加其它内容" },
         { role: "assistant", content: prefix, partial: true }
@@ -153,7 +153,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "messages": [
         {
             "role": "user",
@@ -169,6 +169,8 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 ```
 
 ### 返回结果
+
+以下为 `qwen3.8-max` 的返回示例，用于说明响应字段。
 
 ```
 {
@@ -227,7 +229,7 @@ messages = [
     }
 ]
 response = client.chat.completions.create(
-    model='qwen3.8-max',
+    model='qwen4-max',
     messages=messages,
 )
 
@@ -260,7 +262,7 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input":{
         "messages":[
             {

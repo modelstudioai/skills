@@ -12,35 +12,15 @@
 
 ## Query 参数
 
-参数
-
-类型
-
-默认
-
-说明
-
-`limit`
-
-int
-
-20
+**limit** `int` 默认 20
 
 每页数量，最大 100
 
-`page`
-
-string
-
-—
+**page** `string` 默认 —
 
 首次不传，后续传上一次响应的 `next_page`
 
-`scope_id`
-
-string
-
-—
+**scope\_id** `string` 默认 —
 
 传入会话 ID，仅返回该会话沙箱内的文件
 
@@ -118,56 +98,34 @@ for (AgentStudioFile f : page.getData()) {
 
 ### File 对象字段
 
-字段
-
-类型
-
-说明
-
-`id`
-
-string
+**id** `string`
 
 文件 ID，格式 `file_<24位字母数字>`
 
-`type`
-
-string
+**type** `string`
 
 固定为 `file`
 
-`filename`
-
-string
+**filename** `string`
 
 文件名
 
-`mime_type`
-
-string
+**mime\_type** `string`
 
 服务端检测的 MIME 类型
 
-`size_bytes`
-
-int
+**size\_bytes** `int`
 
 文件大小，单位字节
 
-`downloadable`
-
-bool
+**downloadable** `bool`
 
 是否支持下载，当前接口直传与会话沙箱拷贝均为 `false`
 
-`status`
-
-string
+**status** `string`
 
 安全审核状态：`available` / `checking` / `rejected` / `type_rejected`
 
-`created_at`
-
-string
+**created\_at** `string`
 
 上传时间，ISO 8601

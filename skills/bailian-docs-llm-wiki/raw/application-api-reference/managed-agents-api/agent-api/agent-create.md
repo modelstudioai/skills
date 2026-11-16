@@ -12,83 +12,39 @@
 
 ## 请求体
 
-字段
-
-必填
-
-类型
-
-说明
-
-`name`
-
-是
-
-string
+**name** `string` **（必选）**
 
 智能体名称，用于在控制台与列表中辨识
 
-`description`
-
-否
-
-string
+**description** `string` **（可选）**
 
 智能体用途说明
 
-`model`
-
-是
-
-object
+**model** `object` **（必选）**
 
 模型配置。必填子字段 `id`（模型 ID，如 qwen3.7-max）；可选子字段 `enable_thinking`（bool，是否启用思考模式）、`max_tokens`（int32，最大生成长度）、`temperature`（double，温度参数，控制随机性）、`thinking_budget`（int32，思考预算长度）
 
-`system`
-
-否
-
-string
+**system** `string` **（可选）**
 
 系统提示词，定义角色与行为约束
 
-`tools`
-
-否
-
-array<object>
+**tools** `array<object>` **（可选）**
 
 工具包列表，按类型分组。每项含 `type`（`builtin_toolkit` / `mcp_toolkit`）、`default_config`（含 `enabled` 与 `permission_policy`）、`configs`（逐工具配置，覆盖 `default_config`；单个工具配置支持 `params` 传工具专属参数），MCP 类还需 `mcp_server_name`。`builtin_toolkit` 至多一项，`mcp_toolkit` 可多项
 
-`mcp_servers`
-
-否
-
-array<object>
+**mcp\_servers** `array<object>` **（可选）**
 
 MCP Server 引用列表，每项含 `type`（`official` / `customer`）与 `name`。`name` 可在百炼控制台 **MCP 管理**菜单的服务卡片上查看（自定义服务在创建时指定）
 
-`skills`
-
-否
-
-array<object>
+**skills** `array<object>` **（可选）**
 
 挂载的技能列表，每项含 `type`（`official` / `customer`）、`skill_id` 与 `version`（必须锁定到具体版本号）。`skill_id` 在百炼控制台 **技能管理**菜单的技能详情页查看
 
-`multiagent`
-
-否
-
-object
+**multiagent** `object` **（可选）**
 
 多智能体协作配置。不传或为空表示单智能体；配置后该智能体作为 coordinator 编排编队成员。含 `type`（当前仅 `coordinator`）与 `agents`（编队条目列表，1-20 个，传空数组表示清空编队），每项含 `type`（`agent` 引用另一个 Agent / `self` coordinator 自身，编队中最多一个）、`id`（`type=agent` 时必填，最长 64 字符；`type=self` 时不可传）、`version`（`type=agent` 时可选，>=1 不传取最新；`type=self` 时不可传）
 
-`metadata`
-
-否
-
-object
+**metadata** `object` **（可选）**
 
 业务自定义键值，不影响模型行为
 
@@ -199,6 +155,44 @@ System.out.println(agent.getVersion());  // 1
 
 `search_knowledgebases` 未配置时不启用检索。模型按需调用，并结合多轮对话生成检索问题。使用前需先创建知识检索服务，详见[知识检索](raw/application-user-guide/agent-context/knowledge-base/service/rag-knowledge-retrieval.md)。更新已有智能体时，保留其他仍在使用的工具配置。使用方式详见 [Agent 工具配置](https://help.aliyun.com/zh/model-studio/managed-agents-builtin-tools#h-bt-knowledge)。
 
+### 响应字段
+
+**id** `string`
+
+智能体 ID，格式 `agent_&lt;ULID&gt;`
+
+**type** `string`
+
+固定为 `agent`
+
+**version** `int`
+
+当前版本号，每次更新自动递增；会话创建时锁定该值
+
+**name / description / system** `string`
+
+同请求体
+
+**model / tools / mcp\_servers / skills / multiagent / metadata** `object / array`
+
+同请求体
+
+**archived\_at** `string / null`
+
+归档时间，未归档时为 `null`
+
+**created\_at / updated\_at** `string`
+
+创建 / 最近更新时间，ISO 8601
+
+**workspace\_id** `string`
+
+所属工作空间 ID
+
+**request\_id** `string`
+
+本次请求的唯一标识，排查问题时附带
+
 ## 响应示例
 
 ```
@@ -228,65 +222,3 @@ System.out.println(agent.getVersion());  // 1
   "request_id": "req_xxx"
 }
 ```
-
-### 响应字段
-
-字段
-
-类型
-
-说明
-
-`id`
-
-string
-
-智能体 ID，格式 `agent_&lt;ULID&gt;`
-
-`type`
-
-string
-
-固定为 `agent`
-
-`version`
-
-int
-
-当前版本号，每次更新自动递增；会话创建时锁定该值
-
-`name` / `description` / `system`
-
-string
-
-同请求体
-
-`model` / `tools` / `mcp_servers` / `skills` / `multiagent` / `metadata`
-
-object / array
-
-同请求体
-
-`archived_at`
-
-string / null
-
-归档时间，未归档时为 `null`
-
-`created_at` / `updated_at`
-
-string
-
-创建 / 最近更新时间，ISO 8601
-
-`workspace_id`
-
-string
-
-所属工作空间 ID
-
-`request_id`
-
-string
-
-本次请求的唯一标识，排查问题时附带

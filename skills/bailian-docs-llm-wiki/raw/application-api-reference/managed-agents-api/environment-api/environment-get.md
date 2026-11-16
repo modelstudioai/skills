@@ -31,6 +31,34 @@ Java
 Environment env = client.environments().retrieve("env_xxx");
 ```
 
+### 响应字段
+
+响应为 Environment 对象。字段如下：
+
+**id** `string`
+
+环境 ID，格式 `env_&lt;ULID&gt;`
+
+**type** `string`
+
+固定为 `environment`
+
+**name / description / scope / config / metadata** `string / object`
+
+环境基础属性与完整运行时配置（沙箱类型、预装依赖、网络策略）
+
+**archived\_at** `string / null`
+
+归档时间，未归档时为 `null`
+
+**created\_at / updated\_at** `string`
+
+创建 / 最近更新时间，ISO 8601
+
+**request\_id** `string`
+
+本次请求的唯一标识
+
 ## 响应示例
 
 ```
@@ -52,49 +80,3 @@ Environment env = client.environments().retrieve("env_xxx");
   "request_id": "xxx"
 }
 ```
-
-响应为 Environment 对象。字段如下：
-
-### 响应字段
-
-字段
-
-类型
-
-说明
-
-`id`
-
-string
-
-环境 ID，格式 `env_&lt;ULID&gt;`
-
-`type`
-
-string
-
-固定为 `environment`
-
-`name` / `description` / `scope` / `config` / `metadata`
-
-string / object
-
-环境基础属性与完整运行时配置（沙箱类型、预装依赖、网络策略）
-
-`archived_at`
-
-string / null
-
-归档时间，未归档时为 `null`
-
-`created_at` / `updated_at`
-
-string
-
-创建 / 最近更新时间，ISO 8601
-
-`request_id`
-
-string
-
-本次请求的唯一标识

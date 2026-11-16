@@ -42,6 +42,20 @@
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
+qwen4-max
+
+> [缓存单价（每百万 Token）](https://help.aliyun.com/zh/model-studio/explicit-cache-qwen4#billing)
+
+非思考和思考模式
+
+0<Token≤1M
+
+10元
+
+30元
+
+100万Token
+
 qwen3.8-max
 
 > [Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)半价
@@ -70,7 +84,7 @@ qwen3.8-max-0902
 
 36元
 
-100万Token
+无
 
 qwen3.7-max
 
@@ -168,6 +182,20 @@ qwen-max
 
 无
 
+**qwen4-max — 缓存单价（每百万 Token）**
+
+创建缓存（5m）
+
+创建缓存（1h）
+
+显式/隐式缓存命中
+
+12.5元
+
+20元
+
+0.5元
+
 #### 美国（弗吉尼亚）
 
 **模型 ID（Model ID）**
@@ -183,6 +211,20 @@ qwen-max
 **输出单价（每百万Token）**
 
 > **思维链+回答**
+
+qwen4-max
+
+> [缓存单价（每百万 Token）](https://help.aliyun.com/zh/model-studio/explicit-cache-qwen4#billing)
+
+全球
+
+非思考和思考模式
+
+0<Token≤1M
+
+10元
+
+30元
 
 qwen3.8-max
 
@@ -280,6 +322,20 @@ qwen3.7-max-2026-05-20
 
 36元
 
+**qwen4-max — 缓存单价（每百万 Token）**
+
+创建缓存（5m）
+
+创建缓存（1h）
+
+显式/隐式缓存命中
+
+12.5元
+
+20元
+
+0.5元
+
 #### 新加坡
 
 **模型 ID（Model ID）**
@@ -295,6 +351,20 @@ qwen3.7-max-2026-05-20
 **输出单价（每百万Token）**
 
 > **思维链+回答**
+
+qwen4-max
+
+> [缓存单价（每百万 Token）](https://help.aliyun.com/zh/model-studio/explicit-cache-qwen4#billing)
+
+国际
+
+非思考和思考模式
+
+0<Token≤1M
+
+10.938元
+
+32.813元
 
 qwen3.8-max
 
@@ -392,6 +462,20 @@ qwen-max
 
 46.971元
 
+**qwen4-max — 缓存单价（每百万 Token）**
+
+创建缓存（5m）
+
+创建缓存（1h）
+
+显式/隐式缓存命中
+
+13.672元
+
+21.875元
+
+0.547元
+
 #### 德国（法兰克福）
 
 **模型 ID（Model ID）**
@@ -407,6 +491,20 @@ qwen-max
 **输出单价（每百万Token）**
 
 > **思维链+回答**
+
+qwen4-max
+
+> [缓存单价（每百万 Token）](https://help.aliyun.com/zh/model-studio/explicit-cache-qwen4#billing)
+
+全球
+
+非思考和思考模式
+
+0<Token≤1M
+
+10元
+
+30元
 
 qwen3.8-max
 
@@ -475,6 +573,20 @@ qwen3.7-max-2026-05-20
 12元
 
 36元
+
+**qwen4-max — 缓存单价（每百万 Token）**
+
+创建缓存（5m）
+
+创建缓存（1h）
+
+显式/隐式缓存命中
+
+12.5元
+
+20元
+
+0.5元
 
 #### 日本（东京）
 
@@ -492,6 +604,20 @@ qwen3.7-max-2026-05-20
 
 > **思维链+回答**
 
+qwen4-max
+
+> [缓存单价（每百万 Token）](https://help.aliyun.com/zh/model-studio/explicit-cache-qwen4#billing)
+
+全球
+
+非思考和思考模式
+
+0<Token≤1M
+
+10元
+
+30元
+
 qwen3.8-max
 
 > [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
@@ -550,6 +676,20 @@ qwen3.7-max-2026-05-20
 
 36元
 
+**qwen4-max — 缓存单价（每百万 Token）**
+
+创建缓存（5m）
+
+创建缓存（1h）
+
+显式/隐式缓存命中
+
+12.5元
+
+20元
+
+0.5元
+
 #### 中国香港
 
 **模型 ID（Model ID）**
@@ -565,6 +705,20 @@ qwen3.7-max-2026-05-20
 **输出单价（每百万Token）**
 
 > **思维链+回答**
+
+qwen4-max
+
+> [缓存单价（每百万 Token）](https://help.aliyun.com/zh/model-studio/explicit-cache-qwen4#billing)
+
+全球
+
+非思考和思考模式
+
+0<Token≤1M
+
+10元
+
+30元
 
 qwen3.8-max
 
@@ -633,6 +787,20 @@ qwen3.7-max-2026-05-20
 12元
 
 36元
+
+**qwen4-max — 缓存单价（每百万 Token）**
+
+创建缓存（5m）
+
+创建缓存（1h）
+
+显式/隐式缓存命中
+
+12.5元
+
+20元
+
+0.5元
 
 ### 千问Plus
 
@@ -5720,7 +5888,7 @@ qwen-audio-chat
 
 影响计费的因素：若模型支持[Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)，其输入和输出Token单价均按实时推理价格的50%计费。
 
-**说明**以下模型所有地域均无免费额度。
+**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 **说明**DeepSeek-V4-Flash-0731 已于 2026-08-17 00:00 起调整为峰谷定价模式，调整后单价可见下表，更多信息详见[DeepSeek-V4-Flash-0731 模型涨价通知](https://www.aliyun.com/notice/118555)。
 
@@ -5750,7 +5918,7 @@ deepseek-v4.1-flash-1017
 
 闲时 4元
 
-100万Token
+无
 
 deepseek-v4.1-flash
 
@@ -5774,7 +5942,7 @@ deepseek-v4-pro
 
 24元
 
-100万Token
+无
 
 deepseek-v4-pro-0813
 
@@ -6422,7 +6590,7 @@ kimi-k3
 
 100元
 
-100万Token
+无
 
 kimi-k2.7-code
 

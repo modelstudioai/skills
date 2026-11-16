@@ -35,68 +35,44 @@ Java
 client.agents().archive("agent_xxx");
 ```
 
-## 响应说明
+### 响应字段
 
 响应为 Agent 对象，结构同[创建 Agent](raw/application-api-reference/managed-agents-api/agent-api/agent-create.md)响应，唯一差异是 `archived_at` 字段被填入归档时间（不再为 `null`）。字段如下：
 
-### 响应字段
-
-字段
-
-类型
-
-说明
-
-`id`
-
-string
+**id** `string`
 
 智能体 ID
 
-`type`
-
-string
+**type** `string`
 
 固定为 `agent`
 
-`version`
-
-int
+**version** `int`
 
 当前版本号（归档不改变版本）
 
-`name` / `description` / `system`
-
-string
+**name / description / system** `string`
 
 智能体名称、用途说明、系统提示词
 
-`model` / `tools` / `mcp_servers` / `skills` / `multiagent` / `metadata`
-
-object / array
+**model / tools / mcp\_servers / skills / multiagent / metadata** `object / array`
 
 模型、工具包、MCP 引用、技能、多智能体协作配置、业务元数据
 
-`archived_at`
-
-string
+**archived\_at** `string`
 
 归档时间，ISO 8601；归档接口返回的对象中该字段一定非空
 
-`created_at` / `updated_at`
-
-string
+**created\_at / updated\_at** `string`
 
 创建 / 最近更新时间
 
-`workspace_id`
-
-string
+**workspace\_id** `string`
 
 所属工作空间 ID
 
-`request_id`
-
-string
+**request\_id** `string`
 
 本次请求的唯一标识
+
+## 响应说明

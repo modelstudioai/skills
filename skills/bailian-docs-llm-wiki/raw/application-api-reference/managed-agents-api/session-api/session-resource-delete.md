@@ -12,27 +12,11 @@
 
 ## 路径参数
 
-**参数**
-
-**必填**
-
-**类型**
-
-**说明**
-
-`session_id`
-
-是
-
-string
+**session\_id**`string`**（必选）**
 
 会话 ID，格式 sesn\_<ULID>
 
-`resource_id`
-
-是
-
-string
+**resource\_id**`string`**（必选）**
 
 资源 ID，格式 sesrsc\_<ULID>
 
@@ -45,6 +29,20 @@ curl -X DELETE "$AGENTSTUDIO_URL/sessions/sesn_xxx/resources/sesrsc_xxx" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
+### 响应字段
+
+**id**`string`
+
+被卸载的资源 ID
+
+**type**`string`
+
+固定为 session\_resource\_deleted，标识卸载成功
+
+**request\_id**`string`
+
+本次请求的唯一标识
+
 ## 响应
 
 ```
@@ -55,32 +53,6 @@ curl -X DELETE "$AGENTSTUDIO_URL/sessions/sesn_xxx/resources/sesrsc_xxx" \
 }
 ```
 
-### 响应字段
-
-**字段**
-
-**类型**
-
-**说明**
-
-`id`
-
-string
-
-被卸载的资源 ID
-
-`type`
-
-string
-
-固定为 session\_resource\_deleted，标识卸载成功
-
-`request_id`
-
-string
-
-本次请求的唯一标识
-
 ## 错误码
 
 **状态码**
@@ -88,15 +60,3 @@ string
 **错误码**
 
 **说明**
-
-400
-
-`InvalidParameter`
-
-Required parameter missing or invalid.
-
-401
-
-`InvalidApiKey`
-
-Invalid API-key provided.

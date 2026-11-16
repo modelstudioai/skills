@@ -12,27 +12,11 @@
 
 ## 路径参数
 
-**参数**
-
-**必填**
-
-**类型**
-
-**说明**
-
-`vault_id`
-
-是
-
-string
+**vault\_id** `string` **（必选）**
 
 Vault ID，格式 vlt\_xxx
 
-`credential_id`
-
-是
-
-string
+**credential\_id** `string` **（必选）**
 
 Credential ID，格式 cred\_xxx
 
@@ -44,6 +28,48 @@ curl
 curl -X POST "$AGENTSTUDIO_URL/vaults/vlt_xxx/credentials/cred_xxx/archive" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
+
+### 响应字段
+
+**id** `string`
+
+Credential ID，格式 cred\_xxx
+
+**type** `string`
+
+固定为 credential
+
+**vault\_id** `string`
+
+所属 Vault ID
+
+**display\_name** `string`
+
+Credential 可读名称
+
+**auth** `object`
+
+认证信息，敏感值已脱敏
+
+**metadata** `object`
+
+业务自定义键值对
+
+**archived\_at** `string`
+
+归档时间，ISO 8601
+
+**created\_at** `string`
+
+创建时间，ISO 8601
+
+**updated\_at** `string`
+
+最近更新时间，ISO 8601
+
+**request\_id** `string`
+
+请求唯一标识
 
 ## 响应
 
@@ -73,74 +99,6 @@ curl -X POST "$AGENTSTUDIO_URL/vaults/vlt_xxx/credentials/cred_xxx/archive" \
   "request_id": "req_xxx"
 }
 ```
-
-### 响应字段
-
-**字段**
-
-**类型**
-
-**说明**
-
-`id`
-
-string
-
-Credential ID，格式 cred\_xxx
-
-`type`
-
-string
-
-固定为 credential
-
-`vault_id`
-
-string
-
-所属 Vault ID
-
-`display_name`
-
-string
-
-Credential 可读名称
-
-`auth`
-
-object
-
-认证信息，敏感值已脱敏
-
-`metadata`
-
-object
-
-业务自定义键值对
-
-`archived_at`
-
-string
-
-归档时间，ISO 8601
-
-`created_at`
-
-string
-
-创建时间，ISO 8601
-
-`updated_at`
-
-string
-
-最近更新时间，ISO 8601
-
-`request_id`
-
-string
-
-请求唯一标识
 
 ## 错误码
 

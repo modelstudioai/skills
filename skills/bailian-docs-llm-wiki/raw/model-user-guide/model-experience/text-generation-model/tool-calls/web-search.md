@@ -15,7 +15,7 @@
 ```
 # 导入依赖与创建客户端...
 response = client.responses.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     input="杭州天气",
     tools=[
         {"type": "web_search"},
@@ -71,7 +71,7 @@ response = client.chat.completions.create(
 ```
 # 导入依赖与创建客户端...
 message = client.messages.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     max_tokens=2048,
     # 传入客户端标识
     system=[{"type": "text", "text": "x-anthropic-billing-header: cc_entrypoint=cli;"}],
@@ -94,7 +94,7 @@ message = client.messages.create(
 
 Qwen4-Max 系列、Qwen3.8 Max、Flash 与开源系列、Qwen3.7-Flash、Qwen3.7-Plus、Qwen3.6 系列、Qwen3.5 系列（含 qwen3.5-plus、qwen3.5-flash、qwen3.5-omni 系列与千问开源模型）等模型支持图片、视频等多模态输入，属于多模态模型。这类模型需通过**多模态接口**（`multimodal-generation` 端点）调用：Python SDK 2.0 使用 `client.multimodal.chat.create`，Java 使用 `MultiModalConversation`，而不能使用面向纯文本模型的 `text-generation` 端点。多模态模型的基础调用方式可参见《视觉推理》《图像与视频理解》文档。
 
-搜索策略因系列而异：qwen3.5-omni 系列仅支持 `agent` 策略；`qwen4-max-preview`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b` 和 `qwen3.8-27b` 在多模态接口下不支持 `agent` 策略（使用默认的 `turbo` 或 `max`），如需对 Qwen4、Qwen3.8 使用 agent 检索，请改用 [Responses API 的联网搜索](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y)；本节列出的其余模型支持 `turbo`、`max`、`agent` 策略。
+搜索策略因系列而异：qwen3.5-omni 系列仅支持 `agent` 策略；`qwen4-max`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b` 和 `qwen3.8-27b` 在多模态接口下不支持 `agent` 策略（使用默认的 `turbo` 或 `max`），如需对 Qwen4、Qwen3.8 使用 agent 检索，请改用 [Responses API 的联网搜索](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y)；本节列出的其余模型支持 `turbo`、`max`、`agent` 策略。
 
 > 若通过 `text-generation` 端点调用上述多模态模型，会返回 `400 url error, please check url`，请改用多模态接口（`multimodal-generation` 端点，Python 为 `client.multimodal.chat.create`，Java 为 `MultiModalConversation`）。Java SDK 的 `MultiModalConversationParam` 提供 `enableSearch(true)` 用于开启联网搜索，但未提供 `searchOptions()` 方法，需通过通用参数 `parameter("search_options", ...)` 注入搜索策略等配置；Python 的 `client.multimodal.chat.create` 可直接传入 `search_options`。多模态模型开启联网搜索时需使用**流式调用**（Java 使用 `streamCall`，Python 设置 `stream=True`），否则会返回 `Non-streaming mode does not support Web Search` 报错。
 
@@ -185,7 +185,7 @@ public class Main {
 
 -   **千问**
     
-    -   Qwen4 系列：qwen4-max-preview（[仅 Token Plan](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview)；`search_strategy` 不支持 `agent`；如需 agent 检索，请通过 [Responses API](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y) 使用 `web_search` 工具）
+    -   Qwen4 系列：qwen4-max（`search_strategy` 不支持 `agent`；如需 agent 检索，请通过 [Responses API](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y) 使用 `web_search` 工具）
     -   Qwen3.8 系列：qwen3.8-max、qwen3.8-max-0902、qwen3.8-flash、qwen3.8-2.4t-a95b、qwen3.8-27b（`search_strategy` 不支持 `agent`；如需 agent 检索，请通过 [Responses API](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y) 使用 `web_search` 工具）
     -   Qwen3.7 系列：qwen3.7-max、qwen3.7-max-preview、qwen3.7-max-2026-05-17及之后的快照版本、qwen3.7-plus、qwen3.7-plus-2026-05-26及之后的快照版本、qwen3.7-flash、qwen3.7-flash-2026-07-15及之后的快照版本
     -   Qwen3.6 系列：qwen3.6-plus、qwen3.6-plus-2026-04-02及之后的快照版本、qwen3.6-flash、qwen3.6-flash-2026-04-16及之后的快照版本、qwen3.6-27b、qwen3.6-35b-a3b
@@ -596,13 +596,11 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
     
 -   `agent`：可多次调用联网搜索工具与大模型，实现多轮信息检索与内容整合。
     
-    > 该策略适用于 Qwen3.5 系列（含开源模型与 Omni 系列）、Qwen3.6 系列、Qwen3.7 系列模型，通过 text 端点调用时需使用流式调用。Qwen3.8-Omni-Flash 的 Chat Completions 调用也支持该策略。`qwen4-max-preview`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b` 和 `qwen3.8-27b` 在 Chat Completions/DashScope 协议下不支持 `search_strategy: agent`，但可通过 [Responses API 的联网搜索](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y) 使用 `web_search` 工具实现 agent 式多轮检索。角色扮演模型不支持 `agent` 策略。
+    > 该策略适用于 Qwen3.5 系列（含开源模型与 Omni 系列）、Qwen3.6 系列、Qwen3.7 系列模型，通过 text 端点调用时需使用流式调用。Qwen3.8-Omni-Flash 的 Chat Completions 调用也支持该策略。`qwen4-max`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b` 和 `qwen3.8-27b` 在 Chat Completions/DashScope 协议下不支持 `search_strategy: agent`，但可通过 [Responses API 的联网搜索](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y) 使用 `web_search` 工具实现 agent 式多轮检索。角色扮演模型不支持 `agent` 策略。
     
     > 启用该策略时，仅支持 **返回搜索来源** （ `enable_source: true` ），其他联网搜索功能不可用。
     
     > 启用该策略时，每次调用额外收费，参见 [计费说明](https://help.aliyun.com/zh/model-studio/web-search#92ce83df3a599) 。
-    
--   `agent_max`：在`agent`策略基础上支持网页抓取，参见：[网页抓取](raw/model-user-guide/model-experience/text-generation-model/tool-calls/web-extractor.md)。
     
     > 启用该策略时，仅支持 **返回搜索来源** （ `enable_source: true` ），其他联网搜索功能不可用。
     
@@ -3339,7 +3337,7 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 
 > 支持以下模型：Qwen4-Max 系列；Qwen3.8 Max、Flash 与开源系列、`qwen3.8-omni-flash`；Qwen3.7、Qwen3.5 系列模型（含开源模型，不含Omni）、Qwen3.6-Plus、Qwen3.6-Flash 系列及 qwen3.6-35b-a3b；deepseek-v4-flash-0731、`deepseek-v4.1-flash-1017`、deepseek-v4-pro、deepseek-v4-pro-0813；glm-5.2；kimi-k3；kimi-k3.1-pro。
 
-> **Qwen4 / Qwen3.8 系列的 agent 式检索**：Qwen4-Max（qwen4-max-preview）与 Qwen3.8 系列（qwen3.8-max、qwen3.8-max-0902、qwen3.8-flash、qwen3.8-2.4t-a95b、qwen3.8-27b）在 Chat Completions/DashScope 协议下不支持 `search_strategy: agent`，但通过本节的 Responses API `web_search` 工具即可实现同等的 agent 式多轮检索能力。
+> **Qwen4 / Qwen3.8 系列的 agent 式检索**：Qwen4-Max（qwen4-max）与 Qwen3.8 系列（qwen3.8-max、qwen3.8-max-0902、qwen3.8-flash、qwen3.8-2.4t-a95b、qwen3.8-27b）在 Chat Completions/DashScope 协议下不支持 `search_strategy: agent`，但通过本节的 Responses API `web_search` 工具即可实现同等的 agent 式多轮检索能力。
 
 > **Responses API 不使用 `search_strategy` 参数**。是否发起联网搜索、以及是否进行多轮检索，均由是否挂载 `web_search` 工具及模型自主决策决定；传入 `search_options.search_strategy` 会被静默忽略，不会触发搜索。
 
@@ -3362,7 +3360,7 @@ client = OpenAI(
 
 response = client.responses.create(
     # Qwen3.8 系列通过 Responses API 的 web_search 工具即可使用 agent 式多轮检索
-    model="qwen3.8-max",
+    model="qwen4-max",
     input="杭州明天天气怎么样？",
     tools=[
         {"type": "web_search"},
@@ -3376,10 +3374,10 @@ print("="*20 + "回复内容" + "="*20)
 print(response.output_text)
 
 print("="*20 + "工具调用次数" + "="*20)
-usage = response.usage
-if hasattr(usage, 'x_tools') and usage.x_tools:
-    print(f"联网搜索次数: {usage.x_tools.get('web_search', {}).get('count', 0)}")
-    print(f"网页抓取次数: {usage.x_tools.get('web_extractor', {}).get('count', 0)}")
+usage = getattr(response, "tool_usage", {})
+if usage:
+    print(f"联网搜索次数: {usage.get('web_search', {}).get('num_requests')}")
+    print(f"网页抓取次数: {usage.get('web_extractor', {}).get('num_requests')}")
 
 # 打印每一轮 web_search_call 的搜索来源，观察 agent 式多轮检索过程
 print("="*20 + "搜索来源" + "="*20)
@@ -3404,7 +3402,7 @@ const openai = new OpenAI({
 async function main() {
     const response = await openai.responses.create({
         // Qwen3.8 系列通过 Responses API 的 web_search 工具即可使用 agent 式多轮检索
-        model: "qwen3.8-max",
+        model: "qwen4-max",
         input: "杭州明天天气怎么样？",
         tools: [
             { type: "web_search" },
@@ -3418,8 +3416,8 @@ async function main() {
     console.log(response.output_text);
 
     console.log("====================工具调用次数====================");
-    console.log(`联网搜索次数: ${response.usage?.x_tools?.web_search?.count || 0}`);
-    console.log(`网页抓取次数: ${response.usage?.x_tools?.web_extractor?.count || 0}`);
+    console.log(`联网搜索次数: ${response.tool_usage?.web_search?.num_requests}`);
+    console.log(`网页抓取次数: ${response.tool_usage?.web_extractor?.num_requests}`);
 
     console.log("====================搜索来源====================");
     for (const item of response.output) {
@@ -3441,7 +3439,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input": "杭州明天天气怎么样？",
     "tools": [
         {"type": "web_search"},
@@ -3452,22 +3450,51 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
-以 qwen3.8-max 请求 `杭州明天天气怎么样？` 为例，`output` 数组通常包含多次 `web_search_call` 与 `web_extractor_call`，`usage.x_tools.web_search.count` 会大于 1，体现 agent 式多轮检索：
+`qwen4-max` 的 Responses API 使用响应顶层 `tool_usage`，各工具的 `num_requests` 为计费次数，`pdf_page_parser.num_requests` 为解析页数。Qwen3.8 的 Responses 示例仍使用 `usage.x_tools`。
+
+以下示例展示多轮检索的 `output` 和工具计数。计费次数以 `tool_usage` 为准，不按 `output` 项数计算。
 
 ```
 {
   "output": [
-    { "type": "reasoning" },
-    { "type": "web_search_call", "action": { "sources": [ "..." ] } },
-    { "type": "web_extractor_call" },
-    { "type": "reasoning" },
-    { "type": "web_search_call", "action": { "sources": [ "..." ] } },
-    { "type": "message", "content": [ "..." ] }
+    {
+      "type": "reasoning"
+    },
+    {
+      "type": "web_search_call",
+      "action": {
+        "sources": [
+          "..."
+        ]
+      }
+    },
+    {
+      "type": "web_extractor_call"
+    },
+    {
+      "type": "reasoning"
+    },
+    {
+      "type": "web_search_call",
+      "action": {
+        "sources": [
+          "..."
+        ]
+      }
+    },
+    {
+      "type": "message",
+      "content": [
+        "..."
+      ]
+    }
   ],
-  "usage": {
-    "x_tools": {
-      "web_search":    { "count": 2 },
-      "web_extractor": { "count": 2 }
+  "tool_usage": {
+    "web_search": {
+      "num_requests": 2
+    },
+    "web_extractor": {
+      "num_requests": 2
     }
   }
 }
@@ -3506,18 +3533,6 @@ for item in response.output:
             
             -   华北2（北京）、美国（弗吉尼亚）、中国香港、日本（东京）、德国（法兰克福）地域：4元
             -   新加坡地域 73.392381元。
-    -   **agent\_max 策略（限时优惠）：**
-        
-        包含联网搜索与网页抓取的费用。
-        
-        -   联网搜索工具每 1000 次调用费用：
-            
-            -   华北2（北京）、美国（弗吉尼亚）、中国香港、日本（东京）、德国（法兰克福）地域：4元。
-            -   新加坡地域： 73.392381元。
-        -   网页抓取工具限时免费。
-            
-    -   **历史策略**：`standard`、`pro` 按 `turbo` 策略计费，`pro_max`、`pro_ultra` 按 `max` 策略计费。这些取值已不推荐使用，请改用 `turbo`、`max`、`agent` 或 `agent_max`。
-        
 
 ## 限流说明
 
@@ -3539,7 +3554,8 @@ A：分两层判断：
 
 -   **是否触发了搜索**
     -   DashScope：响应包含 `search_info` 字段，`usage` 中包含 `plugins` 字段。
-    -   OpenAI 兼容：将 `include_tool_usage` 设为 `true` 后，`usage` 中返回 `x_tools` 字段。
+    -   Chat Completions 和 Qwen3.8 Responses：将 `include_tool_usage` 设为 `true` 后，`usage` 中返回 `x_tools` 字段。
+    -   Qwen4 Responses：通过响应顶层 `tool_usage.web_search.num_requests` 查看联网搜索次数。
     -   未触发搜索时，上述字段均不返回。
 -   **是否检索到内容**
     
@@ -3555,7 +3571,7 @@ A：分两层判断：
 A：两者统计口径不同，数值存在差异属于预期情况：
 
 -   **账单计量**：以搜索服务实际完成检索并正常返回结果为计费依据。
--   **`count` 字段**（DashScope 协议为 `usage.plugins.search.count`，OpenAI 兼容协议为 `usage.x_tools.search.count`，两者取值一致）：表示本轮对话经意图判定需要联网搜索，在意图判定阶段即被置位，不代表检索已实际完成。即使[触发限流](https://help.aliyun.com/zh/model-studio/web-search#c2ea761ab4kif)或检索未返回结果，该字段仍会返回数值，不会置 0 或省略。
+-   **`count` 字段**（DashScope 协议为 `usage.plugins.search.count`，OpenAI 兼容协议为 `usage.x_tools.search.count` (Chat Completions / Qwen3.8 Responses)，两者取值一致）：表示本轮对话经意图判定需要联网搜索，在意图判定阶段即被置位，不代表检索已实际完成。即使[触发限流](https://help.aliyun.com/zh/model-studio/web-search#c2ea761ab4kif)或检索未返回结果，该字段仍会返回数值，不会置 0 或省略。
 
 因此 `count` 不作为计费或对账的依据，**对账请以账单出账数据为准**。
 

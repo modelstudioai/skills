@@ -1,12 +1,14 @@
-# qwen4-max-preview（最新模型）
+# qwen4-max-preview
 
 了解 Qwen4-Max-Preview 的多模态理解、深度思考、工具调用能力与 Token Plan 接入方式
 
 Qwen4-Max-Preview 是通义千问新一代旗舰多模态模型，融合文本生成、图片与视频理解及深度思考能力，适用于编程开发、办公、前端设计与复杂智能体任务。模型支持联网搜索、工具调用和结构化输出，兼容 OpenAI 与 Anthropic API，帮助开发者构建具备多模态理解与任务执行能力的智能应用。
 
+正式版 [Qwen4-Max](raw/model-user-guide/get-started-with-models/qwen4-max.md) 已上线，建议使用正式版。
+
 Model ID：`qwen4-max-preview`
 
-**说明**Qwen4-Max-Preview 当前为预览版，仅支持 Token Plan，不支持按量计费。预览期为 2026 年 11 月 11 日 10:00 至 11 月 25 日 24:00（UTC+8），期间不做变更，预览结束后下线。
+**说明**Qwen4-Max-Preview 当前为预览版，仅支持 Token Plan，不支持按量计费。预览期为 2026 年 11 月 11 日 10:00 至 11 月 25 日 24:00（UTC+8），预览期间模型能力持续迭代升级，预览结束后下线。
 
 ## 模型能力与规格
 

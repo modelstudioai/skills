@@ -12,19 +12,7 @@
 
 ## 路径参数
 
-**参数**
-
-**必填**
-
-**类型**
-
-**说明**
-
-`id`
-
-是
-
-string
+**id** `string` **（必选）**
 
 Webhook ID，格式 wep\_<ULID>
 
@@ -37,6 +25,12 @@ curl -X DELETE "$AGENTSTUDIO_URL/webhook_endpoints/wep_01JXX7YQGPRPV1BZXA35QE7WD
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
+### 响应字段
+
+**request\_id** `string`
+
+请求唯一标识
+
 ## 响应
 
 ```
@@ -44,20 +38,6 @@ curl -X DELETE "$AGENTSTUDIO_URL/webhook_endpoints/wep_01JXX7YQGPRPV1BZXA35QE7WD
   "request_id": "8e1d16e4"
 }
 ```
-
-### 响应字段
-
-**字段**
-
-**类型**
-
-**说明**
-
-`request_id`
-
-string
-
-请求唯一标识
 
 ## 错误码
 

@@ -17,7 +17,7 @@ curl "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/resp
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input": "你是谁？"
   }'
 ```
@@ -31,7 +31,7 @@ client = OpenAI(
     base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 response = client.responses.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     input="你是谁？",
 )
 print(response.output_text)
@@ -45,7 +45,7 @@ const client = new OpenAI({
     baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 });
 const response = await client.responses.create({
-    model: "qwen3.8-max",
+    model: "qwen4-max",
     input: "你是谁？",
 });
 console.log(response.output_text);
@@ -64,7 +64,7 @@ public class Main {
             .baseUrl("https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1")
             .build();
         ResponseCreateParams params = ResponseCreateParams.builder()
-            .model("qwen3.8-max")
+            .model("qwen4-max")
             .input("你是谁？")
             .build();
         Response response = client.responses().create(params);
@@ -96,7 +96,7 @@ func main() {
         option.WithBaseURL("https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"),
     )
     response, err := client.Responses.New(context.Background(), responses.ResponseNewParams{
-        Model: "qwen3.8-max",
+        Model: "qwen4-max",
         Input: responses.ResponseNewParamsInputUnion{OfString: openai.String("你是谁？")},
     })
     if err != nil {
@@ -121,7 +121,7 @@ ResponsesClient client = new(
     });
 ResponseResult response = client.CreateResponse(new CreateResponseOptions
 {
-    Model = "qwen3.8-max",
+    Model = "qwen4-max",
     InputItems = { ResponseItem.CreateUserMessageItem("你是谁？") }
 });
 Console.WriteLine(response.GetOutputText());
@@ -135,7 +135,7 @@ client = OpenAI::Client.new(
   base_url: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
 )
 response = client.responses.create(
-  model: "qwen3.8-max",
+  model: "qwen4-max",
   input: "你是谁？"
 )
 puts response.output_text
@@ -150,7 +150,7 @@ curl "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "messages": [{"role": "user", "content": "你是谁？"}]
   }'
 ```
@@ -164,7 +164,7 @@ client = OpenAI(
     base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 response = client.chat.completions.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     messages=[{"role": "user", "content": "你是谁？"}]
 )
 print(response.choices[0].message.content)
@@ -178,7 +178,7 @@ const client = new OpenAI({
     baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 });
 const response = await client.chat.completions.create({
-    model: "qwen3.8-max",
+    model: "qwen4-max",
     messages: [{ role: "user", content: "你是谁？" }]
 });
 console.log(response.choices[0].message.content);
@@ -197,7 +197,7 @@ public class Main {
             .baseUrl("https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1")
             .build();
         ChatCompletionCreateParams params = ChatCompletionCreateParams.builder()
-            .model("qwen3.8-max")
+            .model("qwen4-max")
             .addUserMessage("你是谁？")
             .build();
         ChatCompletion response = client.chat().completions().create(params);
@@ -224,7 +224,7 @@ func main() {
         option.WithBaseURL("https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"),
     )
     response, err := client.Chat.Completions.New(context.Background(), openai.ChatCompletionNewParams{
-        Model: "qwen3.8-max",
+        Model: "qwen4-max",
         Messages: []openai.ChatCompletionMessageParamUnion{
             openai.UserMessage("你是谁？"),
         },
@@ -243,7 +243,7 @@ using OpenAI;
 using OpenAI.Chat;
 
 ChatClient client = new(
-    model: "qwen3.8-max",
+    model: "qwen4-max",
     credential: new ApiKeyCredential(Environment.GetEnvironmentVariable("DASHSCOPE_API_KEY")!),
     options: new OpenAIClientOptions
     {
@@ -261,7 +261,7 @@ client = OpenAI::Client.new(
   base_url: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
 )
 response = client.chat.completions.create(
-  model: "qwen3.8-max",
+  model: "qwen4-max",
   messages: [{role: "user", content: "你是谁？"}]
 )
 puts response.choices.first.message.content
@@ -276,7 +276,7 @@ curl "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/v1/messa
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "max_tokens": 1024,
     "messages": [{"role": "user", "content": "你是谁？"}]
   }'
@@ -291,7 +291,7 @@ client = Anthropic(
     base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic",
 )
 response = client.messages.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     max_tokens=1024,
     messages=[{"role": "user", "content": "你是谁？"}]
 )
@@ -308,7 +308,7 @@ const client = new Anthropic({
     baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic",
 });
 const response = await client.messages.create({
-    model: "qwen3.8-max",
+    model: "qwen4-max",
     max_tokens: 1024,
     messages: [{ role: "user", content: "你是谁？" }]
 });
@@ -330,7 +330,7 @@ public class Main {
             .baseUrl("https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic")
             .build();
         MessageCreateParams params = MessageCreateParams.builder()
-            .model("qwen3.8-max")
+            .model("qwen4-max")
             .maxTokens(1024L)
             .addUserMessage("你是谁？")
             .build();
@@ -360,7 +360,7 @@ func main() {
         option.WithBaseURL("https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic"),
     )
     response, err := client.Messages.New(context.Background(), anthropic.MessageNewParams{
-        Model: "qwen3.8-max",
+        Model: "qwen4-max",
         MaxTokens: 1024,
         Messages: []anthropic.MessageParam{
             anthropic.NewUserMessage(anthropic.NewTextBlock("你是谁？")),
@@ -389,7 +389,7 @@ AnthropicClient client = new()
 };
 MessageCreateParams parameters = new()
 {
-    Model = "qwen3.8-max",
+    Model = "qwen4-max",
     MaxTokens = 1024,
     Messages = [new UserMessageParam("你是谁？")]
 };
@@ -408,7 +408,7 @@ client = Anthropic::Client.new(
   base_url: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic"
 )
 response = client.messages.create(
-  model: "qwen3.8-max",
+  model: "qwen4-max",
   max_tokens: 1024,
   messages: [{role: "user", content: "你是谁？"}]
 )
@@ -428,7 +428,7 @@ $client = new Client(
     baseUrl: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic"
 );
 $response = $client->messages->create(
-    model: "qwen3.8-max",
+    model: "qwen4-max",
     maxTokens: 1024,
     messages: [["role" => "user", "content" => "你是谁？"]]
 );
@@ -443,11 +443,11 @@ foreach ($response->content as $block) {
 
 [
 
-**Qwen4-Max-Preview**
+**Qwen4-Max**
 
 旗舰与最强效果
 
-](raw/model-user-guide/get-started-with-models/qwen4-max-preview.md)
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen4-max?serviceSite=asia-pacific-china&ref=list)
 
 [
 

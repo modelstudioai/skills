@@ -14,6 +14,8 @@
 
 由阿里云百炼托管的沙箱容器，开箱即用，可被多个会话复用。配置预装包后可能需要预热，见[环境预热](#h-env-warmup)
 
+**说明**沙箱持久化在会话级配置，不在环境级配置。环境本身不保留会话运行后的磁盘修改；如需跨运行保留工作文件和环境修改，创建会话时开启沙箱持久化，详见[沙箱持久化](https://help.aliyun.com/zh/model-studio/managed-agents-session-operations#h-sandbox-persistence)。
+
 ## 配置字段
 
 在**环境**页面点击**添加环境**，填写以下字段：

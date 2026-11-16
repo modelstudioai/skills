@@ -15,7 +15,7 @@
 ```
 # 导入依赖与创建客户端...
 response = client.responses.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     input="123的21次方是多少？",
     tools=[
         {"type": "code_interpreter"},
@@ -107,7 +107,7 @@ response = client.multimodal.chat.create(
 
 #### Responses API
 
-千问Max：qwen4-max-preview（[仅 Token Plan](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview)）、Qwen3.8-Max系列、Qwen3.7-Max系列
+千问Max：qwen4-max、Qwen3.8-Max系列、Qwen3.7-Max系列
 
 千问Plus：Qwen3.7-Plus系列、Qwen3.6-Plus系列、Qwen3.5-Plus系列
 
@@ -150,7 +150,7 @@ client = OpenAI(
 )
 
 response = client.responses.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     input="12的3次方",
     tools=[
         {
@@ -190,7 +190,7 @@ const openai = new OpenAI({
 
 async function main() {
     const response = await openai.responses.create({
-        model: "qwen3.8-max",
+        model: "qwen4-max",
         input: "请计算12的三次方",
         tools: [
             { type: "code_interpreter" },
@@ -223,7 +223,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input": "请计算12的三次方",
     "tools": [
         {"type": "code_interpreter"},
@@ -265,7 +265,7 @@ client = OpenAI(
 messages = [{"role": "user", "content": "123的21次方是多少？"}]
 
 completion = client.chat.completions.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     messages=messages,
     extra_body={"enable_thinking": True, "enable_code_interpreter": True},
     stream=True,
@@ -627,7 +627,7 @@ client = OpenAI(
 )
 
 response = client.responses.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     input="12的3次方",
     tools=[
         {"type": "code_interpreter"}

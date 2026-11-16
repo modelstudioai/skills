@@ -31,6 +31,20 @@ Java
 client.skills().delete("skill_xxx");
 ```
 
+### 响应字段
+
+**id** `string`
+
+被删除的技能 ID
+
+**type** `string`
+
+固定为 `skill_deleted`
+
+**request\_id** `string`
+
+本次请求的唯一标识
+
 ## 响应示例
 
 ```
@@ -40,29 +54,3 @@ client.skills().delete("skill_xxx");
   "request_id": "xxx"
 }
 ```
-
-### 响应字段
-
-字段
-
-类型
-
-说明
-
-`id`
-
-string
-
-被删除的技能 ID
-
-`type`
-
-string
-
-固定为 `skill_deleted`
-
-`request_id`
-
-string
-
-本次请求的唯一标识

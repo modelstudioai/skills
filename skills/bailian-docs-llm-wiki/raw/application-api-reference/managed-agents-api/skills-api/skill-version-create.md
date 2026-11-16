@@ -38,6 +38,40 @@ SkillVersion sv = client.skills().createVersion("skill_xxx",
 System.out.println(sv.getVersion());
 ```
 
+### 响应字段
+
+**id** `string`
+
+版本 ID，格式 `skillver_xxx`
+
+**skill\_id** `string`
+
+所属技能 ID
+
+**type** `string`
+
+固定为 `skill_version`
+
+**name / description** `string`
+
+从该版本 zip 包内 `SKILL.md` 解析得到
+
+**version** `string`
+
+版本号，由服务端生成
+
+**status** `string`
+
+扫描状态：`checking` / `active` / `rejected`，仅 `active` 可挂载
+
+**created\_at / updated\_at** `string`
+
+创建 / 最近更新时间，ISO 8601
+
+**additional\_properties** `object`
+
+仅 `status=rejected` 时返回，含 `error_info`：按 zip 包内文件路径列出的安全审查问题
+
 ## 响应示例
 
 ```
@@ -53,59 +87,3 @@ System.out.println(sv.getVersion());
   "updated_at": "2026-06-15T08:23:11.456+00:00"
 }
 ```
-
-### 响应字段
-
-字段
-
-类型
-
-说明
-
-`id`
-
-string
-
-版本 ID，格式 `skillver_xxx`
-
-`skill_id`
-
-string
-
-所属技能 ID
-
-`type`
-
-string
-
-固定为 `skill_version`
-
-`name` / `description`
-
-string
-
-从该版本 zip 包内 `SKILL.md` 解析得到
-
-`version`
-
-string
-
-版本号，由服务端生成
-
-`status`
-
-string
-
-扫描状态：`checking` / `active` / `rejected`，仅 `active` 可挂载
-
-`created_at` / `updated_at`
-
-string
-
-创建 / 最近更新时间，ISO 8601
-
-`additional_properties`
-
-object
-
-仅 `status=rejected` 时返回，含 `error_info`：按 zip 包内文件路径列出的安全审查问题

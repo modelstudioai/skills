@@ -12,61 +12,25 @@
 
 ## 路径参数
 
-**参数**
-
-**必填**
-
-**类型**
-
-**说明**
-
-`vault_id`
-
-是
-
-string
+**vault\_id** `string` **（必选）**
 
 Vault ID，格式 vlt\_xxx
 
-`credential_id`
-
-是
-
-string
+**credential\_id** `string` **（必选）**
 
 Credential ID，格式 cred\_xxx
 
 ## 请求体
 
-**字段**
-
-**必填**
-
-**类型**
-
-**说明**
-
-`auth`
-
-否
-
-object
+**auth** `object` **（可选）**
 
 认证信息，固定为 environment\_variable 类型。更新时 type 与 secret\_name 不可修改，secret\_value 留空表示不修改。
 
-`display_name`
-
-否
-
-string
+**display\_name** `string` **（可选）**
 
 Credential 可读名称，最大 255 字符
 
-`metadata`
-
-否
-
-object
+**metadata** `object` **（可选）**
 
 业务自定义键值对元数据
 
@@ -98,6 +62,48 @@ curl -X POST "$AGENTSTUDIO_URL/vaults/vlt_xxx/credentials/cred_xxx" \
   }'
 ```
 
+### 响应字段
+
+**id** `string`
+
+Credential ID，格式 cred\_xxx
+
+**type** `string`
+
+固定为 credential
+
+**vault\_id** `string`
+
+所属 Vault ID
+
+**display\_name** `string`
+
+Credential 可读名称
+
+**auth** `object`
+
+认证信息，敏感值已脱敏
+
+**metadata** `object`
+
+业务自定义键值对
+
+**archived\_at** `string | null`
+
+归档时间，未归档时为 null
+
+**created\_at** `string`
+
+创建时间，ISO 8601
+
+**updated\_at** `string`
+
+最近更新时间，ISO 8601
+
+**request\_id** `string`
+
+请求唯一标识
+
 ## 响应
 
 ```
@@ -125,74 +131,6 @@ curl -X POST "$AGENTSTUDIO_URL/vaults/vlt_xxx/credentials/cred_xxx" \
   "request_id": "req_xxx"
 }
 ```
-
-### 响应字段
-
-**字段**
-
-**类型**
-
-**说明**
-
-`id`
-
-string
-
-Credential ID，格式 cred\_xxx
-
-`type`
-
-string
-
-固定为 credential
-
-`vault_id`
-
-string
-
-所属 Vault ID
-
-`display_name`
-
-string
-
-Credential 可读名称
-
-`auth`
-
-object
-
-认证信息，敏感值已脱敏
-
-`metadata`
-
-object
-
-业务自定义键值对
-
-`archived_at`
-
-string | null
-
-归档时间，未归档时为 null
-
-`created_at`
-
-string
-
-创建时间，ISO 8601
-
-`updated_at`
-
-string
-
-最近更新时间，ISO 8601
-
-`request_id`
-
-string
-
-请求唯一标识
 
 ## 错误码
 

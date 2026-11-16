@@ -1,74 +1,76 @@
 # file management api
 
-百炼平台的文件管理 API 提供文件上传、查询、列举和删除等基础能力，支持多用途文件复用（如微调、内容提取、批量任务）。该接口为 DashScope 原生设计，但**当前主要用于兼容历史场景，推荐优先使用 [OpenAI 兼容的 File 接口](../../raw/model-api-reference/toolkits-and-frameworks/openai-file-interface.md)**。所有操作均需通过 `Authorization: Bearer ${DASHSCOPE_API_KEY}` 认证。
+百炼平台的文件管理 API 提供上传、查询、列举和删除文件的能力，适用于 fine-tune、file-extract 和 batch 等场景。该 API 返回结构化文件元数据（如 `file_id`、`url`、`md5`、`purpose`），支持多文件批量上传与分页列举。**注意：当前接口主要用于兼容历史场景，推荐优先使用 [OpenAI 兼容的 File 接口](raw/model-api-reference/toolkits-and-frameworks/openai-file-interface.md)**，详见 [原文标题](../../raw/model-api-reference/file-management-api/get-file-api.md) 和 [原文标题](../../raw/model-api-reference/file-management-api/upload-file-api.md)。
 
 ## 支持的模型/功能
 
-文件管理 API 本身不绑定具体模型，而是按 `purpose` 字段区分使用场景，不同用途对应不同下游能力：
+- **上传文件**：支持 `multipart/form-data` 方式上传一个或多个文件，按 `purpose` 分类（`fine-tune`、`file-extract`、`batch`），上传后生成唯一 `file_id` 供后续任务复用。
+- **查询文件**：通过 `GET /api/v1/files/{file_id}` 获取单个文件的完整元数据及可下载 `url`。
+- **列举文件**：通过 `GET /api/v1/files?page_no=1&page_size=20` 分页获取当前用户所有有效文件列表，响应中包含 `purpose` 字段（见 [原文标题](../../raw/model-api-reference/file-management-api/get-file-api.md) 返回示例）。
+- **删除文件**：通过 `DELETE /api/v1/files/{file_id}` 永久移除指定文件（不可恢复）。
 
-- `fine-tune`：用于模型微调训练数据（支持 `.jsonl`、`.zip` 等格式；视频/图像微调需以 `.zip` 上传，单包 ≤1 GB）；文件在控制台「模型调优」页与 API 中均可见可用  
-- `file-extract`：用于文档内容解析与结构化提取（如 PDF、Word、Excel 等）  
-- `batch`：用于创建 [Batch 任务](../../raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)，支持异步批量推理  
-
-> **注意**：文档 1 中说明 fine-tune 的 zip 文件“单个 zip 包不超过 1 GB”，而文档 2 未提及此限制；但文档 1 明确将该限制与“视频/图像生成模型微调”强绑定，普通文本微调仍受通用 300MB 限制约束，二者不矛盾，属场景细分补充。
+> **注意**：文档 1 中声明“当前文件管理 API 仅在北京 Region 开放”，但文档 2 未提及 Region 限制；实际调用时若在非北京 Region 遇到 404 或权限错误，请优先确认 Region 配置，或改用对应 Region 的百炼控制台操作——该不一致需以控制台文档或最新 SDK 为准。
 
 ## 关键参数
 
-| 参数 | 类型 | 传参方式 | 必选 | 说明 |
-|------|------|----------|------|------|
-| `files` | 文件流 | `multipart/form-data` | 是 | 支持一次上传多个文件，每个 `files` 字段对应一个文件 |
-| `purpose` | 字符串 | `multipart/form-data` | 否 | 取值为 `fine-tune` / `file-extract` / `batch`；不传则文件可上传但无法被下游任务自动识别，**强烈建议显式指定** |
-| `descriptions` | 字符串 | `multipart/form-data` | 否 | 文件描述信息，仅作标识，不影响功能 |
-| `file_id` | 字符串 | path（URL 路径） | 是（获取/删除时） | 通过 [上传文件](../../raw/model-api-reference/file-management-api/upload-file-api.md) 返回的 `data.uploaded_files.$.file_id` 获取 |
-| `page_no`, `page_size` | 数字 | query | 是（列举时） | 分页参数；`page_size` 范围 1–100，默认 10 |
+| 参数 | 类型 | 位置 | 必选 | 说明 |
+|------|------|------|------|------|
+| `file_id` | String | path | 是 | 文件唯一标识，由上传接口返回，用于查询/删除 |
+| `page_no` | Number | query | 是 | 当前页码，最小值为 1 |
+| `page_size` | Number | query | 是 | 每页数量，取值范围 1–100 |
+| `files` | 文件流 | multipart/form-data | 是 | 待上传的文件二进制流（支持多文件） |
+| `purpose` | String | multipart/form-data | 否 | 明确用途：`fine-tune`（最大 300MB）、`file-extract`（最大 150MB）、`batch`（最大 500MB）；不传则默认无用途，但影响后续功能可用性 |
+| `descriptions` | String | multipart/form-data | 否 | 文件描述文本，非必填，但建议提供 |
 
 ## 使用方式
 
-### 上传文件（POST `/api/v1/files`）
-```bash
-curl --request POST "https://dashscope.aliyuncs.com/api/v1/files" \
-  --header "Authorization: Bearer ${DASHSCOPE_API_KEY}" \
-  --form 'files=@"/path/to/file1.jsonl"' \
-  --form 'purpose="fine-tune"' \
-  --form 'descriptions="qwen fine-tune sample"' \
-  --form 'files=@"/path/to/file2.pdf"' \
-  --form 'purpose="file-extract"'
-```
+1. **上传文件**（推荐携带 `purpose`）：
+   ```bash
+   curl -X POST "https://dashscope.aliyuncs.com/api/v1/files" \
+     -H "Authorization: Bearer ${DASHSCOPE_API_KEY}" \
+     -F 'files=@data.jsonl' \
+     -F 'purpose=fine-tune' \
+     -F 'descriptions="training data for qwen"'
+   ```
+   成功响应含 `data.uploaded_files[].file_id`，可用于后续操作。
 
-### 查询单个文件（GET `/api/v1/files/{file_id}`）
-```bash
-curl --request GET "https://dashscope.aliyuncs.com/api/v1/files/9G2EaQtq7p1fw7oRhYXdHTtDFYAMVQSh95432B38CAB211EDB8F952C2E8001733" \
-  --header "Authorization: Bearer ${DASHSCOPE_API_KEY}"
-```
+2. **查询文件详情**：
+   ```bash
+   curl -X GET "https://dashscope.aliyuncs.com/api/v1/files/mbSwIGR9yA6i1EtwIpndFErIoDKFyQ6W5601487ECAB111EDA20422ECF4959B5E" \
+     -H "Authorization: Bearer ${DASHSCOPE_API_KEY}"
+   ```
 
-### 列举所有文件（GET `/api/v1/files`）
-```bash
-curl --request GET "https://dashscope.aliyuncs.com/api/v1/files?page_no=1&page_size=20" \
-  --header "Authorization: Bearer ${DASHSCOPE_API_KEY}"
-```
+3. **列举文件**（支持分页）：
+   ```bash
+   curl -X GET "https://dashscope.aliyuncs.com/api/v1/files?page_no=1&page_size=50" \
+     -H "Authorization: Bearer ${DASHSCOPE_API_KEY}"
+   ```
 
-### 删除文件（DELETE `/api/v1/files/{file_id}`）
-```bash
-curl --request DELETE "https://dashscope.aliyuncs.com/api/v1/files/9G2EaQtq7p1fw7oRhYXdHTtDFYAMVQSh95432B38CAB211EDB8F952C2E8001733" \
-  --header "Authorization: Bearer ${DASHSCOPE_API_KEY}"
-```
+4. **删除文件**：
+   ```bash
+   curl -X DELETE "https://dashscope.aliyuncs.com/api/v1/files/mbSwIGR9yA6i1EtwIpndFErIoDKFyQ6W5601487ECAB111EDA20422ECF4959B5E" \
+     -H "Authorization: Bearer ${DASHSCOPE_API_KEY}"
+   ```
 
 ## 限制和注意事项
 
-- **配额限制**：
-  - 单文件大小：`file-extract` ≤150 MB，`batch` ≤500 MB，`fine-tune` ≤300 MB（文本类）；视频/图像微调 zip 包 ≤1 GB（见 [上传文件](../../raw/model-api-reference/file-management-api/upload-file-api.md)）
-  - 总存储空间：100 GB（有效文件，即未删除状态）
-  - 总文件数量：10,000 个（有效文件）
+- **配额限制**：  
+  - 单文件大小：`file-extract` ≤ 150 MB，`batch` ≤ 500 MB，`fine-tune` ≤ 300 MB（视频/图像微调需 .zip 格式，单包 ≤ 1 GB）；  
+  - 总存储空间：≤ 100 GB（有效文件）；  
+  - 总文件数量：≤ 10,000 个（有效文件）。
 
-- **地域限制**：当前原生文件管理 API **仅在北京 Region 开放**；若使用其他 Region，请通过对应 Region 的百炼控制台管理文件（见 [查询和管理文件](../../raw/model-api-reference/file-management-api/get-file-api.md)）
+- **Region 限制**：  
+  > **注意**：[原文标题](../../raw/model-api-reference/file-management-api/get-file-api.md) 明确指出“当前文件管理 API 仅在北京 Region 开放”，若在其他 Region 调用失败，请切换至北京 Region 的 endpoint 或使用对应 Region 控制台。
 
-- **兼容性提示**：两篇原始文档均强调“当前接口主要用于兼容历史场景，推荐优先使用 [OpenAI 兼容的 File 接口](../../raw/model-api-reference/toolkits-and-frameworks/openai-file-interface.md)”，该兼容接口路径为 `/compatible-mode/v1/files`，行为与 OpenAI v1/files 一致，建议新项目直接采用。
+- **兼容性提示**：  
+  所有原始文档均强调“推荐优先使用 [OpenAI 兼容的 File 接口](raw/model-api-reference/toolkits-and-frameworks/openai-file-interface.md)”，其路径为 `/compatible-mode/v1/files`，语义与 OpenAI v1 API 对齐，长期维护性更高。
 
-- **错误处理**：非 200 响应体中必含 `code` 和 `message` 字段，常见错误码包括 `BadRequest.TooLarge`（超空间）、`BadRequest.TooMany`（超数量）、`InvalidParameter`（参数错误）等。
+- **安全性**：  
+  `url` 字段为临时预签名 OSS 下载链接，有效期有限（通常数小时），不可长期缓存；敏感文件请勿公开暴露该 URL。
 
 ## 来源文档
 
-- [上传文件](../../raw/model-api-reference/file-management-api/upload-file-api.md)
 - [查询和管理文件](../../raw/model-api-reference/file-management-api/get-file-api.md)
+- [上传文件](../../raw/model-api-reference/file-management-api/upload-file-api.md)
 
 

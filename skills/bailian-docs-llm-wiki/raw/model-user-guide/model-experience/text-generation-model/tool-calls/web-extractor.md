@@ -15,7 +15,7 @@
 ```
 # 导入依赖与创建客户端...
 response = client.responses.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     input="请访问阿里云百炼代码解释器部分的官方文档，并总结主要内容",
     tools=[
         # 开启网页抓取必须同时开启联网搜索工具
@@ -32,48 +32,6 @@ response = client.responses.create(
 print(response.output_text)
 ```
 
-#### OpenAI 兼容-Chat Completions API
-
-通过 `enable_search` 参数启用联网搜索，并将 `search_strategy` 设置为 `agent_max` 以启用网页抓取功能。同时需要启用 `enable_thinking` 参数开启思考模式。
-
-> 不支持非流式输出。
-
-```
-# 导入依赖与创建客户端...
-completion = client.chat.completions.create(
-    model="qwen3.8-max",
-    messages=[{"role": "user", "content": "请访问阿里云百炼代码解释器部分的官方文档，并总结主要内容"}],
-    extra_body={
-        "enable_thinking": True,
-        "enable_search": True,
-        "search_options": {"search_strategy": "agent_max"}
-    },
-    stream=True
-)
-```
-
-#### DashScope
-
-通过 `enable_search` 参数启用联网搜索，并将 `search_strategy` 设置为 `agent_max` 以启用网页抓取功能。同时需要启用 `enable_thinking` 参数开启思考模式。
-
-> 不支持非流式输出。
-
-```
-import os
-import dashscope
-
-client = dashscope.Client(api_key=os.getenv("DASHSCOPE_API_KEY"))
-
-stream = client.chat.completions.create(
-    model="qwen3.8-max",
-    messages=[{"role": "user", "content": "请访问阿里云百炼代码解释器部分的官方文档，并总结主要内容"}],
-    enable_search=True,
-    search_options={"search_strategy": "agent_max"},
-    enable_thinking=True,
-    stream=True
-)
-```
-
 #### Anthropic 兼容
 
 在 `tools` 参数中添加 Anthropic 服务端的网页抓取工具（`name` 为 `web_fetch`）即可启用网页抓取，并且必须同时添加联网搜索工具（`name` 为 `web_search`）。请求地址为 `https://{WorkspaceId}.{region}.maas.aliyuncs.com/apps/anthropic`。
@@ -86,12 +44,12 @@ stream = client.chat.completions.create(
 
 > 只添加网页抓取工具而未添加联网搜索工具时，请求返回 `InvalidParameter` 错误：`The web_extractor tool must be executed with web_search tool.`
 
-> 支持以下模型：Qwen4-Max 系列（[仅 Token Plan](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview)）；Qwen3.8 Max、Flash 与开源系列（不含 Omni）；Qwen3.7 Max、Plus、Flash 系列；Qwen3.6-Plus、Qwen3.6-Flash 系列；Qwen3.5-Plus、Qwen3.5-Flash 系列；deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731、`deepseek-v4.1-flash-1017`；glm-5.2；kimi-k3；kimi-k3.1-pro。
+> 支持以下模型：Qwen4-Max 系列；Qwen3.8 Max、Flash 与开源系列（不含 Omni）；Qwen3.7 Max、Plus、Flash 系列；Qwen3.6-Plus、Qwen3.6-Flash 系列；Qwen3.5-Plus、Qwen3.5-Flash 系列；deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731、`deepseek-v4.1-flash-1017`；glm-5.2；kimi-k3；kimi-k3.1-pro。
 
 ```
 # 导入依赖与创建客户端...
 message = client.messages.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     max_tokens=4096,
     # 传入客户端标识
     system=[{"type": "text", "text": "x-anthropic-billing-header: cc_entrypoint=cli;"}],
@@ -117,18 +75,13 @@ message = client.messages.create(
 
 #### Responses API
 
-千问Max：qwen4-max-preview（[仅 Token Plan](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview)）、Qwen3.8-Max系列、Qwen3.7-Max系列
+千问Max：qwen4-max、Qwen3.8-Max系列、Qwen3.7-Max系列
 
 千问Plus：Qwen3.7-Plus系列、Qwen3.6-Plus系列、Qwen3.5-Plus系列
 
 DeepSeek：deepseek-v4-flash-0731
 
 Qwen3.8开源系列
-
-#### Chat Completions API / DashScope
-
--   千问Max（思考模式）：Qwen3-Max系列
--   千问Plus：Qwen3.5-Plus系列
 
 ### 其他模型
 
@@ -158,7 +111,7 @@ client = OpenAI(
 )
 
 response = client.responses.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     input="请访问阿里云百炼代码解释器部分的官方文档，并总结主要内容",
     tools=[
         {
@@ -180,10 +133,10 @@ response = client.responses.create(
 print("="*20+"回复内容"+"="*20)
 print(response.output_text)
 # 打印工具调用次数
-usage = response.usage
+usage = getattr(response, "tool_usage", {})
 print("="*20+"工具调用次数"+"="*20)
-if hasattr(usage, 'x_tools') and usage.x_tools:
-    print(f"\n网页抓取运行次数: {usage.x_tools.get('web_extractor', {}).get('count', 0)}")
+if usage:
+    print(f"\n网页抓取运行次数: {usage.get('web_extractor', {}).get('num_requests')}")
 ```
 
 javascript
@@ -201,7 +154,7 @@ const openai = new OpenAI({
 
 async function main() {
     const response = await openai.responses.create({
-        model: "qwen3.8-max",
+        model: "qwen4-max",
         input: "请访问阿里云百炼代码解释器部分的官方文档，并总结主要内容",
         tools: [
             { type: "web_search" },
@@ -216,9 +169,9 @@ async function main() {
 
     // 打印工具调用次数
     console.log("====================工具调用次数====================");
-    if (response.usage && response.usage.x_tools) {
-        console.log(`网页抓取次数: ${response.usage.x_tools.web_extractor?.count || 0}`);
-        console.log(`联网搜索次数: ${response.usage.x_tools.web_search?.count || 0}`);
+    if (response.tool_usage) {
+        console.log(`网页抓取次数: ${response.tool_usage.web_extractor?.num_requests}`);
+        console.log(`联网搜索次数: ${response.tool_usage.web_search?.num_requests}`);
     }
     // 取消以下注释查看中间过程的输出
     // console.log(JSON.stringify(response.output[0], null, 2));
@@ -235,7 +188,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input": "请访问阿里云百炼代码解释器部分的官方文档，并总结主要内容",
     "tools": [
         {"type": "web_search"},
@@ -284,7 +237,7 @@ client = OpenAI(
 )
 
 stream = client.responses.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     input="请访问阿里云百炼代码解释器部分的官方文档，并总结主要内容",
     tools=[
         {"type": "web_search"},
@@ -323,10 +276,10 @@ for chunk in stream:
     # 响应完成，打印工具调用次数
     elif chunk.type == 'response.completed':
         print("\n" + "="*20 + "工具调用次数" + "="*20)
-        usage = chunk.response.usage
-        if hasattr(usage, 'x_tools') and usage.x_tools:
-            print(f"网页抓取次数: {usage.x_tools.get('web_extractor', {}).get('count', 0)}")
-            print(f"联网搜索次数: {usage.x_tools.get('web_search', {}).get('count', 0)}")
+        usage = getattr(chunk.response, "tool_usage", {})
+        if usage:
+            print(f"网页抓取次数: {usage.get('web_extractor', {}).get('num_requests')}")
+            print(f"联网搜索次数: {usage.get('web_search', {}).get('num_requests')}")
 ```
 
 javascript
@@ -344,7 +297,7 @@ const openai = new OpenAI({
 
 async function main() {
     const stream = await openai.responses.create({
-        model: "qwen3.8-max",
+        model: "qwen4-max",
         input: "请访问阿里云百炼代码解释器部分的官方文档，并总结主要内容",
         tools: [
             { type: "web_search" },
@@ -388,10 +341,10 @@ async function main() {
         // 响应完成，打印工具调用次数
         else if (chunk.type === 'response.completed') {
             console.log("\n" + "====================工具调用次数====================");
-            const usage = chunk.response.usage;
-            if (usage && usage.x_tools) {
-                console.log(`网页抓取次数: ${usage.x_tools.web_extractor?.count || 0}`);
-                console.log(`联网搜索次数: ${usage.x_tools.web_search?.count || 0}`);
+            const usage = chunk.response.tool_usage;
+            if (usage) {
+                console.log(`网页抓取次数: ${usage.web_extractor?.num_requests}`);
+                console.log(`联网搜索次数: ${usage.web_search?.num_requests}`);
             }
         }
     }
@@ -408,7 +361,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input": "请访问阿里云百炼代码解释器部分的官方文档，并总结主要内容",
     "tools": [
         {"type": "web_search"},
@@ -417,213 +370,6 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
     ],
     "enable_thinking": true,
     "stream": true
-}'
-```
-
-#### OpenAI 兼容-Chat Completions API
-
-python
-
-```
-import os
-from openai import OpenAI
-
-client = OpenAI(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
-    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
-)
-
-stream = client.chat.completions.create(
-    model="qwen3.8-max",
-    messages=[
-        {"role": "user", "content": "请访问阿里云百炼代码解释器部分的官方文档，并总结主要内容"}
-    ],
-    extra_body={
-        "enable_thinking": True,
-        "enable_search": True,
-        "search_options": {"search_strategy": "agent_max"}
-    },
-    stream=True
-)
-
-reasoning_started = False
-output_started = False
-
-for chunk in stream:
-    if chunk.choices:
-        delta = chunk.choices[0].delta
-        # 打印思考过程
-        if hasattr(delta, 'reasoning_content') and delta.reasoning_content:
-            if not reasoning_started:
-                print("="*20 + "思考过程" + "="*20)
-                reasoning_started = True
-            print(delta.reasoning_content, end='', flush=True)
-        # 打印回复内容
-        if delta.content:
-            if not output_started:
-                print("\n" + "="*20 + "回复内容" + "="*20)
-                output_started = True
-            print(delta.content, end='', flush=True)
-```
-
-javascript
-
-```
-import OpenAI from "openai";
-import process from 'process';
-
-const openai = new OpenAI({
-    // 若没有配置环境变量，请用百炼API Key将下行替换为：apiKey: "sk-xxx",
-    apiKey: process.env.DASHSCOPE_API_KEY,
-    // 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
-    baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
-});
-
-async function main() {
-    const stream = await openai.chat.completions.create({
-        model: "qwen-max",
-        messages: [
-            { role: "user", content: "请访问阿里云百炼代码解释器部分的官方文档，并总结主要内容" }
-        ],
-        enable_thinking: true,
-        enable_search: true,
-        search_options: { search_strategy: "agent_max" },
-        stream: true
-    });
-
-    let reasoningStarted = false;
-    let outputStarted = false;
-
-    for await (const chunk of stream) {
-        if (chunk.choices && chunk.choices.length > 0) {
-            const delta = chunk.choices[0].delta;
-            // 打印思考过程
-            if (delta.reasoning_content) {
-                if (!reasoningStarted) {
-                    console.log("====================思考过程====================");
-                    reasoningStarted = true;
-                }
-                process.stdout.write(delta.reasoning_content);
-            }
-            // 打印回复内容
-            if (delta.content) {
-                if (!outputStarted) {
-                    console.log("\n" + "====================回复内容====================");
-                    outputStarted = true;
-                }
-                process.stdout.write(delta.content);
-            }
-        }
-    }
-}
-
-main();
-```
-
-bash
-
-```
-# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
-curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
--H "Authorization: Bearer $DASHSCOPE_API_KEY" \
--H "Content-Type: application/json" \
--d '{
-    "model": "qwen-max",
-    "messages": [
-        {"role": "user", "content": "请访问阿里云百炼代码解释器部分的官方文档，并总结主要内容"}
-    ],
-    "enable_thinking": true,
-    "enable_search": true,
-    "search_options": {"search_strategy": "agent_max"},
-    "stream": true
-}'
-```
-
-#### DashScope
-
-> 不支持 Java SDK。
-
-python
-
-```
-import os
-import dashscope
-from dashscope.v2 import DashScopeError
-# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
-client = dashscope.Client(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
-    workspace="{WorkspaceId}",
-    region="cn-beijing",
-)
-
-reasoning_started = False
-output_started = False
-
-try:
-    stream = client.chat.completions.create(
-        model="qwen3.8-max",
-        messages=[
-            {"role": "user", "content": "请访问阿里云百炼代码解释器部分的官方文档，并总结主要内容"}
-        ],
-        enable_search=True,
-        search_options={"search_strategy": "agent_max"},
-        enable_thinking=True,
-        stream=True
-    )
-
-    for chunk in stream:
-        delta = chunk.choices[0].delta
-
-        # 打印思考过程
-        if delta.reasoning_content:
-            if not reasoning_started:
-                print("="*20 + "思考过程" + "="*20)
-                reasoning_started = True
-            print(delta.reasoning_content, end='', flush=True)
-
-        # 打印回复内容
-        if delta.content:
-            if not output_started:
-                print("\n" + "="*20 + "回复内容" + "="*20)
-                output_started = True
-            print(delta.content, end='', flush=True)
-except DashScopeError as e:
-    print(f"\nHTTP返回码：{e.status_code}")
-    print(f"错误码：{e.code}")
-    print(f"错误信息：{e.message}")
-    print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
-```
-
-bash
-
-```
-# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
-curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation \
--H "Authorization: Bearer $DASHSCOPE_API_KEY" \
--H "X-DashScope-SSE: enable" \
--H "Content-Type: application/json" \
--d '{
-    "model": "qwen-max",
-    "input": {
-        "messages": [
-            {
-                "role": "user",
-                "content": "请访问阿里云百炼代码解释器部分的官方文档，并总结主要内容"
-            }
-        ]
-    },
-    "parameters": {
-        "enable_thinking": true,
-        "enable_search": true,
-        "search_options": {
-            "search_strategy": "agent_max"
-        },
-        "result_format": "message"
-    }
 }'
 ```
 

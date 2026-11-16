@@ -12,45 +12,17 @@
 
 ## 路径参数
 
-**参数**
-
-**必填**
-
-**类型**
-
-**说明**
-
-`deployment_id`
-
-是
-
-string
+**deployment\_id** `string` **（必选）**
 
 Deployment ID
 
 ## Query 参数
 
-**参数**
-
-**必填**
-
-**类型**
-
-**说明**
-
-`limit`
-
-否
-
-integer
+**limit** `integer` **（可选）**
 
 分页大小，最大 100，默认 `20`
 
-`page`
-
-否
-
-string
+**page** `string` **（可选）**
 
 分页游标
 
@@ -62,6 +34,60 @@ curl
 curl "$AGENTSTUDIO_URL/deployments/depl_xxx/runs?limit=20" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
+
+### 响应字段
+
+**data** `array<object>`
+
+部署执行对象数组
+
+**data\[\].id** `string`
+
+Deployment Run ID
+
+**data\[\].type** `string`
+
+固定为 `deployment_run`
+
+**data\[\].deployment\_id** `string`
+
+关联 Deployment ID
+
+**data\[\].agent** `object`
+
+关联 Agent；包含 `id` 和 `version`
+
+**data\[\].session\_id** `string | null`
+
+Session ID；异步会话创建完成前为 `null`
+
+**data\[\].trigger\_source** `string`
+
+触发来源：`manual` 或 `schedule`
+
+**data\[\].status** `string`
+
+运行状态：`running`、`succeeded` 或 `failed`
+
+**data\[\].error** `object | null`
+
+错误信息；仅运行失败时返回
+
+**data\[\].started\_at** `string`
+
+运行开始时间，ISO 8601
+
+**data\[\].finished\_at** `string | null`
+
+运行结束时间，ISO 8601；运行中为 `null`
+
+**data\[\].request\_id** `string`
+
+请求唯一标识
+
+**next\_page** `string | null`
+
+下一页游标；无更多数据时为 `null`
 
 ## 响应
 
@@ -90,92 +116,6 @@ curl "$AGENTSTUDIO_URL/deployments/depl_xxx/runs?limit=20" \
   "next_page": null
 }
 ```
-
-### 响应字段
-
-**字段**
-
-**类型**
-
-**说明**
-
-`data`
-
-array<object>
-
-部署执行对象数组
-
-`data[].id`
-
-string
-
-Deployment Run ID
-
-`data[].type`
-
-string
-
-固定为 `deployment_run`
-
-`data[].deployment_id`
-
-string
-
-关联 Deployment ID
-
-`data[].agent`
-
-object
-
-关联 Agent；包含 `id` 和 `version`
-
-`data[].session_id`
-
-string | null
-
-Session ID；异步会话创建完成前为 `null`
-
-`data[].trigger_source`
-
-string
-
-触发来源：`manual` 或 `schedule`
-
-`data[].status`
-
-string
-
-运行状态：`running`、`succeeded` 或 `failed`
-
-`data[].error`
-
-object | null
-
-错误信息；仅运行失败时返回
-
-`data[].started_at`
-
-string
-
-运行开始时间，ISO 8601
-
-`data[].finished_at`
-
-string | null
-
-运行结束时间，ISO 8601；运行中为 `null`
-
-`data[].request_id`
-
-string
-
-请求唯一标识
-
-`next_page`
-
-string | null
-
-下一页游标；无更多数据时为 `null`
 
 ## 错误码
 

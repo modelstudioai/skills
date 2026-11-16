@@ -12,79 +12,77 @@
 
 ## 请求体
 
-字段
-
-必填
-
-类型
-
-说明
-
-`agent`
-
-是
-
-object
+**agent** `object` **（必选）**
 
 绑定的智能体引用对象，只传 `id` 即引用；可锁定版本，并按需建立会话级覆盖，见[会话级配置覆盖](#h-sc-override)
 
-`environment_id`
-
-是
-
-string
+**environment\_id** `string` **（必选）**
 
 绑定的运行环境 ID。环境配置预装包时创建后可能需要预热，准备中的环境不可被会话绑定（返回 invalid\_parameter），需等待预热完成
 
-`title`
+**sandbox** `object` **（可选）**
 
-否
+沙箱快照持久化配置。省略时保持原有会话创建行为
 
-string
+属性
+
+**enable\_snapshot** `boolean` **（必选）**
+
+是否为当前 Session 开启沙箱快照持久化。传入 `sandbox` 时必填
+
+**snapshot\_persistent\_seconds** `integer` **（条件必填）**
+
+单份快照的保留时间，单位秒，取值 86400～2592000（1～30 天）。`enable_snapshot=true` 时必填
+
+**title** `string` **（可选）**
 
 会话标题，便于在列表中辨识
 
-`resources`
+**resources** `array` **（可选）**
 
-否
+创建时挂载的资源列表。
 
-array
+文件项
 
-创建时挂载的资源列表。文件项含 `type`（固定为 `file`）、`file_id`（已上传的文件 ID）、`mount_path`（挂载路径，必须以 `/uploads/` 开头，实际路径会加上 `/mnt/session` 前缀）；记忆项含 `type`（固定为 `memory_store`）、`provider`（`default` / `agentstudio_memory`，省略时为 `default`）、`memory_store_id`（必填）、`entity_id`（百炼记忆必填）、`access`（`read_only` / `read_write`，默认 `read_write`）、`description`（百炼记忆的挂载用途描述）、`project_ids`（百炼事实和技能记忆规则 ID，每条挂载合计最多 5 个）、`profile_schema`（百炼画像模板 ID，最多一个）、`instructions`（内置记忆的挂载说明，最长 4096 字符）。内置记忆的挂载路径由服务端生成；百炼记忆无挂载路径。详见[记忆库](raw/application-user-guide/agent-development/managed-agents/managed-agents-context/managed-agents-memory-store.md)
+-   `type`：固定为 `file`
+-   `file_id`：已上传的文件 ID
+-   `mount_path`：挂载路径，必须以 `/uploads/` 开头，实际路径会加上 `/mnt/session` 前缀
 
-`vault_ids`
+记忆项
 
-否
+-   `type`：固定为 `memory_store`
+-   `provider`：`default` / `agentstudio_memory`，省略时为 `default`
+-   `memory_store_id`：必填
+-   `entity_id`：百炼记忆必填
+-   `access`：`read_only` / `read_write`，默认 `read_write`
+-   `description`：百炼记忆的挂载用途描述
+-   `project_ids`：百炼事实和技能记忆规则 ID，每条挂载合计最多 5 个
+-   `profile_schema`：百炼画像模板 ID，最多一个
+-   `instructions`：内置记忆的挂载说明，最长 4096 字符
 
-array of string
+内置记忆的挂载路径由服务端生成；百炼记忆无挂载路径。详见[记忆库](raw/application-user-guide/agent-development/managed-agents/managed-agents-context/managed-agents-memory-store.md)
+
+**vault\_ids** `array of string` **（可选）**
 
 Vault ID 列表。将指定 Vault 中的 Credential 注入会话运行环境，使智能体可访问对应密钥
 
-`metadata`
-
-否
-
-object
+**metadata** `object` **（可选）**
 
 业务自定义键值，不影响模型行为
 
-`environment_variables`
-
-否
-
-object
+**environment\_variables** `object` **（可选）**
 
 会话运行时注入的环境变量，字符串键值对，沙箱代码中可直接按名读取
 
-`mcp_configs`
-
-否
-
-array
+**mcp\_configs** `array` **（可选）**
 
 会话级 MCP 请求头，独立于 `agent`，见[会话级 MCP 请求头](#h-sc-mcp)。省略时为空数组
 
-记忆资源中，`provider` 只接受 `default` 或 `agentstudio_memory`，显式传 `null`、空串或其他值会返回参数错误。`entity_id` 仅用于百炼记忆，是挂载绑定的实体 ID，不是云账号 UID，也不是 Session 顶层字段。`project_ids` 省略或为空数组时使用百炼默认记忆规则；`profile_schema` 省略时不启用画像能力，且不计入 5 条规则。内置记忆沿用 `memory_store_id`、`access` 和 `instructions` 字段。
+-   `provider`：只接受 `default` 或 `agentstudio_memory`，显式传 `null`、空串或其他值会返回参数错误。
+-   `entity_id`：仅用于百炼记忆，是挂载绑定的实体 ID，不是云账号 UID，也不是 Session 顶层字段。
+-   `project_ids`：省略或为空数组时使用百炼默认记忆规则。
+-   `profile_schema`：省略时不启用画像能力，且不计入 5 条规则。
+-   内置记忆：沿用 `memory_store_id`、`access` 和 `instructions` 字段。
 
 **说明**同一会话绑定多个 Vault 时，不同 Vault 之间的 `secret_name` 不能重复，也不要使用前缀相同的名称（例如 `API_KEY` 与 `API_KEY_V2`），否则创建会话返回 400 `invalid_parameter`（Invalid request）。
 
@@ -180,6 +178,19 @@ System.out.println(session.getId() + " " + session.getStatus());
 
 `memory_store_id` 是百炼记忆库 ID，不要求 `memstore_` 前缀。规则与画像模板的默认行为详见[记忆库](https://help.aliyun.com/zh/model-studio/managed-agents-memory-store#h-ms-bailian)。
 
+需要开启沙箱持久化时，在请求体中增加 `sandbox` 字段，例如：
+
+```
+{
+  "sandbox": {
+    "enable_snapshot": true,
+    "snapshot_persistent_seconds": 172800
+  }
+}
+```
+
+省略该字段时默认不开启。保留期内的恢复规则与到期行为见[沙箱持久化](https://help.aliyun.com/zh/model-studio/managed-agents-session-operations#h-sandbox-persistence)。
+
 ## 会话级配置覆盖
 
 `agent` 对象可仅引用智能体，也可附带覆盖字段建立会话级覆盖：覆盖只修改本会话的配置快照，不改动智能体本身，多个会话可基于同一智能体各自定制。对象字段如下：
@@ -274,7 +285,7 @@ array / null
 
 `mcp_configs` 为指定 MCP Server 的全部请求注入自定义 Header，常用于透传租户 ID、鉴权 token。每项含 `mcp_server_name`（MCP Server 名称）与 `headers`（键值对，key 与 value 均为字符串）。传入不存在的 MCP Server 名称不报错，该配置不生效。按会话动态传值的接入方法与示例见[自定义 MCP 与 Skills](https://help.aliyun.com/zh/model-studio/managed-agents-custom-mcp-skills#h-cm-dynamic-header)。
 
-创建与更新的完整请求示例：
+创建会话的完整请求示例：
 
 curl
 
@@ -324,6 +335,103 @@ Session session = client.sessions().create(SessionCreateParam.builder()
     .build());
 ```
 
+### 响应字段
+
+响应为 Session 对象。字段如下：
+
+**id** `string`
+
+会话 ID，格式 `sesn_&lt;ULID&gt;`
+
+**type** `string`
+
+固定为 `session`
+
+**status** `string`
+
+会话状态：`idle` / `running` / `terminated`。新建会话为 `idle`
+
+**agent** `object`
+
+智能体配置完整快照，含 `id` / `version` / `name` / `model` / `system` / `tools` 等；会话级覆盖已并入快照
+
+**environment\_id** `string`
+
+绑定的运行环境 ID
+
+**resources** `array`
+
+挂载的资源列表。
+
+文件项
+
+-   `id`：资源 ID
+-   `type`：资源类型
+-   `file_id`：内部副本 ID
+-   `mount_path`：含前缀的完整路径
+
+记忆项
+
+-   `id`：服务端生成的挂载 ID，与 `memory_store_id` 不同，创建时不传
+-   `type`：资源类型
+-   `provider`：记忆提供方
+-   `memory_store_id`：记忆库 ID
+-   `name`：可选，可能为空
+-   `access`：访问权限
+
+百炼记忆项
+
+-   `entity_id`：百炼记忆实体 ID
+-   `project_ids`：百炼事实和技能记忆规则 ID
+-   `profile_schema`：百炼画像模板 ID
+-   `description`：创建时保存的挂载描述，未填时可为空
+-   不返回 `mount_path`
+
+内置记忆项
+
+-   `file_id`：固定为 `null`
+-   `description`：记忆库元数据
+-   `instructions`：挂载说明
+-   `mount_path`：服务端生成，如 `/mnt/memory/<名称>`
+
+**title / metadata** `string / object`
+
+同请求体
+
+**sandbox** `object`
+
+沙箱快照持久化配置；未配置时省略
+
+属性
+
+**enable\_snapshot** `boolean`
+
+当前 Session 是否开启快照持久化
+
+**snapshot\_persistent\_seconds** `integer`
+
+单份快照配置的保留时间，单位秒；未配置时不返回
+
+**archived\_at** `string / null`
+
+归档时间，未归档时为 `null`
+
+**created\_at / updated\_at** `string`
+
+创建 / 最近更新时间，ISO 8601
+
+**request\_id** `string`
+
+本次请求的唯一标识
+
+**environment\_variables** `object`
+
+会话运行时注入的环境变量，字符串键值对，沙箱代码中可直接按名读取
+
+百炼记忆挂载只返回创建时选择的规则和画像模板 ID，不补入默认规则或模板；不返回记忆正文、画像值或完整规则定义。
+
+本响应不含 `mcp_configs`；通过[获取 Session](raw/application-api-reference/managed-agents-api/session-api/session-get.md)查询。
+
 ## 响应示例
 
 会话详情嵌入完整的智能体快照。
@@ -364,85 +472,20 @@ Session session = client.sessions().create(SessionCreateParam.builder()
 }
 ```
 
-响应为 Session 对象。字段如下：
+### 沙箱配置响应示例
 
-### 响应字段
+创建成功且开启沙箱持久化时，`sandbox` 只返回配置：
 
-字段
+```
+{
+  "sandbox": {
+    "enable_snapshot": true,
+    "snapshot_persistent_seconds": 172800
+  }
+}
+```
 
-类型
-
-说明
-
-`id`
-
-string
-
-会话 ID，格式 `sesn_&lt;ULID&gt;`
-
-`type`
-
-string
-
-固定为 `session`
-
-`status`
-
-string
-
-会话状态：`idle` / `running` / `terminated`。新建会话为 `idle`
-
-`agent`
-
-object
-
-智能体配置完整快照，含 `id` / `version` / `name` / `model` / `system` / `tools` 等；会话级覆盖已并入快照
-
-`environment_id`
-
-string
-
-绑定的运行环境 ID
-
-`resources`
-
-array
-
-挂载的资源列表。文件项含 `id`（资源 ID）、`type`、`file_id`（内部副本 ID）、`mount_path`（含前缀的完整路径）；记忆项含 `id`（服务端生成的挂载 ID，与 `memory_store_id` 不同，创建时不传）、`type`、`provider`、`memory_store_id`、`name`（可选，可能为空）、`access`。百炼记忆项另含 `entity_id`、`project_ids`、`profile_schema`、`description`（创建时保存的挂载描述，未填时可为空）；内置记忆项另含 `file_id`（固定为 `null`）、`description`（记忆库元数据）、`instructions`、`mount_path`（服务端生成，如 `/mnt/memory/<名称>`）。百炼记忆不返回 `mount_path`
-
-`title` / `metadata`
-
-string / object
-
-同请求体
-
-`archived_at`
-
-string / null
-
-归档时间，未归档时为 `null`
-
-`created_at` / `updated_at`
-
-string
-
-创建 / 最近更新时间，ISO 8601
-
-`request_id`
-
-string
-
-本次请求的唯一标识
-
-`environment_variables`
-
-object
-
-会话运行时注入的环境变量，字符串键值对，沙箱代码中可直接按名读取
-
-百炼记忆挂载只返回创建时选择的规则和画像模板 ID，不补入默认规则或模板；不返回记忆正文、画像值或完整规则定义。
-
-本响应不含 `mcp_configs`；通过[获取 Session](raw/application-api-reference/managed-agents-api/session-api/session-get.md)查询。
+当前快照状态和统计字段通过[获取 Session](raw/application-api-reference/managed-agents-api/session-api/session-get.md)查询。
 
 ## 配置锁定
 

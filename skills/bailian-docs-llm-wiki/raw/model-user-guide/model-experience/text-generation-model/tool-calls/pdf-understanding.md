@@ -4,7 +4,7 @@ PDF理解功能使模型能够解析PDF文档中的文字与图片，通过 Chat
 
 ## 支持的模型
 
-qwen4-max-preview（[仅 Token Plan](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview)）、qwen3.8-max、qwen3.8-max-0902、qwen3.8-flash、qwen3.8-27b
+qwen4-max、qwen3.8-max、qwen3.8-max-0902、qwen3.8-flash、qwen3.8-27b
 
 qwen3.8-27b 仅支持在北京地域通过 Chat Completions 或 DashScope 调用 PDF 理解。
 
@@ -32,7 +32,7 @@ client = OpenAI(
 )
 
 completion = client.chat.completions.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     messages=[
         {
             "role": "user",
@@ -82,7 +82,7 @@ const openai = new OpenAI({
 
 async function main() {
     const stream = await openai.chat.completions.create({
-        model: 'qwen3.8-max',
+        model: 'qwen4-max',
         messages: [
             {
                 role: 'user',
@@ -131,7 +131,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "messages": [
         {
             "role": "user",
@@ -188,7 +188,7 @@ messages = [
 completion = MultiModalConversation.call(
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    model="qwen3.8-max",
+    model="qwen4-max",
     messages=messages,
     stream=True,
     incremental_output=True
@@ -211,7 +211,7 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 -H "Content-Type: application/json" \
 -H "X-DashScope-SSE: enable" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input": {
         "messages": [
             {
@@ -312,7 +312,7 @@ with open("report.pdf", "rb") as f:
     pdf_base64 = base64.b64encode(f.read()).decode("utf-8")
 
 completion = client.chat.completions.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     messages=[
         {
             "role": "user",
@@ -368,7 +368,7 @@ messages = [
 
 response = MultiModalConversation.call(
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    model="qwen3.8-max",
+    model="qwen4-max",
     messages=messages
 )
 
@@ -527,7 +527,9 @@ string
 
 ### 查看PDF解析页数
 
-Chat Completions 与 Responses API 可在请求体顶层传入 `include_tool_usage: true`，从 `usage.x_tools.pdf_page_parser.count` 查看解析页数；DashScope 从 `usage.plugins.pdf_page_parser.count` 查看。Anthropic 兼容接口返回的解析页数位于响应顶层 `x_tools.pdf_page_parser.count`。解析计数未返回时，不表示本次未产生解析费用。
+`qwen4-max` 的 Responses API 使用响应顶层 `tool_usage`，各工具的 `num_requests` 为计费次数，`pdf_page_parser.num_requests` 为解析页数。Qwen3.8 的 Responses 示例仍使用 `usage.x_tools`。
+
+Chat Completions 与 Responses API (Qwen3.8) 可在请求体顶层传入 `include_tool_usage: true`，从 `usage.x_tools.pdf_page_parser.count` 查看解析页数；DashScope 从 `usage.plugins.pdf_page_parser.count` 查看。Anthropic 兼容接口返回的解析页数位于响应顶层 `x_tools.pdf_page_parser.count`。解析计数未返回时，不表示本次未产生解析费用。
 
 OpenAI 兼容
 

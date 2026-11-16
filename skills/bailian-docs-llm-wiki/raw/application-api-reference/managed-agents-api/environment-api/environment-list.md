@@ -12,35 +12,15 @@
 
 ## Query 参数
 
-参数
-
-类型
-
-默认
-
-说明
-
-`limit`
-
-int
-
-20
+**limit** `int` 默认 20
 
 每页数量，最大 100
 
-`page`
-
-string
-
-—
+**page** `string` 默认 —
 
 首次不传，后续传上一次响应的 `next_page`
 
-`include_archived`
-
-bool
-
-false
+**include\_archived** `bool` 默认 false
 
 是否包含已归档环境
 
@@ -70,6 +50,30 @@ CursorPage<Environment> page = client.environments().list(EnvironmentListParam.b
 for (Environment e : page.getData()) System.out.println(e.getId() + " " + e.getName());
 ```
 
+### Environment 对象字段
+
+响应顶层包含 `data`（Environment 对象数组）、`next_page`（下一页游标）与 `request_id`（本次请求的唯一标识）。Environment 对象字段如下：
+
+**id** `string`
+
+环境 ID，格式 `env_&lt;ULID&gt;`
+
+**type** `string`
+
+固定为 `environment`
+
+**name / description / scope / config / metadata** `string / object`
+
+环境基础属性与完整运行时配置（沙箱类型、预装依赖、网络策略）
+
+**archived\_at** `string / null`
+
+归档时间，未归档时为 `null`
+
+**created\_at / updated\_at** `string`
+
+创建 / 最近更新时间，ISO 8601
+
 ## 响应示例
 
 ```
@@ -96,43 +100,3 @@ for (Environment e : page.getData()) System.out.println(e.getId() + " " + e.getN
   "request_id": "xxx"
 }
 ```
-
-响应顶层包含 `data`（Environment 对象数组）、`next_page`（下一页游标）与 `request_id`（本次请求的唯一标识）。Environment 对象字段如下：
-
-### Environment 对象字段
-
-字段
-
-类型
-
-说明
-
-`id`
-
-string
-
-环境 ID，格式 `env_&lt;ULID&gt;`
-
-`type`
-
-string
-
-固定为 `environment`
-
-`name` / `description` / `scope` / `config` / `metadata`
-
-string / object
-
-环境基础属性与完整运行时配置（沙箱类型、预装依赖、网络策略）
-
-`archived_at`
-
-string / null
-
-归档时间，未归档时为 `null`
-
-`created_at` / `updated_at`
-
-string
-
-创建 / 最近更新时间，ISO 8601

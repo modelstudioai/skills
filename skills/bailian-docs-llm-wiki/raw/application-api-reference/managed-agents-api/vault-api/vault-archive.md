@@ -12,19 +12,7 @@
 
 ## 路径参数
 
-**参数**
-
-**必填**
-
-**类型**
-
-**说明**
-
-`vault_id`
-
-是
-
-string
+**vault\_id** `string` **（必选）**
 
 Vault ID，格式 vlt\_xxx
 
@@ -36,6 +24,36 @@ curl
 curl -X POST "$AGENTSTUDIO_URL/vaults/vlt_xxx/archive" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
+
+### 响应字段
+
+**id** `string`
+
+Vault ID，格式 vlt\_xxx
+
+**type** `string`
+
+固定为 vault
+
+**display\_name** `string`
+
+Vault 可读名称
+
+**metadata** `object`
+
+业务自定义键值对
+
+**archived\_at** `string | null`
+
+归档时间，已填入归档时间，ISO 8601
+
+**created\_at** `string`
+
+创建时间，ISO 8601
+
+**updated\_at** `string`
+
+最近更新时间，ISO 8601
 
 ## 响应
 
@@ -52,56 +70,6 @@ curl -X POST "$AGENTSTUDIO_URL/vaults/vlt_xxx/archive" \
   "updated_at": "2026-07-10T08:00:00Z"
 }
 ```
-
-### 响应字段
-
-**字段**
-
-**类型**
-
-**说明**
-
-`id`
-
-string
-
-Vault ID，格式 vlt\_xxx
-
-`type`
-
-string
-
-固定为 vault
-
-`display_name`
-
-string
-
-Vault 可读名称
-
-`metadata`
-
-object
-
-业务自定义键值对
-
-`archived_at`
-
-string | null
-
-归档时间，已填入归档时间，ISO 8601
-
-`created_at`
-
-string
-
-创建时间，ISO 8601
-
-`updated_at`
-
-string
-
-最近更新时间，ISO 8601
 
 ## 错误码
 

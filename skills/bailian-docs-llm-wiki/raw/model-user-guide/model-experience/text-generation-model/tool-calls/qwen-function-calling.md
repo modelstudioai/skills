@@ -38,7 +38,7 @@ Function Calling 通过应用程序与大模型之间的多步骤交互实现：
 #### 千问
 
 -   **文本生成模型**
-    -   千问Max：Qwen4-Max 系列（[仅 Token Plan](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview)）、Qwen3.8-Max系列、Qwen3.7-Max系列、Qwen3.6-Max系列、Qwen3-Max系列、Qwen-Max系列
+    -   千问Max：Qwen4-Max 系列、Qwen3.8-Max系列、Qwen3.7-Max系列、Qwen3.6-Max系列、Qwen3-Max系列、Qwen-Max系列
     -   千问Plus：Qwen3.7-Plus系列、Qwen3.6-Plus系列、Qwen3.5-Plus系列、Qwen-Plus系列
     -   千问Flash：Qwen3.8-Flash系列、Qwen3.7-Flash系列、Qwen3.6-Flash系列、Qwen3.5-Flash系列、Qwen-Flash系列
     -   千问Coder：Qwen3-Coder系列、Qwen2.5-Coder系列、Qwen-Coder系列
@@ -180,7 +180,7 @@ def get_current_weather(arguments):
 # 封装模型响应函数
 def get_response(messages):
     completion = client.chat.completions.create(
-        model="qwen3.8-max",
+        model="qwen4-max",
         extra_body={"enable_thinking": False},
         messages=messages,
         tools=tools,
@@ -270,7 +270,7 @@ const getCurrentWeather = (args) => {
 // 封装模型响应函数
 const getResponse = async (messages) => {
   const response = await openai.chat.completions.create({
-    model: "qwen3.8-max",
+    model: "qwen4-max",
     enable_thinking: false,
     messages: messages,
     tools: tools,
@@ -378,8 +378,8 @@ def get_current_weather(arguments):
 # 3. 封装模型响应函数
 def get_response(messages):
     response = client.multimodal.chat.create(
-        # 此处以多模态模型 qwen3.8-max 为例。若调用 qwen-plus 等纯文本模型需使用纯文本模型接口，参见https://help.aliyun.com/model-studio/qwen-api-via-dashscope
-        model="qwen3.8-max",
+        # 此处以多模态模型 qwen4-max 为例。若调用 qwen-plus 等纯文本模型需使用纯文本模型接口，参见https://help.aliyun.com/model-studio/qwen-api-via-dashscope
+        model="qwen4-max",
         enable_thinking=False,
         messages=messages,
         tools=tools,
@@ -523,7 +523,7 @@ public class Main {
 
             // 第四步：首次调用模型。将用户的请求和我们定义好的工具列表一同发送给模型。
             MultiModalConversationParam param = MultiModalConversationParam.builder()
-                    .model("qwen3.8-max") //此处以多模态模型 qwen3.8-max 为例。若调用 qwen-plus 等纯文本模型需使用纯文本模型接口，参见https://help.aliyun.com/model-studio/qwen-api-via-dashscope
+                    .model("qwen4-max") //此处以多模态模型 qwen4-max 为例。若调用 qwen-plus 等纯文本模型需使用纯文本模型接口，参见https://help.aliyun.com/model-studio/qwen-api-via-dashscope
                     .enableThinking(false)
                     .apiKey(System.getenv("DASHSCOPE_API_KEY")) // 从环境变量中获取API Key。
                     .messages(messages) // 传入当前的对话历史。
@@ -931,7 +931,7 @@ client = OpenAI(
 
 def function_calling():
     completion = client.chat.completions.create(
-        model="qwen3.8-max",  # 此处以qwen3.8-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
+        model="qwen4-max",  # 此处以qwen4-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
         extra_body={"enable_thinking": False},
         messages=messages,
         tools=tools
@@ -964,7 +964,7 @@ const openai = new OpenAI(
 
 async function functionCalling() {
     const completion = await openai.chat.completions.create({
-        model: "qwen3.8-max",  // 此处以qwen3.8-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
+        model: "qwen4-max",  // 此处以qwen4-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
         enable_thinking: false,
         messages: messages,
         tools: tools
@@ -1248,7 +1248,7 @@ python
 ```
 def function_calling():
     completion = client.chat.completions.create(
-        model="qwen3.8-max",  # 此处以qwen3.8-max为例，可按需更换模型名称
+        model="qwen4-max",  # 此处以qwen4-max为例，可按需更换模型名称
         extra_body={"enable_thinking": False},
         messages=messages,
         tools=tools,
@@ -1269,7 +1269,7 @@ javascript
 ```
 async function functionCalling() {
     const completion = await openai.chat.completions.create({
-        model: "qwen3.8-max",  // 此处以qwen3.8-max为例，可按需更换模型名称
+        model: "qwen4-max",  // 此处以qwen4-max为例，可按需更换模型名称
         enable_thinking: false,
         messages: messages,
         tools: tools,
@@ -1327,7 +1327,7 @@ const completion = await functionCalling();
 ```
 def function_calling():
     completion = client.chat.completions.create(
-        model="qwen3.8-max",
+        model="qwen4-max",
         extra_body={"enable_thinking": False},
         messages=messages,
         tools=tools,
@@ -1340,7 +1340,7 @@ function_calling()
 ```
 async function functionCalling() {
     const response = await openai.chat.completions.create({
-        model: "qwen3.8-max",
+        model: "qwen4-max",
         enable_thinking: false,
         messages: messages,
         tools: tools,
@@ -1415,7 +1415,7 @@ const completion = await functionCalling();
 ```
 def function_calling():
     completion = client.chat.completions.create(
-        model="qwen3.8-max",
+        model="qwen4-max",
         extra_body={"enable_thinking": False},
         messages=messages,
         tools=tools,
@@ -1428,7 +1428,7 @@ function_calling()
 ```
 async function functionCalling() {
     const completion = await openai.chat.completions.create({
-        model: "qwen3.8-max",
+        model: "qwen4-max",
         enable_thinking: false,
         messages: messages,
         tools: tools,
@@ -1499,7 +1499,7 @@ tools = [
 ]
 
 stream = client.chat.completions.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     extra_body={"enable_thinking": False},
     messages=[{"role": "user", "content": "杭州天气?"}],
     tools=tools,
@@ -1546,7 +1546,7 @@ const tools = [
 ];
 
 const stream = await openai.chat.completions.create({
-    model: "qwen3.8-max",
+    model: "qwen4-max",
     enable_thinking: false,
     messages: [{ role: "user", content: "北京天气" }],
     tools: tools,
@@ -1748,7 +1748,7 @@ def get_current_weather(arguments):
 # 封装模型响应函数
 def get_response(input_data):
     response = client.responses.create(
-        model="qwen3.8-max",
+        model="qwen4-max",
         extra_body={"enable_thinking": False},
         input=input_data,
         tools=tools,
@@ -1842,7 +1842,7 @@ const getCurrentWeather = (args) => {
 // 封装模型响应函数
 const getResponse = async (inputData) => {
   const response = await openai.responses.create({
-    model: "qwen3.8-max",
+    model: "qwen4-max",
     enable_thinking: false,
     input: inputData,
     tools: tools,
@@ -3399,8 +3399,8 @@ messages = [{"role": "user", "content": input("请输入问题：")}]
 #     }]
 
 completion = client.chat.completions.create(
-    # 此处以qwen3.8-max为例，可更换为其它深度思考模型
-    model="qwen3.8-max",
+    # 此处以qwen4-max为例，可更换为其它深度思考模型
+    model="qwen4-max",
     messages=messages,
     extra_body={
         # 开启深度思考
@@ -3555,8 +3555,8 @@ async function main() {
 
     try {
         const stream = await openai.chat.completions.create({
-            // 此处以qwen3.8-max为例，可更换为其它深度思考模型
-            model: "qwen3.8-max",
+            // 此处以qwen4-max为例，可更换为其它深度思考模型
+            model: "qwen4-max",
             messages,
             // 开启深度思考
             enable_thinking: true,
@@ -3686,7 +3686,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "messages": [
         {
             "role": "user",
@@ -3786,8 +3786,8 @@ messages = [{"role": "user", "content": [{"text": input("请输入问题：")}]}
 # }]
 
 stream = client.multimodal.chat.create(
-    # 此处以qwen3.8-max为例，可更换为其它深度思考模型
-    model="qwen3.8-max",
+    # 此处以qwen4-max为例，可更换为其它深度思考模型
+    model="qwen4-max",
     messages=messages,
     enable_thinking=True,
     tools=tools,
@@ -3964,7 +3964,7 @@ public class Main {
         return GenerationParam.builder()
                 // 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
                 .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-                .model("qwen3.8-max")
+                .model("qwen4-max")
                 .enableThinking(true)
                 .messages(Arrays.asList(userMsg))
                 .resultFormat(GenerationParam.ResultFormat.MESSAGE)
@@ -4081,7 +4081,7 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 -H "Content-Type: application/json" \
 -H "X-DashScope-SSE: enable" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input":{
         "messages":[
             {
@@ -4285,7 +4285,7 @@ messages = [
 ]
 
 completion = client.chat.completions.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     extra_body={"enable_thinking": False},
     messages=messages,
 )
@@ -4374,7 +4374,7 @@ const messages = [
 async function main() {
     try {
         const completion = await client.chat.completions.create({
-            model: "qwen3.8-max",
+            model: "qwen4-max",
             enable_thinking: false,
             messages: messages,
         });
@@ -4471,7 +4471,7 @@ messages = [
 ]
 
 response = client.multimodal.chat.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     enable_thinking=False,
     messages=messages,
 )
@@ -4585,7 +4585,7 @@ public class Main {
         // 构建请求参数
         MultiModalConversationParam param = MultiModalConversationParam.builder()
                 // 模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
-                .model("qwen3.8-max")
+                .model("qwen4-max")
                 .enableThinking(false)
                 // 若没有配置环境变量，请用百炼API Key将下行替换为：.apiKey("sk-xxx")
                 .apiKey(System.getenv("DASHSCOPE_API_KEY"))

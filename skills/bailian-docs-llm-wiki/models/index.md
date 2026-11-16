@@ -1,6 +1,6 @@
 # 百炼模型市场索引
 
-> 自动生成 · 共 126 个模型家族 · 336 个主干模型 · 更新于 2026-11-16
+> 自动生成 · 共 127 个模型家族 · 337 个主干模型 · 更新于 2026-11-17
 
 **机器查询走结构化文件**：
 
@@ -17,7 +17,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 `notSuitableFor: []` 表示无已知限制。`profileCompleteness` 为 `structured-only` 时该画像未读过文档，仅机械字段可信。
 硬规格（价格/QPM/contextWindow/openSource）一律看行内顶层字段，不要从 profile 里找。
 
-## 文本生成 `TG` — 30 个家族
+## 文本生成 `TG` — 31 个家族
 
 - [AntDigital](groups/antdigital-models-market-place.json) — 由蚂蚁数科提供的Ling系列模型的API服务
   - 模型：`antdigital/Ling-3.1-flash`
@@ -65,6 +65,8 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`qwen3.8-flash`
 - [Qwen3.8开源模型](groups/qwen3.8-opensource.json) — Qwen3.8-2.4T-A95B 是通义千问最新旗舰系列的开源版本，2026 年 8 月发布。采用稀疏 MoE 架构，总参数 2.4 万亿，每步激活约 950 亿，配合混合注意力机制，支持 100 …
   - 模型：`qwen3.8-2.4t-a95b`, `qwen3.8-27b`
+- [Qwen4-Max](groups/qwen4-max.json) — Qwen4-Max 是通义千问新一代旗舰多模态模型，融合文本生成、图片与视频理解及深度思考能力，适用于编程开发、办公、前端设计与复杂智能体任务。模型支持联网搜索、工具调用和结构化输出，兼容 OpenA…
+  - 模型：`qwen4-max`
 - [SiliconFlow DeepSeek](groups/siliconflow-models.json) — 由硅基流动提供的DeepSeek系列模型API服务。
   - 模型：`siliconflow/deepseek-r1-0528`, `siliconflow/deepseek-v3-0324`, `siliconflow/deepseek-v3.1-terminus`, `siliconflow/deepseek-v3.2`
 - [StepFun推理模型](groups/stepfun-models-market-place.json) — 由阶跃星辰StepFun提供的Step系列推理模型API服务

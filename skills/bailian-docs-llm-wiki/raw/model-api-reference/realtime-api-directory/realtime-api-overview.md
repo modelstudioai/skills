@@ -336,7 +336,7 @@ Relay TLS 证书指纹，填入 `AoqConnectConfig.certFingerprint`。
 
 `integer`
 
-会话有效期，单位为秒。不能用它代替预获取 Token 的可用时间。
+会话有效期（秒）。过期后需重新获取，否则建立连接将失败。
 
 `extraInfo.workspaceIdHash`
 

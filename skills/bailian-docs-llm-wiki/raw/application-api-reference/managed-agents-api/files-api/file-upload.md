@@ -58,6 +58,46 @@ AgentStudioFile file = client.files().upload(Paths.get("sales_2025.csv"), "text/
 System.out.println(file.getId());
 ```
 
+### 响应字段
+
+响应为 File 对象。字段如下：
+
+**id** `string`
+
+文件 ID，格式 `file_<24位字母数字>`（如 `file_maznwes8t9rsysg5r5enkvpr`）
+
+**type** `string`
+
+固定为 `file`
+
+**filename** `string`
+
+文件名（自上传时表单部分解析得到）
+
+**mime\_type** `string`
+
+服务端检测的 MIME 类型
+
+**size\_bytes** `int`
+
+文件大小，单位字节
+
+**downloadable** `bool`
+
+是否支持下载。当前接口直传与会话沙箱拷贝均为 `false`
+
+**status** `string`
+
+安全审核状态：`available`（通过，可挂载） / `checking`（审核中） / `rejected`（内容未通过） / `type_rejected`（类型不支持）。新上传文件默认 `checking`
+
+**created\_at** `string`
+
+上传时间，ISO 8601
+
+**requestId** `string`
+
+本次请求的唯一标识。Python SDK 中对应属性为 `request_id`
+
 ## 响应示例
 
 ```
@@ -73,70 +113,6 @@ System.out.println(file.getId());
   "requestId": "xxx"
 }
 ```
-
-响应为 File 对象。字段如下：
-
-### 响应字段
-
-字段
-
-类型
-
-说明
-
-`id`
-
-string
-
-文件 ID，格式 `file_<24位字母数字>`（如 `file_maznwes8t9rsysg5r5enkvpr`）
-
-`type`
-
-string
-
-固定为 `file`
-
-`filename`
-
-string
-
-文件名（自上传时表单部分解析得到）
-
-`mime_type`
-
-string
-
-服务端检测的 MIME 类型
-
-`size_bytes`
-
-int
-
-文件大小，单位字节
-
-`downloadable`
-
-bool
-
-是否支持下载。当前接口直传与会话沙箱拷贝均为 `false`
-
-`status`
-
-string
-
-安全审核状态：`available`（通过，可挂载） / `checking`（审核中） / `rejected`（内容未通过） / `type_rejected`（类型不支持）。新上传文件默认 `checking`
-
-`created_at`
-
-string
-
-上传时间，ISO 8601
-
-`requestId`
-
-string
-
-本次请求的唯一标识。Python SDK 中对应属性为 `request_id`
 
 ## 作用域
 

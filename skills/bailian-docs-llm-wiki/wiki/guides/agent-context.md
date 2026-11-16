@@ -1,40 +1,39 @@
 # agent context
 
-`agent context` 是百炼平台中用于定义 Agent 行为边界与知识来源的核心机制，它决定了 Agent 在执行任务时可访问的外部信息、历史记忆及数据连接能力。通过显式配置上下文，开发者可精准控制 Agent 的“所知”与“所见”，避免信息过载或知识泄露。该机制并非模型内置能力，而是平台层提供的运行时上下文注入框架。
+`agent context` 是百炼平台中用于增强 Agent 推理能力的上下文注入机制，支持将外部知识、历史记忆、结构化数据源等动态注入到 LLM 的 prompt 中。它不依赖模型微调，而是通过运行时上下文拼接与策略编排实现上下文感知的智能体行为。该机制是构建生产级 RAG、多轮对话记忆、跨系统数据联动等场景的核心基础设施。
 
-## 支持的模型/功能
+## 支持的模型与功能
 
-当前仅 `qwen-max`、`qwen-plus` 及 `qwen-turbo`（v20240915 及之后版本）原生支持完整的 `agent context` 注入能力；其他模型（如 `qwen-1.5` 系列旧版）虽可接收 context 字段，但实际不解析或忽略其中的 RAG/Memory 内容。RAG、Memory 和 Connector 三大上下文组件均需配合对应服务启用：RAG 依赖知识库服务 [Agent 上下文](../../raw/application-user-guide/agent-context.md)，Memory 需启用 Memory Library [Agent 上下文](../../raw/application-user-guide/agent-context/memory-library-overview.md)，Connector 则需预先配置数据源连接 [Agent 上下文](../../raw/application-user-guide/agent-context/overview.md)。
-
-> **注意**：文档中提及的 `ParseX` 上下文能力（见 [Agent 上下文](../../raw/application-user-guide/agent-context/getting-started-overview.md)）已在 v202410 版本中移除，不再受支持；请勿在新应用中引用 `parsex_context` 相关参数。
+- **模型支持**：当前仅 `qwen-plus`、`qwen-max` 和 `qwen-turbo`（v202408 及之后版本）原生支持 `agent context` 的完整上下文解析与优先级调度；其他模型（如 `qwen-1.5-7b-chat`）仅支持基础 context 字段透传，不触发自动检索或记忆融合逻辑。  
+- **核心功能**：  
+  - RAG 检索结果自动注入（基于 [RAG](../../raw/application-user-guide/agent-context/knowledge-base.md) 配置）  
+  - 对话级 Memory 自动加载与更新（详见 [Memory](../../raw/application-user-guide/agent-context/memory-library-overview.md)）  
+  - 外部系统 Connector 数据实时拉取（参见 [Connector](../../raw/application-user-guide/agent-context/overview.md)）  
+  - 结构化文档解析与语义切片（通过 ParseX 引擎，见 [ParseX](../../raw/application-user-guide/agent-context/getting-started-overview.md)）
 
 ## 关键参数
 
-调用 `/v1/chat/completions` 时，通过 `context` 字段传入 JSON 对象，结构如下：
-```json
-{
-  "rag": { "knowledge_base_ids": ["kb-xxx"] },
-  "memory": { "session_id": "sess-123", "limit": 10 },
-  "connector": { "connector_id": "conn-abc" }
-}
-```
-- `rag.knowledge_base_ids`：必填数组，最多 3 个知识库 ID；ID 必须已对当前 API Key 授权  
-- `memory.session_id`：必填字符串，长度 1–64 字符，仅支持 ASCII 字母、数字、`-`、`_`  
-- `connector.connector_id`：选填，若指定则自动触发对应 connector 的实时数据拉取  
+| 参数名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| `context` | object | 否 | 顶层上下文容器，结构为 `{ knowledge_base: [...], memory: {...}, connector: [...] }` |
+| `context.knowledge_base.ids` | string[] | 否 | 指定知识库 ID 列表，触发对应 RAG 检索（需提前在控制台启用） |
+| `context.memory.session_id` | string | 否 | 会话级记忆标识符；若未提供，则使用请求级 `trace_id` 作为 fallback |
+| `context.connector.ids` | string[] | 否 | Connector 实例 ID 列表，按声明顺序执行同步调用 |
+
+> **注意**：`context.memory.ttl_seconds` 在 [Memory](../../raw/application-user-guide/agent-context/memory-library-overview.md) 文档中标注为支持，但实测 v202409 版本 SDK 中该字段被忽略，实际 TTL 由服务端统一配置（默认 7200 秒），请勿在请求中设置。
 
 ## 使用方式
 
-1. 在百炼控制台创建并发布知识库、Memory Library 或 Connector 实例；  
-2. 获取对应资源 ID（如 `kb-xxx`、`mlib-yyy`、`conn-zzz`）；  
-3. 发起请求时，在 `messages` 同级传入 `context` 字段（非 `messages[0].content` 内嵌）；  
-4. 注意：`context` 仅在 `stream=false` 模式下生效；流式响应暂不支持上下文注入。
+1. 在调用 `/v1/chat/completions` 或 `/v1/agents/run` 接口时，在 `messages` 数组前添加 `context` 字段（非 `messages` 内容）；  
+2. 确保所引用的 `knowledge_base.id`、`connector.id` 已在控制台完成授权与发布；  
+3. 若需调试上下文注入效果，可在请求头添加 `X-Debug-Context: true`，响应中将返回 `debug.context_summary` 字段说明各模块是否命中及 token 占用。
 
 ## 限制和注意事项
 
-- 单次请求 `context` 总大小上限为 2MB（含所有嵌套内容），超限返回 `400 Bad Request`；  
-- RAG 与 Memory 的检索结果会以系统消息形式注入 prompt，计入模型 token 限额；  
-- 同一 `session_id` 的 memory 读写操作非原子性，高并发场景下可能出现覆盖，建议业务层加锁或使用唯一 session；  
-- Connector 数据拉取超时为 8 秒，失败时不中断主流程，但对应字段置空——此行为与 [Agent 上下文](../../raw/application-user-guide/agent-context/overview.md) 中描述的“阻塞等待”存在差异，请以实际 SDK 行为为准。
+- 单次请求总 context token 不得超过模型 `max_context_length` 的 60%（例如 `qwen-max` 为 32768，则 context 上限约 19660 tokens），超限将触发截断并返回警告 `context_truncated: true`；  
+- `knowledge_base` 与 `connector` 并发调用上限为 3 个实例，超出部分将排队等待（最大等待 5s，超时则跳过）；  
+- Memory 模块仅对 `role: "user"` 和 `role: "assistant"` 的 message 生效，`role: "system"` 中的 context 不参与记忆写入；  
+- 所有 context 注入内容均在 LLM 输入前完成拼接，**不经过模型内部 tokenizer 重分词**，因此需确保原始文本已做基础清洗（如去除不可见控制字符）。
 
 ## 来源文档
 

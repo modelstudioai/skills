@@ -8,11 +8,11 @@
 
 [
 
-**qwen4-max-preview**
+**qwen4-max**
 
-复杂推理与编程（Token Plan）
+复杂推理与编程
 
-](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview)[
+](raw/model-user-guide/get-started-with-models/qwen4-max.md)[
 
 **qwen3.7-plus**
 
@@ -82,11 +82,11 @@
 
 [
 
-**qwen4-max-preview**
+**qwen4-max**
 
-视觉理解（Token Plan）
+视觉理解
 
-](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview)[
+](raw/model-user-guide/get-started-with-models/qwen4-max.md)[
 
 **qwen3.7-plus**
 

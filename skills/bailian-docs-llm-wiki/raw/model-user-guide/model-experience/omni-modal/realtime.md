@@ -42,8 +42,6 @@ Qwen-Omni-Realtime 模型支持 WebSocket、WebRTC 和 AOQ 三种协议接入。
 
 华北2（北京）地域：`wss://WorkspaceId.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime`
 
-新加坡地域：`wss://WorkspaceId.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime`
-
 调用时，将地址中的 `WorkspaceId` 替换为实际的[业务空间 ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
 查询参数
@@ -65,8 +63,6 @@ Qwen-Omni-Realtime 模型支持 WebSocket、WebRTC 和 AOQ 三种协议接入。
 请求地址
 
 华北2（北京）地域：`POST [https://WorkspaceId.cn-beijing.maas.aliyuncs.com/api/v1/webrtc/realtime](https://WorkspaceId.cn-beijing.maas.aliyuncs.com/api/v1/webrtc/realtime)`
-
-新加坡地域：`POST [https://WorkspaceId.ap-southeast-1.maas.aliyuncs.com/api/v1/webrtc/realtime](https://WorkspaceId.ap-southeast-1.maas.aliyuncs.com/api/v1/webrtc/realtime)`
 
 调用时请将`WorkspaceId`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 
@@ -131,12 +127,7 @@ import os
 from pathlib import Path
 import websocket
 
-region = "cn-beijing"
-endpoints = {
-    "cn-beijing": "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime",
-    "ap-southeast-1": "wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime",
-}
-url = f"{endpoints[region]}?model=qwen3.8-omni-flash-realtime"
+url = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime?model=qwen3.8-omni-flash-realtime"
 audio = Path(os.environ["PCM_FILE"]).read_bytes()
 if not audio or len(audio) % 2:
     raise ValueError("Provide non-empty 16-bit mono PCM audio.")

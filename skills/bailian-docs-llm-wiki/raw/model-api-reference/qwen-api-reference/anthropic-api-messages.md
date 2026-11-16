@@ -89,7 +89,7 @@ temperature 取值范围
 
 支持的模型列表
 
-**千问Max**：qwen3.8-max、qwen3.8-max-0902、qwen3.7-max、qwen3.7-max-2026-05-20、qwen3.7-max-2026-06-08
+**千问Max**：qwen4-max、qwen3.8-max、qwen3.8-max-0902、qwen3.7-max、qwen3.7-max-2026-05-20、qwen3.7-max-2026-06-08
 
 **千问Plus**：qwen3.7-plus、qwen3.7-plus-2026-05-26、qwen3.6-plus、qwen3.6-plus-2026-04-02、qwen3.5-plus、qwen3.5-plus-2026-04-20、qwen3.5-plus-2026-02-15、qwen-plus、qwen-plus-latest
 
@@ -107,7 +107,7 @@ deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash
 
 **max\_tokens** `integer` **（必选）**
 
--   deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731、qwen3.8-max、qwen3.8-flash：模型回复内容和思维链内容之和的最大Token数，模型输出超过此值时生成将提前停止，`stop_reason` 为 `max_tokens`。
+-   qwen4-max、deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731、qwen3.8-max、qwen3.8-flash：模型回复内容和思维链内容之和的最大Token数，模型输出超过此值时生成将提前停止，`stop_reason` 为 `max_tokens`。
     
     > `max_tokens` 限制模型回复内容+思考过程的长度。开启深度思考时，`max_tokens` > `thinking.budget_tokens`
     
@@ -140,6 +140,18 @@ deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash
 
 在该内容块上标记显式缓存断点（参见右侧"显式缓存"示例），命中后第二次及之后的请求按缓存读取计费。仅包含字段 `type`，取值固定为 `ephemeral`。
 
+属性（Qwen4）
+
+仅支持 `qwen4-max`。 Qwen4 的内容块缓存标记还支持 `ttl`，可选 `5m`、`1h`，默认为 `5m`。 详见[显式缓存（Qwen4）](raw/model-user-guide/model-experience/text-generation-model/explicit-cache-qwen4.md)。
+
+**type** `string` (必选)
+
+`ephemeral`
+
+**ttl** `string` (可选)
+
+缓存有效期，支持 `5m` 和 `1h`，默认为 `5m`。
+
 **messages** `array` **（必选）**
 
 messages 数组元素
@@ -153,6 +165,18 @@ messages 数组元素
 消息内容。可以是纯文本字符串，也可以是结构化内容数组。`content` 为字符串时，等价于单个 `type="text"` 的内容块。
 
 content 数组元素类型
+
+thinking (qwen4-max)
+
+**type** `string`
+
+`thinking`
+
+**thinking** `string`
+
+**signature** `string`
+
+思考摘要与签名密文。将完整思考块原样回传到后续请求。
 
 **文本信息**
 
@@ -169,6 +193,42 @@ content 数组元素类型
 **cache\_control** `object` （可选）
 
 在该文本块上标记显式缓存断点（参见右侧"显式缓存"示例）。仅包含字段 `type`，取值固定为 `ephemeral`。
+
+属性（Qwen4）
+
+仅支持 `qwen4-max`。 Qwen4 的内容块缓存标记还支持 `ttl`，可选 `5m`、`1h`，默认为 `5m`。 详见[显式缓存（Qwen4）](raw/model-user-guide/model-experience/text-generation-model/explicit-cache-qwen4.md)。
+
+**type** `string` (必选)
+
+`ephemeral`
+
+**ttl** `string` (可选)
+
+缓存有效期，支持 `5m` 和 `1h`，默认为 `5m`。
+
+document (qwen4-max)
+
+**type** `string` **（必选）**
+
+固定为 `document`。
+
+**source** `object` **（必选）**
+
+PDF数据来源。
+
+属性
+
+**type** `string` **（必选）**
+
+`base64`
+
+**media\_type** `string`
+
+PDF的 MIME 类型，如 `application/pdf`。当 `type` 为 `base64` 时必填。
+
+**data** `string`
+
+Base64 编码的PDF数据。当 `type` 为 `base64` 时必填。
 
 **图片信息**（需使用视觉模型）
 
@@ -254,6 +314,18 @@ Base64 编码的视频数据。当 `type` 为 `base64` 时必填。
 
 在该块上标记显式缓存断点（参见右侧"显式缓存"示例）。仅包含字段 `type`，取值固定为 `ephemeral`。工具调用内容本身会参与缓存前缀。
 
+属性（Qwen4）
+
+仅支持 `qwen4-max`。 Qwen4 的内容块缓存标记还支持 `ttl`，可选 `5m`、`1h`，默认为 `5m`。 详见[显式缓存（Qwen4）](raw/model-user-guide/model-experience/text-generation-model/explicit-cache-qwen4.md)。
+
+**type** `string` (必选)
+
+`ephemeral`
+
+**ttl** `string` (可选)
+
+缓存有效期，支持 `5m` 和 `1h`，默认为 `5m`。
+
 **工具结果信息**（user 角色，工具执行结果回传给模型）
 
 属性
@@ -273,6 +345,32 @@ Base64 编码的视频数据。当 `type` 为 `base64` 时必填。
 **cache\_control** `object` （可选）
 
 在该工具结果块上标记显式缓存断点（参见右侧"显式缓存"示例）。仅包含字段 `type`，取值固定为 `ephemeral`。
+
+属性（Qwen4）
+
+仅支持 `qwen4-max`。 Qwen4 的内容块缓存标记还支持 `ttl`，可选 `5m`、`1h`，默认为 `5m`。 详见[显式缓存（Qwen4）](raw/model-user-guide/model-experience/text-generation-model/explicit-cache-qwen4.md)。
+
+**type** `string` (必选)
+
+`ephemeral`
+
+**ttl** `string` (可选)
+
+缓存有效期，支持 `5m` 和 `1h`，默认为 `5m`。
+
+**cache\_control** `object` (可选)
+
+仅支持 `qwen4-max`。 在请求顶层开启自动缓存，也可在内容块上设置手动断点。`type` 固定为 `ephemeral`。 Python SDK 通过 `extra_body` 传入顶层非标准参数；Node.js SDK 和 curl 直接传入。 详见[显式缓存（Qwen4）](raw/model-user-guide/model-experience/text-generation-model/explicit-cache-qwen4.md)。
+
+属性
+
+**type** `string` (必选)
+
+`ephemeral`
+
+**ttl** `string` (可选)
+
+缓存有效期，支持 `5m` 和 `1h`，默认为 `5m`。
 
 **stream** `boolean` （可选）
 
@@ -304,7 +402,7 @@ Base64 编码的视频数据。当 `type` 为 `base64` 时必填。
 
 深度思考配置。开启后，模型会在生成回复前先进行推理，以提升回答准确度。开启后，响应会包含 `thinking` 类型的内容块。
 
-未传入该参数时，是否进行思考由模型默认行为决定：qwen3.8-max、qwen3.8-flash、deepseek-v4 系列、glm 系列、kimi-k3.1-pro 默认开启思考；kimi-k2.6、kimi-k2.5 默认关闭思考；kimi-k2.7-code、MiniMax-M2.5 仅支持思考模式（无法关闭）。各模型对思考模式的支持情况与默认开关，请参见[深度思考](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md)。
+未传入该参数时，是否进行思考由模型默认行为决定：qwen4-max、qwen3.8-max、qwen3.8-flash、deepseek-v4 系列、glm 系列、kimi-k3.1-pro 默认开启思考；kimi-k2.6、kimi-k2.5 默认关闭思考；kimi-k2.7-code、MiniMax-M2.5 仅支持思考模式（无法关闭）。各模型对思考模式的支持情况与默认开关，请参见[深度思考](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md)。
 
 属性
 
@@ -317,6 +415,12 @@ Base64 编码的视频数据。当 `type` 为 `base64` 时必填。
 > 该参数即将废弃，并将在后续模型中逐步停止支持，新接入建议使用 `effort`控制模型的思考强度。
 
 思考过程可使用的最大 Token 数，与 `max_tokens` 的关系因模型而异，详见 `max_tokens` 参数说明。预算越大，在复杂问题上的分析越充分。当 `type` 为 `enabled` 时生效。
+
+**display** `string` （可选）
+
+`qwen4-max`: `"summarized"`. [思维链摘要与加密](https://help.aliyun.com/zh/model-studio/cot-summary#anthropic).
+
+默认返回完整思维链。开启本功能后，原始思维链不再以明文返回，改为返回摘要与完整密文。摘要用于展示，密文用于恢复历史思考。
 
 **tools** `array` （可选）
 
@@ -354,11 +458,29 @@ tools 数组元素
 
 > 使用 Anthropic SDK 或 HTTP 直接调用时，**必须**在 `system` 中传入客户端标识 `x-anthropic-billing-header: cc_entrypoint=cli;`，否则联网搜索不生效。面向 Claude Code 等 Anthropic 官方客户端时无需额外配置。详见 [联网搜索](raw/model-user-guide/model-experience/text-generation-model/tool-calls/web-search.md)。
 
-> 支持以下模型：Qwen3.8 Max、Flash 与开源系列（不含 Omni）；Qwen3.7 Max、Plus、Flash 系列；Qwen3.6-Plus、Qwen3.6-Flash 系列；Qwen3.5-Plus、Qwen3.5-Flash 系列；deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731、deepseek-v4.1-flash-1017；glm-5.2；kimi-k3；kimi-k3.1-pro。联网搜索的计费与 agent 策略相同，参见 [计费说明](https://help.aliyun.com/zh/model-studio/web-search#92ce83df3a599)。
+> 支持以下模型：`qwen4-max`; Qwen3.8 Max、Flash 与开源系列（不含 Omni）；Qwen3.7 Max、Plus、Flash 系列；Qwen3.6-Plus、Qwen3.6-Flash 系列；Qwen3.5-Plus、Qwen3.5-Flash 系列；deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731、deepseek-v4.1-flash-1017；glm-5.2；kimi-k3；kimi-k3.1-pro。联网搜索的计费与 agent 策略相同，参见 [计费说明](https://help.aliyun.com/zh/model-studio/web-search#92ce83df3a599)。
 
 `kimi-k3.1-pro`（阿里云百炼部署）在北京、新加坡、美国（弗吉尼亚）、德国（法兰克福）、日本（东京）和中国香港均支持 `web_search` 和 `web_fetch`。
 
 `deepseek-v4.1-flash-1017` 还支持网页抓取工具 `web_fetch`。Anthropic 兼容的请求要求及示例请参见[网页抓取](./web-extractor)。
+
+`qwen4-max`: `web_search`, `web_fetch`.
+
+在 `tools` 参数中添加 Anthropic 服务端的网页抓取工具（`name` 为 `web_fetch`）即可启用网页抓取，并且必须同时添加联网搜索工具（`name` 为 `web_search`）。请求地址为 `https://{WorkspaceId}.{region}.maas.aliyuncs.com/apps/anthropic`。
+
+web\_fetch (qwen4-max)
+
+**type** `string` **（必选）**
+
+工具类型，取值为 `web_fetch_20250910` 等带日期后缀的形式。日期后缀无需固定，与客户端发送的值保持一致即可。
+
+**name** `string` **（必选）**
+
+固定为 `web_fetch`。
+
+**max\_uses** `integer`
+
+单次请求最多抓取次数。
 
 **tool\_choice** `object` （可选）
 
@@ -376,6 +498,12 @@ tools 数组元素
 属性
 
 **effort** `string` （可选）
+
+**`qwen4-max`**
+
+可选值：`low`、`high`（默认）、`xhigh`。
+
+`medium` 映射为 `high`，`max` 映射为 `xhigh`。
 
 控制模型的推理力度。
 
@@ -428,6 +556,64 @@ kimi-k3.1-pro（阿里云百炼部署）默认值为 `max`，支持 `max`（深�
 
 JSON Schema 对象，遵循标准 JSON Schema 规范。需包含 `type`（数据类型）、`properties`（字段定义）、`required`（必填字段名数组）、`additionalProperties`（必须设为 `false`）等字段。
 
+属性（Qwen4）
+
+详见[显式缓存（Qwen4）](raw/model-user-guide/model-experience/text-generation-model/explicit-cache-qwen4.md)。
+
+**input\_tokens** `integer`
+
+仅统计未读取也未创建缓存的输入 Token 数；全部输入为本字段与缓存读取、创建 Token 数之和。
+
+**output\_tokens** `integer`
+
+输出 Token 数量。
+
+**cache\_creation\_input\_tokens** `integer`
+
+缓存创建消耗的输入 Token 数量。
+
+**cache\_read\_input\_tokens** `integer`
+
+缓存读取消耗的输入 Token 数量。
+
+**server\_tool\_use** `object` （可选）
+
+服务端工具用量统计。仅在请求中使用了服务端工具（如联网搜索）时返回。
+
+属性
+
+**web\_search\_requests** `integer`
+
+联网搜索的检索次数。
+
+**web\_fetch\_requests** `integer`
+
+网页抓取次数。
+
+**cache\_creation** `object`
+
+按 TTL 统计的缓存创建详情。两种 TTL 的 Token 数之和等于本次创建缓存的 Token 数。
+
+属性
+
+**ephemeral\_5m\_input\_tokens** `integer`
+
+5 分钟缓存创建的 Token 数。
+
+**ephemeral\_1h\_input\_tokens** `integer`
+
+1 小时缓存创建的 Token 数。
+
+**prompt\_tokens\_details** `object`
+
+缓存读取详情。`cached_tokens` 与 `cache_read_input_tokens` 相同，统计时不要重复相加。
+
+属性
+
+**cached\_tokens** `integer`
+
+缓存读取的输入 Token 数。
+
 #### 基础调用
 
 Python
@@ -442,7 +628,7 @@ client = anthropic.Anthropic(
 )
 
 message = client.messages.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     max_tokens=1024,
     system="You are a helpful assistant",
     messages=[
@@ -469,7 +655,7 @@ const anthropic = new Anthropic({
 
 async function main() {
   const message = await anthropic.messages.create({
-    model: "qwen3.8-max",
+    model: "qwen4-max",
     max_tokens: 1024,
     system: "You are a helpful assistant",
     messages: [{
@@ -492,7 +678,7 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/
   -H "Content-Type: application/json" \
   -H "x-api-key: $DASHSCOPE_API_KEY" \
   -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "max_tokens": 1024,
     "system": "You are a helpful assistant",
     "messages": [
@@ -519,7 +705,7 @@ client = anthropic.Anthropic(
 )
 
 stream = client.messages.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     max_tokens=1024,
     stream=True,
     messages=[
@@ -549,7 +735,7 @@ async function main() {
   });
 
   const stream = await anthropic.messages.create({
-    model: "qwen3.8-max",
+    model: "qwen4-max",
     max_tokens: 1024,
     stream: true,
     messages: [{
@@ -577,7 +763,7 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/
   -H "x-api-key: $DASHSCOPE_API_KEY" \
   --no-buffer \
   -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "max_tokens": 1024,
     "stream": true,
     "messages": [
@@ -604,7 +790,7 @@ client = anthropic.Anthropic(
 )
 
 stream = client.messages.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     max_tokens=2048,
     stream=True,
     thinking={
@@ -639,7 +825,7 @@ async function main() {
   });
 
   const stream = await anthropic.messages.create({
-    model: "qwen3.8-max",
+    model: "qwen4-max",
     max_tokens: 2048,
     stream: true,
     thinking: { type: "enabled", budget_tokens: 1024 },
@@ -670,7 +856,7 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/
   -H "Content-Type: application/json" \
   -H "x-api-key: $DASHSCOPE_API_KEY" \
   -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "max_tokens": 2048,
     "stream": true,
     "thinking": {
@@ -700,7 +886,7 @@ client = anthropic.Anthropic(
 )
 
 stream = client.messages.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     max_tokens=1024,
     stream=True,
     messages=[
@@ -742,7 +928,7 @@ async function main() {
   });
 
   const stream = await anthropic.messages.create({
-    model: "qwen3.8-max",
+    model: "qwen4-max",
     max_tokens: 1024,
     stream: true,
     messages: [{
@@ -778,7 +964,7 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/
   -H "Content-Type: application/json" \
   -H "x-api-key: $DASHSCOPE_API_KEY" \
   -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "max_tokens": 1024,
     "stream": true,
     "messages": [
@@ -817,7 +1003,7 @@ client = anthropic.Anthropic(
 )
 
 stream = client.messages.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     max_tokens=1024,
     stream=True,
     messages=[
@@ -859,7 +1045,7 @@ async function main() {
   });
 
   const stream = await anthropic.messages.create({
-    model: "qwen3.8-max",
+    model: "qwen4-max",
     max_tokens: 1024,
     stream: true,
     messages: [{
@@ -895,7 +1081,7 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/
   -H "Content-Type: application/json" \
   -H "x-api-key: $DASHSCOPE_API_KEY" \
   -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "max_tokens": 1024,
     "stream": true,
     "messages": [
@@ -951,7 +1137,7 @@ tools = [
 ]
 
 message = client.messages.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     max_tokens=1024,
     tools=tools,
     messages=[
@@ -977,7 +1163,7 @@ async function main() {
   });
 
   const message = await anthropic.messages.create({
-    model: "qwen3.8-max",
+    model: "qwen4-max",
     max_tokens: 1024,
     tools: [
       {
@@ -1011,7 +1197,7 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/
   -H "Content-Type: application/json" \
   -H "x-api-key: $DASHSCOPE_API_KEY" \
   -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "max_tokens": 1024,
     "tools": [
         {
@@ -1052,7 +1238,7 @@ client = anthropic.Anthropic(
 )
 
 message = client.messages.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     max_tokens=2048,
     # 传入客户端标识，否则联网搜索不生效
     system=[{"type": "text", "text": "x-anthropic-billing-header: cc_entrypoint=cli;"}],
@@ -1092,7 +1278,7 @@ async function main() {
   });
 
   const message = await anthropic.messages.create({
-    model: "qwen3.8-max",
+    model: "qwen4-max",
     max_tokens: 2048,
     // 传入客户端标识，否则联网搜索不生效
     system: [{ type: "text", text: "x-anthropic-billing-header: cc_entrypoint=cli;" }],
@@ -1133,7 +1319,7 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/
   -H "Content-Type: application/json" \
   -H "x-api-key: $DASHSCOPE_API_KEY" \
   -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "max_tokens": 2048,
     "system": [{"type": "text", "text": "x-anthropic-billing-header: cc_entrypoint=cli;"}],
     "messages": [{"role": "user", "content": "杭州明天天气如何"}],
@@ -1161,7 +1347,7 @@ long_text_content = "<Your Code Here>" * 400
 def get_completion(user_input):
     response = client.messages.create(
         # 选择支持显式缓存的模型
-        model="qwen3.8-max",
+        model="qwen4-max",
         max_tokens=1024,
         system=[
             {
@@ -1204,7 +1390,7 @@ const longTextContent = "<Your Code Here>".repeat(400);
 async function getCompletion(userInput) {
   return client.messages.create({
     // 选择支持显式缓存的模型
-    model: "qwen3.8-max",
+    model: "qwen4-max",
     max_tokens: 1024,
     system: [
       {
@@ -1236,7 +1422,7 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/
   -H "Content-Type: application/json" \
   -H "x-api-key: $DASHSCOPE_API_KEY" \
   -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "max_tokens": 1024,
     "system": [
       {
@@ -1441,7 +1627,9 @@ content 数组元素类型
 
 **signature** `string`
 
-当前固定为空字符串。
+`qwen4-max`, `thinking.display="summarized"`: Anthropic Messages 的 thinking block 包含 `thinking` 摘要和 `signature` 密文。流式先返回 `thinking_delta`，再返回完整 `signature_delta`，关闭 thinking block 后返回正文或工具调用；未产生思考或加密失败时 signature 可能为空字符串。
+
+`thinking.display != "summarized"`: 当前固定为空字符串。
 
 **工具调用信息**（Function Call 场景）
 
@@ -1529,6 +1717,106 @@ web\_search\_result 属性
 
 调用方信息，`type` 为 `direct` 表示由模型直接发起调用。
 
+**网页抓取结果**（`web_fetch_tool_result`）
+
+网页抓取结果
+
+字段
+
+类型
+
+说明
+
+`type`
+
+`string`
+
+`web_fetch_tool_result`
+
+`tool_use_id`
+
+`string`
+
+对应 `server_tool_use.id`。
+
+`content`
+
+`object`
+
+抓取结果。
+
+`content.type`
+
+`string`
+
+`web_fetch_result`
+
+`content.url`
+
+`string`
+
+网页地址。
+
+`content.retrieved_at`
+
+`string`
+
+抓取时间。
+
+`content.content`
+
+`object`
+
+网页文档。
+
+`content.content.type`
+
+`string`
+
+`document`
+
+`content.content.title`
+
+`string`
+
+网页标题。
+
+`content.content.source`
+
+`object`
+
+文档内容。
+
+`content.content.source.type`
+
+`string`
+
+`text`
+
+`content.content.source.media_type`
+
+`string`
+
+`text/plain`
+
+`content.content.source.data`
+
+`string`
+
+文档内容。
+
+`caller`
+
+`object`
+
+调用方信息。
+
+`caller.type`
+
+`string`
+
+`direct`
+
 **stop\_reason** `string`
 
 停止原因。可选值：`end_turn`（正常结束）、`max_tokens`（达到 Token 上限）、`tool_use`（工具调用）。
@@ -1571,7 +1859,13 @@ Token 用量统计。
 
 联网搜索的检索次数。
 
+**web\_fetch\_requests** `integer`
+
+网页抓取次数。
+
 #### 基础响应
+
+以下为 `qwen3.8-max` 的返回示例，用于说明响应字段。
 
 ```
 {
@@ -1602,6 +1896,8 @@ Token 用量统计。
 ```
 
 #### 联网搜索响应
+
+以下为 `qwen3.8-max` 的返回示例，用于说明响应字段。
 
 ```
 {
@@ -1696,7 +1992,7 @@ Token 用量统计。
 
 **content\_block** `object`
 
-内容块的初始对象。`type` 取值为 `text`、`thinking`、`tool_use`、`server_tool_use` 或 `web_search_tool_result`。`tool_use` 类型在此事件中 `input` 为空对象，完整入参由后续 `content_block_delta` 增量拼接。`web_search_tool_result` 在此事件中携带完整 `content` 数组，非增量拼接。
+内容块的初始对象。`type` 取值为 `text`、`thinking`、`tool_use`、`server_tool_use` 或 `web_search_tool_result` / `web_fetch_tool_result`。`tool_use` 类型在此事件中 `input` 为空对象，完整入参由后续 `content_block_delta` 增量拼接。`web_search_tool_result` 在此事件中携带完整 `content` 数组，非增量拼接。
 
 **content\_block\_delta**
 
@@ -1718,7 +2014,7 @@ Token 用量统计。
 
 -   `text_delta`：文本增量，含 `text` 字段。
 -   `thinking_delta`：思考增量，含 `thinking` 字段。
--   `signature_delta`：签名增量，含 `signature` 字段（当前固定为空字符串）。
+-   `signature_delta` (`signature`): `qwen4-max`, `thinking.display="summarized"`: Anthropic Messages 的 thinking block 包含 `thinking` 摘要和 `signature` 密文。流式先返回 `thinking_delta`，再返回完整 `signature_delta`，关闭 thinking block 后返回正文或工具调用；未产生思考或加密失败时 signature 可能为空字符串。 `thinking.display != "summarized"`: `signature=""`.
 -   `input_json_delta`：工具调用入参增量，含 `partial_json` 字段。
 
 **content\_block\_stop**
@@ -1766,6 +2062,9 @@ Token 用量统计。
 此外，流式响应还会定期发送 **ping** 事件（`{"type":"ping"}`）用于保持连接活跃，客户端可忽略。
 
 **流式响应示例**
+
+以下为 `qwen3.8-max` 的返回示例，用于说明响应字段。
+
 ```
 {"type":"message_start","message":{"id":"msg_xxx","type":"message","role":"assistant","model":"qwen3.8-max","content":[],"usage":{"input_tokens":15,"output_tokens":0}}}
 {"type":"content_block_start","index":0,"content_block":{"type":"thinking","thinking":"","signature":""}}

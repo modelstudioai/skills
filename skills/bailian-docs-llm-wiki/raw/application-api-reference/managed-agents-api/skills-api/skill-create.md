@@ -38,6 +38,40 @@ Skill skill = client.skills().create(SkillCreateParam.builder()
 System.out.println(skill.getId());
 ```
 
+### 响应字段
+
+**id** `string`
+
+技能 ID，格式 `skill_xxx`
+
+**type** `string`
+
+固定为 `skill`
+
+**name / description** `string`
+
+从 zip 包内 `SKILL.md` 解析得到
+
+**source** `string`
+
+来源：`customer`（自建） / `official`（阿里云百炼官方）
+
+**status** `string`
+
+扫描状态：`checking` / `active` / `rejected` / `deleted`，仅 `active` 可挂载
+
+**latest\_version** `string`
+
+最新版本号，挂载到智能体时不能锁定到 `latest`，必须指定具体版本号
+
+**created\_at / updated\_at** `string`
+
+创建 / 最近更新时间，ISO 8601
+
+**request\_id** `string`
+
+本次请求的唯一标识
+
 ## 响应示例
 
 ```
@@ -54,62 +88,6 @@ System.out.println(skill.getId());
   "request_id": "xxx"
 }
 ```
-
-### 响应字段
-
-字段
-
-类型
-
-说明
-
-`id`
-
-string
-
-技能 ID，格式 `skill_xxx`
-
-`type`
-
-string
-
-固定为 `skill`
-
-`name` / `description`
-
-string
-
-从 zip 包内 `SKILL.md` 解析得到
-
-`source`
-
-string
-
-来源：`customer`（自建） / `official`（阿里云百炼官方）
-
-`status`
-
-string
-
-扫描状态：`checking` / `active` / `rejected` / `deleted`，仅 `active` 可挂载
-
-`latest_version`
-
-string
-
-最新版本号，挂载到智能体时不能锁定到 `latest`，必须指定具体版本号
-
-`created_at` / `updated_at`
-
-string
-
-创建 / 最近更新时间，ISO 8601
-
-`request_id`
-
-string
-
-本次请求的唯一标识
 
 ## 扫描状态
 

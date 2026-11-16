@@ -16,91 +16,43 @@
 
 ## 请求体
 
-字段
-
-必填
-
-类型
-
-说明
-
-`version`
-
-是
-
-int
+**version** `int` **（必选）**
 
 当前版本号，用于乐观锁。若与服务端不一致返回 409 冲突
 
-`name`
-
-是
-
-string
+**name** `string` **（必选）**
 
 智能体名称，缺省视为清空
 
-`model`
-
-是
-
-object
+**model** `object` **（必选）**
 
 模型配置，结构 `{"id": "qwen3.7-max"}`，必填子字段 `id`
 
-`description`
-
-否
-
-string
+**description** `string` **（可选）**
 
 智能体用途说明，缺省视为清空
 
-`system`
-
-否
-
-string
+**system** `string` **（可选）**
 
 系统提示词，缺省视为清空
 
-`tools`
-
-否
-
-array<object>
+**tools** `array<object>` **（可选）**
 
 工具包列表，含义同创建，缺省视为清空。`builtin_toolkit` 至多一项，`mcp_toolkit` 可多项
 
-`mcp_servers`
-
-否
-
-array<object>
+**mcp\_servers** `array<object>` **（可选）**
 
 MCP Server 引用列表，含义同创建，缺省视为清空
 
-`skills`
-
-否
-
-array<object>
+**skills** `array<object>` **（可选）**
 
 挂载的技能列表，含义同创建，缺省视为清空
 
-`multiagent`
-
-否
-
-object
+**multiagent** `object` **（可选）**
 
 多智能体协作配置，含义同创建，缺省视为清空
 
-`metadata`
-
-否
-
-object
+**metadata** `object` **（可选）**
 
 业务自定义键值，缺省视为清空
 
@@ -166,68 +118,44 @@ Agent updated = client.agents().update("agent_xxx", AgentUpdateParam.builder()
     .build());
 ```
 
-## 响应说明
+### 响应字段
 
 响应为更新后的 Agent 对象，结构同[创建 Agent](raw/application-api-reference/managed-agents-api/agent-api/agent-create.md)响应，`version` 自动递增。字段如下：
 
-### 响应字段
-
-字段
-
-类型
-
-说明
-
-`id`
-
-string
+**id** `string`
 
 智能体 ID
 
-`type`
-
-string
+**type** `string`
 
 固定为 `agent`
 
-`version`
-
-int
+**version** `int`
 
 新版本号（自动递增）；已绑定旧版本的会话不受影响
 
-`name` / `description` / `system`
-
-string
+**name / description / system** `string`
 
 请求体覆盖后的新值
 
-`model` / `tools` / `mcp_servers` / `skills` / `multiagent` / `metadata`
-
-object / array
+**model / tools / mcp\_servers / skills / multiagent / metadata** `object / array`
 
 请求体覆盖后的新值，缺省字段为空
 
-`archived_at`
-
-string / null
+**archived\_at** `string / null`
 
 归档时间，未归档时为 `null`
 
-`created_at` / `updated_at`
-
-string
+**created\_at / updated\_at** `string`
 
 创建 / 最近更新时间
 
-`workspace_id`
-
-string
+**workspace\_id** `string`
 
 所属工作空间 ID
 
-`request_id`
-
-string
+**request\_id** `string`
 
 本次请求的唯一标识
+
+## 响应说明

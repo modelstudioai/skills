@@ -31,6 +31,46 @@ Java
 client.sessions().archive("sesn_xxx");
 ```
 
+### 响应字段
+
+响应为 Session 对象。字段如下：
+
+**id**`string`
+
+会话 ID
+
+**type**`string`
+
+固定为 `session`
+
+**status**`string`
+
+归档后置为 `terminated`（终态）
+
+**agent**`object`
+
+智能体配置快照
+
+**environment\_id**`string`
+
+绑定的运行环境 ID
+
+**title / metadata**`string / object`
+
+会话标题、业务元数据
+
+**archived\_at**`string`
+
+归档时间，ISO 8601；归档接口返回的对象中该字段一定非空
+
+**created\_at / updated\_at**`string`
+
+创建 / 最近更新时间
+
+**request\_id**`string`
+
+本次请求的唯一标识
+
 ## 响应示例
 
 返回完整 session 对象，`status` 置为 `terminated`，`archived_at` 被填入归档时间。
@@ -58,67 +98,3 @@ client.sessions().archive("sesn_xxx");
   "request_id": "xxx"
 }
 ```
-
-响应为 Session 对象。字段如下：
-
-### 响应字段
-
-字段
-
-类型
-
-说明
-
-`id`
-
-string
-
-会话 ID
-
-`type`
-
-string
-
-固定为 `session`
-
-`status`
-
-string
-
-归档后置为 `terminated`（终态）
-
-`agent`
-
-object
-
-智能体配置快照
-
-`environment_id`
-
-string
-
-绑定的运行环境 ID
-
-`title` / `metadata`
-
-string / object
-
-会话标题、业务元数据
-
-`archived_at`
-
-string
-
-归档时间，ISO 8601；归档接口返回的对象中该字段一定非空
-
-`created_at` / `updated_at`
-
-string
-
-创建 / 最近更新时间
-
-`request_id`
-
-string
-
-本次请求的唯一标识

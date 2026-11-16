@@ -138,6 +138,26 @@ User Message`object`**（必选）**
 
 图片的 URL或 Base64 Data URL。传入本地文件请参考[图像与视频理解](raw/model-user-guide/model-experience/text-generation-model/vision.md)。
 
+**detail** `string` （可选）
+
+图片处理精度。适用于 `qwen4-max`，默认值为 `high`。
+
+未传入 `max_pixels` 时：
+
+-   `high`：按原图分辨率处理，上限为 `16777216` 像素。
+-   `low`：像素上限为 `2621440`。
+-   `auto`：与 `low` 相同。
+
+显式传入 `max_pixels` 时，以该值作为像素上限，优先于 `detail`。最大值为 `16777216`。Chat Completions 的 `max_pixels` 与 `image_url` 同级；DashScope 与 `image` 同级。
+
+高分辨率图片使用 `high` 时，输入 Token 用量通常高于 `low`。
+
+Chat Completions 可在 `image_url` 内或与 `image_url` 同级传入 `detail`；DashScope 与 `image` 同级传入。
+
+```
+{"type":"image_url","image_url":{"url":"https://example.com/image.jpg","detail":"high"}}
+```
+
 **input\_audio**`object`
 
 输入的音频信息。当`type`为`input_audio`时是必选参数。
@@ -212,12 +232,13 @@ fps有两个功能：
 取值范围
 
 -   **输入图像：**
-    -   `qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、Qwen3.7、Qwen3.6、Qwen3.5、Qwen3-VL：默认值和最小值均为：`65536`
+    -   `qwen4-max`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、Qwen3.7、Qwen3.6、Qwen3.5、Qwen3-VL：默认值和最小值均为：`65536`
     -   `qwen3.8-omni-flash`、Qwen3.5-Omni ：默认值和最小值均为： `24576`
     -   `Qwen2.5-VL`开源系列及`QVQ`系列模型：默认值和最小值均为`3136`
 -   **输入视频文件或图像列表：**
     -   `qwen3-omni-flash`、`qwen3-vl-plus`、`qwen3.5-122b-a10b`、`qwen3.5-27b`、`qwen3.5-35b-a3b`、`qwen3.5-397b-a17b`、`qwen3.5-flash`、`qwen3.5-flash-2026-02-23`、`qwen3.5-omni-flash`、`qwen3.5-omni-flash-2026-03-15`、`qwen3.5-omni-plus`、`qwen3.5-omni-plus-2026-03-15`、`qwen3.5-plus`、`qwen3.5-plus-2026-02-15`、`qwen3.5-plus-2026-04-20`、`qwen3.6-27b`、`qwen3.6-35b-a3b`、`qwen3.6-flash`、`qwen3.6-flash-2026-04-16`、`qwen3.6-plus`、`qwen3.6-plus-2026-04-02`、`qwen3.7-flash`、`qwen3.7-flash-2026-07-15`、`qwen3.7-max-2026-06-08`、`qwen3.7-plus`、`qwen3.7-plus-2026-05-26`、`qwen3.8-27b`、`qwen3.8-flash`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-omni-flash`：默认值为 `65536`，最小值为 `4096`。
     -   `kimi-k2.5`、`kimi-k2.6`、`kimi-k2.7-code`：最小值为 `3136`。
+    -   `qwen4-max`：默认值为`65536`，最小值为`4096`
     -   `Qwen2.5-VL`开源系列及`QVQ`系列模型：默认值为`50176`，最小值为`3136`
 
 示例值
@@ -227,6 +248,8 @@ fps有两个功能：
 -   输入图像列表时：`{"type": "video","video": ["https://xx1.jpg",...,"https://xxn.jpg"],"min_pixels": 65536}`
 
 **max\_pixels**`integer`（可选）
+
+`qwen4-max`: `max_pixels <= 16777216`.
 
 用于设定输入图像或视频帧的最大像素阈值。当输入图像或视频的像素在`[min_pixels, max_pixels]`区间内时，模型会按原图进行识别。当输入图像像素大于`max_pixels`时，会将图像进行缩小，直到总像素低于`max_pixels`。适用型号及取值见下方说明。
 
@@ -250,6 +273,7 @@ fps有两个功能：
     同时设置 `min_pixels` 和 `max_pixels` 时，`max_pixels` 不得小于 `min_pixels`。
     
     -   `qwen3-vl-plus`、`qwen3.5-122b-a10b`、`qwen3.5-27b`、`qwen3.5-35b-a3b`、`qwen3.5-397b-a17b`、`qwen3.5-flash`、`qwen3.5-flash-2026-02-23`、`qwen3.5-omni-flash`、`qwen3.5-omni-flash-2026-03-15`、`qwen3.5-omni-plus`、`qwen3.5-omni-plus-2026-03-15`、`qwen3.5-plus`、`qwen3.5-plus-2026-02-15`、`qwen3.5-plus-2026-04-20`、`qwen3.6-27b`、`qwen3.6-35b-a3b`、`qwen3.6-flash`、`qwen3.6-flash-2026-04-16`、`qwen3.6-plus`、`qwen3.6-plus-2026-04-02`、`qwen3.7-flash`、`qwen3.7-flash-2026-07-15`、`qwen3.7-max-2026-06-08`、`qwen3.7-plus`、`qwen3.7-plus-2026-05-26`、`qwen3.8-27b`、`qwen3.8-flash`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-omni-flash`：默认值为 `655360`，最大值为 `2048000`。
+    -   `qwen4-max`：默认值为`655360`，最大值为`786432`
     -   其他`Qwen3-VL`开源模型：默认值`655360`，最大值为`786432`
     -   `qwen3-omni-flash`：默认值为 `655360`，最大值为 `786432`。
     -   `kimi-k2.7-code`、`kimi-k2.6`、`kimi-k2.5`：最大值为 `1568000`。
@@ -267,7 +291,7 @@ fps有两个功能：
 
 最大值
 
--   **`268435456`**：`qwen3.8-max`、`qwen3.8-max-0902`。
+-   **`268435456`**： `qwen4-max`, `qwen4-max-preview`,`qwen3.8-max`、`qwen3.8-max-0902`。
 -   **`234881024`**：`qwen3.7-plus`、`qwen3.7-plus-2026-05-26`、`qwen3.7-max-2026-06-08`。
 -   **`819200000`**：`qwen3.8-flash`、`qwen3.8-27b`、`qwen3.7-flash`、`qwen3.7-flash-2026-07-15`、`qwen3.6-flash`。
 -   **`184549376`**：`qwen3.8-omni-flash`。
@@ -278,6 +302,16 @@ fps有两个功能：
 -   输入视频文件时：`{"type": "video_url","video_url": {"url":"https://xxxx.mp4"},"total_pixels": 134217728}`
 -   输入图像列表时：`{"type": "video","video": ["https://xx1.jpg",...,"https://xxn.jpg"],"total_pixels": 134217728}`
 
+**prompt\_cache\_breakpoint** `object` (可选)
+
+仅支持 `qwen4-max`。 指定缓存前缀的结束位置。 详见[显式缓存（Qwen4）](raw/model-user-guide/model-experience/text-generation-model/explicit-cache-qwen4.md)。
+
+属性
+
+**mode** `string` (必选)
+
+仅支持 `explicit`；设置断点时需显式传入。
+
 **cache\_control**`object`（可选）
 
 用于开启显式缓存。相关文档：[显式缓存](https://help.aliyun.com/zh/model-studio/context-cache#825f201c5fy6o)。
@@ -287,6 +321,18 @@ fps有两个功能：
 **type** `string`**（必选）**
 
 仅支持设定为`ephemeral`。
+
+属性（Qwen4）
+
+仅支持 `qwen4-max`。 Qwen4 的内容块缓存标记还支持 `ttl`，可选 `5m`、`1h`，默认为 `5m`。 详见[显式缓存（Qwen4）](raw/model-user-guide/model-experience/text-generation-model/explicit-cache-qwen4.md)。
+
+**type** `string` (必选)
+
+`ephemeral`
+
+**ttl** `string` (可选)
+
+缓存有效期，支持 `5m` 和 `1h`，默认为 `5m`。
 
 **role**`string`**（必选）**
 
@@ -305,6 +351,10 @@ Assistant Message `object`（可选）
 **role**`string`**（必选）**
 
 助手消息的角色，固定为`assistant`。
+
+**encrypted\_content** `string`
+
+`qwen4-max`, `thinking_display="summarized"`: 每轮都需传开启参数。客户端只能原样回传密文，不能读取、截断、重新编码、修改或拼接多轮密文。摘要不能替代历史思维链。 [思维链摘要与加密](https://help.aliyun.com/zh/model-studio/cot-summary#multi-turn). 密文必须原样回传。
 
 **partial**`boolean`（可选）默认值为`false`
 
@@ -366,6 +416,24 @@ Tool Message `object`（可选）
 **tool\_call\_id**`string`**（必选）**
 
 发起 Function Calling 后返回的 id，通过completion.choices\[0\].message.tool\_calls\[$index\].id获取，用于标记 Tool Message 对应的工具。
+
+**prompt\_cache\_options** `object` (可选)
+
+仅支持 `qwen4-max`。 请求顶层的缓存配置。 Python SDK 通过 `extra_body` 传入顶层非标准参数；Node.js SDK 和 curl 直接传入。 详见[显式缓存（Qwen4）](raw/model-user-guide/model-experience/text-generation-model/explicit-cache-qwen4.md)。
+
+属性
+
+**mode** `string` (可选)
+
+`implicit`：自动设置缓存断点，无需手动配置。
+
+`explicit`：不自动设置断点，创建显式缓存需结合手动断点。
+
+**ttl** `string` (可选)
+
+缓存有效期，支持 `5m` 和 `1h`，默认为 `5m`。
+
+对本次请求的全部缓存断点生效。未设置顶层 `ttl` 时，使用最后一个 `cache_control` 标记中的 `ttl`；该标记未设置 `ttl` 或没有标记时，使用 `5m`。
 
 **stream**`boolean`（可选） 默认值为 `false`
 
@@ -436,28 +504,52 @@ temperature与top\_p均可以控制生成文本的多样性，建议只设置其
 
 temperature默认值
 
+-   `qwen4-max`：思考模式为 `1.0`，非思考模式为 `0.7`。
+    
 -   qwen3.8-max/qwen3.8-flash（思考模式）：视觉理解0.6，文本输入1.0，0.6以下的temperature值会默认改为0.6
+    
 -   Qwen3.8-Omni-Flash：思考模式为 0.6，非思考模式为 0.7；
+    
 -   Qwen3.8（非思考模式）、Qwen3.7（非思考模式）、Qwen3.6（非思考模式）、Qwen3.5-Omni、Qwen3.5（非思考模式）、Qwen3（非思考模式）、Qwen3-Instruct系列、Qwen3-Coder系列、qwen-max系列、qwen-plus系列（非思考模式）、qwen-flash系列（非思考模式）、qwen开源系列、qwen-coder系列、qwen-doc-turbo、Qwen3-VL（非思考）：0.7；
+    
 -   QVQ系列 : 0.5；
+    
 -   qwen-audio-turbo系列：0.00001；
+    
 -   qwen-vl系列：0.01；
+    
 -   qwen-math系列：0；
+    
 -   Qwen3.7（思考模式）、Qwen3.6（思考模式）、Qwen3.5（思考模式）、Qwen3（思考模式）、Qwen3-Thinking、Qwen3-Omni-Captioner、QwQ 系列：0.6；
+    
 -   qwen-long系列： 1.0；
+    
 -   qwen-plus-character：0.92
+    
 -   qwen3-omni-flash系列：0.9
+    
 -   Qwen3-VL（思考模式）：0.8
+    
 -   DeepSeek系列（阿里云直供）：deepseek-v4.1-flash、deepseek-v4-pro: 1.0；deepseek-r1-distill-qwen 蒸馏版: 0.6；
+    
 -   DeepSeek系列（硅基流动直供）：siliconflow/deepseek-v3.2、siliconflow/deepseek-v3.1-terminus、siliconflow/deepseek-r1-0528、siliconflow/deepseek-v3-0324: 1.0；
+    
 -   DeepSeek系列（快手万擎直供）：vanchin/deepseek-v3.2-think（思考模式）: 0.6；vanchin/deepseek-v3.1-terminus: 0.7；vanchin/deepseek-v3.2-speciale、vanchin/deepseek-r1、vanchin/deepseek-v3、vanchin/deepseek-ocr: 1.0；
+    
 -   Kimi系列（阿里云直供）：kimi-k2.7-code、kimi-k2.6（思考模式）、kimi-k2.5（思考模式）: 1.0；kimi-k2.6（非思考模式）、kimi-k2.5（非思考模式）: 0.6；
+    
 -   Kimi系列（月之暗面直供）：kimi/kimi-k3、kimi/kimi-k3.1-pro、kimi/kimi-k3.1-pro-highspeed、kimi/kimi-k2.7-code-highspeed、kimi/kimi-k2.7-code、kimi/kimi-k2.6（思考模式）、kimi/kimi-k2.5（思考模式）: 1.0；kimi/kimi-k2.6（非思考模式）、kimi/kimi-k2.5（非思考模式）: 0.6；
+    
 -   GLM系列（阿里云直供）：glm-5.1、glm-5: 1.0；
+    
 -   GLM系列（智谱直供）：ZHIPU/GLM-5.1、ZHIPU/GLM-5: 0.6；
+    
 -   MiniMax系列（阿里云直供）：MiniMax-M2.5: 1.0；
+    
 -   MiniMax系列（稀宇科技直供）：MiniMax/MiniMax-M3.1-Flash、MiniMax/MiniMax-M3、MiniMax/MiniMax-M2.7、MiniMax/MiniMax-M2.5、MiniMax/MiniMax-M2.1: 1.0。
+    
 -   MiMo系列（小米直供）：mimo-v2.5-pro: 1.0，范围 \[0, 1.5\]；xiaomi/mimo-v2.6-pro-ultraspeed: 1.0，不支持自定义，传入其他值时仍按 1.0 生效。
+    
 
 > 不建议修改QVQ模型的默认temperature值 。
 
@@ -474,6 +566,8 @@ MiniMax/MiniMax-M3.1-Flash 和 MiniMax/MiniMax-M3 固定使用 `0.95`，不支�
 temperature与top\_p均可以控制生成文本的多样性，建议只设置其中一个值。更多说明，请参见[概述](raw/model-user-guide/model-experience/text-generation-model/text-generation.md)。
 
 top\_p默认值
+
+-   `qwen4-max`：思考模式为 `0.95`，非思考模式为 `0.8`。
 
 非思考模式下的以下型号（`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`）、Qwen3.7（非思考模式）、Qwen3.6（非思考模式）、Qwen3.5-Omni、Qwen3.5（非思考模式）、Qwen3（非思考模式）、Qwen3-Instruct系列、Qwen3-Coder系列、qwen-max系列、qwen-plus系列（非思考模式）、qwen-flash系列（非思考模式）、Qwen 2.5开源系列、qwen-coder系列、qwen-long、qwen-doc-turbo、Qwen3-VL（非思考）：0.8；
 
@@ -513,6 +607,8 @@ MiMo系列（小米直供）：xiaomi/mimo-v2.5-pro: 0.95，范围 \[0.01, 1.0\]
 
 top\_k默认值
 
+-   `qwen4-max`：思考和非思考模式均为 `20`。
+
 QVQ系列：10；
 
 QwQ 系列：40；
@@ -537,7 +633,7 @@ DeepSeek/Kimi/MiniMax系列均不支持top\_k参数。
 
 repetition\_penalty默认值
 
--   `qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、qwen-max、qwen-math系列、qwen-audio-turbo系列、QVQ系列、QwQ系列、Qwen3-VL： 1.0；
+-   `qwen4-max`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、qwen-max、qwen-math系列、qwen-audio-turbo系列、QVQ系列、QwQ系列、Qwen3-VL： 1.0；
 -   qwen-coder系列、qwen2-1.5b-instruct、qwen2-0.5b-instruct：1.1；
 -   其余模型为1.05。
 -   GLM系列（阿里云直供）：1.0；
@@ -546,6 +642,10 @@ repetition\_penalty默认值
 > 该参数非OpenAI标准参数。通过 Python SDK调用时，请放入 **extra\_body** 对象中。配置方式为：extra\_body={"repetition\_penalty":xxx}。
 
 > 不建议修改QVQ模型的默认 repetition\_penalty 值。
+
+**frequency\_penalty** `float` （可选）
+
+支持 `qwen4-max`。按 Token 已出现的次数施加惩罚，以调整重复内容的生成。
 
 **presence\_penalty** `float`（可选）
 
@@ -557,7 +657,7 @@ repetition\_penalty默认值
 
 presence\_penalty默认值
 
-非思考模式下的以下型号（`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`）、Qwen3.7（非思考模式）、Qwen3.6（非思考模式）、Qwen3.5-Omni、Qwen3.5（非思考模式）、Qwen3（非思考模式）、Qwen3-Instruct系列/1.7b/4b（思考模式）、QVQ系列、qwen-max、qwen2.5-vl系列、Qwen3-VL（非思考）：1.5；
+非思考模式下的以下型号（`qwen4-max`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`）、Qwen3.7（非思考模式）、Qwen3.6（非思考模式）、Qwen3.5-Omni、Qwen3.5（非思考模式）、Qwen3（非思考模式）、Qwen3-Instruct系列/1.7b/4b（思考模式）、QVQ系列、qwen-max、qwen2.5-vl系列、Qwen3-VL（非思考）：1.5；
 
 Qwen3.8-Omni-Flash：思考模式为 0.0，非思考模式为 1.5；
 
@@ -639,7 +739,7 @@ Schema 的名称。
 
 该参数的含义随模型不同，具体如下：
 
--   deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731：模型回答与思维链内容之和的最大 Token 数，`max_tokens` 与 `max_completion_tokens` 等价。模型输出超过此值时生成将提前停止，返回的 `finish_reason` 为 `length`。
+-   qwen4-max、deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731：模型回答与思维链内容之和的最大 Token 数，`max_tokens` 与 `max_completion_tokens` 等价。模型输出超过此值时生成将提前停止，返回的 `finish_reason` 为 `length`。
 -   glm-5.3：`max_tokens` 为模型回答与思维链内容之和的最大 Token 数，模型输出超过此值时生成将提前停止，返回的 `finish_reason` 为 `length`。glm-5.3 会忽略 `thinking_budget` 参数。
 -   glm-5.2：不传入 `thinking_budget` 参数时，`max_tokens` 为模型回答与思维链内容之和的最大 Token 数，模型输出超过此值时生成将提前停止，返回的 `finish_reason` 为 `length`；传入 `thinking_budget` 参数时，`max_tokens` 仅为模型回答的最大 Token 数，思维链部分的 Token 数由 `thinking_budget` 单独控制。
 -   其他模型：模型回答的最大 Token 数（不包含思维链）。若生成内容超过此值，生成将提前停止，返回的 `finish_reason` 为 `length`。
@@ -694,6 +794,8 @@ GLM 模型的默认值与最大值见 `max_tokens` 参数中的表格，其他�
 
 **vl\_high\_resolution\_images**`boolean`（可选）默认值为`false`
 
+对 `qwen4-max`，即使 `vl_high_resolution_images=true`，显式传入的 `max_pixels` 仍生效。
+
 是否将输入图像的像素上限提升至 16384 Token 对应的像素值。相关文档：[处理高分辨率图像](raw/model-user-guide/model-experience/text-generation-model/vision.md)。
 
 -   `vl_high_resolution_images：true`，使用固定分辨率策略，忽略 `max_pixels` 设置，超过此分辨率时会将图像总像素缩小至此上限内。
@@ -716,7 +818,7 @@ GLM 模型的默认值与最大值见 `max_tokens` 参数中的表格，其他�
 
 > `n=0` 等价于 `n=1`。
 
-> 仅 [Qwen3（非思考模式）](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md) 和 qwen-plus-character 支持将 `n` 设为大于 `1`。MiniMax/MiniMax-M3.1-Flash 和 MiniMax/MiniMax-M3 仅支持 `n=1`。kimi/kimi-k3.1-pro 和 kimi/kimi-k3.1-pro-highspeed 不支持此参数。
+> 仅 `qwen4-max`、[Qwen3（非思考模式）](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md) 和 qwen-plus-character 支持将 `n` 设为大于 `1`。MiniMax/MiniMax-M3.1-Flash 和 MiniMax/MiniMax-M3 仅支持 `n=1`。kimi/kimi-k3.1-pro 和 kimi/kimi-k3.1-pro-highspeed 不支持此参数。
 
 > 若传入 `tools` 参数， 请将`n` 设为 1。
 
@@ -765,7 +867,15 @@ kimi-k3.1-pro（阿里云百炼部署）默认值为 `true`，可设为 `false` 
 
 该参数非 OpenAI 标准参数。通过 Python SDK 调用时，请放入 `extra_body` 对象中，例如 `extra_body={"reasoning_split": True}`。
 
+**thinking\_display** `string` （可选）
+
+`qwen4-max`: `"summarized"`. [思维链摘要与加密](https://help.aliyun.com/zh/model-studio/cot-summary#enable).
+
+默认返回完整思维链。开启本功能后，原始思维链不再以明文返回，改为返回摘要与完整密文。摘要用于展示，密文用于恢复历史思考。
+
 **preserve\_thinking** `boolean` （可选）默认值为 `false`
+
+`qwen4-max`: 默认值 `true`.
 
 是否将对话历史中 assistant 消息的 reasoning\_content 拼接至模型输入。适用于需要模型参考历史思考过程的场景。
 
@@ -775,20 +885,22 @@ kimi/kimi-k3.1-pro 和 kimi/kimi-k3.1-pro-highspeed 支持此参数，默认关�
 
 需要参考上一轮思考时，将其放在历史 assistant 消息的 `reasoning_content` 字段中随 `messages` 回传。用法见[传递思考过程](https://help.aliyun.com/zh/model-studio/deep-thinking#jln7docdq5et5)。
 
-目前支持qwen3.8-max、qwen3.8-max-0902、qwen3.8-flash（默认开启）、qwen3.8-omni-flash（默认开启）、qwen3.7-max、qwen3.7-max-2026-05-20以及后续快照、qwen3.7-plus、qwen3.7-plus-2026-05-26、qwen3.6-plus、qwen3.6-plus-2026-04-02、qwen3.7-flash、qwen3.7-flash-2026-07-15、qwen3.6-flash、qwen3.6-flash-2026-04-16、kimi-k2.6（阿里云百炼部署）、kimi-k2.7-code（阿里云百炼部署，默认开启）、kimi/kimi-k2.7-code-highspeed（月之暗面直供，默认开启）、kimi/kimi-k2.7-code（月之暗面直供，默认开启）。
+目前支持qwen4-max、qwen3.8-max、qwen3.8-max-0902、qwen3.8-flash（默认开启）、qwen3.8-omni-flash（默认开启）、qwen3.7-max、qwen3.7-max-2026-05-20以及后续快照、qwen3.7-plus、qwen3.7-plus-2026-05-26、qwen3.6-plus、qwen3.6-plus-2026-04-02、qwen3.7-flash、qwen3.7-flash-2026-07-15、qwen3.6-flash、qwen3.6-flash-2026-04-16、kimi-k2.6（阿里云百炼部署）、kimi-k2.7-code（阿里云百炼部署，默认开启）、kimi/kimi-k2.7-code-highspeed（月之暗面直供，默认开启）、kimi/kimi-k2.7-code（月之暗面直供，默认开启）。
 
-> **重要：**使用 qwen3.8-max/qwen3.8-flash 时，preserve\_thinking 默认为 true，必须将历史对话中所有的 reasoning\_content 完整回传。**不支持将 reasoning\_content 拼接到 content 字段中回传。**
+> **重要：**使用 qwen4-max、qwen3.8-max/qwen3.8-flash 时，preserve\_thinking 默认为 true，必须将历史对话中所有的 reasoning\_content 完整回传。**不支持将 reasoning\_content 拼接到 content 字段中回传。**
 
--   对于上述支持此参数的 `qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、Qwen3.7、Qwen3.6 和 Kimi 型号，若历史消息中不包含 `reasoning_content`，开启此参数不会报错。
+-   对于上述支持此参数的 `qwen4-max`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、Qwen3.7、Qwen3.6 和 Kimi 型号，若历史消息中不包含 `reasoning_content`，开启此参数不会报错。
 -   开启后，历史对话中的 reasoning\_content 会计入输入 Token 数量并计费。
 
 > 该参数非OpenAI标准参数。通过 Python SDK调用时，请放入 **extra\_body** 对象中。配置方式为：`extra_body={"preserve_thinking": True}`。
 
 **thinking\_budget** `integer` （可选）
 
-思考过程的最大 Token 数。适用于 `qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`，以及Qwen3.7、Qwen3.6、Qwen3.5、Qwen3-VL、Qwen3、GLM（阿里云直供）、Kimi（阿里云直供）系列模型，其中 kimi-k3.1-pro 和 kimi-k3 不支持该参数。相关文档：[限制思考长度](https://help.aliyun.com/zh/model-studio/deep-thinking#e7c0002fe4meu)。
+`qwen4-max`: 默认值 `131072`.
 
-上述型号的默认值为模型最大思维链长度，请参见：模型列表
+思考过程的最大 Token 数。适用于 `qwen4-max`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`，以及Qwen3.7、Qwen3.6、Qwen3.5、Qwen3-VL、Qwen3、GLM（阿里云直供）、Kimi（阿里云直供）系列模型，其中 kimi-k3.1-pro 和 kimi-k3 不支持该参数。相关文档：[限制思考长度](https://help.aliyun.com/zh/model-studio/deep-thinking#e7c0002fe4meu)。
+
+其他模型: 上述型号的默认值为模型最大思维链长度，请参见：模型列表
 
 > 该参数非OpenAI标准参数。通过 Python SDK调用时，请放入 **extra\_body** 对象中。配置方式为：`extra_body={"thinking_budget": xxx}`。
 
@@ -797,6 +909,52 @@ kimi/kimi-k3.1-pro 和 kimi/kimi-k3.1-pro-highspeed 支持此参数，默认关�
 控制是否解析多通道音频中的空间信息。适用于 `qwen3.8-omni-flash` 的音频输入，默认为 `false`，所有音频按单通道解析。设为 `true` 且输入为双通道（左右）或四通道（FOA，WYZX 顺序）音频时，解析空间音频信息。HTTP 请求中放在请求体顶层；使用 OpenAI Python SDK 时通过 `extra_body={"use_multichannel": True}` 传入。
 
 **reasoning\_effort** `string` （可选）
+
+**`qwen4-max`**
+
+默认值: `reasoning_effort=high`.
+
+`reasoning_effort`
+
+实际档位
+
+`minimal`, `low`
+
+`low`
+
+`medium`, `high`
+
+`high`
+
+`xhigh`, `max`
+
+`xhigh`
+
+`none`
+
+关闭思考
+
+`qwen4-max` 不支持同时设置 `reasoning_effort` 和 `thinking_budget`。`thinking_budget` 必须为正整数，不能设为 `0`。
+
+仅设置 `thinking_budget` 时，按下表确定思考档位，保留传入的预算值。
+
+`thinking_budget`
+
+实际档位
+
+`1–4096`
+
+`low`
+
+`4097–131072`
+
+`high`
+
+`131073–262144`
+
+`xhigh`
+
+两者均未设置时，使用 `high` 和 `131072`。
 
 控制模型的推理力度，不同模型支持的可选值和默认值不同。
 
@@ -888,7 +1046,7 @@ glm-5.3 系列模型始终开启思考，`enable_thinking` 仅支持 `true`，�
 
 **Qwen系列支持列表：**
 
--   qwen-max系列：qwen3.8-max系列、qwen3.7-max系列的文本模态
+-   qwen-max系列：qwen4-max、qwen3.8-max系列、qwen3.7-max系列的文本模态
 -   qwen-plus系列：qwen3.7-plus系列、qwen3.6-plus系列的文本模态，以及qwen3.5-plus系列的全模态
 -   qwen-flash系列：qwen3.8-flash系列、qwen3.7-flash系列、qwen3.6-flash系列、qwen3.5-flash系列的全模态
 
@@ -947,8 +1105,13 @@ seed默认值
 支持的模型
 
 -   qwen-plus系列的快照模型（不包含稳定版模型）
+    
 -   qwen3-vl-plus系列模型（包含稳定版模型）
+    
 -   Qwen3 开源模型
+    
+-   `qwen4-max`
+    
 
 **top\_logprobs** `integer` （可选）默认值为0
 
@@ -1185,7 +1348,7 @@ client = OpenAI(
 
 completion = client.chat.completions.create(
     # 模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
-    model="qwen3.8-max",
+    model="qwen4-max",
     messages=[
         {"role": "system", "content": "You are a helpful assistant."},
         {"role": "user", "content": "你是谁？"},
@@ -1212,7 +1375,7 @@ public class Main {
 
         ChatCompletionCreateParams params = ChatCompletionCreateParams.builder()
                 .addUserMessage("你是谁")
-                .model("qwen3.8-max")
+                .model("qwen4-max")
                 .build();
 
         try {
@@ -1241,7 +1404,7 @@ const openai = new OpenAI(
 
 async function main() {
     const completion = await openai.chat.completions.create({
-        model: "qwen3.8-max",  //此处以qwen3.8-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
+        model: "qwen4-max",  //此处以qwen4-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
         messages: [
             { role: "system", content: "You are a helpful assistant." },
             { role: "user", content: "你是谁？" }
@@ -1276,7 +1439,7 @@ func main() {
 			Messages: []openai.ChatCompletionMessageParamUnion{
 				openai.UserMessage("你是谁"),
 			},
-			Model: "qwen3.8-max",
+			Model: "qwen4-max",
 		},
 	)
 
@@ -1311,9 +1474,9 @@ class Program
 
         // 设置请求 URL 和内容
         string url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions";
-        // 此处以qwen3.8-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
+        // 此处以qwen4-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
         string jsonContent = @"{
-            ""model"": ""qwen3.8-max"",
+            ""model"": ""qwen4-max"",
             ""messages"": [
                 {
                     ""role"": ""system"",
@@ -1373,8 +1536,8 @@ $headers = [
 ];
 // 设置请求体
 $data = [
-    // 此处以qwen3.8-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
-    "model" => "qwen3.8-max",
+    // 此处以qwen4-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
+    "model" => "qwen4-max",
     "messages" => [
         [
             "role" => "system",
@@ -1414,7 +1577,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "messages": [
         {
             "role": "system",
@@ -1444,7 +1607,7 @@ client = OpenAI(
     base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 completion = client.chat.completions.create(
-    model="qwen3.8-max",  # 此处以qwen3.8-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
+    model="qwen4-max",  # 此处以qwen4-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
     messages=[{'role': 'system', 'content': 'You are a helpful assistant.'},
                 {'role': 'user', 'content': '你是谁？'}],
     stream=True,
@@ -1469,7 +1632,7 @@ const openai = new OpenAI(
 
 async function main() {
     const completion = await openai.chat.completions.create({
-        model: "qwen3.8-max", // 此处以qwen3.8-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
+        model: "qwen4-max", // 此处以qwen4-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
         messages: [
             {"role": "system", "content": "You are a helpful assistant."},
             {"role": "user", "content": "你是谁？"}
@@ -1492,7 +1655,7 @@ curl --location "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header "Content-Type: application/json" \
 --data '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "messages": [
         {
             "role": "system",
@@ -1744,7 +1907,7 @@ tools = [
 ]
 messages = [{"role": "user", "content": "杭州天气怎么样"}]
 completion = client.chat.completions.create(
-    model="qwen3.8-max",  # 此处以qwen3.8-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
+    model="qwen4-max",  # 此处以qwen4-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
     messages=messages,
     tools=tools
 )
@@ -1800,7 +1963,7 @@ const tools = [
 
 async function main() {
     const response = await openai.chat.completions.create({
-        model: "qwen3.8-max", // 此处以qwen3.8-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
+        model: "qwen4-max", // 此处以qwen4-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
         messages: messages,
         tools: tools,
     });
@@ -1817,7 +1980,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "messages": [
         {
             "role": "system",
@@ -1872,7 +2035,7 @@ client = OpenAI(
     base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 completion = client.chat.completions.create(
-    model="qwen3.8-max",  # 此处以qwen3.8-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
+    model="qwen4-max",  # 此处以qwen4-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
     messages=[
         {'role': 'system', 'content': 'You are a helpful assistant.'},
         {'role': 'user', 'content': '中国队在巴黎奥运会获得了多少枚金牌'}],
@@ -1897,7 +2060,7 @@ const openai = new OpenAI(
 );
 async function main() {
     const completion = await openai.chat.completions.create({
-        model: "qwen3.8-max", //此处以qwen3.8-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
+        model: "qwen4-max", //此处以qwen4-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
         messages: [
             { role: "system", content: "You are a helpful assistant." },
             { role: "user", content: "中国队在巴黎奥运会获得了多少枚金牌" }
@@ -1917,7 +2080,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "messages": [
         {
             "role": "system",
@@ -1949,7 +2112,7 @@ client = AsyncOpenAI(
 async def main():
     response = await client.chat.completions.create(
         messages=[{"role": "user", "content": "你是谁"}],
-        model="qwen3.8-max",  # 此处以qwen3.8-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
+        model="qwen4-max",  # 此处以qwen4-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
     )
     print(response.model_dump_json())
 
@@ -2275,6 +2438,10 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 
 模型的回复内容。
 
+**encrypted\_content** `string`
+
+`qwen4-max`, `thinking_display="summarized"`: 每轮都需传开启参数。客户端只能原样回传密文，不能读取、截断、重新编码、修改或拼接多轮密文。摘要不能替代历史思维链。 [思维链摘要与加密](https://help.aliyun.com/zh/model-studio/cot-summary#multi-turn).
+
 **reasoning\_content** `string`
 
 模型的思维链内容。
@@ -2429,6 +2596,52 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 
 使用[显式缓存](https://help.aliyun.com/zh/model-studio/context-cache#825f201c5fy6o)时，参数值为`ephemeral`，否则该参数不存在。
 
+属性（Qwen4）
+
+详见[显式缓存（Qwen4）](raw/model-user-guide/model-experience/text-generation-model/explicit-cache-qwen4.md)。
+
+**cached\_tokens** `integer`
+
+命中 Cache 的 Token 数。Context Cache 详情请参见[上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)。
+
+**text\_tokens** `integer`
+
+输入的文本 Token 数。
+
+**image\_tokens** `integer`
+
+输入的图像 Token 数。
+
+**video\_tokens** `integer`
+
+输入的视频文件或者图像列表 Token 数。
+
+**cache\_write\_tokens** `integer`
+
+缓存创建的输入 Token 数。
+
+**cache\_creation\_input\_tokens** `integer`
+
+与 `cache_write_tokens` 相同，统计时不要重复相加。
+
+**cache\_type** `string`
+
+`ephemeral`
+
+**cache\_creation** `object`
+
+按 TTL 统计的缓存创建详情。两种 TTL 的 Token 数之和等于本次创建缓存的 Token 数。
+
+属性
+
+**ephemeral\_5m\_input\_tokens** `integer`
+
+5 分钟缓存创建的 Token 数。
+
+**ephemeral\_1h\_input\_tokens** `integer`
+
+1 小时缓存创建的 Token 数。
+
 **x\_tools** `object`（可选）
 
 联网搜索的调用统计。仅当请求中`include_tool_usage`为`true`，且本次请求实际触发了联网搜索时返回。
@@ -2452,6 +2665,8 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 本次联网搜索实际使用的搜索量级策略，与请求中`search_options.search_strategy`的取值一致，如`turbo`、`max`、`agent`。
 
 #### 文本输入
+
+以下为 `qwen3.8-max` 的返回示例，用于说明响应字段。
 
 ```
 {
@@ -2563,6 +2778,8 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 
 #### 工具调用
 
+以下为 `qwen3.8-max` 的返回示例，用于说明响应字段。
+
 ```
 {
     "id": "chatcmpl-5cc0b5ec-42bf-99e8-ae83-1fd676eec9bf",
@@ -2610,6 +2827,8 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 
 #### 联网搜索
 
+以下为 `qwen3.8-max` 的返回示例，用于说明响应字段。
+
 ```
 {
     "id": "chatcmpl-0df41ee2-49c9-9ee8-a614-fdec17347b6a",
@@ -2645,6 +2864,8 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 ```
 
 设置`include_tool_usage`为`true`并实际触发联网搜索时，`usage`中会增加`x_tools`字段：
+
+以下为 `qwen3.8-max` 的返回示例，用于说明响应字段。
 
 ```
 {
@@ -2706,6 +2927,10 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 **content** `string`
 
 增量消息内容。
+
+**encrypted\_content** `string`
+
+`qwen4-max`, `thinking_display="summarized"`: 每轮都需传开启参数。客户端只能原样回传密文，不能读取、截断、重新编码、修改或拼接多轮密文。摘要不能替代历史思维链。 [思维链摘要与加密](https://help.aliyun.com/zh/model-studio/cot-summary#multi-turn). 密文通过独立数据帧返回，不能与其他帧或多轮密文拼接。
 
 **reasoning\_content** `string`
 
@@ -2928,6 +3153,52 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 
 缓存类型，固定为`ephemeral`。
 
+属性（Qwen4）
+
+详见[显式缓存（Qwen4）](raw/model-user-guide/model-experience/text-generation-model/explicit-cache-qwen4.md)。
+
+**text\_tokens** `integer`
+
+输入文本的 Token 数。
+
+**video\_tokens** `integer`
+
+输入视频（图片列表形式或视频文件）的 Token 数。
+
+**image\_tokens** `integer`
+
+输入图片的 Token 数。
+
+**cached\_tokens** `integer`
+
+命中缓存的 Token 数。Context Cache 详情请参见[上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)。
+
+**cache\_write\_tokens** `integer`
+
+缓存创建的输入 Token 数。
+
+**cache\_creation\_input\_tokens** `integer`
+
+与 `cache_write_tokens` 相同，统计时不要重复相加。
+
+**cache\_type** `string`
+
+`ephemeral`
+
+**cache\_creation** `object`
+
+按 TTL 统计的缓存创建详情。两种 TTL 的 Token 数之和等于本次创建缓存的 Token 数。
+
+属性
+
+**ephemeral\_5m\_input\_tokens** `integer`
+
+5 分钟缓存创建的 Token 数。
+
+**ephemeral\_1h\_input\_tokens** `integer`
+
+1 小时缓存创建的 Token 数。
+
 **x\_tools** `object`（可选）
 
 联网搜索的调用统计。仅当请求中`include_tool_usage`为`true`，且本次请求实际触发了联网搜索时返回，随`usage`在最后一个 chunk 中显示。
@@ -3006,6 +3277,8 @@ data: {"choices":[{"finish_reason":null,"logprobs":null,"delta":{"content":null,
 #### 联网搜索
 
 设置 `include_tool_usage` 为 `true` 并实际触发联网搜索时，最后一个 chunk 的 `usage` 中会增加 `x_tools` 字段：
+
+以下为 `qwen3.8-max` 的返回示例，用于说明响应字段。
 
 ```
 data: {"id":"chatcmpl-3d720785-fa18-9207-ac31-666fd4fb1ba3","object":"chat.completion.chunk","created":1794396212,"model":"qwen3.8-max","choices":[],"usage":{"prompt_tokens":2883,"total_tokens":2962,"completion_tokens":79,"prompt_tokens_details":{"cached_tokens":0,"text_tokens":2883},"completion_tokens_details":{"reasoning_tokens":58,"text_tokens":79},"x_tools":{"search":{"count":1,"strategy":"turbo"}}}}

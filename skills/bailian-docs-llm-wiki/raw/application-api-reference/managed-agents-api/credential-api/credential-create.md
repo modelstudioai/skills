@@ -12,35 +12,15 @@
 
 ## 请求体
 
-**字段**
-
-**必填**
-
-**类型**
-
-**说明**
-
-`auth`
-
-是
-
-object
+**auth** `object` **（必选）**
 
 认证信息，固定为 environment\_variable 类型。
 
-`display_name`
-
-否
-
-string
+**display\_name** `string` **（可选）**
 
 Credential 可读名称，最大 255 字符
 
-`metadata`
-
-否
-
-object
+**metadata** `object` **（可选）**
 
 业务自定义键值对元数据
 
@@ -48,67 +28,31 @@ object
 
 `auth` 当前仅支持 `environment_variable` 一种类型，以环境变量形式注入会话。
 
-**字段**
-
-**必填**
-
-**类型**
-
-**说明**
-
-`type`
-
-是
-
-string
+**type** `string` **（必选）**
 
 固定为 environment\_variable
 
-`secret_name`
-
-是
-
-string
+**secret\_name** `string` **（必选）**
 
 环境变量名称，需满足 `^[a-zA-Z][a-zA-Z0-9_]*$`：以字母开头，仅支持字母、数字和下划线。创建后不可修改
 
-`secret_value`
-
-是
-
-string
+**secret\_value** `string` **（必选）**
 
 环境变量值，仅写入时传入，响应中不返回
 
-`networking`
-
-是
-
-object
+**networking** `object` **（必选）**
 
 网络策略，限制只有发往指定域名的请求才会被替换为真实密钥
 
-`networking.allowed_hosts`
-
-是
-
-array
+**networking.allowed\_hosts** `array` **（必选）**
 
 允许替换真实密钥的域名列表，支持 `*.example.com` 通配子域，最多 10 个。填 `*` 对全部域名生效
 
-`injection_location`
-
-是
-
-object
+**injection\_location** `object` **（必选）**
 
 替换位置，标识密钥写入请求的位置。替换位置为请求头；请求体与查询参数中的占位符不会被替换
 
-`injection_location.header`
-
-否
-
-boolean
+**injection\_location.header** `boolean` **（可选）**
 
 是否启用请求头替换，固定传 true
 
@@ -141,6 +85,72 @@ curl -X POST "$AGENTSTUDIO_URL/vaults/vlt_xxx/credentials" \
   }'
 ```
 
+### 响应字段
+
+**id** `string`
+
+Credential ID，格式 cred\_xxx
+
+**type** `string`
+
+固定为 credential
+
+**vault\_id** `string`
+
+所属 Vault ID
+
+**display\_name** `string`
+
+Credential 可读名称
+
+**auth** `object`
+
+认证信息，敏感值已脱敏（如 secret\_value 不返回）
+
+**auth.type** `string`
+
+认证类型，当前仅支持 environment\_variable
+
+**auth.secret\_name** `string`
+
+环境变量名称
+
+**auth.networking** `object`
+
+网络策略
+
+**auth.networking.allowed\_hosts** `array`
+
+允许替换真实密钥的域名列表
+
+**auth.injection\_location** `object`
+
+替换位置。替换位置为请求头；请求体与查询参数中的占位符不会被替换
+
+**auth.injection\_location.header** `boolean`
+
+是否启用请求头替换
+
+**metadata** `object`
+
+业务自定义键值对
+
+**archived\_at** `string | null`
+
+归档时间，未归档时为 null
+
+**created\_at** `string`
+
+创建时间，ISO 8601
+
+**updated\_at** `string`
+
+最近更新时间，ISO 8601
+
+**request\_id** `string`
+
+请求唯一标识
+
 ## 响应
 
 ```
@@ -169,110 +179,6 @@ curl -X POST "$AGENTSTUDIO_URL/vaults/vlt_xxx/credentials" \
   "request_id": "req_xxx"
 }
 ```
-
-### 响应字段
-
-**字段**
-
-**类型**
-
-**说明**
-
-`id`
-
-string
-
-Credential ID，格式 cred\_xxx
-
-`type`
-
-string
-
-固定为 credential
-
-`vault_id`
-
-string
-
-所属 Vault ID
-
-`display_name`
-
-string
-
-Credential 可读名称
-
-`auth`
-
-object
-
-认证信息，敏感值已脱敏（如 secret\_value 不返回）
-
-`auth.type`
-
-string
-
-认证类型，当前仅支持 environment\_variable
-
-`auth.secret_name`
-
-string
-
-环境变量名称
-
-`auth.networking`
-
-object
-
-网络策略
-
-`auth.networking.allowed_hosts`
-
-array
-
-允许替换真实密钥的域名列表
-
-`auth.injection_location`
-
-object
-
-替换位置。替换位置为请求头；请求体与查询参数中的占位符不会被替换
-
-`auth.injection_location.header`
-
-boolean
-
-是否启用请求头替换
-
-`metadata`
-
-object
-
-业务自定义键值对
-
-`archived_at`
-
-string | null
-
-归档时间，未归档时为 null
-
-`created_at`
-
-string
-
-创建时间，ISO 8601
-
-`updated_at`
-
-string
-
-最近更新时间，ISO 8601
-
-`request_id`
-
-string
-
-请求唯一标识
 
 ## 错误码
 

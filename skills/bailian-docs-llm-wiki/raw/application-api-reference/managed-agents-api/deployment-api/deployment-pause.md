@@ -12,19 +12,7 @@
 
 ## 路径参数
 
-**参数**
-
-**必填**
-
-**类型**
-
-**说明**
-
-`deployment_id`
-
-是
-
-string
+**deployment\_id** `string` **（必选）**
 
 Deployment ID
 
@@ -36,6 +24,76 @@ curl
 curl -X POST "$AGENTSTUDIO_URL/deployments/depl_xxx/pause" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
+
+### 响应字段
+
+**id** `string`
+
+Deployment ID
+
+**type** `string`
+
+固定为 `deployment`
+
+**name** `string`
+
+Deployment 名称
+
+**description** `string`
+
+Deployment 用途说明
+
+**agent** `object`
+
+关联 Agent 在锁定版本的快照
+
+**environment\_id** `string`
+
+关联 Environment ID
+
+**schedule** `object`
+
+定时触发配置。暂停后 `next_run_at` 为 `null`
+
+**initial\_events** `array<object>`
+
+触发时发送给 Agent 的初始事件
+
+**resources** `array<object>`
+
+挂载的文件资源
+
+**vault\_ids** `array<string>`
+
+关联 Vault ID 列表
+
+**metadata** `object`
+
+业务自定义键值对
+
+**status** `string`
+
+此操作后固定为 `paused`
+
+**paused\_reason** `object`
+
+暂停原因
+
+**archived\_at** `string | null`
+
+归档时间，未归档时为 `null`
+
+**created\_at** `string`
+
+创建时间，ISO 8601
+
+**updated\_at** `string`
+
+最近更新时间，ISO 8601
+
+**request\_id** `string`
+
+请求唯一标识
 
 ## 响应
 
@@ -81,116 +139,6 @@ curl -X POST "$AGENTSTUDIO_URL/deployments/depl_xxx/pause" \
   "request_id": "req_xxx"
 }
 ```
-
-### 响应字段
-
-**字段**
-
-**类型**
-
-**说明**
-
-`id`
-
-string
-
-Deployment ID
-
-`type`
-
-string
-
-固定为 `deployment`
-
-`name`
-
-string
-
-Deployment 名称
-
-`description`
-
-string
-
-Deployment 用途说明
-
-`agent`
-
-object
-
-关联 Agent 在锁定版本的快照
-
-`environment_id`
-
-string
-
-关联 Environment ID
-
-`schedule`
-
-object
-
-定时触发配置。暂停后 `next_run_at` 为 `null`
-
-`initial_events`
-
-array<object>
-
-触发时发送给 Agent 的初始事件
-
-`resources`
-
-array<object>
-
-挂载的文件资源
-
-`vault_ids`
-
-array<string>
-
-关联 Vault ID 列表
-
-`metadata`
-
-object
-
-业务自定义键值对
-
-`status`
-
-string
-
-此操作后固定为 `paused`
-
-`paused_reason`
-
-object
-
-暂停原因
-
-`archived_at`
-
-string | null
-
-归档时间，未归档时为 `null`
-
-`created_at`
-
-string
-
-创建时间，ISO 8601
-
-`updated_at`
-
-string
-
-最近更新时间，ISO 8601
-
-`request_id`
-
-string
-
-请求唯一标识
 
 ## 错误码
 
