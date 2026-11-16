@@ -1,52 +1,56 @@
 # 流式输出
 
-流式输出（Streaming Output）是指模型服务在生成结果过程中，将响应内容分块、实时、渐进式地返回给客户端，而非等待全部结果生成完毕后一次性返回。这种方式显著降低端到端延迟，提升用户体验，尤其适用于长文本生成、实时语音交互、多模态流式处理等对响应速度和交互感要求高的场景。
+流式输出（Streaming Output）是百炼平台提供的一种实时响应机制，允许模型在生成过程中逐 token（或逐 chunk）返回结果，而非等待全部内容生成完毕后一次性返回。该机制显著降低端到端延迟，提升用户交互体验，尤其适用于对话类应用、长文本生成、语音合成等对响应速度敏感的场景。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-流式输出在百炼平台中并非单一功能，而是贯穿多个 API 层级的通用能力，具体体现如下：
+流式输出在百炼平台中并非全局默认能力，而是按模型类型和调用协议有选择地支持：
 
-- **Model Experience 统一调用层**：通过 `/v1/models/{model_id}/invoke` 接口，设置 `stream: true` 即可启用流式响应。适用于所有支持流式的文本、视觉、语音类模型（如 `qwen2-72b-chat`、`qwen2-vl`），返回格式为标准 Server-Sent Events（SSE），每帧含 `data:` 字段及结构化 `delta` 或 `text` 片段。
+- **文本生成（LLM）**：所有主流 Qwen 系列模型（如 `qwen3-32b`、`qwen4-max`）均支持流式输出，适用于 Chat、Responses、Anthropic Messages 等协议，以及原生 DashScope API。
+- **语音合成（TTS）**：`qwen-audio` 等 TTS 模型支持流式音频分片返回（如 PCM 或 MP3 片段），便于实现低延迟播放。
+- **不支持的场景**：
+  - 视觉生成（图像/视频）、语音识别（ASR）、向量服务（embedding/rerank）、全模态（omni-modal）模型**不支持流式输出**；调用其 `/invoke-stream` 端点将直接返回 `400 Bad Request`。
+  - 异步任务（如图像生成、视频生成）本身为长耗时作业，采用轮询或事件回调机制，与流式输出无关。
 
-- **Qwen API（OpenAI/Anthropic/DashScope 协议）**：
-  - [OpenAI 兼容接口](openai-compatible-interface.md)（`/chat/completions`、`/responses`）：通过请求参数 `stream=true` 启用，响应为 SSE 流，支持 `delta.content` 增量文本、`delta.tool_calls` 工具调用片段。
-  - Anthropic 兼容接口（`/v1/messages`）：同样使用 `stream=true`，返回 `content_block_delta` 事件，支持 `text_delta` 和 `input_json_delta`。
-  - DashScope 原生接口（`/text-generation/generation` 等）：需显式传入 `stream=true`，响应体为 JSON Lines（NDJSON）格式，每行一个 `{ "output": { "text": "..." } }` 对象。
+调用方式取决于所选协议：
+- **DashScope 原生 API**：使用专用流式端点 `POST /v1/models/{model}/invoke-stream`，并设置请求头 `Accept: text/event-stream`。
+- **OpenAI 兼容 API（Chat Completions）**：在请求体中设置 `"stream": true`，响应为 Server-Sent Events（SSE）格式。
+- **Anthropic Messages API**：同样通过 `"stream": true` 启用，响应结构兼容 Anthropic 标准 SSE。
 
-- **Realtime API（WebSocket）**：原生基于双向流式通信设计，无需额外开关。服务端在模型推理过程中持续推送 `event: text`、`event: audio`、`event: input_audio` 等事件帧，天然支持毫秒级低延迟反馈，是 ASR/TTS/Audio Chat 等实时场景的默认工作模式。
-
-- **Audio API（非实时音频处理）**：部分模型明确支持流式能力，例如：
-  - `Qwen-Audio-ASR` 和 `Fun-ASR-Flash` 支持 HTTP SSE 流式返回中间识别结果（通过 `enable_interim_results=true` 控制）；
-  - `Qwen-Audio-TTS` 在支持的 SDK 中可启用流式音频输出（如分块返回 PCM 数据），但 HTTP 接口本身不直接返回二进制流，需配合 `response_format=audio/wav` + 客户端流式解析。
-
-> ⚠️ 注意：向量模型（embedding/rerank）、异步文件转写类接口（如 `Qwen-Audio-ASR-Filetrans`）**不支持流式输出**；`stream` 参数在这些场景下会被忽略或导致错误。
+> ⚠️ 注意：流式响应需客户端具备 SSE 解析能力；若使用 `curl` 调试，建议添加 `-N` 参数禁用缓冲（`curl -N ...`），否则可能阻塞首帧。
 
 ## 关键参数和配置
 
-| 参数 | 所属层级 | 类型 | 说明 |
-|------|----------|------|------|
-| `stream` | Model Experience / Qwen API / DashScope | boolean | 必填开关。设为 `true` 启用流式响应；`false` 或未传则为同步阻塞模式。 |
-| `enable_interim_results` | Realtime API / Audio API（ASR） | boolean | 控制是否推送中间识别结果（如 ASR 的半句话）。默认 `true`，设为 `false` 仅返回最终结果。 |
-| `response_format` | Realtime API / Audio API（TTS） | string | 指定流式输出内容类型，常见值：`text`、`json`、`audio/wav`。影响客户端解析方式。 |
-| `max_tokens` | 所有支持流式的文本接口 | integer | 仍生效，用于控制总输出长度上限；流式响应会在达到该限制时自动终止。 |
+| 参数 | 类型 | 说明 | 是否必需 | 默认值 |
+|------|------|------|----------|--------|
+| `stream` | boolean | 启用流式响应模式 | 是（启用流式时） | `false` |
+| `incremental_output` | boolean | 在 `stream=true` 下启用增量式输出（即每次仅返回新增 token，而非全量重传） | 否 | `false` |
+| `Accept` 请求头 | string | 必须设为 `text/event-stream`（DashScope 原生流式调用） | 是（DashScope 流式） | — |
 
-- **HTTP 流式响应头**：所有流式接口均返回 `Content-Type: text/event-stream; charset=utf-8`，客户端需按 SSE 协议解析（如监听 `data:` 行，忽略 `event:`、`id:`、`retry:` 等可选字段）。
-- **WebSocket 流式帧**：Realtime API 使用自定义二进制/JSON 帧协议，不依赖 HTTP 头，由 `event` 字段标识数据类型（如 `event: text`）。
-- **错误处理**：流式过程中若发生错误（如鉴权失败、模型中断），服务端会推送 `event: error` 帧并关闭连接，客户端应监听并重试。
+- `incremental_output=true` 可显著减少网络带宽占用和前端渲染开销，推荐在 Web 应用中启用；
+- 所有流式响应均以 SSE 格式返回，每行以 `data:` 开头，末尾含双换行符（`\n\n`）；
+- 流式响应中仍包含完整 `usage` 字段（token 统计）和 `request_id`，但位于最终的 `data: [DONE]` 之前；
+- 若请求中同时指定 `stream=false` 和 `stream=true`（如多处赋值），以最后解析的布尔值为准；建议显式声明一次。
 
 ## 面向开发者，简洁实用
 
-- ✅ **首选统一入口**：新项目建议优先使用 `Model Experience`（`/v1/models/{model_id}/invoke` + `stream=true`），语义一致、SDK 封装完善、跨模态兼容性好。
-- ✅ **实时场景必用 WebSocket**：语音识别、对话、翻译等低延迟需求，请直接接入 `Realtime API`，避免 HTTP 流式带来的额外延迟与连接开销。
-- ✅ **流式解析要健壮**：不要假设每帧只含一个 token；需累积 `delta.text` 或拼接 `data:` 内容，并正确处理空格、换行、emoji 等边界情况。
-- ❌ **勿混用流式与同步逻辑**：流式响应无 `usage` 字段（token 统计在最后一帧 `done` 事件中），也无完整 `message` 对象，切勿按同步响应结构解析。
-- 🛠️ **调试技巧**：用 `curl -N` 或浏览器 DevTools 的 Network → EventStream 查看原始流；Python 开发推荐使用 `httpx.AsyncClient` + `aiter_lines()`，Node.js 推荐 `fetch` + `ReadableStream`。
+- ✅ **快速启用**：只需在请求体加 `"stream": true`（OpenAI/Anthropic 协议）或改用 `/invoke-stream` 端点（DashScope 协议），无需修改模型或输入格式。
+- ✅ **安全可靠**：流式响应与同步响应共享同一鉴权、限流、配额和错误码体系（如 `429 Too Many Requests`、`401 Unauthorized`），行为一致。
+- ✅ **调试友好**：使用 `curl -N -H "Accept: text/event-stream"` 可直接观察 token 逐个生成过程；SDK 中推荐使用 `dashscope.Client.stream()`（Python）或 `StreamResponse`（Java）封装类。
+- ❌ **避免踩坑**：
+  - 不要对非流式支持模型（如 `wanx2.1-t2i-turbo`）调用流式接口；
+  - 不要在流式请求中遗漏 `Accept: text/event-stream`（DashScope 原生）或 `Content-Type: application/json`；
+  - 前端处理 SSE 时，务必监听 `error` 事件并实现重连逻辑（网络中断时自动恢复）；
+  - `incremental_output` 仅影响 `output.text` 字段的更新方式，不影响 `output.choices[0].delta.content` 的语义（OpenAI 协议下已天然增量）。
+
+流式输出是构建高性能 AI 应用的关键能力。启用它，让响应“动起来”。
 
 ## 关联主题页
 
-- [qwen api reference](../api/qwen-api-reference.md)
-- [realtime api directory](../api/realtime-api-directory.md)
+- [get started with models](../guides/get-started-with-models.md)
 - [model experience](../guides/model-experience.md)
-- [audio api directory](../api/audio-api-directory.md)
+- [qwen api reference](../api/qwen-api-reference.md)
+- [application support](../guides/application-support.md)
+- [more about models](../api/more-about-models.md)
 
 

@@ -48,7 +48,7 @@
     ```
     # 导入依赖与创建客户端...
     completion = client.chat.completions.create(
-        model="qwen3.8-max", # 选择模型
+        model="qwen4-max", # 选择模型
         messages=[{"role": "user", "content": "你是谁"}],
         # 由于 enable_thinking 非 OpenAI 标准参数，需要通过 extra_body 传入
         extra_body={"enable_thinking":True},
@@ -70,7 +70,7 @@
     
     response = client.multimodal.chat.create(
         # 可按需更换为其它深度思考模型
-        model="qwen3.8-max",
+        model="qwen4-max",
         messages=messages,
         enable_thinking=True,
         stream=True,
@@ -87,7 +87,7 @@
 
 #### Qwen4
 
-**千问4-Max 系列**（预览版，混合思考模式，**默认开启思考模式**）：qwen4-max-preview（[仅 Token Plan](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview)）
+**千问4-Max 系列**（混合思考模式，**默认开启思考模式**）：qwen4-max、qwen4-max-preview（[仅 Token Plan](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview)）
 
 #### Qwen3.8
 
@@ -195,7 +195,7 @@
 
 API 使用前提：已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，需要[安装 OpenAI 或 DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)（DashScope Java SDK需不低于 2.19.4 版本）。
 
-以下代码以流式调用 qwen3.8-max 开启思考模式为例。
+以下代码以流式调用 qwen4-max 开启思考模式为例。
 
 #### OpenAI兼容
 
@@ -219,7 +219,7 @@ client = OpenAI(
 messages = [{"role": "user", "content": "你是谁"}]
 
 completion = client.chat.completions.create(
-    model="qwen3.8-max",  # 您可以按需更换为其它深度思考模型
+    model="qwen4-max",  # 您可以按需更换为其它深度思考模型
     messages=messages,
     extra_body={"enable_thinking": True},
     stream=True,
@@ -291,7 +291,7 @@ async function main() {
     try {
         const messages = [{ role: 'user', content: '你是谁' }];
         const stream = await openai.chat.completions.create({
-            model: 'qwen3.8-max',
+            model: 'qwen4-max',
             messages,
             stream: true,
             enable_thinking: true
@@ -359,7 +359,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "messages": [
         {
             "role": "user",
@@ -375,6 +375,8 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 ```
 
 ### 返回结果
+
+以下为 `qwen3.8-max` 的返回示例，用于说明响应字段。
 
 ```
 data: {"choices":[{"delta":{"content":null,"role":"assistant","reasoning_content":""},"index":0,"logprobs":null,"finish_reason":null}],"object":"chat.completion.chunk","usage":null,"created":1745485391,"system_fingerprint":null,"model":"qwen3.8-max","id":"chatcmpl-e2edaf2c-8aaf-9e54-90e2-b21dd5045503"}
@@ -413,7 +415,7 @@ messages = [{"role": "user", "content": [{"text": "你是谁？"}]}]
 
 completion = client.multimodal.chat.create(
     # 可按需更换为其它深度思考模型
-    model="qwen3.8-max",
+    model="qwen4-max",
     messages=messages,
     enable_thinking=True,
     stream=True,
@@ -532,7 +534,7 @@ public class Main {
                  // 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
                 // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：.apiKey("sk-xxx")
                 .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-                .model("qwen3.8-max")
+                .model("qwen4-max")
                 .enableThinking(true)
                 .incrementalOutput(true)
                 .messages(Arrays.asList(userMsg))
@@ -587,14 +589,14 @@ public class Main {
 ```
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation
+# 以下为北京地域url，若使用华北2（北京）地域的模型，需将url替换为：https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation
 # === 执行时请删除该注释 ===
 curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation" \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -H "X-DashScope-SSE: enable" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input":{
         "messages":[
             {
@@ -708,7 +710,7 @@ client = OpenAI(
 
 messages = [{"role": "user", "content": "你是谁"}]
 completion = client.chat.completions.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     messages=messages,
     # 通过 extra_body 设置 enable_thinking 开启思考过程
     extra_body={"enable_thinking": True},
@@ -786,7 +788,7 @@ async function main() {
         const messages = [{ role: 'user', content: '你是谁' }];
 
         const stream = await openai.chat.completions.create({
-            model: 'qwen3.8-max',
+            model: 'qwen4-max',
             messages,
             // 注意：在 Node.js SDK，enable_thinking 这样的非标准参数作为顶层属性传递的，无需放在 extra_body 中
             enable_thinking: true,
@@ -870,7 +872,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "messages": [
         {
             "role": "user",
@@ -910,7 +912,7 @@ client = dashscope.Client(
 messages = [{"role": "user", "content": [{"text": "你是谁？"}]}]
 
 completion = client.multimodal.chat.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     messages=messages,
     enable_thinking=True,  # 开启思考过程
     stream=True,           # 开启流式输出（流式输出默认为增量模式）
@@ -1030,7 +1032,7 @@ public class Main {
                 // 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
                 // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：.apiKey("sk-xxx")
                 .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-                .model("qwen3.8-max")
+                .model("qwen4-max")
                 .enableThinking(true)
                 .incrementalOutput(true)
                 .messages(Arrays.asList(userMsg))
@@ -1086,7 +1088,7 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 -H "Content-Type: application/json" \
 -H "X-DashScope-SSE: enable" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input":{
         "messages":[
             {
@@ -1182,7 +1184,7 @@ data:{"output":{"choices":[{"message":{"content":"","reasoning_content":"","role
 
 ```
 completion = client.chat.completions.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     messages=messages,
     # thinking_budget 设置思考过程的最大 Token 数
     extra_body={"enable_thinking": True, "thinking_budget": 50},
@@ -1194,7 +1196,7 @@ completion = client.chat.completions.create(
 
 ```
 completion = client.multimodal.chat.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     messages=messages,
     enable_thinking=True,
     # thinking_budget 设置思考过程的最大 Token 数
@@ -1243,7 +1245,7 @@ first_content = ""
 is_answering = False
 
 completion = client.chat.completions.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     messages=messages,
     extra_body={"enable_thinking": True},
     stream=True,
@@ -1284,7 +1286,7 @@ is_answering = False
 
 # preserve_thinking 通过 extra_body 传入
 completion = client.chat.completions.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     messages=messages,
     extra_body={
         "enable_thinking": True,
@@ -1352,7 +1354,7 @@ async function main() {
     let isAnswering = false;
 
     const stream1 = await openai.chat.completions.create({
-        model: 'qwen3.8-max',
+        model: 'qwen4-max',
         messages: [{ role: 'user', content: '我需要为一个日均千万消息的电商系统选择消息队列，请推荐' }],
         stream: true,
         enable_thinking: true
@@ -1383,7 +1385,7 @@ async function main() {
     isAnswering = false;
 
     const stream2 = await openai.chat.completions.create({
-        model: 'qwen3.8-max',
+        model: 'qwen4-max',
         messages: [
             { role: 'user', content: '我需要为一个日均千万消息的电商系统选择消息队列，请推荐' },
             {
@@ -1447,7 +1449,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "messages": [
         {
             "role": "user",
@@ -1474,14 +1476,16 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 ### 返回结果
 
+以下为 `qwen3.8-max` 的返回示例，用于说明响应字段。
+
 ```
-data: {"choices":[{"delta":{"content":null,"role":"assistant","reasoning_content":""},"index":0,"logprobs":null,"finish_reason":null}],"object":"chat.completion.chunk","usage":null,"created":1743523200,"system_fingerprint":null,"model":"qwen3.8-max","id":"chatcmpl-example-001"}
+data: {"choices":[{"delta":{"content":null,"role":"assistant","reasoning_content":""},"index":0,"logprobs":null,"finish_reason":null}],"object":"chat.completion.chunk","usage":null,"created":1743523200,"system_fingerprint":null,"model":"qwen4-max","id":"chatcmpl-example-001"}
 
 .....
 
-data: {"choices":[{"finish_reason":"stop","delta":{"content":"","reasoning_content":null},"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1743523200,"system_fingerprint":null,"model":"qwen3.8-max","id":"chatcmpl-example-001"}
+data: {"choices":[{"finish_reason":"stop","delta":{"content":"","reasoning_content":null},"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1743523200,"system_fingerprint":null,"model":"qwen4-max","id":"chatcmpl-example-001"}
 
-data: {"choices":[],"object":"chat.completion.chunk","usage":{"prompt_tokens":3463,"completion_tokens":2387,"total_tokens":5850,"completion_tokens_details":{"reasoning_tokens":1347}},"created":1743523200,"system_fingerprint":null,"model":"qwen3.8-max","id":"chatcmpl-example-001"}
+data: {"choices":[],"object":"chat.completion.chunk","usage":{"prompt_tokens":3463,"completion_tokens":2387,"total_tokens":5850,"completion_tokens_details":{"reasoning_tokens":1347}},"created":1743523200,"system_fingerprint":null,"model":"qwen4-max","id":"chatcmpl-example-001"}
 
 data: [DONE]
 ```
@@ -1517,7 +1521,7 @@ first_content = ""
 is_answering = False
 
 completion = client.multimodal.chat.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     messages=messages,
     enable_thinking=True,
     stream=True,
@@ -1558,7 +1562,7 @@ answer_content = ""
 is_answering = False
 
 completion = client.multimodal.chat.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     messages=messages,
     enable_thinking=True,
     # 传递思考过程（preserve_thinking 非 SDK 签名参数，统一通过 parameters 传入）
@@ -1612,7 +1616,7 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 -H "Content-Type: application/json" \
 -H "X-DashScope-SSE: enable" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input":{
         "messages":[
             {
@@ -1730,7 +1734,7 @@ Q：如何以非流式（同步）方式调用深度思考模型？
 
 > 将流式示例改为非流式时，请同步修改**结果解析代码**：非流式调用返回的是完整的响应对象（`completion`），**不能**再像流式示例那样通过 `for chunk in completion` 迭代（否则会报错 `'tuple' object has no attribute 'choices'`），而应直接读取 `completion.choices[0].message.reasoning_content`（思考过程）与 `completion.choices[0].message.content`（回复内容）。此外，`stream=False` 时不能设置 `stream_options` 参数。
 
-以下以 OpenAI 兼容接口、非流式调用 qwen3.8-max 开启思考模式为例：
+以下以 OpenAI 兼容接口、非流式调用 qwen4-max 开启思考模式为例：
 
 ```
 from openai import OpenAI
@@ -1745,7 +1749,7 @@ client = OpenAI(
 )
 
 completion = client.chat.completions.create(
-    model="qwen3.8-max",  # 请替换为支持非流式输出的深度思考模型
+    model="qwen4-max",  # 请替换为支持非流式输出的深度思考模型
     messages=[{"role": "user", "content": "你是谁"}],
     extra_body={"enable_thinking": True},
     stream=False,  # 非流式（同步）输出；stream=False 时不能设置 stream_options
@@ -1817,7 +1821,7 @@ from langchain_core.messages import HumanMessage
 
 chatLLM = ChatTongyi(
     # 您可按需更换为其它深度思考模型
-    model="qwen3.8-max",
+    model="qwen4-max",
     model_kwargs={
         "enable_thinking":True
     }

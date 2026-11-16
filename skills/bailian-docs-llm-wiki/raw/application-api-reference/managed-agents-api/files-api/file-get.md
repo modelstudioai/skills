@@ -52,6 +52,50 @@ AgentStudioFile f = client.files().retrieve("file_xxx");
 System.out.println(f.getFilename() + " " + f.getSizeBytes());
 ```
 
+### 响应字段
+
+响应为 File 对象。字段如下：
+
+**id** `string`
+
+文件 ID，格式如 `file_kyu8k8lut4d4x47ii7qf92yk`
+
+**type** `string`
+
+固定为 `file`
+
+**filename** `string`
+
+文件名
+
+**mime\_type** `string`
+
+服务端检测的 MIME 类型
+
+**size\_bytes** `int`
+
+文件大小，单位字节
+
+**downloadable** `bool`
+
+是否支持下载，当前接口直传与会话沙箱拷贝均为 `false`
+
+**status** `string`
+
+安全审核状态：`available` / `checking` / `rejected` / `type_rejected`
+
+**scope** `object`
+
+仅会话沙箱内部拷贝返回，结构 `{"type": "session", "id": "sesn_..."}`；普通上传文件不返回该字段
+
+**created\_at** `string`
+
+上传时间，ISO 8601
+
+**requestId** `string`
+
+本次请求的唯一标识
+
 ## 响应示例
 
 ```
@@ -67,73 +111,3 @@ System.out.println(f.getFilename() + " " + f.getSizeBytes());
   "requestId": "xxx"
 }
 ```
-
-响应为 File 对象。字段如下：
-
-### 响应字段
-
-字段
-
-类型
-
-说明
-
-`id`
-
-string
-
-文件 ID，格式如 `file_kyu8k8lut4d4x47ii7qf92yk`
-
-`type`
-
-string
-
-固定为 `file`
-
-`filename`
-
-string
-
-文件名
-
-`mime_type`
-
-string
-
-服务端检测的 MIME 类型
-
-`size_bytes`
-
-int
-
-文件大小，单位字节
-
-`downloadable`
-
-bool
-
-是否支持下载，当前接口直传与会话沙箱拷贝均为 `false`
-
-`status`
-
-string
-
-安全审核状态：`available` / `checking` / `rejected` / `type_rejected`
-
-`scope`
-
-object
-
-仅会话沙箱内部拷贝返回，结构 `{"type": "session", "id": "sesn_..."}`；普通上传文件不返回该字段
-
-`created_at`
-
-string
-
-上传时间，ISO 8601
-
-`requestId`
-
-string
-
-本次请求的唯一标识

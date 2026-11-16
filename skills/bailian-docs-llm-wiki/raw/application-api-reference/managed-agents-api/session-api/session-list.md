@@ -12,51 +12,23 @@
 
 ## Query 参数
 
-参数
-
-类型
-
-默认
-
-说明
-
-`agent_id`
-
-string
-
-—
+**agent\_id**`string`默认 —
 
 按智能体过滤
 
-`statuses[]`
-
-string
-
-—
+**statuses\[\]**`string`默认 —
 
 多状态过滤，可重复传入。如 `?statuses[]=idle&statuses[]=running`
 
-`created_at[gte]` / `created_at[lte]`
-
-string
-
-—
+**created\_at\[gte\] / created\_at\[lte\]**`string`默认 —
 
 创建时间范围，ISO 8601
 
-`limit`
-
-int
-
-20
+**limit**`int`默认 20
 
 每页数量，最大 100
 
-`page`
-
-string
-
-—
+**page**`string`默认 —
 
 首次不传，后续传上一次响应的 `next_page`
 
@@ -93,6 +65,50 @@ for (Session s : page.getData()) {
 }
 ```
 
+### Session 对象字段
+
+响应包含 `data`（Session 对象数组）与 `next_page`（下一页游标）。Session 对象字段如下：
+
+**id**`string`
+
+会话 ID，格式 `sesn_&lt;ULID&gt;`
+
+**type**`string`
+
+固定为 `session`
+
+**status**`string`
+
+会话状态：`idle` / `running` / `terminated`
+
+**stop\_reason**`object / null`
+
+会话回到 `idle` 的原因，判别联合。`null` / `{"type":"end_turn"}` / `{"type":"retries_exhausted"}` / `{"type":"requires_action","pending_batch_id":"...","pending_call_ids":[...]}`。仅在 `status=idle` 时用于判断交互状态
+
+**agent**`object`
+
+智能体配置快照，含 `id` / `version` / `name` / `model` / `system` / `tools` 等
+
+**environment\_id**`string`
+
+绑定的运行环境 ID
+
+**title / metadata**`string / object`
+
+会话标题与业务自定义元数据
+
+**archived\_at**`string / null`
+
+归档时间，未归档时为 `null`
+
+**created\_at / updated\_at**`string`
+
+创建 / 最近更新时间，ISO 8601
+
+**environment\_variables**`object`
+
+会话运行时注入的环境变量，字符串键值对，沙箱代码中可直接按名读取
+
 ## 响应示例
 
 ```
@@ -125,73 +141,3 @@ for (Session s : page.getData()) {
   "request_id": "xxx"
 }
 ```
-
-响应包含 `data`（Session 对象数组）与 `next_page`（下一页游标）。Session 对象字段如下：
-
-### Session 对象字段
-
-字段
-
-类型
-
-说明
-
-`id`
-
-string
-
-会话 ID，格式 `sesn_&lt;ULID&gt;`
-
-`type`
-
-string
-
-固定为 `session`
-
-`status`
-
-string
-
-会话状态：`idle` / `running` / `terminated`
-
-`stop_reason`
-
-object / null
-
-会话回到 `idle` 的原因，判别联合。`null` / `{"type":"end_turn"}` / `{"type":"retries_exhausted"}` / `{"type":"requires_action","pending_batch_id":"...","pending_call_ids":[...]}`。仅在 `status=idle` 时用于判断交互状态
-
-`agent`
-
-object
-
-智能体配置快照，含 `id` / `version` / `name` / `model` / `system` / `tools` 等
-
-`environment_id`
-
-string
-
-绑定的运行环境 ID
-
-`title` / `metadata`
-
-string / object
-
-会话标题与业务自定义元数据
-
-`archived_at`
-
-string / null
-
-归档时间，未归档时为 `null`
-
-`created_at` / `updated_at`
-
-string
-
-创建 / 最近更新时间，ISO 8601
-
-`environment_variables`
-
-object
-
-会话运行时注入的环境变量，字符串键值对，沙箱代码中可直接按名读取

@@ -10,7 +10,7 @@ AOQ 将音视频媒体与模型事件分轨传输。SDK 负责媒体采集、编
 
 -   使用所选地域和业务空间对应的 [API Key](raw/model-api-reference/preparations/get-api-key.md) 与 [API Host](https://bailian.console.aliyun.com/cn-beijing/settings/workspace)（不含协议和路径）。
     
--   北京域名：`{WorkspaceId}.cn-beijing.maas.aliyuncs.com`；新加坡域名：`{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
+-   北京域名：`{WorkspaceId}.cn-beijing.maas.aliyuncs.com`。
     
 -   API Key 只保存在服务端，不放入浏览器或移动端应用。
     
@@ -26,8 +26,6 @@ AOQ 将音视频媒体与模型事件分轨传输。SDK 负责媒体采集、编
 由业务 AppServer 发起以下请求。请先[配置 API Key 到环境变量](https://help.aliyun.com/zh/model-studio/get-api-key#20b17d4430qvt)。`clientIp` 选填，不填时使用请求网关的 IP。
 
 POST`https://WorkspaceId.cn-beijing.maas.aliyuncs.com/api/v1/webrtc/realtime?model=qwen3.8-omni-flash-realtime`
-
-POST`https://WorkspaceId.ap-southeast-1.maas.aliyuncs.com/api/v1/webrtc/realtime?model=qwen3.8-omni-flash-realtime`
 
 #### 参数说明
 

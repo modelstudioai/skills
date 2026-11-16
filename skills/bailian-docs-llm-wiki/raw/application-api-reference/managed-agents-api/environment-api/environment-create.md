@@ -12,67 +12,31 @@
 
 ## 请求体
 
-字段
-
-必填
-
-类型
-
-说明
-
-`name`
-
-是
-
-string
+**name** `string` **（必选）**
 
 工作空间内唯一标识
 
-`description`
-
-否
-
-string
+**description** `string` **（可选）**
 
 环境用途说明
 
-`scope`
-
-否
-
-string
+**scope** `string` **（可选）**
 
 作用域。`organization`：工作空间全部成员可见与复用。默认 `organization`
 
-`config.type`
-
-否
-
-string
+**config.type** `string` **（可选）**
 
 `cloud` 云端容器。创建后不可修改。未传入 `config` 时服务端默认补全为 `cloud`
 
-`config.packages`
-
-否
-
-object
+**config.packages** `object` **（可选）**
 
 预装依赖，按包管理器分组。键为 `apt` / `pip` / `npm`，值为包名数组。安装可能需要预热时间，完成前环境不可被会话绑定
 
-`config.networking`
-
-否
-
-object
+**config.networking** `object` **（可选）**
 
 网络策略对象，结构 `{"type": "unrestricted"}`，目前仅支持放行全部出站访问
 
-`metadata`
-
-否
-
-object
+**metadata** `object` **（可选）**
 
 业务自定义键值，不影响运行行为
 
@@ -128,6 +92,34 @@ Environment env = client.environments().create(EnvironmentCreateParam.builder()
     .build());
 ```
 
+### 响应字段
+
+响应为 Environment 对象。字段如下：
+
+**id** `string`
+
+环境 ID，格式 `env_<base64 编码字符串>`，示例值 `env_N2M2OTc4NTY4ZjRkNDEwZT`
+
+**type** `string`
+
+固定为 `environment`
+
+**name / description / scope / config / metadata** `string / object`
+
+同请求体；`config` 为完整运行时配置（沙箱类型、预装依赖、网络策略）
+
+**archived\_at** `string / null`
+
+归档时间，未归档时为 `null`
+
+**created\_at / updated\_at** `string`
+
+创建 / 最近更新时间，ISO 8601
+
+**requestId** `string`
+
+本次请求的唯一标识
+
 ## 响应示例
 
 ```
@@ -149,49 +141,3 @@ Environment env = client.environments().create(EnvironmentCreateParam.builder()
   "requestId": "xxx"
 }
 ```
-
-响应为 Environment 对象。字段如下：
-
-### 响应字段
-
-字段
-
-类型
-
-说明
-
-`id`
-
-string
-
-环境 ID，格式 `env_<base64 编码字符串>`，示例值 `env_N2M2OTc4NTY4ZjRkNDEwZT`
-
-`type`
-
-string
-
-固定为 `environment`
-
-`name` / `description` / `scope` / `config` / `metadata`
-
-string / object
-
-同请求体；`config` 为完整运行时配置（沙箱类型、预装依赖、网络策略）
-
-`archived_at`
-
-string / null
-
-归档时间，未归档时为 `null`
-
-`created_at` / `updated_at`
-
-string
-
-创建 / 最近更新时间，ISO 8601
-
-`requestId`
-
-string
-
-本次请求的唯一标识

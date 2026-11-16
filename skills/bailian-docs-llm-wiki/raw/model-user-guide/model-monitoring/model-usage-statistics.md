@@ -6,7 +6,7 @@
 
 ## 适用范围
 
--   **地域**：支持查看各地域的模型调用用量。美国（弗吉尼亚）地域暂不展示调用次数。
+-   **地域与时间范围**：支持查看各地域 2026 年 9 月及之后的模型用量数据；其中，美国（弗吉尼亚）地域的调用次数仅支持查询 2026 年 10 月及之后的数据。
 -   **模型**：模型列表中的全部模型均支持查看用量，包括基于它们[调优后的模型](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)。
 -   **统计范围**：Token 等用量用于核对费用，仅统计按 Token 后付费的模型调用，不含模型训练、预置吞吐单元、独占吞吐单元等调用；调用次数包含预置吞吐单元、独占吞吐单元等调用。模型调用产生的工具调用用量单独统计。
 
@@ -41,7 +41,7 @@
 -   失败次数、失败率、限流错误次数和内容安全拦截次数已移至[模型监控](raw/model-user-guide/model-monitoring/model-telemetry.md)页面，不再在模型用量详情中展示。
 -   旧版“批量推理”现拆分为批量离线推理（Batch File）和批量在线推理（Batch Chat）。
 
-**说明**页面仅支持查询 2026 年 9 月 1 日及之后的用量数据；更早的数据请通过[费用与成本](https://usercenter2.aliyun.com/finance/expense-report/expense-detail)查看。
+**说明**页面仅支持查询 2026 年 9 月及之后的用量数据；更早的数据请通过[费用与成本](https://usercenter2.aliyun.com/finance/expense-report/expense-detail)查看。
 
 ## 查看费用概览
 

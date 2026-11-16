@@ -1,43 +1,56 @@
 # application component api reference
 
-本 API 参考文档面向开发者，提供百炼平台应用组件（Application Component）的核心 OpenAPI 接口规范，涵盖数据连接（原应用数据）、知识库两大核心能力模块。所有接口均基于 `bailian/2023-12-29` 版本，采用 ROA 签名机制，支持通过官方 SDK 或自签名方式调用。开发者需预先配置 RAM 用户权限与业务空间访问授权。
+本 API 参考文档面向开发者，提供百炼平台应用组件（Application Component）的核心 OpenAPI 接口规范，涵盖数据连接（原应用数据）、知识库两大核心能力模块。所有接口均基于 `bailian/2023-12-29` 版本，采用标准 ROA 签名机制，支持通过官方 SDK 或自签名方式调用。开发者需预先配置 RAM 权限与业务空间成员身份方可使用。
 
 ## 支持的模型/功能
 
-本组件不直接提供大语言模型推理能力，而是聚焦于**结构化与非结构化数据管理**及**知识库全生命周期操作**两大核心功能域：
+API 当前支持两类核心应用组件能力：
 
-- **数据连接（原应用数据）**：提供类目（Category）管理、文件（File）上传/查询/标签更新/删除、OSS 批量导入、解析器配置等能力，支撑知识库的数据源准备。支持 UNSTRUCTURED（文档类目）和 SESSION_FILE（会话文件）两类类目类型，但明确不支持通过 API 新增或删除数据表（表格），该操作仅限控制台完成 [AddCategory](../../raw/_short/api-bailian-2023-12-29-addcategory-e2fe0e0435ed504e.md)。
-- **知识库（Knowledge Base）**：覆盖知识库创建（`CreateIndex`）、提交构建（`SubmitIndexJob`）、追加文件（`SubmitIndexAddDocumentsJob`）、检索（`Retrieve`）、文件与切片（Chunk）管理、监控（`GetIndexMonitor`）等完整链路。支持 `unstructured`（文档/音视频）和 `structured`（数据查询/图片问答）两类知识库，但部分接口存在类型限制，例如 `UpdateChunk` 仅支持 `unstructured` 类型 [UpdateChunk](../../raw/_short/api-bailian-2023-12-29-updatechunk-589b46fcc24261f8.md)。
-
-> **注意**：文档 43 (`AddChunk`) 声明支持 `document`/`table`/`image` 三类知识库，但文档 39 (`UpdateChunk`) 和文档 40 (`DeleteChunk`) 明确限定仅支持 `document`（即 `unstructured`）类型。此为功能范围不一致，实际开发中应以 `UpdateChunk` 和 `DeleteChunk` 的约束为准，`AddChunk` 对 `table`/`image` 的支持可能存在未公开的前置条件或已过时。
+- **数据连接（原应用数据）**：提供非结构化文件与结构化表格的全生命周期管理，包括类目（Category）组织、文件（File）上传/查询/标签管理、OSS 批量导入、解析器配置等。该模块不支持通过 API 新增或删除数据表（即结构化数据表），相关操作必须通过控制台完成 [API概览](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md)。
+- **知识库（Knowledge Base）**：支持创建、更新、检索、监控及维护两类知识库：
+  - *非结构化知识库*（`unstructured`）：适用于文档搜索、音视频问答场景；
+  - *结构化知识库*（`structured`）：适用于数据查询、图片问答场景。
+  > **注意**：`ListIndexDocuments` 接口在文档 32 中声明其权限点为 `sfm:ListIndexFiles`，而文档 33 的 `ListIndexFileDetails` 同样声明为 `sfm:ListIndexFiles`，但文档 36 的 `ListIndices` 明确使用 `sfm:ListIndex`。这表明 `sfm:ListIndexFiles` 是文件级列表操作的通用权限点，而非知识库列表权限，实际使用时应严格按接口文档匹配权限点，避免混淆。
 
 ## 关键参数
 
-- **`WorkspaceId`**：所有接口的必需路径参数，标识业务空间 ID。必须通过百炼控制台获取，当前版本无 API 可枚举业务空间 [ListIndices](../../raw/_short/api-bailian-2023-12-29-listindices-c555173be752eaaf.md)。
-- **`CategoryId` / `FileId` / `IndexId` / `ChunkId`**：资源标识符，均为字符串类型，由上游接口（如 `AddCategory`, `AddFile`, `CreateIndex`, `ListChunks`）返回，不可自行构造。
-- **`Parser`**：文件解析器类型，关键请求参数，用于 `AddFile` 和 `ApplyFileUploadLease`。有效值包括 `DOCMIND`, `DOCMIND_DIGITAL`, `DOCMIND_LLM_VERSION`, `DASH_QWEN_VL_PARSER`, `AUTO_SELECT` 等，具体支持列表需结合 `GetAvailableParserTypes` 接口动态查询。
-- **分页参数**：`List*` 类接口普遍支持 `NextToken`（游标）或 `PageNumber`/`PageSize`（页码）进行分页，最大 `PageSize` 通常为 200。
+所有接口均以 `WorkspaceId`（业务空间 ID）为必需路径参数，用于隔离资源作用域。关键请求参数按功能模块归纳如下：
+
+- **数据连接通用参数**：
+  - `CategoryId`：类目 ID，由 `AddCategory` 返回，用于文件归属、解析设置等上下文。
+  - `FileId`：文件 ID，由 `AddFile` 返回，用于文件详情、标签更新、删除等操作。
+  - `ConnectorId`：连接器 ID，用于关联 OSS 存储或自定义数据源。
+- **知识库通用参数**：
+  - `IndexId`：知识库 ID，由 `CreateIndex` 返回，是绝大多数知识库操作（如 `Retrieve`, `UpdateIndex`, `DeleteIndexDocument`）的必需标识。
+  - `JobId`：任务 ID，由 `SubmitIndexJob` 或 `SubmitIndexAddDocumentsJob` 返回，用于异步任务状态轮询（`GetIndexJobStatus`）。
+- **分页与过滤**：
+  - `MaxResults` / `PageSize`：控制单页返回条目数，最大值通常为 200（文件列表）或无硬限制（知识库列表）。
+  - `NextToken`：用于分页游标，首次调用不传，后续调用需填入上一次响应中的 `NextToken` 值。
+  - `DocumentStatus`：用于过滤知识库文件状态（如 `FINISH`, `PARSE_FAILED`）。
 
 ## 使用方式
 
 1. **环境准备**：
-   - 获取阿里云 AccessKey（推荐使用 RAM 子账号，遵循最小权限原则）。
-   - 在 RAM 控制台为子账号授予 `AliyunBailianDataFullAccess`（读写）或 `AliyunBailianDataReadOnlyAccess`（只读）策略，并确保其已加入目标业务空间。
-   - 配置服务接入点（Endpoint），例如华北2（北京）地域为 `bailian.cn-beijing.aliyuncs.com` [服务接入点](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-endpoint.md)。
-
-2. **典型工作流（以构建知识库为例）**：
-   - 调用 `AddCategory` 创建类目 → `ApplyFileUploadLease` 申请租约 → `AddFile` 上传文件。
-   - 调用 `CreateIndex` 初始化知识库 → `SubmitIndexJob` 提交构建任务 → 轮询 `GetIndexJobStatus` 查询状态。
-   - （可选）调用 `Retrieve` 进行检索，或 `ListIndexDocuments`/`ListChunks` 查看内容。
-
-3. **SDK 优先**：强烈建议使用官方维护的 [阿里云百炼 SDK](https://api.aliyun.com/api-tools/sdk/bailian?version=2023-12-29)，它已封装签名逻辑并提供各语言示例，可显著降低接入复杂度。
+   - 获取访问凭证：使用 RAM 用户 AccessKey（推荐最小权限原则），而非主账号密钥 [授权信息](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-ram.md)。
+   - 配置网络接入点：根据地域选择公网或 VPC 地址，例如北京地域为 `bailian.cn-beijing.aliyuncs.com` [服务接入点](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-endpoint.md)。
+2. **典型工作流（以知识库为例）**：
+   - 创建知识库：调用 `CreateIndex` 初始化，再立即调用 `SubmitIndexJob` 提交构建任务。
+   - 追加文件：先通过 `ApplyFileUploadLease` 和 `AddFile` 将文件导入应用数据，再调用 `SubmitIndexAddDocumentsJob` 将其加入知识库索引。
+   - 检索内容：调用 `Retrieve` 接口，指定 `IndexId` 和 `Query` 即可获取召回结果。
+3. **调试与开发**：
+   - 推荐使用 [OpenAPI Explorer](https://api.aliyun.com/api-tools/explorer/bailian?version=2023-12-29) 直接调试，无需手动签名。
+   - 生产环境强烈建议使用官方 SDK（如 Python、Java 等），其已封装签名、重试、限流处理逻辑。
 
 ## 限制和注意事项
 
-- **限流策略**：所有接口均有严格 QPS 限制，常见值为 5 次/秒（如 `AddCategory`, `ListCategory`）或 10 次/秒（如 `AddFile`, `Retrieve`）。超出后将返回限流错误，需实现退避重试逻辑。
-- **幂等性**：多数查询类（`List*`, `Describe*`, `Get*`）和部分操作类（`Delete*`, `Update*`）接口声明具备幂等性；而 `Add*`, `Apply*`, `Submit*` 等创建类接口通常不具备幂等性，重复调用可能导致资源冗余。
-- **安全与权限**：`sfm:*` 权限点是 RAM 授权的核心，每个 API 对应唯一的 `Action`（如 `sfm:AddFile`），必须在策略中显式声明。`ConnectorId` 等敏感参数需从控制台获取，不可猜测。
-- **功能边界**：API 不支持数据表的增删改查（CRUD），该能力仅存在于控制台；`DeleteIndexDocument` 删除的是知识库索引中的文件，不影响原始应用数据中的文件；`DeleteIndex` 删除知识库前需先解除其与智能体应用的关联，此步骤目前仅支持控制台操作。
+- **限流策略**：各接口有独立 QPS 限制，常见阈值为 `5 次/秒`（如 `AddCategory`, `ListCategory`）或 `10 次/秒`（如 `AddFile`, `Retrieve`）。超出将返回 `429 Too Many Requests`，需实现指数退避重试。
+- **幂等性**：多数查询类接口（`List*`, `Describe*`, `Get*`）具备幂等性；写入类接口（`Add*`, `Submit*`）多数不具备，需自行实现“先查后建”逻辑确保幂等。
+- **数据一致性**：
+  - 应用数据（`datacenter`）与知识库（`index`）是分离的存储层。删除 `datacenter` 中的文件（`DeleteFile`）不影响已构建的知识库索引；反之，删除知识库中的文件（`DeleteIndexDocument`）也不影响原始应用数据。
+  - `DeleteIndex` 删除知识库后，其关联的 `datacenter` 文件仍保留。
+- **功能边界**：
+  - 不支持通过 API 管理数据表（`AddTable`, `UpdateTableFromAuthorizedOss` 仅用于已有连接器的表格更新，且 `AddTable` 文档未说明其是否支持新建表，存在歧义）。
+  - `ApplyFileUploadLease` 接口路径中 `/{CategoryId}` 参数允许传入 `default`，但文档 10 明确指出“用于智能体应用会话交互的文件时，此处传入 `default` 即可”，而文档 6 的 `AddCategory` 示例中 `CategoryType` 仅列出 `UNSTRUCTURED`，未提及 `SESSION_FILE` 类型，表明 `SESSION_FILE` 是内部专用类型，开发者不应在 `AddCategory` 中显式指定。
 
 ## 来源文档
 
@@ -45,8 +58,8 @@
 - [服务接入点](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-endpoint.md)
 - [授权信息](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-ram.md)
 - [API目录](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md)
-- [AddCategory](../../raw/_short/api-bailian-2023-12-29-addcategory-e2fe0e0435ed504e.md)
 - [数据连接（原应用数据）](../../raw/_short/api-bailian-2023-12-29-dir-data-connection-origi-a1f7f2601bd6f7cf.md)
+- [AddCategory](../../raw/_short/api-bailian-2023-12-29-addcategory-e2fe0e0435ed504e.md)
 - [ListCategory](../../raw/_short/api-bailian-2023-12-29-listcategory-2521532ef3e828b3.md)
 - [DeleteCategory - 删除类目](../../raw/_short/api-bailian-2023-12-29-deletecategory-9838436bd2db3113.md)
 - [AddFile](../../raw/_short/api-bailian-2023-12-29-addfile-8c254b3500bc50bc.md)
@@ -60,10 +73,10 @@
 - [DeleteFiles](../../raw/_short/api-bailian-2023-12-29-deletefiles-96ef0815114e4e37.md)
 - [GetParseSettings - 获取类目解析设置](../../raw/_short/api-bailian-2023-12-29-getparsesettings-522514560c54f49f.md)
 - [GetAvailableParserTypes - 获取文件支持的解析器类型](../../raw/_short/api-bailian-2023-12-29-getavailableparsertypes-09561c4e0fb505d5.md)
-- [UpdateTableFromAuthorizedOss](../../raw/_short/api-bailian-2023-12-29-updatetablefromauthorized-d7436828bcf51602.md)
-- [AddTable](../../raw/_short/api-bailian-2023-12-29-addtable-6726351659db288d.md)
 - [ChangeParseSetting](../../raw/_short/api-bailian-2023-12-29-changeparsesetting-59a7c69675f499ad.md)
+- [AddTable](../../raw/_short/api-bailian-2023-12-29-addtable-6726351659db288d.md)
 - [AddConnector](../../raw/_short/api-bailian-2023-12-29-addconnector-7a3c9650409710fe.md)
+- [UpdateTableFromAuthorizedOss](../../raw/_short/api-bailian-2023-12-29-updatetablefromauthorized-d7436828bcf51602.md)
 - [GetConnector](../../raw/_short/api-bailian-2023-12-29-getconnector-cb2e485a0efd52f7.md)
 - [知识库](../../raw/_short/api-bailian-2023-12-29-dir-knowledge-base-f6f202ad9694348f.md)
 - [UpdateConnector](../../raw/_short/api-bailian-2023-12-29-updateconnector-6a24905a7d201597.md)
@@ -71,18 +84,18 @@
 - [GetIndexJobStatus - 查询知识库创建或追加任务状态](../../raw/_short/api-bailian-2023-12-29-getindexjobstatus-1e88b6ccfffe0fe4.md)
 - [SubmitIndexAddDocumentsJob - 提交知识库文件追加任务](../../raw/_short/api-bailian-2023-12-29-submitindexadddocumentsjo-ec4f5cf285e2c447.md)
 - [SubmitIndexJob - 提交知识库创建任务](../../raw/_short/api-bailian-2023-12-29-submitindexjob-63b38294171880d4.md)
+- [Retrieve - 检索知识库](../../raw/_short/api-bailian-2023-12-29-retrieve-c8e6b8d718a30a84.md)
 - [ListIndexDocuments - 查询知识库文件列表](../../raw/_short/api-bailian-2023-12-29-listindexdocuments-9f0db0388c421903.md)
 - [ListIndexFileDetails - 查询知识库文件详情](../../raw/_short/api-bailian-2023-12-29-listindexfiledetails-0e2036d0ef0d8fe8.md)
-- [Retrieve - 检索知识库](../../raw/_short/api-bailian-2023-12-29-retrieve-c8e6b8d718a30a84.md)
-- [DeleteIndexDocument - 删除知识库下的文件](../../raw/_short/api-bailian-2023-12-29-deleteindexdocument-0792a83f5a741348.md)
 - [UpdateIndex - 更新知识库](../../raw/_short/api-bailian-2023-12-29-updateindex-551997e1d335e340.md)
+- [DeleteIndexDocument - 删除知识库下的文件](../../raw/_short/api-bailian-2023-12-29-deleteindexdocument-0792a83f5a741348.md)
 - [ListIndices - 查询知识库列表](../../raw/_short/api-bailian-2023-12-29-listindices-c555173be752eaaf.md)
-- [DeleteIndex - 删除知识库](../../raw/_short/api-bailian-2023-12-29-deleteindex-500502bd6df1c49c.md)
 - [ListChunks - 查询索引下的分片列表](../../raw/_short/api-bailian-2023-12-29-listchunks-30a6c87b93a583c6.md)
-- [UpdateChunk - 修改切片](../../raw/_short/api-bailian-2023-12-29-updatechunk-589b46fcc24261f8.md)
-- [DeleteChunk - 删除切片](../../raw/_short/api-bailian-2023-12-29-deletechunk-d249422088735d90.md)
-- [GetIndexMonitor - 获取知识库监控数据](../../raw/_short/api-bailian-2023-12-29-getindexmonitor-3a609181d5c9c034.md)
-- [版本说明](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-changeset.md)
+- [DeleteIndex - 删除知识库](../../raw/_short/api-bailian-2023-12-29-deleteindex-500502bd6df1c49c.md)
 - [AddChunk - 新增切片](../../raw/_short/api-bailian-2023-12-29-addchunk-1607bcddf6713fd9.md)
+- [UpdateChunk - 修改切片](../../raw/_short/api-bailian-2023-12-29-updatechunk-589b46fcc24261f8.md)
+- [GetIndexMonitor - 获取知识库监控数据](../../raw/_short/api-bailian-2023-12-29-getindexmonitor-3a609181d5c9c034.md)
+- [DeleteChunk - 删除切片](../../raw/_short/api-bailian-2023-12-29-deletechunk-d249422088735d90.md)
+- [版本说明](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-changeset.md)
 
 

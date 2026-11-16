@@ -12,75 +12,35 @@
 
 ## Query 参数
 
-**参数**
-
-**必填**
-
-**类型**
-
-**说明**
-
-`agent_id`
-
-否
-
-string
+**agent\_id** `string` **（可选）**
 
 按 Agent ID 筛选
 
-`keyword`
-
-否
-
-string
+**keyword** `string` **（可选）**
 
 按 ID 或名称模糊搜索
 
-`status`
-
-否
-
-string
+**status** `string` **（可选）**
 
 按状态筛选：`active` 或 `paused`
 
-`include_archived`
-
-否
-
-boolean
+**include\_archived** `boolean` **（可选）**
 
 是否包含已归档的 Deployment，默认 `false`
 
-`limit`
-
-否
-
-integer
+**limit** `integer` **（可选）**
 
 每页返回数量，最大 100，默认 `20`
 
-`page`
-
-否
-
-string
+**page** `string` **（可选）**
 
 分页游标
 
-`created_at[gte]`
-
-否
-
-string
+**created\_at\[gte\]** `string` **（可选）**
 
 创建时间下界，RFC 3339
 
-`created_at[lte]`
-
-否
-
-string
+**created\_at\[lte\]** `string` **（可选）**
 
 创建时间上界，RFC 3339
 
@@ -92,6 +52,84 @@ curl
 curl "$AGENTSTUDIO_URL/deployments?agent_id=agent_xxx&keyword=data&status=active&include_archived=true&limit=20" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
+
+### 响应字段
+
+**data** `array<object>`
+
+部署对象数组
+
+**data\[\].id** `string`
+
+Deployment ID
+
+**data\[\].type** `string`
+
+固定为 `deployment`
+
+**data\[\].name** `string`
+
+Deployment 名称
+
+**data\[\].description** `string`
+
+Deployment 用途说明
+
+**data\[\].agent** `object`
+
+关联 Agent 在锁定版本的快照
+
+**data\[\].environment\_id** `string`
+
+关联 Environment ID
+
+**data\[\].schedule** `object`
+
+定时触发配置
+
+**data\[\].initial\_events** `array<object>`
+
+触发时发送给 Agent 的初始事件
+
+**data\[\].resources** `array<object>`
+
+挂载的文件资源
+
+**data\[\].vault\_ids** `array<string>`
+
+关联 Vault ID 列表
+
+**data\[\].metadata** `object`
+
+业务自定义键值对
+
+**data\[\].status** `string`
+
+Deployment 状态：`active` 或 `paused`
+
+**data\[\].paused\_reason** `object | null`
+
+暂停原因；仅状态为 `paused` 时返回
+
+**data\[\].archived\_at** `string | null`
+
+归档时间，未归档时为 `null`
+
+**data\[\].created\_at** `string`
+
+创建时间，ISO 8601
+
+**data\[\].updated\_at** `string`
+
+最近更新时间，ISO 8601
+
+**data\[\].request\_id** `string`
+
+请求唯一标识
+
+**next\_page** `string | null`
+
+下一页游标；无更多数据时为 `null`
 
 ## 响应
 
@@ -131,128 +169,6 @@ curl "$AGENTSTUDIO_URL/deployments?agent_id=agent_xxx&keyword=data&status=active
   "next_page": null
 }
 ```
-
-### 响应字段
-
-**字段**
-
-**类型**
-
-**说明**
-
-`data`
-
-array<object>
-
-部署对象数组
-
-`data[].id`
-
-string
-
-Deployment ID
-
-`data[].type`
-
-string
-
-固定为 `deployment`
-
-`data[].name`
-
-string
-
-Deployment 名称
-
-`data[].description`
-
-string
-
-Deployment 用途说明
-
-`data[].agent`
-
-object
-
-关联 Agent 在锁定版本的快照
-
-`data[].environment_id`
-
-string
-
-关联 Environment ID
-
-`data[].schedule`
-
-object
-
-定时触发配置
-
-`data[].initial_events`
-
-array<object>
-
-触发时发送给 Agent 的初始事件
-
-`data[].resources`
-
-array<object>
-
-挂载的文件资源
-
-`data[].vault_ids`
-
-array<string>
-
-关联 Vault ID 列表
-
-`data[].metadata`
-
-object
-
-业务自定义键值对
-
-`data[].status`
-
-string
-
-Deployment 状态：`active` 或 `paused`
-
-`data[].paused_reason`
-
-object | null
-
-暂停原因；仅状态为 `paused` 时返回
-
-`data[].archived_at`
-
-string | null
-
-归档时间，未归档时为 `null`
-
-`data[].created_at`
-
-string
-
-创建时间，ISO 8601
-
-`data[].updated_at`
-
-string
-
-最近更新时间，ISO 8601
-
-`data[].request_id`
-
-string
-
-请求唯一标识
-
-`next_page`
-
-string | null
-
-下一页游标；无更多数据时为 `null`
 
 ## 错误码
 

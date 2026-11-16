@@ -12,35 +12,15 @@
 
 ## 请求体
 
-**字段**
-
-**必填**
-
-**类型**
-
-**说明**
-
-`url`
-
-是
-
-string
+**url** `string` **（必选）**
 
 回调地址；允许 HTTP 或 HTTPS，端口不限，可用域名或公网 IP；私网、回环、链路本地和保留地址会被拒绝
 
-`events`
-
-是
-
-array<string>
+**events** `array<string>` **（必选）**
 
 可订阅的具名事件类型数组，不支持通配订阅
 
-`description`
-
-否
-
-string
+**description** `string` **（可选）**
 
 描述，最长 256 个字符
 
@@ -62,6 +42,60 @@ curl -X POST "$AGENTSTUDIO_URL/webhook_endpoints" \
     ]
   }'
 ```
+
+### 响应字段
+
+**id** `string`
+
+Webhook ID，格式 wep\_<ULID>
+
+**description** `string | null`
+
+描述
+
+**url** `string`
+
+回调地址
+
+**events** `array<string>`
+
+订阅的具名事件类型
+
+**status** `string`
+
+Webhook 状态
+
+**disabled\_reason** `string | null`
+
+禁用原因，未禁用时为 null
+
+**consecutive\_fail** `integer`
+
+当前连续失败数，新建时为 0
+
+**last\_success\_at** `string | null`
+
+最近成功投递时间，新建时为 null
+
+**last\_failure\_at** `string | null`
+
+最近失败投递时间，新建时为 null
+
+**signing\_secret** `string`
+
+验签密钥，格式 whsec\_ 加标准 Base64 文本。仅在创建和重置成功响应返回
+
+**created\_at** `string`
+
+创建时间，ISO 8601
+
+**updated\_at** `string`
+
+最近更新时间，ISO 8601
+
+**request\_id** `string`
+
+本次请求的唯一标识
 
 ## 响应
 
@@ -86,92 +120,6 @@ curl -X POST "$AGENTSTUDIO_URL/webhook_endpoints" \
   "request_id": "8e1d16e4"
 }
 ```
-
-### 响应字段
-
-**字段**
-
-**类型**
-
-**说明**
-
-`id`
-
-string
-
-Webhook ID，格式 wep\_<ULID>
-
-`description`
-
-string | null
-
-描述
-
-`url`
-
-string
-
-回调地址
-
-`events`
-
-array<string>
-
-订阅的具名事件类型
-
-`status`
-
-string
-
-Webhook 状态
-
-`disabled_reason`
-
-string | null
-
-禁用原因，未禁用时为 null
-
-`consecutive_fail`
-
-integer
-
-当前连续失败数，新建时为 0
-
-`last_success_at`
-
-string | null
-
-最近成功投递时间，新建时为 null
-
-`last_failure_at`
-
-string | null
-
-最近失败投递时间，新建时为 null
-
-`signing_secret`
-
-string
-
-验签密钥，格式 whsec\_ 加标准 Base64 文本。仅在创建和重置成功响应返回
-
-`created_at`
-
-string
-
-创建时间，ISO 8601
-
-`updated_at`
-
-string
-
-最近更新时间，ISO 8601
-
-`request_id`
-
-string
-
-本次请求的唯一标识
 
 ## 错误码
 

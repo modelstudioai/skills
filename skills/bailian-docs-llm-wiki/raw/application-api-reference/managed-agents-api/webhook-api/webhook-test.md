@@ -12,19 +12,7 @@
 
 ## 路径参数
 
-**参数**
-
-**必填**
-
-**类型**
-
-**说明**
-
-`id`
-
-是
-
-string
+**id** `string` **（必选）**
 
 Webhook ID，格式 wep\_<ULID>
 
@@ -36,6 +24,40 @@ curl
 curl -X POST "$AGENTSTUDIO_URL/webhook_endpoints/wep_01JXX7YQGPRPV1BZXA35QE7WDP/test" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
+
+### 响应字段
+
+**type** `string`
+
+固定为 event
+
+**id** `string`
+
+事件 ID，格式 whe\_<ULID>
+
+**created\_at** `string`
+
+事件创建时间，ISO 8601
+
+**data** `object`
+
+事件载荷
+
+**data.id** `string`
+
+Webhook ID
+
+**data.type** `string`
+
+固定为 webhook.test
+
+**data.workspace\_id** `string`
+
+工作空间 ID
+
+**request\_id** `string`
+
+本次请求的唯一标识，排查问题时附带
 
 ## 响应
 
@@ -52,62 +74,6 @@ curl -X POST "$AGENTSTUDIO_URL/webhook_endpoints/wep_01JXX7YQGPRPV1BZXA35QE7WDP/
   "request_id": "8e1d16e4"
 }
 ```
-
-### 响应字段
-
-**字段**
-
-**类型**
-
-**说明**
-
-`type`
-
-string
-
-固定为 event
-
-`id`
-
-string
-
-事件 ID，格式 whe\_<ULID>
-
-`created_at`
-
-string
-
-事件创建时间，ISO 8601
-
-`data`
-
-object
-
-事件载荷
-
-`data.id`
-
-string
-
-Webhook ID
-
-`data.type`
-
-string
-
-固定为 webhook.test
-
-`data.workspace_id`
-
-string
-
-工作空间 ID
-
-`request_id`
-
-string
-
-本次请求的唯一标识，排查问题时附带
 
 ## 错误码
 

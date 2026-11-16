@@ -12,35 +12,15 @@
 
 ## Query 参数
 
-**参数**
-
-**必填**
-
-**类型**
-
-**说明**
-
-`include_archived`
-
-否
-
-boolean
+**include\_archived** `boolean` **（可选）**
 
 是否包含已归档 Vault，默认 false
 
-`limit`
-
-否
-
-integer
+**limit** `integer` **（可选）**
 
 每页返回数量，默认 20，最大 100
 
-`page`
-
-否
-
-string
+**page** `string` **（可选）**
 
 分页游标，取自上一页响应的 next\_page 值
 
@@ -52,6 +32,44 @@ curl
 curl "$AGENTSTUDIO_URL/vaults?include_archived=true&limit=20" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
+
+### 响应字段
+
+**data** `array<object>`
+
+Vault 对象数组
+
+**data\[\].id** `string`
+
+Vault ID，格式 `vlt_xxx`
+
+**data\[\].type** `string`
+
+固定为 `vault`
+
+**data\[\].display\_name** `string`
+
+Vault 可读名称
+
+**data\[\].metadata** `object`
+
+业务自定义键值对
+
+**data\[\].archived\_at** `string | null`
+
+归档时间，未归档时为 null
+
+**data\[\].created\_at** `string`
+
+创建时间，ISO 8601
+
+**data\[\].updated\_at** `string`
+
+最近更新时间，ISO 8601
+
+**next\_page** `string | null`
+
+下一页游标；无更多数据时为 null
 
 ## 响应
 
@@ -75,68 +93,6 @@ curl "$AGENTSTUDIO_URL/vaults?include_archived=true&limit=20" \
   "next_page": null
 }
 ```
-
-### 响应字段
-
-**字段**
-
-**类型**
-
-**说明**
-
-`data`
-
-array<object>
-
-Vault 对象数组
-
-`data[].id`
-
-string
-
-Vault ID，格式 `vlt_xxx`
-
-`data[].type`
-
-string
-
-固定为 `vault`
-
-`data[].display_name`
-
-string
-
-Vault 可读名称
-
-`data[].metadata`
-
-object
-
-业务自定义键值对
-
-`data[].archived_at`
-
-string | null
-
-归档时间，未归档时为 null
-
-`data[].created_at`
-
-string
-
-创建时间，ISO 8601
-
-`data[].updated_at`
-
-string
-
-最近更新时间，ISO 8601
-
-`next_page`
-
-string | null
-
-下一页游标；无更多数据时为 null
 
 ## 错误码
 

@@ -24,6 +24,10 @@ WebSocket SDK 用法参见 [Python SDK](raw/_short/qwen-livetranslate-python-sdk
 
 属性
 
+`input_modalities`array（可选）
+
+适用于 WebSocket 接入的 `qwen3.8-livetranslate-flash-realtime`。可设为 `["audio"]`（仅音频，默认）或 `["audio", "video"]`（音频和图片）。包含 `video` 时，模型才会处理 `input_image_buffer.append` 发送的图片。
+
 `output_modalities`array（可选）
 
 适用于 `qwen3.8-livetranslate-flash-realtime`。输出模态，可设置为 `["text"]`（仅文本）或 `["text", "audio"]`（文本和音频，默认值）。
@@ -68,6 +72,16 @@ WebSocket SDK 用法参见 [Python SDK](raw/_short/qwen-livetranslate-python-sdk
 
 检测阈值。使用 `speaker_detection` 时，用于区分静音和有效人声，低于阈值的声音会被过滤，不输入模型；取值固定为 `0.5`。
 
+`output`object（可选）
+
+译音配置。
+
+属性
+
+`voice`string（可选）
+
+译音音色。未启用声音复刻时，默认使用 `Tina`。启用实时声音复刻且 `voice_clone_options.frequency` 为 `once` 或 `always` 时，设为 `default`。
+
 `modalities`array（可选）
 
 适用于 `qwen3.5-livetranslate-flash-realtime`。
@@ -86,6 +100,8 @@ WebSocket SDK 用法参见 [Python SDK](raw/_short/qwen-livetranslate-python-sdk
 `voice`string（可选）
 
 生成音频的音色。未启用声音复刻时，可设置为系统预设音色，可选值参见[支持的音色](https://help.aliyun.com/zh/model-studio/qwen3-5-livetranslate-flash-realtime#0a5bde7593gdk)。`qwen3.8-livetranslate-flash-realtime` 和 `qwen3.5-livetranslate-flash-realtime` 的默认音色为 `Tina`。
+
+3.8 也支持在 `audio` 对象的 `output` 中设置音色。
 
 > 启用声音复刻（`enable_voice_clone`为`true`）时，`voice`的取值取决于`voice_clone_options.frequency`：当`frequency`为`once`或`always`时，必须设置为`default`；当`frequency`为`never`时，设置为用户预先复刻的音色 ID。此时不可设置为系统预设音色，否则服务端会返回错误。
 
@@ -237,6 +253,10 @@ VAD 检测灵敏度。值越低，越容易将微弱声音（包括背景噪音�
 {
   "type": "session.update",
   "session": {
+    "input_modalities": [
+      "audio",
+      "video"
+    ],
     "output_modalities": [
       "text",
       "audio"
@@ -251,9 +271,11 @@ VAD 检测灵敏度。值越低，越容易将微弱声音（包括背景噪音�
           "type": "speaker_detection",
           "threshold": 0.5
         }
+      },
+      "output": {
+        "voice": "default"
       }
     },
-    "voice": "default",
     "enable_voice_clone": true,
     "voice_clone_options": {
       "frequency": "once"
@@ -371,6 +393,8 @@ Base64 编码的音频数据。
 ## input\_image\_buffer.append
 
 WebSocket 接入时，将图像数据添加到图像缓冲区。图像可来自本地文件，或从视频流实时采集。
+
+使用 `qwen3.8-livetranslate-flash-realtime` 时，先在 [session.update](#af43722339yva) 中将 `session.input_modalities` 设为 `["audio", "video"]`。旧请求省略此字段时仍可上传图片，但模型不会处理。
 
 目前对图片输入有以下限制：
 

@@ -12,101 +12,45 @@
 
 ## 路径参数
 
-**参数**
-
-**必填**
-
-**类型**
-
-**说明**
-
-`deployment_id`
-
-是
-
-string
+**deployment\_id** `string` **（必选）**
 
 Deployment ID
 
 ## 请求体
 
-**字段**
-
-**必填**
-
-**类型**
-
-**说明**
-
-`name`
-
-否
-
-string
+**name** `string` **（可选）**
 
 Deployment 名称，最长 256 字符
 
-`description`
-
-否
-
-string
+**description** `string` **（可选）**
 
 部署用途描述
 
-`agent`
-
-否
-
-object
+**agent** `object` **（可选）**
 
 关联的 Agent
 
-`environment_id`
-
-否
-
-string | null
+**environment\_id** `string | null` **（可选）**
 
 关联的 Environment ID
 
-`schedule`
-
-否
-
-object | null
+**schedule** `object | null` **（可选）**
 
 定时触发配置；传 null 则清除定时触发
 
-`initial_events`
-
-否
-
-array<object>
+**initial\_events** `array<object>` **（可选）**
 
 触发时发送给 Agent 的初始事件列表，1-50 项
 
-`resources`
-
-否
-
-array<object>
+**resources** `array<object>` **（可选）**
 
 挂载文件资源列表
 
-`vault_ids`
-
-否
-
-array<string>
+**vault\_ids** `array<string>` **（可选）**
 
 关联的 Vault ID 列表
 
-`metadata`
-
-否
-
-object
+**metadata** `object` **（可选）**
 
 业务自定义键值对
 
@@ -123,6 +67,76 @@ curl -X POST "$AGENTSTUDIO_URL/deployments/depl_xxx" \
     "schedule": null
   }'
 ```
+
+### 响应字段
+
+**id** `string`
+
+—
+
+**type** `string`
+
+—
+
+**name** `string`
+
+—
+
+**description** `string`
+
+—
+
+**agent** `object`
+
+—
+
+**environment\_id** `string`
+
+—
+
+**schedule** `object | null`
+
+—
+
+**initial\_events** `array<object>`
+
+—
+
+**resources** `array<object>`
+
+—
+
+**vault\_ids** `array<string>`
+
+—
+
+**metadata** `object`
+
+—
+
+**status** `string`
+
+—
+
+**paused\_reason** `object | null`
+
+暂停原因，仅暂停状态时返回
+
+**archived\_at** `string | null`
+
+—
+
+**created\_at** `string`
+
+—
+
+**updated\_at** `string`
+
+—
+
+**request\_id** `string`
+
+本次请求的唯一标识，排查问题时附带
 
 ## 响应
 
@@ -160,116 +174,6 @@ curl -X POST "$AGENTSTUDIO_URL/deployments/depl_xxx" \
   "request_id": "req_xxx"
 }
 ```
-
-### 响应字段
-
-**字段**
-
-**类型**
-
-**说明**
-
-`id`
-
-string
-
-—
-
-`type`
-
-string
-
-—
-
-`name`
-
-string
-
-—
-
-`description`
-
-string
-
-—
-
-`agent`
-
-object
-
-—
-
-`environment_id`
-
-string
-
-—
-
-`schedule`
-
-object | null
-
-—
-
-`initial_events`
-
-array<object>
-
-—
-
-`resources`
-
-array<object>
-
-—
-
-`vault_ids`
-
-array<string>
-
-—
-
-`metadata`
-
-object
-
-—
-
-`status`
-
-string
-
-—
-
-`paused_reason`
-
-object | null
-
-暂停原因，仅暂停状态时返回
-
-`archived_at`
-
-string | null
-
-—
-
-`created_at`
-
-string
-
-—
-
-`updated_at`
-
-string
-
-—
-
-`request_id`
-
-string
-
-本次请求的唯一标识，排查问题时附带
 
 ## 错误码
 

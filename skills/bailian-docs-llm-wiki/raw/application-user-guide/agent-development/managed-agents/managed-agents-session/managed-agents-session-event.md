@@ -60,6 +60,14 @@ Session session = client.sessions().create(SessionCreateParam.builder()
 System.out.println(session.getId() + " " + session.getStatus());
 ```
 
+### 沙箱持久化
+
+创建会话时可开启沙箱持久化，保留沙箱的工作文件和环境修改，默认关闭。适合任务除最终产物外还有较多中间文件的场景。
+
+在控制台**新建会话**页面的**配置**区域，打开**沙箱持久化**并设置**快照保留时长**（默认 3 天，支持 1–30 天）。通过 API 创建会话时，在请求体中传入 `sandbox`：`enable_snapshot` 控制是否开启，`snapshot_persistent_seconds` 指定单份快照的保留时间（单位秒，`172800` 表示 2 天）。完整字段见[创建 Session API](https://help.aliyun.com/zh/model-studio/session-create#h-sc-req)。
+
+保留、释放与保存范围见[管理会话](https://help.aliyun.com/zh/model-studio/managed-agents-session-operations#h-sandbox-persistence)。
+
 ### 会话级配置与 MCP 请求头
 
 创建会话时通过 `agent` 对象可覆盖本会话的系统提示词、工具、MCP Server 与技能，只传 `id` 则仅引用智能体；`mcp_configs` 为指定 MCP Server 的全部请求注入自定义 Header（如租户 ID、鉴权 token）。覆盖只作用于本会话，不改动智能体本身。
@@ -71,6 +79,7 @@ System.out.println(session.getId() + " " + session.getStatus());
 ### 会话页面布局
 
 -   **事件面板**：实时展示当轮的处理过程。左上角下拉框可按类型筛选事件（All events / User / Agent / Tool / Tool\_output / Error / Model / System）。
+-   **用量标签页**：展示运行时长、交互与执行、错误数、Token 用量和**沙箱持久化配置**。
 -   **右侧标签页**：**智能体**、**环境**、**环境变量**、**记忆**、**文件**、**密钥库**标签页，分别查看当前会话快照的配置；**记忆**展示会话挂载的记忆资源。
 -   **输入区**：底部输入框输入消息，点击**发送**提交；处理中可点击**中断**停止当前轮。
 
@@ -86,6 +95,8 @@ System.out.println(session.getId() + " " + session.getStatus());
 
 -   **归档**：状态变为 `terminated`（终态），事件历史保留可查。适用于已完成的会话。
 -   **删除**：硬删除，会话元数据、事件历史、内部拷贝的资源全部清除，不可恢复。如需保留事件历史请改用归档。
+
+**说明**归档或删除会话时，系统会触发该会话快照资源的释放。快照清理失败不会阻塞会话的归档或删除，资源实际释放可能存在短暂延迟。
 
 ## 下一步
 

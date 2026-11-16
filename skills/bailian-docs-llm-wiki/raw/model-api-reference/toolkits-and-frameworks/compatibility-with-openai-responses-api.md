@@ -16,7 +16,7 @@
 
 ## 支持的模型
 
-`qwen4-max-preview`（[仅 Token Plan](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview)）、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、`qwen3.8-omni-flash`、`qwen3.7-max`、`qwen3.7-max-2026-05-20`、`qwen3.7-max-2026-06-08`、`qwen3.7-max-2026-05-17`、`qwen3.7-max-preview`、`qwen3.7-plus`、`qwen3.7-plus-2026-05-26`、`qwen3.6-plus`、`qwen3.6-plus-2026-04-02`、`qwen3.5-plus`、`qwen3.5-plus-2026-04-20`、`qwen3.5-plus-2026-02-15`、`qwen3.7-flash`、`qwen3.7-flash-2026-07-15`、`qwen3.6-flash`、`qwen3.6-flash-2026-04-16`、`qwen3.5-flash`、`qwen3.5-flash-2026-02-23`、`qwen3.6-35b-a3b`、`qwen3.5-397b-a17b`、`qwen3.5-122b-a10b`、`qwen3.5-27b`、`qwen3.5-35b-a3b`、`deepseek-v4.1-flash`、`deepseek-v4.1-flash-1017`、`deepseek-v4-pro`、`deepseek-v4-pro-0813`、`deepseek-v4-flash-0731`、`glm-5.3`、`glm-5.2`、`kimi-k3`
+`qwen4-max`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、`qwen3.8-omni-flash`、`qwen3.7-max`、`qwen3.7-max-2026-05-20`、`qwen3.7-max-2026-06-08`、`qwen3.7-max-2026-05-17`、`qwen3.7-max-preview`、`qwen3.7-plus`、`qwen3.7-plus-2026-05-26`、`qwen3.6-plus`、`qwen3.6-plus-2026-04-02`、`qwen3.5-plus`、`qwen3.5-plus-2026-04-20`、`qwen3.5-plus-2026-02-15`、`qwen3.7-flash`、`qwen3.7-flash-2026-07-15`、`qwen3.6-flash`、`qwen3.6-flash-2026-04-16`、`qwen3.5-flash`、`qwen3.5-flash-2026-02-23`、`qwen3.6-35b-a3b`、`qwen3.5-397b-a17b`、`qwen3.5-122b-a10b`、`qwen3.5-27b`、`qwen3.5-35b-a3b`、`deepseek-v4.1-flash`、`deepseek-v4.1-flash-1017`、`deepseek-v4-pro`、`deepseek-v4-pro-0813`、`deepseek-v4-flash-0731`、`glm-5.3`、`glm-5.2`、`kimi-k3`
 
 **重要**非列表中阿里云百炼直供文本生成模型仅支持基础兼容能力，Agent 能力（内置工具等）受限。
 
@@ -98,7 +98,7 @@ client = OpenAI(
 )
 
 response = client.responses.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     input="你能做些什么？"
 )
 
@@ -120,7 +120,7 @@ const openai = new OpenAI({
 
 async function main() {
     const response = await openai.responses.create({
-        model: "qwen3.8-max",
+        model: "qwen4-max",
         input: "你能做些什么？"
     });
 
@@ -138,7 +138,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input": "你能做些什么？"
 }'
 ```
@@ -146,6 +146,8 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 **响应示例**
 
 > 以下为API返回的完整响应。
+
+以下为 `qwen3.8-max` 的返回示例，用于说明响应字段。
 
 ```
 {
@@ -226,14 +228,14 @@ client = OpenAI(
 
 # 第一轮对话
 response1 = client.responses.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     input="我的名字是张三，请记住。"
 )
 print(f"第一轮回复: {response1.output_text}")
 
 # 第二轮对话 - 使用 previous_response_id 关联上下文，响应id有效期为7天
 response2 = client.responses.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     input="你还记得我的名字吗？",
     previous_response_id=response1.id
 )
@@ -253,14 +255,14 @@ const openai = new OpenAI({
 async function main() {
     // 第一轮对话
     const response1 = await openai.responses.create({
-        model: "qwen3.8-max",
+        model: "qwen4-max",
         input: "我的名字是张三，请记住。"
     });
     console.log(`第一轮回复: ${response1.output_text}`);
 
     // 第二轮对话 - 使用 previous_response_id 关联上下文，响应id有效期为7天
     const response2 = await openai.responses.create({
-        model: "qwen3.8-max",
+        model: "qwen4-max",
         input: "你还记得我的名字吗？",
         previous_response_id: response1.id
     });
@@ -278,7 +280,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input": "我的名字是张三，请记住。"
 }'
 
@@ -287,13 +289,16 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input": "你还记得我的名字吗？",
     "previous_response_id": "第一轮返回的响应id"
 }'
 ```
 
 **第二轮对话响应示例**
+
+以下为 `qwen3.8-max` 的返回示例，用于说明响应字段。
+
 ```
 {
   "id": "f0dbb153-117f-9bbf-8176-5284b47f3xxx",
@@ -350,7 +355,7 @@ client = OpenAI(
 )
 
 response = client.responses.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     input="9.9和9.11谁大？",
     reasoning={"effort": "medium"}
 )
@@ -381,7 +386,7 @@ const openai = new OpenAI({
 
 async function main() {
     const response = await openai.responses.create({
-        model: "qwen3.8-max",
+        model: "qwen4-max",
         input: "9.9和9.11谁大？",
         reasoning: { effort: "medium" }
     });
@@ -412,13 +417,16 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input": "9.9和9.11谁大？",
     "reasoning": {"effort": "medium"}
 }'
 ```
 
 **响应示例**
+
+以下为 `qwen3.8-max` 的返回示例，用于说明响应字段。
+
 ```
 {
     "created_at": 1774498317,
@@ -495,7 +503,7 @@ client = OpenAI(
 )
 
 stream = client.responses.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     input="请简单介绍一下人工智能。",
     stream=True
 )
@@ -523,7 +531,7 @@ const openai = new OpenAI({
 
 async function main() {
     const stream = await openai.responses.create({
-        model: "qwen3.8-max",
+        model: "qwen4-max",
         input: "请简单介绍一下人工智能。",
         stream: true
     });
@@ -550,13 +558,16 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input": "请简单介绍一下人工智能。",
     "stream": true
 }'
 ```
 
 **响应示例**
+
+以下为 `qwen3.8-max` 的返回示例，用于说明响应字段。
+
 ```
 {"response":{"id":"47a71e7d-868c-4204-9693-ef8ff9058xxx","created_at":1769417481.0,"error":null,"incomplete_details":null,"instructions":null,"metadata":null,"model":"","object":"response","output":[],"parallel_tool_calls":false,"temperature":null,"tool_choice":"auto","tools":[],"top_p":null,"background":null,"completed_at":null,"conversation":null,"max_output_tokens":null,"max_tool_calls":null,"previous_response_id":null,"prompt":null,"prompt_cache_key":null,"prompt_cache_retention":null,"reasoning":null,"safety_identifier":null,"service_tier":null,"status":"queued","text":null,"top_logprobs":null,"truncation":null,"usage":null,"user":null},"sequence_number":0,"type":"response.created"}
 {"response":{"id":"47a71e7d-868c-4204-9693-ef8ff9058xxx","created_at":1769417481.0,"error":null,"incomplete_details":null,"instructions":null,"metadata":null,"model":"","object":"response","output":[],"parallel_tool_calls":false,"temperature":null,"tool_choice":"auto","tools":[],"top_p":null,"background":null,"completed_at":null,"conversation":null,"max_output_tokens":null,"max_tool_calls":null,"previous_response_id":null,"prompt":null,"prompt_cache_key":null,"prompt_cache_retention":null,"reasoning":null,"safety_identifier":null,"service_tier":null,"status":"in_progress","text":null,"top_logprobs":null,"truncation":null,"usage":null,"user":null},"sequence_number":1,"type":"response.in_progress"}
@@ -594,7 +605,7 @@ client = OpenAI(
 )
 
 response = client.responses.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     input="帮我找一下阿里云官网，并提取首页的关键信息",
     # 建议同时开启内置工具以取得最佳效果
     tools=[
@@ -622,7 +633,7 @@ const openai = new OpenAI({
 
 async function main() {
     const response = await openai.responses.create({
-        model: "qwen3.8-max",
+        model: "qwen4-max",
         input: "帮我找一下阿里云官网，并提取首页的关键信息",
         tools: [
             { type: "web_search" },
@@ -655,7 +666,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input": "帮我找一下阿里云官网，并提取首页的关键信息",
     "tools": [
         {
@@ -790,14 +801,14 @@ long_context = "人工智能是计算机科学的一个重要分支，致力于�
 
 # 第一轮对话
 response1 = client.responses.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     input=long_context + "\n\n基于以上背景知识，请简短介绍机器学习中的随机森林算法。",
 )
 print(f"第一轮回复: {response1.output_text}")
 
 # 第二轮对话：通过 previous_response_id 关联上下文，缓存由服务端自动处理
 response2 = client.responses.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     input="它和 GBDT 有什么主要区别？",
     previous_response_id=response1.id,
 )
@@ -827,14 +838,14 @@ const longContext = "人工智能是计算机科学的一个重要分支，致�
 async function main() {
     // 第一轮对话
     const response1 = await openai.responses.create({
-        model: "qwen3.8-max",
+        model: "qwen4-max",
         input: longContext + "\n\n基于以上背景知识，请简短介绍机器学习中的随机森林算法，包括基本原理和应用场景。"
     });
     console.log(`第一轮回复: ${response1.output_text}`);
 
     // 第二轮对话：通过 previous_response_id 关联上下文，缓存由服务端自动处理
     const response2 = await openai.responses.create({
-        model: "qwen3.8-max",
+        model: "qwen4-max",
         input: "它和 GBDT 有什么主要区别？",
         previous_response_id: response1.id
     });
@@ -858,7 +869,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Content-Type: application/json" \
 -H "x-dashscope-session-cache: enable" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input": "人工智能是计算机科学的一个重要分支，致力于研究和开发能够模拟、延伸和扩展人类智能的理论、方法、技术及应用系统。人工智能是计算机科学的一个重要分支，致力于研究和开发能够模拟、延伸和扩展人类智能的理论、方法、技术及应用系统。人工智能是计算机科学的一个重要分支，致力于研究和开发能够模拟、延伸和扩展人类智能的理论、方法、技术及应用系统。人工智能是计算机科学的一个重要分支，致力于研究和开发能够模拟、延伸和扩展人类智能的理论、方法、技术及应用系统。人工智能是计算机科学的一个重要分支，致力于研究和开发能够模拟、延伸和扩展人类智能的理论、方法、技术及应用系统。人工智能是计算机科学的一个重要分支，致力于研究和开发能够模拟、延伸和扩展人类智能的理论、方法、技术及应用系统。人工智能是计算机科学的一个重要分支，致力于研究和开发能够模拟、延伸和扩展人类智能的理论、方法、技术及应用系统。人工智能是计算机科学的一个重要分支，致力于研究和开发能够模拟、延伸和扩展人类智能的理论、方法、技术及应用系统。人工智能是计算机科学的一个重要分支，致力于研究和开发能够模拟、延伸和扩展人类智能的理论、方法、技术及应用系统。人工智能是计算机科学的一个重要分支，致力于研究和开发能够模拟、延伸和扩展人类智能的理论、方法、技术及应用系统。人工智能是计算机科学的一个重要分支，致力于研究和开发能够模拟、延伸和扩展人类智能的理论、方法、技术及应用系统。人工智能是计算机科学的一个重要分支，致力于研究和开发能够模拟、延伸和扩展人类智能的理论、方法、技术及应用系统。人工智能是计算机科学的一个重要分支，致力于研究和开发能够模拟、延伸和扩展人类智能的理论、方法、技术及应用系统。人工智能是计算机科学的一个重要分支，致力于研究和开发能够模拟、延伸和扩展人类智能的理论、方法、技术及应用系统。人工智能是计算机科学的一个重要分支，致力于研究和开发能够模拟、延伸和扩展人类智能的理论、方法、技术及应用系统。人工智能是计算机科学的一个重要分支，致力于研究和开发能够模拟、延伸和扩展人类智能的理论、方法、技术及应用系统。人工智能是计算机科学的一个重要分支，致力于研究和开发能够模拟、延伸和扩展人类智能的理论、方法、技术及应用系统。人工智能是计算机科学的一个重要分支，致力于研究和开发能够模拟、延伸和扩展人类智能的理论、方法、技术及应用系统。人工智能是计算机科学的一个重要分支，致力于研究和开发能够模拟、延伸和扩展人类智能的理论、方法、技术及应用系统。人工智能是计算机科学的一个重要分支，致力于研究和开发能够模拟、延伸和扩展人类智能的理论、方法、技术及应用系统。\n\n基于以上背景知识，请简短介绍机器学习中的随机森林算法，包括基本原理和应用场景。"
 }'
 
@@ -868,7 +879,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Content-Type: application/json" \
 -H "x-dashscope-session-cache: enable" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input": "它和 GBDT 有什么主要区别？",
     "previous_response_id": "第一轮返回的响应id"
 }'
@@ -887,7 +898,7 @@ Python
 ```
 # Chat Completions API
 completion = client.chat.completions.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     messages=[
         {"role": "system", "content": "你是一个有帮助的助手。"},
         {"role": "user", "content": "你好！"}
@@ -897,7 +908,7 @@ print(completion.choices[0].message.content)
 
 # Responses API - 可以使用相同的消息格式
 response = client.responses.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     input=[
         {"role": "system", "content": "你是一个有帮助的助手。"},
         {"role": "user", "content": "你好！"}
@@ -907,7 +918,7 @@ print(response.output_text)
 
 # Responses API - 或使用更简洁的格式
 response = client.responses.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     input="你好！"
 )
 print(response.output_text)
@@ -918,7 +929,7 @@ Node.js
 ```
 // Chat Completions API
 const completion = await client.chat.completions.create({
-    model: "qwen3.8-max",
+    model: "qwen4-max",
     messages: [
         { role: "system", content: "你是一个有帮助的助手。" },
         { role: "user", content: "你好！" }
@@ -928,7 +939,7 @@ console.log(completion.choices[0].message.content);
 
 // Responses API - 可以使用相同的消息格式
 const response = await client.responses.create({
-    model: "qwen3.8-max",
+    model: "qwen4-max",
     input: [
         { role: "system", content: "你是一个有帮助的助手。" },
         { role: "user", content: "你好！" }
@@ -938,7 +949,7 @@ console.log(response.output_text);
 
 // Responses API - 或使用更简洁的格式
 const response2 = await client.responses.create({
-    model: "qwen3.8-max",
+    model: "qwen4-max",
     input: "你好！"
 });
 console.log(response2.output_text);
@@ -952,7 +963,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "messages": [
         {"role": "system", "content": "你是一个有帮助的助手。"},
         {"role": "user", "content": "你好！"}
@@ -964,7 +975,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input": "你好！"
 }'
 ```
@@ -974,6 +985,8 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 Responses API 的响应结构有所不同。使用 `output_text` 快捷方法获取文本输出，或通过 `output` 数组访问详细信息。
 
 **响应对比**
+
+以下为 `qwen3.8-max` 的返回示例，用于说明响应字段。
 
 ```
 # Chat Completions 响应
@@ -1008,6 +1021,8 @@ Responses API 的响应结构有所不同。使用 `output_text` 快捷方法获
   }
 }
 ```
+
+以下为 `qwen3.8-max` 的返回示例，用于说明响应字段。
 
 ```
 # Responses API 响应
@@ -1059,7 +1074,7 @@ messages = [
     {"role": "user", "content": "法国的首都是哪里？"}
 ]
 res1 = client.chat.completions.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     messages=messages
 )
 
@@ -1068,7 +1083,7 @@ messages.append(res1.choices[0].message)
 messages.append({"role": "user", "content": "它的人口是多少？"})
 
 res2 = client.chat.completions.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     messages=messages
 )
 ```
@@ -1076,13 +1091,13 @@ res2 = client.chat.completions.create(
 ```
 # Responses API - 使用 previous_response_id 自动关联
 res1 = client.responses.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     input="法国的首都是哪里？"
 )
 
 # 只需传递上一轮的 ID
 res2 = client.responses.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     input="它的人口是多少？",
     previous_response_id=res1.id
 )
@@ -1097,7 +1112,7 @@ let messages = [
     { role: "user", content: "法国的首都是哪里？" }
 ];
 const res1 = await client.chat.completions.create({
-    model: "qwen3.8-max",
+    model: "qwen4-max",
     messages
 });
 
@@ -1106,7 +1121,7 @@ messages = messages.concat([res1.choices[0].message]);
 messages.push({ role: "user", content: "它的人口是多少？" });
 
 const res2 = await client.chat.completions.create({
-    model: "qwen3.8-max",
+    model: "qwen4-max",
     messages
 });
 ```
@@ -1114,13 +1129,13 @@ const res2 = await client.chat.completions.create({
 ```
 // Responses API - 使用 previous_response_id 自动关联
 const res1 = await client.responses.create({
-    model: "qwen3.8-max",
+    model: "qwen4-max",
     input: "法国的首都是哪里？"
 });
 
 // 只需传递上一轮的 ID
 const res2 = await client.responses.create({
-    model: "qwen3.8-max",
+    model: "qwen4-max",
     input: "它的人口是多少？",
     previous_response_id: res1.id
 });
@@ -1141,7 +1156,7 @@ def web_search(query):
     return r.json().get("results", [])
 
 completion = client.chat.completions.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     messages=[{"role": "user", "content": "法国现任总统是谁？"}],
     functions=[{
         "name": "web_search",
@@ -1158,7 +1173,7 @@ completion = client.chat.completions.create(
 ```
 # Responses API - 直接使用内置工具
 response = client.responses.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     input="法国现任总统是谁？",
     tools=[{"type": "web_search"}]  # 直接启用网络搜索
 )
@@ -1177,7 +1192,7 @@ async function web_search(query) {
 }
 
 const completion = await client.chat.completions.create({
-    model: "qwen3.8-max",
+    model: "qwen4-max",
     messages: [{ role: "user", content: "法国现任总统是谁？" }],
     functions: [{
         name: "web_search",
@@ -1194,7 +1209,7 @@ const completion = await client.chat.completions.create({
 ```
 // Responses API - 直接使用内置工具
 const response = await client.responses.create({
-    model: "qwen3.8-max",
+    model: "qwen4-max",
     input: "法国现任总统是谁？",
     tools: [{ type: "web_search" }]  // 直接启用网络搜索
 });
@@ -1218,7 +1233,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input": "法国现任总统是谁？",
     "tools": [{"type": "web_search"}]
 }'

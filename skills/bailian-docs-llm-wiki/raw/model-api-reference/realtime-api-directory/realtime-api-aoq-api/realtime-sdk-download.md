@@ -1,6 +1,6 @@
 # SDK 下载
 
-本文提供适用于Android、iOS、HarmonyOS、Windows、macOS、Electron和Linux平台的AOQ SDK下载链接及版本更新说明。
+本文提供 AOQ SDK（Android、iOS、HarmonyOS、Windows、macOS、Electron、Linux）及 AOQ Web SDK 的下载链接和版本更新说明。
 
 ## AOQ SDK下载
 
@@ -13,6 +13,28 @@
 **更新日期**
 
 **更新说明**
+
+v1.4.1
+
+Linux
+
+`x86_64`: [AoqClientSdk.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/zh/files/6a4b3c2d1e0f90fb.zip)
+
+`arm64`: [AoqClientSdk.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/zh/files/6a4b3c2d1e0f90fa.zip)
+
+2026-11-16
+
+支持 Linux 客户端 H.264 编解码。
+
+HarmonyOS
+
+[AoqClientSdk.har](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/zh/files/6a4b3c2d1e0f90f9.har)
+
+[libPluginOpus.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/zh/files/6a4b3c2d1e0f90f8.zip)
+
+2026-11-16
+
+优化 HarmonyOS 平台日志与统计数据上报的兼容性和稳定性。
 
 v1.4.0
 
@@ -278,6 +300,36 @@ HarmonyOS
 [libPluginOpus.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260715/wvtyrh/libPluginOpus.zip)
 
 **重要**AOQ使用音频插件的方式加载Opus编解码器，如果需要Opus编解码时需要下载Opus插件并加载到工程内。
+
+## AOQ Web SDK下载
+
+版本
+
+平台
+
+下载
+
+更新日期
+
+更新说明
+
+v1.0.1
+
+Web
+
+[aoq-web-sdk-1.0.1-60040320.tgz](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/zh/files/6a4b3c2d1e0f90ff.tgz)
+
+也可以通过 npm 安装：
+
+`npm install aoq-web-sdk@1.0.1-60040320`
+
+2026-11-16
+
+1.  发布 AOQ Web SDK，支持在浏览器中接入实时音视频与数据交互能力。
+2.  支持实时音频采集与播放，满足双向语音交互需求。
+3.  支持视频采集、本地预览、远端视频渲染及摄像头切换。
+4.  支持双向数据消息收发，便于业务指令与交互信息传递。
+5.  提供会话管理、连接状态通知、异常回调及运行统计能力。
 
 ## WebSocket SDK下载
 

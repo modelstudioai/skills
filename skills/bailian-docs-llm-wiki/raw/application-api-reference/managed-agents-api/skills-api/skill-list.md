@@ -12,35 +12,15 @@ cursor 分页列出技能，按 created\_at 倒序。支持按来源过滤（自
 
 ## Query 参数
 
-参数
-
-类型
-
-默认
-
-说明
-
-`limit`
-
-int
-
-20
+**limit** `int` 默认 20
 
 每页数量，最大 100
 
-`page`
-
-string
-
-—
+**page** `string` 默认 —
 
 首次不传，后续传上一次响应的 `next_page`
 
-`source`
-
-string
-
-`customer`
+**source** `string` 默认 `customer`
 
 来源筛选：`customer`（自建）或 `official`（阿里云百炼官方）
 
@@ -94,50 +74,30 @@ for (Skill s : page.getData()) System.out.println(s.getId() + " " + s.getName())
 
 ### Skill 对象字段
 
-字段
-
-类型
-
-说明
-
-`id`
-
-string
+**id** `string`
 
 技能 ID，格式 `skill_xxx`
 
-`type`
-
-string
+**type** `string`
 
 固定为 `skill`
 
-`name` / `description`
-
-string
+**name / description** `string`
 
 从 zip 包内 `SKILL.md` 解析得到
 
-`source`
-
-string
+**source** `string`
 
 来源：`customer`（自建） / `official`（阿里云百炼官方）
 
-`status`
-
-string
+**status** `string`
 
 扫描状态：`checking` / `active` / `rejected` / `deleted`，仅 `active` 可挂载
 
-`latest_version`
-
-string
+**latest\_version** `string`
 
 最新版本号，挂载到智能体时不能锁定到 `latest`，必须指定具体版本号
 
-`created_at` / `updated_at`
-
-string
+**created\_at / updated\_at** `string`
 
 创建 / 最近更新时间，ISO 8601

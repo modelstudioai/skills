@@ -12,35 +12,15 @@
 
 ## Query 参数
 
-**参数**
-
-**必填**
-
-**类型**
-
-**说明**
-
-`include_archived`
-
-否
-
-boolean
+**include\_archived** `boolean` **（可选）**
 
 默认 false 只返回未归档；true 同时返回未归档与已归档
 
-`limit`
-
-否
-
-integer
+**limit** `integer` **（可选）**
 
 单页条数，1-100，默认 20
 
-`page`
-
-否
-
-string
+**page** `string` **（可选）**
 
 分页游标。首次不传，后续传上一次响应的 next\_page 翻下一页
 
@@ -52,6 +32,48 @@ curl
 curl "$AGENTSTUDIO_URL/memory_stores" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
+
+### 响应字段
+
+**data** `array<object>`
+
+记忆库数组
+
+**id** `string`
+
+记忆库 ID，格式 memstore\_xxx
+
+**type** `string`
+
+固定为 memory\_store
+
+**name** `string`
+
+记忆库名称，1-255 字符
+
+**description** `string`
+
+用途说明；未填写时为空字符串
+
+**metadata** `object`
+
+业务自定义键值对元数据
+
+**archived\_at** `string | null`
+
+归档时间，未归档时省略或为 null
+
+**created\_at** `string`
+
+创建时间，ISO 8601 UTC
+
+**updated\_at** `string`
+
+最近更新时间，ISO 8601 UTC
+
+**next\_page** `string | null`
+
+下一页游标；响应不含该字段或为 null 时表示末页
 
 ## 响应
 
@@ -73,74 +95,6 @@ curl "$AGENTSTUDIO_URL/memory_stores" \
   "next_page": null
 }
 ```
-
-### 响应字段
-
-**字段**
-
-**类型**
-
-**说明**
-
-`data`
-
-array<object>
-
-记忆库数组
-
-`id`
-
-string
-
-记忆库 ID，格式 memstore\_xxx
-
-`type`
-
-string
-
-固定为 memory\_store
-
-`name`
-
-string
-
-记忆库名称，1-255 字符
-
-`description`
-
-string
-
-用途说明；未填写时为空字符串
-
-`metadata`
-
-object
-
-业务自定义键值对元数据
-
-`archived_at`
-
-string | null
-
-归档时间，未归档时省略或为 null
-
-`created_at`
-
-string
-
-创建时间，ISO 8601 UTC
-
-`updated_at`
-
-string
-
-最近更新时间，ISO 8601 UTC
-
-`next_page`
-
-string | null
-
-下一页游标；响应不含该字段或为 null 时表示末页
 
 ## 错误码
 

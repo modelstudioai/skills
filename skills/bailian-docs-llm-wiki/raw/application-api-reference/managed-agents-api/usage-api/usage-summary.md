@@ -14,75 +14,35 @@
 
 ## 请求体
 
-参数
-
-必填
-
-类型
-
-说明
-
-`dimension`
-
-是
-
-string
+**dimension** `string` **（必选）**
 
 查询维度，区分大小写。取值仅为 `workspace`、`agent`、`session`
 
-`agent_id`
-
-条件必填
-
-string
+**agent\_id** `string` **（条件必填）**
 
 `dimension=agent` 时必填，指定一个 Agent；其他维度不传
 
-`agent_version`
-
-否
-
-string
+**agent\_version** `string` **（可选）**
 
 仅 `dimension=agent` 可用。指定 Agent 版本；不传或为 `null` 时合并全部版本。不能是空字符串或纯空白；按原始字符串精确匹配，不自动去除首尾空格
 
-`session_id`
-
-条件必填
-
-string
+**session\_id** `string` **（条件必填）**
 
 `dimension=session` 时必填。使用创建 Session 时返回的 ID；必须为非空、非纯空白的单个字符串，其他维度不传
 
-`time_range`
-
-条件必填
-
-object
+**time\_range** `object` **（条件必填）**
 
 `workspace`、`agent` 维度必填；`session` 维度不接受
 
-`time_range.start_time`
-
-条件必填
-
-string
+**time\_range.start\_time** `string` **（条件必填）**
 
 使用 `time_range` 时必填。带时区的秒级 RFC 3339 字符串，例如 `2026-11-02T10:15:30+08:00`；秒可以非零，无需对齐整分钟
 
-`time_range.end_time`
-
-条件必填
-
-string
+**time\_range.end\_time** `string` **（条件必填）**
 
 使用 `time_range` 时必填。结束时间，格式同上，必须晚于开始时间
 
-`granularity`
-
-否
-
-string
+**granularity** `string` **（可选）**
 
 `workspace`、`agent` 维度可用，取值为 `hour`、`day`、`month`；不传时自动选择。影响实际统计区间的对齐方式。`session` 维度不传
 
@@ -164,6 +124,50 @@ curl -X POST "$AGENTSTUDIO_URL/usage/summary" \
   }'
 ```
 
+## 响应字段
+
+**request\_id** `string`
+
+请求标识，可用于问题排查
+
+**data** `object`
+
+用量查询结果
+
+**data.query\_range** `object`
+
+实际统计区间。仅 `workspace`、`agent` 维度返回；`session` 维度不返回该字段
+
+**data.query\_range.start\_time** `string`
+
+对齐后的开始时间，包含该时刻，固定使用 `+08:00` 时区
+
+**data.query\_range.end\_time** `string`
+
+对齐后的结束时间，不包含该时刻，固定使用 `+08:00` 时区
+
+**data.data\_updated\_at** `string / null`
+
+本次返回用量记录中最近的已知更新时间，固定使用 `+08:00` 时区；无记录或更新时间未知时为 `null`
+
+**data.usage** `object`
+
+总量及分组明细
+
+**data.usage.total** `object`
+
+查询范围内的汇总指标，详见 [汇总指标（total）](https://help.aliyun.com/zh/model-studio/usage-api#h-usage-total)
+
+**data.usage.models** `array`
+
+按模型名称分组的用量明细，无明细时为 `[]`
+
+**data.usage.tools** `array`
+
+按工具来源和名称分组的用量明细，无明细时为 `[]`
+
+Session 查询返回相同的 `usage` 结构，不包含 `query_range` 或 Session 标题、状态等元数据。服务先校验 Session 归属，再查询生命周期累计用量。Session 存在但尚无统计记录时，指标 `value` 为 `null`，模型和工具明细为空数组；不会据此返回 Session 不存在。
+
 ## 响应示例
 
 成功时返回 HTTP 200，顶层字段为 `request_id`、`data`。以下为上述 Agent 请求的汇总示例：秒级起止时间按 `hour` 对齐为 UTC+8 10:00—15:00，数值仅用于说明响应结构。
@@ -226,73 +230,3 @@ curl -X POST "$AGENTSTUDIO_URL/usage/summary" \
   }
 }
 ```
-
-## 响应字段
-
-字段
-
-类型
-
-说明
-
-`request_id`
-
-string
-
-请求标识，可用于问题排查
-
-`data`
-
-object
-
-用量查询结果
-
-`data.query_range`
-
-object
-
-实际统计区间。仅 `workspace`、`agent` 维度返回；`session` 维度不返回该字段
-
-`data.query_range.start_time`
-
-string
-
-对齐后的开始时间，包含该时刻，固定使用 `+08:00` 时区
-
-`data.query_range.end_time`
-
-string
-
-对齐后的结束时间，不包含该时刻，固定使用 `+08:00` 时区
-
-`data.data_updated_at`
-
-string / null
-
-本次返回用量记录中最近的已知更新时间，固定使用 `+08:00` 时区；无记录或更新时间未知时为 `null`
-
-`data.usage`
-
-object
-
-总量及分组明细
-
-`data.usage.total`
-
-object
-
-查询范围内的汇总指标，详见 [汇总指标（total）](https://help.aliyun.com/zh/model-studio/usage-api#h-usage-total)
-
-`data.usage.models`
-
-array
-
-按模型名称分组的用量明细，无明细时为 `[]`
-
-`data.usage.tools`
-
-array
-
-按工具来源和名称分组的用量明细，无明细时为 `[]`
-
-Session 查询返回相同的 `usage` 结构，不包含 `query_range` 或 Session 标题、状态等元数据。服务先校验 Session 归属，再查询生命周期累计用量。Session 存在但尚无统计记录时，指标 `value` 为 `null`，模型和工具明细为空数组；不会据此返回 Session 不存在。

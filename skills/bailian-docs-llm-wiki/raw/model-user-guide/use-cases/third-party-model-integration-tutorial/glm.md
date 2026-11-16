@@ -652,6 +652,50 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/v
 }'
 ```
 
+## 逐块返回 Token 用量（chunk\_include\_usage）
+
+`glm-5.3` 通过 OpenAI Chat Completions 流式调用时，支持 `stream_options.chunk_include_usage` 参数（boolean，可选，默认值为 `false`），仅在 `stream` 为 `true` 时生效。Responses API 不支持该参数。
+
+-   `true`：每个数据块均包含 `usage`，表示截至当前数据块的累计 Token 用量，而不是当前块新增的用量。无需同时设置 `stream_options.include_usage`。
+-   `false` 或不传：不逐块返回用量。需要在最后一个数据块中获取总用量时，设置 `stream_options.include_usage=true`。
+
+流式末尾仍会返回一个 `choices` 为空的用量块，其中的 `usage` 与结束内容块中的最终累计值相同。
+
+不同网关的支持情况如下：
+
+-   **华北2（北京）业务空间专属域名（新网关）**：支持。例如 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`。
+-   **DashScope 固定域名（旧网关）**：不支持。旧网关地址为 `https://dashscope.aliyuncs.com/compatible-mode/v1`，设置 `chunk_include_usage` 后也不会逐块返回用量；需要总用量时仍使用 `stream_options.include_usage=true`。
+
+以下请求使用业务空间专属域名。请将 `{WorkspaceId}` 替换为实际业务空间 ID，并提前配置 API Key 环境变量。
+
+```
+curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions" \
+  -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "glm-5.3",
+    "messages": [{"role": "user", "content": "只回答：好"}],
+    "stream": true,
+    "stream_options": {
+      "chunk_include_usage": true
+    }
+  }'
+```
+
+以下响应省略了中间重复的数据块。首块的 `total_tokens` 为 17，结束块及最终用量块的 `total_tokens` 累计为 70。
+
+```
+data: {"model":"glm-5.3","id":"chatcmpl-xxx","created":1794824000,"object":"chat.completion.chunk","usage":{"prompt_tokens":16,"total_tokens":17,"completion_tokens":1,"prompt_tokens_details":{"cached_tokens":0},"completion_tokens_details":{"reasoning_tokens":1}},"choices":[{"logprobs":null,"index":0,"delta":{"reasoning_content":"","content":"","role":"assistant"},"finish_reason":null}]}
+
+...（省略中间数据块）...
+
+data: {"id":"chatcmpl-xxx","object":"chat.completion.chunk","created":1794824000,"model":"glm-5.3","choices":[{"index":0,"delta":{"content":"","reasoning_content":""},"finish_reason":"stop","logprobs":null}],"usage":{"prompt_tokens":16,"total_tokens":70,"completion_tokens":54,"prompt_tokens_details":{"cached_tokens":0},"completion_tokens_details":{"reasoning_tokens":52}}}
+
+data: {"id":"chatcmpl-xxx","object":"chat.completion.chunk","created":1794824000,"model":"glm-5.3","choices":[],"usage":{"prompt_tokens":16,"total_tokens":70,"completion_tokens":54,"prompt_tokens_details":{"cached_tokens":0},"completion_tokens_details":{"reasoning_tokens":52}}}
+
+data: [DONE]
+```
+
 ## 流式工具调用
 
 glm-5.3、glm-5.2、glm-5.2-fast-preview、glm-5.1、glm-5 支持`tool_stream`参数（boolean）。glm-5.3 的默认值为`true`，其余模型的默认值为`false`；该参数仅在`stream`为`true`时生效。开启后，Function Calling 返回的 tool\_call 参数（arguments）会以流式增量方式逐步返回，而非等待完整生成后一次性返回。

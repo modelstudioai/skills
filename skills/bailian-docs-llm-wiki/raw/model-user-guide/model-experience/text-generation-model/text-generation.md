@@ -62,7 +62,7 @@ try:
     )
 
     completion = client.chat.completions.create(
-        model="qwen3.8-max",
+        model="qwen4-max",
         messages=[
             {"role": "system", "content": "You are a helpful assistant."},
             {"role": "user", "content": "你是谁？"},
@@ -104,7 +104,7 @@ public class Main {
 
             // 创建 ChatCompletion 参数
             ChatCompletionCreateParams params = ChatCompletionCreateParams.builder()
-                    .model("qwen3.8-max")
+                    .model("qwen4-max")
                     .addSystemMessage("You are a helpful assistant.")
                     .addUserMessage("你是谁？")
                     .build();
@@ -146,7 +146,7 @@ const openai = new OpenAI(
     }
 );
 const completion = await openai.chat.completions.create({
-    model: "qwen3.8-max",
+    model: "qwen4-max",
     messages: [
         { role: "system", content: "You are a helpful assistant." },
         { role: "user", content: "你是谁？" }
@@ -195,7 +195,7 @@ func main() {
 				openai.SystemMessage("You are a helpful assistant."),
 				openai.UserMessage("你是谁？"),
 			},
-			Model: "qwen3.8-max",
+			Model: "qwen4-max",
 		},
 	)
 
@@ -240,7 +240,7 @@ class Program
         // 以下为华北2（北京）地域的URL，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的URL不同。
         string url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions";
         string jsonContent = @"{
-            ""model"": ""qwen3.8-max"",
+            ""model"": ""qwen4-max"",
             ""messages"": [
                 {
                     ""role"": ""system"",
@@ -318,7 +318,7 @@ $headers = [
 ];
 // 设置请求体
 $data = [
-    "model" => "qwen3.8-max",
+    "model" => "qwen4-max",
     "messages" => [
         [
             "role" => "system",
@@ -372,7 +372,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "messages": [
         {
             "role": "system",
@@ -387,6 +387,8 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 ```
 
 #### 返回结果
+
+以下为 `qwen3.8-max` 的返回示例，用于说明响应字段。
 
 ```
 {
@@ -434,7 +436,7 @@ try:
     )
 
     response = client.responses.create(
-        model="qwen3.8-max",
+        model="qwen4-max",
         input="简要介绍下你能做什么？"
     )
 
@@ -489,7 +491,7 @@ const openai = new OpenAI({
 async function main() {
     try {
         const response = await openai.responses.create({
-            model: "qwen3.8-max",
+            model: "qwen4-max",
             input: "简要介绍下你能做什么？"
         });
 
@@ -539,12 +541,14 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input": "简要介绍下你能做什么？"
 }'
 ```
 
 #### 返回结果
+
+以下为 `qwen3.8-max` 的返回示例，用于说明响应字段。
 
 ```
 {
@@ -633,7 +637,7 @@ messages = [
 ]
 try:
     response = client.chat.completions.create(
-        # qwen3.7-max、qwen3.7-max-2026-05-20仅支持文本接口，qwen3.8-max、qwen3.7-max-2026-06-08、Qwen3.6、Qwen3.5系列需要使用多模态接口，直接替换模型会导致报错
+        # qwen3.7-max、qwen3.7-max-2026-05-20仅支持文本接口，qwen4-max、qwen3.7-max-2026-06-08、Qwen3.6、Qwen3.5系列需要使用多模态接口，直接替换模型会导致报错
         model="qwen-plus",
         messages=messages,
     )
@@ -685,7 +689,7 @@ public class Main {
                 // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：.apiKey("sk-xxx")
                 // 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
                 .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-                // qwen3.7-max、qwen3.7-max-2026-05-20仅支持文本接口，qwen3.8-max、qwen3.7-max-2026-06-08支持多模态接口，Qwen3.6、Qwen3.5系列需要使用多模态接口，直接替换模型会导致报错
+                // qwen3.7-max、qwen3.7-max-2026-05-20仅支持文本接口，qwen4-max、qwen3.7-max-2026-06-08支持多模态接口，Qwen3.6、Qwen3.5系列需要使用多模态接口，直接替换模型会导致报错
                 .model("qwen-plus")
                 .messages(Arrays.asList(systemMsg, userMsg))
                 .resultFormat(GenerationParam.ResultFormat.MESSAGE)
@@ -721,7 +725,7 @@ public class Main {
 const apiKey = process.env.DASHSCOPE_API_KEY;
 
 const data = {
-    // qwen3.7-max、qwen3.7-max-2026-05-20仅支持文本接口，qwen3.8-max、qwen3.7-max-2026-06-08支持多模态接口，Qwen3.6、Qwen3.5系列需要使用多模态接口，直接替换模型会导致报错
+    // qwen3.7-max、qwen3.7-max-2026-05-20仅支持文本接口，qwen4-max、qwen3.7-max-2026-06-08支持多模态接口，Qwen3.6、Qwen3.5系列需要使用多模态接口，直接替换模型会导致报错
     model: "qwen-plus",
     input: {
         messages: [
@@ -788,7 +792,7 @@ import (
 
 func main() {
 	requestBody := map[string]interface{}{
-		// qwen3.7-max、qwen3.7-max-2026-05-20仅支持文本接口，qwen3.8-max、qwen3.7-max-2026-06-08支持多模态接口，Qwen3.6、Qwen3.5系列需要使用多模态接口，直接替换模型会导致报错
+		// qwen3.7-max、qwen3.7-max-2026-05-20仅支持文本接口，qwen4-max、qwen3.7-max-2026-06-08支持多模态接口，Qwen3.6、Qwen3.5系列需要使用多模态接口，直接替换模型会导致报错
 		"model": "qwen-plus",
 		"input": map[string]interface{}{
 			"messages": []map[string]string{
@@ -865,7 +869,7 @@ class Program
         // 设置请求 URL 和内容
         // 各地域配置不同，请根据实际地域修改
         string url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation";
-        // qwen3.7-max、qwen3.7-max-2026-05-20仅支持文本接口，qwen3.8-max、qwen3.7-max-2026-06-08支持多模态接口，Qwen3.6、Qwen3.5系列需要使用多模态接口，直接替换模型会导致报错
+        // qwen3.7-max、qwen3.7-max-2026-05-20仅支持文本接口，qwen4-max、qwen3.7-max-2026-06-08支持多模态接口，Qwen3.6、Qwen3.5系列需要使用多模态接口，直接替换模型会导致报错
         string jsonContent = @"{
             ""model"": ""qwen-plus"",
             ""input"": {
@@ -954,7 +958,7 @@ $url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/
 $apiKey = getenv('DASHSCOPE_API_KEY');
 
 $data = [
-    // qwen3.7-max、qwen3.7-max-2026-05-20仅支持文本接口，qwen3.8-max、qwen3.7-max-2026-06-08支持多模态接口，Qwen3.6、Qwen3.5系列需要使用多模态接口，直接替换模型会导致报错
+    // qwen3.7-max、qwen3.7-max-2026-05-20仅支持文本接口，qwen4-max、qwen3.7-max-2026-06-08支持多模态接口，Qwen3.6、Qwen3.5系列需要使用多模态接口，直接替换模型会导致报错
     "model" => "qwen-plus",
     "input" => [
         "messages" => [
@@ -1100,7 +1104,7 @@ messages = [
 ]
 try:
     response = client.multimodal.chat.create(
-        model="qwen3.8-max",  # 可按需更换为其他多模态模型
+        model="qwen4-max",  # 可按需更换为其他多模态模型
         messages=messages,
     )
     print(response.output_text)
@@ -1152,7 +1156,7 @@ public class Main {
                 // 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
                 // 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
                 .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-                .model("qwen3.8-max")  // 可按需更换为其他多模态模型
+                .model("qwen4-max")  // 可按需更换为其他多模态模型
                 .messages(Arrays.asList(systemMsg, userMsg))
                 .build();
         try {
@@ -1180,7 +1184,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input": {
         "messages": [
             {

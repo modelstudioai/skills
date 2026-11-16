@@ -12,19 +12,7 @@
 
 ## 路径参数
 
-**参数**
-
-**必填**
-
-**类型**
-
-**说明**
-
-`id`
-
-是
-
-string
+**id** `string` **（必选）**
 
 Webhook ID，格式 wep\_<ULID>
 
@@ -36,6 +24,56 @@ curl
 curl -X POST "$AGENTSTUDIO_URL/webhook_endpoints/wep_01JXX7YQGPRPV1BZXA35QE7WDP/enable" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
+
+### 响应字段
+
+**id** `string`
+
+—
+
+**description** `string | null`
+
+—
+
+**url** `string`
+
+—
+
+**events** `array<string>`
+
+—
+
+**status** `string`
+
+启用后为 ACTIVE
+
+**disabled\_reason** `string | null`
+
+—
+
+**consecutive\_fail** `integer`
+
+返回启用完成时的当前值
+
+**last\_success\_at** `string | null`
+
+返回启用完成时的当前值
+
+**last\_failure\_at** `string | null`
+
+返回启用完成时的当前值
+
+**created\_at** `string`
+
+—
+
+**updated\_at** `string`
+
+—
+
+**request\_id** `string`
+
+本次请求的唯一标识，排查问题时附带
 
 ## 响应
 
@@ -57,86 +95,6 @@ curl -X POST "$AGENTSTUDIO_URL/webhook_endpoints/wep_01JXX7YQGPRPV1BZXA35QE7WDP/
   "request_id": "8e1d16e4"
 }
 ```
-
-### 响应字段
-
-**字段**
-
-**类型**
-
-**说明**
-
-`id`
-
-string
-
-—
-
-`description`
-
-string | null
-
-—
-
-`url`
-
-string
-
-—
-
-`events`
-
-array<string>
-
-—
-
-`status`
-
-string
-
-启用后为 ACTIVE
-
-`disabled_reason`
-
-string | null
-
-—
-
-`consecutive_fail`
-
-integer
-
-返回启用完成时的当前值
-
-`last_success_at`
-
-string | null
-
-返回启用完成时的当前值
-
-`last_failure_at`
-
-string | null
-
-返回启用完成时的当前值
-
-`created_at`
-
-string
-
-—
-
-`updated_at`
-
-string
-
-—
-
-`request_id`
-
-string
-
-本次请求的唯一标识，排查问题时附带
 
 ## 错误码
 

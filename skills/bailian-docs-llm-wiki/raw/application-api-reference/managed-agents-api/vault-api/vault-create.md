@@ -12,27 +12,11 @@
 
 ## 请求体
 
-**字段**
-
-**必填**
-
-**类型**
-
-**说明**
-
-`display_name`
-
-是
-
-string
+**display\_name** `string` **（必选）**
 
 Vault 的可读名称，1-255 字符
 
-`metadata`
-
-否
-
-object
+**metadata** `object` **（可选）**
 
 业务自定义键值对元数据
 
@@ -52,6 +36,36 @@ curl -X POST "$AGENTSTUDIO_URL/vaults" \
   }'
 ```
 
+### 响应字段
+
+**id** `string`
+
+Vault ID，格式 vlt\_xxx
+
+**type** `string`
+
+固定为 vault
+
+**display\_name** `string`
+
+Vault 可读名称
+
+**metadata** `object`
+
+业务自定义键值对
+
+**archived\_at** `string | null`
+
+归档时间，未归档时为 null
+
+**created\_at** `string`
+
+创建时间，ISO 8601
+
+**updated\_at** `string`
+
+最近更新时间，ISO 8601
+
 ## 响应
 
 ```
@@ -67,56 +81,6 @@ curl -X POST "$AGENTSTUDIO_URL/vaults" \
   "updated_at": "2026-06-20T10:00:00Z"
 }
 ```
-
-### 响应字段
-
-**字段**
-
-**类型**
-
-**说明**
-
-`id`
-
-string
-
-Vault ID，格式 vlt\_xxx
-
-`type`
-
-string
-
-固定为 vault
-
-`display_name`
-
-string
-
-Vault 可读名称
-
-`metadata`
-
-object
-
-业务自定义键值对
-
-`archived_at`
-
-string | null
-
-归档时间，未归档时为 null
-
-`created_at`
-
-string
-
-创建时间，ISO 8601
-
-`updated_at`
-
-string
-
-最近更新时间，ISO 8601
 
 ## 错误码
 

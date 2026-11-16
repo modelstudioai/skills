@@ -117,7 +117,7 @@ WebSocket SDK 用法参见 [Python SDK](raw/_short/qwen-livetranslate-python-sdk
 
 `format`object
 
-输出格式。`type` 默认值为 `pcm`，`sample_rate` 默认值为 `24000`（Hz）。
+会话的默认输出格式。`type` 为 `pcm`，`sample_rate` 为 `24000`（Hz）。
 
 `voice`string
 
@@ -325,7 +325,7 @@ VAD（语音活动检测）配置。
 
 `format`object
 
-输出格式。`type` 默认值为 `pcm`，`sample_rate` 默认值为 `24000`（Hz）。
+会话的输出格式配置。收到 [response.audio.delta](#a25cc50a15car) 后，按 PCM 24 kHz 播放译音。
 
 `voice`string
 

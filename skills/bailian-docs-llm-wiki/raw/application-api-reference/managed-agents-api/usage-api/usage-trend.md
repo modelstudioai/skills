@@ -14,83 +14,39 @@
 
 ## 请求体
 
-参数
-
-必填
-
-类型
-
-说明
-
-`dimension`
-
-是
-
-string
+**dimension** `string` **（必选）**
 
 取值仅为小写 `workspace`、`agent`，区分大小写。不支持 `session`
 
-`agent_id`
-
-条件必填
-
-string
+**agent\_id** `string` **（条件必填）**
 
 `dimension=agent` 时必填，指定一个 Agent；`workspace` 维度不传
 
-`agent_version`
-
-否
-
-string
+**agent\_version** `string` **（可选）**
 
 仅 `dimension=agent` 可用。不传或为 `null` 时合并全部版本；不能是空字符串或纯空白，按原始字符串精确匹配，不自动去除首尾空格
 
-`time_range`
-
-是
-
-object
+**time\_range** `object` **（必选）**
 
 查询时间范围
 
-`time_range.start_time`
-
-是
-
-string
+**time\_range.start\_time** `string` **（必选）**
 
 带时区的秒级 RFC 3339 开始时间；秒可以非零，无需对齐整分钟，不接受小数秒
 
-`time_range.end_time`
-
-是
-
-string
+**time\_range.end\_time** `string` **（必选）**
 
 结束时间，格式同上，必须晚于开始时间
 
-`granularity`
-
-否
-
-string
+**granularity** `string` **（可选）**
 
 `hour`、`day` 或 `month`；不传时自动选择，不接受显式 `null`
 
-`page_size`
-
-否
-
-integer
+**page\_size** `integer` **（可选）**
 
 每页最多返回的时间段数量，取值 `1`～`100`，默认 `100`；不接受显式 `null`
 
-`page_token`
-
-否
-
-string
+**page\_token** `string` **（可选）**
 
 首次查询不传。续页原样传入上一页的 `next_page_token`，不解析或自行拼接；不接受显式 null、空字符串、纯空白或无效游标
 
@@ -116,6 +72,56 @@ curl -X POST "$AGENTSTUDIO_URL/usage/trend" \
 ```
 
 查询 Agent 趋势时，将 `dimension` 改为 `agent`，并添加 `agent_id`；需要限定版本时，再添加 `agent_version`。
+
+## 响应字段
+
+**request\_id** `string`
+
+请求标识
+
+**data.query\_range** `object`
+
+整次查询对齐后的实际区间，各页保持一致，不是当前页的起止范围
+
+**data.query\_range.start\_time** `string`
+
+整次查询的开始时间，包含该时刻，使用 `+08:00` 时区
+
+**data.query\_range.end\_time** `string`
+
+整次查询的结束时间，不包含该时刻，使用 `+08:00` 时区
+
+**data.data\_updated\_at** `string / null`
+
+当前页返回用量记录中最近的已知更新时间，无记录或更新时间未知时为 `null`。不同页的值可能不同
+
+**data.granularity** `string`
+
+实际使用的粒度：`hour`、`day` 或 `month`
+
+**data.points** `array`
+
+当前页的时间段列表，按 `start_time` 升序；无记录时为 `[]`
+
+**data.points\[\].start\_time** `string`
+
+当前时间段的开始时间，包含该时刻，使用 `+08:00` 时区
+
+**data.points\[\].end\_time** `string`
+
+当前时间段的结束时间，不包含该时刻，使用 `+08:00` 时区
+
+**data.points\[\].usage** `object`
+
+当前时间段的用量，包含 `total`、`models`、`tools`，结构见 [用量对象](https://help.aliyun.com/zh/model-studio/usage-api#h-usage-object)
+
+**data.has\_more** `boolean`
+
+是否还有下一页
+
+**data.next\_page\_token** `string / null`
+
+下一页游标。`has_more=true` 时为非空字符串；末页为 `null`
 
 ## 响应示例
 
@@ -188,86 +194,6 @@ curl -X POST "$AGENTSTUDIO_URL/usage/trend" \
   }
 }
 ```
-
-## 响应字段
-
-字段
-
-类型
-
-说明
-
-`request_id`
-
-string
-
-请求标识
-
-`data.query_range`
-
-object
-
-整次查询对齐后的实际区间，各页保持一致，不是当前页的起止范围
-
-`data.query_range.start_time`
-
-string
-
-整次查询的开始时间，包含该时刻，使用 `+08:00` 时区
-
-`data.query_range.end_time`
-
-string
-
-整次查询的结束时间，不包含该时刻，使用 `+08:00` 时区
-
-`data.data_updated_at`
-
-string / null
-
-当前页返回用量记录中最近的已知更新时间，无记录或更新时间未知时为 `null`。不同页的值可能不同
-
-`data.granularity`
-
-string
-
-实际使用的粒度：`hour`、`day` 或 `month`
-
-`data.points`
-
-array
-
-当前页的时间段列表，按 `start_time` 升序；无记录时为 `[]`
-
-`data.points[].start_time`
-
-string
-
-当前时间段的开始时间，包含该时刻，使用 `+08:00` 时区
-
-`data.points[].end_time`
-
-string
-
-当前时间段的结束时间，不包含该时刻，使用 `+08:00` 时区
-
-`data.points[].usage`
-
-object
-
-当前时间段的用量，包含 `total`、`models`、`tools`，结构见 [用量对象](https://help.aliyun.com/zh/model-studio/usage-api#h-usage-object)
-
-`data.has_more`
-
-boolean
-
-是否还有下一页
-
-`data.next_page_token`
-
-string / null
-
-下一页游标。`has_more=true` 时为非空字符串；末页为 `null`
 
 ## 分页
 

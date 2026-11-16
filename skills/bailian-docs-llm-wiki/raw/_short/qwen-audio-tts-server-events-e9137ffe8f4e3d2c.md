@@ -1,25 +1,62 @@
 # Qwen-Audio-TTS服务端事件
 
+Qwen-Audio-TTS 服务端事件参考，介绍任务启动、句子合成、任务完成和任务失败的字段及对应请求。
+
+## 事件交互流程
+
+1.  发送 [run-task](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-client-events#run-task) 启动并配置任务，等待 [task-started](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-server-events#task-started)。
+2.  收到 `task-started` 后，通过 [continue-task](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-client-events#continue-task) 发送文本，同时接收 [result-generated](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-server-events#result-generated) 和合成音频。
+3.  文本全部发送完毕后，发送 [finish-task](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-client-events#finish-task)，继续接收剩余结果和音频，直到收到 [task-finished](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-server-events#task-finished)；任务失败时返回 [task-failed](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-server-events#task-failed)。
+
+`result-generated` 返回句子元信息，音频数据通过独立通道传输：WebSocket 使用二进制帧，AOQ 使用 Audio Track。连接、鉴权和音频传输方式请参见 [WebSocket API](raw/_short/qwen-audio-tts-websocket-api-6f9e2d20cf04ea96.md) 或 [AOQ 接入](raw/model-api-reference/realtime-api-directory/realtime-tts-model-apis/qwen-audio-tts-api/qwen-audio-tts-aoq-access.md)。
+
 ## task-started
 
-当客户端发送 `run-task` 指令后，服务端返回 `task-started` 事件，标志任务已成功开启。只有在接收到该事件后，客户端才能继续发送后续指令。
+任务启动成功，是客户端开始发送待合成文本的信号。
 
-**header.task\_id** `string`
+**重要****收到 `task-started` 后才能发送 `continue-task`。** `run-task` 只用于启动和配置任务，待合成文本通过 `continue-task` 发送。
+
+`header`object
+
+`task_id`string
 
 客户端生成的任务 ID。
 
-**header.event** `string`
+`event`string
 
 事件类型，固定为 `task-started`。
 
-**payload** `object`
+`payload`object
 
 无内容，为空对象。
 
 ```
 {
   "header": {
-    "task_id": "2bf83b9a-baeb-4fda-8d9a-xxxxxxxxxxxx",
+    "action": "run-task",
+    "task_id": "a39861ca-2fd0-4d6e-a75c-79aa66a5c2d6",
+    "streaming": "duplex"
+  },
+  "payload": {
+    "input": {},
+    "task_group": "audio",
+    "task": "tts",
+    "function": "SpeechSynthesizer",
+    "model": "qwen-audio-3.1-tts-flash",
+    "parameters": {
+      "text_type": "PlainText",
+      "voice": "longanhuan_v3.1",
+      "format": "mp3",
+      "sample_rate": 22050
+    }
+  }
+}
+```
+```
+{
+  "header": {
+    "task_id": "a39861ca-2fd0-4d6e-a75c-79aa66a5c2d6",
+    "task_uuid": "cc20c8fbbe9a4553be4e2efb2c37a913",
     "event": "task-started",
     "attributes": {}
   },
@@ -29,23 +66,57 @@
 
 ## result-generated
 
-客户端发送文本后，服务端持续返回 `result-generated` 事件。该事件返回句子元信息。
+返回句子元信息，包括句子开始、音频数据块标记和句子结束。
 
-**header.task\_id** `string`
+**重要****`sentence-end` 只表示当前句子合成结束，不表示整个任务结束。** 任务结束以 `task-finished` 为准。音频通过 WebSocket 二进制帧或 AOQ Audio Track 返回。
+
+`header`object
+
+`task_id`string
 
 客户端生成的任务 ID。
 
-**header.event** `string`
+`event`string
 
 事件类型，固定为 `result-generated`。
 
-**payload.output** `object`
+`payload`object
+
+`output`object
 
 输出信息。
 
-属性
+`sentence`object
 
-**type** `string`
+`index`integer
+
+句子编号，从 0 开始。
+
+`words`array
+
+字级别时间戳信息数组。
+
+`text`string
+
+字的文本内容。
+
+`begin_index`integer
+
+字在句子中的开始位置索引，从 0 开始。
+
+`end_index`integer
+
+字在句子中的结束位置索引，从 1 开始。
+
+`begin_time`integer
+
+字对应音频的开始时间戳，单位：毫秒。
+
+`end_time`integer
+
+字对应音频的结束时间戳，单位：毫秒。
+
+`type`string
 
 子事件类型，取值：
 
@@ -53,121 +124,63 @@
 -   `sentence-synthesis`：标识音频数据块，每个事件后立即通过 WebSocket binary 通道传输一个音频数据帧
 -   `sentence-end`：句子结束，返回文本内容和用量信息（`usage`）
 
-**sentence.index** `integer`
-
-句子编号，从 0 开始。
-
-**sentence.words** `array`
-
-字级别时间戳信息数组。
-
-words 元素属性
-
-**text** `string`
-
-字的文本内容。
-
-**begin\_index** `integer`
-
-字在句子中的开始位置索引，从 0 开始。
-
-**end\_index** `integer`
-
-字在句子中的结束位置索引，从 1 开始。
-
-**begin\_time** `integer`
-
-字对应音频的开始时间戳，单位：毫秒。
-
-**end\_time** `integer`
-
-字对应音频的结束时间戳，单位：毫秒。
-
-**original\_text** `string`
+`original_text`string
 
 分句后的句子文本内容。
 
-**payload.usage** `object`
+`usage`object
 
 计费用量，在 `sentence-end` 事件中返回。
 
-**说明**`qwen-audio-3.1-tts-flash` 按输入和输出 Token 计费；`qwen-audio-3.1-tts-plus`、`qwen-audio-3.0-tts-plus` 和 `qwen-audio-3.0-tts-flash` 按字符计费。
+**说明**
 
-属性
+-   `usage` 表示当前任务的累计用量，**不要将各事件中的 `usage` 相加**。任务完成后，以 `task-finished` 中的最终累计用量为准。
+-   qwen-audio-3.1-tts-flash：按输入和输出 Token 计费，用量分别对应 `input_tokens` 和 `output_tokens`，合计见 `total_tokens`。
+-   qwen-audio-3.1-tts-plus：按字符计费（`characters`），同时返回上述 Token 统计字段。
+-   qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash：按字符计费（`characters`）。
 
-**input\_tokens** `integer`
+`input_tokens`integer
 
 本次请求的输入 Token 数。
 
-**说明**适用于 `qwen-audio-3.1-tts-plus`、`qwen-audio-3.1-tts-flash`。
-
-**output\_tokens** `integer`
+`output_tokens`integer
 
 本次请求的输出 Token 数。
 
-**说明**适用于 `qwen-audio-3.1-tts-plus`、`qwen-audio-3.1-tts-flash`。
-
-**total\_tokens** `integer`
+`total_tokens`integer
 
 输入和输出 Token 数之和。
 
-**说明**适用于 `qwen-audio-3.1-tts-plus`、`qwen-audio-3.1-tts-flash`。
-
-**characters** `integer`
+`characters`integer
 
 累计计费字符数。
 
-sentence-begin
+以下示例在启动任务时已设置 `word_timestamp_enabled=true`。
+
+#### sentence-begin
 
 ```
 {
   "header": {
-    "task_id": "3f2d5c86-0550-45c0-801f-xxxxxxxxxx",
-    "event": "result-generated",
-    "attributes": {}
+    "action": "continue-task",
+    "task_id": "c67b3308-1737-4bfe-8292-6961cfa67bbe",
+    "streaming": "duplex"
   },
   "payload": {
-    "output": {
-      "sentence": {
-        "index": 0,
-        "words": []
-      },
-      "type": "sentence-begin",
-      "original_text": "床前明月光，"
+    "input": {
+      "text": "你好，欢迎使用语音合成。"
     }
   }
 }
 ```
-
-sentence-synthesis
-
-```
-{
-    "header": {
-        "task_id": "3f2d5c86-0550-45c0-801f-xxxxxxxxxx",
-        "event": "result-generated",
-        "attributes": {}
-    },
-    "payload": {
-        "output": {
-            "sentence": {
-                "index": 0,
-                "words": []
-            },
-            "type": "sentence-synthesis"
-        }
-    }
-}
-```
-
-sentence-end
-
 ```
 {
   "header": {
-    "task_id": "3f2d5c86-0550-45c0-801f-xxxxxxxxxx",
+    "task_id": "c67b3308-1737-4bfe-8292-6961cfa67bbe",
     "event": "result-generated",
-    "attributes": {}
+    "attributes": {
+      "x-dashscope-inner-response-type": "ws"
+    }
   },
   "payload": {
     "output": {
@@ -175,19 +188,297 @@ sentence-end
         "index": 0,
         "words": [
           {
-            "text": "床",
+            "text": "你",
             "begin_index": 0,
             "end_index": 1,
-            "begin_time": 0,
-            "end_time": 263
+            "begin_time": 80,
+            "end_time": 240
+          },
+          {
+            "text": "好",
+            "begin_index": 1,
+            "end_index": 2,
+            "begin_time": 240,
+            "end_time": 320
+          },
+          {
+            "text": "，",
+            "begin_index": 2,
+            "end_index": 3,
+            "begin_time": 320,
+            "end_time": 640
+          },
+          {
+            "text": "欢",
+            "begin_index": 3,
+            "end_index": 4,
+            "begin_time": 720,
+            "end_time": 960
+          },
+          {
+            "text": "迎",
+            "begin_index": 4,
+            "end_index": 5,
+            "begin_time": 960,
+            "end_time": 1120
+          },
+          {
+            "text": "使",
+            "begin_index": 5,
+            "end_index": 6,
+            "begin_time": 1120,
+            "end_time": 1200
+          },
+          {
+            "text": "用",
+            "begin_index": 6,
+            "end_index": 7,
+            "begin_time": 1200,
+            "end_time": 1360
+          },
+          {
+            "text": "语",
+            "begin_index": 7,
+            "end_index": 8,
+            "begin_time": 1360,
+            "end_time": 1520
+          },
+          {
+            "text": "音",
+            "begin_index": 8,
+            "end_index": 9,
+            "begin_time": 1520,
+            "end_time": 1680
+          }
+        ]
+      },
+      "type": "sentence-begin",
+      "original_text": "你好，欢迎使用语音合成。",
+      "normalized_text": "你好，欢迎使用语音合成。"
+    }
+  }
+}
+```
+
+#### sentence-synthesis
+
+```
+{
+  "header": {
+    "action": "continue-task",
+    "task_id": "c67b3308-1737-4bfe-8292-6961cfa67bbe",
+    "streaming": "duplex"
+  },
+  "payload": {
+    "input": {
+      "text": "你好，欢迎使用语音合成。"
+    }
+  }
+}
+```
+```
+{
+  "header": {
+    "task_id": "c67b3308-1737-4bfe-8292-6961cfa67bbe",
+    "event": "result-generated",
+    "attributes": {
+      "x-dashscope-inner-response-type": "ws"
+    }
+  },
+  "payload": {
+    "output": {
+      "sentence": {
+        "index": 0,
+        "words": [
+          {
+            "text": "你",
+            "begin_index": 0,
+            "end_index": 1,
+            "begin_time": 80,
+            "end_time": 240
+          },
+          {
+            "text": "好",
+            "begin_index": 1,
+            "end_index": 2,
+            "begin_time": 240,
+            "end_time": 320
+          },
+          {
+            "text": "，",
+            "begin_index": 2,
+            "end_index": 3,
+            "begin_time": 320,
+            "end_time": 640
+          },
+          {
+            "text": "欢",
+            "begin_index": 3,
+            "end_index": 4,
+            "begin_time": 720,
+            "end_time": 960
+          },
+          {
+            "text": "迎",
+            "begin_index": 4,
+            "end_index": 5,
+            "begin_time": 960,
+            "end_time": 1120
+          },
+          {
+            "text": "使",
+            "begin_index": 5,
+            "end_index": 6,
+            "begin_time": 1120,
+            "end_time": 1200
+          },
+          {
+            "text": "用",
+            "begin_index": 6,
+            "end_index": 7,
+            "begin_time": 1200,
+            "end_time": 1360
+          },
+          {
+            "text": "语",
+            "begin_index": 7,
+            "end_index": 8,
+            "begin_time": 1360,
+            "end_time": 1520
+          },
+          {
+            "text": "音",
+            "begin_index": 8,
+            "end_index": 9,
+            "begin_time": 1520,
+            "end_time": 1680
+          }
+        ]
+      },
+      "type": "sentence-synthesis"
+    }
+  }
+}
+```
+
+#### sentence-end
+
+```
+{
+  "header": {
+    "action": "continue-task",
+    "task_id": "c67b3308-1737-4bfe-8292-6961cfa67bbe",
+    "streaming": "duplex"
+  },
+  "payload": {
+    "input": {
+      "text": "你好，欢迎使用语音合成。"
+    }
+  }
+}
+```
+```
+{
+  "header": {
+    "task_id": "c67b3308-1737-4bfe-8292-6961cfa67bbe",
+    "event": "result-generated",
+    "attributes": {
+      "x-dashscope-inner-response-type": "ws"
+    }
+  },
+  "payload": {
+    "output": {
+      "sentence": {
+        "index": 0,
+        "words": [
+          {
+            "text": "你",
+            "begin_index": 0,
+            "end_index": 1,
+            "begin_time": 80,
+            "end_time": 240
+          },
+          {
+            "text": "好",
+            "begin_index": 1,
+            "end_index": 2,
+            "begin_time": 240,
+            "end_time": 320
+          },
+          {
+            "text": "，",
+            "begin_index": 2,
+            "end_index": 3,
+            "begin_time": 320,
+            "end_time": 640
+          },
+          {
+            "text": "欢",
+            "begin_index": 3,
+            "end_index": 4,
+            "begin_time": 720,
+            "end_time": 960
+          },
+          {
+            "text": "迎",
+            "begin_index": 4,
+            "end_index": 5,
+            "begin_time": 960,
+            "end_time": 1120
+          },
+          {
+            "text": "使",
+            "begin_index": 5,
+            "end_index": 6,
+            "begin_time": 1120,
+            "end_time": 1200
+          },
+          {
+            "text": "用",
+            "begin_index": 6,
+            "end_index": 7,
+            "begin_time": 1200,
+            "end_time": 1360
+          },
+          {
+            "text": "语",
+            "begin_index": 7,
+            "end_index": 8,
+            "begin_time": 1360,
+            "end_time": 1520
+          },
+          {
+            "text": "音",
+            "begin_index": 8,
+            "end_index": 9,
+            "begin_time": 1520,
+            "end_time": 1680
+          },
+          {
+            "text": "合",
+            "begin_index": 9,
+            "end_index": 10,
+            "begin_time": 1680,
+            "end_time": 1920
+          },
+          {
+            "text": "成。",
+            "begin_index": 10,
+            "end_index": 11,
+            "begin_time": 1920,
+            "end_time": 2080
           }
         ]
       },
       "type": "sentence-end",
-      "original_text": "床前明月光，"
+      "original_text": "你好，欢迎使用语音合成。",
+      "normalized_text": "你好，欢迎使用语音合成。"
     },
     "usage": {
-      "characters": 6
+      "input_tokens": 12,
+      "output_tokens": 29,
+      "total_tokens": 41,
+      "characters": 22
     }
   }
 }
@@ -197,30 +488,50 @@ sentence-end
 
 服务端返回 `task-finished` 事件，标志任务已结束。客户端可以关闭 WebSocket 连接或复用连接开启新任务。
 
-**header.task\_id** `string`
+`header`object
+
+`task_id`string
 
 客户端生成的任务 ID。
 
-**header.event** `string`
+`event`string
 
 事件类型，固定为 `task-finished`。
 
-**payload.usage** `object`
+`payload`object
 
-字段含义与 [result-generated 的 usage](#usage-fields) 相同。
+`usage`object
+
+字段含义与 [`result-generated` 的 usage](#usage-fields) 相同。
 
 ```
 {
   "header": {
-    "task_id": "2bf83b9a-baeb-4fda-8d9a-xxxxxxxxxxxx",
+    "action": "finish-task",
+    "task_id": "a39861ca-2fd0-4d6e-a75c-79aa66a5c2d6",
+    "streaming": "duplex"
+  },
+  "payload": {
+    "input": {}
+  }
+}
+```
+```
+{
+  "header": {
+    "task_id": "a39861ca-2fd0-4d6e-a75c-79aa66a5c2d6",
     "event": "task-finished",
     "attributes": {
-      "request_uuid": "0a9dba9e-d3a6-45a4-be6d-xxxxxxxxxxxx"
+      "x-dashscope-inner-response-type": "ws"
     }
   },
   "payload": {
+    "output": {},
     "usage": {
-      "characters": 13
+      "input_tokens": 12,
+      "output_tokens": 29,
+      "total_tokens": 41,
+      "characters": 22
     }
   }
 }
@@ -230,30 +541,55 @@ sentence-end
 
 当任务失败时，服务端返回 `task-failed` 事件。客户端需要关闭 WebSocket 连接并处理错误。
 
-**header.task\_id** `string`
+`header`object
+
+`task_id`string
 
 客户端生成的任务 ID。
 
-**header.event** `string`
+`event`string
 
 事件类型，固定为 `task-failed`。
 
-**header.error\_code** `string`
+`error_code`string
 
 错误码。
 
-**header.error\_message** `string`
+`error_message`string
 
 具体错误信息。
+
+以下示例使用不支持的音频格式；任务启动后发送文本，服务端随后返回错误。错误码和错误信息随失败原因而变化。
 
 ```
 {
   "header": {
-    "task_id": "2bf83b9a-baeb-4fda-8d9a-xxxxxxxxxxxx",
+    "action": "run-task",
+    "task_id": "7b091c3c-4b35-4c54-9b22-250749ce1b74",
+    "streaming": "duplex"
+  },
+  "payload": {
+    "input": {},
+    "task_group": "audio",
+    "task": "tts",
+    "function": "SpeechSynthesizer",
+    "model": "qwen-audio-3.1-tts-flash",
+    "parameters": {
+      "text_type": "PlainText",
+      "voice": "longanhuan_v3.1",
+      "format": "invalid-format",
+      "sample_rate": 22050
+    }
+  }
+}
+```
+```
+{
+  "header": {
+    "task_id": "7b091c3c-4b35-4c54-9b22-250749ce1b74",
     "event": "task-failed",
     "error_code": "InvalidParameter",
-    "error_message": "[tts:]Engine return error code: 418",
-    "attributes": {}
+    "error_message": "Request format is invalid!"
   },
   "payload": {}
 }

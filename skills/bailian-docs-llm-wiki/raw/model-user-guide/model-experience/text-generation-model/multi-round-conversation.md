@@ -71,7 +71,8 @@ client = OpenAI(
 
 def get_response(messages):
     completion = client.chat.completions.create(
-        model="qwen3.8-max",
+        model="qwen4-max",
+        extra_body={"enable_thinking": False},
         messages=messages
     )
     return completion.choices[0].message.content
@@ -112,7 +113,8 @@ const openai = new OpenAI({
 
 async function getResponse(messages) {
   const completion = await openai.chat.completions.create({
-    model: "qwen3.8-max",
+    model: "qwen4-max",
+    enable_thinking: false,
     messages: messages,
   });
   return completion.choices[0].message.content;
@@ -155,7 +157,8 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
+    "enable_thinking": false,
     "messages":[
         {
             "role": "system",
@@ -718,7 +721,7 @@ while True:
     # 创建聊天完成请求
     completion = client.chat.completions.create(
         # 您可以按需更换为其它深度思考模型
-        model="qwen3.8-max",
+        model="qwen4-max",
         messages=messages,
         extra_body={"enable_thinking": True},
         stream=True,
@@ -747,7 +750,7 @@ while True:
                 print(delta.content, end='', flush=True)
                 answer_content += delta.content
     # 将模型回复的content添加到上下文中
-    messages.append({"role": "assistant", "content": answer_content})
+    messages.append({"role": "assistant", "content": answer_content, "reasoning_content": reasoning_content})
     print("\n")
 ```
 
@@ -803,7 +806,7 @@ async function main() {
         try {
             const stream = await openai.chat.completions.create({
                 // 您可以按需更换为其它深度思考模型
-                model: 'qwen3.8-max',
+                model: 'qwen4-max',
                 messages: messages,
                 enable_thinking: true,
                 stream: true,
@@ -841,7 +844,7 @@ async function main() {
             }
 
             // 将完整回复加入消息历史
-            messages.push({ role: 'assistant', content: answerContent });
+            messages.push({ role: 'assistant', content: answerContent, reasoning_content: reasoningContent });
             console.log("\n");
 
         } catch (error) {
@@ -869,7 +872,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "messages": [
         {
             "role": "user",
@@ -923,8 +926,8 @@ while True:
     user_msg = {"role": "user", "content": [{"text": user_input}]}
     messages.append(user_msg)
     stream = client.multimodal.chat.create(
-         # 此处以qwen3.8-max为例，可按需更换为其它深度思考模型
-        model="qwen3.8-max",
+         # 此处以qwen4-max为例，可按需更换为其它深度思考模型
+        model="qwen4-max",
         messages=messages,
         enable_thinking=True,
         stream=True,
@@ -956,7 +959,7 @@ while True:
                 print(content_text, end="",flush=True)
                 answer_content += content_text
     # 将模型回复的content添加到上下文中
-    messages.append({"role": "assistant", "content": [{"text": answer_content}]})
+    messages.append({"role": "assistant", "content": [{"text": answer_content}], "reasoning_content": reasoning_content})
     print("\n")
     # 如果您需要打印完整思考过程与完整回复，请将以下代码解除注释后运行
     # print("=" * 20 + "完整思考过程" + "=" * 20 + "\n")
@@ -1038,8 +1041,8 @@ public class Main {
         return MultiModalConversationParam.builder()
                 // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：.apiKey("sk-xxx")
                 .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-                // 此处以 qwen3.8-max 为例，可按需更换模型名称
-                .model("qwen3.8-max")
+                // 此处以 qwen4-max 为例，可按需更换模型名称
+                .model("qwen4-max")
                 .enableThinking(true)
                 .messages(messages)
                 .incrementalOutput(true)
@@ -1099,7 +1102,7 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 -H "Content-Type: application/json" \
 -H "X-DashScope-SSE: enable" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input":{
         "messages":[
             {

@@ -1,46 +1,43 @@
 # realtime api directory
 
-Realtime API 是百炼平台提供的低延迟、流式交互式模型服务接口集合，面向语音识别、语音合成、多模态对话、实时翻译等场景。所有接口均基于 WebSocket 协议实现双向流式通信，支持毫秒级响应与持续上下文维护。该目录是实时类 API 的统一入口，各子模块按功能垂直划分，便于开发者按需集成。
+Realtime API 目录汇总了百炼平台支持的低延迟、流式交互类模型能力，覆盖语音识别（ASR）、语音合成（TTS）、音视频翻译、多模态实时对话等场景。所有接口均面向实时性敏感的应用（如智能座舱、远程会议、AI 陪练）设计，要求端到端延迟控制在数百毫秒量级。该目录本身不提供具体接口定义，而是作为功能入口索引，各子能力详见对应文档。
 
-## 支持的模型与功能
+## 支持的模型/功能
 
-Realtime API 当前覆盖以下核心能力：
-- **实时语音识别（ASR）**：支持中英文混合、多方言、带标点和语义断句的流式识别，模型包括 `qwen2-audio-realtime-asr-zh` 等；  
-- **实时语音合成（TTS）**：提供多音色、可控语速/停顿/情感的流式音频生成，支持 SSML 片段注入；  
-- **实时语音对话（Audio Chat）**：端到端流式语音问答，内置声学前端与语言模型协同优化；  
-- **实时音视频翻译（LiveTranslate）**：支持源语语音→目标语语音/文本的跨语言实时转换；  
-- **多模态实时交互（Omni）**：融合语音、文本、图像、动作信号的统一实时理解与生成，详见 [实时多模态](../../raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory.md)；  
-- **AOQ SDK 集成支持**：提供轻量客户端 SDK，封装连接管理、重连、缓冲与事件回调，降低接入复杂度，具体见 [AOQ SDK](../../raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api.md)。
+当前 Realtime API 目录涵盖以下核心能力模块：
+- 实时多模态交互：支持音频+文本+视觉信号联合理解与生成，适用于带摄像头的语音助手场景 [实时多模态](../../raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory.md)  
+- 实时语音识别（ASR）：流式返回识别结果，支持热词、标点恢复、语种自适应 [实时语音识别](../../raw/model-api-reference/realtime-api-directory/realtime-asr-model-apis.md)  
+- 实时语音合成（TTS）：低延迟音频流输出，支持情感韵律控制与多音色切换 [实时语音合成](../../raw/model-api-reference/realtime-api-directory/realtime-tts-model-apis.md)  
+- 实时语音对话（Audio Realtime）：端到端语音输入→理解→生成→合成闭环，内置对话状态管理 [实时语音对话](../../raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory.md)  
+- 实时音视频翻译（LiveTranslate）：支持双语字幕同步生成与音频转译，含源语/目标语时间对齐 [实时音视频翻译](../../raw/model-api-reference/realtime-api-directory/livetranslate-realtime-api-directory.md)  
+- AOQ SDK：面向嵌入式设备的轻量化实时接入套件，提供 C/C++ 接口封装 [AOQ SDK](../../raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api.md)  
+- 多模态交互协议（MIP）：定义跨模态事件（如“用户抬手+说‘播放’”）的标准化交互格式 [多模态交互开发套件](../../raw/model-api-reference/realtime-api-directory/multimodal-interaction-protocol.md)
 
-> **注意**：[实时语音对话](../../raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory.md) 文档中提及的 `audio-chat-v1` 模型已下线，当前默认使用 `qwen2-audio-realtime-chat`，请以 [实时多模态](../../raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory.md) 中的模型列表为准。
+> **注意**：`audio-realtime-api-directory.md` 中描述的“单轮最大上下文长度为 512 tokens”与 `omni-realtime-api-directory.md` 中“支持动态扩展至 2048 tokens”的说明存在不一致；实际调用时请以最新发布的 [实时多模态](../../raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory.md) 文档为准。
 
 ## 关键参数
 
-所有 Realtime API 均通过 WebSocket 连接初始化时携带 query 参数或首帧 JSON message 传递配置：
-
-| 参数 | 类型 | 必填 | 说明 |
-|------|------|------|------|
-| `model` | string | 是 | 模型标识符，如 `qwen2-audio-realtime-asr-zh`，完整列表见 [实时语音识别](../../raw/model-api-reference/realtime-api-directory/realtime-asr-model-apis.md) 等子文档 |
-| `language` | string | 否 | ASR/TTS 场景下指定语言代码（如 `zh`, `en`），部分模型自动检测 |
-| `response_format` | string | 否 | 可选 `text` / `json` / `audio/wav`，影响返回内容类型 |
-| `enable_interim_results` | boolean | 否 | ASR/TTS 默认 `true`，控制是否推送中间结果 |
-| `max_input_length` | integer | 否 | 单次会话最大输入 token 或音频时长（毫秒），超限将触发截断 |
+所有 Realtime API 共享以下基础参数（部分能力支持扩展参数）：
+- `model`: 必填，指定模型标识符（如 `qwen2-audio-realtime-v1`, `qwen2-asr-streaming-v1`）  
+- `stream`: 必填，固定为 `true`，禁用流式模式将导致 400 错误  
+- `response_format`: 可选，支持 `json`（结构化事件）或 `binary`（原始音频流），默认 `json`  
+- `sample_rate`: TTS/LiveTranslate 等音频输出接口必填，单位 Hz（如 `16000`, `24000`）  
+- `language`: ASR/TTS/LiveTranslate 必填，ISO 639-1 格式（如 `zh`, `en`, `ja`）  
 
 ## 使用方式
 
-1. **建立 WebSocket 连接**：向 `wss://dashscope.aliyuncs.com/realtime/v1/<endpoint>` 发起连接，其中 `<endpoint>` 对应具体能力（如 `asr`, `tts`, `omni`）；  
-2. **发送初始化消息（Init Message）**：首帧为 JSON，包含 `model`、`parameters` 等字段，格式参考 [多模态交互开发套件](../../raw/model-api-reference/realtime-api-directory/multimodal-interaction-protocol.md) 定义；  
-3. **流式收发数据**：后续帧可为二进制音频（PCM/WAV）、文本或结构化指令（如 `{"type": "input_audio", "data": "..."}`）；  
-4. **处理事件流**：服务端按 `event: audio`, `event: text`, `event: error` 等类型推送 SSE 兼容事件，客户端需按协议解析。
+1. **认证**：使用 `Authorization: Bearer <api_key>` 请求头，API Key 需具备 `realtime` 权限 scope  
+2. **连接**：通过 WebSocket（推荐）或 HTTP/2 Server-Sent Events（SSE）建立长连接  
+3. **数据帧**：按 [多模态交互开发套件](../../raw/model-api-reference/realtime-api-directory/multimodal-interaction-protocol.md) 定义的二进制帧格式发送音频/文本/事件数据  
+4. **响应处理**：服务端以事件流形式返回 `partial`, `final`, `error`, `metadata` 等类型消息，需按序解析并维护本地状态  
 
 ## 限制和注意事项
 
-- 单连接最长存活时间 30 分钟，超时后需重建；  
-- 音频输入采样率必须为 16kHz（单声道 PCM），其他格式需客户端预转码；  
-- TTS 输出音频默认为 24kHz PCM，不支持 MP3 流式编码；  
-- 实时音视频翻译（LiveTranslate）暂不支持自定义术语表，该能力将在下一版本通过 [实时音视频翻译](../../raw/model-api-reference/realtime-api-directory/livetranslate-realtime-api-directory.md) 更新；  
-- 所有 Realtime API 均不支持 HTTP fallback，仅限 WebSocket；  
-- 错误码统一遵循 RFC 6455 规范，常见 `4001`（鉴权失败）、`4003`（模型不可用）、`4007`（输入超限）。
+- 单连接最大持续时长：15 分钟（超时后需重连，会话状态不保留）  
+- 音频输入采样率必须与模型训练一致（常见为 16kHz 或 24kHz），不支持运行时重采样  
+- 实时 ASR 不支持离线模式；若需断网可用，请参考 [实时语音识别](../../raw/model-api-reference/realtime-api-directory/realtime-asr-model-apis.md) 中的边缘部署方案  
+- 所有 Realtime API 均不支持 `max_tokens` 或 `temperature` 等通用 LLM 参数，相关控制需通过专用参数（如 `asr_confidence_threshold`, `tts_speed`）实现  
+- AOQ SDK 当前仅支持 Linux ARM64 架构，x86_64 支持计划见 [AOQ SDK](../../raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api.md) 更新日志
 
 ## 来源文档
 

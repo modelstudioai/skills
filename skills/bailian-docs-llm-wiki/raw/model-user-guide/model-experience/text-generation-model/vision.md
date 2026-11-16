@@ -27,7 +27,7 @@ client = OpenAI(
 )
 
 completion = client.chat.completions.create(
-    model="qwen3.8-max", # 此处以qwen3.8-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
+    model="qwen4-max", # 此处以qwen4-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
     messages=[
         {
             "role": "user",
@@ -67,7 +67,7 @@ const openai = new OpenAI({
 
 async function main() {
   const response = await openai.chat.completions.create({
-    model: "qwen3.8-max",  // 此处以qwen3.8-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
+    model: "qwen4-max",  // 此处以qwen4-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
     messages: [
       {
         role: "user",
@@ -131,8 +131,8 @@ public class Main {
 
         // 创建聊天请求
         ChatCompletionCreateParams chatParams = ChatCompletionCreateParams.builder()
-                // 此处以qwen3.8-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
-                .model("qwen3.8-max")
+                // 此处以qwen4-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
+                .model("qwen4-max")
                 .addUserMessageOfArrayOfContentParts(List.of(imagePart, textPart))
                 .build();
 
@@ -174,7 +174,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
 --data '{
-  "model": "qwen3.8-max",
+  "model": "qwen4-max",
   "messages": [
   {
     "role": "user",
@@ -187,6 +187,8 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 ```
 
 ### 返回结果
+
+以下为 `qwen3.8-max` 的返回示例，用于说明响应字段。
 
 ```
 {
@@ -283,7 +285,7 @@ public class Main {
                  // 若没有配置环境变量，请用百炼API Key将下行替换为：.apiKey("sk-xxx")
                  // 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
                 .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-                .model("qwen3.8-max")  // 此处以qwen3.8-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
+                .model("qwen4-max")  // 此处以qwen4-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
                 .messages(Arrays.asList(userMessage))
                 .build();
         MultiModalConversationResult result = conv.call(param);
@@ -318,7 +320,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H 'Content-Type: application/json' \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input":{
         "messages":[
             {
@@ -577,7 +579,7 @@ is_answering = False   # 判断是否结束思考过程并开始回复
 enable_thinking = True
 # 创建聊天完成请求
 completion = client.chat.completions.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     messages=[
         {
             "role": "user",
@@ -720,7 +722,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
 --data '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "messages": [
     {
       "role": "user",
@@ -773,7 +775,7 @@ messages = [
 ]
 
 stream = client.multimodal.chat.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     messages=messages,
     stream=True,
     # enable_thinking 参数开启思考过程
@@ -881,7 +883,7 @@ public class Main {
                 // 若没有配置环境变量，请用百炼API Key将下行替换为：.apiKey("sk-xxx")
                 // 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
                 .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-                .model("qwen3.8-max")
+                .model("qwen4-max")
                 .messages(Arrays.asList(Msg))
                 .enableThinking(true)
                 .thinkingBudget(81920)
@@ -932,7 +934,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 -H 'Content-Type: application/json' \
 -H 'X-DashScope-SSE: enable' \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input":{
         "messages":[
             {
@@ -973,7 +975,7 @@ client = OpenAI(
     base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 completion = client.chat.completions.create(
-    model="qwen3.8-max", # 此处以qwen3.8-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
+    model="qwen4-max", # 此处以qwen4-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
     messages=[
        {"role": "user","content": [
            {"type": "image_url","image_url": {"url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241022/emyrja/dog_and_girl.jpeg"},},
@@ -1012,7 +1014,7 @@ const openai = new OpenAI(
 
 async function main() {
     const response = await openai.chat.completions.create({
-        model: "qwen3.8-max",  // 此处以qwen3.8-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
+        model: "qwen4-max",  // 此处以qwen4-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
         messages: [
           {role: "user",content: [
             {type: "image_url",image_url: {"url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241022/emyrja/dog_and_girl.jpeg"}},
@@ -1046,7 +1048,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H 'Content-Type: application/json' \
 -d '{
-  "model": "qwen3.8-max",
+  "model": "qwen4-max",
   "messages": [
     {
       "role": "user",
@@ -1074,6 +1076,8 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 ```
 
 ### 返回结果
+
+以下为 `qwen3.8-max` 的返回示例，用于说明响应字段。
 
 ```
 {
@@ -1176,7 +1180,7 @@ public class Main {
                 // 若没有配置环境变量，请用百炼API Key将下行替换为：.apiKey("sk-xxx")
                // 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
                 .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-                .model("qwen3.8-max")  // 此处以qwen3.8-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
+                .model("qwen4-max")  // 此处以qwen4-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
                 .messages(Arrays.asList(userMessage))
                 .build();
         MultiModalConversationResult result = conv.call(param);
@@ -1213,7 +1217,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
 --data '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input":{
         "messages":[
             {
@@ -1293,7 +1297,7 @@ client = OpenAI(
 )
 
 completion = client.chat.completions.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     messages=[
         {
             "role": "user",
@@ -1333,7 +1337,7 @@ const openai = new OpenAI({
 
 async function main() {
     const response = await openai.chat.completions.create({
-        model: "qwen3.8-max",
+        model: "qwen4-max",
         messages: [
             {
                 role: "user",
@@ -1373,7 +1377,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H 'Content-Type: application/json' \
   -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "messages": [
       {
         "role": "user",
@@ -1467,7 +1471,7 @@ public class Main {
                 // 若没有配置环境变量，请用百炼API Key将下行替换为：.apiKey("sk-xxx")
                 // 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
                 .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-                .model("qwen3.8-max")
+                .model("qwen4-max")
                 .messages(Arrays.asList(userMessage))
                 .build();
         MultiModalConversationResult result = conv.call(param);
@@ -1496,7 +1500,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H 'Content-Type: application/json' \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input":{
         "messages":[
             {"role": "user","content": [{"video": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241115/cqqkru/1.mp4","fps":2},
@@ -1527,7 +1531,7 @@ client = OpenAI(
 )
 
 completion = client.chat.completions.create(
-    model="qwen3.8-max", # 此处以qwen3.8-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
+    model="qwen4-max", # 此处以qwen4-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
     messages=[{"role": "user","content": [
         # 传入图像列表时，用户消息中的"type"参数为"video"
          {"type": "video","video": [
@@ -1559,7 +1563,7 @@ const openai = new OpenAI({
 
 async function main() {
     const response = await openai.chat.completions.create({
-        model: "qwen3.8-max",  // 此处以qwen3.8-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
+        model: "qwen4-max",  // 此处以qwen4-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
         messages: [{
             role: "user",
             content: [
@@ -1598,7 +1602,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H 'Content-Type: application/json' \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "messages": [{"role": "user","content": [{"type": "video","video": [
                   "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/xzsgiz/football1.jpg",
                   "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/tdescd/football2.jpg",
@@ -1665,7 +1669,7 @@ public class Main {
     // 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
     static {Constants.baseHttpApiUrl="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";}
 
-    private static final String MODEL_NAME = "qwen3.8-max"; // 此处以qwen3.8-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
+    private static final String MODEL_NAME = "qwen4-max"; // 此处以qwen4-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
     public static void videoImageListSample() throws ApiException, NoApiKeyException, UploadFileException {
         MultiModalConversation conv = new MultiModalConversation();
         // 传入图像列表时，fps 参数适用于Qwen3.6、Qwen3-VL 和 Qwen2.5-VL系列模型
@@ -1713,7 +1717,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H 'Content-Type: application/json' \
 -d '{
-  "model": "qwen3.8-max",
+  "model": "qwen4-max",
   "input": {
     "messages": [
       {
@@ -1874,7 +1878,7 @@ public class Main {
                 // 若没有配置环境变量，请用百炼API Key将下行替换为：.apiKey("sk-xxx")
                 // 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
                 .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-                .model("qwen3.8-max")  // 此处以qwen3.8-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
+                .model("qwen4-max")  // 此处以qwen4-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
                 .messages(Arrays.asList(userMessage))
                 .build();
         MultiModalConversationResult result = conv.call(param);
@@ -1919,7 +1923,7 @@ client = OpenAI(
     base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 completion = client.chat.completions.create(
-    model="qwen3.8-max", # 此处以qwen3.8-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
+    model="qwen4-max", # 此处以qwen4-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
     messages=[
         {
             "role": "user",
@@ -1964,7 +1968,7 @@ const encodeImage = (imagePath) => {
 const base64Image = encodeImage("xxx/eagle.png")
 async function main() {
     const completion = await openai.chat.completions.create({
-        model: "qwen3.8-max",  // 此处以qwen3.8-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
+        model: "qwen4-max",  // 此处以qwen4-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
         messages: [
             {"role": "user",
              "content": [{"type": "image_url",
@@ -1996,7 +2000,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
 --data '{
-  "model": "qwen3.8-max",
+  "model": "qwen4-max",
   "messages": [
   {
     "role": "user",
@@ -2047,7 +2051,7 @@ messages = [
     },
 ]
 response = client.multimodal.chat.create(
-    model="qwen3.8-max",  # 此处以qwen3.8-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
+    model="qwen4-max",  # 此处以qwen4-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
     messages=messages,
 )
 print(response.output_text)
@@ -2098,7 +2102,7 @@ public class Main {
         MultiModalConversationParam param = MultiModalConversationParam.builder()
                 // 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
                 .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-                .model("qwen3.8-max")
+                .model("qwen4-max")
                 .messages(Arrays.asList(userMessage))
                 .build();
 
@@ -2133,7 +2137,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H 'Content-Type: application/json' \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input":{
         "messages":[
             {
@@ -2217,7 +2221,7 @@ public class Main {
         MultiModalConversationParam param = MultiModalConversationParam.builder()
                 // 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
                 .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-                .model("qwen3.8-max")
+                .model("qwen4-max")
                 .messages(Arrays.asList(userMessage))
                 .build();
         MultiModalConversationResult result = conv.call(param);
@@ -2261,7 +2265,7 @@ client = OpenAI(
     base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 completion = client.chat.completions.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     messages=[
         {
             "role": "user",
@@ -2304,7 +2308,7 @@ const encodeVideo = (videoPath) => {
 const base64Video = encodeVideo("xxx/test.mp4")
 async function main() {
     const completion = await openai.chat.completions.create({
-        model: "qwen3.8-max",
+        model: "qwen4-max",
         messages: [
             {"role": "user",
              "content": [{
@@ -2335,7 +2339,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
 --data '{
-  "model": "qwen3.8-max",
+  "model": "qwen4-max",
   "messages": [
   {
     "role": "user",
@@ -2429,7 +2433,7 @@ public class Main {
                 // 若没有配置环境变量，请用百炼API Key将下行替换为：.apiKey("sk-xxx")
                 // 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
                 .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-                .model("qwen3.8-max")
+                .model("qwen4-max")
                 .messages(Arrays.asList(userMessage))
                 .build();
 
@@ -2464,7 +2468,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H 'Content-Type: application/json' \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input":{
         "messages":[
             {
@@ -2543,7 +2547,7 @@ public class Main {
     // 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
     static {Constants.baseHttpApiUrl="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";}
 
-    private static final String MODEL_NAME = "qwen3.8-max";  // 此处以qwen3.8-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
+    private static final String MODEL_NAME = "qwen4-max";  // 此处以qwen4-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
     public static void videoImageListSample(String localPath1, String localPath2, String localPath3, String localPath4)
             throws ApiException, NoApiKeyException, UploadFileException {
         MultiModalConversation conv = new MultiModalConversation();
@@ -2611,7 +2615,7 @@ client = OpenAI(
     base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 completion = client.chat.completions.create(
-    model="qwen3.8-max",  # 此处以qwen3.8-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
+    model="qwen4-max",  # 此处以qwen4-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
     messages=[
     {"role": "user","content": [
         {"type": "video","video": [
@@ -2652,7 +2656,7 @@ const base64Image3 = encodeImage("football3.jpg")
 const base64Image4 = encodeImage("football4.jpg")
 async function main() {
     const completion = await openai.chat.completions.create({
-        model: "qwen3.8-max", // 此处以qwen3.8-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
+        model: "qwen4-max", // 此处以qwen4-max为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
         messages: [
             {"role": "user",
              "content": [{"type": "video",
@@ -2684,7 +2688,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H 'Content-Type: application/json' \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "messages": [{"role": "user",
                 "content": [{"type": "video",
                 "video": [
@@ -2796,7 +2800,7 @@ public class Main {
         MultiModalConversationParam param = MultiModalConversationParam.builder()
                 // 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
                 .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-                .model("qwen3.8-max")
+                .model("qwen4-max")
                 .messages(Arrays.asList(userMessage))
                 .build();
 
@@ -2836,7 +2840,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H 'Content-Type: application/json' \
 -d '{
-  "model": "qwen3.8-max",
+  "model": "qwen4-max",
   "input": {
     "messages": [
       {
@@ -2862,6 +2866,27 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 ```
 
 ### 处理高分辨率图像
+
+图片处理精度。适用于 `qwen4-max`，默认值为 `high`。
+
+未传入 `max_pixels` 时：
+
+-   `high`：按原图分辨率处理，上限为 `16777216` 像素。
+-   `low`：像素上限为 `2621440`。
+-   `auto`：与 `low` 相同。
+
+显式传入 `max_pixels` 时，以该值作为像素上限，优先于 `detail`。最大值为 `16777216`。Chat Completions 的 `max_pixels` 与 `image_url` 同级；DashScope 与 `image` 同级。
+
+高分辨率图片使用 `high` 时，输入 Token 用量通常高于 `low`。
+
+Chat Completions 可在 `image_url` 内或与 `image_url` 同级传入 `detail`；DashScope 与 `image` 同级传入。
+
+```
+{"type":"image_url","image_url":{"url":"https://example.com/image.jpg","detail":"low"}}
+```
+```
+{"image":"https://example.com/image.jpg","detail":"low"}
+```
 
 视觉理解模型API对单张图像编码后的视觉 Token 数量设有限制，默认配置下，高分辨率图像会被压缩，可能丢失细节，影响理解准确性。启用 `vl_high_resolution_images` 或调整 `max_pixels` 可增加视觉 Token 数量，从而保留更多图像细节，提升理解效果。
 
@@ -2949,7 +2974,7 @@ client = OpenAI(
 )
 
 completion = client.chat.completions.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     messages=[
         {"role": "user","content": [
             {"type": "image_url","image_url": {"url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250212/earbrt/vcg_VCG211286867973_RF.jpg"},
@@ -2982,7 +3007,7 @@ const openai = new OpenAI(
     }
 );
  const response = await openai.chat.completions.create({
-        model: "qwen3.8-max",
+        model: "qwen4-max",
         messages: [
         {role: "user",content: [
             {type: "image_url",
@@ -3011,7 +3036,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H 'Content-Type: application/json' \
 -d '{
-  "model": "qwen3.8-max",
+  "model": "qwen4-max",
   "messages": [
     {
       "role": "user",
@@ -3109,7 +3134,7 @@ public class Main {
         MultiModalConversationParam param = MultiModalConversationParam.builder()
                 // 若没有配置环境变量，请用百炼API Key将下行替换为：.apiKey("sk-xxx")
                 .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-                .model("qwen3.8-max")
+                .model("qwen4-max")
                 .message(userMessage)
                 .vlHighResolutionImages(true)
                 .build();
@@ -3141,7 +3166,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H 'Content-Type: application/json' \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input":{
         "messages":[
             {
@@ -3231,9 +3256,9 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
         
 -   **图像大小：**
     
-    -   以公网URL传入时：Qwen3.8系列、Qwen3.7系列、Qwen3.6系列、Qwen3.5系列、Qwen3-VL系列单个图像不超过 `20MB`，其他模型单个图像不超过`10MB`
+    -   以公网URL传入时：Qwen4-Max、Qwen3.8系列、Qwen3.7系列、Qwen3.6系列、Qwen3.5系列、Qwen3-VL系列单个图像不超过 `20MB`，其他模型单个图像不超过`10MB`
     -   以本地路径传入时：单个图像不超过`10MB`
-    -   以 Base64 编码传入时：Qwen3.8系列、Qwen3.7系列、Qwen3.6系列、Qwen3.5、Qwen3-VL系列编码前的原始图像文件不超过 `20MB`，其他模型不超过 `10MB`；且编码后的 Data URI 字符串在 OpenAI 兼容接口与 DashScope 不超过 `20MB`，在 Anthropic 兼容接口不超过 `32MB`。
+    -   以 Base64 编码传入时：Qwen4-Max、Qwen3.8系列、Qwen3.7系列、Qwen3.6系列、Qwen3.5、Qwen3-VL系列编码前的原始图像文件不超过 `20MB`，其他模型不超过 `10MB`；且编码后的 Data URI 字符串在 OpenAI 兼容接口与 DashScope 不超过 `20MB`，在 Anthropic 兼容接口不超过 `32MB`。
     
     此外，所有接口的请求体整体大小均不得超过 `64MB`，多张图像时需共享此整体额度。DashScope 域名的请求体上限为 16 MiB，建议改用 `{WorkspaceId}.{region}.maas.aliyuncs.com` 工作空间域名。
     
@@ -3245,7 +3270,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
     
     -   以公网URL或本地路径传入时：
         
-        -   Qwen3.8-Max、Qwen3.8-Flash、Qwen3.7-Plus：最多 2048 张
+        -   Qwen4-Max、Qwen3.8-Max、Qwen3.8-Flash、Qwen3.7-Plus：最多 2048 张
         -   Qwen3.7-Flash、Qwen3.6-Plus、Qwen3.6-Flash、Qwen3.5-Plus、Qwen3.5-Flash、Qwen3-VL、Qwen-VL、QVQ系列：最多 256 张
     -   以 Base64 编码传入时：最多 250 张
         
@@ -3257,11 +3282,19 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 
 #### 视频限制
 
--   **以图像列表传入，图像列表的数量有如下限制：**
+-   **以公网 URL 图像列表传入时，图片数量限制如下：**
+    -   Qwen4-Max：最少传入 4 张图片，最多 80 张图片。
+        
     -   `qwen3.8`系列、`qwen3.7`系列、`qwen3.6`系列、`qwen3.5` 系列：最少传入 4 张图片，最多 8000 张图片
+        
     -   `qwen3-vl-plus` 系列：最少传入 4 张图片，最多 2000 张图片
+        
     -   其他`Qwen3-VL`开源、`Qwen2.5-VL`（包括商业版和开源版）和`QVQ`系列模型：最少传入 4 张图片，最多 512 张图片
+        
     -   其他模型：最少传入 4 张图片，最多 80 张图片
+        
+-   以 Base64 编码传入图像列表时：最多 250 张图片；Qwen4-Max 最多 80 张图片。
+    
 -   **以视频文件传入时：**
     -   **视频大小：**
         
@@ -3364,26 +3397,32 @@ for chunk in stream:
         
         以下代码演示了模型内部对图像的大致缩放逻辑，可用于估算一张图像的Token，实际计费请以API响应为准。
         
+        Qwen4-Max 每个图像 Token 对应 `32×32` 像素，图像最小像素值为 `65536`。以下代码设置 `model="qwen4-max"` 时使用 Qwen4-Max 的 `detail` 和像素规则，显式 `max_pixels` 优先。
+        
         ```
         import math
         from PIL import Image  # pip install Pillow
         
-        def smart_resize(image_path, max_pixels, vl_high_resolution_images):
+        def smart_resize(image_path, max_pixels=None, vl_high_resolution_images=False,
+                         model="qwen4-max", detail="high", min_pixels=None):
             """根据模型参数，计算图像缩放后的尺寸，用于估算图像 Token。"""
             image = Image.open(image_path)
             height, width = image.height, image.width
         
-            # Qwen3.6、Qwen3.5、Qwen3-VL 等模型的缩放因子为 32；其他模型为 28
+            # Qwen4-Max、Qwen3.6、Qwen3.5、Qwen3-VL 等模型的缩放因子为 32；其他模型为 28
             factor = 32
             h_bar = round(height / factor) * factor
             w_bar = round(width / factor) * factor
         
-            # Token 下限：4 个 Token
-            min_pixels = 4 * factor * factor
-        
-            # vl_high_resolution_images=True 时，Token 上限固定为 16384，忽略 max_pixels
-            if vl_high_resolution_images:
-                max_pixels = 16384 * factor * factor
+            if model == "qwen4-max":
+                min_pixels = 65536 if min_pixels is None else min_pixels
+                if max_pixels is None:
+                    max_pixels = 16777216 if detail == "high" else 2621440
+            else:
+                min_pixels = 4 * factor * factor if min_pixels is None else min_pixels
+                max_pixels = 2621440 if max_pixels is None else max_pixels
+                if vl_high_resolution_images:
+                    max_pixels = 16384 * factor * factor
         
             # 将总像素数约束在 [min_pixels, max_pixels] 范围内
             if h_bar * w_bar > max_pixels:
@@ -3399,7 +3438,7 @@ for chunk in stream:
         
         if __name__ == "__main__":
             # 注意：max_pixels 和 vl_high_resolution_images 的值需要与调用模型时传入的参数保持一致
-            h_bar, w_bar = smart_resize("xxx/test.jpg", max_pixels=2560 * 32 * 32, vl_high_resolution_images=False)
+            h_bar, w_bar = smart_resize("xxx/test.jpg", model="qwen4-max")
             print(f"缩放后的图像尺寸：高度 {h_bar}，宽度 {w_bar}")
         
             # 每张图像额外包含 <vision_bos> 和 <vision_eos> 各 1 个 Token
@@ -3413,6 +3452,8 @@ for chunk in stream:
             
             模型处理视频文件时，会先进行抽帧，然后计算所有视频帧的总 Token 数。由于该计算过程较为复杂，可使用以下代码，通过传入视频路径来估算视频消耗的总 Token 数：
             
+        
+        以下视频 Token 估算示例使用 Qwen3-VL-Plus 的参数配置。
         
         ```
         # 使用前安装：pip install opencv-python
@@ -3572,6 +3613,8 @@ for chunk in stream:
             
             当以图像列表形式传入视频时，表示已预先完成视频抽帧，可使用以下代码，通过传入图像的路径和数量来计算传入图像列表时消耗的Token数：
             
+        
+        以下视频 Token 估算示例使用 Qwen3-VL-Plus 的参数配置。
         
         ```
         # 使用前安装：pip install Pillow

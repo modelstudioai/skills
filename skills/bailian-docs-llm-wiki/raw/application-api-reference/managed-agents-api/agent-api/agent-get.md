@@ -12,19 +12,7 @@
 
 ## Query 参数
 
-参数
-
-必填
-
-类型
-
-说明
-
-`version`
-
-否
-
-int
+**version** `int` **（可选）**
 
 指定要查询的版本号；不传则返回最新版本
 
@@ -62,6 +50,44 @@ Agent agent = client.agents().retrieve("agent_xxx");
 Agent agentV2 = client.agents().retrieve("agent_xxx", 2);
 ```
 
+### 响应字段
+
+**id** `string`
+
+智能体 ID，格式 `agent_&lt;ULID&gt;`
+
+**type** `string`
+
+固定为 `agent`
+
+**version** `int`
+
+当前版本号，每次更新自动递增；会话创建时锁定该值
+
+**name / description / system** `string`
+
+智能体名称、用途说明、系统提示词
+
+**model / tools / mcp\_servers / skills / multiagent / metadata** `object / array`
+
+模型、工具包、MCP 引用、技能、多智能体协作配置、业务元数据，结构同创建时
+
+**archived\_at** `string / null`
+
+归档时间，未归档时为 `null`
+
+**created\_at / updated\_at** `string`
+
+创建 / 最近更新时间，ISO 8601
+
+**workspace\_id** `string`
+
+所属工作空间 ID
+
+**request\_id** `string`
+
+本次请求的唯一标识
+
 ## 响应示例
 
 ```
@@ -91,65 +117,3 @@ Agent agentV2 = client.agents().retrieve("agent_xxx", 2);
   "request_id": "req_xxx"
 }
 ```
-
-### 响应字段
-
-字段
-
-类型
-
-说明
-
-`id`
-
-string
-
-智能体 ID，格式 `agent_&lt;ULID&gt;`
-
-`type`
-
-string
-
-固定为 `agent`
-
-`version`
-
-int
-
-当前版本号，每次更新自动递增；会话创建时锁定该值
-
-`name` / `description` / `system`
-
-string
-
-智能体名称、用途说明、系统提示词
-
-`model` / `tools` / `mcp_servers` / `skills` / `multiagent` / `metadata`
-
-object / array
-
-模型、工具包、MCP 引用、技能、多智能体协作配置、业务元数据，结构同创建时
-
-`archived_at`
-
-string / null
-
-归档时间，未归档时为 `null`
-
-`created_at` / `updated_at`
-
-string
-
-创建 / 最近更新时间，ISO 8601
-
-`workspace_id`
-
-string
-
-所属工作空间 ID
-
-`request_id`
-
-string
-
-本次请求的唯一标识

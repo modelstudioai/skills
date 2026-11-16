@@ -10,4 +10,5 @@
 -   [Android SDK](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/aoq-android-sdk-reference.md)
 -   [iOS SDK](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/aoq-ios-sdk-reference.md)
 -   [HarmonyOS SDK](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/aoq-harmony-sdk-reference.md)
+-   [Web SDK](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/aoq-web-sdk-reference.md)
 -   [功能参考](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/realtime-api-aoq-sdk-function.md)

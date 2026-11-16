@@ -14,27 +14,11 @@
 
 ## Query 参数
 
-参数
-
-类型
-
-默认
-
-说明
-
-`limit`
-
-int
-
-20
+**limit** `int` 默认 20
 
 每页数量，最大 100
 
-`page`
-
-string
-
-—
+**page** `string` 默认 —
 
 首次不传，后续传上一次响应的 `next_page`
 
@@ -105,56 +89,34 @@ for (SkillVersion sv : versions.getData()) System.out.println(sv.getVersion() + 
 
 ### Skill Version 对象字段
 
-字段
-
-类型
-
-说明
-
-`id`
-
-string
+**id** `string`
 
 版本 ID，格式 `skillver_xxx`
 
-`skill_id`
-
-string
+**skill\_id** `string`
 
 所属技能 ID
 
-`type`
-
-string
+**type** `string`
 
 固定为 `skill_version`
 
-`name` / `description`
-
-string
+**name / description** `string`
 
 从该版本 zip 包内 `SKILL.md` 解析得到
 
-`version`
-
-string
+**version** `string`
 
 版本号，由服务端生成
 
-`status`
-
-string
+**status** `string`
 
 扫描状态：`checking` / `active` / `rejected`，仅 `active` 可挂载
 
-`created_at` / `updated_at`
-
-string
+**created\_at / updated\_at** `string`
 
 创建 / 最近更新时间，ISO 8601
 
-`additional_properties`
-
-object
+**additional\_properties** `object`
 
 仅 `status=rejected` 时返回，含 `error_info`：按 zip 包内文件路径列出的安全审查问题

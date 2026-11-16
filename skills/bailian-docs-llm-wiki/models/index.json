@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026-11-16",
-  "totalFamilies": 126,
-  "totalModels": 336,
+  "updatedAt": "2026-11-17",
+  "totalFamilies": 127,
+  "totalModels": 337,
   "profileCoverage": {
-    "full": 276,
-    "partial": 52,
-    "structured-only": 8,
+    "full": 284,
+    "partial": 49,
+    "structured-only": 4,
     "none": 0
   },
   "capabilityDistribution": {
-    "TG": 30,
+    "TG": 31,
     "VG": 17,
     "IG": 17,
     "Reasoning": 11,
@@ -28,7 +28,7 @@
     "3D-generation": 1
   },
   "providerDistribution": {
-    "qwen": 63,
+    "qwen": 64,
     "qwen-domain-model": 26,
     "wan": 13,
     "mini-max": 4,
@@ -1617,6 +1617,24 @@
       "items": [
         "qwen3.8-2.4t-a95b",
         "qwen3.8-27b"
+      ],
+      "maxContextWindow": 1000000
+    },
+    {
+      "slug": "qwen4-max",
+      "name": "Qwen4-Max",
+      "primaryCapability": "TG",
+      "capabilities": [
+        "TG",
+        "Reasoning",
+        "VU"
+      ],
+      "providers": [
+        "qwen"
+      ],
+      "itemCount": 1,
+      "items": [
+        "qwen4-max"
       ],
       "maxContextWindow": 1000000
     },

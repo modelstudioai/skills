@@ -12,19 +12,7 @@
 
 ## 路径参数
 
-**参数**
-
-**必填**
-
-**类型**
-
-**说明**
-
-`deployment_run_id`
-
-是
-
-string
+**deployment\_run\_id** `string` **（必选）**
 
 Deployment Run ID
 
@@ -36,6 +24,52 @@ curl
 curl "$AGENTSTUDIO_URL/deployment_runs/drun_xxx" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
+
+### 响应字段
+
+**id** `string`
+
+Deployment Run ID
+
+**type** `string`
+
+固定值 deployment\_run
+
+**deployment\_id** `string`
+
+—
+
+**agent** `object`
+
+—
+
+**session\_id** `string | null`
+
+—
+
+**trigger\_source** `string`
+
+—
+
+**status** `string`
+
+—
+
+**error** `object | null`
+
+错误信息，仅运行失败时返回
+
+**started\_at** `string`
+
+ISO 8601 时间戳
+
+**finished\_at** `string | null`
+
+—
+
+**request\_id** `string`
+
+本次请求的唯一标识，排查问题时附带
 
 ## 响应
 
@@ -57,80 +91,6 @@ curl "$AGENTSTUDIO_URL/deployment_runs/drun_xxx" \
   "request_id": "req_xxx"
 }
 ```
-
-### 响应字段
-
-**字段**
-
-**类型**
-
-**说明**
-
-`id`
-
-string
-
-Deployment Run ID
-
-`type`
-
-string
-
-固定值 deployment\_run
-
-`deployment_id`
-
-string
-
-—
-
-`agent`
-
-object
-
-—
-
-`session_id`
-
-string | null
-
-—
-
-`trigger_source`
-
-string
-
-—
-
-`status`
-
-string
-
-—
-
-`error`
-
-object | null
-
-错误信息，仅运行失败时返回
-
-`started_at`
-
-string
-
-ISO 8601 时间戳
-
-`finished_at`
-
-string | null
-
-—
-
-`request_id`
-
-string
-
-本次请求的唯一标识，排查问题时附带
 
 ## 错误码
 

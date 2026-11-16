@@ -6,6 +6,8 @@ Managed Agents 是阿里云百炼的智能体托管运行时，托管会话状�
 
 智能体在独立沙箱中自主执行命令、读写文件、安装依赖并处理数据，事件历史在服务端持久化。
 
+沙箱默认在会话空闲后回收；如需跨运行保留工作文件和环境修改，可在创建会话时开启[沙箱持久化](https://help.aliyun.com/zh/model-studio/managed-agents-session-operations#h-sandbox-persistence)。
+
 **长时运行与有状态会话**
 
 多步工具调用任务可持续数分钟到数小时，跨多轮交互保持上下文和文件系统状态。

@@ -1,5 +1,6 @@
 # 文本生成
 
+-   [qwen4-max](raw/model-user-guide/get-started-with-models/qwen4-max.md)
 -   [qwen3.8-max](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-text-generation/qwen3-8-max.md)
 -   [qwen3.7-max](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-text-generation/qwen3-7-max.md)
 -   [qwen-max](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-text-generation/qwen-max.md)

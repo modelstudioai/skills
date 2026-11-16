@@ -76,7 +76,7 @@ HTTP 请求地址：`POST https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/co
 
 支持的模型
 
-`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、`qwen3.8-omni-flash`、`qwen3.7-max`、`qwen3.7-max-2026-05-20`、`qwen3.7-max-2026-06-08`、`qwen3.7-max-2026-05-17`、`qwen3.7-max-preview`、`qwen3.7-plus`、`qwen3.7-plus-2026-05-26`、`qwen3.6-plus`、`qwen3.6-plus-2026-04-02`、`qwen3.5-plus`、`qwen3.5-plus-2026-04-20`、`qwen3.5-plus-2026-02-15`、`qwen3.7-flash`、`qwen3.7-flash-2026-07-15`、`qwen3.6-flash`、`qwen3.6-flash-2026-04-16`、`qwen3.5-flash`、`qwen3.5-flash-2026-02-23`、`qwen3.6-35b-a3b`、`qwen3.5-397b-a17b`、`qwen3.5-122b-a10b`、`qwen3.5-27b`、`qwen3.5-35b-a3b`、`deepseek-v4.1-flash`、`deepseek-v4.1-flash-1017`、`deepseek-v4-pro`、`deepseek-v4-pro-0813`、`deepseek-v4-flash-0731`、`glm-5.3`、`glm-5.2`、`kimi-k3.1-pro`、`kimi-k3`
+`qwen4-max`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、`qwen3.8-omni-flash`、`qwen3.7-max`、`qwen3.7-max-2026-05-20`、`qwen3.7-max-2026-06-08`、`qwen3.7-max-2026-05-17`、`qwen3.7-max-preview`、`qwen3.7-plus`、`qwen3.7-plus-2026-05-26`、`qwen3.6-plus`、`qwen3.6-plus-2026-04-02`、`qwen3.5-plus`、`qwen3.5-plus-2026-04-20`、`qwen3.5-plus-2026-02-15`、`qwen3.7-flash`、`qwen3.7-flash-2026-07-15`、`qwen3.6-flash`、`qwen3.6-flash-2026-04-16`、`qwen3.5-flash`、`qwen3.5-flash-2026-02-23`、`qwen3.6-35b-a3b`、`qwen3.5-397b-a17b`、`qwen3.5-122b-a10b`、`qwen3.5-27b`、`qwen3.5-35b-a3b`、`deepseek-v4.1-flash`、`deepseek-v4.1-flash-1017`、`deepseek-v4-pro`、`deepseek-v4-pro-0813`、`deepseek-v4-flash-0731`、`glm-5.3`、`glm-5.2`、`kimi-k3.1-pro`、`kimi-k3`
 
 **重要**非列表中阿里云百炼直供文本生成模型仅支持基础兼容能力，Agent 能力（内置工具等）受限。
 
@@ -124,6 +124,16 @@ array 元素类型
 
 输入模型的文本内容。
 
+**prompt\_cache\_breakpoint** `object` (可选)
+
+仅支持 `qwen4-max`。 用于手动标记缓存断点，优先级高于顶层缓存模式。 详见[显式缓存（Qwen4）](raw/model-user-guide/model-experience/text-generation-model/explicit-cache-qwen4.md)。
+
+属性
+
+**mode** `string` (必选)
+
+仅支持 `explicit`；设置断点时需显式传入。
+
 **input\_image** `{ type, image_url }`
 
 图片输入，仅 `user` 角色。
@@ -138,9 +148,19 @@ array 元素类型
 
 图片的公网 URL 或 Base64 编码。Base64 请传入完整的 Data URI，例如：`data:image/png;base64,iVBORw0K...`。
 
+**prompt\_cache\_breakpoint** `object` (可选)
+
+仅支持 `qwen4-max`。 用于手动标记缓存断点，优先级高于顶层缓存模式。 详见[显式缓存（Qwen4）](raw/model-user-guide/model-experience/text-generation-model/explicit-cache-qwen4.md)。
+
+属性
+
+**mode** `string` (必选)
+
+仅支持 `explicit`；设置断点时需显式传入。
+
 **input\_file** `{ type, file_url }`
 
-文件输入，仅 `user` 角色。目前 `qwen3.8-flash`、`qwen3.8-max`、`qwen3.5-ocr` 支持此类型。
+文件输入，仅 `user` 角色。目前 `qwen4-max`、`qwen3.8-flash`、`qwen3.8-max`、`qwen3.5-ocr` 支持此类型。
 
 属性
 
@@ -153,6 +173,16 @@ array 元素类型
 PDF 文件的公网 URL，文件最大 100 MB。
 
 PDF 的页数上限取决于 `ocr_options` 中的 `task`：设置为 `document_parsing` 时最大 50 页；未设置 `task` 或设置为其他任务时，最大 10 页。
+
+**prompt\_cache\_breakpoint** `object` (可选)
+
+仅支持 `qwen4-max`。 用于手动标记缓存断点，优先级高于顶层缓存模式。 详见[显式缓存（Qwen4）](raw/model-user-guide/model-experience/text-generation-model/explicit-cache-qwen4.md)。
+
+属性
+
+**mode** `string` (必选)
+
+仅支持 `explicit`；设置断点时需显式传入。
 
 **input\_audio** `{ type, format, audio_url, 2 more }`
 
@@ -360,6 +390,10 @@ array 元素类型
 
 思考内容的唯一标识，来自上一轮响应。
 
+**encrypted\_content** `string`
+
+`qwen4-max`, `reasoning.summary="auto"`: Responses 的 reasoning item 包含 `summary`（`summary_text` 元素）和 `encrypted_content`。摘要按文本增量返回，密文在 reasoning item 完成事件及最终 response 中返回；可从完成快照补齐密文，不要重复追加摘要。 [思维链摘要与加密](https://help.aliyun.com/zh/model-studio/cot-summary#multi-turn).
+
 **summary** `array` **（必选）**
 
 思考摘要内容。
@@ -436,6 +470,22 @@ array 元素类型
 
 当前响应所属的会话（参考[Conversations API](raw/model-api-reference/toolkits-and-frameworks/openai-compatible-conversations.md)）。会话中的历史项会自动作为上下文传入本次请求，本次请求的输入和输出也会在响应完成后自动添加到会话中。不能与 `previous_response_id` 同时使用。
 
+**prompt\_cache\_options** `object` (可选)
+
+仅支持 `qwen4-max`。 请求顶层的缓存配置。 Python SDK 通过 `extra_body` 传入顶层非标准参数；Node.js SDK 和 curl 直接传入。 详见[显式缓存（Qwen4）](raw/model-user-guide/model-experience/text-generation-model/explicit-cache-qwen4.md)。
+
+属性
+
+**mode** `string`
+
+`implicit`（默认）：开启显式缓存，在最后一条输入消息末尾自动设置断点，与手动断点同时生效。
+
+`explicit`：开启显式缓存，必须设置手动断点才会创建缓存，没有断点时不生效。
+
+**ttl** `string` (可选)
+
+缓存有效期，支持 `5m` 和 `1h`，默认为 `5m`。
+
 **stream** `boolean` （可选）默认值为 `false`
 
 是否开启流式输出。设置为 `true` 时，模型响应数据将实时流式返回给客户端。
@@ -485,7 +535,7 @@ array 元素类型
 
 **code\_interpreter**
 
-代码解释器工具，允许模型执行代码并返回结果，支持数据分析。`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.7-max`、`qwen3.7-max-2026-05-20`、`qwen3.7-max-2026-06-08`需要同时开启思考模式。相关文档：[代码解释器](raw/model-user-guide/model-experience/text-generation-model/tool-calls/qwen-code-interpreter.md)
+代码解释器工具，允许模型执行代码并返回结果，支持数据分析。`qwen4-max`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.7-max`、`qwen3.7-max-2026-05-20`、`qwen3.7-max-2026-06-08`需要同时开启思考模式。相关文档：[代码解释器](raw/model-user-guide/model-experience/text-generation-model/tool-calls/qwen-code-interpreter.md)
 
 属性
 
@@ -672,6 +722,8 @@ mcp_tool = {
 
 **temperature**`float`（可选）
 
+`qwen4-max`：思考模式为 `1.0`，非思考模式为 `0.7`。
+
 采样温度，控制模型生成文本的多样性。
 
 temperature越高，生成的文本更多样，反之，生成的文本更确定。
@@ -681,6 +733,8 @@ temperature越高，生成的文本更多样，反之，生成的文本更确定
 temperature与top\_p均可以控制生成文本的多样性，建议只设置其中一个值。更多说明，请参见[概述](raw/model-user-guide/model-experience/text-generation-model/text-generation.md)。
 
 **top\_p**`float`（可选）
+
+`qwen4-max`：思考模式为 `0.95`，非思考模式为 `0.8`。
 
 核采样的概率阈值，控制模型生成文本的多样性。
 
@@ -714,6 +768,32 @@ kimi-k3.1-pro（阿里云百炼部署）的 `reasoning.effort` 默认值为 `max
 kimi-k3.1-pro 的档位与默认值以上述说明为准，以下说明适用于其他模型。
 
 **effort** `string` （可选）：思考强度档位。
+
+**`qwen4-max`**
+
+默认值: `reasoning.effort=high`.
+
+`reasoning.effort`
+
+实际档位
+
+`minimal`, `low`
+
+`low`
+
+`medium`, `high`
+
+`high`
+
+`xhigh`, `max`
+
+`xhigh`
+
+`none`
+
+关闭思考
+
+仅设置 `reasoning.effort` 时，思考长度上限默认为 `131072` Token。
 
 支持 `none`、`minimal`、`low`、`medium`、`high`、`xhigh`、`max` 共 7 个递增档位。降低该值可加快响应速度并减少推理 Token 的消耗。
 
@@ -755,6 +835,12 @@ kimi-k3.1-pro 的档位与默认值以上述说明为准，以下说明适用于
 
 `glm-5.3` 推荐使用 `max` 档位。
 
+**summary** `string` （可选）
+
+`qwen4-max`: `"auto"`. [思维链摘要与加密](https://help.aliyun.com/zh/model-studio/cot-summary#responses).
+
+默认返回完整思维链。开启本功能后，原始思维链不再以明文返回，改为返回摘要与完整密文。摘要用于展示，密文用于恢复历史思考。
+
 > `reasoning.effort` 的优先级高于 `enable_thinking`，建议优先使用 `reasoning.effort`，`enable_thinking` 后续将不再支持。
 
 **ocr\_options** `object` （可选）
@@ -766,6 +852,8 @@ OCR 定制任务参数。仅适用于 `qwen3.5-ocr` 模型。通过此参数可�
 > 该参数非 OpenAI 标准参数。Python SDK 通过 `extra_body={"ocr_options": {...}}` 传递；Node.js SDK 和 curl 直接使用 `ocr_options` 作为顶层参数。
 
 **max\_output\_tokens** `integer`（可选）
+
+`qwen4-max`：思考模式限制思考与回复的 Token 总数，最大值和未传入时的默认值均为 `262144`；非思考模式最大值和默认值均为 `131072`。
 
 限制生成输出的 Token 数量。
 
@@ -849,7 +937,7 @@ client = OpenAI(
 )
 
 response = client.responses.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     input="你能做些什么？"
 )
 
@@ -870,7 +958,7 @@ const openai = new OpenAI({
 
 async function main() {
     const response = await openai.responses.create({
-        model: "qwen3.8-max",
+        model: "qwen4-max",
         input: "你能做些什么？"
     });
 
@@ -888,7 +976,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input": "你能做些什么？"
 }'
 ```
@@ -907,7 +995,7 @@ client = OpenAI(
 )
 
 stream = client.responses.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     input="请简单介绍一下人工智能。",
     stream=True
 )
@@ -933,7 +1021,7 @@ const openai = new OpenAI({
 
 async function main() {
     const stream = await openai.responses.create({
-        model: "qwen3.8-max",
+        model: "qwen4-max",
         input: "请简单介绍一下人工智能。",
         stream: true
     });
@@ -960,7 +1048,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Content-Type: application/json" \
 --no-buffer \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input": "请简单介绍一下人工智能。",
     "stream": true
 }'
@@ -981,14 +1069,14 @@ client = OpenAI(
 
 # 第一轮对话
 response1 = client.responses.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     input="我的名字是张三，请记住。"
 )
 print(f"第一轮回复: {response1.output_text}")
 
 # 第二轮对话 - 使用 previous_response_id 关联上下文，响应id有效期为7天
 response2 = client.responses.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     input="你还记得我的名字吗？",
     previous_response_id=response1.id
 )
@@ -1008,14 +1096,14 @@ const openai = new OpenAI({
 async function main() {
     // 第一轮对话
     const response1 = await openai.responses.create({
-        model: "qwen3.8-max",
+        model: "qwen4-max",
         input: "我的名字是张三，请记住。"
     });
     console.log(`第一轮回复: ${response1.output_text}`);
 
     // 第二轮对话 - 使用 previous_response_id 关联上下文，响应id有效期为7天
     const response2 = await openai.responses.create({
-        model: "qwen3.8-max",
+        model: "qwen4-max",
         input: "你还记得我的名字吗？",
         previous_response_id: response1.id
     });
@@ -1039,7 +1127,7 @@ client = OpenAI(
 )
 
 response = client.responses.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     input="帮我找一下阿里云官网，并提取首页的关键信息",
     # 建议同时开启内置工具以取得最佳效果
     tools=[
@@ -1066,7 +1154,7 @@ const openai = new OpenAI({
 
 async function main() {
     const response = await openai.responses.create({
-        model: "qwen3.8-max",
+        model: "qwen4-max",
         input: "帮我找一下阿里云官网，并提取首页的关键信息",
         tools: [
             { type: "web_search" },
@@ -1098,7 +1186,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input": "帮我找一下阿里云官网，并提取首页的关键信息",
     "tools": [
         {
@@ -1161,7 +1249,7 @@ def get_current_weather(arguments):
 # 封装模型响应函数
 def get_response(input_data):
     response = client.responses.create(
-        model="qwen3.8-max",
+        model="qwen4-max",
         input=input_data,
         tools=tools,
     )
@@ -1253,7 +1341,7 @@ const getCurrentWeather = (args) => {
 // 封装模型响应函数
 const getResponse = async (inputData) => {
   const response = await openai.responses.create({
-    model: "qwen3.8-max",
+    model: "qwen4-max",
     input: inputData,
     tools: tools,
   });
@@ -1318,7 +1406,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input": [
         {
             "role": "user",
@@ -1350,7 +1438,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input": [
         {
             "role": "user",
@@ -1432,7 +1520,7 @@ def generate_image(arguments):
 # 封装模型响应函数
 def get_response(input_data):
     response = client.responses.create(
-        model="qwen3.8-max",
+        model="qwen4-max",
         input=input_data,
         tools=tools,
     )
@@ -1516,7 +1604,7 @@ const generateImage = (args) => {
 // 封装模型响应函数
 const getResponse = async (inputData) => {
   const response = await openai.responses.create({
-    model: "qwen3.8-max",
+    model: "qwen4-max",
     input: inputData,
     tools: tools,
   });
@@ -1690,14 +1778,14 @@ long_context = "人工智能是计算机科学的一个重要分支，致力于�
 
 # 第一轮对话
 response1 = client.responses.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     input=long_context + "\n\n基于以上背景知识，请简短介绍机器学习中的随机森林算法。",
 )
 print(f"第一轮回复: {response1.output_text}")
 
 # 第二轮对话：通过 previous_response_id 关联上下文，缓存由服务端自动处理
 response2 = client.responses.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     input="它和 GBDT 有什么主要区别？",
     extra_body={"previous_response_id": response1.id},
 )
@@ -1727,7 +1815,7 @@ const longContext = "人工智能是计算机科学的一个重要分支，致�
 async function main() {
     // 第一轮对话
     const response1 = await openai.responses.create({
-        model: "qwen3.8-max",
+        model: "qwen4-max",
         input: longContext + "\n\n基于以上背景知识，请简短介绍机器学习中的随机森林算法，包括基本原理和应用场景。"
     });
     console.log(`第一轮回复: ${response1.output_text}`);
@@ -1735,7 +1823,7 @@ async function main() {
     // 第二轮对话：通过 previous_response_id 关联上下文，缓存由服务端自动处理
     const response2 = await openai.responses.create(
         {
-            model: "qwen3.8-max",
+            model: "qwen4-max",
             input: "它和 GBDT 有什么主要区别？",
         },
         {
@@ -1762,7 +1850,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Content-Type: application/json" \
 -H "x-dashscope-session-cache: enable" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input": "人工智能是计算机科学的一个重要分支..."
 }'
 
@@ -1772,7 +1860,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Content-Type: application/json" \
 -H "x-dashscope-session-cache: enable" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input": "它和 GBDT 有什么主要区别？",
     "previous_response_id": "第一轮返回的响应id"
 }'
@@ -1888,6 +1976,10 @@ Session 缓存按精确匹配命中，规则如下：
 **annotations** `array`
 
 文本注释数组。通常为空数组。
+
+**encrypted\_content** `string`
+
+`qwen4-max`, `reasoning.summary="auto"`: Responses 的 reasoning item 包含 `summary`（`summary_text` 元素）和 `encrypted_content`。摘要按文本增量返回，密文在 reasoning item 完成事件及最终 response 中返回；可从完成快照补齐密文，不要重复追加摘要。 [思维链摘要与加密](https://help.aliyun.com/zh/model-studio/cot-summary#multi-turn). 密文必须原样回传。
 
 **summary** `array`
 
@@ -2023,9 +2115,25 @@ MCP 服务标签。仅当 `type` 为 `mcp_call` 时存在。标识本次调用�
 
 PDF 解析的页面数。
 
+**prompt\_cache\_options** `object` (可选)
+
+仅支持 `qwen4-max`。 本次请求的缓存模式和有效期。
+
+属性
+
+**mode** `string`
+
+`implicit` / `explicit`
+
+**ttl** `string`
+
+`5m` / `1h`
+
 **usage** `object`
 
 本次请求的 Token 消耗信息。
+
+Qwen4 系列、Kimi-K3.1 系列及后续新模型使用下方的新响应结构。
 
 属性
 
@@ -2169,6 +2277,81 @@ PDF 解析的页面数。
 
 示例：`{"web_search": {"count": 1}}`
 
+属性（Qwen4、Kimi-K3.1）
+
+**input\_tokens** `integer`
+
+输入 Token 总数，包含读取缓存、创建缓存和未使用缓存的部分。
+
+**input\_tokens\_details** `object`
+
+输入 Token 明细。
+
+属性
+
+**cache\_write\_tokens** `integer`
+
+缓存创建的 Token 数。
+
+**cache\_write\_tokens\_details** `object`
+
+按 TTL 统计的缓存创建明细。
+
+属性
+
+**ttl\_1h\_tokens** `integer`
+
+1 小时缓存创建的 Token 数。
+
+**ttl\_5m\_tokens** `integer`
+
+5 分钟缓存创建的 Token 数。
+
+**cached\_tokens** `integer`
+
+缓存读取的 Token 数。
+
+**output\_tokens** `integer`
+
+输出 Token 总数。
+
+**output\_tokens\_details** `object`
+
+输出 Token 明细。
+
+属性
+
+**reasoning\_tokens** `integer`
+
+思考过程的 Token 数。
+
+**total\_tokens** `integer`
+
+输入与输出 Token 数之和。
+
+新响应结构不返回 `x_details` 和 `x_tools`。
+
+```
+{
+  "usage": {
+    "input_tokens": 1053,
+    "input_tokens_details": {
+      "cache_write_tokens": 0,
+      "cache_write_tokens_details": {
+        "ttl_1h_tokens": 0,
+        "ttl_5m_tokens": 0
+      },
+      "cached_tokens": 0
+    },
+    "output_tokens": 23,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 1076
+  }
+}
+```
+
 **error** `object`
 
 当模型生成响应失败时返回的错误对象。成功时为 `null`。
@@ -2180,6 +2363,8 @@ PDF 解析的页面数。
 **tool\_choice** `string`
 
 回显请求中 `tool_choice` 参数的值，枚举值为 `auto`、`none`、`required`。
+
+以下为 `qwen3.8-max` 的返回示例，用于说明响应字段。
 
 ```
 {
@@ -2335,6 +2520,8 @@ Token 的对数概率信息。当前固定返回 `null`。
 **content\_index** `integer`
 
 内容块在 `content` 数组中的索引位置。
+
+以下为原有响应结构的流式示例。
 
 基础调用
 

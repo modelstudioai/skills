@@ -20,6 +20,7 @@ Qwen-Audio-Realtime 不支持视频输入或输出。
 -   [Android](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/aoq-android-sdk-reference.md)
 -   [iOS](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/aoq-ios-sdk-reference.md)
 -   [HarmonyOS](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/aoq-harmony-sdk-reference.md)
+-   [Web](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/aoq-web-sdk-reference.md)
 
 其他能力说明请参见[功能参考](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/realtime-api-aoq-sdk-function.md)。
 

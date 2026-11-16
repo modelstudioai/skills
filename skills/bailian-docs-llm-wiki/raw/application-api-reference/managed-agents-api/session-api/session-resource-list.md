@@ -12,45 +12,17 @@
 
 ## 路径参数
 
-**参数**
-
-**必填**
-
-**类型**
-
-**说明**
-
-`session_id`
-
-是
-
-string
+**session\_id** `string` **（必选）**
 
 会话 ID，格式 sesn\_<ULID>
 
 ## Query 参数
 
-**参数**
-
-**必填**
-
-**类型**
-
-**说明**
-
-`limit`
-
-否
-
-integer
+**limit**`integer`**（可选）**
 
 每页数量，最大 100，默认 `20`
 
-`page`
-
-否
-
-string
+**page**`string`**（可选）**
 
 分页游标（opaque token）。首次不传，后续传上一次响应返回的游标
 
@@ -62,6 +34,44 @@ curl
 curl "$AGENTSTUDIO_URL/sessions/sesn_xxx/resources?limit=20" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
+
+### 响应字段
+
+**data**`array<object>`
+
+资源对象数组
+
+**data\[\].id**`string`
+
+资源 ID，格式 sesrsc\_<ULID>
+
+**data\[\].type**`string`
+
+资源类型，固定为 `file`
+
+**data\[\].file\_id**`string`
+
+内部副本的文件 ID
+
+**data\[\].mount\_path**`string`
+
+加上 `/mnt/session/uploads/` 前缀后的完整挂载路径
+
+**data\[\].created\_at**`string`
+
+创建时间，ISO 8601
+
+**data\[\].updated\_at**`string`
+
+最近更新时间，ISO 8601
+
+**next\_page**`string`
+
+下一页游标，原样传入 page 参数续翻；无更多数据时为 null
+
+**request\_id**`string`
+
+本次请求的唯一标识
 
 ## 响应
 
@@ -92,68 +102,6 @@ curl "$AGENTSTUDIO_URL/sessions/sesn_xxx/resources?limit=20" \
 }
 ```
 
-### 响应字段
-
-**字段**
-
-**类型**
-
-**说明**
-
-`data`
-
-array<object>
-
-资源对象数组
-
-`data[].id`
-
-string
-
-资源 ID，格式 sesrsc\_<ULID>
-
-`data[].type`
-
-string
-
-资源类型，固定为 `file`
-
-`data[].file_id`
-
-string
-
-内部副本的文件 ID
-
-`data[].mount_path`
-
-string
-
-加上 `/mnt/session/uploads/` 前缀后的完整挂载路径
-
-`data[].created_at`
-
-string
-
-创建时间，ISO 8601
-
-`data[].updated_at`
-
-string
-
-最近更新时间，ISO 8601
-
-`next_page`
-
-string
-
-下一页游标，原样传入 page 参数续翻；无更多数据时为 null
-
-`request_id`
-
-string
-
-本次请求的唯一标识
-
 ## 错误码
 
 **状态码**
@@ -161,15 +109,3 @@ string
 **错误码**
 
 **说明**
-
-400
-
-`InvalidParameter`
-
-Required parameter missing or invalid.
-
-401
-
-`InvalidApiKey`
-
-Invalid API-key provided.

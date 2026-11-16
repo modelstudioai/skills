@@ -12,27 +12,11 @@
 
 ## 路径参数
 
-**参数**
-
-**必填**
-
-**类型**
-
-**说明**
-
-`session_id`
-
-是
-
-string
+**session\_id**`string`**（必选）**
 
 会话 ID，格式 sesn\_<ULID>
 
-`resource_id`
-
-是
-
-string
+**resource\_id**`string`**（必选）**
 
 资源 ID，格式 sesrsc\_<ULID>
 
@@ -44,6 +28,36 @@ curl
 curl "$AGENTSTUDIO_URL/sessions/sesn_xxx/resources/sesrsc_xxx" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
+
+### 响应字段
+
+**id**`string`
+
+资源 ID，格式 sesrsc\_<ULID>
+
+**type**`string`
+
+资源类型，固定为 file
+
+**file\_id**`string`
+
+内部副本的文件 ID
+
+**mount\_path**`string`
+
+加上 /mnt/session/uploads/ 前缀后的完整挂载路径
+
+**created\_at**`string`
+
+创建时间，ISO 8601
+
+**updated\_at**`string`
+
+最近更新时间，ISO 8601
+
+**request\_id**`string`
+
+本次请求的唯一标识
 
 ## 响应
 
@@ -59,56 +73,6 @@ curl "$AGENTSTUDIO_URL/sessions/sesn_xxx/resources/sesrsc_xxx" \
 }
 ```
 
-### 响应字段
-
-**字段**
-
-**类型**
-
-**说明**
-
-`id`
-
-string
-
-资源 ID，格式 sesrsc\_<ULID>
-
-`type`
-
-string
-
-资源类型，固定为 file
-
-`file_id`
-
-string
-
-内部副本的文件 ID
-
-`mount_path`
-
-string
-
-加上 /mnt/session/uploads/ 前缀后的完整挂载路径
-
-`created_at`
-
-string
-
-创建时间，ISO 8601
-
-`updated_at`
-
-string
-
-最近更新时间，ISO 8601
-
-`request_id`
-
-string
-
-本次请求的唯一标识
-
 ## 错误码
 
 **状态码**
@@ -116,15 +80,3 @@ string
 **错误码**
 
 **说明**
-
-400
-
-`InvalidParameter`
-
-Required parameter missing or invalid.
-
-401
-
-`InvalidApiKey`
-
-Invalid API-key provided.

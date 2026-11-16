@@ -12,19 +12,7 @@
 
 ## 路径参数
 
-**参数**
-
-**必填**
-
-**类型**
-
-**说明**
-
-`vault_id`
-
-是
-
-string
+**vault\_id** `string` **（必选）**
 
 Vault ID，格式 vlt\_xxx
 
@@ -32,27 +20,11 @@ Vault ID，格式 vlt\_xxx
 
 display\_name 和 metadata 至少提供一个。
 
-**字段**
-
-**必填**
-
-**类型**
-
-**说明**
-
-`display_name`
-
-否
-
-string
+**display\_name** `string` **（可选）**
 
 新的可读名称，1-255 字符
 
-`metadata`
-
-否
-
-object
+**metadata** `object` **（可选）**
 
 补丁语义：键设为字符串则追加或覆盖，设为 null 则删除该键
 
@@ -73,6 +45,36 @@ curl -X POST "$AGENTSTUDIO_URL/vaults/vlt_xxx" \
   }'
 ```
 
+### 响应字段
+
+**id** `string`
+
+Vault ID，格式 vlt\_xxx
+
+**type** `string`
+
+固定为 vault
+
+**display\_name** `string`
+
+Vault 可读名称
+
+**metadata** `object`
+
+业务自定义键值对
+
+**archived\_at** `string | null`
+
+归档时间，未归档时为 null
+
+**created\_at** `string`
+
+创建时间，ISO 8601
+
+**updated\_at** `string`
+
+最近更新时间，ISO 8601
+
 ## 响应
 
 ```
@@ -88,56 +90,6 @@ curl -X POST "$AGENTSTUDIO_URL/vaults/vlt_xxx" \
   "updated_at": "2026-07-01T14:30:00Z"
 }
 ```
-
-### 响应字段
-
-**字段**
-
-**类型**
-
-**说明**
-
-`id`
-
-string
-
-Vault ID，格式 vlt\_xxx
-
-`type`
-
-string
-
-固定为 vault
-
-`display_name`
-
-string
-
-Vault 可读名称
-
-`metadata`
-
-object
-
-业务自定义键值对
-
-`archived_at`
-
-string | null
-
-归档时间，未归档时为 null
-
-`created_at`
-
-string
-
-创建时间，ISO 8601
-
-`updated_at`
-
-string
-
-最近更新时间，ISO 8601
 
 ## 错误码
 

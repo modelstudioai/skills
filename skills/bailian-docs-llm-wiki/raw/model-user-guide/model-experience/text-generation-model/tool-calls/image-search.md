@@ -15,7 +15,7 @@ input_content = [
     {"type": "input_image", "image_url": "https://img.alicdn.com/imgextra/i4/O1CN01YbrnSS1qtmsAkw0Ud_!!6000000005554-2-tps-788-450.png"}
 ]
 response = client.responses.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     input=[{"role": "user", "content": input_content}],
     tools=[{"type": "image_search"}]
 )
@@ -31,7 +31,7 @@ print(response.output_text)
 
 千问Plus：Qwen3.7-Plus系列、Qwen3.6-Plus系列、Qwen3.5-Plus系列
 
-千问Max：qwen4-max-preview（[仅 Token Plan](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview)）、Qwen3.8-Max系列、qwen3.7-max-2026-06-08
+千问Max：qwen4-max、Qwen3.8-Max系列、qwen3.7-max-2026-06-08
 
 qwen3.8-27b
 
@@ -72,7 +72,7 @@ input_content = [
 ]
 
 response = client.responses.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     input=[{"role": "user", "content": input_content}],
     tools=[
         {
@@ -120,7 +120,7 @@ const openai = new OpenAI({
 
 async function main() {
     const response = await openai.responses.create({
-        model: "qwen3.8-max",
+        model: "qwen4-max",
         input: [
             {
                 role: "user",
@@ -178,7 +178,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input": [
         {
             "role": "user",
@@ -243,7 +243,7 @@ input_content = [
 ]
 
 stream = client.responses.create(
-    model="qwen3.8-max",
+    model="qwen4-max",
     input=[{"role": "user", "content": input_content}],
     tools=[{"type": "image_search"}],
     stream=True
@@ -296,7 +296,7 @@ const openai = new OpenAI({
 
 async function main() {
     const stream = await openai.responses.create({
-        model: "qwen3.8-max",
+        model: "qwen4-max",
         input: [
             {
                 role: "user",
@@ -367,7 +367,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.8-max",
+    "model": "qwen4-max",
     "input": [
         {
             "role": "user",

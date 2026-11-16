@@ -12,19 +12,7 @@
 
 ## 路径参数
 
-**参数**
-
-**必填**
-
-**类型**
-
-**说明**
-
-`id`
-
-是
-
-string
+**id** `string` **（必选）**
 
 Webhook ID，格式 wep\_<ULID>
 
@@ -37,6 +25,24 @@ curl -X POST "$AGENTSTUDIO_URL/webhook_endpoints/wep_01JXX7YQGPRPV1BZXA35QE7WDP/
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
+### 响应字段
+
+**id** `string`
+
+—
+
+**signing\_secret** `string`
+
+新的验签密钥，格式 whsec\_ 加标准 Base64 文本。仅在本次响应返回
+
+**updated\_at** `string`
+
+—
+
+**request\_id** `string`
+
+本次请求的唯一标识，排查问题时附带
+
 ## 响应
 
 ```
@@ -47,38 +53,6 @@ curl -X POST "$AGENTSTUDIO_URL/webhook_endpoints/wep_01JXX7YQGPRPV1BZXA35QE7WDP/
   "request_id": "8e1d16e4"
 }
 ```
-
-### 响应字段
-
-**字段**
-
-**类型**
-
-**说明**
-
-`id`
-
-string
-
-—
-
-`signing_secret`
-
-string
-
-新的验签密钥，格式 whsec\_ 加标准 Base64 文本。仅在本次响应返回
-
-`updated_at`
-
-string
-
-—
-
-`request_id`
-
-string
-
-本次请求的唯一标识，排查问题时附带
 
 ## 错误码
 

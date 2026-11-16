@@ -12,27 +12,11 @@
 
 ## 路径参数
 
-**参数**
-
-**必填**
-
-**类型**
-
-**说明**
-
-`vault_id`
-
-是
-
-string
+**vault\_id** `string` **（必选）**
 
 Vault ID，格式 vlt\_xxx
 
-`credential_id`
-
-是
-
-string
+**credential\_id** `string` **（必选）**
 
 Credential ID，格式 cred\_xxx
 
@@ -45,6 +29,20 @@ curl -X DELETE "$AGENTSTUDIO_URL/vaults/vlt_xxx/credentials/cred_xxx" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
+### 响应字段
+
+**id** `string`
+
+已删除的 Credential ID
+
+**type** `string`
+
+固定为 credential\_deleted
+
+**request\_id** `string`
+
+请求唯一标识
+
 ## 响应
 
 ```
@@ -54,32 +52,6 @@ curl -X DELETE "$AGENTSTUDIO_URL/vaults/vlt_xxx/credentials/cred_xxx" \
   "request_id": "req_xxx"
 }
 ```
-
-### 响应字段
-
-**字段**
-
-**类型**
-
-**说明**
-
-`id`
-
-string
-
-已删除的 Credential ID
-
-`type`
-
-string
-
-固定为 credential\_deleted
-
-`request_id`
-
-string
-
-请求唯一标识
 
 ## 错误码
 

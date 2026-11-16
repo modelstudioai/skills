@@ -12,45 +12,17 @@
 
 ## 路径参数
 
-**参数**
-
-**必填**
-
-**类型**
-
-**说明**
-
-`id`
-
-是
-
-string
+**id** `string` **（必选）**
 
 Webhook ID，格式 wep\_<ULID>
 
 ## Query 参数
 
-**参数**
-
-**必填**
-
-**类型**
-
-**说明**
-
-`limit`
-
-否
-
-integer
+**limit** `integer` **（可选）**
 
 每页数量，默认 20，范围 1～100
 
-`page`
-
-否
-
-string
+**page** `string` **（可选）**
 
 不透明分页游标；首页不传，后续传上一页返回的 next\_page
 
@@ -62,6 +34,80 @@ curl
 curl "$AGENTSTUDIO_URL/webhook_endpoints/wep_01JXX7YQGPRPV1BZXA35QE7WDP/events?limit=20" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
+
+### 响应字段
+
+**data** `array<object>`
+
+事件对象数组
+
+**data\[\].type** `string`
+
+固定为 `event`
+
+**data\[\].id** `string`
+
+事件 ID，格式 whe\_<ULID>；同一事件的所有投递尝试使用相同外层 id
+
+**data\[\].created\_at** `string`
+
+事件创建时间，ISO 8601
+
+**data\[\].data** `object`
+
+事件载荷
+
+**data\[\].data.id** `string`
+
+资源标识；Thread 事件中为 Session 标识
+
+**data\[\].data.type** `string`
+
+事件类型
+
+**data\[\].data.workspace\_id** `string`
+
+工作空间 ID
+
+**data\[\].data.session\_thread\_id** `string`
+
+Thread 事件中为具体 Thread 标识
+
+**data\[\].delivery** `object`
+
+当前 Webhook 的投递信息
+
+**data\[\].delivery.webhook\_id** `string`
+
+Webhook ID
+
+**data\[\].delivery.status** `string`
+
+投递状态，如 `SUCCEEDED`
+
+**data\[\].delivery.attempt\_count** `integer`
+
+投递尝试次数
+
+**data\[\].delivery.delivery\_at** `string`
+
+投递开始时间，ISO 8601
+
+**data\[\].delivery.finish\_at** `string`
+
+投递完成时间，ISO 8601
+
+**data\[\].delivery.failure\_reason** `string | null`
+
+失败原因；成功时为 `null`
+
+**next\_page** `string | null`
+
+下一页游标，末页为 null
+
+**request\_id** `string`
+
+本次请求的唯一标识，排查问题时附带
 
 ## 响应
 
@@ -94,122 +140,6 @@ curl "$AGENTSTUDIO_URL/webhook_endpoints/wep_01JXX7YQGPRPV1BZXA35QE7WDP/events?l
   "request_id": "8e1d16e4"
 }
 ```
-
-### 响应字段
-
-**字段**
-
-**类型**
-
-**说明**
-
-`data`
-
-array<object>
-
-事件对象数组
-
-`data[].type`
-
-string
-
-固定为 `event`
-
-`data[].id`
-
-string
-
-事件 ID，格式 whe\_<ULID>；同一事件的所有投递尝试使用相同外层 id
-
-`data[].created_at`
-
-string
-
-事件创建时间，ISO 8601
-
-`data[].data`
-
-object
-
-事件载荷
-
-`data[].data.id`
-
-string
-
-资源标识；Thread 事件中为 Session 标识
-
-`data[].data.type`
-
-string
-
-事件类型
-
-`data[].data.workspace_id`
-
-string
-
-工作空间 ID
-
-`data[].data.session_thread_id`
-
-string
-
-Thread 事件中为具体 Thread 标识
-
-`data[].delivery`
-
-object
-
-当前 Webhook 的投递信息
-
-`data[].delivery.webhook_id`
-
-string
-
-Webhook ID
-
-`data[].delivery.status`
-
-string
-
-投递状态，如 `SUCCEEDED`
-
-`data[].delivery.attempt_count`
-
-integer
-
-投递尝试次数
-
-`data[].delivery.delivery_at`
-
-string
-
-投递开始时间，ISO 8601
-
-`data[].delivery.finish_at`
-
-string
-
-投递完成时间，ISO 8601
-
-`data[].delivery.failure_reason`
-
-string | null
-
-失败原因；成功时为 `null`
-
-`next_page`
-
-string | null
-
-下一页游标，末页为 null
-
-`request_id`
-
-string
-
-本次请求的唯一标识，排查问题时附带
 
 ## 错误码
 
