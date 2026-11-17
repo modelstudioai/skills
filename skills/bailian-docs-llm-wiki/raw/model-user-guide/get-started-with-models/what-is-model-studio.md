@@ -553,19 +553,19 @@ foreach ($response->content as $block) {
 
 使用业务数据训练模型，改善特定场景的表现
 
-](https://help.aliyun.com/zh/model-studio/fine-tuning)[
+](raw/model-user-guide/fine-tuning.md)[
 
 **模型评测**
 
 评估模型表现，支持模型选型与调优验证
 
-](https://help.aliyun.com/zh/model-studio/model-evaluation-introduction)[
+](raw/model-user-guide/model-evaluation-introduction.md)[
 
 **模型压缩**
 
 量化调优后的模型，降低推理部署成本
 
-](https://help.aliyun.com/zh/model-studio/model-compression-introduction)
+](raw/model-api-reference/model-production/model-compression-api-overview/model-compression-introduction.md)
 
 [
 

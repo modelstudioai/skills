@@ -1,48 +1,29 @@
 # get started with models
 
-本文档指导开发者快速接入百炼平台的模型服务，涵盖模型选择、调用方式、关键参数配置及常见约束。所有模型均通过统一 API 接口调用，支持同步推理与流式响应。建议首次使用前阅读 [开始使用 (raw/model-user-guide/get-started-with-models.md)](../../raw/model-user-guide/get-started-with-models.md) 中的导航结构。
+百炼平台提供统一的模型调用入口，支持通过 API 快速接入多种大语言模型、多模态模型及推理优化模型。本文档指导开发者完成模型选择、参数配置与首次调用，涵盖基础能力、关键约束及常见问题排查路径。所有模型均通过 Model Studio 统一管理，调用前需确保已开通对应模型服务权限。
 
 ## 支持的模型与核心功能
 
-- 当前支持的模型包括 `qwen2.5-7b`、`qwen2.5-72b`、`qwen3-8b`、`qwen3-32b`、`qwen4-max` 等（详见 [模型列表](../../raw/model-user-guide/get-started-with-models/model-studio-model-list.md)）；其中 `qwen4-max` 为最新旗舰模型，具备更强的多步推理与工具调用能力，其详细规格见 [qwen4-max](../../raw/model-user-guide/get-started-with-models/qwen4-max.md)。
-- 功能覆盖文本生成、[函数调用](../concepts/function-calling.md)（Function Calling）、JSON Schema 输出、多模态输入（部分模型）、以及系统提示词（system prompt）控制。
-- 所有模型均部署在百炼 Model Studio 统一管控下，支持按需启用/停用、版本灰度与自定义 endpoint 配置。
+当前平台支持 Qwen 系列（如 `qwen4-max`、`qwen2.5-plus`）、Qwen-VL 多模态模型及部分第三方精调模型，具体以 [模型列表](../../raw/model-user-guide/get-started-with-models/model-studio-model-list.md) 为准。模型能力覆盖文本生成、代码补全、结构化输出（JSON Schema）、工具调用（Function Calling）及图像理解等。部分模型支持流式响应和系统提示词（`system` role），但并非全部兼容——详见 [qwen4-max](../../raw/model-user-guide/get-started-with-models/qwen4-max.md) 的能力说明。
+
+> **注意**：[选择模型](../../raw/model-user-guide/get-started-with-models/models.md) 文档中列出的部分旧版模型（如 `qwen1.5-72b-chat`）已在控制台下线，实际可用模型请以 [模型列表](../../raw/model-user-guide/get-started-with-models/model-studio-model-list.md) 实时数据为准。
 
 ## 关键参数
 
-调用时必需指定以下参数：
-- `model`: 模型标识符（如 `"qwen3-32b"`），必须与 [模型列表](../../raw/model-user-guide/get-started-with-models/model-studio-model-list.md) 中的名称严格一致；
-- `input.messages`: 非空消息数组，至少包含一个 `user` 角色消息；
-- `parameters.temperature`: 浮点数（0.0–2.0），默认 `0.8`；设为 `0` 可启用确定性输出（推荐用于[函数调用](../concepts/function-calling.md)场景）；
-- `parameters.top_p`: 浮点数（0.0–1.0），默认 `0.95`；与 `temperature` 互斥生效，二者同时设置时以 `temperature` 为准。
-
-> **注意**：[开始使用 (raw/model-user-guide/get-started-with-models.md)](../../raw/model-user-guide/get-started-with-models.md) 中提及的 `max_tokens` 参数在 v2.1+ API 中已更名为 `parameters.max_output_tokens`，旧字段名将被忽略，请务必使用新命名。
+必填参数包括 `model`（模型 ID，区分大小写）、`input.messages`（消息数组，至少含 `role` 和 `content` 字段）。推荐显式设置 `parameters.temperature`（默认 0.8）和 `parameters.max_tokens`（默认 2048，不同模型上限不同）。`stream` 参数控制是否启用流式响应（布尔值），启用后需按 SSE 协议解析响应体。所有参数定义与取值范围详见 [模型服务概览](../../raw/model-user-guide/get-started-with-models/what-is-model-studio.md)。
 
 ## 使用方式
 
-1. **认证**：使用 `X-DashScope-Access-Token` 请求头传入 API Key（需在 [DashScope 控制台](https://dashscope.console.aliyun.com/) 获取）；
-2. **Endpoint**：统一调用 `https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation`；
-3. **示例请求体**：
-   ```json
-   {
-     "model": "qwen3-32b",
-     "input": {
-       "messages": [{"role": "user", "content": "你好"}]
-     },
-     "parameters": {
-       "temperature": 0.5,
-       "max_output_tokens": 512
-     }
-   }
-   ```
-4. 响应解析参考 [错误码](../../raw/model-user-guide/get-started-with-models/error-code-start.md) 文档，重点关注 `status_code` 和 `code` 字段。
+1. 在百炼控制台开通目标模型服务（如 `qwen4-max`）；
+2. 获取 API Key（位于「API 密钥管理」）；
+3. 发送 POST 请求至 `https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation`，Header 中携带 `Authorization: Bearer <api_key>`；
+4. 请求体为 JSON，结构参考 [模型服务概览](../../raw/model-user-guide/get-started-with-models/what-is-model-studio.md) 中的示例。
 
 ## 限制和注意事项
 
-- 单次请求 `input.messages` 总 token 数上限为 32768（具体依模型而异，`qwen4-max` 支持 65536）；
-- 默认 QPS 限流为 5，可通过 [限流](../../raw/model-user-guide/get-started-with-models/rate-limit.md) 文档申请提升；
-- 模型服务地域隔离，调用前需确认所选模型已在目标 Region（如 `cn-beijing`、`ap-southeast-1`）部署，参见 [地域和服务部署范围](../../raw/model-user-guide/get-started-with-models/regions.md)；
-- 不支持跨模型 session 状态保持，每次请求均为无状态独立调用。
+- 免费调用量受账号等级限制，超出后触发限流；详细配额与错误码见 [限流](../../raw/model-user-guide/get-started-with-models/rate-limit.md) 和 [错误码](../../raw/model-user-guide/get-started-with-models/error-code-start.md)；
+- 模型部署地域影响延迟与可用性，中国大陆用户建议优先选用 `cn-beijing` 或 `cn-hangzhou` 区域，具体支持情况参见 [地域和服务部署范围](../../raw/model-user-guide/get-started-with-models/regions.md)；
+- 输入内容长度、输出长度及并发请求数均存在硬性限制，单次请求 `input.messages` 总 token 数不得超过模型 context length（如 `qwen4-max` 为 32768），超限将返回 `400 Bad Request`。
 
 ## 来源文档
 

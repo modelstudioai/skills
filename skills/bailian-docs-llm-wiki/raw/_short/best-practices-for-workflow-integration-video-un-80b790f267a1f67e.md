@@ -45,7 +45,7 @@ pip3 install alibabacloud_endpoint_util alibabacloud_tea_openapi alibabacloud_qu
 
 2.  您可自行优化调整代码中的入参：比如`prompt`模板、`modelId`等。
     
-    需要将代码中的[AK、SK](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)、[workspaceId](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)替换为实际值，以确保代码正常运行并返回正确的结果。
+    需要将代码中的[AK、SK](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)、[workspaceId](raw/application-api-reference/application-call/obtain-the-app-id-and-workspace-id.md)替换为实际值，以确保代码正常运行并返回正确的结果。
     
     ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1015919471/p962781.png)
 

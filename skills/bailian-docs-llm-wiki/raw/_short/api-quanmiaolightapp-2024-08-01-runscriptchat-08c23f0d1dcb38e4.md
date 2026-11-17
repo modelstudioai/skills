@@ -71,7 +71,7 @@ string
 
 是
 
-阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)
+阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](raw/application-api-reference/application-call/obtain-the-app-id-and-workspace-id.md)
 
 llm-rz8db8d00rcn2p0xc
 

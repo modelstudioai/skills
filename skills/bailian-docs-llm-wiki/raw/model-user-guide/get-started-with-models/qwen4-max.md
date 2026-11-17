@@ -72,7 +72,7 @@ OpenAI Chat Completions、Responses、Anthropic Messages、DashScope
 
 批量推理
 
-不支持
+支持
 
 模型调优
 
@@ -603,6 +603,26 @@ qwen4-max
 30元
 
 100万Token
+
+**qwen4-max — Batch 单价（每百万 Token）**
+
+API
+
+输入
+
+输出
+
+[Batch File](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)
+
+5元
+
+15元
+
+[Batch Chat](raw/model-api-reference/toolkits-and-frameworks/openai-compatible-batch-chat.md)（限时 5 折）
+
+原价 10元
+
+原价 30元
 
 #### 美国（弗吉尼亚）
 

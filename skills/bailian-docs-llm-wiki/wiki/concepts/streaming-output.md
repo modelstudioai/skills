@@ -1,56 +1,55 @@
 # 流式输出
 
-流式输出（Streaming Output）是百炼平台提供的一种实时响应机制，允许模型在生成过程中逐 token（或逐 chunk）返回结果，而非等待全部内容生成完毕后一次性返回。该机制显著降低端到端延迟，提升用户交互体验，尤其适用于对话类应用、长文本生成、语音合成等对响应速度敏感的场景。
+流式输出（Streaming Output）是百炼平台提供的一种实时响应机制，允许模型或应用在生成结果过程中，将输出内容按 token、chunk 或语义单元分段推送至客户端，而非等待全部计算完成后再返回完整响应。该机制显著降低端到端延迟，提升用户交互体验，尤其适用于长文本生成、多轮对话、RAG问答等对响应速度敏感的场景。
 
-## 在百炼平台的不同场景中，这个概念如何使用
+## 在百炼平台的不同场景中如何使用
 
-流式输出在百炼平台中并非全局默认能力，而是按模型类型和调用协议有选择地支持：
+流式输出在百炼平台多个核心能力层中统一支持，但启用条件与行为细节因服务类型而异：
 
-- **文本生成（LLM）**：所有主流 Qwen 系列模型（如 `qwen3-32b`、`qwen4-max`）均支持流式输出，适用于 Chat、Responses、Anthropic Messages 等协议，以及原生 DashScope API。
-- **语音合成（TTS）**：`qwen-audio` 等 TTS 模型支持流式音频分片返回（如 PCM 或 MP3 片段），便于实现低延迟播放。
-- **不支持的场景**：
-  - 视觉生成（图像/视频）、语音识别（ASR）、向量服务（embedding/rerank）、全模态（omni-modal）模型**不支持流式输出**；调用其 `/invoke-stream` 端点将直接返回 `400 Bad Request`。
-  - 异步任务（如图像生成、视频生成）本身为长耗时作业，采用轮询或事件回调机制，与流式输出无关。
+- **模型调用（Model Experience）**：通过 `/v1/models/{model_id}/invoke` 接口，在 `parameters.stream = true` 时启用。仅文本生成（LLM）和全模态（Omni-modal）模型支持；视觉生成、语音（ASR/TTS）、向量（embedding/rerank）类模型不支持，误设将返回 `400 Bad Request`。响应格式为 `text/event-stream`（SSE），需按标准 SSE 协议解析 `data:` 行。
 
-调用方式取决于所选协议：
-- **DashScope 原生 API**：使用专用流式端点 `POST /v1/models/{model}/invoke-stream`，并设置请求头 `Accept: text/event-stream`。
-- **OpenAI 兼容 API（Chat Completions）**：在请求体中设置 `"stream": true`，响应为 Server-Sent Events（SSE）格式。
-- **Anthropic Messages API**：同样通过 `"stream": true` 启用，响应结构兼容 Anthropic 标准 SSE。
+- **智能体与工作流应用调用（Application Call / Bailian Application Calling）**：在 `POST /api/v1/apps/{APP_ID}/completion` 或 `/api/v1/applications/{application_id}/call` 中设置 `stream = true`。支持增量输出（推荐同时设置 `incremental_output = true` 避免重复拼接），工作流还支持 `flow_stream_mode = "message_format_plus"` 以获取更结构化的节点级流式事件。
 
-> ⚠️ 注意：流式响应需客户端具备 SSE 解析能力；若使用 `curl` 调试，建议添加 `-N` 参数禁用缓冲（`curl -N ...`），否则可能阻塞首帧。
+- **知识库问答（Knowledge Base QA）**：调用 `/v1/knowledge_bases/{kb_id}/qa` 时传入 `"stream": true`，可同时流式返回检索片段（`retrieval_results`）和模型生成答案（`answer`），便于前端实现“边检索边思考”的渐进式呈现。
+
+- **Qwen 系列 API（OpenAI/Anthropic/DashScope 协议）**：  
+  - OpenAI 兼容 Chat Completions：设置 `"stream": true`，遵循 OpenAI SSE 格式（含 `choices[0].delta.content`）；  
+  - Responses API：`"stream": true` 启用流式响应，支持 `previous_response_id` 多轮上下文延续；  
+  - DashScope 原生协议：`parameters.stream = true`，响应含 `output.text` 增量字段及 `is_last: false/true` 标识。
+
+> ⚠️ 注意：所有场景下，**异步调用（如 `background=true`）均不支持流式输出**；流式必须配合同步 HTTP 请求使用。
 
 ## 关键参数和配置
 
-| 参数 | 类型 | 说明 | 是否必需 | 默认值 |
-|------|------|------|----------|--------|
-| `stream` | boolean | 启用流式响应模式 | 是（启用流式时） | `false` |
-| `incremental_output` | boolean | 在 `stream=true` 下启用增量式输出（即每次仅返回新增 token，而非全量重传） | 否 | `false` |
-| `Accept` 请求头 | string | 必须设为 `text/event-stream`（DashScope 原生流式调用） | 是（DashScope 流式） | — |
+| 参数名 | 所属场景 | 类型 | 默认值 | 说明 |
+|--------|----------|------|--------|------|
+| `stream` | 全场景通用 | boolean | `false` | 启用流式响应的核心开关。必须显式设为 `true`，否则返回完整 JSON 响应。 |
+| `incremental_output` | Application Call（DashScope 协议） | boolean | `false` | 流式模式下是否返回增量内容（如仅新生成 token），避免客户端重复拼接。**强烈推荐设为 `true`**。 |
+| `flow_stream_mode` | 工作流应用 | string | `"message_format"` | 控制流式事件结构：`"message_format_plus"`（推荐）返回带 `node_id` 和 `event_type` 的结构化 chunk；`"message_format"` 仅返回原始文本流。 |
+| `timeout` | Application Call | integer | — | 流式请求建议显式设置（如 `300`），防止长尾请求无限挂起；超时后返回 `504 Gateway Timeout`。 |
 
-- `incremental_output=true` 可显著减少网络带宽占用和前端渲染开销，推荐在 Web 应用中启用；
-- 所有流式响应均以 SSE 格式返回，每行以 `data:` 开头，末尾含双换行符（`\n\n`）；
-- 流式响应中仍包含完整 `usage` 字段（token 统计）和 `request_id`，但位于最终的 `data: [DONE]` 之前；
-- 若请求中同时指定 `stream=false` 和 `stream=true`（如多处赋值），以最后解析的布尔值为准；建议显式声明一次。
+> ✅ 最佳实践：  
+> - 客户端务必设置合理的 `timeout`（建议 ≥ 60s）并实现 SSE 连接重试逻辑；  
+> - 解析时忽略空行、注释行（`:` 开头），只处理 `data:` 行；  
+> - 检查每个 chunk 中的 `is_last`（DashScope）、`finish_reason`（OpenAI）或 `done` 字段，确认流是否结束；  
+> - 对于含工具调用（function calling）的流式响应，需按 `tool_calls` 数组的 `index` 字段顺序合并 delta 内容。
 
 ## 面向开发者，简洁实用
 
-- ✅ **快速启用**：只需在请求体加 `"stream": true`（OpenAI/Anthropic 协议）或改用 `/invoke-stream` 端点（DashScope 协议），无需修改模型或输入格式。
-- ✅ **安全可靠**：流式响应与同步响应共享同一鉴权、限流、配额和错误码体系（如 `429 Too Many Requests`、`401 Unauthorized`），行为一致。
-- ✅ **调试友好**：使用 `curl -N -H "Accept: text/event-stream"` 可直接观察 token 逐个生成过程；SDK 中推荐使用 `dashscope.Client.stream()`（Python）或 `StreamResponse`（Java）封装类。
-- ❌ **避免踩坑**：
-  - 不要对非流式支持模型（如 `wanx2.1-t2i-turbo`）调用流式接口；
-  - 不要在流式请求中遗漏 `Accept: text/event-stream`（DashScope 原生）或 `Content-Type: application/json`；
-  - 前端处理 SSE 时，务必监听 `error` 事件并实现重连逻辑（网络中断时自动恢复）；
-  - `incremental_output` 仅影响 `output.text` 字段的更新方式，不影响 `output.choices[0].delta.content` 的语义（OpenAI 协议下已天然增量）。
-
-流式输出是构建高性能 AI 应用的关键能力。启用它，让响应“动起来”。
+- **一句话启用**：在请求体 `parameters`（模型调用）或顶层对象（应用/知识库调用）中添加 `"stream": true`。  
+- **三步解析流**：① 设置 `Accept: text/event-stream`；② 按行读取，提取 `data:` 后的 JSON 字符串；③ `JSON.parse()` 后检查 `output.text`（DashScope）或 `choices[0].delta.content`（OpenAI）字段。  
+- **避坑提示**：  
+  - 不要对 `rerank` 或 `embedding` 模型设 `stream=true`；  
+  - 工作流流式需配合 `flow_stream_mode` 使用，否则可能丢失节点信息；  
+  - 知识库流式响应中，`retrieval_results` 可能在 `answer` 之前或穿插返回，需按 `event_type` 区分处理。  
+- **调试建议**：使用 `curl -N` 或 Postman 的 SSE 插件直接观察原始流；生产环境务必添加连接保活与错误降级（如自动 fallback 到非流式）。
 
 ## 关联主题页
 
-- [get started with models](../guides/get-started-with-models.md)
 - [model experience](../guides/model-experience.md)
+- [application call](../api/application-call.md)
 - [qwen api reference](../api/qwen-api-reference.md)
-- [application support](../guides/application-support.md)
-- [more about models](../api/more-about-models.md)
+- [knowledge base](../guides/knowledge-base.md)
+- [bailian application calling](../guides/bailian-application-calling.md)
 
 

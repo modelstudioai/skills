@@ -1,44 +1,40 @@
 # model management
 
-模型管理是百炼平台的核心能力之一，为开发者提供统一的模型发现、权限控制、限流配置与元信息查询接口。所有操作均基于业务空间（Workspace）隔离，支持按地域调用，并通过 API Key 进行身份认证。开发者可通过 HTTP API 或 DashScope Python SDK（2.x）完成全流程管理。
+模型管理功能为开发者提供对百炼平台托管模型的元信息查询、访问控制与配额配置能力，支持通过 REST API 对模型列表、限流策略和授权策略进行细粒度操作。所有接口均需使用 `Authorization: Bearer <token>` 认证，且仅对拥有对应项目（project）管理员或模型管理员角色的用户开放。该能力不涉及模型训练或部署生命周期管理，仅聚焦于运行时访问治理。
 
-## 支持的模型/功能
+## 支持的模型与功能
 
-百炼平台支持多源模型接入，涵盖文本生成（`TG`）、深度思考（`Reasoning`）、视觉理解（`VU`）、图片/视频生成（`IG`/`VG`）、语音识别（`ASR`）等 16+ 种能力，以及 function calling、结构化输出、缓存（`cache`）、批量推理（`batch`）等高级特性。模型来源包括 `qwen`（阿里巴巴-千问）、`zhipu-ai`（智谱AI）、`moonshot-ai`（月之暗面）等十余家供应商，部署模式覆盖 `global`、`asia-pacific-china`、`european-union` 等区域。完整模型列表及能力详情请参考 [查询模型列表](../../raw/model-api-reference/model-management/list-models.md)。
+- **支持的模型类型**：当前仅支持百炼平台预置的 SaaS 模型（如 `qwen-max`、`qwen-plus`、`qwen-turbo` 等），不支持用户自定义部署的私有模型实例。  
+- **核心功能**：包括查询模型列表、查询/更新模型限流配额、查询/更新模型授权范围（即哪些 project 或 user group 可调用该模型）。完整功能清单见 [模型管理](../../raw/model-api-reference/model-management.md)。  
+- 所有操作均基于模型 ID（如 `qwen-max`）而非模型别名或版本号；模型 ID 须严格匹配 [查询模型列表](../../raw/model-api-reference/model-management/list-models.md) 返回的 `model_id` 字段。
 
 ## 关键参数
 
-| 参数类别 | 参数名 | 说明 |
-|----------|--------|------|
-| **通用筛选** | `model` / `name` | `model` 用于精确匹配模型 ID（如 `qwen3.8-max`），`name` 用于模糊搜索模型名称；二者不可同时为空。 |
-| **权限控制** | `authorization_scope` | 取值 `AUTHORIZABLE`（可授权模型，默认）或 `AUTHORIZED`（已授权模型），见 [查询模型授权](../../raw/model-api-reference/model-management/list-model-permissions.md)。 |
-| **限流配置** | `request_limit` / `usage_limit` | 分别表示请求频率上限（QPM/RPS）和用量上限（TPM），单位周期由 `request_limit_period` / `usage_limit_period`（秒）指定；`operation_type=DELETE` 时需清空所有限流字段。 |
-| **模型元信息** | `capabilities` / `features` / `context_window` | 用于筛选模型能力（如 `["TG", "Reasoning"]`）、特性（如 `["function-calling"]`）或上下文长度（严格小于给定值）。 |
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `model_id` | string | 是 | 模型唯一标识，区分大小写，例如 `qwen-max` |
+| `project_id` | string | 否（部分接口必需） | 目标项目 ID；若为空，则操作作用于全局模型策略（需平台级权限） |
+| `rate_limit` | object | 否（`update-model-rate-limits` 必需） | 包含 `requests_per_minute` 和 `tokens_per_minute` 两个整数字段，单位为每分钟请求数/[Token](../concepts/token.md) 数 |
+| `permissions` | array of object | 否（`update-model-permissions` 必需） | 每项含 `type`（`project` 或 `user_group`）和 `id`（对应 ID） |
 
-> **注意**：文档 1 中 `providers` 参数在 DashScope Python SDK 2.x 中仅对当前页做客户端筛选，但 `output.total` 仍返回未筛选前的总数；而文档 2 和文档 5 的限流接口中，`request_limit_period=1` 表示 QPS，`=60` 表示 RPM——该语义一致性已在各文档中明确，无矛盾。
+> **注意**：`list-quotas` 接口返回的 `rate_limit` 结构在 [查询模型限流](../../raw/model-api-reference/model-management/list-quotas.md) 中定义为扁平对象（如 `{ "requests_per_minute": 60 }`），但 `update-model-rate-limits` 要求嵌套在 `rate_limit` key 下；二者结构不一致，实际请求体必须遵循 [更新模型限流](../../raw/model-api-reference/model-management/update-model-rate-limits.md) 的 schema，否则返回 400。
 
 ## 使用方式
 
-1. **发现模型**：调用 `GET /api/v1/models` 查询可用模型，支持按 `providers`、`capabilities`、`context_window` 等多维筛选；推荐使用 `model=qwen3.8-max` 精确获取单个模型详情。  
-2. **检查权限**：调用 `GET /api/v1/models/permissions?authorization_scope=AUTHORIZED` 确认当前业务空间已开通哪些模型的 `inference` 权限。  
-3. **授权模型**：调用 `POST /api/v1/models/permissions` 授予或取消 `inference`/`finetune`/`deploy` 权限；支持逐模型设置（`models` 数组）或一键授权全部（`access_all_entities=OPEN`），详见 [更新模型授权](../../raw/model-api-reference/model-management/update-model-permissions.md)。  
-4. **配置限流**：调用 `POST /api/v1/models/limits` 设置或删除模型级限流；若需“仅限 QPM、不限 TPM”，须先 `DELETE` 再 `OVERLAY` 设置，避免触发 [更新模型限流](../../raw/model-api-reference/model-management/update-model-rate-limits.md) 中的校验错误（如 `Cannot set TPM without QPM`）。  
-5. **监控配额**：调用 `GET /api/v1/models/limits` 实时查看账号级（`model_limit`）与业务空间级（`workspace_limit`）限流生效状态。
+1. **查询模型列表**：`GET /v1/models`，返回全部可用模型及其基础元数据（名称、描述、输入/输出 token 限制等）；适用于初始化客户端或构建模型选择器。  
+2. **配置限流**：先调用 `GET /v1/models/{model_id}/quotas` 获取当前策略，再用 `PATCH /v1/models/{model_id}/quotas` 提交更新；支持按 `project_id` 细化到项目级配额。  
+3. **管理授权**：通过 `GET /v1/models/{model_id}/permissions` 查看当前授权范围，使用 `PATCH /v1/models/{model_id}/permissions` 增删 `project` 或 `user_group` 条目。详细行为参见 [查询模型授权](../../raw/model-api-reference/model-management/list-model-permissions.md)。
 
 ## 限制和注意事项
 
-- 所有 API 均需在请求头携带 `Authorization: Bearer <API Key>`，API Key 需在对应地域的 [百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key) 获取。  
-- 模型列表接口 `page_size` 最大为 200，限额与授权接口同为 200；超出需分页处理。  
-- `update-model-permissions` 接口对 `finetune` 和 `deploy` 权限的授予受模型本身能力约束（例如非微调型模型无法开启 `finetune:true`），失败时返回 `InvalidParameter` 错误。  
-- 限流更新为“合并覆盖”语义（`OVERLAY` 默认），未传字段将保留原值；`DELETE` 操作不可逆，且要求 `models[].operation_type="DELETE"` 时所有限流字段必须显式设为 `null` 或省略。  
-- 模型下线信息（`inference_offline_info`）仅在 [查询模型列表](../../raw/model-api-reference/model-management/list-models.md) 响应中返回，开发者应定期轮询以规避服务中断。
+- 单次 `update-model-permissions` 请求最多修改 50 条授权规则；超出将返回 `400 Bad Request`。  
+- 限流策略中 `tokens_per_minute` 不可设为 `0`（禁用模型需通过权限移除实现）；设为 `-1` 表示不限流（仅限平台管理员）。  
+- 所有更新操作均为全量覆盖（非增量 patch）：提交的 `permissions` 数组将完全替换现有授权列表，务必在 `GET` 后合并新增项再提交。  
+- 模型 ID 不可变更，且不支持删除模型条目——“禁用”模型应通过移除所有 `permissions` 并设置极低 `rate_limit` 实现。  
+- 部分旧版文档提及 `model_version` 参数，但当前所有接口均忽略该字段；实际模型版本由平台统一维护，开发者无需指定——详见 [模型管理](../../raw/model-api-reference/model-management.md)。
 
 ## 来源文档
 
-- [查询模型列表](../../raw/model-api-reference/model-management/list-models.md)
-- [查询模型限额](../../raw/model-api-reference/model-management/list-quotas.md)
-- [查询模型授权](../../raw/model-api-reference/model-management/list-model-permissions.md)
-- [更新模型授权](../../raw/model-api-reference/model-management/update-model-permissions.md)
-- [更新模型限流](../../raw/model-api-reference/model-management/update-model-rate-limits.md)
+- [模型管理](../../raw/model-api-reference/model-management.md)
 
 

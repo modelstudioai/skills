@@ -196,6 +196,26 @@ qwen-max
 
 0.5元
 
+**qwen4-max — Batch 单价（每百万 Token）**
+
+API
+
+输入
+
+输出
+
+[Batch File](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)
+
+5元
+
+15元
+
+[Batch Chat](raw/model-api-reference/toolkits-and-frameworks/openai-compatible-batch-chat.md)（限时 5 折）
+
+原价 10元
+
+原价 30元
+
 #### 美国（弗吉尼亚）
 
 **模型 ID（Model ID）**
@@ -13245,11 +13265,85 @@ pixverse/pixverse-upscale
 
 ### 可灵-视频生成
 
-计费规则：输入不计费，输出按成功生成的**视频秒数**计费。
+计费规则：无视频输入时，按成功生成的**视频秒数**计费。4.0 全能参考模型有视频输入时，计费时长为 max（输入视频总时长，生成视频时长）+ 生成视频时长。
 
-不同输出视频分辨率和视频类型（有声/无声）单价不同；请求失败不产生费用，也不消耗免费额度。
+不同模型、输出视频分辨率和参考视频使用情况的单价不同；请求失败不产生费用，也不消耗免费额度。
 
 #### 华北2（北京）
+
+**4.0 模型**
+
+模型 ID
+
+输出视频类型
+
+输出视频分辨率
+
+计费单价
+
+免费额度
+
+kling/kling-v4-video-generation
+
+有声视频
+
+720P
+
+1.0元/秒
+
+无
+
+kling/kling-v4-video-generation
+
+有声视频
+
+1080P
+
+1.5元/秒
+
+无
+
+kling/kling-v4-omni-reference-video-generation
+
+有声视频（无参考视频）
+
+720P
+
+1.0元/秒
+
+无
+
+kling/kling-v4-omni-reference-video-generation
+
+有声视频（无参考视频）
+
+1080P
+
+1.5元/秒
+
+无
+
+kling/kling-v4-omni-reference-video-generation
+
+有声视频（有参考视频）
+
+720P
+
+0.6元/秒
+
+无
+
+kling/kling-v4-omni-reference-video-generation
+
+有声视频（有参考视频）
+
+1080P
+
+0.9元/秒
+
+无
+
+**3.0 模型**
 
 **模型 ID（Model ID）**
 

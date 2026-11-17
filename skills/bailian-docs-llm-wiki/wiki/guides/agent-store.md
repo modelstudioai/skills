@@ -1,38 +1,62 @@
 # agent store
 
-agent store 是百炼平台提供的模型能力与技能的集中注册、发现与调用服务，用于在 Agent 应用中动态加载和组合外部模型能力（如 MCP）或预置技能（Skill）。它通过标准化接口实现能力解耦，支持运行时按需拉取与执行。开发者无需硬编码集成逻辑，即可复用平台托管的能力模块。
+`agent store` 是阿里云百炼平台中统一管理外部能力扩展的核心模块，主要包含 **MCP（Model Context Protocol）服务** 和 **Skill（技能包）** 两类可复用能力单元。开发者可通过该模块快速接入地理信息、网页爬取、文件处理、数据分析等专业工具，无需编写底层接口代码，即可增强智能体或工作流应用的功能边界。
 
 ## 支持的模型/功能
 
-agent store 当前主要支持两类可注册能力：
-- **MCP（Model Context Protocol）**：提供结构化上下文交互协议，支持模型间上下文传递与协同推理，详见 [MCP](../../raw/application-user-guide/agent-store/model-context-protocol.md)；
-- **Skill（技能）**：封装了特定业务逻辑（如查天气、发邮件）的可复用函数单元，具备明确输入/输出 Schema 和权限声明，详见 [Skill](../../raw/application-user-guide/agent-store/skill.md)。
+`agent store` 当前提供两类标准化能力扩展机制：
 
-> **注意**：文档 [Store](../../raw/application-user-guide/agent-store.md) 中未明确说明是否支持自定义 LLM 模型直接注册为 store 条目；根据当前实现，仅 MCP 和 Skill 为官方支持类型，LLM 模型需通过 `model_id` 显式指定，不纳入 store 管理范畴。
+- **MCP 服务**：基于开源 [MCP 协议](https://modelcontextprotocol.io/) 实现的大模型与外部工具通信标准，支持动态发现、调用和组合工具。官方已预置 Amap Maps、WebSearch、Firecrawl、Sequential Thinking 等 MCP 服务；同时支持自定义部署（如 Knowledge Graph Memory）[原文标题](../../raw/application-user-guide/agent-store/model-context-protocol/custom-mcp.md)。  
+- **Skill**：面向文件与数据操作的声明式能力包，分为官方 Skill（如 `xlsx`、`pdf`）和自定义 ZIP 技能包。Skill 通过自然语言描述触发，由智能体自动识别并调用，适用于无需实时 API 调用的离线处理任务 [原文标题](../../raw/application-user-guide/agent-store/skill/introduction-to-skill.md)。
+
+> **注意**：MCP 服务与 Skill 定位不同：MCP 用于**实时、有状态、需鉴权的外部系统交互**（如调用高德地图 API），而 Skill 用于**无状态、本地化、以文件为输入输出的批处理任务**（如解析 Excel 表格）。二者不可互相替代，亦不支持在同一个节点中混合使用。
 
 ## 关键参数
 
-调用 store 中的能力时，需在 `agent_config` 或 `tool_calls` 中指定以下关键字段：
-- `store_id`: 唯一标识符，由平台分配，格式为 `mcp/{uuid}` 或 `skill/{uuid}`；
-- `version`: 语义化版本号（如 `v1.2.0`），用于灰度发布与兼容性控制；
-- `input_schema`: JSON Schema 定义的输入约束，必须与注册时一致，否则调用失败；
-- `auth_required`: 布尔值，指示是否需用户授权（仅 Skill 类型强制校验）。
+| 类别 | 参数 | 说明 | 来源 |
+|--------|------|------|------|
+| **MCP 通用** | `DASHSCOPE_API_KEY` | 全局鉴权凭证，所有云部署及自定义 MCP 服务均使用此 Key，无需为单个服务单独申请 [原文标题](../../raw/application-user-guide/agent-store/model-context-protocol/official-and-third-party-mcp.md) | — |
+| **MCP 部署模式** | `基础模式` / `极速模式` | 基础模式按调用时长计费（0.000156 元/秒），冷启动延迟高；极速模式额外收取部署费（0.000036 元/秒），保持常驻以降低延迟 | 文档 2 |
+| **Skill 触发核心** | `description` 字段（SKILL.md） | 决定智能体是否调用该 Skill 的唯一依据。必须明确描述适用输入类型、支持操作、触发关键词及**不适用场景**，否则将导致误调或漏调 | 文档 8 |
+| **自定义 MCP 配置** | `mcpServers` JSON 结构 | 必须严格匹配协议类型（`stdio`/`sse`/`streamableHttp`）与端点路径（如 `/sse` 或 `/mcp`），否则引发 `11200058`（METHOD_NOT_ALLOWED）等错误码 | 文档 5 |
 
 ## 使用方式
 
-1. **注册能力**：通过控制台或 OpenAPI（`POST /v1/store/items`）提交 MCP 或 Skill 的元数据与执行逻辑；
-2. **发现能力**：调用 `GET /v1/store/search` 并传入关键词、标签或 `type=mcp|skill` 过滤；
-3. **调用能力**：在 Agent 的 `tool_choice` 或 `function_call` 中引用 `store_id`，平台自动解析并路由至对应实现。完整流程参见 [Store](../../raw/application-user-guide/agent-store.md)。
+### MCP 服务
+- **平台内集成**：在智能体应用中最多添加 5 个 MCP 服务；在工作流中每个 MCP 节点需手动指定工具（如 `maps_weather`）并配置参数映射 [原文标题](../../raw/application-user-guide/agent-store/model-context-protocol/official-and-third-party-mcp.md)。  
+- **外部调用**：支持 CLI（`bl mcp call --target amap-maps.maps_weather`）、MCP SDK（Python 示例见文档 7）及第三方客户端（Qoder/Cursor 等一键安装）。  
+- **开通方式**：One Key 服务首次调用自动生效；非 One Key 服务需在 MCP 广场手动开通，并对敏感参数（如 `AMAP_MAPS_API_KEY`）使用 KMS 加密。
+
+### Skill
+- **添加方式**：在智能体应用配置页的「技能」区域点击加号，或从 Skill 管理页直接「添加到智能体」。  
+- **触发逻辑**：智能体仅依据 SKILL.md 中的 `description` 进行语义匹配，**不依赖函数名或代码逻辑**。例如 `xlsx` Skill 的 description 明确排除“产出 Word 文档”的场景，即此类请求不会触发该 Skill。  
+- **更新机制**：重新上传同名 ZIP 包即生成新版本，已添加该 Skill 的智能体会自动升级（官方 Skill 由平台静默更新）。
 
 ## 限制和注意事项
 
-- 单次请求最多并发调用 5 个 store 能力，超出将触发限流（HTTP 429）；
-- MCP 能力不支持嵌套调用自身 store ID，否则引发循环依赖错误；
-- Skill 的 `input_schema` 变更需同步更新所有下游 Agent 配置，否则运行时报 `validation_error`；
-- 所有 store 能力默认启用沙箱执行环境，但 Skill 若声明 `privileged: true`，需经平台安全审核后方可上线——该要求在 [Skill](../../raw/application-user-guide/agent-store/skill.md) 中明确，在 [MCP](../../raw/application-user-guide/agent-store/model-context-protocol.md) 中未提及，建议 Skill 场景严格遵循。
+- **MCP 服务限制**：  
+  - 不支持访问本地资源（如本地数据库、文件系统）[文档 5]；  
+  - 自定义 MCP 服务若依赖私有 npm/PyPI 仓库，当前不支持部署，需发布至公共仓库或改用 SSE 远程连接 [文档 5]；  
+  - 云部署 MCP 服务共享主账号 QPS 限流（如 WebSearch 为 15 QPS），RAM 子账号不独立限流 [文档 2]。  
+
+- **Skill 限制**：  
+  - ZIP 包大小上限 10 MB，且必须包含符合规范的 `SKILL.md`；  
+  - `description` 字段质量直接影响调用准确率——模糊或缺失“不适用场景”描述将显著增加误触发概率。  
+
+- **通用注意事项**：  
+  - MCP 调用会增加模型输入 [Token](../concepts/token.md)（返回结果作为上下文注入）和潜在输出 [Token](../concepts/token.md)（更详尽响应），需在 [Token](../concepts/token.md) 预算中预留余量 [文档 5]；  
+  - MCP 服务**不能**在直接调用千问 API（如 `dashscope.ChatCompletion.create`）时接入，仅限百炼平台内智能体/工作流应用使用 [文档 5]；  
+  - 自定义 MCP 服务版本更新后需**手动重新部署**，npx/uvx 方式不会自动拉取新版本 [文档 5]。
 
 ## 来源文档
 
-- [Store](../../raw/application-user-guide/agent-store.md)
+- [MCP](../../raw/application-user-guide/agent-store/model-context-protocol.md)
+- [模型上下文协议（MCP）](../../raw/application-user-guide/agent-store/model-context-protocol/mcp-introduction.md)
+- [官方 MCP 服务](../../raw/application-user-guide/agent-store/model-context-protocol/official-and-third-party-mcp.md)
+- [自定义 MCP 服务](../../raw/application-user-guide/agent-store/model-context-protocol/custom-mcp.md)
+- [MCP 常见问题](../../raw/application-user-guide/agent-store/model-context-protocol/mcp-faq.md)
+- [Skill](../../raw/application-user-guide/agent-store/skill.md)
+- [外部调用](../../raw/application-user-guide/agent-store/model-context-protocol/mcp-external-calls.md)
+- [Skill](../../raw/application-user-guide/agent-store/skill/introduction-to-skill.md)
 
 

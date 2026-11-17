@@ -1,6 +1,6 @@
 # 创建知识库并导入
 
-一步完成创建知识库和导入文件（合并了 CreateIndex 和 SubmitIndexJob）。创建成功后返回知识库 ID（data.id）；导入任务 ID（ingestionId）需通过 submit-sync-job 接口获取。
+一步完成创建知识库和导入文件（合并了 CreateIndex 和 SubmitIndexJob）。创建成功后返回知识库 ID（data.pipelineId）和导入任务 ID（data.ingestionId）。
 
 ## 前提
 
@@ -114,19 +114,19 @@ integer
 
 `docIds`
 
-是
+条件必填
 
 `array<string>`
 
-创建知识库时同步导入的文件 ID 列表，值来自 [addFile](raw/application-api-reference/rag-api/rag-api-data-import/rag-api-add-file.md) 注册文件后返回的 `fileId`，或通过 [listFile](raw/application-api-reference/rag-api/rag-api-data-import/rag-api-list-file.md) 查询已有文件获取。建议导入不超过 10000 个。注意参数名为 `docIds`，不是 `file_ids` 或 `fileIds`；但校验失败时错误信息中的参数名为 `file_ids`
+创建知识库时同步导入的文件 ID 列表，与 `categoryIds` 至少传一个。值来自 [addFile](raw/application-api-reference/rag-api/rag-api-data-import/rag-api-add-file.md) 注册文件后返回的 `fileId`，或通过 [listFile](raw/application-api-reference/rag-api/rag-api-data-import/rag-api-list-file.md) 查询已有文件获取。建议导入不超过 10000 个。注意参数名为 `docIds`，不是 `file_ids` 或 `fileIds`；但校验失败时错误信息中的参数名为 `file_ids`
 
 `categoryIds`
 
-否
+条件必填
 
 `array<string>`
 
-创建知识库时可同步导入文件。通过指定类目 ID，可导入对应类目下的所有文件，建议导入不超过 10000 个
+创建知识库时按类目同步导入文件，与 `docIds` 至少传一个；按类目导入时无需传 `docIds`。通过指定类目 ID，可导入对应类目下的所有文件，建议导入不超过 10000 个
 
 `dataSources`
 
@@ -329,7 +329,7 @@ boolean
 }
 ```
 
-**说明**`enableSearch`、`enableLlm` 与查询时的 `metadata_filter` 作用不同。通过 API 调用应用时，如需按元数据过滤文档，应在 `rag_options` 中同时指定 `pipeline_ids` 和 `metadata_filter`，详见[应用调用参数](raw/_short/agent-and-workflow-application-api-reference-ab48d043a951dcb2.md)。索引构建完成后，可通过[查询文件详情](raw/application-api-reference/rag-api/rag-api-documents/rag-api-list-file-details.md) API 的 `meta_extract_info` 检查实际抽取结果。
+**说明**`enableSearch`、`enableLlm` 与查询时的 `metadata_filter` 作用不同。通过 API 调用应用时，如需按元数据过滤文档，应在 `rag_options` 中同时指定 `pipeline_ids` 和 `metadata_filter`，详见[应用调用参数](raw/_short/agent-and-workflow-application-api-reference-81f0d3ecfd878b1f.md)。索引构建完成后，可通过[查询文件详情](raw/application-api-reference/rag-api/rag-api-documents/rag-api-list-file-details.md) API 的 `meta_extract_info` 检查实际抽取结果。
 
 ## 请求示例
 
@@ -363,8 +363,9 @@ curl -X POST "$BASE_URL/api/v1/indices/rag/index/create_v2" \
   "success": true,
   "message": "success",
   "data": {
-    "id": "h6a85zj8oc",
-    "pipeline_name": "audit-kb-01",
+    "pipelineId": "h6a85zj8oc",
+    "ingestionId": "7f90991a5ec24ad28c8d309ac37e6dd3",
+    "status": "PENDING",
     "created_at": 1783657930436,
     "updated_at": 1783657930436
   },
@@ -421,7 +422,7 @@ string
 
 object
 
-响应数据。子字段 `id`（string，知识库 ID，后续接口的知识库标识均使用该值）、`pipeline_name`（string，知识库名称）、`created_at`（integer，知识库创建时间，Unix 毫秒时间戳）、`updated_at`（integer，知识库最近更新时间，Unix 毫秒时间戳）。注意：本接口不返回导入任务 ID；传入 `docIds` 时的导入任务 ID 通过[提交导入任务](raw/application-api-reference/rag-api/rag-api-sync-jobs/rag-api-submit-sync-job.md)接口获取（返回 `ingestionId`）
+响应数据。子字段 `pipelineId`（string，知识库 ID，后续接口的知识库标识均使用该值）、`ingestionId`（string，本次导入任务 ID，可通过[查询导入任务状态](raw/application-api-reference/rag-api/rag-api-sync-jobs/rag-api-get-sync-job-status.md)接口跟踪导入进度）、`status`（string，导入任务状态，创建成功时为 `PENDING`）、`created_at`（integer，知识库创建时间，Unix 毫秒时间戳）、`updated_at`（integer，知识库最近更新时间，Unix 毫秒时间戳）
 
 ## 错误码
 
@@ -441,7 +442,7 @@ HTTP 状态码
 
 `Index.InvalidParameter`
 
-`docIds` 缺失或为空数组：`Required parameter(file_ids) missing or invalid, please check the request parameters.`
+`docIds` 与 `categoryIds` 均未提供或均为空数组：`Required parameter(file_ids) missing or invalid, please check the request parameters.`
 
 400
 

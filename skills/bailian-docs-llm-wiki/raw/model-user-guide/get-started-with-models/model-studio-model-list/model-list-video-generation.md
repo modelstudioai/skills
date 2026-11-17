@@ -42,6 +42,8 @@
 -   [wan2.1-vace-plus](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-video-generation/wan2-1-vace-plus.md)
 -   [video-style-transform](raw/_short/video-style-transform-97c10cc599064058.md)
 -   [videoretalk](raw/_short/acoustic-portraits-videoretalk-5459019b8e32940c.md)
+-   [kling/kling-v4-video-generation](raw/_short/kling-v4-video-generation-2c8d4ce0ce4dfaf8.md)
+-   [kling/kling-v4-omni-reference-video-generation](raw/_short/kling-v4-omni-reference-video-generation-a0be3201390d58d7.md)
 -   [kling/kling-v3-turbo-video-generation](raw/_short/kling-v3-turbo-video-generation-1220328d8d3399da.md)
 -   [kling/kling-v3-omni-video-generation](raw/_short/kling-v3-omni-video-generation-703bcb270482773b.md)
 -   [kling/kling-v3-video-generation](raw/_short/kling-v3-video-generation-da9d07b6e115b687.md)

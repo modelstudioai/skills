@@ -30,7 +30,7 @@
 
 string
 
-知识库 ID，即 [createIndex](raw/application-api-reference/rag-api/rag-api-knowledge-base/rag-api-create-index.md) 接口返回的 `data.id`
+知识库 ID，即 [createIndex](raw/application-api-reference/rag-api/rag-api-knowledge-base/rag-api-create-index.md) 接口返回的 `data.pipelineId`
 
 `chunkId`
 

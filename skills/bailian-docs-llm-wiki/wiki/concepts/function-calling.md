@@ -1,71 +1,44 @@
 # 函数调用
 
-函数调用（Function Calling）是百炼平台核心的工具集成能力，指大语言模型在推理过程中主动识别用户意图、生成结构化工具调用请求（`tool_calls`），并由平台自动执行外部 API（如企业微信消息发送、数据库查询、RAG 检索等），再将结果注入后续推理链路的闭环机制。该能力无需开发者手动解析指令或拼接 HTTP 请求，实现“语义到动作”的端到端自动化。
+函数调用（Function Calling）是百炼平台中实现大模型与外部能力动态协同的核心机制，指模型在推理过程中自主识别用户意图、生成结构化工具调用请求（含工具 ID 与参数），并由平台安全执行、返回结果后继续推理的闭环过程。它不是简单的 API 封装，而是模型原生支持的、可被 [prompt](../guides/prompt.md) 触发与控制的语义级能力调度协议。
 
-## 在百炼平台的不同场景中如何使用
+## 在百炼平台的不同场景中，这个概念如何使用
 
-- **应用级集成（Application Use Cases）**：用于对接企业微信、钉钉等办公平台开放接口。例如，在客服助手场景中，当用户说“把订单号 12345 的物流信息发给张经理”，模型可自动生成 `work_wechat_send_message` 工具调用，平台自动完成身份鉴权、消息组装与投递。需在请求中显式传入 `tools` 参数声明可用工具列表。
+函数调用在百炼中并非单一接口，而是贯穿多个能力层的横切行为模式，具体体现为以下三类典型场景：
 
-- **Managed Agents API**：作为托管智能体的核心执行单元，函数调用与 Skill（技能）深度绑定。每个 Skill 封装一个或多个工具逻辑（如 `fetch_customer_data`），Agent 在运行时根据 `session_id` 和 `memory_store_id` 上下文动态选择并调用 Skill，调用结果自动写入 Memory Store 并参与后续决策。
+- **插件（Plugin）调用**：面向智能体应用（Agent）和工作流节点，当启用 `qwen-plus` 或 `qwen-max` 等兼容模型时，模型可基于用户输入、工具描述及 `tools` 字段声明，自主决定是否调用 `code_interpreter`、`quark_search` 等官方/自定义插件。调用触发依赖 `tools` 列表注入与上下文理解，结果自动注入后续 [prompt](../guides/prompt.md)。
+  
+- **MCP（Model Calling Protocol）服务调用**：面向系统级能力集成，开发者通过 `/api/v1/mcp/servers/{mcpCode}/tools/call` 接口显式发起同步工具调用。此时“函数调用”表现为标准 REST 请求——需严格指定 `tool_name` 和 `tool_params`，平台负责路由、鉴权与错误封装，适用于需精确控制调用时机与参数的编排场景。
 
-- **Qwen API（OpenAI 兼容 / Anthropic 兼容）**：通过标准协议字段启用。  
-  - [OpenAI 兼容接口](openai-compatible-interface.md)：在 `tools` 数组中定义函数 schema，响应中返回 `tool_calls` 字段；  
-  - Anthropic Messages 接口：使用 `tool_use` 块和 `tool_result` 交互，支持多工具并行调用与嵌套思考。  
-  所有协议均要求模型具备函数调用能力（如 `qwen4-max`、`qwen3.8-omni-flash`），不支持的模型（如部分轻量版 `flash` 模型）将忽略 `tools` 参数。
+- **[OpenAI 兼容接口](openai-compatible-interface.md)的 `function calling` 模式**：面向迁移开发者，在 `chat/completions` 请求中传入 `functions`（或 `tools`）数组及 `function_call` 策略（如 `"auto"` 或 `"none"`）。百炼兼容该协议，模型返回 `{"function_call": {"name": "xxx", "arguments": "{...}"}}` 结构，开发者需自行解析、执行并拼回 `tool_calls` 消息链。注意：此模式仅对 `qwen4-max`、`qwen3.7-plus` 等明确标注支持 function calling 的文本模型生效。
 
-- **Flow Agent 编排**：在可视化流程中，“工具调用”节点直接映射为函数调用能力。开发者可配置输入参数映射、失败重试策略及结果分支路由，无需编码即可组合多个工具形成业务工作流（如“先查库存 → 再调支付 → 最后发通知”）。
-
-- **Sandbox 自定义 Agent**：在 Python 沙箱中，可通过 `bailian.tool_call()` 辅助函数触发平台托管的工具调用，或直接调用 `requests` 调用自有服务——但后者不享受平台的统一鉴权、限流、重试与可观测性保障，推荐优先使用平台原生函数调用。
+> ⚠️ 关键区别：插件调用由模型驱动、平台自动完成全链路；MCP 调用由开发者驱动、平台仅执行；OpenAI 兼容调用需开发者承担解析与重入逻辑。
 
 ## 关键参数和配置
 
-- `tools`: **必填数组**，定义可用工具的 JSON Schema 列表。每个元素包含 `type: "function"`、`function.name`（唯一标识）、`function.description`（供模型理解用途）及 `function.parameters`（JSON Schema 格式）。示例：
-  ```json
-  {
-    "type": "function",
-    "function": {
-      "name": "work_wechat_send_message",
-      "description": "向企业微信指定成员发送文本消息",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "user_id": {"type": "string", "description": "接收人UserID"},
-          "content": {"type": "string", "description": "消息文本"}
-        },
-        "required": ["user_id", "content"]
-      }
-    }
-  }
-  ```
+| 参数 | 所属场景 | 说明 | 必填 |
+|------|----------|------|------|
+| `tools` / `functions` | 插件、OpenAI 兼容 | 工具列表，每个元素含 `type`（固定为 `"function"`）、`function.name`（工具 ID）、`function.description`（影响模型决策准确性）及 `function.parameters`（JSON Schema 定义） | 是（启用调用时） |
+| `tool_name` + `tool_params` | MCP 调用 | 直接指定待执行工具名与参数对象（无需 schema），`tool_params` 必须与 [查询工具列表](raw/application-api-reference/overview/overview/list.md) 返回的契约完全一致 | 是 |
+| `tool_id` | 插件配置与调用 | 工具唯一标识符，用于 `tools` 数组及后台路由，必须从控制台复制，大小写敏感 | 是（配置与调用均需） |
+| `enable_agent_context: true` | 插件+Agent 场景 | 启用上下文增强时，模型对工具描述与参数语义的理解更准确；但仅对 `qwen-agent-*` 及部分 `qwen-*` 模型有效 | 否（推荐开启） |
+| `biz_params` | 插件（业务透传） | 当工具配置了“业务透传”参数时，必须通过此字段传递，用于运行时动态注入（如用户 ID、会话 ID） | 是（若工具要求） |
 
-- `tool_choice`: **可选字符串或对象**，控制调用策略：  
-  - `"auto"`（默认）：由模型自主决定是否调用及调用哪个工具；  
-  - `"none"`：禁用函数调用，强制模型仅生成文本回复；  
-  - `{"type": "function", "function": {"name": "xxx"}}`：强制指定调用某工具（适用于确定性流程）。
+## 面向开发者，简洁实用
 
-- `parallel_tool_calls`: **布尔值，默认 `true`**（仅 Anthropic Messages 协议支持）。设为 `true` 时允许模型一次性生成多个 `tool_use` 块，并行执行；设为 `false` 则串行调用。
-
-- 注意事项：  
-  - 工具名（`function.name`）必须与平台注册的 Skill 或预置工具 ID 完全一致，大小写敏感；  
-  - `tools` 中定义的参数 schema 必须与实际工具接口签名严格匹配，否则调用失败；  
-  - 函数调用不计入 `max_tokens` 限制，但 `tool_calls` 响应内容会占用输出 token 预算。
-
-## 面向开发者：简洁实用提示
-
-- ✅ **快速验证**：用 `qwen4-max` + 最简 `tools` 定义发起一次 `/v1/chat/completions` 请求，检查响应中是否含 `tool_calls` 字段及正确 `name`/`arguments`。  
-- ✅ **调试必开**：在 Managed Agents 或 Flow Agent 中启用 `X-Bailian-Debug: true` 或 `enable_tracing: true`，查看完整调用链日志（含工具输入/输出、耗时、错误堆栈）。  
-- ⚠️ **避免常见错误**：  
-  - 不要将工具逻辑写在 `system` prompt 中——模型无法执行 prompt 里的伪代码；  
-  - 不要省略 `tools` 中的 `required` 字段——缺失必填参数会导致调用被拒绝；  
-  - 不要在 Sandbox 中重复实现已由平台托管的工具（如 `work_wechat_send_message`）——直接调用更安全、可监控。  
-- 🚀 **进阶建议**：对高并发场景，将高频工具封装为 Skill 并绑定独立 `Environment`，实现资源隔离与独立扩缩容。
+- ✅ **首选插件方案**：若目标是构建智能体，优先使用插件市场中的官方插件或发布自定义插件，配置 `tools` 即可启用模型自主调用，无需手写 HTTP 请求。
+- ✅ **精准控制选 MCP**：若需在工作流中串行调用多个外部服务、或需捕获中间状态，直接调用 MCP `/call` 接口，参数直传、响应明确、错误结构统一。
+- ✅ **迁移 OpenAI 代码**：将 `openai.ChatCompletion.create(...)` 替换为百炼兼容 SDK，`base_url` 改为 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`，`model` 换为百炼模型名（如 `qwen4-max`），其余保持不变。
+- ❌ **避免硬编码工具名**：`tool_name` 和 `tool_id` 必须与平台注册值严格一致，建议从控制台复制，而非手动拼写。
+- ❌ **勿混用调用路径**：同一工具不可同时通过插件和 MCP 方式注册；若已作为插件接入，不应再通过 MCP 接口重复调用。
+- 🔐 **安全第一**：所有工具调用均受业务空间权限管控，子空间需单独授权；涉及敏感操作（如代码执行、网络搜索）的插件，务必在生产环境启用最小权限原则。
 
 ## 关联主题页
 
-- [application use cases](../guides/application-use-cases.md)
-- [managed agents api](../api/managed-agents-api.md)
-- [qwen api reference](../api/qwen-api-reference.md)
+- [more about models](../api/more-about-models.md)
 - [toolkits and frameworks](../api/toolkits-and-frameworks.md)
-- [agent development](../guides/agent-development.md)
+- [overview](../api/overview.md)
+- [plug in](../guides/plug-in.md)
+- [agent context](../guides/agent-context.md)
 
 

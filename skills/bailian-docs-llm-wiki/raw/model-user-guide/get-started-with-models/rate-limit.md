@@ -4775,7 +4775,7 @@ kling/kling-v3-omni-image-generation
 
 10
 
-> 同一阿里云百炼API Key 下，可灵系列的 5 个模型（[图像](https://help.aliyun.com/zh/model-studio/rate-limit#fdd6e348d2md4)及[视频](https://help.aliyun.com/zh/model-studio/rate-limit#kling-third-party-title)）共享 10 个并发数。即这 5 个模型处于运行状态的任务总数加起来不能超过 10 个。
+> 同一阿里云百炼API Key 下，可灵系列的 7 个模型（[图像](https://help.aliyun.com/zh/model-studio/rate-limit#fdd6e348d2md4)及[视频](https://help.aliyun.com/zh/model-studio/rate-limit#kling-third-party-title)）共享 10 个并发数。即这 7 个模型处于运行状态的任务总数加起来不能超过 10 个。
 
 kling/kling-v3-image-generation
 
@@ -6593,11 +6593,15 @@ kling/kling-v3-omni-video-generation
 
 10
 
-> 同一阿里云百炼API Key 下，可灵系列的 5 个模型（[图像](https://help.aliyun.com/zh/model-studio/rate-limit#fdd6e348d2md4)及[视频](https://help.aliyun.com/zh/model-studio/rate-limit#kling-third-party-title)）共享 10 个并发数。即这 5 个模型处于运行状态的任务总数加起来不能超过 10 个。
+> 同一阿里云百炼API Key 下，可灵系列的 7 个模型（[图像](https://help.aliyun.com/zh/model-studio/rate-limit#fdd6e348d2md4)及[视频](https://help.aliyun.com/zh/model-studio/rate-limit#kling-third-party-title)）共享 10 个并发数。即这 7 个模型处于运行状态的任务总数加起来不能超过 10 个。
 
 kling/kling-v3-turbo-video-generation
 
 kling/kling-v3-video-generation
+
+kling/kling-v4-video-generation
+
+kling/kling-v4-omni-reference-video-generation
 
 #### Vidu系列
 

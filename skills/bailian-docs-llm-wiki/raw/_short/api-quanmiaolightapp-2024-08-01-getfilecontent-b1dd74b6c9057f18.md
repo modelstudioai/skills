@@ -81,7 +81,7 @@ string
 
 是
 
-阿里云百炼平台[工作空间 ID](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)
+阿里云百炼平台[工作空间 ID](raw/application-api-reference/application-call/obtain-the-app-id-and-workspace-id.md)
 
 llm-xxxx
 

@@ -461,16 +461,6 @@ GLM-5.3
 
 —
 
-DeepSeek-v4.1-Flash
-
-—
-
-—
-
-—
-
-—
-
 DeepSeek-v4-Flash
 
 ¥5.4
@@ -578,7 +568,7 @@ deepseek-v4.1-flash
 
 1M
 
-0.06
+0.02
 
 无阶梯（1.0）
 

@@ -280,7 +280,12 @@ VAD（语音活动检测）根据语音后的静音判断一句话何时结束�
 
 qwen-audio-3.1-asr-flash-streaming、qwen-audio-3.1-asr-flash-message
 
-通过 `max_sentence_silence` 调整断句静音阈值；还可通过 `vad_model` 选择近场或远场 VAD 模型。
+通过 `max_sentence_silence` 调整断句静音阈值。还可根据实际拾音方式，通过 `vad_model` 选择近场或远场 VAD 模型：
+
+-   近场（`near_meeting_16k`）：说话人与麦克风距离较近，例如使用耳麦的客服通话、手持手机的 App 语音输入。
+    
+-   远场（`far_field_meeting_16k`）：说话人与麦克风距离较远，例如智能音箱语音交互、会议室集中拾音和车载免提语音交互。
+    
 
 qwen-audio-3.0-asr-flash-streaming、Fun-ASR-Realtime系列
 

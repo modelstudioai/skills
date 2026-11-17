@@ -7,11 +7,13 @@
 
 **重要**也可通过阿里云百炼 CLI 外部调用 MCP 服务：`bl mcp list` 查看已开通服务，`bl mcp call --target <名称>.<工具>` 直接调用。详见[使用 CLI](https://help.aliyun.com/zh/model-studio/cli/mcp-skill)。
 
+**重要**需要通过 API 管理 MCP 服务时，可使用 [MCP API](raw/application-api-reference/overview.md) 查询、创建、开通、启停服务和调用工具。
+
 ## 开通 MCP 服务
 
 **说明**阿里云百炼 MCP 服务已从旧版 SSE 协议升级为新版 Streamable HTTP 协议。请根据实际情况选择对应的操作步骤。
 
-#### 首次开通（新用户）
+#### 首次开通
 
 1.  前往[阿里云百炼 MCP 广场](https://bailian.console.aliyun.com/cn-beijing/store/mcp)选择 MCP 服务。以 Amap Maps 服务为例，点击卡片。
     
@@ -22,7 +24,7 @@
     如果涉及输入敏感信息，需通过创建 KMS 凭据进行加密。
     
 
-#### 升级协议（已开通用户）
+#### 升级协议（已开通）
 
 1.  前往[阿里云百炼 MCP 广场](https://bailian.console.aliyun.com/cn-beijing/store/mcp)选择 MCP 服务。以 Amap Maps 服务为例，点击卡片。
 2.  点击右侧**取消开通**，再点击**立即开通**，**确认开通**后即可更新 Amap Maps MCP 服务。
@@ -160,7 +162,7 @@ pip install openai mcp
 ```
 正在联网搜索...
 ==================================================
-阿里云百炼 MCP（Model Context Protocol）是一项新推出的服务，允许用户在百炼平台上统一接入和管理 MCP 服务。最新进展包括：
+阿里云百炼 MCP（Model Context Protocol）是一项新推出的服务，允许开发者在百炼平台上统一接入和管理 MCP 服务。最新进展包括：
 1. 支持通过 MCP 广场一键开通多种 MCP 服务（如 Amap Maps、联网搜索等）。
 2. 提供 Streamable HTTP 协议，支持外部应用通过标准 HTTP 调用。
 3. 已与 Qoder、Cursor 等主流工具集成，支持快捷安装。
