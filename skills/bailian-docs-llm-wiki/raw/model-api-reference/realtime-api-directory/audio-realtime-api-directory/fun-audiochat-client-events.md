@@ -78,13 +78,13 @@ TTS 音色名称。3.1 Plus/Flash 的默认值为 `longanqian_v3.1`，3.0 Plus/F
 
 `input_audio_transcription`object（可选）
 
-输入音频转写配置。适用于 `qwen-audio-3.1-realtime-plus` 和 `qwen-audio-3.1-realtime-flash`。
+输入音频转写配置。
 
 属性
 
 `language`string（可选）
 
-输入音频的源语种。
+输入音频的源语种。适用于 `qwen-audio-3.1-realtime-plus` 和 `qwen-audio-3.1-realtime-flash`。省略此字段时，即时热词仍然生效。
 
 可选值：
 
@@ -102,6 +102,22 @@ TTS 音色名称。3.1 Plus/Flash 的默认值为 `longanqian_v3.1`，3.0 Plus/F
 -   `pt`：葡萄牙语
 -   `ru`：俄语
 -   `it`：意大利语
+
+`model`string
+
+配置即时热词时，设为 `fun-asr`。
+
+`corpus`object（可选）
+
+输入音频转写的即时热词配置。适用于 `qwen-audio-3.0-realtime-plus`、`qwen-audio-3.0-realtime-flash`、`qwen-audio-3.1-realtime-plus` 和 `qwen-audio-3.1-realtime-flash`。
+
+属性
+
+`vocabulary`object
+
+以对象传入热词，键为词语，值为整数权重。普通热词权重为 1–5，值越大，转写时越倾向识别为该词。权重为 50 的词条为超级热词，最多配置 50 个。每次最多传入 2000 个热词。
+
+在同一会话中再次传入 `vocabulary` 时，新词表整体覆盖原词表。传入空对象 `{}` 可清空热词。
 
 `output_audio`object（可选）
 
@@ -266,6 +282,24 @@ VAD 灵敏度。适用于 `server_vad`、`smart_turn` 和 `smart_turn_v2`。值�
         },
         "output_audio": {
             "language": "en"
+        }
+    }
+}
+```
+
+#### 即时热词
+
+```
+{
+    "type": "session.update",
+    "session": {
+        "input_audio_transcription": {
+            "model": "fun-asr",
+            "corpus": {
+                "vocabulary": {
+                    "祺元": 50
+                }
+            }
         }
     }
 }

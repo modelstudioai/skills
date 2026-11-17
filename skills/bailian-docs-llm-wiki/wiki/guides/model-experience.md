@@ -1,56 +1,40 @@
 # model experience
 
-`model experience` 是百炼平台统一的模型调用抽象层，为开发者提供一致的 API 接口与参数语义，屏蔽底层模型类型（文本、视觉、语音等）和部署细节。它支持同步推理、流式响应、批量请求及多模态协同调用，是构建 AI 应用的核心交互入口。详细设计目标见 [模型调用](../../raw/model-user-guide/model-experience.md)。
+`model experience` 是百炼平台统一的模型调用抽象层，为开发者提供一致的 API 接口与参数语义，屏蔽底层模型类型（文本、视觉、语音等）和部署形态（托管/自定义/混合）的差异。它支持同步推理、流式响应、批量请求及上下文管理，适用于从原型验证到生产部署的全周期场景。所有能力均通过 `/v1/models/{model_id}/invoke` 统一端点接入。
 
 ## 支持的模型与功能
 
-`model experience` 覆盖以下五大能力类别，每类对应独立的模型族与专用接口规范：
+当前 `model experience` 覆盖以下模态能力，各模态对应独立的子文档说明：
+- 文本生成：支持大语言模型（LLM）的 [prompt](prompt.md) completion、function calling、tool use 等 [文本](../../raw/model-user-guide/model-experience/text-generation-model.md)  
+- 视觉生成：支持图像/视频生成、编辑、理解任务，含多轮视觉对话支持 [视觉](../../raw/model-user-guide/model-experience/image-and-video-generation.md)  
+- 语音处理：涵盖 TTS、ASR、语音转写与音色克隆，需注意采样率与格式约束 [语音](../../raw/model-user-guide/model-experience/speech-and-audio.md)  
+- 向量服务：提供 embedding 生成与重排序（rerank），适用于检索增强场景 [向量](../../raw/model-user-guide/model-experience/embedding-rerank-model.md)  
+- 全模态：支持图文音多模态联合输入与输出，需显式声明 `input_modality` 参数 [全模态](../../raw/model-user-guide/model-experience/omni-modal.md)
 
-- **文本生成**：支持大语言模型（LLM）的补全、对话、工具调用等，详见 [文本](../../raw/model-user-guide/model-experience/text-generation-model.md)  
-- **视觉生成**：涵盖图像生成、编辑、理解及视频生成，输入支持 URL、base64 或 multipart 二进制，参见 [视觉](../../raw/model-user-guide/model-experience/image-and-video-generation.md)  
-- **语音与音频**：包括 TTS、ASR、音色克隆与音频理解，需注意采样率与格式约束，参考 [语音](../../raw/model-user-guide/model-experience/speech-and-audio.md)  
-- **向量服务**：提供嵌入（embedding）与重排序（rerank）两类低延迟向量操作，适用于 RAG 场景，见 [向量](../../raw/model-user-guide/model-experience/embedding-rerank-model.md)  
-- **全模态**：支持跨模态联合输入（如图文混合 prompt），目前仅限指定模型，具体能力以 [全模态](../../raw/model-user-guide/model-experience/omni-modal.md) 文档为准  
-
-> **注意**：`omni-modal` 类别中部分模型要求 `input` 字段必须为 JSON 对象数组（而非字符串），而 `text-generation-model` 仍接受纯字符串；该不一致已在 v2.3.0 后统一为对象数组格式，旧文档未同步更新。
+> **注意**：`omni-modal` 文档中描述的 `input_modality: ["text", "image"]` 自动推断逻辑，与 `text-generation-model.md` 中明确要求 `input_modality` 必填存在不一致；实际调用时请始终显式指定该字段，以避免 400 错误。
 
 ## 关键参数
 
-所有调用共用以下核心参数（HTTP Header 或 JSON Body 中）：
-
-- `model`: 必填，模型 ID（如 `qwen2.5-7b-instruct`），须在控制台已启用且配额充足  
-- `input`: 必填，结构化输入，格式依模型类型而异（见上节各子文档）  
-- `parameters`: 可选，控制生成行为（如 `temperature`, `top_p`, `max_tokens`），**非所有模型均支持全部参数**，具体支持列表以各子文档为准  
-- `stream`: 布尔值，启用流式响应（仅部分文本/语音模型支持）  
-
-`parameters` 的默认值与取值范围因模型而异，例如 `temperature` 在 `text-generation-model` 中默认为 `0.8`，但在 `embedding-rerank-model` 中被忽略——详见 [文本](../../raw/model-user-guide/model-experience/text-generation-model.md) 与 [向量](../../raw/model-user-guide/model-experience/embedding-rerank-model.md) 的参数对照表。
+| 参数名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| `model_id` | string | 是 | 平台注册的模型唯一标识，如 `qwen2.5-7b-chat` 或 `wanx-v1` |
+| `input` | object | 是 | 模态感知输入结构，详见各模态子文档 [文本](../../raw/model-user-guide/model-experience/text-generation-model.md) |
+| `parameters` | object | 否 | 模型级超参，如 `temperature`, `top_p`, `max_tokens`；部分模态支持 `stream: true` |
+| `request_id` | string | 否 | 用于链路追踪的客户端透传 ID，建议在生产环境设置 |
 
 ## 使用方式
 
-1. **认证**：通过 `Authorization: Bearer <api_key>` 请求头传入有效 API Key  
-2. **端点**：统一使用 `POST /v1/models/{model}/invoke`（同步）或 `/v1/models/{model}/invoke-stream`（流式）  
-3. **请求体**：`Content-Type: application/json`，`input` 和 `parameters` 为 JSON 对象  
-4. **响应**：成功时返回 `200 OK`，结构含 `output`（结果）、`usage`（token/计费信息）、`request_id`（用于问题追踪）  
-
-示例（文本生成）：
-```bash
-curl -X POST "https://dashscope.aliyuncs.com/v1/models/qwen2.5-7b-instruct/invoke" \
-  -H "Authorization: Bearer sk-xxx" \
-  -H "Content-Type: application/json" \
-  -d '{
-        "input": {"messages": [{"role":"user","content":"你好"}]},
-        "parameters": {"temperature": 0.5}
-      }'
-```
+1. **认证**：使用 `Authorization: Bearer <api_key>` 请求头  
+2. **请求体**：POST `/v1/models/{model_id}/invoke`，`Content-Type: application/json`  
+3. **流式响应**：当 `parameters.stream = true` 时，返回 `text/event-stream`，按 SSE 协议解析 chunk（仅文本与全模态支持）  
+4. **错误处理**：关注 HTTP 状态码（如 `429` 表示限流）、`error.code`（如 `"InvalidInput"`）及 `error.message` 字段  
 
 ## 限制和注意事项
 
-- 单次请求 `input` 总大小上限为 16 MB（视觉/视频类模型实际限制更低，见 [视觉](../../raw/model-user-guide/model-experience/image-and-video-generation.md)）  
-- 流式响应仅支持 `text-generation-model` 和 `speech-and-audio` 中的 TTS 模型，其他类型调用 `invoke-stream` 将返回 `400 Bad Request`  
-- 全模态调用（`omni-modal`）暂不支持 `stream=true`，且 `input` 中若含图像 URL，必须为 HTTPS 且可公开访问  
-- 所有模型调用均受账户级 QPS 与并发数限制，超出将返回 `429 Too Many Requests`；实时配额状态需通过 `/v1/status` 查询  
-
-> **注意**：原始文档 [模型调用](../../raw/model-user-guide/model-experience.md) 中未明确说明视觉类模型对 `input.image.url` 的域名白名单要求，但生产环境实际强制校验（仅允许 `aliyuncs.com`、`qiniu.com` 及已备案 CDN 域名），该限制已在最新 SDK 中默认启用。
+- 单次请求 `input` 总大小上限为 16 MB（语音/视频文件经 base64 编码后计入）  
+- 流式响应不支持 `rerank` 和 `embedding` 类模型，调用时若误设 `stream: true` 将返回 `400 Bad Request`  
+- 多模态输入中，图像需为 JPEG/PNG 格式且单边分辨率 ≤ 2048px；视频仅支持 MP4（H.264）且时长 ≤ 10s —— 具体约束见 [视觉](../../raw/model-user-guide/model-experience/image-and-video-generation.md)  
+- 所有模型调用默认启用缓存（基于 `input` + `parameters` 哈希），如需禁用，请在 `parameters` 中添加 `"cache_enabled": false`
 
 ## 来源文档
 

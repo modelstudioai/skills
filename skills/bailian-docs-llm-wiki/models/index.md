@@ -1,6 +1,6 @@
 # 百炼模型市场索引
 
-> 自动生成 · 共 127 个模型家族 · 337 个主干模型 · 更新于 2026-11-17
+> 自动生成 · 共 127 个模型家族 · 339 个主干模型 · 更新于 2026-11-18
 
 **机器查询走结构化文件**：
 
@@ -113,7 +113,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [Wan3.0-Video](groups/wan-video.json) — 多模态全能参考，灵活可控生成视频内容，轻松实现故事创作、创意表达、营销物料制作等
   - 模型：`wan3.0-video`, `wan3.0-video-prime`
 - [可灵AI](groups/kling-models-market-place.json) — 由可灵AI提供的高质量视频与图像生成及编辑模型。
-  - 模型：`kling/kling-v3-image-generation`, `kling/kling-v3-omni-image-generation`, `kling/kling-v3-omni-video-generation`, `kling/kling-v3-turbo-video-generation`, `kling/kling-v3-video-generation`
+  - 模型：`kling/kling-v3-image-generation`, `kling/kling-v3-omni-image-generation`, `kling/kling-v3-omni-video-generation`, `kling/kling-v3-turbo-video-generation`, `kling/kling-v3-video-generation`, `kling/kling-v4-omni-reference-video-generation`, `kling/kling-v4-video-generation`
 - [声动人像VideoRetalk](groups/videoretalk.json) — VideoRetalk是一个人物视频生成模型，可基于人物视频和人声音频，生成人物讲话口型与输入音频相匹配的新视频。
   - 模型：`videoretalk`
 - [视频风格重绘](groups/video-style-transform.json) — 视频风格重绘可以将输入的视频帧序列进行多种风格化的重绘/生成，使新视频画面在兼顾原始人物和物体相貌的同时，带来不同风格的绘画效果。当前支持预置重绘风格包括日式漫画、美式漫画、清新漫画、3D卡通、国风卡…

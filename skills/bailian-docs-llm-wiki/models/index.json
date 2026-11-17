@@ -1,11 +1,11 @@
 {
-  "updatedAt": "2026-11-17",
+  "updatedAt": "2026-11-18",
   "totalFamilies": 127,
-  "totalModels": 337,
+  "totalModels": 339,
   "profileCoverage": {
-    "full": 284,
-    "partial": 49,
-    "structured-only": 4,
+    "full": 298,
+    "partial": 41,
+    "structured-only": 0,
     "none": 0
   },
   "capabilityDistribution": {
@@ -426,13 +426,15 @@
       "providers": [
         "kling"
       ],
-      "itemCount": 5,
+      "itemCount": 7,
       "items": [
         "kling/kling-v3-image-generation",
         "kling/kling-v3-omni-image-generation",
         "kling/kling-v3-omni-video-generation",
         "kling/kling-v3-turbo-video-generation",
-        "kling/kling-v3-video-generation"
+        "kling/kling-v3-video-generation",
+        "kling/kling-v4-omni-reference-video-generation",
+        "kling/kling-v4-video-generation"
       ]
     },
     {

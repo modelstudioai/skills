@@ -236,9 +236,8 @@ fps有两个功能：
     -   `qwen3.8-omni-flash`、Qwen3.5-Omni ：默认值和最小值均为： `24576`
     -   `Qwen2.5-VL`开源系列及`QVQ`系列模型：默认值和最小值均为`3136`
 -   **输入视频文件或图像列表：**
-    -   `qwen3-omni-flash`、`qwen3-vl-plus`、`qwen3.5-122b-a10b`、`qwen3.5-27b`、`qwen3.5-35b-a3b`、`qwen3.5-397b-a17b`、`qwen3.5-flash`、`qwen3.5-flash-2026-02-23`、`qwen3.5-omni-flash`、`qwen3.5-omni-flash-2026-03-15`、`qwen3.5-omni-plus`、`qwen3.5-omni-plus-2026-03-15`、`qwen3.5-plus`、`qwen3.5-plus-2026-02-15`、`qwen3.5-plus-2026-04-20`、`qwen3.6-27b`、`qwen3.6-35b-a3b`、`qwen3.6-flash`、`qwen3.6-flash-2026-04-16`、`qwen3.6-plus`、`qwen3.6-plus-2026-04-02`、`qwen3.7-flash`、`qwen3.7-flash-2026-07-15`、`qwen3.7-max-2026-06-08`、`qwen3.7-plus`、`qwen3.7-plus-2026-05-26`、`qwen3.8-27b`、`qwen3.8-flash`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-omni-flash`：默认值为 `65536`，最小值为 `4096`。
+    -   `qwen4-max`、`qwen3-omni-flash`、`qwen3-vl-plus`、`qwen3.5-122b-a10b`、`qwen3.5-27b`、`qwen3.5-35b-a3b`、`qwen3.5-397b-a17b`、`qwen3.5-flash`、`qwen3.5-flash-2026-02-23`、`qwen3.5-omni-flash`、`qwen3.5-omni-flash-2026-03-15`、`qwen3.5-omni-plus`、`qwen3.5-omni-plus-2026-03-15`、`qwen3.5-plus`、`qwen3.5-plus-2026-02-15`、`qwen3.5-plus-2026-04-20`、`qwen3.6-27b`、`qwen3.6-35b-a3b`、`qwen3.6-flash`、`qwen3.6-flash-2026-04-16`、`qwen3.6-plus`、`qwen3.6-plus-2026-04-02`、`qwen3.7-flash`、`qwen3.7-flash-2026-07-15`、`qwen3.7-max-2026-06-08`、`qwen3.7-plus`、`qwen3.7-plus-2026-05-26`、`qwen3.8-27b`、`qwen3.8-flash`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-omni-flash`：默认值为 `65536`，最小值为 `4096`。
     -   `kimi-k2.5`、`kimi-k2.6`、`kimi-k2.7-code`：最小值为 `3136`。
-    -   `qwen4-max`：默认值为`65536`，最小值为`4096`
     -   `Qwen2.5-VL`开源系列及`QVQ`系列模型：默认值为`50176`，最小值为`3136`
 
 示例值
@@ -249,15 +248,15 @@ fps有两个功能：
 
 **max\_pixels**`integer`（可选）
 
-`qwen4-max`: `max_pixels <= 16777216`.
-
 用于设定输入图像或视频帧的最大像素阈值。当输入图像或视频的像素在`[min_pixels, max_pixels]`区间内时，模型会按原图进行识别。当输入图像像素大于`max_pixels`时，会将图像进行缩小，直到总像素低于`max_pixels`。适用型号及取值见下方说明。
 
 取值范围
 
 -   **输入图像：**
     
-    `max_pixels` 的取值与是否开启`vl_high_resolution_images`参数有关。
+    -   `qwen4-max`：最大值为 `16777216`。未传入时按 `detail` 处理图像；显式传入的 `max_pixels` 不受 `vl_high_resolution_images` 影响。
+    
+    其他模型：`max_pixels` 的取值与是否开启`vl_high_resolution_images`参数有关。
     
     -   当`vl_high_resolution_images`为`False`时：
         
@@ -273,9 +272,8 @@ fps有两个功能：
     同时设置 `min_pixels` 和 `max_pixels` 时，`max_pixels` 不得小于 `min_pixels`。
     
     -   `qwen3-vl-plus`、`qwen3.5-122b-a10b`、`qwen3.5-27b`、`qwen3.5-35b-a3b`、`qwen3.5-397b-a17b`、`qwen3.5-flash`、`qwen3.5-flash-2026-02-23`、`qwen3.5-omni-flash`、`qwen3.5-omni-flash-2026-03-15`、`qwen3.5-omni-plus`、`qwen3.5-omni-plus-2026-03-15`、`qwen3.5-plus`、`qwen3.5-plus-2026-02-15`、`qwen3.5-plus-2026-04-20`、`qwen3.6-27b`、`qwen3.6-35b-a3b`、`qwen3.6-flash`、`qwen3.6-flash-2026-04-16`、`qwen3.6-plus`、`qwen3.6-plus-2026-04-02`、`qwen3.7-flash`、`qwen3.7-flash-2026-07-15`、`qwen3.7-max-2026-06-08`、`qwen3.7-plus`、`qwen3.7-plus-2026-05-26`、`qwen3.8-27b`、`qwen3.8-flash`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-omni-flash`：默认值为 `655360`，最大值为 `2048000`。
-    -   `qwen4-max`：默认值为`655360`，最大值为`786432`
     -   其他`Qwen3-VL`开源模型：默认值`655360`，最大值为`786432`
-    -   `qwen3-omni-flash`：默认值为 `655360`，最大值为 `786432`。
+    -   `qwen4-max`、`qwen3-omni-flash`：默认值为 `655360`，最大值为 `786432`。
     -   `kimi-k2.7-code`、`kimi-k2.6`、`kimi-k2.5`：最大值为 `1568000`。
     -   `Qwen2.5-VL`开源系列及`QVQ`系列模型：默认值为`501760`，最大值为`602112`
 
@@ -291,7 +289,7 @@ fps有两个功能：
 
 最大值
 
--   **`268435456`**： `qwen4-max`, `qwen4-max-preview`,`qwen3.8-max`、`qwen3.8-max-0902`。
+-   **`268435456`**： `qwen4-max`, `qwen3.8-max`、`qwen3.8-max-0902`。
 -   **`234881024`**：`qwen3.7-plus`、`qwen3.7-plus-2026-05-26`、`qwen3.7-max-2026-06-08`。
 -   **`819200000`**：`qwen3.8-flash`、`qwen3.8-27b`、`qwen3.7-flash`、`qwen3.7-flash-2026-07-15`、`qwen3.6-flash`。
 -   **`184549376`**：`qwen3.8-omni-flash`。
@@ -606,8 +604,6 @@ MiMo系列（小米直供）：xiaomi/mimo-v2.5-pro: 0.95，范围 \[0.01, 1.0\]
 指定生成过程中用于采样的候选 Token 数量。值越大，输出越随机；值越小，输出越确定。若设为 `null` 或大于 100，则禁用 `top_k` 策略，仅 `top_p` 策略生效。取值必须为大于或等于 0 的整数。
 
 top\_k默认值
-
--   `qwen4-max`：思考和非思考模式均为 `20`。
 
 QVQ系列：10；
 

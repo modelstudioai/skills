@@ -48,7 +48,7 @@ Flow Agent 的编排能力本身不单独收费，费用来自应用实际调用
 
 图片解析
 
-选择大模型文档解析暂不计费；选择 Qwen VL 解析产生 Qwen-VL 系列模型的调用费用。详见[图片解析节点](raw/application-user-guide/agent-development/llm-application/workflow-application/image-extraction-node.md)
+选择大模型文档解析暂不计费；选择 Qwen VL 解析产生 Qwen-VL 系列模型的调用费用。详见[图片解析节点](raw/application-user-guide/llm-application/workflow-application/image-extraction-node.md)
 
 文档解析、音频解析、视频解析
 
@@ -76,7 +76,7 @@ Flow Agent 的编排能力本身不单独收费，费用来自应用实际调用
 
 Prompt 自动优化
 
-不计费，详见[优化 Prompt](raw/application-user-guide/agent-development/llm-application/prompt/optimize-prompt.md)
+不计费，详见[优化 Prompt](raw/application-user-guide/prompt/optimize-prompt.md)
 
 UI 设计器
 
@@ -90,7 +90,7 @@ UI 设计器
 
 ### 通过分享链接产生的费用由谁承担？
 
-由应用创建者的 UID 账号承担。详见[分享应用](raw/application-user-guide/agent-development/llm-application/application-publishing-and-sharing/share-an-application.md)。
+由应用创建者的 UID 账号承担。详见[分享应用](raw/application-user-guide/llm-application/application-publishing-and-sharing/share-an-application.md)。
 
 ### 如何查询应用实际产生的费用？
 

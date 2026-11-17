@@ -8,6 +8,135 @@
           "Video"
         ],
         "request_modality": [
+          "Text",
+          "Image",
+          "Video"
+        ]
+      },
+      "description": "升级“全能参考”，支持图片、视频、主体与音色组合参考，合计最多15项素材，角色一致性更稳。可借鉴参考视频的动作、运镜与叙事节奏，替换角色或商品，快速复刻创意；支持原视频主体与背景的增删替换及风格调整，让成片修改更精准。",
+      "features": [],
+      "provider": "kling",
+      "model": "kling/kling-v4-omni-reference-video-generation",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "1",
+          "type": "720P_no_reference_video",
+          "priceName": "视频生成（720P 无参考视频）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "1.5",
+          "type": "1080P_no_reference_video",
+          "priceName": "视频生成（1080P 无参考视频）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.6",
+          "type": "720P_reference_video",
+          "priceName": "视频生成（720P 有参考视频）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.9",
+          "type": "1080P_reference_video",
+          "priceName": "视频生成（1080P 有参考视频）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "type": "model-default",
+          "async_user_concurrency_limit": 10
+        }
+      },
+      "priceTimeBands": [],
+      "capabilities": [
+        "VG"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-11-17T06:10:28.000+00:00",
+      "inferenceProvider": "kling",
+      "name": "Kling Video 4.0 Omni",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/kling-video-generation-api-reference",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"kling/kling-v4-omni-reference-video-generation\",\n    \"input\": {\n        \"prompt\": \"一只小猫在月光下奔跑\"\n    },\n    \"parameters\": {\n        \"mode\": \"std\",\n        \"aspect_ratio\": \"16:9\",\n        \"duration\": 3,\n        \"watermark\": true\n    }\n}'",
+            "python": "import json\nimport os\nimport time\nimport urllib.request\n\n\nDOMAIN = \"[workspace-id].cn-beijing.maas.aliyuncs.com\"\nMODEL = \"kling/kling-v4-omni-reference-video-generation\"\nAPI_KEY = os.environ[\"DASHSCOPE_API_KEY\"]\n\n\ndef request(method, path, payload=None):\n    headers = {\n        \"Authorization\": f\"Bearer {API_KEY}\",\n        \"Content-Type\": \"application/json\",\n    }\n\n    if method == \"POST\":\n        headers[\"X-DashScope-Async\"] = \"enable\"\n\n    body = None if payload is None else json.dumps(payload).encode(\"utf-8\")\n    req = urllib.request.Request(\n        f\"https://[workspace-id].cn-beijing.maas.aliyuncs.com{path}\",\n        data=body,\n        method=method,\n        headers=headers,\n    )\n\n    with urllib.request.urlopen(req, timeout=90) as response:\n        return json.loads(response.read().decode(\"utf-8\"))\n\n\ncreated = request(\n    \"POST\",\n    \"/api/v1/services/aigc/video-generation/video-synthesis\",\n    {\n        \"model\": MODEL,\n        \"input\": {\n            \"prompt\": \"一只小猫在月光下奔跑\",\n        },\n        \"parameters\": {\n            \"mode\": \"std\",\n            \"aspect_ratio\": \"16:9\",\n            \"duration\": 3,\n            \"watermark\": True,\n        },\n    },\n)\n\ntask_id = created.get(\"output\", {}).get(\"task_id\")\nif not task_id:\n    raise RuntimeError(f\"未返回任务 ID：{created}\")\n\nprint(f\"任务已创建：{task_id}\", flush=True)\n\nfor _ in range(80):\n    result = request(\"GET\", f\"/api/v1/tasks/{task_id}\")\n    status = result.get(\"output\", {}).get(\"task_status\")\n\n    if status == \"SUCCEEDED\":\n        print(json.dumps(result, ensure_ascii=False, indent=2))\n        break\n\n    if status in {\"FAILED\", \"CANCELED\", \"UNKNOWN\"}:\n        raise RuntimeError(f\"任务 {task_id} 已结束，状态为 {status}：{result}\")\n\n    time.sleep(15)\nelse:\n    raise TimeoutError(f\"任务 {task_id} 在 20 分钟内未完成。\")",
+            "nodejs": "import https from \"node:https\";\n\n// 请在环境变量中配置 DASHSCOPE_API_KEY。\nconst DOMAIN = \"[workspace-id].cn-beijing.maas.aliyuncs.com\";\nconst MODEL = \"kling/kling-v4-omni-reference-video-generation\";\nconst API_KEY = process.env.DASHSCOPE_API_KEY;\n\nif (!API_KEY) {\n  throw new Error(\"请先设置环境变量 DASHSCOPE_API_KEY。\");\n}\n\nfunction request(method, path, payload) {\n  return new Promise((resolve, reject) => {\n    const body = payload ? JSON.stringify(payload) : undefined;\n    const headers = {\n      Authorization: `Bearer ${API_KEY}`,\n    };\n\n    if (method === \"POST\") {\n      headers[\"X-DashScope-Async\"] = \"enable\";\n    }\n    if (body) {\n      headers[\"Content-Type\"] = \"application/json\";\n      headers[\"Content-Length\"] = Buffer.byteLength(body);\n    }\n\n    const req = https.request(\n      {\n        hostname: DOMAIN,\n        path,\n        method,\n        headers,\n      },\n      (res) => {\n        let text = \"\";\n\n        res.on(\"data\", (chunk) => {\n          text += chunk;\n        });\n\n        res.on(\"end\", () => {\n          let result;\n          try {\n            result = JSON.parse(text);\n          } catch {\n            reject(new Error(`HTTP ${res.statusCode}：${text}`));\n            return;\n          }\n\n          if (res.statusCode < 200 || res.statusCode >= 300) {\n            reject(new Error(`HTTP ${res.statusCode}：${JSON.stringify(result)}`));\n            return;\n          }\n\n          resolve(result);\n        });\n      },\n    );\n\n    req.on(\"error\", reject);\n\n    if (body) {\n      req.write(body);\n    }\n    req.end();\n  });\n}\n\nconst created = await request(\n  \"POST\",\n  \"/api/v1/services/aigc/video-generation/video-synthesis\",\n  {\n    model: MODEL,\n    input: {\n      prompt: \"一只小猫在月光下奔跑\",\n    },\n    parameters: {\n      mode: \"std\",\n      aspect_ratio: \"16:9\",\n      duration: 3,\n      watermark: true,\n    },\n  },\n);\n\nconst taskId = created.output?.task_id;\nif (!taskId) {\n  throw new Error(`未返回任务 ID：${JSON.stringify(created)}`);\n}\n\nconsole.log(`任务已创建：${taskId}`);\n\nfor (let attempt = 0; attempt < 80; attempt += 1) {\n  const result = await request(\"GET\", `/api/v1/tasks/${taskId}`);\n  const status = result.output?.task_status;\n\n  if (status === \"SUCCEEDED\") {\n    console.log(JSON.stringify(result, null, 2));\n    process.exit(0);\n  }\n\n  if ([\"FAILED\", \"CANCELED\", \"UNKNOWN\"].includes(status)) {\n    throw new Error(`任务 ${taskId} 已结束，状态为 ${status}：${JSON.stringify(result)}`);\n  }\n\n  await new Promise((resolve) => setTimeout(resolve, 15000));\n}\n\nthrow new Error(`任务 ${taskId} 在 20 分钟内未完成。`);",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/kling-video-generation-api-reference"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Video"
+        ],
+        "request_modality": [
+          "Text",
+          "Image"
+        ]
+      },
+      "description": "复杂动作与大幅运镜更稳定流畅，人物表情、光影材质更真实细腻。最长30秒原生直出，让长镜头与连续叙事充分展开；图生视频支持最多10张关键帧，精准编排情节。双通道立体声与口型匹配升级，让对白与表演自然同步。",
+      "features": [],
+      "provider": "kling",
+      "model": "kling/kling-v4-video-generation",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "1",
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "1.5",
+          "type": "video_ratio_1080p",
+          "priceName": "视频生成（1080P）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "type": "model-default",
+          "async_user_concurrency_limit": 10
+        }
+      },
+      "priceTimeBands": [],
+      "capabilities": [
+        "VG"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-11-17T06:10:48.000+00:00",
+      "inferenceProvider": "kling",
+      "name": "Kling Video 4.0",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/kling-video-generation-api-reference",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"kling/kling-v4-video-generation\",\n    \"input\": {\n        \"prompt\": \"一只小猫在月光下奔跑\"\n    },\n    \"parameters\": {\n        \"mode\": \"std\",\n        \"aspect_ratio\": \"16:9\",\n        \"duration\": 3,\n        \"watermark\": true\n    }\n}'",
+            "python": "import json\nimport os\nimport time\nimport urllib.request\n\n\nDOMAIN = \"[workspace-id].cn-beijing.maas.aliyuncs.com\"\nMODEL = \"kling/kling-v4-video-generation\"\nAPI_KEY = os.environ[\"DASHSCOPE_API_KEY\"]\n\n\ndef request(method, path, payload=None):\n    headers = {\n        \"Authorization\": f\"Bearer {API_KEY}\",\n        \"Content-Type\": \"application/json\",\n    }\n\n    if method == \"POST\":\n        headers[\"X-DashScope-Async\"] = \"enable\"\n\n    body = None if payload is None else json.dumps(payload).encode(\"utf-8\")\n    req = urllib.request.Request(\n        f\"https://[workspace-id].cn-beijing.maas.aliyuncs.com{path}\",\n        data=body,\n        method=method,\n        headers=headers,\n    )\n\n    with urllib.request.urlopen(req, timeout=90) as response:\n        return json.loads(response.read().decode(\"utf-8\"))\n\n\ncreated = request(\n    \"POST\",\n    \"/api/v1/services/aigc/video-generation/video-synthesis\",\n    {\n        \"model\": MODEL,\n        \"input\": {\n            \"prompt\": \"一只小猫在月光下奔跑\",\n        },\n        \"parameters\": {\n            \"mode\": \"std\",\n            \"aspect_ratio\": \"16:9\",\n            \"duration\": 3,\n            \"watermark\": True,\n        },\n    },\n)\n\ntask_id = created.get(\"output\", {}).get(\"task_id\")\nif not task_id:\n    raise RuntimeError(f\"未返回任务 ID：{created}\")\n\nprint(f\"任务已创建：{task_id}\", flush=True)\n\nfor _ in range(80):\n    result = request(\"GET\", f\"/api/v1/tasks/{task_id}\")\n    status = result.get(\"output\", {}).get(\"task_status\")\n\n    if status == \"SUCCEEDED\":\n        print(json.dumps(result, ensure_ascii=False, indent=2))\n        break\n\n    if status in {\"FAILED\", \"CANCELED\", \"UNKNOWN\"}:\n        raise RuntimeError(f\"任务 {task_id} 已结束，状态为 {status}：{result}\")\n\n    time.sleep(15)\nelse:\n    raise TimeoutError(f\"任务 {task_id} 在 20 分钟内未完成。\")",
+            "nodejs": "import https from \"node:https\";\n\n// 请在环境变量中配置 DASHSCOPE_API_KEY。\nconst DOMAIN = \"[workspace-id].cn-beijing.maas.aliyuncs.com\";\nconst MODEL = \"kling/kling-v4-video-generation\";\nconst API_KEY = process.env.DASHSCOPE_API_KEY;\n\nif (!API_KEY) {\n  throw new Error(\"请先设置环境变量 DASHSCOPE_API_KEY。\");\n}\n\nfunction request(method, path, payload) {\n  return new Promise((resolve, reject) => {\n    const body = payload ? JSON.stringify(payload) : undefined;\n    const headers = {\n      Authorization: `Bearer ${API_KEY}`,\n    };\n\n    if (method === \"POST\") {\n      headers[\"X-DashScope-Async\"] = \"enable\";\n    }\n    if (body) {\n      headers[\"Content-Type\"] = \"application/json\";\n      headers[\"Content-Length\"] = Buffer.byteLength(body);\n    }\n\n    const req = https.request(\n      {\n        hostname: DOMAIN,\n        path,\n        method,\n        headers,\n      },\n      (res) => {\n        let text = \"\";\n\n        res.on(\"data\", (chunk) => {\n          text += chunk;\n        });\n\n        res.on(\"end\", () => {\n          let result;\n          try {\n            result = JSON.parse(text);\n          } catch {\n            reject(new Error(`HTTP ${res.statusCode}：${text}`));\n            return;\n          }\n\n          if (res.statusCode < 200 || res.statusCode >= 300) {\n            reject(new Error(`HTTP ${res.statusCode}：${JSON.stringify(result)}`));\n            return;\n          }\n\n          resolve(result);\n        });\n      },\n    );\n\n    req.on(\"error\", reject);\n\n    if (body) {\n      req.write(body);\n    }\n    req.end();\n  });\n}\n\nconst created = await request(\n  \"POST\",\n  \"/api/v1/services/aigc/video-generation/video-synthesis\",\n  {\n    model: MODEL,\n    input: {\n      prompt: \"一只小猫在月光下奔跑\",\n    },\n    parameters: {\n      mode: \"std\",\n      aspect_ratio: \"16:9\",\n      duration: 3,\n      watermark: true,\n    },\n  },\n);\n\nconst taskId = created.output?.task_id;\nif (!taskId) {\n  throw new Error(`未返回任务 ID：${JSON.stringify(created)}`);\n}\n\nconsole.log(`任务已创建：${taskId}`);\n\nfor (let attempt = 0; attempt < 80; attempt += 1) {\n  const result = await request(\"GET\", `/api/v1/tasks/${taskId}`);\n  const status = result.output?.task_status;\n\n  if (status === \"SUCCEEDED\") {\n    console.log(JSON.stringify(result, null, 2));\n    process.exit(0);\n  }\n\n  if ([\"FAILED\", \"CANCELED\", \"UNKNOWN\"].includes(status)) {\n    throw new Error(`任务 ${taskId} 已结束，状态为 ${status}：${JSON.stringify(result)}`);\n  }\n\n  await new Promise((resolve) => setTimeout(resolve, 15000));\n}\n\nthrow new Error(`任务 ${taskId} 在 20 分钟内未完成。`);",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/kling-video-generation-api-reference"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Video"
+        ],
+        "request_modality": [
           "Image",
           "Text"
         ]

@@ -1522,6 +1522,30 @@ Qwen-Audio 支持通过客户端事件管理对话上下文中的对话项（Con
 }
 ```
 
+### 即时热词
+
+人名、产品名或行业术语容易被识别成同音词。配置即时热词后，模型在转写输入音频时会优先识别这些词。例如，同一段音频里的项目名在配置热词前被转写为「7元项目」。将「祺元」设为热词后，转写结果为「祺元项目」。
+
+Qwen-Audio-Realtime 3.0 和 3.1 的 Plus、Flash 型号均支持即时热词，适用于北京和新加坡地域的 WebSocket、WebRTC 和 AOQ 接入。发送音频前，用以下 [session.update](https://help.aliyun.com/zh/model-studio/fun-audiochat-client-events#fc65a1b2c3d5f) 事件配置热词。
+
+```
+{
+    "type": "session.update",
+    "session": {
+        "input_audio_transcription": {
+            "model": "fun-asr",
+            "corpus": {
+                "vocabulary": {
+                    "祺元": 50
+                }
+            }
+        }
+    }
+}
+```
+
+收到 `session.updated` 后再发送音频。从 [conversation.item.input\_audio\_transcription.completed](https://help.aliyun.com/zh/model-studio/qwen-audio-realtime-server-events#fs66e2f2g2h3j) 事件的 `transcript` 字段获取最终转写。会话中可再次发送 `session.update` 传入完整的新词表。将 `vocabulary` 设为 `{}` 可清空热词。
+
 ### 环境音转写
 
 **仅 smart\_turn / smart\_turn\_v2 模式**。当 VAD 检测到语音活动但语义判定为非有效轮次（如噪声、“嗯”“啊”等无语义内容）时，服务端不会触发对话轮，而是将 ASR 识别结果以 `ambient_audio_transcription` 事件透传给客户端。该转写结果不会写入对话上下文。

@@ -1,73 +1,68 @@
-# 模型生产部署、高速推理与模型监控方案对比
+# 模型部署与推理方案对比：高并发推理、模型管理与生产就绪
 
-为帮助开发者在百炼平台上高效完成模型从训练、上线到长期运维的全生命周期管理，本文对三大核心能力模块——**模型生产部署（Model Production）**、**高速推理（High-Speed Inference）** 和 **模型监控（Model Monitoring）** 进行系统性对比分析。三者定位不同：  
-- **模型生产部署** 是模型“上线”的入口，聚焦**定制化模型的构建、封装与服务化**；  
-- **高速推理** 是模型“运行”的加速器，聚焦**性能确定性、吞吐保障与成本优化**；  
-- **模型监控** 是模型“健康”的守门人，聚焦**可观测性、异常诊断与稳定性治理**。  
-
-本对比面向企业级 AI 应用开发者，旨在提供清晰的技术选型依据，避免因能力边界混淆导致架构返工、资源浪费或运维盲区。
+本文档面向百炼平台开发者，系统对比三类核心能力模块在**高并发推理支撑能力、模型全生命周期管理成熟度、生产环境就绪度（SLA/可观测性/稳定性/运维闭环）** 三个维度的技术特性与适用边界。对比目的在于帮助团队基于业务流量特征（如峰值TPS、延迟敏感度、成本弹性）、组织治理需求（如多项目配额隔离、权限分级、审计合规）及交付阶段（PoC验证 → 灰度上线 → 全量生产）做出可落地、可演进的技术选型决策。
 
 ---
 
 ## 关键维度对比表
 
-| 维度 | 模型生产部署（Model Production） | 高速推理（High-Speed Inference） | 模型监控（Model Monitoring） |
-|------|-------------------------------|------------------------------|---------------------------|
-| **核心目标** | 实现模型全生命周期交付：微调 → 导入 → 压缩 → 部署 → 路由 | 保障推理服务性能：低延迟、高吞吐、稳响应、优成本 | 保障模型服务可观测：实时洞察调用质量、健康状态与资源消耗 |
-| **输入格式** | - 微调：JSON 格式训练数据（含 `messages`/`images`/`video_urls` 等）<br>- 部署：OpenAPI 请求体（含 `model_name`, `plan`, `capacity`, `ptu_capacity` 等结构化参数） | - 标准 OpenAI 兼容请求（`/chat/completions`）<br>- Prime/PTU/DTU/MU/智能路由均通过 `model` 字段标识后端实例<br>- 批量推理：JSONL 文件上传 | - 无主动输入；所有数据自动采集自平台 API 调用链路<br>- 审计日志：自动记录 Request ID、status_code、input_tokens、output_tokens、latency 等元信息<br>- 推理日志：需手动开启并投递至 SLS，含完整 prompt/response |
-| **输出格式** | - 微调任务返回 `finetuned_output`（模型 ID）<br>- 部署接口返回 `deployment_id`、`endpoint`、`model_code` 等服务元信息 | - 与标准 OpenAI 接口完全一致（含 `choices[0].message.content`、`usage`、`stream` 支持）<br>- PTU/DTU/MU 返回专属 `model_code`，用于后续调用 | - 控制台图表：分钟级聚合指标（失败率、首 Token 延时、TPM 等）<br>- 日志查询：结构化审计日志（含 trace_id）、原始推理日志（含 prompt/response）<br>- 告警通知：短信/邮件/钉钉/Webhook |
-| **支持模型类型** | ✅ 全模态：文本生成、图像生成、视频生成、语音合成<br>⚠️ 微调/导入/压缩仅限华北2（北京）地域；部分部署方式（如 PTU）图像/语音暂未开放新加坡 | ✅ 文本生成为主（Qwen/GLM/DeepSeek/Kimi 等）<br>✅ Prime/PTU/DTU/MU 支持基础模型 + LoRA 微调模型<br>✅ 智能路由支持十余个文本模型<br>❌ 不支持语音/视频类模型的 Prime 或 PTU 加速 | ✅ 文本生成、深度思考、视觉理解、全模态、向量模型<br>❌ 语音生成、图片生成、视频生成、三方直连模型**部分不支持**（以控制台实际展示为准） |
-| **API 端点** | 主要统一入口：<br>`POST /api/v1/deployments`（部署）<br>`POST /api/v1/fine-tunes`（微调）<br>`POST /api/v1/custom_models/import`（导入） | - Prime/智能路由：直接调用标准 `/compatible-mode/v1/chat/completions`（替换 `model`）<br>- PTU/DTU/MU：调用 `/api/v1/deployments` 创建后，使用专属 `model_code` 调用标准接口<br>- 批量推理：`POST /api/v1/batch/jobs` | 无独立调用 API；全部通过控制台交互：<br>- 监控概览：`/cn-beijing/model/monitoring`<br>- 告警配置：`/cn-beijing/model/alert`<br>- 日志查询：集成 SLS 控制台 |
-| **计费方式** | - `lora`：按 Token 后付费<br>- `mu`/`dtu`/`ptu_v2`：预付费（创建即扣费）<br>- `mr`（智能路由）：后付费<br>- 微调/导入/压缩：按任务时长/存储用量计费 | - Prime：按 Token 后付费（同标准 API，但单价可能略高）<br>- PTU/DTU/MU：**刚性预付费**（创建即计费，无论是否调用）<br>- 批量推理：按 Token 后付费（成本降低约 50%） | ✅ **监控功能本身免费**<br>⚠️ 数据投递依赖云产品：<br>- SLS 日志投递：按写入/存储/读取计费<br>- 云监控/Prometheus：按指标数/采集频率计费 |
-| **典型场景** | - 企业私有知识库问答模型微调与上线<br>- 多 LoRA 插件共享部署（如客服多意图分支）<br>- 视频生成工作流中定制化模型导入与调度 | - AI 编程助手（要求首 Token < 300ms）<br>- 内容安全实时审核（高并发、低 P99 延迟）<br>- 批量数据标注（非实时、成本敏感）<br>- A/B 测试或多模型效果比对（智能路由） | - 生产环境故障快速定界（如突增失败率/限流）<br>- SLA 合规审计（首 Token 延时达标率）<br>- 成本异常预警（Token 消耗突增）<br>- Prompt 工程效果回归分析（结合推理日志） |
+| 维度 | **高并发推理（Model High Speed Inference）** | **模型管理（Model Management）** | **生产就绪（Model Production）** |
+|------|---------------------------------------------|-----------------------------------|----------------------------------|
+| **核心定位** | 面向**运行时性能优化**的推理加速层，聚焦“如何更快、更稳、更省地调用模型” | 面向**运行时访问治理**的策略控制层，聚焦“谁能在何时、以何种配额调用哪个模型” | 面向**模型服务化交付**的工程化平台，聚焦“如何将训练/微调成果可靠、可控、规模化地投入生产” |
+| **输入格式** | 标准 OpenAI 兼容请求体（`messages`, `model`, `stream`, `enable_thinking` 等）；Batch 场景需 JSONL 文件 | REST API 请求体（JSON），含 `model_id`, `rate_limit`, `permissions` 等策略对象 | OpenAPI 请求体（JSON），含 `plan`, `model_name`, `service_tier`, `charge_type`, `deploy_spec` 等部署/调优参数 |
+| **输出格式** | 标准 OpenAI 兼容响应（含 `choices`, `usage`, `model`）；Batch 返回[异步任务](../concepts/asynchronous-task.md) ID 及结果下载链接 | REST API 响应（JSON），返回模型元数据列表、当前限流值、授权范围等策略快照 | OpenAPI 响应（JSON），含 `operation_status`, `output.model_code`, `output.finetuned_output`, `output.quantized_output` 等异步作业结果 |
+| **支持模型** | ✅ Prime：`glm-5.2-fast-preview`, `glm-5.3-prime`, `wan3.0-video-prime`<br>✅ 吞吐预留/PTU/DTU：`Qwen3.8-Max`, `GLM-5.3`, `DeepSeek-v4-Pro` 等数十种 SaaS 模型 + LoRA 微调模型<br>✅ Batch：`qwen3.8-max`, `qwen3-vl-plus`, `text-embedding-v4`<br>✅ 智能路由：动态匹配 `qwen3.8-flash`, `deepseek-v4-pro-0813` 等备选模型 | ⚠️ 仅支持**百炼预置 SaaS 模型**（如 `qwen-max`, `qwen-plus`, `qwen-turbo`）<br>❌ 不支持用户自定义部署的私有模型实例（如 DTU/MU/Lora 部署产出） | ✅ 支持四类模态：文本（`qwen3`, `glm-5`）、图像（`wan2.1`）、视频（`wan3.0-video`）、语音（`cosyvoice-v3-flash`）<br>✅ 支持基础模型、LoRA 微调模型、全参微调模型、压缩后模型<br>✅ DTU/MU 部署支持物理级隔离模型 |
+| **API 端点** | - 实时推理：`https://{workspace_id}.cn-beijing.maas.aliyuncs.com/v1/chat/completions`（兼容模式域名用于 Prime）<br>- Batch 提交：`POST /v1/batch/jobs`（控制台或 API） | `GET /v1/models`, `GET /v1/models/{model_id}/quotas`, `PATCH /v1/models/{model_id}/quotas`, `PATCH /v1/models/{model_id}/permissions` | `POST /api/v1/fine-tunes`, `POST /api/v1/deployments`, `POST /api/v1/fine-tunes/compress/jobs`, `GET /api/v1/deployments/{deployment_id}` |
+| **计费方式** | - Prime：按 token 计费，无额外费用<br>- 吞吐预留（PTU）：预付费（包年包月）或后付费（按实际 TPM 使用量）<br>- DTU：预付费（强制 `pre_paid`），按 `input_tpm`/`output_tpm` 容量计费<br>- MU：按模型单元（MU）数量 × 时长计费<br>- Batch：按 token 计费，成本约为实时推理的 50%<br>- 智能路由：后付费，按实际调用模型计费 | ❌ **不产生直接费用** —— 属于平台治理能力，无独立计费项 | - 调优：按 GPU 小时 + 存储计费<br>- 部署（Lora/MU/DTU/PTU/MR）：对应资源类型计费（见高并发推理列）<br>- 模型压缩：按 GPU 小时计费 |
+| **典型场景** | - 秒级响应的对话机器人、实时搜索摘要<br>- 大促期间保障核心接口 SLA（99.9% < 500ms）<br>- 批量处理历史日志/文档生成报告<br>- A/B 测试多模型效果与成本平衡 | - 多团队共享模型池，防止某项目突发流量挤占全局资源<br>- 合规要求下限制敏感模型仅对特定部门开放<br>- 新模型灰度期设置低配额，逐步放量 | - 将业务专属微调模型（如金融客服 LoRA）上线为稳定服务<br>- 为语音合成服务申请独占 MU 资源保障 TTS 延迟<br>- 对高频调用的 `qwen3.5-flash` 模型启用吞吐预留防抖动<br>- 自动化 CI/CD 流水线集成模型训练→压缩→部署→压测全链路 |
 
 ---
 
-## 适用场景建议（面向开发者）
+## 各方案适用场景建议
 
-| 开发者角色 | 推荐优先启用的能力 | 理由说明 |
-|------------|------------------|----------|
-| **算法工程师（模型研发）** | ✅ 模型生产部署（微调 + 导入 + `lora` 部署）<br>✅ 模型监控（开启推理日志） | 微调是模型定制核心路径；`lora` 部署成本低、迭代快；推理日志可验证 prompt 效果与输出质量，支撑模型优化闭环。 |
-| **SRE / 平台工程师（服务运维）** | ✅ 高速推理（PTU/DTU + 智能路由）<br>✅ 模型监控（告警 + 审计日志） | PTU/DTU 提供确定性性能基线，规避公共池抖动；智能路由实现自动降级与成本调控；监控告警是故障发现第一防线，审计日志满足合规审计要求。 |
-| **全栈开发者（应用集成）** | ✅ 高速推理（Prime 模式 + `ptu_v2`）<br>✅ 模型监控（概览 + 失败率告警） | Prime 模式零改造接入，立竿见影提升用户体验；`ptu_v2` 在北京/新加坡双地域可用，适配全球化部署；监控概览可快速验证集成效果，失败率告警防止线上雪崩。 |
-| **成本与效能负责人** | ✅ 高速推理（批量推理 + 智能路由）<br>✅ 模型监控（用量统计 + Token 消耗告警） | 批量推理降低 50% 成本；智能路由按效果/成本策略自动选优；用量统计与 Token 告警精准识别资源浪费点，驱动模型汰换与精简。 |
-
-> 💡 **关键协同提示**：  
-> - **部署是监控的前提**：只有通过 `model production` 或 `high-speed inference` 创建的正式部署实例（含 `lora`/`ptu_v2`/`mr` 等），其调用才会被 `model monitoring` 系统自动采集；直连公有模型（如 `qwen3.8-max`）的调用**不计入监控范围**。  
-> - **高速推理依赖部署能力**：`ptu_v2`、`dtu`、`mr` 等高速模式本质是 `model production` 中定义的 `plan` 类型，其创建必须通过 `/api/v1/deployments` 接口完成。  
-> - **监控驱动部署优化**：若监控发现某 `lora` 部署实例持续高失败率或高延时，应立即检查是否需升级为 `ptu_v2` 或切换至 `mr` 智能路由兜底。
+| 方案 | 推荐使用场景 | 不推荐场景 | 关键风险提示 |
+|------|--------------|------------|--------------|
+| **高并发推理（Prime / PTU / DTU / Batch / MR）** | • 业务已明确模型选型，追求极致性能与成本效率<br>• 流量存在明显波峰波谷，需容量弹性或硬隔离<br>• 非实时批处理任务（如日报生成、知识库索引）<br>• 多模型效果/成本探索期（智能路由） | • 模型尚未完成调优或验证，仍处于算法迭代阶段<br>• 需要频繁变更模型结构（如修改 LoRA adapter）<br>• 跨地域（非北京/新加坡）部署需求 | • PTU/DTU 创建后需预热，突发流量可能短暂超时<br>• Batch 不返回 `reasoning_content`，无法满足深度思考审计需求<br>• 智能路由备选模型若无调用权限，将静默降级至默认模型，需提前校验权限 |
+| **模型管理（Model Management）** | • 多项目/多租户共用百炼平台，需精细化配额管控<br>• 满足 SOC2/GDPR 等合规审计要求（记录谁在何时调用了哪个模型）<br>• 新模型上线前进行沙箱限流测试（如设 `requests_per_minute=5`） | • 单项目单模型简单场景，无治理复杂度<br>• 需要管理自定义部署模型（如 DTU 实例）的访问策略<br>• 期望通过该能力实现模型版本灰度（其本身不支持版本概念） | • 权限更新为**全量覆盖**，误删 `permissions` 数组将导致模型不可用<br>• `tokens_per_minute=0` 不合法，禁用模型需结合权限移除+极低配额双重措施 |
+| **生产就绪（Model Production）** | • 模型从实验走向生产，需标准化、可复现、可追踪的服务化流程<br>• 语音/视频等强资源敏感模态，需 MU/DTU 级别资源保障<br>• 需要自动化集成（如 GitOps 触发微调→部署→通知）<br>• 对模型体积敏感，需量化压缩降低推理成本 | • 快速原型验证（PoC），仅需临时调用预置模型<br>• 无定制化需求，纯使用百炼标准 SaaS 模型且无配额治理诉求<br>• 跨地域（如华东1）部署需求（当前仅支持华北2/北京） | • **HTTP 200 ≠ 业务成功**：必须检查响应体中 `output.operation_status` 字段<br>• 模型压缩不可逆，压缩后模型不支持继续微调<br>• DTU 续费、自动续费开关仅支持控制台操作，API 不开放 |
 
 ---
 
-## 技术选型决策树（快速参考）
+## 技术选型参考（面向开发者）
 
-```mermaid
-graph TD
-    A[你的核心诉求？] --> B{是否需要定制模型？}
-    B -->|是| C[→ 选 Model Production<br>• 微调/导入 → 部署]
-    B -->|否| D{是否要求确定性性能？}
-    D -->|是| E[→ 选 High-Speed Inference<br>• Prime/PTU/DTU/MU]
-    D -->|否| F[→ 标准 API 即可]
-    C --> G{是否需应对流量高峰？}
-    G -->|是| H[→ 配合 PTU/DTU 预留容量]
-    G -->|否| I[→ lora 部署 + 监控告警]
-    E --> J{是否需多模型动态调度？}
-    J -->|是| K[→ 智能路由 mr]
-    J -->|否| L[→ Prime 或 PTU]
-    H & I & K & L --> M[→ 必须启用 Model Monitoring<br>• 告警+审计日志+用量统计]
-```
+请按以下逻辑分步决策：
 
-> ✅ **一句话总结选型原则**：  
-> **先用 `model production` 把模型“做出来”，再用 `high-speed inference` 把服务“跑起来”，最后用 `model monitoring` 把系统“管起来”。三者不是替代关系，而是递进式能力组合。**
+### 第一步：确认模型来源与成熟度
+- ✅ 若使用**百炼预置 SaaS 模型**（如 `qwen-max`）且无需微调 → 直接进入 **高并发推理** 选型（Prime/PTU/Batch/MR），搭配 **模型管理** 进行配额与权限治理。
+- ✅ 若已完成**LoRA/全参微调**或**导入自定义模型** → 必须通过 **生产就绪（Model Production）** 完成部署（`plan=lora`/`mu`/`dtu`），再基于部署产出的 `model_code` 调用 **高并发推理** 接口。
+- ⚠️ 若需**模型压缩**或**语音/视频专用部署** → 强制使用 **生产就绪**，因其是唯一支持这些能力的入口。
+
+### 第二步：评估流量特征与 SLA 要求
+| 流量特征 | 推荐方案 | 理由 |
+|----------|----------|------|
+| **超高频、低延迟（<200ms）、强稳定性**（如核心APP对话） | DTU 或 PTU（`ptu_fast`） | 物理/逻辑独占资源，规避多租户干扰，TPM 可精确承诺 |
+| **高并发、可容忍秒级延迟**（如后台任务调度） | Batch | 成本优势显著（≈实时推理50%），适合离线批量 |
+| **流量波动大、需弹性伸缩**（如电商大促） | PTU（后付费）+ 溢出至按量 | 预留基线容量保 SLA，溢出部分自动兜底，成本可控 |
+| **多模型效果探索、AB测试** | 智能路由（MR） | 统一入口，策略驱动（效果优先/成本优先），免客户端改码 |
+
+### 第三步：明确治理与运维需求
+- 需**跨项目配额隔离**？ → 必用 **模型管理** 配置 `project_id` 级限流。
+- 需**审计模型调用行为**？ → 开启 **模型管理** 的权限策略，并结合百炼平台操作日志。
+- 需**自动化发布流水线**？ → 以 **生产就绪** OpenAPI 为核心编排，调用 `/api/v1/fine-tunes` → `/api/v1/deployments` → `/v1/chat/completions`。
+- 需**生产环境可观测性**？ → 所有方案均支持百炼平台统一监控（TPM/延迟/错误率），但 **DTU/MU** 提供更细粒度的实例级指标。
+
+> 💡 **最佳实践组合推荐**  
+> - **企业级对话中台**：`生产就绪（LoRA 微调 + PTU 部署）` + `高并发推理（PTU model_code 调用）` + `模型管理（按业务线 project 划分配额）`  
+> - **AI 增强型 BI 工具**：`高并发推理（Batch 处理历史报表）` + `模型管理（限制 `text-embedding-v4` 调用量防滥用）`  
+> - **合规敏感型客服系统**：`生产就绪（CosyVoice MU 部署）` + `高并发推理（MU model_code + stream=true）` + `模型管理（仅授权客服 project 调用）`
 
 ---  
-*文档最后更新时间：2025年7月*  
-*注：所有地域、模型支持列表及计费规则以百炼控制台实时信息为准。*
+*最后更新：2025年4月*
 
 ## 被对比主题页
 
-- [model production](../api/model-production.md)
 - [model high speed inference](../guides/model-high-speed-inference.md)
-- [model monitoring](../guides/model-monitoring.md)
+- [model management](../api/model-management.md)
+- [model production](../api/model-production.md)
 
 

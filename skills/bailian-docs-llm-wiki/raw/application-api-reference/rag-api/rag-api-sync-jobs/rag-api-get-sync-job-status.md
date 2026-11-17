@@ -32,7 +32,7 @@
 
 string
 
-知识库 ID，对应创建知识库时返回的 `data.id`
+知识库 ID，对应创建知识库时返回的 `data.pipelineId`
 
 `job_id`
 
