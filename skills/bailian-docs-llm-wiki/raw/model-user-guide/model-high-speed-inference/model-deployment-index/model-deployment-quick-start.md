@@ -11,32 +11,11 @@
 
 ## 1\. 部署模型
 
-下面的命令展示如何创建专属服务。其中，按 Token 计费的示例使用已经调优好的自定义模型`qwen3-8b-ft-202511132025-0260`，创建一个专属服务`qwen3-8b-ft-202511132025-0260`；按预置吞吐和按模型单元的示例使用预置模型。
+下面的命令展示如何创建专属服务。其中，按 Token 计费的示例使用已经调优好的自定义模型`qwen3-8b-ft-202511132025-0260`，创建一个专属服务`qwen3-8b-ft-202511132025-0260`；按模型单元的示例使用预置模型。
 
 获取自定义模型 ID 的方法：前往[百炼控制台-模型调优](https://bailian.console.aliyun.com/cn-beijing/model/tuning)，点击需要部署的**任务名称** -> **产出** -> 点击蓝色字体的模型名称，进入**我的模型**页面，在模型基本信息区域可查看模型 ID。
 
 使用**模型 ID**作为输入的`model_name`参数，即可使用 API 部署该模型。
-
-#### 按预置吞吐（PTU）计费
-
-**说明**执行以下部署命令后，即便您还没有调用模型，模型部署服务仍将在部署成功后开始计费。建议您先确认服务计费规则，再执行部署命令。
-
-按预置吞吐计费模式按预置吞吐的使用时长收费，适用于追求稳定吞吐保障和高并发低延迟、且流量可预估的场景。该模式下，**吞吐/并发**和**生成速度**均为平台预置，用户不可调。
-
-```
-curl "https://dashscope.aliyuncs.com/api/v1/deployments" \
---header "Authorization: Bearer $DASHSCOPE_API_KEY" \
---header 'Content-Type: application/json' \
---data '{
-    "name": "my_qwen_flash",
-    "model_name": "qwen-flash-2025-07-28",
-    "plan": "ptu",
-    "ptu_capacity": {
-        "input_tpm": 10000,
-        "output_tpm": 1000
-    }
-}'
-```
 
 #### 按模型单元的使用时长计费
 
@@ -141,8 +120,8 @@ export DASHSCOPE_HTTP_BASE_URL="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.c
 dashscope deployments list
 
 # 创建专属服务（--plan 必填）
-# plan 可选值：ptu（PTU 预留资源）/ mu（模型单元）/ lora（LoRA 部署）
-dashscope deployments create -m qwen2.5-7b-instruct -s tst -c 1 --plan ptu
+# plan 可选值：mu（模型单元）/ lora（LoRA 部署）
+dashscope deployments create -m qwen2.5-7b-instruct -s tst -c 1 --plan mu
 ```
 
 > `-m` 指定模型名称，`-s` 指定服务后缀，`-c` 指定部署容量。

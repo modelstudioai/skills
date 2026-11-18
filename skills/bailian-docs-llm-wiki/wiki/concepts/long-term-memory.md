@@ -1,44 +1,88 @@
 # 长期记忆
 
-长期记忆（Long Term Memory, LTM）是百炼平台提供的结构化、跨会话用户状态持久化能力，用于安全、可控地保存和检索用户偏好、行为特征、历史交互等关键上下文信息。它以「片段（Fragment）」为基本单元，支持语义与属性混合检索，并通过显式配置与 API 调用实现细粒度生命周期管理。
+长期记忆（Long Term Memory, LTM）是百炼平台提供的**结构化、用户级、可检索的持久化记忆服务**，用于跨会话、跨请求地存储和复用关键业务信息，包括事实性事件、可复用技能与结构化用户画像。它独立于模型参数与会话上下文，通过统一 API 管理生命周期，是构建个性化、状态感知型 Agent 的核心基础设施。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **Managed Agent 场景**：在 `Session` 级别启用后，长期记忆自动注入模型输入（作为系统提示词的一部分），支撑多轮对话中的状态一致性；开发者可通过 `memory_id` 关联用户身份，结合 `memory_filter` 按标签/时间等条件精准召回历史片段。  
-- **Agent Context 机制中**：作为 `context_sources: ["memory"]` 的核心数据源之一，与 RAG、Connector、ParseX 等上下文动态融合，统一注入模型 [prompt](../guides/prompt.md) 头部，提升 Agent 的事实准确性与个性化推理能力。  
-- **Flow Agent 场景**：虽不直接暴露 LTM 原生接口，但可通过 `tool_calls` 调用封装了 `/v1/memory/get` 和 `/v1/memory/upsert` 的自定义 Skill，或在 Flow 节点中显式调用长期记忆 API 实现流程级记忆读写。  
-- **纯 API 对话调用（非 Agent）**：需在请求 `messages` 中手动传入 `memory_id` 字段，平台将自动加载匹配的 fragments 并注入系统提示；若需主动控制，可独立调用 `/v1/memory/get` 或 `/v1/memory/upsert` 接口。  
-- **模型侧能力差异**：仅 `qwen-max-20240919`、`qwen-plus-20240919` 及后续标注 `ltm_enabled: true` 的模型支持完整读写；`qwen-turbo` 等基础模型仅支持只读（`get_memory`），且不触发自动更新。
+- **Agent 推理增强（`agent context`）**：  
+  当 `context_config.memory.enabled = true`（默认开启）时，平台自动为当前 `user_id` 检索匹配的长期记忆节点（`observation`/`skill`/`user_profile`），并按相关性注入到模型 prompt 中，作为上下文补充。该过程对开发者透明，无需手动调用检索接口，但需确保记忆已预先写入且 `user_id` 一致。
+
+- **结构化记忆管理（`long term memory new`）**：  
+  通过 RESTful API 或 `agentscope-runtime` SDK 主动写入、搜索、更新记忆。典型流程为：  
+  - 使用 `AddMemoryAsync` 从对话消息或工具调用中抽取 `observation`（如“用户下周出差”）或 `skill`（如“自动生成会议纪要”）；  
+  - 通过 `profile_schema` 定义并写入 `user_profile`（如职业、偏好、设备信息）；  
+  - 调用 `/memory_nodes/search` 按 `user_id` + `messages` 语义检索最相关记忆，支持 `top_k` 和 `min_score` 过滤。
+
+- **Flow Agent 开发（`flow agent api`）**：  
+  注意区分新旧版本：  
+  - **旧版 `Memory` 接口**（OpenAPI 路径含 `/memory`）仅支持基础 `MemoryNode` 增删改查，**不支持用户画像、技能抽取与多模态内容**，已标记为“旧”，不推荐新项目使用；  
+  - **新版 `long term memory new`**（独立 endpoint，基于业务空间域名）是当前唯一推荐方案，全面覆盖三类记忆类型与异步抽取能力。
+
+- **Agent 治理与可观测性（`agent governance`）**：  
+  所有长期记忆的读写操作（`AddMemory`, `SearchMemory`, `GetUserProfile` 等）均被自动捕获为 Trace 事件，出现在观测面板的 “Memory” 标签页下，包含耗时、返回节点数、`user_id`、`project_id` 等元数据，可用于分析记忆命中率、冷热分布及性能瓶颈。
+
+- **Sandbox/Managed/Flow Agent 开发（`agent development`）**：  
+  - Sandbox Agent 可直接调用 `agentscope-runtime` SDK 写入/检索记忆；  
+  - Managed Agent 可在 YAML 中配置 `memory_strategy: "summary"` 并结合 `user_id` 实现用户级记忆回溯；  
+  - Flow Agent 可在 Python 脚本节点中集成记忆 SDK，实现条件化记忆更新（如仅当用户明确授权时写入敏感画像）。
 
 ## 关键参数和配置
 
-| 参数名 | 类型 | 必填 | 说明 |
-|--------|------|------|------|
-| `memory_id` | string | 是 | 全局唯一标识符，建议使用 UUIDv4 或业务主键哈希值（如 `sha256(user_id + salt)`） |
-| `fragments` | array | 否 | 片段数组，每个 fragment 包含 `type`（字符串，如 `"preference"`）、`content`（任意 JSON 结构）、`ttl_seconds`（整数，0 表示永不过期，最小有效值为 3600） |
-| `enable_auto_update` | boolean | 否 | 默认 `false`；设为 `true` 后，支持模型在输出中嵌入 `<ltm type="...">...</ltm>` 标签自动触发 `upsert_fragment`（仅限 `ltm_enabled: true` 模型） |
-| `retrieval_strategy` | string | 否 | 取值为 `"semantic"`（向量相似度）、`"attribute"`（字段精确匹配）或 `"hybrid"`（两者加权），影响 `/v1/memory/get` 的召回逻辑 |
-| `memory_filter` | object | 否 | 用于过滤 memory 条目的条件对象（如 `{ "type": "order_history", "created_after": "2024-01-01" }`），常用于 Agent Context 或主动查询 |
+| 参数 | 类型 | 必填 | 说明 | 场景 |
+|------|------|------|------|------|
+| `user_id` | string | ✅ | 用户唯一标识，用于隔离不同用户的记忆空间；必须与 `agent context` 调用中的 `user_id` 一致才能生效 | 全部 |
+| `project_id` / `project_ids` | string / string[] | ⚠️（技能/事实抽取必需） | 绑定记忆抽取规则：指定后触发 `observation` 或 `skill` 自动抽取；未指定则仅支持 `custom_content` 直接写入 | 写入 |
+| `profile_schema` | string | ⚠️（用户画像写入必需） | 用户画像模板 ID；需提前通过 `/profile_schemas` 创建；启用后自动解析 `messages` 中符合 schema 的字段 | 写入 |
+| `extract_mode=profile_only` | string | ❌（可选） | 强制仅执行用户画像抽取，忽略 `observation`/`skill`；此时 `messages` 和 `profile_schema` 均为必填 | 写入 |
+| `top_k` | integer | ❌（默认 `10`） | 检索返回的最大记忆节点数 | 检索 |
+| `min_score` | float | ❌（默认 `0.3`） | 最小相似度阈值；**仅 `plan_version=pro` 时生效** | 检索 |
+| `plan_version` | string | ❌（默认 `lite`） | 检索策略：`lite`（基础向量检索）、`pro`（启用 Rerank + `min_score` 过滤） | 检索 |
+| `memory_types` | string[] | ❌（默认 `["observation"]`） | 指定检索的记忆类型，如 `["observation", "skill"]` | 检索 |
 
-> ⚠️ 注意：单个 `memory_id` 最多存储 100 个 fragment，总内容大小 ≤ 2MB；所有写操作为最终一致性，读取可能存在秒级延迟。
+> **注意**：`user_id` 是长期记忆作用域的唯一锚点，务必在所有相关调用（Agent 推理、记忆写入、检索）中保持一致；跨 `session_id` 的记忆共享天然成立，无需额外配置。
 
 ## 面向开发者，简洁实用
 
-- ✅ **快速启用**：在应用配置页开启「长期记忆」开关，并选择 `ltm_enabled: true` 模型（如 `qwen-max-20240919`）。  
-- ✅ **写入记忆**：调用 `POST /v1/memory/upsert`，传入 `memory_id` 和 `fragments` 数组；避免在高频请求中频繁写入，推荐批量合并后更新。  
-- ✅ **读取记忆**：在对话请求 `messages` 中添加 `"memory_id": "xxx"`，平台自动注入；或调用 `GET /v1/memory/get?memory_id=xxx&retrieval_strategy=hybrid` 主动查询。  
-- ✅ **调试技巧**：使用 `curl -H "Authorization: Bearer $API_KEY" "https://dashscope.aliyuncs.com/api/v1/memory/get?memory_id=xxx"` 快速验证数据是否存在。  
-- ❌ **避坑提醒**：  
-  - 不要混用长期记忆（Fragment）与用户画像（Profile）——后者需走 `/v1/profiles/*` 独立接口；  
-  - `qwen-turbo` 等模型无法响应 `<ltm>` 标签，`enable_auto_update: true` 对其无效；  
-  - `ttl_seconds: 0` 表示永不过期，但文档中“最小值 3600”为过时描述，请以实际 API 行为为准。
+- ✅ **首选异步写入**：用 `AddMemoryAsync` 替代 `AddMemory`，避免同步超时；轮询 `GET /events/{event_id}` 获取结果，适合生产环境。
+- ✅ **画像先建模再写入**：调用 `/profile_schemas` 创建 schema 后，再在 `AddMemoryAsync` 中传 `profile_schema`，否则画像写入失败。
+- ✅ **检索即插即用**：在 `agent context` 中启用 `memory` 即可自动注入；若需精细控制（如只召回技能），请改用 SDK 手动调用 `/memory_nodes/search` 并设置 `memory_types`。
+- ⚠️ **鉴权严格分离**：新版 LTM 使用 `DASHSCOPE_API_KEY` + 业务空间 endpoint；旧版 Flow Agent 的 `Memory` 接口使用 AccessKey 签名 —— 切勿混用。
+- ⚠️ **容量与限流监控**：单用户长期记忆上限为 1MB；全接口 QPM 总限 3000，其中 `search` ≤ 300 QPM，建议在高并发场景添加重试与降级逻辑。
+- 🚀 **快速起步命令**：
+  ```bash
+  # 设置环境变量（替换为你的 WorkspaceId 和 API Key）
+  export MEMORY_ENDPOINT="https://your-workspace-id.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory"
+  export DASHSCOPE_API_KEY="sk-xxxx"
+
+  # 异步写入一条事实记忆
+  curl -X POST "$MEMORY_ENDPOINT/add-async" \
+    -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+    -H "Content-Type: application/json" \
+    -d '{
+          "user_id": "u123",
+          "project_id": "proj-fact-default",
+          "messages": [{"role":"user","content":"我明天要去上海开会"}]
+        }'
+
+  # 检索该用户的相关记忆
+  curl -X POST "$MEMORY_ENDPOINT/memory_nodes/search" \
+    -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+    -H "Content-Type: application/json" \
+    -d '{
+          "user_id": "u123",
+          "messages": [{"role":"user","content":"帮我安排会议行程"}],
+          "top_k": 5,
+          "plan_version": "pro",
+          "min_score": 0.4
+        }'
+  ```
 
 ## 关联主题页
 
 - [long term memory new](../api/long-term-memory-new.md)
 - [agent context](../guides/agent-context.md)
-- [get started with agents](../guides/get-started-with-agents.md)
-- [managed agents api](../api/managed-agents-api.md)
 - [flow agent api](../api/flow-agent-api.md)
+- [agent development](../guides/agent-development.md)
+- [agent governance](../guides/agent-governance.md)
 
 

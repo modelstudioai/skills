@@ -42,3 +42,4 @@
 -   [vidu/viduq2-fast\_reference2image](raw/_short/viduq2-fast-reference2image-8e4ef3717e4b44fa.md)
 -   [vidu/viduq2-pro\_reference2image](raw/_short/viduq2-pro-reference2image-e1754bee1be8c0c6.md)
 -   [vidu/viduq3-fast\_reference2image](raw/_short/viduq3-fast-reference2image-4c390633bdbaac3f.md)
+-   [vidu/viduq3.1-fast\_reference2image](raw/_short/viduq3-1-fast-reference2image-09b0b9c98dde0e9a.md)

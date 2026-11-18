@@ -7,8 +7,8 @@
 -   **适用地域**：本文描述的功能**仅在华北2（北京）地域**可用，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)。
 -   **开通账号权限**：若使用[阿里云子账号](raw/model-user-guide/security-and-compliance/permission-management-overview.md)（[RAM用户](https://help.aliyun.com/zh/ram/user-guide/overview-of-ram-users)），需要为子账号授予模型调用、训练和部署[权限](https://help.aliyun.com/zh/model-studio/use-workspace)。
 -   **配置环境变量**：已成功[获取 API Key](raw/model-api-reference/preparations/get-api-key.md)，并[配置到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
--   **准备工作**：已阅读[千问模型调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model.md)，了解支持微调的模型、微调步骤、数据格式以及计费说明。
--   **RL/OPD 训练**：本接口适用于 SFT/CPT/DPO 微调。强化学习（RL）与 OPD 蒸馏训练通过 DashScope SDK/CLI 提交（`dashscope rl run` 或 `AgenticRL().run()`），非 REST API，详见 [强化学习训练配置](raw/model-user-guide/fine-tuning/rl-overview/rl-training-config-monitoring.md) 与 [OPD 蒸馏训练配置](raw/model-user-guide/fine-tuning/opd-overview/opd-training-config.md)。
+-   **准备工作**：已阅读[千问模型调优](https://help.aliyun.com/zh/model-studio/fine-tune-text-generation-model)，了解支持微调的模型、微调步骤、数据格式以及计费说明。
+-   **RL/OPD 训练**：本接口适用于 SFT/CPT/DPO 微调。强化学习（RL）与 OPD 蒸馏训练通过 DashScope SDK/CLI 提交（`dashscope rl run` 或 `AgenticRL().run()`），非 REST API，详见 [强化学习训练配置](https://help.aliyun.com/zh/model-studio/rl-training-config-monitoring) 与 [OPD 蒸馏训练配置](https://help.aliyun.com/zh/model-studio/opd-training-config)。
 
 ## 创建微调任务
 
@@ -34,7 +34,7 @@ API Key鉴权，格式为`Bearer sk-xxxx`。
 
 **model** `string` **（必选）**
 
-用于调优的[基础模型ID](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/fine-tuning-api-guide.md)或其他调优任务产出的模型ID（对已经调优了的模型进行再次调优）。
+用于调优的[基础模型ID](https://help.aliyun.com/zh/model-studio/fine-tuning-api-guide)或其他调优任务产出的模型ID（对已经调优了的模型进行再次调优）。
 
 **training\_type** `string` （可选）
 
@@ -80,7 +80,7 @@ API Key鉴权，格式为`Bearer sk-xxxx`。
 
 **lr\_scheduler\_type** `string` （可选）
 
-学习率调整策略。推荐 `linear` 或 `inverse_sqrt`。在模型训练中动态调整学习率的策略。各策略详情请参考[学习率调整策略说明](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-on-console.md)。
+学习率调整策略。推荐 `linear` 或 `inverse_sqrt`。在模型训练中动态调整学习率的策略。各策略详情请参考[学习率调整策略说明](https://help.aliyun.com/zh/model-studio/model-training-on-console)。
 
 **split** `float` （可选）
 

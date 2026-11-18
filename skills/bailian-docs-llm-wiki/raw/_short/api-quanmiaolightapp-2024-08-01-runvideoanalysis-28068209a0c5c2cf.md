@@ -32,7 +32,7 @@
 
 -   获取[Java（异步）最新版本依赖](https://api.aliyun.com/api-tools/sdk/QuanMiaoLightApp?version=2024-08-01&language=java-async-tea&tab=primer-doc)。
 -   获取[AccessKey ID、AccessKey Secret](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)。
--   获取[业务空间 ID（Workspace ID）](raw/application-api-reference/application-call/obtain-the-app-id-and-workspace-id.md)。
+-   获取[业务空间 ID（Workspace ID）](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)。
 
 ## 权限说明
 

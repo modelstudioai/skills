@@ -42,6 +42,18 @@ vidu/viduq3-fast\_reference2image
 
 图像格式：PNG
 
+vidu/viduq3.1-fast\_reference2image
+
+支持参考生图、文生图、图片编辑，可通过分辨率与画幅比例指定输出尺寸。
+
+文本、图像
+
+图像分辨率：1K、2K、4K
+
+图像张数：1
+
+图像格式：PNG
+
 vidu/viduq2-pro\_reference2image
 
 支持参考生图、文生图、图片编辑，擅长处理复杂逻辑，具备超强上下文一致性和工业级稳定性。适合专业设计、漫剧制作等。
@@ -107,6 +119,7 @@ vidu/viduq2-fast\_reference2image
 -   `vidu/vidu-image-pro_reference2image`
 -   `vidu/vidu-image-lite_reference2image`
 -   `vidu/viduq3-fast_reference2image`
+-   `vidu/viduq3.1-fast_reference2image`
 -   `vidu/viduq2-pro_reference2image`
 -   `vidu/viduq2-fast_reference2image`
 
@@ -168,6 +181,44 @@ vidu/viduq2-fast\_reference2image
 
 不同模型支持的尺寸列表请参见下方[可用尺寸列表](https://help.aliyun.com/zh/model-studio/vidu-image-generation-api-reference#vidu_sizes_h2)。
 
+使用vidu/viduq3.1-fast\_reference2image时，`size`须从可用尺寸列表中选择，不支持`auto`，并与`resolution`二选一：两者都不传返回参数错误，同时传入时以`resolution`为准。
+
+**resolution** `string` （可选）
+
+**支持模型**：vidu/viduq3.1-fast\_reference2image。
+
+生成图像的分辨率档位，与`size`二选一；传入该参数时忽略`size`。
+
+-   `1K`
+-   `2K`
+-   `4K`
+
+不支持`auto`和`512`。
+
+**aspect\_ratio** `string` （可选）
+
+**支持模型**：vidu/viduq3.1-fast\_reference2image。
+
+生成图像的画幅比例，仅在设置`resolution`时生效。
+
+-   `auto`：默认值，由模型根据提示词决定画幅比例，不固定为`1:1`。
+-   `1:1`
+-   `2:3`
+-   `3:2`
+-   `3:4`
+-   `4:3`
+-   `4:5`
+-   `5:4`
+-   `9:16`
+-   `16:9`
+-   `21:9`
+-   `1:4`
+-   `4:1`
+-   `1:8`
+-   `8:1`
+
+仅传`aspect_ratio`而不传`resolution`时，返回缺少`resolution`的参数错误。
+
 **n** `integer` （可选）
 
 生成图片数量，当前仅支持`1`。传其他值会返回参数错误。
@@ -177,6 +228,8 @@ vidu/viduq2-fast\_reference2image
 随机数种子，取值范围`[0,2147483647]`，`0`表示随机。
 
 使用相同的`seed`参数值可使生成内容保持相对稳定。若不提供，算法将自动使用随机数种子。
+
+使用vidu/viduq3.1-fast\_reference2image时不生效。
 
 **watermark** `bool` （可选）
 
@@ -248,6 +301,41 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
         "size": "2048*2048",
         "n": 1,
         "watermark": false
+    }
+}'
+```
+
+#### 指定分辨率（viduq3.1-fast）
+
+传入`resolution`时，`size`会被忽略。
+
+```
+# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image-generation/generation' \
+--header 'X-DashScope-Async: enable' \
+--header "Authorization: Bearer $DASHSCOPE_API_KEY" \
+--header 'Content-Type: application/json' \
+--data '{
+    "model": "vidu/viduq3.1-fast_reference2image",
+    "input": {
+        "messages": [
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "text": "把背景改成海边日落"
+                    },
+                    {
+                        "image": "https://cdn.wanx.aliyuncs.com/tmp/pressure/umbrella1.png"
+                    }
+                ]
+            }
+        ]
+    },
+    "parameters": {
+        "resolution": "1K",
+        "aspect_ratio": "16:9",
+        "n": 1
     }
 }'
 ```
@@ -478,7 +566,9 @@ curl --location --request GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.co
 
 2880\*2880、1440\*2880、2880\*1440、3312\*2480、2480\*3312、3840\*2160、2160\*3840、3520\*2352、2352\*3520、3840\*1648、1648\*3840
 
-### viduq3-fast
+### viduq3-fast、viduq3.1-fast
+
+vidu/viduq3-fast\_reference2image和vidu/viduq3.1-fast\_reference2image支持的尺寸相同。传入`size`时，服务端会将其映射为分辨率与画幅比例，此时请求中的`aspect_ratio`会被忽略。
 
 **分辨率**
 

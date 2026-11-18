@@ -156,6 +156,68 @@ SSML: 支持
 -   方言：上海话、广东话、东北话、重庆话、陕西话、云南话、宁波话、甘肃话。
 -   语言：日语、韩语、法语、德语、葡萄牙语、意大利语、越南语、印尼语。
 
+使用下表中的音色合成方言或部分小语种时，可通过 `language_hints` 指定目标语种或方言。
+
+点击查看语种和方言的设置方法
+
+将语种或方言代号作为数组传给 `language_hints`，每次只传一个代号。待合成文本应与指定的语种或方言一致。合成普通话或英语时，无需设置此参数。
+
+**说明**如果同时使用 `instruction`，可用它控制语气或情感。不要在 `instruction` 中重复指定语种或方言，也不要指定不同的语种或方言。
+
+**示例**
+
+```
+{
+  "text": "侬好，今朝天气蛮好。",
+  "voice": "longanlingxin_v3.1",
+  "language_hints": ["zh-sh"]
+}
+```
+
+**语种和方言取值范围**
+
+**说明**未列出的语种或方言可传 `["other"]`，但不保证所选音色支持。
+
+#### 语种
+
+-   日语：`ja`
+-   韩语：`ko`
+-   法语：`fr`
+-   德语：`de`
+-   葡萄牙语：`pt`
+-   意大利语：`it`
+-   越南语：`vi`
+-   印度尼西亚语：`id`
+-   阿拉伯语：`ar`
+-   西班牙语：`es`
+-   马来语：`ms`
+-   俄语：`ru`
+-   泰语：`th`
+-   菲律宾语：`tl`
+
+#### 方言
+
+-   广东话：`zh-yue`
+-   东北话：`zh-ne`
+-   甘肃话：`zh-gs`
+-   贵州话：`zh-gz`
+-   河南话：`zh-ha`
+-   河北话：`zh-he`
+-   湖北话：`zh-hb`
+-   湖南话：`zh-hn`
+-   宁夏话：`zh-nx`
+-   陕西话：`zh-sx`
+-   山西话：`zh-shan`
+-   山东话：`zh-sd`
+-   青岛话：`zh-qd`
+-   四川话：`zh-sc`
+-   重庆话：`zh-cq`
+-   云南话：`zh-yn`
+-   江西话：`zh-jx`
+-   浙江话：`zh-zj`
+-   宁波话：`zh-nb`
+-   上海话：`zh-sh`
+
 **音色信息**
 
 **性别**
@@ -2726,7 +2788,7 @@ SSML: 不支持
 
 -   qwen-audio-3.0-tts-plus基础音色列表（Excel）：[qwen-audio-3.0-tts-plus基础音色.xlsx](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260723/ydwqqz/qwen-audio-3.0-tts-plus%E5%9F%BA%E7%A1%80%E9%9F%B3%E8%89%B2.xlsx)
 -   qwen-audio-3.0-tts-flash基础音色列表（Excel）：[qwen-audio-3.0-tts-flash基础音色.xlsx](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260723/thosjr/qwen-audio-3.0-tts-flash%E5%9F%BA%E7%A1%80%E9%9F%B3%E8%89%B2.xlsx)
--   基础音色试听音频包（plus和flash共用）：[基础音色试听音频包.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260720/tuuuqo/%E5%9F%BA%E7%A1%80%E9%9F%B3%E8%89%B2%E8%AF%95%E5%90%AC%E9%9F%B3%E9%A2%91%E5%8C%85.zip)
+-   基础音色试听音频包（plus和flash共用）：[基础音色试听音频包.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/zh/files/6a4b3c2d1e0f9016.zip)
 
 **试听步骤**
 

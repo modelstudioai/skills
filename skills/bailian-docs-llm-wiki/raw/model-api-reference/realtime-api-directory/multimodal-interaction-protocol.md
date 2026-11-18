@@ -16,7 +16,7 @@ WebSocket是一种支持全双工通信的网络协议。客户端和服务器�
 
 -   TLS 版本要求 TLS1.2 或以上
 -   开启 SNI（SERVER NAME INDICATION）
--   配置 CA 证书（[GlobalSign Root CA - R3](https://secure.globalsign.net/cacert/Root-R3.crt)）（也可至GlobalSign官网下载）
+-   配置 CA 证书（[GlobalSign Root CA - R46](https://secure.globalsign.com/cacert/rootr46.crt)）（也可至GlobalSign官网下载）
 
 ## 前提条件
 

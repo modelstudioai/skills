@@ -148,7 +148,7 @@ int
 
 每页数据条数。
 
-**返回值**：`Voice[]` 音色数组。
+**返回值**：`Voice[]` 音色数组。如果列表项的 `getTargetModel()` 返回 `null`，可通过 `voice.getData().get("target_model")` 读取目标模型 ID。
 
 ### queryVoice() - 查询音色详情
 
@@ -176,7 +176,7 @@ String
 
 要查询的音色ID。
 
-**返回值**：`Voice` 对象。
+**返回值**：`Voice` 对象。通过 `getTargetModel()` 获取目标模型 ID。
 
 ### updateVoice() - 更新音色
 
@@ -387,6 +387,9 @@ public class Main {
         Voice[] voices = service.listVoice(prefix, 0, 10);
         logger.info("List successful. Request ID: {}", service.getLastRequestId());
         logger.info("Voices Details: {}", new Gson().toJson(voices));
+        for (Voice voice : voices) {
+            logger.info("Target model: {}", voice.getData().get("target_model"));
+        }
     }
 }
 ```
@@ -419,6 +422,7 @@ public class Main {
 
         logger.info("Query successful. Request ID: {}", service.getLastRequestId());
         logger.info("Voice Details: {}", new Gson().toJson(voice));
+        logger.info("Target model: {}", voice.getTargetModel());
     }
 }
 ```

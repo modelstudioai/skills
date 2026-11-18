@@ -2084,33 +2084,39 @@ Qwen3.8-Omni-Flash-Realtime 的服务端 MCP 工具调用与审批流程见[MCP 
 DashScope Python SDK
 
 ```
-# DashScope Python SDK v1.25.17
+# DashScope Python SDK v2.0.1
 import os
-import uuid
 import threading
 import traceback
 import json
 import base64
 import signal
-import sys
 import time
-from typing import Dict, Any, Optional, List
+from typing import Dict, Any, Optional
 import pyaudio
 import queue
 import contextlib
+from concurrent.futures import ThreadPoolExecutor
 import dashscope
-from dashscope.audio.qwen_omni import *
+from dashscope import DashScopeError
 
 # ==================== 常量定义 ====================
 VOICE = 'Tina'
 MODEL = "qwen3.5-omni-plus-realtime"
-# 如果需要访问新加坡地域，请WS_URL将替换为：wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime
-WS_URL = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime"
-# 配置 API Key，若没有设置环境变量，请用 API Key 将下行替换为 dashscope.api_key = "sk-xxx"
-dashscope.api_key = os.getenv('DASHSCOPE_API_KEY')
 AUDIO_SAMPLE_RATE = 16000
 AUDIO_CHUNK_SIZE = 3200
 OUTPUT_AUDIO_SAMPLE_RATE = 24000
+OUTPUT_MODALITIES = ['audio', 'text']
+
+# ==================== 客户端构造 ====================
+# 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+# 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx"
+# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID；如需访问新加坡地域，请将 region 替换为 ap-southeast-1。
+client = dashscope.Client(
+    api_key=os.getenv('DASHSCOPE_API_KEY'),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # ==================== 工具定义 ====================
 def get_train_price(src: str, dst: str) -> str:
@@ -2233,10 +2239,9 @@ def handle_tool_call(tool_call_response: Dict[str, Any]) -> Dict[str, Any]:
         traceback.print_exc()
         return tool_call_response
 
-def send_tool_call_response(conversation: OmniRealtimeConversation, response: Dict[str, Any]) -> None:
-    """发送工具调用结果到服务端"""
-    conversation.create_item({
-        "id": 'item_' + uuid.uuid4().hex,
+def send_tool_call_response(session, response: Dict[str, Any]) -> None:
+    """发送工具调用结果到服务端（对应 conversation.item.create 事件）"""
+    session.create_item({
         "type": "function_call_output",
         "call_id": response['call_id'],
         "output": response["output"],
@@ -2382,41 +2387,26 @@ class AudioManager:
             self.pya.terminate()
         print('音频资源清理完成')
 
-# ==================== 回调处理器 ====================
-class OmniCallback(OmniRealtimeCallback):
-    """Omni 实时对话回调处理器"""
+# ==================== 事件处理器 ====================
+class OmniEventHandler:
+    """
+    Omni 实时对话事件处理器
 
-    def __init__(self, audio_manager: AudioManager):
+    2.0 SDK 服务端事件不再通过回调下发，改为在接收线程中迭代会话的
+    events() 并逐条交给本类，按 event["type"] 分发处理。
+    """
+
+    def __init__(self, audio_manager: AudioManager, session):
         self.audio_manager = audio_manager
+        self.session = session
         self.tool_calls: Dict[str, Dict[str, Any]] = {}
         self.all_response_text: str = ''
         self.last_package_time: float = 0
         self.is_first_text: bool = True
         self.is_first_audio: bool = True
-        self.conversation: Optional[OmniRealtimeConversation] = None
 
-    def set_conversation(self, conversation: OmniRealtimeConversation) -> None:
-        """设置对话实例引用"""
-        self.conversation = conversation
-
-    def on_open(self) -> None:
-        """连接建立时的回调"""
-        print('连接已建立')
-        self.audio_manager.initialize()
-        self.last_package_time = time.time() * 1000
-        self.is_first_text = True
-        self.is_first_audio = True
-        self.tool_calls = {}
-        self.all_response_text = ''
-
-    def on_close(self, close_status_code: int, close_msg: str) -> None:
-        """连接关闭时的回调"""
-        print(f'连接已关闭: code={close_status_code}, msg={close_msg}')
-        self.audio_manager.cleanup()
-        sys.exit(0)
-
-    def on_event(self, response: Dict[str, Any]) -> None:
-        """处理事件回调"""
+    def handle_event(self, response: Dict[str, Any]) -> None:
+        """处理单条服务端事件"""
         try:
             event_type = response.get('type', '')
 
@@ -2479,20 +2469,26 @@ class OmniCallback(OmniRealtimeCallback):
                 print('====== 响应完成 ======')
                 print(f'完整回复: {self.all_response_text}')
 
-                if self.conversation:
-                    response_id = self.conversation.get_last_response_id()
-                    text_delay = self.conversation.get_last_first_text_delay()
-                    audio_delay = self.conversation.get_last_first_audio_delay()
+                # 首包延迟等指标由会话自动统计
+                response_id = self.session.last_response_id
+                text_delay = self.session.last_first_text_delay
+                audio_delay = self.session.last_first_audio_delay
 
-                    # 只有当所有指标都可用时才打印详细指标
-                    if response_id is not None and text_delay is not None and audio_delay is not None:
-                        print(f'[Metric] 响应ID: {response_id}, '
-                              f'首字延迟: {text_delay:.0f}ms, '
-                              f'首音延迟: {audio_delay:.0f}ms')
-                    else:
-                        print('[Metric] 指标信息暂不可用（可能是工具调用后的响应）')
+                # 只有当所有指标都可用时才打印详细指标
+                if response_id is not None and text_delay is not None and audio_delay is not None:
+                    print(f'[Metric] 响应ID: {response_id}, '
+                          f'首字延迟: {text_delay:.0f}ms, '
+                          f'首音延迟: {audio_delay:.0f}ms')
+                else:
+                    print('[Metric] 指标信息暂不可用（可能是工具调用后的响应）')
 
                 self.all_response_text = ''
+
+                # 处理本轮累积的工具调用，并触发服务端生成最终语音回答
+                if self.process_pending_tool_calls():
+                    print("*** 工具调用完成，创建新响应 ***")
+                    self.session.create_response(modalities=OUTPUT_MODALITIES)
+                    print('====== 工具调用处理完成 ======\n')
 
         except Exception as e:
             print(f'[Error] 处理事件异常: {e}')
@@ -2516,91 +2512,87 @@ class OmniCallback(OmniRealtimeCallback):
                 result = handle_tool_call(tool_call)
 
                 # 发送结果到服务端
-                if self.conversation:
-                    send_tool_call_response(self.conversation, result)
+                send_tool_call_response(self.session, result)
 
         return has_pending
+
+def receive_events(session, handler: OmniEventHandler) -> None:
+    """接收线程：迭代服务端事件并分发处理，连接关闭后自然退出"""
+    try:
+        for event in session.events():
+            handler.handle_event(event)
+    except DashScopeError as e:
+        # 服务端错误事件（如参数校验失败）会以 DashScopeError 异常抛出
+        print(f'[Error] 请求失败: code={e.code}, message={e.message}, request_id={e.request_id}')
+    except Exception as e:
+        print(f'[Error] 接收线程异常: {e}')
+        traceback.print_exc()
 
 # ==================== 主程序 ====================
 def main():
     """主函数"""
     print('正在初始化 Omni 实时对话...')
 
-    # 创建音频管理器
+    # 创建并初始化音频管理器
     audio_manager = AudioManager()
+    audio_manager.initialize()
 
-    # 创建回调处理器
-    callback = OmniCallback(audio_manager)
+    # 创建会话：进入 with 上下文自动建立连接
+    with client.audio.realtime.connect(model=MODEL) as session:
+        # 创建事件处理器
+        handler = OmniEventHandler(audio_manager, session)
 
-    # 创建对话实例
-    conversation = OmniRealtimeConversation(
-        api_key=dashscope.api_key,
-        url=WS_URL,
-        model=MODEL,
-        callback=callback,
-    )
+        # 设置信号处理
+        running = True
 
-    # 设置回调中的对话引用
-    callback.set_conversation(conversation)
+        def signal_handler(sig, frame):
+            nonlocal running
+            print('\n接收到 Ctrl+C，正在停止...')
+            running = False
+            # close 幂等：提前关闭连接，解除接收线程 events() 的阻塞等待
+            session.close()
 
-    # 建立连接
-    conversation.connect()
+        signal.signal(signal.SIGINT, signal_handler)
+        print("按 Ctrl+C 停止对话...\n")
 
-    # 配置会话参数
-    omni_output_modalities = [MultiModality.AUDIO, MultiModality.TEXT]
-
-    conversation.update_session(
-        output_modalities=omni_output_modalities,
-        voice=VOICE,
-        input_audio_format=AudioFormat.PCM_16000HZ_MONO_16BIT,
-        output_audio_format=AudioFormat.PCM_24000HZ_MONO_16BIT,
-        enable_input_audio_transcription=True,
-        enable_turn_detection=True,
-        turn_detection_type='server_vad',
-        tools=TOOLS,
-    )
-
-    # 设置信号处理
-    def signal_handler(sig, frame):
-        print('\n接收到 Ctrl+C，正在停止...')
-        conversation.close()
-        audio_manager.cleanup()
-        print('Omni 实时对话已停止')
-        sys.exit(0)
-
-    signal.signal(signal.SIGINT, signal_handler)
-    print("按 Ctrl+C 停止对话...\n")
-
-    # 主循环：持续发送音频并检查工具调用
-    try:
-        while True:
-            # 处理待处理的工具调用
-            has_tool_calls = callback.process_pending_tool_calls()
-
-            if has_tool_calls:
-                print("*** 工具调用完成，创建新响应 ***")
-                conversation.create_response(
-                    instructions=None,
-                    output_modalities=omni_output_modalities
-                )
-                print('====== 工具调用处理完成 ======\n')
-
-            # 读取并发送音频数据
-            audio_data = audio_manager.read_audio_chunk()
-            if audio_data:
-                audio_b64 = base64.b64encode(audio_data).decode('ascii')
-                conversation.append_audio(audio_b64)
-            else:
+        # 配置会话参数：注册工具定义，开启音频转写与 server_vad
+        session.update_session(
+            OUTPUT_MODALITIES,
+            voice=VOICE,
+            input_audio_config={'type': 'pcm', 'sample_rate': AUDIO_SAMPLE_RATE},
+            output_audio_config={'type': 'pcm', 'sample_rate': OUTPUT_AUDIO_SAMPLE_RATE},
+            enable_input_audio_transcription=True,
+            enable_turn_detection=True,
+            turn_detection_type='server_vad',
+            tools=TOOLS,
+        )
+        # 读取至 session.updated 确认配置生效
+        for event in session.events():
+            handler.handle_event(event)
+            if event.get('type') == 'session.updated':
                 break
 
-    except KeyboardInterrupt:
-        signal_handler(signal.SIGINT, None)
-    except Exception as e:
-        print(f'[Error] 主循环异常: {e}')
-        traceback.print_exc()
-    finally:
-        conversation.close()
-        audio_manager.cleanup()
+        # 接收线程：持续消费服务端事件
+        with ThreadPoolExecutor(max_workers=1) as pool:
+            receiver = pool.submit(receive_events, session, handler)
+            try:
+                # 主循环：持续采集麦克风音频并发送
+                while running:
+                    # 读取并发送音频数据（bytes 会自动 Base64 编码后发送）
+                    audio_data = audio_manager.read_audio_chunk()
+                    if audio_data:
+                        session.append_audio(audio_data)
+                    else:
+                        break
+            except Exception as e:
+                print(f'[Error] 主循环异常: {e}')
+                traceback.print_exc()
+            finally:
+                # close 幂等；需在接收线程仍在运行时调用，以解除 events() 的阻塞等待
+                session.close()
+                receiver.result()
+                audio_manager.cleanup()
+                print('Omni 实时对话已停止')
 
 if __name__ == '__main__':
     main()

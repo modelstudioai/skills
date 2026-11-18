@@ -1,65 +1,54 @@
-# 知识增强方案对比：RAG API 与[长期记忆](../concepts/long-term-memory.md)（Long Term Memory）
+# RAG 与[长期记忆](../concepts/long-term-memory.md)能力对比
 
-本页旨在为百炼平台开发者提供清晰、可落地的技术选型参考，系统对比两种核心知识增强能力：**RAG API**（面向外部知识库的[检索增强生成](../concepts/rag.md)服务）与**[长期记忆](../concepts/long-term-memory.md)（Long Term Memory, LTM）**（面向用户级状态的结构化持久化机制）。二者虽均用于扩展大模型的认知边界，但在设计目标、数据主权、时效粒度、调用范式及适用场景上存在本质差异。理解这些差异，有助于避免能力误用（如用 RAG 存储用户偏好）、规避架构风险（如用 LTM 托管企业文档），并提升系统稳定性与成本效益。
+在构建智能体（Agent）和企业级知识应用过程中，开发者常需在**外部知识增强**与**内部经验沉淀**两类能力间进行技术选型。RAG（Retrieval-Augmented Generation）API 侧重于将结构化/非结构化**静态知识库**作为可信外部源，支撑精准检索与生成；而[长期记忆](../concepts/long-term-memory.md)（Long Term Memory, LTM）服务则聚焦于对**动态交互过程中的用户事实、技能与画像**进行结构化建模与生命周期管理，实现个性化上下文延续。本页旨在从工程落地视角，系统对比二者在接口设计、能力边界、集成成本与适用阶段上的核心差异，为开发者提供可操作的技术选型参考。
 
 ## 关键维度对比
 
-| 维度 | RAG API | [长期记忆](../concepts/long-term-memory.md)（Long Term Memory） |
-|--------|---------|------------------------------|
-| **核心定位** | 外部知识库的**托管式检索增强服务**：将业务文档、数据库、音视频等非结构化/结构化数据接入模型推理链路，实现“用即查、查即答”。 | 用户级上下文的**结构化状态持久化机制**：跨会话保存用户偏好、行为特征、历史交互等高价值语义片段，实现“记所学、用所记”。 |
-| **输入格式** | 支持多源异构输入：<br>• 文档类：PDF/Word/Excel/PPT/TXT/HTML 等（通过 `/job/create` 或文件上传接口）<br>• 表格类：CSV/JSON（指定 `structureType: structured`）<br>• 多模态：JPG/PNG/MP4/MP3（需配置 `multimodalEmbeddingModelName`）<br>• 元数据：`category`、`tags`、自定义字段（通过 `metadata` 传入） | 严格结构化 JSON 输入：<br>• 必填：`memory_id`（字符串，全局唯一）<br>• 可选：`fragments[]`（每个含 `type`、`content`（JSON 对象）、`ttl_seconds`）<br>• 控制参数：`enable_auto_update`、`retrieval_strategy` |
-| **输出格式** | • 检索接口（`/knowledge/search`）：返回带 `score`、`chunk_id`、`content` 的结构化结果数组<br>• 问答接口（`/knowledge/chat`）：SSE 流式响应，含 `answer`、`references`（引用切片 ID 及原文）、`agent_id` 等字段<br>• 管理接口：标准 RESTful JSON（如 `{ "index_id": "idx-xxx", "status": "published" }`） | • 写入接口（`/v1/memory/upsert`）：返回 `success: true` 或错误码<br>• 查询接口（`/v1/memory/get`）：返回 `fragments[]` 数组，每个 fragment 包含 `id`、`type`、`content`、`created_at`、`expires_at`<br>• 自动注入：无显式输出，fragment 内容自动拼接至系统提示词（`system` message）中 |
-| **支持模型** | **不绑定具体模型**：RAG 能力由独立服务提供，问答接口可配置任意百炼支持的 LLM（如 `qwen3.7-plus`、`qwen-max`），模型仅负责生成最终答案，检索逻辑由 RAG 引擎完成。 | **强模型依赖**：<br>• 完整读写（`upsert` + `auto_update`）：仅限 `qwen-max-20240919`、`qwen-plus-20240919` 及后续明确标注 `ltm_enabled: true` 的模型<br>• 只读访问（`get_memory`）：基础模型（如 `qwen-turbo`）亦可调用查询接口，但无法触发自动更新 |
-| **API 端点** | 统一业务空间域名：<br>`https://{workspace_id}.cn-beijing.maas.aliyuncs.com`<br>• 知识库管理：`/api/v1/indices/rag/...`<br>• 数据导入：`/api/v1/connector/dash/...`<br>• 检索/问答：`/api/v1/indices/knowledge/search`、`/api/v2/apps/knowledge/chat` | 独立服务端点：<br>`https://dash.cn-beijing.maas.aliyuncs.com`（固定域名）<br>• 写入：`POST /v1/memory/upsert`<br>• 查询：`GET /v1/memory/get`<br>• （注：不共享 RAG 的 workspace_id 认证域） |
-| **认证方式** | API Key 鉴权：<br>`Authorization: Bearer <API-Key>`<br>Key 在控制台「API Key 管理」页获取 | API Key 鉴权：<br>`Authorization: Bearer <API-Key>`<br>Key 同一控制台，但需确保该 Key 已开通 Long Term Memory 权限 |
-| **计费方式** | 按**调用量分层计费**：<br>• 知识库管理操作（创建/删除/更新）：按次计费<br>• 数据导入（文件解析、切片、向量化）：按文档页数/字节数计费<br>• 检索与问答：按 token（输入+输出）计费，流式问答按实际返回 token 计量 | 按**存储量与时长计费**：<br>• 写入（`upsert`）：按写入的 fragment 总字节数计费（含 `content` 序列化后大小）<br>• 存储：按 `memory_id` 下所有 fragment 的日均占用字节数 × 存储天数计费<br>• 查询（`get`）：免费（不计费） |
-| **典型场景** | • 企业知识库问答（HR 制度、产品手册、技术文档）<br>• 客服工单辅助（检索历史解决方案）<br>• 数据库自然语言查询（NL2SQL）<br>• 图片/视频内容理解（多模态 RAG）<br>• 法律条文、医疗指南等专业领域检索 | • 个性化推荐（记住用户口味、设备偏好、常购品类）<br>• 智能客服连续对话（跨会话识别用户身份与历史诉求）<br>• 电商导购（记录浏览路径、加购意向、比价行为）<br>• SaaS 应用状态同步（用户界面偏好、常用筛选条件）<br>• 游戏 NPC 记忆玩家关键交互事件 |
-| **数据所有权与生命周期** | 数据归属**应用方**，存于百炼专属知识库存储区；知识库可随时删除，操作不可逆；文档/切片支持精细化增删改查。 | 数据归属**应用方**，以 `memory_id` 为单位隔离；单个 memory 下 fragment 最多 100 个，总大小 ≤ 2MB；支持 TTL 过期，`ttl_seconds=0` 表示永不过期（实际行为以运行时为准）。 |
-| **一致性与延迟** | 检索结果为**强一致性**（写入后立即可查）；知识库发布后检索即生效。 | **最终一致性**：写入后秒级内可被查询到；自动更新触发的写入可能存在 1~3 秒延迟。 |
+| 维度 | RAG API | [长期记忆](../concepts/long-term-memory.md)（LTM） |
+|------|---------|----------------|
+| **核心定位** | 外部知识增强：将预置文档、表格、音视频等作为权威知识源，服务于问答、搜索、摘要等任务 | 内部经验沉淀：将对话中产生的事实、技能、用户属性等作为可复用记忆节点，服务于 Agent 的上下文感知与个性化推理 |
+| **输入格式** | • 知识库创建：`structureType`（flat/hierarchical）、`knowledgeType`（document/table/image/multimedia）<br>• 数据导入：支持本地文件、OSS URL、文本内容（Base64 或 raw）<br>• 检索/问答：`query`（字符串或 ContentPart 数组，含 text/image_url）+ `agent_id` + 可选 `kb_search_configs` | • 写入：`messages`（OpenAI 格式数组，支持 text/image_url）、`user_id`、`project_id`（或 `profile_schema`）<br>• 检索：`messages`（触发语义召回）+ `user_id` + `memory_types` + `plan_version`（`lite`/`pro`） |
+| **输出格式** | • 检索（`/knowledge/search`）：返回 `chunks` 列表（含 `content`, `score`, `metadata`），不包含生成结果<br>• 问答（`/knowledge/chat`）：流式返回 `choices[].delta.content`，含模型基于检索结果的合成回答 | • 写入（同步/异步）：返回 `memory_nodes`（含 `id`, `type`, `content`, `score`, `created_at`）或 `event_id`<br>• 检索（`/memory_nodes/search`）：返回排序后的 `memory_nodes` 列表（含 `score`, `type`, `custom_content`, `source`），**不生成自然语言回答** |
+| **支持模型/能力** | • 嵌入模型：可指定 `embeddingModelName`（如 `text-embedding-v4`）<br>• 重排模型：可指定 `rerankModelName`（如 `qwen3-rerank`）<br>• Agent 封装：支持 `qwen3.7-plus` 等大模型 + `turbo`/`agentic` 策略 + 混排配置 | • 抽取模型：底层由平台统一调度，开发者不可见具体模型名；`plan_version=pro` 启用 Rerank 能力<br>• 记忆类型：原生支持 `observation`（事实）、`skill`（流程）、`user_profile`（结构化画像）三类语义节点<br>• 多模态：仅在启用多模态项目的 `messages` 中解析图片，其他场景忽略 |
+| **API 端点（Base URL）** | `https://{workspace_id}.cn-beijing.maas.aliyuncs.com`<br>路径示例：<br>• 创建知识库：`/api/v1/indices/rag/index/create_v2`<br>• 知识问答：`/api/v2/apps/knowledge/chat` | `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory`<br>路径示例：<br>• 写入记忆：`/add` 或 `/add-async`<br>• 检索记忆：`/memory_nodes/search`<br>• 查询画像：`/profile_schemas/{id}/user_profile` |
+| **认证方式** | `Authorization: Bearer <API-Key>`<br>API Key 在百炼控制台「API Key 管理」获取，需 RAM 子账号具备 `AliyunBailianDataFullAccess` 权限 | `Authorization: Bearer $DASHSCOPE_API_KEY`<br>使用同一套 DashScope API Key，但需 RAM 子账号具备 `AliyunBailianFullAccess`（或最小权限策略） |
+| **计费方式** | • 按调用量计费（知识库管理、数据导入、检索、问答均独立计费）<br>• 知识库存储按容量（GB/月）计费<br>• 嵌入/重排模型调用按 Token 计费（详见[计费说明](https://help.aliyun.com/product/420492.html)） | • **商业化起始时间：2026 年 8 月 20 日 10:00（北京时间）**<br>• `Add` 与 `Search` 接口区分 `Pro`/`Lite` 版本，影响抽取质量与 Rerank 能力<br>• 当前公测期免费，正式计费后按调用次数 + `plan_version` 分级计费 |
+| **典型场景** | • 客服知识库问答（产品文档、FAQ）<br>• 企业内部政策/制度检索<br>• 表格数据自然语言查询（销售报表分析）<br>• 图片/视频内容理解（如“找出所有含红色Logo的PPT截图”） | • Agent 记住用户偏好（“用户不吃香菜”，存为 `user_profile`）<br>• 自动归纳用户需求模式（“用户每次出差前都会问航班+酒店”，存为 `skill`）<br>• 追踪临时状态（“用户说‘明天要开会’”，存为 `observation` 并设置时效提醒）<br>• 多轮对话中跨会话复用上下文（避免重复提问） |
 
-## 适用场景建议
+## 各方案的适用场景建议
 
-### ✅ 优先选用 RAG API 当：
-- 你需要将**静态、批量、高价值的业务资料**（如 PDF 手册、Excel 产品表、内部 Wiki 页面）转化为可检索的知识资产；
-- 你的应用场景要求**精确溯源**（如客服需向用户展示答案出处原文）或**多模态理解**（如根据用户上传的故障图片匹配维修指南）；
-- 知识内容由**运营/法务/产品等非技术角色维护**，需要控制台可视化管理、版本回溯、权限分级；
-- 你希望**解耦知识管理与模型推理**，同一知识库可被多个不同模型（Qwen-Max/Qwen-Plus）复用；
-- 你需要对检索过程进行深度干预（如自定义嵌入/重排模型、调整切片策略、设置类目过滤）。
+### ✅ 选择 RAG API 当：
+- 你拥有**大量静态、权威、需版本管控的知识资产**（如 PDF 手册、数据库表、培训视频），且要求检索结果可追溯、可审计；
+- 应用目标是**提升问答准确性与信息覆盖广度**，而非建模用户行为；
+- 需要支持**多模态混合检索**（图文并茂的文档、带字幕的视频）；
+- 已有知识库管理流程（如定期更新 SOP 文档），需通过 API 实现自动化同步；
+- 对响应延迟敏感（如实时客服），且能接受 `knowledge/chat` 必须传完整历史消息的约束。
 
-### ✅ 优先选用长期记忆（LTM）当：
-- 你需要**跨会话、跨设备持续感知单个用户的状态**（如记住用户说“我不吃香菜”，下次点餐自动过滤）；
-- 用户数据具有**强结构化语义**（如 `{"type": "shipping_address", "content": {"province": "浙江", "city": "杭州"}}`），且需按类型高效检索；
-- 你追求**极简集成**：只需在对话请求中添加 `memory_id`，平台自动注入上下文，无需修改提示词工程；
-- 你依赖模型**自主进化记忆**（启用 `enable_auto_update` 后，模型可在回答中隐式更新偏好）；
-- 你需要**低延迟、高频次的用户状态读写**（如实时记录用户点击流并用于下一轮推荐），且能接受最终一致性。
+### ✅ 选择长期记忆（LTM）当：
+- 你的应用是**以 Agent 为核心**，需在多次对话中持续理解用户意图、积累个性化认知；
+- 需要**自动从对话中提炼结构化记忆**（如识别出“会议纪要整理”是一个可复用技能），而非人工维护知识库；
+- 关注**用户画像的动态演进与合规管理**（如 GDPR 下的用户数据生命周期控制）；
+- 希望降低 Agent 开发复杂度——LTM 提供开箱即用的 `observation`/`skill`/`profile` 三层抽象，无需自行设计向量库 Schema；
+- 接受异步写入（`add-async`）作为默认实践，并能处理 `event_id` 轮询逻辑。
 
-### ⚠️ 明确不建议混用的场景：
-- **❌ 用 LTM 存储企业文档**：LTM 单 memory 上限 2MB，且无文档解析、切片、多模态支持能力，无法替代知识库。
-- **❌ 用 RAG API 存储用户偏好**：RAG 不支持按 `user_id` 隔离数据，无 TTL 机制，管理成本高，且无法实现模型自动更新。
-- **❌ 在未启用 LTM 的模型上调用 `enable_auto_update`**：将导致自动更新失效，且无报错提示，仅静默忽略。
-- **❌ 对同一业务实体同时使用 RAG 和 LTM 存储相同信息**（如用户订单既存 RAG 文档又存 LTM fragment）：造成数据冗余、一致性维护困难。
+### ⚠️ 不建议混用或替代的情形：
+- **不要用 LTM 替代 RAG 做知识库问答**：LTM 不提供 `query → answer` 的端到端生成能力，其 `search` 返回的是记忆片段，仍需上层模型做推理整合；
+- **不要用 RAG 替代 LTM 做用户画像管理**：RAG 的 `document` 知识库无法天然支持 `user_id` 隔离、`profile_schema` 校验、软删除回溯等用户级数据治理能力；
+- **二者可协同，但需分层设计**：推荐架构为 —— LTM 负责管理 `user_id` 维度的个性化记忆，RAG 负责管理 `workspace_id` 维度的通用知识库；Agent 在生成前先调用 LTM 获取用户上下文，再调用 RAG 获取领域知识，最后融合决策。
 
-## 技术选型决策树（面向开发者）
+## 面向开发者的技术选型参考
 
-```mermaid
-graph TD
-    A[你的知识是关于什么？] -->|“企业文档/产品资料/外部数据”| B[RAG API]
-    A -->|“单个用户的偏好/行为/状态”| C[长期记忆 LTM]
-    B --> D{是否需要多模态支持？<br>是否需溯源引用？}
-    D -->|是| E[必须选 RAG API]
-    D -->|否| F[仍推荐 RAG API<br>（管理成熟、生态完善）]
-    C --> G{是否需模型自动更新？<br>是否需跨会话无缝感知？}
-    G -->|是| H[必须选 LTM<br>并选用 qwen-max/qwen-plus]
-    G -->|否| I[基础模型 + LTM 查询接口<br>或直接用应用层缓存]
-    B & C --> J[是否需严格数据隔离？]
-    J -->|按用户隔离| K[LTM 天然支持 memory_id 隔离]
-    J -->|按部门/项目隔离| L[RAG 知识库 + 类目/标签管理]
-```
+| 选型考量点 | RAG API | 长期记忆（LTM） | 建议动作 |
+|------------|---------|------------------|----------|
+| **首次集成复杂度** | ⚠️ 较高：需依次完成知识库创建 → 文件上传 → 切片管理 → Agent 发布 → 运行时调用，参数命名不一致（如 `index_id`/`pipelineId`/`id`） | ✅ 较低：只需 `user_id` + `messages` 即可触发抽取，SDK 封装完善（`agentscope-runtime`） | 新项目优先评估 LTM 快速验证可行性；已有知识资产团队可直接启动 RAG 落地 |
+| **数据主权与治理** | ✅ 强：知识库完全由客户控制，支持 OSS 直传、私有化部署选项、细粒度 RBAC | ⚠️ 中：记忆数据归属百炼平台，虽支持软删除与 `user_id` 隔离，但暂无自定义 TTL 或加密密钥 BYOK 支持 | 涉及金融/政务等强监管场景，RAG 更易满足等保要求；LTM 适用于互联网 SaaS 类应用 |
+| **多模态支持成熟度** | ✅ 生产就绪：`image`/`multimedia` 类型知识库已支持视觉感知问答（`visual_perception_qa`） | ⚠️ 有限：仅在启用多模态项目的 `messages` 中解析图片，且不保证所有场景生效 | 视觉理解是刚需时，RAG 是当前唯一稳定选项 |
+| **长期演进潜力** | 🔁 依赖知识库运营：效果提升取决于文档质量、切片策略、嵌入模型升级 | 🚀 平台驱动增强：`plan_version=pro` 将持续接入更优抽取模型与 Rerank 策略，开发者零改造即可受益 | 若团队缺乏 NLP 运维能力，LTM 的“托管式智能”更具可持续性 |
+| **调试与可观测性** | ✅ 丰富：各环节（切片、检索、重排）均有独立日志与指标，支持 `debug: true` 参数查看中间结果 | ⚠️ 有限：异步事件需轮询，同步接口超时风险存在，暂无细粒度中间结果透出 | 对调试效率要求极高时，RAG 提供更透明的链路追踪能力 |
 
-> **最后建议**：  
-> - **MVP 阶段**：若需求明确属于“用户状态”，直接启用 LTM 并选用 `qwen-plus-20240919`；若属于“企业知识”，优先构建 RAG 知识库。  
-> - **混合架构**：大型应用可并行使用——用 RAG 托管公司级知识，用 LTM 托管用户级画像，二者通过 `agent_config` 中的路由规则协同（例如：用户问“我的订单”，LTM 提供订单摘要；问“退货政策”，RAG 提供制度原文）。  
-> - **监控重点**：RAG 关注 `RETRIEVAL_TIMEOUT` 错误码与重排得分分布；LTM 关注 `memory_id` 的碎片数量与平均 TTL，预防存储超限。
+> **总结一句话选型口诀**：  
+> **“管知识，选 RAG；记用户，用 LTM；要准确，靠 RAG；要聪明，靠 LTM。”**  
+> 二者非竞争关系，而是百炼平台面向不同抽象层级（知识层 vs 认知层）提供的互补能力。建议在 Agent 架构设计初期即明确分层职责，避免能力错配导致后期重构成本激增。
 
 ## 被对比主题页
 

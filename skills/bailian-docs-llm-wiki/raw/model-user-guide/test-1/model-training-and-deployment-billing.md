@@ -6,7 +6,7 @@
 
 ### 文本生成模型-千问
 
-**说明**模型训练流程请参见[模型调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)。训练完成后的新模型需先完成**模型部署**，才能评测和调用。
+**说明**模型训练流程请参见[模型调优](https://help.aliyun.com/zh/model-studio/model-training-overview)。训练完成后的新模型需先完成**模型部署**，才能评测和调用。
 
 **计费方式**
 
@@ -204,7 +204,7 @@ qwen-plus-character-2025-11-06
 
 ### 图像生成模型-万相
 
-**说明**模型训练流程请参见[图像生成模型调优](raw/model-user-guide/fine-tuning/wan-image-generation-finetune-guide.md)。训练完成后的新模型需先完成**模型部署**，才能调用。
+**说明**模型训练流程请参见[图像生成模型调优](https://help.aliyun.com/zh/model-studio/wan-image-generation-finetune-guide)。训练完成后的新模型需先完成**模型部署**，才能调用。
 
 **计费方式**
 
@@ -283,7 +283,7 @@ wan2.7-image
 
 ### 图像生成模型-千问
 
-**说明**模型训练流程请参见[图像生成模型调优](raw/model-user-guide/fine-tuning/wan-image-generation-finetune-guide.md)。训练完成后的新模型需先完成**模型部署**，才能调用。
+**说明**模型训练流程请参见[图像生成模型调优](https://help.aliyun.com/zh/model-studio/wan-image-generation-finetune-guide)。训练完成后的新模型需先完成**模型部署**，才能调用。
 
 **计费方式**
 
@@ -396,7 +396,7 @@ qwen-image-2.0-pro
 
 ### 视频生成模型-万相
 
-**说明**模型训练流程请参见[模型调优](raw/model-user-guide/fine-tuning/wan-video-generation-finetune-guide.md)。训练完成后的新模型需先完成**模型部署**，才能调用。
+**说明**模型训练流程请参见[模型调优](https://help.aliyun.com/zh/model-studio/wan-video-generation-finetune-guide)。训练完成后的新模型需先完成**模型部署**，才能调用。
 
 **计费方式**
 
@@ -571,7 +571,7 @@ wan2.2-kf2v-flash
 
 ### 语音合成模型-CosyVoice
 
-**说明**CosyVoice 模型调优服务仅支持**华北2（北京）**地域。模型训练流程请参见[CosyVoice模型调优](raw/model-user-guide/fine-tuning/fine-tune-speech-synthesis-model/fine-tune-speech-synthesis-model-by-api.md)。训练完成后的新模型需先完成**模型部署**，才能调用。
+**说明**CosyVoice 模型调优服务仅支持**华北2（北京）**地域。模型训练流程请参见[CosyVoice模型调优](https://help.aliyun.com/zh/model-studio/fine-tune-speech-synthesis-model-by-api)。训练完成后的新模型需先完成**模型部署**，才能调用。
 
 **计费方式**
 
@@ -597,25 +597,25 @@ wan2.2-kf2v-flash
 
 ### 文本生成模型-千问
 
-#### 按使用时长计费（预置吞吐）
+#### 按使用时长计费（吞吐预留·高速模式）
 
 `费用 = 使用时长 × (输入 TPM 单价 × 输入 TPM + 输出 TPM 单价 × 输出 TPM)`
 
 后付费按小时计算：使用时长单位为小时，单价取下表"持续 1 小时"列；预付费按天计算：使用时长单位为天，单价取下表"持续 1 天"列。
 
 -   预付费订单支付后实时生效，有效期 N 天至第 N 天 23:59 结束。
--   预付费订单到期后，将延后2小时停止服务，停止后资源保留14小时后释放。
+-   预付费订单到期后立即停止服务（不可调用，仍可续费），停机 2 小时后资源释放。
 -   预付费订单支持提前终止服务，已使用部分按 1.2 倍系数结算退费。详见[降配退款规则说明](https://help.aliyun.com/zh/user-center/description-of-downgrade-refund-rules)。
 -   后付费时，如果账户欠费，部署的资源将不再可用且不计费，欠费缴清后服务恢复。
 
-当模型输入超过最长输入 Token 时，相关调用将自动切换为当前模型的按量付费模式；超出购买的 TPM 量时，按创建时选择的溢出策略处理（“自动溢出”切换为按量付费，“仅使用 PTU 容量”返回 429）。此时，推理性能可能下降，将受业务空间中当前快照模型的公共流量的管控，[费用](raw/model-user-guide/test-1/model-pricing.md)按模型调用（按量付费）标准计收。
+当模型输入超过最长输入 Token 时，相关调用将自动切换为当前模型的按量付费模式；超出购买的 TPM 量时，按创建时选择的溢出策略处理（“自动溢出”切换为按量付费，“仅使用预留容量”返回 429）。此时，推理性能可能下降，将受业务空间中当前快照模型的公共流量的管控，[费用](raw/model-user-guide/test-1/model-pricing.md)按模型调用（按量付费）标准计收。
 
 -   此时（仅“自动溢出”策略下），调用 API 返回 Header 将包含：`x-dashscope-ptu-overflow:true`。
 -   TPM 统计请前往：[模型监控（北京）](https://bailian.console.aliyun.com/cn-beijing/model/telemetry)。
 
 缩容场景（降配）的具体降费退费规则请参考：[降配退款规则说明](https://help.aliyun.com/zh/user-center/description-of-downgrade-refund-rules)。
 
-**说明**PTU 部署支持长输入阶梯容量系数和缓存折扣，详见[预置吞吐长输入与缓存](raw/_short/ptu-long-input-and-cache-f0b1f22118ea9791.md)。
+**说明**吞吐预留支持长输入阶梯容量系数和缓存折扣，详见[吞吐预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-conversion-h2)。
 
 #### 华北2（北京）
 
@@ -2555,7 +2555,7 @@ MU5
 
 ### 图像生成模型-万相
 
-经过SFT-LoRA高效微调的万相图像生成模型，部署免费，调用按微调的基础模型的标准调用价格计费。模型训练和部署流程请参见[图像生成模型调优](raw/model-user-guide/fine-tuning/wan-image-generation-finetune-guide.md)。
+经过SFT-LoRA高效微调的万相图像生成模型，部署免费，调用按微调的基础模型的标准调用价格计费。模型训练和部署流程请参见[图像生成模型调优](https://help.aliyun.com/zh/model-studio/wan-image-generation-finetune-guide)。
 
 **模型名称**
 
@@ -2571,7 +2571,7 @@ wan2.7-image
 
 ### 图像生成模型-千问
 
-经过SFT-LoRA高效微调的千问图像生成模型，部署免费，调用按微调的基础模型的标准调用价格计费。模型训练和部署流程请参见[图像生成模型调优](raw/model-user-guide/fine-tuning/wan-image-generation-finetune-guide.md)。
+经过SFT-LoRA高效微调的千问图像生成模型，部署免费，调用按微调的基础模型的标准调用价格计费。模型训练和部署流程请参见[图像生成模型调优](https://help.aliyun.com/zh/model-studio/wan-image-generation-finetune-guide)。
 
 **模型名称**
 

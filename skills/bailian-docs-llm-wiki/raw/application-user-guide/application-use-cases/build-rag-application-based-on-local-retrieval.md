@@ -4,7 +4,7 @@
 
 如果您希望将知识库部署在本地，实现灵活的文档切分与嵌入模型选择，请参考本文档进行操作。
 
-> 如果您希望将知识库部署在云端，直观、快速地创建RAG应用，请使用阿里云百炼提供的[0代码构建RAG应用](https://help.aliyun.com/zh/model-studio/build-knowledge-base-qa-assistant-without-coding)功能。
+> 如果您希望将知识库部署在云端，直观、快速地创建RAG应用，请使用阿里云百炼提供的[0代码构建RAG应用](raw/_short/build-knowledge-base-qa-assistant-without-coding-117468a8b3869dc4.md)功能。
 
 ## 方案概览
 
@@ -26,7 +26,7 @@ RAG应用能够根据用户提供的文档生成回复，有效缓解大模型�
 
 ### 1\. 解压文件
 
-下载[local\_rag.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250414/odwvrb/local_rag.zip)并解压，您可以看到如下图所示的目录结构：![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4139126271/p845330.png)
+下载[local\_rag.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9010.zip)并解压，您可以看到如下图所示的目录结构：![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4139126271/p845330.png)
 
 其中`File/Structured`用于存放用户上传的结构化数据，`File/Unstructured`用于存放用户上传的非结构化数据；`images`中的两张图片用于设置对话角色的头像；`VectorStore`用于存放用户创建的知识库。
 

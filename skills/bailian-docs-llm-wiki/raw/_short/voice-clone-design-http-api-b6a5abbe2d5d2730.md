@@ -304,6 +304,10 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 
 音色 ID。
 
+`target_model`string
+
+驱动音色的目标模型（语音合成或实时语音对话）。
+
 `gmt_create`string
 
 创建时间。
@@ -370,6 +374,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
         "voice_list": [
             {
                 "voice_id": "qwen-audio-3.0-tts-flash-myvoice-xxxxxx",
+                "target_model": "qwen-audio-3.0-tts-flash",
                 "gmt_create": "2024-12-11 13:38:02",
                 "gmt_modified": "2024-12-11 13:38:02",
                 "status": "OK"

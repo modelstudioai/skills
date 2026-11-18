@@ -1,8 +1,8 @@
-# 生命周期
+# 版本管理
 
-开通、关闭、停用和启用 MCP 服务。
+上传、查询和下载 Skill 版本。
 
-生命周期接口用于开通和关闭官方 MCP，以及停用和启用自定义 MCP。
+版本管理接口用于为自定义 Skill 上传新版本，查询版本列表和详情，以及获取版本 ZIP 包的下载地址。
 
 接口
 
@@ -10,26 +10,28 @@
 
 说明
 
-[开通 MCP](raw/application-api-reference/overview/overview/activate.md)
+[创建版本](raw/application-api-reference/overview/overview/create.md)
 
-POST `/{mcpCode}/activate`
+POST `/api/v1/skills/{skill_id}/versions`
 
-开通官方 MCP
+上传新版本 ZIP 包
 
-[关闭官方 MCP](raw/application-api-reference/overview/overview/deactivate.md)
+[列出版本](raw/application-api-reference/overview/overview/list.md)
 
-POST `/{mcpCode}/deactivate`
+GET `/api/v1/skills/{skill_id}/versions`
 
-关闭官方 MCP
+分页查询版本
 
-[停用自定义 MCP](raw/application-api-reference/overview/overview/disable.md)
+[获取版本详情](raw/application-api-reference/overview/overview/get.md)
 
-POST `/{mcpCode}/disable`
+GET `/api/v1/skills/{skill_id}/versions/{version}`
 
-停用自定义 MCP
+查询指定版本
 
-[启用自定义 MCP](raw/application-api-reference/overview/overview/enable.md)
+[下载版本 ZIP](raw/application-api-reference/overview/overview/download.md)
 
-POST `/{mcpCode}/enable`
+GET `/api/v1/skills/{skill_id}/versions/{version}/content`
 
-启用自定义 MCP
+获取 ZIP 包的临时下载地址
+
+版本号格式为 `major.minor`，由服务端递增，不能指定。旧版本保留。挂载到智能体时必须指定具体版本，后续上传新版本不影响已挂载的智能体。

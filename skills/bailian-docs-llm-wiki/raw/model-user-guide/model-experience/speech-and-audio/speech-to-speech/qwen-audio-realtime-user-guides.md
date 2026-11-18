@@ -1533,7 +1533,6 @@ Qwen-Audio-Realtime 3.0 和 3.1 的 Plus、Flash 型号均支持即时热词，�
     "type": "session.update",
     "session": {
         "input_audio_transcription": {
-            "model": "fun-asr",
             "corpus": {
                 "vocabulary": {
                     "祺元": 50

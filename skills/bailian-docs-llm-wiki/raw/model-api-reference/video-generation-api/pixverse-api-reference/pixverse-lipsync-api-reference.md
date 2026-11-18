@@ -217,7 +217,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 ```
 import dashscope
 import os
-from dashscope.v2 import DashScopeError
+from dashscope import DashScopeError
 
 # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
 # 获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key

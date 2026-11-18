@@ -93,7 +93,7 @@ except Exception as e:
 import os
 import httpx
 import dashscope
-from dashscope.v2 import DashScopeError
+from dashscope import DashScopeError
 
 # 通过自定义 HTTP 客户端在请求头中接入 AI 安全护栏服务
 client = dashscope.Client(

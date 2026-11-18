@@ -45,11 +45,12 @@ designed = client.audio.voice_design.create(
     target_model=target_model,
     voice_prompt="沉稳的中年男性播音员，音色低沉浑厚，富有磁性，语速平稳，吐字清晰，适合用于新闻播报或纪录片解说。",
     preview_text="各位听众朋友，大家好，欢迎收听晚间新闻。",
-    preferred_name="announcer",
-    language="zh",
+    prefix="announcer",
+    language_hints=["zh"],
     parameters={"sample_rate": 24000, "response_format": "wav"},
 )
-voice_id = designed.voice
+# voice_id 形如 {target_model}-vd-{prefix}-{唯一ID}，其中 prefix 即上方传入的音色名前缀
+voice_id = designed.voice_id
 print(f"voice_id: {voice_id}")
 with open("preview.wav", "wb") as f:
     f.write(base64.b64decode(designed.preview_audio["data"]))

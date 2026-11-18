@@ -1,57 +1,42 @@
 # frameworks
 
-`frameworks` 是百炼平台为简化大模型应用开发而提供的框架集成能力，支持主流开源框架与百炼 API 的快速对接。开发者可通过标准接口调用百炼的模型服务、工具调用、RAG 等能力，无需手动封装 HTTP 请求或处理鉴权细节。该能力目前以插件/适配器形式提供，需配合对应框架版本使用。
+`frameworks` 是百炼平台提供的标准化集成层，用于将大模型能力无缝嵌入主流 AI 开发框架中，降低工程接入成本。当前支持 LlamaIndex 和 Spring AI Alibaba 两大框架，通过统一的适配器封装模型调用、流式响应、工具调用等能力。所有集成均基于百炼 v3.2+ API 规范实现，需配合对应 SDK 版本使用。
 
-## 支持的模型/功能
+## 支持的模型与功能
 
-当前支持通过框架集成调用以下核心能力：
-- 百炼全量托管模型（如 `qwen-max`、`qwen-plus`、`qwen-turbo`）的文本生成；
-- 内置 RAG 检索增强（需配合 `llamaindex` 的 `QwenRetriever` 或 `Spring AI Alibaba` 的 `QwenEmbeddingClient`）；
-- 工具调用（Function Calling）和结构化输出（JSON Schema）；
-- 流式响应（`stream=true`）及[异步任务](../concepts/asynchronous-task.md)提交（`async=true`）。
-
-> **注意**：`Spring AI Alibaba` 文档中声明支持 `qwen-vl` 多模态模型，但 [框架集成 (raw/application-api-reference/frameworks.md)](../../raw/application-api-reference/frameworks.md) 未列出该模型，且实测 v0.9.2 版本 SDK 会返回 `model_not_supported` 错误——请以 [LlamaIndex](../../raw/application-api-reference/frameworks/llamaindex.md) 文档中明确列出的模型列表为准。
+- **LlamaIndex**：支持 `llm`, `embed_model`, `retriever` 等核心组件注入，兼容 `SimpleDirectoryReader`、`VectorStoreIndex` 等常用模块；完整支持 RAG 流程中的异步查询、元数据过滤与自定义 prompt 模板。详见 [框架集成 (raw/application-api-reference/frameworks.md)](../../raw/application-api-reference/frameworks.md)。
+- **Spring AI Alibaba**：提供 `AlibabaAIClient` 实现 `ChatClient` 和 `EmbeddingClient` 接口，支持 `StreamingChatClient`、`RetryTemplate` 集成及 Spring Boot 自动配置；已验证兼容 Spring AI 0.8.1+ 和 Spring Boot 3.2+。该实现细节见 [Spring AI Alibaba](../../raw/application-api-reference/frameworks/spring-ai-alibaba.md)。
 
 ## 关键参数
 
-所有框架集成均透传以下关键参数（命名与百炼 OpenAPI 一致）：
-- `model`: 必填，模型 ID（如 `"qwen-max"`）；
-- `temperature`: 控制随机性（0.0–2.0，默认 1.0）；
-- `top_p`: 核采样阈值（0.0–1.0，默认 0.8）；
-- `max_tokens`: 输出最大 token 数（默认 2048，上限 8192）；
-- `tools`: 工具定义数组（仅当启用 Function Calling 时有效）；
-- `response_format`: 可设为 `{"type": "json_object"}` 启用 JSON 结构化输出。
+| 参数名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| `model` | string | 是 | 百炼模型 ID（如 `qwen-max`, `qwen-plus`），必须为当前框架支持的模型列表内项 |
+| `api_key` | string | 否 | 若未通过环境变量 `QWEN_API_KEY` 设置，则需显式传入；优先级高于环境变量 |
+| `base_url` | string | 否 | 默认为 `https://dashscope.aliyuncs.com/compatible-mode/v1`；若使用私有部署实例，需覆盖此值 |
+| `stream` | boolean | 否 | 仅 LlamaIndex 的 `LLM` 组件生效；设为 `true` 时启用逐 token [流式输出](../concepts/streaming-output.md)（[LlamaIndex](../../raw/application-api-reference/frameworks/llamaindex.md)） |
+
+> **注意**：Spring AI Alibaba 的 `temperature` 参数默认值为 `0.8`，而 LlamaIndex 适配器中同名参数默认为 `0.1`，二者行为不一致，建议在业务代码中显式指定以避免非预期采样差异。
 
 ## 使用方式
 
-1. **安装适配器包**：  
-   - LlamaIndex：`pip install llama-index-llms-bailian`  
-   - Spring AI Alibaba：`implementation 'com.alibaba.spring.ai:spring-ai-alibaba-spring-boot-starter:0.9.2'`
-
-2. **初始化客户端**（以 LlamaIndex 为例）：  
-   ```python
-   from llama_index.llms.bailian import Bailian
-   llm = Bailian(
-       model="qwen-max",
-       api_key="YOUR_API_KEY",
-       endpoint="https://dashscope.aliyuncs.com/compatible-mode/v1"
-   )
+1. 安装对应框架 SDK 及百炼适配器：
+   ```bash
+   # LlamaIndex 场景
+   pip install llama-index-core llama-index-llms-qwen
+   # Spring AI Alibaba 场景
+   ./gradlew dependencies --include spring-ai-alibaba-spring-boot-starter
    ```
-
-3. **调用示例**：  
-   ```python
-   response = llm.complete("你好，请用中文简要介绍百炼平台。")
-   print(response.text)
-   ```
-
-详细配置项与框架特有方法请参考 [Spring AI Alibaba](../../raw/application-api-reference/frameworks/spring-ai-alibaba.md) 和 [LlamaIndex](../../raw/application-api-reference/frameworks/llamaindex.md) 的独立文档。
+2. 初始化客户端并注入框架：
+   - LlamaIndex：`QwenLLM(model="qwen-max", api_key="...")`
+   - Spring AI Alibaba：在 `application.yml` 中配置 `spring.ai.alibaba.base-url` 和 `spring.ai.alibaba.api-key`
+3. 调用框架原生接口（如 `index.as_query_engine().query("...")` 或 `chatClient.call(...)`）
 
 ## 限制和注意事项
 
-- 所有框架集成均**不支持自定义模型微调部署**，仅限调用百炼平台托管的公开模型；
-- 流式响应在 Spring AI Alibaba 中需显式启用 `StreamingChatClient`，而 LlamaIndex 默认支持 `stream=True` 参数；
-- 跨区域访问（如华东节点调用华北模型）可能触发额外延迟，建议将 `endpoint` 显式指定为与模型部署区匹配的域名；
-- 若遇到 `401 Unauthorized`，请确认 `api_key` 具备 `bailian:InvokeModel` 权限，并检查是否误用了 DashScope 的全局密钥而非百炼专属密钥——该问题在 [框架集成 (raw/application-api-reference/frameworks.md)](../../raw/application-api-reference/frameworks.md) 的 FAQ 部分有明确说明。
+- 单次请求最大上下文长度受所选模型限制（如 `qwen-max` 为 32768 tokens），超出将触发 `400 Bad Request`；框架层不自动截断或分块。
+- LlamaIndex 的 `ToolRetriever` 尚未支持百炼[函数调用](../concepts/function-calling.md)（Function Calling）协议，仅支持传统 `QueryEngine` 流程；相关能力计划在 Q3 发布，当前请参考 [LlamaIndex](../../raw/application-api-reference/frameworks/llamaindex.md) 的已知限制章节。
+- 所有框架集成均**不支持**跨 Region 调用（例如华东1 区应用调用华北2 区部署的百炼实例），`base_url` 必须与实际部署区域严格匹配。
 
 ## 来源文档
 

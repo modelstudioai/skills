@@ -286,6 +286,37 @@ curl 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/resp
   }'
 ```
 
+## 通过 Anthropic 兼容接口传入 PDF URL
+
+qwen3.8-max、qwen3.8-flash 及 qwen4 系列模型支持通过 Anthropic 兼容 Messages API 直接传入 PDF 文件 URL。在 `messages[].content` 中使用 `type: "document"` 内容块，将 `source.type` 设置为 `url`，并在 `source.url` 中指定 PDF 文件 URL。
+
+以下示例使用华北2（北京）地域。将 `{WorkspaceId}` 替换为业务空间 ID，并将环境变量 `DASHSCOPE_API_KEY` 设置为自己的百炼 API Key。
+
+```
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/v1/messages' \
+  --header 'Content-Type: application/json' \
+  --header "x-api-key: $DASHSCOPE_API_KEY" \
+  --data '{
+    "model": "qwen3.8-max",
+    "max_tokens": 1024,
+    "messages": [{
+      "role": "user",
+      "content": [
+        {
+          "type": "document",
+          "source": {
+            "type": "url",
+            "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260616/qmycjl/1506.02640v5.pdf"
+          }
+        },
+        {"type": "text", "text": "总结一下这个PDF文档的内容"}
+      ]
+    }]
+  }'
+```
+
+完整参数说明见 [Anthropic兼容-Messages](raw/model-api-reference/qwen-api-reference/anthropic-api-messages.md)。
+
 ## 使用Base64输入
 
 如果无法提供文件的URL地址，也可以将PDF文件以Base64编码字符串的形式传入。使用 `file_data` 时，`filename` 字段为必填项。
@@ -377,7 +408,7 @@ print(response.output.choices[0].message.content[0]["text"])
 
 #### Anthropic
 
-Anthropic 兼容接口目前仅支持 Base64 PDF 输入，不支持 `document.source.type="url"`。
+Anthropic 兼容接口支持 Base64 PDF 输入；qwen3.8-max、qwen3.8-flash 及 qwen4 系列还支持通过 `document.source.type="url"` 传入 PDF 文件 URL。
 
 Anthropic 兼容接口支持通过 `document.source` 传入 Base64 PDF。下载[示例 PDF](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260616/qmycjl/1506.02640v5.pdf)并保存为 `report.pdf`，或替换为自己的 PDF 文件。Python 示例需要安装 `anthropic` SDK。
 
@@ -456,7 +487,7 @@ EOF
 
 ## 请求参数
 
-以下参数表适用于 Chat Completions。Responses API 使用 `type: "input_file"` 和 `file_url`；Anthropic 兼容接口使用 `type: "document"`，并在 `source` 中设置 `type: "base64"`、`media_type: "application/pdf"` 和 `data`（不含 Data URI 前缀的 Base64 字符串）。 DashScope 使用 `content` 数组中包含 `file_url` 或 `file_data` 的元素传入文件。
+以下参数表适用于 Chat Completions。Responses API 使用 `type: "input_file"` 和 `file_url`；Anthropic 兼容接口使用 `type: "document"`，URL 输入在 `source` 中设置 `type: "url"` 和 `url`，Base64 输入设置 `type: "base64"`、`media_type: "application/pdf"` 和 `data`（不含 Data URI 前缀的 Base64 字符串）。URL 输入支持 qwen3.8-max、qwen3.8-flash 及 qwen4 系列模型。DashScope 使用 `content` 数组中包含 `file_url` 或 `file_data` 的元素传入文件。
 
 **说明**协议中 URL 部分仅支持字符串输入，不支持 list（数组）形式。
 

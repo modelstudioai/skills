@@ -1,84 +1,53 @@
 # security api guide
 
-Security API 是阿里云百炼平台提供的 Agent 安全防护数据查询与告警管理接口集合，面向工作空间维度提供防护概况、资产统计、策略配置、告警查询与导出等能力。所有接口均基于 RESTful 设计，需通过 API Key 鉴权，并按工作空间 ID 和地域拼装 Endpoint。开发者应首先完成认证配置与工作空间准备，再按需调用对应接口。
+Security API 提供对 Agent 安全防护状态、策略配置及安全告警的程序化访问能力，支持查询防护总览、资产分布、策略开关、告警列表与详情，以及告警批量导出。所有接口均基于工作空间路由，通过 API Key 鉴权，适用于安全运营、自动化巡检与合规审计等场景。调用前需确保已开通百炼服务并获取有效 API Key 与工作空间 ID。
 
 ## 支持的模型/功能
 
-Security API 不涉及模型推理，而是提供**Agent 安全治理数据面能力**，覆盖以下核心功能模块：
+Security API 不涉及大模型推理，而是面向 Agent 安全治理的**数据面 API**，覆盖以下核心功能模块：
 
-- **防护概况**：查询最近 24 小时防护总览（`/overview`）与 Agent 资产汇总（`/asset_summary`），包括能力开关状态、各模块覆盖情况及拦截统计。
-- **策略管理**：查询全量安全策略列表（`/policies`），共 11 条固定策略，按 `risk_domain` 分组（如 `model_interaction`、`runtime_tool` 等），含启用状态与免费标识。
-- **告警全生命周期操作**：
-  - 查询告警列表（`/agent_logs`），支持游标分页与多维筛选（风险等级、资产类型、处置状态等）；
-  - 查询单条告警详情（`/agent_logs/{alert_id}`），返回原始风险上下文与处置建议；
-  - 提交导出任务（`/export_agent_logs`），支持按当前筛选条件导出全部告警；
-  - 查询导出状态与下载链接（`/export_status`）。
+- **防护概况**：`GET /overview`（固定查询最近 24 小时）与 `GET /asset_summary`，分别返回防护能力开关、模块覆盖状态、拦截统计，以及 Agent 及其挂载资源（模型、工具、技能、知识库等）的去重计数。
+- **策略管理**：`GET /policies` 返回全量 11 条安全策略（如 `prompt_attack`、`rag_poisoning`、`baseline_check`），含启用状态、风险域分组与免费标识。
+- **告警生命周期**：`GET /agent_logs`（游标分页）、`GET /agent_logs/{alert_id}`（详情）、`POST /export_agent_logs`（提交导出任务）、`GET /export_status`（轮询进度与下载链接），构成完整的告警查询与导出链路。
 
-> **注意**：文档 2 中将 `/agent_logs` 归类为“策略与告警”下的能力，而文档 7 单独命名为“查询告警列表”，二者内容一致；但文档 2 的表格中路径写为 `/agent_logs`，文档 9 的路径为 `/agent_logs/{alert_id}`，命名逻辑统一，无实质矛盾。另需注意，[查询 Agent 资产](../../raw/application-api-reference/security-api-guide/security-api-protection-overview/security-api-assets.md) 接口实际属于防护概况范畴，而非策略管理，文档 2 的分类层级略显模糊，建议以接口路径语义为准。
+> **注意**：文档 6 中 `/agent_logs` 的请求参数 `status_list`（array 类型）与文档 7、8、9 中实际使用的字符串型 `status` 参数存在不一致；实际调用应以文档 6 的 `status_list` 为准（支持多值筛选），其余文档未体现该字段，属描述遗漏。建议优先参考 [查询告警列表](../../raw/application-api-reference/security-api-guide/security-api-policies/security-api-alerts.md) 的完整参数定义。
 
 ## 关键参数
 
-- **全局必需**：
-  - `Authorization: Bearer <your-api-key>`：通过 HTTP Header 传递，API Key 获取方式详见 [认证](../../raw/application-api-reference/security-api-guide/security-api-authentication.md)。
-  - `workspace_id` 与 `region`：用于拼装 Base URL，当前仅支持 `cn-beijing` 地域，格式为 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio/security`。
-- **告警相关接口特有参数**：
-  - `/agent_logs`：支持 `current_page`、`page_size`、`risk_level`、`status_list`、`asset_type`、`order_by`、`lang` 等查询参数；
-  - `/export_agent_logs`：请求体需包含 `params` 字段，其值为告警列表查询参数的 JSON 字符串（注意需手动序列化，非嵌套对象），例如 `"{\"risk_level\":\"high\"}"`；
-  - `/export_status`：必须传 `export_id` 查询参数，值来自 `/export_agent_logs` 响应。
+- **Endpoint 拼装**：必须使用 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio/security`，其中 `workspace_id` 为控制台右上角获取的实际 ID，`region` 固定为 `cn-beijing`（当前唯一支持地域）。
+- **鉴权头**：所有请求必须携带 `Authorization: Bearer <your-api-key>`，API Key 需在 [百炼控制台 API Key 页面](https://bailian.console.aliyun.com/?tab=model#/api-key) 创建，详见 [认证](../../raw/application-api-reference/security-api-guide/security-api-authentication.md)。
+- **告警筛选参数**（`/agent_logs`）：支持 `risk_level`（`high`/`medium`/`low`）、`status_list`（数组，如 `["intercepted","unhandled"]`）、`asset_type`（`agent`/`tool`/`skill` 等）、`order_by`（默认 `check_time`）与 `order`（`desc` 默认）等，用于精准过滤。
+- **导出参数**（`/export_agent_logs`）：`params` 字段需传入 JSON 字符串（非对象），内容为 `/agent_logs` 查询参数的序列化结果（如 `{"risk_level":"high","status_list":["intercepted"]}`），格式要求严格，详见 [导出告警](../../raw/application-api-reference/security-api-guide/security-api-policies/security-api-export.md)。
 
 ## 使用方式
 
-1. **准备环境**：  
-   登录百炼控制台，开通服务并创建 API Key（见 [认证](../../raw/application-api-reference/security-api-guide/security-api-authentication.md)）；在控制台右上角获取 `workspace_id`。
-
-2. **构造请求**：  
-   拼接 Base URL，例如：  
-   `https://ws-abc123.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio/security`
-
-3. **调用示例（curl）**：  
-   ```bash
-   # 查询防护总览
-   curl -X GET "$BASE_URL/overview" \
-     -H "Authorization: Bearer $BAILIAN_API_KEY"
-
-   # 查询高风险告警（第1页，每页20条）
-   curl -X GET "$BASE_URL/agent_logs?risk_level=high&current_page=1&page_size=20" \
-     -H "Authorization: Bearer $BAILIAN_API_KEY"
-
-   # 导出上述筛选结果
-   curl -X POST "$BASE_URL/export_agent_logs" \
-     -H "Authorization: Bearer $BAILIAN_API_KEY" \
-     -H "Content-Type: application/json" \
-     -d '{"lang":"zh","params":"{\"risk_level\":\"high\"}"}'
-
-   # 查询导出状态（假设 export_id=131231）
-   curl -X GET "$BASE_URL/export_status?export_id=131231" \
-     -H "Authorization: Bearer $BAILIAN_API_KEY"
-   ```
-
-4. **错误处理**：  
-   所有错误响应均含 `request_id`，可用于问题定位；网关层错误（如 `InvalidApiKey`、`Endpoint.AccessDenied`）返回扁平结构 `{"request_id", "code", "message"}`；业务错误返回嵌套结构 `{"error": {"code", "message"}}`。详细错误码参考 [Security API 错误码](../../raw/application-api-reference/security-api-guide/security-api-errors.md)。
+1. **初始化**：确认工作空间 ID 与 `cn-beijing` 地域，配置 `BASE_URL`；创建并保管好 API Key。
+2. **基础查询**：直接调用 `GET /overview` 或 `GET /asset_summary` 获取全局快照；调用 `GET /policies` 确认当前策略启用状态。
+3. **告警操作**：
+   - 先用 `GET /agent_logs?risk_level=high&status_list=["unhandled"]` 获取待处理告警列表；
+   - 对关键告警 ID 调用 `GET /agent_logs/{alert_id}` 获取 `risk_detail`（原始 Prompt）与 `risk_handle`（拦截话术）；
+   - 如需批量分析，用 `POST /export_agent_logs` 提交导出任务，再轮询 `GET /export_status?export_id=xxx` 直至 `export_status == "success"` 且 `link` 非空后下载 Excel。
+4. **错误处理**：检查响应 `success` 字段；若为 `false`，解析 `error.code`（网关层如 `InvalidApiKey`，业务层如 `12000094`）与 `message`，结合 [Security API 错误码](../../raw/application-api-reference/security-api-guide/security-api-errors.md) 进行定位。
 
 ## 限制和注意事项
 
-- **地域限制**：当前仅支持 `cn-beijing` 地域，Endpoint 中 `region` 固定为此值，其他地域将返回 `BadRequest.IllegalEndpoint`（400）。
-- **分页机制**：告警列表（`/agent_logs`）使用游标分页，响应中 `next_page` 字段指示下一页页码；导出任务（`/export_agent_logs`）不支持分页，始终导出全量匹配记录。
-- **策略与资产接口无参数**：`/policies` 和 `/asset_summary` 为无参 GET 接口，不支持筛选或分页。
-- **导出参数格式严格**：`/export_agent_logs` 的 `params` 字段必须是合法 JSON 字符串（双引号需转义），且字段名需与 `/agent_logs` 查询参数完全一致（如 `risk_level`，非 `RiskLevel`），否则返回 `400` 参数校验失败。
-- **敏感信息保护**：API Key 具有账号级权限，严禁硬编码、提交至 Git 或暴露于前端，应使用环境变量或密钥管理服务存储。
-- **响应字段空值处理**：`/asset_summary` 接口对未统计到的资源类型返回 `null` 而非 `0`，调用方需做空值判断（见 [查询 Agent 资产](../../raw/application-api-reference/security-api-guide/security-api-protection-overview/security-api-assets.md)）。
+- **地域限制**：Endpoint 仅支持 `cn-beijing`，其他地域请求将返回 `BadRequest.IllegalEndpoint` 错误。
+- **分页机制**：`/agent_logs` 使用游标分页（`next_page` 字段），非传统 offset 分页；`/policies` 无分页，固定返回 11 条。
+- **导出约束**：`/export_agent_logs` 的 `params` 必须是合法 JSON 字符串，且字段名需与 `/agent_logs` 接口文档完全一致（如 `CurrentPage` 首字母大写，见文档 8 示例），否则触发 `400` 参数校验失败。
+- **数据时效性**：`/overview` 固定返回最近 24 小时聚合数据，不支持自定义时间范围；告警数据为实时生成，但导出任务可能因数据量延迟完成。
+- **权限边界**：API Key 具有账号级权限，调用失败常见原因为 `Endpoint.AccessDenied`（工作空间不存在或无权限），请确认工作空间 ID 正确且当前账号已加入该工作空间。
 
 ## 来源文档
 
-- [认证](../../raw/application-api-reference/security-api-guide/security-api-authentication.md)
 - [概览](../../raw/application-api-reference/security-api-guide/security-api-overview.md)
-- [Security API 错误码](../../raw/application-api-reference/security-api-guide/security-api-errors.md)
+- [认证](../../raw/application-api-reference/security-api-guide/security-api-authentication.md)
 - [查询防护总览](../../raw/application-api-reference/security-api-guide/security-api-protection-overview.md)
-- [查询 Agent 资产](../../raw/application-api-reference/security-api-guide/security-api-protection-overview/security-api-assets.md)
+- [Security API 错误码](../../raw/application-api-reference/security-api-guide/security-api-errors.md)
 - [查询安全策略](../../raw/application-api-reference/security-api-guide/security-api-policies.md)
 - [查询告警列表](../../raw/application-api-reference/security-api-guide/security-api-policies/security-api-alerts.md)
-- [导出告警](../../raw/application-api-reference/security-api-guide/security-api-policies/security-api-export.md)
 - [查询告警详情](../../raw/application-api-reference/security-api-guide/security-api-policies/security-api-alert-detail.md)
+- [导出告警](../../raw/application-api-reference/security-api-guide/security-api-policies/security-api-export.md)
 - [查询导出状态](../../raw/application-api-reference/security-api-guide/security-api-policies/security-api-export-status.md)
+- [查询 Agent 资产](../../raw/application-api-reference/security-api-guide/security-api-protection-overview/security-api-assets.md)
 
 

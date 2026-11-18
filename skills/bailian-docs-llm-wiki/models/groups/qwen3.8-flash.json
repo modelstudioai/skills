@@ -241,6 +241,9 @@
       "trainingTypes": {
         "sft": [
           "full"
+        ],
+        "dpo": [
+          "full"
         ]
       },
       "inferenceProvider": "aliyun-bailian",

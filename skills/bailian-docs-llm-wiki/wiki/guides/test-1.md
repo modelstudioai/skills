@@ -1,42 +1,53 @@
 # test 1
 
-`test 1` 是阿里云百炼平台面向开发者提供的模型服务计费与成本管理核心主题，涵盖新人免费额度、按量调用、模型训练/部署、吞吐预留、节省计划及账单监控等全链路成本控制能力。其设计目标是为不同规模和场景的用户提供灵活、透明、可预测的费用模型，支持从快速验证到规模化生产的平滑演进。
+`test 1` 是阿里云百炼平台面向开发者提供的模型服务计费与资源管理核心主题，涵盖新人免费额度、按量调用、吞吐预留、节省计划、账单成本管控等全链路能力。其设计目标是为不同规模和场景的模型应用提供灵活、透明、可预测的成本模型，支持从快速验证到高并发生产的平滑演进。所有计费行为均以 Token 或 TPM（Tokens Per Minute）为基本计量单位，并严格区分地域、模型版本、调用模式及服务形态。
 
 ## 支持的模型/功能
 
-- **实时推理**：支持千问（Qwen）系列（如 `qwen3.8-max`、`qwen4-max`）、DeepSeek、GLM、Kimi 等主流大模型及多模态模型（VL、ASR、TTS、图像生成、视频生成）的按 [Token](../concepts/token.md) 实时调用 [原文标题](../../raw/model-user-guide/test-1/model-pricing.md)。
-- **批量推理（Batch）**：支持 `batch` 和 `batch-chat` 接口，单价为实时推理价格的 50% [原文标题](../../raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)。
-- **模型调优（Fine-tuning）**：支持文本生成、图像生成（万相/千问）、语音合成（CosyVoice）、视频生成等模型的微调，按训练 [Token](../concepts/token.md) 计费 [原文标题](../../raw/model-user-guide/test-1/model-training-and-deployment-billing.md)。
-- **模型部署（PTU/DTU）**：提供预置吞吐（PTU）和独占吞吐（DTU）两种部署模式，支持长输入阶梯系数与缓存折扣 [原文标题](../../raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)。
-- **吞吐预留（TPM Reservation）**：支持标准模式（等同于 API TPS）与高速模式（1.5–2 倍 TPS），按预付费（天/8 小时）或后付费（小时）计费 [原文标题](../../raw/model-user-guide/test-1/tpm-reservation-billing.md)。
+- **实时推理**：支持千问（Qwen）、DeepSeek、GLM、Kimi 等主流大语言模型及多模态模型（如 Qwen-VL、万相）的实时 API 调用，是唯一可使用新人免费额度的调用方式 [原文标题](../../raw/model-user-guide/test-1/new-free-quota.md)。
+- **批量推理（Batch）**：支持 `batch` 和 `batch-chat` 接口，输入/输出 Token 单价为实时推理的 50%，但**不支持免费额度抵扣** [原文标题](../../raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)。
+- **模型训练与调优**：支持文本、图像、视频、语音等多类型模型微调，按训练 Token 总量计费，与推理费用完全隔离 [原文标题](../../raw/model-user-guide/test-1/model-training-and-deployment-billing.md)。
+- **模型部署（吞吐预留）**：提供“标准模式”与“高速模式”，支持按天预付费或按小时后付费，通过专属 model code 调用，具备 TPS 提升与容量保障能力。
+- **上下文缓存**：支持显式/隐式缓存，命中时输入 Token 计费单价大幅降低（如 qwen4-max 缓存命中仅 ¥0.5/百万 Token），但创建缓存本身按更高单价计费 [原文标题](../../raw/model-user-guide/model-experience/text-generation-model/context-cache.md)。
 
-> **注意**：文档 1 明确指出免费额度**仅抵扣模型实时推理**产生的费用，而文档 3 和文档 4 中的模型训练、模型部署、吞吐预留均**不支持使用免费额度抵扣**。该限制在所有相关文档中一致，无矛盾。
+> **注意**：文档 1 明确指出免费额度**不支持 Batch 调用、模型调优、模型部署**；而文档 2 在“千问Max”价格表中又将 Batch 调用列为“享有折扣”的影响因素。二者逻辑冲突——Batch 调用虽享单价折扣，但因其不在免费额度适用范围内，故无法叠加使用。开发者需明确：**折扣 ≠ 免费额度覆盖**。
 
 ## 关键参数
 
-- **[Token](../concepts/token.md) 计费粒度**：输入/输出 Token 均以“每百万 Token”为单位计价；训练费用以“每千 Token”为单位；吞吐预留以“kTPM”（千 Tokens/分钟）为单位购买。
-- **地域差异**：华北2（北京）是唯一提供新人免费额度的地域；其他地域（如美国、新加坡、德国、日本、中国香港）模型单价普遍上浮，且无免费额度 [原文标题](../../raw/model-user-guide/test-1/model-pricing.md)。
-- **阶梯计费**：部分模型（如 `qwen3.7-plus`）对输入 Token 分档定价（如 0–256K、256K–1M），单次请求所有 Token 按最高档单价结算。
-- **缓存折扣**：上下文缓存（显式/隐式）命中时，输入 Token 单价大幅降低（如 `qwen4-max` 缓存命中单价为 0.5 元/百万 Token），但创建缓存本身按更高单价计费 [原文标题](../../raw/model-user-guide/model-experience/text-generation-model/context-cache.md)。
-- **容量换算系数**：吞吐预留中，长输入按阶梯系数（如 `qwen3.7-flash` 输入 >32K 部分系数为 3x）、缓存命中部分按折算系数（如 `glm-5.2` 为 0.25）进行 kTPM 消耗折算 [原文标题](../../raw/model-user-guide/test-1/tpm-reservation-billing.md)。
+- **Token 计量**：输入/输出 Token 分开统计，免费额度为两者共用总额度；模型训练费用中的 Token 总量计算方式因模型类型差异巨大（如 VL 模型按 `max_steps × Lstep`，图像生成按 `n_epochs × N × (max_pixels/压缩率) × GPU系数`）。
+- **TPM（Tokens Per Minute）**：吞吐预留的核心单位，1 kTPM = 1,000 Tokens/分钟；输入/输出 TPM 可独立购买，且受长输入阶梯系数与缓存折算系数双重换算 [原文标题](../../raw/model-user-guide/test-1/tpm-reservation-billing.md)。
+- **地域标识**：计费价格与免费额度严格绑定地域。例如 `qwen3.8-max` 在华北2（北京）有 100 万 Token 免费额度且输入单价 ¥12/百万，而在美国（弗吉尼亚）输入单价升至 ¥14.988/百万且**无免费额度**。
+- **模型快照版本**：带日期后缀的模型（如 `qwen3.8-max-0902`）与不带后缀的最新版（如 `qwen3.8-max`）视为**完全独立模型**，各自拥有独立免费额度、独立计费价格、独立部署实例。
 
 ## 使用方式
 
-- **开通即用**：完成实名认证后，系统自动发放华北2（北京）地域各模型的新人免费额度（通常 100 万 Token），无需手动领取 [原文标题](../../raw/model-user-guide/test-1/new-free-quota.md)。
-- **API 调用**：使用通用 API Key 与 Base URL，通过标准 [OpenAI 兼容接口](../concepts/openai-compatible-interface.md)发起请求；调用自动优先消耗免费额度，再按量计费。
-- **成本优化**：
-  - 长期稳定使用：首选 **AI 通用型节省计划**，承诺月消费享最高 5.3 折，覆盖绝大多数模型 [原文标题](../../raw/model-user-guide/test-1/savings-plan-and-resource-package.md)。
-  - 用量小或集中单一模型：可选**其他模型节省计划**（如千问语音模型、向量模型专项计划）或**资源包**。
-  - 高并发低延迟场景：购买**吞吐预留**（TPM Reservation）保障确定性性能。
-- **预算管控**：在[预算管理](https://bailian.console.aliyun.com/cn-beijing/costing-balance/budget)页面为账号、业务空间或 API Key 设置月度预算，并可开启“达到预算后立即停止”以自动熔断 [原文标题](../../raw/model-user-guide/test-1/budget-management.md)。
+- **开通即用**：完成实名认证后，系统自动发放新人免费额度，无需手动领取；额度两小时内生效，控制台模型广场或免费额度页面可实时查看余量。
+- **API 调用**：使用通用 API Key 与 Base URL，通过标准 [OpenAI 兼容接口](../concepts/openai-compatible-interface.md)发起请求；调用时自动优先抵扣免费额度，再按量计费或应用节省计划。
+- **吞吐预留**：在控制台创建后获得专属 model code（如 `qwen3.8-max-ptu-xxx`），需在 API 请求中显式替换 `model` 参数；预留容量内调用不额外收费，溢出部分按策略处理（自动切换按量或返回 429）。
+- **节省计划**：购买 AI 通用型节省计划后，费用在结算时自动抵扣，**无需修改任何代码或配置**；其抵扣范围覆盖绝大部分阿里直供模型，但 C 类模型（如 DeepSeek、Kimi）仅 1:1 抵扣，无折扣 [原文标题](../../raw/model-user-guide/test-1/savings-plan-and-resource-package.md)。
+- **预算管控**：可在控制台为账号、业务空间或单个 API Key 设置月度预算，开启“达到预算后立即停止”可自动熔断按量调用（返回 HTTP 429），但该功能**生产环境不建议开启**。
 
 ## 限制和注意事项
 
-- **免费额度限制**：仅限华北2（北京）地域；有效期 90 天（自开通/模型发布/申请通过日起算，以较晚者为准）；不同模型（含快照版本）额度独立，不互通；ASR 类模型需在业务空间内单独开通权限方可消耗额度 [原文标题](../../raw/model-user-guide/test-1/new-free-quota.md)。
-- **免费额度用完即停**：该功能默认关闭，开启后额度耗尽将返回 HTTP 403 错误（错误码 `AllocationQuota.FreeTierOnly`）。**生产环境不建议开启**，以免导致服务不可用 [原文标题](../../raw/model-user-guide/test-1/new-free-quota.md)。
-- **模型下架与额度失效**：平台已下架部分模型（如 `qwen3.8-max-0902`、`deepseek-v4-pro`）的免费额度，新用户不再获得，老用户额度仍可使用至到期或耗尽 [原文标题](../../raw/model-user-guide/test-1/new-free-quota.md)。
-- **账单延迟**：模型推理账单为分钟级出账（通常 2–10 分钟），非实时；批量推理、训练、部署为小时级出账。查询 2026 年 4 月 1 日前费用需前往阿里云费用中心逐月导出 [原文标题](../../raw/model-user-guide/test-1/bill-query-and-cost-management.md)。
-- **欠费隔离**：欠费按商品 Code 隔离，例如“百炼容量预留”欠费不影响“百炼大模型推理”服务，但已欠费的商品 Code 无法使用任何额度（免费额度、节省计划、资源包） [原文标题](../../raw/model-user-guide/test-1/bill-query-and-cost-management.md)。
+- **免费额度强约束**：
+  - 仅限华北2（北京）地域；
+  - 有效期 90 天（以开通/发布/申请通过三者最晚时间起算）；
+  - 主账号与 RAM 子账号共享额度，但不同模型间额度绝不互通；
+  - 已下架模型（如 `qwen3.8-max-0902`、`deepseek-v4-pro`）新用户不再获得额度，老用户额度仍有效至耗尽或过期。
+
+- **吞吐预留关键限制**：
+  - 预付费实例到期后立即停机，2 小时后释放资源；8 小时时段预留到期即失效，**不支持扩缩容、续订与退订**；
+  - 容量换算复杂：长输入按阶梯系数（如 qwen3.7-flash 输入 >32K 部分系数为 3x）、缓存命中部分再乘缓存折算系数（如 qwen3.8-max 为 0.125），最终消耗 kTPM = 原始 Token × 阶梯系数 × 缓存系数。
+
+- **账单与成本管理**：
+  - 账单存在延迟：实时推理账单通常 2–10 分钟出账，批量/训练任务为小时级；
+  - “免费额度用完即停”功能开启后，额度耗尽返回 `AllocationQuota.FreeTierOnly` 错误（HTTP 403），但**配置生效有延迟，延迟期内仍可能产生计费**；
+  - 异步任务（如生图、生视频）费用结算与任务执行分离，充值后仍可能出现因历史任务结算导致的二次欠费。
+
+- **其他重要限制**：
+  - 节省计划**不支持抵扣模型训练、模型部署、联网搜索插件、知识库规格费用**；
+  - 入门型 AI 通用节省计划**不支持 `kimi-k3`、`kimi-k3.1-pro` 的费用抵扣**；
+  - 预算管理**仅覆盖 API 按量调用费用**，不包含训练、PTU、DTU 等任何其他费用。
 
 ## 来源文档
 
