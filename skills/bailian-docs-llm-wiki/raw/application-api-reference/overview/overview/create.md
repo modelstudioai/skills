@@ -1,58 +1,18 @@
-# 创建自定义 MCP
+# 创建版本
 
-创建自定义 MCP 服务并立即部署，支持 STDIO、HTTP、SSE 和 OPENAPI 四种类型。
+为自定义 Skill 上传新版本 ZIP 包，版本号由服务端递增。
 
 ## 接口
 
-**POST** `/api/v1/mcp/servers`
+**POST** `/api/v1/skills/{skill_id}/versions`
 
-创建成功后立即触发部署，返回 `201` 和 `Location` 响应头。部署失败仍返回 `201`，服务状态为 `ACTIVATE_FAILED`，失败原因放在 `activate_fail_reason`。
+使用 `multipart/form-data` 为自定义 Skill 上传新版本。版本号由服务端在 `latest_version` 基础上递增，例如 `1.0` 递增为 `1.1`，不能指定。
 
-## 请求体
+## 请求参数
 
-字段
+参数
 
-类型
-
-必填
-
-说明
-
-server\_name
-
-`string`
-
-是
-
-MCP 名称，不能为空白
-
-description
-
-`string`
-
-是
-
-MCP 描述，不能为空白
-
-mcp\_type
-
-`string`
-
-是
-
-`STDIO`、`HTTP`、`SSE` 或 `OPENAPI`
-
-mcp\_config
-
-`object`
-
-是
-
-按 `mcp_type` 传入对应配置
-
-### STDIO
-
-字段
+位置
 
 类型
 
@@ -60,279 +20,130 @@ mcp\_config
 
 说明
 
-command
+skill\_id
+
+Path
 
 `string`
 
 是
 
-`npx` 或 `uvx`
+主账号和工作空间下的自定义 Skill ID
 
-args
+file
 
-`array<string>`
+Form
+
+`file`
 
 是
 
-启动参数，不能为空；每项匹配 `[A-Za-z0-9_@./:=,+-]+`
+新版本 ZIP 包，要求同[创建 Skill](raw/application-api-reference/overview/overview/create.md)
 
-env
+display\_name
 
-`map<string,string>`
-
-否
-
-环境变量，名称匹配 `[A-Za-z_][A-Za-z0-9_]*`，值必须为字符串
-
-fc\_deploy\_region
+Form
 
 `string`
 
 否
 
-函数计算部署地域，需使用控制台支持的地域
+更新 Skill 展示名称；不传或为空白时取新包 SKILL.md 的 `name`
 
-使用 STDIO 前，需要为账号授权函数计算 FC。
+display\_description
 
-### HTTP / SSE
+Form
+
+`string`
+
+否
+
+更新 Skill 展示描述；不传或为空白时取新包 SKILL.md 的 `description`
+
+## 业务规则
+
+-   仅自定义 Skill 可以创建版本。
+-   Skill 正在安全扫描（`checking`）时不能创建新版本，需等待扫描结束；`rejected` 状态可以重新上传。
+-   新包 SKILL.md 的 `name` 不能与官方 Skill 或当前空间的其他自定义 Skill 重名。
+-   创建成功后，Skill 的 `latest_version` 指向新版本，旧版本保留。
+-   请求中的 `display_name` 和 `display_description` 用于更新 Skill 展示信息。
+
+## 响应
+
+返回新版本的 `SkillVersionDTO`。
 
 字段
 
 类型
 
-必填
-
 说明
 
-url
+id
 
 `string`
 
-是
-
-公网 HTTP(S) 地址，不能包含凭据、`#` 片段或反斜杠
-
-headers
-
-`map<string,string>`
-
-否
-
-下游请求头，名称需为合法 HTTP Header，值不能包含 CR/LF
-
-不包含路径时，HTTP 默认使用 `/mcp`，SSE 默认使用 `/sse`。
-
-### OPENAPI
-
-字段
-
-类型
-
-必填
-
-说明
-
-api\_host
-
-`string`
-
-是
-
-公网 HTTP(S) 地址，不能包含查询串、片段、凭据或反斜杠
-
-headers
-
-`map<string,string>`
-
-否
-
-下游请求头，名称需为合法 HTTP Header，值不能为空白或包含 CR/LF
-
-api\_list
-
-`array<Api>`
-
-是
-
-API 列表，不能为空
-
-**Api**
-
-字段
-
-类型
-
-必填
-
-说明
-
-name
-
-`string`
-
-是
-
-工具名，不能为空白，同一 `api_list` 内不能重复
-
-description
-
-`string`
-
-是
-
-工具描述，不能为空白
-
-path
-
-`string`
-
-是
-
-以 `/` 开头的相对路径，支持 `{param}` 占位符
-
-method
-
-`string`
-
-是
-
-`GET` 或 `POST`
-
-content\_type
-
-`string`
-
-否
-
-`application/json`（默认）或 `application/x-www-form-urlencoded`
-
-input\_params
-
-`array<InputParam>`
-
-否
-
-入参定义，省略时按空数组处理
-
-**InputParam**
-
-字段
-
-类型
-
-必填
-
-说明
-
-name
-
-`string`
-
-是
-
-参数名，不能为空白，同级不能重复
-
-description
-
-`string`
-
-是
-
-参数描述，不能为空白
-
-location
-
-`string`
-
-顶层必填
-
-`Query`、`Path`、`Header` 或 `Body`；子属性可省略
+版本记录唯一标识
 
 type
 
 `string`
 
-是
+固定为 `skill_version`
 
-`String`、`Number`、`Integer`、`Boolean`、`Object`、`Array<String>`、`Array<Number>`、`Array<Integer>`、`Array<Boolean>` 或 `Array<Object>`
-
-required
-
-`boolean`
-
-否
-
-是否必填，默认 `false`
-
-properties
-
-`array<InputParam>`
-
-视类型
-
-`Object` 或 `Array<Object>` 必须提供非空子属性
-
-`GET` 不能定义顶层 `Body` 参数；顶层对象和数组参数只能放在 `Body`。全部枚举值区分大小写。
-
-## 响应
-
-返回 `CreateResponse`，未赋值的字段不输出。
-
-字段
-
-类型
-
-说明
-
-mcp\_code
+skill\_id
 
 `string`
 
-MCP 编码
+所属 Skill ID
 
-server\_name
-
-`string`
-
-MCP 名称
-
-server\_status
+display\_name
 
 `string`
 
-部署结果状态
+该版本的展示名称
 
-server\_status\_text
-
-`string`
-
-状态文案
-
-activate\_fail\_reason
+display\_description
 
 `string`
 
-部署失败原因，仅部署失败时返回
+该版本的展示描述
+
+version
+
+`string`
+
+版本号
+
+status
+
+`string`
+
+版本状态
+
+created\_at
+
+`string`
+
+创建时间
+
+updated\_at
+
+`string`
+
+更新时间
+
+additional\_properties
+
+`object / null`
+
+扩展属性
 
 ## 示例
 
-### 创建 HTTP 类型
-
 ```
-curl -X POST "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/mcp/servers" \
+curl -X POST "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/skills/skill_abc123/versions" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "server_name": "weather-mcp",
-    "description": "天气查询 MCP",
-    "mcp_type": "HTTP",
-    "mcp_config": {
-      "url": "https://mcp.example.com/mcp",
-      "headers": {
-        "Authorization": "Bearer sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-      }
-    }
-  }'
+  -F "file=@./pdf-skill-v2.zip"
 ```
 ```
 {
@@ -340,70 +151,18 @@ curl -X POST "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/mcp/ser
   "error_code": null,
   "error_msg": null,
   "data": {
-    "mcp_code": "mcp-a1b2c3d4e5f6g7h8",
-    "server_name": "weather-mcp",
-    "server_status": "ACTIVATED",
-    "server_status_text": "已启用"
+    "id": "skillver_xxxxxxxxxxxxxxxxxxxxxx",
+    "type": "skill_version",
+    "skill_id": "skill_abc123",
+    "display_name": "My Custom Skill",
+    "display_description": "从 SKILL.md 解析的描述",
+    "version": "1.1",
+    "status": "checking",
+    "created_at": "2026-06-15T08:23:11Z",
+    "updated_at": "2026-06-15T08:23:11Z",
+    "additional_properties": null
   },
-  "request_id": "6f1c2a8e-3b0d-4c55-9a0e-2f7d1c9b8a11"
-}
-```
-
-响应头：
-
-```
-Location: /api/v1/mcp/servers/mcp-a1b2c3d4e5f6g7h8
-X-Request-Id: 6f1c2a8e-3b0d-4c55-9a0e-2f7d1c9b8a11
-```
-
-### 创建 STDIO 类型
-
-```
-{
-  "server_name": "amap-maps",
-  "description": "高德地图 MCP",
-  "mcp_type": "STDIO",
-  "mcp_config": {
-    "command": "npx",
-    "args": ["-y", "@amap/amap-maps-mcp-server"],
-    "env": {
-      "AMAP_MAPS_API_KEY": "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-    },
-    "fc_deploy_region": "cn-hangzhou"
-  }
-}
-```
-
-### 创建 OPENAPI 类型
-
-```
-{
-  "server_name": "order-api",
-  "description": "订单查询 API",
-  "mcp_type": "OPENAPI",
-  "mcp_config": {
-    "api_host": "https://api.example.com",
-    "headers": {
-      "X-Api-Key": "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-    },
-    "api_list": [
-      {
-        "name": "getOrder",
-        "description": "根据订单号查询订单",
-        "path": "/orders/{orderId}",
-        "method": "GET",
-        "input_params": [
-          {
-            "name": "orderId",
-            "description": "订单号",
-            "location": "Path",
-            "type": "String",
-            "required": true
-          }
-        ]
-      }
-    ]
-  }
+  "request_id": "15a89d4c-f142-4e00-a9f7-b088442417c9"
 }
 ```
 
@@ -415,22 +174,76 @@ error\_code
 
 说明
 
+401
+
+WORKSPACE\_ID\_ILLEGAL
+
+身份信息缺失或无效
+
 400
 
-InvalidParameter
+SKILL\_ID\_IS\_NULL
 
-请求体缺失、字段类型错误或字段取值不合法
+`skill_id` 为空白
 
-403
+400
 
-AccessDenied
+SKILL\_FILE\_IS\_NULL
 
-函数计算未授权，或目标地址不允许访问
+未上传 `file` 或文件为空
+
+400
+
+SKILL\_FILE\_FORMATER\_ERROR
+
+文件扩展名不是 `.zip`，或文件头不是 ZIP 格式
+
+400
+
+SKILL\_PACKAGE\_TOO\_LARGE
+
+ZIP 包超过 50MB
+
+400
+
+INVALID\_PARAMETER
+
+multipart 请求格式错误
 
 500
 
-InternalError
+SKILL\_NOT\_EXIST
 
-服务内部错误
+Skill 不存在、已删除或无权访问
 
-目标地址为内网地址时返回 `403`，地址格式错误或无法解析时返回 `400`。
+500
+
+SKILL\_VERSION\_NOT\_EXIST
+
+保存成功但读取新版本记录失败
+
+500
+
+SKILL\_UPDATE\_SECURITY\_ERROR
+
+Skill 正在安全扫描中
+
+500
+
+SKILL\_NAME\_OFFICIAL\_DUPLICATE
+
+新包 `name` 与官方 Skill 重名
+
+500
+
+SKILL\_NAME\_CUSTOMER\_DUPLICATE
+
+新包 `name` 与当前空间的其他自定义 Skill 重名
+
+500
+
+SKILL\_UPDATE\_LOCK\_ERROR
+
+同一 Skill 的并发创建版本冲突
+
+完整错误码见[Skill API 错误码](raw/application-api-reference/overview/errors.md)。

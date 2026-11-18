@@ -1,6 +1,90 @@
-# 吞吐预留 API参考
+# 吞吐预留 API 参考
 
-吞吐预留（原 TPM 预留）API 用于创建、查询和管理吞吐预留容量。每个吞吐预留通过 ModelCode 标识，可包含多个容量实例；每个实例对应一次容量购买，可分别扩缩容、续订或释放。
+吞吐预留 API 用于创建、查询和管理吞吐预留容量。每个吞吐预留通过专属模型 code 标识，可包含多个容量实例；每个实例对应一次容量购买，可分别扩缩容、续订或释放。
+
+任务
+
+接口
+
+详见
+
+创建吞吐预留
+
+`POST /api/v1/deployments`
+
+[创建吞吐预留](#h2-sec-create)
+
+查询预留详情
+
+`GET /api/v1/deployments/{deployed_model}`
+
+[查询吞吐预留详情](#h2-sec-query)
+
+查询预留列表
+
+`GET /api/v1/deployments`
+
+[查询吞吐预留列表](#deployment-list)
+
+叠加购买容量实例
+
+`POST /api/v1/deployments/{deployed_model}/capacity-instances`
+
+[叠加购买容量实例](#instance-create)
+
+扩缩容容量实例
+
+`PUT /api/v1/deployments/{deployed_model}/capacity-instances/{instance_id}/scale`
+
+[扩缩容容量实例](#instance-scale)
+
+续订容量实例
+
+`PUT /api/v1/deployments/{deployed_model}/capacity-instances/{instance_id}/renew`
+
+[续订容量实例](#instance-renew)
+
+开启 / 关闭自动续费
+
+`PUT /api/v1/deployments/{deployed_model}/capacity-instances/{instance_id}/auto-renew`
+
+[设置自动续费](#instance-auto-renew)
+
+退订 / 释放容量实例
+
+`DELETE /api/v1/deployments/{deployed_model}/capacity-instances/{instance_id}`
+
+[删除容量实例](#instance-delete)
+
+修改溢出策略
+
+`PUT /api/v1/deployments/{deployed_model}/update-overflowstrategy`
+
+[修改溢出策略](#h2-sec-overflow)
+
+删除吞吐预留
+
+`DELETE /api/v1/deployments/{deployed_model}`
+
+[删除吞吐预留](#deployment-delete)
+
+查询容量实例列表
+
+`GET .../capacity-instances`
+
+[查询容量实例列表](#instance-list)
+
+查询容量操作状态
+
+`GET .../operations/{id}`
+
+[查询容量操作状态](#operation-query)
+
+错误码
+
+—
+
+[错误码](#h2-sec-errors)
 
 ## 认证与调用准备
 
@@ -10,15 +94,13 @@
 
 DashScope API 域名为 `https://dashscope.aliyuncs.com`。弗吉尼亚地域使用 `https://{workspaceId}.us-east-1.maas.aliyuncs.com`。
 
-异步容量操作的结果通过 [查询容量操作](#operation-query) 获取。
+控制台入口参见[吞吐预留](raw/model-user-guide/model-high-speed-inference/tpm-reservation-index/tpm-reservation.md)，部署概念参见[模型部署](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)，通用部署 API 参见[使用 API 进行模型部署](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-quick-start.md)。
 
-控制台入口参见[吞吐预留](raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)，部署概念参见[模型部署](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)，通用部署 API 参见[使用 API 进行模型部署](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-quick-start.md)。
-
-## 公共约定
+## 通用规则
 
 接口基础路径为 `/api/v1/deployments`，沿用调用地域的 DashScope OpenAPI 域名和鉴权方式。请求体使用 `Content-Type: application/json`。使用目标地域的账号、模型和部署。
 
--   `deployed_model`：吞吐预留的调用标识（ModelCode）；实例/操作响应中的 `model_service_id` 表示同一对象。
+-   `deployed_model`：吞吐预留的专属模型 code（调用标识）；实例/操作响应中的 `model_service_id` 表示同一对象。
 -   `instance_id`：容量实例 ID。使用接口返回值，不根据字符串格式推断付费方式。
 -   `operation_id`：操作 ID，使用接口返回的字符串值。
 -   下文示例 ID、模型名、容量值均为占位示例。真实模型、最小值、步长、上限及购买时长以目标地域的模型和购买限制为准。
@@ -45,11 +127,24 @@ DashScope API 域名为 `https://dashscope.aliyuncs.com`。弗吉尼亚地域使
 
 **重要**HTTP 请求成功不等于容量操作成功。实例写接口即使返回 HTTP 200，`output.operation_status` 也可能为 `FAILED`。必须检查操作状态和错误字段，确认成功后再使用更新的容量。
 
-## 创建 吞吐预留
+### 推荐调用顺序
+
+异步容量操作的结果通过 [查询容量操作](#operation-query) 获取。
+
+1.  查询实例详情，查看能力开关及最新配置。
+2.  发起一次购买 / 扩缩容 / 续订 / 删除请求，保存 `operation_id`。
+3.  若返回 `PROCESSING`，定期查询操作并逐步退避；若已终态，直接处理结果。
+4.  `SUCCEEDED` 后刷新实例及专属模型 code；`FAILED` 展示 `error_code` / `error_message`。网络超时不等同于操作失败，先查已有操作。
+
+同一专属模型 code 的容量变更按顺序处理；有进行中操作时，新变更可能被拒绝。已受理的退订释放会排队，在前序操作完成后继续。变更生效前，查询仍返回原生效容量，不应将目标容量视为已生效。
+
+叠加、扩缩容或释放生效后，可通过部署查询接口获取更新后的汇总生效容量，继续使用原专属模型 code。调用模型还需完成对应模型部署，并使用正确的账号鉴权和调用参数；容量操作成功不代表模型调用的其他条件均已满足。
+
+## 创建吞吐预留
 
 `POST /api/v1/deployments`
 
-创建 吞吐预留并购买首个容量实例，返回用于调用模型的 ModelCode。如需为已有 吞吐预留增加容量，请调用 [叠加购买容量实例](#instance-create)。
+创建吞吐预留并购买首个容量实例，返回用于调用模型的专属模型 code。如需为已有吞吐预留增加容量，请调用 [叠加购买容量实例](#instance-create)。
 
 **字段**
 
@@ -81,7 +176,7 @@ String
 
 否
 
-性能档位：`ptu_fast` 为高速（默认），`ptu_default` 为标速
+性能档位：`ptu_fast` 为高速（默认），`ptu_default` 为标准模式。`pricing_cycle` 为 `Hour` 时必须显式传 `ptu_default`，省略时将按默认高速档处理而被拒绝
 
 `charge_type`
 
@@ -105,7 +200,7 @@ String
 
 否
 
-ModelCode 后缀；未传时自动生成。
+专属模型 code 后缀；未传时自动生成。
 
 `ptu_capacity`
 
@@ -123,9 +218,17 @@ Object
 
 预付费必填，见 [预付费参数](#prepaid-fields)；后付费不传
 
-`ptu_default` 支持预付费；`ptu_fast` 支持预付费和后付费。新增容量实例沿用 ModelCode 的性能档位。
+`overflow_strategy`
 
-`ptu_default` 标速支持按天与 8 小时时段两种付费周期：按天对应 `pricing_cycle=Day`，8 小时时段对应 `pricing_cycle=Hour` 且 `duration=8`。8 小时时段仅 `ptu_default` 标速支持，`ptu_fast` 高速不支持。
+String
+
+否
+
+溢出策略，`enable` 表示允许溢出按量计费，`disable` 表示超出容量时限流；创建时设置
+
+`ptu_default` 支持预付费；`ptu_fast` 支持预付费和后付费。新增容量实例沿用专属模型 code 的性能档位。
+
+`ptu_default` 标准模式支持按天与 8 小时时段两种付费周期：按天对应 `pricing_cycle=Day`，8 小时时段对应 `pricing_cycle=Hour` 且 `duration=8`。8 小时时段仅 `ptu_default` 标准模式支持，`ptu_fast` 高速不支持。8 小时服务时段须完整落在每日 22:00–08:00 的售卖时段内，因此仅每日 22:00–次日 00:00 可下单（计费规则见[吞吐预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-8h-h2)）。8 小时时段支持经本接口新建（传 `pricing_cycle=Hour` 且 `duration=8`）或经[叠加购买容量实例](#instance-create)追加到已有预留。
 
 按天预付费示例：
 
@@ -147,7 +250,30 @@ Object
 }
 ```
 
-8 小时时段预付费示例（仅 `ptu_default` 标速）：
+curl 请求示例：
+
+```
+curl -X POST "https://dashscope.aliyuncs.com/api/v1/deployments" \
+    --header "Authorization: Bearer ${DASHSCOPE_API_KEY}" \
+    --header 'Content-Type: application/json' \
+    --data '{
+    "model_name": "<base_model>",
+    "plan": "ptu",
+    "service_tier": "ptu_fast",
+    "charge_type": "pre_paid",
+    "name": "吞吐预留示例",
+    "ptu_capacity": {
+        "input_tpm": 10000,
+        "output_tpm": 1000
+    },
+    "pre_paid_info": {
+        "duration": 30,
+        "auto_renewal": false
+    }
+}'
+```
+
+8 小时时段预付费示例（仅 `ptu_default` 标准模式）：
 
 ```
 {
@@ -169,7 +295,7 @@ Object
 
 ### ptu\_capacity
 
-容量单位为 kTPM（1 kTPM = 1000 Tokens/分钟）。当前支持的模型不支持单独配置思考输出配额。
+容量单位为 kTPM（1 kTPM = 1000 Tokens/分钟）。
 
 **字段**
 
@@ -181,15 +307,21 @@ Object
 
 Long
 
-输入容量，单位 kTPM，按模型要求提供并满足步长及范围
+输入容量，单位 kTPM，起步 200 kTPM、步长 10 kTPM
 
 `output_tpm`
 
 Long
 
-输出容量，单位 kTPM，按模型要求提供并满足步长及范围
+输出容量，单位 kTPM，起步 20 kTPM、步长 1 kTPM
 
-扩缩容时表示所选实例变更后的绝对容量，不是增加量，也不是 ModelCode 的目标总容量。
+`thinking_output_tpm`
+
+Long
+
+思考输出容量，仅部分模型支持该维度
+
+扩缩容时表示所选实例变更后的绝对容量，不是增加量，也不是专属模型 code 的目标总容量。
 
 ### pre\_paid\_info
 
@@ -203,7 +335,7 @@ Long
 
 String
 
-付费周期：`Day` 为按天（默认），`Hour` 为 8 小时时段；`Hour` 仅 `ptu_default` 标速支持，大小写敏感
+付费周期：`Day` 为按天（默认），`Hour` 为 8 小时时段；`Hour` 仅 `ptu_default` 标准模式支持，大小写敏感
 
 `duration`
 
@@ -231,7 +363,7 @@ String
 
 ### 创建响应
 
-`output` 为部署对象（[查询 吞吐预留](#h2-sec-query)）。创建容量实例时可返回 `operation_id`、`instance_id`；预付费实例的购买订单尚未处理完成时，`instance_id` 可能暂缺，后续查询获取。
+`output` 为部署对象（[查询吞吐预留](#h2-sec-query)）。创建容量实例时可返回 `operation_id`、`instance_id`；预付费实例的购买订单尚未处理完成时，`instance_id` 可能暂缺，后续查询获取。
 
 ```
 {
@@ -246,13 +378,690 @@ String
 }
 ```
 
-有 `operation_id` 时按 [查询容量操作](#operation-query) 查询；创建请求超时应先确认是否已经创建，避免重复创建 ModelCode。
+有 `operation_id` 时按 [查询容量操作](#operation-query) 查询；创建请求超时应先确认是否已经创建，避免重复创建专属模型 code。
 
-## 扩缩容
+## 查询接口
+
+### 查询吞吐预留详情
+
+`GET /api/v1/deployments/{deployed_model}`
+
+查询指定吞吐预留的配置、状态，以及所有容量实例已生效的汇总容量。
+
+curl 请求示例：
+
+```
+curl -X GET "https://dashscope.aliyuncs.com/api/v1/deployments/{deployed_model}" \
+    --header "Authorization: Bearer ${DASHSCOPE_API_KEY}" \
+    --header "Content-Type: application/json"
+```
+```
+{
+  "request_id": "example-request",
+  "output": {
+    "deployed_model": "example-model-code",
+    "model_name": "<base_model>",
+    "plan": "ptu",
+    "ptu_service_tier": "ptu_fast",
+    "status": "RUNNING",
+    "charge_type": "pre_paid",
+    "ptu_capacity": {
+      "input_tpm": 10000,
+      "output_tpm": 1000
+    },
+    "overflow_strategy": "disable"
+  }
+}
+```
+
+**字段**
+
+**说明**
+
+`deployed_model`
+
+吞吐预留的调用标识（专属模型 code）。
+
+`model_name`
+
+基础模型名称。
+
+`plan`
+
+类型标识，吞吐预留为 `ptu`。
+
+`status`
+
+专属模型 code 状态，不代表每个容量实例的状态
+
+`ptu_service_tier`
+
+性能档位：`ptu_fast` 为高速，`ptu_default` 为标准模式
+
+`ptu_capacity`
+
+该专属模型 code 下所有容量实例已生效的输入、输出汇总容量
+
+`charge_type`
+
+取值：`pre_paid`（预付费）/ `post_paid`（后付费）
+
+`pre_paid_info`
+
+预付费购买及续订配置，含 `pricing_cycle`（`Day` 按天 / `Hour` 为 8 小时时段）、`duration` 等。存在多个容量实例时，请通过实例详情查询目标实例的 `pre_paid_info`。
+
+`pre_paid_instance_id`
+
+预付费实例标识。存在多个容量实例时，请通过容量实例列表获取各实例的 `instance_id`，并指定要操作的实例。
+
+`pre_paid_gmt_expired`
+
+预付费到期时间。存在多个容量实例时，请通过目标实例详情的 `gmt_expired` 获取其到期时间。到期时刻计算规则见[吞吐预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-lifecycle-h2)。
+
+`overflow_strategy`
+
+溢出策略，`enable` 表示允许溢出按量计费，`disable` 表示超出容量时限流。溢出计费规则详见[吞吐预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-overflow-h2)。
+
+`fail_reason`
+
+失败原因。
+
+`gmt_create`
+
+创建时间。
+
+`gmt_modified`
+
+最后修改时间。
+
+`operation_id`
+
+容量操作 ID，用于查询操作结果；相应写操作响应中可能返回。
+
+`instance_id`
+
+容量实例 ID。购买订单尚未处理完成时可能暂不返回；请通过后续查询获取。
+
+混合付费应通过容量实例列表中各实例的 `charge_type` 判断。部署状态和计费类型不能代替每个实例的状态和计费类型。
+
+### 查询吞吐预留列表
+
+`GET /api/v1/deployments?page_no=1&page_size=10&plan=ptu`
+
+分页查询吞吐预留列表。
+
+curl 请求示例：
+
+```
+curl -X GET "https://dashscope.aliyuncs.com/api/v1/deployments?page_no=1&page_size=10&plan=ptu" \
+    --header "Authorization: Bearer ${DASHSCOPE_API_KEY}" \
+    --header "Content-Type: application/json"
+```
+
+**Query 参数**
+
+**说明**
+
+`page_no`
+
+页码，默认 1
+
+`page_size`
+
+每页数量，默认 10，范围 \[1,100\]
+
+`plan`
+
+可选类型筛选。查询吞吐预留时传 `ptu`；性能档位由 `service_tier` 表示，不作为 `plan` 的取值
+
+```
+{
+  "request_id": "example-request",
+  "output": {
+    "deployments": [
+      {
+        "deployed_model": "example-model-code",
+        "plan": "ptu",
+        "status": "RUNNING",
+        "ptu_capacity": {
+          "input_tpm": 10000,
+          "output_tpm": 1000
+        }
+      }
+    ],
+    "total": 1,
+    "page_no": 1,
+    "page_size": 10
+  }
+}
+```
+
+部署列表不支持通过 `status` 参数筛选状态。容量实例筛选请使用 [查询容量实例列表（含已删除实例）](#instance-list) 的 `statuses`。
+
+### 查询容量实例列表
+
+`GET /api/v1/deployments/{deployed_model}/capacity-instances?page_no=1&page_size=20&include_deleted=true`
+
+curl 请求示例：
+
+```
+curl -X GET "https://dashscope.aliyuncs.com/api/v1/deployments/{deployed_model}/capacity-instances?page_no=1&page_size=20&include_deleted=true" \
+    --header "Authorization: Bearer ${DASHSCOPE_API_KEY}" \
+    --header "Content-Type: application/json"
+```
+
+**Query 参数**
+
+**类型**
+
+**说明**
+
+`page_no`
+
+Integer
+
+默认 1
+
+`page_size`
+
+Integer
+
+默认 20，范围 \[1,100\]
+
+`include_deleted`
+
+Boolean
+
+默认 true；只展示未删除实例时显式传 false
+
+`statuses`
+
+String 列表
+
+可选，多值逗号分隔，例如 `RUNNING,STOPPED`
+
+`charge_types`
+
+String 列表
+
+可选，`pre_paid,post_paid`
+
+`name`
+
+预留名称。
+
+`base_model`
+
+基础模型名。
+
+`base_capacity`
+
+当前生效容量。
+
+`workspace_id`
+
+所属业务空间 ID。
+
+`creator`
+
+创建者。
+
+`modifier`
+
+最后修改者。
+
+```
+{
+  "request_id": "example-request",
+  "output": {
+    "records": [
+      {
+        "model_service_id": "example-model-code",
+        "instance_id": "example-capacity-instance",
+        "charge_type": "post_paid",
+        "status": "STOPPED",
+        "deleted": true,
+        "effective_capacity": {
+          "input_tpm": 0,
+          "output_tpm": 0
+        },
+        "configured_capacity": {
+          "input_tpm": 0,
+          "output_tpm": 0
+        },
+        "can_scale": false,
+        "can_renew": false,
+        "can_delete": false
+      }
+    ],
+    "items": 1,
+    "page": 1,
+    "itemsPerPage": 20,
+    "pageCount": 1
+  }
+}
+```
+
+分页结构与部署列表不同：`records` 是当前页，`items` 是总数，`page` 是页码，`itemsPerPage` / `pageCount` 字段名以接口实际返回为准。优先排列有生效容量的实例，再按创建时间倒序。列表仅支持本节列出的查询参数。
+
+### 查询容量实例详情
+
+`GET /api/v1/deployments/{deployed_model}/capacity-instances/{instance_id}`
+
+返回 [容量实例](#instance-fields) 的实例对象，已删除实例也可查询。专属模型 code 与实例须匹配，不能跨专属模型 code 操作实例。
+
+curl 请求示例：
+
+```
+curl -X GET "https://dashscope.aliyuncs.com/api/v1/deployments/{deployed_model}/capacity-instances/{instance_id}" \
+    --header "Authorization: Bearer ${DASHSCOPE_API_KEY}" \
+    --header "Content-Type: application/json"
+```
+
+**说明**后付费实例释放后，在同一专属模型 code 下重新购买后付费容量会复用原实例 ID。列表和详情更新为重新购买后的实例信息，不再单独保留原删除记录。释放后的 `configured_capacity` 可能为零，不保证保留释放前的配置容量。
+
+### 查询容量操作状态
+
+`GET /api/v1/deployments/{deployed_model}/capacity-operations/{operation_id}`
+
+curl 请求示例：
+
+```
+curl -X GET "https://dashscope.aliyuncs.com/api/v1/deployments/{deployed_model}/capacity-operations/{operation_id}" \
+    --header "Authorization: Bearer ${DASHSCOPE_API_KEY}" \
+    --header "Content-Type: application/json"
+```
+```
+{
+  "request_id": "example-poll-request",
+  "output": {
+    "operation_id": "100001",
+    "request_id": "example-original-request",
+    "operation_type": "SCALE",
+    "operation_status": "SUCCEEDED",
+    "model_service_id": "example-model-code",
+    "instance_id": "example-capacity-instance",
+    "from_status": "RUNNING",
+    "current_status": "RUNNING"
+  }
+}
+```
+
+外层 `request_id` 是本次查询请求标识，操作对象内的 `request_id` 是原始操作标识，两者可能不同。查询路径必须属于创建该操作的专属模型 code。
+
+使用写操作实际返回的 `operation_id`，不要自行构造。查询不存在的数字 ID 或其他专属模型 code 的操作时，返回 HTTP 404、`CAPACITY_OPERATION_NOT_FOUND`；无效的操作 ID 可能返回 `InternalError`，请先核对 ID 再重试。
+
+## 容量管理接口
+
+以下接口均以 `/api/v1/deployments/{deployed_model}` 为前缀。
+
+### 叠加购买容量实例
+
+`POST /api/v1/deployments/{deployed_model}/capacity-instances`
+
+**字段**
+
+**必填**
+
+**说明**
+
+`billing_method`
+
+是
+
+付费方式：`PRE_PAY` 为预付费，`POST_PAY` 为后付费。取值区分大小写
+
+`ptu_capacity`
+
+是
+
+新实例容量
+
+`pre_paid_info`
+
+条件必填
+
+预付费必填，后付费不传
+
+预付费示例：
+
+```
+{
+  "billing_method": "PRE_PAY",
+  "ptu_capacity": {
+    "input_tpm": 10000,
+    "output_tpm": 1000
+  },
+  "pre_paid_info": {
+    "duration": 30,
+    "auto_renewal": false
+  }
+}
+```
+
+curl 请求示例：
+
+```
+curl -X POST "https://dashscope.aliyuncs.com/api/v1/deployments/{deployed_model}/capacity-instances" \
+    --header "Authorization: Bearer ${DASHSCOPE_API_KEY}" \
+    --header 'Content-Type: application/json' \
+    --data '{
+    "billing_method": "PRE_PAY",
+    "ptu_capacity": {
+        "input_tpm": 10000,
+        "output_tpm": 1000
+    },
+    "pre_paid_info": {
+        "duration": 30,
+        "auto_renewal": false
+    }
+}'
+```
+
+8 小时时段增购示例（仅 `ptu_default` 标准模式，`billing_method` 固定 `PRE_PAY`，`pre_paid_info` 传 `pricing_cycle=Hour` / `duration=8` / `auto_renewal=false`）：
+
+```
+{
+  "billing_method": "PRE_PAY",
+  "ptu_capacity": {
+    "input_tpm": 10000,
+    "output_tpm": 1000
+  },
+  "pre_paid_info": {
+    "pricing_cycle": "Hour",
+    "duration": 8,
+    "auto_renewal": false
+  }
+}
+```
+
+curl 请求示例：
+
+```
+curl -X POST "https://dashscope.aliyuncs.com/api/v1/deployments/{deployed_model}/capacity-instances" \
+    --header "Authorization: Bearer ${DASHSCOPE_API_KEY}" \
+    --header 'Content-Type: application/json' \
+    --data '{
+    "billing_method": "PRE_PAY",
+    "ptu_capacity": {
+        "input_tpm": 10000,
+        "output_tpm": 1000
+    },
+    "pre_paid_info": {
+        "pricing_cycle": "Hour",
+        "duration": 8,
+        "auto_renewal": false
+    }
+}'
+```
+
+8 小时服务时段须完整落在每日 22:00–08:00 的售卖时段内，因此仅每日 22:00–次日 00:00 可下单（计费规则见[吞吐预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-8h-h2)）。
+
+8 小时时段实例创建成功后，通过 [查询容量实例详情](#instance-detail) 可获取以下字段：`pricing_cycle` 为 `Hour`；`gmt_effective` 为北京时间整点生效时间；`gmt_expired` 与 `gmt_effective` 相差 8 小时；`can_scale`、`can_renew`、`can_enable_auto_renew`、`can_disable_auto_renew`、`can_delete` 均为 `false`。
+
+后付费示例：
+
+```
+{
+  "billing_method": "POST_PAY",
+  "ptu_capacity": {
+    "input_tpm": 10000,
+    "output_tpm": 1000
+  }
+}
+```
+
+curl 请求示例：
+
+```
+curl -X POST "https://dashscope.aliyuncs.com/api/v1/deployments/{deployed_model}/capacity-instances" \
+    --header "Authorization: Bearer ${DASHSCOPE_API_KEY}" \
+    --header 'Content-Type: application/json' \
+    --data '{
+    "billing_method": "POST_PAY",
+    "ptu_capacity": {
+        "input_tpm": 10000,
+        "output_tpm": 1000
+    }
+}'
+```
+
+返回操作对象，初次响应可能已成功、失败或仍在处理中。沿用现有专属模型 code、模型和性能档位；同一专属模型 code 只允许一个未删除的后付费实例。购买条件或实例数量不满足要求时，请根据接口返回的错误处理。
+
+### 扩缩容容量实例
+
+`PUT /api/v1/deployments/{deployed_model}/capacity-instances/{instance_id}/scale`
+
+```
+{
+  "ptu_capacity": {
+    "input_tpm": 20000,
+    "output_tpm": 2000
+  },
+  "order_type": "UPGRADE"
+}
+```
+
+curl 请求示例：
+
+```
+curl -X PUT "https://dashscope.aliyuncs.com/api/v1/deployments/{deployed_model}/capacity-instances/{instance_id}/scale" \
+    --header "Authorization: Bearer ${DASHSCOPE_API_KEY}" \
+    --header 'Content-Type: application/json' \
+    --data '{
+    "ptu_capacity": {
+        "input_tpm": 20000,
+        "output_tpm": 2000
+    },
+    "order_type": "UPGRADE"
+}'
+```
+
+参数语义同 [扩缩容](#h2-sec-scale)，实例 ID 由路径确定，请求体无需重复。返回操作对象。调用前查询 `can_scale`；预付费到期挂起的实例不能直接扩缩容，应先续订。8 小时时段实例不支持扩缩容，调用返回 `CAPACITY_INSTANCE_OPERATION_UNSUPPORTED`。
+
+### 续订容量实例
+
+`PUT /api/v1/deployments/{deployed_model}/capacity-instances/{instance_id}/renew`
+
+普通续订：
+
+```
+{
+  "pre_paid_info": {
+    "duration": 30,
+    "auto_renewal": false
+  }
+}
+```
+
+curl 请求示例：
+
+```
+curl -X PUT "https://dashscope.aliyuncs.com/api/v1/deployments/{deployed_model}/capacity-instances/{instance_id}/renew" \
+    --header "Authorization: Bearer ${DASHSCOPE_API_KEY}" \
+    --header 'Content-Type: application/json' \
+    --data '{
+    "pre_paid_info": {
+        "duration": 30,
+        "auto_renewal": false
+    }
+}'
+```
+
+续订并调整容量：
+
+```
+{
+  "pre_paid_info": {
+    "duration": 30,
+    "auto_renewal": false
+  },
+  "is_change": true,
+  "ptu_capacity": {
+    "input_tpm": 20000,
+    "output_tpm": 2000
+  }
+}
+```
+
+curl 请求示例：
+
+```
+curl -X PUT "https://dashscope.aliyuncs.com/api/v1/deployments/{deployed_model}/capacity-instances/{instance_id}/renew" \
+    --header "Authorization: Bearer ${DASHSCOPE_API_KEY}" \
+    --header 'Content-Type: application/json' \
+    --data '{
+    "pre_paid_info": {
+        "duration": 30,
+        "auto_renewal": false
+    },
+    "is_change": true,
+    "ptu_capacity": {
+        "input_tpm": 20000,
+        "output_tpm": 2000
+    }
+}'
+```
+
+参数约束同 [续订](#h2-sec-renew)，不传 `order_type`。仅预付费可续订，先检查 `can_renew`；返回操作对象。8 小时时段实例不支持续订和自动续费，调用返回 `CAPACITY_INSTANCE_OPERATION_UNSUPPORTED`。
+
+### 设置自动续费
+
+`PUT /api/v1/deployments/{deployed_model}/capacity-instances/{instance_id}/auto-renew`
+
+开启自动续费：
+
+```
+{
+  "auto_renewal": true,
+  "auto_renewal_cycle": "Day",
+  "auto_renewal_duration": 7
+}
+```
+
+curl 请求示例：
+
+```
+curl -X PUT "https://dashscope.aliyuncs.com/api/v1/deployments/{deployed_model}/capacity-instances/{instance_id}/auto-renew" \
+    --header "Authorization: Bearer ${DASHSCOPE_API_KEY}" \
+    --header 'Content-Type: application/json' \
+    --data '{
+    "auto_renewal": true,
+    "auto_renewal_cycle": "Day",
+    "auto_renewal_duration": 7
+}'
+```
+
+**字段**
+
+**类型**
+
+**必填**
+
+**说明**
+
+`auto_renewal`
+
+Boolean
+
+是
+
+是否开启自动续费
+
+`auto_renewal_cycle`
+
+String
+
+是
+
+计费周期，固定传 `Day`，传其他取值返回 `InvalidParameter`
+
+`auto_renewal_duration`
+
+Integer
+
+是
+
+每次自动续费购买的天数，正整数
+
+返回容量操作对象（`operation_type` 为 `AUTO_RENEW`，通常同步完成、状态为 `SUCCEEDED`）。调用前查询实例的 `can_enable_auto_renew` / `can_disable_auto_renew` 判断当前是否允许开启或关闭；关闭自动续费传 `"auto_renewal": false`。8 小时时段实例不支持自动续费。
+
+### 删除容量实例
+
+`DELETE /api/v1/deployments/{deployed_model}/capacity-instances/{instance_id}`
+
+可选 Query 参数 `reason` 为删除原因，按 URL 编码；无需 JSON 请求体。返回操作对象。
+
+curl 请求示例：
+
+```
+curl -X DELETE "https://dashscope.aliyuncs.com/api/v1/deployments/{deployed_model}/capacity-instances/{instance_id}?reason=release" \
+    --header "Authorization: Bearer ${DASHSCOPE_API_KEY}" \
+    --header "Content-Type: application/json"
+```
+
+-   后付费：按删除流程释放，完成后 `deleted=true`、`status=STOPPED`，生效容量为零。
+-   已生效的预付费：不能用本接口代替退订，直接调用返回 `PREPAID_UNSUBSCRIBE_REQUIRED`。完成退订并释放容量后，最终同样返回 `deleted=true`、`status=STOPPED`。
+-   8 小时时段实例不支持删除与退订，时段到期后容量自动失效；调用返回 `PREPAID_UNSUBSCRIBE_REQUIRED`。
+-   `can_delete=true` 表示当前状态允许进入删除 / 退订流程，不表示预付费可跳过退订直接 DELETE。对于尚无关联订单的失败实例，请根据接口返回结果处理。
+
+退订释放为异步操作。同一专属模型 code 正在处理其他操作时，已受理的释放操作会排队等待，完成前查询可能仍返回原状态和生效容量。退订已受理不代表容量已释放，请通过操作结果及实例 `deleted` 字段确认完成。退订退费公式详见[吞吐预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-unsubscribe-h3)。
+
+### 修改溢出策略
+
+`PUT /api/v1/deployments/{deployed_model}/update-overflowstrategy`
+
+```
+{
+  "overflow_strategy": "disable"
+}
+```
+
+curl 请求示例：
+
+```
+curl -X PUT "https://dashscope.aliyuncs.com/api/v1/deployments/{deployed_model}/update-overflowstrategy" \
+    --header "Authorization: Bearer ${DASHSCOPE_API_KEY}" \
+    --header 'Content-Type: application/json' \
+    --data '{
+    "overflow_strategy": "disable"
+}'
+```
+
+`overflow_strategy` 必填，仅支持小写 `enable` / `disable`。`enable` 表示超出吞吐预留容量的流量允许溢出公共池按量计费；`disable` 表示超出后返回 429 限流错误（仅使用预留容量）。配置作用于整个专属模型 code，容量包不单独配置溢出策略。溢出计费规则详见[吞吐预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-overflow-h2)。
+
+响应包含 `request_id` 和 `output`。修改后可通过 [查询吞吐预留](#h2-sec-query) 获取 `overflow_strategy`，确认配置已更新。
+
+```
+{
+  "request_id": "example-request",
+  "output": {
+    "deployed_model": "example-model-code",
+    "model_name": "<base_model>",
+    "plan": "ptu",
+    "ptu_service_tier": "ptu_fast",
+    "status": "RUNNING",
+    "charge_type": "post_paid",
+    "overflow_strategy": "disable",
+    "ptu_capacity": {
+      "input_tpm": 10000,
+      "output_tpm": 1000
+    }
+  }
+}
+```
+
+**警告**开启溢出策略后，超出容量的流量按量计费，会产生额外费用。关闭后，超出容量的请求会被限流。溢出计费规则详见[吞吐预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-overflow-h2)；更多说明参见[长输入与前缀缓存](raw/model-user-guide/model-high-speed-inference/tpm-reservation-index/tpm-reservation-long-input.md)。
+
+以下两个接口为历史接口，保留兼容。
+
+### 扩缩容（历史接口）
+
+历史接口，推荐改用 [扩缩容容量实例](#instance-scale)；本接口保留兼容，返回部署对象而非容量操作对象。
 
 `PUT /api/v1/deployments/{deployed_model}/scale`
 
-调整指定 吞吐预留下某个容量实例的输入和输出容量。存在多个未删除实例时，必须通过 `instance_id` 指定目标实例。
+调整指定吞吐预留下某个容量实例的输入和输出容量。存在多个未删除实例时，必须通过 `instance_id` 指定目标实例。
 
 **字段**
 
@@ -295,152 +1104,29 @@ String
 }
 ```
 
-`output` 返回 吞吐预留信息，相应容量操作的 ID 通过 `operation_id` 返回。多实例未指定 ID 返回 `CAPACITY_INSTANCE_REQUIRED`。新接入推荐 [扩缩容指定容量实例](#instance-scale)。
-
-预付费变更涉及订单，后付费不走预付费变配订单。变更确认前继续保留原生效容量，失败时不能把目标容量展示为已生效。全零扩缩容不等价于删除实例。
-
-## 查询 吞吐预留
-
-`GET /api/v1/deployments/{deployed_model}`
-
-查询指定 吞吐预留的配置、状态，以及所有容量实例已生效的汇总容量。
+curl 请求示例：
 
 ```
-{
-  "request_id": "example-request",
-  "output": {
-    "deployed_model": "example-model-code",
-    "model_name": "<base_model>",
-    "plan": "ptu",
-    "ptu_service_tier": "ptu_fast",
-    "status": "RUNNING",
-    "charge_type": "pre_paid",
+curl -X PUT "https://dashscope.aliyuncs.com/api/v1/deployments/{deployed_model}/scale" \
+    --header "Authorization: Bearer ${DASHSCOPE_API_KEY}" \
+    --header 'Content-Type: application/json' \
+    --data '{
+    "instance_id": "example-capacity-instance",
     "ptu_capacity": {
-      "input_tpm": 10000,
-      "output_tpm": 1000
+        "input_tpm": 20000,
+        "output_tpm": 2000
     },
-    "overflow_strategy": "disable"
-  }
-}
+    "order_type": "UPGRADE"
+}'
 ```
 
-**字段**
+`output` 返回吞吐预留信息，相应容量操作的 ID 通过 `operation_id` 返回。多实例未指定 ID 返回 `CAPACITY_INSTANCE_REQUIRED`。新接入推荐 [扩缩容容量实例](#instance-scale)。
 
-**说明**
+预付费变更涉及订单，后付费不走预付费变配订单。变更确认前继续保留原生效容量，失败时不能把目标容量展示为已生效。全零扩缩容不等同于删除实例。
 
-`deployed_model`
+### 续订（历史接口）
 
-吞吐预留的调用标识（ModelCode）。
-
-`model_name`
-
-基础模型名称。
-
-`plan`
-
-类型标识，吞吐预留为 `ptu`。
-
-`status`
-
-ModelCode 状态，不代表每个容量实例的状态
-
-`ptu_service_tier`
-
-性能档位：`ptu_fast` 为高速，`ptu_default` 为标速
-
-`ptu_capacity`
-
-该 ModelCode 下所有容量实例已生效的输入、输出汇总容量
-
-`charge_type`
-
-取值：`pre_paid`（预付费）/ `post_paid`（后付费）
-
-`pre_paid_info`
-
-预付费购买及续订配置，含 `pricing_cycle`（`Day` 按天 / `Hour` 为 8 小时时段）、`duration` 等。存在多个容量实例时，请通过实例详情查询目标实例的 `pre_paid_info`。
-
-`pre_paid_instance_id`
-
-预付费实例标识。存在多个容量实例时，请通过容量实例列表获取各实例的 `instance_id`，并指定要操作的实例。
-
-`pre_paid_gmt_expired`
-
-预付费到期时间。存在多个容量实例时，请通过目标实例详情的 `gmt_expired` 获取其到期时间。到期时刻计算规则见[吞吐预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-rules-h2)。
-
-`overflow_strategy`
-
-溢出策略，`enable` 表示允许溢出按量计费，`disable` 表示超出容量时限流。溢出计费口径详见[吞吐预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-overflow-h2)。
-
-`fail_reason`
-
-失败原因。
-
-`gmt_create`
-
-创建时间。
-
-`gmt_modified`
-
-最后修改时间。
-
-`operation_id`
-
-容量操作 ID，用于查询操作结果；相应写操作响应中可能返回。
-
-`instance_id`
-
-容量实例 ID。购买订单尚未处理完成时可能暂不返回；请通过后续查询获取。
-
-混合付费应通过容量实例列表中各实例的 `charge_type` 判断。部署状态和计费类型不能代替每个实例的状态和计费类型。
-
-## 查询 吞吐预留列表
-
-`GET /api/v1/deployments?page_no=1&page_size=10&plan=ptu`
-
-分页查询 吞吐预留列表。
-
-**Query 参数**
-
-**说明**
-
-`page_no`
-
-页码，默认 1
-
-`page_size`
-
-每页数量，默认 10，范围 \[1,100\]
-
-`plan`
-
-可选类型筛选。查询 吞吐预留时传 `ptu`；性能档位由 `service_tier` 表示，不作为 `plan` 的取值
-
-```
-{
-  "request_id": "example-request",
-  "output": {
-    "deployments": [
-      {
-        "deployed_model": "example-model-code",
-        "plan": "ptu",
-        "status": "RUNNING",
-        "ptu_capacity": {
-          "input_tpm": 10000,
-          "output_tpm": 1000
-        }
-      }
-    ],
-    "total": 1,
-    "page_no": 1,
-    "page_size": 10
-  }
-}
-```
-
-部署列表不支持通过 `status` 参数筛选状态。容量实例筛选请使用 [查询容量实例列表（含已删除实例）](#instance-list) 的 `statuses`。
-
-## 续订
+历史接口，推荐改用 [续订容量实例](#instance-renew)；本接口保留兼容，返回部署对象而非容量操作对象。
 
 `PUT /api/v1/deployments/{deployed_model}/renew`
 
@@ -489,6 +1175,22 @@ ModelCode 状态，不代表每个容量实例的状态
 }
 ```
 
+curl 请求示例：
+
+```
+curl -X PUT "https://dashscope.aliyuncs.com/api/v1/deployments/{deployed_model}/renew" \
+    --header "Authorization: Bearer ${DASHSCOPE_API_KEY}" \
+    --header 'Content-Type: application/json' \
+    --data '{
+    "instance_id": "example-capacity-instance",
+    "pre_paid_info": {
+        "duration": 30,
+        "auto_renewal": true,
+        "auto_renewal_duration": 30
+    }
+}'
+```
+
 续订但不开启自动续费：
 
 ```
@@ -501,301 +1203,40 @@ ModelCode 状态，不代表每个容量实例的状态
 }
 ```
 
-仅支持预付费；续订请求不能传 `order_type`。`output` 返回 吞吐预留信息，并可能包含容量操作 ID；推荐使用 [续订指定容量实例](#instance-renew) 的实例级接口并轮询结果。
-
-## 修改溢出策略
-
-`PUT /api/v1/deployments/{deployed_model}/update-overflowstrategy`
+curl 请求示例：
 
 ```
-{
-  "overflow_strategy": "disable"
-}
-```
-
-`overflow_strategy` 必填，仅支持小写 `enable` / `disable`。`enable` 表示超出 PTU 容量的流量允许溢出公共池按量计费；`disable` 表示超出后限流。配置作用于整个 ModelCode，容量包不单独配置溢出策略。溢出计费口径详见[吞吐预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-overflow-h2)。
-
-响应包含 `request_id` 和 `output`。修改后可通过 [查询 吞吐预留](#h2-sec-query) 获取 `overflow_strategy`，确认配置已更新。
-
-```
-{
-  "request_id": "example-request",
-  "output": {
-    "deployed_model": "example-model-code",
-    "model_name": "<base_model>",
-    "plan": "ptu_v2",
-    "ptu_service_tier": "ptu_fast",
-    "status": "RUNNING",
-    "charge_type": "post_paid",
-    "overflow_strategy": "disable",
-    "ptu_capacity": {
-      "input_tpm_quota": 10000,
-      "output_tpm_quota": 10000
-    }
-  }
-}
-```
-
-**警告**开启溢出策略后，超出容量的流量按量计费，会产生额外费用。关闭后，超出容量的请求会被限流。溢出计费口径详见[吞吐预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-overflow-h2)；更多说明参见[预置吞吐长输入与缓存](raw/_short/ptu-long-input-and-cache-f0b1f22118ea9791.md)。
-
-## 容量实例接口
-
-以下接口均以 `/api/v1/deployments/{deployed_model}` 为前缀。实例写操作返回 [容量操作](#operation-fields) 的操作对象，与旧 `/scale`、`/renew` 的部署对象不同。
-
-### 叠加购买容量实例
-
-`POST /api/v1/deployments/{deployed_model}/capacity-instances`
-
-**字段**
-
-**必填**
-
-**说明**
-
-`billing_method`
-
-是
-
-付费方式：`PRE_PAY` 为预付费，`POST_PAY` 为后付费。取值区分大小写
-
-`ptu_capacity`
-
-是
-
-新实例容量
-
-`pre_paid_info`
-
-条件必填
-
-预付费必填，后付费不传
-
-预付费示例：
-
-```
-{
-  "billing_method": "PRE_PAY",
-  "ptu_capacity": {
-    "input_tpm": 10000,
-    "output_tpm": 1000
-  },
-  "pre_paid_info": {
-    "duration": 30,
-    "auto_renewal": false
-  }
-}
-```
-
-8 小时时段增购示例（仅 `ptu_default` 标速，`billing_method` 固定 `PRE_PAY`，`pre_paid_info` 传 `pricing_cycle=Hour` / `duration=8` / `auto_renewal=false`）：
-
-```
-{
-  "billing_method": "PRE_PAY",
-  "ptu_capacity": {
-    "input_tpm": 10000,
-    "output_tpm": 1000
-  },
-  "pre_paid_info": {
-    "pricing_cycle": "Hour",
-    "duration": 8,
-    "auto_renewal": false
-  }
-}
-```
-
-8 小时时段实例创建成功后，通过 [查询容量实例详情](#instance-detail) 可获取以下字段：`pricing_cycle` 为 `Hour`；`gmt_effective` 为北京时间整点生效时间；`gmt_expired` 与 `gmt_effective` 相差 8 小时；`can_scale`、`can_renew`、`can_enable_auto_renew`、`can_disable_auto_renew`、`can_delete` 均为 `false`。
-
-后付费示例：
-
-```
-{
-  "billing_method": "POST_PAY",
-  "ptu_capacity": {
-    "input_tpm": 10000,
-    "output_tpm": 1000
-  }
-}
-```
-
-返回操作对象，初次响应可能已成功、失败或仍在处理中。沿用现有 ModelCode、模型和性能档位；同一 ModelCode 只允许一个未删除的后付费实例。购买条件或实例数量不满足要求时，请根据接口返回的错误处理。
-
-### 查询容量实例列表（含已删除实例）
-
-`GET /api/v1/deployments/{deployed_model}/capacity-instances?page_no=1&page_size=20&include_deleted=true`
-
-**Query 参数**
-
-**类型**
-
-**说明**
-
-`page_no`
-
-Integer
-
-默认 1
-
-`page_size`
-
-Integer
-
-默认 20，范围 \[1,100\]
-
-`include_deleted`
-
-Boolean
-
-默认 true；只展示未删除实例时显式传 false
-
-`statuses`
-
-String 列表
-
-可选，多值逗号分隔，例如 `RUNNING,STOPPED`
-
-`charge_types`
-
-String 列表
-
-可选，`pre_paid,post_paid`
-
-```
-{
-  "request_id": "example-request",
-  "output": {
-    "records": [
-      {
-        "model_service_id": "example-model-code",
-        "instance_id": "example-capacity-instance",
-        "charge_type": "post_paid",
-        "status": "STOPPED",
-        "deleted": true,
-        "effective_capacity": {
-          "input_tpm": 0,
-          "output_tpm": 0
-        },
-        "configured_capacity": {
-          "input_tpm": 0,
-          "output_tpm": 0
-        },
-        "can_scale": false,
-        "can_renew": false,
-        "can_delete": false
-      }
-    ],
-    "items": 1,
-    "page": 1,
-    "itemsPerPage": 20,
-    "pageCount": 1
-  }
-}
-```
-
-分页结构与部署列表不同：`records` 是当前页，`items` 是总数，`page` 是页码，`itemsPerPage` / `pageCount` 保留当前返回的驼峰拼写。优先排列有生效容量的实例，再按创建时间倒序。列表仅支持本节列出的查询参数。
-
-### 查询容量实例详情
-
-`GET /api/v1/deployments/{deployed_model}/capacity-instances/{instance_id}`
-
-返回 [容量实例](#instance-fields) 的实例对象，已删除实例也可查询。ModelCode 与实例须匹配，不能跨 ModelCode 操作实例。
-
-**说明**后付费实例释放后，在同一 ModelCode 下重新购买后付费容量会复用原实例 ID。列表和详情更新为重新购买后的实例信息，不再单独保留原删除记录。释放后的 `configured_capacity` 可能为零，不保证保留释放前的配置容量。
-
-### 扩缩容指定容量实例
-
-`PUT /api/v1/deployments/{deployed_model}/capacity-instances/{instance_id}/scale`
-
-```
-{
-  "ptu_capacity": {
-    "input_tpm": 20000,
-    "output_tpm": 2000
-  },
-  "order_type": "UPGRADE"
-}
-```
-
-参数语义同 [扩缩容](#h2-sec-scale)，实例 ID 由路径确定，请求体无需重复。返回操作对象。调用前读取 `can_scale`；预付费到期挂起的实例不能直接扩缩容，应先续订。8 小时时段实例不支持扩缩容，调用返回 `CAPACITY_INSTANCE_OPERATION_UNSUPPORTED`。
-
-### 续订指定容量实例
-
-`PUT /api/v1/deployments/{deployed_model}/capacity-instances/{instance_id}/renew`
-
-普通续订：
-
-```
-{
-  "pre_paid_info": {
-    "duration": 30,
-    "auto_renewal": false
-  }
-}
-```
-
-续订并调整容量：
-
-```
-{
-  "pre_paid_info": {
-    "duration": 30,
-    "auto_renewal": false
-  },
-  "is_change": true,
-  "ptu_capacity": {
-    "input_tpm": 20000,
-    "output_tpm": 2000
-  }
-}
-```
-
-参数约束同 [续订](#h2-sec-renew)，不传 `order_type`。仅预付费可续订，先检查 `can_renew`；返回操作对象。8 小时时段实例不支持续订和自动续费，调用返回 `CAPACITY_INSTANCE_OPERATION_UNSUPPORTED`。
-
-### 删除 / 释放容量实例
-
-`DELETE /api/v1/deployments/{deployed_model}/capacity-instances/{instance_id}`
-
-可选 Query 参数 `reason` 为删除原因，按 URL 编码；无需 JSON 请求体。返回操作对象。
-
--   后付费：按删除流程释放，完成后 `deleted=true`、`status=STOPPED`，生效容量为零。
--   已生效的预付费：不能用本接口代替退订，直接调用返回 `PREPAID_UNSUBSCRIBE_REQUIRED`。完成退订并释放容量后，最终同样返回 `deleted=true`、`status=STOPPED`。
--   8 小时时段实例不支持直接删除，调用返回 `PREPAID_UNSUBSCRIBE_REQUIRED`，需走商业化退订流程。
--   `can_delete=true` 表示当前状态允许进入删除 / 退订流程，不表示预付费可跳过退订直接 DELETE。对于尚无关联订单的失败实例，请根据接口返回结果处理。
-
-退订释放为异步操作。同一 ModelCode 正在处理其他操作时，已受理的释放操作会排队等待，完成前查询可能仍返回原状态和生效容量。退订已受理不代表容量已释放，请通过操作结果及实例 `deleted` 字段确认完成。退订退费公式详见[吞吐预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-unsubscribe-h3)。
-
-### 查询容量操作
-
-`GET /api/v1/deployments/{deployed_model}/capacity-operations/{operation_id}`
-
-```
-{
-  "request_id": "example-poll-request",
-  "output": {
-    "operation_id": "100001",
-    "request_id": "example-original-request",
-    "operation_type": "SCALE",
-    "operation_status": "SUCCEEDED",
-    "model_service_id": "example-model-code",
+curl -X PUT "https://dashscope.aliyuncs.com/api/v1/deployments/{deployed_model}/renew" \
+    --header "Authorization: Bearer ${DASHSCOPE_API_KEY}" \
+    --header 'Content-Type: application/json' \
+    --data '{
     "instance_id": "example-capacity-instance",
-    "from_status": "RUNNING",
-    "current_status": "RUNNING"
-  }
-}
+    "pre_paid_info": {
+        "duration": 30,
+        "auto_renewal": false
+    }
+}'
 ```
 
-外层 `request_id` 是本次查询请求标识，操作对象内的 `request_id` 是原始操作标识，两者可能不同。查询路径必须属于创建该操作的 ModelCode。
+仅支持预付费；续订请求不能传 `order_type`。`output` 返回吞吐预留信息，并可能包含容量操作 ID；推荐使用 [续订容量实例](#instance-renew) 的实例级接口并轮询结果。
 
-使用写操作实际返回的 `operation_id`，不要自行构造。查询不存在的数字 ID 或其他 ModelCode 的操作时，返回 HTTP 404、`CAPACITY_OPERATION_NOT_FOUND`；传入包含字母等非数字字符的无效 ID 时，可能返回 HTTP 500、`InternalError`。遇到此错误先核对 ID，不要直接重复发起容量写操作。
-
-## 删除 吞吐预留
+## 删除吞吐预留
 
 `DELETE /api/v1/deployments/{deployed_model}`
 
-需先释放全部容量实例，且 ModelCode 为 `STOPPED`、不存在正在执行或排队的容量操作，再删除整个部署。返回部署对象。
+需先释放全部容量实例，且专属模型 code 为 `STOPPED`、不存在正在执行或排队的容量操作，再删除整个部署。返回部署对象。
 
-最后一个实例释放后，ModelCode 变为 `STOPPED`，不会因此自动删除 ModelCode。删除容量实例与删除 ModelCode 是两个不同操作。
+curl 请求示例：
 
-## 响应对象及状态
+```
+curl -X DELETE "https://dashscope.aliyuncs.com/api/v1/deployments/{deployed_model}" \
+    --header "Authorization: Bearer ${DASHSCOPE_API_KEY}" \
+    --header "Content-Type: application/json"
+```
+
+最后一个实例释放后，专属模型 code 变为 `STOPPED`，不会因此自动删除专属模型 code。删除容量实例与删除专属模型 code 是两个不同操作。
+
+## 响应字段说明
 
 ### 容量实例（CapacityInstance）
 
@@ -809,7 +1250,7 @@ String 列表
 
 String
 
-容量实例或操作所属的 ModelCode。
+容量实例或操作所属的专属模型 code。
 
 `instance_id`
 
@@ -869,7 +1310,7 @@ String
 
 String
 
-预付费实例到期时间；8 小时时段实例与 `gmt_effective` 相差 8 小时。到期时刻计算规则见[吞吐预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-rules-h2)。
+预付费实例到期时间；8 小时时段实例与 `gmt_effective` 相差 8 小时。到期时刻计算规则见[吞吐预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-lifecycle-h2)。
 
 `can_scale`
 
@@ -907,7 +1348,43 @@ String
 
 失败原因
 
-`gmt_created`
+`name`
+
+String
+
+预留名称。
+
+`model_name`
+
+String
+
+基础模型名。
+
+`plan`
+
+String
+
+固定 `ptu`。
+
+`ptu_capacity`
+
+Object
+
+容量配置（`input_tpm` / `output_tpm`）。
+
+`ptu_service_tier`
+
+String
+
+推理模式（`ptu_default` / `ptu_fast`）。
+
+`overflow_strategy`
+
+String
+
+溢出策略。
+
+`gmt_create`
 
 时间
 
@@ -918,12 +1395,6 @@ String
 时间
 
 最后修改时间。
-
-`gmt_deleted`
-
-时间
-
-删除时间。
 
 **状态**
 
@@ -963,7 +1434,7 @@ String
 
 后付费删除与预付费退订可统一展示为“已释放”：条件为 `deleted=true`，而不是仅 `status=STOPPED`。`STOPPED + deleted=false` 仍是保留的实例。`deleted=true` 的实例不允许扩缩容、续订、删除。
 
-`RUNNING` 状态不代表所有操作均可用。同一 ModelCode 有进行中操作或存在计费限制时，相应操作可能不可用。预付费 `SUSPENDED` 实例不可扩缩容，符合续订条件时可续订；后付费实例不可续订。调用前重新查询实例详情，通过 `can_scale`、`can_renew`、`can_delete` 检查操作是否可用，并处理接口返回的错误。
+`RUNNING` 状态不代表所有操作均可用。同一专属模型 code 有进行中操作或存在计费限制时，相应操作可能不可用。预付费 `SUSPENDED` 实例不可扩缩容，符合续订条件时可续订；后付费实例不可续订。调用前重新查询实例详情，通过 `can_scale`、`can_renew`、`can_delete` 检查操作是否可用，并处理接口返回的错误。
 
 ### 容量操作（CapacityOperation）
 
@@ -981,7 +1452,7 @@ String
 
 `operation_type`
 
-常见 `CREATE`、`SCALE`、`RENEW`、`DELETE`；生命周期处理也可能出现 `STOP`、`REFUND`，不意味着存在同名公开写接口
+常见 `CREATE`、`SCALE`、`RENEW`、`AUTO_RENEW`、`DELETE`；生命周期处理也可能出现 `STOP`、`REFUND`，不意味着存在同名公开写接口
 
 `operation_status`
 
@@ -989,7 +1460,7 @@ String
 
 `model_service_id`
 
-容量实例或操作所属的 ModelCode。
+容量实例或操作所属的专属模型 code。
 
 `instance_id`
 
@@ -1021,24 +1492,13 @@ String
 
 操作正在执行或排队等待时，均返回 `PROCESSING`。`SUCCEEDED` / `FAILED` 为终态，收到终态后停止轮询，并刷新实例和部署汇总。
 
-## 异步调用、幂等与错误处理
-
-### 推荐调用顺序
-
-1.  查询实例详情，读取能力开关及最新配置。
-2.  发起一次购买 / 扩缩容 / 续订 / 删除请求，保存 `operation_id`。
-3.  若返回 `PROCESSING`，定期查询操作并逐步退避；若已终态，直接处理结果。
-4.  `SUCCEEDED` 后刷新实例及 ModelCode；`FAILED` 展示 `error_code` / `error_message`。网络超时不等同于操作失败，先查已有操作。
-
-同一 ModelCode 的容量变更按顺序处理；有进行中操作时，新变更可能被拒绝。已受理的退订释放会排队，在前序操作完成后继续。变更生效前，查询仍返回原生效容量，不应将目标容量视为已生效。
-
-叠加、扩缩容或释放生效后，可通过部署查询接口获取更新后的汇总生效容量，继续使用原 ModelCode。调用模型还需完成对应模型部署，并使用正确的账号鉴权和调用参数；容量操作成功不代表模型调用的其他条件均已满足。
+## 错误处理与重试
 
 ### 重试与请求标识
 
-对同一个容量写操作的网络重试，保持请求标识与参数不变。建议将 `x-acs-req-uuid` 与 `X-DashScope-RequestId` 设置为同一个 UUID，避免两者不一致导致实际标识变化。当前读取优先级为 `x-acs-req-uuid`、`X-DashScope-RequestId`、`X-Request-Id`，均未提供时生成新标识。
+对同一个容量写操作的网络重试，保持请求标识与参数不变。建议将 `x-acs-req-uuid` 与 `X-DashScope-RequestId` 设置为同一个 UUID，避免两者不一致导致实际标识变化。当前优先级依次为 `x-acs-req-uuid`、`X-DashScope-RequestId`、`X-Request-Id`，均未提供时生成新标识。
 
-相同 ModelCode、相同有效请求标识、相同操作参数的容量操作复用已有操作；同一标识换参数会返回 `IDEMPOTENCY_KEY_CONFLICT`。新业务操作使用新标识。不要将这一实例操作幂等约定直接套用于首次创建 ModelCode。
+相同专属模型 code、相同有效请求标识、相同操作参数的容量操作复用已有操作；同一标识换参数会返回 `IDEMPOTENCY_KEY_CONFLICT`。新业务操作使用新标识。不要将这一实例操作幂等约定直接套用于首次创建专属模型 code。
 
 ### 错误码
 
@@ -1058,7 +1518,7 @@ String
 
 400
 
-刷新详情与能力开关，确认当前状态及付费方式支持操作
+操作不被当前实例状态支持：8 小时时段实例不支持扩缩容/续订/删除；删除 Model Code 须先释放全部容量实例且为 STOPPED 状态
 
 `PREPAID_UNSUBSCRIBE_REQUIRED`
 
@@ -1082,19 +1542,19 @@ String
 
 400
 
-不再对已删除 吞吐预留发起写操作
+不再对已删除吞吐预留发起写操作
 
 `MODEL_CODE_NOT_FOUND` / `CAPACITY_INSTANCE_NOT_FOUND`
 
 404
 
-检查地域、账号、ModelCode 与实例归属；对已删除实例执行扩缩容也可返回 CAPACITY\_INSTANCE\_NOT\_FOUND
+检查地域、账号、专属模型 code 与实例归属；对已删除实例执行扩缩容也可返回 CAPACITY\_INSTANCE\_NOT\_FOUND
 
 `CAPACITY_OPERATION_NOT_FOUND`
 
 404
 
-操作不存在或不属于指定 ModelCode，核对写操作返回的 ID
+操作不存在或不属于指定专属模型 code，核对写操作返回的 ID
 
 `InternalError`
 
@@ -1140,7 +1600,7 @@ String
 
 `InvalidParameter`
 
-核对参数名、类型、容量变化方向与取值。
+参数校验失败。常见触发：字段名或大小写错误（叠加接口 billing\_method 须传 PRE\_PAY/POST\_PAY）；模型固定溢出策略为 disable 时传 enable；模型不支持按 8 小时时段；8 小时服务时段超出售卖时段；容量违反起步/步长/上限约束。
 
 401
 
@@ -1168,9 +1628,9 @@ String
 
 429
 
-`Throttling` / `Throttling.RateQuota` / `Throttling.AllocationQuota`
+`Throttling` / `Throttling.RateQuota` / `` Throttling.AllocationQuota / `QuotaLimit` ``
 
-吞吐预留超额对应 AllocationQuota，可扩容或调整溢出策略。
+吞吐预留超额对应 AllocationQuota，可扩容或调整溢出策略。QuotaLimit 为工作空间吞吐预留容量配额不足，需释放或缩减现有容量。
 
 500
 

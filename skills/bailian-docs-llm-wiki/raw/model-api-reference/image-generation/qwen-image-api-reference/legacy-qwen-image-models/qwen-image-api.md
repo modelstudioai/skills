@@ -357,10 +357,15 @@ SDK与HTTP接口的参数名基本一致，参数结构根据语言特性进行�
 import json
 import os
 import dashscope
-from dashscope import MultiModalConversation
 
-# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
+# 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+client = dashscope.Client(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 messages = [
     {
@@ -371,29 +376,23 @@ messages = [
     }
 ]
 
-# 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-api_key = os.getenv("DASHSCOPE_API_KEY")
-
-response = MultiModalConversation.call(
-    api_key=api_key,
+# 1.x 的 prompt_extend/watermark/negative_prompt/size 等参数，2.0 中统一通过 parameters 传入
+response = client.multimodal.chat.create(
     model="qwen-image-2.0-pro",
     messages=messages,
-    result_format='message',
-    stream=False,
-    watermark=False,
-    prompt_extend=True,
-    negative_prompt="低分辨率，低画质，肢体畸形，手指畸形，画面过饱和，蜡像感，人脸无细节，过度光滑，画面具有AI感。构图混乱。文字模糊，扭曲。",
-    size='2048*2048'
+    parameters={
+        "watermark": False,
+        "prompt_extend": True,
+        "negative_prompt": "低分辨率，低画质，肢体畸形，手指畸形，画面过饱和，蜡像感，人脸无细节，过度光滑，画面具有AI感。构图混乱。文字模糊，扭曲。",
+        "size": "2048*2048",
+    },
 )
 
-if response.status_code == 200:
-    print(json.dumps(response, ensure_ascii=False))
-else:
-    print(f"HTTP返回码：{response.status_code}")
-    print(f"错误码：{response.code}")
-    print(f"错误信息：{response.message}")
-    print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
+# 2.0 SDK：生成结果从 message.content_parts 读取，图像 part 形如 {"image": URL, "type": "image"}
+message = response.choices[0].message
+for part in (message.content_parts or []):
+    if "image" in part:
+        print(json.dumps(part, ensure_ascii=False))
 ```
 
 ##### 响应示例
@@ -548,35 +547,39 @@ import os
 import asyncio
 import dashscope
 from openai import AsyncOpenAI
-from dashscope import MultiModalConversation
 from agents import Agent, Runner, function_tool, OpenAIChatCompletionsModel
 
 # 从环境变量读取百炼 API Key（若未配置，可直接替换为 api_key="sk-xxx"）
 API_KEY = os.getenv("DASHSCOPE_API_KEY")
 
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
-# 文本对话模型（Agent 推理核心）通过 OpenAI 兼容模式接入
-client = AsyncOpenAI(api_key=API_KEY, base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1")
+# 图像生成走 DashScope 原生接口；文本对话模型（Agent 推理核心）通过 OpenAI 兼容模式接入
+client = dashscope.Client(
+    api_key=API_KEY,
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
+openai_client = AsyncOpenAI(api_key=API_KEY, base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1")
 
 # 将图像生成封装为工具（function tool），供 Agent 调用
 @function_tool
 def generate_image(prompt: str) -> str:
     """根据文本描述生成一张图片并返回图片 URL。prompt：图片内容的文字描述。"""
-    rsp = MultiModalConversation.call(
-        api_key=API_KEY,
+    rsp = client.multimodal.chat.create(
         model="qwen-image-2.0-pro",
         messages=[{"role": "user", "content": [{"text": prompt}]}],
-        result_format="message",
     )
-    if rsp.status_code != 200:
-        return f"生成失败：{rsp.code} {rsp.message}"
-    return rsp.output.choices[0].message.content[0]["image"]
+    # 2.0 SDK：生成结果从 message.content_parts 读取，图像 part 形如 {"image": URL, "type": "image"}
+    message = rsp.choices[0].message
+    for part in (message.content_parts or []):
+        if "image" in part:
+            return part["image"]
+    return "生成失败：未返回图像"
 
 agent = Agent(
     name="图像生成助手",
     instructions="你是图像生成助手。当用户想要图片时，调用 generate_image 工具，并把返回的图片 URL 告诉用户。",
-    model=OpenAIChatCompletionsModel(model="qwen-plus", openai_client=client),
+    model=OpenAIChatCompletionsModel(model="qwen-plus", openai_client=openai_client),
     tools=[generate_image],
 )
 

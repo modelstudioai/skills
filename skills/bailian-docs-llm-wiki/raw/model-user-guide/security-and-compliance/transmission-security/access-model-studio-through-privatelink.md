@@ -117,7 +117,7 @@ DashScope Python SDK
 import os
 # 建议dashscope SDK 的版本 >= 2.0.1
 import dashscope
-from dashscope.v2 import DashScopeError
+from dashscope import DashScopeError
 # 配置私网域名：显式指定base_url，将原始域名替换为上一步骤中获取到的私网域名
 client = dashscope.Client(
     api_key=os.getenv("DASHSCOPE_API_KEY"),

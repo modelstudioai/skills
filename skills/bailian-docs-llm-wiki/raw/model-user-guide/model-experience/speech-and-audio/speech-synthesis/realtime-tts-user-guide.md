@@ -288,7 +288,11 @@ cosyvoice-v3-flash
 #### Qwen-Audio-TTS
 
 -   **系统音色**：从 [Qwen-Audio-TTS 音色列表](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/tts-voice-list/qwen-audio-tts-voice-list.md)中选择支持目标方言的音色。直接支持该方言的音色无需额外设置；支持方言指令的音色使用指令控制参数 `instruction` 指定。
+    
+    **说明**使用 qwen-audio-3.1-tts-flash 的多语种与方言音色时，也可通过 `language_hints` 指定方言，参见[多语种与方言音色的设置方法](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list#qwen-tts31-language-hints)。
+    
 -   **复刻音色**：通过指令控制参数 `instruction` 指定方言。
+    
 
 对于支持方言指令的音色，在初始化 `SpeechSynthesizer` 时传入 `instruction="请讲上海话。"`，可将中文文本合成为上海话。
 

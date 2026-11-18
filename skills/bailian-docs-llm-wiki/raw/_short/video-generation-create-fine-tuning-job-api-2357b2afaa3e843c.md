@@ -7,7 +7,7 @@
 -   **适用地域**：本文描述的功能**仅在华北2（北京）地域**可用，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)。
 -   **开通账号权限**：若使用[阿里云子账号](raw/model-user-guide/security-and-compliance/permission-management-overview.md)（[RAM用户](https://help.aliyun.com/zh/ram/user-guide/overview-of-ram-users)），需要为子账号授予模型调用、训练和部署[权限](raw/model-user-guide/security-and-compliance/permission-management-overview.md)。
 -   **配置环境变量**：已成功[获取 API Key](raw/model-api-reference/preparations/get-api-key.md)，并[配置到环境变量](raw/model-api-reference/preparations/get-api-key.md)。
--   **准备工作**：已阅读[视频生成模型调优](raw/model-user-guide/fine-tuning/wan-video-generation-finetune-guide.md)，了解支持微调的模型、微调步骤、数据格式以及计费说明。
+-   **准备工作**：已阅读[视频生成模型调优](https://help.aliyun.com/zh/model-studio/wan-video-generation-finetune-guide)，了解支持微调的模型、微调步骤、数据格式以及计费说明。
 
 ## 创建微调任务
 
@@ -382,7 +382,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes' \
 
 **workspace\_id** `string`
 
-阿里云百炼API Key所属的业务空间ID。请参见[获取Workspace ID](raw/application-api-reference/application-call/obtain-the-app-id-and-workspace-id.md)。
+阿里云百炼API Key所属的业务空间ID。请参见[获取Workspace ID](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)。
 
 **user\_identity** `string`
 

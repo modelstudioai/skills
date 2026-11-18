@@ -1171,7 +1171,7 @@ SDK 的参数命名与HTTP接口基本一致，参数结构根据语言特性进
 
 > 具体耗时受限于排队任务数和服务执行情况，请在获取结果时耐心等待。
 
-**重要**请确保 DashScope Python SDK 版本**不低于**`2.0.1`，再运行以下代码。更新请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+**重要**请确保 DashScope Python SDK 版本**不低于**`2.1.0`，再运行以下代码。更新请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
 各地域的`region`取值和 API Key 不通用，以下示例以北京地域为例进行调用：
 
@@ -1283,7 +1283,7 @@ print(job)
 ```
 import os
 import dashscope
-from dashscope.v2 import DashScopeError
+from dashscope import DashScopeError
 
 # 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
 client = dashscope.Client(
@@ -1412,42 +1412,53 @@ if __name__ == "__main__":
 ```
 import os
 import dashscope
-from dashscope.aigc.image_generation import ImageGeneration
-from dashscope.api_entities.dashscope_response import Message
 
-# 以下为华北2（北京）地域的URL。请将{WorkspaceId}替换为您的百炼业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-
-# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-# 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-api_key = os.getenv("DASHSCOPE_API_KEY")
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+client = dashscope.Client(
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 def sync_call_with_stream():
     print("\n========== 同步调用 - 流式图文输出 ==========")
 
-    image_message = Message(
-        role="user",
-        content=[
-            {
-                "text": "给我一个3张图辣椒炒肉教程"
-            }
-        ]
-    )
-
-    image_stream_res = ImageGeneration.call(
+    stream = client.multimodal.chat.create(
         model="wan2.6-image",
-        api_key=api_key,
-        messages=[image_message],
+        messages=[
+            {
+                "role": "user",
+                "content": [
+                    {"text": "给我一个3张图辣椒炒肉教程"}
+                ],
+            }
+        ],
         stream=True,  # 仅支持流式调用
-        negative_prompt="",
-        enable_interleave=True,
-        max_images=3,
-        size="1280*1280"
+        # 注意：必须显式传 parameters.stream=True（stream=True 不会自动落到 wire 层），
+        # 否则服务端会报错 "stream=False is not supported"
+        parameters={
+            "stream": True,
+            "negative_prompt": "",
+            "enable_interleave": True,  # 开启图文混排输出
+            "max_images": 3,
+            "size": "1280*1280",
+        },
     )
 
     print("流式输出结果:")
-    for stream_res in image_stream_res:
-        print(stream_res)
+    for chunk in stream:
+        if not chunk.choices:
+            continue
+        delta = chunk.choices[0].delta
+        # 文本增量输出
+        if delta.content:
+            print(delta.content, end="")
+        # 图像增量输出：content_parts 携带含图片URL的 image part
+        for part in delta.content_parts or []:
+            if part.get("type") == "image":
+                print(f"\n[图片] {part['image']}")
 
 if __name__ == "__main__":
     sync_call_with_stream()
@@ -1455,7 +1466,7 @@ if __name__ == "__main__":
 
 ##### 响应示例（HTTP 接口返回）
 
-> url 有效期24小时，请及时下载图像。 以上为 HTTP 接口返回的流式数据块（当前示例代码为 1.x 调用方式，其打印结果中额外包含 status\_code/code/message 等字段）。
+> url 有效期24小时，请及时下载图像。 以上为 HTTP 接口返回的流式数据块。
 
 ```
 {"request_id": "5b98e8f3-aeff-4c20-a26c-499a7525axxx", "output": {"text": null, "finish_reason": null, "choices": [{"finish_reason": "null", "message": {"role": "assistant", "content": [{"type": "text", "text": "辣椒"}]}}], "audio": null, "finished": false}, "usage": {"input_tokens": 28, "output_tokens": 0, "characters": 0, "total_tokens": 28, "image_count": 0, "size": "0*0"}}
@@ -1477,7 +1488,7 @@ if __name__ == "__main__":
 ```
 import os
 import dashscope
-from dashscope.v2 import DashScopeError
+from dashscope import DashScopeError
 
 # 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
 client = dashscope.Client(

@@ -4,7 +4,7 @@
 
 ## 适用范围
 
--   **适用地域**：模型部署 API 的开放地域因部署方式而异——模型单元（MU）与 独占吞吐（DTU）支持**华北2（北京）**；预置吞吐（PTU）等部署方式支持**北京与新加坡**地域。如您使用的地域未开放对应部署方式，请通过该地域的百炼控制台完成模型部署操作。
+-   **适用地域**：模型部署 API 的开放地域因部署方式而异——模型单元（MU）与 独占吞吐（DTU）支持**华北2（北京）**。如您使用的地域未开放对应部署方式，请通过该地域的百炼控制台完成模型部署操作。
 -   **开通账号权限**：若使用[阿里云子账号](raw/model-user-guide/security-and-compliance/permission-management-overview.md)（[RAM用户](https://help.aliyun.com/zh/ram/user-guide/overview-of-ram-users)），需要为子账号授予模型调用、训练和部署[权限](https://help.aliyun.com/zh/model-studio/use-workspace)。
 -   **配置环境变量**：已成功[获取 API Key](raw/model-api-reference/preparations/get-api-key.md)，并[配置到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
 -   **阅读部署文档**：建议先阅读[专属部署概述](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)和[使用 API 创建模型部署任务](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-quick-start.md)，了解模型部署的使用方法和基本步骤。
@@ -83,7 +83,7 @@ String
 
 是
 
-部署方案，决定计费方式：`dtu`（DTU 独占算力）、`mu`（模型单元）、`cu`（算力单元）、`ptu_v2`（预置吞吐量 V2）、`lora`（LoRA 共享部署，按 Token 用量计费）。
+部署方案，决定计费方式：`dtu`（DTU 独占算力）、`mu`（模型单元）、`cu`（算力单元）、`lora`（LoRA 共享部署，按 Token 用量计费）。
 
 display\_name
 
@@ -206,7 +206,7 @@ String
 
 是
 
-部署方案，决定计费方式：`dtu`（DTU 独占算力）、`mu`（模型单元）、`cu`（算力单元）、`ptu_v2`（预置吞吐量 V2）、`lora`（LoRA 共享部署，按 Token 用量计费）。
+部署方案，决定计费方式：`dtu`（DTU 独占算力）、`mu`（模型单元）、`cu`（算力单元）、`lora`（LoRA 共享部署，按 Token 用量计费）。
 
 name
 
@@ -332,7 +332,7 @@ String
 
 是
 
-部署方案，决定计费方式：`dtu`（DTU 独占算力）、`mu`（模型单元）、`cu`（算力单元）、`ptu_v2`（预置吞吐量 V2）、`lora`（LoRA 共享部署，按 Token 用量计费）。
+部署方案，决定计费方式：`dtu`（DTU 独占算力）、`mu`（模型单元）、`cu`（算力单元）、`lora`（LoRA 共享部署，按 Token 用量计费）。
 
 name
 
@@ -370,80 +370,11 @@ curl "https://dashscope.aliyuncs.com/api/v1/deployments" \
 }'
 ```
 
-#### 按预置吞吐计费
-
-按预置吞吐计费模式按预置吞吐的使用时长收费，适用于追求稳定吞吐保障和高并发低延迟、且流量可预估的场景。该模式下，吞吐/并发和生成速度均为平台预置，用户不可调。
-
-> 执行以下部署命令后，即便您还没有调用模型，模型部署服务仍将在部署成功后开始计费。建议您先确认服务计费规则，再执行部署命令。
-
-**参数**
-
-**类型**
-
-**必选**
-
-**说明**
-
-model\_name
-
-String
-
-是
-
-待部署的模型名称，对应[我的模型](https://bailian.console.aliyun.com/model/custom)中的模型 ID。也可通过[创建训练任务](raw/_short/create-fine-tuning-job-api-ec89a5612f9a9ba9.md)接口的输出获取。
-
-plan
-
-String
-
-是
-
-部署方案，决定计费方式：`dtu`（DTU 独占算力）、`mu`（模型单元）、`cu`（算力单元）、`ptu_v2`（预置吞吐量 V2）、`lora`（LoRA 共享部署，按 Token 用量计费）。
-
-name
-
-String
-
-否
-
-模型的控制台显示名称。如果不传该参数，将自动使用 `model_name` 的值作为部署名称。
-
-suffix
-
-String
-
-否
-
-模型部署后将生成新的模型名称，suffix 用于指定新模型名称的后缀，最大长度为 8 个字符且需全局唯一。
-
-ptu\_capacity
-
-Object
-
-否
-
-预置吞吐量配置，包含 `input_tpm`（每分钟最大输入 Token 量）、`output_tpm`（每分钟最大输出 Token 量），部分模型另支持 `thinking_output_tpm`（预置思考最大输出 Token 量）。如果不填写该参数，将默认按照 `10,000 input_tpm` 和 `1,000 output_tpm` 进行设置。
-
-```
-curl "https://dashscope.aliyuncs.com/api/v1/deployments" \
---header "Authorization: Bearer $DASHSCOPE_API_KEY" \
---header 'Content-Type: application/json' \
---data '{
-    "name": "my_qwen_flash",
-    "model_name": "qwen-flash-2025-07-28",
-    "plan": "ptu_v2",
-    "ptu_capacity": {
-        "input_tpm": 10000,
-        "output_tpm": 1000
-    }
-}'
-```
-
 ## 部署排障与性能调优
 
 ### max-num-seqs 参数不可配置
 
-百炼模型部署在**按预置吞吐计费**和**按模型单元计费**两种计费方式下，吞吐、并发和生成速度均为平台预置，不支持直接调整 vLLM 内部的 `max-num-seqs` 等推理引擎参数，本接口的请求参数中也不存在该参数。
+百炼模型部署在**吞吐预留**（独立产品，另见其 [API 文档](raw/model-api-reference/model-production/throughput-reservation-api.md)）和**按模型单元计费**两种计费方式下，吞吐、并发和生成速度均为平台预置，不支持直接调整 vLLM 内部的 `max-num-seqs` 等推理引擎参数，本接口的请求参数中也不存在该参数。
 
 **按模型单元计费**方式下，可通过选择**模型单元类型**（对应请求参数 `template_id`）和调整**部署副本数**（对应请求参数 `capacity`）间接控制吞吐能力。
 
@@ -455,7 +386,7 @@ curl "https://dashscope.aliyuncs.com/api/v1/deployments" \
 
 当并发请求超出限流阈值时，接口返回 HTTP `429`，错误码为 `Throttling.RateQuota`，错误信息为 `Requests rate limit exceeded, please try again later`。处理方式：
 
--   **按预置吞吐计费**：调整 `ptu_capacity` 中的 `input_tpm` 和 `output_tpm`（控制台对应 **Input kTPM** 和 **Output kTPM**），或降低请求频率。该方式下溢出策略可选**自动溢出**（切换为按量付费）或**仅使用 PTU 容量**（超出容量的请求直接返回 `429`）。
+-   **吞吐预留**（独立产品，另见其 [API 文档](raw/model-api-reference/model-production/throughput-reservation-api.md)）：调整 `ptu_capacity` 中的 `input_tpm` 和 `output_tpm`（控制台对应 **Input kTPM** 和 **Output kTPM**），或降低请求频率。该方式下溢出策略可选**自动溢出**（切换为按量付费）或**仅使用预留容量**（超出容量的请求直接返回 `429`）。
 -   **按模型单元计费**：调整 `rpm_limit` 和 `tpm_limit`，或降低请求频率。
 
 ### 上下文长度调优

@@ -1,42 +1,52 @@
 # agent context
 
-`agent context` 是百炼平台中用于为 Agent 提供运行时上下文信息的核心机制，它决定了 Agent 在执行任务时可访问的知识、历史记忆、外部数据源及结构化解析能力。该机制通过统一的上下文注入框架，将 RAG 检索结果、[长期记忆](../concepts/long-term-memory.md)、Connector 接入的实时数据以及 ParseX 解析的文档内容动态组装为模型输入。其设计目标是提升 Agent 的事实准确性、状态一致性与多步推理能力。
+`agent context` 是百炼平台中用于增强 Agent 推理能力的核心机制，通过动态注入外部知识、历史记忆和结构化数据源，使 Agent 能在运行时获取上下文相关的补充信息。它不依赖模型自身的参数化知识，而是以轻量、可插拔的方式扩展 Agent 的感知与决策边界。该机制由 RAG、Memory 和 Connector 三大组件协同支撑，适用于对话式应用、智能工作流等场景。
 
 ## 支持的模型与功能
 
-当前 `agent context` 机制完整支持所有百炼平台上的 **Agent-optimized 模型**（如 qwen-agent-7b、qwen-agent-72b），以及部分通用大模型（如 qwen-max、qwen-plus）在启用 `enable_agent_context: true` 时的上下文增强模式。核心功能包括：
-- RAG 检索结果自动注入（基于 [知识库](../../raw/application-user-guide/knowledge-base.md) 配置）；
-- Memory 库中的对话历史与用户画像自动关联（详见 [memory-library-overview.md](../../raw/application-user-guide/agent-context/memory-library-overview.md)）；
-- Connector 接入的第三方系统数据（如 CRM、数据库）按需加载；
-- ParseX 解析后的结构化文档内容（PDF/Word/Excel 等）作为上下文片段嵌入（参见 [getting-started-overview.md](../../raw/application-user-guide/agent-context/getting-started-overview.md)）。
-
-> **注意**：qwen-turbo 和 qwen-1.5 系列模型**不支持** `agent context`，调用时将静默忽略上下文字段；此行为与 [overview.md](../../raw/application-user-guide/agent-context/overview.md) 中“所有模型默认兼容”的旧描述矛盾，以本说明为准。
+- **模型支持**：当前仅 `qwen-max`、`qwen-plus` 和 `qwen-turbo`（v202408 及以上版本）原生支持 `agent context` 的完整上下文注入能力；其他模型（如 `qwen-1.5` 系列）仅支持基础 memory 回溯，不支持 RAG 或 Connector 动态加载 [Agent 上下文](../../raw/application-user-guide/agent-context.md)。
+- **核心功能**：
+  - **RAG 检索增强**：从知识库实时检索相关文档片段，作为 prompt 上下文拼接；
+  - **Memory 管理**：支持会话级短期记忆（session memory）与用户级[长期记忆](../concepts/long-term-memory.md)（user memory），详见 [Memory](../../raw/application-user-guide/agent-context/memory-library-overview.md)；
+  - **Connector 集成**：对接数据库、API、文件系统等外部数据源，按需触发上下文提取。
 
 ## 关键参数
 
 | 参数名 | 类型 | 必填 | 说明 |
 |--------|------|------|------|
-| `context_sources` | array | 否 | 指定启用的上下文类型，取值为 `["rag", "memory", "connector", "parsex"]`；未声明则默认启用全部（但受模型能力限制） |
-| `context_max_tokens` | integer | 否 | 上下文总 token 上限，默认 4096；超出部分按 LRU 策略截断 |
-| `memory_filter` | object | 否 | 用于过滤 memory 条目的条件对象，例如 `{ "user_id": "u123", "tag": "support" }` |
+| `context_config` | object | 否 | 控制上下文注入策略，含 `rag`、`memory`、`connector` 三个子对象 |
+| `rag.enabled` | boolean | 否，默认 `false` | 启用 RAG 检索；启用时需指定 `knowledge_base_id` |
+| `memory.enabled` | boolean | 否，默认 `true` | 是否启用会话记忆；设为 `false` 将禁用所有 memory 注入 |
+| `connector.ids` | string[] | 否 | 指定要调用的 connector ID 列表，最多 3 个 |
+
+> **注意**：`context_config.memory.enabled = false` 并不会清除已存在的 memory 记录，仅跳过本次请求的注入；该行为与 [RAG](../../raw/application-user-guide/agent-context/knowledge-base.md) 文档中“memory 禁用即清空上下文”的旧描述存在矛盾，以当前 SDK v3.2+ 实现为准。
 
 ## 使用方式
 
-1. 在 Agent 配置 YAML 或 API 请求体中显式声明 `context` 字段：
-   ```yaml
-   context:
-     context_sources: ["rag", "memory"]
-     context_max_tokens: 3072
-   ```
-2. 确保对应功能模块已启用并完成配置：RAG 需绑定知识库、Memory 需初始化库、Connector 需完成认证与 schema 映射、ParseX 需上传并解析文档；
-3. 发起 `/v1/agents/{id}/run` 调用，平台自动合成上下文并注入模型 [prompt](prompt.md) 头部。
+1. 在调用 `/v1/chat/completions` 时，于 `messages` 外层传入 `context_config` 对象；
+2. RAG 需提前在控制台创建知识库并获取 `knowledge_base_id`；
+3. Memory 默认自动启用，无需额外配置，但可通过 `user_id` 和 `session_id` 控制作用域；
+4. Connector 需已在平台注册并授权，ID 可在 [Connector](../../raw/application-user-guide/agent-context/overview.md) 页面查看。
+
+示例（精简）：
+```json
+{
+  "model": "qwen-max",
+  "messages": [...],
+  "context_config": {
+    "rag": { "enabled": true, "knowledge_base_id": "kb-xxx" },
+    "memory": { "enabled": true },
+    "connector": { "ids": ["conn-db-001"] }
+  }
+}
+```
 
 ## 限制和注意事项
 
-- 单次请求中 `context_sources` 最多指定 3 种类型，避免上下文膨胀导致推理延迟激增；
-- RAG 与 ParseX 内容若存在语义重叠，系统**不自动去重**，需业务层预处理（[overview.md](../../raw/application-user-guide/agent-context/overview.md) 未说明此风险）；
-- Memory 数据仅支持最近 100 条交互记录（按时间倒序），更早条目需通过 `memory_filter` 主动查询；
-- 所有上下文内容在模型输入前经 Base64 编码与安全扫描，含敏感词或非法格式的片段将被整块丢弃且**不报错**。
+- 单次请求注入的总上下文 token 数上限为 8192（含原始 prompt），超出部分将被截断；
+- RAG 检索结果默认返回 top-3 片段，不可调整数量；
+- Memory 的 user-level 存储容量为 1MB/用户，超限时写入失败且不报错，需主动监控 [ParseX](../../raw/application-user-guide/agent-context/getting-started-overview.md) 日志；
+- 不支持在流式响应（`stream: true`）中动态更新 context_config —— 配置必须在首次请求时固定。
 
 ## 来源文档
 

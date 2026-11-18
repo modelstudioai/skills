@@ -34,7 +34,7 @@
 ```
 import os
 import dashscope
-from dashscope.v2 import DashScopeError
+from dashscope import DashScopeError
 
 # 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
@@ -211,7 +211,7 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 ```
 import os
 import dashscope
-from dashscope.v2 import DashScopeError
+from dashscope import DashScopeError
 
 # 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
 client = dashscope.Client(
@@ -373,7 +373,7 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 ```
 import os
 import dashscope
-from dashscope.v2 import DashScopeError
+from dashscope import DashScopeError
 
 # 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
 client = dashscope.Client(
@@ -604,7 +604,7 @@ import base64
 import os
 import mimetypes
 import dashscope
-from dashscope.v2 import DashScopeError
+from dashscope import DashScopeError
 
 # 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
 client = dashscope.Client(

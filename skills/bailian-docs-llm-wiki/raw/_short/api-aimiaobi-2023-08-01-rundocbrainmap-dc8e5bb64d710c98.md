@@ -69,7 +69,7 @@ string
 
 是
 
-阿里云百炼业务空间 ID。获取方式请参见[如何使用业务空间](raw/application-api-reference/application-call/obtain-the-app-id-and-workspace-id.md)
+阿里云百炼业务空间 ID。获取方式请参见[如何使用业务空间](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)
 
 llm-xxx
 

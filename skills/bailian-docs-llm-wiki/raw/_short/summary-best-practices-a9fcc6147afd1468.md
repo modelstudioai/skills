@@ -34,7 +34,7 @@
 
 ## 获取Workspace ID和App ID
 
-获取Workspace ID和App ID，请参考[获取APP ID 和 Workspace ID](raw/application-api-reference/application-call/obtain-the-app-id-and-workspace-id.md)。
+获取Workspace ID和App ID，请参考[获取APP ID 和 Workspace ID](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)。
 
 ## 安装SDK
 

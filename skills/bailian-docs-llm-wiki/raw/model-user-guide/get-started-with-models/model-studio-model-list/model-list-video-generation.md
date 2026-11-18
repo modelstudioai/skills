@@ -50,6 +50,8 @@
 -   [pixverse/pixverse-lipsync](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-video-generation/pixverse-lipsync.md)
 -   [pixverse/pixverse-motioncontrol](raw/_short/pixverse-motioncontrol-3cfa988336f947a4.md)
 -   [pixverse/pixverse-upscale](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-video-generation/pixverse-upscale.md)
+-   [pixverse/pixverse-v6-max-it2v](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-video-generation/pixverse-v6-max-it2v.md)
+-   [pixverse/pixverse-v6-max-t2v](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-video-generation/pixverse-v6-max-t2v.md)
 -   [pixverse/pixverse-v6-it2v](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-video-generation/pixverse-v6-it2v.md)
 -   [pixverse/pixverse-v6-kf2v](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-video-generation/pixverse-v6-kf2v.md)
 -   [pixverse/pixverse-v6-r2v](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-video-generation/pixverse-v6-r2v.md)

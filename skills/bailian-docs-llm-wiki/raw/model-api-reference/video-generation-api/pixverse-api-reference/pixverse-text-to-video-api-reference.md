@@ -61,14 +61,15 @@
 
 可选值：
 
+-   pixverse/pixverse-v6-max-t2v
 -   pixverse/pixverse-c1-t2v
 -   pixverse/pixverse-v6-t2v
 -   pixverse/pixverse-v5.6-t2v
 
 模型选型
 
--   针对打斗、法术特效及高速运动等动态场景，推荐选用 **c1**。
--   通用场景推荐使用**v6**，**v5.6**建议直接升级至**v6**。
+-   推荐使用 **v6-max**。
+-   针对打斗、法术特效及高速运动等动态场景，可选 **c1**。
 
 **input** `object` **（必选）**
 
@@ -82,6 +83,7 @@
 
 支持中英文，每个汉字/字母占一个字符，字符编码为UTF-8，超过部分会自动截断。
 
+-   pixverse/pixverse-v6-max-t2v：不超过5000个字符。
 -   pixverse/pixverse-c1-t2v：不超过5000个字符。
 -   pixverse/pixverse-v6-t2v：不超过5000个字符。
 -   pixverse/pixverse-v5.6-t2v：不超过2048个字符。
@@ -92,14 +94,48 @@
 
 属性
 
-**size** `string` **（必选）**
+**resolution** `string` **（条件必选）**
+
+使用pixverse/pixverse-v6-max-t2v时必选。
+
+**重要**resolution直接影响费用，请在调用前确认[模型价格](https://help.aliyun.com/zh/model-studio/model-pricing#pxt002a0h3001)。
+
+生成视频的分辨率档位。
+
+可选值：
+
+-   `360P`
+-   `540P`
+-   `720P`
+-   `1080P`
+
+视频分辨率由resolution和aspect\_ratio确定，无需设置size。
+
+**aspect\_ratio** `string` （可选）
+
+生成视频的宽高比。
+
+可选值：
+
+-   `16:9`：默认值
+-   `4:3`
+-   `1:1`
+-   `3:4`
+-   `9:16`
+-   `3:2`
+-   `2:3`
+-   `21:9`
+
+**size** `string` **（条件必选）**
+
+使用pixverse/pixverse-c1-t2v、pixverse/pixverse-v6-t2v、pixverse/pixverse-v5.6-t2v时必选。
 
 生成视频的分辨率，格式为`宽*高`的像素值。
 
 **重要**
 
 -   size直接影响费用，请在调用前确认[模型价格](https://help.aliyun.com/zh/model-studio/model-pricing#pxt002a0h3001)。
--   使用pixverse/pixverse-v5.6-t2v模型，若设置size为1808_1808，且duration为8时，实际输出的视频分辨率为1440_1440。
+-   使用pixverse/pixverse-v5.6-t2v模型，若设置`size=1808*1808`，且duration为8时，实际输出的视频分辨率为`1440*1440`。
 
 不同分辨率档位和宽高比对应的可选值见下方表格。
 
@@ -349,6 +385,8 @@ size取值（宽\*高）
 
 生成视频的时长，单位为秒。
 
+-   pixverse/pixverse-v6-max-t2v：取值范围为\[1, 15\]之间的整数。
+    
 -   pixverse/pixverse-c1-t2v：取值范围为\[1, 15\]之间的整数。
     
 -   pixverse/pixverse-v6-t2v：取值范围为\[1, 15\]之间的整数。
@@ -395,6 +433,31 @@ size取值（宽\*高）
 未指定时，系统自动生成随机种子。若需提升生成结果的可复现性，建议固定seed值。
 
 请注意，由于模型生成具有概率性，即使使用相同 seed，也不能保证每次生成结果完全一致。
+
+#### 文生视频（v6-max）
+
+支持模型：pixverse/pixverse-v6-max-t2v。
+
+```
+# 调用时请将 {WorkspaceId} 替换为真实的业务空间ID。
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
+    -H 'X-DashScope-Async: enable' \
+    -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+    -H 'Content-Type: application/json' \
+    -d '{
+    "model": "pixverse/pixverse-v6-max-t2v",
+    "input": {
+        "prompt": "下着雨，赛博城市里，一只浣熊在栏杆上行走。突然他眼睛发出蓝光，变身成一架高科技无人机，快速飞离画面。"
+    },
+    "parameters": {
+        "resolution": "720P",
+        "aspect_ratio": "16:9",
+        "duration": 5,
+        "audio": true,
+        "watermark": true
+    }
+}'
+```
 
 #### 文生视频
 
@@ -666,9 +729,13 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 
 生成视频的数量。固定为1。
 
+使用pixverse/pixverse-v6-max-t2v时不返回该字段。
+
 **shot\_type**`string`
 
 生成视频的镜头类型。
+
+使用pixverse/pixverse-v6-max-t2v时不返回该字段。
 
 **request\_id**`string`
 
@@ -768,14 +835,13 @@ def sample_sync_call_t2v():
     # call sync api, will return the result
     print('please wait...')
     # generate 为一步式调用（提交任务并等待完成），返回已完成的 Job
-    # audio 为 parameters 段字段，不在具名签名内，经 parameters 透传
     try:
-        job = client.videos.generate(model='pixverse/pixverse-c1-t2v',
+        job = client.videos.generate(model='pixverse/pixverse-v6-max-t2v',
                                      prompt='下着雨，赛博城市里，一只浣熊在栏杆上行走。突然他眼睛发出蓝光，变身成一架高科技无人机，快速飞离画面。',
-                                     size='1280*720',
+                                     resolution='720P',
                                      duration=5,
                                      watermark=False,
-                                     parameters={'audio': False})
+                                     parameters={'aspect_ratio': '16:9', 'audio': False})
         print(job)
         print(job.video_url)
     except DashScopeError as e:
@@ -841,14 +907,13 @@ client = dashscope.Client(
 def sample_async_call_t2v():
     # call async api, will return the task information
     # you can get task status with the returned task id.
-    # audio 为 parameters 段字段，不在具名签名内，经 parameters 透传
     try:
-        job = client.videos.jobs.create(model='pixverse/pixverse-c1-t2v',
+        job = client.videos.jobs.create(model='pixverse/pixverse-v6-max-t2v',
                                         prompt='下着雨，赛博城市里，一只浣熊在栏杆上行走。突然他眼睛发出蓝光，变身成一架高科技无人机，快速飞离画面。',
-                                        size='1280*720',
+                                        resolution='720P',
                                         duration=5,
                                         watermark=True,
-                                        parameters={'audio': False})
+                                        parameters={'aspect_ratio': '16:9', 'audio': False})
         print(job)
         print("task_id: %s" % job.task_id)
     except DashScopeError as e:
@@ -952,6 +1017,9 @@ import com.alibaba.dashscope.exception.NoApiKeyException;
 import com.alibaba.dashscope.utils.JsonUtils;
 import com.alibaba.dashscope.utils.Constants;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Text2Video {
 
     static {
@@ -968,16 +1036,20 @@ public class Text2Video {
      */
     public static void text2Video() throws ApiException, NoApiKeyException, InputRequiredException {
         VideoSynthesis vs = new VideoSynthesis();
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("aspect_ratio", "16:9");
+
         VideoSynthesisParam param =
                 VideoSynthesisParam.builder()
                         .apiKey(apiKey)
-                        .model("pixverse/pixverse-c1-t2v")
+                        .model("pixverse/pixverse-v6-max-t2v")
                         .prompt("下着雨，赛博城市里，一只浣熊在栏杆上行走。突然他眼睛发出蓝光，变身成一架高科技无人机，快速飞离画面。")
-                        .size("1280*720")
+                        .resolution("720P")
                         .duration(5)
                         .audio(true)
                         .watermark(true)
                         .seed(12345)
+                        .parameters(parameters)
                         .build();
         System.out.println("please wait...");
         VideoSynthesisResult result = vs.call(param);
@@ -1044,6 +1116,9 @@ import com.alibaba.dashscope.task.AsyncTaskListParam;
 import com.alibaba.dashscope.utils.JsonUtils;
 import com.alibaba.dashscope.utils.Constants;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Text2Video {
 
     static {
@@ -1061,16 +1136,20 @@ public class Text2Video {
     public static void text2Video() throws ApiException, NoApiKeyException, InputRequiredException {
         VideoSynthesis vs = new VideoSynthesis();
 
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("aspect_ratio", "16:9");
+
         VideoSynthesisParam param =
                 VideoSynthesisParam.builder()
                         .apiKey(apiKey)
-                        .model("pixverse/pixverse-c1-t2v")
+                        .model("pixverse/pixverse-v6-max-t2v")
                         .prompt("下着雨，赛博城市里，一只浣熊在栏杆上行走。突然他眼睛发出蓝光，变身成一架高科技无人机，快速飞离画面。")
-                        .size("1280*720")
+                        .resolution("720P")
                         .duration(5)
                         .audio(true)
                         .watermark(true)
                         .seed(12345)
+                        .parameters(parameters)
                         .build();
 
         // 异步调用

@@ -4791,7 +4791,7 @@ kling/kling-v3-image-generation
 
 **同时处理中任务数量（并发数）**
 
-vidu/vidu-image-pro\_reference2image
+vidu/viduq3.1-fast\_reference2image
 
 300
 
@@ -4808,6 +4808,8 @@ vidu/viduq3-fast\_reference2image
 vidu/viduq2-pro\_reference2image
 
 vidu/viduq2-fast\_reference2image
+
+vidu/vidu-image-pro\_reference2image
 
 ### 语音识别
 
@@ -6551,7 +6553,11 @@ pixverse/pixverse-v6-r2v-omni
 
 5
 
-> 同一个阿里云百炼API Key 在 5 个模型间共享额度。即这 5 个模型处于运行状态的任务总数加起来不能超过 5 个。
+> 同一个阿里云百炼API Key 在 7 个模型间共享额度。即这 7 个模型处于运行状态的任务总数加起来不能超过 5 个。
+
+pixverse/pixverse-v6-max-t2v
+
+pixverse/pixverse-v6-max-it2v
 
 pixverse/pixverse-v6-t2v
 

@@ -387,7 +387,7 @@ import pyaudio
 from concurrent.futures import ThreadPoolExecutor
 
 import dashscope
-from dashscope.v2 import DashScopeError
+from dashscope import DashScopeError
 
 def main():
     # 检查 API Key

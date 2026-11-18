@@ -1,10 +1,14 @@
-# 查询 MCP 详情
+# 获取版本详情
 
-查询官方 MCP 或当前工作空间下自定义 MCP 的详情、状态和配置。
+查询指定版本的元数据和扫描状态。
 
 ## 接口
 
-**GET** `/api/v1/mcp/servers/{mcpCode}`
+**GET** `/api/v1/skills/{skill_id}/versions/{version}`
+
+查询指定版本。版本号精确匹配，不回退到最新版本。
+
+官方 Skill 仅可查询 `active` 版本，其他状态按版本不存在处理。已删除版本按不存在处理。
 
 ## 请求参数
 
@@ -16,17 +20,25 @@
 
 说明
 
-mcpCode
+skill\_id
 
 `string`
 
 是
 
-MCP 编码
+Skill ID
+
+version
+
+`string`
+
+是
+
+版本号，例如 `1.0`
 
 ## 响应
 
-返回完整的 `DetailResponse`。自定义 MCP 的 `mcp_config` 按保存值返回；配置无法恢复时为 `null`。官方 MCP 的 `mcp_config` 始终为 `null`。
+返回 `SkillVersionDTO`。
 
 字段
 
@@ -34,72 +46,70 @@ MCP 编码
 
 说明
 
-mcp\_code
+id
 
 `string`
 
-MCP 编码
-
-server\_name
-
-`string`
-
-MCP 名称
-
-description
-
-`string`
-
-MCP 描述
+版本记录唯一标识
 
 type
 
 `string`
 
-`OFFICIAL` 或 `CUSTOMER`
+固定为 `skill_version`
 
-server\_type
-
-`string`
-
-`STDIO`、`HTTP`、`SSE` 或 `OPENAPI`
-
-server\_status
+skill\_id
 
 `string`
 
-服务状态
+所属 Skill ID
 
-server\_status\_text
+display\_name
 
 `string`
 
-状态文案
+该版本的展示名称
 
-dashscope\_endpoint
+display\_description
 
-`string / null`
+`string`
 
-MCP 接入地址，仅已启用或开通中时返回
+该版本的展示描述
 
-meta\_info
+version
+
+`string`
+
+版本号
+
+status
+
+`string`
+
+版本状态
+
+created\_at
+
+`string`
+
+创建时间
+
+updated\_at
+
+`string`
+
+更新时间
+
+additional\_properties
 
 `object / null`
 
-服务元信息
-
-mcp\_config
-
-`object / null`
-
-自定义 MCP 的已保存配置
-
-`meta_info` 字段见 [MCP API 概览](https://help.aliyun.com/zh/model-studio/mcp-api/overview#h-mcp-api-structures)。
+扩展属性；安全扫描未通过时包含 `error_info`
 
 ## 示例
 
 ```
-curl "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/mcp/servers/mcp-a1b2c3d4e5f6g7h8" \
+curl "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/skills/skill_abc123/versions/1.0" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 ```
@@ -108,30 +118,18 @@ curl "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/mcp/servers/mcp
   "error_code": null,
   "error_msg": null,
   "data": {
-    "mcp_code": "mcp-a1b2c3d4e5f6g7h8",
-    "server_name": "weather-mcp",
-    "description": "天气查询 MCP",
-    "type": "CUSTOMER",
-    "server_type": "HTTP",
-    "server_status": "ACTIVATED",
-    "server_status_text": "已启用",
-    "dashscope_endpoint": "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/mcps/mcp-a1b2c3d4e5f6g7h8/mcp",
-    "meta_info": {
-      "console_detail_url": "https://bailian.console.aliyun.com/flow-agent/mcp-manage/detail/mcp-a1b2c3d4e5f6g7h8/custom",
-      "classification": "生活服务",
-      "activate_user_count": 10,
-      "call_total_count": 1200,
-      "average_call_time": 125,
-      "call_success_rate": 0.99
-    },
-    "mcp_config": {
-      "url": "https://mcp.example.com/mcp",
-      "headers": {
-        "Authorization": "Bearer sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-      }
-    }
+    "id": "skillver_xxxxxxxxxxxxxxxxxxxxxx",
+    "type": "skill_version",
+    "skill_id": "skill_abc123",
+    "display_name": "My Custom Skill",
+    "display_description": "从 SKILL.md 解析的描述",
+    "version": "1.0",
+    "status": "checking",
+    "created_at": "2026-06-15T08:23:11Z",
+    "updated_at": "2026-06-15T08:23:11Z",
+    "additional_properties": null
   },
-  "request_id": "6f1c2a8e-3b0d-4c55-9a0e-2f7d1c9b8a11"
+  "request_id": "15a89d4c-f142-4e00-a9f7-b088442417c9"
 }
 ```
 
@@ -143,22 +141,32 @@ error\_code
 
 说明
 
+401
+
+WORKSPACE\_ID\_ILLEGAL
+
+身份信息缺失或无效
+
 400
 
-InvalidParameter
+SKILL\_ID\_IS\_NULL
 
-携带了查询参数或请求体
+`skill_id` 为空白
 
-404
+400
 
-McpServerNotFound
+SKILL\_VERSION\_IS\_NULL
 
-MCP 服务不存在，或不属于当前工作空间
+`version` 为空白
 
-404
+500
 
-McpServerUnavailable
+SKILL\_NOT\_EXIST
 
-MCP 服务已删除或已下架
+Skill 不存在、已删除或无权访问
 
-**警告**`mcp_config.headers` 会按保存值返回，可能包含 API Key 等敏感信息。请妥善保护响应内容。
+500
+
+SKILL\_VERSION\_NOT\_EXIST
+
+版本不存在、已删除或官方 Skill 的非 `active` 版本

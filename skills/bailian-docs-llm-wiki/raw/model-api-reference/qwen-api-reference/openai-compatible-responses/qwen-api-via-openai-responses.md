@@ -513,6 +513,8 @@ array 元素类型
 
 联网搜索工具，允许模型搜索互联网上的最新信息。相关文档：[联网搜索](raw/model-user-guide/model-experience/text-generation-model/tool-calls/web-search.md)
 
+注：codex 模式下，在 `tools` 中开启 `web_search` 会自动启用 `web_extractor`。
+
 属性
 
 **type** `string` **（必选）**
@@ -535,7 +537,7 @@ array 元素类型
 
 **code\_interpreter**
 
-代码解释器工具，允许模型执行代码并返回结果，支持数据分析。`qwen4-max`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.7-max`、`qwen3.7-max-2026-05-20`、`qwen3.7-max-2026-06-08`需要同时开启思考模式。相关文档：[代码解释器](raw/model-user-guide/model-experience/text-generation-model/tool-calls/qwen-code-interpreter.md)
+代码解释器工具，允许模型执行代码并返回结果，支持数据分析。相关文档：[代码解释器](raw/model-user-guide/model-experience/text-generation-model/tool-calls/qwen-code-interpreter.md)
 
 属性
 

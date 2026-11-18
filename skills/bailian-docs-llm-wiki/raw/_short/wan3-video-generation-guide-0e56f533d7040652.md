@@ -222,7 +222,7 @@ wan3.0-video / wan3.0-video-prime 是 All-in-One 模型，无需切换模型名�
 ```
 import os
 import dashscope
-from dashscope.v2 import DashScopeError
+from dashscope import DashScopeError
 
 # 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
 client = dashscope.Client(
@@ -406,7 +406,7 @@ curl -X GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{ta
 ```
 import os
 import dashscope
-from dashscope.v2 import DashScopeError
+from dashscope import DashScopeError
 
 # 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
 client = dashscope.Client(
@@ -589,7 +589,7 @@ curl -X GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{ta
 ```
 import os
 import dashscope
-from dashscope.v2 import DashScopeError
+from dashscope import DashScopeError
 
 # 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
 client = dashscope.Client(
@@ -795,7 +795,7 @@ H1-2026跨境电商月度GMV.xlsx
 ```
 import os
 import dashscope
-from dashscope.v2 import DashScopeError
+from dashscope import DashScopeError
 
 # 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
 client = dashscope.Client(
@@ -969,7 +969,7 @@ curl -X GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{ta
 ```
 import os
 import dashscope
-from dashscope.v2 import DashScopeError
+from dashscope import DashScopeError
 
 # 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
 client = dashscope.Client(
@@ -1142,7 +1142,7 @@ curl -X GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{ta
 ```
 import os
 import dashscope
-from dashscope.v2 import DashScopeError
+from dashscope import DashScopeError
 
 # 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
 client = dashscope.Client(

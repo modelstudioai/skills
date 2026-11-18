@@ -753,7 +753,7 @@ API Key 无效或已过期，返回 `Invalid API-key provided.`
 ```
 import os
 import dashscope
-from dashscope.v2 import DashScopeError
+from dashscope import DashScopeError
 # 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
 client = dashscope.Client(
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
@@ -788,7 +788,7 @@ except DashScopeError as e:
 import os
 import base64
 import dashscope
-from dashscope.v2 import DashScopeError
+from dashscope import DashScopeError
 # 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
 client = dashscope.Client(
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
@@ -828,7 +828,7 @@ except DashScopeError as e:
 ```
 import os
 import dashscope
-from dashscope.v2 import DashScopeError
+from dashscope import DashScopeError
 # 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
 client = dashscope.Client(
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
@@ -859,7 +859,7 @@ except DashScopeError as e:
 ```
 import os
 import dashscope
-from dashscope.v2 import DashScopeError
+from dashscope import DashScopeError
 # 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
 client = dashscope.Client(
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
@@ -889,7 +889,7 @@ except DashScopeError as e:
 ```
 import os
 import dashscope
-from dashscope.v2 import DashScopeError
+from dashscope import DashScopeError
 # 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
 client = dashscope.Client(
     # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
@@ -936,7 +936,7 @@ except DashScopeError as e:
 ```
 import os
 import dashscope
-from dashscope.v2 import DashScopeError
+from dashscope import DashScopeError
 # 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
 client = dashscope.Client(
     # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
@@ -980,7 +980,7 @@ except DashScopeError as e:
 ```
 import os
 import dashscope
-from dashscope.v2 import DashScopeError
+from dashscope import DashScopeError
 # 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
 client = dashscope.Client(
     # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
@@ -1024,7 +1024,7 @@ except DashScopeError as e:
 ```
 import os
 import dashscope
-from dashscope.v2 import DashScopeError
+from dashscope import DashScopeError
 # 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
 client = dashscope.Client(
     # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",

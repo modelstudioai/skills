@@ -124,4 +124,4 @@ RPM（每分钟请求数）
 
 5
 
-同一个阿里云百炼 API Key 下，Vidu 参考生图系列的以下模型共享 5 个并发数：`vidu/vidu-image-pro_reference2image`、`vidu/vidu-image-lite_reference2image`、`vidu/vidu-image_reference2image`、`vidu/viduq3-fast_reference2image`、`vidu/viduq2-pro_reference2image`、`vidu/viduq2-fast_reference2image`。即这些模型处于运行状态的任务总数加起来不能超过 5 个。
+同一个阿里云百炼 API Key 下，Vidu 参考生图系列的以下模型共享 5 个并发数：`vidu/vidu-image-pro_reference2image`、`vidu/vidu-image-lite_reference2image`、`vidu/vidu-image_reference2image`、`vidu/viduq3-fast_reference2image`、`vidu/viduq2-pro_reference2image`、`vidu/viduq2-fast_reference2image`、`vidu/viduq3.1-fast_reference2image`。即这些模型处于运行状态的任务总数加起来不能超过 5 个。

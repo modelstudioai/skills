@@ -583,7 +583,7 @@ from pathlib import PurePosixPath
 import requests
 import dashscope
 import os
-from dashscope.v2 import DashScopeError
+from dashscope import DashScopeError
 
 # 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
 client = dashscope.Client(
@@ -622,7 +622,7 @@ from pathlib import PurePosixPath
 import requests
 import dashscope
 import os
-from dashscope.v2 import DashScopeError
+from dashscope import DashScopeError
 
 # 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
 client = dashscope.Client(
@@ -698,7 +698,7 @@ from pathlib import PurePosixPath
 import requests
 import dashscope
 import os
-from dashscope.v2 import DashScopeError
+from dashscope import DashScopeError
 
 # 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
 client = dashscope.Client(
@@ -785,7 +785,7 @@ from pathlib import PurePosixPath
 import requests
 import dashscope
 import os
-from dashscope.v2 import DashScopeError
+from dashscope import DashScopeError
 
 # 以下为华北2（北京）地域的配置。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的region取值不同。
 client = dashscope.Client(

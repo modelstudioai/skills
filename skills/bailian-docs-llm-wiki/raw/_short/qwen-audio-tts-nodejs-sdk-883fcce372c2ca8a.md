@@ -147,6 +147,8 @@ API Key。默认读取 `DASHSCOPE_API_KEY`。
 
 否
 
+**说明**使用 qwen-audio-3.1-tts-flash 的多语种与方言音色时，可通过此参数指定语种或方言。具体用法请参见[多语种与方言音色的设置方法](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list#qwen-tts31-language-hints)。
+
 目标语言提示，当前仅第一个元素生效。
 
 `instruction`

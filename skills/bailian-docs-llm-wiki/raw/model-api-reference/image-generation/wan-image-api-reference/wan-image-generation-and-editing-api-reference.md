@@ -1154,7 +1154,7 @@ SDK 参数命名与HTTP接口基本一致。
 
 > 具体耗时受限于排队任务数和服务执行情况，请在获取结果时耐心等待。
 
-**重要**请确保 DashScope Python SDK版本**不低于 2.0.1**，再运行以下代码。更新请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+**重要**请确保 DashScope Python SDK版本**不低于 2.1.0**，再运行以下代码。更新请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
 各地域的`base_url`和API Key 不通用，以下示例以北京地域为例进行调用：
 
@@ -1182,15 +1182,15 @@ import base64
 import mimetypes
 import urllib.request
 import dashscope
-from dashscope.aigc.image_generation import ImageGeneration
-from dashscope.api_entities.dashscope_response import Message
 
-# 以下为华北2（北京）地域的URL，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
-
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
 # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-api_key = os.getenv("DASHSCOPE_API_KEY")
+client = dashscope.Client(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # --- Base64编码函数 ---
 # base64编码格式为 data:{MIME_type};base64,{base64_data}
@@ -1221,36 +1221,24 @@ image_2 = "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/2
 # image_1 = encode_file("/path/to/your/car.png")
 # image_2 = encode_file("/path/to/your/paint.png")
 
-message = Message(
-    role="user",
-    content=[
-        {"text": "把图2的涂鸦喷绘在图1的汽车上"},
-        {"image": image_1},
-        {"image": image_2},
-    ],
-)
 print("----sync call, please wait a moment----")
-rsp = ImageGeneration.call(
+# generate 为一步式调用（提交+等待），直接返回已完成的任务结果
+job = client.images.generate(
     model="wan2.7-image-pro",
-    api_key=api_key,
-    messages=[message],
+    prompt="把图2的涂鸦喷绘在图1的汽车上",
+    # 参考图列表，支持本地文件 如 "file:///path/to/your/car.png"
+    image_urls=[image_1, image_2],
     watermark=False,
     n=1,
     size="2K",  # wan2.7-image-pro仅文生图场景支持4K分辨率，图像编辑和组图生成支持最高2K分辨率
 )
 
 # 提取结果图片URL并保存到本地
-if rsp.status_code == 200:
-    for i, choice in enumerate(rsp.output.choices):
-        for j, content in enumerate(choice["message"]["content"]):
-            if content.get("type") == "image":
-                image_url = content["image"]
-                file_name = f"output_{i}_{j}.png"
-                # 结果URL有效期为24小时，请及时下载
-                urllib.request.urlretrieve(image_url, file_name)
-                print(f"Image saved to {file_name}")
-else:
-    print(f"Failed: status_code={rsp.status_code}, message={rsp.message}")
+for i, image_url in enumerate(job.image_urls):
+    file_name = f"output_{i}.png"
+    # 结果URL有效期为24小时，请及时下载
+    urllib.request.urlretrieve(image_url, file_name)
+    print(f"Image saved to {file_name}")
 ```
 
 ##### 响应示例
@@ -1304,16 +1292,15 @@ import base64
 import mimetypes
 import urllib.request
 import dashscope
-from dashscope.aigc.image_generation import ImageGeneration
-from dashscope.api_entities.dashscope_response import Message
-from http import HTTPStatus
 
-# 以下为华北2（北京）地域的URL，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
-
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
 # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-api_key = os.getenv("DASHSCOPE_API_KEY")
+client = dashscope.Client(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # --- Base64编码函数 ---
 # base64编码格式为 data:{MIME_type};base64,{base64_data}
@@ -1347,73 +1334,47 @@ image_2 = "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/2
 # 创建异步任务
 def create_async_task():
     print("Creating async task...")
-    message = Message(
-        role="user",
-        content=[
-            {"text": "把图2的涂鸦喷绘在图1的汽车上"},
-            {"image": image_1},
-            {"image": image_2},
-        ],
-    )
-    response = ImageGeneration.async_call(
+    job = client.images.jobs.create(
         model="wan2.7-image-pro",
-        api_key=api_key,
-        messages=[message],
+        prompt="把图2的涂鸦喷绘在图1的汽车上",
+        extra_input={'images': [image_1, image_2]},
         watermark=False,
         n=1,
         size="2K",  # wan2.7-image-pro仅文生图场景支持4K分辨率，图像编辑和组图生成支持最高2K分辨率
     )
 
-    if response.status_code == 200:
-        print("Task created successfully:", response)
-        return response
-    else:
-        raise Exception(f"Failed to create task: {response.code} - {response.message}")
+    print("Task created successfully:", job.task_id, job.status)
+    return job
 
-# 等待任务完成
-def wait_for_completion(task_response):
+# 等待任务完成（指数退避轮询，默认总预算24小时；任务失败会抛出DashScopeError）
+def wait_for_completion(job):
     print("Waiting for task completion...")
-    status = ImageGeneration.wait(task=task_response, api_key=api_key)
+    done = client.images.jobs.wait(job)
 
-    if status.output.task_status == "SUCCEEDED":
-        print("Task succeeded!")
-        # 提取结果图片URL并保存到本地
-        for i, choice in enumerate(status.output.choices):
-            for j, content in enumerate(choice["message"]["content"]):
-                if content.get("type") == "image":
-                    image_url = content["image"]
-                    file_name = f"output_{i}_{j}.png"
-                    # 结果URL有效期为24小时，请及时下载
-                    urllib.request.urlretrieve(image_url, file_name)
-                    print(f"Image saved to {file_name}")
-    else:
-        raise Exception(f"Task failed with status: {status.output.task_status}")
+    print("Task succeeded!")
+    # 提取结果图片URL并保存到本地
+    for i, image_url in enumerate(done.image_urls):
+        file_name = f"output_{i}.png"
+        # 结果URL有效期为24小时，请及时下载
+        urllib.request.urlretrieve(image_url, file_name)
+        print(f"Image saved to {file_name}")
 
 # 获取异步任务信息
-def fetch_task_status(task):
+def fetch_task_status(task_id):
     print("Fetching task status...")
-    status = ImageGeneration.fetch(task=task, api_key=api_key)
+    snapshot = client.images.jobs.fetch(task_id)
 
-    if status.status_code == HTTPStatus.OK:
-        print("Task status:", status.output.task_status)
-        print("Response details:", status)
-    else:
-        print(f"Failed to fetch status: {status.code} - {status.message}")
+    print("Task status:", snapshot.status)
 
-# 取消异步任务
-def cancel_task(task):
+# 取消异步任务，只有处于PENDING状态的任务才可以取消
+def cancel_task(task_id):
     print("Canceling task...")
-    response = ImageGeneration.cancel(task=task, api_key=api_key)
-
-    if response.status_code == HTTPStatus.OK:
-        print("Task canceled successfully:", response.output.task_status)
-    else:
-        print(f"Failed to cancel task: {response.code} - {response.message}")
+    client.images.jobs.cancel(task_id)
 
 # 主执行流程
 if __name__ == "__main__":
-    task = create_async_task()
-    wait_for_completion(task)
+    job = create_async_task()
+    wait_for_completion(job)
 ```
 
 ##### 响应示例
@@ -1500,15 +1461,15 @@ import base64
 import mimetypes
 import urllib.request
 import dashscope
-from dashscope.aigc.image_generation import ImageGeneration
-from dashscope.api_entities.dashscope_response import Message
 
-# 以下为华北2（北京）地域的URL，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
-
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
 # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-api_key = os.getenv("DASHSCOPE_API_KEY")
+client = dashscope.Client(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # --- Base64编码函数 ---
 # base64编码格式为 data:{MIME_type};base64,{base64_data}
@@ -1536,40 +1497,24 @@ def encode_file(file_path):
 # 【方式三】使用Base64编码的图片
 # image_1 = encode_file("/path/to/your/image.png")
 
-message = Message(
-    role="user",
-    content=[
-        {
-            "text": "电影感组图，记录同一只流浪橘猫，特征必须前后一致。第一张：春天，橘猫穿梭在盛开的樱花树下；第二张：夏天，橘猫在老街的树荫下乘凉避暑；第三张：秋天，橘猫踩在满地的金色落叶上；第四张：冬天，橘猫在雪地上走留下足迹。"
-        }
-        # 图生组图场景：取消以下注释并注释掉上方纯文本
-        # {"text": "参考图片风格生成四季组图"},
-        # {"image": image_1}
-    ],
-)
-
 print("----sync call, please wait a moment----")
-rsp = ImageGeneration.call(
+# generate 为一步式调用（提交+等待），直接返回已完成的任务结果
+job = client.images.generate(
     model="wan2.7-image-pro",
-    api_key=api_key,
-    messages=[message],
-    enable_sequential=True,
+    prompt="电影感组图，记录同一只流浪橘猫，特征必须前后一致。第一张：春天，橘猫穿梭在盛开的樱花树下；第二张：夏天，橘猫在老街的树荫下乘凉避暑；第三张：秋天，橘猫踩在满地的金色落叶上；第四张：冬天，橘猫在雪地上走留下足迹。",
+    # 图生组图场景：取消以下注释，传入参考图（并将上方提示词改为参考图片风格生成四季组图）
+    # image_urls=[image_1],
+    parameters={"enable_sequential": True},  # 组图生成
     n=4,
     size="2K",  # wan2.7-image-pro仅文生图场景支持4K分辨率，图像编辑和组图生成支持最高2K分辨率
 )
 
 # 提取结果图片URL并保存到本地
-if rsp.status_code == 200:
-    for i, choice in enumerate(rsp.output.choices):
-        for j, content in enumerate(choice["message"]["content"]):
-            if content.get("type") == "image":
-                image_url = content["image"]
-                file_name = f"output_{i}_{j}.png"
-                # 结果URL有效期为24小时，请及时下载
-                urllib.request.urlretrieve(image_url, file_name)
-                print(f"Image saved to {file_name}")
-else:
-    print(f"Failed: status_code={rsp.status_code}, message={rsp.message}")
+for i, image_url in enumerate(job.image_urls):
+    file_name = f"output_{i}.png"
+    # 结果URL有效期为24小时，请及时下载
+    urllib.request.urlretrieve(image_url, file_name)
+    print(f"Image saved to {file_name}")
 ```
 
 ##### 响应示例
@@ -1635,15 +1580,15 @@ import base64
 import mimetypes
 import urllib.request
 import dashscope
-from dashscope.aigc.image_generation import ImageGeneration
-from dashscope.api_entities.dashscope_response import Message
 
-# 以下为华北2（北京）地域的URL，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的URL不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
-
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
 # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-api_key = os.getenv("DASHSCOPE_API_KEY")
+client = dashscope.Client(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 # --- Base64编码函数 ---
 # base64编码格式为 data:{MIME_type};base64,{base64_data}
@@ -1672,50 +1617,32 @@ def encode_file(file_path):
 # image_1 = encode_file("/path/to/your/image.png")
 
 def main():
-    message = Message(
-        role="user",
-        content=[
-            {
-                "text": "电影感组图，记录同一只流浪橘猫，特征必须前后一致。第一张：春天，橘猫穿梭在盛开的樱花树下；第二张：夏天，橘猫在老街的树荫下乘凉避暑；第三张：秋天，橘猫踩在满地的金色落叶上；第四张：冬天，橘猫在雪地上走留下足迹。"
-            }
-            # 图生组图场景：取消以下注释并注释掉上方纯文本
-            # {"text": "参考图片风格生成四季组图"},
-            # {"image": image_1}
-        ],
-    )
-
     # 提交异步任务
     print("提交异步任务...")
-    response = ImageGeneration.async_call(
+    job = client.images.jobs.create(
         model="wan2.7-image-pro",
-        api_key=api_key,
-        messages=[message],
-        enable_sequential=True,
+        prompt="电影感组图，记录同一只流浪橘猫，特征必须前后一致。第一张：春天，橘猫穿梭在盛开的樱花树下；第二张：夏天，橘猫在老街的树荫下乘凉避暑；第三张：秋天，橘猫踩在满地的金色落叶上；第四张：冬天，橘猫在雪地上走留下足迹。",
+        # 图生组图场景：取消以下注释，传入参考图（并将上方提示词改为参考图片风格生成四季组图）
+        # extra_input={'images': [image_1]},
+        parameters={"enable_sequential": True},  # 组图生成
         n=4,
         size="2K",  # wan2.7-image-pro仅文生图场景支持4K分辨率，图像编辑和组图生成支持最高2K分辨率
     )
+    print(f"任务提交成功，任务ID: {job.task_id}")
 
-    if response.status_code == 200:
-        print(f"任务提交成功，任务ID: {response.output.task_id}")
+    # 等待任务完成（指数退避轮询，默认总预算24小时；任务失败会抛出DashScopeError）
+    done = client.images.jobs.wait(job)
 
-        # 等待任务完成
-        status = ImageGeneration.wait(task=response, api_key=api_key)
-
-        if status.output.task_status == "SUCCEEDED":
-            print("任务完成!")
-            # 提取结果图片URL并保存到本地
-            for i, choice in enumerate(status.output.choices):
-                for j, content in enumerate(choice["message"]["content"]):
-                    if content.get("type") == "image":
-                        image_url = content["image"]
-                        file_name = f"output_{i}_{j}.png"
-                        # 结果URL有效期为24小时，请及时下载
-                        urllib.request.urlretrieve(image_url, file_name)
-                        print(f"Image saved to {file_name}")
-        else:
-            print(f"任务失败，状态: {status.output.task_status}")
+    if done.succeeded:
+        print("任务完成!")
+        # 提取结果图片URL并保存到本地
+        for i, image_url in enumerate(done.image_urls):
+            file_name = f"output_{i}.png"
+            # 结果URL有效期为24小时，请及时下载
+            urllib.request.urlretrieve(image_url, file_name)
+            print(f"Image saved to {file_name}")
     else:
-        print(f"任务创建失败: {response.code} - {response.message}")
+        print(f"任务失败，状态: {done.status}")
 
 if __name__ == "__main__":
     try:

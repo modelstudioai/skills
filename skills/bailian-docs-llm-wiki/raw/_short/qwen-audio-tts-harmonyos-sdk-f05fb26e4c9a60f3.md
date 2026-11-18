@@ -303,6 +303,8 @@ MP3或Opus码率（kbps），默认值为 `32`，取值范围为 `[6, 510]`。
 
 否
 
+**说明**使用 qwen-audio-3.1-tts-flash 的多语种与方言音色时，可通过此参数指定语种或方言。具体用法请参见[多语种与方言音色的设置方法](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list#qwen-tts31-language-hints)。
+
 指定语音合成的目标语言，以提升合成效果。该设置与声音复刻时样本音频的语种无关；如需设置复刻任务的源语言，请参见[声音复刻API参考](https://help.aliyun.com/zh/model-studio/voice-clone-design-http-api#h2-create)。当前版本仅处理数组的第一个元素，建议只传一个值。当数字、缩写、符号的朗读方式或小语种合成效果不符合预期时，可设置该参数。例如，将 `"hello, this is 110"` 按英语读作“one one zero”而不是中文“幺幺零”，或将 `@` 读作“at”而不是“艾特”。
 
 取值范围

@@ -18,19 +18,19 @@ DTU 与 MU 按模型适用区分：新发布模型采用 DTU（按输入/输出 
 -   平台负责底层运维，无需管理 GPU。
 -   不主动设 RPM/TPM 上限，流量受实际承载力限制。
 
-通用模型部署流程详见[专属部署概述](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)与[预置吞吐](raw/_short/ptu-long-input-and-cache-f0b1f22118ea9791.md)。
+通用模型部署流程详见[专属部署概述](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)。
 
 ## 方案选型
 
 百炼为推理调用提供多种容量与计费方案。DTU 适用于需要独占部署、微调模型部署、低延迟高并发或数据隔离的场景。各方案的对比如下表所示。
 
-Token 按量、PTU 等全部计费方式的完整对比详见[模型部署](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)主表。
+Token 按量等计费方式的完整对比详见[模型部署](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)主表。
 
 **对比维度**
 
 **DTU**
 
-**PTU**
+**吞吐预留·高速模式**
 
 **Token 按量**
 

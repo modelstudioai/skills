@@ -15,9 +15,15 @@ import os
 import base64
 import mimetypes
 import dashscope
-from dashscope import MultiModalConversation
 
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
+# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+# 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+client = dashscope.Client(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    workspace="{WorkspaceId}",
+    region="cn-beijing",
+)
 
 def encode_file(file_path):
     mime_type, _ = mimetypes.guess_type(file_path)
@@ -33,8 +39,7 @@ image_url = "https://alidocs.oss-cn-zhangjiakou.aliyuncs.com/res/yBRq1ZPYEaXdyOd
 # [方法二] 使用Base64编码图像
 # image_url = encode_file("./your_image.png")
 
-response = MultiModalConversation.call(
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
+response = client.multimodal.chat.create(
     model="qwen-image-3.0-pro",
     messages=[{
         "role": "user",
@@ -43,15 +48,14 @@ response = MultiModalConversation.call(
             {"text": "帮我生成一张充满高级感的都市风格女性写真，画面中人物完美保留输入图片中这位年轻女性的面部特征与一头柔顺的黑色长发。人物换上一套彰显高雅气质的都市职场穿搭，场景设定在一家装修现代简约的高端咖啡店内。"}
         ]
     }],
-    prompt_extend=True
+    parameters={"prompt_extend": True},
 )
 
-print(response)
-if response.status_code == 200:
-    url = response.output.choices[0].message.content[0]["image"]
-    print(f"Generated image URL: {url}")
-else:
-    print(f"Error: {response.code} - {response.message}")
+# 2.0 SDK：生成结果从 message.content_parts 读取，图像 part 形如 {"image": URL, "type": "image"}
+message = response.choices[0].message
+for part in (message.content_parts or []):
+    if "image" in part:
+        print(f"Generated image URL: {part['image']}")
 ```
 
 #### Java

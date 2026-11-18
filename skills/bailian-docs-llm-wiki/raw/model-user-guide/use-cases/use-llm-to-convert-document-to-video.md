@@ -324,7 +324,7 @@ theme\_generate.py
 import os
 import dashscope
 import re
-from dashscope.v2 import DashScopeError
+from dashscope import DashScopeError
 
 def theme_generate_with_qwen_plus(input_filepath, title):
     """
@@ -425,7 +425,7 @@ doc\_split.py
 import dashscope
 import json
 import os
-from dashscope.v2 import DashScopeError
+from dashscope import DashScopeError
 def doc_split_with_qwen_plus(input_filepath, output_filepath):
 
     if not os.path.exists(output_filepath):
@@ -534,7 +534,7 @@ import asyncio
 
 import os
 import dashscope
-from dashscope.v2 import DashScopeError
+from dashscope import DashScopeError
 
 def call_with_stream(content):
     prompt2 = """
