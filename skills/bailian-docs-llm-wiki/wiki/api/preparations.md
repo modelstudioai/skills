@@ -1,49 +1,37 @@
 # preparations
 
-在调用百炼平台模型 API 前，需完成身份认证、环境配置与依赖安装等基础准备。这些步骤是所有模型调用（如 `qwen-max`、`qwen-plus`、文本嵌入、多模态等）的通用前提，直接影响请求的合法性与稳定性。请严格按顺序执行，避免因配置缺失导致 401、403 或连接失败。
+`preparations` 是调用百炼平台模型 API 前必需完成的初始化步骤，涵盖认证凭证获取、开发环境配置及基础网络设置。开发者需按顺序完成 API Key 配置、SDK 安装与初始化、Base URL 适配等环节，方可发起合法请求。所有步骤均以安全、可复现和兼容性为设计前提。
 
 ## 支持的模型/功能
 
-preparations 本身不绑定特定模型，而是为所有支持的模型服务，包括但不限于：  
-- 大语言模型（`qwen-max`、`qwen-plus`、`qwen-turbo`）  
-- 文本嵌入模型（`text-embedding-v1`）  
-- 多模态模型（`qwen-vl-plus`）  
-- [函数调用](../concepts/function-calling.md)与工具增强能力（需 SDK ≥ 2.0）  
-详细模型列表及能力说明见 [使用 API](../../raw/model-api-reference/preparations.md)。
+当前 `preparations` 流程适用于全部百炼平台公开模型（含 Qwen 系列、Baichuan、GLM 等）的同步/异步推理、流式响应、Function Calling 及多模态输入等核心能力。不区分模型类型，统一采用相同的认证与传输协议。具体模型支持列表请参考 [使用 API](../../raw/model-api-reference/preparations.md) 中的上下文说明。
 
 ## 关键参数
 
-必须配置以下参数方可发起有效请求：  
-- `api_key`：通过 [获取与配置 API Key](../../raw/model-api-reference/preparations/get-api-key.md) 获取，需妥善保管并禁止硬编码至前端；  
-- `base_url`：默认为 `https://dashscope.aliyuncs.com/api/v1`，国内用户可选 `https://dashscope.aliyuncs.com/compatible-mode/v1`（兼容 OpenAI 格式），详见 [Base URL总览](../../raw/model-api-reference/preparations/base-url.md)；  
-- `model`：必须显式指定，且须与所选 endpoint 兼容（例如 `text-embedding-v1` 不支持 `messages` 字段）。
+- `api_key`：必填，用于身份鉴权，需通过控制台申请并妥善保管；  
+- `base_url`：可选，用于私有化部署或灰度环境，覆盖默认域名；默认值见 [Base URL总览](../../raw/model-api-reference/preparations/base-url.md)；  
+- `timeout`：建议显式设置（如 `30s`），避免因网络波动导致连接挂起；  
+- `max_retries`：SDK 默认启用指数退避重试（最多 2 次），生产环境建议保留。
+
+> **注意**：[SDK 1.x 历史用法参考](../../raw/model-api-reference/preparations/dashscope-1x-legacy-reference.md) 中的 `dashscope.api_key = "xxx"` 全局赋值方式已被弃用，新版 SDK（2.x+）要求通过 `DashScopeClient(api_key=...)` 实例化传参，否则将触发 `AuthenticationError`。
 
 ## 使用方式
 
-1. **安装 SDK**：推荐使用最新版 DashScope Python SDK（≥ 2.0）：  
-   ```bash
-   pip install dashscope
-   ```  
-   历史项目若依赖 SDK 1.x，请参考 [SDK 1.x 历史用法参考](../../raw/model-api-reference/preparations/dashscope-1x-legacy-reference.md)，但该版本已停止维护，不建议新项目使用。  
-2. **初始化客户端**：  
-   ```python
-   import dashscope
-   dashscope.api_key = "YOUR_API_KEY"
-   # 或传入参数方式（更安全）
-   client = dashscope.Client(api_key="YOUR_API_KEY")
-   ```  
-3. **调用示例**（以 `qwen-turbo` 为例）：  
+1. **获取 API Key**：登录百炼控制台 →「API 密钥管理」→ 创建并复制密钥；  
+2. **安装 SDK**：执行 `pip install dashscope`（Python）或对应语言客户端；  
+3. **初始化客户端**：传入 `api_key` 和可选 `base_url`，例如：  
    ```python
    from dashscope import Generation
-   resp = Generation.call(model='qwen-turbo', prompt='你好')
-   ```
+   Generation.call(model='qwen-max', api_key='YOUR_KEY', base_url='https://dashscope.aliyuncs.com/api/v1')
+   ```  
+   更多语言示例见 [安装SDK](../../raw/model-api-reference/preparations/install-sdk.md)。
 
 ## 限制和注意事项
 
-- 单个 API Key 默认有 QPS 和日调用量限制，超出将返回 `429 Too Many Requests`，具体配额见控制台；  
-- 错误响应结构统一，常见错误码含义参见 [错误码](../../raw/model-api-reference/preparations/error-code.md)；  
-- SDK Expert 功能（如自动重试、流式响应封装）需启用 `dashscope.experimental.enable()`，详见 [SDK Expert](../../raw/model-api-reference/preparations/dashscope-sdk-expert.md)；  
-> **注意**：[SDK 1.x 历史用法参考](../../raw/model-api-reference/preparations/dashscope-1x-legacy-reference.md) 中的 `dashscope.Generation` 初始化方式（如 `dashscope.Generation(api_key=...)`）在 SDK 2.0+ 中已废弃，直接使用将引发 `AttributeError`。请务必迁移至 `Client` 实例化模式。
+- 单个 API Key 默认限流 60 QPS（每秒查询数），超出将返回 `429 Too Many Requests` 错误，详情见 [错误码](../../raw/model-api-reference/preparations/error-code.md)；  
+- API Key 不可跨 Region 使用，若调用非默认地域模型（如 `qwen-vl` 在 cn-shanghai），必须显式指定对应 `base_url`；  
+- 严禁在前端代码、Git 仓库或日志中硬编码 `api_key`，应通过环境变量（如 `DASHSCOPE_API_KEY`）注入；  
+- SDK Expert 模式（如自动重试、指标上报）需额外启用，详见 [SDK Expert](../../raw/model-api-reference/preparations/dashscope-sdk-expert.md)。
 
 ## 来源文档
 

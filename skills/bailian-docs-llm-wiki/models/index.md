@@ -1,6 +1,6 @@
 # 百炼模型市场索引
 
-> 自动生成 · 共 127 个模型家族 · 339 个主干模型 · 更新于 2026-11-18
+> 自动生成 · 共 127 个模型家族 · 342 个主干模型 · 更新于 2026-11-19
 
 **机器查询走结构化文件**：
 
@@ -97,7 +97,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [PixVerse V5.6](groups/pixverse-market-place.json) — 由爱诗科技提供的PixVerse V系列视频大模型API服务。
   - 模型：`pixverse/pixverse-v5.6-it2v`, `pixverse/pixverse-v5.6-kf2v`, `pixverse/pixverse-v5.6-r2v`, `pixverse/pixverse-v5.6-t2v`
 - [PixVerse V6](groups/pixverse-v6-market-place.json) — 由爱诗科技提供的PixVerse V系列视频大模型API服务。
-  - 模型：`pixverse/pixverse-v6-it2v`, `pixverse/pixverse-v6-kf2v`, `pixverse/pixverse-v6-r2v`, `pixverse/pixverse-v6-r2v-omni`, `pixverse/pixverse-v6-t2v`
+  - 模型：`pixverse/pixverse-v6-it2v`, `pixverse/pixverse-v6-kf2v`, `pixverse/pixverse-v6-max-it2v`, `pixverse/pixverse-v6-max-t2v`, `pixverse/pixverse-v6-r2v`, `pixverse/pixverse-v6-r2v-omni`, `pixverse/pixverse-v6-t2v`
 - [Vidu AI生视频](groups/vidu-models-market-place.json) — 由生数科技提供Vidu系列视频生成API服务，电影级画质、一致性保持、精准可控。
   - 模型：`vidu/viduq2_reference2video`, `vidu/viduq2_text2video`, `vidu/viduq2-pro_img2video`, `vidu/viduq2-pro_reference2video`, `vidu/viduq2-pro_start-end2video`, `vidu/viduq2-pro-fast_img2video`, `vidu/viduq2-turbo_img2video`, `vidu/viduq2-turbo_start-end2video`, `vidu/viduq3_reference2video`, `vidu/viduq3-ad_reference2video`, `vidu/viduq3-drama_reference2video`, `vidu/viduq3-mix_reference2video`, `vidu/viduq3-pro_img2video`, `vidu/viduq3-pro_start-end2video`, `vidu/viduq3-pro_text2video`, `vidu/viduq3-pro-fast_img2video`, `vidu/viduq3-turbo_img2video`, `vidu/viduq3-turbo_reference2video`, `vidu/viduq3-turbo_start-end2video`, `vidu/viduq3-turbo_text2video`
 - [Wan-I2V](groups/wan-image-to-video.json) — 图片生成视频内容，稳定保持图像主体、风格和文字等细节信息
@@ -130,7 +130,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [Qwen-MT-Image](groups/qwen-mt-image.json) — 专注做图片翻译的模型服务，能将中、英、日等11个语言的图片翻译到指定的语言，精准还原图片排版和内容信息，支持术语定义、敏感词过滤、商品主体检测等自定义功能，提供灵活、准确、高效的图像本地化服务。
   - 模型：`qwen-mt-image`, `qwen-mt-image-2.0`
 - [Vidu AI生图](groups/vidu-image-models-market-place.json) — 由生数科技提供Vidu系列图片生成API服务，多图参考，精准还原，高速高质。
-  - 模型：`vidu/vidu-image_reference2image`, `vidu/vidu-image-lite_reference2image`, `vidu/vidu-image-pro_reference2image`, `vidu/viduq2-fast_reference2image`, `vidu/viduq2-pro_reference2image`, `vidu/viduq3-fast_reference2image`
+  - 模型：`vidu/vidu-image_reference2image`, `vidu/vidu-image-lite_reference2image`, `vidu/vidu-image-pro_reference2image`, `vidu/viduq2-fast_reference2image`, `vidu/viduq2-pro_reference2image`, `vidu/viduq3-fast_reference2image`, `vidu/viduq3.1-fast_reference2image`
 - [Wan-Image](groups/wan-image-edit.json) — 指令编辑图片内容，轻松实现局部修改、风格变化、一致性保持等
   - 模型：`wan2.5-i2i-preview`, `wan2.6-image`, `wan2.7-image`, `wan2.7-image-pro`, `wanx2.1-imageedit`
 - [Wan-T2I](groups/wan-text-to-image.json) — 文字生成图片，写实质感细腻画面，文字内容生成，艺术风格表现

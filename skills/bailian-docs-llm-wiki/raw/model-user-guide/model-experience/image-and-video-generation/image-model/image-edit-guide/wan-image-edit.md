@@ -24,7 +24,7 @@
 
 #### 同步调用
 
-**重要****请确保 DashScope Python SDK 版本不低于**`2.0.1`**， DashScope Java SDK 版本不低于**`2.22.13`**。**
+**重要****请确保 DashScope Python SDK 版本不低于**`2.1.0`**， DashScope Java SDK 版本不低于**`2.22.13`**。**
 
 #### Python
 
@@ -36,7 +36,6 @@ import base64
 import mimetypes
 import requests
 import dashscope
-from dashscope.aigc.image_generation import ImageGeneration, Message
 
 # 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
 # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
@@ -78,20 +77,11 @@ image_2 = "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/2
 
 print("----sync call, please wait a moment----")
 # generate 为一步式调用（提交+等待），直接返回已完成的任务结果
-# wan2.7-image 系列在 SDK 2.0 中暂未支持（路由缺口），保持 1.x ImageGeneration 调用
-message = Message(
-    role="user",
-    content=[
-        {"text": "把图2的涂鸦喷绘在图1的汽车上"},
-        {"image": image_1},
-        {"image": image_2},
-    ],
-)
-print("----sync call, please wait a moment----")
-rsp = ImageGeneration.call(
+job = client.images.generate(
     model="wan2.7-image-pro",
-    api_key=api_key,
-    messages=[message],
+    prompt="把图2的涂鸦喷绘在图1的汽车上",
+    # 参考图列表，支持本地文件 如 "file:///path/to/your/car.png"
+    image_urls=[image_1, image_2],
     watermark=False,
     n=1,
     size="2K",  # wan2.7-image-pro仅文生图场景支持4K分辨率，图像编辑和组图生成支持最高2K分辨率
@@ -351,7 +341,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 #### 异步调用
 
-**重要****请确保 DashScope Python SDK 版本不低于**`2.0.1`**， DashScope Java SDK 版本不低于**`2.22.13`**。**
+**重要****请确保 DashScope Python SDK 版本不低于**`2.1.0`**， DashScope Java SDK 版本不低于**`2.22.13`**。**
 
 #### Python
 

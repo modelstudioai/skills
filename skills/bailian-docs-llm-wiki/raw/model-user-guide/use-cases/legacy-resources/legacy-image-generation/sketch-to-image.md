@@ -106,7 +106,7 @@ from pathlib import PurePosixPath
 import requests
 import os
 import dashscope
-from dashscope.v2 import DashScopeError
+from dashscope import DashScopeError
 
 client = dashscope.Client(api_key=os.getenv("DASHSCOPE_API_KEY"))
 

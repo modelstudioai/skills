@@ -501,7 +501,7 @@ def events(self) -> Generator[Union[Dict, bytes], None, None]
 合成过程中发生错误时，ws层会以`DashScopeError`异常抛出，异常触发后连接将自动关闭。可在发送/接收处使用try/except捕获并记录错误日志以便排查问题：
 
 ```
-from dashscope.v2 import DashScopeError
+from dashscope import DashScopeError
 
 try:
     ...

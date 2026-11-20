@@ -519,7 +519,7 @@ foreach ($response->content as $block) {
 
 预留指定模型的推理容量，保障高峰期吞吐
 
-](raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)[
+](raw/model-user-guide/model-high-speed-inference/tpm-reservation-index/tpm-reservation.md)[
 
 **批量推理**
 
@@ -553,19 +553,19 @@ foreach ($response->content as $block) {
 
 使用业务数据训练模型，改善特定场景的表现
 
-](raw/model-user-guide/fine-tuning.md)[
+](https://help.aliyun.com/zh/model-studio/fine-tuning)[
 
 **模型评测**
 
 评估模型表现，支持模型选型与调优验证
 
-](raw/model-user-guide/model-evaluation-introduction.md)[
+](https://help.aliyun.com/zh/model-studio/model-evaluation-introduction)[
 
 **模型压缩**
 
 量化调优后的模型，降低推理部署成本
 
-](raw/model-api-reference/model-production/model-compression-api-overview/model-compression-introduction.md)
+](https://help.aliyun.com/zh/model-studio/model-compression-introduction)
 
 [
 

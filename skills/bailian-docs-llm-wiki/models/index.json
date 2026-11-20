@@ -1,11 +1,11 @@
 {
-  "updatedAt": "2026-11-18",
+  "updatedAt": "2026-11-19",
   "totalFamilies": 127,
-  "totalModels": 339,
+  "totalModels": 342,
   "profileCoverage": {
-    "full": 298,
-    "partial": 41,
-    "structured-only": 0,
+    "full": 286,
+    "partial": 53,
+    "structured-only": 3,
     "none": 0
   },
   "capabilityDistribution": {
@@ -582,10 +582,12 @@
       "providers": [
         "pixverse"
       ],
-      "itemCount": 5,
+      "itemCount": 7,
       "items": [
         "pixverse/pixverse-v6-it2v",
         "pixverse/pixverse-v6-kf2v",
+        "pixverse/pixverse-v6-max-it2v",
+        "pixverse/pixverse-v6-max-t2v",
         "pixverse/pixverse-v6-r2v",
         "pixverse/pixverse-v6-r2v-omni",
         "pixverse/pixverse-v6-t2v"
@@ -1923,14 +1925,15 @@
       "providers": [
         "vidu"
       ],
-      "itemCount": 6,
+      "itemCount": 7,
       "items": [
         "vidu/vidu-image_reference2image",
         "vidu/vidu-image-lite_reference2image",
         "vidu/vidu-image-pro_reference2image",
         "vidu/viduq2-fast_reference2image",
         "vidu/viduq2-pro_reference2image",
-        "vidu/viduq3-fast_reference2image"
+        "vidu/viduq3-fast_reference2image",
+        "vidu/viduq3.1-fast_reference2image"
       ]
     },
     {

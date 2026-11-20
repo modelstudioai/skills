@@ -1,8 +1,8 @@
-# MCP API 错误码
+# Skill API 错误码
 
-MCP API 的错误响应结构、常见错误码和工具调用错误处理。
+Skill API 的错误响应结构、常见错误码和排查建议。
 
-MCP API 的成功响应和业务错误使用统一响应结构，响应头包含 `x-request-id`。
+Skill API 的成功响应和业务错误使用统一响应结构。
 
 ## 响应结构
 
@@ -16,7 +16,7 @@ success
 
 `boolean`
 
-请求是否成功。工具是否执行成功还需查看 `data.isError`
+请求是否成功
 
 error\_code
 
@@ -32,7 +32,7 @@ error\_msg
 
 data
 
-`object / array / null`
+`object / null`
 
 业务数据，失败时为 `null`
 
@@ -40,17 +40,35 @@ request\_id
 
 `string`
 
-请求 ID
+请求 ID，同时通过响应头 `X-Request-Id` 返回
 
 ```
 {
   "success": false,
-  "error_code": "McpServerNotFound",
-  "error_msg": "MCP 服务不存在",
+  "error_code": "SKILL_NOT_EXIST",
+  "error_msg": "skill不存在",
   "data": null,
-  "request_id": "6f1c2a8e-3b0d-4c55-9a0e-2f7d1c9b8a11"
+  "request_id": "15a89d4c-f142-4e00-a9f7-b088442417c9"
 }
 ```
+
+## HTTP 状态码
+
+HTTP 状态码
+
+说明
+
+400
+
+请求参数缺失、格式错误或超出取值范围
+
+401
+
+身份信息缺失或无效
+
+500
+
+业务处理失败或服务内部错误，`error_code` 给出具体原因
 
 ## 常见错误码
 
@@ -60,87 +78,141 @@ error\_code
 
 说明
 
+401
+
+WORKSPACE\_ID\_ILLEGAL
+
+身份信息缺失或无效
+
 400
 
-InvalidParameter
+INVALID\_PARAMETER
 
-请求参数缺失、格式错误或超出取值范围
+参数格式错误、取值不合法或分页超出范围
 
 400
 
-OperationNotSupported
+SKILL\_ID\_IS\_NULL
 
-当前 MCP 服务不支持该操作
+`skill_id` 为空白
 
-403
+400
 
-AccessDenied
+SKILL\_VERSION\_IS\_NULL
 
-无权限访问目标地址或资源
+`version` 为空白
 
-404
+400
 
-McpServerNotFound
+SKILL\_FILE\_IS\_NULL
 
-MCP 服务不存在
+未上传 `file` 或文件为空
 
-404
+400
 
-McpServerUnavailable
+SKILL\_FILE\_FORMATER\_ERROR
 
-MCP 服务已删除或已下架
+文件扩展名不是 `.zip`，或文件头不是 ZIP 格式
 
-409
+400
 
-McpServerBusy
+SKILL\_PACKAGE\_TOO\_LARGE
 
-MCP 服务有操作执行中
-
-409
-
-McpServerStateConflict
-
-MCP 服务当前状态不允许该操作
-
-409
-
-McpServerNotActivated
-
-MCP 服务尚未开通
+ZIP 包超过 50MB
 
 500
 
-InternalError
+SKILL\_FILE\_FORMATER\_ERROR
+
+缺少 `SKILL.md`，或 Front Matter 缺少 `name` 或 `description`
+
+500
+
+SKILL\_PACKAGE\_TOO\_LARGE
+
+ZIP 解压后累计大小超过 100MB
+
+500
+
+SKILL\_FILE\_READ\_ERROR
+
+读取上传文件或写入存储失败
+
+500
+
+SKILL\_EXTRA\_ZIP\_ERROR
+
+ZIP 解压失败，仅支持 UTF-8 或 GBK 文件名编码
+
+500
+
+SKILL\_NOT\_EXIST
+
+Skill 不存在、已删除或无权访问
+
+500
+
+SKILL\_VERSION\_NOT\_EXIST
+
+版本不存在、已删除或不可见
+
+500
+
+SKILL\_DELETE\_OFFICIAL\_NOT\_ALLOWED
+
+尝试删除官方 Skill
+
+500
+
+SKILL\_DELETE\_ERROR
+
+删除 Skill 失败
+
+500
+
+SKILL\_UPDATE\_SECURITY\_ERROR
+
+Skill 正在安全扫描中，暂不能创建新版本
+
+500
+
+SKILL\_NAME\_OFFICIAL\_DUPLICATE
+
+SKILL.md 的 `name` 与官方 Skill 重名
+
+500
+
+SKILL\_NAME\_CUSTOMER\_DUPLICATE
+
+SKILL.md 的 `name` 与当前空间的自定义 Skill 重名
+
+500
+
+SKILL\_SUBMIT\_SECURITY\_ERROR
+
+提交安全扫描失败
+
+500
+
+SKILL\_INSERT\_ERROR
+
+保存 Skill 或版本记录失败
+
+500
+
+SKILL\_UPDATE\_LOCK\_ERROR
+
+同一 Skill 的保存操作并发冲突
+
+500
+
+SYSTEM\_ERROR
 
 服务内部错误
-
-502
-
-McpUpstreamError
-
-下游 MCP 操作失败
-
-503
-
-McpUpstreamThrottled
-
-下游 MCP 请求被限流
-
-504
-
-McpUpstreamTimeout
-
-下游 MCP 请求超时
-
-## 工具调用错误
-
--   `tools/call` 调用失败时可能返回 `400`，并透传 MCP 服务的 `error_code` 和 `error_msg`。
--   工具自身执行出错时，可能返回 `200`、`success=true`、`data.isError=true`。请同时检查 HTTP 状态码和 `data.isError`。
--   `tools` 查询工具列表失败时可能返回 `400` 或 `500` `InternalError`。
 
 ## 排查建议
 
 1.  使用 `request_id` 定位具体请求。
 2.  检查 API Key、工作空间 ID 和 Endpoint 是否正确，详见[认证](raw/application-api-reference/overview/authentication.md)。
-3.  确认 MCP 服务已开通且状态为已启用。
-4.  确认请求体字段名和类型符合接口文档。
+3.  上传 ZIP 包前确认文件不超过 50MB，且包内包含 `SKILL.md`。
+4.  按 `skill_id` 查询 Skill 状态，确认无正在进行的扫描或并发操作。

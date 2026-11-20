@@ -448,20 +448,13 @@ Tool Message `object`（可选）
 
 **stream\_options**`object`（可选）
 
-流式输出的配置项，仅在 `stream` 为 `true` 时生效。
+仅用于 `stream` 为 `true` 的流式请求。非流式请求不要传入 `stream_options`。
 
 属性
 
-**include\_usage**`boolean`（可选）默认值为`false`
+**include\_usage**`boolean`（可选）
 
-是否在响应的**最后一个数据块**包含Token消耗信息。
-
-可选值：
-
--   `true`：包含；
--   `false`：不包含。
-
-> 流式输出时，Token 消耗信息仅可出现在响应的最后一个数据块。
+流式输出时，最后一个数据块会包含 `usage`，该数据块的 `choices` 为空数组。
 
 **modalities**`array`（可选）默认值为`["text"]`
 
@@ -2506,7 +2499,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 
 **service\_tier** `string`
 
-该参数当前固定为`null`。
+按量调用时为 `null`；使用吞吐预留专属模型 code 调用时返回性能档位（`ptu_default` / `ptu_fast`），参见[吞吐预留概述](raw/model-user-guide/model-high-speed-inference/tpm-reservation-index/tpm-reservation.md)。
 
 **system\_fingerprint**`string`
 
@@ -2910,7 +2903,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 
 **choices**`array`
 
-模型生成内容的数组，可包含一个或多个对象。若设置`include_usage`参数为`true`，则`choices`在最后一个chunk中为空数组。
+模型生成内容的数组，可包含一个或多个对象。用于返回 Token 消耗信息的最后一个 chunk 中，`choices` 为空数组。
 
 属性
 
@@ -3069,7 +3062,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 
 **usage** `object`
 
-本次请求消耗的Token。只在`include_usage`为`true`时，在最后一个chunk显示。
+本次请求消耗的 Token。返回时位于最后一个 chunk。
 
 属性
 

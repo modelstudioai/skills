@@ -9,7 +9,7 @@
 前提条件
 
 1.  已开通通义晓蜜 CCAI-对话分析 AIO 服务。
-2.  已创建应用：应用中心完成通义晓蜜 CCAI-对话分析 AIO 应用创建，并获取到 APP-ID 和 WORKSPACE-ID：[获取 APP-ID 和 WORKSPACE-ID](raw/application-api-reference/application-call/obtain-the-app-id-and-workspace-id.md)。
+2.  已创建应用：应用中心完成通义晓蜜 CCAI-对话分析 AIO 应用创建，并获取到 APP-ID 和 WORKSPACE-ID：[获取 APP-ID 和 WORKSPACE-ID](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)。
 
 ## 调试
 

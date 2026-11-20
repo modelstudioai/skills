@@ -8,10 +8,6 @@
 
 **说明**计费方式在服务创建后无法更改。如需切换，必须下线已经部署的模型后再重新部署。
 
-**预置吞吐**（PTU，Provisioned Throughput Unit）
-
-**（高吞吐；高性能）**
-
 **模型单元**
 
 **（自定义性能指标；资源隔离）**
@@ -22,20 +18,11 @@
 
 **定义**
 
-通过平台预留资源，保障特定TPM 吞吐能力的模型部署方式；在保障额度内不限速。
-
 按使用时长与模型单元数量配置算力，资源独占的模型部署方式。
 
 以每次调用产生的输入 Token 与输出 Token 作为用量计量依据的模型部署方式。
 
 **优势**
-
-1.  为**高负载生产环境**提供稳定的吞吐容量、更低的延迟和更强的资源确定性。
-    
-2.  相比按Token用量计费，TPS（每秒生成的 Token 数）通常提升约 1.5～2.0 倍。
-    
-3.  支持设置自动续费。
-    
 
 1.  延迟/吞吐等**性能指标可自定义**。
     
@@ -48,20 +35,11 @@
 
 **支持模型**
 
-部分预置模型
-
 部分预置模型与所有调优后模型
 
 部分经过 LoRA 调优后的模型
 
 **使用场景**
-
-1.  银行App的智能客服（流量稳定，需保障并发体验）。
-    
-2.  社交平台的实时内容审核（需稳定处理可预估的流水线任务）。
-    
-3.  公有云翻译API（为标准套餐用户提供基线服务保障）。
-    
 
 1.  电商专属微调大模型（部署私有模型，大促时手动扩容）。
     
@@ -74,17 +52,11 @@
 
 **计费图示**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6346770771/p1052924.png)
-
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6346770771/p1052921.png)
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6346770771/p1052922.png)
 
 **计费方式**
-
-按使用时长和预置吞吐
-
-随用随付、包天
 
 按使用时长和模型单元数量
 
@@ -96,18 +68,11 @@
 
 **扩缩容方式**
 
-自助增减吞吐量
-
 自助增减模型单元数量
 
 在控制台提交申请，等待人工审核。
 
 **产品约束**
-
-1.  预付费按天计费。支持提前终止服务，已使用部分按 1.2 倍系数结算退费
-    
-2.  如果单位时间内使用超出购买的吞吐量，按创建时选择的溢出策略处理：自动溢出则切换为该模型的[模型调用](raw/model-user-guide/test-1/model-pricing.md)按量付费，仅使用 PTU 容量则返回 429。
-    
 
 预付费购买后，若在首月内提前退订，日单价（≈ 月单价 / 30）将按 **1.2** 倍计费
 
@@ -124,9 +89,8 @@ DTU 是模型单元(MU)的继任方案（计量粒度由单元数改为输入/�
 
 各部署模式支持的模型与价格详见对应模式页：
 
-**说明**预置吞吐单元（PTU）的创建与管理现已支持在“吞吐预留”页面进行，支持叠加容量包等更完整的容量管理功能。详见[吞吐预留](raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)。
+**说明**预置吞吐单元（PTU）的创建与管理现已支持在“吞吐预留”页面进行，支持叠加容量包等更完整的容量管理功能。详见[吞吐预留](raw/model-user-guide/model-high-speed-inference/tpm-reservation-index/tpm-reservation.md)。
 
--   [PTU预置吞吐部署](raw/_short/ptu-long-input-and-cache-f0b1f22118ea9791.md)
 -   [独占算力部署](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-modes/dtu-model-deployment.md)
 -   [Token按量部署](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-modes/model-deployment-token.md)
 
@@ -142,7 +106,7 @@ DTU 是模型单元(MU)的继任方案（计量粒度由单元数改为输入/�
     
 3.  填写**服务名称**，完成**选择模型**与**计费方式**，其他配置保持默认，单击**确认**。
     
-    > 需先完成[模型调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-on-console.md)，方可部署大部分模型。
+    > 需先完成[模型调优](https://help.aliyun.com/zh/model-studio/model-training-on-console)，方可部署大部分模型。
     
 4.  返回部署列表，部署状态变为**运行中**时，代表该模型已部署成功。
     
@@ -165,11 +129,11 @@ DTU 是模型单元(MU)的继任方案（计量粒度由单元数改为输入/�
 -   **部署详情**：模型单元类型、副本数等配置信息。
 -   **限流详情**：展示当前部署服务的 RPM（每分钟请求数）、TPM（每分钟 Token 数）等限流配置。
 -   **服务时间**：展示部署服务的创建时间与到期时间。
--   **操作**：根据部署状态和计费方式，可执行更新、监控、扩缩容、续费、下线、删除、体验等操作；预置吞吐单元（PTU）实例还支持在[吞吐预留](raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)页叠加容量包。
+-   **操作**：根据部署状态和计费方式，可执行更新、监控、扩缩容、续费、下线、删除、体验等操作。
 
 部署成功后的 API 调用方式（DashScope / OpenAI 兼容接口 / Assistant SDK）详见[API 部署指南](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-quick-start.md)。
 
-各计费方式的扩缩容操作（手动增减吞吐量/模型单元、Token 扩容申请、自动伸缩策略）详见对应模式页：[PTU预置吞吐部署](raw/_short/ptu-long-input-and-cache-f0b1f22118ea9791.md)、[独占算力部署](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-modes/dtu-model-deployment.md)、[Token按量部署](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-modes/model-deployment-token.md)。
+各计费方式的扩缩容操作（手动增减吞吐量/模型单元、Token 扩容申请、自动伸缩策略）详见对应模式页：[独占算力部署](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-modes/dtu-model-deployment.md)、[Token按量部署](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-modes/model-deployment-token.md)。
 
 ## 部署服务下线
 

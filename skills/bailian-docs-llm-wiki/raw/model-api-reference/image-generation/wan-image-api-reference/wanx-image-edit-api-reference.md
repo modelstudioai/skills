@@ -939,7 +939,7 @@ import base64
 import os
 import mimetypes
 import dashscope
-from dashscope.v2 import DashScopeError
+from dashscope import DashScopeError
 
 """
 环境要求：
@@ -1055,7 +1055,7 @@ if __name__ == '__main__':
 ```
 import os
 import dashscope
-from dashscope.v2 import DashScopeError
+from dashscope import DashScopeError
 
 """
 环境要求：

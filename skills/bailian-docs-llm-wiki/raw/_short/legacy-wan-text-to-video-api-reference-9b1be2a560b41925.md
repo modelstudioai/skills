@@ -690,7 +690,7 @@ SDK 的参数命名与HTTP接口基本一致，参数结构根据语言特性进
 
 ```
 import dashscope
-from dashscope.v2 import DashScopeError
+from dashscope import DashScopeError
 import os
 
 # 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
@@ -760,7 +760,7 @@ if __name__ == '__main__':
 
 ```
 import dashscope
-from dashscope.v2 import DashScopeError
+from dashscope import DashScopeError
 import os
 
 # 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。

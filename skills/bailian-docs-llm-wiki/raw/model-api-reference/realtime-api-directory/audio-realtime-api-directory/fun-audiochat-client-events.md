@@ -103,10 +103,6 @@ TTS 音色名称。3.1 Plus/Flash 的默认值为 `longanqian_v3.1`，3.0 Plus/F
 -   `ru`：俄语
 -   `it`：意大利语
 
-`model`string
-
-配置即时热词时，设为 `fun-asr`。
-
 `corpus`object（可选）
 
 输入音频转写的即时热词配置。适用于 `qwen-audio-3.0-realtime-plus`、`qwen-audio-3.0-realtime-flash`、`qwen-audio-3.1-realtime-plus` 和 `qwen-audio-3.1-realtime-flash`。
@@ -294,7 +290,6 @@ VAD 灵敏度。适用于 `server_vad`、`smart_turn` 和 `smart_turn_v2`。值�
     "type": "session.update",
     "session": {
         "input_audio_transcription": {
-            "model": "fun-asr",
             "corpus": {
                 "vocabulary": {
                     "祺元": 50

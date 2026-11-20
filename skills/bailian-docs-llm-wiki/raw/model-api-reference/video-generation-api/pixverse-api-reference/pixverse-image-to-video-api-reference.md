@@ -58,14 +58,15 @@
 
 可选值：
 
+-   pixverse/pixverse-v6-max-it2v
 -   pixverse/pixverse-c1-it2v
 -   pixverse/pixverse-v6-it2v
 -   pixverse/pixverse-v5.6-it2v
 
 模型选型
 
--   针对打斗、法术特效及高速运动等动态场景，推荐选用 **c1**。
--   通用场景推荐使用**v6**，**v5.6**建议直接升级至**v6**。
+-   推荐使用 **v6-max**。
+-   针对打斗、法术特效及高速运动等动态场景，可选 **c1**。
 
 **input** `object` **（必选）**
 
@@ -79,6 +80,7 @@
 
 支持中英文，每个汉字/字母占一个字符，字符编码为UTF-8，超过部分会自动截断。
 
+-   pixverse/pixverse-v6-max-it2v：不超过5000个字符。
 -   pixverse/pixverse-c1-it2v：不超过5000个字符。
 -   pixverse/pixverse-v6-it2v：不超过5000个字符。
 -   pixverse/pixverse-v5.6-it2v：不超过2048个字符。
@@ -111,7 +113,7 @@
 图像限制：
 
 -   格式：JPG、PNG、WEBP。
--   分辨率：图像的宽度和高度均不超过10000像素。
+-   分辨率：建议图片分辨率不要太小，单边不低于100像素；不支持单边超过10000像素的图片。
 -   文件大小：不超过20MB。
 
 **parameters** `object` （可选）
@@ -134,6 +136,8 @@
 
 生成视频的时长，单位为秒。
 
+-   pixverse/pixverse-v6-max-it2v：取值范围为\[1, 15\]之间的整数。
+    
 -   pixverse/pixverse-c1-it2v：取值范围为\[1, 15\]之间的整数。
     
 -   pixverse/pixverse-v6-it2v：取值范围为\[1, 15\]之间的整数。
@@ -183,7 +187,7 @@
 
 #### 图生视频
 
-支持模型：pixverse/pixverse-c1-it2v、pixverse/pixverse-v6-it2v、pixverse/pixverse-v5.6-it2v。
+支持模型：pixverse/pixverse-v6-max-it2v、pixverse/pixverse-c1-it2v、pixverse/pixverse-v6-it2v、pixverse/pixverse-v5.6-it2v。
 
 ```
 # 调用时请将 {WorkspaceId} 替换为真实的业务空间ID。
@@ -192,7 +196,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
     -H 'Content-Type: application/json' \
     -d '{
-    "model": "pixverse/pixverse-c1-it2v",
+    "model": "pixverse/pixverse-v6-max-it2v",
     "input": {
         "media": [
             {
@@ -205,75 +209,17 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     "parameters": {
         "resolution": "720P",
         "duration": 5,
-        "audio": false,
+        "audio": true,
         "watermark": true
     }
 }'
 ```
 
-#### Python SDK
-
-```
-import dashscope
-import os
-from dashscope.v2 import DashScopeError
-
-# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-# 获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-client = dashscope.Client(api_key=os.getenv("DASHSCOPE_API_KEY"))
-
-media = [{'type': 'image_url', 'url': 'https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260121/zlpocv/wan-i2v-haigui.webp'}]
-
-def sample_async_call():
-    # 异步提交视频生成任务
-    # audio 为 parameters 段字段，不在具名签名内，经 parameters 透传
-    try:
-        job = client.videos.jobs.create(model='pixverse/pixverse-c1-it2v',
-                                        media=media,
-                                        prompt='镜头从海龟下方缓缓上移，海龟悠然游动，腹部细节清晰可见。',
-                                        resolution='720P',
-                                        duration=5,
-                                        watermark=True,
-                                        parameters={'audio': False})
-        print(job)
-        print("task_id: %s" % job.task_id)
-    except DashScopeError as e:
-        print(f"HTTP返回码：{e.status_code}")
-        print(f"错误码：{e.code}")
-        print(f"错误信息：{e.message}")
-        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
-        return
-
-    # 查询任务状态
-    try:
-        snapshot = client.videos.jobs.fetch(job.task_id)
-        print(snapshot.status)
-    except DashScopeError as e:
-        print(f"HTTP返回码：{e.status_code}")
-        print(f"错误码：{e.code}")
-        print(f"错误信息：{e.message}")
-        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
-
-    # 等待任务完成
-    try:
-        done = client.videos.jobs.wait(job)
-        print(done)
-        print(done.video_url)
-    except DashScopeError as e:
-        print(f"HTTP返回码：{e.status_code}")
-        print(f"错误码：{e.code}")
-        print(f"错误信息：{e.message}")
-        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
-
-if __name__ == '__main__':
-    sample_async_call()
-```
-
 #### 图生视频（多镜头）
 
-#### pixverse-c1
+#### pixverse-v6-max、pixverse-c1
 
-支持模型：pixverse/pixverse-c1-it2v。
+支持模型：pixverse/pixverse-v6-max-it2v、pixverse/pixverse-c1-it2v。
 
 在`prompt`中描述多镜头场景即可，不支持设置 `shot_type`参数。
 
@@ -284,7 +230,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
     -H 'Content-Type: application/json' \
     -d '{
-    "model": "pixverse/pixverse-c1-it2v",
+    "model": "pixverse/pixverse-v6-max-it2v",
     "input": {
         "media": [
             {
@@ -528,9 +474,13 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 
 生成视频的数量。固定为1。
 
+使用pixverse/pixverse-v6-max-it2v时不返回该字段。
+
 **shot\_type**`string`
 
 生成视频的镜头类型。
+
+使用pixverse/pixverse-v6-max-it2v时不返回该字段。
 
 **request\_id**`string`
 

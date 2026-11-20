@@ -250,7 +250,7 @@ data: [DONE]
 ```
 import os
 import dashscope
-from dashscope.v2 import DashScopeError
+from dashscope import DashScopeError
 
 # 1. 准备工作：配置API Key与客户端
 # 建议通过环境变量配置API Key，避免硬编码。

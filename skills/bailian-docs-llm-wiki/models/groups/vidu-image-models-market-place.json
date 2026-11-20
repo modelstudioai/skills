@@ -15,6 +15,69 @@
       "description": "输入0-14张参考图片或文本描述，支持参考生图、文生图、图片编辑，对中英文字的精准渲染、UI/图表等设计细节的像素级还原，适合制作海报、信息图等。",
       "features": [],
       "provider": "vidu",
+      "model": "vidu/viduq3.1-fast_reference2image",
+      "prices": [
+        {
+          "priceUnit": "每张",
+          "price": "0.25",
+          "type": "image_type_1k",
+          "priceName": "图片生成（1K）"
+        },
+        {
+          "priceUnit": "每张",
+          "price": "0.34375",
+          "type": "image_type_2k",
+          "priceName": "图片生成（2K）"
+        },
+        {
+          "priceUnit": "每张",
+          "price": "0.71875",
+          "type": "image_type_4k",
+          "priceName": "图片生成（4K）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "priceTimeBands": [],
+      "capabilities": [
+        "IG"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-11-18T00:22:49.000+00:00",
+      "inferenceProvider": "vidu",
+      "name": "ViduQ3.1-fast_reference2image",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-image-generation-api-reference",
+      "category": "Third-party",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image-generation/generation' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"vidu/viduq3.1-fast_reference2image\",\n    \"input\": {\n        \"messages\": [\n            {\n                \"role\": \"user\",\n                \"content\": [\n                    {\n                        \"text\": \"把背景改成海边日落\"\n                    },\n                    {\n                        \"image\": \"https://cdn.wanx.aliyuncs.com/tmp/pressure/umbrella1.png\"\n                    }\n                ]\n            }\n        ]\n    },\n    \"parameters\": {\n        \"resolution\": \"1K\",\n        \"aspect_ratio\": \"16:9\",\n        \"n\": 1\n    }\n}'",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-image-generation-api-reference"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Image"
+        ],
+        "request_modality": [
+          "Text",
+          "Image"
+        ]
+      },
+      "description": "输入0-14张参考图片或文本描述，支持参考生图、文生图、图片编辑，对中英文字的精准渲染、UI/图表等设计细节的像素级还原，适合制作海报、信息图等。",
+      "features": [],
+      "provider": "vidu",
       "model": "vidu/vidu-image_reference2image",
       "prices": [
         {

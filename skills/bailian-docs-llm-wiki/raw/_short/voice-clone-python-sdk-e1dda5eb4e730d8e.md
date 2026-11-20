@@ -226,7 +226,7 @@ int
 
 每页条数，默认10。
 
-**返回值**：`VoiceList`对象，其`voices`为音色列表，`request_id`为请求ID。
+**返回值**：`VoiceList`对象，其`voices`为音色列表，`request_id`为请求ID。列表项为字典，通过 `voice.get("target_model")` 获取目标模型 ID。
 
 ### get() - 查询音色详情
 
@@ -254,7 +254,7 @@ str
 
 要查询的音色ID。
 
-**返回值**：`Voice`对象，音色详情。
+**返回值**：`Voice`对象，音色详情。通过 `voice.target_model` 获取目标模型 ID。
 
 ### update() - 更新音色
 
@@ -379,6 +379,8 @@ voices = client.audio.voices.list(prefix='myvoice', page_index=0, page_size=10)
 
 print(f"Request ID: {voices.request_id}")
 print(f"Found voices: {voices.voices}")
+for voice in voices.voices:
+    print(f"Target model: {voice.get('target_model')}")
 ```
 
 ### 查询特定音色
@@ -401,6 +403,7 @@ voice_details = client.audio.voices.get(voice_id=voice_id)
 
 print(f"Request ID: {voice_details.request_id}")
 print(f"Voice Details: {voice_details}")
+print(f"Target model: {voice_details.target_model}")
 ```
 
 ### 更新音色

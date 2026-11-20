@@ -2,7 +2,7 @@
 
 本文档以千问模型的部署为例进行说明，使用 API（HTTP）调用方式帮助您使用阿里云百炼提供的模型部署功能。
 
-**重要**模型部署 API 的开放地域因部署方式而异——模型单元（MU）与 独占吞吐（DTU）支持华北2（北京）；预置吞吐（PTU）等部署方式支持北京与新加坡地域。
+**重要**模型部署 API 的开放地域因部署方式而异——模型单元（MU）与 独占吞吐（DTU）支持华北2（北京）。
 
 ## 前提条件
 
@@ -199,7 +199,7 @@ models\[\].plans\[\].plan
 
 String
 
-部署方案类型：`mu`（模型单元）、`cu`（算力单元）、`ptu_v2`（预置吞吐量V2）、`lora`（LoRA共享部署）。
+部署方案类型：`mu`（模型单元）、`cu`（算力单元）、`dtu`（DTU 独占算力）、`ptu_v2`（预置吞吐量V2，等效取值 `ptu`）、`lora`（LoRA共享部署）。
 
 models\[\].plans\[\].templates
 
@@ -439,20 +439,6 @@ curl "https://dashscope.aliyuncs.com/api/v1/deployments" \
 }'
 ```
 
-#### PTU v2 部署
-
-按 Token 用量计费：
-
-```
-curl "https://dashscope.aliyuncs.com/api/v1/deployments" \
---header "Authorization: Bearer $DASHSCOPE_API_KEY" \
---header 'Content-Type: application/json' \
---data '{
-    "model_name": "qwen3-8b",
-    "plan": "ptu_v2"
-}'
-```
-
 #### LoRA 共享部署
 
 按 Token 用量计费：
@@ -497,7 +483,7 @@ body
 
 是
 
-部署方案：`dtu`（DTU 独占算力，仅预付费）、`mu`（模型单元）、`cu`（算力单元）、`ptu_v2`（预置吞吐量V2）、`lora`（LoRA共享部署）。
+部署方案：`dtu`（DTU 独占算力，仅预付费）、`mu`（模型单元）、`cu`（算力单元）、`lora`（LoRA共享部署）。
 
 template\_id
 
@@ -2194,21 +2180,6 @@ body
 条件必填
 
 Decode 目标容量。PD 分离模式时必填。
-
-ptu\_capacity
-
-Object
-
-body
-
-条件必填
-
-PTU V2 容量信息。包含字段：
-
--   `input_tpm_quota`（Number，输入 TPM 配额）
-    
--   `output_tpm_quota`（Number，输出 TPM 配额）
-    
 
 dtu\_capacity
 

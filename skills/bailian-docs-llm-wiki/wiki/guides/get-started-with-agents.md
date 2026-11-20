@@ -1,41 +1,39 @@
 # get started with agents
 
-百炼 Agent 服务提供一套可组合、可扩展的智能体构建与运行能力，支持从快速体验到生产级 API 集成的全链路开发。开发者可通过托管模式（Managed Agent）、工作流编排（Flow Agent）或沙箱环境（Sandbox）启动 Agent，并按需接入知识、记忆、工具与安全治理能力。所有能力均基于统一上下文抽象和标准化接口设计。
+Agent 是百炼平台提供的智能体运行与编排能力，支持开发者快速构建具备知识接入、工具调用、上下文管理与安全治理能力的自主执行应用。本文档面向开发者，梳理核心模型类型、关键参数、使用路径及约束条件，帮助你完成首次 Agent 部署与调用。所有功能均需通过百炼控制台或 API 接入，不依赖独立 SDK。
 
-## 支持的模型与功能
+## 支持的模型与功能类型
 
-Agent 服务本身不绑定特定大模型，而是通过 `model_id` 参数动态指定底层 LLM（如 `qwen-max`、`qwen-plus` 等），实际可用模型以 [Agent 服务概览](../../raw/application-user-guide/get-started-with-agents/agent-overview.md) 中“开始构建”章节所列控制台默认选项为准。核心功能模块包括：
+百炼当前提供三类核心 Agent 运行形态，分别适用于不同复杂度与可控性需求：
 
-- **运行时类型**：`managed`（托管会话与工具执行）、`flow`（可视化工作流编排）、`sandbox`（隔离式代码/浏览器/文件执行）  
-- **上下文扩展**：RAG（知识库检索）、Memory（[长期记忆](../concepts/long-term-memory.md)管理）、Connector（企业系统对接）、ParseX（多格式文档结构化解析）  
-- **能力接入**：MCP（Model Context Protocol 工具协议）、Skill（预置能力包，如天气、翻译、数据库查询等）  
+- **Managed Agent**：全托管式智能体，由平台统一管理会话生命周期、工具执行沙箱与环境隔离。适合快速验证业务逻辑，无需自行维护执行上下文。详见 [Agent 服务概览](../../raw/application-user-guide/get-started-with-agents/agent-overview.md)。
+- **Flow Agent**：基于可视化工作流编排的 LLM 应用，支持多节点条件分支、并行调用与状态传递，适用于需要精细控制执行路径的场景。其设计范式与 Managed Agent 不同，不可混用配置。详见 [Agent 服务概览](../../raw/application-user-guide/get-started-with-agents/agent-overview.md)。
+- **Sandbox**：轻量级隔离执行环境，专用于代码解释、浏览器自动化与文件解析等高风险操作，不承载完整 Agent 生命周期，需配合其他 Agent 类型使用。详见 [Agent 服务概览](../../raw/application-user-guide/get-started-with-agents/agent-overview.md)。
 
-> **注意**：文档中 MCP 链接指向外部 help.aliyun.com 页面，而 Skill 描述未说明是否支持自定义 Skill 注册；实际 API 层仅暴露 `mcp_server_urls` 参数用于 MCP 工具发现，自定义 Skill 需通过 [Agent 服务概览](../../raw/application-user-guide/get-started-with-agents/agent-overview.md) 中提到的 Connector 或独立 Skill 服务部署实现。
+> **注意**：文档中提及的 MCP（Model Context Protocol）链接指向外部 help.aliyun.com 页面，而百炼平台实际对接的 MCP 服务已内置于 `managed-agents-api` 中，API 调用时通过 `tools` 字段声明即可，无需额外注册 MCP 服务器。请以 [raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md](../../raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md) 中的 `tools` 参数定义为准。
 
 ## 关键参数
 
-调用 Agent 时需在请求体中明确以下关键字段（以 Managed Agent 为例）：
+调用 Agent（尤其是 Managed Agent）时，以下参数直接影响行为与能力：
 
-- `model_id`: 指定底层大模型 ID，必须为平台当前支持的模型（参见 [Agent 服务概览](../../raw/application-user-guide/get-started-with-agents/agent-overview.md) “开始构建”部分控制台可用列表）  
-- `agent_id`: Agent 实例唯一标识（创建后分配）  
-- `input`: 用户输入文本，类型为 `string`  
-- `parameters`: 可选，用于覆盖 Agent 创建时配置的超参（如 `temperature`、`max_tokens`）  
-- `tools`: 显式声明启用的工具列表（如 `["rag", "memory", "mcp"]`），未声明则不加载对应能力  
+- `model_id`：必需，指定底层大模型 ID（如 `qwen-max`, `qwen-plus`），必须为平台已开通的模型；
+- `tools`：数组，声明启用的工具列表，格式为 `{"type": "knowledge", "id": "kb-xxx"}` 或 `{"type": "connector", "id": "conn-xxx"}`；
+- `memory_id`：可选，关联 Memory 实例 ID，用于跨会话[长期记忆](../concepts/long-term-memory.md)检索；
+- `session_id`：推荐传入，用于会话状态追踪与调试，未提供时平台自动生成；
+- `enable_sandbox`：布尔值，仅 Managed Agent 支持，设为 `true` 时自动启用 Sandbox 执行环境。
 
 ## 使用方式
 
-1. **快速体验**：访问控制台 Playground，选择模板 Agent 直接对话调试（链接见 [Agent 服务概览](../../raw/application-user-guide/get-started-with-agents/agent-overview.md)）  
-2. **API 集成**：调用 `POST /v1/agents/{agent_id}/chat` 接口，传入 `model_id` 和 `input` 即可启动会话；完整请求示例与鉴权方式详见 [Managed Agents API 概览](../../raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md)  
-3. **进阶开发**：  
-   - 使用 Flow Agent 编排多步骤任务（参考 [Flow Agent 介绍](../../raw/application-user-guide/llm-application/llm-application-start-using/flow-agent-introduction.md)）  
-   - 在 Sandbox 中安全执行 Python 代码或浏览器操作（参考 [Sandbox 快速开始](../../raw/application-user-guide/agent-development/sandbox/sandbox-start-using/sandbox-quick-start.md)）
+1. **控制台快速体验**：访问 [体验 Agent](https://bailian.console.aliyun.com/cn-beijing/playground?agent=template_01M4QREF0RGXZVYRF49DQMSBJ8)，选择模板后直接对话生成 Agent，适用于原型验证；
+2. **API 集成**：调用 `/v1/agents/{agent_id}/chat` 接口（见 [raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md](../../raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md)），需提前在控制台创建 Agent 并获取 `agent_id`；
+3. **上下文扩展**：通过 RAG、Memory 或 Connector 模块增强 Agent 能力，各模块均需独立创建资源并绑定至 Agent 实例。
 
 ## 限制和注意事项
 
-- 单次请求 `input` 长度上限为 32768 字符；超出将被截断且不报错  
-- RAG 知识库仅支持已显式挂载至该 Agent 的知识源，未在创建时关联的知识库无法在运行时自动生效  
-- Memory 模块默认启用但仅对同一 `session_id` 内的连续请求有效；跨会话记忆需自行实现持久化逻辑  
-- MCP 工具调用依赖服务端可达性与协议兼容性，若 `mcp_server_urls` 中任一地址不可达，整个工具链将降级为不可用（无 fallback 机制）
+- 单次请求最大 token 数受所选 `model_id` 限制，且 `tools` 声明数量上限为 10 个；
+- Sandbox 环境默认超时 30 秒，不支持持久化存储或后台进程；
+- Flow Agent 不支持直接通过 `/chat` API 调用，必须使用 `/v1/flows/{flow_id}/run` 接口；
+- 所有 Agent 默认开启内容安全检测（含输入/输出），若需关闭需在 Security 模块中显式配置策略，详见 [Agent 服务概览](../../raw/application-user-guide/get-started-with-agents/agent-overview.md) 中的 Security 小节。
 
 ## 来源文档
 

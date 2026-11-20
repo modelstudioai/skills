@@ -8782,6 +8782,22 @@ kling/kling-v3-omni-image-generation
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
 
+vidu/viduq3.1-fast\_reference2image
+
+1K
+
+0.25元/张
+
+无
+
+2K
+
+0.34375元/张
+
+4K
+
+0.71875元/张
+
 vidu/vidu-image\_reference2image
 
 1K
@@ -12465,6 +12481,50 @@ video-style-transform
 
 **免费额度**[**（注）**](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
 
+pixverse/pixverse-v6-max-t2v
+
+有声视频
+
+`audio=true`
+
+360P
+
+原价0.27元/秒**（限时5折）**
+
+无
+
+540P
+
+原价0.33元/秒**（限时5折）**
+
+720P
+
+原价0.44元/秒**（限时5折）**
+
+1080P
+
+原价0.83元/秒**（限时5折）**
+
+无声视频
+
+`audio=false`
+
+360P
+
+原价0.18元/秒**（限时5折）**
+
+540P
+
+原价0.27元/秒**（限时5折）**
+
+720P
+
+原价0.33元/秒**（限时5折）**
+
+1080P
+
+原价0.65元/秒**（限时5折）**
+
 pixverse/pixverse-c1-t2v
 
 有声视频
@@ -12658,6 +12718,50 @@ pixverse/pixverse-v5.6-it2v
 **输出单价**
 
 **免费额度**[**（注）**](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
+
+pixverse/pixverse-v6-max-it2v
+
+有声视频
+
+`audio=true`
+
+360P
+
+原价0.27元/秒**（限时5折）**
+
+无
+
+540P
+
+原价0.33元/秒**（限时5折）**
+
+720P
+
+原价0.44元/秒**（限时5折）**
+
+1080P
+
+原价0.83元/秒**（限时5折）**
+
+无声视频
+
+`audio=false`
+
+360P
+
+原价0.18元/秒**（限时5折）**
+
+540P
+
+原价0.27元/秒**（限时5折）**
+
+720P
+
+原价0.33元/秒**（限时5折）**
+
+1080P
+
+原价0.65元/秒**（限时5折）**
 
 pixverse/pixverse-c1-it2v
 
