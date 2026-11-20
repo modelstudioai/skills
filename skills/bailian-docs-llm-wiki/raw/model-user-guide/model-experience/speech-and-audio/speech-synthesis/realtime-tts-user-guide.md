@@ -10,6 +10,7 @@
 -   **表现力控制**：通过自然语言指令调整语速、情感等表达，或在文本中插入情感与富语言标签。参见[指令控制](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#12884a10929p9)和[情感与富语言标签](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#rt_emtag_h3)。
 -   **自定义音色**：通过[音色复刻](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-cloning-user-guide.md)从音频样本创建音色，或通过[音色设计](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-design-user-guide.md)使用文字描述创建音色。
 -   **精细控制与公式朗读**：使用 [SSML 与 LaTeX](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/ssml-latex-user-guide.md)控制停顿、发音等效果，或将公式转换为语音。
+-   **Markdown 过滤**：将包含表格等结构的 Markdown 文本转换成适合朗读的内容。参见[Markdown 过滤](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#tts_markdown_filter)。
 -   **音频控制**：可调节语速、语调、音量和码率，输出 PCM、WAV、MP3、Opus 等主流音频格式，最高支持 48 kHz 采样率。具体取值与支持范围以对应 API 参数说明为准。
 
 **说明**各模型及音色支持的能力有所不同，使用前请核对对应功能的支持范围。
@@ -218,6 +219,10 @@ with open("output.mp3", "wb") as audio:
 参数适用模型和配置方法请参见 [Qwen-Audio-TTS API](raw/_short/qwen-audio-tts-client-events-26c1ffacfaed1e62.md)或 [CosyVoice API](raw/_short/cosyvoice-client-events-480a8821d2d60e18.md)；SSML 与 LaTeX 的适用模型、音色、接口及用法请参见 [SSML 与 LaTeX](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/ssml-latex-user-guide.md)。
 
 **说明**使用 SSML 时，需要一次提交完整的 SSML 文本，再逐段接收音频，不支持分段输入。
+
+### Markdown 过滤
+
+合成包含表格、链接等 Markdown 格式的内容时，可将 `enable_markdown_filter` 设为 `true`，让服务先将 Markdown 转换成适合朗读的文本。Qwen-Audio-TTS 和 CosyVoice 支持此功能，cosyvoice-v2 除外。配置方法参见 [Qwen-Audio-TTS API](raw/_short/qwen-audio-tts-client-events-26c1ffacfaed1e62.md) 和 [CosyVoice API](raw/_short/cosyvoice-client-events-480a8821d2d60e18.md)。
 
 ### 指令控制
 

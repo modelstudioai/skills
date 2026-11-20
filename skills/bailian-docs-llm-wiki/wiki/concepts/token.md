@@ -1,48 +1,47 @@
 # Token 计量与管理
 
-Token 计量与管理是百炼平台模型服务成本控制与资源调度的核心基础机制，指对模型调用过程中输入（Prompt）、输出（Completion）及中间处理环节所消耗的 Token 进行精确统计、分类计费、配额约束与实时监控的全生命周期管理体系。所有计费、限流、缓存折算、用量告警与成本分析均以 Token 为原子单位展开。
+Token 计量与管理是百炼平台对大模型调用行为进行精细化用量度量、成本归因与资源调控的核心横切能力。它以输入/输出 Token 数为统一计量单位，贯穿模型推理、知识检索、多模态解析等各类 AI 调用场景，并直接驱动计费结算、监控告警、限流控制与成本优化决策。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **实时推理**：输入/输出 Token 分开计量，单价独立（如 `qwen-plus` 输入 ¥0.004/千 Token，输出 ¥0.012/千 Token），新人免费额度（如 100 万 Token）为输入+输出共用总额度，自动优先抵扣。
-- **批量推理（Batch）**：Token 消耗按实际输入长度与输出长度分别统计，单价为实时推理的 50%，但**不参与免费额度抵扣**，仅适用按量计费或节省计划。
-- **模型训练与微调**：按训练过程中的总 Token 量计费（如文本微调按 `max_steps × avg_seq_len`，多模态模型按像素压缩后等效 Token 数），与推理 Token 完全隔离、独立结算。
-- **吞吐预留（TPM）**：将 Token 消耗实时换算为 TPM（Tokens Per Minute）进行容量管控——长输入按阶梯系数（>32K 部分×3）、缓存命中再乘缓存折算系数（如 0.125），最终消耗 kTPM = 原始 Token × 阶梯系数 × 缓存系数。
-- **Agent 与知识库场景**：Managed Agents 中模型节点、Flow Agent 工作流中的大模型/向量/排序节点、知识库的问答与路由调用，均按实际 Token 消耗单独计费；ParseX 图文解析按页、音视频按秒，但底层仍映射为等效 Token 量用于资源调度。
-- **异步任务（图像/视频生成）**：任务创建即预估 Token 消耗（如 `wanx2.1-t2i-turbo` 按 prompt 长度 + 图像分辨率折算），费用在任务完成时结算，与同步调用 Token 计量逻辑一致。
-- **监控与告警**：`模型消耗 TotalToken 数` 是核心可观测指标，支持分钟级聚合与环比突增告警，用于主动识别异常调用、Prompt 膨胀或缓存失效等问题。
-- **账单分析**：Billing API 支持按 `BASE_MODEL`、`API_KEY_ID` 等维度分组查询 Token 对应的费用明细，实现精准成本归因。
+- **模型推理（Generation / Chat Completions）**：所有通义千问系列（如 `qwen-plus`、`qwen3.8-max`）、文本嵌入（`text-embedding-v4`）、重排（`qwen3-rerank`）等模型调用均按实际消耗的 **input_tokens + output_tokens** 精确计量。Token 数在 API 响应的 `usage` 字段中返回（如 `"input_tokens": 127, "output_tokens": 89`），是计费与监控的唯一权威依据。
+
+- **Agent 与 Flow 应用**：Managed Agents 和 Flow Agent 中的每一步模型调用（含工具调用触发的子模型、知识库路由/召回/问答阶段的向量模型与排序模型）均独立计量 Token。例如一次 RAG 问答可能涉及：`text-embedding-v4`（输入 query）→ `qwen3-rerank`（重排 TopK 文档）→ `qwen3.8-max`（生成答案），三者 Token 分别计费、分别监控。
+
+- **ParseX 多模态解析**：虽不直接暴露 Token，但底层统一折算为等效 Token 量参与用量统计与配额管控。文档页、音视频秒数等原始计量单位，在费用中心和用量 API 中会映射为标准化的 `equivalent_tokens`，用于跨服务统一限额（如免费额度抵扣）与告警联动。
+
+- **高速推理能力（Prime / TPM 预留 / DTU）**：Token 计量逻辑保持一致，但计费单价或折算方式可能调整。例如吞吐预留响应中返回的 `provisioned_tokens` 是经长输入阶梯折扣与前缀缓存优化后的**折算 Token 量**，用于精准计费；DTU 方案则按 `TPM × 时长` 折算为等效 Token 消耗，体现物理算力占用。
+
+- **监控与告警**：`模型消耗 TotalToken 数` 是核心可观测指标，支持分钟级聚合、跨模型对比与阈值告警（如“单模型 TPM 突增 300%”）。Token 用量趋势与失败率、延迟等健康指标交叉分析，可快速定位低效 Prompt、冗余召回或模型降级问题。
 
 ## 关键参数和配置
 
-| 参数 | 说明 | 开发者须知 |
-|------|------|------------|
-| `input_tokens` / `output_tokens` | API 响应中返回的实际消耗 Token 数（如 OpenAI 兼容响应中的 `usage.prompt_tokens` 和 `usage.completion_tokens`） | 必须解析响应体获取真实用量，不可依赖请求长度估算；多轮对话需累计每轮 tokens。 |
-| `total_tokens` | 输入+输出 Token 总和，用于部分计费项（如免费额度抵扣）和监控聚合 | 监控告警中“TotalToken 数”即此值，建议配置环比增长 >30% 的告警阈值。 |
-| `tpm_limit` / `ktpm_reserved` | 吞吐预留实例的容量单位（1 kTPM = 1000 Tokens/分钟），输入/输出可独立购买 | 实际消耗受长输入阶梯系数、缓存系数双重影响，需通过控制台“TPM 换算计算器”预估。 |
-| `cache_hit_ratio`（隐式） | 缓存命中时，输入 Token 按折扣单价计费（如 `qwen3.8-max` 缓存命中仅 ¥0.5/百万 Token） | 缓存创建本身按全价计费，开发者应权衡缓存复用率与创建成本。 |
-| `region`（地域） | Token 计费价格与免费额度严格绑定地域（如北京有免费额度，弗吉尼亚无） | 跨地域调用需切换 `base_url` 并注意价格差异，不可混用额度。 |
-| `model_version`（快照版） | `qwen3.8-max-0902` 与 `qwen3.8-max` 视为不同模型，Token 额度、价格、部署实例完全独立 | 升级模型版本即切换计费主体，历史额度不迁移。 |
+| 参数名 | 所属场景 | 说明 | 示例值 |
+|--------|----------|------|--------|
+| `input_tokens` / `output_tokens` | 所有模型 API 响应 | 实际消耗的输入/输出 Token 数，只读字段，不可配置 | `"input_tokens": 256, "output_tokens": 103` |
+| `total_tokens` | 所有模型 API 响应 | `input_tokens + output_tokens`，用于快速汇总 | `359` |
+| `provisioned_tokens` | 吞吐预留（TPM Reservation）响应 | 经缓存、长输入优化后的折算 Token 量，用于计费 | `281`（低于原始 `total_tokens`） |
+| `equivalent_tokens` | ParseX、知识库等组件用量 API | 将页/秒/RCU 等非 Token 单位折算后的统一计量值，用于配额与告警 | `12000`（对应 120 页 PDF 解析） |
+| `token_limit`（请求头） | 高级调用控制（可选） | 通过 `X-DashScope-Token-Limit` 请求头硬性限制本次调用最大 output_tokens，防失控生成 | `X-DashScope-Token-Limit: 512` |
+
+> ⚠️ 注意：  
+> - Token 计量以模型服务端实际分词结果为准，客户端预估（如 tiktoken）可能存在偏差，**务必以 API 响应 `usage` 字段为准**；  
+> - 免费额度、节省计划、资源包均按 `equivalent_tokens` 或 `total_tokens` 抵扣，不区分 input/output；  
+> - `token_limit` 为软限制，部分模型（如流式响应）可能略超，建议预留 5–10% 余量。
 
 ## 面向开发者，简洁实用
 
-- ✅ **必做**：始终解析 API 响应中的 `usage` 字段获取真实 Token 消耗，用于本地用量校验与成本预估。  
-- ✅ **推荐**：在生产环境启用模型监控，为 `TotalToken 数` 配置环比突增告警（如 1 小时内增长 >50%），快速发现 Prompt 注入、循环调用等异常。  
-- ✅ **优化技巧**：  
-  - 使用缓存前评估复用率，避免低频缓存带来高创建成本；  
-  - 知识库查询中调低 `top_k`、关闭 `rerank` 可显著减少排序 Token 消耗；  
-  - Batch 接口虽无免费额度，但单价更低，适合离线批量处理且对延迟不敏感的场景。  
-- ⚠️ **避坑提示**：  
-  - 免费额度**不覆盖** Batch、训练、部署、知识库规格、ParseX、安全防护等任何非实时推理场景；  
-  - 异步任务费用在完成时结算，充值后仍可能因历史任务触发二次扣费；  
-  - Token 计量存在约 1–10 分钟延迟，实时监控数据不可用于秒级限流决策（应依赖 RPM/TPM 配额）。
+- ✅ **必查**：每次模型调用后，立即解析响应中的 `usage` 字段，记录 `input_tokens` 和 `output_tokens`，用于本地用量审计与成本归因。  
+- ✅ **必用**：通过 [用量 API](https://bailian.console.aliyun.com/managed-agent/usage) 按工作空间/Agent/Session 维度拉取 Token 汇总数据，结合时间窗口做趋势分析。  
+- ✅ **必控**：对高风险场景（如用户自由输入、长文档摘要）启用 `X-DashScope-Token-Limit` 头，避免意外超长输出导致 Token 爆涨。  
+- ✅ **必优**：在知识库检索链路中，降低 `TopK`、关闭重排、选用轻量嵌入模型（如 `text-embedding-v3-small`），可显著减少排序与生成阶段的 Token 消耗。  
+- ❌ **勿信**：不要依赖客户端 tokenizer 估算 Token 数做计费预算——百炼使用自研分词器，结果更准确且与计费完全一致。
 
 ## 关联主题页
 
-- [test 1](../guides/test-1.md)
-- [model monitoring](../guides/model-monitoring.md)
 - [agent billing](../guides/agent-billing.md)
-- [more about models](../api/more-about-models.md)
-- [billing api](../api/billing-api.md)
+- [preparations](../api/preparations.md)
+- [model monitoring](../guides/model-monitoring.md)
+- [model high speed inference](../guides/model-high-speed-inference.md)
 
 

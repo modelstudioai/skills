@@ -286,11 +286,9 @@ curl 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/resp
   }'
 ```
 
-## 通过 Anthropic 兼容接口传入 PDF URL
+#### Anthropic
 
 qwen3.8-max、qwen3.8-flash 及 qwen4 系列模型支持通过 Anthropic 兼容 Messages API 直接传入 PDF 文件 URL。在 `messages[].content` 中使用 `type: "document"` 内容块，将 `source.type` 设置为 `url`，并在 `source.url` 中指定 PDF 文件 URL。
-
-以下示例使用华北2（北京）地域。将 `{WorkspaceId}` 替换为业务空间 ID，并将环境变量 `DASHSCOPE_API_KEY` 设置为自己的百炼 API Key。
 
 ```
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/v1/messages' \

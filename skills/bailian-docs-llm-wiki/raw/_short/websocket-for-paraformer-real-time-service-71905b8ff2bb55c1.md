@@ -2,6 +2,8 @@
 
 本文介绍通过 WebSocket 连接访问 Paraformer 实时语音识别服务的接口地址、请求头和交互流程。
 
+使用 Python 调用模型时，请参见 [Paraformer Python SDK](raw/_short/realtime-websocket-python-sdk-paraformer-3b8f41a8c1c64b5a.md)。
+
 **重要**阿里云百炼为华北2（北京）地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`。
 
 `{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。现有域名仍可正常使用。
@@ -80,3 +82,11 @@ string
 4.  通知服务端结束任务：客户端发送 finish-task 指令通知服务端结束任务，并继续接收服务端返回的 result-generated 事件。
 5.  任务结束：客户端收到服务端返回的 task-finished 事件，标志着任务结束。
 6.  关闭连接：客户端关闭 WebSocket 连接。
+
+## 可用的 SDK
+
+-   [Python SDK](raw/_short/realtime-websocket-python-sdk-paraformer-3b8f41a8c1c64b5a.md)
+-   [Java SDK](raw/_short/paraformer-real-time-speech-recognition-java-sdk-07562d683c29a6d3.md)
+-   [Android SDK](raw/_short/android-sdk-for-paraformer-real-time-service-89010820958448e0.md)
+-   [iOS SDK](raw/_short/ios-sdk-for-paraformer-real-time-service-d387ad01c5950d13.md)
+-   [HarmonyOS SDK](raw/_short/harmonyos-sdk-for-paraformer-real-time-service-ed34bd097a16dafb.md)

@@ -1,6 +1,6 @@
 # CreateIndex - 创建知识库
 
-使用此API可创建两类知识库：基于文档或音视频的非结构化知识库，以及用于数据查询或图片问答的结构化知识库。
+使用此API可创建两类知识库：基于文档、图片或音视频的非结构化知识库，以及用于数据查询的结构化知识库。
 
 ## 接口说明
 
@@ -120,18 +120,18 @@ string
 
 **取值范围**：
 
--   unstructured：文档搜索或音视频类知识库。文档搜索类型的使用场景默认为基础文档问答。如需创建其他场景还需传递 knowledgeType 和 knowledgeScene 参数。
+-   unstructured：文档搜索、图片问答或音视频类知识库。文档搜索类型的使用场景默认为基础文档问答。如需创建其他场景还需传递 knowledgeType 和 knowledgeScene 参数。
     
--   structured：数据查询或图片问答类知识库。
+-   structured：数据查询类知识库。
     
 
 请注意，知识库创建后将无法更改其类型。
 
 **枚举值：**
 
--   unstructured :
+-   unstructured
     
-    unstructured
+-   structured
     
 
 unstructured
@@ -265,6 +265,8 @@ string
     
 -   DATA\_CENTER\_FILE：文件类型，即导入[应用数据](https://bailian.console.aliyun.com/?tab=app#/data-center)下的指定文件，可同时导入多个文件。
     
+-   DATA\_CENTER\_STRUCTURED\_TABLE：结构化数据表类型，创建数据查询类知识库时必须同时指定 TableIds 和 Columns。 如果本参数传入 DATA\_CENTER\_STRUCTURED\_TABLE，则必须指定 TableIds 和 Columns 参数。
+    
 
 如果本参数传入 DATA\_CENTER\_CATEGORY，则必须指定`CategoryIds`参数；如果本参数传入 DATA\_CENTER\_FILE，则必须指定`DocumentIds`参数。
 
@@ -272,13 +274,11 @@ string
 
 **枚举值：**
 
--   DATA\_CENTER\_CATEGORY :
+-   DATA\_CENTER\_CATEGORY
     
-    类目类型
+-   DATA\_CENTER\_FILE
     
--   DATA\_CENTER\_FILE :
-    
-    文件类型
+-   DATA\_CENTER\_STRUCTURED\_TABLE: 结构化数据表类型
     
 
 DATA\_CENTER\_FILE
@@ -379,15 +379,15 @@ Columns
 
 array<object>
 
-否
+条件必填
 
 数据表的结构（列名、类型等）。
 
 object
 
-否
+条件必填
 
-该参数暂不开放，请勿传入。
+数据查询类知识库必填的列配置（列名、类型等）。
 
 Column
 
@@ -395,7 +395,7 @@ string
 
 否
 
-该参数暂不开放，请勿传入。
+数据查询类知识库必填的列配置（列名、类型等）。
 
 school
 
@@ -822,7 +822,7 @@ string
     
 -   table: 数据查询。需与 structureType: structured 配合使用。
     
--   image: 图片问答。需与 structureType: structured 配合使用。
+-   image: 图片问答。需与 structureType: unstructured 配合使用。
     
 -   multimedia: 音视频搜索。需与 structureType: unstructured 配合使用。
     
@@ -843,13 +843,13 @@ string
 
 **取值与联动关系**:
 
--   当 knowledgeType 为 document 时，knowledgeType 可设置为 basic\_document\_qa（基础文档问答）、visual\_document\_qa（图文并茂回复）或 lite\_document\_qa（极速问答）、visual\_perception\_qa（视觉理解）。
+-   当 knowledgeType 为 document 时，knowledgeScene 可设置为 basic\_document\_qa（基础文档问答）、visual\_document\_qa（图文并茂回复）或 lite\_document\_qa（极速问答）、visual\_perception\_qa（视觉理解）。
     
--   当 knowledgeType 为 table 时，knowledgeType 设置为 basic\_table\_qa（基础表格问答）。
+-   当 knowledgeType 为 table 时，knowledgeScene 设置为 basic\_table\_qa（基础表格问答）。
     
--   当 knowledgeType 为 image 时，knowledgeType 设置为 image\_qa（图片问答）。
+-   当 knowledgeType 为 image 时，knowledgeScene 设置为 image\_qa（图片问答）。
     
--   当 knowledgeType 为 multimedia 时，knowledgeType 设置为 basic\_multimedia\_qa（音视频搜索问答）。
+-   当 knowledgeType 为 multimedia 时，knowledgeScene 设置为 basic\_multimedia\_qa（音视频搜索问答）。
     
 
 basic\_document\_qa

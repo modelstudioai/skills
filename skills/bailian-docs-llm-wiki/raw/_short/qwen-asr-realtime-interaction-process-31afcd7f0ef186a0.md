@@ -2,6 +2,8 @@
 
 Qwen-ASR-Realtime 实时语音识别服务通过 WebSocket 协议，接收实时音频流并实时转写。支持 VAD 模式 和 Manual 模式 交互流程。
 
+使用 Python 调用模型时，请参见 [Qwen-ASR-Realtime Python SDK](raw/_short/realtime-websocket-python-sdk-qwen-asr-realtime-369ebdfe073a8cec.md)。
+
 **用户指南：**关于模型介绍和选型建议请参见[语音识别](raw/model-user-guide/model-experience/speech-and-audio/speech-recognition/asr-model.md)，示例代码请参见[实时语音识别](raw/model-user-guide/model-experience/speech-and-audio/speech-recognition/real-time-speech-recognition-user-guide.md)。
 
 ## 接口地址
@@ -1241,3 +1243,8 @@ function sendAudioStream($conn, $audio_file_path, $enable_server_vad, $loop, &$i
     $send_chunk();
 }
 ```
+
+## 可用的 SDK
+
+-   [Python SDK](raw/_short/realtime-websocket-python-sdk-qwen-asr-realtime-369ebdfe073a8cec.md)
+-   [Java SDK](raw/_short/qwen-asr-realtime-java-sdk-91e80681dc4dd6d6.md)

@@ -1,6 +1,6 @@
 # WebSocket
 
--   [接入](raw/_short/livetranslate-realtime-websocket-access-69ee95b6726440dc.md)
--   [Python SDK](raw/_short/qwen-livetranslate-python-sdk-147cd38a2304509b.md)
--   [Java SDK](raw/_short/qwen-livetranslate-java-sdk-edfabe658a0fa5ea.md)
--   [C# SDK](raw/_short/qwen-livetranslate-csharp-sdk-1ed6c93536b4b771.md)
+-   [WebSocket 接入](raw/_short/livetranslate-realtime-websocket-access-c83c6ed44456849c.md)
+-   [Python SDK](raw/_short/realtime-websocket-python-sdk-qwen-livetranslate-0362e1544ace9822.md)
+-   [Java SDK](raw/_short/qwen-livetranslate-java-sdk-dfa24a2e7fc6f93f.md)
+-   [C# SDK](raw/_short/qwen-livetranslate-csharp-sdk-57bf408c928a975f.md)

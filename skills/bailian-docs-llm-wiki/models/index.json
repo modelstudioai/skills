@@ -1,36 +1,36 @@
 {
-  "updatedAt": "2026-11-19",
-  "totalFamilies": 127,
-  "totalModels": 342,
+  "updatedAt": "2026-11-21",
+  "totalFamilies": 125,
+  "totalModels": 336,
   "profileCoverage": {
-    "full": 286,
-    "partial": 53,
-    "structured-only": 3,
+    "full": 296,
+    "partial": 39,
+    "structured-only": 1,
     "none": 0
   },
   "capabilityDistribution": {
-    "TG": 31,
+    "TG": 32,
     "VG": 17,
-    "IG": 17,
-    "Reasoning": 11,
+    "IG": 16,
     "ASR": 11,
+    "Reasoning": 10,
     "TTS": 9,
     "Realtime-ASR": 6,
     "VU": 5,
     "Multimodal-Omni": 5,
     "Realtime-Omni": 4,
-    "ME": 2,
     "Realtime-Chatting": 2,
     "TR": 2,
     "Realtime-Audio-Translate": 2,
+    "ME": 1,
     "World-Model": 1,
     "Realtime-Text-to-Speech": 1,
     "3D-generation": 1
   },
   "providerDistribution": {
-    "qwen": 64,
+    "qwen": 63,
     "qwen-domain-model": 26,
-    "wan": 13,
+    "wan": 12,
     "mini-max": 4,
     "pixverse": 4,
     "deepseek": 3,
@@ -50,24 +50,25 @@
     {
       "slug": "Kimi-K2",
       "name": "Kimi",
-      "primaryCapability": "Reasoning",
+      "primaryCapability": "TG",
       "capabilities": [
+        "TG",
         "Reasoning",
-        "VU",
-        "TG"
+        "VU"
       ],
       "providers": [
         "moonshot-ai"
       ],
-      "itemCount": 5,
+      "itemCount": 6,
       "items": [
         "kimi-k2.5",
         "kimi-k2.6",
         "kimi-k2.7-code",
         "kimi-k3",
-        "kimi-k3.1-pro"
+        "kimi-k3.1-pro",
+        "kimi-k3.1-pro-prime"
       ],
-      "maxContextWindow": 1000000
+      "maxContextWindow": 1048576
     },
     {
       "slug": "MiniMax-M2.1",
@@ -1057,22 +1058,6 @@
       "maxContextWindow": 32768
     },
     {
-      "slug": "qwen-vl-embedding",
-      "name": "Qwen-VL-Embedding",
-      "primaryCapability": "ME",
-      "capabilities": [
-        "ME"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 2,
-      "items": [
-        "qwen2.5-vl-embedding",
-        "qwen3-vl-embedding"
-      ]
-    },
-    {
       "slug": "qwen-vl-ocr",
       "name": "Qwen-VL-OCR",
       "primaryCapability": "VU",
@@ -1998,25 +1983,6 @@
       "itemCount": 1,
       "items": [
         "voice-enrollment"
-      ]
-    },
-    {
-      "slug": "wan-image-edit",
-      "name": "Wan-Image",
-      "primaryCapability": "IG",
-      "capabilities": [
-        "IG"
-      ],
-      "providers": [
-        "wan"
-      ],
-      "itemCount": 5,
-      "items": [
-        "wan2.5-i2i-preview",
-        "wan2.6-image",
-        "wan2.7-image",
-        "wan2.7-image-pro",
-        "wanx2.1-imageedit"
       ]
     },
     {

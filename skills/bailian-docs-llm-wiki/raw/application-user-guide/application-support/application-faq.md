@@ -71,7 +71,7 @@
 
 1.  **我的产品接入了通义千问大模型，现需上架到应用市场或小程序平台中，如何备案及申请合作协议？**
     1.  请参考[应用合规备案](raw/_short/compliance-and-launch-filing-guide-for-ai-apps-p-d8d98ba3cff2bf6f.md)进行备案。
-    2.  请[提交工单](https://smartservice.console.aliyun.com/service/create-ticket)申请通义千问系列模型的合作协议。
+    2.  请通过[大模型百炼合作协议备案自助申请助手](https://smartservice.console.aliyun.com/service/self-service-center/search?id=28023&mode=toolPage&trackFrom=topic-llm2&showDrawer=true)申请通义千问系列模型的合作协议，提交后可在[审核列表](https://smartservice.console.aliyun.com/service/audit-list?spm=5176.2020520104.0.0.52a63a98OYNqWq)查看审核进度。
 
 ## 阿里云百炼服务协议
 

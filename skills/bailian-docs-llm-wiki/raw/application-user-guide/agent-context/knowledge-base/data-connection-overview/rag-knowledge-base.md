@@ -224,12 +224,13 @@ curl -X POST https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/indices/
   -H "Content-Type: application/json" \
   -d '{
     "name": "my-knowledge-base",
+    "description": "my-knowledge-base-description",
     "structureType": "unstructured",
     "sinkType": "BUILT_IN",
     "sourceType": "DATA_CENTER_CATEGORY",
     "embeddingModelName": "text-embedding-v4",
     "chunkSize": 600,
-    "source_ids": ["cate_xxx"]
+    "categoryIds": ["cate_xxx"]
   }'
 ```
 

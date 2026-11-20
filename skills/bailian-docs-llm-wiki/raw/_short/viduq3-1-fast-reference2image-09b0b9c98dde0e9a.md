@@ -122,6 +122,6 @@ RPM（每分钟请求数）
 
 同时处理中任务数量（并发数）
 
-5
+5（共享）
 
-同一个阿里云百炼 API Key 下，Vidu 参考生图系列的模型共享 5 个并发数。即这些模型处于运行状态的任务总数加起来不能超过 5 个。
+共享的模型请参见[限流](https://help.aliyun.com/zh/model-studio/rate-limit#vidu-img-third-party-title)。

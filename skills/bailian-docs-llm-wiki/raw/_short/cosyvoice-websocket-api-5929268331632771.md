@@ -18,6 +18,14 @@ WebSocket 接口使用 `wss://` 协议，地址如下：
 
 调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
+## 可用的 SDK
+
+-   [Python SDK](https://help.aliyun.com/zh/model-studio/realtime-websocket-python-sdk-qwen-audio-tts-cosyvoice#model-cosyvoice)
+-   [Java SDK](https://help.aliyun.com/zh/model-studio/realtime-websocket-java-sdk-qwen-audio-tts-cosyvoice#model-cosyvoice)
+-   [Android SDK](https://help.aliyun.com/zh/model-studio/realtime-websocket-android-sdk-qwen-audio-tts-cosyvoice#model-cosyvoice)
+-   [iOS SDK](https://help.aliyun.com/zh/model-studio/realtime-websocket-ios-sdk-qwen-audio-tts-cosyvoice#model-cosyvoice)
+-   [HarmonyOS SDK](https://help.aliyun.com/zh/model-studio/realtime-websocket-harmonyos-sdk-qwen-audio-tts-cosyvoice#model-cosyvoice)
+
 **重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
 
 -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
@@ -117,7 +125,7 @@ WebSocket 接口使用 `wss://` 协议，地址如下：
 
 #### Java
 
-建议使用 Java DashScope SDK 进行开发，请参见[CosyVoice Java SDK](raw/_short/cosyvoice-java-sdk-08d4eee39fa05656.md)。
+建议使用 Java DashScope SDK 进行开发，请参见[CosyVoice Java SDK](https://help.aliyun.com/zh/model-studio/cosyvoice-java-sdk)。
 
 以下是 Java WebSocket 直连示例，运行前请导入以下依赖：
 
@@ -306,7 +314,7 @@ public class TTSWebSocketClient extends WebSocketClient {
 
 #### Python
 
-建议使用 Python DashScope SDK 进行开发，请参见[CosyVoice Python SDK](raw/_short/cosyvoice-python-sdk-c75c9dda4df376a5.md)。
+建议使用 Python DashScope SDK 进行开发，请参见[CosyVoice Python SDK](https://help.aliyun.com/zh/model-studio/realtime-websocket-python-sdk-qwen-audio-tts-cosyvoice#model-cosyvoice)。
 
 以下是 Python WebSocket 直连示例，运行前请导入以下依赖：
 

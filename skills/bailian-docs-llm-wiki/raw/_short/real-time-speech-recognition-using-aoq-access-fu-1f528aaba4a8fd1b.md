@@ -111,7 +111,7 @@ export LD_LIBRARY_PATH="$PWD/AoqClientSdk:$LD_LIBRARY_PATH"
 2.  客户端把 Token 响应转换为 AoqConnectConfig，发布 Audio 和 Data 轨，并订阅 Data 轨。
 3.  客户端按业务需求和模型要求配置音频编码参数，启动麦克风采集但暂不发送音频，然后建立 AOQ 连接。
 4.  连接成功后发送 run-task；收到 task-started 后开启 Audio 轨发送。
-5.  客户端在 onDataMsg 中处理 result-generated；结束录音时先关闭 Audio 轨发送，再发送 finish-task。
+5.  客户端在 `onDataMsg` 中处理 `result-generated`；结束录音时停止采集音频，并通过 Data 轨发送 `finish-task`。
 6.  收到 task-finished 后，可在同一连接上使用新的 task\_id 发起下一轮识别，或断开连接并销毁引擎。
 
 ![aoq-realtime-asr-sequence-zh](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5276066871/p1094760.png)
@@ -286,11 +286,10 @@ if ("task-started".equals(eventName)) {
 
 ### 7\. 结束识别任务
 
-用户结束本轮录音时，停止音频上行并发送 finish-task。保持连接直至收到最终识别结果和 task-finished；后续可按业务需要启动新任务或释放连接。事件格式请参见[客户端事件](raw/_short/fun-asr-client-events-a037d05e99747fff.md)。
+用户结束本轮录音时，停止采集音频，并通过 Data 轨发送 `finish-task`。保持连接直至收到最终识别结果和 task-finished；后续可按业务需要启动新任务或释放连接。事件格式请参见[客户端事件](raw/_short/fun-asr-client-events-a037d05e99747fff.md)。
 
 ```
-engine.enableSendMediaStream(
-        AoqClientEngine.AoqTrackType.AoqTrackTypeAudio, false);
+engine.stopAudioCapture();
 JSONObject payload = new JSONObject().put("input", new JSONObject());
 send(new JSONObject()
         .put("header", createHeader("finish-task"))
@@ -339,6 +338,7 @@ public final class AsrClient {
     private String taskId;
     private boolean connected;
     private boolean taskStarted;
+    private boolean audioCapturing;
 
     public AsrClient(Context context, AoqClientEngine.AoqConnectConfig connectConfig,
                      ResultListener resultListener) {
@@ -391,7 +391,7 @@ public final class AsrClient {
         capture.isExternal = false;
         capture.isVoipMode = true;
         capture.channel = 1;
-        engine.startAudioCapture(capture);
+        audioCapturing = engine.startAudioCapture(capture) == 0;
         engine.enableSendMediaStream(AoqClientEngine.AoqTrackType.AoqTrackTypeAudio, false);
     }
 
@@ -399,6 +399,9 @@ public final class AsrClient {
     public void beginRecognition() {
         if (!connected || taskStarted || taskId != null) {
             return;
+        }
+        if (!audioCapturing) {
+            startAudioCapture();
         }
         taskId = UUID.randomUUID().toString();
         JSONObject header = createHeader("run-task");
@@ -420,7 +423,9 @@ public final class AsrClient {
         if (taskId == null) {
             return;
         }
-        engine.enableSendMediaStream(AoqClientEngine.AoqTrackType.AoqTrackTypeAudio, false);
+        if (audioCapturing && engine.stopAudioCapture() == 0) {
+            audioCapturing = false;
+        }
         JSONObject payload = new JSONObject().put("input", new JSONObject());
         send(new JSONObject()
                 .put("header", createHeader("finish-task"))
@@ -429,7 +434,10 @@ public final class AsrClient {
 
     public void close() {
         engine.enableSendMediaStream(AoqClientEngine.AoqTrackType.AoqTrackTypeAudio, false);
-        engine.stopAudioCapture();
+        if (audioCapturing) {
+            engine.stopAudioCapture();
+            audioCapturing = false;
+        }
         engine.disconnect();
         AoqClientEngine.destroy();
     }
@@ -596,7 +604,7 @@ task-finished
 
 ### 同一连接多次识别
 
-收到 task-finished 后调用 beginRecognition，可在同一 AOQ 连接上启动下一轮识别。每轮任务必须使用新的 task\_id，不需要重新申请 Token 或重建连接；如果连接已经断开，则需要重新获取连接凭证。
+收到 task-finished 后调用 beginRecognition，可在同一 AOQ 连接上启动下一轮识别。`beginRecognition` 会重新启动音频采集。每轮任务必须使用新的 task\_id，不需要重新申请 Token 或重建连接；如果连接已经断开，则需要重新获取连接凭证。
 
 ### Android 后台识别
 
@@ -618,7 +626,7 @@ Android 10 及以上版本中，如需在应用进入后台后继续采集麦克
 
 收不到最终结果
 
-先关闭 Audio 轨发送，再发送 finish-task；等待最终 result-generated 和 task-finished，不要立即断开连接。
+发送 finish-task 后，保持连接，直到收到最终 result-generated 和 task-finished。
 
 Android 加载 SDK 失败
 

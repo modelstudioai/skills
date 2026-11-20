@@ -25,13 +25,14 @@
    - Managed：编辑 YAML，点击「实时预览」触发[流式输出](../concepts/streaming-output.md)与工具调用日志  
    - Flow：拖入节点后双击配置参数，在「调试面板」中上传测试输入 JSON  
    - Sandbox：编写 `main.py` 入口函数（必须含 `def main(input: dict) -> dict:` 签名），支持断点调试（需开启 `debug_mode: true`）  
-3. **部署**：通过「发布」生成 API Endpoint，支持 REST 调用或嵌入 SDK（`from baiLian import AgentClient`）
+3. **部署与调用**：生成 API Key 后，通过 `POST /v1/agents/{agent_id}/invoke` 调用，请求体为 `{"input": {...}}`
 
 ## 限制和注意事项
 
-- Sandbox 的 CPU 内存上限为 2GB，单次执行超时 60 秒；禁止访问 `/etc/`、`/proc/` 等系统路径及发起外网 DNS 查询（白名单域名除外）  
+- Sandbox Agent 单次执行内存上限 2GB，CPU 时间限制 60 秒；超时将被强制 kill 并返回 `500 Internal Error`  
 - 所有 Agent 类型均**不支持**跨会话共享内存（即不同 `session_id` 间无状态关联），需自行通过外部存储（如 Redis）实现持久化  
-- Managed Agent 的 YAML 中若引用未发布的工具，保存时会报错，但错误提示未明确指向具体行号——该问题已在 [原文标题](../../raw/application-user-guide/agent-development.md) 的「常见问题」章节提及，建议结合控制台红字提示定位
+- Managed Agent 的 YAML 配置中禁止使用 `eval()`、`exec()` 等动态代码执行语法，解析阶段即报错  
+- Flow Agent 的「自定义脚本」节点与 Sandbox Agent 的 `pip install` 行为一致，但受限于预装依赖白名单（详见 [原文标题](../../raw/application-user-guide/agent-development.md)）
 
 ## 来源文档
 

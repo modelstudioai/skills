@@ -114,7 +114,7 @@ curl --location 'https://bailian.aliyuncs.com/v2/app/completions' \
     
     a.备案号获取流程请查看[应用合规备案](raw/_short/compliance-and-launch-filing-guide-for-ai-apps-p-d8d98ba3cff2bf6f.md)；
     
-    b.如需申请千问系列模型的合作协议，请联系您的商务经理获取。如需商业化算法/模型备案指导服务，请前往[算法/模型备案咨询](https://page.aliyun.com/form/act1311146645/index.htm)页面提交申请。
+    b.如需申请千问系列模型的合作协议，请通过[大模型百炼合作协议备案自助申请助手](https://smartservice.console.aliyun.com/service/self-service-center/search?id=28023&mode=toolPage&trackFrom=topic-llm2&showDrawer=true)提交申请，提交后可在[审核列表](https://smartservice.console.aliyun.com/service/audit-list?spm=5176.2020520104.0.0.52a63a98OYNqWq)查看审核进度。
     
 6.  **如何实现业务数据隔离，使不同用户的数据之间不关联？**
     

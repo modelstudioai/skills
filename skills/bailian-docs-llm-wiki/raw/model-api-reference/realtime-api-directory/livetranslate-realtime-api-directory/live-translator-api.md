@@ -8,7 +8,7 @@ Qwen-LiveTranslate-Realtime 可实时翻译语音，并结合画面辅助理解�
 
 选择协议时，可先查看 [Realtime API 接入方式选择](https://help.aliyun.com/zh/model-studio/realtime-api-overview#rtov-protocol-selection)。各型号支持的输入、输出和事件字段见对应的接入与事件参考。
 
--   使用 [WebSocket](raw/_short/livetranslate-realtime-websocket-access-69ee95b6726440dc.md) 时，通过音频事件发送语音，可添加图像辅助翻译。
+-   使用 [WebSocket](raw/_short/livetranslate-realtime-websocket-access-c83c6ed44456849c.md) 时，通过音频事件发送语音，可添加图像辅助翻译。
     
     浏览器原生支持 WebSocket。接入模型时仍需满足鉴权要求，长期 API Key 应保存在服务端。
     

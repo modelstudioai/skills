@@ -2,9 +2,9 @@
 
 本文介绍 Qwen-Omni-Realtime API 的服务端事件，包括工具调用（Function Calling）相关事件。
 
-**说明**本页为 Qwen-Omni-Realtime 的事件参考，事件定义以 WebSocket 接入为基础。AOQ、WebRTC 通过各自的数据通道收发模型事件，媒体通过媒体轨道传输。请先阅读[WebSocket 接入](raw/_short/omni-realtime-websocket-access-3f16ac0799ebc899.md)、[WebRTC 接入](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/omni-realtime-webrtc-access.md)或[AOQ 接入](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/omni-realtime-aoq-access.md)。
+**说明**本页为 Qwen-Omni-Realtime 的事件参考，事件定义以 WebSocket 接入为基础。AOQ、WebRTC 通过各自的数据通道收发模型事件，媒体通过媒体轨道传输。请先阅读[WebSocket 接入](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/omni-realtime-websocket-access.md)、[WebRTC 接入](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/omni-realtime-webrtc-access.md)或[AOQ 接入](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/omni-realtime-aoq-access.md)。
 
-WebSocket SDK 用法参见 [Python SDK](raw/_short/omni-realtime-python-sdk-0d3c931c58118ee5.md)和 [Java SDK](raw/_short/omni-realtime-java-sdk-5b43428f0b0df256.md)。型号与协议选择参见[概述](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/omni-realtime-api.md)。
+WebSocket SDK 用法参见 [Python SDK](raw/_short/realtime-websocket-python-sdk-qwen-omni-realtime-b04c23b57a9c2f51.md)和 [Java SDK](raw/_short/omni-realtime-java-sdk-91c6c46e0976cc89.md)。型号与协议选择参见[概述](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/omni-realtime-api.md)。
 
 ## error
 

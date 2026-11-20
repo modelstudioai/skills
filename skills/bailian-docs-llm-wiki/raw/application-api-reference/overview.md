@@ -1,10 +1,10 @@
-# Skill API 概览
+# MCP API 概览
 
-Skill API 用于管理百炼上的 Skill，支持创建、查询、删除 Skill 及管理版本。
+MCP API 用于管理百炼上的 MCP 服务，支持查询、创建、更新、开通、启停、删除、工具调用与推荐。
 
-Skill API 用于管理阿里云百炼上的 Skill，覆盖自定义 Skill 与官方 Skill 的创建、查询、删除，以及版本上传、查询和下载。
+MCP API 用于管理阿里云百炼上的 MCP 服务，覆盖官方 MCP 与自定义 MCP 的查询、创建、更新、开通、启停和删除，并提供工具列表、工具调用与工具推荐能力。
 
-**说明**调用前请先配置[认证](raw/application-api-reference/overview/authentication.md)；错误处理见[Skill API 错误码](raw/application-api-reference/overview/errors.md)。
+**说明**调用前请先配置[认证](raw/application-api-reference/overview/authentication.md)；错误处理见[MCP API 错误码](raw/application-api-reference/overview/errors.md)。
 
 ## 前提条件
 
@@ -14,70 +14,14 @@ Skill API 用于管理阿里云百炼上的 Skill，覆盖自定义 Skill 与官
 ## Endpoint
 
 ```
-https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/skills
+https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/mcp/servers
 ```
 
 -   `workspace_id`：工作空间 ID。
 
-## 接口列表
-
-接口
-
-方法
-
-说明
-
-[创建 Skill](raw/application-api-reference/overview/overview/create.md)
-
-POST `/api/v1/skills`
-
-上传 ZIP 包创建自定义 Skill
-
-[获取 Skill](raw/application-api-reference/overview/overview/get.md)
-
-GET `/api/v1/skills/{skill_id}`
-
-查询单个 Skill
-
-[列出 Skill](raw/application-api-reference/overview/overview/list.md)
-
-GET `/api/v1/skills`
-
-分页查询自定义和官方 Skill
-
-[删除 Skill](raw/application-api-reference/overview/overview/delete.md)
-
-DELETE `/api/v1/skills/{skill_id}`
-
-删除自定义 Skill 及其全部版本
-
-[创建版本](raw/application-api-reference/overview/overview/create.md)
-
-POST `/api/v1/skills/{skill_id}/versions`
-
-为自定义 Skill 上传新版本
-
-[列出版本](raw/application-api-reference/overview/overview/list.md)
-
-GET `/api/v1/skills/{skill_id}/versions`
-
-分页查询版本
-
-[获取版本详情](raw/application-api-reference/overview/overview/get.md)
-
-GET `/api/v1/skills/{skill_id}/versions/{version}`
-
-查询指定版本
-
-[下载版本 ZIP](raw/application-api-reference/overview/overview/download.md)
-
-GET `/api/v1/skills/{skill_id}/versions/{version}/content`
-
-获取 ZIP 包的临时下载地址
-
 ## 响应结构
 
-成功和业务错误统一返回以下结构：
+成功和业务错误统一返回以下结构，响应头包含 `x-request-id`：
 
 字段
 
@@ -89,7 +33,7 @@ success
 
 `boolean`
 
-请求是否成功
+请求是否成功。工具是否执行成功还需查看 `data.isError`
 
 error\_code
 
@@ -113,7 +57,7 @@ request\_id
 
 `string`
 
-请求 ID，同时通过响应头 `X-Request-Id` 返回
+请求 ID
 
 ```
 {
@@ -121,83 +65,91 @@ request\_id
   "error_code": null,
   "error_msg": null,
   "data": {},
-  "request_id": "15a89d4c-f142-4e00-a9f7-b088442417c9"
+  "request_id": "6f1c2a8e-3b0d-4c55-9a0e-2f7d1c9b8a11"
 }
 ```
 
-## 分页
-
-Skill 列表和版本列表使用页码分页。
-
-参数
-
-类型
-
-默认
-
-说明
-
-pageNo
-
-`integer`
-
-1
-
-页码，最小 1
-
-pageSize
-
-`integer`
-
-20
-
-单页条数，取值范围 1 到 100
-
-`pageNo × pageSize` 不能超过 10000。响应返回 `total`、`page_no`、`page_size`，调用方据此计算总页数。
-
 ## 枚举
 
-**status**
+**type（归属类型）**
 
 值
 
 说明
 
-checking
+OFFICIAL
 
-安全扫描中，暂不可用
+官方 MCP
 
-active
+CUSTOMER
 
-可用
+自定义 MCP
 
-rejected
-
-未通过安全扫描，不可用
-
-deleted
-
-已删除，正常查询不返回
-
-**source**
+**server\_type（服务类型）**
 
 值
 
 说明
 
-customer
+STDIO
 
-主账号和工作空间下的自定义 Skill
+通过 npx/uvx 启动，部署在函数计算 FC
 
-official
+HTTP
 
-官方 Skill
+远程 Streamable HTTP 服务
+
+SSE
+
+远程 SSE 服务
+
+OPENAPI
+
+将已有 HTTP API 转换为 MCP
+
+**server\_status（服务状态）**
+
+值
+
+自定义 MCP 文案
+
+官方 MCP 文案
+
+INACTIVE
+
+未启用
+
+未开通
+
+ACTIVATING
+
+部署中
+
+开通中
+
+ACTIVATED
+
+已启用
+
+已启用
+
+ACTIVATE\_FAILED
+
+部署失败
+
+开通失败
+
+DELETED
+
+已删除
+
+\-
 
 ## 数据结构
 
-### SkillDTO
+### DetailResponse
 
-创建 Skill、获取 Skill 和 Skill 列表返回此对象。
+详情、列表项、开通、停用、启用和删除接口返回的服务信息。
 
 字段
 
@@ -205,151 +157,67 @@ official
 
 说明
 
-id
-
-`string`
-
-Skill 唯一标识，用作路径参数 `skill_id`
-
-display\_name
-
-`string`
-
-展示名称；为空时取 SKILL.md 的 `name`
-
-display\_description
-
-`string`
-
-展示描述；为空时取 SKILL.md 的 `description`
-
-source
-
-`string`
-
-`customer` 或 `official`
-
-status
-
-`string`
-
-Skill 主记录状态，见上表
-
-latest\_version
-
-`string`
-
-最新版本号，例如 `1.0`
-
-classification
+mcp\_code
 
 `string / null`
 
-分类；官方 Skill 有值，自定义 Skill 为 `null`
+MCP 唯一编码
+
+server\_name
+
+`string / null`
+
+MCP 名称
+
+description
+
+`string / null`
+
+MCP 描述
+
+type
+
+`string / null`
+
+OFFICIAL / CUSTOMER
+
+server\_type
+
+`string / null`
+
+STDIO / HTTP / SSE / OPENAPI
+
+server\_status
+
+`string / null`
+
+服务状态
+
+server\_status\_text
+
+`string / null`
+
+状态文案
+
+dashscope\_endpoint
+
+`string / null`
+
+MCP 接入地址，仅已启用或开通中时返回
 
 meta\_info
 
 `object / null`
 
-官方 Skill 的元信息；自定义 Skill 为 `null`
+服务元信息
 
-created\_at
-
-`string`
-
-创建时间，ISO 8601 UTC
-
-updated\_at
-
-`string`
-
-更新时间，ISO 8601 UTC
-
-### SkillVersionDTO
-
-创建版本、列出版本和获取版本详情返回此对象。
-
-字段
-
-类型
-
-说明
-
-id
-
-`string`
-
-版本记录唯一标识，`skillver_` 前缀
-
-type
-
-`string`
-
-固定为 `skill_version`
-
-skill\_id
-
-`string`
-
-所属 Skill ID
-
-display\_name
-
-`string`
-
-该版本的展示名称；为空时取该版本 SKILL.md 的 `name`
-
-display\_description
-
-`string`
-
-该版本的展示描述；为空时取该版本 SKILL.md 的 `description`
-
-version
-
-`string`
-
-版本号，格式为 `major.minor`，例如 `1.0`、`1.1`
-
-status
-
-`string`
-
-该版本状态，见上表
-
-created\_at
-
-`string`
-
-创建时间，ISO 8601 UTC
-
-updated\_at
-
-`string`
-
-更新时间，ISO 8601 UTC
-
-additional\_properties
+mcp\_config
 
 `object / null`
 
-扩展属性；无内容时为 `null`
+自定义 MCP 的已保存配置；官方 MCP 为 `null`
 
-`additional_properties` 字段：
-
-字段
-
-类型
-
-说明
-
-error\_info
-
-`map<string,string> / null`
-
-安全扫描未通过时的明细，键为文件路径，值为问题描述
-
-### SkillDeletedResponse
+### meta\_info
 
 字段
 
@@ -357,19 +225,65 @@ error\_info
 
 说明
 
-id
+icon
+
+`string / null`
+
+图标地址，仅官方 MCP
+
+provider
+
+`string / null`
+
+提供方，仅官方 MCP
+
+is\_onekey
+
+`boolean`
+
+是否为 One Key MCP，仅官方 MCP
+
+console\_detail\_url
 
 `string`
 
-被删除的 Skill ID
+控制台详情地址
 
-type
+classification
 
-`string`
+`string / null`
 
-固定为 `skill_deleted`
+分类中文名称，未配置时为 `null`
 
-### VersionDownloadResponse
+activate\_user\_count
+
+`long / null`
+
+累计开通账号数
+
+call\_total\_count
+
+`long / null`
+
+累计调用次数
+
+average\_call\_time
+
+`long / null`
+
+当日成功调用平均耗时，单位毫秒
+
+call\_success\_rate
+
+`double / null`
+
+成功率，取值 0 到 1
+
+自定义 MCP 的 `meta_info` 不包含 `icon`、`provider`、`is_onekey`。
+
+### CreateResponse
+
+创建和更新接口返回的服务信息，未赋值的字段不输出。
 
 字段
 
@@ -377,76 +291,118 @@ type
 
 说明
 
-skill\_id
+mcp\_code
 
 `string`
 
-Skill ID
+MCP 编码
 
-version
-
-`string`
-
-版本号
-
-file\_url
+server\_name
 
 `string`
 
-ZIP 包的预签名下载地址，有效期 2 小时
+MCP 名称
 
-### Page
+server\_status
 
-Skill 列表和版本列表的 `data` 结构。
+`string`
 
-字段
+服务状态
 
-类型
+server\_status\_text
+
+`string`
+
+状态文案
+
+activate\_fail\_reason
+
+`string`
+
+部署失败原因，仅部署失败时返回
+
+## 请求命名
+
+分页参数使用 `pageNo`、`pageSize`，推荐条数使用 `topN`，路径参数使用 `mcpCode`。请求体和响应字段使用 snake\_case，工具调用结果除外：工具 schema 沿用 MCP 协议字段 `inputSchema`、`additionalProperties`，工具调用结果使用 `isError`。
+
+## 接口列表
+
+接口
+
+方法
 
 说明
 
-items
+[查询 MCP 列表](raw/application-api-reference/overview/overview/list.md)
 
-`array`
+GET `/list`
 
-当前页记录
+分页查询官方和自定义 MCP
 
-total
+[创建自定义 MCP](raw/application-api-reference/overview/overview/create.md)
 
-`long`
+POST `/`
 
-命中总数
+创建并部署自定义 MCP
 
-page\_no
+[查询 MCP 详情](raw/application-api-reference/overview/overview/get.md)
 
-`integer`
+GET `/{mcpCode}`
 
-当前页码
+查询 MCP 详情
 
-page\_size
+[更新自定义 MCP](raw/application-api-reference/overview/overview/update.md)
 
-`integer`
+POST `/{mcpCode}`
 
-单页条数
+更新名称、描述或配置
 
-## 可见性
+[删除自定义 MCP](raw/application-api-reference/overview/overview/delete.md)
 
-按 `skill_id` 访问的接口先校验可见性，不可见时按不存在处理。
+DELETE `/{mcpCode}`
 
-对象
+删除自定义 MCP
 
-自定义 Skill
+[查询工具列表](raw/application-api-reference/overview/overview/list.md)
 
-官方 Skill
+GET `/{mcpCode}/tools`
 
-Skill
+查询 MCP 提供的工具
 
-主账号和工作空间下未删除的记录
+[调用工具](raw/application-api-reference/overview/overview/call.md)
 
-未删除且状态为 `active`
+POST `/{mcpCode}/tools/call`
 
-版本
+调用指定工具
 
-未删除的全部状态，包含 `checking` 和 `rejected`
+[推荐工具](raw/application-api-reference/overview/overview/recommend.md)
 
-仅 `active`
+GET `/tools/recommend`
+
+按自然语言需求推荐工具
+
+[开通官方 MCP](raw/application-api-reference/overview/overview/activate.md)
+
+POST `/{mcpCode}/activate`
+
+开通官方 MCP
+
+[关闭官方 MCP](raw/application-api-reference/overview/overview/deactivate.md)
+
+POST `/{mcpCode}/deactivate`
+
+关闭官方 MCP
+
+[停用自定义 MCP](raw/application-api-reference/overview/overview/disable.md)
+
+POST `/{mcpCode}/disable`
+
+停用自定义 MCP
+
+[启用自定义 MCP](raw/application-api-reference/overview/overview/enable.md)
+
+POST `/{mcpCode}/enable`
+
+启用自定义 MCP
+
+**警告**`mcp_config` 中的 `headers` 等配置会按保存值返回，可能包含敏感信息。请仅在可信环境调用，并妥善保护响应内容。

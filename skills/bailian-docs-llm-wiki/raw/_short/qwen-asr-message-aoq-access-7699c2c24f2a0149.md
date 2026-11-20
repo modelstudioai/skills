@@ -12,7 +12,7 @@
 
 ## 1\. 获取连接凭证
 
-**说明**如需提前获取 Token，或了解完整的鉴权流程，请参见[建连鉴权详解](https://help.aliyun.com/zh/model-studio/realtime-api-overview#tkauth-auth-detail-title)。
+**说明**如需了解完整的鉴权流程，请参见[建连鉴权详解](https://help.aliyun.com/zh/model-studio/realtime-api-overview#tkauth-auth-detail-title)。
 
 在 AppServer 设置环境变量 `DASHSCOPE_API_KEY`，用[所选地域及业务空间的接入域名](raw/model-user-guide/get-started-with-models/regions.md)替换 `{endpoint}`。Qwen-Audio-ASR-Message 使用 Inference 建连路径，以下以 `qwen-audio-3.1-asr-flash-message` 为例。
 
@@ -125,7 +125,7 @@ engine.enableSendMediaStream(AoqClientEngine.AoqTrackType.AoqTrackTypeAudio, tru
 
 ## 4\. 结束任务并释放资源
 
-录音结束后，停止采集新的音频，等待待发送的音频送出。调用 `enableSendMediaStream` 关闭 Audio 轨上行，再通过 Data 轨发送 `finish-task`。保持连接，接收剩余识别结果并等待 `task-finished`。
+录音结束后，停止采集音频，并通过 Data 轨发送 `finish-task`。保持连接，接收剩余识别结果并等待 `task-finished`。
 
 ```
 {

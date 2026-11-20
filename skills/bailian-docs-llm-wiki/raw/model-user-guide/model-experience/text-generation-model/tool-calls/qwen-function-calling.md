@@ -2034,7 +2034,7 @@ Python 工具调用增量格式示意如下；实际内容由模型返回，函�
 
 Qwen3.8-Omni-Flash-Realtime、Qwen3.5-Omni-Plus-Realtime 和 Qwen3.5-Omni-Flash-Realtime 支持自定义 Function Calling，适用于语音对话场景。以下流程通过 DashScope SDK 或 WebSocket 原生协议调用，接入方式与 SDK 配置见[实时调用指南](raw/model-user-guide/model-experience/omni-modal/realtime.md)。
 
-Qwen3.8-Omni-Flash-Realtime 的服务端 MCP 工具调用与审批流程见[MCP 交互流程](https://help.aliyun.com/zh/model-studio/omni-realtime-interaction-process#qwen38-mcp-flow)。
+Qwen3.8-Omni-Flash-Realtime 的服务端 MCP 工具调用与审批流程见[MCP 交互流程](https://help.aliyun.com/zh/model-studio/omni-realtime-websocket-access#qwen38-mcp-flow)。
 
 **工作流程**：
 

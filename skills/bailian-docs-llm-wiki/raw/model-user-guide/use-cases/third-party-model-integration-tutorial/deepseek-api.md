@@ -6,6 +6,8 @@
 
 不同地域的服务接入地址不同，请根据您选择的地域配置对应的 Base URL（调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)）。各地域可调用的模型及限流不同，请参见[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)文档。
 
+中国香港地域支持以下 DeepSeek 模型：`deepseek-v4.1-flash`、`deepseek-v4.1-flash-1017`、`deepseek-v4-pro-0813` 和 `deepseek-v4-flash-0731`。这四款模型在中国香港地域均支持 Chat Completions、Responses API 和 Anthropic Messages API 调用。
+
 #### OpenAI兼容
 
 #### 华北2（北京）
@@ -38,9 +40,15 @@ SDK 调用配置的`base_url`：`https://{WorkspaceId}.ap-northeast-1.maas.aliyu
 
 HTTP 请求地址：`POST https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
 
+#### 中国香港
+
+SDK 调用配置的`base_url`：`https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/compatible-mode/v1`
+
+HTTP 请求地址：`POST https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
+
 #### OpenAI兼容-Responses API
 
-**说明**以下4款模型支持 Responses API：`deepseek-v4.1-flash`、`deepseek-v4-flash-0731`、`deepseek-v4-pro`、`deepseek-v4-pro-0813`；这些模型的 Responses API 服务仅限华北2（北京）与新加坡地域。
+**说明**以下 DeepSeek 模型均支持 Responses API：`deepseek-v4.1-flash`、`deepseek-v4.1-flash-1017`、`deepseek-v4-pro`、`deepseek-v4-pro-0813`、`deepseek-v4-flash-0731`。各地域实际可调用的模型以该地域的上架情况为准，请参见[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)。
 
 `deepseek-v4.1-flash-1017` 支持在华北2（北京）、新加坡、美国（弗吉尼亚）、德国（法兰克福）、日本（东京）和中国香港六个地域通过 Responses API 调用，并支持 `web_search`、`web_extractor` 和 `code_interpreter` 三种内置工具。六个地域的 SDK `base_url` 和 `POST` 请求地址见 [Responses API 端点配置](./qwen-api-via-openai-responses)。
 
@@ -55,6 +63,14 @@ HTTP 请求地址：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/com
 SDK 调用配置的`base_url`：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`
 
 HTTP 请求地址：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/responses`
+
+#### 中国香港
+
+中国香港地域的上述四款模型均支持通过 Responses API 调用。
+
+SDK 调用配置的`base_url`：`https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/compatible-mode/v1`
+
+HTTP 请求地址：`POST https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/compatible-mode/v1/responses`
 
 #### DashScope
 
@@ -88,11 +104,19 @@ HTTP 请求地址为`POST https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com
 
 SDK 调用配置的`region`：`dashscope.Client(workspace="{WorkspaceId}", region="ap-northeast-1")`
 
+#### 中国香港
+
+HTTP 请求地址为`POST https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
+
+SDK 调用配置的`region`：`dashscope.Client(workspace="{WorkspaceId}", region="cn-hongkong")`
+
 ## 快速开始
 
 deepseek-v4-pro-0813 是 DeepSeek 系列旗舰模型，在编程、数学和通用任务方面表现出色。deepseek-v4-flash-0731 是Flash系列最新版本。您可以通过`enable_thinking`参数在思考与非思考模式之间切换。以下示例以 deepseek-v4-pro 模型为例展示思考模式的调用方式，您可以将 model 参数替换为其他 DeepSeek 模型。
 
 需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，需要[安装 OpenAI 或 DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
+
+#### 华北2（北京）
 
 #### OpenAI兼容
 
@@ -521,6 +545,43 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/v
 }'
 ```
 
+#### 中国香港
+
+以下示例使用 `deepseek-v4.1-flash-1017` 通过 OpenAI兼容的 Chat Completions API 调用中国香港地域。请使用中国香港地域的 API Key，并将 `{WorkspaceId}` 替换为中国香港地域的业务空间 ID。各地域的 API Key 和业务空间专属域名不能混用。
+
+Python
+
+```
+from openai import OpenAI
+import os
+
+client = OpenAI(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    base_url="https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/compatible-mode/v1",
+)
+
+completion = client.chat.completions.create(
+    model="deepseek-v4.1-flash-1017",
+    messages=[{"role": "user", "content": "你是谁"}],
+)
+
+print(completion.choices[0].message.content)
+```
+
+curl
+
+```
+curl -X POST "https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/compatible-mode/v1/chat/completions" \
+-H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+-H "Content-Type: application/json" \
+-d '{
+  "model": "deepseek-v4.1-flash-1017",
+  "messages": [{"role": "user", "content": "你是谁"}]
+}'
+```
+
+DashScope 和 Responses API 的香港接入地址见[服务接入地址](#ds_bu_h2)。使用 Anthropic Messages API 时，SDK 的 `base_url` 配置为 `https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/apps/anthropic`，HTTP 请求地址为 `POST https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/apps/anthropic/v1/messages`。
+
 ## 推理强度（reasoning\_effort）
 
 deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-flash-0731 和 deepseek-v4-pro-0813默认开启思考模式。通过`reasoning_effort`参数可以调整推理强度，可选值为`low(仅deepseek-v4.1-flash、deepseek-v4-flash-0731 和 deepseek-v4-pro-0813 支持)`、`high`和`max`，默认为`high`。
@@ -598,7 +659,7 @@ print(response.choices[0].message.content)
 
 ## Responses API
 
-`deepseek-v4.1-flash`、`deepseek-v4-flash-0731`、`deepseek-v4-pro`与`deepseek-v4-pro-0813`支持通过 OpenAI 兼容的 Responses API 调用，仅支持华北2（北京）与新加坡地域，服务接入地址参见[服务接入地址](https://help.aliyun.com/zh/model-studio/deepseek-api#ds_bu_h2)。
+`deepseek-v4.1-flash`、`deepseek-v4.1-flash-1017`、`deepseek-v4-pro`、`deepseek-v4-pro-0813`、`deepseek-v4-flash-0731` 均支持通过 OpenAI 兼容的 Responses API 调用，各地域实际可调用的模型以该地域的上架情况为准，服务接入地址参见[服务接入地址](https://help.aliyun.com/zh/model-studio/deepseek-api#ds_bu_h2)。
 
 `deepseek-v4.1-flash-1017` 支持在华北2（北京）、新加坡、美国（弗吉尼亚）、德国（法兰克福）、日本（东京）和中国香港六个地域通过 Responses API 调用，并支持 `web_search`、`web_extractor` 和 `code_interpreter` 三种内置工具。六个地域的 SDK `base_url` 和 `POST` 请求地址见 [Responses API 端点配置](./qwen-api-via-openai-responses)。
 

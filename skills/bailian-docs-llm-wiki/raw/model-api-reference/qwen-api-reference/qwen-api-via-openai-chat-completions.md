@@ -2735,7 +2735,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
     "choices": [
         {
             "message": {
-                "content": "这个视频片段展现了一场夜间足球比赛中的关键射门与扑救瞬间，视角独特——**从球门网内向外拍摄**（即“球门视角”），营造出强烈的临场感和紧张氛围。以下是具体过程的分步描述：\n\n---\n\n\ud83d\udd39 **0.0…",
+                "content": "这个视频片段展现了一场夜间足球比赛中的关键射门与扑救瞬间，视角独特——**从球门网内向外拍摄**（即“球门视角”），营造出强烈的临场感和紧张氛围。以下是具体过程的分步描述：\n\n---\n\n- **0.0…",
                 "reasoning_content": "",
                 "role": "assistant"
             },

@@ -79,7 +79,7 @@ qwen-image-2.1-turbo
 
 如果您的应用已基于 OpenAI Images 协议或 OpenAI SDK 开发，可通过 OpenAI 兼容模式调用千问-图像生成与编辑，无需改造请求结构。文生图（T2I）与图生图/图像编辑（I2I）共用同一个接口：**不传**`image`**为文生图，传**`image`**为图生图**。
 
-**说明**OpenAI 兼容模式为**同步、非流式**接口，图生图通过`/images/generations`接口的扩展字段`image`实现，**不使用**OpenAI 官方`/images/edits`的 multipart 文件上传形式。以下能力暂不支持：异步调用、流式输出、partial image、`/images/edits`、multipart 与 mask。传入`response_format=b64_json`不会报错，但会被忽略，响应中仍返回图像URL。如需异步调用，请使用[DashScope异步调用](https://help.aliyun.com/zh/model-studio/qwen-image-generation-and-editing-api-reference#6740266-async-title)。
+**说明**OpenAI 兼容模式为**同步、非流式**接口，图生图通过`/images/generations`接口的扩展字段`image`实现，**不使用**OpenAI 官方`/images/edits`的 multipart 文件上传形式。以下能力暂不支持：异步调用、流式输出、partial image、`/images/edits`、multipart 与 mask。如需异步调用，请使用[DashScope异步调用](https://help.aliyun.com/zh/model-studio/qwen-image-generation-and-editing-api-reference#6740266-async-title)。
 
 ### URL
 
@@ -134,6 +134,15 @@ SDK调用配置的base\_url：`https://{WorkspaceId}.ap-northeast-1.maas.aliyunc
 **model** `string` **（必选）**
 
 模型名称，可选值为`qwen-image-3.0-pro`、`qwen-image-3.0`、`qwen-image-2.1-pro`和`qwen-image-2.1-turbo`。
+
+**response\_format** `string` （可选）
+
+输出图像的返回格式。默认值为 `url`，可选值：
+
+-   `url`：通过 `data[].url` 返回图像临时签名 URL。
+-   `b64_json`：通过 `data[].b64_json` 返回图像的 Base64 编码数据，不返回图像临时签名 URL。
+
+`b64_json` 仅支持 `qwen-image-3.0` 和 `qwen-image-3.0-pro` 的同步调用。
 
 **prompt** `string` **（必选）**
 
@@ -244,7 +253,11 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 
 **url** `string`
 
-生成图像的 URL，格式为PNG。**链接有效期为24小时**，请及时下载并保存图像。
+`response_format=url`: 生成图像的 URL，格式为PNG。**链接有效期为24小时**，请及时下载并保存图像。
+
+**b64\_json** `string`
+
+图像的 Base64 编码数据。仅在 `response_format=b64_json` 时返回，不包含 `data:image/...;base64,` 前缀，可直接进行 Base64 解码。
 
 **usage** `object`
 
@@ -565,6 +578,15 @@ except APIStatusError as exc:
 
 属性
 
+**response\_format** `string` （可选）
+
+输出图像的返回格式。默认值为 `url`，可选值：
+
+-   `url`：通过 `output.choices[].message.content[].image` 返回图像临时签名 URL。
+-   `b64_json`：通过 `output.choices[].message.content[].image` 返回图像的 Data URL，包含 MIME 类型和 Base64 编码数据，不返回图像临时签名 URL。
+
+`b64_json` 仅支持 `qwen-image-3.0` 和 `qwen-image-3.0-pro` 的同步调用。异步调用设置 `parameters.response_format="b64_json"` 时，任务失败，错误码为 `InvalidParameter`。
+
 **prompt\_extend** `boolean` （可选）
 
 是否开启提示词智能改写，默认值为 `true`（建议开启）。开启后，模型会按照`prompt_extend_mode`指定的方式优化正向提示词，对描述较简单的提示词效果提升明显。
@@ -698,7 +720,9 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 **image** `string`
 
-生成图像的 URL，格式为PNG。**链接有效期为24小时**，请及时下载并保存图像。
+`response_format=url`: 生成图像的 URL，格式为PNG。**链接有效期为24小时**，请及时下载并保存图像。
+
+`response_format=b64_json`：返回图像的 Data URL，格式为 `data:{MIME_type};base64,{base64_data}`，例如 `data:image/png;base64,...`。MIME 类型取决于实际图像格式。解码时，提取第一个逗号后的 Base64 编码数据。
 
 **usage** `object`
 

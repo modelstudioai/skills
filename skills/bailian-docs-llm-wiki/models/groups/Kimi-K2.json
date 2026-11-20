@@ -14,6 +14,147 @@
       },
       "builtInToolMultiPrices": [
         {
+          "supportedApi": "Responses API",
+          "name": "code_interpreter",
+          "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-code-interpreter",
+          "type": "code_interpreter",
+          "prices": [
+            {
+              "priceUnit": "",
+              "price": "0",
+              "currency": "CNY"
+            }
+          ]
+        },
+        {
+          "supportedApi": "Responses API",
+          "name": "web_extractor",
+          "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/web-extractor",
+          "type": "web_extractor",
+          "prices": [
+            {
+              "priceUnit": "",
+              "price": "0",
+              "currency": "CNY"
+            }
+          ]
+        },
+        {
+          "supportedApi": "Responses API",
+          "name": "web_search",
+          "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/web-search",
+          "type": "web_search",
+          "prices": [
+            {
+              "priceUnit": "千次调用",
+              "price": "4",
+              "currency": "CNY"
+            }
+          ]
+        }
+      ],
+      "description": "Kimi-K3.1-Pro-Prime 是 Kimi-K3.1-Pro 的高速版本（Prime 快速通道）。模型能力与 Kimi-K3.1-Pro 完全一致——同一模型权重，支持 100 万 token 上下文窗口，原生具备视觉理解能力（文本、图片输入，文本输出），在代码、3D 创作、金融研究与长程 Agent 任务上保持同等水平（Terminal-Bench 4.0 得分 65.7%、OfficeQA Pro v2 达 64.4 当前最佳、声明级幻觉率 8.3%）。",
+      "features": [
+        "cache",
+        "function-calling",
+        "structured-outputs",
+        "web-search"
+      ],
+      "provider": "moonshot-ai",
+      "model": "kimi-k3.1-pro-prime",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "26",
+          "ntmItemCode": "sfm_inference_public_cn",
+          "timeBand": "standard",
+          "ntmAmountType": "input_token",
+          "type": "input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "136",
+          "ntmItemCode": "sfm_inference_public_cn",
+          "timeBand": "standard",
+          "ntmAmountType": "output_token",
+          "type": "output_token",
+          "priceName": "输出"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "1.3",
+          "ntmItemCode": "sfm_inference_public_cn",
+          "timeBand": "standard",
+          "ntmAmountType": "input_token_cache",
+          "type": "input_token_cache",
+          "priceName": "输入（缓存命中）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "usage_limit": 120000,
+          "usage_limit_field": "total_tokens",
+          "usage_limit_period": 6,
+          "type": "model-default"
+        }
+      },
+      "priceTimeBands": [
+        "standard"
+      ],
+      "capabilities": [
+        "TG",
+        "Reasoning",
+        "VU"
+      ],
+      "versionTag": "MAJOR",
+      "maxOutputTokens": 1048576,
+      "latestOnlineAt": "2026-11-19T14:00:05.918+00:00",
+      "contextWindow": 1048576,
+      "maxInputTokens": 1048576,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Kimi-K3.1-Pro-Prime",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/kimi-api",
+      "category": "Third-party",
+      "samples": {
+        "openai": {
+          "default": {
+            "python": "from openai import OpenAI\nimport os\nclient = OpenAI(\n    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key=\"sk-xxx\"\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1\",\n)\nmessages = [{\"role\": \"user\", \"content\": \"你是谁\"}]\ncompletion = client.chat.completions.create(\n    model=\"kimi-k3.1-pro-prime\",\n    messages=messages,\n    stream=True\n)\nis_answering = False  # 是否进入回复阶段\nprint(\"\\n\" + \"=\" * 20 + \"思考过程\" + \"=\" * 20)\nfor chunk in completion:\n    if chunk.choices:\n        delta = chunk.choices[0].delta\n        # 只收集思考内容\n        if hasattr(delta, \"reasoning_content\") and delta.reasoning_content is not None:\n            if not is_answering:\n                print(delta.reasoning_content, end=\"\", flush=True)\n        # 收到content，开始进行回复\n        if hasattr(delta, \"content\") and delta.content:\n            if not is_answering:\n                print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n                is_answering = True\n            print(delta.content, end=\"\", flush=True)",
+            "curl": "curl -X POST https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"kimi-k3.1-pro-prime\",\n    \"messages\": [\n        {\n            \"role\": \"user\", \n            \"content\": \"你是谁\"\n        }\n    ],\n    \"stream\": true\n}'",
+            "nodejs": "import OpenAI from \"openai\";\nimport process from 'process';\n\n// 初始化OpenAI客户端\nconst openai = new OpenAI({\n    // 如果没有配置环境变量，请用阿里云百炼API Key替换：apiKey: \"sk-xxx\"\n    apiKey: process.env.DASHSCOPE_API_KEY,\n    baseURL: 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1'\n});\n\nlet reasoningContent = ''; // 完整思考过程\nlet answerContent = ''; // 完整回复\nlet isAnswering = false; // 是否进入回复阶段\n\nasync function main() {\n    const messages = [{ role: 'user', content: '你是谁' }];\n\n    const stream = await openai.chat.completions.create({\n        model: 'kimi-k3.1-pro-prime',\n        messages,\n        stream: true,\n    });\n\n    console.log('\\n' + '='.repeat(20) + '思考过程' + '='.repeat(20) + '\\n');\n\n    for await (const chunk of stream) {\n        if (chunk.choices?.length) {\n            const delta = chunk.choices[0].delta;\n            // 只收集思考内容\n            if (delta.reasoning_content !== undefined && delta.reasoning_content !== null) {\n                if (!isAnswering) {\n                    process.stdout.write(delta.reasoning_content);\n                }\n                reasoningContent += delta.reasoning_content;\n            }\n\n            // 收到content，开始进行回复\n            if (delta.content !== undefined && delta.content) {\n                if (!isAnswering) {\n                    console.log('\\n' + '='.repeat(20) + '完整回复' + '='.repeat(20) + '\\n');\n                    isAnswering = true;\n                }\n                process.stdout.write(delta.content);\n                answerContent += delta.content;\n            }\n        }\n    }\n}\n\nmain();",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-api-via-openai-chat-completions"
+          }
+        },
+        "dashscope": {
+          "default": {
+            "curl": "curl -X POST \"https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation\" \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"kimi-k3.1-pro-prime\",\n    \"input\":{\n        \"messages\":[\n            {\n                \"role\": \"user\",\n                \"content\": \"你是谁？\"\n            }\n        ]\n    },\n    \"parameters\":{\n        \"result_format\": \"message\"\n    }\n}'",
+            "python": "import os\nimport dashscope\nfrom dashscope import MultiModalConversation\n\ndashscope.base_http_api_url = \"https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1\"\n\nmessages = [\n    {\n        \"role\": \"user\",\n        \"content\": [{\"text\": \"你是谁？\"}],\n    }\n]\n\nresponses = MultiModalConversation.call(\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    model=\"kimi-k3.1-pro-prime\",\n    messages=messages,\n    stream=True,\n    incremental_output=True,\n)\n\nreasoning_printed = False\nis_answering = False\nhas_content = False\n\nfor response in responses:\n    if response.status_code != 200:\n        raise RuntimeError(\n            f\"status={response.status_code}, code={response.code}, \"\n            f\"request_id={response.request_id}, message={response.message}\"\n        )\n    if not response.output or not response.output.choices:\n        continue\n    message = response.output.choices[0].message\n    if not message:\n        continue\n\n    reasoning = message.get(\"reasoning_content\")\n    if not is_answering and reasoning:\n        if not reasoning_printed:\n            print(\"=\" * 20 + \"思考过程\" + \"=\" * 20)\n            reasoning_printed = True\n        print(reasoning, end=\"\", flush=True)\n\n    for item in message.get(\"content\") or []:\n        text = item.get(\"text\") if isinstance(item, dict) else None\n        if text:\n            if not is_answering:\n                print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n                is_answering = True\n            print(text, end=\"\", flush=True)\n            has_content = True\n\nif not has_content:\n    raise RuntimeError(\"流结束但没有返回回复内容\")\nprint()",
+            "java": "import java.util.Arrays;\nimport java.util.Collections;\nimport java.util.Map;\n\nimport com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;\nimport com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationParam;\nimport com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationResult;\nimport com.alibaba.dashscope.common.MultiModalMessage;\nimport com.alibaba.dashscope.common.Role;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic class KimiDashScopeExample {\n    private static boolean reasoningPrinted = false;\n    private static boolean isAnswering = false;\n    private static final StringBuilder finalContent = new StringBuilder();\n\n    private static void handleResult(MultiModalConversationResult result) {\n        if (result == null) {\n            return;\n        }\n        if ((result.getStatusCode() != null && result.getStatusCode() != 200)\n                || (result.getCode() != null && !result.getCode().isEmpty())) {\n            throw new IllegalStateException(\"status=\" + result.getStatusCode()\n                    + \", code=\" + result.getCode() + \", request_id=\" + result.getRequestId());\n        }\n        if (result.getOutput() == null\n                || result.getOutput().getChoices() == null\n                || result.getOutput().getChoices().isEmpty()\n                || result.getOutput().getChoices().get(0) == null) {\n            return;\n        }\n        MultiModalMessage message = result.getOutput().getChoices().get(0).getMessage();\n        if (message == null) {\n            return;\n        }\n\n        String reasoning = message.getReasoningContent();\n        if (!isAnswering && reasoning != null && !reasoning.isEmpty()) {\n            if (!reasoningPrinted) {\n                System.out.println(\"====================思考过程====================\");\n                reasoningPrinted = true;\n            }\n            System.out.print(reasoning);\n        }\n\n        if (message.getContent() == null) {\n            return;\n        }\n        for (Map<String, Object> item : message.getContent()) {\n            if (item == null) {\n                continue;\n            }\n            Object text = item.get(\"text\");\n            if (text instanceof String && !((String) text).isEmpty()) {\n                if (!isAnswering) {\n                    System.out.println(\"\\n====================完整回复====================\");\n                    isAnswering = true;\n                }\n                finalContent.append((String) text);\n                System.out.print((String) text);\n            }\n        }\n    }\n\n    public static void main(String[] args) throws Exception {\n        Constants.baseHttpApiUrl = \"https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1\";\n        reasoningPrinted = false;\n        isAnswering = false;\n        finalContent.setLength(0);\n\n        MultiModalMessage userMsg = MultiModalMessage.builder()\n                .role(Role.USER.getValue())\n                .content(Collections.singletonList(\n                        Collections.<String, Object>singletonMap(\"text\", \"你是谁？\")))\n                .build();\n        MultiModalConversationParam param = MultiModalConversationParam.builder()\n                .apiKey(System.getenv(\"DASHSCOPE_API_KEY\"))\n                .model(\"kimi-k3.1-pro-prime\")\n                .incrementalOutput(true)\n                .messages(Arrays.asList(userMsg))\n                .build();\n\n        MultiModalConversation conversation = new MultiModalConversation();\n        conversation.streamCall(param).blockingForEach(KimiDashScopeExample::handleResult);\n        if (finalContent.length() == 0) {\n            throw new IllegalStateException(\"流结束但没有返回回复内容\");\n        }\n        System.out.println();\n    }\n}",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-api-via-dashscope"
+          }
+        },
+        "anthropic": {
+          "messagesAPI": {
+            "python": "import os\nfrom anthropic import Anthropic\n\nclient = Anthropic(\n    api_key=os.environ[\"DASHSCOPE_API_KEY\"],\n    base_url=\"https://[workspace-id].cn-beijing.maas.aliyuncs.com/apps/anthropic\",\n)\n\nmessage = client.messages.create(\n    model=\"kimi-k3.1-pro-prime\",\n    max_tokens=4096,\n    messages=[{\"role\": \"user\", \"content\": \"9.9和9.11哪个大？\"}],\n    thinking={\"type\": \"enabled\"},\n)\n\nfor block in message.content:\n    if block.type == \"thinking\":\n        print(\"思考：\", block.thinking)\n    elif block.type == \"text\":\n        print(\"回答：\", block.text)\n",
+            "curl": "curl -X POST \"https://[workspace-id].cn-beijing.maas.aliyuncs.com/apps/anthropic/v1/messages\" \\\n  -H \"Content-Type: application/json\" \\\n  -H \"x-api-key: $DASHSCOPE_API_KEY\" \\\n  -d '{\n    \"model\": \"kimi-k3.1-pro-prime\",\n    \"max_tokens\": 4096,\n    \"messages\": [{\"role\": \"user\", \"content\": \"9.9和9.11哪个大？\"}],\n    \"thinking\": {\"type\": \"enabled\"}\n  }'\n",
+            "nodejs": "import Anthropic from '@anthropic-ai/sdk';\n\nconst client = new Anthropic({\n  apiKey: process.env.DASHSCOPE_API_KEY,\n  baseURL: 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/apps/anthropic',\n});\n\nconst message = await client.messages.create({\n  model: 'kimi-k3.1-pro-prime',\n  max_tokens: 4096,\n  messages: [{ role: 'user', content: '9.9和9.11哪个大？' }],\n  thinking: { type: 'enabled' },\n});\n\nfor (const block of message.content) {\n  if (block.type === 'thinking') {\n    console.log('思考：', block.thinking);\n  } else if (block.type === 'text') {\n    console.log('回答：', block.text);\n  }\n}\n",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/anthropic-api-messages"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Text"
+        ],
+        "request_modality": [
+          "Text",
+          "Image"
+        ]
+      },
+      "builtInToolMultiPrices": [
+        {
           "supportedApi": "Anthropic API",
           "name": "web_search",
           "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/web-search",
@@ -108,8 +249,8 @@
       "samples": {
         "openai": {
           "default": {
-            "curl": "curl -X POST https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"kimi-k3.1-pro\",\n    \"messages\": [\n        {\n            \"role\": \"user\", \n            \"content\": \"你是谁\"\n        }\n    ],\n    \"stream\": true\n}'",
             "python": "from openai import OpenAI\nimport os\nclient = OpenAI(\n    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key=\"sk-xxx\"\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1\",\n)\nmessages = [{\"role\": \"user\", \"content\": \"你是谁\"}]\ncompletion = client.chat.completions.create(\n    model=\"kimi-k3.1-pro\",\n    messages=messages,\n    stream=True\n)\nis_answering = False  # 是否进入回复阶段\nprint(\"\\n\" + \"=\" * 20 + \"思考过程\" + \"=\" * 20)\nfor chunk in completion:\n    if chunk.choices:\n        delta = chunk.choices[0].delta\n        # 只收集思考内容\n        if hasattr(delta, \"reasoning_content\") and delta.reasoning_content is not None:\n            if not is_answering:\n                print(delta.reasoning_content, end=\"\", flush=True)\n        # 收到content，开始进行回复\n        if hasattr(delta, \"content\") and delta.content:\n            if not is_answering:\n                print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n                is_answering = True\n            print(delta.content, end=\"\", flush=True)",
+            "curl": "curl -X POST https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"kimi-k3.1-pro\",\n    \"messages\": [\n        {\n            \"role\": \"user\", \n            \"content\": \"你是谁\"\n        }\n    ],\n    \"stream\": true\n}'",
             "nodejs": "import OpenAI from \"openai\";\nimport process from 'process';\n\n// 初始化OpenAI客户端\nconst openai = new OpenAI({\n    // 如果没有配置环境变量，请用阿里云百炼API Key替换：apiKey: \"sk-xxx\"\n    apiKey: process.env.DASHSCOPE_API_KEY,\n    baseURL: 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1'\n});\n\nlet reasoningContent = ''; // 完整思考过程\nlet answerContent = ''; // 完整回复\nlet isAnswering = false; // 是否进入回复阶段\n\nasync function main() {\n    const messages = [{ role: 'user', content: '你是谁' }];\n\n    const stream = await openai.chat.completions.create({\n        model: 'kimi-k3.1-pro',\n        messages,\n        stream: true,\n    });\n\n    console.log('\\n' + '='.repeat(20) + '思考过程' + '='.repeat(20) + '\\n');\n\n    for await (const chunk of stream) {\n        if (chunk.choices?.length) {\n            const delta = chunk.choices[0].delta;\n            // 只收集思考内容\n            if (delta.reasoning_content !== undefined && delta.reasoning_content !== null) {\n                if (!isAnswering) {\n                    process.stdout.write(delta.reasoning_content);\n                }\n                reasoningContent += delta.reasoning_content;\n            }\n\n            // 收到content，开始进行回复\n            if (delta.content !== undefined && delta.content) {\n                if (!isAnswering) {\n                    console.log('\\n' + '='.repeat(20) + '完整回复' + '='.repeat(20) + '\\n');\n                    isAnswering = true;\n                }\n                process.stdout.write(delta.content);\n                answerContent += delta.content;\n            }\n        }\n    }\n}\n\nmain();",
             "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-api-via-openai-chat-completions"
           }
@@ -124,8 +265,8 @@
         },
         "anthropic": {
           "messagesAPI": {
-            "curl": "curl -X POST \"https://[workspace-id].cn-beijing.maas.aliyuncs.com/apps/anthropic/v1/messages\" \\\n  -H \"Content-Type: application/json\" \\\n  -H \"x-api-key: $DASHSCOPE_API_KEY\" \\\n  -d '{\n    \"model\": \"kimi-k3.1-pro\",\n    \"max_tokens\": 4096,\n    \"messages\": [{\"role\": \"user\", \"content\": \"9.9和9.11哪个大？\"}],\n    \"thinking\": {\"type\": \"enabled\"}\n  }'\n",
             "python": "import os\nfrom anthropic import Anthropic\n\nclient = Anthropic(\n    api_key=os.environ[\"DASHSCOPE_API_KEY\"],\n    base_url=\"https://[workspace-id].cn-beijing.maas.aliyuncs.com/apps/anthropic\",\n)\n\nmessage = client.messages.create(\n    model=\"kimi-k3.1-pro\",\n    max_tokens=4096,\n    messages=[{\"role\": \"user\", \"content\": \"9.9和9.11哪个大？\"}],\n    thinking={\"type\": \"enabled\"},\n)\n\nfor block in message.content:\n    if block.type == \"thinking\":\n        print(\"思考：\", block.thinking)\n    elif block.type == \"text\":\n        print(\"回答：\", block.text)\n",
+            "curl": "curl -X POST \"https://[workspace-id].cn-beijing.maas.aliyuncs.com/apps/anthropic/v1/messages\" \\\n  -H \"Content-Type: application/json\" \\\n  -H \"x-api-key: $DASHSCOPE_API_KEY\" \\\n  -d '{\n    \"model\": \"kimi-k3.1-pro\",\n    \"max_tokens\": 4096,\n    \"messages\": [{\"role\": \"user\", \"content\": \"9.9和9.11哪个大？\"}],\n    \"thinking\": {\"type\": \"enabled\"}\n  }'\n",
             "nodejs": "import Anthropic from '@anthropic-ai/sdk';\n\nconst client = new Anthropic({\n  apiKey: process.env.DASHSCOPE_API_KEY,\n  baseURL: 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/apps/anthropic',\n});\n\nconst message = await client.messages.create({\n  model: 'kimi-k3.1-pro',\n  max_tokens: 4096,\n  messages: [{ role: 'user', content: '9.9和9.11哪个大？' }],\n  thinking: { type: 'enabled' },\n});\n\nfor (const block of message.content) {\n  if (block.type === 'thinking') {\n    console.log('思考：', block.thinking);\n  } else if (block.type === 'text') {\n    console.log('回答：', block.text);\n  }\n}\n",
             "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/anthropic-api-messages"
           }
@@ -234,8 +375,8 @@
       "samples": {
         "openai": {
           "default": {
-            "curl": "curl -X POST https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"kimi-k3\",\n    \"messages\": [\n        {\n            \"role\": \"user\", \n            \"content\": \"你是谁\"\n        }\n    ],\n    \"stream\": true\n}'",
             "python": "from openai import OpenAI\nimport os\nclient = OpenAI(\n    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key=\"sk-xxx\"\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1\",\n)\nmessages = [{\"role\": \"user\", \"content\": \"你是谁\"}]\ncompletion = client.chat.completions.create(\n    model=\"kimi-k3\",\n    messages=messages,\n    stream=True\n)\nis_answering = False  # 是否进入回复阶段\nprint(\"\\n\" + \"=\" * 20 + \"思考过程\" + \"=\" * 20)\nfor chunk in completion:\n    if chunk.choices:\n        delta = chunk.choices[0].delta\n        # 只收集思考内容\n        if hasattr(delta, \"reasoning_content\") and delta.reasoning_content is not None:\n            if not is_answering:\n                print(delta.reasoning_content, end=\"\", flush=True)\n        # 收到content，开始进行回复\n        if hasattr(delta, \"content\") and delta.content:\n            if not is_answering:\n                print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n                is_answering = True\n            print(delta.content, end=\"\", flush=True)",
+            "curl": "curl -X POST https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"kimi-k3\",\n    \"messages\": [\n        {\n            \"role\": \"user\", \n            \"content\": \"你是谁\"\n        }\n    ],\n    \"stream\": true\n}'",
             "nodejs": "import OpenAI from \"openai\";\nimport process from 'process';\n\n// 初始化OpenAI客户端\nconst openai = new OpenAI({\n    // 如果没有配置环境变量，请用阿里云百炼API Key替换：apiKey: \"sk-xxx\"\n    apiKey: process.env.DASHSCOPE_API_KEY,\n    baseURL: 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1'\n});\n\nlet reasoningContent = ''; // 完整思考过程\nlet answerContent = ''; // 完整回复\nlet isAnswering = false; // 是否进入回复阶段\n\nasync function main() {\n    const messages = [{ role: 'user', content: '你是谁' }];\n\n    const stream = await openai.chat.completions.create({\n        model: 'kimi-k3',\n        messages,\n        stream: true,\n    });\n\n    console.log('\\n' + '='.repeat(20) + '思考过程' + '='.repeat(20) + '\\n');\n\n    for await (const chunk of stream) {\n        if (chunk.choices?.length) {\n            const delta = chunk.choices[0].delta;\n            // 只收集思考内容\n            if (delta.reasoning_content !== undefined && delta.reasoning_content !== null) {\n                if (!isAnswering) {\n                    process.stdout.write(delta.reasoning_content);\n                }\n                reasoningContent += delta.reasoning_content;\n            }\n\n            // 收到content，开始进行回复\n            if (delta.content !== undefined && delta.content) {\n                if (!isAnswering) {\n                    console.log('\\n' + '='.repeat(20) + '完整回复' + '='.repeat(20) + '\\n');\n                    isAnswering = true;\n                }\n                process.stdout.write(delta.content);\n                answerContent += delta.content;\n            }\n        }\n    }\n}\n\nmain();",
             "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-api-via-openai-chat-completions"
           }
@@ -250,8 +391,8 @@
         },
         "anthropic": {
           "messagesAPI": {
-            "curl": "curl -X POST \"https://[workspace-id].cn-beijing.maas.aliyuncs.com/apps/anthropic/v1/messages\" \\\n  -H \"Content-Type: application/json\" \\\n  -H \"x-api-key: $DASHSCOPE_API_KEY\" \\\n  -d '{\n    \"model\": \"kimi-k3\",\n    \"max_tokens\": 4096,\n    \"messages\": [{\"role\": \"user\", \"content\": \"9.9和9.11哪个大？\"}],\n    \"thinking\": {\"type\": \"enabled\"}\n  }'\n",
             "python": "import os\nfrom anthropic import Anthropic\n\nclient = Anthropic(\n    api_key=os.environ[\"DASHSCOPE_API_KEY\"],\n    base_url=\"https://[workspace-id].cn-beijing.maas.aliyuncs.com/apps/anthropic\",\n)\n\nmessage = client.messages.create(\n    model=\"kimi-k3\",\n    max_tokens=4096,\n    messages=[{\"role\": \"user\", \"content\": \"9.9和9.11哪个大？\"}],\n    thinking={\"type\": \"enabled\"},\n)\n\nfor block in message.content:\n    if block.type == \"thinking\":\n        print(\"思考：\", block.thinking)\n    elif block.type == \"text\":\n        print(\"回答：\", block.text)\n",
+            "curl": "curl -X POST \"https://[workspace-id].cn-beijing.maas.aliyuncs.com/apps/anthropic/v1/messages\" \\\n  -H \"Content-Type: application/json\" \\\n  -H \"x-api-key: $DASHSCOPE_API_KEY\" \\\n  -d '{\n    \"model\": \"kimi-k3\",\n    \"max_tokens\": 4096,\n    \"messages\": [{\"role\": \"user\", \"content\": \"9.9和9.11哪个大？\"}],\n    \"thinking\": {\"type\": \"enabled\"}\n  }'\n",
             "nodejs": "import Anthropic from '@anthropic-ai/sdk';\n\nconst client = new Anthropic({\n  apiKey: process.env.DASHSCOPE_API_KEY,\n  baseURL: 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/apps/anthropic',\n});\n\nconst message = await client.messages.create({\n  model: 'kimi-k3',\n  max_tokens: 4096,\n  messages: [{ role: 'user', content: '9.9和9.11哪个大？' }],\n  thinking: { type: 'enabled' },\n});\n\nfor (const block of message.content) {\n  if (block.type === 'thinking') {\n    console.log('思考：', block.thinking);\n  } else if (block.type === 'text') {\n    console.log('回答：', block.text);\n  }\n}\n",
             "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/anthropic-api-messages"
           }
@@ -358,8 +499,8 @@
       "samples": {
         "openai": {
           "default": {
-            "curl": "curl -X POST https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"kimi-k2.7-code\",\n    \"messages\": [\n        {\n            \"role\": \"user\", \n            \"content\": \"你是谁\"\n        }\n    ],\n    \"stream\": true\n}'",
             "python": "from openai import OpenAI\nimport os\nclient = OpenAI(\n    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key=\"sk-xxx\"\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1\",\n)\nmessages = [{\"role\": \"user\", \"content\": \"你是谁\"}]\ncompletion = client.chat.completions.create(\n    model=\"kimi-k2.7-code\",\n    messages=messages,\n    stream=True\n)\nis_answering = False  # 是否进入回复阶段\nprint(\"\\n\" + \"=\" * 20 + \"思考过程\" + \"=\" * 20)\nfor chunk in completion:\n    if chunk.choices:\n        delta = chunk.choices[0].delta\n        # 只收集思考内容\n        if hasattr(delta, \"reasoning_content\") and delta.reasoning_content is not None:\n            if not is_answering:\n                print(delta.reasoning_content, end=\"\", flush=True)\n        # 收到content，开始进行回复\n        if hasattr(delta, \"content\") and delta.content:\n            if not is_answering:\n                print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n                is_answering = True\n            print(delta.content, end=\"\", flush=True)",
+            "curl": "curl -X POST https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"kimi-k2.7-code\",\n    \"messages\": [\n        {\n            \"role\": \"user\", \n            \"content\": \"你是谁\"\n        }\n    ],\n    \"stream\": true\n}'",
             "nodejs": "import OpenAI from \"openai\";\nimport process from 'process';\n\n// 初始化OpenAI客户端\nconst openai = new OpenAI({\n    // 如果没有配置环境变量，请用阿里云百炼API Key替换：apiKey: \"sk-xxx\"\n    apiKey: process.env.DASHSCOPE_API_KEY,\n    baseURL: 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1'\n});\n\nlet reasoningContent = ''; // 完整思考过程\nlet answerContent = ''; // 完整回复\nlet isAnswering = false; // 是否进入回复阶段\n\nasync function main() {\n    const messages = [{ role: 'user', content: '你是谁' }];\n\n    const stream = await openai.chat.completions.create({\n        model: 'kimi-k2.7-code',\n        messages,\n        stream: true,\n    });\n\n    console.log('\\n' + '='.repeat(20) + '思考过程' + '='.repeat(20) + '\\n');\n\n    for await (const chunk of stream) {\n        if (chunk.choices?.length) {\n            const delta = chunk.choices[0].delta;\n            // 只收集思考内容\n            if (delta.reasoning_content !== undefined && delta.reasoning_content !== null) {\n                if (!isAnswering) {\n                    process.stdout.write(delta.reasoning_content);\n                }\n                reasoningContent += delta.reasoning_content;\n            }\n\n            // 收到content，开始进行回复\n            if (delta.content !== undefined && delta.content) {\n                if (!isAnswering) {\n                    console.log('\\n' + '='.repeat(20) + '完整回复' + '='.repeat(20) + '\\n');\n                    isAnswering = true;\n                }\n                process.stdout.write(delta.content);\n                answerContent += delta.content;\n            }\n        }\n    }\n}\n\nmain();",
             "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-api-via-openai-chat-completions"
           }
@@ -374,8 +515,8 @@
         },
         "anthropic": {
           "messagesAPI": {
-            "curl": "curl -X POST \"https://[workspace-id].cn-beijing.maas.aliyuncs.com/apps/anthropic/v1/messages\" \\\n  -H \"Content-Type: application/json\" \\\n  -H \"x-api-key: $DASHSCOPE_API_KEY\" \\\n  -d '{\n    \"model\": \"kimi-k2.7-code\",\n    \"max_tokens\": 4096,\n    \"messages\": [{\"role\": \"user\", \"content\": \"9.9和9.11哪个大？\"}],\n    \"thinking\": {\"type\": \"enabled\"}\n  }'\n",
             "python": "import os\nfrom anthropic import Anthropic\n\nclient = Anthropic(\n    api_key=os.environ[\"DASHSCOPE_API_KEY\"],\n    base_url=\"https://[workspace-id].cn-beijing.maas.aliyuncs.com/apps/anthropic\",\n)\n\nmessage = client.messages.create(\n    model=\"kimi-k2.7-code\",\n    max_tokens=4096,\n    messages=[{\"role\": \"user\", \"content\": \"9.9和9.11哪个大？\"}],\n    thinking={\"type\": \"enabled\"},\n)\n\nfor block in message.content:\n    if block.type == \"thinking\":\n        print(\"思考：\", block.thinking)\n    elif block.type == \"text\":\n        print(\"回答：\", block.text)\n",
+            "curl": "curl -X POST \"https://[workspace-id].cn-beijing.maas.aliyuncs.com/apps/anthropic/v1/messages\" \\\n  -H \"Content-Type: application/json\" \\\n  -H \"x-api-key: $DASHSCOPE_API_KEY\" \\\n  -d '{\n    \"model\": \"kimi-k2.7-code\",\n    \"max_tokens\": 4096,\n    \"messages\": [{\"role\": \"user\", \"content\": \"9.9和9.11哪个大？\"}],\n    \"thinking\": {\"type\": \"enabled\"}\n  }'\n",
             "nodejs": "import Anthropic from '@anthropic-ai/sdk';\n\nconst client = new Anthropic({\n  apiKey: process.env.DASHSCOPE_API_KEY,\n  baseURL: 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/apps/anthropic',\n});\n\nconst message = await client.messages.create({\n  model: 'kimi-k2.7-code',\n  max_tokens: 4096,\n  messages: [{ role: 'user', content: '9.9和9.11哪个大？' }],\n  thinking: { type: 'enabled' },\n});\n\nfor (const block of message.content) {\n  if (block.type === 'thinking') {\n    console.log('思考：', block.thinking);\n  } else if (block.type === 'text') {\n    console.log('回答：', block.text);\n  }\n}\n",
             "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/anthropic-api-messages"
           }
@@ -492,8 +633,8 @@
         },
         "anthropic": {
           "messagesAPI": {
-            "curl": "curl -X POST \"https://[workspace-id].cn-beijing.maas.aliyuncs.com/apps/anthropic/v1/messages\" \\\n  -H \"Content-Type: application/json\" \\\n  -H \"x-api-key: $DASHSCOPE_API_KEY\" \\\n  -d '{\n    \"model\": \"kimi-k2.6\",\n    \"max_tokens\": 4096,\n    \"messages\": [{\"role\": \"user\", \"content\": \"9.9和9.11哪个大？\"}],\n    \"thinking\": {\"type\": \"enabled\"}\n  }'\n",
             "python": "import os\nfrom anthropic import Anthropic\n\nclient = Anthropic(\n    api_key=os.environ[\"DASHSCOPE_API_KEY\"],\n    base_url=\"https://[workspace-id].cn-beijing.maas.aliyuncs.com/apps/anthropic\",\n)\n\nmessage = client.messages.create(\n    model=\"kimi-k2.6\",\n    max_tokens=4096,\n    messages=[{\"role\": \"user\", \"content\": \"9.9和9.11哪个大？\"}],\n    thinking={\"type\": \"enabled\"},\n)\n\nfor block in message.content:\n    if block.type == \"thinking\":\n        print(\"思考：\", block.thinking)\n    elif block.type == \"text\":\n        print(\"回答：\", block.text)\n",
+            "curl": "curl -X POST \"https://[workspace-id].cn-beijing.maas.aliyuncs.com/apps/anthropic/v1/messages\" \\\n  -H \"Content-Type: application/json\" \\\n  -H \"x-api-key: $DASHSCOPE_API_KEY\" \\\n  -d '{\n    \"model\": \"kimi-k2.6\",\n    \"max_tokens\": 4096,\n    \"messages\": [{\"role\": \"user\", \"content\": \"9.9和9.11哪个大？\"}],\n    \"thinking\": {\"type\": \"enabled\"}\n  }'\n",
             "nodejs": "import Anthropic from '@anthropic-ai/sdk';\n\nconst client = new Anthropic({\n  apiKey: process.env.DASHSCOPE_API_KEY,\n  baseURL: 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/apps/anthropic',\n});\n\nconst message = await client.messages.create({\n  model: 'kimi-k2.6',\n  max_tokens: 4096,\n  messages: [{ role: 'user', content: '9.9和9.11哪个大？' }],\n  thinking: { type: 'enabled' },\n});\n\nfor (const block of message.content) {\n  if (block.type === 'thinking') {\n    console.log('思考：', block.thinking);\n  } else if (block.type === 'text') {\n    console.log('回答：', block.text);\n  }\n}\n",
             "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/anthropic-api-messages"
           }
@@ -610,8 +751,8 @@
         },
         "anthropic": {
           "messagesAPI": {
-            "curl": "curl -X POST \"https://[workspace-id].cn-beijing.maas.aliyuncs.com/apps/anthropic/v1/messages\" \\\n  -H \"Content-Type: application/json\" \\\n  -H \"x-api-key: $DASHSCOPE_API_KEY\" \\\n  -d '{\n    \"model\": \"kimi-k2.5\",\n    \"max_tokens\": 4096,\n    \"messages\": [{\"role\": \"user\", \"content\": \"9.9和9.11哪个大？\"}],\n    \"thinking\": {\"type\": \"enabled\"}\n  }'\n",
             "python": "import os\nfrom anthropic import Anthropic\n\nclient = Anthropic(\n    api_key=os.environ[\"DASHSCOPE_API_KEY\"],\n    base_url=\"https://[workspace-id].cn-beijing.maas.aliyuncs.com/apps/anthropic\",\n)\n\nmessage = client.messages.create(\n    model=\"kimi-k2.5\",\n    max_tokens=4096,\n    messages=[{\"role\": \"user\", \"content\": \"9.9和9.11哪个大？\"}],\n    thinking={\"type\": \"enabled\"},\n)\n\nfor block in message.content:\n    if block.type == \"thinking\":\n        print(\"思考：\", block.thinking)\n    elif block.type == \"text\":\n        print(\"回答：\", block.text)\n",
+            "curl": "curl -X POST \"https://[workspace-id].cn-beijing.maas.aliyuncs.com/apps/anthropic/v1/messages\" \\\n  -H \"Content-Type: application/json\" \\\n  -H \"x-api-key: $DASHSCOPE_API_KEY\" \\\n  -d '{\n    \"model\": \"kimi-k2.5\",\n    \"max_tokens\": 4096,\n    \"messages\": [{\"role\": \"user\", \"content\": \"9.9和9.11哪个大？\"}],\n    \"thinking\": {\"type\": \"enabled\"}\n  }'\n",
             "nodejs": "import Anthropic from '@anthropic-ai/sdk';\n\nconst client = new Anthropic({\n  apiKey: process.env.DASHSCOPE_API_KEY,\n  baseURL: 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/apps/anthropic',\n});\n\nconst message = await client.messages.create({\n  model: 'kimi-k2.5',\n  max_tokens: 4096,\n  messages: [{ role: 'user', content: '9.9和9.11哪个大？' }],\n  thinking: { type: 'enabled' },\n});\n\nfor (const block of message.content) {\n  if (block.type === 'thinking') {\n    console.log('思考：', block.thinking);\n  } else if (block.type === 'text') {\n    console.log('回答：', block.text);\n  }\n}\n",
             "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/anthropic-api-messages"
           }

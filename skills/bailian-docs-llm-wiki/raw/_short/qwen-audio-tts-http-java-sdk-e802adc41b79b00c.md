@@ -684,6 +684,18 @@ HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
     .build();
 ```
 
+`enable_markdown_filter`
+
+`boolean`
+
+否
+
+是否启用 Markdown 过滤。启用后，服务会在合成前将 Markdown 转换成适合朗读的文本。
+
+默认值：`false`。设为 `true` 启用。
+
+通过 `parameter("enable_markdown_filter", true)` 启用。
+
 ## 示例代码
 
 以下示例展示Qwen-Audio-TTS语音合成的非流式和流式调用方式。运行前请确保已设置环境变量`DASHSCOPE_API_KEY`。

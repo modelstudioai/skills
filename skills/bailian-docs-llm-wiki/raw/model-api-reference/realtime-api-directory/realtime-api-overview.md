@@ -22,7 +22,7 @@ Realtime API 支持实时多模态交互、语音识别、语音合成、语音�
 
 qwen3.8-omni-flash-realtime、qwen3.5-omni-plus-realtime、qwen3.5-omni-flash-realtime
 
-[支持](raw/_short/omni-realtime-websocket-access-3f16ac0799ebc899.md)
+[支持](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/omni-realtime-websocket-access.md)
 
 [支持](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/omni-realtime-webrtc-access.md)
 
@@ -68,7 +68,7 @@ qwen-audio-3.1-asr-flash-message、qwen-audio-3.1-asr-flash-streaming、qwen-aud
 
 qwen-audio-3.1-realtime-plus、qwen-audio-3.1-realtime-flash、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash
 
-[支持](raw/_short/audio-realtime-websocket-access-5f0da4977f0f021b.md)
+[支持](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/audio-realtime-websocket-access.md)
 
 [支持](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/audio-realtime-webrtc-access.md)
 
@@ -78,7 +78,7 @@ qwen-audio-3.1-realtime-plus、qwen-audio-3.1-realtime-flash、qwen-audio-3.0-re
 
 Qwen-Livetranslate-Realtime 系列模型
 
-[支持](raw/_short/livetranslate-realtime-websocket-access-69ee95b6726440dc.md)
+[支持](raw/_short/livetranslate-realtime-websocket-access-c83c6ed44456849c.md)
 
 [支持](raw/_short/livetranslate-realtime-webrtc-access-ddb4e390439cd632.md)
 
@@ -172,14 +172,14 @@ WebRTC 和 WebSocket 在建连时鉴权；AOQ 在 AppServer 请求连接凭证�
 
 WebSocket 在建立连接时通过 HTTP 请求头携带 API Key 进行鉴权，具体要求参见对应模型的接入文档。
 
--   [Qwen-Omni-Realtime](raw/_short/omni-realtime-websocket-access-3f16ac0799ebc899.md)
+-   [Qwen-Omni-Realtime](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/omni-realtime-websocket-access.md)
 -   [Qwen-Audio-TTS](raw/_short/qwen-audio-tts-websocket-api-6f9e2d20cf04ea96.md)
 -   [CosyVoice](raw/_short/cosyvoice-websocket-api-5929268331632771.md)
 -   [Qwen-Audio-ASR-Message](raw/_short/qwen-asr-message-websocket-api-8b78d8662335cafa.md)
 -   [Qwen-Audio-ASR-Streaming](raw/_short/qwen-audio-asr-streaming-websocket-api-779f1056a08e5525.md)
 -   [Fun-ASR-Realtime](raw/_short/fun-asr-realtime-websocket-api-ba4d50025cae8d1c.md)
--   [Qwen-Audio-Realtime](raw/_short/audio-realtime-websocket-access-5f0da4977f0f021b.md)
--   [Qwen-LiveTranslate-Realtime](raw/_short/livetranslate-realtime-websocket-access-69ee95b6726440dc.md)
+-   [Qwen-Audio-Realtime](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/audio-realtime-websocket-access.md)
+-   [Qwen-LiveTranslate-Realtime](raw/_short/livetranslate-realtime-websocket-access-c83c6ed44456849c.md)
 -   [多模态开发套件](raw/model-api-reference/realtime-api-directory/multimodal-interaction-protocol.md)
 
 #### WebRTC
@@ -196,21 +196,9 @@ AOQ 采用**服务端代理鉴权**模式：API Key 仅在业务 AppServer 侧�
 
 #### 获取连接凭证
 
-AOQ 支持即时鉴权和预鉴权两种方式：即时鉴权在业务需要建连时获取凭证，随即建立媒体连接；预鉴权提前获取并缓存凭证，业务需要时再建连，减少建连时等待信令 HTTP 请求的耗时。
-
-#### 即时鉴权
-
 业务需要媒体连接时，由 AppServer 请求连接凭证并返回客户端，客户端随即调用 `connect(config)` 建连。
 
 ![AOQ 即时鉴权与媒体建连时序](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/zh/images/6a4b3c2d1e0f90b0.png)
-
-#### 预鉴权
-
-AppServer 提前请求连接凭证，客户端缓存完整连接参数，业务需要媒体连接时再调用 `connect(config)`。
-
-Token 的默认有效期为 5 分钟；如需延长，请联系售后支持。Token 过期后，需重新获取连接凭证。
-
-![AOQ 预鉴权与按需媒体建连时序](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/zh/images/6a4b3c2d1e0f90bc.png)
 
 #### 请求路径
 
@@ -270,15 +258,7 @@ URL · `string`
 
 选填。客户端真实公网 IP，用于选择 Relay 接入点；不传时使用请求来源 IP。
 
-`serverPassiveConnect`
-
-请求体 · `boolean`
-
-选填。传 `true` 时使用预鉴权模式；不传时使用即时鉴权模式。此参数仅用于请求网关，无需在 `AoqConnectConfig` 中新增字段。
-
 以下以 qwen3.8-omni-flash-realtime 为例，使用对应的 `{endpoint}` 和环境变量 `DASHSCOPE_API_KEY`。调用 Inference 路径的模型时，将请求路径改为 `/api/v1/webrtc/inference`，并设置对应的 `model`。
-
-#### 即时鉴权请求
 
 ```
 curl -X POST \
@@ -287,17 +267,6 @@ curl -X POST \
   -H "Content-Type: application/json" \
   -H "x-dashscope-rtc-transport: moq" \
   -d '{}'
-```
-
-#### 预鉴权请求
-
-```
-curl -X POST \
-  "https://{endpoint}/api/v1/webrtc/realtime?model=qwen3.8-omni-flash-realtime" \
-  -H "Authorization: Bearer ${DASHSCOPE_API_KEY}" \
-  -H "Content-Type: application/json" \
-  -H "x-dashscope-rtc-transport: moq" \
-  -d '{"serverPassiveConnect":true}'
 ```
 
 #### 返回说明
@@ -344,7 +313,7 @@ Relay TLS 证书指纹，填入 `AoqConnectConfig.certFingerprint`。
 
 业务空间 ID 的哈希值，填入 `AoqConnectConfig.workspaceIdHash`。
 
-两种模式的响应结构相同。下例为即时鉴权的响应示例，字段值以实际返回为准。
+以下为响应示例，字段值以实际返回为准。
 
 ```
 {

@@ -1375,4 +1375,4 @@ RPM 限制每分钟的 WebSocket 建连请求次数。同一连接内的多轮�
 2.  重新建立连接，发送 `session.update`，恢复目标语种、输出模态等配置。
 3.  收到 `session.updated` 后，再继续发送音频。
 
-参数错误且连接未断开时，修正请求后可继续使用原连接。使用 `dashscope.Client()` 时，还需[恢复事件接收](https://help.aliyun.com/zh/model-studio/qwen-livetranslate-python-sdk#lt-sdk-error-receive)。
+参数错误且连接未断开时，修正请求后可继续使用原连接。使用 `dashscope.Client()` 时，还需[恢复事件接收](https://help.aliyun.com/zh/model-studio/realtime-websocket-python-sdk-qwen-livetranslate-realtime#model-qwen-livetranslate-realtime-lt-sdk-error-receive)。

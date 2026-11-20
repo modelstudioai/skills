@@ -1,47 +1,39 @@
 # world model api reference
 
-世界模型 API 提供面向叙事与交互场景的多模态建模能力，支持剧情生成、角色行为决策、环境状态演化等核心功能。当前以 HappyOyster 系列模型为主力实现，覆盖 Adventure（冒险叙事）、Directing（导演式控制）和 Acting（角色实时动作）三类子任务。所有接口均基于 RESTful 设计，需通过 API Key 鉴权调用。
+世界模型 API 提供面向叙事与交互式内容生成的专用能力，覆盖冒险（Adventure）、导演（Directing）和表演（Acting）三类核心场景。该接口当前以 OpenAPI 形式提供，支持结构化输入与事件流式响应。所有能力均需通过百炼平台申请权限后调用，其中 Acting 能力尚处邀测阶段。
 
 ## 支持的模型/功能
 
-- **HappyOyster Adventure**：用于长程剧情规划与分支逻辑生成，适用于游戏叙事引擎、互动小说等场景。详见 [Adventure Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-adventure-openapi-reference.md)。
-- **HappyOyster Directing**：提供高层意图到场景指令的映射，支持镜头调度、节奏控制、冲突强度调节等导演级干预能力。详见 [Directing Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-directing-openapi-reference.md)。
-- **HappyOyster Acting（邀测中）**：面向单角色实时响应建模，输出符合性格、状态与上下文的动作/台词序列。该能力尚未全量开放，接口细节请参阅 [Acting Open API参考（邀测中）](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-acting-openapi-reference.md)。
+世界模型当前提供以下三类功能模块，分别对应不同创作角色：
 
-> **注意**：文档中“Acting”标注为“邀测中”，但部分 SDK v2.3+ 已默认启用该 endpoint；实际调用前请确认所用 API Key 是否已获邀测白名单权限，否则将返回 `403 Forbidden`。
+- **Adventure（冒险）**：用于生成多分支剧情、环境描述与玩家可交互状态，适用于游戏叙事或互动小说；  
+- **Directing（导演）**：聚焦于镜头语言、节奏控制与多角色协同调度，输出含时间戳与动作指令的导演脚本；  
+- **Acting（表演）**：支持单角色情绪化台词生成与微表情/肢体动作建议（[Acting Open API参考（邀测中）](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-acting-openapi-reference.md)），目前仅对白名单用户开放。
+
+> **注意**：原始文档中将 Acting 标注为“邀测中”，但 [Adventure Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-adventure-openapi-reference.md) 与 [Directing Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-directing-openapi-reference.md) 均未注明访问限制，实际调用前请确认控制台权限状态。
 
 ## 关键参数
 
-| 参数名 | 类型 | 必填 | 说明 |
-|--------|------|------|------|
-| `scene_state` | object | 是 | 当前世界状态快照，含角色位置、情绪、物品持有等字段，结构见 [Adventure Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-adventure-openapi-reference.md) 中 `SceneStateSchema` 定义 |
-| `intent` | string | 否 | 高层目标描述（如 `"阻止反派启动装置"`），仅 Directing 和 Acting 接口有效 |
-| `max_steps` | integer | 否 | 最大推理步数，默认 5，上限 20；超过将截断并返回 partial result |
+所有世界模型 API 共享以下必需参数：
+
+- `model`: 必填，取值为 `"happyoyster/adventure"`、`"happyoyster/directing"` 或 `"happyoyster/acting"`；  
+- `input`: 必填，JSON 对象，结构依模型类型而异（详见各 OpenAPI 文档）；  
+- `stream`: 可选，布尔值，默认 `false`；设为 `true` 时返回 SSE 流式响应；  
+- `max_tokens`: 可选，整数，最大输出 token 数，上限为 4096（[Directing Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-directing-openapi-reference.md) 明确指定此限制）。
 
 ## 使用方式
 
-1. 构造 POST 请求，`Content-Type: application/json`  
-2. 请求体包含 `scene_state` 及可选参数（如 `intent`, `max_steps`）  
-3. 设置请求头 `Authorization: Bearer <your_api_key>`  
-4. 调用对应 endpoint（例如 `/v1/world-model/adventure`）
-
-示例（cURL）：
-```bash
-curl -X POST https://dashscope.aliyuncs.com/api/v1/world-model/adventure \
-  -H "Authorization: Bearer sk-xxx" \
-  -H "Content-Type: application/json" \
-  -d '{
-        "scene_state": {"characters": [{"id": "hero", "mood": "anxious"}]},
-        "max_steps": 8
-      }'
-```
+1. 在百炼控制台开通「世界模型」服务并获取 API Key；  
+2. 根据目标场景选择对应 `model` 值，并按 [Adventure Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-adventure-openapi-reference.md) 等文档构造 `input`；  
+3. 发送 POST 请求至 `https://dashscope.aliyuncs.com/api/v1/services/aigc/world-model/invoke`，携带 `Authorization: Bearer <api_key>`；  
+4. 解析 JSON 响应体中的 `output` 字段（非流式）或逐块处理 `data:` 行（流式）。
 
 ## 限制和注意事项
 
-- 单次请求 `scene_state` JSON 大小不得超过 256 KB；超限将返回 `413 Payload Too Large`  
-- Adventure 接口响应延迟中位值约 1.2s（P95 < 3.5s），Directing 与 Acting 因计算复杂度更高，建议设置 5s+ 超时  
-- 所有接口均不支持流式响应（`stream=false` 为唯一合法值）  
-- > **注意**：原始文档未明确说明 rate limit，但生产环境实际限制为 10 QPS / key；该数值在 [Directing Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-directing-openapi-reference.md) 的 “Rate Limits” 小节中有补充说明，应以此为准。
+- 单次请求 `input` 总长度（含文本与结构化字段）不得超过 8192 字符；  
+- Acting 模块暂不支持 `stream: true`，启用后将返回 400 错误；  
+- 所有模型均不支持系统级角色设定（如 `system prompt`），上下文需完全由 `input` 结构承载；  
+- 若发现 [Directing Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-directing-openapi-reference.md) 中定义的 `shot_type` 枚举值与实际响应不符，请以最新 SDK 版本返回的 `enum` 字段为准。
 
 ## 来源文档
 

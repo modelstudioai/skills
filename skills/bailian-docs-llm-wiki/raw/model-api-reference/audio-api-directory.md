@@ -1,4 +1,4 @@
-# 音频（非实时）
+# 音视频（非实时）
 
 -   [概述](raw/model-api-reference/audio-api-directory/audio-api-references.md)
 -   [语音识别](raw/model-api-reference/audio-api-directory/speech-recognition-api-reference.md)
