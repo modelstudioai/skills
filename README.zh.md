@@ -65,6 +65,8 @@ npx skills add modelstudioai/skills
 |------|------|
 | [`bailian-docs-llm-wiki`](./skills/bailian-docs-llm-wiki/) | 引导 Agent 查阅仓库内置的**百炼文档库**：模型规格与定价、API/错误码、智能体/RAG/知识库、SDK 与多模态、计费等。从 `models/index.md` 和 `wiki/index.md` 开始逐层查阅。 |
 | [`bailian-model-recommend`](./skills/bailian-model-recommend/) | **模型选型与推荐**：根据场景或功能需求，从百炼模型库中推荐最合适的模型并附可直接运行的示例代码。命中"推荐 / 选哪个 / 对比"等意图时激活，内部读取 `bailian-docs-llm-wiki` 的 `models/` 数据。 |
+| [`bailian-rl-deploy`](./skills/bailian-rl-deploy/) | **端到端强化学习训练与部署**：授权 → 托管沙箱运行时 → 数据与 Rollout/Reward 代码 → 提交（`bl finetune rl run`）→ 观测 → Checkpoint 自动发布 → 部署调用。MTU 计费护栏（dry-run → 确认 → `--yes`）；沙箱仅支持 macOS/Linux。SFT/DPO/CPT/LoRA 走 CLI registry 的 `bailian-finetune`；OPD 蒸馏 → `bailian-opd`。 |
+| [`bailian-opd`](./skills/bailian-opd/) | **端到端纯 Model OPD 蒸馏**（`pg_opd`）：授权 → ChatML 数据校验 → 七阶段只读预检（容量双口径建议、batch-fit 零步闸）→ 请求体/告警/计费原样确认 → 带重复创建守卫的确认后提交 → 轮询到验证过的终态 + checkpoint。确定性 Node 脚本（`opd-preflight` / `opd-submit` / `opd-wait`）+ 内置历史成功基线（9B←397B / 9B←Flash）。MTU 后付费在任何探针前先披露。RL → `bailian-rl-deploy`；SFT/部署 → `bailian-train-deploy`。 |
 | [`financial-expert`](./skills/financial-expert/) | **金融数据分析**：基于 `bl mcp`（`market-cmapi00073529`），覆盖 A 股、港股、基金、债券与指数，支持股票 / 基金 / 基金经理筛选、财务估值、全球宏观与行业时序、券商研报、公司及基金公告、财经新闻和企业风险查询。实时工具包括 `NewsDataQuery` 与 `IcEnterpriseDataQuery`。 |
 | [`happyhorse-prompt-studio`](./skills/happyhorse-prompt-studio/) | **HappyHorse 1.0 视频提示词工作室**：用生动示例引导用户发现场景，再组装出 日/中/英 三语的成片级 Prompt。覆盖漫剧、角色 PV、漫画运动、虚拟偶像 MV 及自由创作场景。 |
 | [`spark-video`](./skills/spark-video/) | **端到端短片制作**：编剧 ↔ 导演（逐场景）→ 并行渲染 DAG → 逐 clip 审片 → 拼接。适合"帮我做一集短剧/产品广告"一句话出片。入口技能注册为 **`spark-video-episode`**（见 [`SKILL.md`](./skills/spark-video/SKILL.md)）。 |
