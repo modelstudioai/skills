@@ -140,8 +140,18 @@ description: >-
 - `raw/application-user-guide/` — 应用使用指南
 - `raw/model-api-reference/` — 模型 API 参考
 - `raw/application-api-reference/` — 应用 API 参考
+- `raw/_short/` — 超长路径文档的扁平化存放目录（见下）
 
 当 wiki / models 层信息不足时，从 raw 层获取完整原文。
+
+#### `raw/_short/` 与 Windows 路径限制
+
+源站部分文档层级过深，完整路径会超出 Windows 260 字符路径限制（MAX_PATH），
+爬虫将这类文档扁平化存放到 `raw/_short/<slug>-<16位hash>.md`（文件名 ≤ 68 字符）。
+
+- **链接已改写，直接跟读即可**：llms.txt、wiki 页「来源文档」、raw 内部互链中所有指向这些文档的链接都已改写为 `raw/_short/...` 路径，无需手动映射回原始层级。
+- **回溯原始层级**：`_short` 文件不含原始路径元信息，拿文档标题到 `llms.txt` 的目录树中搜索，即可定位其在源站的所属章节。
+- **Windows 用户建议**：安装/克隆目录尽量短（如 `C:\skills`）；git 克隆时设置 `git config --global core.longpaths true`；Win10 1607+ 可启用系统长路径支持（组策略「启用 Win32 长路径」）彻底解除 260 限制。
 
 ## 强约束
 
