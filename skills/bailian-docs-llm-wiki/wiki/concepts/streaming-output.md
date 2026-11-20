@@ -1,40 +1,49 @@
 # 流式输出
 
-流式输出（Streaming Output）是百炼平台提供的一种实时响应机制，允许模型在生成过程中逐 token（或逐 chunk）向客户端推送结果，而非等待全部内容生成完毕后一次性返回。该机制显著降低用户感知延迟，提升交互体验，尤其适用于对话界面、代码补全、语音合成等对实时性敏感的场景。
+流式输出（Streaming Output）是百炼平台提供的一种低延迟响应机制，允许模型在生成过程中**逐段、逐 token 地持续返回结果**，而非等待全部内容生成完毕后一次性返回。该机制显著降低端到端延迟，提升用户交互体验，尤其适用于长文本生成、实时语音识别与合成等对响应速度敏感的场景。
 
 ## 在百炼平台的不同场景中如何使用
 
-- **Model Experience 统一调用接口**（`/v1/models/{model_id}/invoke`）：通过请求体中设置 `"stream": true` 启用；响应为 `text/event-stream` 格式，每条 `data:` 行包含一个 JSON 对象（如 `{"output": {"text": "Hello"}, "usage": {...}}`），需按 Server-Sent Events（SSE）协议解析。
-- **Qwen API（OpenAI 兼容 / Anthropic 兼容 / DashScope 原生）**：各协议均支持流式，参数名统一为 `stream=true`（OpenAI/Anthropic）或 `stream=True`（DashScope SDK）。例如 [OpenAI 兼容接口](openai-compatible-interface.md) `/v1/chat/completions` 中启用后，返回 `choices[0].delta.content` 增量字段。
-- **Application Support（Agent/RAG 应用）**：支持 `stream=True` 与 `incremental_output=True` 双模式：前者返回完整历史片段（含已生成内容重发），后者仅返回本次新增 token，更适合前端增量渲染与 Markdown 实时高亮。
-- **Framework 集成（LlamaIndex / Spring AI Alibaba）**：LlamaIndex 的 `QwenLLM` 支持 `stream=True` 参数；Spring AI Alibaba 的 `StreamingChatClient` 自动适配流式语义，调用 `stream()` 方法即可获取 `Flux<ChatResponse>`。
-- **多模态限制注意**：文本与语音类模型（如 `qwen2.5-7b-chat`, `qwen-audio`）普遍支持流式；但部分全模态模型（如 `wanx-vl-3.0`）暂不支持 `stream: true`，启用将返回 `400 Unsupported Operation` 错误。
+流式输出在百炼平台中并非全局统一启用，而是按模型类型和调用方式差异化支持：
+
+- **Model Experience（HTTP 同步调用）**  
+  适用于 `text-generation`（如 `qwen3` 系列）和 `speech-to-text`（ASR）类模型。通过在 JSON 请求体中设置 `"stream": true`，服务端将以 `text/event-stream` MIME 类型返回 SSE（Server-Sent Events）格式数据。每条事件为 `data: {...}` 行，包含 `delta`（增量内容）、`finish_reason`（结束原因）等字段。不支持流式的模型（如 `embedding`、`rerank`、`image-generation`）会忽略该参数。
+
+- **Realtime API（WebSocket 实时调用）**  
+  所有实时音视频能力（ASR、TTS、Audio Chat、LiveTranslate 等）**强制要求流式**，通过 WebSocket 协议实现双向低延迟流传输。需显式设置 `"enable_streaming": true`，并按协议分帧发送/接收音频流或语义事件（如 `transcript`、`audio_chunk`）。此场景下“流式”是协议级基础能力，而非可选开关。
+
+- **Application Support（AI 应用层）**  
+  在 Agent 或 RAG 应用中，可通过 SDK 的 `stream=True` 参数启用流式响应；若需前端仅渲染新增内容（避免重复刷新），应额外启用 `incremental_output=True`，确保每次事件只携带本次生成的 token 差量。
+
+> ✅ **关键区别**：HTTP 流式（SSE）适合单次请求的渐进式响应；WebSocket 流式（Realtime）面向持续会话，支持上下文保持与双向媒体流。
 
 ## 关键参数和配置
 
-| 参数 | 类型 | 默认值 | 说明 |
-|------|------|--------|------|
-| `stream` | boolean | `false` | 全局开关，启用后返回 SSE 流；必须显式设为 `true` 才生效。所有协议与 SDK 均识别此字段。 |
-| `incremental_output` | boolean | `false` | 仅 Application Support 场景有效；设为 `true` 时，流式响应中 `output.text` 仅含本次新增内容（非累计），避免前端重复渲染。 |
-| `timeout`（客户端） | duration | SDK 默认 30s | 流式请求易受网络波动影响，建议显式设置超时（如 `60s`），防止连接长期挂起。 |
-| `max_retries`（SDK） | integer | 2（指数退避） | 流式连接中断时，SDK 可自动重试（需配合 `stream` 使用）；生产环境建议保留默认值。 |
+| 参数 | 位置 | 类型 | 说明 | 是否必需 | 备注 |
+|------|------|------|------|-----------|------|
+| `stream` | HTTP 请求体（`parameters` 外层） | `boolean` | 启用 HTTP 流式响应 | ❌（默认 `false`） | 仅对 `text-generation` 和 `speech-to-text` 模型生效 |
+| `enable_streaming` | Realtime WebSocket 初始化消息 | `boolean` | 启用 WebSocket 流式协议 | ✅（必须为 `true`） | 所有 Realtime API 的硬性要求 |
+| `incremental_output` | Application SDK / HTTP 请求体 | `boolean` | 启用增量式流式（仅返回 delta） | ❌（默认 `false`） | 配合 `stream=true` 使用，避免前端重复解析全量历史 |
+| `max_latency_ms` | Realtime 初始化消息 | `integer` | 端到端最大允许延迟（毫秒） | ❌（默认 `800`） | 影响流式吞吐与实时性权衡，最小可设 `300` |
 
-> ⚠️ 注意：流式响应不支持 `system` 消息重试缓存；若使用 `previous_response_id` 或会话缓存，需确保上游逻辑兼容增量更新语义。
+⚠️ 注意：  
+- `stream=true` 对视觉生成、向量模型等不支持流式的模型**静默失效**，不会报错但返回同步响应；  
+- Realtime API **不接受 HTTP 调用**，尝试 `POST /v1/models/xxx/invoke?stream=true` 将返回 `405 Method Not Allowed`；  
+- 流式响应需客户端正确处理 SSE 格式（按行解析 `data:` 字段）或 WebSocket 二进制/文本帧，建议优先使用官方 SDK 封装。
 
-## 面向开发者：简洁实用提示
+## 面向开发者：快速实践提示
 
-- ✅ **必做**：前端解析流式响应时，务必按 SSE 规范处理 `data:` 行，忽略 `event:`、`id:` 等可选字段；推荐使用成熟库（如 `EventSource` 浏览器原生 API 或 `fetch-event-source`）。
-- ✅ **必做**：流式调用需保持 HTTP 连接活跃，服务端默认超时 60 秒；若生成耗时长（如长文摘要），请增大客户端 `timeout` 并处理 `AbortError`。
-- ❌ **禁止**：不要在流式响应中依赖 `usage.total_tokens` 的实时准确性——该字段仅在最终 `done` 事件中完整准确，中间 chunk 的 `usage` 为当前累计估算值。
-- 💡 **技巧**：结合 `incremental_output=true` 与前端防抖（debounce），可实现平滑的打字机效果；对 Markdown 内容，建议每次只对新增片段做语法高亮，而非全量重渲染。
-- 📦 **调试**：使用 `curl -N` 或 Postman 的 Stream 开关可快速验证流式行为；SDK 日志开启 `DEBUG` 级别可查看原始 SSE 数据流。
+- ✅ **首选 SDK**：Python 使用 `dashscope.Generation.call(..., stream=True)`；JavaScript 使用 `DashScopeClient.chat(..., { stream: true })`；Realtime 场景务必使用 `@dashscope/realtime-sdk`。  
+- ✅ **前端解析 SSE**：监听 `onmessage` 事件，用 `JSON.parse(event.data)` 解析每条 `data:` 内容，注意过滤空行和 `event:` 行。  
+- ✅ **错误防御**：流式请求失败时，服务端可能返回非 SSE 的 `application/json` 错误体（如 `400 Bad Request`），需检查响应头 `Content-Type` 再决定解析逻辑。  
+- ⚠️ **超时控制**：HTTP 流式请求默认超时 60 秒，长文本生成建议显式设置 `timeout=120`（SDK 支持）；Realtime WebSocket 连接需自行实现心跳保活与重连。  
+- 🚫 **禁止行为**：不要在流式响应中修改 `input.messages` 或 `parameters` 并重发；不要对 `embedding`/`rerank` 模型设置 `stream=true` 期望获得流式结果。
 
 ## 关联主题页
 
-- [preparations](../api/preparations.md)
-- [qwen api reference](../api/qwen-api-reference.md)
 - [model experience](../guides/model-experience.md)
+- [realtime api directory](../api/realtime-api-directory.md)
 - [application support](../guides/application-support.md)
-- [frameworks](../api/frameworks.md)
+- [more about models](../api/more-about-models.md)
 
 

@@ -8,7 +8,7 @@ Qwen-Audio-Realtime 用于实时语音对话。模型支持文本和流式音频
 
 选择协议时，可先查看 [Realtime API 接入方式选择](https://help.aliyun.com/zh/model-studio/realtime-api-overview#rtov-protocol-selection)。各型号支持的输入、输出和事件字段见对应的接入与事件参考。
 
--   [WebSocket](raw/_short/audio-realtime-websocket-access-5f0da4977f0f021b.md) 通过事件收发音频和文本。
+-   [WebSocket](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/audio-realtime-websocket-access.md) 通过事件收发音频和文本。
     
     浏览器原生支持 WebSocket。接入模型时仍需满足鉴权要求，长期 API Key 应保存在服务端。
     

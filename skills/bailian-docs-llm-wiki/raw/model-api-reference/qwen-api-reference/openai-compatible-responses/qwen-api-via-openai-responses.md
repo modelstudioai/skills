@@ -288,6 +288,54 @@ PDF 的页数上限取决于 `ocr_options` 中的 `task`：设置为 `document_p
 
 标注信息。
 
+**Custom Tool Call** `object` （可选）
+
+模型返回的自定义工具调用。执行工具后，将调用项和对应的 `custom_tool_call_output` 追加到下一轮请求的 `input` 中。
+
+属性
+
+**type** `string` **（必选）**
+
+固定为 `custom_tool_call`。
+
+**id** `string` （可选）
+
+上一轮响应中的调用项 ID，原样回传。
+
+**name** `string` **（必选）**
+
+工具名称，例如 `emit_code`。
+
+**input** `string` **（必选）**
+
+自定义工具的自由文本输入，仅当 `type` 为 `custom_tool_call` 时存在。
+
+**call\_id** `string` **（必选）**
+
+工具调用标识符，使用模型返回的 `call_id`。
+
+**namespace** `string` （可选）
+
+工具所属的命名空间。调用命名空间内的 `function` 或 `custom` 工具时返回，回传调用项时保留该字段。
+
+**Custom Tool Call Output** `object` （可选）
+
+自定义工具的执行结果，通过 `call_id` 关联对应的调用。
+
+属性
+
+**type** `string` **（必选）**
+
+固定为 `custom_tool_call_output`。
+
+**call\_id** `string` **（必选）**
+
+工具调用标识符，使用模型返回的 `call_id`。
+
+**output** `string` **（必选）**
+
+自定义工具的执行结果，通过 `call_id` 关联对应的调用。
+
 **Function Call** `object` （可选）
 
 模型决定调用外部工具时生成的结构化指令。
@@ -305,6 +353,10 @@ Function Call 的唯一标识，来自上一轮响应。
 **name** `string` **（必选）**
 
 工具函数名称。
+
+**namespace** `string` （可选）
+
+工具所属的命名空间。调用命名空间内的 `function` 或 `custom` 工具时返回，回传调用项时保留该字段。
 
 **arguments** `string` **（必选）**
 
@@ -499,7 +551,7 @@ array 元素类型
 
 **tools** `array` （可选）
 
-模型在生成响应时可调用的工具数组。支持内置工具和自定义 function 工具，可混合使用。
+模型在生成响应时可调用的工具数组。支持内置工具、自定义 `function` 和 `custom` 工具；可通过 `namespace` 将相关工具分组。
 
 `kimi-k3.1-pro`（阿里云百炼部署）支持 `web_search`、`web_extractor` 和 `code_interpreter` 三项内置工具，适用于北京、新加坡、美国（弗吉尼亚）、德国（法兰克福）、日本（东京）和中国香港。
 
@@ -674,6 +726,118 @@ mcp_tool = {
     "required": ["city"]
   }
 }]
+```
+
+**自定义工具****custom**
+
+自定义格式工具，调用输入为自由文本，可通过 Lark 或 Regex 文法描述输入格式。模型返回 `custom_tool_call`，工具输入位于 `input` 字段。
+
+属性
+
+**type** `string` **（必选）**
+
+固定为 `custom`。
+
+**name** `string` **（必选）**
+
+工具名称，例如 `emit_code`。
+
+**description** `string` （可选）
+
+工具描述，说明用途及调用时机。
+
+**format** `object` （可选）
+
+工具输入的格式配置。
+
+若工具依赖特定的文法结构（如 `apply_patch` 补丁文件格式），建议将 `format.type` 设置为 `grammar` 并提供文法规则，帮助模型按指定格式生成调用输入。
+
+当 `format.type` 为 `grammar` 时，需配对提供 `syntax` 和 `definition`；为 `text` 时，表示无约束的自由文本，`syntax` 和 `definition` 均可选。
+
+属性
+
+**type** `string` （可选）
+
+取值为 `text`（无特定文法约束的自由文本）或 `grammar`（文法格式）。
+
+**syntax** `string` （可选）
+
+文法语法类型：`lark` 或 `regex`。
+
+**definition** `string` （可选）
+
+文法规则定义。Lark 使用产生式，Regex 使用正则表达式。
+
+以下对象作为 `tools` 数组的一个元素传入。
+
+```
+{
+  "type": "custom",
+  "name": "apply_patch",
+  "description": "Use the `apply_patch` tool to edit files. This is a FREEFORM tool, so do not wrap the patch in JSON.",
+  "format": {
+    "type": "grammar",
+    "syntax": "lark",
+    "definition": "start: begin_patch hunk+ end_patch\nbegin_patch: \"*** Begin Patch\" LF\nend_patch: \"*** End Patch\" LF?\n\nhunk: add_hunk | delete_hunk | update_hunk\nadd_hunk: \"*** Add File: \" filename LF add_line+\ndelete_hunk: \"*** Delete File: \" filename LF\nupdate_hunk: \"*** Update File: \" filename LF change_move? change?\n\nfilename: /[^\\n]+/\nadd_line: ADD_LINE\nADD_LINE: /\\+[^\\n]*\\n/\n\nchange_move: \"*** Move to: \" filename LF\nchange: (change_context | change_line)+ eof_line?\nchange_context: CONTEXT_LINE\nCONTEXT_LINE: /@@[^\\n]*\\n/\nchange_line: CHANGE_LINE\nCHANGE_LINE: /[+\\- ][^\\n]*\\n/\neof_line: \"*** End of File\" LF\n\n%import common.LF\n"
+  }
+}
+```
+**命名空间****namespace**
+
+将相关的 `function` 或 `custom` 工具归拢在同一命名空间中。
+
+属性
+
+**type** `string` **（必选）**
+
+固定为 `namespace`。
+
+**name** `string` **（必选）**
+
+命名空间名称，例如 `crm`。
+
+**description** `string` （可选）
+
+命名空间的整体描述。
+
+**tools** `array[object]` **（必选）**
+
+命名空间内的工具列表。每个元素为 `function` 或 `custom` 工具对象，字段与对应工具定义相同。
+
+以下对象作为 `tools` 数组的一个元素传入。
+
+```
+{
+  "type": "namespace",
+  "name": "crm",
+  "description": "Customer Relationship Management tools",
+  "tools": [
+    {
+      "type": "function",
+      "name": "get_customer",
+      "description": "Get customer details by ID",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "customer_id"
+        ]
+      }
+    },
+    {
+      "type": "custom",
+      "name": "import_patch",
+      "description": "Import customer batch patch",
+      "format": {
+        "type": "text"
+      }
+    }
+  ]
+}
 ```
 
 **tool\_choice** `string or object` （可选）默认值为 `auto`
@@ -1920,6 +2084,7 @@ Session 缓存按精确匹配命中，规则如下：
 -   `message`：消息类型，包含模型最终生成的回复内容。
 -   `reasoning`：推理类型，设置 `reasoning.effort`（非 `none`）或开启思考模式时返回。推理 Token 会被计入 `output_tokens_details.reasoning_tokens` 中，按推理 Token 计费。
 -   `function_call`：函数调用类型，使用自定义 `function` 工具时返回。需要处理函数调用并返回结果。
+-   `custom_tool_call`: 自定义工具调用类型，使用 `custom` 工具时返回。
 -   `web_search_call`：搜索调用类型，使用 `web_search` 工具时返回。
 -   `code_interpreter_call`：代码执行类型，使用 `code_interpreter` 工具时返回。
 -   `web_extractor_call`：网页抽取类型，使用 `web_extractor` 工具时返回。需要配合 `web_search` 工具一起使用。
@@ -1938,15 +2103,23 @@ Session 缓存按精确匹配命中，规则如下：
 
 **status** `string`
 
-输出项状态。可选值：`completed`（完成）、`in_progress`（生成中）。当 `type` 不为`reasoning`时存在。
+输出项状态。可选值：`completed`（完成）、`in_progress`（生成中）。当 `type` 为 `reasoning` 或 `custom_tool_call` 时不返回此字段。
 
 **name** `string`
 
-工具或函数名称。当 `type` 为 `function_call`、`web_search_image_call`、`image_search_call`、`mcp_call` 时存在。
+工具或函数名称。当 `type` 为 `function_call` 或 `custom_tool_call`、`web_search_image_call`、`image_search_call`、`mcp_call` 时存在。
 
 对于 `web_search_image_call` 和 `image_search_call`，值分别固定为 `"web_search_image"` 和 `"image_search"`。
 
 对于 `mcp_call`，值为 MCP 服务中被调用的具体函数名（如 `amap-maps-maps_geo`）。
+
+**namespace** `string` （可选）
+
+工具所属的命名空间。调用命名空间内的 `function` 或 `custom` 工具时返回，回传调用项时保留该字段。
+
+**input** `string` （可选）
+
+自定义工具的自由文本输入，仅当 `type` 为 `custom_tool_call` 时存在。
 
 **arguments** `string`
 
@@ -1959,7 +2132,7 @@ Session 缓存按精确匹配命中，规则如下：
 
 **call\_id** `string`
 
-函数调用的唯一标识符。仅当 `type` 为 `function_call` 时存在。在返回函数调用结果时，需要通过此 ID 关联请求与响应。
+函数调用的唯一标识符。仅当 `type` 为 `function_call` 或 `custom_tool_call` 时存在。在返回函数调用结果时，需要通过此 ID 关联请求与响应。
 
 **content** `array`
 

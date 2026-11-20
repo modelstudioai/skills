@@ -18,6 +18,15 @@ WebSocket 接口使用 `wss://` 协议，地址如下：
 
 调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
+## 可用的 SDK
+
+-   [Python SDK](https://help.aliyun.com/zh/model-studio/realtime-websocket-python-sdk-qwen-audio-tts-cosyvoice#model-qwen-audio-tts)
+-   [Java SDK](https://help.aliyun.com/zh/model-studio/realtime-websocket-java-sdk-qwen-audio-tts-cosyvoice#model-qwen-audio-tts)
+-   [Node.js SDK](raw/_short/qwen-audio-tts-nodejs-sdk-7cea26a2d48961a9.md)
+-   [Android SDK](https://help.aliyun.com/zh/model-studio/realtime-websocket-android-sdk-qwen-audio-tts-cosyvoice#model-qwen-audio-tts)
+-   [iOS SDK](https://help.aliyun.com/zh/model-studio/realtime-websocket-ios-sdk-qwen-audio-tts-cosyvoice#model-qwen-audio-tts)
+-   [HarmonyOS SDK](https://help.aliyun.com/zh/model-studio/realtime-websocket-harmonyos-sdk-qwen-audio-tts-cosyvoice#model-qwen-audio-tts)
+
 **重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
 
 -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
@@ -117,7 +126,7 @@ WebSocket 接口使用 `wss://` 协议，地址如下：
 
 #### Java
 
-建议使用 Java DashScope SDK 进行开发，请参见[Qwen-Audio-TTS Java SDK](raw/_short/qwen-audio-tts-java-sdk-ca1cb7fe793863ec.md)。
+建议使用 Java DashScope SDK 进行开发，请参见[Qwen-Audio-TTS Java SDK](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-java-sdk)。
 
 以下是 Java WebSocket 直连示例，运行前请导入以下依赖：
 
@@ -306,7 +315,7 @@ public class TTSWebSocketClient extends WebSocketClient {
 
 #### Python
 
-建议使用 Python DashScope SDK 进行开发，请参见[Qwen-Audio-TTS Python SDK](raw/_short/qwen-audio-tts-python-sdk-b9148d99130a0108.md)。
+建议使用 Python DashScope SDK 进行开发，请参见[Qwen-Audio-TTS Python SDK](https://help.aliyun.com/zh/model-studio/realtime-websocket-python-sdk-qwen-audio-tts-cosyvoice#model-qwen-audio-tts)。
 
 以下是 Python WebSocket 直连示例，运行前请导入以下依赖：
 

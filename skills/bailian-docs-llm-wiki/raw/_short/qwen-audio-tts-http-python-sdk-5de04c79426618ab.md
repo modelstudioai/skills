@@ -330,6 +330,18 @@ def stream(self,
 }
 ```
 
+`enable_markdown_filter`
+
+`bool`
+
+否
+
+是否启用 Markdown 过滤。启用后，服务会在合成前将 Markdown 转换成适合朗读的文本。
+
+默认值：`False`。设为 `True` 启用。
+
+通过 `extra_input={"enable_markdown_filter": True}` 启用。
+
 **返回值**：
 
 -   **非流式模式**（`synthesize`）：返回结果对象（`HttpSynthesis`），包含以下属性：

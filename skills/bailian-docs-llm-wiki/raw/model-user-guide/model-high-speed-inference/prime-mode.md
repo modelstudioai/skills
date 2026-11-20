@@ -30,6 +30,8 @@ curl -X POST https://{workspace_id}.cn-beijing.maas.aliyuncs.com/compatible-mode
 ## 支持的模型
 
 > 模型支持的能力、使用限制与原版模型相同
+> 
+> wan3.0-video-prime 的输入视频和输出视频均按**秒数**计费，价格由输出视频的分辨率决定。计费时长 = 输入视频时长 + 输出视频时长。
 
 #### 华北2（北京）
 
@@ -42,6 +44,14 @@ curl -X POST https://{workspace_id}.cn-beijing.maas.aliyuncs.com/compatible-mode
 **输出单价**
 
 **缓存命中**
+
+kimi-k3.1-pro-prime
+
+¥26
+
+¥136
+
+¥1.3
 
 glm-5.3-prime
 
@@ -88,6 +98,14 @@ wan3.0-video-prime
 **输出单价**
 
 **缓存命中**
+
+kimi-k3.1-pro-prime
+
+¥29.167
+
+¥145.833
+
+¥1.458
 
 glm-5.3-prime
 

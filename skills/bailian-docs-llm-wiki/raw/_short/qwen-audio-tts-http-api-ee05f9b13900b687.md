@@ -256,6 +256,12 @@
 }
 ```
 
+**enable\_markdown\_filter** `boolean`（可选）
+
+是否启用 Markdown 过滤。启用后，服务会在合成前将 Markdown 转换成适合朗读的文本。
+
+默认值：`false`。设为 `true` 启用。
+
 非流式
 
 ```

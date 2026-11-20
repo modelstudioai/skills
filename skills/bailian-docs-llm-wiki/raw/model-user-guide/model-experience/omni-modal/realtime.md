@@ -10,7 +10,7 @@
 
 实时音视频对话优先使用 **Qwen3.8-Omni-Flash-Realtime**。模型支持音视频双工交互，接收文本、图片、流式音频和视频输入，返回文本与音频。
 
--   **工具调用与联网搜索**：支持[自定义 Function Calling](https://help.aliyun.com/zh/model-studio/qwen-function-calling#rt02realtime01)和[远程 MCP 工具](https://help.aliyun.com/zh/model-studio/omni-realtime-interaction-process#qwen38-mcp-flow)，或启用[联网搜索](#f6g7h8i9j0s7k)。
+-   **工具调用与联网搜索**：支持[自定义 Function Calling](https://help.aliyun.com/zh/model-studio/qwen-function-calling#rt02realtime01)和[远程 MCP 工具](https://help.aliyun.com/zh/model-studio/omni-realtime-websocket-access#qwen38-mcp-flow)，或启用[联网搜索](#f6g7h8i9j0s7k)。
 -   **语音轮次检测**：支持 `semantic_vad`，可过滤附和声、背景音等无意义声音，减少语音轮次误触发。
 -   **多通道音频与视频聚合**：WebSocket 接入支持 1、2、4 声道音频；视频聚合可在不需要细粒度视觉信息时降低计算开销。详见[输入与输出功能](#realtime-advanced-config)。
 -   **语言**：支持 [113 种语种和方言](https://help.aliyun.com/zh/model-studio/qwen-omni#d54e85c641oux)的语音识别，以及 [36 种语种和方言](https://help.aliyun.com/zh/model-studio/qwen-omni#d54e85c641oux)的语音生成。
@@ -3481,7 +3481,7 @@ Function Calling 的工具结果通过 `conversation.item.create` 回填，`item
 
 以下配置适用于 Qwen3.8-Omni-Flash-Realtime。
 
-在 `session.tools` 中配置公网 HTTPS MCP Streamable HTTP 服务；仅在没有活动 Response 时更新 MCP 配置。默认需要审批。先确认工具发现完成，再发起需要该工具的 Response。执行结果、拒绝和失败处理以及续答步骤见[MCP 交互流程](https://help.aliyun.com/zh/model-studio/omni-realtime-interaction-process#qwen38-mcp-flow)。
+在 `session.tools` 中配置公网 HTTPS MCP Streamable HTTP 服务；仅在没有活动 Response 时更新 MCP 配置。默认需要审批。先确认工具发现完成，再发起需要该工具的 Response。执行结果、拒绝和失败处理以及续答步骤见[MCP 交互流程](https://help.aliyun.com/zh/model-studio/omni-realtime-websocket-access#qwen38-mcp-flow)。
 
 ### 联网搜索
 
@@ -3820,7 +3820,7 @@ Qwen-Omni-Realtime 模型根据不同模态（音频、图像）对应的Token�
 
 输出语音时，`qwen3.8-omni-flash-realtime` 的音频及对应文本分别按音频输出和文本输出单价计费；Qwen3.5-Omni-Realtime 系列仅对音频计费，对应文本不计费。
 
-MCP 工具调用不额外收费，模型推理仍按模型价格计费。MCP 的调用流程与使用限制见[MCP 交互流程](https://help.aliyun.com/zh/model-studio/omni-realtime-interaction-process#qwen38-mcp-flow)。
+MCP 工具调用不额外收费，模型推理仍按模型价格计费。MCP 的调用流程与使用限制见[MCP 交互流程](https://help.aliyun.com/zh/model-studio/omni-realtime-websocket-access#qwen38-mcp-flow)。
 
 **说明**在多轮实时对话中，模型每次生成响应时，需要将上下文窗口内的所有历史对话内容（包括之前各轮的音频、图片和文本）与本轮新增输入一并作为输入 Token 进行处理。因此，输入 Token 会随对话轮次的增加而逐轮累积，而非仅计算当前轮次的新增输入。
 
@@ -4000,6 +4000,6 @@ A：如果没有收到 `conversation.item.input_audio_transcription.completed` �
     
 -   [WebRTC 接入](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/omni-realtime-webrtc-access.md)
     
--   [Python SDK](raw/_short/omni-realtime-python-sdk-0d3c931c58118ee5.md)
+-   [Python SDK](raw/_short/realtime-websocket-python-sdk-qwen-omni-realtime-b04c23b57a9c2f51.md)
     
--   [Java SDK](raw/_short/omni-realtime-java-sdk-5b43428f0b0df256.md)
+-   [Java SDK](raw/_short/omni-realtime-java-sdk-91c6c46e0976cc89.md)

@@ -298,7 +298,7 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-gen
 
 -   **Qwen-Audio-TTS**：[WebSocket 接入](raw/_short/qwen-audio-tts-websocket-api-6f9e2d20cf04ea96.md)、[AOQ 接入](raw/model-api-reference/realtime-api-directory/realtime-tts-model-apis/qwen-audio-tts-api/qwen-audio-tts-aoq-access.md)
 -   **CosyVoice**：[WebSocket 接入](raw/_short/cosyvoice-websocket-api-5929268331632771.md)、[AOQ 接入](raw/_short/cosyvoice-aoq-access-c0e8e4035486f433.md)
--   **Qwen-Audio-Realtime**：[WebSocket 接入](raw/_short/audio-realtime-websocket-access-5f0da4977f0f021b.md)、[WebRTC 接入](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/audio-realtime-webrtc-access.md)、[AOQ 接入](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/audio-realtime-aoq-access.md)
+-   **Qwen-Audio-Realtime**：[WebSocket 接入](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/audio-realtime-websocket-access.md)、[WebRTC 接入](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/audio-realtime-webrtc-access.md)、[AOQ 接入](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/audio-realtime-aoq-access.md)
 -   **MiniMax**：[非实时语音合成 API 参考](raw/_short/minimax-synchronous-speech-synthesis-api-cddb40af595ff320.md)
 
 ## 音频要求

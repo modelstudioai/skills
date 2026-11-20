@@ -206,30 +206,6 @@ thinking (qwen4-max)
 
 缓存有效期，支持 `5m` 和 `1h`，默认为 `5m`。
 
-document (qwen4-max)
-
-**type** `string` **（必选）**
-
-固定为 `document`。
-
-**source** `object` **（必选）**
-
-PDF数据来源。
-
-属性
-
-**type** `string` **（必选）**
-
-`base64`
-
-**media\_type** `string`
-
-PDF的 MIME 类型，如 `application/pdf`。当 `type` 为 `base64` 时必填。
-
-**data** `string`
-
-Base64 编码的PDF数据。当 `type` 为 `base64` 时必填。
-
 **图片信息**（需使用视觉模型）
 
 属性
@@ -292,8 +268,6 @@ Base64 编码的视频数据。当 `type` 为 `base64` 时必填。
 
 **PDF 文档信息**
 
-qwen3.8-max、qwen3.8-flash 及 qwen4 系列模型支持通过 Anthropic 兼容 Messages API 直接传入 PDF 文件 URL。在 `messages[].content` 中使用 `type: "document"` 内容块，将 `source.type` 设置为 `url`，并在 `source.url` 中指定 PDF 文件 URL。
-
 属性
 
 **type** `string` **（必选）**
@@ -308,31 +282,6 @@ PDF 文档的数据来源，包含以下字段：
 -   `url` (`string`): 当 `source.type` 为 `url` 时必填，指定 PDF 文件 URL。
 -   `media_type` (`string`): 当 `source.type` 为 `base64` 时必填，设置为 `application/pdf`。
 -   `data` (`string`): 当 `source.type` 为 `base64` 时必填，传入不含 Data URI 前缀的 Base64 编码 PDF 数据。
-
-以下示例使用华北2（北京）地域。将 `{WorkspaceId}` 替换为业务空间 ID，并将环境变量 `DASHSCOPE_API_KEY` 设置为自己的百炼 API Key。
-
-```
-curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/v1/messages' \
-  --header 'Content-Type: application/json' \
-  --header "x-api-key: $DASHSCOPE_API_KEY" \
-  --data '{
-    "model": "qwen3.8-max",
-    "max_tokens": 1024,
-    "messages": [{
-      "role": "user",
-      "content": [
-        {
-          "type": "document",
-          "source": {
-            "type": "url",
-            "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260616/qmycjl/1506.02640v5.pdf"
-          }
-        },
-        {"type": "text", "text": "总结一下这个PDF文档的内容"}
-      ]
-    }]
-  }'
-```
 
 PDF 理解的使用说明见 [PDF理解](raw/model-user-guide/model-experience/text-generation-model/tool-calls/pdf-understanding.md)。
 

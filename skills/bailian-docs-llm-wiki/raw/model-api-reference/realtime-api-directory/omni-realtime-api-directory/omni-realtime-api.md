@@ -2,13 +2,13 @@
 
 Qwen-Omni-Realtime 可结合语音和画面进行实时对话。模型接收文本、流式音频和视觉输入，可返回文本和音频。
 
-`qwen3.8-omni-flash-realtime`、`qwen3.5-omni-plus-realtime`、`qwen3.5-omni-flash-realtime` 均支持 WebSocket、WebRTC 和 AOQ。历史型号 `qwen3-omni-flash-realtime-2025-09-15` 的 WebSocket 资料参见 [Python SDK](raw/_short/omni-realtime-python-sdk-0d3c931c58118ee5.md)和[客户端事件](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md)。
+`qwen3.8-omni-flash-realtime`、`qwen3.5-omni-plus-realtime`、`qwen3.5-omni-flash-realtime` 均支持 WebSocket、WebRTC 和 AOQ。历史型号 `qwen3-omni-flash-realtime-2025-09-15` 的 WebSocket 资料参见 [Python SDK](raw/_short/realtime-websocket-python-sdk-qwen-omni-realtime-b04c23b57a9c2f51.md)和[客户端事件](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md)。
 
 ## 协议选型
 
 选择协议时，可先查看 [Realtime API 接入方式选择](https://help.aliyun.com/zh/model-studio/realtime-api-overview#rtov-protocol-selection)。各型号支持的输入、输出和事件字段见对应的接入与事件参考。
 
--   通过 [WebSocket](raw/_short/omni-realtime-websocket-access-3f16ac0799ebc899.md) 发送图片或视频帧时，需先发送至少一次音频输入事件，再发送图像事件。
+-   通过 [WebSocket](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/omni-realtime-websocket-access.md) 发送图片或视频帧时，需先发送至少一次音频输入事件，再发送图像事件。
     
     浏览器原生支持 WebSocket。接入模型时仍需满足鉴权要求，长期 API Key 应保存在服务端。
     

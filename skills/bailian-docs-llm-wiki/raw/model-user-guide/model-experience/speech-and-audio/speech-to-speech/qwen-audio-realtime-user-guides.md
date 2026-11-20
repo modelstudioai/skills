@@ -1646,7 +1646,7 @@ RPM 限制每分钟的 WebSocket 建连请求次数。同一连接内的多轮�
 
 通过 AOQ 接入的流程和示例，请参见[AOQ 接入](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/audio-realtime-aoq-access.md)。协议选型和参考入口请参见[API 参考](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/voice-conversation-api-references.md)。
 
--   [WebSocket API](raw/_short/audio-realtime-websocket-access-5f0da4977f0f021b.md)
+-   [WebSocket API](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/audio-realtime-websocket-access.md)
 -   [客户端事件](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/fun-audiochat-client-events.md)
 -   [服务端事件](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/qwen-audio-realtime-server-events.md)
 -   [WebRTC 接入](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/audio-realtime-webrtc-access.md)

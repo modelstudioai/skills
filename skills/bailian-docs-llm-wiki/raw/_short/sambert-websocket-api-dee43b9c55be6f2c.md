@@ -2,6 +2,8 @@
 
 本文介绍通过WebSocket连接访问Sambert实时语音合成服务的交互流程、接口地址和请求头。
 
+使用 Python 调用模型时，请参见 [Sambert Python SDK](raw/_short/realtime-websocket-python-sdk-sambert-fadce15cce38cbc8.md)。
+
 DashScope SDK目前仅支持Java和Python。使用其他编程语言时，可通过WebSocket连接与服务进行通信。
 
 **用户指南：**关于模型介绍和选型建议请参见[语音合成](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/tts-model.md)。
@@ -813,3 +815,11 @@ function checkAndClearOutputFile(filePath) {
 
 main().catch(console.error);
 ```
+
+## 可用的 SDK
+
+-   [Python SDK](raw/_short/realtime-websocket-python-sdk-sambert-fadce15cce38cbc8.md)
+-   [Java SDK](raw/_short/sambert-java-sdk-cb02e75e7f8b6608.md)
+-   [Android SDK](raw/_short/sambert-android-sdk-bfefef75815d0eec.md)
+-   [iOS SDK](raw/_short/sambert-ios-sdk-e6f625ea2a1c10cd.md)
+-   [HarmonyOS SDK](raw/_short/sambert-harmonyos-sdk-f1b2ba5ea827b7d2.md)

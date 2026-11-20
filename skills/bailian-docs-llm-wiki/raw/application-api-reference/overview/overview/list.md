@@ -1,18 +1,16 @@
-# 列出版本
+# 查询工具列表
 
-分页查询 Skill 的版本，新版本在前。
+查询指定 MCP 服务提供的工具名称、描述和入参 schema。
 
 ## 接口
 
-**GET** `/api/v1/skills/{skill_id}/versions`
+**GET** `/api/v1/mcp/servers/{mcpCode}/tools`
 
-分页查询 Skill 的版本，新版本在前。自定义 Skill 返回未删除的全部版本，包含 `checking` 和 `rejected` 状态；官方 Skill 仅返回 `active` 版本。
+返回指定 MCP 服务当前可用的工具列表。
 
 ## 请求参数
 
 参数
-
-位置
 
 类型
 
@@ -20,41 +18,17 @@
 
 说明
 
-skill\_id
-
-Path
+mcpCode
 
 `string`
 
 是
 
-Skill ID
-
-pageNo
-
-Query
-
-`integer`
-
-否
-
-页码，默认 1，最小 1
-
-pageSize
-
-Query
-
-`integer`
-
-否
-
-单页条数，默认 20，取值范围 1 到 100
-
-`pageNo × pageSize` 不能超过 10000。
+MCP 编码
 
 ## 响应
 
-`data` 为分页对象，`items` 每项为 `SkillVersionDTO`。
+`data` 为工具数组，每个工具包含以下字段：
 
 字段
 
@@ -62,34 +36,52 @@ Query
 
 说明
 
-items
+name
 
-`array<SkillVersionDTO>`
+`string / null`
 
-当前页版本列表
+工具名称
 
-total
+description
 
-`long`
+`string / null`
 
-版本总数
+工具描述
 
-page\_no
+inputSchema
 
-`integer`
+`object / null`
 
-当前页码
+工具入参 schema
 
-page\_size
+inputSchema.type
 
-`integer`
+`string / null`
 
-单页条数
+通常为 `object`
+
+inputSchema.properties
+
+`map<string,object> / null`
+
+参数定义
+
+inputSchema.required
+
+`array<string> / null`
+
+必填参数名
+
+inputSchema.additionalProperties
+
+`boolean / null`
+
+是否允许额外参数
 
 ## 示例
 
 ```
-curl "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/skills/skill_abc123/versions?pageNo=1&pageSize=10" \
+curl "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/mcp/servers/mcp-a1b2c3d4e5f6g7h8/tools" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 ```
@@ -97,31 +89,24 @@ curl "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/skills/skill_ab
   "success": true,
   "error_code": null,
   "error_msg": null,
-  "data": {
-    "items": [
-      {
-        "id": "skillver_NWQ3YmQ1OTRjNGFmxxxxxx",
-        "type": "skill_version",
-        "skill_id": "skill_abc123",
-        "display_name": "workflow-automation",
-        "display_description": "将多个技能串联成自动化工作流",
-        "version": "1.0",
-        "status": "rejected",
-        "created_at": "2026-05-11T09:25:43Z",
-        "updated_at": "2026-05-11T09:31:01Z",
-        "additional_properties": {
-          "error_info": {
-            "/index.js": "[Dangerous Tools Without Confirmation] Line 179: ...",
-            "/SKILL.md": "[Dangerous Tools Without Confirmation] Line 10: ..."
+  "data": [
+    {
+      "name": "get_weather",
+      "description": "查询指定城市的天气",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "city": {
+            "type": "string",
+            "description": "城市名称"
           }
-        }
+        },
+        "required": ["city"],
+        "additionalProperties": false
       }
-    ],
-    "total": 1,
-    "page_no": 1,
-    "page_size": 10
-  },
-  "request_id": "28e054b1-2cc4-4e0f-bac5-0c1395b1d7ae"
+    }
+  ],
+  "request_id": "6f1c2a8e-3b0d-4c55-9a0e-2f7d1c9b8a11"
 }
 ```
 
@@ -133,26 +118,16 @@ error\_code
 
 说明
 
-401
-
-WORKSPACE\_ID\_ILLEGAL
-
-身份信息缺失或无效
-
 400
 
-SKILL\_ID\_IS\_NULL
+\-
 
-`skill_id` 为空白
-
-400
-
-INVALID\_PARAMETER
-
-`pageNo` 或 `pageSize` 非整数、越界或超出分页范围
+服务未开通、实例异常或工具列表为空，错误码由 MCP 服务返回
 
 500
 
-SKILL\_NOT\_EXIST
+InternalError
 
-Skill 不存在、已删除或无权访问
+服务内部错误
+
+**说明**One Key MCP 服务无需提前开通。首次查询工具或调用工具时，服务可能自动完成开通。

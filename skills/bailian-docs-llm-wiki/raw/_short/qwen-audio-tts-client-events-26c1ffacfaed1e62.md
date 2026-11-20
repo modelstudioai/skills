@@ -245,6 +245,12 @@ SSML 的使用限制（支持的模型、音色和接口），请参见[使用�
 }
 ```
 
+`enable_markdown_filter`boolean可选
+
+是否启用 Markdown 过滤。启用后，服务会在合成前将 Markdown 转换成适合朗读的文本。
+
+默认值：`false`。设为 `true` 启用。
+
 `input`object必填
 
 输入数据：固定为空对象 `{}`，待合成文本通过 `continue-task` 指令发送。

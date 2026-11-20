@@ -233,9 +233,9 @@ SSML 的使用限制（支持的模型、音色和接口），请参见[使用�
 
 `enable_markdown_filter`boolean可选
 
-**说明**仅cosyvoice-v3-flash复刻音色支持该功能。
+**说明**cosyvoice-v2 不支持此功能。
 
-是否启用 Markdown 过滤。启用该功能后，系统在合成语音前自动过滤输入文本中的 Markdown 标记符号，避免将其朗读为文字内容。
+是否启用 Markdown 过滤。启用后，服务会在合成前将 Markdown 转换成适合朗读的文本。
 
 默认值：`false`。
 

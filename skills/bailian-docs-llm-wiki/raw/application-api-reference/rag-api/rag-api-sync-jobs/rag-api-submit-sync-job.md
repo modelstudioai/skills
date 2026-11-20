@@ -102,11 +102,14 @@ curl -X POST "$BASE_URL/api/v1/indices/rag/index/job/create" \
   -H "Content-Type: application/json" \
   -d '{
     "indexId": "your-kb-id",
+    "sourceType": "DATA_CENTER_CATEGORY",
     "categoryIds": ["your-category-id"]
   }'
 ```
 
 其中 `BASE_URL` 为 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com`（`{workspace_id}` 为业务空间 ID），`BAILIAN_API_KEY` 为阿里云百炼 API Key。
+
+**说明**按类目追加导入只导入类目中当前存在的文件，不会删除知识库中已从类目移除的文档。同名文件重新上传可能生成新的文件 ID，也不会自动替换知识库中的旧文档。需要删除时，请先通过 [deleteFile](raw/application-api-reference/rag-api/rag-api-data-import/rag-api-delete-file.md) 删除数据集文件，再通过[删除文档](raw/application-api-reference/rag-api/rag-api-documents/rag-api-delete-document.md)删除知识库中的对应文档；如果只删知识库而保留数据集文件，下次按类目追加导入会将其重新导入。
 
 ## 响应示例
 

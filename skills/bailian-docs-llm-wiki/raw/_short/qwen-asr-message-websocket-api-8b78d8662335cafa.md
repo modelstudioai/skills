@@ -2,6 +2,8 @@
 
 本文介绍通过 WebSocket 连接访问 Qwen-Audio-3.1-ASR-Flash-Message 实时语音识别服务的接口地址、请求头和交互流程。
 
+使用 Python 调用模型时，请参见 [Qwen-Audio-ASR-Message Python SDK](https://help.aliyun.com/zh/model-studio/realtime-websocket-python-sdk-qwen-audio-asr-fun-asr#model-qwen-audio-asr-message)。
+
 ## 接口地址
 
 WebSocket 接口地址如下，必须使用 `wss://` 协议：
@@ -1273,3 +1275,12 @@ function handleEvent($conn, $response, $loop, $audio_file_path, $taskId) {
     }
 }
 ```
+
+## 可用的 SDK
+
+-   [Python SDK](https://help.aliyun.com/zh/model-studio/realtime-websocket-python-sdk-qwen-audio-asr-fun-asr#model-qwen-audio-asr-message)
+-   [Java SDK](https://help.aliyun.com/zh/model-studio/realtime-websocket-java-sdk-qwen-audio-asr-fun-asr#model-qwen-audio-asr-message)
+-   [Node.js SDK](https://help.aliyun.com/zh/model-studio/realtime-websocket-nodejs-sdk-qwen-audio-asr-fun-asr#model-qwen-audio-asr-message)
+-   [Android SDK](https://help.aliyun.com/zh/model-studio/realtime-websocket-android-sdk-qwen-audio-asr-fun-asr#model-qwen-audio-asr-message)
+-   [iOS SDK](https://help.aliyun.com/zh/model-studio/realtime-websocket-ios-sdk-qwen-audio-asr-fun-asr#model-qwen-audio-asr-message)
+-   [HarmonyOS SDK](https://help.aliyun.com/zh/model-studio/realtime-websocket-harmonyos-sdk-qwen-audio-asr-fun-asr#model-qwen-audio-asr-message)

@@ -16,6 +16,8 @@
 
 **警告**文件 ID 参数名为 `docIds`，不是 `file_ids` 或 `fileIds`。但校验失败时错误信息中的参数名为 `file_ids`。
 
+### 基本参数
+
 字段
 
 必填
@@ -30,15 +32,15 @@
 
 string
 
-知识库名称，1-20 字符
+知识库名称，1-20 字符，业务空间内唯一
 
 `description`
 
-是
+否
 
 string
 
-知识库描述，1-200 字符
+知识库描述，0-500 字符，默认为空
 
 `structureType`
 
@@ -46,7 +48,7 @@ string
 
 string
 
-结构类型：`unstructured`（非结构化）或 `structured`（结构化）
+结构类型：`unstructured`（非结构化）或 `structured`（结构化）。`document`、`image`、`multimedia` 搭配 `unstructured`，`table` 搭配 `structured`
 
 `knowledgeType`
 
@@ -54,7 +56,7 @@ string
 
 string
 
-知识库类型，对应控制台的知识库类型：`document`（文档搜索）、`table`（数据查询）、`image`（图片问答）、`multimedia`（音视频搜索）。取值需与 `structureType` 匹配：`document`、`image` 和 `multimedia` 搭配 `unstructured`，`table` 搭配 `structured`。必须与 `knowledgeScene` 同时提供或同时省略；同时省略时，系统按 `structureType` 采用默认配置
+知识库类型：`document`（文档搜索）、`table`（数据查询）、`image`（图片问答）、`multimedia`（音视频搜索）。必须与 `knowledgeScene` 同时提供或同时省略；同时省略时，系统按 `structureType` 采用默认配置。场景约束见下表
 
 `knowledgeScene`
 
@@ -62,7 +64,7 @@ string
 
 string
 
-使用场景，对应控制台的使用场景，取值取决于 `knowledgeType`：`document` 支持 `basic_document_qa`（基础文档问答）、`visual_perception_qa`（视觉理解，富文本文档）、`lite_document_qa`（极速问答）；`table` 固定为 `basic_table_qa`；`image` 固定为 `image_qa`；`multimedia` 固定为 `basic_multimedia_qa`。控制台仅在文档搜索类型下提供场景选项，其余类型自动填入固定值，但通过 API 创建时仍需显式传入。必须与 `knowledgeType` 同时提供或同时省略。注意：`lite_document_qa` 要求 `sinkType` 为 `BUILT_IN`；`visual_perception_qa` 和 `image_qa` 要求通过 `multimodalEmbeddingModelName` 指定多模态向量模型。此外 `document` 还接受 `visual_document_qa`（图文并茂回复），但控制台已不再提供该入口
+使用场景，取值取决于 `knowledgeType`，必须与 `knowledgeType` 同时提供或同时省略。注意：`lite_document_qa` 要求 `sinkType=BUILT_IN`；`visual_perception_qa` 和 `image_qa` 要求通过 `multimodalEmbeddingModelName` 指定多模态向量模型。此外 `document` 还接受 `visual_document_qa`（图文并茂回复），但控制台已不再提供该入口
 
 `sinkType`
 
@@ -70,7 +72,7 @@ string
 
 string
 
-存储类型，默认 `DEFAULT`。`BUILT_IN` 表示使用平台内置向量存储，`knowledgeScene` 为 `lite_document_qa`（极速问答）时必须为 `BUILT_IN`
+向量存储类型。`DEFAULT`、`BUILT_IN` 均表示平台内置向量存储；`ADB` 表示 AnalyticDB for PostgreSQL，需同时传 `sinkInstanceId` 和 `sinkRegion`。`lite_document_qa` 仅支持 `BUILT_IN`
 
 `sourceType`
 
@@ -78,7 +80,7 @@ string
 
 string
 
-数据源类型，如 `DATA_CENTER_FILE`
+导入模式。`DATA_CENTER_FILE`：按指定文件导入，必须传 `docIds`；`DATA_CENTER_CATEGORY`：按类目导入，必须传 `categoryIds`；`DATA_CENTER_STRUCTURED_TABLE`：按结构化数据表导入，必须传 `tableIds` 和 `columns`。顶层 `sourceType` 决定参数校验分支，`dataSources` 中的同名字段不能替代它
 
 `embeddingModelName`
 
@@ -86,15 +88,81 @@ string
 
 string
 
-向量嵌入模型名称，如 `text-embedding-v4`
+向量嵌入模型名称，如 `text-embedding-v3`、`text-embedding-v4`、`qwen3.7-text-embedding`。基础文档问答未传时默认为 `text-embedding-v3`
 
 `multimodalEmbeddingModelName`
+
+条件必填
+
+string
+
+多模态向量模型名称，如 `qwen3-vl-embedding`。`knowledgeScene` 为 `visual_perception_qa` 或 `image_qa` 时必填，缺失或取值非法会返回 `invalid multi embedding model`；音视频搜索场景可选传
+
+`docIds`
+
+条件必填
+
+`array<string>`
+
+`sourceType=DATA_CENTER_FILE` 时必填的文件 ID 列表；仅传 `categoryIds` 不能替代。值来自 [addFile](raw/application-api-reference/rag-api/rag-api-data-import/rag-api-add-file.md) 注册文件后返回的 `fileId`，或通过 [listFile](raw/application-api-reference/rag-api/rag-api-data-import/rag-api-list-file.md) 查询已有文件获取。建议导入不超过 10000 个。注意参数名为 `docIds`，不是 `file_ids` 或 `fileIds`；但校验失败时错误信息中的参数名为 `file_ids`
+
+`categoryIds`
+
+条件必填
+
+`array<string>`
+
+`sourceType=DATA_CENTER_CATEGORY` 时必填的类目 ID 列表；仅传 `docIds` 不能替代。通过指定类目 ID，可导入对应类目下的所有文件，建议导入不超过 10000 个。类目 ID 通过 [listCategory](raw/application-api-reference/rag-api/rag-api-data-import/rag-api-list-category.md) 获取
+
+`dataSources`
+
+否
+
+`array<object>`
+
+数据源配置列表，可不传。子字段 `sourceType`（string，数据源类型）不能替代顶层 `sourceType` 决定导入模式；如填写，建议与顶层 `sourceType` 保持一致
+
+`pipelineCommercialType`
 
 否
 
 string
 
-多模态向量模型名称，如 `qwen3-vl-embedding`。`knowledgeScene` 为 `image_qa`（图片问答）或 `visual_perception_qa`（视觉理解）时必填，缺失或取值非法会返回 `invalid multi embedding model`
+规格类型：`standard`（标准版，默认）或 `enterprise`（旗舰版）
+
+`pipelineCommercialCu`
+
+条件必填
+
+integer
+
+RCU 数量，取值范围 1-200。`pipelineCommercialType=enterprise` 时必填，否则返回 `Required parameter(index_commercial_cu) missing or invalid`
+
+`pipelineRetrieveRateLimitStrategy`
+
+否
+
+string
+
+知识库依赖链路限流处理策略，仅旗舰版使用。当前支持 `downgrade`（降级为轻量级链路检索），默认为 `downgrade`
+
+### 切片与解析参数
+
+字段
+
+必填
+
+类型
+
+说明
+
+`chunkMode`
+
+否
+
+string
+
+切片模式，默认为 `auto`（智能切分）。可选 `length`（按长度）、`page`（按页）、`regex`（按正则）及 `h1`~`h5`（按对应层级标题）
 
 `chunkSize`
 
@@ -102,7 +170,31 @@ string
 
 integer
 
-文档切片大小（字符数）。建议值 300-800
+切片大小（字符数），基础文档问答默认为 500，取值范围 1-6000。建议值 300-800。小于 100 时必须同时设置小于该值的 `overlapSize`
+
+`overlapSize`
+
+否
+
+integer
+
+相邻切片重叠长度（字符数），默认为 100，取值范围 0-1024，且必须小于 `chunkSize`。控制台报文中的 `chunkOverlap` 与该字段等价，二者均可使用
+
+`separator`
+
+条件必填
+
+string
+
+分句标识符，仅 `chunkMode=regex` 时生效且必填，如 `(?<=。)`；其他模式下无需传入
+
+`enableHeaders`
+
+否
+
+boolean
+
+是否将 xlsx、xls 文件首行作为表头并拼接到每个数据切片中，默认为 `false`。仅建议表格含表头时开启
 
 `metaExtractColumns`
 
@@ -112,35 +204,167 @@ integer
 
 元数据抽取配置，最多 5 个字段。仅在创建知识库时生效，创建后不能通过更新知识库补配。数组元素字段见 [Metadata 抽取配置](#h-ragapi-create-index-metadata)
 
-`docIds`
+### 检索与重排参数
+
+字段
+
+必填
+
+类型
+
+说明
+
+`enableRewrite`
+
+否
+
+boolean
+
+是否开启多轮对话改写，基础文档问答默认为 `true`
+
+`rerankModelName`
+
+否
+
+string
+
+排序模型。基础文档问答默认为 `qwen3-rerank`。也支持 `qwen3-rerank-hybrid`、`gte-rerank`、`gte-rerank-hybrid`；后两者后续停止更新，不建议使用
+
+`rerankMinScore`
+
+否
+
+number
+
+相似度阈值，基础文档问答默认为 0.01，取值范围 0.01-1.00
+
+`rerankTopN`
+
+否
+
+integer
+
+重排序后的默认返回条数，默认为 5，取值范围 1-20。创建时设置会作为后续 Retrieve 的默认值，Retrieve 请求中的 `RerankTopN` 可覆盖它
+
+`sparseSimilarityTopK`
+
+否
+
+integer
+
+关键词检索 TopK，默认为 100，取值范围 0-100。与 `denseSimilarityTopK` 之和不超过 200
+
+`denseSimilarityTopK`
+
+否
+
+integer
+
+向量检索 TopK，默认为 100，取值范围 0-100。与 `sparseSimilarityTopK` 之和不超过 200；基础文档问答中，两者之和还必须不小于 `rerankTopN`，确保候选数量覆盖返回条数
+
+`rerankMode`
+
+否
+
+string
+
+排序模型的指令干预模式：`qa`（问答，默认）、`similar`（相似匹配）或 `custom`（自定义）
+
+`rerankInstruct`
+
+否
+
+string
+
+自定义排序指令，仅 `rerankMode=custom` 时生效
+
+### 结构化数据与外部存储参数
+
+字段
+
+必填
+
+类型
+
+说明
+
+`tableIds`
 
 条件必填
 
 `array<string>`
 
-创建知识库时同步导入的文件 ID 列表，与 `categoryIds` 至少传一个。值来自 [addFile](raw/application-api-reference/rag-api/rag-api-data-import/rag-api-add-file.md) 注册文件后返回的 `fileId`，或通过 [listFile](raw/application-api-reference/rag-api/rag-api-data-import/rag-api-list-file.md) 查询已有文件获取。建议导入不超过 10000 个。注意参数名为 `docIds`，不是 `file_ids` 或 `fileIds`；但校验失败时错误信息中的参数名为 `file_ids`
+数据查询类知识库必填的数据表 ID 列表；包含多个 ID 时仅取第一个。ID 在数据连接的表格列表中获取
 
-`categoryIds`
+`columns`
 
 条件必填
-
-`array<string>`
-
-创建知识库时按类目同步导入文件，与 `docIds` 至少传一个；按类目导入时无需传 `docIds`。通过指定类目 ID，可导入对应类目下的所有文件，建议导入不超过 10000 个
-
-`dataSources`
-
-是
 
 `array<object>`
 
-数据源配置列表。子字段 `sourceType`（string，数据源类型，如 `DATA_CENTER_FILE`）
+数据查询类知识库必填的列配置。元素包含 `name`（列名）、`type`（列类型：`string`、`double`、`long`、`datetime`、`image_url`）、`isSearch`（是否参与检索，默认 `true`）、`isRecall`（是否参与模型回复，默认 `true`）
+
+`connectId`
+
+否
+
+string
+
+自定义数据库连接器 ID，替代旧字段 `datasourceCode`，与 `table` 配合使用。通过数据中心已有 `tableIds` 导入时无需传入，且不能用 `connectId + table` 替代本接口要求的 `tableIds`
+
+`datasourceCode`
+
+否
+
+string
+
+旧版数据源 Code，建议改用 `connectId`。仅使用自定义数据库来源时需要，与 `database`、`table` 配合使用
+
+`database`
+
+否
+
+string
+
+自定义数据库名称，仅使用自定义数据库来源时需要，与 `datasourceCode` 或 `connectId`、`table` 配合使用
+
+`table`
+
+否
+
+string
+
+自定义数据表名称，仅使用自定义数据库来源时需要，与 `datasourceCode` 或 `connectId`、`database` 配合使用
+
+`sinkInstanceId`
+
+条件必填
+
+string
+
+AnalyticDB for PostgreSQL 实例 ID，`sinkType=ADB` 时必填，否则返回 `Required parameter(db_instance_id) missing or invalid`
+
+`sinkRegion`
+
+条件必填
+
+string
+
+AnalyticDB for PostgreSQL 实例地域，`sinkType=ADB` 时必填
+
+**说明**
+
+-   通过数据中心已有数据表创建数据查询知识库时，最小参数组合为 `sourceType=DATA_CENTER_STRUCTURED_TABLE`、`tableIds` 和 `columns`。`connectId`、`datasourceCode`、`database`、`table` 仅用于自定义数据库来源，不是该路径的必填项。
+-   `createIndexType`、`channelType` 暂不开放，请勿传入。
+-   控制台浏览器中的网络请求使用控制台内部网关和专用参数，与公开 API 的鉴权、端点和参数契约不同。请以本页为准，不要直接照抄控制台报文调用公开 API。
+-   本接口不支持通过 `dataSync` 开启控制台的“自动同步知识索引”，额外传入 `dataSync:true` 不生效。类目新增文件后，需调用[提交导入任务](raw/application-api-reference/rag-api/rag-api-sync-jobs/rag-api-submit-sync-job.md)按类目追加导入；在数据集中同名重新上传可能生成新的文件 ID，不会自动替换知识库中的旧文档；该操作也不会删除知识库中已从数据集移除的文档，删除文件需在数据集和知识库中分别进行。
+-   控制台报文中的 `dataType` 对应 `structureType`，`cornerstoneParam` 为控制台内部字段，均不属于本接口的独立公开参数。
 
 ## 知识库类型与使用场景
 
 `knowledgeType` 和 `knowledgeScene` 对应控制台创建知识库第 1 步的知识库类型和使用场景。两者必须**同时提供或同时省略**，只传一个会报 `knowledgeType and knowledgeScene cannot be empty`；同时省略时，系统按 `structureType` 采用默认配置。
 
-控制台仅在文档搜索类型下提供使用场景选项，其余三种类型的场景是固定的（控制台自动填入），但通过 API 创建时仍需显式成对传入。
+控制台仅在文档搜索类型下提供使用场景选项，其余三种类型的场景由控制台自动填入。API 创建时可同时省略这两个字段，由系统按 `structureType` 采用默认配置；仅在需要指定非默认类型或场景时，才必须成对传入。
 
 knowledgeType
 
@@ -350,6 +574,33 @@ curl -X POST "$BASE_URL/api/v1/indices/rag/index/create_v2" \
   }'
 ```
 
+按类目导入时，顶层 `sourceType` 必须改为 `DATA_CENTER_CATEGORY`，并传入 `categoryIds`。无需传 `docIds`，也可不传 `dataSources`：
+
+```
+curl -X POST "$BASE_URL/api/v1/indices/rag/index/create_v2" \
+  -H "Authorization: Bearer $BAILIAN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "your-kb-name",
+    "description": "your-kb-description",
+    "structureType": "unstructured",
+    "sinkType": "DEFAULT",
+    "sourceType": "DATA_CENTER_CATEGORY",
+    "embeddingModelName": "text-embedding-v4",
+    "chunkSize": 600,
+    "categoryIds": ["your-category-id"]
+  }'
+```
+
+创建旗舰版时，还需在请求体同级传入以下字段；不传 `pipelineCommercialType` 时默认为 `standard`：
+
+```
+{
+  "pipelineCommercialType": "enterprise",
+  "pipelineCommercialCu": 1
+}
+```
+
 其中 `BASE_URL` 为 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com`（`{workspace_id}` 为业务空间 ID），`BAILIAN_API_KEY` 为阿里云百炼 API Key。
 
 ## 响应示例
@@ -436,13 +687,25 @@ HTTP 状态码
 
 `Index.InvalidParameter`
 
-`description` 缺失或超长：`Required parameter(description length range[1-200]) missing or invalid, please check the request parameters.`
+`description` 超过 500 字符：`Required parameter(description length range[1-500]) missing or invalid, please check the request parameters.`
 
 400
 
 `Index.InvalidParameter`
 
-`docIds` 与 `categoryIds` 均未提供或均为空数组：`Required parameter(file_ids) missing or invalid, please check the request parameters.`
+`sourceType=DATA_CENTER_FILE` 时未传 `docIds` 或传入空数组；仅传 `categoryIds` 仍会报此错：`Required parameter(file_ids) missing or invalid, please check the request parameters.`
+
+400
+
+`Index.InvalidParameter`
+
+`sourceType=DATA_CENTER_CATEGORY` 时未传 `categoryIds`；仅传 `docIds` 或将类目参数误写为 `source_ids` 均会报此错：`Required parameter(source_ids) missing or invalid, please check the request parameters.`
+
+400
+
+`Index.InvalidParameter`
+
+未传顶层 `sourceType`，即使已传 `dataSources` 也会报此错：`Required parameter(data_sources) missing or invalid, please check the request parameters.`
 
 400
 
@@ -455,3 +718,5 @@ HTTP 状态码
 `InvalidApiKey`
 
 API Key 无效或缺失：`Invalid API-key provided.`
+
+**警告**缺少顶层 `sourceType` 导致的 400 可能同时留下同名空知识库。重试前请通过[查询知识库列表](raw/application-api-reference/rag-api/rag-api-knowledge-base/rag-api-list-indices.md)检查并清理，避免积累重复空库。

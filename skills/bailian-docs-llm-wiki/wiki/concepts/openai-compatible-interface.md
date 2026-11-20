@@ -1,57 +1,62 @@
 # OpenAI 兼容接口
 
-OpenAI 兼容接口是百炼平台提供的一套标准化 REST API 协议，严格遵循 OpenAI v1 API 的路径、请求/响应结构、字段命名与错误码规范，使开发者无需修改核心调用逻辑即可将现有 OpenAI 应用快速迁移至百炼。该接口并非简单代理，而是深度适配百炼模型能力（如多模态、工具链、长上下文）的原生实现，兼顾兼容性与扩展性。
+OpenAI 兼容接口是百炼平台提供的一套标准化 REST API 协议层，完全遵循 OpenAI 官方 API 的路径、请求/响应结构、参数命名与语义规范（如 `/chat/completions`、`/embeddings`、`/batches` 等），使开发者无需修改业务逻辑即可将现有 OpenAI 集成快速迁移到百炼托管的 Qwen 系列及专用模型上。
 
-## 在百炼平台的不同场景中，这个概念如何使用
+## 在百炼平台的不同场景中如何使用
 
-- **快速迁移已有应用**：替换 SDK 初始化时的 `base_url`（如 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`）和 `api_key`，即可复用 `openai`、`langchain_openai` 等标准 SDK 调用 Qwen、DeepSeek、GLM、Kimi 等模型，零代码改造。
-- **构建智能体（Agent）**：通过 `/compatible-mode/v1/responses` 接口启用内置联网搜索、网页抽取、代码解释器等工具链；配合 `previous_response_id` 实现无状态多轮对话，`store=true` 后可查询历史输入与输出。
-- **多模态理解与生成**：在 `/compatible-mode/v1/chat/completions` 中使用 `messages` 包含 `image_url` 或 base64 图像数据，支持 `qwen3-vl-plus`、`QVQ` 等模型；注意 `QVQ` 仅支持[流式输出](streaming-output.md)，需显式启用思考模式。
-- **向量嵌入与排序**：调用 `/compatible-mode/v1/embeddings`（文本向量）或 `/compatible-mode/v1/rerank`（文本重排），支持 `qwen3.7-text-embedding`、`qwen3-rerank` 等模型；注意多模态向量（`qwen3-vl-embedding`）和稀疏向量暂不兼容此协议。
-- **文件与批量处理**：使用 `/compatible-mode/v1/files` 上传、管理文件（用途为 `file-extract`/`batch`），再通过 `/compatible-mode/v1/batches` 提交异步批量推理任务；相比 DashScope 原生文件接口，OpenAI 兼容版支持跨 Region 调用且错误码更规范。
+- **通用大模型调用**：通过 `chat/completions` 端点调用 `qwen4-max`、`qwen3.7-plus`、`qwen3.8-flash` 等文本模型，支持多模态输入（图像/Base64、PDF、视频帧）、系统消息、工具调用（`tools` + `tool_choice`）和 Session 上下文缓存（需 `x-dashscope-session-cache: enable` 请求头）。
+- **向量与嵌入服务**：通过 `/embeddings` 端点调用百炼专用嵌入模型（如 `text-embedding-v3`），兼容 OpenAI 的 `input` 字段格式（string 或 string[]），但不支持 `response_format=json_object`。
+- **批量异步处理**：通过 `/batches` 端点提交 JSONL 格式任务文件（上限 100MB），适用于大规模文本生成或嵌入计算；注意该端点不支持流式响应与 `json_object` 输出格式。
+- **智能体（Agent）开发**：通过专属路径 `/compatible-mode/v1/agents/chat/completions` 调用 `qwen-plus-agent-v1` 等 Agent 专用模型，支持工具自动选择、Session 持久化、Environment 隔离执行与 Vault 敏感凭证注入，语义与 OpenAI Agents API 高度对齐。
+- **垂直场景模型接入**：`tongyi-intent-detect-v3`（意图识别）、`gui-plus`（GUI 自动化）、`qwen3.5-ocr`（OCR）等专用模型均支持 OpenAI 兼容接口；但 `qwen-deep-research` 等研究型模型**明确不支持**该协议，仅限 DashScope SDK 调用。
 
-> ⚠️ 注意：Qwen-Audio 音频模型、部分高级参数（如 `vl_high_resolution_images`、`min_pixels`）及稀疏向量输出等能力**仅在 DashScope 原生协议中可用**，不纳入 OpenAI 兼容接口范围。
+> ⚠️ 注意：Qwen-Audio 模型不支持 OpenAI 兼容协议；QwQ/QVQ 模型的 `system` 消息无效；所有模型必须使用百炼平台颁发的 `api_key`，且不可复用 OpenAI 密钥。
 
 ## 关键参数和配置
 
-| 参数 | 位置 | 必填 | 说明 |
-|------|------|------|------|
-| `base_url` | SDK 初始化或 HTTP 请求 Host | 是 | 格式为 `https://{WorkspaceId}.{region}.maas.aliyuncs.com/compatible-mode/v1`；必须使用业务空间专属域名（如 `abc123.cn-beijing.maas.aliyuncs.com`），旧域名 `dashscope.aliyuncs.com` 已不推荐。 |
-| `api_key` | `Authorization: Bearer <API_KEY>` | 是 | **严格按地域绑定**：北京地域 endpoint 必须使用北京创建的 API Key，跨地域调用返回 `401 invalid_api_key`。 |
-| `model` | 请求 body | 是 | 模型 ID 必须与控制台发布名称**完全一致、大小写敏感**，如 `qwen3.8-max`（非 `qwen-3.8-max`）、`deepseek-v4.1-flash`；第三方模型需带供应商前缀。 |
-| `workspace_id` | URL 路径占位符 | 是 | `{WorkspaceId}` 需替换为真实业务空间 ID，可在百炼控制台「业务空间详情」页获取。 |
-| `stream` | 请求 body | 否 | 设为 `true` 启用逐 token 流式响应（所有 Chat/Responses/Vision 接口均支持）。 |
-| `enable_thinking` | 请求 body（Batch 场景） | 否 | 显式开关思考模式，默认开启；必须作为顶层参数传入，不可置于 `extra_body`。 |
+| 参数 | 是否必填 | 说明 | 兼容性备注 |
+|------|----------|------|------------|
+| `model` | ✓ | 百炼控制台已开通的模型 ID（如 `qwen4-max`、`qwen-plus-agent-v1`），**不可使用 `gpt-4` 等 OpenAI 模型名** | 所有端点均强制校验，非法值返回 404 |
+| `api_key` | ✓（Header） | 百炼平台生成的密钥（`Bearer <sk-xxx>`），需在控制台「API Keys」中创建并授权对应权限（如 `agents:run`） | 不兼容 OpenAI 密钥；LangChain 需配合 `BailianLLM` 使用 |
+| `base_url` | ✓（客户端配置） | 必须显式设置为：<br>• 通用接口：`https://dashscope.aliyuncs.com/api/v1`<br>• Agents 接口：`https://dashscope.aliyuncs.com/compatible-mode/v1/agents`<br>• **推荐生产环境使用业务空间专属域名**（如 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`） | LangChain 示例易遗漏此配置，导致连接失败 |
+| `messages` | ✓（`chat/completions`） | 标准 OpenAI 消息数组，支持 `role: "system"/"user"/"assistant"/"tool"`；`tool` 消息需含 `tool_call_id` 和 `content` | `gui-plus`、`qwen-vl-ocr` 支持 `image_url.data:image/*;base64,...` 内联图；**不支持 `image_url.url` 远程链接** |
+| `tools` / `tool_choice` | ✗ | 工具定义与调用策略，格式与 OpenAI 完全一致；`tool_choice="auto"` 时自动触发[函数调用](function-calling.md) | `stream=True` 时该功能被静默忽略（不支持 streaming + function calling 组合） |
+| `response_format` | ✗ | 仅 `chat/completions` 支持 `{"type": "json_object"}`；其他端点（如 `embeddings`、`batches`）传入将被忽略 | 启用后模型将严格输出合法 JSON，无需额外解析 |
+| `session_id` | ✗（Agents） | 复用已有会话上下文；首次调用可省略，服务自动生成并返回 | Session 默认 TTL 24 小时，超时需主动调用 `/sessions/{id}/extend` 延长 |
 
-> ✅ 最佳实践：将 `base_url` 和 `api_key` 从环境变量读取（如 `OPENAI_BASE_URL`, `OPENAI_API_KEY`），避免硬编码；使用 `curl -v` 或 SDK 日志验证实际请求 URL 与 Header 是否符合预期。
+## 面向开发者：快速上手建议
 
-## 面向开发者，简洁实用
-
-- **起步最快方式**：
-  ```bash
-  pip install -U openai
-  export OPENAI_BASE_URL="https://abc123.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
-  export OPENAI_API_KEY="sk-xxx"
-  python -c "from openai import OpenAI; c=OpenAI(); print(c.chat.completions.create(model='qwen3.8-max', messages=[{'role':'user','content':'Hello'}]).choices[0].message.content)"
+- ✅ **首选业务空间专属域名**：性能更优、延迟更低、稳定性更强（如 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`）。
+- ✅ **Python 开发者**：直接使用 `openai>=1.0.0` SDK，只需覆盖 `base_url` 和 `api_key`：
+  ```python
+  from openai import OpenAI
+  client = OpenAI(
+      api_key="sk-xxx",  # 百炼密钥
+      base_url="https://dashscope.aliyuncs.com/api/v1"
+  )
+  response = client.chat.completions.create(
+      model="qwen4-max",
+      messages=[{"role": "user", "content": "你好"}]
+  )
   ```
+- ✅ **LangChain 用户**：导入 `BailianLLM` 替代 `ChatOpenAI`，链式逻辑零改造：
+  ```python
+  from langchain_community.llms import BailianLLM
+  llm = BailianLLM(model="qwen4-max", api_key="sk-xxx")
+  ```
+- ❌ **避免踩坑**：
+  - 不要传 `gpt-4` 等非百炼模型名；
+  - 不要对 `batches` 或 `embeddings` 设置 `response_format`；
+  - 不要在 `stream=True` 时依赖 `tool_calls`；
+  - 图像输入务必用 Base64 内联（`data:image/png;base64,...`），勿用 URL。
 
-- **调试要点**：
-  - 404 错误：检查 `model` 名称是否拼写正确、`base_url` 是否含 `/compatible-mode/v1` 路径；
-  - 401 错误：确认 `api_key` 与 `base_url` 所在地域一致；
-  - 400 错误：检查 `messages` 格式（必须为数组，首条 `system` 消息需 `role: system`）、图像参数（`detail` 仅对 `qwen4-max` 生效）；
-  - 流式响应：确保客户端正确处理 `text/event-stream` Content-Type 与 `data:` 前缀。
-
-- **避坑提醒**：
-  - 不要混用协议：`/responses` 是 OpenAI 兼容专用路径，勿与 Anthropic 的 `/messages` 或 DashScope 原生 `/api/v1/services/...` 混用；
-  - 第三方模型（DeepSeek/Kimi/GLM）仅在华北2（北京）、新加坡、中国香港地域可用，且需在控制台开通对应服务；
-  - `max_pixels` 默认值以 OpenAI 兼容文档为准（如 `qwen3.8-max` 为 `2621440`），DashScope 原生协议可能不同。
+如需调试，推荐使用 [百炼 API Playground](https://bailian.console.aliyun.com) 实时验证请求结构与响应。
 
 ## 关联主题页
 
 - [qwen api reference](../api/qwen-api-reference.md)
 - [toolkits and frameworks](../api/toolkits-and-frameworks.md)
-- [frameworks](../api/frameworks.md)
-- [vector and sort](../api/vector-and-sort.md)
-- [file management api](../api/file-management-api.md)
+- [openai compatible agents api](../api/openai-compatible-agents-api.md)
+- [more models](../api/more-models.md)
 
 

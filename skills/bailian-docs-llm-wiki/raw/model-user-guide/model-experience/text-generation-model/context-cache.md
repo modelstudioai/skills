@@ -946,7 +946,7 @@ while True:
     -   千问开源：qwen3.8-2.4t-a95b、qwen3.8-27b
     -   DeepSeek（阿里云百炼部署）：deepseek-v4.1-flash、deepseek-v4.1-flash-1017、deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731
     -   DeepSeek（快手万擎部署）：vanchin/deepseek-v4.1-flash、vanchin/deepseek-v4-pro、vanchin/deepseek-v4-pro-0813、vanchin/deepseek-v3.2-think、vanchin/deepseek-v3.1-terminus、vanchin/deepseek-r1、vanchin/deepseek-v3
-    -   Kimi（阿里云百炼部署）：kimi-k3.1-pro、kimi-k3、kimi-k2.7-code、kimi-k2.6、kimi-k2.5
+    -   Kimi（阿里云百炼部署）：kimi-k3.1-pro、kimi-k3.1-pro-prime、kimi-k3、kimi-k2.7-code、kimi-k2.6、kimi-k2.5
     -   Kimi（月之暗面部署）：kimi/kimi-k3.1-pro、kimi/kimi-k3.1-pro-highspeed、kimi/kimi-k3、kimi/kimi-k2.8-preview、kimi/kimi-k2.7-code-highspeed、kimi/kimi-k2.7-code、kimi/kimi-k2.6
     -   GLM（阿里云百炼部署）：glm-5.3、glm-5.3-prime、glm-5.2、glm-5.2-fast-preview、glm-5.1、glm-5
     -   GLM（智谱部署）：ZHIPU/GLM-5.3-FlashX、ZHIPU/GLM-5.3-Flash、ZHIPU/GLM-5.3、ZHIPU/GLM-5.2、ZHIPU/GLM-5.1、ZHIPU/GLM-5
@@ -977,7 +977,7 @@ while True:
     -   千问开源：qwen3.8-2.4t-a95b、qwen3.8-27b
     -   DeepSeek：deepseek-v4.1-flash、deepseek-v4.1-flash-1017、deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731
     -   GLM（阿里云百炼部署）：glm-5.3、glm-5.3-prime、glm-5.2、glm-5.2-fast-preview、glm-5.1
-    -   Kimi（阿里云百炼部署）：kimi-k3.1-pro、kimi-k3、kimi-k2.7-code
+    -   Kimi（阿里云百炼部署）：kimi-k3.1-pro、kimi-k3.1-pro-prime、kimi-k3、kimi-k2.7-code
 -   **视觉理解模型**
     -   千问 VL：qwen3-vl-plus
 

@@ -2,7 +2,7 @@
 
 DashScope Python SDK 内置的 SDK 智能助手——只描述需求即可拿到校验过版本的可运行代码，贴报错或给文件路径即可自动诊断、修复并验证。
 
-DashScope SDK Expert（下称 SDK Expert）是 dashscope Python SDK（≥1.27.3）内置的 SDK 智能助手 CLI。本页是通用使用指南：教怎么用 SDK Expert 开发与排障。各接口完整参数见侧栏单接口参考页，能力域见下方"覆盖能力一览"。
+DashScope SDK Expert（下称 SDK Expert）是 [dashscope Python SDK](https://dashscope.github.io/dashscope-sdk-python/)（≥1.27.3）内置的 SDK 智能助手 CLI。本页是通用使用指南：教怎么用 SDK Expert 开发与排障。各接口完整参数见侧栏单接口参考页，能力域见下方"覆盖能力一览"。
 
 ## 快速开始
 
@@ -15,20 +15,38 @@ DashScope SDK Expert（下称 SDK Expert）是 dashscope Python SDK（≥1.27.3�
     
     各 region 的 base\_url 不同，域名对照见 [Base URL 总览](raw/model-api-reference/preparations/base-url.md)。
     
-2.  **安装/升级 SDK**：SDK Expert 随 dashscope Python SDK 1.27.3 引入。
+2.  **安装/升级 SDK**：SDK Expert 随 dashscope Python SDK 1.27.3 引入，SDK Expert 的 CLI 能力由独立包 dashscope-agenticx 提供。
     
     ```
     # 如果运行失败，可以将 pip 替换成 pip3
-    pip install -U dashscope
+    pip install -U "dashscope[acli]"
     ```
     
-3.  **启动 CLI**：终端执行 `dashscope`（不带子命令）进入 SDK Expert 交互式会话；也可 `python -m dashscope.acli`（acli 即 SDK Expert 的 CLI 入口模块）。首次启动会提示下载 SDK Expert 知识包（含 api-doc/diagnose 等专项 skill）；也可手动装：
+    **重要**SDK Expert 还可以通过独立包安装：`pip install -U dashscope-agenticx`。安装后可直接执行 `agenticx` 命令，完整用法与更新见 [AgenticX 官方文档](https://dashscope.github.io/dashscope-agenticx/zh/)。
+    
+3.  **启动 CLI**：终端执行 `dashscope`（不带子命令）进入 SDK Expert 交互式会话（首次启动会提示下载 SDK Expert 知识包，含 api-doc/diagnose 等专项 skill）。SDK Expert 的 CLI 能力（原 `python -m dashscope.acli` 入口）已独立为 dashscope-agenticx 包，手动安装知识包请改用 AgenticX 的入口：
     
     ```
-    dashscope
-    # 或手动装 SDK Expert 知识包
-    python -m dashscope.acli example download dashscope-sdk-expert
+    # 下载 Expert 模板
+    python -m dashscope_agenticx expert download dashscope-sdk-expert
+    # 列出可用模板
+    python -m dashscope_agenticx expert
     ```
+    
+    如果已安装命令行脚本，也可以直接运行：
+    
+    ```
+    agenticx expert download dashscope-sdk-expert
+    agenticx expert
+    ```
+    
+    下载完成后，通过 SDK 提问：
+    
+    ```
+    dashscope expert "你的问题"
+    ```
+    
+    **说明**通过 `dashscope expert` 提问要求 dashscope 与 dashscope-agenticx 安装在同一 Python 环境——用 `pip install -U "dashscope[acli]"` 可一并安装；若分别安装，请在同一虚拟环境中执行。
     
 4.  **查看帮助**：会话中输入 `/help` 查看全部 command 与 skill。command 是会话操作（如 `/clear` `/help` `/exit`）；skill 是领域能力开关（`/skill <名称>`）。不确定就直接自然语言提问，SDK Expert 自动匹配 skill。
     
@@ -49,53 +67,22 @@ DashScope SDK Expert（下称 SDK Expert）是 dashscope Python SDK（≥1.27.3�
 
 装 SDK Expert 知识包后，可用以下 skill（`/skill` 查看全部）：
 
-skill
+-   **api-doc** — 查 SDK API 文档
+-   **sdk-example** — 生成示例代码
+-   **error-code** — 错误码含义与修复建议
+-   **diagnose** — 读取代码文件，定位根因
+-   **explain-code** — 解释指定代码逻辑
+-   **translate** — 多语言翻译
+-   **update-sdk** — 更新知识库索引
 
-用途
+会话内通过 `/skill` 切换 skill（不带参数查看全部），常用示例：
 
-示例
-
-api-doc
-
-查 SDK API 文档
-
-`/skill api-doc Generation`
-
-sdk-example
-
-生成示例代码
-
-`/skill sdk-example TextEmbedding`
-
-error-code
-
-错误码含义与修复建议
-
-`/skill error-code InvalidApiKey`
-
-diagnose
-
-读取代码文件，定位根因
-
-`/skill diagnose ./my_code.py`
-
-explain-code
-
-解释指定代码逻辑
-
-`/skill explain-code <代码>`
-
-translate
-
-多语言翻译
-
-`/skill translate en 你好世界`
-
-update-sdk
-
-更新知识库索引
-
-`/skill update-sdk <sdk路径>`
+```
+/skill api-doc Generation
+/skill sdk-example TextEmbedding
+/skill error-code InvalidApiKey
+/skill diagnose ./my_code.py
+```
 
 SDK Expert 覆盖 DashScope SDK 全部能力域——文本生成、多模态、语音、检索、微调与部署、Agent 等。查某接口文档/示例用 `api-doc`/`sdk-example`，生成代码或排障直接自然语言提问即可。
 

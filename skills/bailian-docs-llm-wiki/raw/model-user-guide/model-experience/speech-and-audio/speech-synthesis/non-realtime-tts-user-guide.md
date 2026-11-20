@@ -10,6 +10,7 @@
 -   **表现力控制**：通过自然语言指令调整语速、情感等表达，或在文本中插入情感与富语言标签。参见[指令控制](https://help.aliyun.com/zh/model-studio/non-realtime-tts-user-guide#nrt_instruct_h3)和[情感与富语言标签](https://help.aliyun.com/zh/model-studio/non-realtime-tts-user-guide#nrt_emtag_h3)。
 -   **自定义音色**：通过[音色复刻](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-cloning-user-guide.md)从音频样本创建音色，或通过[音色设计](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-design-user-guide.md)使用文字描述创建音色。
 -   **精细控制与公式朗读**：使用 [SSML 与 LaTeX](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/ssml-latex-user-guide.md)控制停顿、发音等效果，或将公式转换为语音。
+-   **Markdown 过滤**：将包含表格等结构的 Markdown 文本转换成适合朗读的内容。参见[Markdown 过滤](https://help.aliyun.com/zh/model-studio/non-realtime-tts-user-guide#tts_markdown_filter)。
 
 **说明**
 
@@ -216,6 +217,10 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 数字、缩写或符号的读法不符合预期时，可通过 `language_hints` 指定合成目标语言，或通过 `hot_fix` 定义词语发音与文本替换。参数适用模型和配置方法请参见对应的 [Qwen-Audio-TTS API](raw/_short/qwen-audio-tts-http-api-ee05f9b13900b687.md)或 [CosyVoice API](raw/_short/cosyvoice-tts-http-api-63e05680db50f996.md)。
 
 需要控制停顿、数字读法或字词发音时，可使用 SSML。Qwen-Audio-TTS 和 CosyVoice 的适用模型、音色、接口与标签用法，请参见 [SSML 与 LaTeX](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/ssml-latex-user-guide.md)。
+
+### Markdown 过滤
+
+合成包含表格、链接等 Markdown 格式的内容时，可将 `enable_markdown_filter` 设为 `true`，让服务先将 Markdown 转换成适合朗读的文本。Qwen-Audio-TTS 和 CosyVoice 支持此功能，cosyvoice-v2 除外。配置方法参见 [Qwen-Audio-TTS API](raw/_short/qwen-audio-tts-http-api-ee05f9b13900b687.md) 和 [CosyVoice API](raw/_short/cosyvoice-tts-http-api-63e05680db50f996.md)。
 
 ### 指令控制
 

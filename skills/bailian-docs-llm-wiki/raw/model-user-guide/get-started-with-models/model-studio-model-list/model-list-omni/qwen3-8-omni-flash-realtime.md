@@ -32,7 +32,7 @@ Function Calling
 
 MCP
 
-支持远程 MCP 工具，详见[MCP 交互流程](https://help.aliyun.com/zh/model-studio/omni-realtime-interaction-process#qwen38-mcp-flow)
+支持远程 MCP 工具，详见[MCP 交互流程](https://help.aliyun.com/zh/model-studio/omni-realtime-websocket-access#qwen38-mcp-flow)
 
 多通道音频
 

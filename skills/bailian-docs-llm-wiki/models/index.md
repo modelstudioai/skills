@@ -1,6 +1,6 @@
 # 百炼模型市场索引
 
-> 自动生成 · 共 127 个模型家族 · 342 个主干模型 · 更新于 2026-11-19
+> 自动生成 · 共 125 个模型家族 · 336 个主干模型 · 更新于 2026-11-21
 
 **机器查询走结构化文件**：
 
@@ -17,7 +17,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 `notSuitableFor: []` 表示无已知限制。`profileCompleteness` 为 `structured-only` 时该画像未读过文档，仅机械字段可信。
 硬规格（价格/QPM/contextWindow/openSource）一律看行内顶层字段，不要从 profile 里找。
 
-## 文本生成 `TG` — 31 个家族
+## 文本生成 `TG` — 32 个家族
 
 - [AntDigital](groups/antdigital-models-market-place.json) — 由蚂蚁数科提供的Ling系列模型的API服务
   - 模型：`antdigital/Ling-3.1-flash`
@@ -29,6 +29,8 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`glm-5`, `glm-5.1`, `glm-5.2`, `glm-5.3`, `glm-5.3-prime`
 - [GLM-5.2-Fast](groups/glm-fast.json) — GLM-5.2-Fast-Preview 是智谱 AI 旗舰模型 GLM-5.2 的高速版本，支持 1M 超长上下文，模型能力对齐 GLM-5.2 标准版，具备逻辑推理、长文本理解与代码生成能力。通过…
   - 模型：`glm-5.2-fast-preview`
+- [Kimi](groups/Kimi-K2.json) — Kimi是由月之暗面提供的开源模型，包含k3、k2.7-code、k2.6、k2.5等多模态和大语言模型。
+  - 模型：`kimi-k2.5`, `kimi-k2.6`, `kimi-k2.7-code`, `kimi-k3`, `kimi-k3.1-pro`, `kimi-k3.1-pro-prime`
 - [Kimi](groups/kimi-models-market-place.json) — 由月之暗面提供的Kimi系列模型的API服务。
   - 模型：`kimi/kimi-k2.6`, `kimi/kimi-k2.7-code`, `kimi/kimi-k2.7-code-highspeed`, `kimi/kimi-k2.8-preview`, `kimi/kimi-k3`, `kimi/kimi-k3.1-pro`, `kimi/kimi-k3.1-pro-highspeed`
 - [MiMo文本模型](groups/xiaomi-models-market-place.json) — 由小米MiMo提供的MiMo文本模型API服务
@@ -119,7 +121,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [视频风格重绘](groups/video-style-transform.json) — 视频风格重绘可以将输入的视频帧序列进行多种风格化的重绘/生成，使新视频画面在兼顾原始人物和物体相貌的同时，带来不同风格的绘画效果。当前支持预置重绘风格包括日式漫画、美式漫画、清新漫画、3D卡通、国风卡…
   - 模型：`video-style-transform`
 
-## 图像生成 `IG` — 17 个家族
+## 图像生成 `IG` — 16 个家族
 
 - [Qwen-Image-2.0](groups/qwen-image-2.0.json) — Qwen-Image-2.0系列加速版模型，实现了图片生成和图片编辑的融合；具备更专业的文字渲染1k token指令支持能力、更细腻的真实质感，细腻刻画写实场景、更强的语义遵循能力。加速版有效实现了模…
   - 模型：`qwen-image-2.0`, `qwen-image-2.0-pro`
@@ -131,8 +133,6 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`qwen-mt-image`, `qwen-mt-image-2.0`
 - [Vidu AI生图](groups/vidu-image-models-market-place.json) — 由生数科技提供Vidu系列图片生成API服务，多图参考，精准还原，高速高质。
   - 模型：`vidu/vidu-image_reference2image`, `vidu/vidu-image-lite_reference2image`, `vidu/vidu-image-pro_reference2image`, `vidu/viduq2-fast_reference2image`, `vidu/viduq2-pro_reference2image`, `vidu/viduq3-fast_reference2image`, `vidu/viduq3.1-fast_reference2image`
-- [Wan-Image](groups/wan-image-edit.json) — 指令编辑图片内容，轻松实现局部修改、风格变化、一致性保持等
-  - 模型：`wan2.5-i2i-preview`, `wan2.6-image`, `wan2.7-image`, `wan2.7-image-pro`, `wanx2.1-imageedit`
 - [Wan-T2I](groups/wan-text-to-image.json) — 文字生成图片，写实质感细腻画面，文字内容生成，艺术风格表现
   - 模型：`wan2.2-t2i-flash`, `wan2.2-t2i-plus`, `wan2.5-t2i-preview`, `wan2.6-t2i`, `wanx-v1`, `wanx-v1-0521`, `wanx2.0-t2i-turbo`, `wanx2.1-t2i-plus`, `wanx2.1-t2i-turbo`
 - [Z-Image-Turbo](groups/z-image-turbo.json) — Z-Image-Turbo是在Artificial Analysis评测中荣登文生图开源模型世界第一的高效图像生成模型,仅用60亿参数和8步推理就能生成媲美大规模商业模型的照片级真实感图像,并在中英双…
@@ -155,31 +155,6 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`virtualmodel-v2`
 - [鞋靴模特](groups/shoemodel-v1.json) — 鞋靴模特支持输入多视角鞋靴系列图片，同时对输入模特模板图的鞋子区域进行鞋靴AI试穿，实现模特鞋靴布局重绘生成，最终生成图片的效果, 布局自然、细节丰富、画面细腻、试穿结果逼真。可用于模特商品图设计、新…
   - 模型：`shoemodel-v1`
-
-## 推理 `Reasoning` — 11 个家族
-
-- [Kimi](groups/Kimi-K2.json) — Kimi是由月之暗面提供的开源模型，包含k3、k2.7-code、k2.6、k2.5等多模态和大语言模型。
-  - 模型：`kimi-k2.5`, `kimi-k2.6`, `kimi-k2.7-code`, `kimi-k3`, `kimi-k3.1-pro`
-- [MiniMax](groups/MiniMax-M2.1.json) — MiniMax推出的旗舰级开源大模型，聚焦真实世界复杂任务，包含MiniMax-M2.1、MiniMax-M2.5等开源模型。
-  - 模型：`MiniMax-M2.5`
-- [Qwen-Flash](groups/qwen-flash.json) — Qwen3系列Flash模型，实现思考模式和非思考模式的有效融合，可在对话中切换模式。复杂推理类任务性能优秀，指令遵循、文本理解等能力显著提高。支持1M上下文长度，按照上下文长度进行阶梯计费。
-  - 模型：`qwen-flash`
-- [Qwen-Plus](groups/qwen-plus.json) — 千问超大规模语言模型的增强版，支持中文英文等不同语言输入。主干模型、latest和快照04-28已升级Qwen3系列，实现思考模式和非思考模式的有效融合，可在对话中切换模式。
-  - 模型：`qwen-plus`, `qwen-plus-latest`
-- [Qwen3.5-Flash](groups/qwen3.5-flash.json) — Qwen3.5原生视觉语言系列Flash模型，展现出与当前顶尖前沿模型相媲美的卓越性能，模型效果在纯文本与多模态方面相较3系列均实现飞跃式进步。
-  - 模型：`qwen3.5-flash`
-- [Qwen3.5开源模型](groups/qwen3.5.json) — Qwen3.5系列开源模型，基于混合架构设计的原生视觉语言模型，融合了线性注意力机制与稀疏混合专家模型，实现了更高的推理效率。
-  - 模型：`qwen3.5-122b-a10b`, `qwen3.5-27b`, `qwen3.5-35b-a3b`, `qwen3.5-397b-a17b`
-- [Qwen3.6-Flash](groups/qwen3.6-flash.json) — Qwen3.6原生视觉语言系列Flash模型，模型效果相较3.5-Flash显著提升。本模型重点提升agentic coding能力（在多项代码智能体基准上大幅超越前代）、数学推理和代码推理能力；视觉…
-  - 模型：`qwen3.6-flash`
-- [Qwen3.6-Plus](groups/qwen3.6-plus.json) — Qwen3.6原生视觉语言系列Plus模型，展现出与当前顶尖前沿模型相媲美的卓越性能，模型效果相较3.5系列显著提升。模型在Agentic coding、前端编程、Vibe coding等代码能力、多…
-  - 模型：`qwen3.6-plus`
-- [Qwen3.7-Max](groups/qwen3.7-max.json) — Qwen3.7系列中规模最大、综合能力最强的Max模型，当前开放纯文本模型能力供体验。Qwen3.7是面向智能体时代的新一代旗舰模型，核心优势在于智能体能力的广度与深度：在编程、办公与生产力、长周期自…
-  - 模型：`qwen3.7-max`, `qwen3.7-max-preview`
-- [Qwen3.8-Max](groups/qwen3.8-max.json) — Qwen3.8原生视觉语言系列Max模型，是通义千问迄今能力最强的旗舰模型，拥有2.4万亿参数，采用MoE架构，展现出与当前顶尖前沿模型相媲美的卓越性能，模型效果相较3.7系列显著提升。
-  - 模型：`qwen3.8-max`, `qwen3.8-max-0902`
-- [智谱GLM系列文本模型](groups/zhipu-models-market-place.json) — 由智谱提供的GLM系列文本模型API服务
-  - 模型：`ZHIPU/GLM-5`, `ZHIPU/GLM-5.1`, `ZHIPU/GLM-5.2`, `ZHIPU/GLM-5.3`, `ZHIPU/GLM-5.3-Flash`, `ZHIPU/GLM-5.3-FlashX`
 
 ## 语音识别 `ASR` — 11 个家族
 
@@ -205,6 +180,29 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`qwen3-asr-flash-filetrans`
 - [语音识别热词](groups/speech-biasing.json) — 热词是指用户可以预先定义的一组特定词汇或短语，这些词汇或短语在识别、翻译过程中会被赋予更高的优先级。针对您的特定业务领域，如果有部分词汇的语音识别、翻译效果不够好，可以将这些关键词或短语添加为热词进行…
   - 模型：`speech-biasing`
+
+## 推理 `Reasoning` — 10 个家族
+
+- [MiniMax](groups/MiniMax-M2.1.json) — MiniMax推出的旗舰级开源大模型，聚焦真实世界复杂任务，包含MiniMax-M2.1、MiniMax-M2.5等开源模型。
+  - 模型：`MiniMax-M2.5`
+- [Qwen-Flash](groups/qwen-flash.json) — Qwen3系列Flash模型，实现思考模式和非思考模式的有效融合，可在对话中切换模式。复杂推理类任务性能优秀，指令遵循、文本理解等能力显著提高。支持1M上下文长度，按照上下文长度进行阶梯计费。
+  - 模型：`qwen-flash`
+- [Qwen-Plus](groups/qwen-plus.json) — 千问超大规模语言模型的增强版，支持中文英文等不同语言输入。主干模型、latest和快照04-28已升级Qwen3系列，实现思考模式和非思考模式的有效融合，可在对话中切换模式。
+  - 模型：`qwen-plus`, `qwen-plus-latest`
+- [Qwen3.5-Flash](groups/qwen3.5-flash.json) — Qwen3.5原生视觉语言系列Flash模型，展现出与当前顶尖前沿模型相媲美的卓越性能，模型效果在纯文本与多模态方面相较3系列均实现飞跃式进步。
+  - 模型：`qwen3.5-flash`
+- [Qwen3.5开源模型](groups/qwen3.5.json) — Qwen3.5系列开源模型，基于混合架构设计的原生视觉语言模型，融合了线性注意力机制与稀疏混合专家模型，实现了更高的推理效率。
+  - 模型：`qwen3.5-122b-a10b`, `qwen3.5-27b`, `qwen3.5-35b-a3b`, `qwen3.5-397b-a17b`
+- [Qwen3.6-Flash](groups/qwen3.6-flash.json) — Qwen3.6原生视觉语言系列Flash模型，模型效果相较3.5-Flash显著提升。本模型重点提升agentic coding能力（在多项代码智能体基准上大幅超越前代）、数学推理和代码推理能力；视觉…
+  - 模型：`qwen3.6-flash`
+- [Qwen3.6-Plus](groups/qwen3.6-plus.json) — Qwen3.6原生视觉语言系列Plus模型，展现出与当前顶尖前沿模型相媲美的卓越性能，模型效果相较3.5系列显著提升。模型在Agentic coding、前端编程、Vibe coding等代码能力、多…
+  - 模型：`qwen3.6-plus`
+- [Qwen3.7-Max](groups/qwen3.7-max.json) — Qwen3.7系列中规模最大、综合能力最强的Max模型，当前开放纯文本模型能力供体验。Qwen3.7是面向智能体时代的新一代旗舰模型，核心优势在于智能体能力的广度与深度：在编程、办公与生产力、长周期自…
+  - 模型：`qwen3.7-max`, `qwen3.7-max-preview`
+- [Qwen3.8-Max](groups/qwen3.8-max.json) — Qwen3.8原生视觉语言系列Max模型，是通义千问迄今能力最强的旗舰模型，拥有2.4万亿参数，采用MoE架构，展现出与当前顶尖前沿模型相媲美的卓越性能，模型效果相较3.7系列显著提升。
+  - 模型：`qwen3.8-max`, `qwen3.8-max-0902`
+- [智谱GLM系列文本模型](groups/zhipu-models-market-place.json) — 由智谱提供的GLM系列文本模型API服务
+  - 模型：`ZHIPU/GLM-5`, `ZHIPU/GLM-5.1`, `ZHIPU/GLM-5.2`, `ZHIPU/GLM-5.3`, `ZHIPU/GLM-5.3-Flash`, `ZHIPU/GLM-5.3-FlashX`
 
 ## 语音合成 `TTS` — 9 个家族
 
@@ -279,13 +277,6 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [Qwen3.8-Omni-Flash-Realtime](groups/qwen3.8-omni-flash-realtime.json) — Qwen3.8-Omni-Flash-Realtime 通过多种实时协议提供音视频双工交互，面向智能硬件、机器人与实时交互 Agent。支持多通道音频输入与多种通道布局，视频表征可在细粒度与聚合之间按…
   - 模型：`qwen3.8-omni-flash-realtime`
 
-## 多模态嵌入 `ME` — 2 个家族
-
-- [Qwen-VL-Embedding](groups/qwen-vl-embedding.json) — 基于Qwen-VL底座训练的统一多模态向量模型，支持文本、图片、视频单模态/混合模态输入，输出统一表征向量，适用于跨模态检索、图搜、视频检索、图像聚类、复杂多模态信息检索、打标等场景。
-  - 模型：`qwen2.5-vl-embedding`, `qwen3-vl-embedding`
-- [通义多模态向量](groups/embedding.json) — 基于LLM底座的通用多模态表征模型，支持文本、图像、视频3种模态，具有以视觉为中心、全场景性能优异、高性价比的特点，适用于以图搜图、以文搜图、以文搜视频、以视频搜视频、以文搜文等下游多样化任务场景。
-  - 模型：`multimodal-embedding-v1`, `tongyi-embedding-vision-flash`, `tongyi-embedding-vision-plus`
-
 ## Realtime-Chatting `Realtime-Chatting` — 2 个家族
 
 - [Qwen-Audio-3.0-Realtime](groups/qwen-audio-3.0-realtime.json) — 实时双工语音对话，兼顾低时延、自然交互与语音推理。Plus 效果优先，Flash 响应更快。
@@ -306,6 +297,11 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`qwen3.5-livetranslate-flash-realtime`
 - [Qwen3.8-LiveTranslate-Flash-Realtime](groups/qwen3.8-livetranslate-flash-realtime.json) — Qwen3.8-LiveTranslate-Flash的实时版本，一款高精度、高响应、高鲁棒性的多语言实时音视频同传大模型。依托Qwen-Omni强大的基座能力、海量多模态数据、跨语言跨模态对齐和视觉…
   - 模型：`qwen3.8-livetranslate-flash-realtime`
+
+## 多模态嵌入 `ME` — 1 个家族
+
+- [通义多模态向量](groups/embedding.json) — 基于LLM底座的通用多模态表征模型，支持文本、图像、视频3种模态，具有以视觉为中心、全场景性能优异、高性价比的特点，适用于以图搜图、以文搜图、以文搜视频、以视频搜视频、以文搜文等下游多样化任务场景。
+  - 模型：`multimodal-embedding-v1`, `tongyi-embedding-vision-flash`, `tongyi-embedding-vision-plus`
 
 ## World-Model `World-Model` — 1 个家族
 

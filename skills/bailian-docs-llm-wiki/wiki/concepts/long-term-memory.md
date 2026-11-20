@@ -1,88 +1,49 @@
 # 长期记忆
 
-长期记忆（Long Term Memory, LTM）是百炼平台提供的**结构化、用户级、可检索的持久化记忆服务**，用于跨会话、跨请求地存储和复用关键业务信息，包括事实性事件、可复用技能与结构化用户画像。它独立于模型参数与会话上下文，通过统一 API 管理生命周期，是构建个性化、状态感知型 Agent 的核心基础设施。
+长期记忆（Long Term Memory, LTM）是百炼平台提供的结构化用户状态持久化能力，用于跨会话、跨请求地保存与检索用户偏好、行为特征、对话历史摘要等关键上下文信息。它以分片（Fragment）为基本单位，支持语义检索与元数据过滤的混合查询，并通过 `memory_id` 实现严格的用户级数据隔离。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **Agent 推理增强（`agent context`）**：  
-  当 `context_config.memory.enabled = true`（默认开启）时，平台自动为当前 `user_id` 检索匹配的长期记忆节点（`observation`/`skill`/`user_profile`），并按相关性注入到模型 prompt 中，作为上下文补充。该过程对开发者透明，无需手动调用检索接口，但需确保记忆已预先写入且 `user_id` 一致。
+- **API 直接调用**：通过 `/v1/memory/fragments` 系列接口显式写入、读取、更新或删除记忆分片；适用于需要精细控制生命周期或与外部系统（如 CRM）同步的场景。  
+- **Agent 开发（Managed / Flow）**：在 Agent 配置中启用 `enable_memory: true` 后，平台自动将匹配的长期记忆片段注入 prompt 上下文（需模型支持）；也可在 `context.memory_ids` 中指定记忆库 ID，由 Agent 运行时按需加载。  
+- **Agent 上下文（[agent context](../guides/agent-context.md)）机制**：在 API 请求的 `context` 字段中传入 `memory_ids` 数组，即可将对应用户的长期记忆片段（按时间倒序）注入当前推理上下文，与其他 context 类型（如知识库、Connector）协同工作。  
+- **Managed Agents API**：通过 `session_id` 关联的 Memory Store 实现会话延续，但注意：该 Memory Store 是短期会话缓存（默认 TTL 7 天），**不等同于 LTM**；如需长期、跨会话复用，必须使用独立的 LTM 接口管理 `memory_id` 对应的记忆。
 
-- **结构化记忆管理（`long term memory new`）**：  
-  通过 RESTful API 或 `agentscope-runtime` SDK 主动写入、搜索、更新记忆。典型流程为：  
-  - 使用 `AddMemoryAsync` 从对话消息或工具调用中抽取 `observation`（如“用户下周出差”）或 `skill`（如“自动生成会议纪要”）；  
-  - 通过 `profile_schema` 定义并写入 `user_profile`（如职业、偏好、设备信息）；  
-  - 调用 `/memory_nodes/search` 按 `user_id` + `messages` 语义检索最相关记忆，支持 `top_k` 和 `min_score` 过滤。
-
-- **Flow Agent 开发（`flow agent api`）**：  
-  注意区分新旧版本：  
-  - **旧版 `Memory` 接口**（OpenAPI 路径含 `/memory`）仅支持基础 `MemoryNode` 增删改查，**不支持用户画像、技能抽取与多模态内容**，已标记为“旧”，不推荐新项目使用；  
-  - **新版 `long term memory new`**（独立 endpoint，基于业务空间域名）是当前唯一推荐方案，全面覆盖三类记忆类型与异步抽取能力。
-
-- **Agent 治理与可观测性（`agent governance`）**：  
-  所有长期记忆的读写操作（`AddMemory`, `SearchMemory`, `GetUserProfile` 等）均被自动捕获为 Trace 事件，出现在观测面板的 “Memory” 标签页下，包含耗时、返回节点数、`user_id`、`project_id` 等元数据，可用于分析记忆命中率、冷热分布及性能瓶颈。
-
-- **Sandbox/Managed/Flow Agent 开发（`agent development`）**：  
-  - Sandbox Agent 可直接调用 `agentscope-runtime` SDK 写入/检索记忆；  
-  - Managed Agent 可在 YAML 中配置 `memory_strategy: "summary"` 并结合 `user_id` 实现用户级记忆回溯；  
-  - Flow Agent 可在 Python 脚本节点中集成记忆 SDK，实现条件化记忆更新（如仅当用户明确授权时写入敏感画像）。
+> ⚠️ 关键区分：`session_id` 绑定的是临时会话状态（短期记忆），而 `memory_id` 标识的是用户级长期记忆实体——二者独立存在，不可混用。
 
 ## 关键参数和配置
 
-| 参数 | 类型 | 必填 | 说明 | 场景 |
-|------|------|------|------|------|
-| `user_id` | string | ✅ | 用户唯一标识，用于隔离不同用户的记忆空间；必须与 `agent context` 调用中的 `user_id` 一致才能生效 | 全部 |
-| `project_id` / `project_ids` | string / string[] | ⚠️（技能/事实抽取必需） | 绑定记忆抽取规则：指定后触发 `observation` 或 `skill` 自动抽取；未指定则仅支持 `custom_content` 直接写入 | 写入 |
-| `profile_schema` | string | ⚠️（用户画像写入必需） | 用户画像模板 ID；需提前通过 `/profile_schemas` 创建；启用后自动解析 `messages` 中符合 schema 的字段 | 写入 |
-| `extract_mode=profile_only` | string | ❌（可选） | 强制仅执行用户画像抽取，忽略 `observation`/`skill`；此时 `messages` 和 `profile_schema` 均为必填 | 写入 |
-| `top_k` | integer | ❌（默认 `10`） | 检索返回的最大记忆节点数 | 检索 |
-| `min_score` | float | ❌（默认 `0.3`） | 最小相似度阈值；**仅 `plan_version=pro` 时生效** | 检索 |
-| `plan_version` | string | ❌（默认 `lite`） | 检索策略：`lite`（基础向量检索）、`pro`（启用 Rerank + `min_score` 过滤） | 检索 |
-| `memory_types` | string[] | ❌（默认 `["observation"]`） | 指定检索的记忆类型，如 `["observation", "skill"]` | 检索 |
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `memory_id` | string | 否 | 用户级唯一标识；未提供时平台基于 `user_id` 自动生成，但**强烈建议业务侧统一维护并复用**，确保记忆一致性 |
+| `fragment_type` | string | 是 | `"profile"`（系统预定义字段，如 `location`, `preferred_language`）或 `"custom"`（需自行定义 schema） |
+| `ttl_seconds` | integer | 否 | 分片存活时间，默认 `2592000`（30 天）；最小有效值为 `1800`（30 分钟）；设为 `0` 表示永不过期（慎用） |
+| `retrieval_mode` | string | 否 | 默认 `"hybrid"`（关键词 + 元数据过滤 + 语义向量）；可选 `"semantic"`（纯向量检索，对 query 质量敏感）或 `"exact"`（仅匹配 `key` 字段） |
 
-> **注意**：`user_id` 是长期记忆作用域的唯一锚点，务必在所有相关调用（Agent 推理、记忆写入、检索）中保持一致；跨 `session_id` 的记忆共享天然成立，无需额外配置。
+- **模型兼容性**：  
+  - ✅ 自动读写（写入后自动注入 prompt）：仅 `qwen-max-2025-03` 及后续标注 `ltm-enabled` 的模型  
+  - ⚠️ 显式读取（需调用 `/v1/memory/retrieve`）：`qwen-plus`、`qwen-turbo` 支持，但**不支持自动注入**  
+  - ❌ 不支持：所有非 Qwen 系列模型、Qwen-VL 多模态模型（不支持 memory 类型 context）
 
-## 面向开发者，简洁实用
+- **限制**：  
+  - 单次检索最多返回 10 个分片，总内容长度 ≤ 8192 字符（含 metadata）  
+  - 写入后检索延迟：通常 ≤ 2 秒，高并发下最长 ≤ 5 秒  
+  - 严格隔离：无法通过一个 `memory_id` 访问另一个用户的记忆（无共享记忆）  
 
-- ✅ **首选异步写入**：用 `AddMemoryAsync` 替代 `AddMemory`，避免同步超时；轮询 `GET /events/{event_id}` 获取结果，适合生产环境。
-- ✅ **画像先建模再写入**：调用 `/profile_schemas` 创建 schema 后，再在 `AddMemoryAsync` 中传 `profile_schema`，否则画像写入失败。
-- ✅ **检索即插即用**：在 `agent context` 中启用 `memory` 即可自动注入；若需精细控制（如只召回技能），请改用 SDK 手动调用 `/memory_nodes/search` 并设置 `memory_types`。
-- ⚠️ **鉴权严格分离**：新版 LTM 使用 `DASHSCOPE_API_KEY` + 业务空间 endpoint；旧版 Flow Agent 的 `Memory` 接口使用 AccessKey 签名 —— 切勿混用。
-- ⚠️ **容量与限流监控**：单用户长期记忆上限为 1MB；全接口 QPM 总限 3000，其中 `search` ≤ 300 QPM，建议在高并发场景添加重试与降级逻辑。
-- 🚀 **快速起步命令**：
-  ```bash
-  # 设置环境变量（替换为你的 WorkspaceId 和 API Key）
-  export MEMORY_ENDPOINT="https://your-workspace-id.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory"
-  export DASHSCOPE_API_KEY="sk-xxxx"
+## 面向开发者：快速上手建议
 
-  # 异步写入一条事实记忆
-  curl -X POST "$MEMORY_ENDPOINT/add-async" \
-    -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
-    -H "Content-Type: application/json" \
-    -d '{
-          "user_id": "u123",
-          "project_id": "proj-fact-default",
-          "messages": [{"role":"user","content":"我明天要去上海开会"}]
-        }'
-
-  # 检索该用户的相关记忆
-  curl -X POST "$MEMORY_ENDPOINT/memory_nodes/search" \
-    -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
-    -H "Content-Type: application/json" \
-    -d '{
-          "user_id": "u123",
-          "messages": [{"role":"user","content":"帮我安排会议行程"}],
-          "top_k": 5,
-          "plan_version": "pro",
-          "min_score": 0.4
-        }'
-  ```
+- **首次集成**：优先使用 `fragment_type: "profile"` 快速沉淀用户基础属性（如 `age`, `interests`, `location`），避免自定义 schema 复杂度。  
+- **调试技巧**：调用 `/v1/memory/retrieve` 时带上 `debug: true` 查询参数，可返回检索过程的向量相似度、匹配字段等诊断信息。  
+- **生产注意**：  
+  - 永不过期（`ttl_seconds: 0`）的记忆需配合定期清理策略，否则可能触发配额告警；  
+  - 所有写入操作必须携带 `memory_id` 或 `user_id`，否则将被拒绝；  
+  - `profile` 类型字段名必须在白名单内，否则返回 `400 Bad Request` —— 建议先查 [Profile 字段规范](../../raw/application-api-reference/long-term-memory-new/profiles-overview.md)。
 
 ## 关联主题页
 
 - [long term memory new](../api/long-term-memory-new.md)
-- [agent context](../guides/agent-context.md)
-- [flow agent api](../api/flow-agent-api.md)
 - [agent development](../guides/agent-development.md)
-- [agent governance](../guides/agent-governance.md)
+- [agent context](../guides/agent-context.md)
+- [managed agents api](../api/managed-agents-api.md)
 
 

@@ -2498,6 +2498,230 @@ SSML: 支持
 
 时间戳: 支持
 
+**音色名称**: Nagi
+
+**本地名称**: 凪
+
+**voice 参数**: `qwen-audio-3.1-tts-flash-nagi_ja`
+
+日语
+
+男
+
+SSML: 支持
+
+指令控制: 支持
+
+时间戳: 支持
+
+**音色名称**: Haneul
+
+**本地名称**: 하늘
+
+**voice 参数**: `qwen-audio-3.1-tts-flash-haneul_ko`
+
+韩语
+
+男
+
+SSML: 支持
+
+指令控制: 支持
+
+时间戳: 支持
+
+**音色名称**: Aube
+
+**本地名称**: Aube
+
+**voice 参数**: `qwen-audio-3.1-tts-flash-aube_fr`
+
+法语
+
+女
+
+SSML: 支持
+
+指令控制: 支持
+
+时间戳: 支持
+
+**音色名称**: Lerche
+
+**本地名称**: Lerche
+
+**voice 参数**: `qwen-audio-3.1-tts-flash-lerche_de`
+
+德语
+
+女
+
+SSML: 支持
+
+指令控制: 支持
+
+时间戳: 支持
+
+**音色名称**: Veter
+
+**本地名称**: Ветер
+
+**voice 参数**: `qwen-audio-3.1-tts-flash-veter_ru`
+
+俄语
+
+男
+
+SSML: 支持
+
+指令控制: 支持
+
+时间戳: 支持
+
+**音色名称**: Rugiada
+
+**本地名称**: Rugiada
+
+**voice 参数**: `qwen-audio-3.1-tts-flash-rugiada_it`
+
+意大利语
+
+女
+
+SSML: 支持
+
+指令控制: 支持
+
+时间戳: 支持
+
+**音色名称**: Albor
+
+**本地名称**: Albor
+
+**voice 参数**: `qwen-audio-3.1-tts-flash-albor_es`
+
+西班牙语
+
+男
+
+SSML: 支持
+
+指令控制: 支持
+
+时间戳: 支持
+
+**音色名称**: Farol
+
+**本地名称**: Farol
+
+**voice 参数**: `qwen-audio-3.1-tts-flash-farol_pt`
+
+葡萄牙语
+
+男
+
+SSML: 支持
+
+指令控制: 支持
+
+时间戳: 支持
+
+**音色名称**: Naseem
+
+**本地名称**: نسيم
+
+**voice 参数**: `qwen-audio-3.1-tts-flash-naseem_ar`
+
+阿拉伯语
+
+男
+
+SSML: 支持
+
+指令控制: 支持
+
+时间戳: 支持
+
+**音色名称**: Embun
+
+**本地名称**: Embun
+
+**voice 参数**: `qwen-audio-3.1-tts-flash-embun_id`
+
+印尼语
+
+男
+
+SSML: 支持
+
+指令控制: 支持
+
+时间戳: 支持
+
+**音色名称**: May
+
+**本地名称**: Mây
+
+**voice 参数**: `qwen-audio-3.1-tts-flash-may_vi`
+
+越南语
+
+男
+
+SSML: 支持
+
+指令控制: 支持
+
+时间戳: 支持
+
+**音色名称**: Bayu
+
+**本地名称**: Bayu
+
+**voice 参数**: `qwen-audio-3.1-tts-flash-bayu_ms`
+
+马来语
+
+男
+
+SSML: 支持
+
+指令控制: 支持
+
+时间戳: 支持
+
+**音色名称**: Sailom
+
+**本地名称**: สายลม
+
+**voice 参数**: `qwen-audio-3.1-tts-flash-sailom_th`
+
+泰语
+
+男
+
+SSML: 支持
+
+指令控制: 支持
+
+时间戳: 支持
+
+**音色名称**: Hiraya
+
+**本地名称**: Hiraya
+
+**voice 参数**: `qwen-audio-3.1-tts-flash-hiraya_tl`
+
+菲律宾语（他加禄语）
+
+女
+
+SSML: 支持
+
+指令控制: 支持
+
+时间戳: 支持
+
 ### qwen-audio-3.0-tts-plus
 
 **适用场景**
