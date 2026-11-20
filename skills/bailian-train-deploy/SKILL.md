@@ -1,200 +1,221 @@
 ---
 name: bailian-train-deploy
-description: 用百炼 CLI (`bl`) 走完"数据→微调训练→导出→部署→调用"的完整闭环，或跳过训练直接部署基座模型。支持文本模型（SFT/DPO/CPT）、音频 TTS 模型（CosyVoice）、图像生成模型（Wan2.7）和视频生成模型（Wan i2v/kf2v）微调。涵盖数据集校验/上传、创建微调任务、等待训练、导出最佳 checkpoint、创建推理部署、等待就绪、给出调用示例。当用户提到在百炼 / DashScope / 阿里云模型工作室上"训练模型""微调""fine-tune""finetune""部署模型""模型上线""把微调模型跑起来/调用""训练一个推理模型""继续预训练""LoRA/SFT/DPO 训练""语音合成模型""TTS 微调""CosyVoice""声音克隆""图像生成微调""文生图""图生图""Wan2.7""图像模型训练""视频生成微调""图生视频""首帧生视频""首尾帧""kf2v""i2v""Wan视频""视频特效训练"等，都应激活本技能——即使用户没明说"用 bl"，只要意图是百炼平台的训练或部署，就用本技能，不要自己拼凑命令。
+description: >-
+  Use the Bailian CLI (`bl`) to run the full closed loop of "data → fine-tuning → export →
+  deployment → invocation", or skip training and deploy a base model directly. Supports
+  fine-tuning text models (SFT/DPO/CPT), audio TTS models (CosyVoice), image generation
+  models (Wan2.7), and video generation models (Wan i2v/kf2v). Covers dataset
+  validation/upload, creating fine-tuning jobs, waiting for training, exporting the best
+  checkpoint, creating inference deployments, waiting until ready, and providing call
+  examples. Activate this skill whenever the user mentions "train a model" / 训练模型,
+  "fine-tune" / "fine-tune" / "finetune" / 微调, "deploy a model" / 部署模型, "put the
+  model online" / 模型上线, "run/call my fine-tuned model" / 把微调模型跑起来,
+  "train a reasoning model" / 训练一个推理模型, "continued pretraining" / 继续预训练,
+  "LoRA/SFT/DPO training" / LoRA/SFT/DPO 训练, "speech synthesis model" / 语音合成模型,
+  "TTS fine-tuning" / TTS 微调, "CosyVoice", "voice cloning" / 声音克隆,
+  "image generation fine-tuning" / 图像生成微调, "text-to-image" / 文生图,
+  "image-to-image" / 图生图, "Wan2.7", "image model training" / 图像模型训练,
+  "video generation fine-tuning" / 视频生成微调, "image-to-video" / 图生视频,
+  "first-frame-to-video" / 首帧生视频, "first-and-last-frame" / 首尾帧, "kf2v", "i2v",
+  "Wan video" / Wan视频, or "video effect training" / 视频特效训练 on Bailian / DashScope /
+  Alibaba Cloud Model Studio. Even if the user does not explicitly say "use bl", as long
+  as the intent is training or deployment on the Bailian platform, use this skill instead
+  of assembling commands yourself.
 ---
 
-# 百炼模型训练→部署闭环 (`bl`)
+# Bailian Model Training → Deployment Closed Loop (`bl`)
 
-用百炼 CLI `bl` 把模型部署成可调用的专属推理服务——可以先微调再部署，也可以跳过训练直接部署基座。支持文本、音频 TTS、图像生成和视频生成四种模态，两处"等待"用 Monitor 异步轮询，不阻塞主流程。
+Use the Bailian CLI `bl` to turn a model into a callable dedicated inference service — you can fine-tune first and then deploy, or skip training and deploy a base model directly. Four modalities are supported: text, audio TTS, image generation, and video generation. The two "wait" points use asynchronous Monitor polling and never block the main flow.
 
 ```
-链路 A（先训练后部署）：
-数据集 → finetune <模态> create → 等 SUCCEEDED → 导出模型(通常自动) → deploy <模态> create → 等 RUNNING → 调用
+Link A (train first, then deploy):
+dataset → finetune <modality> create → wait for SUCCEEDED → export model (usually automatic) → deploy <modality> create → wait for RUNNING → invoke
 
-链路 B（直接部署基座，跳过训练）：
-选基座 → deploy <模态> create → 等 RUNNING → 调用
+Link B (deploy a base model directly, skipping training):
+choose a base model → deploy <modality> create → wait for RUNNING → invoke
 ```
 
-链路 B 适用于"只想把某个基座跑成自己的部署服务"——和直接调用 API 在推理上没本质区别，但能拿到独立部署实例、可调速率/计费方式、纳入自己的运维。**仅当用户明确表示不训练 / 跳过训练 / 直接部署基座时才走这条**；用户只是没提训练细节时，默认按链路 A 引导，不要擅自跳过训练。
+Link B fits "I just want to run some base model as my own deployment service" — in terms of inference it is essentially the same as calling the API directly, but you get a dedicated deployment instance with configurable rate/billing that is under your own operations. **Take this route only when the user explicitly says no training / skip training / deploy the base model directly**; when the user simply has not mentioned training details, default to guiding them through Link A and never skip training on your own initiative.
 
-**模态分发**：本技能的通用流程适用于所有模态，但数据格式、超参、推理命令因模态而异。确定用户意图后，按模态查阅对应参考文件：
-- **文本模型**（对话/推理）→ [`references/text.md`](references/text.md)
-- **音频 TTS 模型**（语音合成/CosyVoice）→ [`references/audio.md`](references/audio.md)
-- **图像生成模型**（文生图/图生图/Wan2.7）→ [`references/image.md`](references/image.md)
-- **视频生成模型**（图生视频/首尾帧/Wan i2v/kf2v）→ [`references/video.md`](references/video.md)
-- 未来新增模态 = 新增对应 reference 文件，本流程骨架不变
+**Modality dispatch**: The generic flow in this skill applies to all modalities, but data format, hyperparameters, and inference commands differ by modality. Once the user's intent is clear, consult the matching reference file:
+- **Text models** (chat/reasoning) → [`references/text.md`](references/text.md)
+- **Audio TTS models** (speech synthesis/CosyVoice) → [`references/audio.md`](references/audio.md)
+- **Image generation models** (text-to-image/image-to-image/Wan2.7) → [`references/image.md`](references/image.md)
+- **Video generation models** (image-to-video/first-and-last-frame/Wan i2v/kf2v) → [`references/video.md`](references/video.md)
+- Future modalities = add a matching reference file; this flow skeleton stays unchanged
 
-> 本技能假设 `bl`（bailian-cli）已安装。命令/flag 细节以 `bl <cmd> --help` 为准；本技能聚焦**流程编排与避坑**。
+> This skill assumes `bl` (bailian-cli) is already installed. Command/flag details are governed by `bl <cmd> --help`; this skill focuses on **flow orchestration and pitfall avoidance**.
 
-## 写操作护栏（创建前必读）
+## Write-operation guardrails (read before creating anything)
 
-`bl finetune <模态> create` 与 `bl deploy <模态> create` 都是真实写操作，会产生计费资源（微调训练 + 推理部署）。`bl` **没有 `--dry-run`**，所以用**预检命令**代替预演、用**计费确认**把关预留资源。任何写操作前必须先过这三道闸：
+`bl finetune <modality> create` and `bl deploy <modality> create` are real write operations that create billable resources (fine-tuning + inference deployment). `bl` has **no `--dry-run`**, so use **pre-check commands** instead of a dry run, and gate reserved resources with **billing confirmation**. Any write operation must pass these three gates first:
 
-1. **预检代替 dry-run**（创建前必跑，确认可行再写）。这些预检命令本身都需先通过下方[前置检查](#前置检查动作流起点)的认证——未认证先 `bl auth login` 再预检：
-   - 训练前：`bl finetune capability --base-model <base>` —— 确认基座支持你选的 training-type（不支持会快速失败且不耗配额；`create` 提交时也会再校验一次）。
-   - 部署前：`bl deploy models --source custom`（链路 A 微调输出）或 `--source base`（链路 B 基座）—— 确认目标模型可部署、看清可用 plan，再决定 `--plan`。
-   - 复用检测：`bl deploy list --status RUNNING` —— 若已有引用同一 `finetuned_output` 且 RUNNING 的部署，直接复用其 `deployed_model`，**不要再建第二个计费实例**。
-2. **计费确认硬闸门（mu/ptu）**：
-   - `lora`（默认，按 token 计费，闲置一般不计费）—— 安全默认，可直接创建。
-   - `mu` / `ptu` 是**预留/独占资源，闲置也计费**——创建前**必须**向用户显式说明计费方式并取得确认。在 agent / CI 等非交互环境**不能自动开通预留资源**。命中 mu/ptu 时，把“这会产生闲置计费”连同命令交还给真人在终端确认（`bl` 当前不提供 `--yes` 跳过确认 flag，确认行为完全由真人把控）。
-3. **账号就绪检查**：`bl auth status` —— `authenticated: false` 即停，给 `bl auth login --api-key sk-...`。百炼走 API key / access token 认证，**没有独立的实名闸门**，`auth status` 即账号就绪检查。
+1. **Pre-checks instead of dry-run** (must run before creation; write only once feasibility is confirmed). These pre-check commands themselves require authentication via the [pre-flight checks](#pre-flight-checks-start-of-the-action-flow-1) below — if not authenticated, run `bl auth login` first, then pre-check:
+   - Before training: `bl finetune capability --base-model <base>` — confirm the base model supports your chosen training-type (unsupported combos fail fast without consuming quota; `create` re-validates at submission).
+   - Before deployment: `bl deploy models --source custom` (Link A fine-tuned output) or `--source base` (Link B base model) — confirm the target model is deployable, see the available plans, then decide `--plan`.
+   - Reuse detection: `bl deploy list --status RUNNING` — if a RUNNING deployment already references the same `finetuned_output`, reuse its `deployed_model` and **do not create a second billable instance**.
+2. **Hard billing-confirmation gate (mu/ptu)**:
+   - `lora` (default; token-billed; idle usually not billed) — the safe default, can be created directly.
+   - `mu` / `ptu` are **reserved/exclusive resources that bill even when idle** — before creating them you **must** explain the billing model to the user and get their confirmation. In non-interactive environments (agent / CI) you **must not auto-provision reserved resources**. When mu/ptu applies, hand "this will incur idle billing" together with the command back to a real human for terminal confirmation (`bl` currently offers no `--yes` flag to skip confirmation; confirmation is entirely human-controlled).
+3. **Account readiness check**: `bl auth status` — if `authenticated: false`, stop and provide `bl auth login --api-key sk-...`. Bailian authenticates with API key / access token and has **no separate real-name gate**; `auth status` is the account readiness check.
 
-## 反触发表（不归本 skill 的意图，附完整命令）
+## Reverse-trigger table (intents that do not belong to this skill, with full commands)
 
-| 用户意图 | 路由到 | 完整示范命令 |
+| User intent | Route to | Full example command |
 |---|---|---|
-| 只想试模型效果 / 一次性对话 | `bailian-cli` | `bl text chat --model qwen3-8b --message "..."` |
-| 已确定模型，只要调用方式 | `bailian-cli` | `bl text chat --model <model> --message "..."` |
-| 不知道选哪个基座 / 模型选型 | `bailian-model-recommend` | （让该 skill 按场景推荐）|
-| 纯查模型参数 / 价格 / 上下文窗口 | `bailian-docs-llm-wiki` | （查模型数据目录）|
-| 已有部署，只想生成调用示例 | `bailian-cli` | `bl text chat --model <deployed_model> --message "..."` 或 `bl speech synthesize --model <deployed_model> --voice default --text "..."` 或异步 API + 触发词（图像生成，见 [image.md](references/image.md#推理与调用)）|
-| 对已有训练任务 / 部署做查删（生命周期） | `bl` 直接 | `bl finetune list` / `bl deploy list` / `bl deploy delete --deployed-model <id>` |
+| Just want to try a model / one-off chat | `bailian-cli` | `bl text chat --model qwen3-8b --message "..."` |
+| Model already chosen, only need how to call it | `bailian-cli` | `bl text chat --model <model> --message "..."` |
+| Don't know which base model to pick / model selection | `bailian-model-recommend` | (let that skill recommend per scenario) |
+| Pure lookup of model specs / pricing / context window | `bailian-docs-llm-wiki` | (query the model data catalog) |
+| Already have a deployment, only want a call example | `bailian-cli` | `bl text chat --model <deployed_model> --message "..."` or `bl speech synthesize --model <deployed_model> --voice default --text "..."` or the async API + trigger word (image generation, see [image.md](references/image.md#inference-and-invocation)) |
+| Query/delete existing jobs or deployments (lifecycle) | `bl` directly | `bl finetune list` / `bl deploy list` / `bl deploy delete --deployed-model <id>` |
 
-> 本 skill 只负责"新建训练任务 + 新建部署 + 调用交付"这一条闭环。训练任务与部署的**全生命周期管理**（list / stop / delete 历史任务、删除部署等）不在本 skill 流程内，用 `bl finetune list` / `bl deploy list` / `bl deploy delete` 直接操作。
+> This skill only owns the closed loop of "create a training job + create a deployment + deliver invocation". **Full lifecycle management** of jobs and deployments (list / stop / delete historical jobs, delete deployments, etc.) is outside this skill's flow — operate directly with `bl finetune list` / `bl deploy list` / `bl deploy delete`.
 
-## 反幻觉清单
+## Anti-hallucination checklist
 
-- **`--base-model` / `--model-name` / `--model` 分属不同命令，切勿复用**：
-  - `bl finetune <模态> create --base-model` → 基座模型名（文本 `qwen3-8b`，音频 `cosyvoice-v3-flash`，图像 `wan2.7-image-pro`）。
-  - `bl deploy <模态> create --model-name` → 导出模型名（链路 A：`qwen3-8b-ft-...` / `cosyvoice-v3-flash-ft-...` / `wan2.7-image-pro-ft-...`；链路 B：基座名）。
-  - 推理命令 `--model` → 必须用 `deploy <模态> create` 响应里的 `deployed_model`，**不是**你传给 deploy <模态> create 的名字。
-- **`--training-type` 取值穷举**：`sft` / `sft-lora`（默认）/ `dpo` / `dpo-lora` / `cpt`。映射在 CLI 边界完成（`sft-lora`→`efficient_sft`），永远传 CLI 值，不要传服务端字符串。`cpt` 无 `-lora` 变体。音频 TTS 和图像生成都只用 `sft-lora`——`finetune audio create` / `finetune image create` **不暴露此 flag**，仅 `finetune text create` 接受。
-- **`--plan` 取值穷举**：`lora`（默认，token 计费）/ `ptu`（需 `--input-tpm`/`--output-tpm`）/ `mu`（需 `--deploy-spec`/`--capacity`）。链路 B 基座通常**不支持 `lora`**。音频 TTS 微调模型**只支持 `mu`**。图像生成微调模型**只支持 `lora`**。
-- **`--deploy-spec`**（非 ~~template-id~~）：mu plan 的部署规格 flag。CLI 从 catalog 读取 `template_id`，在请求体中发送为 `deploy_spec`。
-- **`--source` 取值穷举**（`bl deploy models`）：`custom`（微调输出）/ `base`（基座）/ `public`。
-- **`--learning-rate` 必须字符串**：传 `"3e-4"`，不要传数字 `3e-4`，避免 JSON 精度丢失（文本适用，音频/图像不需要传此参数）。
-- **推理命令因模态不同**：文本模型用 `bl text chat`，音频 TTS 用 `bl speech synthesize --voice default`，图像生成用异步 API + 触发词（详见 [`references/image.md`](references/image.md#推理与调用)）。
-- **没有这些 flag/子命令**：`bl` 无 `--dry-run`、无裸 `finetune create`/`deploy create`（**必须带模态段**：`finetune text|audio|image create`、`deploy text|audio|image create`）、无 `finetune start`、无 `deploy stop`（停用/恢复用 `bl deploy pause` / `bl deploy resume`；pause 对 mu/ptu 停止计费）。
-- **必填**：`finetune <模态> create` 的 `--base-model` / `--datasets`；`deploy <模态> create` 的 `--model-name` / `--display-name`。
+- **`--base-model` / `--model-name` / `--model` belong to different commands; never reuse them**:
+  - `bl finetune <modality> create --base-model` → base model name (text `qwen3-8b`, audio `cosyvoice-v3-flash`, image `wan2.7-image-pro`).
+  - `bl deploy <modality> create --model-name` → exported model name (Link A: `qwen3-8b-ft-...` / `cosyvoice-v3-flash-ft-...` / `wan2.7-image-pro-ft-...`; Link B: the base model name).
+  - Inference command `--model` → must be the `deployed_model` from the `deploy <modality> create` response, **not** the name you passed to `deploy <modality> create`.
+- **`--training-type` exhaustive values**: `sft` / `sft-lora` (default) / `dpo` / `dpo-lora` / `cpt`. The mapping happens at the CLI boundary (`sft-lora`→`efficient_sft`); always pass CLI values, never server-side strings. `cpt` has no `-lora` variant. Audio TTS and image generation only use `sft-lora` — `finetune audio create` / `finetune image create` **do not expose this flag**; only `finetune text create` accepts it.
+- **`--plan` exhaustive values**: `lora` (default, token-billed) / `ptu` (requires `--input-tpm`/`--output-tpm`) / `mu` (requires `--deploy-spec`/`--capacity`). Link B base models usually **do not support `lora`**. Audio TTS fine-tuned models **only support `mu`**. Image generation fine-tuned models **only support `lora`**.
+- **`--deploy-spec`** (not ~~template-id~~): the deployment-spec flag for the mu plan. The CLI reads `template_id` from the catalog and sends it as `deploy_spec` in the request body.
+- **`--source` exhaustive values** (`bl deploy models`): `custom` (fine-tuned output) / `base` (base model) / `public`.
+- **`--learning-rate` must be a string**: pass `"3e-4"`, not the number `3e-4`, to avoid JSON precision loss (applies to text; audio/image do not take this parameter).
+- **Inference commands differ by modality**: text models use `bl text chat`, audio TTS uses `bl speech synthesize --voice default`, image generation uses the async API + trigger word (see [`references/image.md`](references/image.md#inference-and-invocation)).
+- **These flags/subcommands do not exist**: `bl` has no `--dry-run`, no bare `finetune create`/`deploy create` (**the modality segment is mandatory**: `finetune text|audio|image create`, `deploy text|audio|image create`), no `finetune start`, no `deploy stop` (use `bl deploy pause` / `bl deploy resume` to disable/restore; pause stops billing for mu/ptu).
+- **Required**: `--base-model` / `--datasets` on `finetune <modality> create`; `--model-name` / `--display-name` on `deploy <modality> create`.
 
-## 前置检查（动作流起点）
+## Pre-flight checks (start of the action flow)
 
-- 认证：`bl auth status`，确认已配置 API key（`DASHSCOPE_API_KEY` 或 `bl auth login --api-key sk-...`）。
-- 基座选型：查询训练能力用 `bl finetune capability`（查 listFoundationModels，走 API key、无需 console 登录）：
-  - `bl finetune capability --base-model <base>` —— 该模型支持哪些训练类型。
-  - `bl finetune capability --training-type sft-lora` —— 反向查：哪些模型支持该训练类型（返回 `models` 列表，含中文名）。
-  - 选定基座后可直接进入第 2 步；`bl finetune <模态> create` 提交前也会再用 listFoundationModels 校验，不支持会快速失败。
-  - 文本推理推荐 Qwen3 系列（`qwen3-8b` / `qwen3-14b` / `qwen3.6-flash`）；音频 TTS 用 `cosyvoice-v3-flash`；图像生成用 `wan2.7-image-pro` / `wan2.7-image`。
+- Authentication: `bl auth status`; confirm an API key is configured (`DASHSCOPE_API_KEY` or `bl auth login --api-key sk-...`).
+- Base model selection: query training capability with `bl finetune capability` (queries listFoundationModels via API key; no console login needed):
+  - `bl finetune capability --base-model <base>` — which training types this model supports.
+  - `bl finetune capability --training-type sft-lora` — reverse lookup: which models support that training type (returns a `models` list with Chinese names).
+  - Once a base model is chosen, go straight to Step 2; `bl finetune <modality> create` re-validates against listFoundationModels before submission and fails fast if unsupported.
+  - For text reasoning, the Qwen3 series is recommended (`qwen3-8b` / `qwen3-14b` / `qwen3.6-flash`); audio TTS uses `cosyvoice-v3-flash`; image generation uses `wan2.7-image-pro` / `wan2.7-image`.
 
-## 第 1 步：准备数据集
+## Step 1: Prepare the dataset
 
-支持三种数据来源，由你（Agent）根据用户意图灵活选用，不必写死交互流程——你本身具备主动提问能力，知道有哪些选项后自然向用户确认即可：
+Three data sources are supported; choose flexibly based on user intent rather than hardcoding an interaction flow — you can proactively ask questions: once you know the options, naturally confirm with the user:
 
-1. **本地数据集** —— 用户提供本地文件路径，直接使用。
-2. **已上传数据集** —— 从百炼上已有的数据集中选取（`bl dataset list`）。
-3. **生成示例数据** —— 征得用户同意后，由你生成一份小规模示例数据，仅用于跑通流程（效果有限，需如实告知用户）。
+1. **Local dataset** — the user provides a local file path; use it directly.
+2. **Already-uploaded dataset** — pick from existing Bailian datasets (`bl dataset list`).
+3. **Generated sample data** — with the user's consent, generate a small sample dataset just to walk the flow through (limited quality; tell the user honestly).
 
-**数据格式因模态不同**，详见对应参考文件：
-- **文本模型**：`.jsonl` 文件（ChatML/DPO/CPT schema），详见 [`references/text.md`](references/text.md#数据格式)。
-- **音频 TTS**：`.zip` 包（内含 `data.jsonl` + `train/*.wav`），详见 [`references/audio.md`](references/audio.md#数据格式)。
-- **图像生成**：`.zip` 包（内含 `data.jsonl` + 图像文件平铺），详见 [`references/image.md`](references/image.md#数据格式)。
+**Data format differs by modality**; see the matching reference file:
+- **Text models**: `.jsonl` file (ChatML/DPO/CPT schema), see [`references/text.md`](references/text.md#data-format).
+- **Audio TTS**: `.zip` package (containing `data.jsonl` + `train/*.wav`), see [`references/audio.md`](references/audio.md#data-format).
+- **Image generation**: `.zip` package (containing `data.jsonl` + image files laid out flat), see [`references/image.md`](references/image.md#data-format).
 
-提交训练前用 `bl dataset validate --file <path>` 校验通过再继续（CLI 自动探测 schema，也可 `--schema tts` / `--schema image` / `--schema chatml` 显式指定）。
+Before submitting training, validate with `bl dataset validate --file <path>` and continue only after it passes (the CLI auto-detects the schema; you can also explicitly pass `--schema tts` / `--schema image` / `--schema chatml`).
 
-## 第 2 步：创建微调任务
+## Step 2: Create the fine-tuning job
 
 ```bash
-bl finetune <模态> create \
+bl finetune <modality> create \
   --base-model <base-model> \
   --datasets <path-or-file-id> \
   --output json
 ```
 
-**training-type 取值与映射**详见 [`references/finetune.md`](references/finetune.md)。**模态特异性超参**见对应参考文件：
-- 文本模型（`finetune text create`）：接受 `--training-type` / `--n-epochs` / `--learning-rate` 等，详见 [`references/text.md`](references/text.md#创建训练任务)。
-- 音频 TTS（`finetune audio create`）：**不暴露 `--training-type`**（内部固定 `sft-lora`），超参由 CLI 自动注入，详见 [`references/audio.md`](references/audio.md#创建训练任务)。
-- 图像生成（`finetune image create`）：**不暴露 `--training-type`**（内部固定 `sft-lora`），超参由 CLI 自动注入，详见 [`references/image.md`](references/image.md#创建训练任务)。
+**training-type values and mapping**: see [`references/finetune.md`](references/finetune.md). **Modality-specific hyperparameters**: see the matching reference file:
+- Text models (`finetune text create`): accepts `--training-type` / `--n-epochs` / `--learning-rate`, etc.; see [`references/text.md`](references/text.md#create-a-training-job).
+- Audio TTS (`finetune audio create`): **does not expose `--training-type`** (internally fixed to `sft-lora`); hyperparameters are auto-injected by the CLI; see [`references/audio.md`](references/audio.md#create-a-training-job).
+- Image generation (`finetune image create`): **does not expose `--training-type`** (internally fixed to `sft-lora`); hyperparameters are auto-injected by the CLI; see [`references/image.md`](references/image.md#create-a-training-job).
 
-从响应记下：`output.job_id`、`output.finetuned_output`（输出模型名，形如 `<base>-ft-<ts>-<id>`）。
+Record from the response: `output.job_id`, `output.finetuned_output` (the output model name, shaped like `<base>-ft-<ts>-<id>`).
 
-## 第 3 步：等待训练完成（异步）
+## Step 3: Wait for training to finish (asynchronous)
 
-用 Monitor 工具运行本技能自带的等待脚本——它会在状态变化时通知，到终态退出：
+Use the Monitor tool to run this skill's bundled wait script — it notifies on status changes and exits at a terminal state:
 
 ```
-Monitor command: bash <本技能目录>/scripts/wait.sh finetune <JOB_ID>
+Monitor command: bash <this-skill-directory>/scripts/wait.sh finetune <JOB_ID>
 ```
 
-`<本技能目录>` 即本技能的 base 目录（技能加载时会给出，含 `scripts/wait.sh`），用实际路径替换。脚本每 30s 轮询，终态为 `SUCCEEDED`/`FAILED`/`CANCELED`/`PARTIALLY_SUCCEEDED`。
+`<this-skill-directory>` is this skill's base directory (provided when the skill is loaded, containing `scripts/wait.sh`); substitute the actual path. The script polls every 30s; terminal states are `SUCCEEDED`/`FAILED`/`CANCELED`/`PARTIALLY_SUCCEEDED`.
 
-⚠️ **避坑：不要在 zsh 里手写 `status=...` 轮询循环。** `status` 是 zsh 的只读内置变量，赋值会报 `read-only variable` 并让脚本 exit 1。用本技能的 bash 脚本（`#!/usr/bin/env bash`）规避，或自写时改用 `st` 等变量名。
+⚠️ **Pitfall: never hand-write a `status=...` polling loop in zsh.** `status` is a read-only zsh built-in variable; assigning to it raises `read-only variable` and makes the script exit 1. Use this skill's bash script (`#!/usr/bin/env bash`) to avoid it, or rename the variable to something like `st` if you write your own.
 
-## 第 4 步：导出最佳模型（通常可跳过）
+## Step 4: Export the best model (usually skippable)
 
-任务 SUCCEEDED 后，平台**会自动导出 best checkpoint** 为可部署模型——直接进第 5 步即可，无需手动导出。
+After the job reaches SUCCEEDED, the platform **automatically exports the best checkpoint** as a deployable model — go straight to Step 5; no manual export needed.
 
-只有要部署**非 best** 的某个 checkpoint 时才显式导出：
+Export explicitly only when deploying a checkpoint that is **not the best**:
 ```bash
-bl finetune checkpoints --job-id <JOB_ID>          # 列出可用 checkpoint
-bl finetune export --job-id <JOB_ID> --checkpoint <name> --model-name <自定义名>
+bl finetune checkpoints --job-id <JOB_ID>          # list available checkpoints
+bl finetune export --job-id <JOB_ID> --checkpoint <name> --model-name <custom-name>
 ```
 
-## 第 5 步：创建部署
+## Step 5: Create the deployment
 
-> 创建前先过[写操作护栏](#写操作护栏创建前必读)：`bl deploy list --status RUNNING` 查是否已有同模型部署可复用；`bl deploy models --source custom|base` 确认可用 plan；`mu`/`ptu` 必须先取得用户计费确认。
+> Before creating, pass the [write-operation guardrails](#write-operation-guardrails-read-before-creating-anything): `bl deploy list --status RUNNING` to check for a reusable deployment of the same model; `bl deploy models --source custom|base` to confirm available plans; for `mu`/`ptu`, obtain the user's billing confirmation first.
 
-⚠️ **关键避坑：微调后的模型不能直接用微调输出名调用，会 404 `Model not exist`。必须先创建部署。**（链路 B 部署基座同理——直接调用走的是公共推理，不经过你的部署实例。）
+⚠️ **Key pitfall: a fine-tuned model cannot be invoked directly by its fine-tuned output name — you get 404 `Model not exist`. You must create a deployment first.** (Same for Link B base deployments — direct calls go through public inference and bypass your deployment instance.)
 
 ```bash
-bl deploy <模态> create \
-  --model-name <finetuned-output> \   # 微调输出名(链路A) 或基座名(链路B)
+bl deploy <modality> create \
+  --model-name <finetuned-output> \   # fine-tuned output name (Link A) or base model name (Link B)
   --display-name <display-name> \
-  --plan <lora|ptu|mu> \              # 见下方说明
+  --plan <lora|ptu|mu> \              # see notes below
   --output json
 ```
 
-- **模态段**（`text` / `audio` / `image`）须与部署模型模态匹配；三个模态子命令 flag 完全相同。
-- `--model-name`：链路 A 传第 2 步的 `finetuned_output`；链路 B 直接传基座模型名。
-- `--plan`：
-  - 文本微调模型默认 `lora`（token 计费），也可用 `mu`。
-  - **音频 TTS 微调模型只支持 `mu`**（不支持 `lora` / `ptu`），需 `--deploy-spec` + `--capacity`。
-  - **图像生成微调模型只支持 `lora`**（不支持 `mu` / `ptu`）。
-  - 链路 B 基座通常只支持 `ptu`/`mu`，**不支持 `lora`**。
-  - 各 plan 必填参数与计费细则见 [`references/deploy.md`](references/deploy.md)。
-- `--deploy-spec`：mu plan 的部署规格（如 `dps-20260521172224-1vabse`），省略时自动从 catalog 匹配。
-- 不确定支持哪些 plan：链路 A 用 `bl deploy models --source custom`，链路 B 用 `bl deploy models --source base`，按返回的 `plans` 选。
+- The **modality segment** (`text` / `audio` / `image`) must match the deployed model's modality; the three modality subcommands share identical flags.
+- `--model-name`: Link A passes the `finetuned_output` from Step 2; Link B passes the base model name directly.
+- `--plan`:
+  - Text fine-tuned models default to `lora` (token-billed); `mu` is also available.
+  - **Audio TTS fine-tuned models only support `mu`** (not `lora` / `ptu`), requiring `--deploy-spec` + `--capacity`.
+  - **Image generation fine-tuned models only support `lora`** (not `mu` / `ptu`).
+  - Link B base models usually only support `ptu`/`mu`, **not `lora`**.
+  - Required parameters and billing details per plan: see [`references/deploy.md`](references/deploy.md).
+- `--deploy-spec`: deployment spec for the mu plan (e.g. `dps-20260521172224-1vabse`); if omitted, it is auto-matched from the catalog.
+- Not sure which plans are supported: Link A uses `bl deploy models --source custom`, Link B uses `bl deploy models --source base`; pick from the returned `plans`.
 
-⚠️ **避坑（最高频错误）：`--model-name` 与推理命令的 `--model` 含义不同**——`deploy <模态> create --model-name` 传导出模型名，响应返回的 `output.deployed_model` 才是部署实例 id，推理命令 `--model` 必须用 `deployed_model`，**不要复用**。详见 [`references/deploy.md`](references/deploy.md)。
+⚠️ **Pitfall (most frequent error): `--model-name` and the inference command's `--model` mean different things** — `deploy <modality> create --model-name` takes the exported model name, while `output.deployed_model` in the response is the deployment instance id; the inference command's `--model` must use `deployed_model`, **do not reuse the other name**. See [`references/deploy.md`](references/deploy.md).
 
-从响应记下：`output.deployed_model`。
+Record from the response: `output.deployed_model`.
 
-## 第 6 步：等待部署就绪（异步）
+## Step 6: Wait for the deployment to be ready (asynchronous)
 
 ```
-Monitor command: bash <本技能目录>/scripts/wait.sh deploy <DEPLOYED_MODEL>
+Monitor command: bash <this-skill-directory>/scripts/wait.sh deploy <DEPLOYED_MODEL>
 ```
 
-`<本技能目录>` 同第 3 步。每 15s 轮询，`RUNNING` 即就绪（`FAILED`/`STOPPED` 终止）。
+`<this-skill-directory>` is the same as in Step 3. Polls every 15s; `RUNNING` means ready (`FAILED`/`STOPPED` are terminal).
 
-⚠️ **避坑：状态传播延迟。** 部署刚到 `RUNNING` 时立即调用，可能短暂返回 404 `Model not exist`——这是服务端状态传播延迟，不是用错模型名。`bl deploy get` 也可能还显示 `PENDING`。约 1 分钟内会稳定，遇 404 等十几秒重试即可；若持续 404，先核对用的是 `deployed_model` 而非微调输出名。
+⚠️ **Pitfall: status-propagation delay.** Calling immediately after a deployment first reaches `RUNNING` may briefly return 404 `Model not exist` — this is server-side state-propagation delay, not a wrong model name. `bl deploy get` may also still show `PENDING`. It stabilizes within about a minute; on 404, wait a dozen seconds and retry. If 404 persists, first verify you are using `deployed_model` rather than the fine-tuned output name.
 
-## 第 7 步：调用与交付
+## Step 7: Invoke and deliver
 
-**推理命令因模态不同**：
+**Inference commands differ by modality**:
 
-文本模型：
+Text model:
 ```bash
-bl text chat --model <DEPLOYED_MODEL> --message "你的问题"
+bl text chat --model <DEPLOYED_MODEL> --message "Your question"
 ```
 
-音频 TTS 模型：
+Audio TTS model:
 ```bash
-bl speech synthesize --model <DEPLOYED_MODEL> --voice default --text "你要合成的文本" --out result.mp3
+bl speech synthesize --model <DEPLOYED_MODEL> --voice default --text "The text to synthesize" --out result.mp3
 ```
 
-图像生成模型（异步 API，需触发词）：
+Image generation model (async API, trigger word required):
 ```bash
-# 详见 references/image.md —— 需 X-DashScope-Async 头 + prompt 含触发词
+# See references/image.md — requires the X-DashScope-Async header + a prompt containing the trigger word
 ```
 
-> `--model` 必须用 `deploy <模态> create` 响应中的 `deployed_model`，**不是**微调输出名。音频 TTS 的 `--voice` 固定为 `default`。图像生成需异步调用且 prompt 包含触发词。详见对应模态参考文件。
+> `--model` must be the `deployed_model` from the `deploy <modality> create` response, **not** the fine-tuned output name. Audio TTS `--voice` is fixed to `default`. Image generation requires async invocation and a prompt containing the trigger word. See the matching modality reference file.
 
-向用户交付时给出：
-- **部署实例 id**（`deployed_model`）——调用用它，不是微调输出名
-- 一条可直接运行的推理示例命令
-- 常用运维命令：`bl deploy get --deployed-model <id>` 查状态；`bl deploy delete --deployed-model <id>` 删除部署；`bl finetune list` 查历史任务。
+When delivering to the user, provide:
+- **The deployment instance id** (`deployed_model`) — use this for invocation, not the fine-tuned output name
+- One directly runnable inference example command
+- Common ops commands: `bl deploy get --deployed-model <id>` to check status; `bl deploy delete --deployed-model <id>` to delete the deployment; `bl finetune list` for historical jobs.
 
-## 收尾提示
-- **闲置计费与删除**：`lora` 闲置一般不计费；`mu`/`ptu` 闲置也计费，不用要清理；`bl deploy delete` 只能删 STOPPED/FAILED 的部署，RUNNING 的 mu/ptu 可先 `bl deploy pause`（停止计费）再删。细则见 [`references/deploy.md`](references/deploy.md#计费与运维细则)。
-- **复用数据集**：多次训练同一数据时，先 `bl dataset upload` 拿 file-id，再用 `--datasets <file-id>` 避免重复上传。
-- **效果不好**：优先加数据（量与质量），其次调 `n-epochs`/`learning-rate`，最后才考虑全参 `sft`。小数据集（<100 条）效果上限有限，要管理预期。
+## Wrap-up notes
+
+- **Idle billing and deletion**: `lora` is usually not billed when idle; `mu`/`ptu` bill even when idle — clean them up when unused; `bl deploy delete` can only delete STOPPED/FAILED deployments; for RUNNING mu/ptu, first `bl deploy pause` (stops billing), then delete. Details in [`references/deploy.md`](references/deploy.md#billing-and-ops-details).
+- **Reuse datasets**: when training multiple times on the same data, first `bl dataset upload` to get a file-id, then use `--datasets <file-id>` to avoid repeated uploads.
+- **Poor results**: add data first (quantity and quality), then tune `n-epochs`/`learning-rate`, and only consider full-parameter `sft` last. Small datasets (<100 samples) have a limited quality ceiling — manage expectations.

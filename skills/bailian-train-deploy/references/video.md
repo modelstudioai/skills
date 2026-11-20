@@ -1,39 +1,39 @@
-# 视频生成模型参考
+# Video Generation Model Reference
 
-> 本文件补充 [`SKILL.md`](../SKILL.md) 中视频生成微调链路的模态特异性细节（数据格式、模型、超参、部署、推理）。通用流程见 SKILL.md。
+> This file supplements [`SKILL.md`](../SKILL.md) with the modality-specific details of the video generation fine-tuning pipeline (data format, models, hyperparameters, deployment, inference). See SKILL.md for the generic flow.
 
-## 适用场景
+## Applicable scenarios
 
-用户想微调一个视频生成模型，用自己的视频数据训练出定制特效、动作或风格的 LoRA 模型。当前支持的基座：
+The user wants to fine-tune a video generation model, training a custom-effect, motion, or style LoRA model from their own video data. Currently supported base models:
 
-| 基座模型 | 类型 | 说明 |
+| Base model | Type | Notes |
 |---|---|---|
-| `wan2.7-i2v` | 首帧图生视频 | 推荐，最新一代，质量最高 |
-| `wan2.5-i2v-preview` | 首帧图生视频 | 上一代 |
-| `wan2.2-i2v-flash` | 首帧图生视频 | 轻量快速 |
-| `wan2.2-kf2v-flash` | 首尾帧图生视频 | 给定首帧+尾帧，生成中间过渡视频 |
+| `wan2.7-i2v` | first-frame image-to-video | Recommended, latest generation, highest quality |
+| `wan2.5-i2v-preview` | first-frame image-to-video | Previous generation |
+| `wan2.2-i2v-flash` | first-frame image-to-video | Lightweight and fast |
+| `wan2.2-kf2v-flash` | first-and-last-frame image-to-video | Given the first frame + last frame, generates the intermediate transition video |
 
-## 数据格式
+## Data format
 
-视频生成数据是 **ZIP 包**（不是 .jsonl），内含标注文件和媒体文件。
+Video generation data is a **ZIP package** (not .jsonl), containing an annotation file and media files.
 
-### 首帧（i2v）数据集
+### First-frame (i2v) dataset
 
 ```
 i2v-dataset.zip
-├── data.jsonl           # 标注文件
-├── image_1.jpeg         # 首帧图像（平铺）
-├── video_1.mp4          # 训练目标视频
+├── data.jsonl           # annotation file
+├── image_1.jpeg         # first-frame image (flat)
+├── video_1.mp4          # training target video
 ├── image_2.jpeg
 └── video_2.mp4
 ```
 
-JSONL 每行格式：
+Per-line JSONL format:
 ```json
-{"prompt": "视频开头展示了...", "first_frame_path": "image_1.jpg", "video_path": "video_1.mp4"}
+{"prompt": "The video opens with...", "first_frame_path": "image_1.jpg", "video_path": "video_1.mp4"}
 ```
 
-### 首尾帧（kf2v）数据集
+### First-and-last-frame (kf2v) dataset
 
 ```
 kf2v-dataset.zip
@@ -45,34 +45,34 @@ kf2v-dataset.zip
     └── video_1.mp4
 ```
 
-JSONL 每行格式：
+Per-line JSONL format:
 ```json
-{"prompt": "视频开头展示了...", "first_frame_path": "image/image_1_first.jpg", "last_frame_path": "image/image_1_last.jpg", "video_path": "video/video_1.mp4"}
+{"prompt": "The video opens with...", "first_frame_path": "image/image_1_first.jpg", "last_frame_path": "image/image_1_last.jpg", "video_path": "video/video_1.mp4"}
 ```
 
-### 验证集（可选）
+### Validation set (optional)
 
-验证集只需首帧图像（kf2v 需首帧+尾帧），**无需视频**。训练时系统会在每个 eval 节点自动生成预览视频。
+The validation set only needs first-frame images (kf2v needs first + last frames), **no videos**. During training, the system automatically generates preview videos at each eval step.
 
 ```json
-{"prompt": "视频开头展示了...", "first_frame_path": "image_1.jpg"}
+{"prompt": "The video opens with...", "first_frame_path": "image_1.jpg"}
 ```
 
-### 数据要求
+### Data requirements
 
-- 图像格式：BMP、JPEG、PNG、WEBP，分辨率 ≤ 4096×4096
-- 视频格式：MP4、MOV，分辨率 ≤ 4096×4096
-- 视频时长：wan2.2 建议 2~5 秒；wan2.5/2.7 建议 2~10 秒
-- 文件名**仅支持英文字符**（ASCII）
-- 建议至少 **10 条**数据（20~100 条推荐）
-- ZIP 包 ≤ 1GB
-- 数据集 schema 为 `video`（CLI 自动探测 `first_frame_path`/`video_path` 字段识别）
+- Image formats: BMP, JPEG, PNG, WEBP, resolution ≤ 4096×4096
+- Video formats: MP4, MOV, resolution ≤ 4096×4096
+- Video duration: 2-5 seconds recommended for wan2.2; 2-10 seconds for wan2.5/2.7
+- File names support **English characters only** (ASCII)
+- At least **10 samples** recommended (20-100 preferred)
+- ZIP package ≤ 1GB
+- Dataset schema is `video` (the CLI auto-detects it via the `first_frame_path`/`video_path` fields)
 
-### 校验
+### Validation
 
-视频 ZIP **不走** `bl dataset validate`（该命令 `--schema` 仅支持 chatml/dpo/cpt/tts/image）。直接 `bl dataset upload --file <zip-path>`：CLI 依据 `data.jsonl` 里的 `first_frame_path`/`video_path` 字段自动探测 video schema，并在上传时校验 ZIP 内的文件引用。
+Video ZIPs do **not** go through `bl dataset validate` (that command's `--schema` only supports chatml/dpo/cpt/tts/image). Just run `bl dataset upload --file <zip-path>`: the CLI auto-detects the video schema from the `first_frame_path`/`video_path` fields in `data.jsonl` and validates the file references inside the ZIP at upload time.
 
-## 创建训练任务
+## Create a training job
 
 ```bash
 bl finetune video create \
@@ -81,9 +81,9 @@ bl finetune video create \
   --output json
 ```
 
-### 超参默认值（按模型自动适配）
+### Hyperparameter defaults (auto-adapted per model)
 
-| 参数 | wan2.7 | wan2.5 | wan2.2 |
+| Parameter | wan2.7 | wan2.5 | wan2.2 |
 |---|---|---|---|
 | `batch_size` | 1 | 4 | 4 |
 | `max_pixels` | 102400 | 36864 | 262144 |
@@ -94,23 +94,23 @@ bl finetune video create \
 | `lora_alpha` | 32 | 32 | 32 |
 | `split` | 0.5 | 0.5 | 0.5 |
 
-用户可通过 `--n-epochs`、`--batch-size`、`--learning-rate` 覆盖默认值。
+Users can override the defaults via `--n-epochs`, `--batch-size`, and `--learning-rate`.
 
-### 小数据集注意
+### Small-dataset caveat
 
-数据集较小时（< 10 条），默认 `split=0.5` 可能导致验证集 ≤ batch_size 报错。解决：
-- 使用 `--batch-size 1` 降低 batch_size
-- 或单独上传验证集 `--validations <file-id>`
+With a small dataset (< 10 samples), the default `split=0.5` may leave the validation set ≤ batch_size and cause an error. Fixes:
+- Use `--batch-size 1` to lower batch_size
+- Or upload a separate validation set with `--validations <file-id>`
 
-## 等待训练完成
+## Wait for training to finish
 
 ```bash
 bl finetune watch --job-id <job_id> --follow
 ```
 
-视频训练通常需要**数小时**。训练完成后输出 `finetuned_output`（如 `wan2.7-i2v-ft-202608061949-48ca`），这是部署用的模型名。
+Video training usually takes **several hours**. When finished, it outputs `finetuned_output` (e.g. `wan2.7-i2v-ft-202608061949-48ca`) — this is the model name used for deployment.
 
-## 部署
+## Deployment
 
 ```bash
 bl deploy image create \
@@ -120,58 +120,58 @@ bl deploy image create \
   --output json
 ```
 
-视频 LoRA 部署使用 `plan=lora`（按 token 计费）。部署约 5~10 分钟进入 RUNNING。
+Video LoRA deployment uses `plan=lora` (token-billed). The deployment reaches RUNNING in about 5-10 minutes.
 
 ```bash
 bl deploy get --deployed-model <deployed_model>
 ```
 
-## 推理与调用
+## Inference and invocation
 
-部署 RUNNING 后，用 `bl video generate` 调用：
+Once the deployment is RUNNING, invoke with `bl video generate`:
 
-### 首帧（i2v）— 所有版本
+### First frame (i2v) — all versions
 
 ```bash
 bl video generate \
   --model <deployed_model> \
   --image https://example.com/first_frame.png \
-  --prompt "描述文本" \
+  --prompt "Description text" \
   --prompt-extend false
 ```
 
-### 首尾帧（kf2v）— wan2.2-kf2v
+### First-and-last-frame (kf2v) — wan2.2-kf2v
 
 ```bash
 bl video generate \
   --model <deployed_model> \
   --image https://example.com/first_frame.png \
   --last-frame https://example.com/last_frame.png \
-  --prompt "描述文本" \
+  --prompt "Description text" \
   --prompt-extend false
 ```
 
-`--last-frame` 触发 kf2v 模式，自动切换到 `image2video/video-synthesis` 端点。
+`--last-frame` triggers kf2v mode, automatically switching to the `image2video/video-synthesis` endpoint.
 
-### 关键参数
+### Key parameters
 
-| 参数 | 说明 |
+| Parameter | Notes |
 |---|---|
-| `--prompt-extend false` | LoRA 模型建议关闭 prompt 改写 |
-| `--resolution 720P` | 输出分辨率（480P / 720P，wan2.7 支持 1080P） |
-| `--download <path>` | 下载视频到本地 |
-| `--async` | 仅返回 task_id，不等待 |
+| `--prompt-extend false` | Recommended to disable prompt rewriting for LoRA models |
+| `--resolution 720P` | Output resolution (480P / 720P; wan2.7 supports 1080P) |
+| `--download <path>` | Download the video locally |
+| `--async` | Only return a task_id, do not wait |
 
-## Prompt 编写建议
+## Prompt-writing guidance
 
-视频微调的 prompt 结构：`[主体描述] + [背景描述] + [触发词] + [运动描述]`
+Video fine-tuning prompt structure: `[subject description] + [background description] + [trigger word] + [motion description]`
 
-- **触发词**：无意义稀有词（如 `s86b5p`），作为特效的"视觉锚点"
-- **一致性**：所有包含同一特效的样本，运动描述部分保持一致
-- **多样性**：主体和场景越丰富越好，避免模型过拟合到单一背景
+- **Trigger word**: a meaningless rare token (e.g. `s86b5p`) that serves as the "visual anchor" of the effect
+- **Consistency**: for all samples containing the same effect, keep the motion-description part identical
+- **Diversity**: the richer the subjects and scenes, the better; avoid the model overfitting to a single background
 
-## 计费
+## Billing
 
-- **训练**：按 token 计费，`bl finetune get --job-id <id>` 查看 `usage_tokens` 和 `training_cost`
-- **部署**：plan=lora 免费（闲置不计费）
-- **推理调用**：按基础模型标准价格计费
+- **Training**: token-billed; check `usage_tokens` and `training_cost` with `bl finetune get --job-id <id>`
+- **Deployment**: plan=lora is free (no idle billing)
+- **Inference calls**: billed at the base model's standard price
