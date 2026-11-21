@@ -1,51 +1,53 @@
 # model management
 
-模型管理是百炼平台的核心能力之一，提供对可用模型的发现、权限控制与限流配置三大功能。开发者可通过统一 API 查询模型元信息（如能力、定价、上下文长度）、设置业务空间级模型调用权限（推理/微调/部署），以及精细化管控请求频率（QPS/QPM）与用量（TPM）。所有操作均基于业务空间（Workspace）隔离，支持多地域部署。
+模型管理是百炼平台的核心能力之一，提供对可用模型的发现、权限控制、限流配置与使用监控等全生命周期操作。开发者可通过统一 API 接口查询模型元信息、设置业务空间级访问权限、调整调用配额，并基于返回的上下文长度、模态支持、定价等字段进行选型与集成。所有操作均需通过 API Key 认证，并按地域 Endpoint 调用。
 
 ## 支持的模型与功能
 
-- **模型发现**：通过 [查询模型列表](../../raw/model-api-reference/model-management/list-models.md) 接口获取全量模型信息，支持按作者（`providers`）、能力（`capabilities`，如 `Reasoning`、`VU`）、模态（`request_modality`/`response_modality`）、特性（`features`，如 `function-calling`）等多维度筛选，并返回定价、上下文窗口（`context_window`）、发布时间等关键元数据。
-- **权限控制**：通过 [查询模型授权](../../raw/model-api-reference/model-management/list-model-permissions.md) 和 [更新模型授权](../../raw/model-api-reference/model-management/update-model-permissions.md) 接口管理业务空间内模型的访问权限，支持逐模型授权（`models` 数组）与一键授权（`access_all_entities=OPEN`）两种模式，权限粒度包括 `inference`（必选）、`fine_tune`、`deploy`。
-- **限流配置**：通过 [查询模型限额](../../raw/model-api-reference/model-management/list-quotas.md) 和 [更新模型限流](../../raw/model-api-reference/model-management/update-model-rate-limits.md) 接口管理账号级（`model_limit`）与业务空间级（`workspace_limit`）限流策略，支持 RPM/QPS、TPM 及异步任务并发与排队数（`async_user_concurrency_limit`/`async_user_queue_limit`）。
+百炼平台支持多厂商、多模态、多能力的模型生态，涵盖文本生成（TG）、深度思考（Reasoning）、视觉理解（VU）、图片/视频生成（IG/VG）、语音识别（ASR）、TTS、3D 生成及实时全模态（Realtime-Omni）等能力。模型作者包括 `qwen`、`zhipu-ai`、`moonshot-ai`、`deepseek`、`kling`、`vidu` 等十余家供应商；推理服务由 `aliyun-bailian`、`siliconflow`、`moonshot` 等多家服务商提供。模型特性（如 `function-calling`、`structured-outputs`、`cache`、`web-search`）和部署模式（如 `ptu`）均可在查询时筛选。详细能力列表与可选值请参见 [查询模型列表](../../raw/model-api-reference/model-management/list-models.md)。
 
-> **注意**：文档 5 中列出的 `deployment_methods=ptu` 和 `deployment_ptu_service_tiers` 参数在文档 1–4 的限流与权限接口中均未体现，当前限流配置不感知 PTU 部署模式，相关行为以实际 API 响应为准。
+> **注意**：文档 1 中 `inference_providers` 列表包含 `moonshot`（对应 Kimi），但文档 5 的 `update-model-permissions.md` 中未提及该 provider 的授权兼容性；实际授权行为以 [更新模型授权](../../raw/model-api-reference/model-management/update-model-permissions.md) 接口为准，不支持对非 `aliyun-bailian` 提供的模型执行 `deploy` 操作。
 
 ## 关键参数
 
-| 参数 | 位置 | 类型 | 说明 | 示例 |
-|------|------|------|------|------|
-| `model` / `name` | Query 或 Body | String | 模型 ID（精确）或名称（模糊） | `qwen3.8-max`, `qwen` |
-| `page_no` / `page_size` | Query | Integer | 分页参数，`page_no` 从 1 开始 | `1`, `100` |
-| `request_limit` / `request_limit_period` | Body (`models[].*`) | Number | 请求限流值及周期（秒），`60`=QPM，`1`=QPS | `60`, `1` |
-| `usage_limit` / `usage_limit_period` | Body (`models[].*`) | Number | 用量限流值及周期（秒），单位为 Token | `100000`, `60` |
-| `operation_type` | Body (`models[].operation_type`) | String | 限流操作类型：`OVERLAY`（覆盖）或 `DELETE`（清空） | `"OVERLAY"` |
-| `authorization_scope` | Query | String | 权限查询范围：`AUTHORIZABLE`（可授）或 `AUTHORIZED`（已授） | `"AUTHORIZED"` |
-| `access_all_entities` | Body | String | 一键授权开关：`OPEN`/`CLOSE`/`KEEP` | `"OPEN"` |
+模型管理相关接口共用以下核心参数：
+
+- `model`（String）：模型 ID，用于精确查询或配置，如 `qwen3.8-max`；
+- `name`（String）：模型名称模糊搜索，适用于列表类接口；
+- `page_no` / `page_size`（Integer）：分页参数，`page_no` 从 1 开始，`page_size` 最大支持 200（[查询模型授权](../../raw/model-api-reference/model-management/list-model-permissions.md) 明确限定为 1–200）；
+- `authorization_scope`（String）：仅用于权限接口，取值 `AUTHORIZABLE`（默认）或 `AUTHORIZED`；
+- `access_all_entities`（String）：仅用于授权更新，支持 `OPEN`/`CLOSE`/`KEEP`，决定是否启用一键授权。
+
+此外，限流接口特有 `request_limit`（QPM/RPS）、`usage_limit`（TPM）、`request_limit_period` 和 `usage_limit_period`；模型列表接口支持 `capabilities`、`features`、`context_window`、`service_site` 等高阶筛选参数。
 
 ## 使用方式
 
-1. **查询模型**：使用 `GET /api/v1/models`，推荐先按 `providers=qwen` 或 `capabilities=TG` 筛选，再用 `model=qwen3.8-max` 获取单模型详情。  
-2. **检查权限**：调用 `GET /api/v1/models/permissions?authorization_scope=AUTHORIZED` 确认目标模型是否已开通 `inference` 权限。  
-3. **授权模型**：若未授权，调用 `POST /api/v1/models/permissions` 提交 `{"models":[{"model":"qwen3.8-max","inference":true}]}`。  
-4. **配置限流**：调用 `GET /api/v1/models/limits?model=qwen3.8-max` 查看当前配额，再用 `POST /api/v1/models/limits` 设置 `request_limit=120`（QPM）和 `usage_limit=200000`（TPM）。  
-5. **验证生效**：再次调用 `list-quotas` 接口确认 `workspace_limit` 字段已更新。
+### 查询类操作
+- **查模型列表**：调用 `GET /api/v1/models`，支持按作者（`providers`）、能力（`capabilities`）、特性（`features`）等多维过滤，返回含定价、上下文长度、模态支持的完整元数据；
+- **查模型限额**：调用 `GET /api/v1/models/limits`，获取账号级（`model_limit`）与业务空间级（`workspace_limit`）的 QPM/TPM/异步并发等配额；
+- **查模型授权**：调用 `GET /api/v1/models/permissions`，确认当前业务空间对各模型的 `inference`/`fine_tune`/`deploy` 权限状态。
 
-> **注意**：文档 2 明确要求“若需只限制 RPM、豁免 TPM”，必须分两步执行（先 `DELETE` 再 `OVERLAY` 设置 QPM），而文档 1 的示例中 `qwen3.8-max` 的 `usage_limit` 为 `500000`（非 null），表明该模型默认启用 TPM 限制。两者逻辑一致，但开发者需主动选择是否启用 TPM。
+### 配置类操作
+- **更新限流**：调用 `POST /api/v1/models/limits`，支持 `OVERLAY`（合并覆盖）与 `DELETE`（清空限流）两种 `operation_type`。注意：TPM 设置依赖 QPM 已存在，否则报错 `Cannot set TPM without QPM`；
+- **更新授权**：调用 `POST /api/v1/models/permissions`，支持逐模型设置布尔权限，或通过 `access_all_entities=OPEN` 一键授权全部推理模型（含未来新增）。
+
+所有接口均需在请求头中携带 `Authorization: Bearer <API_KEY>`，并替换 `{WorkspaceId}` 为实际业务空间 ID。Python SDK 调用示例详见 [查询模型列表](../../raw/model-api-reference/model-management/list-models.md)。
 
 ## 限制和注意事项
 
-- **地域一致性**：所有模型管理 API 的 Endpoint 必须与业务空间所在地域匹配（如北京地域用 `cn-beijing.maas.aliyuncs.com`），跨地域调用将失败；美国弗吉尼亚地域使用独立域名 `dashscope-us.aliyuncs.com`，不带 `{WorkspaceId}` 前缀。
-- **权限优先级**：模型必须先完成 [查询模型授权](../../raw/model-api-reference/model-management/list-model-permissions.md) 中的 `AUTHORIZED` 状态，才能被调用；即使限流配额充足，无 `inference: true` 权限仍会返回 403 错误。
-- **限流继承关系**：`workspace_limit` 不得超过 `model_limit`（账号级上限），且 `model_limit` 为 null 表示该模型无全局限制，此时 `workspace_limit` 可设为任意值（但受平台默认策略约束）。
-- **异步任务限制**：仅部分模型（如 `wan2.6-i2v-flash`）支持 `async_user_queue_limit` 和 `async_user_concurrency_limit`，该字段在 `list-quotas` 响应中为 `null` 即表示不适用。
-- **参数互斥性**：`update-model-rate-limits` 接口在 `operation_type=DELETE` 时，`request_limit` 和 `usage_limit` 必须为空；若仅传 `request_limit` 而未传 `request_limit_period`，将沿用当前值而非默认 `60`（文档 2 未明确定义默认值，以实际响应为准）。
+- **配额继承关系**：业务空间级限流（`workspace_limit`）不能超过账号级限流（`model_limit`），且未显式设置时默认继承账号级配额；
+- **限流删除风险**：使用 `DELETE` 操作清空限流时，存在短暂无保护窗口期，生产环境建议采用两步法并评估风险；
+- **授权范围隔离**：`access_all_entities=OPEN` 仅授予 `INFERENCE` 权限，`fine_tune` 与 `deploy` 仍需显式逐模型配置，且 `deploy` 仅对百炼托管模型生效；
+- **地域一致性**：所有模型管理接口必须与模型调用所选地域保持一致（如北京地域模型需调用 `cn-beijing` Endpoint），跨地域查询可能返回空或过期数据；
+- **分页总数差异**：DashScope Python SDK 2.x 在 `list()` 响应中将总数字段命名为 `total_count`，而原始 HTTP 响应为 `output.total`，注意适配；
+- **模型下线提示**：部分模型响应中含 `inference_offline_info.offline_time` 字段，表示预计下线时间，建议定期轮询或监听变更。
 
 ## 来源文档
 
-- [查询模型限额](../../raw/model-api-reference/model-management/list-quotas.md)
-- [更新模型限流](../../raw/model-api-reference/model-management/update-model-rate-limits.md)
-- [查询模型授权](../../raw/model-api-reference/model-management/list-model-permissions.md)
-- [更新模型授权](../../raw/model-api-reference/model-management/update-model-permissions.md)
 - [查询模型列表](../../raw/model-api-reference/model-management/list-models.md)
+- [查询模型限额](../../raw/model-api-reference/model-management/list-quotas.md)
+- [查询模型授权](../../raw/model-api-reference/model-management/list-model-permissions.md)
+- [更新模型限流](../../raw/model-api-reference/model-management/update-model-rate-limits.md)
+- [更新模型授权](../../raw/model-api-reference/model-management/update-model-permissions.md)
 
 

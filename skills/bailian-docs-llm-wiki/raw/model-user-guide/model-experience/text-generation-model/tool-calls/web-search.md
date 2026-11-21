@@ -227,6 +227,7 @@ public class Main {
 -   **DeepSeek**：`deepseek-v4.1-flash-1017` 支持模型原生联网搜索、Responses API 内置 `web_search` 和 Anthropic 兼容 API 内置 `web_search`，适用于中国（北京）、新加坡（国际部署范围），以及美国（弗吉尼亚）、德国（法兰克福）、日本（东京）、中国香港（全球部署范围）。
     
 -   **千问**
+    -   Qwen4-Max：qwen4-max（美国（弗吉尼亚）地域的弗吉尼亚服务部署范围）
     -   Qwen3.8 系列：qwen3.8-max、qwen3.8-max-0902、qwen3.8-flash
     -   千问Omni：qwen3.8-omni-flash（Chat Completions 搜索策略需设为 `agent`；也支持 Responses API）
 

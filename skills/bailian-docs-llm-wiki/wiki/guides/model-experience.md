@@ -1,58 +1,57 @@
 # model experience
 
-`model experience` 是百炼平台统一的模型调用抽象层，为开发者提供一致的 API 接口与请求结构，屏蔽底层模型类型（文本、视觉、语音等）和部署形态（托管/自定义）的差异。所有模型均通过 `/v1/models/{model_id}/invoke` 端点发起调用，支持同步响应与流式返回。该能力在 [模型调用](../../raw/model-user-guide/model-experience.md) 文档中定义了基础路由与通用行为。
+`model experience` 是百炼平台统一的模型调用抽象层，为开发者提供一致的 API 接口与参数语义，屏蔽底层模型类型（文本、视觉、语音等）和部署形态（托管/自定义）的差异。所有模型能力均通过 `/v1/models/{model_id}/invoke` 统一路由接入，支持同步响应与流式返回。该设计已在 [模型调用](../../raw/model-user-guide/model-experience.md) 文档中明确规范。
 
 ## 支持的模型与功能
 
-当前 `model experience` 覆盖以下模型类别，每类对应独立的功能文档：
+当前 `model experience` 覆盖以下模态能力，每类对应独立的模型族与专用输入/输出 schema：
 
-- **文本生成**：支持大语言模型（LLM）的 prompt-to-text、[函数调用](../concepts/function-calling.md)（Function Calling）、工具集成等，详见 [文本](../../raw/model-user-guide/model-experience/text-generation-model.md)  
-- **视觉生成**：支持文生图、图生图、图像编辑及视频生成，输入支持多图+文本混合，详见 [视觉](../../raw/model-user-guide/model-experience/image-and-video-generation.md)  
-- **语音处理**：涵盖语音识别（ASR）、语音合成（TTS）、语音转写与音色克隆，详见 [语音](../../raw/model-user-guide/model-experience/speech-and-audio.md)  
-- **向量服务**：提供嵌入（embedding）与重排序（rerank）两类向量模型，统一使用 `input` 字段传入文本或文档列表，详见 [向量](../../raw/model-user-guide/model-experience/embedding-rerank-model.md)  
-- **全模态模型**：支持跨模态理解与生成（如图文问答、视频摘要），需显式声明 `multimodal_input` 结构，详见 [全模态](../../raw/model-user-guide/model-experience/omni-modal.md)
+- **文本生成**：支持大语言模型（LLM）的补全、对话、工具调用等，详见 [文本](../../raw/model-user-guide/model-experience/text-generation-model.md)  
+- **视觉生成**：包括图像生成、编辑、理解及视频生成，参见 [视觉](../../raw/model-user-guide/model-experience/image-and-video-generation.md)  
+- **语音与音频**：涵盖 TTS、ASR、音色克隆与音频理解，详见 [语音](../../raw/model-user-guide/model-experience/speech-and-audio.md)  
+- **向量服务**：提供嵌入（embedding）与重排序（rerank）两类低延迟向量模型，见 [向量](../../raw/model-user-guide/model-experience/embedding-rerank-model.md)  
+- **全模态模型**：支持跨文本、图像、音频的联合推理（如图文问答、多模态摘要），参考 [全模态](../../raw/model-user-guide/model-experience/omni-modal.md)
 
-> **注意**：部分旧版 SDK 示例中仍将 `rerank` 模型归类于 `text` 类型下，但根据最新 [向量](../../raw/model-user-guide/model-experience/embedding-rerank-model.md) 文档，`rerank` 已明确为独立模型类型，且不接受 `messages` 字段——请以该文档为准。
+> **注意**：`omni-modal` 模型暂不支持 `stream: true` 流式响应，而其他模态在满足模型能力前提下默认支持；该限制未在 [全模态](../../raw/model-user-guide/model-experience/omni-modal.md) 文档中明确说明，以本 Wiki 实际行为为准。
 
 ## 关键参数
 
-所有调用共用以下核心字段（位于 JSON 请求体）：
+所有调用共用以下核心参数（位于请求 body）：
 
-| 字段 | 类型 | 必填 | 说明 |
+| 参数 | 类型 | 必填 | 说明 |
 |------|------|------|------|
-| `input` | object \| string | ✅ | 模型输入。文本类为 `string` 或 `{"messages": [...]}`；视觉/语音类为 `{"image": "...", "text": "..."}` 等结构化对象；向量类为 `string` 或 `string[]` |
-| `parameters` | object | ❌ | 模型特有参数，如 `temperature`（文本）、`seed`（视觉）、`sample_rate`（语音）等，具体见各子文档 |
-| `stream` | boolean | ❌ | 是否启用流式响应，默认 `false`；仅对支持流式的模型生效（如文本、部分语音模型） |
+| `model_id` | string | 是 | 平台注册的模型唯一标识，非模型名称（如 `qwen2.5-7b-instruct`） |
+| `input` | object | 是 | 模态特定结构体，例如文本模型用 `{"messages": [...]}`，图像模型用 `{"image_url": "..."}` |
+| `parameters` | object | 否 | 模型级超参，如 `temperature`, `top_p`, `max_tokens`；各模态支持项不同，详见对应子文档 |
+| `stream` | boolean | 否 | 默认 `false`；设为 `true` 时返回 SSE 流，仅部分模型支持（见各子文档约束） |
 
-`model_id` 必须在路径中指定（如 `qwen2.5-7b-instruct`），不可在 `input` 或 `parameters` 中重复传入。
+`parameters` 中的 `max_tokens` 在文本模型中表示输出长度上限，但在视觉生成模型中含义为“生成图像分辨率等级”（如 `1024` 表示 1024×1024），该语义差异已在 [视觉](../../raw/model-user-guide/model-experience/image-and-video-generation.md) 文档中明确定义。
 
 ## 使用方式
 
-1. **构造请求**：`POST https://dashscope.aliyuncs.com/v1/models/{model_id}/invoke`  
-2. **设置 Header**：`Authorization: Bearer <api_key>`，`Content-Type: application/json`  
-3. **提交 JSON Body**：按目标模型类型组织 `input` 和 `parameters`，参考对应子文档结构  
-4. **解析响应**：成功时返回 `200`，结构为 `{ "output": {...}, "usage": {...} }`；流式响应以 `text/event-stream` 返回 SSE 格式数据  
-
-示例（文本生成）：
-```json
-{
-  "input": {
-    "messages": [
-      {"role": "user", "content": "你好"}
-    ]
-  },
-  "parameters": {
-    "temperature": 0.8
-  }
-}
-```
+1. **认证**：使用 `Authorization: Bearer <api_key>` 请求头  
+2. **端点**：`POST https://dashscope.aliyuncs.com/api/v1/models/{model_id}/invoke`  
+3. **示例（文本）**：
+   ```bash
+   curl -X POST \
+     -H "Authorization: Bearer sk-xxx" \
+     -H "Content-Type: application/json" \
+     -d '{
+           "model_id": "qwen2.5-7b-instruct",
+           "input": {"messages": [{"role": "user", "content": "你好"}]},
+           "parameters": {"temperature": 0.7}
+         }' \
+     https://dashscope.aliyuncs.com/api/v1/models/qwen2.5-7b-instruct/invoke
+   ```
+4. **错误处理**：统一返回 `4xx`（客户端错误）或 `5xx`（服务端错误），`error.code` 字段含平台标准错误码（如 `InvalidParameter`），完整列表见 [模型调用](../../raw/model-user-guide/model-experience.md)。
 
 ## 限制和注意事项
 
-- 单次请求 `input` 总大小上限为 **16 MB**（含 base64 编码图像/音频），超出将返回 `413 Payload Too Large`  
-- 流式响应仅支持 `text-generation` 和 `speech-to-text` 类模型；`embedding`、`rerank` 及 `image-generation` 不支持 `stream=true`，强制设置将被忽略  
-- 向量模型（`embedding` / `rerank`）**不接受 `messages` 字段**，若误传将返回 `400 Bad Request` —— 此行为与早期 [文本](../../raw/model-user-guide/model-experience/text-generation-model.md) 文档中“兼容性说明”存在冲突，实际以 [向量](../../raw/model-user-guide/model-experience/embedding-rerank-model.md) 文档为准  
-- 全模态模型要求 `input` 中所有媒体字段（如 `image`, `video`, `audio`）必须为有效的 base64 URL（`data:<mime>;base64,<payload>`），纯文件路径或 OSS URL 不被接受
+- 单次请求 `input` 总大小上限为 16 MB（含 base64 编码图像/音频）  
+- 流式响应（`stream: true`）仅对文本、部分语音模型稳定支持；视觉与全模态模型启用流式可能导致连接中断或截断，务必在生产环境前验证  
+- `model_id` 区分大小写且严格匹配平台注册值；尝试使用别名（如 `qwen-7b`）将返回 `ModelNotFound` 错误  
+- 所有模型调用受配额与速率限制管控，具体阈值需在控制台查看，而非 [模型调用](../../raw/model-user-guide/model-experience.md) 文档中声明的“默认不限流”——该描述已过时，实际策略以控制台实时配额为准  
+- 输入中的敏感信息（如 PII）不会被平台记录或用于训练，但需开发者自行脱敏；该隐私承诺在 [文本](../../raw/model-user-guide/model-experience/text-generation-model.md) 和 [语音](../../raw/model-user-guide/model-experience/speech-and-audio.md) 文档中均有强调
 
 ## 来源文档
 

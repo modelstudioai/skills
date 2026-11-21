@@ -126,7 +126,7 @@ GLM：glm-5.1
 不同服务部署范围支持的模型不同。
 
 -   **美国部署范围：**
-    -   千问 Max: qwen3.8-max、qwen3.7-max
+    -   千问 Max: qwen4-max、qwen3.8-max、qwen3.7-max
     -   千问 Plus: qwen3.7-plus
     -   千问 Flash：qwen3.8-flash、qwen3.7-flash、qwen3.6-flash
 -   **全球服务部署范围：**
@@ -1005,7 +1005,7 @@ while True:
 -   **美国服务部署范围：**
     -   文本生成模型
         
-        -   千问 Max：qwen3.8-max、qwen3.7-max
+        -   千问 Max：qwen4-max、qwen3.8-max、qwen3.7-max
         -   千问 Plus：qwen3.7-plus
         -   千问 Flash：qwen3.8-flash、qwen3.7-flash
         -   DeepSeek（阿里云百炼部署）：deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731

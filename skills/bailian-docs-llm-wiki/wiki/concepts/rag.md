@@ -1,44 +1,49 @@
 # 检索增强生成
 
-检索增强生成（Retrieval-Augmented Generation，RAG）是一种将大语言模型（LLM）的生成能力与外部知识源的精准检索能力相结合的技术范式。它通过在模型推理前动态检索相关上下文片段，并将其注入提示（prompt），使模型能在不更新参数的前提下，准确、可信地回答领域专属、时效性强或私有化的复杂问题。
+检索增强生成（Retrieval-Augmented Generation，RAG）是百炼平台的核心能力范式：它通过在大模型推理前动态检索相关知识片段，并将其作为上下文注入提示（prompt），从而显著提升模型回答的准确性、时效性与领域专业性，同时降低幻觉风险。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-在百炼平台中，RAG 不是独立功能模块，而是贯穿知识库构建、检索服务、智能体编排与应用集成的核心架构模式：
+RAG 在百炼中不是单一接口，而是贯穿数据准备、运行时调用与应用编排的端到端能力链：
 
-- **知识库驱动的问答应用**：在「智能体应用」中启用知识库绑定后，平台自动在每次请求时执行 RAG 流程——先从已发布的知识库中语义检索 Top-K 相关片段（支持文档、表格、图片、音视频等多模态知识库），再将检索结果与用户问题拼接为增强 prompt，交由指定大模型（如 `Qwen3.5-Plus`）生成最终回答。该流程对开发者透明，无需手动构造检索逻辑。
-
-- **RAG API 直接调用**：通过 `/api/v2/apps/knowledge/chat` 接口发起流式问答时，系统强制执行 RAG：自动关联应用配置的知识库，完成向量检索 + 重排（默认 `qwen3-rerank`）+ 上下文注入 + LLM 生成三阶段处理；而 `/api/v1/indices/knowledge/search` 则提供纯检索能力，供开发者自定义融合策略（如多库加权混排、人工后处理等）。
-
-- **AppFlow 低代码集成**：在网站、企业微信、钉钉等渠道部署 AI 助手时，只要在应用配置中开启「必定调用」并绑定知识库，AppFlow 即自动注入 RAG 能力——所有来自渠道的消息均经 RAG 流程处理，无需修改前端或渠道侧代码。
-
-- **Agent 智能体编排**：当 Agent 配置了知识库作为工具之一（如 `knowledge_retrieval` 工具），模型可在规划阶段自主决定是否触发检索，实现条件式 RAG；此时检索结果以结构化 tool message 形式传入后续生成步骤，支持更灵活的多步推理。
+- **知识库驱动问答**：在智能体（Agent）或 RAG API 中，用户上传 PDF/DOCX/TXT 等文档 → 经 ParseX 语义切分与向量化 → 构建知识库 → 调用时自动触发检索 → 将 top-K 相关片段注入 LLM 上下文，实现“基于你提供的资料回答”；
+- **多模态 RAG**：支持 `document`（文本）、`table`（结构化数据）、`image`（图文问答）、`multimedia`（音视频语义检索）四类知识库，对应不同嵌入模型（如 `qwen3-vl-embedding`）和检索策略；
+- **跨渠道统一增强**：网站、企业微信、钉钉等所有渠道集成的 AI 助手，均复用同一套知识库与 RAG 配置，确保问答一致性；
+- **Agent 上下文集成**：通过 `context.rag` 字段在 Agent 创建或调用时声明知识库 ID 与 `top_k`，RAG 结果与 Memory、Connector 输出自动合并为统一上下文输入模型；
+- **低代码应用构建**：在控制台配置智能体时开启「知识库」开关并设为「必定调用」，即完成 RAG 启用，无需编写检索逻辑。
 
 ## 关键参数和配置
 
-RAG 行为主要由以下参数与配置控制，开发者需按需显式设置或在控制台调整：
+| 参数 | 说明 | 可选值/示例 | 所属层级 |
+|------|------|-------------|----------|
+| `knowledge_base_id` | 知识库唯一标识符 | `"kb-abc123"` | Agent `context.rag` / RAG API 请求体 |
+| `top_k` | 检索返回的最相关片段数 | `3`（默认）、`1`–`10` | Agent `context.rag` / RAG API `/search` |
+| `rerankModelName` | 重排序模型名称（影响最终排序质量） | `"qwen3-rerank"`（默认）、自定义模型名 | RAG API 创建知识库时指定 |
+| `knowledgeType` + `structureType` | 决定知识库类型与处理方式 | `{"knowledgeType": "document", "structureType": "unstructured"}` | RAG API 创建知识库参数 |
+| `embeddingModelName` | 文本嵌入模型（影响检索召回质量） | `"text-embedding-v4"`、`"qwen3.7-text-embedding"` | RAG API 创建知识库参数 |
+| `enable_context` | 启用上下文注入的全局开关（需模型支持） | `true`（必开） | Agent 创建请求体顶层标志 |
 
-- **知识库绑定**：在应用或 Agent 的 `agent_config` 中通过 `knowledge_base_ids` 字段指定一个或多个 `indexId`；多库场景下，系统默认并行检索、统一重排合并（无串行开关）。
+> ⚠️ 注意：  
+> - 单次请求注入的总上下文（含 RAG 片段 + Memory + Prompt）token 上限为 **8192**，超长内容将被静默截断；  
+> - RAG 检索结果按相关性降序排列，但**不保证时间顺序**，如需保序（如按文档页码），须在业务层对 `context.rag.results` 手动后处理；  
+> - “必定调用”模式下，即使用户问题看似无关，系统仍强制执行检索并注入结果——适用于强合规、强依据场景。
 
-- **重排模型**：通过 `rerankModelName` 参数指定（如 `"qwen3-rerank"`），影响检索结果排序质量；该参数在 Agent 草稿配置或 RAG API 请求体中可覆盖默认值。
+## 面向开发者，简洁实用
 
-- **嵌入模型**：知识库创建时指定 `embeddingModelName`（如 `"text-embedding-v3"` 或 `"qwen3.7-text-embedding"`），决定向量化精度；视觉类知识库需额外配置 `multimodalEmbeddingModelName`（如 `"qwen3-vl-embedding"`）。
-
-- **检索范围控制**：
-  - `top_k`：控制每库返回的检索片段数（默认 3，最大 10）；
-  - `score_threshold`：过滤低相关性片段（浮点数，范围 0–1，默认不启用）；
-  - `filter`：支持按 `category_id`、`file_id`、时间范围等元数据过滤（仅部分接口支持）。
-
-- **流式与增量输出**：RAG 问答必须启用 `stream=true`；如需前端高效渲染，建议同时设置 `incremental_output=true`，确保 SSE 响应中每个 `data:` 事件仅含本次新增 token。
-
-- **会话状态**：RAG 服务本身**不维护会话历史**；若需上下文感知，客户端须在每次请求的 `messages` 中完整传入历史对话（含 system/user/assistant 角色），平台将基于全部历史 + 检索内容联合生成。
-
-> ⚠️ 注意：所有参数名严格区分大小写与命名风格（如 `indexId` vs `index_id`），请以各接口文档为准；硬编码模型名（如 `qwen3-rerank`）存在版本迭代风险，推荐优先使用控制台发布的 Agent 配置。
+- ✅ **快速起步**：控制台上传文件 → 创建标准知识库 → 在智能体中开启知识库并设为「必定调用」→ 发布 → 测试。全程无代码。
+- ✅ **精细控制**：使用 RAG API 自主管理知识库生命周期（创建/更新/删除）、导入任务、跨库联合检索；通过 `/api/v2/apps/knowledge/chat` 实现流式 RAG 问答。
+- ✅ **模型协同**：RAG 与 Qwen3.5-Plus、Qwen-Max、Qwen-Turbo 等模型天然兼容；推荐搭配 `qwen3-rerank` 重排 + `text-embedding-v4` 嵌入，平衡效果与延迟。
+- ✅ **调试定位**：所有 RAG 调用返回 `RequestId`，配合控制台「问题反馈」按钮或工单提交，可精准追溯检索片段来源、嵌入质量与重排得分。
+- ❌ **避坑提醒**：  
+> - 不要混用 `id` / `index_id` 字段名（见 RAG API 文档）；  
+> - 扫描版 PDF 必须预处理为文本型 PDF，ParseX 不支持 OCR；  
+> - 微信公众号未认证时 5 秒超时限制会导致 RAG 调用失败，务必完成认证。
 
 ## 关联主题页
 
 - [rag api](../api/rag-api.md)
 - [application use cases](../guides/application-use-cases.md)
+- [agent context](../guides/agent-context.md)
 - [use cases](../guides/use-cases.md)
 - [application support](../guides/application-support.md)
 

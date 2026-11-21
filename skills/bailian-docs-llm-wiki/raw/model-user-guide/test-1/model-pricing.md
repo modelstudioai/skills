@@ -246,6 +246,20 @@ qwen4-max
 
 30元
 
+qwen4-max
+
+> [缓存单价（每百万 Token）](https://help.aliyun.com/zh/model-studio/explicit-cache-qwen4#billing)
+
+弗吉尼亚
+
+非思考和思考模式
+
+0<Token≤1M
+
+10.938元
+
+32.813元
+
 qwen3.8-max
 
 > [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
@@ -342,7 +356,7 @@ qwen3.7-max-2026-05-20
 
 36元
 
-**qwen4-max — 缓存单价（每百万 Token）**
+**qwen4-max — 缓存单价（每百万 Token） (全球)**
 
 创建缓存（5m）
 
@@ -355,6 +369,20 @@ qwen3.7-max-2026-05-20
 20元
 
 0.5元
+
+**qwen4-max — 缓存单价（每百万 Token） (弗吉尼亚)**
+
+创建缓存（5m）
+
+创建缓存（1h）
+
+显式/隐式缓存命中
+
+13.672元
+
+21.875元
+
+0.547元
 
 #### 新加坡
 

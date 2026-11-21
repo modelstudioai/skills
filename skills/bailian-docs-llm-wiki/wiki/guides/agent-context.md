@@ -1,54 +1,49 @@
 # agent context
 
-agent context 是百炼平台中用于定义 Agent 运行时环境与外部信息源的关键机制，它决定了 Agent 能够感知和利用哪些知识、历史交互及外部系统能力。通过 context，开发者可显式注入知识库、记忆片段、连接器配置等结构化上下文数据，从而影响 Agent 的推理与决策行为。其设计目标是解耦业务逻辑与上下文供给，支持灵活、可复用的上下文组合。
+agent context 是百炼平台中用于定义 Agent 运行时环境与外部信息输入的关键机制，它决定了 Agent 在执行任务过程中可访问的知识、历史记忆、数据源及解析能力。通过合理配置上下文，开发者可显著提升 Agent 的准确性、连贯性与领域适应性。其设计遵循模块化原则，各组件（如 RAG、Memory、Connector）可独立启用或组合使用。
 
 ## 支持的模型/功能
 
-当前 agent context 机制在所有支持 `agent` 类型调用的模型上可用，包括 Qwen-Max、Qwen-Plus 和 Qwen-Turbo（详见 [Agent 上下文](../../raw/application-user-guide/agent-context.md)）。核心支持的功能包括：
-- RAG：接入知识库实现检索增强（参见 [RAG](../../raw/application-user-guide/agent-context/knowledge-base.md)）；
-- Memory：加载对话历史或[长期记忆](../concepts/long-term-memory.md)片段；
-- Connector：绑定第三方服务（如飞书、钉钉、数据库）的预注册连接器实例；
-- ParseX：启用结构化文档解析与上下文注入（见 [ParseX](../../raw/application-user-guide/agent-context/getting-started-overview.md)）。
+agent context 本身不依赖特定大模型，但需与支持 `tool calling` 和 `context injection` 能力的模型协同工作，当前已验证兼容的模型包括：Qwen-Max、Qwen-Plus、Qwen-Turbo 及部分第三方接入模型（需开启 `enable_context` 标志）。核心功能模块包括：
+- **RAG**：支持从知识库动态检索并注入上下文片段，详见 [Agent 上下文](../../raw/application-user-guide/agent-context.md)；
+- **Memory**：提供短期对话记忆（session-level）与长期用户画像记忆（user-level），其能力边界在 [Memory](../../raw/application-user-guide/agent-context/memory-library-overview.md) 中明确定义；
+- **Connector**：用于对接外部系统（如 CRM、数据库），其协议适配与认证方式参考 [Connector](../../raw/application-user-guide/agent-context/overview.md)；
+- **ParseX**：专用于非结构化文档（PDF/Word/Excel）的内容提取与语义切分，是 RAG 前置必备环节，用法见 [ParseX](../../raw/application-user-guide/agent-context/getting-started-overview.md)。
 
-> **注意**：Qwen-VL 系列多模态模型暂不支持 memory 和 connector 类型 context，仅支持 RAG 和 ParseX；该限制未在 [Agent 上下文](../../raw/application-user-guide/agent-context.md) 中明确说明，以本 Wiki 实际行为为准。
+> **注意**：部分旧版 SDK 示例中将 `memory` 配置为布尔开关（`true/false`），但自 v2.3.0 起已改为对象结构（含 `type`, `ttl`, `max_length` 字段），实际行为以 [Memory](../../raw/application-user-guide/agent-context/memory-library-overview.md) 文档为准。
 
 ## 关键参数
 
-在 API 请求体中，context 通过 `context` 字段传入，类型为对象，支持以下子字段：
-
-| 字段 | 类型 | 必填 | 说明 |
-|------|------|------|------|
-| `knowledge_base_ids` | string[] | 否 | 知识库 ID 列表，用于 RAG 检索 |
-| `memory_ids` | string[] | 否 | 记忆库 ID 列表，按时间倒序加载最近 N 条交互 |
-| `connector_ids` | string[] | 否 | 已配置的 connector 实例 ID 列表 |
-| `parsex_config` | object | 否 | ParseX 解析参数，含 `file_id`、`chunk_size` 等（详见 [ParseX](../../raw/application-user-guide/agent-context/getting-started-overview.md)）|
-
-所有 ID 均需为用户空间内已创建并授权的有效资源 ID；空数组或缺失字段将被忽略。
-
-## 使用方式
-
-1. 在控制台或 SDK 中预先创建知识库、记忆库、connector 或上传文件启用 ParseX；
-2. 构造请求时，在 `messages` 外层添加 `context` 对象，例如：
+所有上下文模块均通过 `context` 字段统一配置，典型结构如下：
 
 ```json
 {
-  "model": "qwen-max",
-  "messages": [{"role": "user", "content": "上次我问过什么？"}],
   "context": {
-    "memory_ids": ["mem_abc123"],
-    "knowledge_base_ids": ["kb_xyz789"]
+    "rag": { "knowledge_base_id": "kb-xxx", "top_k": 3 },
+    "memory": { "type": "session", "ttl": 3600 },
+    "connector": { "id": "conn-yyy", "params": { "timeout": 5000 } },
+    "parsex": { "mode": "semantic", "chunk_size": 512 }
   }
 }
 ```
 
-3. 注意：context 不参与 token 计费，但其关联内容（如检索结果、解析后文本）会作为 prompt 一部分计入总 token（参考 [Memory](../../raw/application-user-guide/agent-context/memory-library-overview.md) 中的计费说明）。
+- `rag.knowledge_base_id`：必填，对应知识库唯一标识；
+- `memory.type`：仅支持 `"session"` 或 `"user"`，不支持 `"global"`（该值已在 [Connector](../../raw/application-user-guide/agent-context/overview.md) 的附录中明确废弃）；
+- `parsex.mode`：推荐 `"semantic"`，`"fixed"` 模式在长文档中易导致语义断裂。
+
+## 使用方式
+
+1. 在创建 Agent 时，于请求体 `POST /v1/agents` 的 `context` 字段中传入完整配置；
+2. 若使用 SDK，调用 `AgentBuilder.withContext(...)` 方法链式设置；
+3. RAG 与 ParseX 需预先完成知识库构建与文档解析任务（异步），否则首次调用将返回 `400 Bad Request`；
+4. Memory 的生命周期由会话 ID（`session_id`）或用户 ID（`user_id`）自动绑定，无需手动管理。
 
 ## 限制和注意事项
 
-- 单次请求最多支持 5 个 `knowledge_base_ids`、3 个 `memory_ids`、3 个 `connector_ids`；
-- `parsex_config` 仅支持单个 `file_id`，不支持批量解析；
-- context 中引用的资源必须与请求所用 API Key 所属工作空间一致，跨空间 ID 无效；
-- 若同时指定 `memory_ids` 和 `knowledge_base_ids`，Agent 默认优先融合记忆上下文，再执行 RAG 检索（此行为与 [Agent 上下文](../../raw/application-user-guide/agent-context.md) 描述一致，但 [Memory](../../raw/application-user-guide/agent-context/memory-library-overview.md) 中未明确融合顺序，建议以实际调用为准）。
+- 单次请求注入的上下文总 token 数上限为 8192（含 prompt + context），超出将被截断且不报错；
+- RAG 与 Memory 的检索结果默认按相关性降序合并，但 **不保证时间顺序**，若需严格保序，须在应用层对 `context.rag.results` 与 `context.memory.items` 手动排序；
+- Connector 调用失败时，Agent 默认跳过该模块继续执行，不会中断流程——此行为与 [Agent 上下文](../../raw/application-user-guide/agent-context.md) 中“fail-fast”描述存在矛盾，实际以运行时行为为准；
+- ParseX 对扫描版 PDF 不支持 OCR，需预处理为文本型 PDF，该限制未在 [ParseX](../../raw/application-user-guide/agent-context/getting-started-overview.md) 中明确说明，属隐含约束。
 
 ## 来源文档
 
