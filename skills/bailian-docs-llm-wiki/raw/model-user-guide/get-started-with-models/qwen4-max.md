@@ -226,7 +226,7 @@ OpenAI Chat Completions、Responses、Anthropic Messages、DashScope
 
 #### 美国（弗吉尼亚）
 
-部署范围：全球
+部署范围：全球 / 弗吉尼亚
 
 能力
 
@@ -652,6 +652,20 @@ qwen4-max
 
 30元
 
+qwen4-max
+
+> [缓存单价（每百万 Token）](https://help.aliyun.com/zh/model-studio/explicit-cache-qwen4#billing)
+
+弗吉尼亚
+
+非思考和思考模式
+
+0<Token≤1M
+
+10.938元
+
+32.813元
+
 #### 新加坡
 
 **模型 ID（Model ID）**
@@ -843,6 +857,14 @@ qwen4-max
 30,000
 
 5,000,000
+
+qwen4-max
+
+弗吉尼亚
+
+15,000
+
+3,000,000
 
 #### 德国（法兰克福）
 

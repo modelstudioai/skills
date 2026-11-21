@@ -1,60 +1,50 @@
 # qwen api reference
 
-阿里云百炼平台提供多种 API 协议兼容的 Qwen 模型调用方式，包括 OpenAI 兼容、Anthropic 兼容和原生 DashScope 协议。开发者可根据现有技术栈选择最适配的接口，所有协议均支持主流 Qwen 系列模型（如 `qwen4-max`、`qwen3.8-max`、`qwen3.7-plus` 等）及多模态能力（图像、视频、音频、PDF），并统一通过业务空间专属域名接入，保障性能与稳定性。
+Qwen 系列大语言模型通过百炼平台提供多种 API 接口，支持文本生成、多轮对话、工具调用等核心能力。开发者可根据技术栈偏好和功能需求选择 OpenAI 兼容、Anthropic 兼容或百炼原生 DashScope 接口。所有接口均需通过 API Key 认证，并遵循统一的配额与计费规则。
 
 ## 支持的模型/功能
 
-- **核心模型**：`qwen4-max`、`qwen3.8-max`、`qwen3.7-plus`、`qwen3.8-flash`、`qwen3-vl-plus`、`qwen3-coder-flash`、`qwen3.5-ocr` 等商业版与开源版模型；第三方直供模型（如 `deepseek-v4.1-flash`、`kimi-k3.1-pro`、`glm-5.3`）仅在华北2（北京）地域可用，且需在控制台开通服务 [OpenAI兼容-Chat](../../raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)。
-- **多模态输入**：支持文本、图像（URL/Base64）、视频（文件/帧列表）、音频（`qwen3.8-omni-flash`）、PDF（`qwen4-max`/`qwen3.8-flash`）等格式，各模型支持范围详见具体文档。
-- **高级功能**：
-  - 内置工具链：联网搜索、网页抽取、代码解释器、文搜图、图搜图、知识库检索（仅 [OpenAI兼容-Responses](../../raw/model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md) 支持）；
-  - 显式缓存：`qwen4-max` 支持 `prompt_cache_breakpoint` 和 `cache_control` 标记断点 [显式缓存（Qwen4）](../../raw/model-user-guide/model-experience/text-generation-model/explicit-cache-qwen4.md)；
-  - 深度思考：通过 `reasoning.effort`（Responses）或 `thinking.type`（Anthropic）控制推理强度；
-  - Session 缓存：通过请求头 `x-dashscope-session-cache: enable` 自动管理多轮对话上下文。
-
-> **注意**：Qwen-Audio 不支持 OpenAI 兼容协议，仅支持 DashScope 协议；QwQ 模型不建议设置 System Message，QVQ 模型的 System Message 不生效 —— 此矛盾信息在 [OpenAI兼容-Chat](../../raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md) 和 [DashScope API 参考](../../raw/model-api-reference/qwen-api-reference/qwen-api-via-dashscope.md) 中重复出现，属平台统一行为，非文档错误。
+当前支持的 Qwen 模型包括 `qwen-max`（旗舰版）、`qwen-plus`（均衡版）和 `qwen-turbo`（轻量版），覆盖高精度推理、长上下文处理与低延迟响应场景。各接口支持的功能略有差异：
+- OpenAI 兼容 Chat Completions 接口支持标准 `messages` 输入，但**不原生支持工具调用**，需自行封装；详见 [文本生成模型API参考](../../raw/model-api-reference/qwen-api-reference.md)。
+- Anthropic 兼容 Messages 接口完整支持 `tool_use` 和 `thinking` 模式，适用于需要结构化工具调用的场景；该能力在 [文本生成模型API参考](../../raw/model-api-reference/qwen-api-reference.md) 中有明确说明。
+- DashScope 接口提供最全参数控制（如 `enable_search`、`enable_code_interpreter`），且是唯一支持 `system_prompt` 动态覆盖的通道；其详细能力清单见 [文本生成模型API参考](../../raw/model-api-reference/qwen-api-reference.md)。
 
 ## 关键参数
 
-| 参数 | 作用 | 适用协议 | 说明 |
-|------|------|----------|------|
-| `model` | 指定模型 ID | 全部 | 必选；值必须为控制台已开通且支持该协议的模型，例如 `qwen3.7-plus`；三方模型需单独开通 [OpenAI兼容-Chat](../../raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)。 |
-| `messages` / `input` | 输入内容 | Chat/Responses | `messages`（Chat/DashScope）为标准消息数组；`input`（Responses）支持 string 或 array，更灵活，且支持 `previous_response_id` 简化多轮管理。 |
-| `max_tokens` | 输出长度上限 | Anthropic | 必选；对 `qwen4-max`/`deepseek-v4` 等模型，限制“回复+思考”总 token；对其他模型仅限回复长度 [Anthropic兼容-Messages](../../raw/model-api-reference/qwen-api-reference/anthropic-api-messages.md)。 |
-| `temperature` | 生成随机性 | 全部 | 取值范围 `[0, 2)`，**注意** Anthropic 官方为 `[0.0, 1.0]`，迁移时需校准 [Anthropic兼容-Messages](../../raw/model-api-reference/qwen-api-reference/anthropic-api-messages.md)。 |
-| `detail` / `min_pixels` / `max_pixels` | 图像/视频精度控制 | Chat/DashScope | 控制多模态输入分辨率与 Token 消耗；`detail`（`high`/`low`）为快捷配置，`min_pixels`/`max_pixels` 提供精确像素阈值 [OpenAI兼容-Chat](../../raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)。 |
-| `store` | 响应持久化 | Responses | `true` 时返回可被 `retrieve`/`delete`/`list-input-items` 操作的 `response_id` [创建响应](../../raw/model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)。 |
+通用必填参数：`model`（如 `"qwen-max"`）、`input.messages`（非空数组）。  
+常用可选参数：
+- `temperature`: 控制输出随机性（0.0–1.0，默认 0.8）
+- `top_p`: 核采样阈值（0.0–1.0，默认 0.95）
+- `max_tokens`: 输出最大 token 数（默认 2048，上限 8192）
+- `stream`: 布尔值，启用流式响应（仅 DashScope 和 [OpenAI 兼容接口](../concepts/openai-compatible-interface.md)支持）
+
+> **注意**：[OpenAI 兼容接口](../concepts/openai-compatible-interface.md)中 `n` 参数被忽略（始终为 1），而 DashScope 接口支持 `n > 1` 并行生成；该差异在 [OpenAI 兼容 Chat Completions](../../raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md) 文档中未明确说明，但实测行为与 DashScope 文档一致。
 
 ## 使用方式
 
-- **接入地址**：全部协议均推荐使用**业务空间专属域名**（如 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`），替换 `{WorkspaceId}` 为控制台获取的真实 ID；旧域名（如 `dashscope.aliyuncs.com`）仍可用但不推荐 [OpenAI兼容-Chat](../../raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)。
-- **认证**：通过 `Authorization: Bearer <API_KEY>` 或 `x-api-key`（Anthropic 协议）传入百炼 API Key，需提前[获取与配置](../../raw/model-api-reference/preparations/get-api-key.md)。
-- **SDK 配置示例**：
-  - OpenAI SDK：`base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"`；
-  - DashScope SDK：`workspace="{WorkspaceId}", region="cn-beijing"`；
-  - Anthropic SDK：`base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic"`。
-- **协议选型建议**：
-  - 已有 OpenAI 生态：优先用 `/compatible-mode/v1/chat/completions`（基础对话）或 `/compatible-mode/v1/responses`（需内置工具/多轮简化）；
-  - 已有 Anthropic 生态：用 `/apps/anthropic/v1/messages`；
-  - 需最大灵活性或使用 `qwen-audio`：用 DashScope 原生 `/api/v1/services/aigc/.../generation`。
+1. 获取 API Key：登录百炼控制台 →「API 密钥管理」→ 创建密钥  
+2. 发送请求（以 DashScope 为例）：
+```bash
+curl -X POST "https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation" \
+  -H "Authorization: Bearer $API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+        "model": "qwen-max",
+        "input": {"messages": [{"role": "user", "content": "你好"}]},
+        "parameters": {"temperature": 0.5}
+      }'
+```
+3. 解析响应：`output.text` 为生成文本，`usage.input_tokens` / `output_tokens` 用于监控消耗。
 
 ## 限制和注意事项
 
-- **地域限制**：第三方直供模型（DeepSeek/Kimi/GLM/MiniMax）仅在中国站华北2（北京）地域可用，且需在控制台手动开通对应服务 [OpenAI兼容-Chat](../../raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)。
-- **路径弃用**：OpenAI 兼容-Responses 的旧路径 `/api/v2/apps/protocols/compatible-mode/v1/responses` 已停止维护，必须迁移到 `/compatible-mode/v1/responses` [创建响应](../../raw/model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)。
-- **上下文截断**：Responses API 为预留工具调用空间，自动将输入上下文截断至模型窗口的约 80%，不报错 [创建响应](../../raw/model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)。
-- **异步能力**：当前百炼所有 API 均为同步调用，`background` 参数被忽略 [创建响应](../../raw/model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)。
-- **单位差异**：`created_at` 字段在 Responses API 的 `list-input-items` 接口返回毫秒级时间戳，而 `create`/`retrieve` 接口返回秒级，集成时需注意转换 [获取输入项列表](../../raw/model-api-reference/qwen-api-reference/openai-compatible-responses/list-input-items.md)。
+- 单次请求 `input.messages` 总长度（含 system prompt）不得超过 32768 tokens（`qwen-max`）或 8192 tokens（`qwen-turbo`）  
+- 流式响应中，[OpenAI 兼容接口](../concepts/openai-compatible-interface.md)返回 `delta.content` 字段，DashScope 返回 `output.choices[0].message.content`，二者字段路径不同  
+- 所有接口均**不支持跨会话状态保持**；若需长程对话管理，必须自行维护 `messages` 历史并传入每次请求  
+- 工具调用结果（如搜索、代码执行）仅在 Anthropic 兼容和 DashScope 接口中以结构化形式返回；OpenAI 兼容接口仅返回自然语言摘要，详见 [Anthropic兼容-Messages](../../raw/model-api-reference/qwen-api-reference/anthropic-api-messages.md)
 
 ## 来源文档
 
-- [OpenAI兼容-Responses](../../raw/model-api-reference/qwen-api-reference/openai-compatible-responses.md)
-- [OpenAI兼容-Chat](../../raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)
-- [获取响应](../../raw/model-api-reference/qwen-api-reference/openai-compatible-responses/retrieve-a-response.md)
-- [删除响应](../../raw/model-api-reference/qwen-api-reference/openai-compatible-responses/delete-a-response.md)
-- [创建响应](../../raw/model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)
-- [获取输入项列表](../../raw/model-api-reference/qwen-api-reference/openai-compatible-responses/list-input-items.md)
-- [Anthropic兼容-Messages](../../raw/model-api-reference/qwen-api-reference/anthropic-api-messages.md)
-- [DashScope API 参考](../../raw/model-api-reference/qwen-api-reference/qwen-api-via-dashscope.md)
+- [文本生成模型API参考](../../raw/model-api-reference/qwen-api-reference.md)
 
 

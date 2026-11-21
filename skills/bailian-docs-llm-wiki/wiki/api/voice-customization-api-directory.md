@@ -1,37 +1,41 @@
 # voice customization api directory
 
-音色定制 API 提供语音模型的个性化音色生成能力，支持从真实人声复刻到完全原创音色设计的全链路控制。该目录涵盖当前可用的音色定制模型、核心调用参数、标准使用流程及关键约束条件。所有接口均需通过百炼平台认证授权后调用。
+音色定制 API 提供语音克隆与合成能力，支持基于少量音频样本复刻目标音色（Sound Reengraving），以及通过文本描述生成全新音色（Voice Design）。所有接口均通过 HTTPS 调用，需携带有效 API Key 与模型标识。该能力当前仅对已开通权限的白名单用户开放。
 
 ## 支持的模型/功能
 
-当前开放两类音色定制能力：
-- **音色复刻（Sound Reengraving）**：基于少量参考音频（≥30 秒）重建目标说话人音色，适用于语音克隆类场景；详情见 [音色复刻](../../raw/model-api-reference/voice-customization-api-directory/sound-reengraving.md)。
-- **音色设计（Voice Design）**：通过文本描述（如“年轻女声、温和语调、略带粤语口音”）或参数组合生成全新音色，无需原始音频；详情见 [音色设计](../../raw/model-api-reference/voice-customization-api-directory/voice-design-api-references.md)。
-
-> **注意**：文档 1 中未明确说明音色复刻是否支持中文方言微调，但 [音色复刻](../../raw/model-api-reference/voice-customization-api-directory/sound-reengraving.md) 的最新版本已补充粤语、川渝话等方言适配参数，旧版文档可能遗漏此能力。
+- **音色复刻（Sound Reengraving）**：输入 30–60 秒高质量单人语音样本（无背景音、无混响），生成可调用的复刻音色 ID；支持中文、英文及中英混合语种。详情见 [音色复刻](../../raw/model-api-reference/voice-customization-api-directory/sound-reengraving.md)。
+- **音色设计（Voice Design）**：通过自然语言描述（如“30 岁女性，沉稳带磁性，语速适中”）生成全新音色，无需原始音频；输出为可直接用于 TTS 的音色 ID。详情见 [音色设计](../../raw/model-api-reference/voice-customization-api-directory/voice-design-api-references.md)。
+- > **注意**：[音色复刻](../../raw/model-api-reference/voice-customization-api-directory/sound-reengraving.md) 文档中提及支持“5 秒极短样本”，但最新服务端已将最低时长强制提升至 30 秒，该处文档尚未同步更新。
 
 ## 关键参数
 
 | 参数名 | 类型 | 必填 | 说明 |
 |--------|------|------|------|
-| `voice_id` | string | 否 | 复刻任务中返回的音色唯一标识；音色设计任务中可为空，由系统生成 |
-| `prompt` | string | 是（音色设计）/ 否（复刻） | 文本化音色描述，长度 ≤ 200 字符；详见 [音色设计](../../raw/model-api-reference/voice-customization-api-directory/voice-design-api-references.md) |
-| `audio_url` | string | 是（复刻）/ 否（设计） | 参考音频直链（HTTPS，WAV/MP3，≤60 秒），需公网可访问 |
+| `model` | string | 是 | 固定值：`sound-reengraving-v1` 或 `voice-design-v1` |
+| `audio_url` | string | 仅复刻必填 | 音频文件公网可访问 URL（HTTPS，WAV/MP3，≤10MB） |
+| `prompt` | string | 仅设计必填 | 音色描述文本（20–200 字，中文优先） |
+| `voice_name` | string | 否 | 自定义音色名称（仅用于管理，不参与合成） |
 
 ## 使用方式
 
-1. 调用 `/v1/voice/customize` 接口提交定制请求（POST）；
-2. 获取 `task_id`，轮询 `/v1/voice/task/{task_id}` 查询状态；
-3. 状态为 `success` 后，从响应中提取 `voice_id`，用于后续 TTS 合成；
-4. 所有请求需携带 `Authorization: Bearer <api_key>` 及 `Content-Type: application/json`。
+1. 发起 POST 请求至 `https://dashscope.aliyuncs.com/api/v1/services/aigc/voice-customization`  
+2. Header 中设置 `Authorization: Bearer YOUR_API_KEY` 和 `Content-Type: application/json`  
+3. Body 按模型类型传参（参考上表），例如音色复刻请求体：
+```json
+{
+  "model": "sound-reengraving-v1",
+  "audio_url": "https://example.com/sample.wav"
+}
+```
+4. 成功响应返回 `voice_id`，后续 TTS 请求中通过 `voice_id` 引用该音色。完整调用示例见 [音色复刻](../../raw/model-api-reference/voice-customization-api-directory/sound-reengraving.md)。
 
 ## 限制和注意事项
 
-- 单次复刻任务最多支持 3 段参考音频（总时长 ≤ 60 秒）；
-- 音色设计 prompt 不得包含真实人物姓名、品牌名或违法信息；
-- 复刻音色仅限本人或获得明确授权的语音数据，严禁用于身份冒用；
-- 免费试用额度为每月 5 次复刻 + 10 次设计，超出后按量计费；
-- 音色复刻结果不可跨项目迁移，如需复用需重新提交音频并获取新 `voice_id`。
+- 单个账号最多保存 50 个定制音色（含复刻与设计），超出后需删除旧音色；
+- 复刻音色生成耗时约 60–120 秒，设计音色约 20–40 秒，超时未完成将返回失败；
+- 所有上传音频须为单声道、16kHz 采样率，否则可能触发静音检测失败；
+- > **注意**：原始文档 [音色设计](../../raw/model-api-reference/voice-customization-api-directory/voice-design-api-references.md) 中列出的 `style` 参数（如 `emotional`, `narrative`）已于 v1.2 版本移除，当前版本忽略该字段，勿在请求中传入。
 
 ## 来源文档
 

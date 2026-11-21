@@ -1,17 +1,17 @@
 {
-  "updatedAt": "2026-11-21",
-  "totalFamilies": 125,
-  "totalModels": 336,
+  "updatedAt": "2026-11-22",
+  "totalFamilies": 127,
+  "totalModels": 343,
   "profileCoverage": {
-    "full": 296,
-    "partial": 39,
-    "structured-only": 1,
+    "full": 323,
+    "partial": 20,
+    "structured-only": 0,
     "none": 0
   },
   "capabilityDistribution": {
     "TG": 32,
     "VG": 17,
-    "IG": 16,
+    "IG": 17,
     "ASR": 11,
     "Reasoning": 10,
     "TTS": 9,
@@ -19,18 +19,18 @@
     "VU": 5,
     "Multimodal-Omni": 5,
     "Realtime-Omni": 4,
+    "ME": 2,
     "Realtime-Chatting": 2,
     "TR": 2,
     "Realtime-Audio-Translate": 2,
-    "ME": 1,
     "World-Model": 1,
     "Realtime-Text-to-Speech": 1,
     "3D-generation": 1
   },
   "providerDistribution": {
-    "qwen": 63,
+    "qwen": 64,
     "qwen-domain-model": 26,
-    "wan": 12,
+    "wan": 13,
     "mini-max": 4,
     "pixverse": 4,
     "deepseek": 3,
@@ -1058,6 +1058,22 @@
       "maxContextWindow": 32768
     },
     {
+      "slug": "qwen-vl-embedding",
+      "name": "Qwen-VL-Embedding",
+      "primaryCapability": "ME",
+      "capabilities": [
+        "ME"
+      ],
+      "providers": [
+        "qwen"
+      ],
+      "itemCount": 2,
+      "items": [
+        "qwen2.5-vl-embedding",
+        "qwen3-vl-embedding"
+      ]
+    },
+    {
       "slug": "qwen-vl-ocr",
       "name": "Qwen-VL-OCR",
       "primaryCapability": "VU",
@@ -1983,6 +1999,25 @@
       "itemCount": 1,
       "items": [
         "voice-enrollment"
+      ]
+    },
+    {
+      "slug": "wan-image-edit",
+      "name": "Wan-Image",
+      "primaryCapability": "IG",
+      "capabilities": [
+        "IG"
+      ],
+      "providers": [
+        "wan"
+      ],
+      "itemCount": 5,
+      "items": [
+        "wan2.5-i2i-preview",
+        "wan2.6-image",
+        "wan2.7-image",
+        "wan2.7-image-pro",
+        "wanx2.1-imageedit"
       ]
     },
     {

@@ -1,46 +1,48 @@
 # application [use cases](use-cases.md)
 
-阿里云百炼平台支持多种主流渠道的 AI 助手/机器人快速集成，覆盖网站、企业微信、微信公众号、钉钉等场景，所有方案均基于统一的 RAG（[检索增强生成](../concepts/rag.md)）架构，通过百炼大模型应用 + AppFlow 低代码连接流实现。开发者无需自行部署模型或构建推理服务，可复用百炼提供的模型能力、知识库管理与 API 接入能力，在 10 分钟内完成端到端上线。
+阿里云百炼平台支持多种主流企业级渠道的 AI 助手快速集成，覆盖网站、微信公众号、企业微信、钉钉等场景，所有方案均基于统一的 RAG（[检索增强生成](../concepts/rag.md)）架构，通过百炼大模型应用 + AppFlow 低代码连接流实现。核心流程一致：创建百炼智能体应用 → 配置私有知识库 → 通过 AppFlow 关联目标渠道 → 完成渠道侧认证与 Webhook 配置。开发者可复用同一套知识库和提示词策略，实现跨渠道能力对齐。
 
 ## 支持的模型/功能
 
-- **核心模型**：所有用例默认推荐使用 `Qwen3.5-Plus`（文档 1 中明确指定），该模型在效果、速度与成本间取得平衡；文档 2、3、4 中则统一表述为“千问-Plus”，需注意二者为同一模型的不同命名方式。> **注意**：文档 5 中列出的 `qwen-max`、`qwen-plus`、`qwen3.5-flash` 均为当前可用商业模型，但 `qwen-plus` 与 `Qwen3.5-Plus` 实际指向同一模型版本，命名差异属历史兼容性问题，建议以控制台实际模型列表为准。
-- **RAG 能力**：全部用例均依赖百炼知识库（Knowledge Base）实现私有知识增强，支持 PDF/DOCX/TXT/MD/PPTX/XLSX 等格式上传（[在网站上增加一个AI助手](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-website-in-10-minutes.md)）、图像及结构化数据（[基于本地知识库构建RAG应用](../../raw/application-user-guide/application-use-cases/build-rag-application-based-on-local-retrieval.md)）。
-- **交互载体**：支持 Web 悬浮窗（文档 1）、企业微信应用（文档 2）、微信公众号消息（文档 3）、钉钉机器人（文档 4）四类标准渠道；文档 5 提供本地 Gradio Web UI，适用于开发测试与私有化部署场景。
+- **基础模型**：推荐使用 `Qwen3.5-Plus`（文档 1 中明确指出其“能力均衡，推理效果、成本和速度介于千问Max和千问Flash之间”），也支持 `qwen-max`、`qwen3.5-flash` 等商业模型（见 [基于本地知识库构建RAG应用](../../raw/application-user-guide/application-use-cases/build-rag-application-based-on-local-retrieval.md)）。
+- **核心功能**：
+  - 智能体（Agent）应用：支持角色设定、多轮对话、工具调用（当前各渠道案例均以问答型智能体为主）。
+  - RAG 增强：通过百炼知识库模块接入私有文档（PDF/DOCX/TXT 等），支持“必定调用”等知识引用方式（[在网站上增加一个AI助手](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-website-in-10-minutes.md)）。
+  - 多端嵌入：提供 Web 悬浮挂件、企业微信自建应用、微信公众号消息接口、钉钉机器人 HTTP 模式四种标准化集成路径。
+
+> **注意**：文档 2（企业微信）、文档 3（微信公众号）、文档 4（钉钉）均要求使用 AppFlow 预置模板创建连接流，但文档 1（网站）未提及模板，而是引导用户手动配置 AI 助手 Web 集成。三者底层能力一致，但配置入口和自动化程度存在差异，建议优先采用模板化路径以降低出错率。
 
 ## 关键参数
 
-| 参数 | 说明 | 来源 |
-|------|------|------|
-| `AppID` / `应用ID` | 百炼应用唯一标识，用于调用模型 API，必须与 API Key 同属一个业务空间 | [在网站上增加一个AI助手](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-website-in-10-minutes.md) |
-| `API Key` | 百炼平台鉴权凭证，用于 AppFlow 或自定义后端调用模型服务 | [在企业微信中集成一个 AI 助手](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-work-wechat.md) |
-| `AgentKey`（业务空间标识） | 用于校验 AppID 与 API Key 的归属一致性，不匹配将导致 `request error` | [在网站上增加一个AI助手](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-website-in-10-minutes.md) |
-| `WebhookUrl` | AppFlow 连接流对外暴露的 HTTP 回调地址，需配置到企业微信/公众号/钉钉后台 | [在企业微信中集成一个 AI 助手](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-work-wechat.md) |
-| `Token` & `EncodingAESKey` | 企业微信消息加解密必需参数，由 AppFlow 在创建企业微信凭证时生成 | [在企业微信中集成一个 AI 助手](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-work-wechat.md) |
+| 参数 | 说明 | 来源示例 |
+|------|------|----------|
+| `AppId`（百炼应用 ID） | 百炼控制台「应用管理」页面获取，用于标识调用的目标智能体应用 | [在网站上增加一个AI助手](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-website-in-10-minutes.md) |
+| `API Key` | 百炼控制台「密钥管理」创建，用于鉴权调用 API | [在企业微信中集成一个 AI 助手](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-work-wechat.md) |
+| `WebhookUrl` | AppFlow 连接流发布后生成，需填入企业微信/钉钉/公众号后台作为回调地址 | [在钉钉上增加一个AI机器人](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-dingtalk.md) |
+| `AgentKey`（业务空间标识） | 仅企业微信场景需校验，确保智能体与 API Key 在同一业务空间（见文档 1 常见问题） | [在网站上增加一个AI助手](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-website-in-10-minutes.md) |
 
 ## 使用方式
 
-1. **创建百炼应用**：进入[应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)，选择「智能体应用」，配置 Prompt（如 `你叫小助，可以帮助用户解答产品选购、使用等方面的问题`）并发布；
-2. **配置知识库（可选但推荐）**：上传私有文档 → 创建知识库 → 在应用配置中启用「必定调用」并绑定知识库；
-3. **创建渠道连接流**：
-   - 网站：使用 AppFlow 创建「模型服务AI助手」，配置 Web 集成并嵌入悬浮挂件脚本；
-   - 企业微信/公众号/钉钉：使用 AppFlow 预置模板（如 `企业微信自建应用大模型自动回复`），按向导完成三方凭证（企业 ID/AgentId/Secret 或 AppID/Client ID）与百炼凭证（API Key + AppID）绑定；
-4. **渠道侧配置**：
-   - 网站：在 HTML 中插入 AppFlow 生成的 `<script>` 标签；
-   - 企业微信：在应用后台配置「API 接收消息」URL（即 WebhookUrl）及 Token/EncodingAESKey，并添加可信 IP；
-   - 微信公众号：在后台开启「服务器配置」，填写 WebhookUrl 及 Token/EncodingAESKey（认证号支持全事件，未认证号仅限 5 秒被动回复）；
-   - 钉钉：在应用配置中启用「HTTP 模式」机器人，设置 WebhookUrl（**严禁选择 Stream 模式**）；
-5. **验证与日志**：通过渠道端发起对话；如需分析，可在 AppFlow 连接流中追加 SLS 日志节点记录原始请求与响应。
+1. **创建百炼智能体应用**  
+   进入百炼控制台 → 应用管理 → 创建「智能体应用」→ 选择模型（如 `Qwen3.5-Plus`）→ 设置 Prompt（例如 `"你叫小助，可以帮助用户解答产品选购、使用等方面的问题。"`）→ 发布。
+
+2. **配置知识库（可选但推荐）**  
+   - 上传文件：通过「数据连接」或「文件」页签导入文档（支持 PDF/DOCX/TXT 等，单文件 ≤100MB）；  
+   - 创建知识库：进入「知识库」页面 → 创建标准版 → 关联已上传文件；  
+   - 引用知识：返回应用配置页 → 开启「知识库」开关 → 添加知识库 → 设置调用方式为「必定调用」→ 再次发布。
+
+3. **通过 AppFlow 关联渠道**  
+   - **网站**：AppFlow 控制台 → 模型服务 AI 助手 → 创建 AI 助手 → 导入百炼模型 → Web 页面集成 → 获取悬浮挂件脚本 → 插入 HTML。  
+   - **企业微信/微信公众号/钉钉**：使用对应 AppFlow 预置模板（如 `tl-qiyeweixinself0813shzoa`）→ 授权渠道凭证（企业 ID/AgentId/Secret 或 AppID）→ 配置百炼凭证（API Key）→ 填写百炼 `AppId` → 发布并获取 `WebhookUrl`。  
+   - **渠道侧配置**：将 `WebhookUrl` 及配套 Token/EncodingAESKey/IP 白名单填入对应平台后台（企业微信需配置可信 IP；公众号需完成认证以避免 5 秒超时限制；钉钉必须选 HTTP 模式）。
 
 ## 限制和注意事项
 
-- **免费额度适用性**：新用户免费额度可覆盖全部文档所述场景的模型调用消耗（文档 1、2、3、4 均明确提及），但 AppFlow、函数计算 FC、ADB-PG 向量存储等配套云产品单独计费；
-- **认证依赖**：微信公众号未认证时，消息响应超 5 秒即失败，必须使用「未认证公众号」专用模板（文档 3），或升级为认证号；
-- **安全校验强制项**：
-  - 企业微信要求域名主体备案与企业主体一致，否则需通过 AppFlow 部署 Nginx 代理或计算巢实例解决（文档 2）；
-  - 企业微信可信 IP 仅允许单企业独占，多企业共用同一 IP 将触发安全拦截（文档 2）；
-- **模型响应时效**：钉钉机器人要求 HTTP 模式下必须在 3 秒内返回响应，若百炼应用响应慢，需优化 Prompt（如添加“请简短回答”）、切换至 `qwen3.5-flash` 模型或调整知识库召回策略；
-- **本地 RAG 差异**：文档 5 描述的本地部署方案（`local_rag`）完全独立于百炼控制台，其知识库、嵌入模型、切分逻辑均在本地运行，仅生成环节调用百炼 API，不适用于生产级高并发场景，详见 [基于本地知识库构建RAG应用](../../raw/application-user-guide/application-use-cases/build-rag-application-based-on-local-retrieval.md)。
+- **免费额度**：新用户可享百炼免费额度，覆盖教程内模型调用消耗；额度用尽后按 token 计费（[新用户免费额度](../../raw/model-user-guide/test-1/new-free-quota.md)）。AppFlow、函数计算 FC、ADB-PG 向量存储等组件单独计费。
+- **文件限制**：百炼知识库单文档最大 100MB 或 1000 页，图片单张 ≤20MB，最多上传 200 个文件（见文档 2）；本地 RAG 应用不建议传入 >100MB 文件（见文档 5）。
+- **认证依赖**：微信公众号未认证时仅支持被动回复（5 秒限制），强烈建议完成认证（见文档 3 常见问题）；企业微信需配置可信 IP，若使用第三方服务器可能触发安全拦截（见文档 2 常见问题）。
+- **模型响应时效**：钉钉机器人要求 HTTP 模式，若选用 `qwen-max` 等高延迟模型可能导致超时，可改用 `qwen3.5-flash` 平衡速度与效果（见文档 5）。
+- **调试要点**：出现 `request error` 或无响应时，优先检查三项：API Key 状态、`AppId` 正确性、业务空间标识（`AgentKey`）一致性（见文档 1 常见问题）。
 
 ## 来源文档
 

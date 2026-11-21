@@ -1,6 +1,6 @@
 # 百炼模型市场索引
 
-> 自动生成 · 共 125 个模型家族 · 336 个主干模型 · 更新于 2026-11-21
+> 自动生成 · 共 127 个模型家族 · 343 个主干模型 · 更新于 2026-11-22
 
 **机器查询走结构化文件**：
 
@@ -121,7 +121,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [视频风格重绘](groups/video-style-transform.json) — 视频风格重绘可以将输入的视频帧序列进行多种风格化的重绘/生成，使新视频画面在兼顾原始人物和物体相貌的同时，带来不同风格的绘画效果。当前支持预置重绘风格包括日式漫画、美式漫画、清新漫画、3D卡通、国风卡…
   - 模型：`video-style-transform`
 
-## 图像生成 `IG` — 16 个家族
+## 图像生成 `IG` — 17 个家族
 
 - [Qwen-Image-2.0](groups/qwen-image-2.0.json) — Qwen-Image-2.0系列加速版模型，实现了图片生成和图片编辑的融合；具备更专业的文字渲染1k token指令支持能力、更细腻的真实质感，细腻刻画写实场景、更强的语义遵循能力。加速版有效实现了模…
   - 模型：`qwen-image-2.0`, `qwen-image-2.0-pro`
@@ -133,6 +133,8 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`qwen-mt-image`, `qwen-mt-image-2.0`
 - [Vidu AI生图](groups/vidu-image-models-market-place.json) — 由生数科技提供Vidu系列图片生成API服务，多图参考，精准还原，高速高质。
   - 模型：`vidu/vidu-image_reference2image`, `vidu/vidu-image-lite_reference2image`, `vidu/vidu-image-pro_reference2image`, `vidu/viduq2-fast_reference2image`, `vidu/viduq2-pro_reference2image`, `vidu/viduq3-fast_reference2image`, `vidu/viduq3.1-fast_reference2image`
+- [Wan-Image](groups/wan-image-edit.json) — 指令编辑图片内容，轻松实现局部修改、风格变化、一致性保持等
+  - 模型：`wan2.5-i2i-preview`, `wan2.6-image`, `wan2.7-image`, `wan2.7-image-pro`, `wanx2.1-imageedit`
 - [Wan-T2I](groups/wan-text-to-image.json) — 文字生成图片，写实质感细腻画面，文字内容生成，艺术风格表现
   - 模型：`wan2.2-t2i-flash`, `wan2.2-t2i-plus`, `wan2.5-t2i-preview`, `wan2.6-t2i`, `wanx-v1`, `wanx-v1-0521`, `wanx2.0-t2i-turbo`, `wanx2.1-t2i-plus`, `wanx2.1-t2i-turbo`
 - [Z-Image-Turbo](groups/z-image-turbo.json) — Z-Image-Turbo是在Artificial Analysis评测中荣登文生图开源模型世界第一的高效图像生成模型,仅用60亿参数和8步推理就能生成媲美大规模商业模型的照片级真实感图像,并在中英双…
@@ -277,6 +279,13 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [Qwen3.8-Omni-Flash-Realtime](groups/qwen3.8-omni-flash-realtime.json) — Qwen3.8-Omni-Flash-Realtime 通过多种实时协议提供音视频双工交互，面向智能硬件、机器人与实时交互 Agent。支持多通道音频输入与多种通道布局，视频表征可在细粒度与聚合之间按…
   - 模型：`qwen3.8-omni-flash-realtime`
 
+## 多模态嵌入 `ME` — 2 个家族
+
+- [Qwen-VL-Embedding](groups/qwen-vl-embedding.json) — 基于Qwen-VL底座训练的统一多模态向量模型，支持文本、图片、视频单模态/混合模态输入，输出统一表征向量，适用于跨模态检索、图搜、视频检索、图像聚类、复杂多模态信息检索、打标等场景。
+  - 模型：`qwen2.5-vl-embedding`, `qwen3-vl-embedding`
+- [通义多模态向量](groups/embedding.json) — 基于LLM底座的通用多模态表征模型，支持文本、图像、视频3种模态，具有以视觉为中心、全场景性能优异、高性价比的特点，适用于以图搜图、以文搜图、以文搜视频、以视频搜视频、以文搜文等下游多样化任务场景。
+  - 模型：`multimodal-embedding-v1`, `tongyi-embedding-vision-flash`, `tongyi-embedding-vision-plus`
+
 ## Realtime-Chatting `Realtime-Chatting` — 2 个家族
 
 - [Qwen-Audio-3.0-Realtime](groups/qwen-audio-3.0-realtime.json) — 实时双工语音对话，兼顾低时延、自然交互与语音推理。Plus 效果优先，Flash 响应更快。
@@ -297,11 +306,6 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`qwen3.5-livetranslate-flash-realtime`
 - [Qwen3.8-LiveTranslate-Flash-Realtime](groups/qwen3.8-livetranslate-flash-realtime.json) — Qwen3.8-LiveTranslate-Flash的实时版本，一款高精度、高响应、高鲁棒性的多语言实时音视频同传大模型。依托Qwen-Omni强大的基座能力、海量多模态数据、跨语言跨模态对齐和视觉…
   - 模型：`qwen3.8-livetranslate-flash-realtime`
-
-## 多模态嵌入 `ME` — 1 个家族
-
-- [通义多模态向量](groups/embedding.json) — 基于LLM底座的通用多模态表征模型，支持文本、图像、视频3种模态，具有以视觉为中心、全场景性能优异、高性价比的特点，适用于以图搜图、以文搜图、以文搜视频、以视频搜视频、以文搜文等下游多样化任务场景。
-  - 模型：`multimodal-embedding-v1`, `tongyi-embedding-vision-flash`, `tongyi-embedding-vision-plus`
 
 ## World-Model `World-Model` — 1 个家族
 

@@ -6,58 +6,43 @@
 
 当前 `more models` 类别下主要包含以下四类专用模型：
 
-- **意图理解模型**：`tongyi-intent-detect-v3`，支持两种模式——同时输出意图与[函数调用](../concepts/function-calling.md)（需 `Response in INTENT_MODE.` 系统提示），或仅输出预定义意图标签（如 `alarm_set`）。详见 [意图理解能力](../../raw/model-api-reference/more-models/intent-detect-capability.md)。
-- **深度研究模型**：`qwen-deep-research`，专用于长周期、多阶段的研究任务（反问确认 → 研究规划 → 网络搜索 → 报告生成），**仅支持华北2（北京）地域及 DashScope Python SDK**，不支持 [OpenAI 兼容接口](../concepts/openai-compatible-interface.md)或 Java SDK。
-- **GUI界面交互模型**：`gui-plus` 及其版本（如 `gui-plus-2026-02-26`），支持图文多模态输入与工具调用，适用于自动化桌面操作（如点击、输入、截图）。支持 [OpenAI 兼容接口](../concepts/openai-compatible-interface.md)与 DashScope API。
-- **OCR文字识别模型**：包括 `qwen3.5-ocr`、`qwen-vl-ocr-2025-11-20`、`qwen-vl-ocr` 等，支持高精度图像文本提取与结构化信息抽取（如车票、合同字段），支持多地域部署（华北2、新加坡、美国弗吉尼亚）。
+- **意图理解模型**：`tongyi-intent-detect-v3`，支持两种模式——同时输出意图与[函数调用](../concepts/function-calling.md)（需 `Response in INTENT_MODE.` 系统指令），或仅输出预定义意图标签（如 `alarm_set`）。详见 [意图理解能力](../../raw/model-api-reference/more-models/intent-detect-capability.md)。
+- **深度研究模型**：`qwen-deep-research`，专用于长周期、多阶段的研究任务（反问确认 → 研究规划 → 网络搜索 → 报告生成），仅支持华北2（北京）地域及 DashScope Python SDK，**不支持 [OpenAI 兼容接口](../concepts/openai-compatible-interface.md)**。详见 [Qwen-Deep-Research API 参考](../../raw/model-api-reference/more-models/qwen-deep-research-api.md)。
+- **GUI界面交互模型**：`gui-plus-*`（如 `gui-plus-2026-02-26`），支持图文多模态输入与工具调用，适用于自动化桌面操作（如点击、输入、截图）。支持 [OpenAI 兼容接口](../concepts/openai-compatible-interface.md)与 DashScope SDK。详见 [GUI-Plus API参考](../../raw/model-api-reference/more-models/gui-plus-interface-interaction-model.md)。
+- **OCR文字识别模型**：`qwen3.5-ocr`、`qwen-vl-ocr-*` 等，专精于图像中文本内容的高精度提取，支持自定义 Prompt 提取结构化字段（如车票信息）。支持 OpenAI 兼容接口与 DashScope SDK。详见 [Qwen-OCR API参考](../../raw/model-api-reference/more-models/qwen-vl-ocr-api-reference.md)。
 
-> **注意**：文档 2 明确指出 `qwen-deep-research` “仅支持通过 Python DashScope SDK 调用，暂不支持 Java SDK 与 OpenAI 兼容接口”，而文档 3 和文档 4 均明确支持 OpenAI 兼容接口。三者在协议支持上存在明确差异，非文档矛盾，而是模型设计定位不同。
+> **注意**：文档 2 明确指出 `qwen-deep-research` “仅支持通过 Python DashScope SDK 调用，暂不支持 Java SDK 与 OpenAI 兼容接口”，而文档 3 和文档 4 均明确支持 OpenAI 兼容接口。该限制在文档 1 中未提及，属关键差异，开发者务必遵守。
 
 ## 关键参数
 
 | 参数 | 说明 | 适用模型 | 备注 |
 |------|------|----------|------|
 | `model` | 模型名称（必填） | 全部 | 如 `"tongyi-intent-detect-v3"`、`"qwen-deep-research"`、`"gui-plus-2026-02-26"`、`"qwen3.5-ocr"` |
-| `messages` | 对话上下文数组（必填） | 全部 | `gui-plus` 和 `qwen-vl-ocr` 支持 `image_url` + `text` 混合 content；`qwen-deep-research` 要求两阶段 message 结构（user → assistant → user） |
-| `vl_high_resolution_images` | 控制图像像素上限策略（非 OpenAI 标准） | `gui-plus` | 需通过 `extra_body` 传入；设为 `true` 时忽略 `max_pixels`，固定上限 `12845056` |
-| `output_format` | 指定研究报告格式 | `qwen-deep-research` | 取值：`model_detailed_report`（默认，~6000 Token）或 `model_summary_report`（~1500–2000 Token） |
-| `min_pixels` / `max_pixels` | 图像预处理像素阈值 | `gui-plus`、`qwen-vl-ocr` | 默认值因模型而异（如 `qwen3.5-ocr` 默认 `min_pixels=3072`, `max_pixels=8388608`）；[Qwen-OCR API参考](../../raw/model-api-reference/more-models/qwen-vl-ocr-api-reference.md) 中详细列出了各模型对应关系 |
-| `enable_thinking` | 是否返回思考过程（仅混合思考模型） | `gui-plus-2026-02-26` | 需通过 `extra_body` 传入；启用后思考内容在 `reasoning_content` 字段中 |
+| `messages` | 对话消息数组（必填） | 全部 | `system`/`user`/`assistant` 角色需严格匹配；GUI-Plus 与 Qwen-OCR 的 `user.content` 为数组（支持 `text` + `image_url`）；`qwen-deep-research` 要求两步调用（含 `assistant` 消息作为历史） |
+| `vl_high_resolution_images` | 图像高分辨率开关（非 OpenAI 标准） | GUI-Plus | 仅 Python SDK 通过 `extra_body` 传入；设为 `true` 时 `max_pixels` 失效，上限固定为 `12845056` |
+| `min_pixels` / `max_pixels` | 图像像素阈值（单位：像素） | GUI-Plus、Qwen-OCR | 默认值与范围因模型而异：`qwen3.5-ocr` 使用 `32×32` 像素/Token，`qwen-vl-ocr` 使用 `28×28`；详见 [Qwen-OCR API参考](../../raw/model-api-reference/more-models/qwen-vl-ocr-api-reference.md) |
+| `output_format` | 研究报告格式 | `qwen-deep-research` | 可选 `model_detailed_report`（默认，~6000 Token）或 `model_summary_report`（~1500–2000 Token） |
+| `enable_thinking` | 是否开启思考模式（非 OpenAI 标准） | GUI-Plus（仅混合思考模型） | Python SDK 需通过 `extra_body` 传入；开启后返回 `reasoning_content` 字段 |
 
 ## 使用方式
 
-### 域名与认证
-- **统一推荐使用业务空间专属域名**（性能与稳定性更优）：
-  - 华北2（北京）：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
-  - 新加坡：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
-  - 美国（弗吉尼亚）：`https://{WorkspaceId}.us-east-1.maas.aliyuncs.com`（仅 `qwen-vl-ocr` 系列支持）
-- 所有模型均要求已[获取与配置 API Key](../../raw/model-api-reference/preparations/get-api-key.md)，并建议配置至环境变量 `DASHSCOPE_API_KEY`。
-- SDK 安装参见 [安装SDK](../../raw/model-api-reference/preparations/install-sdk.md)。
+### 通用前提
+- 已[获取与配置 API Key](../../raw/model-api-reference/preparations/get-api-key.md)，并配置至环境变量 `DASHSCOPE_API_KEY`；
+- 已安装对应 SDK（[DashScope SDK](../../raw/model-api-reference/preparations/install-sdk.md) 或 OpenAI SDK）；
+- **必须使用业务空间专属域名**（推荐）：`https://{WorkspaceId}.{region}.maas.aliyuncs.com`，其中 `{WorkspaceId}` 在控制台“业务空间详情”中查看；旧域名（如 `dashscope.aliyuncs.com`）仍可用，但性能与稳定性较低 —— 此迁移建议在 [意图理解能力](../../raw/model-api-reference/more-models/intent-detect-capability.md) 和 [GUI-Plus API参考](../../raw/model-api-reference/more-models/gui-plus-interface-interaction-model.md) 中均被强调。
 
-### 调用方式示例
-- **OpenAI 兼容接口**：适用于 `tongyi-intent-detect-v3`、`gui-plus`、`qwen-vl-ocr` 系列，`base_url` 需设为对应地域的 `compatible-mode/v1` 地址。
-- **DashScope SDK**：
-  - `tongyi-intent-detect-v3` 和 `gui-plus` 支持 `chat.completions.create`；
-  - `qwen-deep-research` **必须使用 `Generation.call`**（非 `chat.completions`），且需手动处理流式响应中的 `phase` 字段（如 `ResearchPlanning`, `WebResearch`, `answer`）；
-  - `qwen-vl-ocr` 推荐使用 OpenAI 兼容接口，DashScope SDK 调用方式未在原始文档中体现。
-
-> **注意**：文档 1 中 dashscope CLI 的 `Understanding.call` 示例（`model='opennlu-v1'`）与当前 `tongyi-intent-detect-v3` 模型无关，属过时用法；当前意图模型**必须使用 `chat.completions.create` + `INTENT_MODE` 系统提示**。该不一致已在文档中明确标注为“dashscope CLI 暂不支持 understanding 子命令”，故不构成矛盾，但需开发者规避旧 CLI 方式。
+### 调用示例要点
+- **意图理解**：系统消息中必须显式声明 `Response in INTENT_MODE.`（[函数调用](../concepts/function-calling.md)模式）或 `just reply with the chosen tag.`（纯意图模式）；响应需用正则解析 `<tags>`/<tool_call>/`<content>` 结构。
+- **深度研究**：必须分两步调用：第一步仅 `user` 消息发起请求，捕获模型反问；第二步将 `user` 初始消息、`assistant` 反问、`user` 补充澄清三者按序传入 `messages`。
+- **GUI-Plus / Qwen-OCR**：`user.content` 必须为数组，内含 `{"type": "image_url", "image_url": {"url": "..."}}` 和可选 `{"type": "text", "text": "..."}`；图像 URL 支持公网地址或 Base64 Data URL。
 
 ## 限制和注意事项
 
-- **地域限制**：
-  - `qwen-deep-research` 仅支持华北2（北京）地域；
-  - `qwen-vl-ocr` 系列支持华北2、新加坡、美国（弗吉尼亚）三地；
-  - `tongyi-intent-detect-v3` 和 `gui-plus` 支持华北2 与新加坡（文档 1 和文档 3 均明确列出）。
-- **协议与 SDK 限制**：
-  - `qwen-deep-research` 不支持 OpenAI 兼容接口（文档 2 明确声明），仅 DashScope Python SDK；
-  - `gui-plus` 和 `qwen-vl-ocr` 支持 OpenAI 兼容接口，但部分参数（如 `vl_high_resolution_images`, `top_k`）需放入 `extra_body`；
-  - `tongyi-intent-detect-v3` 的 `INTENT_MODE` 输出格式需配合自定义 `parse_text` 函数解析 `<tags>`/<tool_call>/`<content>` 结构（见 [意图理解能力](../../raw/model-api-reference/more-models/intent-detect-capability.md)）。
-- **输入输出约束**：
-  - `qwen-vl-ocr` 的 `max_tokens` 上限因模型而异（`qwen3.5-ocr` 为 32768，`qwen-vl-ocr` 为 4096，超限需商务申请）；
-  - `qwen-deep-research` 输出为流式多阶段响应，客户端必须按 `phase` 字段区分处理，不可简单等待 `finish_reason == "stop"`；
-  - `gui-plus` 的 `system` message 中若含工具定义，需严格遵循 `<tools>` XML 标签包裹及 `<tool_call>...</tool_call>` 工具调用格式。
-- **成本与配额**：`tongyi-intent-detect-v3` 提供开通后 90 天内 100 万 Token 免费额度（见 [意图理解能力](../../raw/model-api-reference/more-models/intent-detect-capability.md)）；其余模型按实际 Token 消耗计费，无通用免费额度说明。
+- **地域限制**：`qwen-deep-research` **仅支持华北2（北京）地域**；GUI-Plus 和 Qwen-OCR 支持华北2（北京）、新加坡、美国（弗吉尼亚）三地，但各地区 `base_url` 和 `endpoint` 不同，需严格匹配（见 [Qwen-OCR API参考](../../raw/model-api-reference/more-models/qwen-vl-ocr-api-reference.md)）。
+- **SDK 限制**：`qwen-deep-research` 不支持 OpenAI 兼容接口与 Java SDK；`tongyi-intent-detect-v3` 的 `dashscope CLI` 不支持 `understanding` 子命令，需用 Python SDK（见 [意图理解能力](../../raw/model-api-reference/more-models/intent-detect-capability.md)）。
+- **图像参数冲突**：文档 3 中 `vl_high_resolution_images` 的说明存在自引用错误 —— 其链接指向自身（`raw/model-api-reference/more-models/gui-plus-interface-interaction-model.md`），应为笔误，实际逻辑以文档正文为准。
+- **OCR 输出长度**：`qwen-vl-ocr` 默认最大输出 `4096` tokens；若需 `4097–8192`，须联系商务经理申请，并提供主账号ID、图像类型、QPS等信息（见 [Qwen-OCR API参考](../../raw/model-api-reference/more-models/qwen-vl-ocr-api-reference.md)）。
+- **Token 成本与免费额度**：`tongyi-intent-detect-v3` 提供开通后90天内 100万 Token 免费额度（见 [意图理解能力](../../raw/model-api-reference/more-models/intent-detect-capability.md)）；其他模型未在原始文档中声明免费额度，需按实际用量计费。
 
 ## 来源文档
 
