@@ -1,50 +1,50 @@
 # 检索增强生成
 
-检索增强生成（Retrieval-Augmented Generation，RAG）是百炼平台的核心能力范式：它通过在大模型推理前动态检索相关知识片段，并将其作为上下文注入提示（prompt），从而显著提升模型回答的准确性、时效性与领域专业性，同时降低幻觉风险。
+检索增强生成（Retrieval-Augmented Generation，简称 RAG）是一种将外部知识检索与大语言模型生成能力深度融合的技术范式。它通过在模型推理前动态检索相关知识片段，并将其作为上下文注入提示（Prompt），显著提升回答的准确性、时效性与领域专业性，同时降低幻觉风险。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-RAG 在百炼中不是单一接口，而是贯穿数据准备、运行时调用与应用编排的端到端能力链：
+在百炼平台中，RAG 不是单一功能，而是贯穿多个服务层级的**核心增强机制**，支持以下典型落地方式：
 
-- **知识库驱动问答**：在智能体（Agent）或 RAG API 中，用户上传 PDF/DOCX/TXT 等文档 → 经 ParseX 语义切分与向量化 → 构建知识库 → 调用时自动触发检索 → 将 top-K 相关片段注入 LLM 上下文，实现“基于你提供的资料回答”；
-- **多模态 RAG**：支持 `document`（文本）、`table`（结构化数据）、`image`（图文问答）、`multimedia`（音视频语义检索）四类知识库，对应不同嵌入模型（如 `qwen3-vl-embedding`）和检索策略；
-- **跨渠道统一增强**：网站、企业微信、钉钉等所有渠道集成的 AI 助手，均复用同一套知识库与 RAG 配置，确保问答一致性；
-- **Agent 上下文集成**：通过 `context.rag` 字段在 Agent 创建或调用时声明知识库 ID 与 `top_k`，RAG 结果与 Memory、Connector 输出自动合并为统一上下文输入模型；
-- **低代码应用构建**：在控制台配置智能体时开启「知识库」开关并设为「必定调用」，即完成 RAG 启用，无需编写检索逻辑。
+- **RAG API 服务**：面向开发者提供端到端私有知识问答能力。您可上传文档（PDF/DOCX/TXT 等）→ 自动解析切片 → 向量化索引 → 语义检索 → 注入 LLM 生成。适用于客服问答、技术文档助手、内部知识中枢等场景，所有环节均可通过 `/v1/knowledge/query` 等标准接口编排调用。
+
+- **智能体（Agent）应用**：在 Agent 编排中，RAG 作为 `context.rag` 模块被声明式启用。当用户提问时，平台自动触发知识库检索，将 top_k 个高相关片段注入模型上下文。支持“必定调用”或“按需调用”两种策略，适配强约束（如制度问答）与轻量交互（如闲聊辅助）不同需求。
+
+- **本地化 RAG 部署**：满足数据不出域要求。您可在本地运行 ParseX 解析 + 向量检索模块（如基于 Chroma 或 Milvus），仅将检索结果和 query 发送至百炼 API 进行生成。全程无需上传原始文档，敏感数据完全保留在本地环境。
+
+- **[多模态](multi-modal.md)与结构化增强**：结合 `vector and sort` 能力，RAG 可扩展至图像、视频等[多模态](multi-modal.md)内容检索；借助 `more` 提供的 `searchFilters`，还能在语义召回后叠加字段级过滤（如 `{"department": "HR", "effective_date": {"gte": "2024-01-01"}}`），实现“语义+结构”双重精准匹配。
 
 ## 关键参数和配置
 
-| 参数 | 说明 | 可选值/示例 | 所属层级 |
-|------|------|-------------|----------|
-| `knowledge_base_id` | 知识库唯一标识符 | `"kb-abc123"` | Agent `context.rag` / RAG API 请求体 |
-| `top_k` | 检索返回的最相关片段数 | `3`（默认）、`1`–`10` | Agent `context.rag` / RAG API `/search` |
-| `rerankModelName` | 重排序模型名称（影响最终排序质量） | `"qwen3-rerank"`（默认）、自定义模型名 | RAG API 创建知识库时指定 |
-| `knowledgeType` + `structureType` | 决定知识库类型与处理方式 | `{"knowledgeType": "document", "structureType": "unstructured"}` | RAG API 创建知识库参数 |
-| `embeddingModelName` | 文本嵌入模型（影响检索召回质量） | `"text-embedding-v4"`、`"qwen3.7-text-embedding"` | RAG API 创建知识库参数 |
-| `enable_context` | 启用上下文注入的全局开关（需模型支持） | `true`（必开） | Agent 创建请求体顶层标志 |
+RAG 行为由以下关键参数控制，均支持运行时动态指定（API）或控制台可视化配置（Agent）：
+
+| 参数 | 所属模块 | 类型 | 默认值 | 说明 |
+|------|----------|------|--------|------|
+| `knowledge_id` / `knowledge_base_id` | RAG API / Agent Context | string | — | 知识库唯一标识，需提前创建并处于 `active` 状态 |
+| `top_k` | RAG API (`top_k`) / Agent (`rag.top_k`) | integer | `3` | 检索返回的最相关文本切片数量，范围 1–10；值过大会增加 token 开销，过小可能遗漏关键信息 |
+| `retrieval_strategy` | RAG API | string | `"hybrid"` | 检索模式：`"hybrid"`（关键词+向量融合召回，推荐）、`"vector_only"`（纯语义） |
+| `score_threshold` | Agent Context (`rag.score_threshold`) | float | `0.3` | 相似度阈值，低于此值的片段将被丢弃；建议设为 `0.2–0.5`，避免噪声注入 |
+| `searchFilters` | RAG API / [more](../api/more.md) 扩展 | object array | — | 结构化过滤条件，支持字段等值、范围、模糊、标签等，用于精准限定检索范围（如 `[{ "doc_type": "policy" }]`） |
 
 > ⚠️ 注意：  
-> - 单次请求注入的总上下文（含 RAG 片段 + Memory + Prompt）token 上限为 **8192**，超长内容将被静默截断；  
-> - RAG 检索结果按相关性降序排列，但**不保证时间顺序**，如需保序（如按文档页码），须在业务层对 `context.rag.results` 手动后处理；  
-> - “必定调用”模式下，即使用户问题看似无关，系统仍强制执行检索并注入结果——适用于强合规、强依据场景。
+> - 切片长度（chunk size）由平台固定为 **512 token**，不可配置；  
+> - 嵌入模型固定为 `text-embedding-v3`（RAG API）或可选 `qwen3.7-text-embedding`（自定义向量场景），不支持用户替换；  
+> - 所有检索结果默认按相关性降序排列，无需额外排序参数。
 
 ## 面向开发者，简洁实用
 
-- ✅ **快速起步**：控制台上传文件 → 创建标准知识库 → 在智能体中开启知识库并设为「必定调用」→ 发布 → 测试。全程无代码。
-- ✅ **精细控制**：使用 RAG API 自主管理知识库生命周期（创建/更新/删除）、导入任务、跨库联合检索；通过 `/api/v2/apps/knowledge/chat` 实现流式 RAG 问答。
-- ✅ **模型协同**：RAG 与 Qwen3.5-Plus、Qwen-Max、Qwen-Turbo 等模型天然兼容；推荐搭配 `qwen3-rerank` 重排 + `text-embedding-v4` 嵌入，平衡效果与延迟。
-- ✅ **调试定位**：所有 RAG 调用返回 `RequestId`，配合控制台「问题反馈」按钮或工单提交，可精准追溯检索片段来源、嵌入质量与重排得分。
-- ❌ **避坑提醒**：  
-> - 不要混用 `id` / `index_id` 字段名（见 RAG API 文档）；  
-> - 扫描版 PDF 必须预处理为文本型 PDF，ParseX 不支持 OCR；  
-> - 微信公众号未认证时 5 秒超时限制会导致 RAG 调用失败，务必完成认证。
+- ✅ **快速起步**：用 RAG API 三步完成集成：① 创建知识库 → ② 上传文档并触发同步 → ③ 调用 `/v1/knowledge/query` 发起问答。cURL 示例见 [RAG API 概览](raw/application-api-reference/rag-api/rag-api-overview.md)。  
+- ✅ **调试技巧**：首次调用时，设置 `top_k=5` 并打印 `retrieved_chunks` 字段（响应中 `debug_info.retrieved_chunks`），直观验证检索质量；若结果不相关，优先检查文档格式、`score_threshold` 是否过低或 `searchFilters` 是否误排除。  
+- ✅ **性能优化**：对高并发场景，启用流式响应（`stream=true`）降低首字延迟；对长文档问答，确保 `query` ≤ 2048 字符，避免截断——必要时前端做预处理摘要。  
+- ✅ **安全合规**：使用 `more` 提供的临时 [Token](token.md)（`/api/v1/tokens`）替代永久 API Key 供前端调用；结构化过滤（`searchFilters`）可天然实现权限隔离（如按 `tenant_id` 过滤）。  
+- ❌ **避坑提醒**：知识库状态非 `active` 时请求必失败；`query` 含 `\x00` 等控制字符将静默失败；`gte`/`lte` 等操作符仅对 Schema 中明确定义为 `double` 或 `date` 类型的字段生效。
 
 ## 关联主题页
 
 - [rag api](../api/rag-api.md)
+- [vector and sort](../api/vector-and-sort.md)
 - [application use cases](../guides/application-use-cases.md)
 - [agent context](../guides/agent-context.md)
-- [use cases](../guides/use-cases.md)
-- [application support](../guides/application-support.md)
+- [more](../api/more.md)
 
 

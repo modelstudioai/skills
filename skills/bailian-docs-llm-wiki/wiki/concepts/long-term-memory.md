@@ -1,53 +1,66 @@
 # 长期记忆
 
-长期记忆（Long Term Memory, LTM）是百炼平台提供的结构化用户状态持久化能力，用于跨会话、跨请求地保存和检索用户偏好、行为特征、历史交互等关键上下文信息。它以细粒度、可检索、可配置的方式支撑个性化与连贯性体验，是构建生产级智能体的核心基础设施。
+长期记忆（Long Term Memory）是百炼平台提供的结构化、可检索、生命周期可控的用户级持久化记忆服务，用于跨会话、跨任务地存储和复用事实性信息（如用户事件）、结构化画像（如偏好与身份属性）及可复用技能（如流程模板）。它独立于单次对话上下文，通过语义向量+结构化索引混合架构实现高精度召回与业务语义对齐。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **API 直接调用（`/v1/memory/fragments` 等）**：开发者通过 RESTful 接口显式管理记忆片段（Fragment），适用于需要精确控制写入时机、内容结构或元数据过滤的场景（如用户设置同步、多步任务状态快照）。  
-- **Agent 上下文（`context.memory.type = "user"`）**：在 Agent 配置中启用 `user` 级别 memory，平台自动基于 `user_id` 注入匹配的长期记忆片段，无需手动调用检索接口；适用于客服、个人助理等需持续理解用户身份与偏好的场景。  
-- **Managed Agents API（`enable_memory: true`）**：在托管式 Agent 的 `/chat` 请求中启用该开关，系统将自动关联其绑定的 Memory Store，并在模型推理前注入相关 fragment；适合标准化工作流，降低状态管理复杂度。  
-- **Sandbox 自定义开发**：通过 Python SDK（`bailian-sdk>=1.12.0`）调用 `memory_fragment.upsert()`、`memory_fragment.retrieve()` 等封装方法，在自研逻辑中灵活组合长期记忆与短期会话状态，实现混合记忆架构。
-
-> ⚠️ 注意：长期记忆仅对 `qwen-max`、`qwen-plus` 和 `qwen-turbo`（v202409+）原生生效；其他模型需显式设置 `enable_long_term_memory: true` 并接受服务端降级处理（如仅注入元数据摘要）。
+- **Managed Agents**：作为 `Memory Store` 的核心能力，默认启用（`enable_memory=true`），在每次 `/session/{session_id}/chat` 调用后自动将关键对话片段写入长期记忆（类型由 `project_id` 规则或显式配置决定），并在后续请求中按需检索注入上下文。  
+- **Agent Context 配置**：当 `context.memory.type = "user"` 时，底层即调用长期记忆服务，基于传入的 `user_id` 检索并注入该用户的 `observation` 和 `skill` 类型记忆；`user_profile` 则通过预定义 schema 自动填充结构化字段。  
+- **独立 API 调用**：开发者可通过 `long-term-memory-new` RESTful 接口（如 `/add-async`、`/memory_nodes/search`）直接管理记忆，适用于需精细控制抽取逻辑、多项目协同或与外部系统集成的场景（如 CRM 同步用户画像）。  
+- **Sandbox Agent / Flow Agent**：虽不自动写入，但可通过 `agentscope-runtime` SDK 显式调用 `LongTermMemoryClient` 进行读写，实现自定义记忆策略（例如仅在满足业务规则时保存会议纪要为 `skill`）。  
+- **Agent Governance 安全体系**：所有写入长期记忆的内容均经过默认内容安全检测（“量·挡·记”闭环中的“记”环节），敏感信息（如身份证号、手机号）会被自动识别、脱敏并记录审计日志。
 
 ## 关键参数和配置
 
-| 参数名 | 类型 | 默认值 | 说明 |
-|--------|------|--------|------|
-| `fragment_id` | string | 服务端生成 | 建议使用业务主键（如 `user:123:settings`），便于后续精准读写与清理 |
-| `ttl_seconds` | integer | `2592000`（30 天） | 取值范围：`3600`–`31536000`（1 小时至 1 年）；设为 `0` 将返回 `400` 错误，不支持永不过期 |
-| `metadata` | object | `{}` | 键值对（字符串/数字/布尔），最多 16 个 key，总大小 ≤ 4KB；用于 `filter` 检索（如 `{"category": "preference", "version": 2}`） |
-| `enable_auto_injection` | boolean | `true` | 控制本次 `/v1/chat/completions` 请求是否自动注入匹配 fragment；设为 `false` 时需手动调用 `/v1/memory/retrieve` |
-| `top_k`（检索时） | integer | `5` | `/v1/memory/retrieve` 返回的最大条目数，上限 `20` |
+| 参数 | 位置 | 类型 | 说明 | 是否必填 |
+|------|------|------|------|----------|
+| `user_id` | Query 或 Body | string | 用户唯一标识，用于隔离不同用户的记忆空间 | ✅ |
+| `project_id` 或 `project_ids` | Body | string / array | 决定记忆类型（`observation`/`skill`）及抽取规则；多项目时触发联合抽取 | ✅（写入） |
+| `profile_schema` | Body | string | 启用用户画像抽取时必需；值为已创建的 schema ID 或内联 JSON Schema | ❌（仅画像场景） |
+| `extract_mode` | Body | string | 可选 `"profile_only"`（仅抽画像）、`"full"`（默认，全类型） | ❌（默认 `"full"`） |
+| `messages` | Body | array | 触发智能抽取的原始对话消息（推荐）；与 `custom_content` 二选一 | ⚠️（二者必选其一） |
+| `custom_content` | Body | string | 直接存为原始文本（跳过抽取），适合已结构化内容 | ⚠️（二者必选其一） |
+| `memory_types` | `/search` Body | array | 检索时指定类型，如 `["observation", "skill"]`；默认仅 `["observation"]` | ❌（默认 `["observation"]`） |
+| `top_k` | `/search` Body | integer | 最大召回数量，默认 `10` | ❌ |
+| `min_score` | `/search` Body | number | 仅 `pro` 计划生效，过滤低置信度结果，默认 `0.3` | ❌ |
 
-- **容量限制**：单个 `user_id` 最多存储 **5000 个 fragment**；超出写入失败（HTTP `429`）。  
-- **内容限制**：单个 fragment 的 `content` 字段最大长度为 **65536 字符**，超长需预处理（截断、分片或摘要）。  
-- **延迟影响**：启用 LTM 后，平均请求延迟增加 **80–200ms**（取决于 fragment 数量与检索复杂度）；高并发场景建议对高频 `user_id` 进行缓存预热。
+> 💡 提示：生产环境强烈推荐使用异步接口 `/add-async`（而非 `/add`）写入含技能或画像的记忆，避免同步超时；同步接口仅适用于轻量、实时摘要类场景。
 
 ## 面向开发者，简洁实用
 
-- ✅ **推荐实践**：  
-  - 使用 `fragment_id` 显式标识业务语义（避免随机 ID），例如 `profile:123`, `order:456:summary`, `feedback:789:rating`；  
-  - 将用户画像类字段（如 `timezone`, `language`, `theme_preference`）存为独立 fragment，配合 `metadata` 分类，提升检索精度；  
-  - 在 Sandbox 或 Flow Agent 中，优先使用 SDK 封装方法（如 `memory_fragment.upsert(content, fragment_id, metadata)`），而非手拼 HTTP 请求体。
-
-- ❌ **避坑提示**：  
-  - 不要依赖 `ttl_seconds=0` 实现“永久记忆”——该值非法，必须设为有效正整数；  
-  - 不要在单次请求中写入大量 fragment（如循环插入 100+ 条），应批量聚合后分批提交；  
-  - 用户画像（Profile）为只读视图，由系统自动聚合生成，**不可直接写入或修改**；  
-  - 启用 LTM 后，务必监控 `429 Too Many Fragments` 错误，及时清理过期或冗余 fragment（调用 `DELETE /v1/memory/fragments/{fragment_id}`）。
-
-- 🔧 **调试建议**：  
-  - 开发阶段开启 `enable_auto_injection: false`，先手动调用 `/v1/memory/retrieve` 验证检索逻辑；  
-  - 使用 `metadata` 中的 `debug: true` 标记临时 fragment，便于灰度验证后批量清理；  
-  - 查看响应头 `X-Bailian-Memory-Hit-Count` 可获知本次自动注入的实际 fragment 数量。
+- **快速开始**：设置 `MEMORY_SERVICE_ENDPOINT="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory"` 和 `DASHSCOPE_API_KEY`，即可调用 SDK 或 cURL。
+- **SDK 推荐**：使用 `agentscope-runtime>=0.4.0`，一行代码初始化：
+  ```python
+  from agentscope.runtime import LongTermMemoryClient
+  client = LongTermMemoryClient(workspace_id="your-workspace-id", api_key="sk-xxx")
+  ```
+- **写入示例（异步）**：
+  ```python
+  event_id = client.add_async(
+      user_id="u123",
+      project_id="proj-abc",
+      messages=[{"role": "user", "content": "我下周二要飞上海，帮我订酒店"}]
+  )
+  # 轮询 event_id 获取结果
+  ```
+- **检索示例**：
+  ```python
+  results = client.search(
+      user_id="u123",
+      messages=["帮我查一下之前的会议安排"],
+      memory_types=["observation", "skill"],
+      top_k=5
+  )
+  ```
+- **用户画像工作流**：先调用 `client.create_profile_schema(...)` 定义字段（如 `{"age": "integer", "interests": "array"}`），再在 `add_async` 中传 `profile_schema="schema-xyz"`，最后用 `client.get_user_profile(user_id="u123", schema_id="schema-xyz")` 获取结构化结果。
+- **注意边界**：单条记忆最大 8KB（超长截断不报错）；`pro` 计划支持 Rerank 和 `min_score`，`lite` 计划仅基础向量召回；所有操作均按 `WorkspaceId` 隔离，跨空间需切换 endpoint。
 
 ## 关联主题页
 
 - [long term memory new](../api/long-term-memory-new.md)
-- [agent context](../guides/agent-context.md)
 - [managed agents api](../api/managed-agents-api.md)
 - [agent development](../guides/agent-development.md)
+- [agent governance](../guides/agent-governance.md)
+- [agent context](../guides/agent-context.md)
 
 

@@ -1,58 +1,60 @@
 # overview
 
-百炼平台的 MCP（Model Calling Protocol）与 Skill（技能）能力提供了一套标准化的工具集成与版本管理机制，支持开发者将外部服务封装为可被智能体调用的工具，并对自定义 Skill 进行全生命周期管理。核心能力围绕 MCP 服务开通/启停、工具推荐与调用，以及 Skill 版本上传、查询、下载与删除展开。
+百炼平台的 `overview` 文档汇总了 Skill（工具）和 MCP（模型能力平台）服务的核心管理能力，涵盖认证、版本控制、生命周期操作及调用方式。本文档面向开发者，聚焦可编程接口的使用规范与约束，不涉及控制台交互或产品营销描述。
 
 ## 支持的模型/功能
 
-- **MCP 工具服务**：支持官方 MCP（如高德地图、天气等）的开通与关闭，以及自定义 MCP 的创建、更新、启用、停用；支持通过 `/tools/recommend` [推荐工具](../../raw/application-api-reference/overview/overview/recommend.md) 和 `/tools/call` 调用具体工具。
-- **Skill（技能）管理**：面向自定义 Skill 提供完整的版本管理能力，包括上传新版本（`POST /versions`）、分页查询版本列表（`GET /versions`）、获取指定版本详情（`GET /versions/{version}`）及下载 ZIP 包（`GET /versions/{version}/content`）。官方 Skill 仅允许查询和下载 `active` 状态的版本。
-- **统一错误处理**：所有接口遵循统一响应结构（含 `success`、`error_code`、`error_msg`、`data`、`request_id`），错误码语义明确，便于自动化排查。详见 [Skill API 错误码](../../raw/application-api-reference/overview/errors.md)。
+- **Skill（自定义工具）**：支持上传 ZIP 包形式的自定义 Skill，包含 `SKILL.md`（必需）和执行逻辑（如 `index.js`），经安全扫描后生成版本；官方 Skill 仅提供只读访问（`active` 状态）。
+- **MCP（模型能力平台）**：分为两类：
+  - *官方 MCP*：通过 `/activate` 和 `/deactivate` 开通/关闭（如 `amap-maps`），部分需配置环境变量（见[开通官方 MCP](raw/application-api-reference/overview/overview/activate.md)）；
+  - *自定义 MCP*：通过 `/enable`/`/disable` 启停，支持 `/update` 修改配置并重新部署（见[更新自定义 MCP](raw/application-api-reference/overview/overview/update.md)）。
+- **工具推荐与调用**：提供 `/tools/recommend` 接口根据自然语言需求推荐可用工具，并通过 `/tools/call` 执行具体工具（见[调用工具](raw/application-api-reference/overview/overview/call.md)）。
 
 ## 关键参数
 
-- **认证参数**：所有请求需携带 `Authorization: Bearer $DASHSCOPE_API_KEY` Header，并使用工作空间专属 Endpoint（格式为 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com`）。API Key 获取方式见 [认证](../../raw/application-api-reference/overview/authentication.md)。
-- **Skill 版本号**：格式为 `major.minor`（如 `1.0`），由服务端自动递增，**不可由客户端指定**；旧版本永久保留，挂载到智能体时必须显式指定版本。
-- **分页参数**：`pageNo`（默认 1，最小 1）和 `pageSize`（默认 20，范围 1–100），且 `pageNo × pageSize ≤ 10000`。
-- **ZIP 包限制**：上传 ZIP 需包含 `SKILL.md`（含 `name` 和 `description`），文件大小 ≤ 50MB，解压后总大小 ≤ 100MB，仅支持 UTF-8 或 GBK 文件名编码。
+- **认证参数**：所有请求必须携带 `Authorization: Bearer $DASHSCOPE_API_KEY` Header，并使用工作空间专属 Endpoint（格式为 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/...`），详见[认证](raw/application-api-reference/overview/authentication.md)。
+- **Skill 版本参数**：`skill_id`（路径参数）、`version`（精确匹配，不回退）、`pageNo`/`pageSize`（分页，`pageNo × pageSize ≤ 10000`）。
+- **MCP 操作参数**：`mcpCode`（路径参数）为必填；开通官方 MCP 时，`env` 字段为必填（若服务声明了环境变量），且 `fc_deploy_region` 必须与控制台地域一致。
+- **ZIP 包限制**：上传 ZIP 包大小 ≤ 50MB；解压后总大小 ≤ 100MB；文件名编码仅支持 UTF-8 或 GBK；必须包含 `SKILL.md` 且其 Front Matter 至少含 `name` 和 `description`。
 
 ## 使用方式
 
-1. **认证配置**：设置环境变量 `DASHSCOPE_API_KEY`，并确认 `workspace_id` 正确；
-2. **MCP 操作**：
-   - 官方 MCP：先调用 `/activate` 开通（需传入必要 `env`），再通过 `/tools/call` 调用；
-   - 自定义 MCP：先 `POST /servers` 创建，再通过 `/enable` 启用，后续可 `POST /disable` 停用或 `POST /servers/{mcpCode}` 更新配置；
-3. **Skill 版本操作**：
-   - 上传：`POST /skills/{skill_id}/versions`，`multipart/form-data` 提交 ZIP；
-   - 查询：`GET /skills/{skill_id}/versions`（列表）或 `GET /skills/{skill_id}/versions/{version}`（详情）；
-   - 下载：`GET /skills/{skill_id}/versions/{version}/content` 获取临时 `file_url`；
-4. **错误处理**：优先检查 HTTP 状态码（400/401/500），再解析 `error_code`；使用 `request_id` 追踪问题。
+1. **认证准备**：获取 API Key 并设置环境变量 `DASHSCOPE_API_KEY`，确认 `workspace_id` 正确。
+2. **Skill 版本管理**：
+   - 创建：`POST /api/v1/skills/{skill_id}/versions`，以 `multipart/form-data` 上传 ZIP；
+   - 查询：`GET /api/v1/skills/{skill_id}/versions`（列表）或 `GET /api/v1/skills/{skill_id}/versions/{version}`（详情）；
+   - 下载：`GET /api/v1/skills/{skill_id}/versions/{version}/content` 获取临时下载地址（2 小时有效）。
+3. **MCP 生命周期管理**：
+   - 官方 MCP：`POST /api/v1/mcp/servers/{mcpCode}/activate`（开通）或 `POST /api/v1/mcp/servers/{mcpCode}/deactivate`（关闭）；
+   - 自定义 MCP：`POST /api/v1/mcp/servers/{mcpCode}/enable`（启用）、`/disable`（停用）、`/update`（更新配置）；
+   - 删除：仅支持自定义 MCP，`DELETE /api/v1/mcp/servers/{mcpCode}`。
+4. **工具调用**：先调用 `/tools/recommend?query=...` 获取工具信息，再用 `POST /tools/call` 提交 `tool_name` 和 `tool_params`。
 
-> **注意**：文档中存在多处重复内容（如 `list.md`、`get.md`、`create.md` 等被多次提交），但关键规则一致；唯一需警惕的矛盾点是：文档 7（更新自定义 MCP）要求修改 `mcp_config` 时必须同时提交 `mcp_type`，而文档 13（开通官方 MCP）示例中仅提交 `env` 即可成功——这反映两类 MCP 的配置模型本质不同，**切勿将官方 MCP 的 `env` 提交方式套用于自定义 MCP 的 `mcp_config` 更新**。
+> **注意**：文档 7（更新自定义 MCP）与文档 15（启用自定义 MCP）存在关键矛盾——前者称“修改 `mcp_type` 和 `mcp_config` 会重新部署”，后者明确“启用时不能提交新配置”。实际行为以文档 15 为准：`/enable` 仅使用已保存配置，新配置必须通过 `/update` 提交。
 
 ## 限制和注意事项
 
-- **权限隔离**：官方 MCP 不可删除、不可更新配置；自定义 Skill 不可删除官方 Skill；RAM 子账号需显式授权。
+- **权限隔离**：RAM 子账号需显式授权；API Key 权限由控制台配置决定；官方 Skill 不可删除（见[Skill API 错误码](raw/application-api-reference/overview/errors.md)中 `SKILL_DELETE_OFFICIAL_NOT_ALLOWED`）。
+- **版本不可变性**：Skill 版本号由服务端递增（`major.minor`），不可指定；旧版本保留，但挂载到智能体时必须显式指定版本，后续上传不影响已挂载实例。
 - **状态约束**：
-  - Skill 在 `checking`（安全扫描中）状态时，禁止创建新版本；
-  - 自定义 MCP 在运行中或部署中时，禁止更新配置或启停；
-  - One Key MCP（如部分云市场服务）不支持关闭（`/deactivate` 返回 `DeActivateFailed`）。
-- **安全与合规**：上传 ZIP 必须通过安全扫描（`checking` → `active` 或 `rejected`），失败时 `additional_properties.error_info` 提供具体违规位置；`SKILL.md` 的 `name` 不得与官方或同空间其他自定义 Skill 重名。
-- **资源限制**：单次 ZIP 上传上限 50MB；分页总数上限 10000 条；下载 URL 有效期仅 2 小时。
+  - Skill 处于 `checking` 状态时禁止创建新版本；
+  - MCP 服务运行中或部署中时，禁止 `update`/`enable`/`disable`（返回 `409 McpServerBusy`）；
+  - One Key MCP 不支持关闭（`/deactivate` 返回 `400 DeActivateFailed`）。
+- **错误处理**：统一响应结构含 `success`、`error_code`、`error_msg` 和 `request_id`；务必同时检查 HTTP 状态码和 `data.isError`（如工具执行失败时可能返回 `200` + `data.isError=true`）。
 
 ## 来源文档
 
-- [MCP API 错误码](../../raw/application-api-reference/overview/errors.md)
 - [认证](../../raw/application-api-reference/overview/authentication.md)
-- [创建自定义 MCP](../../raw/application-api-reference/overview/overview/create.md)
-- [查询 MCP 列表](../../raw/application-api-reference/overview/overview/list.md)
+- [MCP API 错误码](../../raw/application-api-reference/overview/errors.md)
 - [服务管理](../../raw/application-api-reference/overview/overview.md)
+- [查询 MCP 列表](../../raw/application-api-reference/overview/overview/list.md)
+- [创建自定义 MCP](../../raw/application-api-reference/overview/overview/create.md)
 - [查询 MCP 详情](../../raw/application-api-reference/overview/overview/get.md)
 - [更新自定义 MCP](../../raw/application-api-reference/overview/overview/update.md)
-- [查询工具列表](../../raw/application-api-reference/overview/overview/list.md)
 - [工具](../../raw/application-api-reference/overview/overview.md)
-- [删除自定义 MCP](../../raw/application-api-reference/overview/overview/delete.md)
+- [查询工具列表](../../raw/application-api-reference/overview/overview/list.md)
+- [调用工具](../../raw/application-api-reference/overview/overview/call.md)
 - [生命周期](../../raw/application-api-reference/overview/overview.md)
-- [推荐工具](../../raw/application-api-reference/overview/overview/recommend.md)
 - [开通官方 MCP](../../raw/application-api-reference/overview/overview/activate.md)
 - [关闭官方 MCP](../../raw/application-api-reference/overview/overview/deactivate.md)
 - [停用自定义 MCP](../../raw/application-api-reference/overview/overview/disable.md)
@@ -64,11 +66,12 @@
 - [获取 Skill](../../raw/application-api-reference/overview/overview/get.md)
 - [列出 Skill](../../raw/application-api-reference/overview/overview/list.md)
 - [删除 Skill](../../raw/application-api-reference/overview/overview/delete.md)
+- [推荐工具](../../raw/application-api-reference/overview/overview/recommend.md)
 - [版本管理](../../raw/application-api-reference/overview/overview.md)
-- [创建版本](../../raw/application-api-reference/overview/overview/create.md)
-- [列出版本](../../raw/application-api-reference/overview/overview/list.md)
 - [获取版本详情](../../raw/application-api-reference/overview/overview/get.md)
+- [创建版本](../../raw/application-api-reference/overview/overview/create.md)
 - [下载版本 ZIP](../../raw/application-api-reference/overview/overview/download.md)
-- [调用工具](../../raw/application-api-reference/overview/overview/call.md)
+- [列出版本](../../raw/application-api-reference/overview/overview/list.md)
+- [删除自定义 MCP](../../raw/application-api-reference/overview/overview/delete.md)
 
 
