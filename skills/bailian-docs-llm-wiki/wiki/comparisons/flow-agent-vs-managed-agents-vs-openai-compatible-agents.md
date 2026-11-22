@@ -1,44 +1,75 @@
-# Flow Agent、托管 Agent 与 OpenAI 兼容 Agent 接口对比
+# 流程型智能体、托管智能体与 OpenAI 兼容智能体对比
 
-本文档面向百炼平台开发者，旨在清晰对比三种主流智能体调用方案的技术特性、能力边界与适用场景，帮助团队基于业务需求、工程成熟度和迁移成本做出高效技术选型。随着智能体应用从单步推理向多步骤编排、状态持久化与系统集成演进，百炼平台提供了分层抽象的 Agent 能力：**Flow Agent** 侧重确定性流程控制，**托管 Agent** 提供全生命周期自主管理，而 **OpenAI 兼容 Agent** 则聚焦生态平滑迁移。三者并非替代关系，而是覆盖不同抽象层级与协作范式的互补方案。
+## 背景与目的
+
+百炼平台面向不同技术成熟度与业务需求的开发者，提供了三类定位清晰、能力分层的智能体服务接口：**流程型智能体（Flow Agent API）**、**托管智能体（Managed Agents API）** 和 **OpenAI 兼容智能体（OpenAI Compatible Agents API）**。三者在架构设计、抽象层级、模型支持、状态管理及生态适配等方面存在显著差异。本文旨在为开发者提供一份客观、可操作的技术选型参考，帮助其根据项目阶段（MVP 验证 / 生产部署 / 生态迁移）、团队能力（是否具备状态/内存/环境治理经验）、集成复杂度（是否已有 OpenAI 工具链）等维度，快速识别最匹配的方案。
+
+---
 
 ## 关键维度对比
 
-| 维度 | Flow Agent | 托管 Agent | OpenAI 兼容 Agent |
-|------|------------|-------------|---------------------|
-| **核心定位** | 流程即服务（Workflow-as-a-Service）：将预定义、强结构化的多步骤任务封装为可编程 API | 托管式智能体平台（Managed Agent Platform）：提供环境、会话、记忆、技能等完整运行时基础设施 | 兼容性优先的智能体网关（OpenAI-Compatible Gateway）：复用 OpenAI SDK/生态，零改造接入百炼 Agent 能力 |
-| **输入格式** | JSON 对象，严格匹配流程 Schema 的 `input` 字段（如 `{"order_id": "O123", "reason": "delay"}`）；不支持 message 数组 | RESTful 多阶段调用：需先创建 Agent → 启动 Session → 发送 `chat` 请求；消息体为 `{"message": "..."}` 格式，含元数据字段（如 `session_id`, `enable_memory`） | 完全兼容 OpenAI `chat.completions` 格式：`messages` 数组（含 `system`/`user`/`assistant`）、`tools`、`tool_choice` 等字段；支持 `stream: true` |
-| **输出格式** | 同步模式：返回结构化结果对象（含 `status`, `output`, `steps` 执行轨迹）；异步模式：返回 `task_id`，需轮询 `/tasks/{id}` 获取最终 JSON 结果 | 分阶段响应：`/chat` 接口支持 SSE [流式输出](../concepts/streaming-output.md)（`event: message`, `event: tool_call`）或 JSON 块；最终响应含 `content`, `tool_calls`, `session_state`, `memory_summary` 等字段 | 100% 兼容 OpenAI 响应格式：非流式返回 `choices[0].message`；流式返回标准 `data: {...}` chunk；`tool_calls` 字段结构与 OpenAI 一致 |
-| **支持模型** | 仅 `flow-agent-v1`（百炼自研流程专用模型），不兼容通用 LLM | `qwen-max`, `qwen-plus`, `qwen-turbo`（Qwen 系列托管模型），不支持用户自定义模型 | 仅 `qwen-plus`, `qwen-max`（v202408+ 版本），`qwen-turbo` 已下线；不支持第三方模型 |
-| **API 端点** | `POST /v1/flows/{flow_id}/run`（单次触发）<br>`GET /v1/tasks/{task_id}`（异步轮询） | `POST /v1/agents`（创建）<br>`POST /v1/agents/{agent_id}/sessions`（启动会话）<br>`POST /v1/agents/{agent_id}/sessions/{session_id}/chat`（交互） | `POST https://dashscope.aliyuncs.com/api/v1/agents/chat/completions`（单一入口，OpenAI 风格） |
-| **状态与记忆** | 依赖 `enable_session` + `memory_id` 显式开启；记忆 TTL 固定 7 天，不可配置；[长期记忆](../concepts/long-term-memory.md)为“旧版”机制 | 内置 Session 生命周期管理（自动创建/续期）；Memory Store 可配置容量（`memory_capacity`）与清理策略（LRU）；支持多 Memory Store 绑定 | 通过 `session_id` 自动维护上下文；Session 默认 TTL 24 小时，支持手动 `extend`；记忆由平台透明管理，开发者无感知 |
-| **工具调用（Function Calling）** | 不直接支持 OpenAI 风格 `tools`；工具能力内嵌于流程节点（如“调用 CRM API”节点），由流程设计器配置 | 支持 Skill（可复用技能包）作为工具载体；通过 `tool_choice` 控制调用，支持 `"auto"`/`"none"`/指定 Skill 名；Skill 可关联 Vault、Webhook 等 | 原生支持 OpenAI `tools` + `tool_choice` 语法；工具 schema 必须为 OpenAI 标准格式（`type: "function"`）；调用结果自动注入后续消息流 |
-| **计费方式** | 按「Flow 执行次数」计费；每次 `run` 调用计为 1 次，无论内部步骤多少 | 按「Agent 实例小时数」+「Session 调用次数」+「Memory 存储量」组合计费；Environment、Vault、Webhook 等资源单独计费 | 按「Agent 调用量」独立计费（计入百炼「Agent」配额池），与普通 LLM 调用 quota 分离；不按 token 或小时计费 |
-| **典型场景** | 客服工单自动分派与闭环（输入工单ID→查库→路由→生成回复→更新状态）<br>数据清洗流水线（ETL 步骤编排）<br>合规审批工作流（多角色人工介入节点） | 企业级 AI 助手（如 HR 助手：查政策+填表+发邮件+同步钉钉）<br>自动化运维 Agent（监控告警→诊断→执行修复脚本→生成报告）<br>知识增强型销售顾问（实时检索 Vault + 调用 CRM） | 快速迁移现有 OpenAI 应用（如 LangChain / LlamaIndex 项目）<br>前端 SDK 直连 Agent（React/Vue App 使用 `openai` npm 包调用）<br>需要复用大量 OpenAI 生态工具链（如 AutoGen, CrewAI）的场景 |
+| 维度 | 流程型智能体（Flow Agent API） | 托管智能体（Managed Agents API） | OpenAI 兼容智能体（OpenAI Compatible Agents API） |
+|------|------------------------------|----------------------------------|--------------------------------------------------|
+| **核心定位** | 应用级调用 + 组件化管理（Prompt/旧记忆）的混合接口体系 | 全托管式 Agent 运行时平台，强调会话生命周期、安全隔离与技能编排 | OpenAI 标准协议兼容层，聚焦工具调用与多步推理的“无感迁移”体验 |
+| **输入格式** | 支持 `prompt`（单轮文本）或标准 `messages` 数组（含 `system`/`user`/`assistant` 角色，支持[多模态](../concepts/multi-modal.md)）；`session_id` 控制上下文延续 | 严格结构化：`{ "input": { "text": "..." } }` 或 `{ "input": { "files": [...] } }`；必须显式传入 `session_id` | 完全兼容 OpenAI `chat.completions` 格式：`messages` 数组（角色同 OpenAI），支持 `tools`、`tool_choice`、`session_id` 等扩展字段 |
+| **输出格式** | 同步返回 JSON（含 `output.text` / `output.choices[0].message.content`）；流式响应为 SSE，增量模式需 `incremental_output=true` | JSON 结构统一：`{ "output": { "text": "...", "session_id": "...", "memory_updated": true } }`；不支持原生流式 | 完全兼容 OpenAI 响应格式（`choices[0].message` 可含 `tool_calls`）；支持 `stream=true` 的 SSE 流式，但 `tool_calls` 分片需客户端按 `index` 合并 |
+| **支持模型** | 不绑定具体模型，由所调用的**应用（App）** 内部配置决定（可为 Qwen 系列、自定义模型、多模型路由等） | 仅限平台托管模型：`qwen-max`、`qwen-plus`、`qwen-turbo`；**不支持自定义模型接入** | 仅限专用 Agent 模型：`qwen-plus-agent-v1`、`qwen-max-agent-v1`（后者已弃用）；**不支持通用大模型直接作为 Agent 后端** |
+| **API 端点** | 双轨制：<br>• 应用调用：`https://dashscope.aliyuncs.com/api/v1/apps/{app_id}/completion`（DashScope 网关）<br>• 组件管理：`https://bailian.{region}.aliyuncs.com/...`（阿里云 OpenAPI） | 统一 RESTful 端点：<br>`https://dashscope.aliyuncs.com/api/v1/agents/{agent_id}/session/{session_id}/chat` 等 | OpenAI 兼容端点：<br>`https://dashscope.aliyuncs.com/api/v1/agents/chat/completions`（与 OpenAI `v1/chat/completions` 路径对齐） |
+| **认证方式** | **双鉴权体系**：<br>• 应用调用：`Authorization: Bearer <API Key>`（百炼 API Key）<br>• 组件管理：`ACS3-HMAC-SHA256` 签名（阿里云 AccessKey） | 单一鉴权：`Authorization: Bearer <API Key>`，需 `managed_agents:full_access` 权限 | 单一鉴权：`Authorization: Bearer <API Key>`，需 `agents:run` 权限 |
+| **计费方式** | 按调用次数 + 模型 token 消耗计费（与所调用 App 的计费策略一致）；Prompt 模板/记忆管理接口**免费** | 按 Agent 实例运行时长（秒）+ 记忆存储量（GB·月）+ [Token](../concepts/token.md) 消耗综合计费；Environment/Vault/Skill 等资源按用量计费 | 按请求次数 + Agent 模型 token 消耗计费；Session 存储、Vault 密钥管理等配套能力按用量计费 |
+| **长期状态管理** | 提供“[长期记忆](../concepts/long-term-memory.md)（旧）”API（Memory/MemoryNode），但已标记为遗留；推荐使用新版会话状态（非此 API 直接提供） | 内置 **Memory Store**（向量+结构化混合索引），自动持久化会话历史与工具结果；支持 TTL 与批量操作 | Session 状态自动持久化（含 message history 与 tool call 缓存），TTL 默认 24 小时；需显式调用 `/sessions/{id}/extend` 延长 |
+| **工具调用能力** | 无原生工具调用支持；需在应用（App）内部通过工作流编排或函数节点实现 | 通过 **Skill API** 注册与编排技能（Skill），支持参数校验、权限控制、异步执行；非 OpenAI `tools` 格式 | 原生支持 OpenAI `tools` / `tool_choice` 语义，自动解析、选择、调用并注入结果；与现有 OpenAI 工具生态无缝对接 |
+| **典型场景** | • 快速上线预置智能体应用（如客服问答、报告生成）<br>• 需要独立管理 Prompt 模板与旧版记忆的存量系统<br>• [多模态](../concepts/multi-modal.md)输入（图像/音频）驱动的应用调用 | • 构建高安全要求的自动化 Agent（如财务审批、HR 入职）<br>• 需精细控制会话生命周期、环境隔离、密钥 Vault 的生产系统<br>• 长期运行、多技能协同的复杂工作流 | • 将现有 OpenAI `chat.completions` + `tools` 应用平滑迁移到百炼<br>• 快速验证 Agent 工具调用逻辑（无需重写 SDK）<br>• 与 LangChain / LlamaIndex 等框架深度集成 |
+
+---
 
 ## 适用场景建议
 
-- **选择 Flow Agent 当：**  
-  你的业务逻辑是**高度确定、步骤固定、强依赖外部系统集成**的流程（如订单履约、贷款审批）。你已通过百炼控制台完成可视化流程编排，并希望以轻量 HTTP 接口被 ERP、CRM 等后端系统调用。此时，你追求的是**可审计、可追踪、低代码交付**，而非自由对话能力。
+### ✅ 推荐选择 **流程型智能体（Flow Agent API）** 当：
+- 你已通过百炼控制台发布了一个成熟的智能体应用（App），只需在业务系统中调用它；
+- 你需要对 Prompt 模板进行版本化管理、A/B 测试，或复用旧版[长期记忆](../concepts/long-term-memory.md)能力；
+- 项目处于早期验证阶段（PoC），追求最低接入成本，且不涉及复杂状态或工具链；
+- 输入包含图片、语音等[多模态](../concepts/multi-modal.md)内容，且后端应用已配置对应处理节点。
 
-- **选择托管 Agent 当：**  
-  你需要构建一个**长期在线、具备自主记忆、能灵活切换工具与环境、需精细管控资源权限**的生产级 Agent（如 7×24 客服坐席、研发助手）。你愿意投入初期学习成本，以换取对 Environment 隔离、Memory Store 容量、Skill 版本、Webhook 重试策略等**全栈可控性**。这是百炼平台最完整、最“原生”的 Agent 能力。
+> ⚠️ 注意：若需构建全新 Agent 并长期维护，不建议依赖“[长期记忆](../concepts/long-term-memory.md)（旧）”，应评估托管或 OpenAI 兼容方案。
 
-- **选择 OpenAI 兼容 Agent 当：**  
-  你的团队已在使用 OpenAI 生态（如 LangChain Agents、LlamaIndex Query Engine），或正快速验证 MVP，**要求最小化代码修改即可接入百炼 Agent 能力**。你接受在功能上做一定取舍（如不支持 `response_format`、无自定义 Memory TTL），以换取**开发效率与生态延续性**。这是最快落地、风险最低的迁移路径。
+### ✅ 推荐选择 **托管智能体（Managed Agents API）** 当：
+- 你对 Agent 的安全性、可观测性、资源隔离有强要求（如金融、政务场景）；
+- 需要将敏感凭证（数据库密码、API Key）通过 Vault 安全注入，并与 Skill 权限绑定；
+- 业务逻辑高度依赖多轮会话状态、外部文件上下文、以及跨 Skill 的复杂编排；
+- 团队具备较强的工程能力，愿意接受稍高的学习曲线以换取全托管的稳定性与扩展性。
 
-## 技术选型参考指南（致开发者）
+### ✅ 推荐选择 **OpenAI 兼容智能体（OpenAI Compatible Agents API）** 当：
+- 你正在将基于 OpenAI 的 Agent 应用（如使用 `openai>=1.0` SDK 的工具调用代码）迁移到百炼；
+- 你使用 LangChain 的 `AgentExecutor`、LlamaIndex 的 `ReActAgent` 等框架，希望最小化代码改造；
+- 你重视开发体验一致性，希望调试、日志、错误码与 OpenAI 生态保持对齐；
+- 你当前主要使用 `qwen-plus-agent-v1` 等专用 Agent 模型，且暂无定制模型需求。
 
-| 你的关键诉求 | 推荐方案 | 理由说明 |
-|--------------|----------|----------|
-| **已有成熟 OpenAI 代码，想 1 小时内跑通百炼 Agent** | ✅ OpenAI 兼容 Agent | 替换 endpoint 和 API Key 即可，无需改逻辑；`tools` 参数开箱即用；LangChain `OpenAIAssistantAgent` 可直接复用 |
-| **需要严格遵循 SOP，每一步操作都可回溯、可审批、可人工干预** | ✅ Flow Agent | 流程节点天然支持人工审核节点、条件分支、失败重试策略；输出含完整 `steps` 执行日志，满足审计要求 |
-| **要构建一个带知识库、能调用多个内部 API、需区分不同部门数据权限的 AI 助手** | ✅ 托管 Agent | Environment 实现数据/工具沙箱隔离；Vault 支持部门级知识库挂载；Credential 管理密钥；Skill 封装标准化 API 调用，避免硬编码 |
-| **预算敏感，且主要负载是短时、无状态的问答（如 FAQ 查询）** | ⚠️ 三者均非最优 | 此类场景应优先选用 `chat.completions`（普通 LLM 接口），成本更低、延迟更小；Agent 方案均引入额外状态管理开销 |
-| **需要自定义模型（如微调后的 Qwen）或接入第三方模型（如 Claude）** | ❌ 三者均不支持 | 百炼当前所有 Agent 方案均限定于平台托管模型；如需自定义模型，请使用基础 `chat.completions` 接口自行编排 |
-| **必须支持 JSON Schema 输出格式（`response_format: {"type": "json_object"}`）** | ❌ OpenAI 兼容 Agent 不支持<br>✅ Flow Agent 可通过流程节点后处理实现<br>✅ 托管 Agent 可在 Skill 返回前做 JSON 格式化 | [OpenAI 兼容接口](../concepts/openai-compatible-interface.md)明确声明忽略该字段；另两者可通过流程/技能逻辑保障输出结构 |
+---
 
-> **重要提醒**：三者可混合使用。例如：用 Flow Agent 编排主业务流程，在某个节点中调用托管 Agent 处理复杂对话，再将结果传给 [OpenAI 兼容接口](../concepts/openai-compatible-interface.md)供前端展示——百炼平台的设计哲学是“组合优于耦合”。请始终以**业务问题本质**而非技术名词驱动选型。
+## 技术选型决策树（面向开发者）
+
+```mermaid
+graph TD
+    A[你的核心诉求是什么？] --> B{是否已有 OpenAI 工具调用代码？}
+    B -->|是| C[优先选 OpenAI 兼容智能体<br>→ 降低迁移成本，保持生态一致]
+    B -->|否| D{是否需要企业级安全与隔离？<br>（Vault / Environment / Skill 权限）}
+    D -->|是| E[选托管智能体<br>→ 全托管运行时，开箱即用的安全基线]
+    D -->|否| F{是否只需调用一个已发布的智能体应用？<br>（如控制台一键部署的客服 Bot）}
+    F -->|是| G[选流程型智能体<br>→ 最简路径，5 分钟完成集成]
+    F -->|否| H{是否需长期记忆、多会话、工具调用？}
+    H -->|是| I[托管 or OpenAI 兼容<br>→ 避免使用遗留“长期记忆（旧）”]
+    H -->|否| G
+```
+
+> 💡 **最后建议**：  
+> - 新项目**避免使用流程型智能体的“长期记忆（旧）”**，该能力已明确标记为遗留；  
+> - 若未来计划接入自定义模型或私有化部署，**托管智能体**目前提供最灵活的底层控制能力；  
+> - 若团队重度依赖 OpenAI 生态工具链，**OpenAI 兼容智能体**是现阶段最平滑的演进路径。  
+
+---  
+*文档更新时间：2024年10月*  
+*依据百炼平台 v1.2.x 文档体系整理*
 
 ## 被对比主题页
 
