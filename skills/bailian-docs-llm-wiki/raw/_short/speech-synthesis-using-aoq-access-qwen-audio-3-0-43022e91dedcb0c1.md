@@ -12,7 +12,7 @@ qwen-audio-3.0-tts-flash 支持 AOQ Inference 事件协议。本教程选择该�
 
 1.  开通阿里云百炼，并按[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。API Key 只保存在业务 AppServer，不要写入客户端代码或提交到代码仓库。
 2.  根据业务部署地域确认 AOQ Endpoint。地域和接入地址的选择方法请参见[选择地域、服务部署范围和接入域名](raw/model-user-guide/get-started-with-models/regions.md)。
-3.  从[SDK 下载](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/realtime-sdk-download.md)获取最新版 AOQ Client SDK。
+3.  从[SDK 下载](raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-sdk-download.md)获取最新版 AOQ Client SDK。
 4.  按 [Qwen-Audio-TTS 的 AOQ 鉴权步骤](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-aoq-access#authentication)搭建业务 AppServer。每次建立新连接前，客户端都应从 AppServer 获取新的连接凭证。
 
 ### 导入 SDK
@@ -549,8 +549,8 @@ continue-task 被拒绝
 
 -   [获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)
 -   [选择地域、服务部署范围和接入域名](raw/model-user-guide/get-started-with-models/regions.md)
--   [AOQ Client SDK 简介](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/realtime-api-aoq-sdk-desc.md)
--   [SDK 下载](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/realtime-sdk-download.md)
+-   [AOQ Client SDK 简介](raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-api-aoq-sdk-desc.md)
+-   [SDK 下载](raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-sdk-download.md)
 -   [Qwen-Audio-TTS AOQ 接入](raw/model-api-reference/realtime-api-directory/realtime-tts-model-apis/qwen-audio-tts-api/qwen-audio-tts-aoq-access.md)
 -   [Qwen-Audio-TTS 用户指南](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/tts-model.md)
 -   [客户端事件](raw/_short/cosyvoice-client-events-480a8821d2d60e18.md)

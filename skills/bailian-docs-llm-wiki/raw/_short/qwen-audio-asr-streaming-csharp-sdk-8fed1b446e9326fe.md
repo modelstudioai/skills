@@ -73,7 +73,7 @@ await client.StopAsync();
     
 3.  在 `TranscriberStarted` 之后调用 `SendAudioAsync` 按音频播放节奏持续上行音频帧。
     
-    **说明**使用 `Qwen-Audio-ASR-Message` 时，如需在任务运行中更新上下文，可在发送音频期间调用 `SendContextAsync`。
+    **Note**使用 `Qwen-Audio-ASR-Message` 时，如需在任务运行中更新上下文，可在发送音频期间调用 `SendContextAsync`。
     
 4.  在 `SentenceBegin`、`PartialResult`、`SentenceEnd` 中获取中间与最终结果（`PartialResult` 的文本可能变化，以 `SentenceEnd` 的最终文本为准）。
     
@@ -118,7 +118,7 @@ await client.StopAsync();
 
 音频采样率，单位 Hz。
 
-**说明**`Qwen-Audio-ASR-Message` 仅支持 `16000` Hz。
+**Note**`Qwen-Audio-ASR-Message` 仅支持 `16000` Hz。
 
 `MaxSentenceSilence`
 
@@ -136,7 +136,7 @@ VAD 断句的静音阈值，单位毫秒。
 
 是否启用多阈值 VAD 断句。
 
-**说明**仅适用于 `Qwen-Audio-ASR-Streaming` 系列。
+**Note**仅适用于 `Qwen-Audio-ASR-Streaming` 系列。
 
 `KeepDialect`
 
@@ -146,7 +146,7 @@ VAD 断句的静音阈值，单位毫秒。
 
 是否保留方言表达。
 
-**说明**`Qwen-Audio-ASR-Streaming` 系列仅适用于 `qwen-audio-3.1-asr-flash-streaming`；`Qwen-Audio-ASR-Message` 系列仅在最终识别结果（`SentenceEnd`）中生效，中间结果（`PartialResult`）不支持。
+**Note**`Qwen-Audio-ASR-Streaming` 系列仅适用于 `qwen-audio-3.1-asr-flash-streaming`；`Qwen-Audio-ASR-Message` 系列仅在最终识别结果（`SentenceEnd`）中生效，中间结果（`PartialResult`）不支持。
 
 `Heartbeat`
 
@@ -196,7 +196,7 @@ VAD 断句的静音阈值，单位毫秒。
 
 敏感词过滤规则，传入 JSON 字符串。
 
-**说明**仅适用于 `Qwen-Audio-ASR-Streaming` 系列。
+**Note**仅适用于 `Qwen-Audio-ASR-Streaming` 系列。
 
 `ExtraParametersJson`
 
@@ -214,7 +214,7 @@ JSON 对象字符串，合并到协议的 `parameters` 对象。
 
 是否返回中间结果。默认只返回定稿；设为 `true` 后，可通过 `PartialResult` 接收中间结果。
 
-**说明**仅适用于 `Qwen-Audio-ASR-Message` 系列（`Qwen-Audio-ASR-Streaming` 系列默认持续返回中间结果）。
+**Note**仅适用于 `Qwen-Audio-ASR-Message` 系列（`Qwen-Audio-ASR-Streaming` 系列默认持续返回中间结果）。
 
 `DisfluencyRemovalEnabled`
 
@@ -224,4 +224,4 @@ JSON 对象字符串，合并到协议的 `parameters` 对象。
 
 是否过滤语气词。
 
-**说明**仅适用于 `Qwen-Audio-ASR-Message` 系列。
+**Note**仅适用于 `Qwen-Audio-ASR-Message` 系列。

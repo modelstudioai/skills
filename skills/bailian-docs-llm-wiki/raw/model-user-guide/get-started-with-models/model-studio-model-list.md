@@ -7,6 +7,7 @@
 -   [全模态](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-omni.md)
 -   [语音识别](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-speech-recognition.md)
 -   [语音合成](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-speech-synthesis.md)
+-   [音频打标](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-audio-tagging.md)
 -   [音频生成](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-audio-generation.md)
 -   [语音转语音](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-speech-to-speech.md)
 -   [世界模型](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-world-model.md)

@@ -111,7 +111,7 @@ TPM 限流值按**百炼平台月消费金额**分档，支持的模型在不同
 
 2000万
 
-**kimi-k3.1-pro**
+**kimi-k3.1-pro-prime**
 
 120万
 
@@ -119,7 +119,7 @@ TPM 限流值按**百炼平台月消费金额**分档，支持的模型在不同
 
 1000万
 
-**kimi-k3.1-pro-prime**
+**kimi-k3.1-pro**
 
 120万
 
@@ -5381,6 +5381,20 @@ Sambert系列模型
 
 20
 
+### 音频打标
+
+#### Qwen-Audio-3.1-Captioner
+
+#### 华北2（北京）
+
+**模型名称**
+
+**每分钟调用次数（RPM）**
+
+qwen-audio-3.1-captioner
+
+600
+
 ### 音频生成
 
 #### Qwen-Audio-TTS-Next
@@ -5406,6 +5420,10 @@ qwen-audio-3.1-tts-next
 180
 
 ### 语音对话
+
+#### Qwen-Audio-Live
+
+WebSocket 最多同时保持 5 条连接。
 
 #### Qwen-Audio-Realtime
 

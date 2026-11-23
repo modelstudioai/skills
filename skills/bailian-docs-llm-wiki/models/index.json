@@ -1,35 +1,35 @@
 {
-  "updatedAt": "2026-11-23",
-  "totalFamilies": 126,
-  "totalModels": 342,
+  "updatedAt": "2026-11-24",
+  "totalFamilies": 129,
+  "totalModels": 345,
   "profileCoverage": {
-    "full": 161,
-    "partial": 178,
-    "structured-only": 3,
+    "full": 139,
+    "partial": 190,
+    "structured-only": 16,
     "none": 0
   },
   "capabilityDistribution": {
     "TG": 32,
     "VG": 17,
     "IG": 17,
-    "ASR": 11,
+    "ASR": 12,
     "Reasoning": 10,
     "TTS": 9,
     "Realtime-ASR": 6,
     "VU": 5,
     "Multimodal-Omni": 5,
     "Realtime-Omni": 4,
+    "Realtime-Chatting": 3,
     "ME": 2,
-    "Realtime-Chatting": 2,
     "TR": 2,
+    "Realtime-Audio-Translate": 2,
     "World-Model": 1,
     "Realtime-Text-to-Speech": 1,
-    "Realtime-Audio-Translate": 1,
     "3D-generation": 1
   },
   "providerDistribution": {
-    "qwen": 64,
-    "qwen-domain-model": 25,
+    "qwen": 66,
+    "qwen-domain-model": 26,
     "wan": 13,
     "mini-max": 4,
     "pixverse": 4,
@@ -677,6 +677,36 @@
       ]
     },
     {
+      "slug": "qwen-audio-3.1-captioner",
+      "name": "Qwen-Audio-3.1-Captioner",
+      "primaryCapability": "ASR",
+      "capabilities": [
+        "ASR"
+      ],
+      "providers": [
+        "qwen"
+      ],
+      "itemCount": 1,
+      "items": [
+        "qwen-audio-3.1-captioner"
+      ]
+    },
+    {
+      "slug": "qwen-audio-3.1-live",
+      "name": "Qwen-Audio-3.1-Live",
+      "primaryCapability": "Realtime-Chatting",
+      "capabilities": [
+        "Realtime-Chatting"
+      ],
+      "providers": [
+        "qwen"
+      ],
+      "itemCount": 1,
+      "items": [
+        "qwen-audio-3.1-live"
+      ]
+    },
+    {
       "slug": "qwen-audio-3.1-realtime",
       "name": "Qwen-Audio-3.1-Realtime",
       "primaryCapability": "Realtime-Chatting",
@@ -1277,6 +1307,22 @@
         "qwen3.5-flash"
       ],
       "maxContextWindow": 1000000
+    },
+    {
+      "slug": "qwen3.5-livetranslate-flash-realtime",
+      "name": "Qwen3.5-LiveTranslate-Flash-Realtime",
+      "primaryCapability": "Realtime-Audio-Translate",
+      "capabilities": [
+        "Realtime-Audio-Translate"
+      ],
+      "providers": [
+        "qwen-domain-model"
+      ],
+      "itemCount": 1,
+      "items": [
+        "qwen3.5-livetranslate-flash-realtime"
+      ],
+      "maxContextWindow": 53248
     },
     {
       "slug": "qwen3.5-ocr",

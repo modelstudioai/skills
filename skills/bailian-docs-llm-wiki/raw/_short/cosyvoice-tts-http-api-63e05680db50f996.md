@@ -222,30 +222,6 @@
 
 **说明**仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
-**hot\_fix** `object`（可选）
-
-文本热修复配置，用于自定义指定词语的发音或对待合成文本进行替换。
-
-**说明**cosyvoice-v2不支持该功能。
-
-参数介绍：
-
--   pronunciation：自定义发音。指定词语的拼音标注，用于纠正默认发音不准确的情况。
--   replace：文本替换。在语音合成前将指定词语替换为目标文本，替换后的文本将作为实际合成内容。
-
-示例：
-
-```
-"hot_fix": {
-  "pronunciation": [
-    {"天气": "tian1 qi4"}
-  ],
-  "replace": [
-    {"今天": "金天"}
-  ]
-}
-```
-
 **enable\_markdown\_filter** `boolean`（可选）
 
 **说明**cosyvoice-v2 不支持此功能。

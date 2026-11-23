@@ -10,11 +10,11 @@
 
 **百炼推荐**
 
-高能力实时对话
+工具运行期间继续语音对话
 
 OpenAI GPT-Live 1、Gemini 3.8 Live
 
-`qwen-audio-3.1-realtime-plus`
+`qwen-audio-3.1-live`
 
 成本敏感对话
 
@@ -89,6 +89,12 @@ Realtime API
 
 Realtime API
 
+实时语音对话与任务委派
+
+[qwen-audio-3.1-live](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-speech-to-speech/qwen-audio-3-1-live.md)
+
+Realtime API
+
 成本敏感的对话
 
 `qwen-audio-3.1-realtime-flash`
@@ -119,7 +125,7 @@ Realtime API
 
 ### Function Calling
 
-根据音视频内容查询知识库、查询日程或触发工作流，可使用 Qwen3.8-Omni-Flash-Realtime、Qwen-Audio Realtime。
+根据音视频内容查询知识库、查询日程或触发工作流，可使用 Qwen3.8-Omni-Flash-Realtime、Qwen-Audio Realtime。Qwen-Audio-Live 可在语音对话中[调用函数](https://help.aliyun.com/zh/model-studio/qwen-audio-live#live-function-calling)。
 
 ### 联网搜索
 
@@ -854,6 +860,12 @@ Realtime API
 
 实时语音对话
 
+[qwen-audio-3.1-live](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-speech-to-speech/qwen-audio-3-1-live.md)
+
+Realtime API
+
+实时语音对话与任务委派
+
 qwen3.5-omni-plus / qwen3.5-omni-flash
 
 Chat Completions
@@ -889,6 +901,20 @@ Chat Completions
 **思考模式**
 
 **翻译**
+
+[qwen-audio-3.1-live](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-speech-to-speech/qwen-audio-3-1-live.md)
+
+Realtime API
+
+音频、文本
+
+支持
+
+\--
+
+\--
+
+\--
 
 `qwen-audio-3.1-realtime-plus`
 
@@ -1196,6 +1222,7 @@ Chat Completions
 
 选定模型后，参考对应的调用文档：
 
+-   [Qwen-Audio-Live](raw/model-user-guide/model-experience/speech-and-audio/speech-to-speech/qwen-audio-live.md)（实时双工对话，可委派后台任务）
 -   Qwen-Audio Realtime（实时语音对话）→ [实时语音对话（Qwen-Audio-Realtime）](https://help.aliyun.com/zh/model-studio/qwen-audio-realtime-user-guides)
 -   Qwen3.8-Omni-Flash-Realtime（实时）→ [实时（Qwen-Omni-Realtime）](raw/model-user-guide/model-experience/omni-modal/realtime.md)
 -   Qwen3.5-Omni（离线语音输出）→ [非实时（Qwen-Omni）](raw/model-user-guide/model-experience/omni-modal/qwen-omni.md)

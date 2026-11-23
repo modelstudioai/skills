@@ -298,7 +298,7 @@ createConfig.enableDumpAudio = false
 engine = AoqClientEngine.createEngine(createConfig, delegate: self)
 ```
 
-实现 `AoqEngineDelegate`，在 `onConnectionStatusChange` 中维护连接状态，在 `onDataMsg` 中解析目标模型事件，在 `onError` 中处理 SDK 错误。模型返回的错误事件也需要在 Data 消息处理逻辑中单独处理。SDK 接口及错误说明请参见 [各平台 SDK](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/realtime-api-aoq-sdk-desc.md)和[功能参考](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/realtime-api-aoq-sdk-function.md)。
+实现 `AoqEngineDelegate`，在 `onConnectionStatusChange` 中维护连接状态，在 `onDataMsg` 中解析目标模型事件，在 `onError` 中处理 SDK 错误。模型返回的错误事件也需要在 Data 消息处理逻辑中单独处理。SDK 接口及错误说明请参见 [各平台 SDK](raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-api-aoq-sdk-desc.md)和[功能参考](raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-api-aoq-sdk-function.md)。
 
 ## 3\. 配置 SDK
 
@@ -411,7 +411,7 @@ engine.connect(connectConfig)
 
 ### 发送和解析模型事件
 
-客户端通过 Data 轨发送事件。以下为 iOS Swift 代码片段，其他接口详见 [iOS SDK 参考](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/aoq-ios-sdk-reference.md)：
+客户端通过 Data 轨发送事件。以下为 iOS Swift 代码片段，其他接口详见 [iOS SDK 参考](raw/model-api-reference/more-about-models/realtime-api-aoq-api/aoq-ios-sdk-reference.md)：
 
 ```
 // eventJSON 由目标模型的客户端事件协议构造。
@@ -443,11 +443,11 @@ engine.disconnect()
 AoqClientEngine.destroy()
 ```
 
-异常断开后清理业务层就绪状态，按[连接状态管理](raw/_short/aoq-connection-management-f4e04b0f678fdee1.md)处理后续连接；重新建连后按模型协议重新初始化。
+异常断开后清理业务层就绪状态，按[连接状态管理](raw/_short/aoq-connection-management-b3a43f4f91587453.md)处理后续连接；重新建连后按模型协议重新初始化。
 
 ## Data 通道发送和接收事件
 
-客户端通过 AOQ SDK 的 Data 轨发送和接收模型事件。连接时需要发布和订阅 Data 轨；发送时将模型事件序列化后放入 `AoqDataMsg`，并调用所用平台的 Data 发送接口；接收时在 `onDataMsg` 回调中解析消息。接口详见[各平台 SDK](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/realtime-api-aoq-sdk-desc.md)。
+客户端通过 AOQ SDK 的 Data 轨发送和接收模型事件。连接时需要发布和订阅 Data 轨；发送时将模型事件序列化后放入 `AoqDataMsg`，并调用所用平台的 Data 发送接口；接收时在 `onDataMsg` 回调中解析消息。接口详见[各平台 SDK](raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-api-aoq-sdk-desc.md)。
 
 发送事件的名称、字段、参数和调用时机遵循目标模型的**客户端事件定义**；收到消息后的解析方式、状态变更、结果和错误处理遵循该模型的**服务端事件定义**。初始化事件根据模型要求按需发送，后续文本和控制事件按照业务需要发送。
 
@@ -486,31 +486,31 @@ Qwen-Omni-Realtime
 
 等待模型就绪、暂停上行、按需开启视频
 
-[媒体流发送管理](raw/_short/aoq-media-stream-control-1278a5c1aba30cc3.md)
+[媒体流发送管理](raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-api-aoq-sdk-function/aoq-media-stream-control.md)
 
 音频设备与处理
 
 编解码、扬声器、文件混音、音频帧回调
 
-[音频常用功能](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/realtime-api-aoq-sdk-function/aoq-audio-features.md)
+[音频常用功能](raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-api-aoq-sdk-function/aoq-audio-features.md)
 
 外部音频输入
 
 使用业务侧音频源
 
-[自定义音频采集](raw/_short/aoq-custom-audio-capture-79471541298aac63.md)
+[自定义音频采集](raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-api-aoq-sdk-function/aoq-custom-audio-capture.md)
 
 外部音频输出
 
 由业务侧处理或播放输出音频
 
-[自定义音频播放](raw/_short/aoq-custom-audio-playback-d7aa8527189532a2.md)
+[自定义音频播放](raw/_short/aoq-custom-audio-playback-7832b33ccf014535.md)
 
 视频采集与输入
 
 摄像头及业务侧画面输入
 
-[视频常用功能](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/realtime-api-aoq-sdk-function/aoq-video-features.md)、[自定义视频输入](raw/_short/aoq-custom-video-input-be576bbf9ade6cc8.md)
+[视频常用功能](raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-api-aoq-sdk-function/aoq-video-features.md)、[自定义视频输入](raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-api-aoq-sdk-function/aoq-custom-video-input.md)
 
 媒体发送控制只控制媒体传输。模型响应取消、轮次提交等行为仍需使用目标模型的事件协议。
 

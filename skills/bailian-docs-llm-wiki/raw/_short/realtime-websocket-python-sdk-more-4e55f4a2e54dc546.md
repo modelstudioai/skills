@@ -1,6 +1,6 @@
 # 更多
 
--   [Qwen-ASR-Realtime](raw/_short/realtime-websocket-python-sdk-qwen-asr-realtime-369ebdfe073a8cec.md)
--   [Paraformer](raw/_short/realtime-websocket-python-sdk-paraformer-3b8f41a8c1c64b5a.md)
--   [Qwen-TTS-Realtime](raw/_short/realtime-websocket-python-sdk-qwen-tts-realtime-1a31f8c60ec0fca6.md)
--   [Sambert](raw/_short/realtime-websocket-python-sdk-sambert-fadce15cce38cbc8.md)
+-   [Qwen-ASR-Realtime](raw/_short/realtime-websocket-python-sdk-qwen-asr-realtime-281dee62f7074a94.md)
+-   [Paraformer](raw/_short/realtime-websocket-python-sdk-paraformer-48f2eb5035b28f23.md)
+-   [Qwen-TTS-Realtime](raw/_short/realtime-websocket-python-sdk-qwen-tts-realtime-3dc71548ffc651f8.md)
+-   [Sambert](raw/_short/realtime-websocket-python-sdk-sambert-74c648d694dcfd04.md)

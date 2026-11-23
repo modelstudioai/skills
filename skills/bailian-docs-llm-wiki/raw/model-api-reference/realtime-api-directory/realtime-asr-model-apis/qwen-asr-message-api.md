@@ -4,3 +4,4 @@
 -   [服务端事件](raw/_short/qwen-asr-message-server-events-f2a670ecbf4abcc9.md)
 -   [WebSocket 接入](raw/_short/qwen-asr-message-websocket-api-8b78d8662335cafa.md)
 -   [AOQ 接入](raw/_short/qwen-asr-message-aoq-access-7699c2c24f2a0149.md)
+-   [WebSocket SDK](raw/_short/qwen-asr-message-websocket-sdk-b2b433d2975fa641.md)

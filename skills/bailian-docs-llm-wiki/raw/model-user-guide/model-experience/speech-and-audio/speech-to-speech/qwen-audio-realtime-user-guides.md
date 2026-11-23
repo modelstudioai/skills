@@ -1,4 +1,4 @@
-# Qwen-Audio 实时语音对话
+# Qwen-Audio-Realtime
 
 Qwen-Audio 是端到端实时语音交互大模型，支持低延迟语音对话，适用于语音助手、智能客服、AI 伴侣等场景。
 
@@ -101,7 +101,7 @@ qwen-audio-3.0-realtime-flash
 ## 前提条件
 
 -   已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并将其[配置到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
--   如果通过 AOQ 协议接入，需要下载并集成 AOQ 客户端 SDK，详见[AOQ SDK 简介](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/realtime-api-aoq-sdk-desc.md)。
+-   如果通过 AOQ 协议接入，需要下载并集成 AOQ 客户端 SDK，详见[AOQ SDK 简介](raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-api-aoq-sdk-desc.md)。
 
 ## 快速开始
 

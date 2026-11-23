@@ -1,58 +1,51 @@
-# 模型调用协议
+# 模型上下文协议（MCP）
 
-模型调用协议（Model Calling Protocol，简称 MCP）是百炼平台定义的一套标准化工具接入规范，用于将任意后端服务（如 API、函数、本地脚本）封装为大模型可识别、可发现、可安全调用的结构化能力单元。它不改变模型本身，而是构建在模型推理层之上的统一工具交互契约，使智能体能以声明式方式调用外部能力。
+模型上下文协议（Model Context Protocol，简称 MCP）是百炼平台定义的标准化工具接入与编排协议，用于将外部服务（如地图、搜索、天气、数据库等）以统一语义和结构暴露给大模型，使其能在推理过程中动态感知、发现、选择并调用合适工具，从而扩展模型能力边界。MCP 不是单一接口，而是一套涵盖服务注册、元信息描述、工具发现、参数校验、异步调用与结果解析的端到端协议体系。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **智能体与工作流编排**：在 Managed Agent 或 Flow Agent 中添加 MCP 服务后，模型可在生成过程中自动触发 `tool_calls`，平台依据协议解析参数、转发请求、处理响应并注入上下文。例如用户问“北京今天天气如何”，模型自动调用 `amap-maps.weather` 工具，无需硬编码集成。
-- **CLI 与 SDK 直接调用**：开发者可通过 `bl mcp call --target amap-maps.weather` 命令或 Python SDK 的 `MCPClient` 类，绕过智能体直接调用已注册的 MCP 服务，适用于自动化脚本、测试或轻量级集成。
-- **自定义工具接入**：开发者可基于四种部署类型实现符合 MCP 协议的服务：
-  - `STDIO`：通过函数计算（FC）运行 CLI 工具（如 `npx`/`uvx`），标准输入输出通信；
-  - `HTTP`：提供兼容 OpenAPI 规范的 REST 接口，支持同步响应；
-  - `SSE`：提供 Server-Sent Events 流式接口，适用于长时任务或进度反馈；
-  - `OPENAPI`：复用现有 OpenAPI 3.0 文档，平台自动解析 schema 并生成调用逻辑。
-- **Agent Store 能力中心**：所有官方 MCP（如高德地图、Firecrawl、WebSearch）和用户自建 MCP 均在 Agent Store 统一注册、管理、启停与计费，形成即插即用的能力市场。
+- **智能体（Agent）开发**：MCP 是 Agent 调用外部工具的核心载体。在 Managed Agent 的 YAML 配置或 Flow Agent 的工具节点中，开发者通过 `mcp_code` 引用已开通的 MCP 服务；模型根据 System Prompt 中的工具描述与用户请求，自主生成符合 MCP Schema 的调用指令，平台自动完成序列化、路由、认证与结果注入。
+  
+- **工作流（Workflow）编排**：每个 MCP 节点绑定一个具体 MCP 服务及其工具（如 `amap/weather`），需手动配置输入参数映射（如将上一节点输出的 `city_name` 映射为 `location` 字段）。MCP 节点执行失败时，错误信息（含 `data.isError: true` 及原始响应）会透传至下游，支持条件分支判断。
 
-> ⚠️ 注意：MCP 服务**仅限智能体/工作流内部调用或通过 MCP 专用 API（`/api/v1/mcp/servers/...`）显式调用**，不可在纯 `qwen-*` 模型 API（如 `/v1/chat/completions`）中直接使用。
+- **外部集成与 CLI/Sdk 调用**：通过百炼 MCP SDK（兼容 OpenAI Tools API）、CLI 工具（如 `bl mcp call --target amap.weather`）或第三方客户端（Qoder/Cursor），可绕过智能体直接调用 MCP 工具，适用于调试、自动化脚本或嵌入已有系统。
+
+- **自定义能力扩展**：开发者可创建自定义 MCP，支持四种接入类型：
+  - `STDIO`：本地进程（如 `npx @bailian/mcp-server`），适合轻量 Node.js/Python 工具；
+  - `HTTP`：标准 RESTful 接口，要求返回符合 MCP Tool Schema 的 JSON；
+  - `SSE`：服务端事件流，适用于长时任务（如爬取、渲染）的进度推送；
+  - `OPENAPI`：自动解析 OpenAPI 3.0 文档，一键生成工具列表与调用逻辑。
+
+> ⚠️ 注意：MCP **不可直接接入千问原生 API（如 `/v1/chat/completions`）调用链**；仅限在智能体应用、工作流应用中使用。
 
 ## 关键参数和配置
 
-- **核心标识**：
-  - `mcp_code`：MCP 唯一编码（如 `amap-maps`），创建后生成，用于所有 API 路径（如 `/api/v1/mcp/servers/{mcpCode}`）和 CLI 参数（`--target {mcpCode}.tool_name`）。
-  - `tool_name`：工具名（如 `weather`, `geocode`），必须与 MCP 服务返回的 `tools` 列表中定义一致，调用时必填。
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `mcp_type` | string | 是 | 接入类型，取值为 `stdio` / `http` / `sse` / `openapi`；必须与后端服务实际协议严格一致，否则触发 `11200058` 错误。 |
+| `mcp_config` | object | 是 | 协议配置对象，结构因 `mcp_type` 而异：<br>• `http`/`sse`: 含 `url`（不含凭据、`#` 或 `\`）、`headers`（禁止 CR/LF）；<br>• `stdio`: 含 `command`（如 `npx`）、`args`（仅支持公共 npm/PyPI 包）；<br>• `openapi`: 含 `spec_url`（OpenAPI JSON/YAML 地址）或内联 `spec_content`。 |
+| `server_type` | string | 是（API 创建时） | 后端部署形态，取值 `STDIO`/`HTTP`/`SSE`/`OPENAPI`，与 `mcp_type` 语义对齐但命名风格不同（全大写）。 |
+| `type`（前端/CLI） | string | 是 | 前端 UI 或 CLI 中使用的协议标识，取值 `stdio`/`sse`/`streamableHttp`；注意 `streamableHttp` 对应后端 `HTTP` 类型，且端点路径必须为 `/mcp`。 |
 
-- **协议配置字段（`mcp_config`）**：
-  - `mcp_type`：必需，取值为 `STDIO` / `HTTP` / `SSE` / `OPENAPI`，决定后续配置结构。
-  - `endpoint`（HTTP/SSE/OPENAPI）：服务地址，支持 HTTPS URL；SSE 必须以 `/sse` 结尾。
-  - `command`（STDIO）：执行命令（如 `npx @amap/maps-cli weather`），支持环境变量占位符（如 `$AMAP_API_KEY`）。
-  - `headers`：请求头（如 `{"Authorization": "Bearer ${apiKey}"}`），敏感字段在响应中自动脱敏。
-  - `inputSchema`：JSON Schema 定义工具输入参数结构，直接影响模型参数生成准确性。
-
-- **调用控制参数**：
-  - `timeout_ms`：单次调用超时毫秒数（默认 30000，最大 60000）。
-  - `max_retries`：失败重试次数（默认 0，最大 3）。
-  - `enable_streaming`（SSE/HTTP）：是否启用流式响应（需服务端支持）。
-
-- **认证与安全**：
-  - 所有 MCP 调用共享 `DASHSCOPE_API_KEY` 认证，无需为每个服务单独申请密钥。
-  - 敏感凭据（如第三方 API Key）**必须通过 KMS 加密后注入 `mcp_config.headers` 或环境变量**，严禁明文配置。
+- **敏感字段处理**：`mcp_config.headers`、`mcp_config.env` 等字段可能包含 API Key、Token 等密钥，**严禁明文填写**。生产环境必须使用 KMS 凭据加密，并在日志、监控、前端响应中主动过滤该字段。
+- **状态管理**：自定义 MCP 修改配置前需先调用 `/disable`；官方 MCP 仅支持 `/activate`/`/deactivate`，无删除接口。
+- **工具调用判据**：响应体中 `success: true` 仅表示 MCP API 调用成功；**必须检查 `data.isError` 字段（布尔值）及 `data.error_msg` 才能确认工具执行是否成功**。
 
 ## 面向开发者，简洁实用
 
-- ✅ **快速验证**：用 `bl mcp list` 查看可用服务，`bl mcp tools --target amap-maps` 查看工具列表，`bl mcp call --target amap-maps.weather --params '{"city":"北京"}'` 直接调试。
-- ✅ **自建第一步**：选择 `STDIO` 类型 → 编写一个接收 JSON 输入、输出 JSON 响应的 CLI 脚本 → 用 `bl mcp create --type STDIO --command "node weather.js"` 注册。
-- ✅ **调试关键**：关注响应中的 `isError` 字段（`true` 表示工具执行失败，非网络错误）和 `x-request-id` 头（用于日志追踪）。
-- ❌ **避免踩坑**：
-  - 不要依赖 `server_status_text` 字符串做状态判断，应检查 `server_status` 枚举值（如 `ACTIVE`, `INACTIVE`）；
-  - 自定义 MCP 更新代码后，必须重新部署（`bl mcp update` + `bl mcp enable`），不会自动热更新；
-  - `inputSchema` 中缺失 `required` 字段或类型错误，会导致模型传参失败，调用前务必用 `bl mcp tools` 校验 schema。
+- ✅ **快速上手**：从控制台「Agent Store」→「MCP 服务」开通高德地图、WebSearch 等官方服务，无需配置即可在智能体中调用。
+- ✅ **调试技巧**：使用 `GET /{mcpCode}/tools` 查看工具列表及完整 Schema；用 `POST /{mcpCode}/tools/call` 手动构造请求测试；所有响应头含 `X-Request-Id`，用于问题定位。
+- ✅ **安全红线**：`mcp_config.url` 和 `headers` 中禁止硬编码密钥；本地开发时用 `.env` + KMS 加密；线上环境禁用 `stdio` 的 `command` 明文命令。
+- ✅ **排障重点**：若工具未被调用，检查 System Prompt 是否清晰描述工具名称与能力；若调用失败，优先查看 `data.isError` 和 `activate_fail_reason`（激活失败时）。
+- ❌ **避坑提示**：MCP 服务运行在函数计算 FC，**无法访问本地文件、数据库或内网资源**；需访问云服务时，务必配置 FC 公网出口 IP 白名单或 VPC 打通。
 
 ## 关联主题页
 
 - [overview](../api/overview.md)
 - [overview 1e06e5e20b81f10d](../api/overview-1e06e5e20b81f10d.md)
 - [agent store](../guides/agent-store.md)
-- [capabilities](../guides/capabilities.md)
 - [agent development](../guides/agent-development.md)
+- [agent governance](../guides/agent-governance.md)
+- [application support](../guides/application-support.md)
 
 

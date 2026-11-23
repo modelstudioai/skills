@@ -857,9 +857,9 @@ VAD检测方
 
 打断方式
 
-[RequestToSpeak](raw/model-api-reference/realtime-api-directory/multimodal-interaction-protocol.md)消息打断
+[RequestToSpeak](raw/model-api-reference/more-about-models/multimodal-interaction-protocol.md)消息打断
 
-[RequestToSpeak](raw/model-api-reference/realtime-api-directory/multimodal-interaction-protocol.md)消息打断
+[RequestToSpeak](raw/model-api-reference/more-about-models/multimodal-interaction-protocol.md)消息打断
 
 语音打断
 

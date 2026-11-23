@@ -79,7 +79,7 @@
             **说明**
             
             -   首次使用需按界面提示完成授权。
-            -   目标 Bucket 需要添加`bailian-datahub-access`标签（值为`read`）以供阿里云百炼访问。[添加标签](https://oss.console.aliyun.com/bucket)
+            -   目标 Bucket 需要添加`bailian-connector-access`标签（值为`ReadAndWrite`）以供阿里云百炼访问。[添加标签](https://oss.console.aliyun.com/bucket)
             
     
     #### 表格
@@ -97,7 +97,7 @@
             **说明**
             
             -   首次使用需按界面提示完成授权。
-            -   目标 Bucket 需要添加`bailian-datahub-access`标签（值为`read`）以供阿里云百炼访问。[添加标签](https://oss.console.aliyun.com/bucket)
+            -   目标 Bucket 需要添加`bailian-connector-access`标签（值为`ReadAndWrite`）以供阿里云百炼访问。[添加标签](https://oss.console.aliyun.com/bucket)
             
     
     #### MySQL

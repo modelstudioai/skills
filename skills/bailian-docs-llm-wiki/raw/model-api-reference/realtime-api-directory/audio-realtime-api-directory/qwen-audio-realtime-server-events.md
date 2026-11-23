@@ -6,7 +6,7 @@ Qwen-Audio-Realtime API 的服务端事件参考。所有服务端事件均包�
 
 **说明**本页为 Qwen-Audio-Realtime 的事件参考，事件定义以 WebSocket 接入为基础。AOQ、WebRTC 通过各自的数据通道收发模型事件，媒体通过媒体轨道传输。请先阅读[WebSocket 接入](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/audio-realtime-websocket-access.md)、[WebRTC 接入](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/audio-realtime-webrtc-access.md)或[AOQ 接入](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/audio-realtime-aoq-access.md)。
 
-WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-realtime-service-dece94dbee395089.md)、[iOS SDK](raw/_short/ios-sdk-for-qwen-audio-realtime-service-b9a569cee3df83b5.md)和 [HarmonyOS SDK](raw/_short/harmonyos-sdk-for-qwen-audio-realtime-service-146c4626906be247.md)。型号与协议选择参见[概述](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/voice-conversation-api-references.md)。
+WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-realtime-service-fbe978d80b5ee150.md)、[iOS SDK](raw/_short/ios-sdk-for-qwen-audio-realtime-service-11c3579f6cded913.md)和 [HarmonyOS SDK](raw/_short/harmonyos-sdk-for-qwen-audio-realtime-service-c258297df757a167.md)。型号与协议选择参见[概述](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/voice-conversation-api-references.md)。
 
 ## error
 

@@ -1,4 +1,4 @@
 # 更多
 
--   [Paraformer](raw/_short/harmonyos-sdk-for-paraformer-real-time-service-ed34bd097a16dafb.md)
--   [Sambert](raw/_short/sambert-harmonyos-sdk-f1b2ba5ea827b7d2.md)
+-   [Paraformer](raw/_short/harmonyos-sdk-for-paraformer-real-time-service-642577184b92b90f.md)
+-   [Sambert](raw/_short/sambert-harmonyos-sdk-6ffde1be395ffb11.md)

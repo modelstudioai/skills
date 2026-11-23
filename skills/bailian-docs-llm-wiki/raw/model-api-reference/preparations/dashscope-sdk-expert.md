@@ -44,6 +44,8 @@ DashScope SDK Expert（下称 SDK Expert）是 [dashscope Python SDK](https://da
     
     ```
     dashscope expert "你的问题"
+    # 简易提问示例：一次性命令，直接返回答案后退出
+    dashscope expert "如何用 SDK 开发业务"
     ```
     
     **说明**通过 `dashscope expert` 提问要求 dashscope 与 dashscope-agenticx 安装在同一 Python 环境——用 `pip install -U "dashscope[acli]"` 可一并安装；若分别安装，请在同一虚拟环境中执行。

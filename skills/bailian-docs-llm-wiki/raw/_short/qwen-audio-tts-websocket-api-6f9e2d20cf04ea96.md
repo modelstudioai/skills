@@ -22,7 +22,7 @@ WebSocket 接口使用 `wss://` 协议，地址如下：
 
 -   [Python SDK](https://help.aliyun.com/zh/model-studio/realtime-websocket-python-sdk-qwen-audio-tts-cosyvoice#model-qwen-audio-tts)
 -   [Java SDK](https://help.aliyun.com/zh/model-studio/realtime-websocket-java-sdk-qwen-audio-tts-cosyvoice#model-qwen-audio-tts)
--   [Node.js SDK](raw/_short/qwen-audio-tts-nodejs-sdk-7cea26a2d48961a9.md)
+-   [Node.js SDK](raw/_short/qwen-audio-tts-nodejs-sdk-e49b9390f1cc4802.md)
 -   [Android SDK](https://help.aliyun.com/zh/model-studio/realtime-websocket-android-sdk-qwen-audio-tts-cosyvoice#model-qwen-audio-tts)
 -   [iOS SDK](https://help.aliyun.com/zh/model-studio/realtime-websocket-ios-sdk-qwen-audio-tts-cosyvoice#model-qwen-audio-tts)
 -   [HarmonyOS SDK](https://help.aliyun.com/zh/model-studio/realtime-websocket-harmonyos-sdk-qwen-audio-tts-cosyvoice#model-qwen-audio-tts)

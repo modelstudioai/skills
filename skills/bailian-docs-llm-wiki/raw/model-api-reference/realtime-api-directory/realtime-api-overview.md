@@ -74,6 +74,16 @@ qwen-audio-3.1-realtime-plus、qwen-audio-3.1-realtime-flash、qwen-audio-3.0-re
 
 [支持](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/audio-realtime-aoq-access.md)
 
+[Qwen-Audio-Live](raw/model-api-reference/realtime-api-directory/qwen-audio-live-api-directory.md)
+
+`qwen-audio-3.1-live`
+
+[支持](raw/model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-websocket-access.md)
+
+[支持](raw/_short/qwen-audio-live-webrtc-access-2a873a21a2d29a3b.md)
+
+[支持](raw/_short/qwen-audio-live-aoq-access-7fc752b6a8e53044.md)
+
 [实时语音翻译](raw/model-api-reference/realtime-api-directory/livetranslate-realtime-api-directory.md)
 
 Qwen-Livetranslate-Realtime 系列模型
@@ -88,7 +98,7 @@ Qwen-Livetranslate-Realtime 系列模型
 
 multimodal-dialog
 
-[支持](raw/model-api-reference/realtime-api-directory/multimodal-interaction-protocol.md)
+[支持](raw/model-api-reference/more-about-models/multimodal-interaction-protocol.md)
 
 [支持](raw/model-user-guide/use-cases/realtime-audio-video-integration/best-practice-webrtc-multimodal-dialog.md)
 
@@ -180,11 +190,13 @@ WebSocket 在建立连接时通过 HTTP 请求头携带 API Key 进行鉴权，�
 -   [Fun-ASR-Realtime](raw/_short/fun-asr-realtime-websocket-api-ba4d50025cae8d1c.md)
 -   [Qwen-Audio-Realtime](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/audio-realtime-websocket-access.md)
 -   [Qwen-LiveTranslate-Realtime](raw/_short/livetranslate-realtime-websocket-access-c83c6ed44456849c.md)
--   [多模态开发套件](raw/model-api-reference/realtime-api-directory/multimodal-interaction-protocol.md)
+-   [多模态开发套件](raw/model-api-reference/more-about-models/multimodal-interaction-protocol.md)
 
 #### WebRTC
 
-WebRTC 通过 HTTP POST 请求完成 SDP 交换，鉴权在此阶段完成。客户端将 Offer SDP 发送至服务端，服务端返回 Answer SDP。
+Qwen-Audio-Live 使用控制 WebSocket 提交 Offer SDP，在建立 WebSocket 连接时鉴权。见 [Qwen-Audio-Live WebRTC 接入](raw/_short/qwen-audio-live-webrtc-access-2a873a21a2d29a3b.md)。
+
+以下模型通过 HTTP POST 交换 SDP，并在这一阶段鉴权。客户端发送 Offer SDP，服务端返回 Answer SDP。
 
 -   [Qwen-Omni-Realtime](https://help.aliyun.com/zh/model-studio/omni-realtime-webrtc-access#authentication)
 -   [Qwen-Audio-Realtime](https://help.aliyun.com/zh/model-studio/audio-realtime-webrtc-access#authentication)

@@ -233,7 +233,7 @@ SSML 的使用限制（支持的模型、音色和接口），请参见[使用�
 
 否
 
-**说明**使用 qwen-audio-3.1-tts-flash 的多语种与方言音色时，可通过此参数指定语种或方言。具体用法请参见[多语种与方言音色的设置方法](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list#qwen-tts31-language-hints)。
+**Note**使用 qwen-audio-3.1-tts-flash 的多语种与方言音色时，可通过此参数指定语种或方言。具体用法请参见[多语种与方言音色的设置方法](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list#qwen-tts31-language-hints)。
 
 指定语音合成的目标语言，提升合成效果。
 
@@ -282,7 +282,7 @@ SSML 的使用限制（支持的模型、音色和接口），请参见[使用�
     保加利亚语、荷兰语、匈牙利语、罗马尼亚语、丹麦语、克罗地亚语、希腊语、捷克语、挪威语、瑞典语、印地语、斯洛伐克语、芬兰语、乌尔都语、塞尔维亚语、墨西哥西班牙语、立陶宛语、拉脱维亚语、土耳其语、波斯语、希伯来语、蒙古语、斯洛文尼亚语、阿塞拜疆语、波兰语、加泰罗尼亚语、高棉语、巴西葡萄牙语、老挝语、格鲁吉亚语、南非荷兰语、尼泊尔语、白俄罗斯语、马拉雅拉姆语、卢森堡语、阿尔巴尼亚语、泰米尔语、僧伽罗语、泰卢固语、爱沙尼亚语、宿务语、波斯尼亚语、缅甸语、亚美尼亚语、拉丁语、冰岛语、马耳他语、斯瓦希里语、哈萨克语、塞舌尔克里奥尔语、乌克兰语。
     
 
-**说明**
+**Note**
 
 -   此参数为数组，但当前版本仅处理第一个元素，因此建议只传入一个值。
 -   此参数用于指定语音合成的目标语言，该设置与声音复刻时的样本音频的语种无关。如需设置复刻任务的源语言，请参见[声音复刻API参考](https://help.aliyun.com/zh/model-studio/voice-clone-design-http-api#h2-create)。
@@ -538,7 +538,7 @@ SSML 的使用限制（支持的模型、音色和接口），请参见[使用�
 
 否
 
-**重要**
+**Important**
 
 -   此参数为数组，但当前版本仅处理第一个元素，因此建议只传入一个值。
 -   此参数用于指定语音合成的目标语言，该设置与声音复刻时的样本音频的语种无关。如需设置复刻任务的源语言，请参见[声音复刻API参考](https://help.aliyun.com/zh/model-studio/voice-clone-design-http-api#h2-create)。
@@ -590,7 +590,7 @@ SSML 的使用限制（支持的模型、音色和接口），请参见[使用�
 
 默认值：false。
 
-**说明**仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
+**Note**仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
 `aigc_propagator`
 
@@ -602,7 +602,7 @@ SSML 的使用限制（支持的模型、音色和接口），请参见[使用�
 
 默认值：阿里云UID。
 
-**说明**仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
+**Note**仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
 `aigc_propagate_id`
 
@@ -614,35 +614,7 @@ SSML 的使用限制（支持的模型、音色和接口），请参见[使用�
 
 默认值：本次语音合成请求Request ID。
 
-**说明**仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
-
-`hot_fix`
-
-`object`
-
-否
-
-文本热修复配置，用于自定义指定词语的发音或对待合成文本进行替换。
-
-**说明**cosyvoice-v2不支持该功能。
-
-参数介绍：
-
--   pronunciation：自定义发音。指定词语的拼音标注，用于纠正默认发音不准确的情况。
--   replace：文本替换。在语音合成前将指定词语替换为目标文本，替换后的文本将作为实际合成内容。
-
-示例：
-
-```
-"hot_fix": {
-  "pronunciation": [
-    {"天气": "tian1 qi4"}
-  ],
-  "replace": [
-    {"今天": "金天"}
-  ]
-}
-```
+**Note**仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
 `enable_markdown_filter`
 
@@ -650,7 +622,7 @@ SSML 的使用限制（支持的模型、音色和接口），请参见[使用�
 
 否
 
-**说明**cosyvoice-v2 不支持此功能。
+**Note**cosyvoice-v2 不支持此功能。
 
 是否启用 Markdown 过滤。启用后，服务会在合成前将 Markdown 转换成适合朗读的文本。
 

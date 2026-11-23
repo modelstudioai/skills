@@ -1,53 +1,54 @@
-# RAG、[长期记忆](../concepts/memory.md)与向量检索排序能力对比
+# RAG、[长期记忆](../concepts/long-term-memory.md)与向量检索排序能力对比
 
-本对比旨在帮助开发者清晰区分百炼平台三大核心语义增强能力的定位、边界与协同关系：**RAG API**（面向知识库驱动的端到端问答服务）、**[长期记忆](../concepts/memory.md)（Long Term Memory）**（面向用户/项目级结构化记忆的生命周期管理）、**向量与排序（Vector & Sort）**（面向底层语义表征与重排的原子能力）。三者并非互斥替代，而是分层协作：向量与排序是 RAG 和[长期记忆](../concepts/memory.md)的**技术底座**；RAG 是面向业务知识场景的**封装服务**；长期记忆则是面向 Agent 智能体持续演化的**状态中枢**。准确理解差异，是构建可扩展、可维护、可计费的 AI 应用的关键前提。
+本对比旨在帮助开发者清晰理解百炼平台三大核心语义基础设施——**RAG API**、**[长期记忆](../concepts/long-term-memory.md)（Long Term Memory）** 和 **向量与排序（Vector & Sort）** 在定位、能力边界、技术实现与工程适配性上的本质差异。三者虽均依赖向量表示与语义匹配，但设计目标迥异：RAG 面向**知识库驱动的问答系统构建**，[长期记忆](../concepts/long-term-memory.md)聚焦**Agent 上下文的结构化持久化与个性化建模**，而向量与排序则提供**原子级、可组合的底层嵌入与重排能力**。本文不替代各模块独立文档，而是从技术选型视角提炼关键决策因子，助力架构设计与接口集成。
 
 ## 关键维度对比
 
 | 维度 | RAG API | 长期记忆（New） | 向量与排序（Vector & Sort） |
 |------|---------|------------------|----------------------------|
-| **核心定位** | 知识库全生命周期管理 + 语义检索/问答一体化服务（SaaS 化能力封装） | 用户/项目级结构化记忆（observation/skill/profile）的写入、检索、更新与画像构建（状态管理服务） | 文本/多模态向量化（embedding）与语义相关性重排（rerank）的原子模型能力（PaaS 基础设施） |
-| **输入格式** | • 检索/问答：`query`（文本/图片）、`messages`（对话历史）、`agent_id`<br>• 知识库管理：`docIds`/`categoryIds`、OSS 文件元数据、`sourceType` 分支参数<br>• 多模态：支持 `image_url`、`video_url` 等字段 | • 写入：`messages`（含 text/image/video）、`custom_content`、`profile_schema`、`project_ids`<br>• 检索：`query`（文本）、`memory_types`、`min_score`（Pro 版）、`user_id`<br>• 画像：`schema_id` + `user_id` | • 向量：`input`（string/array/file 或 `{"contents": [...]}`）<br>• 排序：`{"query": "...", "documents": [...]}`（支持混合模态文档）<br>• 支持 OpenAI 兼容格式（如 `/v1/embeddings`） |
-| **输出格式** | • 检索：`{ "results": [{ "doc_id", "content", "score", "metadata" }] }`<br>• 问答：流式 `text/event-stream`（含 `plan`/`tool_call`/`answer` 三阶段事件）<br>• 管理：标准 REST JSON（含 `index_id`, `chunk_id`, `request_id`） | • 写入：`event_id`（异步）或 `memory_node_id`（同步）<br>• 检索：`{ "nodes": [{ "id", "type", "content", "score", "project_id" }] }`<br>• 画像：结构化 JSON（按模板定义的字段）<br>• 所有响应含统一 `request_id` | • 向量：`{ "data": [{ "embedding": [...], "index": 0 }], "usage": {...} }`（支持 `base64` 编码）<br>• 排序：`{ "results": [{ "index", "relevance_score", "document" }] }`（`return_documents=true` 时返回原文） |
-| **支持模型/能力** | • **不直接暴露模型**，通过 Agent 封装：<br> – 向量模型：`text-embedding-v4`, `qwen3-vl-embedding` 等（配置在 Agent）<br> – 重排模型：`qwen3-rerank`（配置在 `kb_search_configs`）<br> – LLM：`qwen3.7-plus`（用于问答生成）<br>• 四类知识库：`unstructured`/`structured`/`image`/`multimedia` | • **不绑定特定模型**，记忆抽取由后台策略执行：<br> – 抽取逻辑透明（`intelligent` 模式），开发者不可选模型<br> – 技能导出、画像生成为黑盒服务<br>• 支持 `project_ids` 路由，但无显式模型参数 | • **显式模型选择**：<br> – 向量：`qwen3.7-text-embedding`, `text-embedding-v4`, `qwen3-vl-embedding`, `tongyi-embedding-vision-plus-2026-03-06`<br> – 排序：`qwen3-rerank`, `qwen3.7-text-rerank`, `qwen3-vl-rerank`<br>• 支持 `instruct` 自定义任务指令、`enable_fusion` 控制融合模式 |
-| **API 端点（典型）** | • 知识库管理：`/api/v1/indices/knowledge/create_v2`<br>• 检索：`/api/v1/indices/knowledge/search`（需 `agent_id`）<br>• 问答：`/api/v2/apps/knowledge/chat`（强制 `stream: true`） | • 写入：`POST /api/v2/apps/memory/add-async`<br>• 检索：`POST /api/v2/apps/memory/memory_nodes/search`<br>• 画像：`GET /api/v2/apps/memory/profile_schemas/{schema_id}/user_profile` | • 向量（同步）：`/api/v1/services/embeddings/text-embedding/text-embedding`<br>• 向量（异步）：`/api/v1/services/embeddings/text-embedding/text-embedding` + `X-DashScope-Async: enable`<br>• 排序：`/api/v1/services/rerank/text-rerank/text-rerank` |
-| **鉴权方式** | `Authorization: Bearer <API-Key>`（百炼平台 API Key）<br>Base URL 含 `{workspace_id}` | `Authorization: Bearer $DASHSCOPE_API_KEY`（DashScope API Key）<br>Endpoint 含 `{WorkspaceId}`（业务空间 ID） | `Authorization: Bearer $DASHSCOPE_API_KEY`（DashScope API Key）<br>支持 OpenAI 兼容 Header（`Authorization: Bearer sk-xxx`） |
-| **计费方式** | • **按调用次数计费**：<br> – 知识库管理接口（创建/删除/同步）：按次<br> – 检索/问答接口：按“每 10 秒请求数”计费（非 QPS）<br>• 无免费额度说明（依赖所配 Agent 的模型计费） | • **商业化起始时间明确**：2026 年 8 月 20 日 10:00（北京时间）起正式计费<br>• 分版本计费：<br> – `Lite`：基础检索（无 `min_score`/Rerank）<br> – `Pro`：支持过滤、重排、高并发<br>• 当前处于免费试用期 | • **按 Token/请求计费**：<br> – 文本向量：按输入 Token 计费（`qwen3.7-text-embedding` 等享北京地域 100 万 Token 免费额度）<br> – 多模态向量：按输入内容复杂度计费<br> – 排序：按 `query + documents` 总 Token 计费<br>• 明确标注各模型 Token 上限（如 `text-embedding-v4`: 8,192 Token/行） |
-| **典型场景** | • 企业知识库问答（产品文档、内部 SOP）<br>• 客服机器人（多轮对话+知识引用）<br>• 多源异构数据联合检索（文档+数据库+图片）<br>• 需要开箱即用、带安全策略（拒答/防泄漏）的生产服务 | • Agent 智能体长期状态维护（记住用户偏好、会议安排、技能步骤）<br>• 用户画像动态构建（消费习惯、兴趣标签、角色权限）<br>• 项目级经验沉淀（`project_ids` 隔离，跨会话复用技能）<br>• 需要结构化存储、支持软删除与异步抽取的场景 | • 构建自定义 RAG 流水线（自主选择 embedding + rerank 模型）<br>• 批量预处理知识库文档（异步向量化）<br>• 跨模态搜索系统（图文混合检索、视频关键帧匹配）<br>• 对延迟/成本/模型精度有精细化控制需求的场景 |
+| **核心定位** | 知识库全生命周期管理 + 语义检索/问答服务（端到端应用层） | Agent 的结构化记忆存储与上下文增强（中间件层） | 原子化向量化（Embedding）与重排序（Rerank）能力（基础能力层） |
+| **输入格式** | 支持多模态混合输入：<br>• 文本（`query`）、<br>• 图片 URL / base64（`image_urls`）、<br>• 结构化数据（`table` 类型知识库）；需绑定预发布 `agent_id` | 以对话消息流（`messages`）为主，支持文本+图片 URL；支持显式传入 `user_id`、`project_id`、`profile_schema` 等上下文标识符 | 严格按能力类型区分：<br>• Embedding：`string[]` 或单图 `{"url": "..."} / {"image": "base64..."}`<br>• Rerank：`{"query": "...", "documents": [...]}` |
+| **输出格式** | • 检索：返回带 `score`、`content`、`source` 的文档片段列表<br>• 问答：SSE 流式响应（含规划、工具调用、生成三阶段）<br>• 所有响应含统一错误结构（`error.code`, `request_id`） | • 写入：同步返回 `memory_nodes` 或异步 `event_id`<br>• 检索：返回 `memory_nodes` 列表（含 `type`, `content`, `score`, `metadata`）<br>• 画像：返回结构化 JSON（字段由 `profile_schema` 定义） | • Embedding：`data[i].embedding`（float 数组）+ `object`, `model`<br>• Rerank：`results[i].index`, `results[i].relevance_score`, `results[i].document` |
+| **支持模型** | • 嵌入：`text-embedding-v3/v4`, `qwen3.7-text-embedding`, `qwen3-vl-embedding`<br>• 重排：默认 `qwen3-rerank`，支持自定义 `rerankModelName` | • 抽取模型隐式绑定 `project_id` 或 `plan_version`（`pro`/`lite`）<br>• `pro` 版本启用 `qwen3-rerank` 等高阶重排能力<br>• 不暴露底层嵌入模型选择权 | • Embedding：`text-embedding-v1/v2`, `multimodal-embedding-v1`<br>• Rerank：`rerank-v1/v2`<br>• **模型 ID 必须显式指定且与路径强绑定**（如 `/v1/embeddings` 只接受 embedding 模型） |
+| **API 端点** | • 管理类：`/api/v1/indices/...`, `/api/v1/documents/...`<br>• 运行时：`/api/v1/indices/knowledge/search`, `/api/v2/apps/knowledge/chat`（需 `agent_id`） | • 写入：`POST /memory_nodes/add`, `POST /memory_nodes/add-async`<br>• 检索：`POST /memory_nodes/search`, `GET /profile_schemas/{id}/user_profile`<br>• 全路径基于 `MEMORY_SERVICE_ENDPOINT`（业务空间专属域名） | • 统一入口：`https://dashscope.aliyuncs.com/api/v1/embeddings`<br>• `https://dashscope.aliyuncs.com/api/v1/rerank`<br>• **不依赖业务空间 ID，全局可用** |
+| **计费方式** | 按调用次数计费：<br>• 知识库管理（创建/更新/删除）<br>• 检索（`/search`）与问答（`/chat`）<br>• 监控接口（`/get_index_monitor`）单独计费 | 按调用次数计费（2026年8月20日起生效）：<br>• `add` / `add-async`（写入）<br>• `search`（检索）<br>• `profile_schema` 相关操作<br>• `pro` 版本费用高于 `lite` | 按调用次数计费：<br>• 每次 `/v1/embeddings` 请求计 1 次<br>• 每次 `/v1/rerank` 请求计 1 次<br>• **无版本/能力分级，单价统一** |
+| **典型场景** | • 企业知识库问答（产品文档、客服话术）<br>• 多模态内容搜索（图文混搜、音视频摘要）<br>• 基于结构化数据（表格）的自然语言查询 | • Agent 对话历史的记忆沉淀与回溯（如“用户上次说要买咖啡”）<br>• 用户画像动态构建（偏好、身份、设备等）<br>• SOP/技能流程的结构化存储与复用（如“报销审批步骤”） | • 自研 RAG 系统的向量底座（替换默认嵌入）<br>• 搜索引擎结果页（SERP）重排序<br>• 推荐系统召回后精排<br>• 对接第三方向量数据库（如 Milvus、PGVector）的前置处理 |
 
-## 各方案适用场景建议
+## 各方案的适用场景建议
 
-### ✅ 优先选用 RAG API 当：
-- 你希望**快速上线一个知识问答应用**，无需自行搭建向量库、设计检索流程、集成 LLM；
-- 你的知识源是**结构化文档（PDF/Word/Excel）或多媒体文件**，且需要开箱即用的解析、切片、多模态检索能力；
-- 你需要**企业级保障**：内置安全策略（敏感信息过滤、拒答控制）、统一监控（QPS/存储）、细粒度权限（业务空间隔离）；
-- 你接受**Agent 封装带来的抽象**，不追求对 embedding/rerank 模型的逐层调试与替换。
+- **优先选用 RAG API 当且仅当**：  
+  ✅ 你需要快速上线一个**开箱即用的知识问答系统**，且能接受百炼托管的知识库构建、切片、索引、检索、问答全流程；  
+  ✅ 业务涉及**多模态（图文/音视频）或结构化（表格）知识**，需平台原生支持；  
+  ❌ 不适合需要完全自定义向量索引结构、或必须对接私有向量数据库的深度定制场景。
 
-> 📌 *典型误用*：试图用 RAG API 替代长期记忆来存储用户个性化状态（如“用户喜欢蓝色主题”），因其知识库设计面向静态知识，缺乏 `user_id`/`project_id` 一级隔离与动态画像能力。
+- **优先选用长期记忆（New）当且仅当**：  
+  ✅ 你正在构建 **Agent 应用**，需在多次对话中**跨会话保持用户状态、行为习惯与技能记忆**；  
+  ✅ 你需要**结构化、可 Schema 化的用户画像**，并支持动态增删属性与异步抽取；  
+  ✅ 记忆需按 `project_id` 实现**多租户/多业务线隔离**；  
+  ❌ 不适合用于构建通用文档搜索引擎，因其不提供文档上传、切片、全文检索等 RAG 核心能力。
 
-### ✅ 优先选用长期记忆（New）当：
-- 你在构建**具备记忆能力的智能体（Agent）**，需要跨会话记住用户事实（`observation`）、固化操作流程（`skill`）、构建动态画像（`user_profile`）；
-- 你需要**多租户/多项目隔离**，且记忆数据需与具体 `user_id` 和 `project_ids` 强绑定；
-- 你接受**抽取逻辑黑盒化**，更关注“存什么、查什么”，而非“如何向量化、如何重排”；
-- 你计划在 2026 年 8 月后持续运营，且愿意采用 `Pro` 版本获取 `min_score` 过滤与 Rerank 支持。
+- **优先选用向量与排序（Vector & Sort）当且仅当**：  
+  ✅ 你是**系统架构师或算法工程师**，需将向量化/Rerank 能力作为**可插拔组件**集成进自研系统（如 LangChain、LlamaIndex、内部搜索中台）；  
+  ✅ 你需要**最高灵活性**：自由选择模型、控制输入输出格式、批量处理、与自有向量库协同；  
+  ✅ 你已具备向量索引、相似度计算、结果融合等工程能力，仅缺高质量嵌入与重排模型；  
+  ❌ 不适合直接用于构建终端问答产品——它不提供知识库管理、对话状态维护、Agent 编排等上层能力。
 
-> 📌 *典型误用*：用长期记忆替代向量与排序服务做通用语义搜索（如“在 10 万篇新闻中找相似报道”），因其未提供大规模向量索引（如 FAISS/Milvus）托管，仅支持基于向量相似度的轻量级检索。
-
-### ✅ 优先选用向量与排序（Vector & Sort）当：
-- 你正在**自研 RAG 框架或高级搜索系统**，需要自由组合不同 embedding 模型（如用 `text-embedding-v4` 做文档向量，`qwen3-vl-embedding` 做图片向量）与 rerank 模型（如用 `qwen3-rerank` 重排图文混合结果）；
-- 你需要**超大批量离线处理**（如每日同步 50 万份合同 PDF 的向量化），依赖异步批处理能力；
-- 你对**延迟、Token 成本、模型精度有极致要求**，需逐个测试 `qwen3.7-text-embedding` vs `text-embedding-v4` 的效果与性价比；
-- 你已有向量数据库（如 Milvus/Pinecone），仅需百炼提供高质量向量生成与重排服务。
-
-> 📌 *典型误用*：直接调用向量与排序 API 构建用户问答界面——它不提供 LLM 生成、不管理知识库、不处理对话状态，必须自行补全完整链路。
-
-## 技术选型参考（面向开发者）
+## 面向开发者的技术选型参考
 
 | 你的需求 | 推荐方案 | 关键理由 | 注意事项 |
 |----------|----------|----------|----------|
-| **从零启动一个客服知识库，2 周内上线** | ✅ RAG API | 提供端到端闭环：上传文档 → 创建知识库 → 配置 Agent → 调用问答接口。免去向量库选型、LLM 集成、安全策略开发。 | 务必提前规划 `agent_id` 生命周期；注意 `delete-index` 为不可逆操作。 |
-| **为对话机器人添加“记住用户生日”“掌握报销流程”能力** | ✅ 长期记忆（New） | 原生支持 `user_id` 隔离、`skill` 类型、异步抽取，与 Agent 运行时天然契合。`AddMemoryAsync` 可并行处理多项目记忆。 | `AddMemory` 同步接口在复杂抽取时可能超时，务必优先用 `AddMemoryAsync`；画像首次查询需等待异步完成。 |
-| **构建跨模态电商搜索（用户拍图搜同款+文字描述优化）** | ✅ 向量与排序 + 自研索引 | `
+| “我要三天内上线一个客服知识库问答页面” | ✅ RAG API | 提供 `create_index_v2` 一键导入 + `agent_id` 直接调用 `/knowledge/chat`，最小化开发量 | 注意 `agent_id` 需提前发布；监控接口限流极严（QPS=1） |
+| “我的 Agent 需记住用户每次对话中的关键事实，并在后续对话中主动引用” | ✅ 长期记忆（New） | 原生支持 `observation` 类型 + `user_id` 隔离 + 异步抽取，专为 Agent 上下文设计 | 默认使用 `efficient` 模式；高精度需 `intelligent` + `add-async`，首次画像查询需重试 |
+| “我已有 Milvus 集群，但嵌入质量差，想换百炼的 `qwen3.7-text-embedding`” | ✅ 向量与排序 | 直接调用 `/v1/embeddings` 获取向量，无缝注入自有库；无知识库绑定开销 | 注意 `text-embedding-v2` 输出 2048 维，勿硬编码 1024 |
+| “我在 RAG 流程中发现 BM25 初检结果相关性不足，想加一层百炼重排” | ✅ 向量与排序（Rerank） | `/v1/rerank` 接口简洁明确，支持 `top_k` 控制，可插入任意检索 pipeline 后 | `query` 超 512 token 会被静默截断，务必前端预处理 |
+| “我需要同时做知识库问答 + 用户画像分析 + 自定义推荐排序” | ⚠️ **组合使用** | RAG API 处理知识问答，长期记忆管理用户画像，向量与排序支撑推荐精排 | 注意三者鉴权方式一致（API Key），但域名不同（RAG/记忆为 workspace 域名，向量为 dashscope 全局域名） |
+| “我要求所有数据不出私有云，且必须审计每条知识变更” | ❌ 三者均不适用 | RAG API 与长期记忆均为百炼 SaaS 服务；向量与排序虽为 API，但模型运行在阿里云环境 | 需评估百炼私有化部署方案或切换至开源模型自建 |
+
+> **最后提醒**：  
+> - **命名一致性是高频踩坑点**：RAG API 中 `indexId`/`index_id`/`id` 混用，长期记忆中 `project_id`/`project_ids` 互斥，向量 API 中 `model` 字段必须与路径严格匹配——请始终以最新 OpenAPI Spec 为准，勿依赖参数名直觉。  
+> - **时间戳单位陷阱**：RAG 的 `get_index_monitor` 要求秒级时间戳，其余多数接口为毫秒级；长期记忆与向量 API 统一使用毫秒级。  
+> - **错误重试策略**：三者均返回标准 `429`，但退避策略略有差异——RAG 建议读取 `Retry-After` Header，长期记忆与向量推荐指数退避（1s/2s/4s）。  
+> - **未来演进提示**：长期记忆将于 2026 年 8 月起正式商业化；RAG API 的 `qwen3-rerank` 已成事实标准；向量与排序将持续扩展多模态模型族。建议在架构设计中预留模型升级与能力迁移路径。
 
 ## 被对比主题页
 

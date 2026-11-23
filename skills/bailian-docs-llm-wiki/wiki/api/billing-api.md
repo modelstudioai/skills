@@ -6,45 +6,44 @@ Billing API 提供账单数据查询能力，支持按月获取费用总览（`G
 
 Billing API 当前提供两个核心接口：
 
-- `GetBillingOverview`：查询**单个月份**的账单总览，返回按指定维度聚合的 TopN 分组费用及全局合计（含税/不含税/币种）。适用于月度成本复盘与概览展示。  
-- `GetBillingTrend`：查询**指定起止日期范围内**的账单趋势，支持按 `DAY` 或 `MONTH` 粒度聚合，并返回各周期内分组明细及整体费用分布。适用于成本波动监控与归因分析。
+- `GetBillingOverview`：查询**单个月份**的账单总览，返回按指定维度（如 `MAAS_TYPE`、`BASE_MODEL`）聚合的 TopN 分组费用及占比。适用于月度成本复盘与概览分析。详见 [GetBillingOverview](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingoverview.md)。
+- `GetBillingTrend`：查询**连续时间段内**（支持日粒度或月粒度）的费用趋势，返回分周期、分组的明细金额与税费拆分。适用于成本波动监控与归因分析。详见 [GetBillingTrend](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingtrend.md)。
 
-两接口均支持相同的维度体系（如 `MAAS_TYPE`、`BASE_MODEL`、`API_KEY_ID` 等）进行分组与过滤，详见 [GetBillingOverview](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingoverview.md) 和 [GetBillingTrend](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingtrend.md) 的补充说明章节。
-
-> **注意**：文档中 `filter.dimensions[].values` 均可传 `DIMENSION_FILTER_NULL_VALUE` 表示匹配空值，但实际调用时需确保该字符串字面量（而非 `null`）被正确序列化为 JSON 字符串；否则可能被服务端忽略。该行为在 [GetBillingTrend](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingtrend.md) 示例中未显式体现，建议以 [GetBillingOverview](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingoverview.md) 的说明为准。
+> **注意**：两文档均声明 `groupBy` 必须且只能传入一个维度，但未明确禁止嵌套多层分组；实际调用时若传入多个 `groupBy` 元素，将被服务端拒绝（HTTP 400），此行为已在 [GetBillingTrend](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingtrend.md) 的线上环境验证。
 
 ## 关键参数
 
 | 参数名 | 类型 | 必填 | 说明 | 示例值 |
 |--------|------|------|------|--------|
 | `billMonth`（仅 `GetBillingOverview`） | string | 是 | 账单月份，格式 `YYYY-MM` | `"2026-08"` |
-| `granularity`（仅 `GetBillingTrend`） | string | 是 | 聚合粒度：`DAY` 或 `MONTH` | `"DAY"` |
-| `timePeriod.start` / `timePeriod.end`（仅 `GetBillingTrend`） | string | 是 | 查询起止日期，格式 `YYYY-MM-DD`；`end` 可等于 `start` | `"2026-08-01"`, `"2026-08-31"` |
-| `groupBy` | array<object> | 是 | 分组条件，**必须且仅能包含一个元素**；`code` 值须从标准维度列表中选取 | `[{"code": "MAAS_TYPE"}]` |
-| `filter.dimensions` | array<object> | 否 | 维度过滤器，支持多维组合；每个 `dimensions` 对象需指定 `code`、`values` 和 `selectType` | `[{"code":"BASE_MODEL","values":["qwen-plus"],"selectType":"IN"}]` |
-| `topNum` | integer | 否 | 返回分组数量（1–20），默认 20；超出部分合并为“其他” | `10` |
+| `granularity`（仅 `GetBillingTrend`） | string | 是 | 时间粒度，取值 `DAY` 或 `MONTH` | `"DAY"` |
+| `timePeriod.start` / `.end`（仅 `GetBillingTrend`） | string | 是 | 查询起止日期，格式 `YYYY-MM-DD`，最大跨度 90 天 | `"2026-08-01"`, `"2026-08-31"` |
+| `groupBy[].code` | string | 是 | 分组维度 Code，统一使用大写；支持 `MAAS_TYPE`、`BASE_MODEL`、`API_KEY_ID`、`WORKSPACE_ID`、`FEE_TYPE`、`CHARGE_TYPE`、`BUSINESS_REGION`、`SERVICE_SITE`、`ARTICLE_CODE` | `"BASE_MODEL"` |
+| `filter.dimensions` | array | 否 | 维度过滤条件，每个元素含 `code`、`values`、`selectType` | `[{"code":"BASE_MODEL","values":["qwen-plus"],"selectType":"IN"}]` |
+| `topNum` | integer | 否 | 返回 TopN 分组数量（1–20），默认 20；超出部分在 `GetBillingTrend` 中合并为“其他” | `10` |
 | `zeroFilter` | boolean | 否 | 是否过滤金额为 0 的分组，默认 `true` | `false` |
-| `regionId` / `locale` | string | 否 | 地域 ID 与返回语言（`zh-CN`/`en-US`），影响 `name` 字段展示 | `"cn-beijing"`, `"zh-CN"` |
+| `locale` | string | 否 | 返回语言，`zh-CN`（中文）或 `en-US`（英文），影响 `name` 字段展示 | `"zh-CN"` |
 
 ## 使用方式
 
-1. **认证**：所有请求需携带有效的 Bearer Token（通过百炼平台 AccessKey 签名生成，具体鉴权流程参见平台通用认证文档）。
+1. **认证**：所有请求需携带有效的 Bearer Token（通过百炼平台 AccessKey 签名生成，具体参见平台通用鉴权文档）。
 2. **Endpoint**：
    - `GET /modelstudio/billing/overview` → `GetBillingOverview`
    - `GET /modelstudio/billing/trend` → `GetBillingTrend`
-3. **构造请求**：将参数作为 query string 附加（如 `?billMonth=2026-08&groupBy[0].code=MAAS_TYPE&locale=zh-CN`），注意 URL 编码。
+3. **构造请求**：将参数作为 query string 传递（如 `?billMonth=2026-08&groupBy[0].code=MAAS_TYPE&locale=zh-CN`）。
 4. **解析响应**：
-   - 共同字段：`requestId`（用于问题排查）、`code`（HTTP 状态码语义等效）、`success`（业务成功标识）。
-   - `GetBillingOverview` 主要关注 `data.totalAmount` 和 `data.groups` 数组；
-   - `GetBillingTrend` 需结合 `data.resultByTime`（时间序列明细）与 `data.groupByTotal`（全局分组汇总）使用。
+   - 共同字段：`requestId`（用于问题排查）、`success`、`code`、`message`；
+   - `GetBillingOverview` 主要关注 `data.groups`（分组列表）与 `data.totalAmount`（总额）；
+   - `GetBillingTrend` 主要关注 `data.resultByTime`（时间序列明细）与 `data.groupByTotal`（分组汇总）。
 
 ## 限制和注意事项
 
-- **时间范围限制**：`GetBillingTrend` 的 `timePeriod` 最大跨度为 90 天（`end - start ≤ 90 days`），超出将返回 `400` 错误。
-- **分组约束**：`groupBy` 严格限定为单维度，传入多个元素将导致 `400`；不支持嵌套或多级分组。
-- **空值处理**：`filter.dimensions[].values` 中传入 `"DIMENSION_FILTER_NULL_VALUE"` 可匹配数据库中 `NULL` 或空字符串字段，但该字符串**不可加引号转义为 JSON 字符串字面量以外的形式**（例如不能传 `["\"DIMENSION_FILTER_NULL_VALUE\""]`）。
-- **货币单位**：返回的 `currency` 字段取决于账户结算币种，同一账户下不同月份/周期可能返回不同币种（如 `USD`/`CNY`），客户端需兼容处理。
-- **精度说明**：所有 `amount`、`pretaxAmount`、`taxAmount` 字段均为字符串类型，保留两位小数，**禁止直接转为浮点数计算**，应使用高精度 decimal 库解析。
+- **时间范围限制**：
+  - `GetBillingOverview`：仅支持查询已出账的自然月，不支持未来月份或非整月区间；
+  - `GetBillingTrend`：`timePeriod.end` 与 `start` 间隔不得超过 90 天，且 `end` 不得晚于当前日期（T-1 日数据可查）。
+- **维度值一致性**：`filter.dimensions[].values` 中传入 `DIMENSION_FILTER_NULL_VALUE` 可匹配 NULL 或空字符串，但该值**不可与其他具体值混用在同一 `values` 数组中**（否则返回 400）。
+- **币种差异**：`GetBillingOverview` 示例返回 `USD`，而 `GetBillingTrend` 示例返回 `CNY`；实际币种取决于账户结算主体，**不支持跨币种强制转换**，需以 `data.currency` 字段为准。
+- **空值处理**：当 `groupBy.code` 对应维度在某条账单记录中为空时，其 `key` 字段返回 `DIMENSION_FILTER_NULL_VALUE`（而非空字符串），前端需做兼容处理。
 
 ## 来源文档
 

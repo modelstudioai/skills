@@ -1,0 +1,65 @@
+{
+  "name": "Qwen-Audio-3.1-Live",
+  "description": "千问实时语音模型服务（Qwen-Audio-3.1-Live）是一款面向实时通话的下一代实时双工语音模型服务。服务采用前台语音模型与后台推理模型协同的架构，并支持按业务场景灵活配置前后台模型，兼顾复杂问题处理能力与自然的双工对话体验：前台模型负责理解用户意图、自然应答和把握发声时机；后台模型负责复杂推理、任务规划与工具调用。后台任务执行期间，前台仍可与用户持续交流，并将任务进展和结果自然融入对话，支持边听、边想、边说、边做。\n\n服务提供两种任务协作模式：Client 模式下，客户应用负责组织对话上下文、调用自有 Agent 或业务流程，并将处理结果交还给前台模型；Responses 模式下，服务根据配置调用后台推理模型，传递所需对话上下文，并将后台结果接入实时对话。两种模式下，客户都可以通过 Function Call 扩展知识查询、订单办理、行程规划等业务工具，并按需配置模型、交互提示词和工具能力，方便客户从实时语音对话逐步扩展到复杂业务执行，让语音助手不仅会聊天，也能把事情办下去。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Text",
+          "Audio"
+        ],
+        "request_modality": [
+          "Text",
+          "Audio"
+        ]
+      },
+      "description": "千问实时语音模型服务（Qwen-Audio-3.1-Live）是一款面向实时通话的下一代实时双工语音模型服务。服务采用前台语音模型与后台推理模型协同的架构，并支持按业务场景灵活配置前后台模型，兼顾复杂问题处理能力与自然的双工对话体验：前台模型负责理解用户意图、自然应答和把握发声时机；后台模型负责复杂推理、任务规划与工具调用。后台任务执行期间，前台仍可与用户持续交流，并将任务进展和结果自然融入对话，支持边听、边想、边说、边做。\n\n服务提供两种任务协作模式：Client 模式下，客户应用负责组织对话上下文、调用自有 Agent 或业务流程，并将处理结果交还给前台模型；Responses 模式下，服务根据配置调用后台推理模型，传递所需对话上下文，并将后台结果接入实时对话。两种模式下，客户都可以通过 Function Call 扩展知识查询、订单办理、行程规划等业务工具，并按需配置模型、交互提示词和工具能力，方便客户从实时语音对话逐步扩展到复杂业务执行，让语音助手不仅会聊天，也能把事情办下去。",
+      "features": [],
+      "provider": "qwen",
+      "model": "qwen-audio-3.1-live",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.00333",
+          "ntmItemCode": "sfm_inferenceFunAudio_public_cn",
+          "timeBand": "standard",
+          "ntmAmountType": "duration",
+          "type": "content_duration",
+          "priceName": "音频时长"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "usage_limit": 100000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 60,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        }
+      },
+      "priceTimeBands": [
+        "standard"
+      ],
+      "capabilities": [
+        "Realtime-Chatting"
+      ],
+      "versionTag": "MAJOR",
+      "equivalentSnapshot": "",
+      "maxOutputTokens": 65536,
+      "latestOnlineAt": "2026-11-23T07:08:07.408+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen-Audio-3.1-Live",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-audio-3-1-live",
+      "category": "Audio",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# 安装依赖：python -m pip install \"websockets>=15\"\n# 准备录音：ffmpeg -i input.wav -ar 16000 -ac 1 -f s16le input.pcm\n# 设置 DASHSCOPE_API_KEY，再填写同地域的 WORKSPACE_ID。\n# 将代码保存为 live_quickstart.py。运行时指定 cn-beijing 或 ap-southeast-1。\n# 示例：python live_quickstart.py input.pcm cn-beijing\n# 回复音频保存为 reply.wav。\n\nimport base64\nimport json\nimport os\nimport sys\nimport time\nimport uuid\nimport wave\nfrom pathlib import Path\n\nfrom websockets.sync.client import connect\n\nWORKSPACE_ID = \"WorkspaceId\"\nSESSION_MODEL = \"qwen-audio-4.0-realtime-preview\"\nREGIONS = (\"cn-beijing\", \"ap-southeast-1\")\nREPLY_TIMEOUT_SECONDS = 12\n\n\ndef main():\n    if len(sys.argv) != 3 or sys.argv[2] not in REGIONS:\n        raise SystemExit(\"Usage: python live_quickstart.py input.pcm {cn-beijing|ap-southeast-1}\")\n    region = sys.argv[2]\n    url = (\n        f\"wss://{WORKSPACE_ID}.{region}.maas.aliyuncs.com/api-ws/v1/realtime\"\n        \"?model=qwen-audio-3.1-live\"\n    )\n    audio = Path(sys.argv[1]).read_bytes()\n    if not audio or len(audio) % 2:\n        raise ValueError(\"请提供非空的 16 位 PCM 文件\")\n    headers = {\"Authorization\": f\"Bearer {os.environ['DASHSCOPE_API_KEY']}\"}\n    with connect(\n        url,\n        additional_headers=headers,\n        close_timeout=2,\n    ) as ws:\n        def send(event_type, **payload):\n            ws.send(json.dumps({\n                \"type\": event_type,\n                \"event_id\": uuid.uuid4().hex,\n                **payload,\n            }))\n\n        session = {\n            \"model\": SESSION_MODEL,\n            \"modalities\": [\"text\", \"audio\"],\n            \"turn_detection\": {\"type\": \"duplex\"},\n            \"delegation\": {\"type\": \"client\"},\n        }\n        send(\"session.update\", session=session)\n\n        deadline = time.monotonic() + 20\n        while True:\n            event = json.loads(ws.recv(timeout=max(0, deadline - time.monotonic())))\n            if event[\"type\"] == \"session.updated\":\n                break\n            if event[\"type\"] in (\"error\", \"session.closed\"):\n                raise RuntimeError(event)\n\n        audio += bytes(32000 * 3)\n        with wave.open(\"reply.wav\", \"wb\") as reply:\n            reply.setparams((1, 2, 24000, 0, \"NONE\", \"not compressed\"))\n            start = time.monotonic()\n            offset = 0\n            deadline = start + len(audio) / 32000 + REPLY_TIMEOUT_SECONDS\n            while time.monotonic() < deadline:\n                if offset < len(audio) and time.monotonic() >= start + offset / 32000:\n                    frame = audio[offset:offset + 640]\n                    send(\"session.input_audio.append\",\n                         audio=base64.b64encode(frame).decode(\"ascii\"))\n                    offset += len(frame)\n                try:\n                    event = json.loads(ws.recv(timeout=0.02 if offset < len(audio) else 0.25))\n                except TimeoutError:\n                    continue\n                event_type = event[\"type\"]\n                if event_type == \"session.output_audio.delta\":\n                    reply.writeframesraw(base64.b64decode(event[\"delta\"]))\n                elif event_type == \"session.output_transcript.delta\":\n                    print(event[\"delta\"], end=\"\", flush=True)\n                elif event_type == \"session.closed\":\n                    break\n                elif event_type == \"error\":\n                    raise RuntimeError(event[\"error\"])\n            else:\n                send(\"session.close\")\n                close_deadline = time.monotonic() + 2\n                while time.monotonic() < close_deadline:\n                    try:\n                        event = json.loads(ws.recv(timeout=max(0, close_deadline - time.monotonic())))\n                    except TimeoutError:\n                        break\n                    if event[\"type\"] == \"session.closed\":\n                        break\n            if not reply.getnframes():\n                raise RuntimeError(\"未收到语音回复\")\n\n\nmain()\n",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-audio-live"
+          }
+        }
+      }
+    }
+  ]
+}

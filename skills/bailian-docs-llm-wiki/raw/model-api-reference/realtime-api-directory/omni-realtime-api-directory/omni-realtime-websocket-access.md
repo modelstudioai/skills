@@ -4,7 +4,7 @@ Qwen-Omni-Realtime WebSocket 接入
 
 ## 适用范围
 
-本文面向 Qwen-Omni-Realtime。示例模型为 `qwen3.8-omni-flash-realtime`，`qwen3.5-omni-plus-realtime`、`qwen3.5-omni-flash-realtime` 的配置参见事件参考。历史型号 `qwen3-omni-flash-realtime-2025-09-15` 的参数参见 [Python SDK](raw/_short/realtime-websocket-python-sdk-qwen-omni-realtime-b04c23b57a9c2f51.md)。
+本文面向 Qwen-Omni-Realtime。示例模型为 `qwen3.8-omni-flash-realtime`，`qwen3.5-omni-plus-realtime`、`qwen3.5-omni-flash-realtime` 的配置参见事件参考。历史型号 `qwen3-omni-flash-realtime-2025-09-15` 的参数参见 [Python SDK](raw/_short/realtime-websocket-python-sdk-qwen-omni-realtime-e50924065f85dda8.md)。
 
 -   使用所选地域和业务空间对应的 [API Key](raw/model-api-reference/preparations/get-api-key.md) 与 [API Host](https://bailian.console.aliyun.com/cn-beijing/settings/workspace)（不含协议和路径）。
 -   北京域名：`{WorkspaceId}.cn-beijing.maas.aliyuncs.com`。
@@ -16,7 +16,7 @@ Qwen-Omni-Realtime WebSocket 接入
 
 WebSocket`wss://WorkspaceId.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime?model=qwen3.8-omni-flash-realtime`
 
-`qwen3.8-omni-flash-realtime` 必须使用业务空间专属域名。旧型号可继续使用原域名：北京为 `wss://dashscope.aliyuncs.com`，新加坡为 `wss://dashscope-intl.aliyuncs.com`。详情参见 [Python SDK](raw/_short/realtime-websocket-python-sdk-qwen-omni-realtime-b04c23b57a9c2f51.md)。
+`qwen3.8-omni-flash-realtime` 必须使用业务空间专属域名。旧型号可继续使用原域名：北京为 `wss://dashscope.aliyuncs.com`，新加坡为 `wss://dashscope-intl.aliyuncs.com`。详情参见 [Python SDK](raw/_short/realtime-websocket-python-sdk-qwen-omni-realtime-e50924065f85dda8.md)。
 
 在 WebSocket 握手请求头中设置 `Authorization: Bearer <API_KEY>`。不要把长期 API Key 放入浏览器或移动端。
 
@@ -206,6 +206,6 @@ MCP 工具数
 
 ## SDK 与参考
 
--   [Python SDK](raw/_short/realtime-websocket-python-sdk-qwen-omni-realtime-b04c23b57a9c2f51.md)
--   [Java SDK](raw/_short/omni-realtime-java-sdk-91c6c46e0976cc89.md)
--   [C# SDK](raw/_short/omni-realtime-csharp-sdk-c4c97b27dd2975f7.md)
+-   [Python SDK](raw/_short/realtime-websocket-python-sdk-qwen-omni-realtime-e50924065f85dda8.md)
+-   [Java SDK](raw/_short/omni-realtime-java-sdk-13dfd16f685872d7.md)
+-   [C# SDK](raw/_short/omni-realtime-csharp-sdk-f5e5dc6601296458.md)

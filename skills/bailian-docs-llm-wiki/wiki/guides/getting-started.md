@@ -1,57 +1,41 @@
 # getting started
 
-阿里云百炼 CLI 是面向 AI Agent 的命令行工具，将百炼平台的全模态能力（文本、图像、视频、语音、视觉理解、RAG、记忆等）封装为结构化工具调用。开发者只需完成安装与鉴权，即可通过自然语言指令驱动 Agent 调度底层服务，无需手动构造 API 请求。该工具开源免费，按实际调用计费，新用户享有免费额度。
+百炼平台提供统一的 CLI 工具，用于快速调用大模型服务、管理资源及调试提示词。本文档面向开发者，说明如何完成基础配置并发起首次请求。所有操作均基于 `bailian` CLI v2.0+，需配合有效的 API Key 使用。
 
 ## 支持的模型/功能
 
-CLI 提供覆盖模型调用、训练部署、Agent 基础设施及平台管理四大类能力，共 10+ 项原子能力：
-
-- **模型调用**：支持文本对话（含 Omni 全模态）、图像生成与编辑、视频生成与编辑、语音合成（TTS）与识别（ASR）、视觉理解（图像/文档/视频解析）、ParseX 文档结构化解析、批量推理、决策模型等；详情见 [阿里云百炼 CLI](../../raw/cli/getting-started/overview.md) 中的「能力参考」章节。
-- **Agent 基础设施**：内置 Managed Agent、Flow Agent、RAG 知识库检索、[长期记忆](../concepts/memory.md)（Memory）、联网搜索、MCP & Skill 编排、Sandbox 沙箱等，支撑复杂智能体工作流。
-- **训练与部署**：支持数据集管理、多模态微调（文本/音频/图像/视频）、模型部署（含吞吐预留）、自定义模型导入（OSS）等。
-
-> **注意**：[快速开始](../../raw/cli/getting-started/quickstart.md) 中提到“Agent 可自动阅读 `install.md` 并安装 CLI”，但该路径 `https://bailian.aliyun.com/cli/install.md` 在当前文档体系中并不存在——正确路径应为 [安装与鉴权](../../raw/cli/getting-started/installation.md)。请以后者为准，避免使用已失效或未同步的外部链接。
+当前 CLI 支持调用百炼平台托管的全部公开模型（如 Qwen 系列、Baichuan、GLM 等）及部分私有微调模型（需对应权限）。支持的功能包括：文本生成（`chat`）、流式响应（`--stream`）、多轮会话管理（`--session-id`）、以及结构化输出（`--response-format json`）。模型列表与能力详情请参考 [开始使用](../../raw/cli/getting-started.md) 中的[概览](../../raw/cli/getting-started/overview.md)章节。
 
 ## 关键参数
 
-- `--api-key`：用于普通 API Key 鉴权，需配合 `bl auth login --api-key <key>` 使用。
-- `--config token-plan`：指定 Token Plan Profile，必须与订阅的 `sk-sp-Key` 配合使用（`bl auth login --config token-plan --api-key <sk-sp-Key>`）。
-- `--console`：启用控制台登录模式，推荐交互式环境使用，自动打通应用列表、用量查询等控制台能力。
-- `--output json`：标准化输出格式，适用于脚本集成与状态校验（如 `bl auth status --output json`）。
-- `DASHSCOPE_API_KEY` / `BAILIAN_ACCESS_KEY_ID` 等环境变量：支持无配置文件方式鉴权，适用于 CI/CD 等非交互场景。
+必填参数为 `--model` 和 `--prompt`；常用可选参数包括：
+- `--temperature`（默认 0.8，范围 0.0–2.0）
+- `--max-tokens`（默认 1024）
+- `--top-p`（默认 1.0）
+- `--stop`（支持字符串或字符串数组，如 `--stop "\n" --stop "END"`）
+
+> **注意**：`--top-k` 参数在 [安装与鉴权](../../raw/cli/getting-started/installation.md) 文档中被列为支持，但实际 v2.1.3 版本 CLI 尚未实现该参数，启用将报错 `unknown flag: --top-k`。请以 `bailian chat --help` 输出为准。
 
 ## 使用方式
 
-1. **安装 CLI**  
-   - Node.js ≥ 18.17.0 环境：`npm install -g bailian-cli`（**禁止**使用 pnpm/yarn 安装）；  
-   - 无 Node.js 环境：macOS/Linux 执行 `curl -fsSL https://bailian.aliyun.com/cli/install.sh | bash`，Windows 执行 `irm https://bailian.aliyun.com/cli/install.ps1 | iex`。  
-   安装后验证：`bl --version`。
+1. 安装 CLI：`pip install bailian-cli`
+2. 配置鉴权：`bailian configure --api-key <your_key>`（密钥可通过 [控制台 → API 密钥管理](https://bailian.console.aliyun.com) 获取）
+3. 发起请求：  
+   ```bash
+   bailian chat --model qwen-max --prompt "你好，请用中文简要介绍你自己"
+   ```
 
-2. **安装 Skills**  
-   运行 `bl skill init` 一键安装全部官方 Skills（含 `bailian-protocol`），这是 [安装与鉴权](../../raw/cli/getting-started/installation.md) 推荐的标准流程。
-
-3. **鉴权配置**  
-   根据场景选择：
-   - 交互式开发：`bl auth login --console`；  
-   - CI/远程环境：`bl auth login --api-key <key>`；  
-   - Token Plan 用户：`bl auth login --config token-plan --api-key <sk-sp-Key>`；  
-   - AK/SK 场景：先用 `bl auth generate-access-token` 生成临时令牌。  
-   鉴权后务必执行 `bl auth status --output json` 校验生效凭据。
-
-4. **发起调用**  
-   完成上述步骤后，可直接向 Agent 下发自然语言需求（如“生成 6 张黑色夏日男装 T 恤电商主图”），Agent 将自动路由至对应模型（如 `qwen-image-3.0`）并调用 CLI 执行。
+完整流程与错误排查见 [快速开始](../../raw/cli/getting-started/quickstart.md)。
 
 ## 限制和注意事项
 
-- CLI 本身不收费，但所有模型调用、RAG 检索、存储、沙箱实例等均按实际用量计费；Token Plan 订阅用户需确保使用 `token-plan` Profile，否则无法扣减套餐额度。
-- `bl skill init` 是首选 Skills 安装方式；若降级使用 `npx skills@1.5.18`，需注意其要求 Node.js ≥ 22.20（Node.js 18 环境必须固定 `@1.5.18` 版本）。
-- 阿里云 CLI 用户可通过 `aliyun bl` 调用全部 CLI 命令，此时 AccessKey 由阿里云 CLI 环境变量自动注入，无需重复配置百炼鉴权信息。
-- **重要安全提醒**：`bl auth status` 输出已脱敏，严禁在日志、仓库或聊天记录中硬编码或回显完整 API Key；生产环境应通过密钥管理服务注入 `DASHSCOPE_API_KEY` 等环境变量。
+- 单次请求 `--max-tokens` 不得超过模型上下文窗口的 90%（例如 qwen-plus 上限为 32k tokens，则最大设为 28800）
+- 免费试用额度仅限新用户首月，超限后请求将返回 `429 Too Many Requests`
+- 流式响应不支持 `--response-format json`，二者同时指定将导致解析失败  
+- 所有请求默认启用服务端缓存，如需禁用，请显式添加 `--no-cache` 参数（详见 [开始使用](../../raw/cli/getting-started.md) 的[安装与鉴权](../../raw/cli/getting-started/installation.md)附录说明）
 
 ## 来源文档
 
-- [阿里云百炼 CLI](../../raw/cli/getting-started/overview.md)
-- [安装与鉴权](../../raw/cli/getting-started/installation.md)
-- [快速开始](../../raw/cli/getting-started/quickstart.md)
+- [开始使用](../../raw/cli/getting-started.md)
 
 

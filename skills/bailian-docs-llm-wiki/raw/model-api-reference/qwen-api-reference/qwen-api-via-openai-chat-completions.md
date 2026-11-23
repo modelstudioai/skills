@@ -140,7 +140,7 @@ User Message`object`**（必选）**
 
 **detail** `string` （可选）
 
-图片处理精度。适用于 `qwen4-max`，默认值为 `high`。
+图片处理精度。自 Qwen4 起，Max、Plus 和 Flash 模型支持此参数。默认值为 `high`。
 
 未传入 `max_pixels` 时：
 
@@ -173,6 +173,8 @@ Chat Completions 可在 `image_url` 内或与 `image_url` 同级传入 `detail`�
 输入音频的格式，如`mp3`、`wav`等。
 
 **video**`array`
+
+Qwen4-Max、Qwen3.8、Qwen3.7、Qwen3.6、Qwen3.5 系列以公网 URL 图像列表传入视频时，支持 4–8000 张图片；以 Base64 图像列表传入时，最多 250 张图片。
 
 输入的**图片列表形式的视频信息**。当`type`为`video`时是必选参数。使用方法请参见：[视频理解（Qwen-VL、QVQ）](https://help.aliyun.com/zh/model-studio/vision#80dbf6ca8fh6s)或[视频理解（Qwen-Omni）](raw/model-user-guide/model-experience/omni-modal/qwen-omni.md)。
 
@@ -271,9 +273,9 @@ fps有两个功能：
     
     同时设置 `min_pixels` 和 `max_pixels` 时，`max_pixels` 不得小于 `min_pixels`。
     
-    -   `qwen3-vl-plus`、`qwen3.5-122b-a10b`、`qwen3.5-27b`、`qwen3.5-35b-a3b`、`qwen3.5-397b-a17b`、`qwen3.5-flash`、`qwen3.5-flash-2026-02-23`、`qwen3.5-omni-flash`、`qwen3.5-omni-flash-2026-03-15`、`qwen3.5-omni-plus`、`qwen3.5-omni-plus-2026-03-15`、`qwen3.5-plus`、`qwen3.5-plus-2026-02-15`、`qwen3.5-plus-2026-04-20`、`qwen3.6-27b`、`qwen3.6-35b-a3b`、`qwen3.6-flash`、`qwen3.6-flash-2026-04-16`、`qwen3.6-plus`、`qwen3.6-plus-2026-04-02`、`qwen3.7-flash`、`qwen3.7-flash-2026-07-15`、`qwen3.7-max-2026-06-08`、`qwen3.7-plus`、`qwen3.7-plus-2026-05-26`、`qwen3.8-27b`、`qwen3.8-flash`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-omni-flash`：默认值为 `655360`，最大值为 `2048000`。
+    -   `qwen4-max`、`qwen3-vl-plus`、`qwen3.5-122b-a10b`、`qwen3.5-27b`、`qwen3.5-35b-a3b`、`qwen3.5-397b-a17b`、`qwen3.5-flash`、`qwen3.5-flash-2026-02-23`、`qwen3.5-omni-flash`、`qwen3.5-omni-flash-2026-03-15`、`qwen3.5-omni-plus`、`qwen3.5-omni-plus-2026-03-15`、`qwen3.5-plus`、`qwen3.5-plus-2026-02-15`、`qwen3.5-plus-2026-04-20`、`qwen3.6-27b`、`qwen3.6-35b-a3b`、`qwen3.6-flash`、`qwen3.6-flash-2026-04-16`、`qwen3.6-plus`、`qwen3.6-plus-2026-04-02`、`qwen3.7-flash`、`qwen3.7-flash-2026-07-15`、`qwen3.7-max-2026-06-08`、`qwen3.7-plus`、`qwen3.7-plus-2026-05-26`、`qwen3.8-27b`、`qwen3.8-flash`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-omni-flash`：默认值为 `655360`，最大值为 `2048000`。
     -   其他`Qwen3-VL`开源模型：默认值`655360`，最大值为`786432`
-    -   `qwen4-max`、`qwen3-omni-flash`：默认值为 `655360`，最大值为 `786432`。
+    -   `qwen3-omni-flash`：默认值为 `655360`，最大值为 `786432`。
     -   `kimi-k2.7-code`、`kimi-k2.6`、`kimi-k2.5`：最大值为 `1568000`。
     -   `Qwen2.5-VL`开源系列及`QVQ`系列模型：默认值为`501760`，最大值为`602112`
 

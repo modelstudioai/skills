@@ -6,7 +6,7 @@
 
 ## SDK 获取
 
-AOQ Client SDK 及音频 Opus 插件请参见 [SDK 下载](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/realtime-sdk-download.md)。本文的音频传输示例使用 Opus，需要同时导入对应平台的插件。模型支持的地域、语种、计费和限流以[实时语音/音视频翻译模型说明](raw/model-user-guide/model-experience/omni-modal/qwen3-5-livetranslate-flash-realtime.md)为准。
+AOQ Client SDK 及音频 Opus 插件请参见 [SDK 下载](raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-sdk-download.md)。本文的音频传输示例使用 Opus，需要同时导入对应平台的插件。模型支持的地域、语种、计费和限流以[实时语音/音视频翻译模型说明](raw/model-user-guide/model-experience/omni-modal/qwen3-5-livetranslate-flash-realtime.md)为准。
 
 ## SDK 导入
 
@@ -428,6 +428,6 @@ AoqClientEngine.destroy();
 -   [客户端事件](raw/model-api-reference/realtime-api-directory/livetranslate-realtime-api-directory/live-translator-client-events.md)
 -   [服务端事件](raw/model-api-reference/realtime-api-directory/livetranslate-realtime-api-directory/live-translator-server-events.md)
 -   [AOQ 接入](raw/model-api-reference/realtime-api-directory/livetranslate-realtime-api-directory/livetranslate-realtime-aoq-access.md)
--   [AOQ Client SDK 简介](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/realtime-api-aoq-sdk-desc.md)
--   [SDK 下载](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/realtime-sdk-download.md)
+-   [AOQ Client SDK 简介](raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-api-aoq-sdk-desc.md)
+-   [SDK 下载](raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-sdk-download.md)
 -   [通过 AOQ 使用 qwen3.8-omni-flash-realtime 实现实时通话](raw/model-user-guide/use-cases/realtime-audio-video-integration/best-practice-aoq-omni-realtime.md)

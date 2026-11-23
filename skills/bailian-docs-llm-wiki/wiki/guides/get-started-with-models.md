@@ -1,36 +1,46 @@
 # get started with models
 
-本文档介绍如何快速开始使用百炼平台的模型服务，涵盖模型选择、调用方式、关键参数配置及常见限制。开发者可通过控制台或 API 接入预置大模型，无需自行部署基础设施。所有模型均通过统一的 `/v1/chat/completions` 等标准接口调用。
+本文档指导开发者快速接入百炼平台的模型服务，涵盖模型选择、调用方式、关键参数配置及常见限制。所有模型均通过统一 API 接口调用，支持同步推理与流式响应。建议首次使用前通读 [开始使用](../../raw/model-user-guide/get-started-with-models.md) 全文，并重点关注地域可用性与限流策略。
 
-## 支持的模型与功能
+## 支持的模型与核心功能
 
-百炼平台提供多类大语言模型（如 `qwen4-max`、`qwen2.5-72b`、`qwen-audio` 等）及多模态模型，覆盖文本生成、代码补全、语音理解、图像描述等场景。完整模型列表见 [模型列表](../../raw/model-user-guide/get-started-with-models/model-studio-model-list.md)。部分模型支持流式响应、[函数调用](../concepts/function-calling.md)（function calling）和自定义 system prompt，具体能力以各模型文档为准，例如 [qwen4-max](../../raw/model-user-guide/get-started-with-models/qwen4-max.md) 明确支持 tool choice 和 structured output。
-
-> **注意**：[选择模型](../../raw/model-user-guide/get-started-with-models/models.md) 文档中列出的部分旧版模型（如 `qwen1.5-14b-chat`）已进入维护期，新项目推荐优先选用 `qwen2.5` 或 `qwen4` 系列；该文档未同步标注弃用状态，实际选型请以 [模型服务概览](../../raw/model-user-guide/get-started-with-models/what-is-model-studio.md) 中的“当前推荐”标识为准。
+- 当前平台提供多类大语言模型（如 `qwen4-max`、`qwen2.5-72b`、`qwen-audio` 等）及多模态模型，完整列表见 [模型列表](../../raw/model-user-guide/get-started-with-models/model-studio-model-list.md)  
+- 模型能力覆盖文本生成、代码补全、结构化输出（JSON Schema）、工具调用（Function Calling）、长上下文（最高 1M tokens）及音视频理解等  
+- 所有模型均集成在 [模型服务概览](../../raw/model-user-guide/get-started-with-models/what-is-model-studio.md) 定义的统一抽象层中，无需为不同模型适配独立 SDK
 
 ## 关键参数
 
-调用模型时需指定以下必需参数：
-- `model`: 模型 ID（如 `"qwen4-max"`），必须与 [模型列表](../../raw/model-user-guide/get-started-with-models/model-studio-model-list.md) 中的名称完全一致；
-- `messages`: 对话历史数组，格式为 `[{ "role": "user", "content": "..." }]`；
-- `temperature` / `top_p`: 控制输出随机性，取值范围均为 `0.0–1.0`（默认 `0.8`）；
-- `max_tokens`: 限制响应最大 token 数，不同模型有独立上限（详见各模型文档）。
+| 参数名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| `model` | string | 是 | 模型 ID，必须与 [模型列表](../../raw/model-user-guide/get-started-with-models/model-studio-model-list.md) 中一致（如 `qwen4-max`） |
+| `input.messages` | array | 是 | 对话消息数组，格式为 `[{ "role": "user", "content": "..." }]`；`content` 可为字符串或含 `image_url`/`audio_url` 的对象 |
+| `parameters.temperature` | number | 否 | 采样温度，默认 `0.8`；设为 `0` 启用确定性解码（推荐用于结构化输出） |
+| `parameters.max_tokens` | integer | 否 | 最大输出 token 数，上限取决于模型（如 `qwen4-max` 为 8192） |
+
+> **注意**：`qwen4-max` 的实际最大输出长度在 [qwen4-max](../../raw/model-user-guide/get-started-with-models/qwen4-max.md) 中标注为 32768，但当前 API 实际限制仍为 8192 —— 请以 [错误码](../../raw/model-user-guide/get-started-with-models/error-code-start.md) 中 `InvalidParameter.MaxTokensExceeded` 的触发阈值为准。
 
 ## 使用方式
 
-1. **API 调用**：使用 HTTPS POST 请求至 `https://dashscope.aliyuncs.com/api/v1/chat/completions`，携带 `Authorization: Bearer <api_key>` 头；
-2. **SDK 调用**：推荐使用官方 Python SDK（`dashscope` v1.20.0+），示例：
-   ```python
-   from dashscope import Generation
-   resp = Generation.call(model='qwen4-max', messages=[{'role':'user','content':'你好'}])
+1. **认证**：使用 `X-DashScope-Access-Token` 请求头传入 API Key（需在控制台开通模型权限）  
+2. **端点**：`POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation`（文本模型）或 `/services/aigc/multimodal-generation/generation`（多模态）  
+3. **示例请求体**：
+   ```json
+   {
+     "model": "qwen4-max",
+     "input": {
+       "messages": [{"role": "user", "content": "用 Python 写一个快速排序"}]
+     },
+     "parameters": {"temperature": 0.1, "max_tokens": 1024}
+   }
    ```
-3. **控制台调试**：登录百炼控制台 → 进入「Model Studio」→ 选择模型 → 使用右侧「API 调试」面板实时测试。
+4. 响应结构统一，结果位于 `output.text`（文本）或 `output.choices[0].message.content`（兼容 OpenAI 格式）
 
 ## 限制和注意事项
 
-- **地域限制**：模型服务仅在杭州、上海、北京、深圳、新加坡等指定地域可用，详情参见 [地域和服务部署范围](../../raw/model-user-guide/get-started-with-models/regions.md)；
-- **限流策略**：默认 QPS 为 5，TPM（Tokens Per Minute）为 10,000，超出将返回 `429 Too Many Requests`；具体配额与升降级规则见 [限流](../../raw/model-user-guide/get-started-with-models/rate-limit.md)；
-- **错误处理**：常见错误码（如 `InvalidParameter`、`ResourceNotFound`）含义及修复建议汇总于 [错误码](../../raw/model-user-guide/get-started-with-models/error-code-start.md)，建议在生产环境集成重试与降级逻辑。
+- **地域限制**：模型服务仅在 [地域和服务部署范围](../../raw/model-user-guide/get-started-with-models/regions.md) 列出的 Region 可用（如 `cn-beijing`, `ap-southeast-1`），跨 Region 调用将返回 `RegionNotSupported` 错误  
+- **限流策略**：默认 QPS 为 5，TPM（Token Per Minute）为 10000，具体配额见 [限流](../../raw/model-user-guide/get-started-with-models/rate-limit.md)；超出后返回 `RateLimitExceeded` 错误码  
+- **输入长度**：单次请求总 token（prompt + completion）不得超过模型 context window；超长输入将被截断且不报错，建议客户端预估并分片处理  
+- **调试建议**：首次调用失败时，优先检查 `X-DashScope-Access-Token` 权限、`model` 字符串拼写、以及是否在支持地域内 —— 这些是 [开始使用](../../raw/model-user-guide/get-started-with-models.md) 中强调的三大高频问题
 
 ## 来源文档
 

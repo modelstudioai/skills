@@ -1,51 +1,48 @@
-# Token 计量与消耗
+# Token 计量与计费
 
-Token 计量与消耗是百炼平台对模型调用资源进行精细化计费与成本控制的核心机制，指系统依据实际输入（Input）、输出（Output）及缓存（Cached）Token 数量，结合模型单价与使用场景，实时统计并扣减对应资源额度（如 Credits 或按量费用）的过程。该机制贯穿所有模型调用路径，是开发者评估、监控和优化 AI 应用成本的底层依据。
+Token 计量与计费是百炼平台统一、精确的资源消耗度量与成本核算机制：所有模型推理类服务（含文本生成、嵌入、重排序、决策判断等）均以 UTF-8 字节级编码统计实际输入与输出 Token 数量，并据此按千 Token（kToken）为单位进行实时扣费或额度抵扣。该机制是平台按量计费体系的核心基础，贯穿免费额度、Token Plan、吞吐预留、Agent 组件化计费等全部成本场景。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **模型 API 调用（含 Token Plan 与按量模式）**：每次 `chat/completions` 或多模态请求均按 `input_tokens + output_tokens + cached_tokens` 三部分计量；其中 `cached_tokens` 指模型复用历史上下文缓存所节省的计算量，但按平台规则仍计入消耗（如 `qwen3.6-plus` 示例中缓存 Token 占比超 80%）。Token Plan 使用 Credits 抵扣，按量模式直接计费。
-
-- **智能体（Agent）与工作流（Flow Agent）**：Token 消耗发生在每个“计费节点”——包括大模型节点、Rerank 排序节点、知识库问答模型、记忆库检索模型等。多个知识库并行检索时，Token 消耗量按知识库数量线性叠加；Rerank 开启与否直接影响排序阶段的 Token 用量（`top_k` 越大，排序 Token 越高）。
-
-- **ParseX 文档解析**：图文解析按页计量（每页隐含文本 Token），音视频按秒转为文本/特征后计量；字段抽取若复用解析结果，可跳过重复 Token 解析，显著降低 Token 消耗。
-
-- **安全高级防护**：内容检测服务将输入内容按 Token 量换算为 Credits（1 Credit ≈ 数十至数百 Token，依模型而异），每日每席位 300 Credits 免费额度即基于此换算逻辑。
-
-- **模型监控与用量分析**：`模型消耗 TotalToken 数` 是核心用量指标，支持分钟级聚合与告警，用于识别异常调用、定位高消耗节点（如未设 `max_tokens` 的长输出、未关 Rerank 的高频检索），但注意：监控数据延迟约 1 分钟，**不作为计费依据**，最终以账单为准。
+- **通用模型调用（/v1/chat/completions 等）**：输入 Prompt（含 system/user/assistant 消息）与输出 response 的所有字符均按 UTF-8 编码逐字节解析为 Token，系统自动四舍五入到整数 Token 后计入用量；例如 `qwen-plus` 调用一次含 1234 输入 + 567 输出，即消耗 1801 Token。
+- **Token Plan 场景**：必须显式携带 `x-bailian-token-plan-id` 请求头，系统校验 Plan 绑定模型后，从预购额度中实时扣减本次调用的总 Token 数（输入 + 输出），余额不足返回 `402 Payment Required`。
+- **Agent 应用**：模型调用费用独立于 Agent 其他组件（如知识库、沙箱、记忆库），但知识库中的 Rerank 调用、智能体路由时的 `qwen-plus` 判断、记忆检索注入 Prompt 所产生的额外 Token，均按实际 Token 数单独计费。
+- **向量与排序服务（/v1/embeddings /v1/rerank）**：`text-embedding-v1` 等嵌入模型按输入文本总 Token 数计费；Rerank 模型则按 `query` + 所有 `documents` 的 Token 总和计费（非仅返回文档数），且 `query` 超 512 Token 将被静默截断——截断前的完整长度仍计入计量。
+- **决策模型（decision-model-preview）**：严格按 `state` 字段（无论 string/object/array）序列化后的 UTF-8 字节长度换算 Token，上限 65536 Token；`questions` 结构体本身不参与 Token 计量，仅 `state` 内容计入。
+- **监控与用量分析**：控制台「模型用量统计」中 `TotalToken 数` 是唯一可信的计费依据，延迟约 1–10 分钟；该数据与账单出账一致，可用于成本突增告警（如配置“1分钟内 TotalToken 增长 >50万”触发通知）。
 
 ## 关键参数和配置
 
-| 参数 | 说明 | 开发建议 |
-|------|------|----------|
-| `input_tokens` / `output_tokens` | 请求中实际发送的输入 Token 数与模型生成的输出 Token 数，由 SDK 或平台自动统计 | 显式设置 `max_tokens` 防止意外长输出；压缩 Prompt、移除冗余注释可减少 input_tokens |
-| `cached_tokens` | 缓存命中带来的 Token 节省量，但平台仍按比例计入消耗（如 50% 缓存命中率 ≈ 50% 输入 Token 计费） | 无需手动干预，但需知其存在——相同 Prompt 多次调用仍产生消耗，非零成本 |
-| `top_k`（知识库/记忆库） | 初检返回的候选数，直接影响后续 Rerank 模型的输入 Token 量 | 高频低成本场景建议调低（如 `top_k=10`），可降低 60%+ 排序 Token |
-| `plan_version=Lite`（记忆库） | 关闭 Rerank 的轻量策略，大幅减少排序 Token 消耗 | 适用于对精度要求不高、QPS 敏感的检索场景 |
-| `stream=false`（默认） | 非流式响应会一次性返回全部 output_tokens，更易统计；流式响应需客户端累加 `usage` 字段 | 生产环境建议优先使用非流式，便于用量归因与告警 |
-| `model`（必需） | 不同模型 Token 单价差异极大（如 `qwen3.8-flash` 单价约为 `qwen4-max` 的 1/5） | 成本敏感场景应主动选型，避免使用 `auto` 模型（不支持 `tool_choice` 等关键参数，且单价不可控） |
-
-> ⚠️ 注意：`sk-sp-`（Token Plan）与 `sk-`（百炼通用）API Key 的 Token 计量逻辑完全隔离——前者抵扣 Credits，后者触发按量计费；混用将导致计费异常或鉴权失败。
+- **Token 计量规则**：
+  - 统一采用 UTF-8 字节级编码统计，非词元（token）级分词；
+  - 输入与输出 Token 均计入，不可拆分抵扣；
+  - 所有场景（含 Batch、缓存命中、长输入）均先按此规则得出原始 Token 数，再应用对应折扣或系数。
+- **计费换算公式**：  
+  `费用（元） = ⌈总 Token 数 ÷ 1000⌉ × 单价（元/千 Token）`  
+  其中单价由模型、地域、计费模式（按量/Token Plan/节省计划）共同决定。
+- **特殊系数（需主动启用）**：
+  - 上下文缓存：命中部分 Token 按折扣系数（如 0.1）计费，创建缓存 Token 按 1.25× 标准单价计费；
+  - 长输入阶梯：对 >32K 输入按区间应用系数（如 3x），直接作用于原始 Token 数；
+  - Batch 调用：单价为实时推理的 50%，但不与缓存折扣叠加。
+- **用量查询接口**：  
+  `GET /api/v1/token-plan/usage`（Token Plan 余额）  
+  `GET /api/v1/model/usage`（按模型/业务空间维度查询历史 Token 消耗）
 
 ## 面向开发者，简洁实用
 
-- **查用量**：统一通过控制台 [用量](https://bailian.console.aliyun.com/managed-agent/usage) 页面查看明细，或调用 `POST /usage/summary` API 获取结构化数据。
-- **省 Token**：  
-  - 知识库：关 Rerank + 降 `top_k` + 复用 ParseX 解析结果；  
-  - 智能体：避免无意义长对话上下文，定期清理沙箱快照（`snapshot_retention_hours` 影响存储费，间接关联 Token 复用效率）；  
-  - 模型调用：设 `max_tokens`、精简 system prompt、禁用非必要工具（`tool_choice="none"`）。
-- **避坑提示**：  
-  - Token Plan 仅限交互式开发，**严禁用于后台脚本或生产服务**，否则订阅可能被暂停；  
-  - 所有免费额度（Token Plan、资源包、账户余额）严格按类型隔离，知识库免费时长 ≠ 模型 Token 免费；  
-  - 夜间折扣（22:00–08:00）仅限指定模型，调用前请确认控制台实时价格。
+- ✅ **务必校验 `model` 字段一致性**：Token Plan 中 `qwen-turbo` 不可用于 `qwen-plus`，否则直接报错；Agent 中知识库路由调用 `qwen-plus` 也需确保其属于已开通计费权限的模型。
+- ✅ **警惕隐式 Token 消耗**：记忆库 `Search` 结果注入 Prompt、Rerank 的 `documents` 列表、决策模型中 `state` 的 JSON 序列化，都会显著增加 Token 数——建议在开发期用 `/v1/chat/completions` 的 `tools` 或 `response_format` 模拟结构化输入，预估 Token 开销。
+- ✅ **调试技巧**：使用 `curl -v` 或 SDK 日志开启 debug 模式，查看响应头 `x-bailian-input-tokens` 和 `x-bailian-output-tokens` 字段，快速验证计量是否符合预期。
+- ❌ **不要依赖客户端估算**：避免用字符数、单词数或第三方 tokenizer 估算 Token；百炼 Token 数以服务端实际编码结果为准，尤其对中文、emoji、多模态 base64 等场景差异显著。
+- ⚠️ **注意地域隔离**：华北2（北京）的免费额度、价格、模型支持列表与其他地域完全独立；跨地域调用需重新确认 Token 计量逻辑与计费规则。
 
 ## 关联主题页
 
-- [agent billing](../guides/agent-billing.md)
 - [token plan guide](../guides/token-plan-guide.md)
-- [token plan personal](../guides/token-plan-personal.md)
-- [token plan team edition](../guides/token-plan-team-edition.md)
-- [token plan best practice](../guides/token-plan-best-practice.md)
+- [agent billing](../guides/agent-billing.md)
+- [test 1](../guides/test-1.md)
 - [model monitoring](../guides/model-monitoring.md)
+- [vector and sort](../api/vector-and-sort.md)
+- [decision model](../api/decision-model.md)
 
 

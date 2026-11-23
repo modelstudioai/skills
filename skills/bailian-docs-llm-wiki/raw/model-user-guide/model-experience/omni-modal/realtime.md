@@ -4000,6 +4000,6 @@ A：如果没有收到 `conversation.item.input_audio_transcription.completed` �
     
 -   [WebRTC 接入](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/omni-realtime-webrtc-access.md)
     
--   [Python SDK](raw/_short/realtime-websocket-python-sdk-qwen-omni-realtime-b04c23b57a9c2f51.md)
+-   [Python SDK](raw/_short/realtime-websocket-python-sdk-qwen-omni-realtime-e50924065f85dda8.md)
     
--   [Java SDK](raw/_short/omni-realtime-java-sdk-91c6c46e0976cc89.md)
+-   [Java SDK](raw/_short/omni-realtime-java-sdk-13dfd16f685872d7.md)

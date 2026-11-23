@@ -45,14 +45,6 @@ curl -X POST https://{workspace_id}.cn-beijing.maas.aliyuncs.com/compatible-mode
 
 **缓存命中**
 
-kimi-k3.1-pro-prime
-
-¥26
-
-¥136
-
-¥1.3
-
 glm-5.3-prime
 
 ¥16
@@ -98,14 +90,6 @@ wan3.0-video-prime
 **输出单价**
 
 **缓存命中**
-
-kimi-k3.1-pro-prime
-
-¥29.167
-
-¥145.833
-
-¥1.458
 
 glm-5.3-prime
 

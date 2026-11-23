@@ -6,6 +6,24 @@
 
 ## 2026 年
 
+### 2026-11-23
+
+#### qwen-audio-3.1-live
+
+实时语音对话
+
+模型支持实时语音对话。应用或后台模型处理任务时，前台模型仍可与用户交谈，并在任务完成后播报结果。
+
+[模型详情](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-speech-to-speech/qwen-audio-3-1-live.md) | [接入指南](raw/model-user-guide/model-experience/speech-and-audio/speech-to-speech/qwen-audio-live.md)
+
+* * *
+
+#### qwen-audio-3.1-captioner
+
+音频打标
+
+Qwen-Audio-3.1-Captioner 是面向音频全信息理解、复杂声学场景分析与大规模数据处理优化的新一代音频全要素转写与分离模型。该模型在传统语音转写的基础上，重点增强了对说话人，时间戳，环境音、音效、音乐等多维音频信息的感知与摘要能力，并具备强劲的说话人与背景音频分离能力。
+
 ### 2026-11-19
 
 #### kimi-k3.1-pro-prime
@@ -3835,6 +3853,16 @@ Paraformer语音识别提供的文件转写API，能够对常见的音频或音�
 #### 新加坡
 
 ## 2026 年
+
+### 2026-11-23
+
+#### qwen-audio-3.1-live
+
+实时语音对话
+
+模型支持实时语音对话。应用或后台模型处理任务时，前台模型仍可与用户交谈，并在任务完成后播报结果。
+
+[模型详情](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-speech-to-speech/qwen-audio-3-1-live.md) | [接入指南](raw/model-user-guide/model-experience/speech-and-audio/speech-to-speech/qwen-audio-live.md)
 
 ### 2026-11-19
 

@@ -612,7 +612,7 @@ API Key 本身不绑定特定模型，同一个 API Key 可调用所有模型，
 
 实时调用时，系统将自动优先使用免费额度抵扣，无需手动设置。按消耗优先级依次为：免费额度 > 资源包 > 节省计划 > 按量付费。
 
-**Token Plan/Coding Plan 专属 API Key** 不消耗免费额度，使用专属 API Key 调用模型将直接按量付费。如需使用免费额度，请改用通用 API Key（非专属 API Key）。
+**Token Plan/Coding Plan 专属 API Key** 不消耗免费额度。使用 Token Plan 专属 API Key 调用模型时，直接消耗 Token Plan 的 Credits 额度；使用 Coding Plan 专属 API Key 调用模型时，消耗 Coding Plan 的套餐额度。两者均不会转为按量付费。如需使用免费额度，请改用通用 API Key（非专属 API Key）。
 
 ### OAuth 认证的免费额度为什么在控制台不显示？
 

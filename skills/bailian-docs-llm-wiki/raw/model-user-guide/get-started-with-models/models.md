@@ -272,11 +272,45 @@
 
 [查看更多](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/tts-model.md)
 
+### 音频打标
+
+为录音中的语音、音效和背景声添加时间标记，并描述整段录音的声学场景。
+
+[
+
+**qwen-audio-3.1-captioner**
+
+语音、音效和背景声标注
+
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen-audio-3.1-captioner)
+
+[查看更多](raw/model-user-guide/model-experience/speech-and-audio/audio-tagging.md)
+
+### 音频生成
+
+生成人声、音效和环境音等音频内容
+
+[
+
+**qwen-audio-3.1-tts-next**
+
+完整场景声音生成
+
+](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen-audio-3.1-tts-next)
+
+[查看更多](raw/model-user-guide/model-experience/speech-and-audio/audio-generation.md)
+
 ### 语音转语音
 
 端到端语音对话，无需分别调用 ASR 和 TTS
 
 [
+
+**qwen-audio-3.1-live**
+
+实时双工语音对话，支持委派后台任务
+
+](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-speech-to-speech/qwen-audio-3-1-live.md)[
 
 **qwen-audio-3.1-realtime-plus**
 
@@ -303,20 +337,6 @@
 ](raw/_short/qwen-audio-3-1-realtime-flash-5b9fe71827656bd5.md)
 
 [查看更多](raw/model-user-guide/model-experience/speech-and-audio/speech-to-speech/s2s-model.md)
-
-### 音频生成
-
-生成人声、音效和环境音等音频内容
-
-[
-
-**qwen-audio-3.1-tts-next**
-
-完整场景声音生成
-
-](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen-audio-3.1-tts-next)
-
-[查看更多](raw/model-user-guide/model-experience/speech-and-audio/audio-generation.md)
 
 ## 向量
 

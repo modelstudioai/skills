@@ -60,7 +60,7 @@
       "versionTag": "MAJOR",
       "latestOnlineAt": "2026-11-17T06:10:28.000+00:00",
       "inferenceProvider": "kling",
-      "name": "Kling Video 4.0 Omni",
+      "name": "Kling Video 4.0",
       "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/kling-video-generation-api-reference",
       "samples": {
         "dashscope": {

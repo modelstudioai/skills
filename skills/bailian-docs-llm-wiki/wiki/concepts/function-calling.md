@@ -1,47 +1,47 @@
 # 函数调用
 
-函数调用（Function Calling）是百炼平台中智能体（Agent）与外部能力交互的核心机制，指模型在推理过程中自主识别用户意图、生成结构化工具调用请求（`tool_calls`），并由平台调度执行预注册函数（如 MCP 服务、Skill、自定义 HTTP 接口等）的能力。该机制将大模型的“规划”能力与确定性程序逻辑解耦，实现安全、可控、可审计的 AI 自动化。
+函数调用（Function Calling）是百炼平台中智能体（Agent）实现工具驱动推理的核心机制：模型根据用户输入自主判断是否需要、以及调用哪些外部工具，并按严格定义的参数结构生成标准化的调用请求；平台负责路由、执行、结果注入与上下文融合，最终由模型整合工具输出生成自然语言响应。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-函数调用不是独立接口，而是贯穿多个 Agent 运行时层的统一语义能力，具体体现为：
+函数调用在百炼平台中并非单一接口能力，而是贯穿多个 Agent 架构层级的横切行为模式，具体体现为：
 
-- **OpenAI 兼容 Agents API**：通过标准 `tools` 数组声明函数签名（支持 `function` 类型），配合 `tool_choice` 控制调用策略；响应中若含 `tool_calls` 字段，即表示模型已触发函数调用，需开发者或平台自动执行后续步骤（如调用 MCP 服务、解析 Skill 输入）。
-  
-- **Managed Agents API**：不暴露原始 `tool_calls`，而是封装为更高阶的 **Skill 调用** 和 **Webhook 触发**。当用户输入匹配 Skill 的 `description` 或满足 Webhook 配置条件时，平台自动路由至对应能力，开发者无需解析 JSON Schema 或拼接调用参数。
+- **Agent 运行时（`/v1/agents/run`）**：通过 `tools` 数组声明工具集合，模型自动选择并生成 `tool_calls`；调用结果以结构化 JSON 形式返回，不暴露原始 HTTP 细节。  
+- **[OpenAI 兼容接口](openai-compatible-api.md)（`/compatible-mode/v1/chat/completions`）**：完全复用 OpenAI 的 `tools` + `tool_choice` 语义，支持 `"auto"`、`"none"` 或指定函数名；响应中 `finish_reason: "tool_calls"` 明确标识调用发生，`message.tool_calls` 包含完整调用指令。  
+- **Managed Agents（托管式 Agent）**：工具以预注册的类型化能力（如 `"file_search"`、`"web_search"`）接入，开发者无需编写 schema，平台自动映射为内部函数调用，降低定义门槛。  
+- **Agent Store 能力集成**：MCP 服务和 Skill 均作为“可调用函数”的物理载体——MCP 提供标准化协议端点（`/mcp`、`/sse`），Skill 封装 ZIP 内的可执行逻辑；二者均需在应用配置中显式启用，方能被模型识别为可用函数。  
+- **自定义插件（Application Support）**：支持注册任意 HTTP API 为函数，平台自动解析其 OpenAPI 3.0 描述，生成符合百炼调用规范的函数签名；但仅允许透传 `Authorization` Header，其余 Header 被剥离。  
+- **Flow Agent 应用调用**：虽未暴露底层 `tool_calls` 字段，但当应用绑定 MCP 或 Skill 后，函数调用行为由平台隐式完成，开发者只需关注 `app_id` 和 `input`，无需感知调用细节。
 
-- **Flow Agent（可视化编排）**：以「工具节点」形式呈现，支持拖拽接入 MCP 服务或 Skill，并通过图形化参数映射（如将前序节点输出字段绑定到 `weather.city`）完成函数调用配置；调用逻辑由平台运行时自动注入上下文并处理返回结果。
-
-- **Sandbox Agent（代码沙箱）**：开发者需在 `Agent.run()` 中手动解析 `messages[-1].tool_calls`（若存在），调用 `bailian-sdk` 提供的 `call_tool()` 方法执行指定函数（如 `mcp.call("websearch", {"query": "杭州天气"})`），并把结果以 `tool_message` 格式回传给模型继续推理。
-
-- **Agent Store（能力中心）**：函数调用的“供给侧”。MCP 服务和 Skill 本质是被调用的函数实体——前者提供标准化的远程 API 接口（`streamablehttp`/`stdio`），后者提供声明式的本地文件处理逻辑；二者均需通过 `agent store` 注册、授权、配置后，才能被上述任一 Agent 模式调用。
-
-> ✅ 关键共识：无论哪种模式，函数调用均由模型主动发起（非 Prompt 硬编码），且调用目标必须提前在平台侧注册/启用；未注册的函数名将导致 `invalid_tool_call` 错误。
+> ✅ 关键共识：所有场景下，“函数”本质是**带名称、描述和 JSON Schema 参数的可执行能力单元**；模型不直接发起 HTTP 请求，而是生成符合 schema 的调用声明，由百炼运行时统一调度执行。
 
 ## 关键参数和配置
 
-| 参数/配置项 | 所属场景 | 说明 | 注意事项 |
-|-------------|----------|------|----------|
-| `tools` | OpenAI 兼容 Agents API、Sandbox | JSON Schema 数组，定义可调用函数的名称、描述、参数类型与约束 | 必须严格遵循 OpenAI 工具格式；Schema 过长会占用 token 预算，建议精简 `description` |
-| `tool_choice` | OpenAI 兼容 Agents API | 控制调用策略：`"auto"`（默认，由模型决策）、`"none"`（禁用）、`{"type":"function","function":{"name":"xxx"}}`（强制指定） | 强制指定时，若模型无法生成匹配参数，将报错而非降级为文本回复 |
-| `mcpServers` / `SKILL.md` | Agent Store | MCP 服务的连接配置（含协议、地址、环境变量）；Skill 的元数据描述（`name`, `description`, `input_schema`） | `description` 直接影响模型调用准确率，需包含典型触发词、输入示例、边界说明 |
-| `enable_rag`（间接影响） | Managed/Flow Agent | 启用 RAG 时，知识库检索结果可能作为 `tool_message` 注入上下文，影响后续函数调用决策 | 并非直接控制函数调用，但改变模型可用信息，从而改变调用行为 |
-| `max_iterations` | Flow/Sandbox Agent | 限制单次请求中函数调用+模型推理的总循环次数 | 默认 `10`，但 Managed Agent 实际硬限为 `5`；超限将终止流程并返回 `max_iterations_exceeded` |
+| 参数 | 所属场景 | 类型 | 说明 | 必填性 |
+|------|----------|------|------|--------|
+| `tools` | 所有 Agent 接口（`/v1/agents/run`, `/chat/completions`, Managed Agents） | array | 工具定义列表，每个元素含 `name`（合法 Python 标识符）、`description`、`parameters`（JSON Schema Draft-07） | 否（无则退化为普通对话） |
+| `tool_choice` | [OpenAI 兼容接口](openai-compatible-api.md) | string / object | 控制调用策略：`"auto"`（默认）、`"none"` 或 `{"type": "function", "function": {"name": "xxx"}}` | 否 |
+| `name`（工具内） | 所有场景 | string | 函数唯一标识符，必须为合法 Python 标识符（字母/数字/下划线，不以数字开头）；否则返回 `422 Unprocessable Entity` | 是 |
+| `parameters`（工具内） | 所有场景 | object | 严格遵循 JSON Schema Draft-07；不支持 `additionalProperties: true` 等宽松校验，缺失必填字段将触发 `validation_error` | 是（若定义了参数） |
+| `enable_session` + `session_id` | [OpenAI 兼容接口](openai-compatible-api.md) | boolean / string | 启用会话状态后，函数调用上下文（如前序结果）可跨轮次复用；`session_id` 需客户端维护 | 条件必填（启用会话时） |
+
+> ⚠️ 注意：`temperature`、`top_p` 等采样参数对函数调用决策**无直接影响**；模型是否调用函数主要取决于 `tools` 定义质量、`system_prompt` 中的工具说明清晰度，以及用户 query 的明确性。
 
 ## 面向开发者，简洁实用
 
-- **调试优先**：所有 Agent 模式均支持 `X-Bailian-Debug: true` 请求头，返回完整调用链日志（含 `tool_calls` 原始内容、MCP/Skill 执行耗时、错误堆栈），务必在开发期开启。
-- **错误处理必做**：函数调用失败（如网络超时、参数校验失败、权限不足）会返回 `tool_calls` + `error` 字段，需在代码中显式捕获并构造 `tool_message` 回传，否则流程中断。
-- **安全红线**：禁止在 Sandbox 中通过 `subprocess` 或 `os.system` 动态执行未注册函数；所有外部调用必须经由 `bailian-sdk` 的 `call_tool()` 或平台预置节点完成，确保审计可追溯。
-- **性能提示**：MCP 服务冷启动延迟高，高频调用场景请选用「极速模式」部署；Skill ZIP 包超过 5MB 会显著增加加载时间，建议拆分大依赖。
-- **兼容性确认**：`qwen-max` 等通用模型**不支持函数调用**；必须使用带 `-agent-v1` 后缀的专用 Agent 模型（如 `qwen-plus-agent-v1`）或 Managed Agent 底层托管模型。
+- **定义函数，先写好 `name` 和 `description`**：`description` 是模型理解能力的关键，需用一句话说清“做什么、输入什么、输出什么、何时用”，避免模糊表述（如“处理数据” → “从 Excel 表格中提取销售额大于100万的客户姓名和邮箱”）。  
+- **参数 Schema 要最小化、强约束**：只声明必需字段，用 `type`、`enum`、`minLength` 等严格限定；避免 `anyOf` 或嵌套过深，否则易触发校验失败。  
+- **调试首选 `max_iterations=3` + `verbose=true`（需技术支持开通）**：快速定位模型为何未调用函数（是没看到？参数不匹配？还是根本没理解需求？）。  
+- **函数名即契约**：`name` 一旦发布，不可随意变更；下游系统（如 MCP 服务、Skill 后端）必须严格按此名称响应，否则平台无法匹配结果。  
+- **不要自己拼接 HTTP 请求**：所有函数调用均由百炼运行时完成；你只需提供正确 `tools`，接收结构化结果，专注业务逻辑整合。
 
 ## 关联主题页
 
+- [get started with agents](../guides/get-started-with-agents.md)
 - [managed agents api](../api/managed-agents-api.md)
+- [flow agent api](../api/flow-agent-api.md)
 - [openai compatible agents api](../api/openai-compatible-agents-api.md)
-- [agent development](../guides/agent-development.md)
 - [agent store](../guides/agent-store.md)
-- [toolkits and frameworks](../api/toolkits-and-frameworks.md)
+- [application support](../guides/application-support.md)
 
 

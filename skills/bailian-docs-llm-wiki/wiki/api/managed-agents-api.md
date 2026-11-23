@@ -1,32 +1,51 @@
 # managed agents api
 
-Managed Agents API 是百炼平台提供的托管式智能体服务接口，用于创建、配置和管理具备[长期记忆](../concepts/memory.md)、工具调用、多轮会话与环境隔离能力的 AI Agent。该 API 以 RESTful 形式提供，支持细粒度资源控制（如 Environment、Session、Memory Store）和可扩展能力（如 Skill、Vault、Webhook）。开发者可通过它构建生产级自动化工作流，无需自行维护底层推理与状态管理逻辑。
+Managed Agents API 是百炼平台提供的托管式智能体服务接口，用于创建、配置和管理具备[长期记忆](../concepts/long-term-memory.md)、工具调用、多步推理能力的 AI Agent。该 API 抽象了底层运行时与基础设施细节，开发者可通过声明式方式定义 Agent 行为、环境依赖与数据访问策略。所有资源均支持 RESTful 操作，并与百炼统一认证体系集成。
 
 ## 支持的模型与功能
 
-- **模型支持**：当前仅支持百炼平台托管的 `qwen-max`、`qwen-plus` 和 `qwen-turbo` 等 Qwen 系列模型；不支持用户自定义模型或外部模型接入。  
-- **核心功能模块**包括：Agent 生命周期管理、隔离式运行环境（Environment）、有状态会话（Session）、持久化记忆存储（Memory Store）、安全凭证管理（Credential）、技能封装（Skill）、文件处理（File）、密钥保险库（Vault）、部署配置（Deployment）及事件回调（Webhook）。完整能力清单详见 [Managed Agent API](../../raw/application-api-reference/managed-agents-api.md) 的子模块索引。
+- **模型支持**：当前仅支持 `qwen-max`、`qwen-plus` 和 `qwen-turbo` 三类 Qwen 系列大模型；其他模型（如 `qwen2.5-*`）暂未开放接入，详见 [Managed Agent API](../../raw/application-api-reference/managed-agents-api.md) 的子文档说明。
+- **核心功能**：
+  - Agent 生命周期管理（创建、更新、删除）
+  - 环境隔离（Environment）与会话状态（Session）控制
+  - 内置 Memory Store 实现跨会话上下文持久化
+  - 文件上传/引用（Files API）、技能注册（Skills API）、密钥安全存储（Vault/Credential API）
+  - Webhook 事件回调（如 `session.completed`、`agent.error`）
+
+> **注意**：原始文档中 [概览](../../raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md) 提到“支持自定义 LLM 接入”，但该能力尚未上线，实际仅限百炼内置 Qwen 模型；请以 [快速开始](../../raw/application-api-reference/managed-agents-api/managed-agents-quickstart.md) 中的模型列表为准。
 
 ## 关键参数
 
-- `agent_id`：必填，由 `/agents` 创建后返回的唯一标识符，用于后续所有资源操作。  
-- `environment_id`：可选但推荐，指定 Agent 运行的隔离环境；若未指定，则使用默认环境（可能影响多租户安全性）。  
-- `session_id`：会话级状态标识，需在 `/sessions` 中显式创建，用于跨请求维持上下文与 Memory Store 绑定。  
-- `memory_store_id`：若启用[长期记忆](../concepts/memory.md)，必须关联已创建的 Memory Store 实例，其 TTL 和访问策略需提前配置。  
-- `webhook_url`：仅在注册 Webhook 时生效，须为 HTTPS 端点且响应超时 ≤3s；详细约束见 [Webhook](../../raw/application-api-reference/managed-agents-api/webhook-api.md) 文档。
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `model_id` | string | 是 | 必须为 `qwen-max` / `qwen-plus` / `qwen-turbo` 之一 |
+| `system_prompt` | string | 否 | 全局系统指令，长度 ≤ 4096 字符 |
+| `tools` | array | 否 | 工具列表，每个元素含 `type`（如 `"file_search"`、`"web_search"`）及对应配置 |
+| `memory_store_id` | string | 否 | 指向已创建的 Memory Store 资源 ID；不传则使用默认内存实例 |
+| `environment_id` | string | 否 | 指定运行环境，影响网络策略与资源配额 |
 
 ## 使用方式
 
-1. **认证**：使用平台颁发的 `API Key`，通过 `Authorization: Bearer <api_key>` 请求头传递；JWT Token 方式暂不支持（参见 [认证](../../raw/application-api-reference/managed-agents-api/managed-agents-api-authentication.md)）。  
-2. **快速启动**：按顺序调用：`POST /agents` → `POST /environments` → `POST /sessions` → `POST /sessions/{session_id}/messages`；完整流程见 [快速开始](../../raw/application-api-reference/managed-agents-api/managed-agents-quickstart.md)。  
-3. **调试建议**：首次集成时务必启用 `X-Bailian-Debug: true` 请求头，以获取详细的执行链路日志（含 Skill 调用、Memory 读写、Tool 执行等）。
+1. **认证**：使用 Bearer Token，通过 `Authorization: Bearer <access_token>` 传递；Token 需通过百炼 OAuth2 流程获取，详见 [认证](../../raw/application-api-reference/managed-agents-api/managed-agents-api-authentication.md) 文档。
+2. **创建 Agent**：
+   ```bash
+   curl -X POST https://dashscope.aliyuncs.com/api/v1/agents \
+     -H "Authorization: Bearer $TOKEN" \
+     -H "Content-Type: application/json" \
+     -d '{
+           "model_id": "qwen-plus",
+           "system_prompt": "你是一个技术文档助手。",
+           "tools": [{"type": "file_search", "file_ids": ["file-xxx"]}]
+         }'
+   ```
+3. **启动会话**：调用 `/sessions` 创建会话后，通过 `POST /sessions/{session_id}/messages` 发送用户消息并流式接收响应。
 
 ## 限制和注意事项
 
-- 单个 Agent 最多绑定 10 个 Skill，单个 Environment 最多承载 50 个并发 Session；超出将返回 `429 Too Many Requests`。  
-- Memory Store 默认保留 7 天历史数据，不可修改 TTL；如需长期归档，请自行导出至对象存储（参考 [Memory Store](../../raw/application-api-reference/managed-agents-api/memory-store-api.md)）。  
-- > **注意**：原始文档中 [概览](../../raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md) 提到“支持异步批处理模式”，但当前 API 实际仅提供同步消息接口（`/sessions/{id}/messages`），该描述已过时，以 [Session and Event](../../raw/application-api-reference/managed-agents-api/session-api.md) 的实时流式响应说明为准。  
-- 文件上传（`/files`）最大单文件限制为 100MB，且仅支持 `text/plain`、`application/pdf`、`application/vnd.openxmlformats-officedocument.wordprocessingml.document` 三种 MIME 类型。
+- 单个 Agent 最多绑定 10 个 `tools`；单次会话最大上下文长度为 32k token（含 system prompt + history + input）。
+- Memory Store 默认保留最近 100 条交互记录，TTL 为 7 天；如需更长保留期，需显式调用 `PATCH /memory-stores/{id}` 更新 `ttl_seconds`。
+- 所有文件（via Files API）必须先上传并获得 `file_id`，再在 `tools.file_search` 中引用；直接传入本地路径或 URL 将被拒绝。
+- 错误处理应基于 [错误码](../../raw/application-api-reference/managed-agents-api/managed-agents-api-errors.md) 文档中的 `error_code` 字段（如 `InvalidParameter.ModelIdNotSupported`），而非仅依赖 HTTP 状态码。
 
 ## 来源文档
 

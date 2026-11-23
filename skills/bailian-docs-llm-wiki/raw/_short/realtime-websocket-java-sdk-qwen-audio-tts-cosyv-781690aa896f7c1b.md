@@ -26,7 +26,7 @@ SDK的接口地址需在初始化前设置为下方地址（包含WorkspaceId）
 
 调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
-**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
+**Important**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
 
 -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
 -   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
@@ -51,7 +51,7 @@ SDK提供了语音合成的关键接口，支持以下几种调用方式：
 
 发送的文本长度不得超过20000字符。
 
-**重要**每次调用`call`方法前，需要重新初始化`SpeechSynthesizer`实例。
+**Important**每次调用`call`方法前，需要重新初始化`SpeechSynthesizer`实例。
 
 ```
 import com.alibaba.dashscope.audio.ttsv2.SpeechSynthesisParam;
@@ -124,7 +124,7 @@ public class Main {
 
 发送的文本长度不得超过20000字符。
 
-**重要**每次调用`call`方法前，需要重新初始化`SpeechSynthesizer`实例。
+**Important**每次调用`call`方法前，需要重新初始化`SpeechSynthesizer`实例。
 
 ```
 import com.alibaba.dashscope.audio.tts.SpeechSynthesisResult;
@@ -240,7 +240,7 @@ public class Main {
     
     若无待发送文本，需及时调用 `streamingComplete`结束任务。
     
-    **重要**请务必确保调用`streamingComplete`方法，否则可能会导致结尾部分的文本无法成功转换为语音。
+    **Important**请务必确保调用`streamingComplete`方法，否则可能会导致结尾部分的文本无法成功转换为语音。
     
     > 服务端强制设定23秒超时机制，客户端无法修改该配置。
     
@@ -643,7 +643,7 @@ SDK版本低于2.21.7时，`seed`需要通过扩展参数进行设置。
 
 否
 
-**说明**使用 qwen-audio-3.1-tts-flash 的多语种与方言音色时，可通过此参数指定语种或方言。具体用法请参见[多语种与方言音色的设置方法](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list#qwen-tts31-language-hints)。
+**Note**使用 qwen-audio-3.1-tts-flash 的多语种与方言音色时，可通过此参数指定语种或方言。具体用法请参见[多语种与方言音色的设置方法](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list#qwen-tts31-language-hints)。
 
 指定语音合成的目标语言，提升合成效果。
 
@@ -692,7 +692,7 @@ SDK版本低于2.21.7时，`seed`需要通过扩展参数进行设置。
     保加利亚语、荷兰语、匈牙利语、罗马尼亚语、丹麦语、克罗地亚语、希腊语、捷克语、挪威语、瑞典语、印地语、斯洛伐克语、芬兰语、乌尔都语、塞尔维亚语、墨西哥西班牙语、立陶宛语、拉脱维亚语、土耳其语、波斯语、希伯来语、蒙古语、斯洛文尼亚语、阿塞拜疆语、波兰语、加泰罗尼亚语、高棉语、巴西葡萄牙语、老挝语、格鲁吉亚语、南非荷兰语、尼泊尔语、白俄罗斯语、马拉雅拉姆语、卢森堡语、阿尔巴尼亚语、泰米尔语、僧伽罗语、泰卢固语、爱沙尼亚语、宿务语、波斯尼亚语、缅甸语、亚美尼亚语、拉丁语、冰岛语、马耳他语、斯瓦希里语、哈萨克语、塞舌尔克里奥尔语、乌克兰语。
     
 
-**说明**
+**Note**
 
 -   此参数为数组，但当前版本仅处理第一个元素，因此建议只传入一个值。
 -   此参数用于指定语音合成的目标语言，该设置与声音复刻时的样本音频的语种无关。如需设置复刻任务的源语言，请参见[声音复刻API参考](https://help.aliyun.com/zh/model-studio/voice-clone-design-http-api#h2-create)。
@@ -961,7 +961,7 @@ SDK版本低于2.21.7时，`seed`需要通过扩展参数进行设置。
 
 否
 
-**重要**
+**Important**
 
 -   此参数为数组，但当前版本仅处理第一个元素，因此建议只传入一个值。
 -   此参数用于指定语音合成的目标语言，该设置与声音复刻时的样本音频的语种无关。如需设置复刻任务的源语言，请参见[声音复刻API参考](https://help.aliyun.com/zh/model-studio/voice-clone-design-http-api#h2-create)。
@@ -1002,41 +1002,6 @@ SDK版本低于2.21.7时，`seed`需要通过扩展参数进行设置。
 设置指令，用于控制方言、情感或角色等合成效果。
 
 使用说明请参见[指令控制](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#12884a10929p9)。
-
-`hotFix(ParamHotFix)`
-
-`ParamHotFix`
-
-否
-
-文本热修复配置，用于自定义指定词语的发音或对待合成文本进行替换。
-
-**说明**cosyvoice-v2不支持该功能。
-
-参数介绍：
-
--   pronunciation：自定义发音。指定词语的拼音标注，用于纠正默认发音不准确的情况。
--   replace：文本替换。在语音合成前将指定词语替换为目标文本，替换后的文本将作为实际合成内容。
-
-示例：
-
-```
-List<ParamHotFix.PronunciationItem> pronunciationItems = new ArrayList<>();
-pronunciationItems.add(new ParamHotFix.PronunciationItem("天气", "tian1 qi4"));
-
-List<ParamHotFix.ReplaceItem> replaceItems = new ArrayList<>();
-replaceItems.add(new ParamHotFix.ReplaceItem("今天", "金天"));
-
-ParamHotFix paramHotFix = new ParamHotFix();
-paramHotFix.setPronunciation(pronunciationItems);
-paramHotFix.setReplace(replaceItems);
-
-SpeechSynthesisParam param = SpeechSynthesisParam.builder()
-                        .model("cosyvoice-v3-plus") // 模型
-                        .voice("longanyang") // 音色
-                        .hotFix(paramHotFix)
-                        .build();
-```
 
 `parameter(String key, Object value)`
 
@@ -1098,7 +1063,7 @@ SpeechSynthesisParam param = SpeechSynthesisParam.builder()
 
 默认值：false。
 
-**说明**仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
+**Note**仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
 `aigc_propagator`
 
@@ -1110,7 +1075,7 @@ SpeechSynthesisParam param = SpeechSynthesisParam.builder()
 
 默认值：阿里云UID。
 
-**说明**仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
+**Note**仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
 `aigc_propagate_id`
 
@@ -1122,7 +1087,7 @@ SpeechSynthesisParam param = SpeechSynthesisParam.builder()
 
 默认值：本次语音合成请求Request ID。
 
-**说明**仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
+**Note**仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
 `enable_markdown_filter`
 
@@ -1130,7 +1095,7 @@ SpeechSynthesisParam param = SpeechSynthesisParam.builder()
 
 否
 
-**说明**cosyvoice-v2 不支持此功能。
+**Note**cosyvoice-v2 不支持此功能。
 
 是否启用 Markdown 过滤。启用后，服务会在合成前将 Markdown 转换成适合朗读的文本。
 
@@ -1579,7 +1544,7 @@ public void streamingCancel()
 
 **说明**：取消当前轮次的双向流式语音合成任务。调用后，SDK 会立即结束当前任务。取消后可在当前连接上继续发起新的合成任务，无需重新初始化 `SpeechSynthesizer` 实例。
 
-**重要****版本要求**：使用该功能需要 Java SDK 版本不低于 2.22.26。
+**Important****版本要求**：使用该功能需要 Java SDK 版本不低于 2.22.26。
 
 #### ResultCallback
 
@@ -1617,9 +1582,9 @@ public void streamingCancel()
 
 **说明**：取消当前轮次的双向流式语音合成任务。调用后，SDK 会立即结束当前任务。取消后可在当前连接上继续发起新的合成任务，无需重新初始化 `SpeechSynthesizer` 实例。
 
-**重要****版本要求**：使用该功能需要 Java SDK 版本不低于 2.22.26。
+**Important****版本要求**：使用该功能需要 Java SDK 版本不低于 2.22.26。
 
-**重要****模型限制**：
+**Important****模型限制**：
 
 -   华北2（北京）地域：CosyVoice 系列模型仅 v2 及以上版本支持该功能。
 -   新加坡地域：CosyVoice 系列模型不支持该功能。

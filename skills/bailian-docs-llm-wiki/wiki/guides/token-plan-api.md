@@ -1,43 +1,34 @@
 # token plan api
 
-TokenPlan API 是百炼平台用于管理组织级 Token 配额、席位生命周期及用量订阅的核心接口集合，支持开发者通过程序化方式完成席位购买、变配、成员绑定、API Key 分配等关键操作。该 API 由两个后端服务协同提供：席位购买与变配功能由 BssOpenApi 承载，其余管理能力（如组织、成员、席位状态、邀请、API Key、订阅用量）统一由 ModelStudio 提供。所有接口均需使用有效的 `AccessKeyId` 和 `AccessKeySecret` 进行签名认证。
+Token Plan API 是百炼平台用于管理组织级 Token 配额、席位分配与订阅用量的核心接口集合，支持企业客户精细化控制模型调用资源。该 API 分为两类服务：席位购买与变配由 BssOpenApi 承载，其余功能（如组织管理、成员/席位/邀请/Key/用量等）统一通过 ModelStudio API 提供。所有接口均需使用有效的 API Key 进行身份认证与权限校验。
 
 ## 支持的模型/功能
 
-- **席位生命周期管理**：创建、查询、升级、降配、释放席位（对应 [席位购买与变配](../../raw/token-plan-user-guide/token-plan-api/token-plan-api-seat-purchase.md)）
-- **组织与成员治理**：组织信息维护、成员增删改查、角色分配（见 [组织与账号](../../raw/token-plan-user-guide/token-plan-api/token-plan-api-organization.md) 和 [成员管理](../../raw/token-plan-user-guide/token-plan-api/token-plan-api-member.md)）
-- **API 密钥与权限控制**：为成员或服务生成独立 API Key，并设置作用域与有效期（参见 [API Key 管理](../../raw/token-plan-user-guide/token-plan-api/token-plan-api-key.md)）
-- **用量与订阅监控**：实时查询 Token 消耗量、剩余配额、账单周期及订阅状态（依据 [订阅与用量](../../raw/token-plan-user-guide/token-plan-api/token-plan-api-subscription.md)）
-
-> **注意**：文档中明确指出“席位购买与变配接口属于 BssOpenApi（版本 2023-09-30），其余接口属于 ModelStudio（版本 2026-02-10）”，但当前 ModelStudio 最新稳定版实际为 2025-10-15；请以 [原文标题](../../raw/token-plan-user-guide/token-plan-api/token-plan-api.md) 中声明的接口归属为准，避免混用 SDK 版本。
+- **ModelStudio API（v2026-02-10）**：覆盖组织与账号管理、成员增删改查、席位分配与回收、邀请链接生成与状态查询、API Key 创建与轮换、订阅详情与实时用量统计等功能。  
+- **BssOpenApi（v2023-09-30）**：仅提供席位购买、升级、降配等计费相关操作，不涉及运行时资源调度或权限控制。  
+  > **注意**：[席位购买与变配](../../raw/token-plan-user-guide/token-plan-api/token-plan-api-seat-purchase.md) 接口所属服务域与其他模块不一致，调用方需分别配置对应 OpenAPI endpoint 与鉴权凭证，详见 [原文标题](../../raw/token-plan-user-guide/token-plan-api/token-plan-api-seat-purchase.md)。
 
 ## 关键参数
 
-- `OrganizationId`（必填，string）：组织唯一标识，从组织管理接口获取  
-- `SeatId`（部分接口必填）：席位 ID，用于变配或释放操作  
-- `ModelName`（仅变配时可选）：目标模型名称（如 `qwen-max`），影响 Token 配额计算逻辑  
-- `Quantity`（变配接口必填）：新席位数量，支持整数增减  
-- `EffectiveTime`（可选）：变配生效时间，支持立即生效（`immediately`）或下个计费周期（`next-cycle`）  
-
-所有请求需携带标准阿里云签名头（`x-acs-signature-nonce`, `x-acs-signature-method`, `x-acs-signature-version`, `x-acs-signature`）及 `x-acs-accesskey-id`。
+- `org_id`（路径参数）：必填，目标组织唯一标识，从 [组织与账号](../../raw/token-plan-user-guide/token-plan-api/token-plan-api-organization.md) 接口获取。  
+- `seat_id`（路径/请求体）：席位操作必需，用于绑定成员或触发变配，参见 [席位管理](../../raw/token-plan-user-guide/token-plan-api/token-plan-api-seat.md) 文档。  
+- `api_key`（Header: `Authorization: Bearer <key>`）：全局认证凭据，须具备对应组织 `token_plan_admin` 或 `token_plan_member` 权限，管理方式见 [API Key 管理](../../raw/token-plan-user-guide/token-plan-api/token-plan-api-key.md)。
 
 ## 使用方式
 
-1. 调用 [组织与账号](../../raw/token-plan-user-guide/token-plan-api/token-plan-api-organization.md) 接口获取 `OrganizationId`  
-2. 调用 [席位购买与变配](../../raw/token-plan-user-guide/token-plan-api/token-plan-api-seat-purchase.md) 创建初始席位（BssOpenApi 域名：`https://bssopenapi.aliyuncs.com`）  
-3. 调用 [成员管理](../../raw/token-plan-user-guide/token-plan-api/token-plan-api-member.md) 将成员加入组织并分配席位  
-4. 调用 [API Key 管理](../../raw/token-plan-user-guide/token-plan-api/token-plan-api-key.md) 为成员生成具备 Token 调用权限的密钥  
-5. 定期轮询 [订阅与用量](../../raw/token-plan-user-guide/token-plan-api/token-plan-api-subscription.md) 接口监控配额水位  
-
-SDK 示例（Python）建议使用 `aliyun-python-sdk-bssopenapi`（v1.3.11+）和 `aliyun-python-sdk-modelstudio`（v2.0.8+），注意区分 endpoint。
+1. 调用 `GET /v1/organizations` 获取 `org_id`；  
+2. 根据场景选择子资源路径：  
+   - 成员管理 → `/v1/organizations/{org_id}/members`  
+   - 席位分配 → `/v1/organizations/{org_id}/seats`  
+   - 用量查询 → `/v1/organizations/{org_id}/subscriptions/usage`  
+3. 席位购买/变配需切换至 BssOpenApi endpoint（如 `https://bssopenapi.aliyuncs.com`），使用 `Action=ModifySeatCapacity` 等专用 Action，具体参数格式以 [原文标题](../../raw/token-plan-user-guide/token-plan-api/token-plan-api-seat-purchase.md) 为准。
 
 ## 限制和注意事项
 
-- 单次变配请求 `Quantity` 变更幅度不可超过当前值的 ±50%，超出需分批提交  
-- 席位释放后，关联成员的 API Key 将自动失效，且无法恢复历史用量记录  
-- ModelStudio 接口调用频率限制为 100 QPS / OrganizationId，BssOpenApi 席位类接口为 20 QPS / Account  
-- 所有接口均不支持跨地域调用：BssOpenApi 必须使用 `cn-shanghai` 区域 endpoint，ModelStudio 必须与组织所在 region 一致  
-- > **注意**：[原文标题](../../raw/token-plan-user-guide/token-plan-api/token-plan-api.md) 明确要求“席位购买与变配”必须走 BssOpenApi，但部分旧版 SDK 文档误将其归入 ModelStudio；请严格按该原始文档的服务划分调用，否则将返回 `InvalidAction` 错误。
+- 单次请求最多返回 100 条记录，分页需传入 `page_number` 和 `page_size`；  
+- ModelStudio 接口 QPS 限流为 50/秒/组织，BssOpenApi 限流为 10/秒/账号，超限返回 `429 Too Many Requests`；  
+- 席位释放后，关联成员的 Token 调用权限将在 5 分钟内失效，但历史用量数据仍可查询，详见 [订阅与用量](../../raw/token-plan-user-guide/token-plan-api/token-plan-api-subscription.md)；  
+- > **注意**：[原文标题](../../raw/token-plan-user-guide/token-plan-api/token-plan-api-seat.md) 中描述的“席位可跨组织迁移”为过时信息，当前版本不支持跨 org seat 转移，实际行为以最新 OpenAPI Schema 为准。
 
 ## 来源文档
 
