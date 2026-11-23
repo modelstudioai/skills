@@ -112,15 +112,15 @@ WAV (16bit)、MP3、M4A
 Python
 
 ```
-# 依赖：dashscope >= 1.26.5，pyaudio
+# 依赖：dashscope >= 2.0.1，pyaudio
 import os
 import requests
 import base64
 import pathlib
-import time
+import threading
 import pyaudio
-from dashscope.audio.qwen_omni import MultiModality, OmniRealtimeCallback, OmniRealtimeConversation
 import dashscope
+from dashscope import DashScopeError
 
 # ======= 常量配置 =======
 DEFAULT_TARGET_MODEL = "qwen3.8-omni-flash-realtime"  # 声音复刻、实时对话要使用相同的模型
@@ -134,7 +134,9 @@ def create_voice(file_path: str,
                  preferred_name: str = DEFAULT_PREFERRED_NAME,
                  audio_mime_type: str = DEFAULT_AUDIO_MIME_TYPE) -> str:
     """
-    创建音色，并返回 voice 参数
+    创建音色，并返回 voice 参数。
+    当前 2.0 SDK 尚未提供 Omni 声音复刻（qwen-voice-enrollment）的管理面接口，
+    此处按 HTTP 原生协议直接调用创建音色接口。
     """
     # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key = "sk-xxx"
@@ -170,31 +172,33 @@ def create_voice(file_path: str,
     except (KeyError, ValueError) as e:
         raise RuntimeError(f"解析 voice 响应失败: {e}")
 
-class SimpleCallback(OmniRealtimeCallback):
-    def __init__(self, pya):
-        self.pya = pya
-        self.out = None
-    def on_open(self):
-        self.out = self.pya.open(
-            format=pyaudio.paInt16,
-            channels=1,
-            rate=24000,
-            output=True
-        )
-    def on_event(self, response):
-        if response['type'] == 'response.audio.delta':
-            self.out.write(base64.b64decode(response['delta']))
-        elif response['type'] == 'conversation.item.input_audio_transcription.completed':
-            print(f"[User] {response['transcript']}")
-        elif response['type'] == 'response.audio_transcript.done':
-            print(f"[LLM] {response['transcript']}")
+def receive_events(session, out):
+    """接收线程：迭代服务端事件并按 type 分发处理，连接关闭后自然退出"""
+    try:
+        for event in session.events():
+            event_type = event.get("type", "")
+            # 音频增量：Base64 编码的 PCM 数据，解码后直接写播放流
+            if event_type == "response.audio.delta":
+                out.write(base64.b64decode(event["delta"]))
+            elif event_type == "conversation.item.input_audio_transcription.completed":
+                print(f"[User] {event.get('transcript', '')}")
+            elif event_type == "response.audio_transcript.done":
+                print(f"[LLM] {event.get('transcript', '')}")
+    except DashScopeError as e:
+        # 服务端错误事件（如参数校验失败）会以 DashScopeError 异常抛出
+        print(f"[Error] code={e.code}, message={e.message}, request_id={e.request_id}")
 
 if __name__ == '__main__':
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：dashscope.api_key = "sk-xxx"
-    dashscope.api_key = os.getenv("DASHSCOPE_API_KEY")
-    # 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
+    # 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID；
+    # 如需访问新加坡地域，请将 region 替换为 ap-southeast-1。
+    # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    client = dashscope.Client(
+        api_key=os.getenv("DASHSCOPE_API_KEY"),
+        workspace="{WorkspaceId}",
+        region="cn-beijing",
+    )
     base_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com"
-    ws_url = base_url.replace("https://", "wss://") + "/api-ws/v1/realtime"
 
     # 1. 声音复刻：创建专属音色
     voice = create_voice(VOICE_FILE_PATH, url=f"{base_url}/api/v1/services/audio/tts/customization")
@@ -202,26 +206,40 @@ if __name__ == '__main__':
 
     # 2. 使用复刻音色进行实时对话
     pya = pyaudio.PyAudio()
-    callback = SimpleCallback(pya)
-    conv = OmniRealtimeConversation(model=DEFAULT_TARGET_MODEL, callback=callback, url=ws_url)
-    conv.connect()
-    conv.update_session(
-        output_modalities=[MultiModality.AUDIO, MultiModality.TEXT],
-        voice=voice  # 使用复刻生成的专属音色
-    )
+    out = pya.open(format=pyaudio.paInt16, channels=1, rate=24000, output=True)
     mic = pya.open(format=pyaudio.paInt16, channels=1, rate=16000, input=True)
-    print("对话已开始，对着麦克风说话 (Ctrl+C 退出)...")
-    try:
-        while True:
-            audio_data = mic.read(3200, exception_on_overflow=False)
-            conv.append_audio(base64.b64encode(audio_data).decode())
-            time.sleep(0.01)
-    except KeyboardInterrupt:
-        conv.close()
-        mic.close()
-        callback.out.close()
-        pya.terminate()
-        print("\n对话结束")
+
+    # 进入 with 上下文自动建立连接；2.0 SDK 服务端事件不再通过回调下发，
+    # 改为在接收线程中迭代会话的 events() 并按 type 分发处理
+    with client.audio.realtime.connect(model=DEFAULT_TARGET_MODEL) as session:
+        # 配置会话：输出模态、使用复刻生成的专属音色、输入输出音频格式与转写
+        session.update_session(
+            ["audio", "text"],
+            voice=voice,  # 使用复刻生成的专属音色
+            input_audio_config={"type": "pcm", "sample_rate": 16000},
+            output_audio_config={"type": "pcm", "sample_rate": 24000},
+            enable_input_audio_transcription=True,
+            enable_turn_detection=True,
+        )
+
+        receiver = threading.Thread(target=receive_events, args=(session, out), daemon=True)
+        receiver.start()
+
+        print("对话已开始，对着麦克风说话 (Ctrl+C 退出)...")
+        try:
+            while True:
+                audio_data = mic.read(3200, exception_on_overflow=False)
+                # bytes 会自动 Base64 编码后发送
+                session.append_audio(audio_data)
+        except KeyboardInterrupt:
+            pass
+        finally:
+            # close 幂等：提前关闭连接，解除接收线程 events() 的阻塞等待
+            session.close()
+            mic.close()
+            out.close()
+            pya.terminate()
+            print("\n对话结束")
 ```
 
 Java
@@ -430,7 +448,7 @@ public class Main {
 Python
 
 ```
-# 依赖：dashscope >= 1.23.9，soundfile，numpy
+# 依赖：dashscope >= 2.1.0，soundfile，numpy
 import os
 import requests
 import base64
@@ -446,11 +464,14 @@ DEFAULT_AUDIO_MIME_TYPE = "audio/mpeg"
 VOICE_FILE_PATH = "voice.mp3"  # 用于声音复刻的本地音频文件的相对路径
 
 def create_voice(file_path: str,
+                 url: str,
                  target_model: str = DEFAULT_TARGET_MODEL,
                  preferred_name: str = DEFAULT_PREFERRED_NAME,
                  audio_mime_type: str = DEFAULT_AUDIO_MIME_TYPE) -> str:
     """
-    创建音色，并返回 voice 参数
+    创建音色，并返回 voice 参数。
+    当前 2.0 SDK 尚未提供 Omni 声音复刻（qwen-voice-enrollment）的管理面接口，
+    此处按 HTTP 原生协议直接调用创建音色接口。
     """
     # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key = "sk-xxx"
@@ -463,7 +484,6 @@ def create_voice(file_path: str,
     base64_str = base64.b64encode(file_path_obj.read_bytes()).decode()
     data_uri = f"data:{audio_mime_type};base64,{base64_str}"
 
-    url = dashscope.base_http_api_url + "/services/audio/tts/customization"
     payload = {
         "model": "qwen-voice-enrollment",
         "input": {
@@ -488,39 +508,50 @@ def create_voice(file_path: str,
         raise RuntimeError(f"解析 voice 响应失败: {e}")
 
 if __name__ == '__main__':
-    # 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
-    dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
+    # 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID；
+    # 如需访问新加坡地域，请将 region 替换为 ap-southeast-1。
+    # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    client = dashscope.Client(
+        api_key=os.getenv("DASHSCOPE_API_KEY"),
+        workspace="{WorkspaceId}",
+        region="cn-beijing",
+    )
+    base_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com"
 
     # 1. 声音复刻：创建专属音色
-    voice = create_voice(VOICE_FILE_PATH)
+    voice = create_voice(VOICE_FILE_PATH, url=f"{base_url}/api/v1/services/audio/tts/customization")
     print(f"声音复刻完成，音色: {voice}")
 
     # 2. 使用复刻音色进行非实时对话
     messages = [{"role": "user", "content": [{"text": "你好，请做一段自我介绍"}]}]
 
-    response = dashscope.MultiModalConversation.call(
-        # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-        api_key=os.getenv("DASHSCOPE_API_KEY"),
+    # modalities/audio 为签名外参数，统一通过 parameters 传入
+    response = client.multimodal.chat.create(
         model=DEFAULT_TARGET_MODEL,
         messages=messages,
-        modalities=["text", "audio"],
-        audio={"voice": voice, "format": "wav"},  # 使用复刻生成的专属音色
-        stream=True
+        stream=True,
+        parameters={
+            "modalities": ["text", "audio"],
+            "audio": {"voice": voice, "format": "wav"},  # 使用复刻生成的专属音色
+        },
     )
 
     print("模型回复：")
     audio_base64_string = ""
-    for r in response:
-        try:
-            content = r.output.choices[0].message.content
-            for item in content:
-                if isinstance(item, dict):
-                    if "audio" in item:
-                        audio_base64_string += item["audio"].get("data", "")
-                    elif "text" in item:
-                        print(item["text"], end="")
-        except Exception:
-            pass
+    for chunk in response:
+        if not chunk.choices:
+            continue
+        delta = chunk.choices[0].delta
+        if delta is None:
+            continue
+        # 文本增量直接打印
+        if delta.content:
+            print(delta.content, end="")
+        # 音频增量：从 delta.content_parts 读取 {"audio": {"data": Base64}} 形式的 part
+        for part in (delta.content_parts or []):
+            if isinstance(part, dict) and "audio" in part:
+                audio_base64_string += part["audio"].get("data", "")
 
     if audio_base64_string:
         wav_bytes = base64.b64decode(audio_base64_string)

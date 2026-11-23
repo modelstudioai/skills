@@ -2,7 +2,7 @@
 
 Qwen-Omni-Realtime 可结合语音和画面进行实时对话。模型接收文本、流式音频和视觉输入，可返回文本和音频。
 
-`qwen3.8-omni-flash-realtime`、`qwen3.5-omni-plus-realtime`、`qwen3.5-omni-flash-realtime` 均支持 WebSocket、WebRTC 和 AOQ。历史型号 `qwen3-omni-flash-realtime-2025-09-15` 的 WebSocket 资料参见 [Python SDK](raw/_short/realtime-websocket-python-sdk-qwen-omni-realtime-b04c23b57a9c2f51.md)和[客户端事件](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md)。
+`qwen3.8-omni-flash-realtime`、`qwen3.5-omni-plus-realtime`、`qwen3.5-omni-flash-realtime` 均支持 WebSocket、WebRTC 和 AOQ。历史型号 `qwen3-omni-flash-realtime-2025-09-15` 的 WebSocket 资料参见 [Python SDK](raw/_short/realtime-websocket-python-sdk-qwen-omni-realtime-e50924065f85dda8.md)和[客户端事件](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md)。
 
 ## 协议选型
 

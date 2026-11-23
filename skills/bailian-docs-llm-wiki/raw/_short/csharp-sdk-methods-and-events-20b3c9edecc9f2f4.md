@@ -56,7 +56,7 @@ Bailian.DashScope SDK 客户端类参考，涵盖语音识别、语音合成、�
 
 发送协议格式的上下文数组。
 
-**说明**仅适用于 Qwen-Audio-ASR-Message 系列。
+**Note**仅适用于 Qwen-Audio-ASR-Message 系列。
 
 ### 事件
 
@@ -396,7 +396,7 @@ Bailian.DashScope SDK 客户端类参考，涵盖语音识别、语音合成、�
 
 任务完成后读取。`SynthesizeAsync` 或 `StopAsync` 返回后，读取 `Characters` 获取本次任务的总字符数；服务端未返回用量时，`Usage` 为 `null`。
 
-**说明**`qwen-audio-3.1-tts-flash` 按 Token 计费；`qwen-audio-3.1-tts-plus` 按字符计费。两者均返回 `InputTokens`、`OutputTokens` 和 `TotalTokens`。
+**Note**`qwen-audio-3.1-tts-flash` 按 Token 计费；`qwen-audio-3.1-tts-plus` 按字符计费。两者均返回 `InputTokens`、`OutputTokens` 和 `TotalTokens`。
 
 ### 结果对象
 

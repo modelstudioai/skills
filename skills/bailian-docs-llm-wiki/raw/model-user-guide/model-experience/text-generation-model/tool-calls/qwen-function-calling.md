@@ -55,6 +55,7 @@ Function Calling 通过应用程序与大模型之间的多步骤交互实现：
     -   Qwen3-VL 开源系列
 -   **语音对话模型**
     -   千问Audio-Realtime：Qwen-Audio-3.1-Realtime-Plus、Qwen-Audio-3.1-Realtime-Flash、Qwen-Audio-3.0-Realtime-Plus系列、Qwen-Audio-3.0-Realtime-Flash系列
+    -   [Qwen-Audio-Live](https://help.aliyun.com/zh/model-studio/qwen-audio-live#live-function-calling)：通过 Realtime API 在会话中声明函数并回传结果。
 
 #### DeepSeek
 

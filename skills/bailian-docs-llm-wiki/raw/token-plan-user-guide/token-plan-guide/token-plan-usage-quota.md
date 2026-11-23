@@ -55,7 +55,7 @@ Harness 权益不参与上述抵扣顺序。详见[Harness 权益](raw/token-pla
 
 Credits 是 Token Plan 的统一计量单位，不等于 Token。
 
-不同模型的单价不同，单次请求的 Credits 由输入 Token、缓存 Token 和输出 Token 共同决定。以团队版 `qwen3.6-plus` 为例：
+个人版和团队版采用相同的 Credits 计费逻辑。不同模型的单价不同，单次请求的 Credits 由输入 Token、缓存 Token 和输出 Token 共同决定。以团队版 `qwen3.6-plus` 为例：
 
 Token 类型
 

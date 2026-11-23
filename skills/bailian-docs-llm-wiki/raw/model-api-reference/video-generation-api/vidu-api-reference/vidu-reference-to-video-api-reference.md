@@ -170,7 +170,7 @@ Vidu-参考生视频模型支持传入 参考图片 和 文本提示词 ，将�
 
 -   vidu/viduq3-ad\_reference2video：可选720P、1080P。默认值为720P。
 -   vidu/viduq3-drama\_reference2video：可选720P、1080P。默认值为1080P。
--   vidu/viduq3-mix\_reference2video：可选720P、1080P。默认值为720P。
+-   vidu/viduq3-mix\_reference2video：可选540P、720P、1080P。默认值为720P。
 -   vidu/viduq3\_reference2video：可选540P、720P、1080P。默认值为720P。
 -   vidu/viduq3-turbo\_reference2video：可选540P、720P、1080P。默认值为720P。
 -   vidu/viduq2-pro\_reference2video：可选540P、720P、1080P。默认值为720P。

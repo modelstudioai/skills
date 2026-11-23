@@ -1,0 +1,68 @@
+{
+  "name": "Qwen-Audio-3.1-Captioner",
+  "description": "Qwen-Audio-3.1-Captioner 是面向音频全信息理解、复杂声学场景分析与大规模数据处理优化的新一代音频全要素转写与分离模型。该模型在传统语音转写的基础上，重点增强了对说话人，时间戳，环境音、音效、音乐等多维音频信息的感知与摘要能力，并具备强劲的说话人与背景音频分离能力。核心能力如下：\n 全信息音频转写与摘要：支持对输入音频中的语音内容、说话人信息，时间戳，环境声、音效、背景音乐等多维信息进行全要素提取与语义转写，并能自动生成结构化的音频内容摘要。\n 声学场景深度分析：支持对环境音效、背景噪音类型及空间声学特征进行分类与识别，为声学场景理解与音频监控提供精准沉淀。\n 复杂场景音轨分离：专为多人对话及重叠声学环境优化，能够精准提取并分离不同说话人语音以及背景音频要素，显著提升复杂音频场景下的解析质量。\n 高效音频剪辑与标注：能够输出毫秒级的时间戳与多轨标记，方便后续音频自动化剪辑、轴线对齐以及大规模数据集的自动化标注与处理。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Text",
+          "Audio"
+        ],
+        "request_modality": [
+          "Audio"
+        ]
+      },
+      "description": "Qwen-Audio-3.1-Captioner 是面向音频全信息理解、复杂声学场景分析与大规模数据处理优化的新一代音频全要素转写与分离模型。该模型在传统语音转写的基础上，重点增强了对说话人，时间戳，环境音、音效、音乐等多维音频信息的感知与摘要能力，并具备强劲的说话人与背景音频分离能力。核心能力如下：\n 全信息音频转写与摘要：支持对输入音频中的语音内容、说话人信息，时间戳，环境声、音效、背景音乐等多维信息进行全要素提取与语义转写，并能自动生成结构化的音频内容摘要。\n 声学场景深度分析：支持对环境音效、背景噪音类型及空间声学特征进行分类与识别，为声学场景理解与音频监控提供精准沉淀。\n 复杂场景音轨分离：专为多人对话及重叠声学环境优化，能够精准提取并分离不同说话人语音以及背景音频要素，显著提升复杂音频场景下的解析质量。\n 高效音频剪辑与标注：能够输出毫秒级的时间戳与多轨标记，方便后续音频自动化剪辑、轴线对齐以及大规模数据集的自动化标注与处理。",
+      "features": [],
+      "provider": "qwen",
+      "model": "qwen-audio-3.1-captioner",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.8",
+          "ntmItemCode": "sfm_inferenceFunAudio_public_cn",
+          "timeBand": "standard",
+          "ntmAmountType": "asr_input_token",
+          "type": "asr_input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "2.7",
+          "ntmItemCode": "sfm_inferenceFunAudio_public_cn",
+          "timeBand": "standard",
+          "ntmAmountType": "asr_output_token",
+          "type": "asr_output_token",
+          "priceName": "输出"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "count_limit": 10,
+          "type": "model-default"
+        }
+      },
+      "priceTimeBands": [
+        "standard"
+      ],
+      "capabilities": [
+        "ASR"
+      ],
+      "versionTag": "MAJOR",
+      "equivalentSnapshot": "",
+      "latestOnlineAt": "2026-11-23T02:41:46.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen-Audio-3.1-Captioner",
+      "category": "Audio",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "# 请先设置环境变量 DASHSCOPE_API_KEY。\ncurl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/audio/asr/transcription' \\\n     --header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n     --header 'Content-Type: application/json' \\\n     --header 'X-DashScope-Async: enable' \\\n     --data '{\n    \"model\": \"qwen-audio-3.1-captioner\",\n    \"input\": {\n        \"file_url\": \"https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/zh/audios/6a4b3c2d1e0f9093.wav\"\n    },\n    \"parameters\": {\n        \"channel_id\": [0]\n    }\n}'",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-audio-asr-captioner-http-api"
+          }
+        }
+      }
+    }
+  ]
+}

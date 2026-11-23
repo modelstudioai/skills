@@ -8,7 +8,7 @@
 
 -   使用 `qwen-audio-3.1-asr-flash-message`。具体支持范围参见[模型与协议支持范围](https://help.aliyun.com/zh/model-studio/realtime-api-overview#rtov-s02h2)。
 -   在业务 AppServer 配置与调用地域和业务空间匹配的 [API Key](raw/model-api-reference/preparations/get-api-key.md)。
--   从[SDK 下载](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/realtime-sdk-download.md)导入对应平台的 AOQ SDK。下文以 Android Java 和 Opus 传输为例，请同时导入 Opus 插件。使用麦克风采集时，请在客户端申请录音权限。
+-   从[SDK 下载](raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-sdk-download.md)导入对应平台的 AOQ SDK。下文以 Android Java 和 Opus 传输为例，请同时导入 Opus 插件。使用麦克风采集时，请在客户端申请录音权限。
 
 ## 1\. 获取连接凭证
 
@@ -55,7 +55,7 @@ API Key 仅保存在 AppServer。AppServer 将下表中的连接参数返回客�
 
 ## 2\. 初始化 SDK 并建连
 
-用 `AoqCreateConfig` 设置 SDK 工作目录，调用 `AoqClientEngine.createEngine` 创建引擎并注册回调。在 `onConnectionStatusChange` 中处理连接状态，在 `onDataMsg` 中解析模型事件，在 `onError` 中处理 SDK 错误。[Android SDK](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/aoq-android-sdk-reference.md)提供引擎初始化和连接字段的完整接口说明。
+用 `AoqCreateConfig` 设置 SDK 工作目录，调用 `AoqClientEngine.createEngine` 创建引擎并注册回调。在 `onConnectionStatusChange` 中处理连接状态，在 `onDataMsg` 中解析模型事件，在 `onError` 中处理 SDK 错误。[Android SDK](raw/model-api-reference/more-about-models/realtime-api-aoq-api/aoq-android-sdk-reference.md)提供引擎初始化和连接字段的完整接口说明。
 
 将 AppServer 返回的凭证填入 `connectConfig` 后，发布 Audio 和 Data 轨，订阅 Data 轨。下例设置 16 kHz 单声道 Opus 编码和内置采集，建连时关闭 Audio 轨发送。模型的输入格式由任务事件指定，SDK 编码配置用于媒体轨传输。
 
@@ -144,5 +144,5 @@ engine.enableSendMediaStream(AoqClientEngine.AoqTrackType.AoqTrackTypeAudio, tru
 
 ## 相关文档
 
--   [AOQ SDK](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api.md) · [功能参考](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/realtime-api-aoq-sdk-function.md)
--   [媒体流发送管理](raw/_short/aoq-media-stream-control-1278a5c1aba30cc3.md) · [自定义音频采集](raw/_short/aoq-custom-audio-capture-79471541298aac63.md)
+-   [AOQ SDK](raw/model-api-reference/more-about-models/realtime-api-aoq-api.md) · [功能参考](raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-api-aoq-sdk-function.md)
+-   [媒体流发送管理](raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-api-aoq-sdk-function/aoq-media-stream-control.md) · [自定义音频采集](raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-api-aoq-sdk-function/aoq-custom-audio-capture.md)

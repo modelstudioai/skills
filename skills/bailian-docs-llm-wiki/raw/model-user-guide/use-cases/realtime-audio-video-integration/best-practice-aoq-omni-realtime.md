@@ -4,7 +4,7 @@
 
 ## SDK 获取
 
-AOQ Client SDK 及音频 Opus 插件请参见[SDK下载](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/realtime-sdk-download.md)。本示例使用 Opus 编码，需导入对应插件。
+AOQ Client SDK 及音频 Opus 插件请参见[SDK下载](raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-sdk-download.md)。本示例使用 Opus 编码，需导入对应插件。
 
 ## SDK 导入
 
@@ -131,7 +131,7 @@ engine = AoqClientEngine.createEngine(config, this, context);
 
 调用 `startAudioCapture` 与 `startAudioPlayer` 启动本地音频采集与播放；调用 `startVideoCapture` 启动摄像头，并通过 `setLocalView` 将 SDK 渲染目标绑定到业务侧的预览控件。
 
-以下示例由 SDK 自动播放音频。如需先审核再播放，请在 `startAudioPlayer` 的播放配置中将 `isExternal` 设为 `true`，关闭 SDK 自动播放，并开启播放音频帧回调。应用可复制并缓存回调中的 PCM 音频，审核后再决定播放或丢弃。配置方法见[自定义音频播放](raw/_short/aoq-custom-audio-playback-d7aa8527189532a2.md)。
+以下示例由 SDK 自动播放音频。如需先审核再播放，请在 `startAudioPlayer` 的播放配置中将 `isExternal` 设为 `true`，关闭 SDK 自动播放，并开启播放音频帧回调。应用可复制并缓存回调中的 PCM 音频，审核后再决定播放或丢弃。配置方法见[自定义音频播放](raw/_short/aoq-custom-audio-playback-7832b33ccf014535.md)。
 
 **iOS：**
 
@@ -498,6 +498,6 @@ engine.switchCamera(AoqCameraDirection.AoqCameraDirectionBack);
 
 ## 相关文档
 
--   AOQ Client SDK 详细 API：[SDK简介](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/realtime-api-aoq-sdk-desc.md)
+-   AOQ Client SDK 详细 API：[SDK简介](raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-api-aoq-sdk-desc.md)
 -   qwen3.8-omni-flash-realtime 模型客户端事件：[客户端事件](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md)
 -   qwen3.8-omni-flash-realtime 模型服务端事件：[服务端事件](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md)

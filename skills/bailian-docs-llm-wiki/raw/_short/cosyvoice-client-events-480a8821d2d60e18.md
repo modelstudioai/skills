@@ -201,36 +201,6 @@ SSML 的使用限制（支持的模型、音色和接口），请参见[使用�
 
 **说明**仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
-`hot_fix`object可选
-
-文本热修复配置，用于自定义指定词语的发音或对待合成文本进行替换。
-
-**说明**cosyvoice-v2不支持该功能。
-
-参数介绍：
-
--   `pronunciation`：自定义发音。指定词语的拼音标注，用于纠正默认发音不准确的情况。
--   `replace`：文本替换。在语音合成前将指定词语替换为目标文本，替换后的文本将作为实际合成内容。
-
-以下示例用拼音标注中文词语的发音，并替换待合成文本。
-
-```
-{
-  "hot_fix": {
-    "pronunciation": [
-      {
-        "天气": "tian1 qi4"
-      }
-    ],
-    "replace": [
-      {
-        "今天": "金天"
-      }
-    ]
-  }
-}
-```
-
 `enable_markdown_filter`boolean可选
 
 **说明**cosyvoice-v2 不支持此功能。

@@ -456,7 +456,7 @@ curl -X GET "https://dashscope.aliyuncs.com/api/v1/deployments/{deployed_model}"
 
 `pre_paid_gmt_expired`
 
-预付费到期时间。存在多个容量实例时，请通过目标实例详情的 `gmt_expired` 获取其到期时间。到期时刻计算规则见[吞吐预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-lifecycle-h2)。
+预付费到期时间。存在多个容量实例时，请通过目标实例详情的 `gmt_expired` 获取其到期时间。到期时刻计算规则见[吞吐预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-rules-h2)。
 
 `overflow_strategy`
 
@@ -1310,7 +1310,7 @@ String
 
 String
 
-预付费实例到期时间；8 小时时段实例与 `gmt_effective` 相差 8 小时。到期时刻计算规则见[吞吐预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-lifecycle-h2)。
+预付费实例到期时间；8 小时时段实例与 `gmt_effective` 相差 8 小时。到期时刻计算规则见[吞吐预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-rules-h2)。
 
 `can_scale`
 

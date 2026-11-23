@@ -25,7 +25,7 @@ SDK的接口地址由Client构造参数`workspace`/`region`决定（对应下方
 
 调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
-**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
+**Important**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
 
 -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
 -   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
@@ -48,7 +48,7 @@ SDK提供了语音合成的关键接口，支持以下几种调用方式：
 
 单次调用发送的文本长度不得超过20000字符，超出限制将返回错误。
 
-**重要**`synthesize`与`stream`每次调用自建会话，无需复用实例。
+**Important**`synthesize`与`stream`每次调用自建会话，无需复用实例。
 
 ```
 # coding=utf-8
@@ -88,7 +88,7 @@ export DASHSCOPE_HTTP_BASE_URL="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.c
 dashscope speech-synthesis create -m qwen-audio-3.0-tts-flash -t "你好世界" --voice longanhuan_v3.6
 ```
 
-**重要**SDK Expert 交互式助手可按自然语言完成同样的开发与排障，见
+**Important**SDK Expert 交互式助手可按自然语言完成同样的开发与排障，见
 
 [DashScope SDK Expert](raw/model-api-reference/preparations/dashscope-sdk-expert.md)。
 
@@ -100,7 +100,7 @@ dashscope speech-synthesis create -m qwen-audio-3.0-tts-flash -t "你好世界" 
 
 单次调用发送的文本长度不得超过20000字符，超出限制将返回错误。
 
-**重要**`synthesize`与`stream`每次调用自建会话，无需复用实例。
+**Important**`synthesize`与`stream`每次调用自建会话，无需复用实例。
 
 ```
 # coding=utf-8
@@ -155,7 +155,7 @@ print("语音合成完成，所有合成结果已被接收：" + get_timestamp()
     
     若无待发送文本，需及时调用 `stop`结束任务。
     
-    **重要**请务必确保调用`stop`方法，否则可能会导致结尾部分的文本无法成功转换为语音。
+    **Important**请务必确保调用`stop`方法，否则可能会导致结尾部分的文本无法成功转换为语音。
     
     > 服务端强制设定23秒超时机制，客户端无法修改该配置。
     
@@ -271,7 +271,7 @@ SDK提供了语音合成的关键接口，支持以下几种调用方式：
 
 单次调用发送的文本长度不得超过20000字符，超出限制将触发 `DashScopeError` 异常。
 
-**重要**`synthesize`与`stream`每次调用自建会话，无需复用实例。
+**Important**`synthesize`与`stream`每次调用自建会话，无需复用实例。
 
 按相同调用方式复用 [共用代码示例](#tts-code-examples)，将 `model` 设为 `cosyvoice-v3-plus`，将 `voice` 设为 `longanyang`。
 
@@ -284,7 +284,7 @@ export DASHSCOPE_HTTP_BASE_URL="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.c
 dashscope speech-synthesis create -m cosyvoice-v2 -t "你好世界" --voice longxiaochun_v2
 ```
 
-**重要**SDK Expert 交互式助手可按自然语言完成同样的开发与排障，见
+**Important**SDK Expert 交互式助手可按自然语言完成同样的开发与排障，见
 
 [DashScope SDK Expert](raw/model-api-reference/preparations/dashscope-sdk-expert.md)。
 
@@ -294,7 +294,7 @@ dashscope speech-synthesis create -m cosyvoice-v2 -t "你好世界" --voice long
 
 单次调用发送的文本长度不得超过20000字符，超出限制将触发 `DashScopeError` 异常。
 
-**重要**`synthesize`与`stream`每次调用自建会话，无需复用实例。
+**Important**`synthesize`与`stream`每次调用自建会话，无需复用实例。
 
 按相同调用方式复用 [共用代码示例](#tts-code-examples)，将 `model` 设为 `cosyvoice-v3-plus`，将 `voice` 设为 `longanyang`。
 
@@ -313,7 +313,7 @@ dashscope speech-synthesis create -m cosyvoice-v2 -t "你好世界" --voice long
     
     若无待发送文本，需及时调用 `stop`结束任务。
     
-    **重要**请务必确保调用`stop`方法，否则可能会导致结尾部分的文本无法成功转换为语音。
+    **Important**请务必确保调用`stop`方法，否则可能会导致结尾部分的文本无法成功转换为语音。
     
     > 服务端强制设定23秒超时机制，客户端无法修改该配置。
     
@@ -466,7 +466,7 @@ audio = client.audio.tts.stream(
 
 否
 
-**说明**使用 qwen-audio-3.1-tts-flash 的多语种与方言音色时，可通过此参数指定语种或方言。具体用法请参见[多语种与方言音色的设置方法](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list#qwen-tts31-language-hints)。
+**Note**使用 qwen-audio-3.1-tts-flash 的多语种与方言音色时，可通过此参数指定语种或方言。具体用法请参见[多语种与方言音色的设置方法](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list#qwen-tts31-language-hints)。
 
 指定语音合成的目标语言，提升合成效果。
 
@@ -515,7 +515,7 @@ audio = client.audio.tts.stream(
     保加利亚语、荷兰语、匈牙利语、罗马尼亚语、丹麦语、克罗地亚语、希腊语、捷克语、挪威语、瑞典语、印地语、斯洛伐克语、芬兰语、乌尔都语、塞尔维亚语、墨西哥西班牙语、立陶宛语、拉脱维亚语、土耳其语、波斯语、希伯来语、蒙古语、斯洛文尼亚语、阿塞拜疆语、波兰语、加泰罗尼亚语、高棉语、巴西葡萄牙语、老挝语、格鲁吉亚语、南非荷兰语、尼泊尔语、白俄罗斯语、马拉雅拉姆语、卢森堡语、阿尔巴尼亚语、泰米尔语、僧伽罗语、泰卢固语、爱沙尼亚语、宿务语、波斯尼亚语、缅甸语、亚美尼亚语、拉丁语、冰岛语、马耳他语、斯瓦希里语、哈萨克语、塞舌尔克里奥尔语、乌克兰语。
     
 
-**说明**
+**Note**
 
 -   此参数为数组，但当前版本仅处理第一个元素，因此建议只传入一个值。
 -   此参数用于指定语音合成的目标语言，该设置与声音复刻时的样本音频的语种无关。如需设置复刻任务的源语言，请参见[声音复刻API参考](https://help.aliyun.com/zh/model-studio/voice-clone-design-http-api#h2-create)。
@@ -764,7 +764,7 @@ audio = client.audio.tts.stream(
 
 否
 
-**重要**
+**Important**
 
 -   此参数为数组，但当前版本仅处理第一个元素，因此建议只传入一个值。
 -   此参数用于指定语音合成的目标语言，该设置与声音复刻时的样本音频的语种无关。如需设置复刻任务的源语言，请参见[声音复刻API参考](https://help.aliyun.com/zh/model-studio/voice-clone-design-http-api#h2-create)。
@@ -816,7 +816,7 @@ audio = client.audio.tts.stream(
 
 默认值：false。
 
-**说明**仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
+**Note**仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
 `enable_aigc_tag`、`aigc_propagator`和`aigc_propagate_id`需要通过`parameters`字典进行设置：
 
@@ -843,7 +843,7 @@ audio = client.audio.tts.synthesize(
 
 默认值：阿里云UID。
 
-**说明**仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
+**Note**仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
 需要通过`parameters`字典进行设置，参见`enable_aigc_tag`的示例。
 
@@ -857,40 +857,9 @@ audio = client.audio.tts.synthesize(
 
 默认值：本次语音合成请求Request ID。
 
-**说明**仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
+**Note**仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
 需要通过`parameters`字典进行设置，参见`enable_aigc_tag`的示例。
-
-`hot_fix`
-
-`dict`
-
-否
-
-文本热修复配置，用于自定义指定词语的发音或对待合成文本进行替换。
-
-**说明**cosyvoice-v2不支持该功能。
-
-参数介绍：
-
--   pronunciation：自定义发音。指定词语的拼音标注，用于纠正默认发音不准确的情况。
--   replace：文本替换。在语音合成前将指定词语替换为目标文本，替换后的文本将作为实际合成内容。
-
-示例：
-
-```
-audio = client.audio.tts.synthesize(
-    "待合成文本",
-    model="cosyvoice-v3-plus",
-    voice="longanyang", # 音色
-    parameters={
-        "hot_fix": {
-            "pronunciation": [{"天气": "tian1 qi4"}],
-            "replace": [{"今天": "金天"}]
-        }
-    },
-)
-```
 
 `enable_markdown_filter`
 
@@ -898,7 +867,7 @@ audio = client.audio.tts.synthesize(
 
 否
 
-**说明**cosyvoice-v2 不支持此功能。
+**Note**cosyvoice-v2 不支持此功能。
 
 是否启用 Markdown 过滤。启用后，服务会在合成前将 Markdown 转换成适合朗读的文本。
 
@@ -1054,7 +1023,7 @@ def cancel(self) -> None
 
 **说明**：取消当前轮次的流式语音合成任务。调用后，SDK 会立即结束当前任务。取消后当前会话不能再发送文本，如需继续合成请新建会话。
 
-**重要****模型限制**：
+**Important****模型限制**：
 
 -   华北2（北京）地域：CosyVoice 系列模型仅 v2 及以上版本支持该功能。
 -   新加坡地域：CosyVoice 系列模型不支持该功能。

@@ -331,7 +331,7 @@ API Key。
 -   `pcm`
 -   `opus`
 
-**重要**opus：用户传入PCM格式音频，由SDK内部完成opus编码。
+**Important**opus：用户传入PCM格式音频，由SDK内部完成opus编码。
 
 `nls_config.sample_rate`
 
@@ -341,7 +341,7 @@ API Key。
 
 采样率（Hz），支持任意采样率。
 
-**重要**当开启端侧音频能力（如AEC、VAD）时，不支持8000Hz。
+**Important**当开启端侧音频能力（如AEC、VAD）时，不支持8000Hz。
 
 `nls_config.keep_dialect`
 
@@ -351,7 +351,7 @@ API Key。
 
 是否保留方言表达，默认值为 `false`。`false`：将方言转写为普通话文本；`true`：保留方言表达。
 
-**说明**适用于 `qwen-audio-3.1-asr-flash-streaming`。
+**Note**适用于 `qwen-audio-3.1-asr-flash-streaming`。
 
 `nls_config.vad_model`
 
@@ -364,7 +364,7 @@ VAD 模型，默认值为 `far_field_meeting_16k`。
 -   `near_meeting_16k`：近场场景。
 -   `far_field_meeting_16k`：远场场景。
 
-**说明**适用于 `qwen-audio-3.1-asr-flash-streaming`。
+**Note**适用于 `qwen-audio-3.1-asr-flash-streaming`。
 
 `nls_config.max_sentence_silence`
 
@@ -800,7 +800,7 @@ API Key。
 -   `pcm`
 -   `opus`
 
-**重要**opus：用户传入PCM格式音频，由SDK内部完成opus编码。
+**Important**opus：用户传入PCM格式音频，由SDK内部完成opus编码。
 
 `nls_config.sample_rate`
 
@@ -865,7 +865,7 @@ API Key。
 
 是否保留方言表达，默认值为 `false`。`false`：将方言转写为普通话文本；`true`：保留方言表达。
 
-**说明**仅在最终结果（`sentence_end=true`）生效，中间结果（`sentence_end=false`）不支持。
+**Note**仅在最终结果（`sentence_end=true`）生效，中间结果（`sentence_end=false`）不支持。
 
 `nls_config.vad_model`
 
@@ -1230,7 +1230,7 @@ API Key。
 -   `pcm`
 -   `opus`
 
-**重要**opus：用户传入PCM格式音频，由SDK内部完成opus编码。
+**Important**opus：用户传入PCM格式音频，由SDK内部完成opus编码。
 
 `nls_config.sample_rate`
 
@@ -1242,7 +1242,7 @@ API Key。
 
 取值范围：8k模型仅支持 8000 Hz，其他模型支持任意采样率。
 
-**重要**当开启端侧音频能力（如AEC、VAD）时，不支持8000Hz。
+**Important**当开启端侧音频能力（如AEC、VAD）时，不支持8000Hz。
 
 `nls_config.max_sentence_silence`
 

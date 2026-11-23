@@ -1,48 +1,48 @@
 # realtime api directory
 
-实时 API 目录是百炼平台面向低延迟、流式交互场景提供的统一入口，涵盖语音识别、语音合成、音视频对话、实时翻译及多模态交互等核心能力。所有接口均基于 WebSocket 协议设计，支持端到端流式传输与双向实时交互。开发者需通过 [音视频（实时）](../../raw/model-api-reference/realtime-api-directory.md) 文档索引获取各子模块的详细规范。
+实时 API 目录汇总了百炼平台支持的低延迟、流式音视频处理能力，适用于语音识别、语音合成、实时翻译、多模态交互等场景。所有接口均基于 WebSocket 协议设计，支持逐帧/逐 token 流式响应。开发者需通过 [音视频（实时）](../../raw/model-api-reference/realtime-api-directory.md) 文档入口获取完整子模块索引。
 
 ## 支持的模型与功能
 
-当前目录下包含以下六大类实时能力：
-- 实时语音识别（ASR）：支持中文、英文等多语种流式识别，含标点恢复与说话人分离选项  
-- 实时语音合成（TTS）：提供多音色、可控语速/语调的流式音频生成  
-- 实时语音对话（Audio Realtime）：集成 ASR+LLM+TTS 的端到端对话流水线  
-- 实时音视频翻译（LiveTranslate）：支持双语字幕同步、源音保留与目标语音合成  
-- 实时多模态（Omni Realtime）：融合语音、文本、图像输入的联合理解与响应（参见 [实时多模态](../../raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory.md)）  
-- 多模态交互协议：定义客户端与服务端间事件帧格式、状态同步机制（详见 [多模态交互开发套件](../../raw/model-api-reference/realtime-api-directory/multimodal-interaction-protocol.md)）
+当前目录涵盖以下核心能力：
+- **实时语音识别（ASR）**：支持中英文混合识别、标点预测、说话人分离（部分模型）  
+- **实时语音合成（TTS）**：流式音频输出，支持情感韵律控制与多音色切换  
+- **实时多模态交互（Omni）**：融合语音、文本、图像输入的端到端实时推理（见 [实时多模态](../../raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory.md)）  
+- **Qwen-Audio 系列**：包括 `Qwen-Audio-Realtime`（低延迟音频理解）和 `Qwen-Audio-Live`（直播场景优化版），二者接口结构相似但流控策略不同  
+- **实时音视频翻译（LiveTranslate）**：支持源语种语音→目标语种语音的端到端流式翻译  
 
-> **注意**：[实时语音对话](../../raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory.md) 文档中声明的 `enable_interactive_mode` 参数，在最新 SDK 版本中已更名为 `interactive_mode`，旧参数名将被弃用，请以 [WebSocket SDK](../../raw/model-api-reference/realtime-api-directory/realtime-websocket-sdk.md) 文档为准。
+> **注意**：[Qwen-Audio-Live](../../raw/model-api-reference/realtime-api-directory/qwen-audio-live-api-directory.md) 文档中标注的“默认启用自动静音检测”与 [实时语音识别](../../raw/model-api-reference/realtime-api-directory/realtime-asr-model-apis.md) 中“需显式设置 `enable_silence_detection: true`”存在不一致，以后者为准——该参数必须显式传入才生效。
 
 ## 关键参数
 
-通用必填参数（所有实时 API 共享）：
-- `model`: 模型标识符，如 `qwen2-audio-realtime-v1`、`qwen2-asr-v1`，具体取值见各子模块文档  
-- `stream`: 布尔值，必须为 `true`  
-- `audio_format`: 输入音频编码格式，支持 `pcm16`、`opus`、`mp3`（部分模型仅支持 `pcm16`）  
-- `sample_rate`: 音频采样率，常见值为 `16000` 或 `48000`，需与 `audio_format` 匹配  
+通用必需参数（所有实时 API 共享）：
+- `model`: 模型标识符（如 `qwen-audio-realtime`, `qwen2-asr-16k`）  
+- `stream`: 必须为 `true`  
+- `response_format`: 可选 `json`（结构化事件）或 `pcm`（原始音频流，仅 TTS/LiveTranslate 支持）  
+- `audio_encoding` / `sample_rate`: 音频输入格式约束（详见各子模型文档）  
 
-功能特有参数示例：
-- ASR：`punctuation_prediction`, `speaker_diarization`  
+模型特有参数示例：
+- ASR：`language`, `punctuation_prediction`, `speaker_diarization`  
 - TTS：`voice`, `speed`, `pitch`  
-- LiveTranslate：`source_lang`, `target_lang`, `subtitle_mode`（`single_line` / `dual_line`）
+- LiveTranslate：`source_lang`, `target_lang`, `translate_mode`（`speech_to_speech` 或 `speech_to_text`）
 
 ## 使用方式
 
-1. **建立连接**：使用标准 WebSocket 客户端连接 `wss://dashscope.aliyuncs.com/realtime/v1/...`，携带 `Authorization: Bearer <api_key>` 与 `X-DashScope-Date` 时间戳头  
-2. **发送初始化帧**：首帧为 JSON 格式 `{"type": "session.update", "parameters": {...}}`，声明模型、参数及会话配置  
-3. **流式收发数据**：后续按协议帧类型（`input.audio`, `response.text.delta`, `event.error` 等）双向传输二进制音频或结构化事件  
-4. **关闭连接**：发送 `{"type": "session.terminate"}` 或等待服务端超时断连  
+1. 建立 WebSocket 连接：`wss://dashscope.aliyuncs.com/api/v1/realtime/{model}`  
+2. 发送 `session.update` 初始化请求（含参数与配置）  
+3. 分帧发送 `input.audio` 二进制数据（PCM/WAV 格式，按文档要求切片）  
+4. 接收 `output.*` 事件流（文本、音频 chunk 或结构化结果）  
+5. 主动发送 `session.terminate` 结束会话  
 
-推荐优先使用官方 [WebSocket SDK](../../raw/model-api-reference/realtime-api-directory/realtime-websocket-sdk.md) 或 [AOQ SDK](../../raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api.md)，其已封装连接管理、重连逻辑与帧解析。
+完整握手与错误码说明请参阅 [实时语音识别](../../raw/model-api-reference/realtime-api-directory/realtime-asr-model-apis.md) 的“连接流程”章节。
 
 ## 限制和注意事项
 
-- 单次会话最大时长：30 分钟（ASR/TTS 为 60 分钟）；超时后连接强制关闭，需重建会话  
-- 音频输入缓冲区上限：单次 `input.audio` 帧不超过 64KB（约 2 秒 16kHz PCM），建议分片发送  
-- 并发连接数：免费版限 5 路，企业版按配额配置，超出返回 `429 Too Many Requests`  
-- 所有实时 API **不支持 HTTP 轮询调用**，仅接受 WebSocket 连接；尝试 HTTP 请求将返回 `405 Method Not Allowed`  
-- 服务端错误事件（`event.error`）中 `code` 字段遵循 [音视频（实时）](../../raw/model-api-reference/realtime-api-directory.md) 定义的统一错误码体系，如 `InvalidParameter`、`AudioFormatNotSupported`
+- 单次会话最长 300 秒，超时后连接自动关闭  
+- 音频输入需严格满足采样率（如 16kHz）、位深（16-bit）、单声道要求，否则返回 `400 Bad Audio Format`  
+- Qwen-Audio-Realtime 与 Qwen-Audio-Live **不可混用同一 `model` 参数调用**，即使路径相同——模型服务后端路由逻辑已分离  
+- 所有实时 API **不支持 HTTP 轮询替代 WebSocket**；尝试使用 REST 接口将返回 `405 Method Not Allowed`  
+- 流式响应中 `output.text` 事件可能包含中间结果（如 ASR 的 partial transcript），最终结果以 `is_final: true` 字段标识——该行为在 [实时多模态](../../raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory.md) 和 [Qwen-Audio-Realtime](../../raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory.md) 中定义一致，但 [实时语音合成](../../raw/model-api-reference/realtime-api-directory/realtime-tts-model-apis.md) 文档未明确说明 `is_final` 含义，建议以实际响应字段为准。
 
 ## 来源文档
 

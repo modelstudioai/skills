@@ -25,7 +25,7 @@ SDK的接口地址需在初始化前设置为下方地址（包含WorkspaceId）
 
 调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
-**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
+**Important**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
 
 -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
 -   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
@@ -563,7 +563,7 @@ RecognitionParam param = RecognitionParam.builder()
 -   `aac`
 -   `amr`
 
-**重要**opus/speex：必须使用Ogg封装；
+**Important**opus/speex：必须使用Ogg封装；
 
 wav：必须为PCM编码；
 
@@ -767,7 +767,7 @@ RecognitionParam param = RecognitionParam.builder()
 
 静音音频指的是在音频文件或数据流中没有声音信号的内容。静音音频可以通过多种方法生成，例如使用音频编辑软件如Audacity或Adobe Audition，或者通过命令行工具如FFmpeg。
 
-**说明**使用该字段时，SDK版本不能低于2.19.1。
+**Note**使用该字段时，SDK版本不能低于2.19.1。
 
 `heartbeat`需要通过`RecognitionParam`实例的`parameter`方法或者`parameters`方法进行设置：
 
@@ -991,11 +991,11 @@ Map 中需包含 `context` 键，值为 `List<Map<String, Object>>` 类型的消
 -   `role`（String，必选）：消息角色。`user` 表示前几轮用户语音的识别结果或领域相关的词表；`assistant` 表示前几轮大语言模型的回复内容。
 -   `content`（List<Map>，必选）：消息内容列表。每个元素包含 `type`（String，role 为 user 时填 `input_text`，role 为 assistant 时填 `text`）和 `text`（String，文本内容）。
 
-**重要**上下文消息（`input_text` 和 `text` 类型）各最多 5 条，超出时保留最近的 5 条。每轮上下文文本总长度不超过 400 个字符，超出部分从末尾截断。
+**Important**上下文消息（`input_text` 和 `text` 类型）各最多 5 条，超出时保留最近的 5 条。每轮上下文文本总长度不超过 400 个字符，超出部分从末尾截断。
 
-**重要**携带上下文时，`context` 中的消息顺序有要求：上下文消息必须按对话轮次排列，每轮中 `user`（`input_text` 类型）必须在对应的 `assistant`（`text` 类型）之前。
+**Important**携带上下文时，`context` 中的消息顺序有要求：上下文消息必须按对话轮次排列，每轮中 `user`（`input_text` 类型）必须在对应的 `assistant`（`text` 类型）之前。
 
-**说明**使用该字段时，SDK版本不能低于2.22.23。
+**Note**使用该字段时，SDK版本不能低于2.22.23。
 
 `input`通过`RecognitionParam`实例的`input`方法进行设置：
 
@@ -1093,7 +1093,7 @@ RecognitionParam param = RecognitionParam.builder()
 -   `aac`
 -   `amr`
 
-**重要**opus/speex：必须使用Ogg封装；
+**Important**opus/speex：必须使用Ogg封装；
 
 wav：必须为PCM编码；
 
@@ -1294,7 +1294,7 @@ RecognitionParam param = RecognitionParam.builder()
 
 静音音频指的是在音频文件或数据流中没有声音信号的内容。静音音频可以通过多种方法生成，例如使用音频编辑软件如Audacity或Adobe Audition，或者通过命令行工具如FFmpeg。
 
-**说明**使用该字段时，SDK版本不能低于2.19.1。
+**Note**使用该字段时，SDK版本不能低于2.19.1。
 
 `heartbeat`需要通过`RecognitionParam`实例的`parameter`方法或者`parameters`方法进行设置：
 
@@ -1377,11 +1377,11 @@ Map 中需包含 `context` 键，值为 `List<Map<String, Object>>` 类型的消
 -   `role`（String，必选）：消息角色。`user` 表示前几轮用户语音的识别结果或领域相关的词表；`assistant` 表示前几轮大语言模型的回复内容。
 -   `content`（List<Map>，必选）：消息内容列表。每个元素包含 `type`（String，role 为 user 时填 `input_text`，role 为 assistant 时填 `text`）和 `text`（String，文本内容）。
 
-**重要**上下文消息（`input_text` 和 `text` 类型）各最多 5 条，超出时保留最近的 5 条。每轮上下文文本总长度不超过 400 个字符，超出部分从末尾截断。
+**Important**上下文消息（`input_text` 和 `text` 类型）各最多 5 条，超出时保留最近的 5 条。每轮上下文文本总长度不超过 400 个字符，超出部分从末尾截断。
 
-**重要**携带上下文时，`context` 中的消息顺序有要求：上下文消息必须按对话轮次排列，每轮中 `user`（`input_text` 类型）必须在对应的 `assistant`（`text` 类型）之前。
+**Important**携带上下文时，`context` 中的消息顺序有要求：上下文消息必须按对话轮次排列，每轮中 `user`（`input_text` 类型）必须在对应的 `assistant`（`text` 类型）之前。
 
-**说明**使用该字段时，SDK版本不能低于2.22.23。
+**Note**使用该字段时，SDK版本不能低于2.22.23。
 
 `input`通过`RecognitionParam`实例的`input`方法进行设置：
 
@@ -1480,7 +1480,7 @@ RecognitionParam param = RecognitionParam.builder()
 -   `aac`
 -   `amr`
 
-**重要**opus/speex：必须使用Ogg封装；
+**Important**opus/speex：必须使用Ogg封装；
 
 wav：必须为PCM编码；
 
@@ -1619,7 +1619,7 @@ RecognitionParam param = RecognitionParam.builder()
 
 静音音频指的是在音频文件或数据流中没有声音信号的内容。静音音频可以通过多种方法生成，例如使用音频编辑软件如Audacity或Adobe Audition，或者通过命令行工具如FFmpeg。
 
-**说明**使用该字段时，SDK版本不能低于2.19.1。
+**Note**使用该字段时，SDK版本不能低于2.19.1。
 
 `heartbeat`需要通过`RecognitionParam`实例的`parameter`方法或者`parameters`方法进行设置：
 
@@ -1848,18 +1848,18 @@ RecognitionParam param = RecognitionParam.builder()
 
 输入对象，用于传入对话上下文（context）。上下文用于辅助识别、提升专有词汇的识别准确率。使用方法详见[提升识别准确率](raw/model-user-guide/model-experience/speech-and-audio/speech-recognition/improve-asr-accuracy.md)。
 
-**重要**仅 `fun-asr-realtime` 模型支持 context 参数。
+**Important**仅 `fun-asr-realtime` 模型支持 context 参数。
 
 Map 中需包含 `context` 键，值为 `List<Map<String, Object>>` 类型的消息数组，每条消息包含以下字段：
 
 -   `role`（String，必选）：消息角色。`user` 表示前几轮用户语音的识别结果或领域相关的词表；`assistant` 表示前几轮大语言模型的回复内容。
 -   `content`（List<Map>，必选）：消息内容列表。每个元素包含 `type`（String，role 为 user 时填 `input_text`，role 为 assistant 时填 `text`）和 `text`（String，文本内容）。
 
-**重要**上下文消息（`input_text` 和 `text` 类型）各最多 5 条，超出时保留最近的 5 条。每轮上下文文本总长度不超过 400 个字符，超出部分从末尾截断。
+**Important**上下文消息（`input_text` 和 `text` 类型）各最多 5 条，超出时保留最近的 5 条。每轮上下文文本总长度不超过 400 个字符，超出部分从末尾截断。
 
-**重要**携带上下文时，`context` 中的消息顺序有要求：上下文消息必须按对话轮次排列，每轮中 `user`（`input_text` 类型）必须在对应的 `assistant`（`text` 类型）之前。
+**Important**携带上下文时，`context` 中的消息顺序有要求：上下文消息必须按对话轮次排列，每轮中 `user`（`input_text` 类型）必须在对应的 `assistant`（`text` 类型）之前。
 
-**说明**使用该字段时，SDK版本不能低于2.22.23。
+**Note**使用该字段时，SDK版本不能低于2.22.23。
 
 `input`通过`RecognitionParam`实例的`input`方法进行设置：
 
@@ -2000,7 +2000,7 @@ requestId
 
 获取当前任务的requestId，在调用`call`、`streamingCall`开始新任务之后可以使用。
 
-**说明**该方法自2.18.0版本及以后的SDK中才开始提供。
+**Note**该方法自2.18.0版本及以后的SDK中才开始提供。
 
 ```
 public long getFirstPackageDelay()
@@ -2012,7 +2012,7 @@ public long getFirstPackageDelay()
 
 获取首包延迟，从发送第一包音频到收到首包识别结果延迟，在任务完成后使用。
 
-**说明**该方法自2.18.0版本及以后的SDK中才开始提供。
+**Note**该方法自2.18.0版本及以后的SDK中才开始提供。
 
 ```
 public long getLastPackageDelay()
@@ -2024,7 +2024,7 @@ public long getLastPackageDelay()
 
 获得尾包延迟，发送`stop`指令到最后一包识别结果下发耗时，在任务完成后使用。
 
-**说明**该方法自2.18.0版本及以后的SDK中才开始提供。
+**Note**该方法自2.18.0版本及以后的SDK中才开始提供。
 
 #### 回调接口（`ResultCallback`）
 
@@ -2329,7 +2329,7 @@ requestId
 
 获取当前任务的requestId，在调用`call`、`streamingCall`开始新任务之后可以使用。
 
-**说明**该方法自2.18.0版本及以后的SDK中才开始提供。
+**Note**该方法自2.18.0版本及以后的SDK中才开始提供。
 
 ```
 public long getFirstPackageDelay()
@@ -2341,7 +2341,7 @@ public long getFirstPackageDelay()
 
 获取首包延迟，从发送第一包音频到收到首包识别结果延迟，在任务完成后使用。
 
-**说明**该方法自2.18.0版本及以后的SDK中才开始提供。
+**Note**该方法自2.18.0版本及以后的SDK中才开始提供。
 
 ```
 public long getLastPackageDelay()
@@ -2353,7 +2353,7 @@ public long getLastPackageDelay()
 
 获得尾包延迟，发送`stop`指令到最后一包识别结果下发耗时，在任务完成后使用。
 
-**说明**该方法自2.18.0版本及以后的SDK中才开始提供。
+**Note**该方法自2.18.0版本及以后的SDK中才开始提供。
 
 ##### 更新对话上下文
 

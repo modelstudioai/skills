@@ -2,7 +2,7 @@
 
 本文介绍通过 WebSocket 连接访问 Paraformer 实时语音识别服务的接口地址、请求头和交互流程。
 
-使用 Python 调用模型时，请参见 [Paraformer Python SDK](raw/_short/realtime-websocket-python-sdk-paraformer-3b8f41a8c1c64b5a.md)。
+使用 Python 调用模型时，请参见 [Paraformer Python SDK](raw/_short/realtime-websocket-python-sdk-paraformer-48f2eb5035b28f23.md)。
 
 **重要**阿里云百炼为华北2（北京）地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`。
 
@@ -85,8 +85,8 @@ string
 
 ## 可用的 SDK
 
--   [Python SDK](raw/_short/realtime-websocket-python-sdk-paraformer-3b8f41a8c1c64b5a.md)
--   [Java SDK](raw/_short/paraformer-real-time-speech-recognition-java-sdk-07562d683c29a6d3.md)
--   [Android SDK](raw/_short/android-sdk-for-paraformer-real-time-service-89010820958448e0.md)
--   [iOS SDK](raw/_short/ios-sdk-for-paraformer-real-time-service-d387ad01c5950d13.md)
--   [HarmonyOS SDK](raw/_short/harmonyos-sdk-for-paraformer-real-time-service-ed34bd097a16dafb.md)
+-   [Python SDK](raw/_short/realtime-websocket-python-sdk-paraformer-48f2eb5035b28f23.md)
+-   [Java SDK](raw/_short/paraformer-real-time-speech-recognition-java-sdk-7a1a7974a8aacc5d.md)
+-   [Android SDK](raw/_short/android-sdk-for-paraformer-real-time-service-9e7815d0b3adcb41.md)
+-   [iOS SDK](raw/_short/ios-sdk-for-paraformer-real-time-service-28718b821c8d6e25.md)
+-   [HarmonyOS SDK](raw/_short/harmonyos-sdk-for-paraformer-real-time-service-642577184b92b90f.md)

@@ -17,12 +17,12 @@
 
 1.  开通阿里云百炼，并按[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)获取 API Key。API Key 只保存在业务 AppServer，不要写入客户端代码或提交到代码仓库。
 2.  `{endpoint}` 使用华北2（北京）的 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com` 或新加坡的 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，替换为实际业务空间 ID，并使用对应地域和业务空间的 API Key。
-3.  从 [SDK 下载](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/realtime-sdk-download.md)获取最新版 AOQ Client SDK。
+3.  从 [SDK 下载](raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-sdk-download.md)获取最新版 AOQ Client SDK。
 4.  按 [Qwen-Audio-ASR-Streaming 的 AOQ 鉴权步骤](https://help.aliyun.com/zh/model-studio/qwen-audio-asr-streaming-aoq-access#authentication)搭建业务 AppServer。每次建立新连接前，客户端都应从 AppServer 获取新的连接凭证。
 
 ### 导入 SDK
 
-从 [SDK 下载](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/realtime-sdk-download.md)获取最新版 AOQ Client SDK 后，根据开发平台导入对应 SDK。后续客户端代码以 Android 为例，其他平台使用相同的接口设计和事件流程。
+从 [SDK 下载](raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-sdk-download.md)获取最新版 AOQ Client SDK 后，根据开发平台导入对应 SDK。后续客户端代码以 Android 为例，其他平台使用相同的接口设计和事件流程。
 
 #### Android
 
@@ -518,7 +518,7 @@ sendRunTask();
 
 -   [客户端事件](raw/_short/qwen-audio-asr-streaming-client-events-3240c8efa3976e48.md)
 -   [服务端事件](raw/_short/qwen-audio-asr-streaming-server-events-4757090610f208c7.md)
--   [AOQ SDK Android API 参考](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/aoq-android-sdk-reference.md)
+-   [AOQ SDK Android API 参考](raw/model-api-reference/more-about-models/realtime-api-aoq-api/aoq-android-sdk-reference.md)
 -   [qwen-audio-3.1-asr-flash-streaming 模型信息](raw/_short/qwen-audio-3-1-asr-flash-streaming-5a2483d4eed63d1c.md)
 -   [使用 AOQ 接入 fun-asr-realtime 实现实时语音识别](raw/_short/real-time-speech-recognition-using-aoq-access-fu-1f528aaba4a8fd1b.md)
 -   [Qwen-Audio-ASR-Streaming AOQ 接入](raw/_short/qwen-audio-asr-streaming-aoq-access-7b2cf295190f6172.md)

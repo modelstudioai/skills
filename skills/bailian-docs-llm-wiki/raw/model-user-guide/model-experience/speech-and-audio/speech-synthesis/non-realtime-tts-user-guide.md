@@ -214,7 +214,7 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 
 ### 语言与发音
 
-数字、缩写或符号的读法不符合预期时，可通过 `language_hints` 指定合成目标语言，或通过 `hot_fix` 定义词语发音与文本替换。参数适用模型和配置方法请参见对应的 [Qwen-Audio-TTS API](raw/_short/qwen-audio-tts-http-api-ee05f9b13900b687.md)或 [CosyVoice API](raw/_short/cosyvoice-tts-http-api-63e05680db50f996.md)。
+数字、缩写或符号的读法不符合预期时，可通过 `language_hints` 指定合成目标语言。参数配置请参见 [Qwen-Audio-TTS API](raw/_short/qwen-audio-tts-http-api-ee05f9b13900b687.md) 或 [CosyVoice API](raw/_short/cosyvoice-tts-http-api-63e05680db50f996.md)。使用 Qwen-Audio-TTS 时，还可通过 `hot_fix` 指定词语的发音，或在合成前替换词语。
 
 需要控制停顿、数字读法或字词发音时，可使用 SSML。Qwen-Audio-TTS 和 CosyVoice 的适用模型、音色、接口与标签用法，请参见 [SSML 与 LaTeX](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/ssml-latex-user-guide.md)。
 

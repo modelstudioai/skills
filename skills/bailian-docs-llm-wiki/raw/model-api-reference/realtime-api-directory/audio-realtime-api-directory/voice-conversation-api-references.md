@@ -1,4 +1,4 @@
-# 实时语音对话
+# Qwen-Audio-Realtime
 
 Qwen-Audio-Realtime 用于实时语音对话。模型支持文本和流式音频输入，可返回文本和音频。
 

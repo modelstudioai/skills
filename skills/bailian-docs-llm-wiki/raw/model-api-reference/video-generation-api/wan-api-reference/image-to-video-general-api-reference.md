@@ -685,7 +685,7 @@ SDK 的参数命名与[HTTP接口](raw/model-api-reference/video-generation-api/
 # -*- coding: utf-8 -*-
 import dashscope
 import os
-from dashscope.v2 import DashScopeError
+from dashscope import DashScopeError
 
 # 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
 client = dashscope.Client(
@@ -766,7 +766,7 @@ if __name__ == '__main__':
 # -*- coding: utf-8 -*-
 import dashscope
 import os
-from dashscope.v2 import DashScopeError
+from dashscope import DashScopeError
 
 # 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
 client = dashscope.Client(

@@ -44,7 +44,9 @@
 
 qwen4-max
 
-> [缓存单价（每百万 Token）](https://help.aliyun.com/zh/model-studio/explicit-cache-qwen4#billing)
+> [Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)半价
+
+> [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
 
 非思考和思考模式
 
@@ -182,40 +184,6 @@ qwen-max
 
 无
 
-**qwen4-max — 缓存单价（每百万 Token）**
-
-创建缓存（5m）
-
-创建缓存（1h）
-
-显式/隐式缓存命中
-
-12.5元
-
-20元
-
-0.5元
-
-**qwen4-max — Batch 单价（每百万 Token）**
-
-API
-
-输入
-
-输出
-
-[Batch File](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)
-
-5元
-
-15元
-
-[Batch Chat](raw/model-api-reference/toolkits-and-frameworks/openai-compatible-batch-chat.md)（限时 5 折）
-
-原价 10元
-
-原价 30元
-
 #### 美国（弗吉尼亚）
 
 **模型 ID（Model ID）**
@@ -234,7 +202,7 @@ API
 
 qwen4-max
 
-> [缓存单价（每百万 Token）](https://help.aliyun.com/zh/model-studio/explicit-cache-qwen4#billing)
+> [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
 
 全球
 
@@ -248,7 +216,7 @@ qwen4-max
 
 qwen4-max
 
-> [缓存单价（每百万 Token）](https://help.aliyun.com/zh/model-studio/explicit-cache-qwen4#billing)
+> [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
 
 弗吉尼亚
 
@@ -356,34 +324,6 @@ qwen3.7-max-2026-05-20
 
 36元
 
-**qwen4-max — 缓存单价（每百万 Token） (全球)**
-
-创建缓存（5m）
-
-创建缓存（1h）
-
-显式/隐式缓存命中
-
-12.5元
-
-20元
-
-0.5元
-
-**qwen4-max — 缓存单价（每百万 Token） (弗吉尼亚)**
-
-创建缓存（5m）
-
-创建缓存（1h）
-
-显式/隐式缓存命中
-
-13.672元
-
-21.875元
-
-0.547元
-
 #### 新加坡
 
 **模型 ID（Model ID）**
@@ -402,7 +342,7 @@ qwen3.7-max-2026-05-20
 
 qwen4-max
 
-> [缓存单价（每百万 Token）](https://help.aliyun.com/zh/model-studio/explicit-cache-qwen4#billing)
+> [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
 
 国际
 
@@ -510,20 +450,6 @@ qwen-max
 
 46.971元
 
-**qwen4-max — 缓存单价（每百万 Token）**
-
-创建缓存（5m）
-
-创建缓存（1h）
-
-显式/隐式缓存命中
-
-13.672元
-
-21.875元
-
-0.547元
-
 #### 德国（法兰克福）
 
 **模型 ID（Model ID）**
@@ -542,7 +468,7 @@ qwen-max
 
 qwen4-max
 
-> [缓存单价（每百万 Token）](https://help.aliyun.com/zh/model-studio/explicit-cache-qwen4#billing)
+> [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
 
 全球
 
@@ -621,20 +547,6 @@ qwen3.7-max-2026-05-20
 12元
 
 36元
-
-**qwen4-max — 缓存单价（每百万 Token）**
-
-创建缓存（5m）
-
-创建缓存（1h）
-
-显式/隐式缓存命中
-
-12.5元
-
-20元
-
-0.5元
 
 #### 日本（东京）
 
@@ -654,7 +566,7 @@ qwen3.7-max-2026-05-20
 
 qwen4-max
 
-> [缓存单价（每百万 Token）](https://help.aliyun.com/zh/model-studio/explicit-cache-qwen4#billing)
+> [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
 
 全球
 
@@ -724,20 +636,6 @@ qwen3.7-max-2026-05-20
 
 36元
 
-**qwen4-max — 缓存单价（每百万 Token）**
-
-创建缓存（5m）
-
-创建缓存（1h）
-
-显式/隐式缓存命中
-
-12.5元
-
-20元
-
-0.5元
-
 #### 中国香港
 
 **模型 ID（Model ID）**
@@ -756,7 +654,7 @@ qwen3.7-max-2026-05-20
 
 qwen4-max
 
-> [缓存单价（每百万 Token）](https://help.aliyun.com/zh/model-studio/explicit-cache-qwen4#billing)
+> [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
 
 全球
 
@@ -835,20 +733,6 @@ qwen3.7-max-2026-05-20
 12元
 
 36元
-
-**qwen4-max — 缓存单价（每百万 Token）**
-
-创建缓存（5m）
-
-创建缓存（1h）
-
-显式/隐式缓存命中
-
-12.5元
-
-20元
-
-0.5元
 
 ### 千问Plus
 
@@ -9823,6 +9707,30 @@ qwen3-tts-flash-realtime
 
 每主账号每模型每月3万字符。
 
+## 音频打标
+
+### Qwen-Audio-3.1-Captioner
+
+#### 华北2（北京）
+
+**模型 ID（Model ID）**
+
+**输入单价**
+
+**输出单价**
+
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
+
+有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
+
+qwen-audio-3.1-captioner
+
+0.8元/百万 Token
+
+2.7元/百万 Token
+
+100万 Token
+
 ## 音频生成
 
 ### Qwen-Audio-TTS-Next
@@ -10014,6 +9922,32 @@ qwen-audio-3.0-realtime-flash
 5.104元
 
 13.636元
+
+### Qwen-Audio-Live
+
+Qwen-Audio-Live 按会话时长（秒）计费。连接建立后，单次会话至少按 3 秒计费。超过 3 秒时，按实际会话时长计费。发送文字消息、静音或空闲的时间也计入会话时长。百炼调用后台模型时，按该模型的实际 Token 用量和单价另行计费。
+
+#### 华北2（北京）
+
+模型 ID
+
+单价（元/秒）
+
+`qwen-audio-3.1-live`
+
+0.003330
+
+免费额度为 36,000 秒（10 小时），仅适用于华北2（北京）地域。有效期为 90 天，从开通阿里云百炼、模型发布或模型申请通过之日起计算，以较晚者为准。可在控制台查看额度和余额。详见[新人免费额度](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)。
+
+#### 新加坡
+
+模型 ID
+
+单价（元/秒）
+
+`qwen-audio-3.1-live`
+
+0.005177
 
 ## 音视频翻译
 
@@ -13893,11 +13827,15 @@ vidu/viduq3-drama\_reference2video
 
 vidu/viduq3-mix\_reference2video
 
+540P
+
+0.46875元/秒
+
+无
+
 720P
 
 0.78125元/秒
-
-无
 
 1080P
 

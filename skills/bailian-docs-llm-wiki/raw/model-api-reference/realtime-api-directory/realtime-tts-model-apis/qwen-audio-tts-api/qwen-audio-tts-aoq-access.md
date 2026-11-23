@@ -8,7 +8,7 @@
 
 -   选择支持 AOQ 的型号。`qwen-audio-3.1-tts-plus`、`qwen-audio-3.1-tts-flash`、`qwen-audio-3.0-tts-plus` 和 `qwen-audio-3.0-tts-flash` 的协议支持情况见[模型与协议支持范围](https://help.aliyun.com/zh/model-studio/realtime-api-overview#rtov-s02h2)。
 -   在业务 AppServer 配置与调用地域和业务空间匹配的 [API Key](raw/model-api-reference/preparations/get-api-key.md)。
--   从[SDK 下载](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/realtime-sdk-download.md)导入对应平台的 AOQ SDK。下文以 Android Java 和 Opus 传输为例，请同时导入 Opus 插件。纯文本合成无需申请麦克风或摄像头权限。
+-   从[SDK 下载](raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-sdk-download.md)导入对应平台的 AOQ SDK。下文以 Android Java 和 Opus 传输为例，请同时导入 Opus 插件。纯文本合成无需申请麦克风或摄像头权限。
 
 ## 1\. 获取连接凭证
 
@@ -55,7 +55,7 @@ API Key 仅保存在 AppServer。AppServer 将下表中的连接参数返回客�
 
 ## 2\. 初始化 SDK 并建连
 
-用 `AoqCreateConfig` 设置 SDK 工作目录，调用 `AoqClientEngine.createEngine` 创建引擎并注册回调。在 `onConnectionStatusChange` 中处理连接状态，在 `onDataMsg` 中解析模型事件，在 `onError` 中处理 SDK 错误。[Android SDK](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/aoq-android-sdk-reference.md)提供引擎初始化和连接字段的完整接口说明。
+用 `AoqCreateConfig` 设置 SDK 工作目录，调用 `AoqClientEngine.createEngine` 创建引擎并注册回调。在 `onConnectionStatusChange` 中处理连接状态，在 `onDataMsg` 中解析模型事件，在 `onError` 中处理 SDK 错误。[Android SDK](raw/model-api-reference/more-about-models/realtime-api-aoq-api/aoq-android-sdk-reference.md)提供引擎初始化和连接字段的完整接口说明。
 
 将 AppServer 返回的凭证填入 `connectConfig` 后，发布 Data 轨，订阅 Audio 和 Data 轨。下例设置 24 kHz 单声道 Opus 解码并启动播放器。模型的输出格式由任务事件指定，SDK 解码配置用于媒体轨传输。
 
@@ -155,6 +155,6 @@ SDK 从 Audio 轨接收并播放语音。`result-generated` 是 Data 轨上的�
 
 ## 相关文档
 
--   [AOQ SDK](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api.md) · [功能参考](raw/model-api-reference/realtime-api-directory/realtime-api-aoq-api/realtime-api-aoq-sdk-function.md)
--   [自定义音频播放](raw/_short/aoq-custom-audio-playback-d7aa8527189532a2.md)
+-   [AOQ SDK](raw/model-api-reference/more-about-models/realtime-api-aoq-api.md) · [功能参考](raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-api-aoq-sdk-function.md)
+-   [自定义音频播放](raw/_short/aoq-custom-audio-playback-7832b33ccf014535.md)
 -   [使用 AOQ 接入 Qwen-Audio-TTS](raw/_short/speech-synthesis-using-aoq-access-qwen-audio-3-0-43022e91dedcb0c1.md)

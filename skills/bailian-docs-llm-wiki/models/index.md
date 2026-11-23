@@ -1,6 +1,6 @@
 # 百炼模型市场索引
 
-> 自动生成 · 共 126 个模型家族 · 342 个主干模型 · 更新于 2026-11-23
+> 自动生成 · 共 129 个模型家族 · 345 个主干模型 · 更新于 2026-11-24
 
 **机器查询走结构化文件**：
 
@@ -158,7 +158,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [鞋靴模特](groups/shoemodel-v1.json) — 鞋靴模特支持输入多视角鞋靴系列图片，同时对输入模特模板图的鞋子区域进行鞋靴AI试穿，实现模特鞋靴布局重绘生成，最终生成图片的效果, 布局自然、细节丰富、画面细腻、试穿结果逼真。可用于模特商品图设计、新…
   - 模型：`shoemodel-v1`
 
-## 语音识别 `ASR` — 11 个家族
+## 语音识别 `ASR` — 12 个家族
 
 - [Fun-ASR-Flash](groups/fun-asr-flash.json) — 百聆2026年6月更新的大模型ASR版本，全面支持汉语传统七大方言体系（官话/吴/湘/赣/客/闽/粤），并适配 20+ 地区口音官话。针对中文古诗词的韵律、节奏与文言表达特点进行专项优化，提升对古诗词…
   - 模型：`fun-asr-flash-2026-06-15`
@@ -174,6 +174,8 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`qwen-audio-3.1-asr-flash`, `qwen-audio-3.1-asr-flash-filetrans`, `qwen-audio-3.1-asr-flash-streaming`
 - [Qwen-Audio-3.1-ASR-Message](groups/qwen-audio-3.1-asr-message.json) — Qwen-Audio-3.1-ASR-Flash-Message是一款基于大语言模型的高精度、长上下文、高灵活性的多语种语音识别模型。ASR-Flash-Message模型不仅支持超长音频上下文的无缝…
   - 模型：`qwen-audio-3.1-asr-flash-message`
+- [Qwen-Audio-3.1-Captioner](groups/qwen-audio-3.1-captioner.json) — Qwen-Audio-3.1-Captioner 是面向音频全信息理解、复杂声学场景分析与大规模数据处理优化的新一代音频全要素转写与分离模型。该模型在传统语音转写的基础上，重点增强了对说话人，时间戳，…
+  - 模型：`qwen-audio-3.1-captioner`
 - [Qwen-Audio-ASR-Flash-Filetrans](groups/qwen-audio-asr-flash-filetrans.json) — Qwen-Audio-ASR-Flash-Filetrans是新一代端到端离线语音识别大模型，面向会议转写、内容生产与通话分析等场景，支持多语种与多地区中文方言识别。模型具备高精度转写、热词及上下文增…
   - 模型：`qwen-audio-3.0-asr-flash-filetrans`
 - [Qwen3-ASR-Flash](groups/qwen3-asr-flash.json) — Qwen3-ASR-Flash是一款基于大语言模型的高精度、高智能、高鲁棒性的多语种语音识别模型。依托强大的基座模型、海量的文本与多模态数据、千万小时音频数据，Qwen3-ASR-Flash实现了高精…
@@ -279,6 +281,15 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [Qwen3.8-Omni-Flash-Realtime](groups/qwen3.8-omni-flash-realtime.json) — Qwen3.8-Omni-Flash-Realtime 通过多种实时协议提供音视频双工交互，面向智能硬件、机器人与实时交互 Agent。支持多通道音频输入与多种通道布局，视频表征可在细粒度与聚合之间按…
   - 模型：`qwen3.8-omni-flash-realtime`
 
+## Realtime-Chatting `Realtime-Chatting` — 3 个家族
+
+- [Qwen-Audio-3.0-Realtime](groups/qwen-audio-3.0-realtime.json) — 实时双工语音对话，兼顾低时延、自然交互与语音推理。Plus 效果优先，Flash 响应更快。
+  - 模型：`qwen-audio-3.0-realtime-flash`, `qwen-audio-3.0-realtime-plus`
+- [Qwen-Audio-3.1-Live](groups/qwen-audio-3.1-live.json) — 千问实时语音模型服务（Qwen-Audio-3.1-Live）是一款面向实时通话的下一代实时双工语音模型服务。服务采用前台语音模型与后台推理模型协同的架构，并支持按业务场景灵活配置前后台模型，兼顾复杂…
+  - 模型：`qwen-audio-3.1-live`
+- [Qwen-Audio-3.1-Realtime](groups/qwen-audio-3.1-realtime.json) — Qwen-Audio-3.1-Realtime 是新一代实时全双工语音大模型，进一步增强口语推理、多轮指令遵循、共情表达与角色扮演能力，兼顾智能应答与自然对话节奏。模型优化噪声拒识、多人对话理解与动态…
+  - 模型：`qwen-audio-3.1-realtime-flash`, `qwen-audio-3.1-realtime-plus`
+
 ## 多模态嵌入 `ME` — 2 个家族
 
 - [Qwen-VL-Embedding](groups/qwen-vl-embedding.json) — 基于Qwen-VL底座训练的统一多模态向量模型，支持文本、图片、视频单模态/混合模态输入，输出统一表征向量，适用于跨模态检索、图搜、视频检索、图像聚类、复杂多模态信息检索、打标等场景。
@@ -286,19 +297,19 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [通义多模态向量](groups/embedding.json) — 基于LLM底座的通用多模态表征模型，支持文本、图像、视频3种模态，具有以视觉为中心、全场景性能优异、高性价比的特点，适用于以图搜图、以文搜图、以文搜视频、以视频搜视频、以文搜文等下游多样化任务场景。
   - 模型：`multimodal-embedding-v1`, `tongyi-embedding-vision-flash`, `tongyi-embedding-vision-plus`
 
-## Realtime-Chatting `Realtime-Chatting` — 2 个家族
-
-- [Qwen-Audio-3.0-Realtime](groups/qwen-audio-3.0-realtime.json) — 实时双工语音对话，兼顾低时延、自然交互与语音推理。Plus 效果优先，Flash 响应更快。
-  - 模型：`qwen-audio-3.0-realtime-flash`, `qwen-audio-3.0-realtime-plus`
-- [Qwen-Audio-3.1-Realtime](groups/qwen-audio-3.1-realtime.json) — Qwen-Audio-3.1-Realtime 是新一代实时全双工语音大模型，进一步增强口语推理、多轮指令遵循、共情表达与角色扮演能力，兼顾智能应答与自然对话节奏。模型优化噪声拒识、多人对话理解与动态…
-  - 模型：`qwen-audio-3.1-realtime-flash`, `qwen-audio-3.1-realtime-plus`
-
 ## 翻译 `TR` — 2 个家族
 
 - [Qwen-Embedding](groups/qwen-embedding.json) — 基于Qwen模型基座训练的多语言文本统一向量模型，文本检索、聚类、分类性能大幅提升，多语言支持，适用于向量检索、向量化等等场景，可搭配检索增强、文档处理场景使用，支持64~2560维用户自定义向量维度…
   - 模型：`qwen3.7-text-embedding`, `qwen3.7-text-embedding-flash`, `text-embedding-async-v1`, `text-embedding-async-v2`, `text-embedding-v1`, `text-embedding-v2`, `text-embedding-v3`, `text-embedding-v4`
 - [Qwen-Rerank](groups/qwen-rerank.json) — 基于Qwen LLM底座训练的文本排序模型，对输入的Query和候选Docs进行相关性排序，支持100+语种和长文本输入，适用于文本检索、RAG等场景，效果对齐Qwen家族开源Rerank系列模型。
   - 模型：`gte-rerank-v2`, `qwen3-rerank`, `qwen3-vl-rerank`, `qwen3.7-text-rerank`
+
+## 实时音频翻译 `Realtime-Audio-Translate` — 2 个家族
+
+- [Qwen3.5-LiveTranslate-Flash-Realtime](groups/qwen3.5-livetranslate-flash-realtime.json) — Qwen3.5-LiveTranslate-Flash的实时版本，一款高精度、高响应、高鲁棒性的多语言实时音视频同传大模型。依托Qwen3.5-Omni强大的基座能力、海量多模态数据、跨语言跨模态对齐…
+  - 模型：`qwen3.5-livetranslate-flash-realtime`
+- [Qwen3.8-LiveTranslate-Flash-Realtime](groups/qwen3.8-livetranslate-flash-realtime.json) — Qwen3.8-LiveTranslate-Flash的实时版本，一款高精度、高响应、高鲁棒性的多语言实时音视频同传大模型。依托Qwen-Omni强大的基座能力、海量多模态数据、跨语言跨模态对齐和视觉…
+  - 模型：`qwen3.8-livetranslate-flash-realtime`
 
 ## World-Model `World-Model` — 1 个家族
 
@@ -309,11 +320,6 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 
 - [Qwen-Audio-3.0-TTS](groups/qwen-audio-3.0-tts.json) — 多语种语音合成，支持方言及情绪、角色、语速控制。Plus 效果优先，Flash 速度与成本优先。
   - 模型：`qwen-audio-3.0-tts-flash`, `qwen-audio-3.0-tts-plus`
-
-## 实时音频翻译 `Realtime-Audio-Translate` — 1 个家族
-
-- [Qwen3.8-LiveTranslate-Flash-Realtime](groups/qwen3.8-livetranslate-flash-realtime.json) — Qwen3.8-LiveTranslate-Flash的实时版本，一款高精度、高响应、高鲁棒性的多语言实时音视频同传大模型。依托Qwen-Omni强大的基座能力、海量多模态数据、跨语言跨模态对齐和视觉…
-  - 模型：`qwen3.8-livetranslate-flash-realtime`
 
 ## 3D 生成 `3D-generation` — 1 个家族
 

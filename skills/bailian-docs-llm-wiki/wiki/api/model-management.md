@@ -1,42 +1,45 @@
 # model management
 
-模型管理是百炼平台的核心能力之一，提供对可用模型的发现、权限控制、限流配置与配额监控等全生命周期操作。开发者可通过统一 API 接口查询模型元信息（如能力、模态、上下文长度、定价）、设置业务空间级访问权限、配置请求/用量限流，并实时查看当前配额使用情况。所有操作均基于业务空间（Workspace）隔离，需通过 API Key 认证。
+模型管理是百炼平台为开发者提供的核心能力，用于发现、授权、限流和监控模型的全生命周期操作。通过统一的 REST API 接口，开发者可程序化地查询可用模型列表、获取模型配额与权限状态、动态调整限流策略及开通/关闭模型调用权限。所有操作均基于业务空间（Workspace）粒度，支持多地域部署与细粒度权限控制。
 
-## 支持的模型与功能
+## 支持的模型/功能
 
-百炼平台支持多厂商、多模态、多能力的模型生态，涵盖文本生成（`TG`）、深度思考（`Reasoning`）、视觉理解（`VU`）、图片/视频生成（`IG`/`VG`）、语音识别（`ASR`）、结构化输出（`structured-outputs`）、function calling 等能力。模型作者包括 `qwen`、`zhipu-ai`、`moonshot-ai`、`deepseek`、`kling`、`vidu` 等十余家供应商；推理服务由 `aliyun-bailian`、`siliconflow`、`moonshot` 等提供。完整可选值详见 [查询模型列表](../../raw/model-api-reference/model-management/list-models.md) 中的 `providers`、`inference_providers`、`capabilities` 和 `features` 参数说明。
+百炼平台支持多源模型接入，涵盖文本生成（TG）、深度思考（Reasoning）、视觉理解（VU）、图片/视频生成（IG/VG）、语音识别（ASR）、TTS、3D 生成等能力。模型来源包括 `qwen`（阿里巴巴-千问）、`zhipu-ai`（智谱AI）、`moonshot-ai`（月之暗面）、`deepseek`、`kling`、`vidu` 等十余家供应商；推理服务由 `aliyun-bailian`、`siliconflow`、`moonshot` 等多家服务商提供。模型特性（`features`）支持 `function-calling`、`structured-outputs`、`web-search`、`cache`、`batch`、`fine-tuning` 等，具体能力需以 [查询模型列表](../../raw/model-api-reference/model-management/list-models.md) 接口返回的 `capabilities` 和 `features` 字段为准。
 
-> **注意**：文档 1 中列出的 `inference_providers` 包含 `moonshot`（对应 Kimi），而文档 5 的授权接口返回示例中 `permissions` 字段仅包含 `inference`/`fine_tune`/`deploy` 三类布尔权限，未体现推理服务供应商绑定关系——实际授权粒度为模型 ID 级，不区分底层推理 provider，此为设计一致，非矛盾。
+> **注意**：文档 1 中列出的 `inference_providers` 包含 `alibaba-cloud-modelstudio`，但该值在实际 API 响应中未被观测到，且 Model Studio 已于 2024 年底完成服务迁移，建议以 `aliyun-bailian` 作为默认推理供应商，详见 [查询模型列表](../../raw/model-api-reference/model-management/list-models.md)。
 
 ## 关键参数
 
-| 参数类别 | 关键字段 | 说明 |
-|----------|----------|------|
-| **模型标识** | `model`（ID）、`name`（名称） | `model` 用于精确查询与调用（如 `qwen3.8-max`）；`name` 仅用于模糊搜索。 |
-| **筛选维度** | `providers`, `capabilities`, `features`, `service_site`, `supports` | 支持按作者、能力（如 `["Reasoning", "VU"]`）、特性（如 `["function-calling"]`）、部署地域（如 `cn-hongkong`）、用途（`inference` 或 `deploy`）组合过滤。 |
-| **权限控制** | `inference`, `finetune`, `deploy` | 布尔值，分别控制模型调用、微调、部署权限，见 [更新模型授权](../../raw/model-api-reference/model-management/update-model-permissions.md)。 |
-| **限流配置** | `request_limit` / `request_limit_period`, `usage_limit` / `usage_limit_period` | 分别表示 QPM/RPM（如 `60` 次/分钟）和 TPM（如 `100000` tokens/分钟），周期单位为秒（`60`=1分钟）。 |
+| 参数名 | 类型 | 说明 | 来源 |
+|--------|------|------|------|
+| `model` | String | 模型 ID（如 `qwen3.8-max`），用于精确查询、限流、授权等操作 | [查询模型列表](../../raw/model-api-reference/model-management/list-models.md) |
+| `providers` / `inference_providers` | Array[String] | 按作者或推理服务商筛选模型，客户端 SDK 仅对当前页生效 | [查询模型列表](../../raw/model-api-reference/model-management/list-models.md) |
+| `capabilities` / `features` | Array[String] | 模型能力与特性标识，必须通过 HTTP API 查询，SDK 不透传 | [查询模型列表](../../raw/model-api-reference/model-management/list-models.md) |
+| `request_limit` / `usage_limit` | Number | QPM（每分钟请求数）与 TPM（每分钟 Token 用量），单位秒级周期需显式指定 `*_period` | [更新模型限流](../../raw/model-api-reference/model-management/update-model-rate-limits.md) |
+| `authorization_scope` | String | `AUTHORIZABLE`（可授权）或 `AUTHORIZED`（已授权），控制 [查询模型授权](../../raw/model-api-reference/model-management/list-model-permissions.md) 返回范围 | [查询模型授权](../../raw/model-api-reference/model-management/list-model-permissions.md) |
 
 ## 使用方式
 
-### 1. 查询模型列表  
-调用 `GET /api/v1/models`，支持分页（`page_no`/`page_size`）与多维筛选。推荐优先用 `model` 精确查询单个模型详情，或用 `providers=qwen&capabilities=TG` 获取千问文本生成模型全集。[查询模型列表](../../raw/model-api-reference/model-management/list-models.md) 提供了各地域 Endpoint 及 Python SDK 示例。
+### 1. 发现模型  
+调用 `GET /api/v1/models` 获取模型列表，支持按名称模糊搜索（`name=qwen`）、ID 精确查询（`model=qwen3.8-max`）、能力筛选（`capabilities=TG&capabilities=Reasoning`）等。推荐使用 Python SDK 的 `client.models.list()` 方法，自动处理分页与字段映射。
 
-### 2. 查询/更新模型授权  
-- **查询**：`GET /api/v1/models/permissions?authorization_scope=AUTHORIZED` 获取当前已开通推理权限的模型列表；  
-- **更新**：`POST /api/v1/models/permissions` 支持逐模型授权（如 `{"model":"qwen-plus","inference":true}`）或一键授权（`access_all_entities=OPEN`）。详细字段与约束见 [更新模型授权](../../raw/model-api-reference/model-management/update-model-permissions.md)。
+### 2. 查询权限与限额  
+- 权限：`GET /api/v1/models/permissions?authorization_scope=AUTHORIZED` 查看当前业务空间已开通推理权限的模型；  
+- 限额：`GET /api/v1/models/limits?model=qwen3.8-max` 获取账号级与业务空间级 QPM/TPM 配置。  
 
-### 3. 查询/更新模型限流  
-- **查询**：`GET /api/v1/models/limits?model=qwen3.8-max` 返回账号级（`model_limit`）与业务空间级（`workspace_limit`）配额；  
-- **更新**：`POST /api/v1/models/limits` 通过 `operation_type=OVERLAY` 覆盖或 `DELETE` 清除限流。注意：TPM 设置需先存在 QPM 配置，否则报错（见 [更新模型限流](../../raw/model-api-reference/model-management/update-model-rate-limits.md) 错误码说明）。
+### 3. 授权与限流变更  
+- **授权**：`POST /api/v1/models/permissions` 支持逐模型设置 `inference`/`finetune`/`deploy` 权限，或通过 `access_all_entities=OPEN` 一键授权全部推理模型；  
+- **限流**：`POST /api/v1/models/limits` 支持 `OVERLAY`（合并覆盖）与 `DELETE`（清空）两种操作类型。若需“仅限 QPM、不限 TPM”，须先 `DELETE` 再 `OVERLAY` 设置 `request_limit`，详见 [更新模型限流](../../raw/model-api-reference/model-management/update-model-rate-limits.md)。
+
+> **注意**：文档 3 中示例请求地址误写为 `https://dashscope.aliyuncs.com/...`，实际应替换 `{WorkspaceId}` 并匹配地域 Endpoint（如 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/...`），否则将返回 404 或鉴权失败，详见 [更新模型限流](../../raw/model-api-reference/model-management/update-model-rate-limits.md)。
 
 ## 限制和注意事项
 
-- **配额继承关系**：业务空间级限流（`workspace_limit`）不能超过账号级限流（`model_limit`），且未显式设置时默认继承账号级配额。
-- **限流生效延迟**：限流策略变更后通常在 10 秒内生效，但高并发场景下可能存在短暂窗口期。
-- **权限与限流解耦**：模型授权（`permissions`）控制“能否调用”，限流（`limits`）控制“调用频次/用量”，二者独立配置，需同步管理。
-- **地域一致性**：所有管理 API（列表、权限、限流）必须使用与业务空间所在地域匹配的 Endpoint（如北京空间需调用 `cn-beijing.maas.aliyuncs.com`），跨地域调用将返回 403。
-- **模型状态**：部分模型可能返回 `inference_offline_info` 字段，标明预计下线时间，调用前应检查该字段避免生产中断。
+- **配额继承关系**：业务空间级限流（`workspace_limit`）不能超过账号级限流（`model_limit`），且未设置时默认继承账号级配置；  
+- **权限生效延迟**：模型授权变更后，通常在 30 秒内全局生效，但缓存可能导致首次调用短暂失败；  
+- **批量操作限制**：`update-model-rate-limits` 接口 `models` 数组最多 200 项，`update-model-permissions` 最多 20 项；  
+- **异步任务限制**：部分模型（如 `wan2.6-i2v-flash`）额外限制 `async_user_queue_limit` 与 `async_user_concurrency_limit`，需在 [查询模型限额](../../raw/model-api-reference/model-management/list-quotas.md) 响应中检查；  
+- **模型下线预警**：响应中 `inference_offline_info.offline_time` 字段标明预计下线时间，建议定期轮询并制定降级预案。
 
 ## 来源文档
 

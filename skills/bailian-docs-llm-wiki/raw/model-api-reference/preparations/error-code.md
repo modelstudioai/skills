@@ -669,11 +669,11 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 -   **原因一： 模型名称与API 端点不匹配**：例如调用纯文本模型时使用了多模态接口，或者调用多模态模型时使用了纯文本接口。
     
     **解决方案：**
-    1.  通过DashScope使用qwen3.7-plus、qwen3-vl-plus、qwen3.8-max、qwen3.8-flash等**多模态模型**时：需使用MultiModalConversation.call() 或multimodal-generation端点，具体参考[图像与视频理解](raw/model-user-guide/model-experience/text-generation-model/vision.md)。从纯文本模型（如qwen3.7-max）切换为多模态模型（如qwen3.8-max）时，需将调用方式从Generation.call() 改为MultiModalConversation.call()，否则会返回url error。
+    1.  通过DashScope使用qwen3.7-plus、qwen3-vl-plus、qwen3.8-max、qwen3.8-flash等**多模态模型**时：需使用client.multimodal.chat.create() 或multimodal-generation端点，具体参考[图像与视频理解](raw/model-user-guide/model-experience/text-generation-model/vision.md)。从纯文本模型（如qwen3.7-max）切换为多模态模型（如qwen3.8-max）时，需将调用方式从client.chat.completions.create() 改为client.multimodal.chat.create()，否则会返回url error。
         
         > 若使用 spring-ai-alibaba 框架，请确认是否设置多模态参数[withMultiModel](https://github.com/spring-ai-alibaba/examples/blob/c66ffdec789defe4adf86b34bac0084df3b71e92/spring-ai-alibaba-multi-model-example/dashscope-multi-model/src/main/java/com/alibaba/cloud/ai/example/multi/controller/MultiModelController.java#L82)。
         
-    2.  通过DashScope使用qwen3.7-max、qwen-plus、deepseek-v4-pro等**纯文本模型**时，需使用Generation.call() 或 text-generation 端点，具体参考[概述](raw/model-user-guide/model-experience/text-generation-model/text-generation.md)。
+    2.  通过DashScope使用qwen3.7-max、qwen-plus、deepseek-v4-pro等**纯文本模型**时，需使用client.chat.completions.create() 或 text-generation 端点，具体参考[概述](raw/model-user-guide/model-experience/text-generation-model/text-generation.md)。
         
     3.  通过DashScope使用CosyVoice**声音复刻**接口时：该接口包含 `model` 与 `target_model` 参数：需将 `model` 设置为 `voice-enrollment`， `target_model` 设置为具体的 CosyVoice 模型，具体参考[CosyVoice声音复刻/设计API](https://help.aliyun.com/zh/model-studio/cosyvoice-clone-design-api)。
         

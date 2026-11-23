@@ -6,3 +6,4 @@
 -   [AOQ 接入](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/omni-realtime-aoq-access.md)
 -   [客户端事件](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md)
 -   [服务端事件](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/server-events.md)
+-   [WebSocket SDK](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/omni-realtime-websocket-sdk-reference.md)

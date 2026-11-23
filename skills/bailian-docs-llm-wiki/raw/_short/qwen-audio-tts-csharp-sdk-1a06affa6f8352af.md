@@ -153,7 +153,7 @@ await foreach (var chunk in client.StreamAudioAsync(["今天下午三点开会�
 
 是否开启 SSML 解析。
 
-**说明**通过一次 `continue-task` 发送完整的 SSML 文本；使用 `SynthesizeAsync` 时只传入一个文本分段。音频可流式接收。
+**Note**通过一次 `continue-task` 发送完整的 SSML 文本；使用 `SynthesizeAsync` 时只传入一个文本分段。音频可流式接收。
 
 `WordTimestampEnabled`
 
@@ -187,7 +187,7 @@ await foreach (var chunk in client.StreamAudioAsync(["今天下午三点开会�
 
 是否嵌入 AIGC 隐性标识（`wav`、`mp3`、`opus` 格式生效）。
 
-**说明**在 CosyVoice 系列中，仅 `cosyvoice-v3-flash`、`cosyvoice-v3-plus`、`cosyvoice-v2` 支持此参数。
+**Note**在 CosyVoice 系列中，仅 `cosyvoice-v3-flash`、`cosyvoice-v3-plus`、`cosyvoice-v2` 支持此参数。
 
 `AigcPropagator`
 
@@ -197,7 +197,7 @@ await foreach (var chunk in client.StreamAudioAsync(["今天下午三点开会�
 
 AIGC 内容传播者标识。
 
-**说明**仅在 `EnableAigcTag` 为 `true` 时下发；在 CosyVoice 系列中，仅 `cosyvoice-v3-flash`、`cosyvoice-v3-plus`、`cosyvoice-v2` 支持。
+**Note**仅在 `EnableAigcTag` 为 `true` 时下发；在 CosyVoice 系列中，仅 `cosyvoice-v3-flash`、`cosyvoice-v3-plus`、`cosyvoice-v2` 支持。
 
 `AigcPropagateId`
 
@@ -207,7 +207,7 @@ AIGC 内容传播者标识。
 
 AIGC 内容传播行为标识。
 
-**说明**仅在 `EnableAigcTag` 为 `true` 时下发；在 CosyVoice 系列中，仅 `cosyvoice-v3-flash`、`cosyvoice-v3-plus`、`cosyvoice-v2` 支持。
+**Note**仅在 `EnableAigcTag` 为 `true` 时下发；在 CosyVoice 系列中，仅 `cosyvoice-v3-flash`、`cosyvoice-v3-plus`、`cosyvoice-v2` 支持。
 
 `HotFixJson`
 
@@ -217,7 +217,7 @@ AIGC 内容传播行为标识。
 
 文本热修复配置，传入包含 `pronunciation` 和 `replace` 规则的 JSON 对象字符串。
 
-**说明**`cosyvoice-v2` 不支持此参数。
+**Note**仅 Qwen-Audio-TTS 支持此参数。
 
 `ExtraParametersJson`
 
@@ -235,4 +235,4 @@ JSON 对象字符串，合并到协议的 `parameters` 对象。
 
 是否过滤输入中的 Markdown 标记。
 
-**说明**`cosyvoice-v2` 不支持此参数。
+**Note**`cosyvoice-v2` 不支持此参数。

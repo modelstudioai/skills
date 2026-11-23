@@ -9,7 +9,7 @@
 -   安装 .NET 8 SDK 或 .NET 10 SDK。
 -   [获取 API Key](raw/model-api-reference/preparations/get-api-key.md)，并设置环境变量 `DASHSCOPE_API_KEY`。
 
-**警告**长期 API Key 应保存在服务端，不要写入对外分发的桌面端、移动端或浏览器应用。保护方法请参见[API Key 防泄漏最佳实践](raw/model-user-guide/security-and-compliance/api-key-leak-prevention.md)。
+**Warning**长期 API Key 应保存在服务端，不要写入对外分发的桌面端、移动端或浏览器应用。保护方法请参见[API Key 防泄漏最佳实践](raw/model-user-guide/security-and-compliance/api-key-leak-prevention.md)。
 
 ### 安装 SDK
 
@@ -21,7 +21,7 @@ NuGet 包名是 `Bailian.DashScope`，程序集是 `DashScope.dll`，根命名�
 
 将解压后的 `packages/` 目录用作本地 NuGet 源。
 
-**说明**以下示例使用 .NET 8。如使用 .NET 10，将命令和路径中的 `net8.0` 替换为 `net10.0`。
+**Note**以下示例使用 .NET 8。如使用 .NET 10，将命令和路径中的 `net8.0` 替换为 `net10.0`。
 
 ```
 dotnet new console --framework net8.0 --name SpeechExample

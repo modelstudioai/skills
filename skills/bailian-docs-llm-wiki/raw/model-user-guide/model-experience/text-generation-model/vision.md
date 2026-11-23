@@ -2867,28 +2867,9 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 
 ### 处理高分辨率图像
 
-图片处理精度。适用于 `qwen4-max`，默认值为 `high`。
-
-未传入 `max_pixels` 时：
-
--   `high`：按原图分辨率处理，上限为 `16777216` 像素。
--   `low`：像素上限为 `2621440`。
--   `auto`：与 `low` 相同。
-
-显式传入 `max_pixels` 时，以该值作为像素上限，优先于 `detail`。最大值为 `16777216`。Chat Completions 的 `max_pixels` 与 `image_url` 同级；DashScope 与 `image` 同级。
-
-高分辨率图片使用 `high` 时，输入 Token 用量通常高于 `low`。
-
-Chat Completions 可在 `image_url` 内或与 `image_url` 同级传入 `detail`；DashScope 与 `image` 同级传入。
-
-```
-{"type":"image_url","image_url":{"url":"https://example.com/image.jpg","detail":"low"}}
-```
-```
-{"image":"https://example.com/image.jpg","detail":"low"}
-```
-
 视觉理解模型API对单张图像编码后的视觉 Token 数量设有限制，默认配置下，高分辨率图像会被压缩，可能丢失细节，影响理解准确性。启用 `vl_high_resolution_images` 或调整 `max_pixels` 可增加视觉 Token 数量，从而保留更多图像细节，提升理解效果。
+
+也可通过 `detail` 控制图片处理精度。支持的模型、取值及参数优先级请参见 [OpenAI Chat Completions](raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)或 [DashScope](raw/model-api-reference/qwen-api-reference/qwen-api-via-dashscope.md)。
 
 查看每个模型视觉 Token 对应的像素、Token 上限和像素上限
 
@@ -3256,11 +3237,10 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
         
 -   **图像大小：**
     
-    -   以公网URL传入时：Qwen4-Max、Qwen3.8系列、Qwen3.7系列、Qwen3.6系列、Qwen3.5系列、Qwen3-VL系列单个图像不超过 `20MB`，其他模型单个图像不超过`10MB`
-    -   以本地路径传入时：单个图像不超过`10MB`
-    -   以 Base64 编码传入时：Qwen4-Max、Qwen3.8系列、Qwen3.7系列、Qwen3.6系列、Qwen3.5、Qwen3-VL系列编码前的原始图像文件不超过 `20MB`，其他模型不超过 `10MB`；且编码后的 Data URI 字符串在 OpenAI 兼容接口与 DashScope 不超过 `20MB`，在 Anthropic 兼容接口不超过 `32MB`。
+    -   以公网 URL 传入时：Qwen4 系列、Qwen3.8 系列、Qwen3.7 系列、Qwen3.6 系列、Qwen3.5 系列、Qwen3-VL 系列单张图像不超过 `200 MiB`。
+    -   以 Base64 编码传入时：上述系列编码后的字符串，在 OpenAI 兼容接口与 DashScope 中不超过 `50 MiB`（包含 Data URI 前缀），在 Anthropic 兼容接口中小于 `32 MiB`。
     
-    此外，所有接口的请求体整体大小均不得超过 `64MB`，多张图像时需共享此整体额度。DashScope 域名的请求体上限为 16 MiB，建议改用 `{WorkspaceId}.{region}.maas.aliyuncs.com` 工作空间域名。
+    请求体整体大小按接口分别限制，所有图像及其他请求字段共享此额度：OpenAI 兼容接口与 DashScope 不超过 `128 MiB`；Anthropic 兼容接口不超过 `64 MiB`。DashScope 域名的请求体上限为 `16 MiB`，建议改用 `{WorkspaceId}.{region}.maas.aliyuncs.com` 工作空间域名。
     
     上述限制取决于所选模型，不支持通过购买高级套餐或升级模型版本提升。
     
@@ -3283,17 +3263,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 #### 视频限制
 
 -   **以公网 URL 图像列表传入时，图片数量限制如下：**
-    -   Qwen4-Max：最少传入 4 张图片，最多 80 张图片。
-        
-    -   `qwen3.8`系列、`qwen3.7`系列、`qwen3.6`系列、`qwen3.5` 系列：最少传入 4 张图片，最多 8000 张图片
-        
+    -   `Qwen4-Max`、`qwen3.8`系列、`qwen3.7`系列、`qwen3.6`系列、`qwen3.5` 系列：最少传入 4 张图片，最多 8000 张图片
     -   `qwen3-vl-plus` 系列：最少传入 4 张图片，最多 2000 张图片
-        
     -   其他`Qwen3-VL`开源、`Qwen2.5-VL`（包括商业版和开源版）和`QVQ`系列模型：最少传入 4 张图片，最多 512 张图片
-        
     -   其他模型：最少传入 4 张图片，最多 80 张图片
-        
--   以 Base64 编码传入图像列表时：最多 250 张图片；Qwen4-Max 最多 80 张图片。
+-   以 Base64 编码传入图像列表时：最多 250 张图片。
+    
+-   \*\*视频帧像素上限：\*\*Qwen4-Max、Qwen3.8、Qwen3.7、Qwen3.6、Qwen3.5 系列及 Qwen3-VL-Plus 的 `max_pixels` 最大值为 `2048000`，适用于视频文件和图像列表形式的视频。
     
 -   **以视频文件传入时：**
     -   **视频大小：**
@@ -3786,17 +3762,17 @@ for chunk in stream:
 
 图像
 
-大于 7MB 小于 10MB
+不超过 10MB
 
 传入本地路径
 
-仅支持公网 URL，建议使用[阿里云对象存储服务](https://www.aliyun.com/product/oss)
+公网 URL 或 Base64 编码，遵守上述大小限制。公网 URL 可使用[阿里云对象存储服务](https://www.aliyun.com/product/oss)。
 
-小于 7MB
+超过 10MB
 
-传入本地路径
+使用公网 URL
 
-Base64 编码
+公网 URL 或 Base64 编码，遵守上述大小限制。公网 URL 可使用[阿里云对象存储服务](https://www.aliyun.com/product/oss)。
 
 视频
 
@@ -3818,7 +3794,7 @@ Base64 编码
 
 Base64 编码
 
-> Base64 编码会增大数据体积，原始文件大小应小于 7 MB。
+> Base64 编码会增大数据体积，请遵守上述单项编码字符串和请求体整体大小限制。
 
 > 使用 Base64 或本地路径可避免服务端下载超时，提升稳定性。
 

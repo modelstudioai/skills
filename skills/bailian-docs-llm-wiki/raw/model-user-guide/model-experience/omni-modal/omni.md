@@ -83,7 +83,7 @@ Qwen3.8-Omni-Flash-Realtime；Qwen3.5-Omni Plus / Flash
 [声音复刻](raw/model-user-guide/model-experience/omni-modal/qwen-omni-voice-cloning-user-guide.md)
 
 -   使用 Qwen3.8-Omni-Flash 进行内容分析时，支持音频最长3小时、视频最长2小时。
--   支持工具调用（Function Calling）：Qwen3.8-Omni-Flash-Realtime、Qwen3.8-Omni-Flash、Qwen3.5-Omni Plus / Flash（文本输出）、Qwen3.5-Omni-Realtime、Qwen3-Omni-Flash、Qwen-Audio Realtime。
+-   支持工具调用（Function Calling）：Qwen3.8-Omni-Flash-Realtime、Qwen3.8-Omni-Flash、Qwen3.5-Omni Plus / Flash（文本输出）、Qwen3.5-Omni-Realtime、Qwen3-Omni-Flash、Qwen-Audio Realtime、[Qwen-Audio-Live](https://help.aliyun.com/zh/model-studio/qwen-audio-live#live-function-calling)。
 -   支持联网搜索：Qwen3.8-Omni-Flash-Realtime、Qwen3.8-Omni-Flash、Qwen3.5-Omni、Qwen-Audio Realtime。
 
 ## 翻译
@@ -960,6 +960,12 @@ Realtime API（WebSocket）
 
 实时语音对话
 
+[qwen-audio-3.1-live](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-speech-to-speech/qwen-audio-3-1-live.md)
+
+Realtime API（WebSocket、WebRTC、AOQ）
+
+实时语音对话与任务委派
+
 ## 所有模型
 
 ### Qwen3.8-Omni
@@ -1245,6 +1251,18 @@ Chat Completions
 **联网搜索**
 
 **思考模式**
+
+[qwen-audio-3.1-live](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-speech-to-speech/qwen-audio-3-1-live.md)
+
+Realtime API（WebSocket、WebRTC、AOQ）
+
+音频、文本
+
+支持
+
+不支持
+
+不支持
 
 `qwen-audio-3.1-realtime-plus`
 

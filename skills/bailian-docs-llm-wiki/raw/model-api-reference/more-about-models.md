@@ -6,3 +6,5 @@
 -   [子业务空间的模型调用](raw/model-api-reference/more-about-models/model-calling-in-sub-workspace.md)
 -   [上传文件获取临时URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)
 -   [DashScope SDK连接复用配置](raw/model-api-reference/more-about-models/connection-multiplexing-configuration.md)
+-   [AOQ SDK](raw/model-api-reference/more-about-models/realtime-api-aoq-api.md)
+-   [多模态交互开发套件](raw/model-api-reference/more-about-models/multimodal-interaction-protocol.md)
