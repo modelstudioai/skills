@@ -1,0 +1,8 @@
+# 模型微调与部署
+
+阿里云百炼 CLI 模型微调与部署文档入口。
+
+模型微调与部署文档已拆分为两个页面：
+
+-   [模型微调](raw/cli/capabilities/training-deployment/finetune.md) — 文本、音频、图像、视频微调，微调任务管理、Checkpoint 与模型压缩
+-   [模型部署](raw/cli/capabilities/training-deployment/deploy.md) — 文本、音频、图像部署，部署管理与吞吐预留容量

@@ -20,7 +20,7 @@
 
 ## 配置 API Key 到环境变量
 
--   **方式一：在**[**第三方工具**](https://help.aliyun.com/zh/model-studio/use-chat-client-or-development-tool)**中进行配置**
+-   **方式一：在**[**第三方工具**](raw/token-plan-user-guide/use-chat-client-or-development-tool.md)**中进行配置**
     
     如果在 Chatbox 等工具或平台中调用模型，您可能需要输入三个信息：
     
@@ -33,7 +33,7 @@
     -   模型名称，如 qwen-plus、qwen-max、deepseek-v4-pro 等。
         
     
-    我们也提供了一些常用工具的配置方法：[Dify](https://help.aliyun.com/zh/model-studio/dify)、[Chatbox](https://help.aliyun.com/zh/model-studio/chatbox)、[Cline](https://help.aliyun.com/zh/model-studio/cline)、[Claude Code](https://help.aliyun.com/zh/model-studio/claude-code)、[Postman](https://help.aliyun.com/zh/model-studio/first-call-to-image-and-video-api)。
+    我们也提供了一些常用工具的配置方法：[Dify](https://help.aliyun.com/zh/model-studio/dify)、[Chatbox](raw/token-plan-user-guide/use-chat-client-or-development-tool/more-tools-guide/chatbox.md)、[Cline](raw/token-plan-user-guide/use-chat-client-or-development-tool/more-tools-guide/cline.md)、[Claude Code](raw/token-plan-user-guide/use-chat-client-or-development-tool/claude-code.md)、[Postman](https://help.aliyun.com/zh/model-studio/first-call-to-image-and-video-api)。
     
 -   **方式二：配置 API Key 到环境变量，后续支持 cURL 和代码调用**
     

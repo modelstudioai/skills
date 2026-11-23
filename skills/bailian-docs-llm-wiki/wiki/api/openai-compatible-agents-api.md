@@ -18,34 +18,26 @@
 | 参数 | 类型 | 必填 | 说明 |
 |------|------|------|------|
 | `model` | string | ✓ | Agent 模型 ID，必须为平台支持的 Agent 专用模型 |
-| `messages` | array | ✓ | 与 OpenAI 格式一致，首条 `user` 消息触发 Agent 初始化 |
-| `tools` | array | ✗ | 工具定义列表，格式同 OpenAI `tools` 字段；若为空则退化为普通 chat |
-| `tool_choice` | string / object | ✗ | 控制工具调用策略（`"auto"`/`"none"`/`{"type": "function", "function": {"name": "xxx"}}`） |
-| `session_id` | string | ✗ | 指定已有 Session 继续对话；未提供则新建 Session（详见 [Sessions](../../raw/application-api-reference/openai-compatible-agents-api/openai-compatible-agents-api-session.md)） |
-| `environment_id` | string | ✗ | 指定执行环境，用于隔离资源与权限 |
+| `messages` | array | ✓ | 与 OpenAI 格式一致，首条消息建议为 `role: "system"` 描述 Agent 行为约束 |
+| `tools` | array | ✗ | 工具定义列表，格式同 OpenAI `tools` 字段；若未提供则禁用工具调用 |
+| `tool_choice` | string / object | ✗ | 控制工具调用策略，支持 `"auto"`、`"none"` 或 `{"type": "function", "function": {"name": "xxx"}}` |
+| `session_id` | string | ✗ | 指定已有 Session ID 以复用上下文；首次调用可省略，由服务自动生成 |
+| `environment_id` | string | ✗ | 绑定预配置的 Environment，用于控制外部依赖访问权限 |
+
+完整参数语义与默认值详见 [Agents](../../raw/application-api-reference/openai-compatible-agents-api/openai-compatible-agents-api-agent.md) 接口文档。
 
 ## 使用方式
 
-1. **认证**：使用 Bearer [Token](../concepts/token.md)，Header 中携带 `Authorization: Bearer <api_key>`；API Key 需在控制台「API 密钥管理」中创建，权限需包含 `agents:run`；认证机制细节见 [认证](../../raw/application-api-reference/openai-compatible-agents-api/openai-compatible-agents-api-authentication.md)。
-2. **请求示例**（curl）：
-   ```bash
-   curl -X POST https://dashscope.aliyuncs.com/api/v1/agents/chat/completions \
-     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
-     -H "Content-Type: application/json" \
-     -d '{
-           "model": "qwen-plus-agent-v1",
-           "messages": [{"role": "user", "content": "查一下今天北京的天气"}],
-           "tools": [{"type": "function", "function": {"name": "get_weather", "parameters": {...}}}]
-         }'
-   ```
-3. **响应结构**：与 OpenAI `chat.completions` 一致，但 `choices[0].message` 可能含 `tool_calls` 字段；若 Agent 触发多轮工具调用，需按 `session_id` 轮询或监听流式响应中的 `delta.tool_calls`。
+1. **认证**：使用 Bearer Token 方式，在 `Authorization` 请求头中传入 `Bearer <api_key>`；API Key 需在百炼控制台「API 密钥管理」中创建，且需具备 `agents:run` 权限 —— 认证细节见 [认证](../../raw/application-api-reference/openai-compatible-agents-api/openai-compatible-agents-api-authentication.md)。
+2. **发起请求**：向 `POST https://dashscope.aliyuncs.com/api/v1/agents/chat/completions` 发送 JSON 请求（Host 与路径与 OpenAI 兼容）。
+3. **处理响应**：返回结构与 OpenAI `chat.completions` 一致，但新增 `session_id`、`environment_id` 等字段；若触发工具调用，`content` 为空，`tool_calls` 数组包含待执行项。
 
 ## 限制和注意事项
 
-- 单次请求最大 `messages` 数量为 50 条（含系统、用户、助手、tool 消息）；超出将返回 `400 Bad Request`（错误码参考 [错误码](../../raw/application-api-reference/openai-compatible-agents-api/openai-compatible-agents-api-errors.md)）。
-- Session 默认 TTL 为 24 小时，超时后关联 history 与 environment 资源自动释放；如需长期会话，请显式调用 `/sessions/{id}/extend`。
-- Vault 中存储的密钥**不会**自动注入所有 Agent 调用，必须在 `tools` 或 `environment` 配置中显式声明引用路径（如 `"vault://weather-api-key"`），否则视为未授权访问。
-- 流式响应（`stream=true`）下，`tool_calls` 的 `id` 字段可能跨 chunk 分片传输，客户端需按 `index` 合并；此行为与 OpenAI 不完全一致，详见 [Agents](../../raw/application-api-reference/openai-compatible-agents-api/openai-compatible-agents-api-agent.md) 文档说明。
+- 单次请求最大 `messages` 数量为 50 条，总 token 上限为 32768（含 tools schema）；
+- Session 默认 TTL 为 24 小时，超时后历史不可恢复，需显式调用 `/sessions/{id}/extend` 延长；
+- Vault 中存储的凭证仅在绑定的 Environment 内部可用，Agent 无法通过 `messages` 直接读取其明文；
+- 错误响应遵循标准 HTTP 状态码 + 自定义 `error.code`，常见错误（如 `invalid_tool_call`, `session_not_found`）含义详见 [错误码](../../raw/application-api-reference/openai-compatible-agents-api/openai-compatible-agents-api-errors.md)。
 
 ## 来源文档
 

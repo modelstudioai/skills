@@ -1,11 +1,11 @@
 {
   "updatedAt": "2026-11-23",
-  "totalFamilies": 127,
-  "totalModels": 343,
+  "totalFamilies": 126,
+  "totalModels": 342,
   "profileCoverage": {
-    "full": 274,
-    "partial": 45,
-    "structured-only": 24,
+    "full": 161,
+    "partial": 178,
+    "structured-only": 3,
     "none": 0
   },
   "capabilityDistribution": {
@@ -22,14 +22,14 @@
     "ME": 2,
     "Realtime-Chatting": 2,
     "TR": 2,
-    "Realtime-Audio-Translate": 2,
     "World-Model": 1,
     "Realtime-Text-to-Speech": 1,
+    "Realtime-Audio-Translate": 1,
     "3D-generation": 1
   },
   "providerDistribution": {
     "qwen": 64,
-    "qwen-domain-model": 26,
+    "qwen-domain-model": 25,
     "wan": 13,
     "mini-max": 4,
     "pixverse": 4,
@@ -1277,22 +1277,6 @@
         "qwen3.5-flash"
       ],
       "maxContextWindow": 1000000
-    },
-    {
-      "slug": "qwen3.5-livetranslate-flash-realtime",
-      "name": "Qwen3.5-LiveTranslate-Flash-Realtime",
-      "primaryCapability": "Realtime-Audio-Translate",
-      "capabilities": [
-        "Realtime-Audio-Translate"
-      ],
-      "providers": [
-        "qwen-domain-model"
-      ],
-      "itemCount": 1,
-      "items": [
-        "qwen3.5-livetranslate-flash-realtime"
-      ],
-      "maxContextWindow": 53248
     },
     {
       "slug": "qwen3.5-ocr",

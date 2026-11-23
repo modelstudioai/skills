@@ -38,7 +38,7 @@ Memory
 
 按记忆策略版本及计费项计量
 
-[Memory](raw/application-user-guide/agent-billing/billing.md)
+[Memory](raw/application-user-guide/agent-billing/billing-f23f20af1adb6c6b.md)
 
 ParseX
 
@@ -50,7 +50,7 @@ Security
 
 按安全防护服务的计费规则
 
-[Security](raw/application-user-guide/agent-billing/billing.md)
+[Security](raw/application-user-guide/agent-billing/billing-a923eaad372554c6.md)
 
 ## 计费与免费额度
 

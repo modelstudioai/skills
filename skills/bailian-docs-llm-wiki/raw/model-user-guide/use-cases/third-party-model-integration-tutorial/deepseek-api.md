@@ -870,7 +870,7 @@ deepseek-v4-pro 在编程、数学和通用任务方面表现出色，deepseek-v
 
 #### Cherry Studio
 
-请参见[Cherry Studio](https://help.aliyun.com/zh/model-studio/cherry-studio)。
+请参见[Cherry Studio](raw/token-plan-user-guide/use-chat-client-or-development-tool/more-tools-guide/cherry-studio.md)。
 
 #### Dify
 

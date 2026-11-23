@@ -87,7 +87,7 @@
 
 #### Qwen4
 
-**千问4-Max 系列**（混合思考模式，**默认开启思考模式**）：qwen4-max、qwen4-max-preview（[仅 Token Plan](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview)）
+**千问4-Max 系列**（混合思考模式，**默认开启思考模式**）：qwen4-max、qwen4-max-preview（[仅 Token Plan](raw/token-plan-user-guide/token-plan-personal/token-plan-personal-overview.md)）
 
 #### Qwen3.8
 
@@ -1783,11 +1783,11 @@ Q：如何接入 Chatbox 、 Cherry Studio 、 Cline 或 Dify ？
 
 #### Cherry Studio
 
-请参见[Cherry Studio](https://help.aliyun.com/zh/model-studio/cherry-studio)。
+请参见[Cherry Studio](raw/token-plan-user-guide/use-chat-client-or-development-tool/more-tools-guide/cherry-studio.md)。
 
 #### Cline
 
-请参见[Cline](https://help.aliyun.com/zh/model-studio/cline)。
+请参见[Cline](raw/token-plan-user-guide/use-chat-client-or-development-tool/more-tools-guide/cline.md)。
 
 #### Dify
 

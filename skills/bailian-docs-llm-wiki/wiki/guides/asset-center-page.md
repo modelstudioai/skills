@@ -1,48 +1,49 @@
 # asset center page
 
-资产中心是百炼平台中统一管理模型、提示词、知识库等 AI 资源的核心界面，为开发者提供可视化操作入口与资源元数据视图。所有已部署或已上传的资产均在此集中呈现，支持按类型、状态、创建时间等维度筛选和快速跳转。该页面不直接执行推理，而是作为资源生命周期管理的起点。
+资产中心是百炼平台提供的统一资产管理入口，用于持久化保存、筛选和操作模型生成的图片与视频资产。它解耦了临时访问 URL 的生命周期限制，支持通过资产 ID（`asset_id`）在 API 中直接复用已有资产，并提供 OSS 转存、收藏、回收站等核心管理能力。该功能已全量开放，平台存储当前限时免费 [原文标题](../../raw/model-user-guide/asset-center-page/asset-center.md)。
 
 ## 支持的模型/功能
 
-资产中心当前支持以下四类资产的展示与基础操作：
-- **大模型（LLM）**：包括平台预置模型（如 Qwen 系列）及用户自定义部署的模型服务；
-- **提示词工程资产（Prompt Template）**：结构化提示模板，支持变量注入与版本管理；
-- **知识库（Knowledge Base）**：已向量化并完成切片索引的文档集合；
-- **工作流（Workflow）**：通过可视化编排器构建的多步骤 AI 流程。
+- **支持资产类型**：仅限图片与视频，**不支持音频资产**（详见 [原文标题](../../raw/model-user-guide/asset-center-page/asset-center.md)）。
+- **图片模型**：`qwen-image-3.0-pro`、`qwen-image-3.0`、`qwen-image-2.0-pro` 及多个带时间后缀的版本（如 `2026-06-22`）、`z-image-turbo`、`wan2.7-image-pro`、`wan2.7-image`。
+- **视频模型**：`wan3.0-video`、`wan3.0-video-prime`、`happyhorse1.1-t2v/i2v/r2v`、`wan2.7-r2v/i2v/t2v`。
+- **核心功能**：
+  - 多维筛选（类型、模型、时间、提示词）
+  - 收藏/取消收藏、批量删除、回收站（保留 30 天）
+  - 资产详情查看（含完整生成参数与提示词）
+  - OSS 转存（全局配置，支持路径模板与自动释放平台副本）
 
-> **注意**：原始文档 [资产中心](../../raw/model-user-guide/asset-center-page.md) 未明确列出工作流类型，但实际 UI 中已支持；该能力已在 [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md) 的最新版本中确认补充。
+> **注意**：文档中列出的 `qwen-image-2.0-pro-2026-06-22` 等带未来日期后缀的模型名，可能为占位符或已下线版本；实际可用模型请以控制台模型列表或 `/v1/models` API 返回为准。建议优先使用无时间后缀的稳定版（如 `qwen-image-2.0-pro`），并参考最新 [原文标题](../../raw/model-user-guide/asset-center-page/asset-center.md) 确认兼容性。
 
 ## 关键参数
 
-资产列表页默认展示以下字段（均可排序）：
-- `资产名称`：唯一标识符，不可重复；
-- `类型`：取值为 `llm` / `prompt` / `knowledge_base` / `workflow`；
-- `状态`：`active`（就绪）、`deploying`（部署中）、`failed`（失败）；
-- `更新时间`：最后一次配置变更或部署完成时间；
-- `操作`：含「编辑」「调试」「删除」按钮（权限受 RBAC 控制）。
-
-部分资产（如 LLM）额外显示 `模型 ID` 和 `API Endpoint` 字段，详见 [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md)。
+- `asset_id`：每个资产唯一标识，可在资产详情弹窗中获取，用于 API 输入复用。
+- OSS 路径模板：默认 `{workspace}/{yyyy}/{mm}/{model}/{id}.{ext}`，其中 `{workspace}` 为当前业务空间标识。
+- 转存范围策略：支持“全部资产”或“N 天前资产”，并可选是否释放平台存储副本。
+- 平台存储配额：默认 5 GB 免费额度，超量按 0.15 元/GB/月计费；回收站内资产在 30 天保留期内仍计入配额。
 
 ## 使用方式
 
-1. 登录百炼控制台，进入 **AI 资产 > 资产中心**；
-2. 使用顶部搜索框按名称或 ID 过滤，或使用左侧筛选栏选择类型/状态；
-3. 点击某资产行右侧「调试」可跳转至对应调试页（如模型调试页、Prompt 模拟器）；
-4. 批量操作需勾选复选框后点击「批量删除」——该操作不可撤销。
-
-所有资产的 CRUD 接口亦可通过 OpenAPI v3 调用，参考 `/v1/assets` 系列接口定义（见 [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md)）。
+1. **开通**：首次访问 [资产中心](https://bailian.console.aliyun.com/cn-beijing/model/asset-center)，点击**立即开通**。
+2. **OSS 绑定**（可选但推荐）：
+   - 授权服务关联角色 `AliyunServiceRoleForBailianAssetForward`
+   - 选择**未开启版本控制**的 OSS Bucket（开启版本控制将导致转存失败）
+   - 配置路径模板与转存策略
+3. **API 复用资产**：
+   - 生图模型：在 `image_url` / `image_base64` 参数位置，替换为 `"asset_id": "xxx"`（三选一）
+   - 生视频模型：在视频/图片输入字段（如 `input_video`, `first_frame_image`）中同理传入 `"asset_id"`
+4. **管理操作**：通过卡片悬停操作（收藏、删除）、顶部筛选栏、右上角回收站入口完成日常管理。
 
 ## 限制和注意事项
 
-- 单个账号下最多创建 200 个资产（含所有类型），超出后需删除闲置项方可新增；
-- `knowledge_base` 类型资产不支持跨项目共享，即使项目间有成员重叠；
-- 删除 `llm` 类型资产时，若存在正在调用该模型的 API Key 或工作流，系统将阻断删除并提示依赖关系；
-- 资产名称仅支持 ASCII 字母、数字、下划线和短横线，长度 2–64 字符。
-
-> **注意**：文档 [资产中心](../../raw/model-user-guide/asset-center-page.md) 中提及“支持中文命名”，但实测前端校验已禁用中文字符，该描述已过时，请以当前控制台行为为准。
+- OSS 转存**不支持已开启版本控制的 Bucket**，否则任务失败且重试无效（见 [原文标题](../../raw/model-user-guide/asset-center-page/asset-center.md)）。
+- 回收站资产保留期为 **30 天**，到期自动永久清除，不可恢复；手动永久删除亦不可逆。
+- 平台存储容量统计包含回收站内资产；释放平台副本（OSS 转存时勾选）后，该资产不再显示于资产中心，也不再占用配额。
+- 权限需显式授予 RAM 策略：普通用户需 `AliyunBailianAssetCenterReader`，OSS 配置权限需 `AliyunBailianAssetCenterAdmin`。
+- 切换业务空间后，资产列表实时变更，但 OSS 转存配置保持全局一致，不受业务空间影响。
 
 ## 来源文档
 
-- [资产中心](../../raw/model-user-guide/asset-center-page.md)
+- [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md)
 
 

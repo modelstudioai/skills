@@ -1,40 +1,43 @@
 # get started with agents
 
-Agent 是百炼平台提供的可编程智能体服务，支持开发者快速构建具备规划、工具调用和多轮推理能力的应用。本文档指导你完成 Agent 的初始化配置、核心参数设置及基础调用流程。所有操作均基于百炼 API v3 接口，需配合有效的 API Key 和模型授权。
+百炼 Agent 服务提供一套完整的智能体开发与运行基础设施，支持从快速体验到生产级 API 集成的全链路流程。开发者可按需组合模型、工具、知识与安全能力，构建具备上下文感知、多步推理和自主执行能力的智能体应用。本文档聚焦入门路径，梳理核心能力、参数配置、调用方式及关键约束。
 
 ## 支持的模型与功能
 
-当前 Agent 服务仅支持 `qwen-max`、`qwen-plus` 和 `qwen-turbo` 三款 Qwen 系列模型（详见 [开始使用](../../raw/application-user-guide/get-started-with-agents.md)）。不支持第三方模型或自定义 LLM 后端。Agent 内置以下关键能力：  
-- 自动化工具选择与调用（需提前注册 Tool Schema）  
-- 多轮对话状态维护（最长支持 10 轮历史上下文）  
-- 结构化输出约束（通过 `response_format` 参数启用 JSON Schema 校验）  
-
-> **注意**：原始文档中提及的 `qwen-72b-chat` 已于 2024-06 版本下线，实际调用将返回 `model_not_found` 错误；请以控制台「模型列表」实时状态为准。
+Agent 服务本身不绑定特定大模型，而是通过 `model_id` 参数动态指定底层 LLM（如 `qwen-max`、`qwen-plus` 等），模型能力由 [Agent 服务概览](../../raw/application-user-guide/get-started-with-agents/agent-overview.md) 中“开发与运行”章节定义的托管模式决定。当前支持三类核心运行形态：  
+- **Managed Agent**：全托管会话与工具执行，适合快速验证逻辑；  
+- **Flow Agent**：基于可视化编排的工作流智能体，支持条件分支与多节点协同；  
+- **Sandbox**：提供隔离[沙箱环境](../concepts/sandbox.md)，用于安全执行代码、浏览器操作或文件解析（详见 [Agent 服务概览](../../raw/application-user-guide/get-started-with-agents/agent-overview.md)）。  
+此外，上下文能力（RAG、Memory、Connector、ParseX）与工具能力（MCP、Skill）均以插件化方式接入，无需修改核心逻辑。
 
 ## 关键参数
 
-| 参数名 | 类型 | 必填 | 说明 |
-|--------|------|------|------|
-| `model` | string | 是 | 必须为 `qwen-max`/`qwen-plus`/`qwen-turbo` 之一，大小写敏感 |
-| `tools` | array | 否 | 工具定义数组，每个元素需包含 `name`、`description` 和 `parameters`（遵循 OpenAPI 3.0 Schema） |
-| `tool_choice` | string \| object | 否 | 可选 `"auto"`（默认）、`"none"` 或 `{ "type": "function", "function": { "name": "xxx" } }`；详见 [Agent 服务概览](../../raw/application-user-guide/get-started-with-agents/agent-overview.md) |
-| `max_iterations` | integer | 否 | 最大推理步数，默认 5，取值范围 1–15 |
+调用 Agent 时需在请求体中明确以下必选/常用参数：  
+- `agent_id`：Agent 实例唯一标识（创建后生成）；  
+- `model_id`：指定底层推理模型 ID，必须与 Agent 所属工作空间支持的模型列表一致；  
+- `input`：用户输入内容，类型为 `string` 或结构化 `object`（取决于 Agent 配置）；  
+- `enable_memory`：布尔值，控制是否启用[长期记忆](../concepts/memory.md)（依赖 [Agent 服务概览](../../raw/application-user-guide/get-started-with-agents/agent-overview.md) 中 Memory 模块配置）；  
+- `tools`：显式声明本次调用允许使用的工具列表（如 `["mcp://calculator", "skill://web_search"]`），未声明的工具将被拦截。
+
+> **注意**：部分旧版文档将 `tool_choice` 描述为自由字符串枚举（如 `"auto"`/`"required"`），但最新 API 实际仅接受 `tools` 数组 + `tool_choice: "auto"` 组合，强制指定工具需使用 `tool_choice: {"type": "function", "function": {"name": "xxx"}}` 格式，该差异已在 [raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md](../../raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md) 中修正。
 
 ## 使用方式
 
-1. **准备工具定义**：按 [Agent 服务概览](../../raw/application-user-guide/get-started-with-agents/agent-overview.md) 中的 Schema 规范编写工具描述；  
-2. **发起请求**：向 `/v3/agents/run` 发送 POST 请求，携带 `model`、`messages`（含用户初始 query）及可选 `tools`；  
-3. **处理响应**：检查 `status` 字段（`success` / `tool_calls` / `failed`），对 `tool_calls` 类型响应需同步执行工具并提交结果至 `/v3/agents/continue`。
+1. **快速体验**：访问控制台 Playground，选择模板 Agent 直接对话调试（链接见 [Agent 服务概览](../../raw/application-user-guide/get-started-with-agents/agent-overview.md)）；  
+2. **低代码构建**：在控制台使用 Flow Agent 可视化画布编排节点，配置 RAG 知识库、Memory 存储及 MCP 工具调用；  
+3. **API 集成**：调用 `POST /v1/agents/{agent_id}/chat` 接口，传入标准 OpenAI 兼容格式请求体（参考 [raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md](../../raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md)）；  
+4. **Sandbox 扩展**：对需执行 Python 代码或网页抓取的任务，必须显式启用 Sandbox 并在 `tools` 中声明 `sandbox://python` 或 `sandbox://browser`。
 
 ## 限制和注意事项
 
-- 单次请求最大输入 tokens 为 32768（含 system prompt、messages 和 tools 描述），超限将返回 `400 Bad Request`；  
-- `tools` 数量上限为 20 个，单个 tool 的 `parameters` Schema 深度不得超过 5 层；  
-- Agent 不支持流式响应（`stream: true` 将被忽略），所有输出均为完整 JSON 对象；  
-- 若在调试中遇到 `invalid_tool_call` 错误，请确认工具名拼写与 `tool_choice.name` 严格一致——该行为与 [开始使用](../../raw/application-user-guide/get-started-with-agents.md) 文档描述一致，但与旧版 SDK 示例存在差异，建议以 API 实际返回为准。
+- 单次请求最大 `input` 长度为 32768 tokens（含上下文拼接后），超长文本需前置截断或启用 RAG 分块检索；  
+- Managed Agent 默认会话有效期为 24 小时，超时后 `session_id` 失效，需重新初始化；  
+- MCP 工具调用受配额与并发数限制，企业版用户需在控制台开通对应工具服务并授权；  
+- Sandbox 环境禁止访问内网地址、执行系统级命令（如 `rm -rf`）、或加载未经签名的第三方包；  
+- Memory 模块当前仅支持 key-value 结构化存储，不支持向量相似度检索（该能力由 RAG 独立提供）。
 
 ## 来源文档
 
-- [开始使用](../../raw/application-user-guide/get-started-with-agents.md)
+- [Agent 服务概览](../../raw/application-user-guide/get-started-with-agents/agent-overview.md)
 
 

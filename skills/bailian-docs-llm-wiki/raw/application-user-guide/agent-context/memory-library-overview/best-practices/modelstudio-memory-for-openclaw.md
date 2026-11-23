@@ -327,7 +327,7 @@ Get-Content "$env:TEMP\openclaw\openclaw-$(Get-Date -Format 'yyyy-MM-dd').log" -
 
 说明
 
-[OpenClaw](https://help.aliyun.com/zh/model-studio/openclaw)
+[OpenClaw](raw/token-plan-user-guide/use-chat-client-or-development-tool/openclaw.md)
 
 阿里云官方 OpenClaw 集成配置文档
 

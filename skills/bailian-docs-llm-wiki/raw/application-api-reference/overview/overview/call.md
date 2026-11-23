@@ -40,7 +40,7 @@ tool\_name
 
 是
 
-工具名称，使用[查询工具列表](raw/application-api-reference/overview/overview/list.md)返回的名称
+工具名称，使用[查询工具列表](raw/application-api-reference/overview/overview/list-64eddd50625ee03f.md)返回的名称
 
 tool\_params
 

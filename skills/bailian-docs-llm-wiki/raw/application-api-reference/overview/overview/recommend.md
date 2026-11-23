@@ -72,7 +72,7 @@ tool\_input\_schema
 
 `object / null`
 
-工具入参 schema，结构与[查询工具列表](raw/application-api-reference/overview/overview/list.md)的 `inputSchema` 相同
+工具入参 schema，结构与[查询工具列表](raw/application-api-reference/overview/overview/list-64eddd50625ee03f.md)的 `inputSchema` 相同
 
 ## 示例
 

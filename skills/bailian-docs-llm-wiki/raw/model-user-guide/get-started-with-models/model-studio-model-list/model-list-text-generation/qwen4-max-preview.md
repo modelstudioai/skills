@@ -50,9 +50,9 @@ API 兼容性
 
 ## 快速接入
 
-通过 [Token Plan](https://help.aliyun.com/zh/model-studio/token-plan-overview) 接入 Qwen4-Max-Preview：
+通过 [Token Plan](raw/token-plan-user-guide/token-plan-guide/token-plan-overview.md) 接入 Qwen4-Max-Preview：
 
-1.  选择 [Token Plan 个人版](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview) 或 [Token Plan 团队版](https://help.aliyun.com/zh/model-studio/token-plan-team-overview)，按对应指南获取套餐专用 API Key。
+1.  选择 [Token Plan 个人版](raw/token-plan-user-guide/token-plan-personal/token-plan-personal-overview.md) 或 [Token Plan 团队版](raw/token-plan-user-guide/token-plan-team-edition/token-plan-team-overview.md)，按对应指南获取套餐专用 API Key。
 2.  使用套餐专用 Base URL：`https://token-plan.cn-beijing.maas.aliyuncs.com`。各协议的完整接入地址见 Token Plan 指南。
 3.  将模型 ID 设置为 `qwen4-max-preview`。
 
@@ -60,7 +60,7 @@ API 兼容性
 
 ## 使用注意事项
 
-**说明****输出预算变化（OpenAI Chat Completions）**：自 `qwen4-max-preview` 起，`max_tokens` 与 `max_completion_tokens` 等价，均限制思考内容与最终回答的 Token 总量。开启思考时，思考内容会占用同一预算；迁移时沿用仅为回答预留的上限，可能导致输出提前截断，请为思考与回答共同预留额度。此前已上线的 Qwen 模型行为不变。详见 [API 兼容性升级说明](https://help.aliyun.com/zh/model-studio/api-compatibility-upgrade-notice)。
+**说明****输出预算变化（OpenAI Chat Completions）**：自 `qwen4-max-preview` 起，`max_tokens` 与 `max_completion_tokens` 等价，均限制思考内容与最终回答的 Token 总量。开启思考时，思考内容会占用同一预算；迁移时沿用仅为回答预留的上限，可能导致输出提前截断，请为思考与回答共同预留额度。此前已上线的 Qwen 模型行为不变。详见 [API 兼容性升级说明](raw/product-updates/release-notes/api-compatibility-upgrade-notice.md)。
 
 -   **思考模式**：默认开启，可选择 `low`、`medium` 或 `xhigh`（默认）。`reasoning_effort` 和 `thinking_budget` 不能同时设置。详见 [深度思考](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md)。
 -   **多轮对话**：Chat Completions 的 `preserve_thinking` 默认开启，需在历史 assistant 消息的 `reasoning_content` 字段中完整回传思考内容，不支持拼接到 `content` 字段。

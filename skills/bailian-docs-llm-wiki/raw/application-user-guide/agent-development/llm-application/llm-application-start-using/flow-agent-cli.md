@@ -37,4 +37,4 @@ bl app list                                              # 浏览已发布的应
 bl app call --app-id <应用ID> --prompt "生成本周运营周报大纲"
 ```
 
-任意命令追加 `--help` 查看完整参数。更多命令参见 [Flow Agent 命令参考](https://help.aliyun.com/zh/model-studio/cli/flow-agent)。
+任意命令追加 `--help` 查看完整参数。更多命令参见 [Flow Agent 命令参考](raw/cli/capabilities/agent-infrastructure/flow-agent.md)。

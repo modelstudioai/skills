@@ -1,50 +1,50 @@
 # support
 
-阿里云百炼平台的 `support` 体系面向开发者提供覆盖产品使用、API调用、计费运维及法律合规的全链路支持能力。它包含自助文档、自动化工具、人工服务与法律协议四层保障，核心目标是确保模型服务稳定、可预期、可审计。开发者应优先查阅结构化文档与错误码说明，并在必要时通过标准工单或售前/售后通道升级问题。
+阿里云百炼平台的 `support` 体系涵盖技术咨询、故障诊断、计费与合规保障、售后响应等多维度服务，面向开发者提供从接入到生产运维的全周期支撑。核心支持能力基于官方控制台、API/SDK、CLI 工具链及法律协议框架展开，不依赖第三方工具或非平台原生能力。所有服务均以阿里云主账号或具备 `AliyunBailianFullAccess` 权限的 RAM 账号为前提 [常见问题 (raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md)](../../raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md)。
 
 ## 支持的模型/功能
 
-- **模型范围**：支持千问系列（Qwen-Max、Qwen-Plus、Qwen3.5-Flash、Qwen3-VL-Plus 等）、万相（文生图）及其他第三方模型，但需注意：[**万相会员**](https://tongyi.aliyun.com/wan/pricing?whereToMemberShip=upgrade)权益**不适用于百炼API调用**，二者计费体系完全独立 [常见问题 (raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md)](../../raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md)。
-- **功能覆盖**：
-  - Completion / Assistant API 调用（含 function call 基础能力，但**暂不支持单次请求中连续调用两个本地函数**）；
-  - RAG 应用构建与 `doc_reference_type` 参数控制（仅在旧版应用中生效，新版需通过控制台开关启用）；
-  - 模型微调（SFT）、[多模态](../concepts/multi-modal.md)训练（qwen3-vl-plus 支持图片训练）；
-  - CLI 工具（`bl`）的鉴权、Profile 切换与 [Token](../concepts/token.md) Plan 使用；
-  - 业务空间权限隔离、数据加密（AES-256）与合规备案支持。
-
-> **注意**：文档 1 中提到“当前暂不支持 memory 配置功能”（Assistant API），而文档 3 未涉及该能力；该限制仍有效，无更新说明，以 [常见问题 (raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md)](../../raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md) 为准。
+- **模型覆盖**：支持千问系列（Qwen-Max、Qwen-Plus、Qwen3.5-Flash、Qwen3-VL-Plus 等）、万相（仅图像生成，**不支持百炼 API 调用**）及其他平台托管模型；Qwen3-VL-Plus 已支持图文多模态微调 [常见问题 (raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md)](../../raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md)。
+- **功能范围**：
+  - 模型推理（Completion / Assistant API）、RAG 应用构建、自定义模型微调（SFT）、体验中心交互；
+  - 不支持：本地模型上传、训练后模型导出、结构化数据库（MySQL/Hive）直连（RDS 正在开发中）、Assistant API 的 memory 配置或连续 function call 调用；
+  - 幻觉缓解能力依赖提示词工程、RAG、参数调优（如降低 `temperature`）及插件/MCP，**不提供隐式内容标识**。
 
 ## 关键参数
 
-| 参数 | 说明 | 生效条件 |
-|------|------|----------|
-| `temperature`, `top_k`, `top_p`, `max_tokens` | 控制生成随机性、候选集范围与输出长度，可用于抑制幻觉 [常见问题 (raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md)](../../raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md) | 所有 Completion/Assistant API 请求体中传入 |
-| `doc_reference_type` | 控制答案来源标注格式（如 `inline` / `footnote`） | **仅在旧版应用中生效**；新版应用需在控制台开启「展示回答来源」开关，否则该参数无效 |
-| `RequestId`, `AppId`, `User`, `Bot` | Completion API 必填字段 | 缺失或格式错误将返回错误码 `100004` |
+- **鉴权参数**：`Authorization: Bearer <API-Key>` 必须携带，API-Key 需在[北京或新加坡控制台](https://bailian.console.aliyun.com/settings/api-key)创建；
+- **请求参数**（以 Completion API 为例）：
+  - 必填：`AppId`, `Prompt`, `RequestId`；
+  - 可选：`User`, `Bot`, `doc_reference_type`（**仅旧版应用生效**；新版需在控制台开启“展示回答来源”开关）；
+- **CLI 凭据管理**：Token Plan 需显式使用 `--config token-plan` Profile，普通 `default` Profile 不触发 Token 扣减 [常见问题 (raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md)](../../raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md)；
+- **限流参数**：按 RPS/RPM 控制，触发后需等待对应窗口剩余时间（如 120 RPM 下单次请求失败后约等待 0.8 秒）。
 
 ## 使用方式
 
-- **自助排查**：  
-  - 查看错误码详情 → [错误码](raw/model-api-reference/preparations/error-code.md)；  
-  - 安装 SDK → [安装SDK](raw/model-api-reference/preparations/install-sdk.md)（Python/Java）；  
-  - CLI 鉴权与 Profile 管理 → 使用 `bl auth login --config token-plan` 切换至订阅凭据 [常见问题 (raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md)](../../raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md)。
-- **人工支持**：  
-  - 技术问题 → 提交标准工单或通过 [官网-售后服务](https://smartservice.console.aliyun.com/service/robot-chat)；  
-  - 业务合作 → 拨打 4008013260 或使用 [官网-售前咨询](https://smartservice.console.aliyun.com/service/pre-sales-chat)；  
-  - 合规备案 → 使用 [大模型百炼合作协议备案自助申请助手](https://smartservice.console.aliyun.com/service/self-service-center/search?id=28023&mode=toolPage&trackFrom=topic-llm2&showDrawer=true)。
+- **开通**：无需手动开通，满足实名认证 + 主账号或 `AliyunBailianFullAccess` 权限 RAM 账号即可自动启用；
+- **接入路径**：
+  - Web：通过[百炼控制台](https://bailian.console.aliyun.com/)直接体验或配置应用；
+  - API：参考 [错误码文档](raw/model-api-reference/preparations/error-code.md) 和 [SDK 安装指南](raw/model-api-reference/preparations/install-sdk.md)；
+  - CLI：执行 `bl auth login --console` 登录控制台凭据，`bl auth login --config token-plan --api-key <sk>` 启用 Token Plan；
+- **售后触达**：
+  - 技术问题：通过[官网售后服务入口](https://smartservice.console.aliyun.com/service/robot-chat)提交工单；
+  - 业务合作：拨打 4008013260 或使用[售前咨询通道](https://smartservice.console.aliyun.com/service/pre-sales-chat)；
+  - 法律协议：所有服务条款以 [相关协议](../../raw/model-user-guide/support/related-agreements.md) 中公布的正式文本为准。
 
 ## 限制和注意事项
 
-- **服务开通与关闭**：  
-  - 开通无需手动操作，满足实名认证 + 主账号或具备 `AliyunBailianFullAccess` 权限的 RAM 账号即可自动启用；  
-  - **服务开通后暂不支持关闭**，如需停用，应删除所有 API-Key [常见问题 (raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md)](../../raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md)。
-- **数据与隐私**：  
-  - 百炼**不会将用户数据用于模型训练**，传输全程 AES-256 加密；  
-  - 根据法规要求，调用日志等数据会被存储，具体条款见 [《阿里云百炼服务协议》](https://terms.alicdn.com/legal-agreement/terms/common_platform_service/20230728213935489/20230728213935489.html?spm=5176.2020520104.0.0.52a63a98OYNqWq) [相关协议 (raw/model-user-guide/support/related-agreements.md)](../../raw/model-user-guide/support/related-agreements.md)。
-- **第三方工具支持边界**（重要）：  
-  - 百炼**仅对自身服务端状态、API 可达性、官方 SDK 行为负责**；  
-  - 不支持 Cursor/Windsurf/OpenClaw 等第三方工具的安装、配置、本地环境（代理/防火墙/VPN）、业务代码调试或其内部统计与阿里云计费差异解释 [阿里云百炼平台售后服务范围说明 (raw/model-user-guide/support/after-sales-service-scope.md)](../../raw/model-user-guide/support/after-sales-service-scope.md)。  
-  > **注意**：文档 3 明确声明“第三方工具不构成我们的代理、受托或联合服务主体”，此为法律责任边界，非技术建议范围。
+- **数据与安全**：
+  - 百炼**不将用户数据用于模型训练**，传输全程 AES-256 加密；
+  - 对话记录仅在登录状态下保存，控制台最多保留 **100 条历史记录**，无时间限制；
+  - 数据隔离通过业务空间权限实现，不同子账号间数据物理隔离 [常见问题 (raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md)](../../raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md)。
+- **计费与账户**：
+  - 后付费按分钟出账、按月结算；账户余额必须 ≥ 0 元方可开通服务；
+  - 万相会员权益**完全独立于百炼计费体系**，不可用于抵扣 API 调用费用；
+  - 预付费支持节省计划与资源包，详情见 [节省计划与资源包文档](raw/model-user-guide/test-1/savings-plan-and-resource-package.md)。
+- **第三方工具支持边界**：
+  > **注意**：阿里云百炼**仅对自身服务端行为负责**。对于 Cursor、Windsurf 等第三方工具的安装、配置、内部报错、Token 统计差异、本地网络/代理/防火墙问题，百炼仅提供方向性建议（如连通性测试、API 示例核查），不承担排查与解决责任 [阿里云百炼平台售后服务范围说明](../../raw/model-user-guide/support/after-sales-service-scope.md)。
+- **模型能力边界**：
+  > **注意**：`doc_reference_type` 参数在新版本应用中已失效，其功能由控制台“展示回答来源”开关统一控制；若该开关关闭，该参数设置无效 [常见问题 (raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md)](../../raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md)。
 
 ## 来源文档
 

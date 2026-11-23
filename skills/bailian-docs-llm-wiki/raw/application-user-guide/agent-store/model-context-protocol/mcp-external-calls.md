@@ -5,9 +5,9 @@
 -   集成至第三方应用：支持将 MCP 服务安装到 Qoder、Codex、Claude Code 和 Cursor，也可手动添加到其他 MCP 客户端。
 -   集成至个人项目：通过 MCP SDK 调用，实现灵活编码和深度定制。
 
-**重要**也可通过阿里云百炼 CLI 外部调用 MCP 服务：`bl mcp list` 查看已开通服务，`bl mcp call --target <名称>.<工具>` 直接调用。详见[使用 CLI](https://help.aliyun.com/zh/model-studio/cli/mcp-skill)。
+**重要**也可通过阿里云百炼 CLI 外部调用 MCP 服务：`bl mcp list` 查看已开通服务，`bl mcp call --target <名称>.<工具>` 直接调用。详见[使用 CLI](raw/cli/capabilities/agent-infrastructure/mcp-skill.md)。
 
-**重要**需要通过 API 管理 MCP 服务时，可使用 [MCP API](raw/application-api-reference/overview.md) 查询、创建、开通、启停服务和调用工具。
+**重要**需要通过 API 管理 MCP 服务时，可使用 [MCP API](raw/application-api-reference/overview-1e06e5e20b81f10d.md) 查询、创建、开通、启停服务和调用工具。
 
 ## 开通 MCP 服务
 
