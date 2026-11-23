@@ -8,7 +8,7 @@
 
 ## 前提条件
 
--   已[安装阿里云百炼 CLI](https://help.aliyun.com/zh/model-studio/cli/installation)并配置 API Key。
+-   已[安装阿里云百炼 CLI](raw/cli/getting-started/installation.md)并配置 API Key。
 -   已取得 ParseX 可用的业务空间 ID，并通过 `--workspace-id`、`BAILIAN_WORKSPACE_ID` 或配置项 `workspace_id` 指定。
 -   输入文件存放在可访问的 HTTP(S) URL，包括带签名的 OSS URL。
 
@@ -54,7 +54,7 @@
 
 `--biz-id` 任务 ID、`--follow`
 
-完整参数见 [ParseX 命令参考](https://help.aliyun.com/zh/model-studio/cli/parsex)。
+完整参数见 [ParseX 命令参考](raw/cli/capabilities/agent-infrastructure/parsex.md)。
 
 ## 示例
 

@@ -1,40 +1,41 @@
 # application [support](support.md)
 
-`application support` 是百炼平台为应用层调用提供的基础服务支持能力，涵盖模型接入、功能扩展、参数配置与生命周期管理等核心环节。它面向开发者提供统一的 API 接口和 SDK 封装，用于构建生产级 AI 应用。该能力依赖平台底层模型服务与资源调度系统，需配合具体模型规格与配额策略使用。
+application [support](support.md) 指阿里云百炼平台为开发者在构建、调试和运维 AI 应用（含 Agent、RAG、自定义插件等）过程中提供的技术支撑体系，涵盖功能能力边界、关键配置参数、调用方式规范及服务保障范围。该支持体系以平台原生 API 和控制台能力为基础，同时明确区分阿里云责任边界与用户/第三方责任范围。所有使用均需遵守相关法律协议与合规要求。
 
 ## 支持的模型/功能
 
-- 支持调用百炼平台全部已上线的 [通义千问系列大模型](../../raw/application-user-guide/application-support.md)（如 Qwen1.5、Qwen2、Qwen2.5），以及部分专用小模型（如 Qwen-Audio、Qwen-VL）；
-- 提供标准推理（`chat/completions`）、流式响应、[函数调用](../concepts/function-calling.md)（Function Calling）、工具集成（Tools）等核心功能；
-- 支持通过 `application_id` 绑定专属模型版本、提示词模板及后处理规则，实现应用级模型治理 —— 具体配置方式详见 [售后说明](../../raw/application-user-guide/application-support/application-after-sales-service-scope.md)。
+- **Agent 能力**：官方提供 6 款内置插件：Python 代码解释器、计算器、图片生成、夸克搜索、生成二维码、GitHub 搜索；其中部分需申请开通 [Agent 应用与知识库常见问题](../../raw/application-user-guide/application-support/application-faq.md)。
+- **RAG（知识检索增强）**：支持多知识库并行检索，按配置策略打分后选取 topN 结果，广泛应用于问答系统、客户服务、教育训练等场景 [Agent 应用与知识库常见问题](../../raw/application-user-guide/application-support/application-faq.md)。
+- **自定义插件**：支持通过 Assistant API 注册并调用用户自定义函数，大模型可理解参数结构并生成调用逻辑；但**不支持透传除 `Authorization` 外的任意 HTTP Header**，此为硬性限制 [Agent 应用与知识库常见问题](../../raw/application-user-guide/application-support/application-faq.md)。
+- **协议与合规**：所有应用需遵守《阿里云百炼服务协议》《阿里云百炼体验功能特别说明》及开源模型相关条款，上架小程序或应用市场前须完成[应用合规备案](../../raw/_short/compliance-and-launch-filing-guide-for-ai-apps-p-d8d98ba3cff2bf6f.md)。
+
+> **注意**：文档 2 中“Agent 和 Assistant API 的最大区别”描述（“调整插件模型、基于上下文的理解，用户可以自己去开发”）存在表述模糊，易误解为 Agent 可直接修改底层模型行为；实际二者均为调用百炼托管模型，差异在于编排粒度与 SDK 封装层级——Assistant API 提供更高阶的类封装与 prompt 管理能力，而 Agent 更侧重插件调度与状态管理。建议以控制台实际能力为准。
 
 ## 关键参数
 
-| 参数名 | 类型 | 必填 | 说明 |
-|--------|------|------|------|
-| `application_id` | string | 是 | 应用唯一标识，由控制台创建应用时生成，用于路由至对应模型实例与配置 |
-| `model` | string | 否 | 显式指定模型 ID（如 `qwen-max`）；若未传，则使用该 `application_id` 绑定的默认模型 |
-| `stream` | boolean | 否 | 默认 `false`；设为 `true` 时启用 SSE 流式响应 |
-| `tools` | array | 否 | [函数调用](../concepts/function-calling.md)所需工具定义列表，格式遵循 OpenAI 兼容规范 |
-
-> **注意**：文档 [常见问题](../../raw/application-user-guide/application-support/application-faq.md) 中提及 `model` 参数“可覆盖应用绑定模型”，但实测中若应用已启用模型灰度发布策略，该覆盖行为可能被平台拦截 —— 建议优先通过控制台调整绑定模型，而非运行时覆盖。
+- `stream=True`：启用[流式输出](../concepts/streaming.md)，适用于前端实时渲染场景。
+- `incremental_output=True`：启用增量式[流式输出](../concepts/streaming.md)（即每次返回新 token 而非全量重发），需服务端与 SDK 版本支持。
+- 文件上传必填 `MD5`：用于校验文件完整性，上传 PDF 时后缀必须为小写 `pdf`，否则触发错误码 `140010`。
+- 知识库文档上限：单业务空间最多 10 万个文档，超限时需提交工单申请扩容。
 
 ## 使用方式
 
-1. 在百炼控制台创建应用，获取 `application_id`；
-2. 使用 SDK（如 `dashscope` Python SDK v1.20.0+）或直接调用 `/v1/applications/{application_id}/chat/completions` 接口；
-3. 构造请求体，至少包含 `messages` 字段（格式同 OpenAI），并按需传入 `stream`、`tools` 等参数；
-4. 处理响应：非流式返回标准 JSON；流式响应需按 SSE 协议解析 `data:` 行 —— 完整协议细节参见 [相关协议](../../raw/application-user-guide/application-support/application-related-agreements.md)。
+- **插件调用**：内置插件在应用配置中启用；自定义插件需通过 Assistant API 注册 schema 并配置 endpoint，模型将依据函数描述自动推理参数。
+- **RAG 调试**：若检索结果不准确，可通过回复下方“问题反馈”按钮提交，或复制 `RequestId` 提交工单 [Agent 应用与知识库常见问题](../../raw/application-user-guide/application-support/application-faq.md)。
+- **Markdown 渲染**：模型输出中的 `**text**` 等语法需由前端自行解析渲染，平台不提供服务端富文本转换。
+- **备案与合作**：接入通义千问模型的应用上架前，须完成[应用合规备案](../../raw/_short/compliance-and-launch-filing-guide-for-ai-apps-p-d8d98ba3cff2bf6f.md)，并通过[大模型百炼合作协议备案自助申请助手](https://smartservice.console.aliyun.com/service/self-service-center/search?id=28023&mode=toolPage&trackFrom=topic-llm2&showDrawer=true)提交协议申请。
 
 ## 限制和注意事项
 
-- 单次请求 `messages` 总 token 数上限为 32768（含 system、user、assistant 内容），超出将返回 `400 Bad Request`；
-- 每个 `application_id` 默认共享所属项目配额，不单独限流；高并发场景需提前申请配额扩容；
-- 不支持跨 region 调用：`application_id` 仅在其创建时指定的地域（如 `cn-beijing`）内有效；
-- 若应用绑定的是私有微调模型，其输入/输出内容受企业版数据隔离策略约束，不可与公有模型混用 —— 此限制在 [售后说明](../../raw/application-user-guide/application-support/application-after-sales-service-scope.md) 中有明确界定。
+- **服务边界**：阿里云百炼售后仅覆盖平台自身服务（API、SDK、控制台、计费系统），**不包含**第三方工具（如 Cursor、Windsurf）、用户本地环境（代理/防火墙/内网）、业务代码实现或跨云厂商集成问题 [阿里云百炼平台售后服务范围说明](../../raw/application-user-guide/application-support/application-after-sales-service-scope.md)。
+- **Header 限制**：自定义插件调用时，仅 `Authorization` 头可被透传至目标服务，其他 header（如 `X-User-ID`、`X-Tenant`）将被丢弃，不可绕过。
+- **数据导入规则**：结构化数据（如 Excel）导入时，空行将导致后续行被截断；首行为空则整表识别为空文件。
+- **法律约束**：所有使用行为须同时遵守[相关协议](../../raw/application-user-guide/application-support/application-related-agreements.md)，包括但不限于服务协议、体验功能特别说明及开源模型条款。
 
 ## 来源文档
 
-- [服务支持](../../raw/application-user-guide/application-support.md)
+- [相关协议](../../raw/application-user-guide/application-support/application-related-agreements.md)
+- [Agent 应用与知识库常见问题](../../raw/application-user-guide/application-support/application-faq.md)
+- [阿里云百炼平台售后服务范围说明](../../raw/application-user-guide/application-support/application-after-sales-service-scope.md)
 
 

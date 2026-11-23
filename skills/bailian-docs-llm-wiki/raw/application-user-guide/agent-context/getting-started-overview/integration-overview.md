@@ -96,14 +96,14 @@ API Key 在[**控制台 API Key 页**](raw/model-api-reference/preparations/get-
 
 ## CLI
 
-阿里云百炼 CLI 把 ParseX 的解析与字段抽取封装为命令。安装与鉴权见[安装与鉴权](https://help.aliyun.com/zh/model-studio/cli/installation)，操作步骤和示例见[使用 CLI](raw/application-user-guide/agent-context/getting-started-overview/integration-overview/cli.md)。
+阿里云百炼 CLI 把 ParseX 的解析与字段抽取封装为命令。安装与鉴权见[安装与鉴权](raw/cli/getting-started/installation.md)，操作步骤和示例见[使用 CLI](raw/application-user-guide/agent-context/getting-started-overview/integration-overview/cli.md)。
 
 ```
 bl parsex parse submit --workspace-id <workspace-id> --file-url "https://example.com/document.pdf" --output-file-format markdown --output json
 bl parsex parse result --workspace-id <workspace-id> --biz-id <parse-biz-id> --follow --output json
 ```
 
-完整参数见 [ParseX 命令参考](https://help.aliyun.com/zh/model-studio/cli/parsex)。
+完整参数见 [ParseX 命令参考](raw/cli/capabilities/agent-infrastructure/parsex.md)。
 
 ## **Agent Skill**
 

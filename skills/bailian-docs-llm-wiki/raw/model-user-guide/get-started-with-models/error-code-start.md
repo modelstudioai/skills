@@ -957,7 +957,7 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 **解决方案：**
 
 -   若通过代码调用，请勿将content设置为如`[{"type": "text", "text": "你是谁？"}]`的array类型。
--   若使用 [Cline](https://help.aliyun.com/zh/model-studio/cline) ，请在设置界面单击`MODEL CONFIGURATION`，并勾选 **Enable R1 messages format**。
+-   若使用 [Cline](raw/token-plan-user-guide/use-chat-client-or-development-tool/more-tools-guide/cline.md) ，请在设置界面单击`MODEL CONFIGURATION`，并勾选 **Enable R1 messages format**。
 
 #### The image size is not supported for the data inspection.
 
@@ -1959,7 +1959,7 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
             
 -   **填写错误**：阿里云百炼的 API Key 以 `sk-` 开头，请确认未误填其他模型提供商的密钥，且复制时未包含多余空格或换行符。
     
--   **套餐专属 API Key（Coding Plan / Token Plan 团队版）**：Coding Plan 与 Token Plan 团队版均提供以 `sk-sp-` 开头的专属 API Key，**必须配合各自的专属 Base URL 使用**，不可与通用 API Key/Base URL 混用（混用会返回本鉴权错误）。其中 Coding Plan 的专属地址为 [](https://coding.dashscope.aliyuncs.com/v1)[https://coding.dashscope.aliyuncs.com/v1](https://coding.dashscope.aliyuncs.com/v1)；Token Plan 团队版的专属 Base URL 可在控制台**我的订阅**的 API Key 区域查看。请确认同时更新了 API Key 和 Base URL，具体配置方法请分别参见接入AI工具与[快速开始](https://help.aliyun.com/zh/model-studio/token-plan-overview)。
+-   **套餐专属 API Key（Coding Plan / Token Plan 团队版）**：Coding Plan 与 Token Plan 团队版均提供以 `sk-sp-` 开头的专属 API Key，**必须配合各自的专属 Base URL 使用**，不可与通用 API Key/Base URL 混用（混用会返回本鉴权错误）。其中 Coding Plan 的专属地址为 [](https://coding.dashscope.aliyuncs.com/v1)[https://coding.dashscope.aliyuncs.com/v1](https://coding.dashscope.aliyuncs.com/v1)；Token Plan 团队版的专属 Base URL 可在控制台**我的订阅**的 API Key 区域查看。请确认同时更新了 API Key 和 Base URL，具体配置方法请分别参见接入AI工具与[快速开始](raw/token-plan-user-guide/token-plan-guide/token-plan-overview.md)。
     
 -   **地域不匹配**：API Key 和 Base URL 属于不同的地域，例如使用了华北2（北京）地域的 API Key 和新加坡地域的 Base URL。请确认您使用的 API Key 位于[北京](https://bailian.console.aliyun.com/settings/api-key)地域页面或[新加坡](https://bailian.console.aliyun.com/settings/api-key)地域页面，或[美国](https://bailian.console.aliyun.com/us-east-1)地域页面。各地域对应的 Base URL 如下：
     
@@ -1994,7 +1994,7 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
     
     其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
     
--   **工具适配问题**：第三方工具未正确适配（如[Dify](https://help.aliyun.com/zh/model-studio/dify)最新版本插件不稳定导致报错，可尝试安装旧版本千问插件；旧版本[Cline](https://help.aliyun.com/zh/model-studio/cline)调用模型时**API Provider**选择了**Alibaba Qwen**，应选择**OpenAI兼容**）。
+-   **工具适配问题**：第三方工具未正确适配（如[Dify](https://help.aliyun.com/zh/model-studio/dify)最新版本插件不稳定导致报错，可尝试安装旧版本千问插件；旧版本[Cline](raw/token-plan-user-guide/use-chat-client-or-development-tool/more-tools-guide/cline.md)调用模型时**API Provider**选择了**Alibaba Qwen**，应选择**OpenAI兼容**）。
     
 
 若以上均不符合，可能是 API Key 被删除，请重新获取并发起调用。
@@ -2056,13 +2056,13 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **原因：** 无权访问此模型。可能因该模型需申请权限、模型免费额度已耗尽且不支持付费使用（如 `deepseek-r1-distill-llama-70b`），或该模型已下线。
 
-**解决方案：** 若该模型已下线，请在[模型下线机制说明](https://help.aliyun.com/zh/model-studio/model-depreciation)中确认其下线状态，并改用该文档推荐的替代模型。
+**解决方案：** 若该模型已下线，请在[模型下线机制说明](raw/product-updates/release-notes/model-depreciation.md)中确认其下线状态，并改用该文档推荐的替代模型。
 
 **使用通用 API Key 调用 Token Plan 专属模型**
 
 **原因：** Token Plan 专属模型（如 `qwen3.8-max-preview`）仅限 Token Plan 订阅用户使用专属 API Key（以 `sk-sp-` 开头）配合 Token Plan 专属 Base URL 调用。使用通用 API Key（以 `sk-` 开头）调用这些模型会返回 403 `access_denied` 错误。
 
-**解决方案：** 请前往阿里云百炼控制台，在**我的订阅**的 API Key 区域获取 Token Plan 专属 API Key 与专属 Base URL，并确认同时更新了两者，具体配置方法请参见[快速开始](https://help.aliyun.com/zh/model-studio/token-plan-overview)。若 API Key 与 Base URL 不匹配（例如专属 API Key 搭配通用 Base URL），将返回 401 鉴权错误，请参见本文档 **401-InvalidApiKey/invalid\_api\_key**。
+**解决方案：** 请前往阿里云百炼控制台，在**我的订阅**的 API Key 区域获取 Token Plan 专属 API Key 与专属 Base URL，并确认同时更新了两者，具体配置方法请参见[快速开始](raw/token-plan-user-guide/token-plan-guide/token-plan-overview.md)。若 API Key 与 Base URL 不匹配（例如专属 API Key 搭配通用 Base URL），将返回 401 鉴权错误，请参见本文档 **401-InvalidApiKey/invalid\_api\_key**。
 
 **解决方案：** 请前往阿里云百炼控制台，在[模型广场](https://bailian.console.aliyun.com/model/market)的对应模型卡片下方单击**立即申请**发起测试申请。或改用其他模型，例如千问或万相的文生图模型替代 Flux。
 
@@ -2142,7 +2142,7 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：**
 
--   前往[模型下线机制说明](https://help.aliyun.com/zh/model-studio/model-depreciation)确认所调用的模型是否已下线。
+-   前往[模型下线机制说明](raw/product-updates/release-notes/model-depreciation.md)确认所调用的模型是否已下线。
 -   若模型已下线，请改用其推荐的替代模型重新调用。
 
 ### AllocationQuota.FreeTierOnly

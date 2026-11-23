@@ -20,34 +20,32 @@
 |--------|------|------|------|
 | `model` | string | 是 | 模型标识符，如 `happyoyster-adventure-v1`、`happyoyster-directing-v1`；不支持 `happyoyster-acting-v1` 在公开环境调用 |
 | `input` | object | 是 | 输入结构体，具体字段依模型类型而异（详见各子文档） |
-| `stream` | boolean | 否 | 是否启用流式响应，默认 `false`；仅 Adventure 与 Directing 支持 `true` |
+| `stream` | boolean | 否 | 是否启用流式响应，默认 `false`；仅 Adventure 和 Directing 支持 `true` |
 
-其他模型特有参数（如 `scene_context`、`emotion_bias`）请参阅对应子文档，例如 [Directing Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-directing-openapi-reference.md) 中定义的 `shot_sequence` 字段为必填项。
+部分高级参数（如 `max_steps`、`consistency_level`）在 [Directing Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-directing-openapi-reference.md) 中有详细定义，但 Adventure 接口暂不支持 `consistency_level`。
 
 ## 使用方式
 
-1. 获取 API Key 并配置 `Authorization: Bearer <key>` 请求头；  
-2. 构造 POST 请求至 `https://dashscope.aliyuncs.com/api/v1/services/aigc/world-model/invoke`；  
-3. 在 `input` 中按目标模型要求组织数据（如 Adventure 需提供 `world_seed` 和 `narrative_constraints`）；  
-4. 解析响应中的 `output.result` 字段获取结构化输出。
-
-示例请求体（Adventure）：
-```json
-{
-  "model": "happyoyster-adventure-v1",
-  "input": {
-    "world_seed": "cyberpunk_2077",
-    "narrative_constraints": ["no magic", "single protagonist"]
-  }
-}
-```
+1. 获取 API Key 并配置 `Authorization: Bearer <your_api_key>` 请求头；  
+2. 构造 POST 请求至 `https://dashscope.aliyuncs.com/api/v1/world-models/{model}/invoke`；  
+3. 示例（Adventure 调用）：
+   ```bash
+   curl -X POST \
+     -H "Authorization: Bearer $API_KEY" \
+     -H "Content-Type: application/json" \
+     -d '{
+           "model": "happyoyster-adventure-v1",
+           "input": {"world_seed": "cyberpunk_2077", "n_characters": 3}
+         }' \
+     https://dashscope.aliyuncs.com/api/v1/world-models/happyoyster-adventure-v1/invoke
+   ```
 
 ## 限制和注意事项
 
-- 单次请求最大输入长度为 8192 tokens，超出将返回 `400 Bad Request`；  
-- Acting 模块暂不支持批量调用与长上下文维持，相关约束详见 [Acting Open API参考（邀测中）](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-acting-openapi-reference.md)；  
-- 所有模型默认超时时间为 30 秒，Directing 在复杂镜头链场景下建议主动设置 `timeout=60`；  
-- 输出字段命名存在版本差异：v1 接口返回 `output.result`，而部分测试环境文档误写为 `response.data` —— 请以 [Adventure Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-adventure-openapi-reference.md) 中定义的实际响应结构为准。
+- 单次请求最大输入长度为 8192 tokens（按模型 tokenizer 计算），超长内容需预处理截断；  
+- Acting 接口目前仅对白名单用户开放，未获邀用户调用将返回 `403 Forbidden`；  
+- 所有模型均不支持跨会话状态保持，如需连续交互，请自行维护 `session_id` 并在 `input` 中显式传入；  
+- 输出字段命名存在版本差异：v1 接口返回 `output.world_state`，而部分测试环境文档误写为 `output.state` —— 请以 [Adventure Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-adventure-openapi-reference.md) 中的 schema 定义为准。
 
 ## 来源文档
 

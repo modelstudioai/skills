@@ -1,6 +1,6 @@
 # 百炼模型市场索引
 
-> 自动生成 · 共 127 个模型家族 · 343 个主干模型 · 更新于 2026-11-23
+> 自动生成 · 共 126 个模型家族 · 342 个主干模型 · 更新于 2026-11-23
 
 **机器查询走结构化文件**：
 
@@ -300,13 +300,6 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [Qwen-Rerank](groups/qwen-rerank.json) — 基于Qwen LLM底座训练的文本排序模型，对输入的Query和候选Docs进行相关性排序，支持100+语种和长文本输入，适用于文本检索、RAG等场景，效果对齐Qwen家族开源Rerank系列模型。
   - 模型：`gte-rerank-v2`, `qwen3-rerank`, `qwen3-vl-rerank`, `qwen3.7-text-rerank`
 
-## 实时音频翻译 `Realtime-Audio-Translate` — 2 个家族
-
-- [Qwen3.5-LiveTranslate-Flash-Realtime](groups/qwen3.5-livetranslate-flash-realtime.json) — Qwen3.5-LiveTranslate-Flash的实时版本，一款高精度、高响应、高鲁棒性的多语言实时音视频同传大模型。依托Qwen3.5-Omni强大的基座能力、海量多模态数据、跨语言跨模态对齐…
-  - 模型：`qwen3.5-livetranslate-flash-realtime`
-- [Qwen3.8-LiveTranslate-Flash-Realtime](groups/qwen3.8-livetranslate-flash-realtime.json) — Qwen3.8-LiveTranslate-Flash的实时版本，一款高精度、高响应、高鲁棒性的多语言实时音视频同传大模型。依托Qwen-Omni强大的基座能力、海量多模态数据、跨语言跨模态对齐和视觉…
-  - 模型：`qwen3.8-livetranslate-flash-realtime`
-
 ## World-Model `World-Model` — 1 个家族
 
 - [HappyOyster-1.0](groups/happyoyster-1.0.json) — Happyoyster 系列首个实时交互的开放式世界模型。只需输入一句话，即可生成一个完整、可演绎、可探索、可互动的数字世界。
@@ -316,6 +309,11 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 
 - [Qwen-Audio-3.0-TTS](groups/qwen-audio-3.0-tts.json) — 多语种语音合成，支持方言及情绪、角色、语速控制。Plus 效果优先，Flash 速度与成本优先。
   - 模型：`qwen-audio-3.0-tts-flash`, `qwen-audio-3.0-tts-plus`
+
+## 实时音频翻译 `Realtime-Audio-Translate` — 1 个家族
+
+- [Qwen3.8-LiveTranslate-Flash-Realtime](groups/qwen3.8-livetranslate-flash-realtime.json) — Qwen3.8-LiveTranslate-Flash的实时版本，一款高精度、高响应、高鲁棒性的多语言实时音视频同传大模型。依托Qwen-Omni强大的基座能力、海量多模态数据、跨语言跨模态对齐和视觉…
+  - 模型：`qwen3.8-livetranslate-flash-realtime`
 
 ## 3D 生成 `3D-generation` — 1 个家族
 
