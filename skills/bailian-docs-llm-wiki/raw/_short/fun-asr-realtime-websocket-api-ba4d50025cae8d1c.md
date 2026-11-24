@@ -2,7 +2,7 @@
 
 本文介绍通过 WebSocket 连接访问 Fun-ASR-Realtime 实时语音识别服务的接口地址、请求头和交互流程。
 
-使用 Python 调用模型时，请参见 [Fun-ASR-Realtime Python SDK](https://help.aliyun.com/zh/model-studio/realtime-websocket-python-sdk-qwen-audio-asr-fun-asr#model-fun-asr-realtime)。
+使用 Python 调用模型时，请参见 [Fun-ASR-Realtime Python SDK](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-websocket-sdk-python#model-fun-asr-realtime)。
 
 ## 接口地址
 
@@ -1278,8 +1278,8 @@ function handleEvent($conn, $response, $loop, $audio_file_path, $taskId) {
 
 ## 可用的 SDK
 
--   [Python SDK](https://help.aliyun.com/zh/model-studio/realtime-websocket-python-sdk-qwen-audio-asr-fun-asr#model-fun-asr-realtime)
--   [Java SDK](https://help.aliyun.com/zh/model-studio/realtime-websocket-java-sdk-qwen-audio-asr-fun-asr#model-fun-asr-realtime)
--   [Android SDK](https://help.aliyun.com/zh/model-studio/realtime-websocket-android-sdk-qwen-audio-asr-fun-asr#model-fun-asr-realtime)
--   [iOS SDK](https://help.aliyun.com/zh/model-studio/realtime-websocket-ios-sdk-qwen-audio-asr-fun-asr#model-fun-asr-realtime)
--   [HarmonyOS SDK](https://help.aliyun.com/zh/model-studio/realtime-websocket-harmonyos-sdk-qwen-audio-asr-fun-asr#model-fun-asr-realtime)
+-   [Python SDK](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-websocket-sdk-python#model-fun-asr-realtime)
+-   [Java SDK](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-websocket-sdk-java#model-fun-asr-realtime)
+-   [Android SDK](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-websocket-sdk-android#model-fun-asr-realtime)
+-   [iOS SDK](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-websocket-sdk-ios#model-fun-asr-realtime)
+-   [HarmonyOS SDK](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-websocket-sdk-harmonyos#model-fun-asr-realtime)

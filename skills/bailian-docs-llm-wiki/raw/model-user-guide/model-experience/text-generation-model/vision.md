@@ -3368,12 +3368,12 @@ for chunk in stream:
             
         -   `token_pixels`：每视觉`Token`对应的像素值，不同模型情况不同：
             
-            -   `qwen3.8系列`、`qwen3.7系列`、`qwen3.6系列`、`qwen3.5系列`、`Qwen3-VL`**：**每个`Token`对应 `32x32`像素
+            -   `Qwen4`、`qwen3.8系列`、`qwen3.7系列`、`qwen3.6系列`、`qwen3.5系列`、`Qwen3-VL`**：**每个`Token`对应 `32x32`像素
             -   `QVQ`及其他`Qwen2.5-VL`模型**：**每个Token对应`28x28`像素
         
         以下代码演示了模型内部对图像的大致缩放逻辑，可用于估算一张图像的Token，实际计费请以API响应为准。
         
-        Qwen4-Max 每个图像 Token 对应 `32×32` 像素，图像最小像素值为 `65536`。以下代码设置 `model="qwen4-max"` 时使用 Qwen4-Max 的 `detail` 和像素规则，显式 `max_pixels` 优先。
+        以下代码以 `qwen4-max` 为例估算图像 Token。`detail`、像素限制及参数优先级请参见 [OpenAI Chat Completions](raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)、[DashScope](raw/model-api-reference/qwen-api-reference/qwen-api-via-dashscope.md)。
         
         ```
         import math

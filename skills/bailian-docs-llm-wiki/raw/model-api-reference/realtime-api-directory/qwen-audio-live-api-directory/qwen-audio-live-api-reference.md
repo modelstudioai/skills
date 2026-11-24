@@ -6,7 +6,7 @@
 
 ## 选择接入方式
 
-先建立 WebSocket，再选择用哪条连接收发音频。
+两种接入方式都先建立控制 WebSocket。音频可以通过这条连接收发，也可以通过单独建立的媒体连接收发。
 
 -   **[仅用 WebSocket](raw/model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-websocket-access.md)**。收发事件中的 Base64 编码 PCM。省略 `session.transport`，或将其 `type` 设为 `websocket`。
 -   **WebSocket + WebRTC 或 AOQ**。保持控制 WebSocket 连接，用于配置会话、协商媒体连接和发送任务请求。媒体连接就绪后，通过它收发音频，并选择控制 WebSocket 或媒体连接来接收服务端事件。
@@ -21,7 +21,7 @@
 
 操作
 
-客户端发送
+客户端操作
 
 服务端返回
 
@@ -39,7 +39,7 @@
 
 查看会话用量
 
-读取服务主动上报的事件
+监听服务端每 5 秒上报的用量事件
 
 [`session.usage.updated`](https://help.aliyun.com/zh/model-studio/qwen-audio-live-server-events#live-usage-updated)
 
@@ -59,7 +59,7 @@
 
 操作
 
-客户端发送
+客户端操作
 
 服务端返回
 
@@ -85,7 +85,7 @@
 
 [`session.item.create`](https://help.aliyun.com/zh/model-studio/qwen-audio-live-client-events#live-item-create)，`item.type` 填 `message`
 
-按会话配置收取音频和字幕
+按会话配置返回音频和字幕
 
 ### 处理委派任务和函数调用
 
@@ -113,7 +113,7 @@
 
 应用发送 [`session.instruction.append`](https://help.aliyun.com/zh/model-studio/qwen-audio-live-client-events#live-instruction-append)，填写当前任务的 `delegation_id`
 
-收到 [`session.instructions.appended`](https://help.aliyun.com/zh/model-studio/qwen-audio-live-server-events#live-instructions-appended) 回执。从后续 [`session.delegation.created`](https://help.aliyun.com/zh/model-studio/qwen-audio-live-server-events#live-delegation-created) 的 `supplements`（如有）读取补充信息。
+收到 [`session.instructions.appended`](https://help.aliyun.com/zh/model-studio/qwen-audio-live-server-events#live-instructions-appended) 回执（请求名用 `instruction`，回执名用 `instructions`）。从后续 [`session.delegation.created`](https://help.aliyun.com/zh/model-studio/qwen-audio-live-server-events#live-delegation-created) 的 `supplements`（如有）读取补充信息。
 
 回传 Client 任务结果
 

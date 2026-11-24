@@ -34,7 +34,7 @@
 
 即使只收发语音，Offer SDP 也必须包含 `m=video` 和 `m=application` 两个媒体段。添加视频收发器和创建 DataChannel 分别生成这两个媒体段。纯语音接入无需采集摄像头或发送视频。
 
-1.  创建 `RTCPeerConnection`，添加 `sendrecv` 音频收发器和视频收发器，再创建 DataChannel。示例将视频收发器设为 `recvonly`，DataChannel 名称为 `oai-events`。
+1.  创建 `RTCPeerConnection`，添加音频收发器并将其方向设为 `sendrecv`。再添加视频收发器并创建 DataChannel。本例将视频收发器的方向设为 `recvonly`，DataChannel 命名为 `oai-events`。
 2.  调用 `createOffer()` 和 `setLocalDescription()`。等 `iceGatheringState` 变为 `complete` 后，从 `localDescription.sdp` 读取包含 ICE 候选的完整 Offer。
 3.  通过控制 WebSocket 发送 [session.update](https://help.aliyun.com/zh/model-studio/qwen-audio-live-client-events#live-session-update)。将 `session.transport.type` 设为 `rtc`，将 Offer SDP 写入 `session.transport.sdp`。
 
@@ -42,7 +42,7 @@
 
 ### 读取 Answer SDP 并收发音频
 
-服务端通过控制 WebSocket 返回 [session.updated](https://help.aliyun.com/zh/model-studio/qwen-audio-live-server-events#live-session-updated) 后，从 `session.transport.sdp` 读取 Answer SDP。调用 `setRemoteDescription({ type: "answer", sdp })` 应用 Answer。等媒体连接建立后，挂载麦克风轨道，并将收到的远端音轨交给播放器。
+浏览器通过控制 WebSocket 收到 [session.updated](https://help.aliyun.com/zh/model-studio/qwen-audio-live-server-events#live-session-updated) 后，从 `session.transport.sdp` 读取 Answer SDP。调用 `setRemoteDescription({ type: "answer", sdp })` 应用 Answer。等媒体连接建立后，挂载麦克风轨道，并将收到的远端音轨交给播放器。
 
 媒体连接就绪后，可从控制 WebSocket 或 WebRTC DataChannel 接收服务端事件。如果两路收到相同 `event_id` 的事件，只处理一次。例如，输入转写 `session.input_transcript.delta` 和输出字幕 `session.output_transcript.delta` 可能同时从两路到达。
 
@@ -141,7 +141,7 @@ server.listen(8000, "127.0.0.1", () => console.log(localOrigin));
 
 ### 创建浏览器页面
 
-将以下 HTML 保存为 `index.html`。然后将下面的 JavaScript 保存为同一目录下的 `live.js`。
+将以下 HTML 保存为 `index.html`。
 
 ```
 <!doctype html>
@@ -158,7 +158,7 @@ server.listen(8000, "127.0.0.1", () => console.log(localOrigin));
 </html>
 ```
 
-浏览器等待本地代理发来 `proxy.ready`，再开始 SDP 协商。应用通过 `onTranscript` 接收字幕，按 `type` 区分用户和模型。
+在同一目录下创建 `live.js`，保存下面的 JavaScript。浏览器收到本地代理发来的 `proxy.ready` 后，开始 SDP 协商。应用通过 `onTranscript` 接收字幕，按 `type` 区分用户和模型。
 
 ```
 async function startWebRTC(control, audio, onTranscript, onConnected, onError) {

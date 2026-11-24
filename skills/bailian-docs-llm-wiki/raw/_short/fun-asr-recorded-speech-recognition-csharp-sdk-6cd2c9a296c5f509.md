@@ -4,7 +4,7 @@
 
 ## 快速开始
 
-按[SDK简介](raw/model-api-reference/realtime-api-directory/realtime-websocket-sdk/realtime-websocket-csharp-sdk/csharp-sdk.md)安装 SDK 并配置 API Key。将示例地址中的 `WorkspaceId` 替换为同地域的业务空间 ID。
+按[SDK简介](https://help.aliyun.com/zh/model-studio/csharp-sdk)安装 SDK 并配置 API Key。将示例地址中的 `WorkspaceId` 替换为同地域的业务空间 ID。
 
 以下示例使用 `fun-asr` 转写音频文件，并在控制台输出文本。
 

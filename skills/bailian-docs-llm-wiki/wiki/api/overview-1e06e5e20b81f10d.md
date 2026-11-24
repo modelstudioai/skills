@@ -1,47 +1,40 @@
 # [overview](overview.md) 1e06e5e20b81f10d
 
-MCP API 是百炼平台用于统一管理 MCP（Model Calling Protocol）服务的核心接口，支持对官方及自定义 MCP 的全生命周期操作（查询、创建、启停、开通、删除）以及工具级能力（调用、推荐、列表获取）。该 API 面向开发者提供标准化的 RESTful 接口，所有响应遵循统一结构，并通过 `x-request-id` 支持链路追踪。详细行为与协议规范请参考 [原文标题](../../raw/application-api-reference/overview-1e06e5e20b81f10d.md)。
+MCP API 是百炼平台提供的服务管理接口，用于全生命周期管控 MCP（Model Calling Protocol）服务，包括官方 MCP 与自定义 MCP 的查询、创建、启停、开通/关闭、工具调用及推荐。该 API 面向开发者设计，需配合工作空间 ID 和 API Key 使用，所有响应遵循统一结构并携带 `x-request-id` 便于问题追踪。详细行为规范请参阅 [MCP API 概览](../../raw/application-api-reference/overview-1e06e5e20b81f10d.md)。
 
 ## 支持的模型/功能
 
-- **服务类型覆盖**：支持四种 `server_type`：`STDIO`（函数计算部署）、`HTTP`（远程流式 HTTP）、`SSE`（远程 SSE）、`OPENAPI`（已有 HTTP API 封装）。
-- **归属类型区分**：`OFFICIAL`（阿里云官方 MCP）与 `CUSTOMER`（用户自定义 MCP），二者在元信息字段（如 `icon`、`provider`、`is_onekey`）和状态文案上存在差异。
+- **服务类型支持**：`STDIO`（npx/uvx 启动，部署于函数计算 FC）、`HTTP`（远程 Streamable HTTP）、`SSE`（远程 SSE）、`OPENAPI`（将现有 HTTP API 封装为 MCP）。
+- **服务归属类型**：`OFFICIAL`（阿里云官方提供）与 `CUSTOMER`（用户自定义）两类，元信息字段存在差异（如 `icon`、`provider` 仅限官方 MCP）。
 - **核心能力**：
-  - 全生命周期管理：创建、更新、启用/停用（自定义）、开通/关闭（官方）、删除；
-  - 工具交互：查询工具列表、调用指定工具、按自然语言推荐工具；
-  - 状态与指标：实时返回 `server_status`、`call_success_rate`、`average_call_time` 等运行时指标。
+  - 官方 MCP：开通（`activate`）、关闭（`deactivate`）
+  - 自定义 MCP：创建（`create`）、更新（`update`）、启用（`enable`）、停用（`disable`）、删除（`delete`）
+  - 工具层：查询工具列表（`/tools`）、调用工具（`/tools/call`）、按自然语言推荐工具（`/tools/recommend`）
 
-> **注意**：官方 MCP 的 `DELETED` 状态未定义（文档中留空），而自定义 MCP 支持该状态；实际调用中应以 `server_status` 枚举值为准，避免依赖状态文案做逻辑判断。详见 [原文标题](../../raw/application-api-reference/overview-1e06e5e20b81f10d.md) 中的“枚举”章节。
+> **注意**：[MCP API 概览](../../raw/application-api-reference/overview-1e06e5e20b81f10d.md) 中明确说明 `meta_info` 字段对自定义 MCP 不返回 `icon`、`provider`、`is_onekey`，但部分旧版文档示例未强调此差异，实际开发中应以该文档为准。
 
 ## 关键参数
 
-- **Endpoint 路径变量**：`{workspace_id}` 必须为真实工作空间 ID，构成完整地址 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/mcp/servers`。
-- **分页与排序**：统一使用 `pageNo`（从 1 开始）和 `pageSize`；工具推荐接口使用 `topN` 指定返回数量。
-- **请求/响应格式**：
-  - 请求体与响应主体字段均为 `snake_case`（如 `mcp_code`, `server_name`）；
-  - 工具调用结果例外：保留 MCP 协议字段名（如 `inputSchema`, `additionalProperties`），且必须检查 `data.isError` 判断执行是否成功（`success: true` 仅表示 API 调用成功）。
-- **敏感字段警示**：`mcp_config.headers` 等配置字段会原样返回，可能含密钥或 Token，[原文标题](../../raw/application-api-reference/overview-1e06e5e20b81f10d.md) 明确要求仅在可信环境调用并保护响应内容。
+- **路径参数**：`mcpCode`（MCP 唯一编码），用于详情、启停、工具调用等接口。
+- **分页参数**：`pageNo`、`pageSize`（snake_case），适用于 `/list` 等列表接口。
+- **推荐参数**：`topN`（指定推荐工具数量），用于 `/tools/recommend`。
+- **认证参数**：必须在请求头中携带 `Authorization: Bearer <api_key>`，认证方式详见 [认证](../../raw/application-api-reference/overview/authentication-58370587ddc046ee.md)。
+- **敏感字段**：`mcp_config.headers` 等配置项会原样返回，可能含密钥或 [Token](../concepts/token.md)，需严格限制调用环境与响应日志留存。
 
 ## 使用方式
 
-1. **前置准备**：
-   - 开通百炼服务，创建 API Key（参见 [raw/model-api-reference/preparations/get-api-key.md](raw/model-api-reference/preparations/get-api-key.md)）；
-   - 获取工作空间 ID（控制台右上角菜单复制）；
-   - 配置认证头（Bearer Token），详见 [原文标题](../../raw/application-api-reference/overview-1e06e5e20b81f10d.md) 中“说明”部分引用的认证文档。
-2. **典型流程**（自定义 MCP）：
-   - `POST /` 创建 → 获取 `mcp_code`；
-   - `POST /{mcpCode}/enable` 启用服务；
-   - `GET /{mcpCode}/tools` 获取工具列表；
-   - `POST /{mcpCode}/tools/call` 调用具体工具。
-3. **错误处理**：所有接口统一返回 `error_code` 与 `error_msg`，业务错误码定义见 [MCP API 错误码](raw/application-api-reference/overview/errors-972b4127b84f4429.md)，需结合 `data.isError` 判断工具执行结果。
+- **Endpoint 格式**：`https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/mcp/servers`  
+  其中 `workspace_id` 需从[百炼控制台](https://bailian.console.aliyun.com/)右上角工作空间菜单复制获取。
+- **请求体/响应格式**：全部使用 `snake_case`（工具调用结果中的 `isError` 除外，遵循 MCP 协议）。
+- **响应结构统一**：无论成功或业务错误，均返回标准 JSON 结构，含 `success`、`error_code`、`error_msg`、`data`、`request_id` 字段；工具执行是否成功需进一步检查 `data.isError`。
+- 接口调用前须确保已满足前提条件：[开通百炼服务并创建 API Key](../../raw/model-api-reference/preparations/get-api-key.md)，且已获取有效 `workspace_id`。
 
 ## 限制和注意事项
 
-- **权限隔离**：API Key 作用域绑定工作空间，无法跨 workspace 操作。
-- **状态最终一致性**：`ACTIVATING` / `ACTIVATED` 等状态变更存在延迟，轮询建议间隔 ≥1s；`ACTIVATE_FAILED` 时可通过 `activate_fail_reason` 字段定位失败原因。
-- **自定义 MCP 配置安全**：`mcp_config` 中的 `headers`、`env` 等字段不脱敏，禁止在前端或日志中直接打印响应体。
-- **官方 MCP 不可删除**：仅支持 `activate` / `deactivate`，无 DELETE 接口；删除操作仅适用于 `CUSTOMER` 类型。
-- **响应头必含 `x-request-id`**：用于问题排查与服务端日志关联，务必在客户端记录。
+- **状态字段语义差异**：`server_status` 的文案在官方与自定义 MCP 中不一致（如 `INACTIVE` 对应“未启用” vs “未开通”），解析时应结合 `type` 字段判断上下文，避免硬编码文案匹配。
+- **敏感信息风险**：`mcp_config` 中的 `headers`、`env` 等字段可能包含凭证，[MCP API 概览](../../raw/application-api-reference/overview-1e06e5e20b81f10d.md) 明确警告“请仅在可信环境调用，并妥善保护响应内容”，生产环境禁止打印或落库完整响应。
+- **错误处理**：所有错误码与含义详见 [MCP API 错误码](../../raw/application-api-reference/overview/errors-972b4127b84f4429.md)，不建议依赖 `error_msg` 做逻辑分支，应以 `error_code` 为主。
+- **One Key MCP 限制**：官方 MCP 若标记 `is_onekey: true`，则不支持手动启停，其生命周期由平台统一管控，调用 `enable`/`disable` 将返回明确错误。
 
 ## 来源文档
 

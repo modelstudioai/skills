@@ -2,7 +2,7 @@
 
 RAG API 的服务地址、协议约定、请求格式、接口清单与限流规则。
 
-通过 RAG API，您可以以编程方式管理知识库、导入文档、执行检索以及调用知识问答服务。所有接口均通过 DashScope 网关提供服务。
+通过 Knowledge API（原RAG API），您可以以编程方式管理知识库、导入文档、执行检索以及调用知识问答服务。所有接口均通过 DashScope 网关提供服务。
 
 **说明**调用 API 前，请先[获取 API Key](raw/application-api-reference/rag-api/rag-api-authentication.md)。
 
@@ -16,7 +16,7 @@ RAG API 的服务地址、协议约定、请求格式、接口清单与限流规
 https://{workspace_id}.cn-beijing.maas.aliyuncs.com
 ```
 
-RAG API 包含三组接口，路径前缀不同：
+Knowledge API（原RAG API） 包含三组接口，路径前缀不同：
 
 接口组
 
@@ -190,6 +190,10 @@ Request Body
 
 查询指定知识库的存储用量和 QPS 监控数据
 
+[Wiki API](raw/application-api-reference/rag-api/rag-api-knowledge-base/rag-api-wiki.md)
+
+创建和配置 Wiki 知识库，查询 Wiki 检索服务并使用 Wiki 检索
+
 ### 文档管理
 
 接口
@@ -320,11 +324,11 @@ Request Body
 
 [Agent 管理概述](raw/application-api-reference/rag-api/rag-api-agents/rag-api-agent-overview.md)
 
-RAG Agent 实例的全生命周期管理 API
+Knowledge（原RAG） Agent 实例的全生命周期管理 API
 
 [创建 Agent](raw/application-api-reference/rag-api/rag-api-agents/rag-api-agent-create.md)
 
-创建一个新的 RAG Agent，初始状态为 draft
+创建一个新的 Knowledge（原RAG） Agent，初始状态为 draft
 
 [更新 Agent](raw/application-api-reference/rag-api/rag-api-agents/rag-api-agent-update.md)
 

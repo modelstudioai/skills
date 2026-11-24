@@ -12,7 +12,7 @@
 
 -   **部署方式：**部署于公共云，**不支持微调**。
     
--   [计费方式](raw/application-user-guide/agent-development/application-gallery/xiyan-gbi/xiyangbi-billing-description.md)**：按每月每RPM计费，支持**[**试用**](https://bailian.console.aliyun.com/xiyan?switchAgent=12473251#/home)**（各200个查询）。**
+-   [计费方式](raw/application-user-guide/agent-development/application-gallery/xiyan-gbi/xiyangbi-billing-description.md)**：按每月每RPM计费。**
     
 -   **版本特点：**
     -   **标准版Turbo：**响应迅速，适合开箱即用的通用查询，允许通过规则干预输出。

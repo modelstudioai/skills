@@ -2,7 +2,7 @@
 
 -   [Managed Agent](raw/cli/capabilities/agent-infrastructure/managed-agent.md)
 -   [Flow Agent](raw/cli/capabilities/agent-infrastructure/flow-agent.md)
--   [RAG](raw/cli/capabilities/agent-infrastructure/rag.md)
+-   [Knowledge（原RAG）](raw/cli/capabilities/agent-infrastructure/rag.md)
 -   [Memory](raw/cli/capabilities/agent-infrastructure/memory.md)
 -   [联网搜索](raw/cli/capabilities/agent-infrastructure/web-search.md)
 -   [MCP & Skill](raw/cli/capabilities/agent-infrastructure/mcp-skill.md)

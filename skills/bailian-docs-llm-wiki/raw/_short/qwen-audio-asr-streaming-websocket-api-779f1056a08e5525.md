@@ -2,7 +2,7 @@
 
 本文介绍通过 WebSocket 连接访问 Qwen-Audio-ASR-Streaming 实时语音识别服务的接口地址、请求头和交互流程。
 
-使用 Python 调用模型时，请参见 [Qwen-Audio-ASR-Streaming Python SDK](https://help.aliyun.com/zh/model-studio/realtime-websocket-python-sdk-qwen-audio-asr-fun-asr#model-qwen-audio-asr-streaming)。
+使用 Python 调用模型时，请参见 [Qwen-Audio-ASR-Streaming Python SDK](https://help.aliyun.com/zh/model-studio/qwen-audio-asr-streaming-websocket-sdk-python#model-qwen-audio-asr-streaming)。
 
 ## 接口地址
 
@@ -1278,9 +1278,9 @@ function handleEvent($conn, $response, $loop, $audio_file_path, $taskId) {
 
 ## 可用的 SDK
 
--   [Python SDK](https://help.aliyun.com/zh/model-studio/realtime-websocket-python-sdk-qwen-audio-asr-fun-asr#model-qwen-audio-asr-streaming)
--   [Java SDK](https://help.aliyun.com/zh/model-studio/realtime-websocket-java-sdk-qwen-audio-asr-fun-asr#model-qwen-audio-asr-streaming)
--   [Node.js SDK](https://help.aliyun.com/zh/model-studio/realtime-websocket-nodejs-sdk-qwen-audio-asr-fun-asr#model-qwen-audio-asr-streaming)
--   [Android SDK](https://help.aliyun.com/zh/model-studio/realtime-websocket-android-sdk-qwen-audio-asr-fun-asr#model-qwen-audio-asr-streaming)
--   [iOS SDK](https://help.aliyun.com/zh/model-studio/realtime-websocket-ios-sdk-qwen-audio-asr-fun-asr#model-qwen-audio-asr-streaming)
--   [HarmonyOS SDK](https://help.aliyun.com/zh/model-studio/realtime-websocket-harmonyos-sdk-qwen-audio-asr-fun-asr#model-qwen-audio-asr-streaming)
+-   [Python SDK](https://help.aliyun.com/zh/model-studio/qwen-audio-asr-streaming-websocket-sdk-python#model-qwen-audio-asr-streaming)
+-   [Java SDK](https://help.aliyun.com/zh/model-studio/qwen-audio-asr-streaming-websocket-sdk-java#model-qwen-audio-asr-streaming)
+-   [Node.js SDK](https://help.aliyun.com/zh/model-studio/qwen-audio-asr-streaming-websocket-sdk-nodejs#model-qwen-audio-asr-streaming)
+-   [Android SDK](https://help.aliyun.com/zh/model-studio/qwen-audio-asr-streaming-websocket-sdk-android#model-qwen-audio-asr-streaming)
+-   [iOS SDK](https://help.aliyun.com/zh/model-studio/qwen-audio-asr-streaming-websocket-sdk-ios#model-qwen-audio-asr-streaming)
+-   [HarmonyOS SDK](https://help.aliyun.com/zh/model-studio/qwen-audio-asr-streaming-websocket-sdk-harmonyos#model-qwen-audio-asr-streaming)

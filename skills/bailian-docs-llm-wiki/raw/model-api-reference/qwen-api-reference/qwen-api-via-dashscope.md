@@ -710,9 +710,7 @@ kimi/kimi-k3.1-pro 和 kimi/kimi-k3.1-pro-highspeed 支持此参数，默认关�
 
 **thinking\_budget** `integer` （可选）
 
-`qwen4-max`: 默认值 `131072`.
-
-思考过程的最大长度。适用于Qwen4、Qwen3.8、Qwen3.7、Qwen3.6、Qwen3.5、Qwen3-VL、Qwen3、GLM（阿里云直供）、Kimi（阿里云直供）系列模型，其中 kimi-k3 和 kimi-k3.1-pro 不支持该参数。相关文档：[限制思考长度](https://help.aliyun.com/zh/model-studio/deep-thinking#e7c0002fe4meu)。
+思考过程的最大长度。适用于Qwen4、Qwen3.8、Qwen3.7、Qwen3.6、Qwen3.5、Qwen3-VL、Qwen3、GLM（阿里云直供）、Kimi（阿里云直供）系列模型，其中 kimi-k3 和 kimi-k3.1-pro 不支持该参数。相关文档：[限制思考长度](https://help.aliyun.com/zh/model-studio/deep-thinking#e7c0002fe4meu)。 `qwen4-max` 的默认值为 `131072`。
 
 其他模型: 默认值为模型最大思维链长度，请参见：[选择模型](raw/model-user-guide/get-started-with-models/models.md)
 

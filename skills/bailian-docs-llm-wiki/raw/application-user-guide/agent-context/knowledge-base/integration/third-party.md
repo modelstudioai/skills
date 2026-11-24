@@ -42,7 +42,7 @@ Coze 支持通过 MCP 或自定义 API 插件接入。
 
 ## n8n
 
-n8n 可通过 HTTP Request 节点调用 RAG 检索接口：
+n8n 可通过 HTTP Request 节点调用 Knowledge（原RAG） 检索接口：
 
 1.  添加 **HTTP Request** 节点
 2.  方法选 POST，URL 填检索接口地址（见下方说明）

@@ -1,32 +1,56 @@
 # [more](more.md) about models
 
-百炼平台提供多种模型调用方式与配套能力，覆盖同步/异步任务、多模态文件处理、子空间隔离、连接优化及实时音视频交互等核心场景。开发者需根据业务需求选择合适的技术路径，并严格遵循权限、地域、时效性等约束条件。
+阿里云百炼平台提供多样化的模型调用能力，覆盖同步/异步推理、实时多模态交互、子空间隔离、文件上传与连接复用等关键场景。本文面向开发者，系统梳理模型服务的核心能力、参数配置、使用方式及约束条件，帮助您高效、安全地集成模型能力。
 
 ## 支持的模型/功能
 
-- **异步模型**：图像生成、视频生成、长文本处理等耗时操作采用异步模式，需先创建任务获取 `task_id`，再轮询或通过事件总线接收结果通知。[通过HTTP回调URL或MQ接收异步任务完成通知](../../raw/model-api-reference/more-about-models/async-task-api.md) 提供了免轮询的高可靠方案。
-- **实时多模态模型**：基于 WebSocket 的 `Qwen-Omni-Realtime`、`Qwen-Audio-Realtime` 等模型支持语音识别（ASR）、语音合成（TTS）、实时翻译等能力，要求客户端在收到 `DialogStateChanged` 且 `state=Listening` 后才可发送音频流。[多模态交互开发套件](../../raw/model-api-reference/more-about-models/multimodal-interaction-protocol.md) 明确了该关键时序约束。
-- **AOQ SDK 支持的实时模型**：包括 `Qwen-Omni-Realtime`、`Qwen-Audio-Realtime` 和 `Qwen-LiveTranslate-Realtime`，各平台 SDK（Windows/macOS/Android/iOS/Web 等）均提供统一 API 抽象，但需注意 `Qwen-Audio-Realtime` 不支持视频输入或输出。[AOQ SDK 简介](../../raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-api-aoq-sdk-desc.md) 汇总了各模型的媒体能力边界。
+百炼支持三类主流调用模式：  
+- **同步模型**（如 `qwen-plus`、`qwen3`）：通过 HTTP 或 SDK 直接调用，适用于低延迟文本生成任务；  
+- **异步模型**（如图像生成、视频生成、长音频转录）：需先提交任务获取 `task_id`，再轮询或通过事件总线接收结果通知，详见[异步任务管理 API](raw/model-api-reference/more-about-models/manage-asynchronous-tasks.md)；  
+- **实时流式模型**（如 `Qwen-Omni-Realtime`、`Qwen-Audio-Realtime`）：基于 WebSocket 或 AOQ SDK 实现端到端低延迟音视频交互，不支持 [OpenAI 兼容接口](../concepts/openai-compatible-interface.md)。  
 
-> **注意**：文档 25 与文档 27 均列出 `Qwen-Audio-Realtime`，但文档 25 在“语音识别支持的模型”列表中错误地将其与 Paraformer、FunASR 等并列作为 ASR 模型；而文档 27 及所有 AOQ SDK 参考文档（如文档 8–16）一致强调其**不支持视频输入或输出**，且其核心定位是端到端实时语音交互，非通用 ASR 引擎。实际使用应以文档 27 及各 SDK 参考为准，避免将 `Qwen-Audio-Realtime` 误用于纯离线 ASR 场景。
+> **注意**：`Qwen-Audio-Realtime` 明确不支持视频输入或输出，该限制在所有平台 SDK 文档中一致强调（如 [AOQ SDK 简介](raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-api-aoq-sdk-desc.md)、[AOQ Client SDK Windows API 参考](raw/model-api-reference/more-about-models/realtime-api-aoq-api/aoq-windows-sdk-reference.md) 等），无矛盾。
+
+实时交互场景推荐使用 **AOQ SDK**，其提供跨平台（Windows/macOS/Electron/Linux C++/Python/Android/iOS/HarmonyOS/Web）统一 API，封装连接管理、媒体流控制、3A 处理、帧级回调等能力，并支持自定义采集/播放、屏幕共享等高级功能。详细接口请参见各平台参考文档，例如 [AOQ Client SDK Android API 参考](raw/model-api-reference/more-about-models/realtime-api-aoq-api/aoq-android-sdk-reference.md)。
 
 ## 关键参数
 
-- **临时 API Key 有效期（TTL）**：默认 60 秒，可通过 `expire_in_seconds` 参数设置，范围为 [1, 1800] 秒。该 Key 继承生成它的永久 Key 的全部权限。[生成临时API Key](../../raw/model-api-reference/more-about-models/generate-temporary-api-key.md) 明确了此安全机制。
-- **异步任务查询限流**：20 QPS（每秒每个主账号），超限将触发限流。建议按任务类型设置合理查询间隔（如图像生成任务间隔 ≥ 2 秒）。[异步任务管理 API](../../raw/model-api-reference/more-about-models/manage-asynchronous-tasks.md) 提供了具体指导。
-- **文件上传有效期**：通过临时存储上传的文件 URL 有效期为 48 小时，过期后无法使用。生产环境必须使用 OSS 等长期存储方案。[上传本地文件获取临时URL](../../raw/model-api-reference/more-about-models/get-temporary-file-url.md) 多次强调此限制。
+| 参数 | 说明 | 典型取值/范围 | 注意事项 |
+|------|------|----------------|----------|
+| `expire_in_seconds` | 临时 API Key 有效期 | `[1, 1800]` 秒（默认 60） | 用于不可信环境，继承源 Key 权限，不可手动删除 |
+| `task_id` | 异步任务唯一标识 | UUID 字符串 | 查询结果接口限流 20 QPS，建议按任务类型设置合理轮询间隔 |
+| `model_name` | 文件上传时指定的模型名 | 如 `qwen3-vl-plus` | 文件与模型强绑定，不同模型无法共享同一临时 URL |
+| `connectionPoolSize` | Java SDK 连接池大小 | 默认 32，高并发建议调优 | 过低易阻塞，过高可能压垮服务端；需同步调整 `maximumAsyncRequests` |
+| `enableSendMediaStream` | AOQ 媒体流发送开关 | `true`/`false`（按 `trackType` 独立控制） | 模型要求先收到 `session.updated` 后再开启，否则可能被拒绝 |
 
 ## 使用方式
 
-- **子业务空间调用**：需使用该子空间专属的 API Key，并确保已为其配置对应模型的调用权限（标准模型需显式授权，调优模型仅限本空间调用）。OpenAI 兼容方式仅支持标准模型，不支持调优模型。[子业务空间的模型调用](../../raw/model-api-reference/more-about-models/model-calling-in-sub-workspace.md) 给出了完整流程。
-- **连接复用**：高并发场景下，Java SDK 默认启用连接池，Python SDK 需传入自定义 HTTP 客户端；推荐调整 `connectionPoolSize`（默认 32）和 `connectionIdleTimeout`（默认 300 秒）以匹配业务负载。[DashScope SDK连接复用配置](../../raw/model-api-reference/more-about-models/connection-multiplexing-configuration.md) 提供了参数说明与示例。
-- **实时音视频控制**：必须遵循“先禁用、后开启”原则——连接前调用 `enableSendMediaStream(false)`，待收到 `session.updated` 消息后再调用 `enableSendMediaStream(true)`，否则模型可能因未就绪而丢弃媒体流。[媒体流发送管理](../../raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-api-aoq-sdk-function/aoq-media-stream-control.md) 是该流程的权威依据。
+### 1. 安全调用（客户端场景）
+在浏览器或移动 App 等不可信环境，**禁止硬编码永久 API Key**。应由可信后端调用 [生成临时API Key](raw/model-api-reference/more-about-models/generate-temporary-api-key.md) 接口，获取带 TTL 的 `st-***` [Token](../concepts/token.md) 下发至前端，避免密钥泄露风险。
+
+### 2. 异步任务结果获取
+- **轮询方式**：调用 `GET /api/v1/tasks/{task_id}`，注意遵守 20 QPS 限流，对图像/视频类任务建议间隔 ≥5s；  
+- **事件驱动方式**：配置 HTTP 回调 URL 或 RocketMQ 到事件总线，由百炼主动推送 `任务完成事件`，规避轮询资源浪费和限流问题，详见[通过HTTP回调URL或MQ接收异步任务完成通知](raw/model-api-reference/more-about-models/async-task-api.md)。
+
+### 3. 多模态文件处理
+调用多模态模型（如 `qwen3-vl-plus`）前，需先上传本地文件获取临时 OSS URL：  
+- 调用 `GET /api/v1/uploads?action=getPolicy&model={model_name}` 获取上传凭证；  
+- 使用凭证将文件上传至临时存储（有效期 48 小时）；  
+- 在模型请求中传入返回的 `oss://` URL。  
+> **注意**：该功能限流 100 QPS（按主账号+模型维度），且文件仅限同主账号下使用，**严禁用于生产环境或压测**；生产环境请使用阿里云 OSS。
+
+### 4. 连接优化
+高并发调用时，启用连接复用可显著降低延迟与资源消耗：  
+- **Java SDK**：直接配置 `ConnectionConfigurations`（如 `connectionPoolSize=64`, `readTimeout=300`）；  
+- **Python SDK**：传入自定义 `httpx.Client` 或 `aiohttp.ClientSession` 复用连接池。
 
 ## 限制和注意事项
 
-- **地域隔离**：北京、新加坡、弗吉尼亚、中国香港四地的 API Key 互不通用，Endpoint 也不同。调用前必须确认 Key 与 Endpoint 地域一致，否则返回 `InvalidApiKey` 错误。[生成临时API Key](../../raw/model-api-reference/more-about-models/generate-temporary-api-key.md) 和 [上传本地文件获取临时URL](../../raw/model-api-reference/more-about-models/get-temporary-file-url.md) 均明确指出此要点。
-- **临时文件限制**：上传凭证接口限流为 100 QPS（按“主账号+模型”维度），且不支持扩容；文件大小上限 1GB，但不同模型对输入文件有额外限制；文件仅限同一主账号下使用。[上传本地文件获取临时URL](../../raw/model-api-reference/more-about-models/get-temporary-file-url.md) 将其列为“重要”警告。
-- **AOQ 平台能力差异**：Linux C++ SDK 的 `startAudioCapture`/`stopAudioCapture` 为空实现，`setLocalView`/`setRemoteView` 无渲染实现；Web SDK 依赖 WebTransport 和 HTTPS；HarmonyOS SDK 通过 NAPI 桥接。跨平台开发时须查阅对应平台的 [API 参考文档](../../raw/model-api-reference/more-about-models/realtime-api-aoq-api/aoq-windows-sdk-reference.md)（如文档 8–16），不可假设接口行为完全一致。
+- **地域隔离**：北京、新加坡、弗吉尼亚、中国香港四地 API Key **完全独立**，Endpoint 和鉴权 [Token](../concepts/token.md) 不互通，调用前务必确认地域配置；  
+- **子空间权限**：子业务空间的 API Key 调用标准模型（如 `qwen-plus`）前，必须在控制台[设置模型调用权限](https://help.aliyun.com/zh/model-studio/permission-management-overview#f642213a1f38l)；调优部署的私有模型则无需额外授权，但仅限本空间 Key 调用；  
+- **临时文件生命周期**：上传的文件 48 小时后自动清理，且无法查询、修改或下载，仅能作为 URL 参数在模型请求中一次性使用；  
+- **AOQ 初始化约束**：`enableSendMediaStream` 必须在 `createEngine` 之后、`connect` 之前调用；若未显式调用，默认 `connect` 成功后立即发送媒体流，可能违反部分模型的 `session.updated` 就绪协议；  
+- **WebSocket 安全要求**：多模态 WebSocket (`wss://dashscope.aliyuncs.com/api-ws/v1/inference`) 要求 TLS 1.2+、启用 SNI，并信任 GlobalSign Root CA - R46 证书。
 
 ## 来源文档
 
@@ -36,6 +60,8 @@
 - [子业务空间的模型调用](../../raw/model-api-reference/more-about-models/model-calling-in-sub-workspace.md)
 - [上传本地文件获取临时URL](../../raw/model-api-reference/more-about-models/get-temporary-file-url.md)
 - [DashScope SDK连接复用配置](../../raw/model-api-reference/more-about-models/connection-multiplexing-configuration.md)
+- [AOQ SDK](../../raw/model-api-reference/more-about-models/realtime-api-aoq-api.md)
+- [AOQ SDK 简介](../../raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-api-aoq-sdk-desc.md)
 - [SDK 下载](../../raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-sdk-download.md)
 - [AOQ Client SDK Windows API 参考](../../raw/model-api-reference/more-about-models/realtime-api-aoq-api/aoq-windows-sdk-reference.md)
 - [AOQ Client SDK macOS API 参考](../../raw/model-api-reference/more-about-models/realtime-api-aoq-api/aoq-macos-sdk-reference.md)
@@ -49,13 +75,11 @@
 - [功能参考](../../raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-api-aoq-sdk-function.md)
 - [连接状态管理](../../raw/_short/aoq-connection-management-b3a43f4f91587453.md)
 - [媒体流发送管理](../../raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-api-aoq-sdk-function/aoq-media-stream-control.md)
-- [音频常用功能介绍](../../raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-api-aoq-sdk-function/aoq-audio-features.md)
 - [自定义音频播放](../../raw/_short/aoq-custom-audio-playback-7832b33ccf014535.md)
+- [音频常用功能介绍](../../raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-api-aoq-sdk-function/aoq-audio-features.md)
 - [自定义音频采集](../../raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-api-aoq-sdk-function/aoq-custom-audio-capture.md)
 - [视频常用功能介绍](../../raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-api-aoq-sdk-function/aoq-video-features.md)
 - [自定义视频输入](../../raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-api-aoq-sdk-function/aoq-custom-video-input.md)
 - [多模态交互开发套件](../../raw/model-api-reference/more-about-models/multimodal-interaction-protocol.md)
-- [AOQ SDK](../../raw/model-api-reference/more-about-models/realtime-api-aoq-api.md)
-- [AOQ SDK 简介](../../raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-api-aoq-sdk-desc.md)
 
 

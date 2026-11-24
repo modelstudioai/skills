@@ -7,6 +7,7 @@
         "response_modality": [
           "Video"
         ],
+        "inference_mode": "app",
         "request_modality": [
           "Text",
           "Image"
@@ -37,6 +38,16 @@
           "priceName": "世界体验（480P）"
         }
       ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "usage_limit": 10000000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 300,
+          "usage_limit_period": 1,
+          "type": "model-default"
+        }
+      },
       "priceTimeBands": [
         "standard"
       ],

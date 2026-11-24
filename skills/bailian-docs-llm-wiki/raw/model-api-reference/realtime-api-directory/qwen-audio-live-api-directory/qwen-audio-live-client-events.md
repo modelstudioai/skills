@@ -6,7 +6,7 @@
 
 ## session.update
 
-配置会话。服务通过 [`session.updated`](https://help.aliyun.com/zh/model-studio/qwen-audio-live-server-events#live-session-updated) 确认配置已生效。纯 WebSocket 接入此时即可发送音频。WebRTC 和 AOQ 还需等待各自的媒体连接就绪。
+发送此事件可配置会话，包括前台模型、对话指令和音频传输方式。省略 `session.transport` 时，音频通过控制 WebSocket 收发。服务通过 [`session.updated`](https://help.aliyun.com/zh/model-studio/qwen-audio-live-server-events#live-session-updated) 确认配置已生效。仅用 WebSocket 时，收到确认后即可发送音频。使用 WebRTC 或 AOQ 时，还需等待媒体连接就绪。
 
 `type`string必填
 
@@ -271,7 +271,7 @@ AOQ 配置。
 
 ## session.input\_audio.append
 
-在纯 WebSocket 会话中发送一帧音频。AOQ 会话通过 AOQ 发送音频。
+仅用 WebSocket 接入时，通过此事件发送一帧音频。使用 WebRTC 时，通过 WebRTC 媒体轨道发送音频。使用 AOQ 时，通过 AOQ 媒体连接发送音频。
 
 `type`string必填
 
@@ -354,7 +354,7 @@ Base64 编码的 16 kHz、16 位、单声道 PCM16LE。
 
 `role`string按类型填写
 
-`message` 示例填 `user`。
+消息发送者的角色。下方的用户文本示例使用 `user`。
 
 `content`array按类型填写
 
@@ -566,7 +566,7 @@ Base64 编码的 16 kHz、16 位、单声道 PCM16LE。
 
 `role`string按类型填写
 
-`message` 示例填 `user`。
+消息发送者的角色。下方的用户文本示例使用 `user`。
 
 `content`array按类型填写
 
@@ -625,7 +625,7 @@ Base64 编码的 16 kHz、16 位、单声道 PCM16LE。
 
 ## response.create
 
-启动新的后台任务。服务通过 `response.event` 返回后台事件。显式启动时，服务直接返回后台事件，自动委派流程才会发送 `session.delegation.created`。
+应用通过此事件发起后台任务后，直接从 `response.event` 读取后台事件。只有前台模型自动委派任务时，服务才会发送 `session.delegation.created`。
 
 `type`string必填
 

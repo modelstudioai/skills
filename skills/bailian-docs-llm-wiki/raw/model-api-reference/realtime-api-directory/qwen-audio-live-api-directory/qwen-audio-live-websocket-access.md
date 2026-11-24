@@ -20,8 +20,8 @@ URL 中的 `model=qwen-audio-3.1-live` 用于选择 Qwen-Audio-Live 的服务入
 
 ## 建立会话并收发音频
 
-1.  建立连接，发送 [`session.update`](https://help.aliyun.com/zh/model-studio/qwen-audio-live-client-events#live-session-update)，等待 [`session.updated`](https://help.aliyun.com/zh/model-studio/qwen-audio-live-server-events#live-session-updated)。
-2.  省略会话配置中的 `transport`，用同一条 WebSocket 收发音频。通过 `session.input_audio.append` 逐帧上传 Base64 编码的 16 kHz、16 位、单声道 PCM 音频。将 `session.output_audio.delta` 中的 Base64 数据解码为 24 kHz、16 位、单声道 PCM 音频。
+1.  建立连接，发送 [`session.update`](https://help.aliyun.com/zh/model-studio/qwen-audio-live-client-events#live-session-update)。如需通过这条连接收发音频，在会话配置中省略 `session.transport`。等待 [`session.updated`](https://help.aliyun.com/zh/model-studio/qwen-audio-live-server-events#live-session-updated)。
+2.  收到确认后，通过 `session.input_audio.append` 逐帧上传 Base64 编码的 16 kHz、16 位、单声道 PCM 音频。将 `session.output_audio.delta` 中的 Base64 数据解码为 24 kHz、16 位、单声道 PCM 音频。
 3.  通过 `session.input_transcript.delta` 和 `session.output_transcript.delta` 分别读取输入转写和输出字幕。
 4.  发送 `session.close`，收到 `session.closed` 后释放资源。
 

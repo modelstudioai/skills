@@ -82,6 +82,8 @@ Function Calling
 
 本文仅展示模型调用原价，不包含限时优惠等活动信息，请前往[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)查看活动优惠。
 
+计费规则：输入计费，输出不计费。输入按检测的图像张数计费，只要请求成功（无论检测结果通过与否），每张输入图像均计费一次。
+
 #### 华北2（北京）
 
 计费项

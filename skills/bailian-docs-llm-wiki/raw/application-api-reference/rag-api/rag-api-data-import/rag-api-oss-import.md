@@ -4,7 +4,7 @@
 
 ## 前提
 
-已获取阿里云百炼 API Key（[控制台 API Key 页面](https://bailian.console.aliyun.com/?tab=model#/api-key)）并完成鉴权配置，详见 [RAG API 概览](raw/application-api-reference/rag-api/rag-api-overview.md)与[鉴权](raw/application-api-reference/rag-api/rag-api-authentication.md)。数据导入接口与其他 RAG API 使用相同的 Base URL 与鉴权方式，路径前缀为 `/api/v1/connector/dash/`。
+已获取阿里云百炼 API Key（[控制台 API Key 页面](https://bailian.console.aliyun.com/?tab=model#/api-key)）并完成鉴权配置，详见 [Knowledge（原RAG） API 概览](raw/application-api-reference/rag-api/rag-api-overview.md)与[鉴权](raw/application-api-reference/rag-api/rag-api-authentication.md)。数据导入接口与其他 Knowledge API（原RAG API） 使用相同的 Base URL 与鉴权方式，路径前缀为 `/api/v1/connector/dash/`。
 
 **说明**使用前需要通过\*\*服务关联角色（SLR）\*\*授权百炼平台访问您的 OSS Bucket。请在阿里云 RAM 控制台确认已创建 `AliyunServiceRoleForBailian` 服务关联角色，否则调用将返回权限错误。
 

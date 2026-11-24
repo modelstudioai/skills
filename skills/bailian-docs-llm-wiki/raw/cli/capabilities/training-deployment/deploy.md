@@ -1,10 +1,10 @@
 # 模型部署
 
-阿里云百炼 CLI 按文本、音频、图像模态创建和管理模型部署及吞吐预留容量的命令速查。
+阿里云百炼 CLI 创建和管理文本、音频、图像模型部署、吞吐预留容量及模型路由的命令速查。
 
-在终端管理模型部署全生命周期：按文本、音频、图像选择创建命令，管理部署、限流、扩缩容和吞吐预留容量。
+在终端管理模型部署全生命周期：按文本、音频、图像选择创建命令，管理部署、限流、扩缩容、吞吐预留容量和模型路由。
 
-**重要**任意命令追加 `--help` 可查看完整参数说明，例如 `bl deploy list --help`。本文命令明细以 bl 2.5.1 为基准核实。
+**重要**任意命令追加 `--help` 可查看完整参数说明，例如 `bl deploy list --help`。本文命令明细以 bl 2.10.5 为基准核实。
 
 ## 按模态选择命令
 
@@ -122,7 +122,7 @@ number
 
 否
 
-旧版思考输出容量参数；PTU 不支持此参数
+思考输出容量，单位 kTPM（plan=ptu，部分模型支持，由服务端校验）
 
 `--charge-type <type>`
 
@@ -148,13 +148,21 @@ string
 
 可选 PTU ModelCode 后缀；省略时由服务端生成
 
-`--duration <days>`
+`--pricing-cycle <Day|Hour>`
+
+string
+
+否
+
+预付费计费周期（区分大小写）：Day（默认）或 Hour（8 小时闲时窗口）
+
+`--duration <n>`
 
 number
 
 否
 
-预付费购买或续订天数，正整数
+预付费时长：Day 为正整数天，Hour 固定为 8 小时
 
 `--auto-renewal <true|false>`
 
@@ -221,7 +229,8 @@ bl deploy text create --model-name my-qwen-sft --display-name my-sft-test
 ```
 
 -   文本和图片部署默认使用 `lora`（按 Token 计费），音频（CosyVoice TTS）默认使用 `mu`（按模型单元计费）。可通过 --plan 覆盖。
--   plan=ptu 时，--charge-type、--input-tpm 和 --output-tpm 必填。容量单位为 kTPM（1 kTPM = 1000 Token/分钟），不支持单独的思考输出容量。预付费须提供 --duration 和显式 --auto-renewal true|false。
+-   plan=ptu 时，--charge-type、--input-tpm 和 --output-tpm 必填。容量单位为 kTPM（1 kTPM = 1000 Token/分钟）。单独的思考输出容量（--thinking-output-tpm）仅部分模型支持，由服务端校验。预付费须提供 --duration 和显式 --auto-renewal true|false。
+-   8 小时闲时窗口仅适用于预付费 ptu\_default：同时指定 `--pricing-cycle Hour`、`--duration 8`、`--auto-renewal false` 和 `--service-tier ptu_default`。服务时段须完整落在 UTC+8 22:00–次日 08:00，因此仅在 UTC+8 22:00–24:00 接受下单；模型支持由服务端校验。
 -   plan=mu 时，`capacity`、`billing_method` 和 `deploy_spec` 必填。billing\_method 默认且仅支持 POST\_PAY；省略 deploy\_spec 和 capacity 时，会从 GET /deployments/models 自动选择。
 -   使用 `deploy models --source base` 查看可用模板。
 -   PTU 创建即使指定 --quiet 也保留原始 JSON 和 operation\_id。--wait 仅查询返回的操作；待生效容量不等于已生效容量。调用模型前请确认实际状态。
@@ -319,7 +328,7 @@ number
 
 否
 
-旧版思考输出容量参数；PTU 不支持此参数
+思考输出容量，单位 kTPM（plan=ptu，部分模型支持，由服务端校验）
 
 `--charge-type <type>`
 
@@ -345,13 +354,21 @@ string
 
 可选 PTU ModelCode 后缀；省略时由服务端生成
 
-`--duration <days>`
+`--pricing-cycle <Day|Hour>`
+
+string
+
+否
+
+预付费计费周期（区分大小写）：Day（默认）或 Hour（8 小时闲时窗口）
+
+`--duration <n>`
 
 number
 
 否
 
-预付费购买或续订天数，正整数
+预付费时长：Day 为正整数天，Hour 固定为 8 小时
 
 `--auto-renewal <true|false>`
 
@@ -418,7 +435,8 @@ bl deploy audio create --model-name my-cosyvoice-ft --display-name my-tts
 ```
 
 -   文本和图片部署默认使用 `lora`（按 Token 计费），音频（CosyVoice TTS）默认使用 `mu`（按模型单元计费）。可通过 --plan 覆盖。
--   plan=ptu 时，--charge-type、--input-tpm 和 --output-tpm 必填。容量单位为 kTPM（1 kTPM = 1000 Token/分钟），不支持单独的思考输出容量。预付费须提供 --duration 和显式 --auto-renewal true|false。
+-   plan=ptu 时，--charge-type、--input-tpm 和 --output-tpm 必填。容量单位为 kTPM（1 kTPM = 1000 Token/分钟）。单独的思考输出容量（--thinking-output-tpm）仅部分模型支持，由服务端校验。预付费须提供 --duration 和显式 --auto-renewal true|false。
+-   8 小时闲时窗口仅适用于预付费 ptu\_default：同时指定 `--pricing-cycle Hour`、`--duration 8`、`--auto-renewal false` 和 `--service-tier ptu_default`。服务时段须完整落在 UTC+8 22:00–次日 08:00，因此仅在 UTC+8 22:00–24:00 接受下单；模型支持由服务端校验。
 -   plan=mu 时，`capacity`、`billing_method` 和 `deploy_spec` 必填。billing\_method 默认且仅支持 POST\_PAY；省略 deploy\_spec 和 capacity 时，会从 GET /deployments/models 自动选择。
 -   使用 `deploy models --source base` 查看可用模板。
 -   PTU 创建即使指定 --quiet 也保留原始 JSON 和 operation\_id。--wait 仅查询返回的操作；待生效容量不等于已生效容量。调用模型前请确认实际状态。
@@ -516,7 +534,7 @@ number
 
 否
 
-旧版思考输出容量参数；PTU 不支持此参数
+思考输出容量，单位 kTPM（plan=ptu，部分模型支持，由服务端校验）
 
 `--charge-type <type>`
 
@@ -542,13 +560,21 @@ string
 
 可选 PTU ModelCode 后缀；省略时由服务端生成
 
-`--duration <days>`
+`--pricing-cycle <Day|Hour>`
+
+string
+
+否
+
+预付费计费周期（区分大小写）：Day（默认）或 Hour（8 小时闲时窗口）
+
+`--duration <n>`
 
 number
 
 否
 
-预付费购买或续订天数，正整数
+预付费时长：Day 为正整数天，Hour 固定为 8 小时
 
 `--auto-renewal <true|false>`
 
@@ -615,7 +641,8 @@ bl deploy image create --model-name my-wan-ft --display-name my-wan
 ```
 
 -   文本和图片部署默认使用 `lora`（按 Token 计费），音频（CosyVoice TTS）默认使用 `mu`（按模型单元计费）。可通过 --plan 覆盖。
--   plan=ptu 时，--charge-type、--input-tpm 和 --output-tpm 必填。容量单位为 kTPM（1 kTPM = 1000 Token/分钟），不支持单独的思考输出容量。预付费须提供 --duration 和显式 --auto-renewal true|false。
+-   plan=ptu 时，--charge-type、--input-tpm 和 --output-tpm 必填。容量单位为 kTPM（1 kTPM = 1000 Token/分钟）。单独的思考输出容量（--thinking-output-tpm）仅部分模型支持，由服务端校验。预付费须提供 --duration 和显式 --auto-renewal true|false。
+-   8 小时闲时窗口仅适用于预付费 ptu\_default：同时指定 `--pricing-cycle Hour`、`--duration 8`、`--auto-renewal false` 和 `--service-tier ptu_default`。服务时段须完整落在 UTC+8 22:00–次日 08:00，因此仅在 UTC+8 22:00–24:00 接受下单；模型支持由服务端校验。
 -   plan=mu 时，`capacity`、`billing_method` 和 `deploy_spec` 必填。billing\_method 默认且仅支持 POST\_PAY；省略 deploy\_spec 和 capacity 时，会从 GET /deployments/models 自动选择。
 -   使用 `deploy models --source base` 查看可用模板。
 -   PTU 创建即使指定 --quiet 也保留原始 JSON 和 operation\_id。--wait 仅查询返回的操作；待生效容量不等于已生效容量。调用模型前请确认实际状态。
@@ -825,13 +852,21 @@ string
 
 PTU 容量实例 ID；存在多个未释放实例时必填
 
-`--duration <days>`
+`--pricing-cycle <Day|Hour>`
+
+string
+
+否
+
+预付费计费周期（区分大小写）：Day（默认）或 Hour（8 小时闲时窗口）
+
+`--duration <n>`
 
 number
 
 否
 
-预付费购买或续订天数，正整数
+预付费时长：Day 为正整数天，Hour 固定为 8 小时
 
 `--auto-renewal <true|false>`
 
@@ -918,7 +953,7 @@ bl deploy scale --deployed-model dep-... --capacity 8 --dry-run
 
 ### bl deploy delete
 
-删除模型部署（PTU 须为 STOPPED 且已释放全部容量）。需要 API Key 鉴权。
+删除模型部署或模型路由（PTU 须为 STOPPED 且已释放全部容量）。需要 API Key 鉴权。
 
 **语法**
 
@@ -968,6 +1003,7 @@ bl deploy delete --deployed-model dep-... --dry-run
 
 -   PTU 删除要求状态为 STOPPED、全部容量实例已释放，且不存在执行中或排队的容量操作。暂停或缩容到零不等于释放实例；预付费容量可能需要先退订。
 -   本地检查部署、未释放实例及返回的 operation\_id。没有公开的排队操作列表接口，因此无法在本地确认所有操作均已完成，最终以服务端裁决为准。--skip-precheck 仅省略本地检查，不绕过服务端验证或资源释放要求。
+-   删除模型路由（plan=mr）前会校验部署类型；RUNNING 路由无需先停机即可删除。
 
 ### bl deploy pause
 
@@ -1177,9 +1213,304 @@ string
 bl deploy models --source base
 ```
 
+## 模型路由
+
+模型路由按策略在候选模型之间转发后付费请求（`plan=mr`）。需要 API Key 鉴权。
+
+### bl deploy router versions
+
+列出可用的模型路由版本、支持的策略与候选模型。需要 API Key 鉴权。
+
+**语法**
+
+```
+bl deploy router versions [--page <n>] [--page-size <n>]
+```
+
+参数
+
+类型
+
+必填
+
+说明
+
+`--page <n>`
+
+number
+
+否
+
+页码（默认：1）
+
+`--page-size <n>`
+
+number
+
+否
+
+每页数量（1–1000，默认：50）
+
+**示例**：列出可用的路由版本与候选模型
+
+```
+bl deploy router versions
+```
+
+-   创建或整体替换路由配置时，使用返回的 route\_model\_version、supported\_strategies 和 supported\_candidate\_model\_ids。
+
+### bl deploy router create
+
+创建后付费模型路由。需要 API Key 鉴权。
+
+**语法**
+
+```
+bl deploy router create --name <name> --route-version <version> --strategy <EFFECT_FIRST|COST_FIRST> --candidates <model-id,...>
+```
+
+参数
+
+类型
+
+必填
+
+说明
+
+`--name <name>`
+
+string
+
+是
+
+路由名称（1–64 个字母、数字或连字符）
+
+`--route-version <version>`
+
+string
+
+是
+
+`bl deploy router versions` 返回的路由版本
+
+`--strategy <EFFECT_FIRST|COST_FIRST>`
+
+string
+
+是
+
+路由优化策略
+
+`--candidates <model-id,...>`
+
+string
+
+是
+
+候选模型 ID，以逗号分隔
+
+`--yes`
+
+switch
+
+否
+
+确认执行此高风险操作
+
+**警告**创建后路由立即进入 RUNNING 状态，后付费路由可能产生费用。
+
+**示例**：预览创建模型路由
+
+```
+bl deploy router create --name my-router --route-version v1 --strategy EFFECT_FIRST --candidates qwen-plus,qwen-turbo --dry-run
+```
+
+-   创建时使用 plan=mr 和 charge\_type=post\_paid。路由创建后立即 RUNNING；确认费用后传入 --yes 执行。
+
+### bl deploy router list
+
+列出模型路由。需要 API Key 鉴权。
+
+**语法**
+
+```
+bl deploy router list [--page <n>] [--page-size <n>]
+```
+
+参数
+
+类型
+
+必填
+
+说明
+
+`--page <n>`
+
+number
+
+否
+
+页码（默认：1）
+
+`--page-size <n>`
+
+number
+
+否
+
+每页数量（1–100，默认：10）
+
+**示例**：列出模型路由
+
+```
+bl deploy router list
+```
+
+-   固定请求 plan=mr，不支持覆盖部署类型。
+
+### bl deploy router get
+
+获取模型路由详情。需要 API Key 鉴权。
+
+**语法**
+
+```
+bl deploy router get --deployed-model <id>
+```
+
+参数
+
+类型
+
+必填
+
+说明
+
+`--deployed-model <id>`
+
+string
+
+是
+
+路由的部署调用标识（ModelCode）
+
+**示例**：获取指定路由的详情
+
+```
+bl deploy router get --deployed-model router-example
+```
+
+-   返回前会校验部署类型为 plan=mr。
+
+### bl deploy router update
+
+更新 RUNNING 模型路由的指定配置。需要 API Key 鉴权。
+
+**语法**
+
+```
+bl deploy router update --deployed-model <id> [--route-version <version>] [--strategy <EFFECT_FIRST|COST_FIRST>] [--candidates <model-id,...>]
+```
+
+参数
+
+类型
+
+必填
+
+说明
+
+`--deployed-model <id>`
+
+string
+
+是
+
+路由的部署调用标识（ModelCode）
+
+`--route-version <version>`
+
+string
+
+否
+
+`bl deploy router versions` 返回的路由版本
+
+`--strategy <EFFECT_FIRST|COST_FIRST>`
+
+string
+
+否
+
+路由优化策略
+
+`--candidates <model-id,...>`
+
+string
+
+否
+
+候选模型 ID，以逗号分隔；替换整个候选列表
+
+**示例**：预览将路由策略改为成本优先
+
+```
+bl deploy router update --deployed-model router-example --strategy COST_FIRST --dry-run
+```
+
+-   至少提供一个路由字段。命令读取当前路由并保留未提供的字段；--candidates 替换整个候选列表。仅 RUNNING 路由可更新；更新前会校验部署类型为 plan=mr。
+-   同时提供全部三个路由字段时，dry-run 完全离线；只提供部分字段时，dry-run 需要凭证并读取当前路由，但不会提交更新。
+
+### bl deploy router delete
+
+删除模型路由。需要 API Key 鉴权。
+
+**语法**
+
+```
+bl deploy router delete --deployed-model <id>
+```
+
+参数
+
+类型
+
+必填
+
+说明
+
+`--deployed-model <id>`
+
+string
+
+是
+
+路由的部署调用标识（ModelCode）
+
+`--yes`
+
+switch
+
+否
+
+确认执行此高风险操作
+
+**警告**该操作会永久删除指定的模型路由，且无法撤销。
+
+**示例**：预览删除指定路由的操作
+
+```
+bl deploy router delete --deployed-model router-example --dry-run
+```
+
+-   删除前会校验部署类型为 plan=mr；RUNNING 路由无需先停机。仅在确认后传入 --yes 执行。
+
 ## 吞吐预留容量
 
 容量实例的购买、扩缩、续费、释放与溢出策略设置属于高风险操作：未加 `--yes` 时阻断执行，可先用 `--dry-run` 预览。
+
+**说明**8 小时闲时实例不可变配、续订、自动续费、释放或退订，到期自动失效。
 
 ### bl deploy capacity list
 
@@ -1304,7 +1635,7 @@ bl deploy capacity get --deployed-model example-model-code --instance-id example
 **语法**
 
 ```
-bl deploy capacity create --deployed-model <code> --billing-method <PRE_PAY|POST_PAY> --input-tpm <kTPM> --output-tpm <kTPM> [--duration <days>] [--auto-renewal <true|false>] [--wait]
+bl deploy capacity create --deployed-model <code> --billing-method <PRE_PAY|POST_PAY> --input-tpm <kTPM> --output-tpm <kTPM> [--pricing-cycle <Day|Hour>] [--duration <n>] [--auto-renewal <true|false>] [--wait]
 ```
 
 参数
@@ -1339,13 +1670,21 @@ number
 
 输出绝对容量，单位 kTPM
 
-`--duration <days>`
+`--pricing-cycle <Day|Hour>`
+
+string
+
+否
+
+预付费计费周期（区分大小写）：Day（默认）或 Hour（8 小时闲时窗口）
+
+`--duration <n>`
 
 number
 
 否
 
-预付费购买或续订天数，正整数
+预付费时长：Day 为正整数天，Hour 固定为 8 小时
 
 `--auto-renewal <true|false>`
 
@@ -1426,8 +1765,12 @@ switch
 ```
 bl deploy capacity create --deployed-model example-code --billing-method POST_PAY --input-tpm 10000 --output-tpm 1000 --dry-run
 ```
+```
+bl deploy capacity create --deployed-model example-code --billing-method PRE_PAY --pricing-cycle Hour --duration 8 --auto-renewal false --input-tpm 10000 --output-tpm 1000 --dry-run
+```
 
 -   沿用原 ModelCode、模型和性能档位。同一 ModelCode 只允许一个未释放的后付费实例；购买资格和实例数量限制由服务端校验。
+-   8 小时闲时窗口仅适用于预付费：指定 `--pricing-cycle Hour`、`--duration 8` 和 `--auto-renewal false`，无需指定自动续费天数。服务时段须完整落在 UTC+8 22:00–次日 08:00，因此仅在 UTC+8 22:00–24:00 接受下单；模型支持由服务端校验。闲时实例不可变配、续订、自动续费、释放或退订，到期自动失效。
 
 ### bl deploy capacity scale
 
@@ -1479,13 +1822,21 @@ number
 
 输出绝对容量，单位 kTPM
 
-`--duration <days>`
+`--pricing-cycle <Day|Hour>`
+
+string
+
+否
+
+预付费计费周期（区分大小写）：Day（默认）或 Hour（8 小时闲时窗口）
+
+`--duration <n>`
 
 number
 
 否
 
-预付费购买或续订天数，正整数
+预付费时长：Day 为正整数天，Hour 固定为 8 小时
 
 `--auto-renewal <true|false>`
 
@@ -1576,7 +1927,7 @@ bl deploy capacity scale --deployed-model example-code --instance-id example-ins
 **语法**
 
 ```
-bl deploy capacity renew --deployed-model <code> --instance-id <id> --duration <days> --auto-renewal <true|false> [--is-change <true|false>] [--input-tpm <kTPM>] [--output-tpm <kTPM>] [--wait]
+bl deploy capacity renew --deployed-model <code> --instance-id <id> --duration <n> --auto-renewal <true|false> [--is-change <true|false>] [--input-tpm <kTPM>] [--output-tpm <kTPM>] [--wait]
 ```
 
 参数
@@ -1619,13 +1970,21 @@ number
 
 输出绝对容量，单位 kTPM
 
-`--duration <days>`
+`--pricing-cycle <Day|Hour>`
+
+string
+
+否
+
+预付费计费周期（区分大小写）：Day（默认）或 Hour（8 小时闲时窗口）
+
+`--duration <n>`
 
 number
 
 否
 
-预付费购买或续订天数，正整数
+预付费时长：Day 为正整数天，Hour 固定为 8 小时
 
 `--auto-renewal <true|false>`
 
@@ -1708,6 +2067,208 @@ bl deploy capacity renew --deployed-model example-code --instance-id example-ins
 ```
 
 -   仅支持预付费，写入前刷新 can\_renew。变更容量必须指定 --is-change true；相同配置容量可随 false 发送。本接口不接受 order\_type。
+
+### bl deploy capacity auto-renew enable
+
+开启单个预付费容量实例的自动续费。需要 API Key 鉴权。
+
+**语法**
+
+```
+bl deploy capacity auto-renew enable --deployed-model <code> --instance-id <id> --cycle Day --auto-renewal-duration <days> [--wait]
+```
+
+参数
+
+类型
+
+必填
+
+说明
+
+`--deployed-model <code>`
+
+string
+
+是
+
+部署调用标识（ModelCode）
+
+`--instance-id <id>`
+
+string
+
+是
+
+接口返回的容量实例 ID
+
+`--cycle <Day>`
+
+string
+
+是
+
+自动续费周期；当前仅接受 Day（区分大小写）
+
+`--auto-renewal-duration <days>`
+
+number
+
+是
+
+每次自动续费的天数，正整数
+
+`--request-id <uuid>`
+
+string
+
+否
+
+请求标识，省略时生成；仅重试同一容量操作时保持标识和参数一致
+
+`--wait`
+
+switch
+
+否
+
+等待返回的容量操作完成并刷新容量
+
+`--interval <seconds>`
+
+number
+
+否
+
+等待初始轮询间隔（1–3600，默认：2 秒）
+
+`--poll-timeout <seconds>`
+
+number
+
+否
+
+提交后的等待总时限（默认：600 秒）
+
+`--yes`
+
+switch
+
+否
+
+确认执行此高风险操作
+
+**警告**开启自动续费会持续产生费用，直到关闭自动续费。
+
+**示例**：预览开启容量实例自动续费
+
+```
+bl deploy capacity auto-renew enable --deployed-model example-code --instance-id example-instance --cycle Day --auto-renewal-duration 30 --dry-run
+```
+
+-   写入前刷新 can\_enable\_auto\_renew。仅支持预付费实例；8 小时闲时实例不支持自动续费。
+-   该操作通常同步完成并返回 SUCCEEDED；可传入 --wait 等待返回的容量操作。
+
+### bl deploy capacity auto-renew disable
+
+关闭单个预付费容量实例的自动续费。需要 API Key 鉴权。
+
+**语法**
+
+```
+bl deploy capacity auto-renew disable --deployed-model <code> --instance-id <id> --cycle Day --auto-renewal-duration <days> [--wait]
+```
+
+参数
+
+类型
+
+必填
+
+说明
+
+`--deployed-model <code>`
+
+string
+
+是
+
+部署调用标识（ModelCode）
+
+`--instance-id <id>`
+
+string
+
+是
+
+接口返回的容量实例 ID
+
+`--cycle <Day>`
+
+string
+
+是
+
+自动续费周期；当前仅接受 Day（区分大小写）
+
+`--auto-renewal-duration <days>`
+
+number
+
+是
+
+每次自动续费的天数，正整数
+
+`--request-id <uuid>`
+
+string
+
+否
+
+请求标识，省略时生成；仅重试同一容量操作时保持标识和参数一致
+
+`--wait`
+
+switch
+
+否
+
+等待返回的容量操作完成并刷新容量
+
+`--interval <seconds>`
+
+number
+
+否
+
+等待初始轮询间隔（1–3600，默认：2 秒）
+
+`--poll-timeout <seconds>`
+
+number
+
+否
+
+提交后的等待总时限（默认：600 秒）
+
+`--yes`
+
+switch
+
+否
+
+确认执行此高风险操作
+
+**警告**关闭自动续费后，实例到期时不再续费。
+
+**示例**：预览关闭容量实例自动续费
+
+```
+bl deploy capacity auto-renew disable --deployed-model example-code --instance-id example-instance --cycle Day --auto-renewal-duration 30 --dry-run
+```
+
+-   写入前刷新 can\_disable\_auto\_renew。仅支持预付费实例；8 小时闲时实例不支持自动续费。
+-   该操作通常同步完成并返回 SUCCEEDED；可传入 --wait 等待返回的容量操作。
 
 ### bl deploy capacity delete
 

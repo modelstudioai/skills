@@ -1,71 +1,66 @@
 # coding plan guide
 
-Coding Plan 是百炼平台面向开发者提供的编程专用模型订阅服务，通过固定月费模式提供千问、GLM、Kimi、MiniMax 等主流编码模型的稳定调用能力。它专为 AI 编程工具（如 Claude Code、OpenCode、OpenClaw 等）设计，不支持直接 API 调用，需配合兼容协议端点与套餐专属凭证使用。所有请求均按模型调用次数计费并受多级额度限制约束。
+Coding Plan 是面向开发者的一站式 AI 编程订阅服务，通过固定月费模式提供稳定、可控的模型调用额度，专为交互式编程工具设计。它不支持 API 直接调用，仅限在认证的开源/商业编程客户端中使用，以保障服务稳定性与资源公平性。所有套餐均使用独立的 `sk-sp-` 开头 API Key 和专属 Base URL，与百炼按量计费体系完全隔离。
 
 ## 支持的模型与功能
 
-- **当前主力推荐模型**：`qwen3.7-plus`（支持图片理解）、`qwen3.6-plus`（支持图片理解）、`kimi-k2.5`（支持图片理解）、`glm-5`、`MiniMax-M2.5`  
-- **其他可用模型**：`qwen3.5-plus`（支持图片理解）  
-- **模型能力统一支持**：  
-  - 思考模式（Reasoning/Thinking Mode）：所有推荐模型默认支持，需通过客户端配置启用（如 OpenCode 的 `thinking.budgetTokens`、Qwen Code 的 `enable_thinking`、OpenClaw 的 `reasoning: true` + `compat.thinkingFormat: "qwen"`）；详见[OpenCode](../../raw/token-plan-user-guide/use-chat-client-or-development-tool/opencode.md) 和 [OpenClaw](../../raw/token-plan-user-guide/use-chat-client-or-development-tool/openclaw.md) 文档。  
-  - 图片理解：仅标注“支持图片理解”的模型可用，输入需含 base64 编码图像数据。  
-- **不支持的模型**：`qwen-portal/coder-model` 等非百炼平台模型，调用将返回 `model 'xxx' is not supported` 错误；该模型属于 Qwen Chat 网页版免费服务，与 Coding Plan 无关 [原文标题](../../raw/token-plan-user-guide/coding-plan-guide/coding-plan-faq.md)。
+Coding Plan Pro 套餐当前**仅支持以下精确模型版本**（区分大小写，严格匹配）：
 
-> **注意**：文档 2 中称 Lite 套餐“支持所有套餐模型”，但文档 1 明确指出 Lite 套餐已于 2026 年 4 月 13 日起停止续费与升级，且当前仅 Pro 套餐在售；实际可用模型以 [Coding Plan概述](../../raw/token-plan-user-guide/coding-plan-guide/coding-plan.md) 中“Pro 高级套餐”所列为准，Lite 已不可新购或续费。
+- **推荐模型**：`qwen3.7-plus`（支持图片理解）、`qwen3.6-plus`（支持图片理解）、`kimi-k2.5`（支持图片理解）、`glm-5`、`MiniMax-M2.5`  
+- **更多模型**：`qwen3.5-plus`（支持图片理解）
+
+> **注意**：文档 1 中称 Lite 套餐“支持所有套餐模型”，但文档 1 同时明确说明 Lite 套餐已于 **2026 年 4 月 13 日起停止续费与升级**，且当前已不可新购；因此实际可用模型仅限 Pro 套餐所列。Lite 的兼容性描述已失效，开发者应以 [Coding Plan概述](../../raw/token-plan-user-guide/coding-plan-guide/coding-plan.md) 中 Pro 套餐模型列表为准。
+
+所有支持模型默认启用深度思考（reasoning）能力。不同工具开启方式各异：
+- **Claude Code**：执行 `/config` → 切换 `Thinking mode` 为 `true`，快捷键 `Ctrl + O` 查看过程  
+- **OpenCode**：在 `opencode.json` 中配置 `thinking.type: "enabled"` 及合理 `budgetTokens` 值（参考各模型上限）  
+- **Qwen Code**：在 `~/.qwen/settings.json` 的 `generationConfig.extra_body` 中设置 `"enable_thinking": true`  
+- **OpenClaw**：需在模型配置中同时启用 `"reasoning": true` 和 `"compat": {"thinkingFormat": "qwen"}`，并确保模型 ID 带 `bailian/` 前缀（详见 [OpenClaw](../../raw/token-plan-user-guide/use-chat-client-or-development-tool/openclaw.md)）
 
 ## 关键参数
 
-| 参数 | 说明 | 取值要求 | 来源依据 |
-|------|------|----------|----------|
-| **API Key** | 必须使用套餐专属 Key，格式为 `sk-sp-xxx` | 不可混用百炼通用 Key（`sk-xxx`），否则触发按量扣费或 `401 invalid access token` 错误 | [原文标题](../../raw/token-plan-user-guide/coding-plan-guide/coding-plan-faq.md) |
-| **Base URL** | 协议决定端点：<br>• OpenAI 兼容 → `https://coding.dashscope.aliyuncs.com/v1`<br>• Anthropic 兼容 → `https://coding.dashscope.aliyuncs.com/apps/anthropic` | 路径错误将导致 `404` 或 `403 invalid api-key`；例如 Claude Code 必须用 Anthropic 端点，不可误配为 `/v1` | [原文标题](../../raw/token-plan-user-guide/coding-plan-guide/coding-plan-faq.md) |
-| **thinking_budget / budgetTokens** | 控制思考链最大 Token 数 | 必须 ≤ 模型上限：`qwen3.7-plus`（262144）、`qwen3.6-plus`（81920）、`glm-5`（32768）等；超限报错 `The thinking_budget parameter must be a positive integer and not greater than 38912`（示例值已过时，以实际模型上限为准） | [原文标题](../../raw/token-plan-user-guide/coding-plan-guide/coding-plan-faq.md) |
-| **max_tokens / limit.output** | 控制响应最大输出长度 | 必须 ∈ `[1, xxxx]`，具体上限依模型而定；超限报错 `InternalError.Algo.InvalidParameter: Range of max_tokens should be [1, xxxx]` | [原文标题](../../raw/token-plan-user-guide/coding-plan-guide/coding-plan-faq.md) |
+| 参数类型 | 值 | 说明 |
+|----------|----|------|
+| **API Key 格式** | `sk-sp-xxxxx` | 必须使用 Coding Plan 专属 Key，**不可混用**百炼通用 Key（`sk-xxxxx`）；复制时需确保无空格或换行 |
+| **Base URL（OpenAI 兼容）** | `https://coding.dashscope.aliyuncs.com/v1` | 用于 Qwen Code、OpenCode、Cursor 等 OpenAI 协议工具 |
+| **Base URL（Anthropic 兼容）** | `https://coding.dashscope.aliyuncs.com/apps/anthropic` | 用于 Claude Code、Hermes Agent 等 Anthropic 协议工具 |
+| **5 小时额度** | 6,000 次请求 | 滚动恢复：每分钟释放 5 小时前消耗的额度（例：10:00 消耗 100 次，15:00 自动恢复） |
+| **每周额度** | 45,000 次请求 | 每周一 00:00:00（UTC+08:00）重置 |
+| **每月额度** | 90,000 次请求 | 在订阅日次月同一时刻重置 |
+
+额度消耗按“模型调用次数”计费，非按 token。简单任务约 5–10 次，复杂任务约 10–30+ 次，受上下文长度、工具调用频次影响。实时用量可在 [Coding Plan 页面](https://bailian.console.aliyun.com/cn-beijing/subscription/coding-plan) 查看。
 
 ## 使用方式
 
-1. **订阅与凭证获取**  
-   - 订阅 Pro 套餐：访问 [Coding Plan 购买页](https://common-buy.aliyun.com/coding-plan)；RAM 子账号需主账号授权管理员权限后方可订阅。  
-   - 获取凭证：在 [Coding Plan 页面](https://bailian.console.aliyun.com/cn-beijing/subscription/coding-plan) 复制 `sk-sp-xxx` 格式 API Key，并确认 Base URL 协议类型。
+1. **订阅服务**  
+   主账号直接访问 [Coding Plan 购买页](https://common-buy.aliyun.com/coding-plan) 订购；RAM 子账号需由主账号在 [权限管理](https://bailian.console.aliyun.com/cn-beijing/model/settings/permission) 中授予**管理员权限**后方可订阅。
 
-2. **工具接入**  
-   - 所有兼容工具均需配置上述 API Key 与对应 Base URL；  
-   - 各工具思考模式启用方式不同，需严格参照其文档：  
-     - Claude Code：`/config` → `Thinking mode` 切换为 `true`；  
-     - OpenCode：在 `opencode.json` 中配置 `thinking.type: "enabled"` 与 `budgetTokens`；  
-     - Qwen Code：在 `~/.qwen/settings.json` 的 `generationConfig.extra_body` 中设 `"enable_thinking": true`；  
-     - OpenClaw：需同时设置 `reasoning: true` 与 `compat.thinkingFormat: "qwen"`，并重启 Gateway。  
-   - 完整工具列表及配置指引见 [Coding Plan概述](../../raw/token-plan-user-guide/coding-plan-guide/coding-plan.md)。
+2. **获取凭证**  
+   订阅成功后，在 [Coding Plan 页面](https://bailian.console.aliyun.com/cn-beijing/subscription/coding-plan) 获取 `sk-sp-xxxxx` Key 和对应 Base URL。
 
-3. **上下文管理**  
-   - 输入超长报错 `400 InvalidParameter: Range of input length should be [1, xxx]` 时，优先新建会话（`/new`）或压缩上下文（`/compact`）；  
-   - OpenCode 用户可配置 `limit` 参数控制上下文长度，详见 [OpenCode](../../raw/token-plan-user-guide/use-chat-client-or-development-tool/opencode.md)。
+3. **接入工具**  
+   将 Key 与 Base URL 配置至支持的编程工具。完整兼容工具列表见 [Coding Plan概述](../../raw/token-plan-user-guide/coding-plan-guide/coding-plan.md)，包括 OpenClaw、Hermes Agent、Claude Code、OpenCode、Cursor、Qwen Code 等。配置错误是常见报错主因（如 401/403/404），请严格对照工具文档操作。
+
+4. **验证与调试**  
+   推荐使用 [阿里云 AI 助理](https://www.aliyun.com/ai-assistant/) 提问排查问题，例如：“使用coding plan时，报错model 'xxx' is not [support](support.md)ed是什么原因”。该助手可结合官方文档精准定位模型名错误、URL 配置错位等典型问题（参见 [Coding Plan 常见问题](../../raw/token-plan-user-guide/coding-plan-guide/coding-plan-faq.md)）。
 
 ## 限制和注意事项
 
-- **额度限制（Pro 套餐）**：  
-  - 每 5 小时：6,000 次请求（滚动恢复，每分钟释放 5 小时前用量）；  
-  - 每周：45,000 次请求（每周一 00:00:00 UTC+8 重置）；  
-  - 每月：90,000 次请求（订阅日当日 00:00:00 UTC+8 重置）。  
-  - 单次提问消耗 5–30+ 次额度，取决于任务复杂度、上下文长度及工具调用次数。
-
-- **严格使用范围**：  
-  - **禁止 API 直接调用**：不得用于自动化脚本、自定义后端服务或非交互式批量任务；违规将导致订阅暂停或 Key 封禁；  
-  - **禁止账号共享**：套餐为订阅人专享，共享可能导致权益受限；  
-  - **数据授权**：输入与输出内容将用于服务优化，终止使用后不再新增授权，但历史数据授权不可撤回（参见《阿里云百炼服务协议》第 5.2 条）。
-
-- **网络与稳定性**：  
-  - `Connection closed mid-response` 多因本地代理（VPN/HTTP Proxy）不稳定导致，建议关闭代理或确保其可稳定访问 `coding.dashscope.aliyuncs.com`；  
-  - 海外用户可正常使用，若遇延迟，推荐使用 [Model Studio Coding Plan](../../raw/token-plan-user-guide/coding-plan-guide/coding-plan.md)。
-
-- **错误排查重点**：  
-  - `401 invalid access token`：检查是否误用 `sk-xxx` 通用 Key；  
-  - `403 invalid api-key`：确认 Base URL 域名拼写（必须为 `coding.dashscope.aliyuncs.com`，非 `dashscope.aliyuncs.com`）；  
-  - `Unknown model` / `No API key found for provider "xxxxx"`：OpenClaw 用户需确保 `openclaw.json` 中 `models.providers` 包含 `bailian` 键，且 `agents.defaults.model.primary` 前缀为 `bailian/`。
+- **严禁 API 直接调用**：仅限在交互式编程客户端中使用。禁止用于自动化脚本、自定义后端服务或任何非交互式批量场景。违规将导致订阅暂停或 Key 封禁。  
+- **额度超限响应**：  
+  - `hour allocated quota exceeded` → 等待 5 小时滚动恢复  
+  - `week/month allocated quota exceeded` → 分别等待周一 00:00 或订阅日 00:00 重置  
+  - `concurrency allocated quota exceeded` / `429 usage allocated quota exceeded` → 降低请求频率，避免短时高负载；确认 Key 未被共享  
+- **模型调用约束**：  
+  - 必须使用文档明确列出的模型 ID，拼写、大小写、空格均敏感；`qwen-portal/coder-model` 等非百炼模型**不支持**（见 [Coding Plan 常见问题](../../raw/token-plan-user-guide/coding-plan-guide/coding-plan-faq.md)）  
+  - OpenClaw 等多 provider 工具需显式配置 `bailian/` 前缀及 `models.providers.bailian` 结构，否则触发 `Unknown model` 或 `No API key found for provider` 错误  
+- **地域与网络**：全球可用，但需确保客户端能直连 `coding.dashscope.aliyuncs.com`。海外用户若遇连接中断（`Connection closed mid-response`），应检查本地代理是否拦截或转发失败。  
+- **数据授权**：输入与输出内容将用于服务优化；停用服务后终止后续授权，但已授权数据不追溯撤销（详见 [Coding Plan概述](../../raw/token-plan-user-guide/coding-plan-guide/coding-plan.md) 订阅前须知第 2 条）。  
+- **不支持退款**：订阅前请充分评估需求。
 
 ## 来源文档
 
-- [Coding Plan 常见问题](../../raw/token-plan-user-guide/coding-plan-guide/coding-plan-faq.md)
 - [Coding Plan概述](../../raw/token-plan-user-guide/coding-plan-guide/coding-plan.md)
+- [Coding Plan 常见问题](../../raw/token-plan-user-guide/coding-plan-guide/coding-plan-faq.md)
 
 

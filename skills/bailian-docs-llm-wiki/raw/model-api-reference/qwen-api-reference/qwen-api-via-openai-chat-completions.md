@@ -866,9 +866,7 @@ kimi-k3.1-pro（阿里云百炼部署）默认值为 `true`，可设为 `false` 
 
 **preserve\_thinking** `boolean` （可选）默认值为 `false`
 
-`qwen4-max`: 默认值 `true`.
-
-是否将对话历史中 assistant 消息的 reasoning\_content 拼接至模型输入。适用于需要模型参考历史思考过程的场景。
+是否将对话历史中 assistant 消息的 reasoning\_content 拼接至模型输入。适用于需要模型参考历史思考过程的场景。 `qwen4-max` 的默认值为 `true`。
 
 kimi-k3.1-pro 和 kimi-k3（阿里云百炼部署）默认保留客户端传入的历史 `reasoning_content`。建议在 `messages` 中完整回传历史 assistant 消息及其 `reasoning_content`。
 
@@ -887,9 +885,7 @@ kimi/kimi-k3.1-pro 和 kimi/kimi-k3.1-pro-highspeed 支持此参数，默认关�
 
 **thinking\_budget** `integer` （可选）
 
-`qwen4-max`: 默认值 `131072`.
-
-思考过程的最大 Token 数。适用于 `qwen4-max`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`，以及Qwen3.7、Qwen3.6、Qwen3.5、Qwen3-VL、Qwen3、GLM（阿里云直供）、Kimi（阿里云直供）系列模型，其中 kimi-k3.1-pro 和 kimi-k3 不支持该参数。相关文档：[限制思考长度](https://help.aliyun.com/zh/model-studio/deep-thinking#e7c0002fe4meu)。
+思考过程的最大 Token 数。适用于 `qwen4-max`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`，以及Qwen3.7、Qwen3.6、Qwen3.5、Qwen3-VL、Qwen3、GLM（阿里云直供）、Kimi（阿里云直供）系列模型，其中 kimi-k3.1-pro 和 kimi-k3 不支持该参数。相关文档：[限制思考长度](https://help.aliyun.com/zh/model-studio/deep-thinking#e7c0002fe4meu)。 `qwen4-max` 的默认值为 `131072`。
 
 其他模型: 上述型号的默认值为模型最大思维链长度，请参见：模型列表
 
