@@ -2,11 +2,9 @@
 
 调用大模型时，不同推理请求可能出现输入内容的重叠（例如多轮对话或对同一本书的多次提问）。上下文缓存（Context Cache）技术可以缓存这些请求的公共前缀，减少推理时的重复计算。这能提升响应速度，并在不影响回复效果的前提下降低您的使用成本。
 
-`qwen4-max`: [Prompt Cache](raw/model-user-guide/model-experience/text-generation-model/explicit-cache-qwen4.md).
-
 为满足不同场景的需求，上下文缓存提供两种工作模式，可以根据对便捷性、确定性及成本的需求进行选择：
 
--   [显式缓存](https://help.aliyun.com/zh/model-studio/context-cache#825f201c5fy6o)：需要**主动开启**的缓存模式。需要主动为指定内容创建缓存，以在有效期（5分钟）内实现确定性命中。除了输入 Token 计费，用于创建缓存的 Token 通常按输入 Token 标准单价的 125% 计费，后续命中通常仅需支付 10% 的费用，具体价格见[如何计费](https://help.aliyun.com/zh/model-studio/context-cache#904e3da8aatwp)。
+-   [显式缓存](https://help.aliyun.com/zh/model-studio/context-cache#825f201c5fy6o)：需要**主动开启**的缓存模式。需要主动为指定内容创建缓存，以在有效期（5分钟）内实现确定性命中。除了输入 Token 计费，用于创建缓存的 Token 通常按输入 Token 标准单价的 125% 计费，后续命中通常仅需支付 10% 的费用，具体价格见[如何计费](https://help.aliyun.com/zh/model-studio/context-cache#904e3da8aatwp)。 `qwen4-max` 的显式缓存用法请参见 [显式缓存（Qwen4）](raw/model-user-guide/model-experience/text-generation-model/explicit-cache-qwen4.md)。
 -   [隐式缓存](https://help.aliyun.com/zh/model-studio/context-cache#2317ea09cfxok)：此为自动模式，无需额外配置，且无法关闭，适合追求便捷的通用场景。系统会**自动识别**请求内容的**公共前缀**并进行缓存，但缓存**命中率不确定**。对命中缓存的部分，通常按输入 Token 标准单价的 20% 计费，具体价格见[如何计费](https://help.aliyun.com/zh/model-studio/context-cache#7768a4362ailr)。
 
 **项目**

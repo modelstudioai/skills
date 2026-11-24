@@ -99,10 +99,10 @@ WebSocket`wss://WorkspaceId.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime?
 ## SDK 与参考
 
 -   [Python SDK](raw/_short/realtime-websocket-python-sdk-qwen-livetranslate-8af00207378f749b.md)
--   [Java SDK](raw/_short/qwen-livetranslate-java-sdk-dfa24a2e7fc6f93f.md)
+-   [Java SDK](https://help.aliyun.com/zh/model-studio/qwen-livetranslate-java-sdk)
 
 ## 可用的 SDK
 
 -   [Python SDK](raw/_short/realtime-websocket-python-sdk-qwen-livetranslate-8af00207378f749b.md)
--   [Java SDK](raw/_short/qwen-livetranslate-java-sdk-dfa24a2e7fc6f93f.md)
+-   [Java SDK](https://help.aliyun.com/zh/model-studio/qwen-livetranslate-java-sdk)
 -   [C# SDK](raw/_short/qwen-livetranslate-csharp-sdk-7dc0bd18d993e44e.md)

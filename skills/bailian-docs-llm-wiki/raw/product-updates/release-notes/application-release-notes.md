@@ -2,6 +2,21 @@
 
 Agent 各模块的功能更新、优化、问题修复与计费变更，按日期倒序排列。
 
+### 2026-11-24
+
+新增
+
+#### RAG：Wiki 与本体知识图谱上线
+
+##### 新功能
+
+-   旗舰版文档知识库支持开启 Wiki 与本体知识图谱：一次解析同时生成可阅读、可检索的主题知识页面（Wiki Page）与知识关系视图。Wiki Page 构建独立索引参与检索召回；图谱数据本身不参与检索，用于知识浏览与关系展示。
+-   支持配置抽取模型（qwen3.8-max、qwen3.8-flash、qwen3.7-plus）、提取粒度、Wiki 内容生成要求与提取重点，文档新增或修改后自动更新；支持在控制台新建、编辑、回滚和删除 Wiki Page，并查看历史版本。
+-   知识检索新增 Wiki 检索服务，与 Chunk 检索并列；知识问答可同时使用普通知识检索与 Wiki 检索。
+-   Wiki 抽取模型按实际输入/输出 Token 独立计费，不包含在知识库规格费用或知识库免费额度内。
+
+详见[Wiki 与本体知识图谱](raw/application-user-guide/agent-context/knowledge-base/data-connection-overview/rag-wiki.md)和[计费说明](https://help.aliyun.com/zh/model-studio/rag-wiki#h-ragwiki-billing)。
+
 ### 2026-11-11
 
 新增修复

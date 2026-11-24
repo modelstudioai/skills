@@ -21,7 +21,7 @@ Qwen-Audio-Live 的前台模型负责听取用户语音、提问和回复。遇�
 
 #### 准备录音和凭证
 
--   准备华北2（北京）的业务空间 ID 和 [API Key](raw/model-api-reference/preparations/get-api-key.md)。长期 API Key 保存在应用服务端。
+-   Qwen-Audio-Live 仅支持业务空间专属域名。本例需要华北2（北京）的业务空间 ID 和 [API Key](raw/model-api-reference/preparations/get-api-key.md)。长期 API Key 保存在应用服务端。
 -   安装 Python 和 FFmpeg。录一句「请从一数到三」，保存为 `input.wav`。
 
 将 API Key 配置到环境变量 `DASHSCOPE_API_KEY`，然后安装依赖，并将录音转换为 16 kHz、16 位、单声道的 PCM 音频。
@@ -33,11 +33,7 @@ ffmpeg -i input.wav -ar 16000 -ac 1 -f s16le input.pcm
 
 #### 发送录音并接收回复
 
-Qwen-Audio-Live 仅支持业务空间专属域名。这个示例连接华北2（北京），请在代码中填写该地域的业务空间 ID。
-
-示例中的两个模型参数已经填好。连接地址里的 `model` 用于接入 Qwen-Audio-Live 服务，`session.model` 则指定与用户交谈的前台模型。本例使用 `qwen-audio-4.0-realtime-preview`，并将 `turn_detection.type` 设为 `duplex`，开启全双工对话。此时模型可以边听边说，在回复时仍能接收用户语音。其他会话设置见 [session.update](https://help.aliyun.com/zh/model-studio/qwen-audio-live-client-events#live-session-update)。
-
-将以下示例保存为 `live_quickstart.py`。
+将下面的代码保存为 `live_quickstart.py`，在连接地址中填入上一步准备的业务空间 ID。两个模型参数都可以沿用示例值。
 
 ```
 import base64
@@ -128,11 +124,14 @@ def main():
 
 main()
 ```
+
+用上一步准备的录音运行脚本：
+
 ```
 python live_quickstart.py input.pcm
 ```
 
-运行后，终端会显示回复字幕。打开生成的 `reply.wav`，确认能听到模型数数。该文件是 24 kHz、16 位、单声道 WAV。
+运行后，终端会显示回复字幕。打开生成的 `reply.wav`，确认能听到模型数数。该文件是 24 kHz、16 位、单声道 WAV。要调整示例中的模型、音色或音频传输方式，见[配置会话](#live-session-config)。
 
 如果没有收到回复，先检查 API Key、业务空间 ID 和连接地址是否属于同一地域，再确认脚本是在收到 [`session.updated`](https://help.aliyun.com/zh/model-studio/qwen-audio-live-server-events#live-session-updated) 后才发送录音。其他现象可按[排查接入问题](#live-troubleshoot-session)逐项检查。
 
@@ -192,7 +191,7 @@ python live_quickstart.py input.pcm
 
 前台模型
 
-通过 `session.model` 选择与用户交谈的模型。要开启全双工对话，选择 `qwen-audio-4.0-realtime-preview`，并将 `session.turn_detection.type` 设为 `duplex`。
+连接地址中的 `model=qwen-audio-3.1-live` 指定要接入的服务。`session.model` 指定与用户交谈的前台模型。快速开始使用 `qwen-audio-4.0-realtime-preview`，并将 `session.turn_detection.type` 设为 `duplex`，开启全双工对话。模型可以边听边说，在回复时仍能接收用户语音。
 
 对话指令和音色
 
@@ -209,6 +208,8 @@ python live_quickstart.py input.pcm
 任务处理模式
 
 通过 `session.delegation` 设置。见[任务委派与工具](#live-delegation)。
+
+完整配置字段见 [session.update](https://help.aliyun.com/zh/model-studio/qwen-audio-live-client-events#live-session-update)。
 
 发送 [`session.update`](https://help.aliyun.com/zh/model-studio/qwen-audio-live-client-events#live-session-update) 后，通过 [`session.updated`](https://help.aliyun.com/zh/model-studio/qwen-audio-live-server-events#live-session-updated) 确认哪些配置已生效。仅用 WebSocket 时，收到该事件后就可以发送音频。使用 WebRTC 或 AOQ 时，还要等媒体连接就绪。
 
@@ -232,7 +233,7 @@ python live_quickstart.py input.pcm
 -   **AOQ** 通过 SDK 发送用户语音和播放模型回复。上行音频必须通过 AOQ 发送。将 `session.transport.aoq.ws_audio` 设为 `true` 后，控制 WebSocket 也会收到一份模型的回复音频。详见 [AOQ 接入](raw/_short/qwen-audio-live-aoq-access-7fc752b6a8e53044.md)。
 -   **WebSocket** 通过 JSON 事件收发音频。输入和输出都使用单声道 PCM，采样率见下表。
 
-下表的音频收发流程适用于纯 WebSocket 接入。字幕事件适用于三种接入方式。
+下表的音频收发流程适用于纯 WebSocket 接入。无论音频通过哪条连接传输，都可以用表中的字幕事件显示用户转写和模型回复。
 
 数据
 
@@ -258,9 +259,9 @@ python live_quickstart.py input.pcm
 
 前者是用户语音的转写，后者是模型回复的字幕。
 
-如果用户在模型播报时补充一句话，用户字幕和模型字幕可能同时更新。将两路字幕分别追加到各自的对话气泡，并根据播放器的实际状态更新界面上的播报指示。
+如果用户在模型播报时补充一句话，用户字幕和模型字幕可能同时更新。把用户转写和模型字幕分别追加到各自的对话气泡。界面上的播报状态以播放器为准。
 
-WebRTC 或 AOQ 媒体连接就绪后，控制 WebSocket 和媒体连接都可用于接收字幕。如果两路都收到同一个 `event_id`，只追加一次。
+WebRTC 或 AOQ 媒体连接就绪后，控制 WebSocket 和媒体连接都可用于接收字幕。如果应用同时监听这两条连接，追加字幕前按 `event_id` 去重。
 
 如果界面有麦克风开关，可在用户切换时发送 `session.input_audio.mute` 或 `session.input_audio.unmute`，等服务确认后再更新开关状态。静音期间，会话仍保持连接。
 
@@ -284,11 +285,11 @@ WebRTC 或 AOQ 媒体连接就绪后，控制 WebSocket 和媒体连接都可用
 
 ### 结束会话和查看用量
 
-单次会话没有时长上限，费用按会话时长（秒）计算。连接建立后至少计费 3 秒，超过 3 秒则按实际会话时长计费。发送文字消息、静音和空闲的时间都计入会话时长。百炼调用后台模型时，还会按该模型的实际 Token 用量另行计费。
-
 用户挂断或点击结束时，发送 `session.close` 并停止采集麦克风音频。等收到 `session.closed` 后，再关闭连接并释放资源。
 
-会话激活后，服务每 5 秒通过 `session.usage.updated` 上报 `usage.seconds`，表示会话累计计费时长（秒）。会话期间取最新值，结束后以 `session.closed` 中的 `usage.seconds` 为准。价格及后台模型计费见[计费说明](https://help.aliyun.com/zh/model-studio/model-pricing#qwen-audio-live-pricing)。
+会话激活后，服务每 5 秒通过 `session.usage.updated` 上报 `usage.seconds`，表示会话累计计费时长（秒）。会话期间取最新值，结束后以 `session.closed` 中的 `usage.seconds` 为准。
+
+单次会话没有时长上限，费用按会话时长（秒）计算。连接建立后至少计费 3 秒，超过 3 秒则按实际会话时长计费。发送文字消息、静音和空闲的时间都计入会话时长。百炼调用后台模型时，还会按该模型的实际 Token 用量另行计费。价格及后台模型计费见[计费说明](https://help.aliyun.com/zh/model-studio/model-pricing#qwen-audio-live-pricing)。
 
 ### 排查接入问题
 
@@ -303,6 +304,10 @@ WebRTC 或 AOQ 媒体连接就绪后，控制 WebSocket 和媒体连接都可用
 收到字幕，未听到语音回复
 
 纯 WebSocket 接入时，检查是否收到 `session.output_audio.delta`，并以 24 kHz 播放。使用 WebRTC 或 AOQ 时，检查播放器是否接收到所选通道的下行音频。
+
+字幕里有重复的字词或整句
+
+使用 WebRTC 或 AOQ 时，控制 WebSocket 和媒体连接都可能收到同一条字幕。选择一路更新字幕即可。如果同时监听两路，在追加字幕前按 `event_id` 去重。
 
 任务已处理，未听到语音播报
 
@@ -321,7 +326,7 @@ WebRTC 或 AOQ 媒体连接就绪后，控制 WebSocket 和媒体连接都可用
 用户在对话中提出业务请求时，前台模型可以直接发起函数调用，也可以把任务委派给后台。接入时，可以根据任务的处理步骤和响应要求，选择把工具配置在哪里。
 
 -   **前台工具**适合可直接执行、需要快速响应的操作。例如，用户说「播放音乐」时，前台模型调用通过 `session.tools` 注册的函数，由应用执行播放指令。
--   **后台工具**适合需要判断条件或依次调用多个工具的任务。例如，办理改签时，后台先查询订单和改签规则，再查找可选班次。前台模型收到结果后，向用户说明有哪些班次可选。
+-   **后台工具**适合需要判断条件或依次调用多个工具的任务。例如，查询可改签班次时，如果后台模型已配置相应的查询工具，就可以先查订单和改签规则，再查符合条件的班次，由前台模型向用户播报。
 
 ### 选择处理任务模式
 
@@ -343,7 +348,7 @@ Client 模式
 
 谁准备任务输入
 
-百炼根据会话发起后台请求，应用配置后台模型和任务指令。
+应用预先配置后台模型和任务指令。需要委派时，百炼根据当前对话准备输入并发起请求。
 
 应用从委派事件读取任务摘要和上下文，结合业务数据构造请求。
 
@@ -353,7 +358,7 @@ Client 模式
 
 应用可以校验、汇总或筛选结果，再把适合播报的内容交给前台模型。
 
-例如，只需根据用户给出的单价和数量计算总价，可以用 Responses 模式。查询库存需要按门店权限调用内部接口，并由应用校验结果，可以用 Client 模式。
+同样是查询可改签班次，如果让百炼调用后台模型，由模型使用已配置的工具完成查询，可以选择 Responses 模式。如果已有票务工作流负责查询，并且需要应用核对班次后再播报，可以选择 Client 模式。
 
 两种模式都可以[配置前台函数](#live-call-frontend-functions)，用 `call_id` 将函数调用与结果对应起来。Client 模式中的任务委派则使用 `delegation_id` 关联同一任务的进度、追问和结果。接入业务系统前，先确认应用拥有接口权限，并了解接口需要哪些输入、会返回什么。
 
@@ -365,47 +370,132 @@ Client 模式
 
 #### 配置会话
 
-将[快速开始](#live-first-session)中的脚本另存为 `live_responses.py`。在发送 `session.update` 前，用下面的代码设置前台指令并替换 `session` 的委派配置。可以将 `REPLY_TIMEOUT_SECONDS` 设为 30 秒，给后台处理和语音播报留出时间。
+将 `session.delegation.type` 设为 `responses`，在 `session.delegation.responses` 中指定后台模型（`model`）。还可以为后台模型编写任务指令（`instructions`）或配置工具（`tools`）。
 
-百炼将 `session.delegation.responses` 中的 `model`、`instructions` 和 `tools` 配置传给所选的后台模型。
-
-```
-session["instructions"] = (
-    "担任语音客服。"
-    "计算总价时，如果缺少单价或数量，先向用户确认。"
-    "条件齐全后，将计算任务交给后台模型。"
-    "收到结果后，用一句话播报。"
-)
-session["delegation"] = {
-    "type": "responses",
-    "responses": {
-        "model": "qwen4-max",
-        "instructions": (
-            "根据单价和数量计算总价，返回金额和币种。"
-            "缺少必要条件时，说明缺少哪一项。"
-        ),
-    },
-}
-```
+以计算总价为例，前台提示词可以写成“缺少单价或数量时，先向用户确认。两项齐全后，把计算交给后台”。后台提示词则写明“根据单价和数量计算总价，返回金额和币种”。
 
 #### 接收后台事件
 
 自动委派开始时，服务发送 [`session.delegation.created`](https://help.aliyun.com/zh/model-studio/qwen-audio-live-server-events#live-delegation-created)。后台生成期间，服务通过 [`response.event`](https://help.aliyun.com/zh/model-studio/qwen-audio-live-server-events#live-response-event) 转发后台事件。按外层的 `delegation_id`（如有）关联任务，按 `event.type` 区分后台事件。
 
-在音频接收循环中，将下面两个分支加在 `session.output_transcript.delta` 分支之后。用内层 `response.completed` 判断后台何时完成本次生成，再从前台字幕和音频事件获取面向用户的回复。
-
-```
-elif event_type == "session.delegation.created":
-    print(f"\n已派发任务 {event['delegation_id']}", flush=True)
-elif event_type == "response.event":
-    backend_event = event["event"]
-    if backend_event["type"] == "response.completed":
-        print("\n后台模型已完成生成", flush=True)
-    elif backend_event["type"] == "response.failed":
-        print("\n后台生成失败", backend_event.get("response", {}).get("error"), flush=True)
-```
+收到内层 `response.completed` 表示后台生成结束。用户听到的回复仍由前台模型播报，脚本会显示前台字幕并将语音保存为 `reply.wav`。
 
 #### 验证委派与播报
+
+将以下完整示例保存为 `live_responses.py`，并在连接地址中填入业务空间 ID。脚本为后台处理和语音播报预留 30 秒。
+
+```
+import base64
+import json
+import os
+import sys
+import time
+import uuid
+import wave
+from pathlib import Path
+
+from websockets.sync.client import connect
+
+WEBSOCKET_URL = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime?model=qwen-audio-3.1-live"
+SESSION_MODEL = "qwen-audio-4.0-realtime-preview"
+REPLY_TIMEOUT_SECONDS = 30
+
+def main():
+    audio = Path(sys.argv[1]).read_bytes()
+    if not audio or len(audio) % 2:
+        raise ValueError("请提供非空的 16 位 PCM 文件")
+    headers = {"Authorization": f"Bearer {os.environ['DASHSCOPE_API_KEY']}"}
+    with connect(
+        WEBSOCKET_URL,
+        additional_headers=headers,
+        close_timeout=2,
+    ) as ws:
+        def send(event_type, **payload):
+            ws.send(json.dumps({
+                "type": event_type,
+                "event_id": uuid.uuid4().hex,
+                **payload,
+            }))
+
+        session = {
+            "model": SESSION_MODEL,
+            "modalities": ["text", "audio"],
+            "turn_detection": {"type": "duplex"},
+            "instructions": (
+                "担任语音客服。"
+                "计算总价时，如果缺少单价或数量，先向用户确认。"
+                "条件齐全后，将计算任务交给后台模型。"
+                "收到结果后，用一句话播报。"
+            ),
+            "delegation": {
+                "type": "responses",
+                "responses": {
+                    "model": "qwen4-max",
+                    "instructions": (
+                        "根据单价和数量计算总价，返回金额和币种。"
+                        "缺少必要条件时，说明缺少哪一项。"
+                    ),
+                },
+            },
+        }
+        send("session.update", session=session)
+
+        deadline = time.monotonic() + 20
+        while True:
+            event = json.loads(ws.recv(timeout=max(0, deadline - time.monotonic())))
+            if event["type"] == "session.updated":
+                break
+            if event["type"] in ("error", "session.closed"):
+                raise RuntimeError(event)
+
+        audio += bytes(32000 * 3)
+        with wave.open("reply.wav", "wb") as reply:
+            reply.setparams((1, 2, 24000, 0, "NONE", "not compressed"))
+            start = time.monotonic()
+            offset = 0
+            deadline = start + len(audio) / 32000 + REPLY_TIMEOUT_SECONDS
+            while time.monotonic() < deadline:
+                if offset < len(audio) and time.monotonic() >= start + offset / 32000:
+                    frame = audio[offset:offset + 640]
+                    send("session.input_audio.append",
+                         audio=base64.b64encode(frame).decode("ascii"))
+                    offset += len(frame)
+                try:
+                    event = json.loads(ws.recv(timeout=0.02 if offset < len(audio) else 0.25))
+                except TimeoutError:
+                    continue
+                event_type = event["type"]
+                if event_type == "session.output_audio.delta":
+                    reply.writeframesraw(base64.b64decode(event["delta"]))
+                elif event_type == "session.output_transcript.delta":
+                    print(event["delta"], end="", flush=True)
+                elif event_type == "session.delegation.created":
+                    print(f"\n已派发任务 {event['delegation_id']}", flush=True)
+                elif event_type == "response.event":
+                    backend_event = event["event"]
+                    if backend_event["type"] == "response.completed":
+                        print("\n后台模型已完成生成", flush=True)
+                    elif backend_event["type"] == "response.failed":
+                        print("\n后台生成失败", backend_event.get("response", {}).get("error"), flush=True)
+                elif event_type == "session.closed":
+                    break
+                elif event_type == "error":
+                    raise RuntimeError(event["error"])
+            else:
+                send("session.close")
+                close_deadline = time.monotonic() + 2
+                while time.monotonic() < close_deadline:
+                    try:
+                        event = json.loads(ws.recv(timeout=max(0, close_deadline - time.monotonic())))
+                    except TimeoutError:
+                        break
+                    if event["type"] == "session.closed":
+                        break
+            if not reply.getnframes():
+                raise RuntimeError("未收到语音回复")
+
+main()
+```
 
 录下「每件商品三百二十七元，买十三件一共多少钱」，保存为 `responses.wav`。转换录音并运行脚本。
 
@@ -428,59 +518,115 @@ python live_responses.py responses.pcm
 
 应用已有完整输入时，可通过 [`response.item.create`](https://help.aliyun.com/zh/model-studio/qwen-audio-live-client-events#live-response-item-create) 提供文本，再通过 [`response.create`](https://help.aliyun.com/zh/model-studio/qwen-audio-live-client-events#live-response-create) 发起独立的后台任务。结果从 `response.event` 读取。
 
-将上述示例另存为 `live_responses_text.py`。保留 Responses 会话配置，删除 `main()` 开头读取和校验 PCM 文件的代码。将收到 `session.updated` 后从 `audio +=` 开始的音频处理代码替换为下方代码，缩进与 `send("session.update", session=session)` 一致。保留文件末尾的 `main()` 调用。
+将以下完整示例保存为 `live_responses_text.py`，并在连接地址中填入业务空间 ID。脚本直接发送文本，在终端显示后台返回的计算结果。
 
 ```
-send("response.item.create", item={
-    "type": "message",
-    "role": "user",
-    "content": [{"type": "input_text", "text": "单价 327 元，数量 13，计算总价。"}],
-})
-send("response.create")
+import json
+import os
+import time
+import uuid
 
-deadline = time.monotonic() + REPLY_TIMEOUT_SECONDS
-while True:
-    event = json.loads(ws.recv(timeout=max(0, deadline - time.monotonic())))
-    if event["type"] in ("error", "session.closed"):
-        raise RuntimeError(event)
-    if event["type"] != "response.event":
-        continue
+from websockets.sync.client import connect
 
-    backend_event = event["event"]
-    kind = backend_event["type"]
-    if kind == "response.output_text.delta":
-        print(backend_event["delta"], end="", flush=True)
-    elif kind == "response.completed":
-        print()
-        break
-    elif kind == "response.failed":
-        raise RuntimeError(backend_event)
+WEBSOCKET_URL = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime?model=qwen-audio-3.1-live"
+SESSION_MODEL = "qwen-audio-4.0-realtime-preview"
+REPLY_TIMEOUT_SECONDS = 30
 
-send("session.close")
+def main():
+    headers = {"Authorization": f"Bearer {os.environ['DASHSCOPE_API_KEY']}"}
+    with connect(
+        WEBSOCKET_URL,
+        additional_headers=headers,
+        close_timeout=2,
+    ) as ws:
+        def send(event_type, **payload):
+            ws.send(json.dumps({
+                "type": event_type,
+                "event_id": uuid.uuid4().hex,
+                **payload,
+            }))
+
+        session = {
+            "model": SESSION_MODEL,
+            "modalities": ["text", "audio"],
+            "turn_detection": {"type": "duplex"},
+            "instructions": (
+                "担任语音客服。"
+                "计算总价时，如果缺少单价或数量，先向用户确认。"
+                "条件齐全后，将计算任务交给后台模型。"
+                "收到结果后，用一句话播报。"
+            ),
+            "delegation": {
+                "type": "responses",
+                "responses": {
+                    "model": "qwen4-max",
+                    "instructions": (
+                        "根据单价和数量计算总价，返回金额和币种。"
+                        "缺少必要条件时，说明缺少哪一项。"
+                    ),
+                },
+            },
+        }
+        send("session.update", session=session)
+
+        deadline = time.monotonic() + 20
+        while True:
+            event = json.loads(ws.recv(timeout=max(0, deadline - time.monotonic())))
+            if event["type"] == "session.updated":
+                break
+            if event["type"] in ("error", "session.closed"):
+                raise RuntimeError(event)
+
+        send("response.item.create", item={
+            "type": "message",
+            "role": "user",
+            "content": [{"type": "input_text", "text": "单价 327 元，数量 13，计算总价。"}],
+        })
+        send("response.create")
+
+        deadline = time.monotonic() + REPLY_TIMEOUT_SECONDS
+        while True:
+            event = json.loads(ws.recv(timeout=max(0, deadline - time.monotonic())))
+            if event["type"] in ("error", "session.closed"):
+                raise RuntimeError(event)
+            if event["type"] != "response.event":
+                continue
+
+            backend_event = event["event"]
+            kind = backend_event["type"]
+            if kind == "response.output_text.delta":
+                print(backend_event["delta"], end="", flush=True)
+            elif kind == "response.completed":
+                print()
+                break
+            elif kind == "response.failed":
+                raise RuntimeError(backend_event)
+
+        send("session.close")
+
+main()
 ```
 
 运行 `python live_responses_text.py`。终端应输出后台模型返回的金额。
 
 ### 使用 Client 模式接入业务系统
 
+在 Client 模式下，前台模型把任务交给应用。应用执行业务操作，把结果发回前台模型，由它告诉用户。
+
 #### 接入准备
 
-可以先用下方的固定库存结果，验证应用能否把任务结果交给前台模型播报。接入真实库存接口时，应用需要有调用权限，能把用户说的商品名称转换为接口所需的商品 ID，并把查询结果整理成包含商品名称的回复。
+-   **运行示例**：按[快速开始](#live-first-session)准备业务空间 ID、API Key 和运行环境，并录一段询问库存的语音。应用收到查询任务后，直接回传预设的“黑色折叠伞还有七把”，供前台模型播报。运行示例无需库存接口。
+-   **接入自己的业务系统**：确认应用有权调用业务接口，了解接口需要哪些参数，以及返回结果中哪些信息要告诉用户。例如，库存接口如果按商品 ID 查询，应用需要先根据用户说的商品名称找到对应的 ID，再查询库存，将商品名称和剩余数量一起回传。
 
 #### 配置会话
 
-将[快速开始](#live-first-session)的原始脚本另存为 `live_client.py`，用于验证固定结果的回传和播报。保留 `delegation` 中的 `"type": "client"`，可将 `REPLY_TIMEOUT_SECONDS` 设为 30 秒，为任务处理和播报留出时间。在发送 `session.update` 前为 `session` 添加以下指令。
-
-```
-session["instructions"] = "将库存查询交给应用，收到结果后用语音回复用户。"
-seen_delegation_events = set()
-```
+将 `session.delegation.type` 设为 `client`，在前台提示词中说明哪些任务交给应用，以及收到结果后如何回复用户。库存查询示例使用的提示词是“将库存查询交给应用，收到结果后用语音回复用户”。
 
 #### 接收任务并准备上下文
 
 收到 [`session.delegation.created`](https://help.aliyun.com/zh/model-studio/qwen-audio-live-server-events#live-delegation-created) 后，用 `event_id` 去重，并保存 `delegation_id`，用于关联后续更新。从 `summary` 和 `context`（如有）提取任务信息，再结合应用保存的业务状态准备请求。例如，查库存时，可以用任务里的商品名称和当前门店，找到库存接口所需的商品 ID。
 
-如果用户没说要查哪件商品，先请前台模型追问。收到后续的 `session.delegation.created` 时，用 `delegation_id` 关联同一任务。如果事件带有 `supplements`，可以从中读取补充内容。等查询条件齐全后再执行。
+任务缺少必要信息时，应用可以请前台模型向用户追问。例如，用户想查库存却没说商品名称，就请前台模型问清要查哪件商品。收到后续的 `session.delegation.created` 时，用 `delegation_id` 关联同一任务。如果事件带有 `supplements`，可以从中读取补充内容。等查询条件齐全后再执行。
 
 #### 回传进度、补充问题和结果
 
@@ -512,23 +658,112 @@ seen_delegation_events = set()
 
 业务调用较慢时，可以在应用后台执行，让主循环继续收发音频和处理事件。核对业务结果后，再把适合播报的内容交给前台模型。
 
-在快速开始的音频接收循环中，紧接在 `session.output_transcript.delta` 分支后添加以下两个分支。它们复用示例中的 `send` 函数。
-
-```
-elif event_type == "session.delegation.created":
-    if event["event_id"] in seen_delegation_events:
-        continue
-    seen_delegation_events.add(event["event_id"])
-    task_id = event["delegation_id"]
-    print(f"\n收到任务 {task_id}", flush=True)
-    send("session.commentary.append",
-         delegation_id=task_id,
-         content="黑色折叠伞还有七把。")
-elif event_type == "session.commentary.appended":
-    print("\n服务已受理任务结果", flush=True)
-```
-
 #### 验证任务派发和结果播报
+
+将以下完整示例保存为 `live_client.py`，并在连接地址中填入业务空间 ID。
+
+```
+import base64
+import json
+import os
+import sys
+import time
+import uuid
+import wave
+from pathlib import Path
+
+from websockets.sync.client import connect
+
+WEBSOCKET_URL = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime?model=qwen-audio-3.1-live"
+SESSION_MODEL = "qwen-audio-4.0-realtime-preview"
+REPLY_TIMEOUT_SECONDS = 30
+
+def main():
+    audio = Path(sys.argv[1]).read_bytes()
+    if not audio or len(audio) % 2:
+        raise ValueError("请提供非空的 16 位 PCM 文件")
+    headers = {"Authorization": f"Bearer {os.environ['DASHSCOPE_API_KEY']}"}
+    with connect(
+        WEBSOCKET_URL,
+        additional_headers=headers,
+        close_timeout=2,
+    ) as ws:
+        def send(event_type, **payload):
+            ws.send(json.dumps({
+                "type": event_type,
+                "event_id": uuid.uuid4().hex,
+                **payload,
+            }))
+
+        session = {
+            "model": SESSION_MODEL,
+            "modalities": ["text", "audio"],
+            "turn_detection": {"type": "duplex"},
+            "delegation": {"type": "client"},
+            "instructions": "将库存查询交给应用，收到结果后用语音回复用户。",
+        }
+        seen_delegation_events = set()
+        send("session.update", session=session)
+
+        deadline = time.monotonic() + 20
+        while True:
+            event = json.loads(ws.recv(timeout=max(0, deadline - time.monotonic())))
+            if event["type"] == "session.updated":
+                break
+            if event["type"] in ("error", "session.closed"):
+                raise RuntimeError(event)
+
+        audio += bytes(32000 * 3)
+        with wave.open("reply.wav", "wb") as reply:
+            reply.setparams((1, 2, 24000, 0, "NONE", "not compressed"))
+            start = time.monotonic()
+            offset = 0
+            deadline = start + len(audio) / 32000 + REPLY_TIMEOUT_SECONDS
+            while time.monotonic() < deadline:
+                if offset < len(audio) and time.monotonic() >= start + offset / 32000:
+                    frame = audio[offset:offset + 640]
+                    send("session.input_audio.append",
+                         audio=base64.b64encode(frame).decode("ascii"))
+                    offset += len(frame)
+                try:
+                    event = json.loads(ws.recv(timeout=0.02 if offset < len(audio) else 0.25))
+                except TimeoutError:
+                    continue
+                event_type = event["type"]
+                if event_type == "session.output_audio.delta":
+                    reply.writeframesraw(base64.b64decode(event["delta"]))
+                elif event_type == "session.output_transcript.delta":
+                    print(event["delta"], end="", flush=True)
+                elif event_type == "session.delegation.created":
+                    if event["event_id"] in seen_delegation_events:
+                        continue
+                    seen_delegation_events.add(event["event_id"])
+                    task_id = event["delegation_id"]
+                    print(f"\n收到任务 {task_id}", flush=True)
+                    send("session.commentary.append",
+                         delegation_id=task_id,
+                         content="黑色折叠伞还有七把。")
+                elif event_type == "session.commentary.appended":
+                    print("\n服务已受理任务结果", flush=True)
+                elif event_type == "session.closed":
+                    break
+                elif event_type == "error":
+                    raise RuntimeError(event["error"])
+            else:
+                send("session.close")
+                close_deadline = time.monotonic() + 2
+                while time.monotonic() < close_deadline:
+                    try:
+                        event = json.loads(ws.recv(timeout=max(0, close_deadline - time.monotonic())))
+                    except TimeoutError:
+                        break
+                    if event["type"] == "session.closed":
+                        break
+            if not reply.getnframes():
+                raise RuntimeError("未收到语音回复")
+
+main()
+```
 
 录下「请查一下黑色折叠伞有没有货」，保存为 `client.wav`。转换录音并运行脚本。
 
@@ -541,7 +776,9 @@ python live_client.py client.pcm
 
 ### 配置和处理前台函数
 
-如果应用的库存查询需要商品名称，可以在 `session.tools` 中声明一个函数，让前台模型从对话中提取商品名称，再按声明的格式传给应用。将以下字段加入 `session.update` 的 `session` 对象，其余会话配置沿用原值。
+前面的库存示例把整个查询任务交给应用，由应用准备查询条件。如果已有一个按商品名称查库存的函数，可以让前台模型直接调用它。应用在 `session.tools` 中声明函数和参数，前台模型就能从对话中提取商品名称，交给应用执行。Client 和 Responses 模式都可以使用前台函数。
+
+将以下字段加入 `session.update` 的 `session` 对象，其余会话配置沿用原值。
 
 ```
 {
@@ -564,7 +801,19 @@ python live_client.py client.pcm
 
 1.  收到 [`session.event`](https://help.aliyun.com/zh/model-studio/qwen-audio-live-server-events#live-session-event) 后，读取 `event.item` 中 `type` 为 `function_call` 的调用项。
 2.  按 `name` 找到函数，将 `arguments` 从 JSON 字符串解析为参数，校验后执行。同一个 `call_id` 只执行一次。
-3.  发送 [`session.item.create`](https://help.aliyun.com/zh/model-studio/qwen-audio-live-client-events#live-item-create) 回传结果。将 `item.type` 设为 `function_call_output`，填入本次调用的 `item.call_id`。会话级任务的结果仍通过 `session.commentary.append` 按 `delegation_id` 回传。
+3.  发送 [`session.item.create`](https://help.aliyun.com/zh/model-studio/qwen-audio-live-client-events#live-item-create) 回传结果。将 `item.type` 设为 `function_call_output`，在 `item.call_id` 中填写本次函数调用的 `call_id`。
+
+```
+{
+  "type": "session.item.create",
+  "event_id": "evt_function_result",
+  "item": {
+    "type": "function_call_output",
+    "call_id": "call_stock",
+    "output": "{\"stock\":7}"
+  }
+}
+```
 
 在 Client 模式下，前台模型等待函数结果时仍可接收用户语音并回复。应用可继续收发音频和处理事件。需要查询网页或其他实时信息时，可注册搜索服务，或由 Client 模式下的应用调用搜索服务。
 

@@ -106,6 +106,62 @@ multimodal-dialog
 
 **说明**模型的名称、上下文、价格、快照版本等信息请参见[阿里云百炼控制台](https://bailian.console.aliyun.com/cn-beijing/)；并发限流条件请参考[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)。
 
+## 按模型查找 WebSocket SDK
+
+模型
+
+开发语言和平台
+
+Qwen-Omni-Realtime
+
+[Python](raw/_short/realtime-websocket-python-sdk-qwen-omni-realtime-e50924065f85dda8.md) · [Java](raw/_short/omni-realtime-java-sdk-13dfd16f685872d7.md) · [C#](raw/_short/omni-realtime-csharp-sdk-f5e5dc6601296458.md)
+
+Qwen-Audio-ASR-Streaming
+
+[Python](raw/_short/qwen-audio-asr-streaming-websocket-sdk-python-d3f6f03216a64996.md) · [Java](raw/_short/qwen-audio-asr-streaming-websocket-sdk-java-923284a83b541f4a.md) · [Node.js](raw/_short/qwen-audio-asr-streaming-websocket-sdk-nodejs-8175ebf0edea3f44.md) · [C#](raw/_short/qwen-audio-asr-streaming-websocket-sdk-csharp-d4cdd1f28e10e1ee.md) · [Android](raw/_short/qwen-audio-asr-streaming-websocket-sdk-android-a883b456b530c951.md) · [iOS](raw/_short/qwen-audio-asr-streaming-websocket-sdk-ios-5a7e89574b8cdbfe.md) · [HarmonyOS](raw/_short/qwen-audio-asr-streaming-websocket-sdk-harmonyos-c35c7ad324ec7afe.md) · [Flutter](raw/_short/qwen-audio-asr-streaming-websocket-sdk-flutter-bae77e53068468b6.md)
+
+Qwen-Audio-ASR-Message
+
+[Python](raw/_short/qwen-asr-message-websocket-sdk-python-06f03701cdddda13.md) · [Java](raw/_short/qwen-asr-message-websocket-sdk-java-4524c054fb74f217.md) · [Node.js](raw/_short/qwen-asr-message-websocket-sdk-nodejs-627576e97b262b0a.md) · [C#](raw/_short/qwen-asr-message-websocket-sdk-csharp-7aa85c2b1a5a929c.md) · [Android](raw/_short/qwen-asr-message-websocket-sdk-android-b9e8e19722b5d570.md) · [iOS](raw/_short/qwen-asr-message-websocket-sdk-ios-fb447b88c464d9d4.md) · [HarmonyOS](raw/_short/qwen-asr-message-websocket-sdk-harmonyos-98cb0f5731fef1cb.md) · [Flutter](raw/_short/qwen-asr-message-websocket-sdk-flutter-1042f8131f3deccc.md)
+
+Fun-ASR-Realtime
+
+[Python](raw/_short/fun-asr-realtime-websocket-sdk-python-56ba4399a24fcf69.md) · [Java](raw/_short/fun-asr-realtime-websocket-sdk-java-ec987af1c2fd19d4.md) · [C#](raw/_short/fun-asr-realtime-csharp-sdk-cb1c36fb275d548c.md) · [Android](raw/_short/fun-asr-realtime-websocket-sdk-android-263995507ca5b758.md) · [iOS](raw/_short/fun-asr-realtime-websocket-sdk-ios-1698818bdb0dee85.md) · [HarmonyOS](raw/_short/fun-asr-realtime-websocket-sdk-harmonyos-4bd03211debbdd3f.md) · [Flutter](raw/_short/fun-asr-realtime-websocket-sdk-flutter-237f299ab91e973a.md)
+
+Qwen-ASR-Realtime
+
+[Python](raw/_short/realtime-websocket-python-sdk-qwen-asr-realtime-281dee62f7074a94.md) · [Java](raw/_short/qwen-asr-realtime-java-sdk-d0faa50c48463b79.md)
+
+Paraformer
+
+[Python](raw/_short/realtime-websocket-python-sdk-paraformer-48f2eb5035b28f23.md) · [Java](raw/_short/paraformer-real-time-speech-recognition-java-sdk-7a1a7974a8aacc5d.md) · [C#](raw/_short/paraformer-realtime-csharp-sdk-0af0d0018568b776.md) · [Android](raw/_short/android-sdk-for-paraformer-real-time-service-9e7815d0b3adcb41.md) · [iOS](raw/_short/ios-sdk-for-paraformer-real-time-service-28718b821c8d6e25.md) · [HarmonyOS](raw/_short/harmonyos-sdk-for-paraformer-real-time-service-642577184b92b90f.md) · [Flutter](raw/_short/realtime-websocket-flutter-sdk-paraformer-ce62061a08ebbb55.md)
+
+Qwen-Audio-TTS
+
+[Python](raw/_short/qwen-audio-tts-websocket-sdk-python-74a72caa32997dec.md) · [Java](raw/_short/qwen-audio-tts-websocket-sdk-java-ec88c8d98488df37.md) · [Node.js](raw/_short/qwen-audio-tts-nodejs-sdk-e49b9390f1cc4802.md) · [C#](raw/_short/qwen-audio-tts-websocket-sdk-csharp-4b86003f8b25dbbd.md) · [Android](raw/_short/qwen-audio-tts-websocket-sdk-android-deab75c7b0d9709a.md) · [iOS](raw/_short/qwen-audio-tts-websocket-sdk-ios-20133baf35bd9806.md) · [HarmonyOS](raw/_short/qwen-audio-tts-websocket-sdk-harmonyos-3937eb409e9f327d.md) · [Flutter](raw/_short/qwen-audio-tts-websocket-sdk-flutter-44fc29e41055a783.md)
+
+CosyVoice
+
+[Python](raw/_short/cosyvoice-websocket-sdk-python-47e109e34183e539.md) · [Java](raw/_short/cosyvoice-websocket-sdk-java-a4920147be4869ef.md) · [C#](raw/_short/cosyvoice-websocket-sdk-csharp-c2c2b009e6d5a87f.md) · [Android](raw/_short/cosyvoice-websocket-sdk-android-a3c227256eefa5f2.md) · [iOS](raw/_short/cosyvoice-websocket-sdk-ios-906cc4f70118010a.md) · [HarmonyOS](raw/_short/cosyvoice-websocket-sdk-harmonyos-340ad797fa66e3f1.md) · [Flutter](raw/_short/cosyvoice-websocket-sdk-flutter-14e4f441e1c1f2d6.md)
+
+Qwen-TTS-Realtime
+
+[Python](raw/_short/realtime-websocket-python-sdk-qwen-tts-realtime-3dc71548ffc651f8.md) · [Java](raw/_short/qwen-tts-realtime-java-sdk-9494aeb08ebf2190.md)
+
+Sambert
+
+[Python](raw/_short/realtime-websocket-python-sdk-sambert-74c648d694dcfd04.md) · [Java](raw/_short/sambert-java-sdk-79ed7a3fed2f3f90.md) · [C#](raw/_short/sambert-csharp-sdk-3727135a614c5624.md) · [Android](raw/_short/sambert-android-sdk-8827dfd4fba2386d.md) · [iOS](raw/_short/sambert-ios-sdk-3a58fd71fde42af6.md) · [HarmonyOS](raw/_short/sambert-harmonyos-sdk-6ffde1be395ffb11.md) · [Flutter](raw/_short/realtime-websocket-flutter-sdk-sambert-d02804b097bac96d.md)
+
+Qwen-Audio-Realtime
+
+[Node.js](raw/_short/qwen-audio-realtime-nodejs-sdk-a2a0cc33ba0a85a8.md) · [C#](raw/_short/qwen-audio-realtime-csharp-sdk-7c78b8d6a3bc97a4.md) · [Android](raw/_short/android-sdk-for-qwen-audio-realtime-service-fbe978d80b5ee150.md) · [iOS](raw/_short/ios-sdk-for-qwen-audio-realtime-service-11c3579f6cded913.md) · [HarmonyOS](raw/_short/harmonyos-sdk-for-qwen-audio-realtime-service-c258297df757a167.md) · [Flutter](raw/_short/realtime-websocket-flutter-sdk-qwen-audio-realti-8fa612950516022e.md)
+
+Qwen-LiveTranslate-Realtime
+
+[Python](raw/_short/realtime-websocket-python-sdk-qwen-livetranslate-8af00207378f749b.md) · [Java](raw/_short/qwen-livetranslate-realtime-websocket-sdk-java-4fa3677627879b83.md) · [C#](raw/_short/qwen-livetranslate-csharp-sdk-7dc0bd18d993e44e.md) · [Flutter](raw/_short/realtime-websocket-flutter-sdk-qwen-livetranslat-ed4e5a3a77d23fdf.md)
+
+**C# 通用参考** [SDK简介](https://help.aliyun.com/zh/model-studio/csharp-sdk) · [接口与事件](https://help.aliyun.com/zh/model-studio/csharp-sdk-methods-and-events)
+
 ## 接入方式选择
 
 Realtime API 支持 WebSocket、WebRTC 和 AOQ（AI over QUIC）三种接入方式。可用方式及输入、输出能力以所选模型的接入文档为准。

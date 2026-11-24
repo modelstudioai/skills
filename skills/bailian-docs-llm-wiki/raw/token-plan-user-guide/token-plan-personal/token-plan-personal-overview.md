@@ -2,6 +2,8 @@
 
 Token Plan 个人版的套餐权益、账号权限、升级续费、退订和使用规则。
 
+**说明**Token Plan 个人版目前仅支持**华北2（北京）**地域。
+
 ## 套餐档位与定价
 
 **Lite 套餐**
@@ -76,7 +78,7 @@ Standard 全部权益
 
 **重要**
 
--   **qwen4-max-preview 预览权益**：当前为预览版，预览期为 2026 年 11 月 11 日 10:00 至 11 月 25 日 24:00（UTC+8），预览期间模型能力持续迭代升级，预览结束后下线；限时活动期间 Credits 消耗低至 2 折（相当于增加 5 倍用量），每晚 22:00 - 次日 08:00 再享 4 折（即原标准的 0.8 折）。
+-   **qwen4-max-preview 预览权益**：当前为预览版，预览期为 2026 年 11 月 11 日 10:00 至 11 月 25 日 10:00（UTC+8），预览期间模型能力持续迭代升级，预览结束后下线；限时活动期间 Credits 消耗低至 2 折（相当于增加 5 倍用量），每晚 22:00 - 次日 08:00 再享 4 折（即原标准的 0.8 折）。
 -   **限时夜间折扣**：每晚 22:00 - 次日 08:00 调用 qwen3.8-max、qwen3.8-flash 享 4 折，调用 deepseek-v4-pro-0813、deepseek-v4-flash-0731、deepseek-v4.1-flash、deepseek-v4.1-flash-1017 享 5 折。
 -   **decision-model-preview 限时免费**：调用不消耗 Credits。接入方法参见[接入决策模型](raw/token-plan-user-guide/token-plan-best-practice/token-plan-decision-model.md)。
 

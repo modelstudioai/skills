@@ -130,7 +130,7 @@ App Group 为可选配置。如需使用，主应用和 Broadcast Upload Extensi
     }
     ```
     
-3.  使用 Opus 编解码时，解压插件包，将 `libPluginOpus.so` 放到应用模块的对应架构目录。v1.4.1 的 HAR 包含 arm64 原生库，请使用 arm64 插件。
+3.  使用 Opus 编解码时，解压插件包，将 `libPluginOpus.so` 放到应用模块的对应架构目录。v1.4.2 的 HAR 包含 arm64 原生库，请使用 arm64 插件。
     
     ```
     libs/AoqClientSdk.har
@@ -221,6 +221,33 @@ Web SDK 独立维护版本号，不需要引入原生 SDK 的 Opus 插件。接�
 **更新日期**
 
 **更新说明**
+
+v1.4.2
+
+Android
+
+[AoqClientSdk-release.aar](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f91ce.aar)
+
+[libPluginOpus.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f939f.zip)
+
+2026-11-24
+
+1.  新增 TTS 播放前的 PCM 音频数据回调，应用可自行缓存音频并播放。
+2.  修复已知的稳定性问题。
+
+iOS
+
+[AoqClientSdk.framework.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f91cd.zip)
+
+[AoqScreenShare.framework.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f91c3.zip)
+
+[PluginOpus.framework.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f939d.zip)
+
+HarmonyOS
+
+[AoqClientSdk.har](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f91c1.har)
+
+[libPluginOpus.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9393.zip)
 
 v1.4.1
 

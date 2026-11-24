@@ -2,9 +2,9 @@
 
 数据集（原数据连接）是阿里云百炼 RAG 管理外部数据源的统一入口。通过创建数据集，应用可以安全地访问企业数据库、文档系统和对象存储中的数据，在对话中实时查询和引用这些数据。
 
-**说明**本页介绍的是 RAG 数据集（原数据连接）。面向智能体（Agent）场景的新版 [Connector](raw/application-user-guide/agent-context/overview.md) 已上线，可连接的系统更多，并支持通过 MCP 供智能体调用。旧版数据连接需在 **2026 年 9 月 30 日**前完成[数据连接迁移](raw/application-user-guide/agent-context/overview/reference-overview/migration.md)。
+**说明**本页介绍的是 Knowledge（原RAG） 数据集（原数据连接）。面向智能体（Agent）场景的新版 [Connector](raw/application-user-guide/agent-context/overview.md) 已上线，可连接的系统更多，并支持通过 MCP 供智能体调用。旧版数据连接需在 **2026 年 9 月 30 日**前完成[数据连接迁移](raw/application-user-guide/agent-context/overview/reference-overview/migration.md)。
 
-数据集是 RAG 管理外部数据源的统一入口。创建数据集时按数据来源选择数据集类型，应用即可安全地访问企业数据库、文档系统和对象存储中的数据，在对话中实时查询和引用。
+数据集是 Knowledge（原RAG） 管理外部数据源的统一入口。创建数据集时按数据来源选择数据集类型，应用即可安全地访问企业数据库、文档系统和对象存储中的数据，在对话中实时查询和引用。
 
 ### 数据集类型
 

@@ -927,7 +927,7 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 1.  **检查** `voice` **参数赋值**：
     
-    -   如果使用的是默认音色，请对照[Python SDK](https://help.aliyun.com/zh/model-studio/cosyvoice-python-sdk)中的“voice参数”进行确认。
+    -   如果使用的是默认音色，请对照[Python SDK](raw/_short/cosyvoice-websocket-sdk-python-47e109e34183e539.md)中的“voice参数”进行确认。
     -   如果使用的是声音复刻音色，请通过[CosyVoice声音复刻/设计API](https://help.aliyun.com/zh/model-studio/cosyvoice-clone-design-api)接口确认音色状态为“OK”，并确保音色归属账号与调用账号一致。
 2.  **检查版本匹配**：v2模型只能使用v2的音色，v1模型只能使用v1的音色，两者不可混用。
     

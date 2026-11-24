@@ -1,8 +1,8 @@
-# RAG 简介
+# Knowledge 简介（原RAG 简介）
 
 阿里云百炼 RAG 是企业级知识库与检索服务：上传文档后，平台自动完成解析、切片、向量化与索引，并通过 API 提供知识检索与流式问答，连接你的私有知识与前沿大模型。
 
-阿里云百炼 RAG 提供从数据接入到知识服务的一体化能力：文档上传后自动完成解析、切片、向量化与索引，再通过控制台或 API 提供多路召回检索与基于大模型的流式问答。
+阿里云百炼 Knowledge（原RAG） 提供从数据接入到知识服务的一体化能力：文档上传后自动完成解析、切片、向量化与索引，再通过控制台或 API 提供多路召回检索与基于大模型的流式问答。
 
 ## 快速入口
 
@@ -14,4 +14,4 @@
 -   [知识检索](raw/application-user-guide/agent-context/knowledge-base/service/rag-knowledge-retrieval.md)：多路召回与 Agentic 多轮检索。
 -   [知识问答](raw/application-user-guide/agent-context/knowledge-base/service/rag-knowledge-qa.md)：基于大模型的流式 RAG 问答。
 -   [应用集成](raw/application-user-guide/agent-context/knowledge-base/integration/channels.md)：API、MCP、CLI 与 Skill 多种集成方式。
--   [RAG API 参考](raw/application-api-reference/rag-api/rag-api-overview.md)：知识库、文档、切片、检索与问答等接口。
+-   [Knowledge API（原RAG API） 参考](raw/application-api-reference/rag-api/rag-api-overview.md)：知识库、文档、切片、检索与问答等接口。

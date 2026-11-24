@@ -1,70 +1,61 @@
 # token plan best practice
 
-Token Plan 提供了多种 AIGC 能力的标准化接入方式，涵盖决策模型、多模态生成（图像/视频）、语音处理（合成/识别）及实时语音对话。本文档面向开发者，总结各能力的通用接入模式、关键参数、使用约束与最佳实践，帮助你高效、稳定地集成 Token Plan 服务。
+[Token](../concepts/token.md) Plan 提供了文本生成之外的多模态能力（图像、视频、语音、决策等），但这些能力不兼容标准的 OpenAI/Anthropic 文本协议，需通过 Slash Command、Skill 或 Agent 显式调用原生接口。本文档汇总各能力的接入方式、关键参数、使用约束与最佳实践，帮助开发者快速、安全、高效地集成。
 
 ## 支持的模型/功能
 
-Token Plan 当前支持以下核心能力，均通过统一 API 基础设施提供，但调用协议和行为模式各异：
+[Token](../concepts/token.md) Plan 当前支持以下核心多模态能力，均需独立接入：
 
-- **决策模型**：`decision-model-preview`，专用于结构化判断（如内容审核、工单分类），同步返回 `choice`、`probabilities` 和 `confidence`，不生成自然语言文本，显著降低 token 开销 [接入决策模型](../../raw/token-plan-user-guide/token-plan-best-practice/token-plan-decision-model.md)。  
-- **图像生成**：包括 `qwen-image-3.0-pro`、`wan2.7-image-pro` 等，支持文生图与图生图，同步返回图片 URL [接入图像生成模型](../../raw/token-plan-user-guide/token-plan-best-practice/token-plan-image-generation.md)。  
-- **视频生成**：包括 `happyhorse-1.1-t2v`（文生视频）、`happyhorse-1.1-i2v`（图生视频）等，采用异步任务模式，需轮询 `GET /api/v1/tasks/{task_id}` 获取结果 [接入视频生成模型](../../raw/token-plan-user-guide/token-plan-best-practice/token-plan-video-generation.md)。  
-- **语音识别（ASR）**：`qwen-audio-3.0-asr-flash`，支持非实时音频转写，输入可为公网 URL 或 Base64 Data URI [接入语音识别模型](../../raw/token-plan-user-guide/token-plan-best-practice/token-plan-speech-recognition.md)。  
-- **语音合成（TTS）**：`qwen-audio-3.0-tts-plus`，将文本转为音频流，返回带过期时间的 `output.audio.url` [接入语音合成模型](../../raw/token-plan-user-guide/token-plan-best-practice/token-plan-speech-synthesis.md)。  
-- **实时语音对话**：`qwen-audio-3.0-realtime-plus`，基于 WebSocket 协议，支持双向音频流与实时转录，需本地运行客户端脚本 [接入实时语音对话模型](../../raw/token-plan-user-guide/token-plan-best-practice/token-plan-realtime-voice.md)。  
-- **视觉理解**：原生支持模型（如 `qwen3.8-max`、`qwen3.7-plus`）可直接处理图片；纯文本模型（如 `glm-5.2`）可通过 Skill/Agent 代理调用视觉模型实现扩展能力 [添加视觉理解能力](../../raw/token-plan-user-guide/token-plan-best-practice/add-vision-skill.md)。
+- **决策模型**：`decision-model-preview`，专用于结构化判定（如评论审核、工单分类），通过 `/compatible-mode/v1/systemone` 接口同步返回 `choice`、`probabilities` 和 `confidence`，[接入决策模型](../../raw/token-plan-user-guide/token-plan-best-practice/token-plan-decision-model.md) 详细说明其并行多问题处理与置信度分流机制。
+- **图像生成**：支持 `qwen-image-3.0-pro`、`wan2.7-image-pro` 等模型，通过 `/api/v1/services/aigc/multimodal-generation/generation` 同步生成图片，[接入图像生成模型](../../raw/token-plan-user-guide/token-plan-best-practice/token-plan-image-generation.md) 提供了完整的 Slash Command 示例与尺寸参数说明。
+- **视频生成**：支持 `happyhorse-1.1-t2v`（文生视频）等模型，采用异步任务模式，需先提交再轮询 `GET /api/v1/tasks/{task_id}` 获取 `video_url`，[接入视频生成模型](../../raw/token-plan-user-guide/token-plan-best-practice/token-plan-video-generation.md) 给出了带重试逻辑的 Python 轮询脚本。
+- **语音合成（TTS）**：`qwen-audio-3.0-tts-plus`，同步返回音频 URL；**语音识别（ASR）**：`qwen-audio-3.0-asr-flash`，同样复用 `/multimodal-generation/generation` 接口但输入为 `input_audio`，二者均需注意音色/格式匹配与 Base64 编码规范。
+- **实时语音对话**：`qwen-audio-3.0-realtime-plus`，基于 WebSocket 连接，需客户端管理音频流与会话状态，[接入实时语音对话模型](../../raw/token-plan-user-guide/token-plan-best-practice/token-plan-realtime-voice.md) 提供了完整可运行的 Python 客户端脚本。
+- **视觉理解**：非独立模型，而是通过切换 `qwen3.8-max` 等原生支持视觉的模型，或为 `glm-5.2` 等纯文本模型配置 Skill/Agent 代理调用视觉模型实现，详见 [添加视觉理解能力](../../raw/token-plan-user-guide/token-plan-best-practice/add-vision-skill.md)。
 
-> **注意**：文档 2 和文档 3 中关于模型支持范围的描述存在不一致——文档 2 称 `qwen-image-2.0-pro` 和 `qwen-image-2.0` 为“团队版专属”，而文档 3 未明确限定其可用版本；实际以控制台[个人版](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview#tppo-h-models)和[团队版](https://help.aliyun.com/zh/model-studio/token-plan-team-overview#tpto-h-models)模型列表为准，建议在控制台确认当前订阅版本所含模型。
+> **注意**：文档 1 与文档 8 均列出语音识别接口为 `/api/v1/services/aigc/multimodal-generation/generation`，但文档 1 错误地将该接口同时标注为“语音识别”和“图像生成”共用入口；实际中二者虽共享同一 Endpoint，但请求体结构（`input.messages[].content[]` 内容类型）和 `model` 参数完全不同，不可混用。请以文档 8 的 ASR 请求体结构为准。
 
 ## 关键参数
 
-所有能力均依赖统一的认证机制和基础参数，但具体字段因能力而异：
+所有能力均需 `Authorization: Bearer $ANTHROPIC_AUTH_TOKEN`（或 `TOKEN_PLAN_API_KEY`）鉴权。核心参数按能力归类如下：
 
-- **认证**：全部接口使用 `Authorization: Bearer $ANTHROPIC_AUTH_TOKEN`（或 `TOKEN_PLAN_API_KEY`），API Key 必须为 `sk-sp-` 开头的 Token Plan 套餐密钥。  
-- **模型标识**：`model` 字段为必填，值必须严格匹配文档中列出的模型 ID（如 `decision-model-preview`、`qwen-image-3.0-pro`），拼写错误将导致 `404` 或 `422` 错误。  
-- **输入格式**：
-  - 决策模型：通过 `state`（结构化上下文）和 `questions`（类型化问题）传入，`questions` 中每个 key 对应一个独立判定项。
-  - 多模态生成（图像/视频/ASR/TTS）：统一使用 `input` 字段嵌套内容，如 `input.messages[0].content[0].text`（图像）、`input.messages[0].content[0].input_audio.data`（ASR）、`input.text`（TTS）。
-  - 实时语音：通过 WebSocket 发送 JSON event，如 `input_audio_buffer.append` 或 `session.update`。
-- **输出控制**：
-  - `confidence`（决策模型）：0–1 浮点数，用于分流策略（如 `>= 0.9` 自动执行，`< 0.9` 转人工）。
-  - `parameters`（图像/视频）：控制分辨率（`size`/`resolution`）、宽高比（`ratio`）、时长（`duration`）、采样率（`sample_rate`）等，不指定则取默认值。
-  - `output.audio.url`（TTS/ASR）和 `output.video_url`（视频）均为临时链接，需及时下载。
+- **通用必填**：`model`（模型 ID，严格区分大小写与版本号，如 `qwen-image-3.0-pro`、`decision-model-preview`）。
+- **图像生成**：`input.messages[0].content[0].text`（prompt）、`parameters.size`（如 `1024*1024`）。
+- **决策模型**：`state`（待判定数据）、`questions`（结构化问题定义，含 `type`、`instructions`、`criteria`），`criteria` 边界描述比 prompt 工程更可靠。
+- **视频生成**：`input.prompt`、`parameters.resolution`（`720P`/`1080P`）、`parameters.ratio`（`16:9`）、`parameters.duration`（3–15 秒）；提交时必须携带 `X-DashScope-Async: enable` 头。
+- **语音合成**：`input.text`、`input.voice`（音色名，如 `longanhuan_v3.6`，需与模型匹配）、`input.format`（`mp3`/`wav`）。
+- **语音识别**：`input.messages[0].content[0].input_audio.data`（URL 或 `data:audio/{format};base64,...`）、`parameters.format`（必填，如 `wav`）。
+- **实时语音对话**：WebSocket URL 中 `?model=qwen-audio-3.0-realtime-plus`，会话初始化 `session.update` 中 `modalities`、`voice`、`turn_detection` 等字段决定交互行为。
 
 ## 使用方式
 
-所有能力均通过 Agent 工具的扩展机制（Slash Command / Skill / Agent）调用，通用流程如下：
-
-1. **配置密钥**：将 `sk-sp-xxx` API Key 设置为环境变量 `$ANTHROPIC_AUTH_TOKEN`（或 `$TOKEN_PLAN_API_KEY`），**严禁硬编码到配置文件或日志中**。  
-2. **创建扩展**：按工具类型将对应能力的配置内容保存至标准路径（如 Claude Code → `.claude/commands/<name>.md`；OpenCode → `.opencode/agents/<name>.md`）。完整路径映射见 [接入概览](../../raw/token-plan-user-guide/token-plan-best-practice/token-plan-integration-overview.md)。  
-3. **触发执行**：在工具中输入对应指令（如 `/text-to-image 一只猫`、`/review-comments comments.txt`），工具自动解析参数、构造请求并处理响应。  
-4. **结果消费**：
-   - 同步能力（决策、图像、ASR、TTS）：直接解析 JSON 响应体，提取 `answers.c1.choice`、`output.choices[0].message.content[0].image`、`output.text`、`output.audio.url` 等字段。
-   - 异步能力（视频）：提交后获取 `task_id`，轮询 `GET /api/v1/tasks/{task_id}` 直至 `task_status == "SUCCEEDED"`，再提取 `output.video_url`。
-   - 实时能力（语音）：运行独立 Python 客户端，由本地 `sounddevice` 采集/播放音频，WebSocket 透传至服务端。
+1. **API Key 管理**：始终将 `sk-sp-xxx` Key 配置为环境变量（`ANTHROPIC_AUTH_TOKEN` 或 `TOKEN_PLAN_API_KEY`），**禁止硬编码、写入配置文件或日志**（见 [接入概览](../../raw/token-plan-user-guide/token-plan-best-practice/token-plan-integration-overview.md)）。
+2. **工具扩展配置**：
+   - **Slash Command**（Claude Code）：在项目根目录创建 `.claude/commands/<name>.md`，内容为带步骤的 Markdown + 内联代码块（Bash/Python）。
+   - **Skill**（Codex/Qwen Code/OpenClaw）：在 `~/.<tool>/skills/<name>/SKILL.md` 中定义 YAML front matter（含 `name`、`description`）和执行逻辑。
+   - **Agent**（OpenCode）：在 `.opencode/agents/<name>.md` 中定义 YAML front matter（含 `mode: subagent`、`model`）和指令。
+3. **异步任务处理**：视频生成必须轮询 `GET /api/v1/tasks/{task_id}`，建议设置合理间隔（如 10 秒）与超时（`task_id` 有效期 24 小时），并处理 `FAILED`/`CANCELED` 状态。
+4. **结果消费**：所有能力返回的媒体 URL（`image`、`video_url`、`audio.url`）均有短时效性，**必须立即下载并持久化**，不可缓存 URL 长期使用。
 
 ## 限制和注意事项
 
-- **计费与用量**：各能力 Credits 消耗不同（视频 > 图像 > 语音 > 决策），实际用量以控制台[用量统计](https://bailian.console.aliyun.com/cn-beijing/subscription/token-plan/personal)为准，不依赖请求次数而取决于输出规模（如图片数量、视频秒数、字符数、音频时长）。  
-- **URL 时效性**：所有生成资源（图片、视频、音频）的 `url` 字段均有时效限制，必须在返回后立即下载，不可缓存长期使用。  
-- **输入约束**：
-  - 视频生成：单次任务时长 3–15 秒，分辨率与模型强绑定（如 `happyhorse-1.1-t2v` 不支持 `4K`）。
-  - 语音识别：音频时长 ≤ 5 分钟，格式需符合 [音频规格](https://help.aliyun.com/zh/model-studio/asr-model#asr_audio_spec02)。
-  - 实时语音：需本地麦克风/扬声器权限，外放易引发回声打断，**强烈建议使用耳机**。  
-- **安全与稳定性**：
-  - 请求失败需按状态码处理：`401`（密钥无效）、`422`（参数校验失败，响应体含具体错误字段）、`429`/`529`（限流，需指数退避重试）。
-  - 高风险动作（如账号封禁、资金操作）**不得仅依赖模型 `choice` 自动执行**，必须保留人工复核环节。
-  - 视觉模型需显式声明 `modalities.input = ["text", "image"]`（如 OpenCode、OpenClaw 配置），否则即使模型支持也无法启用视觉能力 [添加视觉理解能力](../../raw/token-plan-user-guide/token-plan-best-practice/add-vision-skill.md)。
+- **模型可用性**：`decision-model-preview` 仅限 [Token](../concepts/token.md) Plan 个人版（见 [接入决策模型](../../raw/token-plan-user-guide/token-plan-best-practice/token-plan-decision-model.md)）；部分图像/视频模型（如 `qwen-image-2.0-pro`）为团队版专属，需核对 [个人版](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview#tppo-h-models) 与 [团队版](https://help.aliyun.com/zh/model-studio/token-plan-team-overview#tpto-h-models) 模型列表。
+- **计费与用量**：各能力计费单位不同（图片张数、视频秒数、TTS 字符数、ASR 音频秒数、决策调用次数），**实际消耗以控制台 [用量统计](https://bailian.console.aliyun.com/cn-beijing/subscription/token-plan/personal) 为准**，非凭请求参数估算。
+- **安全红线**：API Key 严禁泄露；生成结果 URL 有时效；高风险操作（如账号封禁）必须保留人工复核环节（见 [接入决策模型](../../raw/token-plan-user-guide/token-plan-best-practice/token-plan-decision-model.md) 注意事项）。
+- **技术约束**：
+  - OpenCode 使用视觉模型需在配置文件中显式声明 `"input": ["text", "image"]`（见 [添加视觉理解能力](../../raw/token-plan-user-guide/token-plan-best-practice/add-vision-skill.md)）。
+  - 实时语音对话外放易导致自激打断，**必须使用耳机**（见 [接入实时语音对话模型](../../raw/token-plan-user-guide/token-plan-best-practice/token-plan-realtime-voice.md)）。
+  - ASR 单次音频时长上限为 5 分钟，格式需符合 [音频规格](https://help.aliyun.com/zh/model-studio/asr-model#asr_audio_spec02)。
 
 ## 来源文档
 
+- [接入概览](../../raw/token-plan-user-guide/token-plan-best-practice/token-plan-integration-overview.md)
+- [接入图像生成模型](../../raw/token-plan-user-guide/token-plan-best-practice/token-plan-image-generation.md)
 - [接入决策模型](../../raw/token-plan-user-guide/token-plan-best-practice/token-plan-decision-model.md)
 - [接入视频生成模型](../../raw/token-plan-user-guide/token-plan-best-practice/token-plan-video-generation.md)
-- [接入图像生成模型](../../raw/token-plan-user-guide/token-plan-best-practice/token-plan-image-generation.md)
-- [接入概览](../../raw/token-plan-user-guide/token-plan-best-practice/token-plan-integration-overview.md)
-- [接入语音识别模型](../../raw/token-plan-user-guide/token-plan-best-practice/token-plan-speech-recognition.md)
-- [添加视觉理解能力](../../raw/token-plan-user-guide/token-plan-best-practice/add-vision-skill.md)
 - [接入语音合成模型](../../raw/token-plan-user-guide/token-plan-best-practice/token-plan-speech-synthesis.md)
+- [添加视觉理解能力](../../raw/token-plan-user-guide/token-plan-best-practice/add-vision-skill.md)
 - [接入实时语音对话模型](../../raw/token-plan-user-guide/token-plan-best-practice/token-plan-realtime-voice.md)
+- [接入语音识别模型](../../raw/token-plan-user-guide/token-plan-best-practice/token-plan-speech-recognition.md)
 
 

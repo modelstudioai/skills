@@ -5,3 +5,4 @@
 -   [更新知识库](raw/application-api-reference/rag-api/rag-api-knowledge-base/rag-api-update-index.md)
 -   [删除知识库](raw/application-api-reference/rag-api/rag-api-knowledge-base/rag-api-delete-index.md)
 -   [获取监控数据](raw/application-api-reference/rag-api/rag-api-knowledge-base/rag-api-get-index-monitor.md)
+-   [Wiki API](raw/application-api-reference/rag-api/rag-api-knowledge-base/rag-api-wiki.md)

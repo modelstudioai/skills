@@ -228,7 +228,7 @@ String
 
 `ptu_default` 支持预付费；`ptu_fast` 支持预付费和后付费。新增容量实例沿用专属模型 code 的性能档位。
 
-`ptu_default` 标准模式支持按天与 8 小时时段两种付费周期：按天对应 `pricing_cycle=Day`，8 小时时段对应 `pricing_cycle=Hour` 且 `duration=8`。8 小时时段仅 `ptu_default` 标准模式支持，`ptu_fast` 高速不支持。8 小时服务时段须完整落在每日 22:00–08:00 的售卖时段内，因此仅每日 22:00–次日 00:00 可下单（计费规则见[吞吐预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-8h-h2)）。8 小时时段支持经本接口新建（传 `pricing_cycle=Hour` 且 `duration=8`）或经[叠加购买容量实例](#instance-create)追加到已有预留。
+`ptu_default` 标准模式支持按天与 8 小时时段两种付费周期：按天对应 `pricing_cycle=Day`，8 小时时段对应 `pricing_cycle=Hour` 且 `duration=8`。8 小时时段仅 `ptu_default` 标准模式支持，`ptu_fast` 高速不支持。8 小时服务时段须完整落在每日 22:00–08:00 的售卖时段内，因此仅当日 22:00–次日 00:00 可下单（计费规则见[吞吐预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-8h-h2)）。8 小时时段支持经本接口新建（传 `pricing_cycle=Hour` 且 `duration=8`）或经[叠加购买容量实例](#instance-create)追加到已有预留。
 
 按天预付费示例：
 
@@ -795,7 +795,7 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/deployments/{deployed_model}
 }'
 ```
 
-8 小时服务时段须完整落在每日 22:00–08:00 的售卖时段内，因此仅每日 22:00–次日 00:00 可下单（计费规则见[吞吐预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-8h-h2)）。
+8 小时服务时段须完整落在每日 22:00–08:00 的售卖时段内，因此仅当日 22:00–次日 00:00 可下单（计费规则见[吞吐预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-8h-h2)）。
 
 8 小时时段实例创建成功后，通过 [查询容量实例详情](#instance-detail) 可获取以下字段：`pricing_cycle` 为 `Hour`；`gmt_effective` 为北京时间整点生效时间；`gmt_expired` 与 `gmt_effective` 相差 8 小时；`can_scale`、`can_renew`、`can_enable_auto_renew`、`can_disable_auto_renew`、`can_delete` 均为 `false`。
 

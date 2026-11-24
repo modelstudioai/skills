@@ -133,7 +133,7 @@ curl -X POST https://{workspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/indices/r
 
 ## MCP Server
 
-MCP（Model Context Protocol）是一种开放协议，让 AI 编码助手和 Agent 框架直接调用外部工具。接入 RAG MCP Server 后，你的 AI 助手可以在对话中检索知识库内容。
+MCP（Model Context Protocol）是一种开放协议，让 AI 编码助手和 Agent 框架直接调用外部工具。接入 Knowledge（原RAG） MCP Server 后，你的 AI 助手可以在对话中检索知识库内容。
 
 ### 前置条件
 

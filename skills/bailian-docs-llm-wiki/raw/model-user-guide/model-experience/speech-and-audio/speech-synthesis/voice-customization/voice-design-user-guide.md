@@ -69,7 +69,7 @@ with open("output.wav", "wb") as f:
 
 运行示例后，`preview.wav` 为预览音频，`output.wav` 为合成音频。保存打印的音色 ID，后续可使用该 ID 调用语音合成。
 
-HTTP 请求示例、可选参数和返回字段请参见[音色设计 API 参考](raw/model-api-reference/voice-customization-api-directory/voice-design-api-references.md)；合成参数请参见 [Qwen-Audio-TTS Python SDK](https://help.aliyun.com/zh/model-studio/realtime-websocket-python-sdk-qwen-audio-tts-cosyvoice#model-qwen-audio-tts-h3-cv-params)。
+HTTP 请求示例、可选参数和返回字段请参见[音色设计 API 参考](raw/model-api-reference/voice-customization-api-directory/voice-design-api-references.md)；合成参数请参见 [Qwen-Audio-TTS Python SDK](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-websocket-sdk-python#model-qwen-audio-tts-h3-cv-params)。
 
 ## 声音描述指南
 

@@ -20,12 +20,12 @@ WebSocket 接口使用 `wss://` 协议，地址如下：
 
 ## 可用的 SDK
 
--   [Python SDK](https://help.aliyun.com/zh/model-studio/realtime-websocket-python-sdk-qwen-audio-tts-cosyvoice#model-qwen-audio-tts)
--   [Java SDK](https://help.aliyun.com/zh/model-studio/realtime-websocket-java-sdk-qwen-audio-tts-cosyvoice#model-qwen-audio-tts)
+-   [Python SDK](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-websocket-sdk-python#model-qwen-audio-tts)
+-   [Java SDK](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-websocket-sdk-java#model-qwen-audio-tts)
 -   [Node.js SDK](raw/_short/qwen-audio-tts-nodejs-sdk-e49b9390f1cc4802.md)
--   [Android SDK](https://help.aliyun.com/zh/model-studio/realtime-websocket-android-sdk-qwen-audio-tts-cosyvoice#model-qwen-audio-tts)
--   [iOS SDK](https://help.aliyun.com/zh/model-studio/realtime-websocket-ios-sdk-qwen-audio-tts-cosyvoice#model-qwen-audio-tts)
--   [HarmonyOS SDK](https://help.aliyun.com/zh/model-studio/realtime-websocket-harmonyos-sdk-qwen-audio-tts-cosyvoice#model-qwen-audio-tts)
+-   [Android SDK](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-websocket-sdk-android#model-qwen-audio-tts)
+-   [iOS SDK](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-websocket-sdk-ios#model-qwen-audio-tts)
+-   [HarmonyOS SDK](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-websocket-sdk-harmonyos#model-qwen-audio-tts)
 
 **重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
 
@@ -126,7 +126,7 @@ WebSocket 接口使用 `wss://` 协议，地址如下：
 
 #### Java
 
-建议使用 Java DashScope SDK 进行开发，请参见[Qwen-Audio-TTS Java SDK](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-java-sdk)。
+建议使用 Java DashScope SDK 进行开发，请参见[Qwen-Audio-TTS Java SDK](raw/_short/qwen-audio-tts-websocket-sdk-java-ec88c8d98488df37.md)。
 
 以下是 Java WebSocket 直连示例，运行前请导入以下依赖：
 
@@ -315,7 +315,7 @@ public class TTSWebSocketClient extends WebSocketClient {
 
 #### Python
 
-建议使用 Python DashScope SDK 进行开发，请参见[Qwen-Audio-TTS Python SDK](https://help.aliyun.com/zh/model-studio/realtime-websocket-python-sdk-qwen-audio-tts-cosyvoice#model-qwen-audio-tts)。
+建议使用 Python DashScope SDK 进行开发，请参见[Qwen-Audio-TTS Python SDK](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-websocket-sdk-python#model-qwen-audio-tts)。
 
 以下是 Python WebSocket 直连示例，运行前请导入以下依赖：
 

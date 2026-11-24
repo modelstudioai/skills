@@ -11,6 +11,8 @@ Skill 是可添加到智能体应用的能力包，用于让智能体在对话�
 -   **官方 Skill**：平台预置的通用 Skill，覆盖常见文件处理场景。无需配置，添加后即可使用。
 -   **自定义 Skill**：通过上传 ZIP 技能包创建。适用于官方 Skill 未覆盖的业务场景，如特定行业的数据处理、自定义文件格式解析等。
 
+也可在终端用阿里云百炼 CLI 安装、查看、更新与移除本地 Skill。详见[使用 CLI](raw/cli/capabilities/agent-infrastructure/mcp-skill.md)。
+
 ## 官方 Skill
 
 阿里云百炼提供多个官方 Skill，覆盖常见的文件处理场景。官方 Skill 由平台统一维护，无需配置，添加后即可使用。
@@ -96,7 +98,7 @@ description: "Use this skill any time a spreadsheet file is the primary input or
 
 ### 上传并创建
 
-1.  在控制台左侧导航栏，选择**组件Skill 管理**。
+1.  在控制台左侧导航栏，选择**Skill 管理**。
 2.  点击右上角**自定义 Skill**按钮。
 3.  在弹窗中，点击上传区域选择 ZIP 文件，或直接将文件拖拽到上传区域。
 4.  点击**确认**提交。
@@ -120,7 +122,7 @@ description: "Use this skill any time a spreadsheet file is the primary input or
 
 ### 方式一：从 Skill 详情页添加
 
-1.  在控制台左侧导航栏，选择**组件Skill 管理**，点击目标 Skill 卡片进入详情页。
+1.  在控制台左侧导航栏，选择**Skill 管理**，点击目标 Skill 卡片进入详情页。
 2.  点击右上角**添加到智能体**。
 3.  在弹出的应用列表中选择目标应用，确认添加。
 
@@ -132,7 +134,7 @@ description: "Use this skill any time a spreadsheet file is the primary input or
 
 ## 查看 Skill 详情
 
-1.  在控制台左侧导航栏，选择**组件Skill 管理**。
+1.  在控制台左侧导航栏，选择**Skill 管理**。
 2.  在**官方 Skill** 或**自定义 Skill** 标签页中，点击目标 Skill 卡片进入详情页。
 
 详情页包含两个标签：
@@ -149,3 +151,13 @@ description: "Use this skill any time a spreadsheet file is the primary input or
 例如，在对话窗格中发送：`帮我创建一个包含本月销售数据的表格，按地区分列统计`
 
 智能体将调用 xlsx Skill，生成包含分列统计的 .xlsx 文件并提供下载。
+
+## 常见问题
+
+Skill 管理是否收费？
+
+上传、存储和管理 Skill 不产生独立计费项。智能体调用 Skill 时，按实际发生的会话运行时费、模型调用费和工具及 MCP 调用费计费。
+
+是否支持将自定义 Skill 共享给其他阿里云账号？
+
+自定义 Skill 仅在当前阿里云账号的当前业务空间内可见，暂不支持公开发布或跨账号共享。如需在其他阿里云账号使用，可通过[下载 Skill 包](raw/application-api-reference/managed-agents-api/skills-api/skill-version-download.md)接口导出 ZIP 文件，由其他阿里云账号上传创建。

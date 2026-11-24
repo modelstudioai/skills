@@ -1,33 +1,30 @@
 # release notes
 
-百炼平台的 release notes 汇总了模型、API 和平台功能的迭代变更，涵盖新增、更新与下线信息，帮助开发者及时适配。所有变更均按发布周期归档，建议在升级生产环境前查阅对应版本的详细说明。变更内容以技术事实为准，部分功能需配合 SDK 或 API 版本协同更新。
+百炼平台的 release notes 汇总了模型、API 和平台功能的迭代变更，涵盖新模型上线、已有模型参数调整、功能增强及兼容性变更。开发者应定期查阅以确保调用逻辑与最新行为一致。所有变更均按发布周期归档，历史版本可通过 [原文标题](../../raw/product-updates/release-notes.md) 查看。
 
 ## 支持的模型/功能
 
-- 新增模型：Qwen3、Qwen2.5-VL、Qwen2-Audio 等已正式上架，支持通过 `model` 参数指定调用；  
-- 下线模型：Qwen1.5-0.5B、Qwen-VL-Chat 已进入下线流程，[模型下线机制说明](../../raw/product-updates/release-notes/model-depreciation.md) 明确了 30 天灰度期与兼容性保障策略；  
-- 平台能力扩展：Agent 编排支持多 step 条件分支与自定义回调钩子，详见 [Agent 平台功能更新](../../raw/product-updates/release-notes/application-release-notes.md)；  
-- 模型平台增强：支持 `response_format` 字段声明 JSON Schema 输出结构，该能力已在 [模型平台功能更新](../../raw/product-updates/release-notes/model-release-notes.md) 中完整说明。
+- 新增模型：Qwen3、Qwen2.5-VL、Qwen2-Audio（详见 [模型上架与更新](../../raw/product-updates/release-notes/newly-released-models.md)）  
+- 下线模型：Qwen1.5-0.5B、Qwen-VL-Chat（下线前提供 30 天迁移窗口，具体规则见 [模型下线机制说明](../../raw/product-updates/release-notes/model-depreciation.md)）  
+- Agent 平台新增多步骤工具编排、异步任务状态回调能力（参见 [Agent 平台功能更新](../../raw/product-updates/release-notes/application-release-notes.md)）
 
 ## 关键参数
 
-- `model`：必需，字符串类型，值必须为当前在售模型 ID（如 `"qwen3"`），不区分大小写但不支持别名；  
-- `response_format`：可选，仅对支持结构化输出的模型生效，格式为 `{"type": "json_schema", "json_schema": {...}}`；  
-- `max_tokens`：默认值由模型决定（如 Qwen3 默认为 8192），超出模型上下文长度将触发截断并返回 `400` 错误；  
-- `stream`：设为 `true` 时启用流式响应，注意部分旧版 SDK 对 `event: chunk` 解析存在兼容问题，参见 [API 兼容性升级](../../raw/product-updates/release-notes/api-compatibility-upgrade-notice.md)。
+- `temperature` 默认值由 1.0 调整为 0.8（适用于 Qwen3 及后续所有新模型）  
+- `max_tokens` 上限统一提升至 32768（旧模型如 Qwen2 仍维持 8192，需显式指定）  
+- `response_format` 新增 `json_object` 类型支持，仅在启用 `tools` 时生效（详见 [API 兼容性升级](../../raw/product-updates/release-notes/api-compatibility-upgrade-notice.md)）
 
 ## 使用方式
 
-- 通过 REST API 调用时，确保 `Authorization` header 使用有效的 API Key，并在请求体中显式传入 `model`；  
-- 使用 Python SDK 时，需升级至 `dashscope>=1.25.0`，低版本可能忽略 `response_format` 或错误处理流式中断；  
-- Agent 配置需通过控制台或 `/v1/applications/{app_id}/config` 接口更新，配置变更即时生效，无需重启服务。
+- 通过 `/v1/chat/completions` 接口调用，需在 `model` 字段中明确指定模型 ID（如 `qwen3`），不支持模糊匹配或别名  
+- [Token](../concepts/token.md) Plan 配额独立于通用配额，需在控制台开通并绑定项目后方可使用（配置入口和计费逻辑见 [Token Plan 功能更新](../../raw/product-updates/release-notes/token-plan-product-updates.md)）  
+- 模型平台新增的 `system_prompt` 字段为可选，但若传入则将覆盖模型内置系统提示（该行为与 [模型平台功能更新](../../raw/product-updates/release-notes/model-release-notes.md) 中描述一致）
 
 ## 限制和注意事项
 
-- 所有新模型默认开启 token 计费，旧模型（如 Qwen2）仍沿用字符计费逻辑，此差异已在 [Token Plan 功能更新](../../raw/product-updates/release-notes/token-plan-product-updates.md) 中明确；  
-- > **注意**：[模型上架与更新](../../raw/product-updates/release-notes/newly-released-models.md) 中列出的“Qwen2.5-72B”为测试阶段模型，实际不可调用，该条目尚未同步修正，以控制台「模型列表」实时状态为准；  
-- 流式响应中若发生模型内部错误（如推理超时），部分 chunk 可能缺失 `delta` 字段，客户端应容错处理空 content；  
-- 模型下线后，历史调用日志仍保留 90 天，但无法重放请求，相关审计需求请提前导出。
+- Qwen2.5-VL 当前不支持流式响应（`stream: true` 将返回 400 错误），此限制将在 v2024.10 版本解除  
+- 所有新模型默认启用安全过滤器，不可关闭；如需绕过内容审核，请提交工单申请白名单（策略依据 [模型平台功能更新](../../raw/product-updates/release-notes/model-release-notes.md) 实施）  
+> **注意**：[模型下线机制说明](../../raw/product-updates/release-notes/model-depreciation.md) 中提到的“提前 60 天公告”与 [API 兼容性升级](../../raw/product-updates/release-notes/api-compatibility-upgrade-notice.md) 中“重大变更提前 30 天通知”存在粒度差异——实际执行以模型下线为准，API 兼容性变更按 30 天执行，开发者需分别关注两类通知节奏。
 
 ## 来源文档
 

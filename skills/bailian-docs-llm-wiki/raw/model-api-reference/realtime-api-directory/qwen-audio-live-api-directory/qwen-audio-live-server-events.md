@@ -775,7 +775,7 @@ JSON 字符串形式的函数参数。
 
 ## session.instructions.appended
 
-服务已受理追问内容。对于请求 `session.instruction.append`，可用关联字段匹配回执。
+服务已受理客户端通过 `session.instruction.append` 提交的追问。请求名用 `instruction`，回执名用 `instructions`。回执包含 `client_event_id` 时，可用它匹配请求的 `event_id`。
 
 `type`string必填
 
@@ -953,7 +953,7 @@ Token 用量除以上下文上限。结果可能滞后。
 
 ## error
 
-根据错误码检查请求和会话状态。收到关闭事件后，重新建连。
+收到 `error` 时，根据 `error.code` 检查请求和会话状态。如果随后收到 `session.closed`，需要继续对话时再建立新连接并配置会话。
 
 `type`string必填
 

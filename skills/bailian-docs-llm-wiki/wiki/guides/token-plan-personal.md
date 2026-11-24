@@ -1,72 +1,41 @@
 # token plan personal
 
-Token Plan 个人版是面向独立开发者的按月订阅模型服务套餐，提供固定额度的 Credits 用于调用百炼平台支持的各类大模型，并为 Standard 和 Pro 档位额外附赠 Harness 权益（覆盖联网搜索、图像生成等 AgentStudio 工具）。所有模型调用均通过 `sk-sp-xxx` 格式的 Token Plan 专属 API Key 进行，而 Harness 工具则需使用独立的百炼 API Key（`sk-xxx`）调用 MCP 接口。套餐权益、额度规则与接入方式需结合控制台实时状态使用。
+[Token](../concepts/token.md) Plan 个人版是面向独立开发者的按月订阅型模型调用权益套餐，提供固定 Credits 额度、并发 Agent 支持及可选的 Harness 工具权益。该计划当前仅支持华北2（北京）地域，所有模型调用与 Harness 工具使用均通过百炼平台统一鉴权与计量。详细权益结构与技术约束请参考官方文档。
 
 ## 支持的模型与功能
 
-### 模型支持
-Token Plan 个人版支持多厂商、多模态模型，包括：
-- **千问系列**：`qwen4-max`、`qwen4-max-preview`（预览期至 2026-11-25，消耗低至 2 折）、`qwen3.8-max`/`qwen3.8-flash`（夜间 22:00–08:00 享 4 折）、`qwen-image-3.0-pro`、`qwen-audio-3.0-tts-plus` 等；
-- **万相系列**：`wan2.7-image`、`wan2.7-image-pro`、`wan3.0-video`；
-- **DeepSeek 系列**：`deepseek-v4.1-flash`、`deepseek-v4-pro-0813`（夜间享 5 折）等；
-- **智谱 AI、HappyHorse 及领域模型**：如 `glm-5.3`、`happyhorse-1.1-t2v`、`decision-model-preview`（调用不消耗 Credits）。
+- **支持模型**：覆盖千问（`qwen4-max`, `qwen4-max-preview`, `qwen3.8-max`, `qwen3.8-flash`, `qwen3.7-plus`, `qwen-image-3.0-pro`, `qwen-audio-*` 等）、万相（`wan2.7-image`, `wan3.0-video`）、DeepSeek（`deepseek-v4.1-flash`, `deepseek-v4-pro-0813` 等）、智谱 AI（`glm-5.3`, `glm-5.2`）、HappyHorse（`happyhorse-1.1-t2v` 等）及领域模型 `decision-model-preview`（[原文标题](../../raw/token-plan-user-guide/token-plan-personal/token-plan-personal-overview.md)）。  
+- **预览与限时权益**：`qwen4-max-preview` 为预览模型（2026-11-11 至 2026-11-25），期间 Credits 消耗低至 2 折；`decision-model-preview` 调用完全免费，接入方法见 [原文标题](../../raw/token-plan-user-guide/token-plan-best-practice/token-plan-decision-model.md)。  
+- **内置工具**：模型原生支持 `web_search`, `web_search_image`, `image_search`, `web_extractor`, `code_interpreter` 等工具，调用时自动触发并按 Credits 抵扣，无需额外配置。
 
-> **注意**：`auto` 模型不支持 `tool_choice`、`thinking.budget_tokens`（Anthropic 兼容）和 `thinking_budget`（OpenAI 兼容）参数，详见 [个人版订阅与权益](../../raw/token-plan-user-guide/token-plan-personal/token-plan-personal-overview.md)。
-
-### 内置工具（模型级）
-以下工具通过 Responses API 调用模型时自动触发，按 Credits 抵扣，无需单独开通：
-- `web_search`（联网搜索）、`web_search_image`（文搜图）、`image_search`（图搜图）、`web_extractor`（网页抓取）、`code_interpreter`（代码解释器）
-
-### Harness 权益工具（独立计量）
-仅 Standard 与 Pro 套餐附赠，**不占用 Credits**，使用百炼 API Key（`sk-xxx`）调用 MCP 接口，支持：
-- 自研工具：联网搜索增强版、垂类搜索、网页解析、图像生成、语音合成、语音识别、代码解释器；
-- 百炼知识库、记忆库、全托管智能体、沙箱等暂无免费额度，但享 88 折后付费。
-
-详细额度见 [Harness 权益](../../raw/token-plan-user-guide/token-plan-personal/token-plan-harness-benefits.md)，例如 Standard 档位每月含联网搜索增强版 100 次、图像生成 20 张；Pro 档位对应为 500 次、50 张。
+> **注意**：`auto` 模型不支持 `tool_choice`、`thinking.budget_tokens`（Anthropic 兼容）和 `thinking_budget`（OpenAI 兼容）参数，该限制在 [原文标题](../../raw/token-plan-user-guide/token-plan-personal/token-plan-personal-overview.md) 中明确说明。
 
 ## 关键参数
 
-| 参数类型 | 说明 |
-|----------|------|
-| **API Key 类型** | 模型调用必须使用 `sk-sp-xxx`（Token Plan 专属），Harness 工具必须使用 `sk-xxx`（百炼通用 API Key）；二者不可混用，详见 [Harness 权益](../../raw/token-plan-user-guide/token-plan-personal/token-plan-harness-benefits.md)。 |
-| **模型调用参数** | 支持标准 OpenAI/Anthropic 兼容参数（如 `model`, `messages`, `max_tokens`）；`qwen4-max-preview` 等预览模型支持 `stream`, `response_format`，但 `auto` 模型不支持 `tool_choice` 等特定参数。 |
-| **Harness MCP 配置** | 所有 Harness 工具均为 HTTP Streamable 类型，请求头统一为 `Authorization: Bearer ${DASHSCOPE_API_KEY}`；MCP URL 在控制台「我的订阅 > Harness 权益」页签中获取。 |
+| 参数 | 说明 |
+|------|------|
+| `model` | 必填。合法 Model ID（如 `qwen4-max`, `deepseek-v4.1-flash`），`auto` 为智能路由模型。 |
+| `api_key` | 必填。**[Token](../concepts/token.md) Plan 专属 API Key**（格式 `sk-sp-xxx`），仅用于模型调用与 Credits 抵扣；Harness 工具需使用百炼通用 API Key（`sk-xxx`），二者不可混用。 |
+| `region` | 必填。当前仅支持 `cn-beijing`（华北2）。 |
+| `tool_choice` | 仅对支持该参数的模型有效（`auto` 不支持）；若指定工具，将强制启用对应内置能力。 |
 
 ## 使用方式
 
-### 模型调用（Credits 抵扣）
-1. 获取 `sk-sp-xxx` API Key（[控制台 → API Key 管理](https://bailian.console.aliyun.com/cn-beijing/api-keys)）；
-2. 使用标准 `/v1/chat/completions` 或 `/v1/embeddings` 等接口，指定支持的 `model` ID；
-3. 请求成功即按模型单价扣除对应 Credits，剩余额度可在 [控制台 → 我的订阅](https://bailian.console.aliyun.com/cn-beijing/subscription/token-plan) 查看。
-
-### Harness 工具接入（独立权益抵扣）
-1. 在控制台「我的订阅 > Harness 权益」页签确认已开通对应工具；
-2. 获取百炼 API Key（`sk-xxx`），**非** `sk-sp-xxx`；
-3. 选择接入方式：
-   - **AI Native（推荐）**：复制控制台「一键接入」指令，在 Qwen Code / Claude Code / Codex / OpenCode 中执行（如 `qwen mcp add EnhancedSearch ...`）；
-   - **手动配置**：将 MCP URL 与 `Authorization` 头写入本地 Agent 配置文件（如 `~/.qwen/settings.json`），并设置环境变量 `DASHSCOPE_API_KEY`；
-4. 调用时系统自动优先抵扣免费额度，用尽后按 88 折计费。
-
-完整接入示例见 [Harness 权益](../../raw/token-plan-user-guide/token-plan-personal/token-plan-harness-benefits.md) 中「接入联网搜索增强版」章节。
+- **模型调用**：使用 `sk-sp-xxx` Key，通过百炼标准 `/v1/chat/completions` 或 `/v1/models/{model}/chat` 接口发起请求，Credits 自动从套餐或用量包中抵扣。  
+- **Harness 工具调用**：Standard/Pro 套餐用户使用 `sk-xxx` Key，通过 MCP 协议调用各工具的 HTTP Streamable 服务（如 `https://dashscope.aliyuncs.com/api/v1/mcps/EnhancedSearch/mcp`），消耗独立计量的免费额度或 88 折后付费额度（[原文标题](../../raw/token-plan-user-guide/token-plan-personal/token-plan-harness-benefits.md)）。  
+- **接入流程**：在控制台「我的订阅 > Harness 权益」页签选择工具 → 点击「AI Native 接入」获取配置指令 → 将 MCP URL 与 `sk-xxx` Key 写入本地 Agent 配置（如 Qwen Code、Claude Code 等）。
 
 ## 限制和注意事项
 
-- **地域限制**：Token Plan 个人版目前仅支持华北2（北京）地域。
-- **额度规则**：
-  - 模型 Credits 按月发放，不结转；用量包（100 元/20,000 Credits）有效期 1 个月，到期作废；
-  - Harness 免费额度按订阅周期发放，未用完不结转，升配后剩余额度按公式折算（见 [Harness 权益](../../raw/token-plan-user-guide/token-plan-personal/token-plan-harness-benefits.md)）。
-- **权限与退订**：
-  - 个人版不支持自助退订或降配；订阅到期后 API Key 暂停，续费后自动恢复；
-  - Lite 与 Essential 套餐**不包含 Harness 权益**；团队版不支持该权益。
-- **关键隔离原则**：
-  - Harness 权益与模型 Credits **完全独立核算**：Harness 调用不扣 Credits，用量包也不能抵扣 Harness 费用；
-  - `sk-xxx`（百炼 Key）仅用于 Harness 工具；`sk-sp-xxx`（Token Plan Key）仅用于模型调用 —— 混用将导致鉴权失败或错误计费。
-
-> **注意**：文档 2 中提及“Essential 套餐权益含‘联网搜索等内置工具’”，但文档 1 明确指出“Lite 与 Essential 套餐不包含 Harness 权益”，且内置工具（如 `web_search`）属于模型级能力、按 Credits 抵扣，而 Harness 的“联网搜索增强版”是独立 MCP 服务。二者属不同技术栈，此处无矛盾，但开发者须严格区分调用路径与计费归属。
+- **地域限制**：[Token](../concepts/token.md) Plan 个人版**仅支持华北2（北京）地域**，跨地域调用将失败（[原文标题](../../raw/token-plan-user-guide/token-plan-personal/token-plan-personal-overview.md)）。  
+- **退订与降配**：个人版不支持退订或降配；如需更换低档位，须等待当前订阅到期后重新购买。  
+- **额度规则**：每月 Credits 按自然月重置；用量包有效期为 1 个月，到期未用额度自动作废，不结转、不退款。  
+- **Harness 独立性**：Harness 权益与模型 Credits 完全隔离——不占用、不混算、不支持用量包抵扣；其免费额度按订阅周期发放，未用完不结转（[原文标题](../../raw/token-plan-user-guide/token-plan-personal/token-plan-harness-benefits.md)）。  
+- **API Key 分离**：`sk-sp-xxx` 仅用于模型调用；`sk-xxx` 仅用于 Harness 工具（MCP）调用。混用将导致鉴权失败或计费错误。
 
 ## 来源文档
 
-- [Harness 权益](../../raw/token-plan-user-guide/token-plan-personal/token-plan-harness-benefits.md)
 - [个人版订阅与权益](../../raw/token-plan-user-guide/token-plan-personal/token-plan-personal-overview.md)
+- [Harness 权益](../../raw/token-plan-user-guide/token-plan-personal/token-plan-harness-benefits.md)
 
 

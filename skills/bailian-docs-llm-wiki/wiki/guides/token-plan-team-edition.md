@@ -1,50 +1,58 @@
 # token plan team edition
 
-Token Plan 团队版是面向中小研发团队的 API 调用配额订阅服务，以“坐席”为最小计费与用量单元，提供分档额度、跨坐席共享用量包及精细化成员管理能力。所有坐席绑定独立 API Key，地域限定为华北2（北京），不支持跨地域调用。详细权益与运营规则参见 [团队版订阅与权益](../../raw/token-plan-user-guide/token-plan-team-edition/token-plan-team-overview.md)。
+[Token](../concepts/token.md) Plan Team Edition 是面向企业团队的 AI 模型调用服务订阅方案，提供多档位坐席、共享用量包及集中式成员管理能力。所有坐席绑定独立 API Key，支持 SSO（SAML）和钉钉身份集成，适用于需统一管控模型访问权限与用量的开发团队。该服务当前仅支持华北2（北京）地域。
 
 ## 支持的模型与功能
 
-- **模型覆盖**：支持千问（qwen4-max、qwen4-max-preview、qwen3.8-flash 等）、万相（wan2.7-image、wan3.0-video）、DeepSeek（deepseek-v4.1-flash、deepseek-v4-pro-0813 等）、月之暗面（kimi-k2.7-code）、智谱 AI（glm-5.3）、MiniMax（M2.5）、HappyHorse（t2v/r2v/i2v）等多厂商模型。
-- **特殊权益**：
-  - `qwen4-max-preview` 为限时预览模型（2026-11-11 10:00 至 11-25 24:00 UTC+8），账单统一显示为 `qwen4.0-max-preview`，且预览期内 Credits 消耗低至 2 折；
-  - `deepseek-v4-pro-0813` 等 4 款 DeepSeek 模型在每日 22:00–08:00 享 5 折 Credits 抵扣。
-- **内置工具**：`web_search`、`web_search_image`、`image_search`、`web_extractor`、`code_interpreter` 等工具通过 Responses API 自动触发，按实际调用消耗 Credits，无需额外接入。
-- **限制说明**：`auto` 模型不支持 `tool_choice`、`thinking.budget_tokens`（Anthropic 兼容）和 `thinking_budget`（OpenAI 兼容）参数。
+### 支持的模型
+团队版支持调用百炼平台全量商用模型，包括：
+- **千问系列**：`qwen4-max`、`qwen4-max-preview`（预览期至 2026-11-25，详见[团队版订阅与权益](../../raw/token-plan-user-guide/token-plan-team-edition/token-plan-team-overview.md)）、`qwen3.8-flash`、`qwen-image-3.0-pro`、`qwen-audio-3.0-realtime-plus` 等；
+- **万相系列**：`wan2.7-image-pro`、`wan3.0-video`；
+- **DeepSeek 系列**：`deepseek-v4.1-flash-1017`、`deepseek-v4-pro-0813`（夜间 22:00–08:00 享 5 折）；
+- **月之暗面、智谱 AI、MiniMax、HappyHorse** 等合作厂商模型。
 
-> **注意**：文档 1 中列出 `qwen4-max-preview` 预览期截止时间为 2026 年 11 月 25 日，但该时间明显为占位符或过期模板；实际有效期请以控制台实时展示或阿里云官方通知为准。开发者应主动校验模型可用性，避免硬编码依赖已下线 ID。
+> **注意**：`auto` 模型不支持 `tool_choice`、`thinking.budget_tokens`（Anthropic 兼容）和 `thinking_budget`（OpenAI 兼容）参数。
+
+### 内置工具能力
+所有支持模型均可直接调用以下内置工具（按 Credits 计费，无需额外接入）：
+- `web_search`（联网搜索）
+- `web_search_image`（文搜图）
+- `image_search`（图搜图）
+- `web_extractor`（网页抓取）
+- `code_interpreter`（代码解释器）
 
 ## 关键参数
 
-| 参数 | 说明 | 来源 |
+| 参数 | 说明 | 约束 |
 |------|------|------|
-| `seat_type` | 坐席类型：`standard` / `advanced` / `premium`，对应标准/高级/尊享坐席 | [团队版订阅与权益](../../raw/token-plan-user-guide/token-plan-team-edition/token-plan-team-overview.md) |
-| `credits_per_seat` | 月度额度：25,000 / 100,000 / 250,000 Credits/坐席/月，独立计量，不跨坐席共享 | [团队版订阅与权益](../../raw/token-plan-user-guide/token-plan-team-edition/token-plan-team-overview.md) |
-| `shared_package` | 共享用量包：625,000 Credits/个，有效期 1 个月，到期清零；抵扣顺序优先于坐席额度 | [团队版订阅与权益](../../raw/token-plan-user-guide/token-plan-team-edition/token-plan-team-overview.md) |
-| `seat_quota_limit` | 成员级共享用量包上限：由管理员在[团队管理](../../raw/token-plan-user-guide/token-plan-team-edition/token-plan-team-management.md)中为单个成员设置，每 24 小时仅可修改一次 |
+| `model` | 必填，指定模型 ID（如 `qwen4-max-preview`） | 不支持别名混用；`qwen4-max-preview` 与 `qwen4.0-max-preview` 等价，账单统一显示为后者 |
+| `base_url` | 必填，由控制台分配，格式为 `https://dashscope.aliyuncs.com/compatible-mode/v1`（或新版兼容地址） | 需与分配席位时生成的 Base URL 严格一致 |
+| `api_key` | 必填，每个席位唯一，由管理员分配或成员通过 SSO/钉钉登录后自动生成 | 仅限本组织内成员使用；重置后原 Key 立即失效 |
+| `shared_usage_package_quota` | 可选，通过[团队管理](../../raw/token-plan-user-guide/token-plan-team-edition/token-plan-team-management.md)为成员设置单人共享用量包上限 | 单次设置后 24 小时内不可重复修改；启用后实际可用额度 = min(设置上限, 组织剩余共享包) |
 
 ## 使用方式
 
-1. **订阅与分配**：主账号或 RAM 账号在控制台「我的订阅」完成坐席购买；管理员在「成员管理」中手动添加成员或通过 SSO/钉钉接入，并为其分配坐席，系统自动生成专属 API Key 与 Base URL。
-2. **API 调用**：成员使用分配的 API Key 和 Base URL（如 `https://dashscope.aliyuncs.com/api/v1`）调用模型，请求头需包含 `Authorization: Bearer <API_KEY>`。
-3. **用量控制**：
-   - 管理员可在「成员管理」中为成员设置共享用量包额度上限；
-   - 所有者/管理员可查看各成员、各模型的用量趋势与明细，入口为[控制台我的订阅](https://bailian.console.aliyun.com/cn-beijing/subscription/overview)；
-   - 成员自身无法查看组织级用量，需联系管理员获取。
+1. **订阅与初始化**  
+   主账号或已授权 RAM 用户登录 [Token](../concepts/token.md) Plan 控制台 → 进入**我的订阅** → 订购团队版（标准/高级/尊享坐席 + 共享用量包）。
+
+2. **成员与席位管理**  
+   - 手动添加成员：在[团队管理](../../raw/token-plan-user-guide/token-plan-team-edition/token-plan-team-management.md)中填写用户名（英文字母/数字/下划线），分配席位后系统自动生成 API Key 和 Base URL；  
+   - SSO/钉钉接入：完成 IdP 或钉钉应用配置后，成员通过管理平台地址（见[团队管理](../../raw/token-plan-user-guide/token-plan-team-edition/token-plan-team-management.md)“基本信息”区域）登录即自动加入。
+
+3. **API 调用**  
+   成员使用分配的 `api_key` 和 `base_url`，按 [OpenAI 兼容接口](../concepts/openai-compatible-interface.md)格式发起请求（如 `/chat/completions`），无需额外鉴权头。
 
 ## 限制和注意事项
 
-- **地域限制**：仅支持华北2（北京）地域调用，海外调用需自行确保合规性。
-- **坐席绑定**：每个坐席严格绑定一名成员与一个 API Key，不可共享；移出成员时，若其已消耗 Credits，则坐席不可回收至资源池。
-- **退订与重置**：退订坐席后 API Key 立即失效；重置 API Key 后原密钥立即作废，新密钥需重新分发。
-- **升级与续费**：
-  - 升级坐席按剩余周期折算差价与新增额度，不支持降配；
-  - 续费不重置当期额度，额度按自然月周期刷新（非按订阅起始日滚动）。
-- **权限隔离**：所有者与管理员权限限于本团队组织内，无法跨阿里云账号操作；RAM 子账号需主账号预先授权，详见 [团队管理](../../raw/token-plan-user-guide/token-plan-team-edition/token-plan-team-management.md) 中的权限说明。
-- **SSO/钉钉前提**：配置 SAML 或钉钉前，必须清空组织内所有成员；否则配置入口被禁用。
+- **地域限制**：团队版仅支持华北2（北京）地域，海外调用需自行确保合规性。
+- **坐席绑定**：每个坐席严格绑定一名成员与一个 API Key，不可转让、不可共享；移出成员时，若其已消耗 Credits，则该坐席**不会回归资源池**（见[团队管理](../../raw/token-plan-user-guide/token-plan-team-edition/token-plan-team-management.md)）。
+- **共享用量包**：有效期为 1 个月，到期未用额度自动清零；抵扣顺序优先于坐席月度额度（详见[团队版订阅与权益](../../raw/token-plan-user-guide/token-plan-team-edition/token-plan-team-overview.md)）。
+- **升级与退订**：支持加购、升级、续费；**不支持降配**（如需降低坐席档位，须等待当前订阅到期后重新订购）；已产生用量的坐席不可退订。
+- **API Key 生命周期**：退订坐席会导致对应 API Key 不可用；续订成功后原 Key 自动恢复有效——如需更换，应通过[团队管理](../../raw/token-plan-user-guide/token-plan-team-edition/token-plan-team-management.md)执行重置操作。
 
 ## 来源文档
 
-- [团队版订阅与权益](../../raw/token-plan-user-guide/token-plan-team-edition/token-plan-team-overview.md)
 - [团队管理](../../raw/token-plan-user-guide/token-plan-team-edition/token-plan-team-management.md)
+- [团队版订阅与权益](../../raw/token-plan-user-guide/token-plan-team-edition/token-plan-team-overview.md)
 
 

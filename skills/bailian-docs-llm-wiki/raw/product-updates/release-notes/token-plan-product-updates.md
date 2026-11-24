@@ -16,7 +16,7 @@ Qwen4-Max 正式上线，个人版和团队版均支持该模型。详见[个人
 
 #### Qwen4-Max-Preview 上线
 
-预览期为 2026 年 11 月 11 日 10:00 至 11 月 25 日 24:00（UTC+8），期间 Credits 消耗低至 2 折，个人版每晚 22:00 - 次日 08:00 再享 4 折。个人版和团队版均支持该模型，详见[个人版支持的模型](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview#tppo-h-models)和[团队版支持的模型](https://help.aliyun.com/zh/model-studio/token-plan-team-overview#tpto-h-models)。
+预览期为 2026 年 11 月 11 日 10:00 至 11 月 25 日 10:00（UTC+8），期间 Credits 消耗低至 2 折，个人版每晚 22:00 - 次日 08:00 再享 4 折。个人版和团队版均支持该模型，详见[个人版支持的模型](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview#tppo-h-models)和[团队版支持的模型](https://help.aliyun.com/zh/model-studio/token-plan-team-overview#tpto-h-models)。
 
 ### 2026-11-09
 

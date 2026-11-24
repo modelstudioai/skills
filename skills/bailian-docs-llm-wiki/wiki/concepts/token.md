@@ -1,48 +1,44 @@
-# Token 计量与计费
+# Token
 
-Token 计量与计费是百炼平台统一、精确的资源消耗度量与成本核算机制：所有模型推理类服务（含文本生成、嵌入、重排序、决策判断等）均以 UTF-8 字节级编码统计实际输入与输出 Token 数量，并据此按千 Token（kToken）为单位进行实时扣费或额度抵扣。该机制是平台按量计费体系的核心基础，贯穿免费额度、Token Plan、吞吐预留、Agent 组件化计费等全部成本场景。
+Token 是百炼平台对模型输入与输出内容进行标准化计量的基本单位，用于精确计费、配额控制与资源调度。一个 Token 通常对应一个子词（subword）或字符级单元，其具体切分逻辑由底层模型的 tokenizer 决定；平台统一按实际 tokenized 后的长度计量，不依赖用户原始文本字数。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **通用模型调用（/v1/chat/completions 等）**：输入 Prompt（含 system/user/assistant 消息）与输出 response 的所有字符均按 UTF-8 编码逐字节解析为 Token，系统自动四舍五入到整数 Token 后计入用量；例如 `qwen-plus` 调用一次含 1234 输入 + 567 输出，即消耗 1801 Token。
-- **Token Plan 场景**：必须显式携带 `x-bailian-token-plan-id` 请求头，系统校验 Plan 绑定模型后，从预购额度中实时扣减本次调用的总 Token 数（输入 + 输出），余额不足返回 `402 Payment Required`。
-- **Agent 应用**：模型调用费用独立于 Agent 其他组件（如知识库、沙箱、记忆库），但知识库中的 Rerank 调用、智能体路由时的 `qwen-plus` 判断、记忆检索注入 Prompt 所产生的额外 Token，均按实际 Token 数单独计费。
-- **向量与排序服务（/v1/embeddings /v1/rerank）**：`text-embedding-v1` 等嵌入模型按输入文本总 Token 数计费；Rerank 模型则按 `query` + 所有 `documents` 的 Token 总和计费（非仅返回文档数），且 `query` 超 512 Token 将被静默截断——截断前的完整长度仍计入计量。
-- **决策模型（decision-model-preview）**：严格按 `state` 字段（无论 string/object/array）序列化后的 UTF-8 字节长度换算 Token，上限 65536 Token；`questions` 结构体本身不参与 Token 计量，仅 `state` 内容计入。
-- **监控与用量分析**：控制台「模型用量统计」中 `TotalToken 数` 是唯一可信的计费依据，延迟约 1–10 分钟；该数据与账单出账一致，可用于成本突增告警（如配置“1分钟内 TotalToken 增长 >50万”触发通知）。
+- **计费计量**：所有模型调用（含文本、图像、语音、视频、决策等多模态）均以 `input_tokens` 和 `output_tokens` 分别计费。例如调用 `qwen4-max` 时，Prompt 经 tokenizer 处理后为 1280 个 token，生成响应为 320 个 token，则本次调用消耗 1600 Token（输入/输出单价可能不同）。
+- **Token Plan 资源包抵扣**：购买的 Token Plan（基础版/个人版/团队版）额度以 Token 为单位扣减。系统按请求头中指定的 `x-acs-token-plan-id` 或专属 API Key（如 `sk-sp-xxx`）自动匹配并消耗对应包内额度，支持跨模型通用（除明确标注“不支持”的微调/私有模型）。
+- **吞吐预留（TPM）容量换算**：1 kTPM = 1,000 Tokens/分钟，用于定义模型服务的稳定并发能力。输入/输出流量分别按 token 速率折算为 TPM，长上下文或缓存命中会应用阶梯系数（如 3×、0.125×）动态调整等效 TPM 占用。
+- **监控与告警**：模型监控中的 `TotalToken 数` 指标按分钟聚合各模型实际消耗的 token 总量，可配置告警（如“单模型每分钟 Token 消耗环比增长 >50%”），用于异常用量识别与成本风控。
+- **免费额度与预算管理**：新人免费额度（90天/100万 Token）、月度预算上限均以 Token 为计量基准；当额度耗尽且开启“用完即停”时，请求将直接返回 HTTP 403 错误，而非降级或限流。
+- **Batch 与异步任务**：Batch 调用按输入+输出 token 总量计费（单价为实时调用的 50%）；异步任务（如生图、生视频）虽不直接暴露 token 数，但后台仍基于 prompt 长度、分辨率、时长等参数折算为等效 token 进行结算。
 
 ## 关键参数和配置
 
-- **Token 计量规则**：
-  - 统一采用 UTF-8 字节级编码统计，非词元（token）级分词；
-  - 输入与输出 Token 均计入，不可拆分抵扣；
-  - 所有场景（含 Batch、缓存命中、长输入）均先按此规则得出原始 Token 数，再应用对应折扣或系数。
-- **计费换算公式**：  
-  `费用（元） = ⌈总 Token 数 ÷ 1000⌉ × 单价（元/千 Token）`  
-  其中单价由模型、地域、计费模式（按量/Token Plan/节省计划）共同决定。
-- **特殊系数（需主动启用）**：
-  - 上下文缓存：命中部分 Token 按折扣系数（如 0.1）计费，创建缓存 Token 按 1.25× 标准单价计费；
-  - 长输入阶梯：对 >32K 输入按区间应用系数（如 3x），直接作用于原始 Token 数；
-  - Batch 调用：单价为实时推理的 50%，但不与缓存折扣叠加。
-- **用量查询接口**：  
-  `GET /api/v1/token-plan/usage`（Token Plan 余额）  
-  `GET /api/v1/model/usage`（按模型/业务空间维度查询历史 Token 消耗）
+- **无显式传参**：Token 是平台后端自动计算的隐式指标，开发者无需在请求体中传递 `input_tokens` 或 `output_tokens`。
+- **必需鉴权标识**（决定 token 归属与扣减路径）：
+  - Token Plan 基础版：HTTP Header 中必须携带 `x-acs-token-plan-id: tp-xxxxxx` 和 `x-acs-trace-id: trace-xxxxxx`；
+  - Token Plan 个人版/团队版：使用专属 API Key（`sk-sp-xxx`）+ 正确 `base_url`，平台自动关联订阅与用量；
+  - 免费额度/节省计划：使用百炼通用 API Key（`sk-xxx`），系统按预设优先级（免费额度 → 节省计划 → 按量付费）自动抵扣。
+- **影响 token 计数的关键请求参数**：
+  - `max_tokens`：限制输出长度，直接影响 `output_tokens` 上限；
+  - `temperature` / `top_p` 等采样参数：不改变 token 数，但影响实际生成长度；
+  - 多模态输入（如图片 Base64、音频 data URL）：经模型专用 encoder 处理后转换为等效 token 序列，计入 `input_tokens`；
+  - `tool_choice` 或内置工具调用：工具执行过程产生的中间 token（如搜索结果摘要、代码执行输出）全部计入总消耗。
 
 ## 面向开发者，简洁实用
 
-- ✅ **务必校验 `model` 字段一致性**：Token Plan 中 `qwen-turbo` 不可用于 `qwen-plus`，否则直接报错；Agent 中知识库路由调用 `qwen-plus` 也需确保其属于已开通计费权限的模型。
-- ✅ **警惕隐式 Token 消耗**：记忆库 `Search` 结果注入 Prompt、Rerank 的 `documents` 列表、决策模型中 `state` 的 JSON 序列化，都会显著增加 Token 数——建议在开发期用 `/v1/chat/completions` 的 `tools` 或 `response_format` 模拟结构化输入，预估 Token 开销。
-- ✅ **调试技巧**：使用 `curl -v` 或 SDK 日志开启 debug 模式，查看响应头 `x-bailian-input-tokens` 和 `x-bailian-output-tokens` 字段，快速验证计量是否符合预期。
-- ❌ **不要依赖客户端估算**：避免用字符数、单词数或第三方 tokenizer 估算 Token；百炼 Token 数以服务端实际编码结果为准，尤其对中文、emoji、多模态 base64 等场景差异显著。
-- ⚠️ **注意地域隔离**：华北2（北京）的免费额度、价格、模型支持列表与其他地域完全独立；跨地域调用需重新确认 Token 计量逻辑与计费规则。
+- ✅ **务必校验实际 token 数**：使用 [tokenizer 工具](https://help.aliyun.com/zh/model-studio/token-calculator) 或 SDK 的 `count_tokens()` 方法预估开销，避免因 prompt 过长导致意外超支。
+- ✅ **优先复用 Token Plan**：对稳定业务流量，购买 Token Plan 比按量付费低 30–50%；个人/团队版还附带 Harness 工具权益，进一步摊薄单次调用成本。
+- ⚠️ **注意 token 计费边界**：流式响应中若启用 `stream_options.include_usage=true`，会触发额外一次用量上报，导致重复扣减——生产环境请禁用该参数。
+- ⚠️ **地域强约束**：Token Plan 个人版与团队版仅支持华北2（北京），跨地域调用将失败；免费额度也仅在北京地域生效。
+- 📊 **监控必看指标**：在「模型监控」中重点关注 `模型消耗 TotalToken 数`（按模型聚合）与 `审计日志` 中的 `input_token_count` / `output_token_count` 字段，精准归因费用来源。
 
 ## 关联主题页
 
 - [token plan guide](../guides/token-plan-guide.md)
-- [agent billing](../guides/agent-billing.md)
-- [test 1](../guides/test-1.md)
+- [token plan personal](../guides/token-plan-personal.md)
+- [token plan team edition](../guides/token-plan-team-edition.md)
+- [token plan best practice](../guides/token-plan-best-practice.md)
 - [model monitoring](../guides/model-monitoring.md)
-- [vector and sort](../api/vector-and-sort.md)
-- [decision model](../api/decision-model.md)
+- [test 1](../guides/test-1.md)
 
 

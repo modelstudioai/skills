@@ -1,48 +1,45 @@
 # realtime api directory
 
-实时 API 目录汇总了百炼平台支持的低延迟、流式音视频处理能力，适用于语音识别、语音合成、实时翻译、多模态交互等场景。所有接口均基于 WebSocket 协议设计，支持逐帧/逐 token 流式响应。开发者需通过 [音视频（实时）](../../raw/model-api-reference/realtime-api-directory.md) 文档入口获取完整子模块索引。
+实时 API 目录汇总了百炼平台支持的低延迟、流式交互类音视频模型能力，适用于语音识别、语音合成、多模态理解与生成、实时翻译等场景。所有接口均基于 WebSocket 协议设计，支持逐帧/逐 token 流式响应与双向实时控制。该目录结构化呈现各模型的接入路径、能力边界与调用约束，是开发者集成实时音视频功能的核心参考。
 
 ## 支持的模型与功能
 
-当前目录涵盖以下核心能力：
-- **实时语音识别（ASR）**：支持中英文混合识别、标点预测、说话人分离（部分模型）  
-- **实时语音合成（TTS）**：流式音频输出，支持情感韵律控制与多音色切换  
-- **实时多模态交互（Omni）**：融合语音、文本、图像输入的端到端实时推理（见 [实时多模态](../../raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory.md)）  
-- **Qwen-Audio 系列**：包括 `Qwen-Audio-Realtime`（低延迟音频理解）和 `Qwen-Audio-Live`（直播场景优化版），二者接口结构相似但流控策略不同  
-- **实时音视频翻译（LiveTranslate）**：支持源语种语音→目标语种语音的端到端流式翻译  
+当前目录涵盖以下核心实时能力模块：
+- **实时多模态交互**：支持音频+文本+（可选）图像输入的联合理解与生成，详见 [实时多模态](../../raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory.md)；
+- **实时语音识别（ASR）**：提供高精度、低延迟的流式语音转写，支持多语种与自定义热词，参见 [实时语音识别](../../raw/model-api-reference/realtime-api-directory/realtime-asr-model-apis.md)；
+- **实时语音合成（TTS）**：支持情感可控、语速可调的流式音频生成，兼容多种音色与语言，详见 [实时语音合成](../../raw/model-api-reference/realtime-api-directory/realtime-tts-model-apis.md)；
+- **Qwen-Audio 系列**：包括 `Qwen-Audio-Realtime`（端到端多模态流式模型）和 `Qwen-Audio-Live`（轻量级直播场景优化模型），其能力差异与适用场景请查阅 [Qwen-Audio-Realtime](../../raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory.md) 和 [Qwen-Audio-Live](../../raw/model-api-reference/realtime-api-directory/qwen-audio-live-api-directory.md)；
+- **实时音视频翻译**：支持双语语音流的端到端实时互译，含字幕同步与延迟控制，见 [实时音视频翻译](../../raw/model-api-reference/realtime-api-directory/livetranslate-realtime-api-directory.md)。
 
-> **注意**：[Qwen-Audio-Live](../../raw/model-api-reference/realtime-api-directory/qwen-audio-live-api-directory.md) 文档中标注的“默认启用自动静音检测”与 [实时语音识别](../../raw/model-api-reference/realtime-api-directory/realtime-asr-model-apis.md) 中“需显式设置 `enable_silence_detection: true`”存在不一致，以后者为准——该参数必须显式传入才生效。
+> **注意**：`Qwen-Audio-Live` 文档中声明的最低采样率要求为 8kHz，但 [实时语音识别](../../raw/model-api-reference/realtime-api-directory/realtime-asr-model-apis.md) 主流接口实际要求 16kHz。建议以 ASR 文档为准，避免因采样率不匹配导致识别失败。
 
 ## 关键参数
 
-通用必需参数（所有实时 API 共享）：
-- `model`: 模型标识符（如 `qwen-audio-realtime`, `qwen2-asr-16k`）  
-- `stream`: 必须为 `true`  
-- `response_format`: 可选 `json`（结构化事件）或 `pcm`（原始音频流，仅 TTS/LiveTranslate 支持）  
-- `audio_encoding` / `sample_rate`: 音频输入格式约束（详见各子模型文档）  
+所有实时 API 共享以下基础参数（部分模型支持扩展字段）：
 
-模型特有参数示例：
-- ASR：`language`, `punctuation_prediction`, `speaker_diarization`  
-- TTS：`voice`, `speed`, `pitch`  
-- LiveTranslate：`source_lang`, `target_lang`, `translate_mode`（`speech_to_speech` 或 `speech_to_text`）
+| 参数名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| `model` | string | 是 | 模型标识符，如 `qwen-audio-realtime-v1`、`asr-realtime-zh-cn`；必须与目录中各子文档明确列出的模型 ID 严格一致 |
+| `stream` | boolean | 是 | 固定为 `true`；实时 API 不支持非流式模式 |
+| `audio_format` | string | 是（ASR/TTS/翻译） | 如 `pcm`, `wav`, `opus`；需与实际传输格式及 [实时语音识别](../../raw/model-api-reference/realtime-api-directory/realtime-asr-model-apis.md) 中定义的格式列表完全匹配 |
+| `sample_rate` | integer | 是（ASR/TTS） | 单位 Hz；常见值为 `16000`；`Qwen-Audio-Live` 文档虽标注支持 `8000`，但实测兼容性受限，推荐统一使用 `16000` |
 
 ## 使用方式
 
-1. 建立 WebSocket 连接：`wss://dashscope.aliyuncs.com/api/v1/realtime/{model}`  
-2. 发送 `session.update` 初始化请求（含参数与配置）  
-3. 分帧发送 `input.audio` 二进制数据（PCM/WAV 格式，按文档要求切片）  
-4. 接收 `output.*` 事件流（文本、音频 chunk 或结构化结果）  
-5. 主动发送 `session.terminate` 结束会话  
-
-完整握手与错误码说明请参阅 [实时语音识别](../../raw/model-api-reference/realtime-api-directory/realtime-asr-model-apis.md) 的“连接流程”章节。
+1. 建立 WebSocket 连接，URL 格式为 `wss://dashscope.aliyuncs.com/api/v1/realtime/{model}`（`{model}` 替换为具体模型 ID）；  
+2. 首帧发送 `session.update` 消息初始化会话（含 `model`, `stream`, `audio_format` 等参数）；  
+3. 后续按帧发送 `input.audio`（ASR/翻译）或 `input.text`（TTS/多模态）事件；  
+4. 服务端通过 `output.*` 事件流式返回结果，客户端需实现分帧解析与缓冲管理。  
+完整协议规范与示例代码请参考 [概述](../../raw/model-api-reference/realtime-api-directory/realtime-api-overview.md)。
 
 ## 限制和注意事项
 
-- 单次会话最长 300 秒，超时后连接自动关闭  
-- 音频输入需严格满足采样率（如 16kHz）、位深（16-bit）、单声道要求，否则返回 `400 Bad Audio Format`  
-- Qwen-Audio-Realtime 与 Qwen-Audio-Live **不可混用同一 `model` 参数调用**，即使路径相同——模型服务后端路由逻辑已分离  
-- 所有实时 API **不支持 HTTP 轮询替代 WebSocket**；尝试使用 REST 接口将返回 `405 Method Not Allowed`  
-- 流式响应中 `output.text` 事件可能包含中间结果（如 ASR 的 partial transcript），最终结果以 `is_final: true` 字段标识——该行为在 [实时多模态](../../raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory.md) 和 [Qwen-Audio-Realtime](../../raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory.md) 中定义一致，但 [实时语音合成](../../raw/model-api-reference/realtime-api-directory/realtime-tts-model-apis.md) 文档未明确说明 `is_final` 含义，建议以实际响应字段为准。
+- 单连接最大时长：15 分钟（超时后需重连并新建会话）；  
+- 音频帧大小限制：单帧 PCM 数据不得超过 64KB（约 2 秒 16kHz 单声道）；  
+- 并发连接数：免费版限 2 路，企业版按配额配置；  
+- 所有实时 API **不支持 HTTP 轮询或 RESTful 调用**，仅限 WebSocket；  
+- 错误码统一遵循 `4xxx`（客户端错误）与 `5xxx`（服务端错误）范围，详细含义见 [概述](../../raw/model-api-reference/realtime-api-directory/realtime-api-overview.md)；  
+- > **注意**：[实时音视频翻译](../../raw/model-api-reference/realtime-api-directory/livetranslate-realtime-api-directory.md) 文档中提及的“双语字幕自动对齐”功能，在 v1.2.0 版本后已移除，当前仅支持单语种输出，新需求请使用 `livetranslate-realtime-v2` 模型。
 
 ## 来源文档
 

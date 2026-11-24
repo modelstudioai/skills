@@ -2,45 +2,32 @@
 
 模型上下文协议（Model Context Protocol, MCP）旨在搭建大模型和外部工具之间的信息传递通道。通过 MCP 协议，开发者不用为每个外部工具编写复杂的接口，阿里云百炼应用也能够接入海量第三方工具。
 
-## MCP 服务接入示例
+## One Key Service
 
-**路径规划智能体**
+阿里云百炼 MCP 广场提供 **One Key Service** 体验——只需一个阿里云百炼 API Key，即可调用广场内的 One Key MCP 服务。
 
-**网页爬取工作流**
-
--   大模型应用：智能体应用
-    
--   外部工具：Amap Maps MCP 服务提供地理信息获取能力
-    
-
--   大模型应用：工作流应用
-    
--   外部工具：Firecrawl MCP 服务提供网页爬取能力
-    
-
-![2025-04-08\_14-07-26 (1)](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2024314471/p938865.gif)
-
-![2025-04-08\_14-36-09 (2)](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2024314471/p939258.gif)
+-   **无需二次开通**：One Key MCP 服务无需单独开通或订阅，首次调用自动生效。
+-   **统一鉴权**：使用阿里云百炼 API Key（`DASHSCOPE_API_KEY`）即可访问全部 One Key MCP 服务，无需为每个服务单独获取密钥。
+-   **按量后付费**：按实际调用量计费，无需预付费或购买资源包。部分服务提供免费额度，首次调用时自动激活，用完后转为按量计费。
 
 ## 如何使用 MCP
 
-现在，阿里云百炼智能体和工作流应用已支持接入两种 MCP 服务。使用 MCP 服务的详细方法，请参考[官方 MCP 服务](raw/application-user-guide/agent-store/model-context-protocol/official-and-third-party-mcp.md)和[自定义MCP服务](raw/application-user-guide/agent-store/model-context-protocol/custom-mcp.md)。
+阿里云百炼支持以下两种 MCP 服务，可以接入阿里云百炼智能体、工作流等应用，也可以通过 Endpoint 远程调用：
 
--   官方 MCP 服务：阿里云百炼官方部署了多种 MCP 服务，可快速接入阿里云百炼应用。
--   自定义 MCP 服务：阿里云百炼还支持部署自定义 MCP 服务。可在 MCP 市场或互联网上搜寻 MCP 服务，以自定义 MCP 服务的形式部署在阿里云百炼上。
+-   **广场 MCP**：MCP 广场上架的服务，对全部账号可见，分为 One Key MCP（无需开通，API Key 直接调用）和需手动开通的 MCP。详见[官方 MCP 服务](raw/application-user-guide/agent-store/model-context-protocol/official-and-third-party-mcp.md)。
+-   **自定义 MCP**：支持部署自有 MCP 服务或从开源社区接入，仅当前账号可见。详见[自定义 MCP 服务](raw/application-user-guide/agent-store/model-context-protocol/custom-mcp.md)。
 
-![bailian\_map](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2024314471/p939005.svg)
+也可在终端用阿里云百炼 CLI 直接编排 MCP：列出已激活服务、查看工具、直接调用任意工具。详见[使用 CLI](raw/cli/capabilities/agent-infrastructure/mcp-skill.md)。
 
 ## 计费说明
 
-### 云部署 MCP 服务
+### 广场 MCP
 
--   **部署费用**：限时免部署费用。
--   **调用费用**：部分 MCP 服务涉及第三方 API 调用，使用后可能会产生费用。这部分费用由第三方收取，阿里云百炼不收取费用。
+广场 MCP 服务（含 One Key MCP）的计费模式因服务而异，具体服务的收费标准请在 [MCP 广场](https://bailian.console.aliyun.com/?tab=mcp#/mcp-market)对应服务卡片中查看。其中部分服务由第三方供应商通过云市场提供，计量数据由服务商推送给云市场。
 
-##### 联网搜索MCP服务
+#### 联网搜索 MCP 服务
 
--   **服务开通**：请前往[联网搜索MCP服务](https://bailian.console.aliyun.com/cn-beijing/store/mcp/detail/WebSearch)开通并使用。
+-   **接入方式**：在[联网搜索 MCP 服务](https://bailian.console.aliyun.com/cn-beijing/store/mcp/detail/WebSearch)详情页的**安装**区域，复制安装命令或 MCP 服务地址。该服务已加入 One Key Service，无需手动开通。
 -   **调用费用**：免费额度 2000 次，额度用尽后按 29 元/千次计费。
 -   **限流说明**：限流为 15 QPS，阿里云主账号与其 RAM 子账号共享限流限制。
 
@@ -48,14 +35,11 @@
 
 根据服务的响应速度，阿里云百炼提供以下两种计费模式：
 
--   **基础模式：**
-    -   **无部署费用。无调用时不计费，有调用时按调用时长计费。**
-        -   **调用费率**：0.000156 元/秒
-    -   **适用场景**：偶尔调用，对启动速度要求不高（首次调用会有一定启动延迟）
-        
+-   **基础模式**：
+    -   **部署费用**：无。
+    -   **调用费率**：0.000156 元/秒，无调用时不计费，有调用时按时长计费。
+    -   **适用场景**：偶尔调用，对启动速度要求不高（首次调用会有一定启动延迟）。
 -   **极速模式**：
-    
-    -   **有部署费用。无调用时按部署时长计费，有调用时另按调用时长计费。**
-        -   **调用费率：**0.000156 元/秒
-        -   **部署费率：**0.000036 元/秒
-    -   **适用场景**：可减少频繁启动服务带来的延迟，适合需要长时间保持在线，且调用较频繁的场景。
+    -   **部署费率**：0.000036 元/秒，无调用时按部署时长计费。
+    -   **调用费率**：0.000156 元/秒，有调用时另按调用时长计费。
+    -   **适用场景**：需要长时间保持在线，且调用较频繁的场景，可减少频繁启动服务带来的延迟。

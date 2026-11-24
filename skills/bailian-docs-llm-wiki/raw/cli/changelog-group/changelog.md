@@ -2,6 +2,18 @@
 
 阿里云百炼 CLI 的版本更新记录
 
+## 2.11.0 | 2026-11-24
+
+-   新增全局 `--biz-source <source>` 参数，全部命令支持该参数；调用方（skill、agent、产品）可声明业务来源，归一化后的来源上报到 AEM 专用扁平列 `c6`（及 `ext`），支持按来源统计命令调用的 PV/UV。缺省省略；空白或非法值归一化为 `unknown`。
+
+## 2.10.5 | 2026-11-23
+
+-   新增 `bl deploy router` 命令组，管理后付费模型路由（`plan=mr`）：`versions` 列出可用版本、支持的策略与候选模型；`create` 通过 `--name`、`--route-version`、`--strategy`（`EFFECT_FIRST` / `COST_FIRST`）和 `--candidates` 创建，创建后立即 RUNNING；`list` / `get` 查询路由，`get` 校验 `plan=mr`；`update` 更新 RUNNING 路由的指定字段并保留未提供字段，`--candidates` 替换整个候选列表；`delete` 确认后永久删除，RUNNING 路由无需先停机。
+-   新增 `bl deploy capacity auto-renew enable` / `disable`，通过 `--cycle Day` 和 `--auto-renewal-duration` 开启或关闭单个预付费容量实例的自动续费；均为高风险计费操作，支持试运行预览与实例能力预检，8 小时闲时实例不支持。
+-   新增 8 小时闲时容量：`bl deploy capacity create` 和 `bl deploy text create --plan ptu` 支持 `--pricing-cycle Hour --duration 8 --auto-renewal false`；PTU 还须指定 `--service-tier ptu_default`。售卖时段（UTC+8 22:00–24:00）与模型支持由服务端校验；闲时实例不可变配、续订、自动续费、释放或退订，到期自动失效。
+-   变更 PTU 思考输出容量：`bl deploy text create --thinking-output-tpm` 不再在本地对 PTU 拒绝，是否支持由模型决定并由服务端校验。
+-   变更部署删除：`bl deploy delete` 识别模型路由（`plan=mr`），允许 RUNNING 路由无需停机即可删除。
+
 ## 2.10.4 | 2026-11-20
 
 -   新增 `bl finetune rl` 命令组，覆盖百炼强化学习训练的端到端链路：`authorize` 检查准入白名单、服务关联角色与业务开通状态，绝不自动创建角色，缺失时中止并给出双语手动授权指引；`run` 通过 flag 或 YAML 规格提交训练任务并打包 Rollout/Reward 函数代码，在托管 OS 沙箱 Python 运行时内执行（仅 macOS/Linux），创建任务消耗计费的 MTU 算力；`get` / `list` / `watch` / `logs` / `cancel` / `delete` 经共享 fine-tunes 后端管理任务。

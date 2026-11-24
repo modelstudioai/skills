@@ -82,6 +82,8 @@ Function Calling
 
 本文仅展示模型调用原价，不包含限时优惠等活动信息，请前往[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)查看活动优惠。
 
+计费规则：仅输出视频按视频秒数计费，输入不计费。
+
 #### 华北2（北京）
 
 计费项

@@ -2,21 +2,26 @@
 
 阿里云百炼的官方 MCP 服务开通后即可使用。阿里云百炼官方 MCP 服务既支持在平台内部（如智能体、工作流）直接集成，也支持通过外部调用集成至第三方应用或项目中。
 
+阿里云百炼 MCP 广场的 MCP 服务分为两类：
+
+-   **One Key MCP**：无需手动开通，使用阿里云百炼 API Key 直接鉴权，按量后付费。MCP 广场中标识为 One Key 的服务均属于此类。
+-   **需开通的广场 MCP**：需在 MCP 广场手动开通后使用，部分服务可能需要填写第三方服务商的 API Key。
+
+**说明**阿里云百炼采取了安全策略来保障云部署 MCP Server 的数据安全。对于敏感数据，云部署 MCP Server 会在创建时使用 KMS 进行加密管理。
+
 ## One Key MCP
 
-One Key MCP 服务无需手动开通，首次调用自动生效。以使用 **Amap Maps** 高德地图 MCP 服务为例：
-
-**说明**目前 Amap Maps MCP 服务限时免费使用。
+One Key MCP 服务无需手动开通，首次调用自动生效。以使用 **联网搜索** MCP 服务为例：
 
 1.  **进入 MCP 广场**：前往[阿里云百炼 MCP 页面](https://bailian.console.aliyun.com/?tab=mcp#/mcp-market)，浏览并选择带有 One Key 标识的 MCP 服务。
-2.  **获取接入配置**：在服务详情页的**接入方式**中，复制接入配置或点击一键配置到客户端。使用阿里云百炼 API Key（DASHSCOPE\_API\_KEY）即可完成鉴权，无需为该服务单独申请密钥。
+2.  **获取安装配置**：在服务详情页的**安装**区域，复制安装命令或 MCP 服务地址。使用阿里云百炼 API Key（DASHSCOPE\_API\_KEY）即可完成鉴权，无需为该服务单独申请密钥。
 3.  **开始调用**：配置完成后即可调用。首次调用自动生效，无需手动开通。如服务提供免费额度，将自动激活。
 
 ## 需开通的广场 MCP
 
-对于未标识为 One Key 的广场 MCP 服务，需手动开通后使用：
+对于未标识为 One Key 的广场 MCP 服务，需手动开通后使用。以开通 Amap Maps 高德地图 MCP 服务为例：
 
-**说明**阿里云百炼采取了安全策略来保障云部署 MCP Server 的数据安全。对于敏感数据，云部署 MCP Server 会在创建时使用 KMS 进行加密管理。
+**说明**目前 Amap Maps MCP 服务限时免费使用。
 
 1.  前往[阿里云百炼 MCP 页面](https://bailian.console.aliyun.com/?tab=mcp#/mcp-market)，点击 **Amap Maps** 卡片。
     
@@ -26,10 +31,6 @@ One Key MCP 服务无需手动开通，首次调用自动生效。以使用 **Am
     > 阿里云百炼已部署云端的 Amap Maps MCP 服务，开通试用服务无需填写**AMAP\_MAPS\_API\_KEY**。如需商业化服务定制，也支持使用个人**AMAP\_MAPS\_API\_KEY**。
     
     ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1522646571/p1001810.png)
-    
-    对于涉及敏感信息的 MCP 服务，需通过创建 KMS 凭据加密这些信息。
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9796380571/p966038.png)
 
 ## 在智能体或工作流中配置 MCP 服务
 
@@ -196,6 +197,8 @@ MCP 服务可能有多个工具，但在工作流应用中，每个 MCP 节点�
     点击右上角“测试”按钮，输入“`查询杭州天气`”，查看工作流的输出结果。
     
     ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7991344471/p941629.png)
+
+**重要**也可通过阿里云百炼 CLI 管理和调用 MCP 服务：`bl mcp list` 查看已激活的服务，`bl mcp tools --server <Server Code>` 列出可用工具，`bl mcp call --target <Server Code>.<工具>` 直接调用。详见[使用 CLI](raw/cli/capabilities/agent-infrastructure/mcp-skill.md)。
 
 ## 外部调用 MCP 服务
 

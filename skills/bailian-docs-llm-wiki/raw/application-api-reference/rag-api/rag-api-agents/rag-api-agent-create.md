@@ -10,7 +10,7 @@
 
 **POST** `/api/v1/indices/rag/app/create`
 
-创建一个新的 RAG Agent。Agent 是知识问答/检索能力的封装实体，包含模型配置、检索策略、安全策略等。创建后 Agent 处于草稿（`draft`）状态，版本号为 `beta`，可通过[更新 Agent](raw/application-api-reference/rag-api/rag-api-agents/rag-api-agent-update.md)接口修改配置，通过[发布 Agent](raw/application-api-reference/rag-api/rag-api-agents/rag-api-agent-deploy.md)接口发布。`agent_name` 在同租户同场景下唯一。
+创建一个新的 Knowledge（原RAG） Agent。Agent 是知识问答/检索能力的封装实体，包含模型配置、检索策略、安全策略等。创建后 Agent 处于草稿（`draft`）状态，版本号为 `beta`，可通过[更新 Agent](raw/application-api-reference/rag-api/rag-api-agents/rag-api-agent-update.md)接口修改配置，通过[发布 Agent](raw/application-api-reference/rag-api/rag-api-agents/rag-api-agent-deploy.md)接口发布。`agent_name` 在同租户同场景下唯一。
 
 ## agent\_config 结构
 

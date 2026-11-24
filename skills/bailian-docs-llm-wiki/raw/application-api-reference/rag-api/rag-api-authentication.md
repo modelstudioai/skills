@@ -2,7 +2,7 @@
 
 RAG API 的 API Key 获取、使用方式与安全建议。
 
-RAG API 采用 **API Key** 鉴权。请求通过 `Authorization` Header 携带 API Key，业务空间由 Endpoint 中的 `{workspace_id}` 标识，格式为 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com/`。
+Knowledge API（原RAG API） 采用 **API Key** 鉴权。请求通过 `Authorization` Header 携带 API Key，业务空间由 Endpoint 中的 `{workspace_id}` 标识，格式为 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com/`。
 
 ## 获取 API Key
 
