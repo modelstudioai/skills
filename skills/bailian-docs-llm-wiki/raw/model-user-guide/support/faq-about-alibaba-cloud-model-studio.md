@@ -2,23 +2,27 @@
 
 本文档汇总了在使用阿里云百炼大模型服务平台时遇到的常见问题及其解答。
 
+<a id="计费相关"></a>
+
+<a id="abd5253eebfte"></a>
+
 ## 计费相关
 
 1.  **阿里云百炼平台中模型服务中各模型的收费单价是什么？**
     
-    模型介绍请参见[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)，模型价格请参见[模型调用计费](raw/model-user-guide/test-1/model-pricing.md)。
+    模型介绍请参见[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)，模型价格请参见[模型调用计费](../test-1/model-pricing.md)。
     
 2.  **模型部署的费用是如何计算的？**
     
-    请查看[模型部署计费](raw/model-user-guide/test-1/model-training-and-deployment-billing.md)。
+    请查看[模型部署计费](../test-1/model-training-and-deployment-billing.md)。
     
 3.  **千问大模型训练单价计费是什么？**
     
-    请查看[模型训练计费](raw/model-user-guide/test-1/model-training-and-deployment-billing.md)。
+    请查看[模型训练计费](../test-1/model-training-and-deployment-billing.md)。
     
 4.  **目前是否有预付费相关的服务？**
     
-    部分模型支持预付费服务，详情请参见[节省计划与资源包节省计划](raw/model-user-guide/test-1/savings-plan-and-resource-package.md)。
+    部分模型支持预付费服务，详情请参见[节省计划与资源包节省计划](../test-1/savings-plan-and-resource-package.md)。
     
 5.  **后付费的账单是月结算吗？**
     
@@ -41,6 +45,10 @@
     不支持。万相会员与阿里云百炼的计费体系相互独立，万相会员权益不适用于百炼的API调用。
     
 
+<a id="api-sdk相关"></a>
+
+<a id="89798b6897msj"></a>
+
 ## API/SDK相关
 
 1.  **Completion API 调用报错提示“参数缺失”，错误码“100004”，是什么问题？**
@@ -50,7 +58,9 @@
     **正确示例如下**：
     
 
-```
+<a id="code-block"></a>
+
+```http
 curl --location 'https://bailian.aliyuncs.com/v2/app/completions' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer 85763*************cf050f' \
@@ -65,13 +75,13 @@ curl --location 'https://bailian.aliyuncs.com/v2/app/completions' \
 
 2.  **如何查看错误码信息？**
     
-    阿里云百炼模型服务的API调用将返回状态码以标识调用结果。详情及解决方案请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
+    阿里云百炼模型服务的API调用将返回状态码以标识调用结果。详情及解决方案请参见[错误码](../../model-api-reference/preparations/error-code.md)。
     
 3.  **如何安装SDK?**
     
-    DashScope SDK 支持 Java 和 Python。详情请参见[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+    DashScope SDK 支持 Java 和 Python。详情请参见[安装SDK](../../model-api-reference/preparations/install-sdk.md)。
     
-    多模态交互模型的 SDK 详情请参见 [Realtime API](raw/model-api-reference/realtime-api-directory/realtime-api-overview.md)。
+    多模态交互模型的 SDK 详情请参见 [Realtime API](../../model-api-reference/realtime-api-directory/realtime-api-overview.md)。
     
 4.  **Assistant API 调用 function call ，用户需要依次调用两个本地函数，现在支持吗？**
     
@@ -87,6 +97,10 @@ curl --location 'https://bailian.aliyuncs.com/v2/app/completions' \
     
     doc\_reference\_type 参数只在旧版本应用中生效，新版本应用中直接在应用操作页面开启展示答案来源按钮即可。请检查应用配置中**展示回答来源**开关是否已开启。若该开关处于关闭状态，`doc_reference_type` 参数设置将不会生效。
     
+
+<a id="产品相关"></a>
+
+<a id="640d31f0eeull"></a>
 
 ## 产品相关
 
@@ -112,13 +126,13 @@ curl --location 'https://bailian.aliyuncs.com/v2/app/completions' \
     
 5.  **我的产品接入了千问大模型，需要上架到微信小程序等其他应用商店，需要提供合作协议用于上架产品，应该怎么申请？**
     
-    a.备案号获取流程请查看[应用合规备案](raw/_short/compliance-and-launch-filing-guide-for-ai-apps-p-d8d98ba3cff2bf6f.md)；
+    a.备案号获取流程请查看[应用合规备案](../../_short/compliance-and-launch-filing-guide-for-ai-apps-p-d8d98ba3cff2bf6f.md)；
     
     b.如需申请千问系列模型的合作协议，请通过[大模型百炼合作协议备案自助申请助手](https://smartservice.console.aliyun.com/service/self-service-center/search?id=28023&mode=toolPage&trackFrom=topic-llm2&showDrawer=true)提交申请，提交后可在[审核列表](https://smartservice.console.aliyun.com/service/audit-list?spm=5176.2020520104.0.0.52a63a98OYNqWq)查看审核进度。
     
 6.  **如何实现业务数据隔离，使不同用户的数据之间不关联？**
     
-    可以通过主账号给不同子账号授予不同的业务空间权限，不同业务空间的数据互不影响，存在隔离。详细内容请前往[业务空间权限管理](https://help.aliyun.com/zh/model-studio/permission-management-overview#dac6676deelh2)查看。
+    可以通过主账号给不同子账号授予不同的业务空间权限，不同业务空间的数据互不影响，存在隔离。详细内容请前往[业务空间权限管理](../security-and-compliance/permission-management-overview.md#dac6676deelh2)查看。
     
 7.  **阿里云百炼是否保存模型调用时产生的数据？**
     
@@ -139,11 +153,15 @@ curl --location 'https://bailian.aliyuncs.com/v2/app/completions' \
      百炼目前没有提供官方的独立手机应用，主要通过Web控制台访问。
      
 
+<a id="模型中心"></a>
+
+<a id="bc181783f87v2"></a>
+
 ## 模型中心
 
 1.  **完形填空词的数据能作为训练题吗？**
     
-    可以的，可以通过上传训练集时，指定好问题内容及答案，引导大模型学习。可以点击[自定义模型最佳实践](raw/model-user-guide/use-cases/model-training-best-practices.md)参考。
+    可以的，可以通过上传训练集时，指定好问题内容及答案，引导大模型学习。可以点击[自定义模型最佳实践](../use-cases/model-training-best-practices.md)参考。
     
 2.  **目前阿里云百炼只能训练文字吗？图片可以训练吗？**
     
@@ -215,6 +233,10 @@ curl --location 'https://bailian.aliyuncs.com/v2/app/completions' \
      qwen-plus-latest 是 qwen-plus 的最新版本，属于 Qwen3 系列，而非 Qwen3.5 或 Qwen3.7 系列。另外 Qwen3.5、Qwen3.7 等是独立的模型系列，与 Qwen3 系列并列，并非 Qwen3 的子版本。
      
 
+<a id="模型幻觉问题"></a>
+
+<a id="b2d4f6a8c0e3m"></a>
+
 ## 模型幻觉问题
 
 1.  **什么是模型幻觉？**
@@ -231,6 +253,10 @@ curl --location 'https://bailian.aliyuncs.com/v2/app/completions' \
     4.  **插件/MCP**：利用插件或MCP的能力降低模型幻觉。例如利用大模型去总结结构化数据库中的数据时，可以通过插件/MCP调用数据库客户端完成数据计算，再将计算结果返回给模型做总结，避免模型直接处理数值计算时产生幻觉。
     5.  **模型参数调优**：降低`temperature`、`top_k`、`top_p`等随机性参数，使输出更保守，避免离奇生成，但可能牺牲创造力。降低`max_tokens`在某些场景下可以防止模型回复关键信息后继续捏造内容。
     6.  **后处理验证**：模型推理完成之后，通过后续步骤验证回复内容的正确性。通常是通过AI的能力再去校验一次回答过程是否有幻觉。该方法会增加成本并降低模型请求处理速度。
+
+<a id="cli-相关"></a>
+
+<a id="h-cli-faq"></a>
 
 ## CLI 相关
 
@@ -251,7 +277,11 @@ curl --location 'https://bailian.aliyuncs.com/v2/app/completions' \
     执行 `bl auth status --output json` 查看当前凭据（脱敏输出）；执行 `bl config list` 查看全部 Profile，`bl config use --name <profile>` 切换当前 Profile。
     
 
-CLI 安装、Skills 与报错排查的更多问答见 [安装与鉴权](raw/cli/getting-started/installation.md) 页的“常见问题”。
+CLI 安装、Skills 与报错排查的更多问答见 [安装与鉴权](../../cli/getting-started/installation.md) 页的“常见问题”。
+
+<a id="如何联系我们"></a>
+
+<a id="cf3e495823o4g"></a>
 
 ## 如何联系我们
 

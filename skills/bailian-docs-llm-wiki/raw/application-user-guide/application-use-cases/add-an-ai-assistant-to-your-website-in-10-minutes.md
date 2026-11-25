@@ -2,6 +2,10 @@
 
 在阿里云上您可快速为您的网站添加一个可高度自定义的AI 助手，以便全天候（7x24小时）回应客户咨询，提升用户体验、增强业务竞争力。
 
+<a id="方案概览"></a>
+
+<a id="9f090f0e31045"></a>
+
 ## 方案概览
 
 ![c8ac5d01471a4cda8935c678d9462613](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4742151571/p980978.gif)
@@ -15,11 +19,19 @@
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5482562571/p983292.png)
 
+<a id="1-创建大模型问答应用"></a>
+
+<a id="e9e4d5a24buxu"></a>
+
 ### 1\. 创建大模型问答应用
 
 首先创建百炼应用，获取大模型推理 API 服务。
 
-> 阿里云百炼提供的[新用户免费额度](raw/model-user-guide/test-1/new-free-quota.md)可以覆盖本教程的模型调用消耗，额度消耗完后按 token 计费，相比自行部署大模型可以显著降低初期投入成本。本教程中使用的 AppFlow、函数计算 FC 及可选的 ADB-PG 向量存储由相应云产品单独计费，具体请参见各产品的计费文档。
+> 阿里云百炼提供的[新用户免费额度](../../model-user-guide/test-1/new-free-quota.md)可以覆盖本教程的模型调用消耗，额度消耗完后按 token 计费，相比自行部署大模型可以显著降低初期投入成本。本教程中使用的 AppFlow、函数计算 FC 及可选的 ADB-PG 向量存储由相应云产品单独计费，具体请参见各产品的计费文档。
+
+<a id="1-1-创建应用"></a>
+
+<a id="4f8c2f65a6wpc"></a>
 
 #### 1.1 创建应用
 
@@ -34,13 +46,19 @@
     > 您可输入Prompt设置角色，引导模型应对客户咨询。
     
 
-```
+<a id="code-block"></a>
+
+```text
 你叫小助，可以帮助用户解答产品选购、使用等方面的问题。
 ```
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3601275771/p1066021.png) 3. 在页面右侧可以提问验证模型效果。不过目前它还无法准确回答您公司的商品信息。点击右上角的**发布**，我们将在后面的步骤中去解决这一问题。
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5082715571/p996997.png)
+
+<a id="1-2-获取调用-api-所需的应用id和api-key"></a>
+
+<a id="48d862bea9yrn"></a>
 
 #### 1.2 获取调用 API 所需的应用ID和API Key
 
@@ -52,9 +70,17 @@
 2.  前往[密钥管理](https://bailian.console.aliyun.com/?tab=app#/api-key)页面，点击**创建API Key**，在弹出窗口中创建一个新 API-Key。保存 API-Key 到本地用于后续配置。
     
 
+<a id="2-创建ai助手"></a>
+
+<a id="9ce1153dd92j7"></a>
+
 ### 2\. 创建AI助手
 
 AppFlow 无需代码即可连接网页与模型服务平台。
+
+<a id="2-1-创建ai助手"></a>
+
+<a id="16e7895596rvz"></a>
 
 #### 2.1 创建AI助手
 
@@ -68,6 +94,10 @@ AppFlow 无需代码即可连接网页与模型服务平台。
 4.  在创建AI助手页面中可以自定义您的AI助手图标和名称。配置完成单击**提交**，跳转至AI助手详情页面。
     
     ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2115805571/p975441.png)
+
+<a id="2-2-导入并配置您的模型"></a>
+
+<a id="ae84a3861171e"></a>
 
 #### 2.2 导入并配置您的模型
 
@@ -85,6 +115,10 @@ AppFlow 无需代码即可连接网页与模型服务平台。
     
     ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4742151571/p976234.png)
 
+<a id="2-3-创建ai助手web页面集成"></a>
+
+<a id="d871505a38sgb"></a>
+
 #### 2.3 创建AI助手Web页面集成
 
 1.  **AI助手详情**页面中点击**集成**并选择**web页面集成**，对页面集成进行创建或配置。
@@ -99,9 +133,17 @@ AppFlow 无需代码即可连接网页与模型服务平台。
 4.  完成配置后点击**提交**按钮进行保存。
     
 
+<a id="3-为网站增加-ai-助手"></a>
+
+<a id="fce03efe12i3v"></a>
+
 ### 3\. 为网站增加 AI 助手
 
 在网站中增加 AI 助手非常简单，您只需要在网站的 HTML 文件中插入几行代码。
+
+<a id="3-1-搭建示例网站"></a>
+
+<a id="32ffb45d50hz8"></a>
 
 #### 3.1 搭建示例网站
 
@@ -126,7 +168,13 @@ AppFlow 无需代码即可连接网页与模型服务平台。
     
     ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5482562571/p985864.png)
 
-**说明**如果首次使用阿里云函数计算服务，需要按照页面引导，授权“AliyunFCServerlessDevsRole”角色所需的权限。
+> **说明**
+>
+> 如果首次使用阿里云函数计算服务，需要按照页面引导，授权“AliyunFCServerlessDevsRole”角色所需的权限。
+
+<a id="3-2-增加-ai-助手相关代码"></a>
+
+<a id="b45c1ace092mo"></a>
 
 #### 3.2 增加 AI 助手相关代码
 
@@ -146,6 +194,10 @@ AppFlow 无需代码即可连接网页与模型服务平台。
     
     ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5482562571/p985889.png)
 
+<a id="3-3-验证网站上的-ai-助手"></a>
+
+<a id="80d3029cb9q06"></a>
+
 #### 3.3 验证网站上的 AI 助手
 
 现在，您可以重新访问示例网站页面以查看最新效果。此时您会发现网站的右下角出现了 AI 助手图标![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4742151571/p980795.png)，点击即可唤起 AI 助手。
@@ -154,7 +206,15 @@ AppFlow 无需代码即可连接网页与模型服务平台。
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4742151571/p980799.png)
 
+<a id="常见问题"></a>
+
+<a id="h2-faq-request-error"></a>
+
 ## 常见问题
+
+<a id="嵌入-ai-助手后出现-request-error-怎么办"></a>
+
+<a id="h3-request-error"></a>
 
 ### 嵌入 AI 助手后出现 request error 怎么办？
 
@@ -166,11 +226,19 @@ AppFlow 无需代码即可连接网页与模型服务平台。
 
 以上三项均正确配置后，AI 助手可正常对话。
 
+<a id="4-为-ai-助手增加私有知识"></a>
+
+<a id="bdc1ba5739qp6"></a>
+
 ### 4\. 为 AI 助手增加私有知识
 
 通过前面的步骤，您已经拥有了一个可以和客户对话的 AI 助手。但是，如果想让 AI 助手像公司员工一样，更加精准且专业地回答与商品相关的问题，我们还需要为大模型应用配置知识库。
 
 假设您在一家售卖智能手机的公司工作。您的网站上会有很多与智能手机相关的信息，如支持双卡双待、屏幕、电池容量、内存等信息。不同机型的详细配置清单参考：[阿里云百炼系列手机产品介绍.docx](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20240701/geijms/%E7%99%BE%E7%82%BC%E7%B3%BB%E5%88%97%E6%89%8B%E6%9C%BA%E4%BA%A7%E5%93%81%E4%BB%8B%E7%BB%8D.docx)。
+
+<a id="4-1-配置知识库"></a>
+
+<a id="f3ccbb6a53e4b"></a>
 
 #### 4.1 配置知识库
 
@@ -195,27 +263,55 @@ AppFlow 无需代码即可连接网页与模型服务平台。
     ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0601275771/p1066026.png)
     
 
+<a id="4-2-检验效果"></a>
+
+<a id="221e51e470e4u"></a>
+
 #### 4.2 检验效果
 
 有了参考知识，AI 助手就能准确回答关于您公司的商品的问题了。
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4742151571/p980819.png)
 
+<a id="总结"></a>
+
+<a id="2ef9cb54c8ml8"></a>
+
 ## 总结
 
 通过前面的学习，您已在 10 分钟内免费搭建大模型 RAG 应用并部署到网站，以应对客户咨询。
 
+<a id="应用评测"></a>
+
+<a id="012a3cbc50fpn"></a>
+
 ### 应用评测
 
-建议在正式上线 AI 助手前，组织业务人员一起参与[人工评测](raw/application-user-guide/agent-governance/agenteval/agenteval-evaluation/agenteval-evaluation-task.md)，确保大模型应用的回答效果符合预期。如果不符合预期，可以通过[优化提示词](raw/model-user-guide/use-cases/prompt-engineering-guide.md)、完善补充私有知识、调整文档切分策略等方法来改进回答效果。
+建议在正式上线 AI 助手前，组织业务人员一起参与[人工评测](../agent-governance/agenteval/agenteval-evaluation/agenteval-evaluation-task.md)，确保大模型应用的回答效果符合预期。如果不符合预期，可以通过[优化提示词](../../model-user-guide/use-cases/prompt-engineering-guide.md)、完善补充私有知识、调整文档切分策略等方法来改进回答效果。
+
+<a id="持续改进"></a>
+
+<a id="f978b19e7dwyg"></a>
 
 ### 持续改进
+
+<a id="大模型课程"></a>
+
+<a id="6b40f0f011n3v"></a>
 
 #### 大模型课程
 
 系统体验的改进优化永远没有终点，您可以考虑学习并通过[阿里云大模型 ACA 认证](https://edu.aliyun.com/certification/aca13)，该认证配套的免费课程能帮助您进一步了解大模型的能力和应用场景，以及如何优化大模型的应用效果。
 
+<a id="常见问题-2"></a>
+
+<a id="b5e8c3d7f1a2m"></a>
+
 ## 常见问题
+
+<a id="ai-助手报错-failed-to-stream-content"></a>
+
+<a id="d8e0f5a7b3c4p"></a>
 
 ### AI 助手报错"Failed to stream content"
 

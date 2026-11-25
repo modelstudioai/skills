@@ -2,37 +2,103 @@
 
 使用 DashScope Java SDK 识别本地音频文件或麦克风输入。本文覆盖 Qwen-Audio-ASR-Streaming、Qwen-Audio-ASR-Message 和 Fun-ASR-Realtime。
 
+<a id="前提条件"></a>
+
+<a id="通用参考"></a>
+
+<a id="model-qwen-audio-asr-streaming-8a24f2ed09vr0"></a>
+
+<a id="shared-1"></a>
+
 ## 前提条件
 
--   已开通服务并[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。请配置API Key到环境变量，而非硬编码在代码中，防范因代码泄露导致的安全风险。
--   [安装最新版DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
+<a id="model-qwen-audio-asr-message-8a24f2ed09vr0"></a>
+
+<a id="model-fun-asr-realtime-8a24f2ed09vr0"></a>
+
+-   已开通服务并[获取与配置 API Key](../model-api-reference/preparations/get-api-key.md)。请配置API Key到环境变量，而非硬编码在代码中，防范因代码泄露导致的安全风险。
+-   [安装最新版DashScope SDK](../model-api-reference/preparations/install-sdk.md)。
+
+<a id="接口地址"></a>
+
+<a id="model-qwen-audio-asr-streaming-h2-3r8w6k1j"></a>
+
+<a id="shared-4"></a>
 
 ### 接口地址
 
+<a id="model-qwen-audio-asr-message-h2-3r8w6k1j"></a>
+
+<a id="model-fun-asr-realtime-h2-3r8w6k1j"></a>
+
 SDK的接口地址需在初始化前设置为下方地址（包含WorkspaceId）。如需切换到其他地域，请修改 `Constants.baseWebsocketApiUrl`为对应地域的URL。
+
+<a id="sec-tabs"></a>
+
+<a id="华北2-北京"></a>
+
+<a id="华北2-北京-h4"></a>
 
 #### 华北2（北京）
 
 `wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference`
 
-调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
+
+<a id="新加坡"></a>
+
+<a id="新加坡-h4"></a>
 
 #### 新加坡
 
 `wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/inference`
 
-调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
 
-**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
+> **重要**
+>
+> 阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
+>
+> -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+> -   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
 
--   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
--   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+<a id="快速开始"></a>
+
+<a id="model-qwen-audio-asr-streaming-dd017b69c3byd"></a>
+
+<a id="快速开始-2"></a>
+
+<a id="model-qwen-audio-asr-message-dd017b69c3byd"></a>
+
+<a id="快速开始-3"></a>
+
+<a id="model-fun-asr-realtime-dd017b69c3byd"></a>
+
+<a id="model-qwen-audio-asr-streaming-8341058094tc3"></a>
+
+<a id="model-qwen-audio-asr-streaming-9d1e5f6852jr8"></a>
+
+<a id="model-qwen-audio-asr-streaming-6734e006bc0gp"></a>
+
+<a id="model-qwen-audio-asr-message-8341058094tc3"></a>
+
+<a id="model-qwen-audio-asr-message-9d1e5f6852jr8"></a>
+
+<a id="model-qwen-audio-asr-message-6734e006bc0gp"></a>
+
+<a id="model-fun-asr-realtime-8341058094tc3"></a>
+
+<a id="model-fun-asr-realtime-9d1e5f6852jr8"></a>
+
+<a id="model-fun-asr-realtime-6734e006bc0gp"></a>
 
 ## 快速开始
 
 将示例中的 `{WorkspaceId}` 换成实际的业务空间 ID，`{YOUR_AUDIO_FILE}` 换成本地 16 kHz WAV 文件路径。运行后，终端输出识别结果。
 
-```
+<a id="code-block"></a>
+
+```java
 import com.alibaba.dashscope.audio.asr.recognition.Recognition;
 import com.alibaba.dashscope.audio.asr.recognition.RecognitionParam;
 import com.alibaba.dashscope.utils.Constants;
@@ -75,25 +141,17 @@ public class Main {
 }
 ```
 
+<a id="更多示例"></a>
+
 ### 更多示例
 
 以下代码可共用。示例默认使用 Qwen-Audio-ASR-Streaming。调用其他模型时，按下表替换 `model`。
 
-模型
-
-`model` 的值
-
-Qwen-Audio-ASR-Streaming
-
-非流式调用和基于回调的本地文件示例使用 `qwen-audio-3.1-asr-flash-streaming`。麦克风和 Flowable 示例使用 `qwen-audio-3.0-asr-flash-streaming`。
-
-Qwen-Audio-ASR-Message
-
-`qwen-audio-3.1-asr-flash-message`
-
-Fun-ASR-Realtime
-
-`fun-asr-realtime`
+| 模型 | `model` 的值 |
+| --- | --- |
+| Qwen-Audio-ASR-Streaming | 非流式调用和基于回调的本地文件示例使用 `qwen-audio-3.1-asr-flash-streaming`。麦克风和 Flowable 示例使用 `qwen-audio-3.0-asr-flash-streaming`。 |
+| Qwen-Audio-ASR-Message | `qwen-audio-3.1-asr-flash-message` |
+| Fun-ASR-Realtime | `fun-asr-realtime` |
 
 如需指定识别语言，请按对应模型的[请求参数](#%E8%AF%B7%E6%B1%82%E5%8F%82%E6%95%B0)配置 `language_hints`。
 
@@ -102,13 +160,21 @@ Fun-ASR-Realtime
 -   非流式调用：针对本地文件进行识别，并一次性返回完整的处理结果。适合处理录制好的音频。
 -   双向流式调用：可直接对音频流进行识别，并实时输出结果。音频流可以来自外部设备（如麦克风）或从本地文件读取。适合需要即时反馈的场景。
 
+<a id="sec-tabs-2"></a>
+
+<a id="非流式调用"></a>
+
+<a id="非流式调用-h4"></a>
+
 #### 非流式调用
 
 提交单个语音实时转写任务，通过传入本地文件的方式同步阻塞地拿到转写结果。
 
 将示例中的 `{YOUR_AUDIO_FILE}` 替换为本地 WAV 文件的路径。运行后，程序会在终端打印完整的识别结果。
 
-```
+<a id="code-block-2"></a>
+
+```java
 import com.alibaba.dashscope.audio.asr.recognition.Recognition;
 import com.alibaba.dashscope.audio.asr.recognition.RecognitionParam;
 import com.alibaba.dashscope.utils.Constants;
@@ -152,6 +218,10 @@ public class Main {
 }
 ```
 
+<a id="双向流式调用-基于回调"></a>
+
+<a id="双向流式调用-基于回调-h4"></a>
+
 #### 双向流式调用：基于回调
 
 提交单个语音实时转写任务，通过实现回调接口的方式流式输出实时识别结果。
@@ -175,9 +245,15 @@ public class Main {
     该方法会阻塞当前线程，直到回调接口（ResultCallback）的`onComplete`或者`onError`回调触发后才会释放线程阻塞。
     
 
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-识别传入麦克风的语音-tab"></a>
+
 识别传入麦克风的语音
 
-```
+<a id="code-code-group-识别传入麦克风的语音"></a>
+
+```java
 import com.alibaba.dashscope.audio.asr.recognition.Recognition;
 import com.alibaba.dashscope.audio.asr.recognition.RecognitionParam;
 import com.alibaba.dashscope.audio.asr.recognition.RecognitionResult;
@@ -281,9 +357,13 @@ class RealtimeRecognitionTask implements Runnable {
 }
 ```
 
+<a id="fig-code-group-识别本地语音文件-tab"></a>
+
 识别本地语音文件
 
-```
+<a id="code-code-group-识别本地语音文件"></a>
+
+```java
 import com.alibaba.dashscope.api.GeneralApi;
 import com.alibaba.dashscope.audio.asr.recognition.Recognition;
 import com.alibaba.dashscope.audio.asr.recognition.RecognitionParam;
@@ -438,6 +518,10 @@ class RealtimeRecognitionTask implements Runnable {
 }
 ```
 
+<a id="双向流式调用-基于flowable"></a>
+
+<a id="双向流式调用-基于flowable-h4"></a>
+
 #### 双向流式调用：基于Flowable
 
 提交单个语音实时转写任务，通过实现工作流（Flowable）的方式流式输出实时识别结果。
@@ -453,7 +537,9 @@ Flowable 是 RxJava 中用于处理响应式数据流的类。关于Flowable的�
 -   `RecognitionParam`实例（请求参数）：通过它可以设置语音识别所需的模型、采样率、音频格式等参数。
 -   `Flowable<ByteBuffer>`实例：您需要创建一个`Flowable<ByteBuffer>`类型的实例，并在其中实现解析音频流的方法。
 
-```
+<a id="code-block-3"></a>
+
+```java
 import com.alibaba.dashscope.audio.asr.recognition.Recognition;
 import com.alibaba.dashscope.audio.asr.recognition.RecognitionParam;
 import com.alibaba.dashscope.exception.NoApiKeyException;
@@ -547,17 +633,41 @@ public class Main {
 }
 ```
 
+<a id="高并发调用"></a>
+
+<a id="model-qwen-audio-asr-streaming-ea8503736dlf7"></a>
+
+<a id="高并发调用-2"></a>
+
+<a id="model-qwen-audio-asr-message-ea8503736dlf7"></a>
+
+<a id="高并发调用-3"></a>
+
+<a id="model-fun-asr-realtime-ea8503736dlf7"></a>
+
 ### 高并发调用
 
-在DashScope Java SDK中，采用了OkHttp3的连接池技术，以减少重复建立连接的开销。详情请参见[高并发最佳实践](https://help.aliyun.com/zh/model-studio/speech-recognition-best-practices#java)。
+在DashScope Java SDK中，采用了OkHttp3的连接池技术，以减少重复建立连接的开销。详情请参见[高并发最佳实践](../model-user-guide/model-experience/speech-and-audio/speech-recognition/speech-recognition-best-practices.md#java)。
+
+<a id="请求参数"></a>
 
 ## 请求参数
+
+<a id="qwen-audio-asr-message"></a>
+
+<a id="model-qwen-audio-asr-message"></a>
+
+<a id="请求参数-2"></a>
+
+<a id="model-qwen-audio-asr-message-d72d661a1brzp"></a>
 
 ### Qwen-Audio-ASR-Message
 
 通过`RecognitionParam`的链式方法配置模型、采样率、音频格式等参数。配置完成的参数对象传入[Recognition类](#model-qwen-audio-asr-message-adcb5e9bddbyq)的`call`/`streamCall`方法中使用。
 
-```
+<a id="code-block-4"></a>
+
+```java
 RecognitionParam param = RecognitionParam.builder()
   .model("qwen-audio-3.1-asr-flash-message")
   .format("pcm")
@@ -565,518 +675,146 @@ RecognitionParam param = RecognitionParam.builder()
   .build();
 ```
 
-**参数**
-
-**类型**
-
-**是否必须**
-
-**说明**
-
-`model`
-
-`String`
-
-是
-
-模型名，设置为 `qwen-audio-3.1-asr-flash-message`。
-
-`sampleRate`
-
-`Integer`
-
-是
-
-采样率（Hz）。
-
-仅支持 `16000` Hz。
-
-`format`
-
-`String`
-
-是
-
-音频格式。
-
-取值范围：
-
--   `pcm`
--   `wav`
--   `mp3`
--   `opus`
--   `speex`
--   `aac`
--   `amr`
-
-**重要**opus/speex：必须使用Ogg封装；
-
-wav：必须为PCM编码；
-
-amr：仅支持AMR-NB类型。
-
-`disfluency_removal_enabled`
-
-`boolean`
-
-否
-
-是否过滤语气词并对输出结果进行润色，默认值为 `false`。设置为 `true` 时启用。 通过 `.parameter("disfluency_removal_enabled", value)` 设置。
-
-`intermediate_result_enabled`
-
-`boolean`
-
-否
-
-是否返回流式中间结果，默认值为 `false`。设置为 `true` 时返回流式中间结果。 通过 `.parameter("intermediate_result_enabled", value)` 设置。
-
-`keep_dialect`
-
-`boolean`
-
-否
-
-默认 `false`，将方言转写为普通话；设为 `true` 时保留方言表达。通过 `.parameter("keep_dialect", value)` 设置。完整参数说明请参见[客户端事件](raw/_short/qwen-asr-message-client-events-1721a061cc8750e6.md)。
-
-仅在最终结果（`sentence_end=true`）生效，中间结果（`sentence_end=false`）不支持。
-
-`vad_model`
-
-`String`
-
-否
-
-可选 `near_meeting_16k`（近场）或 `far_field_meeting_16k`（远场，默认值）。通过 `.parameter("vad_model", value)` 设置。完整参数说明请参见[客户端事件](raw/_short/qwen-asr-message-client-events-1721a061cc8750e6.md)。
-
-`vocabularyId`
-
-`String`
-
-否
-
-预编译热词列表 ID。
-
-需预先调用创建热词列表接口生成，识别时传入该 ID 即可使用列表中的热词。
-
-适用于词汇已知且相对稳定、需要跨请求复用同一词表的场景。
-
-使用方法请参见[预编译热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_precompiled_h3)。
-
-`vocabulary`
-
-`Map<String, Integer>`
-
-否
-
-即时热词。
-
-以键值对形式传入，键为热词文本（`string`），值为热词权重（`integer`），无需预先创建热词列表。权重取值范围为 \[1, 5\] 或 50：取 \[1, 5\] 时值越大模型越倾向输出该词；取 50 时为超级热词，召回率大幅提升，但超级热词数量最多不超过 50 个。
-
-适用于临时性、会话级别的热词优化。
-
-与预编译热词同时配置时，系统会合并两类热词；合并后超过 2000 个时，随机选择 2000 个使用。使用方法请参见[即时热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_instant_h3)。
-
-`vocabulary`需要通过 `RecognitionParam` 实例的 `parameter` 方法或者 `parameters` 方法进行设置：
-
-通过parameter设置
-
-```
-Map<String, Integer> vocab = new HashMap<>();
-vocab.put("张三", 5);
-vocab.put("李四", 5);
+<table><thead><tr><th><strong>参数</strong></th><th><strong>类型</strong></th><th><strong>是否必须</strong></th><th><strong>说明</strong></th></tr></thead><tbody><tr><td><code>model</code></td><td><code>String</code></td><td>是</td><td>模型名，设置为 <code>qwen-audio-3.1-asr-flash-message</code>。</td></tr><tr><td><code>sampleRate</code></td><td><code>Integer</code></td><td>是</td><td><p>采样率（Hz）。</p><p>仅支持 <code>16000</code> Hz。</p></td></tr><tr><td><code>format</code></td><td><code>String</code></td><td>是</td><td><p>音频格式。</p><p>取值范围：</p><ul><li><code>pcm</code></li><li><code>wav</code></li><li><code>mp3</code></li><li><code>opus</code></li><li><code>speex</code></li><li><code>aac</code></li><li><code>amr</code></li></ul><div><div><p><strong>重要</strong>opus/speex：必须使用Ogg封装；</p><p>wav：必须为PCM编码；</p><p>amr：仅支持AMR-NB类型。</p></div></div></td></tr><tr><td><code>disfluency_removal_enabled</code></td><td><code>boolean</code></td><td>否</td><td>是否过滤语气词并对输出结果进行润色，默认值为 <code>false</code>。设置为 <code>true</code> 时启用。 通过 <code>.parameter(&quot;disfluency_removal_enabled&quot;, value)</code> 设置。</td></tr><tr><td><code>intermediate_result_enabled</code></td><td><code>boolean</code></td><td>否</td><td>是否返回流式中间结果，默认值为 <code>false</code>。设置为 <code>true</code> 时返回流式中间结果。 通过 <code>.parameter(&quot;intermediate_result_enabled&quot;, value)</code> 设置。</td></tr><tr><td><code>keep_dialect</code></td><td><code>boolean</code></td><td>否</td><td>默认 <code>false</code>，将方言转写为普通话；设为 <code>true</code> 时保留方言表达。通过 <code>.parameter(&quot;keep_dialect&quot;, value)</code> 设置。完整参数说明请参见<a href="qwen-asr-message-client-events-1721a061cc8750e6.md">客户端事件</a>。<p>仅在最终结果（<code>sentence_end=true</code>）生效，中间结果（<code>sentence_end=false</code>）不支持。</p></td></tr><tr><td><code>vad_model</code></td><td><code>String</code></td><td>否</td><td>可选 <code>near_meeting_16k</code>（近场）或 <code>far_field_meeting_16k</code>（远场，默认值）。通过 <code>.parameter(&quot;vad_model&quot;, value)</code> 设置。完整参数说明请参见<a href="qwen-asr-message-client-events-1721a061cc8750e6.md">客户端事件</a>。</td></tr><tr><td><code>vocabularyId</code></td><td><code>String</code></td><td>否</td><td><p>预编译热词列表 ID。</p><p>需预先调用创建热词列表接口生成，识别时传入该 ID 即可使用列表中的热词。</p><p>适用于词汇已知且相对稳定、需要跨请求复用同一词表的场景。</p><p>使用方法请参见<a href="../model-user-guide/model-experience/speech-and-audio/speech-recognition/improve-asr-accuracy.md#hw_precompiled_h3">预编译热词</a>。</p></td></tr><tr><td><code>vocabulary</code></td><td><code>Map&lt;String, Integer&gt;</code></td><td>否</td><td><p>即时热词。</p><p>以键值对形式传入，键为热词文本（<code>string</code>），值为热词权重（<code>integer</code>），无需预先创建热词列表。权重取值范围为 [1, 5] 或 50：取 [1, 5] 时值越大模型越倾向输出该词；取 50 时为超级热词，召回率大幅提升，但超级热词数量最多不超过 50 个。</p><p>适用于临时性、会话级别的热词优化。</p><p>与预编译热词同时配置时，系统会合并两类热词；合并后超过 2000 个时，随机选择 2000 个使用。使用方法请参见<a href="../model-user-guide/model-experience/speech-and-audio/speech-recognition/improve-asr-accuracy.md#hw_instant_h3">即时热词</a>。</p><p><code>vocabulary</code>需要通过 <code>RecognitionParam</code> 实例的 <code>parameter</code> 方法或者 <code>parameters</code> 方法进行设置：</p><a id="fig-code-group-2"></a><div><a id="fig-code-group-2-通过parameter设置-tab"></a>通过parameter设置<div><a id="code-code-group-2-通过parameter设置"></a><pre class="language-java"><code>Map&lt;String, Integer&gt; vocab = new HashMap&lt;&gt;();
+vocab.put(&quot;张三&quot;, 5);
+vocab.put(&quot;李四&quot;, 5);
 
 RecognitionParam param = RecognitionParam.builder()
-        .model("qwen-audio-3.1-asr-flash-message")
-        .format("pcm")
+        .model(&quot;qwen-audio-3.1-asr-flash-message&quot;)
+        .format(&quot;pcm&quot;)
         .sampleRate(16000)
-        .parameter("vocabulary", vocab)
+        .parameter(&quot;vocabulary&quot;, vocab)
         .build();
-```
+</code></pre></div><a id="fig-code-group-2-通过parameters设置-tab"></a>通过parameters设置<div><a id="code-code-group-2-通过parameters设置"></a><pre class="language-java"><code>Map&lt;String, Integer&gt; vocab = new HashMap&lt;&gt;();
+vocab.put(&quot;张三&quot;, 5);
+vocab.put(&quot;李四&quot;, 5);
 
-通过parameters设置
-
-```
-Map<String, Integer> vocab = new HashMap<>();
-vocab.put("张三", 5);
-vocab.put("李四", 5);
-
-Map<String, Object> parameters = new HashMap<>();
-parameters.put("vocabulary", vocab);
+Map&lt;String, Object&gt; parameters = new HashMap&lt;&gt;();
+parameters.put(&quot;vocabulary&quot;, vocab);
 
 RecognitionParam param = RecognitionParam.builder()
-        .model("qwen-audio-3.1-asr-flash-message")
-        .format("pcm")
+        .model(&quot;qwen-audio-3.1-asr-flash-message&quot;)
+        .format(&quot;pcm&quot;)
         .sampleRate(16000)
         .parameters(parameters)
         .build();
-```
-
-`language_hints`
-
-`String[]`
-
-否
-
-待识别音频语种。无默认值，不设置时模型自动识别。
-
-最多支持设置 4 个值，超出时仅前 4 个生效。
-
-点击查看支持的语言代码
-
--   zh: 中文
--   en: 英文
--   ja: 日语
--   ko：韩语
--   vi：越南语
--   th：泰语
--   id：印尼语
--   ms：马来语
--   tl：菲律宾语
--   hi：印地语
--   ar：阿拉伯语
--   fr：法语
--   de：德语
--   es：西班牙语
--   pt：葡萄牙语
--   ru：俄语
--   it：意大利语
--   nl：荷兰语
--   sv：瑞典语
--   da：丹麦语
--   fi：芬兰语
--   no：挪威语
--   el：希腊语
--   pl：波兰语
--   cs：捷克语
--   hu：匈牙利语
--   ro：罗马尼亚语
--   bg：保加利亚语
--   hr：克罗地亚语
--   sk：斯洛伐克语
-
-通过 `RecognitionParam` 的 `.parameter("language_hints", new String[]{"zh"})` 设置。
-
-仅在最终结果（`sentence_end=true`）生效，中间结果（`sentence_end=false`）不支持。
-
-`max_sentence_silence`
-
-`Integer`
-
-否
-
-VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈值时，系统会判定该句子已结束。
-
-默认值：800。
-
-取值范围：\[200, 6000\]。
-
-`max_sentence_silence`需要通过`RecognitionParam`实例的`parameter`方法或者`parameters`方法进行设置：
-
-通过parameter设置
-
-```
-RecognitionParam param = RecognitionParam.builder()
- .model("qwen-audio-3.1-asr-flash-message")
- .format("pcm")
+</code></pre></div></div></td></tr><tr><td><code>language_hints</code></td><td><code>String[]</code></td><td>否</td><td>待识别音频语种。无默认值，不设置时模型自动识别。<p>最多支持设置 4 个值，超出时仅前 4 个生效。</p><a id="accordion-点击查看支持的语言代码"></a><section><p>点击查看支持的语言代码</p><div><ul><li>zh: 中文</li><li>en: 英文</li><li>ja: 日语</li><li>ko：韩语</li><li>vi：越南语</li><li>th：泰语</li><li>id：印尼语</li><li>ms：马来语</li><li>tl：菲律宾语</li><li>hi：印地语</li><li>ar：阿拉伯语</li><li>fr：法语</li><li>de：德语</li><li>es：西班牙语</li><li>pt：葡萄牙语</li><li>ru：俄语</li><li>it：意大利语</li><li>nl：荷兰语</li><li>sv：瑞典语</li><li>da：丹麦语</li><li>fi：芬兰语</li><li>no：挪威语</li><li>el：希腊语</li><li>pl：波兰语</li><li>cs：捷克语</li><li>hu：匈牙利语</li><li>ro：罗马尼亚语</li><li>bg：保加利亚语</li><li>hr：克罗地亚语</li><li>sk：斯洛伐克语</li></ul></div></section><p>通过 <code>RecognitionParam</code> 的 <code>.parameter(&quot;language_hints&quot;, new String[]{&quot;zh&quot;})</code> 设置。</p><p>仅在最终结果（<code>sentence_end=true</code>）生效，中间结果（<code>sentence_end=false</code>）不支持。</p></td></tr><tr><td><code>max_sentence_silence</code></td><td><code>Integer</code></td><td>否</td><td><p>VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈值时，系统会判定该句子已结束。</p><p>默认值：800。</p><p>取值范围：[200, 6000]。</p><p><code>max_sentence_silence</code>需要通过<code>RecognitionParam</code>实例的<code>parameter</code>方法或者<code>parameters</code>方法进行设置：</p><a id="fig-code-group-3"></a><div><a id="fig-code-group-3-通过parameter设置-tab"></a>通过parameter设置<div><a id="code-code-group-3-通过parameter设置"></a><pre class="language-java"><code>RecognitionParam param = RecognitionParam.builder()
+ .model(&quot;qwen-audio-3.1-asr-flash-message&quot;)
+ .format(&quot;pcm&quot;)
  .sampleRate(16000)
- .parameter("max_sentence_silence", 800)
+ .parameter(&quot;max_sentence_silence&quot;, 800)
  .build();
-```
-
-通过parameters设置
-
-```
-RecognitionParam param = RecognitionParam.builder()
- .model("qwen-audio-3.1-asr-flash-message")
- .format("pcm")
+</code></pre></div><a id="fig-code-group-3-通过parameters设置-tab"></a>通过parameters设置<div><a id="code-code-group-3-通过parameters设置"></a><pre class="language-java"><code>RecognitionParam param = RecognitionParam.builder()
+ .model(&quot;qwen-audio-3.1-asr-flash-message&quot;)
+ .format(&quot;pcm&quot;)
  .sampleRate(16000)
- .parameters(Collections.singletonMap("max_sentence_silence", 800))
+ .parameters(Collections.singletonMap(&quot;max_sentence_silence&quot;, 800))
  .build();
-```
-
-`heartbeat`
-
-`boolean`
-
-否
-
-是否启用心跳包。
-
-默认值：false。
-
--   true：在持续发送静音音频的情况下，可保持与服务端的连接不中断。
--   false（默认）：即使持续发送静音音频，连接也将在一定时间后因超时而断开。
-
-静音音频指的是在音频文件或数据流中没有声音信号的内容。静音音频可以通过多种方法生成，例如使用音频编辑软件如Audacity或Adobe Audition，或者通过命令行工具如FFmpeg。
-
-**说明**使用该字段时，SDK版本不能低于2.19.1。
-
-`heartbeat`需要通过`RecognitionParam`实例的`parameter`方法或者`parameters`方法进行设置：
-
-通过parameter设置
-
-```
-RecognitionParam param = RecognitionParam.builder()
- .model("qwen-audio-3.1-asr-flash-message")
- .format("pcm")
+</code></pre></div></div></td></tr><tr><td><code>heartbeat</code></td><td><code>boolean</code></td><td>否</td><td><p>是否启用心跳包。</p><p>默认值：false。</p><ul><li>true：在持续发送静音音频的情况下，可保持与服务端的连接不中断。</li><li>false（默认）：即使持续发送静音音频，连接也将在一定时间后因超时而断开。</li></ul><p>静音音频指的是在音频文件或数据流中没有声音信号的内容。静音音频可以通过多种方法生成，例如使用音频编辑软件如Audacity或Adobe Audition，或者通过命令行工具如FFmpeg。</p><div><div><p><strong>说明</strong>使用该字段时，SDK版本不能低于2.19.1。</p></div></div><p><code>heartbeat</code>需要通过<code>RecognitionParam</code>实例的<code>parameter</code>方法或者<code>parameters</code>方法进行设置：</p><a id="fig-code-group-4"></a><div><a id="fig-code-group-4-通过parameter设置-tab"></a>通过parameter设置<div><a id="code-code-group-4-通过parameter设置"></a><pre class="language-java"><code>RecognitionParam param = RecognitionParam.builder()
+ .model(&quot;qwen-audio-3.1-asr-flash-message&quot;)
+ .format(&quot;pcm&quot;)
  .sampleRate(16000)
- .parameter("heartbeat", true)
+ .parameter(&quot;heartbeat&quot;, true)
  .build();
-```
-
-通过parameters设置
-
-```
-RecognitionParam param = RecognitionParam.builder()
- .model("qwen-audio-3.1-asr-flash-message")
- .format("pcm")
+</code></pre></div><a id="fig-code-group-4-通过parameters设置-tab"></a>通过parameters设置<div><a id="code-code-group-4-通过parameters设置"></a><pre class="language-java"><code>RecognitionParam param = RecognitionParam.builder()
+ .model(&quot;qwen-audio-3.1-asr-flash-message&quot;)
+ .format(&quot;pcm&quot;)
  .sampleRate(16000)
- .parameters(Collections.singletonMap("heartbeat", true))
+ .parameters(Collections.singletonMap(&quot;heartbeat&quot;, true))
  .build();
-```
-
-`speech_noise_threshold`
-
-`float`
-
-否
-
-语音与噪音的判定阈值，用于调整语音活动检测（VAD）的灵敏度。
-
-取值范围：\[-1.0, 1.0\]。
-
-取值说明：
-
--   取值越接近 -1：降低噪音判定阈值，噪音被识别为语音的概率增大，可能导致更多噪音被转写
--   取值越接近 +1：提高噪音判定阈值，语音被误判为噪音的概率增大，可能导致部分语音被过滤
-
-此参数为高级配置参数，调整可能显著影响识别效果，建议：
-
--   调整前充分测试验证效果
--   根据实际音频环境小幅度调整（建议步长 0.1）
-
-`speech_noise_threshold`需要通过`RecognitionParam`实例的`parameter`方法或者`parameters`方法进行设置：
-
-通过parameter设置
-
-```
-RecognitionParam param = RecognitionParam.builder()
- .model("qwen-audio-3.1-asr-flash-message")
- .format("pcm")
+</code></pre></div></div></td></tr><tr><td><code>speech_noise_threshold</code></td><td><code>float</code></td><td>否</td><td><p>语音与噪音的判定阈值，用于调整语音活动检测（VAD）的灵敏度。</p><p>取值范围：[-1.0, 1.0]。</p><p>取值说明：</p><ul><li>取值越接近 -1：降低噪音判定阈值，噪音被识别为语音的概率增大，可能导致更多噪音被转写</li><li>取值越接近 +1：提高噪音判定阈值，语音被误判为噪音的概率增大，可能导致部分语音被过滤</li></ul><p>此参数为高级配置参数，调整可能显著影响识别效果，建议：</p><ul><li>调整前充分测试验证效果</li><li>根据实际音频环境小幅度调整（建议步长 0.1）</li></ul><p><code>speech_noise_threshold</code>需要通过<code>RecognitionParam</code>实例的<code>parameter</code>方法或者<code>parameters</code>方法进行设置：</p><a id="fig-code-group-5"></a><div><a id="fig-code-group-5-通过parameter设置-tab"></a>通过parameter设置<div><a id="code-code-group-5-通过parameter设置"></a><pre class="language-java"><code>RecognitionParam param = RecognitionParam.builder()
+ .model(&quot;qwen-audio-3.1-asr-flash-message&quot;)
+ .format(&quot;pcm&quot;)
  .sampleRate(16000)
- .parameter("speech_noise_threshold", -0.5)
+ .parameter(&quot;speech_noise_threshold&quot;, -0.5)
  .build();
-```
-
-通过parameters设置
-
-```
-RecognitionParam param = RecognitionParam.builder()
- .model("qwen-audio-3.1-asr-flash-message")
- .format("pcm")
+</code></pre></div><a id="fig-code-group-5-通过parameters设置-tab"></a>通过parameters设置<div><a id="code-code-group-5-通过parameters设置"></a><pre class="language-java"><code>RecognitionParam param = RecognitionParam.builder()
+ .model(&quot;qwen-audio-3.1-asr-flash-message&quot;)
+ .format(&quot;pcm&quot;)
  .sampleRate(16000)
- .parameters(Collections.singletonMap("speech_noise_threshold", -0.5))
+ .parameters(Collections.singletonMap(&quot;speech_noise_threshold&quot;, -0.5))
  .build();
-```
+</code></pre></div></div></td></tr><tr><td><code>input</code></td><td><code>Map&lt;String, Object&gt;</code></td><td>否</td><td><p>输入对象，用于传入对话上下文（context）。上下文用于辅助识别、提升专有词汇的识别准确率。使用方法详见<a href="../model-user-guide/model-experience/speech-and-audio/speech-recognition/improve-asr-accuracy.md">提升识别准确率</a>。</p><p>Map 中需包含 <code>context</code> 键，值为 <code>List&lt;Map&lt;String, Object&gt;&gt;</code> 类型的消息数组，每条消息包含以下字段：</p><ul><li><code>role</code>（String，必选）：消息角色。<code>user</code> 表示前几轮用户语音的识别结果或领域相关的词表；<code>assistant</code> 表示前几轮大语言模型的回复内容。</li><li><code>content</code>（List&lt;Map&gt;，必选）：消息内容列表。每个元素包含 <code>type</code>（String，role 为 user 时填 <code>input_text</code>，role 为 assistant 时填 <code>text</code>）和 <code>text</code>（String，文本内容）。</li></ul><div><div><p><strong>重要</strong>上下文消息（<code>input_text</code> 和 <code>text</code> 类型）各最多 5 条，超出时保留最近的 5 条。每轮上下文文本总长度不超过 400 个字符，超出部分从末尾截断。</p></div></div><div><div><p><strong>重要</strong>携带上下文时，<code>context</code> 中的消息顺序有要求：上下文消息必须按对话轮次排列，每轮中 <code>user</code>（<code>input_text</code> 类型）必须在对应的 <code>assistant</code>（<code>text</code> 类型）之前。</p></div></div><div><div><p><strong>说明</strong>使用该字段时，SDK版本不能低于2.22.23。</p></div></div><p><code>input</code>通过<code>RecognitionParam</code>实例的<code>input</code>方法进行设置：</p><a id="code-block-5"></a><pre class="language-java"><code>// 1. 构建 input 结构体
+Map&lt;String, Object&gt; userContent = new HashMap&lt;&gt;();
+userContent.put(&quot;type&quot;, &quot;input_text&quot;);
+userContent.put(&quot;text&quot;, &quot;你好啊&quot;);
 
-`input`
+Map&lt;String, Object&gt; assistantContent = new HashMap&lt;&gt;();
+assistantContent.put(&quot;type&quot;, &quot;text&quot;);
+assistantContent.put(&quot;text&quot;, &quot;你好啊，我是通义千问，有什么可以帮助你的？&quot;);
 
-`Map<String, Object>`
+Map&lt;String, Object&gt; userMessage = new HashMap&lt;&gt;();
+userMessage.put(&quot;role&quot;, &quot;user&quot;);
+userMessage.put(&quot;content&quot;, Arrays.asList(userContent));
 
-否
+Map&lt;String, Object&gt; assistantMessage = new HashMap&lt;&gt;();
+assistantMessage.put(&quot;role&quot;, &quot;assistant&quot;);
+assistantMessage.put(&quot;content&quot;, Arrays.asList(assistantContent));
 
-输入对象，用于传入对话上下文（context）。上下文用于辅助识别、提升专有词汇的识别准确率。使用方法详见[提升识别准确率](raw/model-user-guide/model-experience/speech-and-audio/speech-recognition/improve-asr-accuracy.md)。
-
-Map 中需包含 `context` 键，值为 `List<Map<String, Object>>` 类型的消息数组，每条消息包含以下字段：
-
--   `role`（String，必选）：消息角色。`user` 表示前几轮用户语音的识别结果或领域相关的词表；`assistant` 表示前几轮大语言模型的回复内容。
--   `content`（List<Map>，必选）：消息内容列表。每个元素包含 `type`（String，role 为 user 时填 `input_text`，role 为 assistant 时填 `text`）和 `text`（String，文本内容）。
-
-**重要**上下文消息（`input_text` 和 `text` 类型）各最多 5 条，超出时保留最近的 5 条。每轮上下文文本总长度不超过 400 个字符，超出部分从末尾截断。
-
-**重要**携带上下文时，`context` 中的消息顺序有要求：上下文消息必须按对话轮次排列，每轮中 `user`（`input_text` 类型）必须在对应的 `assistant`（`text` 类型）之前。
-
-**说明**使用该字段时，SDK版本不能低于2.22.23。
-
-`input`通过`RecognitionParam`实例的`input`方法进行设置：
-
-```
-// 1. 构建 input 结构体
-Map<String, Object> userContent = new HashMap<>();
-userContent.put("type", "input_text");
-userContent.put("text", "你好啊");
-
-Map<String, Object> assistantContent = new HashMap<>();
-assistantContent.put("type", "text");
-assistantContent.put("text", "你好啊，我是通义千问，有什么可以帮助你的？");
-
-Map<String, Object> userMessage = new HashMap<>();
-userMessage.put("role", "user");
-userMessage.put("content", Arrays.asList(userContent));
-
-Map<String, Object> assistantMessage = new HashMap<>();
-assistantMessage.put("role", "assistant");
-assistantMessage.put("content", Arrays.asList(assistantContent));
-
-Map<String, Object> input = new HashMap<>();
-input.put("context", Arrays.asList(userMessage, assistantMessage));
+Map&lt;String, Object&gt; input = new HashMap&lt;&gt;();
+input.put(&quot;context&quot;, Arrays.asList(userMessage, assistantMessage));
 
 // 2. 通过 input 方法传入
 RecognitionParam param = RecognitionParam.builder()
- .model("qwen-audio-3.1-asr-flash-message")
- .format("pcm")
+ .model(&quot;qwen-audio-3.1-asr-flash-message&quot;)
+ .format(&quot;pcm&quot;)
  .sampleRate(16000)
  .input(input)
  .build();
-```
+</code></pre></td></tr><tr><td><code>apiKey</code></td><td><code>String</code></td><td>否</td><td>用户API Key。</td></tr></tbody></table>
 
-`apiKey`
-
-`String`
-
-否
-
-用户API Key。
+<a id="接口参考"></a>
 
 ## 接口参考
 
+<a id="qwen-audio-asr-message-的接口"></a>
+
+<a id="关键接口-2"></a>
+
+<a id="model-qwen-audio-asr-message-8b0d2507910sx"></a>
+
 ### Qwen-Audio-ASR-Message 的接口
+
+<a id="recognition类"></a>
+
+<a id="model-qwen-audio-asr-message-adcb5e9bddbyq"></a>
 
 #### `Recognition`类
 
 `Recognition`通过`import com.alibaba.dashscope.audio.asr.recognition.Recognition;`方式引入。它的关键接口如下：
 
-**接口/方法**
+<table><thead><tr><th><strong>接口/方法</strong></th><th><strong>参数</strong></th><th><strong>返回值</strong></th><th><strong>描述</strong></th></tr></thead><tbody><tr><td><a id="code-block-6"></a><pre class="language-java"><code>public void call(RecognitionParam param, final ResultCallback&lt;RecognitionResult&gt; callback)
+</code></pre></td><td><ul><li><code>param</code>：<a href="#model-qwen-audio-asr-message-d72d661a1brzp">请求参数</a></li><li><code>callback</code>：<a href="#model-qwen-audio-asr-message-3639e1cb40mxi">回调接口（ResultCallback）</a></li></ul></td><td>无</td><td>基于回调形式的流式实时识别，该方法不会阻塞当前线程。</td></tr><tr><td><a id="code-block-7"></a><pre class="language-java"><code>public String call(RecognitionParam param, File file)
+</code></pre></td><td><ul><li><code>param</code>：<a href="#model-qwen-audio-asr-message-d72d661a1brzp">请求参数</a></li><li><code>file</code>：待识别音频文件</li></ul></td><td>识别结果</td><td>基于本地文件的非流式调用，该方法会阻塞当前线程直到全部音频读完，该方法要求所识别文件具有可读权限。</td></tr><tr><td><a id="code-block-8"></a><pre class="language-java"><code>public Flowable&lt;RecognitionResult&gt; streamCall(RecognitionParam param, Flowable&lt;ByteBuffer&gt; audioFrame)
+</code></pre></td><td><ul><li><code>param</code>：<a href="#model-qwen-audio-asr-message-d72d661a1brzp">请求参数</a></li><li><code>audioFrame</code>：<code>Flowable&lt;ByteBuffer&gt;</code>实例</li></ul></td><td><code>Flowable&lt;RecognitionResult&gt;</code></td><td>基于Flowable的流式实时识别。</td></tr><tr><td><a id="code-block-9"></a><pre class="language-java"><code>public void sendAudioFrame(ByteBuffer audioFrame)
+</code></pre></td><td><ul><li><code>audioFrame</code>：二进制音频流，为<code>ByteBuffer</code>类型</li></ul></td><td>无</td><td><p>推送音频，每次推送的音频流不宜过大或过小，建议每包音频时长为100ms左右，大小在1KB~16KB之间。</p><p>识别结果通过<a href="#model-qwen-audio-asr-message-3639e1cb40mxi">回调接口（ResultCallback）</a>的onEvent方法获取。</p></td></tr><tr><td><a id="code-block-10"></a><pre class="language-java"><code>public void stop()
+</code></pre></td><td>无</td><td>无</td><td><p>停止实时识别。</p><p>该方法会阻塞当前线程，直到回调实例<code>ResultCallback</code>的<code>onComplete</code>或者<code>onError</code>被调用之后才会解除对当前线程的阻塞。</p></td></tr><tr><td><a id="code-block-11"></a><pre class="language-java"><code>boolean getDuplexApi().close(int code, String reason)
+</code></pre></td><td><p>code: WebSocket关闭码（Close Code）</p><p>reason：关闭原因</p><p>这两个参数可参考<a href="https://datatracker.ietf.org/doc/html/rfc6455#section-7.1.5">The WebSocket Protocol</a>文档进行配置</p></td><td>true</td><td>在任务结束后，无论是否出现异常都需要关闭WebSocket连接，避免造成连接泄漏。关于如何复用连接提升效率请参考<a href="../model-user-guide/model-experience/speech-and-audio/speech-recognition/speech-recognition-best-practices.md#java">高并发最佳实践</a>。</td></tr><tr><td><a id="code-block-12"></a><pre class="language-java"><code>public String getLastRequestId()
+</code></pre></td><td>无</td><td>requestId</td><td><p>获取当前任务的requestId，在调用<code>call</code>、<code>streamingCall</code>开始新任务之后可以使用。</p><div><div><p><strong>说明</strong>该方法自2.18.0版本及以后的SDK中才开始提供。</p></div></div></td></tr><tr><td><a id="code-block-13"></a><pre class="language-java"><code>public long getFirstPackageDelay()
+</code></pre></td><td>无</td><td>首包延迟</td><td><p>获取首包延迟，从发送第一包音频到收到首包识别结果延迟，在任务完成后使用。</p><div><div><p><strong>说明</strong>该方法自2.18.0版本及以后的SDK中才开始提供。</p></div></div></td></tr><tr><td><a id="code-block-14"></a><pre class="language-java"><code>public long getLastPackageDelay()
+</code></pre></td><td>无</td><td>尾包延迟</td><td><p>获得尾包延迟，发送<code>stop</code>指令到最后一包识别结果下发耗时，在任务完成后使用。</p><div><div><p><strong>说明</strong>该方法自2.18.0版本及以后的SDK中才开始提供。</p></div></div></td></tr></tbody></table>
 
-**参数**
-
-**返回值**
-
-**描述**
-
-```
-public void call(RecognitionParam param, final ResultCallback<RecognitionResult> callback)
-```
-
--   `param`：[请求参数](#model-qwen-audio-asr-message-d72d661a1brzp)
--   `callback`：[回调接口（ResultCallback）](#model-qwen-audio-asr-message-3639e1cb40mxi)
-
-无
-
-基于回调形式的流式实时识别，该方法不会阻塞当前线程。
-
-```
-public String call(RecognitionParam param, File file)
-```
-
--   `param`：[请求参数](#model-qwen-audio-asr-message-d72d661a1brzp)
--   `file`：待识别音频文件
-
-识别结果
-
-基于本地文件的非流式调用，该方法会阻塞当前线程直到全部音频读完，该方法要求所识别文件具有可读权限。
-
-```
-public Flowable<RecognitionResult> streamCall(RecognitionParam param, Flowable<ByteBuffer> audioFrame)
-```
-
--   `param`：[请求参数](#model-qwen-audio-asr-message-d72d661a1brzp)
--   `audioFrame`：`Flowable<ByteBuffer>`实例
-
-`Flowable<RecognitionResult>`
-
-基于Flowable的流式实时识别。
-
-```
-public void sendAudioFrame(ByteBuffer audioFrame)
-```
-
--   `audioFrame`：二进制音频流，为`ByteBuffer`类型
-
-无
-
-推送音频，每次推送的音频流不宜过大或过小，建议每包音频时长为100ms左右，大小在1KB~16KB之间。
-
-识别结果通过[回调接口（ResultCallback）](#model-qwen-audio-asr-message-3639e1cb40mxi)的onEvent方法获取。
-
-```
-public void stop()
-```
-
-无
-
-无
-
-停止实时识别。
-
-该方法会阻塞当前线程，直到回调实例`ResultCallback`的`onComplete`或者`onError`被调用之后才会解除对当前线程的阻塞。
-
-```
-boolean getDuplexApi().close(int code, String reason)
-```
-
-code: WebSocket关闭码（Close Code）
-
-reason：关闭原因
-
-这两个参数可参考[The WebSocket Protocol](https://datatracker.ietf.org/doc/html/rfc6455#section-7.1.5)文档进行配置
-
-true
-
-在任务结束后，无论是否出现异常都需要关闭WebSocket连接，避免造成连接泄漏。关于如何复用连接提升效率请参考[高并发最佳实践](https://help.aliyun.com/zh/model-studio/speech-recognition-best-practices#java)。
-
-```
-public String getLastRequestId()
-```
-
-无
-
-requestId
-
-获取当前任务的requestId，在调用`call`、`streamingCall`开始新任务之后可以使用。
-
-**说明**该方法自2.18.0版本及以后的SDK中才开始提供。
-
-```
-public long getFirstPackageDelay()
-```
-
-无
-
-首包延迟
-
-获取首包延迟，从发送第一包音频到收到首包识别结果延迟，在任务完成后使用。
-
-**说明**该方法自2.18.0版本及以后的SDK中才开始提供。
-
-```
-public long getLastPackageDelay()
-```
-
-无
-
-尾包延迟
-
-获得尾包延迟，发送`stop`指令到最后一包识别结果下发耗时，在任务完成后使用。
-
-**说明**该方法自2.18.0版本及以后的SDK中才开始提供。
+<a id="model-qwen-audio-asr-message-update-context"></a>
 
 ##### 更新对话上下文
 
 调用 `updateContext` 在识别任务运行过程中更新对话上下文，用于辅助后续音频的识别。该方法要求 DashScope Java SDK 2.23.0 及以上版本。
 
-```
+<a id="code-block-15"></a>
+
+```java
 public void updateContext(Map<String, Object> payloadInput)
 ```
 
 -   **调用时机：**调用 `call(param, callback)` 启动流式识别后、调用 `stop` 前。
 -   **参数：**`payloadInput` 为`Map<String, Object>`，传入 `continue-task` 事件的 `payload.input` 对象，包含 `context` 字段，不要额外包装 `payload` 或 `input` 层级。
--   **支持范围与参数约束：**请参见 [continue-task](https://help.aliyun.com/zh/model-studio/qwen-asr-message-client-events#h-continue-task)。
+-   **支持范围与参数约束：**请参见 [continue-task](qwen-asr-message-client-events-1721a061cc8750e6.md#h-continue-task)。
 
 以下示例复用已启动的 `recognizer` 实例，Java 集合类型通过 `import java.util.*;` 导入。
 
-```
+<a id="code-block-16"></a>
+
+```java
 Map<String, Object> userContent = new HashMap<>();
 userContent.put("type", "input_text");
 userContent.put("text", "这是第 1 轮语音识别测试");
@@ -1096,6 +834,10 @@ payloadInput.put("context", Arrays.asList(userMessage, assistantMessage));
 recognizer.updateContext(payloadInput);
 ```
 
+<a id="回调接口-resultcallback"></a>
+
+<a id="model-qwen-audio-asr-message-3639e1cb40mxi"></a>
+
 #### 回调接口（`ResultCallback`）
 
 [双向流式调用](https://help.aliyun.com/zh/model-studio/qwen-asr-message-java-sdk)时，服务端会通过回调的方式，将关键流程信息和数据返回给客户端。您需要实现回调方法，处理服务端返回的信息或者数据。
@@ -1104,7 +846,9 @@ recognizer.updateContext(payloadInput);
 
 由于Java支持连接复用，因此没有`onClose`和`onOpen`。
 
-```
+<a id="code-block-17"></a>
+
+```java
 ResultCallback<RecognitionResult> callback = new ResultCallback<RecognitionResult>() {
     @Override
     public void onEvent(RecognitionResult result) {
@@ -1124,188 +868,64 @@ ResultCallback<RecognitionResult> callback = new ResultCallback<RecognitionResul
 };
 ```
 
-**接口/方法**
+<table><thead><tr><th><strong>接口/方法</strong></th><th><strong>参数</strong></th><th><strong>返回值</strong></th><th><strong>描述</strong></th></tr></thead><tbody><tr><td><a id="code-block-18"></a><pre class="language-java"><code>public void onEvent(RecognitionResult result)
+</code></pre></td><td><code>result</code>：<a href="#model-qwen-audio-asr-message-11a082e1d9ijq">实时识别结果（RecognitionResult）</a></td><td>无</td><td>当服务有回复时会被回调。</td></tr><tr><td><a id="code-block-19"></a><pre class="language-java"><code>public void onComplete()
+</code></pre></td><td>无</td><td>无</td><td>任务完成后该接口被回调。</td></tr><tr><td><a id="code-block-20"></a><pre class="language-java"><code>public void onError(Exception e)
+</code></pre></td><td><code>e</code>：异常信息</td><td>无</td><td>发生异常时该接口被回调。</td></tr></tbody></table>
 
-**参数**
+<a id="实时识别结果-recognitionresult"></a>
 
-**返回值**
+<a id="model-qwen-audio-asr-message-11a082e1d9ijq"></a>
 
-**描述**
+<a id="响应结果-2"></a>
 
-```
-public void onEvent(RecognitionResult result)
-```
-
-`result`：[实时识别结果（RecognitionResult）](#model-qwen-audio-asr-message-11a082e1d9ijq)
-
-无
-
-当服务有回复时会被回调。
-
-```
-public void onComplete()
-```
-
-无
-
-无
-
-任务完成后该接口被回调。
-
-```
-public void onError(Exception e)
-```
-
-`e`：异常信息
-
-无
-
-发生异常时该接口被回调。
+<a id="model-qwen-audio-asr-message-60280ef1ec77f"></a>
 
 #### 实时识别结果（`RecognitionResult`）
 
 `RecognitionResult`代表一次实时识别的结果。
 
-**接口/方法**
+<table><thead><tr><th><strong>接口/方法</strong></th><th><strong>参数</strong></th><th><strong>返回值</strong></th><th><strong>描述</strong></th></tr></thead><tbody><tr><td><a id="code-block-21"></a><pre class="language-java"><code>public String getRequestId()
+</code></pre></td><td>无</td><td>requestId</td><td>获取requestId。</td></tr><tr><td><a id="code-block-22"></a><pre class="language-java"><code>public boolean isSentenceEnd()
+</code></pre></td><td>无</td><td>是否是完整句子，即产生断句</td><td>判断给定句子是否已经结束。</td></tr><tr><td><a id="code-block-23"></a><pre class="language-java"><code>public Sentence getSentence()
+</code></pre></td><td>无</td><td><a href="#model-qwen-audio-asr-message-e3e502b072h3a">单句信息（Sentence）</a></td><td>获取单句信息，包括时间戳和文本信息等。</td></tr></tbody></table>
 
-**参数**
+<a id="单句信息-sentence"></a>
 
-**返回值**
-
-**描述**
-
-```
-public String getRequestId()
-```
-
-无
-
-requestId
-
-获取requestId。
-
-```
-public boolean isSentenceEnd()
-```
-
-无
-
-是否是完整句子，即产生断句
-
-判断给定句子是否已经结束。
-
-```
-public Sentence getSentence()
-```
-
-无
-
-[单句信息（Sentence）](#model-qwen-audio-asr-message-e3e502b072h3a)
-
-获取单句信息，包括时间戳和文本信息等。
+<a id="model-qwen-audio-asr-message-e3e502b072h3a"></a>
 
 #### 单句信息（`Sentence`）
 
-**接口/方法**
+<table><thead><tr><th><strong>接口/方法</strong></th><th><strong>参数</strong></th><th><strong>返回值</strong></th><th><strong>描述</strong></th></tr></thead><tbody><tr><td><a id="code-block-24"></a><pre class="language-java"><code>public Long getBeginTime()
+</code></pre></td><td>无</td><td>句子开始时间，单位为ms</td><td>返回句子开始时间。</td></tr><tr><td><a id="code-block-25"></a><pre class="language-java"><code>public Long getEndTime()
+</code></pre></td><td>无</td><td>句子结束时间，单位为ms</td><td>返回句子结束时间。</td></tr><tr><td><a id="code-block-26"></a><pre class="language-java"><code>public String getText()
+</code></pre></td><td>无</td><td>识别文本</td><td>返回识别文本。</td></tr><tr><td><a id="code-block-27"></a><pre class="language-java"><code>public List&lt;Word&gt; getWords()
+</code></pre></td><td>无</td><td><a href="#model-qwen-audio-asr-message-125fb5faa3y7t">字时间戳信息（Word）</a>的List集合</td><td>返回字时间戳信息。</td></tr></tbody></table>
 
-**参数**
+<a id="字时间戳信息-word"></a>
 
-**返回值**
-
-**描述**
-
-```
-public Long getBeginTime()
-```
-
-无
-
-句子开始时间，单位为ms
-
-返回句子开始时间。
-
-```
-public Long getEndTime()
-```
-
-无
-
-句子结束时间，单位为ms
-
-返回句子结束时间。
-
-```
-public String getText()
-```
-
-无
-
-识别文本
-
-返回识别文本。
-
-```
-public List<Word> getWords()
-```
-
-无
-
-[字时间戳信息（Word）](#model-qwen-audio-asr-message-125fb5faa3y7t)的List集合
-
-返回字时间戳信息。
+<a id="model-qwen-audio-asr-message-125fb5faa3y7t"></a>
 
 #### 字时间戳信息（`Word`）
 
-**接口/方法**
+<table><thead><tr><th><strong>接口/方法</strong></th><th><strong>参数</strong></th><th><strong>返回值</strong></th><th><strong>描述</strong></th></tr></thead><tbody><tr><td><a id="code-block-28"></a><pre class="language-java"><code>public long getBeginTime()
+</code></pre></td><td>无</td><td>字开始时间，单位为ms</td><td>返回字开始时间。</td></tr><tr><td><a id="code-block-29"></a><pre class="language-java"><code>public long getEndTime()
+</code></pre></td><td>无</td><td>字结束时间，单位为ms</td><td>返回字结束时间。</td></tr><tr><td><a id="code-block-30"></a><pre class="language-java"><code>public String getText()
+</code></pre></td><td>无</td><td>字</td><td>返回识别的字。</td></tr><tr><td><a id="code-block-31"></a><pre class="language-java"><code>public String getPunctuation()
+</code></pre></td><td>无</td><td>标点</td><td>返回标点。</td></tr></tbody></table>
 
-**参数**
+<a id="错误码"></a>
 
-**返回值**
+<a id="model-qwen-audio-asr-streaming-605d5ca873bnd"></a>
 
-**描述**
-
-```
-public long getBeginTime()
-```
-
-无
-
-字开始时间，单位为ms
-
-返回字开始时间。
-
-```
-public long getEndTime()
-```
-
-无
-
-字结束时间，单位为ms
-
-返回字结束时间。
-
-```
-public String getText()
-```
-
-无
-
-字
-
-返回识别的字。
-
-```
-public String getPunctuation()
-```
-
-无
-
-标点
-
-返回标点。
+<a id="shared-17"></a>
 
 ## 错误码
 
-如遇报错问题，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行排查。
+<a id="model-qwen-audio-asr-message-605d5ca873bnd"></a>
+
+<a id="model-fun-asr-realtime-605d5ca873bnd"></a>
+
+如遇报错问题，请参见[错误码](../model-api-reference/preparations/error-code.md)进行排查。
 
 若问题仍未解决，可加入[语音 SDK 示例仓库](https://github.com/aliyun/alibabacloud-bailian-speech-demo)中列出的开发者群反馈问题，并提供Request ID，以便进一步排查问题。

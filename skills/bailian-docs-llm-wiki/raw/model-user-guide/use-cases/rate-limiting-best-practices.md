@@ -6,15 +6,19 @@
 
 本文按改动成本从低到高，介绍三类方案：
 
--   [平台配置方案](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#h2_platform_solutions)（低改动成本）：[服务端排队等待](raw/model-user-guide/use-cases/rate-limiting-best-practices.md)、[PTU](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#h3_ptu)、[Batch API](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#h3_batch_api)。
--   [客户端流控策略](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#h2_strategies)（改客户端代码）：从[基础重试](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#h3_l1)到[自适应拥塞控制](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#h3_l4)，按工程复杂度递进的四种策略。
--   [架构兜底方案](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#h2_arch_fallback)（改系统架构）：[模型降级（Fallback）](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#h3_fallback)、[基于消息队列（MQ）的削峰填谷](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#h3_mq_arch)。
+-   [平台配置方案](rate-limiting-best-practices.md#h2_platform_solutions)（低改动成本）：[服务端排队等待](rate-limiting-best-practices.md)、[PTU](rate-limiting-best-practices.md#h3_ptu)、[Batch API](rate-limiting-best-practices.md#h3_batch_api)。
+-   [客户端流控策略](rate-limiting-best-practices.md#h2_strategies)（改客户端代码）：从[基础重试](rate-limiting-best-practices.md#h3_l1)到[自适应拥塞控制](rate-limiting-best-practices.md#h3_l4)，按工程复杂度递进的四种策略。
+-   [架构兜底方案](rate-limiting-best-practices.md#h2_arch_fallback)（改系统架构）：[模型降级（Fallback）](rate-limiting-best-practices.md#h3_fallback)、[基于消息队列（MQ）的削峰填谷](rate-limiting-best-practices.md#h3_mq_arch)。
 
-如果当前正在解决 `429` 报错，可查看[错误诊断与策略推荐](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#h3_diag_table)定位原因。若为突发流量（Traffic Burst）触发，推荐先试[服务端排队等待](raw/model-user-guide/use-cases/rate-limiting-best-practices.md)——只需加一个请求头。
+如果当前正在解决 `429` 报错，可查看[错误诊断与策略推荐](rate-limiting-best-practices.md#h3_diag_table)定位原因。若为突发流量（Traffic Burst）触发，推荐先试[服务端排队等待](rate-limiting-best-practices.md)——只需加一个请求头。
+
+<a id="平台限流机制"></a>
+
+<a id="h2_platform_rl"></a>
 
 ## 平台限流机制
 
-限流按**主账号**维度、**模型**独立计算，触发后通常 1 分钟内恢复。各模型的限流条件和当前用量参见[模型限流条件](raw/model-user-guide/get-started-with-models/rate-limit.md)和[模型用量监控](raw/model-user-guide/model-monitoring/model-telemetry.md)。百炼 API 有以下三种限流规则：
+限流按**主账号**维度、**模型**独立计算，触发后通常 1 分钟内恢复。各模型的限流条件和当前用量参见[模型限流条件](../get-started-with-models/rate-limit.md)和[模型用量监控](../model-monitoring/model-telemetry.md)。百炼 API 有以下三种限流规则：
 
 -   **分钟级配额限制（RPM / TPM）**：每分钟允许的最大请求数（Requests Per Minute，RPM）和最大 Token 用量（Tokens Per Minute，TPM）。
 -   **瞬时频率限制（RPS / TPS）**：每秒允许的最大请求数（RPS）和最大 Token 用量（TPS）。单秒内请求或 Token 消耗过于密集时触发。
@@ -22,91 +26,41 @@
 
 以下从平台配置、客户端流控、架构兜底三个层面介绍应对方案。
 
+<a id="错误诊断与策略推荐"></a>
+
+<a id="h3_diag_table"></a>
+
 ## 错误诊断与策略推荐
 
-同一错误码可能由不同限流维度触发。高并发下服务端饱和也可能导致响应变慢或超时，可通过[自适应拥塞控制策略](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#h3_l4)缓解。
+同一错误码可能由不同限流维度触发。高并发下服务端饱和也可能导致响应变慢或超时，可通过[自适应拥塞控制策略](rate-limiting-best-practices.md#h3_l4)缓解。
 
-**错误码 (DashScope / OpenAI)**
+<table><thead><tr><th><p><strong>错误码 (DashScope / OpenAI)</strong></p></th><th><p><strong>触发维度</strong></p></th><th><p><strong>特征诊断</strong></p></th><th><p><strong>推荐策略</strong></p></th></tr></thead><tbody><tr><td rowspan="2"><p>Throttling.RateQuota / limit_requests</p></td><td><p><strong>请求频率超限</strong><br>（RPM 超限）<br></p></td><td><p>间歇性报错，成功率随时间下降</p></td><td><p><a href="rate-limiting-best-practices.md">令牌桶</a>：控制单位时间内的请求配额</p></td></tr><tr><td><p><strong>请求频率超限</strong><br>（RPS 超限）<br></p></td><td><p>启动瞬间或并发激增时集中报错</p></td><td><p><a href="rate-limiting-best-practices.md">并发信号量</a>或<a href="rate-limiting-best-practices.md">平滑限速器</a>：拉开请求间距</p></td></tr><tr><td rowspan="2"><p>Throttling.AllocationQuota / insufficient_quota</p></td><td><p><strong>Token 用量超限</strong><br>（TPM 超限）<br></p></td><td><p>长文本处理时间歇性报错</p></td><td><p><a href="rate-limiting-best-practices.md">双重令牌桶</a>：同时限制 RPM 和 TPM 配额</p></td></tr><tr><td><p><strong>Token 用量超限</strong><br>（TPS 超限）<br></p></td><td><p>长文本并发时瞬间 Token 消耗过大</p></td><td><p><a href="rate-limiting-best-practices.md">并发信号量</a>或<a href="rate-limiting-best-practices.md">平滑限速器</a></p></td></tr><tr><td><p>Throttling.BurstRate / limit_burst_rate</p></td><td><p><strong>流量增速超限</strong><br>（Traffic Burst）<br></p></td><td><p>启动或空闲恢复后突然发起大量请求</p></td><td><p>推荐首选<a href="rate-limiting-best-practices.md">服务端排队等待</a>；或令牌桶设置低初始值（如 <code>initial_tokens=0</code>）实现冷启动缓起；或使用<a href="rate-limiting-best-practices.md">平滑限速器</a>削峰</p></td></tr></tbody></table>
 
-**触发维度**
+<a id="平台配置方案"></a>
 
-**特征诊断**
-
-**推荐策略**
-
-Throttling.RateQuota / limit\_requests
-
-**请求频率超限**  
-（RPM 超限）  
-
-间歇性报错，成功率随时间下降
-
-[令牌桶](raw/model-user-guide/use-cases/rate-limiting-best-practices.md)：控制单位时间内的请求配额
-
-**请求频率超限**  
-（RPS 超限）  
-
-启动瞬间或并发激增时集中报错
-
-[并发信号量](raw/model-user-guide/use-cases/rate-limiting-best-practices.md)或[平滑限速器](raw/model-user-guide/use-cases/rate-limiting-best-practices.md)：拉开请求间距
-
-Throttling.AllocationQuota / insufficient\_quota
-
-**Token 用量超限**  
-（TPM 超限）  
-
-长文本处理时间歇性报错
-
-[双重令牌桶](raw/model-user-guide/use-cases/rate-limiting-best-practices.md)：同时限制 RPM 和 TPM 配额
-
-**Token 用量超限**  
-（TPS 超限）  
-
-长文本并发时瞬间 Token 消耗过大
-
-[并发信号量](raw/model-user-guide/use-cases/rate-limiting-best-practices.md)或[平滑限速器](raw/model-user-guide/use-cases/rate-limiting-best-practices.md)
-
-Throttling.BurstRate / limit\_burst\_rate
-
-**流量增速超限**  
-（Traffic Burst）  
-
-启动或空闲恢复后突然发起大量请求
-
-推荐首选[服务端排队等待](raw/model-user-guide/use-cases/rate-limiting-best-practices.md)；或令牌桶设置低初始值（如 `initial_tokens=0`）实现冷启动缓起；或使用[平滑限速器](raw/model-user-guide/use-cases/rate-limiting-best-practices.md)削峰
+<a id="h2_platform_solutions"></a>
 
 ## 平台配置方案
 
 以下方案依赖平台能力，客户端改动极少或无需改动。
 
+<a id="服务端排队等待-推荐首选"></a>
+
+<a id="h3_wait_timeout"></a>
+
 ### 服务端排队等待（推荐首选）
 
 针对增速/突发限流（Traffic Burst），百炼支持在请求头中声明等待时间上限。服务端收到请求后，会在这个时间窗内择机重试，直到请求开始处理或时间窗内重试结束；该值只是上限，不是等到设定值才重试。相比直接返回 429，该机制可显著提升突发流量下的成功率。
 
-**说明**该功能仅适用于增速/突发限流（Throttling.BurstRate），不适用于 RPM/TPM 绝对值限流。
+> **说明**
+>
+> 该功能仅适用于增速/突发限流（Throttling.BurstRate），不适用于 RPM/TPM 绝对值限流。
 
 **配置方式**
 
 在请求头中添加 `X-DashScope-Wait-Timeout` 字段：
 
-**Header 字段**
-
-**示例**
-
-**说明**
-
-X-DashScope-Wait-Timeout
-
-90
-
-排队等待的时间窗上限，单位为秒。服务端在该时间窗内择机重试请求，而不是等到设定值才开始重试。
-
--   值为 `0`：不排队，直接返回 429。
-    
--   该值仅为上限，实际等待时间可能小于设定值。例如设置为 90 秒，一次调用也可能在 30 秒左右就开始重试；若重试仍未成功，则返回 429。
-    
--   建议值：3~120 秒。突发流量下建议适当调大，以增加重试机会、提升成功率。
-    
+<table><thead><tr><th><p><strong>Header 字段</strong></p></th><th><p><strong>示例</strong></p></th><th><p><strong>说明</strong></p></th></tr></thead><tbody><tr><td><p>X-DashScope-Wait-Timeout</p></td><td><p>90</p></td><td><p>排队等待的时间窗上限，单位为秒。服务端在该时间窗内择机重试请求，而不是等到设定值才开始重试。</p><ul><li><p>值为 <code>0</code>：不排队，直接返回 429。</p></li><li><p>该值仅为上限，实际等待时间可能小于设定值。例如设置为 90 秒，一次调用也可能在 30 秒左右就开始重试；若重试仍未成功，则返回 429。</p></li><li><p>建议值：3~120 秒。突发流量下建议适当调大，以增加重试机会、提升成功率。</p></li></ul></td></tr></tbody></table>
 
 **超时时间配置**
 
@@ -117,11 +71,19 @@ X-DashScope-Wait-Timeout
 
 例如：原基础超时时间为 120 秒，Wait-Timeout 设为 90 秒，则非流式请求的超时时间应设为 210 秒。
 
+<a id="accordion-代码示例"></a>
+
 代码示例
+
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-openai-python-sdk-tab"></a>
 
 OpenAI Python SDK
 
-```
+<a id="code-code-group-openai-python-sdk"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -141,9 +103,13 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
+<a id="fig-code-group-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-curl"></a>
+
+```bash
 curl -X POST "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
@@ -154,25 +120,37 @@ curl -X POST "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions
   }'
 ```
 
+<a id="预置吞吐单元-ptu"></a>
+
+<a id="h3_ptu"></a>
+
 ### 预置吞吐单元（PTU）
 
-[PTU 服务](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)提供独立预留的专享算力，可避免公共资源池的竞争，是保障实时高吞吐的首选。
+[PTU 服务](../model-high-speed-inference/model-deployment-index/model-deployment-introduction.md)提供独立预留的专享算力，可避免公共资源池的竞争，是保障实时高吞吐的首选。
 
 适用场景：业务对吞吐量有确定性要求（如 SLA 承诺），或希望免去客户端流控开发，直接获得稳定高吞吐。
 
 PTU 为预留资源，未满负荷使用也持续计费。建议根据实际峰值评估规格，避免闲置浪费。
 
+<a id="异步批处理-batch-api"></a>
+
+<a id="h3_batch_api"></a>
+
 ### 异步批处理（Batch API）
 
-数据清洗、离线分析等无实时性要求的任务，可使用 [Batch API](raw/model-user-guide/model-high-speed-inference/batch-inference.md) 批量提交。任务在低峰期异步执行，不受在线限流约束。
+数据清洗、离线分析等无实时性要求的任务，可使用 [Batch API](../model-high-speed-inference/batch-inference.md) 批量提交。任务在低峰期异步执行，不受在线限流约束。
 
 适用场景：数据标注、日志分析、批量摘要等允许数小时至数天返回结果的任务。费用通常低于实时 API。
 
 结果返回时间不确定，不适用于需即时响应的在线业务。提交后需通过轮询或回调获取结果。
 
+<a id="客户端流控策略"></a>
+
+<a id="h2_strategies"></a>
+
 ## 客户端流控策略
 
-当平台方案（如[服务端排队等待](raw/model-user-guide/use-cases/rate-limiting-best-practices.md)等）无法满足需求时，需在客户端引入流控。核心原则：**将请求均匀分布在时间窗口内**，避免突发触发限流。系统启动或长时间空闲后，应逐步提升并发而非瞬间拉满。
+当平台方案（如[服务端排队等待](rate-limiting-best-practices.md)等）无法满足需求时，需在客户端引入流控。核心原则：**将请求均匀分布在时间窗口内**，避免突发触发限流。系统启动或长时间空闲后，应逐步提升并发而非瞬间拉满。
 
 以下四种策略按工程复杂度递增，每种包含上一级能力并增强：
 
@@ -182,6 +160,10 @@ PTU 为预留资源，未满负荷使用也持续计费。建议根据实际峰�
 -   自适应拥塞控制则基于实时反馈动态调整发送速率。
 
 在满足业务需求的前提下，优先选择实现成本更低的策略。
+
+<a id="各策略的吞吐量表现对比"></a>
+
+<a id="h3_throughput_comp"></a>
 
 ### 各策略的吞吐量表现对比
 
@@ -194,17 +176,29 @@ PTU 为预留资源，未满负荷使用也持续计费。建议根据实际峰�
 -   **流量整形策略**：稳定性高，以牺牲部分峰值吞吐换取平稳输出。
 -   **自适应拥塞控制策略**：高负载下可动态收敛至稳定高吞吐点，但存在冷启动探测开销。
 
+<a id="基础重试策略"></a>
+
+<a id="h3_l1"></a>
+
 ### 基础重试策略
 
 适用于个人测试、本地脚本等低并发场景。不限制发送速率，仅在收到 `429` 或 `5xx` 时触发带随机抖动的指数退避重试。
 
 没有前置流量控制，多线程并发下易触发限流并导致请求积压。
 
+<a id="accordion-代码示例-2"></a>
+
 代码示例
+
+<a id="fig-code-group-2"></a>
+
+<a id="fig-code-group-2-使用-tenacity-库-tab"></a>
 
 使用 tenacity 库
 
-```
+<a id="code-code-group-2-使用-tenacity-库"></a>
+
+```python
 import openai
 from openai import OpenAI
 from tenacity import (
@@ -249,9 +243,13 @@ except Exception as e:
     print(f"请求失败: {e}")
 ```
 
+<a id="fig-code-group-2-原生实现-无依赖-tab"></a>
+
 原生实现（无依赖）
 
-```
+<a id="code-code-group-2-原生实现-无依赖"></a>
+
+```python
 import time
 import random
 import openai
@@ -309,6 +307,10 @@ except Exception as e:
 
 系统以分散方式恢复，避免"失败—集体重试—再次失败"的恶性循环。
 
+<a id="请求速率限制策略"></a>
+
+<a id="h3_l2"></a>
+
 ### 请求速率限制策略
 
 被动重试难以应对真实业务流量，频繁重试增加延迟。该策略引入**主动流控**：请求发出前先自检，将无序涌入的请求梳理成符合 RPM 限额的队列。主动平滑带来少量可控的排队延迟，但远低于”报错—等待—重试”循环的代价——**用确定的小代价，避免不确定的大延迟**。
@@ -326,11 +328,19 @@ except Exception as e:
 
 该策略不追踪 Token 用量，长文本任务中仍可能耗尽 TPM 配额。
 
+<a id="accordion-代码示例-3"></a>
+
 代码示例
+
+<a id="fig-code-group-3"></a>
+
+<a id="fig-code-group-3-核心组件-令牌桶-tab"></a>
 
 核心组件：令牌桶
 
-```
+<a id="code-code-group-3-核心组件-令牌桶"></a>
+
+```python
 import time
 
 class TokenBucket:
@@ -372,9 +382,13 @@ class TokenBucket:
             self.last_refill = now
 ```
 
+<a id="fig-code-group-3-客户端逻辑-tab"></a>
+
 客户端逻辑
 
-```
+<a id="code-code-group-3-客户端逻辑"></a>
+
+```python
 import asyncio
 import openai
 from openai import AsyncOpenAI
@@ -428,6 +442,10 @@ class RateLimitedClient:
         return await self._execute_request(model, messages, max_tokens)
 ```
 
+<a id="流量整形策略"></a>
+
+<a id="h3_l3"></a>
+
 ### 流量整形策略
 
 RAG 实时入库、长文档批量分析等高稳吞吐场景中，请求速率限制存在 **TPM 盲区**。流量整形策略升级为**双重资源感知（RPM & TPM）**，并在发送端引入整形机制，将突发脉冲削峰填谷为平滑流速。
@@ -449,11 +467,19 @@ RAG 实时入库、长文档批量分析等高稳吞吐场景中，请求速率�
 
 该策略采用保守平滑机制，会牺牲部分峰值并发，不适用于极致低延迟的在线服务。
 
+<a id="accordion-代码示例-4"></a>
+
 代码示例
+
+<a id="fig-code-group-4"></a>
+
+<a id="fig-code-group-4-进阶令牌桶-tab"></a>
 
 进阶令牌桶
 
-```
+<a id="code-code-group-4-进阶令牌桶"></a>
+
+```python
 import time
 
 class TokenBucket:
@@ -515,9 +541,13 @@ class TokenBucket:
         self.tokens = min(self.capacity, self.tokens + amount)
 ```
 
+<a id="fig-code-group-4-平滑限流器-tab"></a>
+
 平滑限流器
 
-```
+<a id="code-code-group-4-平滑限流器"></a>
+
+```python
 import time
 
 class SmoothRateLimiter:
@@ -533,9 +563,13 @@ class SmoothRateLimiter:
         return wait_time
 ```
 
+<a id="fig-code-group-4-客户端逻辑-tab"></a>
+
 客户端逻辑
 
-```
+<a id="code-code-group-4-客户端逻辑"></a>
+
+```python
 import asyncio
 
 class TrafficShapingClient:
@@ -574,21 +608,25 @@ class TrafficShapingClient:
             return content
 ```
 
+<a id="自适应拥塞控制策略"></a>
+
+<a id="h3_l4"></a>
+
 ### 自适应拥塞控制策略
 
 适用于 API 网关、复杂代理、多租户等大规模动态负载场景。
 
-**说明**
-
-**选型提示：该策略并非通用方案**
-
-该策略的价值在于应对**高度不确定**与**剧烈波动**的环境，并非普适选择：
-
--   **性能悖论**：若负载可预测（如定量批处理），直接设定最优静态参数通常优于需要"试探与收敛"的动态探测。
--   **探测损耗**：动态算法必然伴随冷启动爬坡与试探波动，在可知场景下是不必要的性能损耗。
--   **维护成本**：闭环反馈机制增加系统复杂度与排查难度。
-
-除非业务**规模极大、负载复杂且波动显著**，否则优先选择更简单的前三种策略。
+> **说明**
+>
+> **选型提示：该策略并非通用方案**
+>
+> 该策略的价值在于应对**高度不确定**与**剧烈波动**的环境，并非普适选择：
+>
+> -   **性能悖论**：若负载可预测（如定量批处理），直接设定最优静态参数通常优于需要"试探与收敛"的动态探测。
+> -   **探测损耗**：动态算法必然伴随冷启动爬坡与试探波动，在可知场景下是不必要的性能损耗。
+> -   **维护成本**：闭环反馈机制增加系统复杂度与排查难度。
+>
+> 除非业务**规模极大、负载复杂且波动显著**，否则优先选择更简单的前三种策略。
 
 请求速率限制和流量整形基于**静态配额**，负载稳定时完全适用。但在网关级场景下，下游负载复杂多变（短请求与深度推理交织），平台阈值也动态波动，静态策略难以兼顾效率与稳定。
 
@@ -613,11 +651,19 @@ class TrafficShapingClient:
 -   **大请求饥饿**：为追求调度性能采用了非严格 FIFO 唤醒机制，配额紧缺时短 Token 请求可能抢占资源，导致长 Token 请求等待过长。
 -   **冷启动**：需要预热时间建立统计模型，低负载或短时任务中吞吐量可能低于前三种策略。
 
+<a id="accordion-代码示例-5"></a>
+
 代码示例
+
+<a id="fig-code-group-5"></a>
+
+<a id="fig-code-group-5-控制入口-tab"></a>
 
 控制入口
 
-```
+<a id="code-code-group-5-控制入口"></a>
+
+```python
 class ElasticCongestionController:
     async def acquire(self):
         """[准入阶段] 请求发起前的检查"""
@@ -654,9 +700,13 @@ class ElasticCongestionController:
             self.update_limit_via_ebp()
 ```
 
+<a id="fig-code-group-5-ebp-探测-tab"></a>
+
 EBP 探测
 
-```
+<a id="code-code-group-5-ebp-探测"></a>
+
+```python
 def probe_next_limit(self, current_limit, max_known_capacity):
     """
     计算下一个并发上限
@@ -685,9 +735,13 @@ def probe_next_limit(self, current_limit, max_known_capacity):
     return min(final_limit, dynamic_ceiling)
 ```
 
+<a id="fig-code-group-5-统计追踪-tab"></a>
+
 统计追踪
 
-```
+<a id="code-code-group-5-统计追踪"></a>
+
+```python
 class CongestionMetrics:
     def update_stats(self, latency, token_count):
         """
@@ -712,9 +766,17 @@ class CongestionMetrics:
         self.inflight_tokens += estimated_tokens
 ```
 
+<a id="架构兜底方案"></a>
+
+<a id="h2_arch_fallback"></a>
+
 ## 架构兜底方案
 
 当平台配置和客户端流控仍无法满足可用性或峰值吞吐要求时，可在架构层面引入兜底。
+
+<a id="模型降级-fallback"></a>
+
+<a id="h3_fallback"></a>
 
 ### 模型降级（Fallback）
 
@@ -726,11 +788,15 @@ class CongestionMetrics:
 -   **仅限流错误时降级**：降级针对 `429` 限流错误，网络超时或参数错误切换模型无法解决。
 -   **备选模型需提前验证**：确保备选模型支持业务所需功能（如 Function Calling、结构化输出），避免降级后功能异常。
 
+<a id="accordion-代码示例-6"></a>
+
 代码示例
 
 以下示例演示了基于 429 错误码的模型降级逻辑：主模型请求触发限流时，自动切换至备选模型重试。
 
-```
+<a id="code-block"></a>
+
+```python
 import os
 import asyncio
 from openai import AsyncOpenAI, APIStatusError
@@ -770,7 +836,11 @@ if __name__ == "__main__":
     asyncio.run(main())
 ```
 
-模型降级可与客户端流控策略组合使用。例如，在[请求速率限制策略](raw/model-user-guide/use-cases/rate-limiting-best-practices.md)的重试逻辑中集成降级判断：当重试次数耗尽仍触发限流时，切换至备选模型。
+模型降级可与客户端流控策略组合使用。例如，在[请求速率限制策略](rate-limiting-best-practices.md)的重试逻辑中集成降级判断：当重试次数耗尽仍触发限流时，切换至备选模型。
+
+<a id="基于消息队列-mq-的削峰填谷"></a>
+
+<a id="h3_mq_arch"></a>
 
 ### 基于消息队列（MQ）的削峰填谷
 
@@ -780,9 +850,13 @@ if __name__ == "__main__":
 
 设计要点：
 
--   **消费速率控制**：消费端应配合[请求速率限制](raw/model-user-guide/use-cases/rate-limiting-best-practices.md)或[流量整形](raw/model-user-guide/use-cases/rate-limiting-best-practices.md)策略，按 RPM/TPM 配额匀速消费，而非无限制地拉取消息。
+-   **消费速率控制**：消费端应配合[请求速率限制](rate-limiting-best-practices.md)或[流量整形](rate-limiting-best-practices.md)策略，按 RPM/TPM 配额匀速消费，而非无限制地拉取消息。
 -   **死信处理**：多次重试仍失败的消息转入死信队列并告警，避免无限重试阻塞消费。
 -   **背压传递**：MQ 积压超阈值时向上游反馈压力（如返回排队状态），避免队列无限增长。
+
+<a id="生产环境注意事项"></a>
+
+<a id="h3_prod_extensions"></a>
 
 ## 生产环境注意事项
 
@@ -795,7 +869,7 @@ if __name__ == "__main__":
     -   语音识别等模型：通常受单位时间内请求数（如 RPM）和用量（如音频时长）双重约束，策略与文本模型基本一致。
     -   图片/视频等模型：通常受任务提交速率和并发任务数约束。可沿用请求速率限制策略的思路，限制任务提交速率并配合信号量控制并发数。
     
-    无论限流指标如何变化，客户端主动流控的原则不变。只需将计数器或探测指标替换为对应模态的指标。具体规则参见[模型限流条件](raw/model-user-guide/get-started-with-models/rate-limit.md)。
+    无论限流指标如何变化，客户端主动流控的原则不变。只需将计数器或探测指标替换为对应模态的指标。具体规则参见[模型限流条件](../get-started-with-models/rate-limit.md)。
     
 -   **并发模型的原子性**
     

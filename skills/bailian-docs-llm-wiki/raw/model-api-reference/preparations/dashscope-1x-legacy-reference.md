@@ -4,99 +4,51 @@ DashScope Python SDK 1.x 接口的历史用法速查与 1.x 到 2.0 的迁移对
 
 本文面向**仍在使用 DashScope Python SDK 1.x 的存量项目**，集中收录 1.x 接口的典型用法，并给出对应的 2.0 写法。
 
-**警告**新项目请直接使用 [SDK 2.0](raw/model-api-reference/preparations/install-sdk.md)：1.x 已进入冻结维护（只修缺陷、不增功能），1.x 与 2.0 在同一个 `dashscope` 包内并存（2.0.1 起提供），存量代码无需删除 1.x 依赖即可逐步迁移。Assistants / Threads / Runs 系列 API 已随 1.x 下线，服务端不再支持，请勿在新代码中使用。
+> **警告**
+>
+> 新项目请直接使用 [SDK 2.0](install-sdk.md)：1.x 已进入冻结维护（只修缺陷、不增功能），1.x 与 2.0 在同一个 `dashscope` 包内并存（2.0.1 起提供），存量代码无需删除 1.x 依赖即可逐步迁移。Assistants / Threads / Runs 系列 API 已随 1.x 下线，服务端不再支持，请勿在新代码中使用。
+
+<a id="接口迁移总对照"></a>
+
+<a id="m1x_mapping"></a>
 
 ## 接口迁移总对照
 
-能力
+| 能力 | 1.x 接口 | 2.0 接口 |
+| --- | --- | --- |
+| 文本生成 | `Generation.call` / `AioGeneration.call` | `client.chat.completions.create` |
+| 多模态对话 | `MultiModalConversation.call` | `client.multimodal.chat.create` |
+| 图像生成 | `ImageSynthesis.call/async_call/fetch/wait` | `client.images.generate` / `client.images.jobs.*` |
+| 视频生成 | `VideoSynthesis.call/async_call/fetch/wait` | `client.videos.generate` / `client.videos.jobs.*` |
+| 录音文件转写 | `Transcription.async_call/fetch/wait` | `client.audio.asr.transcribe` / `client.audio.asr.jobs.*` |
+| 实时语音识别 | `Recognition.start/send_audio_frame/stop` | `client.audio.asr.recognize(...)` 上下文管理器 |
+| 语音合成 | `SpeechSynthesizer`（tts\_v2 回调式） | `client.audio.tts.synthesize/stream/connect` |
+| 文本向量 | `TextEmbedding.call` / `BatchTextEmbedding` | `client.embeddings.create` / `client.embeddings.jobs.*` |
+| 重排序 | `TextReRank.call` | `client.rerank.create` |
+| 智能体应用 | `Application.call` | `client.apps.completions.create` |
+| 文件管理 | `Files.upload/list/get/delete` | `client.files.upload/list/get/delete` |
+| 模型列表 | `Models.list/get` | `client.models.list/get` |
 
-1.x 接口
+<a id="客户端构造与鉴权"></a>
 
-2.0 接口
-
-文本生成
-
-`Generation.call` / `AioGeneration.call`
-
-`client.chat.completions.create`
-
-多模态对话
-
-`MultiModalConversation.call`
-
-`client.multimodal.chat.create`
-
-图像生成
-
-`ImageSynthesis.call/async_call/fetch/wait`
-
-`client.images.generate` / `client.images.jobs.*`
-
-视频生成
-
-`VideoSynthesis.call/async_call/fetch/wait`
-
-`client.videos.generate` / `client.videos.jobs.*`
-
-录音文件转写
-
-`Transcription.async_call/fetch/wait`
-
-`client.audio.asr.transcribe` / `client.audio.asr.jobs.*`
-
-实时语音识别
-
-`Recognition.start/send_audio_frame/stop`
-
-`client.audio.asr.recognize(...)` 上下文管理器
-
-语音合成
-
-`SpeechSynthesizer`（tts\_v2 回调式）
-
-`client.audio.tts.synthesize/stream/connect`
-
-文本向量
-
-`TextEmbedding.call` / `BatchTextEmbedding`
-
-`client.embeddings.create` / `client.embeddings.jobs.*`
-
-重排序
-
-`TextReRank.call`
-
-`client.rerank.create`
-
-智能体应用
-
-`Application.call`
-
-`client.apps.completions.create`
-
-文件管理
-
-`Files.upload/list/get/delete`
-
-`client.files.upload/list/get/delete`
-
-模型列表
-
-`Models.list/get`
-
-`client.models.list/get`
+<a id="m1x_client"></a>
 
 ## 客户端构造与鉴权
 
 1.x 通过模块级全局变量配置；2.0 通过 `Client` 构造参数配置（优先级：构造参数 > `dashscope.settings` > 环境变量 > `~/.dashscope/config.toml`）。
 
-```
+<a id="code-block"></a>
+
+```python
 # 1.x：全局变量
 import dashscope
 dashscope.api_key = os.getenv("DASHSCOPE_API_KEY")
 dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 ```
-```
+
+<a id="code-block-2"></a>
+
+```python
 # 2.0：客户端构造
 import dashscope
 client = dashscope.Client(
@@ -106,9 +58,15 @@ client = dashscope.Client(
 )
 ```
 
+<a id="文本生成"></a>
+
+<a id="m1x_chat"></a>
+
 ## 文本生成
 
-```
+<a id="code-block-3"></a>
+
+```python
 # 1.x
 from dashscope import Generation
 response = Generation.call(
@@ -124,7 +82,10 @@ else:
     print(f"错误码：{response.code}")
     print(f"错误信息：{response.message}")
 ```
-```
+
+<a id="code-block-4"></a>
+
+```python
 # 2.0
 from dashscope import DashScopeError
 try:
@@ -139,9 +100,15 @@ except DashScopeError as e:
     print(f"错误信息：{e.message}")
 ```
 
+<a id="多模态对话"></a>
+
+<a id="m1x_mm"></a>
+
 ## 多模态对话
 
-```
+<a id="code-block-5"></a>
+
+```python
 # 1.x
 from dashscope import MultiModalConversation
 response = MultiModalConversation.call(
@@ -156,7 +123,10 @@ response = MultiModalConversation.call(
     }])
 print(response.output.choices[0].message.content[0]['text'])
 ```
-```
+
+<a id="code-block-6"></a>
+
+```python
 # 2.0：content parts 形状保留，取值扁平化
 response = client.multimodal.chat.create(
     model='qwen3-vl-plus',
@@ -170,9 +140,15 @@ response = client.multimodal.chat.create(
 print(response.output_text)
 ```
 
+<a id="图像生成"></a>
+
+<a id="m1x_img"></a>
+
 ## 图像生成
 
-```
+<a id="code-block-7"></a>
+
+```python
 # 1.x：同步 call（阻塞到出图）
 from dashscope import ImageSynthesis
 rsp = ImageSynthesis.call(api_key=os.getenv("DASHSCOPE_API_KEY"),
@@ -188,7 +164,10 @@ else:
     print('Failed, status_code: %s, code: %s, message: %s' %
           (rsp.status_code, rsp.code, rsp.message))
 ```
-```
+
+<a id="code-block-8"></a>
+
+```python
 # 2.0：generate 一步式（提交并等待）；枚举类改字符串
 job = client.images.generate(
     model="wanx2.1-t2i-turbo",
@@ -202,9 +181,15 @@ for url in job.image_urls:
 
 分步任务（1.x `async_call/fetch/wait`）对应 `client.images.jobs.create/fetch/wait`；任务状态判定由 `rsp.output.task_status == 'SUCCEEDED'` 改为 `job.succeeded`。
 
+<a id="视频生成"></a>
+
+<a id="m1x_vid"></a>
+
 ## 视频生成
 
-```
+<a id="code-block-9"></a>
+
+```python
 # 1.x
 from dashscope import VideoSynthesis
 rsp = VideoSynthesis.call(api_key=api_key,
@@ -217,7 +202,10 @@ rsp = VideoSynthesis.call(api_key=api_key,
 if rsp.status_code == HTTPStatus.OK:
     print("video_url:", rsp.output.video_url)
 ```
-```
+
+<a id="code-block-10"></a>
+
+```python
 # 2.0
 job = client.videos.generate(
     model='wan3.0-video',
@@ -230,11 +218,19 @@ job = client.videos.generate(
 print("video_url:", job.video_url)
 ```
 
-**说明**1.x `VideoSynthesis` 的 `extend_prompt` 默认为 `True`；2.0 为 `prompt_extend` 且缺省由服务端决定，依赖旧默认的调用需显式传 `prompt_extend=True`。
+> **说明**
+>
+> 1.x `VideoSynthesis` 的 `extend_prompt` 默认为 `True`；2.0 为 `prompt_extend` 且缺省由服务端决定，依赖旧默认的调用需显式传 `prompt_extend=True`。
+
+<a id="录音文件转写"></a>
+
+<a id="m1x_asr"></a>
 
 ## 录音文件转写
 
-```
+<a id="code-block-11"></a>
+
+```python
 # 1.x：async_call 提交 + wait 等待
 from dashscope.audio.asr import Transcription
 task_response = Transcription.async_call(
@@ -246,7 +242,10 @@ transcribe_response = Transcription.wait(task=task_response.output.task_id)
 if transcribe_response.status_code == HTTPStatus.OK:
     print(json.dumps(transcribe_response.output, indent=4, ensure_ascii=False))
 ```
-```
+
+<a id="code-block-12"></a>
+
+```python
 # 2.0：transcribe 一步式；签名外参数走 parameters
 job = client.audio.asr.transcribe(
     ['{YOUR_AUDIO_URL}'],
@@ -258,11 +257,17 @@ print(json.dumps(job.model_dump(), indent=4, ensure_ascii=False))
 
 分步控制（原 `async_call` + 循环 `fetch`）对应 `client.audio.asr.jobs.create` + 循环 `jobs.fetch`。
 
+<a id="实时语音识别"></a>
+
+<a id="m1x_recognition"></a>
+
 ## 实时语音识别
 
 1.x 使用回调类（`Recognition` + `RecognitionCallback`）；2.0 改为上下文管理器 + 事件迭代。
 
-```
+<a id="code-block-13"></a>
+
+```python
 # 1.x（回调式，节选）
 from dashscope.audio.asr import Recognition
 class Callback(RecognitionCallback):
@@ -272,7 +277,10 @@ recognition.start()
 recognition.send_audio_frame(chunk)
 recognition.stop()
 ```
-```
+
+<a id="code-block-14"></a>
+
+```python
 # 2.0（事件迭代式，发送与接收并发）
 from concurrent.futures import ThreadPoolExecutor
 
@@ -295,11 +303,17 @@ with client.audio.asr.recognize(
 
 本地文件一次识别（1.x `Recognition.call(file)`）对应 `for event in client.audio.asr.recognize_file(path, model=...):`。
 
+<a id="语音合成"></a>
+
+<a id="m1x_tts"></a>
+
 ## 语音合成
 
 1.x `tts_v2` 使用回调收音频；2.0 改为迭代/会话式。
 
-```
+<a id="code-block-15"></a>
+
+```python
 # 1.x（回调式，节选）
 from dashscope.audio.tts_v2 import SpeechSynthesizer, ResultCallback
 class Callback(ResultCallback):
@@ -312,7 +326,10 @@ synthesizer = SpeechSynthesizer(
 synthesizer.streaming_call(text)
 synthesizer.streaming_complete()
 ```
-```
+
+<a id="code-block-16"></a>
+
+```python
 # 2.0：connect 会话（分段发送 + 逐段收音频）
 with client.audio.tts.connect(
         model="cosyvoice-v3-flash",
@@ -328,9 +345,15 @@ with client.audio.tts.connect(
 
 一次性合成（短文本整段返回）用 `client.audio.tts.synthesize(text, model=..., voice=...)`；纯流式用 `client.audio.tts.stream(text, ...)` 迭代 bytes。
 
+<a id="文本向量与重排序"></a>
+
+<a id="m1x_emb"></a>
+
 ## 文本向量与重排序
 
-```
+<a id="code-block-17"></a>
+
+```python
 # 1.x
 resp = dashscope.TextEmbedding.call(
     model="qwen3.7-text-embedding",
@@ -339,7 +362,10 @@ resp = dashscope.TextEmbedding.call(
 if resp.status_code == HTTPStatus.OK:
     print(resp)
 ```
-```
+
+<a id="code-block-18"></a>
+
+```python
 # 2.0
 resp = client.embeddings.create(
     model="qwen3.7-text-embedding",
@@ -351,9 +377,15 @@ for item in resp.embeddings:
 
 批量向量（1.x `BatchTextEmbedding`）对应 `client.embeddings.jobs.create/fetch/wait`。重排序 `TextReRank.call` 对应 `client.rerank.create`，取值由 `resp.output.results[i]` 改为 `resp.results[i]`。
 
+<a id="智能体应用调用"></a>
+
+<a id="m1x_app"></a>
+
 ## 智能体应用调用
 
-```
+<a id="code-block-19"></a>
+
+```python
 # 1.x
 from dashscope import Application
 response = Application.call(
@@ -365,7 +397,10 @@ if response.status_code != HTTPStatus.OK:
 else:
     print(response.output.text)
 ```
-```
+
+<a id="code-block-20"></a>
+
+```python
 # 2.0
 from dashscope import DashScopeError
 try:
@@ -379,6 +414,10 @@ except DashScopeError as e:
 
 应用流式调用保留 `incremental_output` 参数（帧形态由它决定），逐帧取值由 `response.output.text` 改为 `partial.text`。
 
+<a id="行为差异要点"></a>
+
+<a id="m1x_diffs"></a>
+
 ## 行为差异要点
 
 迁移时除接口名外，还需要注意以下行为差异：
@@ -389,11 +428,15 @@ except DashScopeError as e:
 -   **响应结构**：1.x 业务内容包裹在 `output` 字段下（`response.output.choices[...]`）；2.0 已扁平化（`response.choices[...]`），并新增 `resp.output_text`、`job.succeeded` 等便捷取值。
 -   **签名外参数**：2.0 各资源方法为封闭具名签名，1.x 透传的模型专属参数需改走 `parameters={...}`（图像素材类走 `extra_input=`）。
 
+<a id="相关文档"></a>
+
+<a id="m1x_links"></a>
+
 ## 相关文档
 
--   安装与升级：[安装 SDK](raw/model-api-reference/preparations/install-sdk.md)
--   文本生成：[文本生成](raw/model-user-guide/model-experience/text-generation-model/text-generation.md)、[流式输出](raw/model-user-guide/model-experience/text-generation-model/stream.md)、[多轮对话](raw/model-user-guide/model-experience/text-generation-model/multi-round-conversation.md)
--   图像与视频：[图像生成](raw/model-api-reference/image-generation/wan-image-api-reference/text-to-image-v2-api-reference.md)、[视频生成](raw/_short/text-to-video-guide-99fbc872809463c8.md)
--   语音：[录音文件识别](raw/_short/paraformer-recorded-speech-recognition-python-sd-cec7d242cc0bcda0.md)、[实时语音识别](raw/_short/realtime-websocket-python-sdk-paraformer-48f2eb5035b28f23.md)、[实时语音合成](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/realtime-tts-user-guide.md)
--   向量与排序：[向量](raw/model-user-guide/model-experience/embedding-rerank-model/embedding.md)、[重排序](raw/model-user-guide/model-experience/embedding-rerank-model/rerank.md)
--   应用调用：[智能体应用调用](raw/_short/call-single-agent-application-7bb88312c0915edf.md)
+-   安装与升级：[安装 SDK](install-sdk.md)
+-   文本生成：[文本生成](../../model-user-guide/model-experience/text-generation-model/text-generation.md)、[流式输出](../../model-user-guide/model-experience/text-generation-model/stream.md)、[多轮对话](../../model-user-guide/model-experience/text-generation-model/multi-round-conversation.md)
+-   图像与视频：[图像生成](../image-generation/wan-image-api-reference/text-to-image-v2-api-reference.md)、[视频生成](../../_short/text-to-video-guide-99fbc872809463c8.md)
+-   语音：[录音文件识别](../../_short/paraformer-recorded-speech-recognition-python-sd-cec7d242cc0bcda0.md)、[实时语音识别](../../_short/realtime-websocket-python-sdk-paraformer-48f2eb5035b28f23.md)、[实时语音合成](../../model-user-guide/model-experience/speech-and-audio/speech-synthesis/realtime-tts-user-guide.md)
+-   向量与排序：[向量](../../model-user-guide/model-experience/embedding-rerank-model/embedding.md)、[重排序](../../model-user-guide/model-experience/embedding-rerank-model/rerank.md)
+-   应用调用：[智能体应用调用](../../application-user-guide/bailian-application-calling/call-single-agent-application.md)

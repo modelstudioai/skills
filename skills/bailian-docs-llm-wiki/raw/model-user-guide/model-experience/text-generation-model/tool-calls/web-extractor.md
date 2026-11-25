@@ -2,9 +2,19 @@
 
 大模型无法直接获取网页数据。网页抓取工具可以访问指定 URL 并提取内容，为大模型提供所需信息。
 
+<a id="使用方式"></a>
+
+<a id="529c63eb16f2d"></a>
+
 ## 使用方式
 
 网页抓取功能支持四种调用方式，启用参数有所不同：
+
+<a id="sec-tabs"></a>
+
+<a id="openai-兼容-responses-api"></a>
+
+<a id="openai-兼容-responses-api-h4"></a>
 
 #### OpenAI 兼容-Responses API
 
@@ -12,7 +22,9 @@
 
 > 为获得最佳回复效果，尤其是在解决数学计算、数据分析类问题时，建议同时开启 `code_interpreter` 工具。这将允许模型在需要时调用代码解释器，提高结果的准确性。
 
-```
+<a id="code-block"></a>
+
+```python
 # 导入依赖与创建客户端...
 response = client.responses.create(
     model="qwen4-max",
@@ -32,6 +44,10 @@ response = client.responses.create(
 print(response.output_text)
 ```
 
+<a id="anthropic-兼容"></a>
+
+<a id="anthropic-兼容-h4"></a>
+
 #### Anthropic 兼容
 
 在 `tools` 参数中添加 Anthropic 服务端的网页抓取工具（`name` 为 `web_fetch`）即可启用网页抓取，并且必须同时添加联网搜索工具（`name` 为 `web_search`）。请求地址为 `https://{WorkspaceId}.{region}.maas.aliyuncs.com/apps/anthropic`。
@@ -46,7 +62,9 @@ print(response.output_text)
 
 > 支持以下模型：Qwen4-Max 系列；Qwen3.8 Max、Flash 与开源系列（不含 Omni）；Qwen3.7 Max、Plus、Flash 系列；Qwen3.6-Plus、Qwen3.6-Flash 系列；Qwen3.5-Plus、Qwen3.5-Flash 系列；deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731、`deepseek-v4.1-flash-1017`；glm-5.2；kimi-k3；kimi-k3.1-pro。
 
-```
+<a id="code-block-2"></a>
+
+```python
 # 导入依赖与创建客户端...
 message = client.messages.create(
     model="qwen4-max",
@@ -65,13 +83,27 @@ message = client.messages.create(
 
 抓取过程通过 `server_tool_use`（抓取请求）和 `web_fetch_tool_result`（抓取结果）内容块返回，抓取次数记录在 `usage.server_tool_use.web_fetch_requests` 中。
 
+<a id="支持的模型"></a>
+
+<a id="01888c8579ow7"></a>
+
 ## 支持的模型
 
-`deepseek-v4.1-flash-1017` 支持 Responses API 内置 `web_extractor` 和 Anthropic 兼容 API 内置 `web_fetch`，适用于[模型页面](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-text-generation/deepseek-v4-1-flash.md)所列的全部六个地域及对应部署范围。
+`deepseek-v4.1-flash-1017` 支持 Responses API 内置 `web_extractor` 和 Anthropic 兼容 API 内置 `web_fetch`，适用于[模型页面](../../../get-started-with-models/model-studio-model-list/model-list-text-generation/deepseek-v4-1-flash.md)所列的全部六个地域及对应部署范围。
 
 `kimi-k3.1-pro`（阿里云百炼部署）支持 Responses API 内置 `web_extractor` 和 Anthropic 兼容 API 内置 `web_fetch`，适用于北京、新加坡、美国（弗吉尼亚）、德国（法兰克福）、日本（东京）和中国香港。
 
+<a id="推荐模型"></a>
+
+<a id="we_rec_title"></a>
+
 ### 推荐模型
+
+<a id="sec-tabs-2"></a>
+
+<a id="responses-api"></a>
+
+<a id="responses-api-h4"></a>
 
 #### Responses API
 
@@ -83,6 +115,10 @@ DeepSeek：deepseek-v4-flash-0731
 
 Qwen3.8开源系列
 
+<a id="其他模型"></a>
+
+<a id="we_other_title"></a>
+
 ### 其他模型
 
 以下模型也支持此工具调用，但效果不如推荐模型。仅支持通过Responses API调用。
@@ -91,15 +127,25 @@ Qwen3.8开源系列
 -   Qwen3.6开源系列（qwen3.6-27b除外）
 -   Qwen3.5开源系列
 
+<a id="快速开始"></a>
+
+<a id="95fb51452ai4z"></a>
+
 ## 快速开始
 
 运行以下代码，通过 Responses API 调用网页抓取工具，自动总结一篇技术文档。
 
-> 需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
+> 需要已[获取与配置 API Key](../../../../model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
+
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-python-tab"></a>
 
 python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -139,9 +185,13 @@ if usage:
     print(f"\n网页抓取运行次数: {usage.get('web_extractor', {}).get('num_requests')}")
 ```
 
+<a id="fig-code-group-javascript-tab"></a>
+
 javascript
 
-```
+<a id="code-code-group-javascript"></a>
+
+```javascript
 import OpenAI from "openai";
 import process from 'process';
 
@@ -180,9 +230,13 @@ async function main() {
 main();
 ```
 
+<a id="fig-code-group-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-bash"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -201,7 +255,9 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 运行以上代码可获取如下回复：
 
-```
+<a id="code-block-3"></a>
+
+```text
 ====================回复内容====================
 根据阿里云百炼官方文档，我为您总结了**代码解释器**功能的核心内容：
 
@@ -215,17 +271,33 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 网页抓取运行次数: 1
 ```
 
+<a id="流式输出"></a>
+
+<a id="dd7be55d36tei"></a>
+
 ## 流式输出
 
 网页抓取耗时较长，建议启用流式输出，实时获取中间过程输出结果。
 
 > 建议优先使用Responses API，以获取工具的中间执行状态。
 
+<a id="sec-tabs-3"></a>
+
+<a id="openai-兼容-responses-api-2"></a>
+
+<a id="openai-兼容-responses-api-2-h4"></a>
+
 #### OpenAI 兼容-Responses API
+
+<a id="fig-code-group-2"></a>
+
+<a id="fig-code-group-2-python-tab"></a>
 
 python
 
-```
+<a id="code-code-group-2-python"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -282,9 +354,13 @@ for chunk in stream:
             print(f"联网搜索次数: {usage.get('web_search', {}).get('num_requests')}")
 ```
 
+<a id="fig-code-group-2-javascript-tab"></a>
+
 javascript
 
-```
+<a id="code-code-group-2-javascript"></a>
+
+```javascript
 import OpenAI from "openai";
 import process from 'process';
 
@@ -353,9 +429,13 @@ async function main() {
 main();
 ```
 
+<a id="fig-code-group-2-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-2-bash"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -372,6 +452,10 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
     "stream": true
 }'
 ```
+
+<a id="计费说明"></a>
+
+<a id="0fa5323508eb1"></a>
 
 ## 计费说明
 

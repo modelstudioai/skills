@@ -2,6 +2,10 @@
 
 在兼容 OpenAI 或 Anthropic API 的第三方工具中接入阿里云百炼。
 
+<a id="快速开始"></a>
+
+<a id="quick-connect"></a>
+
 ## 快速开始
 
 1.  1
@@ -19,24 +23,50 @@
     
     选择协议和 Base URL
     
+    <a id="connection-reference"></a>
+    
+    <a id="mt-config-h"></a>
+    
     在工具的自定义模型设置中选择协议，并填写对应 Base URL。OpenAI 协议使用 `compatible-mode/v1` 或 `/v1` 地址，Anthropic 协议使用 `/apps/anthropic` 地址。
+    
+    <a id="sec-tabs"></a>
+    
+    <a id="token-plan"></a>
+    
+    <a id="token-plan-h4"></a>
     
     #### Token Plan
     
-    -   OpenAI Base URL：`[https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1](https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1)`
-    -   Anthropic Base URL：`[https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic](https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic)`
+    <a id="tpp-mt-h"></a>
+    
+    <a id="mt-tp-h"></a>
+    
+    -   OpenAI Base URL：`https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
+    -   Anthropic Base URL：`https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic`
+    
+    <a id="按量计费"></a>
+    
+    <a id="按量计费-h4"></a>
     
     #### 按量计费
     
-    将 `{WorkspaceId}` 替换为真实的 [Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+    <a id="mt-payg-h"></a>
+    
+    将 `{WorkspaceId}` 替换为真实的 [Workspace ID](../../../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
     
     -   OpenAI Base URL：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
     -   Anthropic Base URL：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic`
     
+    <a id="coding-plan"></a>
+    
+    <a id="coding-plan-h4"></a>
+    
     #### Coding Plan
     
-    -   OpenAI Base URL：`[https://coding.dashscope.aliyuncs.com/v1](https://coding.dashscope.aliyuncs.com/v1)`
-    -   Anthropic Base URL：`[https://coding.dashscope.aliyuncs.com/apps/anthropic](https://coding.dashscope.aliyuncs.com/apps/anthropic)`
+    <a id="mt-cp-h"></a>
+    
+    -   OpenAI Base URL：`https://coding.dashscope.aliyuncs.com/v1`
+    -   Anthropic Base URL：`https://coding.dashscope.aliyuncs.com/apps/anthropic`
     
 3.  3
     
@@ -44,9 +74,9 @@
     
     按计费方案填写模型 ID：
     
-    -   Token Plan：填写[个人版](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview#tppo-h-models)或[团队版](https://help.aliyun.com/zh/model-studio/token-plan-team-overview#tpto-h-models)支持的文本生成模型
+    -   Token Plan：填写[个人版](../../token-plan-personal/token-plan-personal-overview.md#tppo-h-models)或[团队版](../../token-plan-team-edition/token-plan-team-overview.md#tpto-h-models)支持的文本生成模型
     -   按量计费：例如 `qwen3.8-max` 或 `qwen3.8-flash`
-    -   Coding Plan：填写[支持的文本生成模型](raw/token-plan-user-guide/coding-plan-guide/coding-plan.md)
+    -   Coding Plan：填写[支持的文本生成模型](../../coding-plan-guide/coding-plan.md)
     
 4.  4
     
@@ -54,6 +84,10 @@
     
     发送一条测试消息。收到模型回复即表示接入成功。
     
+
+<a id="不支持的工具类型"></a>
+
+<a id="mt-unsupported-h"></a>
 
 ## 不支持的工具类型
 

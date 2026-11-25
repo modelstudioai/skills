@@ -4,19 +4,23 @@
 
 把未提交的多文件 diff 交给模型，让它判断该拆几条 commit、每条带哪些文件、有没有破坏调用方。
 
-**说明**
-
-**免责声明**：本页展示内容均为 AI 模型生成，仅供参考，不构成任何效果承诺；实际产出效果与 Credits 消耗以控制台“用量详情”为准。
+> **说明**
+>
+> **免责声明**：本页展示内容均为 AI 模型生成，仅供参考，不构成任何效果承诺；实际产出效果与 Credits 消耗以控制台“用量详情”为准。
 
 本篇以一份混了三类不相关改动的多文件 diff 跑通（修 bug + 加功能 + 顺手清理）：把 diff 交给 qwen3.8-flash，它自行判断拆分粒度，为每条 commit 写出符合 Conventional Commits 的标题与正文，标注是否破坏调用方，并给出 PR 标题与提交前提醒。diff 里预设了 5 个陷阱，用来检验它是读 diff 还是靠函数名猜。
 
 调用链：qwen3.8-flash（未提交的 diff 一次输入 → commit 列表 + PR 标题 + 提交前提醒）。关闭思考模式，输入短、输出更短。
 
+<a id="步骤-把-diff-交给模型拆分"></a>
+
 ## 步骤：把 diff 交给模型拆分
 
 把 `git diff` 的内容连同下面的指令一起发给 qwen3.8-flash。写 commit 是一天要跑好几次的动作，同样建议关闭思考。下面的 diff 为便于阅读做了节选：
 
-```
+<a id="code-block"></a>
+
+```text
 你是 Git 提交助手。下面是我工作区里攒了一上午、还没提交的改动。
 请判断这些改动该拆成几个 commit，并为每个 commit 写好提交信息。
 
@@ -107,7 +111,9 @@ diff --git a/requirements.txt b/requirements.txt
 
 关键参数：
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "model": "qwen3.8-flash",
   "messages": [{"role": "user", "content": "……git diff 正文……"}],
@@ -117,9 +123,13 @@ diff --git a/requirements.txt b/requirements.txt
 
 OpenAI 兼容模式下，`enable_thinking` 放在请求体顶层。
 
+<a id="accordion-查看实测产出-5-条-commit-pr-标题-提交前提醒-节选"></a>
+
 查看实测产出 · 5 条 commit + PR 标题 + 提交前提醒（节选）
 
-```
+<a id="code-block-3"></a>
+
+```text
 {
   "commits": [
     {
@@ -172,6 +182,8 @@ OpenAI 兼容模式下，`enable_thinking` 放在请求体顶层。
   ]
 }
 ```
+
+<a id="说明"></a>
 
 ## 说明
 

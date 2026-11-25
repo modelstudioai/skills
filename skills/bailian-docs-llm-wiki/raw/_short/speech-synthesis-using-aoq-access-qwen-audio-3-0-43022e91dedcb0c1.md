@@ -2,28 +2,48 @@
 
 通过 AOQ 接入 qwen-audio-3.0-tts-flash，分段发送文本并实时播放合成语音。客户端代码以 Android Java 为例。
 
+<a id="方案概述"></a>
+
+<a id="tts-overview-title"></a>
+
 ## 方案概述
 
 qwen-audio-3.0-tts-flash 支持 AOQ Inference 事件协议。本教程选择该模型演示通过 AOQ 进行流式语音合成：客户端通过 Data 轨发送 run-task、continue-task 和 finish-task，服务端通过 Audio 轨流式返回音频，并通过 Data 轨返回任务事件。
 
 同一任务可以多次发送 continue-task。完整语句会尽快合成，不完整语句会暂存在服务端，直到后续文本补全或客户端发送 finish-task。该方式适合移动端播报、长文本分段输入和低延迟语音输出。
 
+<a id="准备工作"></a>
+
+<a id="tts-prerequisites-title"></a>
+
 ## 准备工作
 
-1.  开通阿里云百炼，并按[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。API Key 只保存在业务 AppServer，不要写入客户端代码或提交到代码仓库。
-2.  根据业务部署地域确认 AOQ Endpoint。地域和接入地址的选择方法请参见[选择地域、服务部署范围和接入域名](raw/model-user-guide/get-started-with-models/regions.md)。
-3.  从[SDK 下载](raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-sdk-download.md)获取最新版 AOQ Client SDK。
-4.  按 [Qwen-Audio-TTS 的 AOQ 鉴权步骤](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-aoq-access#authentication)搭建业务 AppServer。每次建立新连接前，客户端都应从 AppServer 获取新的连接凭证。
+1.  开通阿里云百炼，并按[获取与配置 API Key](../model-api-reference/preparations/get-api-key.md)。API Key 只保存在业务 AppServer，不要写入客户端代码或提交到代码仓库。
+2.  根据业务部署地域确认 AOQ Endpoint。地域和接入地址的选择方法请参见[选择地域、服务部署范围和接入域名](../model-user-guide/get-started-with-models/regions.md)。
+3.  从[SDK 下载](../model-api-reference/more-about-models/realtime-api-aoq-api/realtime-sdk-download.md)获取最新版 AOQ Client SDK。
+4.  按 [Qwen-Audio-TTS 的 AOQ 鉴权步骤](../model-api-reference/realtime-api-directory/realtime-tts-model-apis/qwen-audio-tts-api/qwen-audio-tts-aoq-access.md#authentication)搭建业务 AppServer。每次建立新连接前，客户端都应从 AppServer 获取新的连接凭证。
+
+<a id="导入-sdk"></a>
+
+<a id="tts-import-sdk-title"></a>
 
 ### 导入 SDK
 
 根据开发平台导入对应 SDK。后续客户端代码以 Android Java 为例，其他平台使用相同的接口设计和事件流程。本文以 Opus 音频流为例，请先按 SDK 下载文档导入对应插件。
 
+<a id="sec-tabs"></a>
+
+<a id="android"></a>
+
+<a id="android-h4"></a>
+
 #### Android
 
 1.  将 Opus 插件中的 libPluginOpus.so 按 ABI 放入 app/src/main/jniLibs/armeabi-v7a/ 和 app/src/main/jniLibs/arm64-v8a/，将 AoqClientSdk-release.aar 放入 app/libs，并在 app/build.gradle 中配置依赖和 SDK 支持的 ABI：
 
-```
+<a id="code-block"></a>
+
+```groovy
 android {
     defaultConfig {
         minSdk 21
@@ -38,12 +58,18 @@ dependencies {
 
 2.  在 AndroidManifest.xml 中声明以下权限：
 
-```
+<a id="code-block-2"></a>
+
+```xml
 <uses-permission android:name="android.permission.INTERNET" />
 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 ```
 
 3.  本场景不需要申请麦克风或摄像头权限。
+
+<a id="ios"></a>
+
+<a id="ios-h4"></a>
 
 #### iOS
 
@@ -51,11 +77,17 @@ dependencies {
 2.  本场景不使用麦克风或摄像头，无需声明对应权限。
 3.  Swift 工程使用 import AoqClientSdk；Objective-C 工程使用 #import <AoqClientSdk/AoqClientSdk.h>。
 
+<a id="harmonyos"></a>
+
+<a id="harmonyos-h4"></a>
+
 #### HarmonyOS
 
 1.  将 Opus 插件中的 libPluginOpus.so 放入 entry/libs/arm64-v8a/，将 AoqClientSdk.har 放入 entry/libs，并在 entry/oh-package.json5 中声明依赖。该 SDK 兼容 API 12，支持 arm64-v8a：
 
-```
+<a id="code-block-3"></a>
+
+```json
 {
   "dependencies": {
     "@aoq/client-sdk": "file:./libs/AoqClientSdk.har"
@@ -65,7 +97,9 @@ dependencies {
 
 2.  在 entry/src/main/module.json5 中声明以下权限：
 
-```
+<a id="code-block-4"></a>
+
+```json
 "requestPermissions": [
   { "name": "ohos.permission.INTERNET" }
 ]
@@ -73,17 +107,27 @@ dependencies {
 
 3.  本场景不需要申请麦克风或摄像头权限。
 
+<a id="linux-python"></a>
+
+<a id="linux-python-h4"></a>
+
 #### Linux (Python)
 
 1.  解压 SDK，并保持 aoq\_client\_sdk.py、libAoqClientSdk.so 和 libonnxruntime.so.1.16.3 位于同一目录。
 2.  将 SDK 目录加入 Python 和动态库搜索路径：
 
-```
+<a id="code-block-5"></a>
+
+```bash
 export PYTHONPATH="$PWD/AoqClientSdk:$PYTHONPATH"
 export LD_LIBRARY_PATH="$PWD/AoqClientSdk:$LD_LIBRARY_PATH"
 ```
 
 3.  在 Python 代码中使用 import aoq\_client\_sdk。也可通过 AOQ\_CLIENT\_SDK\_LIB 指定 libAoqClientSdk.so 的绝对路径。
+
+<a id="体验-demo"></a>
+
+<a id="tts-experience-demo-title"></a>
 
 ## 体验 Demo
 
@@ -92,6 +136,10 @@ export LD_LIBRARY_PATH="$PWD/AoqClientSdk:$LD_LIBRARY_PATH"
 扫描以下二维码下载 Demo：
 
 ![Demo 下载二维码](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f92cd.png)
+
+<a id="实现流程"></a>
+
+<a id="tts-flow-title"></a>
 
 ## 实现流程
 
@@ -104,11 +152,17 @@ export LD_LIBRARY_PATH="$PWD/AoqClientSdk:$LD_LIBRARY_PATH"
 
 ![AOQ 流式语音合成时序图](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2418966871/p1094860.png)
 
+<a id="appserver-获取-token"></a>
+
+<a id="tts-token-request-title"></a>
+
 ## AppServer 获取 Token
 
 在 AppServer 设置 DASHSCOPE\_API\_KEY，并使用所选地域的 Endpoint 发送请求。clientIp 为客户端的真实公网 IP；该字段可选，但建议传入，以便服务分配合适的 Relay 接入点。
 
-```
+<a id="code-block-6"></a>
+
+```bash
 curl -X POST \
   "https://{endpoint}/api/v1/webrtc/inference?model=qwen-audio-3.0-tts-flash" \
   -H "Content-Type: application/json" \
@@ -117,43 +171,40 @@ curl -X POST \
   -d "{\"clientIp\": \"${CLIENT_REAL_IP}\"}"
 ```
 
-**说明**如果 AppServer 无法获取客户端真实公网 IP，请删除 clientIp 字段，不要传空字符串。
+> **说明**
+>
+> 如果 AppServer 无法获取客户端真实公网 IP，请删除 clientIp 字段，不要传空字符串。
 
 AppServer 将响应中的以下字段返回客户端。API Key 仅保存在 AppServer。
 
-**响应字段**
+|  |  |
+| --- | --- |
+| **响应字段** | **SDK 字段** |
+| aoqTokenForClient | AoqConnectConfig.token |
+| sid | AoqConnectConfig.sid |
+| clientRelayCertFingerprint | AoqConnectConfig.certFingerprint |
+| clientRelayEndpoints | AoqConnectConfig.relayEndpoints |
+| extraInfo.workspaceIdHash | AoqConnectConfig.workspaceIdHash |
 
-**SDK 字段**
+<a id="实现-android-客户端"></a>
 
-aoqTokenForClient
-
-AoqConnectConfig.token
-
-sid
-
-AoqConnectConfig.sid
-
-clientRelayCertFingerprint
-
-AoqConnectConfig.certFingerprint
-
-clientRelayEndpoints
-
-AoqConnectConfig.relayEndpoints
-
-extraInfo.workspaceIdHash
-
-AoqConnectConfig.workspaceIdHash
+<a id="tts-implementation-title"></a>
 
 ## 实现 Android 客户端
 
 客户端从 AppServer 获取 AoqConnectConfig 后，按以下步骤实现 Android 端流式语音合成。
 
+<a id="1-创建引擎并设置回调"></a>
+
+<a id="tts-step-1-title"></a>
+
 ### 1\. 创建引擎并设置回调
 
 创建 AOQ 单例引擎并注册连接与 Data 轨事件回调。客户需要在连接状态回调中维护可用状态，并把任务事件交给业务状态机。
 
-```
+<a id="code-block-7"></a>
+
+```java
 AoqClientListener listener = new AoqClientListener() {
     @Override
     public void onConnectionStatusChange(AoqClientEngine.AoqConnectionStatus status) {
@@ -172,11 +223,17 @@ createConfig.workDir = context.getFilesDir().getAbsolutePath();
 engine = AoqClientEngine.createEngine(context, createConfig, listener);
 ```
 
+<a id="2-启动音频播放"></a>
+
+<a id="tts-step-2-title"></a>
+
 ### 2\. 启动音频播放
 
 TTS 场景不采集麦克风，只需初始化本地播放器。客户可以选择默认使用扬声器或听筒；服务端 Audio 轨音频由 SDK 自动播放。
 
-```
+<a id="code-block-8"></a>
+
+```java
 AoqClientEngine.AoqAudioPlaybackConfig playbackConfig =
         new AoqClientEngine.AoqAudioPlaybackConfig();
 playbackConfig.channel = 1;
@@ -184,11 +241,17 @@ playbackConfig.isDefaultSpeaker = true;
 engine.startAudioPlayer(playbackConfig);
 ```
 
+<a id="3-配置解码器-轨道并建立连接"></a>
+
+<a id="tts-step-3-title"></a>
+
 ### 3\. 配置解码器、轨道并建立连接
 
 配置 SDK 的音频解码参数，然后发布 Data 轨、订阅 Audio 和 Data 轨。以下数值仅为本教程的 Opus 示例配置。AoqConnectConfig 的连接字段由客户根据 AppServer Token 响应填写。
 
-```
+<a id="code-block-9"></a>
+
+```java
 AoqClientEngine.AoqAudioCodecConfig audioDecoderConfig =
         new AoqClientEngine.AoqAudioCodecConfig();
 audioDecoderConfig.trackType = AoqClientEngine.AoqTrackType.AoqTrackTypeAudio;
@@ -211,11 +274,17 @@ connectConfig.subscribeTracks.add(subscribeDataTrack);
 engine.connect(connectConfig);
 ```
 
+<a id="4-调用-senddatamsg-发送-run-task-事件"></a>
+
+<a id="tts-step-4-title"></a>
+
 ### 4\. 调用 sendDataMsg 发送 run-task 事件
 
-连接成功后为本轮生成新的 UUID task\_id，并配置模型、音色、文本类型、音频格式和采样率。其他可选参数请参见[客户端事件](raw/_short/cosyvoice-client-events-480a8821d2d60e18.md)。
+连接成功后为本轮生成新的 UUID task\_id，并配置模型、音色、文本类型、音频格式和采样率。其他可选参数请参见[客户端事件](cosyvoice-client-events-480a8821d2d60e18.md)。
 
-```
+<a id="code-block-10"></a>
+
+```java
 taskId = UUID.randomUUID().toString();
 JSONObject header = new JSONObject()
         .put("action", "run-task")
@@ -239,11 +308,17 @@ dataMessage.data = runTask.toString().getBytes(StandardCharsets.UTF_8);
 engine.sendDataMsg(dataMessage);
 ```
 
+<a id="5-调用-senddatamsg-发送-continue-task-事件"></a>
+
+<a id="tts-step-5-title"></a>
+
 ### 5\. 调用 sendDataMsg 发送 continue-task 事件
 
 只能在收到 task-started 后发送 continue-task。同一任务可连续发送多个片段；单次最多 20,000 个字符，累计最多 200,000 个字符。客户应及时发送后续片段或结束任务，不要依赖固定的连接超时秒数。
 
-```
+<a id="code-block-11"></a>
+
+```java
 JSONObject continueHeader = new JSONObject()
         .put("action", "continue-task")
         .put("task_id", taskId)
@@ -258,11 +333,17 @@ dataMessage.data = continueTask.toString().getBytes(StandardCharsets.UTF_8);
 engine.sendDataMsg(dataMessage);
 ```
 
+<a id="6-处理服务端事件"></a>
+
+<a id="tts-step-6-title"></a>
+
 ### 6\. 处理服务端事件
 
-在 onDataMsg 中读取 header.event，维护任务状态并处理失败。result-generated 只表示句子已合成，音频仍通过 Audio 轨返回。完整字段请参见[服务端事件](raw/_short/cosyvoice-server-events-81793da4414e2646.md)。
+在 onDataMsg 中读取 header.event，维护任务状态并处理失败。result-generated 只表示句子已合成，音频仍通过 Audio 轨返回。完整字段请参见[服务端事件](cosyvoice-server-events-81793da4414e2646.md)。
 
-```
+<a id="code-block-12"></a>
+
+```java
 JSONObject header = event.optJSONObject("header");
 if (header == null) return;
 String name = header.optString("event");
@@ -279,11 +360,17 @@ if ("task-started".equals(name)) {
 }
 ```
 
+<a id="7-调用-senddatamsg-发送-finish-task-事件"></a>
+
+<a id="tts-step-7-title"></a>
+
 ### 7\. 调用 sendDataMsg 发送 finish-task 事件
 
-发送完全部文本后立即发送 finish-task，以合成服务端缓存的不完整语句，并等待 task-finished。详细规则请参见[客户端事件](raw/_short/cosyvoice-client-events-480a8821d2d60e18.md)。
+发送完全部文本后立即发送 finish-task，以合成服务端缓存的不完整语句，并等待 task-finished。详细规则请参见[客户端事件](cosyvoice-client-events-480a8821d2d60e18.md)。
 
-```
+<a id="code-block-13"></a>
+
+```java
 JSONObject finishHeader = new JSONObject()
         .put("action", "finish-task")
         .put("task_id", taskId)
@@ -296,42 +383,46 @@ dataMessage.data = finishTask.toString().getBytes(StandardCharsets.UTF_8);
 engine.sendDataMsg(dataMessage);
 ```
 
+<a id="8-断开连接并销毁引擎"></a>
+
+<a id="tts-step-8-title"></a>
+
 ### 8\. 断开连接并销毁引擎
 
 不要在发送 finish-task 后立即断开。收到 task-finished 或 task-failed 后，如不再发起下一轮任务，再断开连接并销毁引擎。SDK 会自动关闭音频播放器。
 
-```
+<a id="code-block-14"></a>
+
+```java
 engine.disconnect();
 AoqClientEngine.destroy();
 ```
 
+<a id="主要服务端事件"></a>
+
+<a id="tts-events-title"></a>
+
 ## 主要服务端事件
 
-**事件**
+|  |  |
+| --- | --- |
+| **事件** | **说明** |
+| task-started | 任务已启动，可以发送 continue-task |
+| result-generated | 一个完整语句已合成，对应音频通过 Audio 轨返回 |
+| task-finished | 所有缓存文本已处理，任务结束 |
+| task-failed | 任务失败，应读取错误码和错误消息 |
 
-**说明**
+<a id="完整示例"></a>
 
-task-started
-
-任务已启动，可以发送 continue-task
-
-result-generated
-
-一个完整语句已合成，对应音频通过 Audio 轨返回
-
-task-finished
-
-所有缓存文本已处理，任务结束
-
-task-failed
-
-任务失败，应读取错误码和错误消息
+<a id="tts-complete-title"></a>
 
 ## 完整示例
 
 以下类接收由 AppServer Token 响应转换完成的 AoqConnectConfig。连接成功后调用 synthesize(text, voice)；生产代码还需补充权限、UI 状态和重连逻辑。
 
-```
+<a id="code-block-15"></a>
+
+```java
 import android.content.Context;
 
 import com.alibaba.aoq.clientsdk.AoqClientEngine;
@@ -501,57 +592,73 @@ public final class TtsClient {
 }
 ```
 
+<a id="运行并验证"></a>
+
+<a id="tts-run-title"></a>
+
 ## 运行并验证
 
 1.  收到 task-started 后才提交文本。
 2.  完整语句的音频通过 Audio 轨连续播放；不完整语句在 finish-task 后补充合成。
 3.  所有音频完成后收到 task-finished；随后可以使用新的 task\_id 开始下一轮。
 
+<a id="典型场景"></a>
+
+<a id="tts-scenarios-title"></a>
+
 ## 典型场景
+
+<a id="同一连接多次合成"></a>
+
+<a id="tts-scenario-1-title"></a>
 
 ### 同一连接多次合成
 
 收到 task-finished 后，可在同一 AOQ 连接上使用新的 task\_id 再次发送 run-task，无需重新申请 Token；如果连接已断开，则必须获取新的连接凭证。
 
+<a id="切换音色"></a>
+
+<a id="tts-scenario-2-title"></a>
+
 ### 切换音色
 
 每个 run-task 都可以通过 parameters.voice 选择系统音色或有效的 voice\_id，因此可在同一连接的不同任务间切换音色。
+
+<a id="扬声器或听筒"></a>
+
+<a id="tts-scenario-3-title"></a>
 
 ### 扬声器或听筒
 
 通过 AoqAudioPlaybackConfig.isDefaultSpeaker 设置默认输出设备；运行中可调用 enableSpeakerphone 切换。
 
+<a id="常见问题"></a>
+
+<a id="tts-troubleshooting-title"></a>
+
 ## 常见问题
 
-**问题**
+|  |  |
+| --- | --- |
+| **问题** | **处理方法** |
+| 连接成功但任务不启动 | 确认通过 Inference Token 地址获取凭证，并检查 run-task 的模型名、task\_id 和 Data 轨发布配置。 |
+| continue-task 被拒绝 | 等待 task-started 后再发送，并确保 run-task、continue-task、finish-task 使用同一个 task\_id。 |
+| 任务成功但没有声音 | 确认已订阅 Audio 轨并启动播放器，同时检查 SDK 解码配置是否与 run-task 中选择的输出音频格式一致。 |
+| 末尾文本没有音频 | 所有文本发送完毕后必须发送 finish-task，并等待剩余音频和 task-finished 后再断开。 |
 
-**处理方法**
+<a id="相关文档"></a>
 
-连接成功但任务不启动
-
-确认通过 Inference Token 地址获取凭证，并检查 run-task 的模型名、task\_id 和 Data 轨发布配置。
-
-continue-task 被拒绝
-
-等待 task-started 后再发送，并确保 run-task、continue-task、finish-task 使用同一个 task\_id。
-
-任务成功但没有声音
-
-确认已订阅 Audio 轨并启动播放器，同时检查 SDK 解码配置是否与 run-task 中选择的输出音频格式一致。
-
-末尾文本没有音频
-
-所有文本发送完毕后必须发送 finish-task，并等待剩余音频和 task-finished 后再断开。
+<a id="tts-related-title"></a>
 
 ## 相关文档
 
 如需查看完整参数、事件字段或其他平台接口，请参见：
 
--   [获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)
--   [选择地域、服务部署范围和接入域名](raw/model-user-guide/get-started-with-models/regions.md)
--   [AOQ Client SDK 简介](raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-api-aoq-sdk-desc.md)
--   [SDK 下载](raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-sdk-download.md)
--   [Qwen-Audio-TTS AOQ 接入](raw/model-api-reference/realtime-api-directory/realtime-tts-model-apis/qwen-audio-tts-api/qwen-audio-tts-aoq-access.md)
--   [Qwen-Audio-TTS 用户指南](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/tts-model.md)
--   [客户端事件](raw/_short/cosyvoice-client-events-480a8821d2d60e18.md)
--   [服务端事件](raw/_short/cosyvoice-server-events-81793da4414e2646.md)
+-   [获取与配置 API Key](../model-api-reference/preparations/get-api-key.md)
+-   [选择地域、服务部署范围和接入域名](../model-user-guide/get-started-with-models/regions.md)
+-   [AOQ Client SDK 简介](../model-api-reference/more-about-models/realtime-api-aoq-api/realtime-api-aoq-sdk-desc.md)
+-   [SDK 下载](../model-api-reference/more-about-models/realtime-api-aoq-api/realtime-sdk-download.md)
+-   [Qwen-Audio-TTS AOQ 接入](../model-api-reference/realtime-api-directory/realtime-tts-model-apis/qwen-audio-tts-api/qwen-audio-tts-aoq-access.md)
+-   [Qwen-Audio-TTS 用户指南](../model-user-guide/model-experience/speech-and-audio/speech-synthesis/tts-model.md)
+-   [客户端事件](cosyvoice-client-events-480a8821d2d60e18.md)
+-   [服务端事件](cosyvoice-server-events-81793da4414e2646.md)

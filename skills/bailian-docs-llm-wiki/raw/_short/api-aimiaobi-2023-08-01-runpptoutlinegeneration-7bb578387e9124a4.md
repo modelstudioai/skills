@@ -2,17 +2,29 @@
 
 生成PPT大纲内容
 
+<a id="接口说明"></a>
+
+<a id="api-detail-51"></a>
+
 ## 接口说明
 
 接入说明：
 
 -   当前接口为 HTTP-SSE 协议。
--   由于 OpenAPI 门户目前对 SSE 推理协议不兼容（无法直接调试），接口 SDK 方式调用示例（支持 Java、Python 版本的 sdk）请参考 [PPT 生成最佳实践文档](raw/_short/ppt-generation-best-practices-019a3b75f1392a3a.md)。
+-   由于 OpenAPI 门户目前对 SSE 推理协议不兼容（无法直接调试），接口 SDK 方式调用示例（支持 Java、Python 版本的 sdk）请参考 [PPT 生成最佳实践文档](ppt-generation-best-practices-019a3b75f1392a3a.md)。
 -   其中获取 Java 异步 SDK 的最新版本： [请点击链接获取](https://api.aliyun.com/api-tools/sdk/AiMiaoBi?spm=a2c4g.11186623.0.0.4cd3170d7rccDC&version=2023-08-01&language=java-async-tea&tab=primer-doc)。
+
+<a id="调试"></a>
+
+<a id="api-doc-debug"></a>
 
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -31,209 +43,63 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-**操作**
+| 操作 | 访问级别 | 资源类型 | 条件关键字 | 关联操作 |
+| --- | --- | --- | --- | --- |
+| aimiaobi:RunPptOutlineGeneration | create | \*全部资源<br><br>`*` | 无 | 无 |
 
-**访问级别**
+<a id="请求语法"></a>
 
-**资源类型**
-
-**条件关键字**
-
-**关联操作**
-
-aimiaobi:RunPptOutlineGeneration
-
-create
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-53"></a>
 
 ## 请求语法
 
-```
+<a id="code-block"></a>
+
+```text
 POST /pop/ppt/runPptOutlineGeneration HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="api-detail-36"></a>
+
 ## 请求参数
 
-**名称**
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-8v8a5mfpxffrj1pn |
+| Prompt | string | 是 | 用户问题 | 帮我生成一个消防安全主题的PPT |
+| ExternalUserId | string | 否 |  | abc |
 
-**类型**
+<a id="返回参数"></a>
 
-**必填**
-
-**描述**
-
-**示例值**
-
-WorkspaceId
-
-string
-
-是
-
-阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)
-
-llm-8v8a5mfpxffrj1pn
-
-Prompt
-
-string
-
-是
-
-用户问题
-
-帮我生成一个消防安全主题的PPT
-
-ExternalUserId
-
-string
-
-否
-
-abc
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-**名称**
-
-**类型**
-
-**描述**
-
-**示例值**
-
-object
-
-Schema of Response
-
-Header
-
-object
-
-响应头
-
-ErrorCode
-
-string
-
-错误码
-
-Success
-
-ErrorMessage
-
-string
-
-错误信息
-
-xxx
-
-Event
-
-string
-
-SSE 事件。task-started:开始，task-finished:结束，task-failed:失败
-
-task-started
-
-SessionId
-
-string
-
-会话 ID。
-
-1a3d7c9f-3a6d-4e49-b176-2d8721a27397
-
-StatusCode
-
-integer
-
-状态码。
-
-200
-
-TaskId
-
-string
-
-任务 ID
-
-8996314ce5514867943c71935e6a45af
-
-TraceId
-
-string
-
-全链路 ID
-
-0bc1ec3a17435601877224179ecc8a
-
-Payload
-
-object
-
-响应体
-
-Output
-
-object
-
-输出
-
-Text
-
-string
-
-输出内容
-
-文本生成结果
-
-RequestId
-
-string
-
-请求唯一标识
-
-F2F366D6-E9FE-1006-BB70-2C650896AAB5
-
-HttpStatusCode
-
-string
-
-http 状态码
-
-200
-
-Code
-
-string
-
-状态码
-
-success
-
-Message
-
-string
-
-信息
-
-successful
-
-Success
-
-boolean
-
-是否成功：true 成功，false 失败
-
-true
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | Schema of Response |  |
+| Header | object | 响应头 |  |
+| ErrorCode | string | 错误码 | Success |
+| ErrorMessage | string | 错误信息 | xxx |
+| Event | string | SSE 事件。task-started:开始，task-finished:结束，task-failed:失败 | task-started |
+| SessionId | string | 会话 ID。 | 1a3d7c9f-3a6d-4e49-b176-2d8721a27397 |
+| StatusCode | integer | 状态码。 | 200 |
+| TaskId | string | 任务 ID | 8996314ce5514867943c71935e6a45af |
+| TraceId | string | 全链路 ID | 0bc1ec3a17435601877224179ecc8a |
+| Payload | object | 响应体 |  |
+| Output | object | 输出 |  |
+| Text | string | 输出内容 | 文本生成结果 |
+| RequestId | string | 请求唯一标识 | F2F366D6-E9FE-1006-BB70-2C650896AAB5 |
+| HttpStatusCode | string | http 状态码 | 200 |
+| Code | string | 状态码 | success |
+| Message | string | 信息 | successful |
+| Success | boolean | 是否成功：true 成功，false 失败 | true |
+
+<a id="示例"></a>
+
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -241,7 +107,9 @@ true
 
 `JSON`格式
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "Header": {
     "ErrorCode": "Success",
@@ -265,25 +133,21 @@ true
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
+
 ## 错误码
 
-**HTTP status code**
-
-**错误码**
-
-**错误信息**
-
-**描述**
-
-403
-
-NoPermission
-
-You are not authorized to perform this action.
-
-请检查workspaceId的赋值
+| HTTP status code | 错误码 | 错误信息 | 描述 |
+| --- | --- | --- | --- |
+| 403 | NoPermission | You are not authorized to perform this action. | 请检查workspaceId的赋值 |
 
 访问[错误中心](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/errorCode)查看更多错误码。
+
+<a id="变更历史"></a>
+
+<a id="workbench-doc-change-demo"></a>
 
 ## 变更历史
 

@@ -1,5 +1,9 @@
 # 常见问题Q&A
 
+<a id="通义法睿大模型和通义法睿应用api有什么区别"></a>
+
+<a id="2dd8b68214bjz"></a>
+
 ## 通义法睿大模型和通义法睿应用API有什么区别？
 
 [通义法睿大模型](https://help.aliyun.com/zh/model-studio/developer-reference/tongyi-farui-quick-start?spm=a2c4g.11186623.0.0.3e6b528aYplLKx)是以千问为基座，经法律行业数据和知识专门训练的**法律行业大模型产品**，具有回答法律问题、推理法律适用、推荐裁判类案、辅助案情分析、生成法律文书、检索法律知识、审查合同条款等基础功能，使用时仅需要调用大模型的API接口，通过不同的prompt实现功能，适用场景更加灵活。

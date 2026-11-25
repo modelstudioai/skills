@@ -1,8 +1,12 @@
 # Qwen-Audio-ASR-Message iOS SDK
 
+<a id="前提条件"></a>
+
 ## 前提条件
 
-1.  [获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。移动端应用请勿硬编码长期 API Key。建议由应用服务端[生成临时 API Key](raw/model-api-reference/more-about-models/generate-temporary-api-key.md)，再下发给客户端。
+1.  [获取与配置 API Key](../model-api-reference/preparations/get-api-key.md)。移动端应用请勿硬编码长期 API Key。建议由应用服务端[生成临时 API Key](../model-api-reference/more-about-models/generate-temporary-api-key.md)，再下发给客户端。
+
+<a id="安装-sdk"></a>
 
 ### 安装 SDK
 
@@ -11,13 +15,35 @@
 -   在 Build Phases → Link Binary With Libraries 中添加 nuisdk.xcframework。
 -   在 General → Frameworks, Libraries, and Embedded Content 中将 nuisdk.xcframework 设置为 Embed & Sign。
 
+<a id="快速开始"></a>
+
+<a id="model-qwen-audio-asr-streaming-a7fed77afbder"></a>
+
+<a id="shared-1"></a>
+
 ## 快速开始
 
 用 Xcode 打开示例工程。示例代码位于`DashFunAsrSpeechTranscriberViewController.m`，替换 API Key 后体验功能。
 
 在示例中使用模型 `qwen-audio-3.1-asr-flash-message`。
 
+<a id="model-qwen-audio-asr-message-a7fed77afbder"></a>
+
+<a id="model-fun-asr-realtime-a7fed77afbder"></a>
+
+<a id="调用步骤"></a>
+
+<a id="model-qwen-audio-asr-streaming-bccc719ce3r6a"></a>
+
+<a id="shared-4"></a>
+
+<a id="model-qwen-audio-asr-message-bccc719ce3r6a"></a>
+
+<a id="调用步骤-2"></a>
+
 ### 调用步骤
+
+<a id="model-fun-asr-realtime-bccc719ce3r6a"></a>
 
 1.  初始化 SDK
 2.  按业务需求设置参数：通过`nui_initialize`接口设置连接与控制参数；通过`nui_set_params`接口设置语音识别效果参数。
@@ -30,11 +56,25 @@
 
 **Qwen-Audio-ASR-Message · 接口参考**
 
-[nui\_initialize](https://help.aliyun.com/zh/model-studio/qwen-asr-message-websocket-sdk-ios#model-qwen-audio-asr-message-05eab5125e2pm)、[连接与控制参数](https://help.aliyun.com/zh/model-studio/qwen-asr-message-websocket-sdk-ios#model-qwen-audio-asr-message-57acf5ecc1w8j)、[nui\_set\_params](https://help.aliyun.com/zh/model-studio/qwen-asr-message-websocket-sdk-ios#model-qwen-audio-asr-message-763672f3f8dgw)、[语音识别效果参数](https://help.aliyun.com/zh/model-studio/qwen-asr-message-websocket-sdk-ios#model-qwen-audio-asr-message-d20cce9518kla)、[nui\_dialog\_start](https://help.aliyun.com/zh/model-studio/qwen-asr-message-websocket-sdk-ios#model-qwen-audio-asr-message-8fe6ea298apzu)、[onNuiAudioStateChanged](https://help.aliyun.com/zh/model-studio/qwen-asr-message-websocket-sdk-ios#model-qwen-audio-asr-message-bc71fe2545pfy)、[onNuiNeedAudioData](https://help.aliyun.com/zh/model-studio/qwen-asr-message-websocket-sdk-ios#model-qwen-audio-asr-message-46174611d31qf)、[nui\_update\_audio\_data](https://help.aliyun.com/zh/model-studio/qwen-asr-message-websocket-sdk-ios#model-qwen-audio-asr-message-nui-update-audio-data)、[onNuiEventCallback](https://help.aliyun.com/zh/model-studio/qwen-asr-message-websocket-sdk-ios#model-qwen-audio-asr-message-163c1ef871tqt)、[nui\_dialog\_cancel](https://help.aliyun.com/zh/model-studio/qwen-asr-message-websocket-sdk-ios#model-qwen-audio-asr-message-156934a01bzjc)、[nui\_release](#model-qwen-audio-asr-message-6c2931e9ae3eq)
+[nui\_initialize](qwen-asr-message-websocket-sdk-ios-fb447b88c464d9d4.md#model-qwen-audio-asr-message-05eab5125e2pm)、[连接与控制参数](qwen-asr-message-websocket-sdk-ios-fb447b88c464d9d4.md#model-qwen-audio-asr-message-57acf5ecc1w8j)、[nui\_set\_params](qwen-asr-message-websocket-sdk-ios-fb447b88c464d9d4.md#model-qwen-audio-asr-message-763672f3f8dgw)、[语音识别效果参数](qwen-asr-message-websocket-sdk-ios-fb447b88c464d9d4.md#model-qwen-audio-asr-message-d20cce9518kla)、[nui\_dialog\_start](qwen-asr-message-websocket-sdk-ios-fb447b88c464d9d4.md#model-qwen-audio-asr-message-8fe6ea298apzu)、[onNuiAudioStateChanged](qwen-asr-message-websocket-sdk-ios-fb447b88c464d9d4.md#model-qwen-audio-asr-message-bc71fe2545pfy)、[onNuiNeedAudioData](qwen-asr-message-websocket-sdk-ios-fb447b88c464d9d4.md#model-qwen-audio-asr-message-46174611d31qf)、[nui\_update\_audio\_data](qwen-asr-message-websocket-sdk-ios-fb447b88c464d9d4.md#model-qwen-audio-asr-message-nui-update-audio-data)、[onNuiEventCallback](qwen-asr-message-websocket-sdk-ios-fb447b88c464d9d4.md#model-qwen-audio-asr-message-163c1ef871tqt)、[nui\_dialog\_cancel](qwen-asr-message-websocket-sdk-ios-fb447b88c464d9d4.md#model-qwen-audio-asr-message-156934a01bzjc)、[nui\_release](#model-qwen-audio-asr-message-6c2931e9ae3eq)
+
+<a id="请求参数"></a>
 
 ## 请求参数
 
+<a id="qwen-audio-asr-message"></a>
+
+<a id="model-qwen-audio-asr-message"></a>
+
+<a id="model-qwen-audio-asr-message-a96bfa6340jdd"></a>
+
+<a id="请求参数-2"></a>
+
 ### Qwen-Audio-ASR-Message
+
+<a id="连接与控制参数"></a>
+
+<a id="model-qwen-audio-asr-message-57acf5ecc1w8j"></a>
 
 #### 连接与控制参数
 
@@ -42,7 +82,9 @@
 
 **参数示例：**以下为 JSON 字符串示例，参数未完整列出。请按实际需求在编码时补充：
 
-```
+<a id="code-block"></a>
+
+```json
 {
     "url": "wss://dashscope.aliyuncs.com/api-ws/v1/inference",
     "apikey": "st-****",
@@ -50,144 +92,14 @@
     "service_mode": "1"
 }
 ```
+
 **参数说明**
 
-**参数**
+<table><thead><tr><th><strong>参数</strong></th><th><strong>类型</strong></th><th><strong>是否必须</strong></th><th><strong>说明</strong></th></tr></thead><tbody><tr><td><p><code>url</code></p></td><td><p><code>String</code></p></td><td><p>是</p></td><td><p>服务地址：</p><ul><li><p><code>wss://dashscope.aliyuncs.com/api-ws/v1/inference</code></p></li><li><p>华北2（北京）：<code>wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference</code></p></li><li><p>新加坡：<code>wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/inference</code></p></li></ul><p>调用时，请将 <code>{WorkspaceId}</code> 替换为真实的 <a href="../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain">Workspace ID</a>。</p></td></tr><tr><td><p><code>apikey</code></p></td><td><p><code>String</code></p></td><td><p>是</p></td><td><p>API Key。</p></td></tr><tr><td><p><code>service_mode</code></p></td><td><p><code>String</code></p></td><td><p>是</p></td><td><p>运行模式。实时语音识别固定为 <code>&quot;1&quot;</code>。</p></td></tr><tr><td><p><code>device_id</code></p></td><td><p><code>String</code></p></td><td><p>是</p></td><td><p>用于标识终端用户的唯一字符串，可设为应用内用户ID或客户端生成的设备唯一标识符。此ID主要用于日志追踪和问题排查。</p></td></tr><tr><td><p><code>audio_update_manually</code></p></td><td><p><code>String</code></p></td><td><p>否</p></td><td><p>是否启用主动推送音频数据模式。默认值：<code>&quot;false&quot;</code>。</p><p>设为 <code>&quot;true&quot;</code>，且 SDK 版本支持端侧音频能力（如 AEC、VAD）时，默认启用端侧音频能力。</p></td></tr><tr><td><p><code>workspace</code></p></td><td><p><code>String</code></p></td><td><p>否</p></td><td><p>端侧资源文件的存储路径。当 <code>audio_update_manually</code> 设为 <code>&quot;true&quot;</code> 且启用端侧音频能力（如 AEC、VAD）时，必须设置此参数。</p></td></tr><tr><td><p><code>debug_path</code></p></td><td><p><code>String</code></p></td><td><p>否</p></td><td><p>日志文件的存储路径。</p><p>此参数仅在调用<a href="#model-qwen-audio-asr-message-05eab5125e2pm">nui_initialize</a>接口时将<code>save_log</code>设为<code>YES</code>时生效。此时必须设置日志文件路径，否则将报错。</p><p>本地最多保留两个日志文件。</p></td></tr><tr><td><p><code>save_wav</code></p></td><td><p><code>String</code></p></td><td><p>否</p></td><td><p>是否保存调试用的音频文件。音频文件保存于<code>debug_path</code>下。</p><p>默认值：&quot;false&quot;。</p><p>取值范围：</p><ul><li><p>&quot;true&quot;：是</p></li><li><p>&quot;false&quot;：否</p></li></ul><p>此参数仅在调用<a href="#model-qwen-audio-asr-message-05eab5125e2pm">nui_initialize</a>接口时将<code>save_log</code>设为true时生效。 同时，<code>debug_path</code>也必须被设置。</p></td></tr><tr><td><p><code>max_log_file_size</code></p></td><td><p><code>int</code></p></td><td><p>否</p></td><td><p>设定日志文件的最大字节数。</p><p>此参数仅在调用<a href="#model-qwen-audio-asr-message-05eab5125e2pm">nui_initialize</a>接口时将<code>save_log</code>设为<code>YES</code>时生效。</p><p>默认值：104857600（100 * 1024 * 1024 字节, 即 100MiB）。</p></td></tr><tr><td><p><code>log_track_level</code></p></td><td><p><code>int</code></p></td><td><p>否</p></td><td><p>控制通过日志回调（<a href="#model-qwen-audio-asr-message-9c10968457gc6">onNuiLogTrackCallback</a>）对外发送的日志内容的过滤级别。</p><p>默认值：2。</p><p>取值范围：</p><ul><li><p>0：LOG_LEVEL_VERBOSE</p></li><li><p>1：LOG_LEVEL_DEBUG</p></li><li><p>2：LOG_LEVEL_INFO</p></li><li><p>3：LOG_LEVEL_WARNING</p></li><li><p>4：LOG_LEVEL_ERROR</p></li><li><p>5：LOG_LEVEL_NONE（表示关闭此功能）</p></li></ul><p>注意：<code>log_track_level</code>与<code>level</code>（通过<a href="#model-qwen-audio-asr-message-05eab5125e2pm">nui_initialize</a>接口设置）共同决定最终回调的日志。一条日志的级别数值必须同时大于或等于<code>log_track_level</code>和<code>level</code>的值，才会被回调。例如，<code>log_track_level</code>设为2 (INFO)，<code>level</code>设为3 (WARNING)，则只有WARNING及以上级别（数值&gt;=3）的日志才会被回调。</p></td></tr></tbody></table>
 
-**类型**
+<a id="语音识别效果参数"></a>
 
-**是否必须**
-
-**说明**
-
-`url`
-
-`String`
-
-是
-
-服务地址：
-
--   `wss://dashscope.aliyuncs.com/api-ws/v1/inference`
-    
--   华北2（北京）：`wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference`
-    
--   新加坡：`wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/inference`
-    
-
-调用时，请将 `{WorkspaceId}` 替换为真实的 [Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
-
-`apikey`
-
-`String`
-
-是
-
-API Key。
-
-`service_mode`
-
-`String`
-
-是
-
-运行模式。实时语音识别固定为 `"1"`。
-
-`device_id`
-
-`String`
-
-是
-
-用于标识终端用户的唯一字符串，可设为应用内用户ID或客户端生成的设备唯一标识符。此ID主要用于日志追踪和问题排查。
-
-`audio_update_manually`
-
-`String`
-
-否
-
-是否启用主动推送音频数据模式。默认值：`"false"`。
-
-设为 `"true"`，且 SDK 版本支持端侧音频能力（如 AEC、VAD）时，默认启用端侧音频能力。
-
-`workspace`
-
-`String`
-
-否
-
-端侧资源文件的存储路径。当 `audio_update_manually` 设为 `"true"` 且启用端侧音频能力（如 AEC、VAD）时，必须设置此参数。
-
-`debug_path`
-
-`String`
-
-否
-
-日志文件的存储路径。
-
-此参数仅在调用[nui\_initialize](#model-qwen-audio-asr-message-05eab5125e2pm)接口时将`save_log`设为`YES`时生效。此时必须设置日志文件路径，否则将报错。
-
-本地最多保留两个日志文件。
-
-`save_wav`
-
-`String`
-
-否
-
-是否保存调试用的音频文件。音频文件保存于`debug_path`下。
-
-默认值："false"。
-
-取值范围：
-
--   "true"：是
-    
--   "false"：否
-    
-
-此参数仅在调用[nui\_initialize](#model-qwen-audio-asr-message-05eab5125e2pm)接口时将`save_log`设为true时生效。 同时，`debug_path`也必须被设置。
-
-`max_log_file_size`
-
-`int`
-
-否
-
-设定日志文件的最大字节数。
-
-此参数仅在调用[nui\_initialize](#model-qwen-audio-asr-message-05eab5125e2pm)接口时将`save_log`设为`YES`时生效。
-
-默认值：104857600（100 \* 1024 \* 1024 字节, 即 100MiB）。
-
-`log_track_level`
-
-`int`
-
-否
-
-控制通过日志回调（[onNuiLogTrackCallback](#model-qwen-audio-asr-message-9c10968457gc6)）对外发送的日志内容的过滤级别。
-
-默认值：2。
-
-取值范围：
-
--   0：LOG\_LEVEL\_VERBOSE
-    
--   1：LOG\_LEVEL\_DEBUG
-    
--   2：LOG\_LEVEL\_INFO
-    
--   3：LOG\_LEVEL\_WARNING
-    
--   4：LOG\_LEVEL\_ERROR
-    
--   5：LOG\_LEVEL\_NONE（表示关闭此功能）
-    
-
-注意：`log_track_level`与`level`（通过[nui\_initialize](#model-qwen-audio-asr-message-05eab5125e2pm)接口设置）共同决定最终回调的日志。一条日志的级别数值必须同时大于或等于`log_track_level`和`level`的值，才会被回调。例如，`log_track_level`设为2 (INFO)，`level`设为3 (WARNING)，则只有WARNING及以上级别（数值>=3）的日志才会被回调。
+<a id="model-qwen-audio-asr-message-d20cce9518kla"></a>
 
 #### 语音识别效果参数
 
@@ -195,7 +107,9 @@ API Key。
 
 **参数示例：**以下为 JSON 字符串示例，参数未完整列出。请按实际需求在编码时补充：
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
     "service_type": 4,
     "nls_config": {
@@ -205,556 +119,323 @@ API Key。
     }
 }
 ```
+
 **参数说明**
 
-**一级参数**
+<table><thead><tr><th><strong>一级参数</strong></th><th><strong>类型</strong></th><th><strong>是否必须</strong></th><th><strong>说明</strong></th></tr></thead><tbody><tr><td><p><code>service_type</code></p></td><td><p><code>int</code></p></td><td><p>是</p></td><td><p>语音服务类型。实时语音识别固定为 <code>4</code>。</p></td></tr><tr><td><p><code>nls_config</code></p></td><td><p><code>object</code></p></td><td><p>是</p></td><td><p>语音识别核心配置对象，包含模型选择、识别效果控制等关键参数。</p></td></tr><tr><td><p><code>nls_config.model</code></p></td><td><p><code>string</code></p></td><td><p>是</p></td><td><p>模型名，设置为 <code>qwen-audio-3.1-asr-flash-message</code>。</p></td></tr><tr><td><p><code>nls_config.sr_format</code></p></td><td><p><code>string</code></p></td><td><p>是</p></td><td><p>音频格式。</p><p>取值范围：</p><ul><li><code>pcm</code></li><li><code>opus</code></li></ul><div><div><p><strong>重要</strong>传入 PCM 格式的音频数据时，如果将该参数设为 <code>opus</code>，SDK 会在内部完成 Opus 编码。</p></div></div></td></tr><tr><td><p><code>nls_config.sample_rate</code></p></td><td><p><code>int</code></p></td><td><p>是</p></td><td><p>采样率（Hz）。</p><p>仅支持 <code>16000</code> Hz。</p></td></tr><tr><td><p><code>nls_config.language_hints</code></p></td><td><p><code>array[string]</code></p></td><td><p>否</p></td><td><p>待识别音频语种。无默认值，不设置时模型自动识别。</p><p>最多支持设置 4 个值，超出时仅前 4 个生效。</p><a id="accordion-点击查看支持的语言代码"></a><section><p>点击查看支持的语言代码</p><div><ul><li>zh: 中文</li><li>en: 英文</li><li>ja: 日语</li><li>ko：韩语</li><li>vi：越南语</li><li>th：泰语</li><li>id：印尼语</li><li>ms：马来语</li><li>tl：菲律宾语</li><li>hi：印地语</li><li>ar：阿拉伯语</li><li>fr：法语</li><li>de：德语</li><li>es：西班牙语</li><li>pt：葡萄牙语</li><li>ru：俄语</li><li>it：意大利语</li><li>nl：荷兰语</li><li>sv：瑞典语</li><li>da：丹麦语</li><li>fi：芬兰语</li><li>no：挪威语</li><li>el：希腊语</li><li>pl：波兰语</li><li>cs：捷克语</li><li>hu：匈牙利语</li><li>ro：罗马尼亚语</li><li>bg：保加利亚语</li><li>hr：克罗地亚语</li><li>sk：斯洛伐克语</li></ul></div></section><p>仅在最终结果（<code>sentence_end=true</code>）生效，中间结果（<code>sentence_end=false</code>）不支持。</p></td></tr><tr><td><p><code>nls_config.keep_dialect</code></p></td><td><p><code>boolean</code></p></td><td><p>否</p></td><td><p>是否保留方言表达，默认值为 <code>false</code>。<code>false</code>：将方言转写为普通话文本；<code>true</code>：保留方言表达。</p><div><div><p><strong>说明</strong>仅在最终结果（<code>sentence_end=true</code>）生效，中间结果（<code>sentence_end=false</code>）不支持。</p></div></div></td></tr><tr><td><p><code>nls_config.vad_model</code></p></td><td><p><code>string</code></p></td><td><p>否</p></td><td><p>VAD 模型，默认值为 <code>far_field_meeting_16k</code>。</p><ul><li><code>near_meeting_16k</code>：近场场景。</li><li><code>far_field_meeting_16k</code>：远场场景。</li></ul></td></tr><tr><td><p><code>nls_config.max_sentence_silence</code></p></td><td><p><code>int</code></p></td><td><p>否</p></td><td><p>VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈值时，系统会判定该句子已结束。</p><p>默认值：800。</p><p>取值范围：[200, 6000]。</p></td></tr><tr><td><p><code>nls_config.heartbeat</code></p></td><td><p><code>boolean</code></p></td><td><p>否</p></td><td><p>是否启用心跳包。</p><p>默认值：false。</p><ul><li>true：在持续发送静音音频的情况下，可保持与服务端的连接不中断。</li><li>false（默认）：即使持续发送静音音频，连接也将在一定时间后因超时而断开。</li></ul><p>静音音频指的是在音频文件或数据流中没有声音信号的内容。静音音频可以通过多种方法生成，例如使用音频编辑软件如Audacity或Adobe Audition，或者通过命令行工具如FFmpeg。</p></td></tr><tr><td><p><code>nls_config.disfluency_removal_enabled</code></p></td><td><p><code>boolean</code></p></td><td><p>否</p></td><td><p>是否过滤语气词并对输出结果进行润色，默认值为 <code>false</code>。设置为 <code>true</code> 时启用。</p></td></tr><tr><td><p><code>nls_config.intermediate_result_enabled</code></p></td><td><p><code>boolean</code></p></td><td><p>否</p></td><td><p>是否返回流式中间结果，默认值为 <code>false</code>。设置为 <code>true</code> 时返回流式中间结果。</p></td></tr><tr><td><p><code>nls_config.vocabulary_id</code></p></td><td><p><code>string</code></p></td><td><p>否</p></td><td><p>预编译热词列表 ID。</p><p>需预先调用创建热词列表接口生成，识别时传入该 ID 即可使用列表中的热词。</p><p>适用于词汇已知且相对稳定、需要跨请求复用同一词表的场景。</p><p>使用方法请参见<a href="../model-user-guide/model-experience/speech-and-audio/speech-recognition/improve-asr-accuracy.md#hw_precompiled_h3">预编译热词</a>。</p></td></tr><tr><td><p><code>nls_config.instant_vocabulary</code></p></td><td><p><code>object</code></p></td><td><p>否</p></td><td><p>即时热词。</p><p>以键值对形式传入，键为热词文本（<code>string</code>），值为热词权重（<code>integer</code>），无需预先创建热词列表。权重取值范围为 [1, 5] 或 50：取 [1, 5] 时值越大模型越倾向输出该词；取 50 时为超级热词，召回率大幅提升，但超级热词数量最多不超过 50 个。</p><p>适用于临时性、会话级别的热词优化。</p><p>与预编译热词同时配置时，系统会合并两类热词；合并后超过 2000 个时，随机选择 2000 个使用。使用方法、适用模型及限制请参见<a href="../model-user-guide/model-experience/speech-and-audio/speech-recognition/improve-asr-accuracy.md#hw_instant_h3">即时热词</a>。</p></td></tr><tr><td><p><code>nls_config.speech_noise_threshold</code></p></td><td><p><code>float</code></p></td><td><p>否</p></td><td><p>语音与噪音的判定阈值，用于调整语音活动检测（VAD）的灵敏度。</p><p>取值范围：[-1.0, 1.0]。</p><p>取值说明：</p><ul><li>取值越接近 -1：降低噪音判定阈值，噪音被识别为语音的概率增大，可能导致更多噪音被转写</li><li>取值越接近 +1：提高噪音判定阈值，语音被误判为噪音的概率增大，可能导致部分语音被过滤</li></ul><p>此参数为高级配置参数，调整可能显著影响识别效果，建议：</p><ul><li>调整前充分测试验证效果</li><li>根据实际音频环境小幅度调整（建议步长 0.1）</li></ul></td></tr><tr><td><p><code>nls_config.enable_connection_fast_check</code></p></td><td><p><code>BOOL</code></p></td><td><p>否</p></td><td><p>是否启用快速网络检测，以便尽快反馈断网情况。默认值：<code>NO</code>。</p></td></tr></tbody></table>
 
-**类型**
+<a id="接口参考"></a>
 
-**是否必须**
-
-**说明**
-
-`service_type`
-
-`int`
-
-是
-
-语音服务类型。实时语音识别固定为 `4`。
-
-`nls_config`
-
-`object`
-
-是
-
-语音识别核心配置对象，包含模型选择、识别效果控制等关键参数。
-
-`nls_config.model`
-
-`string`
-
-是
-
-模型名，设置为 `qwen-audio-3.1-asr-flash-message`。
-
-`nls_config.sr_format`
-
-`string`
-
-是
-
-音频格式。
-
-取值范围：
-
--   `pcm`
--   `opus`
-
-**重要**传入 PCM 格式的音频数据时，如果将该参数设为 `opus`，SDK 会在内部完成 Opus 编码。
-
-`nls_config.sample_rate`
-
-`int`
-
-是
-
-采样率（Hz）。
-
-仅支持 `16000` Hz。
-
-`nls_config.language_hints`
-
-`array[string]`
-
-否
-
-待识别音频语种。无默认值，不设置时模型自动识别。
-
-最多支持设置 4 个值，超出时仅前 4 个生效。
-
-点击查看支持的语言代码
-
--   zh: 中文
--   en: 英文
--   ja: 日语
--   ko：韩语
--   vi：越南语
--   th：泰语
--   id：印尼语
--   ms：马来语
--   tl：菲律宾语
--   hi：印地语
--   ar：阿拉伯语
--   fr：法语
--   de：德语
--   es：西班牙语
--   pt：葡萄牙语
--   ru：俄语
--   it：意大利语
--   nl：荷兰语
--   sv：瑞典语
--   da：丹麦语
--   fi：芬兰语
--   no：挪威语
--   el：希腊语
--   pl：波兰语
--   cs：捷克语
--   hu：匈牙利语
--   ro：罗马尼亚语
--   bg：保加利亚语
--   hr：克罗地亚语
--   sk：斯洛伐克语
-
-仅在最终结果（`sentence_end=true`）生效，中间结果（`sentence_end=false`）不支持。
-
-`nls_config.keep_dialect`
-
-`boolean`
-
-否
-
-是否保留方言表达，默认值为 `false`。`false`：将方言转写为普通话文本；`true`：保留方言表达。
-
-**说明**仅在最终结果（`sentence_end=true`）生效，中间结果（`sentence_end=false`）不支持。
-
-`nls_config.vad_model`
-
-`string`
-
-否
-
-VAD 模型，默认值为 `far_field_meeting_16k`。
-
--   `near_meeting_16k`：近场场景。
--   `far_field_meeting_16k`：远场场景。
-
-`nls_config.max_sentence_silence`
-
-`int`
-
-否
-
-VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈值时，系统会判定该句子已结束。
-
-默认值：800。
-
-取值范围：\[200, 6000\]。
-
-`nls_config.heartbeat`
-
-`boolean`
-
-否
-
-是否启用心跳包。
-
-默认值：false。
-
--   true：在持续发送静音音频的情况下，可保持与服务端的连接不中断。
--   false（默认）：即使持续发送静音音频，连接也将在一定时间后因超时而断开。
-
-静音音频指的是在音频文件或数据流中没有声音信号的内容。静音音频可以通过多种方法生成，例如使用音频编辑软件如Audacity或Adobe Audition，或者通过命令行工具如FFmpeg。
-
-`nls_config.disfluency_removal_enabled`
-
-`boolean`
-
-否
-
-是否过滤语气词并对输出结果进行润色，默认值为 `false`。设置为 `true` 时启用。
-
-`nls_config.intermediate_result_enabled`
-
-`boolean`
-
-否
-
-是否返回流式中间结果，默认值为 `false`。设置为 `true` 时返回流式中间结果。
-
-`nls_config.vocabulary_id`
-
-`string`
-
-否
-
-预编译热词列表 ID。
-
-需预先调用创建热词列表接口生成，识别时传入该 ID 即可使用列表中的热词。
-
-适用于词汇已知且相对稳定、需要跨请求复用同一词表的场景。
-
-使用方法请参见[预编译热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_precompiled_h3)。
-
-`nls_config.instant_vocabulary`
-
-`object`
-
-否
-
-即时热词。
-
-以键值对形式传入，键为热词文本（`string`），值为热词权重（`integer`），无需预先创建热词列表。权重取值范围为 \[1, 5\] 或 50：取 \[1, 5\] 时值越大模型越倾向输出该词；取 50 时为超级热词，召回率大幅提升，但超级热词数量最多不超过 50 个。
-
-适用于临时性、会话级别的热词优化。
-
-与预编译热词同时配置时，系统会合并两类热词；合并后超过 2000 个时，随机选择 2000 个使用。使用方法、适用模型及限制请参见[即时热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_instant_h3)。
-
-`nls_config.speech_noise_threshold`
-
-`float`
-
-否
-
-语音与噪音的判定阈值，用于调整语音活动检测（VAD）的灵敏度。
-
-取值范围：\[-1.0, 1.0\]。
-
-取值说明：
-
--   取值越接近 -1：降低噪音判定阈值，噪音被识别为语音的概率增大，可能导致更多噪音被转写
--   取值越接近 +1：提高噪音判定阈值，语音被误判为噪音的概率增大，可能导致部分语音被过滤
-
-此参数为高级配置参数，调整可能显著影响识别效果，建议：
-
--   调整前充分测试验证效果
--   根据实际音频环境小幅度调整（建议步长 0.1）
-
-`nls_config.enable_connection_fast_check`
-
-`BOOL`
-
-否
-
-是否启用快速网络检测，以便尽快反馈断网情况。默认值：`NO`。
+<a id="通用参考-qwen-audio-asr-streaming-fun-asr-realtime"></a>
 
 ## 接口参考
 
+<a id="共用接口"></a>
+
+<a id="通用参考"></a>
+
 ### 共用接口
 
+<a id="nui-release"></a>
+
+<a id="model-qwen-audio-asr-streaming-6c2931e9ae3eq"></a>
+
+<a id="shared-6"></a>
+
 #### nui\_release
+
+<a id="model-qwen-audio-asr-message-6c2931e9ae3eq"></a>
+
+<a id="model-fun-asr-realtime-6c2931e9ae3eq"></a>
 
 释放SDK所有内部资源，并强制终止所有正在进行的任务。此方法调用后，SDK实例将变为不可用状态，如需再次使用，必须重新调用 `nui_initialize` 进行初始化。
 
 **方法签名**
-```
+
+<a id="code-block-3"></a>
+
+```text
 -(NuiResultCode) nui_release;
 ```
 
+<a id="nui-get-version"></a>
+
+<a id="model-qwen-audio-asr-streaming-d691f902dfmyg"></a>
+
+<a id="shared-9"></a>
+
 #### nui\_get\_version
+
+<a id="model-qwen-audio-asr-message-d691f902dfmyg"></a>
+
+<a id="model-fun-asr-realtime-d691f902dfmyg"></a>
 
 获得当前SDK版本信息。此接口需在 `nui_initialize` 之后调用才有返回值。
 
 **方法签名**
-```
+
+<a id="code-block-4"></a>
+
+```text
 -(const char*) nui_get_version;
 ```
+
 **返回值说明**
 
 当前SDK版本信息。
 
+<a id="nui-get-all-response"></a>
+
+<a id="model-qwen-audio-asr-streaming-5351814f1aj65"></a>
+
+<a id="shared-12"></a>
+
 #### nui\_get\_all\_response
+
+<a id="model-qwen-audio-asr-message-5351814f1aj65"></a>
+
+<a id="model-fun-asr-realtime-5351814f1aj65"></a>
 
 获得当前事件回调的完整信息。
 
 **方法签名**
-```
+
+<a id="code-block-5"></a>
+
+```text
 -(const char*) nui_get_all_response;
 ```
+
 **返回值说明**
 
 JSON字符串格式的完整事件信息。
 
+<a id="onnuilogtrackcallback-监听追踪日志"></a>
+
+<a id="model-qwen-audio-asr-streaming-9c10968457gc6"></a>
+
+<a id="shared-15"></a>
+
 #### onNuiLogTrackCallback：监听追踪日志
+
+<a id="model-qwen-audio-asr-message-9c10968457gc6"></a>
+
+<a id="model-fun-asr-realtime-9c10968457gc6"></a>
 
 此回调用于接收 SDK 内部的详细日志，方便进行问题定位和调试。
 
-```
+<a id="code-block-6"></a>
+
+```text
 -(void) onNuiLogTrackCallback:(NuiSdkLogLevel)level
                    logMessage:(const char *)log;
 ```
 
+<a id="qwen-audio-asr-message-2"></a>
+
 ### Qwen-Audio-ASR-Message
+
+<a id="关键接口"></a>
+
+<a id="model-qwen-audio-asr-message-737b46fda6cbf"></a>
 
 #### 关键接口
 
+<a id="model-qwen-audio-asr-message-4bed3999d9kx0"></a>
+
+<a id="neonui-2"></a>
+
 ##### NeoNui
+
+<a id="model-qwen-audio-asr-message-05eab5125e2pm"></a>
 
 ###### nui\_initialize
 
 初始化语音识别SDK实例。SDK为单例模式，在调用 `nui_release` 前禁止重复初始化。
 
 **方法签名**
-```
+
+<a id="code-block-7"></a>
+
+```text
 -(NuiResultCode) nui_initialize:(const char *)parameters
                        logLevel:(NuiSdkLogLevel)level
                         saveLog:(BOOL)save_log;
 ```
+
 **参数说明**
 
-**参数**
+| 参数 | 类型 | 说明 |
+| --- | --- | --- |
+| `parameters` | `char*` | JSON字符串，包含鉴权、连接和调试参数。参见[连接与控制参数](#model-qwen-audio-asr-message-57acf5ecc1w8j)。 |
+| `level` | `NuiSdkLogLevel` | 控制SDK自身日志的打印级别。 |
+| `save_log` | `BOOL` | 是否保存本地日志。若为`YES`，须在[连接与控制参数](#model-qwen-audio-asr-message-57acf5ecc1w8j)通过`debug_path`指定路径，并可通过`max_log_file_size`设置文件大小。 |
 
-**类型**
-
-**说明**
-
-`parameters`
-
-`char*`
-
-JSON字符串，包含鉴权、连接和调试参数。参见[连接与控制参数](#model-qwen-audio-asr-message-57acf5ecc1w8j)。
-
-`level`
-
-`NuiSdkLogLevel`
-
-控制SDK自身日志的打印级别。
-
-`save_log`
-
-`BOOL`
-
-是否保存本地日志。若为`YES`，须在[连接与控制参数](#model-qwen-audio-asr-message-57acf5ecc1w8j)通过`debug_path`指定路径，并可通过`max_log_file_size`设置文件大小。
+<a id="model-qwen-audio-asr-message-763672f3f8dgw"></a>
 
 ###### nui\_set\_params
 
 以JSON格式设置[语音识别效果参数](#model-qwen-audio-asr-message-d20cce9518kla)。在 `nui_dialog_start` 之前调用。
 
 **方法签名**
-```
+
+<a id="code-block-8"></a>
+
+```text
 -(NuiResultCode) nui_set_params:(const char *)params;
 ```
+
 **参数说明**
 
-**参数**
+| 参数 | 类型 | 说明 |
+| --- | --- | --- |
+| `params` | `char*` | [语音识别效果参数](#model-qwen-audio-asr-message-d20cce9518kla)。 |
 
-**类型**
-
-**说明**
-
-`params`
-
-`char*`
-
-[语音识别效果参数](#model-qwen-audio-asr-message-d20cce9518kla)。
+<a id="model-qwen-audio-asr-message-8fe6ea298apzu"></a>
 
 ###### nui\_dialog\_start
 
 开始识别。
 
 **方法签名**
-```
+
+<a id="code-block-9"></a>
+
+```text
 -(NuiResultCode) nui_dialog_start:(NuiVadMode)vad_mode
                       dialogParam:(const char *)dialog_params;
 ```
+
 **参数说明**
 
-**参数**
-
-**类型**
-
-**说明**
-
-`vad_mode`
-
-`NuiVadMode`
-
-VAD模式。固定为`MODE_P2T`。
-
-`dialog_params`
-
-`char*`
-
-如果[连接与控制参数](#model-qwen-audio-asr-message-57acf5ecc1w8j)的`apikey`参数使用的是[临时API Key](raw/model-api-reference/more-about-models/generate-temporary-api-key.md)，当其过期时，可在此处更新。如果需要通过上下文增强来提升识别准确率，也可在此处传入上下文。
-
-内容为JSON格式：
-
-```
-{
-  "apikey": "st-****",
-  "input_context": [
+<table><thead><tr><th><strong>参数</strong></th><th><strong>类型</strong></th><th><strong>说明</strong></th></tr></thead><tbody><tr><td><p><code>vad_mode</code></p></td><td><p><code>NuiVadMode</code></p></td><td><p>VAD模式。固定为<code>MODE_P2T</code>。</p></td></tr><tr><td><p><code>dialog_params</code></p></td><td><p><code>char*</code></p></td><td><p>如果<a href="#model-qwen-audio-asr-message-57acf5ecc1w8j">连接与控制参数</a>的<code>apikey</code>参数使用的是<a href="../model-api-reference/more-about-models/generate-temporary-api-key.md">临时API Key</a>，当其过期时，可在此处更新。如果需要通过上下文增强来提升识别准确率，也可在此处传入上下文。</p><p>内容为JSON格式：</p><a id="code-block-10"></a><pre class="language-json"><code>{
+  &quot;apikey&quot;: &quot;st-****&quot;,
+  &quot;input_context&quot;: [
     {
-      "role": "user",
-      "content": [
+      &quot;role&quot;: &quot;user&quot;,
+      &quot;content&quot;: [
         {
-          "text": "xxxxx",
-          "type": "input_text"
+          &quot;text&quot;: &quot;xxxxx&quot;,
+          &quot;type&quot;: &quot;input_text&quot;
         }
       ]
     }
   ]
 }
-```
+</code></pre></td></tr></tbody></table>
+
+<a id="model-qwen-audio-asr-message-156934a01bzjc"></a>
 
 ###### nui\_dialog\_cancel
 
 结束识别或者立即取消当前交互。
 
 **方法签名**
-```
+
+<a id="code-block-11"></a>
+
+```text
 -(NuiResultCode) nui_dialog_cancel:(BOOL)force;
 ```
+
 **参数说明**
 
-**参数**
+<table><thead><tr><th><strong>参数</strong></th><th><strong>类型</strong></th><th><strong>说明</strong></th></tr></thead><tbody><tr><td><p><code>force</code></p></td><td><p><code>BOOL</code></p></td><td><p>是否强制结束而忽略最终结果。</p><ul><li><p><code>YES</code>：不等待服务端返回最终识别结果就立即结束任务。</p></li><li><p><code>NO</code>：结束任务，但是会等待完整结果返回。</p></li></ul></td></tr></tbody></table>
 
-**类型**
-
-**说明**
-
-`force`
-
-`BOOL`
-
-是否强制结束而忽略最终结果。
-
--   `YES`：不等待服务端返回最终识别结果就立即结束任务。
-    
--   `NO`：结束任务，但是会等待完整结果返回。
-    
+<a id="model-qwen-audio-asr-message-nui-dialog-action"></a>
 
 ###### nui\_dialog\_action
 
 在交互过程中下发对话动作指令，用于更新识别上下文等运行时行为。
 
 **方法签名**
-```
+
+<a id="code-block-12"></a>
+
+```text
 -(NuiResultCode) nui_dialog_action:(const char *)action_params;
 ```
+
 **参数说明**
 
-**参数**
-
-**类型**
-
-**说明**
-
-`action_params`
-
-`char*`
-
-JSON 字符串，用于更新识别上下文等运行时行为。
-
-`action_params.type`
-
-`String`
-
-固定为 `"action"`。
-
-`action_params.command`
-
-`String`
-
-运行指令。支持以下取值：
-
--   `context`：即时更新上下文增强，以提升识别准确率。
-    
--   `play_start`：使用端侧 AEC 时，通知 SDK 内部 AEC 播放器开始播放音频。
-    
--   `play_over`：使用端侧 AEC 时，通知 SDK 内部 AEC 播放器已经播放结束。
-    
-
-`action_params.context`
-
-`String`
-
-当 `command` 为 `"context"` 时，用于即时更新上下文增强。示例：
-
-```
-{
-  "context": [
+<table><thead><tr><th><strong>参数</strong></th><th><strong>类型</strong></th><th><strong>说明</strong></th></tr></thead><tbody><tr><td><p><code>action_params</code></p></td><td><p><code>char*</code></p></td><td><p>JSON 字符串，用于更新识别上下文等运行时行为。</p></td></tr><tr><td><p><code>action_params.type</code></p></td><td><p><code>String</code></p></td><td><p>固定为 <code>&quot;action&quot;</code>。</p></td></tr><tr><td><p><code>action_params.command</code></p></td><td><p><code>String</code></p></td><td><p>运行指令。支持以下取值：</p><ul><li><p><code>context</code>：即时更新上下文增强，以提升识别准确率。</p></li><li><p><code>play_start</code>：使用端侧 AEC 时，通知 SDK 内部 AEC 播放器开始播放音频。</p></li><li><p><code>play_over</code>：使用端侧 AEC 时，通知 SDK 内部 AEC 播放器已经播放结束。</p></li></ul></td></tr><tr><td><p><code>action_params.context</code></p></td><td><p><code>String</code></p></td><td><p>当 <code>command</code> 为 <code>&quot;context&quot;</code> 时，用于即时更新上下文增强。示例：</p><a id="code-block-13"></a><pre class="language-json"><code>{
+  &quot;context&quot;: [
     {
-      "role": "user",
-      "content": [
+      &quot;role&quot;: &quot;user&quot;,
+      &quot;content&quot;: [
         {
-          "text": "xxx",
-          "type": "input_text"
+          &quot;text&quot;: &quot;xxx&quot;,
+          &quot;type&quot;: &quot;input_text&quot;
         }
       ]
     }
   ]
 }
-```
+</code></pre></td></tr></tbody></table>
+
+<a id="model-qwen-audio-asr-message-nui-update-audio-data"></a>
 
 ###### nui\_update\_audio\_data
 
 当 `audio_update_manually` 设为 `"true"` 时，录音数据不再通过 `onNuiNeedAudioData` 填入，而是通过此接口主动推送。
 
 **方法签名**
-```
+
+<a id="code-block-14"></a>
+
+```text
 -(NuiResultCode) nui_update_audio_data:(const char *)data
                                     Len:(int)length
                               FirstPack:(BOOL)first_pack;
 ```
+
 **参数说明**
 
-**参数**
+| 参数 | 类型 | 说明 |
+| --- | --- | --- |
+| `data` | `const char *` | 推送的音频数据。 |
+| `length` | `int` | 推送的音频数据的字节数。 |
+| `first_pack` | `BOOL` | 无需关注此参数。 |
 
-**类型**
-
-**说明**
-
-`data`
-
-`const char *`
-
-推送的音频数据。
-
-`length`
-
-`int`
-
-推送的音频数据的字节数。
-
-`first_pack`
-
-`BOOL`
-
-无需关注此参数。
+<a id="model-qwen-audio-asr-message-nui-push-reference-data"></a>
 
 ###### nui\_push\_reference\_data
 
 当 `audio_update_manually` 设为 `"true"` 且启用端侧 AEC 回声消除能力时，需要通过此接口推送播放器播放的音频数据作为参考信号。
 
 **方法签名**
-```
+
+<a id="code-block-15"></a>
+
+```text
 -(NuiResultCode) nui_push_reference_data:(const char *)data
                                      Len:(int)length
                                FirstPack:(BOOL)first_pack;
 ```
+
 **参数说明**
 
-**参数**
+| 参数 | 类型 | 说明 |
+| --- | --- | --- |
+| `data` | `const char *` | 推送的音频数据。 |
+| `length` | `int` | 推送的音频数据的字节数。 |
+| `first_pack` | `BOOL` | 无需关注此参数。 |
 
-**类型**
+<a id="model-qwen-audio-asr-message-8b030fec74e01"></a>
 
-**说明**
-
-`data`
-
-`const char *`
-
-推送的音频数据。
-
-`length`
-
-`int`
-
-推送的音频数据的字节数。
-
-`first_pack`
-
-`BOOL`
-
-无需关注此参数。
+<a id="neonuisdkdelegate-监听回调-2"></a>
 
 ##### NeoNuiSdkDelegate：监听回调
+
+<a id="model-qwen-audio-asr-message-163c1ef871tqt"></a>
 
 ###### onNuiEventCallback：监听事件和语音识别结果
 
 **方法签名**
-```
+
+<a id="code-block-16"></a>
+
+```text
 -(void) onNuiEventCallback:(NuiCallbackEvent)nuiEvent
                     dialog:(long)dialog
                  kwsResult:(const char *)wuw
@@ -762,192 +443,103 @@ JSON 字符串，用于更新识别上下文等运行时行为。
                   ifFinish:(BOOL)finish
                    retCode:(int)code;
 ```
+
 **参数说明**
 
-**参数**
+| 参数 | 类型 | 说明 |
+| --- | --- | --- |
+| `nuiEvent` | `NuiCallbackEvent` | 回调事件。 |
+| `dialog` | `long` | 会话编码，无需关注该参数。 |
+| `wuw` | `char*` | 语音唤醒功能。无需关注该参数。 |
+| `asr_result` | `char*` | 语音识别结果。 |
+| `finish` | `BOOL` | 本轮识别是否结束标志。 |
+| `code` | `int` | 仅在出现 `EVENT_ASR_ERROR` 事件时有效。 |
 
-**类型**
-
-**说明**
-
-`nuiEvent`
-
-`NuiCallbackEvent`
-
-回调事件。
-
-`dialog`
-
-`long`
-
-会话编码，无需关注该参数。
-
-`wuw`
-
-`char*`
-
-语音唤醒功能。无需关注该参数。
-
-`asr_result`
-
-`char*`
-
-语音识别结果。
-
-`finish`
-
-`BOOL`
-
-本轮识别是否结束标志。
-
-`code`
-
-`int`
-
-仅在出现 `EVENT_ASR_ERROR` 事件时有效。
+<a id="model-qwen-audio-asr-message-bc71fe2545pfy"></a>
 
 ###### onNuiAudioStateChanged：监听音频状态
 
 SDK 通过此回调通知何时应该开始或停止录音。
 
 **方法签名**
-```
+
+<a id="code-block-17"></a>
+
+```text
 -(void) onNuiAudioStateChanged:(NuiAudioState)state;
 ```
+
 **NuiAudioState状态说明**
 
-**参数**
+| 参数 | 说明 |
+| --- | --- |
+| `STATE_OPEN` | 交互启动，可以打开录音设备进行录音。 |
+| `STATE_PAUSE` | 交互停止，可以停止录音。 |
+| `STATE_CLOSE` | SDK 实例已释放，可以彻底关闭录音设备。 |
 
-**说明**
-
-`STATE_OPEN`
-
-交互启动，可以打开录音设备进行录音。
-
-`STATE_PAUSE`
-
-交互停止，可以停止录音。
-
-`STATE_CLOSE`
-
-SDK 实例已释放，可以彻底关闭录音设备。
+<a id="model-qwen-audio-asr-message-46174611d31qf"></a>
 
 ###### onNuiNeedAudioData：填充待识别音频数据
 
 开始识别后，该回调被连续触发，需在其中提供待识别音频数据。
 
 **方法签名**
-```
+
+<a id="code-block-18"></a>
+
+```text
 -(int) onNuiNeedAudioData:(char *)audioData length:(int)len;
 ```
+
 **参数说明**
 
-**参数**
+| 参数 | 类型 | 说明 |
+| --- | --- | --- |
+| `audioData` | `char *` | 填充的音频数据。 |
+| `len` | `int` | 填充的音频数据的字节数。 |
 
-**类型**
-
-**说明**
-
-`audioData`
-
-`char *`
-
-填充的音频数据。
-
-`len`
-
-`int`
-
-填充的音频数据的字节数。
+<a id="model-qwen-audio-asr-message-on-nui-assist-event-callback"></a>
 
 ###### onNuiAssistEventCallback：辅助数据和信息结果
 
 此回调用于接收 SDK 内部的辅助事件和相关数据。
 
 **方法签名**
-```
+
+<a id="code-block-19"></a>
+
+```text
 -(void) onNuiAssistEventCallback:(NuiCallbackEvent)nuiEvent
                             info:(char*)info
                          infoLen:(int)info_len
                           buffer:(char*)buffer
                              len:(int)len;
 ```
+
 **参数说明**
 
-**参数**
+| 参数 | 类型 | 说明 |
+| --- | --- | --- |
+| `nuiEvent` | `NuiCallbackEvent` | 回调事件。 |
+| `info` | `char *` | 无需关注此参数。 |
+| `info_len` | `int` | 无需关注此参数。 |
+| `buffer` | `char *` | 辅助数据，例如 AEC 回声消除后的音频数据。 |
+| `len` | `int` | 辅助数据的字节数。 |
 
-**类型**
+<a id="model-qwen-audio-asr-message-981ff433acpmr"></a>
 
-**说明**
-
-`nuiEvent`
-
-`NuiCallbackEvent`
-
-回调事件。
-
-`info`
-
-`char *`
-
-无需关注此参数。
-
-`info_len`
-
-`int`
-
-无需关注此参数。
-
-`buffer`
-
-`char *`
-
-辅助数据，例如 AEC 回声消除后的音频数据。
-
-`len`
-
-`int`
-
-辅助数据的字节数。
+<a id="nuicallbackevent-事件类型-2"></a>
 
 ##### NuiCallbackEvent：事件类型
 
-**事件**
-
-**说明**
-
-EVENT\_TRANSCRIBER\_STARTED
-
-任务启动成功。
-
-EVENT\_VAD\_START
-
-任务启动后即触发该事件。不代表检测到人声起点。
-
-EVENT\_VAD\_END
-
-检测到人声终点。
-
-EVENT\_ASR\_PARTIAL\_RESULT
-
-语音识别中间结果。
-
-EVENT\_ASR\_ERROR
-
-语音识别过程中出现错误。
-
-EVENT\_MIC\_ERROR
-
-因连续2秒未收到任何音频数据而触发。
-
-EVENT\_SENTENCE\_END
-
-检测到一句话结束，此时会返回一句完整的识别结果。
-
-EVENT\_TRANSCRIBER\_COMPLETE
-
-语音识别结束。
-
-EVENT\_AEC\_DATA
-
-AEC 回声消除后的音频数据。
+| 事件 | 说明 |
+| --- | --- |
+| EVENT\_TRANSCRIBER\_STARTED | 任务启动成功。 |
+| EVENT\_VAD\_START | 任务启动后即触发该事件。不代表检测到人声起点。 |
+| EVENT\_VAD\_END | 检测到人声终点。 |
+| EVENT\_ASR\_PARTIAL\_RESULT | 语音识别中间结果。 |
+| EVENT\_ASR\_ERROR | 语音识别过程中出现错误。 |
+| EVENT\_MIC\_ERROR | 因连续2秒未收到任何音频数据而触发。 |
+| EVENT\_SENTENCE\_END | 检测到一句话结束，此时会返回一句完整的识别结果。 |
+| EVENT\_TRANSCRIBER\_COMPLETE | 语音识别结束。 |
+| EVENT\_AEC\_DATA | AEC 回声消除后的音频数据。 |

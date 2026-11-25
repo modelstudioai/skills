@@ -2,23 +2,37 @@
 
 大模型的输入输出中可能包含敏感或高风险内容，例如涉黄、涉政和广告等。大模型自有的合规检查机制通常能够提供有效的内容安全保障。此外，阿里云百炼支持接入 AI 安全护栏服务，进一步识别输入输出内容的违规信息，保障安全与合规性。
 
+<a id="配置-ai-安全护栏服务"></a>
+
+<a id="e9fbe020bac7g"></a>
+
 ## 配置 AI 安全护栏服务
 
 调用阿里云百炼的大模型时，会根据模型自动匹配对应的 AI 安全护栏服务。
 
-**说明**AI 安全护栏服务仅华北2（北京）地域可用，其他地域暂不支持接入。
+> **说明**
+>
+> AI 安全护栏服务仅华北2（北京）地域可用，其他地域暂不支持接入。
 
-目前支持文本和图片类型的模型，模型与护栏服务的对应关系请参见[服务与模型对应关系](https://help.aliyun.com/zh/model-studio/content-security#h2-service-mapping)，计费信息请参见[计费说明](https://help.aliyun.com/zh/model-studio/content-security#3f5435b893mfi)。
+目前支持文本和图片类型的模型，模型与护栏服务的对应关系请参见[服务与模型对应关系](content-security.md#h2-service-mapping)，计费信息请参见[计费说明](content-security.md#3f5435b893mfi)。
+
+<a id="步骤一-开通-ai-安全护栏服务"></a>
+
+<a id="abaf0de6f4dcq"></a>
 
 ### 步骤一：开通 AI 安全护栏服务
 
 访问 AI 安全护栏[购买](https://common-buy.aliyun.com/?commodityCode=lvwang_guardrail_public_cn)页面，创建**服务关联角色**，单击**立即购买**即可完成开通。
 
+<a id="步骤二-授权-ai-安全护栏"></a>
+
+<a id="eb68bf7575xkc"></a>
+
 ### 步骤二：授权 AI 安全护栏
 
 1.  访问**[安全管理](https://bailian.console.aliyun.com/cn-beijing/settings/security?globalset=1)**页面。`安全管理`入口仅在华北2（北京）地域下显示，其他地域的左栏**管理**分组中无此菜单。
     
-    若您访问上述链接进入的页面如下所示，说明此前已进行过授权操作，请跳转[步骤三：设置请求头header](https://help.aliyun.com/zh/model-studio/content-security#efe2cfd8148qy)。
+    若您访问上述链接进入的页面如下所示，说明此前已进行过授权操作，请跳转[步骤三：设置请求头header](content-security.md#efe2cfd8148qy)。
     
     即页面显示**全局设置**标题，右侧状态为**已开通（不可取消）**，页面主体展示**自建安全机制承诺函**全文内容。
     
@@ -27,25 +41,47 @@
 3.  确认授权。
     
 
+<a id="步骤三-设置请求头header"></a>
+
+<a id="efe2cfd8148qy"></a>
+
 ### 步骤三：设置请求头header
 
-调用阿里云百炼时，在请求头header设置以下参数，接入 AI 安全护栏服务。若不想修改调用代码，可改用[业务空间维度开关](https://help.aliyun.com/zh/model-studio/content-security#h2-workspace-switch)。注意：参数值为 JSON 字符串，而非嵌套 JSON 对象。
+调用阿里云百炼时，在请求头header设置以下参数，接入 AI 安全护栏服务。若不想修改调用代码，可改用[业务空间维度开关](content-security.md#h2-workspace-switch)。注意：参数值为 JSON 字符串，而非嵌套 JSON 对象。
 
-```
+<a id="code-block"></a>
+
+```json
 {
     "X-DashScope-DataInspection": "{\"input\":\"cip\",\"output\":\"cip\"}"
 }
 ```
+
 **调用示例**
 
-> 调用时请设置DASHSCOPE\_API\_KEY，获取方法，请参见[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
+> 调用时请设置DASHSCOPE\_API\_KEY，获取方法，请参见[获取与配置 API Key](../../model-api-reference/preparations/get-api-key.md)。
+
+<a id="sec-tabs"></a>
+
+<a id="python"></a>
+
+<a id="python-h4"></a>
 
 #### Python
+
+<a id="sec-tabs-2"></a>
+
+<a id="openai"></a>
+
+<a id="openai-h4"></a>
 
 #### OpenAI
 
 **请求示例**
-```
+
+<a id="code-block-2"></a>
+
+```python
 import os
 from openai import OpenAI
 try:
@@ -69,8 +105,12 @@ except Exception as e:
     print(f"错误信息：{e}")
     print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
+
 **响应示例**
-```
+
+<a id="code-block-3"></a>
+
+```json
 错误信息：Error code: 400 -
 {
     "error":
@@ -86,10 +126,17 @@ except Exception as e:
 请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code
 ```
 
+<a id="dashscope"></a>
+
+<a id="dashscope-h4"></a>
+
 #### DashScope
 
 **请求示例**
-```
+
+<a id="code-block-4"></a>
+
+```python
 import os
 import httpx
 import dashscope
@@ -118,19 +165,36 @@ except DashScopeError as e:
     print(f"错误信息：{e.message}")
     print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
+
 **响应示例**
-```
+
+<a id="code-block-5"></a>
+
+```json
 错误码：DataInspectionFailed
 错误信息：Input data may contain inappropriate content. For details, see: https://help.aliyun.com/zh/model-studio/error-code#inappropriate-content
 请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code
 ```
 
+<a id="java"></a>
+
+<a id="java-h4"></a>
+
 #### Java
+
+<a id="sec-tabs-3"></a>
+
+<a id="openai-2"></a>
+
+<a id="openai-2-h4"></a>
 
 #### OpenAI
 
 **请求示例**
-```
+
+<a id="code-block-6"></a>
+
+```java
 // 更多使用示例请参考：https://github.com/openai/openai-java/tree/main/openai-java-example/src/main/java/com/openai/example
 import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
@@ -162,8 +226,12 @@ public class Main {
     }
 }
 ```
+
 **响应示例**
-```
+
+<a id="code-block-7"></a>
+
+```json
 Error occurred: 400: Input data may contain inappropriate content.
 com.openai.errors.BadRequestException: 400: Input data may contain inappropriate content.
 	at com.openai.errors.BadRequestException$Builder.build(BadRequestException.kt:88)
@@ -179,12 +247,25 @@ com.openai.errors.BadRequestException: 400: Input data may contain inappropriate
 	at Main.main(Main.java:25)
 ```
 
+<a id="node-js"></a>
+
+<a id="node-js-h4"></a>
+
 #### Node.js
+
+<a id="sec-tabs-4"></a>
+
+<a id="openai-3"></a>
+
+<a id="openai-3-h4"></a>
 
 #### OpenAI
 
 **请求示例**
-```
+
+<a id="code-block-8"></a>
+
+```javascript
 import OpenAI from "openai";
 const openai = new OpenAI(
   {
@@ -208,8 +289,12 @@ async function main() {
 };
 main();
 ```
+
 **响应示例**
-```
+
+<a id="code-block-9"></a>
+
+```json
 BadRequestError: 400 Input data may contain inappropriate content.
     at Function.generate
     at OpenAI.makeStatusError
@@ -233,12 +318,25 @@ BadRequestError: 400 Input data may contain inappropriate content.
 }
 ```
 
+<a id="curl"></a>
+
+<a id="curl-h4"></a>
+
 #### cURL
+
+<a id="sec-tabs-5"></a>
+
+<a id="openai-4"></a>
+
+<a id="openai-4-h4"></a>
 
 #### OpenAI
 
 **请求示例**
-```
+
+<a id="code-block-10"></a>
+
+```bash
 curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
@@ -257,8 +355,12 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions 
     ]
 }'
 ```
+
 **响应示例**
-```
+
+<a id="code-block-11"></a>
+
+```json
 {
     "error":
     {
@@ -272,10 +374,17 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions 
 }
 ```
 
+<a id="dashscope-2"></a>
+
+<a id="dashscope-2-h4"></a>
+
 #### DashScope
 
 **请求示例**
-```
+
+<a id="code-block-12"></a>
+
+```bash
 curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
@@ -299,8 +408,12 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation
     }
 }'
 ```
+
 **响应示例**
-```
+
+<a id="code-block-13"></a>
+
+```json
 {
     "code": "DataInspectionFailed",
     "message": "Input data may contain inappropriate content. For details, see: https://help.aliyun.com/zh/model-studio/error-code#inappropriate-content",
@@ -308,11 +421,19 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation
 }
 ```
 
+<a id="查看审核结果"></a>
+
+<a id="5f0edc5cb9tlk"></a>
+
 ### 查看审核结果
 
 登录[AI 安全护栏控制台](https://yundun.console.aliyun.com/?spm=a2c4g.11186623.0.0.7129eb8bc4Mksa&p=guardrail#/overview)，在**检测结果结果查询**页签页面查看审核结果，以进一步分析文本内容中高频的违规类型，审核结果示例如下。
 
 结果查询页面包含筛选栏（支持按条件、文本内容、时间范围搜索）和结果表格。表格列包括**文本内容**、**服务Service**、**风险等级**、**返回标签（释义）**、**反馈结果**、**请求时间**和**操作**。示例中两条记录分别对应`bailian_query_check`（请求检查）和`bailian_response_check`（响应检查）服务，均被标记为**高风险**，返回标签为`contraband_act（疑似其他的刑事犯罪）:100`，每行可单击**详情**或**反馈**进行操作。
+
+<a id="业务空间维度开关"></a>
+
+<a id="h2-workspace-switch"></a>
 
 ## 业务空间维度开关
 
@@ -322,71 +443,32 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation
 2.  在**高级配置**的**AI安全护栏**区域，按需勾选**输入检测**或**输出检测**。两项相互独立，默认均为未勾选。
 3.  单击**确定**保存。开关对业务空间下所有 API Key 的模型调用生效，网关将在推理链路自动注入 `X-DashScope-DataInspection` 请求头触发检测。
 
-**说明**
+> **说明**
+>
+> -   若页面提示“请先前往**安全管理**授权开通本功能”，请先完成[步骤一：开通 AI 安全护栏服务](content-security.md#abaf0de6f4dcq)和[步骤二：授权 AI 安全护栏](content-security.md#eb68bf7575xkc)；防护配置管理请至[AI安全护栏控制台](https://yundun.console.aliyun.com/?p=guardrail)。
+> -   开启开关后，护栏服务将按实际调用量计费，计费规则请参见[计费说明](content-security.md#3f5435b893mfi)。
+> -   业务空间开关与请求头传参双通道并存：当请求中已设置 `X-DashScope-DataInspection` 时，以请求头的设置为准。
 
--   若页面提示“请先前往**安全管理**授权开通本功能”，请先完成[步骤一：开通 AI 安全护栏服务](https://help.aliyun.com/zh/model-studio/content-security#abaf0de6f4dcq)和[步骤二：授权 AI 安全护栏](https://help.aliyun.com/zh/model-studio/content-security#eb68bf7575xkc)；防护配置管理请至[AI安全护栏控制台](https://yundun.console.aliyun.com/?p=guardrail)。
--   开启开关后，护栏服务将按实际调用量计费，计费规则请参见[计费说明](https://help.aliyun.com/zh/model-studio/content-security#3f5435b893mfi)。
--   业务空间开关与请求头传参双通道并存：当请求中已设置 `X-DashScope-DataInspection` 时，以请求头的设置为准。
+<a id="服务与模型对应关系"></a>
+
+<a id="h2-service-mapping"></a>
 
 ## 服务与模型对应关系
 
 调用时在请求头传入 `cip` 标识后，系统会根据所用模型自动匹配以下护栏服务：
 
-**服务名称**
+| 服务名称 | service 标识 | 适用模型 | 检测内容 |
+| --- | --- | --- | --- |
+| 百炼输入内容安全护栏 | `qwen_query_check`、`bl_query_guard` | 百炼主流模型（不含 Qwen3-Max、Qwen-Max、Qwen-VL-Max） | 输入中的底线类违规（涉黄、涉政、涉暴）、不良诱导信息及部分诱导性敏感话题 |
+| 百炼输出内容安全护栏 | `qwen_response_check`、`bl_response_guard` | 百炼主流模型（不含 Qwen3-Max、Qwen-Max、Qwen-VL-Max） | 输出中的底线类违规、不良诱导信息，以及辱骂、偏见、不良价值观内容 |
+| 百炼输入内容安全护栏（Pro） | `qwen_query_check_pro`、`bl_query_guard_pro` | 仅 Qwen3-Max、Qwen-Max、Qwen-VL-Max | 检测范围同输入护栏，基于 Qwen3-Max 系列历史模型定向调优 |
+| 百炼输出内容安全护栏（Pro） | `qwen_response_check_pro`、`bl_response_guard_pro` | 仅 Qwen3-Max、Qwen-Max、Qwen-VL-Max | 检测范围同输出护栏，基于 Qwen3-Max 系列历史模型定向调优 |
+| 百炼输入图片安全护栏 | `bl_img_query_guard` | 图片类模型，与模型系列无关 | 输入图片的内容合规风险 |
+| 百炼输出图片安全护栏 | `bl_img_response_guard` | 图片类模型，与模型系列无关 | 输出图片的内容合规风险 |
 
-**service 标识**
+<a id="风险标签管理"></a>
 
-**适用模型**
-
-**检测内容**
-
-百炼输入内容安全护栏
-
-`qwen_query_check`、`bl_query_guard`
-
-百炼主流模型（不含 Qwen3-Max、Qwen-Max、Qwen-VL-Max）
-
-输入中的底线类违规（涉黄、涉政、涉暴）、不良诱导信息及部分诱导性敏感话题
-
-百炼输出内容安全护栏
-
-`qwen_response_check`、`bl_response_guard`
-
-百炼主流模型（不含 Qwen3-Max、Qwen-Max、Qwen-VL-Max）
-
-输出中的底线类违规、不良诱导信息，以及辱骂、偏见、不良价值观内容
-
-百炼输入内容安全护栏（Pro）
-
-`qwen_query_check_pro`、`bl_query_guard_pro`
-
-仅 Qwen3-Max、Qwen-Max、Qwen-VL-Max
-
-检测范围同输入护栏，基于 Qwen3-Max 系列历史模型定向调优
-
-百炼输出内容安全护栏（Pro）
-
-`qwen_response_check_pro`、`bl_response_guard_pro`
-
-仅 Qwen3-Max、Qwen-Max、Qwen-VL-Max
-
-检测范围同输出护栏，基于 Qwen3-Max 系列历史模型定向调优
-
-百炼输入图片安全护栏
-
-`bl_img_query_guard`
-
-图片类模型，与模型系列无关
-
-输入图片的内容合规风险
-
-百炼输出图片安全护栏
-
-`bl_img_response_guard`
-
-图片类模型，与模型系列无关
-
-输出图片的内容合规风险
+<a id="h2-risk-labels"></a>
 
 ## 风险标签管理
 
@@ -403,9 +485,17 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation
 
 完整标签列表、各标签的细分检测范围及自定义词库配置，可在 AI 安全护栏控制台的**模型防护**页面查看和管理：顶部菜单栏切换地域，找到目标服务后单击**管理**，进入防护维度的**配置管理**编辑细分场景的检测状态。除红线管控标签外，其余风险标签均可开关；配置修改后约 2~5 分钟生效。
 
+<a id="通过-ai-网关使用护栏"></a>
+
+<a id="h2-guardrail-via-gateway"></a>
+
 ## 通过 AI 网关使用护栏
 
 如果您通过 AI 网关调用 Model API，可以在 AI 网关控制台按消费者维度配置护栏的检查策略与拦截策略（支持内容合规、提示词攻击、敏感信息、模型幻觉、恶意 URL 等防护维度，各维度可设置低、中、高防护等级）。详细操作请参见[如何在AI网关开启使用AI安全护栏产品服务](https://help.aliyun.com/zh/document_detail/2980055.html)。
+
+<a id="知识库检索场景安全拦截"></a>
+
+<a id="h2-kb-retrieval-block"></a>
 
 ## 知识库检索场景安全拦截
 
@@ -415,7 +505,11 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation
 
 1.  检查上传到知识库的文档内容，确认是否包含政治敏感、涉黄涉暴、违法不良、个人隐私数据或可能诱导违规的表述。
 2.  简化或改写应用的提示词，减少可能触发安全拦截的表述。
-3.  如问题仍未解决，收集完整报错信息（HTTP 状态码、错误码、错误消息），联系客户经理申请加白，具体流程见下方[内容加白申请流程](https://help.aliyun.com/zh/model-studio/content-security#h2-whitelist-apply)。
+3.  如问题仍未解决，收集完整报错信息（HTTP 状态码、错误码、错误消息），联系客户经理申请加白，具体流程见下方[内容加白申请流程](content-security.md#h2-whitelist-apply)。
+
+<a id="内容加白申请流程"></a>
+
+<a id="h2-whitelist-apply"></a>
 
 ## 内容加白申请流程
 
@@ -433,8 +527,14 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation
 2.  联系客户经理，提供报错信息、使用场景及需要加白的具体内容。
 3.  等待安全部门完成审核，审核通过后加白处理生效。
 
+<a id="计费说明"></a>
+
+<a id="3f5435b893mfi"></a>
+
 ## 计费说明
 
 在百炼控制台开通 AI 安全护栏产品的 SLR 授权，并通过百炼配置启用该产品策略后，系统将根据实际调用量计费。计费方式为按 Token 数量后付费，每日费用按当日实际使用量结算；未调用服务时不产生费用。计费规则详见[计费概述](https://help.aliyun.com/zh/document_detail/2872706.html#0529545b91g7c)。
 
-**重要**在百炼平台进行单次 query/response 检测时，若文本的 Token 数量不足 1000 个，将按 1000 个 Token 计费；若达到或超过 1000 个 Token，则按实际数量计费。
+> **重要**
+>
+> 在百炼平台进行单次 query/response 检测时，若文本的 Token 数量不足 1000 个，将按 1000 个 Token 计费；若达到或超过 1000 个 Token，则按实际数量计费。

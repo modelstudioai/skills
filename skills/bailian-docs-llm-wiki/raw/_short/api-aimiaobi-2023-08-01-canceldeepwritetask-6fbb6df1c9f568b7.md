@@ -2,11 +2,19 @@
 
 取消深度写作任务。
 
+<a id="调试"></a>
+
+<a id="api-detail-23"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
 [调试](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/CancelDeepWriteTask)
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -25,151 +33,30 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-操作
+<table><thead><tr><th>操作</th><th>访问级别</th><th>资源类型</th><th>条件关键字</th><th>关联操作</th></tr></thead><tbody><tr><td>aimiaobi:CancelDeepWriteTask</td><td>update</td><td><div><div>*全部资源</div><div><code>*</code></div></div></td><td><ul>无</ul></td><td>无</td></tr></tbody></table>
 
-访问级别
+<a id="请求参数"></a>
 
-资源类型
-
-条件关键字
-
-关联操作
-
-aimiaobi:CancelDeepWriteTask
-
-update
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-36"></a>
 
 ## 请求参数
 
-名称
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| WorkspaceId | string | 否 | [业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-xxxxx |
+| TaskId | string | 否 | 任务 ID | xbabac91-fdad-44d6-95ce-\*\*\*\*\*\* |
 
-类型
+<a id="返回参数"></a>
 
-必填
-
-描述
-
-示例值
-
-WorkspaceId
-
-string
-
-否
-
-[业务空间 ID](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)
-
-llm-xxxxx
-
-TaskId
-
-string
-
-否
-
-任务 ID
-
-xbabac91-fdad-44d6-95ce-\*\*\*\*\*\*
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-名称
+<table><thead><tr><th>名称</th><th>类型</th><th>描述</th><th>示例值</th></tr></thead><tbody><tr><td></td><td>object</td><td><div><p>Schema of Response</p></div></td><td></td></tr><tr><td>RequestId</td><td>string</td><td><div><p>Id of the request</p></div></td><td>xxxxx</td></tr><tr><td>Success</td><td>boolean</td><td><div><p>此次请求是否成功</p></div></td><td>true</td></tr><tr><td>Code</td><td>string</td><td><div><p>错误码</p></div></td><td>DataNotExists</td></tr><tr><td>Message</td><td>string</td><td><div><p>错误消息</p></div></td><td>错误消息</td></tr><tr><td>HttpStatusCode</td><td>integer</td><td><div><p>http 错误码</p></div></td><td>400</td></tr><tr><td>Data</td><td>object</td><td><div><p>任务响应对象</p></div></td><td></td></tr><tr><td>TaskId</td><td>string</td><td><div><p>任务 ID</p></div></td><td>xbabac91-fdad-44d6-95ce-******</td></tr><tr><td>Input</td><td>string</td><td><div><p>用户的问题</p></div></td><td>北京2025年新能源汽车发展趋势</td></tr><tr><td>Status</td><td>string</td><td><div><p>任务状态</p></div><div><div>枚举值：</div><ul><li>in_progress：运行中。</li><li>queued：排队中。</li><li>cancelled：已取消。</li><li>completed：已完成。</li><li>failed：失败。</li></ul></div></td><td>cancelled</td></tr></tbody></table>
 
-类型
+<a id="示例"></a>
 
-描述
-
-示例值
-
-object
-
-Schema of Response
-
-RequestId
-
-string
-
-Id of the request
-
-xxxxx
-
-Success
-
-boolean
-
-此次请求是否成功
-
-true
-
-Code
-
-string
-
-错误码
-
-DataNotExists
-
-Message
-
-string
-
-错误消息
-
-错误消息
-
-HttpStatusCode
-
-integer
-
-http 错误码
-
-400
-
-Data
-
-object
-
-任务响应对象
-
-TaskId
-
-string
-
-任务 ID
-
-xbabac91-fdad-44d6-95ce-\*\*\*\*\*\*
-
-Input
-
-string
-
-用户的问题
-
-北京2025年新能源汽车发展趋势
-
-Status
-
-string
-
-任务状态
-
-枚举值：
-
--   in\_progress：运行中。
--   queued：排队中。
--   cancelled：已取消。
--   completed：已完成。
--   failed：失败。
-
-cancelled
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -177,7 +64,9 @@ cancelled
 
 `JSON`格式
 
-```
+<a id="code-block"></a>
+
+```text
 {
   "RequestId": "xxxxx",
   "Success": true,
@@ -191,6 +80,10 @@ cancelled
   }
 }
 ```
+
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
 
 ## 错误码
 

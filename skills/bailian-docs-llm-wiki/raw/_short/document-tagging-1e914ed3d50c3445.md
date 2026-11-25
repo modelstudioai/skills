@@ -2,147 +2,72 @@
 
 本文为您介绍通义数据挖掘打标分类API的语法及示例。
 
+<a id="请求语法"></a>
+
+<a id="fc7e5abcedu3y"></a>
+
 ## 请求语法
 
-```
+<a id="code-block"></a>
+
+```bash
 POST /zhiwen-chat/tagging HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="7ee89e9538w3k"></a>
+
 ## 请求参数
 
-**名称**
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| capabilityType | string | 是 | 能力类型<br><br>打标分类：TAG\_CLASSIFY | TAG\_CLASSIFY |
+| userPrompt | string | 是 | 提示词 | 你需要分析企业经营范围，从内容中提取出关键信息并以结构化的方式输出。输出完毕后结束，不要新增内容。 |
+| fileIdList | array | 是 | 文档ID列表 | \[<br><br>"file\_zhiwen\_XXX"<br><br>\] |
+| stream | boolean | 是 | 是否流式返回 | true |
 
-**类型**
+<a id="返回参数"></a>
 
-**必填**
-
-**描述**
-
-**示例值**
-
-capabilityType
-
-string
-
-是
-
-能力类型
-
-打标分类：TAG\_CLASSIFY
-
-TAG\_CLASSIFY
-
-userPrompt
-
-string
-
-是
-
-提示词
-
-你需要分析企业经营范围，从内容中提取出关键信息并以结构化的方式输出。输出完毕后结束，不要新增内容。
-
-fileIdList
-
-array
-
-是
-
-文档ID列表
-
-\[
-
-"file\_zhiwen\_XXX"
-
-\]
-
-stream
-
-boolean
-
-是
-
-是否流式返回
-
-true
+<a id="e4d7abfd02lfi"></a>
 
 ## 返回参数
 
-**名称**
+| 名称 | 类型 | 描述 |
+| --- | --- | --- |
+| output | object |  |
+| \-choices | array |  |
+| \-finishReason | string | 结束原因 |
+| \-message | object | 消息体 |
+| \-role | string | 角色 |
+| \-content | string | 消息内容 |
+| requestId | string | 请求ID |
+| usage | object | token使用信息 |
+| \-inputTokens | int | 输入token数量 |
+| \-outputTokens | int | 输出token数量 |
+| \-totalTokens | int | 总token数量 |
 
-**类型**
+<a id="示例"></a>
 
-**描述**
-
-output
-
-object
-
-\-choices
-
-array
-
-\-finishReason
-
-string
-
-结束原因
-
-\-message
-
-object
-
-消息体
-
-\-role
-
-string
-
-角色
-
-\-content
-
-string
-
-消息内容
-
-requestId
-
-string
-
-请求ID
-
-usage
-
-object
-
-token使用信息
-
-\-inputTokens
-
-int
-
-输入token数量
-
-\-outputTokens
-
-int
-
-输出token数量
-
-\-totalTokens
-
-int
-
-总token数量
+<a id="f3d8cb046admd"></a>
 
 ## 示例
 
+<a id="调用示例"></a>
+
+<a id="b651468f63at1"></a>
+
 ### 调用示例
+
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-python-tab"></a>
 
 python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 import os
 import requests
 
@@ -178,9 +103,13 @@ with requests.post(url, json=request_body, headers=request_headers) as response:
         print("Received:", response.json())
 ```
 
+<a id="fig-code-group-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-java"></a>
+
+```java
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.config.RequestConfig;
@@ -317,11 +246,17 @@ public class TaggingDemo {
 }
 ```
 
+<a id="正常返回示例"></a>
+
+<a id="fb70f84389k08"></a>
+
 ### 正常返回示例
 
 `JSON`格式
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "output": {
     "choices": [{
@@ -341,6 +276,10 @@ public class TaggingDemo {
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="90bc3eb804i3l"></a>
+
 ## 错误码
 
-请参见[错误码-通义数据挖掘](raw/_short/docmining-error-code-d4361ce416c8ad2d.md)。
+请参见[错误码-通义数据挖掘](docmining-error-code-d4361ce416c8ad2d.md)。

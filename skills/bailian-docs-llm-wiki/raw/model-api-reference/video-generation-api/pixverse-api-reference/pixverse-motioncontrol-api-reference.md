@@ -2,12 +2,22 @@
 
 爱诗-视频动作模仿模型支持输入 人物图片 和 动作参考视频 ，将视频中的动作迁移到目标角色上，生成角色复现相同动作的新视频。适用于动作模仿、编舞复刻、角色动画生成等场景。
 
-**重要**本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)。
+> **重要**
+>
+> 本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)。
+
+<a id="服务开通"></a>
+
+<a id="8bb48973d87d6"></a>
 
 ## 服务开通
 
 1.  前往[阿里云百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)，搜索 **PixVerse**，找到 PixVerse 模型卡片，单击**立即开通**；
 2.  在弹窗内确认开通及授权。
+
+<a id="适用范围"></a>
+
+<a id="pvmc003a0h2scp"></a>
 
 ## 适用范围
 
@@ -15,141 +25,66 @@
 
 -   [**选择模型**](https://bailian.console.aliyun.com/cn-beijing/model/market)：确认模型所属的地域。
 -   **选择 URL**：选择对应的地域 Endpoint URL。
--   **配置 API Key**：选择地域并[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
+-   **配置 API Key**：选择地域并[获取与配置 API Key](../../preparations/get-api-key.md)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
 
-**说明**本文的视频动作模仿示例适用于**华北2（北京）地域**。
+> **说明**
+>
+> 本文的视频动作模仿示例适用于**华北2（北京）地域**。
+
+<a id="http调用"></a>
+
+<a id="pvmc101a0h2http"></a>
 
 ## HTTP调用
 
 由于视频动作模仿任务耗时较长（通常为1-5分钟），API采用异步调用。整个流程包含 **"创建任务 -> 轮询获取"** 两个核心步骤，具体如下：
 
+<a id="步骤1-创建任务获取任务id"></a>
+
+<a id="pvmc111a0h4stp1"></a>
+
 ### 步骤1：创建任务获取任务ID
 
 **北京地域**：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis`
 
-调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](../../../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
 
-**说明**
+> **说明**
+>
+> -   创建成功后，使用接口返回的 `task_id` 查询结果，task\_id 有效期为 24 小时。**请勿重复创建任务**，轮询获取即可。
+> -   新手指引请参见[Postman](https://help.aliyun.com/zh/model-studio/first-call-to-image-and-video-api)。
 
--   创建成功后，使用接口返回的 `task_id` 查询结果，task\_id 有效期为 24 小时。**请勿重复创建任务**，轮询获取即可。
--   新手指引请参见[Postman](https://help.aliyun.com/zh/model-studio/first-call-to-image-and-video-api)。
-
-#### 请求参数
-
-##### 请求头（Headers）
-
-**Content-Type**`string`**（必选）**
-
-请求内容类型。此参数必须设置为`application/json`。
-
-**Authorization**`string`**（必选）**
-
-请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
-
-**X-DashScope-Async**`string`**（必选）**
-
-异步处理配置参数。HTTP请求只支持异步，**必须设置为**`enable`。
-
-**重要**缺少此请求头将报错：“current user api does not support synchronous calls”。
-
-##### 请求体（Request Body）
-
-**model** `string` **（必选）**
-
-模型名称。固定值：`pixverse/pixverse-motioncontrol`。
-
-**input** `object` **（必选）**
-
-输入的基本信息，包括角色图片和动作视频。
-
-属性
-
-**media** `array` **（必选）**
-
-媒体素材列表，必须包含 1 个 `image_url` 类型的角色图片和 1 个 `video_url` 类型的动作视频。
-
-元素属性
-
-**type** `string` **（必选）**
-
-媒体类型。取值范围：
-
--   `image_url`：角色图片。
--   `video_url`：动作视频。
-
-**url** `string` **（必选）**
-
-媒体资源的 URL 地址。
-
--   `image_url`：角色图片的 URL。建议单人主体，画面清晰。
-    
-    -   文件大小：不超过 20MB。
-    -   分辨率：最长边不超过 10000px。
-    -   支持格式：PNG、JPEG、WebP。
--   `video_url`：动作视频的 URL。建议为单人主体，画面动作清晰。
-    
-    -   文件大小：不超过 100MB。
-    -   时长：不超过 30 秒。
-    -   支持格式：MP4、MOV。
-
-**parameters** `object` **（必选）**
-
-视频生成参数。如设置输出视频清晰度、是否添加水印等。
-
-属性
-
-**resolution** `string` **（必选）**
-
-输出视频的清晰度。取值范围：`360P`、`540P`、`720P`。实际输出分辨率会根据输入素材的宽高比自适应调整。
-
-**watermark** `boolean` （可选）
-
-是否添加水印标识，水印位于视频右下角，文案固定为"AI生成"。
-
--   `false`：默认值，不添加水印。
--   `true`：添加水印。
-
-#### 视频动作模仿
-
-传入角色图片和动作视频，生成角色模仿动作的视频。
-
-```
-# 调用时请将 {WorkspaceId} 替换为真实的业务空间ID。
+<table><tbody><tr><td><a id="pvmc123a0h4reqp"></a><h4>请求参数</h4><a id="pvmc142a0h5hdr1"></a><h5>请求头（Headers）</h5><p><strong>Content-Type</strong><code>string</code><strong>（必选）</strong></p><p>请求内容类型。此参数必须设置为<code>application/json</code>。</p><p><strong>Authorization</strong><code>string</code><strong>（必选）</strong></p><p>请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。</p><p><strong>X-DashScope-Async</strong><code>string</code><strong>（必选）</strong></p><p>异步处理配置参数。HTTP请求只支持异步，<strong>必须设置为</strong><code>enable</code>。</p><div><div><p><strong>重要</strong>缺少此请求头将报错：“current user api does not support synchronous calls”。</p></div></div><a id="pvmc154a0h5body"></a><h5>请求体（Request Body）</h5><p><strong>model</strong> <code>string</code> <strong>（必选）</strong></p><p>模型名称。固定值：<code>pixverse/pixverse-motioncontrol</code>。</p><p><strong>input</strong> <code>object</code> <strong>（必选）</strong></p><p>输入的基本信息，包括角色图片和动作视频。</p><a id="accordion-属性"></a><section><p>属性</p><div><p><strong>media</strong> <code>array</code> <strong>（必选）</strong></p><p>媒体素材列表，必须包含 1 个 <code>image_url</code> 类型的角色图片和 1 个 <code>video_url</code> 类型的动作视频。</p><a id="accordion-元素属性"></a><section><p>元素属性</p><div><p><strong>type</strong> <code>string</code> <strong>（必选）</strong></p><p>媒体类型。取值范围：</p><ul><li><code>image_url</code>：角色图片。</li><li><code>video_url</code>：动作视频。</li></ul><p><strong>url</strong> <code>string</code> <strong>（必选）</strong></p><p>媒体资源的 URL 地址。</p><ul><li><p><code>image_url</code>：角色图片的 URL。建议单人主体，画面清晰。</p><ul><li>文件大小：不超过 20MB。</li><li>分辨率：最长边不超过 10000px。</li><li>支持格式：PNG、JPEG、WebP。</li></ul></li><li><p><code>video_url</code>：动作视频的 URL。建议为单人主体，画面动作清晰。</p><ul><li>文件大小：不超过 100MB。</li><li>时长：不超过 30 秒。</li><li>支持格式：MP4、MOV。</li></ul></li></ul></div></section></div></section><p><strong>parameters</strong> <code>object</code> <strong>（必选）</strong></p><p>视频生成参数。如设置输出视频清晰度、是否添加水印等。</p><a id="accordion-属性-2"></a><section><p>属性</p><div><p><strong>resolution</strong> <code>string</code> <strong>（必选）</strong></p><p>输出视频的清晰度。取值范围：<code>360P</code>、<code>540P</code>、<code>720P</code>。实际输出分辨率会根据输入素材的宽高比自适应调整。</p><p><strong>watermark</strong> <code>boolean</code> （可选）</p><p>是否添加水印标识，水印位于视频右下角，文案固定为&quot;AI生成&quot;。</p><ul><li><code>false</code>：默认值，不添加水印。</li><li><code>true</code>：添加水印。</li></ul></div></section></td><td><a id="sec-tabs"></a><section><a id="视频动作模仿"></a><section><a id="视频动作模仿-h4"></a><h4>视频动作模仿</h4><p>传入角色图片和动作视频，生成角色模仿动作的视频。</p><a id="code-block"></a><pre class="language-bash"><code># 调用时请将 {WorkspaceId} 替换为真实的业务空间ID。
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
     -H 'X-DashScope-Async: enable' \
-    -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+    -H &quot;Authorization: Bearer $DASHSCOPE_API_KEY&quot; \
     -H 'Content-Type: application/json' \
     -d '{
-    "model": "pixverse/pixverse-motioncontrol",
-    "input": {
-        "media": [
+    &quot;model&quot;: &quot;pixverse/pixverse-motioncontrol&quot;,
+    &quot;input&quot;: {
+        &quot;media&quot;: [
             {
-                "type": "image_url",
-                "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250919/adsyrp/move_input_image.jpeg"
+                &quot;type&quot;: &quot;image_url&quot;,
+                &quot;url&quot;: &quot;https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250919/adsyrp/move_input_image.jpeg&quot;
             },
             {
-                "type": "video_url",
-                "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250919/kaakcn/move_input_video.mp4"
+                &quot;type&quot;: &quot;video_url&quot;,
+                &quot;url&quot;: &quot;https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250919/kaakcn/move_input_video.mp4&quot;
             }
         ]
     },
-    "parameters": {
-        "resolution": "720P",
-        "watermark": true
+    &quot;parameters&quot;: {
+        &quot;resolution&quot;: &quot;720P&quot;,
+        &quot;watermark&quot;: true
     }
 }'
-```
-
-#### Python SDK
-
-```
-import dashscope
+</code></pre></section><a id="python-sdk"></a><section><a id="python-sdk-h4"></a><h4>Python SDK</h4><a id="code-block-2"></a><pre class="language-python"><code>import dashscope
 import os
 from dashscope import DashScopeError
 
-# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key=&quot;sk-xxx&quot;
 # 获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-client = dashscope.Client(api_key=os.getenv("DASHSCOPE_API_KEY"))
+client = dashscope.Client(api_key=os.getenv(&quot;DASHSCOPE_API_KEY&quot;))
 
 media = [{'type': 'image_url', 'url': 'https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250919/adsyrp/move_input_image.jpeg'}, {'type': 'video_url', 'url': 'https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250919/kaakcn/move_input_video.mp4'}]
 
@@ -161,12 +96,12 @@ def sample_async_call():
                                         resolution='720P',
                                         watermark=True)
         print(job)
-        print("task_id: %s" % job.task_id)
+        print(&quot;task_id: %s&quot; % job.task_id)
     except DashScopeError as e:
-        print(f"HTTP返回码：{e.status_code}")
-        print(f"错误码：{e.code}")
-        print(f"错误信息：{e.message}")
-        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
+        print(f&quot;HTTP返回码：{e.status_code}&quot;)
+        print(f&quot;错误码：{e.code}&quot;)
+        print(f&quot;错误信息：{e.message}&quot;)
+        print(&quot;请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code&quot;)
         return
 
     # 查询任务状态
@@ -174,10 +109,10 @@ def sample_async_call():
         snapshot = client.videos.jobs.fetch(job.task_id)
         print(snapshot.status)
     except DashScopeError as e:
-        print(f"HTTP返回码：{e.status_code}")
-        print(f"错误码：{e.code}")
-        print(f"错误信息：{e.message}")
-        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
+        print(f&quot;HTTP返回码：{e.status_code}&quot;)
+        print(f&quot;错误码：{e.code}&quot;)
+        print(f&quot;错误信息：{e.message}&quot;)
+        print(&quot;请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code&quot;)
 
     # 等待任务完成
     try:
@@ -185,193 +120,75 @@ def sample_async_call():
         print(done)
         print(done.video_url)
     except DashScopeError as e:
-        print(f"HTTP返回码：{e.status_code}")
-        print(f"错误码：{e.code}")
-        print(f"错误信息：{e.message}")
-        print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
+        print(f&quot;HTTP返回码：{e.status_code}&quot;)
+        print(f&quot;错误码：{e.code}&quot;)
+        print(f&quot;错误信息：{e.message}&quot;)
+        print(&quot;请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code&quot;)
 
 if __name__ == '__main__':
     sample_async_call()
-```
+</code></pre></section></section></td></tr></tbody></table>
+
+<a id="步骤2-根据任务id查询结果"></a>
+
+<a id="pvmc401a0h4stp2"></a>
 
 ### 步骤2：根据任务ID查询结果
 
 **北京地域**：`GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}`
 
-**说明**
+> **说明**
+>
+> -   **轮询建议**：视频生成过程约需数分钟，建议采用**轮询**机制，并设置合理的查询间隔（如 15 秒）来获取结果。
+> -   **任务状态流转**：PENDING（排队中）→ RUNNING（处理中）→ SUCCEEDED（成功）/ FAILED（失败）。
+> -   **task\_id 有效期**：**24小时**，超时后将无法查询结果，接口将返回任务状态为`UNKNOWN`。
+> -   **RPS 限制**：查询接口默认RPS为20。如需更高频查询或事件通知，建议[配置异步任务回调](../../more-about-models/async-task-api.md)。
+> -   **更多操作**：如需批量查询、取消任务等操作，请参见[管理异步任务](../../more-about-models/manage-asynchronous-tasks.md)。
 
--   **轮询建议**：视频生成过程约需数分钟，建议采用**轮询**机制，并设置合理的查询间隔（如 15 秒）来获取结果。
--   **任务状态流转**：PENDING（排队中）→ RUNNING（处理中）→ SUCCEEDED（成功）/ FAILED（失败）。
--   **task\_id 有效期**：**24小时**，超时后将无法查询结果，接口将返回任务状态为`UNKNOWN`。
--   **RPS 限制**：查询接口默认RPS为20。如需更高频查询或事件通知，建议[配置异步任务回调](raw/model-api-reference/more-about-models/async-task-api.md)。
--   **更多操作**：如需批量查询、取消任务等操作，请参见[管理异步任务](raw/model-api-reference/more-about-models/manage-asynchronous-tasks.md)。
+<table><tbody><tr><td><a id="pvmc424a0h4qr01"></a><h4>请求参数</h4><a id="pvmc434a0h5qr01"></a><h5>请求头（Headers）</h5><p><strong>Authorization</strong><code>string</code><strong>（必选）</strong></p><p>请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。</p><a id="pvmc440a0h5qr02"></a><h5>URL路径参数（Path parameters）</h5><p><strong>task_id</strong> <code>string</code><strong>（必选）</strong></p><p>任务ID。</p></td><td><a id="sec-tabs-2"></a><section><a id="查询任务结果"></a><section><a id="查询任务结果-h4"></a><h4>查询任务结果</h4><p>将<code>{task_id}</code>完整替换为上一步接口返回的<code>task_id</code>的值。<code>task_id</code>查询有效期为24小时，并请将<code>{WorkspaceId}</code>替换为真实的<a href="../../../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain">业务空间ID</a>。</p><a id="code-block-3"></a><pre class="language-bash"><code>curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id} \
+--header &quot;Authorization: Bearer $DASHSCOPE_API_KEY&quot;
+</code></pre></section></section></td></tr></tbody></table>
 
-#### 请求参数
-
-##### 请求头（Headers）
-
-**Authorization**`string`**（必选）**
-
-请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
-
-##### URL路径参数（Path parameters）
-
-**task\_id** `string`**（必选）**
-
-任务ID。
-
-#### 查询任务结果
-
-将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
-
-```
-curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id} \
---header "Authorization: Bearer $DASHSCOPE_API_KEY"
-```
-
-#### 响应参数
-
-**output**`object`
-
-任务输出信息。
-
-属性
-
-**task\_id** `string`
-
-任务ID。查询有效期24小时。
-
-**task\_status** `string`
-
-任务状态。
-
-枚举值
-
--   PENDING：任务排队中
--   RUNNING：任务处理中
--   SUCCEEDED：任务执行成功
--   FAILED：任务执行失败
--   CANCELED：任务已取消
--   UNKNOWN：任务不存在或状态未知
-
-**轮询过程中的状态流转：**
-
--   PENDING（排队中） → RUNNING（处理中）→ SUCCEEDED（成功）/ FAILED（失败）。
--   初次查询状态通常为 PENDING（排队中）或 RUNNING（处理中）。
--   当状态变为 SUCCEEDED 时，响应中将包含生成的视频URL。
--   若状态为 FAILED，请检查错误信息并重试。
--   若状态为 CANCELED，表示任务已取消，如需继续请重新提交任务。
--   若状态为 UNKNOWN，表示任务不存在或状态未知，可能在 task\_id 不存在或超过 24 小时有效期后出现。
-
-**submit\_time** `string`
-
-任务提交时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
-
-**scheduled\_time** `string`
-
-任务执行时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
-
-**end\_time** `string`
-
-任务完成时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
-
-**video\_url**`string`
-
-视频URL。仅在 task\_status 为 SUCCEEDED 时返回。
-
-视频格式为MP4（H.264 编码）。视频链接暂无过期时间，但不建议将其作为长期存储，请及时下载。
-
-**orig\_prompt** `string`
-
-原始输入的prompt，对应请求参数`prompt`。
-
-**code**`string`
-
-请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
-
-**message**`string`
-
-请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
-
-**usage** `object`
-
-输出信息统计。只对成功的结果计数。
-
-属性
-
-**duration** `integer`
-
-计费时长（秒）。输出视频时长与输入的动作参考视频时长一致，计费按向上取整。
-
-**size** `string`
-
-输出视频的分辨率。
-
-**fps** `integer`
-
-输出视频的帧率。
-
-**SR** `string`
-
-输出视频的分辨率档位。
-
-**video\_count** `integer`
-
-视频数量，固定为 1。
-
-#### 任务执行成功
-
-```
-{
-    "request_id": "43aa3b9f-71c7-98e0-9529-xxxxxx",
-    "output": {
-        "task_id": "e699df60-145c-464f-ab6a-xxxxxx",
-        "task_status": "SUCCEEDED",
-        "submit_time": "2026-07-14 18:15:04.045",
-        "scheduled_time": "2026-07-14 18:15:04.093",
-        "end_time": "2026-07-14 18:16:17.412",
-        "video_url": "https://media.pixverseai.cn/xxxx.mp4"
+<table><tbody><tr><td><a id="pvmc454a0h4qrs1"></a><h4>响应参数</h4><p><strong>output</strong><code>object</code></p><p>任务输出信息。</p><a id="accordion-属性-3"></a><section><p>属性</p><div><p><strong>task_id</strong> <code>string</code></p><p>任务ID。查询有效期24小时。</p><p><strong>task_status</strong> <code>string</code></p><p>任务状态。</p><a id="accordion-枚举值"></a><section><p>枚举值</p><div><ul><li>PENDING：任务排队中</li><li>RUNNING：任务处理中</li><li>SUCCEEDED：任务执行成功</li><li>FAILED：任务执行失败</li><li>CANCELED：任务已取消</li><li>UNKNOWN：任务不存在或状态未知</li></ul></div></section><strong>轮询过程中的状态流转：</strong><ul><li>PENDING（排队中） → RUNNING（处理中）→ SUCCEEDED（成功）/ FAILED（失败）。</li><li>初次查询状态通常为 PENDING（排队中）或 RUNNING（处理中）。</li><li>当状态变为 SUCCEEDED 时，响应中将包含生成的视频URL。</li><li>若状态为 FAILED，请检查错误信息并重试。</li><li>若状态为 CANCELED，表示任务已取消，如需继续请重新提交任务。</li><li>若状态为 UNKNOWN，表示任务不存在或状态未知，可能在 task_id 不存在或超过 24 小时有效期后出现。</li></ul><p><strong>submit_time</strong> <code>string</code></p><p>任务提交时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。</p><p><strong>scheduled_time</strong> <code>string</code></p><p>任务执行时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。</p><p><strong>end_time</strong> <code>string</code></p><p>任务完成时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。</p><p><strong>video_url</strong><code>string</code></p><p>视频URL。仅在 task_status 为 SUCCEEDED 时返回。</p><p>视频格式为MP4（H.264 编码）。视频链接暂无过期时间，但不建议将其作为长期存储，请及时下载。</p><p><strong>orig_prompt</strong> <code>string</code></p><p>原始输入的prompt，对应请求参数<code>prompt</code>。</p><p><strong>code</strong><code>string</code></p><p>请求失败的错误码。请求成功时不会返回此参数，详情请参见<a href="../../preparations/error-code.md">错误码</a>。</p><p><strong>message</strong><code>string</code></p><p>请求失败的详细信息。请求成功时不会返回此参数，详情请参见<a href="../../preparations/error-code.md">错误码</a>。</p></div></section><p><strong>usage</strong> <code>object</code></p><p>输出信息统计。只对成功的结果计数。</p><a id="accordion-属性-4"></a><section><p>属性</p><div><p><strong>duration</strong> <code>integer</code></p><p>计费时长（秒）。输出视频时长与输入的动作参考视频时长一致，计费按向上取整。</p><p><strong>size</strong> <code>string</code></p><p>输出视频的分辨率。</p><p><strong>fps</strong> <code>integer</code></p><p>输出视频的帧率。</p><p><strong>SR</strong> <code>string</code></p><p>输出视频的分辨率档位。</p><p><strong>video_count</strong> <code>integer</code></p><p>视频数量，固定为 1。</p></div></section></td><td><a id="sec-tabs-3"></a><section><a id="任务执行成功"></a><section><a id="任务执行成功-h4"></a><h4>任务执行成功</h4><a id="code-block-4"></a><pre class="language-json"><code>{
+    &quot;request_id&quot;: &quot;43aa3b9f-71c7-98e0-9529-xxxxxx&quot;,
+    &quot;output&quot;: {
+        &quot;task_id&quot;: &quot;e699df60-145c-464f-ab6a-xxxxxx&quot;,
+        &quot;task_status&quot;: &quot;SUCCEEDED&quot;,
+        &quot;submit_time&quot;: &quot;2026-07-14 18:15:04.045&quot;,
+        &quot;scheduled_time&quot;: &quot;2026-07-14 18:15:04.093&quot;,
+        &quot;end_time&quot;: &quot;2026-07-14 18:16:17.412&quot;,
+        &quot;video_url&quot;: &quot;https://media.pixverseai.cn/xxxx.mp4&quot;
     },
-    "usage": {
-        "duration": 6,
-        "size": "1280*704",
-        "fps": 24,
-        "video_count": 1,
-        "SR": "720"
+    &quot;usage&quot;: {
+        &quot;duration&quot;: 6,
+        &quot;size&quot;: &quot;1280*704&quot;,
+        &quot;fps&quot;: 24,
+        &quot;video_count&quot;: 1,
+        &quot;SR&quot;: &quot;720&quot;
     }
 }
-```
-
-#### 任务执行失败
-
-若任务执行失败，task\_status将置为 FAILED，并提供错误码和信息。请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
-
-```
-{
-    "request_id": "e5d70b02-ebd3-98ce-9fe8-759d7d7b107d",
-    "output": {
-        "task_id": "86ecf553-d340-4e21-af6e-a0c6a421c010",
-        "task_status": "FAILED",
-        "code": "InvalidParameter",
-        "message": "Invalid field type or value. Please verify your input data."
+</code></pre></section><a id="任务执行失败"></a><section><a id="任务执行失败-h4"></a><h4>任务执行失败</h4><p>若任务执行失败，task_status将置为 FAILED，并提供错误码和信息。请参见<a href="../../preparations/error-code.md">错误码</a>进行解决。</p><a id="code-block-5"></a><pre class="language-json"><code>{
+    &quot;request_id&quot;: &quot;e5d70b02-ebd3-98ce-9fe8-759d7d7b107d&quot;,
+    &quot;output&quot;: {
+        &quot;task_id&quot;: &quot;86ecf553-d340-4e21-af6e-a0c6a421c010&quot;,
+        &quot;task_status&quot;: &quot;FAILED&quot;,
+        &quot;code&quot;: &quot;InvalidParameter&quot;,
+        &quot;message&quot;: &quot;Invalid field type or value. Please verify your input data.&quot;
     }
 }
-```
-
-#### 任务查询过期
-
-task\_id查询有效期为 24 小时，超时后将无法查询，返回以下报错信息。
-
-```
-{
-    "request_id": "a4de7c32-7057-9f82-8581-xxxxxx",
-    "output": {
-        "task_id": "502a00b1-19d9-4839-a82f-xxxxxx",
-        "task_status": "UNKNOWN"
+</code></pre></section><a id="任务查询过期"></a><section><a id="任务查询过期-h4"></a><h4>任务查询过期</h4><p>task_id查询有效期为 24 小时，超时后将无法查询，返回以下报错信息。</p><a id="code-block-6"></a><pre class="language-json"><code>{
+    &quot;request_id&quot;: &quot;a4de7c32-7057-9f82-8581-xxxxxx&quot;,
+    &quot;output&quot;: {
+        &quot;task_id&quot;: &quot;502a00b1-19d9-4839-a82f-xxxxxx&quot;,
+        &quot;task_status&quot;: &quot;UNKNOWN&quot;
     }
 }
-```
+</code></pre></section></section></td></tr></tbody></table>
+
+<a id="错误码"></a>
+
+<a id="OajFO"></a>
 
 ## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](../../preparations/error-code.md)进行解决。

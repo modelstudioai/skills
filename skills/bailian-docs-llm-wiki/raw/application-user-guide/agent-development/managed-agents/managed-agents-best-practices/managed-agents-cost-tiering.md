@@ -2,9 +2,17 @@
 
 让旗舰模型只做规划与综合、廉价模型用内置联网工具承担 token 密集的阅读执行，并度量这一拆分的实际收益：事件流归集、对照实验设计与不适用场景。
 
+<a id="概述"></a>
+
+<a id="h-ct-intro"></a>
+
 ## 概述
 
-本篇讲 multiagent 协调者模式的**成本分层**：让旗舰模型只做规划与综合，把 token 密集的阅读执行交给廉价模型，并度量这一拆分的实际收益。多智能体的完整链路——配置形状、编排工具、线程观察——已在[进阶：多智能体定制复杂提案](raw/_short/managed-agents-multiagent-proposal-c42cf9fd6aca491d.md)展开，本篇不重复；聚焦成本收益：这一架构为什么降低账单、如何度量，以及不适用的场景。
+本篇讲 multiagent 协调者模式的**成本分层**：让旗舰模型只做规划与综合，把 token 密集的阅读执行交给廉价模型，并度量这一拆分的实际收益。多智能体的完整链路——配置形状、编排工具、线程观察——已在[进阶：多智能体定制复杂提案](../../../../_short/managed-agents-multiagent-proposal-c42cf9fd6aca491d.md)展开，本篇不重复；聚焦成本收益：这一架构为什么降低账单、如何度量，以及不适用的场景。
+
+<a id="场景-阅读是主要开销"></a>
+
+<a id="h-ct-scenario"></a>
 
 ## 场景：阅读是主要开销
 
@@ -14,9 +22,15 @@
 
 同样的成本逻辑适用于任何“廉价模型足以承担 token 密集处理”的负载：文档评审、日志分析、代码库扫描。
 
+<a id="架构-阅读留在-worker-线程"></a>
+
+<a id="h-ct-arch"></a>
+
 ## 架构：阅读留在 worker 线程
 
-```
+<a id="code-block"></a>
+
+```text
 问题
    │
    ▼
@@ -39,20 +53,32 @@ web_search → web_fetch ×N（内置工具）
 
 并行是附带收益：worker 各自在独立线程里跑，墙钟时间也更短。
 
+<a id="配一个两模型团队"></a>
+
+<a id="h-ct-team"></a>
+
 ## 配一个两模型团队
 
 模型 ID 使用当前可用的档位：旗舰协调者 `qwen3.8-max`，廉价 worker `qwen3.7-plus`（更省的还有 `qwen3.6-flash` 档）。具体列表以控制台为准。
 
-```
+<a id="code-block-2"></a>
+
+```bash
 export AGENTSTUDIO_URL="https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio"
 export DASHSCOPE_API_KEY="<你的 DashScope API Key>"
 ```
+
+<a id="worker-廉价模型-内置联网工具"></a>
+
+<a id="h-ct-worker"></a>
 
 ### worker：廉价模型 + 内置联网工具
 
 内置工具比市场 MCP 少一层开通与凭证——同一个 `builtin_toolkit` 里显式启用 `web_search` 与 `web_fetch` 即可，不需要 `mcp_servers`：
 
-```
+<a id="code-block-3"></a>
+
+```bash
 curl -X POST "$AGENTSTUDIO_URL/agents" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
@@ -73,13 +99,21 @@ curl -X POST "$AGENTSTUDIO_URL/agents" \
 
 工具名必须带下划线（`web_search` / `web_fetch`，不能写成 `websearch` / `webfetch`）。每个 worker 实例在自己的 Session 线程里研究一个聚焦子问题——它读的巨大网页不进入任何其他人的上下文。
 
-**警告****联网工具选型**。`web_search` / `web_fetch` 覆盖搜索与静态读取；需要点击网页或填写表单时，改用已开通的 MCP 服务里的 `browser_use`（服务名与工具名以控制台服务目录为准）。两条路的工具名不同，system prompt 里引用的工具名要和实际启用的对上。
+> **警告**
+>
+> **联网工具选型**。`web_search` / `web_fetch` 覆盖搜索与静态读取；需要点击网页或填写表单时，改用已开通的 MCP 服务里的 `browser_use`（服务名与工具名以控制台服务目录为准）。两条路的工具名不同，system prompt 里引用的工具名要和实际启用的对上。
+
+<a id="协调者-旗舰模型-无自有工具-只有一个-roster"></a>
+
+<a id="h-ct-coordinator"></a>
 
 ### 协调者：旗舰模型，无自有工具，只有一个 roster
 
 协调者不配 `tools`——它对 roster 之外的世界没有任何直接通道。使它成为协调者的就是 `multiagent` 字段：服务端自动注入 `create_agent` / `list_agents` / `wait_for_agents`（worker 侧获得 `submit_result`），这些工具不用定义：
 
-```
+<a id="code-block-4"></a>
+
+```bash
 curl -X POST "$AGENTSTUDIO_URL/agents" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
@@ -96,11 +130,19 @@ curl -X POST "$AGENTSTUDIO_URL/agents" \
   }'
 ```
 
-之后就是[多智能体篇](raw/_short/managed-agents-multiagent-proposal-c42cf9fd6aca491d.md)的标准链路：建 Environment、建 Session 挂协调者、POST 一条 `message` 事件。
+之后就是[多智能体篇](../../../../_short/managed-agents-multiagent-proposal-c42cf9fd6aca491d.md)的标准链路：建 Environment、建 Session 挂协调者、POST 一条 `message` 事件。
 
-**说明****roster 版本语义**（见[多智能体篇](raw/_short/managed-agents-multiagent-proposal-c42cf9fd6aca491d.md)）：成员不带 `version` 就是每次委派取 worker 的最新版本——改 worker 不需要动协调者；想让团队配置冻结可复现，就显式写 `version` 锁定。
+> **说明**
+>
+> **roster 版本语义**（见[多智能体篇](../../../../_short/managed-agents-multiagent-proposal-c42cf9fd6aca491d.md)）：成员不带 `version` 就是每次委派取 worker 的最新版本——改 worker 不需要动协调者；想让团队配置冻结可复现，就显式写 `version` 锁定。
 
-**说明****协调者只知道写进它 prompt 的东西**。服务端不会向协调者暴露 worker 的 system prompt 或工具细节；它对 worker 行为的认知全部来自写在它自己 prompt 里的描述。两边描述不一致时，委派质量会下降——对齐两边的描述由配置编写方负责，服务端不强制。
+> **说明**
+>
+> **协调者只知道写进它 prompt 的东西**。服务端不会向协调者暴露 worker 的 system prompt 或工具细节；它对 worker 行为的认知全部来自写在它自己 prompt 里的描述。两边描述不一致时，委派质量会下降——对齐两边的描述由配置编写方负责，服务端不强制。
+
+<a id="先验证单-worker-链路"></a>
+
+<a id="h-ct-single"></a>
 
 ## 先验证单 worker 链路
 
@@ -108,35 +150,59 @@ curl -X POST "$AGENTSTUDIO_URL/agents" \
 
 这一步也是团队上线前的冒烟测试：确认 worker 线程里两类工具都出现成功调用、最终消息带着来源，再引入协调者。
 
+<a id="度量这笔账"></a>
+
+<a id="h-ct-measure"></a>
+
 ## 度量这笔账
 
 核算这套架构的成本收益，有两条数据路径：
 
 **路径一：事件流逐次归组（事后可查，不需要额外设施）。** 每次模型调用都产生一条 `model_request_end` 事件，载荷带 `model`、`input_tokens` / `output_tokens` / `cache_read_input_tokens` / `cache_creation_input_tokens`，且事件顶层带 `thread_id`。按 `thread_id` 分桶就是“协调者线程开销 vs 各 worker 线程开销”；按 `data.model` 分桶就是“旗舰栏 vs 廉价栏”——两张账单直接从事件流里读出来。
 
-**路径二：时间窗 × 模型 ID。** 在工作空间维度的用量数据里，按运行时间窗和模型 ID 两个维度取数：团队那次出现两行（旗舰 + 廉价），单旗舰对照那次只有旗舰一行。操作顺序：跑完团队记下时间窗，再跑对照记下时间窗，分别取数。用量与计价口径以[计费说明](raw/application-user-guide/agent-billing/managed-agents-billing.md)为准。
+**路径二：时间窗 × 模型 ID。** 在工作空间维度的用量数据里，按运行时间窗和模型 ID 两个维度取数：团队那次出现两行（旗舰 + 廉价），单旗舰对照那次只有旗舰一行。操作顺序：跑完团队记下时间窗，再跑对照记下时间窗，分别取数。用量与计价口径以[计费说明](../../../agent-billing/managed-agents-billing.md)为准。
 
-**说明**联网工具调用次数单独计费（`web_search` 按次计费，`web_fetch` 当前限时免费），与模型推理费用分开核算——把旧 MCP 配置换成内置工具会改变工具费用这一部分，两组成本需要重新测量。
+> **说明**
+>
+> 联网工具调用次数单独计费（`web_search` 按次计费，`web_fetch` 当前限时免费），与模型推理费用分开核算——把旧 MCP 配置换成内置工具会改变工具费用这一部分，两组成本需要重新测量。
+
+<a id="对照实验的公平性设计"></a>
+
+<a id="h-ct-fair"></a>
 
 ### 对照实验的公平性设计
 
 要回答“不用这个模式要花多少”，合理的对照组是**单个旗舰 agent 挂同样的内置联网工具**（工具配置与 worker 完全一致，只把模型 ID 换成旗舰）。一个关键差异决定这个对比是否有效：**核实标准必须匹配**。放任旗舰自行判断时，成本确实更低——每个事实只读取单一来源即可交付——但核实严格度也随之降低，不能视为“同样的工作换了价格”。对照的 prompt 要明确提出团队已经在做的事：每个事实至少两次独立核实、两源分歧时重取并标记、答案里给每个事实两个来源 URL。
 
+<a id="反事实估算"></a>
+
+<a id="h-ct-counterfactual"></a>
+
 ### 反事实估算
 
-想看“假如全部阅读按旗舰费率计价”，拿团队运行的 token 计数统一乘旗舰费率，与真实拆分（阅读部分按廉价费率）对比。缓存相关的费率倍率（写 / 读）以[计费说明](raw/application-user-guide/agent-billing/managed-agents-billing.md)为准——`model_request_end` 里的 `cache_read_input_tokens` / `cache_creation_input_tokens` 就是做这类核算的原始字段。
+想看“假如全部阅读按旗舰费率计价”，拿团队运行的 token 计数统一乘旗舰费率，与真实拆分（阅读部分按廉价费率）对比。缓存相关的费率倍率（写 / 读）以[计费说明](../../../agent-billing/managed-agents-billing.md)为准——`model_request_end` 里的 `cache_read_input_tokens` / `cache_creation_input_tokens` 就是做这类核算的原始字段。
 
 需要验证的假设是：在保持答案质量的同时，把大部分阅读 token 转移到廉价 worker 上。统一核实要求能让对比有意义，但不保证两组消耗一样的 token，也不保证团队总价更低；实际 token 量、委派开销和工具费用都要分别测量。
 
-**警告****工具调用成功不等于协调者拿到可用结论**。实测中 worker 可能先发一条只含提交回执的消息，协调者还需要用 `send_to_agent` 追问完整报告。worker 的 system prompt 要明确要求最终消息包含事实与来源 URL，并检查实际交付内容。
+> **警告**
+>
+> **工具调用成功不等于协调者拿到可用结论**。实测中 worker 可能先发一条只含提交回执的消息，协调者还需要用 `send_to_agent` 追问完整报告。worker 的 system prompt 要明确要求最终消息包含事实与来源 URL，并检查实际交付内容。
+
+<a id="成本护栏"></a>
+
+<a id="h-ct-guardrails"></a>
 
 ## 成本护栏
 
 Session 没有 budget / 花费上限字段，护栏落在三层：
 
--   **定时任务层限流**：约束触发频率（cron 时间表本身就是节流），避免同一份任务被反复拉起。注意**并发触发并不报错**（连续两次 `/run` 各自创建 run、并行跑完），并发上限要靠触发端自己控制，见[生产化篇](raw/application-user-guide/agent-development/managed-agents/managed-agents-best-practices/managed-agents-production.md)；
+-   **定时任务层限流**：约束触发频率（cron 时间表本身就是节流），避免同一份任务被反复拉起。注意**并发触发并不报错**（连续两次 `/run` 各自创建 run、并行跑完），并发上限要靠触发端自己控制，见[生产化篇](managed-agents-production.md)；
 -   **prompt 约束 fan-out**：在协调者的 system prompt 里写清 worker 数量上限、单个 brief 的任务粒度、什么情况下不再追加——协调者 spawn 多少 worker 完全由它判断，prompt 是唯一的控制手段；
 -   **事后对账**：每次运行结束按模型维度核对用量，与预期区间比对，异常放大时回头收紧 prompt 里的粒度约束。
+
+<a id="四点注意事项"></a>
+
+<a id="h-ct-cautions"></a>
 
 ## 四点注意事项
 
@@ -145,11 +211,19 @@ Session 没有 budget / 花费上限字段，护栏落在三层：
 3.  **核实标准只覆盖放进去的东西**。两组都核实了 20 个事实，但公园列表本身可能来自模型记忆——事实被审计了，**问题分解没有**。前提重要时，多花一次委派，让 worker 先核实它。
 4.  **协调者只知道写进它 prompt 的东西**。对 worker 行为描述的准确性，直接决定委派质量，也决定这套经济学能不能兑现。
 
+<a id="不适用场景"></a>
+
+<a id="h-ct-when"></a>
+
 ## 不适用场景
 
 -   **窄问题**：阅读太少，没有套利空间；
--   **协调者凭自身知识直接作答**（无委派发生）：额外产生一次无实际产出的旗舰调用。这在事件流里有明确信号：一条**没有任何 `thread_created` 的运行**——用[多智能体篇](raw/_short/managed-agents-multiagent-proposal-c42cf9fd6aca491d.md)的分桶渲染可直接识别；
+-   **协调者凭自身知识直接作答**（无委派发生）：额外产生一次无实际产出的旗舰调用。这在事件流里有明确信号：一条**没有任何 `thread_created` 的运行**——用[多智能体篇](../../../../_short/managed-agents-multiagent-proposal-c42cf9fd6aca491d.md)的分桶渲染可直接识别；
 -   **原材料本身需要旗舰级判断**（微妙的文档分析，而非找事实）：廉价读者可能在提炼时把关键的东西摘掉。
+
+<a id="小结"></a>
+
+<a id="h-ct-summary"></a>
 
 ## 小结
 
@@ -158,10 +232,14 @@ Session 没有 budget / 花费上限字段，护栏落在三层：
 -   **度量两条路**：`model_request_end` 按 `thread_id` / 模型归组（事件层）；时间窗 × 模型 ID（用量层）。对照实验必须严格度匹配，否则比的是两个不同的产品；
 -   **护栏三层**：定时任务限流、prompt 约束 fan-out、事后对账。
 
-运行结束后的清理与[多智能体篇](raw/_short/managed-agents-multiagent-proposal-c42cf9fd6aca491d.md)相同：Session / Environment / Agent 逐个 archive（归档保留审计记录、停计量）。
+运行结束后的清理与[多智能体篇](../../../../_short/managed-agents-multiagent-proposal-c42cf9fd6aca491d.md)相同：Session / Environment / Agent 逐个 archive（归档保留审计记录、停计量）。
+
+<a id="下一步"></a>
+
+<a id="h-ct-next"></a>
 
 ## 下一步
 
--   [进阶：多智能体定制复杂提案](raw/_short/managed-agents-multiagent-proposal-c42cf9fd6aca491d.md)：本篇架构的完整搭建链路。
--   [Agent 工具配置](raw/application-user-guide/agent-development/managed-agents/managed-agents-agent/managed-agents-builtin-tools.md)：内置工具集与逐工具启用的完整字段。
--   [计费说明](raw/application-user-guide/agent-billing/managed-agents-billing.md)：模型费率、缓存与联网工具的计费口径。
+-   [进阶：多智能体定制复杂提案](../../../../_short/managed-agents-multiagent-proposal-c42cf9fd6aca491d.md)：本篇架构的完整搭建链路。
+-   [Agent 工具配置](../managed-agents-agent/managed-agents-builtin-tools.md)：内置工具集与逐工具启用的完整字段。
+-   [计费说明](../../../agent-billing/managed-agents-billing.md)：模型费率、缓存与联网工具的计费口径。

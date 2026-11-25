@@ -1,48 +1,41 @@
-# 模型上下文协议（MCP）
+# 模型上下文协议
 
-模型上下文协议（Model Context Protocol，简称 MCP）是百炼平台统一抽象和接入外部工具服务的核心协议标准。它将天气、地图、数据库、知识库等异构能力封装为语义清晰、结构一致、可被大模型自动发现与调用的标准化工具，使智能体无需硬编码即可动态扩展上下文感知与执行能力。
+模型上下文协议（Model Context Protocol，简称 MCP）是百炼平台定义的标准化工具通信协议，用于在大模型推理过程中安全、可靠、可发现地调用外部服务与能力。它抽象了工具接入的底层传输细节（如 HTTP、SSE、STDIO），统一建模工具元信息、输入输出 Schema、调用生命周期与错误语义，使大模型能基于自然语言意图自动选择、参数化并执行工具。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-MCP 不是独立运行的服务，而是贯穿智能体全生命周期的**能力接入层协议**，在以下关键场景中发挥核心作用：
-
-- **智能体（Managed / Flow Agent）中自动调用**：当用户提问（如“杭州今天气温多少？”），模型基于自然语言理解自动匹配已启用的 `weather` MCP 工具，并通过 `/tools/call` 接口发起调用；结果返回后由模型整合生成最终回复。最多可同时绑定 5 个 MCP 服务。
-  
-- **工作流（Flow Agent）中显式编排**：每个 MCP 节点严格绑定一个具体工具（如 `amap-maps.maps_weather`），需前置节点提取参数（城市名）、后置节点解析结果，实现确定性、可调试的工具链路。
-
-- **CLI 与 SDK 外部直调**：开发者可通过 `bl mcp call --target weather.get_current --city "杭州"` 命令或 Python SDK 直接调用 MCP 工具，用于测试、集成或构建轻量级自动化脚本。
-
-- **Agent Store 统一管理**：所有 MCP 服务（无论官方 One Key 或自定义）均在「Agent Store」集中展示、开通、配置与启停，形成可复用、可共享的能力市场。
-
-> ⚠️ 注意：MCP **不能**在直接调用千问基础 API（如 `/v1/chat/completions`）时使用；仅限集成于百炼平台内的智能体应用或工作流应用中生效。
+- **智能体（Managed Agent）集成**：MCP 服务作为 `tools` 显式挂载到 Agent 配置中，Agent 运行时根据用户输入动态触发 MCP [工具调用](tool-calling.md)，并将结果注入上下文供后续 LLM 推理使用。  
+- **工作流（Flow Agent）编排**：在 Flow 节点中以「MCP 工具节点」形式存在，需手动指定 `server_code.tool_name` 及参数映射规则；工具执行结果可被下游 LLM 或条件节点直接引用。  
+- **Agent Store 统一管理**：所有官方 MCP（如天气、地图、联网搜索）和自定义 MCP 均注册于 Agent Store，通过 `/mcp/servers/list` 发现，通过 `/tools/call` 执行，实现“一处注册、多处复用”。  
+- **外部 IDE/编辑器集成（Qoder、Cursor 等）**：开发者通过 MCP SDK（如 `streamablehttp_client`）连接百炼提供的 `mcp_url`，复用同一套协议与认证机制，实现本地开发环境与平台能力的无缝对接。  
+- **自定义工具开发**：开发者只需按 `mcp_type`（`HTTP`/`SSE`/`STDIO`/`OPENAPI`）实现对应协议端点，并提交符合规范的 `mcp_config`，即可被平台识别为标准 MCP 服务，无需改造业务逻辑。
 
 ## 关键参数和配置
 
-| 类别 | 参数/字段 | 说明 | 约束与示例 |
-|--------|-----------|------|------------|
-| **协议类型（必填）** | `mcp_type` | 决定服务部署与通信方式 | 支持 `STDIO`（npx/uvx 启动）、`HTTP`（普通 REST）、`SSE`（Server-Sent Events）、`OPENAPI`（OpenAPI 3.x 规范自动转换） |
-| **服务标识** | `server_name`、`mcpCode` | 全局唯一编码，用于 API 路径与工具调用 | `mcpCode` 由平台生成，不可修改；`server_name` 可更新（不触发重部署） |
-| **配置对象** | `mcp_config` | 根据 `mcp_type` 动态结构化 | • `HTTP`: 必含 `url`，可选 `headers`<br>• `OPENAPI`: 必含 `api_list`（工具列表 JSON Schema）<br>• `STDIO`: 必含 `command`（如 `"npx"`）与 `args`（如 `["@modelcontextprotocol/server-memory"]`） |
-| **认证与安全** | `Authorization: Bearer <key>` | 所有 MCP 接口均需百炼 API Key 鉴权 | 使用 `DASHSCOPE_API_KEY`，通过请求头传递；敏感字段（如 `mcp_config.headers`）原样返回，禁止日志留存 |
-| **工具推荐** | `topN`（查询参数） | 用于 `/tools/recommend` 接口，指定返回推荐工具数量 | 默认 `3`，最大 `10` |
-| **分页控制** | `pageNo`, `pageSize` | 适用于 `/servers/list` 等列表接口 | `pageNo ≥ 1`，`pageSize ∈ [1, 100]`，且 `pageNo × pageSize ≤ 10000` |
+- **`mcp_type`**（必填）：声明服务通信类型，取值为 `HTTP`、`SSE`、`STDIO` 或 `OPENAPI`；决定 `mcp_config` 的结构约束与运行时调度方式。  
+- **`mcp_config`**（必填，结构依赖 `mcp_type`）：
+  - `HTTP`：需含 `url`（字符串）、可选 `headers`（对象，支持密钥透传）；
+  - `SSE`：需含 `url`，且客户端必须监听 `/sse` 路径；
+  - `STDIO`：需含 `command`（字符串，如 `python mcp_server.py`），由函数计算托管执行；
+  - `OPENAPI`：需提供 `api_list` 数组，每个 API 含 `path`、`method`、`input_params`（OpenAPI 3.0 兼容 schema）。  
+- **`type`（客户端配置）**：在 CLI 或 SDK 中声明客户端期望的通信模式，必须与服务端暴露的路径严格匹配（如 `type: "sse"` 对应服务端 `/sse` 端点），不一致将导致 `11200058` 错误。  
+- **`mcp_url`**（运行时地址）：格式为 `https://dashscope.aliyuncs.com/api/v1/mcps/{ServiceCode}/mcp`（Streamable HTTP）或 `/sse`（SSE），由平台自动生成，不可自定义。  
+- **认证凭证**：全程使用 `DASHSCOPE_API_KEY`（Bearer [Token](token.md)），无额外 OAuth 或 API Key 透传；敏感字段（如 `mcp_config.headers.Authorization`）由调用方自行维护，平台不解析、不审计。
 
 ## 面向开发者，简洁实用
 
-- ✅ **快速上手**：One Key MCP（如联网搜索、Amap Maps）开箱即用，控制台点击开通 → 智能体中勾选 → 模型自动调用。
-- ✅ **自定义灵活**：用 `npx @modelcontextprotocol/server-*` 一行启动本地 MCP 服务，或通过 AI 网关封装任意 HTTP API，5 分钟完成接入。
-- ✅ **调试可靠**：所有工具调用返回统一结构，务必检查 `data.isError` 字段（即使 HTTP 状态码为 200，也可能执行失败）。
-- ✅ **安全可控**：`mcp_config` 中的密钥类字段（如 `headers.Authorization`）不会被平台脱敏，**请确保调用环境可信，禁止打印/落库完整响应**。
-- ✅ **状态明确**：区分 `OFFICIAL`（平台托管，仅支持 `activate/deactivate`）与 `CUSTOMER`（用户自建，支持 `enable/disable/update/delete`）；修改配置前必须先 `disable`，否则返回 `400 OperationNotSupported`。
-
-> 📌 提示：开发自定义 MCP 时，优先选用 `SSE` 或 `OPENAPI` 类型——它们无需函数计算部署、无出口 IP 限制，更适合访问私有内网服务。
+- ✅ **快速验证**：用 `bl mcp tools --server weather` 查看工具列表，再用 `bl mcp call --target weather.get_current_weather --city 北京` 直接调试。  
+- ✅ **零侵入接入**：已有 RESTful 服务？用 `OPENAPI` 类型导入 OpenAPI 3.0 YAML 即可生成 MCP；本地脚本？选 `STDIO` 类型，一行命令部署。  
+- ✅ **安全第一**：`mcp_config` 中的 `headers`、`auth` 等字段**禁止记录日志、禁止前端展示**；所有传输必须 HTTPS，敏感配置建议通过 Vault 注入。  
+- ⚠️ **注意一致性**：`mcp_type`（服务端声明）与客户端 `type`（SDK/CLI 配置）必须匹配；`OPENAPI` 类型的 `inputSchema` 字段名保持 camelCase，不转 snake_case。  
+- 🚫 **不支持裸调用**：MCP 协议仅在百炼平台内生效（智能体、工作流、Agent Store），不可用于直接调用 `dashscope` SDK 的独立 Python 脚本。
 
 ## 关联主题页
 
-- [overview](../api/overview.md)
 - [overview 1e06e5e20b81f10d](../api/overview-1e06e5e20b81f10d.md)
+- [overview](../api/overview.md)
 - [agent store](../guides/agent-store.md)
-- [capabilities](../guides/capabilities.md)
-- [agent development](../guides/agent-development.md)
+- [managed agents api](../api/managed-agents-api.md)
+- [flow agent api](../api/flow-agent-api.md)
 
 

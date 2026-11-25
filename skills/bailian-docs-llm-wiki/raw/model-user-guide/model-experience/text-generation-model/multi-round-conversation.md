@@ -2,7 +2,11 @@
 
 通义千问 API 是无状态的，不会保存对话历史。要实现多轮对话，需在每次请求中显式传入历史对话消息，并可结合截断、摘要、召回等策略，高效管理上下文，减少 Token 消耗。
 
-> 本文介绍如何通过 OpenAI 兼容的 Chat Completion 接口或 DashScope 接口实现多轮对话。 Responses API 可更便捷地实现多轮对话，参见：[OpenAI兼容-Responses](raw/model-api-reference/toolkits-and-frameworks/compatibility-with-openai-responses-api.md)。
+> 本文介绍如何通过 OpenAI 兼容的 Chat Completion 接口或 DashScope 接口实现多轮对话。 Responses API 可更便捷地实现多轮对话，参见：[OpenAI兼容-Responses](../../../model-api-reference/toolkits-and-frameworks/compatibility-with-openai-responses-api.md)。
+
+<a id="工作原理"></a>
+
+<a id="5b03a2da4d9lz"></a>
 
 ## 工作原理
 
@@ -15,7 +19,9 @@
     向`messages` 数组添加用户问题。
     
 
-```
+<a id="code-block"></a>
+
+```json
 // 使用文本模型
 [
     {"role": "user", "content": "推荐一部关于太空探索的科幻电影。"}
@@ -33,7 +39,9 @@
     向`messages`数组添加大模型回复内容与用户的最新提问。
     
 
-```
+<a id="code-block-2"></a>
+
+```json
 // 使用文本模型
 [
     {"role": "user", "content": "推荐一部关于太空探索的科幻电影。"},
@@ -51,13 +59,29 @@
 //]
 ```
 
+<a id="快速开始"></a>
+
+<a id="393ed51341wq3"></a>
+
 ## 快速开始
+
+<a id="sec-tabs"></a>
+
+<a id="openai兼容"></a>
+
+<a id="openai兼容-h4"></a>
 
 #### OpenAI兼容
 
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -97,9 +121,13 @@ messages.append({"role": "assistant", "content": assistant_output})
 print(f"模型：{assistant_output}\n")
 ```
 
+<a id="fig-code-group-node-js-tab"></a>
+
 Node.js
 
-```
+<a id="code-code-group-node-js"></a>
+
+```javascript
 import OpenAI from "openai";
 
 // 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
@@ -145,9 +173,13 @@ async function runConversation() {
 runConversation();
 ```
 
+<a id="fig-code-group-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-curl"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
@@ -180,13 +212,25 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="dashscope"></a>
+
+<a id="dashscope-h4"></a>
+
 #### DashScope
+
+<a id="sec-tabs-2"></a>
+
+<a id="python"></a>
+
+<a id="python-h4"></a>
 
 #### Python
 
 示例代码以手机商店导购为例，导购与顾客会进行多轮对话来采集购买意向，采集完成后会结束会话。
 
-```
+<a id="code-block-3"></a>
+
+```python
 import os
 import dashscope
 # 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的region取值不同。
@@ -228,9 +272,15 @@ while "我已了解您的购买意向" not in assistant_output:
     print("\n")
 ```
 
+<a id="java"></a>
+
+<a id="java-h4"></a>
+
 #### Java
 
-```
+<a id="code-block-4"></a>
+
+```java
 import java.util.ArrayList;
 import java.util.List;
 import com.alibaba.dashscope.aigc.generation.Generation;
@@ -292,9 +342,15 @@ public class Main {
 }
 ```
 
+<a id="curl"></a>
+
+<a id="curl-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-5"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
@@ -328,6 +384,10 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }'
 ```
 
+<a id="多模态模型的多轮对话"></a>
+
+<a id="36eaa79f55dz7"></a>
+
 ## 多模态模型的多轮对话
 
 多模态模型支持在对话中加入图片、音频等内容，其多轮对话的实现方式与文本模型主要有以下不同：
@@ -335,13 +395,25 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 -   **用户消息（user message）的构造方式**：多模态模型的用户消息不仅包含文本，还包含图片、音频等多模态信息。
 -   **DashScope SDK接口：**使用 DashScope Python SDK 2.0 时，需调用 `client.multimodal.chat.create` 接口；如需异步调用，请使用`dashscope.AsyncClient`。使用DashScope Java SDK 时，需调用 `MultiModalConversation` 类。
 
-> 多模态模型请参见：[图像与视频理解](raw/model-user-guide/model-experience/text-generation-model/vision.md)、[界面交互](raw/model-user-guide/model-experience/text-generation-model/specialized-models/gui-automation.md)、[Kimi](raw/model-user-guide/use-cases/third-party-model-integration-tutorial/kimi-api.md)。`Qwen-Omni`的实现方法请参见[非实时（Qwen-Omni）](raw/model-user-guide/model-experience/omni-modal/qwen-omni.md)。Qwen-VL-OCR、Qwen3-Omni-Captioner是为特定单轮任务设计的模型，不支持多轮对话。
+> 多模态模型请参见：[图像与视频理解](vision.md)、[界面交互](specialized-models/gui-automation.md)、[Kimi](../../use-cases/third-party-model-integration-tutorial/kimi-api.md)。`Qwen-Omni`的实现方法请参见[非实时（Qwen-Omni）](../omni-modal/qwen-omni.md)。Qwen-VL-OCR、Qwen3-Omni-Captioner是为特定单轮任务设计的模型，不支持多轮对话。
+
+<a id="sec-tabs-3"></a>
+
+<a id="openai兼容-2"></a>
+
+<a id="openai兼容-2-h4"></a>
 
 #### OpenAI兼容
 
+<a id="fig-code-group-2"></a>
+
+<a id="fig-code-group-2-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-2-python"></a>
+
+```python
 from openai import OpenAI
 import os
 
@@ -393,9 +465,13 @@ completion = client.chat.completions.create(
 print(f"第二轮输出：{completion.choices[0].message.content}")
 ```
 
+<a id="fig-code-group-2-node-js-tab"></a>
+
 Node.js
 
-```
+<a id="code-code-group-2-node-js"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const openai = new OpenAI(
@@ -434,9 +510,13 @@ async function main() {
 main()
 ```
 
+<a id="fig-code-group-2-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-2-curl"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
@@ -485,11 +565,23 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="dashscope-2"></a>
+
+<a id="dashscope-2-h4"></a>
+
 #### DashScope
+
+<a id="sec-tabs-4"></a>
+
+<a id="python-2"></a>
+
+<a id="python-2-h4"></a>
 
 #### Python
 
-```
+<a id="code-block-6"></a>
+
+```python
 import os
 import dashscope
 
@@ -528,11 +620,15 @@ response = client.multimodal.chat.create(
 print(f"模型第二轮输出：{response.output_text}")
 ```
 
+<a id="async-aio-multimodal-py-title"></a>
+
 ### 异步调用
 
 如需在异步环境中使用多模态多轮对话，请使用 `dashscope.AsyncClient`：
 
-```
+<a id="code-block-7"></a>
+
+```python
 import asyncio
 import os
 import dashscope
@@ -572,9 +668,15 @@ async def main():
 asyncio.run(main())
 ```
 
+<a id="java-2"></a>
+
+<a id="java-2-h4"></a>
+
 #### Java
 
-```
+<a id="code-block-8"></a>
+
+```java
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -629,9 +731,15 @@ public class Main {
 }
 ```
 
+<a id="curl-2"></a>
+
+<a id="curl-2-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-9"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
@@ -668,11 +776,17 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }'
 ```
 
+<a id="思考模型的多轮对话"></a>
+
+<a id="9c315c95a8omt"></a>
+
 ## 思考模型的多轮对话
 
 思考模型返回`reasoning_content`（思考过程）与`content`（回复内容）两个字段。更新 messages 数组时，仅保留`content`字段，忽略`reasoning_content`字段。
 
-```
+<a id="code-block-10"></a>
+
+```json
 [
     {"role": "user", "content": "推荐一部关于太空探索的科幻电影。"},
     {"role": "assistant", "content": "我推荐《xxx》，这是一部经典的科幻作品。"}, # 添加上下文时请勿添加reasoning_content字段
@@ -680,17 +794,33 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 ]
 ```
 
-> 思考模型详情参见：[深度思考](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md)、[图像与视频理解](raw/model-user-guide/model-experience/text-generation-model/vision.md)。
+> 思考模型详情参见：[深度思考](deep-thinking.md)、[图像与视频理解](vision.md)。
 
-> Qwen3-Omni-Flash（思考模式）实现多轮对话请参见[全模态](https://help.aliyun.com/zh/model-studio/qwen-omni#4d96cc766ehhi)。
+> Qwen3-Omni-Flash（思考模式）实现多轮对话请参见[全模态](../omni-modal/qwen-omni.md#4d96cc766ehhi)。
+
+<a id="sec-tabs-5"></a>
+
+<a id="openai兼容-3"></a>
+
+<a id="openai兼容-3-h4"></a>
 
 #### OpenAI兼容
 
+<a id="sec-tabs-6"></a>
+
+<a id="python-3"></a>
+
+<a id="python-3-h4"></a>
+
 #### Python
+
+<a id="dc6474fd70932"></a>
 
 ### 示例代码
 
-```
+<a id="code-block-11"></a>
+
+```python
 from openai import OpenAI
 import os
 
@@ -754,11 +884,19 @@ while True:
     print("\n")
 ```
 
+<a id="node-js"></a>
+
+<a id="node-js-h4"></a>
+
 #### Node.js
+
+<a id="99842877e06av"></a>
 
 ### 示例代码
 
-```
+<a id="code-block-12"></a>
+
+```javascript
 import OpenAI from "openai";
 import process from 'process';
 import readline from 'readline/promises';
@@ -857,13 +995,27 @@ async function main() {
 main().catch(console.error);
 ```
 
+<a id="http"></a>
+
+<a id="http-h4"></a>
+
 #### HTTP
+
+<a id="da82a7bab1qkm"></a>
 
 ### 示例代码
 
+<a id="sec-tabs-7"></a>
+
+<a id="curl-3"></a>
+
+<a id="curl-3-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-13"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
@@ -895,13 +1047,27 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="dashscope-3"></a>
+
+<a id="dashscope-3-h4"></a>
+
 #### DashScope
+
+<a id="sec-tabs-8"></a>
+
+<a id="python-4"></a>
+
+<a id="python-4-h4"></a>
 
 #### Python
 
+<a id="be19bb7b31t0q"></a>
+
 ### 示例代码
 
-```
+<a id="code-block-14"></a>
+
+```python
 import os
 import dashscope
 
@@ -968,11 +1134,19 @@ while True:
     # print(f"{answer_content}")
 ```
 
+<a id="java-3"></a>
+
+<a id="java-3-h4"></a>
+
 #### Java
+
+<a id="95245adc47m0x"></a>
 
 ### 示例代码
 
-```
+<a id="code-block-15"></a>
+
+```java
 // dashscope SDK的版本 >= 2.19.4
 import java.util.Arrays;
 import org.slf4j.Logger;
@@ -1086,13 +1260,27 @@ public class Main {
 }
 ```
 
+<a id="http-2"></a>
+
+<a id="http-2-h4"></a>
+
 #### HTTP
+
+<a id="28a1adbca3uxu"></a>
 
 ### 示例代码
 
+<a id="sec-tabs-9"></a>
+
+<a id="curl-4"></a>
+
+<a id="curl-4-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-16"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
@@ -1127,17 +1315,33 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 }'
 ```
 
+<a id="应用于生产环境"></a>
+
+<a id="b45721fe6484z"></a>
+
 ## 应用于生产环境
 
 多轮对话会带来巨大的 Token 消耗，且容易超出大模型上下文最大长度导致报错。以下策略可帮助您有效管理上下文与控制成本。
+
+<a id="1-上下文管理"></a>
+
+<a id="4e96dbe7fa5br"></a>
 
 ### 1\. 上下文管理
 
 `messages` 数组会随对话轮次增加而变长，最终可能超出模型的 Token 限制。建议参考以下内容，在对话过程中管理上下文长度。
 
+<a id="1-1-上下文截断"></a>
+
+<a id="d51b7eec063kr"></a>
+
 #### 1.1. 上下文截断
 
 当对话历史过长时，保留最近的 N 轮对话历史。该方式实现简单，但会丢失较早的对话信息。
+
+<a id="1-2-滚动摘要"></a>
+
+<a id="a822cbf3deamb"></a>
 
 #### 1.2. 滚动摘要
 
@@ -1146,6 +1350,10 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 a. 对话历史达到一定长度（如上下文长度最大值的 70%）时，将对话历史中较早的部分（如前一半）提取出来，发起独立 API 调用使大模型对这部分内容生成“记忆摘要”；
 
 b. 构建下一次请求时，用“记忆摘要”替换冗长的对话历史，并拼接最近的几轮对话。
+
+<a id="1-3-向量化召回"></a>
+
+<a id="25bf933d7d9ix"></a>
 
 #### 1.3. 向量化召回
 
@@ -1157,20 +1365,36 @@ b. 用户提问时，通过相似度检索相关对话记录；
 
 c. 将检索到的对话记录与最近的用户输入拼接后输入大模型。
 
+<a id="2-成本控制"></a>
+
+<a id="9703598cafzpi"></a>
+
 ### 2\. 成本控制
 
 输入 Token 数会随着对话轮数增加，显著增加使用成本，以下成本管理策略供您参考。
+
+<a id="2-1-减少输入-token"></a>
+
+<a id="5c7f2030d560e"></a>
 
 #### 2.1. 减少输入 Token
 
 通过上文介绍的上下文管理策略减少输入 Token，降低成本。
 
+<a id="2-2-使用支持上下文缓存的模型"></a>
+
+<a id="46262816d855v"></a>
+
 #### 2.2. 使用支持上下文缓存的模型
 
-发起多轮对话请求时，`messages` 部分会重复计算并计费。阿里云百炼对`qwen-max`、`qwen3.8-max`等模型提供了[上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)功能，可以降低使用成本并提升响应速度，建议优先使用支持上下文缓存的模型。
+发起多轮对话请求时，`messages` 部分会重复计算并计费。阿里云百炼对`qwen-max`、`qwen3.8-max`等模型提供了[上下文缓存](context-cache.md)功能，可以降低使用成本并提升响应速度，建议优先使用支持上下文缓存的模型。
 
 > 上下文缓存功能自动开启，无需修改代码。
 
+<a id="错误码"></a>
+
+<a id="efc117f59a2gm"></a>
+
 ## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](../../../model-api-reference/preparations/error-code.md)进行解决。

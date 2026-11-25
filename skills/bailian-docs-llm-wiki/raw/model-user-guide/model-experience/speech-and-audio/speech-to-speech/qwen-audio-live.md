@@ -8,34 +8,52 @@ Qwen-Audio-Live 的前台模型负责听取用户语音、提问和回复。遇�
 
 ![前台模型在订单查询期间继续对话，应用或后台模型根据所选模式处理任务并回传结果。](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/zh/images/6a4b3c2d1e0f9009.png)
 
+<a id="接入应用"></a>
+
 会话配置、音频收发和用量查询见[管理会话](#live-sessions)。接入业务系统或后台模型见[任务委派与工具](#live-delegation)。
+
+<a id="快速开始"></a>
+
+<a id="live-quickstart"></a>
 
 ## 快速开始
 
 -   想先验证接入，可以[运行本页的 Python 示例](#live-first-session)，发送一段录音，检查能否收到字幕和音频。
--   想直接和模型对话，可以[运行 WebRTC 浏览器示例](https://help.aliyun.com/zh/model-studio/qwen-audio-live-webrtc-access#live-webrtc-browser-demo)，用麦克风说话，并听取模型回复。
+-   想直接和模型对话，可以[运行 WebRTC 浏览器示例](../../../../_short/qwen-audio-live-webrtc-access-2a873a21a2d29a3b.md#live-webrtc-browser-demo)，用麦克风说话，并听取模型回复。
+
+<a id="建立第一个会话"></a>
+
+<a id="live-first-session"></a>
 
 ### 建立第一个会话
 
 本例通过 WebSocket 将一段录音发送给模型，并将语音回复保存到 `reply.wav`。
 
+<a id="准备录音和凭证"></a>
+
 #### 准备录音和凭证
 
--   Qwen-Audio-Live 仅支持业务空间专属域名。本例需要华北2（北京）的业务空间 ID 和 [API Key](raw/model-api-reference/preparations/get-api-key.md)。长期 API Key 保存在应用服务端。
+-   Qwen-Audio-Live 仅支持业务空间专属域名。本例需要华北2（北京）的业务空间 ID 和 [API Key](../../../../model-api-reference/preparations/get-api-key.md)。长期 API Key 保存在应用服务端。
 -   安装 Python 和 FFmpeg。录一句「请从一数到三」，保存为 `input.wav`。
 
 将 API Key 配置到环境变量 `DASHSCOPE_API_KEY`，然后安装依赖，并将录音转换为 16 kHz、16 位、单声道的 PCM 音频。
 
-```
+<a id="code-block"></a>
+
+```bash
 python -m pip install "websockets>=15"
 ffmpeg -i input.wav -ar 16000 -ac 1 -f s16le input.pcm
 ```
+
+<a id="发送录音并接收回复"></a>
 
 #### 发送录音并接收回复
 
 将下面的代码保存为 `live_quickstart.py`，在连接地址中填入上一步准备的业务空间 ID。两个模型参数都可以沿用示例值。
 
-```
+<a id="code-block-2"></a>
+
+```python
 import base64
 import json
 import os
@@ -50,6 +68,7 @@ from websockets.sync.client import connect
 WEBSOCKET_URL = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime?model=qwen-audio-3.1-live"
 SESSION_MODEL = "qwen-audio-4.0-realtime-preview"
 REPLY_TIMEOUT_SECONDS = 12
+
 
 def main():
     audio = Path(sys.argv[1]).read_bytes()
@@ -122,35 +141,48 @@ def main():
             if not reply.getnframes():
                 raise RuntimeError("未收到语音回复")
 
+
 main()
 ```
 
 用上一步准备的录音运行脚本：
 
-```
+<a id="code-block-3"></a>
+
+```bash
 python live_quickstart.py input.pcm
 ```
 
 运行后，终端会显示回复字幕。打开生成的 `reply.wav`，确认能听到模型数数。该文件是 24 kHz、16 位、单声道 WAV。要调整示例中的模型、音色或音频传输方式，见[配置会话](#live-session-config)。
 
-如果没有收到回复，先检查 API Key、业务空间 ID 和连接地址是否属于同一地域，再确认脚本是在收到 [`session.updated`](https://help.aliyun.com/zh/model-studio/qwen-audio-live-server-events#live-session-updated) 后才发送录音。其他现象可按[排查接入问题](#live-troubleshoot-session)逐项检查。
+如果没有收到回复，先检查 API Key、业务空间 ID 和连接地址是否属于同一地域，再确认脚本是在收到 [`session.updated`](../../../../model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-server-events.md#live-session-updated) 后才发送录音。其他现象可按[排查接入问题](#live-troubleshoot-session)逐项检查。
+
+<a id="选择接入方式"></a>
 
 ### 选择接入方式
 
 两种接入方式都先建立 WebSocket 主连接。您可以用这条连接直接收发音频，也可以另外建立一条 WebRTC 或 AOQ 媒体连接来收发音频。
 
--   **[仅用 WebSocket](raw/model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-websocket-access.md)**。适合用录音验证接入，或由服务端直接处理音频。音频、字幕和任务事件都走同一条连接。
+-   **[仅用 WebSocket](../../../../model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-websocket-access.md)**。适合用录音验证接入，或由服务端直接处理音频。音频、字幕和任务事件都走同一条连接。
     
     ![应用与百炼共用一条 WebSocket 连接收发音频和事件。](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/zh/images/6a4b3c2d1e0f901d.png)
 -   **WebSocket + WebRTC 或 AOQ**。保留 WebSocket 主连接，用它配置会话、协商媒体连接和发送任务请求。媒体连接就绪后，用它收发音频，同时可从 WebSocket 主连接或媒体连接接收服务端事件。
     
     ![控制 WebSocket 是主连接。WebRTC 或 AOQ 媒体连接收发音频，也可接收服务端事件。](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/zh/images/6a4b3c2d1e0f9018.png)
-    -   **[WebRTC](raw/_short/qwen-audio-live-webrtc-access-2a873a21a2d29a3b.md)**。适合在浏览器或应用中实时采集和播放语音。通过控制 WebSocket 交换 SDP。
-    -   **[AOQ](raw/_short/qwen-audio-live-aoq-access-7fc752b6a8e53044.md)**。适合已集成 AOQ Client SDK 的应用。通过控制 WebSocket 获取临时凭证，再用 SDK 连接 Relay。
+    -   **[WebRTC](../../../../_short/qwen-audio-live-webrtc-access-2a873a21a2d29a3b.md)**。适合在浏览器或应用中实时采集和播放语音。通过控制 WebSocket 交换 SDP。
+    -   **[AOQ](../../../../_short/qwen-audio-live-aoq-access-7fc752b6a8e53044.md)**。适合已集成 AOQ Client SDK 的应用。通过控制 WebSocket 获取临时凭证，再用 SDK 连接 Relay。
 
-[API 参考](raw/model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-api-reference.md)按操作提供请求与响应事件的入口。[模型详情](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-speech-to-speech/qwen-audio-3-1-live.md)列出地域、限流和价格。
+[API 参考](../../../../model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-api-reference.md)按操作提供请求与响应事件的入口。[模型详情](../../../get-started-with-models/model-studio-model-list/model-list-speech-to-speech/qwen-audio-3-1-live.md)列出地域、限流和价格。
+
+<a id="编写提示词"></a>
+
+<a id="live-write-prompts"></a>
+
+<a id="编写前台和后台指令"></a>
 
 ## 编写提示词
+
+<a id="编写前台对话提示词"></a>
 
 ### 编写前台对话提示词
 
@@ -160,15 +192,21 @@ python live_quickstart.py input.pcm
 
 要让客服先简短回答，再问客户是否需要帮助，可在 `session.update` 的 `session` 中加入以下字段，并保留已有的 `model` 和 `delegation` 等设置。
 
-```
+<a id="code-block-4"></a>
+
+```json
 {
   "instructions": "担任门店客服。先用一句话回答，再询问用户是否需要其他帮助。"
 }
 ```
 
+<a id="编写任务处理规则"></a>
+
 ### 编写任务处理规则
 
 任务提示词说明处理步骤、输入校验和结果格式。用 Client 模式时，在应用或 Agent 中定义这些规则。用 Responses 模式时，在 `session.delegation.responses.instructions` 中写明后台模型需要遵循的规则，百炼没有内置的后台提示词。
+
+<a id="用提示词分配计算任务"></a>
 
 ### 用提示词分配计算任务
 
@@ -179,85 +217,71 @@ python live_quickstart.py input.pcm
 
 完整的会话配置和验证步骤见 [Responses 模式示例](#live-use-responses)。
 
+<a id="管理会话"></a>
+
+<a id="live-sessions"></a>
+
 ## 管理会话
 
 建立连接后，先配置会话，确定由哪个前台模型和用户交谈、使用什么音色、如何传输音频，以及任务交给谁处理。
 
+<a id="配置会话"></a>
+
+<a id="live-session-config"></a>
+
 ### 配置会话
 
-设置
+| 设置 | 配置位置和用途 |
+| --- | --- |
+| 前台模型 | 连接地址中的 `model=qwen-audio-3.1-live` 指定要接入的服务。`session.model` 指定与用户交谈的前台模型。快速开始使用 `qwen-audio-4.0-realtime-preview`，并将 `session.turn_detection.type` 设为 `duplex`，开启全双工对话。模型可以边听边说，在回复时仍能接收用户语音。 |
+| 对话指令和音色 | 通过 `instructions` 和 `voice` 设置。见[编写提示词](#live-write-prompts)和[配置音色](#live-configure-voice)。 |
+| 输出类型 | `modalities` 同时包含 `text` 和 `audio` 时，服务返回语音和字幕。 |
+| 音频传输方式 | 通过 `session.transport` 选择音频走哪条连接。省略时，音频通过 WebSocket 收发。使用 WebRTC 或 AOQ 时，按各自的[接入流程](../../../../model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-api-reference.md#live-select-transport)建立媒体连接。 |
+| 任务处理模式 | 通过 `session.delegation` 设置。见[任务委派与工具](#live-delegation)。 |
 
-配置位置和用途
+完整配置字段见 [session.update](../../../../model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-client-events.md#live-session-update)。
 
-前台模型
+发送 [`session.update`](../../../../model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-client-events.md#live-session-update) 后，通过 [`session.updated`](../../../../model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-server-events.md#live-session-updated) 确认哪些配置已生效。仅用 WebSocket 时，收到该事件后就可以发送音频。使用 WebRTC 或 AOQ 时，还要等媒体连接就绪。
 
-连接地址中的 `model=qwen-audio-3.1-live` 指定要接入的服务。`session.model` 指定与用户交谈的前台模型。快速开始使用 `qwen-audio-4.0-realtime-preview`，并将 `session.turn_detection.type` 设为 `duplex`，开启全双工对话。模型可以边听边说，在回复时仍能接收用户语音。
+<a id="配置音色"></a>
 
-对话指令和音色
+<a id="live-configure-voice"></a>
 
-通过 `instructions` 和 `voice` 设置。见[编写提示词](#live-write-prompts)和[配置音色](#live-configure-voice)。
-
-输出类型
-
-`modalities` 同时包含 `text` 和 `audio` 时，服务返回语音和字幕。
-
-音频传输方式
-
-通过 `session.transport` 选择音频走哪条连接。省略时，音频通过 WebSocket 收发。使用 WebRTC 或 AOQ 时，按各自的[接入流程](https://help.aliyun.com/zh/model-studio/qwen-audio-live-api-reference#live-select-transport)建立媒体连接。
-
-任务处理模式
-
-通过 `session.delegation` 设置。见[任务委派与工具](#live-delegation)。
-
-完整配置字段见 [session.update](https://help.aliyun.com/zh/model-studio/qwen-audio-live-client-events#live-session-update)。
-
-发送 [`session.update`](https://help.aliyun.com/zh/model-studio/qwen-audio-live-client-events#live-session-update) 后，通过 [`session.updated`](https://help.aliyun.com/zh/model-studio/qwen-audio-live-server-events#live-session-updated) 确认哪些配置已生效。仅用 WebSocket 时，收到该事件后就可以发送音频。使用 WebRTC 或 AOQ 时，还要等媒体连接就绪。
+<a id="配置对话指令和音色"></a>
 
 ### 配置音色
 
 在 `session.update` 的 `session` 对象中设置音色 ID，保留其余会话配置。
 
-```
+<a id="code-block-5"></a>
+
+```json
 {
   "voice": "qingyou"
 }
 ```
 
-示例中的 `qingyou` 对应「青柚」，默认值为 `yunshu`（云舒）。完整列表见[客户端事件](https://help.aliyun.com/zh/model-studio/qwen-audio-live-client-events#live-session-voice)。
+示例中的 `qingyou` 对应「青柚」，默认值为 `yunshu`（云舒）。完整列表见[客户端事件](../../../../model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-client-events.md#live-session-voice)。
+
+<a id="收发语音和字幕"></a>
+
+<a id="live-session-media"></a>
 
 ### 收发语音和字幕
 
 发送麦克风音频和播放模型回复时，使用建连时选定的音频通道。开启全双工对话后，播放回复时也要继续采集并发送用户语音，同时读取服务端事件。
 
 -   **WebRTC** 通过媒体轨道收发音频。浏览器收到远端音轨后，将它交给播放器。
--   **AOQ** 通过 SDK 发送用户语音和播放模型回复。上行音频必须通过 AOQ 发送。将 `session.transport.aoq.ws_audio` 设为 `true` 后，控制 WebSocket 也会收到一份模型的回复音频。详见 [AOQ 接入](raw/_short/qwen-audio-live-aoq-access-7fc752b6a8e53044.md)。
+-   **AOQ** 通过 SDK 发送用户语音和播放模型回复。上行音频必须通过 AOQ 发送。将 `session.transport.aoq.ws_audio` 设为 `true` 后，控制 WebSocket 也会收到一份模型的回复音频。详见 [AOQ 接入](../../../../_short/qwen-audio-live-aoq-access-7fc752b6a8e53044.md)。
 -   **WebSocket** 通过 JSON 事件收发音频。输入和输出都使用单声道 PCM，采样率见下表。
 
 下表的音频收发流程适用于纯 WebSocket 接入。无论音频通过哪条连接传输，都可以用表中的字幕事件显示用户转写和模型回复。
 
-数据
-
-事件
-
-处理方式
-
-麦克风音频或录音
-
-发送 `session.input_audio.append`
-
-将 16 kHz、16 位、单声道 PCM 音频分片并编码为 Base64。快速开始以 20 毫秒为一帧。
-
-模型回复音频
-
-接收 `session.output_audio.delta`
-
-解码事件的 `delta`，按到达顺序播放 24 kHz、16 位、单声道 PCM。
-
-字幕
-
-接收 `session.input_transcript.delta` 和 `session.output_transcript.delta`
-
-前者是用户语音的转写，后者是模型回复的字幕。
+| 数据 | 事件 | 处理方式 |
+| --- | --- | --- |
+| 麦克风音频或录音 | 发送 `session.input_audio.append` | 将 16 kHz、16 位、单声道 PCM 音频分片并编码为 Base64。快速开始以 20 毫秒为一帧。 |
+| 模型回复音频 | 接收 `session.output_audio.delta` | 解码事件的 `delta`，按到达顺序播放 24 kHz、16 位、单声道 PCM。 |
+| 字幕 | 接收 `session.input_transcript.delta` 和 `session.output_transcript.delta` | 前者是用户语音的转写，后者是模型回复的字幕。 |
 
 如果用户在模型播报时补充一句话，用户字幕和模型字幕可能同时更新。把用户转写和模型字幕分别追加到各自的对话气泡。界面上的播报状态以播放器为准。
 
@@ -265,11 +289,15 @@ WebRTC 或 AOQ 媒体连接就绪后，控制 WebSocket 和媒体连接都可用
 
 如果界面有麦克风开关，可在用户切换时发送 `session.input_audio.mute` 或 `session.input_audio.unmute`，等服务确认后再更新开关状态。静音期间，会话仍保持连接。
 
+<a id="发送文字消息"></a>
+
 ### 发送文字消息
 
 除了语音，用户也可以在通话中用文字补充信息，例如输入要查的商品名。应用通过 `session.item.create` 将这段文字作为用户消息发给模型。
 
-```
+<a id="code-block-6"></a>
+
+```json
 {
   "type": "session.item.create",
   "event_id": "evt_user_message",
@@ -283,43 +311,39 @@ WebRTC 或 AOQ 媒体连接就绪后，控制 WebSocket 和媒体连接都可用
 }
 ```
 
+<a id="结束会话和查看用量"></a>
+
 ### 结束会话和查看用量
 
 用户挂断或点击结束时，发送 `session.close` 并停止采集麦克风音频。等收到 `session.closed` 后，再关闭连接并释放资源。
 
 会话激活后，服务每 5 秒通过 `session.usage.updated` 上报 `usage.seconds`，表示会话累计计费时长（秒）。会话期间取最新值，结束后以 `session.closed` 中的 `usage.seconds` 为准。
 
-单次会话没有时长上限，费用按会话时长（秒）计算。连接建立后至少计费 3 秒，超过 3 秒则按实际会话时长计费。发送文字消息、静音和空闲的时间都计入会话时长。百炼调用后台模型时，还会按该模型的实际 Token 用量另行计费。价格及后台模型计费见[计费说明](https://help.aliyun.com/zh/model-studio/model-pricing#qwen-audio-live-pricing)。
+单次会话没有时长上限，费用按会话时长（秒）计算。连接建立后至少计费 3 秒，超过 3 秒则按实际会话时长计费。发送文字消息、静音和空闲的时间都计入会话时长。百炼调用后台模型时，还会按该模型的实际 Token 用量另行计费。价格及后台模型计费见[计费说明](../../../test-1/model-pricing.md#qwen-audio-live-pricing)。
+
+<a id="排查接入问题"></a>
+
+<a id="live-troubleshoot-session"></a>
 
 ### 排查接入问题
 
-问题现象
+| 问题现象 | 排查方法 |
+| --- | --- |
+| 上传音频后没有回复 | 先确认收到 `session.updated`。纯 WebSocket 接入时，检查上行音频是否为 16 kHz、16 位、单声道 PCM。使用 WebRTC 或 AOQ 时，确认媒体连接已就绪，并已通过该连接发送音频。 |
+| 收到字幕，未听到语音回复 | 纯 WebSocket 接入时，检查是否收到 `session.output_audio.delta`，并以 24 kHz 播放。使用 WebRTC 或 AOQ 时，检查播放器是否接收到所选通道的下行音频。 |
+| 字幕里有重复的字词或整句 | 使用 WebRTC 或 AOQ 时，控制 WebSocket 和媒体连接都可能收到同一条字幕。选择一路更新字幕即可。如果同时监听两路，在追加字幕前按 `event_id` 去重。 |
+| 任务已处理，未听到语音播报 | 检查应用是否接收并播放前台模型的语音。Client 模式下，确认回传的 `delegation_id` 与任务一致。 |
+| 收到 `error` 或 `session.closed` | 收到 `error` 时，按[错误事件](../../../../model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-server-events.md#live-error)检查请求。会话关闭后，如需继续通话，重新建连并配置会话。 |
 
-排查方法
+<a id="任务委派与工具"></a>
 
-上传音频后没有回复
-
-先确认收到 `session.updated`。纯 WebSocket 接入时，检查上行音频是否为 16 kHz、16 位、单声道 PCM。使用 WebRTC 或 AOQ 时，确认媒体连接已就绪，并已通过该连接发送音频。
-
-收到字幕，未听到语音回复
-
-纯 WebSocket 接入时，检查是否收到 `session.output_audio.delta`，并以 24 kHz 播放。使用 WebRTC 或 AOQ 时，检查播放器是否接收到所选通道的下行音频。
-
-字幕里有重复的字词或整句
-
-使用 WebRTC 或 AOQ 时，控制 WebSocket 和媒体连接都可能收到同一条字幕。选择一路更新字幕即可。如果同时监听两路，在追加字幕前按 `event_id` 去重。
-
-任务已处理，未听到语音播报
-
-检查应用是否接收并播放前台模型的语音。Client 模式下，确认回传的 `delegation_id` 与任务一致。
-
-收到 `error` 或 `session.closed`
-
-收到 `error` 时，按[错误事件](https://help.aliyun.com/zh/model-studio/qwen-audio-live-server-events#live-error)检查请求。会话关闭后，如需继续通话，重新建连并配置会话。
+<a id="live-delegation"></a>
 
 ## 任务委派与工具
 
 本节示例沿用[快速开始](#live-quickstart)的纯 WebSocket 连接。使用 WebRTC 或 AOQ 时，会话配置和任务请求仍通过控制 WebSocket 发送，音频则通过媒体连接收发。
+
+<a id="前后台工具选型"></a>
 
 ### 前后台工具选型
 
@@ -328,45 +352,39 @@ WebRTC 或 AOQ 媒体连接就绪后，控制 WebSocket 和媒体连接都可用
 -   **前台工具**适合可直接执行、需要快速响应的操作。例如，用户说「播放音乐」时，前台模型调用通过 `session.tools` 注册的函数，由应用执行播放指令。
 -   **后台工具**适合需要判断条件或依次调用多个工具的任务。例如，查询可改签班次时，如果后台模型已配置相应的查询工具，就可以先查订单和改签规则，再查符合条件的班次，由前台模型向用户播报。
 
+<a id="选择处理任务模式"></a>
+
 ### 选择处理任务模式
 
 希望百炼调用后台模型并传回结果时，选择 [Responses 模式](#live-use-responses)。已有业务接口、工作流或 Agent，或者需要由应用先核对结果再决定播报内容时，选择 [Client 模式](#live-use-client)。
 
-在 [`session.update`](https://help.aliyun.com/zh/model-studio/qwen-audio-live-client-events#live-session-update) 中设置 `session.delegation.type`。Responses 模式填 `responses`，Client 模式填 `client`。
+在 [`session.update`](../../../../model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-client-events.md#live-session-update) 中设置 `session.delegation.type`。Responses 模式填 `responses`，Client 模式填 `client`。
 
-要决定的事
-
-Responses 模式
-
-Client 模式
-
-谁处理任务
-
-百炼调用配置的后台 Responses 模型。
-
-应用调用业务接口、工作流、Agent 或模型。
-
-谁准备任务输入
-
-应用预先配置后台模型和任务指令。需要委派时，百炼根据当前对话准备输入并发起请求。
-
-应用从委派事件读取任务摘要和上下文，结合业务数据构造请求。
-
-谁决定回传什么
-
-后台结果由百炼交给前台模型。
-
-应用可以校验、汇总或筛选结果，再把适合播报的内容交给前台模型。
+| 要决定的事 | Responses 模式 | Client 模式 |
+| --- | --- | --- |
+| 谁处理任务 | 百炼调用配置的后台 Responses 模型。 | 应用调用业务接口、工作流、Agent 或模型。 |
+| 谁准备任务输入 | 应用预先配置后台模型和任务指令。需要委派时，百炼根据当前对话准备输入并发起请求。 | 应用从委派事件读取任务摘要和上下文，结合业务数据构造请求。 |
+| 谁决定回传什么 | 后台结果由百炼交给前台模型。 | 应用可以校验、汇总或筛选结果，再把适合播报的内容交给前台模型。 |
 
 同样是查询可改签班次，如果让百炼调用后台模型，由模型使用已配置的工具完成查询，可以选择 Responses 模式。如果已有票务工作流负责查询，并且需要应用核对班次后再播报，可以选择 Client 模式。
 
 两种模式都可以[配置前台函数](#live-call-frontend-functions)，用 `call_id` 将函数调用与结果对应起来。Client 模式中的任务委派则使用 `delegation_id` 关联同一任务的进度、追问和结果。接入业务系统前，先确认应用拥有接口权限，并了解接口需要哪些输入、会返回什么。
 
+<a id="使用-responses-模式调用后台模型"></a>
+
+<a id="live-use-responses"></a>
+
 ### 使用 Responses 模式调用后台模型
+
+<a id="接入准备"></a>
 
 #### 接入准备
 
 准备业务空间可调用的后台 Responses 模型。示例使用 `qwen4-max` 计算总价，再由前台模型播报。
+
+<a id="配置会话-2"></a>
+
+<a id="live-responses-configuration"></a>
 
 #### 配置会话
 
@@ -374,17 +392,23 @@ Client 模式
 
 以计算总价为例，前台提示词可以写成“缺少单价或数量时，先向用户确认。两项齐全后，把计算交给后台”。后台提示词则写明“根据单价和数量计算总价，返回金额和币种”。
 
+<a id="接收后台事件"></a>
+
 #### 接收后台事件
 
-自动委派开始时，服务发送 [`session.delegation.created`](https://help.aliyun.com/zh/model-studio/qwen-audio-live-server-events#live-delegation-created)。后台生成期间，服务通过 [`response.event`](https://help.aliyun.com/zh/model-studio/qwen-audio-live-server-events#live-response-event) 转发后台事件。按外层的 `delegation_id`（如有）关联任务，按 `event.type` 区分后台事件。
+自动委派开始时，服务发送 [`session.delegation.created`](../../../../model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-server-events.md#live-delegation-created)。后台生成期间，服务通过 [`response.event`](../../../../model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-server-events.md#live-response-event) 转发后台事件。按外层的 `delegation_id`（如有）关联任务，按 `event.type` 区分后台事件。
 
 收到内层 `response.completed` 表示后台生成结束。用户听到的回复仍由前台模型播报，脚本会显示前台字幕并将语音保存为 `reply.wav`。
+
+<a id="验证委派与播报"></a>
 
 #### 验证委派与播报
 
 将以下完整示例保存为 `live_responses.py`，并在连接地址中填入业务空间 ID。脚本为后台处理和语音播报预留 30 秒。
 
-```
+<a id="code-block-7"></a>
+
+```python
 import base64
 import json
 import os
@@ -399,6 +423,7 @@ from websockets.sync.client import connect
 WEBSOCKET_URL = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime?model=qwen-audio-3.1-live"
 SESSION_MODEL = "qwen-audio-4.0-realtime-preview"
 REPLY_TIMEOUT_SECONDS = 30
+
 
 def main():
     audio = Path(sys.argv[1]).read_bytes()
@@ -494,33 +519,42 @@ def main():
             if not reply.getnframes():
                 raise RuntimeError("未收到语音回复")
 
+
 main()
 ```
 
 录下「每件商品三百二十七元，买十三件一共多少钱」，保存为 `responses.wav`。转换录音并运行脚本。
 
-```
+<a id="code-block-8"></a>
+
+```bash
 ffmpeg -i responses.wav -ar 16000 -ac 1 -f s16le responses.pcm
 python live_responses.py responses.pcm
 ```
 
-先看终端是否记录了任务派发，以及 [`response.event`](https://help.aliyun.com/zh/model-studio/qwen-audio-live-server-events#live-response-event) 中的 `response.completed`。再打开 `reply.wav`，确认模型播报了总价 4,251 元。应用中如需显示播报进度，以播放器的实际状态为准。
+先看终端是否记录了任务派发，以及 [`response.event`](../../../../model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-server-events.md#live-response-event) 中的 `response.completed`。再打开 `reply.wav`，确认模型播报了总价 4,251 元。应用中如需显示播报进度，以播放器的实际状态为准。
 
 再录一段只提供单价的请求，例如「每件三百二十七元，一共多少钱」。用同样的方法转换录音并运行脚本，检查字幕或新的 `reply.wav` 是否追问购买数量。
 
+<a id="配置和观察后台工具"></a>
+
 #### 配置和观察后台工具
 
-通过 `session.delegation.responses.tools` 声明供后台模型使用的工具。工具定义的格式见 [Responses API](raw/model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)。自动委派中，服务执行受支持的后台工具并处理结果。应用可监听 [`response.event`](https://help.aliyun.com/zh/model-studio/qwen-audio-live-server-events#live-response-event) 观察执行情况。收到内层 `response.output_item.done` 且 `event.item.type` 为 `function_call` 时，可从 `event.item` 读取函数名 `name`、参数 `arguments` 和调用 ID `call_id`。
+通过 `session.delegation.responses.tools` 声明供后台模型使用的工具。工具定义的格式见 [Responses API](../../../../model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)。自动委派中，服务执行受支持的后台工具并处理结果。应用可监听 [`response.event`](../../../../model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-server-events.md#live-response-event) 观察执行情况。收到内层 `response.output_item.done` 且 `event.item.type` 为 `function_call` 时，可从 `event.item` 读取函数名 `name`、参数 `arguments` 和调用 ID `call_id`。
 
 如果业务系统需要由应用执行和校验，使用 [Client 模式](#live-use-client)接收任务，或[在前台声明函数](#live-call-frontend-functions)以获取结构化参数。
 
+<a id="由应用发起后台生成"></a>
+
 #### 由应用发起后台生成
 
-应用已有完整输入时，可通过 [`response.item.create`](https://help.aliyun.com/zh/model-studio/qwen-audio-live-client-events#live-response-item-create) 提供文本，再通过 [`response.create`](https://help.aliyun.com/zh/model-studio/qwen-audio-live-client-events#live-response-create) 发起独立的后台任务。结果从 `response.event` 读取。
+应用已有完整输入时，可通过 [`response.item.create`](../../../../model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-client-events.md#live-response-item-create) 提供文本，再通过 [`response.create`](../../../../model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-client-events.md#live-response-create) 发起独立的后台任务。结果从 `response.event` 读取。
 
 将以下完整示例保存为 `live_responses_text.py`，并在连接地址中填入业务空间 ID。脚本直接发送文本，在终端显示后台返回的计算结果。
 
-```
+<a id="code-block-9"></a>
+
+```python
 import json
 import os
 import time
@@ -531,6 +565,7 @@ from websockets.sync.client import connect
 WEBSOCKET_URL = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime?model=qwen-audio-3.1-live"
 SESSION_MODEL = "qwen-audio-4.0-realtime-preview"
 REPLY_TIMEOUT_SECONDS = 30
+
 
 def main():
     headers = {"Authorization": f"Bearer {os.environ['DASHSCOPE_API_KEY']}"}
@@ -604,65 +639,64 @@ def main():
 
         send("session.close")
 
+
 main()
 ```
 
 运行 `python live_responses_text.py`。终端应输出后台模型返回的金额。
 
+<a id="使用-client-模式接入业务系统"></a>
+
+<a id="live-use-client"></a>
+
 ### 使用 Client 模式接入业务系统
 
 在 Client 模式下，前台模型把任务交给应用。应用执行业务操作，把结果发回前台模型，由它告诉用户。
+
+<a id="接入准备-2"></a>
 
 #### 接入准备
 
 -   **运行示例**：按[快速开始](#live-first-session)准备业务空间 ID、API Key 和运行环境，并录一段询问库存的语音。应用收到查询任务后，直接回传预设的“黑色折叠伞还有七把”，供前台模型播报。运行示例无需库存接口。
 -   **接入自己的业务系统**：确认应用有权调用业务接口，了解接口需要哪些参数，以及返回结果中哪些信息要告诉用户。例如，库存接口如果按商品 ID 查询，应用需要先根据用户说的商品名称找到对应的 ID，再查询库存，将商品名称和剩余数量一起回传。
 
+<a id="配置会话-3"></a>
+
 #### 配置会话
 
 将 `session.delegation.type` 设为 `client`，在前台提示词中说明哪些任务交给应用，以及收到结果后如何回复用户。库存查询示例使用的提示词是“将库存查询交给应用，收到结果后用语音回复用户”。
 
+<a id="接收任务并准备上下文"></a>
+
 #### 接收任务并准备上下文
 
-收到 [`session.delegation.created`](https://help.aliyun.com/zh/model-studio/qwen-audio-live-server-events#live-delegation-created) 后，用 `event_id` 去重，并保存 `delegation_id`，用于关联后续更新。从 `summary` 和 `context`（如有）提取任务信息，再结合应用保存的业务状态准备请求。例如，查库存时，可以用任务里的商品名称和当前门店，找到库存接口所需的商品 ID。
+收到 [`session.delegation.created`](../../../../model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-server-events.md#live-delegation-created) 后，用 `event_id` 去重，并保存 `delegation_id`，用于关联后续更新。从 `summary` 和 `context`（如有）提取任务信息，再结合应用保存的业务状态准备请求。例如，查库存时，可以用任务里的商品名称和当前门店，找到库存接口所需的商品 ID。
 
 任务缺少必要信息时，应用可以请前台模型向用户追问。例如，用户想查库存却没说商品名称，就请前台模型问清要查哪件商品。收到后续的 `session.delegation.created` 时，用 `delegation_id` 关联同一任务。如果事件带有 `supplements`，可以从中读取补充内容。等查询条件齐全后再执行。
+
+<a id="回传进度-补充问题和结果"></a>
 
 #### 回传进度、补充问题和结果
 
 根据要回传的是进度、追问还是结果，选择下表中的事件。发送时填入当前任务的 `delegation_id`。
 
-要回传的内容
-
-发送的事件
-
-`content` 示例
-
-更新进度，暂不播报
-
-[`session.thinking.append`](https://help.aliyun.com/zh/model-studio/qwen-audio-live-client-events#live-thinking-append)
-
-正在查询该门店的库存。
-
-需要向用户追问的条件
-
-[`session.instruction.append`](https://help.aliyun.com/zh/model-studio/qwen-audio-live-client-events#live-instruction-append)
-
-请询问用户要查询哪件商品。
-
-要让前台模型播报的结果
-
-[`session.commentary.append`](https://help.aliyun.com/zh/model-studio/qwen-audio-live-client-events#live-commentary-append)
-
-黑色折叠伞还有七把。
+| 要回传的内容 | 发送的事件 | `content` 示例 |
+| --- | --- | --- |
+| 更新进度，暂不播报 | [`session.thinking.append`](../../../../model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-client-events.md#live-thinking-append) | 正在查询该门店的库存。 |
+| 需要向用户追问的条件 | [`session.instruction.append`](../../../../model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-client-events.md#live-instruction-append) | 请询问用户要查询哪件商品。 |
+| 要让前台模型播报的结果 | [`session.commentary.append`](../../../../model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-client-events.md#live-commentary-append) | 黑色折叠伞还有七把。 |
 
 业务调用较慢时，可以在应用后台执行，让主循环继续收发音频和处理事件。核对业务结果后，再把适合播报的内容交给前台模型。
+
+<a id="验证任务派发和结果播报"></a>
 
 #### 验证任务派发和结果播报
 
 将以下完整示例保存为 `live_client.py`，并在连接地址中填入业务空间 ID。
 
-```
+<a id="code-block-10"></a>
+
+```python
 import base64
 import json
 import os
@@ -677,6 +711,7 @@ from websockets.sync.client import connect
 WEBSOCKET_URL = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime?model=qwen-audio-3.1-live"
 SESSION_MODEL = "qwen-audio-4.0-realtime-preview"
 REPLY_TIMEOUT_SECONDS = 30
+
 
 def main():
     audio = Path(sys.argv[1]).read_bytes()
@@ -762,25 +797,38 @@ def main():
             if not reply.getnframes():
                 raise RuntimeError("未收到语音回复")
 
+
 main()
 ```
 
 录下「请查一下黑色折叠伞有没有货」，保存为 `client.wav`。转换录音并运行脚本。
 
-```
+<a id="code-block-11"></a>
+
+```bash
 ffmpeg -i client.wav -ar 16000 -ac 1 -f s16le client.pcm
 python live_client.py client.pcm
 ```
 
 先在终端确认应用收到了任务派发，而且服务已受理回传的结果。再打开 `reply.wav`，听模型是否说出了库存结果。接入真实库存接口后，用查询结果替换示例中的固定结果。
 
+<a id="配置和处理前台函数"></a>
+
+<a id="live-call-frontend-functions"></a>
+
+<a id="live-function-calling"></a>
+
 ### 配置和处理前台函数
+
+<a id="在对话中调用函数"></a>
 
 前面的库存示例把整个查询任务交给应用，由应用准备查询条件。如果已有一个按商品名称查库存的函数，可以让前台模型直接调用它。应用在 `session.tools` 中声明函数和参数，前台模型就能从对话中提取商品名称，交给应用执行。Client 和 Responses 模式都可以使用前台函数。
 
 将以下字段加入 `session.update` 的 `session` 对象，其余会话配置沿用原值。
 
-```
+<a id="code-block-12"></a>
+
+```json
 {
   "tools": [
     {
@@ -799,11 +847,13 @@ python live_client.py client.pcm
 }
 ```
 
-1.  收到 [`session.event`](https://help.aliyun.com/zh/model-studio/qwen-audio-live-server-events#live-session-event) 后，读取 `event.item` 中 `type` 为 `function_call` 的调用项。
+1.  收到 [`session.event`](../../../../model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-server-events.md#live-session-event) 后，读取 `event.item` 中 `type` 为 `function_call` 的调用项。
 2.  按 `name` 找到函数，将 `arguments` 从 JSON 字符串解析为参数，校验后执行。同一个 `call_id` 只执行一次。
-3.  发送 [`session.item.create`](https://help.aliyun.com/zh/model-studio/qwen-audio-live-client-events#live-item-create) 回传结果。将 `item.type` 设为 `function_call_output`，在 `item.call_id` 中填写本次函数调用的 `call_id`。
+3.  发送 [`session.item.create`](../../../../model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-client-events.md#live-item-create) 回传结果。将 `item.type` 设为 `function_call_output`，在 `item.call_id` 中填写本次函数调用的 `call_id`。
 
-```
+<a id="code-block-13"></a>
+
+```json
 {
   "type": "session.item.create",
   "event_id": "evt_function_result",
@@ -817,30 +867,18 @@ python live_client.py client.pcm
 
 在 Client 模式下，前台模型等待函数结果时仍可接收用户语音并回复。应用可继续收发音频和处理事件。需要查询网页或其他实时信息时，可注册搜索服务，或由 Client 模式下的应用调用搜索服务。
 
+<a id="从-qwen-audio-realtime-接入"></a>
+
 ## 从 Qwen-Audio-Realtime 接入
 
 如果应用已使用 Qwen-Audio-Realtime，可保留现有业务接口和工具实现。先用快速开始验证 Qwen-Audio-Live 的语音收发，再迁移事件处理和任务逻辑。
 
-迁移项
+| 迁移项 | 在 Qwen-Audio-Live 中的处理方式 |
+| --- | --- |
+| WebSocket 连接 | 使用 [Qwen-Audio-Live 请求地址](../../../../model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-websocket-access.md)，并在 `session.update` 中配置前台模型和任务处理模式。 |
+| WebSocket 音频 | 用 `session.input_audio.append` 发送用户语音，从 `session.output_audio.delta` 读取模型回复。按本页示例开启全双工对话后，应用持续发送音频即可，无需再用手动模式的 `input_audio_buffer.commit` 和 `response.create` 触发语音回复。格式和采样率见[收发语音和字幕](#live-session-media)。 |
+| WebRTC 信令 | 原来通过 HTTP 交换 SDP。接入 Live 时，通过控制 WebSocket 发送 Offer，并从 `session.updated` 的 `session.transport.sdp` 读取 Answer。见 [WebRTC 接入](../../../../_short/qwen-audio-live-webrtc-access-2a873a21a2d29a3b.md)。 |
+| 前台函数 | 从 `session.event` 读取函数调用。执行后通过 `session.item.create` 按 `call_id` 回传。旧流程用 `response.create` 触发前台继续回复。Live 的 [`response.create`](../../../../model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-client-events.md#live-response-create) 用于显式启动后台任务。 |
+| 耗时业务任务 | 按[任务委派与工具](#live-delegation)选择 Client 或 Responses。用一条需要调用工具的语音请求验证任务结果和语音播报。 |
 
-在 Qwen-Audio-Live 中的处理方式
-
-WebSocket 连接
-
-使用 [Qwen-Audio-Live 请求地址](raw/model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-websocket-access.md)，并在 `session.update` 中配置前台模型和任务处理模式。
-
-WebSocket 音频
-
-用 `session.input_audio.append` 发送用户语音，从 `session.output_audio.delta` 读取模型回复。按本页示例开启全双工对话后，应用持续发送音频即可，无需再用手动模式的 `input_audio_buffer.commit` 和 `response.create` 触发语音回复。格式和采样率见[收发语音和字幕](#live-session-media)。
-
-WebRTC 信令
-
-原来通过 HTTP 交换 SDP。接入 Live 时，通过控制 WebSocket 发送 Offer，并从 `session.updated` 的 `session.transport.sdp` 读取 Answer。见 [WebRTC 接入](raw/_short/qwen-audio-live-webrtc-access-2a873a21a2d29a3b.md)。
-
-前台函数
-
-从 `session.event` 读取函数调用。执行后通过 `session.item.create` 按 `call_id` 回传。旧流程用 `response.create` 触发前台继续回复。Live 的 [`response.create`](https://help.aliyun.com/zh/model-studio/qwen-audio-live-client-events#live-response-create) 用于显式启动后台任务。
-
-耗时业务任务
-
-按[任务委派与工具](#live-delegation)选择 Client 或 Responses。用一条需要调用工具的语音请求验证任务结果和语音播报。
+![](data:image/png;base64,)

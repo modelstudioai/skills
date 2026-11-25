@@ -2,6 +2,10 @@
 
 本文提供妙笔写作链路 API的几个最佳实践，帮助您快速入门并开发您自己的业务应用。
 
+<a id="前提条件"></a>
+
+<a id="13e2af6d97opa"></a>
+
 ## 前提条件
 
 -   已开通服务，开通地址：[https://common-buy.aliyun.com/?spm=a2c4g.11186623.0.0.225a777dIkFbJA&commodityCode=sfm\_miaobi\_public\_cn&request={%22guige%22:%22try%22}](https://common-buy.aliyun.com/?spm=a2c4g.11186623.0.0.225a777dIkFbJA&commodityCode=sfm_miaobi_public_cn&request=%7B%22guige%22:%22try%22%7D)；
@@ -9,13 +13,19 @@
 -   [获取 AccessKey ID、AccessKey Secret](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)；
 -   引入妙笔SDK [注意获取最新SDK版本](https://api.aliyun.com/api-tools/sdk/AiMiaoBi?version=2023-08-01&language=java-async-tea&tab=primer-doc)；
 
-```
+<a id="code-block"></a>
+
+```json
 <dependency>
   <groupId>com.aliyun</groupId>
   <artifactId>alibabacloud-aimiaobi20230801</artifactId>
   <version>1.0.103</version>
 </dependency>
 ```
+
+<a id="1-直接生成文章"></a>
+
+<a id="51f1c40c9bfhe"></a>
 
 ## 1、直接生成文章
 
@@ -25,7 +35,9 @@
 
 -   Java：
 
-```
+<a id="code-block-2"></a>
+
+```java
 package org.example.writing;
 
 import com.alibaba.fastjson2.JSONObject;
@@ -95,7 +107,9 @@ public class RunWritingV2DirectWritingDemo {
 
 -   Python：
 
-```
+<a id="code-block-3"></a>
+
+```python
 import os
 from alibabacloud_tea_openapi_sse.client import Client as OpenApiClient
 from alibabacloud_tea_openapi_sse import models as open_api_models
@@ -181,9 +195,15 @@ if __name__ == '__main__':
     asyncio.run(test_run_writing())
 ```
 
+<a id="2-使用模板生成文章"></a>
+
+<a id="c55612773e4x5"></a>
+
 ## 2、使用模板生成文章
 
-```
+<a id="code-block-4"></a>
+
+```java
 package org.example.writing;
 
 import com.alibaba.fastjson2.JSONObject;
@@ -328,7 +348,10 @@ public class RunWritingV2WithTemplate {
 
 }
 ```
-```
+
+<a id="code-block-5"></a>
+
+```python
 """
 模板写作示例（Python）。
 
@@ -480,9 +503,15 @@ if __name__ == "__main__":
     asyncio.run(template_writing())
 ```
 
+<a id="3-分大纲生成文章"></a>
+
+<a id="a331f5bfed8dc"></a>
+
 ## 3、分大纲生成文章
 
-```
+<a id="code-block-6"></a>
+
+```java
 package org.example.writing;
 
 import com.alibaba.fastjson2.JSONObject;
@@ -716,7 +745,10 @@ public class RunWritingV2Outline {
     }
 }
 ```
-```
+
+<a id="code-block-7"></a>
+
+```python
 """
 分步骤大纲写作示例（Python）。
 
@@ -948,13 +980,19 @@ if __name__ == "__main__":
     asyncio.run(test_outline_writing())
 ```
 
+<a id="4-ai工具箱"></a>
+
+<a id="eaa81272d54v5"></a>
+
 ## 4、AI工具箱
 
 AI工具箱包括内容续写、摘要生成、标题生成、内容缩写、内容扩写、关键词抽取等功能，最新实时能力可参考妙笔写作页面的AI工具箱。本节通过**实现摘要**生成场景来帮助您熟悉API的使用。
 
 生成调用demo如下：
 
-```
+<a id="code-block-8"></a>
+
+```java
 package com.aliyun.sdk.service.aimiaobi20230801;
 
 import com.aliyun.auth.credentials.Credential;

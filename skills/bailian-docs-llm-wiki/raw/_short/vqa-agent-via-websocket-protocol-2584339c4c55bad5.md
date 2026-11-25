@@ -4,11 +4,11 @@
 
 直通Agent是指不经过语音识别（ASR）、意图识别，将请求直接传递到Agent的方式。
 
-实时多模态交互的标准流程通常如下：如果需要在该完整链路中使用拍照问答Agent（例如智能眼镜场景，直接问“帮我看看这是什么”），请阅读[拍照问答](https://help.aliyun.com/zh/model-studio/official-agent#d7ae29429ek0s)和[设备端C SDK视觉模块接入](raw/_short/rtos-sdk-license-mode-vision-module-4064c7e2aac67ce6.md)
+实时多模态交互的标准流程通常如下：如果需要在该完整链路中使用拍照问答Agent（例如智能眼镜场景，直接问“帮我看看这是什么”），请阅读[拍照问答](official-agent-297b22931e69e622.md#d7ae29429ek0s)和[设备端C SDK视觉模块接入](rtos-sdk-license-mode-vision-module-4064c7e2aac67ce6.md)
 
 ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5088379671/p1049999.png)
 
-如果只需要直通Agent，并不需要语音合成TTS，请阅读[通过HTTP协议接入拍照问答Agent](raw/_short/vqa-agent-through-the-http-protocol-3a15a2a67c124417.md)，即如下流程。
+如果只需要直通Agent，并不需要语音合成TTS，请阅读[通过HTTP协议接入拍照问答Agent](vqa-agent-through-the-http-protocol-3a15a2a67c124417.md)，即如下流程。
 
 ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5088379671/p1049998.png)
 
@@ -16,13 +16,25 @@
 
 ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5088379671/p1049994.png)
 
+<a id="前提条件"></a>
+
+<a id="c1d9282ee5lrb"></a>
+
 ## 前提条件
 
-必须先阅读[实时多模态交互协议（WebSocket）](raw/model-api-reference/more-about-models/multimodal-interaction-protocol.md) ，了解实时多模态交互的整体WebSocket协议。
+必须先阅读[实时多模态交互协议（WebSocket）](../model-api-reference/more-about-models/multimodal-interaction-protocol.md) ，了解实时多模态交互的整体WebSocket协议。
+
+<a id="开通阿里云百炼模型服务并获取api-key"></a>
+
+<a id="86e2ae8cf0jgw"></a>
 
 ### 开通阿里云百炼模型服务并获取API KEY
 
-请参考[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)，API KEY作为百炼模型服务的鉴权凭证。
+请参考[获取与配置 API Key](../model-api-reference/preparations/get-api-key.md)，API KEY作为百炼模型服务的鉴权凭证。
+
+<a id="管控台开通拍照问答直通链路"></a>
+
+<a id="744b3f7d0aquu"></a>
 
 ### 管控台开通拍照问答直通链路
 
@@ -30,7 +42,9 @@
 
 ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5088379671/p1049995.png)
 
-**重要**意图识别配置、文本模型配置均需打开（按照本文配置方式下，使用拍照问答不产生意图识别和文本模型的费用）。
+> **重要**
+>
+> 意图识别配置、文本模型配置均需打开（按照本文配置方式下，使用拍照问答不产生意图识别和文本模型的费用）。
 
 1.  关闭 对话承接语、知识库、联网搜索、长期记忆配置。
 
@@ -46,7 +60,9 @@
 
 测试图片描述场景，提示词可使用如下（仅做演示支持，用户可按场景编辑）：
 
-```
+<a id="code-block"></a>
+
+```text
 你是一个专业的图像分析与描述助手，请基于图片内容生成简洁、准确且信息丰富的文字描述。请确保描述涵盖以下要点：
 主要物体和场景：明确指出画面中的核心元素及其位置、颜色、形状、数量，并说明场景类型（如室内、室外、城市、自然等）。
 人物特征与动作（如有）：描述人物的衣着、表情、姿势、动作，互动关系，以及可能的身份或角色。
@@ -63,185 +79,67 @@
 
 1.  配置完成后请点击右上角发布按键进行发布（必须发布后才能测试）。
 
+<a id="时序图"></a>
+
+<a id="2b0cb57a9csi3"></a>
+
 ## 时序图
 
 \[**关键流程**\] 服务端返回`Started`消息表示会话创建成功，但客户端禁止立即发送音频。客户端必须等待并接收到`DialogStateChanged`事件且`state`为`Listening`后，方可开始发送音频流。
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5088379671/p1050108.png)
 
-**重要**
+> **重要**
+>
+> 1.  服务端返回`Started`消息表示会话创建成功，但客户端禁止立即发送请求。客户端必须等待并接收到`DialogStateChanged`事件且`state`为`Listening`后，方可开始发送请求。
+> 2.  本文与标准语音对话在流程上的区别是，标准语音对话是在服务端处于`Listening`后开始上行语音，要监听VAD相关事件如SpeechStarted、SpeechEnded等事件，而本文是通过RequestToRespond 直接发送请求到服务端。
 
-1.  服务端返回`Started`消息表示会话创建成功，但客户端禁止立即发送请求。客户端必须等待并接收到`DialogStateChanged`事件且`state`为`Listening`后，方可开始发送请求。
-2.  本文与标准语音对话在流程上的区别是，标准语音对话是在服务端处于`Listening`后开始上行语音，要监听VAD相关事件如SpeechStarted、SpeechEnded等事件，而本文是通过RequestToRespond 直接发送请求到服务端。
+<a id="通过requesttorespond发送请求"></a>
+
+<a id="a4691aa95952u"></a>
 
 ## 通过RequestToRespond发送请求
+
+<a id="requesttorespond"></a>
+
+<a id="1bbdef4d367bs"></a>
 
 ### RequestToRespond
 
 在Listening状态时，通知服务端与用户主动交互，可以上传文本调用agent，返回的结果再转换为语音下发
 
-**一级参数**
+| 一级参数 | 二级参数 | 类型 | 是否必选 | 说明 |
+| --- | --- | --- | --- | --- |
+| input | directive | string | 是 | 指令名称：RequestToRespond |
+|  | dialog\_id | string | 是 | 对话id，标识对话上下文，**应与服务端返回的Listening状态时携带的dialog\_id相同** |
+|  | type | string | 是 | 服务应该采取的交互类型：<br><br>transcript 表示直接把文本转语音<br><br>prompt 表示把文本送大模型回答<br><br>**本文指定为prompt** |
+|  | text | string | 是 | 要处理的文本，可以为""空字符，也可以为明确的文本请求 |
+| parameters | images | list\[\] | 否 | 需要分析的图片信息，目前仅支持上传单张图片 |
+|  | biz\_params | object | 否 | 与Start消息中biz\_params相同，传递对话系统自定义参数。RequestToRespond的biz\_params参数只在本次请求中生效。 |
 
-**二级参数**
-
-**类型**
-
-**是否必选**
-
-**说明**
-
-input
-
-directive
-
-string
-
-是
-
-指令名称：RequestToRespond
-
-dialog\_id
-
-string
-
-是
-
-对话id，标识对话上下文，**应与服务端返回的Listening状态时携带的dialog\_id相同**
-
-type
-
-string
-
-是
-
-服务应该采取的交互类型：
-
-transcript 表示直接把文本转语音
-
-prompt 表示把文本送大模型回答
-
-**本文指定为prompt**
-
-text
-
-string
-
-是
-
-要处理的文本，可以为""空字符，也可以为明确的文本请求
-
-parameters
-
-images
-
-list\[\]
-
-否
-
-需要分析的图片信息，目前仅支持上传单张图片
-
-biz\_params
-
-object
-
-否
-
-与Start消息中biz\_params相同，传递对话系统自定义参数。RequestToRespond的biz\_params参数只在本次请求中生效。
+<a id="1fe4bdbb1fp1j"></a>
 
 ##### parameters.images的参数说明
 
-**一级参数**
+<table><thead><tr><th><p><strong>一级参数</strong></p></th><th><p><strong>类型</strong></p></th><th><p><strong>是否必选</strong></p></th><th><p><strong>说明</strong></p></th></tr></thead><tbody><tr><td><p>type</p></td><td><p>string</p></td><td><p>是</p></td><td><p>图片类型，支持两种：base64/url</p></td></tr><tr><td><p>value</p></td><td><p>string</p></td><td><p>是</p></td><td><p>图片内容。</p><ul><li><p>当type为base64时，这里是图片的base64字符串，<strong>且大小不能超过180KB</strong>。</p></li><li><p>当type为url时，这里是图片的url地址。</p></li></ul></td></tr></tbody></table>
 
-**类型**
-
-**是否必选**
-
-**说明**
-
-type
-
-string
-
-是
-
-图片类型，支持两种：base64/url
-
-value
-
-string
-
-是
-
-图片内容。
-
--   当type为base64时，这里是图片的base64字符串，**且大小不能超过180KB**。
-    
--   当type为url时，这里是图片的url地址。
-    
+<a id="092f5b8fb38qo"></a>
 
 ##### parameters.biz\_params的参数说明
 
-**一级参数**
+<table><thead><tr><th><p><strong>一级参数</strong></p></th><th><p><strong>二级参数</strong></p></th><th><p><strong>类型</strong></p></th><th><p><strong>是否必选</strong></p></th><th><p><strong>说明</strong></p></th></tr></thead><tbody><tr><td rowspan="2"><p>commands[i]</p></td><td><p>name</p></td><td><p>string</p></td><td><p>是</p></td><td><p>表示直通到agent，本实践中固定为“agent_command”，请直接复制使用</p></td></tr><tr><td><p>exec_params</p></td><td><p>object</p></td><td><p>是</p></td><td><p>表示指定的agent，本实践固定，具体请参考commands.exec_params参数说明</p></td></tr></tbody></table>
 
-**二级参数**
-
-**类型**
-
-**是否必选**
-
-**说明**
-
-commands\[i\]
-
-name
-
-string
-
-是
-
-表示直通到agent，本实践中固定为“agent\_command”，请直接复制使用
-
-exec\_params
-
-object
-
-是
-
-表示指定的agent，本实践固定，具体请参考commands.exec\_params参数说明
+<a id="db0b7a60e1s6v"></a>
 
 ##### commands.exec\_params参数说明
 
-**一级参数**
-
-**二级参数**
-
-**类型**
-
-**是否必选**
-
-**说明**
-
-exec\_params
-
-app\_id
-
-string
-
-是
-
-表示指定的agent，本实践固定为"visual\_qa",请复制使用
-
-intent
-
-string
-
-是
-
-表示指定agent的动作，本实践固定为"open\_visual\_qa",请复制使用
+<table><thead><tr><th><p><strong>一级参数</strong></p></th><th><p><strong>二级参数</strong></p></th><th><p><strong>类型</strong></p></th><th><p><strong>是否必选</strong></p></th><th><p><strong>说明</strong></p></th></tr></thead><tbody><tr><td rowspan="2"><p>exec_params</p></td><td><p>app_id</p></td><td><p>string</p></td><td><p>是</p></td><td><p>表示指定的agent，本实践固定为&quot;visual_qa&quot;,请复制使用</p></td></tr><tr><td><p>intent</p></td><td><p>string</p></td><td><p>是</p></td><td><p>表示指定agent的动作，本实践固定为&quot;open_visual_qa&quot;,请复制使用</p></td></tr></tbody></table>
 
 示例：
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
     "header": {
         "action":"continue-task",
@@ -276,7 +174,7 @@ string
 }
 ```
 
-**重要**
-
-1.  header中的参数定义见[实时多模态交互协议（WebSocket）](raw/model-api-reference/more-about-models/multimodal-interaction-protocol.md)相关说明
-2.  时序图中的其他流程见[实时多模态交互协议（WebSocket）](raw/model-api-reference/more-about-models/multimodal-interaction-protocol.md)相关说明
+> **重要**
+>
+> 1.  header中的参数定义见[实时多模态交互协议（WebSocket）](../model-api-reference/more-about-models/multimodal-interaction-protocol.md)相关说明
+> 2.  时序图中的其他流程见[实时多模态交互协议（WebSocket）](../model-api-reference/more-about-models/multimodal-interaction-protocol.md)相关说明

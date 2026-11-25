@@ -8,49 +8,29 @@
     
     打开 [ParseX](https://bailian.console.aliyun.com/cn-beijing/parsex/document-parse)，登录后选择左侧“字段抽取”。工作区包括选择输入文档、设置字段以及查看结果，您可以在同一页面完成一次体验。
     
-    **工作区**
-    
-    **用途**
-    
-    文件区域
-    
-    选择材料并预览原文
-    
-    配置区域
-    
-    定义字段和本次抽取要求
-    
-    结果区域
-    
-    任务完成后，查看抽取结果
+    | 工作区 | 用途 |
+    | --- | --- |
+    | 文件区域 | 选择材料并预览原文 |
+    | 配置区域 | 定义字段和本次抽取要求 |
+    | 结果区域 | 任务完成后，查看抽取结果 |
     
 2.  **选择材料**
     
     在输入区域上传文件，或选择内置样例，或者已经解析处理成功的文档。
     
-    **材料来源**
-    
-    **操作**
-    
-    本地文件
-    
-    在文件区域上传图文材料，检查文件名称和预览内容
-    
-    内置样例
-    
-    选择样例，检查所选材料
-    
-    已有解析结果
-    
-    打开**选择已完成的任务列表**，找到目标图文解析任务并选择
+    | 材料来源 | 操作 |
+    | --- | --- |
+    | 本地文件 | 在文件区域上传图文材料，检查文件名称和预览内容 |
+    | 内置样例 | 选择样例，检查所选材料 |
+    | 已有解析结果 | 打开**选择已完成的任务列表**，找到目标图文解析任务并选择 |
     
 3.  **设置抽取要求**
     
     1.  在**字段结构**中填写需要字段抽取的信息。
-    2.  按[配置信息抽取](raw/application-user-guide/agent-context/getting-started-overview/extract-overview/extract-configuration.md)检查字段名称、类型和说明。
+    2.  按[配置信息抽取](extract-configuration.md)检查字段名称、类型和说明。
     3.  检查抽取设置与补充要求。
     
-    已有合适配置时，按[保存与复用配置](raw/application-user-guide/agent-context/getting-started-overview/settings-configurations.md)中的方法进入测试并复用。
+    已有合适配置时，按[保存与复用配置](../settings-configurations.md)中的方法进入测试并复用。
     
 4.  **提交解析**
     
@@ -63,4 +43,4 @@
     
 6.  **返回历史结果**
     
-    进入[任务记录](raw/application-user-guide/agent-context/getting-started-overview/settings-configurations/tasks.md)，找到对应抽取任务，查看详情并从结果入口返回查看。
+    进入[任务记录](../settings-configurations/tasks.md)，找到对应抽取任务，查看详情并从结果入口返回查看。

@@ -2,6 +2,10 @@
 
 该接口用于合同审查模块的智能规则生成，调用大模型返回合同的审查规则和对应风险。传入合同审查文件的ID、审查立场，会通过sse的方式增量式返回模型生成的审查规则。
 
+<a id="接口说明"></a>
+
+<a id="api-detail-51"></a>
+
 ## 接口说明
 
 请确保在使用该接口前，已充分了解法睿产品的收费方式和价格。
@@ -10,251 +14,83 @@
 -   服务的响应结果是以流式的形式来返回（SSE）。
 -   接口的调用需要阿里云百炼平台的工作空间权限。
 
+<a id="调试"></a>
+
+<a id="api-detail-23"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
 [调试](https://api.aliyun.com/api/FaRui/2024-06-28/RunContractRuleGeneration)
 
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
+
 ## 授权信息
 
 当前API暂无授权信息透出。
 
+<a id="请求语法"></a>
+
+<a id="api-detail-53"></a>
+
 ## 请求语法
 
-```
+<a id="code-block"></a>
+
+```text
 POST /{workspaceId}/farui/contract/rule/genarate HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="api-detail-36"></a>
+
 ## 请求参数
 
-名称
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| appId | string | 否 | 应用 ID | farui |
+| stream | boolean | 否 | 是否是流式输出 | true |
+| workspaceId | string | 否 | 阿里云百炼平台工作空间 ID | llm-9w5y60lseff0jiqm |
+| assistant | object | 否 | 智能体 |  |
+| metaData | object | 否 | 智能体元数据 |  |
+| fileId | string | 否 | 文件 ID。 | 9a6b1ba60d9944249363ec3cc1529b7b |
+| position | string | 否 | 审查立场，0=中立，1=甲方，2=乙方 | 1 |
+| type | string | 否 | 智能体类型 | contract\_examime |
+| version | string | 否 | 智能体版本 | 1.0.0 |
 
-类型
+<a id="返回参数"></a>
 
-必填
-
-描述
-
-示例值
-
-appId
-
-string
-
-否
-
-应用 ID
-
-farui
-
-stream
-
-boolean
-
-否
-
-是否是流式输出
-
-true
-
-workspaceId
-
-string
-
-否
-
-阿里云百炼平台工作空间 ID
-
-llm-9w5y60lseff0jiqm
-
-assistant
-
-object
-
-否
-
-智能体
-
-metaData
-
-object
-
-否
-
-智能体元数据
-
-fileId
-
-string
-
-否
-
-文件 ID。
-
-9a6b1ba60d9944249363ec3cc1529b7b
-
-position
-
-string
-
-否
-
-审查立场，0=中立，1=甲方，2=乙方
-
-1
-
-type
-
-string
-
-否
-
-智能体类型
-
-contract\_examime
-
-version
-
-string
-
-否
-
-智能体版本
-
-1.0.0
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-名称
-
-类型
-
-描述
-
-示例值
-
-object
-
-Schema of Response
-
-Code
-
-string
-
-错误 Code 码
-
-null
-
-Message
-
-string
-
-请求异常，返回具体异常错误信息。
-
-null
-
-Output
-
-object
-
-输出信息
-
-ruleTaskId
-
-string
-
-生成规则任务的 ID
-
-b265b416-ca1f-425d-9340-c968f39624e9
-
-rules
-
-array<object>
-
-模型生成的规则（增量式）
-
-rules
-
-object
-
-riskLevel
-
-string
-
-规则风险等级(high-高风险、medium-中风险、low-低风险)
-
-medium
-
-ruleSequence
-
-string
-
-规则序号
-
-1.1
-
-ruleTag
-
-string
-
-规则标签（类型）
-
-审查条款的合法性
-
-ruleTitle
-
-string
-
-规则标题
-
-审查该合同标的条款中，标的合法性相关的风险
-
-RequestId
-
-string
-
-阿里云为该请求生成的唯一标识符。
-
-744419D0-671A-5997-9840-E8AE48356194
-
-Success
-
-boolean
-
-是否调用成功。true：调用成功。 false：调用失败。
-
-True
-
-Usage
-
-object
-
-本次调用的使用量（合同审查按页码计费）
-
-input
-
-long
-
-输入的文档页数
-
-5
-
-unit
-
-string
-
-单元（固定为 page）
-
-page
-
-httpStatusCode
-
-integer
-
-HTTP 状态码
-
-200
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | Schema of Response |  |
+| Code | string | 错误 Code 码 | null |
+| Message | string | 请求异常，返回具体异常错误信息。 | null |
+| Output | object | 输出信息 |  |
+| ruleTaskId | string | 生成规则任务的 ID | b265b416-ca1f-425d-9340-c968f39624e9 |
+| rules | array<object> | 模型生成的规则（增量式） |  |
+| rules | object |  |  |
+| riskLevel | string | 规则风险等级(high-高风险、medium-中风险、low-低风险) | medium |
+| ruleSequence | string | 规则序号 | 1.1 |
+| ruleTag | string | 规则标签（类型） | 审查条款的合法性 |
+| ruleTitle | string | 规则标题 | 审查该合同标的条款中，标的合法性相关的风险 |
+| RequestId | string | 阿里云为该请求生成的唯一标识符。 | 744419D0-671A-5997-9840-E8AE48356194 |
+| Success | boolean | 是否调用成功。true：调用成功。 false：调用失败。 | True |
+| Usage | object | 本次调用的使用量（合同审查按页码计费） |  |
+| input | long | 输入的文档页数 | 5 |
+| unit | string | 单元（固定为 page） | page |
+| httpStatusCode | integer | HTTP 状态码 | 200 |
+
+<a id="示例"></a>
+
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -262,7 +98,9 @@ HTTP 状态码
 
 `JSON`格式
 
-```
+<a id="code-block-2"></a>
+
+```text
 {
   "Code": null,
   "Message": null,
@@ -286,6 +124,10 @@ HTTP 状态码
   "httpStatusCode": 200
 }
 ```
+
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
 
 ## 错误码
 

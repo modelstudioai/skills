@@ -1,40 +1,46 @@
 # 3d generation
 
-百炼平台提供基于文本或图像输入生成3D模型的API能力，当前仅支持Tripo模型，适用于快速原型设计、游戏资产生成等场景。该能力为异步接口，需轮询获取生成结果。所有请求均需通过`/v1/3d/generation`端点发起。
+百炼平台提供基于文本或图像输入生成3D模型的API能力，当前仅支持Tripo模型，适用于快速原型设计、游戏资产生成等场景。该能力以异步任务方式运行，需轮询获取生成结果。所有请求均需通过`/v1/3d/generation`端点提交。
 
 ## 支持的模型/功能
 
-- 当前**唯一支持的模型为 Tripo**，详见 [Tripo](../../raw/model-api-reference/3d-generation/tripo-api-reference.md)  
-- 支持两种输入模式：纯文本描述（text-to-3D）和单张参考图+可选文本提示（image-to-3D）  
-- 输出格式为 `.glb`（GL Transmission Format），兼容主流渲染引擎与WebGL查看器  
-- 不支持多视角图、视频、点云或网格编辑等高级3D操作——该限制在 [3D模型生成](../../raw/model-api-reference/3d-generation.md) 中明确说明
+- 当前**唯一支持的模型为 Tripo**，详见 [3D模型生成](../../raw/model-api-reference/3d-generation.md) 文档；
+- 支持两种输入模式：纯文本描述（`prompt`）或图文混合（`prompt` + `image_url`）；
+- 输出为 `.glb` 格式的通用3D模型文件，可通过标准WebGL引擎直接加载。
 
 ## 关键参数
 
 | 参数名 | 类型 | 必填 | 说明 |
 |--------|------|------|------|
-| `input` | object | 是 | 包含 `text`（string）或 `image_url`（string）字段；二者不可同时为空，但可共存 |
-| `image_url` | string | 否 | 公开可访问的JPEG/PNG图片URL，尺寸建议 ≥512×512，宽高比应接近1:1 |
-| `text` | string | 否 | 中英文描述，长度 ≤200 字符；若仅传`image_url`，模型将自动理解图像内容 |
-| `callback_url` | string | 否 | 异步完成后的HTTP回调地址（需支持POST，带`X-Event-Type: generation.completed`头） |
+| `prompt` | string | 是 | 中文或英文提示词，建议包含物体类别、材质、视角等细节；避免抽象概念或动态动作描述 |
+| `image_url` | string | 否 | JPEG/PNG格式的参考图URL（需公网可访问），与`prompt`协同提升几何一致性；若提供，`prompt`仍需描述主体语义 |
+| `callback_url` | string | 否 | 异步完成回调地址（需HTTPS），平台将POST结果至该地址；未提供则需主动轮询 `/v1/3d/generation/{task_id}` |
+| `seed` | integer | 否 | 随机种子，用于结果复现（范围0–4294967295） |
 
-> **注意**：原始文档 [3D模型生成](../../raw/model-api-reference/3d-generation.md) 未声明`callback_url`的鉴权要求，但实际调用中该URL必须能被百炼服务端公网访问且返回2xx状态码，否则回调失败且无重试机制。
+> **注意**：[3D模型生成](../../raw/model-api-reference/3d-generation.md) 中提及“支持多视角渲染输出”，但当前API实际返回仅含单个`.glb`文件，该功能尚未上线，以 [Tripo](../../raw/3d-generation/tripo-api-reference.md) 的最新接口定义为准。
 
 ## 使用方式
 
-1. 发送 `POST /v1/3d/generation` 请求，携带JSON body（含`input`等参数）  
-2. 接收响应中的 `task_id`（字符串），用于后续轮询或回调验证  
-3. 轮询 `GET /v1/3d/generation/{task_id}` 获取状态（`pending`/`success`/`failed`）；成功时返回`result.glb_url`（有效期24小时）  
-4. 下载GLB文件并校验SHA256（响应中提供`result.file_hash`）  
+1. 发送 `POST /v1/3d/generation` 请求，携带上述参数（`Content-Type: application/json`）；
+2. 解析响应中的 `task_id` 和 `status`（通常为 `queued` 或 `running`）；
+3. 轮询 `GET /v1/3d/generation/{task_id}` 直至 `status` 变为 `success`（含 `model_url`）或 `failed`；
+4. 下载 `model_url` 指向的 `.glb` 文件（有效期24小时），该URL由平台OSS托管，无需鉴权。
 
-完整请求示例与错误码说明见 [Tripo](../../raw/model-api-reference/3d-generation/tripo-api-reference.md)。
+示例请求体：
+```json
+{
+  "prompt": "一只写实风格的陶瓷猫摆件，白色釉面，坐姿，正面视角",
+  "image_url": "https://example.com/cat-ref.jpg",
+  "seed": 42
+}
+```
 
 ## 限制和注意事项
 
-- 单次请求最大等待时间：180秒；超时后任务自动终止，状态为`failed`  
-- 每个`task_id`最多轮询50次，建议间隔≥2秒  
-- 输入图像禁止包含人脸、身份证件、水印或受版权保护的3D资产；违反将导致`failed`且不计费返还  
-- GLB文件默认为简化拓扑（约5k–50k面片），如需更高精度，需联系技术支持开通白名单——此能力尚未在公开文档 [3D模型生成](../../raw/model-api-reference/3d-generation.md) 中披露，属内部灰度功能
+- 单次请求最大`prompt`长度为200字符；`image_url` 图片分辨率建议 ≥ 512×512，过大可能导致超时；
+- 不支持生成带骨骼动画、物理碰撞体或复杂材质贴图（如PBR多贴图集）的模型；
+- 生成耗时通常为 60–180 秒，超时阈值为 300 秒，超时任务状态置为 `failed`；
+- 所有输入内容须符合中国法律法规及百炼内容安全策略，禁止生成违法、暴力、色情或侵权内容——具体细则参见 [3D模型生成](../../raw/model-api-reference/3d-generation.md) 的合规章节。
 
 ## 来源文档
 

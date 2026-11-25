@@ -2,15 +2,27 @@
 
 本文档介绍如何对应用进行编辑、删除等管理，如何进行API调用、如何查看调用量。
 
+<a id="我的应用"></a>
+
+<a id="bf37ecda2ad4s"></a>
+
 ## 我的应用
 
 路径：[应用广场](https://bailian.console.aliyun.com/#/app-market)→ 点击[全部应用](https://bailian.console.aliyun.com/cn-beijing?tab=app#/app-market/all)→ 找到**伶鹊CCAI-对话分析AIO**，选择该应用卡片，即可进入**我的应用。**
+
+<a id="3-1-应用复制-删除-修改"></a>
+
+<a id="087da64ca2z49"></a>
 
 ### 3.1 应用复制、删除、修改
 
 -   **应用复制：**在**我的应用**中，可以点击应用右上角选择复制应用，对该应用进行复制。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5549763871/p1086394.png)![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5549763871/p1086395.png)
 -   **应用修改：**同时可以点击应用右上角选择修改应用，对该应用名称进行修改。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5549763871/p1086396.png)![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5549763871/p1086397.png)
 -   **应用删除：**如果需要删除该应用，可以点击应用的右上角选择删除应用，对该应用进行删除，弹出“确认删除”二次确认框，选择确认删除，将成功删除。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5549763871/p1086399.png)![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0159666271/p850646.png)
+
+<a id="3-2-api调用"></a>
+
+<a id="ffc8db1af8bxg"></a>
 
 ### 3.2 API调用
 
@@ -22,6 +34,10 @@
         
     -   通过**自定义创建方式**的API调用：![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5549763871/p1086403.png)
         
+
+<a id="3-3-调用量"></a>
+
+<a id="b373a484cb44x"></a>
 
 ### 3.3 调用量
 

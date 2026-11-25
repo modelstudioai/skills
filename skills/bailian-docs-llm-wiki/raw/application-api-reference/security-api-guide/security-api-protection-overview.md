@@ -2,9 +2,17 @@
 
 查询防护总览数据，固定查询最近 24 小时。返回防护能力开关、各模块防护覆盖开关与拦截统计。
 
+<a id="前提"></a>
+
+<a id="h-secapi-protover-prereq"></a>
+
 ## 前提
 
-已完成 Endpoint 与鉴权配置，详见[API 总览与认证](raw/application-api-reference/security-api-guide/security-api-overview.md)。
+已完成 Endpoint 与鉴权配置，详见[API 总览与认证](security-api-overview.md)。
+
+<a id="接口"></a>
+
+<a id="h-secapi-protover-endpoint"></a>
 
 ## 接口
 
@@ -12,52 +20,34 @@
 
 查询防护总览数据，固定查询最近 24 小时。
 
+<a id="请求示例"></a>
+
+<a id="h-secapi-protover-eg"></a>
+
 ## 请求示例
 
-```
+<a id="code-block"></a>
+
+```bash
 curl -X GET "$BASE_URL/overview" \
   -H "Authorization: Bearer $BAILIAN_API_KEY"
 ```
 
 其中 `BASE_URL` 为 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio/security`，`BAILIAN_API_KEY` 为阿里云百炼 API Key。
 
+<a id="响应体"></a>
+
+<a id="h-secapi-protover-resp"></a>
+
 ## 响应体
 
-字段
-
-类型
-
-说明
-
-`capabilities`
-
-array
-
-防护能力开关列表，顺序固定。每项含 `key` 与 `enabled`
-
-`protection`
-
-array
-
-各模块防护覆盖开关列表，结构同 `capabilities`
-
-`content_safety`
-
-object
-
-内容安全统计卡片，含 `hit`（拦截或异常次数）与 `scanned`（检测总次数）
-
-`file_scan`
-
-object
-
-文件扫描统计卡片，含 `hit` 与 `scanned`
-
-`skill_scan`
-
-object
-
-技能扫描统计卡片，含 `hit` 与 `scanned`
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `capabilities` | array | 防护能力开关列表，顺序固定。每项含 `key` 与 `enabled` |
+| `protection` | array | 各模块防护覆盖开关列表，结构同 `capabilities` |
+| `content_safety` | object | 内容安全统计卡片，含 `hit`（拦截或异常次数）与 `scanned`（检测总次数） |
+| `file_scan` | object | 文件扫描统计卡片，含 `hit` 与 `scanned` |
+| `skill_scan` | object | 技能扫描统计卡片，含 `hit` 与 `scanned` |
 
 `capabilities` 的 `key` 取值：`agent_identity`（Agent 身份签发）、`content_safety`（内容安全）、`supply_chain_scan`（供应链静态扫描）、`credential_isolation`（凭证隔离）、`session_lifecycle`（Session 生命周期治理）。
 
@@ -65,9 +55,15 @@ object
 
 顶部汇总的扫描总数为各项 `scanned` 之和，风险数为各项 `hit` 之和。
 
+<a id="响应示例"></a>
+
+<a id="h-secapi-protover-resp-eg"></a>
+
 ## 响应示例
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "success": true,
   "data": {

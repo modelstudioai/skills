@@ -2,6 +2,10 @@
 
 通过 AI 工具的扩展机制接入 decision-model-preview 决策模型：以评论自动审核为例，一次请求并行判定多条内容，返回 choice、probabilities、confidence，按置信度自动放行、隐藏或转人工。
 
+<a id="背景-为什么用决策模型"></a>
+
+<a id="tp-dm-why-h"></a>
+
 ## 背景：为什么用决策模型
 
 评论审核、工单分类、请求路由这类判断，常见做法是让对话模型输出 JSON：判定规则写在 prompt 里，容易被诱导性内容带偏；输出外层常包代码围栏，解析不稳；每次都先生成一段分析文字，token 开销不小。
@@ -14,13 +18,23 @@ decision-model-preview 是决策模型，专做这类判断。通过 `/compatibl
 -   返回就是 JSON，无围栏、无多余文字，Agent 与代码直接消费
 -   答案是短结构而非长文本，输出 token 开销小，适合高频调用
 
-**说明**接入决策模型目前仅支持
+> **说明**
+>
+> 接入决策模型目前仅支持
+>
+> [Token Plan 个人版](../token-plan-personal/token-plan-personal-overview.md)。
 
-[Token Plan 个人版](raw/token-plan-user-guide/token-plan-personal/token-plan-personal-overview.md)。
+<a id="示例-在-claude-code-中接入评论审核"></a>
+
+<a id="tp-dm-example-h"></a>
 
 ## 示例：在 Claude Code 中接入评论审核
 
 以 Claude Code 为例，通过 Slash Command 接入决策模型。其他工具的接入方式类似，区别在于扩展机制和配置文件路径不同。
+
+<a id="步骤一-创建-slash-command"></a>
+
+<a id="tp-dm-example-step1-h"></a>
 
 ### 步骤一：创建 Slash Command
 
@@ -28,7 +42,9 @@ decision-model-preview 是决策模型，专做这类判断。通过 `/compatibl
 
 在项目根目录创建 `.claude/commands/review-comments.md`，写入以下内容：
 
-```
+<a id="code-block"></a>
+
+````text
 调用 Token Plan 决策模型，批量审核评论并按置信度分流。
 
 用户输入：$ARGUMENTS（评论文件路径，或直接粘贴的多条评论）
@@ -72,15 +88,23 @@ curl -s -X POST "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode
    - confidence < 0.9：转人工
 
 5. 表格后输出一行统计：自动处理 X 条，转人工 Y 条。转人工的条目附一句说明，引用该条 probabilities 中 spam 的概率。
-```
+````
+
+<a id="步骤二-审核评论"></a>
+
+<a id="tp-dm-example-step2-h"></a>
 
 ### 步骤二：审核评论
 
 准备一份评论文件 `comments.txt`，每行一条评论：
 
+<a id="accordion-查看测试数据-10-条评论-含-3-个边界样本"></a>
+
 查看测试数据 · 10 条评论（含 3 个边界样本）
 
-```
+<a id="code-block-2"></a>
+
+```text
 这篇文章把异步和并发的区别讲得很清楚，收藏了。
 加微信 teacher888 领取内部资料，免费带你做副业月入过万。
 请问示例里为什么用线程池而不是协程？
@@ -95,9 +119,13 @@ curl -s -X POST "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode
 
 在 Claude Code 中输入 `/review-comments comments.txt`，输出示例：
 
+<a id="accordion-查看输出示例-10-条评论的判定与分流"></a>
+
 查看输出示例 · 10 条评论的判定与分流
 
-```
+<a id="code-block-3"></a>
+
+```text
 | #  | 评论摘要                             | 判定  | confidence | 动作     |
 |----|--------------------------------------|-------|------------|----------|
 | 1  | 这篇文章把异步并发的区别讲得很清楚…   | pass  | 1.00       | 自动放行 |
@@ -120,91 +148,47 @@ curl -s -X POST "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode
 -   **#5 和 #9 是负评和报错，判 pass。** 判定看内容性质，不看语气。批评、质疑、报错反馈属于正常讨论，这条规则写进了 `criteria`。
 -   **#8 是带链接的技术分享，confidence 只有 0.69，进人工队列。** 内容介于分享与引流之间，概率分布也不极端（spam 0.84 / pass 0.16），模型明确表示倾向但把握不足——这正是 `criteria` 边界描述要处理的那类样本。分流阈值写在 Command 的第 4 步里，调高更保守，调低更自动。
 
+<a id="读懂返回的三个字段"></a>
+
+<a id="tp-dm-answers-h"></a>
+
 ## 读懂返回的三个字段
 
 答案按 `questions` 里的 key 原样返回，每条 Choice 答案包含：
 
-字段
-
-含义
-
-怎么用
-
-`choice`
-
-选中的选项
-
-分支依据：放行还是隐藏
-
-`probabilities`
-
-每个选项的概率，总和为 1
-
-展示、排序、加权
-
-`confidence`
-
-判定把握，0 到 1
-
-阈值分流：高自动执行，低转人工
+| 字段 | 含义 | 怎么用 |
+| --- | --- | --- |
+| `choice` | 选中的选项 | 分支依据：放行还是隐藏 |
+| `probabilities` | 每个选项的概率，总和为 1 | 展示、排序、加权 |
+| `confidence` | 判定把握，0 到 1 | 阈值分流：高自动执行，低转人工 |
 
 `questions` 的 key 自定义，不参与推理。需要"程度"类判断时改用 Noul（返回 0 到 1 的概率）或 Score（按等级打分），一次调用可以混合。
+
+<a id="其他工具"></a>
+
+<a id="tp-dm-other-tools-h"></a>
 
 ## 其他工具
 
 不同工具的扩展机制和配置文件路径如下表所示，该表为支持扩展机制的主流 AI 编程工具示例。将上述 Claude Code 示例中的配置内容保存到对应路径即可。
 
-工具
+| 工具 | 扩展机制 | 配置文件路径 |
+| --- | --- | --- |
+| Claude Code | Slash Command | `.claude/commands/review-comments.md` |
+| Codex | Skill | `~/.codex/skills/token-plan-review/SKILL.md` |
+| Qwen Code | Skill | `~/.qwen/skills/review-comments/SKILL.md` |
+| OpenCode | Agent | `.opencode/agents/review-comments.md` |
+| OpenClaw | Skill | `~/.openclaw/workspace/skills/token-plan-review/SKILL.md` |
+| Hermes Agent | Skill | `~/.hermes/skills/moderation/review-comments/SKILL.md` |
+| Qoder | Skill | `~/.qoder/skills/review-comments/SKILL.md` |
 
-扩展机制
+> **说明**
+>
+> Skill 类工具（Codex、Qwen Code、OpenClaw、Hermes Agent、Qoder）需要在配置文件开头添加 YAML front matter，完整配置文件如下：
 
-配置文件路径
+<a id="code-block-4"></a>
 
-Claude Code
-
-Slash Command
-
-`.claude/commands/review-comments.md`
-
-Codex
-
-Skill
-
-`~/.codex/skills/token-plan-review/SKILL.md`
-
-Qwen Code
-
-Skill
-
-`~/.qwen/skills/review-comments/SKILL.md`
-
-OpenCode
-
-Agent
-
-`.opencode/agents/review-comments.md`
-
-OpenClaw
-
-Skill
-
-`~/.openclaw/workspace/skills/token-plan-review/SKILL.md`
-
-Hermes Agent
-
-Skill
-
-`~/.hermes/skills/moderation/review-comments/SKILL.md`
-
-Qoder
-
-Skill
-
-`~/.qoder/skills/review-comments/SKILL.md`
-
-**说明**Skill 类工具（Codex、Qwen Code、OpenClaw、Hermes Agent、Qoder）需要在配置文件开头添加 YAML front matter，完整配置文件如下：
-
-```
+````text
 ---
 name: "token-plan-review"
 description: "调用 Token Plan 决策模型，批量审核评论并按置信度分流。当用户要求审核评论、过滤垃圾评论时激活。"
@@ -253,11 +237,13 @@ curl -s -X POST "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode
    - confidence < 0.9：转人工
 
 5. 表格后输出一行统计：自动处理 X 条，转人工 Y 条。转人工的条目附一句说明，引用该条 probabilities 中 spam 的概率。
-```
+````
 
 OpenCode Agent 的 front matter 不同，完整配置文件如下：
 
-```
+<a id="code-block-5"></a>
+
+````text
 ---
 description: "调用 Token Plan 决策模型，批量审核评论并按置信度分流。"
 mode: subagent
@@ -310,7 +296,11 @@ curl -s -X POST "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode
    - confidence < 0.9：转人工
 
 5. 表格后输出一行统计：自动处理 X 条，转人工 Y 条。转人工的条目附一句说明，引用该条 probabilities 中 spam 的概率。
-```
+````
+
+<a id="注意事项"></a>
+
+<a id="tp-dm-notes-h"></a>
 
 ## 注意事项
 

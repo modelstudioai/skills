@@ -1,39 +1,33 @@
 # get started with agents
 
-Agent 是百炼平台提供的可编程智能体运行与编排服务，支持开发者快速构建具备知识、工具调用和上下文感知能力的 AI 应用。本文档面向开发者，梳理 Agent 的核心能力边界、关键配置项及接入路径，帮助你基于实际需求选择合适模式并规避常见陷阱。所有功能均需通过百炼控制台或 API 调用，不支持纯前端直连。
+百炼平台的 Agent 服务提供端到端的智能体开发与运行能力，支持从快速体验、低代码编排到高自由度 API 集成的多种路径。开发者可按需组合上下文（RAG、Memory、Connector）、工具（MCP、Skill）与执行环境（Managed Agent、Flow Agent、Sandbox），并借助 Evolution 和 Security 模块实现可观测性与安全治理。所有能力均通过统一控制台与标准化 API 暴露，详见 [Agent 服务概览](../../raw/application-user-guide/get-started-with-agents/agent-overview.md)。
 
-## 支持的模型与功能
+## 支持的模型与核心功能
 
-Agent 本身不绑定特定大模型，而是通过 `model_id` 参数动态指定后端 LLM（如 `qwen-max`、`qwen-plus`），模型能力由 [Agent 服务概览](../../raw/application-user-guide/get-started-with-agents/agent-overview.md) 中定义的执行环境决定。当前支持三类核心运行模式：  
-- **Managed Agent**：托管会话生命周期、工具调用与状态管理，适合对话式应用；  
-- **Flow Agent**：基于可视化节点编排多步骤工作流，支持条件分支与并行执行；  
-- **Sandbox**：提供隔离沙箱环境，安全执行代码、浏览器操作或文件解析（如 PDF 表格提取）。  
-
-上下文增强能力包括 RAG（知识库检索）、Memory（[长期记忆](../concepts/long-term-memory.md)存储）、Connector（企业系统对接）和 ParseX（文档结构化解析），详见 [Agent 服务概览](../../raw/application-user-guide/get-started-with-agents/agent-overview.md)。
+Agent 服务本身不绑定特定大模型，而是以“能力抽象层”方式解耦模型调用：Managed Agent 和 Flow Agent 默认支持 Qwen 系列（如 qwen-max、qwen-plus），同时允许用户在创建时指定任意已接入百炼的 LLM 模型；Sandbox 环境则独立于模型，专注安全执行代码/浏览器/文件操作。上下文模块中，RAG 依赖向量引擎（默认 DashVector），Memory 使用专用持久化存储，Connector 支持 HTTP、数据库、飞书/钉钉等标准协议接入。完整能力矩阵见 [Agent 服务概览](../../raw/application-user-guide/get-started-with-agents/agent-overview.md)。
 
 ## 关键参数
 
-调用 Agent 时必须显式指定以下参数：  
-- `agent_id`：在控制台创建 Agent 后生成的唯一标识符；  
-- `model_id`：所用大模型 ID，需与 Agent 配置的兼容模型列表一致（如 Flow Agent 不支持 `qwen-turbo`）；  
-- `input`：用户输入文本，部分场景下需配合 `files`（上传文件）或 `context`（显式传入上下文片段）使用；  
-- `stream`：布尔值，控制是否启用流式响应（仅 Managed Agent 和 Flow Agent 支持）；  
-- `tools`：若启用 MCP 工具调用，需在此字段声明工具 ID 列表，且工具须已在 [Agent 服务概览](../../raw/application-user-guide/get-started-with-agents/agent-overview.md) 中注册并授权。
+- `agent_id`：Agent 唯一标识，由控制台创建或 API 返回，用于后续调用（如 `/v1/agents/{agent_id}/chat`）  
+- `session_id`：会话级状态隔离标识，建议业务侧生成 UUID，不复用以避免上下文污染  
+- `enable_memory`：布尔值，启用后自动关联 Memory 模块（需提前配置 Memory 实例）  
+- `tools`：显式声明 MCP 工具列表（格式为 `[{ "tool_id": "xxx", "version": "1.0" }]`），未声明则仅使用内置基础工具  
+- `max_iterations`：Flow Agent 中工作流最大执行步数，默认 15，超限将终止并返回 `error: iteration_limit_exceeded`  
 
-> **注意**：`memory_id` 参数在 Memory 功能中用于指定记忆库实例，但其值不能直接传入 Agent 调用请求 —— 必须通过控制台为 Agent 绑定 Memory 实例后，由平台自动注入上下文。该行为与旧版文档中“手动传 memory_id”的描述矛盾，以当前控制台逻辑为准。
+> **注意**：文档中 `tools` 参数在 [Agent 服务概览](../../raw/application-user-guide/get-started-with-agents/agent-overview.md) 的 MCP 描述部分未明确字段结构，但实际 API 要求必须为对象数组且含 `tool_id`；请以 [Managed Agents API 概览](../../raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md) 中的 OpenAPI Schema 为准。
 
 ## 使用方式
 
-1. **控制台快速体验**：访问 [体验 Agent](https://bailian.console.aliyun.com/cn-beijing/playground?agent=template_01M4QREF0RGXZVYRF49DQMSBJ8) 页面，无需编码即可创建模板 Agent 并测试交互；  
-2. **API 接入业务系统**：参考 [Managed Agents API 概览](../../raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md)，使用 `POST /v1/agents/{agent_id}/chat` 发起调用；  
-3. **集成开发流程**：建议按“创建 Agent → 配置上下文（RAG/Memory）→ 绑定工具（MCP/Skill）→ 测试 → 部署”顺序推进，各环节操作指引见 [Agent 服务概览](../../raw/application-user-guide/get-started-with-agents/agent-overview.md)。
+1. **快速体验**：访问控制台 Playground（[体验 Agent](https://bailian.console.aliyun.com/cn-beijing/playground?agent=template_01M4QREF0RGXZVYRF49DQMSBJ8)），选择模板 Agent 直接对话，无需编码  
+2. **低代码构建**：使用 Flow Agent 可视化画布编排节点（LLM、RAG、Tool Call、条件分支），保存后自动生成可调用 `agent_id`  
+3. **API 集成**：调用 `POST /v1/agents/{agent_id}/chat`，传入 `messages` 数组与上述关键参数；请求头需携带 `Authorization: Bearer <access_token>`。详细接口定义见 [Managed Agents API 概览](../../raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md)  
 
 ## 限制和注意事项
 
-- 单次请求最大输入长度为 32,768 token（含 system prompt、history、input 及 context），超长内容需预处理截断或分块；  
-- Sandbox 模式下，Python 执行超时默认为 30 秒，不可修改；浏览器操作（Puppeteer）仅支持 Chromium 内核，不兼容 IE 或旧版 Edge；  
-- MCP 工具调用失败时，Agent 默认返回错误信息而非重试，需在业务层捕获 `tool_call_failed` 状态并处理；  
-- 所有 Agent 实例默认开启内容安全检测（含敏感词过滤与图片鉴黄），无法关闭，但可通过 Security 模块配置自定义策略，详情见 [Security 文档](../../raw/application-user-guide/agent-governance/security-guide/section-gs/cli.md)。
+- 单次请求 `messages` 总 tokens 不得超过模型 context length（如 qwen-max 为 32768），超长将被截断且不报错  
+- Sandbox 环境默认禁止外网访问（`network: false`），如需调用外部 API，须在创建时显式开启 `network: true` 并配置白名单域名  
+- Memory 模块的长期记忆检索默认仅匹配当前 `session_id`，跨会话共享需主动调用 `/v1/memory/{memory_id}/search` 并合并结果  
+- 所有 Agent 调用均受账号级 QPS 与并发数配额限制，超出将返回 `429 Too Many Requests`；具体配额请查阅控制台「配额管理」，或参考 [Agent 服务概览](../../raw/application-user-guide/get-started-with-agents/agent-overview.md) 中的治理章节
 
 ## 来源文档
 

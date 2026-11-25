@@ -2,7 +2,13 @@
 
 2025年1月24日全妙轻应用（网络内容安全审核）新增文章校对场景示例和批处理接口。
 
-**说明**体验地址：[网络内容安全审核产品控制台](https://bailian.console.aliyun.com/?spm=5176.29619931.J__Z58Z6CX7MY__Ll8p1ZOR.1.74cd59fcHNZmnE#/app/app-market/quanmiao/network-content-audit)。
+> **说明**
+>
+> 体验地址：[网络内容安全审核产品控制台](https://bailian.console.aliyun.com/?spm=5176.29619931.J__Z58Z6CX7MY__Ll8p1ZOR.1.74cd59fcHNZmnE#/app/app-market/quanmiao/network-content-audit)。
+
+<a id="1-新增-文章校对场景-示例"></a>
+
+<a id="ffa433b51905l"></a>
 
 ### 1\. 新增“文章校对场景”示例
 
@@ -15,6 +21,10 @@
 -   **标点错误审核**：检查多余或缺失的标点符号
 
 输入待审核素材后单击**开始审核**，右侧输出结果按三个维度分别列出具体错误及修改建议。
+
+<a id="2-增加批处理接口"></a>
+
+<a id="9fd81f9fdb4df"></a>
 
 ### 2\. 增加批处理接口
 

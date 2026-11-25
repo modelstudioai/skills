@@ -2,167 +2,72 @@
 
 获取排版任务结果
 
+<a id="调试"></a>
+
+<a id="api-doc-debug"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
 当前API暂无授权信息透出。
 
+<a id="请求语法"></a>
+
+<a id="api-detail-53"></a>
+
 ## 请求语法
 
-```
+<a id="code-block"></a>
+
+```text
 POST  HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="api-detail-36"></a>
+
 ## 请求参数
 
-**名称**
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：[获取 workspaceId](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-xxxx |
+| TaskId | string | 是 | 待排版内容 | 29ae0ba84c1c4cc694d0f4f1aead8005 |
 
-**类型**
+<a id="返回参数"></a>
 
-**必填**
-
-**描述**
-
-**示例值**
-
-WorkspaceId
-
-string
-
-是
-
-阿里云百炼业务空间唯一标识：[获取 workspaceId](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)
-
-llm-xxxx
-
-TaskId
-
-string
-
-是
-
-待排版内容
-
-29ae0ba84c1c4cc694d0f4f1aead8005
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-**名称**
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | Schema of Response |  |
+| RequestId | string | Id of the request | 1813ceee-7fe5-41b4-87e5-982a4d18cca5 |
+| Success | boolean | 调用是否成功。 | true |
+| Code | string | 状态码 | successful |
+| HttpStatusCode | integer | http 状态码 | 200 |
+| Message | string | 错误说明 | successful |
+| Data | object | 业务数据 |  |
+| TaskStats | string | 任务状态 | PENDING-待执行、RUNNING-执行中、SUCCESSED-成功、SUSPENDED-暂停、FAILED-失败、CANCELLED-取消 |
+| LayoutResult | object | 排版后的结构化内容 |  |
+| Elements | array<object> | 返回元素数据 |  |
+|  | object | 数组对象 |  |
+| Index | number | 各个元素的索引顺序 | 1 |
+| Type | string | type 类型 | 支持的类型如下 HEADING("标题"), H1("一级标题"), H2("二级标题"), H3("三级标题"), H4("四级标题"), H5("五级标题"), H6("六级标题"), PARAGRAPH("段落"), SIGNATURE("落款"), FOOTNOTE("脚注"), TABLE("表格"), CODE\_BLOCK("代码块"), ATTACHMENT("附件"), BLOCKQUOTE("引用"); |
+| Content | string | 内容 | 一、本月主要工作进展\\n |
+| FormatContent | string | 针对标题，去除标题数字标好后的内容 | 本月主要工作进展 |
 
-**类型**
+<a id="示例"></a>
 
-**描述**
-
-**示例值**
-
-object
-
-Schema of Response
-
-RequestId
-
-string
-
-Id of the request
-
-1813ceee-7fe5-41b4-87e5-982a4d18cca5
-
-Success
-
-boolean
-
-调用是否成功。
-
-true
-
-Code
-
-string
-
-状态码
-
-successful
-
-HttpStatusCode
-
-integer
-
-http 状态码
-
-200
-
-Message
-
-string
-
-错误说明
-
-successful
-
-Data
-
-object
-
-业务数据
-
-TaskStats
-
-string
-
-任务状态
-
-PENDING-待执行、RUNNING-执行中、SUCCESSED-成功、SUSPENDED-暂停、FAILED-失败、CANCELLED-取消
-
-LayoutResult
-
-object
-
-排版后的结构化内容
-
-Elements
-
-array<object>
-
-返回元素数据
-
-object
-
-数组对象
-
-Index
-
-number
-
-各个元素的索引顺序
-
-1
-
-Type
-
-string
-
-type 类型
-
-支持的类型如下 HEADING("标题"), H1("一级标题"), H2("二级标题"), H3("三级标题"), H4("四级标题"), H5("五级标题"), H6("六级标题"), PARAGRAPH("段落"), SIGNATURE("落款"), FOOTNOTE("脚注"), TABLE("表格"), CODE\_BLOCK("代码块"), ATTACHMENT("附件"), BLOCKQUOTE("引用");
-
-Content
-
-string
-
-内容
-
-一、本月主要工作进展\\n
-
-FormatContent
-
-string
-
-针对标题，去除标题数字标好后的内容
-
-本月主要工作进展
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -170,7 +75,9 @@ string
 
 `JSON`格式
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "RequestId": "1813ceee-7fe5-41b4-87e5-982a4d18cca5",
   "Success": true,
@@ -193,9 +100,17 @@ string
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
+
 ## 错误码
 
 访问[错误中心](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/errorCode)查看更多错误码。
+
+<a id="变更历史"></a>
+
+<a id="workbench-doc-change-demo"></a>
 
 ## 变更历史
 

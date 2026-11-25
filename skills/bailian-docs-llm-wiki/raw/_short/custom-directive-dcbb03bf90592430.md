@@ -2,15 +2,33 @@
 
 本文档系统阐述多模态指令配置标准及设备交互规范，核心内容包括：指令设计、时间格式、交互流程、开发支持。该规范旨在确保意图模型与设备控制的无缝衔接，实现标准化、高可靠性的交互过程。
 
+<a id="指令简介"></a>
+
+<a id="170db7a6d36yb"></a>
+
+<a id="03fdc9aca7dmr"></a>
+
 ## 指令简介
 
 指令由多模态交互云端下发给终端，用于将用户的交互意图转化为具体的业务动作。开发者可以通过指令扩展功能，实现对设备硬件控制（如开关、调节、动作）、媒体播放（如进度、音效）及应用程序（如跳转）的灵活控制，具有良好的扩展性，我们提供了一系列常见预置指令，也支持开发者根据业务需求自定义。
 
-管控台的配置方式可以参考[应用配置](raw/_short/multimodal-app-configuration-8919f99b339e17da.md)。
+管控台的配置方式可以参考[应用配置](multimodal-app-configuration-8919f99b339e17da.md)。
+
+<a id="指令配置技巧"></a>
+
+<a id="f74383f3e0mkw"></a>
+
+<a id="ad2e00d89ddn9"></a>
 
 ## 指令配置技巧
 
 为了确保意图模型能够准确地理解并调用正确的工具，我们需要遵循一套严谨的工具定义规范。以下是一些关键点和示例来帮助您更好地定义工具。
+
+<a id="工具描述要清晰准确"></a>
+
+<a id="8b09e4dd26nq4"></a>
+
+<a id="d66d64cf0712w"></a>
 
 ### 工具描述要清晰准确
 
@@ -22,6 +40,12 @@
 -   **好**：`"查询指定日期的天气情况"`
 -   **不好**：`"查看天气"`（过于宽泛，可能被误用于其他天气相关操作）
 
+<a id="参数定义需无歧义"></a>
+
+<a id="7844592cbaw7f"></a>
+
+<a id="a9bea13aecwsa"></a>
+
 ### 参数定义需无歧义
 
 -   **目标**：每个参数的作用和取值范围都应明确。
@@ -29,7 +53,9 @@
 
 **示例** - 定义一个播放音乐的工具：
 
-```
+<a id="code-block"></a>
+
+```json
 {
   "type": "object",
   "required": ["action", "media"],
@@ -47,6 +73,12 @@
 }
 ```
 
+<a id="精简而全面"></a>
+
+<a id="36e9f7985ee5h"></a>
+
+<a id="19e835fa19lzm"></a>
+
 ### 精简而全面
 
 -   **目标**：保持工具定义简洁但信息完整。
@@ -54,7 +86,9 @@
 
 **示例** - 查询的工具定义：
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "name": "query_city_news",
   "description": "查询指定城市的新闻",
@@ -75,13 +109,29 @@
 }
 ```
 
+<a id="合理合并相似参数"></a>
+
+<a id="491be76bd2k9w"></a>
+
+<a id="ff2bced72bacx"></a>
+
 ### 合理合并相似参数
 
 在设计工具调用接口时，合理合并相似参数意味着将具有类似功能或可以共同处理的多个参数整合为一个。这样做不仅能够简化接口定义，减少冗余，还能使工具调用更加直观易懂。下面通过几个例子来具体说明如何进行合理的参数合并：
 
+<a id="例子1-控制播放器"></a>
+
+<a id="7d99ff7d94xtb"></a>
+
+<a id="f6970485916sl"></a>
+
 #### 例子1: 控制播放器
 
 假设我们有两个独立的工具函数用于控制媒体播放器的状态：一个是play\_media用来开始播放媒体内容，另一个是pause\_media用来暂停当前播放的内容。这两个工具其实都是关于控制播放状态的操作，因此可以考虑将其合并为一个工具control\_playback，并通过引入一个额外的参数action来区分具体的命令。
+
+<a id="32181d7cb3tsw"></a>
+
+<a id="47577ea23128r"></a>
 
 ##### 原始定义
 
@@ -91,6 +141,10 @@
 -   pause\_media
     
     -   参数: 无
+
+<a id="5e04c9ca88us4"></a>
+
+<a id="f1b202ebe8xx7"></a>
 
 ##### 合并后的定义
 
@@ -102,9 +156,19 @@
 
 这样做的好处是减少了需要维护的工具数量，并且使得对于播放状态的控制变得更加灵活和一致。
 
+<a id="例子2-设置提醒"></a>
+
+<a id="7acdf63e00ciz"></a>
+
+<a id="18a383076ah4p"></a>
+
 #### 例子2: 设置提醒
 
 如果我们有一个设置闹钟的应用场景，其中包含两个不同的工具：set\_alarm用于设定一次性闹钟，而set\_repeating\_alarm则用于创建重复性闹钟。这两个工具实际上都是关于配置闹钟的行为，只是它们的触发条件不同。因此，可以通过增加一个表示重复模式的新参数来合并这两个工具。
+
+<a id="8e1a8352467ca"></a>
+
+<a id="ec6ea74f78hj7"></a>
 
 ##### 原始定义
 
@@ -120,6 +184,10 @@
         -   repeat\_pattern: 人类可读循环日期
         -   time: 人类可读时间
 
+<a id="9aeebe74aftag"></a>
+
+<a id="a369e788fcn53"></a>
+
 ##### 合并后的定义
 
 -   set\_alarm
@@ -131,13 +199,27 @@
 
 在这个案例中，通过添加一个可选参数repeat\_pattern，我们可以同时支持一次性与重复性闹钟的设置，从而避免了创建两个非常类似的工具。
 
+<a id="总结"></a>
+
+<a id="18b06010dehw8"></a>
+
+<a id="562644f4dd4qu"></a>
+
 #### 总结
 
 合理地合并相似参数关键在于识别出哪些参数本质上是在做相同或高度相关的事情，并尝试找到一种方式将这些行为统一起来。这不仅有助于简化系统设计，还可以提高代码的可维护性和用户体验。但需要注意的是，在合并参数的过程中也要确保不会过度复杂化单一工具的功能，以免造成混淆或使用上的困难。
 
+<a id="人类可读时间规范"></a>
+
+<a id="1424d20607l6d"></a>
+
+<a id="edda3c19f7cjo"></a>
+
 ### 人类可读时间规范
 
-```
+<a id="code-block-3"></a>
+
+```json
 {
         "humanReadableDate": {
             "title": "人类可读日期",
@@ -168,13 +250,25 @@
 
 参数名 以"time\_"开头，系统会把参数理解为humanReadableTime
 
+<a id="自定义工具json文件格式"></a>
+
+<a id="e8dcfd7caaswi"></a>
+
+<a id="db7505ae57thi"></a>
+
 ## 自定义工具JSON文件格式
 
 运行用户直接上传全部工具的定义，文件约定为json格式，其json schema如下。
 
+<a id="1-定义结构说明"></a>
+
+<a id="72945458154u7"></a>
+
 ### 1\. 定义结构说明
 
-```
+<a id="code-block-4"></a>
+
+```json
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "LLM Tool Definition with Examples",
@@ -234,7 +328,10 @@
   }
 }
 ```
-```
+
+<a id="code-block-5"></a>
+
+```json
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "LLM Tool Set Definition",
@@ -257,7 +354,10 @@
   }
 }
 ```
-```
+
+<a id="code-block-6"></a>
+
+```json
 {
   "tool_set_name": "content_manager",
   "tools": [
@@ -319,37 +419,18 @@
 
 一个完整的工具定义包含以下三个核心部分：
 
-**字段名**
+|  |  |  |  |
+| --- | --- | --- | --- |
+| **字段名** | **类型** | **必填** | **说明** |
+| `name` | `string` | 是 | 工具的唯一标识符。只能包含字母、数字、下划线，建议使用 `snake_case`。 |
+| `description` | `string` | 是 | **至关重要**。描述工具的功能、适用场景。模型根据此描述决定是否调用该工具。 |
+| `parameters` | `object` | 是 | 定义工具接收的参数。必须是一个符合 JSON Schema 的对象。 |
 
-**类型**
+<a id="parameters内部结构"></a>
 
-**必填**
+<a id="cd80d542fcw93"></a>
 
-**说明**
-
-`name`
-
-`string`
-
-是
-
-工具的唯一标识符。只能包含字母、数字、下划线，建议使用 `snake_case`。
-
-`description`
-
-`string`
-
-是
-
-**至关重要**。描述工具的功能、适用场景。模型根据此描述决定是否调用该工具。
-
-`parameters`
-
-`object`
-
-是
-
-定义工具接收的参数。必须是一个符合 JSON Schema 的对象。
+<a id="bf271e3a2ehkz"></a>
 
 ### `parameters`内部结构
 
@@ -359,7 +440,9 @@
 
 工具列表的元定义
 
-```
+<a id="code-block-7"></a>
+
+```json
 {
       "type": "array",
       "items": {
@@ -375,7 +458,19 @@
 }
 ```
 
+<a id="下发指令时给出模型回复"></a>
+
+<a id="a02f1c8b83row"></a>
+
+<a id="293c9bc7a8gcb"></a>
+
 ## 下发指令时给出模型回复
+
+<a id="管控台配置"></a>
+
+<a id="e19ee348f890b"></a>
+
+<a id="d44099ede5pre"></a>
 
 ### 管控台配置
 
@@ -384,13 +479,21 @@
 -   根据执行情况回复（默认）：下发指令后，等待端侧返回成功/失败信息，模型生成对应回复，如“已将空调调整到26度”、“已经是最高音量，无法继续调高”。
 -   自动回复：下发指令的同时，自动输出回复。
 
+<a id="端侧接受指令"></a>
+
+<a id="b287d24c98ckf"></a>
+
+<a id="08bb77f975piw"></a>
+
 ### 端侧接受指令
 
 如 3.1 配置取消静音技能需要回复。
 
 通过语音指令“取消静音”的下发结果为：
 
-```
+<a id="code-block-8"></a>
+
+```json
 {
     "payload": {
         "output": {
@@ -426,82 +529,49 @@
 
 当用户选择根据执行情况回复时， 返回结果中包含command\_request\_id。在回复结果时，这个 ID 作为回复的 key 使用。
 
+<a id="端侧回复指令"></a>
+
+<a id="dd60cb95b7rj6"></a>
+
+<a id="e9e1279f4etxd"></a>
+
 ### 端侧回复指令
 
 您在收到指令或者 Agent的结果后，通过端侧执行，获得一个成功或者失败的结果，同步给服务端，通过如下接口提交：
 
-参数
-
-一级参数
-
-二级参数
-
-三级参数
-
-四级参数
-
-参数说明
-
-**技能响应/三方 Agent 回调执行结果**
-
-biz\_params
-
-command\_results\[\]
-
-command\_request\_id
-
-string
-
-请求 id
-
-invoke\_result
-
-执行结果
-
-content
-
-Object
-
-根据不同结果区分，详见端侧统一返回规范
-
-structuredContent
-
-JSON object
-
-结构化返回信息
-
-**structuredContent.success**
-
-**Boolean**
-
-**是否开启成功**
+<table><tbody><tr><td><p>参数</p></td><td><p>一级参数</p></td><td><p>二级参数</p></td><td><p>三级参数</p></td><td><p>四级参数</p></td><td><p>参数说明</p></td></tr><tr><td colspan="5"><p><strong>技能响应/三方 Agent 回调执行结果</strong></p></td><td><p></p></td></tr><tr><td rowspan="5"><p>biz_params</p></td><td rowspan="5"><p>command_results[]</p></td><td><p>command_request_id</p></td><td><p>string</p></td><td><p></p></td><td><p>请求 id</p></td></tr><tr><td rowspan="4"><p>invoke_result</p></td><td><p></p></td><td><p></p></td><td><p>执行结果</p></td></tr><tr><td><p>content</p></td><td><p>Object</p></td><td><p>根据不同结果区分，详见端侧统一返回规范</p></td></tr><tr><td><p>structuredContent</p></td><td><p>JSON object</p></td><td><p>结构化返回信息</p></td></tr><tr><td><p><strong>structuredContent.success</strong></p></td><td><p><strong>Boolean</strong></p></td><td><p><strong>是否开启成功</strong></p></td></tr></tbody></table>
 
 invoke\_result.content 是端侧传递给Agent 的数据部分。我们推荐使用如下端侧统一返回规范格式：
 
-参数名
+|  |  |  |
+| --- | --- | --- |
+| 参数名 | 类型 | 含义 |
+| content | Object | 根据不同结果区分，详见下面的 text content/image content/audio content |
 
-类型
+<a id="1f84613b7cdk2"></a>
 
-含义
-
-content
-
-Object
-
-根据不同结果区分，详见下面的 text content/image content/audio content
+<a id="de55296bc64xp"></a>
 
 ##### Text Content
 
-```
+<a id="code-block-9"></a>
+
+```json
 {
   "type": "text",
   "text": "Tool result text"
 }
 ```
 
+<a id="f62dd34602ml5"></a>
+
+<a id="777709814ctmg"></a>
+
 ##### Image Content
 
-```
+<a id="code-block-10"></a>
+
+```json
 {
   "type": "image",
   "data": "base64-encoded-data",
@@ -513,9 +583,15 @@ Object
 }
 ```
 
+<a id="7d5b114157ut7"></a>
+
+<a id="844799d03f924"></a>
+
 ##### Audio Content
 
-```
+<a id="code-block-11"></a>
+
+```json
 {
   "type": "audio",
   "data": "base64-encoded-audio-data",
@@ -523,9 +599,15 @@ Object
 }
 ```
 
+<a id="b90e1066bb7qp"></a>
+
+<a id="f569ed0c86pjx"></a>
+
 ##### 结果示例：
 
-```
+<a id="code-block-12"></a>
+
+```json
 [
     {
         "command_request_id": "xxxx",
@@ -542,9 +624,17 @@ Object
 ]
 ```
 
+<a id="请求代码示例-端侧回调执行结果-以-java-为例"></a>
+
+<a id="af8bbc175059j"></a>
+
+<a id="98d03e30984e4"></a>
+
 ### 请求代码示例- 端侧回调执行结果（以 java 为例）
 
-```
+<a id="code-block-13"></a>
+
+```java
 public static HashMap<String,Object> getAgentorCommandResult() {
   HashMap<String,Object> commandResult = new HashMap<>();
   commandResult.put("command_request_id", "35b635f3-6511-450e-8fa1-6955d5279367");

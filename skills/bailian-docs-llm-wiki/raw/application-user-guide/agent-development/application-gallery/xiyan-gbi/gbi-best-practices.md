@@ -2,17 +2,33 @@
 
 本文基于析言GBI的API实现了智能数据问答功能。旨在帮助您快速熟悉API的使用，以便在实际项目中灵活运用API。
 
+<a id="前提条件"></a>
+
+<a id="83068ed6e1vgu"></a>
+
 ## 前提条件
 
 -   已开通阿里云百炼。
 -   已获取WorkspaceID：[获取Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 -   已获取AccessKey ID和AccessKey Secret：[获取 AccessKey 与 AgentKey](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)。
 -   RAM用户已添加`AliyunDataAnalysisGBIFullAccess`权限策略：[管理RAM用户的权限](https://help.aliyun.com/zh/ram/user-guide/grant-permissions-to-the-ram-user)。
--   已在析言GBI的**[数据表管理](https://bailian.console.aliyun.com/xiyan#/dataManagement/dataSourceM)**中授权联接了数据库。具体操作，请参见[数据库连接](https://help.aliyun.com/zh/model-studio/xiyan-gbi-user-guide#8e5d17697392b)。
+-   已在析言GBI的**[数据表管理](https://bailian.console.aliyun.com/xiyan#/dataManagement/dataSourceM)**中授权联接了数据库。具体操作，请参见[数据库连接](xiyan-gbi-user-guide.md#8e5d17697392b)。
+
+<a id="操作步骤"></a>
+
+<a id="32e4142297fh2"></a>
 
 ## 操作步骤
 
+<a id="sec-tabs"></a>
+
+<a id="java"></a>
+
+<a id="java-h4"></a>
+
 #### Java
+
+<a id="1b3dd98b4dry6"></a>
 
 #### 步骤1：安装析言GBI的JavaSDK
 
@@ -20,8 +36,10 @@
 2.  打开您的Maven项目的`pom.xml`文件。
 3.  在`<dependencies>`标签内添加以下依赖信息，并将`<version></version>`标签中的版本号替换为最新的版本号。
 
-```
-<dependency>
+<a id="code-block"></a>
+
+```xml
+ <dependency>
             <groupId>com.aliyun</groupId>
             <artifactId>alibabacloud-dataanalysisgbi20240823</artifactId>
             <version>1.0.0</version>
@@ -31,13 +49,17 @@
 4.  保存`pom.xml`文件。
 5.  更新项目依赖，将SDK添加到您的项目中。
 
+<a id="a79ab68abb5ih"></a>
+
 #### 步骤2：实现智能数据问答功能
 
-基于析言GBI的[Chat对话接口](raw/_short/api-dataanalysisgbi-2024-08-23-rundataanalysis-97f97004241a36ec.md)（例如：本示例中的`RunDataAnalysisRequest`类），通过实现智能数问场景来帮助您熟悉API的使用。
+基于析言GBI的[Chat对话接口](../../../../_short/api-dataanalysisgbi-2024-08-23-rundataanalysis-97f97004241a36ec.md)（例如：本示例中的`RunDataAnalysisRequest`类），通过实现智能数问场景来帮助您熟悉API的使用。
 
 请将代码示例中的`accessKeyId`、`accessKeySecret`及`workspaceId`替换为实际值，以确保代码正常运行并返回正确的结果。
 
-```
+<a id="code-block-2"></a>
+
+```java
 package com.alibaba.iic.llmsolution.gbi.util;
 
 import com.aliyun.auth.credentials.Credential;
@@ -114,11 +136,15 @@ public class CommonExample {
 }
 ```
 
+<a id="7df4371b3c8ia"></a>
+
 #### 返回结果示例
 
-参数说明请参见[Chat对话接口](raw/_short/api-dataanalysisgbi-2024-08-23-rundataanalysis-97f97004241a36ec.md)的**返回参数**。
+参数说明请参见[Chat对话接口](../../../../_short/api-dataanalysisgbi-2024-08-23-rundataanalysis-97f97004241a36ec.md)的**返回参数**。
 
-```
+<a id="code-block-3"></a>
+
+```json
 {"event":"rewrite","requestId":"8499A3E6-C1B2-5D2E-845F-2F63F8795B4D","rewrite":"查询销量最高的五个产品及其销量","sessionId":"8db26af8-721c-49bd-95f5-cceb0053ecf6"}
 {"event":"selector","requestId":"8499A3E6-C1B2-5D2E-845F-2F63F8795B4D","rewrite":"查询销量最高的五个产品及其销量","selector":["products","orders"],"sessionId":"8db26af8-721c-49bd-95f5-cceb0053ecf6"}
 {"event":"evidence","evidence":"对于所有的指标（metric），如果没有对所有维度（dimension）都进行了限制，就要进行求和SUM再进行其他聚合或是筛选","rewrite":"查询销量最高的五个产品及其销量","selector":["products","orders"]}
@@ -168,7 +194,9 @@ ALL***********************
 
 如果未授权连接数据库，会返回以下结果：
 
-```
+<a id="code-block-4"></a>
+
+```json
 {"errorMessage":"data source is empty","event":"error"}
 ALL***********************
 请求成功的请求头值：
@@ -176,21 +204,33 @@ ALL***********************
 {Transfer-Encoding=chunked, Keep-Alive=timeout=25, Access-Control-Expose-Headers=*, Access-Control-Allow-Origin=*, x-acs-request-id=CB1F6A3B-43DC-5D9D-8FDC-57A9474B0DF3, Connection=keep-alive, Date=Thu, 14 Nov 2024 06:20:33 GMT, Content-Type=text/event-stream;charset=utf-8, x-acs-trace-id=dfa7db76cf65dcc933292999274fa687}
 ```
 
+<a id="python"></a>
+
+<a id="python-h4"></a>
+
 #### Python
+
+<a id="4f805882ddigx"></a>
 
 #### 步骤1：安装依赖
 
-```
+<a id="code-block-5"></a>
+
+```python
 pip install alibabacloud-tea-openapi-sse==1.0.2
 ```
 
+<a id="2dd9e1f749hca"></a>
+
 #### 步骤2：实现智能数据问答功能
 
-基于析言GBI的[Chat对话接口](raw/_short/api-dataanalysisgbi-2024-08-23-rundataanalysis-97f97004241a36ec.md)的API代码示例如下。
+基于析言GBI的[Chat对话接口](../../../../_short/api-dataanalysisgbi-2024-08-23-rundataanalysis-97f97004241a36ec.md)的API代码示例如下。
 
 请将代码示例中的`accessKeyId`、`accessKeySecret`及`workspaceId`替换为实际值，以确保代码正常运行并返回正确的结果。
 
-```
+<a id="code-block-6"></a>
+
+```python
 from alibabacloud_tea_openapi_sse.client import Client as OpenApiClient
 from alibabacloud_tea_openapi_sse import models as open_api_models
 from alibabacloud_tea_util_sse import models as util_models
@@ -287,11 +327,15 @@ if __name__ == '__main__':
     asyncio.run(query())
 ```
 
+<a id="052747b94cyb7"></a>
+
 #### 返回结果示例
 
-参数说明请参见[Chat对话接口](raw/_short/api-dataanalysisgbi-2024-08-23-rundataanalysis-97f97004241a36ec.md)的**返回参数**。
+参数说明请参见[Chat对话接口](../../../../_short/api-dataanalysisgbi-2024-08-23-rundataanalysis-97f97004241a36ec.md)的**返回参数**。
 
-```
+<a id="code-block-7"></a>
+
+```json
 {'data': {'requestId': '93DE1D26-153E-5386-BA8F-9D2E2F8B3381', 'sessionId': '10148716_1f8ebf09-df4b-4b0c-9493-66a1895a9ba4', 'event': 'rewrite', 'rewrite': '查询user表中的全部数据，并用饼图展示'}}
 {'data': {'requestId': '93DE1D26-153E-5386-BA8F-9D2E2F8B3381', 'selector': ['user'], 'sessionId': '10148716_1f8ebf09-df4b-4b0c-9493-66a1895a9ba4', 'event': 'selector', 'rewrite': '查询er表中的全部数据，并用饼图展示'}}
 {'data': {'evidence': 'KKK是指客单价。KKK=总销售额/订单总数，保留2位小数。', 'selector': ['user'], 'event': 'evidence', 'rewrite': '查询user表中的全部数据，并用饼图展示'}}
@@ -305,13 +349,21 @@ if __name__ == '__main__':
 ------end--------
 ```
 
+<a id="go"></a>
+
+<a id="go-h4"></a>
+
 #### Go
+
+<a id="9aa6de79181ob"></a>
 
 #### 步骤1：安装依赖
 
 在Go项目的go.mod文件中添加以下信息，指定依赖的模块路径和版本号。
 
-```
+<a id="code-block-8"></a>
+
+```go
 go 1.16
 
 require (
@@ -322,13 +374,17 @@ require (
 )
 ```
 
+<a id="d13c351d1a0h9"></a>
+
 #### 步骤2：实现智能数据问答功能
 
-基于析言GBI的[Chat对话接口](raw/_short/api-dataanalysisgbi-2024-08-23-rundataanalysis-97f97004241a36ec.md)的API代码示例如下。
+基于析言GBI的[Chat对话接口](../../../../_short/api-dataanalysisgbi-2024-08-23-rundataanalysis-97f97004241a36ec.md)的API代码示例如下。
 
 请将代码示例中的`accessKeyId`、`accessKeySecret`及`workspaceId`替换为实际值，以确保代码正常运行并返回正确的结果。
 
-```
+<a id="code-block-9"></a>
+
+```go
 // This file is auto-generated, don't edit it. Thanks.
 package main
 
@@ -423,11 +479,15 @@ func main() {
 }
 ```
 
+<a id="1e465e8fbdrqc"></a>
+
 #### 返回结果示例
 
-参数说明请参见[Chat对话接口](raw/_short/api-dataanalysisgbi-2024-08-23-rundataanalysis-97f97004241a36ec.md)的**返回参数**。
+参数说明请参见[Chat对话接口](../../../../_short/api-dataanalysisgbi-2024-08-23-rundataanalysis-97f97004241a36ec.md)的**返回参数**。
 
-```
+<a id="code-block-10"></a>
+
+```go
 -------------------------------------
 Event ID: , Event name: rewrite, Data: {"data":{"requestId":"122453F5-B4F3-52B9-BCA5-3BA3097DA2D4","sessionId":"10204244_4e2e5e96-51c7-419b-8390-137f48b4459e","event":"rewrite","rewrite":"列举10条数据"}}
 -------------------------------------

@@ -2,6 +2,8 @@
 
 大模型受上下文窗口限制，跨会话无法保留记忆，导致每次对话都从零开始。记忆库通过自动提取对话中的关键信息并持久化存储，使智能体能够跨会话持续引用用户偏好和历史信息，提供个性化、连贯的对话体验。
 
+<a id="概述"></a>
+
 ## 概述
 
 记忆库是一种为大模型提供跨会话长期记忆的服务。它从对话与可复用轨迹中提取信息，持久化存储为**事实记忆**、**用户画像**和**技能记忆**，在后续对话中基于语义检索相关记忆并注入上下文，使智能体持续理解用户偏好和历史信息。
@@ -10,45 +12,34 @@
 -   **用户画像**：基于自定义模板提取的结构化属性，如年龄、职业、爱好。适用于固定用户属性。
 -   **技能记忆**：从轨迹中归纳可复用的任务方法，包含技能名称、描述和内容，适用于相似任务。
 
-记忆库提供开放的 API 接口，可接入任意应用，也支持多应用共享同一记忆库。产品概念与工作原理详见[核心概念](raw/application-user-guide/agent-context/memory-library-overview/overview/concepts.md)。
+记忆库提供开放的 API 接口，可接入任意应用，也支持多应用共享同一记忆库。产品概念与工作原理详见[核心概念](overview/concepts.md)。
 
-**警告**记忆库将于 **2026 年 8 月 20 日 10:00**（北京时间）正式开始商业化计费，Add 和 Search 调用区分 **Pro** 和 **Lite** 策略版本。详见[计费说明](raw/application-user-guide/agent-billing/billing-f23f20af1adb6c6b.md)。
+> **警告**
+>
+> 记忆库将于 **2026 年 8 月 20 日 10:00**（北京时间）正式开始商业化计费，Add 和 Search 调用区分 **Pro** 和 **Lite** 策略版本。详见[计费说明](../../agent-billing/billing-f23f20af1adb6c6b.md)。
+
+<a id="控制台功能入口"></a>
 
 ## 控制台功能入口
 
 在[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/memory/playground)的 **Memory** 中按任务选择入口：
 
-入口
+| 入口 | 用途 |
+| --- | --- |
+| Playground | 选择记忆库与规则，通过对话体验记忆写入和检索 |
+| 记忆库 | 管理记忆库、配置记忆规则、查看记忆详情和调试检索 |
+| 记忆观测 | 对照会话消息与关联的记忆变更，参见[记忆观测](observability/observation.md) |
+| 记忆审计 | 筛选变更事件并查看前后快照，参见[记忆审计](observability/audit.md) |
+| 服务渠道 | 查看 REST API、MCP Server、CLI 和 Agent Skill 接入方式 |
+| 用量 | 查看记忆库数量、存储和调用用量 |
 
-用途
-
-Playground
-
-选择记忆库与规则，通过对话体验记忆写入和检索
-
-记忆库
-
-管理记忆库、配置记忆规则、查看记忆详情和调试检索
-
-记忆观测
-
-对照会话消息与关联的记忆变更，参见[记忆观测](raw/application-user-guide/agent-context/memory-library-overview/observability/observation.md)
-
-记忆审计
-
-筛选变更事件并查看前后快照，参见[记忆审计](raw/application-user-guide/agent-context/memory-library-overview/observability/audit.md)
-
-服务渠道
-
-查看 REST API、MCP Server、CLI 和 Agent Skill 接入方式
-
-用量
-
-查看记忆库数量、存储和调用用量
+<a id="快速开始"></a>
 
 ## 快速开始
 
-通过 API 3 步即可完成记忆的写入、查看和检索，参见[快速开始](raw/application-user-guide/agent-context/memory-library-overview/overview/quickstart.md)。写入的记忆可在[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/memory/list)默认记忆库的**记忆详情**标签页，输入记忆实体 ID（`user_id`）后点击**查看**进行确认。
+通过 API 3 步即可完成记忆的写入、查看和检索，参见[快速开始](overview/quickstart.md)。写入的记忆可在[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/memory/list)默认记忆库的**记忆详情**标签页，输入记忆实体 ID（`user_id`）后点击**查看**进行确认。
+
+<a id="创建记忆库"></a>
 
 ## 创建记忆库
 
@@ -62,7 +53,9 @@ Playground
 
 删除记忆库：在记忆库卡片上点击 `...` 图标，或在记忆库详情页右上角点击 `...` 图标，再点击**删除**。删除后记忆库中的所有记忆内容将被清除且不可恢复；默认记忆库不可删除。
 
-详细说明参见[创建与删除记忆库](raw/application-user-guide/agent-context/memory-library-overview/create-memory.md)。
+详细说明参见[创建与删除记忆库](create-memory.md)。
+
+<a id="配置记忆规则"></a>
 
 ## 配置记忆规则
 
@@ -72,7 +65,9 @@ Playground
 -   **用户画像规则**：持久化存储用户的属性信息，需逐个定义画像字段的名称、描述、初始值和记忆抽取策略版本。
 -   **技能记忆规则**：从可复用轨迹中归纳技能记忆。
 
-事实记忆与用户画像的参数说明参见[配置记忆规则](raw/application-user-guide/agent-context/memory-library-overview/create-memory/configure-rules.md)。
+事实记忆与用户画像的参数说明参见[配置记忆规则](create-memory/configure-rules.md)。
+
+<a id="查看记忆与检索调试"></a>
 
 ## 查看记忆与检索调试
 
@@ -80,18 +75,22 @@ Playground
 
 在**记忆检索**标签页可调试检索效果。通过 API 调试时，调用 `/memory_nodes/search`，用 `messages` 提供对话记录，使用 `top_k` 控制最大召回数量；`min_score` 是 Pro 版本生效的最小分数阈值，默认值为 0.3。
 
-通过控制台编辑、停用、恢复、删除事实记忆，或通过 API 管理记忆（列表、更新、删除），参见[管理记忆](raw/application-user-guide/agent-context/memory-library-overview/create-memory/manage-memory.md)。
+通过控制台编辑、停用、恢复、删除事实记忆，或通过 API 管理记忆（列表、更新、删除），参见[管理记忆](create-memory/manage-memory.md)。
+
+<a id="使用用户画像"></a>
 
 ## 使用用户画像
 
-通过 API 创建画像模板后，调用 `AddMemory` 时传入画像模板 ID（`profile_schema`），系统会自动从对话中提取结构化属性，再通过 `GetUserProfile` 获取用户画像。完整流程参见[使用用户画像](raw/application-user-guide/agent-context/memory-library-overview/create-memory/user-profile.md)。
+通过 API 创建画像模板后，调用 `AddMemory` 时传入画像模板 ID（`profile_schema`），系统会自动从对话中提取结构化属性，再通过 `GetUserProfile` 获取用户画像。完整流程参见[使用用户画像](create-memory/user-profile.md)。
+
+<a id="相关文档"></a>
 
 ## 相关文档
 
--   [快速开始](raw/application-user-guide/agent-context/memory-library-overview/overview/quickstart.md)
--   [核心概念](raw/application-user-guide/agent-context/memory-library-overview/overview/concepts.md)
--   [集成方式概览](raw/application-user-guide/agent-context/memory-library-overview/integration-overview.md)
--   [长期记忆 API](raw/application-user-guide/agent-context/memory-library-overview/long-term-memory-2-0.md)
--   [长期记忆 API 参考](raw/application-api-reference/long-term-memory-new/long-term-memory-api-reference.md)
--   [计费说明](raw/application-user-guide/agent-billing/billing-f23f20af1adb6c6b.md)
--   [常见问题](raw/application-user-guide/agent-context/memory-library-overview/integration-overview/faq.md)
+-   [快速开始](overview/quickstart.md)
+-   [核心概念](overview/concepts.md)
+-   [集成方式概览](integration-overview.md)
+-   [长期记忆 API](long-term-memory-2-0.md)
+-   [长期记忆 API 参考](../../../application-api-reference/long-term-memory-new/long-term-memory-api-reference.md)
+-   [计费说明](../../agent-billing/billing-f23f20af1adb6c6b.md)
+-   [常见问题](integration-overview/faq.md)

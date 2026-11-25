@@ -2,6 +2,10 @@
 
 为了在 VPC 内直接调用阿里云百炼的模型或应用 API，且确保流量不经过公网，可以在百炼控制台添加私网连接，将通信完全限制在阿里云内网。
 
+<a id="工作原理"></a>
+
+<a id="984ea3bf63s58"></a>
+
 ## 工作原理
 
 百炼网关支持以下两种接入方式：
@@ -24,7 +28,15 @@ VPC 内的计算资源访问私网域名时，流量将通过 PrivateLink 转发
 -   华北6（乌兰察布）
 -   华北3（张家口）
 
+<a id="通过私网连接访问阿里云百炼-api"></a>
+
+<a id="77efa790086jo"></a>
+
 ## 通过私网连接访问阿里云百炼 API
+
+<a id="步骤一-在百炼控制台添加私网连接"></a>
+
+<a id="726a487d813ji"></a>
 
 ### 步骤一：在百炼控制台添加私网连接
 
@@ -43,6 +55,10 @@ VPC 内的计算资源访问私网域名时，流量将通过 PrivateLink 转发
 4.  单击**确认**，等待**状态**变为**创建成功**。添加完成后预计延迟 1～3min 生效，生效期间该 VPC 下任意云服务器均可使用私网域名访问百炼服务。
     
 
+<a id="步骤二-关联业务空间"></a>
+
+<a id="2e9d4c7b61pvl"></a>
+
 ### 步骤二：关联业务空间
 
 需要通过私网访问阿里云百炼的业务空间，须与私网连接建立关联。
@@ -50,6 +66,10 @@ VPC 内的计算资源访问私网域名时，流量将通过 PrivateLink 转发
 1.  在百炼控制台左侧导航栏选择**业务空间管理**，新建业务空间或编辑目标业务空间。
 2.  在**高级配置**中，将**私网连接**设置为目标私网连接。下拉选项展示终端节点 ID 及其所属地域和 VPC；如无目标选项，可在下拉框中单击**新建私网连接**创建。关联后，该业务空间可通过对应 VPC 的私网连接访问百炼服务。
 3.  如需解除关联：编辑业务空间并清空**私网连接**后保存；或在**网络配置**页面展开目标私网连接行，在**关联业务空间**中单击**解绑**，跳转至对应业务空间处理。已关联业务空间的私网连接需先解绑才能删除。
+
+<a id="步骤三-获取私网域名"></a>
+
+<a id="7688834737rep"></a>
 
 ### 步骤三：获取私网域名
 
@@ -59,20 +79,30 @@ VPC 内的计算资源访问私网域名时，流量将通过 PrivateLink 转发
 
 私网域名仅在所选 VPC 内可解析和访问，通过 HTTPS（443 端口）调用阿里云百炼 API。未关联业务空间时，展开行的 **Endpoint** 列为空。
 
+<a id="步骤四-调用验证"></a>
+
+<a id="2559e347f69hu"></a>
+
 ### 步骤四：调用验证
 
 将阿里云百炼 API base\_url 中的域名，替换为上一步骤中获取到的私网域名，然后在对应 VPC 发起调用即可。
 
-以 OpenAI 兼容模式调用[通义千问文本模型](raw/model-api-reference/qwen-api-reference.md)为例：
+以 OpenAI 兼容模式调用[通义千问文本模型](../../../model-api-reference/qwen-api-reference.md)为例：
 
 -   替换前：`https://{WorkspaceId}.{RegionId}.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
 -   替换后：`https://{WorkspaceId}-{VpcId}.{RegionId}.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
 
 调用示例：
 
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-http-tab"></a>
+
 HTTP
 
-```
+<a id="code-code-group-http"></a>
+
+```bash
 # 将原始域名替换为上一步骤中获取到的私网域名
 curl -X POST https://{WorkspaceId}-{VpcId}.{RegionId}.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -92,9 +122,13 @@ curl -X POST https://{WorkspaceId}-{VpcId}.{RegionId}.maas.aliyuncs.com/compatib
 }'
 ```
 
+<a id="fig-code-group-openai-python-sdk-tab"></a>
+
 OpenAI Python SDK
 
-```
+<a id="code-code-group-openai-python-sdk"></a>
+
+```python
 import os
 from openai import OpenAI
 client = OpenAI(
@@ -111,9 +145,13 @@ completion = client.chat.completions.create(
 print(completion.model_dump_json())
 ```
 
+<a id="fig-code-group-dashscope-python-sdk-tab"></a>
+
 DashScope Python SDK
 
-```
+<a id="code-code-group-dashscope-python-sdk"></a>
+
+```python
 import os
 # 建议dashscope SDK 的版本 >= 2.0.1
 import dashscope
@@ -139,9 +177,13 @@ except DashScopeError as e:
     print('请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code')
 ```
 
+<a id="fig-code-group-dashscope-java-sdk-tab"></a>
+
 DashScope Java SDK
 
-```
+<a id="code-code-group-dashscope-java-sdk"></a>
+
+```java
 // 建议DashScope SDK的版本 >= 2.12.0
 import java.util.Arrays;
 import com.alibaba.dashscope.aigc.generation.Generation;
@@ -186,7 +228,11 @@ public class Main {
 }
 ```
 
-> 调用前，需要您已完成[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。如需要直接传入 API Key，请将`$DASHSCOPE_API_KEY` 替换为您的 API Key。
+> 调用前，需要您已完成[获取与配置 API Key](../../../model-api-reference/preparations/get-api-key.md)。如需要直接传入 API Key，请将`$DASHSCOPE_API_KEY` 替换为您的 API Key。
+
+<a id="跨账号访问"></a>
+
+<a id="cross-account-vpc-sharing"></a>
 
 ## 跨账号访问
 
@@ -197,6 +243,10 @@ public class Main {
 
 两种方式都不需要在账号之间共享私网连接本身。调用方不是百炼账号时，由百炼账号将私网域名和业务空间 API Key 提供给调用方。
 
+<a id="方式一-vpc-共享"></a>
+
+<a id="cross-account-vpc-sharing-steps"></a>
+
 ### 方式一：VPC 共享
 
 VPC 共享涉及两个账号：
@@ -206,13 +256,19 @@ VPC 共享涉及两个账号：
 
 私网连接创建在共享 VPC 内，该 VPC 内属于任一账号的资源都可以使用这条连接。也可以由 VPC 所有者账号自己在该 VPC 内创建私网连接，供共享 VPC 内的其他账号使用。无论哪种情况，PrivateLink 费用都由创建私网连接的账号承担。以下以百炼账号创建私网连接为例。
 
+<a id="步骤一-vpc-所有者账号共享交换机"></a>
+
 #### 步骤一：VPC 所有者账号共享交换机
 
 登录资源共享控制台，单击**创建共享单元**，依次完成**配置基本信息并添加资源**（添加需要共享的交换机）、**关联权限**（选择 `AliyunRSDefaultPermissionVSwitch`）、**关联资源使用者**（输入百炼账号的 UID）和**确认并提交**。共享的是交换机而不是整个 VPC，详细操作参见[共享 VPC](https://help.aliyun.com/zh/vpc/vpc-sharing)。
 
+<a id="步骤二-百炼账号接受共享"></a>
+
 #### 步骤二：百炼账号接受共享
 
 使用百炼账号登录资源共享控制台，在**共享给我**页面接受共享。如果共享单元已自动关联，可跳过此步。
+
+<a id="步骤三-百炼账号添加私网连接"></a>
 
 #### 步骤三：百炼账号添加私网连接
 
@@ -225,9 +281,15 @@ VPC 共享涉及两个账号：
 
 其他参数与同账号流程一致。
 
+<a id="步骤四-完成后续配置并调用"></a>
+
 #### 步骤四：完成后续配置并调用
 
 私网连接创建成功后，按本文[步骤二](#2e9d4c7b61pvl)、[步骤三](#7688834737rep)、[步骤四](#2559e347f69hu)关联业务空间并获取私网域名。调用方在共享 VPC 内使用该私网域名和业务空间 API Key 发起调用。
+
+<a id="方式二-vpc-互联"></a>
+
+<a id="cross-account-vpc-interconnection"></a>
 
 ### 方式二：VPC 互联
 
@@ -237,6 +299,8 @@ VPC 互联涉及两个账号：
 -   **调用方账号**：拥有调用方资源所在的 VPC（下称调用方 VPC）。
 
 VPC 互联后两个 VPC 的网络是双向连通的，任一账号都可以在自己的 VPC 内创建私网连接供另一账号调用，即两个账号都可以作为百炼账号。
+
+<a id="步骤一-打通网络"></a>
 
 #### 步骤一：打通网络
 
@@ -259,41 +323,40 @@ VPC 互联后两个 VPC 的网络是双向连通的，任一账号都可以在�
     详细操作参见[使用企业版转发路由器实现跨地域跨账号 VPC 互通](https://help.aliyun.com/zh/cen/getting-started/use-enterprise-edition-transit-routers-to-connect-vpcs-across-regions-and-accounts)。
     
 
+<a id="步骤二-放行私网连接安全组"></a>
+
 #### 步骤二：放行私网连接安全组
 
 网络打通后，调用方仍需经过私网连接安全组的放行才能访问私网连接。百炼账号在私网连接关联的安全组中添加以下入方向规则：
 
-参数
-
-取值
-
-授权策略
-
-允许
-
-协议类型
-
-自定义 TCP
-
-端口范围
-
-443
-
-授权对象
-
-调用方 VPC 网段，例如 `192.168.0.0/16`。可在专有网络控制台的 VPC 详情页查看
+| 参数 | 取值 |
+| --- | --- |
+| 授权策略 | 允许 |
+| 协议类型 | 自定义 TCP |
+| 端口范围 | 443 |
+| 授权对象 | 调用方 VPC 网段，例如 `192.168.0.0/16`。可在专有网络控制台的 VPC 详情页查看 |
 
 未放行时，即使网络已打通，调用也会连接超时。
+
+<a id="步骤三-发起调用"></a>
 
 #### 步骤三：发起调用
 
 百炼账号将私网域名和业务空间 API Key 提供给调用方账号，调用方 VPC 内的资源按本文[步骤四](#2559e347f69hu)发起调用。如果返回 `Failed to connect to <私网域名> port 443` 等连接超时错误，请检查步骤一的网络配置和步骤二的安全组规则。
+
+<a id="计费说明"></a>
+
+<a id="f9ae3522a8bqk"></a>
 
 ## 计费说明
 
 使用私网连接（PrivateLink）会产生额外费用，可参考[私网连接计费说明](https://help.aliyun.com/zh/privatelink/private-link-billing-description)来了解和评估成本。
 
 私网连接和模型调用费用由创建该私网连接的账号承担，与 VPC 属于哪个账号无关。VPC 对等连接和云企业网计费参见[VPC 对等连接](https://help.aliyun.com/zh/vpc/vpc-peer-to-peer-connection)和[云企业网计费规则](https://help.aliyun.com/zh/cen/product-overview/billing-rules)。
+
+<a id="常见问题"></a>
+
+<a id="fdd1e8823dfnx"></a>
 
 ## 常见问题
 

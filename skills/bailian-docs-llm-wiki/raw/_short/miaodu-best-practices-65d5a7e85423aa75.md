@@ -2,6 +2,10 @@
 
 本文提供妙读写作链路 API的几个最佳实践，帮助您快速入门并开发您自己的业务应用。
 
+<a id="前提条件"></a>
+
+<a id="EIbyy"></a>
+
 ## 前提条件
 
 -   已开通服务；
@@ -10,7 +14,9 @@
 
 使⽤妙读功能，是使⽤SDK⽅式，MAVEN依赖如下：
 
-```
+<a id="code-block"></a>
+
+```xml
 <dependency>
   <groupId>com.aliyun</groupId>
   <artifactId>alibabacloud-aimiaobi20230801</artifactId>
@@ -18,13 +24,23 @@
 </dependency>
 ```
 
+<a id="操作步骤"></a>
+
+<a id="c69dc1afedhl4"></a>
+
 ## 操作步骤
+
+<a id="第一步-上传文档到文档库"></a>
+
+<a id="r8tCg"></a>
 
 ### 第一步：上传文档到文档库
 
-通过[文档上传](raw/_short/api-aimiaobi-2023-08-01-uploaddoc-65330797e2012078.md)接口上传文档到妙读文档库，如下为示例代码：
+通过[文档上传](api-aimiaobi-2023-08-01-uploaddoc-65330797e2012078.md)接口上传文档到妙读文档库，如下为示例代码：
 
-```
+<a id="code-block-2"></a>
+
+```json
 package com.aliyun.sdk.service.aimiaobi20230801;
 
 import com.alibaba.fastjson.JSON;
@@ -104,11 +120,17 @@ public class uploadDocTest {
 }
 ```
 
+<a id="第二步-获得上传的-档信息"></a>
+
+<a id="c5e475c73dz1d"></a>
+
 ### 第二步：获得上传的⽂档信息
 
-上传完文档后需要使用[获取文档信息](raw/_short/api-aimiaobi-2023-08-01-getdocinfo-e63b147cceaff4cb.md)接口获取文档是否上传成功的信息。
+上传完文档后需要使用[获取文档信息](api-aimiaobi-2023-08-01-getdocinfo-e63b147cceaff4cb.md)接口获取文档是否上传成功的信息。
 
-```
+<a id="code-block-3"></a>
+
+```java
 import com.alibaba.fastjson.JSON;
 import com.aliyun.auth.credentials.Credential;
 import com.aliyun.auth.credentials.provider.StaticCredentialProvider;
@@ -161,18 +183,24 @@ CompletableFuture<GetDocInfoResponse> future = client.getDocInfo(request);
  }
 ```
 
+<a id="第三步-文档辅助阅读能力-包含导读-脑图-问答等"></a>
+
+<a id="hYoD4"></a>
+
 ### 第三步：文档辅助阅读能力（包含导读、脑图、问答等）
 
 您可以为指定的文档进行辅助阅读的操作，妙读提供导读、脑图、文档问答等辅助阅读能力。下面是文档导读、全文脑图、文档问答的示例代码：
 
-1.  [文档导读](raw/_short/api-aimiaobi-2023-08-01-rundocintroduction-10faef44b834783f.md)
+1.  [文档导读](api-aimiaobi-2023-08-01-rundocintroduction-10faef44b834783f.md)
 
 -   针对一篇文章、视频或者URL，生成文章的导读内容，包含全文总结、关键要点、章节速览（即分段、每段的总结、段落摘要）。此外支持多种多语言的输入和输出。
--   如果用户仅需要对文章进行全文总结，可使用RunDocSummary接口实现，具体请参《[文档摘要](raw/_short/api-aimiaobi-2023-08-01-rundocsummary-747d3826b5a072aa.md)》。
+-   如果用户仅需要对文章进行全文总结，可使用RunDocSummary接口实现，具体请参《[文档摘要](api-aimiaobi-2023-08-01-rundocsummary-747d3826b5a072aa.md)》。
 
 如下为示例代码：
 
-```
+<a id="code-block-4"></a>
+
+```java
 package com.aliyun.sdk.service.aimiaobi20230801;
 
 import com.aliyun.auth.credentials.Credential;
@@ -245,13 +273,15 @@ public class runDocIntroductionTest {
 }
 ```
 
-1.  [全文脑图](raw/_short/api-aimiaobi-2023-08-01-rundocbrainmap-dc8e5bb64d710c98.md)
+1.  [全文脑图](api-aimiaobi-2023-08-01-rundocbrainmap-dc8e5bb64d710c98.md)
 
 -   针对文章或者书，生成三级脑图，且支持生成多语种，支持控制脑图第二级数量，支持控制叶子节点的字数。
 
 如下为示例代码：
 
-```
+<a id="code-block-5"></a>
+
+```java
 import com.aliyun.auth.credentials.Credential;
 import com.aliyun.auth.credentials.provider.StaticCredentialProvider;
 import com.aliyun.sdk.gateway.pop.Configuration;
@@ -311,13 +341,15 @@ public class runDocBrainmap {
 }
 ```
 
-1.  [文档问答（文章问答/多模态文件问答）](raw/_short/api-aimiaobi-2023-08-01-rundocqa-45115fa76b5c8329.md)
+1.  [文档问答（文章问答/多模态文件问答）](api-aimiaobi-2023-08-01-rundocqa-45115fa76b5c8329.md)
 
 -   针对一个自然语言类的query，在指定的文章范围内给出文字答案（有图则会配图），并显示溯源信息。 多模态文件问答：针对一个自然语言类的query，在指定的多模态文件范围内给出文字答案，并带上相关的图片、视频片段或者文字，并显示溯源信息。
 
 如下为示例代码：
 
-```
+<a id="code-block-6"></a>
+
+```java
 package com.aliyun.sdk.service.aimiaobi20230801;
 
 import com.aliyun.auth.credentials.Credential;
@@ -399,8 +431,12 @@ public class runDocQATest {
 }
 ```
 
+<a id="接口调用常见faq"></a>
+
+<a id="ff57ba57bdubs"></a>
+
 ## 接口调用常见FAQ
 
 问：文件上传成功后，马上调用妙读的导读和脑图的接口时，为什么返回的Errorcode是Failed，显示文件内容为空？
 
-答：[文档上传](raw/_short/api-aimiaobi-2023-08-01-uploaddoc-65330797e2012078.md)为异步调用接口，需要先用[获取文档信息](raw/_short/api-aimiaobi-2023-08-01-getdocinfo-e63b147cceaff4cb.md)接口获取其真实的状态，当状态为成功后，才可对文档进行生成文档脑图、文档摘要、进行文档问答等操作。
+答：[文档上传](api-aimiaobi-2023-08-01-uploaddoc-65330797e2012078.md)为异步调用接口，需要先用[获取文档信息](api-aimiaobi-2023-08-01-getdocinfo-e63b147cceaff4cb.md)接口获取其真实的状态，当状态为成功后，才可对文档进行生成文档脑图、文档摘要、进行文档问答等操作。

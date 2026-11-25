@@ -2,6 +2,10 @@
 
 获取文档库列表，包含文档名称、描述、唯一标识等信息。
 
+<a id="接口说明"></a>
+
+<a id="api-detail-51"></a>
+
 ## 接口说明
 
 前提条件
@@ -9,11 +13,19 @@
 -   已开通阿里云百炼服务和通义点金服务。
 -   获取到 workspaceId：获取 [workspace 标识](https://help.aliyun.com/zh/model-studio/developer-reference/get-app-id-and-workspace?spm=openapi-amp.newDocPublishment.0.0.2eb8281foUVd15#2612f896detsz:~:text=%E6%9F%A5%E7%9C%8BAPI%2DKEY%E3%80%82-,%E8%8E%B7%E5%8F%96APP%2DID%E5%92%8CWORKSPACE,-%E8%BF%9B%E5%85%A5%E6%88%91%E7%9A%84%E5%BA%94%E7%94%A8)。
 
+<a id="调试"></a>
+
+<a id="api-detail-23"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
 [调试](https://api.aliyun.com/api/DianJin/2024-06-28/GetLibraryList)
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -32,553 +44,105 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-操作
+<table><thead><tr><th>操作</th><th>访问级别</th><th>资源类型</th><th>条件关键字</th><th>关联操作</th></tr></thead><tbody><tr><td>dianjin:GetLibraryList</td><td>get</td><td><div><div>*全部资源</div><div><code>*</code></div></div></td><td><ul>无</ul></td><td>无</td></tr></tbody></table>
 
-访问级别
+<a id="请求语法"></a>
 
-资源类型
-
-条件关键字
-
-关联操作
-
-dianjin:GetLibraryList
-
-get
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-53"></a>
 
 ## 请求语法
 
-```
+<a id="code-block"></a>
+
+```text
 GET /{workspaceId}/api/library/list HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="api-detail-36"></a>
+
 ## 请求参数
 
-名称
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| workspaceId | string | 是 | 路径参数，业务空间 id。 | llm-xxxxx |
+| page | integer | 否 | 页码 | 1 |
+| pageSize | integer | 否 | 每页记录的数量 | 10 |
+| query | string | 否 | 搜索的关键词，支持文档库名称和描述 | 测试文档库 |
 
-类型
+<a id="返回参数"></a>
 
-必填
-
-描述
-
-示例值
-
-workspaceId
-
-string
-
-是
-
-路径参数，业务空间 id。
-
-llm-xxxxx
-
-page
-
-integer
-
-否
-
-页码
-
-1
-
-pageSize
-
-integer
-
-否
-
-每页记录的数量
-
-10
-
-query
-
-string
-
-否
-
-搜索的关键词，支持文档库名称和描述
-
-测试文档库
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-名称
-
-类型
-
-描述
-
-示例值
-
-object
-
-ResultCode<PageVO
-
-\>
-
-cost
-
-long
-
-耗时
-
-null
-
-data
-
-object
-
-返回数据
-
-currentPage
-
-long
-
-页码
-
-1
-
-pageSize
-
-long
-
-页面记录数
-
-10
-
-records
-
-array<object>
-
-记录列表
-
-record
-
-object
-
-记录
-
-description
-
-string
-
-文档库描述
-
-文档库
-
-documentCount
-
-long
-
-文档数量
-
-10
-
-gmtCreate
-
-string
-
-创建时间
-
-2024-01-01 00:00:00
-
-gmtModified
-
-string
-
-修改时间
-
-2024-01-01 00:00:00
-
-id
-
-string
-
-文档库 id
-
-24vs4aa42jv1rg7
-
-indexSetting
-
-object
-
-文档库索引设置
-
-chunkStrategy
-
-object
-
-分块策略
-
-docTreeSplit
-
-boolean
-
-版面切分
-
-true
-
-docTreeSplitSize
-
-integer
-
-版面切分大小
-
-160
-
-enhanceGraph
-
-boolean
-
-是否增强图片
-
-true
-
-enhanceTable
-
-boolean
-
-是否增强表格
-
-true
-
-overlap
-
-integer
-
-chunk 重叠长度
-
-40
-
-sentenceSplit
-
-boolean
-
-按句子切分
-
-true
-
-sentenceSplitSize
-
-integer
-
-按句子切分大小
-
-160
-
-size
-
-integer
-
-chunk 大小
-
-256
-
-split
-
-boolean
-
-是否切块
-
-true
-
-modelConfig
-
-object
-
-模型配置
-
-temperature
-
-double
-
-温度
-
-0.8
-
-topP
-
-double
-
-topP
-
-0.8
-
-promptRoleStyle
-
-string
-
-prompt 角色风格
-
-你是一个信息处理专家。
-
-queryEnhancer
-
-object
-
-query 增强
-
-enableFollowUp
-
-boolean
-
-多轮增强
-
-true
-
-enableMultiQuery
-
-boolean
-
-是否利用大模型知识拆解问题
-
-true
-
-enableOpenQa
-
-boolean
-
-是否利用大模型知识回答问题
-
-true
-
-enableQueryRewrite
-
-boolean
-
-是否根据领域知识改写问题
-
-true
-
-enableSession
-
-boolean
-
-记录 session
-
-true
-
-localKnowledgeId
-
-string
-
-知识改写使用的文档库 id
-
-sdbcjsbc
-
-withDocumentReference
-
-boolean
-
-是否带文档引用
-
-true
-
-recallStrategy
-
-object
-
-召回策略
-
-documentRankType
-
-string
-
-合并&排序策略
-
-model
-
-limit
-
-integer
-
-两路合并总结的结果数
-
-10
-
-textIndexSetting
-
-object
-
-文本索引设置
-
-category
-
-string
-
-文本索引类型
-
-ElasticSearch
-
-enable
-
-boolean
-
-文本索引是否开启
-
-true
-
-indexAnalyzer
-
-string
-
-文本索引的索引分析器: (Standard, IkMaxWord, IkSmart)
-
-Standard
-
-rankThreshold
-
-double
-
-文本索引排序阈值
-
-null
-
-searchAnalyzer
-
-string
-
-文本索引的搜索分析器: (Standard, IkMaxWord, IkSmart)
-
-Standard
-
-topK
-
-integer
-
-文本索引最后总结结果数
-
-10
-
-vectorIndexSetting
-
-object
-
-向量索引设置
-
-category
-
-string
-
-向量索引来源：建议填写 ADB
-
-ADB
-
-embeddingType
-
-string
-
-向量索引文本 Embedding 模型
-
-DashScope
-
-enable
-
-boolean
-
-是否开启
-
-true
-
-rankThreshold
-
-double
-
-向量索引排序阈值
-
-null
-
-topK
-
-integer
-
-向量索引最后总结结果数
-
-10
-
-libraryName
-
-string
-
-文档库名称
-
-测试文档库
-
-totalPages
-
-long
-
-总页数
-
-10
-
-totalRecords
-
-long
-
-总记录数
-
-100
-
-dataType
-
-string
-
-数据类型
-
-null
-
-errCode
-
-string
-
-错误码
-
-0
-
-message
-
-string
-
-错误信息
-
-ok
-
-requestId
-
-string
-
-请求 id
-
-0a06dfe817156528535968405edce3
-
-success
-
-boolean
-
-是否成功
-
-true
-
-time
-
-string
-
-时间戳
-
-2024-01-01 00:00:00
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | ResultCode<PageVO<br><br>\> |  |
+| cost | long | 耗时 | null |
+| data | object | 返回数据 |  |
+| currentPage | long | 页码 | 1 |
+| pageSize | long | 页面记录数 | 10 |
+| records | array<object> | 记录列表 |  |
+| record | object | 记录 |  |
+| description | string | 文档库描述 | 文档库 |
+| documentCount | long | 文档数量 | 10 |
+| gmtCreate | string | 创建时间 | 2024-01-01 00:00:00 |
+| gmtModified | string | 修改时间 | 2024-01-01 00:00:00 |
+| id | string | 文档库 id | 24vs4aa42jv1rg7 |
+| indexSetting | object | 文档库索引设置 |  |
+| chunkStrategy | object | 分块策略 |  |
+| docTreeSplit | boolean | 版面切分 | true |
+| docTreeSplitSize | integer | 版面切分大小 | 160 |
+| enhanceGraph | boolean | 是否增强图片 | true |
+| enhanceTable | boolean | 是否增强表格 | true |
+| overlap | integer | chunk 重叠长度 | 40 |
+| sentenceSplit | boolean | 按句子切分 | true |
+| sentenceSplitSize | integer | 按句子切分大小 | 160 |
+| size | integer | chunk 大小 | 256 |
+| split | boolean | 是否切块 | true |
+| modelConfig | object | 模型配置 |  |
+| temperature | double | 温度 | 0.8 |
+| topP | double | topP | 0.8 |
+| promptRoleStyle | string | prompt 角色风格 | 你是一个信息处理专家。 |
+| queryEnhancer | object | query 增强 |  |
+| enableFollowUp | boolean | 多轮增强 | true |
+| enableMultiQuery | boolean | 是否利用大模型知识拆解问题 | true |
+| enableOpenQa | boolean | 是否利用大模型知识回答问题 | true |
+| enableQueryRewrite | boolean | 是否根据领域知识改写问题 | true |
+| enableSession | boolean | 记录 session | true |
+| localKnowledgeId | string | 知识改写使用的文档库 id | sdbcjsbc |
+| withDocumentReference | boolean | 是否带文档引用 | true |
+| recallStrategy | object | 召回策略 |  |
+| documentRankType | string | 合并&排序策略 | model |
+| limit | integer | 两路合并总结的结果数 | 10 |
+| textIndexSetting | object | 文本索引设置 |  |
+| category | string | 文本索引类型 | ElasticSearch |
+| enable | boolean | 文本索引是否开启 | true |
+| indexAnalyzer | string | 文本索引的索引分析器: (Standard, IkMaxWord, IkSmart) | Standard |
+| rankThreshold | double | 文本索引排序阈值 | null |
+| searchAnalyzer | string | 文本索引的搜索分析器: (Standard, IkMaxWord, IkSmart) | Standard |
+| topK | integer | 文本索引最后总结结果数 | 10 |
+| vectorIndexSetting | object | 向量索引设置 |  |
+| category | string | 向量索引来源：建议填写 ADB | ADB |
+| embeddingType | string | 向量索引文本 Embedding 模型 | DashScope |
+| enable | boolean | 是否开启 | true |
+| rankThreshold | double | 向量索引排序阈值 | null |
+| topK | integer | 向量索引最后总结结果数 | 10 |
+| libraryName | string | 文档库名称 | 测试文档库 |
+| totalPages | long | 总页数 | 10 |
+| totalRecords | long | 总记录数 | 100 |
+| dataType | string | 数据类型 | null |
+| errCode | string | 错误码 | 0 |
+| message | string | 错误信息 | ok |
+| requestId | string | 请求 id | 0a06dfe817156528535968405edce3 |
+| success | boolean | 是否成功 | true |
+| time | string | 时间戳 | 2024-01-01 00:00:00 |
+
+<a id="示例"></a>
+
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -586,7 +150,9 @@ string
 
 `JSON`格式
 
-```
+<a id="code-block-2"></a>
+
+```text
 {
   "cost": 0,
   "data": {
@@ -659,6 +225,10 @@ string
   "time": "2024-01-01 00:00:00"
 }
 ```
+
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
 
 ## 错误码
 

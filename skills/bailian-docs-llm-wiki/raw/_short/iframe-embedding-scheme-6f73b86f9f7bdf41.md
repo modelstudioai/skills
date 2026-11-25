@@ -2,27 +2,45 @@
 
 本文档是关于全妙SaaS产品以iframe形式嵌入第三方系统的技术对接方案。
 
+<a id="应用场景描述"></a>
+
+<a id="5b364697747sa"></a>
+
 ### 应用场景描述
 
 当您想要将全妙SaaS产品嵌入到自己的内部系统（如 OA、CRM、门户平台）中时，可以应用此方式，快速集成，开发成本低，并支持配置对应的视觉参数，保持您企业内部视觉的统一。
 
+<a id="具体的接入步骤"></a>
+
+<a id="d0ba535c4ensp"></a>
+
 ### 具体的接入步骤
+
+<a id="101bea1c7aw0d"></a>
 
 ##### 1\. 给阿里云主账号创建子账号
 
 使用主账号在阿里云上[RAM用户管理](https://ram.console.aliyun.com/users)创建子账号，并申请ak、sk并记录下来。只需要一个子账号，后续不同账号下数据权限通过AssumeRole 接口中的RoleSessionName来区分
 
+<a id="00941268a7nuz"></a>
+
 ##### 2\. 给子账号新增授权
 
 进入用户详情页面，在权限管理tab，给子账号新增授权，增加AliyunSTSAssumeRoleAccess和AliyunAiMiaoBiFullAccess 权限
+
+<a id="817249f348f1s"></a>
 
 ##### 3\. 给主账号创建角色
 
 使用主账号在阿里云上[角色管理](https://ram.console.aliyun.com/roles)中创建角色，并赋予角色上面权限（AliyunSTSAssumeRoleAccess和AliyunAiMiaoBiFullAccess），只需要申请一个角色。
 
+<a id="2b4b438aa4avw"></a>
+
 ##### 4\. 进入百炼控制台确认角色
 
 使用主账号进入百炼控制台，在权限配置地方配置，选择新增用户，弹窗中类型选择RAM角色，RAM角色中选择刚刚创建的角色，确定即可。**注意是给角色授权，而不是给用户授权**。
+
+<a id="99bddaf7f1c51"></a>
 
 ##### 5\. 生成免登录地址
 
@@ -36,6 +54,8 @@
     
     1.  其中Destination参数就是需要跳转全妙的目标地址（需要将全妙地址的host域名aimiaobi.console.aliyun.com改为aimiaobi4service.console.aliyun.com），如需定制内容，您可以[在这里定制生成](https://aimiaobi.console.aliyun.com/#/iframeConfig)；
     2.  LoginUrl使用上面服务链接，例如[https://xx.com/aimiaobi，用于登录失效时，自动重定向到对应登录地址重新进行用户登录认证。Login](https://xx.com/aimiaobi%EF%BC%8C%E7%94%A8%E4%BA%8E%E7%99%BB%E5%BD%95%E5%A4%B1%E6%95%88%E6%97%B6%EF%BC%8C%E8%87%AA%E5%8A%A8%E9%87%8D%E5%AE%9A%E5%90%91%E5%88%B0%E5%AF%B9%E5%BA%94%E7%99%BB%E5%BD%95%E5%9C%B0%E5%9D%80%E9%87%8D%E6%96%B0%E8%BF%9B%E8%A1%8C%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E8%AE%A4%E8%AF%81%E3%80%82Login) 接口包含以下必填请求参数（均为 String 类型，需 URLEncode）：**Action**，值为 `Login`，表示操作接口名；**LoginUrl**，登录页地址，Session 失效后跳转回该地址重新登录；**Destination**，登录成功后的跳转目的地址，必须为阿里云官网域名；**SigninToken**，通过 GetSignInToken 接口获取的临时安全令牌。
+
+<a id="fe889d1bbc0w5"></a>
 
 ##### 6\. 嵌入
 

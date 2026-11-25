@@ -2,9 +2,17 @@
 
 重要说明：这个接口涉及到扣费，请注意费用 这个接口包含两个操作： 1. 下发用于初始化“PPT生成”的前端组件的code 2. 进行计费
 
+<a id="调试"></a>
+
+<a id="api-doc-debug"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -23,159 +31,56 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-**操作**
+| 操作 | 访问级别 | 资源类型 | 条件关键字 | 关联操作 |
+| --- | --- | --- | --- | --- |
+| aimiaobi:InitiatePptCreation | create | \*全部资源<br><br>`*` | 无 | 无 |
 
-**访问级别**
+<a id="请求语法"></a>
 
-**资源类型**
-
-**条件关键字**
-
-**关联操作**
-
-aimiaobi:InitiatePptCreation
-
-create
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-53"></a>
 
 ## 请求语法
 
-```
+<a id="code-block"></a>
+
+```text
 POST  HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="api-detail-36"></a>
+
 ## 请求参数
 
-**名称**
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| WorkspaceId | string | 否 | 阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-3fy94b2rtadt01qa |
+| TaskId | string | 是 | 任务 ID | 95c2fbe6-5a20-4fc2-8a93-376ed05fbe13 |
+| Outline | string | 否 | 大纲 | \# 中国传统文化艺术的魅力 ## 1. 传统文化艺术的源远流长 ### 1.1 中国古代艺术发展历程 #### 1.1.1 古代绘画艺术的演变 - 从新石器时代的彩陶绘画到东汉时期帛画的出现，绘画形式不断丰富，展现了古人对美的独特追求。唐代绘画风格多样，吴道子的《送子天王图》线条流畅，色彩绚丽，体现了唐代绘画的高超技艺。 #### 1.1.2 书法艺术的传承与创新 - 书法从甲骨文到楷书、行书、草书，历经数千年演变，承载着中华文化的深厚内涵。王羲之的《兰亭序》被誉为“天下第一行书”，其笔法精妙，结构严谨，展现了书法艺术的巅峰。 |
+| ExternalUserId | string | 否 |  | abc |
 
-**类型**
+<a id="返回参数"></a>
 
-**必填**
-
-**描述**
-
-**示例值**
-
-WorkspaceId
-
-string
-
-否
-
-阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)
-
-llm-3fy94b2rtadt01qa
-
-TaskId
-
-string
-
-是
-
-任务 ID
-
-95c2fbe6-5a20-4fc2-8a93-376ed05fbe13
-
-Outline
-
-string
-
-否
-
-大纲
-
-\# 中国传统文化艺术的魅力 ## 1. 传统文化艺术的源远流长 ### 1.1 中国古代艺术发展历程 #### 1.1.1 古代绘画艺术的演变 - 从新石器时代的彩陶绘画到东汉时期帛画的出现，绘画形式不断丰富，展现了古人对美的独特追求。唐代绘画风格多样，吴道子的《送子天王图》线条流畅，色彩绚丽，体现了唐代绘画的高超技艺。 #### 1.1.2 书法艺术的传承与创新 - 书法从甲骨文到楷书、行书、草书，历经数千年演变，承载着中华文化的深厚内涵。王羲之的《兰亭序》被誉为“天下第一行书”，其笔法精妙，结构严谨，展现了书法艺术的巅峰。
-
-ExternalUserId
-
-string
-
-否
-
-abc
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-**名称**
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | Schema of Response |  |
+| RequestId | string | Id of the request | 11AC01F1-88FB-5C4D-B6F5-E8BB136CD5A3 |
+| Success | boolean | 此次请求是否成功 | true |
+| Code | string | 错误码 | DataNotExists |
+| Message | string | 错误消息 | 错误消息 |
+| HttpStatusCode | integer | http 错误码 | 400 |
+| Data | object | 返回数据 |  |
+| AppKey | string | AppKey | S1X5ecouBztZelaQ |
+| Code | string | Code | 7dhqd2 |
 
-**类型**
+<a id="示例"></a>
 
-**描述**
-
-**示例值**
-
-object
-
-Schema of Response
-
-RequestId
-
-string
-
-Id of the request
-
-11AC01F1-88FB-5C4D-B6F5-E8BB136CD5A3
-
-Success
-
-boolean
-
-此次请求是否成功
-
-true
-
-Code
-
-string
-
-错误码
-
-DataNotExists
-
-Message
-
-string
-
-错误消息
-
-错误消息
-
-HttpStatusCode
-
-integer
-
-http 错误码
-
-400
-
-Data
-
-object
-
-返回数据
-
-AppKey
-
-string
-
-AppKey
-
-S1X5ecouBztZelaQ
-
-Code
-
-string
-
-Code
-
-7dhqd2
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -183,7 +88,9 @@ Code
 
 `JSON`格式
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "RequestId": "11AC01F1-88FB-5C4D-B6F5-E8BB136CD5A3",
   "Success": true,
@@ -197,9 +104,17 @@ Code
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
+
 ## 错误码
 
 访问[错误中心](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/errorCode)查看更多错误码。
+
+<a id="变更历史"></a>
+
+<a id="workbench-doc-change-demo"></a>
 
 ## 变更历史
 

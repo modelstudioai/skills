@@ -2,147 +2,72 @@
 
 本文为您介绍通义数据挖掘文档内容审核API的语法及示例。
 
+<a id="请求语法"></a>
+
+<a id="fc7e5abcedu3y"></a>
+
 ## 请求语法
 
-```
+<a id="code-block"></a>
+
+```bash
 POST /zhiwen-chat/audit HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="7ee89e9538w3k"></a>
+
 ## 请求参数
 
-**名称**
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| capabilityType | string | 是 | 能力类型<br><br>文档内容审核：CONTENT\_REVIEW | CONTENT\_REVIEW |
+| userPrompt | string | 是 | 提示词 | 你是一名经验丰富的高级文档审核专家，精通风险识别、合规性检查、事实核查和专业沟通。你的审核标准极为严格，注重细节，并能提供具有建设性的修改建议。你的任务是针对提供的文档，进行一次全面、深入的审核。你需要识别文档中存在的各种问题，生成一份结构化的审核报告。 |
+| fileIdList | array | 是 | 文档ID列表 | \[<br><br>"file\_zhiwen\_XXX"<br><br>\] |
+| stream | boolean | 是 | 是否流式返回 | true |
 
-**类型**
+<a id="返回参数"></a>
 
-**必填**
-
-**描述**
-
-**示例值**
-
-capabilityType
-
-string
-
-是
-
-能力类型
-
-文档内容审核：CONTENT\_REVIEW
-
-CONTENT\_REVIEW
-
-userPrompt
-
-string
-
-是
-
-提示词
-
-你是一名经验丰富的高级文档审核专家，精通风险识别、合规性检查、事实核查和专业沟通。你的审核标准极为严格，注重细节，并能提供具有建设性的修改建议。你的任务是针对提供的文档，进行一次全面、深入的审核。你需要识别文档中存在的各种问题，生成一份结构化的审核报告。
-
-fileIdList
-
-array
-
-是
-
-文档ID列表
-
-\[
-
-"file\_zhiwen\_XXX"
-
-\]
-
-stream
-
-boolean
-
-是
-
-是否流式返回
-
-true
+<a id="e4d7abfd02lfi"></a>
 
 ## 返回参数
 
-**名称**
+| 名称 | 类型 | 描述 |
+| --- | --- | --- |
+| output | object |  |
+| \-choices | array |  |
+| \-finishReason | string | 结束原因 |
+| \-message | object | 消息体 |
+| \-role | string | 角色 |
+| \-content | string | 消息内容 |
+| requestId | string | 请求ID |
+| usage | object | token使用信息 |
+| \-inputTokens | int | 输入token数量 |
+| \-outputTokens | int | 输出token数量 |
+| \-totalTokens | int | 总token数量 |
 
-**类型**
+<a id="示例"></a>
 
-**描述**
-
-output
-
-object
-
-\-choices
-
-array
-
-\-finishReason
-
-string
-
-结束原因
-
-\-message
-
-object
-
-消息体
-
-\-role
-
-string
-
-角色
-
-\-content
-
-string
-
-消息内容
-
-requestId
-
-string
-
-请求ID
-
-usage
-
-object
-
-token使用信息
-
-\-inputTokens
-
-int
-
-输入token数量
-
-\-outputTokens
-
-int
-
-输出token数量
-
-\-totalTokens
-
-int
-
-总token数量
+<a id="f3d8cb046admd"></a>
 
 ## 示例
 
+<a id="调用示例"></a>
+
+<a id="80a593d496slj"></a>
+
 ### 调用示例
+
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-python-tab"></a>
 
 python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 import os
 import requests
 
@@ -176,11 +101,16 @@ with requests.post(url, json=request_body, headers=request_headers) as response:
                     print("Received:", line[5:].strip())
     else:
         print("Received:", response.json())
+
 ```
+
+<a id="fig-code-group-java-tab"></a>
 
 java
 
-```
+<a id="code-code-group-java"></a>
+
+```java
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -318,11 +248,17 @@ public class AuditDemo {
 }
 ```
 
+<a id="正常返回示例"></a>
+
+<a id="fb70f84389k08"></a>
+
 ### 正常返回示例
 
 `JSON`格式
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "output": {
     "choices": [{
@@ -342,6 +278,10 @@ public class AuditDemo {
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="90bc3eb804i3l"></a>
+
 ## 错误码
 
-请参见[错误码-通义数据挖掘](raw/_short/docmining-error-code-d4361ce416c8ad2d.md)。
+请参见[错误码-通义数据挖掘](docmining-error-code-d4361ce416c8ad2d.md)。

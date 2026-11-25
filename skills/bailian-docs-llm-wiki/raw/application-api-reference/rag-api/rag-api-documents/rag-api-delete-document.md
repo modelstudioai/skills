@@ -2,9 +2,17 @@
 
 从知识库中删除文档及其所有关联切片。
 
+<a id="前提"></a>
+
+<a id="h-ragapi-delete-document-prereq"></a>
+
 ## 前提
 
-已完成 Endpoint 与鉴权配置，详见 [API 总览](raw/application-api-reference/rag-api/rag-api-overview.md)和[认证](raw/application-api-reference/rag-api/rag-api-authentication.md)。
+已完成 Endpoint 与鉴权配置，详见 [API 总览](../rag-api-overview.md)和[认证](../rag-api-authentication.md)。
+
+<a id="接口"></a>
+
+<a id="h-ragapi-delete-document-endpoint"></a>
 
 ## 接口
 
@@ -12,39 +20,32 @@
 
 从指定知识库中删除文档及其所有关联切片。
 
-**警告**此操作不可逆。此接口使用 snake\_case 参数名 `index_id`、`doc_ids`，与其他接口的 camelCase（`indexId`）不同。传 `IndexId` 或 `indexId` 都会返回 `Index.InvalidParameter`。
+> **警告**
+>
+> 此操作不可逆。此接口使用 snake\_case 参数名 `index_id`、`doc_ids`，与其他接口的 camelCase（`indexId`）不同。传 `IndexId` 或 `indexId` 都会返回 `Index.InvalidParameter`。
+>
+> 参数缺失时服务端返回的 `Required parameter(IndexId) missing or invalid`，其中 `IndexId` 是服务端内部字段名，**不是**请求参数名，请仍按 `index_id` 传参。
 
-参数缺失时服务端返回的 `Required parameter(IndexId) missing or invalid`，其中 `IndexId` 是服务端内部字段名，**不是**请求参数名，请仍按 `index_id` 传参。
+<a id="请求体"></a>
+
+<a id="h-ragapi-delete-document-req"></a>
 
 ## 请求体
 
-字段
+| 字段 | 必填 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| `index_id` | 是 | string | 知识库 ID |
+| `doc_ids` | 是 | array<string> | 要删除的文档 ID 列表 |
 
-必填
+<a id="请求示例"></a>
 
-类型
-
-说明
-
-`index_id`
-
-是
-
-string
-
-知识库 ID
-
-`doc_ids`
-
-是
-
-array<string>
-
-要删除的文档 ID 列表
+<a id="h-ragapi-delete-document-eg"></a>
 
 ## 请求示例
 
-```
+<a id="code-block"></a>
+
+```bash
 curl -X POST "$BASE_URL/api/v1/indices/rag/index/delete_file" \
   -H "Authorization: Bearer $BAILIAN_API_KEY" \
   -H "Content-Type: application/json" \
@@ -56,11 +57,17 @@ curl -X POST "$BASE_URL/api/v1/indices/rag/index/delete_file" \
 
 其中 `BASE_URL` 为 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com`（`{workspace_id}` 为业务空间 ID），`BAILIAN_API_KEY` 为阿里云百炼 API Key。
 
+<a id="响应示例"></a>
+
+<a id="h-ragapi-delete-document-resp"></a>
+
 ## 响应示例
 
 删除成功返回 200。
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "code": "Success",
   "status_code": 200,
@@ -74,78 +81,29 @@ curl -X POST "$BASE_URL/api/v1/indices/rag/index/delete_file" \
 }
 ```
 
+<a id="响应字段"></a>
+
+<a id="h-ragapi-delete-document-dto"></a>
+
 ### 响应字段
 
-字段
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `code` | string | 响应码，成功时为 `Success` |
+| `status_code` | integer | HTTP 状态码 |
+| `request_id` | string | 请求唯一标识，排查问题时请提供此 ID |
+| `data` | object | 业务数据。子字段 `deleted`（array<string>，已删除的文档 ID 列表） |
+| `success` | boolean | 操作是否成功 |
+| `message` | string | 响应消息，成功时为 `success` |
+| `status` | string | 请求状态：`SUCCESS` 或 `FAILED` |
 
-类型
+<a id="错误码"></a>
 
-说明
-
-`code`
-
-string
-
-响应码，成功时为 `Success`
-
-`status_code`
-
-integer
-
-HTTP 状态码
-
-`request_id`
-
-string
-
-请求唯一标识，排查问题时请提供此 ID
-
-`data`
-
-object
-
-业务数据。子字段 `deleted`（array<string>，已删除的文档 ID 列表）
-
-`success`
-
-boolean
-
-操作是否成功
-
-`message`
-
-string
-
-响应消息，成功时为 `success`
-
-`status`
-
-string
-
-请求状态：`SUCCESS` 或 `FAILED`
+<a id="h-ragapi-delete-document-errors"></a>
 
 ## 错误码
 
-HTTP 状态码
-
-错误码
-
-错误信息
-
-说明
-
-400
-
-`Index.InvalidParameter`
-
-`Required parameter missing or invalid.`
-
-请求参数无效
-
-401
-
-`InvalidApiKey`
-
-`Invalid API-key provided.`
-
-鉴权失败，API Key 无效或缺失
+| HTTP 状态码 | 错误码 | 错误信息 | 说明 |
+| --- | --- | --- | --- |
+| 400 | `Index.InvalidParameter` | `Required parameter missing or invalid.` | 请求参数无效 |
+| 401 | `InvalidApiKey` | `Invalid API-key provided.` | 鉴权失败，API Key 无效或缺失 |

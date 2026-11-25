@@ -1,3 +1,3 @@
 # 多模态向量
 
--   [多模态向量](raw/model-api-reference/vector-and-sort/multimodal-vector/multimodal-embedding-api-reference.md)
+-   [多模态向量](multimodal-vector/multimodal-embedding-api-reference.md)

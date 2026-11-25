@@ -2,6 +2,10 @@
 
 热点新闻推荐
 
+<a id="接口说明"></a>
+
+<a id="api-detail-51"></a>
+
 ## 接口说明
 
 理解用户意图，获取对应频道下热点列表，比如“播报体育新闻”。历史接口，建议走“播报单（热榜）问答接口 RunHotTopicChat”，完全覆盖了当前接口的能力。
@@ -10,11 +14,19 @@
 
 通过 SDK 方式调用 API 可参考控制台“API”下的 java、python 示例。
 
+<a id="调试"></a>
+
+<a id="api-detail-23"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
 [调试](https://api.aliyun.com/api/QuanMiaoLightApp/2024-08-01/HotNewsRecommend)
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -33,191 +45,59 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-操作
+<table><thead><tr><th>操作</th><th>访问级别</th><th>资源类型</th><th>条件关键字</th><th>关联操作</th></tr></thead><tbody><tr><td>quanmiaolightapp:HotNewsRecommend</td><td>create</td><td><div><div>*全部资源</div><div><code>*</code></div></div></td><td><ul>无</ul></td><td>无</td></tr></tbody></table>
 
-访问级别
+<a id="请求语法"></a>
 
-资源类型
-
-条件关键字
-
-关联操作
-
-quanmiaolightapp:HotNewsRecommend
-
-create
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-53"></a>
 
 ## 请求语法
 
-```
+<a id="code-block"></a>
+
+```text
 POST /{workspaceId}/quanmiao/lightapp/hotNewsRecommend HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="api-detail-36"></a>
+
 ## 请求参数
 
-名称
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| prompt | string | 否 | 推荐新闻的提示词 | 今天的财经新闻 |
+| workspaceId | string | 是 | [业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-xxx |
 
-类型
+<a id="返回参数"></a>
 
-必填
-
-描述
-
-示例值
-
-prompt
-
-string
-
-否
-
-推荐新闻的提示词
-
-今天的财经新闻
-
-workspaceId
-
-string
-
-是
-
-[业务空间 ID](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)
-
-llm-xxx
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-名称
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | Schema of Response |  |
+| requestId | string | 阿里云为该请求生成的唯一标识符。 | 575D5893-01DB-5C81-A899-74F67616762A |
+| code | string | 接口返回码：200：表示成功。其它：表示错误码。错误码详情，请参见错误码。 | 200 |
+| success | boolean | 是否调用成功：true：调用成功。 false：调用失败。 | True |
+| message | string | 错误说明 | ok |
+| data | object | 新闻推荐结果 |  |
+| news | array<object> | 推荐新闻列表 |  |
+| news | object | 推荐新闻对象 |  |
+| title | string | 标题 | xx |
+| content | string | 内容 | xx |
+| url | string | 链接 | http://xxx |
+| pubTime | string | 发布时间 | 2024-09-10 15:32:00 |
+| source | string | 新闻源 | 新华社 |
+| searchSource | string | 搜索源 | QuarkCommonNews：联网检索 |
+| imageUrls | array | 新闻图片列表 |  |
+| imageUrls | string | 图片地址列表 | [http://www.example.com/xxx.png](http://www.example.com/xxx.png) |
 
-类型
+<a id="示例"></a>
 
-描述
-
-示例值
-
-object
-
-Schema of Response
-
-requestId
-
-string
-
-阿里云为该请求生成的唯一标识符。
-
-575D5893-01DB-5C81-A899-74F67616762A
-
-code
-
-string
-
-接口返回码：200：表示成功。其它：表示错误码。错误码详情，请参见错误码。
-
-200
-
-success
-
-boolean
-
-是否调用成功：true：调用成功。 false：调用失败。
-
-True
-
-message
-
-string
-
-错误说明
-
-ok
-
-data
-
-object
-
-新闻推荐结果
-
-news
-
-array<object>
-
-推荐新闻列表
-
-news
-
-object
-
-推荐新闻对象
-
-title
-
-string
-
-标题
-
-xx
-
-content
-
-string
-
-内容
-
-xx
-
-url
-
-string
-
-链接
-
-http://xxx
-
-pubTime
-
-string
-
-发布时间
-
-2024-09-10 15:32:00
-
-source
-
-string
-
-新闻源
-
-新华社
-
-searchSource
-
-string
-
-搜索源
-
-QuarkCommonNews：联网检索
-
-imageUrls
-
-array
-
-新闻图片列表
-
-imageUrls
-
-string
-
-图片地址列表
-
-[http://www.example.com/xxx.png](http://www.example.com/xxx.png)
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -225,7 +105,9 @@ string
 
 `JSON`格式
 
-```
+<a id="code-block-2"></a>
+
+```text
 {
   "requestId": "575D5893-01DB-5C81-A899-74F67616762A",
   "code": 200,
@@ -248,6 +130,10 @@ string
   }
 }
 ```
+
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
 
 ## 错误码
 

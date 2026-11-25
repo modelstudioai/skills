@@ -1,40 +1,36 @@
 # sandbox api
 
-Sandbox API 是百炼平台提供的用于动态创建、管理与销毁隔离沙箱环境的 RESTful 接口，适用于需要临时计算资源、代码执行或模型推理验证的场景。它支持按需启动预置模板的沙箱实例，并提供完整的生命周期控制能力。该 API 与百炼主推理服务解耦，但可与 [Sandbox API 概览](../../raw/application-api-reference/sandbox-api/sandbox-api-overview.md) 中定义的运行时行为保持一致。
+Sandbox API 是百炼平台提供的用于动态创建、管理和销毁隔离执行环境的 RESTful 接口，适用于代码执行、模型推理沙箱化部署等场景。它支持按需启动轻量级容器实例，并提供模板化配置能力。该 API 与百炼统一认证体系集成，需通过 Bearer [Token](../concepts/token.md) 认证 [原文标题](../../raw/application-api-reference/sandbox-api.md)。
 
 ## 支持的模型/功能
 
-- **沙箱类型**：仅支持基于 Docker 镜像构建的轻量级 Linux 容器沙箱（不支持 Windows 或 GPU 加速沙箱）；
-- **内置能力**：支持标准 Python 3.9+ 运行时、HTTP 服务暴露（端口映射）、文件上传/下载、以及 5 分钟内自动超时回收；
-- **模板来源**：所有沙箱必须基于已注册的模板启动，模板可通过 [Sandbox API 模版管理](../../raw/application-api-reference/sandbox-api/sandbox-api-templates.md) 创建和更新；
-- **注意**：原始文档中提及“支持 Jupyter 内核直连”，但该功能已在 v2.3.0 后移除，实际调用将返回 `400 UnsupportedFeature` —— 请以 [Sandbox API 实例管理](../../raw/application-api-reference/sandbox-api/sandbox-api-instances.md) 的最新响应体字段为准。
+- 支持基于预置镜像（如 `python3.11`, `nodejs20`）或自定义 Docker 镜像启动沙箱实例；
+- 提供模版管理能力，允许保存常用配置（环境变量、启动命令、资源限制）为可复用模板 [原文标题](../../raw/application-api-reference/sandbox-api.md)；
+- 支持同步执行（`/run`）和异步实例生命周期管理（`/instances`），后者支持 `start`/`stop`/`delete` 操作。
 
 ## 关键参数
 
 | 参数 | 类型 | 必填 | 说明 |
 |------|------|------|------|
-| `template_id` | string | 是 | 模板唯一标识，需通过 `/templates` 接口获取； |
-| `timeout_seconds` | integer | 否 | 实例存活时间，范围 60–1800 秒，默认 300； |
-| `env` | object | 否 | 环境变量键值对（最多 20 对，单个值 ≤ 4KB）； |
-| `ports` | array | 否 | 端口映射列表，如 `[{"container_port": 8080, "protocol": "http"}]`； |
+| `template_id` | string | 否 | 模板 ID；若未提供，需显式指定 `image`, `command`, `resources` 等字段 [原文标题](../../raw/application-api-reference/sandbox-api.md) |
+| `timeout` | integer | 否 | 执行超时（秒），默认 30，最大 300 |
+| `resources.cpu` / `resources.memory` | object | 否 | 资源限制，单位为 `mCPU` 和 `MiB`，例如 `{ "cpu": 500, "memory": 1024 }` |
 
-> **注意**：`ports` 中 `protocol` 字段当前仅接受 `"http"`，`"https"` 和 `"tcp"` 均被拒绝，此限制未在 [Sandbox API 概览](../../raw/application-api-reference/sandbox-api/sandbox-api-overview.md) 中明确说明，但已被 [Sandbox API 实例管理](../../raw/application-api-reference/sandbox-api/sandbox-api-instances.md) 的 OpenAPI Schema 严格约束。
+> **注意**：文档中 `resources.memory` 的单位在 [sandbox-api/sandbox-api-instances.md](../../raw/application-api-reference/sandbox-api.md) 中描述为 `MB`，但实际 API 仅接受 `MiB`（即二进制兆字节），请以 OpenAPI Schema 和实测行为为准。
 
 ## 使用方式
 
-1. **认证**：使用 Bearer [Token](../concepts/token.md)，[Token](../concepts/token.md) 需通过百炼平台 OAuth2 流程获取，并具备 `sandbox:instances:write` scope；
-2. **创建实例**：`POST /v1/sandbox/instances`，请求体为 JSON，含上述关键参数；
-3. **轮询状态**：通过 `GET /v1/sandbox/instances/{instance_id}` 获取 `status`（`pending`/`running`/`failed`/`terminated`）；
-4. **交互**：实例就绪后，通过返回的 `endpoint`（格式 `https://<id>.sandbox.qwen.ai`）发起 HTTP 请求；
-5. 所有操作均需遵循 [Sandbox API 认证](../../raw/application-api-reference/sandbox-api/sandbox-api-authentication.md) 中定义的签名与重试策略。
+1. 获取访问 [Token](../concepts/token.md)（参考 [sandbox-api/sandbox-api-authentication.md](../../raw/application-api-reference/sandbox-api.md)）；
+2. 创建实例（POST `/v1/sandboxes/instances`）或直接运行（POST `/v1/sandboxes/run`）；
+3. 轮询 `status` 字段或监听 Webhook（需提前注册）获取执行结果；
+4. 显式调用 `DELETE /v1/sandboxes/instances/{id}` 清理长期运行实例（自动回收策略不保证及时性）。
 
 ## 限制和注意事项
 
-- 单用户并发沙箱实例上限为 5 个，超出时返回 `429 Too Many Requests`；
-- 每个沙箱内存上限 2GB，CPU 配额为 1 核（不可调整）；
-- 实例创建后若 60 秒内未进入 `running` 状态，将自动标记为 `failed` 并释放资源；
-- 日志仅保留最近 24 小时，且不支持流式拉取（需调用 `/logs` 接口一次性获取完整文本）；
-- 错误响应结构统一遵循 [Sandbox API 错误码](../../raw/application-api-reference/sandbox-api/sandbox-api-errors.md)，建议解析 `error.code` 而非 HTTP 状态码做业务判断。
+- 单次请求最大响应体为 10 MB；超出部分将被截断并返回 `413 Payload Too Large`；
+- 沙箱实例默认存活 10 分钟（无活跃连接），超时后自动终止，但不会自动释放挂载卷；
+- 不支持 GPU 加速；所有实例运行于 CPU-only 环境；
+- 模板创建后不可修改，如需更新需新建模板并更新引用 —— 此行为与 [sandbox-api/sandbox-api-templates.md](../../raw/application-api-reference/sandbox-api.md) 描述一致。
 
 ## 来源文档
 

@@ -2,63 +2,43 @@
 
 本文介绍使用阿里云百炼服务可能出现的错误信息及解决方案。
 
+<a id="error-code-search-react"></a>
+
 搜索错误码
 
+<a id="error-code-search-input"></a>
+
+<a id="error-code-search-submit"></a>
+
 搜索
+
+<a id="error-code-search-status"></a>
+
+<a id="error-code-search-results"></a>
+
+<a id="快速排障"></a>
+
+<a id="error-code-page-search"></a>
 
 ## 快速排障
 
 调用失败时，可根据下表查找常见问题，再对照响应中的错误码和错误消息查看具体原因及解决方案。
 
+<a id="1-查找错误原因"></a>
+
 ### 1\. 查找错误原因
 
-常见问题
+| 常见问题 | 错误详情 | 排查与处理 |
+| --- | --- | --- |
+| **401：鉴权失败** | [InvalidApiKey/invalid\_api\_key](#f0a70479b3nre) | 检查 API Key 是否有效，以及 API Key、地域和 Base URL 是否匹配。修正后重新调用。 |
+| **403：访问被拒绝** | [AccessDenied/access\_denied](#f6436bf1edmmz) | 根据错误消息检查访问权限、服务开通状态，以及接口支持的同步或异步调用方式。消息涉及欠费时，参见 [Arrearage](#083013fdf2buo)。 |
+| **404：模型、资源或接口路径不存在** | [ModelNotFound](#8f3300113cbrz)、[NotFound](#d9beba50faz5m) | 检查模型名、部署名或资源 ID 是否正确，目标模型是否在该地域可用，以及请求路径和调用方式是否符合接口要求。 |
+| **429：触发限流或额度限制** | [Throttling.RateQuota](#5ed5532c85ckv)、[Throttling.AllocationQuota/insufficient\_quota](#02f52a91cb53j) | 根据错误消息确认具体限制。触发限流时，降低请求频率、并发数或单位时间内的 Token 用量；免费额度耗尽或资源数量达到上限时，按对应条目处理后再调用。 |
+| **400：请求有误** | [InvalidParameter](#9270b004a1e1p) | 根据错误消息检查具体参数、请求格式及接口要求，修正后重新调用。 |
+| **5xx：服务处理失败** | [InternalError](#bd2637cca0gx8)、[ServiceUnavailable](#16863964ceyeb) | 根据对应错误条目的解决方案处理：需要修正输入或配置的，修正后重新调用；建议稍后重试的，等待后重试。 |
+| **没有 HTTP 响应：连接失败或超时** | [客户端连接错误](#4fbf7d70ffjab) | 根据客户端异常信息检查网络连通性、代理和超时配置。提交任务或创建资源后发生超时的处理方式见下文。 |
 
-错误详情
-
-排查与处理
-
-**401：鉴权失败**
-
-[InvalidApiKey/invalid\_api\_key](#f0a70479b3nre)
-
-检查 API Key 是否有效，以及 API Key、地域和 Base URL 是否匹配。修正后重新调用。
-
-**403：访问被拒绝**
-
-[AccessDenied/access\_denied](#f6436bf1edmmz)
-
-根据错误消息检查访问权限、服务开通状态，以及接口支持的同步或异步调用方式。消息涉及欠费时，参见 [Arrearage](#083013fdf2buo)。
-
-**404：模型、资源或接口路径不存在**
-
-[ModelNotFound](#8f3300113cbrz)、[NotFound](#d9beba50faz5m)
-
-检查模型名、部署名或资源 ID 是否正确，目标模型是否在该地域可用，以及请求路径和调用方式是否符合接口要求。
-
-**429：触发限流或额度限制**
-
-[Throttling.RateQuota](#5ed5532c85ckv)、[Throttling.AllocationQuota/insufficient\_quota](#02f52a91cb53j)
-
-根据错误消息确认具体限制。触发限流时，降低请求频率、并发数或单位时间内的 Token 用量；免费额度耗尽或资源数量达到上限时，按对应条目处理后再调用。
-
-**400：请求有误**
-
-[InvalidParameter](#9270b004a1e1p)
-
-根据错误消息检查具体参数、请求格式及接口要求，修正后重新调用。
-
-**5xx：服务处理失败**
-
-[InternalError](#bd2637cca0gx8)、[ServiceUnavailable](#16863964ceyeb)
-
-根据对应错误条目的解决方案处理：需要修正输入或配置的，修正后重新调用；建议稍后重试的，等待后重试。
-
-**没有 HTTP 响应：连接失败或超时**
-
-[客户端连接错误](#4fbf7d70ffjab)
-
-根据客户端异常信息检查网络连通性、代理和超时配置。提交任务或创建资源后发生超时的处理方式见下文。
+<a id="2-恢复调用"></a>
 
 ### 2\. 恢复调用
 
@@ -66,6 +46,8 @@
 -   **限流或可重试的临时错误**：限流时降低请求频率或并发。重试时逐步延长间隔，并设置最大重试次数和总耗时；达到任一上限后停止重试。
 -   **执行状态不明的请求**：创建资源、提交任务等操作超时或连接中断时，若接口支持查询，请先查询执行结果（如使用已返回的任务 ID），再决定是否重新提交。无法确认执行状态时，联系技术支持，以免重复创建资源或执行任务。
 -   **恢复业务调用**：确认请求结果正常后，逐步恢复调用量，并观察是否再次出现相同错误。异步任务需确认最终状态和输出结果。
+
+<a id="3-联系技术支持"></a>
 
 ### 3\. 联系技术支持
 
@@ -78,19 +60,29 @@
 
 提交前请移除 API Key、访问令牌、Authorization 认证信息和 URL 中的签名参数，并对日志、请求与响应中的业务数据脱敏。
 
+<a id="使用阿里云-ai-助理"></a>
+
+<a id="14aad410332ik"></a>
+
 ## 使用阿里云 AI 助理
 
 推荐使用[阿里云 AI 助理](https://www.aliyun.com/ai-assistant/)，其知识库整合了阿里云官方帮助文档，输入错误信息即可获取解决方案。
 
 示例问题：
 
-```
+<a id="code-block"></a>
+
+```text
 报错信息：'code': 'Arrearage', 'param': None, 'message': 'Access denied, please make sure your account is in good standing.', 'type': 'Arrearage'}帮我看下什么原因
 ```
 
 示例分析结果：
 
 分析结果表明账号因欠费导致访问被拒绝，可能原因包括账号欠费、余额不足或充值延迟。建议登录阿里云控制台进入**费用与成本**页面检查账户状态，完成充值后等待几分钟让系统更新即可恢复正常访问。
+
+<a id="如何获取-request-id"></a>
+
+<a id="request-id-faq-title"></a>
 
 ## 如何获取 Request ID？
 
@@ -104,11 +96,23 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 -   仅支持华北2（北京）、新加坡、美国（弗吉尼亚）地域的部分模型。
 -   数据存在分钟级延迟，开通前的历史调用记录不可追溯。
 
-详情请参见[模型监控](raw/model-user-guide/model-monitoring/model-telemetry.md)文档。
+详情请参见[模型监控](../model-monitoring/model-telemetry.md)文档。
+
+<a id="200"></a>
+
+<a id="http-200"></a>
 
 ## 200
 
+<a id="bailiangateway-workspace-notauthorised"></a>
+
+<a id="2d753c201eeyp"></a>
+
+<a id="200-bailiangateway-workspace-notauthorised"></a>
+
 ### BailianGateway.Workspace.NotAuthorised
+
+<a id="部分功能使用受限"></a>
 
 #### 部分功能使用受限
 
@@ -118,21 +122,45 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **解决方案：**（1）请重新访问百炼控制台首页，再导航到目标页面。（2）需要主账号或具有管理员权限的 RAM 账号为该子账号开通对应业务空间的权限。
 
+<a id="bailiangateway-team-notauthorised"></a>
+
+<a id="bailian_team_notauth_h2"></a>
+
+<a id="200-bailiangateway-team-notauthorised"></a>
+
 ### BailianGateway.Team.NotAuthorised
 
 **原因：**当前 RAM 子账号没有所访问团队（组织）的权限。当 RAM 子账号访问其未被授权的团队（组织）资源时，网关的团队级授权校验未通过，返回此报错。
 
 **解决方案：**请主账号或具有管理员权限的 RAM 账号在权限管理中，将该 RAM 子账号添加至对应团队（组织）并授予相应权限。
 
+<a id="400"></a>
+
+<a id="http-400"></a>
+
 ## 400
 
+<a id="invalidparameter"></a>
+
+<a id="9270b004a1e1p"></a>
+
+<a id="400-invalidparameter"></a>
+
 ### InvalidParameter
+
+<a id="parameter-enable-thinking-must-be-set-to-false-for-non-streaming-calls-parameter-enable-thinking-only-support-stream-call"></a>
+
+<a id="enable-thinking-only-for-streaming"></a>
 
 #### parameter.enable\_thinking must be set to false for non-streaming calls/ parameter.enable\_thinking only support stream call
 
 **原因：** 使用非流式输出方式调用了思考模式模型。
 
-**解决方案：**请将`enable_thinking`参数设置为`false`，或者改用[流式输出](raw/model-user-guide/model-experience/text-generation-model/stream.md)方式调用思考模式模型。
+**解决方案：**请将`enable_thinking`参数设置为`false`，或者改用[流式输出](../model-experience/text-generation-model/stream.md)方式调用思考模式模型。
+
+<a id="the-thinking-budget-parameter-must-be-a-positive-integer-and-not-greater-than-xxx"></a>
+
+<a id="8626bba5afbgz"></a>
 
 #### The thinking\_budget parameter must be a positive integer and not greater than xxx
 
@@ -140,23 +168,39 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **解决方案：** 请参见模型列表中模型的最大思维链长度，指定为大于0且不超过该长度的值。
 
+<a id="this-model-only-support-stream-mode-please-enable-the-stream-parameter-to-access-the-model-current-user-api-does-not-support-http-call"></a>
+
+<a id="stream-only-model"></a>
+
 #### This model only support stream mode, please enable the stream parameter to access the model. / current user api does not support http call.
 
-**原因：** 模型仅支持[流式输出](raw/model-user-guide/model-experience/text-generation-model/stream.md)，但调用时未启用流式输出。
+**原因：** 模型仅支持[流式输出](../model-experience/text-generation-model/stream.md)，但调用时未启用流式输出。
 
-**解决方案：** 请使用[流式输出](raw/model-user-guide/model-experience/text-generation-model/stream.md)方式调用模型。
+**解决方案：** 请使用[流式输出](../model-experience/text-generation-model/stream.md)方式调用模型。
+
+<a id="this-model-does-not-support-enable-search"></a>
+
+<a id="d86ef92f928in"></a>
 
 #### This model does not support enable\_search.
 
-**原因：** 当前模型不支持[联网搜索](raw/model-user-guide/model-experience/text-generation-model/tool-calls/web-search.md)能力，但指定了`enable_search`参数为`true`。
+**原因：** 当前模型不支持[联网搜索](../model-experience/text-generation-model/tool-calls/web-search.md)能力，但指定了`enable_search`参数为`true`。
 
 **解决方案：** 请调用支持联网搜索能力的模型。
 
+<a id="暂时不支持当前设置的语种"></a>
+
+<a id="fc465a0e45f4a"></a>
+
 #### 暂时不支持当前设置的语种！
 
-**原因：** 使用 Qwen-MT 模型时，传入的 `source_lang` 或 `target_lang` 格式错误，或不在[支持的语言](https://help.aliyun.com/zh/model-studio/machine-translation#038d2865bbydc)里。
+**原因：** 使用 Qwen-MT 模型时，传入的 `source_lang` 或 `target_lang` 格式错误，或不在[支持的语言](../model-experience/text-generation-model/specialized-models/machine-translation.md#038d2865bbydc)里。
 
 **解决方案：** 请传入正确格式的英文名或语种编码。
+
+<a id="the-incremental-output-parameter-must-be-true-when-enable-thinking-is-true"></a>
+
+<a id="cabf71f55e154"></a>
 
 #### The incremental\_output parameter must be "true" when enable\_thinking is true
 
@@ -164,11 +208,19 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **解决方案：** 请将`incremental_output`参数设置为`true`再调用，API将返回增量内容。
 
+<a id="the-incremental-output-parameter-of-this-model-cannot-be-set-to-false"></a>
+
+<a id="bad5900569uaz"></a>
+
 #### The incremental\_output parameter of this model cannot be set to False.
 
 **原因：** 模型仅支持增量流式输出，未将`incremental_output`参数设置为`true`。
 
 **解决方案：** 请将`incremental_output`参数设置为`true`再调用，API将返回增量内容。
+
+<a id="range-of-input-length-should-be-1-xxx-internalerror-algo-invalidparameter"></a>
+
+<a id="81221bf732m4b"></a>
 
 #### Range of input length should be \[1, xxx\]（InternalError.Algo.InvalidParameter）
 
@@ -179,11 +231,19 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 -   若通过代码调用，请控制 messages 数组中的 Token 数在模型最大输入Token范围内；
 -   使用对话客户端（如Chatbox）或阿里云百炼控制台进行连续对话时，每次请求都会附带历史记录，容易超出模型限制。超出限制后，请开启新对话。
 
+<a id="range-of-max-tokens-should-be-1-xxx"></a>
+
+<a id="cc5c90b6db061"></a>
+
 #### Range of max\_tokens should be \[1, xxx\]
 
 **原因：** `max_tokens` 参数设置未在 \[1, 模型最大输出 Token 数\]的范围内。
 
 **解决方案：** `max_tokens`上限请参考模型列表文档中的"最大输出 Token 数"。
+
+<a id="temperature-should-be-in-0-0-2-0-temperature-must-be-float"></a>
+
+<a id="00b2e620e2k3l"></a>
 
 #### Temperature should be in \[0.0, 2.0)/'temperature' must be Float
 
@@ -191,11 +251,19 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **解决方案：** 将temperature参数设置为大于等于0，小于2的数字。
 
+<a id="range-of-top-p-should-be-0-0-1-0-top-p-must-be-float"></a>
+
+<a id="6ad42985bchwz"></a>
+
 #### Range of top\_p should be (0.0, 1.0\]/'top\_p' must be Float
 
 **原因：** top\_p参数设置不在`(0.0, 1.0]`范围。
 
 **解决方案：** 将`top_p`参数设置为大于0，小于等于1的数字。
+
+<a id="parameter-top-k-be-greater-than-or-equal-to-0"></a>
+
+<a id="a7daaec3ee60a"></a>
 
 #### Parameter top\_k be greater than or equal to 0
 
@@ -203,11 +271,19 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **解决方案：** 将`top_k`参数设置为大于等于0的数字。
 
+<a id="repetition-penalty-should-be-greater-than-0-0"></a>
+
+<a id="19c77b8f69k4j"></a>
+
 #### Repetition\_penalty should be greater than 0.0
 
 **原因：** `repetition_penalty`参数设置为小于等于0的数字。
 
 **解决方案：** 将`repetition_penalty`参数设置为大于0的数字。
+
+<a id="presence-penalty-should-be-in-2-0-2-0"></a>
+
+<a id="d2f56c0b9a5hl"></a>
 
 #### Presence\_penalty should be in \[-2.0, 2.0\]
 
@@ -215,11 +291,19 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **解决方案：** 将`presence_penalty`参数设置在`[-2.0,2.0]`区间。
 
+<a id="range-of-n-should-be-1-4"></a>
+
+<a id="e7b6b3d88dqzg"></a>
+
 #### Range of n should be \[1, 4\]
 
 **原因：** n 参数设置未在 \[1, 4\]的范围内。
 
 **解决方案：** 将 n 参数设置在\[1, 4\]范围内。
+
+<a id="range-of-seed-should-be-0-9223372036854775807"></a>
+
+<a id="9d2c556870a3n"></a>
 
 #### Range of seed should be \[0, 9223372036854775807\]
 
@@ -227,11 +311,19 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **解决方案：** 将`seed`参数设置在 \[0, 9223372036854775807\]的范围内。
 
+<a id="request-method-get-is-not-supported"></a>
+
+<a id="cfc43a9cb3nq4"></a>
+
 #### Request method 'GET' is not supported.
 
 **原因：** 当前接口不支持 `GET` 请求方法。
 
 **解决方案：** 请查阅接口文档，使用该接口支持的请求方法（如 `POST` 等）重新发起请求。
+
+<a id="messages-with-role-tool-must-be-a-response-to-a-preceeding-message-with-tool-calls"></a>
+
+<a id="a938d59de521i"></a>
 
 #### messages with role "tool" must be a response to a preceeding message with "tool\_calls"
 
@@ -239,11 +331,19 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **解决方案：** 请将模型第一轮响应的 Assistant Message 添加到 messages 数组后再添加 Tool Message。
 
+<a id="an-assistant-message-with-tool-calls-must-be-followed-by-tool-messages-responding-to-each-tool-call-id"></a>
+
+<a id="assistant-tool-calls-followed-by-tool"></a>
+
 #### An assistant message with "tool\_calls" must be followed by tool messages responding to each "tool\_call\_id"
 
 **原因：** assistant 消息包含 tool\_calls 时，后续必须跟随 tool 角色消息来响应每个 tool\_call\_id。常见于使用工具调用百炼 API 时消息序列格式不正确，例如在带 tool\_calls 的 assistant 消息之后直接追加 user 消息。
 
 **解决方案：** 在带 tool\_calls 的 assistant 消息之后、发送下一个 user 消息之前，插入对应的 tool 角色消息（每条包含匹配的 tool\_call\_id 和该工具的执行结果）。assistant 消息中的每个 tool\_call\_id 都必须有且仅有一条 tool 消息与之对应。
+
+<a id="required-body-invalid-please-check-the-request-body-format"></a>
+
+<a id="f56634b51dv6e"></a>
 
 #### Required body invalid, please check the request body format.
 
@@ -253,17 +353,25 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 错误示例（`text` 字段缺少闭合引号，导致请求体不是合法 JSON）：
 
-```
+<a id="code-block-2"></a>
+
+```json
 {"model":"qwen-image-3.0-pro","input":{"messages":[{"role":"user","content":[{"image":"https://example.com/img.png"},{"text":"请将图片背景改为蓝色}]}]}}
 ```
 
 正确示例：
 
-```
+<a id="code-block-3"></a>
+
+```json
 {"model":"qwen-image-3.0-pro","input":{"messages":[{"role":"user","content":[{"image":"https://example.com/img.png"},{"text":"请将图片背景改为蓝色"}]}]}}
 ```
 
 提交请求前可使用 jsonlint.com 等 JSON 校验工具检查请求体语法。也可借助阿里云AI助理帮助修复请求体格式。
+
+<a id="input-content-must-be-a-string"></a>
+
+<a id="3117787756d0w"></a>
 
 #### input content must be a string.
 
@@ -271,29 +379,49 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **解决方案：** 请勿将content设置为如`[{"type": "text","text": "你是谁？"}]`的数组类型。
 
+<a id="the-content-field-is-a-required-field"></a>
+
+<a id="0359e401062qi"></a>
+
 #### The content field is a required field.
 
 **原因：** 发起请求时，未指定`content`参数，如`{"role": "user"}`。
 
 **解决方案：** 请指定`content`参数。如`{"role": "user","content": "你是谁"}`。
 
+<a id="either-prompt-or-messages-must-exist-and-cannot-both-be-none"></a>
+
+<a id="199fba0265wum"></a>
+
 #### Either "prompt" or "messages" must exist and cannot both be none
 
 **原因：** 调用大模型时，既未指定`messages`参数，也未指定`prompt`参数（即将废弃）。如果指定了`messages`参数后报错，可能是因为格式错误，例如通过DashScope-HTTP时，`messages`需放入`input`对象中，而不是与`model`参数并列。
 
-**解决方案：** 请指定`messages`参数。如果已指定但仍报错，请参见[文本生成](raw/model-api-reference/qwen-api-reference.md)API文档，检查其位置是否正确。
+**解决方案：** 请指定`messages`参数。如果已指定但仍报错，请参见[文本生成](../../model-api-reference/qwen-api-reference.md)API文档，检查其位置是否正确。
+
+<a id="messages-must-contain-the-word-json-in-some-form-to-use-response-format-of-type-json-object"></a>
+
+<a id="4b2b7bcaefr8i"></a>
 
 #### 'messages' must contain the word 'json' in some form, to use 'response\_format' of type 'json\_object'.
 
-**原因：** 使用[结构化输出](raw/model-user-guide/model-experience/text-generation-model/qwen-structured-output.md)时，提示词中不包含 `json` 关键词。
+**原因：** 使用[结构化输出](../model-experience/text-generation-model/qwen-structured-output.md)时，提示词中不包含 `json` 关键词。
 
 **解决方案：** 在提示词中加入`json`（不区分大小写），如：“请以json格式输出”。
 
+<a id="json-mode-response-is-not-supported-when-enable-thinking-is-true"></a>
+
+<a id="ccffa8d337loe"></a>
+
 #### Json mode response is not supported when enable\_thinking is true
 
-**原因：** 使用[结构化输出](raw/model-user-guide/model-experience/text-generation-model/qwen-structured-output.md)时开启了模型的思考模式。
+**原因：** 使用[结构化输出](../model-experience/text-generation-model/qwen-structured-output.md)时开启了模型的思考模式。
 
-**解决方案：** 请在使用结构化输出时，将`enable_thinking`设为`false`关闭思考模式。哪些模型仅在非思考模式下支持结构化输出，请参见[支持的模型](https://help.aliyun.com/zh/model-studio/qwen-structured-output#7a8e438e89xeq)。
+**解决方案：** 请在使用结构化输出时，将`enable_thinking`设为`false`关闭思考模式。哪些模型仅在非思考模式下支持结构化输出，请参见[支持的模型](../model-experience/text-generation-model/qwen-structured-output.md#7a8e438e89xeq)。
+
+<a id="tool-names-are-not-allowed-to-be-search"></a>
+
+<a id="04d5652789r0r"></a>
 
 #### Tool names are not allowed to be \[search\]
 
@@ -301,11 +429,19 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **解决方案：** 工具名称请设置为`search`之外的值。
 
+<a id="unknown-format-of-response-format-response-format-should-be-a-dict-includes-type-and-an-optional-key-json-schema-the-response-format-type-from-user-is-xxx"></a>
+
+<a id="d08defd0e7kbk"></a>
+
 #### Unknown format of response\_format, response\_format should be a dict, includes 'type' and an optional key 'json\_schema'. The response\_format type from user is xxx.
 
 **原因：** 指定的`response_format`参数不符合规定。
 
-**解决方案：** 如需使用[结构化输出](raw/model-user-guide/model-experience/text-generation-model/qwen-structured-output.md)功能，请将`response_format`参数设置为`{"type": "json_object"}`。
+**解决方案：** 如需使用[结构化输出](../model-experience/text-generation-model/qwen-structured-output.md)功能，请将`response_format`参数设置为`{"type": "json_object"}`。
+
+<a id="the-value-of-the-enable-thinking-parameter-is-restricted-to-true"></a>
+
+<a id="9c16fdf75fnn1"></a>
 
 #### The value of the enable\_thinking parameter is restricted to True.
 
@@ -316,17 +452,29 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 -   若通过第三方工具调用（如 Cherry Studio），请打开输入框的思考开关。
 -   若通过代码调用，请将`enable_thinking`设为`true`。
 
+<a id="audio-output-only-support-with-stream-true"></a>
+
+<a id="913e991f8ccxl"></a>
+
 #### 'audio' output only support with stream=true
 
 **原因：** 请求输出音频，但未开启流式输出。
 
 **解决方案：** 设置`stream`参数为`true`以启用流式输出。
 
+<a id="tool-choice-is-one-of-the-strings-that-should-be-none-auto"></a>
+
+<a id="5f69577806hre"></a>
+
 #### tool\_choice is one of the strings that should be \["none", "auto"\]
 
 **原因：** 发起 Function Calling 时指定的 `tool_choice` 参数有误。
 
 **解决方案：** 请指定为 "auto"（由大模型自主选择工具）或 "none"（强制不使用工具）。
+
+<a id="model-not-exist"></a>
+
+<a id="281b1fd57cuwp"></a>
 
 #### Model not exist.
 
@@ -335,7 +483,11 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 **解决方案：**
 
 -   **检查模型名称格式：**确认`model`参数大小写是否正确，是否存在多余的空格。
--   **使用正确的模型名称：**请对照[模型列表](raw/model-user-guide/get-started-with-models/models.md)中的模型名称，检查输入的`model`是否正确。请勿混用开源社区的模型名与百炼模型ID，如应该使用`qwen3.7-plus`，而非`Qwen/Qwen3.7-Plus`。
+-   **使用正确的模型名称：**请对照[模型列表](models.md)中的模型名称，检查输入的`model`是否正确。请勿混用开源社区的模型名与百炼模型ID，如应该使用`qwen3.7-plus`，而非`Qwen/Qwen3.7-Plus`。
+
+<a id="the-product-is-not-activated-please-confirm-that-you-have-activated-products-and-try-again-after-activation"></a>
+
+<a id="product-not-activated-h3"></a>
 
 #### The product is not activated, please confirm that you have activated products and try again after activation.
 
@@ -346,11 +498,19 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 -   **开通模型服务：**请前往阿里云百炼控制台[模型市场](https://bailian.console.aliyun.com/cn-beijing/model/market)，确认所调用的模型（如 `kimi-k3`）处于已开通状态后再行调用。
 -   **开通百炼服务：**若尚未开通百炼，请使用阿里云主账号或拥有 `AliyunBailianFullAccess` 权限的 RAM 账号登录[百炼控制台](https://bailian.console.aliyun.com/)，满足使用条件后由系统自动开通，再重试调用。
 
+<a id="the-result-format-parameter-must-be-message-when-enable-thinking-is-true"></a>
+
+<a id="03c89b9446uke"></a>
+
 #### The result\_format parameter must be "message" when enable\_thinking is true
 
 **原因：** 调用思考模式模型，`result_format`参数未设置为`"message"`。
 
 **解决方案：** 将`result_format`参数设置为`"message"`。
+
+<a id="the-audio-is-empty"></a>
+
+<a id="16cccdf4c2hxn"></a>
 
 #### The audio is empty
 
@@ -358,29 +518,49 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **解决方案：** 请增加音频的时间。
 
+<a id="file-parsing-in-progress-please-try-again-later"></a>
+
+<a id="8ebe1b1599e7l"></a>
+
 #### File parsing in progress, please try again later.
 
 **原因**：使用 Qwen-Long 模型时，文件未完成解析。
 
 **解决方案**：请等待文件解析完成后再重试。
 
+<a id="the-stop-parameter-must-be-of-type-str-list-str-list-int-or-list-list-int-and-all-elements-within-the-list-must-be-of-the-same-type"></a>
+
+<a id="ef8ea2018dmcj"></a>
+
 #### The "stop" parameter must be of type "str", "list\[str\]", "list\[int\]", or "list\[list\[int\]\]", and all elements within the list must be of the same type.
 
 **原因：** `stop` 参数不符合`str`, `list[str]`, `list[int],` 或`list[list[int]]`格式。
 
-**解决方案：** 参见[文本生成](raw/model-api-reference/qwen-api-reference.md)API 文档，设置正确格式的`stop` 参数。
+**解决方案：** 参见[文本生成](../../model-api-reference/qwen-api-reference.md)API 文档，设置正确格式的`stop` 参数。
+
+<a id="value-error-batch-size-is-invalid-it-should-not-be-larger-than-xxx"></a>
+
+<a id="a6c6e3b337tyh"></a>
 
 #### Value error, batch size is invalid, it should not be larger than xxx.
 
 **原因：** 调用 Embedding 模型时，文本数量超过模型上限。
 
-**解决方案：** 参考[Embedding](raw/model-user-guide/model-experience/embedding-rerank-model/embedding.md)文档中模型的**批次大小**信息，控制传入文本的数量。
+**解决方案：** 参考[Embedding](../model-experience/embedding-rerank-model/embedding.md)文档中模型的**批次大小**信息，控制传入文本的数量。
+
+<a id="invalid-file-id-file-fe"></a>
+
+<a id="d34b1f4f88ev2"></a>
 
 #### Invalid file \[id:file-fe-\*\*\*\*\*\*\*\*\*\*\].
 
 **原因**：提供的 file-id 无效。例如输入错误、使用了不属于当前阿里云账号的 file-id。
 
-**解决方案**：通过[OpenAI兼容-File](raw/model-api-reference/toolkits-and-frameworks/openai-file-interface.md)确认file-id是否有效，或重新[OpenAI兼容-File](raw/model-api-reference/toolkits-and-frameworks/openai-file-interface.md)来获取新的file\_id后进行调用。
+**解决方案**：通过[OpenAI兼容-File](../../model-api-reference/toolkits-and-frameworks/openai-file-interface.md)确认file-id是否有效，或重新[OpenAI兼容-File](../../model-api-reference/toolkits-and-frameworks/openai-file-interface.md)来获取新的file\_id后进行调用。
+
+<a id="is-too-short"></a>
+
+<a id="431ed59dd7buy"></a>
 
 #### \[\] is too short
 
@@ -388,11 +568,19 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **解决方案：** 请添加 message 后再发起请求。
 
+<a id="the-tool-call-is-not-supported"></a>
+
+<a id="0a08c660173rp"></a>
+
 #### The tool call is not supported.
 
 **原因：** 使用的模型不支持传入tools参数。
 
 **解决方案：** 请更换为支持Function Calling的Qwen或DeepSeek模型。
+
+<a id="repetitive-tool-calls-detected-in-the-conversation-history-the-same-tool-call-with-identical-name-and-arguments-has-been-repeated-across-multiple-consecutive-rounds-please-modify-your-request-or-adjust-the-tool-call-arguments-to-avoid-infinite-loops"></a>
+
+<a id="ie-algo-ip-rtc-h3"></a>
 
 #### Repetitive tool calls detected in the conversation history. The same tool call with identical name and arguments has been repeated across multiple consecutive rounds. Please modify your request or adjust the tool call arguments to avoid infinite loops.
 
@@ -403,6 +591,10 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 -   在每轮工具调用后，将工具的执行结果以 Tool Message 形式追加到`messages`数组中，再发起下一轮请求，便于模型据此推进而非重复发起相同调用。
 -   检查工具是否正常返回结果；若工具持续返回相同或无效结果，建议在应用侧增加工具调用次数上限或终止逻辑，避免无限循环。
 -   必要时优化提示词，明确任务完成的条件，避免模型反复发起同一工具调用。
+
+<a id="the-provided-messages-input-is-invalid-the-error-info-is-unexpected-item-type-in-content-input-should-be-a-valid-string-input-should-be-a-valid-dictionary-or-instance-of-input-messages-x-content"></a>
+
+<a id="ie-algo-ip-uit-h3"></a>
 
 #### The provided messages input is invalid. The error info is \[Unexpected item type in content\] / Input should be a valid string / Input should be a valid dictionary or instance of ... (input.messages.x.content...)
 
@@ -415,19 +607,31 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 -   **纯文本模型：**请将 `content` 设置为字符串，不要传入数组或其他类型。若业务需要图片等多模态输入，请改用多模态模型（如 Qwen-VL、Qwen3-VL 系列）；若需继续使用纯文本模型，请在调用前从 `messages` 及对话历史中移除图片（`image_url`）等多模态元素。
 -   **多模态模型：**`content` 数组中的每个元素都需为合法对象，`type` 仅支持 `text`、`image_url`、`video_url`、`video` 等模型支持的模态类型，请勿混入数字、布尔值、嵌套数组，或缺少 `type`、`type` 取值非法的元素。
 
+<a id="required-parameter-xxx-missing-or-invalid-please-check-the-request-parameters"></a>
+
+<a id="1ad29d0a9bu04"></a>
+
 #### Required parameter(xxx) missing or invalid, please check the request parameters.
 
 **原因：** 接口调用参数不合法。
 
 **解决方案：** 请检查请求参数，确保所有必需参数都已提供且格式正确。
 
-当报错信息中参数名称为`data_sources`时，通常是因为调用 CreateIndex 接口时未指定必传参数`SourceType`导致后续 SubmitIndexJob 接口报错。基于给定文档创建知识库时，此参数需传入`DATA_CENTER_FILE`；基于给定类目创建知识库时，此参数需传入`DATA_CENTER_CATEGORY`。详见[CreateIndex](raw/_short/api-bailian-2023-12-29-createindex-8bc613c75f8af371.md)文档。
+当报错信息中参数名称为`data_sources`时，通常是因为调用 CreateIndex 接口时未指定必传参数`SourceType`导致后续 SubmitIndexJob 接口报错。基于给定文档创建知识库时，此参数需传入`DATA_CENTER_FILE`；基于给定类目创建知识库时，此参数需传入`DATA_CENTER_CATEGORY`。详见[CreateIndex](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-createindex)文档。
+
+<a id="input-must-contain-file-urls"></a>
+
+<a id="27d6c2a728jia"></a>
 
 #### input must contain file\_urls
 
 **原因：** 使用语音识别（Paraformer）的录音文件识别时，未对请求参数`file_urls`赋值。
 
 **解决方案：** 请在请求中包含`file_urls`参数并为其赋值。
+
+<a id="the-provided-url-does-not-appear-to-be-valid-ensure-it-is-correctly-formatted"></a>
+
+<a id="6136acf455ur2"></a>
 
 #### The provided URL does not appear to be valid. Ensure it is correctly formatted.
 
@@ -444,17 +648,29 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
     -   通过 HTTP 调用，需确保请求的 Header 中添加了参数 `X-DashScope-OssResourceResolve: enable`。
     -   通过 SDK 调用：仅支持 DashScope SDK调用，请勿使用 OpenAI SDK。
 
+<a id="input-should-be-a-valid-dictionary-or-instance-of-gpt3message"></a>
+
+<a id="ce18c49a88v5c"></a>
+
 #### Input should be a valid dictionary or instance of GPT3Message
 
 **原因：** messages 字段的构造格式不符合要求，例如括号数量不匹配、缺少必要的键值对等。
 
 **解决方案：** 请检查`messages`字段的JSON结构是否正确。
 
+<a id="value-error-contents-is-neither-str-nor-list-of-str-input-contents"></a>
+
+<a id="7e89870921vrc"></a>
+
 #### Value error, contents is neither str nor list of str. : input.contents
 
 **原因：** 使用 Embedding 模型时，输入不是字符串也不是字符串数组。
 
 **解决方案：** 请修改输入格式为字符串或字符串列表。
+
+<a id="no-backend-server-available"></a>
+
+<a id="no-backend-server-available-2"></a>
 
 #### No backend server available
 
@@ -467,11 +683,19 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 3.  登录阿里云百炼控制台，查看所调用服务的状态是否正常。
 4.  确认账号与网络均正常后，等待几分钟重新调用 API。
 
+<a id="file-id-file-fe-xxx-format-is-not-supported"></a>
+
+<a id="0ab4677a2fcii"></a>
+
 #### File \[id:file-fe-xxx\] format is not supported.
 
 **原因：** Qwen-Long模型仅限于处理纯文本格式文件（TXT、DOCX、PDF、EPUB、MOBI、MD），不支持图片或扫描文档。
 
 **解决方案：** 如需对图片内容进行文本提取、分析和总结，可使用千问VL模型。
+
+<a id="file-id-file-fe-cannot-be-found"></a>
+
+<a id="2903f3bb13wai"></a>
 
 #### File \[id:file-fe-\*\*\*\*\*\*\*\*\*\*\] cannot be found.
 
@@ -479,11 +703,19 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **解决方案：** 请等待模型完成对话后再删除相关文件。
 
+<a id="too-many-files-provided"></a>
+
+<a id="6dd16086bckk1"></a>
+
 #### Too many files provided.
 
 **原因：** 提供的file-id数量超限。
 
 **解决方案：** 请确保file-id数量小于100。
+
+<a id="file-id-file-fe-exceeds-size-limit"></a>
+
+<a id="02821fafe6pl4"></a>
 
 #### File \[id:file-fe-\*\*\*\*\*\*\*\*\*\*\] exceeds size limit.
 
@@ -491,11 +723,19 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **解决方案：** 确保文件小于150 MB。
 
+<a id="file-id-file-fe-exceeds-page-limits-15000-pages"></a>
+
+<a id="3a432b04d5xbx"></a>
+
 #### File \[id:file-fe-\*\*\*\*\*\*\*\*\*\*\] exceeds page limits (15000 pages).
 
 **原因：** 文件页数超出限制。
 
 **解决方案：** 确保文件页数少于15000页。
+
+<a id="file-id-file-fe-content-blank"></a>
+
+<a id="437b8b12bd4n5"></a>
 
 #### File \[id:file-fe-\*\*\*\*\*\*\*\*\*\*\] content blank.
 
@@ -503,17 +743,29 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **解决方案：** 确保文件内容不为空。
 
+<a id="total-message-token-length-exceed-model-limit-10000000-tokens"></a>
+
+<a id="a81cc451ab2hm"></a>
+
 #### Total message token length exceed model limit (10000000 tokens).
 
 **原因：** 输入总长度超过了10,000,000 Token。
 
 **解决方案：** 请确保message长度符合要求。
 
+<a id="the-video-modality-input-does-not-meet-the-requirements-because-the-range-of-sequence-images-shoule-be-4-512-4-80"></a>
+
+<a id="7b6863668blat"></a>
+
 #### The video modality input does not meet the requirements because: the range of sequence images shoule be (4, 512)./(4,80).
 
 **原因：** 使用千问 VL 模型以图像列表方式输入视频时，图像数量不符合要求。
 
-**解决方案：** Qwen3-VL与Qwen2.5-VL系列模型需传入4-512张图片；其他模型需传入4-80张图片。详情可参见[图像与视频理解](raw/model-user-guide/model-experience/text-generation-model/vision.md)。
+**解决方案：** Qwen3-VL与Qwen2.5-VL系列模型需传入4-512张图片；其他模型需传入4-80张图片。详情可参见[图像与视频理解](../model-experience/text-generation-model/vision.md)。
+
+<a id="exceeded-limit-on-max-bytes-per-data-uri-item-10485760-multimodal-file-size-is-too-large"></a>
+
+<a id="82de1c8dc2mdr"></a>
 
 #### Exceeded limit on max bytes per data-uri item : 10485760'. / Multimodal file size is too large
 
@@ -529,7 +781,11 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
     -   qwen3-vl-plus系列：不超过 1GB；
     -   其他模型不超过 150MB。
 
-> 压缩文件体积请参见[如何将图像或视频压缩到满足要求的大小？](raw/model-user-guide/model-experience/text-generation-model/vision.md)
+> 压缩文件体积请参见[如何将图像或视频压缩到满足要求的大小？](../model-experience/text-generation-model/vision.md)
+
+<a id="input-should-be-cherry-serena-ethan-or-chelsie-parameters-audio-voice"></a>
+
+<a id="b976cdf3760zy"></a>
 
 #### Input should be 'Cherry', 'Serena', 'Ethan' or 'Chelsie': parameters.audio.voice
 
@@ -537,11 +793,19 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **解决方案：** 请指定为'Cherry', 'Serena', 'Ethan' 或 'Chelsie'中的一个。
 
+<a id="the-image-length-and-width-do-not-meet-the-model-restrictions"></a>
+
+<a id="8f428a371bom3"></a>
+
 #### The image length and width do not meet the model restrictions.
 
 **原因：** 传入千问VL模型的图像尺寸（长度和宽度）不符合模型的要求。
 
 **解决方案：** 图像尺寸需满足以下要求：宽度和高度均不小于10像素，且宽高比不应超过200:1或1:200。
+
+<a id="failed-to-decode-the-image-during-the-data-inspection"></a>
+
+<a id="1d27ef1d1byyp"></a>
 
 #### Failed to decode the image during the data inspection.
 
@@ -549,11 +813,19 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **解决方案：** 请确认图像是否有损坏，以及图像格式是否符合要求。
 
+<a id="the-file-format-is-illegal-and-cannot-be-opened-the-audio-format-is-illegal-and-cannot-be-opened-the-media-format-is-not-supported-or-incorrect-for-the-data-inspection"></a>
+
+<a id="56bec83894di6"></a>
+
 #### The file format is illegal and cannot be opened. / The audio format is illegal and cannot be opened. / The media format is not supported or incorrect for the data inspection.
 
 **原因：** 无法支持的文件格式或文件无法打开。
 
 **解决方案：** 请确认文件是否损坏、文件扩展名和实际格式是否匹配、文件格式是否支持。
+
+<a id="the-input-messages-do-not-contain-elements-with-the-role-of-user"></a>
+
+<a id="a7763649f7vn6"></a>
 
 #### The input messages do not contain elements with the role of user.
 
@@ -563,6 +835,10 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 -   或API调用阿里云百炼工作流应用时，在开始节点中传入的参数，需通过`biz_params`参数传递（而非`user_prompt_params`）。
 
 **解决方案：** 请确保向模型传入User Message，或正确传递自定义参数。
+
+<a id="failed-to-download-multimodal-content-download-the-media-resource-timed-out-during-the-data-inspection-process-unable-to-download-the-media-resource-during-the-data-inspection-process"></a>
+
+<a id="download_error"></a>
 
 #### Failed to download multimodal content. / Download the media resource timed out during the data inspection process. / Unable to download the media resource during the data inspection process.
 
@@ -581,69 +857,9 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
     
 -   **调整传输方式**
     
-    若传入公网 URL 方式失败，可参考[传入本地文件（Base64 编码或文件路径）](https://help.aliyun.com/zh/model-studio/vision#d987f8de5395x)切换为推荐的传入方式：
+    若传入公网 URL 方式失败，可参考[传入本地文件（Base64 编码或文件路径）](../model-experience/text-generation-model/vision.md#d987f8de5395x)切换为推荐的传入方式：
     
-    **文件类型**
-    
-    **文件规格**
-    
-    **DashScope SDK（Python、Java）**
-    
-    **OpenAI 兼容 / DashScope HTTP**
-    
-    图像
-    
-    大于 7MB 小于 10MB
-    
-    传入本地路径
-    
-    仅支持公网 URL，建议使用[阿里云对象存储服务](https://www.aliyun.com/product/oss)
-    
-    小于 7MB
-    
-    传入本地路径
-    
-    Base64 编码
-    
-    视频
-    
-    大于 100 MB
-    
-    仅支持公网 URL，建议使用[阿里云对象存储服务](https://www.aliyun.com/product/oss)
-    
-    仅支持公网 URL，建议使用[阿里云对象存储服务](https://www.aliyun.com/product/oss)
-    
-    大于 7MB 小于 100 MB
-    
-    传入本地路径
-    
-    仅支持公网 URL，建议使用[阿里云对象存储服务](https://www.aliyun.com/product/oss)
-    
-    小于 7MB
-    
-    传入本地路径
-    
-    Base64 编码
-    
-    音频
-    
-    大于 10 MB
-    
-    仅支持公网 URL，建议使用[阿里云对象存储服务](https://www.aliyun.com/product/oss)
-    
-    仅支持公网 URL，建议使用[阿里云对象存储服务](https://www.aliyun.com/product/oss)
-    
-    大于 7MB 小于 10 MB
-    
-    传入本地路径
-    
-    仅支持公网 URL，建议使用[阿里云对象存储服务](https://www.aliyun.com/product/oss)
-    
-    小于 7MB
-    
-    传入本地路径
-    
-    Base64 编码
+    <table><thead><tr><th><p><strong>文件类型</strong></p></th><th><p><strong>文件规格</strong></p></th><th><p><strong>DashScope SDK（Python、Java）</strong></p></th><th><p><strong>OpenAI 兼容 / DashScope HTTP</strong></p></th></tr></thead><tbody><tr><td rowspan="2"><p>图像</p></td><td><p>大于 7MB 小于 10MB</p></td><td><p>传入本地路径</p></td><td><p>仅支持公网 URL，建议使用<a href="https://www.aliyun.com/product/oss">阿里云对象存储服务</a></p></td></tr><tr><td><p>小于 7MB</p></td><td><p>传入本地路径</p></td><td><p>Base64 编码</p></td></tr><tr><td rowspan="3"><p>视频</p></td><td><p>大于 100 MB</p></td><td><p>仅支持公网 URL，建议使用<a href="https://www.aliyun.com/product/oss">阿里云对象存储服务</a></p></td><td><p>仅支持公网 URL，建议使用<a href="https://www.aliyun.com/product/oss">阿里云对象存储服务</a></p></td></tr><tr><td><p>大于 7MB 小于 100 MB</p></td><td><p>传入本地路径</p></td><td><p>仅支持公网 URL，建议使用<a href="https://www.aliyun.com/product/oss">阿里云对象存储服务</a></p></td></tr><tr><td><p>小于 7MB</p></td><td><p>传入本地路径</p></td><td><p>Base64 编码</p></td></tr><tr><td rowspan="3"><p>音频</p></td><td><p>大于 10 MB</p></td><td><p>仅支持公网 URL，建议使用<a href="https://www.aliyun.com/product/oss">阿里云对象存储服务</a></p></td><td><p>仅支持公网 URL，建议使用<a href="https://www.aliyun.com/product/oss">阿里云对象存储服务</a></p></td></tr><tr><td><p>大于 7MB 小于 10 MB</p></td><td><p>传入本地路径</p></td><td><p>仅支持公网 URL，建议使用<a href="https://www.aliyun.com/product/oss">阿里云对象存储服务</a></p></td></tr><tr><td><p>小于 7MB</p></td><td><p>传入本地路径</p></td><td><p>Base64 编码</p></td></tr></tbody></table>
     
     > Base64 编码会增大数据体积，原始文件大小应小于 7 MB。
     
@@ -651,8 +867,12 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
     
 -   **放行**`DashScopeUserBot`
     
-    若图片托管在您控制的服务器上，请在安全策略中放行 User-Agent 包含 `DashScopeUserBot` 的请求。也可改用[传入本地文件（Base64 编码或文件路径）](https://help.aliyun.com/zh/model-studio/vision#d987f8de5395x)的方式，避免服务端下载公网 URL。
+    若图片托管在您控制的服务器上，请在安全策略中放行 User-Agent 包含 `DashScopeUserBot` 的请求。也可改用[传入本地文件（Base64 编码或文件路径）](../model-experience/text-generation-model/vision.md#d987f8de5395x)的方式，避免服务端下载公网 URL。
     
+
+<a id="failed-to-find-the-requested-media-resource-during-the-data-inspection-process"></a>
+
+<a id="6fccfc0574up1"></a>
 
 #### Failed to find the requested media resource during the data inspection process.
 
@@ -664,23 +884,31 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 -   确认资源文件未被删除或移动
 -   确认URL未过期（如使用OSS签名URL，需检查有效期）
 
+<a id="url-error-please-check-url"></a>
+
+<a id="error_url"></a>
+
 #### url error, please check url！
 
 -   **原因一： 模型名称与API 端点不匹配**：例如调用纯文本模型时使用了多模态接口，或者调用多模态模型时使用了纯文本接口。
     
     **解决方案：**
-    1.  通过DashScope使用qwen3.7-plus、qwen3-vl-plus、qwen3.8-max、qwen3.8-flash等**多模态模型**时：需使用client.multimodal.chat.create() 或multimodal-generation端点，具体参考[图像与视频理解](raw/model-user-guide/model-experience/text-generation-model/vision.md)。从纯文本模型（如qwen3.7-max）切换为多模态模型（如qwen3.8-max）时，需将调用方式从client.chat.completions.create() 改为client.multimodal.chat.create()，否则会返回url error。
+    1.  通过DashScope使用qwen3.7-plus、qwen3-vl-plus、qwen3.8-max、qwen3.8-flash等**多模态模型**时：需使用client.multimodal.chat.create() 或multimodal-generation端点，具体参考[图像与视频理解](../model-experience/text-generation-model/vision.md)。从纯文本模型（如qwen3.7-max）切换为多模态模型（如qwen3.8-max）时，需将调用方式从client.chat.completions.create() 改为client.multimodal.chat.create()，否则会返回url error。
         
         > 若使用 spring-ai-alibaba 框架，请确认是否设置多模态参数[withMultiModel](https://github.com/spring-ai-alibaba/examples/blob/c66ffdec789defe4adf86b34bac0084df3b71e92/spring-ai-alibaba-multi-model-example/dashscope-multi-model/src/main/java/com/alibaba/cloud/ai/example/multi/controller/MultiModelController.java#L82)。
         
-    2.  通过DashScope使用qwen3.7-max、qwen-plus、deepseek-v4-pro等**纯文本模型**时，需使用client.chat.completions.create() 或 text-generation 端点，具体参考[概述](raw/model-user-guide/model-experience/text-generation-model/text-generation.md)。
+    2.  通过DashScope使用qwen3.7-max、qwen-plus、deepseek-v4-pro等**纯文本模型**时，需使用client.chat.completions.create() 或 text-generation 端点，具体参考[概述](../model-experience/text-generation-model/text-generation.md)。
         
     3.  通过DashScope使用CosyVoice**声音复刻**接口时：该接口包含 `model` 与 `target_model` 参数：需将 `model` 设置为 `voice-enrollment`， `target_model` 设置为具体的 CosyVoice 模型，具体参考[CosyVoice声音复刻/设计API](https://help.aliyun.com/zh/model-studio/cosyvoice-clone-design-api)。
         
 -   **原因二：DashScope SDK 版本过低：**调用图像/视频生成模型时，旧版SDK无法识别正确的服务端地址；
     
-    **解决方案：**[升级 SDK 版本](raw/model-api-reference/preparations/install-sdk.md)
+    **解决方案：**[升级 SDK 版本](../../model-api-reference/preparations/install-sdk.md)
     
+
+<a id="dont-have-authorization-to-access-the-media-resource-during-the-data-inspection-process"></a>
+
+<a id="3ba5afbd70phx"></a>
 
 #### Don't have authorization to access the media resource during the data inspection process.
 
@@ -688,17 +916,29 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **解决方案：** 请确保在文件URL的有效期内访问该文件。
 
+<a id="the-item-of-content-should-be-a-message-of-a-certain-modal"></a>
+
+<a id="2e18d98a0djz7"></a>
+
 #### The item of content should be a message of a certain modal.
 
 **原因：** 使用DashScope SDK调用多模态模型时，`content` 数组中每个元素的键必须为以下值之一：`image`、`video`、`audio` 或 `text`。
 
 **解决方案：** 请并使用正确的`content`参数。
 
+<a id="invalid-video-file"></a>
+
+<a id="43da9d83ef2dz"></a>
+
 #### Invalid video file.
 
 **原因：** 传入的视频文件无效。
 
 **解决方案：** 请检查视频文件是否损坏或格式是否正确。
+
+<a id="the-video-modality-input-does-not-meet-the-requirements-because-the-video-file-is-too-long"></a>
+
+<a id="4789f1ff21nlu"></a>
 
 #### The video modality input does not meet the requirements because: The video file is too long.
 
@@ -709,7 +949,11 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 -   Qwen2.5-VL模型支持的视频时长应在2秒至10分钟之间。
 -   其他千问VL或 Qwen-Omni-Turbo 模型支持的视频时长应在2秒至40秒之间。
 
-其他 Qwen-Omni 型号的视频限制见[单一模态输入](https://help.aliyun.com/zh/model-studio/qwen-omni#h2-single-modal-input)。
+其他 Qwen-Omni 型号的视频限制见[单一模态输入](../model-experience/omni-modal/qwen-omni.md#h2-single-modal-input)。
+
+<a id="field-required-xxx"></a>
+
+<a id="936d0ca16e2wm"></a>
 
 #### Field required: xxx
 
@@ -717,15 +961,27 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **解决方案：** 请根据错误提示`xxx`补充对应的参数。
 
+<a id="the-request-is-missing-required-parameters-or-in-a-wrong-format-please-check-the-parameters-that-you-send"></a>
+
+<a id="cb2ec4543be2h"></a>
+
 #### The request is missing required parameters or in a wrong format, please check the parameters that you send.
 
 **原因：** 缺少入参，或入参格式错误。
 
 **解决方案：** 请检查请求参数是否完整且格式正确。
 
+<a id="missing-training-files"></a>
+
+<a id="3443400d5aoxp"></a>
+
 #### Missing training files.
 
 **原因：** 参数错误，缺少参数或者参数格式问题等。
+
+<a id="the-style-is-invalid"></a>
+
+<a id="a92e9d7b84avs"></a>
 
 #### The style is invalid.
 
@@ -733,11 +989,19 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **解决方案：** 请检查`style`参数的取值是否正确。
 
+<a id="the-style-level-is-invalid"></a>
+
+<a id="39a57aedebi9f"></a>
+
 #### The style\_level is invalid.
 
 **原因：** style\_level不在枚举范围内。
 
 **解决方案：** 详情参见[EMO 视频生成](https://help.aliyun.com/zh/model-studio/emo-api)。
+
+<a id="parameters-video-ratio-must-be-9-16-or-3-4"></a>
+
+<a id="d147c86a163yl"></a>
 
 #### parameters.video\_ratio must be 9:16 or 3:4.
 
@@ -745,11 +1009,19 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **解决方案：** 请修改`video_ratio`参数为 "9:16" 或 "3:4"。
 
+<a id="the-xxx-parm-is-invalid"></a>
+
+<a id="f78e96731aa4l"></a>
+
 #### the xxx parm is invalid!
 
 **原因：** 输入参数超出范围。
 
-**解决方案：** 详情参见[视频风格重绘](raw/model-api-reference/video-generation-api/portrait-animation-api-reference/video-style-transform-api-reference.md)。
+**解决方案：** 详情参见[视频风格重绘](../../model-api-reference/video-generation-api/portrait-animation-api-reference/video-style-transform-api-reference.md)。
+
+<a id="input-json-error"></a>
+
+<a id="f74242572fvns"></a>
 
 #### input json error.
 
@@ -757,11 +1029,19 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **解决方案：** 请检查请求的JSON格式是否正确。
 
+<a id="read-image-error"></a>
+
+<a id="3aa64fea0bu40"></a>
+
 #### read image error.
 
 **原因：** 读取图像失败。
 
 **解决方案：** 请检查图像文件是否损坏或格式是否正确。
+
+<a id="the-parameters-must-conform-to-the-specification-xxx"></a>
+
+<a id="d2c213820br34"></a>
 
 #### the parameters must conform to the specification: xxx.
 
@@ -769,11 +1049,19 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **解决方案：** 请根据错误提示`xxx`检查并修正参数值。
 
+<a id="the-size-of-person-image-and-coarse-image-are-not-the-same"></a>
+
+<a id="7e3ee4babdgjw"></a>
+
 #### The size of person image and coarse\_image are not the same.
 
 **原因：** coarse\_image分辨率和person\_image不一致。
 
 **解决方案：** 请确保`coarse_image`和`person_image`的分辨率一致。
+
+<a id="the-request-is-missing-required-parameters-or-the-parameters-are-out-of-the-specified-range-please-check-the-parameters-that-you-send"></a>
+
+<a id="4801e93aceyx4"></a>
 
 #### The request is missing required parameters or the parameters are out of the specified range, please check the parameters that you send.
 
@@ -781,17 +1069,29 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **解决方案：** 请检查并修正请求参数。
 
+<a id="image-format-error"></a>
+
+<a id="02fbd65b8914g"></a>
+
 #### image format error
 
 **原因：** 图片格式错误。
 
 **解决方案：** 需要是图片url或者Base64字符串。
 
+<a id="no-messages-found-in-input"></a>
+
+<a id="c44c41e120xr0"></a>
+
 #### No messages found in input
 
 **原因：** 请求参数中需要有messages字段。
 
-**解决方案：** 详情参见[千问-图像编辑](raw/model-api-reference/image-generation/qwen-image-api-reference/legacy-qwen-image-models/qwen-image-edit-api.md)。
+**解决方案：** 详情参见[千问-图像编辑](../../model-api-reference/image-generation/qwen-image-api-reference/legacy-qwen-image-models/qwen-image-edit-api.md)。
+
+<a id="invalid-image-format-or-corrupted-file"></a>
+
+<a id="942bf3bd8bsz2"></a>
 
 #### Invalid image format or corrupted file
 
@@ -799,29 +1099,49 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **解决方案：** 请检查文件是否可正常打开和下载，确保文件完整且格式符合要求。
 
+<a id="download-image-failed"></a>
+
+<a id="1356a14c63oq9"></a>
+
 #### download image failed
 
 **原因：** 图片不能下载。
 
 **解决方案：** 请检查文件是否可正常下载。
 
+<a id="messages-length-only-support-1"></a>
+
+<a id="913b3852abn4n"></a>
+
 #### messages length only support 1
 
 **原因：** messages数组长度仅支持 1。
 
-**解决方案：** 即只能传入一条对话消息。详情参见[千问-图像编辑](raw/model-api-reference/image-generation/qwen-image-api-reference/legacy-qwen-image-models/qwen-image-edit-api.md)。
+**解决方案：** 即只能传入一条对话消息。详情参见[千问-图像编辑](../../model-api-reference/image-generation/qwen-image-api-reference/legacy-qwen-image-models/qwen-image-edit-api.md)。
+
+<a id="content-length-only-support-2"></a>
+
+<a id="23cf5fcc0dc3m"></a>
 
 #### content length only support 2
 
 **原因：** content数组长度仅支持为2。
 
-**解决方案：** 即只能传入一组text和image。详情参见[千问-图像编辑](raw/model-api-reference/image-generation/qwen-image-api-reference/legacy-qwen-image-models/qwen-image-edit-api.md)。
+**解决方案：** 即只能传入一组text和image。详情参见[千问-图像编辑](../../model-api-reference/image-generation/qwen-image-api-reference/legacy-qwen-image-models/qwen-image-edit-api.md)。
+
+<a id="lack-of-image-or-text"></a>
+
+<a id="20bab1af67gld"></a>
 
 #### lack of image or text
 
 **原因：** 请求参数缺少image或text字段。
 
-**解决方案：** 详情参见[千问-图像编辑](raw/model-api-reference/image-generation/qwen-image-api-reference/legacy-qwen-image-models/qwen-image-edit-api.md)。
+**解决方案：** 详情参见[千问-图像编辑](../../model-api-reference/image-generation/qwen-image-api-reference/legacy-qwen-image-models/qwen-image-edit-api.md)。
+
+<a id="num-images-per-prompt-must-be-1"></a>
+
+<a id="802dc15665v51"></a>
 
 #### num\_images\_per\_prompt must be 1.
 
@@ -829,11 +1149,19 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **解决方案：** 请将参数`n`的值设置为1。
 
+<a id="input-files-format-not-supported"></a>
+
+<a id="a5b8a6b1beq55"></a>
+
 #### Input files format not supported.
 
 **原因：** 音频、图片格式不符合要求。
 
 **解决方案：** 音频支持格式mp3, wav, aac，图片支持格式jpg, jpeg, png, bmp, webp。详情参见[LivePortrait 视频生成](https://help.aliyun.com/zh/model-studio/liveportrait-api)。
+
+<a id="failed-to-download-input-files"></a>
+
+<a id="27d828761enyc"></a>
 
 #### Failed to download input files.
 
@@ -841,11 +1169,19 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **解决方案：** 请检查文件URL是否可访问，网络是否通畅。
 
+<a id="oss-download-error"></a>
+
+<a id="d3dc2298f58xl"></a>
+
 #### oss download error.
 
 **原因：** 输入图像下载失败。
 
 **解决方案：** 请检查图像的OSS链接是否正确且可访问。
+
+<a id="the-image-content-does-not-comply-with-green-network-verification"></a>
+
+<a id="2df01b4b59aj3"></a>
 
 #### The image content does not comply with green network verification.
 
@@ -853,11 +1189,19 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **解决方案：** 请更换符合内容安全规范的图像。
 
+<a id="read-video-error"></a>
+
+<a id="5ee56eeaa09re"></a>
+
 #### read video error.
 
 **原因：** 读取视频失败。
 
 **解决方案：** 请检查视频文件是否损坏或格式不受支持。
+
+<a id="the-size-of-input-image-is-too-small-or-too-large"></a>
+
+<a id="53168a7affchp"></a>
 
 #### the size of input image is too small or too large.
 
@@ -865,11 +1209,19 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **解决方案：** 请调整图像尺寸以符合API要求。
 
+<a id="the-request-parameter-is-invalid-please-check-the-request-parameter"></a>
+
+<a id="b985256a56crq"></a>
+
 #### The request parameter is invalid, please check the request parameter.
 
 **原因：** 该报错为多场景通用报错：可能是`clothes_type`入参不合规（AI试衣-图片分割），也可能是画幅入参不合规。
 
 **解决方案：** 详情参见[AI试衣-图片分割](https://help.aliyun.com/zh/model-studio/aitryon-parsing-api)；若为画幅入参问题，可选"1:1"或"3:4"。
+
+<a id="the-type-or-value-of-parameter-is-out-of-definition"></a>
+
+<a id="424c936759loo"></a>
 
 #### The type or value of {parameter} is out of definition.
 
@@ -877,17 +1229,29 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **解决方案：** 详情参见[LivePortrait 视频生成](https://help.aliyun.com/zh/model-studio/liveportrait-api)。
 
+<a id="request-timeout-after-23-seconds"></a>
+
+<a id="7b9f15725drh2"></a>
+
 #### request timeout after 23 seconds.
 
-**原因：** 超过23秒未向服务发送数据。该报错信息在使用[实时语音合成（Sambert）](raw/_short/sambert-speech-synthesis-32c5c56b36543707.md)、[语音识别（Paraformer）](raw/_short/paraformer-real-time-speech-recognition-api-refe-fcf57d84158b854c.md)和[实时语音合成（Qwen-Audio-TTS/CosyVoice）](raw/model-api-reference/realtime-api-directory/realtime-tts-model-apis/cosyvoice-large-model-for-speech-synthesis.md)时产生。
+**原因：** 超过23秒未向服务发送数据。该报错信息在使用[实时语音合成（Sambert）](../../_short/sambert-speech-synthesis-32c5c56b36543707.md)、[语音识别（Paraformer）](../../_short/paraformer-real-time-speech-recognition-api-refe-fcf57d84158b854c.md)和[实时语音合成（Qwen-Audio-TTS/CosyVoice）](../../model-api-reference/realtime-api-directory/realtime-tts-model-apis/cosyvoice-large-model-for-speech-synthesis.md)时产生。
 
 **解决方案：** 请检查为什么长时间未向服务器发送数据。如果长时间（超过23秒）不向服务端发送消息，请及时结束任务。
 
+<a id="please-ensure-input-text-is-valid"></a>
+
+<a id="dc047c34e6lzk"></a>
+
 #### Please ensure input text is valid.
 
-**原因：** 若您使用[实时语音合成（Qwen-Audio-TTS/CosyVoice）](raw/model-api-reference/realtime-api-directory/realtime-tts-model-apis/cosyvoice-large-model-for-speech-synthesis.md)，此错误通常是由于未发送待合成文本引起的。可能原因包括：参数遗漏（未为 `text` 参数赋值）或代码异常（导致对 `text` 参数的赋值失败）。
+**原因：** 若您使用[实时语音合成（Qwen-Audio-TTS/CosyVoice）](../../model-api-reference/realtime-api-directory/realtime-tts-model-apis/cosyvoice-large-model-for-speech-synthesis.md)，此错误通常是由于未发送待合成文本引起的。可能原因包括：参数遗漏（未为 `text` 参数赋值）或代码异常（导致对 `text` 参数的赋值失败）。
 
 **解决方案：** 请排查代码，确保 `text` 参数被正确赋值并发送。
+
+<a id="missing-required-parameter-xxx-please-follow-the-protocol"></a>
+
+<a id="2672a27f04522"></a>
 
 #### Missing required parameter 'xxx'! Please follow the protocol!
 
@@ -919,36 +1283,56 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 1.  针对原因1，检查 JSON 格式与参数。
 2.  针对原因2，确保每次调用 `stop()` 之后，下一轮识别前必须重新调用 `call()` 方法。如果使用 DashScope Java SDK，请留意客户端抛出的"状态无效"（Invalid state）异常；如果直接使用 WebSocket 协议，则会收到"Missing required parameter"错误。
 
+<a id="tts-engine-return-error-code-418"></a>
+
+<a id="4f506a938a4qe"></a>
+
 #### \[tts:\]Engine return error code: 418
 
-**原因：** 使用[实时语音合成（Qwen-Audio-TTS/CosyVoice）](raw/model-api-reference/realtime-api-directory/realtime-tts-model-apis/cosyvoice-large-model-for-speech-synthesis.md)，请求参数 `voice`（音色）不正确，或 `model`（模型）与 `voice`（音色）版本不匹配。
+**原因：** 使用[实时语音合成（Qwen-Audio-TTS/CosyVoice）](../../model-api-reference/realtime-api-directory/realtime-tts-model-apis/cosyvoice-large-model-for-speech-synthesis.md)，请求参数 `voice`（音色）不正确，或 `model`（模型）与 `voice`（音色）版本不匹配。
 
 **解决方案：**
 
 1.  **检查** `voice` **参数赋值**：
     
-    -   如果使用的是默认音色，请对照[Python SDK](raw/_short/cosyvoice-websocket-sdk-python-47e109e34183e539.md)中的“voice参数”进行确认。
+    -   如果使用的是默认音色，请对照[Python SDK](../../_short/cosyvoice-websocket-sdk-python-47e109e34183e539.md)中的“voice参数”进行确认。
     -   如果使用的是声音复刻音色，请通过[CosyVoice声音复刻/设计API](https://help.aliyun.com/zh/model-studio/cosyvoice-clone-design-api)接口确认音色状态为“OK”，并确保音色归属账号与调用账号一致。
 2.  **检查版本匹配**：v2模型只能使用v2的音色，v1模型只能使用v1的音色，两者不可混用。
     
 
+<a id="request-voice-is-invalid"></a>
+
+<a id="a4600d0262hc3"></a>
+
 #### Request voice is invalid!
 
-**原因：** 若您使用[实时语音合成（Qwen-Audio-TTS/CosyVoice）](raw/model-api-reference/realtime-api-directory/realtime-tts-model-apis/cosyvoice-large-model-for-speech-synthesis.md)，此错误通常是因为未设置音色。
+**原因：** 若您使用[实时语音合成（Qwen-Audio-TTS/CosyVoice）](../../model-api-reference/realtime-api-directory/realtime-tts-model-apis/cosyvoice-large-model-for-speech-synthesis.md)，此错误通常是因为未设置音色。
 
-**解决方案：** 请检查是否对`voice`参数赋值。若您使用[WebSocket API参考](raw/_short/cosyvoice-websocket-api-5929268331632771.md)，请参照API文档按照正确JSON格式配置参数。
+**解决方案：** 请检查是否对`voice`参数赋值。若您使用[WebSocket API参考](../../_short/cosyvoice-websocket-api-5929268331632771.md)，请参照API文档按照正确JSON格式配置参数。
+
+<a id="ref-images-url-and-obj-or-bg-must-be-the-same-length"></a>
+
+<a id="237cb9c9eecp3"></a>
 
 #### ref\_images\_url and obj\_or\_bg must be the same length.
 
-**原因：** 使用[万相-视频编辑（2.1）](raw/model-api-reference/video-generation-api/wan-api-reference/legacy-video-models/legacy-wanx-vace-api-reference.md)的多图参考功能时，`ref_images_url`和`obj_or_bg`的数组长度不一致。
+**原因：** 使用[万相-视频编辑（2.1）](../../model-api-reference/video-generation-api/wan-api-reference/legacy-video-models/legacy-wanx-vace-api-reference.md)的多图参考功能时，`ref_images_url`和`obj_or_bg`的数组长度不一致。
 
 **解决方案：** 请确保`ref_images_url`和`obj_or_bg`的数组长度一致。
+
+<a id="check-input-data-style"></a>
+
+<a id="1a67cab97bzx3"></a>
 
 #### check input data style.
 
 **原因：** 输入参数不满足入参要求。
 
 **解决方案：** 请检查并修正输入参数。
+
+<a id="an-error-during-model-pre-process"></a>
+
+<a id="6aea77ceaelrp"></a>
 
 #### An error during model pre-process.
 
@@ -957,7 +1341,11 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 **解决方案：**
 
 -   若通过代码调用，请勿将content设置为如`[{"type": "text", "text": "你是谁？"}]`的array类型。
--   若使用 [Cline](raw/token-plan-user-guide/use-chat-client-or-development-tool/more-tools-guide/cline.md) ，请在设置界面单击`MODEL CONFIGURATION`，并勾选 **Enable R1 messages format**。
+-   若使用 [Cline](../../token-plan-user-guide/use-chat-client-or-development-tool/more-tools-guide/cline.md) ，请在设置界面单击`MODEL CONFIGURATION`，并勾选 **Enable R1 messages format**。
+
+<a id="the-image-size-is-not-supported-for-the-data-inspection"></a>
+
+<a id="80fd826206ngp"></a>
 
 #### The image size is not supported for the data inspection.
 
@@ -975,13 +1363,19 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 -   调整生成图像的参数。
     
 
+<a id="wrong-content-type-of-multimodal-url"></a>
+
+<a id="065e89dd58uf2"></a>
+
 #### Wrong Content-Type of multimodal url
 
 **原因**：URL请求的响应头信息`Content-Type`字段不正确。
 
-> 千问VL模型支持的Content Type为：image/bmp、image/bmp、image/icns、image/x-icon、image/jpeg、image/jp2、image/png、image/sgi、image/tiff、image/webp。详情可参见[千问VL模型支持的图像](raw/model-user-guide/model-experience/text-generation-model/vision.md)。
+> 千问VL模型支持的Content Type为：image/bmp、image/bmp、image/icns、image/x-icon、image/jpeg、image/jp2、image/png、image/sgi、image/tiff、image/webp。详情可参见[千问VL模型支持的图像](../model-experience/text-generation-model/vision.md)。
 
 **解决方案**：
+
+<a id="accordion-查看-content-type-字段"></a>
 
 查看 Content-Type 字段
 
@@ -991,11 +1385,19 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 4.  将图片的URL输入到地址栏并访问。
 5.  找到对应的请求，查看Headers部分，在“响应头”（Response Headers）部分中查找Content-Type字段。
 
+<a id="field-required-image-url"></a>
+
+<a id="068dee94174u6"></a>
+
 #### Field required: image\_url
 
 **原因：** 缺少入参`image_url`。
 
 **解决方案：** 请参考[Emoji 视频生成](https://help.aliyun.com/zh/model-studio/emoji-api)，传入`image_url`参数。
+
+<a id="field-required-driven-id"></a>
+
+<a id="e204d0079324i"></a>
 
 #### Field required: driven\_id
 
@@ -1003,11 +1405,19 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **解决方案：** 请参考[Emoji 视频生成](https://help.aliyun.com/zh/model-studio/emoji-api)，传入`driven_id`参数。
 
+<a id="invalid-ext-bbox"></a>
+
+<a id="6b8ba11ceeyae"></a>
+
 #### Invalid ext\_bbox
 
 **原因：** 输入`ext_bbox`参数无效。
 
 **解决方案：** 请参考[Emoji 视频生成](https://help.aliyun.com/zh/model-studio/emoji-api)，传入正确的`ext_bbox`。
+
+<a id="driven-not-exist-driven-id"></a>
+
+<a id="ed5667fb76b8l"></a>
 
 #### Driven not exist: driven\_id
 
@@ -1015,17 +1425,29 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **解决方案：** 请参考[Emoji 视频生成](https://help.aliyun.com/zh/model-studio/emoji-api)，传入正确的`driven_id`。
 
+<a id="text-request-limit-violated-expected-1"></a>
+
+<a id="fc77e3fcbfax3"></a>
+
 #### Text request limit violated, expected 1.
 
-**原因：**在调用CosyVoice语音合成的[WebSocket API参考](raw/_short/cosyvoice-websocket-api-5929268331632771.md)时，将`enable_ssml`设为`true`后多次发送continue-task指令。
+**原因：**在调用CosyVoice语音合成的[WebSocket API参考](../../_short/cosyvoice-websocket-api-5929268331632771.md)时，将`enable_ssml`设为`true`后多次发送continue-task指令。
 
 **解决方案：** `enable_ssml`设为`true`后，只允许发送一次continue-task指令。
+
+<a id="ssml-text-is-not-supported-at-the-moment"></a>
+
+<a id="01c99b4504lv5"></a>
 
 #### SSML text is not supported at the moment!
 
 **原因：**使用CosyVoice语音合成功能时，当前模型或音色不支持 SSML，或未正确启用 SSML 功能。
 
 **解决方案：**请根据[限制与约束](https://help.aliyun.com/zh/model-studio/introduction-to-cosyvoice-ssml-markup-language)进行排查
+
+<a id="tts-engine-return-error-code-428"></a>
+
+<a id="17aa73b94884d"></a>
 
 #### \[tts:\]Engine return error code: 428
 
@@ -1041,7 +1463,7 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
         
         -   须按固定格式编写
         -   仅支持中文 `instruction`
-        -   不同音色支持的 `instruction` 不同，详情请参见[CosyVoice音色列表](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/tts-voice-list/cosyvoice-voice-list.md)
+        -   不同音色支持的 `instruction` 不同，详情请参见[CosyVoice音色列表](../model-experience/speech-and-audio/speech-synthesis/tts-voice-list/cosyvoice-voice-list.md)
 
 **解决方案：**
 
@@ -1049,11 +1471,19 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 -   确认所用模型是否支持 `instruction` 参数
 -   使用 cosyvoice-v3-flash 时，确保 `instruction` 为中文且符合对应音色的固定格式
 
+<a id="at-least-one-of-lyrics-or-prompt-must-be-provided"></a>
+
+<a id="a3b7e2c4f1m8k"></a>
+
 #### At least one of 'lyrics' or 'prompt' must be provided.
 
 **原因：** 使用Fun-Music模型时，请求中未提供`lyrics`或`prompt`参数。
 
 **解决方案：** 请在请求中至少提供`lyrics`或`prompt`参数之一。
+
+<a id="lyrics-content-is-illegal-and-cannot-be-used-for-music-generation"></a>
+
+<a id="b0c4d1e5f2t5r"></a>
 
 #### Lyrics content is illegal and cannot be used for music generation.
 
@@ -1061,7 +1491,17 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **解决方案：** 请修改歌词内容，确保不包含侵权或违规内容后重试。
 
+<a id="invalid-request-error-invalid-value"></a>
+
+<a id="c79a10f70ad2j"></a>
+
+<a id="400-invalid-request-error-invalid-value"></a>
+
 ### invalid\_request\_error-invalid\_value
+
+<a id="1-is-lesser-than-the-minimum-of-0-seed-seed-must-be-integer"></a>
+
+<a id="ac2f420bc14i2"></a>
 
 #### \-1 is lesser than the minimum of 0 - 'seed'/'seed' must be Integer
 
@@ -1069,7 +1509,17 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **解决方案：** 将`seed`参数设置在 \[0, 231\-1\]的范围内。
 
+<a id="invalid-request-error"></a>
+
+<a id="43282c028ar0z"></a>
+
+<a id="400-invalid-request-error"></a>
+
 ### invalid\_request\_error
+
+<a id="you-must-provide-a-model-parameter"></a>
+
+<a id="3a92c18ee560a"></a>
 
 #### you must provide a model parameter.
 
@@ -1077,7 +1527,17 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **解决方案：** 请在请求中添加`model`参数。
 
+<a id="invalidparameter-notsupportenablethinking"></a>
+
+<a id="8185ed2587vjd"></a>
+
+<a id="400-invalidparameter-notsupportenablethinking"></a>
+
 ### InvalidParameter.NotSupportEnableThinking
+
+<a id="the-model-xxx-does-not-support-enable-thinking"></a>
+
+<a id="50ea597fd7awl"></a>
 
 #### The model xxx does not support enable\_thinking.
 
@@ -1085,7 +1545,17 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **解决方案：** 请求时去掉`enable_thinking`参数，或使用支持思考模式的模型。
 
+<a id="invalid-value"></a>
+
+<a id="a49d5136b1e1c"></a>
+
+<a id="400-invalid-value"></a>
+
 ### invalid\_value
+
+<a id="the-requested-voice-xxx-is-not-supported"></a>
+
+<a id="29219324c410f"></a>
 
 #### The requested voice 'xxx' is not supported.
 
@@ -1093,7 +1563,17 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 **解决方案：** 请检查声音复刻时的请求参数`target_model`和语音合成时的请求参数`model`是否一致。
 
+<a id="arrearage"></a>
+
+<a id="083013fdf2buo"></a>
+
+<a id="400-arrearage"></a>
+
 ### Arrearage
+
+<a id="access-denied-please-make-sure-your-account-is-in-good-standing"></a>
+
+<a id="overdue_payment"></a>
 
 #### Access denied, please make sure your account is in good standing.
 
@@ -1104,16 +1584,22 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 -   未欠费：请确认该 API Key 是否属于当前账号。如果账号不存在欠费的情况，可能账户出现异常，详情请联系客服进一步排查。
 -   欠费：请及时充值。充值后，系统余额可能存在延迟，请稍等后重试。
 
-**说明**Q：购买了资源包，且只调用了资源包内的模型，为什么会欠费？
+> **说明**
+>
+> Q：购买了资源包，且只调用了资源包内的模型，为什么会欠费？
+>
+> A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列资源包为例：
+>
+> 资源包仅可抵扣qwen-plus、qwen-plus-latest模型input tokens和output tokens费用，且仅支持抵扣单次请求输入在0<Token≤128K阶梯范围内产生的实时推理费用（非思考模式）
+>
+> 不支持抵扣的费用包括：
+>
+> -   单次请求输入在Token>128K阶梯范围产生的费用。
+> -   Batch调用、上下文缓存、模型调优、模型部署产生的费用。
 
-A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列资源包为例：
+<a id="api-provider-returned-a-billing-error-your-api-key-has-run-out-of-credits-or-has-an-insufficient-balance-check-your-providers-billing-dashboard-and-top-up-or-switch-to-a-different-api-key"></a>
 
-资源包仅可抵扣qwen-plus、qwen-plus-latest模型input tokens和output tokens费用，且仅支持抵扣单次请求输入在0<Token≤128K阶梯范围内产生的实时推理费用（非思考模式）
-
-不支持抵扣的费用包括：
-
--   单次请求输入在Token>128K阶梯范围产生的费用。
--   Batch调用、上下文缓存、模型调优、模型部署产生的费用。
+<a id="openclaw-billing-error"></a>
 
 #### API provider returned a billing error — your API key has run out of credits or has an insufficient balance. Check your provider's billing dashboard and top up or switch to a different API key.
 
@@ -1121,13 +1607,27 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 前往[费用与成本](https://usercenter2.aliyun.com/home)查看账号是否欠费：欠费请及时充值（充值后系统余额可能存在延迟，请稍候后重试）；未欠费请确认调用所用的 API Key 是否属于当前账号。
 
+<a id="isv-out-of-service"></a>
+
+<a id="isv-out-of-service-2"></a>
+
 #### isv.OUT\_OF\_SERVICE
 
 **原因：** 阿里云账户余额不足，导致服务被暂停。其底层原因与本节的 Arrearage（`Access denied, please make sure your account is in good standing.`）一致，均为账户欠费。
 
 **解决方案：** 前往[费用与成本](https://usercenter2.aliyun.com/home)为阿里云账户充值，余额充足后服务自动恢复。
 
+<a id="contain-forbidden-label-error"></a>
+
+<a id="forbidden-label-h2"></a>
+
+<a id="400-contain-forbidden-label-error"></a>
+
 ### Contain.Forbidden.Label.Error
+
+<a id="contain-forbidden-create-order-label"></a>
+
+<a id="contain-forbidden-create-order-label-2"></a>
 
 #### contain forbidden create order label
 
@@ -1135,7 +1635,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 通过[错误码诊断](https://api.aliyun.com/troubleshoot?q=Contain.Forbidden.Label.Error)查看该错误码的诊断结果；并联系客服确认该标签的添加原因并申请解除，解除后重新下单。
 
+<a id="datainspectionfailed-data-inspection-failed"></a>
+
+<a id="f836121381tv2"></a>
+
+<a id="400-datainspectionfailed-data-inspection-failed"></a>
+
 ### DataInspectionFailed/data\_inspection\_failed
+
+<a id="input-or-output-data-may-contain-inappropriate-content-input-data-may-contain-inappropriate-content-output-data-may-contain-inappropriate-content"></a>
+
+<a id="inappropriate_content"></a>
 
 #### Input or output data may contain inappropriate content. / Input data may contain inappropriate content. / Output data may contain inappropriate content.
 
@@ -1143,9 +1653,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请修改输入内容后重试。如需申请内容加白，请联系客户经理。
 
+<a id="input-xxx-data-may-contain-inappropriate-content"></a>
+
+<a id="63fcebbe0960k"></a>
+
 #### Input xxx data may contain inappropriate content.
 
 **原因：** 输入数据（如提示词或图像）可能包含敏感内容。 **解决方案：** 内容合规检查，请修改输入后重试。
+
+<a id="qwen-rejected-the-input-image-before-model-inference-no-actual-ad-porn-ocr-result-was-produced"></a>
+
+<a id="qwen_img_prefilter_h3"></a>
 
 #### Qwen rejected the input image before model inference; no actual ad/porn/OCR result was produced.
 
@@ -1153,15 +1671,35 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请更换或修改输入图片后重试；若确认图片内容合规仍被持续拦截，可提交工单进一步核实。
 
+<a id="invalidfile-downloadfailed"></a>
+
+<a id="c04b23ec0bugz"></a>
+
+<a id="400-invalidfile-downloadfailed"></a>
+
 ### InvalidFile.DownloadFailed
+
+<a id="the-audio-file-cannot-be-downloaded"></a>
+
+<a id="9e997f8c55374"></a>
 
 #### The audio file cannot be downloaded.
 
-**原因：** 使用[语音识别（Paraformer）](raw/_short/paraformer-real-time-speech-recognition-api-refe-fcf57d84158b854c.md)录音文件识别，待识别文件下载失败。
+**原因：** 使用[语音识别（Paraformer）](../../_short/paraformer-real-time-speech-recognition-api-refe-fcf57d84158b854c.md)录音文件识别，待识别文件下载失败。
 
 **解决方案：** 请检查待识别音频文件URL是否可通过公网访问。
 
+<a id="invalidfile-audiolengtherror"></a>
+
+<a id="208735a309uny"></a>
+
+<a id="400-invalidfile-audiolengtherror"></a>
+
 ### InvalidFile.AudioLengthError
+
+<a id="audio-length-must-be-between-1s-and-300s"></a>
+
+<a id="76b72eb9880df"></a>
 
 #### Audio length must be between 1s and 300s.
 
@@ -1169,13 +1707,27 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请确保音频时长在\[1, 300\]秒范围内
 
+<a id="audio-length-must-be-between-1s-and-180s"></a>
+
+<a id="e507f88361jnq"></a>
+
 #### Audio length must be between 1s and 180s.
 
 **原因：** 音频长度不符合要求。
 
 **解决方案：** 请确保音频时长在\[1, 180\]秒范围内。
 
+<a id="invalidfile-nohuman"></a>
+
+<a id="8ef7e181d1yp6"></a>
+
+<a id="400-invalidfile-nohuman"></a>
+
 ### InvalidFile.NoHuman
+
+<a id="the-input-image-has-no-human-body-please-upload-other-image-with-single-person"></a>
+
+<a id="7e27bbf8cfu8u"></a>
 
 #### The input image has no human body. Please upload other image with single person.
 
@@ -1183,7 +1735,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请上传单人照。
 
+<a id="invalidfile-bodyproportion"></a>
+
+<a id="1c86f01821u2j"></a>
+
+<a id="400-invalidfile-bodyproportion"></a>
+
 ### InvalidFile.BodyProportion
+
+<a id="the-proportion-of-the-detected-person-in-the-picture-is-too-large-or-too-small-please-upload-other-image"></a>
+
+<a id="87bd5233266g8"></a>
 
 #### The proportion of the detected person in the picture is too large or too small, please upload other image.
 
@@ -1191,7 +1753,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请上传符合人物占比要求的图片。
 
+<a id="invalidfile-facepose"></a>
+
+<a id="da7af1d9bezun"></a>
+
+<a id="400-invalidfile-facepose"></a>
+
 ### InvalidFile.FacePose
+
+<a id="the-pose-of-the-detected-face-is-invalid-please-upload-other-image-with-whole-face-and-expected-orientation"></a>
+
+<a id="fb4858cfbfoew"></a>
 
 #### The pose of the detected face is invalid, please upload other image with whole face and expected orientation.
 
@@ -1199,11 +1771,19 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请上传符合要求的图片。
 
+<a id="the-pose-of-the-detected-face-is-invalid-please-upload-other-image-with-the-expected-oriention"></a>
+
+<a id="3102c08fc7hva"></a>
+
 #### The pose of the detected face is invalid, please upload other image with the expected oriention.
 
 **原因：** 上传图片中人物面部姿态不符合要求（要求面部朝向无严重偏移）。
 
 **解决方案：** 请确保图片中人脸朝向无偏斜。
+
+<a id="the-pose-of-the-detected-face-is-invalid-please-upload-other-image-with-the-expected-orientation"></a>
+
+<a id="6fa52f885c6wt"></a>
 
 #### The pose of the detected face is invalid, please upload other image with the expected orientation.
 
@@ -1211,7 +1791,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请确保图片中人脸朝向无偏斜。
 
+<a id="invalidfile-resolution"></a>
+
+<a id="048b4ab769qb4"></a>
+
+<a id="400-invalidfile-resolution"></a>
+
 ### InvalidFile.Resolution
+
+<a id="the-image-resolution-is-invalid-please-make-sure-that-the-largest-length-of-image-is-smaller-than-7000-and-the-smallest-length-of-image-is-larger-than-400"></a>
+
+<a id="94964bec92mt0"></a>
 
 #### The image resolution is invalid, please make sure that the largest length of image is smaller than 7000, and the smallest length of image is larger than 400.
 
@@ -1219,11 +1809,19 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 上传图片的分辨率不得高于7000_7000，且不得低于400_400。
 
+<a id="the-image-resolution-is-invalid-please-make-sure-that-the-largest-length-of-image-is-smaller-than-4096-and-the-smallest-length-of-image-is-larger-than-224"></a>
+
+<a id="636ef70d9f1rm"></a>
+
 #### The image resolution is invalid, please make sure that the largest length of image is smaller than 4096, and the smallest length of image is larger than 224.
 
 **原因：** 上传图像大小不符合要求。
 
 解决方案： 上传图片的分辨率最长边小于 4096 像素，且最短边大于 224 像素。
+
+<a id="the-image-resolution-is-invalid-please-make-sure-that-the-largest-length-of-image-is-smaller-than-xxx-and-the-smallest-length-of-image-is-larger-than-yyy"></a>
+
+<a id="adbdd0f2c6812"></a>
 
 #### The image resolution is invalid, please make sure that the largest length of image is smaller than xxx, and the smallest length of image is larger than yyy.
 
@@ -1231,11 +1829,19 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 上传图片的分辨率不得高于xxx_xxx，且不得低于yyy_yyy。
 
+<a id="the-image-resolution-is-invalid-please-make-sure-that-the-aspect-ratio-is-smaller-than-xxx-and-largest-length-of-image-is-smaller-than-yyy"></a>
+
+<a id="b256644e8cyfl"></a>
+
 #### The image resolution is invalid, please make sure that the aspect ratio is smaller than xxx, and largest length of image is smaller than yyy.
 
 **原因：** 上传图像大小不符合要求。
 
 **解决方案：** 上传图片的长宽比必须小于xxx，且分辨率不得高于yyy\*yyy。
+
+<a id="invalid-video-resolution-the-height-or-width-of-video-must-be-xxx-yyy"></a>
+
+<a id="c8f1246b25q5n"></a>
 
 #### Invalid video resolution. The height or width of video must be xxx ~ yyy.
 
@@ -1243,7 +1849,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 视频边长需介于xxx-yyy之间。
 
+<a id="invalidfile-fps"></a>
+
+<a id="104e267043a8j"></a>
+
+<a id="400-invalidfile-fps"></a>
+
 ### InvalidFile.FPS
+
+<a id="invalid-video-fps-the-video-fps-must-be-15-60"></a>
+
+<a id="cbbafc57a4001"></a>
 
 #### Invalid video FPS. The video FPS must be 15 ~ 60.
 
@@ -1251,7 +1867,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 视频帧率需介于15-60fps之间。
 
+<a id="invalidfile-value"></a>
+
+<a id="6735522da8j2d"></a>
+
+<a id="400-invalidfile-value"></a>
+
 ### InvalidFile.Value
+
+<a id="the-value-of-the-image-is-invalid-please-upload-other-clearer-image"></a>
+
+<a id="ebdb21093e7al"></a>
 
 #### The value of the image is invalid, please upload other clearer image.
 
@@ -1259,7 +1885,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请确保图片中人脸清晰。
 
+<a id="invalidfile-frontbody"></a>
+
+<a id="d9dd15789e2l9"></a>
+
+<a id="400-invalidfile-frontbody"></a>
+
 ### InvalidFile.FrontBody
+
+<a id="the-pose-of-the-detected-person-is-invalid-please-upload-other-image-with-the-front-view"></a>
+
+<a id="2213529c64gtn"></a>
 
 #### The pose of the detected person is invalid, please upload other image with the front view.
 
@@ -1267,7 +1903,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请确保图片中人物正面朝向镜头。
 
+<a id="invalidfile-fullface"></a>
+
+<a id="5c57e01c37qyg"></a>
+
+<a id="400-invalidfile-fullface"></a>
+
 ### InvalidFile.FullFace
+
+<a id="the-pose-of-the-detected-face-is-invalid-please-upload-other-image-with-whole-face"></a>
+
+<a id="262d646c5flkd"></a>
 
 #### The pose of the detected face is invalid, please upload other image with whole face.
 
@@ -1275,15 +1921,35 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请确保图片中人脸完整无遮挡。
 
+<a id="invalidfile-facenotmatch"></a>
+
+<a id="397748d6e8lfa"></a>
+
+<a id="400-invalidfile-facenotmatch"></a>
+
 ### InvalidFile.FaceNotMatch
+
+<a id="there-are-no-matched-face-in-the-video-with-the-provided-reference-image"></a>
+
+<a id="765d5ba07a38c"></a>
 
 #### There are no matched face in the video with the provided reference image.
 
 **原因：** 参考图与视频人脸匹配失败。
 
-**解决方案：** 详情参见[VideoRetalk视频生成](raw/model-api-reference/video-generation-api/portrait-animation-api-reference/videoretalk/videoretalk-api.md)。
+**解决方案：** 详情参见[VideoRetalk视频生成](../../model-api-reference/video-generation-api/portrait-animation-api-reference/videoretalk/videoretalk-api.md)。
+
+<a id="invalidfile-content"></a>
+
+<a id="6f331f83624zg"></a>
+
+<a id="400-invalidfile-content"></a>
 
 ### InvalidFile.Content
+
+<a id="the-first-frame-of-input-video-has-no-human-body-please-choose-another-clip"></a>
+
+<a id="e97b87da99znx"></a>
 
 #### The first frame of input video has no human body. Please choose another clip.
 
@@ -1291,11 +1957,19 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请选择包含人体的视频片段。
 
+<a id="the-human-is-too-small-in-the-first-frame-of-input-video-please-choose-another-clip"></a>
+
+<a id="37ab82df6b93t"></a>
+
 #### The human is too small in the first frame of input video. Please choose another clip.
 
 **原因：** 视频首帧人物过小。
 
 **解决方案：** 请选择首帧人物占比较大的视频。
+
+<a id="the-human-is-not-clear-in-the-first-frame-of-input-video-please-choose-another-clip"></a>
+
+<a id="58d5a3815c80m"></a>
 
 #### The human is not clear in the first frame of input video. Please choose another clip.
 
@@ -1303,11 +1977,19 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请选择首帧人物清晰的视频。
 
+<a id="the-input-image-has-no-human-body-or-multi-human-bodies-please-upload-other-image-with-single-person"></a>
+
+<a id="a8391a22eeeke"></a>
+
 #### The input image has no human body or multi human bodies. Please upload other image with single person.
 
 **原因：** 输入图片中没有人或有多人。
 
 **解决方案：** 请上传单人照。
+
+<a id="the-input-image-has-no-human-body-or-has-unclear-human-body-please-upload-other-image"></a>
+
+<a id="fdb1b081b9f1o"></a>
 
 #### The input image has no human body or has unclear human body. Please upload other image.
 
@@ -1315,13 +1997,27 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请上传包含完整清晰人体的图片。
 
+<a id="the-input-image-has-multi-human-bodies-please-upload-other-image-with-single-person"></a>
+
+<a id="da5ece1a709al"></a>
+
 #### The input image has multi human bodies. Please upload other image with single person.
 
 **原因：** 输入图片中有多人。
 
 **解决方案：** 请上传单人照。
 
+<a id="invalidfile-fullbody"></a>
+
+<a id="bbfbd885d0p6c"></a>
+
+<a id="400-invalidfile-fullbody"></a>
+
 ### InvalidFile.FullBody
+
+<a id="the-human-is-not-fullbody-in-the-first-frame-of-input-video-please-choose-another-clip"></a>
+
+<a id="62189d4fb6k0l"></a>
 
 #### The human is not fullbody in the first frame of input video. Please choose another clip.
 
@@ -1329,13 +2025,27 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 需露出人物全身。
 
+<a id="the-pose-of-the-detected-person-is-invalid-please-upload-other-image-with-whole-body-or-change-the-ratio-parameter-to-1-1"></a>
+
+<a id="7503c2a8c0z1t"></a>
+
 #### The pose of the detected person is invalid, please upload other image with whole body, or change the ratio parameter to 1:1。
 
 **原因：** 上传图片中人物姿态不符合要求。
 
 **解决方案：** 请上传符合要求的图片，头像照要求头部完整可见，半身照要求髋部以上完整可见，或者调整图像宽高比为1:1。
 
+<a id="invalidfile-bodypose"></a>
+
+<a id="2ce6e57817o4k"></a>
+
+<a id="400-invalidfile-bodypose"></a>
+
 ### InvalidFile.BodyPose
+
+<a id="the-pose-of-the-detected-person-is-invalid-please-upload-other-image-with-whole-body-and-expected-orientation"></a>
+
+<a id="3f30131d38q7f"></a>
 
 #### The pose of the detected person is invalid, please upload other image with whole body and expected orientation.
 
@@ -1343,7 +2053,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请上传符合要求的图片，要求肩膀及踝部可见，非背身，非坐姿，人物朝向无严重偏移。
 
+<a id="invalidfile-size"></a>
+
+<a id="e53052d41anfw"></a>
+
+<a id="400-invalidfile-size"></a>
+
 ### InvalidFile.Size
+
+<a id="invalid-file-size-the-video-file-size-must-be-less-than-200mb-and-the-audio-file-size-must-be-less-than-15mb"></a>
+
+<a id="4b7c2916d83vc"></a>
 
 #### Invalid file size. The video file size must be less than 200MB, and the audio file size must be less than 15MB.
 
@@ -1351,11 +2071,19 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 视频文件必须小于200MB，音频文件必须小于15MB。
 
+<a id="invalid-file-size-the-image-file-size-must-be-smaller-than-5mb"></a>
+
+<a id="5b8149a42b93h"></a>
+
 #### Invalid file size, The image file size must be smaller than 5MB.
 
 **原因：** 文件大小不符合要求。
 
 **解决方案：** 图片文件必须小于5MB。
+
+<a id="invalid-file-size-the-video-audio-image-file-size-must-be-less-than-xxxmb"></a>
+
+<a id="a2b831c2b8o2v"></a>
 
 #### Invalid file size. The video/audio/image file size must be less than xxxMB.
 
@@ -1363,7 +2091,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 视频/音频/图像文件必须小于指定的MB数。
 
+<a id="invalidfile-duration"></a>
+
+<a id="df386c98dciny"></a>
+
+<a id="400-invalidfile-duration"></a>
+
 ### InvalidFile.Duration
+
+<a id="invalid-file-duration-the-file-duration-must-be-xxx-s-yyy-s"></a>
+
+<a id="ebc928f216l5i"></a>
 
 #### Invalid file duration. The file duration must be xxx s ~ yyy s.
 
@@ -1371,7 +2109,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 视频/音频文件时长需要介于xxx-yyy s之间。
 
+<a id="invalidfile-imagesize"></a>
+
+<a id="3ab6be1e3adqm"></a>
+
+<a id="400-invalidfile-imagesize"></a>
+
 ### InvalidFile.ImageSize
+
+<a id="the-size-of-image-is-beyond-limit"></a>
+
+<a id="98ea2009d8sdg"></a>
 
 #### The size of image is beyond limit.
 
@@ -1379,7 +2127,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 要求图片长宽比例不大于2，且最长边不大于4096。
 
+<a id="invalidfile-aspectratio"></a>
+
+<a id="181c889a02m9p"></a>
+
+<a id="400-invalidfile-aspectratio"></a>
+
 ### InvalidFile.AspectRatio
+
+<a id="invalid-file-ratio-the-file-aspect-ratio-height-width-must-be-between-3-1-and-1-3"></a>
+
+<a id="4d0d0408e845g"></a>
 
 #### Invalid file ratio. The file aspect ratio (height/width) must be between 3:1 and 1:3.
 
@@ -1387,13 +2145,27 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 视频文件长宽比需要介于3:1到1:3之间。
 
+<a id="invalid-file-ratio-the-file-aspect-ratio-height-width-must-be-between-2-0-and-0-5"></a>
+
+<a id="b4a6a8102a6wn"></a>
+
 #### Invalid file ratio. The file aspect ratio (height/width) must be between 2.0 and 0.5.
 
 **原因：** 文件长宽比不符合要求。
 
 **解决方案：** 图片文件宽高比必须在2.0到0.5之间。
 
+<a id="invalidfile-openerror"></a>
+
+<a id="d6971254e81pc"></a>
+
+<a id="400-invalidfile-openerror"></a>
+
 ### InvalidFile.Openerror
+
+<a id="invalid-file-cannot-open-file-as-video-audio-image"></a>
+
+<a id="c0d6116868i8o"></a>
 
 #### Invalid file, cannot open file as video/audio/image.
 
@@ -1401,7 +2173,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请检查文件是否损坏或格式是否正确。
 
+<a id="invalidfile-template-content"></a>
+
+<a id="62a45cdad8i6s"></a>
+
+<a id="400-invalidfile-template-content"></a>
+
 ### InvalidFile.Template.Content
+
+<a id="invalid-template-content"></a>
+
+<a id="65f25520806kx"></a>
 
 #### Invalid template content.
 
@@ -1409,7 +2191,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请检查模板权限和内容。
 
+<a id="invalidfile-format"></a>
+
+<a id="372f5717b4znd"></a>
+
+<a id="400-invalidfile-format"></a>
+
 ### InvalidFile.Format
+
+<a id="invalid-file-format-the-request-file-format-is-one-of-the-following-types-mp4-avi-mov-mp3-wav-aac-jpeg-jpg-png-bmp-and-webp"></a>
+
+<a id="fd5eef38d117o"></a>
 
 #### Invalid file format，the request file format is one of the following types: MP4, AVI, MOV, MP3, WAV, AAC, JPEG, JPG, PNG, BMP, and WEBP.
 
@@ -1417,7 +2209,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 使用符合要求的文件：视频支持mp4、avi、mov；音频支持mp3, wav, aac；图片支持jpg, jpeg, png, bmp, webp。
 
+<a id="invalidfile-multihuman"></a>
+
+<a id="a27060735151p"></a>
+
+<a id="400-invalidfile-multihuman"></a>
+
 ### InvalidFile.MultiHuman
+
+<a id="the-input-image-has-multi-human-bodies-please-upload-other-image-with-single-person-2"></a>
+
+<a id="9a8a70f4bcbps"></a>
 
 #### The input image has multi human bodies. Please upload other image with single person.
 
@@ -1425,7 +2227,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请上传单人照。
 
+<a id="invalidperson"></a>
+
+<a id="b1ad131e29lnf"></a>
+
+<a id="400-invalidperson"></a>
+
 ### InvalidPerson
+
+<a id="the-input-image-has-no-human-body-or-multi-human-bodies-please-upload-other-image-with-single-person-2"></a>
+
+<a id="d33020a7ddrt7"></a>
 
 #### The input image has no human body or multi human bodies. Please upload other image with single person.
 
@@ -1433,15 +2245,35 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请上传单人照。
 
+<a id="invalidparameter-datainspection"></a>
+
+<a id="d4def69268vky"></a>
+
+<a id="400-invalidparameter-datainspection"></a>
+
 ### InvalidParameter.DataInspection
+
+<a id="unable-to-download-the-media-resource-during-the-data-inspection-process"></a>
+
+<a id="84c05e90a3oca"></a>
 
 #### Unable to download the media resource during the data inspection process.
 
 **原因：** 下载图片或音频文件超时。
 
-**解决方案：** 如果从海外发起调用，由于跨境网络不稳定，可能会导致下载资源超时。请将文件存储到国内的 [OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss) 中，再发起模型调用。也可以使用[临时存储空间](raw/model-api-reference/more-about-models/get-temporary-file-url.md)上传文件。
+**解决方案：** 如果从海外发起调用，由于跨境网络不稳定，可能会导致下载资源超时。请将文件存储到国内的 [OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss) 中，再发起模型调用。也可以使用[临时存储空间](../../model-api-reference/more-about-models/get-temporary-file-url.md)上传文件。
+
+<a id="flownotpublished"></a>
+
+<a id="b4a60a2ce4ijj"></a>
+
+<a id="400-flownotpublished"></a>
 
 ### FlowNotPublished
+
+<a id="flow-has-not-published-yet-please-publish-flow-and-try-again"></a>
+
+<a id="fa397bf3bew1f"></a>
 
 #### Flow has not published yet, please publish flow and try again.
 
@@ -1449,7 +2281,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请发布流程后再重试。
 
+<a id="invalidimage-imagesize"></a>
+
+<a id="75fa690829fh5"></a>
+
+<a id="400-invalidimage-imagesize"></a>
+
 ### InvalidImage.ImageSize
+
+<a id="the-size-of-image-is-beyond-limit-2"></a>
+
+<a id="0ffbb8b288vfv"></a>
 
 #### The size of image is beyond limit.
 
@@ -1457,7 +2299,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 要求图片长宽比例不大于2，且最长边不大于4096。
 
+<a id="invalidimage-nohumanface"></a>
+
+<a id="007e368c9dy6c"></a>
+
+<a id="400-invalidimage-nohumanface"></a>
+
 ### InvalidImage.NoHumanFace
+
+<a id="no-human-face-detected"></a>
+
+<a id="d63b398504doi"></a>
 
 #### No human face detected.
 
@@ -1465,7 +2317,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请上传包含清晰人脸的图片。
 
+<a id="invalidimageresolution"></a>
+
+<a id="da01c607ada0h"></a>
+
+<a id="400-invalidimageresolution"></a>
+
 ### InvalidImageResolution
+
+<a id="the-input-image-resolution-is-too-large-or-small"></a>
+
+<a id="f4214add372tj"></a>
 
 #### The input image resolution is too large or small.
 
@@ -1473,7 +2335,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 图像分辨率不低于256×256像素，不超过5760×3240像素。
 
+<a id="invalidimageformat"></a>
+
+<a id="a0b7a16bd8exe"></a>
+
+<a id="400-invalidimageformat"></a>
+
 ### InvalidImageFormat
+
+<a id="the-input-image-is-in-invalid-format"></a>
+
+<a id="388af0747dzhh"></a>
 
 #### The input image is in invalid format.
 
@@ -1481,7 +2353,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 使用JPEG、PNG、JPG、BMP、WEBP格式的图片。
 
+<a id="invalidurl"></a>
+
+<a id="64d6eb0868hn9"></a>
+
+<a id="400-invalidurl"></a>
+
 ### InvalidURL
+
+<a id="invalid-url-provided-in-your-request"></a>
+
+<a id="8ea4253ce5572"></a>
 
 #### Invalid URL provided in your request.
 
@@ -1489,11 +2371,19 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 使用有效的 URL。
 
+<a id="required-url-is-missing-or-invalid-please-check-the-request-url"></a>
+
+<a id="59f5db978fluc"></a>
+
 #### Required URL is missing or invalid, please check the request URL.
 
 **原因：** 输入的URL无效或缺失。
 
 **解决方案：** 请提供正确的URL。
+
+<a id="the-request-url-is-invalid-make-sure-the-url-is-correct-and-is-an-image"></a>
+
+<a id="3035971634vfv"></a>
 
 #### The request URL is invalid, make sure the url is correct and is an image.
 
@@ -1501,11 +2391,19 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请确保URL正确且指向一个图像文件。
 
+<a id="the-input-audio-is-longer-than-xxs"></a>
+
+<a id="c8689491ecuie"></a>
+
 #### The input audio is longer than xxs.
 
 **原因：** 输入的音频文件超过最大时长xx秒。
 
 **解决方案：** 请将音频文件裁剪至xx秒以内。
+
+<a id="file-size-is-larger-than-15mb"></a>
+
+<a id="1a22d3f4d29ur"></a>
 
 #### File size is larger than 15MB.
 
@@ -1513,11 +2411,19 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请将音频文件压缩至15MB以内。
 
+<a id="file-type-is-not-supported-allowed-types-are-wav-mp3"></a>
+
+<a id="c86c120a0frab"></a>
+
 #### File type is not supported. Allowed types are: .wav, .mp3.
 
 **原因：** 输入的音频格式不合规。
 
 **解决方案：** 当前仅支持wav、mp3格式。
+
+<a id="the-request-url-is-invalid-please-check-the-request-url-is-available-and-the-request-image-format-is-one-of-the-following-types-jpeg-jpg-png-bmp-and-webp"></a>
+
+<a id="734be871d520e"></a>
 
 #### The request URL is invalid, please check the request URL is available and the request image format is one of the following types: JPEG, JPG, PNG, BMP, and WEBP.
 
@@ -1525,7 +2431,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请确保URL可访问，且图片格式为JPEG, JPG, PNG, BMP或WEBP。
 
+<a id="invalidimage-fileformat"></a>
+
+<a id="acc5e024f7a00"></a>
+
+<a id="400-invalidimage-fileformat"></a>
+
 ### InvalidImage.FileFormat
+
+<a id="invalid-image-type-please-ensure-the-uploaded-file-is-a-valid-image"></a>
+
+<a id="f3dc8c3193wbb"></a>
 
 #### Invalid image type. Please ensure the uploaded file is a valid image.
 
@@ -1533,7 +2449,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：**使用JPG、JPEG、PNG、BMP、WEBP格式的图片。
 
+<a id="invalidurl-connectionrefused"></a>
+
+<a id="c40e7ac503gmh"></a>
+
+<a id="400-invalidurl-connectionrefused"></a>
+
 ### InvalidURL.ConnectionRefused
+
+<a id="connection-to-xxx-refused-please-provide-available-url"></a>
+
+<a id="fd88361112wqo"></a>
 
 #### Connection to xxx refused, please provide available URL.
 
@@ -1541,7 +2467,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请提供可用的URL。
 
+<a id="invalidurl-timeout"></a>
+
+<a id="8f0e4cd147p0r"></a>
+
+<a id="400-invalidurl-timeout"></a>
+
 ### InvalidURL.Timeout
+
+<a id="download-xxx-timeout-please-check-network-connection"></a>
+
+<a id="75bc34df2dszq"></a>
 
 #### Download xxx timeout, please check network connection.
 
@@ -1549,7 +2485,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请检查网络连接。
 
+<a id="badrequestexception"></a>
+
+<a id="81d08f6decqm0"></a>
+
+<a id="400-badrequestexception"></a>
+
 ### BadRequestException
+
+<a id="invalid-part-type"></a>
+
+<a id="7b97d99dbeuxq"></a>
 
 #### Invalid part type.
 
@@ -1557,7 +2503,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请上传Qwen-Long支持的文件类型。
 
+<a id="badrequest-emptyinput"></a>
+
+<a id="14f7cc8b18l2j"></a>
+
+<a id="400-badrequest-emptyinput"></a>
+
 ### BadRequest.EmptyInput
+
+<a id="required-input-parameter-missing-from-request"></a>
+
+<a id="8d5e1083c4nze"></a>
 
 #### Required input parameter missing from request.
 
@@ -1565,7 +2521,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请在请求中添加`input`参数。
 
+<a id="badrequest-emptyparameters"></a>
+
+<a id="0472622e59c9i"></a>
+
+<a id="400-badrequest-emptyparameters"></a>
+
 ### BadRequest.EmptyParameters
+
+<a id="required-parameter-parameters-missing-from-request"></a>
+
+<a id="7a2724f009rnk"></a>
 
 #### Required parameter "parameters" missing from request.
 
@@ -1573,7 +2539,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请在请求中添加`parameters`参数。
 
+<a id="badrequest-emptymodel"></a>
+
+<a id="ab1cc34f69650"></a>
+
+<a id="400-badrequest-emptymodel"></a>
+
 ### BadRequest.EmptyModel
+
+<a id="required-parameter-model-missing-from-request"></a>
+
+<a id="3ec94aebe8a2e"></a>
 
 #### Required parameter "model" missing from request.
 
@@ -1581,7 +2557,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请在请求中添加`model`参数。
 
+<a id="badrequest-illegalinput"></a>
+
+<a id="9f736f4a4bkoq"></a>
+
+<a id="400-badrequest-illegalinput"></a>
+
 ### BadRequest.IllegalInput
+
+<a id="the-input-parameter-requires-json-format"></a>
+
+<a id="e201b8e74dvxo"></a>
 
 #### The input parameter requires json format.
 
@@ -1589,7 +2575,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请检查入参数格式，确保为标准的JSON。
 
+<a id="badrequest-inputdownloadfailed"></a>
+
+<a id="28733eb69earp"></a>
+
+<a id="400-badrequest-inputdownloadfailed"></a>
+
 ### BadRequest.InputDownloadFailed
+
+<a id="failed-to-download-the-input-file-xxx"></a>
+
+<a id="4748fd9658fsz"></a>
 
 #### Failed to download the input file: xxx.
 
@@ -1597,13 +2593,27 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请根据详细错误信息`xxx`排查。
 
+<a id="failed-to-download-the-input-file"></a>
+
+<a id="4c3178c4d5v4c"></a>
+
 #### Failed to download the input file.
 
 **原因：** 使用Qwen-TTS声音复刻时，服务器下载待复刻音频失败。
 
 **解决方案：** 请检查音频文件是否可以正常下载，若能下载，请检查音频文件大小是否超出限制（超过10MB）。
 
+<a id="badrequest-unsupportedfileformat"></a>
+
+<a id="4f0a6b6d0670t"></a>
+
+<a id="400-badrequest-unsupportedfileformat"></a>
+
 ### BadRequest.UnsupportedFileFormat
+
+<a id="file-format-unsupported"></a>
+
+<a id="db79516063t8d"></a>
 
 #### File format unsupported.
 
@@ -1611,13 +2621,27 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 音频格式需为 WAV（16bit）、MP3 或 M4A。需要注意的是，不能仅凭文件后缀名判断格式，例如，后缀名为 `.mp3` 的文件可能是其他格式（如 Opus）。建议通过工具（如ffprobe、mediainfo）或命令（如Linux/macOS的file命令）确认音频文件的实际编码格式，以确保符合要求。
 
+<a id="input-file-format-is-not-supported"></a>
+
+<a id="1f26623bb0inl"></a>
+
 #### Input file format is not supported.
 
 **原因：** 输入文件的格式不受支持。
 
 **解决方案：** 请使用支持的文件格式。
 
+<a id="badrequest-toolarge"></a>
+
+<a id="f0a69d648ddl2"></a>
+
+<a id="400-badrequest-toolarge"></a>
+
 ### BadRequest.TooLarge
+
+<a id="payload-too-large"></a>
+
+<a id="e12d1bf5aew1s"></a>
 
 #### Payload Too Large.
 
@@ -1626,18 +2650,38 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 **解决方案：**
 
 -   “purpose”参数为“file-extract”时文档不能超150MB、图片不能超20MB。
--   “purpose”参数为“batch”时，文件不能超500MB。 请拆分并分批[上传文件](raw/model-api-reference/toolkits-and-frameworks/openai-file-interface.md)。
+-   “purpose”参数为“batch”时，文件不能超500MB。 请拆分并分批[上传文件](../../model-api-reference/toolkits-and-frameworks/openai-file-interface.md)。
+
+<a id="badrequest-resourcenotexist"></a>
+
+<a id="224fcd129860o"></a>
+
+<a id="400-badrequest-resourcenotexist"></a>
 
 ### BadRequest.ResourceNotExist
+
+<a id="the-required-resource-not-exist"></a>
+
+<a id="03edbbe6e2hwp"></a>
 
 #### The Required resource not exist.
 
 **原因：**
 
 -   [CosyVoice声音复刻](https://help.aliyun.com/zh/model-studio/voice-replica-1)更新、查询或删除接口调用时，对应音色不存在。
--   使用[定制热词（Paraformer）](raw/model-api-reference/audio-api-directory/speech-recognition-api-reference/custom-hot-words.md)时，更新、查询或删除接口调用的热词资源不存在。
+-   使用[定制热词（Paraformer）](../../model-api-reference/audio-api-directory/speech-recognition-api-reference/custom-hot-words.md)时，更新、查询或删除接口调用的热词资源不存在。
+
+<a id="throttling-allocationquota"></a>
+
+<a id="8d3476833aqht"></a>
+
+<a id="400-throttling-allocationquota"></a>
 
 ### Throttling.AllocationQuota
+
+<a id="您当前的配额为xxx"></a>
+
+<a id="48615f838ets9"></a>
 
 #### 您当前的配额为xxx
 
@@ -1645,11 +2689,19 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** [删除](https://help.aliyun.com/zh/model-studio/cosyvoice-clone-design-api)部分音色。
 
+<a id="free-allocated-quota-exceeded"></a>
+
+<a id="e1ff62776chpa"></a>
+
 #### Free allocated quota exceeded.
 
 **原因：** 使用定制热词（Paraformer）时，账号下的热词列表数量已达到上限。
 
 **解决方案：** 删除不再使用的热词列表。
+
+<a id="maximum-voice-storage-limit-exceeded-please-delete-existing-voices"></a>
+
+<a id="69b7568d28b1h"></a>
 
 #### Maximum voice storage limit exceeded, please delete existing voices.
 
@@ -1657,7 +2709,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请[删除](https://help.aliyun.com/zh/model-studio/qwen-tts-voice-cloning)一部分音色。
 
+<a id="invalidgarment"></a>
+
+<a id="27a38648fcg0s"></a>
+
+<a id="400-invalidgarment"></a>
+
 ### InvalidGarment
+
+<a id="missing-clothing-image-please-input-at-least-one-top-garment-or-bottom-garment-image"></a>
+
+<a id="94b477f7a5l08"></a>
 
 #### Missing clothing image.Please input at least one top garment or bottom garment image.
 
@@ -1665,7 +2727,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请至少提供一张上装 (top\_garment\_url) 或下装 (bottom\_garment\_url) 的图片。
 
+<a id="invalidschema"></a>
+
+<a id="811b3cc8ccmjl"></a>
+
+<a id="400-invalidschema"></a>
+
 ### InvalidSchema
+
+<a id="database-schema-is-invalid-for-text2sql"></a>
+
+<a id="a5cbdd7535fgy"></a>
 
 #### Database schema is invalid for text2sql.
 
@@ -1673,13 +2745,27 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请输入数据库Schema信息。
 
+<a id="the-schema-format-is-invalid"></a>
+
+<a id="agent-message-400-invalidschema-parsex"></a>
+
 #### The schema format is invalid.
 
 **适用范围：** ParseX API
 
 **原因：** Schema 格式无效。
 
+<a id="invalidschemaformat"></a>
+
+<a id="976b4820377b0"></a>
+
+<a id="400-invalidschemaformat"></a>
+
 ### InvalidSchemaFormat
+
+<a id="database-schema-format-is-invalid-for-text2sql"></a>
+
+<a id="5c1fb3a453w3m"></a>
 
 #### Database schema format is invalid for text2sql.
 
@@ -1687,7 +2773,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请检查并修正数据表信息的格式。
 
+<a id="audio-audioshorterror"></a>
+
+<a id="ebfd0b9f8aa9v"></a>
+
+<a id="400-audio-audioshorterror"></a>
+
 ### Audio. AudioShortError
+
+<a id="valid-audio-too-short"></a>
+
+<a id="3b50830f4bwj4"></a>
 
 #### valid audio too short!
 
@@ -1695,7 +2791,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：**音频时长应尽量控制在 10~15 秒之间。录音时请确保朗读连贯，并包含至少一段超过 5 秒的连续语音。
 
+<a id="audio-audiosilenterror"></a>
+
+<a id="d1d58f394fe4f"></a>
+
+<a id="400-audio-audiosilenterror"></a>
+
 ### Audio. AudioSilentError
+
+<a id="silent-audio-error"></a>
+
+<a id="c3a2b1a77cg2c"></a>
 
 #### silent audio error.
 
@@ -1703,7 +2809,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 用于声音复刻的音频时长应尽量控制在 10~15 秒之间，并包含至少一段超过 5 秒的连续语音。
 
+<a id="invalidinputlength"></a>
+
+<a id="68d090b4b0m6x"></a>
+
+<a id="400-invalidinputlength"></a>
+
 ### InvalidInputLength
+
+<a id="the-image-resolution-is-invalid-please-make-sure-that-the-largest-length-of-image-is-smaller-than-4096-and-the-smallest-length-of-image-is-larger-than-150-and-the-size-of-image-ranges-from-5kb-to-5mb"></a>
+
+<a id="07b6d245976bc"></a>
 
 #### The image resolution is invalid, please make sure that the largest length of image is smaller than 4096, and the smallest length of image is larger than 150. and the size of image ranges from 5KB to 5MB.
 
@@ -1711,13 +2827,33 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 将图片最长边调整为小于 4096 像素、最短边调整为大于 150 像素，文件大小控制在 5 KB 至 5 MB，再重试。
 
+<a id="faqruleblocked"></a>
+
+<a id="9075c1fa28p7h"></a>
+
+<a id="400-faqruleblocked"></a>
+
 ### FaqRuleBlocked
+
+<a id="input-or-output-data-is-blocked-by-faq-rule"></a>
+
+<a id="1874e51c40d5d"></a>
 
 #### Input or output data is blocked by faq rule.
 
 **原因：** 命中FAQ规则干预模块。
 
+<a id="clientdisconnect"></a>
+
+<a id="a8f7c2a7a4zi6"></a>
+
+<a id="400-clientdisconnect"></a>
+
 ### ClientDisconnect
+
+<a id="client-disconnected-before-task-finished"></a>
+
+<a id="client-disconnected"></a>
 
 #### Client disconnected before task finished!
 
@@ -1725,7 +2861,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请检查代码，不要在任务结束前断开和服务端的连接。
 
+<a id="serviceunavailableerror"></a>
+
+<a id="8ce8a1037fy7j"></a>
+
+<a id="400-serviceunavailableerror"></a>
+
 ### ServiceUnavailableError
+
+<a id="role-must-be-user-or-assistant-and-content-length-must-be-greater-than-0"></a>
+
+<a id="35c9c8e907hba"></a>
 
 #### Role must be user or assistant and Content length must be greater than 0.
 
@@ -1733,7 +2879,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请检查输入内容长度大于0，并确保参数格式（如`role`）符合API文档的要求。
 
+<a id="ipinfringementsuspect"></a>
+
+<a id="b0108ae3a2juf"></a>
+
+<a id="400-ipinfringementsuspect"></a>
+
 ### IPInfringementSuspect
+
+<a id="input-data-is-suspected-of-being-involved-in-ip-infringement"></a>
+
+<a id="b130546d6alnn"></a>
 
 #### Input data is suspected of being involved in IP infringement.
 
@@ -1741,7 +2897,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 内容合规检查，请检查输入，确保不包含引发侵权风险的内容。
 
+<a id="unsupportedoperation"></a>
+
+<a id="d91dc0bf42k4t"></a>
+
+<a id="400-unsupportedoperation"></a>
+
 ### UnsupportedOperation
+
+<a id="the-operation-is-unsupported-on-the-referee-object"></a>
+
+<a id="2761c10d0aond"></a>
 
 #### The operation is unsupported on the referee object.
 
@@ -1749,13 +2915,27 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请检查操作对象和操作类型是否匹配。
 
+<a id="the-fine-tune-job-can-not-be-deleted-because-it-is-succeeded-failed-or-canceled"></a>
+
+<a id="55b762964bdft"></a>
+
 #### The fine-tune job can not be deleted because it is succeeded,failed or canceled.
 
 **原因：** 无法删除该微调任务，因为其状态已是“成功”、“失败”或“已取消”。
 
 **解决方案：** 只有处于特定状态的任务才能被删除，请勿删除已终结状态的任务。
 
+<a id="customroleblocked"></a>
+
+<a id="46a93eb6dfugb"></a>
+
+<a id="400-customroleblocked"></a>
+
 ### CustomRoleBlocked
+
+<a id="input-or-output-data-may-contain-inappropriate-content-with-custom-rule"></a>
+
+<a id="1f1f7f148cjvl"></a>
 
 #### Input or output data may contain inappropriate content with custom rule.
 
@@ -1763,7 +2943,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请检查内容或调整自定义策略。
 
+<a id="audio-preprocesserror"></a>
+
+<a id="4d74bd62ffoo8"></a>
+
+<a id="400-audio-preprocesserror"></a>
+
 ### Audio.PreprocessError
+
+<a id="audio-preprocess-error"></a>
+
+<a id="7b6494d724paq"></a>
 
 #### Audio preprocess error.
 
@@ -1771,13 +2961,27 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请调整`text`参数的内容，若调整后无效，请参照录音操作指南重新录制音频。
 
+<a id="no-segments-meet-minimum-duration-requirement"></a>
+
+<a id="7f01f842c1dh3"></a>
+
 #### No segments meet minimum duration requirement
 
 **原因：** 使用Qwen-TTS声音复刻时，待复刻音频有效人声过短。
 
 **解决方案：** 请参照录音操作指南重新录制音频。
 
+<a id="badrequest-voicenotfound"></a>
+
+<a id="aceb2ac118nqs"></a>
+
+<a id="400-badrequest-voicenotfound"></a>
+
 ### BadRequest.VoiceNotFound
+
+<a id="voice-s-not-found"></a>
+
+<a id="989e84042cby0"></a>
 
 #### Voice '%s' not found.
 
@@ -1785,7 +2989,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请检查传入的`voice`参数是否正确。
 
+<a id="audio-decodererror"></a>
+
+<a id="ae4ceecf7fbuw"></a>
+
+<a id="400-audio-decodererror"></a>
+
 ### Audio.DecoderError
+
+<a id="decoder-audio-file-failed"></a>
+
+<a id="b4e9f6a4a4ndh"></a>
 
 #### Decoder audio file failed.
 
@@ -1793,7 +3007,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请检查音频文件是否损坏，并确保音频满足音频文件格式要求（如Qwen-TTS）或为 WAV（16bit）、MP3 或 M4A（如CosyVoice）。
 
+<a id="audio-audiorateerror"></a>
+
+<a id="aea44d3ed5rzi"></a>
+
+<a id="400-audio-audiorateerror"></a>
+
 ### Audio.AudioRateError
+
+<a id="file-sample-rate-unsupported"></a>
+
+<a id="925daf562ffvt"></a>
 
 #### File sample rate unsupported.
 
@@ -1801,7 +3025,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 采样率需大于等于24000 Hz。
 
+<a id="audio-durationlimiterror"></a>
+
+<a id="6b20b432bb15i"></a>
+
+<a id="400-audio-durationlimiterror"></a>
+
 ### Audio.DurationLimitError
+
+<a id="audio-duration-exceeds-maximum-allowed-limit"></a>
+
+<a id="118cb1977au4e"></a>
 
 #### Audio duration exceeds maximum allowed limit.
 
@@ -1809,11 +3043,35 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 音频不得超过60秒。
 
+<a id="400-2"></a>
+
+<a id="agent-error-400-400"></a>
+
+<a id="error-modules-400-400"></a>
+
+<a id="error-400-400-managed-agents"></a>
+
+<a id="agent-message-400-400-managed-agents"></a>
+
+<a id="error-400-400-security"></a>
+
+<a id="agent-message-400-400-security"></a>
+
 ### 400
 
 **适用范围：** Managed Agents API、Security API
 
 **原因：** 参数校验失败，`message` 给出具体原因。
+
+<a id="badrequest-illegalendpoint"></a>
+
+<a id="agent-error-400-badrequest-illegalendpoint"></a>
+
+<a id="error-modules-400-badrequest-illegalendpoint"></a>
+
+<a id="error-400-badrequest-illegalendpoint-managed-agents"></a>
+
+<a id="error-400-badrequest-illegalendpoint-security"></a>
 
 ### BadRequest.IllegalEndpoint
 
@@ -1821,11 +3079,19 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **原因：** 工作空间路由无效（网关层）。
 
+<a id="100005"></a>
+
+<a id="agent-error-400-100005"></a>
+
 ### 100005
 
 **适用范围：** Sandbox API
 
 **原因：** `source` 只支持 `sandbox_template`。
+
+<a id="11900024"></a>
+
+<a id="agent-error-400-11900024"></a>
 
 ### 11900024
 
@@ -1833,13 +3099,27 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **原因：** 文件不是沙箱模版来源。
 
+<a id="invalid-parameter"></a>
+
+<a id="agent-error-400-invalid-parameter"></a>
+
+<a id="agent-message-400-invalid-parameter-rag"></a>
+
 ### INVALID\_PARAMETER
 
 **适用范围：** RAG API
 
 **原因：** 参数缺失或格式错误。
 
+<a id="notexistbizid"></a>
+
+<a id="agent-error-400-notexistbizid"></a>
+
 ### NotExistBizId
+
+<a id="the-bizid-not-exist"></a>
+
+<a id="agent-message-400-notexistbizid-parsex"></a>
 
 #### The bizId not exist.
 
@@ -1847,7 +3127,15 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **原因：** biz ID 不存在。
 
+<a id="filedownloadfailed"></a>
+
+<a id="agent-error-400-filedownloadfailed"></a>
+
 ### FileDownloadFailed
+
+<a id="file-download-failed"></a>
+
+<a id="agent-message-400-filedownloadfailed-parsex"></a>
 
 #### File download failed.
 
@@ -1857,7 +3145,15 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **处理建议：** `FileDownloadFailed` 标记为不可重试；请先修复文件 URL 或访问条件。`FileDownloadTimeout` 标记为可重试。
 
+<a id="filedownloadtimeout"></a>
+
+<a id="agent-error-400-filedownloadtimeout"></a>
+
 ### FileDownloadTimeout
+
+<a id="file-download-timed-out"></a>
+
+<a id="agent-message-400-filedownloadtimeout-parsex"></a>
 
 #### File download timed out.
 
@@ -1865,7 +3161,15 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **原因：** 文件下载超时，可重试。
 
+<a id="fileformatnotsupported"></a>
+
+<a id="agent-error-400-fileformatnotsupported"></a>
+
 ### FileFormatNotSupported
+
+<a id="unsupported-file-formats"></a>
+
+<a id="agent-message-400-fileformatnotsupported-parsex"></a>
 
 #### Unsupported file formats
 
@@ -1873,7 +3177,15 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **原因：** 不支持的文件格式。
 
+<a id="filesizeexceeded"></a>
+
+<a id="agent-error-400-filesizeexceeded"></a>
+
 ### FileSizeExceeded
+
+<a id="file-size-exceeds-limit"></a>
+
+<a id="agent-message-400-filesizeexceeded-parsex"></a>
 
 #### File size exceeds limit
 
@@ -1881,7 +3193,15 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **原因：** 文件大小超过限制。
 
+<a id="invalidfileurl"></a>
+
+<a id="agent-error-400-invalidfileurl"></a>
+
 ### InvalidFileUrl
+
+<a id="url-is-invalid-or-inaccessible"></a>
+
+<a id="agent-message-400-invalidfileurl-parsex"></a>
 
 #### URL is invalid or inaccessible
 
@@ -1889,7 +3209,15 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **原因：** URL 不合法或不可访问。
 
+<a id="parseresultexpired"></a>
+
+<a id="agent-error-400-parseresultexpired"></a>
+
 ### ParseResultExpired
+
+<a id="the-parseresult-has-exceeded-the-30-day-retention-period"></a>
+
+<a id="agent-message-400-parseresultexpired-parsex"></a>
 
 #### The ParseResult has exceeded the 30-day retention period.
 
@@ -1897,7 +3225,15 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **原因：** 解析结果已过期，超过 30 天保留期。
 
+<a id="pagecountexceeded"></a>
+
+<a id="agent-error-400-pagecountexceeded"></a>
+
 ### PageCountExceeded
+
+<a id="the-page-count-exceeds-the-limit"></a>
+
+<a id="agent-message-400-pagecountexceeded-parsex"></a>
 
 #### The page count exceeds the limit.
 
@@ -1905,7 +3241,15 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **原因：** 页数超过限制。
 
+<a id="pagerangeinvalid"></a>
+
+<a id="agent-error-400-pagerangeinvalid"></a>
+
 ### PageRangeInvalid
+
+<a id="the-page-range-is-invalid"></a>
+
+<a id="agent-message-400-pagerangeinvalid-parsex"></a>
 
 #### The page range is invalid.
 
@@ -1913,7 +3257,15 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **原因：** 页码范围无效。
 
+<a id="parseresultnotreusable"></a>
+
+<a id="agent-error-400-parseresultnotreusable"></a>
+
 ### ParseResultNotReusable
+
+<a id="the-parseresult-is-not-reusable-because-the-input-is-audio-video-or-the-type-does-not-match"></a>
+
+<a id="agent-message-400-parseresultnotreusable-parsex"></a>
 
 #### The ParseResult is not reusable because the input is audio/video or the type does not match.
 
@@ -1923,7 +3275,15 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **处理建议：** 检查解析结果是否超过 7 天保留期，以及输入是否为抽取不支持的音视频或不匹配类型。
 
+<a id="unsupportedfiletype"></a>
+
+<a id="agent-error-400-unsupportedfiletype"></a>
+
 ### UnsupportedFileType
+
+<a id="extract-does-not-support-audio-video-input"></a>
+
+<a id="agent-message-400-unsupportedfiletype-parsex"></a>
 
 #### Extract does not support audio/video input.
 
@@ -1931,13 +3291,35 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **原因：** 抽取不支持音视频输入。
 
+<a id="401"></a>
+
+<a id="http-401"></a>
+
 ## 401
+
+<a id="invalidapikey-invalid-api-key"></a>
+
+<a id="f0a70479b3nre"></a>
+
+<a id="401-invalidapikey-invalid-api-key"></a>
+
+<a id="error-modules-401-invalidapikey"></a>
 
 ### InvalidApiKey/invalid\_api\_key
 
-**说明**
+> **说明**
+>
+> <a id="error-401-invalidapikey-managed-agents"></a>
+>
+> <a id="error-401-invalidapikey-security"></a>
+>
+> 在 Managed Agents API 和 Security API 中，`InvalidApiKey` 由网关返回，表示未携带 API Key 或 API Key 无效。
 
-在 Managed Agents API 和 Security API 中，`InvalidApiKey` 由网关返回，表示未携带 API Key 或 API Key 无效。
+<a id="error-401-invalidapikey-model-apis"></a>
+
+<a id="invalid-api-key-provided-incorrect-api-key-provided"></a>
+
+<a id="apikey_error"></a>
 
 #### Invalid API-key provided. / Incorrect API key provided.
 
@@ -1959,47 +3341,41 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
             
 -   **填写错误**：阿里云百炼的 API Key 以 `sk-` 开头，请确认未误填其他模型提供商的密钥，且复制时未包含多余空格或换行符。
     
--   **套餐专属 API Key（Coding Plan / Token Plan 团队版）**：Coding Plan 与 Token Plan 团队版均提供以 `sk-sp-` 开头的专属 API Key，**必须配合各自的专属 Base URL 使用**，不可与通用 API Key/Base URL 混用（混用会返回本鉴权错误）。其中 Coding Plan 的专属地址为 [](https://coding.dashscope.aliyuncs.com/v1)[https://coding.dashscope.aliyuncs.com/v1](https://coding.dashscope.aliyuncs.com/v1)；Token Plan 团队版的专属 Base URL 可在控制台**我的订阅**的 API Key 区域查看。请确认同时更新了 API Key 和 Base URL，具体配置方法请分别参见接入AI工具与[快速开始](raw/token-plan-user-guide/token-plan-guide/token-plan-overview.md)。
+-   **套餐专属 API Key（Coding Plan / Token Plan 团队版）**：Coding Plan 与 Token Plan 团队版均提供以 `sk-sp-` 开头的专属 API Key，**必须配合各自的专属 Base URL 使用**，不可与通用 API Key/Base URL 混用（混用会返回本鉴权错误）。其中 Coding Plan 的专属地址为 [](https://coding.dashscope.aliyuncs.com/v1)[https://coding.dashscope.aliyuncs.com/v1](https://coding.dashscope.aliyuncs.com/v1)；Token Plan 团队版的专属 Base URL 可在控制台**我的订阅**的 API Key 区域查看。请确认同时更新了 API Key 和 Base URL，具体配置方法请分别参见接入AI工具与[快速开始](../../token-plan-user-guide/token-plan-guide/token-plan-overview.md)。
     
 -   **地域不匹配**：API Key 和 Base URL 属于不同的地域，例如使用了华北2（北京）地域的 API Key 和新加坡地域的 Base URL。请确认您使用的 API Key 位于[北京](https://bailian.console.aliyun.com/settings/api-key)地域页面或[新加坡](https://bailian.console.aliyun.com/settings/api-key)地域页面，或[美国](https://bailian.console.aliyun.com/us-east-1)地域页面。各地域对应的 Base URL 如下：
     
-    **地域**
+    | 地域 | OpenAI兼容 | DashScope |
+    | --- | --- | --- |
+    | 华北2（北京） | `https://dashscope.aliyuncs.com/compatible-mode/v1` | `https://dashscope.aliyuncs.com/api/v1` |
+    | 新加坡 | `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1` | `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1` |
+    | 美国（弗吉尼亚） | `https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/compatible-mode/v1` | `https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1` |
     
-    **OpenAI兼容**
+    > **重要**
+    >
+    > 阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+    >
+    > -   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+    > -   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+    >
+    > 其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
     
-    **DashScope**
-    
-    华北2（北京）
-    
-    `[https://dashscope.aliyuncs.com/compatible-mode/v1](https://dashscope.aliyuncs.com/compatible-mode/v1)`
-    
-    `[https://dashscope.aliyuncs.com/api/v1](https://dashscope.aliyuncs.com/api/v1)`
-    
-    新加坡
-    
-    `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`
-    
-    `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1`
-    
-    美国（弗吉尼亚）
-    
-    `https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/compatible-mode/v1`
-    
-    `https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1`
-    
-    **重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
-    
-    -   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
-    -   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
-    
-    其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
-    
--   **工具适配问题**：第三方工具未正确适配（如[Dify](https://help.aliyun.com/zh/model-studio/dify)最新版本插件不稳定导致报错，可尝试安装旧版本千问插件；旧版本[Cline](raw/token-plan-user-guide/use-chat-client-or-development-tool/more-tools-guide/cline.md)调用模型时**API Provider**选择了**Alibaba Qwen**，应选择**OpenAI兼容**）。
+-   **工具适配问题**：第三方工具未正确适配（如[Dify](https://help.aliyun.com/zh/model-studio/dify)最新版本插件不稳定导致报错，可尝试安装旧版本千问插件；旧版本[Cline](../../token-plan-user-guide/use-chat-client-or-development-tool/more-tools-guide/cline.md)调用模型时**API Provider**选择了**Alibaba Qwen**，应选择**OpenAI兼容**）。
     
 
 若以上均不符合，可能是 API Key 被删除，请重新获取并发起调用。
 
+<a id="not-authorized"></a>
+
+<a id="f9c2421d8953a"></a>
+
+<a id="401-not-authorized"></a>
+
 ### NOT AUTHORIZED
+
+<a id="access-denied-either-you-are-not-authorized-to-access-this-workspace-or-the-workspace-does-not-exist-please-nverify-the-workspace-configuration-ncheck-your-api-endpoint-settings-ensure-you-are-targeting-the-correct-environment"></a>
+
+<a id="45c72b5db8rqa"></a>
 
 #### Access denied: Either you are not authorized to access this workspace, or the workspace does not exist. Please:\\nVerify the workspace configuration.\\nCheck your API endpoint settings. Ensure you are targeting the correct environment.
 
@@ -2013,7 +3389,19 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 -   请确认{WorkspaceId}值无误且账号已是该业务空间的成员后，再调用接口。
 -   中国站用户请使用**华北2（北京）地域的接入地址；国际站用户请使用新加坡**地域的接入地址。使用[在线调试](https://api.aliyun.com/api/bailian/2023-12-29/CreateIndex)时，确认服务地址正确。
 
+<a id="invalid-access-token-or-token-expired"></a>
+
+<a id="a3f7b2c8d1token"></a>
+
+<a id="401-invalid-access-token-or-token-expired"></a>
+
 ### invalid access token or token expired
+
+<a id="invalid-access-token-or-token-expired-2"></a>
+
+<a id="b4e8c3d9f2tokenmsg"></a>
+
+<a id="invalid-access-token-or-token-expired-2-2"></a>
 
 #### invalid access token or token expired.
 
@@ -2024,15 +3412,33 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 -   Anthropic 兼容端点：`https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic`
 -   OpenAI 兼容端点：`https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
 
+<a id="unauthorized"></a>
+
+<a id="agent-error-401-unauthorized"></a>
+
 ### UNAUTHORIZED
 
 **适用范围：** RAG API
 
 **原因：** API Key 缺失或无效。
 
+<a id="403"></a>
+
+<a id="http-403"></a>
+
 ## 403
 
+<a id="accessdenied-access-denied"></a>
+
+<a id="f6436bf1edmmz"></a>
+
+<a id="403-accessdenied-access-denied"></a>
+
 ### AccessDenied/access\_denied
+
+<a id="current-user-api-does-not-support-asynchronous-calls"></a>
+
+<a id="65b6af3dafigq"></a>
 
 #### Current user api does not support asynchronous calls.
 
@@ -2040,31 +3446,47 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请移除请求头中的 `X-DashScope-Async`，或将其值设为 `disable`。
 
+<a id="current-user-api-does-not-support-synchronous-calls"></a>
+
+<a id="e1b9c181334xz"></a>
+
 #### current user api does not support synchronous calls.
 
 **原因：** 接口不支持同步调用。
 
 **解决方案：** 请在请求头中设置 `X-DashScope-Async: enable`。
 
+<a id="invalid-according-to-policy-policy-expired"></a>
+
+<a id="aa6297294cqip"></a>
+
 #### Invalid according to Policy: Policy expired.
 
 **原因：** 在获取临时公网URL时，文件上传凭证已经过期。
 
-**解决方案：** 请重新调用[文件上传凭证接口](https://help.aliyun.com/zh/model-studio/get-temporary-file-url#32db94982cllx)生成新凭证。
+**解决方案：** 请重新调用[文件上传凭证接口](../../model-api-reference/more-about-models/get-temporary-file-url.md#32db94982cllx)生成新凭证。
+
+<a id="access-denied"></a>
+
+<a id="access_denied"></a>
 
 #### Access denied.
 
 **原因：** 无权访问此模型。可能因该模型需申请权限、模型免费额度已耗尽且不支持付费使用（如 `deepseek-r1-distill-llama-70b`），或该模型已下线。
 
-**解决方案：** 若该模型已下线，请在[模型下线机制说明](raw/product-updates/release-notes/model-depreciation.md)中确认其下线状态，并改用该文档推荐的替代模型。
+**解决方案：** 若该模型已下线，请在[模型下线机制说明](../../product-updates/release-notes/model-depreciation.md)中确认其下线状态，并改用该文档推荐的替代模型。
 
 **使用通用 API Key 调用 Token Plan 专属模型**
 
 **原因：** Token Plan 专属模型（如 `qwen3.8-max-preview`）仅限 Token Plan 订阅用户使用专属 API Key（以 `sk-sp-` 开头）配合 Token Plan 专属 Base URL 调用。使用通用 API Key（以 `sk-` 开头）调用这些模型会返回 403 `access_denied` 错误。
 
-**解决方案：** 请前往阿里云百炼控制台，在**我的订阅**的 API Key 区域获取 Token Plan 专属 API Key 与专属 Base URL，并确认同时更新了两者，具体配置方法请参见[快速开始](raw/token-plan-user-guide/token-plan-guide/token-plan-overview.md)。若 API Key 与 Base URL 不匹配（例如专属 API Key 搭配通用 Base URL），将返回 401 鉴权错误，请参见本文档 **401-InvalidApiKey/invalid\_api\_key**。
+**解决方案：** 请前往阿里云百炼控制台，在**我的订阅**的 API Key 区域获取 Token Plan 专属 API Key 与专属 Base URL，并确认同时更新了两者，具体配置方法请参见[快速开始](../../token-plan-user-guide/token-plan-guide/token-plan-overview.md)。若 API Key 与 Base URL 不匹配（例如专属 API Key 搭配通用 Base URL），将返回 401 鉴权错误，请参见本文档 **401-InvalidApiKey/invalid\_api\_key**。
 
 **解决方案：** 请前往阿里云百炼控制台，在[模型广场](https://bailian.console.aliyun.com/model/market)的对应模型卡片下方单击**立即申请**发起测试申请。或改用其他模型，例如千问或万相的文生图模型替代 Flux。
+
+<a id="access-denied-by-api-key-restrictions"></a>
+
+<a id="apikey-model-scope-denied"></a>
 
 #### Access denied by API-Key restrictions.
 
@@ -2076,7 +3498,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 -   也可以新建一个权限为**全部**的 API Key 后重试。
 -   该限制对 OpenAI 兼容接口和 DashScope 原生接口均生效，更换 Base URL 无法绕过；请确认调用时使用的 API Key 具备目标模型的调用权限。
 
+<a id="accessdenied-unpurchased"></a>
+
+<a id="d39f809e7ajgg"></a>
+
+<a id="403-accessdenied-unpurchased"></a>
+
 ### AccessDenied.Unpurchased
+
+<a id="access-to-model-denied-please-make-sure-you-are-eligible-for-using-the-model"></a>
+
+<a id="service-not-enabled"></a>
 
 #### Access to model denied. Please make sure you are eligible for using the model.
 
@@ -2093,7 +3525,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
     > 如果开通服务时提示“您尚未进行实名认证”，请先进行[实名认证](https://help.aliyun.com/zh/account/verify-your-identity-individual-account)。
     
 
+<a id="model-accessdenied"></a>
+
+<a id="94a2e01649ylu"></a>
+
+<a id="403-model-accessdenied"></a>
+
 ### Model.AccessDenied
+
+<a id="model-access-denied"></a>
+
+<a id="model-access-denied-2"></a>
 
 #### Model access denied.
 
@@ -2104,7 +3546,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 -   **调用标准模型**：使用子业务空间的API-KEY调用标准模型（例如`qwen-plus`）时，子业务空间需具备该模型的调用权限。详见[模型调用授权](https://help.aliyun.com/zh/model-studio/use-workspace)。
 -   **调用自定义模型**：自定义模型部署成功后，仅能用其所在业务空间的API-KEY调用，且无需模型调用授权。
 
+<a id="app-accessdenied"></a>
+
+<a id="d4270f908657q"></a>
+
+<a id="403-app-accessdenied"></a>
+
 ### App.AccessDenied
+
+<a id="app-access-denied"></a>
+
+<a id="a276721df6ze0"></a>
 
 #### App access denied.
 
@@ -2118,7 +3570,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 -   如果是Claude Code报错，请使用默认业务空间的API Key。
 -   若上述建议都正确，建议刷新数据重新发布再调用，或尝试重新创建智能体。
 
+<a id="workspace-accessdenied"></a>
+
+<a id="526f4a5439j5c"></a>
+
+<a id="403-workspace-accessdenied"></a>
+
 ### Workspace.AccessDenied
+
+<a id="workspace-access-denied"></a>
+
+<a id="a9c8f3d338mtf"></a>
 
 #### Workspace access denied.
 
@@ -2127,14 +3589,32 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 **解决方案：**
 
 -   如果调用子业务空间的应用，请参考[业务空间](https://help.aliyun.com/zh/model-studio/call-rag-application-through-api-old#78c7ddbcca64f)。
--   如果调用子业务空间的模型，请参考[子业务空间的模型调用](raw/model-api-reference/more-about-models/model-calling-in-sub-workspace.md)。
+-   如果调用子业务空间的模型，请参考[子业务空间的模型调用](../../model-api-reference/more-about-models/model-calling-in-sub-workspace.md)。
 -   也可改为使用主账号的API KEY，主账号具有所有业务空间的权限。
+
+<a id="endpoint-accessdenied"></a>
+
+<a id="endpoint-ad-h2"></a>
+
+<a id="403-endpoint-accessdenied"></a>
+
+<a id="error-modules-403-endpoint-accessdenied"></a>
 
 ### Endpoint.AccessDenied
 
-**说明**
+> **说明**
+>
+> <a id="error-403-endpoint-accessdenied-managed-agents"></a>
+>
+> <a id="error-403-endpoint-accessdenied-security"></a>
+>
+> 在 Managed Agents API 和 Security API 中，`Endpoint.AccessDenied` 由网关返回，表示工作空间不存在或没有访问权限。
 
-在 Managed Agents API 和 Security API 中，`Endpoint.AccessDenied` 由网关返回，表示工作空间不存在或没有访问权限。
+<a id="error-403-endpoint-accessdenied-model-apis"></a>
+
+<a id="workspace-endpoint-access-denied"></a>
+
+<a id="endpoint-access-denied"></a>
 
 #### Workspace endpoint access denied.
 
@@ -2142,10 +3622,20 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：**
 
--   前往[模型下线机制说明](raw/product-updates/release-notes/model-depreciation.md)确认所调用的模型是否已下线。
+-   前往[模型下线机制说明](../../product-updates/release-notes/model-depreciation.md)确认所调用的模型是否已下线。
 -   若模型已下线，请改用其推荐的替代模型重新调用。
 
+<a id="allocationquota-freetieronly"></a>
+
+<a id="a9d20b11c0obu"></a>
+
+<a id="403-allocationquota-freetieronly"></a>
+
 ### AllocationQuota.FreeTierOnly
+
+<a id="the-free-tier-of-the-model-has-been-exhausted-if-you-wish-to-continue-access-the-model-on-a-paid-basis-please-disable-the-use-free-tier-only-mode-in-the-management-console"></a>
+
+<a id="free-tier-exhausted"></a>
 
 #### The free tier of the model has been exhausted. If you wish to continue access the model on a paid basis, please disable the "use free tier only" mode in the management console.
 
@@ -2153,16 +3643,20 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案**：[认证](https://myaccount.console.aliyun.com/cert-info)并充值后再进行调用。
 
-**原因二**：用户开启了[免费额度用完即停](https://help.aliyun.com/zh/model-studio/new-free-quota#d1cb80ac11i92)，且免费额度耗尽后发起请求。
+**原因二**：用户开启了[免费额度用完即停](../test-1/new-free-quota.md#d1cb80ac11i92)，且免费额度耗尽后发起请求。
 
 > 控制台显示的免费额度为分钟级更新（需手动刷新页面）。
 
 **解决方案**：
 
--   如需继续以付费方式调用，可随时关闭[免费额度用完即停](https://help.aliyun.com/zh/model-studio/new-free-quota#d1cb80ac11i92)开关，无需等到免费额度用完；关闭后即可按量付费继续调用。
+-   如需继续以付费方式调用，可随时关闭[免费额度用完即停](../test-1/new-free-quota.md#d1cb80ac11i92)开关，无需等到免费额度用完；关闭后即可按量付费继续调用。
 -   若在使用 Coding Plan 时遇到此问题，通常是配置错误所致。Coding Plan 需要配置专属的 Base URL 和 [API Key](https://bailian.console.aliyun.com/cn-beijing/subscription/coding-plan)，详情请参见[Coding Plan快速开始](https://help.aliyun.com/zh/model-studio/coding-plan-quickstart)。
 -   关闭开关后仍报错，或控制台显示已有额度但调用仍被拒绝时，请检查 **API Key** 是否发生变动或失效，建议重置 API Key 或新建 Key 后重新测试。
 -   若控制台的调用记录中没有对应请求，可能是请求未到达服务端，请检查客户端插件配置或本地网络连接是否正常。
+
+<a id="11900007"></a>
+
+<a id="agent-error-403-11900007"></a>
 
 ### 11900007
 
@@ -2170,13 +3664,25 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **原因：** 文件不可下载。
 
+<a id="forbidden"></a>
+
+<a id="agent-error-403-forbidden"></a>
+
 ### FORBIDDEN
 
 **适用范围：** RAG API
 
 **原因：** 无操作权限。
 
+<a id="accountoverdue"></a>
+
+<a id="agent-error-403-accountoverdue"></a>
+
 ### AccountOverdue
+
+<a id="service-suspended-due-to-unpaid-fees"></a>
+
+<a id="agent-message-403-accountoverdue-parsex"></a>
 
 #### Service suspended due to unpaid fees
 
@@ -2184,15 +3690,33 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **原因：** 欠费停服。
 
+<a id="404"></a>
+
+<a id="http-404"></a>
+
 ## 404
 
+<a id="modelnotfound-model-not-found"></a>
+
+<a id="8f3300113cbrz"></a>
+
+<a id="404-modelnotfound-model-not-found"></a>
+
 ### ModelNotFound/ model\_not\_found
+
+<a id="the-provided-model-xxx-is-not-supported-by-the-batch-api"></a>
+
+<a id="6ef4755005yut"></a>
 
 #### The provided model xxx is not supported by the Batch API.
 
 **原因：** 当前模型暂不支持 Batch 调用，或者可能存在模型名称拼写错误。
 
-**解决方案：** 请参考[OpenAI兼容-Batch（文件输入）](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)，确认支持 Batch调用的模型及其正确名称。
+**解决方案：** 请参考[OpenAI兼容-Batch（文件输入）](../../model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)，确认支持 Batch调用的模型及其正确名称。
+
+<a id="model-can-not-be-found-the-model-xxx-does-not-exist-the-model-xxx-does-not-exist-or-you-do-not-have-access-to-it"></a>
+
+<a id="30d9dfb7f82dh"></a>
 
 #### Model can not be found. / The model xxx does not exist. / The model xxx does not exist or you do not have access to it.
 
@@ -2200,7 +3724,7 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：**
 
--   请对照[模型列表](raw/model-user-guide/get-started-with-models/models.md)中的模型名称，检查您输入的模型名称（参数`model`的取值）是否正确。
+-   请对照[模型列表](models.md)中的模型名称，检查您输入的模型名称（参数`model`的取值）是否正确。
     
 -   请前往[模型广场](https://bailian.console.aliyun.com/model/market)开通模型服务。
     
@@ -2211,7 +3735,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
     1.  **确认使用部署名称**：专属部署端点的 `model` 参数应填写部署名称（model code），而非模型名称。部署名称可在百炼控制台的**专属部署**页面查看，格式类似 `qwen3.5-flash-2026-02-23-9439a8e1eafa`。使用模型名称调用专属部署端点，或在标准 API 端点上使用部署名称，均会返回 `model_not_found`。
     2.  **区分调用方式**：通用调用使用标准 API 端点和模型名称，专属部署调用使用专属部署端点 URL 和部署名称，两者不可混用。通用调用与专属部署调用的 API-KEY 也可能不同，混用会导致 `invalid_api_key` 认证错误。
 
+<a id="model-not-supported"></a>
+
+<a id="fc28915aee15i"></a>
+
+<a id="404-model-not-supported"></a>
+
 ### model\_not\_supported
+
+<a id="unsupported-model-xxx-for-openai-compatibility-mode"></a>
+
+<a id="fed580e231sl6"></a>
 
 #### Unsupported model xxx for OpenAI compatibility mode.
 
@@ -2219,7 +3753,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请您使用DashScope原生方式调用。
 
+<a id="workspacenotfound"></a>
+
+<a id="f90c423862gfc"></a>
+
+<a id="404-workspacenotfound"></a>
+
 ### WorkSpaceNotFound
+
+<a id="workspace-can-not-be-found"></a>
+
+<a id="e6f1849a80fct"></a>
 
 #### WorkSpace can not be found.
 
@@ -2227,7 +3771,17 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：**请确认 Base URL 中填写的 {WorkspaceId} 正确。{WorkspaceId} 为您的百炼业务空间 ID，可在[业务空间管理](https://bailian.console.aliyun.com/settings/workspace)页面查看。如仍报错，请确认您的账号是该业务空间的成员。
 
+<a id="notfound"></a>
+
+<a id="d9beba50faz5m"></a>
+
+<a id="404-notfound"></a>
+
 ### NotFound
+
+<a id="not-found"></a>
+
+<a id="8d96fac71dv3x"></a>
 
 #### Not found!
 
@@ -2241,11 +3795,21 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 -   请检查要查询/操作的资源ID是否错误。
 -   检查热词ID是否正确并参照API文档按照正确的方式进行调用。
 
+<a id="request-path-not-found"></a>
+
+<a id="e3f7a4b8c5w8u"></a>
+
 #### Request path not found.
 
 **原因：** 使用Fun-Music模型时，访问的服务地址不存在。
 
 **解决方案：** 请检查接口路径是否正确及是否存在异常字符。
+
+<a id="agent-001"></a>
+
+<a id="agent-error-404-agent-001"></a>
+
+<a id="agent-message-404-agent-001-managed-agents"></a>
 
 ### AGENT\_001
 
@@ -2253,11 +3817,19 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **原因：** 智能体不存在。
 
+<a id="11900006"></a>
+
+<a id="agent-error-404-11900006"></a>
+
 ### 11900006
 
 **适用范围：** Sandbox API
 
 **原因：** 文件不存在。
+
+<a id="11900023"></a>
+
+<a id="agent-error-404-11900023"></a>
 
 ### 11900023
 
@@ -2265,11 +3837,19 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **原因：** 文件不存在或正在内容校验，暂不可用。
 
+<a id="kb-not-found"></a>
+
+<a id="agent-error-404-kb-not-found"></a>
+
 ### KB\_NOT\_FOUND
 
 **适用范围：** RAG API
 
 **原因：** 知识库不存在。
+
+<a id="document-not-found"></a>
+
+<a id="agent-error-404-document-not-found"></a>
 
 ### DOCUMENT\_NOT\_FOUND
 
@@ -2277,13 +3857,27 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **原因：** 文档不存在。
 
+<a id="data-source-not-found"></a>
+
+<a id="agent-error-404-data-source-not-found"></a>
+
 ### DATA\_SOURCE\_NOT\_FOUND
 
 **适用范围：** RAG API
 
 **原因：** 数据源不存在。
 
+<a id="405"></a>
+
+<a id="http-405"></a>
+
 ## 405
+
+<a id="405-2"></a>
+
+<a id="agent-error-405-405"></a>
+
+<a id="agent-message-405-405-security"></a>
 
 ### 405
 
@@ -2291,9 +3885,23 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **原因：** 请求方法不支持。
 
+<a id="409"></a>
+
+<a id="http-409"></a>
+
 ## 409
 
+<a id="conflict"></a>
+
+<a id="eb97278096enw"></a>
+
+<a id="409-conflict"></a>
+
 ### Conflict
+
+<a id="model-instance-xxx-already-exists-please-specify-a-suffix"></a>
+
+<a id="effbdef3f9p2u"></a>
 
 #### Model instance xxx already exists, please specify a suffix.
 
@@ -2301,13 +3909,25 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：**为部署的模型指定不同的后缀名。
 
+<a id="kb-name-conflict"></a>
+
+<a id="agent-error-409-kb-name-conflict"></a>
+
 ### KB\_NAME\_CONFLICT
 
 **适用范围：** RAG API
 
 **原因：** 知识库名称已存在。
 
+<a id="resultnotready"></a>
+
+<a id="agent-error-409-resultnotready"></a>
+
 ### ResultNotReady
+
+<a id="retrieve-result-if-job-is-not-completed"></a>
+
+<a id="agent-message-409-resultnotready-parsex"></a>
 
 #### Retrieve result if job is not completed.
 
@@ -2317,7 +3937,15 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **处理建议：** 收到 `ResultNotReady` 时，任务尚未完成。继续使用原 `biz_id` 调用对应的结果端点。
 
+<a id="413"></a>
+
+<a id="http-413"></a>
+
 ## 413
+
+<a id="11900008"></a>
+
+<a id="agent-error-413-11900008"></a>
 
 ### 11900008
 
@@ -2325,15 +3953,27 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **原因：** 文件超过大小上限。
 
+<a id="requestentitytoolarge"></a>
+
+<a id="agent-error-413-requestentitytoolarge"></a>
+
 ### RequestEntityTooLarge
 
 **适用范围：** Sandbox API
 
 **原因：** multipart 请求体超过 50 MB。
 
+<a id="415"></a>
+
+<a id="http-415"></a>
+
 ## 415
 
 Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/form-data`。
+
+<a id="11900014"></a>
+
+<a id="agent-error-415-11900014"></a>
 
 ### 11900014
 
@@ -2341,15 +3981,33 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **原因：** 文件类型不被允许。
 
+<a id="11900019"></a>
+
+<a id="agent-error-415-11900019"></a>
+
 ### 11900019
 
 **适用范围：** Sandbox API
 
 **原因：** 视频格式不支持。
 
+<a id="429"></a>
+
+<a id="http-429"></a>
+
 ## 429
 
+<a id="throttling"></a>
+
+<a id="5ca0afb383zeh"></a>
+
+<a id="429-throttling"></a>
+
 ### Throttling
+
+<a id="requests-throttling-triggered"></a>
+
+<a id="86886acaa2hce"></a>
 
 #### Requests throttling triggered.
 
@@ -2357,17 +4015,29 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 请降低调用频率或稍后重试。
 
+<a id="too-many-fine-tune-job-in-running-please-retry-later-only-20-fine-tune-job-in-running-or-succeeded-allowed-per-user"></a>
+
+<a id="d2b66090a4yee"></a>
+
 #### Too many fine-tune job in running, please retry later. / Only 20 fine-tune job in running or succeeded allowed per user.
 
 **原因：** 资源的创建触发平台限制。
 
 **解决方案：** 可以删除不再使用的模型。如需提高并发量或保留更多模型，请联系商务经理进行申请提额。
 
+<a id="too-many-requests-in-route-please-try-again-later"></a>
+
+<a id="f8f289b6f1f7t"></a>
+
 #### Too many requests in route. Please try again later.
 
 **原因**：请求过多触发限流。
 
 **解决方案**：请稍后重试。
+
+<a id="all-models-are-temporarily-rate-limited-please-try-again-in-a-few-minutes"></a>
+
+<a id="all-models-rate-limited"></a>
 
 #### All models are temporarily rate-limited. Please try again in a few minutes.
 
@@ -2377,19 +4047,39 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 -   等待数分钟后重试，限流会自动解除。
 -   降低请求并发数，避免短时间内发送过多请求。
--   如需更高调用频率，可参考[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)申请提额。
+-   如需更高调用频率，可参考[限流](rate-limit.md)申请提额。
+
+<a id="throttling-ratequota-limitrequests-limit-requests-resourceexhausted-too-many-requests"></a>
+
+<a id="5ed5532c85ckv"></a>
+
+<a id="429-throttling-ratequota-limitrequests-limit-requests-resourceexhausted-too-many-requests"></a>
 
 ### Throttling.RateQuota/LimitRequests/limit\_requests/ResourceExhausted/Too many requests
+
+<a id="you-have-exceeded-your-request-limit-requests-rate-limit-exceeded-please-try-again-later-you-exceeded-your-current-requests-list"></a>
+
+<a id="rate_limit"></a>
 
 #### You have exceeded your request limit./Requests rate limit exceeded, please try again later. /You exceeded your current requests list.
 
 **原因：** 调用频率（RPS/RPM）触发限流。
 
-**解决方案：** 请参考[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)，控制调用频率。
+**解决方案：** 请参考[限流](rate-limit.md)，控制调用频率。
 
 **说明：** 若单次调用即返回 429，请检查请求头是否设置了 `X-DashScope-Async: enable`。部分模型（如 `qwen-image-3.0-pro`）不支持异步调用，设置该请求头时即使单次请求也会返回 429。请移除 `X-DashScope-Async` 请求头，或将其值设为 `disable`，然后使用同步调用重试。详情请参见本文档中“**403-**AccessDenied/access\_denied”下“**Current user api does not support asynchronous calls.**”条目。
 
+<a id="throttling-burstrate-limit-burst-rate"></a>
+
+<a id="6d23103c75skz"></a>
+
+<a id="429-throttling-burstrate-limit-burst-rate"></a>
+
 ### Throttling.BurstRate/limit\_burst\_rate
+
+<a id="request-rate-increased-too-quickly-to-ensure-system-stability-please-adjust-your-client-logic-to-scale-requests-more-smoothly-over-time"></a>
+
+<a id="ab8a2d94ec57g"></a>
 
 #### Request rate increased too quickly. To ensure system stability, please adjust your client logic to scale requests more smoothly over time.
 
@@ -2397,15 +4087,29 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案**：建议优化客户端调用逻辑，采用平滑请求策略（如匀速调度、指数退避或请求队列缓冲），将请求均匀分散在时间窗口内，避免瞬时高峰。
 
+<a id="throttling-allocationquota-insufficient-quota"></a>
+
+<a id="02f52a91cb53j"></a>
+
+<a id="429-throttling-allocationquota-insufficient-quota"></a>
+
 ### Throttling.AllocationQuota/insufficient\_quota
+
+<a id="allocated-quota-exceeded-please-increase-your-quota-limit-you-exceeded-your-current-quota-please-check-your-plan-and-billing-details"></a>
+
+<a id="token_limit"></a>
 
 #### Allocated quota exceeded, please increase your quota limit./ You exceeded your current quota, please check your plan and billing details.
 
 **原因：** 每秒钟或每分钟消耗Token数（TPS/TPM）触发限流。
 
-**解决方案：** 前往[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)文档查看模型限流条件并调整调用策略；如果默认额度无法满足业务需求，请联系商务经理申请提额。
+**解决方案：** 前往[限流](rate-limit.md)文档查看模型限流条件并调整调用策略；如果默认额度无法满足业务需求，请联系商务经理申请提额。
 
-> 可参考[FAQ](https://help.aliyun.com/zh/model-studio/rate-limit#d1688da3e3egs)避免触发限流。
+> 可参考[FAQ](rate-limit.md#d1688da3e3egs)避免触发限流。
+
+<a id="too-many-requests-batch-requests-are-being-throttled-due-to-system-capacity-limits-please-try-again-later"></a>
+
+<a id="ad754f35c4dj2"></a>
 
 #### Too many requests. Batch requests are being throttled due to system capacity limits. Please try again later.
 
@@ -2413,11 +4117,19 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 暂时无法处理您的请求，请稍后再进行重试。
 
+<a id="free-allocated-quota-exceeded-2"></a>
+
+<a id="2c77a3ab9244i"></a>
+
 #### Free allocated quota exceeded.
 
 **原因：** 免费额度已到期或耗尽，且该模型暂不支持按量计费。
 
-**解决方案：** 使用其它模型替换，例如：千问Audio模型额度耗尽，可使用[非实时（Qwen-Omni）](raw/model-user-guide/model-experience/omni-modal/qwen-omni.md)模型。
+**解决方案：** 使用其它模型替换，例如：千问Audio模型额度耗尽，可使用[非实时（Qwen-Omni）](../model-experience/omni-modal/qwen-omni.md)模型。
+
+<a id="maximum-voice-clone-voice-limit-exceeded"></a>
+
+<a id="fef6888787hzq"></a>
 
 #### Maximum voice-clone voice limit exceeded.
 
@@ -2425,7 +4137,17 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 请[删除](https://help.aliyun.com/zh/model-studio/qwen-tts-voice-cloning)一部分音色。
 
+<a id="throttling-concurrency"></a>
+
+<a id="throttling-concurrency-h2"></a>
+
+<a id="429-throttling-concurrency"></a>
+
 ### Throttling.Concurrency
+
+<a id="too-many-concurrent-requests"></a>
+
+<a id="throttling-concurrency-h3"></a>
 
 #### Too many concurrent requests.
 
@@ -2433,7 +4155,17 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 等待片刻后重试即可。平台会根据整体资源负载动态调整并发上限，高峰时段可能触发此限制。
 
+<a id="throttling-serviceoverloaded"></a>
+
+<a id="throttling-service-overloaded"></a>
+
+<a id="429-throttling-serviceoverloaded"></a>
+
 ### Throttling.ServiceOverloaded
+
+<a id="internalerror-algo-an-error-occurred-in-model-serving-error-message-is-too-many-requests"></a>
+
+<a id="throttling-service-overloaded-msg"></a>
 
 #### InternalError.Algo: An error occurred in model serving, error message is: \[Too many requests.\]
 
@@ -2441,7 +4173,17 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 请稍后再试。
 
+<a id="throttling-resourceexhausted"></a>
+
+<a id="throttling-resource-exhausted"></a>
+
+<a id="429-throttling-resourceexhausted"></a>
+
 ### Throttling.ResourceExhausted
+
+<a id="internalerror-algo-an-error-occurred-in-model-serving-error-message-is-too-many-requests-2"></a>
+
+<a id="throttling-resource-exhausted-msg"></a>
 
 #### InternalError.Algo: An error occurred in model serving, error message is: \[Too many requests.\]
 
@@ -2449,7 +4191,17 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 请稍后再试。
 
+<a id="commoditynotpurchased"></a>
+
+<a id="21660e7f18lo0"></a>
+
+<a id="429-commoditynotpurchased"></a>
+
 ### CommodityNotPurchased
+
+<a id="commodity-has-not-purchased-yet"></a>
+
+<a id="5b71f88164esm"></a>
 
 #### Commodity has not purchased yet.
 
@@ -2457,27 +4209,63 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 请先订购业务空间服务。
 
+<a id="prepaidbilloverdue"></a>
+
+<a id="a6077d9e71ljf"></a>
+
+<a id="429-prepaidbilloverdue"></a>
+
 ### PrepaidBillOverdue
+
+<a id="the-prepaid-bill-is-overdue"></a>
+
+<a id="4884b2a2c3xem"></a>
 
 #### The prepaid bill is overdue.
 
 **原因：** 业务空间预付费账单到期。
 
+<a id="postpaidbilloverdue"></a>
+
+<a id="187530dff3ojs"></a>
+
+<a id="429-postpaidbilloverdue"></a>
+
 ### PostpaidBillOverdue
+
+<a id="the-postpaid-bill-is-overdue"></a>
+
+<a id="23bb8a9992qix"></a>
 
 #### The postpaid bill is overdue.
 
 **原因：** 模型推理商品已失效。
 
+<a id="budgetlimitexceeded"></a>
+
+<a id="budget-exhausted"></a>
+
+<a id="429-budgetlimitexceeded"></a>
+
 ### BudgetLimitExceeded
+
+<a id="the-budget-configured-in-budget-management-has-been-exhausted-you-will-be-unable-to-make-further-api-calls-until-the-budget-limit-is-increased-or-reset"></a>
+
+<a id="budget-exhausted-msg"></a>
 
 #### The budget configured in Budget Management has been exhausted. You will be unable to make further API calls until the budget limit is increased or reset.
 
-**原因：** 您在[预算管理](raw/model-user-guide/test-1/budget-management.md)中设置的预算额度已用尽，且开启了“达预算即停”。
+**原因：** 您在[预算管理](../test-1/budget-management.md)中设置的预算额度已用尽，且开启了“达预算即停”。
 
 **解决方案：** 在[预算管理](https://bailian.console.aliyun.com/cn-beijing/costing-balance/budget)页面提高预算额度或关闭“达预算即停”，即可恢复调用。
 
-**警告**服务停止存在一定延迟，延迟时段内产生的费仍将正常收取。若已达预算阈值触发停机后，又发放了免费额度，停机不会自动恢复，需手动调整预算阈值。
+> **警告**
+>
+> 服务停止存在一定延迟，延迟时段内产生的费仍将正常收取。若已达预算阈值触发停机后，又发放了免费额度，停机不会自动恢复，需手动调整预算阈值。
+
+<a id="quota-exceeded"></a>
+
+<a id="agent-error-429-quota-exceeded"></a>
 
 ### QUOTA\_EXCEEDED
 
@@ -2485,15 +4273,33 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **原因：** 超出租户配额。
 
+<a id="rate-limited"></a>
+
+<a id="agent-error-429-rate-limited"></a>
+
 ### RATE\_LIMITED
 
 **适用范围：** RAG API
 
 **原因：** 接口限流。
 
+<a id="430"></a>
+
+<a id="http-430"></a>
+
 ## 430
 
+<a id="audio-decodererror-2"></a>
+
+<a id="af8063ee6cz1q"></a>
+
+<a id="430-audio-decodererror"></a>
+
 ### Audio.DecoderError
+
+<a id="decoder-audio-file-failed-2"></a>
+
+<a id="a074390f8decc"></a>
 
 #### Decoder audio file failed.
 
@@ -2501,7 +4307,17 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案**：建议通过工具（如ffprobe、mediainfo）或命令（如Linux/macOS的file命令）确认音频文件的实际编码格式，以确保符合要求。
 
+<a id="audio-filesizeexceed"></a>
+
+<a id="33fbadd9e3lk0"></a>
+
+<a id="430-audio-filesizeexceed"></a>
+
 ### Audio.FileSizeExceed
+
+<a id="file-too-large"></a>
+
+<a id="724c82d84eqig"></a>
 
 #### File too large
 
@@ -2509,7 +4325,17 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 用于声音复刻的音频文件需10M以内。
 
+<a id="audio-audiorateerror-2"></a>
+
+<a id="077dc8bd08klb"></a>
+
+<a id="430-audio-audiorateerror"></a>
+
 ### Audio.AudioRateError
+
+<a id="file-sample-rate-unsupported-2"></a>
+
+<a id="3ebbf2edc9tz5"></a>
 
 #### File sample rate unsupported
 
@@ -2517,7 +4343,17 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 采样率设置为16KHz及以上。
 
+<a id="audio-audiosilenterror-2"></a>
+
+<a id="723c061282ofd"></a>
+
+<a id="430-audio-audiosilenterror"></a>
+
 ### Audio.AudioSilentError
+
+<a id="silent-file-unsupported"></a>
+
+<a id="b5f7b12fd0ela"></a>
 
 #### Silent file unsupported.
 
@@ -2525,9 +4361,23 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 音频时长应尽量控制在 10~15 秒之间，并包含至少一段超过 5 秒的连续语音。
 
+<a id="500"></a>
+
+<a id="http-500"></a>
+
 ## 500
 
+<a id="internalerror-internal-error"></a>
+
+<a id="bd2637cca0gx8"></a>
+
+<a id="500-internalerror-internal-error"></a>
+
 ### InternalError/internal\_error
+
+<a id="an-internal-error-has-occured-please-try-again-later-or-contact-service-support"></a>
+
+<a id="6a5edac3397ed"></a>
 
 #### An internal error has occured, please try again later or contact service support.
 
@@ -2535,7 +4385,7 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：**
 
--   如果您使用[（Qwen-Omni）模型](raw/model-user-guide/model-experience/omni-modal/qwen-omni.md)，且所用接口要求流式输出，请设置 `stream=true`。
+-   如果您使用[（Qwen-Omni）模型](../model-experience/omni-modal/qwen-omni.md)，且所用接口要求流式输出，请设置 `stream=true`。
     
 -   如果您使用[CosyVoice声音复刻](https://help.aliyun.com/zh/model-studio/voice-replica-1)，则可能的原因是：
     
@@ -2543,11 +4393,19 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
     -   录音文件URL无法访问，请按照[CosyVoice声音复刻/设计API](https://help.aliyun.com/zh/model-studio/cosyvoice-clone-design-api)中的说明操作后重试。
     -   录音文件时长过长。尽量选择10~15秒的录音。录音时请确保朗读连贯，并包含至少一段超过 5 秒的连续语音。
 
+<a id="internal-server-error"></a>
+
+<a id="070f11f6b8g7l"></a>
+
 #### Internal server error!
 
 **原因：** 内部算法错误。
 
 **解决方案：** 请稍后重试。
+
+<a id="audio-preprocess-server-error"></a>
+
+<a id="3c38cea088hsh"></a>
 
 #### audio preprocess server error
 
@@ -2566,17 +4424,29 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
     **解决方案**：尽量选择10~15秒的录音。录音时请确保朗读连贯，并包含至少一段超过 5 秒的连续语音。
     
 
+<a id="request-asr-failed"></a>
+
+<a id="febd7a6a526lu"></a>
+
 #### request asr failed
 
 **原因：**使用[CosyVoice声音复刻](https://help.aliyun.com/zh/model-studio/voice-replica-1)时，音频文件不规范，未包含有效人声或声音不清晰，杂音大。
 
 **解决方案**：请参见[录音操作指南](https://help.aliyun.com/zh/model-studio/recording-guide)录音后重试。
 
+<a id="remote-cancelled-grpc-stream"></a>
+
+<a id="b4e2a1c7d9rcs"></a>
+
 #### Remote cancelled grpc stream.
 
 **原因：** 语音合成中使用的音色不存在。
 
-**解决方案：** 请检查`voice`参数，确保指定了正确的音色名称。可用音色请参见[实时语音合成（Qwen-Audio-TTS/CosyVoice）](raw/model-api-reference/realtime-api-directory/realtime-tts-model-apis/cosyvoice-large-model-for-speech-synthesis.md)。
+**解决方案：** 请检查`voice`参数，确保指定了正确的音色名称。可用音色请参见[实时语音合成（Qwen-Audio-TTS/CosyVoice）](../../model-api-reference/realtime-api-directory/realtime-tts-model-apis/cosyvoice-large-model-for-speech-synthesis.md)。
+
+<a id="an-internal-error-has-occurred-please-try-again-later"></a>
+
+<a id="agent-message-500-internalerror-parsex"></a>
 
 #### An internal error has occurred, please try again later.
 
@@ -2584,7 +4454,17 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **原因：** 内部错误。
 
+<a id="internalerror-fileupload"></a>
+
+<a id="138a10424ew8f"></a>
+
+<a id="500-internalerror-fileupload"></a>
+
 ### InternalError.FileUpload
+
+<a id="oss-upload-error"></a>
+
+<a id="db9bd442198tm"></a>
 
 #### oss upload error.
 
@@ -2592,7 +4472,17 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 请检查OSS配置和网络。
 
+<a id="internalerror-upload"></a>
+
+<a id="2121a68cf3myr"></a>
+
+<a id="500-internalerror-upload"></a>
+
 ### InternalError.Upload
+
+<a id="failed-to-upload-result"></a>
+
+<a id="06735d277azf7"></a>
 
 #### Failed to upload result.
 
@@ -2600,7 +4490,17 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 请检查存储配置或稍后重试。
 
+<a id="internalerror-algo"></a>
+
+<a id="67efd50170pur"></a>
+
+<a id="500-internalerror-algo"></a>
+
 ### InternalError.Algo
+
+<a id="inference-internal-error"></a>
+
+<a id="6f02ee53cc185"></a>
 
 #### inference internal error.
 
@@ -2608,17 +4508,27 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 请先尝试重试，排除偶发情况。
 
+<a id="expecting-delimiter-line-x-column-xxx-char-xxx"></a>
+
+<a id="7701da53dex3y"></a>
+
 #### Expecting ',' delimiter: line x column xxx (char xxx)
 
 **原因：** 模型生成的JSON数据不合法，无法正常发起工具调用。
 
 **解决方案：** 建议更换最新的模型或优化提示词后重试。
 
+<a id="missing-content-length-of-multimodal-url"></a>
+
+<a id="1cdd8405c6l7m"></a>
+
 #### Missing Content-Length of multimodal url.
 
 **原因：** URL请求的响应头信息缺失`Content-Length`字段。
 
 **解决方案：** 如果问题无法解决，请尝试使用其他图片链接。
+
+<a id="accordion-查看-content-length-字段"></a>
 
 查看 Content-Length 字段
 
@@ -2628,11 +4538,19 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 4.  将图片的URL输入到地址栏并访问。
 5.  找到对应的请求，查看Headers部分，在“响应头”（Response Headers）部分中查找Content-Length字段
 
+<a id="an-error-occurred-in-model-serving-error-message-is-request-rejected-by-inference-engine"></a>
+
+<a id="954d7ba104zwb"></a>
+
 #### An error occurred in model serving, error message is: \[Request rejected by inference engine!\]
 
 **原因：** 模型服务底层服务器出现错误。
 
 **解决方案：** 请稍后重试。
+
+<a id="an-internal-error-has-occured-during-algorithm-execution"></a>
+
+<a id="207c14c28c7ws"></a>
 
 #### An internal error has occured during algorithm execution.
 
@@ -2640,11 +4558,19 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 请稍后重试。
 
+<a id="inference-error-inference-error"></a>
+
+<a id="e3af31c4beikv"></a>
+
 #### Inference error: Inference error.
 
 **原因：** 推理发生错误。
 
 **解决方案：** 请检查输入的图片文件是否有损坏或检查人物图片的质量（需包含完整清晰的人脸）。
+
+<a id="role-must-be-in-user-assistant"></a>
+
+<a id="2f8c7576afnj6"></a>
 
 #### Role must be in \[user, assistant\]
 
@@ -2652,11 +4578,19 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 请确保messages数组中仅包含一个元素，且该元素必须是用户消息（User Message）。
 
+<a id="embedding-pipeline-error-xxx"></a>
+
+<a id="f8c84e45c65r1"></a>
+
 #### Embedding\_pipeline\_Error: xxx
 
 **原因：** 图像或视频预处理出错。
 
 **解决方案：** 请确认上传的图片或视频及请求代码符合要求后重试。
+
+<a id="receive-batching-backend-response-failed"></a>
+
+<a id="a55b6c2005gf7"></a>
 
 #### Receive batching backend response failed!
 
@@ -2664,11 +4598,19 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 请稍后重试。
 
+<a id="music-receive-batching-backend-response-failed"></a>
+
+<a id="f0a4b1c5d2d5b"></a>
+
 #### \[music\]Receive batching backend response failed!
 
 **原因：** 使用Fun-Music模型时，服务超出并发限制。
 
 **解决方案：** 请降低并发请求数量后重试。
+
+<a id="other-kinds-of-server-error"></a>
+
+<a id="c3d7e4f8a5a8e"></a>
 
 #### Other kinds of server error.
 
@@ -2676,11 +4618,19 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 建议提供请求ID给技术人员排查。
 
+<a id="an-internal-error-has-occured-during-execution-please-try-again-later-or-contact-service-support-algorithm-process-error-inference-error-an-internal-error-occurs-during-computation-please-try-this-model-later"></a>
+
+<a id="9e36b3761e59v"></a>
+
 #### An internal error has occured during execution, please try again later or contact service support. / algorithm process error. / inference error. / An internal error occurs during computation, please try this model later.
 
 **原因：** 内部算法错误。
 
 **解决方案：** 请稍后重试。
+
+<a id="list-index-out-of-range"></a>
+
+<a id="0e6937c788fpv"></a>
 
 #### list index out of range
 
@@ -2688,7 +4638,17 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 请调整`messages`数组的顺序，确保最后一个元素是 `{"role": "user", ...}`。
 
+<a id="internalerror-timeout"></a>
+
+<a id="1eb7e256d83v3"></a>
+
+<a id="500-internalerror-timeout"></a>
+
 ### InternalError.Timeout
+
+<a id="an-internal-timeout-error-has-occured-during-execution-please-try-again-later-or-contact-service-support"></a>
+
+<a id="c5e29fcd28pep"></a>
 
 #### An internal timeout error has occured during execution, please try again later or contact service support.
 
@@ -2696,7 +4656,17 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 请检查任务执行情况，或联系技术支持。
 
+<a id="internalerror-configuration"></a>
+
+<a id="internal-configuration-h2"></a>
+
+<a id="500-internalerror-configuration"></a>
+
 ### InternalError.Configuration
+
+<a id="internal-configuration-error"></a>
+
+<a id="internal-configuration-h3"></a>
 
 #### Internal configuration error.
 
@@ -2704,7 +4674,17 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 请稍后重试，或联系技术支持。
 
+<a id="internalerror-datainspection"></a>
+
+<a id="internal-data-inspection-h2"></a>
+
+<a id="500-internalerror-datainspection"></a>
+
 ### InternalError.DataInspection
+
+<a id="content-moderation-service-unavailable"></a>
+
+<a id="internal-data-inspection-h3"></a>
 
 #### Content moderation service unavailable.
 
@@ -2712,7 +4692,17 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 请稍后重试。
 
+<a id="internalerror-translationfailed"></a>
+
+<a id="internal-translation-failed-h2"></a>
+
+<a id="500-internalerror-translationfailed"></a>
+
 ### InternalError.TranslationFailed
+
+<a id="translation-failed"></a>
+
+<a id="internal-translation-failed-h3"></a>
 
 #### Translation failed.
 
@@ -2720,15 +4710,35 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 请稍后重试；如仍失败，请检查输入内容或联系技术支持。
 
+<a id="systemerror"></a>
+
+<a id="50347c2acaf8t"></a>
+
+<a id="500-systemerror"></a>
+
 ### SystemError
+
+<a id="an-system-error-has-occured-please-try-again-later"></a>
+
+<a id="3e50e0f48doim"></a>
 
 #### An system error has occured, please try again later.
 
 **原因：** 系统错误。
 
-**解决方案：** 请稍后重试。若您使用[调用百炼应用](raw/application-api-reference/frameworks/spring-ai-alibaba/spring-ai-alibaba-integrate-llm-application.md)，请参照示例代码或说明文档，查看是否代码编写有误，若依然无法确定问题，加入[Spring AI Alibaba官网](https://java2ai.com/?spm=4347728f.638c0b20.0.0.23f87982NTcSMy)最下方提供的DING群，联系开发人员进行定位。
+**解决方案：** 请稍后重试。若您使用[调用百炼应用](../../application-api-reference/frameworks/spring-ai-alibaba/spring-ai-alibaba-integrate-llm-application.md)，请参照示例代码或说明文档，查看是否代码编写有误，若依然无法确定问题，加入[Spring AI Alibaba官网](https://java2ai.com/?spm=4347728f.638c0b20.0.0.23f87982NTcSMy)最下方提供的DING群，联系开发人员进行定位。
+
+<a id="modelservicefailed"></a>
+
+<a id="2a0b5c68fe7wl"></a>
+
+<a id="500-modelservicefailed"></a>
 
 ### ModelServiceFailed
+
+<a id="failed-to-request-model-service"></a>
+
+<a id="387f609641g32"></a>
 
 #### Failed to request model service.
 
@@ -2736,7 +4746,17 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 请稍后重试。
 
+<a id="requesttimeout"></a>
+
+<a id="4b8a2c0eddbn6"></a>
+
+<a id="500-requesttimeout"></a>
+
 ### RequestTimeOut
+
+<a id="request-timed-out-please-try-again-later-response-timeout-i-o-error-on-post-request-for-https-dashscope-aliyuncs-com-compatible-mode-v1-chat-completions-timeout"></a>
+
+<a id="response-time-out"></a>
 
 #### Request timed out, please try again later. / Response timeout! / I/O error on POST request for "[](https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions)[https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions](https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions)": timeout
 
@@ -2748,13 +4768,23 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：**
 
--   通过流式输出方式发起请求，具体操作请参见[流式输出](raw/model-user-guide/model-experience/text-generation-model/stream.md)。
+-   通过流式输出方式发起请求，具体操作请参见[流式输出](../model-experience/text-generation-model/stream.md)。
 -   将请求参数`heartbeat`设为`true`或及时结束识别任务。
 -   调用图像模型时，可尝试降低图片分辨率、简化编辑需求，或稍后重试。
 
-> 调用千问模型时，响应体中会将已生成的内容返回，不再报超时错误。详情请参见[文本生成](https://help.aliyun.com/zh/model-studio/text-generation#11241147efwpm)。
+> 调用千问模型时，响应体中会将已生成的内容返回，不再报超时错误。详情请参见[文本生成](../model-experience/text-generation-model/text-generation.md#11241147efwpm)。
+
+<a id="responsetimeout"></a>
+
+<a id="b6c0d7e1f8z1x"></a>
+
+<a id="500-responsetimeout"></a>
 
 ### ResponseTimeout
+
+<a id="response-stream-timeout"></a>
+
+<a id="c7d1e8f2a9a2y"></a>
 
 #### Response stream timeout
 
@@ -2762,7 +4792,17 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 建议进行重试调用。
 
+<a id="invokepluginfailed"></a>
+
+<a id="798a834394yx9"></a>
+
+<a id="500-invokepluginfailed"></a>
+
 ### InvokePluginFailed
+
+<a id="failed-to-invoke-plugin"></a>
+
+<a id="fd04ab20262zm"></a>
 
 #### Failed to invoke plugin.
 
@@ -2770,7 +4810,17 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 请检查插件配置和可用性。
 
+<a id="appprocessfailed"></a>
+
+<a id="ec69a32d2bkut"></a>
+
+<a id="500-appprocessfailed"></a>
+
 ### AppProcessFailed
+
+<a id="failed-to-proceed-application-request"></a>
+
+<a id="9fe3b91164ads"></a>
 
 #### Failed to proceed application request.
 
@@ -2778,7 +4828,17 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 请检查应用配置和流程节点。
 
+<a id="rewritefailed"></a>
+
+<a id="8bd8508b625me"></a>
+
+<a id="500-rewritefailed"></a>
+
 ### RewriteFailed
+
+<a id="failed-to-rewrite-content-for-prompt"></a>
+
+<a id="260bd75c37rnk"></a>
 
 #### Failed to rewrite content for prompt.
 
@@ -2786,7 +4846,17 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 请稍后重试。
 
+<a id="retrivalfailed"></a>
+
+<a id="24da98fcb7uil"></a>
+
+<a id="500-retrivalfailed"></a>
+
 ### RetrivalFailed
+
+<a id="failed-to-retrieve-data-from-documents"></a>
+
+<a id="51d8b6e392t7f"></a>
 
 #### Failed to retrieve data from documents.
 
@@ -2794,11 +4864,19 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 请检查文档索引和检索配置。
 
+<a id="11900001"></a>
+
+<a id="agent-error-500-11900001"></a>
+
 ### 11900001
 
 **适用范围：** Sandbox API
 
 **原因：** 文件上传失败。
+
+<a id="embedding-failed"></a>
+
+<a id="agent-error-500-embedding-failed"></a>
 
 ### EMBEDDING\_FAILED
 
@@ -2806,7 +4884,15 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **原因：** 嵌入服务异常。
 
+<a id="processingfailed"></a>
+
+<a id="agent-error-500-processingfailed"></a>
+
 ### ProcessingFailed
+
+<a id="an-internal-error-occurred-in-the-processing-engine"></a>
+
+<a id="agent-message-500-processingfailed-parsex"></a>
 
 #### An internal error occurred in the processing engine.
 
@@ -2814,7 +4900,15 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **原因：** 处理引擎内部错误。
 
+<a id="processingtimeout"></a>
+
+<a id="agent-error-500-processingtimeout"></a>
+
 ### ProcessingTimeout
+
+<a id="the-processing-timed-out"></a>
+
+<a id="agent-message-500-processingtimeout-parsex"></a>
 
 #### The processing timed out.
 
@@ -2822,7 +4916,15 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **原因：** 处理超时。
 
+<a id="batchprocessingfailed"></a>
+
+<a id="agent-error-500-batchprocessingfailed"></a>
+
 ### BatchProcessingFailed
+
+<a id="the-batch-processing-failed"></a>
+
+<a id="agent-message-500-batchprocessingfailed-parsex"></a>
 
 #### The batch processing failed.
 
@@ -2830,7 +4932,15 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **原因：** 批量处理失败。
 
+<a id="customerosswritefailed"></a>
+
+<a id="agent-error-500-customerosswritefailed"></a>
+
 ### CustomerOssWriteFailed
+
+<a id="failed-to-write-to-the-customer-oss"></a>
+
+<a id="agent-message-500-customerosswritefailed-parsex"></a>
 
 #### Failed to write to the customer OSS.
 
@@ -2838,7 +4948,19 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **原因：** 写入客户 OSS 失败。
 
+<a id="serviceunavailable"></a>
+
+<a id="16863964ceyeb"></a>
+
+<a id="500-503-serviceunavailable"></a>
+
+<a id="http-500-503"></a>
+
 ### ServiceUnavailable
+
+<a id="too-many-requests-your-requests-are-being-throttled-due-to-system-capacity-limits-please-try-again-later"></a>
+
+<a id="system_limit"></a>
 
 #### Too many requests. Your requests are being throttled due to system capacity limits. Please try again later.
 
@@ -2846,7 +4968,15 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 请稍后再进行尝试。
 
+<a id="502"></a>
+
+<a id="http-502"></a>
+
 ## 502
+
+<a id="sync-source-unreachable"></a>
+
+<a id="agent-error-502-sync-source-unreachable"></a>
 
 ### SYNC\_SOURCE\_UNREACHABLE
 
@@ -2854,9 +4984,21 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **原因：** 数据源连接失败。
 
+<a id="503"></a>
+
+<a id="http-503"></a>
+
 ## 503
 
+<a id="serviceunavailable-2"></a>
+
+<a id="503-serviceunavailable"></a>
+
 ### ServiceUnavailable
+
+<a id="too-many-requests-your-requests-are-being-throttled-due-to-system-capacity-limits-please-try-again-later-2"></a>
+
+<a id="503-system-limit"></a>
 
 #### Too many requests. Your requests are being throttled due to system capacity limits. Please try again later.
 
@@ -2864,7 +5006,17 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 请稍后再进行尝试。
 
+<a id="modelunavailable"></a>
+
+<a id="6ed2afd626wdv"></a>
+
+<a id="503-modelunavailable"></a>
+
 ### ModelUnavailable
+
+<a id="model-is-unavailable-please-try-again-later"></a>
+
+<a id="0f85dfe140sfm"></a>
 
 #### Model is unavailable, please try again later.
 
@@ -2872,13 +5024,25 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 请稍后重试。
 
+<a id="servicequotaexhausted"></a>
+
+<a id="agent-error-503-servicequotaexhausted"></a>
+
 ### ServiceQuotaExhausted
+
+<a id="the-service-quota-is-exhausted"></a>
+
+<a id="agent-message-503-servicequotaexhausted-parsex"></a>
 
 #### The service quota is exhausted.
 
 **适用范围：** ParseX API
 
 **原因：** 服务配额耗尽。
+
+<a id="12000093"></a>
+
+<a id="agent-error-503-12000093"></a>
 
 ### 12000093
 
@@ -2888,6 +5052,10 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **处理建议：** 对应能力暂时不可用，稍后重试。
 
+<a id="12000094"></a>
+
+<a id="agent-error-503-12000094"></a>
+
 ### 12000094
 
 **适用范围：** Security API
@@ -2896,9 +5064,23 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **处理建议：** 稍后重试。
 
+<a id="504"></a>
+
+<a id="http-504"></a>
+
 ## 504
 
+<a id="gatewaytimeout-inputdownload"></a>
+
+<a id="gateway-timeout-input-download-h2"></a>
+
+<a id="504-gatewaytimeout-inputdownload"></a>
+
 ### GatewayTimeout.InputDownload
+
+<a id="input-file-download-timed-out"></a>
+
+<a id="gateway-timeout-input-download-h3"></a>
 
 #### Input file download timed out.
 
@@ -2906,23 +5088,43 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 请检查 URL 可访问性、文件大小及所在服务的网络状况，或改用更稳定的下载地址后重试。
 
+<a id="retrieval-timeout"></a>
+
+<a id="agent-error-504-retrieval-timeout"></a>
+
 ### RETRIEVAL\_TIMEOUT
 
 **适用范围：** RAG API
 
 **原因：** 检索超时,建议降低 top\_k 或启用更小的重排模型。
 
+<a id="sdk-连接与其他错误"></a>
+
+<a id="http-status-unspecified"></a>
+
 ## SDK、连接与其他错误
 
 以下按 SDK 异常、连接问题及其他调用场景列出错误信息。请匹配完整错误信息，并按对应条目排查；WebSocket 关闭码与 HTTP 状态码是不同的标识。
 
+<a id="apiconnectionerror-客户端网络异常-服务端未返回状态码"></a>
+
+<a id="4fbf7d70ffjab"></a>
+
 ### APIConnectionError（客户端网络异常，服务端未返回状态码）
+
+<a id="connection-error"></a>
+
+<a id="5c18c53576jsp"></a>
 
 #### Connection error.
 
 **原因：** 本地网络问题，通常是因为开启了代理。
 
 **解决方案：** 请关闭或者重启代理。
+
+<a id="the-operation-was-canceled-connection-reset"></a>
+
+<a id="operation-canceled-connection-reset"></a>
 
 #### The operation was canceled. / Connection reset
 
@@ -2933,13 +5135,25 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 -   适当放宽客户端超时配置（如调整至 50 秒以上）。
 -   使用 `curl` 命令测试网络连通性，以排除本地网络问题。
 
+<a id="sdk-报错"></a>
+
+<a id="5f63cd02d0ygl"></a>
+
 ### SDK 报错
+
+<a id="error-authenticationerror-no-api-key-provided-you-can-set-by-dashscope-api-key-your-api-key-in-code-or-you-can-set-it-via-environment-variable-dashscope-api-key-your-api-key"></a>
+
+<a id="4b998b64d8vhc"></a>
 
 #### error.AuthenticationError: No api key provided. You can set by dashscope.api\_key = your\_api\_key in code, or you can set it via environment variable DASHSCOPE\_API\_KEY= your\_api\_key.
 
 **原因：** 使用DashScope SDK 时未提供API Key。
 
 **解决方案：** 具体配置API Key的方法，请参见[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
+
+<a id="openai-openaierror-the-api-key-client-option-must-be-set-either-by-passing-api-key-to-the-client-or-by-setting-the-openai-api-key-environment-variable"></a>
+
+<a id="df212e38aaq4v"></a>
 
 #### openai.OpenAIError: The api\_key client option must be set either by passing api\_key to the client or by setting the OPENAI\_API\_KEY environment variable
 
@@ -2962,19 +5176,35 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
     **注意：**此方法存在安全风险，请勿用于生产环境。
     
 
+<a id="bad-request-for-url-xxx"></a>
+
+<a id="a54eec659cape"></a>
+
 #### Bad Request for url:xxx
 
 **原因：** 使用 Python Requests 库时，`response.raise_for_status()` 会针对 HTTP 错误响应抛出 `HTTPError`；异常仍保留 `response`，不会丢失服务端响应正文。
 
 **解决方案：** 捕获 `HTTPError` 后，可从原 `response` 或异常的 `response` 读取 `status_code` 和 `text`。确认正文可解析为 JSON 后，再使用 `response.json()` 读取结构化错误信息。连接失败、超时等未取得 HTTP 响应的传输异常应单独处理，不能假定其具有可读取的服务端正文。
 
+<a id="cannot-resolve-symbol-ttsv2"></a>
+
+<a id="edb73511edpg7"></a>
+
 #### Cannot resolve symbol 'ttsv2'
 
-**原因：** 若您使用[实时语音合成（Qwen-Audio-TTS/CosyVoice）](raw/model-api-reference/realtime-api-directory/realtime-tts-model-apis/cosyvoice-large-model-for-speech-synthesis.md)，出现该问题的原因是DashScope SDK版本过低。
+**原因：** 若您使用[实时语音合成（Qwen-Audio-TTS/CosyVoice）](../../model-api-reference/realtime-api-directory/realtime-tts-model-apis/cosyvoice-large-model-for-speech-synthesis.md)，出现该问题的原因是DashScope SDK版本过低。
 
-**解决方案：** 请[安装最新版 DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
+**解决方案：** 请[安装最新版 DashScope SDK](../../model-api-reference/preparations/install-sdk.md)。
+
+<a id="networkerror"></a>
+
+<a id="198e64a46ffuw"></a>
 
 ### NetworkError
+
+<a id="noapikeyexception-can-not-find-api-key"></a>
+
+<a id="ab657028da885"></a>
 
 #### NoApiKeyException: Can not find api-key.
 
@@ -2982,47 +5212,87 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 您可以重启客户端或IDE后重试。更多情况请参考[常见问题](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
 
+<a id="connectexception-failed-to-connect-to-dashscope-aliyuncs-com"></a>
+
+<a id="e986475cfddz0"></a>
+
 #### ConnectException: Failed to connect to dashscope.aliyuncs.com
 
 **原因：** 本地网络环境存在异常。
 
 **解决方案：** 请检查本地网络，例如因证书问题导致无法访问 HTTPS，防火墙设置有误等情况。建议您更换网络环境或服务器进行测试。
 
+<a id="inputrequiredexception-parameter-invalid-text-is-null"></a>
+
+<a id="22f1d818d4oc4"></a>
+
 #### InputRequiredException: Parameter invalid: text is null
 
-**原因**：使用[实时语音合成（Qwen-Audio-TTS/CosyVoice）](raw/model-api-reference/realtime-api-directory/realtime-tts-model-apis/cosyvoice-large-model-for-speech-synthesis.md)时未发送待合成文本。
+**原因**：使用[实时语音合成（Qwen-Audio-TTS/CosyVoice）](../../model-api-reference/realtime-api-directory/realtime-tts-model-apis/cosyvoice-large-model-for-speech-synthesis.md)时未发送待合成文本。
 
 **解决方案：**调用语音合成接口时为 `text` 参数赋值。
+
+<a id="multimodalconversation-call-missing-1-required-positional-argument-messages"></a>
+
+<a id="79e0084c4fvqj"></a>
 
 #### MultiModalConversation.call() missing 1 required positional argument: 'messages'
 
 **原因：**当前使用的DashScope SDK版本过低。
 
-**解决方案：**请[安装最新版 DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
+**解决方案：**请[安装最新版 DashScope SDK](../../model-api-reference/preparations/install-sdk.md)。
+
+<a id="mismatched-model"></a>
+
+<a id="9eaf6d38bdirx"></a>
 
 ### mismatched\_model
+
+<a id="the-model-xxx-for-this-request-does-not-match-the-rest-of-the-batch-each-batch-must-contain-requests-for-a-single-model"></a>
+
+<a id="bbd5cd7d62gts"></a>
 
 #### The model 'xxx' for this request does not match the rest of the batch. Each batch must contain requests for a single model.
 
 **原因：** 在单个 Batch 任务中，所有请求都必须选用同一个模型。
 
-**解决方案：** 请根据[OpenAI兼容-Batch（文件输入）](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)检查您的输入文件。
+**解决方案：** 请根据[OpenAI兼容-Batch（文件输入）](../../model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)检查您的输入文件。
+
+<a id="duplicate-custom-id"></a>
+
+<a id="2918776353rep"></a>
 
 ### duplicate\_custom\_id
+
+<a id="the-custom-id-xxx-for-this-request-is-a-duplicate-of-another-request-the-custom-id-parameter-must-be-unique-for-each-request-in-a-batch"></a>
+
+<a id="b39aecf7a5lbm"></a>
 
 #### The custom\_id 'xxx' for this request is a duplicate of another request. The custom\_id parameter must be unique for each request in a batch.
 
 **原因：** 在单个 Batch 任务中，每条请求的 ID 必须唯一。
 
-**解决方案：** 请根据[OpenAI兼容-Batch（文件输入）](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)检查您的输入文件，确保所有请求 ID 不重复。
+**解决方案：** 请根据[OpenAI兼容-Batch（文件输入）](../../model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)检查您的输入文件，确保所有请求 ID 不重复。
+
+<a id="upload-file-capacity-exceed-limit-upload-file-number-exceed-limit"></a>
+
+<a id="2cf16e9641hvy"></a>
 
 #### Upload file capacity exceed limit. / Upload file number exceed limit.
 
 **原因：** 上传文件失败，当前阿里云账号下的阿里云百炼存储空间已满或接近满额。
 
-**解决方案：** 可以通过[OpenAI兼容-File](raw/model-api-reference/toolkits-and-frameworks/openai-file-interface.md)接口删除不需要的文件以释放空间。当前存储空间支持最大文件数为10000个，总量不超过100 GB。
+**解决方案：** 可以通过[OpenAI兼容-File](../../model-api-reference/toolkits-and-frameworks/openai-file-interface.md)接口删除不需要的文件以释放空间。当前存储空间支持最大文件数为10000个，总量不超过100 GB。
+
+<a id="websocket-报错"></a>
+
+<a id="48dfed8a3buwo"></a>
 
 ### WebSocket 报错
+
+<a id="invalid-payload-data"></a>
+
+<a id="443ca522a8yxs"></a>
 
 #### Invalid payload data
 
@@ -3033,11 +5303,19 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 1.  检查发送`run-task`指令时，`payload`中是否有“`"input": {}`”，若无，请添加。
 2.  确认在最终是否发送了完整的`finish-task`指令，且遵循其格式说明。请勿发送自创内容（如`{ "input": { "end_of_stream": true } }`）。
 
+<a id="the-decoded-text-message-was-too-big-for-the-output-buffer-and-the-endpoint-does-not-support-partial-messages"></a>
+
+<a id="1692216a0fq74"></a>
+
 #### The decoded text message was too big for the output buffer and the endpoint does not support partial messages
 
 **原因：** 使用语音识别（Paraformer）的流式语音识别时，服务返回的识别结果数据量过大。
 
 **解决方案：** 请分段发送待识别音频，建议每次发送的音频时长约为100毫秒，数据大小保持在1KB至16KB之间。
+
+<a id="timeouterror-websocket-connection-could-not-established-within-5s-please-check-your-network-connection-firewall-settings-or-server-status"></a>
+
+<a id="2bbffc7566y0r"></a>
 
 #### TimeoutError: websocket connection could not established within 5s. Please check your network connection, firewall settings, or server status.
 
@@ -3045,11 +5323,19 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 请检查本地网络、防火墙设置，或更换网络环境或服务器进行测试。
 
+<a id="unsupported-audio-format-xxx"></a>
+
+<a id="08d730e5b0yv5"></a>
+
 #### unsupported audio format:xxx
 
 **原因：** CosyVoice声音复刻时，上传的音频格式不符合模型要求。
 
 **解决方案：** 音频格式需为 WAV（16bit）、MP3 或 M4A。请注意，不能仅凭文件后缀名判断格式，建议通过工具（如ffprobe、mediainfo）或命令（如Linux/macOS的file命令）确认音频文件的实际编码格式。
+
+<a id="internal-unknown-error"></a>
+
+<a id="16acd1c2c222f"></a>
 
 #### internal unknown error
 
@@ -3057,11 +5343,19 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 音频格式需为 WAV（16bit）、MP3 或 M4A。建议通过工具（如ffprobe、mediainfo）或命令确认音频文件的实际编码格式。
 
+<a id="invalid-backend-response-received-missing-status-name"></a>
+
+<a id="76b1c23355kt1"></a>
+
 #### Invalid backend response received (missing status name)
 
 **原因：** 使用语音识别（Paraformer）的录音文件识别的RESTful API时，请求参数拼写有误。
 
 **解决方案：** 请参照API文档检查代码。
+
+<a id="no-input-audio-error"></a>
+
+<a id="19b94c72fajam"></a>
 
 #### NO\_INPUT\_AUDIO\_ERROR
 
@@ -3072,11 +5366,19 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 1.  检查是否有音频输入。
 2.  检查音频格式是否正确（支持pcm、wav、mp3、opus、speex、aac、amr等）。
 
+<a id="success-with-no-valid-fragment"></a>
+
+<a id="6e02fbcd28lzd"></a>
+
 #### SUCCESS\_WITH\_NO\_VALID\_FRAGMENT
 
 **原因：** 若您使用语音识别（Paraformer）录音文件识别，识别结果查询接口调用成功，但是VAD模块未检测到有效语音。
 
 **解决方案：** 请排查录音文件是否包含有效语音，如果都是无效语音（例如纯静音），则没有识别结果是正常现象。
+
+<a id="asr-response-have-no-words"></a>
+
+<a id="bd1d8d669ewjz"></a>
 
 #### ASR\_RESPONSE\_HAVE\_NO\_WORDS
 
@@ -3084,11 +5386,21 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 请排查录音文件是否包含有效语音，或有效语音是否都是语气词且开启了顺滑参数`disfluency_removal_enabled`，导致语气词被过滤。
 
+<a id="file-download-failed-2"></a>
+
+<a id="a96126552cz69"></a>
+
+<a id="file-download-failed-2-2"></a>
+
 #### FILE\_DOWNLOAD\_FAILED
 
 **原因：** 若您使用语音识别（Paraformer）录音文件识别，待识别文件下载失败。
 
 **解决方案：** 请检查录音文件路径是否正确，以及是否可以通过外网访问和下载。
+
+<a id="file-check-failed"></a>
+
+<a id="1e4ec7dd191q9"></a>
 
 #### FILE\_CHECK\_FAILED
 
@@ -3096,11 +5408,19 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 请检查录音文件是否是单轨/双轨的WAV格式或MP3格式。
 
+<a id="file-too-large-2"></a>
+
+<a id="072211a7080gh"></a>
+
 #### FILE\_TOO\_LARGE
 
 **原因：** 若您使用语音识别（Paraformer）录音文件识别，待识别文件过大。
 
 **解决方案：** 请检查录音文件大小是否超过2GB，超过则需您对录音文件分段。
+
+<a id="file-normalize-failed"></a>
+
+<a id="a4be7d4fb8fwg"></a>
 
 #### FILE\_NORMALIZE\_FAILED
 
@@ -3108,11 +5428,19 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 请检查录音文件是否有损坏，是否可以正常播放。
 
+<a id="file-parse-failed"></a>
+
+<a id="25e758c3d5fb7"></a>
+
 #### FILE\_PARSE\_FAILED
 
 **原因：** 若您使用语音识别（Paraformer）录音文件识别，文件解析失败。
 
 **解决方案：** 请检查录音文件是否有损坏，是否可以正常播放。
+
+<a id="mkv-parse-failed"></a>
+
+<a id="287746c3f5l7x"></a>
 
 #### MKV\_PARSE\_FAILED
 
@@ -3120,11 +5448,19 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 请检查录音文件是否损坏，是否可以正常播放。
 
+<a id="file-trans-task-expired"></a>
+
+<a id="19063d730ebu4"></a>
+
 #### FILE\_TRANS\_TASK\_EXPIRED
 
 **原因：** 若您使用语音识别（Paraformer）录音文件识别，录音文件识别任务过期。
 
 **解决方案：** TaskId不存在，或者已过期。请重新提交任务。
+
+<a id="request-invalid-file-url-value"></a>
+
+<a id="e2e32b45a4mtw"></a>
 
 #### REQUEST\_INVALID\_FILE\_URL\_VALUE
 
@@ -3132,11 +5468,19 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 请确认`file_url`参数格式是否正确。
 
+<a id="content-length-check-failed"></a>
+
+<a id="19a3ccaec9rxq"></a>
+
 #### CONTENT\_LENGTH\_CHECK\_FAILED
 
 **原因：** 若您使用语音识别（Paraformer）录音文件识别，`content-length`检查失败。
 
 **解决方案：** 请检查下载待识别录音文件时，HTTP response中的`content-length`与文件实际大小是否一致。
+
+<a id="file-404-not-found"></a>
+
+<a id="e574897b87w7i"></a>
 
 #### FILE\_404\_NOT\_FOUND
 
@@ -3144,11 +5488,19 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 请检查文件URL是否正确。
 
+<a id="file-403-forbidden"></a>
+
+<a id="d82f1a72f2dok"></a>
+
 #### FILE\_403\_FORBIDDEN
 
 **原因：** 若您使用语音识别（Paraformer）录音文件识别，没有权限下载待识别录音。
 
 **解决方案：** 请检查文件访问权限。
+
+<a id="file-server-error"></a>
+
+<a id="1d050b1f621sg"></a>
 
 #### FILE\_SERVER\_ERROR
 
@@ -3156,11 +5508,19 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 请稍后重试或检查文件服务器状态。
 
+<a id="audio-duration-too-long"></a>
+
+<a id="7413b323103ja"></a>
+
 #### AUDIO\_DURATION\_TOO\_LONG
 
 **原因：** 若您使用语音识别（Paraformer）录音文件识别，请求的文件时长超过12小时。
 
 **解决方案：** 建议将音频进行切分，分多次提交识别任务。可使用FFmpeg等工具切分。
+
+<a id="decode-error"></a>
+
+<a id="787cf9e8f26pr"></a>
 
 #### DECODE\_ERROR
 
@@ -3168,17 +5528,29 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 请确认文件下载链接中文件为支持的音频格式。
 
+<a id="client-error-qwen-tts-engine-return-error-code-411"></a>
+
+<a id="fb8f998860y0r"></a>
+
 #### CLIENT\_ERROR-\[qwen-tts:\]Engine return error code: 411
 
 **原因：** 在进行Qwen-TTS实时语音合成时，选用的模型是`qwen-tts-vc-realtime-2025-08-20`，但音色是默认音色。该模型仅支持复刻音色。
 
 **解决方案：** 请使用通过声音复刻生成的音色，而非默认音色。
 
+<a id="no-valid-audio-error"></a>
+
+<a id="f0fed5b7b4nue"></a>
+
 #### NO\_VALID\_AUDIO\_ERROR
 
 **原因：** 使用语音识别（Paraformer）时，待识别音频无效。
 
 **解决方案：** 请检查音频格式、采样率等是否满足要求。
+
+<a id="invalidparameter-task-can-not-be-null"></a>
+
+<a id="c73ad195bbx3a"></a>
 
 #### InvalidParameter: task can not be null
 
@@ -3190,16 +5562,28 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 2.  检查 continue-task 指令：确保 payload.input 中包含 text 字段，且 text 不为空字符串。
 3.  检查 finish-task 指令：确保 payload 中包含 `"input": {}`。
 
+<a id="close-code-1007-model-not-found"></a>
+
+<a id="ws-close-1007-model-not-found"></a>
+
 #### close code 1007 Model not found
 
 **原因：**通过 WebSocket 协议调用实时模型（如 Qwen3-Omni-Flash-Realtime）时，请求中的模型名称错误，或该模型服务尚未开通。服务端以 `close code 1007` 关闭连接，reason 为 `Model not found`。
 
 **解决方案：**
 
--   请对照[模型列表](raw/model-user-guide/get-started-with-models/models.md)中的模型名称，检查您输入的模型名称（参数 `model` 的取值）是否正确。实时模型的名称含 `-realtime` 等后缀，不可省略或改写。
+-   请对照[模型列表](models.md)中的模型名称，检查您输入的模型名称（参数 `model` 的取值）是否正确。实时模型的名称含 `-realtime` 等后缀，不可省略或改写。
 -   请前往[模型广场](https://bailian.console.aliyun.com/model/market)确认该模型服务是否已开通；未开通时请先开通再重试。
 
+<a id="coding-plan"></a>
+
+<a id="e1f2a3b4c5d6t"></a>
+
 ### Coding Plan
+
+<a id="connection-error-2"></a>
+
+<a id="f2a3b4c5d6e7u"></a>
 
 #### Connection error
 
@@ -3207,11 +5591,19 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 检查 Base URL 域名拼写及网络连接。
 
+<a id="hour-allocated-quota-exceeded"></a>
+
+<a id="c5d6e7f8a9b0x"></a>
+
 #### hour allocated quota exceeded
 
 **原因：** 每 5 小时请求额度已用完。
 
 **解决方案：** 等待 5 小时后额度自动恢复。
+
+<a id="week-allocated-quota-exceeded"></a>
+
+<a id="f8a9b0c1d2e3a"></a>
 
 #### week allocated quota exceeded
 
@@ -3219,11 +5611,19 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 等待至每周一 00:00:00（UTC+8）额度重置。
 
+<a id="month-allocated-quota-exceeded"></a>
+
+<a id="c1d2e3f4a5b6d"></a>
+
 #### month allocated quota exceeded
 
 **原因：** 每月请求额度已用完。
 
 **解决方案：** 等待至订阅月对应日 00:00:00（UTC+8）额度重置。
+
+<a id="concurrency-allocated-quota-exceeded"></a>
+
+<a id="f4a5b6c7d8e9g"></a>
 
 #### concurrency allocated quota exceeded
 
@@ -3231,11 +5631,19 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 
 **解决方案：** 等待片刻后重试即可。平台会根据整体资源负载动态调整并发上限，高峰时段可能触发此限制。
 
+<a id="usage-allocated-quota-exceeded-please-try-again-later"></a>
+
+<a id="c7d8e9f0a1b2j"></a>
+
 #### usage allocated quota exceeded. please try again later.
 
 **原因：** Coding Plan 除调用次数限制外，还会对短时间内的资源消耗进行综合评估。当系统检测到短时间内资源消耗较高时，会触发临时限流。
 
 **解决方案：** 通常等待一小时后即可恢复。建议将大型任务拆分为多个小任务，分时段提交。
+
+<a id="agent-api-响应与重试"></a>
+
+<a id="agent-error-reference"></a>
 
 ## Agent API 响应与重试
 
@@ -3244,46 +5652,29 @@ Sandbox API 中，表示文件类型不支持，或请求体不是 `multipart/fo
 -   **RAG API：** 统一响应包含 `error.code`、`error.message`、`error.param`、`request_id`。每个响应都带 `request_id`，联系支持时附上该 ID。重试按下表执行。
 -   **ParseX API：** 错误响应中的 `request_id`、`code`、`message` 均为 `string`，请求 ID 可用于定位失败请求。
 -   **Security API：** 业务错误返回 `type`、`error.code`、`error.message`、`request_id`，`request_id` 与响应头 `x-request-id` 一致；鉴权与工作空间路由错误由网关返回扁平的 `request_id`、`code`、`message`。使用 `request_id` 定位请求。
--   **Flow Agent API：** 两类接口的错误响应约定和 HTTP 状态说明见 [Flow Agent API 错误码](raw/application-api-reference/flow-agent-api/flow-agent-api-errors.md)。
--   **Memory API：** HTTP 状态、错误响应示例及重试策略见 [Memory API 错误码](raw/application-api-reference/long-term-memory-new/api-overview/errors.md)。
+-   **Flow Agent API：** 两类接口的错误响应约定和 HTTP 状态说明见 [Flow Agent API 错误码](../../application-api-reference/flow-agent-api/flow-agent-api-errors.md)。
+-   **Memory API：** HTTP 状态、错误响应示例及重试策略见 [Memory API 错误码](../../application-api-reference/long-term-memory-new/api-overview/errors.md)。
 
 **RAG API 重试策略：** HTTP 504 最多重试 2 次，其他 5xx 最多重试 3 次，具体间隔见下表。
 
-错误类型
+| 错误类型 | 是否重试 | 间隔与上限 |
+| --- | --- | --- |
+| 4xx（限流除外） | 否 | — |
+| 429 限流 | 是 | 按 `Retry-After` 头，或 1s/2s/4s 指数退避 |
+| 504 超时 | 是 | 直接重试，最多 2 次 |
+| 其他 5xx | 是 | 1s/2s/4s，最多 3 次 |
 
-是否重试
+<a id="sandbox-api-响应示例"></a>
 
-间隔与上限
-
-4xx（限流除外）
-
-否
-
-—
-
-429 限流
-
-是
-
-按 `Retry-After` 头，或 1s/2s/4s 指数退避
-
-504 超时
-
-是
-
-直接重试，最多 2 次
-
-其他 5xx
-
-是
-
-1s/2s/4s，最多 3 次
+<a id="sandbox-error-response-example"></a>
 
 ### Sandbox API 响应示例
 
 以下为 Sandbox API 的错误响应示例：
 
-```
+<a id="code-block-4"></a>
+
+```json
 {
   "code": 100004,
   "message": "参数缺失",

@@ -2,13 +2,25 @@
 
 获取文体学习分析结果列表。
 
+<a id="接口说明"></a>
+
+<a id="api-detail-51"></a>
+
 ## 接口说明
 
-全妙产品支持 iframe 嵌入 具体请参考文档： [客户对接\_全妙公有云 iframe 定制方案](raw/_short/iframe-embedding-scheme-6f73b86f9f7bdf41.md)
+全妙产品支持 iframe 嵌入 具体请参考文档： [客户对接\_全妙公有云 iframe 定制方案](iframe-embedding-scheme-6f73b86f9f7bdf41.md)
+
+<a id="调试"></a>
+
+<a id="api-doc-debug"></a>
 
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -27,197 +39,50 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-**操作**
+| 操作 | 访问级别 | 资源类型 | 条件关键字 | 关联操作 |
+| --- | --- | --- | --- | --- |
+| aimiaobi:ListStyleLearningResult | list | \*全部资源<br><br>`*` | 无 | 无 |
 
-**访问级别**
+<a id="请求参数"></a>
 
-**资源类型**
-
-**条件关键字**
-
-**关联操作**
-
-aimiaobi:ListStyleLearningResult
-
-list
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-36"></a>
 
 ## 请求参数
 
-**名称**
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| AgentKey | string | 是 | 业务空间唯一标识： [AgentKey](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey) | xxxxx\_p\_efm |
+| Current | integer | 否 | 当前页码 | 1 |
+| Size | integer | 否 | 每页条数：默认 10 | 10 |
 
-**类型**
+<a id="返回参数"></a>
 
-**必填**
-
-**描述**
-
-**示例值**
-
-AgentKey
-
-string
-
-是
-
-业务空间唯一标识： [AgentKey](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)
-
-xxxxx\_p\_efm
-
-Current
-
-integer
-
-否
-
-当前页码
-
-1
-
-Size
-
-integer
-
-否
-
-每页条数：默认 10
-
-10
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-**名称**
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | PageResult |  |
+| Code | string | 状态码 | NoData |
+| Current | integer | 当前页码 | 1 |
+| Data | array<object> | 文体学习分析结果集合 |  |
+|  | object | 业务数据 |  |
+| AigcResult | string | AIGC 生成的内容 | AIGC 生成的内容 |
+| Id | integer | 文体学习分析结果 ID | 70 |
+| RewriteResult | string | 用户修订后内容 | 用户修订后内容 |
+| StyleName | string | 文体风格名称 | 文体风格名称 |
+| TaskId | string | 文体分析时的任务 ID | 3f7045e099474ba28ceca1b4eb6d6e21 |
+| HttpStatusCode | integer | http 状态码 | 200 |
+| Message | string | 错误说明 | success |
+| RequestId | string | 请求唯一标识 | 1813ceee-7fe5-41b4-87e5-982a4d18cca5 |
+| Size | integer | 每页记录条数 | 10 |
+| Success | boolean | 是否成功：true 成功，false 失败 | true |
+| Total | integer | 总记录条数 | 100 |
 
-**类型**
+<a id="示例"></a>
 
-**描述**
-
-**示例值**
-
-object
-
-PageResult
-
-Code
-
-string
-
-状态码
-
-NoData
-
-Current
-
-integer
-
-当前页码
-
-1
-
-Data
-
-array<object>
-
-文体学习分析结果集合
-
-object
-
-业务数据
-
-AigcResult
-
-string
-
-AIGC 生成的内容
-
-AIGC 生成的内容
-
-Id
-
-integer
-
-文体学习分析结果 ID
-
-70
-
-RewriteResult
-
-string
-
-用户修订后内容
-
-用户修订后内容
-
-StyleName
-
-string
-
-文体风格名称
-
-文体风格名称
-
-TaskId
-
-string
-
-文体分析时的任务 ID
-
-3f7045e099474ba28ceca1b4eb6d6e21
-
-HttpStatusCode
-
-integer
-
-http 状态码
-
-200
-
-Message
-
-string
-
-错误说明
-
-success
-
-RequestId
-
-string
-
-请求唯一标识
-
-1813ceee-7fe5-41b4-87e5-982a4d18cca5
-
-Size
-
-integer
-
-每页记录条数
-
-10
-
-Success
-
-boolean
-
-是否成功：true 成功，false 失败
-
-true
-
-Total
-
-integer
-
-总记录条数
-
-100
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -225,7 +90,9 @@ integer
 
 `JSON`格式
 
-```
+<a id="code-block"></a>
+
+```json
 {
   "Code": "NoData",
   "Current": 1,
@@ -247,9 +114,17 @@ integer
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
+
 ## 错误码
 
 访问[错误中心](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/errorCode)查看更多错误码。
+
+<a id="变更历史"></a>
+
+<a id="workbench-doc-change-demo"></a>
 
 ## 变更历史
 

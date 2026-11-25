@@ -2,17 +2,25 @@
 
 Qwen-Audio-Realtime API 的客户端事件参考。
 
-**用户指南**：[实时语音对话（Qwen-Audio-Realtime）](https://help.aliyun.com/zh/model-studio/fun-audiochat-realtime)。如需了解事件交互时序，请参见[WebSocket 接入](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/audio-realtime-websocket-access.md)。
+**用户指南**：[实时语音对话（Qwen-Audio-Realtime）](https://help.aliyun.com/zh/model-studio/fun-audiochat-realtime)。如需了解事件交互时序，请参见[WebSocket 接入](audio-realtime-websocket-access.md)。
 
-**说明**本页为 Qwen-Audio-Realtime 的事件参考，事件定义以 WebSocket 接入为基础。AOQ、WebRTC 通过各自的数据通道收发模型事件，媒体通过媒体轨道传输。请先阅读[WebSocket 接入](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/audio-realtime-websocket-access.md)、[WebRTC 接入](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/audio-realtime-webrtc-access.md)或[AOQ 接入](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/audio-realtime-aoq-access.md)。
+> **说明**
+>
+> 本页为 Qwen-Audio-Realtime 的事件参考，事件定义以 WebSocket 接入为基础。AOQ、WebRTC 通过各自的数据通道收发模型事件，媒体通过媒体轨道传输。请先阅读[WebSocket 接入](audio-realtime-websocket-access.md)、[WebRTC 接入](audio-realtime-webrtc-access.md)或[AOQ 接入](audio-realtime-aoq-access.md)。
 
-WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-realtime-service-fbe978d80b5ee150.md)、[iOS SDK](raw/_short/ios-sdk-for-qwen-audio-realtime-service-11c3579f6cded913.md)和 [HarmonyOS SDK](raw/_short/harmonyos-sdk-for-qwen-audio-realtime-service-c258297df757a167.md)。型号与协议选择参见[概述](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/voice-conversation-api-references.md)。
+WebSocket SDK 用法参见 [Android SDK](../../../_short/android-sdk-for-qwen-audio-realtime-service-fbe978d80b5ee150.md)、[iOS SDK](../../../_short/ios-sdk-for-qwen-audio-realtime-service-11c3579f6cded913.md)和 [HarmonyOS SDK](../../../_short/harmonyos-sdk-for-qwen-audio-realtime-service-c258297df757a167.md)。型号与协议选择参见[概述](voice-conversation-api-references.md)。
+
+<a id="session-update"></a>
+
+<a id="fc65a1b2c3d5f"></a>
 
 ## session.update
 
 **说明**：建立连接后，发送此事件更新会话的默认配置。仅包含需要变更的字段，未传字段保持原值。服务端收到后校验参数，若参数不合法则返回错误，若参数合法则应用更改并返回完整配置。
 
-**说明**`turn_detection` 仅在首次发送音频之前（IDLE 状态）允许修改。
+> **说明**
+>
+> `turn_detection` 仅在首次发送音频之前（IDLE 状态）允许修改。
 
 `type`string（必选）
 
@@ -21,6 +29,8 @@ WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-r
 `session`object（可选）
 
 会话配置。
+
+<a id="accordion-属性"></a>
 
 属性
 
@@ -41,13 +51,15 @@ WebSocket SDK 用法参见 [Android SDK](raw/_short/android-sdk-for-qwen-audio-r
 
 TTS 音色名称。3.1 Plus/Flash 的默认值为 `longanqian_v3.1`，3.0 Plus/Flash 的默认值为 `longanqian`。支持系统音色和声音复刻音色，仅可在第一次 `session.update` 中设置，后续传入将被忽略。
 
--   **3.1 Plus/Flash 系统音色**：可选值包括 `longanqian_v3.1` 和 3.1 TTS Plus/Flash 音色列表中的全部音色，完整范围请参见[音色配置](https://help.aliyun.com/zh/model-studio/qwen-audio-realtime-user-guides#fc60h311)。
+-   **3.1 Plus/Flash 系统音色**：可选值包括 `longanqian_v3.1` 和 3.1 TTS Plus/Flash 音色列表中的全部音色，完整范围请参见[音色配置](../../../model-user-guide/model-experience/speech-and-audio/speech-to-speech/qwen-audio-realtime-user-guides.md#fc60h311)。
 -   **3.0 Plus/Flash 系统音色**：可选值：`longanqian`、`longanlingxin`、`longanlingxi`、`longanxiaoxin`、`longanlufeng`。
--   **声音复刻音色**：通过[声音复刻 API](https://help.aliyun.com/zh/model-studio/voice-clone-design-http-api#h3-create-enrollment)创建，将返回的 `voice_id` 填入此参数。详见[音色配置](https://help.aliyun.com/zh/model-studio/fun-audiochat-realtime#fc60h311)。
+-   **声音复刻音色**：通过[声音复刻 API](../../../_short/voice-clone-design-http-api-b6a5abbe2d5d2730.md#h3-create-enrollment)创建，将返回的 `voice_id` 填入此参数。详见[音色配置](https://help.aliyun.com/zh/model-studio/fun-audiochat-realtime#fc60h311)。
 
 连接 `qwen-audio-3.1-realtime-plus` 或 `qwen-audio-3.1-realtime-flash` 后，在首次 `session.update` 中设置音色，例如：
 
-```
+<a id="code-block"></a>
+
+```json
 {
     "type": "session.update",
     "session": {
@@ -80,6 +92,8 @@ TTS 音色名称。3.1 Plus/Flash 的默认值为 `longanqian_v3.1`，3.0 Plus/F
 
 输入音频转写配置。
 
+<a id="accordion-属性-2"></a>
+
 属性
 
 `language`string（可选）
@@ -107,6 +121,8 @@ TTS 音色名称。3.1 Plus/Flash 的默认值为 `longanqian_v3.1`，3.0 Plus/F
 
 输入音频转写的即时热词配置。适用于 `qwen-audio-3.0-realtime-plus`、`qwen-audio-3.0-realtime-flash`、`qwen-audio-3.1-realtime-plus` 和 `qwen-audio-3.1-realtime-flash`。
 
+<a id="accordion-属性-3"></a>
+
 属性
 
 `vocabulary`object
@@ -118,6 +134,8 @@ TTS 音色名称。3.1 Plus/Flash 的默认值为 `longanqian_v3.1`，3.0 Plus/F
 `output_audio`object（可选）
 
 输出音频配置。适用于 `qwen-audio-3.1-realtime-plus` 和 `qwen-audio-3.1-realtime-flash`。
+
+<a id="accordion-属性-4"></a>
 
 属性
 
@@ -160,6 +178,8 @@ TTS 音色名称。3.1 Plus/Flash 的默认值为 `longanqian_v3.1`，3.0 Plus/F
 
 联网搜索配置，仅在 `enable_search` 为 `true` 时生效。
 
+<a id="accordion-属性-5"></a>
+
 属性
 
 `enable_source`boolean（可选）
@@ -170,6 +190,8 @@ TTS 音色名称。3.1 Plus/Flash 的默认值为 `longanqian_v3.1`，3.0 Plus/F
 
 Function Calling 工具定义列表。配置后模型可根据用户输入自主决定是否调用工具。
 
+<a id="accordion-属性-6"></a>
+
 属性
 
 `type`string（必选）
@@ -177,6 +199,8 @@ Function Calling 工具定义列表。配置后模型可根据用户输入自主
 固定为 `function`。
 
 `function`object
+
+<a id="accordion-属性-7"></a>
 
 属性
 
@@ -191,6 +215,8 @@ Function Calling 工具定义列表。配置后模型可根据用户输入自主
 `parameters`object（可选）
 
 对工具函数入参的描述，模型据此提取所需入参。若函数无需入参，可不指定。
+
+<a id="accordion-属性-8"></a>
 
 属性
 
@@ -211,6 +237,8 @@ Function Calling 工具定义列表。配置后模型可根据用户输入自主
 以下轮次检测字段说明适用于 `qwen-audio-3.1-realtime-plus`、`qwen-audio-3.1-realtime-flash`、`qwen-audio-3.0-realtime-plus` 和 `qwen-audio-3.0-realtime-flash`。
 
 轮次检测配置。设为 `null` 可切换为 push-to-talk 模式（手动提交音频并触发推理）。若不提供此字段，系统将使用默认参数启用 VAD。
+
+<a id="accordion-属性-9"></a>
 
 属性
 
@@ -238,13 +266,23 @@ VAD 灵敏度。适用于 `server_vad`、`smart_turn` 和 `smart_turn_v2`。值�
 
 **仅在 smart\_turn / smart\_turn\_v2 模式下生效。**目标用户预录音频的公网可访问 URL 列表，用于说话人增强。模型通过这些音频在双工对话中锁定目标说话人，忽略旁人声音和背景噪声。最多支持 5 个 URL。音频格式要求：16kHz PCM 或 WAV。
 
-**重要**该参数仅在**第一次**发送 `session.update` 事件时可配置，后续传入该字段将被忽略。
+> **重要**
+>
+> 该参数仅在**第一次**发送 `session.update` 事件时可配置，后续传入该字段将被忽略。
+
+<a id="sec-tabs"></a>
+
+<a id="基础配置"></a>
+
+<a id="基础配置-h4"></a>
 
 #### 基础配置
 
 以下示例适用于 `qwen-audio-3.1-realtime-plus` 和 `qwen-audio-3.1-realtime-flash`，显式选择系统音色 `longanqian_v3.1`。
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
     "type": "session.update",
     "session": {
@@ -263,13 +301,19 @@ VAD 灵敏度。适用于 `server_vad`、`smart_turn` 和 `smart_turn_v2`。值�
 }
 ```
 
+<a id="语言配置"></a>
+
+<a id="语言配置-h4"></a>
+
 #### 语言配置
 
 **语言配置（qwen-audio-3.1-realtime-plus / qwen-audio-3.1-realtime-flash）**
 
 连接 `qwen-audio-3.1-realtime-plus` 或 `qwen-audio-3.1-realtime-flash` 后，可发送以下 `session.update` 事件，分别将输入音频源语种设置为中文、输出音频目标语种设置为英语。
 
-```
+<a id="code-block-3"></a>
+
+```json
 {
     "type": "session.update",
     "session": {
@@ -283,9 +327,15 @@ VAD 灵敏度。适用于 `server_vad`、`smart_turn` 和 `smart_turn_v2`。值�
 }
 ```
 
+<a id="即时热词"></a>
+
+<a id="即时热词-h4"></a>
+
 #### 即时热词
 
-```
+<a id="code-block-4"></a>
+
+```json
 {
     "type": "session.update",
     "session": {
@@ -300,11 +350,17 @@ VAD 灵敏度。适用于 `server_vad`、`smart_turn` 和 `smart_turn_v2`。值�
 }
 ```
 
+<a id="function-calling"></a>
+
+<a id="function-calling-h4"></a>
+
 #### Function Calling
 
 Function Calling：
 
-```
+<a id="code-block-5"></a>
+
+```json
 {
     "type": "session.update",
     "session": {
@@ -341,11 +397,17 @@ Function Calling：
 }
 ```
 
+<a id="声纹注册"></a>
+
+<a id="声纹注册-h4"></a>
+
 #### 声纹注册
 
 声纹注册（voiceprint\_audio\_urls）：
 
-```
+<a id="code-block-6"></a>
+
+```json
 {
     "type": "session.update",
     "session": {
@@ -360,6 +422,10 @@ Function Calling：
 }
 ```
 
+<a id="input-audio-buffer-append"></a>
+
+<a id="fc65b1c3d4e6g"></a>
+
 ## input\_audio\_buffer.append
 
 **说明**：WebSocket 接入时，追加音频数据到输入缓冲区。应持续、高频发送（如每 20~40 ms 一帧）。此事件无服务端确认回包。
@@ -372,12 +438,18 @@ Function Calling：
 
 Base64 编码的音频数据。
 
-```
+<a id="code-block-7"></a>
+
+```json
 {
     "type": "input_audio_buffer.append",
     "audio": "<base64 编码的音频数据>"
 }
 ```
+
+<a id="input-audio-buffer-commit"></a>
+
+<a id="fc65b2c4d5e7h"></a>
 
 ## input\_audio\_buffer.commit
 
@@ -389,11 +461,17 @@ server\_vad / smart\_turn / smart\_turn\_v2 模式下此事件被忽略。
 
 事件类型，固定为 `input_audio_buffer.commit`。
 
-```
+<a id="code-block-8"></a>
+
+```json
 {
     "type": "input_audio_buffer.commit"
 }
 ```
+
+<a id="input-audio-buffer-clear"></a>
+
+<a id="fc65b3c5d6e8i"></a>
 
 ## input\_audio\_buffer.clear
 
@@ -403,17 +481,25 @@ server\_vad / smart\_turn / smart\_turn\_v2 模式下此事件被忽略。
 
 事件类型，固定为 `input_audio_buffer.clear`。
 
-```
+<a id="code-block-9"></a>
+
+```json
 {
     "type": "input_audio_buffer.clear"
 }
 ```
 
+<a id="conversation-item-create"></a>
+
+<a id="fc65c1d2e3f5h"></a>
+
 ## conversation.item.create
 
 **说明**：手动向对话上下文插入一条对话项。可用于注入历史上下文、补充文本信息，或写回 Function Calling 的工具执行结果。
 
-**说明**若 `item.id` 已存在于对话中，会返回错误并拒绝创建。
+> **说明**
+>
+> 若 `item.id` 已存在于对话中，会返回错误并拒绝创建。
 
 `type`string（必选）
 
@@ -426,6 +512,8 @@ server\_vad / smart\_turn / smart\_turn\_v2 模式下此事件被忽略。
 `item`object（必选）
 
 要创建的对话项。
+
+<a id="accordion-属性-10"></a>
 
 属性
 
@@ -448,6 +536,8 @@ server\_vad / smart\_turn / smart\_turn\_v2 模式下此事件被忽略。
 `content`array（`message` 类型必选）
 
 消息内容列表。每个元素包含 `type` 和对应的数据字段。
+
+<a id="accordion-各-role-支持的-content-类型"></a>
 
 各 role 支持的 content 类型
 
@@ -480,11 +570,19 @@ server\_vad / smart\_turn / smart\_turn\_v2 模式下此事件被忽略。
 
 工具执行结果，JSON 字符串格式。
 
+<a id="sec-tabs-2"></a>
+
+<a id="用户文本消息"></a>
+
+<a id="用户文本消息-h4"></a>
+
 #### 用户文本消息
 
 注入用户文本消息：
 
-```
+<a id="code-block-10"></a>
+
+```json
 {
     "type": "conversation.item.create",
     "previous_item_id": "item_xxx",
@@ -502,11 +600,17 @@ server\_vad / smart\_turn / smart\_turn\_v2 模式下此事件被忽略。
 }
 ```
 
+<a id="function-calling-结果"></a>
+
+<a id="function-calling-结果-h4"></a>
+
 #### Function Calling 结果
 
 写回 Function Calling 结果：
 
-```
+<a id="code-block-11"></a>
+
+```json
 {
     "type": "conversation.item.create",
     "item": {
@@ -516,6 +620,10 @@ server\_vad / smart\_turn / smart\_turn\_v2 模式下此事件被忽略。
     }
 }
 ```
+
+<a id="conversation-item-retrieve"></a>
+
+<a id="fc65c2d3e4f6h"></a>
 
 ## conversation.item.retrieve
 
@@ -529,12 +637,18 @@ server\_vad / smart\_turn / smart\_turn\_v2 模式下此事件被忽略。
 
 要查询的对话项 ID。服务端以 `conversation.item.retrieved` 事件返回查询结果。
 
-```
+<a id="code-block-12"></a>
+
+```json
 {
     "type": "conversation.item.retrieve",
     "item_id": "item_xxx"
 }
 ```
+
+<a id="conversation-item-delete"></a>
+
+<a id="fc65c3d4e5f7h"></a>
 
 ## conversation.item.delete
 
@@ -548,12 +662,18 @@ server\_vad / smart\_turn / smart\_turn\_v2 模式下此事件被忽略。
 
 要删除的对话项 ID。
 
-```
+<a id="code-block-13"></a>
+
+```json
 {
     "type": "conversation.item.delete",
     "item_id": "item_xxx"
 }
 ```
+
+<a id="response-create"></a>
+
+<a id="fc65d1e2f3g5i"></a>
 
 ## response.create
 
@@ -565,7 +685,9 @@ server\_vad / smart\_turn / smart\_turn\_v2 模式下此事件被忽略。
 
 `response` 字段可选，用于覆盖本轮推理的会话默认配置。Function Calling 场景下，客户端写入 `function_call_output` 后也通过该事件触发二轮推理。
 
-**说明**server\_vad / smart\_turn / smart\_turn\_v2 模式下，手动触发的推理仍可能被新语音打断。
+> **说明**
+>
+> server\_vad / smart\_turn / smart\_turn\_v2 模式下，手动触发的推理仍可能被新语音打断。
 
 `type`string（必选）
 
@@ -574,6 +696,8 @@ server\_vad / smart\_turn / smart\_turn\_v2 模式下此事件被忽略。
 `response`object（可选）
 
 用于覆盖本轮推理的会话默认配置。不传时使用当前会话配置。
+
+<a id="accordion-属性-11"></a>
 
 属性
 
@@ -585,7 +709,9 @@ server\_vad / smart\_turn / smart\_turn\_v2 模式下此事件被忽略。
 
 覆盖本轮的 TTS 音色。
 
-```
+<a id="code-block-14"></a>
+
+```json
 {
     "type": "response.create",
     "response": {
@@ -593,6 +719,10 @@ server\_vad / smart\_turn / smart\_turn\_v2 模式下此事件被忽略。
     }
 }
 ```
+
+<a id="response-cancel"></a>
+
+<a id="fc65d2e3f4g6i"></a>
 
 ## response.cancel
 
@@ -604,7 +734,9 @@ server\_vad / smart\_turn / smart\_turn\_v2 模式下此事件被忽略。
 
 事件类型，固定为 `response.cancel`。
 
-```
+<a id="code-block-15"></a>
+
+```json
 {
     "type": "response.cancel"
 }

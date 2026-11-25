@@ -2,13 +2,25 @@
 
 提交审核任务
 
+<a id="接口说明"></a>
+
+<a id="api-detail-51"></a>
+
 ## 接口说明
 
 全妙产品支持 iframe 嵌入 具体请参考文档： [客户对接\_全妙公有云 iframe 定制方案](https://alidocs.dingtalk.com/i/nodes/m9bN7RYPWdyrPBREcyM6jDQ2VZd1wyK0?cid=116617178%3A898142682&utm_source=im&utm_scene=team_space&iframeQuery=utm_medium%3Dim_card%26utm_source%3Dim&utm_medium=im_card&corpId=dingd8e1123006514592)
 
+<a id="调试"></a>
+
+<a id="api-doc-debug"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -27,157 +39,44 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-**操作**
+| 操作 | 访问级别 | 资源类型 | 条件关键字 | 关联操作 |
+| --- | --- | --- | --- | --- |
+| aimiaobi:SubmitAuditTask | create | \*全部资源<br><br>`*` | 无 | 无 |
 
-**访问级别**
+<a id="请求参数"></a>
 
-**资源类型**
-
-**条件关键字**
-
-**关联操作**
-
-aimiaobi:SubmitAuditTask
-
-create
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-36"></a>
 
 ## 请求参数
 
-**名称**
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| ArticleId | string | 否 | 审核时的文章 ID | xxxx |
+| WorkspaceId | string | 否 | [业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | xxxx |
+| Content | string | 否 | 待审核的内容 | 待审核的内容 |
+| HtmlContent | string | 否 | 审核时的 HTML 格式 的内容 | 待审核的内容（HTML格式） |
+| Title | string | 否 | 审核时的文章标题 | 审核时的文章标题 |
 
-**类型**
+<a id="返回参数"></a>
 
-**必填**
-
-**描述**
-
-**示例值**
-
-ArticleId
-
-string
-
-否
-
-审核时的文章 ID
-
-xxxx
-
-WorkspaceId
-
-string
-
-否
-
-[业务空间 ID](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)
-
-xxxx
-
-Content
-
-string
-
-否
-
-待审核的内容
-
-待审核的内容
-
-HtmlContent
-
-string
-
-否
-
-审核时的 HTML 格式 的内容
-
-待审核的内容（HTML格式）
-
-Title
-
-string
-
-否
-
-审核时的文章标题
-
-审核时的文章标题
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-**名称**
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | Schema of Response |  |
+| RequestId | string | Id of the request | xxxxx |
+| Success | boolean | 此次请求是否成功 | true |
+| Code | string | 错误码 | DataNotExists |
+| Message | string | 错误消息 | 错误消息 |
+| HttpStatusCode | integer | http 错误码 | 400 |
+| Data | object | 任务响应对象 |  |
+| TaskId | string | 任务 ID | xx |
 
-**类型**
+<a id="示例"></a>
 
-**描述**
-
-**示例值**
-
-object
-
-Schema of Response
-
-RequestId
-
-string
-
-Id of the request
-
-xxxxx
-
-Success
-
-boolean
-
-此次请求是否成功
-
-true
-
-Code
-
-string
-
-错误码
-
-DataNotExists
-
-Message
-
-string
-
-错误消息
-
-错误消息
-
-HttpStatusCode
-
-integer
-
-http 错误码
-
-400
-
-Data
-
-object
-
-任务响应对象
-
-TaskId
-
-string
-
-任务 ID
-
-xx
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -185,7 +84,9 @@ xx
 
 `JSON`格式
 
-```
+<a id="code-block"></a>
+
+```json
 {
   "RequestId": "xxxxx",
   "Success": true,
@@ -198,9 +99,17 @@ xx
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
+
 ## 错误码
 
 访问[错误中心](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/errorCode)查看更多错误码。
+
+<a id="变更历史"></a>
+
+<a id="workbench-doc-change-demo"></a>
 
 ## 变更历史
 

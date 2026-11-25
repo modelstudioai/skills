@@ -2,17 +2,31 @@
 
 当析言GBI连接实时数仓Hologres后，Hologres实时查询并输出数据至析言GBI进行数据分析。本文为您介绍如何通过析言GBI连接实时数仓Hologres，并利用自然语言完成数据分析。
 
+<a id="前置概念"></a>
+
+<a id="7b72577dbdklu"></a>
+
 ## 前置概念
 
 阅读本文前，您可按需了解[什么是实时数仓Hologres](https://help.aliyun.com/zh/hologres/product-overview/what-is-hologres)。
 
+<a id="操作步骤"></a>
+
+<a id="0ed5df1a55u07"></a>
+
 ## 操作步骤
+
+<a id="hologres数据准备"></a>
+
+<a id="09027756b72h0"></a>
 
 ### Hologres数据准备
 
 以下示例使用MaxCompute提供的公开数据集TPC-H的ORDERS表。您无需进行任何额外准备，只需运行以下SQL语句，即可通过MaxCompute外部表将ORDERS表的数据导入Hologres。
 
-```
+<a id="code-block"></a>
+
+```sql
 -- 创建外部表
 IMPORT FOREIGN SCHEMA public_data
 LIMIT TO (ORDERS_10g)
@@ -53,6 +67,10 @@ COMMIT;
 INSERT INTO ORDERS SELECT * FROM ORDERS_10g;
 ```
 
+<a id="连接hologres"></a>
+
+<a id="b7fca43930itw"></a>
+
 ### 连接Hologres
 
 析言GBI支持通过公网的方式连接Hologres，详情请参见[实例详情](https://help.aliyun.com/zh/hologres/user-guide/instance-configurations)。具体操作模式如下：
@@ -67,38 +85,16 @@ INSERT INTO ORDERS SELECT * FROM ORDERS_10g;
     
     相关配置说明如下：
     
-    **参数名称**
-    
-    **说明**
-    
-    IP/域名
-    
-    Hologres实例的域名。您可以进入[Hologres管理控制台](https://hologram.console.aliyun.com/#/instance)的**实例列表**，选择对应实例，在**实例详情**的**网络信息**中，选择**公网**获取对应域名。
-    
-    端口号
-    
-    Hologres实例的网络端口。您可以进入[Hologres管理控制台](https://hologram.console.aliyun.com/#/instance)的**实例列表**，选择对应实例，在**实例详情**的**网络信息**中，选择**公网**获取对应域名的端口。
-    
-    数据库名称
-    
-    需要连接的数据库名。您可以进入[Hologres管理控制台](https://hologram.console.aliyun.com/#/instance)，**前往HoloWeb**，连接并登录对应实例，在**已登录实例**中查询对应数据库名。
-    
-    数据库Schema
-    
-    需要连接的数据库Schema。默认是`public`，您也可以填写其他Schema。
-    
-    数据库用户名
-    
-    当前账号的AccessKey ID。获取方式请参见[AccessKey 管理](https://usercenter.console.aliyun.com/?spm=5176.2020520153.nav-right.dak.3bcf415dCWGUBj#/manage/ak)。
-    
-    数据库密码
-    
-    当前账号的AccessKey Secret。获取方式请参见[创建访问密钥](https://help.aliyun.com/zh/ram/user-guide/create-an-accesskey-pair)。
+    <table><thead><tr><th><p><strong>参数名称</strong></p></th><th colspan="2"><p><strong>说明</strong></p></th></tr></thead><tbody><tr><td><p>IP/域名</p></td><td colspan="2"><p>Hologres实例的域名。您可以进入<a href="https://hologram.console.aliyun.com/#/instance">Hologres管理控制台</a>的<strong>实例列表</strong>，选择对应实例，在<strong>实例详情</strong>的<strong>网络信息</strong>中，选择<strong>公网</strong>获取对应域名。</p></td></tr><tr><td><p>端口号</p></td><td colspan="2"><p>Hologres实例的网络端口。您可以进入<a href="https://hologram.console.aliyun.com/#/instance">Hologres管理控制台</a>的<strong>实例列表</strong>，选择对应实例，在<strong>实例详情</strong>的<strong>网络信息</strong>中，选择<strong>公网</strong>获取对应域名的端口。</p></td></tr><tr><td><p>数据库名称</p></td><td colspan="2"><p>需要连接的数据库名。您可以进入<a href="https://hologram.console.aliyun.com/#/instance">Hologres管理控制台</a>，<strong>前往HoloWeb</strong>，连接并登录对应实例，在<strong>已登录实例</strong>中查询对应数据库名。</p></td></tr><tr><td><p>数据库Schema</p></td><td colspan="2"><p>需要连接的数据库Schema。默认是<code>public</code>，您也可以填写其他Schema。</p></td></tr><tr><td><p>数据库用户名</p></td><td colspan="2"><p>当前账号的AccessKey ID。获取方式请参见<a href="https://usercenter.console.aliyun.com/?spm=5176.2020520153.nav-right.dak.3bcf415dCWGUBj#/manage/ak">AccessKey 管理</a>。</p></td></tr><tr><td><p>数据库密码</p></td><td colspan="2"><p>当前账号的AccessKey Secret。获取方式请参见<a href="https://help.aliyun.com/zh/ram/user-guide/create-an-accesskey-pair">创建访问密钥</a>。</p></td></tr></tbody></table>
     
 4.  单击右侧**关联数据表**，选择需要关联数据表的名称，单击**确认关联**。
     
     完成数据表关联，可对数据表进行管理。
     
+
+<a id="自然语言问答"></a>
+
+<a id="f16559d6d41ww"></a>
 
 ## 自然语言问答
 
@@ -106,6 +102,10 @@ INSERT INTO ORDERS SELECT * FROM ORDERS_10g;
 
 系统将自动完成问题改写、数据表选取、查询SQL生成和SQL执行，最终以表格形式展示查询结果。您还可以单击**编辑SQL**修改系统生成的SQL语句。
 
+<a id="更多功能与操作"></a>
+
+<a id="09d7b6714b50o"></a>
+
 ## 更多功能与操作
 
-您可以进一步参考[析言GBI使用指南](raw/application-user-guide/agent-development/application-gallery/xiyan-gbi/xiyan-gbi-user-guide.md)，完成企业数据管理、模型优化案例管理、模型输出干预等高级操作。
+您可以进一步参考[析言GBI使用指南](../application-user-guide/agent-development/application-gallery/xiyan-gbi/xiyan-gbi-user-guide.md)，完成企业数据管理、模型优化案例管理、模型输出干预等高级操作。

@@ -4,32 +4,64 @@
 
 **相关文档**：指南文档
 
+<a id="适用范围"></a>
+
+<a id="1fd78afa5brlj"></a>
+
+<a id="09a068c6b1q5b"></a>
+
 ## 适用范围
 
 为确保调用成功，请务必保证模型、endpoint URL 和 API Key 均属于**同一地域**。跨地域调用将会失败。
 
--   [**选择模型**](raw/model-user-guide/model-experience/image-and-video-generation/video-generate-edit-model.md)：确认模型所属的地域。
+-   [**选择模型**](../../../model-user-guide/model-experience/image-and-video-generation/video-generate-edit-model.md)：确认模型所属的地域。
 -   **选择 URL**：选择对应的地域 Endpoint URL，支持HTTP URL或 DashScope SDK URL。
 -   **配置 API Key**：获取该地域的API Key，再配置API Key到环境变量。
 
-**说明**本文的示例代码适用于**北京地域**。
+> **说明**
+>
+> 本文的示例代码适用于**北京地域**。
 
-**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+> **重要**
+>
+> 阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+>
+> -   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+> -   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+>
+> 其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
--   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
--   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+<a id="http调用"></a>
 
-其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
+<a id="a5a4ad982dpoz"></a>
+
+<a id="e9e21dd3a6945"></a>
 
 ## HTTP调用
 
 视频编辑任务耗时较长（通常为1-5分钟），API采用异步调用的方式。整个流程包含 **“创建任务 -> 轮询获取”** 两个核心步骤，具体如下：
 
+<a id="步骤1-创建任务获取任务id"></a>
+
+<a id="9b685d1a9b6wv"></a>
+
+<a id="9c71bffa84zm6"></a>
+
 ### 步骤1：创建任务获取任务ID
+
+<a id="sec-tabs"></a>
+
+<a id="北京"></a>
+
+<a id="北京-h4"></a>
 
 #### 北京
 
 `POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis`
+
+<a id="新加坡"></a>
+
+<a id="新加坡-h4"></a>
 
 #### 新加坡
 
@@ -37,420 +69,94 @@
 
 调用时请将`{WorkspaceId}`替换为真实的业务空间ID。
 
-**说明**
-
--   创建成功后，使用接口返回的 `task_id` 查询结果，task\_id 有效期为 24 小时。**请勿重复创建任务**，轮询获取即可。
--   新手指引请参见Postman。
-
-#### 请求参数
-
-**Content-Type**`string`**（必选）**
-
-请求内容类型。此参数必须设置为`application/json`。
-
-**Authorization**`string`**（必选）**
-
-请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
-
-**X-DashScope-Async**`string`**（必选）**
-
-异步处理配置参数。HTTP请求只支持异步，**必须设置为**`enable`。
-
-**重要**缺少此请求头将报错：“current user api does not support synchronous calls”。
-
-##### 请求体（Request Body）
-
-**model** `string` **（必选）**
-
-模型名称。
-
-示例值：wan2.7-videoedit。
-
-**input** `object` **（必选）**
-
-输入的基本信息，如提示词等。
-
-属性
-
-**prompt** `string` （可选）
-
-文本提示词。用来描述生成视频中期望包含的元素和视觉特点。
-
-支持中英文，每个汉字/字母占一个字符，超过部分会自动截断。
-
--   wan2.7-videoedit：长度不超过5000个字符。
-
-示例值：为人物换上酷闪的衣服，再戴参考图里的帽子。
-
-**negative\_prompt** `string` （可选）
-
-反向提示词，用来描述不希望在视频画面中出现的内容，可以对视频画面进行限制。
-
-支持中英文，长度不超过500个字符，超过部分会自动截断。
-
-示例值：低分辨率、错误、最差质量、低质量、残缺、多余的手指、比例不良等。
-
-**media** `array` **（必选）**
-
-媒体素材列表，用于指定视频生成所需的参考素材（图像、视频）。
-
-数组的每个元素为一个媒体对象，包含 `type` 与 `url` 字段。
-
-属性
-
-**type** `string` **（必选）**
-
-媒体素材类型。可选值为：
-
--   `video`：必传。待编辑的视频。
--   `reference_image`：可选。参考图像。
-
-素材限制：
-
--   视频有且仅有1个。
--   参考图像最多传入4张。
-
-**url** `string` **（必选）**
-
-媒体素材URL、Base64 编码数据或资产中心 asset\_id。素材包括视频和图像。
-
-传入视频（type=video）
-
-待编辑的视频文件的 URL 或资产中心 asset\_id。
-
-视频限制：
-
--   格式：mp4、mov。
--   时长：2～10s。
--   分辨率：宽度和高度范围为\[240,4096\]像素。
--   宽高比：1:8～8:1。
--   文件大小：不超过100MB。
-
-支持输入的格式：
-
-1.  公网URL：
-    
-    -   支持 HTTP 和 HTTPS 协议。
-    -   示例值：[](https://xxx/xxx.mp4)[https://xxx/xxx.mp4](https://xxx/xxx.mp4)。
-2.  临时URL：
-    
-    -   支持OSS协议，必须通过上传文件获取临时 URL。
-    -   示例值：oss://dashscope-instant/xxx/xxx.mp4。
-3.  资产中心 asset\_id
-    
-    -   格式：`ark_asset_vid_xxxxxx`。
-    -   可通过[资产中心](raw/model-user-guide/asset-center-page/asset-center.md)获取，与 URL 二选一。
-
-传入图像（type=reference\_image）
-
-参考图像URL、Base64 编码数据或资产中心 asset\_id。
-
-图像限制：
-
--   格式：JPEG、JPG、PNG（不支持透明通道）、BMP、WEBP。
--   分辨率：宽度和高度范围为\[240, 8000\]像素。
--   宽高比：1:8～8:1。
--   文件大小：不超过20MB。
-
-支持输入的格式：
-
-1.  公网URL:
-    
-    -   支持 HTTP 或 HTTPS 协议。
-    -   示例值：[](https://xxx/xxx.png)[https://xxx/xxx.png](https://xxx/xxx.png)。
-2.  临时URL：
-    
-    -   支持OSS协议，必须通过上传文件获取临时 URL。
-    -   示例值：oss://dashscope-instant/xxx/xxx.png。
-3.  Base64 编码字符串：
-    
-    -   数据格式：`data:{MIME_type};base64,{base64_data}`。
-    -   示例值：data:image/png;base64,GDU7MtCZzEbTbmRZ......（示例已截断，仅做演示）。
-    
-    Base64编码数据格式
-    
-    格式： `data:{MIME_type};base64,{base64_data}` 。
-    
-    -   {base64\_data}：图像文件经过 Base64 编码后的字符串。
-    -   {MIME\_type}：图像的媒体类型，需与文件格式对应。
-    
-    图像格式
-    
-    MIME Type
-    
-    JPEG
-    
-    image/jpeg
-    
-    JPG
-    
-    image/jpeg
-    
-    PNG
-    
-    image/png
-    
-    BMP
-    
-    image/bmp
-    
-    WEBP
-    
-    image/webp
-    
-4.  资产中心 asset\_id
-    
-    -   格式：`ark_asset_img_xxxxxx`。
-    -   可通过[资产中心](raw/model-user-guide/asset-center-page/asset-center.md)获取，与 URL / Base64 三选一。
-
-**parameters** `object` （可选）
-
-视频处理参数，如设置视频分辨率、设置视频时长、开启prompt智能改写、添加水印等。
-
-属性
-
-**resolution** `string` （可选）
-
-生成视频的分辨率档位，用于控制视频的清晰度（总像素）。
-
--   wan2.7-videoedit：可选值：720P、1080P。默认值为`1080P`。
-
-**ratio** `string` （可选）
-
-生成视频的宽高比。
-
-生效逻辑：
-
--   不传 `ratio` 参数：以输入视频的宽高比生成近似比例的视频。
--   传入`ratio`参数：按指定的 `ratio` 生成视频。
-
-可选值为：
-
--   `16:9`
--   `9:16`
--   `1:1`
--   `4:3`
--   `3:4`
-
-不同宽高比对应的输出视频分辨率（宽高像素值）见下方表格。
-
-分辨率档位
-
-宽高比
-
-输出视频分辨率（宽\*高）
-
-720P
-
-16:9
-
-1280\*720
-
-9:16
-
-720\*1280
-
-1:1
-
-960\*960
-
-4:3
-
-1104\*832
-
-3:4
-
-832\*1104
-
-1080P
-
-16:9
-
-1920\*1080
-
-9:16
-
-1080\*1920
-
-1:1
-
-1440\*1440
-
-4:3
-
-1648\*1248
-
-3:4
-
-1248\*1648
-
-**duration** `integer` （可选）
-
-生成视频的时长，单位为秒。
-
-使用建议：此参数仅在需要“截断视频”时才需配置。如果希望输出视频与输入视频时长一致，无需设置（或传入默认值 0）。
-
-使用规则：
-
--   默认行为：默认值为 0，代表直接使用输入视频的时长，不进行截断。
--   截断生效：当传入指定时长时，系统会从原视频的 0 秒起，截取至 duration 设置的长度。
--   取值范围：支持 \[2, 10\] 之间的整数。
-
-**audio\_setting** `string` （可选）
-
-视频声音设置。
-
--   `auto` （默认）：模型根据 `prompt` 内容智能判断。若提示词涉及声音描述，可能重新生成音频；否则可能保留输入素材的原声。
--   `origin`：强制保留输入视频的原声，不重新生成。
-
-**prompt\_extend**`boolean` （可选）
-
-是否开启prompt智能改写。开启后使用大模型对输入prompt进行智能改写。对于较短的prompt生成效果提升明显，但会增加耗时。
-
--   `true`：默认值，开启智能改写。
--   `false`：不开启智能改写。
-
-**watermark** `boolean` （可选）
-
-是否添加水印标识，水印位于视频右下角，文案固定为“AI生成”。
-
--   `false`：默认值，不添加水印。
--   `true`：添加水印。
-
-示例值：false。
-
-**seed**`integer`（可选）
-
-随机数种子，取值范围为`[0, 2147483647]`。
-
-未指定时，系统自动生成随机种子。若需提升生成结果的可复现性，建议固定seed值。
-
-请注意，由于模型生成具有概率性，即使使用相同 seed，也不能保证每次生成结果完全一致。
-
-纯指令编辑（修改视频风格）
-
-```
-curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
+> **说明**
+>
+> -   创建成功后，使用接口返回的 `task_id` 查询结果，task\_id 有效期为 24 小时。**请勿重复创建任务**，轮询获取即可。
+> -   新手指引请参见Postman。
+
+<table><tbody><tr><td><a id="f3da63afcam8r"></a><h4>请求参数</h4><p><strong>Content-Type</strong><code>string</code><strong>（必选）</strong></p><p>请求内容类型。此参数必须设置为<code>application/json</code>。</p><p><strong>Authorization</strong><code>string</code><strong>（必选）</strong></p><p>请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。</p><p><strong>X-DashScope-Async</strong><code>string</code><strong>（必选）</strong></p><p>异步处理配置参数。HTTP请求只支持异步，<strong>必须设置为</strong><code>enable</code>。</p><div><div><p><strong>重要</strong>缺少此请求头将报错：“current user api does not support synchronous calls”。</p></div></div><a id="ee4e0b58694zl"></a><h5>请求体（Request Body）</h5><p><strong>model</strong> <code>string</code> <strong>（必选）</strong></p><p>模型名称。</p><p>示例值：wan2.7-videoedit。</p><p><strong>input</strong> <code>object</code> <strong>（必选）</strong></p><p>输入的基本信息，如提示词等。</p><a id="accordion-属性"></a><section><p>属性</p><div><p><strong>prompt</strong> <code>string</code> （可选）</p><p>文本提示词。用来描述生成视频中期望包含的元素和视觉特点。</p><p>支持中英文，每个汉字/字母占一个字符，超过部分会自动截断。</p><ul><li>wan2.7-videoedit：长度不超过5000个字符。</li></ul><p>示例值：为人物换上酷闪的衣服，再戴参考图里的帽子。</p><p><strong>negative_prompt</strong> <code>string</code> （可选）</p><p>反向提示词，用来描述不希望在视频画面中出现的内容，可以对视频画面进行限制。</p><p>支持中英文，长度不超过500个字符，超过部分会自动截断。</p><p>示例值：低分辨率、错误、最差质量、低质量、残缺、多余的手指、比例不良等。</p><p><strong>media</strong> <code>array</code> <strong>（必选）</strong></p><p>媒体素材列表，用于指定视频生成所需的参考素材（图像、视频）。</p><p>数组的每个元素为一个媒体对象，包含 <code>type</code> 与 <code>url</code> 字段。</p><a id="accordion-属性-2"></a><section><p>属性</p><div><p><strong>type</strong> <code>string</code> <strong>（必选）</strong></p><p>媒体素材类型。可选值为：</p><ul><li><code>video</code>：必传。待编辑的视频。</li><li><code>reference_image</code>：可选。参考图像。</li></ul><p>素材限制：</p><ul><li>视频有且仅有1个。</li><li>参考图像最多传入4张。</li></ul><p><strong>url</strong> <code>string</code> <strong>（必选）</strong></p><p>媒体素材URL、Base64 编码数据或资产中心 asset_id。素材包括视频和图像。</p><a id="accordion-传入视频-type-video"></a><section><p>传入视频（type=video）</p><div><p>待编辑的视频文件的 URL 或资产中心 asset_id。</p><p>视频限制：</p><ul><li>格式：mp4、mov。</li><li>时长：2～10s。</li><li>分辨率：宽度和高度范围为[240,4096]像素。</li><li>宽高比：1:8～8:1。</li><li>文件大小：不超过100MB。</li></ul><p>支持输入的格式：</p><ol><li><p>公网URL：</p><ul><li>支持 HTTP 和 HTTPS 协议。</li><li>示例值：<a href="https://xxx/xxx.mp4"></a><a href="https://xxx/xxx.mp4">https://xxx/xxx.mp4</a>。</li></ul></li><li><p>临时URL：</p><ul><li>支持OSS协议，必须通过上传文件获取临时 URL。</li><li>示例值：oss://dashscope-instant/xxx/xxx.mp4。</li></ul></li><li><p>资产中心 asset_id</p><ul><li>格式：<code>ark_asset_vid_xxxxxx</code>。</li><li>可通过<a href="../../../model-user-guide/asset-center-page/asset-center.md">资产中心</a>获取，与 URL 二选一。</li></ul></li></ol></div></section><a id="accordion-传入图像-type-reference-image"></a><section><p>传入图像（type=reference_image）</p><div><p>参考图像URL、Base64 编码数据或资产中心 asset_id。</p><p>图像限制：</p><ul><li>格式：JPEG、JPG、PNG（不支持透明通道）、BMP、WEBP。</li><li>分辨率：宽度和高度范围为[240, 8000]像素。</li><li>宽高比：1:8～8:1。</li><li>文件大小：不超过20MB。</li></ul><p>支持输入的格式：</p><ol><li><p>公网URL:</p><ul><li>支持 HTTP 或 HTTPS 协议。</li><li>示例值：<a href="https://xxx/xxx.png"></a><a href="https://xxx/xxx.png">https://xxx/xxx.png</a>。</li></ul></li><li><p>临时URL：</p><ul><li>支持OSS协议，必须通过上传文件获取临时 URL。</li><li>示例值：oss://dashscope-instant/xxx/xxx.png。</li></ul></li><li><p>Base64 编码字符串：</p><ul><li>数据格式：<code>data:{MIME_type};base64,{base64_data}</code>。</li><li>示例值：data:image/png;base64,GDU7MtCZzEbTbmRZ......（示例已截断，仅做演示）。</li></ul><a id="accordion-base64编码数据格式"></a><section><p>Base64编码数据格式</p><div><p>格式： <code>data:{MIME_type};base64,{base64_data}</code> 。</p><ul><li>{base64_data}：图像文件经过 Base64 编码后的字符串。</li><li>{MIME_type}：图像的媒体类型，需与文件格式对应。</li></ul><table><tbody><tr><td><p>图像格式</p></td><td><p>MIME Type</p></td></tr><tr><td><p>JPEG</p></td><td><p>image/jpeg</p></td></tr><tr><td><p>JPG</p></td><td><p>image/jpeg</p></td></tr><tr><td><p>PNG</p></td><td><p>image/png</p></td></tr><tr><td><p>BMP</p></td><td><p>image/bmp</p></td></tr><tr><td><p>WEBP</p></td><td><p>image/webp</p></td></tr></tbody></table></div></section></li><li><p>资产中心 asset_id</p><ul><li>格式：<code>ark_asset_img_xxxxxx</code>。</li><li>可通过<a href="../../../model-user-guide/asset-center-page/asset-center.md">资产中心</a>获取，与 URL / Base64 三选一。</li></ul></li></ol></div></section></div></section></div></section><p><strong>parameters</strong> <code>object</code> （可选）</p><p>视频处理参数，如设置视频分辨率、设置视频时长、开启prompt智能改写、添加水印等。</p><a id="accordion-属性-3"></a><section><p>属性</p><div><p><strong>resolution</strong> <code>string</code> （可选）</p><p>生成视频的分辨率档位，用于控制视频的清晰度（总像素）。</p><ul><li>wan2.7-videoedit：可选值：720P、1080P。默认值为<code>1080P</code>。</li></ul><p><strong>ratio</strong> <code>string</code> （可选）</p><p>生成视频的宽高比。</p><p>生效逻辑：</p><ul><li>不传 <code>ratio</code> 参数：以输入视频的宽高比生成近似比例的视频。</li><li>传入<code>ratio</code>参数：按指定的 <code>ratio</code> 生成视频。</li></ul><p>可选值为：</p><ul><li><code>16:9</code></li><li><code>9:16</code></li><li><code>1:1</code></li><li><code>4:3</code></li><li><code>3:4</code></li></ul><p>不同宽高比对应的输出视频分辨率（宽高像素值）见下方表格。</p><table><tbody><tr><td><p>分辨率档位</p></td><td><p>宽高比</p></td><td><p>输出视频分辨率（宽*高）</p></td></tr><tr><td rowspan="5"><p>720P</p></td><td><p>16:9</p></td><td><p>1280*720</p></td></tr><tr><td><p>9:16</p></td><td><p>720*1280</p></td></tr><tr><td><p>1:1</p></td><td><p>960*960</p></td></tr><tr><td><p>4:3</p></td><td><p>1104*832</p></td></tr><tr><td><p>3:4</p></td><td><p>832*1104</p></td></tr><tr><td rowspan="5"><p>1080P</p></td><td><p>16:9</p></td><td><p>1920*1080</p></td></tr><tr><td><p>9:16</p></td><td><p>1080*1920</p></td></tr><tr><td><p>1:1</p></td><td><p>1440*1440</p></td></tr><tr><td><p>4:3</p></td><td><p>1648*1248</p></td></tr><tr><td><p>3:4</p></td><td><p>1248*1648</p></td></tr></tbody></table><p><strong>duration</strong> <code>integer</code> （可选）</p><p>生成视频的时长，单位为秒。</p><p>使用建议：此参数仅在需要“截断视频”时才需配置。如果希望输出视频与输入视频时长一致，无需设置（或传入默认值 0）。</p><p>使用规则：</p><ul><li>默认行为：默认值为 0，代表直接使用输入视频的时长，不进行截断。</li><li>截断生效：当传入指定时长时，系统会从原视频的 0 秒起，截取至 duration 设置的长度。</li><li>取值范围：支持 [2, 10] 之间的整数。</li></ul><p><strong>audio_setting</strong> <code>string</code> （可选）</p><p>视频声音设置。</p><ul><li><code>auto</code> （默认）：模型根据 <code>prompt</code> 内容智能判断。若提示词涉及声音描述，可能重新生成音频；否则可能保留输入素材的原声。</li><li><code>origin</code>：强制保留输入视频的原声，不重新生成。</li></ul><p><strong>prompt_extend</strong><code>boolean</code> （可选）</p><p>是否开启prompt智能改写。开启后使用大模型对输入prompt进行智能改写。对于较短的prompt生成效果提升明显，但会增加耗时。</p><ul><li><code>true</code>：默认值，开启智能改写。</li><li><code>false</code>：不开启智能改写。</li></ul><p><strong>watermark</strong> <code>boolean</code> （可选）</p><p>是否添加水印标识，水印位于视频右下角，文案固定为“AI生成”。</p><ul><li><code>false</code>：默认值，不添加水印。</li><li><code>true</code>：添加水印。</li></ul><p>示例值：false。</p><p><strong>seed</strong><code>integer</code>（可选）</p><p>随机数种子，取值范围为<code>[0, 2147483647]</code>。</p><p>未指定时，系统自动生成随机种子。若需提升生成结果的可复现性，建议固定seed值。</p><p>请注意，由于模型生成具有概率性，即使使用相同 seed，也不能保证每次生成结果完全一致。</p></div></section></td><td><a id="fig-code-group"></a><div><a id="fig-code-group-纯指令编辑-修改视频风格-tab"></a>纯指令编辑（修改视频风格）<div><a id="code-code-group-纯指令编辑-修改视频风格"></a><pre class="language-bash"><code>curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
     -H 'X-DashScope-Async: enable' \
-    -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+    -H &quot;Authorization: Bearer $DASHSCOPE_API_KEY&quot; \
     -H 'Content-Type: application/json' \
     -d '{
-    "model": "wan2.7-videoedit",
-    "input": {
-        "prompt": "将整个画面转换为黏土风格",
-        "media": [
+    &quot;model&quot;: &quot;wan2.7-videoedit&quot;,
+    &quot;input&quot;: {
+        &quot;prompt&quot;: &quot;将整个画面转换为黏土风格&quot;,
+        &quot;media&quot;: [
             {
-                "type": "video",
-                "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260402/ldnfdf/wan2.7-videoedit-style-change.mp4"
+                &quot;type&quot;: &quot;video&quot;,
+                &quot;url&quot;: &quot;https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260402/ldnfdf/wan2.7-videoedit-style-change.mp4&quot;
             }
         ]
     },
-    "parameters": {
-        "resolution": "720P",
-        "prompt_extend": true,
-        "watermark": true
+    &quot;parameters&quot;: {
+        &quot;resolution&quot;: &quot;720P&quot;,
+        &quot;prompt_extend&quot;: true,
+        &quot;watermark&quot;: true
     }
 }'
-```
-
-指令+参考图编辑（局部替换）
-
-```
-curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
+</code></pre></div><a id="fig-code-group-指令-参考图编辑-局部替换-tab"></a>指令+参考图编辑（局部替换）<div><a id="code-code-group-指令-参考图编辑-局部替换"></a><pre class="language-bash"><code>curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
     -H 'X-DashScope-Async: enable' \
-    -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+    -H &quot;Authorization: Bearer $DASHSCOPE_API_KEY&quot; \
     -H 'Content-Type: application/json' \
     -d '{
-    "model": "wan2.7-videoedit",
-    "input": {
-        "prompt": "将视频中女孩的衣服替换为图片中的衣服",
-        "media": [
+    &quot;model&quot;: &quot;wan2.7-videoedit&quot;,
+    &quot;input&quot;: {
+        &quot;prompt&quot;: &quot;将视频中女孩的衣服替换为图片中的衣服&quot;,
+        &quot;media&quot;: [
             {
-                "type": "video",
-                "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260403/nlspwm/T2VA_22.mp4"
+                &quot;type&quot;: &quot;video&quot;,
+                &quot;url&quot;: &quot;https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260403/nlspwm/T2VA_22.mp4&quot;
             },
             {
-                "type": "reference_image",
-                "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260402/fwjpqf/wan2.7-videoedit-change-clothes.png"
+                &quot;type&quot;: &quot;reference_image&quot;,
+                &quot;url&quot;: &quot;https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260402/fwjpqf/wan2.7-videoedit-change-clothes.png&quot;
             }
         ]
     },
-    "parameters": {
-        "resolution": "720P",
-        "prompt_extend": true,
-        "watermark": true
+    &quot;parameters&quot;: {
+        &quot;resolution&quot;: &quot;720P&quot;,
+        &quot;prompt_extend&quot;: true,
+        &quot;watermark&quot;: true
     }
 }'
-```
+</code></pre></div></div></td></tr></tbody></table>
 
-#### 响应参数
-
-**output** `object`
-
-任务输出信息。
-
-属性
-
-**task\_id** `string`
-
-任务ID。查询有效期24小时。
-
-**task\_status** `string`
-
-任务状态。
-
-枚举值
-
--   PENDING：任务排队中
--   RUNNING：任务处理中
--   SUCCEEDED：任务执行成功
--   FAILED：任务执行失败
--   CANCELED：任务已取消
--   UNKNOWN：任务不存在或状态未知
-
-**request\_id**`string`
-
-请求唯一标识。可用于请求明细溯源和问题排查。
-
-**code**`string`
-
-请求失败的错误码。请求成功时不会返回此参数，详情请参见错误码。
-
-**message**`string`
-
-请求失败的详细信息。请求成功时不会返回此参数，详情请参见错误码。
-
-#### 成功响应
-
-请保存 task\_id，用于查询任务状态与结果。
-
-```
-{
-    "output": {
-        "task_status": "PENDING",
-        "task_id": "0385dc79-5ff8-4d82-bcb6-xxxxxx"
+<table><tbody><tr><td><a id="f61855da6bvbh"></a><a id="5c1654cd07xpd"></a><h4>响应参数</h4><p><strong>output</strong> <code>object</code></p><p>任务输出信息。</p><a id="accordion-属性-4"></a><section><p>属性</p><div><p><strong>task_id</strong> <code>string</code></p><p>任务ID。查询有效期24小时。</p><p><strong>task_status</strong> <code>string</code></p><p>任务状态。</p><a id="accordion-枚举值"></a><section><p>枚举值</p><div><ul><li>PENDING：任务排队中</li><li>RUNNING：任务处理中</li><li>SUCCEEDED：任务执行成功</li><li>FAILED：任务执行失败</li><li>CANCELED：任务已取消</li><li>UNKNOWN：任务不存在或状态未知</li></ul></div></section></div></section><p><strong>request_id</strong><code>string</code></p><p>请求唯一标识。可用于请求明细溯源和问题排查。</p><p><strong>code</strong><code>string</code></p><p>请求失败的错误码。请求成功时不会返回此参数，详情请参见错误码。</p><p><strong>message</strong><code>string</code></p><p>请求失败的详细信息。请求成功时不会返回此参数，详情请参见错误码。</p></td><td><a id="sec-tabs-2"></a><section><a id="成功响应"></a><section><a id="成功响应-h4"></a><h4>成功响应</h4><p>请保存 task_id，用于查询任务状态与结果。</p><a id="code-block"></a><pre class="language-json"><code>{
+    &quot;output&quot;: {
+        &quot;task_status&quot;: &quot;PENDING&quot;,
+        &quot;task_id&quot;: &quot;0385dc79-5ff8-4d82-bcb6-xxxxxx&quot;
     },
-    "request_id": "4909100c-7b5a-9f92-bfe5-xxxxxx"
+    &quot;request_id&quot;: &quot;4909100c-7b5a-9f92-bfe5-xxxxxx&quot;
 }
-```
-
-#### 异常响应
-
-创建任务失败，请参见错误码进行解决。
-
-```
-{
-    "code": "InvalidApiKey",
-    "message": "No API-key provided.",
-    "request_id": "7438d53d-6eb8-4596-8835-xxxxxx"
+</code></pre></section><a id="异常响应"></a><section><a id="异常响应-h4"></a><h4>异常响应</h4><p>创建任务失败，请参见错误码进行解决。</p><a id="code-block-2"></a><pre class="language-json"><code>{
+    &quot;code&quot;: &quot;InvalidApiKey&quot;,
+    &quot;message&quot;: &quot;No API-key provided.&quot;,
+    &quot;request_id&quot;: &quot;7438d53d-6eb8-4596-8835-xxxxxx&quot;
 }
-```
+</code></pre></section></section></td></tr></tbody></table>
+
+<a id="步骤2-根据任务id查询结果"></a>
+
+<a id="be5d09eac3ayn"></a>
+
+<a id="e3f32858d7hlv"></a>
 
 ### 步骤2：根据任务ID查询结果
+
+<a id="sec-tabs-3"></a>
+
+<a id="北京-2"></a>
+
+<a id="北京-2-h4"></a>
 
 #### 北京
 
 `GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}`
+
+<a id="新加坡-2"></a>
+
+<a id="新加坡-2-h4"></a>
 
 #### 新加坡
 
@@ -458,209 +164,99 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 调用时请将`{WorkspaceId}`替换为真实的业务空间ID。
 
-**说明**
+> **说明**
+>
+> -   **轮询建议**：视频生成过程约需数分钟，建议采用**轮询**机制，并设置合理的查询间隔（如 15 秒）来获取结果。
+> -   **任务状态流转**：PENDING（排队中）→ RUNNING（处理中）→ SUCCEEDED（成功）/ FAILED（失败）。
+> -   **结果链接**：任务成功后返回视频链接，有效期为 **24 小时**。建议在获取链接后立即下载并转存至永久存储（如[阿里云 OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss)）。
+> -   **task\_id 有效期**：**24小时**，超时后将无法查询结果，接口将返回任务状态为`UNKNOWN`。
+> -   **RPS 限制**：查询接口默认RPS为20。如需更高频查询或事件通知，建议配置异步任务回调。
+> -   **更多操作**：如需批量查询、取消任务等操作，请参见管理异步任务。
 
--   **轮询建议**：视频生成过程约需数分钟，建议采用**轮询**机制，并设置合理的查询间隔（如 15 秒）来获取结果。
--   **任务状态流转**：PENDING（排队中）→ RUNNING（处理中）→ SUCCEEDED（成功）/ FAILED（失败）。
--   **结果链接**：任务成功后返回视频链接，有效期为 **24 小时**。建议在获取链接后立即下载并转存至永久存储（如[阿里云 OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss)）。
--   **task\_id 有效期**：**24小时**，超时后将无法查询结果，接口将返回任务状态为`UNKNOWN`。
--   **RPS 限制**：查询接口默认RPS为20。如需更高频查询或事件通知，建议配置异步任务回调。
--   **更多操作**：如需批量查询、取消任务等操作，请参见管理异步任务。
+<table><tbody><tr><td><a id="fd010a8092qiw"></a><a id="19df887abf8hc"></a><h4>请求参数</h4><a id="50cb3a1aa6yzu"></a><h5>请求头（Headers）</h5><p><strong>Authorization</strong><code>string</code><strong>（必选）</strong></p><p>请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。</p><a id="f96cc5e8cf62s"></a><h5>URL路径参数（Path parameters）</h5><p><strong>task_id</strong> <code>string</code><strong>（必选）</strong></p><p>任务ID。</p></td><td><a id="sec-tabs-4"></a><section><a id="查询任务结果"></a><section><a id="查询任务结果-h4"></a><h4>查询任务结果</h4><p>将<code>{task_id}</code>完整替换为上一步接口返回的<code>task_id</code>的值。<code>task_id</code>查询有效期为24小时，并请将<code>{WorkspaceId}</code>替换为真实的业务空间ID。</p><a id="code-block-3"></a><pre class="language-bash"><code>curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id} \
+--header &quot;Authorization: Bearer $DASHSCOPE_API_KEY&quot;
+</code></pre></section></section></td></tr></tbody></table>
 
-#### 请求参数
-
-##### 请求头（Headers）
-
-**Authorization**`string`**（必选）**
-
-请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
-
-##### URL路径参数（Path parameters）
-
-**task\_id** `string`**（必选）**
-
-任务ID。
-
-#### 查询任务结果
-
-将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的业务空间ID。
-
-```
-curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id} \
---header "Authorization: Bearer $DASHSCOPE_API_KEY"
-```
-
-#### 响应参数
-
-**output**`object`
-
-任务输出信息。
-
-属性
-
-**task\_id** `string`
-
-任务ID。查询有效期24小时。
-
-**task\_status** `string`
-
-任务状态。
-
-枚举值
-
--   PENDING：任务排队中
--   RUNNING：任务处理中
--   SUCCEEDED：任务执行成功
--   FAILED：任务执行失败
--   CANCELED：任务已取消
--   UNKNOWN：任务不存在或状态未知
-
-**轮询过程中的状态流转：**
-
--   PENDING（排队中） → RUNNING（处理中）→ SUCCEEDED（成功）/ FAILED（失败）。
--   初次查询状态通常为 PENDING（排队中）或 RUNNING（处理中）。
--   当状态变为 SUCCEEDED 时，响应中将包含生成的视频URL。
--   若状态为 FAILED，请检查错误信息并重试。
--   若状态为 CANCELED，表示任务已取消，如需继续请重新提交任务。
--   若状态为 UNKNOWN，表示任务不存在或状态未知，可能在 task\_id 不存在或超过 24 小时有效期后出现。
-
-**submit\_time** `string`
-
-任务提交时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
-
-**scheduled\_time** `string`
-
-任务执行时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
-
-**end\_time** `string`
-
-任务完成时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
-
-**video\_url**`string`
-
-视频URL。仅在 task\_status 为 SUCCEEDED 时返回。
-
-链接有效期24小时，可通过此URL下载视频。视频格式为MP4（H.264 编码）。
-
-**orig\_prompt** `string`
-
-原始输入的prompt，对应请求参数`prompt`。
-
-**code**`string`
-
-请求失败的错误码。请求成功时不会返回此参数，详情请参见错误码。
-
-**message**`string`
-
-请求失败的详细信息。请求成功时不会返回此参数，详情请参见错误码。
-
-**usage** `object`
-
-输出信息统计，只对成功的结果计数。
-
-属性
-
-**input\_video\_duration** `float`
-
-输入视频的时长，单位秒。
-
-**output\_video\_duration** `float`
-
-输出视频的时长，单位秒。
-
-**duration** `float`
-
-总的视频时长，用于计费。
-
-计费公式：`duration=input_video_duration+output_video_duration`。
-
-**SR** `integer`
-
-输出视频的分辨率档位。示例值：720。
-
-**video\_count** `integer`
-
-生成视频的数量。固定为1。
-
-**request\_id**`string`
-
-请求唯一标识。可用于请求明细溯源和问题排查。
-
-#### 任务执行成功
-
-视频URL仅保留24小时，超时后会被自动清除，请及时保存生成的视频。
-
-```
-{
-    "request_id": "f16ae7e9-d518-92f8-a02c-xxxxxx",
-    "output": {
-        "task_id": "05e68c7e-850c-49e4-b866-xxxxxx",
-        "task_status": "SUCCEEDED",
-        "submit_time": "2026-04-03 00:08:03.576",
-        "scheduled_time": "2026-04-03 00:08:13.408",
-        "end_time": "2026-04-03 00:11:57.286",
-        "orig_prompt": "将视频中女孩的衣服替换为图片中的衣服",
-        "video_url": "https://dashscope-a717.oss-accelerate.aliyuncs.com/xxx.mp4?xxxx"
+<table><tbody><tr><td><a id="08a68c21dbgfk"></a><a id="1968190de5dwi"></a><h4>响应参数</h4><p><strong>output</strong><code>object</code></p><p>任务输出信息。</p><a id="accordion-属性-5"></a><section><p>属性</p><div><p><strong>task_id</strong> <code>string</code></p><p>任务ID。查询有效期24小时。</p><p><strong>task_status</strong> <code>string</code></p><p>任务状态。</p><a id="accordion-枚举值-2"></a><section><p>枚举值</p><div><ul><li>PENDING：任务排队中</li><li>RUNNING：任务处理中</li><li>SUCCEEDED：任务执行成功</li><li>FAILED：任务执行失败</li><li>CANCELED：任务已取消</li><li>UNKNOWN：任务不存在或状态未知</li></ul></div></section><strong>轮询过程中的状态流转：</strong><ul><li>PENDING（排队中） → RUNNING（处理中）→ SUCCEEDED（成功）/ FAILED（失败）。</li><li>初次查询状态通常为 PENDING（排队中）或 RUNNING（处理中）。</li><li>当状态变为 SUCCEEDED 时，响应中将包含生成的视频URL。</li><li>若状态为 FAILED，请检查错误信息并重试。</li><li>若状态为 CANCELED，表示任务已取消，如需继续请重新提交任务。</li><li>若状态为 UNKNOWN，表示任务不存在或状态未知，可能在 task_id 不存在或超过 24 小时有效期后出现。</li></ul><p><strong>submit_time</strong> <code>string</code></p><p>任务提交时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。</p><p><strong>scheduled_time</strong> <code>string</code></p><p>任务执行时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。</p><p><strong>end_time</strong> <code>string</code></p><p>任务完成时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。</p><p><strong>video_url</strong><code>string</code></p><p>视频URL。仅在 task_status 为 SUCCEEDED 时返回。</p><p>链接有效期24小时，可通过此URL下载视频。视频格式为MP4（H.264 编码）。</p><p><strong>orig_prompt</strong> <code>string</code></p><p>原始输入的prompt，对应请求参数<code>prompt</code>。</p><p><strong>code</strong><code>string</code></p><p>请求失败的错误码。请求成功时不会返回此参数，详情请参见错误码。</p><p><strong>message</strong><code>string</code></p><p>请求失败的详细信息。请求成功时不会返回此参数，详情请参见错误码。</p></div></section><p><strong>usage</strong> <code>object</code></p><p>输出信息统计，只对成功的结果计数。</p><a id="accordion-属性-6"></a><section><p>属性</p><div><p><strong>input_video_duration</strong> <code>float</code></p><p>输入视频的时长，单位秒。</p><p><strong>output_video_duration</strong> <code>float</code></p><p>输出视频的时长，单位秒。</p><p><strong>duration</strong> <code>float</code></p><p>总的视频时长，用于计费。</p><p>计费公式：<code>duration=input_video_duration+output_video_duration</code>。</p><p><strong>SR</strong> <code>integer</code></p><p>输出视频的分辨率档位。示例值：720。</p><p><strong>video_count</strong> <code>integer</code></p><p>生成视频的数量。固定为1。</p></div></section><p><strong>request_id</strong><code>string</code></p><p>请求唯一标识。可用于请求明细溯源和问题排查。</p></td><td><a id="sec-tabs-5"></a><section><a id="任务执行成功"></a><section><a id="任务执行成功-h4"></a><h4>任务执行成功</h4><p>视频URL仅保留24小时，超时后会被自动清除，请及时保存生成的视频。</p><a id="code-block-4"></a><pre class="language-json"><code>{
+    &quot;request_id&quot;: &quot;f16ae7e9-d518-92f8-a02c-xxxxxx&quot;,
+    &quot;output&quot;: {
+        &quot;task_id&quot;: &quot;05e68c7e-850c-49e4-b866-xxxxxx&quot;,
+        &quot;task_status&quot;: &quot;SUCCEEDED&quot;,
+        &quot;submit_time&quot;: &quot;2026-04-03 00:08:03.576&quot;,
+        &quot;scheduled_time&quot;: &quot;2026-04-03 00:08:13.408&quot;,
+        &quot;end_time&quot;: &quot;2026-04-03 00:11:57.286&quot;,
+        &quot;orig_prompt&quot;: &quot;将视频中女孩的衣服替换为图片中的衣服&quot;,
+        &quot;video_url&quot;: &quot;https://dashscope-a717.oss-accelerate.aliyuncs.com/xxx.mp4?xxxx&quot;
     },
-    "usage": {
-        "duration": 10.04,
-        "input_video_duration": 5.02,
-        "output_video_duration": 5.02,
-        "video_count": 1,
-        "SR": 720
+    &quot;usage&quot;: {
+        &quot;duration&quot;: 10.04,
+        &quot;input_video_duration&quot;: 5.02,
+        &quot;output_video_duration&quot;: 5.02,
+        &quot;video_count&quot;: 1,
+        &quot;SR&quot;: 720
     }
 }
-```
-
-#### 任务执行失败
-
-若任务执行失败，task\_status将置为 FAILED，并提供错误码和信息。请参见错误码进行解决。
-
-```
-{
-    "request_id": "e5d70b02-ebd3-98ce-9fe8-759d7d7b107d",
-    "output": {
-        "task_id": "86ecf553-d340-4e21-af6e-a0c6a421c010",
-        "task_status": "FAILED",
-        "code": "InvalidParameter",
-        "message": "The size is not match xxxxxx"
+</code></pre></section><a id="任务执行失败"></a><section><a id="任务执行失败-h4"></a><h4>任务执行失败</h4><p>若任务执行失败，task_status将置为 FAILED，并提供错误码和信息。请参见错误码进行解决。</p><a id="code-block-5"></a><pre class="language-json"><code>{
+    &quot;request_id&quot;: &quot;e5d70b02-ebd3-98ce-9fe8-759d7d7b107d&quot;,
+    &quot;output&quot;: {
+        &quot;task_id&quot;: &quot;86ecf553-d340-4e21-af6e-a0c6a421c010&quot;,
+        &quot;task_status&quot;: &quot;FAILED&quot;,
+        &quot;code&quot;: &quot;InvalidParameter&quot;,
+        &quot;message&quot;: &quot;The size is not match xxxxxx&quot;
     }
 }
-```
-
-#### 任务查询过期
-
-task\_id查询有效期为 24 小时，超时后将无法查询，返回以下报错信息。
-
-```
-{
-    "request_id": "a4de7c32-7057-9f82-8581-xxxxxx",
-    "output": {
-        "task_id": "502a00b1-19d9-4839-a82f-xxxxxx",
-        "task_status": "UNKNOWN"
+</code></pre></section><a id="任务查询过期"></a><section><a id="任务查询过期-h4"></a><h4>任务查询过期</h4><p>task_id查询有效期为 24 小时，超时后将无法查询，返回以下报错信息。</p><a id="code-block-6"></a><pre class="language-json"><code>{
+    &quot;request_id&quot;: &quot;a4de7c32-7057-9f82-8581-xxxxxx&quot;,
+    &quot;output&quot;: {
+        &quot;task_id&quot;: &quot;502a00b1-19d9-4839-a82f-xxxxxx&quot;,
+        &quot;task_status&quot;: &quot;UNKNOWN&quot;
     }
 }
-```
+</code></pre></section></section></td></tr></tbody></table>
+
+<a id="dashscope-sdk调用"></a>
+
+<a id="ve601a0h2sdk1"></a>
+
+<a id="ve600a0sdksec"></a>
 
 ## DashScope SDK调用
 
-SDK 的参数命名与[HTTP接口](https://help.aliyun.com/zh/model-studio/wan-video-editing-api-reference#e9e21dd3a6945)基本一致，参数结构根据语言特性进行封装。
+SDK 的参数命名与[HTTP接口](wan-video-editing-api-reference.md#e9e21dd3a6945)基本一致，参数结构根据语言特性进行封装。
 
 由于视频编辑任务耗时较长（通常为1-5分钟），SDK 在底层封装了 HTTP 异步调用流程，支持同步、异步两种调用方式。
 
 > 具体耗时受限于排队任务数和服务执行情况，请在获取结果时耐心等待。
 
+<a id="python-sdk调用"></a>
+
+<a id="ve607a0h3pyth"></a>
+
+<a id="ve606a0sepyth"></a>
+
 ### Python SDK调用
 
-**重要**请确保 DashScope Python SDK 版本**不低于**`2.0.1`，再运行以下代码。
-
-若版本过低，可能会触发 "url error, please check url!" 等错误。请参考安装SDK进行更新。
+> **重要**
+>
+> 请确保 DashScope Python SDK 版本**不低于**`2.0.1`，再运行以下代码。
+>
+> 若版本过低，可能会触发 "url error, please check url!" 等错误。请参考安装SDK进行更新。
 
 根据模型所在地域设置 `region`（构造 Client 时传入，各地域的region取值不同）:
+
+<a id="sec-tabs-6"></a>
+
+<a id="北京-3"></a>
+
+<a id="北京-3-h4"></a>
 
 #### 北京
 
 `region="cn-beijing"`
+
+<a id="新加坡-3"></a>
+
+<a id="新加坡-3-h4"></a>
 
 #### 新加坡
 
@@ -668,11 +264,23 @@ SDK 的参数命名与[HTTP接口](https://help.aliyun.com/zh/model-studio/wan-v
 
 调用时请将`{WorkspaceId}`替换为真实的业务空间ID。
 
+<a id="sec-tabs-7"></a>
+
+<a id="同步调用"></a>
+
+<a id="同步调用-h4"></a>
+
 #### 同步调用
+
+<a id="ve643a0h5rq01"></a>
+
+<a id="ve642a0secrq1"></a>
 
 ##### 请求示例
 
-```
+<a id="code-block-7"></a>
+
+```python
 import base64
 import mimetypes
 import dashscope
@@ -745,11 +353,15 @@ if __name__ == '__main__':
     sample_sync_call_videoedit()
 ```
 
+<a id="ve646a0h5rs01"></a>
+
 ##### 响应示例
 
 > `video_url` 有效期24小时，请及时下载视频。
 
-```
+<a id="code-block-8"></a>
+
+```json
 {
     "request_id": "d6c3c865-34e9-98a9-a53d-xxxxxx",
     "task_id": "1de7c853-755a-454a-91bc-xxxxxx",
@@ -770,11 +382,21 @@ if __name__ == '__main__':
 }
 ```
 
+<a id="异步调用"></a>
+
+<a id="异步调用-h4"></a>
+
 #### 异步调用
+
+<a id="ve673a0h5rq03"></a>
+
+<a id="ve672a0secrq3"></a>
 
 ##### 请求示例
 
-```
+<a id="code-block-9"></a>
+
+```python
 import base64
 import mimetypes
 import dashscope
@@ -870,11 +492,15 @@ if __name__ == '__main__':
     sample_async_call_videoedit()
 ```
 
+<a id="ve680a0h5rsp2"></a>
+
 ##### 响应示例
 
 1、创建任务的响应示例
 
-```
+<a id="code-block-10"></a>
+
+```json
 {
     "request_id": "f16ae7e9-d518-92f8-a02c-xxxxxx",
     "task_id": "05e68c7e-850c-49e4-b866-xxxxxx",
@@ -886,7 +512,9 @@ if __name__ == '__main__':
 
 > `video_url` 有效期24小时，请及时下载视频。
 
-```
+<a id="code-block-11"></a>
+
+```json
 {
     "request_id": "d6c3c865-34e9-98a9-a53d-xxxxxx",
     "task_id": "1de7c853-755a-454a-91bc-xxxxxx",
@@ -907,17 +535,35 @@ if __name__ == '__main__':
 }
 ```
 
+<a id="java-sdk调用"></a>
+
+<a id="ve701a0h3java"></a>
+
+<a id="ve700a0sejava"></a>
+
 ### Java SDK调用
 
-**重要**请确保 DashScope Java SDK 版本**不低于**`2.22.14`，再运行以下代码。
-
-若版本过低，可能会触发 "url error, please check url!" 等错误。请参考安装SDK进行更新。
+> **重要**
+>
+> 请确保 DashScope Java SDK 版本**不低于**`2.22.14`，再运行以下代码。
+>
+> 若版本过低，可能会触发 "url error, please check url!" 等错误。请参考安装SDK进行更新。
 
 根据模型所在地域设置 `Constants.baseHttpApiUrl`:
+
+<a id="sec-tabs-8"></a>
+
+<a id="北京-4"></a>
+
+<a id="北京-4-h4"></a>
 
 #### 北京
 
 `Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";`
+
+<a id="新加坡-4"></a>
+
+<a id="新加坡-4-h4"></a>
 
 #### 新加坡
 
@@ -925,11 +571,23 @@ if __name__ == '__main__':
 
 调用时请将`{WorkspaceId}`替换为真实的业务空间ID。
 
+<a id="sec-tabs-9"></a>
+
+<a id="同步调用-2"></a>
+
+<a id="同步调用-2-h4"></a>
+
 #### 同步调用
+
+<a id="ve737a0h5jr01"></a>
+
+<a id="ve736a0secjr1"></a>
 
 ##### 请求示例
 
-```
+<a id="code-block-12"></a>
+
+```java
 // Copyright (c) Alibaba, Inc. and its affiliates.
 
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesis;
@@ -1044,11 +702,15 @@ public class VideoEdit {
 }
 ```
 
+<a id="ve740a0h5jr02"></a>
+
 ##### 响应示例
 
 > `video_url` 有效期24小时，请及时下载视频。
 
-```
+<a id="code-block-13"></a>
+
+```json
 {
     "request_id": "0a15ad3c-cde7-9f7e-b8d2-xxxxxx",
     "output": {
@@ -1073,11 +735,21 @@ public class VideoEdit {
 }
 ```
 
+<a id="异步调用-2"></a>
+
+<a id="异步调用-2-h4"></a>
+
 #### 异步调用
+
+<a id="ve773a0h5jr04"></a>
+
+<a id="ve772a0secjr3"></a>
 
 ##### 请求示例
 
-```
+<a id="code-block-14"></a>
+
+```java
 // Copyright (c) Alibaba, Inc. and its affiliates.
 
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesis;
@@ -1218,11 +890,15 @@ public class VideoEdit {
 }
 ```
 
+<a id="ve780a0h5jrp2"></a>
+
 ##### 响应示例
 
 1、创建任务的响应示例
 
-```
+<a id="code-block-15"></a>
+
+```json
 {
     "request_id": "f16ae7e9-d518-92f8-a02c-xxxxxx",
     "output": {
@@ -1241,7 +917,9 @@ public class VideoEdit {
 
 > `video_url` 有效期24小时，请及时下载视频。
 
-```
+<a id="code-block-16"></a>
+
+```json
 {
     "request_id": "0a15ad3c-cde7-9f7e-b8d2-xxxxxx",
     "output": {
@@ -1265,6 +943,12 @@ public class VideoEdit {
     "message": ""
 }
 ```
+
+<a id="错误码"></a>
+
+<a id="0d0a562d05nkh"></a>
+
+<a id="2e1d8db361w9w"></a>
 
 ## 错误码
 

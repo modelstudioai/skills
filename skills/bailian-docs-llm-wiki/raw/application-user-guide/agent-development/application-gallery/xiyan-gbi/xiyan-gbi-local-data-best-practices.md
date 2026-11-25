@@ -2,9 +2,17 @@
 
 本文基于析言GBI的两段式问答API实现了智能数据问答功能。本文旨在帮助您快速熟悉API的使用，以便在实际项目中灵活运用API。
 
+<a id="适用场景"></a>
+
+<a id="0b98ed3023s09"></a>
+
 ## 适用场景
 
 当数据库在本地，无法通过公网或是VPC的方式连接析言时，您可以参考本文运用API进行集成开发。
+
+<a id="前提条件"></a>
+
+<a id="83068ed6e1vgu"></a>
 
 ## 前提条件
 
@@ -12,21 +20,43 @@
 -   已[获取Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 -   已[获取AccessKey ID和AccessKey Secret](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)。
 -   RAM用户已添加`AliyunDataAnalysisGBIFullAccess`权限策略：[管理RAM用户的权限](https://help.aliyun.com/zh/ram/user-guide/grant-permissions-to-the-ram-user)。
--   已在析言GBI的**[数据表管理](https://bailian.console.aliyun.com/xiyan#/dataManagement/dataSourceM)**中授权联接了数据库。具体操作，请参见[数据库连接](https://help.aliyun.com/zh/model-studio/xiyan-gbi-user-guide#8e5d17697392b)。
+-   已在析言GBI的**[数据表管理](https://bailian.console.aliyun.com/xiyan#/dataManagement/dataSourceM)**中授权联接了数据库。具体操作，请参见[数据库连接](xiyan-gbi-user-guide.md#8e5d17697392b)。
+
+<a id="操作步骤"></a>
+
+<a id="lkhDe"></a>
 
 ## 操作步骤
 
+<a id="步骤一-准备数据"></a>
+
+<a id="804b67fadae19"></a>
+
 ### 步骤一：准备数据
 
-具体操作，请参见[官方提供演示用的数据库样例](raw/application-user-guide/agent-development/application-gallery/xiyan-gbi/official-database-sample-for-demonstration.md)。
+具体操作，请参见[官方提供演示用的数据库样例](official-database-sample-for-demonstration.md)。
+
+<a id="步骤二-关联虚拟数据源"></a>
+
+<a id="f751082768hs2"></a>
 
 ### 步骤二：关联虚拟数据源
 
-具体操作，请参见[析言GBI虚拟数据源最佳实践](raw/_short/analysis-of-gbi-virtual-data-source-best-practic-af7d1cfef2030911.md)。
+具体操作，请参见[析言GBI虚拟数据源最佳实践](../../../../_short/analysis-of-gbi-virtual-data-source-best-practic-af7d1cfef2030911.md)。
+
+<a id="步骤三-调api生成sql"></a>
+
+<a id="080aa623f9rw5"></a>
 
 ### 步骤三：调API生成SQL
 
-基于析言GBI的[运行sql生成](raw/_short/api-dataanalysisgbi-2024-08-23-runsqlgeneration-433e34601f24f3f9.md)（例如：本示例中的`RunSqlGenerationRequest`类），通过实现智能数问场景来帮助您熟悉API的使用。
+基于析言GBI的[运行sql生成](../../../../_short/api-dataanalysisgbi-2024-08-23-runsqlgeneration-433e34601f24f3f9.md)（例如：本示例中的`RunSqlGenerationRequest`类），通过实现智能数问场景来帮助您熟悉API的使用。
+
+<a id="sec-tabs"></a>
+
+<a id="java"></a>
+
+<a id="java-h4"></a>
 
 #### Java
 
@@ -36,7 +66,9 @@
 2.  打开您的Maven项目的`pom.xml`文件。
 3.  在`<dependencies>`标签内添加以下依赖信息，并将`<version></version>`标签中的版本号替换为最新的版本号。
 
-```
+<a id="code-block"></a>
+
+```xml
 <dependency>
     <groupId>com.aliyun</groupId>
     <artifactId>alibabacloud-dataanalysisgbi20240823</artifactId>
@@ -51,7 +83,9 @@
 
 请将代码示例中的`accessKeyId`、`accessKeySecret`及`workspaceId`替换为实际值，以确保代码正常运行并返回正确的结果。
 
-```
+<a id="code-block-2"></a>
+
+```python
 import com.aliyun.auth.credentials.Credential;
 import com.aliyun.auth.credentials.provider.StaticCredentialProvider;
 import com.aliyun.sdk.gateway.pop.Configuration;
@@ -114,17 +148,27 @@ public class CommonExample_prod_generation {
 }
 ```
 
+<a id="python"></a>
+
+<a id="python-h4"></a>
+
 #### Python
 
 **安装依赖**
-```
+
+<a id="code-block-3"></a>
+
+```python
 pip install alibabacloud-tea-openapi-sse==1.0.2
 ```
+
 **实现生成SQL功能**
 
 请将代码示例中的`accessKeyId`、`accessKeySecret`及`workspaceId`替换为实际值，以确保代码正常运行并返回正确的结果。
 
-```
+<a id="code-block-4"></a>
+
+```python
 from alibabacloud_tea_openapi_sse.client import Client as OpenApiClient
 from alibabacloud_tea_openapi_sse import models as open_api_models
 from alibabacloud_tea_util_sse import models as util_models
@@ -223,9 +267,15 @@ if __name__ == '__main__':
     asyncio.run(query())
 ```
 
+<a id="返回结果示例"></a>
+
+<a id="cc8e027754x8q"></a>
+
 #### 返回结果示例
 
-```
+<a id="code-block-5"></a>
+
+```json
 {"event":"rewrite","requestId":"06735DAF-FAA6-5532-B059-3317953E0E93","rewrite":"最畅销的3个商品是什么？","sessionId":"10145656_9cd7d644-d034-4d2d-84bf-809273e43a32"}
 {"event":"selector","requestId":"06735DAF-FAA6-5532-B059-3317953E0E93","rewrite":"最畅销的3个商品是什么？","selector":["products","orders"],"sessionId":"10145656_9cd7d644-d034-4d2d-84bf-809273e43a32"}
 {"event":"evidence","rewrite":"最畅销的3个商品是什么？","selector":["products","orders"]}
@@ -245,26 +295,41 @@ if __name__ == '__main__':
 {"event":"sql","requestId":"06735DAF-FAA6-5532-B059-3317953E0E93","rewrite":"最畅销的3个商品是什么？","selector":["products","orders"],"sessionId":"10145656_9cd7d644-d034-4d2d-84bf-809273e43a32","sql":"SELECT p.product_name, SUM(o.quantity) AS total_sold\nFROM products p\nJOIN orders o ON p.product_id \u003d o.product_id\nGROUP BY p.product_name\nORDER BY total_sold DESC\nLIMIT 3;\n"}
 ```
 
+<a id="步骤四-手动查询数据"></a>
+
+<a id="10a2de5337dsl"></a>
+
 ### 步骤四：手动查询数据
 
 在可信环境内连接数据库，再执行SQL，得到查询结果集。
+
+<a id="sec-tabs-2"></a>
+
+<a id="java-2"></a>
+
+<a id="java-2-h4"></a>
 
 #### Java
 
 在`<dependencies>`标签内添加以下依赖信息，以下依赖是可选的。
 
-```
+<a id="code-block-6"></a>
+
+```xml
 <dependency>
     <groupId>org.apache.commons</groupId>
     <artifactId>commons-lang3</artifactId>
     <version>3.9</version>
 </dependency>
 ```
+
 **连接数据库并查询数据**
 
 请将代码示例中的`URL`、`USER`及`PASSWORD`替换为实际值，以确保代码正常运行并返回正确的结果。
 
-```
+<a id="code-block-7"></a>
+
+```java
 public void executeSql(String sql) {
         String URL = "jdbc:mysql://localhost:3306/your_database_name"; // 替换为你的数据库名
         String USER = "your_username"; // 替换为你的数据库用户名
@@ -304,17 +369,27 @@ public void executeSql(String sql) {
     }
 ```
 
+<a id="python-2"></a>
+
+<a id="python-2-h4"></a>
+
 #### Python
 
 **安装依赖**
-```
+
+<a id="code-block-8"></a>
+
+```bash
 pip install mysql-connector-python
 ```
+
 **连接数据库并查询数据**
 
 请将代码示例中的`URL`、`DATABASE`、`USER`及`PASSWORD`替换为实际值，以确保代码正常运行并返回正确的结果。
 
-```
+<a id="code-block-9"></a>
+
+```python
 import mysql.connector
 
 # 数据库连接配置
@@ -351,17 +426,31 @@ cursor.close()
 cnx.close()
 ```
 
+<a id="步骤五-调api进行结果分析"></a>
+
+<a id="22a4f585eczhi"></a>
+
 ### 步骤五：调API进行结果分析
 
-基于析言GBI的[执行结果分析](raw/_short/api-dataanalysisgbi-2024-08-23-rundataresultanal-85170f7a9048b689.md)（例如：本示例中的`RunDataResultAnalysisRequest`类），通过实现智能数问场景来帮助您熟悉API的使用。
+基于析言GBI的[执行结果分析](../../../../_short/api-dataanalysisgbi-2024-08-23-rundataresultanal-85170f7a9048b689.md)（例如：本示例中的`RunDataResultAnalysisRequest`类），通过实现智能数问场景来帮助您熟悉API的使用。
 
-**说明**入参中的RequestId参数，需要填入步骤三的结果中返回的RequestId，以此来满足上下文一致。
+> **说明**
+>
+> 入参中的RequestId参数，需要填入步骤三的结果中返回的RequestId，以此来满足上下文一致。
+
+<a id="sec-tabs-3"></a>
+
+<a id="java-3"></a>
+
+<a id="java-3-h4"></a>
 
 #### Java
 
 请将代码示例中的`workspaceId`、`requestId`及`sqlData`替换为实际值，以确保代码正常运行并返回正确的结果。
 
-```
+<a id="code-block-10"></a>
+
+```java
 public static void runDataResultAnalysis(AsyncClient client) {
     ArrayList<String> columns = new ArrayList<>();
     columns.add("product_name");
@@ -401,11 +490,17 @@ public static void runDataResultAnalysis(AsyncClient client) {
 }
 ```
 
+<a id="python-3"></a>
+
+<a id="python-3-h4"></a>
+
 #### Python
 
 请将代码示例中的`workspaceId`、`requestId`及`sqlData`替换为实际值，以确保代码正常运行并返回正确的结果。
 
-```
+<a id="code-block-11"></a>
+
+```python
 from alibabacloud_tea_openapi_sse.client import Client as OpenApiClient
 from alibabacloud_tea_openapi_sse import models as open_api_models
 from alibabacloud_tea_util_sse import models as util_models
@@ -521,17 +616,35 @@ if __name__ == '__main__':
     asyncio.run(query())
 ```
 
+<a id="返回结果示例-2"></a>
+
+<a id="0ca64fee7egcu"></a>
+
 #### 返回结果示例
 
-```
+<a id="code-block-12"></a>
+
+```json
 {'data': {'visualization': {'data': {'plotType': 'bar', 'yAxis': ['total_sold'], 'xAxis': ['product_name']}, 'text': '最畅销的3个商品分别是：小米手环，共售出28件；全自动豆浆机，共售出14件；护眼台灯，共售出10件。'}, 'requestId': 'F6DFA93F-9006-5BF1-A356-A3B60459ED90', 'event': 'result', 'rewrite': '最畅销的3个商品是什么？', 'sql': 'SELECT p.product_name, SUM(o.quantity) AS total_sold\nFROM products p\nJOIN orders o ON p.product_id = o.product_id\nGROUP BY p.product_name\nORDER BY total_sold DESC\nLIMIT 3;\n'}}
 ```
 
+<a id="完整示例代码"></a>
+
+<a id="a90345419dlbt"></a>
+
 ### 完整示例代码
+
+<a id="java-4"></a>
+
+<a id="5997b401cfi1r"></a>
 
 #### Java
 
 压缩包链接或github地址：[xiyan-sdk-practice.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250224/pntard/xiyan-sdk-practice.zip)
+
+<a id="python-4"></a>
+
+<a id="0ba4b8f805519"></a>
 
 #### Python
 

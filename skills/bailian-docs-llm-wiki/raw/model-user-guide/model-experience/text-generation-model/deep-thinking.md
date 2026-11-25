@@ -2,37 +2,25 @@
 
 深度思考模型在生成回复前先进行推理，从而在逻辑推理、数学计算等复杂任务中提升准确性。本文介绍如何通过API调用 Qwen、DeepSeek 等深度思考模型。
 
-> 本文介绍如何通过 OpenAI 兼容的 Chat Completion 接口或 DashScope 接口调用深度思考模型。 Responses API用法参见： [深度思考](https://help.aliyun.com/zh/model-studio/compatibility-with-openai-responses-api#example-deep-thinking-title) 。
+> 本文介绍如何通过 OpenAI 兼容的 Chat Completion 接口或 DashScope 接口调用深度思考模型。 Responses API用法参见： [深度思考](../../../model-api-reference/toolkits-and-frameworks/compatibility-with-openai-responses-api.md#example-deep-thinking-title) 。
+
+<a id="效果演示"></a>
+
+<a id="h2_demo_deep_thinking"></a>
 
 ## 效果演示
 
 以下是一个深度思考模型的对话示例，展示模型如何先进行推理再给出回答。
 
-**用户提问**
-
-9.9和9.11谁大
-
-**思考过程**（reasoning\_content 字段）
-
-首先，用户的问题是："9.9和9.11谁大"，这看起来是在比较两个数字：9.9 和 9.11。
-
-我需要理解这些数字的含义。在数学中，9.9 等同于 9.90，而 9.11 是 9.11。
-
-为了比较它们，我应该将它们视为小数。9.9 是 9 + 9/10 = 9.9，而 9.11 是 9 + 11/100 = 9.11。
-
-现在，比较 9.9 和 9.11：9.9 等于 9.90（因为 9.9 = 9.90），9.11 是 9.11。现在，9.90 与 9.11 比较：9.90 大于 9.11，因为 90/100 > 11/100。
-
-更精确地：9.9 = 99/10 = 990/100，9.11 = 911/100，990/100 与 911/100 比较，显然 990 > 911，所以 990/100 > 911/100，因此 9.9 > 9.11。
-
-我也可以直接看小数部分：9.9 的小数部分是 0.9，9.11 的小数部分是 0.11。0.9 大于 0.11，因为 0.9 = 0.90 > 0.11。
-
-所以，9.9 大于 9.11。
-
-**模型回答**（content 字段）
-
-结论：9.9 大于 9.11。
+|  |
+| --- |
+| **用户提问**<br><br>9.9和9.11谁大<br><br>**思考过程**（reasoning\_content 字段）<br><br>首先，用户的问题是："9.9和9.11谁大"，这看起来是在比较两个数字：9.9 和 9.11。<br><br>我需要理解这些数字的含义。在数学中，9.9 等同于 9.90，而 9.11 是 9.11。<br><br>为了比较它们，我应该将它们视为小数。9.9 是 9 + 9/10 = 9.9，而 9.11 是 9 + 11/100 = 9.11。<br><br>现在，比较 9.9 和 9.11：9.9 等于 9.90（因为 9.9 = 9.90），9.11 是 9.11。现在，9.90 与 9.11 比较：9.90 大于 9.11，因为 90/100 > 11/100。<br><br>更精确地：9.9 = 99/10 = 990/100，9.11 = 911/100，990/100 与 911/100 比较，显然 990 > 911，所以 990/100 > 911/100，因此 9.9 > 9.11。<br><br>我也可以直接看小数部分：9.9 的小数部分是 0.9，9.11 的小数部分是 0.11。0.9 大于 0.11，因为 0.9 = 0.90 > 0.11。<br><br>所以，9.9 大于 9.11。<br><br>**模型回答**（content 字段）<br><br>结论：9.9 大于 9.11。 |
 
 你也可以在百炼控制台的[体验中心](https://bailian.console.aliyun.com/model/experience/text)选择模型并开启深度思考，直接查看思考过程。
+
+<a id="使用方式"></a>
+
+<a id="bf233b1632s0l"></a>
 
 ## 使用方式
 
@@ -43,9 +31,17 @@
     -   设为`true`：模型先思考再回复；
     -   设为`false`：模型直接回复；
     
+    <a id="sec-tabs"></a>
+    
+    <a id="openai-兼容"></a>
+    
+    <a id="openai-兼容-h4"></a>
+    
     #### OpenAI 兼容
     
-    ```
+    <a id="code-block"></a>
+    
+    ```python
     # 导入依赖与创建客户端...
     completion = client.chat.completions.create(
         model="qwen4-max", # 选择模型
@@ -61,11 +57,17 @@
     )
     ```
     
+    <a id="dashscope"></a>
+    
+    <a id="dashscope-h4"></a>
+    
     #### DashScope
     
-    > Qwen3.5 系列的 DashScope API采用多模态接口，以下示例会报错 `url error` ，调用方式请参见 [开启/关闭思考模式](https://help.aliyun.com/zh/model-studio/vision#bc67a9a2bd2of) 。
+    > Qwen3.5 系列的 DashScope API采用多模态接口，以下示例会报错 `url error` ，调用方式请参见 [开启/关闭思考模式](vision.md#bc67a9a2bd2of) 。
     
-    ```
+    <a id="code-block-2"></a>
+    
+    ```python
     # 导入依赖与创建客户端...
     
     response = client.multimodal.chat.create(
@@ -83,11 +85,25 @@
 
 思考内容通过`reasoning_content`字段返回，回复内容通过`content`字段返回。深度思考需要额外推理时间，本文示例默认采用流式调用（推荐，可实时查看思考过程、避免长时间等待）。商业版深度思考模型同时支持非流式（同步）输出，用法及注意事项参见下方**常见问题**；部分模型（如 qwen3.5-122b-a10b、qwen3.5-27b 等开源版）仅支持流式输出，非流式调用会报错。
 
+<a id="支持的模型"></a>
+
+<a id="78286fdc35hlw"></a>
+
 ## 支持的模型
+
+<a id="sec-tabs-2"></a>
+
+<a id="qwen4"></a>
+
+<a id="qwen4-h4"></a>
 
 #### Qwen4
 
-**千问4-Max 系列**（混合思考模式，**默认开启思考模式**）：qwen4-max、qwen4-max-preview（[仅 Token Plan](raw/token-plan-user-guide/token-plan-personal/token-plan-personal-overview.md)）
+**千问4-Max 系列**（混合思考模式，**默认开启思考模式**）：qwen4-max
+
+<a id="qwen3-8"></a>
+
+<a id="qwen3-8-h4"></a>
 
 #### Qwen3.8
 
@@ -99,7 +115,11 @@
 
 **千问3.8 开源系列**（**仅支持思考模式**）：qwen3.8-2.4t-a95b
 
-**千问3.8 Omni系列**（混合思考模式，**默认开启思考模式**）：qwen3.8-omni-flash。通过 `reasoning_effort` 调节思考力度，详见[思考模式配置](https://help.aliyun.com/zh/model-studio/qwen-omni#bc67a9a2bd2of)。
+**千问3.8 Omni系列**（混合思考模式，**默认开启思考模式**）：qwen3.8-omni-flash。通过 `reasoning_effort` 调节思考力度，详见[思考模式配置](../omni-modal/qwen-omni.md#bc67a9a2bd2of)。
+
+<a id="qwen3-7"></a>
+
+<a id="qwen3-7-h4"></a>
 
 #### Qwen3.7
 
@@ -111,6 +131,10 @@
 
 **千问3.7 Flash系列**（混合思考模式，**默认开启思考模式**）：qwen3.7-flash、qwen3.7-flash-2026-07-15
 
+<a id="qwen3-6"></a>
+
+<a id="qwen3-6-h4"></a>
+
 #### Qwen3.6
 
 **千问3.6 Plus系列**（混合思考模式，**默认开启思考模式**）：qwen3.6-plus、qwen3.6-plus-2026-04-02
@@ -119,6 +143,10 @@
 
 **千问3.6 开源版**：qwen3.6-35b-a3b
 
+<a id="qwen3-5"></a>
+
+<a id="qwen3-5-h4"></a>
+
 #### Qwen3.5
 
 -   **商业版**
@@ -126,6 +154,10 @@
     -   **千问3.5 Flash系列**（混合思考模式，**默认开启思考模式**）：qwen3.5-flash、qwen3.5-flash-2026-02-23
 -   **开源版**
     -   混合思考模式，**默认开启思考模式**：qwen3.5-397b-a17b、 qwen3.5-122b-a10b、qwen3.5-27b、qwen3.5-35b-a3b
+
+<a id="kimi"></a>
+
+<a id="kimi-h4"></a>
 
 #### Kimi
 
@@ -139,10 +171,18 @@
     -   混合思考模式，默认开启思考模式：kimi/kimi-k2.6、kimi/kimi-k2.5
     -   仅思考模式：kimi/kimi-k3.1-pro、kimi/kimi-k3.1-pro-highspeed、kimi/kimi-k3、kimi/kimi-k2.7-code-highspeed、kimi/kimi-k2.7-code
 
+<a id="qwen3"></a>
+
+<a id="qwen3-h4"></a>
+
 #### Qwen3
 
 -   **千问Plus系列**（混合思考模式，默认不开启思考模式）：qwen-plus、qwen-plus-latest、qwen-plus-2025-04-28 及之后的快照版模型
 -   **千问Flash系列**（混合思考模式，默认不开启思考模式）：qwen-flash、qwen-flash-2025-07-28 及之后的快照版模型
+
+<a id="deepseek"></a>
+
+<a id="deepseek-h4"></a>
 
 #### DeepSeek
 
@@ -160,10 +200,18 @@
     -   混合思考模式，默认不开启思考模式：vanchin/deepseek-v3.2-think、vanchin/deepseek-v3.1-terminus
     -   仅思考模式：vanchin/deepseek-r1
 
+<a id="glm"></a>
+
+<a id="glm-h4"></a>
+
 #### GLM
 
 -   仅思考模式：glm-5.3
 -   混合思考模式，默认开启思考模式：glm-5.2、glm-5.2-fast-preview、glm-5.1、glm-5
+
+<a id="minimax"></a>
+
+<a id="minimax-h4"></a>
 
 #### MiniMax
 
@@ -174,36 +222,68 @@
     
     -   仅思考模式：MiniMax/MiniMax-M3.1-Flash
         
-        **说明**MiniMax/MiniMax-M3.1-Flash 始终开启思考，不支持关闭。可通过 `reasoning_effort` 参数设置 `low`、`medium`、`high`、`xhigh` 或 `max`，默认值为 `max`。
+        > **说明**
+        >
+        > MiniMax/MiniMax-M3.1-Flash 始终开启思考，不支持关闭。可通过 `reasoning_effort` 参数设置 `low`、`medium`、`high`、`xhigh` 或 `max`，默认值为 `max`。
         
     -   混合思考模式：MiniMax/MiniMax-M3
         
-        **说明**MiniMax/MiniMax-M3 通过 `thinking` 参数控制思考模式，取值为 `adaptive`（自适应，默认）或 `disabled`（关闭）。详细用法请参见[MiniMax-稀宇科技](raw/model-user-guide/use-cases/third-party-model-integration-tutorial/minimax-api-by-minimax.md)。
+        > **说明**
+        >
+        > MiniMax/MiniMax-M3 通过 `thinking` 参数控制思考模式，取值为 `adaptive`（自适应，默认）或 `disabled`（关闭）。详细用法请参见[MiniMax-稀宇科技](../../use-cases/third-party-model-integration-tutorial/minimax-api-by-minimax.md)。
         
     -   仅思考模式：MiniMax/MiniMax-M2.7、MiniMax/MiniMax-M2.5、MiniMax/MiniMax-M2.1
         
+
+<a id="stepfun"></a>
+
+<a id="stepfun-h4"></a>
 
 #### Stepfun
 
 仅思考模式：stepfun/step-3.7-flash、stepfun/step-5-preview
 
+<a id="ling"></a>
+
+<a id="ling-h4"></a>
+
 #### Ling
 
 混合思考模式，默认开启思考模式：antdigital/Ling-3.1-flash
 
+<a id="快速开始"></a>
+
+<a id="0be77a07d89w8"></a>
+
 ## 快速开始
 
-API 使用前提：已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，需要[安装 OpenAI 或 DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)（DashScope Java SDK需不低于 2.19.4 版本）。
+API 使用前提：已[获取与配置 API Key](../../../model-api-reference/preparations/get-api-key.md)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，需要[安装 OpenAI 或 DashScope SDK](../../../model-api-reference/preparations/install-sdk.md)（DashScope Java SDK需不低于 2.19.4 版本）。
 
 以下代码以流式调用 qwen4-max 开启思考模式为例。
 
+<a id="sec-tabs-3"></a>
+
+<a id="openai兼容"></a>
+
+<a id="openai兼容-h4"></a>
+
 #### OpenAI兼容
+
+<a id="sec-tabs-4"></a>
+
+<a id="python"></a>
+
+<a id="python-h4"></a>
 
 #### Python
 
+<a id="476b0d8764uct"></a>
+
 ### 示例代码
 
-```
+<a id="code-block-3"></a>
+
+```python
 from openai import OpenAI
 import os
 
@@ -256,9 +336,13 @@ for chunk in completion:
         answer_content += delta.content
 ```
 
+<a id="0a46d1b6d1jwu"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-4"></a>
+
+```text
 ====================思考过程====================
 
 好的，用户问“你是谁”，我需要给出一个准确且友好的回答。首先，我要确认自己的身份，即千问，由阿里巴巴集团旗下的通义实验室研发。接下来，应该说明我的主要功能，比如回答问题、创作文字、逻辑推理等。同时，要保持语气亲切，避免过于技术化，让用户感觉轻松。还要注意不要使用复杂术语，确保回答简洁明了。另外，可能需要加入一些互动元素，邀请用户提问，促进进一步交流。最后，检查是否有遗漏的重要信息，比如我的中文名称“千问”和英文名称“Qwen”，以及所属公司和实验室。确保回答全面且符合用户期望。
@@ -267,11 +351,19 @@ for chunk in completion:
 你好！我是千问，是阿里巴巴集团旗下的通义实验室自主研发的超大规模语言模型。我可以回答问题、创作文字、进行逻辑推理、编程等，旨在为用户提供高质量的信息和服务。你可以叫我Qwen，或者直接叫我千问。有什么我可以帮你的吗？
 ```
 
+<a id="node-js"></a>
+
+<a id="node-js-h4"></a>
+
 #### Node.js
+
+<a id="aa3379a8a8m8l"></a>
 
 ### 示例代码
 
-```
+<a id="code-block-5"></a>
+
+```javascript
 import OpenAI from "openai";
 import process from 'process';
 
@@ -333,9 +425,13 @@ async function main() {
 main();
 ```
 
+<a id="ea1e31951foc2"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-6"></a>
+
+```text
 ====================思考过程====================
 
 好的，用户问“你是谁”，我需要回答我的身份。首先，我应该明确说明我是千问，由阿里云开发的超大规模语言模型。接下来，可以提到我的主要功能，比如回答问题、创作文字、逻辑推理等。还要强调我的多语言支持，包括中文和英文，这样用户知道我可以处理不同语言的请求。另外，可能需要解释一下我的应用场景，比如学习、工作和生活中的帮助。不过用户的问题比较直接，可能不需要太详细的信息，保持简洁明了。同时，要确保语气友好，邀请用户进一步提问。检查有没有遗漏的重要信息，比如我的版本或最新更新，但可能用户不需要那么详细。最后，确认回答准确无误，没有错误信息。
@@ -344,13 +440,27 @@ main();
 我是千问，是阿里巴巴集团旗下的通义实验室自主研发的超大规模语言模型。我能够回答问题、创作文字、逻辑推理、编程等多种任务，支持中英文等多种语言。如果你有任何问题或需要帮，欢迎随时告诉我！
 ```
 
+<a id="http"></a>
+
+<a id="http-h4"></a>
+
 #### HTTP
+
+<a id="8a6ac5c012uov"></a>
 
 ### 示例代码
 
+<a id="sec-tabs-5"></a>
+
+<a id="curl"></a>
+
+<a id="curl-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-7"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的配置不同。
@@ -374,11 +484,15 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="3434f14720siq"></a>
+
 ### 返回结果
 
 以下为 `qwen3.8-max` 的返回示例，用于说明响应字段。
 
-```
+<a id="code-block-8"></a>
+
+```json
 data: {"choices":[{"delta":{"content":null,"role":"assistant","reasoning_content":""},"index":0,"logprobs":null,"finish_reason":null}],"object":"chat.completion.chunk","usage":null,"created":1745485391,"system_fingerprint":null,"model":"qwen3.8-max","id":"chatcmpl-e2edaf2c-8aaf-9e54-90e2-b21dd5045503"}
 
 .....
@@ -390,15 +504,29 @@ data: {"choices":[],"object":"chat.completion.chunk","usage":{"prompt_tokens":10
 data: [DONE]
 ```
 
+<a id="dashscope-2"></a>
+
+<a id="dashscope-2-h4"></a>
+
 #### DashScope
 
-> Qwen3.5 系列的 DashScope API采用多模态接口，以下示例会报错 `url error` ，调用方式请参见 [开启/关闭思考模式](https://help.aliyun.com/zh/model-studio/vision#bc67a9a2bd2of) 。
+> Qwen3.5 系列的 DashScope API采用多模态接口，以下示例会报错 `url error` ，调用方式请参见 [开启/关闭思考模式](vision.md#bc67a9a2bd2of) 。
+
+<a id="sec-tabs-6"></a>
+
+<a id="python-2"></a>
+
+<a id="python-2-h4"></a>
 
 #### Python
 
+<a id="ed8257af27xad"></a>
+
 ### 示例代码
 
-```
+<a id="code-block-9"></a>
+
+```python
 import os
 import dashscope
 
@@ -458,9 +586,13 @@ for chunk in completion:
 # print(f"{answer_content}")
 ```
 
+<a id="ba3b8246a48qv"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-10"></a>
+
+```text
 ====================思考过程====================
 好的，用户问：“你是谁？”我需要回答这个问题。首先，我要明确自己的身份，即千问，由阿里云开发的超大规模语言模型。接下来，要说明我的功能和用途，比如回答问题、创作文字、逻辑推理等。同时，要强调我的目标是成为用户的得力助手，提供帮助和支持。
 
@@ -473,11 +605,19 @@ for chunk in completion:
 你好呀～我是千问，是阿里云开发的一款超大规模语言模型。我能够回答问题、创作文字、进行逻辑推理、编程等等，旨在为用户提供帮助和支持。无论是日常生活的疑问还是专业领域的问题，我都能尽力提供帮助。有什么我可以帮你的吗？
 ```
 
+<a id="java"></a>
+
+<a id="java-h4"></a>
+
 #### Java
+
+<a id="4ac031f0676c1"></a>
 
 ### 示例代码
 
-```
+<a id="code-block-11"></a>
+
+```java
 // dashscope SDK的版本 >= 2.19.4
 import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;
 import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationParam;
@@ -565,9 +705,13 @@ public class Main {
 }
 ```
 
+<a id="24452535a8371"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-12"></a>
+
+```text
 ====================思考过程====================
 好的，用户问“你是谁？”，我需要根据之前的设定来回答。首先，我的角色是千问，阿里巴巴集团旗下的超大规模语言模型。要保持口语化，简洁易懂。
 
@@ -580,13 +724,27 @@ public class Main {
 你好！我是千问，阿里巴巴集团旗下的超大规模语言模型。我能够回答问题、创作文字，比如写故事、写公文、写邮件、写剧本、逻辑推理、编程等，还能表达观点，玩游戏等。我熟练掌握多种语言，包括但不限于中文、英文、德语、法语、西班牙语等。有什么需要我帮忙的吗？
 ```
 
+<a id="http-2"></a>
+
+<a id="http-2-h4"></a>
+
 #### HTTP
+
+<a id="e93608c894qfe"></a>
 
 ### 示例代码
 
+<a id="sec-tabs-7"></a>
+
+<a id="curl-2"></a>
+
+<a id="curl-2-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-13"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为北京地域url，若使用华北2（北京）地域的模型，需将url替换为：https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation
@@ -613,9 +771,13 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 }'
 ```
 
+<a id="1e0bfae0c9vk1"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-14"></a>
+
+```text
 id:1
 event:result
 :HTTP_STATUS/200
@@ -678,7 +840,15 @@ event:result
 data:{"output":{"choices":[{"message":{"content":"","reasoning_content":"","role":"assistant"},"finish_reason":"stop"}]},"usage":{"total_tokens":378,"input_tokens":11,"output_tokens":367},"request_id":"25d58c29-c47b-9e8d-a0f1-d6c309ec58b1"}
 ```
 
+<a id="核心能力"></a>
+
+<a id="f8de8e9a49ucb"></a>
+
 ## 核心能力
+
+<a id="切换思考-非思考模式"></a>
+
+<a id="5a3fefa9786lt"></a>
 
 ### 切换思考/非思考模式
 
@@ -687,15 +857,33 @@ data:{"output":{"choices":[{"message":{"content":"","reasoning_content":"","role
 -   简单任务（日常聊天、简单问答）：将`enable_thinking`设为`false`关闭思考；
 -   复杂任务（逻辑推理、代码生成、数学解答）：将`enable_thinking`设为`true`开启思考。
 
+<a id="sec-tabs-8"></a>
+
+<a id="openai兼容-2"></a>
+
+<a id="openai兼容-2-h4"></a>
+
 #### OpenAI兼容
 
-**重要**`enable_thinking`非 OpenAI 标准参数，若使用 OpenAI Python SDK请通过 `extra_body`传入，Node.js SDK中作为顶层参数传入。
+> **重要**
+>
+> `enable_thinking`非 OpenAI 标准参数，若使用 OpenAI Python SDK请通过 `extra_body`传入，Node.js SDK中作为顶层参数传入。
+
+<a id="sec-tabs-9"></a>
+
+<a id="python-3"></a>
+
+<a id="python-3-h4"></a>
 
 #### Python
 
+<a id="0f2b6b7fcalv1"></a>
+
 ### 示例代码
 
-```
+<a id="code-block-15"></a>
+
+```python
 from openai import OpenAI
 import os
 
@@ -748,9 +936,13 @@ for chunk in completion:
         answer_content += delta.content
 ```
 
+<a id="20bbe18d4apdz"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-16"></a>
+
+```text
 ====================思考过程====================
 
 嗯，用户问“你是谁”，我需要先确定他们想知道什么。可能他们第一次接触我，或者想确认我的身份。我应该先介绍自己是千问，由通义实验室研发。然后要说明我的功能，比如回答问题、创作文字、编程等，这样用户了解我能提供什么帮助。还要提到我支持多种语言，这样国际用户也会知道他们可以用不同语言交流。最后保持友好，邀请他们提问，这样可以促进进一步互动。要注意简洁明了，避免技术术语太多，让用户容易理解。可能用户需要的是快速了解我的能力，所以重点放在功能和用途上。还要检查有没有遗漏的信息，比如是否要提到阿里巴巴集团，或者更多技术细节。不过用户可能只需要基本的信息，不需要太深入。确保回答友好且专业，同时鼓励用户继续提问。
@@ -762,11 +954,19 @@ for chunk in completion:
 CompletionUsage(completion_tokens=221, prompt_tokens=10, total_tokens=231, completion_tokens_details=CompletionTokensDetails(accepted_prediction_tokens=None, audio_tokens=None, reasoning_tokens=172, rejected_prediction_tokens=None), prompt_tokens_details=PromptTokensDetails(audio_tokens=None, cached_tokens=0))
 ```
 
+<a id="node-js-2"></a>
+
+<a id="node-js-2-h4"></a>
+
 #### Node.js
+
+<a id="504bfa803c59y"></a>
 
 ### 示例代码
 
-```
+<a id="code-block-17"></a>
+
+```javascript
 import OpenAI from "openai";
 import process from 'process';
 
@@ -835,9 +1035,13 @@ async function main() {
 main();
 ```
 
+<a id="afb225cc29u3t"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-18"></a>
+
+```text
 ====================思考过程====================
 
 嗯，用户问“你是谁”，我需要先确定他们想知道什么。可能他们第一次接触我，或者想确认我的身份。我应该先介绍自己的名字和身份，比如千问，英文名Qwen。然后说明我是阿里巴巴集团旗下的通义实验室自主研发的超大规模语言模型。接下来要提到我的功能，比如回答问题、创作文字、编程、表达观点等，这样用户能了解我的用途。还要提到我支持多语言，这样国际用户会觉得有用。最后邀请他们提问，保持友好和开放的态度。注意用简洁易懂的语言，避免技术术语太多。可能用户需要帮助，或者只是好奇，所以回应要亲切，鼓励他们进一步互动。另外，可能需要考虑用户是否有更深层的需求，比如测试我的能力或者寻找特定帮助，但初次回答还是以基本信息和引导为主。保持口语化，不用复杂句子，让信息传达更有效。
@@ -857,13 +1061,27 @@ main();
 }
 ```
 
+<a id="http-3"></a>
+
+<a id="http-3-h4"></a>
+
 #### HTTP
+
+<a id="9296838816y68"></a>
 
 ### 示例代码
 
+<a id="sec-tabs-10"></a>
+
+<a id="curl-3"></a>
+
+<a id="curl-3-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-19"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的配置不同。
@@ -887,15 +1105,29 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="dashscope-3"></a>
+
+<a id="dashscope-3-h4"></a>
+
 #### DashScope
 
-> Qwen3.5 系列的 DashScope API采用多模态接口，以下示例会报错 `url error` ，调用方式请参见 [开启/关闭思考模式](https://help.aliyun.com/zh/model-studio/vision#bc67a9a2bd2of) 。
+> Qwen3.5 系列的 DashScope API采用多模态接口，以下示例会报错 `url error` ，调用方式请参见 [开启/关闭思考模式](vision.md#bc67a9a2bd2of) 。
+
+<a id="sec-tabs-11"></a>
+
+<a id="python-4"></a>
+
+<a id="python-4-h4"></a>
 
 #### Python
 
+<a id="fbd4f30ff2lyr"></a>
+
 ### 示例代码
 
-```
+<a id="code-block-20"></a>
+
+```python
 import os
 import dashscope
 
@@ -949,9 +1181,13 @@ print(chunk.usage)
 # print(f"\n完整回复:\n{answer_content}")
 ```
 
+<a id="c1a078ac98toz"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-21"></a>
+
+```text
 ====================思考过程====================
 
 嗯，用户问“你是谁？”，我需要先确定他们想知道什么。可能他们第一次接触我，或者想确认我的身份。首先，我应该介绍自己的名字，千问，然后说明我是通义实验室研发的超大规模语言模型。接下来，可能需要解释我的功能，比如回答问题、创作文字、编程等，这样用户能了解我的用途。还要提到我支持多种语言，这样国际用户也能知道他们可以用不同语言交流。最后，保持友好，邀请他们提问，这样能促进进一步的互动。要注意用简洁易懂的语言，避免技术术语太多，让用户容易理解。可能用户有更深层的需求，比如测试我的能力，或者寻找帮助，所以提供具体的例子会更好，比如写故事、写公文、写邮件等。还要确保回答结构清晰，分点说明功能，但可能不需要用项目符号，而是自然过渡。另外，要强调我是AI助手，没有个人意识，所有回答都基于训练数据，这样避免误解。可能需要检查有没有遗漏的重要信息，比如多模态能力，或者最新的更新，但根据之前的回复，可能不需要太深入。总之，回答要全面但简洁，友好且有帮助，让用户感到被理解和支持。
@@ -971,11 +1207,19 @@ print(chunk.usage)
 {"input_tokens": 11, "output_tokens": 405, "total_tokens": 416, "output_tokens_details": {"reasoning_tokens": 256}, "prompt_tokens_details": {"cached_tokens": 0}}
 ```
 
+<a id="java-2"></a>
+
+<a id="java-2-h4"></a>
+
 #### Java
+
+<a id="d7b4e7164300j"></a>
 
 ### 示例代码
 
-```
+<a id="code-block-22"></a>
+
+```java
 // dashscope SDK的版本 >= 2.19.4
 import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;
 import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationParam;
@@ -1063,22 +1307,40 @@ public class Main {
 }
 ```
 
+<a id="81dc6a7769h34"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-23"></a>
+
+```text
 ====================思考过程====================
 嗯，用户问“你是谁？”，我需要先确定他们想了解什么。可能他们想知道我的身份，或者是在测试我的反应。首先，我应该明确回答我是千问，阿里巴巴集团旗下的超大规模语言模型。然后，可能需要简要介绍我的功能，比如回答问题、创作文字、编程等，这样用户能了解我的用途。还要提到我支持多种语言，这样国际用户也会知道他们可以用不同语言交流。最后，保持友好，邀请他们提问，这样他们会觉得亲切，愿意继续互动。要注意回答不要太长，但信息要全面。可能用户还有后续问题，比如我的技术细节或者使用场景，但初次回答应该简洁明了。确保没有使用专业术语，让所有用户都能理解。检查有没有遗漏的重要信息，比如多语言支持和具体功能例子。好的，这样应该能覆盖用户的需求了。
 ====================完整回复====================
 我是千问，阿里巴巴集团旗下的超大规模语言模型。我能够回答问题、创作文字（如写故事、写公文、写邮件、写剧本等）、进行逻辑推理、编程、表达观点、玩游戏等，支持多语言交流，包括但不限于中文、英文、德语、法语、西班牙语等。如果你有任何问题或需要帮助，欢迎随时告诉我！
 ```
 
+<a id="http-4"></a>
+
+<a id="http-4-h4"></a>
+
 #### HTTP
+
+<a id="adea09a017k6l"></a>
 
 ### 示例代码
 
+<a id="sec-tabs-12"></a>
+
+<a id="curl-4"></a>
+
+<a id="curl-4-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-24"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的配置不同。
@@ -1105,9 +1367,13 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 }'
 ```
 
+<a id="f64c0e57dfnap"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-25"></a>
+
+```text
 id:1
 event:result
 :HTTP_STATUS/200
@@ -1172,17 +1438,29 @@ data:{"output":{"choices":[{"message":{"content":"","reasoning_content":"","role
 
 此外，**Qwen3 开源版混合思考模型以及 qwen-plus-2025-04-28 模型**支持通过提示词动态控制思考模式。`enable_thinking`为`true`时，在提示词中加入`/no_think`可关闭思考；多轮对话中如需重新开启，在最新提示词中加入`/think`即可。模型始终遵循最新的`/think`或`/no_think`指令。
 
+<a id="限制思考长度"></a>
+
+<a id="e7c0002fe4meu"></a>
+
 ### 限制思考长度
 
 深度思考模型有时会生成冗长的推理过程，增加等待时间并消耗更多 Token。通过 `thinking_budget` 参数可设置推理过程的最大 Token 数，超过限制后模型立即输出回复。kimi-k3.1-pro 和 kimi-k3 不支持该参数，不能通过它限制思考长度。
 
-支持的模型及各模型的默认值，请参见 [Chat Completions 参数说明](https://help.aliyun.com/zh/model-studio/qwen-api-via-openai-chat-completions#afcd41d2b57zf) 和 [DashScope 参数说明](https://help.aliyun.com/zh/model-studio/qwen-api-via-dashscope#2a1c410015otp)。
+支持的模型及各模型的默认值，请参见 [Chat Completions 参数说明](../../../model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md#afcd41d2b57zf) 和 [DashScope 参数说明](../../../model-api-reference/qwen-api-reference/qwen-api-via-dashscope.md#2a1c410015otp)。
 
 以下仅列出关键参数，完整的流式调用代码请参见[快速开始](#0be77a07d89w8)。
 
+<a id="sec-tabs-13"></a>
+
+<a id="openai兼容-3"></a>
+
+<a id="openai兼容-3-h4"></a>
+
 #### OpenAI兼容
 
-```
+<a id="code-block-26"></a>
+
+```python
 completion = client.chat.completions.create(
     model="qwen4-max",
     messages=messages,
@@ -1192,9 +1470,15 @@ completion = client.chat.completions.create(
 )
 ```
 
+<a id="dashscope-4"></a>
+
+<a id="dashscope-4-h4"></a>
+
 #### DashScope
 
-```
+<a id="code-block-27"></a>
+
+```python
 completion = client.multimodal.chat.create(
     model="qwen4-max",
     messages=messages,
@@ -1205,27 +1489,51 @@ completion = client.multimodal.chat.create(
 )
 ```
 
+<a id="传递思考过程"></a>
+
+<a id="jln7docdq5et5"></a>
+
 ### 传递思考过程
 
 kimi-k3.1-pro 和 kimi-k3（阿里云百炼部署）默认保留客户端传入的历史 `reasoning_content`。建议在多轮请求中完整回传历史 assistant 消息及其 `reasoning_content`。
 
-多轮对话中，`preserve_thinking` 控制模型是否读取历史 assistant 消息中的 `reasoning_content`。设为 `true` 后，这些思考内容会拼接到下一轮输入。客户端需在请求的 `messages` 中提供历史 assistant 消息及其 `reasoning_content`。各型号的默认值以[Chat Completions 参数说明](raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)为准。
+多轮对话中，`preserve_thinking` 控制模型是否读取历史 assistant 消息中的 `reasoning_content`。设为 `true` 后，这些思考内容会拼接到下一轮输入。客户端需在请求的 `messages` 中提供历史 assistant 消息及其 `reasoning_content`。各型号的默认值以[Chat Completions 参数说明](../../../model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)为准。
 
-**重要**支持的模型及各模型的默认值，请参见 [Chat Completions 参数说明](https://help.aliyun.com/zh/model-studio/qwen-api-via-openai-chat-completions#afcd41d2b57zf) 和 [DashScope 参数说明](https://help.aliyun.com/zh/model-studio/qwen-api-via-dashscope#2a1c410015otp)。
+> **重要**
+>
+> 支持的模型及各模型的默认值，请参见 [Chat Completions 参数说明](../../../model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md#afcd41d2b57zf) 和 [DashScope 参数说明](../../../model-api-reference/qwen-api-reference/qwen-api-via-dashscope.md#2a1c410015otp)。
 
 > 对于支持此参数的 Qwen3.8 Max、Qwen3.7、Qwen3.6 和 Kimi 型号，若历史消息中不包含 `reasoning_content`，开启此参数不会报错。
 
 > 开启后，历史对话中的 `reasoning_content` 会计入输入 Token 数量和计费。
 
+<a id="sec-tabs-14"></a>
+
+<a id="openai兼容-4"></a>
+
+<a id="openai兼容-4-h4"></a>
+
 #### OpenAI兼容
 
-**说明**`preserve_thinking`非 OpenAI 标准参数，使用 Python SDK需通过`extra_body`传入。
+> **说明**
+>
+> `preserve_thinking`非 OpenAI 标准参数，使用 Python SDK需通过`extra_body`传入。
+
+<a id="sec-tabs-15"></a>
+
+<a id="python-5"></a>
+
+<a id="python-5-h4"></a>
 
 #### Python
 
+<a id="6q1m6d42gm7zm"></a>
+
 ### 示例代码
 
-```
+<a id="code-block-28"></a>
+
+```python
 from openai import OpenAI
 import os
 
@@ -1314,9 +1622,13 @@ for chunk in completion:
         answer_content += delta.content
 ```
 
+<a id="zj18n55n2hahz"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-29"></a>
+
+```text
 ====================第一轮思考过程====================
 用户需要为日均千万消息的电商系统选择消息队列。让我从吞吐量、可靠性、延迟消息、事务支持等维度对比主流方案...
 
@@ -1333,11 +1645,19 @@ RabbitMQ：延迟低，但集群扩展能力有限，峰值万级TPS...
 我并没有排除Kafka。Kafka在吞吐量和生态方面表现优秀，之所以RocketMQ评分略高，是因为电商核心链路的"开箱即用"特性匹配度：RocketMQ原生支持事务消息和延迟消息，而Kafka需要通过Outbox Pattern等架构模式自行实现。如果团队已有Kafka生态，它完全能胜任千万级消息场景。
 ```
 
+<a id="node-js-3"></a>
+
+<a id="node-js-3-h4"></a>
+
 #### Node.js
+
+<a id="myoz9dl6pyu63"></a>
 
 ### 示例代码
 
-```
+<a id="code-block-30"></a>
+
+```javascript
 import OpenAI from "openai";
 import process from 'process';
 
@@ -1424,9 +1744,13 @@ async function main() {
 main();
 ```
 
+<a id="83wsvftv26m9f"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-31"></a>
+
+```text
 ====================第一轮思考过程====================
 用户需要为日均千万消息的电商系统选择消息队列。让我从吞吐量、可靠性、延迟消息、事务支持等维度对比主流方案...
 ====================第一轮回复====================
@@ -1437,13 +1761,27 @@ main();
 我并没有排除Kafka。Kafka在吞吐量和生态方面表现优秀，之所以RocketMQ评分略高，是因为电商核心链路的"开箱即用"特性匹配度。
 ```
 
+<a id="http-5"></a>
+
+<a id="http-5-h4"></a>
+
 #### HTTP
+
+<a id="ayokqnr2jhn7d"></a>
 
 ### 示例代码
 
+<a id="sec-tabs-16"></a>
+
+<a id="curl-5"></a>
+
+<a id="curl-5-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-32"></a>
+
+```bash
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -1474,11 +1812,15 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="9llmpvme58had"></a>
+
 ### 返回结果
 
 以下为 `qwen3.8-max` 的返回示例，用于说明响应字段。
 
-```
+<a id="code-block-33"></a>
+
+```json
 data: {"choices":[{"delta":{"content":null,"role":"assistant","reasoning_content":""},"index":0,"logprobs":null,"finish_reason":null}],"object":"chat.completion.chunk","usage":null,"created":1743523200,"system_fingerprint":null,"model":"qwen4-max","id":"chatcmpl-example-001"}
 
 .....
@@ -1490,15 +1832,31 @@ data: {"choices":[],"object":"chat.completion.chunk","usage":{"prompt_tokens":34
 data: [DONE]
 ```
 
+<a id="dashscope-5"></a>
+
+<a id="dashscope-5-h4"></a>
+
 #### DashScope
 
-**说明**Java SDK暂不支持`preserve_thinking`参数。通过HTTP调用时，请将`preserve_thinking`放入`parameters`对象中。
+> **说明**
+>
+> Java SDK暂不支持`preserve_thinking`参数。通过HTTP调用时，请将`preserve_thinking`放入`parameters`对象中。
+
+<a id="sec-tabs-17"></a>
+
+<a id="python-6"></a>
+
+<a id="python-6-h4"></a>
 
 #### Python
 
+<a id="2hybb7qx5x673"></a>
+
 ### 示例代码
 
-```
+<a id="code-block-34"></a>
+
+```python
 import os
 import dashscope
 
@@ -1590,9 +1948,13 @@ for chunk in completion:
             answer_content += content_text
 ```
 
+<a id="1wpk5lk2sxtce"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-35"></a>
+
+```text
 ====================第一轮思考过程====================
 用户需要为日均千万消息的电商系统选择消息队列。让我从吞吐量、可靠性、延迟消息、事务支持等维度对比主流方案...
 ====================第一轮回复====================
@@ -1603,13 +1965,27 @@ for chunk in completion:
 我并没有排除Kafka。Kafka在吞吐量和生态方面表现优秀，之所以RocketMQ评分略高，是因为电商核心链路的"开箱即用"特性匹配度。
 ```
 
+<a id="http-6"></a>
+
+<a id="http-6-h4"></a>
+
 #### HTTP
+
+<a id="km28zc40ouxpi"></a>
 
 ### 示例代码
 
+<a id="sec-tabs-18"></a>
+
+<a id="curl-6"></a>
+
+<a id="curl-6-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-36"></a>
+
+```bash
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation" \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -1643,9 +2019,13 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 }'
 ```
 
+<a id="rq5sek85kfs70"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-37"></a>
+
+```text
 id:1
 event:result
 :HTTP_STATUS/200
@@ -1664,11 +2044,19 @@ event:result
 data:{"output":{"choices":[{"message":{"content":"","reasoning_content":"","role":"assistant"},"finish_reason":"stop"}]},"usage":{"total_tokens":5850,"output_tokens":2387,"input_tokens":3463,"output_tokens_details":{"reasoning_tokens":1347}},"request_id":"example-request-001"}
 ```
 
+<a id="其他功能"></a>
+
+<a id="8fa1d9d3a7jxk"></a>
+
 ### 其他功能
 
--   [多轮对话](https://help.aliyun.com/zh/model-studio/multi-round-conversation#9c315c95a8omt)
--   [工具调用](https://help.aliyun.com/zh/model-studio/qwen-function-calling#fbf3d739f2q9f)
--   [联网搜索](https://help.aliyun.com/zh/model-studio/web-search#9b41940862qf3)
+-   [多轮对话](multi-round-conversation.md#9c315c95a8omt)
+-   [工具调用](tool-calls/qwen-function-calling.md#fbf3d739f2q9f)
+-   [联网搜索](tool-calls/web-search.md#9b41940862qf3)
+
+<a id="计费说明"></a>
+
+<a id="e1b6949c321lc"></a>
 
 ## 计费说明
 
@@ -1679,7 +2067,13 @@ data:{"output":{"choices":[{"message":{"content":"","reasoning_content":"","role
     > 若模型在思考模式下未输出思考过程，则按非思考模式价格计费。
     
 
+<a id="常见问题"></a>
+
+<a id="b654fdb6bblx9"></a>
+
 ## 常见问题
+
+<a id="accordion-q-怎么关闭思考模式"></a>
 
 Q：怎么关闭思考模式？
 
@@ -1691,7 +2085,9 @@ Q：怎么关闭思考模式？
 
 `enable_thinking` 是百炼的扩展参数，不属于 OpenAI 标准字段。使用 OpenAI Java SDK 时，`ChatCompletionCreateParams` 不原生支持该字段，需通过 `extraBody` 方法传入：
 
-```
+<a id="code-block-38"></a>
+
+```java
 // enable_thinking 非 OpenAI 标准参数，Java SDK 需通过 extra_body 传递
 ChatCompletionCreateParams params = ChatCompletionCreateParams.builder()
     .model("qwen3.6-plus")
@@ -1707,6 +2103,8 @@ ChatCompletionCreateParams params = ChatCompletionCreateParams.builder()
 client.chat().completions().create(params);
 ```
 
+<a id="accordion-q-如何确认思考模式是否已开启"></a>
+
 Q：如何确认思考模式是否已开启？
 
 若思考模式与非思考模式下的调用耗时差异极小，说明思考模式可能未实际开启。按以下步骤排查：
@@ -1714,6 +2112,8 @@ Q：如何确认思考模式是否已开启？
 1.  检查 API 请求中是否正确传入 `enable_thinking=true` 参数。使用 OpenAI Java SDK 时，该参数需通过 `extraBody` 传入（参见上一问示例）。
 2.  查看响应中是否包含 `reasoning_content` 字段，并确认用量中 `reasoning_tokens` 大于 0。不包含该字段或 `reasoning_tokens=0` 表示思考模式未启用。
 3.  对比思考与非思考模式下的响应时间与 `completion_tokens`。启用思考模式后，响应中会出现 `reasoning_content` 字段，且总耗时显著增加（实测约为非思考模式的 3 倍）；若两者耗时差异极小，说明思考模式未实际生效，请检查参数是否正确传入并重试。
+
+<a id="accordion-q-qwen3-7-plus-调用响应慢如何排查"></a>
 
 Q：qwen3.7-plus 调用响应慢如何排查？
 
@@ -1728,6 +2128,8 @@ qwen3.7-plus 属于混合思考模式模型，且默认开启思考模式。思�
 
 > 用量统计中展示的是单次调用的整体耗时（含思考 Token 的生成时间），并非单个 Token 的生成延迟。
 
+<a id="accordion-q-如何以非流式-同步-方式调用深度思考模型"></a>
+
 Q：如何以非流式（同步）方式调用深度思考模型？
 
 本文示例默认采用流式输出（推荐，可实时查看思考过程、避免长时间等待）。商业版深度思考模型（如 qwen-plus、qwen-flash 等）也支持非流式（同步）输出，一次性返回完整的思考过程与回复。
@@ -1736,7 +2138,9 @@ Q：如何以非流式（同步）方式调用深度思考模型？
 
 以下以 OpenAI 兼容接口、非流式调用 qwen4-max 开启思考模式为例：
 
-```
+<a id="code-block-39"></a>
+
+```python
 from openai import OpenAI
 import os
 
@@ -1765,11 +2169,15 @@ print(message.content)
 
 > 部分模型（如 qwen3.5-122b-a10b、qwen3.5-27b 等开源版）仅支持流式输出，非流式调用会报错 `parameter.enable_thinking only support stream call`，此类模型请使用流式调用。
 
+<a id="accordion-q-免费额度-用完后如何购买-token"></a>
+
 Q： 免费额度 用完后如何购买 Token？
 
 前往[费用与成本](https://usercenter2.aliyun.com/home)中心充值，保持账户余额充足即可正常调用模型。
 
 > 超出免费额度后自动扣费，出账周期为分钟级，消费明细请前往 \*\*[账单详情](https://billing-cost.console.aliyun.com/finance/expense-report/expense-detail-by-instance)\*\* 进行查看。
+
+<a id="accordion-q-如何接入-chatbox-cherry-studio-cline-或-dify"></a>
 
 Q：如何接入 Chatbox 、 Cherry Studio 、 Cline 或 Dify ？
 
@@ -1777,25 +2185,47 @@ Q：如何接入 Chatbox 、 Cherry Studio 、 Cline 或 Dify ？
 
 > 以下以常用工具为例，其他大模型工具的接入方法类似。
 
+<a id="sec-tabs-19"></a>
+
+<a id="chatbox"></a>
+
+<a id="chatbox-h4"></a>
+
 #### Chatbox
 
 请参见[Chatbox](https://help.aliyun.com/zh/model-studio/cline-tool)。
 
+<a id="cherry-studio"></a>
+
+<a id="cherry-studio-h4"></a>
+
 #### Cherry Studio
 
-请参见[Cherry Studio](raw/token-plan-user-guide/use-chat-client-or-development-tool/more-tools-guide/cherry-studio.md)。
+请参见[Cherry Studio](../../../token-plan-user-guide/use-chat-client-or-development-tool/more-tools-guide/cherry-studio.md)。
+
+<a id="cline"></a>
+
+<a id="cline-h4"></a>
 
 #### Cline
 
-请参见[Cline](raw/token-plan-user-guide/use-chat-client-or-development-tool/more-tools-guide/cline.md)。
+请参见[Cline](../../../token-plan-user-guide/use-chat-client-or-development-tool/more-tools-guide/cline.md)。
+
+<a id="dify"></a>
+
+<a id="dify-h4"></a>
 
 #### Dify
 
 请参见[Dify](https://help.aliyun.com/zh/model-studio/dify)。
 
+<a id="accordion-q-可以上传图片或文档进行提问吗"></a>
+
 Q： 可以上传图片或文档进行提问吗 ？
 
-本文涉及的模型仅支持文本输入。Qwen3-VL、QVQ 模型支持图片深度思考，[Qwen- Long](raw/model-user-guide/model-experience/text-generation-model/specialized-models/long-context-qwen-long.md)模型支持文档输入。
+本文涉及的模型仅支持文本输入。Qwen3-VL、QVQ 模型支持图片深度思考，[Qwen- Long](specialized-models/long-context-qwen-long.md)模型支持文档输入。
+
+<a id="accordion-q-如何在使用-langchain-时输出思考过程"></a>
 
 Q：如何在使用 LangChain 时输出思考过程？
 
@@ -1806,7 +2236,9 @@ Q：如何在使用 LangChain 时输出思考过程？
     将 `langchain_community` 和 `dashscope` 更新到最新版本：
     
 
-```
+<a id="code-block-40"></a>
+
+```bash
 pip install -U langchain_community dashscope
 ```
 
@@ -1815,7 +2247,9 @@ pip install -U langchain_community dashscope
     通过以下代码分别打印思考过程与回复内容：
     
 
-```
+<a id="code-block-41"></a>
+
+```python
 from langchain_community.chat_models.tongyi import ChatTongyi
 from langchain_core.messages import HumanMessage
 
@@ -1842,18 +2276,24 @@ for chunk in completion:
 
 输出示例：
 
-```
+<a id="code-block-42"></a>
+
+```text
 ====================思考过程 ====================
 好的，用户问“你是谁”，我需要给出一个准确且友好的回答。首先，我应该介绍自己的名字和基本功能，让用户了解我的用途。然后，可能需要提到我是通义实验室研发的，这样增加权威性。还要说明我能做什么，比如回答问题、创作文字等，这样用户知道可以怎么使用我。同时，保持语气亲切，避免太技术化的术语，让回答更易懂。另外，可能需要检查是否有遗漏的信息，比如多语言支持或者应用场景，但用户的问题比较基础，可能不需要太详细。最后，确保回答简洁明了，不冗长，符合用户的快速获取信息的需求。
 ====================回复内容====================
 我是Qwen3，是阿里巴巴集团旗下的通义实验室自主研发的超大规模语言模型。我可以帮助你回答问题、创作文字（如写故事、公文、邮件、剧本等）、进行逻辑推理、编程，甚至表达观点和玩游戏。我支持多种语言，包括但不限于中文、英文、德语、法语、西班牙语等，旨在为全球用户提供高效、便捷的服务。如果你有任何问题或需要帮助，欢迎随时告诉我！
 ```
 
+<a id="accordion-q-如何查看token-消耗-量-及-调用次数"></a>
+
 Q：如何查看Token 消耗 量 及 调用次数？
 
-模型调用发生后**分钟级**即可在监控图表查看。登录模型监控页面（[北京](https://bailian.console.aliyun.com/cn-beijing/model/telemetry)或[新加坡](https://bailian.console.aliyun.com/ap-southeast-1/model/telemetry)），在左侧导航栏选择**运维管理** > **模型监控**进入监控概览页，设置查询条件（例如，选择时间范围、业务空间等），再在**模型列表**区域找到目标模型并单击**查看详情**，即可查看该模型的调用统计结果。具体请参见[监控告警](raw/model-user-guide/model-monitoring/model-telemetry.md)文档。
+模型调用发生后**分钟级**即可在监控图表查看。登录模型监控页面（[北京](https://bailian.console.aliyun.com/cn-beijing/model/telemetry)或[新加坡](https://bailian.console.aliyun.com/ap-southeast-1/model/telemetry)），在左侧导航栏选择**运维管理** > **模型监控**进入监控概览页，设置查询条件（例如，选择时间范围、业务空间等），再在**模型列表**区域找到目标模型并单击**查看详情**，即可查看该模型的调用统计结果。具体请参见[监控告警](../../model-monitoring/model-telemetry.md)文档。
 
 > 监控数据按分钟级更新，仅供参考，不作为计费依据。
+
+<a id="accordion-q-长提示词生成失败或超时怎么办"></a>
 
 Q：长提示词生成失败或超时怎么办？
 
@@ -1864,6 +2304,8 @@ Q：长提示词生成失败或超时怎么办？
 -   关闭思考模式：将 `enable_thinking` 设为 `false`，处理时间可从约 50 秒降至约 30 秒。
 -   开启流式输出：将 `stream` 设为 `true`，避免非流式调用的超时限制。
 -   调大超时时间：如需保留思考模式，请将客户端超时时间设为 180 秒以上。
+
+<a id="accordion-q-使用第三方客户端调用深度思考模型时-输出思考标签后客户端断连怎么办"></a>
 
 Q：使用第三方客户端调用深度思考模型时，输出思考标签后客户端断连怎么办？
 
@@ -1877,16 +2319,26 @@ Q：使用第三方客户端调用深度思考模型时，输出思考标签后�
 
 您也可以通过 DashScope API 直接调用模型，验证思考功能是否正常工作。
 
+<a id="accordion-q-使用视觉模型-如-qwen3-vl-plus-进行图片安全判断时-模型结论与内容描述矛盾怎么办"></a>
+
 Q：使用视觉模型（如 qwen3-vl-plus）进行图片安全判断时，模型结论与内容描述矛盾怎么办？
 
 视觉模型输出的安全判断是模型生成文本的一部分，并非独立的内容审核裁决。该结论可能随模型版本和所在区域不同而变化，也可能与同一次响应中的内容描述不一致，因此不建议将其作为内容合规的唯一依据。
 
-如果您需要稳定、统一的安全判断标准，请接入 AI 安全护栏，对模型的输入与输出进行独立的内容审核。具体请参见[AI 安全护栏](raw/model-user-guide/security-and-compliance/content-security.md)。
+如果您需要稳定、统一的安全判断标准，请接入 AI 安全护栏，对模型的输入与输出进行独立的内容审核。具体请参见[AI 安全护栏](../../security-and-compliance/content-security.md)。
+
+<a id="api-参考"></a>
+
+<a id="8202e9793agxx"></a>
 
 ## API 参考
 
-深度思考模型的输入输出参数，请参见[文本生成](raw/model-api-reference/qwen-api-reference.md)。
+深度思考模型的输入输出参数，请参见[文本生成](../../../model-api-reference/qwen-api-reference.md)。
+
+<a id="错误码"></a>
+
+<a id="2048aa1f92x46"></a>
 
 ## 错误码
 
-执行报错时，请参见[错误码](raw/model-api-reference/preparations/error-code.md)排查解决。
+执行报错时，请参见[错误码](../../../model-api-reference/preparations/error-code.md)排查解决。

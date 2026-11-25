@@ -2,11 +2,19 @@
 
 反馈模型生成的内容质量。
 
+<a id="调试"></a>
+
+<a id="api-detail-23"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
 [调试](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/FeedbackDialogue)
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -25,181 +33,44 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-操作
+<table><thead><tr><th>操作</th><th>访问级别</th><th>资源类型</th><th>条件关键字</th><th>关联操作</th></tr></thead><tbody><tr><td>aimiaobi:FeedbackDialogue</td><td>create</td><td><div><div>*全部资源</div><div><code>*</code></div></div></td><td><ul>无</ul></td><td>无</td></tr></tbody></table>
 
-访问级别
+<a id="请求参数"></a>
 
-资源类型
-
-条件关键字
-
-关联操作
-
-aimiaobi:FeedbackDialogue
-
-create
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-36"></a>
 
 ## 请求参数
 
-名称
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| AgentKey | string | 是 | 业务空间唯一标识： [AgentKey](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey) | fcb14f25c9ee41ccad33a049de8f941b\_p\_outbound\_public |
+| TaskId | string | 否 | 整个页面的 ID | 3f7045e099474ba28ceca1b4eb6d6e21 |
+| SessionId | string | 是 | 单轮对话的 ID | 75bf82fa-b71b-45d7-ae40-0b00e496cd9e |
+| Rating | string | 否 | thumbsDown:点踩、thumbsUp:点赞 | thumbsDown |
+| RatingTags | array | 否 | 标签 |  |
+| RatingTag | string | 否 | 反馈标签，任意字符，长度小于 20 字 | 生成内容跟要求不符（跟主题不符） |
+| ModifiedResponse | string | 否 | 修改后的生成结果 | test |
+| CustomerResponse | string | 否 | 反馈信息 | test |
+| GoodText | string | 否 | 认为好的生成内容 | test |
 
-类型
+<a id="返回参数"></a>
 
-必填
-
-描述
-
-示例值
-
-AgentKey
-
-string
-
-是
-
-业务空间唯一标识： [AgentKey](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)
-
-fcb14f25c9ee41ccad33a049de8f941b\_p\_outbound\_public
-
-TaskId
-
-string
-
-否
-
-整个页面的 ID
-
-3f7045e099474ba28ceca1b4eb6d6e21
-
-SessionId
-
-string
-
-是
-
-单轮对话的 ID
-
-75bf82fa-b71b-45d7-ae40-0b00e496cd9e
-
-Rating
-
-string
-
-否
-
-thumbsDown:点踩、thumbsUp:点赞
-
-thumbsDown
-
-RatingTags
-
-array
-
-否
-
-标签
-
-RatingTag
-
-string
-
-否
-
-反馈标签，任意字符，长度小于 20 字
-
-生成内容跟要求不符（跟主题不符）
-
-ModifiedResponse
-
-string
-
-否
-
-修改后的生成结果
-
-test
-
-CustomerResponse
-
-string
-
-否
-
-反馈信息
-
-test
-
-GoodText
-
-string
-
-否
-
-认为好的生成内容
-
-test
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-名称
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | BaseResult |  |
+| Code | string | 状态码 | successful |
+| HttpStatusCode | integer | http 状态码 | 200 |
+| Message | string | 错误说明 | successful |
+| RequestId | string | 请求唯一标识 | 3f7045e099474ba28ceca1b4eb6d6e21 |
+| Success | boolean | 是否成功：true 成功，false 失败 | true |
 
-类型
+<a id="示例"></a>
 
-描述
-
-示例值
-
-object
-
-BaseResult
-
-Code
-
-string
-
-状态码
-
-successful
-
-HttpStatusCode
-
-integer
-
-http 状态码
-
-200
-
-Message
-
-string
-
-错误说明
-
-successful
-
-RequestId
-
-string
-
-请求唯一标识
-
-3f7045e099474ba28ceca1b4eb6d6e21
-
-Success
-
-boolean
-
-是否成功：true 成功，false 失败
-
-true
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -207,7 +78,9 @@ true
 
 `JSON`格式
 
-```
+<a id="code-block"></a>
+
+```text
 {
   "Code": "successful",
   "HttpStatusCode": 200,
@@ -216,6 +89,10 @@ true
   "Success": true
 }
 ```
+
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
 
 ## 错误码
 

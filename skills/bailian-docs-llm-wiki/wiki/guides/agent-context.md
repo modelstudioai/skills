@@ -1,42 +1,40 @@
 # agent context
 
-`agent context` 是百炼平台中用于为 Agent 提供外部信息输入与状态记忆能力的核心机制，它决定了 Agent 在执行任务时可感知和利用的上下文范围。该机制通过 Knowledge、Memory、Connector 和 ParseX 四类组件协同构建动态、可扩展的上下文环境。开发者需根据模型能力与业务需求合理配置，否则可能导致上下文截断或推理偏差。
+`agent context` 是百炼平台中用于增强 Agent 推理能力的核心上下文机制，它将外部知识、历史记忆、数据连接器及结构化解析能力统一注入 Agent 的执行环境。该机制不依赖模型自身参数，而是通过运行时动态注入方式影响 LLM 的 [prompt](prompt.md) 构建与决策路径。其设计目标是解耦“能力扩展”与“模型选型”，使同一 Agent 可灵活适配不同模型。
 
 ## 支持的模型与功能
 
-当前 `agent context` 功能在百炼平台全量支持 Qwen 系列大模型（包括 Qwen1.5、Qwen2、Qwen2.5 及 Qwen3），但对非 Qwen 模型（如 Llama 3 或 GLM 系列）的支持仍处于实验阶段，部分 context 注入方式可能被静默忽略。所有 context 组件均依赖模型的 `tool_call` 与 `context_window` 能力，因此仅当模型具备完整工具调用协议及 ≥32k token 上下文窗口时，才能启用 Memory 与 Knowledge 的联合检索 [Agent 上下文](../../raw/application-user-guide/agent-context.md)。
+当前 `agent context` 全量支持百炼平台所有可部署的 Agent 模型（含 Qwen 系列、Qwen2-Agents、以及第三方兼容模型），但部分高级功能需模型具备 tool-calling 或 structured output 能力。具体支持范围详见 [Agent 上下文](../../raw/application-user-guide/agent-context.md) 文档中关于模型兼容性的说明。其中，Memory 功能在 Qwen2-Agents v1.2+ 中默认启用；而 ParseX 的 schema-aware 解析能力仅在支持 JSON Schema 输出的模型上生效，如 Qwen2.5-7B-Instruct（需开启 `response_format: { "type": "json_object" }`）。
 
 ## 关键参数
 
-- `context_type`: 必填，取值为 `"knowledge"`、`"memory"`、`"connector"` 或 `"parsex"`，决定上下文来源类型  
-- `context_id`: 对应资源的唯一标识（如 Knowledge 库 ID、Memory session ID）  
-- `max_context_tokens`: 可选，显式控制注入上下文的最大 token 数，默认为模型 context window 的 30%，但不得超过 8192；该参数在 [Knowledge（原RAG）](../../raw/application-user-guide/agent-context/knowledge-base.md) 中被明确要求用于防止 prompt 溢出  
-- `enable_fallback`: 布尔值，仅对 Connector 有效，启用后在连接失败时自动降级为无 context 执行  
+`agent context` 通过以下核心参数控制行为：
 
-> **注意**：`max_context_tokens` 在 [Memory](../../raw/application-user-guide/agent-context/memory-library-overview.md) 文档中被描述为“建议设为 4096”，但该值与实际模型窗口不匹配，已确认为过时建议；请以 `context_window × 0.3` 为准。
+- `context_sources`: 数组，指定上下文来源类型，如 `["knowledge", "memory", "connector", "parsex"]`  
+- `context_config`: 对象，按来源类型配置参数，例如：
+  - `knowledge.max_chunks`: 控制 RAG 检索返回的最大文档块数（默认 3）
+  - `memory.window_size`: 限制会话级记忆回溯轮数（默认 10）
+  - `parsex.schema`: 定义结构化解析目标 schema（必须为合法 JSON Schema）
+- `context_injection_strategy`: 可选 `"prepend"`（默认）或 `"inject"`，决定上下文插入 [prompt](prompt.md) 的位置
+
+详细参数定义与默认值请参考 [Agent 上下文](../../raw/application-user-guide/agent-context.md) 的配置章节。
 
 ## 使用方式
 
-通过 API 请求体中的 `context` 字段传入结构化对象：
+1. 在创建或更新 Agent 时，于 `agent_config.context` 字段中声明上下文配置；
+2. 若启用 `knowledge`，需提前绑定知识库 ID；启用 `memory` 需确保已开启会话状态管理；
+3. `parsex` 需配合 `input_schema` 和 `output_schema` 显式声明输入/输出结构，并在调用时传入原始非结构化文本；
+4. 所有上下文内容均在每次 `run` 请求时实时注入，不缓存至模型权重中。
 
-```json
-{
-  "context": {
-    "type": "knowledge",
-    "id": "kb_abc123",
-    "max_context_tokens": 6144
-  }
-}
-```
-
-若需组合多源 context（如同时注入 Knowledge 与 Memory），须使用 `context_list` 数组（非 `context` 单对象），且各条目 `context_type` 不可重复。此行为在 [Connector](../../raw/application-user-guide/agent-context/overview.md) 的高级用法章节中有示例说明。
+完整示例与 SDK 调用代码见 [Agent 上下文](../../raw/application-user-guide/agent-context.md) 的快速开始部分。
 
 ## 限制和注意事项
 
-- 单次请求最多支持 3 个 context 条目（即 `context_list` 长度 ≤ 3）  
-- Knowledge 与 ParseX context 不支持实时增量更新，变更后需重新触发索引构建（参见 [ParseX](../../raw/application-user-guide/agent-context/getting-started-overview.md) 初始化流程）  
-- Memory context 仅对同一 `session_id` 有效，跨 session 不共享；且默认 TTL 为 2 小时，不可配置  
-- 所有 context 内容在进入 LLM 输入前会经统一 tokenizer 截断，**不会**触发模型侧的 sliding window 或 long-context 推理优化，因此超长 context 仍可能丢失尾部信息
+- 单次请求中 `context_sources` 总长度（含所有注入文本）不得超过 32,768 token，超限将触发截断并返回警告日志；
+- `memory` 与 `connector` 同时启用时，若 connector 返回数据含时间敏感字段（如 `updated_at`），可能与 memory 的时序窗口冲突，导致逻辑不一致；
+- > **注意**：原始文档 [Agent 上下文](../../raw/application-user-guide/agent-context.md) 中提及 “connector 支持异步预加载”，但该特性已在 v2.4.0 版本中移除，实际行为为同步阻塞加载，最新行为以 [Connector 概览](../../raw/agent-context/overview.md) 为准；
+- `parsex` 当前不支持嵌套过深（>5 层）或含循环引用的 schema，解析失败将退化为原始文本透传；
+- 所有 context 注入内容均参与计费（按 token 计），建议通过 `max_chunks` 和 `window_size` 主动约束规模。
 
 ## 来源文档
 

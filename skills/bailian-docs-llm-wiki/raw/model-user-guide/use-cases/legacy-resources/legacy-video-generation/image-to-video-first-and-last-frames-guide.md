@@ -5,33 +5,38 @@
 -   **基础能力**：固定视频时长（5秒）、指定视频分辨率（480P/720P/1080P）、智能改写prompt、添加水印。
 -   **特效模板**：仅需输入首帧图片，再选择一个特效模板，生成具有特定动态效果的视频。
 
-**快速入口：**[API参考](raw/_short/legacy-image-to-video-by-first-and-last-frame-ap-524bb66cfed1f5de.md)**｜**[Prompt指南](raw/model-user-guide/use-cases/text-to-video-prompt.md)**｜** [万相-图生视频-视频特效列表](raw/_short/wanx-video-effects-5b23bdd72b8e7944.md)
+**快速入口：**[API参考](../../../../_short/legacy-image-to-video-by-first-and-last-frame-ap-524bb66cfed1f5de.md)**｜**[Prompt指南](../../text-to-video-prompt.md)**｜** [万相-图生视频-视频特效列表](../../../../_short/wanx-video-effects-5b23bdd72b8e7944.md)
+
+<a id="快速开始"></a>
+
+<a id="a05623c0f4msm"></a>
 
 ## 快速开始
 
-**输入提示词**
+|  |  |  |  |
+| --- | --- | --- | --- |
+| **输入提示词** | **输入首帧图像** | **输入尾帧图像** | **输出视频（无声视频）** |
+| 一个可爱且表情有些忧伤的蓝色小怪物站在雨中。镜头缓慢拉近，定格在小怪物抬头仰望天空的瞬间。 | ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0229060771/p958738.png) | ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0229060771/p1049069.png) |  |
 
-**输入首帧图像**
+在调用前，先[获取与配置 API Key](../../../../model-api-reference/preparations/get-api-key.md)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。通过SDK进行调用，请[安装DashScope SDK](../../../../model-api-reference/preparations/install-sdk.md)。
 
-**输入尾帧图像**
+<a id="sec-tabs"></a>
 
-**输出视频（无声视频）**
+<a id="python-sdk"></a>
 
-一个可爱且表情有些忧伤的蓝色小怪物站在雨中。镜头缓慢拉近，定格在小怪物抬头仰望天空的瞬间。
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0229060771/p958738.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0229060771/p1049069.png)
-
-在调用前，先[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。通过SDK进行调用，请[安装DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
+<a id="python-sdk-h4"></a>
 
 #### Python SDK
 
-**重要**请确保 DashScope Python SDK 版本**不低于**2.0.1，再运行以下代码。
+> **重要**
+>
+> 请确保 DashScope Python SDK 版本**不低于**2.0.1，再运行以下代码。
+>
+> 若版本过低，可能会触发 “url error, please check url!” 等错误。请参考[安装SDK](../../../../model-api-reference/preparations/install-sdk.md)进行更新。
 
-若版本过低，可能会触发 “url error, please check url!” 等错误。请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
+<a id="code-block"></a>
 
-```
+```python
 import os
 import dashscope
 from dashscope import DashScopeError
@@ -65,13 +70,21 @@ except DashScopeError as e:
     print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
+<a id="java-sdk"></a>
+
+<a id="java-sdk-h4"></a>
+
 #### Java SDK
 
-**重要**请确保 DashScope Java SDK 版本**不低于**`2.22.6`，再运行以下代码。
+> **重要**
+>
+> 请确保 DashScope Java SDK 版本**不低于**`2.22.6`，再运行以下代码。
+>
+> 若版本过低，可能会触发 “url error, please check url!” 等错误。请参考[安装SDK](../../../../model-api-reference/preparations/install-sdk.md)进行更新。
 
-若版本过低，可能会触发 “url error, please check url!” 等错误。请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
+<a id="code-block-2"></a>
 
-```
+```java
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesis;
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesisParam;
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesisResult;
@@ -121,10 +134,17 @@ public class Image2Video {
 }
 ```
 
+<a id="curl"></a>
+
+<a id="curl-h4"></a>
+
 #### curl
 
 **步骤1：创建任务获取任务ID**
-```
+
+<a id="code-block-3"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2video/video-synthesis' \
     -H 'X-DashScope-Async: enable' \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -143,11 +163,14 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     }
 }'
 ```
+
 **步骤2：根据任务ID获取结果**
 
-将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](../../../get-started-with-models/regions.md#h2_migrate_domain)。
 
-```
+<a id="code-block-4"></a>
+
+```bash
 curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id} \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
@@ -156,7 +179,9 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 
 > `video_url` 有效期24小时，请及时下载视频。
 
-```
+<a id="code-block-5"></a>
+
+```json
 {
     "request_id": "c1209113-8437-424f-a386-xxxxxx",
     "output": {
@@ -169,14 +194,28 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 }
 ```
 
+<a id="适用范围"></a>
+
+<a id="06f39eafa2dwt"></a>
+
 ## 适用范围
 
 -   各地域支持的模型有所差异，且资源相互独立。各地域支持的模型请参见[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)。
 -   调用时，确保**模型、Endpoint URL 和 API Key 均属于同一地域**，跨地域调用将会失败。
 
-**说明**本文的示例代码适用于**北京地域**。
+> **说明**
+>
+> 本文的示例代码适用于**北京地域**。
+
+<a id="核心能力"></a>
+
+<a id="dbdc7e40e2alh"></a>
 
 ## 核心能力
+
+<a id="首尾帧生视频"></a>
+
+<a id="d33030e620z40"></a>
 
 ### 首尾帧生视频
 
@@ -190,25 +229,24 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 -   `last_frame_url`：**必填**，必须传入尾帧图像。
 -   `prompt`：可选，推荐填写，控制视频画面的变化。
 
-**输入提示词**
+|  |  |  |  |
+| --- | --- | --- | --- |
+| **输入提示词** | **输入首帧图像** | **输入尾帧图像** | **输出视频（无声视频）** |
+| 写实风格,一只小黑猫好奇地仰望天空,镜头从平视角度逐渐升高,最后以俯视角度捕捉到它好奇的眼神。 | ![首帧图像](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8239161571/p944793.png) | ![尾帧图像](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9239161571/p944794.png) |  |
 
-**输入首帧图像**
+<a id="sec-tabs-2"></a>
 
-**输入尾帧图像**
+<a id="python-sdk-2"></a>
 
-**输出视频（无声视频）**
-
-写实风格,一只小黑猫好奇地仰望天空,镜头从平视角度逐渐升高,最后以俯视角度捕捉到它好奇的眼神。
-
-![首帧图像](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8239161571/p944793.png)
-
-![尾帧图像](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9239161571/p944794.png)
+<a id="python-sdk-2-h4"></a>
 
 #### Python SDK
 
-> 请确保 DashScope Python SDK 版本不低于 2.0.1，可参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
+> 请确保 DashScope Python SDK 版本不低于 2.0.1，可参考[安装SDK](../../../../model-api-reference/preparations/install-sdk.md)进行更新。
 
-```
+<a id="code-block-6"></a>
+
+```python
 import os
 import dashscope
 from dashscope import DashScopeError
@@ -257,11 +295,17 @@ if __name__ == '__main__':
     sample_async_call_kf2v()
 ```
 
+<a id="java-sdk-2"></a>
+
+<a id="java-sdk-2-h4"></a>
+
 #### Java SDK
 
-> 请确保 DashScope Java SDK 版本不低于 `2.22.6`，可参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
+> 请确保 DashScope Java SDK 版本不低于 `2.22.6`，可参考[安装SDK](../../../../model-api-reference/preparations/install-sdk.md)进行更新。
 
-```
+<a id="code-block-7"></a>
+
+```java
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesis;
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesisParam;
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesisResult;
@@ -316,10 +360,17 @@ public class Image2Video {
 }
 ```
 
+<a id="curl-2"></a>
+
+<a id="curl-2-h4"></a>
+
 #### curl
 
 **步骤1：创建任务获取任务ID**
-```
+
+<a id="code-block-8"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2video/video-synthesis' \
     -H 'X-DashScope-Async: enable' \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -338,14 +389,21 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     }
 }'
 ```
+
 **步骤2：根据任务ID获取结果**
 
-将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](../../../get-started-with-models/regions.md#h2_migrate_domain)。
 
-```
+<a id="code-block-9"></a>
+
+```bash
 curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id} \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
+
+<a id="使用视频特效"></a>
+
+<a id="e4e8fe3b49tet"></a>
 
 ### 使用视频特效
 
@@ -355,22 +413,29 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 
 **参数设置：**
 
--   `template`：**必填**，指定特效名称（例如 "mech1" 表示机械觉醒特效）。调用前请查阅[万相-图生视频-视频特效列表](raw/_short/wanx-video-effects-5b23bdd72b8e7944.md)，确认模型是否支持，以免调用失败。
+-   `template`：**必填**，指定特效名称（例如 "mech1" 表示机械觉醒特效）。调用前请查阅[万相-图生视频-视频特效列表](../../../../_short/wanx-video-effects-5b23bdd72b8e7944.md)，确认模型是否支持，以免调用失败。
 -   `first_frame_url`：**必填**，必须传入首帧图像。
 -   `last_frame_url`：**忽略**，在使用特效时，last\_frame\_url 字段无效，建议留空或不传。
 -   `prompt`：**忽略**，在使用特效时，prompt 字段无效，建议留空或不传。
 
-**输入首帧图像**
+|  |  |
+| --- | --- |
+| **输入首帧图像** | **输出视频（特效视频）** |
+| ![首尾帧生视频-视频特效-demo](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8150385571/p1000087.png) |  |
 
-**输出视频（特效视频）**
+<a id="sec-tabs-3"></a>
 
-![首尾帧生视频-视频特效-demo](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8150385571/p1000087.png)
+<a id="python-sdk-3"></a>
+
+<a id="python-sdk-3-h4"></a>
 
 #### Python SDK
 
-> 请确保 DashScope Python SDK 版本不低于 2.0.1，可参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
+> 请确保 DashScope Python SDK 版本不低于 2.0.1，可参考[安装SDK](../../../../model-api-reference/preparations/install-sdk.md)进行更新。
 
-```
+<a id="code-block-10"></a>
+
+```python
 import os
 import dashscope
 from dashscope import DashScopeError
@@ -417,11 +482,17 @@ if __name__ == '__main__':
     sample_async_call_kf2v()
 ```
 
+<a id="java-sdk-3"></a>
+
+<a id="java-sdk-3-h4"></a>
+
 #### Java SDK
 
-> 请确保 DashScope Java SDK 版本不低于 `2.22.6`，可参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
+> 请确保 DashScope Java SDK 版本不低于 `2.22.6`，可参考[安装SDK](../../../../model-api-reference/preparations/install-sdk.md)进行更新。
 
-```
+<a id="code-block-11"></a>
+
+```java
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesis;
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesisParam;
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesisResult;
@@ -473,10 +544,17 @@ public class Image2Video {
 }
 ```
 
+<a id="curl-3"></a>
+
+<a id="curl-3-h4"></a>
+
 #### curl
 
 **步骤1：创建任务获取任务ID**
-```
+
+<a id="code-block-12"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2video/video-synthesis' \
     -H 'X-DashScope-Async: enable' \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -493,24 +571,35 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     }
 }'
 ```
+
 **步骤2：根据任务ID获取结果**
 
-将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](../../../get-started-with-models/regions.md#h2_migrate_domain)。
 
-```
+<a id="code-block-13"></a>
+
+```bash
 curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id} \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
+
+<a id="如何输入图像"></a>
+
+<a id="69308edfbebnx"></a>
 
 ## 如何输入图像
 
 -   **图像数量**：1张首帧图像，1张尾帧图像。
 -   **输入方式**：图像URL、本地文件路径、Base64 编码字符串。
 
+<a id="accordion-方式一-图像url-http-接口-sdk-推荐"></a>
+
 方式一：图像URL（HTTP 接口、SDK） 推荐
 
 -   **公网URL**：支持 HTTP 或 HTTPS 协议。示例：[](https://xxxx/xxx.png)[https://xxxx/xxx.png](https://xxxx/xxx.png)。
--   **临时URL**：支持OSS协议，必须通过[上传文件获取临时 URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。示例：oss://dashscope-instant/xxx/xxx.png。
+-   **临时URL**：支持OSS协议，必须通过[上传文件获取临时 URL](../../../../model-api-reference/more-about-models/get-temporary-file-url.md)。示例：oss://dashscope-instant/xxx/xxx.png。
+
+<a id="accordion-方式二-本地文件路径-仅限sdk"></a>
 
 方式二：本地文件路径（仅限SDK）
 
@@ -518,47 +607,16 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 
 **Python SDK**：支持**绝对路径和相对路径**。文件路径规则如下：
 
-**操作系统**
-
-**传入的文件路径**
-
-**示例（绝对路径）**
-
-**示例（相对路径）**
-
-Linux / macOS
-
-file://{文件的绝对路径或相对路径}
-
-file:///home/images/test.png
-
-file://./images/test.png
-
-Windows
-
-file://D:/images/test.png
-
-file://./images/test.png
+<table><thead><tr><th><p><strong>操作系统</strong></p></th><th><p><strong>传入的文件路径</strong></p></th><th><p><strong>示例（绝对路径）</strong></p></th><th><p><strong>示例（相对路径）</strong></p></th></tr></thead><tbody><tr><td><p>Linux / macOS</p></td><td rowspan="2"><p>file://{文件的绝对路径或相对路径}</p></td><td><p>file:///home/images/test.png</p></td><td><p>file://./images/test.png</p></td></tr><tr><td><p>Windows</p></td><td><p>file://D:/images/test.png</p></td><td><p>file://./images/test.png</p></td></tr></tbody></table>
 
 **Java SDK**：仅支持**绝对路径**。文件路径规则如下：
 
-**操作系统**
+| 操作系统 | 传入的文件路径 | 示例（绝对路径） |
+| --- | --- | --- |
+| Linux / macOS | file://{文件的绝对路径} | file:///home/images/test.png |
+| Windows | file:///{文件的绝对路径} | file:///D:/images/test.png |
 
-**传入的文件路径**
-
-**示例（绝对路径）**
-
-Linux / macOS
-
-file://{文件的绝对路径}
-
-file:///home/images/test.png
-
-Windows
-
-file:///{文件的绝对路径}
-
-file:///D:/images/test.png
+<a id="accordion-方式三-base64-编码字符串-http-接口-sdk"></a>
 
 方式三：Base64 编码字符串（HTTP 接口、SDK）
 
@@ -570,36 +628,30 @@ file:///D:/images/test.png
         
     -   {MIME\_type}：图像的媒体类型，需与文件格式对应。
         
-        **图像格式**
+        | 图像格式 | MIME Type |
+        | --- | --- |
+        | JPEG | image/jpeg |
+        | JPG | image/jpeg |
+        | PNG | image/png |
+        | BMP | image/bmp |
+        | WEBP | image/webp |
         
-        **MIME Type**
-        
-        JPEG
-        
-        image/jpeg
-        
-        JPG
-        
-        image/jpeg
-        
-        PNG
-        
-        image/png
-        
-        BMP
-        
-        image/bmp
-        
-        WEBP
-        
-        image/webp
-        
+
+<a id="示例代码-图像的多种输入方式"></a>
+
+<a id="0b60fba67ann8"></a>
 
 #### 示例代码：图像的多种输入方式
 
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-python-sdk-tab"></a>
+
 Python SDK
 
-```
+<a id="code-code-group-python-sdk"></a>
+
+```python
 import base64
 import os
 import mimetypes
@@ -674,9 +726,13 @@ if __name__ == '__main__':
     sample_sync_call_kf2v()
 ```
 
+<a id="fig-code-group-java-sdk-tab"></a>
+
 Java SDK
 
-```
+<a id="code-code-group-java-sdk"></a>
+
+```java
 // Copyright (c) Alibaba, Inc. and its affiliates.
 
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesis;
@@ -708,11 +764,15 @@ public class Kf2vSync {
         // 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
 ```
 
+<a id="输出视频"></a>
+
+<a id="80761d0d13me6"></a>
+
 ## 输出视频
 
 -   **视频数量**：1个。
     
--   **视频规格**：各模型的输出规格有所差异，具体请参见[视频规格](https://help.aliyun.com/zh/model-studio/image-to-video-first-and-last-frames-guide#06f39eafa2dwt)。
+-   **视频规格**：各模型的输出规格有所差异，具体请参见[视频规格](image-to-video-first-and-last-frames-guide.md#06f39eafa2dwt)。
     
 -   **视频URL有效期**：**24小时**。
     
@@ -721,23 +781,39 @@ public class Kf2vSync {
     -   模型将尽量保持输入首帧图像的宽高比不变，缩放总像素数接近目标值。因编码规范，输出视频的宽高必须被16整除，模型会自动微调尺寸。
     -   例如：输入图像750×1000（宽高比 3:4 = 0.75），设置 resolution = "720P"（目标总像素约 92 万）。最终输出可能为 816 × 1104（宽高比 ≈ 0.739，总像素 ≈ 90 万），且宽高均为 16 的倍数。
 
+<a id="计费与限流"></a>
+
+<a id="6f5774ce5fqie"></a>
+
 ## 计费与限流
 
--   模型免费额度和计费单价请参见[模型价格](https://help.aliyun.com/zh/model-studio/model-pricing#517789fb633zr)。
+-   模型免费额度和计费单价请参见[模型价格](../../../test-1/model-pricing.md#517789fb633zr)。
     
--   模型限流请参见[万相系列](raw/model-user-guide/get-started-with-models/rate-limit.md)。
+-   模型限流请参见[万相系列](../../../get-started-with-models/rate-limit.md)。
     
 -   计费说明：
     
     -   输入不计费，输出计费。输出按成功生成的 **视频秒数** 计费。
-    -   模型调用失败或处理错误不产生任何费用，也不消耗[新人免费额度](raw/model-user-guide/test-1/new-free-quota.md)。
+    -   模型调用失败或处理错误不产生任何费用，也不消耗[新人免费额度](../../../test-1/new-free-quota.md)。
     -   图生视频还支持[节省计划](https://help.aliyun.com/zh/model-studio/billing-for-model-studio)。
+
+<a id="api文档"></a>
+
+<a id="a847ef6c2ecvj"></a>
 
 ## API文档
 
-[图生视频-基于首尾帧API参考](raw/_short/legacy-image-to-video-by-first-and-last-frame-ap-524bb66cfed1f5de.md)
+[图生视频-基于首尾帧API参考](../../../../_short/legacy-image-to-video-by-first-and-last-frame-ap-524bb66cfed1f5de.md)
+
+<a id="常见问题"></a>
+
+<a id="01dd2cf1ff8ql"></a>
 
 ## 常见问题
+
+<a id="q-如何生成特定宽高比-如3-4-的视频"></a>
+
+<a id="d4c9286243gjf"></a>
 
 #### Q：如何生成特定宽高比（如3:4）的视频？
 
@@ -747,6 +823,10 @@ A：当前 API 不支持直接指定视频宽高比。您只能通过 `resolutio
 
 > 例如：输入图像750×1000（宽高比 3:4 = 0.75），设置 resolution = "720P"（目标总像素约 92 万）。最终输出可能为 816 × 1104（宽高比 ≈ 0.739，总像素 ≈ 90 万），且宽高均为 16 的倍数。
 
+<a id="q-为什么运行sdk代码时出现-url-error-please-check-url-错误"></a>
+
+<a id="556cf15871rin"></a>
+
 #### Q：为什么运行SDK代码时出现 “url error, please check url!” 错误？
 
 A：请确保：
@@ -754,4 +834,4 @@ A：请确保：
 -   DashScope Python SDK 版本不低于 2.0.1。
 -   DashScope Java SDK 版本不低于 `2.22.6`。
 
-若版本过低，可能会触发 “url error, please check url!” 的错误。请参考[升级SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
+若版本过低，可能会触发 “url error, please check url!” 的错误。请参考[升级SDK](../../../../model-api-reference/preparations/install-sdk.md)进行更新。

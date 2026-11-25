@@ -4,15 +4,21 @@
 
 先通过控制 WebSocket 建立会话并获取临时凭证。AOQ 连接就绪后，通过 AOQ 收发音频，会话期间保持控制 WebSocket。
 
-从 [SDK 下载](https://help.aliyun.com/zh/model-studio/realtime-sdk-download#sdkdl-h2-aoq)获取终端平台对应的 AOQ Client SDK。macOS 可下载 v1.4.0 的 SDK 和 Opus 插件。
+从 [SDK 下载](../model-api-reference/more-about-models/realtime-api-aoq-api/realtime-sdk-download.md#sdkdl-h2-aoq)获取终端平台对应的 AOQ Client SDK。macOS 可下载 v1.4.0 的 SDK 和 Opus 插件。
+
+<a id="建立-websocket-连接"></a>
 
 ## 建立 WebSocket 连接
 
-按 [WebSocket 接入](raw/model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-websocket-access.md) 中的地址和鉴权说明建立连接。在 `session.update` 的 `session` 对象中加入以下配置。
+按 [WebSocket 接入](../model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-websocket-access.md) 中的地址和鉴权说明建立连接。在 `session.update` 的 `session` 对象中加入以下配置。
 
-```
+<a id="code-block"></a>
+
+```json
 {"transport":{"type":"aoq","aoq":{"ws_audio":false}}}
 ```
+
+<a id="建立-aoq-媒体连接"></a>
 
 ## 建立 AOQ 媒体连接
 
@@ -23,12 +29,16 @@
 
 排查音频收发时，可从 `session.updated` 的 `session.transport.aoq.sid` 读取 AOQ 会话 ID。`session.id` 标识业务会话。
 
+<a id="接收服务端事件"></a>
+
 ## 接收服务端事件
 
 媒体连接就绪后，可从控制 WebSocket 接收服务端事件，也可通过 AOQ 的数据轨接收。使用 AOQ 接收事件时，订阅数据轨并处理 SDK 的数据消息回调。macOS SDK 的回调是 `onDataMsg:`。如果两路收到相同 `event_id` 的事件，只处理一次。
+
+<a id="音频传输"></a>
 
 ## 音频传输
 
 通过 AOQ 发送上行语音。若通过 WebSocket 发送 `session.input_audio.append`，服务会返回 `audio_requires_aoq_media`。
 
-`aoq` 对象中的 `ws_audio` 默认为 `false`。设为 `true` 后，服务还会通过 WebSocket 发送一份下行音频。业务接入见[任务委派与工具](https://help.aliyun.com/zh/model-studio/qwen-audio-live-delegation)。会话和任务事件见 [客户端事件](raw/model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-client-events.md) 和 [服务端事件](raw/model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-server-events.md)。
+`aoq` 对象中的 `ws_audio` 默认为 `false`。设为 `true` 后，服务还会通过 WebSocket 发送一份下行音频。业务接入见[任务委派与工具](https://help.aliyun.com/zh/model-studio/qwen-audio-live-delegation)。会话和任务事件见 [客户端事件](../model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-client-events.md) 和 [服务端事件](../model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-server-events.md)。

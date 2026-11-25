@@ -2,6 +2,10 @@
 
 AOQ Client SDK 支持自定义音频播放功能，通过音频帧回调机制将解码后的 PCM 数据回调给应用层，由开发者自行实现音频渲染播放。
 
+<a id="功能介绍"></a>
+
+<a id="custplay-h2-intro"></a>
+
 ## 功能介绍
 
 AOQ Client SDK 内部音频模块默认会将接收到的远端音频数据通过系统扬声器/听筒播放，但在特定场景中，SDK 内部的音频播放模块可能无法满足开发需求，需要实现自定义音频播放功能，例如：
@@ -12,70 +16,62 @@ AOQ Client SDK 内部音频模块默认会将接收到的远端音频数据通�
 
 AOQ Client SDK 支持灵活的自定义播放功能，通过音频帧回调机制，将解码后的 PCM 数据回调给应用层，由开发者自行实现音频渲染播放。
 
+<a id="custplay-h2-sample"></a>
+
+<a id="示例代码"></a>
+
+<a id="前提条件"></a>
+
+<a id="custplay-h2-prereqs"></a>
+
 ## 前提条件
 
 -   已创建引擎实例（调用 `createEngine`）。
 -   已成功连接服务器（`onConnectionStatusChange` 回调状态为 `AoqConnectionStatusConnected`）。
 
+<a id="功能实现"></a>
+
+<a id="custplay-h2-impl"></a>
+
 ## 功能实现
+
+<a id="1-开启音频播放-外部模式"></a>
+
+<a id="custplay-h3-step1"></a>
 
 ### 1\. 开启音频播放（外部模式）
 
 调用 `startAudioPlayer` 时设置 `isExternal=true`，关闭 SDK 内部的音频渲染设备，由应用层自行处理音频播放。
 
-```
+<a id="code-block"></a>
+
+```java
 AoqClientEngine.AoqAudioPlaybackConfig config = new AoqClientEngine.AoqAudioPlaybackConfig();
 config.isExternal = true;  // 关闭 SDK 内部播放，由应用层自行渲染
 config.channel = 1;        // 声道数
 engine.startAudioPlayer(config);
 ```
+
 **参数说明：**
 
-**参数**
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| isVoipMode | boolean | false | 是否启用 VoIP 模式（硬件AEC），移动端有效 |
+| isDefaultSpeaker | boolean | true | 是否默认扬声器，移动端有效 |
+| isExternal | boolean | false | 是否外部播放模式，true 时 SDK 不打开播放设备 |
+| channel | int | 1 | 声道数 |
 
-**类型**
+<a id="2-设置音频帧回调监听"></a>
 
-**默认值**
-
-**说明**
-
-isVoipMode
-
-boolean
-
-false
-
-是否启用 VoIP 模式（硬件AEC），移动端有效
-
-isDefaultSpeaker
-
-boolean
-
-true
-
-是否默认扬声器，移动端有效
-
-isExternal
-
-boolean
-
-false
-
-是否外部播放模式，true 时 SDK 不打开播放设备
-
-channel
-
-int
-
-1
-
-声道数
+<a id="custplay-h3-step2"></a>
 
 ### 2\. 设置音频帧回调监听
 
 调用 `setAudioFrameObserver` 设置音频帧数据回调监听器，实现 `onPlaybackAudioFrame` 回调方法接收播放 PCM 数据。
 
-```
+<a id="code-block-2"></a>
+
+```java
 engine.setAudioFrameObserver(new AoqClientListener.AoqAudioFrameListener() {
     @Override
     public void onPlaybackAudioFrame(@NonNull AoqClientEngine.AoqAudioFrameData frame) {
@@ -90,11 +86,17 @@ engine.setAudioFrameObserver(new AoqClientListener.AoqAudioFrameListener() {
 });
 ```
 
+<a id="3-开启播放数据回调"></a>
+
+<a id="custplay-h3-step3"></a>
+
 ### 3\. 开启播放数据回调
 
 调用 `enableAudioFrameObserver` 开启播放位置的音频帧回调，指定数据源为 `AoqAudioSourcePlayback`。
 
-```
+<a id="code-block-3"></a>
+
+```java
 AoqClientEngine.AoqAudioObserverConfig observerConfig = new AoqClientEngine.AoqAudioObserverConfig();
 observerConfig.sampleRate = 48000;  // 回调音频采样率
 observerConfig.channels = 1;       // 回调音频声道数
@@ -106,39 +108,18 @@ engine.enableAudioFrameObserver(
     observerConfig
 );
 ```
+
 **参数说明：**
 
-**参数**
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| sampleRate | int | 48000 | 回调音频采样率（Hz） |
+| channels | int | 1 | 回调音频声道数 |
+| mode | AoqAudioObserverMode | AoqAudioObserverModeReadOnly | 读写模式 |
 
-**类型**
+<a id="4-实现自定义音频渲染"></a>
 
-**默认值**
-
-**说明**
-
-sampleRate
-
-int
-
-48000
-
-回调音频采样率（Hz）
-
-channels
-
-int
-
-1
-
-回调音频声道数
-
-mode
-
-AoqAudioObserverMode
-
-AoqAudioObserverModeReadOnly
-
-读写模式
+<a id="custplay-h3-step4"></a>
 
 ### 4\. 实现自定义音频渲染
 
@@ -149,7 +130,9 @@ AoqAudioObserverModeReadOnly
 -   **音效处理**：对 PCM 数据进行音效处理后再播放。
 -   **文件存储**：将接收到的音频数据保存到本地文件。
 
-```
+<a id="code-block-4"></a>
+
+```java
 // 示例：使用 Android AudioTrack 播放
 private AudioTrack mAudioTrack;
 private volatile boolean mPlayRunning = false;
@@ -181,17 +164,24 @@ private void playPcmData(AoqClientEngine.AoqAudioFrameData frame) {
     }
 }
 ```
+
 **注意事项：**
 
 -   `onPlaybackAudioFrame` 回调在 SDK 内部线程触发，回调中的 `frame.dataPtr` 仅在回调期间有效，异步使用需自行拷贝。
 -   AudioTrack.write 是阻塞操作，在回调中直接写入即可，SDK 内部会按节奏回调。
 -   需要维护 `mPlayRunning` 标记，当引擎退出或停止播放时退出处理逻辑。
 
+<a id="5-停止自定义播放"></a>
+
+<a id="custplay-h3-step5"></a>
+
 ### 5\. 停止自定义播放
 
 当不再需要自定义播放时，先关闭音频帧回调，再停止播放设备，释放 AudioTrack 资源。
 
-```
+<a id="code-block-5"></a>
+
+```java
 // 1. 关闭播放位置的音频帧回调
 AoqClientEngine.AoqAudioObserverConfig observerConfig = new AoqClientEngine.AoqAudioObserverConfig();
 engine.enableAudioFrameObserver(

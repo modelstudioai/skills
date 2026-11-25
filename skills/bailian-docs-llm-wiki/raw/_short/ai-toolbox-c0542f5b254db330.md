@@ -1,10 +1,22 @@
 # AI工具箱
 
+<a id="ai工具箱概念"></a>
+
+<a id="f653645da8hck"></a>
+
 ## AI工具箱概念
 
 AI工具箱是一个集成了多种人工智能功能的工具集合，可以帮助用户在不同的文本处理任务中提供支持。通过AI工具箱的生成标题、摘要、续写等功能，用户可以快速获取AI辅助生成的文章内容，从而进行文章的优化和调整。
 
+<a id="全局优化"></a>
+
+<a id="f4339a1b75n5h"></a>
+
 ## 全局优化
+
+<a id="1-生成标题"></a>
+
+<a id="7ae705ec30on3"></a>
 
 ### 1\. 生成标题
 
@@ -17,6 +29,10 @@ AI工具箱是一个集成了多种人工智能功能的工具集合，可以帮
     ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0245332671/p1023627.png)
     
 
+<a id="2-生成摘要"></a>
+
+<a id="52d03c1eae0du"></a>
+
 ### 2\. 生成摘要
 
 -   根据文章的内容自动生成简短的摘要，提供文章主要内容的概述。
@@ -27,6 +43,10 @@ AI工具箱是一个集成了多种人工智能功能的工具集合，可以帮
     
     ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0245332671/p1023635.png)
     
+
+<a id="3-全文续写"></a>
+
+<a id="db1583ed83n3l"></a>
 
 ### 3\. 全文续写
 
@@ -39,6 +59,10 @@ AI工具箱是一个集成了多种人工智能功能的工具集合，可以帮
     ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0245332671/p1023636.png)
     
 
+<a id="4-抽取关键词"></a>
+
+<a id="423720d7cexnn"></a>
+
 ### 4\. 抽取关键词
 
 -   根据文章的内容，自动提取出文章中最具有代表性和重要性的关键词，帮助用户快速了解文章的主题和重点。
@@ -50,12 +74,20 @@ AI工具箱是一个集成了多种人工智能功能的工具集合，可以帮
     ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0245332671/p1023638.png)
     
 
+<a id="5-用户评论预测"></a>
+
+<a id="a67b8fd7772rq"></a>
+
 ### 5\. 用户评论预测
 
 -   点击**用户评论预测**，即可针对当前生成的文章进行用户舆情趋势预测。
     
     ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0245332671/p1023639.png)
     
+
+<a id="6-格式排版"></a>
+
+<a id="25e891b4f9cc1"></a>
 
 ### 6\. 格式排版
 
@@ -74,17 +106,29 @@ AI工具箱是一个集成了多种人工智能功能的工具集合，可以帮
     ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0245332671/p1023646.png)
     
 
+<a id="7-全文翻译"></a>
+
+<a id="bd263e28d4bhw"></a>
+
 ### 7\. 全文翻译
 
 将一种语言的文章翻译成另一种语言，方便跨语言交流和理解，目前支持中英文互译。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4283332671/p1023580.png)
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4283332671/p1023579.png)
 
+<a id="8-一键润色"></a>
+
+<a id="78d634c197t16"></a>
+
 ### 8\. 一键润色
 
 支持将全文内容进行语言润色优化。
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4283332671/p1023581.png)![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4283332671/p1023582.png)
+
+<a id="局部优化-ai改写"></a>
+
+<a id="cb150643falw2"></a>
 
 ## 局部优化（AI改写）
 

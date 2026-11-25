@@ -2,7 +2,13 @@
 
 2025年2月18日视频理解功能更新公告。
 
-**说明**体验地址：[影视传媒视频理解产品控制台](https://bailian.console.aliyun.com/#/app/app-market/quanmiao/video-comprehend)。
+> **说明**
+>
+> 体验地址：[影视传媒视频理解产品控制台](https://bailian.console.aliyun.com/#/app/app-market/quanmiao/video-comprehend)。
+
+<a id="1-上传视频格式扩增"></a>
+
+<a id="8d65545cb10we"></a>
 
 ### 1\. 上传视频格式扩增
 

@@ -2,17 +2,29 @@
 
 大模型的训练数据存在知识截止日期，无法回答实时问题。启用联网搜索后，模型可从网络获取实时数据，准确回答股票价格、天气预报、最新新闻等时效性问题。
 
+<a id="使用方式"></a>
+
+<a id="529c63eb16f2d"></a>
+
 ## 使用方式
 
 联网搜索支持以下四种API调用方式，启用参数各有不同：
+
+<a id="sec-tabs"></a>
+
+<a id="openai-兼容-responses-api"></a>
+
+<a id="openai-兼容-responses-api-h4"></a>
 
 #### OpenAI 兼容-Responses API
 
 通过 `tools` 参数添加 `web_search` 工具即可启用联网搜索。
 
-> Responses API 仅支持部分模型，支持的模型请参见[Responses API的联网搜索](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y)。
+> Responses API 仅支持部分模型，支持的模型请参见[Responses API的联网搜索](web-search.md#7b82860922v0y)。
 
-```
+<a id="code-block"></a>
+
+```python
 # 导入依赖与创建客户端...
 response = client.responses.create(
     model="qwen4-max",
@@ -26,11 +38,17 @@ response = client.responses.create(
 )
 ```
 
+<a id="openai-兼容-chat-completions-api"></a>
+
+<a id="openai-兼容-chat-completions-api-h4"></a>
+
 #### OpenAI 兼容-Chat Completions API
 
 设置 `enable_search: true` 即可启用联网搜索。
 
-```
+<a id="code-block-2"></a>
+
+```python
 # 导入依赖与创建客户端...
 completion = client.chat.completions.create(
     # 需使用支持联网搜索的模型
@@ -41,11 +59,17 @@ completion = client.chat.completions.create(
 )
 ```
 
+<a id="dashscope"></a>
+
+<a id="dashscope-h4"></a>
+
 #### DashScope
 
 设置 `enable_search: true` 即可启用联网搜索。
 
-```
+<a id="code-block-3"></a>
+
+```python
 # 导入依赖与创建客户端...
 response = client.chat.completions.create(
     # 需使用支持联网搜索的模型
@@ -55,6 +79,10 @@ response = client.chat.completions.create(
     enable_search=True
 )
 ```
+
+<a id="anthropic-兼容"></a>
+
+<a id="anthropic-兼容-h4"></a>
 
 #### Anthropic 兼容
 
@@ -68,7 +96,9 @@ response = client.chat.completions.create(
 
 > 支持以下模型：Qwen3.8 Max、Flash 与开源系列（不含 Omni）；Qwen3.7 Max、Plus、Flash 系列；Qwen3.6-Plus、Qwen3.6-Flash 系列；Qwen3.5-Plus、Qwen3.5-Flash 系列；deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731、`deepseek-v4.1-flash-1017`；glm-5.2；kimi-k3；kimi-k3.1-pro。
 
-```
+<a id="code-block-4"></a>
+
+```python
 # 导入依赖与创建客户端...
 message = client.messages.create(
     model="qwen4-max",
@@ -90,17 +120,27 @@ message = client.messages.create(
 
 模型的检索过程通过 `server_tool_use`（检索请求）和 `web_search_tool_result`（检索结果）内容块返回，检索次数记录在 `usage.server_tool_use.web_search_requests` 中。
 
+<a id="多模态模型的联网搜索"></a>
+
+<a id="ws_mm_search_h3a"></a>
+
 ### 多模态模型的联网搜索
 
 Qwen4-Max 系列、Qwen3.8 Max、Flash 与开源系列、Qwen3.7-Flash、Qwen3.7-Plus、Qwen3.6 系列、Qwen3.5 系列（含 qwen3.5-plus、qwen3.5-flash、qwen3.5-omni 系列与千问开源模型）等模型支持图片、视频等多模态输入，属于多模态模型。这类模型需通过**多模态接口**（`multimodal-generation` 端点）调用：Python SDK 2.0 使用 `client.multimodal.chat.create`，Java 使用 `MultiModalConversation`，而不能使用面向纯文本模型的 `text-generation` 端点。多模态模型的基础调用方式可参见《视觉推理》《图像与视频理解》文档。
 
-搜索策略因系列而异：qwen3.5-omni 系列仅支持 `agent` 策略；`qwen4-max`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b` 和 `qwen3.8-27b` 在多模态接口下不支持 `agent` 策略（使用默认的 `turbo` 或 `max`），如需对 Qwen4、Qwen3.8 使用 agent 检索，请改用 [Responses API 的联网搜索](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y)；本节列出的其余模型支持 `turbo`、`max`、`agent` 策略。
+搜索策略因系列而异：qwen3.5-omni 系列仅支持 `agent` 策略；`qwen4-max`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b` 和 `qwen3.8-27b` 在多模态接口下不支持 `agent` 策略（使用默认的 `turbo` 或 `max`），如需对 Qwen4、Qwen3.8 使用 agent 检索，请改用 [Responses API 的联网搜索](web-search.md#7b82860922v0y)；本节列出的其余模型支持 `turbo`、`max`、`agent` 策略。
 
 > 若通过 `text-generation` 端点调用上述多模态模型，会返回 `400 url error, please check url`，请改用多模态接口（`multimodal-generation` 端点，Python 为 `client.multimodal.chat.create`，Java 为 `MultiModalConversation`）。Java SDK 的 `MultiModalConversationParam` 提供 `enableSearch(true)` 用于开启联网搜索，但未提供 `searchOptions()` 方法，需通过通用参数 `parameter("search_options", ...)` 注入搜索策略等配置；Python 的 `client.multimodal.chat.create` 可直接传入 `search_options`。多模态模型开启联网搜索时需使用**流式调用**（Java 使用 `streamCall`，Python 设置 `stream=True`），否则会返回 `Non-streaming mode does not support Web Search` 报错。
 
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 import os
 import dashscope
 # 以下为新加坡地域配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的region取值不同。
@@ -129,9 +169,13 @@ for chunk in stream:
     print(content)
 ```
 
+<a id="fig-code-group-java-tab"></a>
+
 Java
 
-```
+<a id="code-code-group-java"></a>
+
+```java
 // dashscope SDK 版本 >= 2.19.0
 import java.util.Arrays;
 import java.util.Collections;
@@ -177,16 +221,26 @@ public class Main {
 }
 ```
 
+<a id="支持的模型"></a>
+
+<a id="980e4e9787miv"></a>
+
 ## 支持的模型
 
-支持联网搜索的模型如下。支持多模态输入的模型（Qwen4-Max 系列、Qwen3.8 Max、Flash 与开源系列、Qwen3.7-Flash/Plus、Qwen3.6 系列、Qwen3.5 系列及千问开源模型等）需通过多模态接口调用，参见[多模态模型的联网搜索](https://help.aliyun.com/zh/model-studio/web-search#ws_mm_search_h3a)。
+支持联网搜索的模型如下。支持多模态输入的模型（Qwen4-Max 系列、Qwen3.8 Max、Flash 与开源系列、Qwen3.7-Flash/Plus、Qwen3.6 系列、Qwen3.5 系列及千问开源模型等）需通过多模态接口调用，参见[多模态模型的联网搜索](web-search.md#ws_mm_search_h3a)。
+
+<a id="sec-tabs-2"></a>
+
+<a id="华北2-北京"></a>
+
+<a id="华北2-北京-h4"></a>
 
 #### 华北2（北京）
 
 -   **千问**
     
-    -   Qwen4 系列：qwen4-max（`search_strategy` 不支持 `agent`；如需 agent 检索，请通过 [Responses API](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y) 使用 `web_search` 工具）
-    -   Qwen3.8 系列：qwen3.8-max、qwen3.8-max-0902、qwen3.8-flash、qwen3.8-2.4t-a95b、qwen3.8-27b（`search_strategy` 不支持 `agent`；如需 agent 检索，请通过 [Responses API](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y) 使用 `web_search` 工具）
+    -   Qwen4 系列：qwen4-max（`search_strategy` 不支持 `agent`；如需 agent 检索，请通过 [Responses API](web-search.md#7b82860922v0y) 使用 `web_search` 工具）
+    -   Qwen3.8 系列：qwen3.8-max、qwen3.8-max-0902、qwen3.8-flash、qwen3.8-2.4t-a95b、qwen3.8-27b（`search_strategy` 不支持 `agent`；如需 agent 检索，请通过 [Responses API](web-search.md#7b82860922v0y) 使用 `web_search` 工具）
     -   Qwen3.7 系列：qwen3.7-max、qwen3.7-max-preview、qwen3.7-max-2026-05-17及之后的快照版本、qwen3.7-plus、qwen3.7-plus-2026-05-26及之后的快照版本、qwen3.7-flash、qwen3.7-flash-2026-07-15及之后的快照版本
     -   Qwen3.6 系列：qwen3.6-plus、qwen3.6-plus-2026-04-02及之后的快照版本、qwen3.6-flash、qwen3.6-flash-2026-04-16及之后的快照版本、qwen3.6-27b、qwen3.6-35b-a3b
     -   Qwen3.5 系列：qwen3.5-plus、qwen3.5-plus-2026-02-15及之后的快照版本、qwen3.5-flash、qwen3.5-flash-2026-02-23及之后的快照版本、qwen3.5-27b、qwen3.5-35b-a3b、qwen3.5-122b-a10b、qwen3.5-397b-a17b
@@ -200,27 +254,35 @@ public class Main {
     2025 年 7 月后发布的千问Max、千问Plus、千问Flash 模型都自动支持联网搜索。
     
 -   **第三方模型**
-    -   DeepSeek：deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731、`deepseek-v4.1-flash-1017`（其中 deepseek-v4 系列同时支持[Responses API](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y)）
-    -   GLM：glm-5.2（仅支持通过[Responses API](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y)联网搜索）
-    -   Kimi：kimi-k3.1-pro（支持 Responses `web_search` 和 Anthropic `web_search`，不支持 Chat Completions `enable_search`）；kimi-k3（仅支持通过[Responses API](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y)联网搜索）
+    -   DeepSeek：deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731、`deepseek-v4.1-flash-1017`（其中 deepseek-v4 系列同时支持[Responses API](web-search.md#7b82860922v0y)）
+    -   GLM：glm-5.2（仅支持通过[Responses API](web-search.md#7b82860922v0y)联网搜索）
+    -   Kimi：kimi-k3.1-pro（支持 Responses `web_search` 和 Anthropic `web_search`，不支持 Chat Completions `enable_search`）；kimi-k3（仅支持通过[Responses API](web-search.md#7b82860922v0y)联网搜索）
+
+<a id="新加坡"></a>
+
+<a id="新加坡-h4"></a>
 
 #### 新加坡
 
 -   **千问**
-    -   Qwen3.8 系列：qwen3.8-max、qwen3.8-max-0902、qwen3.8-flash、qwen3.8-2.4t-a95b、qwen3.8-27b（`search_strategy` 不支持 `agent`；如需 agent 检索，请通过 [Responses API](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y) 使用 `web_search` 工具）
+    -   Qwen3.8 系列：qwen3.8-max、qwen3.8-max-0902、qwen3.8-flash、qwen3.8-2.4t-a95b、qwen3.8-27b（`search_strategy` 不支持 `agent`；如需 agent 检索，请通过 [Responses API](web-search.md#7b82860922v0y) 使用 `web_search` 工具）
     -   Qwen3.7 系列：qwen3.7-max、qwen3.7-max-2026-05-20及之后的快照版本、qwen3.7-plus、qwen3.7-plus-2026-05-26及之后的快照版本、qwen3.7-flash、qwen3.7-flash-2026-07-15及之后的快照版本
     -   Qwen3.6 系列：qwen3.6-plus、qwen3.6-plus-2026-04-02及之后的快照版本、qwen3.6-flash、qwen3.6-flash-2026-04-16及之后的快照版本、qwen3.6-27b、qwen3.6-35b-a3b
     -   Qwen3.5 系列：qwen3.5-plus、qwen3.5-plus-2026-02-15及之后的快照版本、qwen3.5-flash、qwen3.5-flash-2026-02-23及之后的快照版本、qwen3.5-27b、qwen3.5-35b-a3b、qwen3.5-122b-a10b、qwen3.5-397b-a17b
     -   千问Omni：qwen3.8-omni-flash、qwen3.5-omni-plus、qwen3.5-omni-plus-2026-03-15、qwen3.5-omni-flash、qwen3.5-omni-flash-2026-03-15（搜索策略需设为 `agent`）
     -   千问Omni-Realtime：qwen3.8-omni-flash-realtime、qwen3.5-omni-plus-realtime、qwen3.5-omni-plus-realtime-2026-03-15、qwen3.5-omni-flash-realtime、qwen3.5-omni-flash-realtime-2026-03-15（搜索策略需设为 `agent`）
 -   **第三方模型**
-    -   DeepSeek：deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731、`deepseek-v4.1-flash-1017`（其中 deepseek-v4 系列同时支持[Responses API](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y)）
-    -   GLM：glm-5.2（仅支持通过[Responses API](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y)联网搜索）
-    -   Kimi：kimi-k3.1-pro（支持 Responses `web_search` 和 Anthropic `web_search`，不支持 Chat Completions `enable_search`）；kimi-k3（仅支持通过[Responses API](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y)联网搜索）
+    -   DeepSeek：deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash-0731、`deepseek-v4.1-flash-1017`（其中 deepseek-v4 系列同时支持[Responses API](web-search.md#7b82860922v0y)）
+    -   GLM：glm-5.2（仅支持通过[Responses API](web-search.md#7b82860922v0y)联网搜索）
+    -   Kimi：kimi-k3.1-pro（支持 Responses `web_search` 和 Anthropic `web_search`，不支持 Chat Completions `enable_search`）；kimi-k3（仅支持通过[Responses API](web-search.md#7b82860922v0y)联网搜索）
+
+<a id="全球"></a>
+
+<a id="全球-h4"></a>
 
 #### 全球
 
-美国（弗吉尼亚）、中国香港、日本（东京）、德国（法兰克福）地域支持以下模型。其中中国香港、日本（东京）、德国（法兰克福）需使用服务部署范围为**全球**的业务空间调用，参见[选择地域、服务部署范围和接入域名](raw/model-user-guide/get-started-with-models/regions.md)。
+美国（弗吉尼亚）、中国香港、日本（东京）、德国（法兰克福）地域支持以下模型。其中中国香港、日本（东京）、德国（法兰克福）需使用服务部署范围为**全球**的业务空间调用，参见[选择地域、服务部署范围和接入域名](../../../get-started-with-models/regions.md)。
 
 -   **Kimi**：`kimi-k3.1-pro` 支持 Responses `web_search` 和 Anthropic `web_search`，不支持 Chat Completions `enable_search`，适用于本标签页的全部四个地域。
     
@@ -231,17 +293,35 @@ public class Main {
     -   Qwen3.8 系列：qwen3.8-max、qwen3.8-max-0902、qwen3.8-flash
     -   千问Omni：qwen3.8-omni-flash（Chat Completions 搜索策略需设为 `agent`；也支持 Responses API）
 
+<a id="快速开始"></a>
+
+<a id="744bf8e1c66p3"></a>
+
 ## 快速开始
 
 以下示例通过联网搜索查询天气信息。
+
+<a id="sec-tabs-3"></a>
+
+<a id="openai-兼容"></a>
+
+<a id="openai-兼容-h4"></a>
 
 #### OpenAI 兼容
 
 通过 `enable_search=True` 开启联网搜索。使用 `qwen3.8-omni-flash` 时，还需设置 `search_options={"search_strategy": "agent"}`；如通过 Responses API 调用，则配置 `tools=[{"type": "web_search"}]`，见[Responses API 联网搜索](#7b82860922v0y)。
 
+<a id="sec-tabs-4"></a>
+
+<a id="python"></a>
+
+<a id="python-h4"></a>
+
 #### Python
 
-```
+<a id="code-block-5"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -262,9 +342,13 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content)
 ```
 
+<a id="ef2b8c7994vlk"></a>
+
 ###### 响应示例
 
-```
+<a id="code-block-6"></a>
+
+```text
 根据现有资料，2025年9月17日（明天）杭州市的天气情况如下：
 
 - **天气状况**：多云转晴，部分地区可能有小雨。
@@ -279,9 +363,15 @@ print(completion.choices[0].message.content)
 请注意根据天气变化及时调整出行和穿衣安排。
 ```
 
+<a id="node-js"></a>
+
+<a id="node-js-h4"></a>
+
 #### Node.js
 
-```
+<a id="code-block-7"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const openai = new OpenAI(
@@ -307,9 +397,13 @@ async function main() {
 main();
 ```
 
+<a id="ae812ef175byt"></a>
+
 ###### 响应示例
 
-```
+<a id="code-block-8"></a>
+
+```text
 根据现有资料，2025年9月17日（明天）杭州市的天气情况如下：
 
 - **天气状况**：多云转晴，部分地区可能有小雨。
@@ -324,9 +418,15 @@ main();
 请注意根据天气变化及时调整出行和穿衣安排。
 ```
 
+<a id="curl"></a>
+
+<a id="curl-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-9"></a>
+
+```bash
 # 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -347,11 +447,23 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="dashscope-2"></a>
+
+<a id="dashscope-2-h4"></a>
+
 #### DashScope
+
+<a id="sec-tabs-5"></a>
+
+<a id="python-2"></a>
+
+<a id="python-2-h4"></a>
 
 #### Python
 
-```
+<a id="code-block-10"></a>
+
+```python
 import os
 import dashscope
 
@@ -374,9 +486,13 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
+<a id="c6a805a2b249n"></a>
+
 ###### 响应示例
 
-```
+<a id="code-block-11"></a>
+
+```text
 根据现有资料，2025年9月17日（明天）杭州市的天气情况如下：
 
 - **天气状况**：多云转晴，部分地区可能有小雨。
@@ -391,9 +507,15 @@ print(response.choices[0].message.content)
 请注意根据天气变化及时调整出行和穿衣安排。
 ```
 
+<a id="java"></a>
+
+<a id="java-h4"></a>
+
 #### Java
 
-```
+<a id="code-block-12"></a>
+
+```java
 // 建议 dashscope SDK的版本 >= 2.19.4
 import java.util.Arrays;
 import com.alibaba.dashscope.aigc.generation.Generation;
@@ -440,9 +562,13 @@ public class Main {
 }
 ```
 
+<a id="1aa2458ff89fg"></a>
+
 ###### 响应示例
 
-```
+<a id="code-block-13"></a>
+
+```text
 根据现有资料，2025年9月17日（明天）杭州市的天气情况如下：
 
 - **天气状况**：多云转晴，部分地区可能有小雨。
@@ -457,9 +583,15 @@ public class Main {
 请注意根据天气变化及时调整出行和穿衣安排。
 ```
 
+<a id="curl-2"></a>
+
+<a id="curl-2-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-14"></a>
+
+```bash
 # 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -485,105 +617,31 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }'
 ```
 
+<a id="核心能力"></a>
+
+<a id="f2a1f70bdcd6f"></a>
+
 ## 核心能力
 
 联网搜索除基础搜索外，还支持强制搜索、搜索策略设置、搜索来源返回等进阶功能。DashScope 协议支持全部功能。OpenAI 兼容协议因协议限制，不支持搜索来源返回和角标标注等功能，具体差异见下表。
 
-**功能特性**
+| 功能特性 | DashScope | OpenAI 兼容-Chat Completions | OpenAI 兼容-Responses |
+| --- | --- | --- | --- |
+| 基础联网搜索 | 支持 | 支持 | 支持 |
+| 强制联网搜索 | 支持 | 支持 | 不支持 |
+| 设置搜索量级策略 | 支持 | 支持 | 不支持 |
+| 开启垂域搜索 | 支持 | 支持 | 不支持 |
+| 设置搜索时效性 | 支持 | 支持 | 不支持 |
+| 限定搜索来源站点 | 支持 | 支持 | 不支持 |
+| 通过自然语言干预检索范围 | 支持 | 支持 | 不支持 |
+| 返回搜索来源 | 支持 | 不支持 | 不支持 |
+| 角标引用标注 | 支持 | 不支持 | 不支持 |
+| 提前返回搜索来源 | 支持 | 不支持 | 不支持 |
+| 图文混合输出 | 支持 | 支持 | 不支持 |
 
-**DashScope**
+<a id="设置搜索量级策略"></a>
 
-**OpenAI 兼容-Chat Completions**
-
-**OpenAI 兼容-Responses**
-
-基础联网搜索
-
-支持
-
-支持
-
-支持
-
-强制联网搜索
-
-支持
-
-支持
-
-不支持
-
-设置搜索量级策略
-
-支持
-
-支持
-
-不支持
-
-开启垂域搜索
-
-支持
-
-支持
-
-不支持
-
-设置搜索时效性
-
-支持
-
-支持
-
-不支持
-
-限定搜索来源站点
-
-支持
-
-支持
-
-不支持
-
-通过自然语言干预检索范围
-
-支持
-
-支持
-
-不支持
-
-返回搜索来源
-
-支持
-
-不支持
-
-不支持
-
-角标引用标注
-
-支持
-
-不支持
-
-不支持
-
-提前返回搜索来源
-
-支持
-
-不支持
-
-不支持
-
-图文混合输出
-
-支持
-
-支持
-
-不支持
+<a id="5a7d30420fc5k"></a>
 
 ### 设置搜索量级策略
 
@@ -597,24 +655,38 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
     
 -   `agent`：可多次调用联网搜索工具与大模型，实现多轮信息检索与内容整合。
     
-    > 该策略适用于 Qwen3.5 系列（含开源模型与 Omni 系列）、Qwen3.6 系列、Qwen3.7 系列模型，通过 text 端点调用时需使用流式调用。Qwen3.8-Omni-Flash 的 Chat Completions 调用也支持该策略。`qwen4-max`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b` 和 `qwen3.8-27b` 在 Chat Completions/DashScope 协议下不支持 `search_strategy: agent`，但可通过 [Responses API 的联网搜索](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y) 使用 `web_search` 工具实现 agent 式多轮检索。角色扮演模型不支持 `agent` 策略。
+    > 该策略适用于 Qwen3.5 系列（含开源模型与 Omni 系列）、Qwen3.6 系列、Qwen3.7 系列模型，通过 text 端点调用时需使用流式调用。Qwen3.8-Omni-Flash 的 Chat Completions 调用也支持该策略。`qwen4-max`、`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b` 和 `qwen3.8-27b` 在 Chat Completions/DashScope 协议下不支持 `search_strategy: agent`，但可通过 [Responses API 的联网搜索](web-search.md#7b82860922v0y) 使用 `web_search` 工具实现 agent 式多轮检索。角色扮演模型不支持 `agent` 策略。
     
     > 启用该策略时，仅支持 **返回搜索来源** （ `enable_source: true` ），其他联网搜索功能不可用。
     
-    > 启用该策略时，每次调用额外收费，参见 [计费说明](https://help.aliyun.com/zh/model-studio/web-search#92ce83df3a599) 。
+    > 启用该策略时，每次调用额外收费，参见 [计费说明](web-search.md#92ce83df3a599) 。
     
     > 启用该策略时，仅支持 **返回搜索来源** （ `enable_source: true` ），其他联网搜索功能不可用。
     
-    > 启用该策略时，每次调用额外收费，参见 [计费说明](https://help.aliyun.com/zh/model-studio/web-search#92ce83df3a599) 。
+    > 启用该策略时，每次调用额外收费，参见 [计费说明](web-search.md#92ce83df3a599) 。
     
 
 日常查询建议使用默认的 `turbo` 策略。对于需要高精度、多源交叉验证的研究或报告生成场景，可选择 `max`或`agent` 策略。英文场景推荐使用`agent`。
 
+<a id="sec-tabs-6"></a>
+
+<a id="openai-兼容-2"></a>
+
+<a id="openai-兼容-2-h4"></a>
+
 #### OpenAI 兼容
+
+<a id="sec-tabs-7"></a>
+
+<a id="python-3"></a>
+
+<a id="python-3-h4"></a>
 
 #### Python
 
-```
+<a id="code-block-15"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -638,9 +710,13 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content)
 ```
 
+<a id="958a03f0943ys"></a>
+
 ###### 响应示例
 
-```
+<a id="code-block-16"></a>
+
+```text
 根据已有的知识库内容，阿里云千问团队在2025年9月份发布了以下模型：
 
 1. **Qwen3-Next**：这是下一代基础模型架构，采用了高稀疏度混合专家（MoE）架构。该模型总参数量达800亿，但在每次推理时仅激活30亿参数，从而显著降低了推理成本，同时性能可以媲美2350亿参数的Qwen3旗舰版。
@@ -652,9 +728,15 @@ print(completion.choices[0].message.content)
 这些模型的发布标志着阿里云在人工智能领域的进一步突破，特别是在模型效率、性能和多语言支持方面。
 ```
 
+<a id="node-js-2"></a>
+
+<a id="node-js-2-h4"></a>
+
 #### Node.js
 
-```
+<a id="code-block-17"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const openai = new OpenAI({
@@ -680,9 +762,13 @@ async function main() {
 main();
 ```
 
+<a id="fd895b5514fp6"></a>
+
 ###### 响应示例
 
-```
+<a id="code-block-18"></a>
+
+```text
 根据已有的知识库内容，阿里云千问团队在2025年9月份发布了以下模型：
 1. **Qwen3-Next**：这是下一代基础模型架构，采用了高稀疏度混合专家（MoE）架构。该模型总参数量达800亿，但在每次推理时仅激活30亿参数，从而显著降低了推理成本，同时性能可以媲美2350亿参数的Qwen3旗舰版。
 
@@ -693,9 +779,15 @@ main();
 这些模型的发布标志着阿里云在人工智能领域的进一步突破，特别是在模型效率、性能和多语言支持方面。
 ```
 
+<a id="curl-3"></a>
+
+<a id="curl-3-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-19"></a>
+
+```bash
 # 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -715,9 +807,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="0aa45ad700yba"></a>
+
 ###### 响应示例
 
-```
+<a id="code-block-20"></a>
+
+```json
 {
   "choices": [
     {
@@ -746,11 +842,23 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }
 ```
 
+<a id="dashscope-3"></a>
+
+<a id="dashscope-3-h4"></a>
+
 #### DashScope
+
+<a id="sec-tabs-8"></a>
+
+<a id="python-4"></a>
+
+<a id="python-4-h4"></a>
 
 #### Python
 
-```
+<a id="code-block-21"></a>
+
+```python
 import os
 import dashscope
 
@@ -777,9 +885,13 @@ print("="*20 + "回复内容" + "="*20)
 print(response.choices[0].message.content)
 ```
 
+<a id="badb2aba55afk"></a>
+
 ###### 响应示例
 
-```
+<a id="code-block-22"></a>
+
+```text
 ====================搜索结果====================
 [1]: [阿里持续迭代QWEN3模型,恒生科技指数ETF(159742)持续拉升涨超1.5%,冲击7连涨](https://baijiahao.baidu.com/s?id=1843294702563736079&wfr=spider&for=pc)
 [2]: [阿里推出下一代模型架构;宇树王兴兴谈后悔的事丨新鲜早科技](https://baijiahao.baidu.com/s?id=1843023858158066280&wfr=spider&for=pc)
@@ -807,9 +919,15 @@ print(response.choices[0].message.content)
 综上所述，2025年9月，Qwen最核心的发布是**9月12日推出的革命性高效架构Qwen3-Next及其Qwen3-Next-80B-A3B系列模型**。
 ```
 
+<a id="java-2"></a>
+
+<a id="java-2-h4"></a>
+
 #### Java
 
-```
+<a id="code-block-23"></a>
+
+```java
 import com.alibaba.dashscope.aigc.generation.Generation;
 import com.alibaba.dashscope.aigc.generation.GenerationParam;
 import com.alibaba.dashscope.aigc.generation.GenerationResult;
@@ -855,9 +973,13 @@ public class Main {
 }
 ```
 
+<a id="d128f08fc1ucy"></a>
+
 ###### 响应示例
 
-```
+<a id="code-block-24"></a>
+
+```text
 ====================搜索结果====================
 [SearchInfo.SearchResult(siteName=知乎, icon=https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=493147230,3096476255&fm=195&app=88&f=JPEG?w=200&h=200, index=1, title=阿里Qwen3-Next技术解析:高稀疏度混合专家架构引领大模型新趋势!, url=https://zhuanlan.zhihu.com/p/1950881062403184335), SearchInfo.SearchResult(siteName=知乎, icon=https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=493147230,3096476255&fm=195&app=88&f=JPEG?w=200&h=200, index=2, title=Qwen3-Next:阿里千问挥舞“魔法棒”,点石成金打造AI新基石!, url=https://zhuanlan.zhihu.com/p/1949926096301696837), SearchInfo.SearchResult(siteName=搜狐网, icon=https://b.bdstatic.com/searchbox/mappconsole/image/20190429/a68f8bb8-95b8-406a-8463-b6d029c66170.jpg, index=3, title=阿里巴巴发布Qwen3-Next系列模型,四大架构创新引领AI新潮流 , url=https://www.sohu.com/a/934235058_121956424), SearchInfo.SearchResult(siteName=百家号, icon=https://baijiahao.baidu.com/favicon.ico, index=4, title=阿里持续迭代QWEN3模型,恒生科技指数ETF(159742)持续拉升涨超1.5%,冲击7连涨, url=https://baijiahao.baidu.com/s?id=1843294702563736079&wfr=spider&for=pc), SearchInfo.SearchResult(siteName=百家号, icon=https://baijiahao.baidu.com/favicon.ico, index=5, title=阿里推出下一代模型架构;宇树王兴兴谈后悔的事丨新鲜早科技, url=https://baijiahao.baidu.com/s?id=1843023858158066280&wfr=spider&for=pc), SearchInfo.SearchResult(siteName=, icon=, index=6, title=千问发布Qwen3-Max-Preview，参数量超1万亿, url=https://wallstreetcn.com/articles/3755053), SearchInfo.SearchResult(siteName=搜狐网, icon=https://b.bdstatic.com/searchbox/mappconsole/image/20190429/a68f8bb8-95b8-406a-8463-b6d029c66170.jpg, index=7, title=Qwen3-Next发布!昇腾强力支持,AI模型新纪元开启 , url=https://news.sohu.com/a/934399340_122004016), SearchInfo.SearchResult(siteName=新浪网, icon=https://img.alicdn.com/imgextra/i2/O1CN01mvEkNg1mbgbrppM5C_!!6000000004973-55-tps-32-32.svg, index=8, title=富瑞：阿里巴巴-W推新一代Qwen模型再创里程碑AI主题开启 ..., url=https://finance.sina.com.cn/stock/hkstock/hkgg/2025-09-08/doc-infpumzk6212010.shtml?cre=tianyi&mod=pchp&loc=7&r=0&rfunc=52&tj=cxvertical_pc_hp&tr=12), SearchInfo.SearchResult(siteName=新浪网, icon=https://img.alicdn.com/imgextra/i2/O1CN01mvEkNg1mbgbrppM5C_!!6000000004973-55-tps-32-32.svg, index=9, title=富瑞：阿里巴巴-W推新一代Qwen模型再创里程碑AI主题开启 ..., url=https://finance.sina.com.cn/stock/hkstock/hkgg/2025-09-08/doc-infpumzk6212010.shtml?cre=tianyi&mod=pchp&loc=9&r=0&rfunc=64&tj=cxvertical_pc_hp&tr=12), SearchInfo.SearchResult(siteName=百家号, icon=https://baijiahao.baidu.com/favicon.ico, index=10, title=杰富瑞:阿里推新一代Qwen模型再创里程碑, url=https://baijiahao.baidu.com/s?id=1842683950982961781&wfr=spider&for=pc)]
 ====================回复内容====================
@@ -878,9 +1000,15 @@ public class Main {
 这些模型的发布标志着Qwen在AI大模型领域的技术迭代和突破，推动了AI在多个领域的应用发展。
 ```
 
+<a id="curl-4"></a>
+
+<a id="curl-4-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-25"></a>
+
+```bash
 # 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -906,9 +1034,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }'
 ```
 
+<a id="abd1b02c5df6y"></a>
+
 ###### 响应示例
 
-```
+<a id="code-block-26"></a>
+
+```json
 {
   "output": {
     "choices": [
@@ -1013,6 +1145,10 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }
 ```
 
+<a id="强制联网搜索"></a>
+
+<a id="6f83c89f7dw0v"></a>
+
 ### 强制联网搜索
 
 默认情况下，模型自行判断是否需要联网搜索。业务场景强依赖实时信息时，可设置 `forced_search` 参数为`true`，强制执行联网搜索。
@@ -1022,13 +1158,29 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 -   `true`: 强制联网搜索。
 -   `false` (默认): 模型判断是否需要联网。
 
+<a id="sec-tabs-9"></a>
+
+<a id="openai-兼容-3"></a>
+
+<a id="openai-兼容-3-h4"></a>
+
 #### OpenAI 兼容
+
+<a id="sec-tabs-10"></a>
+
+<a id="python-5"></a>
+
+<a id="python-5-h4"></a>
 
 #### Python
 
-**说明**Python SDK需通过`extra_body`传递`enable_search`，Node.js SDK在顶层传递。
+> **说明**
+>
+> Python SDK需通过`extra_body`传递`enable_search`，Node.js SDK在顶层传递。
 
-```
+<a id="code-block-27"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -1052,9 +1204,13 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content)
 ```
 
+<a id="56503061288er"></a>
+
 ###### 响应示例
 
-```
+<a id="code-block-28"></a>
+
+```text
 根据现有资料，2025年9月17日（明天）杭州市的天气情况如下：
 
 - **天气状况**：多云转晴，部分地区可能有小雨。
@@ -1069,9 +1225,15 @@ print(completion.choices[0].message.content)
 请注意根据天气变化及时调整出行和穿衣安排。
 ```
 
+<a id="node-js-3"></a>
+
+<a id="node-js-3-h4"></a>
+
 #### Node.js
 
-```
+<a id="code-block-29"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const openai = new OpenAI({
@@ -1097,9 +1259,13 @@ async function main() {
 main();
 ```
 
+<a id="103e7f785eg8a"></a>
+
 ###### 响应示例
 
-```
+<a id="code-block-30"></a>
+
+```text
 根据现有资料，2025年9月17日（明天）杭州市的天气情况如下：
 
 - **天气状况**：多云转晴，部分地区可能有小雨。
@@ -1114,9 +1280,15 @@ main();
 请注意根据天气变化及时调整出行和穿衣安排。
 ```
 
+<a id="curl-5"></a>
+
+<a id="curl-5-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-31"></a>
+
+```bash
 # 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -1136,9 +1308,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="125611dfb6w6y"></a>
+
 ###### 响应示例
 
-```
+<a id="code-block-32"></a>
+
+```json
 {
   "choices": [
     {
@@ -1167,11 +1343,23 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }
 ```
 
+<a id="dashscope-4"></a>
+
+<a id="dashscope-4-h4"></a>
+
 #### DashScope
+
+<a id="sec-tabs-11"></a>
+
+<a id="python-6"></a>
+
+<a id="python-6-h4"></a>
 
 #### Python
 
-```
+<a id="code-block-33"></a>
+
+```python
 import os
 import dashscope
 
@@ -1193,9 +1381,13 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
+<a id="6af49a5109pgw"></a>
+
 ###### 响应示例
 
-```
+<a id="code-block-34"></a>
+
+```text
 根据现有资料，2025年9月17日（明天）杭州市的天气情况如下：
 
 - **天气状况**：多云转晴，部分地区可能有小雨。
@@ -1210,9 +1402,15 @@ print(response.choices[0].message.content)
 请注意根据天气变化及时调整出行和穿衣安排。
 ```
 
+<a id="java-3"></a>
+
+<a id="java-3-h4"></a>
+
 #### Java
 
-```
+<a id="code-block-35"></a>
+
+```java
 // 建议 dashscope SDK的版本 >= 2.19.4
 import com.alibaba.dashscope.aigc.generation.Generation;
 import com.alibaba.dashscope.aigc.generation.GenerationParam;
@@ -1255,9 +1453,13 @@ public class Main {
 }
 ```
 
+<a id="08ddebd48fhlk"></a>
+
 ###### 响应示例
 
-```
+<a id="code-block-36"></a>
+
+```text
 根据现有资料，2025年9月17日（明天）杭州市的天气情况如下：
 
 - **天气状况**：多云转晴，部分地区可能有小雨。
@@ -1272,9 +1474,15 @@ public class Main {
 请注意根据天气变化及时调整出行和穿衣安排。
 ```
 
+<a id="curl-6"></a>
+
+<a id="curl-6-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-37"></a>
+
+```bash
 # 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -1299,9 +1507,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }'
 ```
 
+<a id="6f29e348a3e0q"></a>
+
 ###### 响应示例
 
-```
+<a id="code-block-38"></a>
+
+```json
 {
   "output": {
     "choices": [
@@ -1331,6 +1543,10 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }
 ```
 
+<a id="获取并标注引用来源"></a>
+
+<a id="17ac5c28bdahf"></a>
+
 ### 获取并标注引用来源
 
 联网搜索支持在响应中返回搜索来源链接，并通过角标标注引用出处，增强信息可追溯性。
@@ -1346,11 +1562,19 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 
 **以上 enable\_source、enable\_citation、citation\_format 参数仅支持 DashScope 调用方式。**
 
-> [Responses API 的联网搜索](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y)：其搜索来源会在响应中自动返回（参见 [获取搜索来源](https://help.aliyun.com/zh/model-studio/web-search#ws_resp_get_sources)），但 Responses API 暂不支持上述 enable\_citation 角标标注（不会在回复内容中自动插入 `[1]` 角标）。
+> [Responses API 的联网搜索](web-search.md#7b82860922v0y)：其搜索来源会在响应中自动返回（参见 [获取搜索来源](web-search.md#ws_resp_get_sources)），但 Responses API 暂不支持上述 enable\_citation 角标标注（不会在回复内容中自动插入 `[1]` 角标）。
+
+<a id="sec-tabs-12"></a>
+
+<a id="python-7"></a>
+
+<a id="python-7-h4"></a>
 
 #### Python
 
-```
+<a id="code-block-39"></a>
+
+```python
 import os
 import dashscope
 
@@ -1379,9 +1603,13 @@ print("="*20 + "回复内容" + "="*20)
 print(response.choices[0].message.content)
 ```
 
+<a id="9854d426f65ia"></a>
+
 ###### 响应示例
 
-```
+<a id="code-block-40"></a>
+
+```text
 ====================搜索结果====================
 [1]: [直降近10℃!刚刚确认:冷空气即将抵达,这波很猛](https://cj.sina.com.cn/articles/view/1665450974/6344c3de01901avjw)
 [2]: [直降近10℃!刚刚确认:冷空气即将抵达,这波很猛](https://hznews.hangzhou.com.cn/chengshi/content/2025-09/15/content_9083259.htm)
@@ -1395,9 +1623,15 @@ print(response.choices[0].message.content)
 根据最新的天气信息，杭州明天（2025年9月18日）的天气预计会是阴转多云，最高气温为28℃，最低气温24℃，风力较弱，有来自东北方向的风，风速约为2级。此外，空气湿度相对适中，紫外线强度弱，空气质量良好，适合外出活动，但建议关注最新的天气预报以获取更准确的信息[ref_5]。
 ```
 
+<a id="java-4"></a>
+
+<a id="java-4-h4"></a>
+
 #### Java
 
-```
+<a id="code-block-41"></a>
+
+```java
 import com.alibaba.dashscope.aigc.generation.*;
 import com.alibaba.dashscope.common.Message;
 import com.alibaba.dashscope.common.Role;
@@ -1441,9 +1675,13 @@ public class Main {
 }
 ```
 
+<a id="4fde9631cec46"></a>
+
 ###### 响应示例
 
-```
+<a id="code-block-42"></a>
+
+```text
 ====================搜索结果====================
 [SearchInfo.SearchResult(siteName=新浪网, icon=https://mbs1.bdstatic.com/searchbox/mappconsole/image/20220307/88eb511c-5c51-448a-a9b5-df6b24cda8c7.png, index=1, title=直降近10℃!刚刚确认:冷空气即将抵达,这波很猛, url=https://cj.sina.com.cn/articles/view/1665450974/6344c3de01901avjw), SearchInfo.SearchResult(siteName=杭州网, icon=https://img.alicdn.com/imgextra/i1/O1CN01FcFnjf25PIbhq2c3q_!!6000000007518-73-tps-16-16.ico, index=2, title=直降近10℃!刚刚确认:冷空气即将抵达,这波很猛, url=https://hznews.hangzhou.com.cn/chengshi/content/2025-09/15/content_9083259.htm), SearchInfo.SearchResult(siteName=厦门时空科技有限公司, icon=http://www.ip.cn/favicon.ico, index=3, title=杭州市2025年9月份天气查询, url=https://www.ip.cn/tianqi/zhejiang/hangzhou/202509.html), SearchInfo.SearchResult(siteName=eastday, icon=https://img.alicdn.com/imgextra/i3/O1CN01kr9teP1wlRD8OH6TO_!!6000000006348-73-tps-16-16.ico, index=4, title=杭州天气预报杭州2025年09月18日天气, url=https://tianqi.eastday.com/tianqi/hangzhou/20250918.html), SearchInfo.SearchResult(siteName=无, icon=https://img.alicdn.com/imgextra/i2/O1CN01MJh8gM28s6MYPHsm6_!!6000000007987-2-tps-32-32.png, index=5, title=40天天气预报, url=http://uc.src.weather.com.cn/mweather40d/index.shtml?10121010103A), SearchInfo.SearchResult(siteName=厦门时空科技有限公司, icon=http://www.ip.cn/favicon.ico, index=6, title=杭州市2024年9月份天气查询, url=https://www.ip.cn/tianqi/zhejiang/hangzhou/202409.html), SearchInfo.SearchResult(siteName=百家号, icon=https://baijiahao.baidu.com/favicon.ico, index=7, title=风里有了秋的味道,杭州人盼望已久的第一缕桂花香终于来了, url=https://baijiahao.baidu.com/s?id=1843471369098538519&wfr=spider&for=pc), SearchInfo.SearchResult(siteName=厦门时空科技有限公司, icon=http://www.ip.cn/favicon.ico, index=8, title=余杭区2024年9月份天气历史记录, url=https://www.ip.cn/tianqi/zhejiang/hangzhou/yuhang/202409.html)]
 ====================回复内容====================
@@ -1452,9 +1690,15 @@ public class Main {
 受冷空气影响，杭州气温将大幅下降，预计最高气温仅28℃左右，与近日36℃的高温相比直降近10℃[ref_1][ref_5]。天气方面，预计会有一次明显的阵雨或雷雨过程，之后转为小雨转阴 [ref_3]。空气质量等级为优-良，首要污染物为臭氧（O3）[ref_无]。气象条件较一般，建议注意行车安全，并且不太适宜洗车[ref_无]。此外，紫外线强度较弱，但出门前仍建议涂擦防晒护肤品[ref_无]。
 ```
 
+<a id="curl-7"></a>
+
+<a id="curl-7-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-43"></a>
+
+```bash
 # 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -1481,9 +1725,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }'
 ```
 
+<a id="ffed69126bd30"></a>
+
 ###### 响应示例
 
-```
+<a id="code-block-44"></a>
+
+```json
 {
   "output": {
     "choices": [
@@ -1574,6 +1822,10 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }
 ```
 
+<a id="开启垂域搜索"></a>
+
+<a id="b12beb35b0hy4"></a>
+
 ### 开启垂域搜索
 
 天气、股票等垂直领域查询对数据精度要求较高，通用网页搜索结果可能不够精确。
@@ -1589,89 +1841,40 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 
 **支持的领域**：
 
-**领域**
+| 领域 | 说明 | 示例问题 |
+| --- | --- | --- |
+| 汇率 | 提供多币种间的最新汇率转换，支持标准货币代码。 | 人民币与美元的汇率 |
+| 天气 | 提供实时、未来几天及历史天气数据。 | 杭州天气 |
+| 股票 | 支持 A 股、港股、美股，可获取实时股价、前一交易日收盘价、历史趋势、30 日收盘价、股票代码或指数对应股价。 | 沪指昨天收盘点数 |
+| 油价查询 | 实时查询全国各地区最新汽柴油价格，每日更新。 | 杭州油价 |
+| 万年历 | 基于指定日期，提供农历、节气、节日及传统黄历中的吉凶宜忌等信息。 | 今天是农历几号 |
+| 金价 | 提供最新价、开盘价、最高价、最低价等实时行情。 | 金价多少钱了 |
+| 银价 | 提供最新价、开盘价、最高价、最低价等实时行情。 | 银价多少钱了 |
+| 彩票 | 支持双色球、大乐透、排列3、排列5、七星彩、快乐8、3D 等主流彩票类型。 | 最新一期双色球开奖结果 |
+| 电视剧 | 提供主流平台的电视剧资讯。 | 近期热播电视剧 |
+| 电影 | 提供主流电影平台的最新资讯。 | 最近上映了哪些电影 |
+| 车牌限行 | 根据车牌号查询当日限行规则。 | 浙Axxxxxx，今天是否在杭州限行 |
+| 足球赛事 | 支持英超、西甲、德甲、意甲、法甲、中超、苏超等联赛的赛程与积分榜。 | 英超现在哪支球队排名第一 |
 
-**说明**
+<a id="sec-tabs-13"></a>
 
-**示例问题**
+<a id="openai-兼容-4"></a>
 
-汇率
-
-提供多币种间的最新汇率转换，支持标准货币代码。
-
-人民币与美元的汇率
-
-天气
-
-提供实时、未来几天及历史天气数据。
-
-杭州天气
-
-股票
-
-支持 A 股、港股、美股，可获取实时股价、前一交易日收盘价、历史趋势、30 日收盘价、股票代码或指数对应股价。
-
-沪指昨天收盘点数
-
-油价查询
-
-实时查询全国各地区最新汽柴油价格，每日更新。
-
-杭州油价
-
-万年历
-
-基于指定日期，提供农历、节气、节日及传统黄历中的吉凶宜忌等信息。
-
-今天是农历几号
-
-金价
-
-提供最新价、开盘价、最高价、最低价等实时行情。
-
-金价多少钱了
-
-银价
-
-提供最新价、开盘价、最高价、最低价等实时行情。
-
-银价多少钱了
-
-彩票
-
-支持双色球、大乐透、排列3、排列5、七星彩、快乐8、3D 等主流彩票类型。
-
-最新一期双色球开奖结果
-
-电视剧
-
-提供主流平台的电视剧资讯。
-
-近期热播电视剧
-
-电影
-
-提供主流电影平台的最新资讯。
-
-最近上映了哪些电影
-
-车牌限行
-
-根据车牌号查询当日限行规则。
-
-浙Axxxxxx，今天是否在杭州限行
-
-足球赛事
-
-支持英超、西甲、德甲、意甲、法甲、中超、苏超等联赛的赛程与积分榜。
-
-英超现在哪支球队排名第一
+<a id="openai-兼容-4-h4"></a>
 
 #### OpenAI 兼容
 
+<a id="sec-tabs-14"></a>
+
+<a id="python-8"></a>
+
+<a id="python-8-h4"></a>
+
 #### Python
 
-```
+<a id="code-block-45"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -1693,17 +1896,27 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content)
 ```
 
+<a id="c16acb7b2cqt3"></a>
+
 ###### 响应示例
 
-```
+<a id="code-block-46"></a>
+
+```text
 截至2025年9月15日，阿里巴巴美股的收盘价为158.470美元。而在9月16日的实时信息中，阿里巴巴美股的价格为158.040美元，显示出股价在当天略有下降，日环比为1.92%。此外，与上个月相比，股价上涨了17.07%。
 
 如果你需要更具体的实时股价信息，建议查看专业的股票市场平台或财经网站。
 ```
 
+<a id="node-js-4"></a>
+
+<a id="node-js-4-h4"></a>
+
 #### Node.js
 
-```
+<a id="code-block-47"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const openai = new OpenAI({
@@ -1729,17 +1942,27 @@ async function main() {
 main();
 ```
 
+<a id="dcfb5304e08fz"></a>
+
 ###### 响应示例
 
-```
+<a id="code-block-48"></a>
+
+```text
 截至2025年9月15日，阿里巴巴美股的收盘价为158.470美元。而在9月16日的实时信息中，阿里巴巴美股的价格为158.040美元，显示出股价在当天略有下降，日环比为1.92%。此外，与上个月相比，股价上涨了17.07%。
 
 如果你需要更具体的实时股价信息，建议查看专业的股票市场平台或财经网站。
 ```
 
+<a id="curl-8"></a>
+
+<a id="curl-8-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-49"></a>
+
+```bash
 # 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -1759,9 +1982,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="140e4ea5ddg2d"></a>
+
 ###### 响应示例
 
-```
+<a id="code-block-50"></a>
+
+```json
 {
   "choices": [
     {
@@ -1787,13 +2014,25 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }
 ```
 
+<a id="dashscope-5"></a>
+
+<a id="dashscope-5-h4"></a>
+
 #### DashScope
 
 不支持通过DashScope Java SDK开启垂域搜索。
 
+<a id="sec-tabs-15"></a>
+
+<a id="python-9"></a>
+
+<a id="python-9-h4"></a>
+
 #### Python
 
-```
+<a id="code-block-51"></a>
+
+```python
 import os
 import dashscope
 
@@ -1824,9 +2063,13 @@ print("="*20 + "回复内容" + "="*20)
 print(response.choices[0].message.content)
 ```
 
+<a id="b977828e484mq"></a>
+
 ###### 响应示例
 
-```
+<a id="code-block-52"></a>
+
+```text
 ====================垂域搜索结果====================
 阿里巴巴美股：
 实时价格162.210USD
@@ -1861,9 +2104,15 @@ print(response.choices[0].message.content)
 近期，阿里巴巴股价表现强劲，持续创下阶段性新高。其港股（09988.HK）也同步走强，在9月15日盘中一度涨至156.2港元，刷新了近四年来的高点。
 ```
 
+<a id="curl-9"></a>
+
+<a id="curl-9-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-53"></a>
+
+```bash
 # 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -1889,9 +2138,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }'
 ```
 
+<a id="87c9bb5dcce34"></a>
+
 ###### 响应示例
 
-```
+<a id="code-block-54"></a>
+
+```json
 {
   "output": {
     "choices": [
@@ -1998,6 +2251,10 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }
 ```
 
+<a id="设置搜索时效性"></a>
+
+<a id="4f84e80e30i5a"></a>
+
 ### 设置搜索时效性
 
 查询近期新闻或最新动态时，可通过 `freshness` 参数限制搜索时间范围，过滤过期网页。
@@ -2015,11 +2272,23 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 -   仅对 `search_strategy: turbo` 生效
 -   支持模型：qwen-plus、qwen-flash、qwen-plus-character、qwen-flash-character、qwen-flash-character-2026-02-26
 
+<a id="sec-tabs-16"></a>
+
+<a id="openai-兼容-5"></a>
+
+<a id="openai-兼容-5-h4"></a>
+
 #### OpenAI 兼容
+
+<a id="fig-code-group-2"></a>
+
+<a id="fig-code-group-2-python-tab"></a>
 
 Python
 
-```
+<a id="code-code-group-2-python"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -2044,9 +2313,13 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content)
 ```
 
+<a id="fig-code-group-2-node-js-tab"></a>
+
 Node.js
 
-```
+<a id="code-code-group-2-node-js"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const openai = new OpenAI({
@@ -2073,9 +2346,13 @@ async function main() {
 main();
 ```
 
+<a id="fig-code-group-2-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-2-curl"></a>
+
+```bash
 # 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -2096,13 +2373,23 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="dashscope-6"></a>
+
+<a id="dashscope-6-h4"></a>
+
 #### DashScope
 
 不支持通过DashScope Java SDK设置搜索时效性。
 
+<a id="fig-code-group-3"></a>
+
+<a id="fig-code-group-3-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-3-python"></a>
+
+```python
 import os
 import dashscope
 
@@ -2130,9 +2417,13 @@ print("="*20 + "回复内容" + "="*20)
 print(response.choices[0].message.content)
 ```
 
+<a id="fig-code-group-3-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-3-curl"></a>
+
+```bash
 # 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -2159,6 +2450,10 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }'
 ```
 
+<a id="限定搜索来源站点"></a>
+
+<a id="95oc6uryup2j2"></a>
+
 ### 限定搜索来源站点
 
 需要将搜索限定在特定网站（如官方站点或权威媒体）时，可使用 `assigned_site_list` 参数限定来源。启用后，搜索将严格限于指定网站列表。
@@ -2179,11 +2474,23 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 
 > 当指定站点内无相关内容时，搜索结果可能为空，模型将使用自身知识回答。
 
+<a id="sec-tabs-17"></a>
+
+<a id="openai-兼容-6"></a>
+
+<a id="openai-兼容-6-h4"></a>
+
 #### OpenAI 兼容
+
+<a id="fig-code-group-4"></a>
+
+<a id="fig-code-group-4-python-tab"></a>
 
 Python
 
-```
+<a id="code-code-group-4-python"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -2208,9 +2515,13 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content)
 ```
 
+<a id="fig-code-group-4-node-js-tab"></a>
+
 Node.js
 
-```
+<a id="code-code-group-4-node-js"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const openai = new OpenAI({
@@ -2237,9 +2548,13 @@ async function main() {
 main();
 ```
 
+<a id="fig-code-group-4-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-4-curl"></a>
+
+```bash
 # 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -2260,13 +2575,23 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="dashscope-7"></a>
+
+<a id="dashscope-7-h4"></a>
+
 #### DashScope
 
 不支持通过DashScope Java SDK限定搜索来源站点。
 
+<a id="fig-code-group-5"></a>
+
+<a id="fig-code-group-5-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-5-python"></a>
+
+```python
 import os
 import dashscope
 
@@ -2294,9 +2619,13 @@ print("="*20 + "回复内容" + "="*20)
 print(response.choices[0].message.content)
 ```
 
+<a id="fig-code-group-5-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-5-curl"></a>
+
+```bash
 # 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -2323,17 +2652,33 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }'
 ```
 
+<a id="通过自然语言控制检索范围"></a>
+
+<a id="f58e95a5cam6f"></a>
+
 ### 通过自然语言控制检索范围
 
 通过 `prompt_intervene` 参数，可用自然语言指定搜索范围（如仅检索特定主题或地域），系统据此进行针对性检索。
 
 **支持模型**：qwen-plus、qwen-flash、qwen-plus-character、qwen-flash-character、qwen-flash-character-2026-02-26
 
+<a id="sec-tabs-18"></a>
+
+<a id="openai-兼容-7"></a>
+
+<a id="openai-兼容-7-h4"></a>
+
 #### OpenAI 兼容
+
+<a id="fig-code-group-6"></a>
+
+<a id="fig-code-group-6-python-tab"></a>
 
 Python
 
-```
+<a id="code-code-group-6-python"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -2360,9 +2705,13 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content)
 ```
 
+<a id="fig-code-group-6-node-js-tab"></a>
+
 Node.js
 
-```
+<a id="code-code-group-6-node-js"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const openai = new OpenAI({
@@ -2391,9 +2740,13 @@ async function main() {
 main();
 ```
 
+<a id="fig-code-group-6-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-6-curl"></a>
+
+```bash
 # 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -2416,13 +2769,23 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="dashscope-8"></a>
+
+<a id="dashscope-8-h4"></a>
+
 #### DashScope
 
 不支持DashScope Java SDK。
 
+<a id="fig-code-group-7"></a>
+
+<a id="fig-code-group-7-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-7-python"></a>
+
+```python
 import os
 import dashscope
 
@@ -2452,9 +2815,13 @@ print("="*20 + "回复内容" + "="*20)
 print(response.choices[0].message.content)
 ```
 
+<a id="fig-code-group-7-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-7-curl"></a>
+
+```bash
 # 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -2483,6 +2850,10 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }'
 ```
 
+<a id="提前返回搜索来源"></a>
+
+<a id="9d0c3dc42c8ev"></a>
+
 ### 提前返回搜索来源
 
 流式输出场景下，搜索结果就绪到首个数据块发送之间通常有 0.5 秒以上延迟。启用此功能可在搜索完成后立即返回搜索来源，降低首包延时。设置 `prepend_search_result` 为 `true`以启用此功能。
@@ -2494,9 +2865,17 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 
 不支持 OpenAI 兼容方式与 DashScope Java SDK调用。
 
+<a id="sec-tabs-19"></a>
+
+<a id="python-10"></a>
+
+<a id="python-10-h4"></a>
+
 #### Python
 
-```
+<a id="code-block-55"></a>
+
+```python
 import os
 import dashscope
 
@@ -2533,9 +2912,13 @@ for chunk in stream:
     print(content, end='')
 ```
 
+<a id="58a9486232m73"></a>
+
 ##### 响应示例
 
-```
+<a id="code-block-56"></a>
+
+```text
 ====================已阅读8个页面====================
 [1]: [直降近10℃!刚刚确认:冷空气即将抵达,这波很猛](https://cj.sina.com.cn/articles/view/1665450974/6344c3de01901avjw)
 [2]: [直降近10℃!刚刚确认:冷空气即将抵达,这波很猛](https://hznews.hangzhou.com.cn/chengshi/content/2025-09/15/content_9083259.htm)
@@ -2557,9 +2940,15 @@ for chunk in stream:
 受冷空气影响，杭州将迎来一次明显的降温过程。与前几日35℃以上的高温相比，明天最高气温将大幅下降近10℃，体感会凉爽许多。预计这次降温后，直到25日之前都不会再出现高温天气了。
 ```
 
+<a id="curl-10"></a>
+
+<a id="curl-10-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-57"></a>
+
+```bash
 # 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -2587,9 +2976,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }'
 ```
 
+<a id="348072cd6dp1u"></a>
+
 ##### 响应示例
 
-```
+<a id="code-block-58"></a>
+
+```text
 id:1
 event:result
 :HTTP_STATUS/200
@@ -2623,6 +3016,10 @@ event:result
 data:{"output":{"choices":[{"message":{"content":"","role":"assistant"},"finish_reason":"stop"}],"search_info":{"extra_tool_info":[],"search_results":[]}},"usage":{"total_tokens":3224,"output_tokens":284,"input_tokens":2940,"plugins":{"search":{"count":1}},"prompt_tokens_details":{"cached_tokens":0}},"request_id":"785ed962-fa29-4c7e-bed2-7fe0fdbfdc6c"}
 ```
 
+<a id="图文混合输出"></a>
+
+<a id="7t3r4tdm792ay"></a>
+
 ### 图文混合输出
 
 设置 `enable_text_image_mixed: true` 可启用图文混合输出。启用后，模型会在回复中嵌入相关图片。
@@ -2637,7 +3034,9 @@ data:{"output":{"choices":[{"message":{"content":"","role":"assistant"},"finish_
 
 **图片返回格式**：模型返回的图片以 HTML `<img>` 标签形式嵌入回复内容中。如需在前端展示，可直接渲染 HTML，或将其转换为 Markdown 格式。
 
-```
+<a id="code-block-59"></a>
+
+```html
 <!-- 模型返回的图片格式示例 -->
 <p align="center">
 <img src="https://example.com/image.jpg" alt="图片描述" width="400" height="auto">
@@ -2646,11 +3045,23 @@ data:{"output":{"choices":[{"message":{"content":"","role":"assistant"},"finish_
 
 以下示例代码展示如何启用图文混合输出功能。
 
+<a id="sec-tabs-20"></a>
+
+<a id="openai-兼容-8"></a>
+
+<a id="openai-兼容-8-h4"></a>
+
 #### OpenAI 兼容
+
+<a id="fig-code-group-8"></a>
+
+<a id="fig-code-group-8-python-tab"></a>
 
 Python
 
-```
+<a id="code-code-group-8-python"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -2671,9 +3082,13 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content)
 ```
 
+<a id="fig-code-group-8-node-js-tab"></a>
+
 Node.js
 
-```
+<a id="code-code-group-8-node-js"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const openai = new OpenAI({
@@ -2698,9 +3113,13 @@ async function main() {
 main();
 ```
 
+<a id="fig-code-group-8-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-8-curl"></a>
+
+```bash
 # 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -2721,13 +3140,23 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="dashscope-9"></a>
+
+<a id="dashscope-9-h4"></a>
+
 #### DashScope
 
 不支持DashScope Java SDK。
 
+<a id="fig-code-group-9"></a>
+
+<a id="fig-code-group-9-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-9-python"></a>
+
+```python
 import os
 import dashscope
 
@@ -2752,9 +3181,13 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
+<a id="fig-code-group-9-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-9-curl"></a>
+
+```bash
 # 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -2780,6 +3213,10 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }'
 ```
 
+<a id="思考模型的联网搜索"></a>
+
+<a id="9b41940862qf3"></a>
+
 ## 思考模型的联网搜索
 
 前文的示例中，模型获取搜索结果后直接回复。这适用于事实性强、时效要求高的简单查询（如“杭州明天天气如何”）。但面对行业趋势分析、多源信息整合或报告撰写等复杂任务，模型难以给出高质量回答。可改用深度思考模型：获取检索内容后，先推理，再生成回复，可显著提升复杂任务的回答质量。
@@ -2794,15 +3231,31 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 -   **DeepSeek**：deepseek-v4-pro、`deepseek-v4.1-flash-1017`
     
 
-> 思考模型详情参见： [深度思考](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md) 。
+> 思考模型详情参见： [深度思考](../deep-thinking.md) 。
+
+<a id="sec-tabs-21"></a>
+
+<a id="openai兼容"></a>
+
+<a id="openai兼容-h4"></a>
 
 #### OpenAI兼容
 
+<a id="sec-tabs-22"></a>
+
+<a id="python-11"></a>
+
+<a id="python-11-h4"></a>
+
 #### Python
+
+<a id="b7705d9164p2n"></a>
 
 ### 示例代码
 
-```
+<a id="code-block-60"></a>
+
+```python
 from openai import OpenAI
 import os
 
@@ -2864,9 +3317,13 @@ for chunk in completion:
 # print(answer_content)
 ```
 
+<a id="60e2c17217dku"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-61"></a>
+
+```text
 ====================思考过程====================
 
 我需要基于知识库中的AI热点新闻来预测AI的发展趋势。让我先分析一下知识库中的内容，找出近期的AI热点新闻和相关趋势。
@@ -2885,11 +3342,19 @@ AI发展正从"技术驱动"向"需求驱动"转变，更加注重解决实际�
 CompletionUsage(completion_tokens=1683, prompt_tokens=2688, total_tokens=4371, completion_tokens_details=CompletionTokensDetails(accepted_prediction_tokens=None, audio_tokens=None, reasoning_tokens=1022, rejected_prediction_tokens=None), prompt_tokens_details=PromptTokensDetails(audio_tokens=None, cached_tokens=0))
 ```
 
+<a id="node-js-5"></a>
+
+<a id="node-js-5-h4"></a>
+
 #### Node.js
+
+<a id="2c9fedf2ccd46"></a>
 
 ### 示例代码
 
-```
+<a id="code-block-62"></a>
+
+```javascript
 import OpenAI from "openai";
 import process from 'process';
 
@@ -2949,9 +3414,13 @@ async function main() {
 main();
 ```
 
+<a id="88439499edbk3"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-63"></a>
+
+```text
 ====================思考过程====================
 
 我需要基于知识库中的AI热点新闻来预测AI的发展趋势。让我先分析一下知识库中的内容，找出近期的AI热点新闻和相关趋势。
@@ -2976,13 +3445,27 @@ AI发展正从"技术驱动"向"需求驱动"转变，更加注重解决实际�
 }
 ```
 
+<a id="http"></a>
+
+<a id="http-h4"></a>
+
 #### HTTP
+
+<a id="0c2b4b593a9p3"></a>
 
 ### 示例代码
 
+<a id="sec-tabs-23"></a>
+
+<a id="curl-11"></a>
+
+<a id="curl-11-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-64"></a>
+
+```bash
 # 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -3007,13 +3490,27 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="dashscope-10"></a>
+
+<a id="dashscope-10-h4"></a>
+
 #### DashScope
+
+<a id="sec-tabs-24"></a>
+
+<a id="python-12"></a>
+
+<a id="python-12-h4"></a>
 
 #### Python
 
+<a id="776ef6aa599gt"></a>
+
 ### 示例代码
 
-```
+<a id="code-block-65"></a>
+
+```python
 import os
 import dashscope
 
@@ -3094,9 +3591,13 @@ for chunk in stream:
 # print(chunk.usage)
 ```
 
+<a id="8215ec2b34a8l"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-66"></a>
+
+```text
 ====================搜索信息====================
 [1]: [「PE/VC洞察」《乘AI风,破周期浪》之一:全球AI行业及投资趋势](https://baijiahao.baidu.com/s?id=1847324495675907878&wfr=spider&for=pc)
 [2]: [2025年10月AI技术前沿速览:从通用智能到实体智能](https://baijiahao.baidu.com/s?id=1845923714145562035&wfr=spider&for=pc)
@@ -3144,11 +3645,19 @@ AI与机器学习领域的薪资水平持续领跑科技行业。2025年算法�
 AI已不仅是"科技热点"，更是政策支持、资本追逐和产业升级的交汇点[ref_1]。从"一问一答"到"连续对话"，从"机器学习"到"机器智能"的跃升，AI正在深刻改变我们的生活和工作方式[ref_8]。面对这一变革，关键在于"让AI焕新而非'换人'"，既要充分利用AI带来的效率提升，也要保持人类的创造力和判断力[ref_10]。未来，AI将不再是简单的工具，而是人类工作与生活的智能协作者，共同推动社会进步。
 ```
 
+<a id="java-5"></a>
+
+<a id="java-5-h4"></a>
+
 #### Java
+
+<a id="ac6c06616ekkq"></a>
 
 ### 示例代码
 
-```
+<a id="code-block-67"></a>
+
+```java
 // dashscope SDK的版本 >= 2.19.4
 import java.util.Arrays;
 import com.alibaba.dashscope.aigc.generation.SearchInfo;
@@ -3255,9 +3764,13 @@ public class Main {
 }
 ```
 
+<a id="3d8dc4fe1ezyk"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-68"></a>
+
+```text
 ====================搜索信息====================
 [SearchInfo.SearchResult(siteName=CSDN软件开发网, icon=https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=2005731947,4139443793&fm=195&app=88&f=JPEG?w=200&h=200, index=1, title=2025年AI趋势前瞻:即将到来的智能革命, url=https://blog.csdn.net/2401_85325726/article/details/147161907), SearchInfo.SearchResult(siteName=腾讯网, icon=https://search-operate.cdn.bcebos.com/6a15e3da696bf097938b48d38e132a60.jpeg, index=2, title=2025年中国人工智能(AI)十大趋势, url=https://mp.weixin.qq.com/s?__biz=MzI1MjQ2OTQ3Ng==&mid=2247658552&idx=2&sn=e49389c0058c72c571e69dbf0d485126&chksm=e89d380f116acb0baf44ce03181bd2d7175ef8c471b7f67135a7d01c5d3578a77280cbd6445e&scene=27), SearchInfo.SearchResult(siteName=百家号, icon=https://baijiahao.baidu.com/favicon.ico, index=3, title=2025人工智能十大趋势:这次,AI真的要“动起来”了!, url=https://baijiahao.baidu.com/s?id=1839669810600928968&wfr=spider&for=pc), SearchInfo.SearchResult(siteName=百家号, icon=https://baijiahao.baidu.com/favicon.ico, index=4, title=AI 大模型的未来发展趋势如何?三大主线改写产业格局,端侧智能开启全民 AI 时代!, url=https://baijiahao.baidu.com/s?id=1845107629819035324&wfr=spider&for=pc), SearchInfo.SearchResult(siteName=CSDN软件开发网, icon=https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=2005731947,4139443793&fm=195&app=88&f=JPEG?w=200&h=200, index=5, title=2025 年 AI 发展十大预测:多模态融合、边缘 AI 普及将成核心增长点, url=https://blog.csdn.net/stjiejieto/article/details/151017680), SearchInfo.SearchResult(siteName=CSDN软件开发网, icon=https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=2005731947,4139443793&fm=195&app=88&f=JPEG?w=200&h=200, index=6, title=2025年人工智能发展前瞻:揭秘7大趋势,引领未来科技潮流!, url=https://blog.csdn.net/Trb201013/article/details/150769996), SearchInfo.SearchResult(siteName=腾讯网, icon=https://search-operate.cdn.bcebos.com/6a15e3da696bf097938b48d38e132a60.jpeg, index=7, title=2025年的6大人工智能趋势 , url=https://mp.weixin.qq.com/s?__biz=Mzg4MjIwMzQzMA==&mid=2247508799&idx=2&sn=575628bef09b6a8f91297ee56b9a797c&chksm=ceddcbc37eb073d6568611da8dec5e44a6c70f0183c7c803e91c59278ccf0a7399090bb32bb5&scene=27), SearchInfo.SearchResult(siteName=百家号, icon=https://baijiahao.baidu.com/favicon.ico, index=8, title=2025年AI工具大规模落地,国内用户半年多了2.66亿人, url=https://baijiahao.baidu.com/s?id=1847267945526255766&wfr=spider&for=pc), SearchInfo.SearchResult(siteName=百家号, icon=https://baijiahao.baidu.com/favicon.ico, index=9, title=2025年AI工具大规模落地 国内用户半年多了2.66亿人, url=https://baijiahao.baidu.com/s?id=1847270652122448223&wfr=spider&for=pc), SearchInfo.SearchResult(siteName=百家号, icon=https://baijiahao.baidu.com/favicon.ico, index=10, title=人工智能探路深水区——专访中国自动化学会普及工作委员会主任张军平, url=https://baijiahao.baidu.com/s?id=1846757405997456543&wfr=spider&for=pc)]
 ====================思考过程====================
@@ -3292,13 +3805,27 @@ public class Main {
 GenerationUsage(inputTokens=5615, outputTokens=2135, totalTokens=7750, outputTokensDetails=GenerationOutputTokenDetails(reasoningTokens=761), promptTokensDetails=GenerationUsage.PromptTokensDetails(cacheType=null, cachedTokens=0, cacheCreationInputTokens=null, cacheCreation=null))
 ```
 
+<a id="http-2"></a>
+
+<a id="http-2-h4"></a>
+
 #### HTTP
+
+<a id="e26c51f5b85nt"></a>
 
 ### 示例代码
 
+<a id="sec-tabs-25"></a>
+
+<a id="curl-12"></a>
+
+<a id="curl-12-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-69"></a>
+
+```bash
 # 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
 curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation" \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -3330,6 +3857,10 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 }'
 ```
 
+<a id="responses-api的联网搜索"></a>
+
+<a id="7b82860922v0y"></a>
+
 ## Responses API的联网搜索
 
 通过 `tools` 参数的`tools`数组中添加 `web_search` 工具即可启用联网搜索。
@@ -3344,11 +3875,17 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 
 > 对于支持以下工具的模型，建议同时开启 `web_search`、`web_extractor` 和 `code_interpreter`。`qwen3.8-omni-flash` 的内置工具仅支持 `web_search`。
 
-> 关于Responses API的使用说明、代码示例和迁移指南，请参见 [OpenAI兼容-Responses](raw/model-api-reference/toolkits-and-frameworks/compatibility-with-openai-responses-api.md) 。
+> 关于Responses API的使用说明、代码示例和迁移指南，请参见 [OpenAI兼容-Responses](../../../../model-api-reference/toolkits-and-frameworks/compatibility-with-openai-responses-api.md) 。
+
+<a id="fig-code-group-10"></a>
+
+<a id="fig-code-group-10-python-tab"></a>
 
 python
 
-```
+<a id="code-code-group-10-python"></a>
+
+```python
 from openai import OpenAI
 import os
 
@@ -3388,9 +3925,13 @@ for item in response.output:
             print(f"[{i}] {source.url}")
 ```
 
+<a id="fig-code-group-10-javascript-tab"></a>
+
 javascript
 
-```
+<a id="code-code-group-10-javascript"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const openai = new OpenAI({
@@ -3432,9 +3973,13 @@ async function main() {
 main();
 ```
 
+<a id="fig-code-group-10-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-10-bash"></a>
+
+```bash
 # 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -3455,7 +4000,9 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 以下示例展示多轮检索的 `output` 和工具计数。计费次数以 `tool_usage` 为准，不按 `output` 项数计算。
 
-```
+<a id="code-block-70"></a>
+
+```json
 {
   "output": [
     {
@@ -3501,13 +4048,19 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }
 ```
 
+<a id="获取搜索来源"></a>
+
+<a id="ws_resp_get_sources"></a>
+
 ### 获取搜索来源
 
 执行联网搜索后，搜索来源会在响应的 `output` 数组中 `type` 为 `web_search_call` 的元素内返回，其 `action.sources` 字段为搜索来源链接列表。可在上述示例的 `response` 基础上按如下方式提取：
 
 > Responses API 暂不支持 `enable_source`、`enable_citation`、`citation_format` 参数，不会在回复内容中自动插入 `[1]` 角标。如需角标标注，请使用 DashScope 调用方式。
 
-```
+<a id="code-block-71"></a>
+
+```python
 # 在上述 response 的基础上提取搜索来源
 print("=" * 20 + "搜索来源" + "=" * 20)
 for item in response.output:
@@ -3516,9 +4069,15 @@ for item in response.output:
             print(f"[{i}] {source.url}")
 ```
 
+<a id="计费说明"></a>
+
+<a id="92ce83df3a599"></a>
+
 ## 计费说明
 
-**说明**本文所述“联网搜索”为模型内置的联网搜索功能，其计费如下方所示，本身不提供免费调用额度。它与百炼 MCP 广场提供的“联网搜索 MCP”服务是相互独立的两个功能，计费也相互独立：联网搜索 MCP 全部用户前 2000 次调用免费，免费额度用尽后按 29 元/千次计费，详情请参见[接入 Harness 工具](https://help.aliyun.com/zh/model-studio/token-plan-harness-benefits#tpha-h-access)。
+> **说明**
+>
+> 本文所述“联网搜索”为模型内置的联网搜索功能，其计费如下方所示，本身不提供免费调用额度。它与百炼 MCP 广场提供的“联网搜索 MCP”服务是相互独立的两个功能，计费也相互独立：联网搜索 MCP 全部用户前 2000 次调用免费，免费额度用尽后按 29 元/千次计费，详情请参见[接入 Harness 工具](../../../../token-plan-user-guide/token-plan-personal/token-plan-harness-benefits.md#tpha-h-access)。
 
 联网搜索的费用包含两部分：
 
@@ -3535,11 +4094,23 @@ for item in response.output:
             -   华北2（北京）、美国（弗吉尼亚）、中国香港、日本（东京）、德国（法兰克福）地域：4元
             -   新加坡地域 73.392381元。
 
+<a id="限流说明"></a>
+
+<a id="c2ea761ab4kif"></a>
+
 ## 限流说明
 
 联网搜索限流为 15 RPS（每秒请求数），按阿里云主账号维度计算（所有API Key 的联网搜索请求总和，不区分模型）。超出限制时API不会报错，但搜索链路不会触发。
 
+<a id="常见问题"></a>
+
+<a id="36e50005b3h9p"></a>
+
 ## 常见问题
+
+<a id="q-开启联网搜索后-模型为何没有执行网络搜索"></a>
+
+<a id="307a2db423hvj"></a>
 
 ### Q：开启联网搜索后，模型为何没有执行网络搜索？
 
@@ -3547,7 +4118,11 @@ A：可能原因如下：
 
 -   **模型判断无需联网**：模型判断当前问题不涉及实时信息，可直接使用自身知识回答。如需强制联网，请在 `search_options` 中设置 `forced_search: true`。
 -   **触发限流**：账号的请求频率超过了 15 RPS。API 不会报错，但会跳过搜索步骤，请控制请求频率。
--   **模型不支持：**调用的模型不支持联网搜索，请参见[支持的模型](https://help.aliyun.com/zh/model-studio/web-search#980e4e9787miv)。
+-   **模型不支持：**调用的模型不支持联网搜索，请参见[支持的模型](web-search.md#980e4e9787miv)。
+
+<a id="q-如何判断是否执行了搜索"></a>
+
+<a id="32e3bcbbe7fi3"></a>
 
 ### Q：如何判断是否执行了搜索？
 
@@ -3565,47 +4140,83 @@ A：分两层判断：
     例如：提问“杭州天气”，未联网时输入 Token 为 10，联网搜索后输入 Token 变为 1953。
     
 
-> 上述字段中的 `count` 在意图判定阶段即被置位，不代表检索已实际完成，不作为计费或对账依据。详情请参见[账单次数与 count 字段不一致](https://help.aliyun.com/zh/model-studio/web-search#faq-search-billing-count-mismatch-title)。
+> 上述字段中的 `count` 在意图判定阶段即被置位，不代表检索已实际完成，不作为计费或对账依据。详情请参见[账单次数与 count 字段不一致](web-search.md#faq-search-billing-count-mismatch-title)。
+
+<a id="q-账单的联网搜索次数与-api-返回的-count-字段不一致-如何对账"></a>
+
+<a id="faq-search-billing-count-mismatch-title"></a>
 
 ### Q：账单的联网搜索次数与 API 返回的 count 字段不一致，如何对账？
 
 A：两者统计口径不同，数值存在差异属于预期情况：
 
 -   **账单计量**：以搜索服务实际完成检索并正常返回结果为计费依据。
--   **`count` 字段**（DashScope 协议为 `usage.plugins.search.count`，OpenAI 兼容协议为 `usage.x_tools.search.count` (Chat Completions / Qwen3.8 Responses)，两者取值一致）：表示本轮对话经意图判定需要联网搜索，在意图判定阶段即被置位，不代表检索已实际完成。即使[触发限流](https://help.aliyun.com/zh/model-studio/web-search#c2ea761ab4kif)或检索未返回结果，该字段仍会返回数值，不会置 0 或省略。
+-   **`count` 字段**（DashScope 协议为 `usage.plugins.search.count`，OpenAI 兼容协议为 `usage.x_tools.search.count` (Chat Completions / Qwen3.8 Responses)，两者取值一致）：表示本轮对话经意图判定需要联网搜索，在意图判定阶段即被置位，不代表检索已实际完成。即使[触发限流](web-search.md#c2ea761ab4kif)或检索未返回结果，该字段仍会返回数值，不会置 0 或省略。
 
 因此 `count` 不作为计费或对账的依据，**对账请以账单出账数据为准**。
 
+<a id="q-为何输入英文无法执行联网搜索"></a>
+
+<a id="6c5905d39092p"></a>
+
 ### Q：为何输入英文无法执行联网搜索？
 
-A：平台正在持续优化联网的判定流程对于英文的支持。当前建议使用中文提问，或在输入英文时[强制联网搜索](https://help.aliyun.com/zh/model-studio/web-search#6f83c89f7dw0v)。
+A：平台正在持续优化联网的判定流程对于英文的支持。当前建议使用中文提问，或在输入英文时[强制联网搜索](web-search.md#6f83c89f7dw0v)。
+
+<a id="q-开启联网搜索后-用户的提问内容是否会泄露到外部"></a>
+
+<a id="b8c9d0e1f2g3h"></a>
 
 ### Q：开启联网搜索后，用户的提问内容是否会泄露到外部？
 
 A：不会。系统不会将原始问题直接透传给搜索引擎，而是对查询意图进行深度解析和多层脱敏处理，仅提取可用于检索的关键信息片段。从原始 query 到实际检索会经过多次改写，确保敏感内容不会明文外泄。阿里云采用数据加密和隐私保护措施确保安全，具体请参考[服务协议](https://terms.alicdn.com/legal-agreement/terms/common_platform_service/20230728213935489/20230728213935489.html)。
 
+<a id="q-向量化检索是否会导致信息泄露"></a>
+
+<a id="f0g1h2i3j4k5l"></a>
+
 ### Q：向量化检索是否会导致信息泄露？
 
 A：不会。向量是高维数学表示，不具可读性，外部系统无法从中还原原始文字。向量匹配过程在封闭可信环境中完成，不会暴露给公共搜索引擎。
+
+<a id="q-联网搜索的搜索判定机制是什么"></a>
+
+<a id="i9j0k1l2m3n4o"></a>
 
 ### Q：联网搜索的搜索判定机制是什么？
 
 A：系统先判断是否需要搜索——不涉及时事的内容通常不会触发。触发搜索的多为时事信息或百科知识类查询，与机密信息重叠度低。每次搜索都经过多次 query 改写后才执行检索。
 
+<a id="q-联网搜索后模型返回-无法回答-或无响应"></a>
+
+<a id="faq-search-content-moderation-title"></a>
+
 ### Q：联网搜索后模型返回“无法回答”或无响应？
 
 A：联网搜索结果可能包含管控信息，触发内容安全规则，导致模型返回 `DataInspectionFailed` 错误 (HTTP 400)，响应内容为“抱歉，我无法回答这个问题”。排查方法：关闭联网搜索后重新发送相同查询，若模型正常回复，则确认是搜索返回的内容触发了拦截。内容安全拦截为非确定性行为，取决于搜索返回的具体内容，并非所有敏感话题查询都会触发。
+
+<a id="q-联网搜索查询股票价格时-非交易日仍返回股价数据-如何处理"></a>
+
+<a id="faq-stock-price-non-trading-day-title"></a>
 
 ### Q：联网搜索查询股票价格时，非交易日仍返回股价数据，如何处理？
 
 A：使用 qwen3.7-max 或更新版本的模型。qwen3.7-max 能识别非交易日并提示无收盘价；qwen-max 缺少日期推理能力，会在非交易日返回搜索获取的股价。`enable_search_extension` 与 `prompt_intervene` 无法解决该问题。
 
+<a id="q-如何让-kimi-系列模型执行联网搜索"></a>
+
+<a id="faq-kimi-enable-search-not-working-title"></a>
+
 ### Q：如何让 Kimi 系列模型执行联网搜索？
 
 A：kimi-k3.1-pro（阿里云百炼部署）在北京、新加坡、美国（弗吉尼亚）、德国（法兰克福）、日本（东京）和中国香港均支持 Responses `web_search` 和 Anthropic `web_search`，不支持 Chat Completions `enable_search`。
 
-kimi-k3 仅支持通过[Responses API](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y)的 `web_search` 工具联网搜索，不支持 `enable_search` 参数。如需更灵活的检索方式，也可在百炼控制台创建智能体应用，并通过**工具 > MCP 服务**添加联网搜索 MCP 工具（如 `bailian_web_search`）。联网搜索 MCP 与内置联网搜索是相互独立的两个功能，计费也相互独立，详情请参见[接入 Harness 工具](https://help.aliyun.com/zh/model-studio/token-plan-harness-benefits#tpha-h-access)。
+kimi-k3 仅支持通过[Responses API](web-search.md#7b82860922v0y)的 `web_search` 工具联网搜索，不支持 `enable_search` 参数。如需更灵活的检索方式，也可在百炼控制台创建智能体应用，并通过**工具 > MCP 服务**添加联网搜索 MCP 工具（如 `bailian_web_search`）。联网搜索 MCP 与内置联网搜索是相互独立的两个功能，计费也相互独立，详情请参见[接入 Harness 工具](../../../../token-plan-user-guide/token-plan-personal/token-plan-harness-benefits.md#tpha-h-access)。
+
+<a id="错误信息"></a>
+
+<a id="2048aa1f92x46"></a>
 
 ## 错误信息
 
-如果执行报错，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+如果执行报错，请参见[错误码](../../../../model-api-reference/preparations/error-code.md)进行解决。

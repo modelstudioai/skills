@@ -2,10 +2,16 @@
 
 影视互娱剧本创作应用支持创作长篇幅的剧本，内置开放式指令并提供交互式写作体验，通过这些指令，用户可以逐步构建剧本的各个部分，从人物设定、场面设计、剧本主题到剧本构建和创作等，为用户创作剧本提供灵感。
 
-**重要**影视互娱剧本创作应用限时免费，额度用完后再按实际调用模型对应的输入、输出Token以后付费方式来计费。
+> **重要**
+>
+> 影视互娱剧本创作应用限时免费，额度用完后再按实际调用模型对应的输入、输出Token以后付费方式来计费。
+>
+> -   更多关于新用户限时免费福利信息，请参见[新用户限时免费福利](../model-user-guide/test-1/new-free-quota.md)。
+> -   关于Token的计算方法和模型的计费详情，请参见[计费项](https://help.aliyun.com/zh/model-studio/billing-for-model-studio)。
 
--   更多关于新用户限时免费福利信息，请参见[新用户限时免费福利](raw/model-user-guide/test-1/new-free-quota.md)。
--   关于Token的计算方法和模型的计费详情，请参见[计费项](https://help.aliyun.com/zh/model-studio/billing-for-model-studio)。
+<a id="优势特点"></a>
+
+<a id="37d3e0c84bq0v"></a>
 
 ## 优势特点
 
@@ -14,13 +20,25 @@
 -   接口标准与OpenAI的标准规范对齐；用法类似于调用大模型的方法，输入prompt即可使用；创作路径更灵活自由。
 -   内置agent链路，能有效地解决剧本上下文逻辑对齐、细节遗忘的问题。
 
+<a id="功能入口"></a>
+
+<a id="0335d9162anx4"></a>
+
 ## 功能入口
 
 访问**[应用广场](https://bailian.console.aliyun.com/#/app-market)**页面，单击**全妙-影视互娱剧本创作**卡片区域的**查看详情**，即可进入该轻应用控制台。
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7512853471/p935616.png)
 
+<a id="功能介绍"></a>
+
+<a id="372a91c4cam2t"></a>
+
 ## 功能介绍
+
+<a id="写剧本"></a>
+
+<a id="e16f489c62ctx"></a>
 
 ### 写剧本
 
@@ -41,6 +59,10 @@
     下图为生成的剧本相关内容示例。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1953676371/p904171.png)
     
 
+<a id="整理剧本内容"></a>
+
+<a id="90c1ea5ce7yts"></a>
+
 ### 整理剧本内容
 
 1.  在**影视互娱剧本创作**的**效果调试**页签，点击**整理剧本**即可将剧本内容整理到对应模块（整理剧本功能实现一边写剧本，一边进行整理合并）。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1953676371/p904173.png)
@@ -49,6 +71,10 @@
     
     您也可单击![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1953676371/p904192.png)图标进入查看整理剧本的窗口。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1953676371/p904190.png)
     
+
+<a id="下载剧本-复制剧本"></a>
+
+<a id="1575470af1cx4"></a>
 
 ### 下载剧本&复制剧本
 
@@ -59,9 +85,17 @@
 2.  每个段落剧本的内容都支持复制（点击![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1953676371/p904202.png)图标）。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1953676371/p904200.png)
     
 
+<a id="开启新剧本"></a>
+
+<a id="e0ca0a56d5q57"></a>
+
 ### 开启新剧本
 
 点击**开启新剧本**并在二次确认对话框中点击**开启新剧本**，原始的剧本内容将被清空，用户可以开始写新的剧本。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1953676371/p904207.png)
+
+<a id="api调用"></a>
+
+<a id="0641913d26l1r"></a>
 
 ## API调用
 

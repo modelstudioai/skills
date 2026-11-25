@@ -2,11 +2,19 @@
 
 通义多模态翻译术语库查询
 
+<a id="调试"></a>
+
+<a id="api-detail-23"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
 [调试](https://api.aliyun.com/api/AnyTrans/2025-07-07/TermQuery)
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -25,227 +33,53 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-操作
+<table><thead><tr><th>操作</th><th>访问级别</th><th>资源类型</th><th>条件关键字</th><th>关联操作</th></tr></thead><tbody><tr><td>anytrans:TermQuery</td><td>none</td><td><div><div>*全部资源</div><div><code>*</code></div></div></td><td><ul>无</ul></td><td>无</td></tr></tbody></table>
 
-访问级别
+<a id="请求语法"></a>
 
-资源类型
-
-条件关键字
-
-关联操作
-
-anytrans:TermQuery
-
-none
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-53"></a>
 
 ## 请求语法
 
-```
+<a id="code-block"></a>
+
+```text
 POST /anytrans/translate/intervene/query HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="api-detail-36"></a>
+
 ## 请求参数
 
-名称
+<table><thead><tr><th>名称</th><th>类型</th><th>必填</th><th>描述</th><th>示例值</th></tr></thead><tbody><tr><td>workspaceId</td><td>string</td><td>是</td><td><div><p>当前请求所使用的百炼业务空间 id</p></div></td><td>llm-kqtrcpdee4xm29xx</td></tr><tr><td>sourceLanguage</td><td>string</td><td>是</td><td><div><p>源语言</p></div></td><td>zh</td></tr><tr><td>targetLanguage</td><td>string</td><td>是</td><td><div><p>目标语言</p></div></td><td>en</td></tr><tr><td>scene</td><td>string</td><td>是</td><td><div><p>翻译模型</p></div><div><div>枚举值：</div><ul><li>mt-plus：专业版。</li><li>mt-flash：轻量版。</li></ul></div></td><td>mt-flash</td></tr><tr><td>text</td><td>string</td><td>否</td><td><div><p>输入包含干预的句子</p></div></td><td>今天的天气非常不错，我准备去跟我的好朋友去学习一些大模型相关和应用接口的知识。</td></tr><tr><td>ext</td><td>object</td><td>否</td><td><div><p>扩展参数。</p></div></td><td></td></tr><tr><td>paramMap</td><td>any</td><td>否</td><td><div><p>扩展参数配置（bizUserld：业务层面的用户 ID，用来区分不 同业务用户，做到“按用户隔离”的术语干预，互不影响。 bizType：业务场景类型/标识，用来区分不同场景，做到 “按场景隔离”的术语干预，互不影响。）</p></div><div><div>枚举值：</div><ul><li>bizType：业务场景类型。</li><li>bizUserId：业务用户id。</li></ul></div></td><td>{&quot;bizUserld&quot;:&quot;123456&quot;,&quot;bizType&quot;:session&quot;}</td></tr></tbody></table>
 
-类型
+<a id="返回参数"></a>
 
-必填
-
-描述
-
-示例值
-
-workspaceId
-
-string
-
-是
-
-当前请求所使用的百炼业务空间 id
-
-llm-kqtrcpdee4xm29xx
-
-sourceLanguage
-
-string
-
-是
-
-源语言
-
-zh
-
-targetLanguage
-
-string
-
-是
-
-目标语言
-
-en
-
-scene
-
-string
-
-是
-
-翻译模型
-
-枚举值：
-
--   mt-plus：专业版。
--   mt-flash：轻量版。
-
-mt-flash
-
-text
-
-string
-
-否
-
-输入包含干预的句子
-
-今天的天气非常不错，我准备去跟我的好朋友去学习一些大模型相关和应用接口的知识。
-
-ext
-
-object
-
-否
-
-扩展参数。
-
-paramMap
-
-any
-
-否
-
-扩展参数配置（bizUserld：业务层面的用户 ID，用来区分不 同业务用户，做到“按用户隔离”的术语干预，互不影响。 bizType：业务场景类型/标识，用来区分不同场景，做到 “按场景隔离”的术语干预，互不影响。）
-
-枚举值：
-
--   bizType：业务场景类型。
--   bizUserId：业务用户id。
-
-{"bizUserld":"123456","bizType":session"}
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-名称
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | Schema of Response |  |
+| code | string | 响应状态码 | success |
+| message | string | 响应信息 | success |
+| requestId | string | 请求 id | C3C70C8F-E026-17D8-854E-7F8EF2F5C909 |
+| success | boolean | 调用是否成功 | true |
+| httpStatusCode | string | http 状态码 | 200 |
+| data | object | 返回数据 |  |
+| terms | array<object> | 干预术语列表 |  |
+| terms | object | 干预术语 |  |
+| termId | string | 干预术语 id | 92669963 |
+| src | string | 源文本 | 大模型 |
+| tgt | string | 干预后译文 | LLM |
+| failCount | long | 失败数量 | 0 |
 
-类型
+<a id="示例"></a>
 
-描述
-
-示例值
-
-object
-
-Schema of Response
-
-code
-
-string
-
-响应状态码
-
-success
-
-message
-
-string
-
-响应信息
-
-success
-
-requestId
-
-string
-
-请求 id
-
-C3C70C8F-E026-17D8-854E-7F8EF2F5C909
-
-success
-
-boolean
-
-调用是否成功
-
-true
-
-httpStatusCode
-
-string
-
-http 状态码
-
-200
-
-data
-
-object
-
-返回数据
-
-terms
-
-array<object>
-
-干预术语列表
-
-terms
-
-object
-
-干预术语
-
-termId
-
-string
-
-干预术语 id
-
-92669963
-
-src
-
-string
-
-源文本
-
-大模型
-
-tgt
-
-string
-
-干预后译文
-
-LLM
-
-failCount
-
-long
-
-失败数量
-
-0
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -253,7 +87,9 @@ long
 
 `JSON`格式
 
-```
+<a id="code-block-2"></a>
+
+```text
 {
   "code": "success",
   "message": "success",
@@ -273,32 +109,24 @@ long
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
+
 ## 错误码
 
-HTTP status code
-
-错误码
-
-错误信息
-
-400
-
-IdempotentParameterMismatch
-
-The request uses the same client token as a previous, but non-identical request. Do not reuse a client token with different requests, unless the requests are identical.
+| HTTP status code | 错误码 | 错误信息 |
+| --- | --- | --- |
+| 400 | IdempotentParameterMismatch | The request uses the same client token as a previous, but non-identical request. Do not reuse a client token with different requests, unless the requests are identical. |
 
 访问[错误中心](https://api.aliyun.com/document/AnyTrans/2025-07-07/errorCode)查看更多错误码。
 
+<a id="变更历史"></a>
+
+<a id="workbench-doc-change-demo"></a>
+
 ## 变更历史
 
-变更时间
-
-变更内容概要
-
-操作
-
-2025-12-25
-
-OpenAPI 错误码发生变更、OpenAPI 入参发生变更
-
-[查看变更详情](https://api.aliyun.com/document/AnyTrans/2025-07-07/TermQuery?updateTime=2025-12-25#workbench-doc-change-demo)
+| 变更时间 | 变更内容概要 | 操作 |
+| --- | --- | --- |
+| 2025-12-25 | OpenAPI 错误码发生变更、OpenAPI 入参发生变更 | [查看变更详情](https://api.aliyun.com/document/AnyTrans/2025-07-07/TermQuery?updateTime=2025-12-25#workbench-doc-change-demo) |

@@ -2,47 +2,55 @@
 
 查询、列举和删除文件，并了解文件对象的属性信息。
 
-**重要**当前接口主要用于兼容历史场景，推荐优先使用 [OpenAI 兼容的 File 接口](raw/model-api-reference/toolkits-and-frameworks/openai-file-interface.md)。
+> **重要**
+>
+> 当前接口主要用于兼容历史场景，推荐优先使用 [OpenAI 兼容的 File 接口](../toolkits-and-frameworks/openai-file-interface.md)。
+
+<a id="获取指定文件信息"></a>
+
+<a id="066b66310ek68"></a>
 
 ## 获取指定文件信息
 
-```
+<a id="code-block"></a>
+
+```http
 GET https://dashscope.aliyuncs.com/api/v1/files/{file_id}
 Accept: application/json
 ```
 
+<a id="请求示例"></a>
+
+<a id="7aee84600eddz"></a>
+
 ### 请求示例
 
-```
+<a id="code-block-2"></a>
+
+```bash
 curl --location --request GET "https://dashscope.aliyuncs.com/api/v1/files/123" \
 --header "Authorization: Bearer ${DASHSCOPE_API_KEY}"
 ```
 
+<a id="请求参数"></a>
+
+<a id="5c0612700ewey"></a>
+
 ### 请求参数
 
-**字段**
+| 字段 | 类型 | 传参方式 | 必选 | 描述 |
+| --- | --- | --- | --- | --- |
+| file\_id | String | path | 是 | 文件ID，可通过[上传文件](upload-file-api.md)或列举文件接口获取 |
 
-**类型**
+<a id="返回示例"></a>
 
-**传参方式**
-
-**必选**
-
-**描述**
-
-file\_id
-
-String
-
-path
-
-是
-
-文件ID，可通过[上传文件](raw/model-api-reference/file-management-api/upload-file-api.md)或列举文件接口获取
+<a id="e06c1d700eqza"></a>
 
 ### 返回示例
 
-```
+<a id="code-block-3"></a>
+
+```json
 {
     "request_id": "bddee90e-d320-4bf9-b32b-ac3359192d1e",
     "data": {
@@ -57,135 +65,73 @@ path
 }
 ```
 
+<a id="返回参数"></a>
+
+<a id="d498c5700e5t8"></a>
+
 ### 返回参数
 
-**字段**
+| 字段 | 类型 | 描述 |
+| --- | --- | --- |
+| data.file\_id | String | 文件ID |
+| data.url | String | 文件下载链接 |
+| data.name | String | 文件名 |
+| data.size | Number | 文件大小 |
+| data.md5 | String | 文件的md5 |
+| data.description | String | 文件的描述 |
+| data.gmt\_create | Date | 文件上传时间 |
+| data.id | String | 文件的内部ID |
+| data.region | String | 文件所在地域 |
+| data.user\_id | String | 用户ID |
+| data.api\_key\_id | String | API Key ID |
+| request\_id | String | 本次请求的系统唯一码 |
 
-**类型**
+<a id="列举当前所有的文件"></a>
 
-**描述**
-
-data.file\_id
-
-String
-
-文件ID
-
-data.url
-
-String
-
-文件下载链接
-
-data.name
-
-String
-
-文件名
-
-data.size
-
-Number
-
-文件大小
-
-data.md5
-
-String
-
-文件的md5
-
-data.description
-
-String
-
-文件的描述
-
-data.gmt\_create
-
-Date
-
-文件上传时间
-
-data.id
-
-String
-
-文件的内部ID
-
-data.region
-
-String
-
-文件所在地域
-
-data.user\_id
-
-String
-
-用户ID
-
-data.api\_key\_id
-
-String
-
-API Key ID
-
-request\_id
-
-String
-
-本次请求的系统唯一码
+<a id="a3b144d10ei2c"></a>
 
 ## 列举当前所有的文件
 
-```
+<a id="code-block-4"></a>
+
+```http
 GET https://dashscope.aliyuncs.com/api/v1/files
 Accept: application/json
 ```
 
+<a id="请求示例-2"></a>
+
+<a id="719650700eyng"></a>
+
 ### 请求示例
 
-```
+<a id="code-block-5"></a>
+
+```bash
 curl --location --request GET "https://dashscope.aliyuncs.com/api/v1/files?page_no=1&page_size=20" \
 --header "Authorization: Bearer ${DASHSCOPE_API_KEY}"
 ```
 
+<a id="请求参数-2"></a>
+
+<a id="6677a2700etc3"></a>
+
 ### 请求参数
 
-**字段**
+| 字段 | 类型 | 传参方式 | 必选 | 描述 |
+| --- | --- | --- | --- | --- |
+| page\_no | Number | Query | 是 | 当前页，最小值为1，默认值为1 |
+| page\_size | Number | Query | 是 | 分页大小。最小值为1，最大值为100，默认值为10 |
 
-**类型**
+<a id="返回示例-2"></a>
 
-**传参方式**
-
-**必选**
-
-**描述**
-
-page\_no
-
-Number
-
-Query
-
-是
-
-当前页，最小值为1，默认值为1
-
-page\_size
-
-Number
-
-Query
-
-是
-
-分页大小。最小值为1，最大值为100，默认值为10
+<a id="128113d00e4fg"></a>
 
 ### 返回示例
 
-```
+<a id="code-block-6"></a>
+
+```json
 {
     "request_id": "123456",
     "data": {
@@ -226,196 +172,105 @@ Query
 }
 ```
 
+<a id="返回参数-2"></a>
+
+<a id="f85518800em7y"></a>
+
 ### 返回参数
 
-**字段**
+| 字段 | 类型 | 描述 |
+| --- | --- | --- |
+| data.total | Number | 总记录数 |
+| data.page\_size | Number | 分页大小 |
+| data.page\_no | Number | 当前页 |
+| data.files | Array | 文件列表，元素为文件对象，属性详见文件对象小节 |
+| request\_id | String | 本次请求的系统唯一码 |
 
-**类型**
+<a id="删除文件"></a>
 
-**描述**
-
-data.total
-
-Number
-
-总记录数
-
-data.page\_size
-
-Number
-
-分页大小
-
-data.page\_no
-
-Number
-
-当前页
-
-data.files
-
-Array
-
-文件列表，元素为文件对象，属性详见文件对象小节
-
-request\_id
-
-String
-
-本次请求的系统唯一码
+<a id="436c33610en47"></a>
 
 ## 删除文件
 
-```
+<a id="code-block-7"></a>
+
+```http
 DELETE https://dashscope.aliyuncs.com/api/v1/files/{file_id}
 Accept: application/json
 ```
 
+<a id="请求示例-3"></a>
+
+<a id="9bc256200ez7n"></a>
+
 ### 请求示例
 
-```
+<a id="code-block-8"></a>
+
+```bash
 curl --location --request DELETE "https://dashscope.aliyuncs.com/api/v1/files/123" \
 --header "Authorization: Bearer ${DASHSCOPE_API_KEY}"
 ```
 
+<a id="请求参数-3"></a>
+
+<a id="86ba1ec00eiha"></a>
+
 ### 请求参数
 
-**字段**
+| 字段 | 类型 | 传参方式 | 必选 | 描述 |
+| --- | --- | --- | --- | --- |
+| file\_id | String | path | 是 | 文件ID，可通过[上传文件](upload-file-api.md)或列举文件接口获取 |
 
-**类型**
+<a id="返回示例-3"></a>
 
-**传参方式**
-
-**必选**
-
-**描述**
-
-file\_id
-
-String
-
-path
-
-是
-
-文件ID，可通过[上传文件](raw/model-api-reference/file-management-api/upload-file-api.md)或列举文件接口获取
+<a id="2fbe8d800e5qa"></a>
 
 ### 返回示例
 
-```
+<a id="code-block-9"></a>
+
+```json
 {
     "request_id": "038e9953-6f0e-4691-afcc-1f0fe07b32c2"
 }
 ```
 
+<a id="返回参数-3"></a>
+
+<a id="d5f441500eih1"></a>
+
 ### 返回参数
 
-**字段**
+| 字段 | 类型 | 描述 |
+| --- | --- | --- |
+| code | String | 错误码，仅当本次请求出错时返回 |
+| message | String | 错误信息，仅当本次请求出错时返回 |
+| request\_id | String | 本次请求的系统唯一码 |
 
-**类型**
+<a id="文件对象"></a>
 
-**描述**
-
-code
-
-String
-
-错误码，仅当本次请求出错时返回
-
-message
-
-String
-
-错误信息，仅当本次请求出错时返回
-
-request\_id
-
-String
-
-本次请求的系统唯一码
+<a id="v0tcaa5eft1qc"></a>
 
 ## 文件对象
 
-文件对象表示已上传到百炼平台的文件及其属性信息。通过[上传文件](raw/model-api-reference/file-management-api/upload-file-api.md)接口创建，可通过列举文件和查询文件详情接口获取。
+文件对象表示已上传到百炼平台的文件及其属性信息。通过[上传文件](upload-file-api.md)接口创建，可通过列举文件和查询文件详情接口获取。
 
-除 DashScope 原生接口外，您也可以通过 [OpenAI 兼容-File 接口](raw/model-api-reference/toolkits-and-frameworks/openai-file-interface.md)（`/compatible-mode/v1/files`）管理文件。
+除 DashScope 原生接口外，您也可以通过 [OpenAI 兼容-File 接口](../toolkits-and-frameworks/openai-file-interface.md)（`/compatible-mode/v1/files`）管理文件。
 
 > 当前文件管理 API 仅在北京 Region 开放。如您使用其他 Region，请通过该 Region 的百炼控制台完成文件管理操作。
 
-**字段**
-
-**类型**
-
-**描述**
-
-file\_id
-
-String
-
-文件ID
-
-name
-
-String
-
-文件名
-
-description
-
-String
-
-文件的描述
-
-size
-
-Number
-
-文件大小
-
-md5
-
-String
-
-文件的md5
-
-url
-
-String
-
-文件下载链接
-
-gmt\_create
-
-Date
-
-文件上传时间
-
-id
-
-String
-
-文件的内部ID
-
-region
-
-String
-
-文件所在地域
-
-user\_id
-
-String
-
-用户ID
-
-api\_key\_id
-
-String
-
-API Key ID
-
-purpose
-
-String
-
-文件用途
+| 字段 | 类型 | 描述 |
+| --- | --- | --- |
+| file\_id | String | 文件ID |
+| name | String | 文件名 |
+| description | String | 文件的描述 |
+| size | Number | 文件大小 |
+| md5 | String | 文件的md5 |
+| url | String | 文件下载链接 |
+| gmt\_create | Date | 文件上传时间 |
+| id | String | 文件的内部ID |
+| region | String | 文件所在地域 |
+| user\_id | String | 用户ID |
+| api\_key\_id | String | API Key ID |
+| purpose | String | 文件用途 |

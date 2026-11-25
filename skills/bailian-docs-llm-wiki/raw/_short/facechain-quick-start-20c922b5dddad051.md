@@ -2,45 +2,76 @@
 
 调用FaceChain人物图像检测和人物形象训练API，完成训练图片校验、文件上传及人物形象模型训练。
 
-**重要**
+> **重要**
+>
+> -   本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)。
 
--   本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)。
+<a id="快速开始"></a>
+
+<a id="qR4TM"></a>
 
 ## 快速开始
 
+<a id="前提条件"></a>
+
+<a id="o6ecl"></a>
+
 ### 前提条件
 
--   已开通服务并获得API-KEY：[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
+-   已开通服务并获得API-KEY：[获取与配置 API Key](../model-api-reference/preparations/get-api-key.md)。
+
+<a id="功能介绍"></a>
+
+<a id="513c072173ew6"></a>
 
 ## 功能介绍
 
+<a id="使用流程"></a>
+
+<a id="5511a03073g9x"></a>
+
 ### 使用流程
 
-1.  开通大模型服务平台，获得API-KEY：[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)
-2.  开发调用人物图像检测API，进行用户上传图像的质量校验，非必选链路，可以用于产品中进行前置校验，及时提醒用户更换质量不合格的图像。详情参考[人物图像检测API详情](raw/_short/facechain-face-detection-api-3fa0c8f9a08beb3a.md)；
+1.  开通大模型服务平台，获得API-KEY：[获取与配置 API Key](../model-api-reference/preparations/get-api-key.md)
+2.  开发调用人物图像检测API，进行用户上传图像的质量校验，非必选链路，可以用于产品中进行前置校验，及时提醒用户更换质量不合格的图像。详情参考[人物图像检测API详情](facechain-face-detection-api-3fa0c8f9a08beb3a.md)；
 3.  图像文件打包，上传并管理文件，详情参考[百炼文件管理 API](https://help.aliyun.com/zh/model-studio/model-customization-file-management-service)；
-4.  开发调用人物形象训练API，进行自定义人物的模型定制，并获得定制模型ID。详情参考[人物形象训练API详情](raw/_short/facechain-finetune-api-98000a80fe5f2fef.md)；
+4.  开发调用人物形象训练API，进行自定义人物的模型定制，并获得定制模型ID。详情参考[人物形象训练API详情](facechain-finetune-api-98000a80fe5f2fef.md)；
+
+<a id="示例代码"></a>
+
+<a id="048073907c59x"></a>
 
 ## 示例代码
 
-**说明**以下代码演示了如何使用FaceChain原生API进行人物形象训练，运行下述代码时：
-
--   需要使用您的API-KEY替换示例中的YOUR\_DASHSCOPE\_API\_KEY，代码才能正常运行。
--   安装相关依赖
--   请注意，您需要按照代码中注释的提示，替换相关文件路径
+> **说明**
+>
+> 以下代码演示了如何使用FaceChain原生API进行人物形象训练，运行下述代码时：
+>
+> -   需要使用您的API-KEY替换示例中的YOUR\_DASHSCOPE\_API\_KEY，代码才能正常运行。
+> -   安装相关依赖
+> -   请注意，您需要按照代码中注释的提示，替换相关文件路径
 
 如果您手头暂时没有合适的照片，您可以下载我们提供的样片：[sample1](https://dashscope.oss-cn-beijing.aliyuncs.com/samples/fine-tune/facechain/sample1.jpg)、[sample2](https://dashscope.oss-cn-beijing.aliyuncs.com/samples/fine-tune/facechain/sample2.jpg)、[sample3](https://dashscope.oss-cn-beijing.aliyuncs.com/samples/fine-tune/facechain/sample3.jpg)
 
+<a id="依赖及代码"></a>
+
+<a id="079e11d07cgz7"></a>
+
 ### 依赖及代码
 
-```
+<a id="code-block"></a>
+
+```java
 <dependency>
   <groupId>com.alibaba</groupId>
   <artifactId>fastjson</artifactId>
   <version>the-latest-version2</version>
 </dependency>
 ```
-```
+
+<a id="code-block-2"></a>
+
+```java
 package com.alibaba.jing.demo;
 
 import java.io.BufferedReader;
@@ -282,6 +313,10 @@ public class FacechainDemo {
 }
 ```
 
+<a id="了解更多"></a>
+
+<a id="Iv5NB"></a>
+
 ## 了解更多
 
-有关FaceChain的详细调用方法，请参见[人物图像检测API详情](raw/_short/facechain-face-detection-api-3fa0c8f9a08beb3a.md)和[人物形象训练API详情](raw/_short/facechain-finetune-api-98000a80fe5f2fef.md)。
+有关FaceChain的详细调用方法，请参见[人物图像检测API详情](facechain-face-detection-api-3fa0c8f9a08beb3a.md)和[人物形象训练API详情](facechain-finetune-api-98000a80fe5f2fef.md)。

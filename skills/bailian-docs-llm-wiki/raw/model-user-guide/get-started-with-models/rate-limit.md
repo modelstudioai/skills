@@ -2,13 +2,25 @@
 
 百炼模型限流规则与各模型限流额度。主流生成模型采用动态限流（软限流），TPM 限流值随百炼月消费档位按月调整，实际可用 TPM 不低于限流值；其余模型与地域为静态限流，超出限制时请求被拒绝，通常在一分钟内自动恢复。限流按主账号维度计算，RAM 子账号、业务空间和 API Key 调用量合并。
 
+<a id="限流规则"></a>
+
+<a id="0d83adbf7f19s"></a>
+
 ## 限流规则
 
 -   **账号级别限流**：限流按主账号维度计算，账号下所有RAM子账号、业务空间和API Key 的调用量合并计算。
 -   **模型独立限流**：不同模型限流额度相互独立，具体参见下方表格。
 -   **限流形态**：主流生成模型（如 qwen3.8-max、qwen3.8-flash、deepseek-v4-pro-0813、kimi-k3 等）采用**动态限流**，TPM 限流值随百炼月消费档位按月动态调整，实际可用 TPM 不低于限流值，详见[动态限流](#dynamic-rate-limiting)；其余模型与地域采用**静态限流**，规则详见[静态限流规则](#static-rate-limit-rules)。
 
+<a id="动态限流"></a>
+
+<a id="dynamic-rate-limiting"></a>
+
 ## 动态限流
+
+<a id="动态限流机制"></a>
+
+<a id="sec-mechanism-h2"></a>
 
 ### 动态限流机制
 
@@ -18,282 +30,40 @@
 -   **软限流**：当调用量达到限流值时，若平台仍有剩余资源，则不会触发限流，因此**实际可用 TPM** 不低于限流值；调用时观察到的实际限流值可能高于该限流值，属预期行为。
 -   **限流粒度**：按账号 + 模型，主账号下所有 RAM 子账号、业务空间、API Key 的调用量合并计入该账号对该模型的 TPM 配额，共享同一限额。
 -   **业务空间**：可为模型单独设置限流值，未单独设置的业务空间共享账号级配额。
--   **触发限流表现**：触发动态限流时返回 429 错误（错误码为 Throttling.ResourceExhausted 或 Throttling.ServiceOverloaded，报错信息为 Too many requests.）；平台资源不足时可能返回 503 错误（ServiceUnavailable），该情况与限流额度无关，稍后重试即可。错误处理建议参见[错误码](raw/model-api-reference/preparations/error-code.md)。
--   **更多说明**：业务空间限流设置见[权限管理](raw/model-user-guide/security-and-compliance/permission-management-overview.md)。
+-   **触发限流表现**：触发动态限流时返回 429 错误（错误码为 Throttling.ResourceExhausted 或 Throttling.ServiceOverloaded，报错信息为 Too many requests.）；平台资源不足时可能返回 503 错误（ServiceUnavailable），该情况与限流额度无关，稍后重试即可。错误处理建议参见[错误码](../../model-api-reference/preparations/error-code.md)。
+-   **更多说明**：业务空间限流设置见[权限管理](../security-and-compliance/permission-management-overview.md)。
+
+<a id="模型与限流档位"></a>
+
+<a id="sec-tier-h2"></a>
 
 ### 模型与限流档位
 
 TPM 限流值按**百炼平台月消费金额**分档，支持的模型在不同地域的分档如下（数值以控制台实际展示为准）：
 
+<a id="sec-tabs"></a>
+
+<a id="华北2-北京"></a>
+
+<a id="华北2-北京-h4"></a>
+
 #### 华北2（北京）
 
-**百炼平台月消费：**
+<table><thead><tr><th><p><strong>百炼平台月消费：</strong></p></th><th><p><strong>等级1（当前）≤¥10万</strong></p></th><th><p><strong>等级2 ¥10万~¥100万</strong></p></th><th><p><strong>等级3 &gt;¥100万</strong></p></th></tr><tr><th><p><strong>支持的模型</strong></p></th><th colspan="3"><p><strong>TPM 限流档位</strong></p></th></tr></thead><tbody><tr><td><p><strong>qwen4-max</strong></p></td><td><p>500万</p></td><td><p>1000万</p></td><td><p>2000万</p></td></tr><tr><td><p><strong>qwen3.8-max</strong></p></td><td><p>500万</p></td><td><p>1000万</p></td><td><p>2000万</p></td></tr><tr><td><p><strong>qwen3.8-max-0902</strong></p></td><td><p>150万</p></td><td><p>150万</p></td><td><p>150万</p></td></tr><tr><td><p><strong>qwen3.8-flash</strong></p></td><td><p>500万</p></td><td><p>1000万</p></td><td><p>2000万</p></td></tr><tr><td><p><strong>qwen3.8-omni-flash</strong></p></td><td><p>200万</p></td><td><p>500万</p></td><td><p>1000万</p></td></tr><tr><td><p><strong>qwen3.8-2.4t-a95b</strong></p></td><td><p>500万</p></td><td><p>500万</p></td><td><p>500万</p></td></tr><tr><td><p><strong>deepseek-v4.1-flash-1017</strong></p></td><td><p>120万</p></td><td><p>120万</p></td><td><p>120万</p></td></tr><tr><td><p><strong>deepseek-v4.1-flash</strong></p></td><td><p>120万</p></td><td><p>120万</p></td><td><p>120万</p></td></tr><tr><td><p><strong>deepseek-v4-pro-0813</strong></p></td><td><p>120万</p></td><td><p>1000万</p></td><td><p>2000万</p></td></tr><tr><td><p><strong>kimi-k3.1-pro-prime</strong></p></td><td><p>120万</p></td><td><p>500万</p></td><td><p>1000万</p></td></tr><tr><td><p><strong>kimi-k3.1-pro</strong></p></td><td><p>120万</p></td><td><p>500万</p></td><td><p>1000万</p></td></tr><tr><td><p><strong>kimi-k3</strong></p></td><td><p>120万</p></td><td><p>500万</p></td><td><p>1000万</p></td></tr><tr><td><p><strong>glm-5.3</strong></p></td><td><p>500万</p></td><td><p>500万</p></td><td><p>500万</p></td></tr><tr><td><p><strong>glm-5.3-prime</strong></p></td><td><p>200万</p></td><td><p>200万</p></td><td><p>200万</p></td></tr><tr><td><p><strong>qwen3.8-27b</strong></p></td><td><p>500万</p></td><td><p>500万</p></td><td><p>500万</p></td></tr></tbody></table>
 
-**等级1（当前）≤¥10万**
+<a id="新加坡"></a>
 
-**等级2 ¥10万~¥100万**
-
-**等级3 >¥100万**
-
-**支持的模型**
-
-**TPM 限流档位**
-
-**qwen4-max**
-
-500万
-
-1000万
-
-2000万
-
-**qwen3.8-max**
-
-500万
-
-1000万
-
-2000万
-
-**qwen3.8-max-0902**
-
-150万
-
-150万
-
-150万
-
-**qwen3.8-flash**
-
-500万
-
-1000万
-
-2000万
-
-**qwen3.8-omni-flash**
-
-200万
-
-500万
-
-1000万
-
-**qwen3.8-2.4t-a95b**
-
-500万
-
-500万
-
-500万
-
-**deepseek-v4.1-flash-1017**
-
-120万
-
-120万
-
-120万
-
-**deepseek-v4.1-flash**
-
-120万
-
-120万
-
-120万
-
-**deepseek-v4-pro-0813**
-
-120万
-
-1000万
-
-2000万
-
-**kimi-k3.1-pro-prime**
-
-120万
-
-500万
-
-1000万
-
-**kimi-k3.1-pro**
-
-120万
-
-500万
-
-1000万
-
-**kimi-k3**
-
-120万
-
-500万
-
-1000万
-
-**glm-5.3**
-
-500万
-
-500万
-
-500万
-
-**glm-5.3-prime**
-
-200万
-
-200万
-
-200万
-
-**qwen3.8-27b**
-
-500万
-
-500万
-
-500万
+<a id="新加坡-h4"></a>
 
 #### 新加坡
 
-**百炼平台月消费：**
-
-**等级1（当前）≤¥10万**
-
-**等级2 ¥10万~¥100万**
-
-**等级3 >¥100万**
-
-**支持的模型**
-
-**TPM 限流档位**
-
-**qwen4-max**
-
-500万
-
-1000万
-
-2000万
-
-**qwen3.8-max**
-
-200万
-
-500万
-
-1000万
-
-**qwen3.8-max-0902**
-
-150万
-
-150万
-
-150万
-
-**qwen3.8-flash**
-
-250万
-
-500万
-
-1000万
-
-**qwen3.8-omni-flash**
-
-200万
-
-500万
-
-1000万
-
-**qwen3.8-2.4t-a95b**
-
-500万
-
-500万
-
-500万
-
-**deepseek-v4.1-flash-1017**
-
-120万
-
-120万
-
-120万
-
-**deepseek-v4.1-flash**
-
-120万
-
-120万
-
-120万
-
-**deepseek-v4-pro-0813**
-
-120万
-
-500万
-
-1000万
-
-**kimi-k3.1-pro**
-
-120万
-
-500万
-
-1000万
-
-**kimi-k3.1-pro-prime**
-
-120万
-
-500万
-
-1000万
-
-**kimi-k3**
-
-120万
-
-500万
-
-1000万
-
-**glm-5.3**
-
-500万
-
-500万
-
-500万
-
-**glm-5.3-prime**
-
-200万
-
-200万
-
-200万
-
-**qwen3.8-27b**
-
-500万
-
-500万
-
-500万
+<table><thead><tr><th><p><strong>百炼平台月消费：</strong></p></th><th><p><strong>等级1（当前）≤¥10万</strong></p></th><th><p><strong>等级2 ¥10万~¥100万</strong></p></th><th><p><strong>等级3 &gt;¥100万</strong></p></th></tr><tr><th><p><strong>支持的模型</strong></p></th><th colspan="3"><p><strong>TPM 限流档位</strong></p></th></tr></thead><tbody><tr><td><p><strong>qwen4-max</strong></p></td><td><p>500万</p></td><td><p>1000万</p></td><td><p>2000万</p></td></tr><tr><td><p><strong>qwen3.8-max</strong></p></td><td><p>200万</p></td><td><p>500万</p></td><td><p>1000万</p></td></tr><tr><td><p><strong>qwen3.8-max-0902</strong></p></td><td><p>150万</p></td><td><p>150万</p></td><td><p>150万</p></td></tr><tr><td><p><strong>qwen3.8-flash</strong></p></td><td><p>250万</p></td><td><p>500万</p></td><td><p>1000万</p></td></tr><tr><td><p><strong>qwen3.8-omni-flash</strong></p></td><td><p>200万</p></td><td><p>500万</p></td><td><p>1000万</p></td></tr><tr><td><p><strong>qwen3.8-2.4t-a95b</strong></p></td><td><p>500万</p></td><td><p>500万</p></td><td><p>500万</p></td></tr><tr><td><p><strong>deepseek-v4.1-flash-1017</strong></p></td><td><p>120万</p></td><td><p>120万</p></td><td><p>120万</p></td></tr><tr><td><p><strong>deepseek-v4.1-flash</strong></p></td><td><p>120万</p></td><td><p>120万</p></td><td><p>120万</p></td></tr><tr><td><p><strong>deepseek-v4-pro-0813</strong></p></td><td><p>120万</p></td><td><p>500万</p></td><td><p>1000万</p></td></tr><tr><td><p><strong>kimi-k3.1-pro</strong></p></td><td><p>120万</p></td><td><p>500万</p></td><td><p>1000万</p></td></tr><tr><td><p><strong>kimi-k3.1-pro-prime</strong></p></td><td><p>120万</p></td><td><p>500万</p></td><td><p>1000万</p></td></tr><tr><td><p><strong>kimi-k3</strong></p></td><td><p>120万</p></td><td><p>500万</p></td><td><p>1000万</p></td></tr><tr><td><p><strong>glm-5.3</strong></p></td><td><p>500万</p></td><td><p>500万</p></td><td><p>500万</p></td></tr><tr><td><p><strong>glm-5.3-prime</strong></p></td><td><p>200万</p></td><td><p>200万</p></td><td><p>200万</p></td></tr><tr><td><p><strong>qwen3.8-27b</strong></p></td><td><p>500万</p></td><td><p>500万</p></td><td><p>500万</p></td></tr></tbody></table>
 
 以华北2（北京）为例：某账号上一自然月百炼消费金额为 50 万元，落入等级2（¥10万~¥100万）档位，对应 qwen4-max 的 TPM 限流值为 1000万。
+
+<a id="额度展示"></a>
+
+<a id="sec-view-quota-h2"></a>
 
 ### 额度展示
 
@@ -301,9 +71,15 @@ TPM 限流值按**百炼平台月消费金额**分档，支持的模型在不同
 
 模型限额页为只读展示页，展示支持动态限流的**模型**、当前 **TPM 限流值**与**百炼消费档位**。页面顶部展示当前**生效周期**（如 2026-08-15 ～ 2026-09-15）、**上月消费**（按上月自然月统计，如 8 月 1 日—8 月 31 日）与**本月消费**金额，可通过**查看消费详情**查看消费明细，点击**查看规则**可查看限流档位规则说明。下方表格列出各模型的 TPM 限流档位。
 
-**说明**若 TPM 限流值无法满足业务需求，可联系商务经理申请提额。
+> **说明**
+>
+> 若 TPM 限流值无法满足业务需求，可联系商务经理申请提额。
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7706865871/p1092125.png)
+
+<a id="限流动态调整策略"></a>
+
+<a id="sec-adjust-tier-h2"></a>
 
 ### 限流动态调整策略
 
@@ -315,9 +91,17 @@ TPM 限流值按**百炼平台月消费金额**分档，支持的模型在不同
 -   **生效时点**：每月 15 日新档位生效，有效期至次月 15 日。
 -   **调整方向**：低档→高档（升级）或持平不变。
 
+<a id="静态限流明细"></a>
+
+<a id="model-rate-limits"></a>
+
 ## 静态限流明细
 
 以下按模型类别列出各模型的限流值：标注[动态限流](#sec-tier-h2)的模型，其 TPM 限流值随百炼月消费档位调整，参见[模型与限流档位](#sec-tier-h2)；其余模型为静态限流，规则参见[静态限流规则](#static-rate-limit-rules)。
+
+<a id="静态限流规则"></a>
+
+<a id="static-rate-limit-rules"></a>
 
 ### 静态限流规则
 
@@ -325,7063 +109,2120 @@ TPM 限流值按**百炼平台月消费金额**分档，支持的模型在不同
 
 -   **固定限流值**：每个模型有固定的 RPM 与 TPM 限流值，各模型相互独立。
 -   **秒级执行**：限流除按分钟级 RPM/TPM 外，还可能按秒级 RPS（RPM/60）与 TPS（TPM/60）执行，短时间内的请求爆发即使未超出分钟级上限也可能触发限流。
--   **触发与恢复**：超出限制时请求被拒绝并返回 429 错误，通常在一分钟内自动恢复，具体错误信息分类参见[为什么触发限流？](#08b8421697cff)与[错误码](raw/model-api-reference/preparations/error-code.md)。
+-   **触发与恢复**：超出限制时请求被拒绝并返回 429 错误，通常在一分钟内自动恢复，具体错误信息分类参见[为什么触发限流？](#08b8421697cff)与[错误码](../../model-api-reference/preparations/error-code.md)。
+
+<a id="文本生成"></a>
+
+<a id="3392a1d49fftj"></a>
 
 ### 文本生成
 
+<a id="千问语言模型"></a>
+
+<a id="ae2b12964a71a"></a>
+
 #### 千问语言模型
+
+<a id="sec-tabs-2"></a>
+
+<a id="华北2-北京-2"></a>
+
+<a id="华北2-北京-2-h4"></a>
 
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen4-max</p></td><td colspan="2"><p><a href="#sec-tier-h2">动态限流</a></p></td></tr><tr><td><p>qwen3.8-max</p><blockquote><p>用<a href="../../model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md">Batch API</a>调用服务时，不受限流限制。</p></blockquote></td><td colspan="2"><p><a href="#sec-tier-h2">动态限流</a></p></td></tr><tr><td><p>qwen3.8-max-0902</p></td><td colspan="2"><p><a href="#sec-tier-h2">动态限流</a></p></td></tr><tr><td><p>qwen3.8-flash</p><blockquote><p>用<a href="../../model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md">Batch API</a>调用服务时，不受限流限制。</p></blockquote></td><td colspan="2"><p><a href="#sec-tier-h2">动态限流</a></p></td></tr><tr><td><p>qwen3.7-max</p><blockquote><p>用<a href="../../model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md">Batch API</a>调用服务时，不受限流限制。</p></blockquote></td><td><p>30,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.7-max-2026-06-08</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.7-max-2026-05-20</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.7-max-preview</p></td><td><p>60</p></td><td><p>500,000</p></td></tr><tr><td><p>qwen3.7-max-2026-05-17</p></td><td><p>60</p></td><td><p>500,000</p></td></tr><tr><td><p>qwen-max</p><blockquote><p>用<a href="../../model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md">Batch API</a>调用服务时，不受限流限制。</p></blockquote></td><td><p>1,200</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.7-plus</p></td><td><p>30,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.7-plus-2026-05-26</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.6-plus</p><blockquote><p>用<a href="../../model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md">Batch API</a>调用服务时，不受限流限制。</p></blockquote></td><td><p>30,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.6-plus-2026-04-02</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.7-flash</p><blockquote><p>用<a href="../../model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md">Batch API</a>调用服务时，不受限流限制。</p></blockquote></td><td><p>30,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.7-flash-2026-07-15</p></td><td><p>30,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.6-flash</p><blockquote><p>用<a href="../../model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md">Batch API</a>调用服务时，不受限流限制。</p></blockquote></td><td><p>30,000</p></td><td><p>10,000,000</p></td></tr><tr><td><p>qwen3.6-flash-2026-04-16</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.5-plus</p><blockquote><p>用<a href="../../model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md">Batch API</a>调用服务时，不受限流限制。</p></blockquote></td><td><p>30,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.5-plus-2026-04-20</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.5-plus-2026-02-15</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen-plus</p><blockquote><p>用<a href="../../model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md">Batch API</a>调用服务时，不受限流限制。</p></blockquote></td><td><p>30,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen-plus-latest</p><blockquote><p>用<a href="../../model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md">Batch API</a>调用服务时，不受限流限制。</p></blockquote></td><td><p>15,000</p></td><td><p>1,200,000</p></td></tr><tr><td><p>qwen-plus-2025-12-01</p></td><td><p>120</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen-plus-2025-07-14</p><p>（qwen-plus-0714）</p></td><td><p>60</p></td><td><p>100,000</p></td></tr><tr><td><p>qwen-plus-2025-04-28</p><p>（qwen-plus-0428）</p></td><td><p>60</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen-plus-2025-01-25</p><p>（qwen-plus-0125）</p></td><td><p>60</p></td><td><p>150,000</p></td></tr><tr><td><p>qwen3.5-flash</p><blockquote><p>用<a href="../../model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md">Batch API</a>调用服务时，不受限流限制。</p></blockquote></td><td><p>30,000</p></td><td><p>10,000,000</p></td></tr><tr><td><p>qwen3.5-flash-2026-02-23</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen-flash</p><blockquote><p>用<a href="../../model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md">Batch API</a>调用服务时，不受限流限制。</p></blockquote></td><td><p>30,000</p></td><td><p>10,000,000</p></td></tr><tr><td><p>qwen-flash-2025-07-28</p></td><td><p>60</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen-long</p><blockquote><p>用<a href="../../model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md">Batch API</a>调用服务时，不受限流限制。</p></blockquote></td><td><p>1,200</p></td><td><p>3,000,000</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="美国-弗吉尼亚"></a>
 
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen4-max
-
-[动态限流](#sec-tier-h2)
-
-qwen3.8-max
-
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
-
-[动态限流](#sec-tier-h2)
-
-qwen3.8-max-0902
-
-[动态限流](#sec-tier-h2)
-
-qwen3.8-flash
-
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
-
-[动态限流](#sec-tier-h2)
-
-qwen3.7-max
-
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
-
-30,000
-
-5,000,000
-
-qwen3.7-max-2026-06-08
-
-600
-
-1,000,000
-
-qwen3.7-max-2026-05-20
-
-600
-
-1,000,000
-
-qwen3.7-max-preview
-
-60
-
-500,000
-
-qwen3.7-max-2026-05-17
-
-60
-
-500,000
-
-qwen-max
-
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
-
-1,200
-
-1,000,000
-
-qwen3.7-plus
-
-30,000
-
-5,000,000
-
-qwen3.7-plus-2026-05-26
-
-600
-
-1,000,000
-
-qwen3.6-plus
-
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
-
-30,000
-
-5,000,000
-
-qwen3.6-plus-2026-04-02
-
-600
-
-1,000,000
-
-qwen3.7-flash
-
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
-
-30,000
-
-5,000,000
-
-qwen3.7-flash-2026-07-15
-
-30,000
-
-5,000,000
-
-qwen3.6-flash
-
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
-
-30,000
-
-10,000,000
-
-qwen3.6-flash-2026-04-16
-
-600
-
-1,000,000
-
-qwen3.5-plus
-
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
-
-30,000
-
-5,000,000
-
-qwen3.5-plus-2026-04-20
-
-600
-
-1,000,000
-
-qwen3.5-plus-2026-02-15
-
-600
-
-1,000,000
-
-qwen-plus
-
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
-
-30,000
-
-5,000,000
-
-qwen-plus-latest
-
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
-
-15,000
-
-1,200,000
-
-qwen-plus-2025-12-01
-
-120
-
-1,000,000
-
-qwen-plus-2025-07-14
-
-（qwen-plus-0714）
-
-60
-
-100,000
-
-qwen-plus-2025-04-28
-
-（qwen-plus-0428）
-
-60
-
-1,000,000
-
-qwen-plus-2025-01-25
-
-（qwen-plus-0125）
-
-60
-
-150,000
-
-qwen3.5-flash
-
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
-
-30,000
-
-10,000,000
-
-qwen3.5-flash-2026-02-23
-
-600
-
-1,000,000
-
-qwen-flash
-
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
-
-30,000
-
-10,000,000
-
-qwen-flash-2025-07-28
-
-60
-
-1,000,000
-
-qwen-long
-
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
-
-1,200
-
-3,000,000
+<a id="美国-弗吉尼亚-h4"></a>
 
 #### 美国（弗吉尼亚）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen4-max</p></td><td><p>全球</p></td><td><p>30,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen4-max</p></td><td><p>弗吉尼亚</p></td><td><p>15,000</p></td><td><p>3,000,000</p></td></tr><tr><td><p>qwen3.8-max</p></td><td><p>全球</p></td><td><p>30,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.8-max</p></td><td><p>美国</p></td><td><p>30,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.8-max-0902</p></td><td><p>全球</p></td><td><p>30,000</p></td><td><p>150,000</p></td></tr><tr><td><p>qwen3.8-flash</p></td><td><p>全球</p></td><td><p>15,000</p></td><td><p>2,500,000</p></td></tr><tr><td><p>qwen3.8-flash</p></td><td><p>美国</p></td><td><p>15,000</p></td><td><p>2,500,000</p></td></tr><tr><td><p>qwen3.7-max</p></td><td><p>全球</p></td><td><p>30,000</p></td><td><p>10,000,000</p></td></tr><tr><td><p>qwen3.7-max</p></td><td><p>美国</p></td><td><p>30000</p></td><td><p>10,000,000</p></td></tr><tr><td><p>qwen3.7-max-2026-06-08</p></td><td><p>全球</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.7-max-2026-05-20</p></td><td><p>全球</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.7-plus</p></td><td><p>全球</p></td><td><p>30,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.7-plus</p></td><td><p>美国</p></td><td><p>30,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.7-plus-2026-05-26</p></td><td><p>全球</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.6-plus</p></td><td><p>全球</p></td><td><p>30,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.6-plus-2026-04-02</p></td><td><p>全球</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.7-flash</p></td><td><p>全球</p></td><td><p>15,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.7-flash</p></td><td><p>美国</p></td><td><p>15,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.7-flash-2026-07-15</p></td><td><p>全球</p></td><td><p>15000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.6-flash</p></td><td><p>全球</p></td><td><p>15,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.6-flash-2026-04-16</p></td><td><p>全球</p></td><td><p>60</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.6-flash</p></td><td><p>美国</p></td><td><p>15,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.5-plus</p></td><td><p>全球</p></td><td><p>30,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.5-plus-2026-02-15</p></td><td><p>全球</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen-plus</p></td><td><p>全球</p></td><td><p>15,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen-plus</p></td><td><p>美国</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen-plus-2025-12-01</p></td><td><p>全球</p></td><td><p>60</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen-plus-2025-12-01</p></td><td><p>美国</p></td><td><p>60</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.5-flash</p></td><td><p>全球</p></td><td><p>30,000</p></td><td><p>10,000,000</p></td></tr><tr><td><p>qwen3.5-flash-2026-02-23</p></td><td><p>全球</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen-flash</p></td><td><p>全球</p></td><td><p>15,000</p></td><td><p>10,000,000</p></td></tr><tr><td><p>qwen-flash</p></td><td><p>美国</p></td><td><p>30000</p></td><td><p>10,000,000</p></td></tr><tr><td><p>qwen-flash-2025-07-28</p></td><td><p>全球</p></td><td><p>60</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen-flash-2025-07-28</p></td><td><p>美国</p></td><td><p>600</p></td><td><p>5,000,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="新加坡-2"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen4-max
-
-全球
-
-30,000
-
-5,000,000
-
-qwen4-max
-
-弗吉尼亚
-
-15,000
-
-3,000,000
-
-qwen3.8-max
-
-全球
-
-30,000
-
-5,000,000
-
-qwen3.8-max
-
-美国
-
-30,000
-
-5,000,000
-
-qwen3.8-max-0902
-
-全球
-
-30,000
-
-150,000
-
-qwen3.8-flash
-
-全球
-
-15,000
-
-2,500,000
-
-qwen3.8-flash
-
-美国
-
-15,000
-
-2,500,000
-
-qwen3.7-max
-
-全球
-
-30,000
-
-10,000,000
-
-qwen3.7-max
-
-美国
-
-30000
-
-10,000,000
-
-qwen3.7-max-2026-06-08
-
-全球
-
-600
-
-1,000,000
-
-qwen3.7-max-2026-05-20
-
-全球
-
-600
-
-1,000,000
-
-qwen3.7-plus
-
-全球
-
-30,000
-
-5,000,000
-
-qwen3.7-plus
-
-美国
-
-30,000
-
-5,000,000
-
-qwen3.7-plus-2026-05-26
-
-全球
-
-600
-
-1,000,000
-
-qwen3.6-plus
-
-全球
-
-30,000
-
-5,000,000
-
-qwen3.6-plus-2026-04-02
-
-全球
-
-600
-
-1,000,000
-
-qwen3.7-flash
-
-全球
-
-15,000
-
-5,000,000
-
-qwen3.7-flash
-
-美国
-
-15,000
-
-5,000,000
-
-qwen3.7-flash-2026-07-15
-
-全球
-
-15000
-
-5,000,000
-
-qwen3.6-flash
-
-全球
-
-15,000
-
-5,000,000
-
-qwen3.6-flash-2026-04-16
-
-全球
-
-60
-
-1,000,000
-
-qwen3.6-flash
-
-美国
-
-15,000
-
-5,000,000
-
-qwen3.5-plus
-
-全球
-
-30,000
-
-5,000,000
-
-qwen3.5-plus-2026-02-15
-
-全球
-
-600
-
-1,000,000
-
-qwen-plus
-
-全球
-
-15,000
-
-5,000,000
-
-qwen-plus
-
-美国
-
-600
-
-1,000,000
-
-qwen-plus-2025-12-01
-
-全球
-
-60
-
-1,000,000
-
-qwen-plus-2025-12-01
-
-美国
-
-60
-
-1,000,000
-
-qwen3.5-flash
-
-全球
-
-30,000
-
-10,000,000
-
-qwen3.5-flash-2026-02-23
-
-全球
-
-600
-
-1,000,000
-
-qwen-flash
-
-全球
-
-15,000
-
-10,000,000
-
-qwen-flash
-
-美国
-
-30000
-
-10,000,000
-
-qwen-flash-2025-07-28
-
-全球
-
-60
-
-1,000,000
-
-qwen-flash-2025-07-28
-
-美国
-
-600
-
-5,000,000
+<a id="新加坡-2-h4"></a>
 
 #### 新加坡
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen4-max</p></td><td><p>国际</p></td><td colspan="2"><p><a href="#sec-tier-h2">动态限流</a></p></td></tr><tr><td><p>qwen3.8-max</p></td><td><p>国际</p></td><td colspan="2"><p><a href="#sec-tier-h2">动态限流</a></p></td></tr><tr><td><p>qwen3.8-max-0902</p></td><td><p>国际</p></td><td colspan="2"><p><a href="#sec-tier-h2">动态限流</a></p></td></tr><tr><td><p>qwen3.8-flash</p></td><td><p>国际</p></td><td colspan="2"><p><a href="#sec-tier-h2">动态限流</a></p></td></tr><tr><td><p>qwen3.7-max</p></td><td><p>国际</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.7-max-2026-06-08</p></td><td><p>国际</p></td><td><p>60</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.7-max-2026-05-20</p></td><td><p>国际</p></td><td><p>60</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen-max</p><blockquote><p>用<a href="../../model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md">Batch API</a>调用服务时，不受限流限制。</p></blockquote></td><td><p>国际</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.7-plus</p></td><td><p>国际</p></td><td><p>15,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.7-plus-2026-05-26</p></td><td><p>国际</p></td><td><p>60</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.6-plus</p></td><td><p>国际</p></td><td><p>15,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.6-plus-2026-04-02</p></td><td><p>国际</p></td><td><p>60</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.7-flash</p></td><td><p>国际</p></td><td><p>15,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.7-flash-2026-07-15</p></td><td><p>国际</p></td><td><p>15,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.6-flash</p></td><td><p>国际</p></td><td><p>15,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.6-flash-2026-04-16</p></td><td><p>国际</p></td><td><p>60</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.5-plus</p></td><td><p>国际</p></td><td><p>15,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.5-plus-2026-04-20</p></td><td><p>国际</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.5-plus-2026-02-15</p></td><td><p>国际</p></td><td><p>60</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen-plus-latest</p></td><td><p>国际</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen-plus-2025-12-01</p></td><td><p>国际</p></td><td><p>120</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen-plus-2025-07-14</p><p>(qwen-plus-0714)</p></td><td><p>国际</p></td><td><p>60</p></td><td><p>100,000</p></td></tr><tr><td><p>qwen-plus-2025-04-28</p><p>(qwen-plus-0428)</p></td><td><p>国际</p></td><td><p>60</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen-plus-2025-01-25</p><p>(qwen-plus-0125)</p></td><td><p>国际</p></td><td><p>60</p></td><td><p>100,000</p></td></tr><tr><td><p>qwen3.5-flash</p></td><td><p>国际</p></td><td><p>15,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.5-flash-2026-02-23</p></td><td><p>国际</p></td><td><p>60</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen-flash</p></td><td><p>国际</p></td><td><p>600</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen-flash-2025-07-28</p></td><td><p>国际</p></td><td><p>600</p></td><td><p>5,000,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="德国-法兰克福"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen4-max
-
-国际
-
-[动态限流](#sec-tier-h2)
-
-qwen3.8-max
-
-国际
-
-[动态限流](#sec-tier-h2)
-
-qwen3.8-max-0902
-
-国际
-
-[动态限流](#sec-tier-h2)
-
-qwen3.8-flash
-
-国际
-
-[动态限流](#sec-tier-h2)
-
-qwen3.7-max
-
-国际
-
-600
-
-1,000,000
-
-qwen3.7-max-2026-06-08
-
-国际
-
-60
-
-1,000,000
-
-qwen3.7-max-2026-05-20
-
-国际
-
-60
-
-1,000,000
-
-qwen-max
-
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
-
-国际
-
-600
-
-1,000,000
-
-qwen3.7-plus
-
-国际
-
-15,000
-
-5,000,000
-
-qwen3.7-plus-2026-05-26
-
-国际
-
-60
-
-1,000,000
-
-qwen3.6-plus
-
-国际
-
-15,000
-
-5,000,000
-
-qwen3.6-plus-2026-04-02
-
-国际
-
-60
-
-1,000,000
-
-qwen3.7-flash
-
-国际
-
-15,000
-
-5,000,000
-
-qwen3.7-flash-2026-07-15
-
-国际
-
-15,000
-
-5,000,000
-
-qwen3.6-flash
-
-国际
-
-15,000
-
-5,000,000
-
-qwen3.6-flash-2026-04-16
-
-国际
-
-60
-
-1,000,000
-
-qwen3.5-plus
-
-国际
-
-15,000
-
-5,000,000
-
-qwen3.5-plus-2026-04-20
-
-国际
-
-600
-
-1,000,000
-
-qwen3.5-plus-2026-02-15
-
-国际
-
-60
-
-1,000,000
-
-qwen-plus-latest
-
-国际
-
-600
-
-1,000,000
-
-qwen-plus-2025-12-01
-
-国际
-
-120
-
-1,000,000
-
-qwen-plus-2025-07-14
-
-(qwen-plus-0714)
-
-国际
-
-60
-
-100,000
-
-qwen-plus-2025-04-28
-
-(qwen-plus-0428)
-
-国际
-
-60
-
-1,000,000
-
-qwen-plus-2025-01-25
-
-(qwen-plus-0125)
-
-国际
-
-60
-
-100,000
-
-qwen3.5-flash
-
-国际
-
-15,000
-
-5,000,000
-
-qwen3.5-flash-2026-02-23
-
-国际
-
-60
-
-1,000,000
-
-qwen-flash
-
-国际
-
-600
-
-5,000,000
-
-qwen-flash-2025-07-28
-
-国际
-
-600
-
-5,000,000
+<a id="德国-法兰克福-h4"></a>
 
 #### 德国（法兰克福）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen4-max</p></td><td><p>全球</p></td><td><p>30,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.8-max</p></td><td><p>全球</p></td><td><p>30,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.8-max-0902</p></td><td><p>全球</p></td><td><p>30,000</p></td><td><p>150,000</p></td></tr><tr><td><p>qwen3.8-flash</p></td><td><p>欧盟</p></td><td><p>15,000</p></td><td><p>250,000</p></td></tr><tr><td><p>qwen3.8-flash</p></td><td><p>全球</p></td><td><p>15,000</p></td><td><p>250,000</p></td></tr><tr><td><p>qwen3.7-max</p></td><td><p>全球</p></td><td><p>30,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.7-max-2026-06-08</p></td><td><p>全球</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.7-max-2026-05-20</p></td><td><p>全球</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.7-plus</p></td><td><p>全球</p></td><td><p>30,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.7-plus-2026-05-26</p></td><td><p>全球</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.6-plus</p></td><td><p>全球</p></td><td><p>30,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.6-plus-2026-04-02</p></td><td><p>全球</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.7-flash</p></td><td><p>全球</p></td><td><p>15,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.7-flash-2026-07-15</p></td><td><p>全球</p></td><td><p>15,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.6-flash</p></td><td><p>全球</p></td><td><p>15,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.6-flash-2026-04-16</p></td><td><p>全球</p></td><td><p>60</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.5-plus</p></td><td><p>全球</p></td><td><p>30,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.5-plus-2026-02-15</p></td><td><p>全球</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen-plus</p></td><td><p>全球</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen-plus</p></td><td><p>欧盟</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen-plus-2025-12-01</p></td><td><p>全球</p></td><td><p>120</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen-plus-2025-12-01</p></td><td><p>欧盟</p></td><td><p>120</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.5-flash</p></td><td><p>全球</p></td><td><p>35,000</p></td><td><p>10,000,000</p></td></tr><tr><td><p>qwen3.5-flash</p></td><td><p>欧盟</p></td><td><p>35,000</p></td><td><p>10,000,000</p></td></tr><tr><td><p>qwen3.5-flash-2026-02-23</p></td><td><p>全球</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.5-flash-2026-02-23</p></td><td><p>欧盟</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen-flash</p></td><td><p>全球</p></td><td><p>30,000</p></td><td><p>10,000,000</p></td></tr><tr><td><p>qwen-flash-2025-07-28</p></td><td><p>全球</p></td><td><p>60</p></td><td><p>1,000,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="日本-东京"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen4-max
-
-全球
-
-30,000
-
-5,000,000
-
-qwen3.8-max
-
-全球
-
-30,000
-
-5,000,000
-
-qwen3.8-max-0902
-
-全球
-
-30,000
-
-150,000
-
-qwen3.8-flash
-
-欧盟
-
-15,000
-
-250,000
-
-qwen3.8-flash
-
-全球
-
-15,000
-
-250,000
-
-qwen3.7-max
-
-全球
-
-30,000
-
-5,000,000
-
-qwen3.7-max-2026-06-08
-
-全球
-
-600
-
-1,000,000
-
-qwen3.7-max-2026-05-20
-
-全球
-
-600
-
-1,000,000
-
-qwen3.7-plus
-
-全球
-
-30,000
-
-5,000,000
-
-qwen3.7-plus-2026-05-26
-
-全球
-
-600
-
-1,000,000
-
-qwen3.6-plus
-
-全球
-
-30,000
-
-5,000,000
-
-qwen3.6-plus-2026-04-02
-
-全球
-
-600
-
-1,000,000
-
-qwen3.7-flash
-
-全球
-
-15,000
-
-5,000,000
-
-qwen3.7-flash-2026-07-15
-
-全球
-
-15,000
-
-5,000,000
-
-qwen3.6-flash
-
-全球
-
-15,000
-
-5,000,000
-
-qwen3.6-flash-2026-04-16
-
-全球
-
-60
-
-1,000,000
-
-qwen3.5-plus
-
-全球
-
-30,000
-
-5,000,000
-
-qwen3.5-plus-2026-02-15
-
-全球
-
-600
-
-1,000,000
-
-qwen-plus
-
-全球
-
-600
-
-1,000,000
-
-qwen-plus
-
-欧盟
-
-600
-
-1,000,000
-
-qwen-plus-2025-12-01
-
-全球
-
-120
-
-1,000,000
-
-qwen-plus-2025-12-01
-
-欧盟
-
-120
-
-1,000,000
-
-qwen3.5-flash
-
-全球
-
-35,000
-
-10,000,000
-
-qwen3.5-flash
-
-欧盟
-
-35,000
-
-10,000,000
-
-qwen3.5-flash-2026-02-23
-
-全球
-
-600
-
-1,000,000
-
-qwen3.5-flash-2026-02-23
-
-欧盟
-
-600
-
-1,000,000
-
-qwen-flash
-
-全球
-
-30,000
-
-10,000,000
-
-qwen-flash-2025-07-28
-
-全球
-
-60
-
-1,000,000
+<a id="日本-东京-h4"></a>
 
 #### 日本（东京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen4-max</p></td><td><p>全球</p></td><td><p>30,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.8-max</p></td><td><p>全球</p></td><td><p>30,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.8-max-0902</p></td><td><p>全球</p></td><td><p>30,000</p></td><td><p>150,000</p></td></tr><tr><td><p>qwen3.8-flash</p></td><td><p>全球</p></td><td><p>15,000</p></td><td><p>250,000</p></td></tr><tr><td><p>qwen3.7-max</p></td><td><p>全球</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.7-max-2026-05-20</p></td><td><p>全球</p></td><td><p>60</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.7-plus</p></td><td><p>全球</p></td><td><p>15,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.7-plus-2026-05-26</p></td><td><p>全球</p></td><td><p>60</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.7-plus</p></td><td><p>日本</p></td><td><p>15,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.7-plus-2026-05-26</p></td><td><p>日本</p></td><td><p>60</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.6-plus</p></td><td><p>全球</p></td><td><p>15,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.6-plus-2026-04-02</p></td><td><p>全球</p></td><td><p>60</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.7-flash</p></td><td><p>全球</p></td><td><p>15,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.7-flash-2026-07-15</p></td><td><p>全球</p></td><td><p>15,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.6-flash</p></td><td><p>全球</p></td><td><p>15,000</p></td><td><p>10,000,000</p></td></tr><tr><td><p>qwen3.6-flash-2026-04-16</p></td><td><p>全球</p></td><td><p>60</p></td><td><p>1,000,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="中国香港"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen4-max
-
-全球
-
-30,000
-
-5,000,000
-
-qwen3.8-max
-
-全球
-
-30,000
-
-5,000,000
-
-qwen3.8-max-0902
-
-全球
-
-30,000
-
-150,000
-
-qwen3.8-flash
-
-全球
-
-15,000
-
-250,000
-
-qwen3.7-max
-
-全球
-
-600
-
-1,000,000
-
-qwen3.7-max-2026-05-20
-
-全球
-
-60
-
-1,000,000
-
-qwen3.7-plus
-
-全球
-
-15,000
-
-5,000,000
-
-qwen3.7-plus-2026-05-26
-
-全球
-
-60
-
-1,000,000
-
-qwen3.7-plus
-
-日本
-
-15,000
-
-5,000,000
-
-qwen3.7-plus-2026-05-26
-
-日本
-
-60
-
-1,000,000
-
-qwen3.6-plus
-
-全球
-
-15,000
-
-5,000,000
-
-qwen3.6-plus-2026-04-02
-
-全球
-
-60
-
-1,000,000
-
-qwen3.7-flash
-
-全球
-
-15,000
-
-5,000,000
-
-qwen3.7-flash-2026-07-15
-
-全球
-
-15,000
-
-5,000,000
-
-qwen3.6-flash
-
-全球
-
-15,000
-
-10,000,000
-
-qwen3.6-flash-2026-04-16
-
-全球
-
-60
-
-1,000,000
+<a id="中国香港-h4"></a>
 
 #### 中国香港
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen4-max</p></td><td><p>全球</p></td><td><p>30,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.8-max</p></td><td><p>中国香港</p></td><td><p>30,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.8-max-0902</p></td><td><p>中国香港</p></td><td><p>600</p></td><td><p>150,000</p></td></tr><tr><td><p>qwen3.8-flash</p></td><td><p>中国香港</p></td><td><p>15,000</p></td><td><p>2,500,000</p></td></tr><tr><td><p>qwen3.8-flash</p></td><td><p>全球</p></td><td><p>15,000</p></td><td><p>2,500,000</p></td></tr><tr><td><p>qwen3.6-plus</p></td><td><p>全球</p></td><td><p>30,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.7-flash</p></td><td><p>全球</p></td><td><p>15,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.7-flash-2026-07-15</p></td><td><p>全球</p></td><td><p>15,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3.6-flash</p></td><td><p>全球</p></td><td><p>30,000</p></td><td><p>10,000,000</p></td></tr><tr><td><p>qwen-plus</p></td><td><p>中国香港</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen-plus-2025-12-01</p></td><td><p>中国香港</p></td><td><p>60</p></td><td><p>100,000</p></td></tr><tr><td><p>qwen3.5-flash</p></td><td><p>中国香港</p></td><td><p>30,000</p></td><td><p>10,000,000</p></td></tr><tr><td><p>qwen3.5-flash-2026-02-23</p></td><td><p>中国香港</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="千问vl-视觉理解-图生文"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen4-max
-
-全球
-
-30,000
-
-5,000,000
-
-qwen3.8-max
-
-中国香港
-
-30,000
-
-5,000,000
-
-qwen3.8-max-0902
-
-中国香港
-
-600
-
-150,000
-
-qwen3.8-flash
-
-中国香港
-
-15,000
-
-2,500,000
-
-qwen3.8-flash
-
-全球
-
-15,000
-
-2,500,000
-
-qwen3.6-plus
-
-全球
-
-30,000
-
-5,000,000
-
-qwen3.7-flash
-
-全球
-
-15,000
-
-5,000,000
-
-qwen3.7-flash-2026-07-15
-
-全球
-
-15,000
-
-5,000,000
-
-qwen3.6-flash
-
-全球
-
-30,000
-
-10,000,000
-
-qwen-plus
-
-中国香港
-
-600
-
-1,000,000
-
-qwen-plus-2025-12-01
-
-中国香港
-
-60
-
-100,000
-
-qwen3.5-flash
-
-中国香港
-
-30,000
-
-10,000,000
-
-qwen3.5-flash-2026-02-23
-
-中国香港
-
-600
-
-1,000,000
+<a id="590df02870hyp"></a>
 
 #### 千问VL（视觉理解/图生文）
 
+<a id="sec-tabs-3"></a>
+
+<a id="华北2-北京-3"></a>
+
+<a id="华北2-北京-3-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen3-vl-plus</p><blockquote><p>用<a href="../../model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md">Batch API</a>调用服务时，不受限流限制。</p></blockquote></td><td><p>3,000</p></td><td><p>5,000,000</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="美国-弗吉尼亚-2"></a>
 
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen3-vl-plus
-
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
-
-3,000
-
-5,000,000
+<a id="美国-弗吉尼亚-2-h4"></a>
 
 #### 美国（弗吉尼亚）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen3-vl-plus</p></td><td><p>全球</p></td><td><p>6,000</p></td><td><p>10,000,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="新加坡-3"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen3-vl-plus
-
-全球
-
-6,000
-
-10,000,000
+<a id="新加坡-3-h4"></a>
 
 #### 新加坡
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen3-vl-plus</p></td><td><p>国际</p></td><td><p>1,200</p></td><td><p>1,000,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="德国-法兰克福-2"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen3-vl-plus
-
-国际
-
-1,200
-
-1,000,000
+<a id="德国-法兰克福-2-h4"></a>
 
 #### 德国（法兰克福）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen3-vl-plus</p></td><td><p>全球</p></td><td><p>2,000</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3-vl-plus</p></td><td><p>欧盟</p></td><td><p>2,000</p></td><td><p>1,000,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="中国香港-2"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen3-vl-plus
-
-全球
-
-2,000
-
-1,000,000
-
-qwen3-vl-plus
-
-欧盟
-
-2,000
-
-1,000,000
+<a id="中国香港-2-h4"></a>
 
 #### 中国香港
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen3-vl-plus</p></td><td><p>中国香港</p></td><td><p>6,000</p></td><td><p>1,000,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="千问omni"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen3-vl-plus
-
-中国香港
-
-6,000
-
-1,000,000
+<a id="5b7c656e788u8"></a>
 
 #### 千问Omni
 
+<a id="sec-tabs-4"></a>
+
+<a id="华北2-北京-4"></a>
+
+<a id="华北2-北京-4-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen3.8-omni-flash</p></td><td><p>30000</p></td><td><p><a href="#sec-tier-h2">动态限流</a></p></td></tr><tr><td><p>qwen3.5-omni-plus</p></td><td><p>60</p></td><td><p>100,000</p></td></tr><tr><td><p>qwen3.5-omni-plus-2026-03-15</p></td><td><p>60</p></td><td><p>100,000</p></td></tr><tr><td><p>qwen3.5-omni-flash</p></td><td><p>60</p></td><td><p>100,000</p></td></tr><tr><td><p>qwen3.5-omni-flash-2026-03-15</p></td><td><p>60</p></td><td><p>100,000</p></td></tr><tr><td><p>qwen3-omni-flash</p></td><td><p>60</p></td><td><p>100,000</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="新加坡-4"></a>
 
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen3.8-omni-flash
-
-30000
-
-[动态限流](#sec-tier-h2)
-
-qwen3.5-omni-plus
-
-60
-
-100,000
-
-qwen3.5-omni-plus-2026-03-15
-
-60
-
-100,000
-
-qwen3.5-omni-flash
-
-60
-
-100,000
-
-qwen3.5-omni-flash-2026-03-15
-
-60
-
-100,000
-
-qwen3-omni-flash
-
-60
-
-100,000
+<a id="新加坡-4-h4"></a>
 
 #### 新加坡
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen3.8-omni-flash</p></td><td><p>国际</p></td><td><p>30000</p></td><td><p><a href="#sec-tier-h2">动态限流</a></p></td></tr><tr><td><p>qwen3.5-omni-plus</p></td><td><p>国际</p></td><td><p>60</p></td><td><p>100,000</p></td></tr><tr><td><p>qwen3.5-omni-plus-2026-03-15</p></td><td><p>国际</p></td><td><p>60</p></td><td><p>100,000</p></td></tr><tr><td><p>qwen3.5-omni-flash</p></td><td><p>国际</p></td><td><p>60</p></td><td><p>100,000</p></td></tr><tr><td><p>qwen3.5-omni-flash-2026-03-15</p></td><td><p>国际</p></td><td><p>60</p></td><td><p>100,000</p></td></tr><tr><td><p>qwen3-omni-flash</p></td><td><p>国际</p></td><td><p>60</p></td><td><p>100,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="中国香港-3"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen3.8-omni-flash
-
-国际
-
-30000
-
-[动态限流](#sec-tier-h2)
-
-qwen3.5-omni-plus
-
-国际
-
-60
-
-100,000
-
-qwen3.5-omni-plus-2026-03-15
-
-国际
-
-60
-
-100,000
-
-qwen3.5-omni-flash
-
-国际
-
-60
-
-100,000
-
-qwen3.5-omni-flash-2026-03-15
-
-国际
-
-60
-
-100,000
-
-qwen3-omni-flash
-
-国际
-
-60
-
-100,000
+<a id="中国香港-3-h4"></a>
 
 #### 中国香港
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen3.8-omni-flash</p></td><td><p>全球</p></td><td><p>30000</p></td><td><p>2000000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="日本-东京-2"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen3.8-omni-flash
-
-全球
-
-30000
-
-2000000
+<a id="日本-东京-2-h4"></a>
 
 #### 日本（东京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen3.8-omni-flash</p></td><td><p>全球</p></td><td><p>30000</p></td><td><p>2000000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="德国-法兰克福-3"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen3.8-omni-flash
-
-全球
-
-30000
-
-2000000
+<a id="德国-法兰克福-3-h4"></a>
 
 #### 德国（法兰克福）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen3.8-omni-flash</p></td><td><p>全球</p></td><td><p>30000</p></td><td><p>2000000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="美国-弗吉尼亚-3"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen3.8-omni-flash
-
-全球
-
-30000
-
-2000000
+<a id="美国-弗吉尼亚-3-h4"></a>
 
 #### 美国（弗吉尼亚）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen3.8-omni-flash</p></td><td><p>全球</p></td><td><p>30000</p></td><td><p>2000000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="千问omni-realtime"></a>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="a410617af4cte"></a>
 
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen3.8-omni-flash
-
-全球
-
-30000
-
-2000000
+<a id="realtime-request-counting"></a>
 
 #### 千问Omni-Realtime
 
 通过 WebSocket 接入时，RPM 限制每分钟的建连请求次数。同一连接内的多轮响应不重复计数；重连计为新请求。目前没有单独限制同时保持的连接总数，但仍受 TPM 限制。各型号限额见下方表格。
 
+<a id="sec-tabs-5"></a>
+
+<a id="华北2-北京-5"></a>
+
+<a id="华北2-北京-5-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen3.8-omni-flash-realtime</p></td><td><p>60</p></td><td><p>2,000,000</p></td></tr><tr><td><p>qwen3.5-omni-plus-realtime</p></td><td><p>60</p></td><td><p>100,000</p></td></tr><tr><td><p>qwen3.5-omni-plus-realtime-2026-03-15</p></td><td><p>60</p></td><td><p>100,000</p></td></tr><tr><td><p>qwen3.5-omni-flash-realtime</p></td><td><p>60</p></td><td><p>100,000</p></td></tr><tr><td><p>qwen3.5-omni-flash-realtime-2026-03-15</p></td><td><p>60</p></td><td><p>100,000</p></td></tr><tr><td><p>qwen3-omni-flash-realtime-2025-09-15</p></td><td><p>60</p></td><td><p>100,000</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="新加坡-5"></a>
 
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen3.8-omni-flash-realtime
-
-60
-
-2,000,000
-
-qwen3.5-omni-plus-realtime
-
-60
-
-100,000
-
-qwen3.5-omni-plus-realtime-2026-03-15
-
-60
-
-100,000
-
-qwen3.5-omni-flash-realtime
-
-60
-
-100,000
-
-qwen3.5-omni-flash-realtime-2026-03-15
-
-60
-
-100,000
-
-qwen3-omni-flash-realtime-2025-09-15
-
-60
-
-100,000
+<a id="新加坡-5-h4"></a>
 
 #### 新加坡
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen3.8-omni-flash-realtime</p></td><td><p>国际</p></td><td><p>60</p></td><td><p>2,000,000</p></td></tr><tr><td><p>qwen3.5-omni-plus-realtime</p></td><td><p>国际</p></td><td><p>60</p></td><td><p>100,000</p></td></tr><tr><td><p>qwen3.5-omni-plus-realtime-2026-03-15</p></td><td><p>国际</p></td><td><p>60</p></td><td><p>100,000</p></td></tr><tr><td><p>qwen3.5-omni-flash-realtime</p></td><td><p>国际</p></td><td><p>60</p></td><td><p>100,000</p></td></tr><tr><td><p>qwen3.5-omni-flash-realtime-2026-03-15</p></td><td><p>国际</p></td><td><p>60</p></td><td><p>100,000</p></td></tr><tr><td><p>qwen3-omni-flash-realtime-2025-09-15</p></td><td><p>国际</p></td><td><p>60</p></td><td><p>100,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="千问ocr-文字提取"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen3.8-omni-flash-realtime
-
-国际
-
-60
-
-2,000,000
-
-qwen3.5-omni-plus-realtime
-
-国际
-
-60
-
-100,000
-
-qwen3.5-omni-plus-realtime-2026-03-15
-
-国际
-
-60
-
-100,000
-
-qwen3.5-omni-flash-realtime
-
-国际
-
-60
-
-100,000
-
-qwen3.5-omni-flash-realtime-2026-03-15
-
-国际
-
-60
-
-100,000
-
-qwen3-omni-flash-realtime-2025-09-15
-
-国际
-
-60
-
-100,000
+<a id="9c49551dfbk4r"></a>
 
 #### 千问OCR（文字提取）
 
+<a id="sec-tabs-6"></a>
+
+<a id="华北2-北京-6"></a>
+
+<a id="华北2-北京-6-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen3.5-ocr</p></td><td><p>6,000</p></td><td><p>30,000,000</p></td></tr><tr><td><p>qwen-vl-ocr</p><blockquote><p>用<a href="../../model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md">Batch API</a>调用服务时，不受限流限制。</p></blockquote></td><td><p>600</p></td><td><p>6,000,000</p></td></tr><tr><td><p>qwen-vl-ocr-2025-11-20</p></td><td><p>6,000</p></td><td><p>30,000,000</p></td></tr><tr><td><p>qwen-vl-ocr-2024-10-28</p></td><td><p>600</p></td><td><p>6,000,000</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="美国-弗吉尼亚-4"></a>
 
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen3.5-ocr
-
-6,000
-
-30,000,000
-
-qwen-vl-ocr
-
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
-
-600
-
-6,000,000
-
-qwen-vl-ocr-2025-11-20
-
-6,000
-
-30,000,000
-
-qwen-vl-ocr-2024-10-28
-
-600
-
-6,000,000
+<a id="美国-弗吉尼亚-4-h4"></a>
 
 #### 美国（弗吉尼亚）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen-vl-ocr</p></td><td><p>全球</p></td><td><p>600</p></td><td><p>6,000,000</p></td></tr><tr><td><p>qwen-vl-ocr-2025-11-20</p></td><td><p>全球</p></td><td><p>1,200</p></td><td><p>6,000,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="新加坡-6"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen-vl-ocr
-
-全球
-
-600
-
-6,000,000
-
-qwen-vl-ocr-2025-11-20
-
-全球
-
-1,200
-
-6,000,000
+<a id="新加坡-6-h4"></a>
 
 #### 新加坡
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen-vl-ocr</p></td><td><p>国际</p></td><td><p>6,000</p></td><td><p>30,000,000</p></td></tr><tr><td><p>qwen-vl-ocr-2025-11-20</p></td><td><p>国际</p></td><td><p>6,000</p></td><td><p>30,000,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="德国-法兰克福-4"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen-vl-ocr
-
-国际
-
-6,000
-
-30,000,000
-
-qwen-vl-ocr-2025-11-20
-
-国际
-
-6,000
-
-30,000,000
+<a id="德国-法兰克福-4-h4"></a>
 
 #### 德国（法兰克福）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen-vl-ocr</p></td><td><p>全球</p></td><td><p>600</p></td><td><p>6,000,000</p></td></tr><tr><td><p>qwen-vl-ocr-2025-11-20</p></td><td><p>全球</p></td><td><p>1,200</p></td><td><p>6,000,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="千问audio-音频理解"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen-vl-ocr
-
-全球
-
-600
-
-6,000,000
-
-qwen-vl-ocr-2025-11-20
-
-全球
-
-1,200
-
-6,000,000
+<a id="2deeb92f4f8de"></a>
 
 #### 千问Audio（音频理解）
 
+<a id="sec-tabs-7"></a>
+
+<a id="华北2-北京-7"></a>
+
+<a id="华北2-北京-7-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen-audio-turbo</p></td><td><p>120</p></td><td><p>100,000</p></td></tr><tr><td><p>qwen-audio-turbo-latest</p></td><td><p>60</p></td><td><p>无 TPM 限制</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="千问coder"></a>
 
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen-audio-turbo
-
-120
-
-100,000
-
-qwen-audio-turbo-latest
-
-60
-
-无 TPM 限制
+<a id="f7770a0349vq5"></a>
 
 #### 千问Coder
 
+<a id="sec-tabs-8"></a>
+
+<a id="华北2-北京-8"></a>
+
+<a id="华北2-北京-8-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen3-coder-flash</p></td><td><p>5,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3-coder-flash-2025-07-28</p></td><td><p>60</p></td><td><p>1,000,000</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="美国-弗吉尼亚-5"></a>
 
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen3-coder-flash
-
-5,000
-
-5,000,000
-
-qwen3-coder-flash-2025-07-28
-
-60
-
-1,000,000
+<a id="美国-弗吉尼亚-5-h4"></a>
 
 #### 美国（弗吉尼亚）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen3-coder-flash</p></td><td><p>全球</p></td><td><p>1,200</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3-coder-flash-2025-07-28</p></td><td><p>全球</p></td><td><p>60</p></td><td><p>1,000,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="新加坡-7"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen3-coder-flash
-
-全球
-
-1,200
-
-1,000,000
-
-qwen3-coder-flash-2025-07-28
-
-全球
-
-60
-
-1,000,000
+<a id="新加坡-7-h4"></a>
 
 #### 新加坡
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen3-coder-flash</p></td><td><p>国际</p></td><td><p>600</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3-coder-flash-2025-07-28</p></td><td><p>国际</p></td><td><p>600</p></td><td><p>5,000,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="德国-法兰克福-5"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen3-coder-flash
-
-国际
-
-600
-
-5,000,000
-
-qwen3-coder-flash-2025-07-28
-
-国际
-
-600
-
-5,000,000
+<a id="德国-法兰克福-5-h4"></a>
 
 #### 德国（法兰克福）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen3-coder-flash</p></td><td><p>全球</p></td><td><p>5,000</p></td><td><p>5,000,000</p></td></tr><tr><td><p>qwen3-coder-flash-2025-07-28</p></td><td><p>全球</p></td><td><p>60</p></td><td><p>1,000,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="千问翻译模型"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen3-coder-flash
-
-全球
-
-5,000
-
-5,000,000
-
-qwen3-coder-flash-2025-07-28
-
-全球
-
-60
-
-1,000,000
+<a id="19090eae8arxa"></a>
 
 #### 千问翻译模型
 
+<a id="sec-tabs-9"></a>
+
+<a id="华北2-北京-9"></a>
+
+<a id="华北2-北京-9-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen-mt-plus</p></td><td><p>60</p></td><td><p>25,000</p></td></tr><tr><td><p>qwen-mt-flash</p></td><td><p>60</p></td><td><p>35,000</p></td></tr><tr><td><p>qwen-mt-lite</p></td><td><p>60</p></td><td><p>100,000</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="美国-弗吉尼亚-6"></a>
 
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen-mt-plus
-
-60
-
-25,000
-
-qwen-mt-flash
-
-60
-
-35,000
-
-qwen-mt-lite
-
-60
-
-100,000
+<a id="美国-弗吉尼亚-6-h4"></a>
 
 #### 美国（弗吉尼亚）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen-mt-plus</p></td><td><p>全球</p></td><td><p>60</p></td><td><p>25,000</p></td></tr><tr><td><p>qwen-mt-flash</p></td><td><p>全球</p></td><td><p>60</p></td><td><p>35,000</p></td></tr><tr><td><p>qwen-mt-lite</p></td><td><p>全球</p></td><td><p>60</p></td><td><p>100,000</p></td></tr><tr><td><p>qwen-mt-lite</p></td><td><p>美国</p></td><td><p>60</p></td><td><p>100,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="新加坡-8"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen-mt-plus
-
-全球
-
-60
-
-25,000
-
-qwen-mt-flash
-
-全球
-
-60
-
-35,000
-
-qwen-mt-lite
-
-全球
-
-60
-
-100,000
-
-qwen-mt-lite
-
-美国
-
-60
-
-100,000
+<a id="新加坡-8-h4"></a>
 
 #### 新加坡
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen-mt-plus</p></td><td><p>国际</p></td><td><p>60</p></td><td><p>100,000</p></td></tr><tr><td><p>qwen-mt-flash</p></td><td><p>国际</p></td><td><p>60</p></td><td><p>100,000</p></td></tr><tr><td><p>qwen-mt-lite</p></td><td><p>国际</p></td><td><p>60</p></td><td><p>100,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="德国-法兰克福-6"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen-mt-plus
-
-国际
-
-60
-
-100,000
-
-qwen-mt-flash
-
-国际
-
-60
-
-100,000
-
-qwen-mt-lite
-
-国际
-
-60
-
-100,000
+<a id="德国-法兰克福-6-h4"></a>
 
 #### 德国（法兰克福）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen-mt-plus</p></td><td><p>全球</p></td><td><p>60</p></td><td><p>25,000</p></td></tr><tr><td><p>qwen-mt-flash</p></td><td><p>全球</p></td><td><p>60</p></td><td><p>35,000</p></td></tr><tr><td><p>qwen-mt-lite</p></td><td><p>全球</p></td><td><p>60</p></td><td><p>100,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="qwen-mt-uni"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen-mt-plus
-
-全球
-
-60
-
-25,000
-
-qwen-mt-flash
-
-全球
-
-60
-
-35,000
-
-qwen-mt-lite
-
-全球
-
-60
-
-100,000
+<a id="uni-rate-limit"></a>
 
 #### Qwen-MT-Uni
 
+<a id="sec-tabs-10"></a>
+
+<a id="华北2-北京-10"></a>
+
+<a id="华北2-北京-10-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><p><strong>模型名称</strong></p></th><th colspan="4"><p><strong>限流条件（超出任一数值时触发限流）</strong></p></th></tr><tr><th><p><strong>每分钟调用次数（RPM）</strong></p></th><th><p><strong>每分钟消耗Token数（TPM）</strong></p></th><th><p><strong>异步并发数</strong></p></th><th><p><strong>异步排队数</strong></p></th></tr></thead><tbody><tr><td><p>qwen-mt-uni</p></td><td><p>162</p></td><td><p>2,592,000</p></td><td><p>3</p></td><td><p>500</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="千问数据挖掘模型"></a>
 
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-**异步并发数**
-
-**异步排队数**
-
-qwen-mt-uni
-
-162
-
-2,592,000
-
-3
-
-500
+<a id="9828e02499d55"></a>
 
 #### 千问数据挖掘模型
 
+<a id="sec-tabs-11"></a>
+
+<a id="华北2-北京-11"></a>
+
+<a id="华北2-北京-11-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen-doc-turbo</p></td><td><p>600</p></td><td><p>3,000,000</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="千问深入研究模型"></a>
 
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen-doc-turbo
-
-600
-
-3,000,000
+<a id="9884d121bfy7o"></a>
 
 #### 千问深入研究模型
 
+<a id="sec-tabs-12"></a>
+
+<a id="华北2-北京-12"></a>
+
+<a id="华北2-北京-12-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen-deep-research</p></td><td><p>120</p></td><td><p>1,200,000</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="通义晓蜜对话分析模型"></a>
 
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen-deep-research
-
-120
-
-1,200,000
+<a id="cd57449384qjp"></a>
 
 #### 通义晓蜜对话分析模型
 
+<a id="sec-tabs-13"></a>
+
+<a id="华北2-北京-13"></a>
+
+<a id="华北2-北京-13-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>tongyi-xiaomi-analysis-flash</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>tongyi-xiaomi-analysis-pro</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="千问语言模型开源版"></a>
 
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-tongyi-xiaomi-analysis-flash
-
-600
-
-1,000,000
-
-tongyi-xiaomi-analysis-pro
-
-600
-
-1,000,000
+<a id="a1264d06b9yyl"></a>
 
 #### 千问语言模型开源版
 
+<a id="sec-tabs-14"></a>
+
+<a id="华北2-北京-14"></a>
+
+<a id="华北2-北京-14-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen3.8-2.4t-a95b</p></td><td colspan="2"><p><a href="#sec-tier-h2">动态限流</a></p></td></tr><tr><td><p>qwen3.8-27b</p></td><td colspan="2"><p><a href="#sec-tier-h2">动态限流</a></p></td></tr><tr><td><p>qwen3.6-35b-a3b</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.6-27b</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.5-397b-a17b</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.5-122b-a10b</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.5-27b</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.5-35b-a3b</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="美国-弗吉尼亚-7"></a>
 
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen3.8-2.4t-a95b
-
-[动态限流](#sec-tier-h2)
-
-qwen3.8-27b
-
-[动态限流](#sec-tier-h2)
-
-qwen3.6-35b-a3b
-
-600
-
-1,000,000
-
-qwen3.6-27b
-
-600
-
-1,000,000
-
-qwen3.5-397b-a17b
-
-600
-
-1,000,000
-
-qwen3.5-122b-a10b
-
-600
-
-1,000,000
-
-qwen3.5-27b
-
-600
-
-1,000,000
-
-qwen3.5-35b-a3b
-
-600
-
-1,000,000
+<a id="美国-弗吉尼亚-7-h4"></a>
 
 #### 美国（弗吉尼亚）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen3.6-35b-a3b</p></td><td><p>全球</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.5-397b-a17b</p></td><td><p>全球</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.5-122b-a10b</p></td><td><p>全球</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.5-27b</p></td><td><p>全球</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.5-35b-a3b</p></td><td><p>全球</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="新加坡-9"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen3.6-35b-a3b
-
-全球
-
-600
-
-1,000,000
-
-qwen3.5-397b-a17b
-
-全球
-
-600
-
-1,000,000
-
-qwen3.5-122b-a10b
-
-全球
-
-600
-
-1,000,000
-
-qwen3.5-27b
-
-全球
-
-600
-
-1,000,000
-
-qwen3.5-35b-a3b
-
-全球
-
-600
-
-1,000,000
+<a id="新加坡-9-h4"></a>
 
 #### 新加坡
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen3.8-2.4t-a95b</p></td><td><p>国际</p></td><td colspan="2"><p><a href="#sec-tier-h2">动态限流</a></p></td></tr><tr><td><p>qwen3.8-27b</p></td><td><p>国际</p></td><td colspan="2"><p><a href="#sec-tier-h2">动态限流</a></p></td></tr><tr><td><p>qwen3.6-35b-a3b</p></td><td><p>国际</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.6-27b</p></td><td><p>国际</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.5-397b-a17b</p></td><td><p>国际</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.5-122b-a10b</p></td><td><p>国际</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.5-27b</p></td><td><p>国际</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.5-35b-a3b</p></td><td><p>国际</p></td><td><p>600</p></td><td><p>5,000,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="德国-法兰克福-7"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen3.8-2.4t-a95b
-
-国际
-
-[动态限流](#sec-tier-h2)
-
-qwen3.8-27b
-
-国际
-
-[动态限流](#sec-tier-h2)
-
-qwen3.6-35b-a3b
-
-国际
-
-600
-
-1,000,000
-
-qwen3.6-27b
-
-国际
-
-600
-
-1,000,000
-
-qwen3.5-397b-a17b
-
-国际
-
-600
-
-1,000,000
-
-qwen3.5-122b-a10b
-
-国际
-
-600
-
-1,000,000
-
-qwen3.5-27b
-
-国际
-
-600
-
-1,000,000
-
-qwen3.5-35b-a3b
-
-国际
-
-600
-
-5,000,000
+<a id="德国-法兰克福-7-h4"></a>
 
 #### 德国（法兰克福）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen3.6-35b-a3b</p></td><td><p>全球</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.5-397b-a17b</p></td><td><p>全球</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.5-122b-a10b</p></td><td><p>全球</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.5-27b</p></td><td><p>全球</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.5-35b-a3b</p></td><td><p>全球</p></td><td><p>600</p></td><td><p>1,000,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="deepseek"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen3.6-35b-a3b
-
-全球
-
-600
-
-1,000,000
-
-qwen3.5-397b-a17b
-
-全球
-
-600
-
-1,000,000
-
-qwen3.5-122b-a10b
-
-全球
-
-600
-
-1,000,000
-
-qwen3.5-27b
-
-全球
-
-600
-
-1,000,000
-
-qwen3.5-35b-a3b
-
-全球
-
-600
-
-1,000,000
+<a id="f5d967328bgje"></a>
 
 #### DeepSeek
 
+<a id="sec-tabs-15"></a>
+
+<a id="华北2-北京-15"></a>
+
+<a id="华北2-北京-15-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>deepseek-v4.1-flash-1017</p></td><td colspan="2"><p><a href="#sec-tier-h2">动态限流</a></p></td></tr><tr><td><p>deepseek-v4.1-flash</p></td><td colspan="2"><p><a href="#sec-tier-h2">动态限流</a></p></td></tr><tr><td><p>deepseek-v4-pro</p></td><td><p>15,000</p></td><td><p>1,200,000</p></td></tr><tr><td><p>deepseek-v4-pro-0813</p></td><td colspan="2"><p><a href="#sec-tier-h2">动态限流</a></p></td></tr><tr><td><p>deepseek-v4-flash-0731</p></td><td><p>15,000</p></td><td><p>1,200,000</p></td></tr><tr><td><p>deepseek-r1-distill-qwen-1.5b</p></td><td><p>60</p></td><td><p>100,000</p></td></tr><tr><td><p>deepseek-r1-distill-llama-70b</p></td><td><p>60</p></td><td><p>100,000</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="美国-弗吉尼亚-8"></a>
 
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-deepseek-v4.1-flash-1017
-
-[动态限流](#sec-tier-h2)
-
-deepseek-v4.1-flash
-
-[动态限流](#sec-tier-h2)
-
-deepseek-v4-pro
-
-15,000
-
-1,200,000
-
-deepseek-v4-pro-0813
-
-[动态限流](#sec-tier-h2)
-
-deepseek-v4-flash-0731
-
-15,000
-
-1,200,000
-
-deepseek-r1-distill-qwen-1.5b
-
-60
-
-100,000
-
-deepseek-r1-distill-llama-70b
-
-60
-
-100,000
+<a id="美国-弗吉尼亚-8-h4"></a>
 
 #### 美国（弗吉尼亚）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>deepseek-v4.1-flash-1017</p></td><td><p>全球</p></td><td><p>15,000</p></td><td><p>1,200,000</p></td></tr><tr><td><p>deepseek-v4.1-flash</p></td><td><p>全球</p></td><td><p>15,000</p></td><td><p>1,200,000</p></td></tr><tr><td><p>deepseek-v4-pro</p></td><td><p>全球</p></td><td><p>15,000</p></td><td><p>1,200,000</p></td></tr><tr><td><p>deepseek-v4-pro-0813</p></td><td><p>全球</p></td><td><p>15,000</p></td><td><p>1,200,000</p></td></tr><tr><td><p>deepseek-v4-pro</p></td><td><p>美国</p></td><td><p>10,000</p></td><td><p>1,200,000</p></td></tr><tr><td><p>deepseek-v4-flash-0731</p></td><td><p>全球</p></td><td><p>15,000</p></td><td><p>1,200,000</p></td></tr><tr><td><p>deepseek-v4-flash-0731</p></td><td><p>美国</p></td><td><p>15,000</p></td><td><p>1,200,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="新加坡-10"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-deepseek-v4.1-flash-1017
-
-全球
-
-15,000
-
-1,200,000
-
-deepseek-v4.1-flash
-
-全球
-
-15,000
-
-1,200,000
-
-deepseek-v4-pro
-
-全球
-
-15,000
-
-1,200,000
-
-deepseek-v4-pro-0813
-
-全球
-
-15,000
-
-1,200,000
-
-deepseek-v4-pro
-
-美国
-
-10,000
-
-1,200,000
-
-deepseek-v4-flash-0731
-
-全球
-
-15,000
-
-1,200,000
-
-deepseek-v4-flash-0731
-
-美国
-
-15,000
-
-1,200,000
+<a id="新加坡-10-h4"></a>
 
 #### 新加坡
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>deepseek-v4.1-flash-1017</p></td><td><p>国际</p></td><td colspan="2"><p><a href="#sec-tier-h2">动态限流</a></p></td></tr><tr><td><p>deepseek-v4.1-flash</p></td><td><p>国际</p></td><td colspan="2"><p><a href="#sec-tier-h2">动态限流</a></p></td></tr><tr><td><p>deepseek-v4-pro</p></td><td><p>国际</p></td><td><p>10,000</p></td><td><p>1,200,000</p></td></tr><tr><td><p>deepseek-v4-pro-0813</p></td><td><p>国际</p></td><td colspan="2"><p><a href="#sec-tier-h2">动态限流</a></p></td></tr><tr><td><p>deepseek-v4-flash-0731</p></td><td><p>国际</p></td><td><p>15,000</p></td><td><p>1,200,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="德国-法兰克福-8"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-deepseek-v4.1-flash-1017
-
-国际
-
-[动态限流](#sec-tier-h2)
-
-deepseek-v4.1-flash
-
-国际
-
-[动态限流](#sec-tier-h2)
-
-deepseek-v4-pro
-
-国际
-
-10,000
-
-1,200,000
-
-deepseek-v4-pro-0813
-
-国际
-
-[动态限流](#sec-tier-h2)
-
-deepseek-v4-flash-0731
-
-国际
-
-15,000
-
-1,200,000
+<a id="德国-法兰克福-8-h4"></a>
 
 #### 德国（法兰克福）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>deepseek-v4.1-flash-1017</p></td><td><p>全球</p></td><td><p>15,000</p></td><td><p>1,200,000</p></td></tr><tr><td><p>deepseek-v4.1-flash</p></td><td><p>全球</p></td><td><p>15,000</p></td><td><p>1,200,000</p></td></tr><tr><td><p>deepseek-v4-pro</p></td><td><p>全球</p></td><td><p>15,000</p></td><td><p>1,200,000</p></td></tr><tr><td><p>deepseek-v4-pro-0813</p></td><td><p>全球</p></td><td><p>15,000</p></td><td><p>1,200,000</p></td></tr><tr><td><p>deepseek-v4-flash-0731</p></td><td><p>全球</p></td><td><p>15,000</p></td><td><p>1,200,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="日本-东京-3"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-deepseek-v4.1-flash-1017
-
-全球
-
-15,000
-
-1,200,000
-
-deepseek-v4.1-flash
-
-全球
-
-15,000
-
-1,200,000
-
-deepseek-v4-pro
-
-全球
-
-15,000
-
-1,200,000
-
-deepseek-v4-pro-0813
-
-全球
-
-15,000
-
-1,200,000
-
-deepseek-v4-flash-0731
-
-全球
-
-15,000
-
-1,200,000
+<a id="日本-东京-3-h4"></a>
 
 #### 日本（东京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>deepseek-v4-pro</p></td><td><p>日本</p></td><td><p>10,000</p></td><td><p>1,200,000</p></td></tr><tr><td><p>deepseek-v4-pro-0813</p></td><td><p>日本</p></td><td><p>15,000</p></td><td><p>1,200,000</p></td></tr><tr><td><p>deepseek-v4-flash-0731</p></td><td><p>日本</p></td><td><p>15,000</p></td><td><p>1,200,000</p></td></tr><tr><td><p>deepseek-v4.1-flash-1017</p></td><td><p>全球</p></td><td><p>15,000</p></td><td><p>1,200,000</p></td></tr><tr><td><p>deepseek-v4.1-flash</p></td><td><p>全球</p></td><td><p>15,000</p></td><td><p>1,200,000</p></td></tr><tr><td><p>deepseek-v4-pro</p></td><td><p>全球</p></td><td><p>10,000</p></td><td><p>1,200,000</p></td></tr><tr><td><p>deepseek-v4-pro-0813</p></td><td><p>全球</p></td><td><p>15,000</p></td><td><p>1,200,000</p></td></tr><tr><td><p>deepseek-v4-flash-0731</p></td><td><p>全球</p></td><td><p>15,000</p></td><td><p>1,200,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="中国香港-4"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-deepseek-v4-pro
-
-日本
-
-10,000
-
-1,200,000
-
-deepseek-v4-pro-0813
-
-日本
-
-15,000
-
-1,200,000
-
-deepseek-v4-flash-0731
-
-日本
-
-15,000
-
-1,200,000
-
-deepseek-v4.1-flash-1017
-
-全球
-
-15,000
-
-1,200,000
-
-deepseek-v4.1-flash
-
-全球
-
-15,000
-
-1,200,000
-
-deepseek-v4-pro
-
-全球
-
-10,000
-
-1,200,000
-
-deepseek-v4-pro-0813
-
-全球
-
-15,000
-
-1,200,000
-
-deepseek-v4-flash-0731
-
-全球
-
-15,000
-
-1,200,000
+<a id="中国香港-4-h4"></a>
 
 #### 中国香港
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>deepseek-v4.1-flash-1017</p></td><td><p>中国香港</p></td><td><p>15,000</p></td><td><p>1,200,000</p></td></tr><tr><td><p>deepseek-v4.1-flash</p></td><td><p>中国香港</p></td><td><p>15,000</p></td><td><p>1,200,000</p></td></tr><tr><td><p>deepseek-v4-flash-0731</p></td><td><p>中国香港</p></td><td><p>15,000</p></td><td><p>1,200,000</p></td></tr><tr><td><p>deepseek-v4-pro-0813</p></td><td><p>中国香港</p></td><td><p>15,000</p></td><td><p>1,200,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="deepseek-硅基流动直供"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-deepseek-v4.1-flash-1017
-
-中国香港
-
-15,000
-
-1,200,000
-
-deepseek-v4.1-flash
-
-中国香港
-
-15,000
-
-1,200,000
-
-deepseek-v4-flash-0731
-
-中国香港
-
-15,000
-
-1,200,000
-
-deepseek-v4-pro-0813
-
-中国香港
-
-15,000
-
-1,200,000
+<a id="8981b276d2fab"></a>
 
 #### DeepSeek-硅基流动直供
 
+<a id="sec-tabs-16"></a>
+
+<a id="华北2-北京-16"></a>
+
+<a id="华北2-北京-16-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>siliconflow/deepseek-v3.2</p></td><td><p>500</p></td><td><p>500,000</p></td></tr><tr><td><p>siliconflow/deepseek-v3.1-terminus</p></td><td><p>500</p></td><td><p>500,000</p></td></tr><tr><td><p>siliconflow/deepseek-r1-0528</p></td><td><p>500</p></td><td><p>500,000</p></td></tr><tr><td><p>siliconflow/deepseek-v3-0324</p></td><td><p>500</p></td><td><p>500,000</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="deepseek-快手万擎直供"></a>
 
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-siliconflow/deepseek-v3.2
-
-500
-
-500,000
-
-siliconflow/deepseek-v3.1-terminus
-
-500
-
-500,000
-
-siliconflow/deepseek-r1-0528
-
-500
-
-500,000
-
-siliconflow/deepseek-v3-0324
-
-500
-
-500,000
+<a id="vanchin-deepseek-ratelimit-title"></a>
 
 #### DeepSeek-快手万擎直供
 
+<a id="sec-tabs-17"></a>
+
+<a id="华北2-北京-17"></a>
+
+<a id="华北2-北京-17-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>vanchin/deepseek-v3.2-think</p></td><td><p>30</p></td><td><p>600,000</p></td></tr><tr><td><p>vanchin/deepseek-v3.1-terminus</p></td><td><p>500</p></td><td><p>1,000,000</p></td></tr><tr><td><p>vanchin/deepseek-r1</p></td><td><p>500</p></td><td><p>1,000,000</p></td></tr><tr><td><p>vanchin/deepseek-v3</p></td><td><p>500</p></td><td><p>1,000,000</p></td></tr><tr><td><p>vanchin/deepseek-ocr</p></td><td><p>500</p></td><td><p>1,000,000</p></td></tr><tr><td><p>vanchin/deepseek-v4-pro</p></td><td><p>60</p></td><td><p>300,000</p></td></tr><tr><td><p>vanchin/deepseek-v4-pro-0813</p></td><td><p>30</p></td><td><p>600,000</p></td></tr><tr><td><p>vanchin/deepseek-v4.1-flash</p></td><td><p>30</p></td><td><p>600,000</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="kimi"></a>
 
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-vanchin/deepseek-v3.2-think
-
-30
-
-600,000
-
-vanchin/deepseek-v3.1-terminus
-
-500
-
-1,000,000
-
-vanchin/deepseek-r1
-
-500
-
-1,000,000
-
-vanchin/deepseek-v3
-
-500
-
-1,000,000
-
-vanchin/deepseek-ocr
-
-500
-
-1,000,000
-
-vanchin/deepseek-v4-pro
-
-60
-
-300,000
-
-vanchin/deepseek-v4-pro-0813
-
-30
-
-600,000
-
-vanchin/deepseek-v4.1-flash
-
-30
-
-600,000
+<a id="a9ee85ed0emvu"></a>
 
 #### Kimi
 
+<a id="sec-tabs-18"></a>
+
+<a id="华北2-北京-18"></a>
+
+<a id="华北2-北京-18-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p><a href="model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md">kimi-k3.1-pro</a></p></td><td><p>15,000</p></td><td><p><a href="#sec-tier-h2">动态限流</a></p></td></tr><tr><td><p>kimi-k3.1-pro-prime</p></td><td><p>15,000</p></td><td><p><a href="#sec-tier-h2">动态限流</a></p></td></tr><tr><td><p>kimi-k3</p></td><td colspan="2"><p><a href="#sec-tier-h2">动态限流</a></p></td></tr><tr><td><p>kimi-k2.7-code</p></td><td><p>500</p></td><td><p>1,000,000</p></td></tr><tr><td><p>kimi-k2.6</p></td><td><p>500</p></td><td><p>1,000,000</p></td></tr><tr><td><p>kimi-k2.5</p></td><td><p>500</p></td><td><p>1,000,000</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="美国-弗吉尼亚-9"></a>
 
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-[kimi-k3.1-pro](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
-
-15,000
-
-[动态限流](#sec-tier-h2)
-
-kimi-k3.1-pro-prime
-
-15,000
-
-[动态限流](#sec-tier-h2)
-
-kimi-k3
-
-[动态限流](#sec-tier-h2)
-
-kimi-k2.7-code
-
-500
-
-1,000,000
-
-kimi-k2.6
-
-500
-
-1,000,000
-
-kimi-k2.5
-
-500
-
-1,000,000
+<a id="美国-弗吉尼亚-9-h4"></a>
 
 #### 美国（弗吉尼亚）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>kimi-k3</p><p><a href="model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md">kimi-k3.1-pro</a></p></td><td><p>全球</p></td><td><p>15,000</p></td><td><p>1,200,000</p></td></tr><tr><td><p><a href="model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md">kimi-k3.1-pro</a></p></td><td><p>美国</p></td><td colspan="2"><p>限流值以所选业务空间的实际配置为准。</p></td></tr><tr><td><p>kimi-k3</p></td><td><p>国际</p></td><td><p>10,000</p></td><td><p>1,200,000</p></td></tr><tr><td><p>kimi-k2.7-code</p></td><td><p>全球</p></td><td><p>500</p></td><td><p>1,000,000</p></td></tr><tr><td><p>kimi-k2.5</p></td><td><p>全球</p></td><td><p>500</p></td><td><p>1,000,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="德国-法兰克福-9"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-kimi-k3
-
-[kimi-k3.1-pro](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
-
-全球
-
-15,000
-
-1,200,000
-
-[kimi-k3.1-pro](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
-
-美国
-
-限流值以所选业务空间的实际配置为准。
-
-kimi-k3
-
-国际
-
-10,000
-
-1,200,000
-
-kimi-k2.7-code
-
-全球
-
-500
-
-1,000,000
-
-kimi-k2.5
-
-全球
-
-500
-
-1,000,000
+<a id="德国-法兰克福-9-h4"></a>
 
 #### 德国（法兰克福）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>kimi-k3</p><p><a href="model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md">kimi-k3.1-pro</a></p></td><td><p>全球</p></td><td><p>15,000</p></td><td><p>1,200,000</p></td></tr><tr><td><p>kimi-k2.7-code</p></td><td><p>全球</p></td><td><p>500</p></td><td><p>1,000,000</p></td></tr><tr><td><p>kimi-k2.5</p></td><td><p>全球</p></td><td><p>500</p></td><td><p>1,000,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="日本-东京-4"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-kimi-k3
-
-[kimi-k3.1-pro](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
-
-全球
-
-15,000
-
-1,200,000
-
-kimi-k2.7-code
-
-全球
-
-500
-
-1,000,000
-
-kimi-k2.5
-
-全球
-
-500
-
-1,000,000
+<a id="日本-东京-4-h4"></a>
 
 #### 日本（东京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>kimi-k3</p><p><a href="model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md">kimi-k3.1-pro</a></p></td><td><p>全球</p></td><td><p>15,000</p></td><td><p>1,200,000</p></td></tr><tr><td><p>kimi-k2.7-code</p></td><td><p>全球</p></td><td><p>500</p></td><td><p>1,000,000</p></td></tr><tr><td><p>kimi-k2.5</p></td><td><p>全球</p></td><td><p>500</p></td><td><p>1,000,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="新加坡-11"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-kimi-k3
-
-[kimi-k3.1-pro](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
-
-全球
-
-15,000
-
-1,200,000
-
-kimi-k2.7-code
-
-全球
-
-500
-
-1,000,000
-
-kimi-k2.5
-
-全球
-
-500
-
-1,000,000
+<a id="新加坡-11-h4"></a>
 
 #### 新加坡
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p><a href="model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md">kimi-k3.1-pro</a></p></td><td><p>国际</p></td><td><p>10,000</p></td><td><p><a href="#sec-tier-h2">动态限流</a></p></td></tr><tr><td><p>kimi-k3.1-pro-prime</p></td><td><p>国际</p></td><td><p>10,000</p></td><td><p><a href="#sec-tier-h2">动态限流</a></p></td></tr><tr><td><p>kimi-k3</p></td><td><p>国际</p></td><td colspan="2"><p><a href="#sec-tier-h2">动态限流</a></p></td></tr><tr><td><p>kimi-k2.7-code</p></td><td><p>国际</p></td><td><p>500</p></td><td><p>1,000,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="中国香港-5"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-[kimi-k3.1-pro](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
-
-国际
-
-10,000
-
-[动态限流](#sec-tier-h2)
-
-kimi-k3.1-pro-prime
-
-国际
-
-10,000
-
-[动态限流](#sec-tier-h2)
-
-kimi-k3
-
-国际
-
-[动态限流](#sec-tier-h2)
-
-kimi-k2.7-code
-
-国际
-
-500
-
-1,000,000
+<a id="中国香港-5-h4"></a>
 
 #### 中国香港
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>kimi-k3</p><p><a href="model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md">kimi-k3.1-pro</a></p></td><td><p>全球</p></td><td><p>15,000</p></td><td><p>1,200,000</p></td></tr><tr><td><p>kimi-k2.7-code</p></td><td><p>全球</p></td><td><p>500</p></td><td><p>1,000,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="kimi-月之暗面直供"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-kimi-k3
-
-[kimi-k3.1-pro](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-text-generation/kimi-k3-1-pro.md)
-
-全球
-
-15,000
-
-1,200,000
-
-kimi-k2.7-code
-
-全球
-
-500
-
-1,000,000
+<a id="4c5e80ec70q4z"></a>
 
 #### Kimi-月之暗面直供
 
+<a id="sec-tabs-19"></a>
+
+<a id="华北2-北京-19"></a>
+
+<a id="华北2-北京-19-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>kimi/kimi-k3.1-pro-highspeed</p></td><td rowspan="7"><p>500</p><blockquote><p>同一个阿里云百炼API Key 下，在 7 个模型中共享 500 RPM 限流配额。即这 7 个模型的每分钟请求总数加起来不能超过 500。</p></blockquote></td><td rowspan="7"><p>3,000,000</p><blockquote><p>同一个阿里云百炼API Key 下，在 7 个模型中共享 3000000 TPM 限流配额。即这 7 个模型的每分钟 Token 消耗总数加起来不能超过 3000000。</p></blockquote></td></tr><tr><td><p>kimi/kimi-k3.1-pro</p></td></tr><tr><td><p>kimi/kimi-k3</p></td></tr><tr><td><p>kimi/kimi-k2.7-code-highspeed</p></td></tr><tr><td><p>kimi/kimi-k2.7-code</p></td></tr><tr><td><p>kimi/kimi-k2.6</p></td></tr><tr><td><p>kimi/kimi-k2.5</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="glm"></a>
 
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-kimi/kimi-k3.1-pro-highspeed
-
-500
-
-> 同一个阿里云百炼API Key 下，在 7 个模型中共享 500 RPM 限流配额。即这 7 个模型的每分钟请求总数加起来不能超过 500。
-
-3,000,000
-
-> 同一个阿里云百炼API Key 下，在 7 个模型中共享 3000000 TPM 限流配额。即这 7 个模型的每分钟 Token 消耗总数加起来不能超过 3000000。
-
-kimi/kimi-k3.1-pro
-
-kimi/kimi-k3
-
-kimi/kimi-k2.7-code-highspeed
-
-kimi/kimi-k2.7-code
-
-kimi/kimi-k2.6
-
-kimi/kimi-k2.5
+<a id="c66e2c68c1w9s"></a>
 
 #### GLM
 
+<a id="sec-tabs-20"></a>
+
+<a id="华北2-北京-20"></a>
+
+<a id="华北2-北京-20-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>glm-5.3</p></td><td colspan="2"><p><a href="#sec-tier-h2">动态限流</a></p></td></tr><tr><td><p>glm-5.2</p></td><td><p>500</p></td><td><p>2,000,000</p></td></tr><tr><td><p>glm-5.1</p></td><td><p>500</p></td><td><p>1,000,000</p></td></tr><tr><td><p>glm-5</p></td><td><p>500</p></td><td><p>1,000,000</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="美国-弗吉尼亚-10"></a>
 
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-glm-5.3
-
-[动态限流](#sec-tier-h2)
-
-glm-5.2
-
-500
-
-2,000,000
-
-glm-5.1
-
-500
-
-1,000,000
-
-glm-5
-
-500
-
-1,000,000
+<a id="美国-弗吉尼亚-10-h4"></a>
 
 #### 美国（弗吉尼亚）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>glm-5.3</p></td><td><p>全球</p></td><td><p>15,000</p></td><td><p>1,200,000</p></td></tr><tr><td><p>glm-5.3</p></td><td><p>美国</p></td><td><p>15,000</p></td><td><p>1,200,000</p></td></tr><tr><td><p>glm-5.2</p></td><td><p>全球</p></td><td><p>500</p></td><td><p>1,000,000</p></td></tr><tr><td><p>glm-5.2</p></td><td><p>美国</p></td><td><p>500</p></td><td><p>1,000,000</p></td></tr><tr><td><p>glm-5.1</p></td><td><p>全球</p></td><td><p>500</p></td><td><p>1,000,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="德国-法兰克福-10"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-glm-5.3
-
-全球
-
-15,000
-
-1,200,000
-
-glm-5.3
-
-美国
-
-15,000
-
-1,200,000
-
-glm-5.2
-
-全球
-
-500
-
-1,000,000
-
-glm-5.2
-
-美国
-
-500
-
-1,000,000
-
-glm-5.1
-
-全球
-
-500
-
-1,000,000
+<a id="德国-法兰克福-10-h4"></a>
 
 #### 德国（法兰克福）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>glm-5.3</p></td><td><p>全球</p></td><td><p>15,000</p></td><td><p>1,200,000</p></td></tr><tr><td><p>glm-5.2</p></td><td><p>全球</p></td><td><p>500</p></td><td><p>1,000,000</p></td></tr><tr><td><p>glm-5.1</p></td><td><p>全球</p></td><td><p>500</p></td><td><p>1,000,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="日本-东京-5"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-glm-5.3
-
-全球
-
-15,000
-
-1,200,000
-
-glm-5.2
-
-全球
-
-500
-
-1,000,000
-
-glm-5.1
-
-全球
-
-500
-
-1,000,000
+<a id="日本-东京-5-h4"></a>
 
 #### 日本（东京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>glm-5.3</p></td><td><p>全球</p></td><td><p>15,000</p></td><td><p>1,200,000</p></td></tr><tr><td><p>glm-5.1</p></td><td><p>全球</p></td><td><p>500</p></td><td><p>1,000,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="新加坡-12"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-glm-5.3
-
-全球
-
-15,000
-
-1,200,000
-
-glm-5.1
-
-全球
-
-500
-
-1,000,000
+<a id="新加坡-12-h4"></a>
 
 #### 新加坡
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>glm-5.3</p></td><td><p>国际</p></td><td colspan="2"><p><a href="#sec-tier-h2">动态限流</a></p></td></tr><tr><td><p>glm-5.2</p></td><td><p>国际</p></td><td><p>500</p></td><td><p>1,000,000</p></td></tr><tr><td><p>glm-5.1</p></td><td><p>国际</p></td><td><p>500</p></td><td><p>1,000,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="中国香港-6"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-glm-5.3
-
-国际
-
-[动态限流](#sec-tier-h2)
-
-glm-5.2
-
-国际
-
-500
-
-1,000,000
-
-glm-5.1
-
-国际
-
-500
-
-1,000,000
+<a id="中国香港-6-h4"></a>
 
 #### 中国香港
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>glm-5.2</p></td><td><p>全球</p></td><td><p>500</p></td><td><p>1,000,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="glm-智谱直供"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-glm-5.2
-
-全球
-
-500
-
-1,000,000
+<a id="cb01c6d8c8zxp"></a>
 
 #### GLM-智谱直供
 
+<a id="sec-tabs-21"></a>
+
+<a id="华北2-北京-21"></a>
+
+<a id="华北2-北京-21-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>ZHIPU/GLM-5.3</p></td><td><p>200</p></td><td><p>3,000,000</p></td></tr><tr><td><p>ZHIPU/GLM-5.3-Flash</p></td><td><p>200</p></td><td><p>3,000,000</p></td></tr><tr><td><p>ZHIPU/GLM-5.3-FlashX</p></td><td><p>200</p></td><td><p>3,000,000</p></td></tr><tr><td><p>ZHIPU/GLM-5.2</p></td><td><p>200</p></td><td><p>3,000,000</p></td></tr><tr><td><p>ZHIPU/GLM-5.1</p></td><td><p>200</p></td><td><p>3,000,000</p></td></tr><tr><td><p>ZHIPU/GLM-5</p></td><td><p>200</p></td><td><p>3,000,000</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="minimax"></a>
 
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-ZHIPU/GLM-5.3
-
-200
-
-3,000,000
-
-ZHIPU/GLM-5.3-Flash
-
-200
-
-3,000,000
-
-ZHIPU/GLM-5.3-FlashX
-
-200
-
-3,000,000
-
-ZHIPU/GLM-5.2
-
-200
-
-3,000,000
-
-ZHIPU/GLM-5.1
-
-200
-
-3,000,000
-
-ZHIPU/GLM-5
-
-200
-
-3,000,000
+<a id="cf86f6b6a7cku"></a>
 
 #### MiniMax
 
+<a id="sec-tabs-22"></a>
+
+<a id="华北2-北京-22"></a>
+
+<a id="华北2-北京-22-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>MiniMax-M2.5</p></td><td><p>500</p></td><td><p>1,000,000</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="minimax-稀宇科技直供"></a>
 
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-MiniMax-M2.5
-
-500
-
-1,000,000
+<a id="d92c3ff8f4tw1"></a>
 
 #### MiniMax-稀宇科技直供
 
+<a id="sec-tabs-23"></a>
+
+<a id="华北2-北京-23"></a>
+
+<a id="华北2-北京-23-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>MiniMax/MiniMax-M3.1-Flash</p></td><td><p>200</p></td><td><p>10,000,000</p></td></tr><tr><td><p>MiniMax/MiniMax-M3</p></td><td><p>500</p></td><td><p>20,000,000</p></td></tr><tr><td><p>MiniMax/MiniMax-M2.7</p></td><td><p>500</p></td><td><p>20,000,000</p></td></tr><tr><td><p>MiniMax/MiniMax-M2.5</p></td><td><p>500</p></td><td><p>20,000,000</p></td></tr><tr><td><p>MiniMax/MiniMax-M2.1</p></td><td><p>500</p></td><td><p>20,000,000</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="mimo-小米直供"></a>
 
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-MiniMax/MiniMax-M3.1-Flash
-
-200
-
-10,000,000
-
-MiniMax/MiniMax-M3
-
-500
-
-20,000,000
-
-MiniMax/MiniMax-M2.7
-
-500
-
-20,000,000
-
-MiniMax/MiniMax-M2.5
-
-500
-
-20,000,000
-
-MiniMax/MiniMax-M2.1
-
-500
-
-20,000,000
+<a id="54b32ee55e7zu"></a>
 
 #### MiMo-小米直供
 
+<a id="sec-tabs-24"></a>
+
+<a id="华北2-北京-24"></a>
+
+<a id="华北2-北京-24-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>xiaomi/mimo-v2.6-pro-ultraspeed</p></td><td><p>100</p></td><td><p>5,000,000</p></td></tr><tr><td><p>xiaomi/mimo-v2.5-pro</p></td><td><p>100</p></td><td><p>10,000,000</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="stepfun-阶跃星辰直供"></a>
 
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-xiaomi/mimo-v2.6-pro-ultraspeed
-
-100
-
-5,000,000
-
-xiaomi/mimo-v2.5-pro
-
-100
-
-10,000,000
+<a id="sf_ratelimit_h3"></a>
 
 #### Stepfun-阶跃星辰直供
 
+<a id="sec-tabs-25"></a>
+
+<a id="华北2-北京-25"></a>
+
+<a id="华北2-北京-25-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>stepfun/step-3.7-flash</p></td><td><p>500</p></td><td><p>20,000,000</p></td></tr><tr><td><p>stepfun/step-5-preview</p></td><td><p>500</p></td><td><p>10,000,000</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-stepfun/step-3.7-flash
-
-500
-
-20,000,000
-
-stepfun/step-5-preview
-
-500
-
-10,000,000
+<a id="unisound-云知声直供"></a>
 
 #### Unisound-云知声直供
 
+<a id="sec-tabs-26"></a>
+
+<a id="华北2-北京-26"></a>
+
+<a id="华北2-北京-26-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>unisound/unisound-u2</p></td><td><p>300</p></td><td><p>3,000,000</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-unisound/unisound-u2
-
-300
-
-3,000,000
+<a id="ling-蚂蚁数科直供"></a>
 
 #### Ling-蚂蚁数科直供
 
+<a id="sec-tabs-27"></a>
+
+<a id="华北2-北京-27"></a>
+
+<a id="华北2-北京-27-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>antdigital/Ling-3.1-flash</p></td><td><p>300</p></td><td><p>10,000,000</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="图像生成"></a>
 
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-antdigital/Ling-3.1-flash
-
-300
-
-10,000,000
+<a id="5998fd159df49"></a>
 
 ### 图像生成
 
+<a id="千问-qwen-image"></a>
+
+<a id="f812e7c63axvx"></a>
+
 #### 千问（Qwen-Image）
+
+<a id="sec-tabs-28"></a>
+
+<a id="华北2-北京-28"></a>
+
+<a id="华北2-北京-28-h4"></a>
 
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><p><strong>模型名称</strong></p></th><th colspan="2"><p><strong>限流条件（超出任一数值时触发限流）</strong></p></th></tr><tr><th><p><strong>任务下发接口调用限制</strong></p></th><th><p><strong>同时处理中任务数量（并发数）</strong></p></th></tr></thead><tbody><tr><td><p>qwen-image-3.0-pro</p></td><td><p>5 次/分钟</p></td><td><p>同步接口无限制 / 异步接口 10</p></td></tr><tr><td><p>qwen-image-3.0</p></td><td><p>20 次/分钟</p></td><td><p>同步接口无限制 / 异步接口 10</p></td></tr><tr><td><p>qwen-image-2.1-pro</p></td><td><p>20 次/分钟</p></td><td><p>同步接口无限制 / 异步接口 10</p></td></tr><tr><td><p>qwen-image-2.1-turbo</p></td><td><p>120 次/分钟</p></td><td><p>同步接口无限制 / 异步接口 10</p></td></tr><tr><td><p>qwen-image-2.0-pro</p></td><td><p>2 次/分钟</p></td><td><p>同步接口无限制</p></td></tr><tr><td><p>qwen-image-2.0-pro-2026-06-22</p></td><td><p>2 次/分钟</p></td><td><p>同步接口无限制</p></td></tr><tr><td><p>qwen-image-2.0-pro-2026-04-22</p></td><td><p>2 次/分钟</p></td><td><p>同步接口无限制</p></td></tr><tr><td><p>qwen-image-2.0-pro-2026-03-03</p></td><td><p>2 次/分钟</p></td><td><p>同步接口无限制</p></td></tr><tr><td><p>qwen-image-2.0</p></td><td><p>2 次/秒</p></td><td><p>同步接口无限制</p></td></tr><tr><td><p>qwen-image-2.0-2026-03-03</p></td><td><p>2 次/秒</p></td><td><p>同步接口无限制</p></td></tr><tr><td><p>qwen-mt-image-2.0</p></td><td><p>60 次/分钟</p></td><td><p>同步接口无限制 / 异步接口 2</p></td></tr><tr><td><p>qwen-mt-image</p></td><td><p>1 次/秒</p></td><td><p>同步接口无限制 / 异步接口 2</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="美国-弗吉尼亚-11"></a>
 
-**任务下发接口调用限制**
-
-**同时处理中任务数量（并发数）**
-
-qwen-image-3.0-pro
-
-5 次/分钟
-
-同步接口无限制 / 异步接口 10
-
-qwen-image-3.0
-
-20 次/分钟
-
-同步接口无限制 / 异步接口 10
-
-qwen-image-2.1-pro
-
-20 次/分钟
-
-同步接口无限制 / 异步接口 10
-
-qwen-image-2.1-turbo
-
-120 次/分钟
-
-同步接口无限制 / 异步接口 10
-
-qwen-image-2.0-pro
-
-2 次/分钟
-
-同步接口无限制
-
-qwen-image-2.0-pro-2026-06-22
-
-2 次/分钟
-
-同步接口无限制
-
-qwen-image-2.0-pro-2026-04-22
-
-2 次/分钟
-
-同步接口无限制
-
-qwen-image-2.0-pro-2026-03-03
-
-2 次/分钟
-
-同步接口无限制
-
-qwen-image-2.0
-
-2 次/秒
-
-同步接口无限制
-
-qwen-image-2.0-2026-03-03
-
-2 次/秒
-
-同步接口无限制
-
-qwen-mt-image-2.0
-
-60 次/分钟
-
-同步接口无限制 / 异步接口 2
-
-qwen-mt-image
-
-1 次/秒
-
-同步接口无限制 / 异步接口 2
+<a id="美国-弗吉尼亚-11-h4"></a>
 
 #### 美国（弗吉尼亚）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><p><strong>模型名称</strong></p></th><th rowspan="2"><p><strong>服务部署范围</strong></p></th><th colspan="2"><p><strong>限流条件（超出任一数值时触发限流）</strong></p></th></tr><tr><th><p><strong>任务下发接口调用限制</strong></p></th><th><p><strong>同时处理中任务数量（并发数）</strong></p></th></tr></thead><tbody><tr><td><p>qwen-image-3.0-pro</p></td><td><p>全球</p></td><td><p>5 次/分钟</p></td><td><p>同步接口无限制 / 异步接口 10</p></td></tr><tr><td><p>qwen-image-3.0</p></td><td><p>全球</p></td><td><p>20 次/分钟</p></td><td><p>同步接口无限制 / 异步接口 10</p></td></tr><tr><td><p>qwen-image-2.1-pro</p></td><td><p>全球</p></td><td><p>20 次/分钟</p></td><td><p>同步接口无限制 / 异步接口 10</p></td></tr><tr><td><p>qwen-image-2.1-turbo</p></td><td><p>全球</p></td><td><p>120 次/分钟</p></td><td><p>同步接口无限制 / 异步接口 10</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="新加坡-13"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-**任务下发接口调用限制**
-
-**同时处理中任务数量（并发数）**
-
-qwen-image-3.0-pro
-
-全球
-
-5 次/分钟
-
-同步接口无限制 / 异步接口 10
-
-qwen-image-3.0
-
-全球
-
-20 次/分钟
-
-同步接口无限制 / 异步接口 10
-
-qwen-image-2.1-pro
-
-全球
-
-20 次/分钟
-
-同步接口无限制 / 异步接口 10
-
-qwen-image-2.1-turbo
-
-全球
-
-120 次/分钟
-
-同步接口无限制 / 异步接口 10
+<a id="新加坡-13-h4"></a>
 
 #### 新加坡
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><p><strong>模型名称</strong></p></th><th rowspan="2"><p><strong>服务部署范围</strong></p></th><th colspan="2"><p><strong>限流条件（超出任一数值时触发限流）</strong></p></th></tr><tr><th><p><strong>任务下发接口调用限制</strong></p></th><th><p><strong>同时处理中任务数量（并发数）</strong></p></th></tr></thead><tbody><tr><td><p>qwen-image-3.0-pro</p></td><td><p>国际</p></td><td><p>5 次/分钟</p></td><td><p>同步接口无限制 / 异步接口 10</p></td></tr><tr><td><p>qwen-image-3.0</p></td><td><p>国际</p></td><td><p>20 次/分钟</p></td><td><p>同步接口无限制 / 异步接口 10</p></td></tr><tr><td><p>qwen-image-2.1-pro</p></td><td><p>国际</p></td><td><p>20 次/分钟</p></td><td><p>同步接口无限制 / 异步接口 10</p></td></tr><tr><td><p>qwen-image-2.1-turbo</p></td><td><p>国际</p></td><td><p>120 次/分钟</p></td><td><p>同步接口无限制 / 异步接口 10</p></td></tr><tr><td><p>qwen-image-2.0-pro</p></td><td><p>国际</p></td><td><p>2 次/分钟</p></td><td><p>同步接口无限制</p></td></tr><tr><td><p>qwen-image-2.0-pro-2026-06-22</p></td><td><p>国际</p></td><td><p>2 次/分钟</p></td><td><p>同步接口无限制</p></td></tr><tr><td><p>qwen-image-2.0-pro-2026-04-22</p></td><td><p>国际</p></td><td><p>2 次/分钟</p></td><td><p>同步接口无限制</p></td></tr><tr><td><p>qwen-image-2.0-pro-2026-03-03</p></td><td><p>国际</p></td><td><p>2 次/分钟</p></td><td><p>同步接口无限制</p></td></tr><tr><td><p>qwen-image-2.0</p></td><td><p>国际</p></td><td><p>2 次/秒</p></td><td><p>同步接口无限制</p></td></tr><tr><td><p>qwen-image-2.0-2026-03-03</p></td><td><p>国际</p></td><td><p>2 次/秒</p></td><td><p>同步接口无限制</p></td></tr><tr><td><p>qwen-mt-image-2.0</p></td><td><p>国际</p></td><td><p>60 次/分钟</p></td><td><p>同步接口无限制 / 异步接口 2</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="德国-法兰克福-11"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-**任务下发接口调用限制**
-
-**同时处理中任务数量（并发数）**
-
-qwen-image-3.0-pro
-
-国际
-
-5 次/分钟
-
-同步接口无限制 / 异步接口 10
-
-qwen-image-3.0
-
-国际
-
-20 次/分钟
-
-同步接口无限制 / 异步接口 10
-
-qwen-image-2.1-pro
-
-国际
-
-20 次/分钟
-
-同步接口无限制 / 异步接口 10
-
-qwen-image-2.1-turbo
-
-国际
-
-120 次/分钟
-
-同步接口无限制 / 异步接口 10
-
-qwen-image-2.0-pro
-
-国际
-
-2 次/分钟
-
-同步接口无限制
-
-qwen-image-2.0-pro-2026-06-22
-
-国际
-
-2 次/分钟
-
-同步接口无限制
-
-qwen-image-2.0-pro-2026-04-22
-
-国际
-
-2 次/分钟
-
-同步接口无限制
-
-qwen-image-2.0-pro-2026-03-03
-
-国际
-
-2 次/分钟
-
-同步接口无限制
-
-qwen-image-2.0
-
-国际
-
-2 次/秒
-
-同步接口无限制
-
-qwen-image-2.0-2026-03-03
-
-国际
-
-2 次/秒
-
-同步接口无限制
-
-qwen-mt-image-2.0
-
-国际
-
-60 次/分钟
-
-同步接口无限制 / 异步接口 2
+<a id="德国-法兰克福-11-h4"></a>
 
 #### 德国（法兰克福）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><p><strong>模型名称</strong></p></th><th rowspan="2"><p><strong>服务部署范围</strong></p></th><th colspan="2"><p><strong>限流条件（超出任一数值时触发限流）</strong></p></th></tr><tr><th><p><strong>任务下发接口调用限制</strong></p></th><th><p><strong>同时处理中任务数量（并发数）</strong></p></th></tr></thead><tbody><tr><td><p>qwen-image-3.0-pro</p></td><td><p>全球</p></td><td><p>5 次/分钟</p></td><td><p>同步接口无限制 / 异步接口 10</p></td></tr><tr><td><p>qwen-image-3.0</p></td><td><p>全球</p></td><td><p>20 次/分钟</p></td><td><p>同步接口无限制 / 异步接口 10</p></td></tr><tr><td><p>qwen-image-2.1-pro</p></td><td><p>全球</p></td><td><p>20 次/分钟</p></td><td><p>同步接口无限制 / 异步接口 10</p></td></tr><tr><td><p>qwen-image-2.1-turbo</p></td><td><p>全球</p></td><td><p>120 次/分钟</p></td><td><p>同步接口无限制 / 异步接口 10</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="日本-东京-6"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-**任务下发接口调用限制**
-
-**同时处理中任务数量（并发数）**
-
-qwen-image-3.0-pro
-
-全球
-
-5 次/分钟
-
-同步接口无限制 / 异步接口 10
-
-qwen-image-3.0
-
-全球
-
-20 次/分钟
-
-同步接口无限制 / 异步接口 10
-
-qwen-image-2.1-pro
-
-全球
-
-20 次/分钟
-
-同步接口无限制 / 异步接口 10
-
-qwen-image-2.1-turbo
-
-全球
-
-120 次/分钟
-
-同步接口无限制 / 异步接口 10
+<a id="日本-东京-6-h4"></a>
 
 #### 日本（东京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><p><strong>模型名称</strong></p></th><th rowspan="2"><p><strong>服务部署范围</strong></p></th><th colspan="2"><p><strong>限流条件（超出任一数值时触发限流）</strong></p></th></tr><tr><th><p><strong>任务下发接口调用限制</strong></p></th><th><p><strong>同时处理中任务数量（并发数）</strong></p></th></tr></thead><tbody><tr><td><p>qwen-image-3.0-pro</p></td><td><p>全球</p></td><td><p>5 次/分钟</p></td><td><p>同步接口无限制 / 异步接口 10</p></td></tr><tr><td><p>qwen-image-3.0</p></td><td><p>全球</p></td><td><p>20 次/分钟</p></td><td><p>同步接口无限制 / 异步接口 10</p></td></tr><tr><td><p>qwen-image-2.1-pro</p></td><td><p>全球</p></td><td><p>20 次/分钟</p></td><td><p>同步接口无限制 / 异步接口 10</p></td></tr><tr><td><p>qwen-image-2.1-turbo</p></td><td><p>全球</p></td><td><p>120 次/分钟</p></td><td><p>同步接口无限制 / 异步接口 10</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="中国香港-7"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-**任务下发接口调用限制**
-
-**同时处理中任务数量（并发数）**
-
-qwen-image-3.0-pro
-
-全球
-
-5 次/分钟
-
-同步接口无限制 / 异步接口 10
-
-qwen-image-3.0
-
-全球
-
-20 次/分钟
-
-同步接口无限制 / 异步接口 10
-
-qwen-image-2.1-pro
-
-全球
-
-20 次/分钟
-
-同步接口无限制 / 异步接口 10
-
-qwen-image-2.1-turbo
-
-全球
-
-120 次/分钟
-
-同步接口无限制 / 异步接口 10
+<a id="中国香港-7-h4"></a>
 
 #### 中国香港
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><p><strong>模型名称</strong></p></th><th rowspan="2"><p><strong>服务部署范围</strong></p></th><th colspan="2"><p><strong>限流条件（超出任一数值时触发限流）</strong></p></th></tr><tr><th><p><strong>任务下发接口调用限制</strong></p></th><th><p><strong>同时处理中任务数量（并发数）</strong></p></th></tr></thead><tbody><tr><td><p>qwen-image-3.0-pro</p></td><td><p>全球</p></td><td><p>5 次/分钟</p></td><td><p>同步接口无限制 / 异步接口 10</p></td></tr><tr><td><p>qwen-image-3.0</p></td><td><p>全球</p></td><td><p>20 次/分钟</p></td><td><p>同步接口无限制 / 异步接口 10</p></td></tr><tr><td><p>qwen-image-2.1-pro</p></td><td><p>全球</p></td><td><p>20 次/分钟</p></td><td><p>同步接口无限制 / 异步接口 10</p></td></tr><tr><td><p>qwen-image-2.1-turbo</p></td><td><p>全球</p></td><td><p>120 次/分钟</p></td><td><p>同步接口无限制 / 异步接口 10</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="文生图-z-image"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-**任务下发接口调用限制**
-
-**同时处理中任务数量（并发数）**
-
-qwen-image-3.0-pro
-
-全球
-
-5 次/分钟
-
-同步接口无限制 / 异步接口 10
-
-qwen-image-3.0
-
-全球
-
-20 次/分钟
-
-同步接口无限制 / 异步接口 10
-
-qwen-image-2.1-pro
-
-全球
-
-20 次/分钟
-
-同步接口无限制 / 异步接口 10
-
-qwen-image-2.1-turbo
-
-全球
-
-120 次/分钟
-
-同步接口无限制 / 异步接口 10
+<a id="e17ad85fd8wwl"></a>
 
 #### 文生图-Z-Image
 
+<a id="sec-tabs-29"></a>
+
+<a id="华北2-北京-29"></a>
+
+<a id="华北2-北京-29-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><p><strong>模型名称</strong></p></th><th colspan="2"><p><strong>限流条件（超出任一数值时触发限流）</strong></p></th></tr><tr><th><p><strong>每秒钟调用次数（RPS）</strong></p></th><th><p><strong>同时处理中任务数量（并发数）</strong></p></th></tr></thead><tbody><tr><td><p>z-image-turbo</p></td><td><p>2</p></td><td><p>同步接口无限制</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="新加坡-14"></a>
 
-**每秒钟调用次数（RPS）**
-
-**同时处理中任务数量（并发数）**
-
-z-image-turbo
-
-2
-
-同步接口无限制
+<a id="新加坡-14-h4"></a>
 
 #### 新加坡
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><p><strong>模型名称</strong></p></th><th rowspan="2"><p><strong>服务部署范围</strong></p></th><th colspan="2"><p><strong>限流条件（超出任一数值时触发限流）</strong></p></th></tr><tr><th><p><strong>每秒钟调用次数（RPS）</strong></p></th><th><p><strong>同时处理中任务数量（并发数）</strong></p></th></tr></thead><tbody><tr><td><p>z-image-turbo</p></td><td><p>国际</p></td><td><p>2</p></td><td><p>同步接口无限制</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="万相"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-**每秒钟调用次数（RPS）**
-
-**同时处理中任务数量（并发数）**
-
-z-image-turbo
-
-国际
-
-2
-
-同步接口无限制
+<a id="513e0a3df24v7"></a>
 
 #### 万相
 
+<a id="sec-tabs-30"></a>
+
+<a id="华北2-北京-30"></a>
+
+<a id="华北2-北京-30-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><p><strong>模型名称</strong></p></th><th colspan="2"><p><strong>限流条件（超出任一数值时触发限流）</strong></p></th></tr><tr><th><p><strong>每秒钟调用次数（RPS）</strong></p></th><th><p><strong>同时处理中任务数量（并发数）</strong></p></th></tr></thead><tbody><tr><td><p>wan2.7-image-pro</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.7-image</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.6-image</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.6-t2i</p></td><td><p>1</p></td><td><p>5</p></td></tr><tr><td><p>wan2.5-t2i-preview</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.2-t2i-plus</p></td><td><p>2</p></td><td><p>2</p></td></tr><tr><td><p>wan2.2-t2i-flash</p></td><td><p>2</p></td><td><p>2</p></td></tr><tr><td><p>wanx2.1-t2i-plus</p></td><td><p>2</p></td><td><p>2</p></td></tr><tr><td><p>wanx2.1-t2i-turbo</p></td><td><p>2</p></td><td><p>2</p></td></tr><tr><td><p>wanx2.0-t2i-turbo</p></td><td><p>2</p></td><td><p>2</p></td></tr><tr><td><p>wan2.5-i2i-preview</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wanx2.1-imageedit</p></td><td><p>2</p></td><td><p>2</p></td></tr><tr><td><p>wanx-v1</p></td><td><p>2</p></td><td><p>1</p></td></tr><tr><td><p>wanx-x-painting</p></td><td><p>2</p></td><td><p>1</p></td></tr><tr><td><p>wanx-sketch-to-image-lite</p></td><td><p>2</p></td><td><p>1</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="美国-弗吉尼亚-12"></a>
 
-**每秒钟调用次数（RPS）**
-
-**同时处理中任务数量（并发数）**
-
-wan2.7-image-pro
-
-5
-
-5
-
-wan2.7-image
-
-5
-
-5
-
-wan2.6-image
-
-5
-
-5
-
-wan2.6-t2i
-
-1
-
-5
-
-wan2.5-t2i-preview
-
-5
-
-5
-
-wan2.2-t2i-plus
-
-2
-
-2
-
-wan2.2-t2i-flash
-
-2
-
-2
-
-wanx2.1-t2i-plus
-
-2
-
-2
-
-wanx2.1-t2i-turbo
-
-2
-
-2
-
-wanx2.0-t2i-turbo
-
-2
-
-2
-
-wan2.5-i2i-preview
-
-5
-
-5
-
-wanx2.1-imageedit
-
-2
-
-2
-
-wanx-v1
-
-2
-
-1
-
-wanx-x-painting
-
-2
-
-1
-
-wanx-sketch-to-image-lite
-
-2
-
-1
+<a id="美国-弗吉尼亚-12-h4"></a>
 
 #### 美国（弗吉尼亚）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><p><strong>模型名称</strong></p></th><th rowspan="2"><p><strong>服务部署范围</strong></p></th><th colspan="2"><p><strong>限流条件（超出任一数值时触发限流）</strong></p></th></tr><tr><th><p><strong>每秒钟调用次数（RPS）</strong></p></th><th><p><strong>同时处理中任务数量（并发数）</strong></p></th></tr></thead><tbody><tr><td><p>wan2.6-t2i</p></td><td><p>全球</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.6-image</p></td><td><p>全球</p></td><td><p>5</p></td><td><p>5</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="新加坡-15"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-**每秒钟调用次数（RPS）**
-
-**同时处理中任务数量（并发数）**
-
-wan2.6-t2i
-
-全球
-
-5
-
-5
-
-wan2.6-image
-
-全球
-
-5
-
-5
+<a id="新加坡-15-h4"></a>
 
 #### 新加坡
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><p><strong>模型名称</strong></p></th><th rowspan="2"><p><strong>服务部署范围</strong></p></th><th colspan="2"><p><strong>限流条件（超出任一数值时触发限流）</strong></p></th></tr><tr><th><p><strong>每秒钟调用次数（RPS）</strong></p></th><th><p><strong>同时处理中任务数量（并发数）</strong></p></th></tr></thead><tbody><tr><td><p>wan2.7-image-pro</p></td><td><p>国际</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.7-image</p></td><td><p>国际</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.6-image</p></td><td><p>国际</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.6-t2i</p></td><td><p>国际</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.5-t2i-preview</p></td><td><p>国际</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.2-t2i-flash</p></td><td><p>国际</p></td><td><p>2</p></td><td><p>2</p></td></tr><tr><td><p>wan2.2-t2i-plus</p></td><td><p>国际</p></td><td><p>2</p></td><td><p>2</p></td></tr><tr><td><p>wan2.1-t2i-turbo</p></td><td><p>国际</p></td><td><p>2</p></td><td><p>2</p></td></tr><tr><td><p>wan2.1-t2i-plus</p></td><td><p>国际</p></td><td><p>2</p></td><td><p>2</p></td></tr><tr><td><p>wan2.5-i2i-preview</p></td><td><p>国际</p></td><td><p>5</p></td><td><p>5</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="德国-法兰克福-12"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-**每秒钟调用次数（RPS）**
-
-**同时处理中任务数量（并发数）**
-
-wan2.7-image-pro
-
-国际
-
-5
-
-5
-
-wan2.7-image
-
-国际
-
-5
-
-5
-
-wan2.6-image
-
-国际
-
-5
-
-5
-
-wan2.6-t2i
-
-国际
-
-5
-
-5
-
-wan2.5-t2i-preview
-
-国际
-
-5
-
-5
-
-wan2.2-t2i-flash
-
-国际
-
-2
-
-2
-
-wan2.2-t2i-plus
-
-国际
-
-2
-
-2
-
-wan2.1-t2i-turbo
-
-国际
-
-2
-
-2
-
-wan2.1-t2i-plus
-
-国际
-
-2
-
-2
-
-wan2.5-i2i-preview
-
-国际
-
-5
-
-5
+<a id="德国-法兰克福-12-h4"></a>
 
 #### 德国（法兰克福）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><p><strong>模型名称</strong></p></th><th rowspan="2"><p><strong>服务部署范围</strong></p></th><th colspan="2"><p><strong>限流条件（超出任一数值时触发限流）</strong></p></th></tr><tr><th><p><strong>每秒钟调用次数（RPS）</strong></p></th><th><p><strong>同时处理中任务数量（并发数）</strong></p></th></tr></thead><tbody><tr><td><p>wan2.6-t2i</p></td><td><p>全球</p></td><td><p>1</p></td><td><p>5</p></td></tr><tr><td><p>wan2.6-image</p></td><td><p>全球</p></td><td><p>5</p></td><td><p>5</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="图像编辑与生成"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-**每秒钟调用次数（RPS）**
-
-**同时处理中任务数量（并发数）**
-
-wan2.6-t2i
-
-全球
-
-1
-
-5
-
-wan2.6-image
-
-全球
-
-5
-
-5
+<a id="980e34f881ihz"></a>
 
 #### 图像编辑与生成
 
+<a id="sec-tabs-31"></a>
+
+<a id="华北2-北京-31"></a>
+
+<a id="华北2-北京-31-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><p><strong>模型名称</strong></p></th><th colspan="2"><p><strong>限流条件（超出任一数值时触发限流）</strong></p></th></tr><tr><th><p><strong>每秒钟调用次数（RPS）</strong></p></th><th><p><strong>同时处理中任务数量（并发数）</strong></p></th></tr></thead><tbody><tr><td><p>shoemodel-v1</p></td><td><p>2</p></td><td><p>1</p></td></tr><tr><td><p>wanx-virtualmodel</p></td><td><p>2</p></td><td><p>1</p></td></tr><tr><td><p>wanx-style-repaint-v1</p></td><td><p>2</p></td><td><p>2</p></td></tr><tr><td><p>wanx-poster-generation-v1</p></td><td><p>2</p></td><td><p>1</p></td></tr><tr><td><p>virtualmodel-v2</p></td><td><p>2</p></td><td><p>1</p></td></tr><tr><td><p>image-instance-segmentation</p></td><td><p>2</p></td><td><p>1</p></td></tr><tr><td><p>image-erase-completion</p></td><td><p>2</p></td><td><p>1</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="人物写真生成-facechain"></a>
 
-**每秒钟调用次数（RPS）**
-
-**同时处理中任务数量（并发数）**
-
-shoemodel-v1
-
-2
-
-1
-
-wanx-virtualmodel
-
-2
-
-1
-
-wanx-style-repaint-v1
-
-2
-
-2
-
-wanx-poster-generation-v1
-
-2
-
-1
-
-virtualmodel-v2
-
-2
-
-1
-
-image-instance-segmentation
-
-2
-
-1
-
-image-erase-completion
-
-2
-
-1
+<a id="88756e5f858dv"></a>
 
 #### 人物写真生成-FaceChain
 
+<a id="sec-tabs-32"></a>
+
+<a id="华北2-北京-32"></a>
+
+<a id="华北2-北京-32-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><p><strong>模型名称</strong></p></th><th colspan="2"><p><strong>限流条件（超出任一数值时触发限流）</strong></p></th></tr><tr><th><p><strong>每秒钟调用次数（RPS）</strong></p></th><th><p><strong>同时处理中任务数量</strong></p></th></tr></thead><tbody><tr><td><p>facechain-facedetect</p></td><td><p>5</p></td><td><p>同步接口无限制</p></td></tr><tr><td><p>facechain-finetune</p></td><td><p>1</p></td><td><p>1</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="可灵系列"></a>
 
-**每秒钟调用次数（RPS）**
-
-**同时处理中任务数量**
-
-facechain-facedetect
-
-5
-
-同步接口无限制
-
-facechain-finetune
-
-1
-
-1
+<a id="fdd6e348d2md4"></a>
 
 #### 可灵系列
 
+<a id="sec-tabs-33"></a>
+
+<a id="华北2-北京-33"></a>
+
+<a id="华北2-北京-33-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong></th></tr><tr><th><strong>每秒钟调用次数（RPS）</strong></th><th><strong>同时处理中任务数量（并发数）</strong></th></tr></thead><tbody><tr><td><p>kling/kling-v3-omni-image-generation</p></td><td rowspan="2"><p>5</p></td><td rowspan="2"><p>10</p><blockquote><p>同一阿里云百炼API Key 下，可灵系列的 7 个模型（<a href="rate-limit.md#fdd6e348d2md4">图像</a>及<a href="rate-limit.md#kling-third-party-title">视频</a>）共享 10 个并发数。即这 7 个模型处于运行状态的任务总数加起来不能超过 10 个。</p></blockquote></td></tr><tr><td><p>kling/kling-v3-image-generation</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="vidu系列"></a>
 
-**每秒钟调用次数（RPS）**
-
-**同时处理中任务数量（并发数）**
-
-kling/kling-v3-omni-image-generation
-
-5
-
-10
-
-> 同一阿里云百炼API Key 下，可灵系列的 7 个模型（[图像](https://help.aliyun.com/zh/model-studio/rate-limit#fdd6e348d2md4)及[视频](https://help.aliyun.com/zh/model-studio/rate-limit#kling-third-party-title)）共享 10 个并发数。即这 7 个模型处于运行状态的任务总数加起来不能超过 10 个。
-
-kling/kling-v3-image-generation
+<a id="vidu-img-third-party-title"></a>
 
 #### Vidu系列
 
+<a id="sec-tabs-34"></a>
+
+<a id="华北2-北京-34"></a>
+
+<a id="华北2-北京-34-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong></th></tr><tr><th><strong>每分钟请求数RPM限制</strong></th><th><strong>同时处理中任务数量（并发数）</strong></th></tr></thead><tbody><tr><td><p>vidu/viduq3.1-fast_reference2image</p></td><td rowspan="7"><p>300</p></td><td rowspan="7"><p>5</p><blockquote><p>同一个阿里云百炼API Key 下，Vidu参考生图系列的模型共享 5 个并发数。即所有模型处于运行状态的任务总数加起来不能超过 5 个。</p></blockquote></td></tr><tr><td><p>vidu/vidu-image-lite_reference2image</p></td></tr><tr><td><p>vidu/vidu-image_reference2image</p></td></tr><tr><td><p>vidu/viduq3-fast_reference2image</p></td></tr><tr><td><p>vidu/viduq2-pro_reference2image</p></td></tr><tr><td><p>vidu/viduq2-fast_reference2image</p></td></tr><tr><td><p>vidu/vidu-image-pro_reference2image</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="语音识别"></a>
 
-**每分钟请求数RPM限制**
+<a id="speech-recognition-rate-limit"></a>
 
-**同时处理中任务数量（并发数）**
+<a id="55945fd2b5bbf"></a>
 
-vidu/viduq3.1-fast\_reference2image
-
-300
-
-5
-
-> 同一个阿里云百炼API Key 下，Vidu参考生图系列的模型共享 5 个并发数。即所有模型处于运行状态的任务总数加起来不能超过 5 个。
-
-vidu/vidu-image-lite\_reference2image
-
-vidu/vidu-image\_reference2image
-
-vidu/viduq3-fast\_reference2image
-
-vidu/viduq2-pro\_reference2image
-
-vidu/viduq2-fast\_reference2image
-
-vidu/vidu-image-pro\_reference2image
+<a id="语音"></a>
 
 ### 语音识别
 
+<a id="qwen-audio-asr"></a>
+
+<a id="8e353130f9pmp"></a>
+
 #### Qwen-Audio-ASR
+
+<a id="sec-tabs-35"></a>
+
+<a id="华北2-北京-35"></a>
+
+<a id="华北2-北京-35-h4"></a>
 
 #### 华北2（北京）
 
-**模型名称**
+| 模型名称 | 每分钟调用次数（RPM） |
+| --- | --- |
+| qwen-audio-3.1-asr-flash | 600 |
+| qwen-audio-3.0-asr-flash | 600 |
 
-**每分钟调用次数（RPM）**
+<a id="新加坡-16"></a>
 
-qwen-audio-3.1-asr-flash
-
-600
-
-qwen-audio-3.0-asr-flash
-
-600
+<a id="新加坡-16-h4"></a>
 
 #### 新加坡
 
-**模型名称**
+| 模型名称 | 服务部署范围 | 每分钟调用次数（RPM） |
+| --- | --- | --- |
+| qwen-audio-3.1-asr-flash | 国际 | 600 |
+| qwen-audio-3.0-asr-flash | 国际 | 600 |
 
-**服务部署范围**
+<a id="qwen-audio-asr-streaming"></a>
 
-**每分钟调用次数（RPM）**
-
-qwen-audio-3.1-asr-flash
-
-国际
-
-600
-
-qwen-audio-3.0-asr-flash
-
-国际
-
-600
+<a id="6314d076aabhs"></a>
 
 #### Qwen-Audio-ASR-Streaming
 
+<a id="sec-tabs-36"></a>
+
+<a id="华北2-北京-36"></a>
+
+<a id="华北2-北京-36-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th><p><strong>模型名称</strong></p></th><th><p><strong>每分钟调用次数（RPM）</strong></p></th></tr></thead><tbody><tr><td><p>qwen-audio-3.1-asr-flash-streaming</p></td><td rowspan="2"><p>1200</p></td></tr><tr><td><p>qwen-audio-3.0-asr-flash-streaming</p></td></tr></tbody></table>
 
-**每分钟调用次数（RPM）**
+<a id="新加坡-17"></a>
 
-qwen-audio-3.1-asr-flash-streaming
-
-1200
-
-qwen-audio-3.0-asr-flash-streaming
+<a id="新加坡-17-h4"></a>
 
 #### 新加坡
 
-**模型名称**
+<table><thead><tr><th><p><strong>模型名称</strong></p></th><th><p><strong>服务部署范围</strong></p></th><th><p><strong>每分钟调用次数（RPM）</strong></p></th></tr></thead><tbody><tr><td><p>qwen-audio-3.1-asr-flash-streaming</p></td><td><p>国际</p></td><td rowspan="2"><p>1200</p></td></tr><tr><td><p>qwen-audio-3.0-asr-flash-streaming</p></td><td><p>国际</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="qwen-audio-asr-filetrans"></a>
 
-**每分钟调用次数（RPM）**
-
-qwen-audio-3.1-asr-flash-streaming
-
-国际
-
-1200
-
-qwen-audio-3.0-asr-flash-streaming
-
-国际
+<a id="29376bdaa5s47"></a>
 
 #### Qwen-Audio-ASR-Filetrans
 
+<a id="sec-tabs-37"></a>
+
+<a id="华北2-北京-37"></a>
+
+<a id="华北2-北京-37-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+| 模型名称 | 每分钟调用次数（RPM） |
+| --- | --- |
+| qwen-audio-3.1-asr-flash-filetrans | 600 |
+| qwen-audio-3.0-asr-flash-filetrans | 600 |
 
-**每分钟调用次数（RPM）**
+<a id="新加坡-18"></a>
 
-qwen-audio-3.1-asr-flash-filetrans
-
-600
-
-qwen-audio-3.0-asr-flash-filetrans
-
-600
+<a id="新加坡-18-h4"></a>
 
 #### 新加坡
 
-**模型名称**
+| 模型名称 | 服务部署范围 | 每分钟调用次数（RPM） |
+| --- | --- | --- |
+| qwen-audio-3.1-asr-flash-filetrans | 国际 | 600 |
+| qwen-audio-3.0-asr-flash-filetrans | 国际 | 600 |
 
-**服务部署范围**
+<a id="qwen-audio-asr-message"></a>
 
-**每分钟调用次数（RPM）**
-
-qwen-audio-3.1-asr-flash-filetrans
-
-国际
-
-600
-
-qwen-audio-3.0-asr-flash-filetrans
-
-国际
-
-600
+<a id="asr-message"></a>
 
 #### Qwen-Audio-ASR-Message
 
+<a id="sec-tabs-38"></a>
+
+<a id="华北2-北京-38"></a>
+
+<a id="华北2-北京-38-h4"></a>
+
 #### 华北2（北京）
 
-模型名称
+| 模型名称 | 每分钟调用次数（RPM） |
+| --- | --- |
+| qwen-audio-3.1-asr-flash-message | 1200 |
 
-每分钟调用次数（RPM）
+<a id="新加坡-19"></a>
 
-qwen-audio-3.1-asr-flash-message
-
-1200
+<a id="新加坡-19-h4"></a>
 
 #### 新加坡
 
-模型名称
+| 模型名称 | 服务部署范围 | 每分钟调用次数（RPM） |
+| --- | --- | --- |
+| qwen-audio-3.1-asr-flash-message | 国际 | 1200 |
 
-服务部署范围
+<a id="qwen3-asr"></a>
 
-每分钟调用次数（RPM）
-
-qwen-audio-3.1-asr-flash-message
-
-国际
-
-1200
+<a id="7d2f0509a3n03"></a>
 
 #### Qwen3-ASR
 
+<a id="sec-tabs-39"></a>
+
+<a id="华北2-北京-39"></a>
+
+<a id="华北2-北京-39-h4"></a>
+
 #### 华北2（北京）
+
+<a id="sec-tabs-40"></a>
+
+<a id="qwen3-asr-flash-filetrans"></a>
+
+<a id="qwen3-asr-flash-filetrans-h4"></a>
 
 #### Qwen3-ASR-Flash-Filetrans
 
-**模型名称**
+<table><thead><tr><th><p><strong>模型名称</strong></p></th><th><p><strong>每分钟调用次数（RPM）</strong></p></th></tr></thead><tbody><tr><td><p>qwen3-asr-flash-filetrans</p></td><td rowspan="2"><p>100</p></td></tr></tbody></table>
 
-**每分钟调用次数（RPM）**
+<a id="qwen3-asr-flash"></a>
 
-qwen3-asr-flash-filetrans
-
-100
+<a id="qwen3-asr-flash-h4"></a>
 
 #### Qwen3-ASR-Flash
 
-**模型名称**
+<table><thead><tr><th><p><strong>模型名称</strong></p></th><th><p><strong>每分钟调用次数（RPM）</strong></p></th></tr></thead><tbody><tr><td><p>qwen3-asr-flash</p></td><td rowspan="3"><p>100</p></td></tr></tbody></table>
 
-**每分钟调用次数（RPM）**
+<a id="新加坡-20"></a>
 
-qwen3-asr-flash
-
-100
+<a id="新加坡-20-h4"></a>
 
 #### 新加坡
 
+<a id="sec-tabs-41"></a>
+
+<a id="qwen3-asr-flash-filetrans-2"></a>
+
+<a id="qwen3-asr-flash-filetrans-2-h4"></a>
+
 #### Qwen3-ASR-Flash-Filetrans
 
-**模型名称**
+<table><thead><tr><th><p><strong>模型名称</strong></p></th><th><p><strong>服务部署范围</strong></p></th><th><p><strong>每分钟调用次数（RPM）</strong></p></th></tr></thead><tbody><tr><td><p>qwen3-asr-flash-filetrans</p></td><td><p>国际</p></td><td rowspan="2"><p>100</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="qwen3-asr-flash-2"></a>
 
-**每分钟调用次数（RPM）**
-
-qwen3-asr-flash-filetrans
-
-国际
-
-100
+<a id="qwen3-asr-flash-2-h4"></a>
 
 #### Qwen3-ASR-Flash
 
-**模型名称**
+<table><thead><tr><th><p><strong>模型名称</strong></p></th><th><p><strong>服务部署范围</strong></p></th><th><p><strong>每分钟调用次数（RPM）</strong></p></th></tr></thead><tbody><tr><td><p>qwen3-asr-flash</p></td><td><p>国际</p></td><td rowspan="3"><p>100</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="美国-弗吉尼亚-13"></a>
 
-**每分钟调用次数（RPM）**
-
-qwen3-asr-flash
-
-国际
-
-100
+<a id="美国-弗吉尼亚-13-h4"></a>
 
 #### 美国（弗吉尼亚）
 
-**模型名称**
+<table><thead><tr><th><p><strong>模型名称</strong></p></th><th><p><strong>服务部署范围</strong></p></th><th><p><strong>每分钟调用次数（RPM）</strong></p></th></tr></thead><tbody><tr><td><p>qwen3-asr-flash</p></td><td><p>美国</p></td><td rowspan="2"><p>100</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="qwen3-asr-realtime"></a>
 
-**每分钟调用次数（RPM）**
-
-qwen3-asr-flash
-
-美国
-
-100
+<a id="9f21be56e82vj"></a>
 
 #### Qwen3-ASR-Realtime
 
+<a id="sec-tabs-42"></a>
+
+<a id="华北2-北京-40"></a>
+
+<a id="华北2-北京-40-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th><p><strong>模型名称</strong></p></th><th><p><strong>每秒钟调用次数（RPS）</strong></p></th></tr></thead><tbody><tr><td><p>qwen3-asr-flash-realtime</p></td><td rowspan="3"><p>20</p></td></tr></tbody></table>
 
-**每秒钟调用次数（RPS）**
+<a id="新加坡-21"></a>
 
-qwen3-asr-flash-realtime
-
-20
+<a id="新加坡-21-h4"></a>
 
 #### 新加坡
 
-**模型名称**
+<table><thead><tr><th><p><strong>模型名称</strong></p></th><th><p><strong>服务部署范围</strong></p></th><th><p><strong>每秒钟调用次数（RPS）</strong></p></th></tr></thead><tbody><tr><td><p>qwen3-asr-flash-realtime</p></td><td><p>国际</p></td><td rowspan="3"><p>20</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="fun-asr"></a>
 
-**每秒钟调用次数（RPS）**
-
-qwen3-asr-flash-realtime
-
-国际
-
-20
+<a id="8c50a9f1e526h"></a>
 
 #### Fun-ASR
 
+<a id="sec-tabs-43"></a>
+
+<a id="华北2-北京-41"></a>
+
+<a id="华北2-北京-41-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th><p><strong>模型名称</strong></p></th><th><p><strong>每分钟调用次数（RPM）</strong></p></th></tr></thead><tbody><tr><td><p>fun-asr</p></td><td rowspan="6"><p>600</p></td></tr><tr><td><p>fun-asr-flash-2026-06-15</p></td></tr></tbody></table>
 
-**每分钟调用次数（RPM）**
+<a id="新加坡-22"></a>
 
-fun-asr
-
-600
-
-fun-asr-flash-2026-06-15
+<a id="新加坡-22-h4"></a>
 
 #### 新加坡
 
-**模型名称**
+| 模型名称 | 服务部署范围 | 每分钟调用次数（RPM） |
+| --- | --- | --- |
+| fun-asr | 国际 | 600 |
+| fun-asr-flash-2026-06-15 | 国际 | 600 |
 
-**服务部署范围**
+<a id="fun-asr-realtime"></a>
 
-**每分钟调用次数（RPM）**
-
-fun-asr
-
-国际
-
-600
-
-fun-asr-flash-2026-06-15
-
-国际
-
-600
+<a id="c9c9419f7btw4"></a>
 
 #### Fun-ASR-Realtime
 
+<a id="sec-tabs-44"></a>
+
+<a id="华北2-北京-42"></a>
+
+<a id="华北2-北京-42-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th><p><strong>模型名称</strong></p></th><th><p><strong>每秒钟调用次数（RPS）</strong></p></th></tr></thead><tbody><tr><td><p>fun-asr-realtime</p></td><td rowspan="6"><p>20</p></td></tr><tr><td><p>fun-asr-realtime-2026-02-28</p></td></tr><tr><td><p>fun-asr-flash-8k-realtime</p></td></tr><tr><td><p>fun-asr-flash-8k-realtime-2026-01-28</p></td></tr></tbody></table>
 
-**每秒钟调用次数（RPS）**
+<a id="新加坡-23"></a>
 
-fun-asr-realtime
-
-20
-
-fun-asr-realtime-2026-02-28
-
-fun-asr-flash-8k-realtime
-
-fun-asr-flash-8k-realtime-2026-01-28
+<a id="新加坡-23-h4"></a>
 
 #### 新加坡
 
-**模型名称**
+<table><thead><tr><th><p><strong>模型名称</strong></p></th><th><p><strong>服务部署范围</strong></p></th><th><p><strong>每秒钟调用次数（RPS）</strong></p></th></tr></thead><tbody><tr><td><p>fun-asr-realtime</p></td><td><p>国际</p></td><td rowspan="2"><p>20</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="paraformer"></a>
 
-**每秒钟调用次数（RPS）**
-
-fun-asr-realtime
-
-国际
-
-20
+<a id="71c5d28fb01yz"></a>
 
 #### Paraformer
 
+<a id="sec-tabs-45"></a>
+
+<a id="华北2-北京-43"></a>
+
+<a id="华北2-北京-43-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th><p><strong>模型名称</strong></p></th><th><p><strong>每秒钟调用次数（RPS）</strong></p></th></tr></thead><tbody><tr><td><p>paraformer-realtime-v2</p></td><td rowspan="4"><p>20</p></td></tr><tr><td><p>paraformer-realtime-8k-v2</p></td></tr></tbody></table>
 
-**每秒钟调用次数（RPS）**
+| 模型名称 | 每分钟调用次数（RPM） |
+| --- | --- |
+| paraformer-v2 | 1,200 |
 
-paraformer-realtime-v2
+| 模型名称 | 每秒钟调用次数（RPS） | 同时处理中任务数量（并发数） |
+| --- | --- | --- |
+| paraformer-8k-v2 | 20 | 100 |
 
-20
+<a id="语音合成"></a>
 
-paraformer-realtime-8k-v2
-
-**模型名称**
-
-**每分钟调用次数（RPM）**
-
-paraformer-v2
-
-1,200
-
-**模型名称**
-
-**每秒钟调用次数（RPS）**
-
-**同时处理中任务数量（并发数）**
-
-paraformer-8k-v2
-
-20
-
-100
+<a id="speech-synthesis-rate-limit"></a>
 
 ### 语音合成
 
+<a id="qwen-audio-tts"></a>
+
+<a id="79352135767l3"></a>
+
 #### Qwen-Audio-TTS
+
+<a id="sec-tabs-46"></a>
+
+<a id="华北2-北京-44"></a>
+
+<a id="华北2-北京-44-h4"></a>
 
 #### 华北2（北京）
 
-**模型名称**
+| 模型名称 | 每分钟调用次数（RPM） |
+| --- | --- |
+| qwen-audio-3.1-tts-plus | 180 |
+| qwen-audio-3.1-tts-flash | 180 |
+| qwen-audio-3.0-tts-plus | 180 |
+| qwen-audio-3.0-tts-flash | 180 |
 
-**每分钟调用次数（RPM）**
+<a id="新加坡-24"></a>
 
-qwen-audio-3.1-tts-plus
-
-180
-
-qwen-audio-3.1-tts-flash
-
-180
-
-qwen-audio-3.0-tts-plus
-
-180
-
-qwen-audio-3.0-tts-flash
-
-180
+<a id="新加坡-24-h4"></a>
 
 #### 新加坡
 
-**模型名称**
+| 模型名称 | 服务部署范围 | 每分钟调用次数（RPM） |
+| --- | --- | --- |
+| qwen-audio-3.1-tts-plus | 国际 | 180 |
+| qwen-audio-3.1-tts-flash | 国际 | 180 |
+| qwen-audio-3.0-tts-plus | 国际 | 180 |
+| qwen-audio-3.0-tts-flash | 国际 | 180 |
 
-**服务部署范围**
+<a id="cosyvoice"></a>
 
-**每分钟调用次数（RPM）**
-
-qwen-audio-3.1-tts-plus
-
-国际
-
-180
-
-qwen-audio-3.1-tts-flash
-
-国际
-
-180
-
-qwen-audio-3.0-tts-plus
-
-国际
-
-180
-
-qwen-audio-3.0-tts-flash
-
-国际
-
-180
+<a id="95cc317401h9u"></a>
 
 #### CosyVoice
 
+<a id="sec-tabs-47"></a>
+
+<a id="华北2-北京-45"></a>
+
+<a id="华北2-北京-45-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th><p><strong>模型名称</strong></p></th><th><p><strong>每秒钟调用次数（RPS）</strong></p></th></tr></thead><tbody><tr><td><p>cosyvoice-v3.5-plus</p></td><td rowspan="6"><p>3</p></td></tr><tr><td><p>cosyvoice-v3.5-flash</p></td></tr><tr><td><p>cosyvoice-v3-plus</p></td></tr><tr><td><p>cosyvoice-v3-flash</p></td></tr><tr><td><p>cosyvoice-v2</p></td></tr></tbody></table>
 
-**每秒钟调用次数（RPS）**
+<a id="新加坡-25"></a>
 
-cosyvoice-v3.5-plus
-
-3
-
-cosyvoice-v3.5-flash
-
-cosyvoice-v3-plus
-
-cosyvoice-v3-flash
-
-cosyvoice-v2
+<a id="新加坡-25-h4"></a>
 
 #### 新加坡
 
-**模型名称**
+<table><thead><tr><th><p><strong>模型名称</strong></p></th><th><p><strong>服务部署范围</strong></p></th><th><p><strong>每秒钟调用次数（RPS）</strong></p></th></tr></thead><tbody><tr><td><p>cosyvoice-v3-plus</p></td><td><p>国际</p></td><td rowspan="2"><p>3</p></td></tr><tr><td><p>cosyvoice-v3-flash</p></td><td><p>国际</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="minimax-稀宇科技直供-2"></a>
 
-**每秒钟调用次数（RPS）**
-
-cosyvoice-v3-plus
-
-国际
-
-3
-
-cosyvoice-v3-flash
-
-国际
+<a id="7ba64ebc288nj"></a>
 
 #### MiniMax-稀宇科技直供
 
+<a id="sec-tabs-48"></a>
+
+<a id="华北2-北京-46"></a>
+
+<a id="华北2-北京-46-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗字符数</strong><blockquote><strong>仅含输入字符数</strong></blockquote></th></tr></thead><tbody><tr><td><p>MiniMax/speech-2.8-hd</p></td><td><p>20</p></td><td><p>20,000</p></td></tr><tr><td><p>MiniMax/speech-02-hd</p></td><td><p>20</p></td><td><p>20,000</p></td></tr><tr><td><p>MiniMax/speech-2.8-turbo</p></td><td><p>20</p></td><td><p>20,000</p></td></tr><tr><td><p>MiniMax/speech-02-turbo</p></td><td><p>20</p></td><td><p>20,000</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="qwen3-tts"></a>
 
-**每分钟调用次数（RPM）**
-
-**每分钟消耗字符数**
-
-> **仅含输入字符数**
-
-MiniMax/speech-2.8-hd
-
-20
-
-20,000
-
-MiniMax/speech-02-hd
-
-20
-
-20,000
-
-MiniMax/speech-2.8-turbo
-
-20
-
-20,000
-
-MiniMax/speech-02-turbo
-
-20
-
-20,000
+<a id="476158da2fwdl"></a>
 
 #### Qwen3-TTS
 
+<a id="sec-tabs-49"></a>
+
+<a id="华北2-北京-47"></a>
+
+<a id="华北2-北京-47-h4"></a>
+
 #### 华北2（北京）
+
+<a id="sec-tabs-50"></a>
+
+<a id="qwen3-tts-flash"></a>
+
+<a id="qwen3-tts-flash-h4"></a>
 
 #### Qwen3-TTS-Flash
 
-**模型名称**
+| 模型名称 | 每分钟调用次数（RPM） |
+| --- | --- |
+| qwen3-tts-flash | 180 |
 
-**每分钟调用次数（RPM）**
+<a id="新加坡-26"></a>
 
-qwen3-tts-flash
-
-180
+<a id="新加坡-26-h4"></a>
 
 #### 新加坡
 
+<a id="sec-tabs-51"></a>
+
+<a id="qwen3-tts-flash-2"></a>
+
+<a id="qwen3-tts-flash-2-h4"></a>
+
 #### Qwen3-TTS-Flash
 
-**模型名称**
+| 模型名称 | 服务部署范围 | 每分钟调用次数（RPM） |
+| --- | --- | --- |
+| qwen3-tts-flash | 国际 | 180 |
 
-**服务部署范围**
+<a id="qwen3-tts-realtime"></a>
 
-**每分钟调用次数（RPM）**
-
-qwen3-tts-flash
-
-国际
-
-180
+<a id="0deabef960pq1"></a>
 
 #### Qwen3-TTS-Realtime
 
+<a id="sec-tabs-52"></a>
+
+<a id="华北2-北京-48"></a>
+
+<a id="华北2-北京-48-h4"></a>
+
 #### 华北2（北京）
+
+<a id="sec-tabs-53"></a>
+
+<a id="qwen3-tts-flash-realtime"></a>
+
+<a id="qwen3-tts-flash-realtime-h4"></a>
 
 #### Qwen3-TTS-Flash-Realtime
 
-**模型名称**
+| 模型名称 | 每分钟调用次数（RPM） |
+| --- | --- |
+| qwen3-tts-flash-realtime | 180 |
 
-**每分钟调用次数（RPM）**
+<a id="新加坡-27"></a>
 
-qwen3-tts-flash-realtime
-
-180
+<a id="新加坡-27-h4"></a>
 
 #### 新加坡
 
+<a id="sec-tabs-54"></a>
+
+<a id="qwen3-tts-flash-realtime-2"></a>
+
+<a id="qwen3-tts-flash-realtime-2-h4"></a>
+
 #### Qwen3-TTS-Flash-Realtime
 
-**模型名称**
+| 模型名称 | 服务部署范围 | 每分钟调用次数（RPM） |
+| --- | --- | --- |
+| qwen3-tts-flash-realtime | 国际 | 180 |
 
-**服务部署范围**
+<a id="sambert"></a>
 
-**每分钟调用次数（RPM）**
-
-qwen3-tts-flash-realtime
-
-国际
-
-180
+<a id="3f9ff5ba2b5tt"></a>
 
 #### Sambert
 
+<a id="sec-tabs-55"></a>
+
+<a id="华北2-北京-49"></a>
+
+<a id="华北2-北京-49-h4"></a>
+
 #### 华北2（北京）
 
-**模型服务**
+| 模型服务 | 每秒钟调用次数（RPS） |
+| --- | --- |
+| Sambert系列模型 | 20 |
 
-**每秒钟调用次数（RPS）**
+<a id="音频打标"></a>
 
-Sambert系列模型
-
-20
+<a id="audio-tagging-rate-limit"></a>
 
 ### 音频打标
 
+<a id="qwen-audio-3-1-captioner"></a>
+
+<a id="captioner-rate-limit"></a>
+
 #### Qwen-Audio-3.1-Captioner
+
+<a id="sec-tabs-56"></a>
+
+<a id="华北2-北京-50"></a>
+
+<a id="华北2-北京-50-h4"></a>
 
 #### 华北2（北京）
 
-**模型名称**
+| 模型名称 | 每分钟调用次数（RPM） |
+| --- | --- |
+| qwen-audio-3.1-captioner | 600 |
 
-**每分钟调用次数（RPM）**
+<a id="音频生成"></a>
 
-qwen-audio-3.1-captioner
+<a id="audio-generation-rate-limit"></a>
 
-600
+<a id="音频与音乐生成"></a>
 
 ### 音频生成
 
+<a id="qwen-audio-tts-next"></a>
+
+<a id="qwen-audio-tts-next-rate-limit"></a>
+
 #### Qwen-Audio-TTS-Next
+
+<a id="sec-tabs-57"></a>
+
+<a id="华北2-北京-51"></a>
+
+<a id="华北2-北京-51-h4"></a>
 
 #### 华北2（北京）
 
-模型名称
+| 模型名称 | 每分钟调用次数（RPM） |
+| --- | --- |
+| qwen-audio-3.1-tts-next | 180 |
 
-每分钟调用次数（RPM）
+<a id="新加坡-28"></a>
 
-qwen-audio-3.1-tts-next
-
-180
+<a id="新加坡-28-h4"></a>
 
 #### 新加坡
 
-模型名称
+| 模型名称 | 每分钟调用次数（RPM） |
+| --- | --- |
+| qwen-audio-3.1-tts-next | 180 |
 
-每分钟调用次数（RPM）
+<a id="语音对话"></a>
 
-qwen-audio-3.1-tts-next
-
-180
+<a id="speech-dialogue-rate-limit"></a>
 
 ### 语音对话
+
+<a id="qwen-audio-live"></a>
+
+<a id="qwen-audio-live-rate-limit"></a>
 
 #### Qwen-Audio-Live
 
 WebSocket 最多同时保持 5 条连接。
 
+<a id="qwen-audio-realtime"></a>
+
+<a id="739e085c10fxx"></a>
+
+<a id="实时语音对话"></a>
+
 #### Qwen-Audio-Realtime
 
 通过 WebSocket 接入时，RPM 限制每分钟的建连请求次数。同一连接内的多轮响应不重复计数；重连计为新请求。目前没有单独限制同时保持的连接总数，但仍受 TPM 限制。各型号限额见下方表格。
 
+<a id="sec-tabs-58"></a>
+
+<a id="华北2-北京-52"></a>
+
+<a id="华北2-北京-52-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen-audio-3.1-realtime-plus</p></td><td><p>60</p></td><td><p>100,000</p></td></tr><tr><td><p>qwen-audio-3.1-realtime-flash</p></td><td><p>60</p></td><td><p>100,000</p></td></tr><tr><td><p>qwen-audio-3.0-realtime-plus</p></td><td><p>60</p></td><td><p>100,000</p></td></tr><tr><td><p>qwen-audio-3.0-realtime-flash</p></td><td><p>60</p></td><td><p>100,000</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="新加坡-29"></a>
 
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen-audio-3.1-realtime-plus
-
-60
-
-100,000
-
-qwen-audio-3.1-realtime-flash
-
-60
-
-100,000
-
-qwen-audio-3.0-realtime-plus
-
-60
-
-100,000
-
-qwen-audio-3.0-realtime-flash
-
-60
-
-100,000
+<a id="新加坡-29-h4"></a>
 
 #### 新加坡
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen-audio-3.1-realtime-plus</p></td><td><p>国际</p></td><td><p>60</p></td><td><p>100,000</p></td></tr><tr><td><p>qwen-audio-3.1-realtime-flash</p></td><td><p>国际</p></td><td><p>60</p></td><td><p>100,000</p></td></tr><tr><td><p>qwen-audio-3.0-realtime-plus</p></td><td><p>国际</p></td><td><p>60</p></td><td><p>100,000</p></td></tr><tr><td><p>qwen-audio-3.0-realtime-flash</p></td><td><p>国际</p></td><td><p>60</p></td><td><p>100,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="音视频翻译"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen-audio-3.1-realtime-plus
-
-国际
-
-60
-
-100,000
-
-qwen-audio-3.1-realtime-flash
-
-国际
-
-60
-
-100,000
-
-qwen-audio-3.0-realtime-plus
-
-国际
-
-60
-
-100,000
-
-qwen-audio-3.0-realtime-flash
-
-国际
-
-60
-
-100,000
+<a id="audio-video-translation-rate-limit"></a>
 
 ### 音视频翻译
 
+<a id="qwen3-livetranslate-flash"></a>
+
+<a id="4be13d2d4a3r9"></a>
+
 #### Qwen3-LiveTranslate-Flash
+
+<a id="sec-tabs-59"></a>
+
+<a id="华北2-北京-53"></a>
+
+<a id="华北2-北京-53-h4"></a>
 
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen3-livetranslate-flash</p></td><td rowspan="2"><p>100</p></td><td rowspan="2"><p>100,000</p></td></tr><tr><td><p>qwen3-livetranslate-flash-2025-12-01</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="新加坡-30"></a>
 
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen3-livetranslate-flash
-
-100
-
-100,000
-
-qwen3-livetranslate-flash-2025-12-01
+<a id="新加坡-30-h4"></a>
 
 #### 新加坡
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen3-livetranslate-flash</p></td><td><p>国际</p></td><td rowspan="2"><p>100</p></td><td rowspan="2"><p>100,000</p></td></tr><tr><td><p>qwen3-livetranslate-flash-2025-12-01</p></td><td><p>国际</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="qwen-livetranslate-flash-realtime"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen3-livetranslate-flash
-
-国际
-
-100
-
-100,000
-
-qwen3-livetranslate-flash-2025-12-01
-
-国际
+<a id="ea64133a8buvv"></a>
 
 #### Qwen-LiveTranslate-Flash-Realtime
 
 通过 WebSocket 接入时，RPM 限制每分钟的建连请求次数。同一连接内的多轮响应不重复计数；重连计为新请求。目前没有单独限制同时保持的连接总数，但仍受 TPM 限制。各型号限额见下方表格。
 
+<a id="sec-tabs-60"></a>
+
+<a id="华北2-北京-54"></a>
+
+<a id="华北2-北京-54-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen3.8-livetranslate-flash-realtime</p></td><td rowspan="5"><p>10</p></td><td rowspan="5"><p>100,000</p></td></tr><tr><td><p>qwen3.5-livetranslate-flash-realtime</p></td></tr><tr><td><p>qwen3.5-livetranslate-flash-realtime-2026-05-19</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="新加坡-31"></a>
 
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen3.8-livetranslate-flash-realtime
-
-10
-
-100,000
-
-qwen3.5-livetranslate-flash-realtime
-
-qwen3.5-livetranslate-flash-realtime-2026-05-19
+<a id="新加坡-31-h4"></a>
 
 #### 新加坡
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen3.8-livetranslate-flash-realtime</p></td><td><p>国际</p></td><td rowspan="5"><p>10</p></td><td rowspan="5"><p>100,000</p></td></tr><tr><td><p>qwen3.5-livetranslate-flash-realtime</p></td><td><p>国际</p></td></tr><tr><td><p>qwen3.5-livetranslate-flash-realtime-2026-05-19</p></td><td><p>国际</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="音色复刻-设计"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen3.8-livetranslate-flash-realtime
-
-国际
-
-10
-
-100,000
-
-qwen3.5-livetranslate-flash-realtime
-
-国际
-
-qwen3.5-livetranslate-flash-realtime-2026-05-19
-
-国际
+<a id="voice-enrollment-rate-limit"></a>
 
 ### 音色复刻/设计
+
+<a id="qwen-audio-tts-cosyvoice声音复刻-设计"></a>
+
+<a id="86517f838d10u"></a>
 
 #### Qwen-Audio-TTS/CosyVoice声音复刻/设计
 
 Qwen-Audio-TTS/CosyVoice声音复刻/设计共用一个模型，共用限流额度。
 
+<a id="sec-tabs-61"></a>
+
+<a id="华北2-北京-55"></a>
+
+<a id="华北2-北京-55-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+| 模型名称 | 每秒钟调用次数（RPS） |
+| --- | --- |
+| voice-enrollment | 10 |
 
-**每秒钟调用次数（RPS）**
+<a id="新加坡-32"></a>
 
-voice-enrollment
-
-10
+<a id="新加坡-32-h4"></a>
 
 #### 新加坡
 
-**模型名称**
+| 模型名称 | 服务部署范围 | 每秒钟调用次数（RPS） |
+| --- | --- | --- |
+| voice-enrollment | 国际 | 10 |
 
-**服务部署范围**
+<a id="qwen3-tts声音复刻"></a>
 
-**每秒钟调用次数（RPS）**
-
-voice-enrollment
-
-国际
-
-10
+<a id="f4de4b96c09v6"></a>
 
 #### Qwen3-TTS声音复刻
 
+<a id="sec-tabs-62"></a>
+
+<a id="华北2-北京-56"></a>
+
+<a id="华北2-北京-56-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+| 模型名称 | 每分钟调用次数（RPM） |
+| --- | --- |
+| qwen-voice-enrollment | 180 |
 
-**每分钟调用次数（RPM）**
+<a id="新加坡-33"></a>
 
-qwen-voice-enrollment
-
-180
+<a id="新加坡-33-h4"></a>
 
 #### 新加坡
 
-**模型名称**
+| 模型名称 | 服务部署范围 | 每分钟调用次数（RPM） |
+| --- | --- | --- |
+| qwen-voice-enrollment | 国际 | 180 |
 
-**服务部署范围**
+<a id="音乐生成"></a>
 
-**每分钟调用次数（RPM）**
-
-qwen-voice-enrollment
-
-国际
-
-180
+<a id="music-generation-rate-limit"></a>
 
 ### 音乐生成
 
+<a id="fun-music"></a>
+
+<a id="fun-music-rate-limit"></a>
+
 #### Fun-Music
+
+<a id="sec-tabs-63"></a>
+
+<a id="华北2-北京-57"></a>
+
+<a id="华北2-北京-57-h4"></a>
 
 #### 华北2（北京）
 
-**模型名称**
+| 模型名称 | 每分钟调用次数（RPM） |
+| --- | --- |
+| fun-music-preview | 180 |
+| fun-music-v1 | 180 |
 
-**每分钟调用次数（RPM）**
+<a id="视频生成"></a>
 
-fun-music-preview
-
-180
-
-fun-music-v1
-
-180
+<a id="d809366847gza"></a>
 
 ### 视频生成
 
+<a id="happyhorse系列"></a>
+
+<a id="hh-third-party-title"></a>
+
 #### HappyHorse系列
+
+<a id="sec-tabs-64"></a>
+
+<a id="华北2-北京-58"></a>
+
+<a id="华北2-北京-58-h4"></a>
 
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><p><strong>模型名称</strong></p></th><th colspan="2"><p><strong>限流条件（超出任一数值时触发限流）</strong></p></th></tr><tr><th><p><strong>每秒钟调用次数（RPS）</strong></p></th><th><p><strong>同时处理中任务数量（并发数）</strong></p></th></tr></thead><tbody><tr><td><p>happyhorse-1.1-t2v</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>happyhorse-1.1-i2v</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>happyhorse-1.1-r2v</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>happyhorse-1.0-t2v</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>happyhorse-1.0-i2v</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>happyhorse-1.0-r2v</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>happyhorse-1.0-video-edit</p></td><td><p>5</p></td><td><p>5</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="美国-弗吉尼亚-14"></a>
 
-**每秒钟调用次数（RPS）**
-
-**同时处理中任务数量（并发数）**
-
-happyhorse-1.1-t2v
-
-5
-
-5
-
-happyhorse-1.1-i2v
-
-5
-
-5
-
-happyhorse-1.1-r2v
-
-5
-
-5
-
-happyhorse-1.0-t2v
-
-5
-
-5
-
-happyhorse-1.0-i2v
-
-5
-
-5
-
-happyhorse-1.0-r2v
-
-5
-
-5
-
-happyhorse-1.0-video-edit
-
-5
-
-5
+<a id="美国-弗吉尼亚-14-h4"></a>
 
 #### 美国（弗吉尼亚）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><p><strong>模型名称</strong></p></th><th rowspan="2"><p><strong>服务部署范围</strong></p></th><th colspan="2"><p><strong>限流条件（超出任一数值时触发限流）</strong></p></th></tr><tr><th><p><strong>每秒钟调用次数（RPS）</strong></p></th><th><p><strong>同时处理中任务数量（并发数）</strong></p></th></tr></thead><tbody><tr><td><p>happyhorse-1.1-t2v</p></td><td><p>全球</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>happyhorse-1.1-i2v</p></td><td><p>全球</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>happyhorse-1.1-r2v</p></td><td><p>全球</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>happyhorse-1.0-t2v</p></td><td><p>全球</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>happyhorse-1.0-i2v</p></td><td><p>全球</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>happyhorse-1.0-r2v</p></td><td><p>全球</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>happyhorse-1.0-video-edit</p></td><td><p>全球</p></td><td><p>5</p></td><td><p>5</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="新加坡-34"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-**每秒钟调用次数（RPS）**
-
-**同时处理中任务数量（并发数）**
-
-happyhorse-1.1-t2v
-
-全球
-
-5
-
-5
-
-happyhorse-1.1-i2v
-
-全球
-
-5
-
-5
-
-happyhorse-1.1-r2v
-
-全球
-
-5
-
-5
-
-happyhorse-1.0-t2v
-
-全球
-
-5
-
-5
-
-happyhorse-1.0-i2v
-
-全球
-
-5
-
-5
-
-happyhorse-1.0-r2v
-
-全球
-
-5
-
-5
-
-happyhorse-1.0-video-edit
-
-全球
-
-5
-
-5
+<a id="新加坡-34-h4"></a>
 
 #### 新加坡
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><p><strong>模型名称</strong></p></th><th rowspan="2"><p><strong>服务部署范围</strong></p></th><th colspan="2"><p><strong>限流条件（超出任一数值时触发限流）</strong></p></th></tr><tr><th><p><strong>每秒钟调用次数（RPS）</strong></p></th><th><p><strong>同时处理中任务数量（并发数）</strong></p></th></tr></thead><tbody><tr><td><p>happyhorse-1.1-t2v</p></td><td><p>国际</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>happyhorse-1.1-i2v</p></td><td><p>国际</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>happyhorse-1.1-r2v</p></td><td><p>国际</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>happyhorse-1.0-t2v</p></td><td><p>国际</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>happyhorse-1.0-i2v</p></td><td><p>国际</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>happyhorse-1.0-r2v</p></td><td><p>国际</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>happyhorse-1.0-video-edit</p></td><td><p>国际</p></td><td><p>5</p></td><td><p>5</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="德国-法兰克福-13"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-**每秒钟调用次数（RPS）**
-
-**同时处理中任务数量（并发数）**
-
-happyhorse-1.1-t2v
-
-国际
-
-5
-
-5
-
-happyhorse-1.1-i2v
-
-国际
-
-5
-
-5
-
-happyhorse-1.1-r2v
-
-国际
-
-5
-
-5
-
-happyhorse-1.0-t2v
-
-国际
-
-5
-
-5
-
-happyhorse-1.0-i2v
-
-国际
-
-5
-
-5
-
-happyhorse-1.0-r2v
-
-国际
-
-5
-
-5
-
-happyhorse-1.0-video-edit
-
-国际
-
-5
-
-5
+<a id="德国-法兰克福-13-h4"></a>
 
 #### 德国（法兰克福）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><p><strong>模型名称</strong></p></th><th rowspan="2"><p><strong>服务部署范围</strong></p></th><th colspan="2"><p><strong>限流条件（超出任一数值时触发限流）</strong></p></th></tr><tr><th><p><strong>每秒钟调用次数（RPS）</strong></p></th><th><p><strong>同时处理中任务数量（并发数）</strong></p></th></tr></thead><tbody><tr><td><p>happyhorse-1.1-t2v</p></td><td><p>全球</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>happyhorse-1.1-i2v</p></td><td><p>全球</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>happyhorse-1.1-r2v</p></td><td><p>全球</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>happyhorse-1.0-t2v</p></td><td><p>全球</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>happyhorse-1.0-i2v</p></td><td><p>全球</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>happyhorse-1.0-r2v</p></td><td><p>全球</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>happyhorse-1.0-video-edit</p></td><td><p>全球</p></td><td><p>5</p></td><td><p>5</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="日本-东京-7"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-**每秒钟调用次数（RPS）**
-
-**同时处理中任务数量（并发数）**
-
-happyhorse-1.1-t2v
-
-全球
-
-5
-
-5
-
-happyhorse-1.1-i2v
-
-全球
-
-5
-
-5
-
-happyhorse-1.1-r2v
-
-全球
-
-5
-
-5
-
-happyhorse-1.0-t2v
-
-全球
-
-5
-
-5
-
-happyhorse-1.0-i2v
-
-全球
-
-5
-
-5
-
-happyhorse-1.0-r2v
-
-全球
-
-5
-
-5
-
-happyhorse-1.0-video-edit
-
-全球
-
-5
-
-5
+<a id="日本-东京-7-h4"></a>
 
 #### 日本（东京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><p><strong>模型名称</strong></p></th><th rowspan="2"><p><strong>服务部署范围</strong></p></th><th colspan="2"><p><strong>限流值（任何一个值超出即触发限流）</strong></p></th></tr><tr><th><p><strong>每秒钟调用次数（RPS）</strong></p></th><th><p><strong>正在处理中的任务数（并发）</strong></p></th></tr></thead><tbody><tr><td><p>happyhorse-1.1-t2v</p></td><td><p>全球</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>happyhorse-1.1-i2v</p></td><td><p>全球</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>happyhorse-1.1-r2v</p></td><td><p>全球</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>happyhorse-1.0-video-edit</p></td><td><p>全球</p></td><td><p>5</p></td><td><p>5</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="万相系列"></a>
 
-**限流值（任何一个值超出即触发限流）**
-
-**每秒钟调用次数（RPS）**
-
-**正在处理中的任务数（并发）**
-
-happyhorse-1.1-t2v
-
-全球
-
-5
-
-5
-
-happyhorse-1.1-i2v
-
-全球
-
-5
-
-5
-
-happyhorse-1.1-r2v
-
-全球
-
-5
-
-5
-
-happyhorse-1.0-video-edit
-
-全球
-
-5
-
-5
+<a id="018a73300efzz"></a>
 
 #### 万相系列
 
-**说明**`wan3.0-video` 和 `wan3.0-video-prime` 的限流值请前往[百炼控制台模型广场](https://bailian.console.aliyun.com/cn-beijing/model/market)，切换至实际调用地域并查看对应模型详情。
+> **说明**
+>
+> `wan3.0-video` 和 `wan3.0-video-prime` 的限流值请前往[百炼控制台模型广场](https://bailian.console.aliyun.com/cn-beijing/model/market)，切换至实际调用地域并查看对应模型详情。
+
+<a id="sec-tabs-65"></a>
+
+<a id="华北2-北京-59"></a>
+
+<a id="华北2-北京-59-h4"></a>
 
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><p><strong>模型名称</strong></p></th><th colspan="2"><p><strong>限流条件（超出任一数值时触发限流）</strong></p></th></tr><tr><th><p><strong>每秒钟调用次数（RPS）</strong></p></th><th><p><strong>同时处理中任务数量（并发数）</strong></p></th></tr></thead><tbody><tr><td><p>wan2.7-r2v-2026-06-12</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.7-t2v-2026-06-12</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.7-t2v-2026-04-25</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.7-t2v</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.6-t2v</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.5-t2v-preview</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.2-t2v-plus</p></td><td><p>2</p></td><td><p>2</p></td></tr><tr><td><p>wanx2.1-t2v-turbo</p></td><td><p>2</p></td><td><p>2</p></td></tr><tr><td><p>wanx2.1-t2v-plus</p></td><td><p>2</p></td><td><p>2</p></td></tr><tr><td><p>wan2.7-i2v-2026-04-25</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.7-i2v</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.6-i2v-flash</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.6-i2v</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.5-i2v-preview</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.2-i2v-flash</p></td><td><p>2</p></td><td><p>2</p></td></tr><tr><td><p>wan2.2-i2v-plus</p></td><td><p>2</p></td><td><p>2</p></td></tr><tr><td><p>wanx2.1-i2v-turbo</p></td><td><p>2</p></td><td><p>2</p></td></tr><tr><td><p>wanx2.1-i2v-plus</p></td><td><p>2</p></td><td><p>2</p></td></tr><tr><td><p>wan2.2-kf2v-flash</p></td><td><p>2</p></td><td><p>2</p></td></tr><tr><td><p>wanx2.1-kf2v-plus</p></td><td><p>2</p></td><td><p>2</p></td></tr><tr><td><p>wanx2.1-vace-plus</p></td><td><p>2</p></td><td><p>2</p></td></tr><tr><td><p>wan2.7-videoedit</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.7-r2v</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.6-r2v-flash</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.6-r2v</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.2-s2v-detect</p></td><td><p>5</p></td><td><p>同步接口无限制</p></td></tr><tr><td><p>wan2.2-s2v</p></td><td><p>5</p></td><td><p>1</p></td></tr><tr><td><p>wan2.2-animate-move</p></td><td><p>5</p></td><td><p>1</p></td></tr><tr><td><p>wan2.2-animate-mix</p></td><td><p>5</p></td><td><p>1</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="美国-弗吉尼亚-15"></a>
 
-**每秒钟调用次数（RPS）**
-
-**同时处理中任务数量（并发数）**
-
-wan2.7-r2v-2026-06-12
-
-5
-
-5
-
-wan2.7-t2v-2026-06-12
-
-5
-
-5
-
-wan2.7-t2v-2026-04-25
-
-5
-
-5
-
-wan2.7-t2v
-
-5
-
-5
-
-wan2.6-t2v
-
-5
-
-5
-
-wan2.5-t2v-preview
-
-5
-
-5
-
-wan2.2-t2v-plus
-
-2
-
-2
-
-wanx2.1-t2v-turbo
-
-2
-
-2
-
-wanx2.1-t2v-plus
-
-2
-
-2
-
-wan2.7-i2v-2026-04-25
-
-5
-
-5
-
-wan2.7-i2v
-
-5
-
-5
-
-wan2.6-i2v-flash
-
-5
-
-5
-
-wan2.6-i2v
-
-5
-
-5
-
-wan2.5-i2v-preview
-
-5
-
-5
-
-wan2.2-i2v-flash
-
-2
-
-2
-
-wan2.2-i2v-plus
-
-2
-
-2
-
-wanx2.1-i2v-turbo
-
-2
-
-2
-
-wanx2.1-i2v-plus
-
-2
-
-2
-
-wan2.2-kf2v-flash
-
-2
-
-2
-
-wanx2.1-kf2v-plus
-
-2
-
-2
-
-wanx2.1-vace-plus
-
-2
-
-2
-
-wan2.7-videoedit
-
-5
-
-5
-
-wan2.7-r2v
-
-5
-
-5
-
-wan2.6-r2v-flash
-
-5
-
-5
-
-wan2.6-r2v
-
-5
-
-5
-
-wan2.2-s2v-detect
-
-5
-
-同步接口无限制
-
-wan2.2-s2v
-
-5
-
-1
-
-wan2.2-animate-move
-
-5
-
-1
-
-wan2.2-animate-mix
-
-5
-
-1
+<a id="美国-弗吉尼亚-15-h4"></a>
 
 #### 美国（弗吉尼亚）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><p><strong>模型名称</strong></p></th><th rowspan="2"><p><strong>服务部署范围</strong></p></th><th colspan="2"><p><strong>限流条件（超出任一数值时触发限流）</strong></p></th></tr><tr><th><p><strong>每秒钟调用次数（RPS）</strong></p></th><th><p><strong>同时处理中任务数量（并发数）</strong></p></th></tr></thead><tbody><tr><td><p>wan2.7-r2v-2026-06-12</p></td><td><p>全球</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.6-t2v</p></td><td><p>全球</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.6-i2v</p></td><td><p>全球</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.6-r2v</p></td><td><p>全球</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.6-t2v</p></td><td><p>美国</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.6-i2v</p></td><td><p>美国</p></td><td><p>5</p></td><td><p>5</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="新加坡-35"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-**每秒钟调用次数（RPS）**
-
-**同时处理中任务数量（并发数）**
-
-wan2.7-r2v-2026-06-12
-
-全球
-
-5
-
-5
-
-wan2.6-t2v
-
-全球
-
-5
-
-5
-
-wan2.6-i2v
-
-全球
-
-5
-
-5
-
-wan2.6-r2v
-
-全球
-
-5
-
-5
-
-wan2.6-t2v
-
-美国
-
-5
-
-5
-
-wan2.6-i2v
-
-美国
-
-5
-
-5
+<a id="新加坡-35-h4"></a>
 
 #### 新加坡
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><p><strong>模型名称</strong></p></th><th rowspan="2"><p><strong>服务部署范围</strong></p></th><th colspan="2"><p><strong>限流条件（超出任一数值时触发限流）</strong></p></th></tr><tr><th><p><strong>每秒钟调用次数（RPS）</strong></p></th><th><p><strong>同时处理中任务数量（并发数）</strong></p></th></tr></thead><tbody><tr><td><p>wan2.7-t2v-2026-06-12</p></td><td><p>国际</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.7-t2v-2026-04-25</p></td><td><p>国际</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.7-t2v</p></td><td><p>国际</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.6-t2v</p></td><td><p>国际</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.5-t2v-preview</p></td><td><p>国际</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.2-t2v-plus</p></td><td><p>国际</p></td><td><p>2</p></td><td><p>2</p></td></tr><tr><td><p>wan2.1-t2v-turbo</p></td><td><p>国际</p></td><td><p>2</p></td><td><p>2</p></td></tr><tr><td><p>wan2.1-t2v-plus</p></td><td><p>国际</p></td><td><p>2</p></td><td><p>2</p></td></tr><tr><td><p>wan2.7-i2v-2026-04-25</p></td><td><p>国际</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.7-i2v</p></td><td><p>国际</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.6-i2v-flash</p></td><td><p>国际</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.6-i2v</p></td><td><p>国际</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.5-i2v-preview</p></td><td><p>国际</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.2-i2v-plus</p></td><td><p>国际</p></td><td><p>2</p></td><td><p>2</p></td></tr><tr><td><p>wan2.1-i2v-turbo</p></td><td><p>国际</p></td><td><p>2</p></td><td><p>2</p></td></tr><tr><td><p>wan2.1-i2v-plus</p></td><td><p>国际</p></td><td><p>2</p></td><td><p>2</p></td></tr><tr><td><p>wan2.1-kf2v-plus</p></td><td><p>国际</p></td><td><p>1</p></td><td><p>2</p></td></tr><tr><td><p>wan2.1-vace-plus</p></td><td><p>国际</p></td><td><p>2</p></td><td><p>2</p></td></tr><tr><td><p>wan2.7-videoedit</p></td><td><p>国际</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.7-r2v</p></td><td><p>国际</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.6-r2v-flash</p></td><td><p>国际</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.6-r2v</p></td><td><p>国际</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.2-animate-move</p></td><td><p>国际</p></td><td><p>5</p></td><td><p>1</p></td></tr><tr><td><p>wan2.2-animate-mix</p></td><td><p>国际</p></td><td><p>5</p></td><td><p>1</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="德国-法兰克福-14"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-**每秒钟调用次数（RPS）**
-
-**同时处理中任务数量（并发数）**
-
-wan2.7-t2v-2026-06-12
-
-国际
-
-5
-
-5
-
-wan2.7-t2v-2026-04-25
-
-国际
-
-5
-
-5
-
-wan2.7-t2v
-
-国际
-
-5
-
-5
-
-wan2.6-t2v
-
-国际
-
-5
-
-5
-
-wan2.5-t2v-preview
-
-国际
-
-5
-
-5
-
-wan2.2-t2v-plus
-
-国际
-
-2
-
-2
-
-wan2.1-t2v-turbo
-
-国际
-
-2
-
-2
-
-wan2.1-t2v-plus
-
-国际
-
-2
-
-2
-
-wan2.7-i2v-2026-04-25
-
-国际
-
-5
-
-5
-
-wan2.7-i2v
-
-国际
-
-5
-
-5
-
-wan2.6-i2v-flash
-
-国际
-
-5
-
-5
-
-wan2.6-i2v
-
-国际
-
-5
-
-5
-
-wan2.5-i2v-preview
-
-国际
-
-5
-
-5
-
-wan2.2-i2v-plus
-
-国际
-
-2
-
-2
-
-wan2.1-i2v-turbo
-
-国际
-
-2
-
-2
-
-wan2.1-i2v-plus
-
-国际
-
-2
-
-2
-
-wan2.1-kf2v-plus
-
-国际
-
-1
-
-2
-
-wan2.1-vace-plus
-
-国际
-
-2
-
-2
-
-wan2.7-videoedit
-
-国际
-
-5
-
-5
-
-wan2.7-r2v
-
-国际
-
-5
-
-5
-
-wan2.6-r2v-flash
-
-国际
-
-5
-
-5
-
-wan2.6-r2v
-
-国际
-
-5
-
-5
-
-wan2.2-animate-move
-
-国际
-
-5
-
-1
-
-wan2.2-animate-mix
-
-国际
-
-5
-
-1
+<a id="德国-法兰克福-14-h4"></a>
 
 #### 德国（法兰克福）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><p><strong>模型名称</strong></p></th><th rowspan="2"><p><strong>服务部署范围</strong></p></th><th colspan="2"><p><strong>限流条件（超出任一数值时触发限流）</strong></p></th></tr><tr><th><p><strong>每秒钟调用次数（RPS）</strong></p></th><th><p><strong>同时处理中任务数量（并发数）</strong></p></th></tr></thead><tbody><tr><td><p>wan2.6-t2v</p></td><td><p>全球</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.6-i2v</p></td><td><p>全球</p></td><td><p>5</p></td><td><p>5</p></td></tr><tr><td><p>wan2.6-r2v</p></td><td><p>全球</p></td><td><p>5</p></td><td><p>5</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="舞动人像animateanyone"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-**每秒钟调用次数（RPS）**
-
-**同时处理中任务数量（并发数）**
-
-wan2.6-t2v
-
-全球
-
-5
-
-5
-
-wan2.6-i2v
-
-全球
-
-5
-
-5
-
-wan2.6-r2v
-
-全球
-
-5
-
-5
+<a id="02e62576072f0"></a>
 
 #### 舞动人像AnimateAnyone
 
+<a id="sec-tabs-66"></a>
+
+<a id="华北2-北京-60"></a>
+
+<a id="华北2-北京-60-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+| 模型名称 | 每秒钟调用次数（RPS） | 同时处理中任务数量 |
+| --- | --- | --- |
+| animate-anyone-detect | 5 | 1算力单元支持2并发 |
+| animate-anyone | 5 | 1算力单元支持1并发 |
 
-**每秒钟调用次数（RPS）**
+<a id="声动人像videoretalk"></a>
 
-**同时处理中任务数量**
-
-animate-anyone-detect
-
-5
-
-1算力单元支持2并发
-
-animate-anyone
-
-5
-
-1算力单元支持1并发
+<a id="4bb36ecec8el3"></a>
 
 #### 声动人像VideoRetalk
 
+<a id="sec-tabs-67"></a>
+
+<a id="华北2-北京-61"></a>
+
+<a id="华北2-北京-61-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+| 模型名称 | 每秒钟调用次数（RPS） | 同时处理中任务数量 |
+| --- | --- | --- |
+| videoretalk | 1 | 1<br><br>在同一时刻，只有1个作业实际处于运行状态，其他队列中的作业处于排队状态。 |
 
-**每秒钟调用次数（RPS）**
+<a id="视频风格重绘"></a>
 
-**同时处理中任务数量**
-
-videoretalk
-
-1
-
-1
-
-在同一时刻，只有1个作业实际处于运行状态，其他队列中的作业处于排队状态。
+<a id="101f9ad4210ev"></a>
 
 #### 视频风格重绘
 
+<a id="sec-tabs-68"></a>
+
+<a id="华北2-北京-62"></a>
+
+<a id="华北2-北京-62-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+| 模型名称 | 每秒钟调用次数（RPS） | 同时处理中任务数量 |
+| --- | --- | --- |
+| video-style-transform | 20 | 2<br><br>在同一时刻，只有1个作业实际处于运行状态，其他队列中的作业处于排队状态。 |
 
-**每秒钟调用次数（RPS）**
+<a id="爱诗系列"></a>
 
-**同时处理中任务数量**
-
-video-style-transform
-
-20
-
-2
-
-在同一时刻，只有1个作业实际处于运行状态，其他队列中的作业处于排队状态。
+<a id="d64654d0f0rfx"></a>
 
 #### 爱诗系列
 
+<a id="sec-tabs-69"></a>
+
+<a id="华北2-北京-63"></a>
+
+<a id="华北2-北京-63-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong></th></tr><tr><th><strong>每分钟任务下发接口RPM限制</strong></th><th><strong>同时处理中任务数量（并发数）</strong></th></tr></thead><tbody><tr><td><p>pixverse/pixverse-lipsync</p></td><td><p>300</p></td><td rowspan="3"><p>5</p><blockquote><p>同一个阿里云百炼API Key 下，这 3 个模型共享 5 个并发数。即这 3 个模型处于运行状态的任务总数加起来不能超过 5 个。</p></blockquote></td></tr><tr><td><p>pixverse/pixverse-motioncontrol</p></td><td><p>300</p></td></tr><tr><td><p>pixverse/pixverse-upscale</p></td><td><p>300</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong></th></tr><tr><th><strong>每分钟请求数（RPM）</strong></th><th><strong>同时处理中任务数量（并发数）</strong></th></tr></thead><tbody><tr><td><p>pixverse/pixverse-c1-t2v</p></td><td rowspan="4"><p>300</p></td><td rowspan="4"><p>5</p><blockquote><p>同一个阿里云百炼API Key 下，这 4 个模型共享 5 个并发数。即这 4 个模型处于运行状态的任务总数加起来不能超过 5 个。</p></blockquote></td></tr><tr><td><p>pixverse/pixverse-c1-it2v</p></td></tr><tr><td><p>pixverse/pixverse-c1-kf2v</p></td></tr><tr><td><p>pixverse/pixverse-c1-r2v</p></td></tr><tr><td><p>pixverse/pixverse-v6-r2v-omni</p></td><td rowspan="7"><p>300</p></td><td rowspan="7"><p>5</p><blockquote><p>同一个阿里云百炼API Key 下，这 7 个模型共享 5 个并发数。即这 7 个模型处于运行状态的任务总数加起来不能超过 5 个。</p></blockquote></td></tr><tr><td><p>pixverse/pixverse-v6-max-t2v</p></td></tr><tr><td><p>pixverse/pixverse-v6-max-it2v</p></td></tr><tr><td><p>pixverse/pixverse-v6-t2v</p></td></tr><tr><td><p>pixverse/pixverse-v6-it2v</p></td></tr><tr><td><p>pixverse/pixverse-v6-kf2v</p></td></tr><tr><td><p>pixverse/pixverse-v6-r2v</p></td></tr><tr><td><p>pixverse/pixverse-v5.6-t2v</p></td><td rowspan="4"><p>300</p></td><td rowspan="4"><p>5</p><blockquote><p>同一个阿里云百炼API Key 下，这 4 个模型共享 5 个并发数。即这 4 个模型处于运行状态的任务总数加起来不能超过 5 个。</p></blockquote></td></tr><tr><td><p>pixverse/pixverse-v5.6-it2v</p></td></tr><tr><td><p>pixverse/pixverse-v5.6-kf2v</p></td></tr><tr><td><p>pixverse/pixverse-v5.6-r2v</p></td></tr></tbody></table>
 
-**每分钟任务下发接口RPM限制**
+<a id="可灵系列-2"></a>
 
-**同时处理中任务数量（并发数）**
-
-pixverse/pixverse-lipsync
-
-300
-
-5
-
-> 同一个阿里云百炼API Key 下，这 3 个模型共享 5 个并发数。即这 3 个模型处于运行状态的任务总数加起来不能超过 5 个。
-
-pixverse/pixverse-motioncontrol
-
-300
-
-pixverse/pixverse-upscale
-
-300
-
-**模型名称**
-
-**限流条件（超出任一数值时触发限流）**
-
-**每分钟请求数（RPM）**
-
-**同时处理中任务数量（并发数）**
-
-pixverse/pixverse-c1-t2v
-
-300
-
-5
-
-> 同一个阿里云百炼API Key 下，这 4 个模型共享 5 个并发数。即这 4 个模型处于运行状态的任务总数加起来不能超过 5 个。
-
-pixverse/pixverse-c1-it2v
-
-pixverse/pixverse-c1-kf2v
-
-pixverse/pixverse-c1-r2v
-
-pixverse/pixverse-v6-r2v-omni
-
-300
-
-5
-
-> 同一个阿里云百炼API Key 下，这 7 个模型共享 5 个并发数。即这 7 个模型处于运行状态的任务总数加起来不能超过 5 个。
-
-pixverse/pixverse-v6-max-t2v
-
-pixverse/pixverse-v6-max-it2v
-
-pixverse/pixverse-v6-t2v
-
-pixverse/pixverse-v6-it2v
-
-pixverse/pixverse-v6-kf2v
-
-pixverse/pixverse-v6-r2v
-
-pixverse/pixverse-v5.6-t2v
-
-300
-
-5
-
-> 同一个阿里云百炼API Key 下，这 4 个模型共享 5 个并发数。即这 4 个模型处于运行状态的任务总数加起来不能超过 5 个。
-
-pixverse/pixverse-v5.6-it2v
-
-pixverse/pixverse-v5.6-kf2v
-
-pixverse/pixverse-v5.6-r2v
+<a id="kling-third-party-title"></a>
 
 #### 可灵系列
 
+<a id="sec-tabs-70"></a>
+
+<a id="华北2-北京-64"></a>
+
+<a id="华北2-北京-64-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong></th></tr><tr><th><strong>每秒钟调用次数（RPS）</strong></th><th><strong>同时处理中任务数量（并发数）</strong></th></tr></thead><tbody><tr><td><p>kling/kling-v3-omni-video-generation</p></td><td rowspan="5"><p>5</p></td><td rowspan="5"><p>10</p><blockquote><p>同一阿里云百炼API Key 下，可灵系列的 7 个模型（<a href="rate-limit.md#fdd6e348d2md4">图像</a>及<a href="rate-limit.md#kling-third-party-title">视频</a>）共享 10 个并发数。即这 7 个模型处于运行状态的任务总数加起来不能超过 10 个。</p></blockquote></td></tr><tr><td><p>kling/kling-v3-turbo-video-generation</p></td></tr><tr><td><p>kling/kling-v3-video-generation</p></td></tr><tr><td><p>kling/kling-v4-video-generation</p></td></tr><tr><td><p>kling/kling-v4-omni-reference-video-generation</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="vidu系列-2"></a>
 
-**每秒钟调用次数（RPS）**
-
-**同时处理中任务数量（并发数）**
-
-kling/kling-v3-omni-video-generation
-
-5
-
-10
-
-> 同一阿里云百炼API Key 下，可灵系列的 7 个模型（[图像](https://help.aliyun.com/zh/model-studio/rate-limit#fdd6e348d2md4)及[视频](https://help.aliyun.com/zh/model-studio/rate-limit#kling-third-party-title)）共享 10 个并发数。即这 7 个模型处于运行状态的任务总数加起来不能超过 10 个。
-
-kling/kling-v3-turbo-video-generation
-
-kling/kling-v3-video-generation
-
-kling/kling-v4-video-generation
-
-kling/kling-v4-omni-reference-video-generation
+<a id="vidu-third-party-title"></a>
 
 #### Vidu系列
 
+<a id="sec-tabs-71"></a>
+
+<a id="华北2-北京-65"></a>
+
+<a id="华北2-北京-65-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong></th></tr><tr><th><strong>每秒钟调用次数（RPS）</strong></th><th><strong>同时处理中任务数量（并发数）</strong></th></tr></thead><tbody><tr><td><p>vidu/viduq3-ad_reference2video</p></td><td><p>5</p></td><td rowspan="20"><p>5</p><blockquote><p>同一个阿里云百炼API Key 在 20 个模型间共享并发额度。即这 20 个模型处于运行状态的任务总数加起来不能超过 5 个。</p></blockquote></td></tr><tr><td><p>vidu/viduq3-drama_reference2video</p></td><td><p>5</p></td></tr><tr><td><p>vidu/viduq3-pro-fast_img2video</p></td><td><p>5</p></td></tr><tr><td><p>vidu/viduq3-turbo_text2video</p></td><td><p>5</p></td></tr><tr><td><p>vidu/viduq3-pro_text2video</p></td><td><p>5</p></td></tr><tr><td><p>vidu/viduq2_text2video</p></td><td><p>5</p></td></tr><tr><td><p>vidu/viduq3-turbo_img2video</p></td><td><p>5</p></td></tr><tr><td><p>vidu/viduq3-pro_img2video</p></td><td><p>5</p></td></tr><tr><td><p>vidu/viduq2-turbo_img2video</p></td><td><p>5</p></td></tr><tr><td><p>vidu/viduq2-pro_img2video</p></td><td><p>5</p></td></tr><tr><td><p>vidu/viduq2-pro-fast_img2video</p></td><td><p>5</p></td></tr><tr><td><p>vidu/viduq3-turbo_start-end2video</p></td><td><p>5</p></td></tr><tr><td><p>vidu/viduq3-pro_start-end2video</p></td><td><p>5</p></td></tr><tr><td><p>vidu/viduq2-turbo_start-end2video</p></td><td><p>5</p></td></tr><tr><td><p>vidu/viduq2-pro_start-end2video</p></td><td><p>5</p></td></tr><tr><td><p>vidu/viduq3-mix_reference2video</p></td><td><p>5</p></td></tr><tr><td><p>vidu/viduq3_reference2video</p></td><td><p>5</p></td></tr><tr><td><p>vidu/viduq3-turbo_reference2video</p></td><td><p>5</p></td></tr><tr><td><p>vidu/viduq2-pro_reference2video</p></td><td><p>5</p></td></tr><tr><td><p>vidu/viduq2_reference2video</p></td><td><p>5</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="minimax系列"></a>
 
-**每秒钟调用次数（RPS）**
-
-**同时处理中任务数量（并发数）**
-
-vidu/viduq3-ad\_reference2video
-
-5
-
-5
-
-> 同一个阿里云百炼API Key 在 20 个模型间共享并发额度。即这 20 个模型处于运行状态的任务总数加起来不能超过 5 个。
-
-vidu/viduq3-drama\_reference2video
-
-5
-
-vidu/viduq3-pro-fast\_img2video
-
-5
-
-vidu/viduq3-turbo\_text2video
-
-5
-
-vidu/viduq3-pro\_text2video
-
-5
-
-vidu/viduq2\_text2video
-
-5
-
-vidu/viduq3-turbo\_img2video
-
-5
-
-vidu/viduq3-pro\_img2video
-
-5
-
-vidu/viduq2-turbo\_img2video
-
-5
-
-vidu/viduq2-pro\_img2video
-
-5
-
-vidu/viduq2-pro-fast\_img2video
-
-5
-
-vidu/viduq3-turbo\_start-end2video
-
-5
-
-vidu/viduq3-pro\_start-end2video
-
-5
-
-vidu/viduq2-turbo\_start-end2video
-
-5
-
-vidu/viduq2-pro\_start-end2video
-
-5
-
-vidu/viduq3-mix\_reference2video
-
-5
-
-vidu/viduq3\_reference2video
-
-5
-
-vidu/viduq3-turbo\_reference2video
-
-5
-
-vidu/viduq2-pro\_reference2video
-
-5
-
-vidu/viduq2\_reference2video
-
-5
+<a id="minimax-h3-video-title"></a>
 
 #### MiniMax系列
 
+<a id="sec-tabs-72"></a>
+
+<a id="华北2-北京-66"></a>
+
+<a id="华北2-北京-66-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><p><strong>模型名称</strong></p></th><th colspan="2"><p><strong>限流条件（超出任一数值时触发限流）</strong></p></th></tr><tr><th><p><strong>每分钟任务下发接口RPM限制</strong></p></th><th><p><strong>同时处理中任务数量（并发数）</strong></p></th></tr></thead><tbody><tr><td><p>MiniMax/MiniMax-H3</p></td><td><p>300</p></td><td><p>5</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="3d模型生成"></a>
 
-**每分钟任务下发接口RPM限制**
-
-**同时处理中任务数量（并发数）**
-
-MiniMax/MiniMax-H3
-
-300
-
-5
+<a id="0b7e66f09e7lj"></a>
 
 ### 3D模型生成
 
+<a id="tripo系列"></a>
+
+<a id="tripo-third-party-title"></a>
+
 #### Tripo系列
+
+<a id="sec-tabs-73"></a>
+
+<a id="华北2-北京-67"></a>
+
+<a id="华北2-北京-67-h4"></a>
 
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong></th></tr><tr><th><strong>每分钟任务下发接口RPM限制</strong></th><th><strong>同时处理中任务数量（并发数）</strong></th></tr></thead><tbody><tr><td><p>Tripo/Tripo-H3.1</p></td><td><p>300</p></td><td><p>10</p></td></tr><tr><td><p>Tripo/Tripo-P1.0</p></td><td><p>300</p></td><td><p>5</p></td></tr><tr><td><p>Tripo/Tripo-ImageToSplat</p></td><td><p>300</p></td><td><p>5</p></td></tr><tr><td><p>Tripo/Tripo-AutoRig</p></td><td><p>300</p></td><td rowspan="3"><p>10</p><blockquote><p>自动绑骨、绑骨前检查、动画重定向共享同一并发额度，三个模型处于运行状态的任务总数不能超过 10 个。</p></blockquote></td></tr><tr><td><p>Tripo/Tripo-RigCheck</p></td><td><p>300</p></td></tr><tr><td><p>Tripo/Tripo-AnimationRetarget</p></td><td><p>300</p></td></tr><tr><td><p>Tripo/Tripo-Texture</p></td><td><p>300</p></td><td rowspan="2"><p>5</p><blockquote><p>贴图、格式转换共享同一并发额度，两个模型处于运行状态的任务总数不能超过 5 个。</p></blockquote></td></tr><tr><td><p>Tripo/Tripo-ConvertFormat</p></td><td><p>300</p></td></tr><tr><td><p>Tripo/Tripo-Segmentation</p></td><td><p>300</p></td><td rowspan="4"><p>10</p><blockquote><p>分割、智能分割、网格补全、重拓扑共享同一并发额度，四个模型处于运行状态的任务总数不能超过 10 个。</p></blockquote></td></tr><tr><td><p>Tripo/Tripo-SmartSegmentation</p></td><td><p>300</p></td></tr><tr><td><p>Tripo/Tripo-MeshCompletion</p></td><td><p>300</p></td></tr><tr><td><p>Tripo/Tripo-Retopology</p></td><td><p>300</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="向量与排序模型"></a>
 
-**每分钟任务下发接口RPM限制**
-
-**同时处理中任务数量（并发数）**
-
-Tripo/Tripo-H3.1
-
-300
-
-10
-
-Tripo/Tripo-P1.0
-
-300
-
-5
-
-Tripo/Tripo-ImageToSplat
-
-300
-
-5
-
-Tripo/Tripo-AutoRig
-
-300
-
-10
-
-> 自动绑骨、绑骨前检查、动画重定向共享同一并发额度，三个模型处于运行状态的任务总数不能超过 10 个。
-
-Tripo/Tripo-RigCheck
-
-300
-
-Tripo/Tripo-AnimationRetarget
-
-300
-
-Tripo/Tripo-Texture
-
-300
-
-5
-
-> 贴图、格式转换共享同一并发额度，两个模型处于运行状态的任务总数不能超过 5 个。
-
-Tripo/Tripo-ConvertFormat
-
-300
-
-Tripo/Tripo-Segmentation
-
-300
-
-10
-
-> 分割、智能分割、网格补全、重拓扑共享同一并发额度，四个模型处于运行状态的任务总数不能超过 10 个。
-
-Tripo/Tripo-SmartSegmentation
-
-300
-
-Tripo/Tripo-MeshCompletion
-
-300
-
-Tripo/Tripo-Retopology
-
-300
+<a id="68ae4e7d1ehra"></a>
 
 ### 向量与排序模型
 
+<a id="文本向量"></a>
+
+<a id="953ddcd76495l"></a>
+
 #### 文本向量
+
+<a id="sec-tabs-74"></a>
+
+<a id="华北2-北京-68"></a>
+
+<a id="华北2-北京-68-h4"></a>
 
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）/作业数</strong><blockquote><strong>仅输入Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen3.7-text-embedding</p></td><td><p>24,000</p></td><td><p>1,000,000</p></td></tr><tr><td><p>qwen3.7-text-embedding-flash</p></td><td><p>24,000</p></td><td><p>1,000,000</p></td></tr><tr><td><p>text-embedding-v1</p><blockquote><p>用<a href="../../model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md">Batch API</a>调用服务时，不受限流限制。</p></blockquote></td><td><p>1,800</p></td><td><p>1,200,000</p></td></tr><tr><td><p>text-embedding-v2</p><blockquote><p>用<a href="../../model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md">Batch API</a>调用服务时，不受限流限制。</p></blockquote></td><td><p>1,800</p></td><td><p>1,200,000</p></td></tr><tr><td><p>text-embedding-v3</p><blockquote><p>用<a href="../../model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md">Batch API</a>调用服务时，不受限流限制。</p></blockquote></td><td><p>1,800</p></td><td><p>1,200,000</p></td></tr><tr><td><p>text-embedding-v4</p><blockquote><p>用<a href="../../model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md">Batch API</a>调用服务时，不受限流限制。</p></blockquote></td><td><p>1,800</p></td><td><p>1,200,000</p></td></tr><tr><td><p>text-embedding-async-v1</p></td><td><p>60</p></td><td><p>当前用户在系统通用文本向量异步作业排队中和运行中的作业数量不超过50个。</p><p>另外，为了避免大量突发的作业占据太多资源，限制并发的作业数为3个，即任意时间，单个用户最多只有3个通用文本向量的异步作业在并发运行，其他的作业只能在队列中等待。</p></td></tr><tr><td><p>text-embedding-async-v2</p></td><td><p>60</p></td><td><p>当前用户在系统通用文本向量异步作业排队中和运行中的作业数量不超过50个。</p><p>另外，为了避免大量突发的作业占据太多资源，限制并发的作业数为3个，即任意时间，单个用户最多只有3个通用文本向量的异步作业在并发运行，其他的作业只能在队列中等待。</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="新加坡-36"></a>
 
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）/作业数**
-
-> **仅输入Token**
-
-qwen3.7-text-embedding
-
-24,000
-
-1,000,000
-
-qwen3.7-text-embedding-flash
-
-24,000
-
-1,000,000
-
-text-embedding-v1
-
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
-
-1,800
-
-1,200,000
-
-text-embedding-v2
-
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
-
-1,800
-
-1,200,000
-
-text-embedding-v3
-
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
-
-1,800
-
-1,200,000
-
-text-embedding-v4
-
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
-
-1,800
-
-1,200,000
-
-text-embedding-async-v1
-
-60
-
-当前用户在系统通用文本向量异步作业排队中和运行中的作业数量不超过50个。
-
-另外，为了避免大量突发的作业占据太多资源，限制并发的作业数为3个，即任意时间，单个用户最多只有3个通用文本向量的异步作业在并发运行，其他的作业只能在队列中等待。
-
-text-embedding-async-v2
-
-60
-
-当前用户在系统通用文本向量异步作业排队中和运行中的作业数量不超过50个。
-
-另外，为了避免大量突发的作业占据太多资源，限制并发的作业数为3个，即任意时间，单个用户最多只有3个通用文本向量的异步作业在并发运行，其他的作业只能在队列中等待。
+<a id="新加坡-36-h4"></a>
 
 #### 新加坡
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen3.7-text-embedding</p></td><td><p>国际</p></td><td><p>24,000</p></td><td><p>1,000,000</p></td></tr><tr><td><p>text-embedding-v4</p></td><td><p>国际</p></td><td><p>1,800</p></td><td><p>1,000,000</p></td></tr><tr><td><p>text-embedding-v3</p></td><td><p>国际</p></td><td><p>6,000</p></td><td><p>24,000,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="中国香港-8"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen3.7-text-embedding
-
-国际
-
-24,000
-
-1,000,000
-
-text-embedding-v4
-
-国际
-
-1,800
-
-1,000,000
-
-text-embedding-v3
-
-国际
-
-6,000
-
-24,000,000
+<a id="中国香港-8-h4"></a>
 
 #### 中国香港
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>text-embedding-v4</p></td><td><p>中国香港</p></td><td><p>1,800</p></td><td><p>1,200,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="多模态向量"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-text-embedding-v4
-
-中国香港
-
-1,800
-
-1,200,000
+<a id="d59f78d5c18y5"></a>
 
 #### 多模态向量
 
+<a id="sec-tabs-75"></a>
+
+<a id="华北2-北京-69"></a>
+
+<a id="华北2-北京-69-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>仅输入Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen3-vl-embedding</p></td><td><p>2,400</p></td><td><p>1,200,000</p></td></tr><tr><td><p>qwen2.5-vl-embedding</p></td><td><p>1,200</p></td><td><p>600,000</p></td></tr><tr><td><p>tongyi-embedding-vision-plus</p></td><td><p>600</p></td><td><p>200,000</p></td></tr><tr><td><p>tongyi-embedding-vision-flash</p></td><td><p>600</p></td><td><p>200,000</p></td></tr><tr><td><p>tongyi-embedding-vision-flash-2026-03-06</p></td><td><p>1,200</p></td><td><p>9,600,000</p></td></tr><tr><td><p>tongyi-embedding-vision-plus-2026-03-06</p></td><td><p>1,200</p></td><td><p>9,600,000</p></td></tr><tr><td><p>multimodal-embedding-v1</p></td><td><p>120</p></td><td><p>1,000,000</p></td></tr></tbody></table>
 
-**限流条件**
+<a id="排序模型"></a>
 
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **仅输入Token**
-
-qwen3-vl-embedding
-
-2,400
-
-1,200,000
-
-qwen2.5-vl-embedding
-
-1,200
-
-600,000
-
-tongyi-embedding-vision-plus
-
-600
-
-200,000
-
-tongyi-embedding-vision-flash
-
-600
-
-200,000
-
-tongyi-embedding-vision-flash-2026-03-06
-
-1,200
-
-9,600,000
-
-tongyi-embedding-vision-plus-2026-03-06
-
-1,200
-
-9,600,000
-
-multimodal-embedding-v1
-
-120
-
-1,000,000
+<a id="1b5bd6eddbdau"></a>
 
 #### 排序模型
 
+<a id="sec-tabs-76"></a>
+
+<a id="华北2-北京-70"></a>
+
+<a id="华北2-北京-70-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen3.7-text-rerank</p></td><td><p>3,000</p></td><td><p>9,000,000</p></td></tr><tr><td><p>qwen3-rerank</p></td><td><p>5,400</p></td><td><p>5,000,000,000</p></td></tr><tr><td><p>qwen3-vl-rerank</p></td><td><p>600</p></td><td><p>9,000,000</p></td></tr><tr><td><p>gte-rerank-v2</p></td><td><p>5,040</p></td><td><p>4,980,000,000</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="新加坡-37"></a>
 
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen3.7-text-rerank
-
-3,000
-
-9,000,000
-
-qwen3-rerank
-
-5,400
-
-5,000,000,000
-
-qwen3-vl-rerank
-
-600
-
-9,000,000
-
-gte-rerank-v2
-
-5,040
-
-4,980,000,000
+<a id="新加坡-37-h4"></a>
 
 #### 新加坡
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen3-rerank</p></td><td><p>国际</p></td><td><p>5,400</p></td><td><p>5,000,000,000</p></td></tr><tr><td><p>gte-rerank-v2</p></td><td><p>国际</p></td><td><p>5,040</p></td><td><p>4,980,000,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="行业"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen3-rerank
-
-国际
-
-5,400
-
-5,000,000,000
-
-gte-rerank-v2
-
-国际
-
-5,040
-
-4,980,000,000
+<a id="e6785f7240c8r"></a>
 
 ### 行业
 
+<a id="意图理解"></a>
+
+<a id="3921a60f269e3"></a>
+
 #### 意图理解
+
+<a id="sec-tabs-77"></a>
+
+<a id="华北2-北京-71"></a>
+
+<a id="华北2-北京-71-h4"></a>
 
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>tongyi-intent-detect-v3</p></td><td><p>1,200</p></td><td><p>1,000,000</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="角色扮演"></a>
 
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-tongyi-intent-detect-v3
-
-1,200
-
-1,000,000
+<a id="86e73ce5885wo"></a>
 
 #### 角色扮演
 
+<a id="sec-tabs-78"></a>
+
+<a id="华北2-北京-72"></a>
+
+<a id="华北2-北京-72-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen-plus-character</p></td><td><p>120</p></td><td><p>500,000</p></td></tr><tr><td><p>qwen-flash-character</p></td><td><p>120</p></td><td><p>500,000</p></td></tr><tr><td><p>qwen-flash-character-2026-02-26</p></td><td><p>120</p></td><td><p>500,000</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="新加坡-38"></a>
 
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen-plus-character
-
-120
-
-500,000
-
-qwen-flash-character
-
-120
-
-500,000
-
-qwen-flash-character-2026-02-26
-
-120
-
-500,000
+<a id="新加坡-38-h4"></a>
 
 #### 新加坡
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen-plus-character</p></td><td><p>国际</p></td><td><p>120</p></td><td><p>500,000</p></td></tr><tr><td><p>qwen-flash-character</p></td><td><p>国际</p></td><td><p>120</p></td><td><p>500,000</p></td></tr><tr><td><p>qwen-plus-character-ja</p></td><td><p>国际</p></td><td><p>120</p></td><td><p>500,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="美国-弗吉尼亚-16"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen-plus-character
-
-国际
-
-120
-
-500,000
-
-qwen-flash-character
-
-国际
-
-120
-
-500,000
-
-qwen-plus-character-ja
-
-国际
-
-120
-
-500,000
+<a id="美国-弗吉尼亚-16-h4"></a>
 
 #### 美国（弗吉尼亚）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen-plus-character</p></td><td><p>全球</p></td><td><p>120</p></td><td><p>500,000</p></td></tr><tr><td><p>qwen-flash-character</p></td><td><p>全球</p></td><td><p>120</p></td><td><p>500,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="德国-法兰克福-15"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen-plus-character
-
-全球
-
-120
-
-500,000
-
-qwen-flash-character
-
-全球
-
-120
-
-500,000
+<a id="德国-法兰克福-15-h4"></a>
 
 #### 德国（法兰克福）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen-plus-character</p></td><td><p>全球</p></td><td><p>120</p></td><td><p>5,000,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="日本-东京-8"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen-plus-character
-
-全球
-
-120
-
-5,000,000
+<a id="日本-东京-8-h4"></a>
 
 #### 日本（东京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>服务部署范围</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>qwen-plus-character</p></td><td><p>全球</p></td><td><p>120</p></td><td><p>5,000,000</p></td></tr></tbody></table>
 
-**服务部署范围**
+<a id="界面交互"></a>
 
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen-plus-character
-
-全球
-
-120
-
-5,000,000
+<a id="2c80cf1f06pw2"></a>
 
 #### 界面交互
 
+<a id="sec-tabs-79"></a>
+
+<a id="华北2-北京-73"></a>
+
+<a id="华北2-北京-73-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>gui-plus</p></td><td><p>80</p></td><td><p>540,000</p></td></tr><tr><td><p>gui-plus-2026-02-26</p></td><td><p>100</p></td><td><p>540,000</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="决策模型"></a>
 
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-gui-plus
-
-80
-
-540,000
-
-gui-plus-2026-02-26
-
-100
-
-540,000
+<a id="dm-ratelimit"></a>
 
 #### 决策模型
 
+<a id="sec-tabs-80"></a>
+
+<a id="华北2-北京-74"></a>
+
+<a id="华北2-北京-74-h4"></a>
+
 #### 华北2（北京）
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>decision-model-preview</p></td><td><p>1,200</p></td><td><p>2,000,000</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="新加坡-39"></a>
 
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-decision-model-preview
-
-1,200
-
-2,000,000
+<a id="新加坡-39-h4"></a>
 
 #### 新加坡
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th colspan="2"><strong>限流条件（超出任一数值时触发限流）</strong><blockquote><strong>以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制</strong></blockquote></th></tr><tr><th><strong>每分钟调用次数（RPM）</strong></th><th><strong>每分钟消耗Token数（TPM）</strong><blockquote><strong>含输入与输出Token</strong></blockquote></th></tr></thead><tbody><tr><td><p>decision-model-preview</p></td><td><p>1,200</p></td><td><p>2,000,000</p></td></tr></tbody></table>
 
-**限流条件（超出任一数值时触发限流）**
+<a id="已下线模型"></a>
 
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-decision-model-preview
-
-1,200
-
-2,000,000
+<a id="14dd0e482478d"></a>
 
 ### 已下线模型
 
-详细信息，请参见 [模型下线机制说明](raw/product-updates/release-notes/model-depreciation.md) 。
+详细信息，请参见 [模型下线机制说明](../../product-updates/release-notes/model-depreciation.md) 。
+
+<a id="faq"></a>
+
+<a id="d1688da3e3egs"></a>
 
 ## FAQ
+
+<a id="为什么触发限流"></a>
+
+<a id="08b8421697cff"></a>
 
 ### 为什么触发限流？
 
@@ -7390,23 +2231,39 @@ decision-model-preview
 -   `Requests rate limit exceeded` 或 `You exceeded your current requests list`：触发了每分钟请求数（RPM）限流。
 -   `Allocated quota exceeded` 或 `You exceeded your current quota`：触发了每分钟 Token 消耗（TPM）限流。
 -   `Request rate increased too quickly`：请求频率在短时间内激增，触发了系统稳定性保护——即使总调用量未达到 RPM 或 TPM 上限也会触发。
--   其他报错，参见[错误码](raw/model-api-reference/preparations/error-code.md)确认原因。
+-   其他报错，参见[错误码](../../model-api-reference/preparations/error-code.md)确认原因。
 
 短时间内的请求爆发即使未超出分钟级上限也可能触发限流，秒级执行口径参见[静态限流规则](#static-rate-limit-rules)。
 
+<a id="如何查看模型调用量"></a>
+
+<a id="2c4544e8d8wy6"></a>
+
 ### 如何查看模型调用量？
 
-模型调用发生后**分钟级**即可在监控图表查看。登录模型监控页面（[北京](https://bailian.console.aliyun.com/cn-beijing/model/telemetry)或[新加坡](https://bailian.console.aliyun.com/ap-southeast-1/model/telemetry)），在左侧导航栏选择**运维管理** > **模型监控**进入监控概览页，设置查询条件（例如，选择时间范围、业务空间等），再在**模型列表**区域找到目标模型并单击**查看详情**，即可查看该模型的调用统计结果。具体请参见[监控告警](raw/model-user-guide/model-monitoring/model-telemetry.md)文档。
+模型调用发生后**分钟级**即可在监控图表查看。登录模型监控页面（[北京](https://bailian.console.aliyun.com/cn-beijing/model/telemetry)或[新加坡](https://bailian.console.aliyun.com/ap-southeast-1/model/telemetry)），在左侧导航栏选择**运维管理** > **模型监控**进入监控概览页，设置查询条件（例如，选择时间范围、业务空间等），再在**模型列表**区域找到目标模型并单击**查看详情**，即可查看该模型的调用统计结果。具体请参见[监控告警](../model-monitoring/model-telemetry.md)文档。
 
 > 监控数据按分钟级更新，仅供参考，不作为计费依据。
 
+<a id="遇到限流后多久恢复"></a>
+
+<a id="45e83f5504b7t"></a>
+
 ### 遇到限流后多久恢复？
 
-通常在一分钟内恢复。如出现其他报错，参见[错误码](raw/model-api-reference/preparations/error-code.md)进行处理。
+通常在一分钟内恢复。如出现其他报错，参见[错误码](../../model-api-reference/preparations/error-code.md)进行处理。
+
+<a id="模型响应速度与付费有关吗"></a>
+
+<a id="faq-speed-paid-h"></a>
 
 ### 模型响应速度与付费有关吗？
 
 模型输出速度与是否付费无关。免费额度和付费调用使用相同的模型服务基础设施，同一模型的生成速度相同。免费额度仅控制请求是否被接受——额度耗尽时返回 403 错误（开通**免费额度用完即停**后），不会降低已接受请求的生成速度。
+
+<a id="什么因素影响模型响应速度"></a>
+
+<a id="faq-speed-factors-h"></a>
 
 ### 什么因素影响模型响应速度？
 
@@ -7414,14 +2271,22 @@ decision-model-preview
 -   **输出长度**：输出 Token 越多，总耗时越长。
 -   **服务器负载**：高峰期可能略有波动。
 
+<a id="限流会降低已接受请求的生成速度吗"></a>
+
+<a id="faq-rate-limit-speed-h"></a>
+
 ### 限流会降低已接受请求的生成速度吗？
 
 不会。限流（RPM/TPM）仅导致超出限制的请求被拒绝（返回 429 错误）。免费额度耗尽时（开通**免费额度用完即停**）返回 403 错误，同样不影响已接受请求的速度。429 为速率限制，403 为配额耗尽，两者均为拒绝机制。
 
+<a id="如何避免限流"></a>
+
+<a id="0e4e875b9c2eg"></a>
+
 ### 如何避免限流？
 
 1.  **选用高限流模型**
-    -   优先使用 [qwen-plus](raw/model-user-guide/get-started-with-models/models.md) 等限流额度更高的模型。
+    -   优先使用 [qwen-plus](models.md) 等限流额度更高的模型。
     -   稳定版或最新版比带日期的快照版本限流更宽松。
 2.  **优化调用策略**
     -   **降低调用频率**：收到 `Requests rate limit exceeded` 或 `You exceeded your current requests list` 时，降低API调用频率。
@@ -7431,9 +2296,13 @@ decision-model-preview
     
     触发限流后切换到备用模型继续生成，可降低失败概率、提升吞吐量。以下代码在调用 `qwen-plus` 触发限流后，自动改用 `qwen-flash` 重试。也可以选择不同系列的模型（如 qwen-flash）作为备选模型，进一步降低主备模型同时限流的风险。
     
+    <a id="accordion-示例代码"></a>
+    
     示例代码
     
-    ```
+    <a id="code-block"></a>
+    
+    ```python
     import os
     import asyncio
     from openai import AsyncOpenAI, APIStatusError
@@ -7489,16 +2358,24 @@ decision-model-preview
     
 4.  **拆分任务**：长对话或大型文档会快速消耗大量 Token。将大批量任务拆分为小批次，分时段提交。
     
-5.  **批量推理**：无需实时响应时，使用[批量推理](raw/model-user-guide/model-high-speed-inference/batch-inference.md)（Batch API）。批量请求不受实时限流约束，但需考虑排队和处理时间。
+5.  **批量推理**：无需实时响应时，使用[批量推理](../model-high-speed-inference/batch-inference.md)（Batch API）。批量请求不受实时限流约束，但需考虑排队和处理时间。
     
+
+<a id="如何控制-token-用量或费用支出"></a>
+
+<a id="faq_cost_ctrl_h3"></a>
 
 ### 如何控制 Token 用量或费用支出？
 
 限流仅约束单位时间内的调用速率，不限制累计用量。如需控制 Token 用量或费用支出，可通过以下方式管理：
 
--   **设置消费限额与费用告警**：在**账单费用**卡片设置**费用告警**，开启月度消费限额并配置阈值通知，达到阈值即提醒，避免超额支出。详见[账单查询与成本管理](raw/model-user-guide/test-1/bill-query-and-cost-management.md)。
--   **开启免费额度用完即停**：对支持免费额度的模型，可开启**免费额度用完即停**，免费额度耗尽后自动停止调用，避免产生额外费用。详见[新人免费额度](raw/model-user-guide/test-1/new-free-quota.md)。
--   **监控模型调用量**：定期查看各模型的 Token 用量，及时发现异常增长，参见上文[如何查看模型调用量？](https://help.aliyun.com/zh/model-studio/rate-limit#2c4544e8d8wy6)。
+-   **设置消费限额与费用告警**：在**账单费用**卡片设置**费用告警**，开启月度消费限额并配置阈值通知，达到阈值即提醒，避免超额支出。详见[账单查询与成本管理](../test-1/bill-query-and-cost-management.md)。
+-   **开启免费额度用完即停**：对支持免费额度的模型，可开启**免费额度用完即停**，免费额度耗尽后自动停止调用，避免产生额外费用。详见[新人免费额度](../test-1/new-free-quota.md)。
+-   **监控模型调用量**：定期查看各模型的 Token 用量，及时发现异常增长，参见上文[如何查看模型调用量？](rate-limit.md#2c4544e8d8wy6)。
+
+<a id="充值后是否还会被限流"></a>
+
+<a id="faq_recharge_limit_h3"></a>
 
 ### 充值后是否还会被限流？
 

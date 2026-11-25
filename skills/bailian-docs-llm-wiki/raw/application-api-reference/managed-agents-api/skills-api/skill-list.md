@@ -2,55 +2,40 @@
 
 cursor 分页列出技能，按 created\_at 倒序。支持按来源过滤（自建或阿里云百炼官方）。仅 active 状态可挂载到智能体。
 
+<a id="前提"></a>
+
+<a id="h-skl-prereq"></a>
+
 ## 前提
 
-已完成 Endpoint 与鉴权配置，详见[API 总览与认证](raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md)。
+已完成 Endpoint 与鉴权配置，详见[API 总览与认证](../managed-agents-api-overview.md)。
+
+<a id="接口"></a>
+
+<a id="h-skl-endpoint"></a>
 
 ## 接口
 
 **GET** `/skills`
 
-## Query 参数
-
-**limit** `int` 默认 20
-
-每页数量，最大 100
-
-**page** `string` 默认 —
-
-首次不传，后续传上一次响应的 `next_page`
-
-**source** `string` 默认 `customer`
-
-来源筛选：`customer`（自建）或 `official`（阿里云百炼官方）
-
-## 请求示例
-
-curl
-
-```
-curl "$AGENTSTUDIO_URL/skills?source=customer&limit=20" \
-  -H "Authorization: Bearer $DASHSCOPE_API_KEY"
-```
-
-Python
-
-```
-for skill in client.skills.list(source="customer", limit=20):
+<table><tbody><tr><td><a id="h-skl-q"></a><h2>Query 参数</h2><p><strong>limit</strong> <code>int</code> 默认 20</p><p>每页数量，最大 100</p><p><strong>page</strong> <code>string</code> 默认 —</p><p>首次不传，后续传上一次响应的 <code>next_page</code></p><p><strong>source</strong> <code>string</code> 默认 <code>customer</code></p><p>来源筛选：<code>customer</code>（自建）或 <code>official</code>（阿里云百炼官方）</p></td><td><a id="h-skl-eg"></a><h2>请求示例</h2><a id="fig-code-group"></a><div><a id="fig-code-group-curl-tab"></a>curl<div><a id="code-code-group-curl"></a><pre class="language-bash"><code>curl &quot;$AGENTSTUDIO_URL/skills?source=customer&amp;limit=20&quot; \
+  -H &quot;Authorization: Bearer $DASHSCOPE_API_KEY&quot;
+</code></pre></div><a id="fig-code-group-python-tab"></a>Python<div><a id="code-code-group-python"></a><pre class="language-python"><code>for skill in client.skills.list(source=&quot;customer&quot;, limit=20):
     print(skill.id, skill.name)
-```
+</code></pre></div><a id="fig-code-group-java-tab"></a>Java<div><a id="code-code-group-java"></a><pre class="language-java"><code>CursorPage&lt;Skill&gt; page = client.skills().list(SkillListParam.builder()
+    .source(&quot;customer&quot;).limit(20).build());
+for (Skill s : page.getData()) System.out.println(s.getId() + &quot; &quot; + s.getName());
+</code></pre></div></div></td></tr></tbody></table>
 
-Java
+<a id="响应示例"></a>
 
-```
-CursorPage<Skill> page = client.skills().list(SkillListParam.builder()
-    .source("customer").limit(20).build());
-for (Skill s : page.getData()) System.out.println(s.getId() + " " + s.getName());
-```
+<a id="h-skl-resp"></a>
 
 ## 响应示例
 
-```
+<a id="code-block"></a>
+
+```json
 {
   "data": [
     {
@@ -71,6 +56,10 @@ for (Skill s : page.getData()) System.out.println(s.getId() + " " + s.getName())
 ```
 
 响应包含 `data`（Skill 对象数组）与 `next_page`。Skill 对象字段如下：
+
+<a id="skill-对象字段"></a>
+
+<a id="h-skl-dto"></a>
 
 ### Skill 对象字段
 

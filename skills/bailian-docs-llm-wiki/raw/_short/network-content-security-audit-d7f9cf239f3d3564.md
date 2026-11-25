@@ -2,11 +2,23 @@
 
 网络内容安全审核工具能够扫描文本，快速检测涉黄、暴恐、侵权等违规内容，辅助人工审核，提高效率，确保网络环境合法合规、积极健康。此外，该工具还具备对文档进行审核与校对的功能，能够识别文字、标点及表达方面的问题，并提供相应的修改建议。
 
+<a id="功能入口"></a>
+
+<a id="5b1499ef41j77"></a>
+
 ## 功能入口
 
 登录**阿里云百炼大模型服务平台**，在**应用广场**页面，点击[**网络内容安全审核**](https://bailian.console.aliyun.com/?spm=a2c4g.11186623.0.0.134172147obHXO#/app/app-market/quanmiao/network-content-audit)即可进入该轻应用控制台。
 
+<a id="功能介绍"></a>
+
+<a id="d8032fb2d3npq"></a>
+
 ## 功能介绍
+
+<a id="应用详情"></a>
+
+<a id="a55badfd1e7hr"></a>
 
 ### 应用详情
 
@@ -14,14 +26,26 @@
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2818982471/p932103.png)
 
+<a id="效果调试"></a>
+
+<a id="e1ec784f74l8h"></a>
+
 ### 效果调试
 
 点击**效果调试**页签，您可以参考以下步骤设置配置项。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2818982471/p932105.png)
+
+<a id="第一步-上传素材"></a>
+
+<a id="d044158c52w9y"></a>
 
 #### 第一步：上传素材
 
 1.  把待审核内容贴入文本框，可以是文章、评论等，可参考官方示例填写。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2818982471/p932861.png)
 2.  选择线索的模型，默认为**千问-Max**。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2818982471/p932862.png)
+
+<a id="第二步-设置审核维度"></a>
+
+<a id="52fae97a85vfn"></a>
 
 #### 第二步：设置审核维度
 
@@ -38,19 +62,29 @@
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2818982471/p932870.png)
 
+<a id="第三步-输出格式"></a>
+
+<a id="5d6f154ddb67l"></a>
+
 #### 第三步：输出格式
 
 可根据右侧**格式示例**填写输出格式，也可以点击输入框内**智能生成JSON格式**一键生成输出格式。
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2818982471/p932872.png)
 
+<a id="查看api示例"></a>
+
+<a id="b4be9a6149q6g"></a>
+
 ### 查看API示例
 
 效果调试完成后，点击**API**页签，您可以查看对应生成的API示例。
 
-**说明**支持单条实时流式API和批处理API两种调用方式：
-
--   单条实时流式API：请求一次接口（输入一段文本、发起一次调用），就实时处理并流式返回结果。流式响应协议为Server-Sent Events（SSE）。
--   批处理API：输入待挖掘文件或多段文本，后台会创建一个任务，用户需通过任务ID轮询任务的状态、直到任务结束后，返回结果。
+> **说明**
+>
+> 支持单条实时流式API和批处理API两种调用方式：
+>
+> -   单条实时流式API：请求一次接口（输入一段文本、发起一次调用），就实时处理并流式返回结果。流式响应协议为Server-Sent Events（SSE）。
+> -   批处理API：输入待挖掘文件或多段文本，后台会创建一个任务，用户需通过任务ID轮询任务的状态、直到任务结束后，返回结果。
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2818982471/p932846.png)

@@ -2,9 +2,15 @@
 
 本文介绍 Qwen-Omni-Realtime API 的服务端事件，包括工具调用（Function Calling）相关事件。
 
-**说明**本页为 Qwen-Omni-Realtime 的事件参考，事件定义以 WebSocket 接入为基础。AOQ、WebRTC 通过各自的数据通道收发模型事件，媒体通过媒体轨道传输。请先阅读[WebSocket 接入](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/omni-realtime-websocket-access.md)、[WebRTC 接入](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/omni-realtime-webrtc-access.md)或[AOQ 接入](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/omni-realtime-aoq-access.md)。
+> **说明**
+>
+> 本页为 Qwen-Omni-Realtime 的事件参考，事件定义以 WebSocket 接入为基础。AOQ、WebRTC 通过各自的数据通道收发模型事件，媒体通过媒体轨道传输。请先阅读[WebSocket 接入](omni-realtime-websocket-access.md)、[WebRTC 接入](omni-realtime-webrtc-access.md)或[AOQ 接入](omni-realtime-aoq-access.md)。
 
-WebSocket SDK 用法参见 [Python SDK](raw/_short/realtime-websocket-python-sdk-qwen-omni-realtime-e50924065f85dda8.md)和 [Java SDK](raw/_short/omni-realtime-java-sdk-13dfd16f685872d7.md)。型号与协议选择参见[概述](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/omni-realtime-api.md)。
+WebSocket SDK 用法参见 [Python SDK](../../../_short/realtime-websocket-python-sdk-qwen-omni-realtime-e50924065f85dda8.md)和 [Java SDK](../../../_short/omni-realtime-java-sdk-13dfd16f685872d7.md)。型号与协议选择参见[概述](omni-realtime-api.md)。
+
+<a id="error"></a>
+
+<a id="9e1059c1d3tcx"></a>
 
 ## error
 
@@ -21,6 +27,8 @@ WebSocket SDK 用法参见 [Python SDK](raw/_short/realtime-websocket-python-sdk
 `error`object
 
 错误的详细信息。
+
+<a id="accordion-属性"></a>
 
 属性
 
@@ -40,7 +48,9 @@ WebSocket SDK 用法参见 [Python SDK](raw/_short/realtime-websocket-python-sdk
 
 与错误相关的参数，如`session.modalities`。
 
-```
+<a id="code-block"></a>
+
+```json
 {
   "event_id": "event_RoUu4T8yExPMI37GKwaOC",
   "type": "error",
@@ -52,6 +62,10 @@ WebSocket SDK 用法参见 [Python SDK](raw/_short/realtime-websocket-python-sdk
   }
 }
 ```
+
+<a id="session-created"></a>
+
+<a id="ee6b5eb3485hw"></a>
 
 ## session.created
 
@@ -68,6 +82,8 @@ WebSocket SDK 用法参见 [Python SDK](raw/_short/realtime-websocket-python-sdk
 `session`object
 
 会话的配置信息。
+
+<a id="accordion-属性-2"></a>
 
 属性
 
@@ -99,6 +115,8 @@ WebSocket SDK 用法参见 [Python SDK](raw/_short/realtime-websocket-python-sdk
 
 语音转录的配置。
 
+<a id="accordion-属性-3"></a>
+
 属性
 
 `model`string
@@ -109,11 +127,13 @@ WebSocket SDK 用法参见 [Python SDK](raw/_short/realtime-websocket-python-sdk
 
 语音活动检测（VAD）的配置。
 
+<a id="accordion-属性-4"></a>
+
 属性
 
 `type`string
 
-VAD类型。取值：`server_vad`（默认值）、`semantic_vad` 或 `semantic_vad_ec`。其中，`semantic_vad_ec` 适用于 Qwen3.8-Omni-Flash-Realtime 系列模型。详情请参见[客户端事件](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md)。
+VAD类型。取值：`server_vad`（默认值）、`semantic_vad` 或 `semantic_vad_ec`。其中，`semantic_vad_ec` 适用于 Qwen3.8-Omni-Flash-Realtime 系列模型。详情请参见[客户端事件](client-events.md)。
 
 `threshold`float
 
@@ -141,7 +161,9 @@ VAD检测阈值。
 
 以下为北京地域 `qwen3.8-omni-flash-realtime` 返回的默认会话示例。
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
     "event_id": "event_QQubXbhHMyXmKaSuE6PQ8",
     "type": "session.created",
@@ -171,6 +193,10 @@ VAD检测阈值。
 }
 ```
 
+<a id="session-updated"></a>
+
+<a id="424ef2e774q9p"></a>
+
 ## session.updated
 
 收到用户的 `session.update` 请求后，若处理成功，则返回此事件；若出错，则返回 `error` 事件。
@@ -186,6 +212,8 @@ VAD检测阈值。
 `session`object
 
 会话的配置信息。
+
+<a id="accordion-属性-5"></a>
 
 属性
 
@@ -209,13 +237,19 @@ VAD检测阈值。
 
 回显的音频格式配置。若客户端传入了 `session.audio.input.format` / `session.audio.output.format`，服务端将在 `session.updated` 中按相同嵌套结构回显。未使用嵌套字段的客户端，服务端事件结构保持原有行为。
 
+<a id="accordion-属性-6"></a>
+
 属性
 
 `input`object
 
+<a id="accordion-属性-7"></a>
+
 属性
 
 `format`object
+
+<a id="accordion-属性-8"></a>
 
 属性
 
@@ -229,9 +263,13 @@ VAD检测阈值。
 
 `output`object
 
+<a id="accordion-属性-9"></a>
+
 属性
 
 `format`object
+
+<a id="accordion-属性-10"></a>
 
 属性
 
@@ -255,6 +293,8 @@ VAD检测阈值。
 
 语音转录的配置。
 
+<a id="accordion-属性-11"></a>
+
 属性
 
 `model`string
@@ -265,11 +305,13 @@ VAD检测阈值。
 
 语音活动检测（VAD）的配置。
 
+<a id="accordion-属性-12"></a>
+
 属性
 
 `type`string
 
-VAD类型。取值：`server_vad`（默认值）、`semantic_vad` 或 `semantic_vad_ec`。其中，`semantic_vad_ec` 适用于 Qwen3.8-Omni-Flash-Realtime 系列模型。详情请参见[客户端事件](raw/model-api-reference/realtime-api-directory/omni-realtime-api-directory/client-events.md)。
+VAD类型。取值：`server_vad`（默认值）、`semantic_vad` 或 `semantic_vad_ec`。其中，`semantic_vad_ec` 适用于 Qwen3.8-Omni-Flash-Realtime 系列模型。详情请参见[客户端事件](client-events.md)。
 
 `threshold`float
 
@@ -293,7 +335,9 @@ VAD检测阈值。
 
 `tools`array（可选）
 
-工具定义列表。以下属性描述 `type="function"` 的 Function Calling 工具。Qwen3.8-Omni-Flash-Realtime 的 MCP 配置字段见[客户端工具配置](https://help.aliyun.com/zh/model-studio/client-events#session-tools-mcp)；MCP 连接地址和凭证不会在 `session.updated` 中回显。
+工具定义列表。以下属性描述 `type="function"` 的 Function Calling 工具。Qwen3.8-Omni-Flash-Realtime 的 MCP 配置字段见[客户端工具配置](client-events.md#session-tools-mcp)；MCP 连接地址和凭证不会在 `session.updated` 中回显。
+
+<a id="accordion-属性-13"></a>
 
 属性
 
@@ -302,6 +346,8 @@ VAD检测阈值。
 固定为 `function`。
 
 `function`object
+
+<a id="accordion-属性-14"></a>
 
 属性
 
@@ -316,6 +362,8 @@ VAD检测阈值。
 `parameters`object（可选）
 
 对工具函数入参的描述，大模型会参考该字段来进行入参的提取。如果工具函数不需要输入参数，则无需指定。
+
+<a id="accordion-属性-15"></a>
 
 属性
 
@@ -355,7 +403,9 @@ VAD检测阈值。
 
 模型在每次请求时，运行结果一致性程度。
 
-```
+<a id="code-block-3"></a>
+
+```json
 {
     "event_id": "event_X1HsXS4b4uptp6yo1LgKd",
     "type": "session.updated",
@@ -427,6 +477,10 @@ VAD检测阈值。
 }
 ```
 
+<a id="input-audio-buffer-speech-started"></a>
+
+<a id="d06b426b1fnun"></a>
+
 ## input\_audio\_buffer.speech\_started
 
 在 VAD 模式下，当服务端在音频缓冲区中检测到语音开始时，会返回此事件。
@@ -451,7 +505,9 @@ VAD检测阈值。
 
 > 用户消息项用于将用户输入追加到对话历史，供模型后续推理与生成使用。
 
-```
+<a id="code-block-4"></a>
+
+```json
 {
     "event_id": "event_Pvp8nEhsQuGCQbFJ9x58n",
     "type": "input_audio_buffer.speech_started",
@@ -459,6 +515,10 @@ VAD检测阈值。
     "item_id": "item_YbAiGvK2H7YaS34o4R6Ba"
 }
 ```
+
+<a id="input-audio-buffer-speech-stopped"></a>
+
+<a id="fd08ffdf0a2mt"></a>
 
 ## input\_audio\_buffer.speech\_stopped
 
@@ -482,7 +542,9 @@ VAD检测阈值。
 
 将创建的用户消息项的 ID。
 
-```
+<a id="code-block-5"></a>
+
+```json
 {
     "event_id": "event_UhQiqNVRsgUiq4KUS5Xb5",
     "type": "input_audio_buffer.speech_stopped",
@@ -490,6 +552,10 @@ VAD检测阈值。
     "item_id": "item_YbAiGvK2H7YaS34o4R6Ba"
 }
 ```
+
+<a id="input-audio-buffer-committed"></a>
+
+<a id="bd9bfdc258afy"></a>
 
 ## input\_audio\_buffer.committed
 
@@ -510,13 +576,19 @@ VAD检测阈值。
 
 将创建的用户消息项的 ID。
 
-```
+<a id="code-block-6"></a>
+
+```json
 {
     "event_id": "event_Iy6sUzL1nmdFgshFYxJEz",
     "type": "input_audio_buffer.committed",
     "item_id": "item_YbAiGvK2H7YaS34o4R6Ba"
 }
 ```
+
+<a id="input-audio-buffer-cleared"></a>
+
+<a id="1103f53e9b13o"></a>
 
 ## input\_audio\_buffer.cleared
 
@@ -530,12 +602,18 @@ VAD检测阈值。
 
 事件类型，固定为`input_audio_buffer.cleared`。
 
-```
+<a id="code-block-7"></a>
+
+```json
 {
   "event_id": "event_RoUu4T8yExPMI37GKwaOC",
   "type": "input_audio_buffer.cleared"
 }
 ```
+
+<a id="conversation-item-created"></a>
+
+<a id="4f23bd31e6awz"></a>
 
 ## conversation.item.created
 
@@ -565,6 +643,8 @@ VAD检测阈值。
 
 要添加到对话中的项。
 
+<a id="accordion-属性-16"></a>
+
 属性
 
 `id`string
@@ -586,6 +666,8 @@ VAD检测阈值。
 `content`array\[object\]
 
 消息的内容。当 type 为 `message` 时存在。下列字段对应本页示例中的数组元素。
+
+<a id="accordion-数组元素"></a>
 
 数组元素
 
@@ -609,6 +691,8 @@ VAD检测阈值。
 
 当 type 为 `function_call` 时，函数调用的参数（JSON 字符串）。
 
+<a id="accordion-type-mcp-list-tools"></a>
+
 type=mcp\_list\_tools
 
 该类型的 `item.id` 与工具发现状态事件的 `item_id` 相同。
@@ -620,6 +704,8 @@ MCP Server 标识。
 `tools`array\[object\]（必填）
 
 经校验和 `allowed_tools` 过滤的工具定义，发现失败时为空数组。
+
+<a id="accordion-数组元素-2"></a>
 
 数组元素
 
@@ -634,6 +720,8 @@ MCP Server 提供的工具说明。
 `input_schema`object（必填）
 
 MCP Server 提供的 JSON Schema。服务端不执行完整的 JSON Schema 语义校验，最终由 MCP Server 校验工具参数。
+
+<a id="accordion-属性-17"></a>
 
 属性
 
@@ -654,6 +742,8 @@ MCP Server 提供的 JSON Schema。服务端不执行完整的 JSON Schema 语�
 `annotations`object（可选）
 
 MCP Server 提供的 ToolAnnotations。以下是 MCP 标准中的可选提示字段，实际返回内容由 MCP Server 决定。
+
+<a id="accordion-属性-18"></a>
 
 属性
 
@@ -681,6 +771,8 @@ MCP Server 提供的 ToolAnnotations。以下是 MCP 标准中的可选提示字
 
 工具发现失败时出现。
 
+<a id="accordion-属性-19"></a>
+
 属性
 
 `type`string（必填）
@@ -690,6 +782,8 @@ MCP Server 提供的 ToolAnnotations。以下是 MCP 标准中的可选提示字
 `message`string（必填）
 
 面向客户端的安全错误描述，不包含上游敏感响应体。
+
+<a id="accordion-type-mcp-call-初始项"></a>
 
 type=mcp\_call（初始项）
 
@@ -717,6 +811,8 @@ type=mcp\_call（初始项）
 
 初始通常为空字符串；完整参数以后续事件及最终项为准。
 
+<a id="accordion-type-mcp-approval-request"></a>
+
 type=mcp\_approval\_request
 
 审批请求的 `item.id` 应在审批回复中原样填入 `approval_request_id`。
@@ -739,7 +835,9 @@ type=mcp\_approval\_request
 
 示例：
 
-```
+<a id="code-block-8"></a>
+
+```json
 {
     "event_id": "event_JEfkrr9gO3Ny7Xcv9bGVd",
     "type": "conversation.item.created",
@@ -771,6 +869,10 @@ type=mcp\_approval\_request
     }
 }
 ```
+
+<a id="conversation-item-input-audio-transcription-delta"></a>
+
+<a id="b8g4c3d2e6f7g"></a>
 
 ## conversation.item.input\_audio\_transcription.delta
 
@@ -808,7 +910,9 @@ type=mcp\_approval\_request
 
 被识别音频的情感。可选值：`neutral`（平静）、`happy`（愉快）、`sad`（悲伤）、`angry`（愤怒）、`surprised`（惊讶）、`disgusted`（厌恶）、`fearful`（恐惧）。
 
-```
+<a id="code-block-9"></a>
+
+```json
 {
     "event_id": "event_C7jzoeSFuiwOZS6tR14yx",
     "type": "conversation.item.input_audio_transcription.delta",
@@ -824,91 +928,27 @@ type=mcp\_approval\_request
 
 在任何时刻，要获取当前最完整的句子预览，都需要将这两个字段拼接起来：实时预览句子 = `text` + `stash`。
 
+<a id="accordion-点击查看示例"></a>
+
 点击查看示例
 
 假设用户正在说："今天天气不错，阳光明媚。"
 
 以下是您可能会收到的事件流以及如何解读它们：
 
-**时间点**
+| 时间点 | 用户说话进度 | API 响应 (text 和 stash) | 客户端 UI 应显示 (text + stash) |
+| --- | --- | --- | --- |
+| T1 | "今天……" | text: ""<br><br>stash: "今天" | 今天 |
+| T2 | "……天气……" | text: ""<br><br>stash: "今天天气" | 今天天气 |
+| T3 | "……不错" | text: "今天"<br><br>stash: "天气不错" | 今天天气不错<br><br>（注意，"今天"已被确认并移入text） |
+| T4 | （短暂停顿） | text: "今天天气不错，"<br><br>stash: "" | 今天天气不错，<br><br>（前半句完全确认） |
+| T5 | "……阳光……" | text: "今天天气不错，"<br><br>stash: "阳光" | 今天天气不错，阳光 |
+| T6 | "……明媚。" | text: "今天天气不错，"<br><br>stash: "阳光明媚。" | 今天天气不错，阳光明媚。 |
+| T7 | （结束说话） | \- | 使用 conversation.item.input\_audio\_transcription.completed 的 transcript 内容作为最终结果。 |
 
-**用户说话进度**
+<a id="conversation-item-input-audio-transcription-completed"></a>
 
-**API 响应 (text 和 stash)**
-
-**客户端 UI 应显示 (text + stash)**
-
-T1
-
-"今天……"
-
-text: ""
-
-stash: "今天"
-
-今天
-
-T2
-
-"……天气……"
-
-text: ""
-
-stash: "今天天气"
-
-今天天气
-
-T3
-
-"……不错"
-
-text: "今天"
-
-stash: "天气不错"
-
-今天天气不错
-
-（注意，"今天"已被确认并移入text）
-
-T4
-
-（短暂停顿）
-
-text: "今天天气不错，"
-
-stash: ""
-
-今天天气不错，
-
-（前半句完全确认）
-
-T5
-
-"……阳光……"
-
-text: "今天天气不错，"
-
-stash: "阳光"
-
-今天天气不错，阳光
-
-T6
-
-"……明媚。"
-
-text: "今天天气不错，"
-
-stash: "阳光明媚。"
-
-今天天气不错，阳光明媚。
-
-T7
-
-（结束说话）
-
-\-
-
-使用 conversation.item.input\_audio\_transcription.completed 的 transcript 内容作为最终结果。
+<a id="e1d8895b46qxo"></a>
 
 ## conversation.item.input\_audio\_transcription.completed
 
@@ -936,7 +976,9 @@ T7
 
 转录的文本内容。
 
-```
+<a id="code-block-10"></a>
+
+```json
 {
     "event_id": "event_FrrZcxiDfTB9LD9p4pVng",
     "type": "conversation.item.input_audio_transcription.completed",
@@ -945,6 +987,10 @@ T7
     "transcript": "喂，你好。"
 }
 ```
+
+<a id="conversation-item-input-audio-transcription-failed"></a>
+
+<a id="eca1e5495bpby"></a>
 
 ## conversation.item.input\_audio\_transcription.failed
 
@@ -970,6 +1016,8 @@ T7
 
 错误信息。
 
+<a id="accordion-属性-20"></a>
+
 属性
 
 `code`string
@@ -984,7 +1032,9 @@ T7
 
 错误相关的参数。
 
-```
+<a id="code-block-11"></a>
+
+```json
 {
   "type": "conversation.item.input_audio_transcription.failed",
   "item_id": "<item_id>",
@@ -996,6 +1046,10 @@ T7
   }
 }
 ```
+
+<a id="response-created"></a>
+
+<a id="e43ca5aa9eqp6"></a>
 
 ## response.created
 
@@ -1012,6 +1066,8 @@ T7
 `response`object
 
 响应对象。
+
+<a id="accordion-属性-21"></a>
 
 属性
 
@@ -1043,7 +1099,9 @@ T7
 
 此事件下目前为空。
 
-```
+<a id="code-block-12"></a>
+
+```json
 {
     "event_id": "event_XuDavMzQN3KKepqGu3KRh",
     "type": "response.created",
@@ -1063,6 +1121,10 @@ T7
 }
 ```
 
+<a id="response-done"></a>
+
+<a id="f2333c777d9s4"></a>
+
 ## response.done
 
 响应生成完成后，服务端会返回此事件。事件中的 `response` 对象包含除原始音频数据外的全部输出项。
@@ -1078,6 +1140,8 @@ T7
 `response`object
 
 响应对象。
+
+<a id="accordion-属性-22"></a>
 
 属性
 
@@ -1109,6 +1173,8 @@ T7
 
 响应的输出项数组；每个元素是对话项对象。
 
+<a id="accordion-数组元素-3"></a>
+
 数组元素
 
 `id`string
@@ -1135,6 +1201,8 @@ T7
 
 输出项的内容。当 type 为 `message` 时存在；每个元素是输出内容对象。
 
+<a id="accordion-数组元素-4"></a>
+
 数组元素
 
 `type`string
@@ -1160,6 +1228,8 @@ T7
 `arguments`string
 
 当 type 为 `function_call` 时，函数调用的完整参数（JSON 字符串）。
+
+<a id="accordion-type-mcp-call-最终项"></a>
 
 type=mcp\_call（最终项）
 
@@ -1191,6 +1261,8 @@ MCP `tools/call.result` 对象序列化后的 JSON 字符串；部分失败场�
 
 调用失败时出现。
 
+<a id="accordion-属性-23"></a>
+
 属性
 
 `type`string（必填）
@@ -1206,6 +1278,8 @@ MCP Server 返回 `isError=true` 时最终状态为 `failed`，也可能保留�
 `usage`object
 
 本次响应的 Token 消耗信息。
+
+<a id="accordion-属性-24"></a>
 
 属性
 
@@ -1233,11 +1307,15 @@ MCP Server 返回 `isError=true` 时最终状态为 `failed`，也可能保留�
 
 插件使用计量信息。启用联网搜索（`enable_search`）时返回。
 
+<a id="accordion-属性-25"></a>
+
 属性
 
 `search`object
 
 联网搜索计量信息。
+
+<a id="accordion-属性-26"></a>
 
 属性
 
@@ -1251,7 +1329,9 @@ MCP Server 返回 `isError=true` 时最终状态为 `failed`，也可能保留�
 
 示例：
 
-```
+<a id="code-block-13"></a>
+
+```json
 {
     "event_id": "event_CSaxRRYLvbrfexDXAEuDG",
     "type": "response.done",
@@ -1341,6 +1421,10 @@ MCP Server 返回 `isError=true` 时最终状态为 `failed`，也可能保留�
 }
 ```
 
+<a id="response-text-delta"></a>
+
+<a id="0c54be63e0c3w"></a>
+
 ## response.text.delta
 
 当输出模态仅包含文本，且模型增量生成新的文本时，服务端将返回此事件。
@@ -1373,7 +1457,9 @@ MCP Server 返回 `isError=true` 时最终状态为 `failed`，也可能保留�
 
 响应中输出项中内部部分的索引, 目前固定为 0。
 
-```
+<a id="code-block-14"></a>
+
+```json
 {
     "delta": "喂",
     "event_id": "event_TH49MauuPmRo1RGaMSlP7",
@@ -1384,6 +1470,10 @@ MCP Server 返回 `isError=true` 时最终状态为 `failed`，也可能保留�
     "content_index": 0
 }
 ```
+
+<a id="response-text-done"></a>
+
+<a id="d675635a94jfb"></a>
 
 ## response.text.done
 
@@ -1419,7 +1509,9 @@ MCP Server 返回 `isError=true` 时最终状态为 `failed`，也可能保留�
 
 模型输出的完整文本。
 
-```
+<a id="code-block-15"></a>
+
+```json
 {
   "event_id": "event_B1lIeE2Nac33zn5V7h2mm",
   "type": "response.text.done",
@@ -1430,6 +1522,10 @@ MCP Server 返回 `isError=true` 时最终状态为 `failed`，也可能保留�
   "text": "How can I assist you today?"
 }
 ```
+
+<a id="response-audio-delta"></a>
+
+<a id="a25cc50a15car"></a>
 
 ## response.audio.delta
 
@@ -1463,7 +1559,9 @@ WebSocket 接入时，当输出模态包含音频，且模型增量生成新的�
 
 模型增量输出的音频数据，使用Base64编码。
 
-```
+<a id="code-block-16"></a>
+
+```json
 {
   "event_id": "event_B1osWMZBtrEQbiIwW0qHQ",
   "type": "response.audio.delta",
@@ -1474,6 +1572,10 @@ WebSocket 接入时，当输出模态包含音频，且模型增量生成新的�
   "delta": "{base64 audio}"
 }
 ```
+
+<a id="response-audio-done"></a>
+
+<a id="9e8eb59c67qnt"></a>
 
 ## response.audio.done
 
@@ -1505,7 +1607,9 @@ WebSocket 接入时，当输出模态包含音频，且模型增量生成新的�
 
 响应输出项的索引。
 
-```
+<a id="code-block-17"></a>
+
+```json
 {
     "event_id": "event_Le1TDl7VfyHQxl47DtGxI",
     "type": "response.audio.done",
@@ -1515,6 +1619,10 @@ WebSocket 接入时，当输出模态包含音频，且模型增量生成新的�
     "content_index": 0
 }
 ```
+
+<a id="response-audio-transcript-delta"></a>
+
+<a id="35396453cfood"></a>
 
 ## response.audio\_transcript.delta
 
@@ -1548,7 +1656,9 @@ WebSocket 接入时，当输出模态包含音频，且模型增量生成新的�
 
 增量文本。
 
-```
+<a id="code-block-18"></a>
+
+```json
 {
     "event_id": "event_BksW7fOwnyavZdDxIzZYM",
     "type": "response.audio_transcript.delta",
@@ -1559,6 +1669,10 @@ WebSocket 接入时，当输出模态包含音频，且模型增量生成新的�
     "delta": "有什么"
 }
 ```
+
+<a id="response-audio-transcript-done"></a>
+
+<a id="f4d1698567bsm"></a>
 
 ## response.audio\_transcript.done
 
@@ -1592,7 +1706,9 @@ WebSocket 接入时，当输出模态包含音频，且模型增量生成新的�
 
 完整文本。
 
-```
+<a id="code-block-19"></a>
+
+```json
 {
     "event_id": "event_X49tL2WerT4WjxcmH16lS",
     "type": "response.audio_transcript.done",
@@ -1603,6 +1719,10 @@ WebSocket 接入时，当输出模态包含音频，且模型增量生成新的�
     "transcript": "你好呀！有什么我可以帮你的吗？"
 }
 ```
+
+<a id="response-function-call-arguments-delta"></a>
+
+<a id="sv01-fc-args-delta-h2"></a>
 
 ## response.function\_call\_arguments.delta
 
@@ -1636,7 +1756,9 @@ WebSocket 接入时，当输出模态包含音频，且模型增量生成新的�
 
 本段新增的参数字符串片段（增量）。需按顺序拼接。
 
-```
+<a id="code-block-20"></a>
+
+```json
 {
     "event_id": "event_SlKoJyEbPEqLq14DSM1u5",
     "type": "response.function_call_arguments.delta",
@@ -1647,6 +1769,10 @@ WebSocket 接入时，当输出模态包含音频，且模型增量生成新的�
     "delta": " {\"location\": \"北京\"}"
 }
 ```
+
+<a id="response-function-call-arguments-done"></a>
+
+<a id="sv02-fc-args-done-h2"></a>
 
 ## response.function\_call\_arguments.done
 
@@ -1684,7 +1810,9 @@ WebSocket 接入时，当输出模态包含音频，且模型增量生成新的�
 
 函数调用的完整参数，一般以 JSON 字符串形式表示。
 
-```
+<a id="code-block-21"></a>
+
+```json
 {
     "event_id": "event_X6suLyuL5agdH7r6koesM",
     "type": "response.function_call_arguments.done",
@@ -1696,6 +1824,10 @@ WebSocket 接入时，当输出模态包含音频，且模型增量生成新的�
     "arguments": " {\"location\": \"北京\"}"
 }
 ```
+
+<a id="response-output-item-added"></a>
+
+<a id="dae2260d40qtu"></a>
 
 ## response.output\_item.added
 
@@ -1720,6 +1852,8 @@ WebSocket 接入时，当输出模态包含音频，且模型增量生成新的�
 `item`object
 
 输出项信息。
+
+<a id="accordion-属性-27"></a>
 
 属性
 
@@ -1759,6 +1893,8 @@ WebSocket 接入时，当输出模态包含音频，且模型增量生成新的�
 
 当 type 为 `function_call` 时，函数调用的参数（JSON 字符串）。在 added 事件中初始为空字符串。
 
+<a id="accordion-type-mcp-call-初始项-2"></a>
+
 type=mcp\_call（初始项）
 
 `object`string（必填）
@@ -1785,7 +1921,9 @@ type=mcp\_call（初始项）
 
 初始通常为空字符串；完整参数以 `response.mcp_call_arguments.done` 和最终项为准。
 
-```
+<a id="code-block-22"></a>
+
+```json
 {
     "event_id": "event_DsCO341DEVtiATtCB6BUY",
     "type": "response.output_item.added",
@@ -1818,6 +1956,10 @@ type=mcp\_call（初始项）
 }
 ```
 
+<a id="response-output-item-done"></a>
+
+<a id="f580421f45w3h"></a>
+
 ## response.output\_item.done
 
 当新的项目输出完成时，服务端返回此事件。
@@ -1842,6 +1984,8 @@ type=mcp\_call（初始项）
 
 输出项信息。
 
+<a id="accordion-属性-28"></a>
+
 属性
 
 `id`string
@@ -1863,6 +2007,8 @@ type=mcp\_call（初始项）
 `content`array\[object\]
 
 消息的内容。当 type 为 `message` 时存在。下列字段对应本页示例中的数组元素。
+
+<a id="accordion-数组元素-5"></a>
 
 数组元素
 
@@ -1889,6 +2035,8 @@ type=mcp\_call（初始项）
 `arguments`string
 
 当 type 为 `function_call` 时，函数调用的完整参数（JSON 字符串）。
+
+<a id="accordion-type-mcp-call-最终项-2"></a>
 
 type=mcp\_call（最终项）
 
@@ -1920,6 +2068,8 @@ MCP `tools/call.result` 对象序列化后的 JSON 字符串；部分失败场�
 
 调用失败时出现。
 
+<a id="accordion-属性-29"></a>
+
 属性
 
 `type`string（必填）
@@ -1932,7 +2082,9 @@ MCP `tools/call.result` 对象序列化后的 JSON 字符串；部分失败场�
 
 MCP Server 返回 `isError=true` 时最终状态为 `failed`，也可能保留原始 `output`。
 
-```
+<a id="code-block-23"></a>
+
+```json
 {
     "event_id": "event_MEu5nlLw1LsOguHiehIP8",
     "type": "response.output_item.done",
@@ -1970,6 +2122,10 @@ MCP Server 返回 `isError=true` 时最终状态为 `failed`，也可能保留�
 }
 ```
 
+<a id="response-content-part-added"></a>
+
+<a id="de7fa0b877j25"></a>
+
 ## response.content\_part.added
 
 在响应生成过程中，向助手消息项中添加新内容部分时，服务端返回此事件。
@@ -2002,6 +2158,8 @@ MCP Server 返回 `isError=true` 时最终状态为 `failed`，也可能保留�
 
 输出项信息。
 
+<a id="accordion-属性-30"></a>
+
 属性
 
 `type`string
@@ -2012,7 +2170,9 @@ MCP Server 返回 `isError=true` 时最终状态为 `failed`，也可能保留�
 
 内容部分的文本。
 
-```
+<a id="code-block-24"></a>
+
+```json
 {
     "event_id": "event_AVBOmrgY3C8bjlRajfSUT",
     "type": "response.content_part.added",
@@ -2026,6 +2186,10 @@ MCP Server 返回 `isError=true` 时最终状态为 `failed`，也可能保留�
     }
 }
 ```
+
+<a id="response-content-part-done"></a>
+
+<a id="011ad54242wft"></a>
 
 ## response.content\_part.done
 
@@ -2059,6 +2223,8 @@ MCP Server 返回 `isError=true` 时最终状态为 `failed`，也可能保留�
 
 输出项信息。
 
+<a id="accordion-属性-31"></a>
+
 属性
 
 `type`string
@@ -2069,7 +2235,9 @@ MCP Server 返回 `isError=true` 时最终状态为 `failed`，也可能保留�
 
 内容部分的文本。
 
-```
+<a id="code-block-25"></a>
+
+```json
 {
     "event_id": "event_Il8HD19v58Qr5IBkw7LtN",
     "type": "response.content_part.done",
@@ -2084,29 +2252,25 @@ MCP Server 返回 `isError=true` 时最终状态为 `failed`，也可能保留�
 }
 ```
 
+<a id="mcp-事件"></a>
+
+<a id="qwen38-server"></a>
+
 ## MCP 事件
 
 本节介绍 `qwen3.8-omni-flash-realtime` 的 WebSocket 事件与字段。基础事件与字段见前述事件说明。表中“必填”表示所属对象出现时必须提供。ID 均为不透明字符串，不应依赖其长度、前缀或生成规则。`arguments`、`output` 的外层类型为 string，读取内容时需要再次解析 JSON。MCP 连接、工具发现和调用受服务配额及超时限制。
+
+<a id="mcp-list-tools"></a>
 
 ### mcp\_list\_tools.\*
 
 以下三个事件具有相同的字段结构：
 
-事件 type
-
-触发时机
-
-mcp\_list\_tools.in\_progress
-
-开始发现某个 MCP Server 的工具
-
-mcp\_list\_tools.completed
-
-工具发现成功并完成 allowed\_tools 过滤
-
-mcp\_list\_tools.failed
-
-工具发现失败、超时或结果超过服务限制
+| 事件 type | 触发时机 |
+| --- | --- |
+| mcp\_list\_tools.in\_progress | 开始发现某个 MCP Server 的工具 |
+| mcp\_list\_tools.completed | 工具发现成功并完成 allowed\_tools 过滤 |
+| mcp\_list\_tools.failed | 工具发现失败、超时或结果超过服务限制 |
 
 `event_id`string（必选）
 
@@ -2124,13 +2288,17 @@ mcp\_list\_tools.failed
 
 示例：
 
-```
+<a id="code-block-26"></a>
+
+```json
 {
   "event_id": "opaque_event_id",
   "type": "mcp_list_tools.completed",
   "item_id": "opaque_item_id"
 }
 ```
+
+<a id="response-mcp-call-arguments-delta"></a>
 
 ### response.mcp\_call\_arguments.delta
 
@@ -2164,7 +2332,9 @@ mcp\_list\_tools.failed
 
 示例：
 
-```
+<a id="code-block-27"></a>
+
+```json
 {
   "event_id": "opaque_event_id",
   "type": "response.mcp_call_arguments.delta",
@@ -2175,6 +2345,8 @@ mcp\_list\_tools.failed
   "obfuscation": "opaque-value"
 }
 ```
+
+<a id="response-mcp-call-arguments-done"></a>
 
 ### response.mcp\_call\_arguments.done
 
@@ -2204,7 +2376,9 @@ mcp\_list\_tools.failed
 
 示例：
 
-```
+<a id="code-block-28"></a>
+
+```json
 {
   "event_id": "opaque_event_id",
   "type": "response.mcp_call_arguments.done",
@@ -2215,23 +2389,15 @@ mcp\_list\_tools.failed
 }
 ```
 
+<a id="response-mcp-call"></a>
+
 ### response.mcp\_call.\*
 
-事件 type
-
-触发时机
-
-response.mcp\_call.in\_progress
-
-参数生成完成，且审批通过或无需审批，开始调用 MCP Server
-
-response.mcp\_call.completed
-
-MCP 工具调用成功
-
-response.mcp\_call.failed
-
-连接、协议、工具业务错误、审批拒绝、审批超时、调用超时或取消
+| 事件 type | 触发时机 |
+| --- | --- |
+| response.mcp\_call.in\_progress | 参数生成完成，且审批通过或无需审批，开始调用 MCP Server |
+| response.mcp\_call.completed | MCP 工具调用成功 |
+| response.mcp\_call.failed | 连接、协议、工具业务错误、审批拒绝、审批超时、调用超时或取消 |
 
 三个事件均使用以下字段：
 
@@ -2253,7 +2419,9 @@ response.mcp\_call.failed
 
 示例：
 
-```
+<a id="code-block-29"></a>
+
+```json
 {
   "event_id": "opaque_event_id",
   "type": "response.mcp_call.in_progress",
@@ -2262,9 +2430,17 @@ response.mcp\_call.failed
 }
 ```
 
+<a id="mcp-对话项"></a>
+
+<a id="mcp-items"></a>
+
 ## MCP 对话项
 
 以下对象是事件中 `item` 的取值类型，适用于 Qwen3.8-Omni-Flash-Realtime。
+
+<a id="mcp-list-tools-2"></a>
+
+<a id="mcp-list-tools-item"></a>
 
 ### mcp\_list\_tools
 
@@ -2272,7 +2448,9 @@ response.mcp\_call.failed
 
 示例：
 
-```
+<a id="code-block-30"></a>
+
+```json
 {
   "event_id": "opaque_event_id",
   "type": "conversation.item.created",
@@ -2300,13 +2478,19 @@ response.mcp\_call.failed
 }
 ```
 
+<a id="初始-mcp-call"></a>
+
+<a id="mcp-call-initial"></a>
+
 ### 初始 mcp\_call
 
 模型选择 MCP 工具时，该对象出现在 `response.output_item.added.item` 中，也可能通过 `conversation.item.created.item` 返回；字段见 [response.output\_item.added](#dae2260d40qtu) 和 [conversation.item.created](#4f23bd31e6awz) 的对应 `item` 分支。
 
 `response.output_item.added` 示例：
 
-```
+<a id="code-block-31"></a>
+
+```json
 {
   "event_id": "opaque_event_id",
   "type": "response.output_item.added",
@@ -2325,13 +2509,19 @@ response.mcp\_call.failed
 }
 ```
 
+<a id="mcp-approval-request"></a>
+
+<a id="mcp-approval-item"></a>
+
 ### mcp\_approval\_request
 
 该对象通过 `conversation.item.created` 返回；事件顶层字段和审批请求 `item` 字段见 [conversation.item.created](#4f23bd31e6awz)。
 
 示例：
 
-```
+<a id="code-block-32"></a>
+
+```json
 {
   "event_id": "opaque_event_id",
   "type": "conversation.item.created",
@@ -2349,15 +2539,27 @@ response.mcp\_call.failed
 }
 ```
 
+<a id="最终-mcp-call"></a>
+
+<a id="mcp-call-final"></a>
+
 ### 最终 mcp\_call
 
 MCP 调用进入终态后，该对象出现在 `response.output_item.done.item` 中，并进入父 `response.done.response.output` 的最终快照；字段见 [response.output\_item.done](#f580421f45w3h) 和 [response.done](#f2333c777d9s4) 的对应分支。
+
+<a id="sec-tabs"></a>
+
+<a id="成功"></a>
+
+<a id="成功-h4"></a>
 
 #### 成功
 
 成功示例：
 
-```
+<a id="code-block-33"></a>
+
+```json
 {
   "event_id": "opaque_event_id",
   "type": "response.output_item.done",
@@ -2376,11 +2578,17 @@ MCP 调用进入终态后，该对象出现在 `response.output_item.done.item` 
 }
 ```
 
+<a id="失败"></a>
+
+<a id="失败-h4"></a>
+
 #### 失败
 
 失败示例：
 
-```
+<a id="code-block-34"></a>
+
+```json
 {
   "event_id": "opaque_event_id",
   "type": "response.output_item.done",
@@ -2402,8 +2610,12 @@ MCP 调用进入终态后，该对象出现在 `response.output_item.done.item` 
 }
 ```
 
+<a id="mcp-错误"></a>
+
+<a id="mcp-error"></a>
+
 ### MCP 错误
 
 MCP 错误可能发生在工具发现或工具调用阶段。工具发现失败时的 `error` 字段见 [conversation.item.created](#4f23bd31e6awz) 的 `mcp_list_tools` 分支；工具调用失败时见 [response.output\_item.done](#f580421f45w3h) 的 `mcp_call` 分支。
 
-> 相关文档：[实时（Qwen-Omni-Realtime）](raw/model-user-guide/model-experience/omni-modal/realtime.md)。
+> 相关文档：[实时（Qwen-Omni-Realtime）](../../../model-user-guide/model-experience/omni-modal/realtime.md)。

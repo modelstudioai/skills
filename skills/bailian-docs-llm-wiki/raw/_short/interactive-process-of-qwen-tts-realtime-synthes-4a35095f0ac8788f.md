@@ -2,72 +2,74 @@
 
 本文介绍通过 WebSocket 连接访问 Qwen-TTS-Realtime 实时语音合成服务的接口地址、请求头和交互流程。
 
-使用 Python 调用模型时，请参见 [Qwen-TTS-Realtime Python SDK](raw/_short/realtime-websocket-python-sdk-qwen-tts-realtime-3dc71548ffc651f8.md)。
+使用 Python 调用模型时，请参见 [Qwen-TTS-Realtime Python SDK](realtime-websocket-python-sdk-qwen-tts-realtime-3dc71548ffc651f8.md)。
 
-**用户指南**：关于模型介绍和选型建议请参见[实时语音合成](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/realtime-tts-user-guide.md)
+**用户指南**：关于模型介绍和选型建议请参见[实时语音合成](../model-user-guide/model-experience/speech-and-audio/speech-synthesis/realtime-tts-user-guide.md)
 
 Qwen-TTS Realtime API 基于 WebSocket 协议。Java 和 Python 推荐通过 DashScope SDK 调用，可免去处理 WebSocket 细节；其他语言可使用 WebSocket 库直接连接。
+
+<a id="接口地址"></a>
+
+<a id="qwen_ws_endpoint_h2"></a>
 
 ## 接口地址
 
 WebSocket URL 固定如下，通过查询参数 `model` 指定要调用的模型名称：
 
+<a id="sec-tabs"></a>
+
+<a id="华北2-北京"></a>
+
+<a id="华北2-北京-h4"></a>
+
 #### 华北2（北京）
 
 WebSocket URL：`wss://dashscope.aliyuncs.com/api-ws/v1/realtime?model=qwen3-tts-flash-realtime`
+
+<a id="新加坡"></a>
+
+<a id="新加坡-h4"></a>
 
 #### 新加坡
 
 WebSocket URL：`wss://dashscope-intl.aliyuncs.com/api-ws/v1/realtime?model=qwen3-tts-flash-realtime`
 
-**重要**URL 必须使用 `wss://` 协议。Authorization 在请求头中设置（参见[请求头](https://help.aliyun.com/zh/model-studio/interactive-process-of-qwen-tts-realtime-synthesis#qwen_ws_header_h2)），模型通过 URL 查询参数 `model` 指定。
+> **重要**
+>
+> URL 必须使用 `wss://` 协议。Authorization 在请求头中设置（参见[请求头](interactive-process-of-qwen-tts-realtime-synthes-4a35095f0ac8788f.md#qwen_ws_header_h2)），模型通过 URL 查询参数 `model` 指定。
+
+<a id="请求头"></a>
+
+<a id="qwen_ws_header_h2"></a>
 
 ## 请求头
 
 请求头中需添加如下信息：
 
-**参数**
+| 参数 | 类型 | 是否必选 | 说明 |
+| --- | --- | --- | --- |
+| Authorization | string | 是 | 鉴权令牌，格式为 `Bearer <your_api_key>`，将 `<your_api_key>` 替换为实际的 API Key。 |
+| user-agent | string | 否 | 客户端标识，便于服务端追踪来源。 |
+| X-DashScope-WorkSpace | string | 否 | 阿里云百炼[业务空间ID](https://help.aliyun.com/zh/model-studio/use-workspace)。 |
 
-**类型**
+> **重要**
+>
+> Authorization 鉴权在 WebSocket 握手阶段验证。如果 API Key 无效或缺失，握手将失败并返回 HTTP 401/403 错误。
 
-**是否必选**
+<a id="交互流程"></a>
 
-**说明**
-
-Authorization
-
-string
-
-是
-
-鉴权令牌，格式为 `Bearer <your_api_key>`，将 `<your_api_key>` 替换为实际的 API Key。
-
-user-agent
-
-string
-
-否
-
-客户端标识，便于服务端追踪来源。
-
-X-DashScope-WorkSpace
-
-string
-
-否
-
-阿里云百炼[业务空间ID](https://help.aliyun.com/zh/model-studio/use-workspace)。
-
-**重要**Authorization 鉴权在 WebSocket 握手阶段验证。如果 API Key 无效或缺失，握手将失败并返回 HTTP 401/403 错误。
+<a id="qwen_ws_flow_h2"></a>
 
 ## 交互流程
 
-客户端事件和服务端事件的详细说明，请参见[客户端事件](raw/_short/qwen-tts-realtime-client-events-3c4f9162971ee712.md)和[服务端事件](raw/_short/qwen-tts-realtime-server-events-a0bed3a00638ceea.md)。
+客户端事件和服务端事件的详细说明，请参见[客户端事件](qwen-tts-realtime-client-events-3c4f9162971ee712.md)和[服务端事件](qwen-tts-realtime-server-events-a0bed3a00638ceea.md)。
 
 支持两种使用模式：
 
 -   **ServerCommit 模式**：服务端智能判断文本分段与合成时机，开发者无需关心内部状态切分。
 -   **Commit 模式**：客户端控制每一段文本的提交时间，需显式调用 `input_text_buffer.commit` 触发合成。
+
+<a id="6d7b0549d8ysc"></a>
 
 ##### 模式说明：
 
@@ -96,7 +98,9 @@ string
 
 连接建立后，服务端返回如下 `session.created` 事件：
 
-```
+<a id="code-block"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "session.created",
@@ -112,13 +116,23 @@ string
 }
 ```
 
+<a id="示例代码"></a>
+
+<a id="ws-examples"></a>
+
 ## 示例代码
 
 以下示例提供 Python、Java 客户端以及两种提交模式。先配置 `DASHSCOPE_API_KEY`，确保 API Key 与示例接口地域一致。Python 需要 `websockets`、`pyaudio`；Java 需要 Java-WebSocket、Gson，并使用 Java Sound 播放音频。每个客户端事件使用独立 UUID。
 
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-java-tab"></a>
+
 Java
 
-```
+<a id="code-code-group-java"></a>
+
+```xml
 <dependencies>
     <dependency>
         <groupId>org.java-websocket</groupId>
@@ -133,19 +147,31 @@ Java
 </dependencies>
 ```
 
+<a id="fig-code-group-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-python"></a>
+
+```bash
 pip install websockets pyaudio
 ```
 
 1.  **创建客户端**
     
+    <a id="sec-tabs-2"></a>
+    
+    <a id="java"></a>
+    
+    <a id="java-h4"></a>
+    
     #### Java
     
     在本地新建 Java 文件，命名为`TTSRealtimeClient.java`并复制以下代码到文件中：
     
-    ```
+    <a id="code-block-2"></a>
+    
+    ```java
     import com.google.gson.Gson;
     import com.google.gson.JsonObject;
     import org.java_websocket.client.WebSocketClient;
@@ -386,11 +412,17 @@ pip install websockets pyaudio
     }
     ```
     
+    <a id="python"></a>
+    
+    <a id="python-h4"></a>
+    
     #### Python
     
     在本地新建 Python 文件，命名为`tts_realtime_client.py`并复制以下代码到文件中：
     
-    ```
+    <a id="code-block-3"></a>
+    
+    ```python
     # -- coding: utf-8 --
     
     import asyncio
@@ -574,10 +606,12 @@ pip install websockets pyaudio
     ```
     
 
+<a id="可用的-sdk"></a>
+
 ## 可用的 SDK
 
--   [Python SDK](raw/_short/realtime-websocket-python-sdk-qwen-tts-realtime-3dc71548ffc651f8.md)
--   [Java SDK](raw/_short/qwen-tts-realtime-java-sdk-9494aeb08ebf2190.md)
+-   [Python SDK](realtime-websocket-python-sdk-qwen-tts-realtime-3dc71548ffc651f8.md)
+-   [Java SDK](qwen-tts-realtime-java-sdk-9494aeb08ebf2190.md)
 
 2.  **选择语音合成模式**
     
@@ -592,13 +626,27 @@ pip install websockets pyaudio
         客户端将文本添加至缓冲区后主动触发合成。适合精细控制断句的场景（如新闻播报）。
         
     
+    <a id="sec-tabs-3"></a>
+    
+    <a id="server-commit-模式"></a>
+    
+    <a id="server-commit-模式-h4"></a>
+    
     #### server\_commit 模式
+    
+    <a id="sec-tabs-4"></a>
+    
+    <a id="java-2"></a>
+    
+    <a id="java-2-h4"></a>
     
     #### Java
     
     在`TTSRealtimeClient.java`的同级目录下新建另一个 Java 文件，命名为`ServerCommit.java`，并将以下代码复制进文件中：
     
-    ```
+    <a id="code-block-4"></a>
+    
+    ```java
     import javax.sound.sampled.*;
     import java.io.*;
     import java.util.ArrayList;
@@ -715,11 +763,17 @@ pip install websockets pyaudio
     
     编译并运行`ServerCommit.java`，即可听到 Realtime API实时生成的音频。
     
+    <a id="python-2"></a>
+    
+    <a id="python-2-h4"></a>
+    
     #### Python
     
     在`tts_realtime_client.py`的同级目录下新建另一个 Python 文件，命名为`server_commit.py`，并将以下代码复制进文件中：
     
-    ```
+    <a id="code-block-5"></a>
+    
+    ```python
     import os
     import asyncio
     import logging
@@ -855,13 +909,25 @@ pip install websockets pyaudio
     
     运行`server_commit.py`，即可听到 Realtime API实时生成的音频。
     
+    <a id="commit-模式"></a>
+    
+    <a id="commit-模式-h4"></a>
+    
     #### commit 模式
+    
+    <a id="sec-tabs-5"></a>
+    
+    <a id="java-3"></a>
+    
+    <a id="java-3-h4"></a>
     
     #### Java
     
     在`TTSRealtimeClient.java`的同级目录下新建另一个 Java 文件，命名为`Commit.java`，并将以下代码复制进文件中：
     
-    ```
+    <a id="code-block-6"></a>
+    
+    ```java
     import javax.sound.sampled.*;
     import java.io.*;
     import java.util.ArrayList;
@@ -983,11 +1049,17 @@ pip install websockets pyaudio
     
     编译并运行`Commit.java`，可多次输入要合成的文本。在未输入文本的情况下单击 Enter 键，将从扬声器听到 Realtime API返回的音频。
     
+    <a id="python-3"></a>
+    
+    <a id="python-3-h4"></a>
+    
     #### Python
     
     在`tts_realtime_client.py`的同级目录下新建另一个 Python 文件，命名为`commit.py`，并将以下代码复制进文件中：
     
-    ```
+    <a id="code-block-7"></a>
+    
+    ```python
     import os
     import asyncio
     import logging

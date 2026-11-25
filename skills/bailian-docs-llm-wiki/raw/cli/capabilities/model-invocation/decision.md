@@ -4,13 +4,21 @@
 
 `bl decision` 调用决策模型，对业务状态做类型化判定，返回 `choice`、`noul` 或 `score` 结果及概率。适合工单分类、意图判断、风险分级等需要稳定结构化结果的场景。
 
-**说明**决策模型使用 Workspace 专用 Endpoint，需要 `--workspace-id`，也可通过 `BAILIAN_WORKSPACE_ID` 或配置中的 `workspace_id` 提供。支持 `cn-beijing`（默认）和 `ap-southeast-1` 地域；API Key 需要与目标地域匹配。
+> **说明**
+>
+> 决策模型使用 Workspace 专用 Endpoint，需要 `--workspace-id`，也可通过 `BAILIAN_WORKSPACE_ID` 或配置中的 `workspace_id` 提供。支持 `cn-beijing`（默认）和 `ap-southeast-1` 地域；API Key 需要与目标地域匹配。
 
-**重要**任意命令追加 `--help` 可查看完整参数说明，例如 `bl decision --help`。本文命令明细以 bl 2.5.1 为基准核实。
+> **重要**
+>
+> 任意命令追加 `--help` 可查看完整参数说明，例如 `bl decision --help`。本文命令明细以 bl 2.5.1 为基准核实。
+
+<a id="快速开始"></a>
 
 ## 快速开始
 
-```
+<a id="code-block"></a>
+
+```bash
 bl decision --workspace-id ws_xxx \
   --state "用户要求退款，是否属于退款诉求？" \
   --questions '{"refund":{"type":"noul","instructions":"是否在要求退款？"}}' \
@@ -19,7 +27,9 @@ bl decision --workspace-id ws_xxx \
 
 返回结果：
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "model": "decision-model-preview",
   "request_id": "12345678-abcd-1234-abcd-123456789012",
@@ -36,7 +46,11 @@ bl decision --workspace-id ws_xxx \
 }
 ```
 
+<a id="命令"></a>
+
 ## 命令
+
+<a id="bl-decision"></a>
 
 ### bl decision
 
@@ -44,101 +58,30 @@ bl decision --workspace-id ws_xxx \
 
 **语法**
 
-```
+<a id="code-block-3"></a>
+
+```bash
 bl decision (--state <text> | --state-file <path>) (--questions <json> | --questions-file <path>) | --request-file <path>
 ```
 
-参数
-
-类型
-
-必填
-
-说明
-
-`--model <model>`
-
-string
-
-否
-
-决策模型 ID（默认：decision-model-preview）
-
-`--state <text>`
-
-string
-
-否
-
-要判定的业务状态，按字符串发送
-
-`--state-file <path>`
-
-string
-
-否
-
-从文件读取状态；`.json` 按对象或数组解析，其他文件按文本读取；`-` 表示标准输入
-
-`--questions <json>`
-
-string
-
-否
-
-问题表 JSON，以问题 ID 为键
-
-`--questions-file <path>`
-
-string
-
-否
-
-从 JSON 文件读取问题表，支持 `{...}` 或 `{"questions":{...}}`
-
-`--request-file <path>`
-
-string
-
-否
-
-完整请求 JSON `{state, questions}`；会自动移除 `label` 和 `target`
-
-`--workspace-id <id>`
-
-string
-
-否
-
-Endpoint 使用的 Workspace ID（也可设置 BAILIAN\_WORKSPACE\_ID）
-
-`--region <cn-beijing|ap-southeast-1>`
-
-string
-
-否
-
-Endpoint 地域：`cn-beijing`（默认）或 `ap-southeast-1`
-
-`--api-key <key>`
-
-string
-
-否
-
-API Key
-
-`--base-url <url>`
-
-string
-
-否
-
-API Base URL
+| 参数 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| `--model <model>` | string | 否 | 决策模型 ID（默认：decision-model-preview） |
+| `--state <text>` | string | 否 | 要判定的业务状态，按字符串发送 |
+| `--state-file <path>` | string | 否 | 从文件读取状态；`.json` 按对象或数组解析，其他文件按文本读取；`-` 表示标准输入 |
+| `--questions <json>` | string | 否 | 问题表 JSON，以问题 ID 为键 |
+| `--questions-file <path>` | string | 否 | 从 JSON 文件读取问题表，支持 `{...}` 或 `{"questions":{...}}` |
+| `--request-file <path>` | string | 否 | 完整请求 JSON `{state, questions}`；会自动移除 `label` 和 `target` |
+| `--workspace-id <id>` | string | 否 | Endpoint 使用的 Workspace ID（也可设置 BAILIAN\_WORKSPACE\_ID） |
+| `--region <cn-beijing\|ap-southeast-1>` | string | 否 | Endpoint 地域：`cn-beijing`（默认）或 `ap-southeast-1` |
+| `--api-key <key>` | string | 否 | API Key |
+| `--base-url <url>` | string | 否 | API Base URL |
 
 **示例**：判断工单是否在要求退款
 
-```
+<a id="code-block-4"></a>
+
+```bash
 bl decision --workspace-id ws_xxx --state "用户要求退款，是否属于退款诉求？" --questions '{"refund":{"type":"noul","instructions":"是否在要求退款？"}}'
 ```
 
@@ -147,13 +90,19 @@ bl decision --workspace-id ws_xxx --state "用户要求退款，是否属于退�
 -   `--request-file` 会移除 `label` 和 `target`，可直接复用训练样本，不需要先手工删字段。
 -   单次请求建议不超过 16 个问题；问题越多，延迟越高。
 
+<a id="问题类型"></a>
+
 ## 问题类型
+
+<a id="choice"></a>
 
 ### choice
 
 从多个选项中选择一个，适合意图分类、工单类型判断。
 
-```
+<a id="code-block-5"></a>
+
+```json
 {
   "intent": {
     "type": "choice",
@@ -169,11 +118,15 @@ bl decision --workspace-id ws_xxx --state "用户要求退款，是否属于退�
 
 返回 `choice`、`confidence` 和 `probabilities`。
 
+<a id="noul"></a>
+
 ### noul
 
 判断是否成立，返回 0–1 的判定值。`criteria` 可省略，也可分别描述成立与不成立的含义。
 
-```
+<a id="code-block-6"></a>
+
+```json
 {
   "refund": {
     "type": "noul",
@@ -188,11 +141,15 @@ bl decision --workspace-id ws_xxx --state "用户要求退款，是否属于退�
 
 返回 `noul` 分值；文本输出显示为 `P(yes)`。
 
+<a id="score"></a>
+
 ### score
 
 按有序等级评分，`criteria` 必须是按从低到高排列的数组。
 
-```
+<a id="code-block-7"></a>
+
+```json
 {
   "urgency": {
     "type": "score",
@@ -204,11 +161,15 @@ bl decision --workspace-id ws_xxx --state "用户要求退款，是否属于退�
 
 返回 `score`、`legend`、`probabilities` 和 `confidence`。等级数量建议 3–7 个。
 
+<a id="输出"></a>
+
 ## 输出
 
 默认返回完整 JSON。使用 `--output text` 时，每个问题输出一行摘要：
 
-```
+<a id="code-block-8"></a>
+
+```text
 refund   noul P(yes)=0.98
 emotion  choice=angry  confidence=0.26  calm=0.03 angry=0.51 other=0.46
 input_tokens=49  latency_ms=49

@@ -2,63 +2,23 @@
 
 Qwen-OCR 是专为文字提取设计的视觉理解模型，支持从扫描文档、表格、票据等各类图像中提取文本或结构化数据，覆盖多语言场景，并内置信息抽取、表格解析、公式识别等高级任务。
 
+<a id="效果示例"></a>
+
+<a id="95fb1121df2gl"></a>
+
 ## 效果示例
 
-**输入图像**
+<table><thead><tr><th><strong>输入图像</strong></th><th><strong>识别结果</strong></th></tr></thead><tbody><tr><td><strong>识别多种语言</strong><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5727078571/p1008252.png" alt="image"></td><td><p><code>INTERNATIONAL</code></p><p><code>MOTHER LANGUAGE</code></p><p><code>DAY</code></p><p><code>Привет!</code></p><p><code>你好!</code></p><p><code>Bonjour!</code></p><p><code>Merhaba!</code></p><p><code>Ciao!</code></p><p><code>Hello!</code></p><p><code>Ola!</code></p><p><code>בר מולד</code></p><p><code>Salam!</code></p></td></tr><tr><td><strong>识别倾斜图像</strong><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5727078571/p1006562.png" alt="image"></td><td><p>产品介绍</p><p>本品采用韩国进口纤维丝制造，不缩水、不变形、不发霉、不生菌、不伤物品表面。具有真正的不粘油、吸水力强、耐水浸、清洗干净、无毒、无残留、易晾干等特点。</p><p>店家使用经验：不锈钢、陶瓷制品、浴盆、整体浴室大部分是白色的光洁表面，用其他的抹布擦洗表面污渍不易洗掉，太尖的容易划出划痕。使用这个仿真丝瓜布，沾少量中性洗涤剂揉出泡沫，很容易把这些表面污渍擦洗干净。</p><p>6941990612023</p><p>货号：2023</p></td></tr><tr><td><strong>定位文字位置</strong><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5727078571/p1006591.png" alt="img_1"><blockquote><p><a href="qwen-vl-ocr.md">高精识别</a>任务支持文字定位功能。</p></blockquote></td><td><strong>可视化定位效果</strong><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5727078571/p1006592.png" alt="img_1_location"><blockquote><p>可参见<a href="qwen-vl-ocr.md">常见问题</a>将每行文本的边界框绘制到原图上。</p></blockquote></td></tr></tbody></table>
 
-**识别结果**
+<a id="模型选型"></a>
 
-**识别多种语言**![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5727078571/p1008252.png)
-
-`INTERNATIONAL`
-
-`MOTHER LANGUAGE`
-
-`DAY`
-
-`Привет!`
-
-`你好!`
-
-`Bonjour!`
-
-`Merhaba!`
-
-`Ciao!`
-
-`Hello!`
-
-`Ola!`
-
-`בר מולד`
-
-`Salam!`
-
-**识别倾斜图像**![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5727078571/p1006562.png)
-
-产品介绍
-
-本品采用韩国进口纤维丝制造，不缩水、不变形、不发霉、不生菌、不伤物品表面。具有真正的不粘油、吸水力强、耐水浸、清洗干净、无毒、无残留、易晾干等特点。
-
-店家使用经验：不锈钢、陶瓷制品、浴盆、整体浴室大部分是白色的光洁表面，用其他的抹布擦洗表面污渍不易洗掉，太尖的容易划出划痕。使用这个仿真丝瓜布，沾少量中性洗涤剂揉出泡沫，很容易把这些表面污渍擦洗干净。
-
-6941990612023
-
-货号：2023
-
-**定位文字位置**![img\_1](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5727078571/p1006591.png)
-
-> [高精识别](raw/model-user-guide/model-experience/text-generation-model/specialized-models/qwen-vl-ocr.md)任务支持文字定位功能。
-
-**可视化定位效果**![img\_1\_location](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5727078571/p1006592.png)
-
-> 可参见[常见问题](raw/model-user-guide/model-experience/text-generation-model/specialized-models/qwen-vl-ocr.md)将每行文本的边界框绘制到原图上。
+<a id="0573ce495fnnf"></a>
 
 ## 模型选型
 
 Qwen-OCR 提供以下模型，请根据业务需求选择：
 
--   **Qwen3.5-OCR**：基于 Qwen3.5 架构，在文档解析、文字定位、关键信息提取等方面全面升级。支持多轮对话、PDF 文档解析。在业务卡证（身份证、驾驶证等）信息抽取场景效果显著提升，支持的卡证种类请参见[支持的证照与票据类型](https://help.aliyun.com/zh/model-studio/qwen-vl-ocr#d7bedd5c84156)。包括 `qwen3.5-ocr` 模型。
+-   **Qwen3.5-OCR**：基于 Qwen3.5 架构，在文档解析、文字定位、关键信息提取等方面全面升级。支持多轮对话、PDF 文档解析。在业务卡证（身份证、驾驶证等）信息抽取场景效果显著提升，支持的卡证种类请参见[支持的证照与票据类型](qwen-vl-ocr.md#d7bedd5c84156)。包括 `qwen3.5-ocr` 模型。
 -   **Qwen-VL-OCR**：基于 Qwen3-VL 架构，支持文档解析、文字定位（高精识别）、信息抽取、表格解析、公式识别、通用文字识别、多语言识别等内置任务，支持图像旋转矫正。包括 `qwen-vl-ocr`（稳定版）和 `qwen-vl-ocr-2025-11-20` 模型。
 -   **早期版本（不推荐）**：功能和效果均不及新版本，建议迁移至 `qwen3.5-ocr`。包括 `qwen-vl-ocr-2024-10-28` 模型。
 
@@ -66,11 +26,15 @@ Qwen-OCR 提供以下模型，请根据业务需求选择：
 
 **在线体验：**访问[阿里云百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)，在页面右上角选择目标地域，进入[视觉模型](https://bailian.console.aliyun.com/model/experience/vision)页面选择千问OCR 模型进行体验。
 
+<a id="准备工作"></a>
+
+<a id="0d58f5b445r12"></a>
+
 ## 准备工作
 
--   [已配置API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
+-   [已配置API Key](../../../../model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
     
--   如果使用 OpenAI SDK或 DashScope SDK，请先安装[最新版 SDK](raw/model-api-reference/preparations/install-sdk.md)。DashScope Python SDK最低版本为 2.0.1，Java SDK最低版本为 2.21.8。
+-   如果使用 OpenAI SDK或 DashScope SDK，请先安装[最新版 SDK](../../../../model-api-reference/preparations/install-sdk.md)。DashScope Python SDK最低版本为 2.0.1，Java SDK最低版本为 2.21.8。
     
     -   **DashScope SDK**
         -   **优势**：支持图像旋转矫正、内置 OCR 任务等所有高级特性，功能完整，调用简洁。
@@ -80,15 +44,31 @@ Qwen-OCR 提供以下模型，请根据业务需求选择：
         -   **限制**：高级功能（图像旋转矫正和内置 OCR 任务）不支持直接通过参数调用，需手动构造 Prompt 模拟，输出结果需自行解析。
         -   **适用场景**：已有 OpenAI 集成、且不依赖 DashScope 专有高级功能的项目。
 
+<a id="快速开始"></a>
+
+<a id="f2e1e179bds9z"></a>
+
 ## 快速开始
 
-以下示例从[火车票图片（URL）](https://img.alicdn.com/imgextra/i2/O1CN01ktT8451iQutqReELT_!!6000000004408-0-tps-689-487.jpg)中提取关键信息并以JSON格式返回。如需传入本地文件，参见[如何传入本地文件](https://help.aliyun.com/zh/model-studio/vision#d987f8de5395x)；图像规格要求参见[图像限制](https://help.aliyun.com/zh/model-studio/qwen-vl-ocr#8e3e11963by5s)。
+以下示例从[火车票图片（URL）](https://img.alicdn.com/imgextra/i2/O1CN01ktT8451iQutqReELT_!!6000000004408-0-tps-689-487.jpg)中提取关键信息并以JSON格式返回。如需传入本地文件，参见[如何传入本地文件](../vision.md#d987f8de5395x)；图像规格要求参见[图像限制](qwen-vl-ocr.md#8e3e11963by5s)。
+
+<a id="sec-tabs"></a>
+
+<a id="openai-兼容-chat"></a>
+
+<a id="openai-兼容-chat-h4"></a>
 
 #### OpenAI 兼容-Chat
 
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 from openai import OpenAI
 import os
 
@@ -131,9 +111,13 @@ except Exception as e:
     print(f"错误信息: {e}")
 ```
 
+<a id="fig-code-group-node-js-tab"></a>
+
 Node.js
 
-```
+<a id="code-code-group-node-js"></a>
+
+```javascript
 import OpenAI from 'openai';
 
 // 定义提取车票信息的Prompt
@@ -189,9 +173,13 @@ async function main() {
 main();
 ```
 
+<a id="fig-code-group-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-curl"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -219,9 +207,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="accordion-响应示例"></a>
+
 响应示例
 
-```
+<a id="code-block"></a>
+
+````json
 {
   "choices": [{
     "message": {
@@ -243,15 +235,25 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
   "model": "qwen3.5-ocr",
   "id": "chatcmpl-20e5d9ed-e8a3-947d-bebb-c47ef1378598"
 }
-```
+````
+
+<a id="openai-兼容-response"></a>
+
+<a id="openai-兼容-response-h4"></a>
 
 #### OpenAI 兼容-Response
 
-Response API 支持传入图片和 PDF，仅 `qwen3.5-ocr` 及以后版本支持。以下示例通过 Response API 传入图片进行文字提取，PDF 传入示例参见[PDF 文档解析](https://help.aliyun.com/zh/model-studio/qwen-vl-ocr#qwen35ocr_pdf_h2)。
+Response API 支持传入图片和 PDF，仅 `qwen3.5-ocr` 及以后版本支持。以下示例通过 Response API 传入图片进行文字提取，PDF 传入示例参见[PDF 文档解析](qwen-vl-ocr.md#qwen35ocr_pdf_h2)。
+
+<a id="fig-code-group-2"></a>
+
+<a id="fig-code-group-2-python-tab"></a>
 
 Python
 
-```
+<a id="code-code-group-2-python"></a>
+
+```python
 from openai import OpenAI
 import os
 
@@ -288,9 +290,13 @@ response = client.responses.create(
 print(response.output_text)
 ```
 
+<a id="fig-code-group-2-node-js-tab"></a>
+
 Node.js
 
-```
+<a id="code-code-group-2-node-js"></a>
+
+```javascript
 import OpenAI from 'openai';
 
 const PROMPT_TICKET_EXTRACTION = `
@@ -330,9 +336,13 @@ async function main() {
 main();
 ```
 
+<a id="fig-code-group-2-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-2-curl"></a>
+
+```bash
 # 若没有配置环境变量，请用百炼API Key将下行替换为：Authorization: Bearer sk-xxx
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
 curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses' \
@@ -358,11 +368,21 @@ curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode
 }'
 ```
 
+<a id="dashscope"></a>
+
+<a id="dashscope-h4"></a>
+
 #### DashScope
+
+<a id="fig-code-group-3"></a>
+
+<a id="fig-code-group-3-python-tab"></a>
 
 Python
 
-```
+<a id="code-code-group-3-python"></a>
+
+```python
 import os
 import dashscope
 
@@ -403,9 +423,13 @@ except Exception as e:
     print(f"An error occurred: {e}")
 ```
 
+<a id="fig-code-group-3-java-tab"></a>
+
 Java
 
-```
+<a id="code-code-group-3-java"></a>
+
+```java
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
@@ -461,9 +485,13 @@ public class Main {
 }
 ```
 
+<a id="fig-code-group-3-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-3-curl"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -494,9 +522,13 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
+<a id="accordion-响应示例-http-接口返回"></a>
+
 响应示例（HTTP 接口返回）
 
-```
+<a id="code-block-2"></a>
+
+````json
 {
   "output": {
     "choices": [{
@@ -517,7 +549,11 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
   },
   "request_id": "b3ca3bbb-2bdd-9367-90bd-f3f39e480db0"
 }
-```
+````
+
+<a id="调用内置任务"></a>
+
+<a id="3ea70c9a1a4lz"></a>
 
 ## 调用内置任务
 
@@ -530,6 +566,12 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 下表列出了各内置任务对应的`task`的取值、指定的`Prompt`、输出格式与示例：
 
+<a id="sec-tabs-2"></a>
+
+<a id="高精识别"></a>
+
+<a id="高精识别-h4"></a>
+
 #### 高精识别
 
 高精识别任务建议使用 `qwen-vl-ocr-2025-11-20` 及以后版本模型，支持：
@@ -537,51 +579,36 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 -   文本内容识别（提取文字）
 -   文本位置检测（定位文本行并输出坐标）
 
-> 获取文本边界框坐标后，可参见[常见问题](raw/model-user-guide/model-experience/text-generation-model/specialized-models/qwen-vl-ocr.md)将检测框绘制到原图上。
+> 获取文本边界框坐标后，可参见[常见问题](qwen-vl-ocr.md)将检测框绘制到原图上。
 
-**task的取值**
-
-**指定的Prompt**
-
-**输出格式与示例**
-
-`advanced_recognition`
-
-定位所有的文字行，并且返回旋转矩形`([cx, cy, width, height, angle])`的坐标结果。
-
--   格式： 纯文本或者从`ocr_result`字段中直接获取JSON对象
--   示例：
-
-```
-{
-  "output": {
-    "choices": [
+<table><thead><tr><th><strong>task的取值</strong></th><th><strong>指定的Prompt</strong></th><th><strong>输出格式与示例</strong></th></tr></thead><tbody><tr><td><p><code>advanced_recognition</code></p></td><td><p>定位所有的文字行，并且返回旋转矩形<code>([cx, cy, width, height, angle])</code>的坐标结果。</p></td><td><ul><li>格式： 纯文本或者从<code>ocr_result</code>字段中直接获取JSON对象</li><li>示例：</li></ul><a id="code-block-3"></a><pre class="language-json"><code>{
+  &quot;output&quot;: {
+    &quot;choices&quot;: [
       {
-        "message": {
-          "content": [
+        &quot;message&quot;: {
+          &quot;content&quot;: [
             {
-              "ocr_result": {
-                "words_info": [
+              &quot;ocr_result&quot;: {
+                &quot;words_info&quot;: [
                   {
-                    "rotate_rect": [398,153,134,27,90],
-                    "text": "Magsafe"
+                    &quot;rotate_rect&quot;: [398,153,134,27,90],
+                    &quot;text&quot;: &quot;Magsafe&quot;
                   },
                   {
-                    "rotate_rect": [680,250,40,167,90],
-                    "text": "金盾系列"
+                    &quot;rotate_rect&quot;: [680,250,40,167,90],
+                    &quot;text&quot;: &quot;金盾系列&quot;
                   },
-```
+</code></pre><ul><li><p><code>text</code>：每行的文本内容。</p></li><li><p><code>rotate_rect</code>：</p><ul><li>示例值：[center_x, center_y, width, height, angle]</li><li>含义：文字框的旋转矩形表示，<code>center_x、center_y 为文本框中心点坐标</code>，<code>width</code>为宽度，<code>height</code>为高度，<code>angle</code>为文本框相对于水平方向的旋转角度，取值范围为<code>[-90, 90]</code>。</li></ul></li></ul></td></tr></tbody></table>
 
--   `text`：每行的文本内容。
-    
--   `rotate_rect`：
-    
-    -   示例值：\[center\_x, center\_y, width, height, angle\]
-    -   含义：文字框的旋转矩形表示，`center_x、center_y 为文本框中心点坐标`，`width`为宽度，`height`为高度，`angle`为文本框相对于水平方向的旋转角度，取值范围为`[-90, 90]`。
+<a id="fig-code-group-4"></a>
+
+<a id="fig-code-group-4-python-tab"></a>
 
 python
 
-```
+<a id="code-code-group-4-python"></a>
+
+```python
 import os
 import dashscope
 
@@ -613,9 +640,13 @@ response = dashscope.MultiModalConversation.call(
 print(response["output"]["choices"][0]["message"].content[0]["ocr_result"])
 ```
 
+<a id="fig-code-group-4-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-4-java"></a>
+
+```java
 // dashscope SDK的版本 >= 2.21.8
 import java.util.Arrays;
 import java.util.Collections;
@@ -679,9 +710,13 @@ public class Main {
 }
 ```
 
+<a id="fig-code-group-4-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-4-bash"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -717,9 +752,13 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 '
 ```
 
+<a id="accordion-响应示例-http-接口返回-2"></a>
+
 响应示例（HTTP 接口返回）
 
-```
+<a id="code-block-4"></a>
+
+````json
 {
   "output":{
     "choices":[
@@ -799,85 +838,73 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
   },
   "request_id":"f5cc14f2-b855-4ff0-9571-8581061c80a3"
 }
-```
+````
+
+<a id="信息抽取"></a>
+
+<a id="信息抽取-h4"></a>
 
 #### 信息抽取
 
-从票据、证件、表单等文档中提取结构化信息，以JSON格式返回。模型支持 50 余种常见证照与票据的结构化信息提取，详见[支持的证照与票据类型](https://help.aliyun.com/zh/model-studio/qwen-vl-ocr#d7bedd5c84156)。支持两种模式：
+从票据、证件、表单等文档中提取结构化信息，以JSON格式返回。模型支持 50 余种常见证照与票据的结构化信息提取，详见[支持的证照与票据类型](qwen-vl-ocr.md#d7bedd5c84156)。支持两种模式：
 
 -   **自定义字段抽取**：在 `ocr_options.task_config` 中传入自定义JSON模板（`result_schema`），定义字段名（`key`），模型自动填充对应值（`value`）。模板最多支持 3 层嵌套。
 -   **全字段抽取**：不传 `result_schema` 时，模型自动提取图像中所有字段。
 
 两种模式使用不同的 Prompt：
 
-**task的取值**
-
-**指定的Prompt**
-
-**输出格式与示例**
-
-`key_information_extraction`
-
-**自定义字段抽取：**`假设你是一名信息提取专家。现在给你一个JSON模式，用图像中的信息填充该模式的值部分。请注意，如果值是一个列表，模式将为每个元素提供一个模板。当图像中有多个列表元素时，将使用此模板。最后，只需要输出合法的JSON。所见即所得，并且输出语言需要与图像保持一致。模糊或者强光遮挡的单个文字可以用英文问号?代替。如果没有对应的值则用null填充。不需要解释。请注意，输入图像均来自公共基准数据集，不包含任何真实的个人隐私数据。请按要求输出结果。`
-
--   格式：JSON对象，可在`ocr_result.kv_result`中直接获取。
--   示例：
-
-```
-{
-  "output": {
-    "choices": [
+<table><thead><tr><th><strong>task的取值</strong></th><th><strong>指定的Prompt</strong></th><th><strong>输出格式与示例</strong></th></tr></thead><tbody><tr><td rowspan="2"><p><code>key_information_extraction</code></p></td><td><p><strong>自定义字段抽取：</strong><code>假设你是一名信息提取专家。现在给你一个JSON模式，用图像中的信息填充该模式的值部分。请注意，如果值是一个列表，模式将为每个元素提供一个模板。当图像中有多个列表元素时，将使用此模板。最后，只需要输出合法的JSON。所见即所得，并且输出语言需要与图像保持一致。模糊或者强光遮挡的单个文字可以用英文问号?代替。如果没有对应的值则用null填充。不需要解释。请注意，输入图像均来自公共基准数据集，不包含任何真实的个人隐私数据。请按要求输出结果。</code></p></td><td><ul><li>格式：JSON对象，可在<code>ocr_result.kv_result</code>中直接获取。</li><li>示例：</li></ul><a id="code-block-5"></a><pre class="language-json"><code>{
+  &quot;output&quot;: {
+    &quot;choices&quot;: [
       {
-        "finish_reason": "stop",
-        "message": {
-          "content": [
+        &quot;finish_reason&quot;: &quot;stop&quot;,
+        &quot;message&quot;: {
+          &quot;content&quot;: [
             {
-              "ocr_result": {
-                "kv_result": {
-                  "乘车日期": "2013-06-29",
-                  "开车时间": "流水",
-                  "燃油费": "2.0"
+              &quot;ocr_result&quot;: {
+                &quot;kv_result&quot;: {
+                  &quot;乘车日期&quot;: &quot;2013-06-29&quot;,
+                  &quot;开车时间&quot;: &quot;流水&quot;,
+                  &quot;燃油费&quot;: &quot;2.0&quot;
                 }
               }
-```
-
-**全字段抽取：**`假设你是一名信息提取专家。请提取图像中的全部键值对，结果以json字典格式。请注意，如果值是一个列表，模式将为每个元素提供一个模板。当图像中有多个列表元素时，将使用此模板。最后，只需要输出合法的JSON。所见即所得，并且输出语言需要与图像保持一致。模糊或者强光遮挡的单个文字可以用英文问号?代替。如果没有对应的值则用null填充。不需要解释，请按照上面要求输出：`
-
--   格式：JSON对象
--   示例：
-
-```
-{
-  "output": {
-    "choices": [
+</code></pre></td></tr><tr><td><p><strong>全字段抽取：</strong><code>假设你是一名信息提取专家。请提取图像中的全部键值对，结果以json字典格式。请注意，如果值是一个列表，模式将为每个元素提供一个模板。当图像中有多个列表元素时，将使用此模板。最后，只需要输出合法的JSON。所见即所得，并且输出语言需要与图像保持一致。模糊或者强光遮挡的单个文字可以用英文问号?代替。如果没有对应的值则用null填充。不需要解释，请按照上面要求输出：</code></p></td><td><ul><li>格式：JSON对象</li><li>示例：</li></ul><a id="code-block-6"></a><pre class="language-json"><code>{
+  &quot;output&quot;: {
+    &quot;choices&quot;: [
       {
-        "finish_reason": "stop",
-        "message": {
-          "content": [
+        &quot;finish_reason&quot;: &quot;stop&quot;,
+        &quot;message&quot;: {
+          &quot;content&quot;: [
             {
-              "ocr_result": {
-                "kv_result": {
-                  "出发车站": "大汽(南)J?",
-                  "发票代码": "221021325353",
-                  "发票号码": "10283819",
-                  "发票联次": "发票联",
-                  "姓名": "",
-                  "总金额": "8.00",
-                  "日期": "2013-06-29",
-                  "时间": "流水",
-                  "标题": "辽宁省道路汽车客票",
-                  "身份证号": "",
-                  "达到车站": "开发区"
+              &quot;ocr_result&quot;: {
+                &quot;kv_result&quot;: {
+                  &quot;出发车站&quot;: &quot;大汽(南)J?&quot;,
+                  &quot;发票代码&quot;: &quot;221021325353&quot;,
+                  &quot;发票号码&quot;: &quot;10283819&quot;,
+                  &quot;发票联次&quot;: &quot;发票联&quot;,
+                  &quot;姓名&quot;: &quot;&quot;,
+                  &quot;总金额&quot;: &quot;8.00&quot;,
+                  &quot;日期&quot;: &quot;2013-06-29&quot;,
+                  &quot;时间&quot;: &quot;流水&quot;,
+                  &quot;标题&quot;: &quot;辽宁省道路汽车客票&quot;,
+                  &quot;身份证号&quot;: &quot;&quot;,
+                  &quot;达到车站&quot;: &quot;开发区&quot;
                 }
               }
             },
-```
+</code></pre></td></tr></tbody></table>
 
 以下是通过Dashscope SDK及HTTP方式调用的示例代码：
 
+<a id="fig-code-group-5"></a>
+
+<a id="fig-code-group-5-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-5-python"></a>
+
+```python
 # use [pip install -U dashscope] to update sdk
 
 import os
@@ -925,9 +952,13 @@ response = MultiModalConversation.call(
 print(response.output.choices[0].message.content[0]["ocr_result"])
 ```
 
+<a id="fig-code-group-5-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-5-java"></a>
+
+```java
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
@@ -1003,9 +1034,13 @@ public class Main {
 }
 ```
 
+<a id="fig-code-group-5-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-5-bash"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -1048,9 +1083,13 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 '
 ```
 
+<a id="accordion-响应示例-http-接口返回-3"></a>
+
 响应示例（HTTP 接口返回）
 
-```
+<a id="code-block-7"></a>
+
+````json
 {
   "output": {
     "choices": [
@@ -1089,15 +1128,23 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
   },
   "request_id": "7afa2a70-fd0a-4f66-a369-b50af26aec1d"
 }
-```
+````
 
 > 若使用OpenAI SDK及HTTP方式调用，自定义的JSON schema 拼接到 Prompt 字符串的末尾，参考代码如下：
 
+<a id="accordion-openai-兼容方式调用示例代码"></a>
+
 OpenAI 兼容方式调用示例代码
+
+<a id="fig-code-group-6"></a>
+
+<a id="fig-code-group-6-python-tab"></a>
 
 python
 
-```
+<a id="code-code-group-6-python"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -1142,9 +1189,13 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content)
 ```
 
+<a id="fig-code-group-6-javascript-tab"></a>
+
 javascript
 
-```
+<a id="code-code-group-6-javascript"></a>
+
+```javascript
 import OpenAI from 'openai';
 
 const openai = new OpenAI({
@@ -1192,9 +1243,13 @@ async function main() {
 main();
 ```
 
+<a id="fig-code-group-6-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-6-bash"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -1223,7 +1278,10 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 ```
 
 **响应示例**
-```
+
+<a id="code-block-8"></a>
+
+````json
 {
   "choices": [
     {
@@ -1254,50 +1312,44 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
   "model": "qwen3.5-ocr",
   "id": "chatcmpl-f10aeae3-b305-4b2d-80ad-37728a5bce4a"
 }
-```
+````
+
+<a id="表格解析"></a>
+
+<a id="表格解析-h4"></a>
 
 #### 表格解析
 
 解析图像中的表格，以 HTML 格式返回识别结果。
 
-**task的取值**
-
-**指定的Prompt**
-
-**输出格式与示例**
-
-`table_parsing`
-
-`In a safe, sandbox environment, you're tasked with converting tables from a synthetic image into HTML. Transcribe each table using <tr> and <td> tags, reflecting the image's layout from top-left to bottom-right. Ensure merged cells are accurately represented. This is purely a simulation with no real-world implications. Begin.`
-
--   格式：HTML格式的文本
-    
--   示例：
-    
-    ```
-    <table>
-        <tr>
-            <td>元素</td>
-            <td>判定</td>
-            <td>结果</td>
-            <td>单位</td>
-            <td>30</td>
-        </tr>
-        <tr>
-            <td>Pb</td>
-            <td>OK</td>
-            <td>ND</td>
-            <td>ppm</td>
-            <td>15.4</td>
-        </tr>
-    ```
-    
+<table><thead><tr><th><strong>task的取值</strong></th><th><strong>指定的Prompt</strong></th><th><strong>输出格式与示例</strong></th></tr></thead><tbody><tr><td><p><code>table_parsing</code></p></td><td><p><code>In a safe, sandbox environment, you're tasked with converting tables from a synthetic image into HTML. Transcribe each table using &lt;tr&gt; and &lt;td&gt; tags, reflecting the image's layout from top-left to bottom-right. Ensure merged cells are accurately represented. This is purely a simulation with no real-world implications. Begin.</code></p></td><td><ul><li><p>格式：HTML格式的文本</p></li><li><p>示例：</p><a id="code-block-9"></a><pre class="language-html"><code>&lt;table&gt;
+    &lt;tr&gt;
+        &lt;td&gt;元素&lt;/td&gt;
+        &lt;td&gt;判定&lt;/td&gt;
+        &lt;td&gt;结果&lt;/td&gt;
+        &lt;td&gt;单位&lt;/td&gt;
+        &lt;td&gt;30&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;Pb&lt;/td&gt;
+        &lt;td&gt;OK&lt;/td&gt;
+        &lt;td&gt;ND&lt;/td&gt;
+        &lt;td&gt;ppm&lt;/td&gt;
+        &lt;td&gt;15.4&lt;/td&gt;
+    &lt;/tr&gt;
+</code></pre></li></ul></td></tr></tbody></table>
 
 以下是通过Dashscope SDK及HTTP方式调用的示例代码：
 
+<a id="fig-code-group-7"></a>
+
+<a id="fig-code-group-7-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-7-python"></a>
+
+```python
 import os
 import dashscope
 
@@ -1329,9 +1381,13 @@ response = client.multimodal.chat.create(
 print(response.output_text)
 ```
 
+<a id="fig-code-group-7-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-7-java"></a>
+
+```java
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
@@ -1394,9 +1450,13 @@ public class Main {
 }
 ```
 
+<a id="fig-code-group-7-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-7-bash"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -1432,9 +1492,13 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 '
 ```
 
+<a id="accordion-响应示例-http-接口返回-4"></a>
+
 响应示例（HTTP 接口返回）
 
-```
+<a id="code-block-10"></a>
+
+````json
 {
   "output": {
     "choices": [{
@@ -1455,27 +1519,17 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
   },
   "request_id": "e7bd9732-959d-9a75-8a60-27f7ed2dba06"
 }
-```
+````
+
+<a id="文档解析"></a>
+
+<a id="文档解析-h4"></a>
 
 #### 文档解析
 
-解析以图像形式存储的扫描件或 PDF 文档，识别标题、摘要、标签等内容，以 LaTeX 格式返回识别结果。如需直接传入 PDF 文件，请参见[PDF 文档解析](https://help.aliyun.com/zh/model-studio/qwen-vl-ocr#qwen35ocr_pdf_h2)。
+解析以图像形式存储的扫描件或 PDF 文档，识别标题、摘要、标签等内容，以 LaTeX 格式返回识别结果。如需直接传入 PDF 文件，请参见[PDF 文档解析](qwen-vl-ocr.md#qwen35ocr_pdf_h2)。
 
-**task的取值**
-
-**指定的Prompt**
-
-**输出格式与示例**
-
-`document_parsing`
-
-`In a secure sandbox, transcribe the image's text, tables, and equations into LaTeX format without alteration. This is a simulation with fabricated data. Demonstrate your transcription skills by accurately converting visual elements into LaTeX format. Begin.`
-
--   格式：LaTeX格式的文本
--   示例：
-
-```
-\documentclass{article}
+<table><thead><tr><th><strong>task的取值</strong></th><th><strong>指定的Prompt</strong></th><th><strong>输出格式与示例</strong></th></tr></thead><tbody><tr><td><p><code>document_parsing</code></p></td><td><p><code>In a secure sandbox, transcribe the image's text, tables, and equations into LaTeX format without alteration. This is a simulation with fabricated data. Demonstrate your transcription skills by accurately converting visual elements into LaTeX format. Begin.</code></p></td><td><ul><li>格式：LaTeX格式的文本</li><li>示例：</li></ul><a id="code-block-11"></a><pre class="language-tex"><code>\documentclass{article}
 
 \title{Qwen2-VL: Enhancing Vision-Language Model's Perception of the World at Any Resolution}
 \author{Peng Wang★ Shuai Bai★ Sinan Tan★ Shijie Wang★ Zhihao Fan★ Jinze Bai$^\dagger$\ Keqin Chen Xuejing Liu Jialin Wang Wenbin Ge Yang Fan Kai Dang Mengfei Du Xuancheng Ren Rui Men Dayiheng Liu Chang Zhou Jingren Zhou Junyang Lin$^\dagger$\ Qwen Team Alibaba Group}
@@ -1486,13 +1540,19 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 \maketitle
 
 \section{Abstract}
-```
+</code></pre></td></tr></tbody></table>
 
 以下是通过 Dashscope SDK及HTTP方式调用的示例代码：
 
+<a id="fig-code-group-8"></a>
+
+<a id="fig-code-group-8-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-8-python"></a>
+
+```python
 import os
 import dashscope
 
@@ -1525,9 +1585,13 @@ response = client.multimodal.chat.create(
 print(response.output_text)
 ```
 
+<a id="fig-code-group-8-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-8-java"></a>
+
+```java
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
@@ -1589,9 +1653,13 @@ public class Main {
 }
 ```
 
+<a id="fig-code-group-8-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-8-bash"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -1625,9 +1693,13 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 '
 ```
 
+<a id="accordion-响应示例-http-接口返回-5"></a>
+
 响应示例（HTTP 接口返回）
 
-```
+<a id="code-block-12"></a>
+
+````json
 {
     "output": {
         "choices": [
@@ -1652,40 +1724,36 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     },
     "request_id": "7498b999-939e-9cf6-9dd3-9a7d2c6355e4"
 }
-```
+````
+
+<a id="公式识别"></a>
+
+<a id="公式识别-h4"></a>
 
 #### 公式识别
 
 解析图像中的数学公式，以 LaTeX 格式返回识别结果。
 
-**task的取值**
-
-**指定的Prompt**
-
-**输出格式与示例**
-
-`formula_recognition`
-
-`Extract and output the LaTeX representation of the formula from the image, without any additional text or descriptions.`
-
--   格式：LaTeX的文本
--   示例：
-
-```
-$$\tilde { Q } ( x ) : =
+<table><thead><tr><th><strong>task的取值</strong></th><th><strong>指定的Prompt</strong></th><th><strong>输出格式与示例</strong></th></tr></thead><tbody><tr><td><p><code>formula_recognition</code></p></td><td><p><code>Extract and output the LaTeX representation of the formula from the image, without any additional text or descriptions.</code></p></td><td><ul><li>格式：LaTeX的文本</li><li>示例：</li></ul><a id="code-block-13"></a><pre class="language-tex"><code>$$\tilde { Q } ( x ) : =
   \frac { 2 } { \pi } \Omega ,
   \tilde { T } : = T ,
   \tilde { H } = \tilde { h } T ,
   \tilde { h } = \frac { 1 } { m }
   \sum _ { j = 1 }^ { m } w _ { j }
   - z _ { 1 } .$$
-```
+</code></pre></td></tr></tbody></table>
 
 以下是通过 Dashscope SDK及HTTP方式调用的示例代码：
 
+<a id="fig-code-group-9"></a>
+
+<a id="fig-code-group-9-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-9-python"></a>
+
+```python
 import os
 import dashscope
 
@@ -1719,9 +1787,13 @@ response = client.multimodal.chat.create(
 print(response.output_text)
 ```
 
+<a id="fig-code-group-9-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-9-java"></a>
+
+```java
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
@@ -1784,9 +1856,13 @@ public class Main {
 }
 ```
 
+<a id="fig-code-group-9-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-9-bash"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -1822,9 +1898,13 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 '
 ```
 
+<a id="accordion-响应示例-http-接口返回-6"></a>
+
 响应示例（HTTP 接口返回）
 
-```
+<a id="code-block-14"></a>
+
+```json
 {
   "output": {
     "choices": [
@@ -1851,30 +1931,27 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }
 ```
 
+<a id="通用文字识别"></a>
+
+<a id="通用文字识别-h4"></a>
+
 #### 通用文字识别
 
 适用于中英文场景的通用文字识别，以纯文本格式返回识别结果。
 
-**task的取值**
-
-**指定的Prompt**
-
-**输出格式与示例**
-
-`text_recognition`
-
-`Please output only the text content from the image without any additional descriptions or formatting.`
-
--   格式：纯文本
-    
--   示例："读者对象\\n\\n如果你是......"
-    
+<table><thead><tr><th><p><strong>task的取值</strong></p></th><th><p><strong>指定的Prompt</strong></p></th><th><p><strong>输出格式与示例</strong></p></th></tr></thead><tbody><tr><td><p><code>text_recognition</code></p></td><td><p><code>Please output only the text content from the image without any additional descriptions or formatting.</code></p></td><td><ul><li><p>格式：纯文本</p></li><li><p>示例：&quot;读者对象\n\n如果你是......&quot;</p></li></ul></td></tr></tbody></table>
 
 以下是通过 Dashscope SDK及HTTP方式调用的示例代码：
 
+<a id="fig-code-group-10"></a>
+
+<a id="fig-code-group-10-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-10-python"></a>
+
+```python
 import os
 import dashscope
 
@@ -1907,9 +1984,13 @@ response = client.multimodal.chat.create(
 print(response.output_text)
 ```
 
+<a id="fig-code-group-10-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-10-java"></a>
+
+```java
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
@@ -1973,9 +2054,13 @@ public class Main {
 }
 ```
 
+<a id="fig-code-group-10-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-10-bash"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -2008,9 +2093,13 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
+<a id="accordion-响应示例-http-接口返回-7"></a>
+
 响应示例（HTTP 接口返回）
 
-```
+<a id="code-block-15"></a>
+
+```json
 {
   "output": {
     "choices": [{
@@ -2033,30 +2122,27 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }
 ```
 
+<a id="多语言识别"></a>
+
+<a id="多语言识别-h4"></a>
+
 #### 多语言识别
 
 适用于中英文以外小语种的文字识别，支持阿拉伯语、法语、德语、意大利语、日语、韩语、葡萄牙语、俄语、西班牙语、越南语，以纯文本格式返回结果。
 
-**task的取值**
-
-**指定的Prompt**
-
-**输出格式与示例**
-
-`multi_lan`
-
-`Please output only the text content from the image without any additional descriptions or formatting.`
-
--   格式：纯文本
-    
--   示例："Привіт! 、你好!、Bonjour!"
-    
+<table><thead><tr><th><p><strong>task的取值</strong></p></th><th><p><strong>指定的Prompt</strong></p></th><th><p><strong>输出格式与示例</strong></p></th></tr></thead><tbody><tr><td><p><code>multi_lan</code></p></td><td><p><code>Please output only the text content from the image without any additional descriptions or formatting.</code></p></td><td><ul><li><p>格式：纯文本</p></li><li><p>示例：&quot;Привіт! 、你好!、Bonjour!&quot;</p></li></ul></td></tr></tbody></table>
 
 以下是通过Dashscope SDK及HTTP方式调用的示例代码：
 
+<a id="fig-code-group-11"></a>
+
+<a id="fig-code-group-11-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-11-python"></a>
+
+```python
 import os
 import dashscope
 
@@ -2089,9 +2175,13 @@ response = client.multimodal.chat.create(
 print(response.output_text)
 ```
 
+<a id="fig-code-group-11-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-11-java"></a>
+
+```java
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
@@ -2154,9 +2244,13 @@ public class Main {
 }
 ```
 
+<a id="fig-code-group-11-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-11-bash"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -2192,9 +2286,13 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 '
 ```
 
+<a id="accordion-响应示例-http-接口返回-8"></a>
+
 响应示例（HTTP 接口返回）
 
-```
+<a id="code-block-16"></a>
+
+```json
 {
   "output": {
     "choices": [{
@@ -2217,15 +2315,25 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }
 ```
 
+<a id="pdf-文档解析"></a>
+
+<a id="qwen35ocr_pdf_h2"></a>
+
 ## PDF 文档解析
 
 `qwen3.5-ocr` 支持通过 Response API 直接传入 PDF 文件进行文档解析，无需手动将 PDF 拆分为图片，且输出长度不受模型最大输出长度限制，可完整解析长文档。仅支持 Response API 调用，不支持 Chat API。PDF 文件限制：不超过 100 MB；页数上限取决于 `ocr_options` 中的 `task`，设置为 `document_parsing` 时最大 50 页，未设置 `task` 或设置为其他任务时最大 10 页。
 
 以下示例通过 Response API 传入 PDF 文件进行文档解析。
 
+<a id="fig-code-group-12"></a>
+
+<a id="fig-code-group-12-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-12-python"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -2254,9 +2362,13 @@ response = client.responses.create(
 print(response.output[0].content[0].ocr_result)
 ```
 
+<a id="fig-code-group-12-node-js-tab"></a>
+
 Node.js
 
-```
+<a id="code-code-group-12-node-js"></a>
+
+```javascript
 import OpenAI from 'openai';
 
 const client = new OpenAI({
@@ -2286,9 +2398,13 @@ async function main() {
 main();
 ```
 
+<a id="fig-code-group-12-java-tab"></a>
+
 Java
 
-```
+<a id="code-code-group-12-java"></a>
+
+```java
 import java.util.Collections;
 import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
@@ -2336,9 +2452,13 @@ public class Main {
 }
 ```
 
+<a id="fig-code-group-12-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-12-curl"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
 curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses' \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -2362,25 +2482,41 @@ curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode
 }'
 ```
 
-> 如使用不支持 Response API 的早期模型（`qwen-vl-ocr-2025-11-20` 及之前），可使用图像处理库（如 `Python` 的 `pdf2image`）将 PDF 按页转换为图片后，参照[多图像输入](raw/model-user-guide/model-experience/text-generation-model/vision.md)逐页识别。
+> 如使用不支持 Response API 的早期模型（`qwen-vl-ocr-2025-11-20` 及之前），可使用图像处理库（如 `Python` 的 `pdf2image`）将 PDF 按页转换为图片后，参照[多图像输入](../vision.md)逐页识别。
 
-> 关于 OpenAI Responses API 的更多用法（如获取和管理已完成的模型响应），请参见[OpenAI 兼容 - Responses](raw/model-api-reference/qwen-api-reference/openai-compatible-responses.md)。
+> 关于 OpenAI Responses API 的更多用法（如获取和管理已完成的模型响应），请参见[OpenAI 兼容 - Responses](../../../../model-api-reference/qwen-api-reference/openai-compatible-responses.md)。
+
+<a id="传入本地文件-base64-编码或文件路径"></a>
+
+<a id="23d2494606vg6"></a>
 
 ## 传入本地文件（Base64 编码或文件路径）
 
-Qwen-OCR 支持两种本地文件上传方式：Base64 编码和文件路径。根据文件大小和SDK类型选择合适的方式（参见[如何选择文件上传方式](raw/model-user-guide/model-experience/text-generation-model/specialized-models/qwen-vl-ocr.md)），两种方式均需满足[图像限制](https://help.aliyun.com/zh/model-studio/qwen-vl-ocr#8e3e11963by5s)中的图像规格要求。
+Qwen-OCR 支持两种本地文件上传方式：Base64 编码和文件路径。根据文件大小和SDK类型选择合适的方式（参见[如何选择文件上传方式](qwen-vl-ocr.md)），两种方式均需满足[图像限制](qwen-vl-ocr.md#8e3e11963by5s)中的图像规格要求。
+
+<a id="sec-tabs-3"></a>
+
+<a id="base64-编码上传"></a>
+
+<a id="base64-编码上传-h4"></a>
 
 #### Base64 编码上传
 
 将图像转换为 Base64 编码字符串后传入模型，适用于 OpenAI 兼容 SDK、DashScope SDK及HTTP方式。
 
+<a id="accordion-传入-base64-编码字符串的步骤"></a>
+
 传入 Base64 编码字符串的步骤
 
 1.  文件编码：将本地图像转换为 Base64 编码；
     
+    <a id="accordion-图像转换为-base64-编码的示例代码"></a>
+    
     图像转换为 Base64 编码的示例代码
     
-    ```
+    <a id="code-block-17"></a>
+    
+    ```python
     #  编码函数： 将本地文件转换为 Base64 编码的字符串
     def encode_image(image_path):
         with open(image_path, "rb") as image_file:
@@ -2392,10 +2528,14 @@ Qwen-OCR 支持两种本地文件上传方式：Base64 编码和文件路径。�
     
 2.  构建[Data URL](https://www.rfc-editor.org/rfc/rfc2397)：格式如下：`data:[MIME_type];base64,{base64_image}`；
     
-    1.  `MIME_type`需替换为实际的媒体类型，确保与[图像限制](https://help.aliyun.com/zh/model-studio/qwen-vl-ocr#8e3e11963by5s)表格中`MIME Type` 的值匹配（如`image/jpeg`、`image/png`）；
+    1.  `MIME_type`需替换为实际的媒体类型，确保与[图像限制](qwen-vl-ocr.md#8e3e11963by5s)表格中`MIME Type` 的值匹配（如`image/jpeg`、`image/png`）；
     2.  `base64_image`为上一步生成的 Base64 字符串；
 3.  调用模型：通过`image`或`image_url`参数传递`Data URL`并调用模型。
     
+
+<a id="文件路径上传"></a>
+
+<a id="文件路径上传-h4"></a>
 
 #### 文件路径上传
 
@@ -2403,47 +2543,31 @@ Qwen-OCR 支持两种本地文件上传方式：Base64 编码和文件路径。�
 
 请您参考下表，结合您的编程语言与操作系统指定文件的路径。
 
+<a id="accordion-指定文件路径-以图像为例"></a>
+
 指定文件路径（以图像为例）
 
-**系统**
+<table><thead><tr><th><p><strong>系统</strong></p></th><th><p><strong>SDK</strong></p></th><th><p><strong>传入的文件路径</strong></p></th><th><p><strong>示例</strong></p></th></tr></thead><tbody><tr><td rowspan="2"><p>Linux或macOS系统</p></td><td><p>Python SDK</p></td><td rowspan="2"><p>file://{文件的绝对路径}</p></td><td rowspan="2"><p>file:///home/images/test.png</p></td></tr><tr><td><p>Java SDK</p></td></tr><tr><td rowspan="2"><p>Windows系统</p></td><td><p>Python SDK</p></td><td><p>file://{文件的绝对路径}</p></td><td><p>file://D:/images/test.png</p></td></tr><tr><td><p>Java SDK</p></td><td><p>file:///{文件的绝对路径}</p></td><td><p>file:///D:/images/test.png</p></td></tr></tbody></table>
 
-**SDK**
+<a id="sec-tabs-4"></a>
 
-**传入的文件路径**
+<a id="文件路径传入"></a>
 
-**示例**
-
-Linux或macOS系统
-
-Python SDK
-
-file://{文件的绝对路径}
-
-file:///home/images/test.png
-
-Java SDK
-
-Windows系统
-
-Python SDK
-
-file://{文件的绝对路径}
-
-file://D:/images/test.png
-
-Java SDK
-
-file:///{文件的绝对路径}
-
-file:///D:/images/test.png
+<a id="文件路径传入-h4"></a>
 
 #### 文件路径传入
 
 > 传入文件路径仅支持 DashScope Python 和 Java SDK方式调用，不支持 DashScope HTTP和OpenAI 兼容方式。
 
+<a id="fig-code-group-13"></a>
+
+<a id="fig-code-group-13-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-13-python"></a>
+
+```python
 import os
 import dashscope
 
@@ -2485,9 +2609,13 @@ response = client.multimodal.chat.create(
 print(response.output_text)
 ```
 
+<a id="fig-code-group-13-java-tab"></a>
+
 Java
 
-```
+<a id="code-code-group-13-java"></a>
+
+```java
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
@@ -2547,13 +2675,31 @@ public class Main {
 }
 ```
 
+<a id="base64-编码传入"></a>
+
+<a id="base64-编码传入-h4"></a>
+
 #### Base64 编码传入
+
+<a id="sec-tabs-5"></a>
+
+<a id="openai-兼容"></a>
+
+<a id="openai-兼容-h4"></a>
 
 #### OpenAI 兼容
 
+<a id="sec-tabs-6"></a>
+
+<a id="python"></a>
+
+<a id="python-h4"></a>
+
 #### Python
 
-```
+<a id="code-block-18"></a>
+
+```python
 from openai import OpenAI
 import os
 import base64
@@ -2601,9 +2747,15 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content)
 ```
 
+<a id="node-js"></a>
+
+<a id="node-js-h4"></a>
+
 #### Node.js
 
-```
+<a id="code-block-19"></a>
+
+```javascript
 import OpenAI from "openai";
 import {
   readFileSync
@@ -2659,12 +2811,18 @@ async function main() {
 main();
 ```
 
+<a id="curl"></a>
+
+<a id="curl-h4"></a>
+
 #### curl
 
--   将文件转换为 Base64 编码的字符串的方法可参见[示例代码](raw/model-user-guide/model-experience/text-generation-model/specialized-models/qwen-vl-ocr.md)；
+-   将文件转换为 Base64 编码的字符串的方法可参见[示例代码](qwen-vl-ocr.md)；
 -   为了便于展示，代码中的`"data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA..."` ，该Base64 编码字符串是截断的。在实际使用中，请务必传入完整的编码字符串。
 
-```
+<a id="code-block-20"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -2686,11 +2844,23 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 }'
 ```
 
+<a id="dashscope-2"></a>
+
+<a id="dashscope-2-h4"></a>
+
 #### DashScope
+
+<a id="sec-tabs-7"></a>
+
+<a id="python-2"></a>
+
+<a id="python-2-h4"></a>
 
 #### Python
 
-```
+<a id="code-block-21"></a>
+
+```python
 import os
 import base64
 import dashscope
@@ -2743,9 +2913,15 @@ response = client.multimodal.chat.create(
 print(response.output_text)
 ```
 
+<a id="java"></a>
+
+<a id="java-h4"></a>
+
 #### Java
 
-```
+<a id="code-block-22"></a>
+
+```java
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -2818,12 +2994,18 @@ public class Main {
 }
 ```
 
+<a id="curl-2"></a>
+
+<a id="curl-2-h4"></a>
+
 #### curl
 
--   将文件转换为 Base64 编码的字符串的方法可参见[示例代码](raw/model-user-guide/model-experience/text-generation-model/specialized-models/qwen-vl-ocr.md)；
+-   将文件转换为 Base64 编码的字符串的方法可参见[示例代码](qwen-vl-ocr.md)；
 -   为了便于展示，代码中的`"data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA..."` ，该Base64 编码字符串是截断的。在实际使用中，请务必传入完整的编码字符串。
 
-```
+<a id="code-block-23"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -2848,12 +3030,24 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }'
 ```
 
+<a id="更多用法"></a>
+
+<a id="b91625618eejc"></a>
+
 ## 更多用法
 
--   [流式输出](https://help.aliyun.com/zh/model-studio/stream#e98db795e87q9)
--   [多图像输入](raw/model-user-guide/model-experience/text-generation-model/vision.md)
+-   [流式输出](../stream.md#e98db795e87q9)
+-   [多图像输入](../vision.md)
+
+<a id="使用限制"></a>
+
+<a id="eca46e6648szp"></a>
 
 ## 使用限制
+
+<a id="图像限制"></a>
+
+<a id="8e3e11963by5s"></a>
 
 ### 图像限制
 
@@ -2864,47 +3058,14 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 -   **支持的图像格式**
     -   分辨率在4K `(3840x2160)`以下，支持的图像格式如下：
         
-        **图像格式**
-        
-        **常见扩展名**
-        
-        **MIME Type**
-        
-        BMP
-        
-        .bmp
-        
-        image/bmp
-        
-        JPEG
-        
-        .jpe, .jpeg, .jpg
-        
-        image/jpeg
-        
-        PNG
-        
-        .png
-        
-        image/png
-        
-        TIFF
-        
-        .tif, .tiff
-        
-        image/tiff
-        
-        WEBP
-        
-        .webp
-        
-        image/webp
-        
-        HEIC
-        
-        .heic
-        
-        image/heic
+        | 图像格式 | 常见扩展名 | MIME Type |
+        | --- | --- | --- |
+        | BMP | .bmp | image/bmp |
+        | JPEG | .jpe, .jpeg, .jpg | image/jpeg |
+        | PNG | .png | image/png |
+        | TIFF | .tif, .tiff | image/tiff |
+        | WEBP | .webp | image/webp |
+        | HEIC | .heic | image/heic |
         
     -   分辨率处于`4K(3840x2160)`到`8K(7680x4320)`范围，仅支持 JPEG、JPG 、PNG 格式。
         
@@ -2913,8 +3074,12 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
     -   公网URL和本地路径：`qwen3.5-ocr` 单张图像不超过 `20MB`，其他版本不超过 `10MB`。
     -   Base64 编码：编码后字符串不超过 `10MB`。
     
-    > 如需压缩文件体积请参见 [如何将图像或视频压缩到满足要求的大小](raw/model-user-guide/model-experience/text-generation-model/vision.md) 。
+    > 如需压缩文件体积请参见 [如何将图像或视频压缩到满足要求的大小](../vision.md) 。
     
+
+<a id="模型限制"></a>
+
+<a id="f0c2e57d60ttp"></a>
 
 ### 模型限制
 
@@ -2926,8 +3091,12 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
     
 -   **无法处理文本文件**：
     
-    -   含图像数据的文件：遵循[应用于生产环境](https://help.aliyun.com/zh/model-studio/qwen-vl-ocr#9c686fae01bgt)中的建议，先转换为图像序列再处理。
-    -   纯文本或结构化数据文件：使用[Qwen-Long](raw/model-user-guide/model-experience/text-generation-model/specialized-models/long-context-qwen-long.md)等长文本模型处理。
+    -   含图像数据的文件：遵循[应用于生产环境](qwen-vl-ocr.md#9c686fae01bgt)中的建议，先转换为图像序列再处理。
+    -   纯文本或结构化数据文件：使用[Qwen-Long](long-context-qwen-long.md)等长文本模型处理。
+
+<a id="支持的证照与票据类型"></a>
+
+<a id="d7bedd5c84156"></a>
 
 ### 支持的证照与票据类型
 
@@ -2943,11 +3112,17 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 -   **境外身份证件**：香港身份证、澳门身份证、印度尼西亚身份证、泰国身份证、越南身份证、马来西亚身份证、菲律宾身份证、印度身份证、土耳其身份证、巴基斯坦身份证、墨西哥身份证、英国身份证、美国身份证。
 -   **境外护照与驾照**：印度护照、新加坡护照、泰国护照、美国护照、澳大利亚护照、阿联酋护照、菲律宾驾照、日本驾照、美国驾照。
 
+<a id="计费与限流"></a>
+
+<a id="758c9563c4dt1"></a>
+
 ### 计费与限流
 
 -   **计费**：Qwen-OCR 为多模态模型，总费用 = 输入 token 数 × 输入单价 + 输出 token 数 × 输出单价。账单查看或充值请前往控制台[费用与成本](https://usercenter2.aliyun.com/finance/expense-report/expense-detail)页面。
     
     -   **计算图像的 Token**：可通过以下代码估算图像 token 用量，实际计费以 API 响应为准。
+        
+        <a id="accordion-计算图像token-的示例代码"></a>
         
         计算图像Token 的示例代码
         
@@ -2962,7 +3137,9 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
         
         以下代码演示模型内部的图像缩放逻辑，可用于估算 token 用量，实际计费以API响应为准。
         
-        ```
+        <a id="code-block-24"></a>
+        
+        ```python
         import math
         from PIL import Image
         
@@ -3006,10 +3183,14 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
         print(f"图像的总Token数为{token + 2}")
         ```
         
--   **限流**：Qwen-OCR 模型的限流规则参见[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)
+-   **限流**：Qwen-OCR 模型的限流规则参见[限流](../../../get-started-with-models/rate-limit.md)
     
 -   **免费额度（仅北京地域）**：自开通百炼或模型申请通过之日起 90 天内，Qwen-OCR 提供 100 万 token 免费额度。
     
+
+<a id="应用于生产环境"></a>
+
+<a id="9c686fae01bgt"></a>
 
 ## 应用于生产环境
 
@@ -3028,44 +3209,34 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
         -   `max_pixels`：防止超大图消耗过多 token，大多数场景使用默认值即可。若小字识别不清，可适当调高 `max_pixels`，但会增加 token 消耗。
 -   **结果校验**：模型识别结果可能存在误差。关键业务场景建议增加人工审核环节，或引入格式校验规则（如身份证号、银行卡号校验）。
     
--   **批量调用**：大规模、非实时场景可使用 [Batch API异步处理批量任务](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)，可降低调用成本。
+-   **批量调用**：大规模、非实时场景可使用 [Batch API异步处理批量任务](../../../../model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)，可降低调用成本。
     
 
+<a id="常见问题"></a>
+
+<a id="45ca92d929z0y"></a>
+
 ## 常见问题
+
+<a id="accordion-如何选择文件上传方式"></a>
 
 如何选择文件上传方式？
 
 根据SDK类型和文件大小选择上传方式：
 
-**文件类型**
-
-**文件规格**
-
-**DashScope SDK（Python、Java）**
-
-**OpenAI 兼容 / DashScope HTTP**
-
-图像
-
-大于 7MB 小于 20MB
-
-传入本地路径
-
-仅支持公网 URL，建议使用[阿里云对象存储服务](https://www.aliyun.com/product/oss)
-
-小于 7MB
-
-传入本地路径
-
-Base64 编码
+<table><thead><tr><th><p><strong>文件类型</strong></p></th><th><p><strong>文件规格</strong></p></th><th><p><strong>DashScope SDK（Python、Java）</strong></p></th><th><p><strong>OpenAI 兼容 / DashScope HTTP</strong></p></th></tr></thead><tbody><tr><td rowspan="2"><p>图像</p></td><td><p>大于 7MB 小于 20MB</p></td><td><p>传入本地路径</p></td><td><p>仅支持公网 URL，建议使用<a href="https://www.aliyun.com/product/oss">阿里云对象存储服务</a></p></td></tr><tr><td><p>小于 7MB</p></td><td><p>传入本地路径</p></td><td><p>Base64 编码</p></td></tr></tbody></table>
 
 > Base64 编码会增大数据体积约 33%，原始文件应小于 7 MB。
 
 > Base64 和本地路径方式无需服务端下载，网络不稳定时稳定性更高。
 
+<a id="accordion-模型输出文字定位的结果后-如何将检测框绘制到原图上"></a>
+
 模型输出文字定位的结果后，如何将检测框绘制到原图上？
 
 获取模型输出的文字定位结果后，参照[draw\_bbox.py](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20251104/wwsmee/draw_bbox.py)代码将检测框及标签绘制到原图上。
+
+<a id="accordion-传入自定义-prompt-后返回空内容或前端标签式内容怎么办"></a>
 
 传入自定义 Prompt 后返回空内容或前端标签式内容怎么办？
 
@@ -3077,10 +3248,18 @@ Base64 编码
 -   若不确定 Prompt 是否会影响输出格式，可不传 `text` 字段，使用模型默认的 Prompt。
 -   改用 `qwen3.7-plus` 模型，该模型传入相同的 HTML 结构 Prompt 仍返回纯文本结果。
 
+<a id="api参考"></a>
+
+<a id="bd096d877f19f"></a>
+
 ## API参考
 
-Qwen-OCR 模型的输入输出参数详见[Qwen-OCR API参考](raw/model-api-reference/more-models/qwen-vl-ocr-api-reference.md)。
+Qwen-OCR 模型的输入输出参数详见[Qwen-OCR API参考](../../../../model-api-reference/more-models/qwen-vl-ocr-api-reference.md)。
+
+<a id="错误码"></a>
+
+<a id="efc117f59a2gm"></a>
 
 ## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](../../../../model-api-reference/preparations/error-code.md)进行解决。

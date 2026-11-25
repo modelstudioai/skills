@@ -2,21 +2,35 @@
 
 在 OpenClaw 中使用阿里云百炼模型。
 
+<a id="快速开始"></a>
+
+<a id="oc-quickstart-h"></a>
+
 ## 快速开始
 
 1.  1
     
     安装 Qwen 插件
     
-    ```
+    <a id="code-block"></a>
+    
+    ```bash
     openclaw plugins install @openclaw/qwen-provider
     ```
     
-    **说明**无法安装插件时，参考[通过配置文件接入](#5843746f3452j)。
+    > **说明**
+    >
+    > 无法安装插件时，参考[通过配置文件接入](#5843746f3452j)。
     
 2.  2
     
     获取 API Key
+    
+    <a id="sec-tabs"></a>
+    
+    <a id="token-plan"></a>
+    
+    <a id="token-plan-h4"></a>
     
     #### Token Plan
     
@@ -25,9 +39,17 @@
     -   Token Plan 个人版：[创建或查看 API Key](https://bailian.console.aliyun.com/cn-beijing/subscription/token-plan/personal)
     -   Token Plan 团队版：[分配坐席并获取 API Key](https://bailian.console.aliyun.com/cn-beijing/subscription/uac-admin/organization/members/list)
     
+    <a id="按量计费"></a>
+    
+    <a id="按量计费-h4"></a>
+    
     #### 按量计费
     
     从 [百炼 API Key 页面](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key?spm=5176.28197581.0.0.307f29a4lC7Vbh) 获取百炼 API Key。
+    
+    <a id="coding-plan"></a>
+    
+    <a id="coding-plan-h4"></a>
     
     #### Coding Plan
     
@@ -39,21 +61,41 @@
     
     按计费方案运行对应命令，并按提示输入 API Key。
     
+    <a id="sec-tabs-2"></a>
+    
+    <a id="token-plan-2"></a>
+    
+    <a id="token-plan-2-h4"></a>
+    
     #### Token Plan
     
-    ```
+    <a id="code-block-2"></a>
+    
+    ```bash
     openclaw onboard --auth-choice qwen-token-plan-cn
     ```
     
+    <a id="按量计费-2"></a>
+    
+    <a id="按量计费-2-h4"></a>
+    
     #### 按量计费
     
-    ```
+    <a id="code-block-3"></a>
+    
+    ```bash
     openclaw onboard --auth-choice qwen-standard-api-key-cn
     ```
     
+    <a id="coding-plan-2"></a>
+    
+    <a id="coding-plan-2-h4"></a>
+    
     #### Coding Plan
     
-    ```
+    <a id="code-block-4"></a>
+    
+    ```bash
     openclaw onboard --auth-choice qwen-api-key-cn
     ```
     
@@ -61,15 +103,31 @@
     
     验证
     
+    <a id="oc-verify-h"></a>
+    
     运行以下命令确认模型列表和调用结果：
     
-    ```
+    <a id="code-block-5"></a>
+    
+    ```bash
     openclaw models list --provider qwen-token-plan
     openclaw agent --model qwen-token-plan/qwen3.8-max --message "只回复 ok"
     ```
     
 
+<a id="通过配置文件接入"></a>
+
+<a id="5843746f3452j"></a>
+
 ## 通过配置文件接入
+
+<a id="tpp-oc-h"></a>
+
+<a id="60f37ecc38352"></a>
+
+<a id="460252b4b7d14"></a>
+
+<a id="43e34509ccm5f"></a>
 
 适用于无法安装 Qwen 插件或需要手动管理配置的场景。
 
@@ -85,11 +143,19 @@
     
     写入配置
     
+    <a id="sec-tabs-3"></a>
+    
+    <a id="token-plan-个人版"></a>
+    
+    <a id="token-plan-个人版-h4"></a>
+    
     #### Token Plan 个人版
     
     将 `YOUR_API_KEY` 替换为 Token Plan 个人版 API Key。
     
-    ```
+    <a id="code-block-6"></a>
+    
+    ```json
     {
       "models": {
         "mode": "merge",
@@ -108,23 +174,6 @@
                 ],
                 "contextWindow": 1000000,
                 "maxTokens": 393216,
-                "cost": {
-                  "input": 0,
-                  "output": 0,
-                  "cacheRead": 0,
-                  "cacheWrite": 0
-                }
-              },
-              {
-                "id": "qwen4-max-preview",
-                "name": "qwen4-max-preview",
-                "reasoning": true,
-                "input": [
-                  "text",
-                  "image"
-                ],
-                "contextWindow": 1000000,
-                "maxTokens": 131072,
                 "cost": {
                   "input": 0,
                   "output": 0,
@@ -367,11 +416,17 @@
     }
     ```
     
+    <a id="token-plan-团队版"></a>
+    
+    <a id="token-plan-团队版-h4"></a>
+    
     #### Token Plan 团队版
     
     将 `YOUR_API_KEY` 替换为 Token Plan 团队版 API Key。
     
-    ```
+    <a id="code-block-7"></a>
+    
+    ```json
     {
       "models": {
         "mode": "merge",
@@ -390,23 +445,6 @@
                 ],
                 "contextWindow": 1000000,
                 "maxTokens": 393216,
-                "cost": {
-                  "input": 0,
-                  "output": 0,
-                  "cacheRead": 0,
-                  "cacheWrite": 0
-                }
-              },
-              {
-                "id": "qwen4-max-preview",
-                "name": "qwen4-max-preview",
-                "reasoning": true,
-                "input": [
-                  "text",
-                  "image"
-                ],
-                "contextWindow": 1000000,
-                "maxTokens": 131072,
                 "cost": {
                   "input": 0,
                   "output": 0,
@@ -765,11 +803,17 @@
     }
     ```
     
+    <a id="按量计费-3"></a>
+    
+    <a id="按量计费-3-h4"></a>
+    
     #### 按量计费
     
-    将 `YOUR_API_KEY` 替换为百炼 API Key，并将 `{WorkspaceId}` 替换为 [Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+    将 `YOUR_API_KEY` 替换为百炼 API Key，并将 `{WorkspaceId}` 替换为 [Workspace ID](../../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
     
-    ```
+    <a id="code-block-8"></a>
+    
+    ```json
     {
       "models": {
         "mode": "merge",
@@ -883,11 +927,17 @@
     }
     ```
     
+    <a id="coding-plan-3"></a>
+    
+    <a id="coding-plan-3-h4"></a>
+    
     #### Coding Plan
     
     将 `YOUR_API_KEY` 替换为 Coding Plan API Key。
     
-    ```
+    <a id="code-block-9"></a>
+    
+    ```json
     {
       "models": {
         "mode": "merge",
@@ -1017,18 +1067,34 @@
     }
     ```
     
-    **说明**使用 qwen4-max-preview 时，可用 `params.cacheRetention` 设置 `short`、`long` 或 `none`，`long` 对应 1 小时 TTL。
-    
-    **说明**使用 qwen4-max 时，可用 `params.cacheRetention` 设置 `short`、`long` 或 `none`，`long` 对应 1 小时 TTL。qwen4-max 的上下文长度为 1M Token；非思考模式最大输出 131,072 Token，思考与最终回答合计最大 262,144 Token；默认 reasoning\_effort=high，thinking\_budget=131072。
+    > **说明**
+    >
+    > 使用 qwen4-max 时，可用 `params.cacheRetention` 设置 `short`、`long` 或 `none`，`long` 对应 1 小时 TTL。qwen4-max 的上下文长度为 1M Token；非思考模式最大输出 131,072 Token，思考与最终回答合计最大 262,144 Token；默认 reasoning\_effort=high，thinking\_budget=131072。
     
 
-**说明**`gateway.auth.mode: none` 仅适合单机本地使用。需要共享或远程访问时，运行 `openclaw doctor --generate-gateway-token` 生成 token，再重启 Gateway。
+> **说明**
+>
+> `gateway.auth.mode: none` 仅适合单机本地使用。需要共享或远程访问时，运行 `openclaw doctor --generate-gateway-token` 生成 token，再重启 Gateway。
+
+<a id="接入消息渠道"></a>
+
+<a id="nyucdxvzk4rac"></a>
 
 ## 接入消息渠道
 
+<a id="sec-tabs-4"></a>
+
+<a id="钉钉"></a>
+
+<a id="钉钉-h4"></a>
+
 #### 钉钉
 
-**说明**使用[轻量应用服务器](https://help.aliyun.com/zh/simple-application-server/use-cases/quickly-deploy-and-use-openclaw)或[无影云电脑](https://help.aliyun.com/zh/edsp/getting-started/quickly-create-openclaw-through-wuying-cloud-computer-personal-edition/)部署 OpenClaw 时，通常已内置钉钉插件，并可通过图形化界面完成配置。
+<a id="osi54uxg79k0a"></a>
+
+> **说明**
+>
+> 使用[轻量应用服务器](https://help.aliyun.com/zh/simple-application-server/use-cases/quickly-deploy-and-use-openclaw)或[无影云电脑](https://help.aliyun.com/zh/edsp/getting-started/quickly-create-openclaw-through-wuying-cloud-computer-personal-edition/)部署 OpenClaw 时，通常已内置钉钉插件，并可通过图形化界面完成配置。
 
 1.  1
     
@@ -1044,7 +1110,9 @@
     
     安装钉钉渠道插件
     
-    ```
+    <a id="code-block-10"></a>
+    
+    ```bash
     openclaw plugins install @soimy/dingtalk
     openclaw plugins list
     ```
@@ -1057,7 +1125,9 @@
     
     在 `~/.openclaw/openclaw.json` 中添加以下配置。将 `YOUR_DINGTALK_APPKEY` 和 `YOUR_DINGTALK_APPSECRET` 替换为步骤一获取的凭证，不要覆盖已有的 `models`、`agents` 等配置。
     
-    ```
+    <a id="code-block-11"></a>
+    
+    ```json
     {
       "channels": {
         "dingtalk": {
@@ -1083,7 +1153,9 @@
     
     `dmPolicy` 和 `groupPolicy` 设为 `open` 适用于测试或个人使用。生产环境建议改为 `allowlist`，并添加 `allowFrom` 字段：
     
-    ```
+    <a id="code-block-12"></a>
+    
+    ```json
     "dmPolicy": "allowlist",
     "groupPolicy": "allowlist",
     "allowFrom": ["你的工号", "群ID"]
@@ -1093,7 +1165,9 @@
     
     验证
     
-    ```
+    <a id="code-block-13"></a>
+    
+    ```bash
     openclaw gateway restart
     openclaw status
     ```
@@ -1101,7 +1175,13 @@
     在 Channels 部分，DingTalk 应显示为 `ON`，状态为 `OK - configured`。在钉钉群聊中向机器人发送消息测试。
     
 
+<a id="飞书"></a>
+
+<a id="飞书-h4"></a>
+
 #### 飞书
+
+<a id="ouo90358ff4jd"></a>
 
 1.  1
     
@@ -1111,7 +1191,9 @@
     2.  在**凭证与基础信息**页面复制 **App ID**（格式如 `cli_xxx`）和 **App Secret**。
     3.  在**权限管理**页面点击**批量导入/导出权限**，粘贴以下 JSON，点击**下一步，确认新增权限**，再点击**申请开通**。
     
-    ```
+    <a id="code-block-14"></a>
+    
+    ```json
     {
       "scopes": {
         "tenant": [
@@ -1153,7 +1235,9 @@
     
     运行 `openclaw channels add`，按提示选择 **Feishu**，输入 App ID 和 App Secret，再重启网关：
     
-    ```
+    <a id="code-block-15"></a>
+    
+    ```bash
     openclaw gateway restart
     ```
     
@@ -1163,22 +1247,34 @@
     
     验证
     
-    ```
+    <a id="code-block-16"></a>
+    
+    ```bash
     openclaw status
     ```
     
     在 Channels 部分，Feishu 应显示为 `ON`，状态为 `OK`。在飞书中发送消息测试。
     
 
+<a id="微信"></a>
+
+<a id="微信-h4"></a>
+
 #### 微信
 
-**说明**微信版本需要 8.0.70 或更高。
+<a id="fzjn8t6oj80ub"></a>
+
+> **说明**
+>
+> 微信版本需要 8.0.70 或更高。
 
 1.  1
     
     安装微信渠道插件
     
-    ```
+    <a id="code-block-17"></a>
+    
+    ```bash
     npx -y @tencent-weixin/openclaw-weixin-cli@latest install
     ```
     
@@ -1190,20 +1286,30 @@
     
     验证
     
-    ```
+    <a id="code-block-18"></a>
+    
+    ```bash
     openclaw gateway restart
     ```
     
     在微信中找到 ClawBot，发送消息测试。
     
 
+<a id="qq"></a>
+
+<a id="qq-h4"></a>
+
 #### QQ
+
+<a id="1igw9p30iqe3b"></a>
 
 1.  1
     
     安装 QQ 渠道插件
     
-    ```
+    <a id="code-block-19"></a>
+    
+    ```bash
     openclaw plugins install @sliverp/qqbot
     openclaw plugins list
     ```
@@ -1217,7 +1323,9 @@
     1.  访问 [QQ 开放平台](https://q.qq.com/#/)，注册并登录开发者账号。
     2.  在 [OpenClaw 页面](https://q.qq.com/qqbot/openclaw/index.html) 创建机器人，获取 AppID 和 AppSecret。
     
-    **说明**AppSecret 不支持明文保存，二次查看会强制重置，请妥善保存。
+    > **说明**
+    >
+    > AppSecret 不支持明文保存，二次查看会强制重置，请妥善保存。
     
 3.  3
     
@@ -1225,7 +1333,9 @@
     
     在 `~/.openclaw/openclaw.json` 中添加以下配置。将 `YOUR_APP_ID` 和 `YOUR_APP_SECRET` 替换为步骤二获取的凭证，不要覆盖已有的 `models`、`agents` 等配置。
     
-    ```
+    <a id="code-block-20"></a>
+    
+    ```json
     {
       "channels": {
         "qqbot": {
@@ -1254,16 +1364,26 @@
     
     验证
     
-    ```
+    <a id="code-block-21"></a>
+    
+    ```bash
     openclaw gateway restart
     ```
     
     在 QQ 中向机器人发送消息测试。
     
 
+<a id="邮箱"></a>
+
+<a id="邮箱-h4"></a>
+
 #### 邮箱
 
+<a id="oc-ch-email-h3"></a>
+
 通过邮箱渠道，可以使用 163 邮箱等支持 IMAP/SMTP 协议的邮箱与 OpenClaw 进行交互。
+
+<a id="oc-ch-email-step1-h4"></a>
 
 #### 步骤一：安装邮箱渠道插件
 
@@ -1271,7 +1391,9 @@
     
     在终端中执行以下命令安装邮箱渠道插件：
     
-    ```
+    <a id="code-block-22"></a>
+    
+    ```bash
     openclaw plugins install @openclaw/email
     ```
     
@@ -1279,12 +1401,16 @@
     
     安装完成后，执行以下命令确认插件已加载：
     
-    ```
+    <a id="code-block-23"></a>
+    
+    ```bash
     openclaw plugins list
     ```
     
     输出中应包含 `email` 插件且状态为 `loaded`。
     
+
+<a id="oc-ch-email-step2-h4"></a>
 
 #### 步骤二：配置邮箱渠道
 
@@ -1292,7 +1418,9 @@
 
 以 163 邮箱为例，将 `YOUR_EMAIL` 替换为 163 邮箱地址，将 `YOUR_AUTH_CODE` 替换为 163 邮箱的授权码（非登录密码，需在 163 邮箱设置中开启 IMAP 服务后获取）。
 
-```
+<a id="code-block-24"></a>
+
+```json
 {
   "channels": {
     "email": {
@@ -1324,13 +1452,17 @@
 }
 ```
 
+<a id="oc-ch-email-step3-h4"></a>
+
 #### 步骤三：测试
 
 1.  1
     
     执行以下命令重启网关。
     
-    ```
+    <a id="code-block-25"></a>
+    
+    ```bash
     openclaw gateway restart
     ```
     
@@ -1338,7 +1470,9 @@
     
     执行以下命令检查邮箱渠道状态。
     
-    ```
+    <a id="code-block-26"></a>
+    
+    ```bash
     openclaw status
     ```
     
@@ -1349,23 +1483,37 @@
     向配置的邮箱地址发送一封邮件，验证机器人是否自动回复。
     
 
+<a id="错误码"></a>
+
+<a id="oc-error-h"></a>
+
 ## 错误码
 
 配置过程中遇到报错，参考对应计费方案的常见问题文档：
 
--   Token Plan：[Token Plan 常见问题](https://help.aliyun.com/zh/model-studio/token-plan-faq#tpt-h-errors)
--   按量计费：[错误码](raw/model-api-reference/preparations/error-code.md)
--   Coding Plan：[Coding Plan 常见问题](https://help.aliyun.com/zh/model-studio/coding-plan-faq#e07ad90b4f3l0)
+-   Token Plan：[Token Plan 常见问题](../token-plan-guide/token-plan-faq.md#tpt-h-errors)
+-   按量计费：[错误码](../../model-api-reference/preparations/error-code.md)
+-   Coding Plan：[Coding Plan 常见问题](../coding-plan-guide/coding-plan-faq.md#e07ad90b4f3l0)
+
+<a id="常见问题"></a>
+
+<a id="faq_title"></a>
 
 ## 常见问题
 
+<a id="accordion-如何按量计费接入节省计划与资源包"></a>
+
 如何按量计费接入节省计划与资源包？
 
-按量计费接入方式不变，使用百炼通用 API Key 和 Base URL。购买节省计划或资源包后自动生效，调用费用按抵扣顺序自动抵扣。详情参见[节省计划与资源包](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package#h2-usage)。
+按量计费接入方式不变，使用百炼通用 API Key 和 Base URL。购买节省计划或资源包后自动生效，调用费用按抵扣顺序自动抵扣。详情参见[节省计划与资源包](../../model-user-guide/test-1/savings-plan-and-resource-package.md#h2-usage)。
+
+<a id="accordion-如何查看已配置的模型"></a>
 
 如何查看已配置的模型？
 
 在终端输入 `openclaw tui`，进入 OpenClaw 终端命令行，接着输入 `/model` 查看模型列表。按回车键选中模型，按 Esc 键退出模型列表。
+
+<a id="accordion-为什么报错-http-401-incorrect-api-key-provided-no-api-key-found-for-provider-xxx-或-http-401-invalid-iam-token"></a>
 
 为什么报错“HTTP 401: Incorrect API key provided.”、“No API key found for provider xxx”或“HTTP 401: invalid\_iam\_token”？
 
@@ -1375,6 +1523,8 @@
 2.  OpenClaw 的历史配置缓存导致配置错误，请删除 `~/.openclaw/agents/main/agent/models.json` 文件中的 `providers` 配置项，并重启 OpenClaw。
 3.  `invalid_iam_token` 表示 API Key 经 IAM 鉴权校验失败。常见场景：API Key 已被吊销或禁用、API Key 归属的地域与 Base URL 所指地域不一致（例如 API Key 在华北2（北京），但 Base URL 指向其他地域）、使用 STS 临时凭证且已过期。请核对 API Key 与 Base URL 归属同一地域，并确认 API Key 状态正常。
 
+<a id="accordion-我已经配置过钉钉等其他渠道-如何安全地添加新套餐模型"></a>
+
 我已经配置过钉钉等其他渠道，如何安全地添加新套餐模型？
 
 -   不要直接全量覆盖。全量替换会覆盖自定义配置，请进行局部修改。
@@ -1383,11 +1533,15 @@
 
 重启网关后，已有会话可能无法正常对话，请重启会话。
 
+<a id="accordion-报错-device-identity-required-怎么办"></a>
+
 报错 device identity required 怎么办？
 
 详细报错信息：
 
-```
+<a id="code-block-27"></a>
+
+```text
 http://127.0.0.1:18791/15:05:56 [ws] closed before connect conn=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx remote=127.0.0.1 fwd=n/a origin=n/a host=127.0.0.1:18789 ua=n/a code=1008 reason=device identity required
 ```
 
@@ -1403,19 +1557,25 @@ http://127.0.0.1:18791/15:05:56 [ws] closed before connect conn=xxxxxxxx-xxxx-xx
 
 在终端执行以下命令，允许当前设备连接并重新生成浏览器访问地址：
 
-```
+<a id="code-block-28"></a>
+
+```bash
 openclaw devices approve --latest
 openclaw dashboard --no-open
 ```
 
 如果仍未解决，先清除异常的设备记录再重试：
 
-```
+<a id="code-block-29"></a>
+
+```bash
 openclaw devices clear --pending --yes
 openclaw dashboard --no-open
 ```
 
 执行 `openclaw devices list`，确认设备显示在 Paired 列表中即为正常。
+
+<a id="accordion-没有主动使用-openclaw-但仍产生了-token-消耗"></a>
 
 没有主动使用 OpenClaw，但仍产生了 Token 消耗
 

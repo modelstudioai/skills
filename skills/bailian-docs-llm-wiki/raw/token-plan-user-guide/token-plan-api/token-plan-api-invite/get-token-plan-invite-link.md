@@ -2,9 +2,17 @@
 
 获得TokenPlan成员邀请链接
 
+<a id="前提条件"></a>
+
+<a id="tpff846cf845"></a>
+
 ## 前提条件
 
 已获取阿里云账号或 RAM 用户的 AccessKey，并已为其授予调用本接口所需的 RAM 权限。建议将 AccessKey 配置为环境变量 `ALIBABA_CLOUD_ACCESS_KEY_ID` 和 `ALIBABA_CLOUD_ACCESS_KEY_SECRET`，避免明文写入代码。
+
+<a id="请求说明"></a>
+
+<a id="tp95bd6e7c17"></a>
 
 ## 请求说明
 
@@ -12,13 +20,9 @@
     
 -   **请求地址**
     
-    **地域**
-    
-    **Endpoint**
-    
-    华北2（北京）
-    
-    `GET [https://modelstudio.cn-beijing.aliyuncs.com/tokenplan/invite/link/get](https://modelstudio.cn-beijing.aliyuncs.com/tokenplan/invite/link/get)`
+    | 地域 | Endpoint |
+    | --- | --- |
+    | 华北2（北京） | `GET https://modelstudio.cn-beijing.aliyuncs.com/tokenplan/invite/link/get` |
     
 -   **认证方式**
     
@@ -31,61 +35,40 @@
 国内站 host 为 tokenplan-enterprise.bailian.aliyunportal.com  
 国际站 host 为 tokenplan-enterprise.modelstudio.aliyunportal.com
 
+<a id="请求参数"></a>
+
+<a id="tp0dded24d18"></a>
+
 ## 请求参数
 
 该接口无请求参数。
 
+<a id="返回参数"></a>
+
+<a id="tp95dd3c2988"></a>
+
 ## 返回参数
 
-**参数**
+| 参数 | 类型 | 描述 |
+| --- | --- | --- |
+| Success | boolean | 调用接口是否成功：<br>true：成功<br>false：失败 |
+| Code | string | 响应状态码。 |
+| Message | string | 响应信息。 |
+| Data | object | 返回数据 |
+| Token | string | 生成 Token。 |
+| ExpireTime | integer | 过期时间（单位：毫秒） |
 
-**类型**
+<a id="请求示例"></a>
 
-**描述**
-
-Success
-
-boolean
-
-调用接口是否成功：  
-true：成功  
-false：失败
-
-Code
-
-string
-
-响应状态码。
-
-Message
-
-string
-
-响应信息。
-
-Data
-
-object
-
-返回数据
-
-Token
-
-string
-
-生成 Token。
-
-ExpireTime
-
-integer
-
-过期时间（单位：毫秒）
+<a id="tpc56e15c5a6"></a>
 
 ## 请求示例
 
 本接口使用阿里云 OpenAPI 签名，下例中 `${SIGNATURE}` 需按 `ACS3-HMAC-SHA256` 算法计算得出，`x-acs-date`、`x-acs-signature-nonce` 需替换为实际值。
 
-```
+<a id="code-block"></a>
+
+```bash
 curl -X GET "https://modelstudio.cn-beijing.aliyuncs.com/tokenplan/invite/link/get" \
     --header "x-acs-action: GetTokenPlanInviteLink" \
     --header "x-acs-version: 2026-02-10" \
@@ -95,9 +78,15 @@ curl -X GET "https://modelstudio.cn-beijing.aliyuncs.com/tokenplan/invite/link/g
     --header "Authorization: ACS3-HMAC-SHA256 Credential=${ALIBABA_CLOUD_ACCESS_KEY_ID},SignedHeaders=host;x-acs-action;x-acs-content-sha256;x-acs-date;x-acs-signature-nonce;x-acs-version,Signature=${SIGNATURE}"
 ```
 
+<a id="返回示例"></a>
+
+<a id="tp58361664f9"></a>
+
 ## 返回示例
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "Success": true,
   "Data": {
@@ -107,6 +96,10 @@ curl -X GET "https://modelstudio.cn-beijing.aliyuncs.com/tokenplan/invite/link/g
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="tp5fdbda042c"></a>
+
 ## 错误码
 
-如果调用失败，会返回错误信息。更多错误码及解决方法，请参见[错误信息](raw/model-api-reference/preparations/error-code.md)。
+如果调用失败，会返回错误信息。更多错误码及解决方法，请参见[错误信息](../../../model-api-reference/preparations/error-code.md)。

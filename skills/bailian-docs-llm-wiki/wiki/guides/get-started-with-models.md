@@ -1,46 +1,32 @@
 # get started with models
 
-本文档指导开发者快速接入百炼平台的模型服务，涵盖模型选择、调用方式、关键参数配置及常见限制。所有模型均通过统一 API 接口调用，支持同步推理与流式响应。建议首次使用前通读 [开始使用](../../raw/model-user-guide/get-started-with-models.md) 全文，并重点关注地域可用性与限流策略。
+本文档面向开发者，介绍如何快速接入和调用百炼平台提供的大模型服务。你将了解当前支持的主流模型、关键请求参数、标准调用方式，以及生产环境需关注的限制与注意事项。所有内容均基于最新稳定版 API 和控制台能力。
 
-## 支持的模型与核心功能
+## 支持的模型与功能
 
-- 当前平台提供多类大语言模型（如 `qwen4-max`、`qwen2.5-72b`、`qwen-audio` 等）及多模态模型，完整列表见 [模型列表](../../raw/model-user-guide/get-started-with-models/model-studio-model-list.md)  
-- 模型能力覆盖文本生成、代码补全、多轮对话、语音转写、图像理解等场景；部分模型支持[函数调用](../concepts/function-calling.md)（Function Calling）和 JSON Schema 输出约束  
-- 所有模型均集成于 [模型服务概览](../../raw/model-user-guide/get-started-with-models/what-is-model-studio.md) 所述的 Model Studio 架构中，统一纳管权限、配额与可观测性
+百炼平台提供多类大语言模型（LLM）、多模态模型及推理优化版本，覆盖文本生成、代码补全、长上下文理解、图像理解等场景。当前主力模型包括 `qwen2.5-7b`、`qwen2.5-72b`、`qwen-vl-plus` 和 `qwen4-max`（详见 [qwen4-max](../../raw/model-user-guide/get-started-with-models/qwen4-max.md)）。完整模型列表可通过控制台或 [模型列表](../../raw/model-user-guide/get-started-with-models/model-studio-model-list.md) 页面实时查看。部分模型支持流式响应、[函数调用](../concepts/function-calling.md)（Function Calling）和自定义 system [prompt](prompt.md)。
+
+> **注意**：[选择模型](../../raw/model-user-guide/get-started-with-models/models.md) 文档中提及的 `qwen1.5-110b-chat` 已于 2024 年 Q3 下线，实际可用模型请以 [模型列表](../../raw/model-user-guide/get-started-with-models/model-studio-model-list.md) 为准。
 
 ## 关键参数
 
-调用时必需指定以下参数（以 REST API 为例）：
-
-| 参数名 | 类型 | 必填 | 说明 |
-|--------|------|------|------|
-| `model` | string | 是 | 模型 ID，必须与 [模型列表](../../raw/model-user-guide/get-started-with-models/model-studio-model-list.md) 中一致（如 `qwen4-max`） |
-| `input.messages` | array | 是 | 对话历史，格式为 `[{ "role": "user", "content": "..." }]`；`content` 支持纯文本或含 `image_url` 的多模态输入 |
-| `parameters.temperature` | number | 否 | 采样温度，默认 `0.8`；设为 `0` 可启用确定性解码（注意：[qwen4-max](../../raw/model-user-guide/get-started-with-models/qwen4-max.md) 文档明确要求该值 ≥ 0.01） |
-| `parameters.max_tokens` | integer | 否 | 最大输出 token 数，默认 `1024`，上限依模型而异 |
-
-> **注意**：`top_p` 与 `temperature` 同时设置时，部分旧版 SDK 可能忽略 `top_p`；请以 [错误码](../../raw/model-user-guide/get-started-with-models/error-code-start.md) 文档中 `INVALID_PARAMETER` 的校验逻辑为准。
+调用模型 API 时，必需参数包括 `model`（模型 ID，如 `"qwen2.5-7b"`）、`input.messages`（消息数组，至少含一个 user 角色消息）。推荐设置 `parameters.temperature`（默认 0.8）和 `parameters.max_tokens`（默认 1024，最大 32768）。对于 `qwen4-max` 等高阶模型，需显式指定 `parameters.top_p` 和 `parameters.repetition_penalty` 以保障输出稳定性（参见 [qwen4-max](../../raw/model-user-guide/get-started-with-models/qwen4-max.md)）。
 
 ## 使用方式
 
-1. **认证**：在请求 Header 中携带 `Authorization: Bearer <api_key>`，API Key 从控制台「API 密钥管理」获取  
-2. **端点**：`POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation`（文本类）或对应多模态路径  
-3. **示例请求体**：
-   ```json
-   {
-     "model": "qwen4-max",
-     "input": { "messages": [{ "role": "user", "content": "你好" }] },
-     "parameters": { "temperature": 0.5, "max_tokens": 512 }
-   }
-   ```
-4. 响应结构统一包含 `output.text`（主输出）、`usage.input_tokens` / `output_tokens`，流式响应需监听 `event: message` SSE 事件
+1. 在百炼控制台开通模型服务并获取 API Key；
+2. 构造 HTTP POST 请求至 `https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation`；
+3. 设置 `Authorization: Bearer <API_KEY>` 和 `Content-Type: application/json`；
+4. 提交 JSON payload（结构参考 [模型服务概览](../../raw/model-user-guide/get-started-with-models/what-is-model-studio.md)）；
+5. 解析响应中的 `output.text` 或流式 `output.choices[].delta.content`。
 
 ## 限制和注意事项
 
-- **地域限制**：模型服务仅在 [地域和服务部署范围](../../raw/model-user-guide/get-started-with-models/regions.md) 列出的 Region 可用（如 `cn-beijing`、`ap-southeast-1`），跨 Region 调用将返回 `REGION_NOT_SUPPORTED` 错误  
-- **限流策略**：默认 QPS 为 5，TPM（[Token](../concepts/token.md)s Per Minute）为 10000，具体阈值受账号等级与模型类型影响；详细规则见 [限流](../../raw/model-user-guide/get-started-with-models/rate-limit.md)  
-- **输入长度**：单次请求 `input.messages` 总 token 数不得超过模型上下文窗口（例如 `qwen4-max` 为 32768），超长将触发 `CONTEXT_LENGTH_EXCEEDED` 错误  
-- **安全合规**：禁止输入含 PII、违法或高风险内容；平台会主动拦截并记录违规调用，详情参见 [开始使用](../../raw/model-user-guide/get-started-with-models.md) 中的安全章节
+- 免费试用额度为 1000 次调用/月，超出后按量计费；
+- 单次请求 `input.messages` 总 token 数上限为 32768（`qwen4-max` 支持 1M 上下文，但需使用专用 endpoint）；
+- 限流策略为 10 QPS / 账号（突发允许 20 QPS），详情见 [限流](../../raw/model-user-guide/get-started-with-models/rate-limit.md)；
+- 错误响应统一遵循标准格式，常见错误码含义请查阅 [错误码](../../raw/model-user-guide/get-started-with-models/error-code-start.md)；
+- 模型服务部署地域影响延迟与合规性，支持地域列表见 [地域和服务部署范围](../../raw/model-user-guide/get-started-with-models/regions.md)。
 
 ## 来源文档
 

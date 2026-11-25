@@ -2,51 +2,29 @@
 
 API Key 疑似泄漏后的排查路径：定位并处置泄漏 Key 止损，查用量与费用锁定异常时段，查审计日志与推理日志确认调用行为，通过操作审计核对管理操作，完成定损取证与轮换恢复。
 
+<a id="排查思路"></a>
+
+<a id="overview"></a>
+
 ## 排查思路
 
 若已确认泄漏，请先前往[API Key 管理页面](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key)重置或删除泄漏的 Key 立即止损，再按本页步骤排查影响面；尚不确定是否泄漏时，从第二步的用量核对开始。
 
 泄漏排查要回答五个问题，每个问题对应一个控制台信息源：
 
-**要回答的问题**
-
-**查询入口**
-
-**能得到什么**
-
-泄漏的是哪个 Key？谁创建的？现在什么状态？
-
-API Key 管理页面
-
-Key ID、脱敏 Key、描述、归属账号、创建时间；重置、编辑、删除、查看费用操作
-
-这个 Key 被调用了多少、花了多少钱？
-
-模型用量、费用概览与账单
-
-按 API Key 分组的调用次数、Token 用量、按天粒度的用量曲线、金额
-
-调用从哪来、调用了什么模型、成功还是失败？
-
-审计日志
-
-Request ID、时间、模型、Token 用量、延迟、状态码、错误码；可按 API Key 筛选
-
-调用的输入输出内容是什么？
-
-推理日志（需事先开启）
-
-完整 Prompt 与 Response（长度上限 128K）
-
-这个 Key 经历过哪些管理操作？
-
-操作审计 ActionTrail
-
-控制台与 OpenAPI 层面的操作事件记录
+| 要回答的问题 | 查询入口 | 能得到什么 |
+| --- | --- | --- |
+| 泄漏的是哪个 Key？谁创建的？现在什么状态？ | API Key 管理页面 | Key ID、脱敏 Key、描述、归属账号、创建时间；重置、编辑、删除、查看费用操作 |
+| 这个 Key 被调用了多少、花了多少钱？ | 模型用量、费用概览与账单 | 按 API Key 分组的调用次数、Token 用量、按天粒度的用量曲线、金额 |
+| 调用从哪来、调用了什么模型、成功还是失败？ | 审计日志 | Request ID、时间、模型、Token 用量、延迟、状态码、错误码；可按 API Key 筛选 |
+| 调用的输入输出内容是什么？ | 推理日志（需事先开启） | 完整 Prompt 与 Response（长度上限 128K） |
+| 这个 Key 经历过哪些管理操作？ | 操作审计 ActionTrail | 控制台与 OpenAPI 层面的操作事件记录 |
 
 建议按以下顺序推进：
 
-```
+<a id="code-block"></a>
+
+```text
 疑似泄漏
   ├─ 第一步：定位 Key，立即重置或删除（止损）
   ├─ 第二步：按用量与费用曲线锁定异常时间段
@@ -55,6 +33,10 @@ Request ID、时间、模型、Token 用量、延迟、状态码、错误码；�
   └─ 第五步：汇总定损，轮换凭证并修复泄漏源
 ```
 
+<a id="第一步-定位并处置泄漏的-key"></a>
+
+<a id="locate-key"></a>
+
 ## 第一步：定位并处置泄漏的 Key
 
 前往阿里云百炼[API Key](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key)页面，在右上角选择**地域**：各地域的 Key 相互独立，不能跨地域混用。
@@ -62,18 +44,24 @@ Request ID、时间、模型、Token 用量、延迟、状态码、错误码；�
 已确认泄漏时，优先**重置**或**删除**该 Key 立即止损；**编辑**收窄权限仅适合尚无法确认泄漏、需要观察期的场景。在 API Key 列表中找到目标 Key，在其操作列执行：
 
 -   **重置**：为该 Key 换发新值，旧值随即失效。
--   **编辑**：收窄权限（IP 白名单、模型范围），参见[API Key 防泄漏最佳实践](https://help.aliyun.com/zh/model-studio/api-key-leak-prevention#ip-and-model-scope)。
+-   **编辑**：收窄权限（IP 白名单、模型范围），参见[API Key 防泄漏最佳实践](api-key-leak-prevention.md#ip-and-model-scope)。
 -   **删除**：立即失效、不可恢复。
 -   **查看费用**：跳转到该 Key 的费用与用量视图。
 
 该页面可查到 Key 的身份信息：Key ID、脱敏后的 API Key（如 sk-ws-H.YHXL\*\*\*\*PgonKozeC4RM-Nm）、描述、归属账号、创建时间。描述与归属账号是定位 Key 归属应用或负责人的第一线索；完整明文通常无法查看：新版 Key 仅创建时完整显示一次，部分旧版 Key 仍可在列表中直接复制，以列表实际提供的能力为准。排查时用脱敏值、ID 与描述比对。
 
-**说明**删除 Key 不会取消已关联的异步任务：未执行完的异步任务仍会继续执行并产生费用，需另行终止，参见[异步任务欠费计费说明](https://help.aliyun.com/zh/model-studio/bill-query-and-cost-management#async-task-overdue-billing)。排查期间也可为该 Key 开启预算的“达到预算后立即停止”作为第二道止损，参见[预算管理](raw/model-user-guide/test-1/budget-management.md)。
+> **说明**
+>
+> 删除 Key 不会取消已关联的异步任务：未执行完的异步任务仍会继续执行并产生费用，需另行终止，参见[异步任务欠费计费说明](../test-1/bill-query-and-cost-management.md#async-task-overdue-billing)。排查期间也可为该 Key 开启预算的“达到预算后立即停止”作为第二道止损，参见[预算管理](../test-1/budget-management.md)。
 
 处置时注意两个易踩的误区：
 
 1.  仅创建新 Key**不会使旧 Key 自动失效**，旧 Key 必须单独处置。
 2.  不要把新 Key 放回尚未排查完成的可疑环境，否则等于把新凭证再次交出去。
+
+<a id="第二步-查用量与费用-锁定异常时段"></a>
+
+<a id="usage-and-cost"></a>
 
 ## 第二步：查用量与费用，锁定异常时段
 
@@ -81,17 +69,25 @@ Request ID、时间、模型、Token 用量、延迟、状态码、错误码；�
 
 -   **时间粒度**：分钟（最多查 1 天）、小时（最多 7 天）、天（最多 31 天）、月（最多 12 个月）；定位突发高额调用用小时粒度。
 -   **数据延迟**：调用次数延迟约 1 分钟内，Token 用量与费用约延迟 10 分钟；刚发生的滥用可能稍后才体现，不要因暂时无数据排除嫌疑。
--   明细行可点击**查看费用**关联金额；费用概览与账单核算参见[查看费用概览](https://help.aliyun.com/zh/model-studio/model-usage-statistics#cost-overview-title)与[查询账单](https://help.aliyun.com/zh/model-studio/bill-query-and-cost-management#c59ddc52b96f9)。
+-   明细行可点击**查看费用**关联金额；费用概览与账单核算参见[查看费用概览](../model-monitoring/model-usage-statistics.md#cost-overview-title)与[查询账单](../test-1/bill-query-and-cost-management.md#c59ddc52b96f9)。
 
-指标口径与操作详情参见[查看模型用量](https://help.aliyun.com/zh/model-studio/model-usage-statistics#text-token-usage)。
+指标口径与操作详情参见[查看模型用量](../model-monitoring/model-usage-statistics.md#text-token-usage)。
 
 排查时先排除正常业务波动：将异常时间、模型、调用量与业务的发布、批处理、压测、定时任务对照，并核查使用该 Key 的服务部署地域、出口 IP 与第三方工具是否发生变化。境外 IP、新 IP、用量突增都是**需要核查的信号，不是泄漏的定案证据**。处置力度与怀疑程度匹配：仅有告警通知或轻度异常时，先用审计日志核对调用来源；用量曲线确认存在陌生来源调用后，立即重置或删除该 Key 再继续取证。
 
 建议以泄漏确认时间为终点，向前回看 7 天（小时粒度）与 31 天（天粒度），对比该 Key 的历史基线；锁定的异常时间窗即后续日志排查的范围。
 
+<a id="第三步-查调用日志-确认调用行为"></a>
+
+<a id="call-logs"></a>
+
 ## 第三步：查调用日志，确认调用行为
 
 百炼的调用日志分为审计日志与推理日志两类，能力边界不同，排查时要分清。
+
+<a id="审计日志"></a>
+
+<a id="audit-log"></a>
 
 ### 审计日志
 
@@ -101,15 +97,27 @@ Request ID、时间、模型、Token 用量、延迟、状态码、错误码；�
 -   **筛选与搜索**：按时间（最长 30 天）、模型、API Key ID、状态、推理类型筛选，或按 Request ID 搜索。
 -   **用途**：确认泄漏窗口内该 Key 的调用是否来自预期行为，例如大量 4xx/5xx、异常的调用节奏、陌生模型的调用记录。
 
-使用方法参见[日志](https://help.aliyun.com/zh/model-studio/model-telemetry#h2-sec-log)。
+使用方法参见[日志](../model-monitoring/model-telemetry.md#h2-sec-log)。
+
+<a id="推理日志"></a>
+
+<a id="inference-log"></a>
 
 ### 推理日志
 
-推理日志包含完整的 Prompt 与 Response 及中间步骤（长度上限 128K），需要事先在**数据投递**中开启并投递到您自有日志服务（SLS，开启涉及云产品授权与日志服务费用），**只对未来数据生效：开启前的历史调用无法追溯，关闭期间产生的日志不补录**。开启方法与地域支持参见[开启推理日志](https://help.aliyun.com/zh/model-studio/model-telemetry#h3-il-enable)。未开启推理日志时，此前的调用只能通过审计日志的字段级信息排查。
+推理日志包含完整的 Prompt 与 Response 及中间步骤（长度上限 128K），需要事先在**数据投递**中开启并投递到您自有日志服务（SLS，开启涉及云产品授权与日志服务费用），**只对未来数据生效：开启前的历史调用无法追溯，关闭期间产生的日志不补录**。开启方法与地域支持参见[开启推理日志](../model-monitoring/model-telemetry.md#h3-il-enable)。未开启推理日志时，此前的调用只能通过审计日志的字段级信息排查。
+
+<a id="溯源边界"></a>
+
+<a id="tracing-limits"></a>
 
 ### 溯源边界
 
 平台可基于调用日志协助核查异常行为，但调用 IP、模型与时间信息通常不足以直接确认真实使用者或最初泄漏渠道，进一步溯源需要您侧的代码仓库、服务器、终端与第三方服务证据。排查的交付物是证据链与影响面，而不是定责结论；涉及违法行为的，依法保留证据并通过适当渠道处理。
+
+<a id="第四步-查管理操作历史"></a>
+
+<a id="actiontrail"></a>
 
 ## 第四步：查管理操作历史
 
@@ -120,6 +128,10 @@ API Key 的创建、删除等生命周期操作统一归集到阿里云操作审
 
 先通过操作审计确认 Key 状态与操作历史，再结合调用日志排查具体行为。
 
+<a id="第五步-定损-取证与恢复"></a>
+
+<a id="damage-and-recovery"></a>
+
 ## 第五步：定损、取证与恢复
 
 1.  **汇总定损**：异常时间窗（用量曲线）加上调用来源与状态（审计日志）加上金额（账单），形成影响面结论。
@@ -127,43 +139,67 @@ API Key 的创建、删除等生命周期操作统一归集到阿里云操作审
 3.  **留存脱敏证据**：保存截图与 Request ID 清单时，对 Key 值、账号 ID 做脱敏，不再在任何渠道传播完整 Key。
 4.  **核对异步任务**：删除 Key 不取消已提交的异步任务，需终止可取消任务并跟踪不可取消任务的费用。
 5.  **确定轮换范围**：已确认泄漏的 Key 尽快失效并替换；其余 Key 按暴露范围判断，与多个 Key 保存在同一已暴露环境中的，一并轮换并修复环境。
-6.  **恢复顺序**：参照[高危位置清单](https://help.aliyun.com/zh/model-studio/api-key-leak-prevention#secure-storage)修复泄漏源后，在可信环境创建新 Key 并重新配置[权限](https://help.aliyun.com/zh/model-studio/api-key-leak-prevention#ip-and-model-scope)与[预算](https://help.aliyun.com/zh/model-studio/api-key-leak-prevention#budget-alert)，更新各服务端、任务与第三方集成的凭证引用，确认新 Key 调用正常，最后核对旧 Key 已失效。
+6.  **恢复顺序**：参照[高危位置清单](api-key-leak-prevention.md#secure-storage)修复泄漏源后，在可信环境创建新 Key 并重新配置[权限](api-key-leak-prevention.md#ip-and-model-scope)与[预算](api-key-leak-prevention.md#budget-alert)，更新各服务端、任务与第三方集成的凭证引用，确认新 Key 调用正常，最后核对旧 Key 已失效。
 
-**警告**异常费用未查清前，不要简单提高预算或关闭止损配置后恢复调用，应先完成上述排查确认泄漏源已修复。
+> **警告**
+>
+> 异常费用未查清前，不要简单提高预算或关闭止损配置后恢复调用，应先完成上述排查确认泄漏源已修复。
+
+<a id="常见问题"></a>
+
+<a id="faq"></a>
 
 ## 常见问题
+
+<a id="accordion-泄漏的-key-已经删除了-为什么还会收到告警"></a>
 
 泄漏的 Key 已经删除了，为什么还会收到告警？
 
 检测与通知存在时间差，不能仅凭通知时间判断异常是否仍在持续；历史事件也可能在后续核查时才被发现并通知。收到通知不等同于旧 Key 仍能成功调用：如已处置旧 Key 且近期用量无异常，可核对通知对应的调用时间与 Key 标识后忽略。
 
+<a id="accordion-同一个-key-重复收到告警-是否等于确认泄漏"></a>
+
 同一个 Key 重复收到告警，是否等于确认泄漏？
 
 不能仅凭重复次数确认泄漏。请核对每次告警对应的调用时间、Key 标识与异常内容，区分新发生的调用、同一事件的再次通知与历史记录。
+
+<a id="accordion-发生泄漏却没有收到平台告警-为什么"></a>
 
 发生泄漏却没有收到平台告警，为什么？
 
 平台风险检测与告警是平台主动提供的能力，**不在 SLA 约定的服务范围内，受风险场景复杂性所限不承诺绝对的告警覆盖率；凭据的安全保管与合规使用属于您的责任范畴**。未收到告警不代表没有泄漏风险，请先按本文步骤完成疑似泄漏 Key 的排查与处置，再结合异常时间与通知记录核实告警未送达的原因。
 
+<a id="accordion-为什么控制台看不到完整-key-能否请客服查明文"></a>
+
 为什么控制台看不到完整 Key，能否请客服查明文？
 
 不能。新版 Key 仅创建时完整显示一次，之后无法再查看或复制完整明文（部分旧版 Key 仍可在列表中直接复制，以列表实际提供的能力为准）。
+
+<a id="accordion-刚开启推理日志-为什么查不到昨天的输入输出"></a>
 
 刚开启推理日志，为什么查不到昨天的输入输出？
 
 推理日志只对未来数据生效，历史数据不可追溯。此前的调用只能通过审计日志的字段级信息排查。
 
+<a id="accordion-用量页数据和实际调用对不上"></a>
+
 用量页数据和实际调用对不上？
 
 Token 用量与费用约有 10 分钟延迟；且用量页仅统计按 Token 后付费的调用，模型训练、预置吞吐（PTU）等不在其中。失败次数、限流错误等指标在模型监控页查看。
 
+<a id="accordion-调用返回-429-是被限流还是被预算停止"></a>
+
 调用返回 429，是被限流还是被预算停止？
 
-两者都返回 429。预算耗尽的错误信息为“您在‘预算管理’中设置的预算额度已用尽……”，参见[错误码](https://help.aliyun.com/zh/model-studio/error-code#budget-exhausted)；限流 429 由限流或额度限制触发，可在模型监控中查看限流错误次数指标区分。
+两者都返回 429。预算耗尽的错误信息为“您在‘预算管理’中设置的预算额度已用尽……”，参见[错误码](../../model-api-reference/preparations/error-code.md#budget-exhausted)；限流 429 由限流或额度限制触发，可在模型监控中查看限流错误次数指标区分。
+
+<a id="accordion-能否把日志批量导出做自己的分析"></a>
 
 能否把日志批量导出做自己的分析？
 
-自有分析需求请通过日志投递到您自有的 SLS 日志库，在日志库中检索与导出，参见[数据投递](https://help.aliyun.com/zh/model-studio/model-telemetry#h2-sec-delivery)。
+自有分析需求请通过日志投递到您自有的 SLS 日志库，在日志库中检索与导出，参见[数据投递](../model-monitoring/model-telemetry.md#h2-sec-delivery)。
+
+<a id="accordion-怎么确认泄漏的是百炼-api-key-还是阿里云-accesskey"></a>
 
 怎么确认泄漏的是百炼 API Key 还是阿里云 AccessKey？
 

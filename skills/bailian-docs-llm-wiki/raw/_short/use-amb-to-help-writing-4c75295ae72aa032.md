@@ -6,7 +6,9 @@
 
 -   如果您在撰写文章之前没有思路，那么可以试试先在“搜索素材”中搜索相关的内容；假设您需要写一篇有关“中国共同富裕”的文章。具体的操作如下图，在搜索框输入相关的内容，点击“搜索”。![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9922943071/p750189.png)
 
-**说明**搜索源为：夸克 ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9922943071/p750185.png)
+> **说明**
+>
+> 搜索源为：夸克 ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9922943071/p750185.png)
 
 -   随后在弹出的搜索结果界面，您可以根据您的需求把相关合适的文章内容加入到素材库中。
 
@@ -24,17 +26,18 @@
 
 ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9922943071/p750190.png)
 
+<a id="分步骤撰写"></a>
+
+<a id="xd7ua"></a>
+
 ### 分步骤撰写
 
 当领导布置了一篇相关的短文任务，如果你对写作内容没有明确的思路，可以采用分步骤撰写的方式。
 
-文章主题（prompt）
-
-谈一谈中国的共同富裕
-
-文章标题
-
-中国的共同富裕理论
+|  |  |
+| --- | --- |
+| 文章主题（prompt） | 谈一谈中国的共同富裕 |
+| 文章标题 | 中国的共同富裕理论 |
 
 具体操作如下：
 
@@ -69,6 +72,10 @@
 -   最后，点击“保存”即可保存此文章至【文档管理】中。
 
 ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9922943071/p750195.png)
+
+<a id="选题热点"></a>
+
+<a id="8a6b3600050rn"></a>
 
 ## 选题热点
 

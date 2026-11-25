@@ -2,129 +2,57 @@
 
 分页列出当前工作空间的环境模板。
 
+<a id="接口"></a>
+
+<a id="h-oa-env-template-list-endpoint"></a>
+
 ## 接口
 
 **GET** `/agents/environments/templates`
 
 成功返回 `200` 和列表信封。
 
-## 查询参数
-
-**limit** `integer` **（可选）**
-
-每页数量，默认 20；建议使用 `1..100`
-
-**order** `string` **（可选）**
-
-排序方向，`asc` 或 `desc`，默认 `desc`
-
-**after** `string` **（可选）**
-
-上一页的 `last_id`；不包含游标项
-
-**before** `string` **（可选）**
-
-上一页的 `first_id`，用于反向翻页，不能与 `after` 同时使用
-
-同时传 `after` 和 `before` 返回 `400`。游标无效或模板不存在时返回 `404`。
-
-## 请求示例
-
-curl
-
-```
-curl -sS "$BASE_URL/agents/environments/templates?limit=20&order=desc" \
-  -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
-  -H "OpenAI-Beta: agents=v1"
-```
-
-Python
-
-```
-page = client.beta.agents.environments.templates.list(limit=20, order="desc")
+<table><tbody><tr><td><a id="h-oa-env-template-list-query"></a><h2>查询参数</h2><p><strong>limit</strong> <code>integer</code> <strong>（可选）</strong></p><p>每页数量，默认 20；建议使用 <code>1..100</code></p><p><strong>order</strong> <code>string</code> <strong>（可选）</strong></p><p>排序方向，<code>asc</code> 或 <code>desc</code>，默认 <code>desc</code></p><p><strong>after</strong> <code>string</code> <strong>（可选）</strong></p><p>上一页的 <code>last_id</code>；不包含游标项</p><p><strong>before</strong> <code>string</code> <strong>（可选）</strong></p><p>上一页的 <code>first_id</code>，用于反向翻页，不能与 <code>after</code> 同时使用</p><p>同时传 <code>after</code> 和 <code>before</code> 返回 <code>400</code>。游标无效或模板不存在时返回 <code>404</code>。</p></td><td><a id="h-oa-environment-template-list-eg"></a><h2>请求示例</h2><a id="fig-code-group"></a><div><a id="fig-code-group-curl-tab"></a>curl<div><a id="code-code-group-curl"></a><pre class="language-bash"><code>curl -sS &quot;$BASE_URL/agents/environments/templates?limit=20&amp;order=desc&quot; \
+  -H &quot;Authorization: Bearer $DASHSCOPE_API_KEY&quot; \
+  -H &quot;OpenAI-Beta: agents=v1&quot;
+</code></pre></div><a id="fig-code-group-python-tab"></a>Python<div><a id="code-code-group-python"></a><pre class="language-python"><code>page = client.beta.agents.environments.templates.list(limit=20, order=&quot;desc&quot;)
 for template in page.data:
     print(template.id, template.name)
-```
+</code></pre></div></div></td></tr></tbody></table>
 
-### 响应字段
-
-**object** `string`
-
-列表对象类型，固定为 `list`
-
-**data** `array`
-
-当页环境模板；空时为 `[]`
-
-**first\_id** `string / null`
-
-当页首项 ID。空页为 `null`
-
-**last\_id** `string / null`
-
-当页末项 ID。空页为 `null`。后续 `after` 使用该值
-
-**has\_more** `boolean`
-
-当前检索方向是否还有下一页
-
-`data[]` 中每个环境模板包含 `id`、`object`、`name`、`created_at`、`updated_at`、`packages`、`network`、`desktop`、`capability_directories`、`skills`、`plugins`、`files`，字段含义与获取环境模板一致。
-
-## 响应示例
-
-```
-{
-  "object": "list",
-  "data": [
+<table><tbody><tr><td><a id="h-oa-env-template-list-response"></a><h3>响应字段</h3><p><strong>object</strong> <code>string</code></p><p>列表对象类型，固定为 <code>list</code></p><p><strong>data</strong> <code>array</code></p><p>当页环境模板；空时为 <code>[]</code></p><p><strong>first_id</strong> <code>string / null</code></p><p>当页首项 ID。空页为 <code>null</code></p><p><strong>last_id</strong> <code>string / null</code></p><p>当页末项 ID。空页为 <code>null</code>。后续 <code>after</code> 使用该值</p><p><strong>has_more</strong> <code>boolean</code></p><p>当前检索方向是否还有下一页</p><p><code>data[]</code> 中每个环境模板包含 <code>id</code>、<code>object</code>、<code>name</code>、<code>created_at</code>、<code>updated_at</code>、<code>packages</code>、<code>network</code>、<code>desktop</code>、<code>capability_directories</code>、<code>skills</code>、<code>plugins</code>、<code>files</code>，字段含义与获取环境模板一致。</p></td><td><a id="h-oa-environment-template-list-resp"></a><h2>响应示例</h2><a id="code-block"></a><pre class="language-json"><code>{
+  &quot;object&quot;: &quot;list&quot;,
+  &quot;data&quot;: [
     {
-      "id": "envtmpl_xxx",
-      "name": "example-template",
-      "object": "agent.environment.template",
-      "created_at": 1794452344,
-      "updated_at": 1794452344,
-      "packages": {"python": [], "system": [], "npm": []},
-      "network": {"access": "disabled", "allowed_domains": []},
-      "desktop": {"enabled": false},
-      "capability_directories": ["/workspace/skills"],
-      "skills": [],
-      "plugins": [],
-      "files": []
+      &quot;id&quot;: &quot;envtmpl_xxx&quot;,
+      &quot;name&quot;: &quot;example-template&quot;,
+      &quot;object&quot;: &quot;agent.environment.template&quot;,
+      &quot;created_at&quot;: 1794452344,
+      &quot;updated_at&quot;: 1794452344,
+      &quot;packages&quot;: {&quot;python&quot;: [], &quot;system&quot;: [], &quot;npm&quot;: []},
+      &quot;network&quot;: {&quot;access&quot;: &quot;disabled&quot;, &quot;allowed_domains&quot;: []},
+      &quot;desktop&quot;: {&quot;enabled&quot;: false},
+      &quot;capability_directories&quot;: [&quot;/workspace/skills&quot;],
+      &quot;skills&quot;: [],
+      &quot;plugins&quot;: [],
+      &quot;files&quot;: []
     }
   ],
-  "first_id": "envtmpl_xxx",
-  "last_id": "envtmpl_xxx",
-  "has_more": false
+  &quot;first_id&quot;: &quot;envtmpl_xxx&quot;,
+  &quot;last_id&quot;: &quot;envtmpl_xxx&quot;,
+  &quot;has_more&quot;: false
 }
-```
+</code></pre></td></tr></tbody></table>
+
+<a id="错误码"></a>
+
+<a id="h-oa-env-template-list-errors"></a>
 
 ## 错误码
 
-HTTP 状态码
-
-错误类型 / 错误码
-
-解决方案
-
-`400`
-
-`invalid_request_error` / `invalid_request_error`
-
-按查询参数说明修正 `limit`、`order`、`after`、`before`
-
-`401`
-
-`authentication_error` / `invalid_api_key`
-
-在请求头携带有效的 `Authorization: Bearer $DASHSCOPE_API_KEY`
-
-`404`
-
-`not_found_error` / `not_found_error`
-
-使用当前集合中有效的游标
-
-`500`
-
-`server_error` / `server_error`
-
-稍后重试；持续失败时提交工单并提供 `x-request-id`
+| HTTP 状态码 | 错误类型 / 错误码 | 解决方案 |
+| --- | --- | --- |
+| `400` | `invalid_request_error` / `invalid_request_error` | 按查询参数说明修正 `limit`、`order`、`after`、`before` |
+| `401` | `authentication_error` / `invalid_api_key` | 在请求头携带有效的 `Authorization: Bearer $DASHSCOPE_API_KEY` |
+| `404` | `not_found_error` / `not_found_error` | 使用当前集合中有效的游标 |
+| `500` | `server_error` / `server_error` | 稍后重试；持续失败时提交工单并提供 `x-request-id` |

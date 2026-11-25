@@ -2,6 +2,10 @@
 
 上传文档至文档库，会对文档进行解析、分块、构建索引等一系列操作。
 
+<a id="接口说明"></a>
+
+<a id="api-detail-51"></a>
+
 ## 接口说明
 
 请确保在使用该接口前，已充分了解通义点金产品的收费方式和价格。
@@ -11,11 +15,19 @@
 -   已开通阿里云百炼服务和通义点金服务。
 -   获取到 workspaceId：获取 [workspace 标识](https://help.aliyun.com/zh/model-studio/developer-reference/get-app-id-and-workspace?spm=openapi-amp.newDocPublishment.0.0.2eb8281foUVd15#2612f896detsz:~:text=%E6%9F%A5%E7%9C%8BAPI%2DKEY%E3%80%82-,%E8%8E%B7%E5%8F%96APP%2DID%E5%92%8CWORKSPACE,-%E8%BF%9B%E5%85%A5%E6%88%91%E7%9A%84%E5%BA%94%E7%94%A8)。
 
+<a id="调试"></a>
+
+<a id="api-detail-23"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
 [调试](https://api.aliyun.com/api/DianJin/2024-06-28/UploadDocument)
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -34,183 +46,56 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-操作
+<table><thead><tr><th>操作</th><th>访问级别</th><th>资源类型</th><th>条件关键字</th><th>关联操作</th></tr></thead><tbody><tr><td>dianjin:UploadDocument</td><td>none</td><td><div><div>*全部资源</div><div><code>*</code></div></div></td><td><ul>无</ul></td><td>无</td></tr></tbody></table>
 
-访问级别
+<a id="请求语法"></a>
 
-资源类型
-
-条件关键字
-
-关联操作
-
-dianjin:UploadDocument
-
-none
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-53"></a>
 
 ## 请求语法
 
-```
+<a id="code-block"></a>
+
+```text
 POST /{workspaceId}/api/library/document/upload HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="api-detail-36"></a>
+
 ## 请求参数
 
-名称
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| workspaceId | string | 是 | 路径参数，业务空间 id | llm-xxxxx |
+| body | object | 否 | 请求体。 |  |
+| data | string | 否 | 文件元数据，可以用作召回时的筛选 | {\\"cateogry\\": \\"报告\\"} |
+| fileName | string | 是 | 完整文件名（包含后缀）。目前支持 pdf, doc, docx, markdown, ppt, pptx。文件大小限制 100MB，pdf, doc, docx, ppt, pptx 文件页数限制 500 页。 | test.pdf |
+| fileUrl | string | 是 | 文件 Oss 地址。如果文件为非公开读，fileUrl 需要携带签名参数。<br><br>如果使用 sdk 进行文件上传，可以直接上传文件，无需提供 oss 地址，具体参考 sdk 使用说明文档。 | [https://oss-xxx.hangzhou.com/test.pdf](https://oss-xxx.hangzhou.com/test.pdf) |
+| libraryId | string | 是 | 文档库 id | sjdhbcsj |
 
-类型
+<a id="返回参数"></a>
 
-必填
-
-描述
-
-示例值
-
-workspaceId
-
-string
-
-是
-
-路径参数，业务空间 id
-
-llm-xxxxx
-
-body
-
-object
-
-否
-
-请求体。
-
-data
-
-string
-
-否
-
-文件元数据，可以用作召回时的筛选
-
-{\\"cateogry\\": \\"报告\\"}
-
-fileName
-
-string
-
-是
-
-完整文件名（包含后缀）。目前支持 pdf, doc, docx, markdown, ppt, pptx。文件大小限制 100MB，pdf, doc, docx, ppt, pptx 文件页数限制 500 页。
-
-test.pdf
-
-fileUrl
-
-string
-
-是
-
-文件 Oss 地址。如果文件为非公开读，fileUrl 需要携带签名参数。
-
-如果使用 sdk 进行文件上传，可以直接上传文件，无需提供 oss 地址，具体参考 sdk 使用说明文档。
-
-[https://oss-xxx.hangzhou.com/test.pdf](https://oss-xxx.hangzhou.com/test.pdf)
-
-libraryId
-
-string
-
-是
-
-文档库 id
-
-sjdhbcsj
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-名称
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | 返回结果 |  |
+| cost | long | 耗时 | null |
+| data | string | 返回数据 | 1782981430906818562 |
+| dataType | string | 数据类型 | null |
+| errCode | string | 错误码 | 0 |
+| message | string | 错误信息 | ok |
+| requestId | string | 请求 id | ff3fef67-48d9-4379-a237-9ba8143fe739 |
+| success | boolean | 是否成功 | true |
+| time | string | 时间戳 | 2024-04-24 11:54:34 |
 
-类型
+<a id="示例"></a>
 
-描述
-
-示例值
-
-object
-
-返回结果
-
-cost
-
-long
-
-耗时
-
-null
-
-data
-
-string
-
-返回数据
-
-1782981430906818562
-
-dataType
-
-string
-
-数据类型
-
-null
-
-errCode
-
-string
-
-错误码
-
-0
-
-message
-
-string
-
-错误信息
-
-ok
-
-requestId
-
-string
-
-请求 id
-
-ff3fef67-48d9-4379-a237-9ba8143fe739
-
-success
-
-boolean
-
-是否成功
-
-true
-
-time
-
-string
-
-时间戳
-
-2024-04-24 11:54:34
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -218,7 +103,9 @@ string
 
 `JSON`格式
 
-```
+<a id="code-block-2"></a>
+
+```text
 {
   "cost": 0,
   "data": 1782981430906818600,
@@ -230,6 +117,10 @@ string
   "time": "2024-04-24 11:54:34"
 }
 ```
+
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
 
 ## 错误码
 

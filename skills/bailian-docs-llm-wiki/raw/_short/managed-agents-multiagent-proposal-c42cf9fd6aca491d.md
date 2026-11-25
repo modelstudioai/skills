@@ -2,6 +2,10 @@
 
 用 multiagent 协调者模式组织专家子 Agent 团队协作产出销售提案，用 Session Threads API 与线程级事件流精确观察每个子 Agent 的运行。
 
+<a id="概述"></a>
+
+<a id="h-mp-intro"></a>
+
 ## 概述
 
 本篇介绍如何用 Managed Agents 的 `multiagent` 协调者模式，组织一支专家子 Agent 团队协作产出一份销售提案，并用 Session Threads API 与 Session 级事件流精确观察、实时渲染每个子 Agent 的运行。示例统一用 curl（REST）。
@@ -10,9 +14,15 @@
 
 用一个协调者 Agent 跑三个专家：研究员用联网搜索找该细分市场的典型关注点；案例挑选器读案例库挑两个最佳匹配；定价建模员只看规则文件和席位数。再加一个校验员，在协调者动笔前做一次对齐自检。协调者负责排序它们并写出提案。
 
+<a id="环境变量与模型"></a>
+
+<a id="h-mp-env"></a>
+
 ## 环境变量与模型
 
-```
+<a id="code-block"></a>
+
+```bash
 export AGENTSTUDIO_URL="https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio"
 export DASHSCOPE_API_KEY="<你的 DashScope API Key>"
 ```
@@ -23,9 +33,17 @@ export DASHSCOPE_API_KEY="<你的 DashScope API Key>"
 
 多智能体场景的两个高频问题，先放在最前面：
 
-**警告****联网搜索的选型**。本例研究员走 MCP 市场的搜索服务（`WebSearch`，工具名 `bailian_web_search`）；内置工具集的 `web_search` / `web_fetch` 也能覆盖联网检索。两条路都行，但注意 `mcp_toolkit` 的工具名与内置工具不同，system prompt 里引用的工具名要和实际启用的对上。
+> **警告**
+>
+> **联网搜索的选型**。本例研究员走 MCP 市场的搜索服务（`WebSearch`，工具名 `bailian_web_search`）；内置工具集的 `web_search` / `web_fetch` 也能覆盖联网检索。两条路都行，但注意 `mcp_toolkit` 的工具名与内置工具不同，system prompt 里引用的工具名要和实际启用的对上。
 
-**警告****`default_config.enabled: true` 不会把工具发给模型**。`builtin_toolkit` / `mcp_toolkit` 都必须在 `configs[ ]` 里逐工具显式 `enabled: true`，否则 agent 仅能获得平台自动注入的 `mark_artifacts`（见[入门篇](raw/_short/managed-agents-data-analysis-2249e7a887786f0b.md)，多智能体成员同样适用）。
+> **警告**
+>
+> **`default_config.enabled: true` 不会把工具发给模型**。`builtin_toolkit` / `mcp_toolkit` 都必须在 `configs[ ]` 里逐工具显式 `enabled: true`，否则 agent 仅能获得平台自动注入的 `mark_artifacts`（见[入门篇](managed-agents-data-analysis-2249e7a887786f0b.md)，多智能体成员同样适用）。
+
+<a id="定义三个专家子-agent"></a>
+
+<a id="h-mp-workers"></a>
 
 ## 定义三个专家子 Agent
 
@@ -33,11 +51,19 @@ export DASHSCOPE_API_KEY="<你的 DashScope API Key>"
 
 阿里云百炼的编排工具由平台在 multiagent 模式下**自动注入**，无需在 `tools` 里声明（协调者拿到 `create_agent` / `list_agents` / `wait_for_agents`，worker 拿到 `submit_result`）。
 
-**说明**下面每个 `POST /agents` 返回的 `id`（形如 `agent_<ULID>`）请记下来，后面拼进协调者的 roster。
+> **说明**
+>
+> 下面每个 `POST /agents` 返回的 `id`（形如 `agent_<ULID>`）请记下来，后面拼进协调者的 roster。
+
+<a id="研究员-prospect-researcher-只开搜索-mcp"></a>
+
+<a id="h-mp-researcher"></a>
 
 ### 研究员 prospect\_researcher（只开搜索 MCP）
 
-```
+<a id="code-block-2"></a>
+
+```bash
 curl -X POST "$AGENTSTUDIO_URL/agents" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
@@ -57,11 +83,17 @@ curl -X POST "$AGENTSTUDIO_URL/agents" \
   }'
 ```
 
-`mcp_servers.name` 是市场服务的 code（声明时不校验存在性，写错会静默失败，[生产化篇](raw/application-user-guide/agent-development/managed-agents/managed-agents-best-practices/managed-agents-production.md)讲过排查方法）。市场服务由平台代理调用，不需要提供凭证。想确认某服务提供哪些工具名：`bl mcp tools --server WebSearch`。
+`mcp_servers.name` 是市场服务的 code（声明时不校验存在性，写错会静默失败，[生产化篇](../application-user-guide/agent-development/managed-agents/managed-agents-best-practices/managed-agents-production.md)讲过排查方法）。市场服务由平台代理调用，不需要提供凭证。想确认某服务提供哪些工具名：`bl mcp tools --server WebSearch`。
+
+<a id="案例挑选器-case-study-picker-只读本地库"></a>
+
+<a id="h-mp-picker"></a>
 
 ### 案例挑选器 case\_study\_picker（只读本地库）
 
-```
+<a id="code-block-3"></a>
+
+```bash
 curl -X POST "$AGENTSTUDIO_URL/agents" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
@@ -81,9 +113,15 @@ curl -X POST "$AGENTSTUDIO_URL/agents" \
   }'
 ```
 
+<a id="定价建模员-pricing-modeler-只看规则文件"></a>
+
+<a id="h-mp-modeler"></a>
+
 ### 定价建模员 pricing\_modeler（只看规则文件）
 
-```
+<a id="code-block-4"></a>
+
+```bash
 curl -X POST "$AGENTSTUDIO_URL/agents" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
@@ -99,13 +137,19 @@ curl -X POST "$AGENTSTUDIO_URL/agents" \
   }'
 ```
 
+<a id="再加一个校验员-写作前的方案自检"></a>
+
+<a id="h-mp-checker"></a>
+
 ## 再加一个校验员：写作前的方案自检
 
 三个专家各自只给出局部结论，无人负责判断“三份结论合起来是否自洽”。所以 roster 里再额外放一个 `proposal_checker` 子 Agent：它在协调者动笔之前，把关案例挑选与定价框架是否对齐潜客优先级。
 
 它由协调者在写提案前委派一次，读取研究结论、案例挑选、定价框架，判断三者是否互相自洽、是否命中潜客最关心的痛点，然后回传一句判断和修改建议。它是一个和其他专家一样的普通 worker：可被委派、可收发消息、跑在自己的线程和上下文里。
 
-```
+<a id="code-block-5"></a>
+
+```bash
 curl -X POST "$AGENTSTUDIO_URL/agents" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
@@ -118,11 +162,23 @@ curl -X POST "$AGENTSTUDIO_URL/agents" \
   }'
 ```
 
-**说明**校验员是纯判断，不挂任何工具（`tools` 留空数组即可，[进阶：提示词版本管理与回滚](raw/_short/managed-agents-prompt-versioning-b2a756840e400199.md)已验证无工具的纯 LLM agent 可以正常跑）。它承担判断类工作，可以把 `model.id` 设成比其他 worker 更强的模型来提高判断质量——能力与成本分档通过选用不同模型 ID 实现，`model` 字段没有 effort 之类的推理档位参数。
+> **说明**
+>
+> 校验员是纯判断，不挂任何工具（`tools` 留空数组即可，[进阶：提示词版本管理与回滚](managed-agents-prompt-versioning-b2a756840e400199.md)已验证无工具的纯 LLM agent 可以正常跑）。它承担判断类工作，可以把 `model.id` 设成比其他 worker 更强的模型来提高判断质量——能力与成本分档通过选用不同模型 ID 实现，`model` 字段没有 effort 之类的推理档位参数。
 
-**说明**`multiagent.agents[ ]` 的成员类型：`{"type":"agent","id":...}` 引用一个已创建的子 Agent，可选带 `version` 锁定版本（见下节）；`{"type":"self"}` 把协调者自己也作为可委派对象，**最多 1 个**——写两个会报 `AGENT_010 multiagent.agents 中 self 类型最多只能有一个`。
+> **说明**
+>
+> `multiagent.agents[ ]` 的成员类型：`{"type":"agent","id":...}` 引用一个已创建的子 Agent，可选带 `version` 锁定版本（见下节）；`{"type":"self"}` 把协调者自己也作为可委派对象，**最多 1 个**——写两个会报 `AGENT_010 multiagent.agents 中 self 类型最多只能有一个`。
+
+<a id="为团队准备素材并配置协调者"></a>
+
+<a id="h-mp-wiring"></a>
 
 ## 为团队准备素材并配置协调者
+
+<a id="素材清单"></a>
+
+<a id="h-mp-assets"></a>
 
 ### 素材清单
 
@@ -141,11 +197,17 @@ curl -X POST "$AGENTSTUDIO_URL/agents" \
 -   **PRODUCT one-pager**：Northstar 是给中端运营团队的工作流自动化平台，核心能力——可视化流程构建、200+ SaaS 连接器、基于角色审批、SOC 2 Type II；典型效果 40–60% 人工工单下降、3 周首个工作流上线。
 -   **PRICING rules**：每席位 65/月，或年付 52/月；用量档 light 1.0x / standard 1.15x / heavy 1.30x 乘在单价上；企业档（>500 席位）加 48000/年平台费、年付单价降到 44/月；所有选项含 onboarding，企业档含专属 CSM。
 
+<a id="上传-9-个文件"></a>
+
+<a id="h-mp-upload"></a>
+
 ### 上传 9 个文件
 
 把 7 个案例 md、`product_one_pager.md`、`pricing_rules.md` 逐个上传。上传用 multipart，上传后须轮询 `GET /files/{id}` 到 `status=available` 才能挂载。
 
-```
+<a id="code-block-6"></a>
+
+```bash
 # 逐个上传，示例一个案例文件
 curl -X POST "$AGENTSTUDIO_URL/files" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -156,9 +218,15 @@ curl -X POST "$AGENTSTUDIO_URL/files" \
 
 对 9 个文件重复，记下各自 `file_id`。
 
+<a id="建-environment-沙箱"></a>
+
+<a id="h-mp-env2"></a>
+
 ### 建 Environment（沙箱）
 
-```
+<a id="code-block-7"></a>
+
+```bash
 curl -X POST "$AGENTSTUDIO_URL/environments" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
@@ -171,13 +239,21 @@ curl -X POST "$AGENTSTUDIO_URL/environments" \
   }'
 ```
 
-**说明**研究员的 MCP 搜索由平台代理调用、不走沙箱网络，但挑选器/定价员要读挂载文件（沙箱工具），所以 Environment 仍然需要。`networking.type` 当前取值为 `unrestricted`（全部出网放行）。响应 `id` 形如 `env_<...>`。
+> **说明**
+>
+> 研究员的 MCP 搜索由平台代理调用、不走沙箱网络，但挑选器/定价员要读挂载文件（沙箱工具），所以 Environment 仍然需要。`networking.type` 当前取值为 `unrestricted`（全部出网放行）。响应 `id` 形如 `env_<...>`。
+
+<a id="建协调者-agent-挂-roster"></a>
+
+<a id="h-mp-coordinator"></a>
 
 ### 建协调者 Agent（挂 roster）
 
 协调者引用上面四个子 Agent（三专家 + 校验员）：
 
-```
+<a id="code-block-8"></a>
+
+```bash
 curl -X POST "$AGENTSTUDIO_URL/agents" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
@@ -207,13 +283,21 @@ curl -X POST "$AGENTSTUDIO_URL/agents" \
 
 协调者拿到的 `id`（`agent_<ULID>`）记为 `$AGENT_ID`。
 
-**说明****roster 成员的版本语义**：“不带 version”既不是在协调者创建时快照定版，也不是在 Session 创建时定版——协调者不动、把 pricing\_modeler 从 v1 升到 v2 后起 Session，委派出来的 pricing 线程直接用 v2；Session 创建后再升 v3、随后才发消息，线程用的还是 v3。也就是说**改子 Agent 不需要更新协调者**；反过来，想要“团队配置冻结、可复现”，就在成员里显式写 `version`，平台会接受并回显（GET 协调者时成员对象带 `version: N`）。这个语义跟[进阶：提示词版本管理与回滚](raw/_short/managed-agents-prompt-versioning-b2a756840e400199.md)讲的 Session 版本锁定是对偶的：Session 的 `agent` 字段锁协调者自身的版本快照，roster 的 `version` 锁成员引用；都不写就都是“拿最新”。
+> **说明**
+>
+> **roster 成员的版本语义**：“不带 version”既不是在协调者创建时快照定版，也不是在 Session 创建时定版——协调者不动、把 pricing\_modeler 从 v1 升到 v2 后起 Session，委派出来的 pricing 线程直接用 v2；Session 创建后再升 v3、随后才发消息，线程用的还是 v3。也就是说**改子 Agent 不需要更新协调者**；反过来，想要“团队配置冻结、可复现”，就在成员里显式写 `version`，平台会接受并回显（GET 协调者时成员对象带 `version: N`）。这个语义跟[进阶：提示词版本管理与回滚](managed-agents-prompt-versioning-b2a756840e400199.md)讲的 Session 版本锁定是对偶的：Session 的 `agent` 字段锁协调者自身的版本快照，roster 的 `version` 锁成员引用；都不写就都是“拿最新”。
+
+<a id="起-session-挂-9-个文件资源"></a>
+
+<a id="h-mp-session"></a>
 
 ### 起 Session（挂 9 个文件资源）
 
 `mount_path` **必须以 `/uploads/` 开头**，沙箱内实际路径为 `/mnt/session` + mount\_path。7 个案例挂到 `/uploads/case_studies/<slug>.md`，另两个挂到 `/uploads/` 根。指令文本里写的都是**实际路径** `/mnt/session/uploads/...`。
 
-```
+<a id="code-block-9"></a>
+
+```bash
 curl -X POST "$AGENTSTUDIO_URL/sessions" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
@@ -235,13 +319,21 @@ curl -X POST "$AGENTSTUDIO_URL/sessions" \
   }'
 ```
 
-**说明**字段就叫 `agent`（对象只传 `id` 即锁定该 Agent 当前最新版本快照；要锁旧版本传 `{"id": ..., "version": N}`）。响应里 `agent` 字段回显的是**完整配置快照**（含 system 与 tools，但不含 multiagent——roster 不进 Session 快照，成员版本按上表规则在委派时解析）。另外注意：`resources[ ]` 回显的 `file_id` 与提交的不同——挂载时平台为每个文件生成了 session 作用域的新 file id，原 upload id 仍然有效。响应 `id` 形如 `sesn_<ULID>`，记为 `$SESSION_ID`。
+> **说明**
+>
+> 字段就叫 `agent`（对象只传 `id` 即锁定该 Agent 当前最新版本快照；要锁旧版本传 `{"id": ..., "version": N}`）。响应里 `agent` 字段回显的是**完整配置快照**（含 system 与 tools，但不含 multiagent——roster 不进 Session 快照，成员版本按上表规则在委派时解析）。另外注意：`resources[ ]` 回显的 `file_id` 与提交的不同——挂载时平台为每个文件生成了 session 作用域的新 file id，原 upload id 仍然有效。响应 `id` 形如 `sesn_<ULID>`，记为 `$SESSION_ID`。
+
+<a id="启动提案并观察"></a>
+
+<a id="h-mp-run"></a>
 
 ## 启动提案并观察
 
 Session 创建时不携带初始输入，所以流程是**先建 Session、再发一条 `message` 事件**驱动它开始工作。
 
-```
+<a id="code-block-10"></a>
+
+```bash
 curl -X POST "$AGENTSTUDIO_URL/sessions/$SESSION_ID/events" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
@@ -257,11 +349,17 @@ curl -X POST "$AGENTSTUDIO_URL/sessions/$SESSION_ID/events" \
 
 整个流程约 4 分钟：协调者先委派研究员（联网搜 6 次），研究员回传后并行委派挑选器（glob + read×N 遍历案例库）与定价员（read 规则文件），最后委派校验员，然后读 one-pager、写 proposal.md（迭代了 4 稿——校验员的建议直接驱动了改稿）、`mark_artifacts` 登记产物。
 
+<a id="流式观察-session-级单流-按-thread-id-分流"></a>
+
+<a id="h-mp-sse"></a>
+
 ### 流式观察（Session 级单流，按 thread\_id 分流）
 
 SSE 是 **Session 级单流**——协调者与全部子 Agent 的输出都汇聚到同一条流里。**没有 thread 级的 SSE 端点**：`GET /sessions/{sid}/threads/{tid}/events/stream` 返回 `404 {"type":"api_error","message":"not support"}`。想流式看，只有 Session 这一条流；想只看某个 thread，用下节的 Thread Events 轮询。
 
-```
+<a id="code-block-11"></a>
+
+```bash
 curl -N "$AGENTSTUDIO_URL/sessions/$SESSION_ID/events/stream" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Accept: text/event-stream"
@@ -276,9 +374,11 @@ curl -N "$AGENTSTUDIO_URL/sessions/$SESSION_ID/events/stream" \
 -   **`thread_message_received`**：对端视角的同一条消息。`thread_id` 是接收方线程，`metadata.from_session_thread_id` / `from_agent_name` 指向发送方（协调者发来的消息 `from_agent_name` 是 `"coordinator"`）。
 -   **`thread_status`**：线程状态流转。`content[0].data` 为 `{"agent_name": ..., "thread_status": "running"|"idle", ...}`，结束时带 `stop_reason: {"type": "end_turn"}`。
 
-常规事件（`tool_call` / `tool_call_output` / `mcp_call` / `mcp_call_output` / `model_request_start|end` / `reasoning` / `message` / `session_status`）与[入门篇](raw/_short/managed-agents-data-analysis-2249e7a887786f0b.md)相同，只是全部带上了 `thread_id`。协调者被自动注入的编排工具在事件流中的形态如下：
+常规事件（`tool_call` / `tool_call_output` / `mcp_call` / `mcp_call_output` / `model_request_start|end` / `reasoning` / `message` / `session_status`）与[入门篇](managed-agents-data-analysis-2249e7a887786f0b.md)相同，只是全部带上了 `thread_id`。协调者被自动注入的编排工具在事件流中的形态如下：
 
-```
+<a id="code-block-12"></a>
+
+```jsonc
 // 协调者委派（主线程 thrd_ 上）
 { "type": "tool_call", "thread_id": "thrd_...",
   "content": [ { "type": "data", "data": {
@@ -293,9 +393,17 @@ curl -N "$AGENTSTUDIO_URL/sessions/$SESSION_ID/events/stream" \
 { "output": "{\"status\":\"submitted\"}" }
 ```
 
-**说明****worker 的回传通道**：worker 的最终 assistant 文本会自动作为 `thread_message_sent` 回传协调者；`submit_result` 是另一个显式提交工具，二者可能先后各出现一次。**子 Agent 的 system prompt 里不需要写“通过 send\_to\_parent 返回”这类话**——没有叫这个名字的工具，写了反而可能让模型犹豫；直接说“返回严格 JSON”即可。
+> **说明**
+>
+> **worker 的回传通道**：worker 的最终 assistant 文本会自动作为 `thread_message_sent` 回传协调者；`submit_result` 是另一个显式提交工具，二者可能先后各出现一次。**子 Agent 的 system prompt 里不需要写“通过 send\_to\_parent 返回”这类话**——没有叫这个名字的工具，写了反而可能让模型犹豫；直接说“返回严格 JSON”即可。
 
-**说明**若不想用长连接，也可轮询历史事件：`GET /sessions/$SESSION_ID/events?order=asc`。注意**单页上限 100 条**（`limit` 传更大也只回 100），翻页用响应里的 `next_page` 游标：`...&page=<next_page>`。一个完整的多智能体回合有 168 条事件，要翻两页。
+> **说明**
+>
+> 若不想用长连接，也可轮询历史事件：`GET /sessions/$SESSION_ID/events?order=asc`。注意**单页上限 100 条**（`limit` 传更大也只回 100），翻页用响应里的 `next_page` 游标：`...&page=<next_page>`。一个完整的多智能体回合有 168 条事件，要翻两页。
+
+<a id="session-threads-api-每个子-agent-一行"></a>
+
+<a id="h-mp-threads"></a>
 
 ### Session Threads API：每个子 Agent 一行
 
@@ -303,11 +411,16 @@ curl -N "$AGENTSTUDIO_URL/sessions/$SESSION_ID/events/stream" \
 
 **List：** `GET /sessions/{session_id}/threads`
 
-```
+<a id="code-block-13"></a>
+
+```bash
 curl "$AGENTSTUDIO_URL/sessions/$SESSION_ID/threads" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
-```
+
+<a id="code-block-14"></a>
+
+```json
 {
   "data": [
     {
@@ -340,7 +453,9 @@ Query 参数 `limit` / `page` 与其他列表一致；已归档 Thread 默认不
 
 **Archive：** `POST /sessions/{session_id}/threads/{thread_id}/archive`
 
-```
+<a id="code-block-15"></a>
+
+```bash
 curl -X POST "$AGENTSTUDIO_URL/sessions/$SESSION_ID/threads/sthr_xxx/archive" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
@@ -348,6 +463,10 @@ curl -X POST "$AGENTSTUDIO_URL/sessions/$SESSION_ID/threads/sthr_xxx/archive" \
 ```
 
 body 可省略。成功返回归档后的 Thread 对象（`archived_at` 填充、`updated_at` 刷新），之后 List 不再返回它；重复归档幂等。用途：长会话里清掉历史 worker 线程，让 threads 列表只留活跃的——事件数据不受影响。
+
+<a id="各专家回传了什么"></a>
+
+<a id="h-mp-returns"></a>
 
 ### 各专家回传了什么
 
@@ -360,6 +479,10 @@ body 可省略。成功返回归档后的 Thread 对象（`archived_at` 填充�
 
 三个报告差异很大——研究员是外部情报，挑选器是本地案例打分，定价员是纯规则计算，校验员是一句对齐判断。**每个子 Agent 在自己线程里只用自己的工具**，这就是按角色分权的直接证据。
 
+<a id="客户端-把一条流渲染成团队工作台"></a>
+
+<a id="h-mp-client"></a>
+
 ### 客户端：把一条流渲染成团队工作台
 
 前三节讲的是服务端给的观察面。客户端要消费这条流，核心只有一个数据结构——**以 `thread_id` 为键的分桶字典**，再配合四个行为，渲染逻辑比想象的简单：
@@ -371,7 +494,9 @@ body 可省略。成功返回归档后的 Thread 对象（`archived_at` 填充�
 
 把这四条拼起来，就是一个约 50 行的团队工作台：
 
-```
+<a id="code-block-16"></a>
+
+```python
 #!/usr/bin/env python3
 # watch_team.py — 把一条 Session 级流渲染成团队工作台
 # 用法：curl -N "$AGENTSTUDIO_URL/sessions/$SESSION_ID/events/stream" \
@@ -421,7 +546,9 @@ for ln in sys.stdin:                                 # 每帧一行 data:{...}
 
 对应该回合的团队实时输出时序（节选）：
 
-```
+<a id="code-block-17"></a>
+
+```text
 === 会话 running ===
 [coordinator] '好的，我来按流程协调团队为 Meridian Health 构建销售提案。…'
 [prospect_researcher] 开工
@@ -443,31 +570,24 @@ for ln in sys.stdin:                                 # 每帧一行 data:{...}
 
 最后是观察面的选型：
 
-要什么
+| 要什么 | 用什么 |
+| --- | --- |
+| 全团队实时进展（一条连接） | Session 级 SSE 流 + 分桶字典 |
+| 一张“谁在跑 / 谁完了”的工作台 | 轮询 `GET /sessions/{id}/threads`（status + `agent.version`） |
+| 深挖某个子 Agent 干了什么 | `GET .../threads/{tid}/events`（单线程全量） |
+| 权威留档 / 事后归因 | `GET /sessions/{id}/events` 翻页拉全量 |
 
-用什么
+<a id="读提案-以及一次失败归因"></a>
 
-全团队实时进展（一条连接）
-
-Session 级 SSE 流 + 分桶字典
-
-一张“谁在跑 / 谁完了”的工作台
-
-轮询 `GET /sessions/{id}/threads`（status + `agent.version`）
-
-深挖某个子 Agent 干了什么
-
-`GET .../threads/{tid}/events`（单线程全量）
-
-权威留档 / 事后归因
-
-`GET /sessions/{id}/events` 翻页拉全量
+<a id="h-mp-postmortem"></a>
 
 ## 读提案，以及一次失败归因
 
 产物文件取回：从协调者主线程的事件里找写 `proposal.md` 的 `tool_call`（工具 `write`，路径 `/mnt/session/outputs/proposal.md`，`arguments.content` 就是全文——本例还 `mark_artifacts` 登记过，能即时拿到 file\_id），或从 Files 列表按文件名找。
 
-**说明**Files 列表按 scope 过滤的正确参数是 `GET /files?scope_type=session&scope_id=<sesn_...>`——传 `session_id` 会被静默忽略，返回整个工作空间的文件列表（靠每项的 `scope` 字段区分归属）。
+> **说明**
+>
+> Files 列表按 scope 过滤的正确参数是 `GET /files?scope_type=session&scope_id=<sesn_...>`——传 `session_id` 会被静默忽略，返回整个工作空间的文件列表（靠每项的 `scope` 字段区分归属）。
 
 **一个失败案例**：同一个协调者配置跑两次——
 
@@ -478,7 +598,11 @@ Session 级 SSE 流 + 分桶字典
 
 1.  **worker 对 ≠ 团队对**。多智能体架构把调研/挑选/定价拆给专家后，最后一公里的“汇总写作”本身仍是幻觉高风险区——协调者值得配最强的模型，prompt 里要求“引用专家回传的原文数据、禁止改写数字”也有帮助。
 2.  **归因靠 Threads API**。出问题时，`GET /threads/{id}/events` 逐线程检查：挑选器回传的 picks 是对的、定价员的 options 是对的、错在协调者的 write 参数——**问题精确定位到协调者**。单 Agent 出错时只有一整条日志；多智能体为每个环节保留了独立记录，便于归因。
-3.  **评测要进流程**。[进阶：提示词版本管理与回滚](raw/_short/managed-agents-prompt-versioning-b2a756840e400199.md)的方法论在这里同样适用：上线前用固定的潜客画像跑一轮，对 proposal.md 做断言（案例名必须在案例库白名单里、定价必须命中规则表的计算结果），再决定放行。
+3.  **评测要进流程**。[进阶：提示词版本管理与回滚](managed-agents-prompt-versioning-b2a756840e400199.md)的方法论在这里同样适用：上线前用固定的潜客画像跑一轮，对 proposal.md 做断言（案例名必须在案例库白名单里、定价必须命中规则表的计算结果），再决定放行。
+
+<a id="为什么用三个-一个校验-子-agent-而非一个"></a>
+
+<a id="h-mp-why"></a>
 
 ## 为什么用三个（+ 一个校验）子 Agent，而非一个
 
@@ -490,11 +614,17 @@ Session 级 SSE 流 + 分桶字典
 
 额外增加一个 `proposal_checker` 是同一思路的延伸：它在动笔前把案例与定价对齐到潜客优先级上，让不一致在写作前被识别并修正——本例中它驱动协调者修改了 4 稿。校验过程运行在自己的线程里，判断依据与建议都保留在事件日志中，可回溯。代价是额外启动一个 worker 线程：多一轮委派与回传，也多一份运行开销。若某些潜客场景不需要这道自检，可以把它从 roster 里去掉，协调者会直接进入写作。
 
+<a id="清理-归档"></a>
+
+<a id="h-mp-cleanup"></a>
+
 ## 清理（归档）
 
 统一用 archive（保留审计、停计量）。注意顺序：**running 状态的 Session 不能 DELETE**（返回 `400 invalid_parameter`），先等它 idle 或用归档；Agent 只能 archive：
 
-```
+<a id="code-block-18"></a>
+
+```bash
 curl -X POST "$AGENTSTUDIO_URL/sessions/$SESSION_ID/archive" -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 # 或删除：curl -X DELETE "$AGENTSTUDIO_URL/sessions/$SESSION_ID" -H "Authorization: Bearer $DASHSCOPE_API_KEY"（须 idle）
 curl -X POST "$AGENTSTUDIO_URL/environments/$ENV_ID/archive"  -H "Authorization: Bearer $DASHSCOPE_API_KEY"
@@ -504,7 +634,11 @@ curl -X POST "$AGENTSTUDIO_URL/agents/$AGENT_ID/archive"      -H "Authorization:
 
 子 Agent 归档后不能再被新协调者引用进 roster；已有 Session 的历史线程不受影响（事件数据随 Session 保留）。
 
+<a id="下一步"></a>
+
+<a id="h-mp-next"></a>
+
 ## 下一步
 
--   [多智能体协作](raw/application-user-guide/agent-development/managed-agents/managed-agents-agent/managed-agents-multiagent.md)：coordinator 编队的字段参考。
--   [会话事件流](raw/application-user-guide/agent-development/managed-agents/managed-agents-session/managed-agents-event-stream.md)：单 Agent 场景的事件参考。
+-   [多智能体协作](../application-user-guide/agent-development/managed-agents/managed-agents-agent/managed-agents-multiagent.md)：coordinator 编队的字段参考。
+-   [会话事件流](../application-user-guide/agent-development/managed-agents/managed-agents-session/managed-agents-event-stream.md)：单 Agent 场景的事件参考。

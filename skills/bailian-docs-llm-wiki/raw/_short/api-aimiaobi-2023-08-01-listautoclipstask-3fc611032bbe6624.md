@@ -2,301 +2,86 @@
 
 列出智能混剪任务列表
 
+<a id="调试"></a>
+
+<a id="api-doc-debug"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
 当前API暂无授权信息透出。
 
+<a id="请求语法"></a>
+
+<a id="api-detail-53"></a>
+
 ## 请求语法
 
-```
+<a id="code-block"></a>
+
+```text
 POST  HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="api-detail-36"></a>
+
 ## 请求参数
 
-**名称**
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| WorkspaceId | string | 否 | 百炼业务空间 | llm-2setzb9x4ewsd |
+| TaskName | string | 否 | 任务名称 | task001 |
+| TaskType | string | 否 | 任务类型 | type001 |
+| TaskStatus | integer | 否 | 任务状态 | 0 |
+| CreateTimeStart | string | 否 | 任务开始时间 | 2023-02-19 07:28:11 |
+| CreateTimeEnd | string | 否 | 任务结束时间 | 2023-03-18 02:00:00 |
+| Current | integer | 否 | 当前页码 | 1 |
+| Size | integer | 否 | 每页条数：默认 10 | 10 |
+| Skip | integer | 否 | 废弃 | null |
+| MaxResults | integer | 否 | 废弃 | null |
+| NextToken | string | 否 | 废弃 | null |
 
-**类型**
+<a id="返回参数"></a>
 
-**必填**
-
-**描述**
-
-**示例值**
-
-WorkspaceId
-
-string
-
-否
-
-百炼业务空间
-
-llm-2setzb9x4ewsd
-
-TaskName
-
-string
-
-否
-
-任务名称
-
-task001
-
-TaskType
-
-string
-
-否
-
-任务类型
-
-type001
-
-TaskStatus
-
-integer
-
-否
-
-任务状态
-
-0
-
-CreateTimeStart
-
-string
-
-否
-
-任务开始时间
-
-2023-02-19 07:28:11
-
-CreateTimeEnd
-
-string
-
-否
-
-任务结束时间
-
-2023-03-18 02:00:00
-
-Current
-
-integer
-
-否
-
-当前页码
-
-1
-
-Size
-
-integer
-
-否
-
-每页条数：默认 10
-
-10
-
-Skip
-
-integer
-
-否
-
-废弃
-
-null
-
-MaxResults
-
-integer
-
-否
-
-废弃
-
-null
-
-NextToken
-
-string
-
-否
-
-废弃
-
-null
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-**名称**
-
-**类型**
-
-**描述**
-
-**示例值**
-
-object
-
-Schema of Response
-
-RequestId
-
-string
-
-Id of the request
-
-1813ceee-7fe5-41b4-87e5-982a4d18cca5
-
-Code
-
-string
-
-状态码
-
-success
-
-HttpStatusCode
-
-integer
-
-http 状态码
-
-200
-
-Message
-
-string
-
-错误说明
-
-successful
-
-Success
-
-boolean
-
-是否成功：true 成功，false 失败
-
-true
-
-MaxResults
-
-integer
-
-废弃
-
-null
-
-NextToken
-
-string
-
-废弃
-
-null
-
-TotalCount
-
-integer
-
-废弃
-
-null
-
-Current
-
-integer
-
-当前页码
-
-1
-
-Size
-
-integer
-
-每页条数
-
-10
-
-Total
-
-integer
-
-总记录数
-
-20
-
-Data
-
-array<object>
-
-业务数据
-
-object
-
-业务数据
-
-TaskId
-
-string
-
-任务 ID
-
-3f7045e099474ba28ceca1b4eb6d6e21
-
-TaskName
-
-string
-
-任务名称
-
-任务名称
-
-TaskType
-
-string
-
-任务类型
-
-type001
-
-TaskStatus
-
-integer
-
-任务状态
-
-0
-
-TaskStep
-
-string
-
-upload
-
-upload clips generate
-
-CreateTimeStart
-
-string
-
-起始创建时间。
-
-2023-03-18 02:00:00
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | Schema of Response |  |
+| RequestId | string | Id of the request | 1813ceee-7fe5-41b4-87e5-982a4d18cca5 |
+| Code | string | 状态码 | success |
+| HttpStatusCode | integer | http 状态码 | 200 |
+| Message | string | 错误说明 | successful |
+| Success | boolean | 是否成功：true 成功，false 失败 | true |
+| MaxResults | integer | 废弃 | null |
+| NextToken | string | 废弃 | null |
+| TotalCount | integer | 废弃 | null |
+| Current | integer | 当前页码 | 1 |
+| Size | integer | 每页条数 | 10 |
+| Total | integer | 总记录数 | 20 |
+| Data | array<object> | 业务数据 |  |
+|  | object | 业务数据 |  |
+| TaskId | string | 任务 ID | 3f7045e099474ba28ceca1b4eb6d6e21 |
+| TaskName | string | 任务名称 | 任务名称 |
+| TaskType | string | 任务类型 | type001 |
+| TaskStatus | integer | 任务状态 | 0 |
+| TaskStep | string | upload | upload clips generate |
+| CreateTimeStart | string | 起始创建时间。 | 2023-03-18 02:00:00 |
+
+<a id="示例"></a>
+
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -304,7 +89,9 @@ string
 
 `JSON`格式
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "RequestId": "1813ceee-7fe5-41b4-87e5-982a4d18cca5",
   "Code": "success",
@@ -330,25 +117,21 @@ string
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
+
 ## 错误码
 
-**HTTP status code**
-
-**错误码**
-
-**错误信息**
-
-**描述**
-
-403
-
-NoPermission
-
-You are not authorized to perform this action.
-
-请检查workspaceId的赋值
+| HTTP status code | 错误码 | 错误信息 | 描述 |
+| --- | --- | --- | --- |
+| 403 | NoPermission | You are not authorized to perform this action. | 请检查workspaceId的赋值 |
 
 访问[错误中心](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/errorCode)查看更多错误码。
+
+<a id="变更历史"></a>
+
+<a id="workbench-doc-change-demo"></a>
 
 ## 变更历史
 

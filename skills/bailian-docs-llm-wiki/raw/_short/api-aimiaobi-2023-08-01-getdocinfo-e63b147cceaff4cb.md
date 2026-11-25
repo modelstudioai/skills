@@ -2,9 +2,17 @@
 
 妙读获取文档信息。
 
+<a id="调试"></a>
+
+<a id="api-doc-debug"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -23,205 +31,52 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-**操作**
+| 操作 | 访问级别 | 资源类型 | 条件关键字 | 关联操作 |
+| --- | --- | --- | --- | --- |
+| aimiaobi:GetDocInfo | get | \*全部资源<br><br>`*` | 无 | 无 |
 
-**访问级别**
+<a id="请求参数"></a>
 
-**资源类型**
-
-**条件关键字**
-
-**关联操作**
-
-aimiaobi:GetDocInfo
-
-get
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-36"></a>
 
 ## 请求参数
 
-**名称**
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-xxx |
+| DocId | string | 是 | 文档 ID | 12345 |
+| CategoryId | string | 否 | 文档所在目录 | default |
 
-**类型**
+<a id="返回参数"></a>
 
-**必填**
-
-**描述**
-
-**示例值**
-
-WorkspaceId
-
-string
-
-是
-
-阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)
-
-llm-xxx
-
-DocId
-
-string
-
-是
-
-文档 ID
-
-12345
-
-CategoryId
-
-string
-
-否
-
-文档所在目录
-
-default
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-**名称**
-
-**类型**
-
-**描述**
-
-**示例值**
-
-object
-
-Schema of Response
-
-Code
-
-string
-
-内部错误码
-
-successful
-
-Data
-
-object
-
-返回数据
-
-DocName
-
-string
-
-文档名称
-
-電視廣播2020年報
-
-DocType
-
-string
-
-文档类型
-
-pdf
-
-FileUrl
-
-string
-
-文件 url
-
-http://xxx/xxx.pdf
-
-Status
-
-integer
-
-任务状态信息
-
-1和0，当状态为1时 表示获取文档成功，用户可进行生成文档摘要、生脑图等操作
-
-StatusMessage
-
-string
-
-状态消息
-
-导入成功
-
-VideoContents
-
-array
-
-视频中的语音内容文本数组
-
-string
-
-视频中的语音内容文本
-
-文本内容
-
-CategoryId
-
-string
-
-文档所在目录
-
-default
-
-PageInfo
-
-object
-
-Width
-
-integer
-
-100
-
-Height
-
-integer
-
-200
-
-HttpStatusCode
-
-integer
-
-http 状态码
-
-200
-
-Message
-
-string
-
-返回结果消息
-
-successful
-
-RequestId
-
-string
-
-请求 Id
-
-1813ceee-7fe5-41b4-87e5-982a4d18cca5
-
-Success
-
-boolean
-
-是否成功
-
-true
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | Schema of Response |  |
+| Code | string | 内部错误码 | successful |
+| Data | object | 返回数据 |  |
+| DocName | string | 文档名称 | 電視廣播2020年報 |
+| DocType | string | 文档类型 | pdf |
+| FileUrl | string | 文件 url | http://xxx/xxx.pdf |
+| Status | integer | 任务状态信息 | 1和0，当状态为1时 表示获取文档成功，用户可进行生成文档摘要、生脑图等操作 |
+| StatusMessage | string | 状态消息 | 导入成功 |
+| VideoContents | array | 视频中的语音内容文本数组 |  |
+|  | string | 视频中的语音内容文本 | 文本内容 |
+| CategoryId | string | 文档所在目录 | default |
+| PageInfo | object |  |  |
+| Width | integer |  | 100 |
+| Height | integer |  | 200 |
+| HttpStatusCode | integer | http 状态码 | 200 |
+| Message | string | 返回结果消息 | successful |
+| RequestId | string | 请求 Id | 1813ceee-7fe5-41b4-87e5-982a4d18cca5 |
+| Success | boolean | 是否成功 | true |
+
+<a id="示例"></a>
+
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -229,7 +84,9 @@ true
 
 `JSON`格式
 
-```
+<a id="code-block"></a>
+
+```json
 {
   "Code": "successful",
   "Data": {
@@ -254,25 +111,21 @@ true
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
+
 ## 错误码
 
-**HTTP status code**
-
-**错误码**
-
-**错误信息**
-
-**描述**
-
-403
-
-NoPermission
-
-You are not authorized to perform this action.
-
-请检查workspaceId的赋值
+| HTTP status code | 错误码 | 错误信息 | 描述 |
+| --- | --- | --- | --- |
+| 403 | NoPermission | You are not authorized to perform this action. | 请检查workspaceId的赋值 |
 
 访问[错误中心](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/errorCode)查看更多错误码。
+
+<a id="变更历史"></a>
+
+<a id="workbench-doc-change-demo"></a>
 
 ## 变更历史
 

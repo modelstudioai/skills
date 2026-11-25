@@ -2,9 +2,17 @@
 
 获取实例详情
 
+<a id="调试"></a>
+
+<a id="api-doc-debug"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -23,201 +31,62 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-**操作**
+| 操作 | 访问级别 | 资源类型 | 条件关键字 | 关联操作 |
+| --- | --- | --- | --- | --- |
+| bailianvoicebot:GetVocabulary | get | \*全部资源<br><br>`*` | 无 | 无 |
 
-**访问级别**
+<a id="请求语法"></a>
 
-**资源类型**
-
-**条件关键字**
-
-**关联操作**
-
-bailianvoicebot:GetVocabulary
-
-get
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-53"></a>
 
 ## 请求语法
 
-```
+<a id="code-block"></a>
+
+```text
 POST  HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="api-detail-36"></a>
+
 ## 请求参数
 
-**名称**
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| BusinessUnitId | string | 否 | 百炼业务空间 ID | llm-zop7ukgtksltamo4 |
+| VocabularyId | string | 否 | 热词 ID | d74d6290-7cbe-4436-b5d7-014ebb0f4061 |
 
-**类型**
+<a id="返回参数"></a>
 
-**必填**
-
-**描述**
-
-**示例值**
-
-BusinessUnitId
-
-string
-
-否
-
-百炼业务空间 ID
-
-llm-zop7ukgtksltamo4
-
-VocabularyId
-
-string
-
-否
-
-热词 ID
-
-d74d6290-7cbe-4436-b5d7-014ebb0f4061
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-**名称**
-
-**类型**
-
-**描述**
-
-**示例值**
-
-object
-
-Schema of Response
-
-Code
-
-string
-
-内部错误码
-
-OK
-
-HttpStatusCode
-
-integer
-
-http 状态码
-
-200
-
-Message
-
-string
-
-错误信息
-
-Instance llm-zzu528i29ecnprcl does not exist.
-
-RequestId
-
-string
-
-请求 ID
-
-D771A1B6-3D5F-174A-BEE1-98CE1000D337
-
-Data
-
-object
-
-热词对象
-
-VocabularyId
-
-string
-
-热词 ID
-
-af81a389-91f0-4157-8d82-720edd02b66b
-
-Name
-
-string
-
-热词名称
-
-金融场景热词
-
-Description
-
-string
-
-描述
-
-包含金融场景专业术语
-
-CreatedTime
-
-integer
-
-创建时间
-
-1773453676000
-
-UpdatedTime
-
-integer
-
-更新时间
-
-1773453676000
-
-InstanceId
-
-string
-
-百炼业务空间 ID
-
-llm-zop7ukgtksltamo4
-
-TenantId
-
-string
-
-租户 ID
-
-1308144684576655
-
-WordCount
-
-string
-
-热词数量
-
-50
-
-Words
-
-string
-
-热词
-
-{\\"苹果\\":\\"2\\",\\"香蕉\\":\\"3\\"}
-
-Params
-
-array
-
-动态错误参数列表
-
-string
-
-动态错误参数
-
-llm-xdne77rxe14ziszr
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | Schema of Response |  |
+| Code | string | 内部错误码 | OK |
+| HttpStatusCode | integer | http 状态码 | 200 |
+| Message | string | 错误信息 | Instance llm-zzu528i29ecnprcl does not exist. |
+| RequestId | string | 请求 ID | D771A1B6-3D5F-174A-BEE1-98CE1000D337 |
+| Data | object | 热词对象 |  |
+| VocabularyId | string | 热词 ID | af81a389-91f0-4157-8d82-720edd02b66b |
+| Name | string | 热词名称 | 金融场景热词 |
+| Description | string | 描述 | 包含金融场景专业术语 |
+| CreatedTime | integer | 创建时间 | 1773453676000 |
+| UpdatedTime | integer | 更新时间 | 1773453676000 |
+| InstanceId | string | 百炼业务空间 ID | llm-zop7ukgtksltamo4 |
+| TenantId | string | 租户 ID | 1308144684576655 |
+| WordCount | string | 热词数量 | 50 |
+| Words | string | 热词 | {\\"苹果\\":\\"2\\",\\"香蕉\\":\\"3\\"} |
+| Params | array | 动态错误参数列表 |  |
+|  | string | 动态错误参数 | llm-xdne77rxe14ziszr |
+
+<a id="示例"></a>
+
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -225,7 +94,9 @@ llm-xdne77rxe14ziszr
 
 `JSON`格式
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "Code": "OK",
   "HttpStatusCode": 200,
@@ -248,9 +119,17 @@ llm-xdne77rxe14ziszr
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
+
 ## 错误码
 
 访问[错误中心](https://api.aliyun.com/document/BailianVoiceBot/2025-01-01/errorCode)查看更多错误码。
+
+<a id="变更历史"></a>
+
+<a id="workbench-doc-change-demo"></a>
 
 ## 变更历史
 

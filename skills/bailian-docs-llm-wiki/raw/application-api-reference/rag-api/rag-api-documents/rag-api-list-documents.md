@@ -2,9 +2,17 @@
 
 查询指定知识库中的文档列表，支持分页。
 
+<a id="前提"></a>
+
+<a id="h-ragapi-list-documents-prereq"></a>
+
 ## 前提
 
-已完成 Endpoint 与鉴权配置，详见 [API 总览](raw/application-api-reference/rag-api/rag-api-overview.md)和[认证](raw/application-api-reference/rag-api/rag-api-authentication.md)。
+已完成 Endpoint 与鉴权配置，详见 [API 总览](../rag-api-overview.md)和[认证](../rag-api-authentication.md)。
+
+<a id="接口"></a>
+
+<a id="h-ragapi-list-documents-endpoint"></a>
 
 ## 接口
 
@@ -12,43 +20,27 @@
 
 查询指定知识库中的文档列表，支持分页。
 
+<a id="查询参数"></a>
+
+<a id="h-ragapi-list-documents-params"></a>
+
 ## 查询参数
 
-字段
+| 字段 | 必填 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| `index_id` | 是 | string | 知识库 ID，对应[创建知识库](../rag-api-knowledge-base/rag-api-create-index.md)时返回的 `pipelineId` |
+| `page_number` | 否 | integer | 页码，从 1 开始，默认 1 |
+| `page_size` | 否 | integer | 每页返回的文档数量，默认 10，最大 100 |
 
-必填
+<a id="请求示例"></a>
 
-类型
-
-说明
-
-`index_id`
-
-是
-
-string
-
-知识库 ID，对应[创建知识库](raw/application-api-reference/rag-api/rag-api-knowledge-base/rag-api-create-index.md)时返回的 `pipelineId`
-
-`page_number`
-
-否
-
-integer
-
-页码，从 1 开始，默认 1
-
-`page_size`
-
-否
-
-integer
-
-每页返回的文档数量，默认 10，最大 100
+<a id="h-ragapi-list-documents-eg"></a>
 
 ## 请求示例
 
-```
+<a id="code-block"></a>
+
+```bash
 curl -G "$BASE_URL/api/v1/indices/rag/index/files" \
   -H "Authorization: Bearer $BAILIAN_API_KEY" \
   -d "index_id=your_index_id" \
@@ -58,11 +50,17 @@ curl -G "$BASE_URL/api/v1/indices/rag/index/files" \
 
 其中 `BASE_URL` 为 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com`（`{workspace_id}` 为业务空间 ID），`BAILIAN_API_KEY` 为阿里云百炼 API Key。
 
+<a id="响应示例"></a>
+
+<a id="h-ragapi-list-documents-resp"></a>
+
 ## 响应示例
 
 查询成功返回 200。
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "code": "Success",
   "status_code": 200,
@@ -99,78 +97,29 @@ curl -G "$BASE_URL/api/v1/indices/rag/index/files" \
 }
 ```
 
+<a id="响应字段"></a>
+
+<a id="h-ragapi-list-documents-dto"></a>
+
 ### 响应字段
 
-字段
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `code` | string | 响应码，成功时为 `Success` |
+| `status_code` | integer | HTTP 状态码 |
+| `request_id` | string | 请求唯一标识，排查问题时请提供此 ID |
+| `data` | object | 业务数据。子字段 `page_number`（integer，当前页码）、`total_count`（integer，文档总数）、`rows`（array<object>，文档列表。元素字段：`doc_id`（string，文档唯一标识）、`doc_name`（string，文档名称）、`doc_type`（string，文档类型，如 `pdf`、`docx`、`txt`）、`code`（string，细粒度处理状态码，如 `FINISH`、`PARSE_FAILED`、`PIPELINE_JOB_RETRY_IMPORT_ERROR` 等）、`status`（string，粗粒度处理状态，如 `FINISH`、`PARSE_FAILED`、`INSERT_ERROR` 等，与 `code` 多数情况下一致，`code` 提供更细的错误归类）、`message`（string，处理状态描述，失败时为错误原因）、`size`（integer，文件大小，单位字节）、`gmt_modified`（integer，最后修改时间，毫秒级 Unix 时间戳）、`dataSync`（boolean，是否为增量同步数据）、`categoryId`（string，所属类目 ID）、`categoryName`（string，所属类目名称）、`connectorId`（string，所属数据集 ID）、`source_id`（string，数据源 ID）、`ingestion_id`（string，导入任务 ID）、`tags`（array<string>，文档标签列表）、`meta_extract_info`（array，元数据抽取信息）、`canDelete`（boolean，是否可删除）） |
+| `success` | boolean | 请求是否成功 |
+| `message` | string | 提示信息，成功时为 `success` |
+| `status` | string | 请求状态：`SUCCESS` 或 `FAILED` |
 
-类型
+<a id="错误码"></a>
 
-说明
-
-`code`
-
-string
-
-响应码，成功时为 `Success`
-
-`status_code`
-
-integer
-
-HTTP 状态码
-
-`request_id`
-
-string
-
-请求唯一标识，排查问题时请提供此 ID
-
-`data`
-
-object
-
-业务数据。子字段 `page_number`（integer，当前页码）、`total_count`（integer，文档总数）、`rows`（array<object>，文档列表。元素字段：`doc_id`（string，文档唯一标识）、`doc_name`（string，文档名称）、`doc_type`（string，文档类型，如 `pdf`、`docx`、`txt`）、`code`（string，细粒度处理状态码，如 `FINISH`、`PARSE_FAILED`、`PIPELINE_JOB_RETRY_IMPORT_ERROR` 等）、`status`（string，粗粒度处理状态，如 `FINISH`、`PARSE_FAILED`、`INSERT_ERROR` 等，与 `code` 多数情况下一致，`code` 提供更细的错误归类）、`message`（string，处理状态描述，失败时为错误原因）、`size`（integer，文件大小，单位字节）、`gmt_modified`（integer，最后修改时间，毫秒级 Unix 时间戳）、`dataSync`（boolean，是否为增量同步数据）、`categoryId`（string，所属类目 ID）、`categoryName`（string，所属类目名称）、`connectorId`（string，所属数据集 ID）、`source_id`（string，数据源 ID）、`ingestion_id`（string，导入任务 ID）、`tags`（array<string>，文档标签列表）、`meta_extract_info`（array，元数据抽取信息）、`canDelete`（boolean，是否可删除））
-
-`success`
-
-boolean
-
-请求是否成功
-
-`message`
-
-string
-
-提示信息，成功时为 `success`
-
-`status`
-
-string
-
-请求状态：`SUCCESS` 或 `FAILED`
+<a id="h-ragapi-list-documents-errors"></a>
 
 ## 错误码
 
-HTTP 状态码
-
-错误码
-
-错误信息
-
-说明
-
-400
-
-`Index.InvalidParameter`
-
-`Required parameter missing or invalid.`
-
-请求参数无效
-
-401
-
-`InvalidApiKey`
-
-`Invalid API-key provided.`
-
-鉴权失败，API Key 无效或缺失
+| HTTP 状态码 | 错误码 | 错误信息 | 说明 |
+| --- | --- | --- | --- |
+| 400 | `Index.InvalidParameter` | `Required parameter missing or invalid.` | 请求参数无效 |
+| 401 | `InvalidApiKey` | `Invalid API-key provided.` | 鉴权失败，API Key 无效或缺失 |

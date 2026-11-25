@@ -2,25 +2,49 @@
 
 阿里云百炼提供与 OpenAI 兼容的 Batch File API，支持通过文件批量提交请求。系统异步处理所有请求，在全部完成或达到最长等待时间后返回结果，费用仅为实时调用的 50% 。适用于数据分析、模型评测等时效性要求不高但需大批量处理的场景。
 
-如需在控制台操作，请参见[批量推理](raw/model-user-guide/model-high-speed-inference/batch-inference.md)。
+如需在控制台操作，请参见[批量推理](../../model-user-guide/model-high-speed-inference/batch-inference.md)。
+
+<a id="工作流程"></a>
+
+<a id="fe3cf9d7b2w12"></a>
+
+<a id="ac1601293a3ux"></a>
 
 ## 工作流程
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9782127871/CAEQaxiBgIDB5qWk4BkiIDViYzQ0MWUwNTYyNDQ3NDM5NzM0ZTc4N2Y3NTU2NjA56318723_20260129171731.699.svg)
 
+<a id="前提条件"></a>
+
+<a id="235500910ci04"></a>
+
+<a id="0a394b8cf1okd"></a>
+
 ## 前提条件
 
 支持通过 OpenAI SDK（Python、Node.js）或HTTP API调用 Batch File 接口。
 
--   **获取API Key**：[获取并配置API Key 到环境变量](raw/model-api-reference/preparations/get-api-key.md)
+-   **获取API Key**：[获取并配置API Key 到环境变量](../preparations/get-api-key.md)
     
--   **安装 SDK（可选）：**如需使用SDK调用，请安装 [OpenAI SDK](raw/model-api-reference/preparations/install-sdk.md)
+-   **安装 SDK（可选）：**如需使用SDK调用，请安装 [OpenAI SDK](../preparations/install-sdk.md)
     
 -   **服务端点**
     -   **华北2（北京）：**`https://dashscope.aliyuncs.com/compatible-mode/v1`
     -   **新加坡：**`https://dashscope-intl.aliyuncs.com/compatible-mode/v1`
 
+<a id="适用范围"></a>
+
+<a id="9ff45144fafya"></a>
+
+<a id="51eff8d97fl6c"></a>
+
 ## 适用范围
+
+<a id="sec-tabs"></a>
+
+<a id="华北2-北京"></a>
+
+<a id="华北2-北京-h4"></a>
 
 #### 华北2（北京）
 
@@ -32,11 +56,15 @@
     -   千问 Flash：qwen3.8-flash、qwen3.7-flash、qwen3.6-flash、qwen3.5-flash、qwen-flash
     -   千问 Long：qwen-long
 -   **多模态模型**
-    -   [图像与视频理解](raw/model-user-guide/model-experience/text-generation-model/vision.md)：qwen4-max、qwen3.8-max、qwen3.8-flash、qwen3.7-plus、qwen3.6-plus、qwen3.7-flash、qwen3.6-flash、qwen3.5-plus、qwen3.5-flash、qwen3-vl-plus
-    -   [文字提取](raw/model-user-guide/model-experience/text-generation-model/specialized-models/qwen-vl-ocr.md)：qwen-vl-ocr
-    -   [全模态](raw/model-user-guide/model-experience/omni-modal/qwen-omni.md)：qwen3.5-omni-plus
+    -   [图像与视频理解](../../model-user-guide/model-experience/text-generation-model/vision.md)：qwen4-max、qwen3.8-max、qwen3.8-flash、qwen3.7-plus、qwen3.6-plus、qwen3.7-flash、qwen3.6-flash、qwen3.5-plus、qwen3.5-flash、qwen3-vl-plus
+    -   [文字提取](../../model-user-guide/model-experience/text-generation-model/specialized-models/qwen-vl-ocr.md)：qwen-vl-ocr
+    -   [全模态](../../model-user-guide/model-experience/omni-modal/qwen-omni.md)：qwen3.5-omni-plus
 -   [**向量模型**](https://help.aliyun.com/zh/model-studio/user-guide/embedding)**：**text-embedding-v1、text-embedding-v2、text-embedding-v3、text-embedding-v4、qwen3.7-text-embedding、qwen3.7-text-embedding-flash
     
+
+<a id="新加坡"></a>
+
+<a id="新加坡-h4"></a>
 
 #### 新加坡
 
@@ -46,42 +74,64 @@
     -   千问 Max：qwen3.8-max、qwen-max
     -   千问 Plus：qwen3.7-plus、qwen-plus
 -   **多模态模型**
-    -   [图像与视频理解](raw/model-user-guide/model-experience/text-generation-model/vision.md)：qwen3.8-max、qwen3.7-plus
+    -   [图像与视频理解](../../model-user-guide/model-experience/text-generation-model/vision.md)：qwen3.8-max、qwen3.7-plus
 
-**重要**
+> **重要**
+>
+> -   在Batch 场景下，`qwen3.8-max`、`qwen3.8-flash`、`qwen3.7-max`、`qwen3.7-plus`、`qwen3.6-plus`、`qwen3.7-flash`、`qwen3.6-flash`、`qwen3.5-plus`、`qwen3.5-flash`和`qwen3.5-omni-plus`单次请求的上下文 Token 数最大支持 256K，`qwen3.5-omni-plus`不支持语音输出。
+> -   部分模型支持思考模式，开启后会产生思考`tokens`导致成本增加。
+> -   `qwen3.8`、`qwen3.7`、`qwen3.6`和`qwen3.5` 系列模型默认开启思考模式。建议使用混合思考模型时，显式设置`enable_thinking`参数（`true`开启/`false`关闭）。
+> -   在 JSONL 请求体中，`enable_thinking` 为 `body` 的顶层参数，须与 `model` 同级传入，不能放在 `extra_body` 中。
 
--   在Batch 场景下，`qwen3.8-max`、`qwen3.8-flash`、`qwen3.7-max`、`qwen3.7-plus`、`qwen3.6-plus`、`qwen3.7-flash`、`qwen3.6-flash`、`qwen3.5-plus`、`qwen3.5-flash`和`qwen3.5-omni-plus`单次请求的上下文 Token 数最大支持 256K，`qwen3.5-omni-plus`不支持语音输出。
--   部分模型支持思考模式，开启后会产生思考`tokens`导致成本增加。
--   `qwen3.8`、`qwen3.7`、`qwen3.6`和`qwen3.5` 系列模型默认开启思考模式。建议使用混合思考模型时，显式设置`enable_thinking`参数（`true`开启/`false`关闭）。
--   在 JSONL 请求体中，`enable_thinking` 为 `body` 的顶层参数，须与 `model` 同级传入，不能放在 `extra_body` 中。
+<a id="快速开始"></a>
+
+<a id="abe0ee0bfd5dc"></a>
+
+<a id="b056ab78e5blg"></a>
 
 ## 快速开始
 
 在处理正式任务前，使用测试模型`batch-test-model`进行全链路闭环测试。该模型跳过推理过程，直接返回固定的成功响应，用于验证API调用链路和数据格式是否正确。
 
-**说明**
+> **说明**
+>
+> **测试模型（batch-test-model）的限制：**
+>
+> -   测试文件需满足[输入文件要求](batch-interfaces-compatible-with-openai.md#0214fa4f9dxb3)，且文件大小不超过 **1 MB**，行数不超过**100行**。
+> -   并发限制：最大并行任务数 **2 个**。
+> -   费用：测试模型不产生模型推理费用。
 
-**测试模型（batch-test-model）的限制：**
+<a id="第-1-步-准备输入文件"></a>
 
--   测试文件需满足[输入文件要求](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai#0214fa4f9dxb3)，且文件大小不超过 **1 MB**，行数不超过**100行**。
--   并发限制：最大并行任务数 **2 个**。
--   费用：测试模型不产生模型推理费用。
+<a id="a687b7c50ej0t"></a>
+
+<a id="eb771197c0u9g"></a>
 
 ### 第 1 步：准备输入文件
 
 准备一个名为[test\_model.jsonl](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250403/ilveat/test_model.jsonl)的文件，内容如下：
 
-```
+<a id="code-block"></a>
+
+```json
 {"custom_id":"1","method":"POST","url":"/v1/chat/ds-test","body":{"model":"batch-test-model","messages":[{"role":"system","content":"You are a helpful assistant."},{"role":"user","content":"你好！有什么可以帮助你的吗？"}]}}
 {"custom_id":"2","method":"POST","url":"/v1/chat/ds-test","body":{"model":"batch-test-model","messages":[{"role":"system","content":"You are a helpful assistant."},{"role":"user","content":"What is 2+2?"}]}}
 ```
 
 多模态模型（如 qwen3-vl-plus）支持文件 URL、Base64 编码传入方式：
 
-```
+<a id="code-block-2"></a>
+
+```json
 {"custom_id":"image-url","method":"POST","url":"/v1/chat/completions","body":{"model":"qwen3-vl-plus","messages":[{"role":"user","content":[{"type":"image_url","image_url":{"url":"https://dashscope.oss-cn-beijing.aliyuncs.com/images/dog_and_girl.jpeg"}},{"type":"text","text":"请描述这张图片"}]}]}}
 {"custom_id":"image-base64","method":"POST","url":"/v1/chat/completions","body":{"model":"qwen3-vl-plus","messages":[{"role":"user","content":[{"type":"image_url","image_url":{"url":"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEA8ADwAAD..."}},{"type":"text","text":"请描述这张图片"}]}]}}
 ```
+
+<a id="第-2-步-运行代码"></a>
+
+<a id="826aaa760a1qd"></a>
+
+<a id="5cd01fa5a89l8"></a>
 
 ### 第 2 步：运行代码
 
@@ -89,23 +139,35 @@
 
 > 如需调整文件路径或其他参数，请根据实际情况修改代码。
 
-**说明****复用已有文件 ID：**文件上传后返回的 ID（如 `file-batch-xxx`）可重复使用。如果输入内容不变，无需每次重新上传，直接用已有 ID 创建任务即可：
+> **说明**
+>
+> **复用已有文件 ID：**文件上传后返回的 ID（如 `file-batch-xxx`）可重复使用。如果输入内容不变，无需每次重新上传，直接用已有 ID 创建任务即可：
+>
+> <a id="code-block-3"></a>
+>
+> ```python
+> batch = client.batches.create(
+>     input_file_id="file-batch-xxx",  # 直接使用已有文件 ID，无需重新上传
+>     endpoint="/v1/chat/completions",
+>     completion_window="24h"
+> )
+> ```
+>
+> 可通过 `client.files.list(purpose="batch")` 接口查询已上传的 Batch 文件 ID。
 
-```
-batch = client.batches.create(
-    input_file_id="file-batch-xxx",  # 直接使用已有文件 ID，无需重新上传
-    endpoint="/v1/chat/completions",
-    completion_window="24h"
-)
-```
-
-可通过 `client.files.list(purpose="batch")` 接口查询已上传的 Batch 文件 ID。
+<a id="accordion-示例代码"></a>
 
 示例代码
 
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-openai-python-sdk-tab"></a>
+
 OpenAI Python SDK
 
-```
+<a id="code-code-group-openai-python-sdk"></a>
+
+```python
 import os
 from pathlib import Path
 from openai import OpenAI
@@ -209,9 +271,13 @@ if __name__ == "__main__":
     main()
 ```
 
+<a id="fig-code-group-openai-node-js-sdk-tab"></a>
+
 OpenAI Node.js SDK
 
-```
+<a id="code-code-group-openai-node-js-sdk"></a>
+
+```javascript
 /**
  * 阿里云百炼 Batch API 测试 - 使用 OpenAI Node.js SDK
  *
@@ -328,9 +394,13 @@ async function main() {
 main();
 ```
 
+<a id="fig-code-group-java-http-tab"></a>
+
 Java（HTTP）
 
-```
+<a id="code-code-group-java-http"></a>
+
+```java
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -557,9 +627,13 @@ public class BatchAPITest {
 }
 ```
 
+<a id="fig-code-group-curl-http-tab"></a>
+
 curl (HTTP)
 
-```
+<a id="code-code-group-curl-http"></a>
+
+```bash
 #!/bin/bash
 # 阿里云百炼 Batch API 测试 - 使用 curl
 #
@@ -670,16 +744,36 @@ else
 fi
 ```
 
+<a id="第-3-步-验证测试结果"></a>
+
+<a id="4b17251bccf4r"></a>
+
+<a id="863a7955b8e7y"></a>
+
 ### 第 3 步： 验证测试结果
 
 任务成功完成后，结果文件`result.jsonl`包含固定响应`{"content":"This is a test result."}`：
 
-```
+<a id="code-block-4"></a>
+
+```json
 {"id":"a2b1ae25-21f4-4d9a-8634-99a29926486c","custom_id":"1","response":{"status_code":200,"request_id":"a2b1ae25-21f4-4d9a-8634-99a29926486c","body":{"created":1743562621,"usage":{"completion_tokens":6,"prompt_tokens":20,"total_tokens":26},"model":"batch-test-model","id":"chatcmpl-bca7295b-67c3-4b1f-8239-d78323bb669f","choices":[{"finish_reason":"stop","index":0,"message":{"content":"This is a test result."}}],"object":"chat.completion"}},"error":null}
 {"id":"39b74f09-a902-434f-b9ea-2aaaeebc59e0","custom_id":"2","response":{"status_code":200,"request_id":"39b74f09-a902-434f-b9ea-2aaaeebc59e0","body":{"created":1743562621,"usage":{"completion_tokens":6,"prompt_tokens":20,"total_tokens":26},"model":"batch-test-model","id":"chatcmpl-1e32a8ba-2b69-4dc4-be42-e2897eac9e84","choices":[{"finish_reason":"stop","index":0,"message":{"content":"This is a test result."}}],"object":"chat.completion"}},"error":null}
 ```
 
+<a id="执行正式任务"></a>
+
+<a id="bad4ef1522g5k"></a>
+
+<a id="759dd0eccesua"></a>
+
 ## 执行正式任务
+
+<a id="输入文件要求"></a>
+
+<a id="0214fa4f9dxb3"></a>
+
+<a id="bbf6655574dbn"></a>
 
 ### 输入文件要求
 
@@ -693,15 +787,20 @@ fi
 
 示例文件内容：
 
-```
+<a id="code-block-5"></a>
+
+```json
 {"custom_id":"1","method":"POST","url":"/v1/chat/completions","body":{"model":"qwen-plus","messages":[{"role":"system","content":"You are a helpful assistant."},{"role":"user","content":"你好！有什么可以帮助你的吗？"}]}}
 {"custom_id":"2","method":"POST","url":"/v1/chat/completions","body":{"model":"qwen-plus","messages":[{"role":"system","content":"You are a helpful assistant."},{"role":"user","content":"What is 2+2?"}]}}
 ```
+
 **场景2：图像与视频理解**
 
 多模态模型（如 qwen3-vl-plus）支持文件 URL、Base64 编码传入方式。
 
-```
+<a id="code-block-6"></a>
+
+```json
 {"custom_id":"image-url","method":"POST","url":"/v1/chat/completions","body":{"model":"qwen3-vl-plus","messages":[{"role":"user","content":[{"type":"image_url","image_url":{"url":"https://dashscope.oss-cn-beijing.aliyuncs.com/images/dog_and_girl.jpeg"}},{"type":"text","text":"请描述这张图片"}]}]}}
 {"custom_id":"image-base64","method":"POST","url":"/v1/chat/completions","body":{"model":"qwen3-vl-plus","messages":[{"role":"user","content":[{"type":"image_url","image_url":{"url":"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEA8ADwAAD..."}},{"type":"text","text":"请描述这张图片"}]}]}}
 {"custom_id":"video-url","method":"POST","url":"/v1/chat/completions","body":{"model":"qwen3-vl-plus","messages":[{"role":"user","content":[{"type":"video","video":"https://example.com/video.mp4"},{"type":"text","text":"描述这个视频"}]}]}}
@@ -712,11 +811,15 @@ fi
 
 > 示例中的 Base64 字符串已省略，使用下方 Python 代码生成完整编码即可。
 
+<a id="accordion-传入-base64-编码字符串-以图像为例"></a>
+
 传入 Base64 编码字符串（以图像为例）
 
 1.  将本地文件转换为 Base64 编码：
 
-```
+<a id="code-block-7"></a>
+
+```python
 #  编码函数： 将本地文件转换为 Base64 编码的字符串
 import base64
 def encode_image(image_path):
@@ -732,11 +835,19 @@ base64_image = encode_image("xxx/eagle.png")
     1.  `MIME_type`需替换为实际的媒体类型，确保与`MIME Type` 的值匹配（如`image/jpeg`、`image/png`）；
     2.  `base64_image`为上一步生成的 Base64 字符串。
 
-**说明**完整说明（包括文件限制、MIME 类型、编码方法）请参见[传入本地文件（Base64 编码或文件路径）](https://help.aliyun.com/zh/model-studio/vision#d987f8de5395x)。
+> **说明**
+>
+> 完整说明（包括文件限制、MIME 类型、编码方法）请参见[传入本地文件（Base64 编码或文件路径）](../../model-user-guide/model-experience/text-generation-model/vision.md#d987f8de5395x)。
 
 **Batch 推理 JSONL 文件生成工具**
 
 Batch 推理需要构造 JSONL 文件，每行为一个独立请求。以下 Python 脚本可直接运行生成符合格式的 JSONL 文件。
+
+<a id="使用方式"></a>
+
+<a id="h2-usage-china"></a>
+
+<a id="sec-usage-china"></a>
 
 ### 使用方式
 
@@ -745,9 +856,17 @@ Batch 推理需要构造 JSONL 文件，每行为一个独立请求。以下 Pyt
 3.  运行 `python generate_batch_jsonl.py`
 4.  生成的 `batch_input.jsonl` 文件可直接用于 Batch 推理任务
 
+<a id="文本生成模型-jsonl-生成脚本"></a>
+
+<a id="h2-script-china"></a>
+
+<a id="sec-script-china"></a>
+
 #### 文本生成模型 JSONL 生成脚本
 
-```
+<a id="code-block-8"></a>
+
+```python
 #!/usr/bin/env python3
 """
 Batch 推理 JSONL 文件生成工具
@@ -819,11 +938,19 @@ if __name__ == "__main__":
     main()
 ```
 
+<a id="多模态模型请求格式"></a>
+
+<a id="h2-mm-china"></a>
+
+<a id="sec-multimodal-china"></a>
+
 #### 多模态模型请求格式
 
 多模态模型的 `content` 字段为数组格式，包含媒体对象和文本提问。每行请求中的媒体URL需为同一类型（图片、视频或音频）。将上方脚本中的 `TASKS` 替换为以下格式即可：
 
-```
+<a id="code-block-9"></a>
+
+```python
 # 多模态模型配置示例
 MODEL = "qwen3-vl-plus"       # 多模态模型
 
@@ -842,11 +969,19 @@ TASKS = [
 # - 思考模式需额外设置 ENABLE_THINKING = True
 ```
 
+<a id="向量模型请求格式"></a>
+
+<a id="h2-emb-china"></a>
+
+<a id="sec-embedding-china"></a>
+
 #### 向量模型请求格式
 
 向量模型使用 `/v1/embeddings` 接口，请求格式不同于文本生成模型。可使用以下独立脚本生成：
 
-```
+<a id="code-block-10"></a>
+
+```python
 #!/usr/bin/env python3
 """向量模型 Batch JSONL 生成（使用 /v1/embeddings 接口）"""
 import json
@@ -872,29 +1007,40 @@ with open(output_file, "w", encoding="utf-8") as f:
 print(f"已生成 {output_file}，共 {len(TEXTS)} 条请求")
 ```
 
+<a id="1-修改输入文件"></a>
+
+<a id="b5ec99a5c1lko"></a>
+
+<a id="b937fd69b79n2"></a>
+
 ### 1\. 修改输入文件
 
 -   可直接修改用于测试的 `test_model.jsonl` 文件，将 model 参数设置为目标正式模型，并设置URL字段：
     
-    **模型类型**
-    
-    **url**
-    
-    文本生成/多模态模型
-    
-    `/v1/chat/completions`
-    
-    向量模型
-    
-    `/v1/embeddings`
+    | 模型类型 | url |
+    | --- | --- |
+    | 文本生成/多模态模型 | `/v1/chat/completions` |
+    | 向量模型 | `/v1/embeddings` |
     
 -   或使用上方的“JSONL 批量生成工具”为正式任务生成一个新的文件。关键是确保 `model` 和 `url` 字段正确。
     
+
+<a id="2-修改快速开始的代码"></a>
+
+<a id="9e8d214ec6w42"></a>
+
+<a id="c9d67eab84owy"></a>
 
 ### 2\. 修改快速开始的代码
 
 1.  输入文件路径更改为您的文件名
 2.  将 endpoint 参数值修改为与输入文件中URL字段一致的值
+
+<a id="3-运行代码并等待结果"></a>
+
+<a id="38f1a37efdb21"></a>
+
+<a id="d180ad81a8g6y"></a>
 
 ### 3\. 运行代码并等待结果
 
@@ -902,18 +1048,30 @@ print(f"已生成 {output_file}，共 {len(TEXTS)} 条请求")
 
 -   成功结果（`output_file_id`）：每一行对应一个成功的原始请求，包含 `custom_id` 和 `response`。
 
-```
+<a id="code-block-11"></a>
+
+```json
 {"id":"3a5c39d5-3981-4e4c-97f2-e0e821893f03","custom_id":"req-001","response":{"status_code":200,"request_id":"3a5c39d5-3981-4e4c-97f2-e0e821893f03","body":{"created":1768306034,"usage":{"completion_tokens":654,"prompt_tokens":14,"total_tokens":668},"model":"qwen-plus","id":"chatcmpl-3a5c39d5-3981-4e4c-97f2-e0e821893f03","choices":[{"finish_reason":"stop","index":0,"message":{"role":"assistant","content":"你好！杭州西湖是中国著名的风景名胜区，位于浙江省杭州市西部，因此得名“西湖”。它是中国十大风景名胜之一，也是世界文化遗产（2011年被联合国教科文组织列入《世界遗产名录》），以其秀丽的自然风光与深厚的人文底蕴闻名于世。\n\n### 一、自然景观\n西湖三面环山，一面邻城，湖面面积约6.39平方公里，形似如意，碧波荡漾。湖中被孤山、白堤、苏堤、杨公堤等自然或人工分隔成多个水域，形成“一山二塔三岛三堤”的格局。\n\n主要景点包括：\n- **苏堤春晓**：北宋大文豪苏东坡任杭州知州时主持疏浚西湖，用挖出的淤泥堆筑成堤，后人称为“苏堤”。春天桃红柳绿，景色如画。\n- **断桥残雪**：位于白堤东端，是白蛇传中“断桥相会”的发生地，冬日雪后银装素裹，尤为著名。\n- **雷峰夕照**：雷峰塔在夕阳映照下金光熠熠，曾是“西湖十景”之一。\n- **三潭印月**：湖中小瀛洲上的三座石塔，中秋夜可在塔内点灯，月影、灯光、湖光交相辉映。\n- **平湖秋月**：位于白堤西端，是观赏湖上明月的绝佳地点。\n- **花港观鱼**：以赏花和观鱼著称，园内牡丹、锦鲤相映成趣。\n\n### 二、人文历史\n西湖不仅风景优美，还承载着丰富的历史文化：\n- 自唐宋以来，众多文人墨客如白居易、苏东坡、林逋、杨万里等在此留下诗篇。\n- 白居易曾主持修建“白堤”，疏浚西湖，造福百姓。\n- 西湖周边有众多古迹，如岳王庙（纪念民族英雄岳飞）、灵隐寺（千年古刹）、六和塔、龙井村（中国十大名茶龙井茶的产地）等。\n\n### 三、文化象征\n西湖被誉为“人间天堂”的代表，是中国传统山水美学的典范。它融合了自然美与人文美，体现了“天人合一”的哲学思想。许多诗词、绘画、戏曲都以西湖为题材，成为中国文化的重要符号。\n\n### 四、旅游建议\n- 最佳游览季节：春季（3-5月）桃红柳绿，秋季（9-11月）天高气爽。\n- 推荐方式：步行、骑行（环湖绿道）、乘船游湖。\n- 周边美食：西湖醋鱼、龙井虾仁、东坡肉、片儿川等。\n\n总之，杭州西湖不仅是一处自然美景，更是一座活着的文化博物馆，值得细细品味。如果你有机会到杭州，一定不要错过这个“淡妆浓抹总相宜”的人间仙境。"}}],"object":"chat.completion"}},"error":null}
 {"id":"628312ba-172c-457d-ba7f-3e5462cc6899","custom_id":"req-002","response":{"status_code":200,"request_id":"628312ba-172c-457d-ba7f-3e5462cc6899","body":{"created":1768306035,"usage":{"completion_tokens":25,"prompt_tokens":18,"total_tokens":43},"model":"qwen-plus","id":"chatcmpl-628312ba-172c-457d-ba7f-3e5462cc6899","choices":[{"finish_reason":"stop","index":0,"message":{"role":"assistant","content":"春风拂柳绿，  \n夜雨润花红。  \n鸟语林间闹，  \n山川处处同。"}}],"object":"chat.completion"}},"error":null}
 ```
 
--   失败请求详情（`error_file_id`）：包含处理失败的请求行信息和错误原因，可参考[错误码](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai#97e145aeabbwf)进行排查。
+-   失败请求详情（`error_file_id`）：包含处理失败的请求行信息和错误原因，可参考[错误码](batch-interfaces-compatible-with-openai.md#97e145aeabbwf)进行排查。
+
+<a id="具体流程"></a>
+
+<a id="fdd1a4b6d86id"></a>
+
+<a id="bdf0b1d3a39it"></a>
 
 ## 具体流程
 
 Batch API使用流程分为四步：上传文件、创建任务、查询任务状态、下载结果。
 
-**说明**如果数据已存储在阿里云OSS中，可跳过文件上传步骤，直接在创建 Batch 任务时使用OSS文件路径。详情请参见[使用OSS文件创建 Batch 任务](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai#f667257850olj)。
+> **说明**
+>
+> 如果数据已存储在阿里云OSS中，可跳过文件上传步骤，直接在创建 Batch 任务时使用OSS文件路径。详情请参见[使用OSS文件创建 Batch 任务](batch-interfaces-compatible-with-openai.md#f667257850olj)。
+
+<a id="accordion-1-上传文件"></a>
 
 1\. 上传文件
 
@@ -921,23 +1079,39 @@ Batch API使用流程分为四步：上传文件、创建任务、查询任务�
 
 > 上传文件， `purpose` 必须是 `batch` 。
 
-**说明****复用已有文件 ID：**文件上传后返回的 ID（如 `file-batch-xxx`）可重复使用。如果输入内容不变，无需每次重新上传，直接用已有 ID 创建任务即可：
+> **说明**
+>
+> **复用已有文件 ID：**文件上传后返回的 ID（如 `file-batch-xxx`）可重复使用。如果输入内容不变，无需每次重新上传，直接用已有 ID 创建任务即可：
+>
+> <a id="code-block-12"></a>
+>
+> ```python
+> batch = client.batches.create(
+>     input_file_id="file-batch-xxx",  # 直接使用已有文件 ID，无需重新上传
+>     endpoint="/v1/chat/completions",
+>     completion_window="24h"
+> )
+> ```
+>
+> 可通过 `client.files.list(purpose="batch")` 接口查询已上传的 Batch 文件 ID。
 
-```
-batch = client.batches.create(
-    input_file_id="file-batch-xxx",  # 直接使用已有文件 ID，无需重新上传
-    endpoint="/v1/chat/completions",
-    completion_window="24h"
-)
-```
+<a id="sec-tabs-2"></a>
 
-可通过 `client.files.list(purpose="batch")` 接口查询已上传的 Batch 文件 ID。
+<a id="openai-python-sdk"></a>
+
+<a id="openai-python-sdk-h4"></a>
 
 #### OpenAI Python SDK
 
+<a id="eadaf3f1ca7z5"></a>
+
+<a id="6042ecfd84t57"></a>
+
 #### 请求示例
 
-```
+<a id="code-block-13"></a>
+
+```python
 import os
 from pathlib import Path
 from openai import OpenAI
@@ -957,11 +1131,21 @@ file_object = client.files.create(file=Path("test.jsonl"), purpose="batch")
 print(file_object.model_dump_json())
 ```
 
+<a id="openai-node-js-sdk"></a>
+
+<a id="openai-node-js-sdk-h4"></a>
+
 #### OpenAI Node.js SDK
+
+<a id="nodejs-request-title"></a>
+
+<a id="nodejs-request-example"></a>
 
 #### 请求示例
 
-```
+<a id="code-block-14"></a>
+
+```javascript
 /**
  * 阿里云百炼 Batch API - 上传文件
  *
@@ -1000,11 +1184,21 @@ const fileObject = await client.files.create({
 console.log(fileObject.id);
 ```
 
+<a id="java-http"></a>
+
+<a id="java-http-h4"></a>
+
 #### Java（HTTP）
+
+<a id="java-request-title"></a>
+
+<a id="java-request-example"></a>
 
 #### 请求示例
 
-```
+<a id="code-block-15"></a>
+
+```java
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -1096,11 +1290,21 @@ String fileId = uploadFile("test.jsonl");
 }
 ```
 
+<a id="curl-http"></a>
+
+<a id="curl-http-h4"></a>
+
 #### curl(HTTP)
+
+<a id="5103e1fa4a10k"></a>
+
+<a id="552a0018ea51j"></a>
 
 #### 请求示例
 
-```
+<a id="code-block-16"></a>
+
+```bash
 # ======= 重要提示 =======
 # 新加坡和北京地域的API Key不同。
 # 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1/files
@@ -1111,9 +1315,13 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/files \
 --form 'purpose="batch"'
 ```
 
+<a id="e755ceb45blu0"></a>
+
 #### 返回示例
 
-```
+<a id="code-block-17"></a>
+
+```json
 {
     "id": "file-batch-xxx",
     "bytes": 437,
@@ -1126,15 +1334,29 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/files \
 }
 ```
 
+<a id="accordion-2-创建-batch-任务"></a>
+
 2\. 创建 Batch 任务
 
 使用上传文件返回的文件ID 或OSS路径 创建 Batch 任务。
 
+<a id="sec-tabs-3"></a>
+
+<a id="openai-python-sdk-2"></a>
+
+<a id="openai-python-sdk-2-h4"></a>
+
 #### OpenAI Python SDK
+
+<a id="3d1d320515wzr"></a>
+
+<a id="79338d585616c"></a>
 
 #### 请求示例
 
-```
+<a id="code-block-18"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -1156,11 +1378,21 @@ batch = client.batches.create(
 print(batch)
 ```
 
+<a id="openai-node-js-sdk-2"></a>
+
+<a id="openai-node-js-sdk-2-h4"></a>
+
 #### OpenAI Node.js SDK
+
+<a id="e1c89debc2dcp"></a>
+
+<a id="5e32b1d041oge"></a>
 
 #### 请求示例
 
-```
+<a id="code-block-19"></a>
+
+```javascript
 /**
  * 阿里云百炼 Batch API - 创建Batch任务
  *
@@ -1199,11 +1431,21 @@ const batch = await client.batches.create({
 console.log(batch.id);
 ```
 
+<a id="java-http-2"></a>
+
+<a id="java-http-2-h4"></a>
+
 #### Java（HTTP）
+
+<a id="9ae10342eakn6"></a>
+
+<a id="118479281b2ev"></a>
 
 #### 请求示例
 
-```
+<a id="code-block-20"></a>
+
+```java
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -1282,11 +1524,21 @@ String response = sendRequest("POST", "/batches", jsonBody);
 }
 ```
 
+<a id="curl-http-2"></a>
+
+<a id="curl-http-2-h4"></a>
+
 #### curl（HTTP）
+
+<a id="886baf8136i7m"></a>
+
+<a id="08d677dcb7kc1"></a>
 
 #### 请求示例
 
-```
+<a id="code-block-21"></a>
+
+```bash
 # ======= 重要提示 =======
 # 新加坡和北京地域的API Key不同。
 # 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1/batches
@@ -1302,109 +1554,23 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/batches \
   }'
 ```
 
+<a id="7a142728d5hah"></a>
+
+<a id="5edf361ffd9mt"></a>
+
 #### 输入参数
 
-**字段**
+<table><thead><tr><th><p><strong>字段</strong></p></th><th><p><strong>类型</strong></p></th><th><p><strong>传参</strong></p><p><strong>方式</strong></p></th><th><p><strong>必选</strong></p></th><th><p><strong>描述</strong></p></th></tr></thead><tbody><tr><td><p>input_file_id</p></td><td><p>String</p></td><td><p>Body</p></td><td><p>是</p></td><td><div><p>用于指定文件ID、OSS文件URL或OSS文件资源标识符，作为Batch任务的输入文件。您可以通过以下任一方式提供此参数：</p><ul><li><p><a href="batch-interfaces-compatible-with-openai.md">准备与上传文件</a>接口返回的文件ID，如<code>file-batch-xxx</code>；</p></li><li><p><a href="batch-interfaces-compatible-with-openai.md#f667257850olj">使用OSS文件创建 Batch 任务</a>。</p></li></ul></div></td></tr><tr><td><p>endpoint</p></td><td><p>String</p></td><td><p>Body</p></td><td><p>是</p></td><td><p>访问路径，须与输入文件中的URL字段一致。</p><ul><li><p>向量模型填写<code>/v1/embeddings</code></p></li><li><p>测试模型<code>batch-test-model</code>填写<code>/v1/chat/ds-test</code></p></li><li><p>其他模型填写<code>/v1/chat/completions</code></p></li></ul></td></tr><tr><td><p>completion_window</p></td><td><p>String</p></td><td><p>Body</p></td><td><p>是</p></td><td><p>等待时间，最短 24h，最长 336h，仅支持整数。</p><p>支持&quot;h&quot;和&quot;d&quot;两个单位，如&quot;24h&quot;或&quot;14d&quot;。</p></td></tr><tr><td><p>metadata</p></td><td><p>Map</p></td><td><p>Body</p></td><td><p>否</p></td><td><p>任务扩展元数据，以键值对形式附加额外信息。</p></td></tr><tr><td><p>metadata.ds_name</p></td><td><p>String</p></td><td><p>Body</p></td><td><p>否</p></td><td><p>任务名称。</p><p>示例：<code>&quot;ds_name&quot;：&quot;Batch任务&quot;</code></p><p>限制：长度不超过100个字符。</p><p>若重复定义该字段，以最后一次传入的值为准。</p></td></tr><tr><td><p>metadata.ds_description</p></td><td><p>String</p></td><td><p>Body</p></td><td><p>否</p></td><td><p>任务描述。</p><p>示例：<code>&quot;ds_description&quot;：&quot;Batch推理任务测试&quot;</code></p><p>限制：长度不超过200个字符。</p><p>若重复定义该字段，以最后一次传入的值为准。</p></td></tr></tbody></table>
 
-**类型**
+<a id="b4069b9d20wgp"></a>
 
-**传参**
-
-**方式**
-
-**必选**
-
-**描述**
-
-input\_file\_id
-
-String
-
-Body
-
-是
-
-用于指定文件ID、OSS文件URL或OSS文件资源标识符，作为Batch任务的输入文件。您可以通过以下任一方式提供此参数：
-
--   [准备与上传文件](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)接口返回的文件ID，如`file-batch-xxx`；
-    
--   [使用OSS文件创建 Batch 任务](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai#f667257850olj)。
-    
-
-endpoint
-
-String
-
-Body
-
-是
-
-访问路径，须与输入文件中的URL字段一致。
-
--   向量模型填写`/v1/embeddings`
-    
--   测试模型`batch-test-model`填写`/v1/chat/ds-test`
-    
--   其他模型填写`/v1/chat/completions`
-    
-
-completion\_window
-
-String
-
-Body
-
-是
-
-等待时间，最短 24h，最长 336h，仅支持整数。
-
-支持"h"和"d"两个单位，如"24h"或"14d"。
-
-metadata
-
-Map
-
-Body
-
-否
-
-任务扩展元数据，以键值对形式附加额外信息。
-
-metadata.ds\_name
-
-String
-
-Body
-
-否
-
-任务名称。
-
-示例：`"ds_name"："Batch任务"`
-
-限制：长度不超过100个字符。
-
-若重复定义该字段，以最后一次传入的值为准。
-
-metadata.ds\_description
-
-String
-
-Body
-
-否
-
-任务描述。
-
-示例：`"ds_description"："Batch推理任务测试"`
-
-限制：长度不超过200个字符。
-
-若重复定义该字段，以最后一次传入的值为准。
+<a id="0625b5d6afnnb"></a>
 
 #### 返回示例
 
-```
+<a id="code-block-22"></a>
+
+```json
 {
     "id": "batch_xxx",
     "object": "batch",
@@ -1436,161 +1602,66 @@ Body
 }
 ```
 
+<a id="32826319168xk"></a>
+
+<a id="eb6515c507ky0"></a>
+
 #### 返回参数
 
-**字段**
-
-**类型**
-
-**描述**
-
-id
-
-String
-
-本次创建的 Batch 任务 ID。
-
-object
-
-String
-
-对象类型，固定值`batch`。
-
-endpoint
-
-String
-
-访问路径。
-
-errors
-
-Map
-
-错误信息。
-
-input\_file\_id
-
-String
-
-文件ID 或OSS文件URL或OSS文件资源标识符。
-
-completion\_window
-
-String
-
-等待时间，支持最短等待时间24h，最长等待时间336h，仅支持整数。
-
-支持"h"和"d"两个单位，如"24h"或"14d"。
-
-status
-
-String
-
-任务状态，可选值：validating、failed、in\_progress、finalizing、completed、expired、cancelling、cancelled。
-
-output\_file\_id
-
-String
-
-成功请求的输出文件 ID。
-
-error\_file\_id
-
-String
-
-失败请求的错误文件 ID。
-
-created\_at
-
-Integer
-
-任务创建的 Unix 时间戳（秒）。
-
-in\_progress\_at
-
-Integer
-
-任务开始运行的 Unix 时间戳（秒）。
-
-expires\_at
-
-Integer
-
-任务预计过期的 Unix 时间戳（秒）。
-
-finalizing\_at
-
-Integer
-
-任务开始汇总结果的 Unix 时间戳（秒）。
-
-completed\_at
-
-Integer
-
-任务完成的 Unix 时间戳（秒）。
-
-failed\_at
-
-Integer
-
-任务失败的 Unix 时间戳（秒）。
-
-expired\_at
-
-Integer
-
-任务过期的 Unix 时间戳（秒）。
-
-cancelling\_at
-
-Integer
-
-任务开始取消的 Unix 时间戳（秒）。
-
-cancelled\_at
-
-Integer
-
-任务取消完成的 Unix 时间戳（秒）。
-
-request\_counts
-
-Map
-
-各状态的请求数量统计。
-
-metadata
-
-Map
-
-附加元数据，键值对形式。
-
-metadata.ds\_name
-
-String
-
-任务名称。
-
-metadata.ds\_description
-
-String
-
-任务描述。
+| 字段 | 类型 | 描述 |
+| --- | --- | --- |
+| id | String | 本次创建的 Batch 任务 ID。 |
+| object | String | 对象类型，固定值`batch`。 |
+| endpoint | String | 访问路径。 |
+| errors | Map | 错误信息。 |
+| input\_file\_id | String | 文件ID 或OSS文件URL或OSS文件资源标识符。 |
+| completion\_window | String | 等待时间，支持最短等待时间24h，最长等待时间336h，仅支持整数。<br><br>支持"h"和"d"两个单位，如"24h"或"14d"。 |
+| status | String | 任务状态，可选值：validating、failed、in\_progress、finalizing、completed、expired、cancelling、cancelled。 |
+| output\_file\_id | String | 成功请求的输出文件 ID。 |
+| error\_file\_id | String | 失败请求的错误文件 ID。 |
+| created\_at | Integer | 任务创建的 Unix 时间戳（秒）。 |
+| in\_progress\_at | Integer | 任务开始运行的 Unix 时间戳（秒）。 |
+| expires\_at | Integer | 任务预计过期的 Unix 时间戳（秒）。 |
+| finalizing\_at | Integer | 任务开始汇总结果的 Unix 时间戳（秒）。 |
+| completed\_at | Integer | 任务完成的 Unix 时间戳（秒）。 |
+| failed\_at | Integer | 任务失败的 Unix 时间戳（秒）。 |
+| expired\_at | Integer | 任务过期的 Unix 时间戳（秒）。 |
+| cancelling\_at | Integer | 任务开始取消的 Unix 时间戳（秒）。 |
+| cancelled\_at | Integer | 任务取消完成的 Unix 时间戳（秒）。 |
+| request\_counts | Map | 各状态的请求数量统计。 |
+| metadata | Map | 附加元数据，键值对形式。 |
+| metadata.ds\_name | String | 任务名称。 |
+| metadata.ds\_description | String | 任务描述。 |
+
+<a id="accordion-3-查询-与管理-batch-任务"></a>
 
 3\. 查询 与管理 Batch 任务
 
 任务创建后，可通过以下接口查询状态、列出历史任务或取消进行中的任务。
 
+<a id="accordion-查询指定任务状态"></a>
+
 查询指定任务状态
 
 传入 Batch 任务ID可查询指定任务的详细信息。当前仅支持查询 30 天内创建的 Batch 任务。
 
+<a id="sec-tabs-4"></a>
+
+<a id="openai-python-sdk-3"></a>
+
+<a id="openai-python-sdk-3-h4"></a>
+
 #### OpenAI Python SDK
+
+<a id="260688ec05utl"></a>
+
+<a id="b8b4342009tdf"></a>
 
 #### 请求示例
 
-```
+<a id="code-block-23"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -1606,11 +1677,21 @@ batch = client.batches.retrieve("batch_id")  # 将batch_id替换为Batch任务�
 print(batch)
 ```
 
+<a id="openai-node-js-sdk-3"></a>
+
+<a id="openai-node-js-sdk-3-h4"></a>
+
 #### OpenAI Node.js SDK
+
+<a id="42ebd5d6cekoa"></a>
+
+<a id="97066d52630gi"></a>
 
 #### 请求示例
 
-```
+<a id="code-block-24"></a>
+
+```javascript
 /**
  * 阿里云百炼 Batch API - 查询单个任务
  *
@@ -1644,11 +1725,21 @@ const batch = await client.batches.retrieve('batch_id');
 console.log(batch.status);
 ```
 
+<a id="java-http-3"></a>
+
+<a id="java-http-3-h4"></a>
+
 #### Java（HTTP）
+
+<a id="19846b0c63mq4"></a>
+
+<a id="fe824e74f4g7l"></a>
 
 #### 请求示例
 
-```
+<a id="code-block-25"></a>
+
+```java
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -1726,11 +1817,21 @@ public class BatchAPIRetrieveBatch {
 }
 ```
 
+<a id="curl-http-3"></a>
+
+<a id="curl-http-3-h4"></a>
+
 #### curl(HTTP)
+
+<a id="bcef124412b73"></a>
+
+<a id="483c0e2ac0d0n"></a>
 
 #### 请求示例
 
-```
+<a id="code-block-26"></a>
+
+```bash
 # ======= 重要提示 =======
 # 新加坡和北京地域的API Key不同。
 # 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1/batches/batch_id
@@ -1739,11 +1840,17 @@ curl --request GET 'https://dashscope.aliyuncs.com/compatible-mode/v1/batches/ba
  -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
+<a id="retrieve-batch-response-title"></a>
+
+<a id="retrieve-batch-response-example"></a>
+
 #### 返回示例
 
 查询成功后返回 Batch 任务的详细信息。以下为 completed 状态的返回示例：
 
-```
+<a id="code-block-27"></a>
+
+```json
 {
   "id": "batch_abc123",
   "object": "batch",
@@ -1777,68 +1884,31 @@ curl --request GET 'https://dashscope.aliyuncs.com/compatible-mode/v1/batches/ba
 
 返回的JSON对象包含 Batch 任务完整信息，包括任务状态、结果文件 ID、请求统计等。各字段说明见下表。
 
-**字段**
+<table><thead><tr><th><p><strong>字段</strong></p></th><th><p><strong>类型</strong></p></th><th><p><strong>描述</strong></p></th></tr></thead><tbody><tr><td><p>id</p></td><td><p>String</p></td><td><p>Batch 任务 ID。</p></td></tr><tr><td><p>status</p></td><td><p>String</p></td><td><p>任务状态，可能的值包括：</p><ul><li><p>validating：正在验证输入文件</p></li><li><p>in_progress：任务处理中</p></li><li><p>finalizing：处理完成，正在生成输出文件</p></li><li><p>completed：任务成功完成</p></li><li><p>failed：任务因严重错误失败</p></li><li><p>expired：任务在 completion_window 内未完成而过期</p></li><li><p>cancelling：正在取消任务</p></li><li><p>cancelled：任务已取消</p></li></ul></td></tr><tr><td><p>output_file_id</p></td><td><p>String</p></td><td><p>成功结果文件的 ID，任务完成后生成。</p></td></tr><tr><td><p>error_file_id</p></td><td><p>String</p></td><td><p>失败结果文件的 ID，任务完成且有失败请求时生成。</p></td></tr><tr><td><p>request_counts</p></td><td><p>Object</p></td><td><p>请求数量统计对象，包含 total、completed、failed 字段。</p></td></tr></tbody></table>
 
-**类型**
-
-**描述**
-
-id
-
-String
-
-Batch 任务 ID。
-
-status
-
-String
-
-任务状态，可能的值包括：
-
--   validating：正在验证输入文件
-    
--   in\_progress：任务处理中
-    
--   finalizing：处理完成，正在生成输出文件
-    
--   completed：任务成功完成
-    
--   failed：任务因严重错误失败
-    
--   expired：任务在 completion\_window 内未完成而过期
-    
--   cancelling：正在取消任务
-    
--   cancelled：任务已取消
-    
-
-output\_file\_id
-
-String
-
-成功结果文件的 ID，任务完成后生成。
-
-error\_file\_id
-
-String
-
-失败结果文件的 ID，任务完成且有失败请求时生成。
-
-request\_counts
-
-Object
-
-请求数量统计对象，包含 total、completed、failed 字段。
+<a id="accordion-查询任务列表"></a>
 
 查询任务列表
 
 可使用 `batches.list()` 方法查询 Batch 任务列表，通过分页机制逐步获取完整的任务列表。
 
+<a id="sec-tabs-5"></a>
+
+<a id="openai-python-sdk-4"></a>
+
+<a id="openai-python-sdk-4-h4"></a>
+
 #### OpenAI Python SDK
+
+<a id="29740518d7ett"></a>
+
+<a id="7eb9e8e0a52ry"></a>
 
 #### 请求示例
 
-```
+<a id="code-block-28"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -1853,11 +1923,21 @@ batches = client.batches.list(after="batch_xxx", limit=2,extra_query={'ds_name':
 print(batches)
 ```
 
+<a id="openai-node-js-sdk-4"></a>
+
+<a id="openai-node-js-sdk-4-h4"></a>
+
 #### OpenAI Node.js SDK
+
+<a id="10e57ca3a38he"></a>
+
+<a id="efbdeeba2e3nc"></a>
 
 #### 请求示例
 
-```
+<a id="code-block-29"></a>
+
+```javascript
 /**
  * 阿里云百炼 Batch API - 查询任务列表
  *
@@ -1904,11 +1984,21 @@ for (const batch of batches.data) {
 }
 ```
 
+<a id="java-http-4"></a>
+
+<a id="java-http-4-h4"></a>
+
 #### Java（HTTP）
+
+<a id="a492cf12f0lh0"></a>
+
+<a id="2f83e550a8xvs"></a>
 
 #### 请求示例
 
-```
+<a id="code-block-30"></a>
+
+```java
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -1986,11 +2076,21 @@ public class BatchAPIListBatches {
 }
 ```
 
+<a id="curl-http-4"></a>
+
+<a id="curl-http-4-h4"></a>
+
 #### curl(HTTP)
+
+<a id="127c17fef9duj"></a>
+
+<a id="314b7724e83p2"></a>
 
 #### 请求示例
 
-```
+<a id="code-block-31"></a>
+
+```bash
 # ======= 重要提示 =======
 # 新加坡和北京地域的API Key不同。
 # 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1/batches?xxx同下方内容xxx
@@ -2001,91 +2101,31 @@ curl --request GET  'https://dashscope.aliyuncs.com/compatible-mode/v1/batches?a
 
 > 将 `after=batch_id` 中的 `batch_id` 替换为实际值， `limit` 参数设置为返回任务的数量， `ds_name` 填写为任务名称片段，input\_file\_ids的值可填写多个文件ID， `status` 填写Batch任务的多个状态， `create_after` 和 `create_before` 的值填写为时间点。
 
+<a id="be637ea3e500d"></a>
+
+<a id="837b874cbaint"></a>
+
 #### 输入参数
 
-**字段**
+| 字段 | 类型 | 传参方式 | 必选 | 描述 |
+| --- | --- | --- | --- | --- |
+| after | String | Query | 否 | 用于分页的游标，值为上一页最后一个任务的ID。 |
+| limit | Integer | Query | 否 | 每页返回的任务数量，范围\[1, 100\]，默认20。 |
+| ds\_name | String | Query | 否 | 按任务名称进行模糊匹配。 |
+| input\_file\_ids | String | Query | 否 | 按文件ID筛选，多个ID用逗号分隔，最多20个。 |
+| status | String | Query | 否 | 按任务状态筛选，多个状态用逗号分隔。 |
+| create\_after | String | Query | 否 | 筛选在此时间点之后创建的任务，格式：`yyyyMMddHHmmss`。 |
+| create\_before | String | Query | 否 | 筛选在此时间点之前创建的任务，格式：`yyyyMMddHHmmss`。 |
 
-**类型**
+<a id="696b34100bfa0"></a>
 
-**传参方式**
-
-**必选**
-
-**描述**
-
-after
-
-String
-
-Query
-
-否
-
-用于分页的游标，值为上一页最后一个任务的ID。
-
-limit
-
-Integer
-
-Query
-
-否
-
-每页返回的任务数量，范围\[1, 100\]，默认20。
-
-ds\_name
-
-String
-
-Query
-
-否
-
-按任务名称进行模糊匹配。
-
-input\_file\_ids
-
-String
-
-Query
-
-否
-
-按文件ID筛选，多个ID用逗号分隔，最多20个。
-
-status
-
-String
-
-Query
-
-否
-
-按任务状态筛选，多个状态用逗号分隔。
-
-create\_after
-
-String
-
-Query
-
-否
-
-筛选在此时间点之后创建的任务，格式：`yyyyMMddHHmmss`。
-
-create\_before
-
-String
-
-Query
-
-否
-
-筛选在此时间点之前创建的任务，格式：`yyyyMMddHHmmss`。
+<a id="234fd9d7b7ulm"></a>
 
 #### 返回示例
 
-```
+<a id="code-block-32"></a>
+
+```json
 {
   "object": "list",
   "data": [
@@ -2123,53 +2163,41 @@ Query
 }
 ```
 
+<a id="13ee6b5a0dbrg"></a>
+
 #### 返回参数
 
-**字段**
+| 字段 | 类型 | 描述 |
+| --- | --- | --- |
+| object | String | 类型，固定值list。 |
+| data | Array | Batch任务对象，参见创建Batch任务的返回参数。 |
+| first\_id | String | 当前页第一个 Batch任务 ID。 |
+| last\_id | String | 当前页最后一个Batch任务 ID。 |
+| has\_more | Boolean | 是否有下一页。 |
 
-**类型**
-
-**描述**
-
-object
-
-String
-
-类型，固定值list。
-
-data
-
-Array
-
-Batch任务对象，参见创建Batch任务的返回参数。
-
-first\_id
-
-String
-
-当前页第一个 Batch任务 ID。
-
-last\_id
-
-String
-
-当前页最后一个Batch任务 ID。
-
-has\_more
-
-Boolean
-
-是否有下一页。
+<a id="accordion-取消batch任务"></a>
 
 取消Batch任务
 
 取消一个正在进行或排队中的任务。成功调用后，任务状态将变为 cancelling，最终变为 cancelled。在任务被完全取消前，已完成的部分仍会计费。
 
+<a id="sec-tabs-6"></a>
+
+<a id="openai-python-sdk-5"></a>
+
+<a id="openai-python-sdk-5-h4"></a>
+
 #### OpenAI Python SDK
+
+<a id="548636940bfzd"></a>
+
+<a id="5c28ec42e7x9u"></a>
 
 #### 请求示例
 
-```
+<a id="code-block-33"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -2184,11 +2212,21 @@ batch = client.batches.cancel("batch_id")  # 将batch_id替换为Batch任务的i
 print(batch)
 ```
 
+<a id="openai-node-js-sdk-5"></a>
+
+<a id="openai-node-js-sdk-5-h4"></a>
+
 #### OpenAI Node.js SDK
+
+<a id="849e37800fkyy"></a>
+
+<a id="20f23a0ef82lg"></a>
 
 #### 请求示例
 
-```
+<a id="code-block-34"></a>
+
+```javascript
 /**
  * 阿里云百炼 Batch API - 取消任务
  *
@@ -2222,11 +2260,21 @@ const batch = await client.batches.cancel('batch_id');
 console.log(batch.status); // cancelled
 ```
 
+<a id="java-http-5"></a>
+
+<a id="java-http-5-h4"></a>
+
 #### Java（HTTP）
+
+<a id="9797d49ec5l7n"></a>
+
+<a id="3c83185ab1b94"></a>
 
 #### 请求示例
 
-```
+<a id="code-block-35"></a>
+
+```java
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -2303,11 +2351,21 @@ public class BatchAPICancelBatch {
 }
 ```
 
+<a id="curl-http-5"></a>
+
+<a id="curl-http-5-h4"></a>
+
 #### curl(HTTP)
+
+<a id="c7493d1120esw"></a>
+
+<a id="8b344918f625z"></a>
 
 #### 请求示例
 
-```
+<a id="code-block-36"></a>
+
+```bash
 # ======= 重要提示 =======
 # 新加坡和北京地域的API Key不同。
 # 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1/batches/batch_id/cancel
@@ -2318,11 +2376,17 @@ curl --request POST 'https://dashscope.aliyuncs.com/compatible-mode/v1/batches/b
 
 > 将 `batch_id` 替换为实际值。
 
+<a id="cancel-batch-response-title"></a>
+
+<a id="be180a346fgbn"></a>
+
 #### 返回示例
 
 取消任务成功后返回 Batch 任务的详细信息。以下是一个 cancelling 状态的返回示例：
 
-```
+<a id="code-block-37"></a>
+
+```json
 {
   "id": "batch_abc123",
   "object": "batch",
@@ -2353,19 +2417,33 @@ curl --request POST 'https://dashscope.aliyuncs.com/compatible-mode/v1/batches/b
 
 > 取消任务后，状态会先变为 `cancelling` ，等待正在执行的请求完成；最终会变为 `cancelled` 。已完成的请求结果仍会保存在输出文件中。
 
+<a id="accordion-4-下载batch结果文件"></a>
+
 4\. 下载Batch结果文件
 
 任务结束后会生成结果文件（output\_file\_id）和可能的错误文件（error\_file\_id），两者均通过相同的文件下载接口获取。
 
 仅支持下载以`file-batch_output`开头的`file_id`对应的文件。
 
+<a id="sec-tabs-7"></a>
+
+<a id="openai-python-sdk-6"></a>
+
+<a id="openai-python-sdk-6-h4"></a>
+
 #### OpenAI Python SDK
 
 您可以通过`content`方法获取Batch任务结果文件内容，并通过`write_to_file`方法将其保存至本地。
 
+<a id="16468fde432bx"></a>
+
+<a id="32f5c64147ie9"></a>
+
 #### 请求示例
 
-```
+<a id="code-block-38"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -2384,20 +2462,36 @@ print(content.text)
 content.write_to_file("result.jsonl")
 ```
 
+<a id="b765cd6fcfqvx"></a>
+
+<a id="b261ee0f130a0"></a>
+
 #### 返回示例
 
-```
+<a id="code-block-39"></a>
+
+```json
 {"id":"c308ef7f-xxx","custom_id":"1","response":{"status_code":200,"request_id":"c308ef7f-0824-9c46-96eb-73566f062426","body":{"created":1742303743,"usage":{"completion_tokens":35,"prompt_tokens":26,"total_tokens":61},"model":"qwen-plus","id":"chatcmpl-c308ef7f-0824-9c46-96eb-73566f062426","choices":[{"finish_reason":"stop","index":0,"message":{"content":"你好！当然可以。无论是需要信息查询、学习资料、解决问题的方法，还是其他任何帮助，我都在这里为你提供支持。请告诉我你需要什么方面的帮助？"}}],"object":"chat.completion"}},"error":null}
 {"id":"73291560-xxx","custom_id":"2","response":{"status_code":200,"request_id":"73291560-7616-97bf-87f2-7d747bbe84fd","body":{"created":1742303743,"usage":{"completion_tokens":7,"prompt_tokens":26,"total_tokens":33},"model":"qwen-plus","id":"chatcmpl-73291560-7616-97bf-87f2-7d747bbe84fd","choices":[{"finish_reason":"stop","index":0,"message":{"content":"2+2 equals 4."}}],"object":"chat.completion"}},"error":null}
 ```
+
+<a id="openai-node-js-sdk-6"></a>
+
+<a id="openai-node-js-sdk-6-h4"></a>
 
 #### OpenAI Node.js SDK
 
 您可以通过`content`方法获取Batch任务结果文件内容。
 
+<a id="nodejs-download-title"></a>
+
+<a id="nodejs-download-example"></a>
+
 #### 请求示例
 
-```
+<a id="code-block-40"></a>
+
+```javascript
 /**
  * 阿里云百炼 Batch API - 下载结果文件
  *
@@ -2438,13 +2532,23 @@ fs.writeFileSync('result.jsonl', text);
 console.log('结果已保存到 result.jsonl');
 ```
 
+<a id="java-http-6"></a>
+
+<a id="java-http-6-h4"></a>
+
 #### Java（HTTP）
 
 您可以通过GET请求到`/files/{file_id}/content`端点获取文件内容。
 
+<a id="java-download-title"></a>
+
+<a id="java-download-example"></a>
+
 #### 请求示例
 
-```
+<a id="code-block-41"></a>
+
+```java
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -2528,13 +2632,23 @@ System.out.println(content);
 }
 ```
 
+<a id="curl-http-6"></a>
+
+<a id="curl-http-6-h4"></a>
+
 #### curl(HTTP)
 
 您可以通过GET方法，在URL中指定`file_id`来下载Batch任务结果文件。
 
+<a id="6b2e4ba366df3"></a>
+
+<a id="51706205cdwmd"></a>
+
 #### 请求示例
 
-```
+<a id="code-block-42"></a>
+
+```bash
 # ======= 重要提示 =======
 # 新加坡和北京地域的API Key不同。
 # 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1/files/file-batch_output-xxx/content
@@ -2543,11 +2657,15 @@ curl -X GET https://dashscope.aliyuncs.com/compatible-mode/v1/files/file-batch_o
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" > result.jsonl
 ```
 
+<a id="72a124ae0elk8"></a>
+
 #### 返回示例
 
 单条响应结果：
 
-```
+<a id="code-block-43"></a>
+
+```json
 {
     "id": "c308ef7f-xxx",
     "custom_id": "1",
@@ -2579,99 +2697,40 @@ curl -X GET https://dashscope.aliyuncs.com/compatible-mode/v1/files/file-batch_o
 }
 ```
 
+<a id="2b6446177fa80"></a>
+
 #### 返回参数
 
-**字段**
+| 字段 | 类型 | 描述 |
+| --- | --- | --- |
+| id | String | 请求 ID。 |
+| custom\_id | String | 用户自定义的 ID。 |
+| response | Object | 请求结果。 |
+| status\_code | Integer | 状态码。200表示请求成功。 |
+| request\_id | String | 服务端为这次请求生成的唯一ID。 |
+| completion\_tokens | Integer | 模型生成的回复内容（completion）所消耗的Token数量。 |
+| prompt\_tokens | Integer | 发送给模型的输入内容（`prompt`）所消耗的Token数量。 |
+| reasoning\_tokens | Integer | 深度思考模型的思考过程token数。 |
+| total\_tokens | Integer | 本次调用总共消耗的Token数量。 |
+| model | String | 本次调用所使用的模型名称。 |
+| reasoning\_content | String | 深度思考模型的思考过程。 |
+| error | Object | 错误信息对象。如果API调用成功，该值为`null`。如果发生错误，这里会包含错误代码和详细的错误信息。 |
+| error.code | String | 错误行信息和错误原因，可参考[错误码](batch-interfaces-compatible-with-openai.md#97e145aeabbwf)进行排查。 |
+| error.message | String | 错误信息。 |
 
-**类型**
+<a id="进阶功能"></a>
 
-**描述**
+<a id="fac624aa57u5x"></a>
 
-id
-
-String
-
-请求 ID。
-
-custom\_id
-
-String
-
-用户自定义的 ID。
-
-response
-
-Object
-
-请求结果。
-
-status\_code
-
-Integer
-
-状态码。200表示请求成功。
-
-request\_id
-
-String
-
-服务端为这次请求生成的唯一ID。
-
-completion\_tokens
-
-Integer
-
-模型生成的回复内容（completion）所消耗的Token数量。
-
-prompt\_tokens
-
-Integer
-
-发送给模型的输入内容（`prompt`）所消耗的Token数量。
-
-reasoning\_tokens
-
-Integer
-
-深度思考模型的思考过程token数。
-
-total\_tokens
-
-Integer
-
-本次调用总共消耗的Token数量。
-
-model
-
-String
-
-本次调用所使用的模型名称。
-
-reasoning\_content
-
-String
-
-深度思考模型的思考过程。
-
-error
-
-Object
-
-错误信息对象。如果API调用成功，该值为`null`。如果发生错误，这里会包含错误代码和详细的错误信息。
-
-error.code
-
-String
-
-错误行信息和错误原因，可参考[错误码](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai#97e145aeabbwf)进行排查。
-
-error.message
-
-String
-
-错误信息。
+<a id="10c149dbb17w6"></a>
 
 ## 进阶功能
+
+<a id="使用oss文件创建-batch-任务"></a>
+
+<a id="f667257850olj"></a>
+
+<a id="47e365825e7q4"></a>
 
 ### 使用OSS文件创建 Batch 任务
 
@@ -2681,13 +2740,17 @@ String
 
 将具有公共读权限或预签名授权的OSS文件URL直接作为 `input_file_id`：
 
-```
+<a id="code-block-44"></a>
+
+```python
 batch_job = client.batches.create(
     input_file_id="https://your-bucket.oss-cn-beijing.aliyuncs.com/file.jsonl?Expires=...",
     endpoint="/v1/chat/completions",
     completion_window="24h"
 )
 ```
+
+<a id="accordion-获取文件url"></a>
 
 获取文件URL
 
@@ -2714,7 +2777,9 @@ batch_job = client.batches.create(
     使用`oss:{region}:{bucket}/{file_path}`格式的OSS资源标识符：
     
 
-```
+<a id="code-block-45"></a>
+
+```python
 batch_job = client.batches.create(
     input_file_id="oss:cn-beijing:your-bucket/path/to/file.jsonl",
     endpoint="/v1/chat/completions",
@@ -2727,22 +2792,40 @@ batch_job = client.batches.create(
 -   使用与阿里云百炼服务同地域 Bucket（ `cn-beijing`）可利用阿里云内网传输，降低网络延迟、提升稳定性并避免跨地域流量费用。
 -   方式二更安全，基于RAM授权而非公开 URL。
 
+<a id="配置任务完成通知"></a>
+
+<a id="909a9d2f7ahlc"></a>
+
+<a id="70e8ebf567v4q"></a>
+
 ### 配置任务完成通知
 
 长时间运行的任务使用轮询会消耗不必要的资源。建议配置异步通知，系统在任务完成后主动通知。
 
-**说明**任务完成通知功能仅支持在北京地域配置。
+> **说明**
+>
+> 任务完成通知功能仅支持在北京地域配置。
 
 -   **Callback 回调：**在创建任务时指定一个公网可访问的 URL
 -   **EventBridge 消息队列：**与阿里云生态深度集成，无需公网 IP
+
+<a id="accordion-方式一-callback-回调"></a>
 
 方式一：Callback 回调
 
 创建任务时通过 `metadata` 指定一个公网可访问的 URL。任务完成后，系统向该URL发送包含任务状态的 POST 请求：
 
+<a id="sec-tabs-8"></a>
+
+<a id="openai-python-sdk-7"></a>
+
+<a id="openai-python-sdk-7-h4"></a>
+
 #### OpenAI Python SDK
 
-```
+<a id="code-block-46"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -2766,11 +2849,21 @@ batch = client.batches.create(
 print(batch)
 ```
 
+<a id="curl-http-7"></a>
+
+<a id="curl-http-7-h4"></a>
+
 #### curl(HTTP)
+
+<a id="b7fd1cf629jol"></a>
+
+<a id="5044e1f8e2tgd"></a>
 
 #### 请求示例
 
-```
+<a id="code-block-47"></a>
+
+```bash
 curl -X POST --location "https://dashscope.aliyuncs.com/compatible-mode/v1/batches" \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
     -H "Content-Type: application/json" \
@@ -2784,6 +2877,8 @@ curl -X POST --location "https://dashscope.aliyuncs.com/compatible-mode/v1/batch
         }'
 ```
 
+<a id="accordion-方式二-eventbridge-消息队列"></a>
+
 方式二：EventBridge 消息队列
 
 此方式无需公网 IP，适用于与阿里云其他服务（如函数计算、RocketMQ）集成的场景。
@@ -2795,10 +2890,16 @@ curl -X POST --location "https://dashscope.aliyuncs.com/compatible-mode/v1/batch
 
 相关文档：[路由到消息队列RocketMQ版](https://help.aliyun.com/zh/eventbridge/user-guide/route-events-to-message-queue-for-apache-rocketmq)。
 
+<a id="应用于生产环境"></a>
+
+<a id="d5e7241e86l13"></a>
+
+<a id="a97d01906afxv"></a>
+
 ## 应用于生产环境
 
 -   **文件管理**
-    -   定期调用 [OpenAI-File删除文件接口](https://help.aliyun.com/zh/model-studio/openai-file-interface#3457ce1d7ezr3)删除不需要的文件，避免达到文件存储上限（10000个文件或100GB）
+    -   定期调用 [OpenAI-File删除文件接口](openai-file-interface.md#3457ce1d7ezr3)删除不需要的文件，避免达到文件存储上限（10000个文件或100GB）
     -   对于大型文件，推荐将其存储在阿里云OSS中
 -   **任务监控**
     -   优先使用 Callback 或 EventBridge 异步通知
@@ -2806,13 +2907,21 @@ curl -X POST --location "https://dashscope.aliyuncs.com/compatible-mode/v1/batch
 -   **错误处理**
     -   实现完整的异常处理机制，涵盖网络错误、API 错误等
     -   下载并分析 `error_file_id` 的错误详情
-    -   对于常见错误码，参考[错误码](raw/model-api-reference/preparations/error-code.md)进行解决
+    -   对于常见错误码，参考[错误码](../preparations/error-code.md)进行解决
 -   **成本优化**
     -   将时效性要求不高的任务迁移到 Batch API
     -   合并小任务到一个批次
     -   合理设置 `completion_window` 提供更多调度灵活性
 
+<a id="实用工具"></a>
+
+<a id="78136c88fck9c"></a>
+
+<a id="d3a4f85e02ap3"></a>
+
 ### 实用工具
+
+<a id="accordion-csv-转-jsonl"></a>
 
 CSV 转 JSONL
 
@@ -2820,7 +2929,9 @@ CSV 转 JSONL
 
 > 如需调整文件路径或其他参数，请根据实际情况修改代码。
 
-```
+<a id="code-block-48"></a>
+
+```python
 import csv
 import json
 def messages_builder_example(content):
@@ -2837,13 +2948,17 @@ with open("input_demo.csv", "r") as fin:
             fout.write(json.dumps(request, separators=(',', ':'), ensure_ascii=False) + "\n")
 ```
 
+<a id="accordion-jsonl-结果转-csv"></a>
+
 JSONL 结果转 CSV
 
 使用以下脚本可将 `result.jsonl` 文件解析为易于在Excel中分析的 `result.csv` 文件。
 
 > 如需调整文件路径或其他参数，请根据实际情况修改代码。
 
-```
+<a id="code-block-49"></a>
+
+```python
 import json
 import csv
 columns = ["custom_id",
@@ -2883,50 +2998,62 @@ with open("result.jsonl", "r") as fin:
         writer = csv.writer(fout)
         writer.writerows(rows)
 ```
+
 **Excel 乱码解决**
 
 -   可使用文本编辑器（如Sublime）将 CSV 文件的编码转换为GBK，然后再用Excel打开。
 -   或在Excel中新建一个Excel文件，并在导入数据时指定正确的编码格式 UTF-8。
 
+<a id="接口限流"></a>
+
+<a id="4d1c3a85b3nm7"></a>
+
+<a id="c223f5f44be90"></a>
+
 ## 接口限流
 
-**接口**
+| 接口 | 限流（主账号级别） |
+| --- | --- |
+| 创建任务 | 1000 次/分钟，最大并行 1000 个 |
+| 查询任务 | 1000 次/分钟 |
+| 查询任务列表 | 100 次/分钟 |
+| 取消任务 | 1000 次/分钟 |
 
-**限流（主账号级别）**
+<a id="计费说明"></a>
 
-创建任务
+<a id="fecc98d9514rv"></a>
 
-1000 次/分钟，最大并行 1000 个
-
-查询任务
-
-1000 次/分钟
-
-查询任务列表
-
-100 次/分钟
-
-取消任务
-
-1000 次/分钟
+<a id="7a913f86cdi6h"></a>
 
 ## 计费说明
 
--   **计费单价：** 所有成功请求的输入和输出Token，单价均为对应模型实时推理价格的**50%** ，具体请参见[模型列表](raw/model-user-guide/get-started-with-models/models.md)。
+-   **计费单价：** 所有成功请求的输入和输出Token，单价均为对应模型实时推理价格的**50%** ，具体请参见[模型列表](../../model-user-guide/get-started-with-models/models.md)。
     
 -   **计费范围：**
     -   仅对成功执行的请求计费。
     -   文件解析失败、任务执行失败或行级错误请求均**不产生费用** 。
     -   已取消的任务中，取消前已成功完成的请求仍正常计费。
 
-**说明**
+> **说明**
+>
+> -   批量推理为独立计费项，支持[AI 通用型节省计划](../../model-user-guide/test-1/savings-plan-and-resource-package.md)，但不支持[预付费](https://common-buy.aliyun.com/?commodityCode=sfm_llminference_spn_public_cn)（节省计划）、[新人免费额度](../../model-user-guide/test-1/new-free-quota.md)等优惠，以及[上下文缓存](../../model-user-guide/model-experience/text-generation-model/context-cache.md)等功能。
+> -   部分模型（如 qwen3.5-plus、qwen3.5-flash）默认开启思考模式，会产生额外的思考tokens，并按输出token价格计费，导致成本增加。建议根据任务复杂度设置enable\_thinking参数以控制成本，具体请参考[深度思考](../../model-user-guide/model-experience/text-generation-model/deep-thinking.md)。
 
--   批量推理为独立计费项，支持[AI 通用型节省计划](raw/model-user-guide/test-1/savings-plan-and-resource-package.md)，但不支持[预付费](https://common-buy.aliyun.com/?commodityCode=sfm_llminference_spn_public_cn)（节省计划）、[新人免费额度](raw/model-user-guide/test-1/new-free-quota.md)等优惠，以及[上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)等功能。
--   部分模型（如 qwen3.5-plus、qwen3.5-flash）默认开启思考模式，会产生额外的思考tokens，并按输出token价格计费，导致成本增加。建议根据任务复杂度设置enable\_thinking参数以控制成本，具体请参考[深度思考](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md)。
+<a id="错误码"></a>
+
+<a id="97e145aeabbwf"></a>
+
+<a id="6e8489debdu6b"></a>
 
 ## 错误码
 
-调用失败时，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+调用失败时，请参见[错误码](../preparations/error-code.md)进行解决。
+
+<a id="常见问题"></a>
+
+<a id="1b0468f7eeceo"></a>
+
+<a id="75420d4509fk9"></a>
 
 ## 常见问题
 

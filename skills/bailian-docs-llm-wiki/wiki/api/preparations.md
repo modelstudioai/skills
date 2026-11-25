@@ -1,42 +1,34 @@
 # preparations
 
-在调用百炼平台模型服务前，开发者需完成 API Key 获取与配置、SDK 安装、Base URL 选择等基础准备。这些步骤直接影响鉴权、路由、功能可用性及稳定性，是所有模型调用的前提。本文汇总关键配置项、参数约束与常见陷阱，帮助开发者快速建立可运行的调用环境。
+`preparations` 是调用百炼平台模型 API 前必需完成的基础配置步骤，涵盖身份认证、环境准备和请求基础设施设置。开发者需正确获取并管理 API Key，选择适配的 SDK 版本，并确认 Base URL 等网络参数。所有操作均以安全、可复现和符合当前版本规范为前提。
 
 ## 支持的模型/功能
 
-百炼支持文本生成、多模态对话、图像/视频生成、语音识别与合成、[向量嵌入](../concepts/vector-embedding.md)、重排序、智能体应用等多种能力。各能力对应不同 SDK 接口和模型 ID，例如 `qwen-plus`（文本）、`qwen3-vl-plus`（多模态）、`wanx2.1-t2i-turbo`（图像）、`paraformer-v2`（ASR）等。模型列表详见 [模型列表](raw/model-user-guide/get-started-with-models/models.md)，具体能力支持请参考各模型文档。**注意**：部分模型仅支持[流式输出](../concepts/streaming-output.md)（如思考模式模型），若非流式调用将返回 `InvalidParameter` 错误；另需确认目标模型已在控制台[模型市场](https://bailian.console.aliyun.com/cn-beijing/model/market)开通，否则报错 `The product is not activated` [错误码](../../raw/model-api-reference/preparations/error-code.md)。
+本阶段不直接涉及模型选型，但所完成的准备工作（如 API Key 权限配置、SDK 初始化）决定了后续可调用的模型范围。例如，部分模型（如 `qwen-max` 或 `qwen-plus`）要求 API Key 具备对应服务权限；若未开通相应模型配额，即使请求参数合法也会返回 `403 Forbidden` 错误。具体模型支持列表请参考 [使用 API](../../raw/model-api-reference/preparations.md) 中的权限说明章节。
 
 ## 关键参数
 
-- **API Key**：必须通过控制台创建，且与地域强绑定，**不能跨地域混用**；新版 API Key 仅创建时完整显示一次，关闭后不可恢复 [获取与配置 API Key](../../raw/model-api-reference/preparations/get-api-key.md)。
-- **Base URL**：必须与 API Key 所属地域及计费方案匹配。生产环境推荐使用业务空间专属域名（如 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`），试用场景可用 `trial.` 域名，中心化 `dashscope.aliyuncs.com` 域名仍可用但建议迁移 [Base URL总览](../../raw/model-api-reference/preparations/base-url.md)。
-- **模型名称**：严格区分大小写与格式，必须使用百炼官方模型 ID（如 `qwen3.7-plus`），不可混用开源社区命名（如 `Qwen/Qwen3.7-Plus`），否则报错 `Model not exist` [错误码](../../raw/model-api-reference/preparations/error-code.md)。
-- **流式开关**：`stream=true` 是思考模式（`enable_thinking=true`）、音频输出、工具调用等场景的强制要求；非流式调用将触发 `InvalidParameter` 错误。
+- `api_key`：必填，用于身份鉴权，须通过 [获取与配置 API Key](../../raw/preparations/get-api-key.md) 流程生成并妥善保管  
+- `base_url`：可选，用于指定请求入口，国内默认为 `https://dashscope.aliyuncs.com/api/v1`；国际用户或私有化部署场景需按 [Base URL总览](../../raw/preparations/base-url.md) 配置  
+- `timeout`：建议显式设置（如 60s），避免因网络波动导致连接挂起；SDK 默认超时值在不同版本中不一致，请以 [SDK Expert](../../raw/preparations/dashscope-sdk-expert.md) 文档为准  
+
+> **注意**：`dashscope` Python SDK 2.x 起已废弃 `dashscope.api_key` 全局赋值方式，改用 `DashScopeClient(api_key=...)` 实例化；而 [SDK 1.x 历史用法参考](../../raw/preparations/dashscope-1x-legacy-reference.md) 中的写法不再兼容，切勿混用。
 
 ## 使用方式
 
-1. **获取并配置 API Key**：在控制台对应地域页面创建 API Key，推荐归属至业务空间以实现权限隔离与成本核算；配置为环境变量 `DASHSCOPE_API_KEY`（Linux/macOS/Windows 均有详细示例）或直接传入 SDK 构造函数 [获取与配置 API Key](../../raw/model-api-reference/preparations/get-api-key.md)。
-2. **安装 SDK**：推荐使用 DashScope Python SDK 2.0（≥2.0.1）或 OpenAI 兼容 SDK（Python/Node.js/Java/Go）。DashScope SDK 提供原生接口，OpenAI SDK 适配兼容模式；AOQ 实时语音/多模态模型需额外下载 [AOQ SDK](../../raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-sdk-download.md) [安装SDK](../../raw/model-api-reference/preparations/install-sdk.md)。
-3. **初始化客户端**：DashScope SDK 2.0 通过 `Client(api_key=..., workspace=..., region=...)` 构造，优先级为构造参数 > 环境变量 > 配置文件；1.x 版本已冻结维护，新项目请勿使用 [DashScope Python SDK 1.x 历史用法参考](../../raw/model-api-reference/preparations/dashscope-1x-legacy-reference.md)。
-4. **调用模型**：使用对应能力的接口，如 `client.chat.completions.create()`（文本）、`client.multimodal.chat.create()`（多模态）、`client.images.generate()`（图像）。SDK Expert 可自动生成校验过版本的可运行代码，支持需求描述、错误诊断与代码修复 [DashScope SDK Expert](../../raw/model-api-reference/preparations/dashscope-sdk-expert.md)。
+1. 通过 [获取与配置 API Key](../../raw/preparations/get-api-key.md) 获取有效密钥  
+2. 安装对应语言 SDK（推荐最新稳定版）：`pip install dashscope`（Python）或参见 [安装SDK](../../raw/preparations/install-sdk.md)  
+3. 初始化客户端并发起首次健康检查请求（如 `/status` 或空 payload 的 `/chat/completions`）验证连通性  
 
 ## 限制和注意事项
 
-> **注意**：文档 1 中关于 RAM 用户 API Key 的级联删除规则存在时效性矛盾——其明确指出“2026年3月25日前创建的 API Key 与 RAM 用户绑定，删除用户时同步删除”，但该日期明显为未来时间点，实际应为历史策略变更节点（如 2024 年某月），此为文档笔误，开发者应以控制台当前行为及最新公告为准。
-
-- **地域隔离**：API Key、Base URL、模型列表均按地域独立，跨地域调用必报 `401 InvalidApiKey` [错误码](../../raw/model-api-reference/preparations/error-code.md)。
-- **权限继承**：API Key 权限由其归属业务空间决定，同一空间内所有 API Key 权限一致；默认业务空间可调用全部标准模型，子业务空间仅能调用已授权模型。
-- **安全实践**：严禁在客户端（浏览器、移动 App）硬编码长期 API Key；敏感环境应使用临时 API Key（最长 1800 秒）或服务端代理。
-- **错误处理**：SDK 2.0 默认失败抛 `DashScopeError` 异常（含 `code`/`status_code`/`request_id`），而非检查响应状态码；[流式输出](../concepts/streaming-output.md)一律增量返回，无需手动设置 `incremental_output`（除智能体应用外）。
-- **配额与限流**：触发 `Throttling.RateQuota` 或 `Insufficient_quota` 时需降低并发/频率或申请配额；免费额度耗尽后调用将被拒绝，需充值或升级套餐。
+- 单个 API Key 默认有 QPS 和日调用量限制，超出将触发 `429 Too Many Requests`；配额调整需提交工单，不可自行修改  
+- API Key 严禁硬编码在前端代码或公开仓库中；应通过环境变量（如 `DASHSCOPE_API_KEY`）注入  
+- 错误响应解析必须依赖 [错误码](../../raw/preparations/error-code.md) 文档，不同错误类型（如 `InvalidAPIKey` vs `ResourceNotFound`）需差异化处理  
+- 所有 preparatory 操作均需在调用任何模型接口前完成；跳过任一环节可能导致 `401 Unauthorized` 或 `503 Service Unavailable`
 
 ## 来源文档
 
-- [获取与配置 API Key](../../raw/model-api-reference/preparations/get-api-key.md)
-- [错误码](../../raw/model-api-reference/preparations/error-code.md)
-- [安装SDK](../../raw/model-api-reference/preparations/install-sdk.md)
-- [DashScope Python SDK 1.x 历史用法参考](../../raw/model-api-reference/preparations/dashscope-1x-legacy-reference.md)
-- [DashScope SDK Expert](../../raw/model-api-reference/preparations/dashscope-sdk-expert.md)
-- [Base URL总览](../../raw/model-api-reference/preparations/base-url.md)
+- [使用 API](../../raw/model-api-reference/preparations.md)
 
 

@@ -2,21 +2,47 @@
 
 向量化模型可将文本、图像、视频等数据转换为数值向量，用于语义搜索、推荐、聚类、分类、异常检测等下游任务。
 
+<a id="准备工作"></a>
+
+<a id="5a258c65c3ixb"></a>
+
 ## 准备工作
 
-您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过OpenAI SDK或DashScope SDK进行调用，还需要[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+您需要已[获取与配置 API Key](../../../model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过OpenAI SDK或DashScope SDK进行调用，还需要[安装SDK](../../../model-api-reference/preparations/install-sdk.md)。
+
+<a id="获取embedding"></a>
+
+<a id="eb8eea2b1cr5n"></a>
 
 ## 获取Embedding
+
+<a id="sec-tabs"></a>
+
+<a id="文本信息向量"></a>
+
+<a id="文本信息向量-h4"></a>
 
 #### 文本信息向量
 
 调用API时，需在请求中同时指定要向量化的文本内容和所使用的模型名称。
 
+<a id="sec-tabs-2"></a>
+
+<a id="openai兼容接口"></a>
+
+<a id="openai兼容接口-h4"></a>
+
 #### OpenAI兼容接口
+
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-python-tab"></a>
 
 python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -38,9 +64,13 @@ completion = client.embeddings.create(
 print(completion.model_dump_json())
 ```
 
+<a id="fig-code-group-javascript-tab"></a>
+
 javascript
 
-```
+<a id="code-code-group-javascript"></a>
+
+```javascript
 const OpenAI = require("openai");
 
 const openai = new OpenAI({
@@ -68,9 +98,13 @@ async function getEmbedding() {
 getEmbedding();
 ```
 
+<a id="fig-code-group-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-bash"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/embeddings' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
@@ -80,11 +114,21 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 }'
 ```
 
+<a id="dashscope"></a>
+
+<a id="dashscope-h4"></a>
+
 #### DashScope
+
+<a id="fig-code-group-2"></a>
+
+<a id="fig-code-group-2-python-tab"></a>
 
 python
 
-```
+<a id="code-code-group-2-python"></a>
+
+```python
 import os
 import dashscope
 # 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的region取值不同。
@@ -104,9 +148,13 @@ resp = client.embeddings.create(
 print(resp)
 ```
 
+<a id="fig-code-group-2-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-2-java"></a>
+
+```java
 import com.alibaba.dashscope.embeddings.TextEmbedding;
 import com.alibaba.dashscope.embeddings.TextEmbeddingParam;
 import com.alibaba.dashscope.embeddings.TextEmbeddingResult;
@@ -146,9 +194,13 @@ public class Main {
 }
 ```
 
+<a id="fig-code-group-2-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-2-bash"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，各地域的URL不同。
@@ -166,15 +218,25 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
+<a id="多模态独立向量"></a>
+
+<a id="多模态独立向量-h4"></a>
+
 #### 多模态独立向量
 
 可为文本、图片、视频等不同模态的内容分别生成独立的向量，适用于需要单独处理每种内容类型的场景。
 
 > 多模态独立向量化功能需要通过 DashScope SDK 或 API 来调用，不支持 OpenAI 兼容接口调用或在控制台直接使用。
 
+<a id="fig-code-group-3"></a>
+
+<a id="fig-code-group-3-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-3-python"></a>
+
+```python
 import dashscope
 import json
 import os
@@ -201,9 +263,13 @@ resp = client.multimodal.embeddings.create(
 print(json.dumps(resp.model_dump(), indent=4))
 ```
 
+<a id="fig-code-group-3-java-tab"></a>
+
 Java
 
-```
+<a id="code-code-group-3-java"></a>
+
+```java
 import com.alibaba.dashscope.embeddings.MultiModalEmbedding;
 import com.alibaba.dashscope.embeddings.MultiModalEmbeddingItemImage;
 import com.alibaba.dashscope.embeddings.MultiModalEmbeddingItemVideo;
@@ -245,6 +311,10 @@ public class Main {
 }
 ```
 
+<a id="多模态融合向量"></a>
+
+<a id="多模态融合向量-h4"></a>
+
 #### 多模态融合向量
 
 可将文本、图片、视频等不同模态的内容融合成一个融合向量，适用于文搜图、图搜图、文搜视频、跨模态检索等场景。
@@ -255,9 +325,17 @@ public class Main {
 -   `qwen2.5-vl-embedding`：仅支持融合向量，不支持独立向量。
 -   `tongyi-embedding-vision-plus-2026-03-06` 和 `tongyi-embedding-vision-flash-2026-03-06`：同时支持融合向量和独立向量。融合向量通过将 text、image、video 放在同一个 content 对象中实现，无需 enable\_fusion 参数。
 
+<a id="sec-tabs-3"></a>
+
+<a id="python"></a>
+
+<a id="python-h4"></a>
+
 #### Python
 
-```
+<a id="code-block"></a>
+
+```python
 import dashscope
 import json
 import os
@@ -297,7 +375,9 @@ print(json.dumps(resp.model_dump(), indent=4))
 
 以下示例使用 `tongyi-embedding-vision-plus-2026-03-06` 生成融合向量。与 `qwen3-vl-embedding` 不同，该模型通过将 text、image、video 放在同一个 content 对象中实现融合，无需 `enable_fusion` 参数。
 
-```
+<a id="code-block-2"></a>
+
+```python
 import dashscope
 import json
 import os
@@ -330,9 +410,15 @@ resp = client.multimodal.embeddings.create(
 print(json.dumps(resp.model_dump(), indent=4))
 ```
 
+<a id="java-http"></a>
+
+<a id="java-http-h4"></a>
+
 #### Java（HTTP）
 
-```
+<a id="code-block-3"></a>
+
+```java
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -374,7 +460,9 @@ public class Main {
 
 以下示例使用 `tongyi-embedding-vision-plus-2026-03-06` 生成融合向量。与 `qwen3-vl-embedding` 不同，该模型通过将 text、image 放在同一个 content 对象中实现融合，无需 `enable_fusion` 参数。
 
-```
+<a id="code-block-4"></a>
+
+```java
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -416,6 +504,10 @@ public class Main {
 }
 ```
 
+<a id="模型选择"></a>
+
+<a id="a74af50386cer"></a>
+
 ## 模型选择
 
 选择合适的模型取决于您的输入数据类型和应用场景。
@@ -426,235 +518,45 @@ public class Main {
     
     -   **融合向量：**若要将单模态或混合模态输入表征为融合向量，适用于跨模态检索、图搜等场景，可使用 `qwen2.5-vl-embedding`、`qwen3-vl-embedding`、`tongyi-embedding-vision-plus-2026-03-06` 或 `tongyi-embedding-vision-flash-2026-03-06`。例如，输入一张衬衫图片并附加文本”找相似风格但更显年轻的款式”，模型能将图像和文本指令融合成一个向量进行理解。
     -   **独立向量：**若要为每个输入（如图片和其对应的文字标题）生成独立的向量，可选择 `tongyi-embedding-vision-plus`、`tongyi-embedding-vision-flash`、`tongyi-embedding-vision-plus-2026-03-06`、`tongyi-embedding-vision-flash-2026-03-06` 或通用多模态模型`multimodal-embedding-v1`为每个输入部分（图片、文字）生成一个独立的向量。
--   **处理大规模数据**：若您需要处理大规模、非实时的文本数据，建议使用 `qwen3.7-text-embedding`、`qwen3.7-text-embedding-flash` 或 `text-embedding-v4` 并结合 [OpenAI兼容-Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)，以显著降低成本。
+-   **处理大规模数据**：若您需要处理大规模、非实时的文本数据，建议使用 `qwen3.7-text-embedding`、`qwen3.7-text-embedding-flash` 或 `text-embedding-v4` 并结合 [OpenAI兼容-Batch调用](../../../model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)，以显著降低成本。
     
 
 下表包含所有可用向量化模型的详细规格。
 
+<a id="文本向量"></a>
+
+<a id="ee47f9d186aa2"></a>
+
 ### 文本向量
+
+<a id="sec-tabs-4"></a>
+
+<a id="北京"></a>
+
+<a id="北京-h4"></a>
 
 #### 北京
 
-**模型名称**
+<table><thead><tr><th><strong>模型名称</strong></th><th><strong>向量维度</strong></th><th><strong>批次大小</strong></th><th><p><strong>单批次最大处理Token数（</strong><a href="https://help.aliyun.com/zh/model-studio/billing-for-model-studio">注</a><strong>）</strong></p></th><th><strong>单价（每千输入Token）</strong></th><th><p><strong>免费额度</strong><a href="../../test-1/new-free-quota.md#977b13081ab56">（注）</a></p></th><th><strong>支持语种</strong></th></tr></thead><tbody><tr><td><p>qwen3.7-text-embedding</p></td><td><p>2560、2,048、1,536、1,024（默认）、768、512、256</p></td><td><p>20</p></td><td><p>128,000</p></td><td><p>0.0005元</p><p><a href="../../../model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md">Batch接口调用</a>：0.00025元</p></td><td><p>100万Token</p><p>有效期：自开通百炼/模型发布/申请通过之日起90天（以较晚者为准）</p></td><td rowspan="2"><p>中文、英语、西班牙语、法语、葡萄牙语、印尼语、日语、韩语、德语、俄罗斯语等201种主流语种与方言</p><a id="accordion-所有支持语言"></a><section><p>所有支持语言</p><div><p><strong>汉藏语系</strong>：中文（简体中文、繁体中文、粤语）、缅甸语、藏语、梅泰语</p><p><strong>印欧语系</strong>：英语、法语、葡萄牙语、德语、罗马尼亚语、瑞典语、丹麦语、保加利亚语、俄语、捷克语、希腊语、乌克兰语、西班牙语、荷兰语、斯洛伐克语、克罗地亚语、波兰语、立陶宛语、挪威语（博克马尔语）、挪威尼诺斯克语、波斯语、斯洛文尼亚语、古吉拉特语、拉脱维亚语、意大利语、奥克语、尼泊尔语、马拉地语、白俄罗斯语、塞尔维亚语、卢森堡语、威尼斯语、阿萨姆语、威尔士语、西里西亚语、阿斯图里亚语、恰蒂斯加尔语、阿瓦德语、迈蒂利语、博杰普尔语、信德语、爱尔兰语、法罗语、印地语、旁遮普语、孟加拉语、奥里雅语、塔吉克语、东意第绪语、伦巴第语、利古里亚语、西西里语、弗留利语、撒丁岛语、加利西亚语、加泰罗尼亚语、冰岛语、托斯克语、阿尔巴尼亚语、林堡语、罗马尼亚语、达里语、南非荷兰语、马其顿语僧伽罗语、乌尔都语、马加希语、波斯尼亚语、亚美尼亚语、拉特加利亚语、苏格兰盖尔语、中库尔德语、北库尔德语、南普什图语、梵语、敦达里语、马尔瓦里语、阿希拉尼语、巴盖利语、巴格里语、本德利语、布拉吉语、库马翁语、克什米尔语</p><p><strong>亚非语系</strong>：阿拉伯语（标准语、内志语、黎凡特语、埃及语、摩洛哥语、美索不达米亚语、塔伊兹-阿德尼语、突尼斯语、海湾语、阿尔及利亚语、苏丹语、利比亚语）、希伯来语、马耳他语、阿姆哈拉语、提格里尼亚语、卡比尔语、索马里语、西中奥罗莫语、豪萨语</p><p><strong>南岛语系</strong>：印度尼西亚语、马来语、他加禄语、宿务语、爪哇语、巽他语、米南加保语、巴厘岛语、班加语、邦阿西楠语、伊洛科语、瓦雷语（菲律宾）、高原马达加斯加语、马达加斯加语、布吉语、毛利语、萨摩亚语、夏威夷语、斐济语</p><p>德拉威语：泰米尔语、泰卢固语、卡纳达语、马拉雅拉姆语</p><p>突厥语系：土耳其语、北阿塞拜疆语、北乌兹别克语、哈萨克语、巴什基尔语、鞑靼语、克里米亚鞑靼语、吉尔吉斯语、土库曼语、维吾尔语</p><p><strong>壮侗语系</strong>：泰语、老挝语、掸语</p><p><strong>乌拉尔语系</strong>：芬兰语、爱沙尼亚语、匈牙利语、草原马里语</p><p><strong>南亚语系</strong>：越南语、高棉语</p><p><strong>尼日尔-刚果语系</strong>：约鲁巴语、埃维语、卢旺达语、林加拉语、北索托语、尼扬贾语、绍纳语、南索托语、茨瓦纳语、科萨语、祖鲁语、卢干达语、斯瓦蒂语、聪加语、通布卡语、文达语、乔奎语、卢巴-卡赛语、隆迪语、姆本杜语、基库尤语、刚果语、尼日利亚富拉语、沃洛夫语、丰语、卡比耶语、莫西语、阿坎语、特维语、班巴拉语、伊博语</p><p><strong>其他</strong>：日语、韩语、格鲁吉亚语、巴斯克语、海地语、帕皮阿门托语、卡布维尔迪亚努语、托克皮辛语、斯瓦希里语、中部艾马拉语、图卢语、那加语、尼日利亚皮钦语、毛里求斯克里奥尔语、桑戈语、阿亚库乔克丘亚语、喀尔喀蒙古语、西南丁卡语、努埃尔语、瓜拉尼语</p></div></section></td></tr><tr><td><p>qwen3.7-text-embedding-flash</p></td><td><p>1,024（默认）、768、512、256</p></td><td><p>20</p></td><td><p>128,000</p></td><td><p>0.000125元</p><p><a href="../../../model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md">Batch接口调用</a>：0.000063元</p></td><td><p>100万Token</p><p>有效期：自开通百炼/模型发布/申请通过之日起90天（以较晚者为准）</p></td></tr><tr><td><p>text-embedding-v4</p><blockquote><p>属于<a href="https://qwenlm.github.io/zh/blog/qwen3-embedding/">Qwen3-Embedding</a>系列</p></blockquote></td><td><p>2,048、1,536、1,024（默认）、768、512、256、128、64</p></td><td rowspan="2"><p>10</p></td><td><p>33,000</p></td><td><p>0.0005元</p><p><a href="../../../model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md">Batch接口调用</a>：0.00025元</p></td><td><p>100万Token</p><p>有效期：自开通百炼/模型发布/申请通过之日起90天（以较晚者为准）</p></td><td><p>中文、英语、西班牙语、法语、葡萄牙语、印尼语、日语、韩语、德语、俄罗斯语等100+主流语种</p></td></tr><tr><td><p>text-embedding-v3</p></td><td><p>1,024（默认）、768、512、256、128或64</p></td><td><p>8,192</p></td><td><p>0.0005元</p><p><a href="../../../model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md">Batch接口调用</a>：0.00025元</p></td><td rowspan="3"><p>无免费额度</p></td><td><p>中文、英语、西班牙语、法语、葡萄牙语、印尼语、日语、韩语、德语、俄罗斯语等50+主流语种</p></td></tr><tr><td><p>text-embedding-v2</p></td><td rowspan="4"><p>1,536</p></td><td rowspan="2"><p>25</p></td><td rowspan="4"><p>2,048</p></td><td rowspan="2"><p>0.0007元</p><p><a href="../../../model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md">Batch接口调用</a>：0.00035元</p></td><td><p>中文、英语、西班牙语、法语、葡萄牙语、印尼语、日语、韩语、德语、俄罗斯语</p></td></tr><tr><td><p>text-embedding-v1</p></td><td><p>中文、英语、西班牙语、法语、葡萄牙语、印尼语</p></td></tr><tr><td><p>text-embedding-async-v2</p></td><td rowspan="2"><p>100,000</p></td><td rowspan="2"><p>0.0007元</p></td><td><p>2000万Token</p><p>有效期：自开通百炼/模型发布/申请通过之日起90天（以较晚者为准）</p></td><td><p>中文、英语、西班牙语、法语、葡萄牙语、印尼语、日语、韩语、德语、俄罗斯语</p></td></tr><tr><td><p>text-embedding-async-v1</p></td><td><p>无免费额度</p></td><td><p>中文、英语、西班牙语、法语、葡萄牙语、印尼语</p></td></tr></tbody></table>
 
-**向量维度**
+<a id="新加坡"></a>
 
-**批次大小**
-
-**单批次最大处理Token数（**[注](https://help.aliyun.com/zh/model-studio/billing-for-model-studio)**）**
-
-**单价（每千输入Token）**
-
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
-
-**支持语种**
-
-qwen3.7-text-embedding
-
-2560、2,048、1,536、1,024（默认）、768、512、256
-
-20
-
-128,000
-
-0.0005元
-
-[Batch接口调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)：0.00025元
-
-100万Token
-
-有效期：自开通百炼/模型发布/申请通过之日起90天（以较晚者为准）
-
-中文、英语、西班牙语、法语、葡萄牙语、印尼语、日语、韩语、德语、俄罗斯语等201种主流语种与方言
-
-所有支持语言
-
-**汉藏语系**：中文（简体中文、繁体中文、粤语）、缅甸语、藏语、梅泰语
-
-**印欧语系**：英语、法语、葡萄牙语、德语、罗马尼亚语、瑞典语、丹麦语、保加利亚语、俄语、捷克语、希腊语、乌克兰语、西班牙语、荷兰语、斯洛伐克语、克罗地亚语、波兰语、立陶宛语、挪威语（博克马尔语）、挪威尼诺斯克语、波斯语、斯洛文尼亚语、古吉拉特语、拉脱维亚语、意大利语、奥克语、尼泊尔语、马拉地语、白俄罗斯语、塞尔维亚语、卢森堡语、威尼斯语、阿萨姆语、威尔士语、西里西亚语、阿斯图里亚语、恰蒂斯加尔语、阿瓦德语、迈蒂利语、博杰普尔语、信德语、爱尔兰语、法罗语、印地语、旁遮普语、孟加拉语、奥里雅语、塔吉克语、东意第绪语、伦巴第语、利古里亚语、西西里语、弗留利语、撒丁岛语、加利西亚语、加泰罗尼亚语、冰岛语、托斯克语、阿尔巴尼亚语、林堡语、罗马尼亚语、达里语、南非荷兰语、马其顿语僧伽罗语、乌尔都语、马加希语、波斯尼亚语、亚美尼亚语、拉特加利亚语、苏格兰盖尔语、中库尔德语、北库尔德语、南普什图语、梵语、敦达里语、马尔瓦里语、阿希拉尼语、巴盖利语、巴格里语、本德利语、布拉吉语、库马翁语、克什米尔语
-
-**亚非语系**：阿拉伯语（标准语、内志语、黎凡特语、埃及语、摩洛哥语、美索不达米亚语、塔伊兹-阿德尼语、突尼斯语、海湾语、阿尔及利亚语、苏丹语、利比亚语）、希伯来语、马耳他语、阿姆哈拉语、提格里尼亚语、卡比尔语、索马里语、西中奥罗莫语、豪萨语
-
-**南岛语系**：印度尼西亚语、马来语、他加禄语、宿务语、爪哇语、巽他语、米南加保语、巴厘岛语、班加语、邦阿西楠语、伊洛科语、瓦雷语（菲律宾）、高原马达加斯加语、马达加斯加语、布吉语、毛利语、萨摩亚语、夏威夷语、斐济语
-
-德拉威语：泰米尔语、泰卢固语、卡纳达语、马拉雅拉姆语
-
-突厥语系：土耳其语、北阿塞拜疆语、北乌兹别克语、哈萨克语、巴什基尔语、鞑靼语、克里米亚鞑靼语、吉尔吉斯语、土库曼语、维吾尔语
-
-**壮侗语系**：泰语、老挝语、掸语
-
-**乌拉尔语系**：芬兰语、爱沙尼亚语、匈牙利语、草原马里语
-
-**南亚语系**：越南语、高棉语
-
-**尼日尔-刚果语系**：约鲁巴语、埃维语、卢旺达语、林加拉语、北索托语、尼扬贾语、绍纳语、南索托语、茨瓦纳语、科萨语、祖鲁语、卢干达语、斯瓦蒂语、聪加语、通布卡语、文达语、乔奎语、卢巴-卡赛语、隆迪语、姆本杜语、基库尤语、刚果语、尼日利亚富拉语、沃洛夫语、丰语、卡比耶语、莫西语、阿坎语、特维语、班巴拉语、伊博语
-
-**其他**：日语、韩语、格鲁吉亚语、巴斯克语、海地语、帕皮阿门托语、卡布维尔迪亚努语、托克皮辛语、斯瓦希里语、中部艾马拉语、图卢语、那加语、尼日利亚皮钦语、毛里求斯克里奥尔语、桑戈语、阿亚库乔克丘亚语、喀尔喀蒙古语、西南丁卡语、努埃尔语、瓜拉尼语
-
-qwen3.7-text-embedding-flash
-
-1,024（默认）、768、512、256
-
-20
-
-128,000
-
-0.000125元
-
-[Batch接口调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)：0.000063元
-
-100万Token
-
-有效期：自开通百炼/模型发布/申请通过之日起90天（以较晚者为准）
-
-text-embedding-v4
-
-> 属于[Qwen3-Embedding](https://qwenlm.github.io/zh/blog/qwen3-embedding/)系列
-
-2,048、1,536、1,024（默认）、768、512、256、128、64
-
-10
-
-33,000
-
-0.0005元
-
-[Batch接口调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)：0.00025元
-
-100万Token
-
-有效期：自开通百炼/模型发布/申请通过之日起90天（以较晚者为准）
-
-中文、英语、西班牙语、法语、葡萄牙语、印尼语、日语、韩语、德语、俄罗斯语等100+主流语种
-
-text-embedding-v3
-
-1,024（默认）、768、512、256、128或64
-
-8,192
-
-0.0005元
-
-[Batch接口调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)：0.00025元
-
-无免费额度
-
-中文、英语、西班牙语、法语、葡萄牙语、印尼语、日语、韩语、德语、俄罗斯语等50+主流语种
-
-text-embedding-v2
-
-1,536
-
-25
-
-2,048
-
-0.0007元
-
-[Batch接口调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)：0.00035元
-
-中文、英语、西班牙语、法语、葡萄牙语、印尼语、日语、韩语、德语、俄罗斯语
-
-text-embedding-v1
-
-中文、英语、西班牙语、法语、葡萄牙语、印尼语
-
-text-embedding-async-v2
-
-100,000
-
-0.0007元
-
-2000万Token
-
-有效期：自开通百炼/模型发布/申请通过之日起90天（以较晚者为准）
-
-中文、英语、西班牙语、法语、葡萄牙语、印尼语、日语、韩语、德语、俄罗斯语
-
-text-embedding-async-v1
-
-无免费额度
-
-中文、英语、西班牙语、法语、葡萄牙语、印尼语
+<a id="新加坡-h4"></a>
 
 #### 新加坡
 
-**模型名称**
+<table><thead><tr><th><strong>模型名称</strong></th><th><strong>向量维度</strong></th><th><strong>批次大小</strong></th><th><p><strong>单批次最大处理Token数（</strong><a href="https://help.aliyun.com/zh/model-studio/billing-for-model-studio">注</a><strong>）</strong></p></th><th><strong>单价（每千输入Token）</strong></th><th><p><strong>免费额度</strong><a href="../../test-1/new-free-quota.md#977b13081ab56">（注）</a></p></th><th><strong>支持语种</strong></th></tr></thead><tbody><tr><td><p>qwen3.7-text-embedding</p></td><td><p>2560、2,048、1,536、1,024（默认）、768、512、256</p></td><td><p>20</p></td><td><p>128,000</p></td><td><p>0.000525元</p></td><td rowspan="3"><p>无免费额度</p></td><td><p>中文、英语、西班牙语、法语、葡萄牙语、印尼语、日语、韩语、德语、俄罗斯语等201种主流语种与方言</p><a id="accordion-所有支持语言-2"></a><section><p>所有支持语言</p><div><p><strong>汉藏语系</strong>：中文（简体中文、繁体中文、粤语）、缅甸语、藏语、梅泰语</p><p><strong>印欧语系</strong>：英语、法语、葡萄牙语、德语、罗马尼亚语、瑞典语、丹麦语、保加利亚语、俄语、捷克语、希腊语、乌克兰语、西班牙语、荷兰语、斯洛伐克语、克罗地亚语、波兰语、立陶宛语、挪威语（博克马尔语）、挪威尼诺斯克语、波斯语、斯洛文尼亚语、古吉拉特语、拉脱维亚语、意大利语、奥克语、尼泊尔语、马拉地语、白俄罗斯语、塞尔维亚语、卢森堡语、威尼斯语、阿萨姆语、威尔士语、西里西亚语、阿斯图里亚语、恰蒂斯加尔语、阿瓦德语、迈蒂利语、博杰普尔语、信德语、爱尔兰语、法罗语、印地语、旁遮普语、孟加拉语、奥里雅语、塔吉克语、东意第绪语、伦巴第语、利古里亚语、西西里语、弗留利语、撒丁岛语、加利西亚语、加泰罗尼亚语、冰岛语、托斯克语、阿尔巴尼亚语、林堡语、罗马尼亚语、达里语、南非荷兰语、马其顿语僧伽罗语、乌尔都语、马加希语、波斯尼亚语、亚美尼亚语、拉特加利亚语、苏格兰盖尔语、中库尔德语、北库尔德语、南普什图语、梵语、敦达里语、马尔瓦里语、阿希拉尼语、巴盖利语、巴格里语、本德利语、布拉吉语、库马翁语、克什米尔语</p><p><strong>亚非语系</strong>：阿拉伯语（标准语、内志语、黎凡特语、埃及语、摩洛哥语、美索不达米亚语、塔伊兹-阿德尼语、突尼斯语、海湾语、阿尔及利亚语、苏丹语、利比亚语）、希伯来语、马耳他语、阿姆哈拉语、提格里尼亚语、卡比尔语、索马里语、西中奥罗莫语、豪萨语</p><p><strong>南岛语系</strong>：印度尼西亚语、马来语、他加禄语、宿务语、爪哇语、巽他语、米南加保语、巴厘岛语、班加语、邦阿西楠语、伊洛科语、瓦雷语（菲律宾）、高原马达加斯加语、马达加斯加语、布吉语、毛利语、萨摩亚语、夏威夷语、斐济语</p><p>德拉威语：泰米尔语、泰卢固语、卡纳达语、马拉雅拉姆语</p><p>突厥语系：土耳其语、北阿塞拜疆语、北乌兹别克语、哈萨克语、巴什基尔语、鞑靼语、克里米亚鞑靼语、吉尔吉斯语、土库曼语、维吾尔语</p><p><strong>壮侗语系</strong>：泰语、老挝语、掸语</p><p><strong>乌拉尔语系</strong>：芬兰语、爱沙尼亚语、匈牙利语、草原马里语</p><p><strong>南亚语系</strong>：越南语、高棉语</p><p><strong>尼日尔-刚果语系</strong>：约鲁巴语、埃维语、卢旺达语、林加拉语、北索托语、尼扬贾语、绍纳语、南索托语、茨瓦纳语、科萨语、祖鲁语、卢干达语、斯瓦蒂语、聪加语、通布卡语、文达语、乔奎语、卢巴-卡赛语、隆迪语、姆本杜语、基库尤语、刚果语、尼日利亚富拉语、沃洛夫语、丰语、卡比耶语、莫西语、阿坎语、特维语、班巴拉语、伊博语</p><p><strong>其他</strong>：日语、韩语、格鲁吉亚语、巴斯克语、海地语、帕皮阿门托语、卡布维尔迪亚努语、托克皮辛语、斯瓦希里语、中部艾马拉语、图卢语、那加语、尼日利亚皮钦语、毛里求斯克里奥尔语、桑戈语、阿亚库乔克丘亚语、喀尔喀蒙古语、西南丁卡语、努埃尔语、瓜拉尼语</p></div></section></td></tr><tr><td><p>text-embedding-v4</p><blockquote><p>属于<a href="https://qwenlm.github.io/zh/blog/qwen3-embedding/">Qwen3-Embedding</a>系列</p></blockquote></td><td><p>2,048、1,536、1,024（默认）、768、512、256、128、64</p></td><td rowspan="2"><p>10</p></td><td rowspan="2"><p>8,192</p></td><td rowspan="2"><p>0.000514元</p></td><td><p>中文、英语、西班牙语、法语、葡萄牙语、印尼语、日语、韩语、德语、俄罗斯语等100+主流语种</p></td></tr><tr><td><p>text-embedding-v3</p></td><td><p>1,024（默认）、768、512、256、128或64</p></td><td><p>中文、英语、西班牙语、法语、葡萄牙语、印尼语、日语、韩语、德语、俄罗斯语等50+主流语种</p></td></tr></tbody></table>
 
-**向量维度**
+> **说明**
+>
+> 批次大小指单次API调用中能处理的文本数量上限。例如，text-embedding-v4的批次大小为10，意味着一次请求最多可传入10个文本进行向量化，且每个文本不得超过 8192 个Token。这个限制适用于：
+>
+> -   字符串数组输入：数组最多包含10个元素。
+> -   文件输入：文本文件最多包含10行文本。
 
-**批次大小**
+<a id="多模态向量"></a>
 
-**单批次最大处理Token数（**[注](https://help.aliyun.com/zh/model-studio/billing-for-model-studio)**）**
-
-**单价（每千输入Token）**
-
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
-
-**支持语种**
-
-qwen3.7-text-embedding
-
-2560、2,048、1,536、1,024（默认）、768、512、256
-
-20
-
-128,000
-
-0.000525元
-
-无免费额度
-
-中文、英语、西班牙语、法语、葡萄牙语、印尼语、日语、韩语、德语、俄罗斯语等201种主流语种与方言
-
-所有支持语言
-
-**汉藏语系**：中文（简体中文、繁体中文、粤语）、缅甸语、藏语、梅泰语
-
-**印欧语系**：英语、法语、葡萄牙语、德语、罗马尼亚语、瑞典语、丹麦语、保加利亚语、俄语、捷克语、希腊语、乌克兰语、西班牙语、荷兰语、斯洛伐克语、克罗地亚语、波兰语、立陶宛语、挪威语（博克马尔语）、挪威尼诺斯克语、波斯语、斯洛文尼亚语、古吉拉特语、拉脱维亚语、意大利语、奥克语、尼泊尔语、马拉地语、白俄罗斯语、塞尔维亚语、卢森堡语、威尼斯语、阿萨姆语、威尔士语、西里西亚语、阿斯图里亚语、恰蒂斯加尔语、阿瓦德语、迈蒂利语、博杰普尔语、信德语、爱尔兰语、法罗语、印地语、旁遮普语、孟加拉语、奥里雅语、塔吉克语、东意第绪语、伦巴第语、利古里亚语、西西里语、弗留利语、撒丁岛语、加利西亚语、加泰罗尼亚语、冰岛语、托斯克语、阿尔巴尼亚语、林堡语、罗马尼亚语、达里语、南非荷兰语、马其顿语僧伽罗语、乌尔都语、马加希语、波斯尼亚语、亚美尼亚语、拉特加利亚语、苏格兰盖尔语、中库尔德语、北库尔德语、南普什图语、梵语、敦达里语、马尔瓦里语、阿希拉尼语、巴盖利语、巴格里语、本德利语、布拉吉语、库马翁语、克什米尔语
-
-**亚非语系**：阿拉伯语（标准语、内志语、黎凡特语、埃及语、摩洛哥语、美索不达米亚语、塔伊兹-阿德尼语、突尼斯语、海湾语、阿尔及利亚语、苏丹语、利比亚语）、希伯来语、马耳他语、阿姆哈拉语、提格里尼亚语、卡比尔语、索马里语、西中奥罗莫语、豪萨语
-
-**南岛语系**：印度尼西亚语、马来语、他加禄语、宿务语、爪哇语、巽他语、米南加保语、巴厘岛语、班加语、邦阿西楠语、伊洛科语、瓦雷语（菲律宾）、高原马达加斯加语、马达加斯加语、布吉语、毛利语、萨摩亚语、夏威夷语、斐济语
-
-德拉威语：泰米尔语、泰卢固语、卡纳达语、马拉雅拉姆语
-
-突厥语系：土耳其语、北阿塞拜疆语、北乌兹别克语、哈萨克语、巴什基尔语、鞑靼语、克里米亚鞑靼语、吉尔吉斯语、土库曼语、维吾尔语
-
-**壮侗语系**：泰语、老挝语、掸语
-
-**乌拉尔语系**：芬兰语、爱沙尼亚语、匈牙利语、草原马里语
-
-**南亚语系**：越南语、高棉语
-
-**尼日尔-刚果语系**：约鲁巴语、埃维语、卢旺达语、林加拉语、北索托语、尼扬贾语、绍纳语、南索托语、茨瓦纳语、科萨语、祖鲁语、卢干达语、斯瓦蒂语、聪加语、通布卡语、文达语、乔奎语、卢巴-卡赛语、隆迪语、姆本杜语、基库尤语、刚果语、尼日利亚富拉语、沃洛夫语、丰语、卡比耶语、莫西语、阿坎语、特维语、班巴拉语、伊博语
-
-**其他**：日语、韩语、格鲁吉亚语、巴斯克语、海地语、帕皮阿门托语、卡布维尔迪亚努语、托克皮辛语、斯瓦希里语、中部艾马拉语、图卢语、那加语、尼日利亚皮钦语、毛里求斯克里奥尔语、桑戈语、阿亚库乔克丘亚语、喀尔喀蒙古语、西南丁卡语、努埃尔语、瓜拉尼语
-
-text-embedding-v4
-
-> 属于[Qwen3-Embedding](https://qwenlm.github.io/zh/blog/qwen3-embedding/)系列
-
-2,048、1,536、1,024（默认）、768、512、256、128、64
-
-10
-
-8,192
-
-0.000514元
-
-中文、英语、西班牙语、法语、葡萄牙语、印尼语、日语、韩语、德语、俄罗斯语等100+主流语种
-
-text-embedding-v3
-
-1,024（默认）、768、512、256、128或64
-
-中文、英语、西班牙语、法语、葡萄牙语、印尼语、日语、韩语、德语、俄罗斯语等50+主流语种
-
-**说明**批次大小指单次API调用中能处理的文本数量上限。例如，text-embedding-v4的批次大小为10，意味着一次请求最多可传入10个文本进行向量化，且每个文本不得超过 8192 个Token。这个限制适用于：
-
--   字符串数组输入：数组最多包含10个元素。
--   文件输入：文本文件最多包含10行文本。
+<a id="a05d738632511"></a>
 
 ### 多模态向量
 
@@ -662,233 +564,41 @@ text-embedding-v3
 
 > 接口支持单段文本、单张图片或单个视频文件的上传，也允许不同类型组合（如文本+图片），部分模型支持同类型内容的多个输入（如多张图片），请参考具体模型的限制说明。
 
+<a id="sec-tabs-5"></a>
+
+<a id="北京-2"></a>
+
+<a id="北京-2-h4"></a>
+
 #### 北京
 
-**模型名称**
+<table><thead><tr><th><p><strong>模型名称</strong></p></th><th><p><strong>向量维度</strong></p></th><th><p><strong>文本长度限制</strong></p></th><th><p><strong>图片大小限制</strong></p></th><th><p><strong>视频大小限制</strong></p></th><th><p><strong>单价（每千输入Token）</strong></p></th><th><p><strong>免费额度</strong><a href="../../test-1/new-free-quota.md#977b13081ab56">（注）</a></p></th></tr></thead><tbody><tr><td><p>qwen3-vl-embedding</p></td><td><p>2560（默认）, 2048, 1536, 1024, 768, 512, 256</p></td><td rowspan="2"><p>32,000 Token</p></td><td><p>单张大小不超过<strong>10 MB</strong></p></td><td rowspan="2"><p>视频文件大小不超过 <strong>50 MB</strong></p></td><td rowspan="2"><p>图片/视频：0.0018元</p><p>文本：0.0007元</p></td><td><p>100万Token</p><p>有效期：自开通百炼/模型发布/申请通过之日起90天（以较晚者为准）</p></td></tr><tr><td><p>qwen2.5-vl-embedding</p></td><td><p>2048, 1024（默认）, 768, 512</p></td><td><p>单张大小不超过<strong>5 MB</strong></p></td><td><p>无免费额度</p></td></tr><tr><td><p>tongyi-embedding-vision-plus-2026-03-06</p></td><td><p>1152（默认）, 1024, 512, 256, 128, 64</p></td><td rowspan="4"><p>1,024 Token</p></td><td rowspan="2"><p>建议单张大小不超过<strong>5 MB</strong>，最大<strong>10 MB。</strong>支持多图，最多支持输入<strong>64张</strong></p></td><td rowspan="2"><p>视频文件大小不超过 <strong>50 MB</strong></p><p>且编码类型为H.264/H.265</p></td><td><p>0.0005元</p></td><td><p>无免费额度</p></td></tr><tr><td><p>tongyi-embedding-vision-flash-2026-03-06</p></td><td><p>768（默认）, 512, 256, 128, 64</p></td><td><p>0.00015元</p></td><td><p>无免费额度</p></td></tr><tr><td><p>tongyi-embedding-vision-plus</p></td><td><p>1152（默认）, 1024, 512, 256, 128, 64</p></td><td rowspan="2"><p>单张大小不超过<strong>3 MB</strong>。支持多图，最多支持输入<strong>8张</strong></p></td><td rowspan="2"><p>视频文件大小不超过 <strong>10 MB</strong></p></td><td><p>0.0005元</p></td><td><p>100万Token</p><p>有效期：自开通百炼/模型发布/申请通过之日起90天（以较晚者为准）</p></td></tr><tr><td><p>tongyi-embedding-vision-flash</p></td><td><p>768（默认）, 512, 256, 128, 64</p></td><td><p>0.00015元</p></td><td><p>100万Token</p><p>有效期：自开通百炼/模型发布/申请通过之日起90天（以较晚者为准）</p></td></tr><tr><td><p>multimodal-embedding-v1</p></td><td><p>1,024</p></td><td><p>512 Token</p></td><td><p>单张大小不超过<strong>3 MB</strong></p></td><td><p>视频文件大小不超过 <strong>10 MB</strong></p></td><td><p>图片/视频：0.0009 元</p><p>文本：0.0007 元</p></td><td><p>无免费额度</p></td></tr></tbody></table>
 
-**向量维度**
+<a id="新加坡-2"></a>
 
-**文本长度限制**
-
-**图片大小限制**
-
-**视频大小限制**
-
-**单价（每千输入Token）**
-
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
-
-qwen3-vl-embedding
-
-2560（默认）, 2048, 1536, 1024, 768, 512, 256
-
-32,000 Token
-
-单张大小不超过**10 MB**
-
-视频文件大小不超过 **50 MB**
-
-图片/视频：0.0018元
-
-文本：0.0007元
-
-100万Token
-
-有效期：自开通百炼/模型发布/申请通过之日起90天（以较晚者为准）
-
-qwen2.5-vl-embedding
-
-2048, 1024（默认）, 768, 512
-
-单张大小不超过**5 MB**
-
-无免费额度
-
-tongyi-embedding-vision-plus-2026-03-06
-
-1152（默认）, 1024, 512, 256, 128, 64
-
-1,024 Token
-
-建议单张大小不超过**5 MB**，最大**10 MB。**支持多图，最多支持输入**64张**
-
-视频文件大小不超过 **50 MB**
-
-且编码类型为H.264/H.265
-
-0.0005元
-
-无免费额度
-
-tongyi-embedding-vision-flash-2026-03-06
-
-768（默认）, 512, 256, 128, 64
-
-0.00015元
-
-无免费额度
-
-tongyi-embedding-vision-plus
-
-1152（默认）, 1024, 512, 256, 128, 64
-
-单张大小不超过**3 MB**。支持多图，最多支持输入**8张**
-
-视频文件大小不超过 **10 MB**
-
-0.0005元
-
-100万Token
-
-有效期：自开通百炼/模型发布/申请通过之日起90天（以较晚者为准）
-
-tongyi-embedding-vision-flash
-
-768（默认）, 512, 256, 128, 64
-
-0.00015元
-
-100万Token
-
-有效期：自开通百炼/模型发布/申请通过之日起90天（以较晚者为准）
-
-multimodal-embedding-v1
-
-1,024
-
-512 Token
-
-单张大小不超过**3 MB**
-
-视频文件大小不超过 **10 MB**
-
-图片/视频：0.0009 元
-
-文本：0.0007 元
-
-无免费额度
+<a id="新加坡-2-h4"></a>
 
 #### 新加坡
 
-**模型名称**
+<table><thead><tr><th><p><strong>模型名称</strong></p></th><th><p><strong>向量维度</strong></p></th><th><p><strong>文本长度限制</strong></p></th><th><p><strong>图片大小限制</strong></p></th><th><p><strong>视频大小限制</strong></p></th><th><p><strong>单价（每千输入Token）</strong></p></th></tr></thead><tbody><tr><td><p>tongyi-embedding-vision-plus</p></td><td><p>1152（默认）, 1024, 512, 256, 128, 64</p></td><td><p>1,024 Token</p></td><td rowspan="2"><p>最多 <strong>8 张</strong>且单张大小不超过<strong>3 MB</strong></p></td><td rowspan="2"><p>视频文件大小不超过 <strong>10 MB</strong></p></td><td><p>0.0005元</p></td></tr><tr><td><p>tongyi-embedding-vision-flash</p></td><td><p>768（默认）, 512, 256, 128, 64</p></td><td><p>1,024 Token</p></td><td><p>0.00015元</p></td></tr></tbody></table>
 
-**向量维度**
+<a id="输入与语种限制"></a>
 
-**文本长度限制**
-
-**图片大小限制**
-
-**视频大小限制**
-
-**单价（每千输入Token）**
-
-tongyi-embedding-vision-plus
-
-1152（默认）, 1024, 512, 256, 128, 64
-
-1,024 Token
-
-最多 **8 张**且单张大小不超过**3 MB**
-
-视频文件大小不超过 **10 MB**
-
-0.0005元
-
-tongyi-embedding-vision-flash
-
-768（默认）, 512, 256, 128, 64
-
-1,024 Token
-
-0.00015元
+<a id="993adb781aelw"></a>
 
 #### 输入与语种限制
 
-**多模态融合向量模型**
+<table><thead><tr><th colspan="5"><strong>多模态融合向量模型</strong></th></tr><tr><th><strong>模型</strong></th><th><strong>文本</strong></th><th><strong>图片</strong></th><th><strong>视频</strong></th><th><strong>单次请求条数</strong></th></tr></thead><tbody><tr><td><p>qwen3-vl-embedding</p></td><td><p>支持中、英、日、韩、法、德等33种主流语言</p><a id="accordion-所有支持语言-3"></a><section><p>所有支持语言</p><div><p>中文、日语、韩语、印尼语、越南语、泰语、英语、法语、德语、俄语、葡萄牙语、西班牙语、意大利语、瑞典语、丹麦语、捷克语、挪威语、荷兰语、芬兰语、土耳其语、波兰语、斯瓦希里语、罗马尼亚语、塞尔维亚语、希腊语、哈萨克语、乌兹别克语、宿务语、阿拉伯语、乌尔都语、波斯语、印地语 / 天城语、希伯来语。</p></div></section></td><td rowspan="2"><p>JPEG, PNG, WEBP, BMP, TIFF, ICO, DIB, ICNS, SGI（支持URL或Base64）</p></td><td rowspan="2"><p>MP4, AVI, MOV（仅支持URL）</p></td><td><p>一次请求中传入内容元素总数不超过 20。图片数量不超过10，视频数量不超过1。</p></td></tr><tr><td><p>qwen2.5-vl-embedding</p></td><td><p>支持中、英、日、韩、法、德等11种主流语言</p><a id="accordion-所有支持语言-4"></a><section><p>所有支持语言</p><div><p>中文、英语、日语、韩语、法语、德语、俄语、葡萄牙语、西班牙语、意大利语、印尼语</p></div></section></td><td><p>一次请求内，图片、文本、视频、融合对象每种类型最多出现 1 次。</p></td></tr><tr><td colspan="5"><strong>多模态向量模型</strong></td></tr><tr><td><strong>模型</strong></td><td><strong>文本</strong></td><td><strong>图片</strong></td><td><strong>视频</strong></td><td><strong>单次请求条数</strong></td></tr><tr><td><p>tongyi-embedding-vision-plus-2026-03-06</p></td><td rowspan="2"><p>支持中、英、日、韩等超30种主流语言</p><a id="accordion-所有支持语言-5"></a><section><p>所有支持语言</p><div><p>中文、日语、韩语、印尼语、越南语、泰语、英语、法语、德语、俄语、葡萄牙语、西班牙语、意大利语、瑞典语、丹麦语、捷克语、挪威语、荷兰语、芬兰语、土耳其语、波兰语、斯瓦希里语、罗马尼亚语、塞尔维亚语、希腊语、哈萨克语、乌兹别克语、宿务语、阿拉伯语、乌尔都语、波斯语、印地语 / 天城语、希伯来语。</p></div></section></td><td rowspan="2"><p>JPEG, PNG, WEBP, BMP, TIFF, ICO, DIB, ICNS, SGI（支持URL或Base64）</p></td><td rowspan="2"><p>MP4, MPEG, MOV, MPG, WEBM, AVI, FLV, MKV（仅支持URL）</p></td><td rowspan="2"><p>一次请求中传入内容元素总数不超过 20，单次图片总数不超过64，视频数量不超过8。</p></td></tr><tr><td><p>tongyi-embedding-vision-flash-2026-03-06</p></td></tr><tr><td><p>tongyi-embedding-vision-plus</p></td><td rowspan="2"><p>中文与英文</p></td><td rowspan="2"><p>JPG, PNG, BMP (支持URL或Base64)</p></td><td rowspan="3"><p>MP4, MPEG, MOV, MPG, WEBM, AVI, FLV, MKV（仅支持URL）</p></td><td rowspan="2"><p>暂无传入内容元素数量限制，输入内容Token数不超过单批次处理Token数量上限即可。</p></td></tr><tr><td><p>tongyi-embedding-vision-flash</p></td></tr><tr><td><p>multimodal-embedding-v1</p></td><td><p>中文与英文</p></td><td><p>JPG, PNG, BMP (支持URL或Base64)</p></td><td><p>一次请求中传入内容元素总数不超过 20；图片、视频各最多 1 条，文本最多 20 条，共享总条数上限。</p></td></tr></tbody></table>
 
-**模型**
+<a id="核心功能"></a>
 
-**文本**
-
-**图片**
-
-**视频**
-
-**单次请求条数**
-
-qwen3-vl-embedding
-
-支持中、英、日、韩、法、德等33种主流语言
-
-所有支持语言
-
-中文、日语、韩语、印尼语、越南语、泰语、英语、法语、德语、俄语、葡萄牙语、西班牙语、意大利语、瑞典语、丹麦语、捷克语、挪威语、荷兰语、芬兰语、土耳其语、波兰语、斯瓦希里语、罗马尼亚语、塞尔维亚语、希腊语、哈萨克语、乌兹别克语、宿务语、阿拉伯语、乌尔都语、波斯语、印地语 / 天城语、希伯来语。
-
-JPEG, PNG, WEBP, BMP, TIFF, ICO, DIB, ICNS, SGI（支持URL或Base64）
-
-MP4, AVI, MOV（仅支持URL）
-
-一次请求中传入内容元素总数不超过 20。图片数量不超过10，视频数量不超过1。
-
-qwen2.5-vl-embedding
-
-支持中、英、日、韩、法、德等11种主流语言
-
-所有支持语言
-
-中文、英语、日语、韩语、法语、德语、俄语、葡萄牙语、西班牙语、意大利语、印尼语
-
-一次请求内，图片、文本、视频、融合对象每种类型最多出现 1 次。
-
-**多模态向量模型**
-
-**模型**
-
-**文本**
-
-**图片**
-
-**视频**
-
-**单次请求条数**
-
-tongyi-embedding-vision-plus-2026-03-06
-
-支持中、英、日、韩等超30种主流语言
-
-所有支持语言
-
-中文、日语、韩语、印尼语、越南语、泰语、英语、法语、德语、俄语、葡萄牙语、西班牙语、意大利语、瑞典语、丹麦语、捷克语、挪威语、荷兰语、芬兰语、土耳其语、波兰语、斯瓦希里语、罗马尼亚语、塞尔维亚语、希腊语、哈萨克语、乌兹别克语、宿务语、阿拉伯语、乌尔都语、波斯语、印地语 / 天城语、希伯来语。
-
-JPEG, PNG, WEBP, BMP, TIFF, ICO, DIB, ICNS, SGI（支持URL或Base64）
-
-MP4, MPEG, MOV, MPG, WEBM, AVI, FLV, MKV（仅支持URL）
-
-一次请求中传入内容元素总数不超过 20，单次图片总数不超过64，视频数量不超过8。
-
-tongyi-embedding-vision-flash-2026-03-06
-
-tongyi-embedding-vision-plus
-
-中文与英文
-
-JPG, PNG, BMP (支持URL或Base64)
-
-MP4, MPEG, MOV, MPG, WEBM, AVI, FLV, MKV（仅支持URL）
-
-暂无传入内容元素数量限制，输入内容Token数不超过单批次处理Token数量上限即可。
-
-tongyi-embedding-vision-flash
-
-multimodal-embedding-v1
-
-中文与英文
-
-JPG, PNG, BMP (支持URL或Base64)
-
-一次请求中传入内容元素总数不超过 20；图片、视频各最多 1 条，文本最多 20 条，共享总条数上限。
+<a id="50a0f41076ngn"></a>
 
 ## 核心功能
+
+<a id="切换向量维度"></a>
+
+<a id="c2f07398beub8"></a>
 
 ### 切换向量维度
 
@@ -898,9 +608,15 @@ JPG, PNG, BMP (支持URL或Base64)
 -   **追求精度**：对于高精度要求领域，可选择 1536 或 2048 维度。这会带来一定的精度提升，但存储和计算开销会显著增加。
 -   **资源受限**：在对成本极其敏感的场景下，可选择 768 及以下维度。这能显著降低资源消耗，但会损失部分语义信息。
 
+<a id="fig-code-group-4"></a>
+
+<a id="fig-code-group-4-openai兼容接口-tab"></a>
+
 OpenAI兼容接口
 
-```
+<a id="code-code-group-4-openai兼容接口"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -920,9 +636,13 @@ resp = client.embeddings.create(
 print(f"向量维度: {len(resp.data[0].embedding)}")
 ```
 
+<a id="fig-code-group-4-dashscope-tab"></a>
+
 DashScope
 
-```
+<a id="code-code-group-4-dashscope"></a>
+
+```python
 import os
 import dashscope
 # 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的region取值不同。
@@ -943,6 +663,10 @@ resp = client.embeddings.create(
 print(f"向量维度: {len(resp.embeddings[0].embedding)}")
 ```
 
+<a id="区分查询与文档文本-text-type"></a>
+
+<a id="92608abc9dcxe"></a>
+
 ### 区分查询与文档文本 (text\_type)
 
 > 该参数目前仅支持通过DashScope SDK及API启用。
@@ -954,13 +678,19 @@ print(f"向量维度: {len(resp.embeddings[0].embedding)}")
 
 当使用短文本去匹配长文本时，应区分 `query` 和 `document`。而在聚类、分类等所有文本处于相同角色的任务中，则无需设置此参数。
 
+<a id="使用任务指令提升效果-instruct"></a>
+
+<a id="eb35b65eben45"></a>
+
 ### 使用任务指令提升效果 (instruct)
 
 > 该参数目前仅支持通过DashScope SDK及API启用。
 
 通过提供明确的英文任务指令（instruct），可以引导 `qwen3.7-text-embedding`、`qwen3.7-text-embedding-flash` 和 `text-embedding-v4` 模型针对特定检索场景优化向量质量，有效提升精度。其中 `qwen3.7-text-embedding` 在指令遵循能力上对比 text-embedding-v4 提升了 **16.4%**，建议优先使用。使用此功能时，必须将 `text_type` 参数设置为 `query`。
 
-```
+<a id="code-block-5"></a>
+
+```python
 # 场景：为搜索引擎构建文档向量时，可以添加指令以优化用于检索的向量质量。
 resp = client.embeddings.create(
     model="qwen3.7-text-embedding",
@@ -970,53 +700,41 @@ resp = client.embeddings.create(
 )
 ```
 
+<a id="稠密与稀疏向量"></a>
+
+<a id="58a9ececa45lw"></a>
+
 ### 稠密与稀疏向量
 
 > 该参数目前仅支持通过DashScope SDK及API启用。
 
 `qwen3.7-text-embedding`、`qwen3.7-text-embedding-flash`、`text-embedding-v4`和`text-embedding-v3`支持输出三种类型的向量，以适应不同检索策略的需求。其中 `qwen3.7-text-embedding` 的 Sparse Embedding 采用全新类 SPLADE 训练策略，效果提升 **8.4%**，并新增跨语言检索支持。
 
-**向量类型 (output\_type)**
+| 向量类型 (output\_type) | 核心优势 | 主要不足 | 典型应用场景 |
+| --- | --- | --- | --- |
+| dense | **深度语义理解**，能识别同义词和上下文，与召回结果更相关。 | **计算和存储成本较高**；无法保证关键词的精确匹配。 | 语义搜索、智能问答、内容推荐。 |
+| sparse | **高计算效率**，专注于关键词的**精确匹配**和快速过滤。 | **牺牲了语义理解能力**，无法处理同义词或上下文。 | 日志检索、商品SKU搜索、精确信息过滤。 |
+| dense&sparse | 结合语义与关键词，搜索效果最好。**生成成本不变**，API调用开销与单向量模式相同。 | **存储需求大**，系统架构和检索逻辑更复杂。 | 高质量、生产级的混合搜索引擎。 |
 
-**核心优势**
+<a id="应用示例"></a>
 
-**主要不足**
-
-**典型应用场景**
-
-dense
-
-**深度语义理解**，能识别同义词和上下文，与召回结果更相关。
-
-**计算和存储成本较高**；无法保证关键词的精确匹配。
-
-语义搜索、智能问答、内容推荐。
-
-sparse
-
-**高计算效率**，专注于关键词的**精确匹配**和快速过滤。
-
-**牺牲了语义理解能力**，无法处理同义词或上下文。
-
-日志检索、商品SKU搜索、精确信息过滤。
-
-dense&sparse
-
-结合语义与关键词，搜索效果最好。**生成成本不变**，API调用开销与单向量模式相同。
-
-**存储需求大**，系统架构和检索逻辑更复杂。
-
-高质量、生产级的混合搜索引擎。
+<a id="a356aa16bdi40"></a>
 
 ## 应用示例
 
 > 以下为功能演示代码。在生产环境中，请预先计算向量并持久化存储在向量数据库中，检索时仅需计算查询向量。
 
+<a id="语义搜索"></a>
+
+<a id="5141fd5463kr0"></a>
+
 ### 语义搜索
 
 通过计算查询与文档之间的向量相似度，实现精准的语义匹配。
 
-```
+<a id="code-block-6"></a>
+
+```python
 import os
 import dashscope
 import numpy as np
@@ -1070,13 +788,20 @@ query = "什么是AI？"
 results = semantic_search(query, documents, top_k=2)
 for doc, sim in results:
     print(f"相似度: {sim:.3f}, 文档: {doc}")
+
 ```
+
+<a id="推荐系统"></a>
+
+<a id="e42c4bf795jh8"></a>
 
 ### 推荐系统
 
 通过分析用户历史行为向量，发现用户的兴趣偏好并推荐相似物品。
 
-```
+<a id="code-block-7"></a>
+
+```python
 import os
 import dashscope
 import numpy as np
@@ -1131,11 +856,17 @@ for movie, score in recommendations:
     print(f"推荐分数: {score:.3f}, 电影: {movie}")
 ```
 
+<a id="文本聚类"></a>
+
+<a id="d5c766dd40q98"></a>
+
 ### 文本聚类
 
 通过分析向量间的距离，将相似的文本自动分组。
 
-```
+<a id="code-block-8"></a>
+
+```python
 # 需要安装 scikit-learn: pip install scikit-learn
 import os
 import dashscope
@@ -1185,11 +916,17 @@ for cluster_id, docs in clusters.items():
         print(f"- {doc}")
 ```
 
+<a id="文本分类"></a>
+
+<a id="122d8699273b2"></a>
+
 ### 文本分类
 
 通过计算输入文本与预定义标签的向量相似度，实现在没有预先标记的示例的情况下，对新类别进行识别和分类。
 
-```
+<a id="code-block-9"></a>
+
+```python
 import os
 import dashscope
 import numpy as np
@@ -1234,13 +971,19 @@ print(f"输入文本: '{text_to_classify}'")
 print(f"最匹配的分类是: '{label}' (相似度: {score:.3f})")
 ```
 
+<a id="异常检测"></a>
+
+<a id="b12ec1e5ebdp5"></a>
+
 ### 异常检测
 
 通过计算文本向量与正常样本中心的向量相似度，识别出与常规模式显著不同的异常数据。
 
 > 示例代码中的阈值（threshold）仅为演示目的。在真实业务场景中，相似度的具体数值会因数据内容和分布的不同而变化，没有一个固定的阈值。建议基于自己的数据集来校准此值。
 
-```
+<a id="code-block-10"></a>
+
+```python
 import os
 import dashscope
 import numpy as np
@@ -1300,25 +1043,43 @@ for desc, comment in test_comments.items():
     print(f"是否为异常: {result} (与正常样本相似度: {score:.3f})\n")
 ```
 
+<a id="api参考"></a>
+
+<a id="13089dd842upm"></a>
+
 ## API参考
 
 -   **通用文本向量**
-    -   [同步处理模型接口API详情](raw/model-api-reference/vector-and-sort/general-text-vector/text-embedding-synchronous-api.md)
-    -   [批处理模型接口API详情](raw/model-api-reference/vector-and-sort/general-text-vector/text-embedding-batch-api.md)
+    -   [同步处理模型接口API详情](../../../model-api-reference/vector-and-sort/general-text-vector/text-embedding-synchronous-api.md)
+    -   [批处理模型接口API详情](../../../model-api-reference/vector-and-sort/general-text-vector/text-embedding-batch-api.md)
 -   **多模态向量**
     
-    [多模态向量模型接口API详情](raw/model-api-reference/vector-and-sort/multimodal-vector/multimodal-embedding-api-reference.md)
+    [多模态向量模型接口API详情](../../../model-api-reference/vector-and-sort/multimodal-vector/multimodal-embedding-api-reference.md)
     
+
+<a id="错误码"></a>
+
+<a id="efc117f59a2gm"></a>
 
 ## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](../../../model-api-reference/preparations/error-code.md)进行解决。
+
+<a id="限流"></a>
+
+<a id="73848402f9nin"></a>
 
 ## 限流
 
-关于模型的限流条件，请参见[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)。
+关于模型的限流条件，请参见[限流](../../get-started-with-models/rate-limit.md)。
+
+<a id="模型性能-mteb-cmteb"></a>
+
+<a id="2bab6468f7h2h"></a>
 
 ## 模型性能(MTEB/CMTEB)
+
+<a id="评测基准"></a>
 
 ### 评测基准
 
@@ -1326,122 +1087,16 @@ for desc, comment in test_comments.items():
 -   **CMTEB**：中文大规模文本嵌入评测基准，专门针对中文文本的评测。
 -   分数范围0-100，数值越高代表效果越优。
 
-**模型**
-
-**MTEB**
-
-**MTEB（Retrieval task）**
-
-**CMTEB**
-
-**CMTEB (Retrieval task)**
-
-text-embedding-v1
-
-58.30
-
-45.47
-
-59.84
-
-56.59
-
-text-embedding-v2
-
-60.13
-
-49.49
-
-62.17
-
-62.78
-
-text-embedding-v3（64维度）
-
-57.40
-
-46.52
-
-59.19
-
-62.03
-
-text-embedding-v3（128维度）
-
-60.19
-
-52.51
-
-63.81
-
-68.22
-
-text-embedding-v3（256维度）
-
-61.13
-
-54.41
-
-65.92
-
-71.07
-
-text-embedding-v3（512维度）
-
-62.11
-
-54.30
-
-66.81
-
-71.88
-
-text-embedding-v3（768维度）
-
-62.43
-
-54.74
-
-67.90
-
-72.29
-
-text-embedding-v3（1024维度）
-
-63.39
-
-55.41
-
-68.92
-
-73.23
-
-text-embedding-v4（512维度）
-
-64.73
-
-56.34
-
-68.79
-
-73.33
-
-text-embedding-v4（1024维度）
-
-68.36
-
-59.30
-
-70.14
-
-73.98
-
-text-embedding-v4（2048维度）
-
-71.58
-
-61.97
-
-71.99
-
-75.01
+| 模型 | MTEB | MTEB（Retrieval task） | CMTEB | CMTEB (Retrieval task) |
+| --- | --- | --- | --- | --- |
+| text-embedding-v1 | 58.30 | 45.47 | 59.84 | 56.59 |
+| text-embedding-v2 | 60.13 | 49.49 | 62.17 | 62.78 |
+| text-embedding-v3（64维度） | 57.40 | 46.52 | 59.19 | 62.03 |
+| text-embedding-v3（128维度） | 60.19 | 52.51 | 63.81 | 68.22 |
+| text-embedding-v3（256维度） | 61.13 | 54.41 | 65.92 | 71.07 |
+| text-embedding-v3（512维度） | 62.11 | 54.30 | 66.81 | 71.88 |
+| text-embedding-v3（768维度） | 62.43 | 54.74 | 67.90 | 72.29 |
+| text-embedding-v3（1024维度） | 63.39 | 55.41 | 68.92 | 73.23 |
+| text-embedding-v4（512维度） | 64.73 | 56.34 | 68.79 | 73.33 |
+| text-embedding-v4（1024维度） | 68.36 | 59.30 | 70.14 | 73.98 |
+| text-embedding-v4（2048维度） | 71.58 | 61.97 | 71.99 | 75.01 |

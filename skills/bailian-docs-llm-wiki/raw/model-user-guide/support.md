@@ -1,5 +1,5 @@
 # 服务支持
 
--   [常见问题](raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md)
--   [相关协议](raw/model-user-guide/support/related-agreements.md)
--   [售后说明](raw/model-user-guide/support/after-sales-service-scope.md)
+-   [常见问题](support/faq-about-alibaba-cloud-model-studio.md)
+-   [相关协议](support/related-agreements.md)
+-   [售后说明](support/after-sales-service-scope.md)

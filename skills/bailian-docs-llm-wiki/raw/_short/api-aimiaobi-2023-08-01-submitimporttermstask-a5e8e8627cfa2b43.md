@@ -2,11 +2,19 @@
 
 提交导入自定义词库任务
 
+<a id="调试"></a>
+
+<a id="api-detail-23"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
 [调试](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/SubmitImportTermsTask)
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -25,137 +33,42 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-操作
+<table><thead><tr><th>操作</th><th>访问级别</th><th>资源类型</th><th>条件关键字</th><th>关联操作</th></tr></thead><tbody><tr><td>aimiaobi:SubmitImportTermsTask</td><td>none</td><td><div><div>*全部资源</div><div><code>*</code></div></div></td><td><ul>无</ul></td><td>无</td></tr></tbody></table>
 
-访问级别
+<a id="请求参数"></a>
 
-资源类型
-
-条件关键字
-
-关联操作
-
-aimiaobi:SubmitImportTermsTask
-
-none
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-36"></a>
 
 ## 请求参数
 
-名称
-
-类型
-
-必填
-
-描述
-
-示例值
-
-WorkspaceId
-
-string
-
-是
-
-阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)
-
-llm-xx
-
-FileKey
-
-string
-
-是
-
-文件 FileKey
-
-oss://default/oss-bucket-name/aimiaobi/2021/07/01/1625126400000/1.docx
-
-TermsName
-
-string
-
-否
-
-词典名称。可选。不填默认 Default
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-xx |
+| FileKey | string | 是 | 文件 FileKey | oss://default/oss-bucket-name/aimiaobi/2021/07/01/1625126400000/1.docx |
+| TermsName | string | 否 | 词典名称。可选。不填默认 Default |  |
 
 **注意** FileKey 生成方式见 通用接口-文件上传下载 GenerateUploadConfig - 生成上传配置
 
+<a id="返回参数"></a>
+
+<a id="api-detail-41"></a>
+
 ## 返回参数
 
-名称
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | Schema of Response |  |
+| RequestId | string | Id of the request | F2F366D6-E9FE-1006-BB70-2C650896AAB5 |
+| Success | boolean | 此次请求是否成功 | true |
+| Code | string | 状态码 | DataNotExists |
+| Message | string | 错误说明 | success |
+| HttpStatusCode | integer | http 状态码 | 200 |
+| Data | object | 业务数据 |  |
+| TaskId | string | 任务 ID | 3f7045e099474ba28ceca1b4eb6d6e21 |
 
-类型
+<a id="示例"></a>
 
-描述
-
-示例值
-
-object
-
-Schema of Response
-
-RequestId
-
-string
-
-Id of the request
-
-F2F366D6-E9FE-1006-BB70-2C650896AAB5
-
-Success
-
-boolean
-
-此次请求是否成功
-
-true
-
-Code
-
-string
-
-状态码
-
-DataNotExists
-
-Message
-
-string
-
-错误说明
-
-success
-
-HttpStatusCode
-
-integer
-
-http 状态码
-
-200
-
-Data
-
-object
-
-业务数据
-
-TaskId
-
-string
-
-任务 ID
-
-3f7045e099474ba28ceca1b4eb6d6e21
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -163,7 +76,9 @@ string
 
 `JSON`格式
 
-```
+<a id="code-block"></a>
+
+```text
 {
   "RequestId": "F2F366D6-E9FE-1006-BB70-2C650896AAB5",
   "Success": true,
@@ -176,20 +91,20 @@ string
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
+
 ## 错误码
 
 访问[错误中心](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/errorCode)查看更多错误码。
 
+<a id="变更历史"></a>
+
+<a id="workbench-doc-change-demo"></a>
+
 ## 变更历史
 
-变更时间
-
-变更内容概要
-
-操作
-
-2025-11-11
-
-OpenAPI 入参发生变更
-
-[查看变更详情](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/SubmitImportTermsTask?updateTime=2025-11-11#workbench-doc-change-demo)
+| 变更时间 | 变更内容概要 | 操作 |
+| --- | --- | --- |
+| 2025-11-11 | OpenAPI 入参发生变更 | [查看变更详情](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/SubmitImportTermsTask?updateTime=2025-11-11#workbench-doc-change-demo) |

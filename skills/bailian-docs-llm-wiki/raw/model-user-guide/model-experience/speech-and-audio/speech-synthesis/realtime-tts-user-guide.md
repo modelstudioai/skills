@@ -2,32 +2,56 @@
 
 了解实时语音合成的模型特性、流式调用方法和合成效果优化方式。
 
+<a id="功能介绍"></a>
+
+<a id="a5e9de808eli8"></a>
+
 ## 功能介绍
 
 实时语音合成支持分段输入文本、逐段返回音频，适合将大模型生成的文本实时转换为语音。
 
--   **多语言与方言**：根据目标语言选择模型和音色，也可通过指令指定方言。参见[方言](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#tts_rt_dialect_h3)。
--   **表现力控制**：通过自然语言指令调整语速、情感等表达，或在文本中插入情感与富语言标签。参见[指令控制](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#12884a10929p9)和[情感与富语言标签](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#rt_emtag_h3)。
--   **自定义音色**：通过[音色复刻](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-cloning-user-guide.md)从音频样本创建音色，或通过[音色设计](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-design-user-guide.md)使用文字描述创建音色。
--   **精细控制与公式朗读**：使用 [SSML 与 LaTeX](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/ssml-latex-user-guide.md)控制停顿、发音等效果，或将公式转换为语音。
--   **Markdown 过滤**：将包含表格等结构的 Markdown 文本转换成适合朗读的内容。参见[Markdown 过滤](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#tts_markdown_filter)。
+-   **多语言与方言**：根据目标语言选择模型和音色，也可通过指令指定方言。参见[方言](realtime-tts-user-guide.md#tts_rt_dialect_h3)。
+-   **表现力控制**：通过自然语言指令调整语速、情感等表达，或在文本中插入情感与富语言标签。参见[指令控制](realtime-tts-user-guide.md#12884a10929p9)和[情感与富语言标签](realtime-tts-user-guide.md#rt_emtag_h3)。
+-   **自定义音色**：通过[音色复刻](voice-customization/voice-cloning-user-guide.md)从音频样本创建音色，或通过[音色设计](voice-customization/voice-design-user-guide.md)使用文字描述创建音色。
+-   **精细控制与公式朗读**：使用 [SSML 与 LaTeX](ssml-latex-user-guide.md)控制停顿、发音等效果，或将公式转换为语音。
+-   **Markdown 过滤**：将包含表格等结构的 Markdown 文本转换成适合朗读的内容。参见[Markdown 过滤](realtime-tts-user-guide.md#tts_markdown_filter)。
 -   **音频控制**：可调节语速、语调、音量和码率，输出 PCM、WAV、MP3、Opus 等主流音频格式，最高支持 48 kHz 采样率。具体取值与支持范围以对应 API 参数说明为准。
 
-**说明**各模型及音色支持的能力有所不同，使用前请核对对应功能的支持范围。
+> **说明**
+>
+> 各模型及音色支持的能力有所不同，使用前请核对对应功能的支持范围。
+>
+> 需要通过 HTTP 一次提交完整文本时，请参见[非实时语音合成](non-realtime-tts-user-guide.md)。
 
-需要通过 HTTP 一次提交完整文本时，请参见[非实时语音合成](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/non-realtime-tts-user-guide.md)。
+<a id="开始使用"></a>
+
+<a id="db13aea91dlej"></a>
 
 ## 开始使用
 
-[安装 DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)，在控制台[获取 API Key](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key)，并配置 `DASHSCOPE_API_KEY` 环境变量。
+<a id="nrt00_prereq_h2"></a>
+
+[安装 DashScope SDK](../../../../model-api-reference/preparations/install-sdk.md)，在控制台[获取 API Key](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key)，并配置 `DASHSCOPE_API_KEY` 环境变量。
+
+<a id="sec-tabs"></a>
+
+<a id="qwen-audio-tts-推荐"></a>
+
+<a id="qwen-audio-tts-推荐-h4"></a>
 
 #### Qwen-Audio-TTS（推荐）
 
 以下使用北京地域的 qwen-audio-3.1-tts-flash 和系统音色 `longanhuan_v3.1`，分段发送文本并将返回音频保存为 `output.mp3`。
 
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-java-tab"></a>
+
 Java
 
-```
+<a id="code-code-group-java"></a>
+
+```java
 import com.alibaba.dashscope.audio.tts.SpeechSynthesisResult;
 import com.alibaba.dashscope.audio.ttsv2.SpeechSynthesisAudioFormat;
 import com.alibaba.dashscope.audio.ttsv2.SpeechSynthesisParam;
@@ -76,9 +100,13 @@ public class Main {
 }
 ```
 
+<a id="fig-code-group-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 import os
 import dashscope
 
@@ -106,13 +134,23 @@ with open("output.mp3", "wb") as audio:
             audio.write(chunk)
 ```
 
+<a id="cosyvoice"></a>
+
+<a id="cosyvoice-h4"></a>
+
 #### CosyVoice
 
 以下使用北京地域的 cosyvoice-v3-flash 和系统音色 `longanyang`，分段发送文本并将返回音频保存为 `output.mp3`。
 
+<a id="fig-code-group-2"></a>
+
+<a id="fig-code-group-2-java-tab"></a>
+
 Java
 
-```
+<a id="code-code-group-2-java"></a>
+
+```java
 import com.alibaba.dashscope.audio.tts.SpeechSynthesisResult;
 import com.alibaba.dashscope.audio.ttsv2.SpeechSynthesisAudioFormat;
 import com.alibaba.dashscope.audio.ttsv2.SpeechSynthesisParam;
@@ -161,9 +199,13 @@ public class Main {
 }
 ```
 
+<a id="fig-code-group-2-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-2-python"></a>
+
+```python
 import os
 import dashscope
 
@@ -190,45 +232,58 @@ with open("output.mp3", "wb") as audio:
             audio.write(chunk)
 ```
 
+<a id="合成效果优化"></a>
+
+<a id="rt_advanced_h2"></a>
+
+<a id="title-as9-d89-fco"></a>
+
 ## 合成效果优化
+
+<a id="语言与发音"></a>
 
 ### 语言与发音
 
 根据需要控制的内容，选择对应方式：
 
-**需求**
+| 需求 | 使用方式 |
+| --- | --- |
+| 指定合成语音的目标语言 | 使用 `language_hints` 指定整体合成语言，帮助模型按目标语言朗读数字、缩写和符号，改善小语种合成效果。 |
+| 修正特定词语的发音或替换文本 | Qwen-Audio-TTS 支持通过 `hot_fix` 为指定词语标注拼音，或在合成前替换词语。 |
+| 精细控制停顿、数字读法或字词发音 | 使用 SSML 标签标记需要控制的文本，按标签设置停顿、读法和发音等效果。 |
+| 朗读数学公式 | 使用 CosyVoice 的 LaTeX 公式朗读功能，将支持的数学公式转换为中文语音。 |
 
-**使用方式**
+参数适用模型和配置方法请参见 [Qwen-Audio-TTS API](../../../../_short/qwen-audio-tts-client-events-26c1ffacfaed1e62.md)或 [CosyVoice API](../../../../_short/cosyvoice-client-events-480a8821d2d60e18.md)；SSML 与 LaTeX 的适用模型、音色、接口及用法请参见 [SSML 与 LaTeX](ssml-latex-user-guide.md)。
 
-指定合成语音的目标语言
+> **说明**
+>
+> 使用 SSML 时，需要一次提交完整的 SSML 文本，再逐段接收音频，不支持分段输入。
 
-使用 `language_hints` 指定整体合成语言，帮助模型按目标语言朗读数字、缩写和符号，改善小语种合成效果。
+<a id="markdown-过滤"></a>
 
-修正特定词语的发音或替换文本
-
-Qwen-Audio-TTS 支持通过 `hot_fix` 为指定词语标注拼音，或在合成前替换词语。
-
-精细控制停顿、数字读法或字词发音
-
-使用 SSML 标签标记需要控制的文本，按标签设置停顿、读法和发音等效果。
-
-朗读数学公式
-
-使用 CosyVoice 的 LaTeX 公式朗读功能，将支持的数学公式转换为中文语音。
-
-参数适用模型和配置方法请参见 [Qwen-Audio-TTS API](raw/_short/qwen-audio-tts-client-events-26c1ffacfaed1e62.md)或 [CosyVoice API](raw/_short/cosyvoice-client-events-480a8821d2d60e18.md)；SSML 与 LaTeX 的适用模型、音色、接口及用法请参见 [SSML 与 LaTeX](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/ssml-latex-user-guide.md)。
-
-**说明**使用 SSML 时，需要一次提交完整的 SSML 文本，再逐段接收音频，不支持分段输入。
+<a id="tts_markdown_filter"></a>
 
 ### Markdown 过滤
 
-合成包含表格、链接等 Markdown 格式的内容时，可将 `enable_markdown_filter` 设为 `true`，让服务先将 Markdown 转换成适合朗读的文本。Qwen-Audio-TTS 和 CosyVoice 支持此功能，cosyvoice-v2 除外。配置方法参见 [Qwen-Audio-TTS API](raw/_short/qwen-audio-tts-client-events-26c1ffacfaed1e62.md) 和 [CosyVoice API](raw/_short/cosyvoice-client-events-480a8821d2d60e18.md)。
+合成包含表格、链接等 Markdown 格式的内容时，可将 `enable_markdown_filter` 设为 `true`，让服务先将 Markdown 转换成适合朗读的文本。Qwen-Audio-TTS 和 CosyVoice 支持此功能，cosyvoice-v2 除外。配置方法参见 [Qwen-Audio-TTS API](../../../../_short/qwen-audio-tts-client-events-26c1ffacfaed1e62.md) 和 [CosyVoice API](../../../../_short/cosyvoice-client-events-480a8821d2d60e18.md)。
+
+<a id="指令控制"></a>
+
+<a id="12884a10929p9"></a>
 
 ### 指令控制
 
 通过 `instruction` 参数，用自然语言说明要合成的语种，描述语速、情感或说话方式，控制合成语音的表现。
 
-**说明**如需创建具有特定性别、年龄或音色特质的新音色，或参考声音描述的编写建议与示例，请参见[音色设计](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-design-user-guide.md)。
+> **说明**
+>
+> 如需创建具有特定性别、年龄或音色特质的新音色，或参考声音描述的编写建议与示例，请参见[音色设计](voice-customization/voice-design-user-guide.md)。
+
+<a id="sec-tabs-2"></a>
+
+<a id="qwen-audio-tts"></a>
+
+<a id="qwen-audio-tts-h4"></a>
 
 #### Qwen-Audio-TTS
 
@@ -236,80 +291,66 @@ qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、q
 
 建议在 `instruction` 中说明合成语种和所需效果，以提升合成质量。指令中指定的语种须与待合成文本的语种一致。例如，合成荷兰语文本时，可设置：
 
-```
+<a id="code-block"></a>
+
+```text
 请用荷兰话说，每个字都慢慢说
 ```
 
+<a id="cosyvoice-2"></a>
+
+<a id="cosyvoice-2-h4"></a>
+
 #### CosyVoice
 
-**说明**CosyVoice 的 `instruction` 长度不能超过 100 个字符。计数时，汉字（包括简体、繁体汉字、日文汉字和韩文汉字）按 2 个字符计算，其他字符（包括标点符号、字母、数字、假名和谚文）按 1 个字符计算。
+> **说明**
+>
+> CosyVoice 的 `instruction` 长度不能超过 100 个字符。计数时，汉字（包括简体、繁体汉字、日文汉字和韩文汉字）按 2 个字符计算，其他字符（包括标点符号、字母、数字、假名和谚文）按 1 个字符计算。
 
-**模型**
+<table><thead><tr><th><strong>模型</strong></th><th><strong>可使用的音色</strong></th><th><strong>指令要求</strong></th><th><strong>指令文本语言</strong></th></tr></thead><tbody><tr><td><p>cosyvoice-v3.5-plus、cosyvoice-v3.5-flash</p></td><td><p>复刻音色、设计音色</p><p>无系统音色。</p></td><td><p>自然语言指令。</p></td><td><p>中文、英文、法语、德语、日语、韩语、俄语、葡萄牙语、泰语、印尼语、越南语。</p></td></tr><tr><td><p>cosyvoice-v3-plus</p></td><td><p>系统音色</p></td><td><p>按<a href="tts-voice-list/cosyvoice-voice-list.md">音色列表</a>中的固定格式和内容填写。</p><p>复刻音色、设计音色不支持指令控制。</p></td><td><p>按<a href="tts-voice-list/cosyvoice-voice-list.md">音色列表</a>指定的语言填写。</p></td></tr><tr><td rowspan="2"><p>cosyvoice-v3-flash</p></td><td><p>系统音色</p></td><td><p>按<a href="tts-voice-list/cosyvoice-voice-list.md">音色列表</a>中的固定格式和内容填写。</p></td><td><p>中文。</p></td></tr><tr><td><p>复刻音色、设计音色</p></td><td><p>自然语言指令。</p></td><td><p>中文、英文、法语、德语、日语、韩语、俄语。</p></td></tr></tbody></table>
 
-**可使用的音色**
+<a id="方言"></a>
 
-**指令要求**
-
-**指令文本语言**
-
-cosyvoice-v3.5-plus、cosyvoice-v3.5-flash
-
-复刻音色、设计音色
-
-无系统音色。
-
-自然语言指令。
-
-中文、英文、法语、德语、日语、韩语、俄语、葡萄牙语、泰语、印尼语、越南语。
-
-cosyvoice-v3-plus
-
-系统音色
-
-按[音色列表](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/tts-voice-list/cosyvoice-voice-list.md)中的固定格式和内容填写。
-
-复刻音色、设计音色不支持指令控制。
-
-按[音色列表](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/tts-voice-list/cosyvoice-voice-list.md)指定的语言填写。
-
-cosyvoice-v3-flash
-
-系统音色
-
-按[音色列表](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/tts-voice-list/cosyvoice-voice-list.md)中的固定格式和内容填写。
-
-中文。
-
-复刻音色、设计音色
-
-自然语言指令。
-
-中文、英文、法语、德语、日语、韩语、俄语。
+<a id="tts_rt_dialect_h3"></a>
 
 ### 方言
 
 通过方言功能，可将文本合成为河南话、四川话等中文方言语音。方言的选择方式取决于模型和音色类型。
 
+<a id="sec-tabs-3"></a>
+
+<a id="qwen-audio-tts-2"></a>
+
+<a id="qwen-audio-tts-2-h4"></a>
+
 #### Qwen-Audio-TTS
 
--   **系统音色**：从 [Qwen-Audio-TTS 音色列表](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/tts-voice-list/qwen-audio-tts-voice-list.md)中选择支持目标方言的音色。直接支持该方言的音色无需额外设置；支持方言指令的音色使用指令控制参数 `instruction` 指定。
+-   **系统音色**：从 [Qwen-Audio-TTS 音色列表](tts-voice-list/qwen-audio-tts-voice-list.md)中选择支持目标方言的音色。直接支持该方言的音色无需额外设置；支持方言指令的音色使用指令控制参数 `instruction` 指定。
     
-    **说明**使用 qwen-audio-3.1-tts-flash 的多语种与方言音色时，也可通过 `language_hints` 指定方言，参见[多语种与方言音色的设置方法](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list#qwen-tts31-language-hints)。
+    > **说明**
+    >
+    > 使用 qwen-audio-3.1-tts-flash 的多语种与方言音色时，也可通过 `language_hints` 指定方言，参见[多语种与方言音色的设置方法](tts-voice-list/qwen-audio-tts-voice-list.md#qwen-tts31-language-hints)。
     
 -   **复刻音色**：通过指令控制参数 `instruction` 指定方言。
     
 
 对于支持方言指令的音色，在初始化 `SpeechSynthesizer` 时传入 `instruction="请讲上海话。"`，可将中文文本合成为上海话。
 
+<a id="cosyvoice-3"></a>
+
+<a id="cosyvoice-3-h4"></a>
+
 #### CosyVoice
 
--   **系统音色**：选择直接支持目标方言的音色，例如 `longshange_v3`；或选择支持方言指令的音色，例如 `longanhuan_v3`，按[音色列表](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/tts-voice-list/cosyvoice-voice-list.md)的格式填写指令。
+-   **系统音色**：选择直接支持目标方言的音色，例如 `longshange_v3`；或选择支持方言指令的音色，例如 `longanhuan_v3`，按[音色列表](tts-voice-list/cosyvoice-voice-list.md)的格式填写指令。
 -   **复刻音色**：使用支持指令控制的模型，通过 `instruction` 指定方言。
 -   **设计音色**：暂不支持方言。
 
 使用 CosyVoice 的 Python 开始使用示例时，将初始化与文本发送部分替换为以下内容，可使用 `longanhuan_v3` 输出河南话：
 
-```
+<a id="code-block-2"></a>
+
+```python
 with client.audio.tts.connect(
     model="cosyvoice-v3-flash",
     voice="longanhuan_v3",
@@ -321,206 +362,170 @@ with client.audio.tts.connect(
     session.flush()
 ```
 
-使用 Qwen3-TTS 时，请从 [Qwen3-TTS 音色列表](https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list#0ad0bfdd635ar)中选择支持目标方言的音色。
+使用 Qwen3-TTS 时，请从 [Qwen3-TTS 音色列表](tts-voice-list/qwen-tts-voice-list.md#0ad0bfdd635ar)中选择支持目标方言的音色。
+
+<a id="情感与富语言标签"></a>
+
+<a id="rt_emtag_h3"></a>
 
 ### 情感与富语言标签
 
-**说明**适用于 qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus 和 qwen-audio-3.0-tts-flash。
+> **说明**
+>
+> 适用于 qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus 和 qwen-audio-3.0-tts-flash。
 
 情感与富语言标签可控制语音的情感和风格，并在指定位置加入笑声、叹息等拟声效果。将标签直接写入待合成文本 `text`，无需额外参数。
+
+<a id="使用示例"></a>
 
 #### 使用示例
 
 以下文本先使用兴奋语气，在指定位置插入笑声后继续合成正文：
 
-```
+<a id="code-block-3"></a>
+
+```text
 [excited]今天的天气真不错！[laughing]我们一起出去玩吧！
 ```
 
 以下文本在第二句切换为兴奋语气：
 
-```
+<a id="code-block-4"></a>
+
+```text
 [serious]请注意安全事项。[excited]好了，现在让我们开始吧！
 ```
 
+<a id="支持标签"></a>
+
 #### 支持标签
+
+<a id="sec-tabs-4"></a>
+
+<a id="控制类标签"></a>
+
+<a id="控制类标签-h4"></a>
 
 #### 控制类标签
 
 控制类标签设置后续文本的情感或风格，直到出现下一个控制类标签；长句被自动切分时，作用范围以切分后的文本为界。
 
-**标签**
+| 标签 | 说明 |
+| --- | --- |
+| `[sad]` | 悲伤 |
+| `[amazed]` | 惊叹 |
+| `[deep and loud shouting]` | 深沉大声呐喊 |
+| `[trembling]` | 颤抖 |
+| `[angry]` | 愤怒 |
+| `[excited]` | 兴奋 |
+| `[sarcastic]` | 讽刺 |
+| `[curious]` | 好奇 |
+| `[like dracula]` | 吸血鬼语气 |
+| `[bored]` | 无聊 |
+| `[tired]` | 疲倦 |
+| `[scornful]` | 轻蔑 |
+| `[shouting]` | 大喊 |
+| `[asmr]` | ASMR 轻声 |
+| `[panicked]` | 惊慌 |
+| `[mischievously]` | 调皮 |
+| `[empathetic]` | 共情 |
+| `[whispers]` | 低声耳语 |
+| `[reluctantly]` | 不情愿 |
+| `[crying]` | 哭泣 |
+| `[serious]` | 严肃 |
+| `[very slowly]` | 非常缓慢 |
+| `[very fast]` | 非常快速 |
 
-**说明**
+<a id="富语言类标签"></a>
 
-`[sad]`
-
-悲伤
-
-`[amazed]`
-
-惊叹
-
-`[deep and loud shouting]`
-
-深沉大声呐喊
-
-`[trembling]`
-
-颤抖
-
-`[angry]`
-
-愤怒
-
-`[excited]`
-
-兴奋
-
-`[sarcastic]`
-
-讽刺
-
-`[curious]`
-
-好奇
-
-`[like dracula]`
-
-吸血鬼语气
-
-`[bored]`
-
-无聊
-
-`[tired]`
-
-疲倦
-
-`[scornful]`
-
-轻蔑
-
-`[shouting]`
-
-大喊
-
-`[asmr]`
-
-ASMR 轻声
-
-`[panicked]`
-
-惊慌
-
-`[mischievously]`
-
-调皮
-
-`[empathetic]`
-
-共情
-
-`[whispers]`
-
-低声耳语
-
-`[reluctantly]`
-
-不情愿
-
-`[crying]`
-
-哭泣
-
-`[serious]`
-
-严肃
-
-`[very slowly]`
-
-非常缓慢
-
-`[very fast]`
-
-非常快速
+<a id="富语言类标签-h4"></a>
 
 #### 富语言类标签
 
 富语言类标签在当前位置插入拟声效果，不改变前后文本的情感风格。
 
-**标签**
+| 标签 | 说明 |
+| --- | --- |
+| `[gasp]` | 倒吸气 |
+| `[sighing]` | 叹息 |
+| `[clears throat]` | 清嗓 |
+| `[giggles]` | 咯咯笑 |
+| `[laughing]` | 大笑 |
+| `[cough]` | 咳嗽 |
+| `[snorts]` | 哼声、嗤笑 |
 
-**说明**
+<a id="应用于生产环境"></a>
 
-`[gasp]`
-
-倒吸气
-
-`[sighing]`
-
-叹息
-
-`[clears throat]`
-
-清嗓
-
-`[giggles]`
-
-咯咯笑
-
-`[laughing]`
-
-大笑
-
-`[cough]`
-
-咳嗽
-
-`[snorts]`
-
-哼声、嗤笑
+<a id="rt_production_h2"></a>
 
 ## 应用于生产环境
 
-文本发送、音频播放、连接复用、并发管理和性能排查，请参见[语音合成最佳实践](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/tts-high-concurrency-best-practices.md)。请求频率和并发数应遵循对应模型的[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)。
+<a id="websocket-连接复用"></a>
+
+<a id="为什么语音合成的实际时长与-wav-文件显示的时长不一致"></a>
+
+<a id="为什么音频播放卡顿"></a>
+
+<a id="为什么音频无法播放"></a>
+
+<a id="模型限流"></a>
+
+<a id="语音合成耗时较长是什么原因"></a>
+
+<a id="高并发最佳实践"></a>
+
+<a id="ug_ws_reuse_h3"></a>
+
+<a id="rt_ratelimit_h3"></a>
+
+<a id="ug_hc_h3"></a>
+
+<a id="ug_faq_wav_time"></a>
+
+<a id="ug_faq_no_play"></a>
+
+<a id="ug_faq_stutter"></a>
+
+<a id="ug_faq_slow"></a>
+
+文本发送、音频播放、连接复用、并发管理和性能排查，请参见[语音合成最佳实践](tts-high-concurrency-best-practices.md)。请求频率和并发数应遵循对应模型的[限流](../../../get-started-with-models/rate-limit.md)。
+
+<a id="取消任务"></a>
+
+<a id="rt_cancel_h3"></a>
 
 ### 取消任务
 
 使用 Qwen-Audio-TTS 或 CosyVoice 模型时，如需中断当前轮次合成，可发送取消指令。服务端会结束当前任务并返回 `task-finished`。
 
-**调用方式**
+| 调用方式 | 版本要求 | 使用方法 |
+| --- | --- | --- |
+| Python SDK | 2.0.1 及以上版本 | 调用会话对象的 `session.cancel()`（`client.audio.tts.connect` 返回的会话）。 |
+| Java SDK | 2.22.26 及以上版本 | 调用 `SpeechSynthesizer.streamingCancel()`。 |
+| WebSocket 原始协议 | 无需 SDK | 发送 `finish-task` 事件，并在 `input` 中设置 `directive=cancel`。 |
 
-**版本要求**
+<a id="支持模型"></a>
 
-**使用方法**
-
-Python SDK
-
-2.0.1 及以上版本
-
-调用会话对象的 `session.cancel()`（`client.audio.tts.connect` 返回的会话）。
-
-Java SDK
-
-2.22.26 及以上版本
-
-调用 `SpeechSynthesizer.streamingCancel()`。
-
-WebSocket 原始协议
-
-无需 SDK
-
-发送 `finish-task` 事件，并在 `input` 中设置 `directive=cancel`。
+<a id="4a43cc1bb7kxg"></a>
 
 ## 支持模型
+
+<a id="sec-tabs-5"></a>
+
+<a id="华北2-北京"></a>
+
+<a id="华北2-北京-h4"></a>
 
 #### 华北2（北京）
 
 -   **Qwen-Audio-TTS**：qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash
 -   **CosyVoice**：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-plus、cosyvoice-v3-flash、cosyvoice-v2
 -   **Qwen3-TTS**：qwen3-tts-flash-realtime
--   **Sambert**：sambert-zhinan-v1、sambert-zhiqi-v1、sambert-zhichu-v1、sambert-zhide-v1、sambert-zhijia-v1、sambert-zhiru-v1、sambert-zhiqian-v1、sambert-zhixiang-v1、sambert-zhiwei-v1、sambert-zhihao-v1、sambert-zhijing-v1、sambert-zhiming-v1、sambert-zhimo-v1、sambert-zhina-v1、sambert-zhishu-v1、sambert-zhistella-v1、sambert-zhiting-v1、sambert-zhixiao-v1、sambert-zhiya-v1、sambert-zhiye-v1、sambert-zhiying-v1、sambert-zhiyuan-v1、sambert-zhiyue-v1、sambert-zhigui-v1、sambert-zhishuo-v1、sambert-zhimiao-emo-v1、sambert-zhimao-v1、sambert-zhilun-v1、sambert-zhifei-v1、sambert-zhida-v1、sambert-camila-v1、sambert-perla-v1、sambert-indah-v1、sambert-clara-v1、sambert-hanna-v1、sambert-beth-v1、sambert-betty-v1、sambert-cally-v1、sambert-cindy-v1、sambert-eva-v1、sambert-donna-v1、sambert-brian-v1、sambert-waan-v1，请参见[Sambert模型列表](https://help.aliyun.com/zh/model-studio/sambert-java-sdk#57d33631f7doi)
+-   **Sambert**：sambert-zhinan-v1、sambert-zhiqi-v1、sambert-zhichu-v1、sambert-zhide-v1、sambert-zhijia-v1、sambert-zhiru-v1、sambert-zhiqian-v1、sambert-zhixiang-v1、sambert-zhiwei-v1、sambert-zhihao-v1、sambert-zhijing-v1、sambert-zhiming-v1、sambert-zhimo-v1、sambert-zhina-v1、sambert-zhishu-v1、sambert-zhistella-v1、sambert-zhiting-v1、sambert-zhixiao-v1、sambert-zhiya-v1、sambert-zhiye-v1、sambert-zhiying-v1、sambert-zhiyuan-v1、sambert-zhiyue-v1、sambert-zhigui-v1、sambert-zhishuo-v1、sambert-zhimiao-emo-v1、sambert-zhimao-v1、sambert-zhilun-v1、sambert-zhifei-v1、sambert-zhida-v1、sambert-camila-v1、sambert-perla-v1、sambert-indah-v1、sambert-clara-v1、sambert-hanna-v1、sambert-beth-v1、sambert-betty-v1、sambert-cally-v1、sambert-cindy-v1、sambert-eva-v1、sambert-donna-v1、sambert-brian-v1、sambert-waan-v1，请参见[Sambert模型列表](../../../../_short/sambert-java-sdk-79ed7a3fed2f3f90.md#57d33631f7doi)
+
+<a id="新加坡"></a>
+
+<a id="新加坡-h4"></a>
 
 #### 新加坡
 
@@ -528,29 +533,61 @@ WebSocket 原始协议
 -   **CosyVoice**：cosyvoice-v3-plus、cosyvoice-v3-flash
 -   **Qwen3-TTS**：qwen3-tts-flash-realtime
 
-系统音色与试听分别参见 [Qwen-Audio-TTS](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/tts-voice-list/qwen-audio-tts-voice-list.md)、[CosyVoice](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/tts-voice-list/cosyvoice-voice-list.md)、[Qwen3-TTS](https://help.aliyun.com/zh/model-studio/qwen-tts-voice-list#0ad0bfdd635ar) 和 [Sambert](https://help.aliyun.com/zh/model-studio/sambert-java-sdk#57d33631f7doi) 音色列表。使用复刻或设计音色时，合成模型须与创建音色时指定的目标模型一致。
+<a id="bac280ddf5a1u"></a>
+
+系统音色与试听分别参见 [Qwen-Audio-TTS](tts-voice-list/qwen-audio-tts-voice-list.md)、[CosyVoice](tts-voice-list/cosyvoice-voice-list.md)、[Qwen3-TTS](tts-voice-list/qwen-tts-voice-list.md#0ad0bfdd635ar) 和 [Sambert](../../../../_short/sambert-java-sdk-79ed7a3fed2f3f90.md#57d33631f7doi) 音色列表。使用复刻或设计音色时，合成模型须与创建音色时指定的目标模型一致。
+
+<a id="api-参考"></a>
+
+<a id="e52d8b91d3qsk"></a>
 
 ## API 参考
 
-对延迟和弱网下音频传输稳定性要求较高的移动端应用，可使用 AOQ 协议。AOQ 的接入方式，以及 AOQ、WebRTC 和 WebSocket 的差异与模型支持范围，请参见 [Realtime API 概述](raw/model-api-reference/realtime-api-directory/realtime-api-overview.md)。
+对延迟和弱网下音频传输稳定性要求较高的移动端应用，可使用 AOQ 协议。AOQ 的接入方式，以及 AOQ、WebRTC 和 WebSocket 的差异与模型支持范围，请参见 [Realtime API 概述](../../../../model-api-reference/realtime-api-directory/realtime-api-overview.md)。
 
--   [Qwen-Audio-TTS API 参考](raw/model-api-reference/realtime-api-directory/realtime-tts-model-apis/qwen-audio-tts-api.md)
--   [CosyVoice API 参考](raw/model-api-reference/realtime-api-directory/realtime-tts-model-apis/cosyvoice-large-model-for-speech-synthesis.md)
--   [Qwen3-TTS API 参考](raw/_short/qwen-tts-realtime-api-reference-d4cd30fb5f0577aa.md)
--   [Sambert API 参考](raw/_short/sambert-speech-synthesis-32c5c56b36543707.md)
+<a id="ug_ws_direct_h3"></a>
+
+-   [Qwen-Audio-TTS API 参考](../../../../model-api-reference/realtime-api-directory/realtime-tts-model-apis/qwen-audio-tts-api.md)
+-   [CosyVoice API 参考](../../../../model-api-reference/realtime-api-directory/realtime-tts-model-apis/cosyvoice-large-model-for-speech-synthesis.md)
+-   [Qwen3-TTS API 参考](../../../../_short/qwen-tts-realtime-api-reference-d4cd30fb5f0577aa.md)
+-   [Sambert API 参考](../../../../_short/sambert-speech-synthesis-32c5c56b36543707.md)
+
+<a id="常见问题"></a>
+
+<a id="58d835e2e4og5"></a>
 
 ## 常见问题
 
+<a id="使用复刻音色生成的音频无声音如何排查"></a>
+
+<a id="eda5a6a3e527n"></a>
+
+<a id="ba62afce0c4y0"></a>
+
+<a id="如何限制-api-key-仅用于语音合成服务-权限隔离"></a>
+
+<a id="ug_faq_apikey"></a>
+
+<a id="子业务空间的-api-key-能否调用-qwen-audio-tts-cosyvoice-模型"></a>
+
+<a id="ug_faq_sub_biz"></a>
+
+<a id="accordion-使用复刻音色生成的音频无声音如何排查-2"></a>
+
 使用复刻音色生成的音频无声音如何排查？
 
-确认 `voice` 为创建成功的音色 ID，创建音色时的 `target_model` 与合成时的 `model` 一致。音色状态、源音频要求及质量建议请参见[音色复刻](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-cloning-user-guide.md)。
+确认 `voice` 为创建成功的音色 ID，创建音色时的 `target_model` 与合成时的 `model` 一致。音色状态、源音频要求及质量建议请参见[音色复刻](voice-customization/voice-cloning-user-guide.md)。
+
+<a id="accordion-如何限制-api-key-仅用于语音合成服务-权限隔离-2"></a>
 
 如何限制 API Key 仅用于语音合成服务（权限隔离）？
 
-通过新建业务空间并仅授权特定模型，可限制 API Key 的使用范围。请参见[业务空间管理](https://help.aliyun.com/zh/model-studio/permission-management-overview#dac6676deelh2)。
+通过新建业务空间并仅授权特定模型，可限制 API Key 的使用范围。请参见[业务空间管理](../../../security-and-compliance/permission-management-overview.md#dac6676deelh2)。
+
+<a id="accordion-子业务空间的-api-key-能否调用-qwen-audio-tts-cosyvoice-模型-2"></a>
 
 子业务空间的 API Key 能否调用 Qwen-Audio-TTS/CosyVoice 模型？
 
 默认业务空间下，所有模型均可调用。
 
-子业务空间下，需要为 API Key 对应的子业务空间进行[模型授权](https://help.aliyun.com/zh/model-studio/permission-management-overview#f642213a1f38l)。请参见[子业务空间的模型调用](raw/model-api-reference/more-about-models/model-calling-in-sub-workspace.md)。
+子业务空间下，需要为 API Key 对应的子业务空间进行[模型授权](../../../security-and-compliance/permission-management-overview.md#f642213a1f38l)。请参见[子业务空间的模型调用](../../../../model-api-reference/more-about-models/model-calling-in-sub-workspace.md)。

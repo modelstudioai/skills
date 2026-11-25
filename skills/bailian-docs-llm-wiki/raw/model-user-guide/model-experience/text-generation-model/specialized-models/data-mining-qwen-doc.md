@@ -2,67 +2,38 @@
 
 数据挖掘模型专门针对信息抽取、内容审核、分类打标和摘要生成任务进行设计。相比通用对话模型，该模型能够快速且精确地输出规范的结构化数据（如JSON格式），解决通用对话模型返回不规范回复结构或提取信息不够准确的问题。 此外，该模型还支持基于文档内容生成PPT，提供模板模式和创意模式两种方式。
 
-**说明**本文档仅适用于华北2（北京）地域。如需使用模型，需使用华北2（北京）地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)。
+> **说明**
+>
+> 本文档仅适用于华北2（北京）地域。如需使用模型，需使用华北2（北京）地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)。
+
+<a id="使用方式"></a>
+
+<a id="a88486d062d1c"></a>
 
 ## 使用方式
 
-Qwen-Doc-Turbo 支持通过以下三种方式从文件中提取信息，具体文件大小与类型限制请参考[限制](https://help.aliyun.com/zh/model-studio/data-mining-qwen-doc#4798ba361eox3)：
+Qwen-Doc-Turbo 支持通过以下三种方式从文件中提取信息，具体文件大小与类型限制请参考[限制](data-mining-qwen-doc.md#4798ba361eox3)：
 
-**特性**
+| 特性 | 文件URL (推荐) | 文件ID | 纯文本 |
+| --- | --- | --- | --- |
+| **文件来源** | 公网 URL | 本地文件 (需先上传) | 字符串传入 |
+| **输入长度限制** | 最多10个文件<br>支持大文件 (最大输入253k Token) | 1个文件<br>支持大文件 (最大输入253k Token) | 9,000 Token以内 |
+| **SDK 兼容性** | 仅限 `DashScope` | 上传: `OpenAI`<br>调用: `OpenAI` 和 `DashScope` | `OpenAI` 和 `DashScope` |
+| **核心优点** | 无需上传至百炼，支持指定文件的解析方式 | 避免重复上传，适合复用 | 无需文件管理 |
+| **PPT生成** | 仅创意模式支持（1个文件） | 仅创意模式支持（1个文件） | 创意和模板模式均支持 |
 
-**文件URL (推荐)**
+<a id="前提条件"></a>
 
-**文件ID**
-
-**纯文本**
-
-**文件来源**
-
-公网 URL
-
-本地文件 (需先上传)
-
-字符串传入
-
-**输入长度限制**
-
-最多10个文件  
-支持大文件 (最大输入253k Token)  
-
-1个文件  
-支持大文件 (最大输入253k Token)  
-
-9,000 Token以内
-
-**SDK 兼容性**
-
-仅限 `DashScope`
-
-上传: `OpenAI`  
-调用: `OpenAI` 和 `DashScope`  
-
-`OpenAI` 和 `DashScope`
-
-**核心优点**
-
-无需上传至百炼，支持指定文件的解析方式
-
-避免重复上传，适合复用
-
-无需文件管理
-
-**PPT生成**
-
-仅创意模式支持（1个文件）
-
-仅创意模式支持（1个文件）
-
-创意和模板模式均支持
+<a id="2d555a4dd61ev"></a>
 
 ## 前提条件
 
--   已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)，并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
--   如果通过SDK调用，还需要安装[OpenAI SDK](raw/model-api-reference/preparations/install-sdk.md)或[DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
+-   已[获取与配置 API Key](../../../../model-api-reference/preparations/get-api-key.md)，并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
+-   如果通过SDK调用，还需要安装[OpenAI SDK](../../../../model-api-reference/preparations/install-sdk.md)或[DashScope SDK](../../../../model-api-reference/preparations/install-sdk.md)。
+
+<a id="通过文件url传入"></a>
+
+<a id="eeb6290cabqgg"></a>
 
 ## 通过文件URL传入
 
@@ -70,9 +41,15 @@ Qwen-Doc-Turbo 支持通过以下三种方式从文件中提取信息，具体�
 
 > 文件URL方式当前仅支持DashScope协议，可以选择使用DashScope Python SDK或者HTTP方式调用（如curl）
 
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 import os
 import dashscope
 
@@ -115,9 +92,13 @@ except Exception as e:
     print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
+<a id="fig-code-group-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-bash"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer $DASHSCOPE_API_KEY' \
@@ -152,19 +133,26 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
+<a id="accordion-响应示例"></a>
+
 响应示例
 
-模型返回的 `response.output.choices[0].message.content` 字段可能包含 Markdown 代码块标记（如 ` ```json ` 和 ` ``` ` 包裹）。在使用 `json.loads()` 解析前，需先去除 Markdown 标记。示例处理方式：
+模型返回的 `response.output.choices[0].message.content` 字段可能包含 Markdown 代码块标记（如 ```` ```json ```` 和 ```` ``` ```` 包裹）。在使用 `json.loads()` 解析前，需先去除 Markdown 标记。示例处理方式：
 
-```
+<a id="code-block"></a>
+
+````python
 content = response.output.choices[0].message.content
 # 去除可能的 markdown 代码块标记
 if content.startswith("```"):
     lines = content.split("\n")
     content = "\n".join(lines[1:-1])  # 去掉首尾的 ``` 行
 data = json.loads(content)
-```
-```
+````
+
+<a id="code-block-2"></a>
+
+```json
 [
   {
     "model": "PRO-100",
@@ -190,15 +178,29 @@ data = json.loads(content)
 ]
 ```
 
+<a id="通过文件id传入"></a>
+
+<a id="2f84224814ytl"></a>
+
 ## 通过文件ID传入
+
+<a id="上传文件"></a>
+
+<a id="d0e6237e75mu6"></a>
 
 ### 上传文件
 
-在运行以下代码前，请先点击[示例产品手册A](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20251107/jockge/%E7%A4%BA%E4%BE%8B%E4%BA%A7%E5%93%81%E6%89%8B%E5%86%8CA.docx)下载文件，并将其放置在项目代码所在的目录中。通过OpenAI兼容接口上传到阿里云百炼平台的安全存储空间，获取返回的`file-id`。有关文件上传接口的详细参数解释及调用方式，请参考[API文档](raw/model-api-reference/toolkits-and-frameworks/openai-file-interface.md)页面进行了解。
+在运行以下代码前，请先点击[示例产品手册A](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20251107/jockge/%E7%A4%BA%E4%BE%8B%E4%BA%A7%E5%93%81%E6%89%8B%E5%86%8CA.docx)下载文件，并将其放置在项目代码所在的目录中。通过OpenAI兼容接口上传到阿里云百炼平台的安全存储空间，获取返回的`file-id`。有关文件上传接口的详细参数解释及调用方式，请参考[API文档](../../../../model-api-reference/toolkits-and-frameworks/openai-file-interface.md)页面进行了解。
+
+<a id="fig-code-group-2"></a>
+
+<a id="fig-code-group-2-python-tab"></a>
 
 Python
 
-```
+<a id="code-code-group-2-python"></a>
+
+```python
 import os
 from pathlib import Path
 from openai import OpenAI
@@ -214,9 +216,13 @@ file_object = client.files.create(file=Path("示例产品手册A.docx"), purpose
 print(file_object.id)
 ```
 
+<a id="fig-code-group-2-java-tab"></a>
+
 Java
 
-```
+<a id="code-code-group-2-java"></a>
+
+```java
 import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
 import com.openai.models.files.*;
@@ -247,9 +253,13 @@ public class Main {
 }
 ```
 
+<a id="fig-code-group-2-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-2-curl"></a>
+
+```bash
 curl --location --request POST 'https://dashscope.aliyuncs.com/compatible-mode/v1/files' \
   --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
   --form 'file=@"示例产品手册A.docx"' \
@@ -258,13 +268,23 @@ curl --location --request POST 'https://dashscope.aliyuncs.com/compatible-mode/v
 
 运行以上代码，您可以得到本次上传文件对应的`file-id`。
 
+<a id="通过文件id传入信息并对话"></a>
+
+<a id="1e35988bf3mqe"></a>
+
 ### 通过文件ID传入信息并对话
 
 将获取的 `file-id` 嵌入到System Message 中。第一条System Message用于设定角色向模型提问，后续的System Message用于传入 `file-id`，User Message包含针对文件的具体问题。
 
+<a id="fig-code-group-3"></a>
+
+<a id="fig-code-group-3-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-3-python"></a>
+
+```python
 import os
 from openai import OpenAI, BadRequestError
 
@@ -301,9 +321,13 @@ except BadRequestError as e:
     print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
+<a id="fig-code-group-3-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-3-java"></a>
+
+```java
 import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
 import com.openai.core.http.StreamResponse;
@@ -342,9 +366,13 @@ public class Main {
 }
 ```
 
+<a id="fig-code-group-3-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-3-bash"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header "Content-Type: application/json" \
@@ -362,11 +390,19 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 }'
 ```
 
+<a id="accordion-完整示例-上传文件并调用模型"></a>
+
 完整示例：上传文件并调用模型
+
+<a id="fig-code-group-4"></a>
+
+<a id="fig-code-group-4-python-tab"></a>
 
 python
 
-```
+<a id="code-code-group-4-python"></a>
+
+```python
 import os
 import time
 from pathlib import Path
@@ -431,9 +467,13 @@ except Exception as e:
     print(f"发生错误：{e}")
 ```
 
+<a id="fig-code-group-4-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-4-java"></a>
+
+```java
 import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
 import com.openai.core.http.StreamResponse;
@@ -515,19 +555,26 @@ public class Main {
 }
 ```
 
+<a id="accordion-响应示例-2"></a>
+
 响应示例
 
-模型返回的内容（Python 示例中流式拼接后的 `full_content` 变量）可能包含 Markdown 代码块标记（如 ` ```json ` 和 ` ``` ` 包裹）。在使用 `json.loads()` 解析前，需先去除 Markdown 标记。示例处理方式：
+模型返回的内容（Python 示例中流式拼接后的 `full_content` 变量）可能包含 Markdown 代码块标记（如 ```` ```json ```` 和 ```` ``` ```` 包裹）。在使用 `json.loads()` 解析前，需先去除 Markdown 标记。示例处理方式：
 
-```
+<a id="code-block-3"></a>
+
+````python
 content = full_content
 # 去除可能的 markdown 代码块标记
 if content.startswith("```"):
     lines = content.split("\n")
     content = "\n".join(lines[1:-1])  # 去掉首尾的 ``` 行
 data = json.loads(content)
-```
-```
+````
+
+<a id="code-block-4"></a>
+
+```json
 [
   {
     "model": "PRO-100",
@@ -553,15 +600,25 @@ data = json.loads(content)
 ]
 ```
 
+<a id="通过纯文本传入"></a>
+
+<a id="5e5ece4be56s3"></a>
+
 ## 通过纯文本传入
 
 除了通过 `file-id` 传入文件信息外，您还可以直接使用字符串传入文件内容。在此方法下，为避免模型混淆角色设定与文件内容，请确保在 `messages` 的第一条消息中添加用于角色设定的信息。
 
 > 受限于API调用请求体大小，如果您的文本内容长度超过9,000Token，请通过文件URL或文件ID传入信息对话。
 
+<a id="fig-code-group-5"></a>
+
+<a id="fig-code-group-5-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-5-python"></a>
+
+```python
 import os
 from openai import OpenAI, BadRequestError
 
@@ -597,9 +654,13 @@ except BadRequestError as e:
     print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
+<a id="fig-code-group-5-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-5-java"></a>
+
+```java
 import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
 import com.openai.core.http.StreamResponse;
@@ -637,9 +698,13 @@ public class Main {
 }
 ```
 
+<a id="fig-code-group-5-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-5-bash"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header "Content-Type: application/json" \
@@ -657,19 +722,26 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 }'
 ```
 
+<a id="accordion-响应示例-3"></a>
+
 响应示例
 
-模型返回的内容（Python 示例中流式拼接后的 `full_content` 变量）可能包含 Markdown 代码块标记（如 ` ```json ` 和 ` ``` ` 包裹）。在使用 `json.loads()` 解析前，需先去除 Markdown 标记。示例处理方式：
+模型返回的内容（Python 示例中流式拼接后的 `full_content` 变量）可能包含 Markdown 代码块标记（如 ```` ```json ```` 和 ```` ``` ```` 包裹）。在使用 `json.loads()` 解析前，需先去除 Markdown 标记。示例处理方式：
 
-```
+<a id="code-block-5"></a>
+
+````python
 content = full_content
 # 去除可能的 markdown 代码块标记
 if content.startswith("```"):
     lines = content.split("\n")
     content = "\n".join(lines[1:-1])  # 去掉首尾的 ``` 行
 data = json.loads(content)
-```
-```
+````
+
+<a id="code-block-6"></a>
+
+```json
 [
   {
     "model": "PRO-100",
@@ -695,6 +767,10 @@ data = json.loads(content)
 ]
 ```
 
+<a id="生成ppt"></a>
+
+<a id="f6a7b8c9d0pp1"></a>
+
 ## 生成PPT
 
 Qwen-Doc-Turbo支持基于文档内容生成PPT，提供以下两种模式：
@@ -708,7 +784,15 @@ Qwen-Doc-Turbo支持基于文档内容生成PPT，提供以下两种模式：
     支持system message、doc\_url和file\_id三种输入方式，每次仅支持传入单个文档。
     
 
-**说明**PPT生成功能仅在流式输出时有效，非流式调用会报错 `The parameter skill is only supported in stream mode`。
+> **说明**
+>
+> PPT生成功能仅在流式输出时有效，非流式调用会报错 `The parameter skill is only supported in stream mode`。
+
+<a id="sec-tabs"></a>
+
+<a id="模板模式"></a>
+
+<a id="模板模式-h4"></a>
 
 #### 模板模式
 
@@ -721,11 +805,23 @@ Qwen-Doc-Turbo支持基于文档内容生成PPT，提供以下两种模式：
 
 通过`skill`指定`type`为`ppt`和`template_id`。模板模式支持OpenAI兼容和DashScope两种SDK。
 
+<a id="sec-tabs-2"></a>
+
+<a id="openai兼容"></a>
+
+<a id="openai兼容-h4"></a>
+
 #### OpenAI兼容
+
+<a id="fig-code-group-6"></a>
+
+<a id="fig-code-group-6-python-tab"></a>
 
 python
 
-```
+<a id="code-code-group-6-python"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -752,9 +848,13 @@ for chunk in completion:
         print(chunk.choices[0].delta.content, end='', flush=True)
 ```
 
+<a id="fig-code-group-6-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-6-bash"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header "Content-Type: application/json" \
@@ -788,11 +888,21 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 }'
 ```
 
+<a id="dashscope"></a>
+
+<a id="dashscope-h4"></a>
+
 #### DashScope
+
+<a id="fig-code-group-7"></a>
+
+<a id="fig-code-group-7-python-tab"></a>
 
 python
 
-```
+<a id="code-code-group-7-python"></a>
+
+```python
 import os
 import dashscope
 
@@ -819,9 +929,13 @@ for chunk in stream:
         print(content, end='', flush=True)
 ```
 
+<a id="fig-code-group-7-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-7-bash"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer $DASHSCOPE_API_KEY' \
@@ -856,6 +970,8 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
+<a id="42b8ac2dadvb2"></a>
+
 #### 输出说明
 
 流式输出，分为以下三个阶段：
@@ -864,17 +980,33 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 -   **页面HTML生成**：模型逐页生成HTML格式的页面，每页为一个完整的HTML文档，输出在`reasoning_content`字段。
 -   **最终PPT文件**：生成完成后，PPT文件的下载链接输出在`content`字段中。
 
+<a id="创意模式"></a>
+
+<a id="创意模式-h4"></a>
+
 #### 创意模式
 
 设置`mode`为`creative`。创意模式支持doc\_url、file\_id和纯文本三种输入方式，其中doc\_url仅支持DashScope SDK，file\_id和纯文本支持OpenAI兼容和DashScope两种SDK。
+
+<a id="sec-tabs-3"></a>
+
+<a id="doc-url"></a>
+
+<a id="doc-url-h4"></a>
 
 #### doc\_url
 
 > doc\_url方式仅支持DashScope SDK。
 
+<a id="fig-code-group-8"></a>
+
+<a id="fig-code-group-8-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-8-python"></a>
+
+```python
 import os
 import dashscope
 
@@ -904,9 +1036,13 @@ for chunk in response:
             print(content, end='', flush=True)
 ```
 
+<a id="fig-code-group-8-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-8-bash"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer $DASHSCOPE_API_KEY' \
@@ -945,13 +1081,29 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
+<a id="file-id"></a>
+
+<a id="file-id-h4"></a>
+
 #### file\_id
+
+<a id="sec-tabs-4"></a>
+
+<a id="openai兼容-2"></a>
+
+<a id="openai兼容-2-h4"></a>
 
 #### OpenAI兼容
 
+<a id="fig-code-group-9"></a>
+
+<a id="fig-code-group-9-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-9-python"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -978,9 +1130,13 @@ for chunk in completion:
         print(chunk.choices[0].delta.content, end='', flush=True)
 ```
 
+<a id="fig-code-group-9-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-9-bash"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header "Content-Type: application/json" \
@@ -1013,11 +1169,21 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 }'
 ```
 
+<a id="dashscope-2"></a>
+
+<a id="dashscope-2-h4"></a>
+
 #### DashScope
+
+<a id="fig-code-group-10"></a>
+
+<a id="fig-code-group-10-python-tab"></a>
 
 python
 
-```
+<a id="code-code-group-10-python"></a>
+
+```python
 import os
 import dashscope
 
@@ -1044,9 +1210,13 @@ for chunk in stream:
         print(content, end='', flush=True)
 ```
 
+<a id="fig-code-group-10-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-10-bash"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer $DASHSCOPE_API_KEY' \
@@ -1080,13 +1250,29 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
+<a id="纯文本"></a>
+
+<a id="纯文本-h4"></a>
+
 #### 纯文本
+
+<a id="sec-tabs-5"></a>
+
+<a id="openai兼容-3"></a>
+
+<a id="openai兼容-3-h4"></a>
 
 #### OpenAI兼容
 
+<a id="fig-code-group-11"></a>
+
+<a id="fig-code-group-11-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-11-python"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -1113,9 +1299,13 @@ for chunk in completion:
         print(chunk.choices[0].delta.content, end='', flush=True)
 ```
 
+<a id="fig-code-group-11-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-11-bash"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header "Content-Type: application/json" \
@@ -1148,11 +1338,21 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 }'
 ```
 
+<a id="dashscope-3"></a>
+
+<a id="dashscope-3-h4"></a>
+
 #### DashScope
+
+<a id="fig-code-group-12"></a>
+
+<a id="fig-code-group-12-python-tab"></a>
 
 python
 
-```
+<a id="code-code-group-12-python"></a>
+
+```python
 import os
 import dashscope
 
@@ -1179,9 +1379,13 @@ for chunk in stream:
         print(content, end='', flush=True)
 ```
 
+<a id="fig-code-group-12-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-12-bash"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer $DASHSCOPE_API_KEY' \
@@ -1215,6 +1419,8 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
+<a id="a6b7c8d9e0pqk"></a>
+
 #### 输出说明
 
 流式输出，分为以下三个阶段：
@@ -1223,39 +1429,17 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 -   **页面图片生成**：模型逐页生成PPT图片，每页图片的URL输出在`reasoning_content`字段中，格式为`<page-N>图片URL</page-N>`。
 -   **最终PPT文件**：生成完成后，PPT文件的下载链接输出在`content`字段中。
 
+<a id="模型定价"></a>
+
+<a id="08aa06c026u55"></a>
+
 ## 模型定价
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><p><strong>模型名称</strong></p></th><th><p><strong>上下文长度</strong></p></th><th><p><strong>最大输入</strong></p></th><th><p><strong>最大输出</strong></p></th><th><p><strong>输入成本</strong></p></th><th><p><strong>输出成本</strong></p></th><th rowspan="2"><p><strong>免费额度</strong></p></th></tr><tr><th colspan="3"><p><strong>（Token数）</strong></p></th><th colspan="2"><p><strong>（每千Token）</strong></p></th></tr></thead><tbody><tr><td><p>qwen-doc-turbo</p></td><td><p>262,144</p></td><td><p>253,952</p></td><td><p>32,768</p></td><td><p>0.0006元</p></td><td><p>0.001元</p></td><td><p>无免费额度</p></td></tr></tbody></table>
 
-**上下文长度**
+<a id="ppt生成计量方式"></a>
 
-**最大输入**
-
-**最大输出**
-
-**输入成本**
-
-**输出成本**
-
-**免费额度**
-
-**（Token数）**
-
-**（每千Token）**
-
-qwen-doc-turbo
-
-262,144
-
-253,952
-
-32,768
-
-0.0006元
-
-0.001元
-
-无免费额度
+<a id="c0d1e2f3a4pqy"></a>
 
 ### PPT生成计量方式
 
@@ -1265,15 +1449,19 @@ PPT生成功能的Token计量方式如下：
 -   **output\_tokens**：大纲生成的输出Token数。
 -   **total\_tokens**：input\_tokens + output\_tokens。
 
+<a id="常见问题"></a>
+
+<a id="43e63b66b2i5s"></a>
+
 ## 常见问题
 
 1.  通过OpenAI文件兼容接口上传文件后，文件将被保存在何处？
     
-    所有通过OpenAI文件兼容接口上传的文件均将被保存在当前阿里云账号下的阿里云百炼存储空间且不会产生任何费用，关于所上传文件的信息查询与管理请参考[OpenAI文件接口](raw/model-api-reference/toolkits-and-frameworks/openai-file-interface.md)。
+    所有通过OpenAI文件兼容接口上传的文件均将被保存在当前阿里云账号下的阿里云百炼存储空间且不会产生任何费用，关于所上传文件的信息查询与管理请参考[OpenAI文件接口](../../../../model-api-reference/toolkits-and-frameworks/openai-file-interface.md)。
     
 2.  文件ID是否可以用于其他模型对话或功能调用？
     
-    文件ID目前仅能用于Qwen-Long、Qwen-Doc-Turbo模型对话以及[Batch接口批量调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)。
+    文件ID目前仅能用于Qwen-Long、Qwen-Doc-Turbo模型对话以及[Batch接口批量调用](../../../../model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)。
     
 3.  通过文件URL方式上传时，文件解析策略（file\_parsing\_strategy）参数有什么不同？
     
@@ -1292,13 +1480,25 @@ PPT生成功能的Token计量方式如下：
     PPT生成不会产生额外费用。费用按Token用量计算：输入Token数为您传入的文档内容Token数与模型生成大纲消耗的输入Token数之和，输出Token数为模型生成大纲的输出Token数，图片渲染和PPT文件生成不计费。
     
 
+<a id="api参考"></a>
+
+<a id="7e9866a3cd2d7"></a>
+
 ## API参考
 
-关于Qwen-Doc-Turbo的输入与输出参数，请参考[OpenAI 兼容API详情](raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)或[DashScope API详情](raw/model-api-reference/qwen-api-reference/qwen-api-via-dashscope.md)
+关于Qwen-Doc-Turbo的输入与输出参数，请参考[OpenAI 兼容API详情](../../../../model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)或[DashScope API详情](../../../../model-api-reference/qwen-api-reference/qwen-api-via-dashscope.md)
+
+<a id="错误码"></a>
+
+<a id="3e8eb683f5chk"></a>
 
 ## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](../../../../model-api-reference/preparations/error-code.md)进行解决。
+
+<a id="限制"></a>
+
+<a id="4798ba361eox3"></a>
 
 ## 限制
 
@@ -1310,7 +1510,7 @@ PPT生成功能的Token计量方式如下：
         
     -   **上传文件 (**`file-id`**)**: 单个文件不超过 150MB。单个阿里云账号最多可上传 1 万个文件，总大小不超过 100GB，当前暂无有效期限制。单次请求最多引用 1 个文件。
         
-        > 使用文件ID传入时，当文件数量或总大小达到任一上限时，新的文件上传请求将会失败。请参考[OpenAI兼容-File](raw/model-api-reference/toolkits-and-frameworks/openai-file-interface.md)，及时删除不再需要的文件以释放配额，然后才能继续上传。
+        > 使用文件ID传入时，当文件数量或总大小达到任一上限时，新的文件上传请求将会失败。请参考[OpenAI兼容-File](../../../../model-api-reference/toolkits-and-frameworks/openai-file-interface.md)，及时删除不再需要的文件以释放配额，然后才能继续上传。
         
     -   **支持格式**：TXT, DOC, DOCX, PDF, XLS, XLSX, MD, PPT, PPTX, JPG, JPEG, PNG, GIF, BMP。
         
@@ -1321,4 +1521,4 @@ PPT生成功能的Token计量方式如下：
     -   最大输出长度为 32,768 Token。
 -   **文件共享：**
     -   `file-id` 仅在生成它的阿里云主账号内有效，不支持跨账号或通过 RAM 用户 API Key 调用。
--   **限流**：关于模型的限流条件，请参见[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)。
+-   **限流**：关于模型的限流条件，请参见[限流](../../../get-started-with-models/rate-limit.md)。

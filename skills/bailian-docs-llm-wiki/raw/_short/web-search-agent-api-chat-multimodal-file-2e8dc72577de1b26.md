@@ -2,649 +2,224 @@
 
 使用联网搜索多模态能力时，可以通过如下文件接口，将需要与联网搜索 agent 交互的图片提前上传到 OSS 处，在进行联网问答时，使用已经提前上传到 OSS 图片 url， 可以提供更流畅的问答体验。
 
+<a id="获取预签名-oss-上传地址"></a>
+
+<a id="94946be707igv"></a>
+
 ## 获取预签名 OSS 上传地址
 
 获取与签名 OSS 上传地址，可以将图片上传至该地址
 
-```
+<a id="code-block"></a>
+
+```http
 POST /web-search-agent/file/upload/apply HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="c86cfe6eab2q3"></a>
+
 ### 请求参数
 
-**参数名**
+| 参数名 | 类型 | 是否必须 | 说明 |
+| --- | --- | --- | --- |
+| input | object | 是 | 输入字段 |
+| input.session\_id | str | 是 | 文件操作<br><br>session id（业务自定义） |
+| input.files | array | 是 | 待上传文件列表 |
+| input.files\[\].file\_name | str | 是 | 文件名称 |
+| input.files\[\].file\_size | int | 是 | 文件大小(字节) |
+| input.files\[\].content\_type | str | 是 | 文件 MIME<br><br>类型 |
+| parameters | object | 是 | 配置参数字段 |
+| parameters.agent\_options | object | 是 | Agent<br><br>选项配置 |
+| parameters.agent\_options.agent\_id | str | 是 | Agent ID |
 
-**类型**
+<a id="返回参数"></a>
 
-**是否必须**
-
-**说明**
-
-input
-
-object
-
-是
-
-输入字段
-
-input.session\_id
-
-str
-
-是
-
-文件操作
-
-session id（业务自定义）
-
-input.files
-
-array
-
-是
-
-待上传文件列表
-
-input.files\[\].file\_name
-
-str
-
-是
-
-文件名称
-
-input.files\[\].file\_size
-
-int
-
-是
-
-文件大小(字节)
-
-input.files\[\].content\_type
-
-str
-
-是
-
-文件 MIME
-
-类型
-
-parameters
-
-object
-
-是
-
-配置参数字段
-
-parameters.agent\_options
-
-object
-
-是
-
-Agent
-
-选项配置
-
-parameters.agent\_options.agent\_id
-
-str
-
-是
-
-Agent ID
+<a id="5a4c825c06o01"></a>
 
 ### 返回参数
 
-**参数名**
+| 参数名 | 类型 | 是否必须 | 说明 |
+| --- | --- | --- | --- |
+| code | str | 是 | 状态码（成功：200） |
+| message | str | 是 | 状态信息 |
+| output | object | 是 | 输出字段 |
+| output.request\_id | str | 否 | 请求ID |
+| output.result | object | 是 | 文件处理结果 |
+| output.result.upload\_tasks | array | 是 | 上传任务列表 |
+| output.result.upload\_tasks\[\].file\_id | str | 是 | 文件 ID |
+| output.result.upload\_tasks\[\].file\_name | str | 是 | 文件名称 |
+| output.result.upload\_tasks\[\].upload\_url | str | 是 | OSS<br><br>预签名上传地址 |
+| output.result.upload\_tasks\[\].expire\_at | int | 是 | 上传 URL<br><br>过期时间(Unix 时间戳)，默认 1 小时 |
 
-**类型**
+<a id="执行上传"></a>
 
-**是否必须**
-
-**说明**
-
-code
-
-str
-
-是
-
-状态码（成功：200）
-
-message
-
-str
-
-是
-
-状态信息
-
-output
-
-object
-
-是
-
-输出字段
-
-output.request\_id
-
-str
-
-否
-
-请求ID
-
-output.result
-
-object
-
-是
-
-文件处理结果
-
-output.result.upload\_tasks
-
-array
-
-是
-
-上传任务列表
-
-output.result.upload\_tasks\[\].file\_id
-
-str
-
-是
-
-文件 ID
-
-output.result.upload\_tasks\[\].file\_name
-
-str
-
-是
-
-文件名称
-
-output.result.upload\_tasks\[\].upload\_url
-
-str
-
-是
-
-OSS
-
-预签名上传地址
-
-output.result.upload\_tasks\[\].expire\_at
-
-int
-
-是
-
-上传 URL
-
-过期时间(Unix 时间戳)，默认 1 小时
+<a id="86f44629b7zk6"></a>
 
 ## 执行上传
 
 在获取到 OSS 预签名上传地址后，可以通过如下操作将本地文件上传到对应的地址。其中，${output.result.upload\_tasks\[\].upload\_url}为通过调用**获取预签名 OSS 上传地址**接口获取到对应文件的OSS 预签名上传地址。
 
-```
+<a id="code-block-2"></a>
+
+```http
 curl -X PUT -T ./path/to/test.jpg -H "Content-Type: image/jpeg" ${output.result.upload_tasks[].upload_url}
 ```
+
+<a id="回调获取文件上传的状态"></a>
+
+<a id="b2acc1bc9c24l"></a>
 
 ## 回调获取文件上传的状态
 
 调用文件上传回调，查看文件上传的结果，即是否成功。
 
-```
+<a id="code-block-3"></a>
+
+```http
 POST /web-search-agent/file/upload/callback HTTP/1.1
 ```
 
+<a id="请求参数-2"></a>
+
+<a id="9cc84c98f4dsu"></a>
+
 ### 请求参数
 
-**参数名**
+| 参数名 | 类型 | 是否必须 | 说明 |
+| --- | --- | --- | --- |
+| input | object | 是 | 输入字段 |
+| input.session\_id | str | 是 | 文件操作<br><br>session id（业务自定义） |
+| input.file\_id | str | 是 | 文件<br><br>ID(获取上传 URL 时返回) |
+| parameters | object | 是 | 配置参数字段 |
+| parameters.agent\_options | object | 是 | Agent<br><br>选项配置 |
+| parameters.agent\_options.agent\_id | str | 是 | Agent ID |
 
-**类型**
+<a id="返回参数-2"></a>
 
-**是否必须**
-
-**说明**
-
-input
-
-object
-
-是
-
-输入字段
-
-input.session\_id
-
-str
-
-是
-
-文件操作
-
-session id（业务自定义）
-
-input.file\_id
-
-str
-
-是
-
-文件
-
-ID(获取上传 URL 时返回)
-
-parameters
-
-object
-
-是
-
-配置参数字段
-
-parameters.agent\_options
-
-object
-
-是
-
-Agent
-
-选项配置
-
-parameters.agent\_options.agent\_id
-
-str
-
-是
-
-Agent ID
+<a id="0e57a27ba74ty"></a>
 
 ### 返回参数
 
-**参数名**
+| 参数名 | 类型 | 是否必须 | 说明 |
+| --- | --- | --- | --- |
+| code | str | 是 | 状态码（成功：200） |
+| message | str | 是 | 状态信息 |
+| output | object | 是 | 输出字段 |
+| output.request\_id | str | 否 | 请求ID |
+| output.result | object | 是 | 处理结果 |
+| output.result.status | str | 是 | 上传状态(成功:SUCCESS) |
 
-**类型**
+<a id="获取文件上传的信息"></a>
 
-**是否必须**
-
-**说明**
-
-code
-
-str
-
-是
-
-状态码（成功：200）
-
-message
-
-str
-
-是
-
-状态信息
-
-output
-
-object
-
-是
-
-输出字段
-
-output.request\_id
-
-str
-
-否
-
-请求ID
-
-output.result
-
-object
-
-是
-
-处理结果
-
-output.result.status
-
-str
-
-是
-
-上传状态(成功:SUCCESS)
+<a id="d0ad2de9445kx"></a>
 
 ## 获取文件上传的信息
 
 查看已经上传文件的状态信息
 
-```
+<a id="code-block-4"></a>
+
+```http
 POST /web-search-agent/file/info/get HTTP/1.1
 ```
 
+<a id="请求参数-3"></a>
+
+<a id="6521738901vw6"></a>
+
 ### 请求参数
 
-**参数名**
+| 参数名 | 类型 | 是否必须 | 说明 |
+| --- | --- | --- | --- |
+| input | object | 是 | 输入字段 |
+| input.session\_id | str | 是 | 文件操作<br><br>session id（业务自定义） |
+| input.file\_ids | array\[str\] | 是 | 文件 ID 列表 |
+| parameters | object | 是 | 配置参数字段 |
+| parameters.agent\_options | object | 是 | Agent<br><br>选项配置 |
+| parameters.agent\_options.agent\_id | str | 是 | Agent ID |
 
-**类型**
+<a id="返回参数-3"></a>
 
-**是否必须**
-
-**说明**
-
-input
-
-object
-
-是
-
-输入字段
-
-input.session\_id
-
-str
-
-是
-
-文件操作
-
-session id（业务自定义）
-
-input.file\_ids
-
-array\[str\]
-
-是
-
-文件 ID 列表
-
-parameters
-
-object
-
-是
-
-配置参数字段
-
-parameters.agent\_options
-
-object
-
-是
-
-Agent
-
-选项配置
-
-parameters.agent\_options.agent\_id
-
-str
-
-是
-
-Agent ID
+<a id="f9f054f963l9t"></a>
 
 ### 返回参数
 
-**参数名**
+| 参数名 | 类型 | 是否必须 | 说明 |
+| --- | --- | --- | --- |
+| code | str | 是 | 状态码（成功：200） |
+| message | str | 是 | 状态信息 |
+| output | object | 是 | 输出字段 |
+| output.request\_id | str | 否 | 请求ID |
+| output.result | object | 是 | 处理结果 |
+| output.result\[\].file\_id | str | 是 | 文件 ID |
+| output.result\[\].file\_name | str | 是 | 文件名称 |
+| output.result\[\].file\_size | int | 是 | 文件大小(字节) |
+| output.result\[\].content\_type | str | 是 | 文件 MIME<br><br>类型 |
+| output.result\[\].preview\_url | str | 是 | 文件预览地址(OSS<br><br>预签名 URL) |
+| output.result\[\].expire\_at | int | 是 | 预览 URL<br><br>过期时间(Unix 时间戳) |
+| output.result\[\].status | str | 是 | 文件状态(如:done) |
 
-**类型**
+<a id="删除文件"></a>
 
-**是否必须**
-
-**说明**
-
-code
-
-str
-
-是
-
-状态码（成功：200）
-
-message
-
-str
-
-是
-
-状态信息
-
-output
-
-object
-
-是
-
-输出字段
-
-output.request\_id
-
-str
-
-否
-
-请求ID
-
-output.result
-
-object
-
-是
-
-处理结果
-
-output.result\[\].file\_id
-
-str
-
-是
-
-文件 ID
-
-output.result\[\].file\_name
-
-str
-
-是
-
-文件名称
-
-output.result\[\].file\_size
-
-int
-
-是
-
-文件大小(字节)
-
-output.result\[\].content\_type
-
-str
-
-是
-
-文件 MIME
-
-类型
-
-output.result\[\].preview\_url
-
-str
-
-是
-
-文件预览地址(OSS
-
-预签名 URL)
-
-output.result\[\].expire\_at
-
-int
-
-是
-
-预览 URL
-
-过期时间(Unix 时间戳)
-
-output.result\[\].status
-
-str
-
-是
-
-文件状态(如:done)
+<a id="9915c18324216"></a>
 
 ## 删除文件
 
 删除已上传的文件
 
-```
+<a id="code-block-5"></a>
+
+```http
 POST /web-search-agent/file/delete HTTP/1.1
 ```
 
+<a id="请求参数-4"></a>
+
+<a id="d22df108301ye"></a>
+
 ### 请求参数
 
-**参数名**
+| 参数名 | 类型 | 是否必须 | 说明 |
+| --- | --- | --- | --- |
+| input | object | 是 | 输入字段 |
+| input.session\_id | str | 是 | 文件操作<br><br>session id（业务自定义） |
+| input.file\_ids | array\[str\] | 是 | 文件 ID 列表 |
+| parameters | object | 是 | 配置参数字段 |
+| parameters.agent\_options | object | 是 | Agent<br><br>选项配置 |
+| parameters.agent\_options.agent\_id | str | 是 | Agent ID |
 
-**类型**
+<a id="返回参数-4"></a>
 
-**是否必须**
-
-**说明**
-
-input
-
-object
-
-是
-
-输入字段
-
-input.session\_id
-
-str
-
-是
-
-文件操作
-
-session id（业务自定义）
-
-input.file\_ids
-
-array\[str\]
-
-是
-
-文件 ID 列表
-
-parameters
-
-object
-
-是
-
-配置参数字段
-
-parameters.agent\_options
-
-object
-
-是
-
-Agent
-
-选项配置
-
-parameters.agent\_options.agent\_id
-
-str
-
-是
-
-Agent ID
+<a id="411afacf89r78"></a>
 
 ### 返回参数
 
-**参数名**
+| 参数名 | 类型 | 是否必须 | 说明 |
+| --- | --- | --- | --- |
+| code | str | 是 | 状态码（成功：200） |
+| message | str | 是 | 状态信息 |
+| output | object | 是 | 输出字段 |
+| output.request\_id | str | 否 | 请求ID |
+| output.result | object | 是 | 处理结果 |
+| output.result\[\].status | str | 是 | 删除状态(成功:SUCCESS) |
 
-**类型**
+<a id="调用示例"></a>
 
-**是否必须**
-
-**说明**
-
-code
-
-str
-
-是
-
-状态码（成功：200）
-
-message
-
-str
-
-是
-
-状态信息
-
-output
-
-object
-
-是
-
-输出字段
-
-output.request\_id
-
-str
-
-否
-
-请求ID
-
-output.result
-
-object
-
-是
-
-处理结果
-
-output.result\[\].status
-
-str
-
-是
-
-删除状态(成功:SUCCESS)
+<a id="ab0dc25cccefs"></a>
 
 ## 调用示例
 
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 # coding=utf-8
 
 import os
@@ -856,9 +431,13 @@ if __name__ == "__main__":
         delete_result = call_delete_file(SESSION_ID, [file_id])
 ```
 
+<a id="fig-code-group-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-java"></a>
+
+```java
 import java.io.*;
 import java.net.*;
 import java.util.*;

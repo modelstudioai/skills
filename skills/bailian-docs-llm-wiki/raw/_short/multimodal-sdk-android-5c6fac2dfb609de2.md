@@ -4,26 +4,41 @@
 
 MultiModalDialog SDK是阿里云千问团队提供的支持音视频端到端多模实时交互的SDK。通过SDK对接千问大模型以及后端多种Agent，能够支持用户接入语音对话、天气、音乐、新闻等多种能力，并支持视频和图像的大模型对话能力。
 
+<a id="多模态实时交互服务架构"></a>
+
+<a id="f9224da564gai"></a>
+
+<a id="f02bc82dbdhh9"></a>
+
 ## 多模态实时交互服务架构
 
 ![多模态实时交互服务接入架构-通用-流程图](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7227370571/p976841.jpg)
 
+<a id="前提条件"></a>
+
+<a id="3b0a8f6803lko"></a>
+
 ## 前提条件
 
--   开通阿里云百炼实时多模交互应用，获取[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)、[APP ID](https://bailian.console.aliyun.com/?tab=app#/app/app-market/multi-modal-app/myApp)和[API Key](raw/model-api-reference/preparations/get-api-key.md)。
+-   开通阿里云百炼实时多模交互应用，获取[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)、[APP ID](https://bailian.console.aliyun.com/?tab=app#/app/app-market/multi-modal-app/myApp)和[API Key](../model-api-reference/preparations/get-api-key.md)。
 -   下载SDK和 Demo并配置必要的环境、依赖。
 -   导入示例代码，按照调用流程接入SDK。
 -   您可以直接运行压缩包中的 APK 测试程序，填入上方三个必要参数，即可进行测试。
 
-Package
+|  |  |
+| --- | --- |
+| Package | Version |
+| [bailian-multi-modal-android-sdk-1.0.6.7.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260817/ohqphm/bailian-multi-modal-android-sdk-1.0.6.7.zip) | 1.0.6.7 |
 
-Version
+<a id="sdk接入"></a>
 
-[bailian-multi-modal-android-sdk-1.0.6.7.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260817/ohqphm/bailian-multi-modal-android-sdk-1.0.6.7.zip)
-
-1.0.6.7
+<a id="08beccbec49rz"></a>
 
 ## SDK接入
+
+<a id="交互数据链路说明"></a>
+
+<a id="d2dba24286nyf"></a>
 
 ### 交互数据链路说明
 
@@ -31,6 +46,10 @@ SDK使用WebSocket协议与服务端交互，支持AudioOnly和AudioAndVideo 两
 
 -   音频交互：仅支持音频和文本对话功能。
 -   音视频交互：在交互中通过指令方式进入视频通话模式，客户端持续向服务端发送图片序列，实现端到端的音视频多模交互能力。
+
+<a id="交互模式说明"></a>
+
+<a id="35fbcbeefdnz1"></a>
 
 ### 交互模式说明
 
@@ -40,9 +59,17 @@ SDK支持 **Push2Talk**、 **Tap2Talk**和**Duplex**（全双工）三种交互�
 -   Tap2Talk: 点击开始说话，自动判断用户说话结束的收音方式。
 -   Duplex: 全双工交互，连接开始后支持任意时刻开始说话，支持语音打断。
 
+<a id="调用说明"></a>
+
+<a id="76dd0830c98c7"></a>
+
 ### 调用说明
 
 SDK及其调用Demo。
+
+<a id="sdk引用"></a>
+
+<a id="8ae2c34e8fwd3"></a>
 
 #### SDK引用
 
@@ -58,7 +85,9 @@ SDK及其调用Demo。
     参考`app/build.gradle`
     
 
-```
+<a id="code-block"></a>
+
+```text
 implementation libs.androidbootstrap
 implementation libs.okhttp
 implementation libs.okio //Android OKHttp3应用要增加一个收发IO的okio包
@@ -66,64 +95,31 @@ implementation libs.http.logging.interceptor
 implementation libs.core.ktx
 ```
 
+<a id="关键参数"></a>
+
+<a id="ce029139edy2m"></a>
+
 #### 关键参数
 
-参数名称
+|  |  |  |  |
+| --- | --- | --- | --- |
+| 参数名称 | 是否必须 | 值 | 说明 |
+| url | 是 | String | 请求的服务端地址。<br><br>WebSocket 链路地址：wss://dashscope.aliyuncs.com/api-ws/v1/inference |
+| api\_key | 是 | String | 百炼服务接入[API Key](../model-api-reference/preparations/get-api-key.md)。请您在百炼平台创建API\_KEY，移动端为了安全考虑，您也可以在服务端接入[短时Token](../model-api-reference/more-about-models/generate-temporary-api-key.md)，并下发给客户端使用。 |
+| workspace\_id | 是 | String | 百炼管控台，业务空间 ID。 |
+| app\_id | 是 | String | 您在管控台创建的应用 ID。 |
+| chain\_mode | 是 | String | WebSocket。 |
 
-是否必须
+<a id="demo简介"></a>
 
-值
-
-说明
-
-url
-
-是
-
-String
-
-请求的服务端地址。
-
-WebSocket 链路地址：wss://dashscope.aliyuncs.com/api-ws/v1/inference
-
-api\_key
-
-是
-
-String
-
-百炼服务接入[API Key](raw/model-api-reference/preparations/get-api-key.md)。请您在百炼平台创建API\_KEY，移动端为了安全考虑，您也可以在服务端接入[短时Token](raw/model-api-reference/more-about-models/generate-temporary-api-key.md)，并下发给客户端使用。
-
-workspace\_id
-
-是
-
-String
-
-百炼管控台，业务空间 ID。
-
-app\_id
-
-是
-
-String
-
-您在管控台创建的应用 ID。
-
-chain\_mode
-
-是
-
-String
-
-WebSocket。
+<a id="df4a2743e8bxz"></a>
 
 #### Demo简介
 
 -   **EntranceActivity** 入口页面，需要修改url/api\_key/app\_id等信息。
     
     -   可以通过页面选择对话使用Tap2Talk或者Duplex等模式。
-    -   使用 License 模式，请参考子文档【[使用 License 模式接入Android SDK](raw/_short/multimodal-license-android-9643b6fc983c3081.md)】。
+    -   使用 License 模式，请参考子文档【[使用 License 模式接入Android SDK](multimodal-license-android-9643b6fc983c3081.md)】。
 -   **MultimodalDialogActivity**，对话交互实现类。
     
     -   Demo页面中引用TYAudioRecorder 作为录音输入，您可以替换为自己的实现。
@@ -137,7 +133,13 @@ WebSocket。
     -   Demo在VideoAndAudio音视频交互模式下，目前通过外部采集的方式输入图像序列，方便眼镜等IoT设备的采集和视频对话接入。
         
 
+<a id="接口设计"></a>
+
+<a id="948a6af067omr"></a>
+
 #### 接口设计
+
+<a id="ad6675a229cee"></a>
 
 ##### MultimodalDialog 对话入口类
 
@@ -146,7 +148,9 @@ WebSocket。
     初始化对话类，传入必要的全局参数。
     
 
-```
+<a id="code-block-2"></a>
+
+```text
 /**
      * 初始化
      * @param context: 上下文
@@ -171,7 +175,9 @@ WebSocket。
     创建会话。
     
 
-```
+<a id="code-block-3"></a>
+
+```text
 /**
      * 初始化成功后，启动对话流程
      * @param params 初始化参数
@@ -185,7 +191,9 @@ WebSocket。
     开始对话。
     
 
-```
+<a id="code-block-4"></a>
+
+```text
 /**
      * 连接,启动对话
      */
@@ -197,7 +205,9 @@ WebSocket。
     结束对话。
     
 
-```
+<a id="code-block-5"></a>
+
+```text
 /**
      * 断开,结束对话
      */
@@ -206,8 +216,10 @@ WebSocket。
 
 5.  destroy
 
-```
-/**
+<a id="code-block-6"></a>
+
+```text
+    /**
      * 销毁实例
      */
     fun destroy()
@@ -218,8 +230,10 @@ WebSocket。
     设置超时时间。
     
 
-```
-/**
+<a id="code-block-7"></a>
+
+```text
+    /**
      * 设置对话超时时间,当服务未在指定时间内检出用户说话，上报timeout事件
      * @param timeout 超时时间,单位ms
      */
@@ -231,8 +245,10 @@ WebSocket。
     打断交互。
     
 
-```
-/**
+<a id="code-block-8"></a>
+
+```text
+    /**
      * 打断AI说话
      */
     fun interrupt()
@@ -243,7 +259,9 @@ WebSocket。
     通知服务端开始上传音频，注意需要在Listening状态才可以调用。只需要在Push2Talk模式下调用。
     
 
-```
+<a id="code-block-9"></a>
+
+```text
 /**
  * 通知服务端开始上传音频，注意需要在Listening状态才可以调用。
  * 只需要在Push2Talk模式下调用。
@@ -256,7 +274,9 @@ fun startSpeech()
     通知服务端上传音频。
     
 
-```
+<a id="code-block-10"></a>
+
+```text
 /**
  * 通知服务端上传音频。
  * @param audioData 音频帧数据
@@ -269,7 +289,9 @@ fun sendAudioData(audioData: ByteArray?)
      通知服务端结束上传音频。只需要在Push2Talk模式下调用。
      
 
-```
+<a id="code-block-11"></a>
+
+```text
 /**
  * 通知服务端结束上传音频。只需要在Push2Talk模式下调用。
  * Push2Talk 用户结束说话
@@ -282,7 +304,9 @@ fun stopSpeech()
      请求服务端回答指定问题或做TTS播放出来。
      
 
-```
+<a id="code-block-12"></a>
+
+```text
 /**
      * 请求服务端回答指定问题或做TTS播放出来
      * @param type: transcript 表示直接把文本转语音，prompt 表示把文本送大模型回答
@@ -294,8 +318,10 @@ fun stopSpeech()
 
 12.  其他接口。
 
-```
-/**
+<a id="code-block-13"></a>
+
+```text
+    /**
      * 当前配置是否是全双工模式
      */
     fun isDuplexMode(): Boolean
@@ -322,35 +348,16 @@ fun stopSpeech()
      * @param callback: 送帧结果回调
      */
     fun sendVideoFrame(videoFrame: TYVideoFrame,callback: IVideoChatPushFrameCallback)
+
 ```
+
+<a id="c81c93c0e11xc"></a>
 
 ###### 关键参数枚举
 
-##### 参数
+<table><tbody><tr><td><h5>参数</h5></td><td><p>值</p></td><td><p>说明</p></td></tr><tr><td><h5>ChainMode</h5></td><td><p>WebSocket</p></td><td><p>支持AudioOnly和AudioAndVideo两种交互</p></td></tr><tr><td rowspan="3"><h5>DialogMode</h5></td><td><p>TAP2TALK</p></td><td><p>手动开始，自动结束</p></td></tr><tr><td><p>PUSH2TALK</p></td><td><p>手动开始，手动结束</p></td></tr><tr><td><p>DUPLEX</p></td><td><p>全双工交互</p></td></tr></tbody></table>
 
-值
-
-说明
-
-##### ChainMode
-
-WebSocket
-
-支持AudioOnly和AudioAndVideo两种交互
-
-##### DialogMode
-
-TAP2TALK
-
-手动开始，自动结束
-
-PUSH2TALK
-
-手动开始，手动结束
-
-DUPLEX
-
-全双工交互
+<a id="33f91b5e5d9fb"></a>
 
 ###### MultiModalRequestParam 端云交互参数详情
 
@@ -358,522 +365,43 @@ DUPLEX
 
 请求开始会话消息。服务收到Start消息后，向客户端发送**Started**消息。
 
-**一级参数**
-
-**二级参数**
-
-**类型**
-
-**是否必选**
-
-**说明**
-
-task\_group
-
-string
-
-是
-
-任务组名称，固定为"aigc"，请直接复制使用
-
-task
-
-string
-
-是
-
-任务名称，固定为"multimodal-generation"，请直接复制使用
-
-function
-
-string
-
-是
-
-调用功能，固定为"generation"，请直接复制使用
-
-model
-
-string
-
-是
-
-阿里云百炼模型名称，固定为"multimodal-dialog"，请直接复制使用
-
-input
-
-directive
-
-string
-
-是
-
-指令名称：Start
-
-workspace\_id
-
-string
-
-是
-
-客户在阿里云百炼业务空间ID（[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)），可在**多模态交互开发套件控制台**，点击左下角业务空间名称，"业务空间详情"中查看，目前仅支持主账号默认业务空间。
-
-app\_id
-
-string
-
-是
-
-客户创建的应用ID（[APP ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#2612f896detsz)），可在**多模态交互开发套件**控制台的"我的应用"页面查看。
-
-dialog\_id
-
-string
-
-否
-
-对话ID，默认不填时是开启新会话，服务端会自动生成并在事件中下发，格式示例："12345678-1234-1234-1234-1234567890ab"，共36个字符。当希望继续之前的对话时，把当时服务端下发的dialog\_id在这里传入
-
-parameters
-
-upstream
-
-object
-
-是
-
-参数说明参考下方 [parameters.upstream的参数说明](raw/_short/multimodal-sdk-android-5c6fac2dfb609de2.md)表格
-
-downstream
-
-object
-
-否
-
-参数说明参考下方 [parameters.downstream的参数说明](raw/_short/multimodal-sdk-android-5c6fac2dfb609de2.md)表格
-
-client\_info
-
-object
-
-是
-
-参数说明参考下方 [parameters.client\_info的参数说明](raw/_short/multimodal-sdk-android-5c6fac2dfb609de2.md)表格
-
-biz\_params
-
-object
-
-否
-
-参数说明参考下方 [parameters.biz\_params的参数说明](raw/_short/multimodal-sdk-android-5c6fac2dfb609de2.md)表格
+<table><thead><tr><th><p><strong>一级参数</strong></p></th><th><p><strong>二级参数</strong></p></th><th><p><strong>类型</strong></p></th><th><p><strong>是否必选</strong></p></th><th><p><strong>说明</strong></p></th></tr></thead><tbody><tr><td><p>task_group</p></td><td></td><td><p>string</p></td><td><p>是</p></td><td><p>任务组名称，固定为&quot;aigc&quot;，请直接复制使用</p></td></tr><tr><td><p>task</p></td><td></td><td><p>string</p></td><td><p>是</p></td><td><p>任务名称，固定为&quot;multimodal-generation&quot;，请直接复制使用</p></td></tr><tr><td><p>function</p></td><td></td><td><p>string</p></td><td><p>是</p></td><td><p>调用功能，固定为&quot;generation&quot;，请直接复制使用</p></td></tr><tr><td><p>model</p></td><td></td><td><p>string</p></td><td><p>是</p></td><td><p>阿里云百炼模型名称，固定为&quot;multimodal-dialog&quot;，请直接复制使用</p></td></tr><tr><td rowspan="4"><p>input</p></td><td><p>directive</p></td><td><p>string</p></td><td><p>是</p></td><td><p>指令名称：Start</p></td></tr><tr><td><p>workspace_id</p></td><td><p>string</p></td><td><p>是</p></td><td><p>客户在阿里云百炼业务空间ID（<a href="https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h">Workspace ID</a>），可在<strong>多模态交互开发套件控制台</strong>，点击左下角业务空间名称，&quot;业务空间详情&quot;中查看，目前仅支持主账号默认业务空间。</p></td></tr><tr><td><p>app_id</p></td><td><p>string</p></td><td><p>是</p></td><td><p>客户创建的应用ID（<a href="https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#2612f896detsz">APP ID</a>），可在<strong>多模态交互开发套件</strong>控制台的&quot;我的应用&quot;页面查看。</p></td></tr><tr><td><p>dialog_id</p></td><td><p>string</p></td><td><p>否</p></td><td><p>对话ID，默认不填时是开启新会话，服务端会自动生成并在事件中下发，格式示例：&quot;12345678-1234-1234-1234-1234567890ab&quot;，共36个字符。当希望继续之前的对话时，把当时服务端下发的dialog_id在这里传入</p></td></tr><tr><td rowspan="4"><p>parameters</p></td><td><p>upstream</p></td><td><p>object</p></td><td><p>是</p></td><td><p>参数说明参考下方 <a href="multimodal-sdk-android-5c6fac2dfb609de2.md">parameters.upstream的参数说明</a>表格</p></td></tr><tr><td><p>downstream</p></td><td><p>object</p></td><td><p>否</p></td><td><p>参数说明参考下方 <a href="multimodal-sdk-android-5c6fac2dfb609de2.md">parameters.downstream的参数说明</a>表格</p></td></tr><tr><td><p>client_info</p></td><td><p>object</p></td><td><p>是</p></td><td><p>参数说明参考下方 <a href="multimodal-sdk-android-5c6fac2dfb609de2.md">parameters.client_info的参数说明</a>表格</p></td></tr><tr><td><p>biz_params</p></td><td><p>object</p></td><td><p>否</p></td><td><p>参数说明参考下方 <a href="multimodal-sdk-android-5c6fac2dfb609de2.md">parameters.biz_params的参数说明</a>表格</p></td></tr></tbody></table>
 
 **parameters.upstream**的参数说明如下**：**
 
-**一级参数**
-
-**类型**
-
-**是否必选**
-
-**说明**
-
-type
-
-string
-
-是
-
-上行类型：
-
-AudioOnly 仅语音通话
-
-mode
-
-string
-
-否
-
-客户端使用的模式，默认**tap2talk。**
-
-可选项：
-
--   push2talk: 客户端控制模式。
-    
--   tap2talk: 点击模式。
-    
--   duplex: 双工模式。
-    
-
-三种模式的对比可以参考下方的[客户端使用的三种模式对比](raw/_short/multimodal-sdk-android-5c6fac2dfb609de2.md)表格。
-
-audio\_format
-
-string
-
-否
-
-音频格式，支持pcm，raw-opus，默认为pcm
-
-sample\_rate
-
-int
-
-否
-
-语音识别的采样率，支持范围：
-
--   8000
-    
--   16000
-    
--   24000
-    
--   48000
-    
-
-默认为16000
-
-vocabulary\_id
-
-string
-
-否
-
-热词id，设置该参数时会覆盖管控台热词配置。当管控台提供的热词不能满足客户需求时，可以考虑用Open API程序化管理热词，参见[热词API文档](https://next.api.aliyun.com/document/MultimodalDialog/2025-09-03/Vocabulary)。
-
-language
-
-string
-
-否
-
-语音识别语种，默认和控制台选择的语言保持一致。
+<table><thead><tr><th><p><strong>一级参数</strong></p></th><th><p><strong>类型</strong></p></th><th><p><strong>是否必选</strong></p></th><th><p><strong>说明</strong></p></th></tr></thead><tbody><tr><td><p>type</p></td><td><p>string</p></td><td><p>是</p></td><td><p>上行类型：</p><p>AudioOnly 仅语音通话</p></td></tr><tr><td><p>mode</p></td><td><p>string</p></td><td><p>否</p></td><td><p>客户端使用的模式，默认<strong>tap2talk。</strong></p><p>可选项：</p><ul><li><p>push2talk: 客户端控制模式。</p></li><li><p>tap2talk: 点击模式。</p></li><li><p>duplex: 双工模式。</p></li></ul><p>三种模式的对比可以参考下方的<a href="multimodal-sdk-android-5c6fac2dfb609de2.md">客户端使用的三种模式对比</a>表格。</p></td></tr><tr><td><p>audio_format</p></td><td><p>string</p></td><td><p>否</p></td><td><p>音频格式，支持pcm，raw-opus，默认为pcm</p></td></tr><tr><td><p>sample_rate</p></td><td><p>int</p></td><td><p>否</p></td><td><p>语音识别的采样率，支持范围：</p><ul><li><p>8000</p></li><li><p>16000</p></li><li><p>24000</p></li><li><p>48000</p></li></ul><p>默认为16000</p></td></tr><tr><td><p>vocabulary_id</p></td><td><p>string</p></td><td><p>否</p></td><td><p>热词id，设置该参数时会覆盖管控台热词配置。当管控台提供的热词不能满足客户需求时，可以考虑用Open API程序化管理热词，参见<a href="https://next.api.aliyun.com/document/MultimodalDialog/2025-09-03/Vocabulary">热词API文档</a>。</p></td></tr><tr><td><p>language</p></td><td><p>string</p></td><td><p>否</p></td><td><p>语音识别语种，默认和控制台选择的语言保持一致。</p></td></tr></tbody></table>
 
 **parameters.downstream**的参数说明如下：
 
-**一级参数**
-
-**类型**
-
-**是否必选**
-
-**说明**
-
-voice
-
-string
-
-否
-
-合成语音的音色，支持范围取决于用户在管控台选择的语音合成模型
-
-sample\_rate
-
-int
-
-否
-
-合成语音的采样率，支持范围：
-
--   8000
-    
--   16000
-    
--   24000
-    
--   48000
-    
-
-默认为24000。
-
-千问-TTS、千问3-TTS模型仅支持24000。
-
-audio\_format
-
-string
-
-否
-
-音频格式，支持pcm，opus，mp3，raw-opus，默认为pcm。
-
-千问-TTS模型仅支持pcm。
-
-注意：opus 和 raw-opus的区别是opus格式的每一包数据都有额外ogg封装（[RFC 7845](https://www.rfc-editor.org/rfc/rfc7845.html)）
-
-frame\_size
-
-int
-
-否
-
-合成音频的帧大小，取值范围：
-
--   10
-    
--   20
-    
--   40
-    
--   60
-    
--   100
-    
--   120
-    
-
-默认值为60，单位ms
-
-只在合成音频格式为opus或raw-opus时生效
-
-volume
-
-int
-
-否
-
-合成音频的音量，取值范围0-100，默认50
-
-speech\_rate
-
-int
-
-否
-
-合成音频的语速，取值范围50-200，表示默认语速的50%-200%，默认100
-
-pitch\_rate
-
-int
-
-否
-
-合成音频的声调，取值范围50-200，默认100
-
-bit\_rate
-
-int
-
-否
-
-合成音频的比特率，取值范围：6~510kbps，默认值为32，单位kbps，只在合成音频格式为mp3, opus或raw-opus时生效
-
-intermediate\_text
-
-string
-
-否
-
-控制返回给用户哪些中间文本：
-
--   transcript：返回用户语音识别结果
-    
--   dialog：返回对话系统回答中间结果
-    
-
-可以设置多种，以逗号分隔，默认为transcript
-
-word\_timestamp\_enabled
-
-boolean
-
-否
-
-是否下发tts合成音频对应的时间戳。如果设置为true，会在RespondingContent.extra\_info下返回时间戳信息，用于客户端显示字幕等，默认为false。
-
-必须在intermediate\_text有指定dialog的情况下才会返回；
-
-只有[CosyVoice音色列表](raw/model-user-guide/model-experience/speech-and-audio/speech-synthesis/tts-voice-list/cosyvoice-voice-list.md)中表明支持时间戳的音色和复刻音色才会返回。
-
-transmit\_rate\_limit
-
-int
-
-否
-
-下发音频发送速率限制，单位：字节每秒
-
-incremental\_response
-
-boolean
-
-否
-
-是否增量返回大模型结果，true为增量，false为全量。默认为false，全量下发
-
-instruction
-
-string
-
-否
-
-设置指令，用于控制方言、情感等合成效果。该功能适用的模型以及在不同模型的格式要求请参见[指令控制](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#12884a10929p9)。
-
-language
-
-string
-
-否
-
-语音合成语种，默认和控制台选择的语言保持一致。
+<table><thead><tr><th><p><strong>一级参数</strong></p></th><th><p><strong>类型</strong></p></th><th><p><strong>是否必选</strong></p></th><th><p><strong>说明</strong></p></th></tr></thead><tbody><tr><td><p>voice</p></td><td><p>string</p></td><td><p>否</p></td><td><p>合成语音的音色，支持范围取决于用户在管控台选择的语音合成模型</p></td></tr><tr><td><p>sample_rate</p></td><td><p>int</p></td><td><p>否</p></td><td><p>合成语音的采样率，支持范围：</p><ul><li><p>8000</p></li><li><p>16000</p></li><li><p>24000</p></li><li><p>48000</p></li></ul><p>默认为24000。</p><p>千问-TTS、千问3-TTS模型仅支持24000。</p></td></tr><tr><td><p>audio_format</p></td><td><p>string</p></td><td><p>否</p></td><td><p>音频格式，支持pcm，opus，mp3，raw-opus，默认为pcm。</p><p>千问-TTS模型仅支持pcm。</p><p>注意：opus 和 raw-opus的区别是opus格式的每一包数据都有额外ogg封装（<a href="https://www.rfc-editor.org/rfc/rfc7845.html">RFC 7845</a>）</p></td></tr><tr><td><p>frame_size</p></td><td><p>int</p></td><td><p>否</p></td><td><p>合成音频的帧大小，取值范围：</p><ul><li><p>10</p></li><li><p>20</p></li><li><p>40</p></li><li><p>60</p></li><li><p>100</p></li><li><p>120</p></li></ul><p>默认值为60，单位ms</p><p>只在合成音频格式为opus或raw-opus时生效</p></td></tr><tr><td><p>volume</p></td><td><p>int</p></td><td><p>否</p></td><td><p>合成音频的音量，取值范围0-100，默认50</p></td></tr><tr><td><p>speech_rate</p></td><td><p>int</p></td><td><p>否</p></td><td><p>合成音频的语速，取值范围50-200，表示默认语速的50%-200%，默认100</p></td></tr><tr><td><p>pitch_rate</p></td><td><p>int</p></td><td><p>否</p></td><td><p>合成音频的声调，取值范围50-200，默认100</p></td></tr><tr><td><p>bit_rate</p></td><td><p>int</p></td><td><p>否</p></td><td><p>合成音频的比特率，取值范围：6~510kbps，默认值为32，单位kbps，只在合成音频格式为mp3, opus或raw-opus时生效</p></td></tr><tr><td><p>intermediate_text</p></td><td><p>string</p></td><td><p>否</p></td><td><p>控制返回给用户哪些中间文本：</p><ul><li><p>transcript：返回用户语音识别结果</p></li><li><p>dialog：返回对话系统回答中间结果</p></li></ul><p>可以设置多种，以逗号分隔，默认为transcript</p></td></tr><tr><td><p>word_timestamp_enabled</p></td><td><p>boolean</p></td><td><p>否</p></td><td><p>是否下发tts合成音频对应的时间戳。如果设置为true，会在RespondingContent.extra_info下返回时间戳信息，用于客户端显示字幕等，默认为false。</p><p>必须在intermediate_text有指定dialog的情况下才会返回；</p><p>只有<a href="../model-user-guide/model-experience/speech-and-audio/speech-synthesis/tts-voice-list/cosyvoice-voice-list.md">CosyVoice音色列表</a>中表明支持时间戳的音色和复刻音色才会返回。</p></td></tr><tr><td><p>transmit_rate_limit</p></td><td><p>int</p></td><td><p>否</p></td><td><p>下发音频发送速率限制，单位：字节每秒</p></td></tr><tr><td><p>incremental_response</p></td><td><p>boolean</p></td><td><p>否</p></td><td><p>是否增量返回大模型结果，true为增量，false为全量。默认为false，全量下发</p></td></tr><tr><td><p>instruction</p></td><td><p>string</p></td><td><p>否</p></td><td><p>设置指令，用于控制方言、情感等合成效果。该功能适用的模型以及在不同模型的格式要求请参见<a href="../model-user-guide/model-experience/speech-and-audio/speech-synthesis/realtime-tts-user-guide.md#12884a10929p9">指令控制</a>。</p></td></tr><tr><td><p>language</p></td><td><p>string</p></td><td><p>否</p></td><td><p>语音合成语种，默认和控制台选择的语言保持一致。</p></td></tr></tbody></table>
 
 **parameters.client\_info**的参数说明如下：
 
-**一级参数**
-
-**二级参数**
-
-**类型**
-
-**是否必选**
-
-**说明**
-
-user\_id
-
-string
-
-是
-
-终端用户ID，客户根据自己业务规则生成，用来针对不同终端用户实现定制化功能。最大长度36个字符。
-
-device
-
-uuid
-
-string
-
-否
-
-客户端全局唯一的ID，需要用户自己生成并传入SDK，最大长度40个字符。一个终端用户可以有多个设备，那么每一个设备的uuid都不同，但user\_id相同。
-
-network
-
-ip
-
-string
-
-否
-
-调用方公网IP
-
-location
-
-latitude
-
-string
-
-否
-
-调用方纬度信息，在需要客户端精确位置的业务场景提交
-
-longitude
-
-string
-
-否
-
-调用方经度信息，在需要客户端精确位置的业务场景提交
-
-city\_name
-
-string
-
-否
-
-调用方所在城市，指明客户端粗略位置
+<table><thead><tr><th><p><strong>一级参数</strong></p></th><th><p><strong>二级参数</strong></p></th><th><p><strong>类型</strong></p></th><th><p><strong>是否必选</strong></p></th><th><p><strong>说明</strong></p></th></tr></thead><tbody><tr><td><p>user_id</p></td><td></td><td><p>string</p></td><td><p>是</p></td><td><p>终端用户ID，客户根据自己业务规则生成，用来针对不同终端用户实现定制化功能。最大长度36个字符。</p></td></tr><tr><td><p>device</p></td><td><p>uuid</p></td><td><p>string</p></td><td><p>否</p></td><td><p>客户端全局唯一的ID，需要用户自己生成并传入SDK，最大长度40个字符。一个终端用户可以有多个设备，那么每一个设备的uuid都不同，但user_id相同。</p></td></tr><tr><td><p>network</p></td><td><p>ip</p></td><td><p>string</p></td><td><p>否</p></td><td><p>调用方公网IP</p></td></tr><tr><td rowspan="3"><p>location</p></td><td><p>latitude</p></td><td><p>string</p></td><td><p>否</p></td><td><p>调用方纬度信息，在需要客户端精确位置的业务场景提交</p></td></tr><tr><td><p>longitude</p></td><td><p>string</p></td><td><p>否</p></td><td><p>调用方经度信息，在需要客户端精确位置的业务场景提交</p></td></tr><tr><td><p>city_name</p></td><td><p>string</p></td><td><p>否</p></td><td><p>调用方所在城市，指明客户端粗略位置</p></td></tr></tbody></table>
 
 **parameters.biz\_params**的参数说明如下：
 
-**一级参数**
-
-**类型**
-
-**是否必选**
-
-**说明**
-
-user\_defined\_params
-
-json object
-
-否
-
-设置需要透传给agent 和 mcp 服务的参数，各类agent传递的参数参考[调用官方Agent](raw/_short/official-agent-297b22931e69e622.md)文档说明， mcp 传递参数依照 mcp 服务本身所需的参数。可以在extra\_config子节点中设置对话扩展参数，目前支持：1. enable\_web\_search，表示是否开启联网搜索。这里的设置优先级更高，会覆盖管控台配置；2. agent\_timeout，表示agent连接超时的时间，传值范围是10秒到120秒。如果不传，则默认为10秒。
-
-user\_prompt\_params
-
-json object
-
-否
-
-用于设置用户自定义prompt变量，由用户自定义设置json中的key和value。管控台上配置自定义prompt变量的方法参考[应用配置-提示词](raw/_short/multimodal-app-configuration-8919f99b339e17da.md)
-
-user\_query\_params
-
-json object
-
-否
-
-用于设置用户自定义对话变量，由用户自定义设置json中的key和value。管控台上配置自定义对话变量的方法参考[应用配置-对话变量](raw/_short/multimodal-app-configuration-8919f99b339e17da.md)
+| 一级参数 | 类型 | 是否必选 | 说明 |
+| --- | --- | --- | --- |
+| user\_defined\_params | json object | 否 | 设置需要透传给agent 和 mcp 服务的参数，各类agent传递的参数参考[调用官方Agent](official-agent-297b22931e69e622.md)文档说明， mcp 传递参数依照 mcp 服务本身所需的参数。可以在extra\_config子节点中设置对话扩展参数，目前支持：1. enable\_web\_search，表示是否开启联网搜索。这里的设置优先级更高，会覆盖管控台配置；2. agent\_timeout，表示agent连接超时的时间，传值范围是10秒到120秒。如果不传，则默认为10秒。 |
+| user\_prompt\_params | json object | 否 | 用于设置用户自定义prompt变量，由用户自定义设置json中的key和value。管控台上配置自定义prompt变量的方法参考[应用配置-提示词](multimodal-app-configuration-8919f99b339e17da.md) |
+| user\_query\_params | json object | 否 | 用于设置用户自定义对话变量，由用户自定义设置json中的key和value。管控台上配置自定义对话变量的方法参考[应用配置-对话变量](multimodal-app-configuration-8919f99b339e17da.md) |
 
 **客户端使用的三种模式对比：**
 
-**对比项**
-
-**push2talk**
-
-**tap2talk**
-
-**duplex**
-
-类型
-
-客户端控制模式
-
-点击模式
-
-双工模式
-
-音频上传方式
-
-按需
-
-持续
-
-Listening状态超过20秒不上传音频即报错
-
-持续
-
-任何状态超过20秒不上传音频都报错
-
-VAD检测方
-
-客户端
-
-服务端
-
-服务端
-
-打断方式
-
-[RequestToSpeak](raw/model-api-reference/more-about-models/multimodal-interaction-protocol.md)消息打断
-
-[RequestToSpeak](raw/model-api-reference/more-about-models/multimodal-interaction-protocol.md)消息打断
-
-语音打断
-
-使用场景
-
-由用户控制开始/结束客户端语音发送和识别，适用于按键说话，松开停止说话的场景。
-
-客户端需持续上传音频，服务端自动检测语音活动的场景。但不支持用户语音打断大模型输出，只能发送RequestToSpeak打断消息。
-
-客户端需持续上传音频，服务端自动检测语音活动的场景。用户随时可以说话打断大模型输出。
+| 对比项 | push2talk | tap2talk | duplex |
+| --- | --- | --- | --- |
+| 类型 | 客户端控制模式 | 点击模式 | 双工模式 |
+| 音频上传方式 | 按需 | 持续<br><br>Listening状态超过20秒不上传音频即报错 | 持续<br><br>任何状态超过20秒不上传音频都报错 |
+| VAD检测方 | 客户端 | 服务端 | 服务端 |
+| 打断方式 | [RequestToSpeak](../model-api-reference/more-about-models/multimodal-interaction-protocol.md)消息打断 | [RequestToSpeak](../model-api-reference/more-about-models/multimodal-interaction-protocol.md)消息打断 | 语音打断 |
+| 使用场景 | 由用户控制开始/结束客户端语音发送和识别，适用于按键说话，松开停止说话的场景。 | 客户端需持续上传音频，服务端自动检测语音活动的场景。但不支持用户语音打断大模型输出，只能发送RequestToSpeak打断消息。 | 客户端需持续上传音频，服务端自动检测语音活动的场景。用户随时可以说话打断大模型输出。 |
 
 示例如下：
 
-```
+<a id="code-block-14"></a>
+
+```json
 {
     "header": {
         "action":"run-task",
@@ -936,10 +464,14 @@ VAD检测方
 }
 ```
 
+<a id="290dc8b301e60"></a>
+
 ##### IConversationCallback （回调接口）
 
-```
-/**
+<a id="code-block-15"></a>
+
+```text
+    /**
      * 对话启动结果，鉴权、客户端加入通道成功后，会回调该消息
      */
     fun onStartResult(isSuccess: Boolean, errorInfo: TYError?)
@@ -1000,61 +532,31 @@ VAD检测方
     fun onDebugInfoTrack(level: Int, type: Constant.TYDebugInfoType, debugInfo: String)
 ```
 
+<a id="ee9c017bdds3h"></a>
+
 ###### onConvEventCallback AI对话 Response详情
 
 -   EVENT\_HUMAN\_SPEAKING\_DETAIL
     
     语音识别内容
     
+    <a id="03cb5f06fcxu5"></a>
+    
+    <a id="9ef7dba3a6ng1"></a>
+    
     ##### SpeechContent - response
     
-    一级参数
+    |  |  |  |  |  |  |
+    | --- | --- | --- | --- | --- | --- |
+    | 一级参数 | 二级参数 | 三级参数 | 类型 | 是否必选 | 说明 |
+    | output | event |  | string | 是 | 事件名称：SpeechContent |
+    |  | dialog\_id |  | string | 是 | 对话 ID。 |
+    |  | text |  | string | 是 | 用户语音识别出的文本，流式**全量**输出 |
+    |  | finished |  | bool | 是 | 输出是否结束 |
     
-    二级参数
+    <a id="code-block-16"></a>
     
-    三级参数
-    
-    类型
-    
-    是否必选
-    
-    说明
-    
-    output
-    
-    event
-    
-    string
-    
-    是
-    
-    事件名称：SpeechContent
-    
-    dialog\_id
-    
-    string
-    
-    是
-    
-    对话 ID。
-    
-    text
-    
-    string
-    
-    是
-    
-    用户语音识别出的文本，流式**全量**输出
-    
-    finished
-    
-    bool
-    
-    是
-    
-    输出是否结束
-    
-    ```
+    ```json
     {
         "header": {
             "request_id": "9B32878******************3D053",
@@ -1085,69 +587,13 @@ VAD检测方
     
     大模型的返回文本
     
-    output
-    
-    finished
-    
-    bool
-    
-    是
-    
-    输出是否结束
-    
-    dialog\_id
-    
-    string
-    
-    是
-    
-    对话 ID。
-    
-    event
-    
-    string
-    
-    是
-    
-    消息类型
-    
-    text
-    
-    string
-    
-    否
-    
-    大模型返回的文本结果。
-    
-    spoken
-    
-    string
-    
-    否
-    
-    大模型返回的播放内容的文本，可能跟 text 字段有所不同。
-    
-    extra\_info
-    
-    object
-    
-    否
-    
-    其他扩展信息，目前支持：
-    
-    commands: 命令字符串
-    
-    agent\_info: 智能体信息
-    
-    tool\_calls: 插件返回的信息
-    
-    dialog\_debug: 对话debug信息
-    
-    timestamps: 链路中各节点时间戳
+    <table><tbody><tr><td rowspan="6"><p>output</p></td><td><p>finished</p></td><td></td><td><p>bool</p></td><td><p>是</p></td><td><p>输出是否结束</p></td></tr><tr><td><p>dialog_id</p></td><td></td><td><p>string</p></td><td><p>是</p></td><td><p>对话 ID。</p></td></tr><tr><td><p>event</p></td><td></td><td><p>string</p></td><td><p>是</p></td><td><p>消息类型</p></td></tr><tr><td><p>text</p></td><td></td><td><p>string</p></td><td><p>否</p></td><td><p>大模型返回的文本结果。</p></td></tr><tr><td><p>spoken</p></td><td></td><td><p>string</p></td><td><p>否</p></td><td><p>大模型返回的播放内容的文本，可能跟 text 字段有所不同。</p></td></tr><tr><td><p>extra_info</p></td><td></td><td><p>object</p></td><td><p>否</p></td><td><p>其他扩展信息，目前支持：</p><p>commands: 命令字符串</p><p>agent_info: 智能体信息</p><p>tool_calls: 插件返回的信息</p><p>dialog_debug: 对话debug信息</p><p>timestamps: 链路中各节点时间戳</p></td></tr></tbody></table>
     
     示例：
     
-    ```
+    <a id="code-block-17"></a>
+    
+    ```json
     {
         "header": {
             "event":"result-generated",
@@ -1186,27 +632,59 @@ VAD检测方
     ```
     
 
+<a id="异常处理"></a>
+
+<a id="b83dda5833kyf"></a>
+
 #### 异常处理
+
+<a id="e011088f10l8t"></a>
 
 ##### onErrorReceived - response
 
+<a id="通用错误码"></a>
+
+<a id="8494b71d83tzt"></a>
+
+<a id="89ada5e99a10n"></a>
+
 #### 通用错误码
 
-如遇报错问题，请参见[多模态交互套件-错误码](raw/_short/multimodal-error-code-27e8073eb3267722.md)进行排查。
+如遇报错问题，请参见[多模态交互套件-错误码](multimodal-error-code-27e8073eb3267722.md)进行排查。
 
 若问题仍未解决，请联系技术支持，反馈遇到的问题，并提供完整的request\_id和dialog\_id，以便进一步排查问题。
 
+<a id="调用时序"></a>
+
+<a id="b6af8d622cqep"></a>
+
 #### 调用时序
+
+<a id="8849a2589306k"></a>
 
 ##### 全双工交互
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0921377471/p957926.png)
 
+<a id="af5a6cc73bv6i"></a>
+
 ##### 半双工交互
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0921377471/p957927.png)
 
+<a id="更多sdk接口使用说明"></a>
+
+<a id="8e1dad4f24sb3"></a>
+
+<a id="5bba6310c7sb9"></a>
+
 ## 更多SDK接口使用说明
+
+<a id="双工交互"></a>
+
+<a id="cbaab8ec949jy"></a>
+
+<a id="97798c5357jth"></a>
 
 ### 双工交互
 
@@ -1218,7 +696,9 @@ VAD检测方
 
 请将实时录音获取的音频数据通过如下接口传入SDK。
 
-```
+<a id="code-block-18"></a>
+
+```java
 multiModalDialog.sendAudioData(data);
 ```
 
@@ -1226,9 +706,17 @@ multiModalDialog.sendAudioData(data);
 
 请将实时播放的音频数据通过如下接口传入SDK。注意传入数据需要保证与当前播放数据一致。
 
-```
+<a id="code-block-19"></a>
+
+```java
 multiModalDialog.sendRefData(data);
 ```
+
+<a id="vqa交互"></a>
+
+<a id="179a4ac1c22zs"></a>
+
+<a id="7ba9b25c2cohg"></a>
 
 ### VQA交互
 
@@ -1240,7 +728,9 @@ VQA 是在对话过程中通过发送图片实现图片+语音的多模交互的
 
 -   处理"visual\_qa" command和上传拍照。
 
-```
+<a id="code-block-20"></a>
+
+```java
 private void executeCmd(String cmd,String dialogId,String taskId){
   String cmdName = null;
   String cmdParamValue = null;
@@ -1279,6 +769,12 @@ public static JSONArray getMockOSSImage() {
   }
 ```
 
+<a id="通过-websocket-链路请求liveai"></a>
+
+<a id="6ff2cdacc27um"></a>
+
+<a id="0eeaf6d3a199j"></a>
+
 ### 通过 WebSocket 链路请求LiveAI
 
 LiveAI （视频通话）是百炼多模交互提供的官方Agent。通过Android 全功能版本SDK， 您也可以在 WebSocket 链路中通过自行录制视频帧的方式来调用视频通话功能。
@@ -1287,13 +783,17 @@ LiveAI （视频通话）是百炼多模交互提供的官方Agent。通过Andro
 
 -   LiveAI调用时序
 
+<a id="e0a817e803bvl"></a>
+
 #### ![截屏2025-06-20 11](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1903140571/p975541.png)
 
 -   关键代码示例
 
 请注意参照如下的调用流程实现 通过 WebSocket 协议调用 LiveAI。
 
-```
+<a id="code-block-21"></a>
+
+```java
 //1. 设置交互类型为AudioAndVideo
 MultiModalRequestParam.UpStream.builder().mode("duplex").type("AudioAndVideo").build();
 
@@ -1378,6 +878,12 @@ private static String getLocalImageBase64(){
 }
 ```
 
+<a id="文本合成tts"></a>
+
+<a id="b8ccc5da4bb3b"></a>
+
+<a id="6e3f603365i4l"></a>
+
 ### 文本合成TTS
 
 SDK支持通过文本直接请求服务端合成音频。
@@ -1386,9 +892,17 @@ SDK支持通过文本直接请求服务端合成音频。
 
 若当前状态非Listening，需要先调用`Interrupt` 接口打断当前播报。
 
-```
+<a id="code-block-22"></a>
+
+```java
 conversation.requestToRespond("transcript","幸福是一种技能，是你摒弃了外在多余欲望后的内心平和。",null);
 ```
+
+<a id="自定义提示词变量和传值"></a>
+
+<a id="442af8d6f6i38"></a>
+
+<a id="bc12359002e0p"></a>
 
 ### 自定义提示词变量和传值
 
@@ -1402,7 +916,9 @@ conversation.requestToRespond("transcript","幸福是一种技能，是你摒弃
 
 如下示例，设置`"user_name" = "大米"`。
 
-```
+<a id="code-block-23"></a>
+
+```java
 //在请求参数构建中传入biz_params.user_prompt_params
 HashMap<String, String> userPromptParams = new HashMap<>();
 userPromptParams.put("user_name", "大米");
@@ -1416,6 +932,12 @@ userPromptParams.put("user_name", "大米");
 
 ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1903140571/p975544.png)
 
+<a id="asr结果即时纠错"></a>
+
+<a id="630d27822bdo8"></a>
+
+<a id="b2da3253cd73l"></a>
+
 ### ASR结果即时纠错
 
 在对话过程中，ASR 识别结果有可能出现错误或者非预期的结果。 除了配置热词之外，您也可以通过即时纠错功能接口上传词表进行实时干预。
@@ -1424,51 +946,17 @@ userPromptParams.put("user_name", "大米");
 
 通过配置UpStream的AsrPostProcessing 参数来配置纠错词表。
 
-参数
+| 参数 | 一级参数 | 二级参数 | 类型 | 说明 |
+| --- | --- | --- | --- | --- |
+| AsrPostProcessing |  |  | Object | ASR 纠错词表 |
+|  | ReplaceWord\[\] |  | List | 词表列表，每个ReplaceWord 对应一组词的替换规则 |
+|  |  | source | String | 需要被替换的文本 |
+|  |  | target | String | 替换目标文本 |
+|  |  | match\_mode | String | 匹配模式，默认为exact：<br><br>**exact**：整句精确匹配，只有文本与source完全相同才匹配成功<br><br>**partial**：部分匹配，文本中部分字符与source相同即匹配成功 |
 
-一级参数
+<a id="code-block-24"></a>
 
-二级参数
-
-类型
-
-说明
-
-AsrPostProcessing
-
-Object
-
-ASR 纠错词表
-
-ReplaceWord\[\]
-
-List
-
-词表列表，每个ReplaceWord 对应一组词的替换规则
-
-source
-
-String
-
-需要被替换的文本
-
-target
-
-String
-
-替换目标文本
-
-match\_mode
-
-String
-
-匹配模式，默认为exact：
-
-**exact**：整句精确匹配，只有文本与source完全相同才匹配成功
-
-**partial**：部分匹配，文本中部分字符与source相同即匹配成功
-
-```
+```java
 //构建AsrPostProcessing对象
 MultiModalRequestParam.UpStream.ReplaceWord replaceWord = new MultiModalRequestParam.UpStream.ReplaceWord();
     replaceWord.setTarget("一加一");

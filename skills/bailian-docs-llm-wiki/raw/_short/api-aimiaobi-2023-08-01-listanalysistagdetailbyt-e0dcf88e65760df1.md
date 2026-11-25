@@ -2,11 +2,19 @@
 
 分页获取企业VOC分析任务明细列表。
 
+<a id="调试"></a>
+
+<a id="api-detail-23"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
 [调试](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/ListAnalysisTagDetailByTaskId)
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -25,281 +33,58 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-操作
+<table><thead><tr><th>操作</th><th>访问级别</th><th>资源类型</th><th>条件关键字</th><th>关联操作</th></tr></thead><tbody><tr><td>aimiaobi:ListAnalysisTagDetailByTaskId</td><td>get</td><td><div><div>*全部资源</div><div><code>*</code></div></div></td><td><ul>无</ul></td><td>无</td></tr></tbody></table>
 
-访问级别
+<a id="请求参数"></a>
 
-资源类型
-
-条件关键字
-
-关联操作
-
-aimiaobi:ListAnalysisTagDetailByTaskId
-
-get
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-36"></a>
 
 ## 请求参数
 
-名称
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | xxxx |
+| TaskId | string | 是 | 任务唯一 ID<br><br>**说明** TaskId 默认无需填写，系统将自动生成。当后续任务填写的 TaskId 相同时，表示这些任务属于同一组对话。 | xxx |
+| Categories | array | 否 | 分类筛选列表 |  |
+|  | string | 否 | 分类筛选 | 分类1 |
+| NextToken | string | 否 | 下一页标识 | token-xxxx |
+| MaxResults | integer | 否 | 每页最大数量 | 10 |
+| Size | integer | 否 | 请求记录数 | 3 |
+| Current | integer | 否 | 当前页码 | 1 |
 
-类型
+<a id="返回参数"></a>
 
-必填
-
-描述
-
-示例值
-
-WorkspaceId
-
-string
-
-是
-
-阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)
-
-xxxx
-
-TaskId
-
-string
-
-是
-
-任务唯一 ID
-
-**说明** TaskId 默认无需填写，系统将自动生成。当后续任务填写的 TaskId 相同时，表示这些任务属于同一组对话。
-
-xxx
-
-Categories
-
-array
-
-否
-
-分类筛选列表
-
-string
-
-否
-
-分类筛选
-
-分类1
-
-NextToken
-
-string
-
-否
-
-下一页标识
-
-token-xxxx
-
-MaxResults
-
-integer
-
-否
-
-每页最大数量
-
-10
-
-Size
-
-integer
-
-否
-
-请求记录数
-
-3
-
-Current
-
-integer
-
-否
-
-当前页码
-
-1
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-名称
-
-类型
-
-描述
-
-示例值
-
-object
-
-PlainResult
-
-Code
-
-string
-
-状态码
-
-NoData
-
-Data
-
-array<object>
-
-标签挖掘分类明细列表
-
-data
-
-object
-
-标签挖掘分类明细
-
-Id
-
-long
-
-数据主键 ID
-
-112
-
-TaskId
-
-string
-
-任务 ID
-
-xxx
-
-TagTaskType
-
-string
-
-标签挖掘任务类型（单标签：singleTagValue，多标签：multiTagValues，总结概括：summaryAndOverview）
-
-summaryAndOverview
-
-Content
-
-string
-
-标签内容
-
-xxx
-
-ContentTags
-
-array<object>
-
-标签内容列表
-
-contentTags
-
-object
-
-标签值列表
-
-TagName
-
-string
-
-标签名称
-
-xxx
-
-SummaryOverview
-
-string
-
-总结概括
-
-xxx
-
-Tags
-
-array
-
-标签值列表
-
-tags
-
-string
-
-标签值
-
-标签值列表
-
-HttpStatusCode
-
-integer
-
-http 状态码
-
-200
-
-Message
-
-string
-
-错误说明
-
-success
-
-RequestId
-
-string
-
-请求唯一标识
-
-1813ceee-7fe5-41b4-87e5-982a4d18cca5
-
-Success
-
-boolean
-
-是否成功：true 成功，false 失败
-
-true
-
-NextToken
-
-string
-
-下一页标识
-
-token-xxxx
-
-MaxResults
-
-integer
-
-每页最大数量
-
-10
-
-TotalCount
-
-integer
-
-总数
-
-10
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | PlainResult |  |
+| Code | string | 状态码 | NoData |
+| Data | array<object> | 标签挖掘分类明细列表 |  |
+| data | object | 标签挖掘分类明细 |  |
+| Id | long | 数据主键 ID | 112 |
+| TaskId | string | 任务 ID | xxx |
+| TagTaskType | string | 标签挖掘任务类型（单标签：singleTagValue，多标签：multiTagValues，总结概括：summaryAndOverview） | summaryAndOverview |
+| Content | string | 标签内容 | xxx |
+| ContentTags | array<object> | 标签内容列表 |  |
+| contentTags | object | 标签值列表 |  |
+| TagName | string | 标签名称 | xxx |
+| SummaryOverview | string | 总结概括 | xxx |
+| Tags | array | 标签值列表 |  |
+| tags | string | 标签值 | 标签值列表 |
+| HttpStatusCode | integer | http 状态码 | 200 |
+| Message | string | 错误说明 | success |
+| RequestId | string | 请求唯一标识 | 1813ceee-7fe5-41b4-87e5-982a4d18cca5 |
+| Success | boolean | 是否成功：true 成功，false 失败 | true |
+| NextToken | string | 下一页标识 | token-xxxx |
+| MaxResults | integer | 每页最大数量 | 10 |
+| TotalCount | integer | 总数 | 10 |
+
+<a id="示例"></a>
+
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -307,7 +92,9 @@ integer
 
 `JSON`格式
 
-```
+<a id="code-block"></a>
+
+```text
 {
   "Code": "NoData",
   "Data": [
@@ -336,6 +123,10 @@ integer
   "TotalCount": 10
 }
 ```
+
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
 
 ## 错误码
 

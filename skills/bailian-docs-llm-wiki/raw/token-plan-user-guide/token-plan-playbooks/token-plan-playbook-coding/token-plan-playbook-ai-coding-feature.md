@@ -2,35 +2,37 @@
 
 一句话描述需求，AI 读入现有代码增量加功能不动老逻辑。
 
-**说明**
-
-**免责声明**：本页展示内容均为 AI 模型生成，仅供参考，不构成任何效果承诺；实际产出效果与 Credits 消耗以控制台“用量详情”为准。
+> **说明**
+>
+> **免责声明**：本页展示内容均为 AI 模型生成，仅供参考，不构成任何效果承诺；实际产出效果与 Credits 消耗以控制台“用量详情”为准。
 
 本篇用一套销售 CRM 跑通：它缺“客户跟进提醒”，超期客户没人管——在 Qoder 里把现有代码交给 `qwen3.7-max`，一句话让它在不动搜索、筛选等老功能的前提下增量补上提醒。
 
 工具：Qoder · `qwen3.7-max` 读入现有代码 → 增量开发。
 
+<a id="实测产出"></a>
+
+<a id="tp-pb-crm-result"></a>
+
 ## 实测产出
 
 同一套现有代码、仅追加一条功能指令，加功能前后（均可点击试用）：
 
-加功能前的基础 CRM
+|  |  |
+| --- | --- |
+| 加功能前的基础 CRM<br><br>![基础 CRM](https://g-adoc.alcasset.com/media/maas_docs/sfm/zh/images/6a4b3c2d1e0f9e1d.png)<br><br>[点击试用](https://g-adoc.alcasset.com/media/maas_docs/sfm/zh/files/6a4b3c2d1e0f9e1e.html) | 新增跟进提醒后<br><br>![新增跟进提醒](https://g-adoc.alcasset.com/media/maas_docs/sfm/zh/images/6a4b3c2d1e0f9e1f.png)<br><br>[点击试用](https://g-adoc.alcasset.com/media/maas_docs/sfm/zh/files/6a4b3c2d1e0f9e1c.html) |
 
-![基础 CRM](https://g-adoc.alcasset.com/media/maas_docs/sfm/zh/images/6a4b3c2d1e0f9e1d.png)
+<a id="步骤-一句话加功能"></a>
 
-[点击试用](https://g-adoc.alcasset.com/media/maas_docs/sfm/zh/files/6a4b3c2d1e0f9e1e.html)
-
-新增跟进提醒后
-
-![新增跟进提醒](https://g-adoc.alcasset.com/media/maas_docs/sfm/zh/images/6a4b3c2d1e0f9e1f.png)
-
-[点击试用](https://g-adoc.alcasset.com/media/maas_docs/sfm/zh/files/6a4b3c2d1e0f9e1c.html)
+<a id="tp-pb-crm-step1"></a>
 
 ## 步骤：一句话加功能
 
 在 Qoder 里把现有代码连同下面的指令发给 `qwen3.7-max`：
 
-```
+<a id="code-block"></a>
+
+```text
 这是我现有的 CRM 系统代码（见下方）。请在不改动现有功能（搜索、状态筛选）
 的前提下，新增「客户跟进提醒」功能：
 1. 超过 7 天未跟进的客户整行标红置顶（已成交、已流失客户不参与提醒）；
@@ -39,6 +41,10 @@
 保持现有代码风格，输出完整修改后的文件。
 【现有代码】{粘贴文件内容}
 ```
+
+<a id="说明"></a>
+
+<a id="tp-pb-crm-notes"></a>
 
 ## 说明
 

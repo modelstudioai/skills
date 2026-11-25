@@ -2,11 +2,17 @@
 
 文搜图工具使模型能够根据文本描述从互联网搜索相关图片，并基于图片内容进行描述和推理，适用于可视化问答、配图推荐等场景。
 
+<a id="使用方式"></a>
+
+<a id="b4c8d2e6f0g3h"></a>
+
 ## 使用方式
 
 文搜图功能通过 Responses API 调用，在 `tools` 中添加 `web_search_image` 工具。
 
-```
+<a id="code-block"></a>
+
+```python
 # 导入依赖与创建客户端...
 response = client.responses.create(
     model="qwen4-max",
@@ -17,7 +23,15 @@ response = client.responses.create(
 print(response.output_text)
 ```
 
+<a id="支持的模型"></a>
+
+<a id="g9h3i7j1k5l8m"></a>
+
 ## 支持的模型
+
+<a id="推荐模型"></a>
+
+<a id="we_rec_title"></a>
 
 ### 推荐模型
 
@@ -29,6 +43,10 @@ print(response.output_text)
 
 qwen3.8-27b
 
+<a id="其他模型"></a>
+
+<a id="we_other_title"></a>
+
 ### 其他模型
 
 以下模型也支持此工具调用，但效果不如推荐模型。
@@ -37,15 +55,25 @@ qwen3.8-27b
 
 仅支持通过 Responses API 调用。
 
+<a id="快速开始"></a>
+
+<a id="n6o0p4q8r2s5t"></a>
+
 ## 快速开始
 
 运行以下代码，通过 Responses API 调用文搜图工具，根据文本描述搜索互联网图片。
 
-> 需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
+> 需要已[获取与配置 API Key](../../../../model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
+
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-python-tab"></a>
 
 python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 import os
 import json
 from openai import OpenAI
@@ -90,9 +118,13 @@ if hasattr(response.usage, 'x_tools') and response.usage.x_tools:
         print(f"[工具统计] {tool_name} 调用次数: {info.get('count', 0)}")
 ```
 
+<a id="fig-code-group-javascript-tab"></a>
+
 javascript
 
-```
+<a id="code-code-group-javascript"></a>
+
+```javascript
 import OpenAI from "openai";
 import process from 'process';
 
@@ -145,9 +177,13 @@ async function main() {
 main();
 ```
 
+<a id="fig-code-group-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-bash"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -163,7 +199,9 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 运行以上代码可获取如下回复：
 
-```
+<a id="code-block-2"></a>
+
+```text
 [工具调用] 文搜图 (status: completed)
   搜索到 30 张图片：
   [1] Best Free Information Technology Background S Google Slides Themes ...
@@ -195,13 +233,23 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 [工具统计] web_search_image 调用次数: 1
 ```
 
+<a id="流式输出"></a>
+
+<a id="d2e6f0g4h8i1j"></a>
+
 ## 流式输出
 
 文搜图工具运行较慢，建议启用流式输出，实时获取中间过程的输出结果。
 
+<a id="fig-code-group-2"></a>
+
+<a id="fig-code-group-2-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-2-python"></a>
+
+```python
 import os
 import json
 from openai import OpenAI
@@ -252,9 +300,13 @@ for event in stream:
                 print(f"[工具统计] {tool_name} 调用次数: {info.get('count', 0)}")
 ```
 
+<a id="fig-code-group-2-javascript-tab"></a>
+
 javascript
 
-```
+<a id="code-code-group-2-javascript"></a>
+
+```javascript
 import OpenAI from "openai";
 import process from 'process';
 
@@ -321,9 +373,13 @@ async function main() {
 main();
 ```
 
+<a id="fig-code-group-2-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-2-bash"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -340,7 +396,9 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 运行以上代码可获取如下输出：
 
-```
+<a id="code-block-3"></a>
+
+```text
 [工具调用] 文搜图搜索中...
 [工具调用] 文搜图完成 (status: completed)
   搜索到 30 张图片：
@@ -372,6 +430,10 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 [Token 用量] 输入: 7180, 输出: 558, 合计: 7738
 [工具统计] web_search_image 调用次数: 1
 ```
+
+<a id="计费说明"></a>
+
+<a id="o3p7q1r5s9t2u"></a>
 
 ## 计费说明
 

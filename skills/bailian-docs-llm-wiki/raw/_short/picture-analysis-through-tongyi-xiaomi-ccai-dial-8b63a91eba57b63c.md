@@ -3,14 +3,26 @@
 本文向您介绍一个通过伶鹊CCAI-对话分析AIO应用进行图片分析的最佳实践。
 
 -   关于Java SDK的更多说明，请参见[开始使用](https://help.aliyun.com/zh/sdk/developer-reference/get-started-with-alibaba-cloud-classic-sdk-for-java)。
--   关于各API的详细出入参说明，请参见[API目录](raw/_short/api-contactcenterai-2024-06-03-dir-f5fdcb398b72451f.md)。
+-   关于各API的详细出入参说明，请参见[API目录](api-contactcenterai-2024-06-03-dir-f5fdcb398b72451f.md)。
+
+<a id="前提条件"></a>
+
+<a id="dde42f7d2b2u4"></a>
 
 ## 前提条件
 
 -   如果您还未创建AccessKeyID和AccessKeySecret，请参考[获取 AccessKey 与 AgentKey](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)。
--   如果您使用子账号调用接口，请参考[伶鹊CCAI-对话分析RAM子账号使用方式和授权操作](raw/_short/use-and-authorize-ram-users-for-ccai-dialogue-an-e83b0ec9dc63d2ff.md)。
+-   如果您使用子账号调用接口，请参考[伶鹊CCAI-对话分析RAM子账号使用方式和授权操作](use-and-authorize-ram-users-for-ccai-dialogue-an-e83b0ec9dc63d2ff.md)。
+
+<a id="获取workspaceid和app-id"></a>
+
+<a id="63e895af2e8ux"></a>
 
 ## 获取WorkspaceID和App ID
+
+<a id="workspace-id"></a>
+
+<a id="2b938f6397k9j"></a>
 
 ### Workspace ID
 
@@ -18,6 +30,10 @@
 
 1.  访问[**业务空间管理**](https://bailian.console.aliyun.com/?admin=1#/efm/business_management)页面。
 2.  在业务空间管理列表中获取的Workspace ID为入参中workspaceId。
+
+<a id="app-id"></a>
+
+<a id="379fa6ddeaye6"></a>
 
 ### App ID
 
@@ -27,7 +43,17 @@
 2.  点击上方**我的应用**，展示应用卡片列表。
 3.  每个卡片上的应用ID即为需要获取的App ID。
 
+<a id="安装sdk"></a>
+
+<a id="acd7931e70w6n"></a>
+
 ## 安装SDK
+
+<a id="sec-tabs"></a>
+
+<a id="同步java"></a>
+
+<a id="同步java-h4"></a>
 
 #### 同步Java
 
@@ -41,6 +67,10 @@
 
 </dependency>
 
+<a id="异步java"></a>
+
+<a id="异步java-h4"></a>
+
 #### 异步Java
 
 <dependency>
@@ -53,13 +83,25 @@
 
 </dependency>
 
+<a id="代码示例"></a>
+
+<a id="33bc2083e24y0"></a>
+
 ## 代码示例
 
-**说明**请用已获取的Workspace ID替换示例中的YOUR\_WORKSPACEID，AccessKeyID替换示例中的YOUR\_ACCESS\_KEY\_ID，AccessKeySecret替换示例中的YOUR\_ACCESS\_KEY\_SECRET，App ID替换示例中的YOUR\_APPID，代码才能正常运行。为防止密钥泄露，建议将AccessKeyID和AccessKeySecret设置为环境变量。
+> **说明**
+>
+> 请用已获取的Workspace ID替换示例中的YOUR\_WORKSPACEID，AccessKeyID替换示例中的YOUR\_ACCESS\_KEY\_ID，AccessKeySecret替换示例中的YOUR\_ACCESS\_KEY\_SECRET，App ID替换示例中的YOUR\_APPID，代码才能正常运行。为防止密钥泄露，建议将AccessKeyID和AccessKeySecret设置为环境变量。
+
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-同步非流失调用-tab"></a>
 
 同步非流失调用
 
-```
+<a id="code-code-group-同步非流失调用"></a>
+
+```java
 import com.alibaba.fastjson.JSONObject;
 import com.aliyun.contactcenterai20240603.Client;
 import com.aliyun.contactcenterai20240603.models.*;
@@ -97,9 +139,13 @@ public class CcaiPaasTest {
 }
 ```
 
+<a id="fig-code-group-异步非流式调用-tab"></a>
+
 异步非流式调用
 
-```
+<a id="code-code-group-异步非流式调用"></a>
+
+```java
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -168,9 +214,13 @@ public class CcaiPaasTest {
 }
 ```
 
+<a id="fig-code-group-异步流式调用-tab"></a>
+
 异步流式调用
 
-```
+<a id="code-code-group-异步流式调用"></a>
+
+```java
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;

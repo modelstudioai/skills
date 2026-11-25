@@ -2,6 +2,10 @@
 
 阿里云百炼轻应用-车机/内容平台新闻热榜互动-播报单热点推荐：理解用户意图，获取对应频道下热点列表。
 
+<a id="接口说明"></a>
+
+<a id="api-detail-51"></a>
+
 ## 接口说明
 
 理解用户意图，获取对应频道下热点列表，比如“播报体育新闻”。历史接口，建议走“播报单（热榜）问答接口 RunHotTopicChat”，完全覆盖了当前接口的能力。
@@ -10,11 +14,19 @@
 
 通过 SDK 方式调用 API 可参考控制台“API”下的 java、python 示例。
 
+<a id="调试"></a>
+
+<a id="api-detail-23"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
 [调试](https://api.aliyun.com/api/QuanMiaoLightApp/2024-08-01/GenerateBroadcastNews)
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -33,259 +45,68 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-操作
+<table><thead><tr><th>操作</th><th>访问级别</th><th>资源类型</th><th>条件关键字</th><th>关联操作</th></tr></thead><tbody><tr><td>quanmiaolightapp:GenerateBroadcastNews</td><td>none</td><td><div><div>*全部资源</div><div><code>*</code></div></div></td><td><ul>无</ul></td><td>无</td></tr></tbody></table>
 
-访问级别
+<a id="请求语法"></a>
 
-资源类型
-
-条件关键字
-
-关联操作
-
-quanmiaolightapp:GenerateBroadcastNews
-
-none
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-53"></a>
 
 ## 请求语法
 
-```
+<a id="code-block"></a>
+
+```text
 POST /{workspaceId}/quanmiao/lightapp/GenerateBroadcastNews HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="api-detail-36"></a>
+
 ## 请求参数
 
-名称
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| workspaceId | string | 是 | [业务空间唯一标识](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-xxx |
+| prompt | string | 是 | 用户意图 | 帮我播报体育热点 |
 
-类型
+<a id="返回参数"></a>
 
-必填
-
-描述
-
-示例值
-
-workspaceId
-
-string
-
-是
-
-[业务空间唯一标识](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)
-
-llm-xxx
-
-prompt
-
-string
-
-是
-
-用户意图
-
-帮我播报体育热点
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-名称
-
-类型
-
-描述
-
-示例值
-
-object
-
-Schema of Response
-
-code
-
-string
-
-状态码
-
-xx
-
-data
-
-object
-
-分类和新闻热点数据
-
-hotTopicSummaries
-
-array<object>
-
-新闻热点数据列表
-
-hotTopicSummaries
-
-object
-
-新闻热点数据
-
-category
-
-string
-
-热点话题分类
-
-体育
-
-hotTopic
-
-string
-
-热点话题名称
-
-热点
-
-hotTopicVersion
-
-string
-
-热点话题版本
-
-2024-09-13\_08
-
-hotValue
-
-double
-
-热度
-
-1000000
-
-id
-
-string
-
-热点话题 ID
-
-1458tb3bjo7531kap42a
-
-images
-
-array<object>
-
-相关图片列表
-
-images
-
-object
-
-相关图片
-
-url
-
-string
-
-图片 url
-
-[http://xxx.com/xxx.jpeg](http://xxx.com/xxx.jpeg)
-
-textSummary
-
-string
-
-热点话题文本摘要
-
-xxx
-
-sessionId
-
-string
-
-对话 ID
-
-2bb0ea82dafd48a8817fadc4c90e2b52
-
-taskId
-
-string
-
-任务 ID
-
-3feb69ed02d9b1a17d0f1a942675d300
-
-text
-
-string
-
-理解结果
-
-体育
-
-usage
-
-object
-
-token 消耗
-
-inputTokens
-
-long
-
-输入 token 数
-
-1
-
-outputTokens
-
-long
-
-输出 Token 数量
-
-2
-
-totalTokens
-
-long
-
-总 token 量
-
-3
-
-httpStatusCode
-
-integer
-
-http 状态码
-
-200
-
-message
-
-string
-
-错误说明
-
-success
-
-requestId
-
-string
-
-请求唯一标识
-
-117F5ABE-CF02-5502-9A3F-E56BC9081A64
-
-success
-
-boolean
-
-是否成功：true 成功，false 失败
-
-True
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | Schema of Response |  |
+| code | string | 状态码 | xx |
+| data | object | 分类和新闻热点数据 |  |
+| hotTopicSummaries | array<object> | 新闻热点数据列表 |  |
+| hotTopicSummaries | object | 新闻热点数据 |  |
+| category | string | 热点话题分类 | 体育 |
+| hotTopic | string | 热点话题名称 | 热点 |
+| hotTopicVersion | string | 热点话题版本 | 2024-09-13\_08 |
+| hotValue | double | 热度 | 1000000 |
+| id | string | 热点话题 ID | 1458tb3bjo7531kap42a |
+| images | array<object> | 相关图片列表 |  |
+| images | object | 相关图片 |  |
+| url | string | 图片 url | [http://xxx.com/xxx.jpeg](http://xxx.com/xxx.jpeg) |
+| textSummary | string | 热点话题文本摘要 | xxx |
+| sessionId | string | 对话 ID | 2bb0ea82dafd48a8817fadc4c90e2b52 |
+| taskId | string | 任务 ID | 3feb69ed02d9b1a17d0f1a942675d300 |
+| text | string | 理解结果 | 体育 |
+| usage | object | token 消耗 |  |
+| inputTokens | long | 输入 token 数 | 1 |
+| outputTokens | long | 输出 Token 数量 | 2 |
+| totalTokens | long | 总 token 量 | 3 |
+| httpStatusCode | integer | http 状态码 | 200 |
+| message | string | 错误说明 | success |
+| requestId | string | 请求唯一标识 | 117F5ABE-CF02-5502-9A3F-E56BC9081A64 |
+| success | boolean | 是否成功：true 成功，false 失败 | True |
+
+<a id="示例"></a>
+
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -293,7 +114,9 @@ True
 
 `JSON`格式
 
-```
+<a id="code-block-2"></a>
+
+```text
 {
   "code": "xx",
   "data": {
@@ -327,6 +150,10 @@ True
   "success": true
 }
 ```
+
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
 
 ## 错误码
 

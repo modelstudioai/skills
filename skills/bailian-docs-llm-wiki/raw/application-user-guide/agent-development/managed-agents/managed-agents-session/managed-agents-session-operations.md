@@ -2,104 +2,52 @@
 
 会话创建后，可通过状态机、工具调用审批和中断机制控制执行流程，并在任务完成后归档或删除。
 
+<a id="状态机"></a>
+
+<a id="h-state"></a>
+
 ## 状态机
 
 会话状态显示在页面顶部。下表给出每个状态的触发条件、下一状态与可执行的操作：
 
-**状态**
-
-**触发条件**
-
-**下一状态**
-
-**可执行操作**
-
-`idle`（可交互：`stop_reason` 为 `null` / `end_turn` / `retries_exhausted`）
-
-会话刚创建（`null`）、一轮处理结束（`end_turn`）或重试耗尽（`retries_exhausted`）
-
-收到消息后进入 `running`；归档或删除后进入 `terminated`
-
-发送消息、挂载文件、归档、删除
-
-`idle`（`stop_reason=requires_action`）
-
-触发 `always_ask` 工具审批，等待裁决
-
-收齐裁决后进入 `running`；发送 `interrupt` 会结束本批审批
-
-提交审批（`tool_approval_response`）、中断（`interrupt`）；**不能**用普通消息直接继续
-
-`running`
-
-收到消息，智能体开始处理
-
-完成后进入 `idle`；触发审批后进入 `idle`（`requires_action`）；发生不可恢复错误后进入 `terminated`
-
-中断
-
-`terminated`
-
-归档、删除，或不可恢复错误
-
-终态，不可恢复
-
-查看事件历史；新建会话继续
+| 状态 | 触发条件 | 下一状态 | 可执行操作 |
+| --- | --- | --- | --- |
+| `idle`（可交互：`stop_reason` 为 `null` / `end_turn` / `retries_exhausted`） | 会话刚创建（`null`）、一轮处理结束（`end_turn`）或重试耗尽（`retries_exhausted`） | 收到消息后进入 `running`；归档或删除后进入 `terminated` | 发送消息、挂载文件、归档、删除 |
+| `idle`（`stop_reason=requires_action`） | 触发 `always_ask` 工具审批，等待裁决 | 收齐裁决后进入 `running`；发送 `interrupt` 会结束本批审批 | 提交审批（`tool_approval_response`）、中断（`interrupt`）；**不能**用普通消息直接继续 |
+| `running` | 收到消息，智能体开始处理 | 完成后进入 `idle`；触发审批后进入 `idle`（`requires_action`）；发生不可恢复错误后进入 `terminated` | 中断 |
+| `terminated` | 归档、删除，或不可恢复错误 | 终态，不可恢复 | 查看事件历史；新建会话继续 |
 
 会话处于 `idle` 时，`session_status` 事件（及 `GET /sessions/{session_id}`）携带 `stop_reason` 说明原因。`stop_reason` 仅在会话状态为 `idle` 时用于判断交互状态：刚创建且尚无结束原因时为 `null`，其余取 `end_turn`、`retries_exhausted` 或 `requires_action`。`running` 时为 `null`；`terminated` 是终态，客户端不应依赖或解释其 `stop_reason`。客户端应按下表把四种 `idle` 投影映射到界面操作，判断可交互性时以“是否为 `requires_action`”为准，而非仅看 `idle`：
 
-`stop_reason`
-
-含义
-
-可发送普通消息
-
-审批 / 中断
-
-`null`
-
-会话刚创建、尚未处理
-
-允许
-
-无待审批
-
-`end_turn`
-
-模型主动结束本轮
-
-允许
-
-无待审批
-
-`retries_exhausted`
-
-重试耗尽，本轮结束
-
-允许
-
-无待审批
-
-`requires_action`
-
-存在待裁决的 `always_ask` 审批，携带 `pending_batch_id` / `pending_call_ids`
-
-**禁止**（单独发送会得到 `pending_tool_approval_unresolved`）
-
-提交审批 / 发送 `interrupt`
+| `stop_reason` | 含义 | 可发送普通消息 | 审批 / 中断 |
+| --- | --- | --- | --- |
+| `null` | 会话刚创建、尚未处理 | 允许 | 无待审批 |
+| `end_turn` | 模型主动结束本轮 | 允许 | 无待审批 |
+| `retries_exhausted` | 重试耗尽，本轮结束 | 允许 | 无待审批 |
+| `requires_action` | 存在待裁决的 `always_ask` 审批，携带 `pending_batch_id` / `pending_call_ids` | **禁止**（单独发送会得到 `pending_tool_approval_unresolved`） | 提交审批 / 发送 `interrupt` |
 
 -   **可交互 `idle`（`null` / `end_turn` / `retries_exhausted`）**：均不存在审批屏障，可直接发送普通消息开始新一轮。
--   **`requires_action`**：只能提交审批或发送 `interrupt`；逐条裁决后仍为该状态，`pending_call_ids` 缩减为剩余项，全部收齐后才回到 `running`。此时单独发送普通消息不会继续处理，会得到 `pending_tool_approval_unresolved`；`interrupt` + 普通 `message` 的合法组合按[会话事件流](https://help.aliyun.com/zh/model-studio/managed-agents-event-stream#%E5%B7%A5%E5%85%B7%E5%AE%A1%E6%89%B9)定义处理。
+-   **`requires_action`**：只能提交审批或发送 `interrupt`；逐条裁决后仍为该状态，`pending_call_ids` 缩减为剩余项，全部收齐后才回到 `running`。此时单独发送普通消息不会继续处理，会得到 `pending_tool_approval_unresolved`；`interrupt` + 普通 `message` 的合法组合按[会话事件流](managed-agents-event-stream.md#%E5%B7%A5%E5%85%B7%E5%AE%A1%E6%89%B9)定义处理。
 
-**警告**按状态驱动界面时，请以 `stop_reason` 而非仅 `idle` 判断可交互性：只有 `requires_action` 禁用普通消息、启用审批/中断；其余可交互 `idle`（`null` / `end_turn` / `retries_exhausted`）均放行新一轮消息。切勿把 `retries_exhausted` 当作永久禁聊。
+> **警告**
+>
+> 按状态驱动界面时，请以 `stop_reason` 而非仅 `idle` 判断可交互性：只有 `requires_action` 禁用普通消息、启用审批/中断；其余可交互 `idle`（`null` / `end_turn` / `retries_exhausted`）均放行新一轮消息。切勿把 `retries_exhausted` 当作永久禁聊。
 
-会话运行期间可通过 API 动态挂载、查询与卸载文件资源，详见[运行时挂载资源 API](raw/application-api-reference/managed-agents-api/session-api/session-resource-create.md)。
+会话运行期间可通过 API 动态挂载、查询与卸载文件资源，详见[运行时挂载资源 API](../../../../application-api-reference/managed-agents-api/session-api/session-resource-create.md)。
+
+<a id="会话级配置"></a>
+
+<a id="h-session-config"></a>
 
 ## 会话级配置
 
-会话运行期间可通过[更新 Session API](raw/application-api-reference/managed-agents-api/session-api/session-update.md) 修改会话级智能体配置（`agent` patch：系统提示词、工具、MCP Server、技能）与会话级 MCP 请求头（`mcp_configs`）。修改只作用于本会话快照，不生成智能体新版本。
+会话运行期间可通过[更新 Session API](../../../../application-api-reference/managed-agents-api/session-api/session-update.md) 修改会话级智能体配置（`agent` patch：系统提示词、工具、MCP Server、技能）与会话级 MCP 请求头（`mcp_configs`）。修改只作用于本会话快照，不生成智能体新版本。
 
 `agent` patch 的子字段语义：省略保留已有覆盖；`null` 删除该字段覆盖并重新继承智能体源配置；空数组明确覆盖为空；空字符串（仅 `system`）明确使用空提示词。
+
+<a id="沙箱持久化"></a>
+
+<a id="h-sandbox-persistence"></a>
 
 ## 沙箱持久化
 
@@ -109,13 +57,19 @@
 
 本节提到的“快照”指沙箱文件系统快照；会话创建时保存的智能体配置快照是另一类快照。
 
+<a id="开启与配置"></a>
+
+<a id="h-sandbox-config"></a>
+
 ### 开启与配置
 
 在智能体详情页点击**新建会话**，在**配置**区域打开**沙箱持久化**，设置**快照保留时长**。默认关闭；保留时长默认 3 天，支持 1–30 天。控制台按天配置，API 使用整数秒配置，`snapshot_persistent_seconds` 的取值范围为 86400～2592000。
 
 通过 API 创建会话时，在请求体传入 `sandbox`：
 
-```
+<a id="code-block"></a>
+
+```json
 {
   "sandbox": {
     "enable_snapshot": true,
@@ -124,7 +78,11 @@
 }
 ```
 
-`enable_snapshot` 控制是否开启；`snapshot_persistent_seconds` 为单份快照的保留时间，单位秒，`172800` 表示 2 天。完整字段见[创建 Session API](https://help.aliyun.com/zh/model-studio/session-create#h-sc-req)。
+`enable_snapshot` 控制是否开启；`snapshot_persistent_seconds` 为单份快照的保留时间，单位秒，`172800` 表示 2 天。完整字段见[创建 Session API](../../../../application-api-reference/managed-agents-api/session-api/session-create.md#h-sc-req)。
+
+<a id="快照生命周期与保留期刷新"></a>
+
+<a id="h-sandbox-snapshot-lifecycle"></a>
 
 ### 快照生命周期与保留期刷新
 
@@ -140,39 +98,32 @@
 
 未开启沙箱持久化时，沙箱在会话空闲后回收，再次运行会重新初始化。
 
+<a id="保存范围"></a>
+
+<a id="h-sandbox-save-scope"></a>
+
 ### 保存范围
 
-内容
+| 内容 | 是否保留 |
+| --- | --- |
+| 工作目录文件和环境修改 | 保留 |
+| 上传文件 | 不保留；每次运行按外部文件恢复，沙箱内修改不写回 |
+| 产物 | 仅已同步的产物保留 |
+| Memory | 不保留快照；读取绑定记忆库的最新数据 |
+| Skills | 不保留快照；从外部加载 |
+| 运行中的进程 | 不保留 |
 
-是否保留
+<a id="工具调用"></a>
 
-工作目录文件和环境修改
-
-保留
-
-上传文件
-
-不保留；每次运行按外部文件恢复，沙箱内修改不写回
-
-产物
-
-仅已同步的产物保留
-
-Memory
-
-不保留快照；读取绑定记忆库的最新数据
-
-Skills
-
-不保留快照；从外部加载
-
-运行中的进程
-
-不保留
+<a id="h-tool-call"></a>
 
 ## 工具调用
 
 智能体根据系统提示词和当前消息自主决定何时调用哪个工具。全部工具（内置、MCP、技能）均在会话绑定的运行环境中执行，调用过程通过事件面板实时可见。
+
+<a id="调用流程"></a>
+
+<a id="h-tc-flow"></a>
 
 ### 调用流程
 
@@ -183,6 +134,10 @@ Skills
 3.  执行：在沙箱中运行工具，输出回传给模型。
 4.  回复或继续：模型基于工具输出决定回复或发起下一次工具调用。
 
+<a id="归档与删除"></a>
+
+<a id="h-lifecycle"></a>
+
 ## 归档与删除
 
 会话支持归档和删除两种操作：
@@ -190,52 +145,84 @@ Skills
 -   **归档**：状态变为 `terminated`（终态），事件历史保留可查。适用于已完成的会话。
 -   **删除**：硬删除，会话元数据、事件历史、内部拷贝的资源全部清除，不可恢复。如需保留事件历史请改用归档。
 
-**说明**归档或删除会话时，系统会触发该会话快照资源的释放。快照清理失败不会阻塞会话的归档或删除，资源实际释放可能存在短暂延迟。
+> **说明**
+>
+> 归档或删除会话时，系统会触发该会话快照资源的释放。快照清理失败不会阻塞会话的归档或删除，资源实际释放可能存在短暂延迟。
 
-通过 API 归档会话，详见[归档 Session API](raw/application-api-reference/managed-agents-api/session-api/session-archive.md)。
+通过 API 归档会话，详见[归档 Session API](../../../../application-api-reference/managed-agents-api/session-api/session-archive.md)。
+
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-bash-tab"></a>
 
 bash
 
-```
+<a id="code-code-group-bash"></a>
+
+```bash
 curl -X POST "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio/sessions/sesn_xxx/archive" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
+<a id="fig-code-group-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 client.sessions.archive("sesn_xxx")
 ```
 
+<a id="fig-code-group-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-java"></a>
+
+```java
 client.sessions().archive("sesn_xxx");
 ```
 
 通过 API 删除会话：
 
+<a id="fig-code-group-2"></a>
+
+<a id="fig-code-group-2-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-2-bash"></a>
+
+```bash
 curl -X DELETE "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio/sessions/sesn_xxx" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
+<a id="fig-code-group-2-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-2-python"></a>
+
+```python
 client.sessions.delete("sesn_xxx")
 ```
 
+<a id="fig-code-group-2-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-2-java"></a>
+
+```java
 client.sessions().delete("sesn_xxx");
 ```
 
+<a id="下一步"></a>
+
 ## 下一步
 
--   [会话事件流（SSE）](raw/application-user-guide/agent-development/managed-agents/managed-agents-session/managed-agents-event-stream.md)：了解全部事件类型与 SSE 订阅。
--   [定义 Agent](raw/application-user-guide/agent-development/managed-agents/managed-agents-agent/managed-agents-agent-definition.md)：调整智能体的模型、提示词与工具集。
--   [云端托管环境](raw/application-user-guide/agent-development/managed-agents/managed-agents-environment/managed-agents-cloud-hosting.md)：配置工具调用的执行沙箱。
+-   [会话事件流（SSE）](managed-agents-event-stream.md)：了解全部事件类型与 SSE 订阅。
+-   [定义 Agent](../managed-agents-agent/managed-agents-agent-definition.md)：调整智能体的模型、提示词与工具集。
+-   [云端托管环境](../managed-agents-environment/managed-agents-cloud-hosting.md)：配置工具调用的执行沙箱。

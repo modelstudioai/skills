@@ -2,9 +2,17 @@
 
 批量分配席位至成员层
 
+<a id="前提条件"></a>
+
+<a id="tp6382e87e35"></a>
+
 ## 前提条件
 
 已获取阿里云账号或 RAM 用户的 AccessKey，并已为其授予调用本接口所需的 RAM 权限。建议将 AccessKey 配置为环境变量 `ALIBABA_CLOUD_ACCESS_KEY_ID` 和 `ALIBABA_CLOUD_ACCESS_KEY_SECRET`，避免明文写入代码。
+
+<a id="请求说明"></a>
+
+<a id="tpcfee812749"></a>
 
 ## 请求说明
 
@@ -12,13 +20,9 @@
     
 -   **请求地址**
     
-    **地域**
-    
-    **Endpoint**
-    
-    华北2（北京）
-    
-    `POST [https://modelstudio.cn-beijing.aliyuncs.com/tokenplan/subscription/seat-assignments](https://modelstudio.cn-beijing.aliyuncs.com/tokenplan/subscription/seat-assignments)`
+    | 地域 | Endpoint |
+    | --- | --- |
+    | 华北2（北京） | `POST https://modelstudio.cn-beijing.aliyuncs.com/tokenplan/subscription/seat-assignments` |
     
 -   **认证方式**
     
@@ -27,76 +31,43 @@
     推荐使用阿里云 SDK 或 [OpenAPI Explorer](https://api.aliyun.com/api/ModelStudio/2026-02-10/BatchAssignSeats) 发起调用，可免去自行计算签名。
     
 
+<a id="请求参数"></a>
+
+<a id="tp38dd14e63f"></a>
+
 ## 请求参数
 
 所有参数均通过 Query String 传递。数组类型参数（AccountIds）使用 Flat 格式：以 `参数名.序号` 逐个传递，序号从 1 开始，例如 `AccountIds.1=acc_123456789`、`AccountIds.2=<第二个取值>`。
 
-**参数**
+| 参数 | 类型 | 必选 | 描述 |
+| --- | --- | --- | --- |
+| SeatType | string | 是 | 席位类型<br>standard - 标准席位<br>pro - 高级席位<br>max - 尊享席位 |
+| AccountIds | Array | 否 | 目标成员 id 列表 |
+| Locale | string | 否 | 多语言信息 zh-CN/en-US |
 
-**类型**
+<a id="返回参数"></a>
 
-**必选**
-
-**描述**
-
-SeatType
-
-string
-
-是
-
-席位类型  
-standard - 标准席位  
-pro - 高级席位  
-max - 尊享席位
-
-AccountIds
-
-Array
-
-否
-
-目标成员 id 列表
-
-Locale
-
-string
-
-否
-
-多语言信息 zh-CN/en-US
+<a id="tpe7b8a7707d"></a>
 
 ## 返回参数
 
-**参数**
+| 参数 | 类型 | 描述 |
+| --- | --- | --- |
+| Success | boolean | 是否成功 |
+| Code | string | 响应状态码。 |
+| Message | string | 响应信息。 |
 
-**类型**
+<a id="请求示例"></a>
 
-**描述**
-
-Success
-
-boolean
-
-是否成功
-
-Code
-
-string
-
-响应状态码。
-
-Message
-
-string
-
-响应信息。
+<a id="tpfaeb6105bf"></a>
 
 ## 请求示例
 
 本接口使用阿里云 OpenAPI 签名，下例中 `${SIGNATURE}` 需按 `ACS3-HMAC-SHA256` 算法计算得出，`x-acs-date`、`x-acs-signature-nonce` 需替换为实际值。
 
-```
+<a id="code-block"></a>
+
+```bash
 curl -X POST "https://modelstudio.cn-beijing.aliyuncs.com/tokenplan/subscription/seat-assignments?SeatType=standard&AccountIds.1=acc_123456789&Locale=zh-CN" \
     --header "x-acs-action: BatchAssignSeats" \
     --header "x-acs-version: 2026-02-10" \
@@ -106,14 +77,24 @@ curl -X POST "https://modelstudio.cn-beijing.aliyuncs.com/tokenplan/subscription
     --header "Authorization: ACS3-HMAC-SHA256 Credential=${ALIBABA_CLOUD_ACCESS_KEY_ID},SignedHeaders=host;x-acs-action;x-acs-content-sha256;x-acs-date;x-acs-signature-nonce;x-acs-version,Signature=${SIGNATURE}"
 ```
 
+<a id="返回示例"></a>
+
+<a id="tp13609e866a"></a>
+
 ## 返回示例
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "Success": true
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="tp3b18ee207e"></a>
+
 ## 错误码
 
-如果调用失败，会返回错误信息。更多错误码及解决方法，请参见[错误信息](raw/model-api-reference/preparations/error-code.md)。
+如果调用失败，会返回错误信息。更多错误码及解决方法，请参见[错误信息](../../../model-api-reference/preparations/error-code.md)。

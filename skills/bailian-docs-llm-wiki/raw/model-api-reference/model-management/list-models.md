@@ -2,35 +2,81 @@
 
 查询百炼平台上可用的模型列表，支持按模型作者、模态类型、模型能力、部署模式等条件筛选，并获取模型的定价和上下文长度等信息。
 
+<a id="a1b2c3d4e5f010"></a>
+
+<a id="前提条件"></a>
+
+<a id="a1b2c3d4e5f020"></a>
+
+<a id="请求说明"></a>
+
+<a id="请求地址"></a>
+
+<a id="sec-tabs"></a>
+
+<a id="华北2-北京"></a>
+
+<a id="华北2-北京-h4"></a>
+
 #### 华北2（北京）
 
 GET`https://WorkspaceId.cn-beijing.maas.aliyuncs.com/api/v1/models`
+
+<a id="新加坡"></a>
+
+<a id="新加坡-h4"></a>
 
 #### 新加坡
 
 GET`https://WorkspaceId.ap-southeast-1.maas.aliyuncs.com/api/v1/models`
 
+<a id="中国香港"></a>
+
+<a id="中国香港-h4"></a>
+
 #### 中国香港
 
 GET`https://WorkspaceId.cn-hongkong.maas.aliyuncs.com/api/v1/models`
+
+<a id="日本-东京"></a>
+
+<a id="日本-东京-h4"></a>
 
 #### 日本（东京）
 
 GET`https://WorkspaceId.ap-northeast-1.maas.aliyuncs.com/api/v1/models`
 
+<a id="德国-法兰克福"></a>
+
+<a id="德国-法兰克福-h4"></a>
+
 #### 德国（法兰克福）
 
 GET`https://WorkspaceId.eu-central-1.maas.aliyuncs.com/api/v1/models`
 
+<a id="美国-弗吉尼亚"></a>
+
+<a id="美国-弗吉尼亚-h4"></a>
+
 #### 美国（弗吉尼亚）
 
 GET`https://dashscope-us.aliyuncs.com/api/v1/models`
+
+<a id="请求头"></a>
 
 ## 请求头
 
 `Authorization`String必填
 
 格式为 `Bearer <API Key>`。在所选地域的 [API Key 管理](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key)页面选择业务空间并获取 API Key。
+
+<a id="a1b2c3d4e5f100"></a>
+
+<a id="请求参数"></a>
+
+<a id="查询参数-query-string"></a>
+
+<a id="查询参数"></a>
 
 ## 查询参数
 
@@ -61,6 +107,10 @@ GET`https://dashscope-us.aliyuncs.com/api/v1/models`
 
 按模型作者筛选。DashScope Python SDK 2.x 的 `provider` 参数只在客户端筛选当前页，返回对象的 `total_count` 仍为筛选前的总数。
 
+<a id="accordion-providers-可选值"></a>
+
+<a id="accordion-点击查看可选值"></a>
+
 点击查看可选值
 
 -   `qwen`：阿里巴巴-千问
@@ -81,6 +131,10 @@ GET`https://dashscope-us.aliyuncs.com/api/v1/models`
 
 按推理服务供应商筛选。
 
+<a id="accordion-inference-providers-可选值"></a>
+
+<a id="accordion-点击查看可选值-2"></a>
+
 点击查看可选值
 
 -   `aliyun-bailian`：阿里云百炼
@@ -99,6 +153,10 @@ GET`https://dashscope-us.aliyuncs.com/api/v1/models`
 `capabilities`Array\[String\]可选
 
 按文本生成、深度思考等模型能力筛选。此参数需通过 HTTP API 使用。
+
+<a id="accordion-capabilities-可选值"></a>
+
+<a id="accordion-点击查看可选值-3"></a>
 
 点击查看可选值
 
@@ -125,6 +183,8 @@ GET`https://dashscope-us.aliyuncs.com/api/v1/models`
 
 按模型特性筛选，如 function calling 和结构化输出。 此参数需通过 HTTP API 使用。
 
+<a id="accordion-features-可选值"></a>
+
 -   `model-experience`：模型体验
 -   `function-calling`：function calling
 -   `structured-outputs`：结构化输出
@@ -142,6 +202,8 @@ GET`https://dashscope-us.aliyuncs.com/api/v1/models`
 
 按部署模式筛选。不传时返回所有部署模式的模型。
 
+<a id="accordion-service-site-可选值"></a>
+
 -   `global`：全球
 -   `international`：国际
 -   `asia-pacific-china`：中国
@@ -154,6 +216,8 @@ GET`https://dashscope-us.aliyuncs.com/api/v1/models`
 
 按模型支持的应用场景筛选。默认值：`inference`。
 
+<a id="accordion-supports-可选值"></a>
+
 -   `inference`：支持推理的模型
 -   `deploy`：支持部署的模型
 
@@ -161,11 +225,19 @@ GET`https://dashscope-us.aliyuncs.com/api/v1/models`
 
 按部署方式筛选。
 
+<a id="accordion-deployment-methods-可选值"></a>
+
 -   `ptu`：预置吞吐量（Provisioned Throughput Unit）
 
 `deployment_ptu_service_tiers`Array\[String\]可选
 
 按 PTU 类型筛选，使用时需同时设置 `deployment_methods` 包含 `ptu`。
+
+<a id="返回说明"></a>
+
+<a id="返回参数"></a>
+
+<a id="a1b2c3d4e5f300"></a>
 
 ## 返回参数
 
@@ -181,9 +253,13 @@ GET`https://dashscope-us.aliyuncs.com/api/v1/models`
 
 查询是否成功。
 
+<a id="accordion-output-models"></a>
+
 `output`Object
 
 模型列表及分页信息。
+
+<a id="accordion-查看子字段"></a>
 
 查看子字段
 
@@ -202,6 +278,8 @@ GET`https://dashscope-us.aliyuncs.com/api/v1/models`
 `models`Array\[Object\]
 
 模型列表，每个元素为一个模型对象。分页响应示例仅保留一条模型记录。
+
+<a id="accordion-查看子字段-2"></a>
 
 查看子字段
 
@@ -237,11 +315,15 @@ GET`https://dashscope-us.aliyuncs.com/api/v1/models`
 
 模型定价信息，按计费区间返回。
 
+<a id="accordion-查看子字段-3"></a>
+
 查看子字段
 
 `prices`Array\[Object\]
 
 该计费区间的价格列表。
+
+<a id="accordion-查看子字段-4"></a>
 
 查看子字段
 
@@ -263,6 +345,8 @@ GET`https://dashscope-us.aliyuncs.com/api/v1/models`
 
 模型的输入输出模态信息。
 
+<a id="accordion-查看子字段-5"></a>
+
 查看子字段
 
 -   `response_modality`（Array\[String\]）：输出模态。
@@ -278,6 +362,8 @@ GET`https://dashscope-us.aliyuncs.com/api/v1/models`
 `model_info`Object
 
 模型的上下文长度信息。字段值为 `null` 表示无限制或不适用。
+
+<a id="accordion-查看子字段-6"></a>
 
 查看子字段
 
@@ -296,6 +382,8 @@ GET`https://dashscope-us.aliyuncs.com/api/v1/models`
 
 推理场景下线信息。
 
+<a id="accordion-查看子字段-7"></a>
+
 查看子字段
 
 下线信息条目（`$`）包含以下字段。
@@ -308,20 +396,44 @@ GET`https://dashscope-us.aliyuncs.com/api/v1/models`
 
 请求 ID，用于问题排查。
 
+<a id="a1b2c3d4e5f400"></a>
+
+<a id="请求示例"></a>
+
+<a id="a1b2c3d4e5f500"></a>
+
+<a id="返回示例"></a>
+
+<a id="sec-tabs-2"></a>
+
+<a id="默认查询"></a>
+
+<a id="默认查询-h4"></a>
+
 #### 默认查询
+
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-curl-tab"></a>
 
 curl
 
-```
+<a id="code-code-group-curl"></a>
+
+```bash
 curl --get "https://WorkspaceId.cn-beijing.maas.aliyuncs.com/api/v1/models" \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
     -d "page_no=1" \
     -d "page_size=20"
 ```
 
+<a id="fig-code-group-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 import os
 import dashscope
 
@@ -338,7 +450,9 @@ resp = client.models.list(
 print(resp.models)
 ```
 
-```
+<a id="code-block"></a>
+
+```json
 {
     "code": null,
     "message": null,
@@ -397,11 +511,21 @@ print(resp.models)
 }
 ```
 
+<a id="按模型-id-查询"></a>
+
+<a id="按模型-id-查询-h4"></a>
+
 #### 按模型 ID 查询
+
+<a id="fig-code-group-2"></a>
+
+<a id="fig-code-group-2-curl-tab"></a>
 
 curl
 
-```
+<a id="code-code-group-2-curl"></a>
+
+```bash
 curl --get "https://WorkspaceId.cn-beijing.maas.aliyuncs.com/api/v1/models" \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
     -d "model=qwen3.8-max" \
@@ -409,9 +533,13 @@ curl --get "https://WorkspaceId.cn-beijing.maas.aliyuncs.com/api/v1/models" \
     -d "page_size=20"
 ```
 
+<a id="fig-code-group-2-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-2-python"></a>
+
+```python
 import os
 import dashscope
 
@@ -424,7 +552,9 @@ model = client.models.get("qwen3.8-max")
 print(model)
 ```
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
     "code": null,
     "message": null,
@@ -483,9 +613,15 @@ print(model)
 }
 ```
 
+<a id="按模型作者查询"></a>
+
+<a id="按模型作者查询-h4"></a>
+
 #### 按模型作者查询
 
-```
+<a id="code-block-3"></a>
+
+```bash
 curl --get "https://WorkspaceId.cn-beijing.maas.aliyuncs.com/api/v1/models" \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
     -d "providers=qwen" \
@@ -493,7 +629,9 @@ curl --get "https://WorkspaceId.cn-beijing.maas.aliyuncs.com/api/v1/models" \
     -d "page_size=100"
 ```
 
-```
+<a id="code-block-4"></a>
+
+```json
 {
     "code": null,
     "message": null,
@@ -552,9 +690,15 @@ curl --get "https://WorkspaceId.cn-beijing.maas.aliyuncs.com/api/v1/models" \
 }
 ```
 
+<a id="按能力查询"></a>
+
+<a id="按能力查询-h4"></a>
+
 #### 按能力查询
 
-```
+<a id="code-block-5"></a>
+
+```bash
 curl --get "https://WorkspaceId.cn-beijing.maas.aliyuncs.com/api/v1/models" \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
     -d "capabilities=TG" \
@@ -562,7 +706,9 @@ curl --get "https://WorkspaceId.cn-beijing.maas.aliyuncs.com/api/v1/models" \
     -d "page_size=20"
 ```
 
-```
+<a id="code-block-6"></a>
+
+```json
 {
     "code": null,
     "message": null,
@@ -621,6 +767,12 @@ curl --get "https://WorkspaceId.cn-beijing.maas.aliyuncs.com/api/v1/models" \
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="a1b2c3d4e5f600"></a>
+
 ## 错误码
 
-如果调用失败，会返回错误信息。更多错误码及解决方法，请参见[错误信息](raw/model-api-reference/preparations/error-code.md)。
+如果调用失败，会返回错误信息。更多错误码及解决方法，请参见[错误信息](../preparations/error-code.md)。
+
+![](data:image/png;base64,)

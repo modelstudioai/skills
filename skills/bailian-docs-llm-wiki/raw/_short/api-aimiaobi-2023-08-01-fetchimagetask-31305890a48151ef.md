@@ -2,11 +2,19 @@
 
 获取图片任务执行结果。
 
+<a id="调试"></a>
+
+<a id="api-detail-23"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
 [调试](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/FetchImageTask)
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -25,207 +33,50 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-操作
+<table><thead><tr><th>操作</th><th>访问级别</th><th>资源类型</th><th>条件关键字</th><th>关联操作</th></tr></thead><tbody><tr><td>aimiaobi:FetchImageTask</td><td>get</td><td><div><div>*全部资源</div><div><code>*</code></div></div></td><td><ul>无</ul></td><td>无</td></tr></tbody></table>
 
-访问级别
+<a id="请求参数"></a>
 
-资源类型
-
-条件关键字
-
-关联操作
-
-aimiaobi:FetchImageTask
-
-get
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-36"></a>
 
 ## 请求参数
 
-名称
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| AgentKey | string | 是 | 业务空间唯一标识： [AgentKey](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey) | cd327c3d5d5e44159cc716e23bfa530e\_p\_beebot\_public |
+| TaskIdList | array | 是 | 任务 ID 列表 |  |
+| TaskIdList | string | 是 | TaskId，任务唯一标识<br><br>**说明** TaskId 默认无需填写，系统将自动生成。当后续任务填写的 TaskId 相同时，表示这些任务属于同一组对话。 | 9c5ac65f-fcac-416c-81d0-4ab81e1373fd |
+| ArticleTaskId | string | 是 | 文章 taskId | e1be065b-adc3-435e-bd01-1c18c5ed75d3 |
 
-类型
+<a id="返回参数"></a>
 
-必填
-
-描述
-
-示例值
-
-AgentKey
-
-string
-
-是
-
-业务空间唯一标识： [AgentKey](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)
-
-cd327c3d5d5e44159cc716e23bfa530e\_p\_beebot\_public
-
-TaskIdList
-
-array
-
-是
-
-任务 ID 列表
-
-TaskIdList
-
-string
-
-是
-
-TaskId，任务唯一标识
-
-**说明** TaskId 默认无需填写，系统将自动生成。当后续任务填写的 TaskId 相同时，表示这些任务属于同一组对话。
-
-9c5ac65f-fcac-416c-81d0-4ab81e1373fd
-
-ArticleTaskId
-
-string
-
-是
-
-文章 taskId
-
-e1be065b-adc3-435e-bd01-1c18c5ed75d3
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-名称
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | PlainResult |  |
+| Code | string | 状态码 | success |
+| Data | object | 业务数据 |  |
+| TaskInfoList | array<object> | 智能配图生成的图片信息 |  |
+| TaskInfoList | object |  |  |
+| Id | long | 段落 ID | 1 |
+| ImageList | array<object> | 图片信息 |  |
+| ImageList | object |  |  |
+| Code | string | 如果图片没有生成返回的异常 code 标识 | NoData |
+| Message | string | 如果图片没有生成返回的异常信息描述 | 错误 |
+| Url | string | 图片地址 | [http://www.example.com/aaa.png](http://www.example.com/aaa.png) |
+| TaskId | string | 任务 ID 任务唯一标识 | net-7eb32699000d4193a3c59fc64ae1e55f |
+| TaskStatus | string | 当前任务状态 SUCCESSED=任务执行成功 ，FAILED=任务执行失败 ，CANCELED=任务被取消 ，PENDIN=任务排队中 ，SUSPENDE=任务挂起 RUNNIN=任务处理中 | SUCCESSED |
+| HttpStatusCode | integer | http 状态码 | 200 |
+| Message | string | 错误说明 | success |
+| RequestId | string | 请求唯一标识 | DD656AF9-0839-521A-A3D2-F320009F9C87 |
+| Success | boolean | 是否成功：true 成功，false 失败 | true |
 
-类型
+<a id="示例"></a>
 
-描述
-
-示例值
-
-object
-
-PlainResult
-
-Code
-
-string
-
-状态码
-
-success
-
-Data
-
-object
-
-业务数据
-
-TaskInfoList
-
-array<object>
-
-智能配图生成的图片信息
-
-TaskInfoList
-
-object
-
-Id
-
-long
-
-段落 ID
-
-1
-
-ImageList
-
-array<object>
-
-图片信息
-
-ImageList
-
-object
-
-Code
-
-string
-
-如果图片没有生成返回的异常 code 标识
-
-NoData
-
-Message
-
-string
-
-如果图片没有生成返回的异常信息描述
-
-错误
-
-Url
-
-string
-
-图片地址
-
-[http://www.example.com/aaa.png](http://www.example.com/aaa.png)
-
-TaskId
-
-string
-
-任务 ID 任务唯一标识
-
-net-7eb32699000d4193a3c59fc64ae1e55f
-
-TaskStatus
-
-string
-
-当前任务状态 SUCCESSED=任务执行成功 ，FAILED=任务执行失败 ，CANCELED=任务被取消 ，PENDIN=任务排队中 ，SUSPENDE=任务挂起 RUNNIN=任务处理中
-
-SUCCESSED
-
-HttpStatusCode
-
-integer
-
-http 状态码
-
-200
-
-Message
-
-string
-
-错误说明
-
-success
-
-RequestId
-
-string
-
-请求唯一标识
-
-DD656AF9-0839-521A-A3D2-F320009F9C87
-
-Success
-
-boolean
-
-是否成功：true 成功，false 失败
-
-true
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -233,7 +84,9 @@ true
 
 `JSON`格式
 
-```
+<a id="code-block"></a>
+
+```text
 {
   "Code": "success",
   "Data": {
@@ -258,6 +111,10 @@ true
   "Success": true
 }
 ```
+
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
 
 ## 错误码
 

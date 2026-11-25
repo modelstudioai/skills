@@ -2,16 +2,24 @@
 
 输入原图、待擦除区域掩码图像以及保留区域掩码图像，可以在保留原图背景的同时擦除指定图像区域。
 
-**重要**
+> **重要**
+>
+> -   本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)。
+> -   image-erase-completion 模型当前仅提供**免费体验**，免费额度用完后不可调用且不支持付费，推荐参考[图像编辑-千问](../../../model-experience/image-and-video-generation/image-model/image-edit-guide/qwen-image-edit-guide.md)或[图像编辑-万相2.1](wanx-image-edit.md)获取替代方案。
 
--   本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)。
--   image-erase-completion 模型当前仅提供**免费体验**，免费额度用完后不可调用且不支持付费，推荐参考[图像编辑-千问](raw/model-user-guide/model-experience/image-and-video-generation/image-model/image-edit-guide/qwen-image-edit-guide.md)或[图像编辑-万相2.1](raw/model-user-guide/use-cases/legacy-resources/legacy-image-generation/wanx-image-edit.md)获取替代方案。
+<a id="基本介绍"></a>
+
+<a id="7609a6a70f331"></a>
 
 ## 基本介绍
 
 图像擦除补全通过指定图像mask中要删除的人体、宠物、物品、文字、水印等图像区域，在保留背景的同时移除图像中的一个或多个人物、物体、文字等元素，此功能不支持输入prompt的消除。擦除补全技术结合AIGC inpainting等先进技术，可以在多种场景下应用，从而满足用户对隐私保护、内容创作和图像编辑等方面需求。
 
-推荐配合使用[人物实例分割](raw/model-api-reference/image-generation/image-creative-tools-api-reference/image-instance-segmentation-api-reference.md)接口来进行人体消除，选择完整人体mask区域来消除一个或多个人物，能准确地画出每一个对象边界的像素级掩码（mask）。
+推荐配合使用[人物实例分割](../../../../model-api-reference/image-generation/image-creative-tools-api-reference/image-instance-segmentation-api-reference.md)接口来进行人体消除，选择完整人体mask区域来消除一个或多个人物，能准确地画出每一个对象边界的像素级掩码（mask）。
+
+<a id="使用场景"></a>
+
+<a id="Qod1X"></a>
 
 ### 使用场景
 
@@ -20,37 +28,27 @@
 -   营销广告制作：在广告制作中，需要将产品图片与特定场景或人物结合，但原始图片中可能包含不需要的元素。AI消除功能能够轻松移除这些图像元素，增强海报或广告视觉创意效果。
 -   社交媒体创作：用户在社交媒体上分享照片时，可能希望移除照片中的路人、杂乱背景等。AI擦除补全功能让用户能够轻松实现这一需求，提升照片的质量和美观度。
 
+<a id="特色优势"></a>
+
+<a id="e3343370dc0e7"></a>
+
 ### 特色优势
 
 -   AI擦除补全技术能够智能填补被移除元素留下的空白区域，使修复后的图像看起来自然无痕，又保持视觉效果的和谐与专业性，无需担心人工合成的痕迹。
 -   AI擦除补全功能能够自动识别和移除图像中的多种图像格式和尺寸元素的对象，精确识别图像中的对象，确保擦除对象的准确性和补全对象的一致性&自然性。
 -   企业级平台服务提供在高并发、大流量下的稳定写真图片生成响应和99.9%的可靠性保障，可直接调用的简单推理API接口，服务简单易用，易被集成，兼容性强。
 
+<a id="模型概览"></a>
+
+<a id="a0c22dbf96vss"></a>
+
 ### 模型概览
 
-**模型名**
+<table><tbody><tr><td rowspan="2"><strong>模型名</strong></td><td rowspan="2"><p><strong>免费额度</strong><a href="../../../test-1/new-free-quota.md">（查看）</a></p></td><td rowspan="2"><strong>计费单价</strong></td><td colspan="2"><strong>限流（含主账号与RAM子账号）</strong></td></tr><tr><td><strong>任务下发接口QPS限制</strong></td><td><strong>同时处理中任务数量</strong></td></tr><tr><td><p>image-erase-completion</p></td><td><p>500张</p></td><td><p>目前仅供免费体验。</p><blockquote><p>免费额度用完后不可调用，推荐参考<a href="../../../model-experience/image-and-video-generation/image-model/image-edit-guide/qwen-image-edit-guide.md">图像编辑-千问</a>或<a href="wanx-image-edit.md">图像编辑-万相2.1</a>获取替代方案。</p></blockquote></td><td><p>2</p></td><td><p>1</p></td></tr></tbody></table>
 
-**免费额度**[（查看）](raw/model-user-guide/test-1/new-free-quota.md)
+<a id="快速开始"></a>
 
-**计费单价**
-
-**限流（含主账号与RAM子账号）**
-
-**任务下发接口QPS限制**
-
-**同时处理中任务数量**
-
-image-erase-completion
-
-500张
-
-目前仅供免费体验。
-
-> 免费额度用完后不可调用，推荐参考[图像编辑-千问](raw/model-user-guide/model-experience/image-and-video-generation/image-model/image-edit-guide/qwen-image-edit-guide.md)或[图像编辑-万相2.1](raw/model-user-guide/use-cases/legacy-resources/legacy-image-generation/wanx-image-edit.md)获取替代方案。
-
-2
-
-1
+<a id="98b58466f5w47"></a>
 
 ## 快速开始
 
@@ -66,31 +64,22 @@ image-erase-completion
 -   图片大小：不超过10M。
 -   URL地址中不能包含中文字符。
 
-**原图（image\_url）**
-
-**人物实例分割掩码图像**
-
-**待擦除区域（mask\_url）**
-
-**保留区域（foreground\_url）**
-
-**输出**
-
-![图片擦除2-原图.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0184161571/p840837.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850595.png)
-
-![图片擦除2-擦除.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0184161571/p840839.png)
-
-![图片擦除2-保留.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0184161571/p840841.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0184161571/p840842.png)
+|  |  |  |  |  |
+| --- | --- | --- | --- | --- |
+| **原图（image\_url）** | **人物实例分割掩码图像** | **待擦除区域（mask\_url）** | **保留区域（foreground\_url）** | **输出** |
+| ![图片擦除2-原图.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0184161571/p840837.png) | ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850595.png) | ![图片擦除2-擦除.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0184161571/p840839.png) | ![图片擦除2-保留.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0184161571/p840841.png) | ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0184161571/p840842.png) |
 
 由于模型计算耗时较长，示例代码展示异步处理的调用方式，以避免请求超时。
 
-您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
+您需要已[获取与配置 API Key](../../../../model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
 
-调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](../../../get-started-with-models/regions.md#h2_migrate_domain)。
+
+<a id="sec-tabs"></a>
+
+<a id="curl"></a>
+
+<a id="curl-h4"></a>
 
 #### curl
 
@@ -98,7 +87,9 @@ image-erase-completion
 
 接口返回任务ID，可根据任务ID查询图像生成的结果。
 
-```
+<a id="code-block"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
 curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \
 --header 'X-DashScope-Async: enable' \
@@ -117,22 +108,38 @@ curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.c
     }
 }'
 ```
+
 **2、根据任务ID查询任务状态与结果**
-```
+
+<a id="code-block-2"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
 curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/13b1848b-5493-4c0e-8c44-xxxxxxxxxxxx \
      -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 ```
 
+<a id="效果示例"></a>
+
+<a id="a2504ac7d6qya"></a>
+
 ## 效果示例
 
-fast\_mode模式适合不需要生成大量细节的场景，详细使用请参考[图像擦除补全](raw/model-api-reference/image-generation/image-creative-tools-api-reference/image-erase-completion-api-reference.md)。
+fast\_mode模式适合不需要生成大量细节的场景，详细使用请参考[图像擦除补全](../../../../model-api-reference/image-generation/image-creative-tools-api-reference/image-erase-completion-api-reference.md)。
+
+<a id="保持图像细节-默认-fast-mode-false"></a>
+
+<a id="2576c883bbxl3"></a>
 
 ### 保持图像细节（默认，fast\_mode=false）
 
+<a id="accordion-调用示例"></a>
+
 调用示例
 
-```
+<a id="code-block-3"></a>
+
+```json
 {
   "model": "image-erase-completion",
   "input": {
@@ -146,61 +153,27 @@ fast\_mode模式适合不需要生成大量细节的场景，详细使用请参�
 }
 ```
 
-**原图（image\_url）**
+|  |  |  |  |  |
+| --- | --- | --- | --- | --- |
+| **原图（image\_url）** | **人物实例分割掩码图像** | **待擦除区域（mask\_url）** | **保留区域（foreground\_url）** | **输出图像** |
+| ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850620.png) | ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850624.png) | ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850629.png) | ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850631.png) | ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850632.png) |
+| ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850621.png) | ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850625.png) | ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850636.png) | ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850635.png) | ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850634.png) |
+| ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850622.png) | ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850626.png) | ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850640.png) | ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850639.png) | ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850638.png) |
+| ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850623.png) | ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850627.png) | ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850641.png) | ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850642.png) | ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850643.png) |
 
-**人物实例分割掩码图像**
+<a id="忽略图像细节-fast-mode-true"></a>
 
-**待擦除区域（mask\_url）**
-
-**保留区域（foreground\_url）**
-
-**输出图像**
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850620.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850624.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850629.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850631.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850632.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850621.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850625.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850636.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850635.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850634.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850622.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850626.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850640.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850639.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850638.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850623.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850627.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850641.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850642.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850643.png)
+<a id="167c532b60242"></a>
 
 ### 忽略图像细节（fast\_mode=true）
 
+<a id="accordion-调用示例-2"></a>
+
 调用示例
 
-```
+<a id="code-block-4"></a>
+
+```json
 {
   "model": "image-erase-completion",
   "input": {
@@ -213,24 +186,16 @@ fast\_mode模式适合不需要生成大量细节的场景，详细使用请参�
 }
 ```
 
-**原图（image\_url）**
+|  |  |  |
+| --- | --- | --- |
+| **原图（image\_url）** | **擦除区域掩码图像（mask\_url）** | **输出图像** |
+| ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850649.png) | ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850652.png) | ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850653.png) |
+| ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850657.png) | ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850658.png) | ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850659.png) |
 
-**擦除区域掩码图像（mask\_url）**
+<a id="api参考"></a>
 
-**输出图像**
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850649.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850652.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850653.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850657.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850658.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2949386271/p850659.png)
+<a id="8db33ec4b87vm"></a>
 
 ## API参考
 
-API的输入输出参数，请参见[图像擦除补全](raw/model-api-reference/image-generation/image-creative-tools-api-reference/image-erase-completion-api-reference.md)。
+API的输入输出参数，请参见[图像擦除补全](../../../../model-api-reference/image-generation/image-creative-tools-api-reference/image-erase-completion-api-reference.md)。

@@ -2,13 +2,19 @@
 
 图搜图工具使模型能够根据输入图片从互联网搜索视觉相似的图片，并基于搜索结果进行分析和推理，适用于以图找同款、视觉内容溯源等场景。
 
+<a id="使用方式"></a>
+
+<a id="b3g5c7d9e1f4h"></a>
+
 ## 使用方式
 
 图搜图功能通过 Responses API 调用。您需要在 `tools` 参数中添加 `image_search` 工具，并在 `input` 中以多模态格式传入图片。
 
 > `input` 中必须包含图片内容，通过 `input_image` 类型传入图片 URL。可同时传入 `input_text` 类型的文本，为搜索提供补充说明。
 
-```
+<a id="code-block"></a>
+
+```python
 # 导入依赖与创建客户端...
 input_content = [
     {"type": "input_text", "text": "找与这张图相似风格的风景图"},
@@ -23,7 +29,15 @@ response = client.responses.create(
 print(response.output_text)
 ```
 
+<a id="支持的模型"></a>
+
+<a id="l3q5m7n9o1p4r"></a>
+
 ## 支持的模型
+
+<a id="推荐模型"></a>
+
+<a id="we_rec_title"></a>
 
 ### 推荐模型
 
@@ -35,6 +49,10 @@ print(response.output_text)
 
 qwen3.8-27b
 
+<a id="其他模型"></a>
+
+<a id="we_other_title"></a>
+
 ### 其他模型
 
 以下模型也支持此工具调用，但效果不如推荐模型。
@@ -43,17 +61,27 @@ qwen3.8-27b
 
 仅支持通过 Responses API 调用。
 
+<a id="快速开始"></a>
+
+<a id="s0x2t4u6v8w1y"></a>
+
 ## 快速开始
 
 运行以下代码，通过 Responses API 调用图搜图工具，根据输入的图片搜索相似或相关图片。
 
-> 需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
+> 需要已[获取与配置 API Key](../../../../model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
 
 > 请将示例代码中的 `image_url` 替换为可公网访问的图片 URL。
 
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 import os
 import json
 from openai import OpenAI
@@ -105,9 +133,13 @@ if hasattr(response.usage, 'x_tools') and response.usage.x_tools:
         print(f"[工具统计] {tool_name} 调用次数: {info.get('count', 0)}")
 ```
 
+<a id="fig-code-group-javascript-tab"></a>
+
 javascript
 
-```
+<a id="code-code-group-javascript"></a>
+
+```javascript
 import OpenAI from "openai";
 import process from 'process';
 
@@ -170,9 +202,13 @@ async function main() {
 main();
 ```
 
+<a id="fig-code-group-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-bash"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -196,7 +232,9 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 运行以上代码可获取如下回复：
 
-```
+<a id="code-block-2"></a>
+
+```text
 [工具调用] 图搜图 (status: completed)
   搜索到 2 张图片：
   [1] QingMing Festival Holiday Notice 2024
@@ -218,13 +256,23 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 [工具统计] image_search 调用次数: 1
 ```
 
+<a id="流式输出"></a>
+
+<a id="k8p0l2m4n6o9q"></a>
+
 ## 流式输出
 
 运行图搜图工具需要较长处理时间，建议启用流式输出，实时获取中间过程输出结果。
 
+<a id="fig-code-group-2"></a>
+
+<a id="fig-code-group-2-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-2-python"></a>
+
+```python
 import os
 import json
 from openai import OpenAI
@@ -281,9 +329,13 @@ for event in stream:
                 print(f"[工具统计] {tool_name} 调用次数: {info.get('count', 0)}")
 ```
 
+<a id="fig-code-group-2-javascript-tab"></a>
+
 javascript
 
-```
+<a id="code-code-group-2-javascript"></a>
+
+```javascript
 import OpenAI from "openai";
 import process from 'process';
 
@@ -359,9 +411,13 @@ async function main() {
 main();
 ```
 
+<a id="fig-code-group-2-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-2-bash"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -386,7 +442,9 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 运行以上代码可获取如下回复：
 
-```
+<a id="code-block-3"></a>
+
+```text
 [工具调用] 图搜图搜索中...
 [工具调用] 图搜图完成 (status: completed)
   搜索到 3 张图片：
@@ -403,6 +461,10 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 [工具统计] image_search 调用次数: 1
 ```
 
+<a id="计费说明"></a>
+
+<a id="v9a1w3x5y7z0b"></a>
+
 ## 计费说明
 
 计费涉及以下方面：
@@ -410,19 +472,35 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -   **模型调用费用**：图片搜索的结果信息会拼接到提示词中，增加模型的输入 Token，按照模型的标准价格计费。价格详情请参考百炼控制台。
 -   **工具调用费用**：每1000次调用收费：华北2（北京）地域为48元，新加坡地域为58.713905元。
 
+<a id="常见问题"></a>
+
+<a id="1081409d37emx"></a>
+
 ## 常见问题
+
+<a id="q-支持的图片格式有哪些-支持哪些图片传入方式"></a>
+
+<a id="00ad058b6811b"></a>
 
 ### Q：支持的图片格式有哪些？支持哪些图片传入方式？
 
-A：请参见：[图像与视频理解](raw/model-user-guide/model-experience/text-generation-model/vision.md)与[文件传入方式](https://help.aliyun.com/zh/model-studio/vision#531707ed76i06)。
+A：请参见：[图像与视频理解](../vision.md)与[文件传入方式](../vision.md#531707ed76i06)。
 
 > OpenAI SDK 不支持本地路径传入。
+
+<a id="q-支持传入几张图片"></a>
+
+<a id="3a68542be487p"></a>
 
 ### Q：支持传入几张图片？
 
 A：图片数量受模型最大输入长度限制：图片和文本的总 Token 数需小于模型支持的最大值。模型每次仅搜索一张图片，但可多次调用以处理多张。
 
 > 搜索图片的数量由模型决策。
+
+<a id="q-会返回几张搜索图片结果"></a>
+
+<a id="056d54c354b0c"></a>
 
 ### Q：会返回几张搜索图片结果？
 

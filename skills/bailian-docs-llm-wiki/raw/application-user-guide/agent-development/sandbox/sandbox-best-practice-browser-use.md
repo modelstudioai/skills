@@ -4,39 +4,33 @@
 
 Browser Use Sandbox 面向需要访问网页、点击按钮、填写表单、截图归档或抓取动态页面的 Agent。推荐基于浏览器镜像（`browser`）创建模版：3000 端口提供 browser 服务，可通过 CDP 连接 Puppeteer、Playwright 或 BrowserUse。
 
-如果任务只涉及网页访问、点击、截图、下载文件和轻量结果提取，使用 Browser Use Sandbox 即可；浏览器产物还需要在同一会话中交给 Python/Node.js 做数据清洗、表格分析或报告生成时，优先使用 [AIO Sandbox](raw/application-user-guide/agent-development/sandbox/sandbox-best-practice-aio.md)。
+如果任务只涉及网页访问、点击、截图、下载文件和轻量结果提取，使用 Browser Use Sandbox 即可；浏览器产物还需要在同一会话中交给 Python/Node.js 做数据清洗、表格分析或报告生成时，优先使用 [AIO Sandbox](sandbox-best-practice-aio.md)。
 
-**警告**沙箱公网 URL 应视为访问凭证：未设置应用层鉴权时，持有 URL 的人可完全控制沙箱内浏览器（含已登录态与 Cookie）。请勿公开分享，也不要写入日志或前端代码。
+> **警告**
+>
+> 沙箱公网 URL 应视为访问凭证：未设置应用层鉴权时，持有 URL 的人可完全控制沙箱内浏览器（含已登录态与 Cookie）。请勿公开分享，也不要写入日志或前端代码。
+
+<a id="适用场景"></a>
+
+<a id="h-sandbox-bp-bu-scenarios"></a>
 
 ## 适用场景
 
-**场景**
+| 场景 | 说明 |
+| --- | --- |
+| 网页数据采集 | 访问动态页面，提取标题、正文、表格、链接或业务字段 |
+| 运营后台自动化 | 登录后台，填写表单，点击按钮，下载报表或截图归档 |
+| 页面巡检 | 定时打开页面，验证关键元素、截图、性能或可用性 |
+| 轻量 E2E 测试 | 在隔离浏览器环境中运行端到端测试，避免污染 CI Worker |
+| 浏览器工具型 Agent | 让 Agent 通过 BrowserUse 等框架完成多步骤网页任务 |
 
-**说明**
+<a id="推荐流程"></a>
 
-网页数据采集
-
-访问动态页面，提取标题、正文、表格、链接或业务字段
-
-运营后台自动化
-
-登录后台，填写表单，点击按钮，下载报表或截图归档
-
-页面巡检
-
-定时打开页面，验证关键元素、截图、性能或可用性
-
-轻量 E2E 测试
-
-在隔离浏览器环境中运行端到端测试，避免污染 CI Worker
-
-浏览器工具型 Agent
-
-让 Agent 通过 BrowserUse 等框架完成多步骤网页任务
+<a id="h-sandbox-bp-bu-flow"></a>
 
 ## 推荐流程
 
-1.  基于浏览器镜像（`browser`）创建模版并获取 `templateCode`，详见[模版管理](raw/application-user-guide/agent-development/sandbox/sandbox-templates.md)。
+1.  基于浏览器镜像（`browser`）创建模版并获取 `templateCode`，详见[模版管理](sandbox-templates.md)。
 2.  使用模版创建沙箱，并设置合理的超时时间。
 3.  通过 `sandbox.getHost(3000)` 获取 browser 服务公网 host。
 4.  轮询 `/health`，确认 browser 服务已经就绪。
@@ -45,11 +39,17 @@ Browser Use Sandbox 面向需要访问网页、点击按钮、填写表单、截
 7.  将结构化结果、截图、HTML、PDF 或下载文件保存到沙箱任务目录。
 8.  业务侧读取结果后销毁沙箱。
 
+<a id="准备本地环境"></a>
+
+<a id="h-sandbox-bp-bu-env"></a>
+
 ## 准备本地环境
 
 以下示例使用 Node.js 与 Puppeteer Core。业务侧不需要安装完整浏览器，Chromium/Chrome 已运行在沙箱中。
 
-```
+<a id="code-block"></a>
+
+```json
 {
   "name": "browser-use-sandbox-demo",
   "version": "1.0.0",
@@ -61,15 +61,23 @@ Browser Use Sandbox 面向需要访问网页、点击按钮、填写表单、截
 }
 ```
 
-**说明**`e2b` 固定为 2.31.0（示例验证版本），更高版本的 SDK 创建实例时返回 405。
+> **说明**
+>
+> `e2b` 固定为 2.31.0（示例验证版本），更高版本的 SDK 创建实例时返回 405。
 
 下文 BrowserUse 接入的 Python 示例还需安装：
 
-```
+<a id="code-block-2"></a>
+
+```bash
 pip install "browser-use==0.13.10" "e2b==2.31.0"
 ```
 
 BrowserUse 示例中的模型调用使用阿里云百炼 OpenAI 兼容接口，`api_key` 填阿里云百炼 API Key（必填），`model` 可选，默认 `qwen3-vl-plus`。
+
+<a id="puppeteer-示例"></a>
+
+<a id="h-sandbox-bp-bu-puppeteer"></a>
 
 ## Puppeteer 示例
 
@@ -80,7 +88,9 @@ BrowserUse 示例中的模型调用使用阿里云百炼 OpenAI 兼容接口，`
 3.  通过 CDP 连接云端浏览器。
 4.  打开 `https://example.com`，提取页面信息并保存截图。
 
-```
+<a id="code-block-3"></a>
+
+```javascript
 import { writeFile } from "node:fs/promises";
 import puppeteer from "puppeteer-core";
 import { Sandbox } from "e2b";
@@ -172,11 +182,17 @@ try {
 }
 ```
 
+<a id="browseruse-接入"></a>
+
+<a id="h-sandbox-bp-bu-browseruse"></a>
+
 ## BrowserUse 接入
 
 对于以自然语言驱动网页操作的 Agent，可让 BrowserUse 连接沙箱暴露的 CDP 地址。业务服务负责创建和销毁沙箱；BrowserUse 只连接这个沙箱中的浏览器会话。
 
-```
+<a id="code-block-4"></a>
+
+```python
 import asyncio
 
 from browser_use import Agent, BrowserSession, ChatOpenAI
@@ -232,6 +248,10 @@ if __name__ == "__main__":
 
 这类接入方式适合搜索、比较、填写表单、点击确认和生成截图证据。需要稳定产物时，让 Agent 把关键结果写成 JSON，同时保留截图或 HTML 片段，便于人工复核和问题追踪。
 
+<a id="上线建议"></a>
+
+<a id="h-sandbox-bp-bu-production"></a>
+
 ## 上线建议
 
 -   把每个浏览器任务限制在明确的 URL 范围内，必要时增加域名白名单。
@@ -241,10 +261,14 @@ if __name__ == "__main__":
 -   登录态、Cookie、账号凭证和业务 Token 按任务隔离，通过运行时注入，不写入模版。
 -   记录 URL、截图、关键 DOM 摘要、工具调用轨迹和结果文件路径。
 -   需要人工观察或调试时，使用镜像内置的 noVNC 页面：`https://<sandbox-host>/static/vnc.html?path=/ws/livestream&autoconnect=true`。`path` 不能省略且必须以 `/` 开头，写成相对路径会解析到 `/static/ws/livestream` 并连接失败；根路径 `/vnc.html` 为 404。WebSocket 可直接连接 `wss://<sandbox-host>/ws/livestream`（等价别名 `/ws/liveview`）。
--   任务需要在浏览器操作后继续运行 Python/Node.js 脚本处理数据时，使用 [AIO Sandbox](raw/application-user-guide/agent-development/sandbox/sandbox-best-practice-aio.md)。
+-   任务需要在浏览器操作后继续运行 Python/Node.js 脚本处理数据时，使用 [AIO Sandbox](sandbox-best-practice-aio.md)。
+
+<a id="下一步"></a>
+
+<a id="h-sandbox-bp-bu-next"></a>
 
 ## 下一步
 
--   [使用 AIO Sandbox](raw/application-user-guide/agent-development/sandbox/sandbox-best-practice-aio.md)：浏览器操作与代码执行一体化
--   [模版管理](raw/application-user-guide/agent-development/sandbox/sandbox-templates.md)：基于浏览器镜像创建模版
--   [实例管理与使用](raw/application-user-guide/agent-development/sandbox/sandbox-sdk.md)：实例生命周期与数据面操作
+-   [使用 AIO Sandbox](sandbox-best-practice-aio.md)：浏览器操作与代码执行一体化
+-   [模版管理](sandbox-templates.md)：基于浏览器镜像创建模版
+-   [实例管理与使用](sandbox-sdk.md)：实例生命周期与数据面操作

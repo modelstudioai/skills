@@ -2,6 +2,10 @@
 
 本章节介绍 AOQ Client SDK 的连接状态机及其对应的 API 调用。
 
+<a id="连接状态图"></a>
+
+<a id="connmgr-h2-state-diagram"></a>
+
 ## 连接状态图
 
 下图描述了 AOQ Client SDK 的连接状态迁移关系：
@@ -10,37 +14,22 @@ AOQ Client SDK 连接状态迁移图
 
 ![111](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3811364871/p1088081.svg)
 
+<a id="状态说明"></a>
+
+<a id="connmgr-h2-status-desc"></a>
+
 ## 状态说明
 
-**状态**
+| 状态 | 枚举值 | 说明 |
+| --- | --- | --- |
+| 链接中（Connecting） | 1 | 调用 `connect` 后进入，正在与 AI Service 建立连接 |
+| 已连接（Connected） | 2 | 连接建立成功，可正常收发音视频和数据消息 |
+| 失败（Failed） | 3 | 连接异常（鉴权失败/超时/服务端拒绝等），SDK 内部会自动迁移到已断开 |
+| 已断开（Disconnected） | 0 | 初始状态/主动断开/异常断开后的终态 |
 
-**枚举值**
+<a id="状态迁移规则"></a>
 
-**说明**
-
-链接中（Connecting）
-
-1
-
-调用 `connect` 后进入，正在与 AI Service 建立连接
-
-已连接（Connected）
-
-2
-
-连接建立成功，可正常收发音视频和数据消息
-
-失败（Failed）
-
-3
-
-连接异常（鉴权失败/超时/服务端拒绝等），SDK 内部会自动迁移到已断开
-
-已断开（Disconnected）
-
-0
-
-初始状态/主动断开/异常断开后的终态
+<a id="connmgr-h2-transition-rules"></a>
 
 ## 状态迁移规则
 
@@ -50,28 +39,53 @@ AOQ Client SDK 连接状态迁移图
 4.  **链接异常** → 从 `Connected` 迁移到 `Failed`，随后 SDK 自动迁移到 `Disconnected`。
 5.  **App 调用** `disconnect` → 从 `Connected` 迁移到 `Disconnected`。
 
-**说明****说明**：`Failed` 是瞬态，SDK 触发 `onConnectionStatusChange(Failed)` 后会自动迁移到 `Disconnected`，业务层无需手动调用 disconnect。
+> **说明**
+>
+> **说明**：`Failed` 是瞬态，SDK 触发 `onConnectionStatusChange(Failed)` 后会自动迁移到 `Disconnected`，业务层无需手动调用 disconnect。
+
+<a id="connect-api"></a>
+
+<a id="connmgr-h2-connect-api"></a>
 
 ## connect API
 
 调用 `connect` 发起与 AI Service 的连接，传入由 AppServer allocate 接口返回的鉴权凭证。
 
+<a id="方法签名"></a>
+
+<a id="connmgr-h2-connect-signature"></a>
+
 ### 方法签名
 
 **Android：**
-```
+
+<a id="code-block"></a>
+
+```java
 public abstract int connect(@NonNull AoqConnectConfig config);
 ```
+
 **iOS：**
-```
+
+<a id="code-block-2"></a>
+
+```text
 - (int)connect:(AoqConnectConfig * _Nonnull)config;
 ```
+
 **Ohos：**
-```
+
+<a id="code-block-3"></a>
+
+```javascript
 connect(config: AoqConnectConfig): number;
 ```
 
 **返回值：**`0` 表示调用成功（异步建连）；`< 0` 表示失败。
+
+<a id="行为说明"></a>
+
+<a id="connmgr-h2-connect-behavior"></a>
 
 ### 行为说明
 
@@ -79,26 +93,49 @@ connect(config: AoqConnectConfig): number;
 -   如果链接成功时触发 `onConnectionStatusChange(connected)` 回调。
 -   如果链接失败时触发 `onConnectionStatusChange(failed)` 回调。
 
+<a id="disconnect-api"></a>
+
+<a id="connmgr-h2-disconnect-api"></a>
+
 ## disconnect API
 
 调用 `disconnect` 主动断开与 AI Service 的连接。
 
+<a id="方法签名-2"></a>
+
+<a id="connmgr-h2-disconnect-signature"></a>
+
 ### 方法签名
 
 **Android：**
-```
+
+<a id="code-block-4"></a>
+
+```java
 public abstract int disconnect();
 ```
+
 **iOS：**
-```
+
+<a id="code-block-5"></a>
+
+```text
 - (int)disconnect;
 ```
+
 **Ohos：**
-```
+
+<a id="code-block-6"></a>
+
+```javascript
 disconnect(): number;
 ```
 
 **返回值：**`0` 表示成功；`< 0` 表示失败。
+
+<a id="行为说明-2"></a>
+
+<a id="connmgr-h2-disconnect-behavior"></a>
 
 ### 行为说明
 
@@ -106,27 +143,48 @@ disconnect(): number;
 -   引擎不会自动释放，可重新调用 `connect` 进行重连。
 -   未连接状态下调用 `disconnect` 是安全的，返回 0。
 
+<a id="onconnectionstatuschange-回调"></a>
+
+<a id="connmgr-h2-callback"></a>
+
 ## onConnectionStatusChange 回调
 
 连接状态变化时，SDK 通过此回调通知业务层。
 
 **Android：**
-```
+
+<a id="code-block-7"></a>
+
+```java
 public void onConnectionStatusChange(
     @NonNull AoqClientEngine.AoqConnectionStatus status) {}
 ```
+
 **iOS：**
-```
+
+<a id="code-block-8"></a>
+
+```text
 - (void)onConnectionStatusChange:(AoqConnectionStatus)status;
 ```
+
 **Ohos：**
-```
+
+<a id="code-block-9"></a>
+
+```javascript
 onConnectionStatusChange?: (status: AoqConnectionStatus) => void;
 ```
 
+<a id="示例代码"></a>
+
+<a id="connmgr-h2-callback-example"></a>
+
 ### 示例代码
 
-```
+<a id="code-block-10"></a>
+
+```swift
 func onConnectionStatusChange(_ status: AoqConnectionStatus) {
     switch status {
     case .connecting:

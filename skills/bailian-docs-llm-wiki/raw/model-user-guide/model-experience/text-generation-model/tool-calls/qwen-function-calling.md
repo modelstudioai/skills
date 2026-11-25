@@ -2,6 +2,12 @@
 
 大模型无法访问实时数据和外部系统。Function Calling 允许模型调用外部工具（API、数据库、自定义函数等），获取信息或执行操作，突破模型自身能力的限制。
 
+<a id="工作原理"></a>
+
+<a id="4c970cd736may"></a>
+
+<a id="ecbc6ae7f20im"></a>
+
 ## 工作原理
 
 Function Calling 通过应用程序与大模型之间的多步骤交互实现：
@@ -33,7 +39,19 @@ Function Calling 通过应用程序与大模型之间的多步骤交互实现：
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9256127871/CAEQYhiBgIDE9unxyRkiIDVjNDgwMDBjYTE0NzQ5MTBiMzBiNjJkNTk5ZjE2YTIz4358988_20240409160230.951.svg)
 
+<a id="支持的模型"></a>
+
+<a id="48631a8d2emg8"></a>
+
+<a id="00cdc5d6b5mqe"></a>
+
 ## 支持的模型
+
+<a id="sec-tabs"></a>
+
+<a id="千问"></a>
+
+<a id="千问-h4"></a>
 
 #### 千问
 
@@ -55,7 +73,11 @@ Function Calling 通过应用程序与大模型之间的多步骤交互实现：
     -   Qwen3-VL 开源系列
 -   **语音对话模型**
     -   千问Audio-Realtime：Qwen-Audio-3.1-Realtime-Plus、Qwen-Audio-3.1-Realtime-Flash、Qwen-Audio-3.0-Realtime-Plus系列、Qwen-Audio-3.0-Realtime-Flash系列
-    -   [Qwen-Audio-Live](https://help.aliyun.com/zh/model-studio/qwen-audio-live#live-function-calling)：通过 Realtime API 在会话中声明函数并回传结果。
+    -   [Qwen-Audio-Live](../../speech-and-audio/speech-to-speech/qwen-audio-live.md#live-function-calling)：通过 Realtime API 在会话中声明函数并回传结果。
+
+<a id="deepseek"></a>
+
+<a id="deepseek-h4"></a>
 
 #### DeepSeek
 
@@ -76,14 +98,24 @@ Function Calling 通过应用程序与大模型之间的多步骤交互实现：
     -   vanchin/deepseek-r1
     -   vanchin/deepseek-v3
 
+<a id="glm"></a>
+
+<a id="glm-h4"></a>
+
 #### GLM
 
-**重要**调用 GLM 系列模型的 Function Calling 时，需在请求中传入 extra\_body={"tool\_stream": True}，否则模型不会返回 tool\_calls，工具调用不生效。glm-5.3 的 tool\_stream 默认值为 true，无需显式传入。
+> **重要**
+>
+> 调用 GLM 系列模型的 Function Calling 时，需在请求中传入 extra\_body={"tool\_stream": True}，否则模型不会返回 tool\_calls，工具调用不生效。glm-5.3 的 tool\_stream 默认值为 true，无需显式传入。
 
 -   glm-5.3
 -   glm-5.2
 -   glm-5.1
 -   glm-5
+
+<a id="kimi"></a>
+
+<a id="kimi-h4"></a>
 
 #### Kimi
 
@@ -100,6 +132,10 @@ Function Calling 通过应用程序与大模型之间的多步骤交互实现：
 
 > 在思考模式下，使用 kimi/kimi-k3.1-pro、kimi/kimi-k3.1-pro-highspeed、kimi/kimi-k3、kimi/kimi-k2.7-code-highspeed、kimi/kimi-k2.7-code、kimi/kimi-k2.6、kimi/kimi-k2.5 进行工具调用时，需在每轮 assistant 消息中保留 `reasoning_content` 字段；`tool_choice` 支持 `"auto"`（默认）、`"none"`，kimi/kimi-k3.1-pro、kimi/kimi-k3.1-pro-highspeed、kimi/kimi-k3 还支持 `"required"`，否则会报错。kimi/kimi-k3.1-pro、kimi/kimi-k3.1-pro-highspeed 不支持 `parallel_tool_calls` 参数。
 
+<a id="minimax"></a>
+
+<a id="minimax-h4"></a>
+
 #### MiniMax
 
 -   阿里云百炼部署
@@ -115,6 +151,10 @@ Function Calling 通过应用程序与大模型之间的多步骤交互实现：
 
 > MiniMax/MiniMax-M3.1-Flash 不支持通过 `parallel_tool_calls` 控制工具调用的并行性。设置为 `false` 也不能保证串行调用，模型仍可能在一轮中返回多个 `tool_calls`，请按实际返回结果处理。`tool_choice` 仅支持 `auto`；其他取值可能报错或不生效，指定函数名称不能保证模型调用该函数。进行多轮 Function Calling 时，必须将模型返回的完整 assistant 消息加入对话历史，包括 `reasoning_content` 和 `tool_calls` 字段。不要手工重建或丢弃其中的字段。
 
+<a id="ling"></a>
+
+<a id="ling-h4"></a>
+
 #### Ling
 
 -   蚂蚁数科部署
@@ -123,17 +163,35 @@ Function Calling 通过应用程序与大模型之间的多步骤交互实现：
 
 > antdigital/Ling-3.1-flash 不支持 `parallel_tool_calls` 参数。
 
+<a id="快速开始"></a>
+
+<a id="dd5a3dca390k9"></a>
+
+<a id="6b4fbbb68fhul"></a>
+
 ## 快速开始
 
 您需要已获取与配置 API Key并配置API Key到环境变量。如果通过 OpenAI SDK或 DashScope SDK调用，还需安装SDK。
 
 以下示例演示天气查询场景的完整 Function Calling 流程。
 
+<a id="sec-tabs-2"></a>
+
+<a id="openai-兼容"></a>
+
+<a id="openai-兼容-h4"></a>
+
 #### OpenAI 兼容
+
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-python-tab"></a>
 
 python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 from openai import OpenAI
 from datetime import datetime
 import json
@@ -225,9 +283,13 @@ else:
     print(f"助手最终回复：{assistant_output.content}")
 ```
 
+<a id="fig-code-group-javascript-tab"></a>
+
 javascript
 
-```
+<a id="code-code-group-javascript"></a>
+
+```javascript
 import OpenAI from 'openai';
 
 // 初始化客户端
@@ -330,11 +392,21 @@ const main = async () => {
 main().catch(console.error);
 ```
 
+<a id="dashscope"></a>
+
+<a id="dashscope-h4"></a>
+
 #### DashScope
+
+<a id="fig-code-group-2"></a>
+
+<a id="fig-code-group-2-python-tab"></a>
 
 python
 
-```
+<a id="code-code-group-2-python"></a>
+
+```python
 import os
 import json
 import random
@@ -434,9 +506,13 @@ else:
     print(f"助手最终回复：{content}")
 ```
 
+<a id="fig-code-group-2-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-2-java"></a>
+
+```java
 import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;
 import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationParam;
 import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationResult;
@@ -585,11 +661,19 @@ public class Main {
 
 运行后得到如下输出：
 
-```
+<a id="code-block"></a>
+
+```text
 正在调用工具 [get_current_weather]，参数：{'location': '北京'}
 工具返回：北京今天是多云。
 助手最终回复：北京今天是多云的天气。
 ```
+
+<a id="如何使用"></a>
+
+<a id="038e24005c1vt"></a>
+
+<a id="9f9f4215fe08u"></a>
 
 ## 如何使用
 
@@ -597,20 +681,30 @@ Function Calling 支持两种传入工具信息的方式：
 
 -   方式一：通过 tools 参数传入（推荐）
     
-    参见[如何使用](https://help.aliyun.com/zh/model-studio/qwen-function-calling#038e24005c1vt)，按照**定义工具**、**创建 messages 数组**、**发起 Function Calling**、**运行工具函数**、**大模型总结工具函数输出**的步骤调用。
+    参见[如何使用](qwen-function-calling.md#038e24005c1vt)，按照**定义工具**、**创建 messages 数组**、**发起 Function Calling**、**运行工具函数**、**大模型总结工具函数输出**的步骤调用。
     
 -   方式二：通过 System Message 传入
     
-    通过 tools 参数传入效果最佳，服务端会自动适配最优 prompt 模板。如使用 Qwen 模型且不期望使用 tools 参数，参见[通过 System Message 传入工具信息](raw/model-user-guide/model-experience/text-generation-model/tool-calls/qwen-function-calling.md)。
+    通过 tools 参数传入效果最佳，服务端会自动适配最优 prompt 模板。如使用 Qwen 模型且不期望使用 tools 参数，参见[通过 System Message 传入工具信息](qwen-function-calling.md)。
     
 
 以下以 OpenAI 兼容接口为例，通过 tools 参数分步骤介绍 Function Calling 的详细用法。
 
 假设业务场景会收到天气查询与时间查询两类问题。
 
+<a id="1-定义工具"></a>
+
+<a id="46b66879c9bud"></a>
+
+<a id="03929214d6leu"></a>
+
 ### 1\. 定义工具
 
 工具连接大模型与外部服务，首先需定义工具。
+
+<a id="1-1-创建工具函数"></a>
+
+<a id="9632a61a34ep9"></a>
 
 #### 1.1. 创建工具函数
 
@@ -629,9 +723,15 @@ Function Calling 支持两种传入工具信息的方式：
     > 如果使用 Node.js，请运行 `npm install date-fns` 安装获取时间的工具包 date-fns：
     
 
+<a id="fig-code-group-3"></a>
+
+<a id="fig-code-group-3-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-3-python"></a>
+
+```python
 ## 步骤1.1:定义工具函数
 
 # 添加导入random模块
@@ -665,9 +765,13 @@ print(get_current_time())
 print("\n")
 ```
 
+<a id="fig-code-group-3-javascript-tab"></a>
+
 javascript
 
-```
+<a id="code-code-group-3-javascript"></a>
+
+```javascript
 // 步骤1.1:定义工具函数
 
 // 导入时间查询工具
@@ -702,57 +806,52 @@ console.log("\n")
 
 运行工具后，得到输出：
 
-```
+<a id="code-block-2"></a>
+
+```text
 测试工具输出：
 上海今天是多云。
 当前时间：2025-01-08 20:21:45。
 ```
 
+<a id="1-2-创建-tools-数组"></a>
+
+<a id="b7c8a0e72a9d0"></a>
+
 #### 1.2 创建 tools 数组
 
 人类选择工具前需了解工具的功能、使用场景和输入参数。大模型同理——模型依据这些信息选择合适的工具。按以下JSON格式提供工具信息。
 
--   `type`字段固定为`"function"`；
-    
--   `function`字段为 Object 类型；
-    
-    -   `name`字段为自定义的工具函数名称，建议使用与函数相同的名称，如`get_current_weather`或`get_current_time`；
-        
-    -   `description`字段是对工具函数功能的描述，大模型会参考该字段来选择是否使用该工具函数。
-        
-    -   `parameters`字段是对工具函数入参的描述，类型是 Object ，大模型会参考该字段来进行入参的提取。如果工具函数不需要输入参数，则无需指定`parameters`参数。
-        
-        -   `type`字段固定为`"object"`；
-        -   `properties`字段描述了入参的名称、数据类型与描述，为 Object 类型，Key 值为入参的名称，Value 值为入参的数据类型与描述；
-        -   `required`字段指定哪些参数为必填项，为 Array 类型。
-
-对于天气查询工具来说，工具描述信息的格式如下：
-
-```
-{
-    "type": "function",
-    "function": {
-        "name": "get_current_weather",
-        "description": "当你想查询指定城市的天气时非常有用。",
-        "parameters": {
-            "type": "object",
-            "properties": {
-                "location": {
-                    "type": "string",
-                    "description": "城市或县区，比如北京市、杭州市、余杭区等。"
+<table><tbody><tr><td><ul><li><p><code>type</code>字段固定为<code>&quot;function&quot;</code>；</p></li><li><p><code>function</code>字段为 Object 类型；</p><ul><li><p><code>name</code>字段为自定义的工具函数名称，建议使用与函数相同的名称，如<code>get_current_weather</code>或<code>get_current_time</code>；</p></li><li><p><code>description</code>字段是对工具函数功能的描述，大模型会参考该字段来选择是否使用该工具函数。</p></li><li><p><code>parameters</code>字段是对工具函数入参的描述，类型是 Object ，大模型会参考该字段来进行入参的提取。如果工具函数不需要输入参数，则无需指定<code>parameters</code>参数。</p><ul><li><code>type</code>字段固定为<code>&quot;object&quot;</code>；</li><li><code>properties</code>字段描述了入参的名称、数据类型与描述，为 Object 类型，Key 值为入参的名称，Value 值为入参的数据类型与描述；</li><li><code>required</code>字段指定哪些参数为必填项，为 Array 类型。</li></ul></li></ul></li></ul></td><td><p>对于天气查询工具来说，工具描述信息的格式如下：</p><a id="code-block-3"></a><pre class="language-json"><code>{
+    &quot;type&quot;: &quot;function&quot;,
+    &quot;function&quot;: {
+        &quot;name&quot;: &quot;get_current_weather&quot;,
+        &quot;description&quot;: &quot;当你想查询指定城市的天气时非常有用。&quot;,
+        &quot;parameters&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;properties&quot;: {
+                &quot;location&quot;: {
+                    &quot;type&quot;: &quot;string&quot;,
+                    &quot;description&quot;: &quot;城市或县区，比如北京市、杭州市、余杭区等。&quot;
                 }
             },
-            "required": ["location"]
+            &quot;required&quot;: [&quot;location&quot;]
         }
     }
 }
-```
+</code></pre></td></tr></tbody></table>
 
 发起 Function Calling 前，在代码中定义工具信息数组（tools），包含每个工具的函数名、描述和参数定义。该数组在后续请求时作为参数传入。
 
+<a id="fig-code-group-4"></a>
+
+<a id="fig-code-group-4-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-4-python"></a>
+
+```python
 # 请将以下代码粘贴到步骤1.1代码后
 
 ## 步骤1.2:创建 tools 数组
@@ -788,9 +887,13 @@ tool_name = [tool["function"]["name"] for tool in tools]
 print(f"创建了{len(tools)}个工具，为：{tool_name}\n")
 ```
 
+<a id="fig-code-group-4-javascript-tab"></a>
+
 javascript
 
-```
+<a id="code-code-group-4-javascript"></a>
+
+```javascript
 // 请将以下代码粘贴到步骤1.1代码后
 
 // 步骤1.2:创建 tools 数组
@@ -827,27 +930,49 @@ const toolNames = tools.map(tool => tool.function.name);
 console.log(`创建了${tools.length}个工具，为：${toolNames.join(', ')}\n`);
 ```
 
+<a id="2-创建messages数组"></a>
+
+<a id="3cffc8d450bh9"></a>
+
+<a id="d3166f28c2r8i"></a>
+
 ### 2\. 创建messages数组
 
 Function Calling 通过 messages 数组向大模型传入指令与上下文。发起调用前，messages 数组需包含 System Message 和 User Message。
 
+<a id="system-message"></a>
+
+<a id="a7fe96da6bfxf"></a>
+
 #### System Message
 
-尽管在[创建 tools 数组](https://help.aliyun.com/zh/model-studio/qwen-function-calling#b7c8a0e72a9d0)时已描述了工具的功能和使用场景，但在 System Message 中进一步强调何时调用工具，通常能提高工具调用的准确率。当前场景可将 System Prompt 设置为：
+尽管在[创建 tools 数组](qwen-function-calling.md#b7c8a0e72a9d0)时已描述了工具的功能和使用场景，但在 System Message 中进一步强调何时调用工具，通常能提高工具调用的准确率。当前场景可将 System Prompt 设置为：
 
-```
+<a id="code-block-4"></a>
+
+```text
 你是一个很有帮助的助手。如果用户提问关于天气的问题，请调用 ‘get_current_weather’ 函数;
 如果用户提问关于时间的问题，请调用‘get_current_time’函数。
 请以友好的语气回答问题。
 ```
 
+<a id="user-message"></a>
+
+<a id="5e72b6d4bc4ao"></a>
+
 #### User Message
 
 User Message 用于传入用户提问的问题。假设用户提问“上海天气”，此时的 messages 数组为：
 
+<a id="fig-code-group-5"></a>
+
+<a id="fig-code-group-5-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-5-python"></a>
+
+```python
 # 步骤2:创建messages数组
 # 请将以下代码粘贴到步骤1.2 代码后
 # 文本生成模型的 User Message示例
@@ -880,9 +1005,13 @@ messages = [
 print("messages 数组创建完成\n")
 ```
 
+<a id="fig-code-group-5-javascript-tab"></a>
+
 javascript
 
-```
+<a id="code-code-group-5-javascript"></a>
+
+```javascript
 // 步骤2:创建messages数组
 // 请将以下代码粘贴到步骤1.2 代码后
 const messages = [
@@ -907,15 +1036,27 @@ console.log("messages 数组创建完成\n");
 
 > 由于备选工具包含天气查询与时间查询，也可提问关于当前时间的问题。
 
+<a id="3-发起-function-calling"></a>
+
+<a id="9f478b2e76wrk"></a>
+
+<a id="0548fe3958jh6"></a>
+
 ### 3\. 发起 Function Calling
 
 将创建好的 `tools` 与 `messages` 传入大模型，即可发起一次 Function Calling。大模型会判断是否调用工具。若调用，则返回该工具的函数名与参数。
 
-> 支持的模型参见 [支持的模型](https://help.aliyun.com/zh/model-studio/qwen-function-calling#48631a8d2emg8) 。
+> 支持的模型参见 [支持的模型](qwen-function-calling.md#48631a8d2emg8) 。
+
+<a id="fig-code-group-6"></a>
+
+<a id="fig-code-group-6-python-tab"></a>
 
 python
 
-```
+<a id="code-code-group-6-python"></a>
+
+```python
 # 步骤3:发起 function calling
 # 请将以下代码粘贴到步骤2 代码后
 
@@ -946,9 +1087,13 @@ print("正在发起function calling...")
 completion = function_calling()
 ```
 
+<a id="fig-code-group-6-javascript-tab"></a>
+
 javascript
 
-```
+<a id="code-code-group-6-javascript"></a>
+
+```javascript
 // 步骤3:发起 function calling
 // 请将以下代码粘贴到步骤2 代码后
 
@@ -981,7 +1126,9 @@ const completion = await functionCalling();
 
 由于用户提问为上海天气，大模型指定需要使用的工具函数名称为：`"get_current_weather"`，函数的入参为：`"{\"location\": \"上海\"}"`。
 
-```
+<a id="code-block-5"></a>
+
+```json
 {
     "content": "",
     "refusal": null,
@@ -1004,7 +1151,9 @@ const completion = await functionCalling();
 
 需要注意，如果问题被大模型判断为无需使用工具，会通过`content`参数直接回复。在输入“你好”时，`tool_calls`参数为空，返回对象格式为：
 
-```
+<a id="code-block-6"></a>
+
+```json
 {
     "content": "你好！有什么可以帮助你的吗？如果你有关于天气或者时间的问题，我特别擅长回答。",
     "refusal": null,
@@ -1017,7 +1166,13 @@ const completion = await functionCalling();
 
 > 如果 `tool_calls` 参数为空，可使程序直接返回 `content` ，无需运行以下步骤。
 
-> 若希望每次发起 Function Calling 后大模型都可以选择指定工具，请参见 [强制工具调用](https://help.aliyun.com/zh/model-studio/qwen-function-calling#b0910669927j7) 。
+> 若希望每次发起 Function Calling 后大模型都可以选择指定工具，请参见 [强制工具调用](qwen-function-calling.md#b0910669927j7) 。
+
+<a id="4-运行工具函数"></a>
+
+<a id="77d223b12de3a"></a>
+
+<a id="0e0189709bfw3"></a>
 
 ### 4\. 运行工具函数
 
@@ -1038,9 +1193,15 @@ const completion = await functionCalling();
 
 完成解析后，将参数传入工具函数并执行，获取输出结果。
 
+<a id="fig-code-group-7"></a>
+
+<a id="fig-code-group-7-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-7-python"></a>
+
+```python
 # 步骤4:运行工具函数
 # 请将以下代码粘贴到步骤3 代码后
 import json
@@ -1069,9 +1230,13 @@ else:
 print(f"工具函数输出：{function_output}\n")
 ```
 
+<a id="fig-code-group-7-javascript-tab"></a>
+
 javascript
 
-```
+<a id="code-code-group-7-javascript"></a>
+
+```javascript
 // 步骤4:运行工具函数
 // 请将以下代码粘贴到步骤3 代码后
 
@@ -1106,11 +1271,21 @@ console.log(`工具函数输出：${functionOutput}\n`);
 
 运行后得到如下输出：
 
-```
+<a id="code-block-7"></a>
+
+```text
 上海今天是多云。
 ```
 
-**说明**实际业务中，许多工具执行具体操作（如邮件发送、文件上传），而非数据查询，不会输出字符串。建议为此类工具添加状态描述信息（如“邮件发送完成”、“操作执行失败”），帮助大模型了解执行状态。
+> **说明**
+>
+> 实际业务中，许多工具执行具体操作（如邮件发送、文件上传），而非数据查询，不会输出字符串。建议为此类工具添加状态描述信息（如“邮件发送完成”、“操作执行失败”），帮助大模型了解执行状态。
+
+<a id="5-大模型总结工具函数输出"></a>
+
+<a id="388e179fecs9z"></a>
+
+<a id="ab7706377b83a"></a>
 
 ### 5\. 大模型总结工具函数输出
 
@@ -1118,21 +1293,27 @@ console.log(`工具函数输出：${functionOutput}\n`);
 
 1.  添加 Assistant Message
     
-    [发起 Function Calling](https://help.aliyun.com/zh/model-studio/qwen-function-calling#9f478b2e76wrk)后，通过`completion.choices[0].message`得到 Assistant Message，首先将它添加到 messages 数组中；
+    [发起 Function Calling](qwen-function-calling.md#9f478b2e76wrk)后，通过`completion.choices[0].message`得到 Assistant Message，首先将它添加到 messages 数组中；
     
 2.  添加 Tool Message
     
     将工具的输出通过`{"role": "tool", "content": "工具的输出","tool_call_id": completion.choices[0].message.tool_calls[0].id}`形式添加到 messages 数组。
     
-    **说明**
+    > **说明**
+    >
+    > -   工具的输出通常为字符串。需要模型理解工具产出的图片时，`content`可传入内容数组，例如`[{"type": "text", "text": "图片生成成功。"}, {"type": "image_url", "image_url": {"url": "https://example.com/image.png"}}]`，其中`url`支持公网 URL 或 Base64 Data URI。图片 URL 作为字符串传入时按普通文本处理，不会被解析为图片。
+    > -   `tool_call_id` 是系统为每一次的工具调用请求生成的**唯一标识符**。模型可能一次性要求调用多个工具，将多个工具结果返回给模型时，`tool_call_id`可确保工具的输出结果能够与它的调用意图对应。
     
-    -   工具的输出通常为字符串。需要模型理解工具产出的图片时，`content`可传入内容数组，例如`[{"type": "text", "text": "图片生成成功。"}, {"type": "image_url", "image_url": {"url": "https://example.com/image.png"}}]`，其中`url`支持公网 URL 或 Base64 Data URI。图片 URL 作为字符串传入时按普通文本处理，不会被解析为图片。
-    -   `tool_call_id` 是系统为每一次的工具调用请求生成的**唯一标识符**。模型可能一次性要求调用多个工具，将多个工具结果返回给模型时，`tool_call_id`可确保工具的输出结果能够与它的调用意图对应。
-    
+
+<a id="fig-code-group-8"></a>
+
+<a id="fig-code-group-8-python-tab"></a>
 
 python
 
-```
+<a id="code-code-group-8-python"></a>
+
+```python
 # 步骤5.1:向大模型提交工具输出
 # 请将以下代码粘贴到步骤4 代码后
 
@@ -1142,9 +1323,13 @@ messages.append({"role": "tool", "content": function_output, "tool_call_id": com
 print("已添加tool message\n")
 ```
 
+<a id="fig-code-group-8-javascript-tab"></a>
+
 javascript
 
-```
+<a id="code-code-group-8-javascript"></a>
+
+```javascript
 // 步骤5.1:向大模型提交工具输出
 // 请将以下代码粘贴到步骤4 代码后
 
@@ -1160,7 +1345,9 @@ console.log("已添加 tool message\n");
 
 此时的 messages 数组为：
 
-```
+<a id="code-block-8"></a>
+
+```text
 [
   System Message -- 指引模型调用工具的策略
   User Message -- 用户的问题
@@ -1171,18 +1358,28 @@ console.log("已添加 tool message\n");
 
 更新 messages 数组后，运行以下代码。
 
+<a id="fig-code-group-9"></a>
+
+<a id="fig-code-group-9-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-9-python"></a>
+
+```python
 # 步骤5.2:大模型总结工具输出
 # 请将以下代码粘贴到步骤5.1 代码后
 print("正在总结工具输出...")
 completion = function_calling()
 ```
 
+<a id="fig-code-group-9-javascript-tab"></a>
+
 javascript
 
-```
+<a id="code-code-group-9-javascript"></a>
+
+```javascript
 // 步骤5.2:大模型总结工具输出
 // 请将以下代码粘贴到步骤5.1 代码后
 
@@ -1192,7 +1389,9 @@ const completion_1 = await functionCalling();
 
 可从`content`得到回复内容：“上海今天的天气是多云。如果您有其他问题，欢迎继续提问。”
 
-```
+<a id="code-block-9"></a>
+
+```json
 {
     "content": "上海今天的天气是多云。如果您有其他问题，欢迎继续提问。",
     "refusal": null,
@@ -1205,17 +1404,37 @@ const completion_1 = await functionCalling();
 
 至此，您已完成了一次完整的 Function Calling 流程。
 
+<a id="进阶用法"></a>
+
+<a id="3bd4ed56e6aqz"></a>
+
+<a id="bb2f89fbc6ckh"></a>
+
 ## 进阶用法
 
+<a id="指定工具调用方式"></a>
+
+<a id="56919040e6hjv"></a>
+
+<a id="cec840ca39b8b"></a>
+
 ### 指定工具调用方式
+
+<a id="并行工具调用"></a>
+
+<a id="cb6b5c484bt4x"></a>
+
+<a id="a0a0a8f95111u"></a>
 
 #### 并行工具调用
 
 > 本节仅适用于支持 `parallel_tool_calls` 的模型。MiniMax/MiniMax-M3.1-Flash、kimi-k3 不支持通过此参数控制工具调用的并行性：设置为 `false` 也可能在一轮中返回多个 `tool_calls`。调用方需遍历并处理实际返回的全部工具调用。kimi/kimi-k3.1-pro、kimi/kimi-k3.1-pro-highspeed 不支持 `parallel_tool_calls` 参数。
 
-单一城市天气查询只需一次工具调用。若问题需要多次调用工具，如“北京上海的天气如何”或“杭州天气，以及现在几点了”，由于 `parallel_tool_calls` 默认为 `true`，[发起 Function Calling](https://help.aliyun.com/zh/model-studio/qwen-function-calling#9f478b2e76wrk) 后，模型可在一次返回中包含多个工具调用信息。以提问“北京上海的天气如何”为例，返回对象的`tool_calls`数组中包含了北京和上海的入参信息：
+单一城市天气查询只需一次工具调用。若问题需要多次调用工具，如“北京上海的天气如何”或“杭州天气，以及现在几点了”，由于 `parallel_tool_calls` 默认为 `true`，[发起 Function Calling](qwen-function-calling.md#9f478b2e76wrk) 后，模型可在一次返回中包含多个工具调用信息。以提问“北京上海的天气如何”为例，返回对象的`tool_calls`数组中包含了北京和上海的入参信息：
 
-```
+<a id="code-block-10"></a>
+
+```json
 {
     "content": "",
     "role": "assistant",
@@ -1242,11 +1461,17 @@ const completion_1 = await functionCalling();
 }
 ```
 
-若希望模型每次只返回一个工具调用，可在[发起 Function Calling](https://help.aliyun.com/zh/model-studio/qwen-function-calling#9f478b2e76wrk)时将请求参数`parallel_tool_calls`设为`false`：
+若希望模型每次只返回一个工具调用，可在[发起 Function Calling](qwen-function-calling.md#9f478b2e76wrk)时将请求参数`parallel_tool_calls`设为`false`：
+
+<a id="fig-code-group-10"></a>
+
+<a id="fig-code-group-10-python-tab"></a>
 
 python
 
-```
+<a id="code-code-group-10-python"></a>
+
+```python
 def function_calling():
     completion = client.chat.completions.create(
         model="qwen4-max",  # 此处以qwen4-max为例，可按需更换模型名称
@@ -1265,9 +1490,13 @@ print("正在发起function calling...")
 completion = function_calling()
 ```
 
+<a id="fig-code-group-10-javascript-tab"></a>
+
 javascript
 
-```
+<a id="code-code-group-10-javascript"></a>
+
+```javascript
 async function functionCalling() {
     const completion = await openai.chat.completions.create({
         model: "qwen4-max",  // 此处以qwen4-max为例，可按需更换模型名称
@@ -1287,7 +1516,9 @@ const completion = await functionCalling();
 
 返回结果中只包含北京市的入参信息：
 
-```
+<a id="code-block-11"></a>
+
+```json
 {
     "content": "",
     "refusal": null,
@@ -1308,7 +1539,15 @@ const completion = await functionCalling();
 }
 ```
 
-**说明**并行工具调用适合任务之间无依赖的情况。若任务之间有依赖关系（工具A的输入与工具B的输出结果有关），请参见[快速开始](https://help.aliyun.com/zh/model-studio/qwen-function-calling#dd5a3dca390k9)，通过while循环实现串行工具调用（一次调用一个工具）。
+> **说明**
+>
+> 并行工具调用适合任务之间无依赖的情况。若任务之间有依赖关系（工具A的输入与工具B的输出结果有关），请参见[快速开始](qwen-function-calling.md#dd5a3dca390k9)，通过while循环实现串行工具调用（一次调用一个工具）。
+
+<a id="强制工具调用"></a>
+
+<a id="b0910669927j7"></a>
+
+<a id="5e07424970wjx"></a>
 
 #### 强制工具调用
 
@@ -1325,7 +1564,9 @@ const completion = await functionCalling();
     假设当前场景中只包含天气查询的问题，可修改 function\_calling 代码为：
     
 
-```
+<a id="code-block-12"></a>
+
+```python
 def function_calling():
     completion = client.chat.completions.create(
         model="qwen4-max",
@@ -1338,7 +1579,10 @@ def function_calling():
 
 function_calling()
 ```
-```
+
+<a id="code-block-13"></a>
+
+```javascript
 async function functionCalling() {
     const response = await openai.chat.completions.create({
         model: "qwen4-max",
@@ -1368,9 +1612,15 @@ const response = await functionCalling();
 
 假设当前场景中的问题均需要调用工具，您可以修改 function\_calling 代码为：
 
+<a id="fig-code-group-11"></a>
+
+<a id="fig-code-group-11-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-11-python"></a>
+
+```python
 def function_calling():
     completion = client.chat.completions.create(
         model="kimi/kimi-k3",
@@ -1383,9 +1633,13 @@ def function_calling():
 function_calling()
 ```
 
+<a id="fig-code-group-11-javascript-tab"></a>
+
 javascript
 
-```
+<a id="code-code-group-11-javascript"></a>
+
+```javascript
 async function functionCalling() {
     const completion = await openai.chat.completions.create({
         model: "kimi/kimi-k3",
@@ -1413,7 +1667,9 @@ const completion = await functionCalling();
     假设当前场景中的问题均无需调用工具，可修改 function\_calling 代码为：
     
 
-```
+<a id="code-block-14"></a>
+
+```python
 def function_calling():
     completion = client.chat.completions.create(
         model="qwen4-max",
@@ -1426,7 +1682,10 @@ def function_calling():
 
 function_calling()
 ```
-```
+
+<a id="code-block-15"></a>
+
+```javascript
 async function functionCalling() {
     const completion = await openai.chat.completions.create({
         model: "qwen4-max",
@@ -1444,11 +1703,19 @@ async function functionCalling() {
 const completion = await functionCalling();
 ```
 
+<a id="多轮对话"></a>
+
+<a id="e45596d2e64bf"></a>
+
+<a id="29c92c5073u27"></a>
+
 ### 多轮对话
 
-用户可能第一轮提问“北京天气”，第二轮提问“上海的呢？”。若模型上下文缺少第一轮信息，模型无法判断调用哪个工具。多轮对话场景中，每轮结束后保持 messages 数组完整，在此基础上添加 User Message 并[发起 Function Calling](https://help.aliyun.com/zh/model-studio/qwen-function-calling#9f478b2e76wrk)以及后续步骤。messages 结构如下所示：
+用户可能第一轮提问“北京天气”，第二轮提问“上海的呢？”。若模型上下文缺少第一轮信息，模型无法判断调用哪个工具。多轮对话场景中，每轮结束后保持 messages 数组完整，在此基础上添加 User Message 并[发起 Function Calling](qwen-function-calling.md#9f478b2e76wrk)以及后续步骤。messages 结构如下所示：
 
-```
+<a id="code-block-16"></a>
+
+```text
 [
   System Message -- 指引模型调用工具的策略
   User Message -- 用户的问题
@@ -1459,6 +1726,12 @@ const completion = await functionCalling();
 ]
 ```
 
+<a id="流式输出"></a>
+
+<a id="953d0d7b1ahuk"></a>
+
+<a id="dad2dbe656yhp"></a>
+
 ### 流式输出
 
 使用流式输出可实时获取工具函数名称与入参信息，提升用户体验。其中：
@@ -1466,9 +1739,15 @@ const completion = await functionCalling();
 -   工具调用的参数信息：以数据流的形式分块返回。
 -   工具函数名称：在流式响应的第一个数据块中返回。
 
+<a id="fig-code-group-12"></a>
+
+<a id="fig-code-group-12-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-12-python"></a>
+
+```python
 from openai import OpenAI
 import os
 
@@ -1512,9 +1791,13 @@ for chunk in stream:
     print(delta.tool_calls)
 ```
 
+<a id="fig-code-group-12-javascript-tab"></a>
+
 javascript
 
-```
+<a id="code-code-group-12-javascript"></a>
+
+```javascript
 import { OpenAI } from "openai";
 
 const openai = new OpenAI(
@@ -1562,7 +1845,9 @@ for await (const chunk of stream) {
 
 运行后得到如下输出：
 
-```
+<a id="code-block-17"></a>
+
+```json
 [ChoiceDeltaToolCall(index=0, id='call_8f08d2b0fc0c4d8fab7123', function=ChoiceDeltaToolCallFunction(arguments='{"location":', name='get_current_weather'), type='function')]
 [ChoiceDeltaToolCall(index=0, id='', function=ChoiceDeltaToolCallFunction(arguments=' "杭州"}', name=None), type='function')]
 None
@@ -1570,9 +1855,15 @@ None
 
 运行以下代码拼接入参信息（`arguments`）：
 
+<a id="fig-code-group-13"></a>
+
+<a id="fig-code-group-13-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-13-python"></a>
+
+```python
 tool_calls = {}
 for response_chunk in stream:
     delta_tool_calls = response_chunk.choices[0].delta.tool_calls
@@ -1587,9 +1878,13 @@ for response_chunk in stream:
 print(tool_calls[0].model_dump_json())
 ```
 
+<a id="fig-code-group-13-javascript-tab"></a>
+
 javascript
 
-```
+<a id="code-code-group-13-javascript"></a>
+
+```javascript
 const toolCalls = {};
 for await (const responseChunk of stream) {
   const deltaToolCalls = responseChunk.choices[0]?.delta?.tool_calls;
@@ -1614,13 +1909,17 @@ console.log(JSON.stringify(toolCalls[0]));
 
 获得如下输出：
 
-```
+<a id="code-block-18"></a>
+
+```json
 {"index":0,"id":"call_16c72bef988a4c6c8cc662","function":{"arguments":"{\"location\": \"杭州\"}","name":"get_current_weather"},"type":"function"}
 ```
 
 在使用大模型总结工具函数输出步骤，添加的 Assistant Message 需要符合下方格式。仅需将下方的`tool_calls`中的元素替换为以上内容即可。
 
-```
+<a id="code-block-19"></a>
+
+```json
 {
     "content": "",
     "refusal": None,
@@ -1641,71 +1940,51 @@ console.log(JSON.stringify(toolCalls[0]));
 }
 ```
 
+<a id="responses-api的工具调用"></a>
+
+<a id="e819c10e32nge"></a>
+
+<a id="e814d5ef10f8c"></a>
+
 ### Responses API的工具调用
 
 上述示例基于 OpenAI Chat Completions 和 DashScope API。若使用 OpenAI Responses API，整体流程相同，但接口格式有以下区别：
 
-**维度**
-
-**Chat Completions**
-
-**Responses API**
-
-工具定义格式
-
-```
-{
-    "type": "function",
-    "function": {
-        "name":...,
-        "parameters":...
+<table><thead><tr><th><strong>维度</strong></th><th><strong>Chat Completions</strong></th><th><strong>Responses API</strong></th></tr></thead><tbody><tr><td><p>工具定义格式</p></td><td><a id="code-block-20"></a><pre class="language-json"><code>{
+    &quot;type&quot;: &quot;function&quot;,
+    &quot;function&quot;: {
+        &quot;name&quot;:...,
+        &quot;parameters&quot;:...
     }
 }
-```
-
-```
-{
-    "type": "function",
-    "name":...,
-    "parameters":...
+</code></pre></td><td><a id="code-block-21"></a><pre class="language-json"><code>{
+    &quot;type&quot;: &quot;function&quot;,
+    &quot;name&quot;:...,
+    &quot;parameters&quot;:...
 }
-```
-
-工具调用输出
-
-response.choices\[0\].message.tool\_calls
-
-response.output 中 type 为 function\_call 的项
-
-工具结果回传
-
-```
-{
-    "role": "tool",
-    "tool_call_id":...,
-    "content":...
+</code></pre></td></tr><tr><td><p>工具调用输出</p></td><td><p>response.choices[0].message.tool_calls</p></td><td><p>response.output 中 type 为 function_call 的项</p></td></tr><tr><td><p>工具结果回传</p></td><td><a id="code-block-22"></a><pre class="language-json"><code>{
+    &quot;role&quot;: &quot;tool&quot;,
+    &quot;tool_call_id&quot;:...,
+    &quot;content&quot;:...
 }
-```
-
-```
-{
-    "type": "function_call_output",
-    "call_id":...,
-    "output":...
+</code></pre></td><td><a id="code-block-23"></a><pre class="language-json"><code>{
+    &quot;type&quot;: &quot;function_call_output&quot;,
+    &quot;call_id&quot;:...,
+    &quot;output&quot;:...
 }
-```
+</code></pre></td></tr><tr><td><p>最终回复</p></td><td><p>response.choices[0].message.content</p></td><td><p>response.output_text</p></td></tr></tbody></table>
 
-最终回复
+两种 API 的工具结果均支持字符串和内容数组两种形式。Responses API 的`output`数组元素类型为`input_text`与`input_image`，`image_url`直接传入 URL 或 Base64 Data URI，不使用嵌套对象，字段说明参见[创建响应](../../../../model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)。
 
-response.choices\[0\].message.content
+<a id="fig-code-group-14"></a>
 
-response.output\_text
-
-两种 API 的工具结果均支持字符串和内容数组两种形式。Responses API 的`output`数组元素类型为`input_text`与`input_image`，`image_url`直接传入 URL 或 Base64 Data URI，不使用嵌套对象，字段说明参见[创建响应](raw/model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)。
+<a id="fig-code-group-14-python-tab"></a>
 
 python
 
-```
+<a id="code-code-group-14-python"></a>
+
+```python
 from openai import OpenAI
 import json
 import os
@@ -1798,9 +2077,13 @@ else:
     print(f"助手最终回复：{response.output_text}")
 ```
 
+<a id="fig-code-group-14-javascript-tab"></a>
+
 javascript
 
-```
+<a id="code-code-group-14-javascript"></a>
+
+```javascript
 import OpenAI from "openai";
 
 // 初始化客户端
@@ -1901,21 +2184,39 @@ const main = async () => {
 main().catch(console.error);
 ```
 
+<a id="全模态模型的工具调用"></a>
+
+<a id="399065d71bd3r"></a>
+
+<a id="8e9c756dcajdh"></a>
+
 ### 全模态模型的工具调用
 
 全模态模型支持工具调用，Qwen-Omni 系列和 Qwen-Omni-Realtime 系列的调用方式不同。
 
+<a id="qwen-omni-系列"></a>
+
+<a id="rt01nonrealti01"></a>
+
+<a id="rt01nonrealtime"></a>
+
 #### Qwen-Omni 系列
 
-文本工具调用使用 `qwen3.8-omni-flash`，可通过 Chat Completions 或 Responses 接入。以下 Python 和 JavaScript 示例使用 Chat Completions，关闭思考并流式读取文本和工具调用增量。音视频输入见 [Qwen3.8-Omni-Flash](https://help.aliyun.com/zh/model-studio/qwen-omni#qwen38-offline)。
+文本工具调用使用 `qwen3.8-omni-flash`，可通过 Chat Completions 或 Responses 接入。以下 Python 和 JavaScript 示例使用 Chat Completions，关闭思考并流式读取文本和工具调用增量。音视频输入见 [Qwen3.8-Omni-Flash](../../omni-modal/qwen-omni.md#qwen38-offline)。
 
-示例设置 `reasoning_effort="none"` 关闭思考。需要结合思考进行工具调用时，可省略该参数，使用默认的 `xhigh`，并分别读取 `reasoning_content`、`content` 和 `tool_calls`。此时多轮请求需将上一轮 assistant 消息的思考内容、回复和工具调用一起加入历史，再传入工具结果；`preserve_thinking` 默认开启。详见[传递思考过程](https://help.aliyun.com/zh/model-studio/deep-thinking#jln7docdq5et5)。
+示例设置 `reasoning_effort="none"` 关闭思考。需要结合思考进行工具调用时，可省略该参数，使用默认的 `xhigh`，并分别读取 `reasoning_content`、`content` 和 `tool_calls`。此时多轮请求需将上一轮 assistant 消息的思考内容、回复和工具调用一起加入历史，再传入工具结果；`preserve_thinking` 默认开启。详见[传递思考过程](../deep-thinking.md#jln7docdq5et5)。
 
-先[安装 OpenAI SDK](raw/model-api-reference/preparations/install-sdk.md)，配置 `DASHSCOPE_API_KEY`，并将 `DASHSCOPE_BASE_URL` 设置为业务空间的 [Chat Completions 地址](raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)。API Key 与地址使用同一地域。
+先[安装 OpenAI SDK](../../../../model-api-reference/preparations/install-sdk.md)，配置 `DASHSCOPE_API_KEY`，并将 `DASHSCOPE_BASE_URL` 设置为业务空间的 [Chat Completions 地址](../../../../model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)。API Key 与地址使用同一地域。
+
+<a id="fig-code-group-15"></a>
+
+<a id="fig-code-group-15-python-tab"></a>
 
 python
 
-```
+<a id="code-code-group-15-python"></a>
+
+```python
 from openai import OpenAI
 import os
 
@@ -1965,9 +2266,13 @@ for chunk in completion:
         print(delta.tool_calls)
 ```
 
+<a id="fig-code-group-15-javascript-tab"></a>
+
 javascript
 
-```
+<a id="code-code-group-15-javascript"></a>
+
+```javascript
 import { OpenAI } from "openai";
 
 const openai = new OpenAI(
@@ -2022,20 +2327,28 @@ for await (const chunk of stream) {
 
 Python 工具调用增量格式示意如下；实际内容由模型返回，函数名和参数可能分多个数据块到达：
 
-```
+<a id="code-block-24"></a>
+
+```text
 [ChoiceDeltaToolCall(index=0, id='call_391c8e5787bc4972a388aa', function=ChoiceDeltaToolCallFunction(arguments=None, name='get_current_weather'), type='function')]
 [ChoiceDeltaToolCall(index=0, id='call_391c8e5787bc4972a388aa', function=ChoiceDeltaToolCallFunction(arguments=' {"location": "杭州市"}', name=None), type='function')]
 ```
 
-拼接入参信息（`arguments`）的代码请参见[流式输出](https://help.aliyun.com/zh/model-studio/qwen-function-calling#953d0d7b1ahuk)。
+拼接入参信息（`arguments`）的代码请参见[流式输出](qwen-function-calling.md#953d0d7b1ahuk)。
 
 > Qwen3.5-Omni-Plus、Qwen3.5-Omni-Flash 和 Qwen3-Omni-Flash 的既有调用必须设置 `stream=True`。获取工具信息时可使用 `modalities=["text"]`；Qwen3.5-Omni 同时输出音频时需跳过音频数据块。
 
+<a id="qwen-omni-realtime-系列"></a>
+
+<a id="rt02realtime01"></a>
+
+<a id="rt02realtime"></a>
+
 #### Qwen-Omni-Realtime 系列
 
-Qwen3.8-Omni-Flash-Realtime、Qwen3.5-Omni-Plus-Realtime 和 Qwen3.5-Omni-Flash-Realtime 支持自定义 Function Calling，适用于语音对话场景。以下流程通过 DashScope SDK 或 WebSocket 原生协议调用，接入方式与 SDK 配置见[实时调用指南](raw/model-user-guide/model-experience/omni-modal/realtime.md)。
+Qwen3.8-Omni-Flash-Realtime、Qwen3.5-Omni-Plus-Realtime 和 Qwen3.5-Omni-Flash-Realtime 支持自定义 Function Calling，适用于语音对话场景。以下流程通过 DashScope SDK 或 WebSocket 原生协议调用，接入方式与 SDK 配置见[实时调用指南](../../omni-modal/realtime.md)。
 
-Qwen3.8-Omni-Flash-Realtime 的服务端 MCP 工具调用与审批流程见[MCP 交互流程](https://help.aliyun.com/zh/model-studio/omni-realtime-websocket-access#qwen38-mcp-flow)。
+Qwen3.8-Omni-Flash-Realtime 的服务端 MCP 工具调用与审批流程见[MCP 交互流程](../../../../model-api-reference/realtime-api-directory/omni-realtime-api-directory/omni-realtime-websocket-access.md#qwen38-mcp-flow)。
 
 **工作流程**：
 
@@ -2046,7 +2359,9 @@ Qwen3.8-Omni-Flash-Realtime 的服务端 MCP 工具调用与审批流程见[MCP 
 1.  用户发起语音提问，客户端采集音频并发送至服务端（对应 `append_audio()` 方法），服务端 VAD 检测语音结束后进行模型推理，判断需要调用工具。
 2.  服务端将工具调用信息返回给客户端（对应 `response.function_call_arguments.done` 事件），包含函数名（`name`）、函数入参（`arguments`）和调用标识（`call_id`），示例如下：
 
-```
+<a id="code-block-25"></a>
+
+```json
 {
     "type": "response.function_call_arguments.done",
     "response_id": "resp_JnTOsWXlFhKcFohZbtfz6",
@@ -2064,7 +2379,9 @@ Qwen3.8-Omni-Flash-Realtime 的服务端 MCP 工具调用与审批流程见[MCP 
 
 1.  客户端将工具执行结果发回服务端（对应 `conversation.item.create` 事件），包含调用标识（`call_id`）和执行结果（`output`），示例如下：
 
-```
+<a id="code-block-26"></a>
+
+```json
 {
     "type": "conversation.item.create",
     "item": {
@@ -2082,9 +2399,15 @@ Qwen3.8-Omni-Flash-Realtime 的服务端 MCP 工具调用与审批流程见[MCP 
 
 > 千问Omni-Realtime详情请参见： 实时（Qwen-Omni-Realtime） 、 客户端事件 、 服务端事件 。
 
+<a id="fig-code-group-16"></a>
+
+<a id="fig-code-group-16-dashscope-python-sdk-tab"></a>
+
 DashScope Python SDK
 
-```
+<a id="code-code-group-16-dashscope-python-sdk"></a>
+
+```python
 # DashScope Python SDK v2.0.1
 import os
 import threading
@@ -2599,9 +2922,13 @@ if __name__ == '__main__':
     main()
 ```
 
+<a id="fig-code-group-16-dashscope-java-sdk-tab"></a>
+
 DashScope Java SDK
 
-```
+<a id="code-code-group-16-dashscope-java-sdk"></a>
+
+```java
 // DashScope Java SDK v2.22.15
 import com.alibaba.dashscope.audio.omni.*;
 import com.alibaba.dashscope.exception.NoApiKeyException;
@@ -3056,9 +3383,13 @@ public class Main {
 }
 ```
 
+<a id="fig-code-group-16-websocket-python-tab"></a>
+
 WebSocket(Python)
 
-```
+<a id="code-code-group-16-websocket-python"></a>
+
+```python
 import asyncio
 import json
 import base64
@@ -3310,6 +3641,12 @@ async def main():
 asyncio.run(main())
 ```
 
+<a id="深度思考模型的工具调用"></a>
+
+<a id="fbf3d739f2q9f"></a>
+
+<a id="7ab99501011yo"></a>
+
 ### 深度思考模型的工具调用
 
 深度思考模型在输出工具调用信息前先进行推理，提升决策的可解释性与可靠性。
@@ -3331,13 +3668,31 @@ asyncio.run(main())
 
 > 开启思考模式（`enable_thinking=True`）时，`tool_choice` 不支持设置为 `"required"` 或 object 形式，同时设置会报错（`The tool_choice parameter does not support being set to required or object in thinking mode`），两者不兼容。如需在思考模式下稳定进行工具调用（如 MCP 调用），建议改用 Responses API 接入 MCP，参见 MCP。
 
+<a id="sec-tabs-3"></a>
+
+<a id="openai兼容"></a>
+
+<a id="openai兼容-h4"></a>
+
 #### OpenAI兼容
+
+<a id="sec-tabs-4"></a>
+
+<a id="python"></a>
+
+<a id="python-h4"></a>
 
 #### Python
 
+<a id="6ca0b8b43erd7"></a>
+
+<a id="4f558ca916mqq"></a>
+
 ### 示例代码
 
-```
+<a id="code-block-27"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -3462,11 +3817,17 @@ else:
     print(tool_info)
 ```
 
+<a id="aa7be9d7f2fbq"></a>
+
+<a id="2b9255e2a1u8p"></a>
+
 ### 返回结果
 
 输入“四个直辖市的天气”，得到以下返回结果：
 
-```
+<a id="code-block-28"></a>
+
+```text
 ====================思考过程====================
 好的，用户问的是“四个直辖市的天气”。首先，我需要明确四个直辖市是哪几个。根据中国的行政区划，直辖市包括北京、上海、天津和重庆。所以用户想知道这四个城市的天气情况。
 
@@ -3483,11 +3844,21 @@ else:
 [{'id': 'call_767af2834c12488a8fe6e3', 'name': 'get_current_weather', 'arguments': '{"location": "北京市"}'}, {'id': 'call_2cb05a349c89437a947ada', 'name': 'get_current_weather', 'arguments': '{"location": "上海市"}'}, {'id': 'call_988dd180b2ca4b0a864ea7', 'name': 'get_current_weather', 'arguments': '{"location": "天津市"}'}, {'id': 'call_4e98c57ea96a40dba26d12', 'name': 'get_current_weather', 'arguments': '{"location": "重庆市"}'}]
 ```
 
+<a id="node-js"></a>
+
+<a id="node-js-h4"></a>
+
 #### Node.js
+
+<a id="1aa110fe19oci"></a>
+
+<a id="9e75063dc42bf"></a>
 
 ### 示例代码
 
-```
+<a id="code-block-29"></a>
+
+```javascript
 import OpenAI from "openai";
 import readline from 'node:readline/promises';
 import { stdin as input, stdout as output } from 'node:process';
@@ -3623,11 +3994,17 @@ async function main() {
 main();
 ```
 
+<a id="d7b1fc592cioc"></a>
+
+<a id="37228b9e84gsp"></a>
+
 ### 返回结果
 
 输入“四个直辖市的天气”，得到以下返回结果：
 
-```
+<a id="code-block-30"></a>
+
+```text
 请输入您的问题：四个直辖市的天气
 ====================思考过程====================
 好的，用户问的是四个直辖市的天气。首先，我需要明确中国的四个直辖市分别是哪几个。北京、上海、天津和重庆，对吧？接下来，我需要为每个城市调用天气查询功能。
@@ -3664,13 +4041,29 @@ main();
 ]
 ```
 
+<a id="http"></a>
+
+<a id="http-h4"></a>
+
 #### HTTP
+
+<a id="3603beccb2ki4"></a>
+
+<a id="c67fd4bebcuqw"></a>
 
 ### 示例代码
 
+<a id="sec-tabs-5"></a>
+
+<a id="curl"></a>
+
+<a id="curl-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-31"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -3718,13 +4111,29 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="dashscope-2"></a>
+
+<a id="dashscope-2-h4"></a>
+
 #### DashScope
+
+<a id="sec-tabs-6"></a>
+
+<a id="python-2"></a>
+
+<a id="python-2-h4"></a>
 
 #### Python
 
+<a id="deb085b978221"></a>
+
+<a id="c233c1399e4tg"></a>
+
 ### 示例代码
 
-```
+<a id="code-block-32"></a>
+
+```python
 import os
 import dashscope
 
@@ -3838,11 +4247,17 @@ else:
     print(tool_info)
 ```
 
+<a id="605f582dfanwt"></a>
+
+<a id="82f57032aa9n1"></a>
+
 ### 返回结果
 
 输入“四个直辖市的天气”，得到以下返回结果：
 
-```
+<a id="code-block-33"></a>
+
+```text
 请输入问题：四个直辖市的天气
 ====================思考过程====================
 好的，用户问的是四个直辖市的天气。首先，我需要确认中国的四个直辖市分别是哪些。北京、上海、天津和重庆，对吧？接下来，用户需要每个城市的天气情况，所以我需要调用天气查询功能。
@@ -3858,11 +4273,21 @@ else:
 [{'id': 'call_2f774ed97b0e4b24ab10ec', 'name': 'get_current_weather', 'arguments': '{"location": "北京市"}'}, {'id': 'call_dc3b05b88baa48c58bc33a', 'name': 'get_current_weather', 'arguments': '{"location": "上海市"}}'}, {'id': 'call_249b2de2f73340cdb46cbc', 'name': 'get_current_weather', 'arguments': '{"location": "天津市"}'}, {'id': 'call_833333634fda49d1b39e87', 'name': 'get_current_weather', 'arguments': '{"location": "重庆市"}}'}]
 ```
 
+<a id="java"></a>
+
+<a id="java-h4"></a>
+
 #### Java
+
+<a id="9b782b988fsxb"></a>
+
+<a id="cbb469e22e0al"></a>
 
 ### 示例代码
 
-```
+<a id="code-block-34"></a>
+
+```java
 // dashscope SDK的版本 >= 2.19.4
 import java.util.Arrays;
 
@@ -4032,9 +4457,15 @@ public class Main {
 }
 ```
 
+<a id="ecf57f70e033j"></a>
+
+<a id="167caa120f9so"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-35"></a>
+
+```json
 {"requestId":"4edb81cd-4647-9d5d-88f9-a4f30bc6d8dd","usage":{"input_tokens":238,"output_tokens":6,"total_tokens":244},"output":{"choices":[{"finish_reason":"null","message":{"role":"assistant","content":"","reasoning_content":"好的，用户让我"}}]}}
 {"requestId":"4edb81cd-4647-9d5d-88f9-a4f30bc6d8dd","usage":{"input_tokens":238,"output_tokens":12,"total_tokens":250},"output":{"choices":[{"finish_reason":"null","message":{"role":"assistant","content":"","reasoning_content":"告诉杭州的天气。我"}}]}}
 {"requestId":"4edb81cd-4647-9d5d-88f9-a4f30bc6d8dd","usage":{"input_tokens":238,"output_tokens":16,"total_tokens":254},"output":{"choices":[{"finish_reason":"null","message":{"role":"assistant","content":"","reasoning_content":"需要先确定是否有"}}]}}
@@ -4057,13 +4488,29 @@ public class Main {
 {"requestId":"4edb81cd-4647-9d5d-88f9-a4f30bc6d8dd","usage":{"input_tokens":238,"output_tokens":108,"total_tokens":346},"output":{"choices":[{"finish_reason":"tool_calls","message":{"role":"assistant","content":"","reasoning_content":"","tool_calls":[{"type":"function","id":"","function":{"arguments":"\"}"}}]}}]}}
 ```
 
+<a id="http-2"></a>
+
+<a id="http-2-h4"></a>
+
 #### HTTP
+
+<a id="9aeb286b9bo9j"></a>
+
+<a id="aeb6ee3ccfk3n"></a>
 
 ### 示例代码
 
+<a id="sec-tabs-7"></a>
+
+<a id="curl-2"></a>
+
+<a id="curl-2-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-36"></a>
+
+```bash
 # ======= 重要提示 =======
 # 如果使用纯文本生成模型，请将url替换为 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
@@ -4115,7 +4562,19 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 }'
 ```
 
+<a id="应用于生产环境"></a>
+
+<a id="d54eb398dbfh8"></a>
+
+<a id="89a262c0b7vnl"></a>
+
 ## 应用于生产环境
+
+<a id="测试工具调用准确率"></a>
+
+<a id="3abf650fc1qop"></a>
+
+<a id="1b7cadb10b2sa"></a>
 
 ### 测试工具调用准确率
 
@@ -4131,6 +4590,12 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
     
     提示词调优无法提升性能时，升级到更强的模型版本（如 `qwen3.6-plus`）是最直接有效的方法。
     
+
+<a id="动态控制工具数量"></a>
+
+<a id="97fd4bb2e8x72"></a>
+
+<a id="14ed1e08a7g3w"></a>
 
 ### 动态控制工具数量
 
@@ -4161,6 +4626,12 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 -   **保持候选集精简**：无论使用何种方法，最终提供给主模型的工具数量建议**不超过 20 个**。这是在模型认知负荷、成本、延迟和准确率之间的最佳平衡点。
 -   **分层过滤策略**：可以构建一个漏斗式的路由策略。例如，先用成本极低的关键词/规则匹配进行第一轮筛选，过滤掉明显不相关的工具，再对剩余的工具进行语义检索，从而提高效率和质量。
 
+<a id="工具安全性原则"></a>
+
+<a id="438f2c17bc50x"></a>
+
+<a id="24f0151c8bc54"></a>
+
 ### 工具安全性原则
 
 向大模型开放工具执行能力时，安全是首要考量。核心原则：“最小权限”和“人类确认”。
@@ -4169,9 +4640,21 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 -   **危险工具隔离**：请勿向大模型直接提供危险工具，例如执行任意代码（`code interpreter`）、操作文件系统（`fs.delete`）、执行数据库删除或更新操作（`db.drop_table`）或涉及资金流转的工具（`payment.transfer`）。
 -   **人类参与**：对于所有高权限或不可逆的操作，必须引入人工审核和确认环节。模型可以生成操作请求，但最终的执行“按钮”必须由人类用户点击。例如，模型可以准备好一封邮件，但发送操作需要用户确认。
 
+<a id="用户体验优化"></a>
+
+<a id="c9653409d73qi"></a>
+
+<a id="ca77c3eeccppz"></a>
+
 ### 用户体验优化
 
 Function Calling 链路较长，任何环节出问题都可能影响用户体验。
+
+<a id="处理工具运行失败"></a>
+
+<a id="226e299496dqg"></a>
+
+<a id="de16e4dc96qjl"></a>
 
 #### 处理工具运行失败
 
@@ -4180,6 +4663,12 @@ Function Calling 链路较长，任何环节出问题都可能影响用户体验
 -   **最大重试次数**：设置合理的重试上限（例如 3 次），避免因连续失败导致用户长时间等待或系统资源浪费。
 -   **提供兜底话术**：当重试耗尽或遇到无法解决的错误时，应向用户返回清晰、友好的提示信息，例如：“抱歉，我暂时无法查询到相关信息，可能是服务有些繁忙，请您稍后再试。”
 
+<a id="应对处理延迟"></a>
+
+<a id="df704a5ddcq11"></a>
+
+<a id="d241d77570f5a"></a>
+
 #### 应对处理延迟
 
 较高延迟会降低用户满意度，需从前端交互和后端两方面优化。
@@ -4187,21 +4676,47 @@ Function Calling 链路较长，任何环节出问题都可能影响用户体验
 -   **设置超时时间**：为 Function Calling 的每一步设置独立且合理的超时时间。一旦超时，应立即中断操作并给出反馈。
 -   **提供即时反馈**：开始执行 Function Calling 时，建议在界面上给出提示，如“正在为您查询天气...”、“正在搜索相关信息...”，向用户实时反馈处理进度。
 
+<a id="计费说明"></a>
+
+<a id="61c4cd0841kdo"></a>
+
+<a id="cf2f65edde0il"></a>
+
 ## 计费说明
 
 除 messages 数组中的 Token 外，工具描述信息也作为输入 Token 计费。
 
+<a id="accordion-通过-system-message-传入工具信息"></a>
+
 通过 System Message 传入工具信息
 
-推荐您参考[如何使用](https://help.aliyun.com/zh/model-studio/qwen-function-calling#038e24005c1vt)部分，通过 tools 参数向大模型传入工具信息。如果您需要通过 System Message 传入工具信息，为了模型的最佳效果，请参考以下代码中的提示词模板：
+推荐您参考[如何使用](qwen-function-calling.md#038e24005c1vt)部分，通过 tools 参数向大模型传入工具信息。如果您需要通过 System Message 传入工具信息，为了模型的最佳效果，请参考以下代码中的提示词模板：
+
+<a id="sec-tabs-8"></a>
+
+<a id="openai兼容-2"></a>
+
+<a id="openai兼容-2-h4"></a>
 
 #### OpenAI兼容
 
+<a id="sec-tabs-9"></a>
+
+<a id="python-3"></a>
+
+<a id="python-3-h4"></a>
+
 #### Python
+
+<a id="b22c78e6c2oy5"></a>
+
+<a id="3315cc8583qrr"></a>
 
 ### 示例代码
 
-```
+<a id="code-block-37"></a>
+
+```python
 import os
 from openai import OpenAI
 import json
@@ -4285,11 +4800,21 @@ completion = client.chat.completions.create(
 print(completion.model_dump_json())
 ```
 
+<a id="node-js-2"></a>
+
+<a id="node-js-2-h4"></a>
+
 #### Node.js
+
+<a id="bf6cf5c763hft"></a>
+
+<a id="6b04acd0b2rn3"></a>
 
 ### 示例代码
 
-```
+<a id="code-block-38"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const client = new OpenAI({
@@ -4381,13 +4906,29 @@ async function main() {
 main();
 ```
 
+<a id="dashscope-3"></a>
+
+<a id="dashscope-3-h4"></a>
+
 #### DashScope
+
+<a id="sec-tabs-10"></a>
+
+<a id="python-4"></a>
+
+<a id="python-4-h4"></a>
 
 #### Python
 
+<a id="c86545f6d43e9"></a>
+
+<a id="b751dfb277z1g"></a>
+
 ### 示例代码
 
-```
+<a id="code-block-39"></a>
+
+```python
 import os
 import json
 import dashscope
@@ -4472,11 +5013,21 @@ response = client.multimodal.chat.create(
 print(response)
 ```
 
+<a id="java-2"></a>
+
+<a id="java-2-h4"></a>
+
 #### Java
+
+<a id="4eca20f071j8y"></a>
+
+<a id="ffd45217614mw"></a>
 
 ### 示例代码
 
-```
+<a id="code-block-40"></a>
+
+```java
 // Copyright (c) Alibaba, Inc. and its affiliates.
 // version >= 2.12.0
 
@@ -4596,6 +5147,12 @@ public class Main {
 ```
 
 > 运行以上代码后，可以使用 XML 解析器提取 `<tool_call>` 和 `</tool_call>` 之间的工具调用信息，包括函数名和入参。
+
+<a id="错误码"></a>
+
+<a id="a95c18d468a4"></a>
+
+<a id="c2438606b55px"></a>
 
 ## 错误码
 

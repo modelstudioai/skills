@@ -2,14 +2,24 @@
 
 使用 DashScopeCloudIndex（DashScopeCloudRetriever）可以便捷地通过 LlamaIndex 框架进行阿里云百炼云端文档索引管理以及检索器的构建。
 
+<a id="前提条件"></a>
+
+<a id="6d5f2ea3ee5vj"></a>
+
 ## 前提条件
 
--   [获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到系统环境变量中](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
+-   [获取与配置 API Key](../../../model-api-reference/preparations/get-api-key.md)并[配置API Key到系统环境变量中](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
     
 -   [获取业务空间 ID](https://help.aliyun.com/zh/model-studio/use-workspace)并以相同方式配置到系统环境变量中，变量名请使用`DASHSCOPE_WORKSPACE_ID`。
     
-    **重要**如果您使用了 IDE 或其他辅助开发插件，需自行将DASHSCOPE\_API\_KEY和DASHSCOPE\_WORKSPACE\_ID变量配置到相应的开发环境中。
+    > **重要**
+    >
+    > 如果您使用了 IDE 或其他辅助开发插件，需自行将DASHSCOPE\_API\_KEY和DASHSCOPE\_WORKSPACE\_ID变量配置到相应的开发环境中。
     
+
+<a id="基于本地文件构建云端知识库"></a>
+
+<a id="32038c1fd2ddw"></a>
 
 ## 基于本地文件构建云端知识库
 
@@ -19,17 +29,23 @@
 
 1.  安装以下依赖
 
-```
+<a id="code-block"></a>
+
+```bash
 pip install llama-index-readers-dashscope
 pip install llama-index-indices-managed-dashscope
 ```
 
-2.  准备被解析文件，示例中使用的被解析文件：[阿里云百炼系列产品介绍（虚构）.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241129/idkzqh/%E7%99%BE%E7%82%BC%E7%B3%BB%E5%88%97%E4%BA%A7%E5%93%81%E4%BB%8B%E7%BB%8D%EF%BC%88%E8%99%9A%E6%9E%84%EF%BC%89.zip)。本地文件的上传和解析使用 [DashScopeParse 模块](raw/application-api-reference/frameworks/llamaindex/dashscopeparse.md)。
+2.  准备被解析文件，示例中使用的被解析文件：[阿里云百炼系列产品介绍（虚构）.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241129/idkzqh/%E7%99%BE%E7%82%BC%E7%B3%BB%E5%88%97%E4%BA%A7%E5%93%81%E4%BB%8B%E7%BB%8D%EF%BC%88%E8%99%9A%E6%9E%84%EF%BC%89.zip)。本地文件的上传和解析使用 [DashScopeParse 模块](dashscopeparse.md)。
     
-    **说明**DashScopeParse 智能文档解析支持 PDF、DOC、DOCX、TXT、MD、PPT、PPTX、XLS、XLSX 格式。单文档最大限制100MB或1000页，一次上传最多支持200个文件。
+    > **说明**
+    >
+    > DashScopeParse 智能文档解析支持 PDF、DOC、DOCX、TXT、MD、PPT、PPTX、XLS、XLSX 格式。单文档最大限制100MB或1000页，一次上传最多支持200个文件。
+    >
+    > **只有 PDF、DOC、DOCX 文件会进行智能化解析，其他类型的文件只原样上传到云端，不进行解析。**
     
-    **只有 PDF、DOC、DOCX 文件会进行智能化解析，其他类型的文件只原样上传到云端，不进行解析。**
-    
+
+<a id="accordion-获取需要上传文档的-类目-id-category-id"></a>
 
 获取需要上传文档的 类目 ID （category\_id）。
 
@@ -37,10 +53,15 @@ pip install llama-index-indices-managed-dashscope
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1503624671/p890502.png)
 
-**重要**在使用 DashScopeParse 时，不设置类目 ID （category\_id）将使用**应用数据**\-**文件**中的默认类目。
+> **重要**
+>
+> 在使用 DashScopeParse 时，不设置类目 ID （category\_id）将使用**应用数据**\-**文件**中的默认类目。
 
 **示例代码：**
-```
+
+<a id="code-block-2"></a>
+
+```python
 import os
 from llama_index.readers.dashscope import DashScopeParse
 from llama_index.indices.managed.dashscope import DashScopeCloudIndex
@@ -90,8 +111,12 @@ nodes = retriever.retrieve("你知道的阿里云百炼手机是什么吗？")
 # 展示检索到的第一个TextNode向量
 print(nodes[0])
 ```
+
 **示例代码输出：**
-```
+
+<a id="code-block-3"></a>
+
+```text
 完成文档上传和智能化解析
 Index my_first_index created successfully!
 完成云端知识库构建
@@ -108,10 +133,17 @@ Text: 欢迎来到未来科技的前沿，探索我们精心打造的智能手�
 Score:  0.567
 ```
 
+<a id="直接使用阿里云百炼云端知识库"></a>
+
+<a id="b285cc1da9ky2"></a>
+
 ## 直接使用阿里云百炼云端知识库
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6067484671/CAEQURiBgMD4wa3ynxkiIDkwMDI4ZTZkNzMzNzQ4ZjhiZmFjMDRlNjZjNDllMjc14831159_20241219114514.229.svg) **示例代码：**
-```
+
+<a id="code-block-4"></a>
+
+```python
 import os
 from llama_index.indices.managed.dashscope import DashScopeCloudIndex
 
@@ -138,8 +170,12 @@ nodes = retriever.retrieve("你知道的阿里云百炼手机是什么吗？")
 # 展示检索到的第一个TextNode向量
 print(nodes[0])
 ```
+
 **示例代码输出：**
-```
+
+<a id="code-block-5"></a>
+
+```text
 完成云端知识库构建
 ===========================================================================================================
 命中测试：你知道的阿里云百炼手机是什么吗？
@@ -153,6 +189,10 @@ Text: 欢迎来到未来科技的前沿，探索我们精心打造的智能手�
 128GB存储空间确保流畅操作，4500mAh电池满足日常所需。侧面指纹解锁，便捷又安全。参考售价：29...
 Score:  0.567
 ```
+
+<a id="api-参考"></a>
+
+<a id="67b7574c0funl"></a>
 
 ## API 参考
 

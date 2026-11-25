@@ -2,9 +2,17 @@
 
 查询单条告警详情。入参为告警列表返回的 alert\_id。
 
+<a id="前提"></a>
+
+<a id="h-secapi-alertdetail-prereq"></a>
+
 ## 前提
 
-已完成 Endpoint 与鉴权配置，详见[API 总览与认证](raw/application-api-reference/security-api-guide/security-api-overview.md)。
+已完成 Endpoint 与鉴权配置，详见[API 总览与认证](../security-api-overview.md)。
+
+<a id="接口"></a>
+
+<a id="h-secapi-alertdetail-endpoint"></a>
 
 ## 接口
 
@@ -12,140 +20,65 @@
 
 查询单条告警详情。入参为告警列表返回的 `alert_id`。
 
+<a id="请求参数"></a>
+
+<a id="h-secapi-alertdetail-params"></a>
+
 ## 请求参数
 
-参数
+| 参数 | 必填 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| `alert_id` | 是 | string | 告警 ID，取自告警列表 |
 
-必填
+<a id="请求示例"></a>
 
-类型
-
-说明
-
-`alert_id`
-
-是
-
-string
-
-告警 ID，取自告警列表
+<a id="h-secapi-alertdetail-eg"></a>
 
 ## 请求示例
 
-```
+<a id="code-block"></a>
+
+```bash
 curl -X GET "$BASE_URL/agent_logs/4289016" \
   -H "Authorization: Bearer $BAILIAN_API_KEY"
 ```
 
 其中 `BASE_URL` 为 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio/security`，`BAILIAN_API_KEY` 为阿里云百炼 API Key。
 
+<a id="响应体"></a>
+
+<a id="h-secapi-alertdetail-resp"></a>
+
 ## 响应体
 
-字段
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `alert_id` | string | 告警记录 ID，详情查询主键 |
+| `risk_name` | string | 命中类目 |
+| `risk_desc` | string | 命中原因（简要） |
+| `risk_detail` | string | 原始 Prompt 或风险详情，Markdown 格式的事件摘要与攻击模式分析 |
+| `risk_handle` | string | 拦截话术或处置建议 |
+| `risk_level` | string | 风险等级：`high` / `medium` / `low` |
+| `asset_type` | string | 风险节点类型，MCP 统一归为 `tool` |
+| `asset_name` | string | 资产名称 |
+| `app_id` | string | 应用 ID |
+| `app_name` | string | Agent 名称 |
+| `status` | string | 处置状态 |
+| `source` | string | 来源 |
+| `check_time` | string | 检查时间，毫秒时间戳字符串 |
+| `handle_time` | string | 处置时间，毫秒时间戳字符串 |
+| `event_id` | string | 事件标识，即 Trace ID |
+| `file_name` | string | Skill 文件名，仅 Skill 静态扫描类告警返回 |
 
-类型
+<a id="响应示例"></a>
 
-说明
-
-`alert_id`
-
-string
-
-告警记录 ID，详情查询主键
-
-`risk_name`
-
-string
-
-命中类目
-
-`risk_desc`
-
-string
-
-命中原因（简要）
-
-`risk_detail`
-
-string
-
-原始 Prompt 或风险详情，Markdown 格式的事件摘要与攻击模式分析
-
-`risk_handle`
-
-string
-
-拦截话术或处置建议
-
-`risk_level`
-
-string
-
-风险等级：`high` / `medium` / `low`
-
-`asset_type`
-
-string
-
-风险节点类型，MCP 统一归为 `tool`
-
-`asset_name`
-
-string
-
-资产名称
-
-`app_id`
-
-string
-
-应用 ID
-
-`app_name`
-
-string
-
-Agent 名称
-
-`status`
-
-string
-
-处置状态
-
-`source`
-
-string
-
-来源
-
-`check_time`
-
-string
-
-检查时间，毫秒时间戳字符串
-
-`handle_time`
-
-string
-
-处置时间，毫秒时间戳字符串
-
-`event_id`
-
-string
-
-事件标识，即 Trace ID
-
-`file_name`
-
-string
-
-Skill 文件名，仅 Skill 静态扫描类告警返回
+<a id="h-secapi-alertdetail-resp-eg"></a>
 
 ## 响应示例
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "success": true,
   "data": {

@@ -2,9 +2,17 @@
 
 获取选题热点列表。
 
+<a id="调试"></a>
+
+<a id="api-doc-debug"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -23,299 +31,64 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-**操作**
+| 操作 | 访问级别 | 资源类型 | 条件关键字 | 关联操作 |
+| --- | --- | --- | --- | --- |
+| aimiaobi:ListHotNewsWithType | list | \*全部资源<br><br>`*` | 无 | 无 |
 
-**访问级别**
+<a id="请求参数"></a>
 
-**资源类型**
-
-**条件关键字**
-
-**关联操作**
-
-aimiaobi:ListHotNewsWithType
-
-list
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-36"></a>
 
 ## 请求参数
 
-**名称**
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| AgentKey | string | 是 | 业务空间唯一标识： [AgentKey](quanmiao-paas-agentkey-get-guide-69257d542bb38f0f.md) | c160c841c8e54295bf2f441432785944\_p\_efm |
+| NewsType | string | 否 | 新闻类别。society: 社会时事，person: 人物新闻，government: 党政时事 | society |
+| NewsTypes | array | 否 | 新闻类别列表多选。society: 社会时事，person: 人物新闻，government: 党政时事 |  |
+|  | string | 否 | 新闻类别 | society |
+| Size | integer | 否 | 每页记录数 | 10 |
+| Current | integer | 否 | 当前页码 | 1 |
 
-**类型**
+<a id="返回参数"></a>
 
-**必填**
-
-**描述**
-
-**示例值**
-
-AgentKey
-
-string
-
-是
-
-业务空间唯一标识： [AgentKey](raw/_short/quanmiao-paas-agentkey-get-guide-69257d542bb38f0f.md)
-
-c160c841c8e54295bf2f441432785944\_p\_efm
-
-NewsType
-
-string
-
-否
-
-新闻类别。society: 社会时事，person: 人物新闻，government: 党政时事
-
-society
-
-NewsTypes
-
-array
-
-否
-
-新闻类别列表多选。society: 社会时事，person: 人物新闻，government: 党政时事
-
-string
-
-否
-
-新闻类别
-
-society
-
-Size
-
-integer
-
-否
-
-每页记录数
-
-10
-
-Current
-
-integer
-
-否
-
-当前页码
-
-1
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-**名称**
-
-**类型**
-
-**描述**
-
-**示例值**
-
-object
-
-PlainResult<List
-
-\>
-
-Code
-
-string
-
-状态码
-
-successful
-
-Data
-
-array<object>
-
-业务数据
-
-array<object>
-
-News
-
-array<object>
-
-新闻列表
-
-object
-
-Author
-
-string
-
-作者
-
-作者名称
-
-Content
-
-string
-
-内容
-
-新闻内容
-
-DocUuid
-
-string
-
-内部文档唯一标识
-
-3f7045e099474ba28ceca1b4eb6d6e21
-
-ImageUrls
-
-array
-
-图片地址
-
-string
-
-新闻图像的 URL。
-
-[http://www.example.com/a.jpg](http://www.example.com/a.jpg)
-
-PubTime
-
-string
-
-发布时间
-
-2023-04-11 06:14:07
-
-SearchSource
-
-string
-
-搜索源
-
-新浪热榜
-
-SearchSourceName
-
-string
-
-搜索源名称
-
-新浪热榜
-
-Source
-
-string
-
-来源
-
-新浪新闻综合
-
-Summary
-
-string
-
-文章摘要
-
-摘要
-
-Tag
-
-string
-
-标签
-
-社会
-
-Title
-
-string
-
-标题
-
-新闻标题
-
-UpdateTime
-
-string
-
-系统更新时间
-
-2023-10-14 14:30:00
-
-Url
-
-string
-
-文章 URL
-
-[http://www.example.com/a.html](http://www.example.com/a.html)
-
-NewsType
-
-string
-
-新闻类别。society: 社会时事，person: 人物新闻，government: 党政时事
-
-society
-
-NewsTypeName
-
-string
-
-新闻类别名称
-
-社会时事
-
-TotalPages
-
-integer
-
-总页数
-
-77
-
-HttpStatusCode
-
-integer
-
-http 状态码
-
-200
-
-Message
-
-string
-
-错误说明
-
-successful
-
-RequestId
-
-string
-
-请求唯一标识
-
-3f7045e099474ba28ceca1b4eb6d6e21
-
-Success
-
-boolean
-
-是否成功：true 成功，false 失败
-
-true
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | PlainResult<List<br><br>\> |  |
+| Code | string | 状态码 | successful |
+| Data | array<object> | 业务数据 |  |
+|  | array<object> |  |  |
+| News | array<object> | 新闻列表 |  |
+|  | object |  |  |
+| Author | string | 作者 | 作者名称 |
+| Content | string | 内容 | 新闻内容 |
+| DocUuid | string | 内部文档唯一标识 | 3f7045e099474ba28ceca1b4eb6d6e21 |
+| ImageUrls | array | 图片地址 |  |
+|  | string | 新闻图像的 URL。 | [http://www.example.com/a.jpg](http://www.example.com/a.jpg) |
+| PubTime | string | 发布时间 | 2023-04-11 06:14:07 |
+| SearchSource | string | 搜索源 | 新浪热榜 |
+| SearchSourceName | string | 搜索源名称 | 新浪热榜 |
+| Source | string | 来源 | 新浪新闻综合 |
+| Summary | string | 文章摘要 | 摘要 |
+| Tag | string | 标签 | 社会 |
+| Title | string | 标题 | 新闻标题 |
+| UpdateTime | string | 系统更新时间 | 2023-10-14 14:30:00 |
+| Url | string | 文章 URL | [http://www.example.com/a.html](http://www.example.com/a.html) |
+| NewsType | string | 新闻类别。society: 社会时事，person: 人物新闻，government: 党政时事 | society |
+| NewsTypeName | string | 新闻类别名称 | 社会时事 |
+| TotalPages | integer | 总页数 | 77 |
+| HttpStatusCode | integer | http 状态码 | 200 |
+| Message | string | 错误说明 | successful |
+| RequestId | string | 请求唯一标识 | 3f7045e099474ba28ceca1b4eb6d6e21 |
+| Success | boolean | 是否成功：true 成功，false 失败 | true |
+
+<a id="示例"></a>
+
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -323,7 +96,9 @@ true
 
 `JSON`格式
 
-```
+<a id="code-block"></a>
+
+```json
 {
   "Code": "successful",
   "Data": [
@@ -359,9 +134,17 @@ true
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
+
 ## 错误码
 
 访问[错误中心](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/errorCode)查看更多错误码。
+
+<a id="变更历史"></a>
+
+<a id="workbench-doc-change-demo"></a>
 
 ## 变更历史
 

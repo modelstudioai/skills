@@ -2,150 +2,60 @@
 
 将已暂停的 Deployment 恢复为活跃状态。
 
+<a id="前提"></a>
+
+<a id="h-unpause-prereq"></a>
+
 ## 前提
 
-已完成 Endpoint 与鉴权配置，详见[API 总览与认证](raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md)。
+已完成 Endpoint 与鉴权配置，详见[API 总览与认证](../managed-agents-api-overview.md)。
+
+<a id="接口"></a>
+
+<a id="h-unpause-endpoint"></a>
 
 ## 接口
 
 **POST** `/deployments/{deployment_id}/unpause`
 
-## 路径参数
+<table><tbody><tr><td><a id="h-unpause-path"></a><h2>路径参数</h2><p><strong>deployment_id</strong> <code>string</code> <strong>（必选）</strong></p><p>Deployment ID</p></td><td><a id="h-unpause-eg"></a><h2>请求示例</h2><a id="fig-code-group"></a><div><a id="fig-code-group-curl-tab"></a>curl<div><a id="code-code-group-curl"></a><pre class="language-bash"><code>curl -X POST &quot;$AGENTSTUDIO_URL/deployments/depl_xxx/unpause&quot; \
+  -H &quot;Authorization: Bearer $DASHSCOPE_API_KEY&quot;
+</code></pre></div></div></td></tr></tbody></table>
 
-**deployment\_id** `string` **（必选）**
-
-Deployment ID
-
-## 请求示例
-
-curl
-
-```
-curl -X POST "$AGENTSTUDIO_URL/deployments/depl_xxx/unpause" \
-  -H "Authorization: Bearer $DASHSCOPE_API_KEY"
-```
-
-### 响应字段
-
-**id** `string`
-
-Deployment ID
-
-**type** `string`
-
-固定值 deployment
-
-**name** `string`
-
-Deployment 名称
-
-**description** `string`
-
-Deployment 描述
-
-**agent** `object`
-
-—
-
-**environment\_id** `string`
-
-—
-
-**schedule** `object`
-
-定时触发配置
-
-**initial\_events** `array<object>`
-
-—
-
-**resources** `array<object>`
-
-—
-
-**vault\_ids** `array<string>`
-
-—
-
-**metadata** `object`
-
-—
-
-**status** `string`
-
-—
-
-**paused\_reason** `string | null`
-
-—
-
-**archived\_at** `string | null`
-
-—
-
-**created\_at** `string`
-
-—
-
-**updated\_at** `string`
-
-—
-
-**request\_id** `string`
-
-本次请求的唯一标识，排查问题时附带
-
-## 响应
-
-```
-{
-  "id": "depl_xxx",
-  "type": "deployment",
-  "name": "Daily Report Generator",
-  "description": "Generates daily sales reports",
-  "agent": {
-    "id": "agent_xxx",
-    "version": 13
+<table><tbody><tr><td><a id="h-unpause-dto"></a><h3>响应字段</h3><p><strong>id</strong> <code>string</code></p><p>Deployment ID</p><p><strong>type</strong> <code>string</code></p><p>固定值 deployment</p><p><strong>name</strong> <code>string</code></p><p>Deployment 名称</p><p><strong>description</strong> <code>string</code></p><p>Deployment 描述</p><p><strong>agent</strong> <code>object</code></p><p>—</p><p><strong>environment_id</strong> <code>string</code></p><p>—</p><p><strong>schedule</strong> <code>object</code></p><p>定时触发配置</p><p><strong>initial_events</strong> <code>array&lt;object&gt;</code></p><p>—</p><p><strong>resources</strong> <code>array&lt;object&gt;</code></p><p>—</p><p><strong>vault_ids</strong> <code>array&lt;string&gt;</code></p><p>—</p><p><strong>metadata</strong> <code>object</code></p><p>—</p><p><strong>status</strong> <code>string</code></p><p>—</p><p><strong>paused_reason</strong> <code>string | null</code></p><p>—</p><p><strong>archived_at</strong> <code>string | null</code></p><p>—</p><p><strong>created_at</strong> <code>string</code></p><p>—</p><p><strong>updated_at</strong> <code>string</code></p><p>—</p><p><strong>request_id</strong> <code>string</code></p><p>本次请求的唯一标识，排查问题时附带</p></td><td><a id="h-unpause-resp"></a><h2>响应</h2><a id="code-block"></a><pre class="language-json"><code>{
+  &quot;id&quot;: &quot;depl_xxx&quot;,
+  &quot;type&quot;: &quot;deployment&quot;,
+  &quot;name&quot;: &quot;Daily Report Generator&quot;,
+  &quot;description&quot;: &quot;Generates daily sales reports&quot;,
+  &quot;agent&quot;: {
+    &quot;id&quot;: &quot;agent_xxx&quot;,
+    &quot;version&quot;: 13
   },
-  "environment_id": "env_xxx",
-  "schedule": {
-    "cron": "0 9 * * *"
+  &quot;environment_id&quot;: &quot;env_xxx&quot;,
+  &quot;schedule&quot;: {
+    &quot;cron&quot;: &quot;0 9 * * *&quot;
   },
-  "initial_events": [],
-  "resources": [],
-  "vault_ids": [],
-  "metadata": {},
-  "status": "active",
-  "paused_reason": null,
-  "archived_at": null,
-  "created_at": "2026-07-20T10:00:00Z",
-  "updated_at": "2026-07-28T02:00:00Z",
-  "request_id": "req_xxx"
+  &quot;initial_events&quot;: [],
+  &quot;resources&quot;: [],
+  &quot;vault_ids&quot;: [],
+  &quot;metadata&quot;: {},
+  &quot;status&quot;: &quot;active&quot;,
+  &quot;paused_reason&quot;: null,
+  &quot;archived_at&quot;: null,
+  &quot;created_at&quot;: &quot;2026-07-20T10:00:00Z&quot;,
+  &quot;updated_at&quot;: &quot;2026-07-28T02:00:00Z&quot;,
+  &quot;request_id&quot;: &quot;req_xxx&quot;
 }
-```
+</code></pre></td></tr></tbody></table>
+
+<a id="错误码"></a>
+
+<a id="h-unpause-err"></a>
 
 ## 错误码
 
-**状态码**
-
-**错误码**
-
-**说明**
-
-400
-
-`InvalidParameter`
-
-Required parameter missing or invalid.
-
-401
-
-`InvalidApiKey`
-
-Invalid API-key provided.
-
-409
-
-`DEPLOYMENT_STATE_CONFLICT`
-
-Cannot unpause an archived deployment.
+| 状态码 | 错误码 | 说明 |
+| --- | --- | --- |
+| 400 | `InvalidParameter` | Required parameter missing or invalid. |
+| 401 | `InvalidApiKey` | Invalid API-key provided. |
+| 409 | `DEPLOYMENT_STATE_CONFLICT` | Cannot unpause an archived deployment. |

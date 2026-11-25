@@ -2,13 +2,25 @@
 
 本文以 Android 平台为例，介绍如何接入 AOQ Client SDK，使用 qwen3.8-livetranslate-flash-realtime 实现语音的实时翻译。其他平台的接入流程和模型事件处理方式类似，使用对应平台的 SDK 接口即可；下文客户端代码统一使用 Java。
 
-**说明**模型能力详情请参考[实时语音/音视频翻译模型说明](raw/model-user-guide/model-experience/omni-modal/qwen3-5-livetranslate-flash-realtime.md)，媒体与模型事件的分工请参考 [AOQ 接入](raw/model-api-reference/realtime-api-directory/livetranslate-realtime-api-directory/livetranslate-realtime-aoq-access.md)。
+> **说明**
+>
+> 模型能力详情请参考[实时语音/音视频翻译模型说明](../model-user-guide/model-experience/omni-modal/qwen3-5-livetranslate-flash-realtime.md)，媒体与模型事件的分工请参考 [AOQ 接入](../model-api-reference/realtime-api-directory/livetranslate-realtime-api-directory/livetranslate-realtime-aoq-access.md)。
+
+<a id="sdk-获取"></a>
 
 ## SDK 获取
 
-AOQ Client SDK 及音频 Opus 插件请参见 [SDK 下载](raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-sdk-download.md)。本文的音频传输示例使用 Opus，需要同时导入对应平台的插件。模型支持的地域、语种、计费和限流以[实时语音/音视频翻译模型说明](raw/model-user-guide/model-experience/omni-modal/qwen3-5-livetranslate-flash-realtime.md)为准。
+AOQ Client SDK 及音频 Opus 插件请参见 [SDK 下载](../model-api-reference/more-about-models/realtime-api-aoq-api/realtime-sdk-download.md)。本文的音频传输示例使用 Opus，需要同时导入对应平台的插件。模型支持的地域、语种、计费和限流以[实时语音/音视频翻译模型说明](../model-user-guide/model-experience/omni-modal/qwen3-5-livetranslate-flash-realtime.md)为准。
+
+<a id="sdk-导入"></a>
 
 ## SDK 导入
+
+<a id="sec-tabs"></a>
+
+<a id="android"></a>
+
+<a id="android-h4"></a>
 
 #### Android
 
@@ -16,7 +28,9 @@ AOQ Client SDK 及音频 Opus 插件请参见 [SDK 下载](raw/model-api-referen
 
 在 `app/build.gradle` 中声明依赖：
 
-```
+<a id="code-block"></a>
+
+```groovy
 android {
     defaultConfig {
         minSdk 21
@@ -34,7 +48,9 @@ dependencies {
 
 在 `AndroidManifest.xml` 中声明权限：
 
-```
+<a id="code-block-2"></a>
+
+```xml
 <uses-permission android:name="android.permission.INTERNET" />
 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -45,7 +61,9 @@ dependencies {
 
 本文 Java 示例使用以下导入：
 
-```
+<a id="code-block-3"></a>
+
+```java
 import com.alibaba.aoq.clientsdk.AoqClientEngine;
 import com.alibaba.aoq.clientsdk.AoqClientEngine.*;
 import com.alibaba.aoq.clientsdk.AoqClientListener;
@@ -56,29 +74,35 @@ import org.json.JSONException;
 import org.json.JSONObject;
 ```
 
+<a id="ios"></a>
+
+<a id="ios-h4"></a>
+
 #### iOS
 
 将 `AoqClientSdk.framework` 和 `PluginOpus.framework` 拖入 Xcode 工程，在 **Target > General > Frameworks, Libraries, and Embedded Content** 中选择 **Embed & Sign**。
 
 在 `Info.plist` 中声明麦克风用途：
 
-**Key**
-
-**Value 示例**
-
-`NSMicrophoneUsageDescription`
-
-用于采集需要实时翻译的语音
+| Key | Value 示例 |
+| --- | --- |
+| `NSMicrophoneUsageDescription` | 用于采集需要实时翻译的语音 |
 
 启动采集前需要取得麦克风授权。仅在启用视觉增强时添加 `NSCameraUsageDescription` 并申请摄像头权限。
 
 业务代码通过 `AoqClientSdk` 模块访问 SDK；Swift 使用 `import AoqClientSdk`，Objective-C 使用 `#import <AoqClientSdk/AoqClientSdk.h>`。后续会话配置与事件处理流程和 Android 示例相同，SDK 调用使用对应的 iOS 接口。
 
+<a id="harmonyos"></a>
+
+<a id="harmonyos-h4"></a>
+
 #### HarmonyOS
 
 将 `AoqClientSdk.har` 放入工程根目录的 `libs/`，在 `entry/oh-package.json5` 的 `dependencies` 中添加：
 
-```
+<a id="code-block-4"></a>
+
+```json
 {
   "dependencies": {
     "@aoq/client-sdk": "file:../libs/AoqClientSdk.har"
@@ -90,7 +114,9 @@ import org.json.JSONObject;
 
 在 `entry/src/main/module.json5` 的 `module` 对象中添加以下权限配置，并在应用字符串资源中定义 `perm_mic_reason`，例如“用于采集需要实时翻译的语音”：
 
-```
+<a id="code-block-5"></a>
+
+```json
 {
   "requestPermissions": [
     { "name": "ohos.permission.INTERNET" },
@@ -107,19 +133,25 @@ import org.json.JSONObject;
 
 启动采集前，通过 `abilityAccessCtrl.createAtManager().requestPermissionsFromUser` 请求麦克风运行时授权；仅在启用视觉增强时增加摄像头权限。
 
+<a id="appserver-获取-token"></a>
+
 ## AppServer 获取 Token
 
 客户端不直接保存百炼 API Key。由业务 AppServer 使用对应地域、业务空间的 API Key，为每次翻译连接申请临时凭证，再通过 HTTPS 返回给已经完成业务鉴权的客户端。
 
-按 [Qwen-LiveTranslate-Realtime 的 AOQ 鉴权步骤](https://help.aliyun.com/zh/model-studio/livetranslate-realtime-aoq-access#authentication)搭建 AppServer。实时翻译属于 Realtime 协议，申请凭证时指定：
+按 [Qwen-LiveTranslate-Realtime 的 AOQ 鉴权步骤](../model-api-reference/realtime-api-directory/livetranslate-realtime-api-directory/livetranslate-realtime-aoq-access.md#authentication)搭建 AppServer。实时翻译属于 Realtime 协议，申请凭证时指定：
 
-```
+<a id="code-block-6"></a>
+
+```text
 model=qwen3.8-livetranslate-flash-realtime
 ```
 
 以下命令仅在 AppServer 侧执行。`BAILIAN_ENDPOINT` 设置为实际业务空间对应的 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com` 或 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`；`DASHSCOPE_API_KEY` 从服务端环境变量或密钥管理服务读取。
 
-```
+<a id="code-block-7"></a>
+
+```bash
 curl --fail-with-body --request POST \
   "https://${BAILIAN_ENDPOINT}/api/v1/webrtc/realtime?model=qwen3.8-livetranslate-flash-realtime" \
   --header "Content-Type: application/json" \
@@ -132,53 +164,33 @@ curl --fail-with-body --request POST \
 
 客户端将返回值映射到 `AoqConnectConfig`：
 
-**网关返回字段**
+| 网关返回字段 | SDK 字段 | 说明 |
+| --- | --- | --- |
+| `aoqTokenForClient` | `token` | 本次连接的临时令牌 |
+| `sid` | `sid` | 本次会话标识 |
+| `clientRelayCertFingerprint` | `certFingerprint` | 原样使用服务端返回的证书指纹 |
+| `clientRelayEndpoints` | `relayEndpoints` | 按结构转换完整接入点列表 |
+| `extraInfo.workspaceIdHash` | `workspaceIdHash` | 使用返回值；未返回时按 SDK 要求处理 |
 
-**SDK 字段**
-
-**说明**
-
-`aoqTokenForClient`
-
-`token`
-
-本次连接的临时令牌
-
-`sid`
-
-`sid`
-
-本次会话标识
-
-`clientRelayCertFingerprint`
-
-`certFingerprint`
-
-原样使用服务端返回的证书指纹
-
-`clientRelayEndpoints`
-
-`relayEndpoints`
-
-按结构转换完整接入点列表
-
-`extraInfo.workspaceIdHash`
-
-`workspaceIdHash`
-
-使用返回值；未返回时按 SDK 要求处理
+<a id="实现实时语音翻译"></a>
 
 ## 实现实时语音翻译
+
+<a id="整体交互流程"></a>
 
 ### 整体交互流程
 
 ![AOQ 实时语音翻译交互时序](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/zh/images/6a4b3c2d1e0f9246.png)
 
+<a id="创建引擎并设置回调"></a>
+
 ### 创建引擎并设置回调
 
 调用 `createEngine` 创建引擎，注册连接、Data 消息及错误回调。业务对象需在会话期间持有引擎和监听对象。
 
-```
+<a id="code-block-8"></a>
+
+```java
 // 配置引擎工作目录。
 AoqCreateConfig createConfig = new AoqCreateConfig();
 createConfig.workDir = appCtx.getFilesDir().getAbsolutePath();
@@ -188,7 +200,9 @@ engine = AoqClientEngine.createEngine(appCtx, createConfig, listener);
 
 `AoqClientListener`可以获取连接、模型消息和媒体设备等事件，请实现并在创建引擎的时候传入。
 
-```
+<a id="code-block-9"></a>
+
+```java
 AoqClientListener listener = new AoqClientListener() {
     // 接收音频采集与播放设备状态。
     @Override
@@ -222,13 +236,17 @@ AoqClientListener listener = new AoqClientListener() {
 };
 ```
 
+<a id="启动音频采集与播放"></a>
+
 ### 启动音频采集与播放
 
 在已经取得麦克风权限的前提下，准备采集和播放。**先关闭音频发送，再启动采集**，避免引擎建连后默认推流。
 
 采集已启动不代表模型已能接收音频。页面应在收到 `session.updated` 并成功开启发送后，再提示用户开始说话；本文不实现连接前音频缓存。
 
-```
+<a id="code-block-10"></a>
+
+```java
 // 关闭音频上行，等待模型配置确认。
 engine.enableSendMediaStream(AoqTrackType.AoqTrackTypeAudio, false);
 
@@ -245,43 +263,24 @@ audioPlaybackConfig.isExternal = false;
 engine.startAudioPlayer(audioPlaybackConfig);
 ```
 
+<a id="设置编解码及建立连接"></a>
+
 ### 设置编解码及建立连接
 
 主场景需要：
 
-**方向**
-
-**轨道**
-
-**用途**
-
-发布
-
-Audio
-
-向模型输入语音
-
-发布
-
-Data
-
-发送会话配置与结束事件
-
-订阅
-
-Audio
-
-接收翻译语音
-
-订阅
-
-Data
-
-接收原文、译文与状态事件
+| 方向 | 轨道 | 用途 |
+| --- | --- | --- |
+| 发布 | Audio | 向模型输入语音 |
+| 发布 | Data | 发送会话配置与结束事件 |
+| 订阅 | Audio | 接收翻译语音 |
+| 订阅 | Data | 接收原文、译文与状态事件 |
 
 音频上行和下行分别配置。以下代码以 **Opus、16 kHz、单声道传输配置**为例。
 
-```
+<a id="code-block-11"></a>
+
+```java
 AoqAudioCodecConfig audioEncoderConfig = new AoqAudioCodecConfig();
 audioEncoderConfig.codecType = AoqEncoderType.AoqEncoderTypeAudioOpus;
 audioEncoderConfig.sampleRate = 16000;
@@ -313,11 +312,15 @@ engine.connect(connectConfig);
 
 `connect` 返回成功仅表示调用被接受。等待 `onConnectionStatusChange` 通知连接成功后，再发送模型配置。
 
+<a id="配置翻译会话"></a>
+
 ### 配置翻译会话
 
 连接成功后，通过 Data 轨发送下面的 `session.update`。该配置使用默认音色，不开启声音复刻：
 
-```
+<a id="code-block-12"></a>
+
+```json
 {
   "type": "session.update",
   "session": {
@@ -337,11 +340,13 @@ engine.connect(connectConfig);
 }
 ```
 
-交互流程请参考[实时翻译模型说明](raw/model-user-guide/model-experience/omni-modal/qwen3-5-livetranslate-flash-realtime.md)，`session.update` 完整参数请参考[实时翻译客户端事件](raw/model-api-reference/realtime-api-directory/livetranslate-realtime-api-directory/live-translator-client-events.md)。
+交互流程请参考[实时翻译模型说明](../model-user-guide/model-experience/omni-modal/qwen3-5-livetranslate-flash-realtime.md)，`session.update` 完整参数请参考[实时翻译客户端事件](../model-api-reference/realtime-api-directory/livetranslate-realtime-api-directory/live-translator-client-events.md)。
 
 将上述 JSON 编码为 UTF-8 字节，通过 `sendDataMsg` 发送。
 
-```
+<a id="code-block-13"></a>
+
+```java
 private static final String SESSION_UPDATE_JSON =
         "{\"type\":\"session.update\",\"session\":{"
         + "\"output_modalities\":[\"text\",\"audio\"],"
@@ -361,13 +366,17 @@ public void onConnectionStatusChange(AoqConnectionStatus status) {
 }
 ```
 
+<a id="收到-session-updated-后开启媒体发送"></a>
+
 ### 收到 session.updated 后开启媒体发送
 
 在 `onDataMsg` 中解析事件类型。
 
-下面先展示控制事件分流；原文与译文事件的处理见[服务端事件](raw/model-api-reference/realtime-api-directory/livetranslate-realtime-api-directory/live-translator-server-events.md)。收到 `session.finished` 后设置业务完成状态，再由“断开连接与销毁引擎”中的释放方法收尾。
+下面先展示控制事件分流；原文与译文事件的处理见[服务端事件](../model-api-reference/realtime-api-directory/livetranslate-realtime-api-directory/live-translator-server-events.md)。收到 `session.finished` 后设置业务完成状态，再由“断开连接与销毁引擎”中的释放方法收尾。
 
-```
+<a id="code-block-14"></a>
+
+```java
 // 接收 Data 轨中的模型事件。
 @Override
 public void onDataMsg(AoqDataMsg message) {
@@ -389,7 +398,11 @@ public void onDataMsg(AoqDataMsg message) {
 }
 ```
 
-**说明****AOQ 与 WebSocket 的区别**：本文通过 Audio 轨直接发送和接收音频。不要再发送 `input_audio_buffer.append` 重复上传同一份音频，也不要照搬 WebSocket 示例，在收到 `response.audio.delta` 后另起一个播放器重复播音。译音由 SDK 音频订阅和播放器处理；Data 轨用于字幕与模型事件。媒体与 Data 轨的使用方式请参考 [AOQ 接入](raw/model-api-reference/realtime-api-directory/livetranslate-realtime-api-directory/livetranslate-realtime-aoq-access.md)。
+> **说明**
+>
+> **AOQ 与 WebSocket 的区别**：本文通过 Audio 轨直接发送和接收音频。不要再发送 `input_audio_buffer.append` 重复上传同一份音频，也不要照搬 WebSocket 示例，在收到 `response.audio.delta` 后另起一个播放器重复播音。译音由 SDK 音频订阅和播放器处理；Data 轨用于字幕与模型事件。媒体与 Data 轨的使用方式请参考 [AOQ 接入](../model-api-reference/realtime-api-directory/livetranslate-realtime-api-directory/livetranslate-realtime-aoq-access.md)。
+
+<a id="结束输入-等待尾句翻译"></a>
 
 ### 结束输入，等待尾句翻译
 
@@ -400,20 +413,26 @@ public void onDataMsg(AoqDataMsg message) {
 3.  继续接收尾句原文、译文和译音，等待 `session.finished`。
 4.  按本地播放收尾策略断开连接、释放资源。
 
-`session.finish` 的发送要求请参考[实时翻译客户端事件](raw/model-api-reference/realtime-api-directory/livetranslate-realtime-api-directory/live-translator-client-events.md)，`session.finished` 的字段与含义请参考[实时翻译服务端事件](raw/model-api-reference/realtime-api-directory/livetranslate-realtime-api-directory/live-translator-server-events.md)。
+`session.finish` 的发送要求请参考[实时翻译客户端事件](../model-api-reference/realtime-api-directory/livetranslate-realtime-api-directory/live-translator-client-events.md)，`session.finished` 的字段与含义请参考[实时翻译服务端事件](../model-api-reference/realtime-api-directory/livetranslate-realtime-api-directory/live-translator-server-events.md)。
 
-```
+<a id="code-block-15"></a>
+
+```java
 AoqDataMsg message = new AoqDataMsg();
 message.data = "{\"type\":\"session.finish\"}".getBytes(StandardCharsets.UTF_8);
 // 通知模型输入结束，等待 session.finished。
 engine.sendDataMsg(message);
 ```
 
+<a id="断开连接与销毁引擎"></a>
+
 ### 断开连接与销毁引擎
 
 收到 `session.finished` 后，服务端已经完成本会话处理，但**这不等于本地扬声器已经播放完最后一段音频**。如果产品要求完整播完译音，应先完成本地播放收尾，再执行以下方法。
 
-```
+<a id="code-block-16"></a>
+
+```java
 // 停止译音播放。
 engine.stopAudioPlayer();
 // 断开 AOQ 连接。
@@ -422,12 +441,14 @@ engine.disconnect();
 AoqClientEngine.destroy();
 ```
 
+<a id="相关文档"></a>
+
 ## 相关文档
 
--   [实时语音/音视频翻译](raw/model-user-guide/model-experience/omni-modal/qwen3-5-livetranslate-flash-realtime.md)
--   [客户端事件](raw/model-api-reference/realtime-api-directory/livetranslate-realtime-api-directory/live-translator-client-events.md)
--   [服务端事件](raw/model-api-reference/realtime-api-directory/livetranslate-realtime-api-directory/live-translator-server-events.md)
--   [AOQ 接入](raw/model-api-reference/realtime-api-directory/livetranslate-realtime-api-directory/livetranslate-realtime-aoq-access.md)
--   [AOQ Client SDK 简介](raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-api-aoq-sdk-desc.md)
--   [SDK 下载](raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-sdk-download.md)
--   [通过 AOQ 使用 qwen3.8-omni-flash-realtime 实现实时通话](raw/model-user-guide/use-cases/realtime-audio-video-integration/best-practice-aoq-omni-realtime.md)
+-   [实时语音/音视频翻译](../model-user-guide/model-experience/omni-modal/qwen3-5-livetranslate-flash-realtime.md)
+-   [客户端事件](../model-api-reference/realtime-api-directory/livetranslate-realtime-api-directory/live-translator-client-events.md)
+-   [服务端事件](../model-api-reference/realtime-api-directory/livetranslate-realtime-api-directory/live-translator-server-events.md)
+-   [AOQ 接入](../model-api-reference/realtime-api-directory/livetranslate-realtime-api-directory/livetranslate-realtime-aoq-access.md)
+-   [AOQ Client SDK 简介](../model-api-reference/more-about-models/realtime-api-aoq-api/realtime-api-aoq-sdk-desc.md)
+-   [SDK 下载](../model-api-reference/more-about-models/realtime-api-aoq-api/realtime-sdk-download.md)
+-   [通过 AOQ 使用 qwen3.8-omni-flash-realtime 实现实时通话](../model-user-guide/use-cases/realtime-audio-video-integration/best-practice-aoq-omni-realtime.md)

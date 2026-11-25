@@ -2,11 +2,17 @@
 
 本文介绍千问实时语音/音视频翻译 API 的服务端事件，包括事件类型、参数和示例。
 
-> 相关文档：[实时语音/音视频翻译-千问](raw/model-user-guide/model-experience/omni-modal/qwen3-5-livetranslate-flash-realtime.md)。
+> 相关文档：[实时语音/音视频翻译-千问](../../../model-user-guide/model-experience/omni-modal/qwen3-5-livetranslate-flash-realtime.md)。
 
-**说明**本页为 Qwen-LiveTranslate-Realtime 的事件参考，事件定义以 WebSocket 接入为基础。AOQ、WebRTC 通过各自的数据通道收发模型事件，媒体通过媒体轨道传输。请先阅读[WebSocket 接入](raw/_short/livetranslate-realtime-websocket-access-c83c6ed44456849c.md)、[WebRTC 接入](raw/_short/livetranslate-realtime-webrtc-access-ddb4e390439cd632.md)或[AOQ 接入](raw/model-api-reference/realtime-api-directory/livetranslate-realtime-api-directory/livetranslate-realtime-aoq-access.md)。
+> **说明**
+>
+> 本页为 Qwen-LiveTranslate-Realtime 的事件参考，事件定义以 WebSocket 接入为基础。AOQ、WebRTC 通过各自的数据通道收发模型事件，媒体通过媒体轨道传输。请先阅读[WebSocket 接入](../../../_short/livetranslate-realtime-websocket-access-c83c6ed44456849c.md)、[WebRTC 接入](../../../_short/livetranslate-realtime-webrtc-access-ddb4e390439cd632.md)或[AOQ 接入](livetranslate-realtime-aoq-access.md)。
 
-WebSocket SDK 用法参见 [Python SDK](raw/_short/realtime-websocket-python-sdk-qwen-livetranslate-8af00207378f749b.md)和 [Java SDK](https://help.aliyun.com/zh/model-studio/qwen-livetranslate-java-sdk)。型号与协议选择参见[概述](raw/model-api-reference/realtime-api-directory/livetranslate-realtime-api-directory/live-translator-api.md)。
+WebSocket SDK 用法参见 [Python SDK](../../../_short/realtime-websocket-python-sdk-qwen-livetranslate-8af00207378f749b.md)和 [Java SDK](https://help.aliyun.com/zh/model-studio/qwen-livetranslate-java-sdk)。型号与协议选择参见[概述](live-translator-api.md)。
+
+<a id="error"></a>
+
+<a id="9e1059c1d3tcx"></a>
 
 ## error
 
@@ -23,6 +29,8 @@ WebSocket SDK 用法参见 [Python SDK](raw/_short/realtime-websocket-python-sdk
 `error`object
 
 错误的详细信息。
+
+<a id="accordion-属性"></a>
 
 属性
 
@@ -42,7 +50,9 @@ WebSocket SDK 用法参见 [Python SDK](raw/_short/realtime-websocket-python-sdk
 
 与错误相关的参数，如`session.modalities`。
 
-```
+<a id="code-block"></a>
+
+```json
 {
   "event_id": "event_RoUu4T8yExPMI37GKwaOC",
   "type": "error",
@@ -54,6 +64,10 @@ WebSocket SDK 用法参见 [Python SDK](raw/_short/realtime-websocket-python-sdk
   }
 }
 ```
+
+<a id="session-created"></a>
+
+<a id="39689ed6e90ag"></a>
 
 ## session.created
 
@@ -70,6 +84,8 @@ WebSocket SDK 用法参见 [Python SDK](raw/_short/realtime-websocket-python-sdk
 `session`object
 
 会话的配置。
+
+<a id="accordion-属性-2"></a>
 
 属性
 
@@ -97,9 +113,13 @@ WebSocket SDK 用法参见 [Python SDK](raw/_short/realtime-websocket-python-sdk
 
 适用于 `qwen3.8-livetranslate-flash-realtime`。音频输入与输出配置。
 
+<a id="accordion-属性-3"></a>
+
 属性
 
 `input`object
+
+<a id="accordion-属性-4"></a>
 
 属性
 
@@ -112,6 +132,8 @@ WebSocket SDK 用法参见 [Python SDK](raw/_short/realtime-websocket-python-sdk
 断句配置。默认 `type` 为 `speaker_detection`，`threshold` 为 `0.5`，`silence_duration_ms` 为 `1000`。
 
 `output`object
+
+<a id="accordion-属性-5"></a>
 
 属性
 
@@ -163,6 +185,8 @@ VAD（语音活动检测）配置。
 
 翻译配置。
 
+<a id="accordion-属性-6"></a>
+
 属性
 
 `language`string（可选）
@@ -173,17 +197,27 @@ VAD（语音活动检测）配置。
 
 热词配置，用于提升特定词汇的翻译准确性。
 
+<a id="accordion-属性-7"></a>
+
 属性
 
 `phrases`object（可选）
 
-热词映射表。key 为源语言词汇，value 为目标语言对应翻译，参见[支持的语种](https://help.aliyun.com/zh/model-studio/qwen3-5-livetranslate-flash-realtime#4ffd192226f0s) 。
+热词映射表。key 为源语言词汇，value 为目标语言对应翻译，参见[支持的语种](../../../model-user-guide/model-experience/omni-modal/qwen3-5-livetranslate-flash-realtime.md#4ffd192226f0s) 。
+
+<a id="sec-tabs"></a>
+
+<a id="qwen3-8-livetranslate-flash-realtime"></a>
+
+<a id="qwen3-8-livetranslate-flash-realtime-h4"></a>
 
 #### qwen3.8-livetranslate-flash-realtime
 
 适用于 `qwen3.8-livetranslate-flash-realtime`。
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "event_id": "event_example",
   "type": "session.created",
@@ -225,11 +259,17 @@ VAD（语音活动检测）配置。
 }
 ```
 
+<a id="qwen3-5-livetranslate-flash-realtime"></a>
+
+<a id="qwen3-5-livetranslate-flash-realtime-h4"></a>
+
 #### qwen3.5-livetranslate-flash-realtime
 
 `qwen3.5-livetranslate-flash-realtime` 示例：
 
-```
+<a id="code-block-3"></a>
+
+```json
 {
     "event_id": "event_QxBGpjBDmDDQQWDtrqBKB",
     "type": "session.created",
@@ -263,6 +303,10 @@ VAD（语音活动检测）配置。
 }
 ```
 
+<a id="session-updated"></a>
+
+<a id="424ef2e774q9p"></a>
+
 ## session.updated
 
 收到用户的 `session.update` 请求后，若处理成功，则返回此事件；若出错，则返回 `error` 事件。
@@ -278,6 +322,8 @@ VAD（语音活动检测）配置。
 `session`object
 
 会话的配置。
+
+<a id="accordion-属性-8"></a>
 
 属性
 
@@ -305,9 +351,13 @@ VAD（语音活动检测）配置。
 
 适用于 `qwen3.8-livetranslate-flash-realtime`。音频输入与输出配置。
 
+<a id="accordion-属性-9"></a>
+
 属性
 
 `input`object
+
+<a id="accordion-属性-10"></a>
 
 属性
 
@@ -320,6 +370,8 @@ VAD（语音活动检测）配置。
 断句配置。默认 `type` 为 `speaker_detection`，`threshold` 为 `0.5`，`silence_duration_ms` 为 `1000`。
 
 `output`object
+
+<a id="accordion-属性-11"></a>
 
 属性
 
@@ -367,6 +419,8 @@ VAD（语音活动检测）配置。
 
 输入音频转录配置。仅在会话配置了`input_audio_transcription.model`参数时返回。
 
+<a id="accordion-属性-12"></a>
+
 属性
 
 `model`string
@@ -382,6 +436,8 @@ VAD（语音活动检测）配置。
 适用于 `qwen3.5-livetranslate-flash-realtime` 等模型。
 
 VAD（语音活动检测）配置。Manual 模式下（客户端在`session.update`中将该参数设为`null`）不返回此字段。
+
+<a id="accordion-属性-13"></a>
 
 属性
 
@@ -413,6 +469,8 @@ VAD 检测到新一轮语音开始时，是否打断当前正在生成的翻译�
 
 翻译配置。
 
+<a id="accordion-属性-14"></a>
+
 属性
 
 `language`string（可选）
@@ -422,6 +480,8 @@ VAD 检测到新一轮语音开始时，是否打断当前正在生成的翻译�
 `corpus`object（可选）
 
 热词配置，用于提升特定词汇的翻译准确性。
+
+<a id="accordion-属性-15"></a>
 
 属性
 
@@ -437,17 +497,27 @@ VAD 检测到新一轮语音开始时，是否打断当前正在生成的翻译�
 
 声音复刻控制参数，仅在`enable_voice_clone`为`true`时返回。
 
+<a id="accordion-属性-16"></a>
+
 属性
 
 `frequency`string
 
 音色复刻频率。
 
+<a id="sec-tabs-2"></a>
+
+<a id="qwen3-8-livetranslate-flash-realtime-2"></a>
+
+<a id="qwen3-8-livetranslate-flash-realtime-2-h4"></a>
+
 #### qwen3.8-livetranslate-flash-realtime
 
 适用于 `qwen3.8-livetranslate-flash-realtime`。
 
-```
+<a id="code-block-4"></a>
+
+```json
 {
   "event_id": "event_example",
   "type": "session.updated",
@@ -489,11 +559,17 @@ VAD 检测到新一轮语音开始时，是否打断当前正在生成的翻译�
 }
 ```
 
+<a id="qwen3-5-livetranslate-flash-realtime-2"></a>
+
+<a id="qwen3-5-livetranslate-flash-realtime-2-h4"></a>
+
 #### qwen3.5-livetranslate-flash-realtime
 
 `qwen3.5-livetranslate-flash-realtime` 示例：
 
-```
+<a id="code-block-5"></a>
+
+```json
 {
     "event_id": "event_QxBGpjBDmDDQQWDtrqBKB",
     "type": "session.updated",
@@ -538,11 +614,15 @@ VAD 检测到新一轮语音开始时，是否打断当前正在生成的翻译�
 }
 ```
 
+<a id="session-finished"></a>
+
+<a id="5369266402pgb"></a>
+
 ## session.finished
 
 会话结束事件，表示当前会话中，所有音频翻译已完成。
 
-该事件在客户端发送 [session.finish](https://help.aliyun.com/zh/model-studio/live-translator-client-events#f8075550b26jf) 后返回。客户端收到该事件后，如需播放剩余译音，应先完成本地播放，再主动断开连接。
+该事件在客户端发送 [session.finish](live-translator-client-events.md#f8075550b26jf) 后返回。客户端收到该事件后，如需播放剩余译音，应先完成本地播放，再主动断开连接。
 
 `event_id`string
 
@@ -552,12 +632,18 @@ VAD 检测到新一轮语音开始时，是否打断当前正在生成的翻译�
 
 事件类型，固定为`session.finished`。
 
-```
+<a id="code-block-6"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "session.finished"
 }
 ```
+
+<a id="response-created"></a>
+
+<a id="38033afc582r1"></a>
 
 ## response.created
 
@@ -574,6 +660,8 @@ VAD 检测到新一轮语音开始时，是否打断当前正在生成的翻译�
 `response`object
 
 响应对象。
+
+<a id="accordion-属性-17"></a>
 
 属性
 
@@ -614,7 +702,9 @@ VAD 检测到新一轮语音开始时，是否打断当前正在生成的翻译�
 
 此事件下目前为空。
 
-```
+<a id="code-block-7"></a>
+
+```json
 {
     "event_id": "event_L8hHVI5jYis6BzAjnPWJh",
     "type": "response.created",
@@ -634,6 +724,10 @@ VAD 检测到新一轮语音开始时，是否打断当前正在生成的翻译�
 }
 ```
 
+<a id="response-done"></a>
+
+<a id="f2333c777d9s4"></a>
+
 ## response.done
 
 响应生成完成后，服务端会返回此事件。事件中的 `response` 对象包含除原始音频数据外的全部输出项。
@@ -649,6 +743,8 @@ VAD 检测到新一轮语音开始时，是否打断当前正在生成的翻译�
 `response`object
 
 响应对象。
+
+<a id="accordion-属性-18"></a>
 
 属性
 
@@ -684,6 +780,8 @@ VAD 检测到新一轮语音开始时，是否打断当前正在生成的翻译�
 
 响应的输出。
 
+<a id="accordion-属性-19"></a>
+
 属性
 
 `id`string
@@ -710,6 +808,8 @@ VAD 检测到新一轮语音开始时，是否打断当前正在生成的翻译�
 
 输出项的内容。
 
+<a id="accordion-属性-20"></a>
+
 属性
 
 `type`string
@@ -727,6 +827,8 @@ VAD 检测到新一轮语音开始时，是否打断当前正在生成的翻译�
 `usage`object
 
 会话截至当前响应的累计 Token 用量。每次 `response.done` 都会返回当前累计值。统计整个会话时，取最后一次的 `usage`，无需将各次结果相加。
+
+<a id="accordion-属性-21"></a>
 
 属性
 
@@ -746,6 +848,8 @@ VAD 检测到新一轮语音开始时，是否打断当前正在生成的翻译�
 
 输入 Token 的分类统计。
 
+<a id="accordion-属性-22"></a>
+
 属性
 
 `text_tokens`integer
@@ -764,6 +868,8 @@ VAD 检测到新一轮语音开始时，是否打断当前正在生成的翻译�
 
 输出 Token 的分类统计。
 
+<a id="accordion-属性-23"></a>
+
 属性
 
 `text_tokens`integer
@@ -774,7 +880,9 @@ VAD 检测到新一轮语音开始时，是否打断当前正在生成的翻译�
 
 输出音频 Token 数。
 
-```
+<a id="code-block-8"></a>
+
+```json
 {
   "event_id": "event_CNea8oXNipVanSg2VIzkO",
   "type": "response.done",
@@ -821,6 +929,10 @@ VAD 检测到新一轮语音开始时，是否打断当前正在生成的翻译�
 }
 ```
 
+<a id="response-text-delta"></a>
+
+<a id="text-delta"></a>
+
 ## response.text.delta
 
 适用于 `qwen3.8-livetranslate-flash-realtime`。 仅输出文本时，返回译文的新增文本片段。
@@ -853,7 +965,9 @@ VAD 检测到新一轮语音开始时，是否打断当前正在生成的翻译�
 
 本次新增的文本片段。按接收顺序累加，不覆盖已收到的文本。
 
-```
+<a id="code-block-9"></a>
+
+```json
 {
   "event_id": "event_example",
   "type": "response.text.delta",
@@ -864,6 +978,10 @@ VAD 检测到新一轮语音开始时，是否打断当前正在生成的翻译�
   "delta": "Hello"
 }
 ```
+
+<a id="response-text-text"></a>
+
+<a id="0c54be63e0c3w"></a>
 
 ## response.text.text
 
@@ -901,9 +1019,11 @@ VAD 检测到新一轮语音开始时，是否打断当前正在生成的翻译�
 
 `stash`string
 
-初步生成的临时文本，与当前 `text` 拼接后构成临时生成结果；系统会通过 `response.text.text` 事件持续更新 `text` 和 `stash`，直至收到[response.text.done](https://help.aliyun.com/zh/model-studio/live-translator-server-events#d675635a94jfb)事件，此时可通过 `text` 字段获取完整的最终文本。
+初步生成的临时文本，与当前 `text` 拼接后构成临时生成结果；系统会通过 `response.text.text` 事件持续更新 `text` 和 `stash`，直至收到[response.text.done](live-translator-server-events.md#d675635a94jfb)事件，此时可通过 `text` 字段获取完整的最终文本。
 
-```
+<a id="code-block-10"></a>
+
+```json
 {
     "event_id": "event_B1lIeyOXR7qJMEExbqtTG",
     "type": "response.text.text",
@@ -915,6 +1035,10 @@ VAD 检测到新一轮语音开始时，是否打断当前正在生成的翻译�
     "stash": " you today?"
 }
 ```
+
+<a id="response-text-done"></a>
+
+<a id="d675635a94jfb"></a>
 
 ## response.text.done
 
@@ -950,7 +1074,9 @@ VAD 检测到新一轮语音开始时，是否打断当前正在生成的翻译�
 
 模型输出的完整文本。
 
-```
+<a id="code-block-11"></a>
+
+```json
 {
     "event_id": "event_B1lIeE2Nac33zn5V7h2mm",
     "type": "response.text.done",
@@ -961,6 +1087,10 @@ VAD 检测到新一轮语音开始时，是否打断当前正在生成的翻译�
     "text": "How can I assist you today?"
 }
 ```
+
+<a id="response-audio-delta"></a>
+
+<a id="a25cc50a15car"></a>
 
 ## response.audio.delta
 
@@ -994,7 +1124,9 @@ WebSocket 接入时，当输出模态包含音频，且模型增量生成新的�
 
 模型增量输出的音频数据，使用Base64编码。
 
-```
+<a id="code-block-12"></a>
+
+```json
 {
     "event_id": "event_B1osWMZBtrEQbiIwW0qHQ",
     "type": "response.audio.delta",
@@ -1005,6 +1137,10 @@ WebSocket 接入时，当输出模态包含音频，且模型增量生成新的�
     "delta": "UklGRnoGAABXQVZFZm10IBAAAAAB..."
 }
 ```
+
+<a id="response-audio-done"></a>
+
+<a id="9e8eb59c67qnt"></a>
 
 ## response.audio.done
 
@@ -1038,7 +1174,9 @@ WebSocket 接入时，当输出模态包含音频，且模型增量生成新的�
 
 目前固定为 0。
 
-```
+<a id="code-block-13"></a>
+
+```json
 {
     "event_id": "event_B1osWMWoDRYyITDyNYcBu",
     "type": "response.audio.done",
@@ -1048,6 +1186,10 @@ WebSocket 接入时，当输出模态包含音频，且模型增量生成新的�
     "content_index": 0
 }
 ```
+
+<a id="input-audio-buffer-speech-started"></a>
+
+<a id="vad001speechstartedh2"></a>
 
 ## input\_audio\_buffer.speech\_started
 
@@ -1073,7 +1215,9 @@ WebSocket 接入时，当输出模态包含音频，且模型增量生成新的�
 
 适用于 `qwen3.8-livetranslate-flash-realtime`。启用 `speaker_detection` 时返回的说话人标识。可通过本事件的 `item_id` 关联语音识别结果，并通过翻译消息项的 `previous_item_id` 关联译文。
 
-```
+<a id="code-block-14"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "input_audio_buffer.speech_started",
@@ -1081,6 +1225,10 @@ WebSocket 接入时，当输出模态包含音频，且模型增量生成新的�
     "item_id": "item_xxx"
 }
 ```
+
+<a id="input-audio-buffer-speech-stopped"></a>
+
+<a id="vad002speechstoppedh2"></a>
 
 ## input\_audio\_buffer.speech\_stopped
 
@@ -1102,7 +1250,9 @@ WebSocket 接入时，当输出模态包含音频，且模型增量生成新的�
 
 关联的消息项唯一标识符。
 
-```
+<a id="code-block-15"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "input_audio_buffer.speech_stopped",
@@ -1110,6 +1260,10 @@ WebSocket 接入时，当输出模态包含音频，且模型增量生成新的�
     "item_id": "item_xxx"
 }
 ```
+
+<a id="input-audio-buffer-committed"></a>
+
+<a id="ltcommitted001h2"></a>
 
 ## input\_audio\_buffer.committed
 
@@ -1123,12 +1277,18 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
 
 事件类型，固定为`input_audio_buffer.committed`。
 
-```
+<a id="code-block-16"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "input_audio_buffer.committed"
 }
 ```
+
+<a id="input-audio-buffer-cleared"></a>
+
+<a id="ltcleared001h2"></a>
 
 ## input\_audio\_buffer.cleared
 
@@ -1142,12 +1302,18 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
 
 事件类型，固定为`input_audio_buffer.cleared`。
 
-```
+<a id="code-block-17"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "input_audio_buffer.cleared"
 }
 ```
+
+<a id="conversation-item-created"></a>
+
+<a id="ltitemcreated001h2"></a>
 
 ## conversation.item.created
 
@@ -1173,6 +1339,8 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
 `item`object
 
 消息项信息。
+
+<a id="accordion-属性-24"></a>
 
 属性
 
@@ -1200,7 +1368,9 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
 
 消息的内容。响应刚创建时为空数组，随流式响应逐步填充；Manual 模式下 commit 产生的用户消息项中包含`{"type": "input_audio"}`。
 
-```
+<a id="code-block-18"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "conversation.item.created",
@@ -1215,6 +1385,10 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
     }
 }
 ```
+
+<a id="conversation-item-input-audio-transcription-delta"></a>
+
+<a id="transcription-delta"></a>
 
 ## conversation.item.input\_audio\_transcription.delta
 
@@ -1240,7 +1414,9 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
 
 本次新增的文本片段。按接收顺序累加，不覆盖已收到的文本。
 
-```
+<a id="code-block-19"></a>
+
+```json
 {
   "event_id": "event_example",
   "type": "conversation.item.input_audio_transcription.delta",
@@ -1249,6 +1425,10 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
   "delta": "Hello"
 }
 ```
+
+<a id="conversation-item-input-audio-transcription-text"></a>
+
+<a id="asr002texth2"></a>
 
 ## conversation.item.input\_audio\_transcription.text
 
@@ -1296,7 +1476,9 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
 -   `angry`：愤怒
 -   `fearful`：恐惧
 
-```
+<a id="code-block-20"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "conversation.item.input_audio_transcription.text",
@@ -1308,6 +1490,10 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
     "emotion": "neutral"
 }
 ```
+
+<a id="conversation-item-input-audio-transcription-completed"></a>
+
+<a id="asr003comph2"></a>
 
 ## conversation.item.input\_audio\_transcription.completed
 
@@ -1349,7 +1535,9 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
 -   `angry`：愤怒
 -   `fearful`：恐惧
 
-```
+<a id="code-block-21"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "conversation.item.input_audio_transcription.completed",
@@ -1360,6 +1548,10 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
     "emotion": ""
 }
 ```
+
+<a id="conversation-item-input-audio-transcription-failed"></a>
+
+<a id="ltasrfailed001h2"></a>
 
 ## conversation.item.input\_audio\_transcription.failed
 
@@ -1379,6 +1571,8 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
 
 `error`object
 
+<a id="accordion-属性-25"></a>
+
 属性
 
 `code`string
@@ -1389,7 +1583,9 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
 
 错误消息。
 
-```
+<a id="code-block-22"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "conversation.item.input_audio_transcription.failed",
@@ -1402,6 +1598,10 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
     }
 }
 ```
+
+<a id="response-audio-transcript-delta"></a>
+
+<a id="audio-transcript-delta"></a>
 
 ## response.audio\_transcript.delta
 
@@ -1435,7 +1635,9 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
 
 本次新增的文本片段。按接收顺序累加，不覆盖已收到的文本。
 
-```
+<a id="code-block-23"></a>
+
+```json
 {
   "event_id": "event_example",
   "type": "response.audio_transcript.delta",
@@ -1446,6 +1648,10 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
   "delta": "Hello"
 }
 ```
+
+<a id="response-audio-transcript-text"></a>
+
+<a id="35396453cfood"></a>
 
 ## response.audio\_transcript.text
 
@@ -1483,9 +1689,11 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
 
 `stash`string
 
-初步翻译的临时文本，与当前 `text` 拼接后构成临时翻译结果；系统会通过 `response.audio_transcript.text` 事件持续更新 `text` 和 `stash`，直至收到[response.audio\_transcript.done](https://help.aliyun.com/zh/model-studio/live-translator-server-events#f4d1698567bsm)事件，此时可通过 `transcript` 字段获取完整的最终翻译文本。
+初步翻译的临时文本，与当前 `text` 拼接后构成临时翻译结果；系统会通过 `response.audio_transcript.text` 事件持续更新 `text` 和 `stash`，直至收到[response.audio\_transcript.done](live-translator-server-events.md#f4d1698567bsm)事件，此时可通过 `transcript` 字段获取完整的最终翻译文本。
 
-```
+<a id="code-block-24"></a>
+
+```json
 {
   "event_id": "event_xxx",
   "type": "response.audio_transcript.text",
@@ -1497,6 +1705,10 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
   "stash": " who are you?"
 }
 ```
+
+<a id="response-audio-transcript-done"></a>
+
+<a id="f4d1698567bsm"></a>
 
 ## response.audio\_transcript.done
 
@@ -1530,7 +1742,9 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
 
 完整文本。
 
-```
+<a id="code-block-25"></a>
+
+```json
 {
     "event_id": "event_VN4Q4GJugLcc1S23viW8E",
     "type": "response.audio_transcript.done",
@@ -1541,6 +1755,10 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
     "transcript": "How can I assist you today?"
 }
 ```
+
+<a id="response-output-item-added"></a>
+
+<a id="dae2260d40qtu"></a>
 
 ## response.output\_item.added
 
@@ -1565,6 +1783,8 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
 `item`object
 
 输出项信息。
+
+<a id="accordion-属性-26"></a>
 
 属性
 
@@ -1592,7 +1812,9 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
 
 消息的内容。
 
-```
+<a id="code-block-26"></a>
+
+```json
 {
     "event_id": "event_B4O5yPt3Gjnjy5eYH3plG",
     "type": "response.output_item.added",
@@ -1608,6 +1830,10 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
     }
 }
 ```
+
+<a id="response-output-item-done"></a>
+
+<a id="f580421f45w3h"></a>
 
 ## response.output\_item.done
 
@@ -1632,6 +1858,8 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
 `item`object
 
 输出项信息。
+
+<a id="accordion-属性-27"></a>
 
 属性
 
@@ -1659,7 +1887,9 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
 
 消息的内容。
 
-```
+<a id="code-block-27"></a>
+
+```json
 {
     "event_id": "event_XkiwbYTBC9Wcdwy6uYJ2G",
     "type": "response.output_item.done",
@@ -1680,6 +1910,10 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
     }
 }
 ```
+
+<a id="response-content-part-added"></a>
+
+<a id="de7fa0b877j25"></a>
 
 ## response.content\_part.added
 
@@ -1713,6 +1947,8 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
 
 输出项信息。
 
+<a id="accordion-属性-28"></a>
+
 属性
 
 `type`string
@@ -1723,7 +1959,9 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
 
 内容部分的文本。
 
-```
+<a id="code-block-28"></a>
+
+```json
 {
     "event_id": "event_J2UixwYKZsXg7c9YXZetL",
     "type": "response.content_part.added",
@@ -1737,6 +1975,10 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
     }
 }
 ```
+
+<a id="response-content-part-done"></a>
+
+<a id="011ad54242wft"></a>
 
 ## response.content\_part.done
 
@@ -1770,6 +2012,8 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
 
 输出项信息。
 
+<a id="accordion-属性-29"></a>
+
 属性
 
 `type`string
@@ -1780,7 +2024,9 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
 
 内容部分的文本。
 
-```
+<a id="code-block-29"></a>
+
+```json
 {
     "event_id": "event_VN4Q4GJugLcc1S23viW8E",
     "type": "response.content_part.done",

@@ -2,18 +2,34 @@
 
 本文介绍如何在阿里云百炼工作流中集成视频理解功能。
 
+<a id="需求背景"></a>
+
+<a id="22f3a56d363ut"></a>
+
 ## 需求背景
 
 用户可能会遇到需要使用阿里云百炼工作流（workflow）搭建智能体，并希望在其中某一环节引用视频理解API的情况。阿里云百炼工作流是一种将复杂任务拆解为多个子任务，从而提高工作流程可控性的流程式AI应用。用户可以通过拖拽节点的方式来创建自定义的任务流程。
 
+<a id="前提条件"></a>
+
+<a id="955c5c3e5fmp8"></a>
+
 ## 前提条件
 
--   开通阿里云百炼账号。具体操作，请参见[开通阿里云百炼](raw/model-user-guide/get-started-with-models/what-is-model-studio.md)。
+-   开通阿里云百炼账号。具体操作，请参见[开通阿里云百炼](../model-user-guide/get-started-with-models/what-is-model-studio.md)。
 -   开通函数计算（FC）。具体操作，请参见[什么是函数计算](https://help.aliyun.com/zh/functioncompute/what-is-function-compute)。
+
+<a id="操作步骤"></a>
+
+<a id="bd40b2306fd2g"></a>
 
 ## 操作步骤
 
 本文以创建一个视频理解工作流应用为例进行说明。
+
+<a id="步骤一-创建函数-fc"></a>
+
+<a id="73a3669985u1t"></a>
 
 ### 步骤一：创建函数（FC）
 
@@ -26,10 +42,10 @@
         
         -   配置函数入口：配置->运行时->请求处理程序：FCVideoAnalysisTask.get\_video\_analysis\_task。
 
-**说明**
-
--   **运行环境**：选择**Python 3.12**。
--   **代码上传方式：**可选择**通过ZIP包上传代码**，文件示例：[FCVideoAnalysisTask.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250530/rcuggo/FCVideoAnalysisTask.zip)。
+> **说明**
+>
+> -   **运行环境**：选择**Python 3.12**。
+> -   **代码上传方式：**可选择**通过ZIP包上传代码**，文件示例：[FCVideoAnalysisTask.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250530/rcuggo/FCVideoAnalysisTask.zip)。
 
 ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1015919471/p962779.png) ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1015919471/p962777.png)
 
@@ -37,7 +53,9 @@
     
     -   方案一：执行以下命令：
 
-```
+<a id="code-block"></a>
+
+```json
 pip3 install alibabacloud_endpoint_util alibabacloud_tea_openapi alibabacloud_quanmiaolightapp20240801 -t .
 ```
 
@@ -45,9 +63,13 @@ pip3 install alibabacloud_endpoint_util alibabacloud_tea_openapi alibabacloud_qu
 
 2.  您可自行优化调整代码中的入参：比如`prompt`模板、`modelId`等。
     
-    需要将代码中的[AK、SK](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)、[workspaceId](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)替换为实际值，以确保代码正常运行并返回正确的结果。
+    需要将代码中的[AK、SK](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)、[workspaceId](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id)替换为实际值，以确保代码正常运行并返回正确的结果。
     
     ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1015919471/p962781.png)
+
+<a id="步骤二-配置阿里云百炼工作流"></a>
+
+<a id="08c1f46190l2s"></a>
 
 ### 步骤二：配置阿里云百炼工作流
 
@@ -62,15 +84,27 @@ pip3 install alibabacloud_endpoint_util alibabacloud_tea_openapi alibabacloud_qu
     
     ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1015919471/p962786.png)
 
+<a id="可选-发布工作流为组件"></a>
+
+<a id="e1cba0e7e365f"></a>
+
 ### 可选：发布工作流为组件
 
-您可以将工作流应用发布为组件，以供其他智能体或工作流应用使用。具体操作，请参见[发布为组件](https://help.aliyun.com/zh/model-studio/workflow/introduction#cff002ee1f73o)。
+您可以将工作流应用发布为组件，以供其他智能体或工作流应用使用。具体操作，请参见[发布为组件](../application-user-guide/llm-application/workflow-application/introduction.md#cff002ee1f73o)。
 
 ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1015919471/p962778.png) ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1015919471/p962783.png)
+
+<a id="可选-组件应用-串行"></a>
+
+<a id="468710efad1iu"></a>
 
 ### 可选：组件应用-串行
 
 可在您的工作流中导入串行的视频理解组件。示例文件：[视频理解-串行.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250603/ealumt/%E6%B5%8B%E8%AF%95-%E8%A7%86%E9%A2%91%E7%90%86%E8%A7%A3%E7%BB%84%E4%BB%B6.zip)。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1015919471/p963369.png)
+
+<a id="可选-组件应用-并行"></a>
+
+<a id="c64e56e8574w6"></a>
 
 ### 可选：组件应用-并行
 
@@ -78,7 +112,15 @@ pip3 install alibabacloud_endpoint_util alibabacloud_tea_openapi alibabacloud_qu
 
 ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1015919471/p962785.png)
 
+<a id="常见问题"></a>
+
+<a id="c4a7cb176fp4x"></a>
+
 ## 常见问题
+
+<a id="处理的视频支持多久时长"></a>
+
+<a id="35b5ef083bwyj"></a>
 
 #### 处理的视频支持多久时长？
 

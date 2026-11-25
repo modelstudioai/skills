@@ -2,11 +2,17 @@
 
 本文介绍千问实时语音/音视频翻译 API 的客户端事件，包括事件类型、参数和示例。
 
-> 相关文档：[实时语音/音视频翻译-千问](raw/model-user-guide/model-experience/omni-modal/qwen3-5-livetranslate-flash-realtime.md)。
+> 相关文档：[实时语音/音视频翻译-千问](../../../model-user-guide/model-experience/omni-modal/qwen3-5-livetranslate-flash-realtime.md)。
 
-**说明**本页为 Qwen-LiveTranslate-Realtime 的事件参考，事件定义以 WebSocket 接入为基础。AOQ、WebRTC 通过各自的数据通道收发模型事件，媒体通过媒体轨道传输。请先阅读[WebSocket 接入](raw/_short/livetranslate-realtime-websocket-access-c83c6ed44456849c.md)、[WebRTC 接入](raw/_short/livetranslate-realtime-webrtc-access-ddb4e390439cd632.md)或[AOQ 接入](raw/model-api-reference/realtime-api-directory/livetranslate-realtime-api-directory/livetranslate-realtime-aoq-access.md)。
+> **说明**
+>
+> 本页为 Qwen-LiveTranslate-Realtime 的事件参考，事件定义以 WebSocket 接入为基础。AOQ、WebRTC 通过各自的数据通道收发模型事件，媒体通过媒体轨道传输。请先阅读[WebSocket 接入](../../../_short/livetranslate-realtime-websocket-access-c83c6ed44456849c.md)、[WebRTC 接入](../../../_short/livetranslate-realtime-webrtc-access-ddb4e390439cd632.md)或[AOQ 接入](livetranslate-realtime-aoq-access.md)。
 
-WebSocket SDK 用法参见 [Python SDK](raw/_short/realtime-websocket-python-sdk-qwen-livetranslate-8af00207378f749b.md)和 [Java SDK](https://help.aliyun.com/zh/model-studio/qwen-livetranslate-java-sdk)。型号与协议选择参见[概述](raw/model-api-reference/realtime-api-directory/livetranslate-realtime-api-directory/live-translator-api.md)。
+WebSocket SDK 用法参见 [Python SDK](../../../_short/realtime-websocket-python-sdk-qwen-livetranslate-8af00207378f749b.md)和 [Java SDK](https://help.aliyun.com/zh/model-studio/qwen-livetranslate-java-sdk)。型号与协议选择参见[概述](live-translator-api.md)。
+
+<a id="session-update"></a>
+
+<a id="af43722339yva"></a>
 
 ## session.update
 
@@ -22,6 +28,8 @@ WebSocket SDK 用法参见 [Python SDK](raw/_short/realtime-websocket-python-sdk
 
 会话配置。
 
+<a id="accordion-属性"></a>
+
 属性
 
 `input_modalities`array（可选）
@@ -36,17 +44,23 @@ WebSocket SDK 用法参见 [Python SDK](raw/_short/realtime-websocket-python-sdk
 
 适用于 `qwen3.8-livetranslate-flash-realtime`。音频配置。
 
+<a id="accordion-属性-2"></a>
+
 属性
 
 `input`object
 
 输入音频配置。
 
+<a id="accordion-属性-3"></a>
+
 属性
 
 `format`object（可选）
 
 输入音频格式。
+
+<a id="accordion-属性-4"></a>
 
 属性
 
@@ -62,6 +76,8 @@ WebSocket SDK 用法参见 [Python SDK](raw/_short/realtime-websocket-python-sdk
 
 语音检测配置。
 
+<a id="accordion-属性-5"></a>
+
 属性
 
 `type`string（可选）
@@ -75,6 +91,8 @@ WebSocket SDK 用法参见 [Python SDK](raw/_short/realtime-websocket-python-sdk
 `output`object（可选）
 
 译音配置。
+
+<a id="accordion-属性-6"></a>
 
 属性
 
@@ -99,7 +117,7 @@ WebSocket SDK 用法参见 [Python SDK](raw/_short/realtime-websocket-python-sdk
 
 `voice`string（可选）
 
-生成音频的音色。未启用声音复刻时，可设置为系统预设音色，可选值参见[支持的音色](https://help.aliyun.com/zh/model-studio/qwen3-5-livetranslate-flash-realtime#0a5bde7593gdk)。`qwen3.8-livetranslate-flash-realtime` 和 `qwen3.5-livetranslate-flash-realtime` 的默认音色为 `Tina`。
+生成音频的音色。未启用声音复刻时，可设置为系统预设音色，可选值参见[支持的音色](../../../model-user-guide/model-experience/omni-modal/qwen3-5-livetranslate-flash-realtime.md#0a5bde7593gdk)。`qwen3.8-livetranslate-flash-realtime` 和 `qwen3.5-livetranslate-flash-realtime` 的默认音色为 `Tina`。
 
 3.8 也支持在 `audio` 对象的 `output` 中设置音色。
 
@@ -112,6 +130,8 @@ WebSocket SDK 用法参见 [Python SDK](raw/_short/realtime-websocket-python-sdk
 `voice_clone_options`object（可选）
 
 声音复刻控制参数，仅在`enable_voice_clone`为`true`时生效。
+
+<a id="accordion-属性-7"></a>
 
 属性
 
@@ -149,6 +169,8 @@ WebSocket SDK 用法参见 [Python SDK](raw/_short/realtime-websocket-python-sdk
 
 输入音频相关配置。
 
+<a id="accordion-属性-8"></a>
+
 属性
 
 `model`string|null（可选）
@@ -159,7 +181,7 @@ WebSocket SDK 用法参见 [Python SDK](raw/_short/realtime-websocket-python-sdk
 
 `language`string（可选）
 
-翻译源语种，可选值：[支持的语种](https://help.aliyun.com/zh/model-studio/qwen3-5-livetranslate-flash-realtime#4ffd192226f0s)。默认不填写，此时模型会自动识别源语种。
+翻译源语种，可选值：[支持的语种](../../../model-user-guide/model-experience/omni-modal/qwen3-5-livetranslate-flash-realtime.md#4ffd192226f0s)。默认不填写，此时模型会自动识别源语种。
 
 `input_audio_format`string（可选）
 
@@ -191,6 +213,8 @@ WebSocket SDK 用法参见 [Python SDK](raw/_short/realtime-websocket-python-sdk
 -   设为配置对象（默认值）：启用 VAD 模式。服务端自动检测语音起止，自动提交音频缓冲区并触发翻译响应，客户端无需发送`input_audio_buffer.commit`事件。
 -   设为`null`：启用 Manual 模式。由客户端通过`input_audio_buffer.commit`事件手动提交音频缓冲区，服务端收到后自动开始生成翻译响应。
 
+<a id="accordion-属性-9"></a>
+
 属性
 
 `type`string（可选）
@@ -213,17 +237,21 @@ VAD 检测灵敏度。值越低，越容易将微弱声音（包括背景噪音�
 
 翻译配置。
 
+<a id="accordion-属性-10"></a>
+
 属性
 
 `language`string（可选）
 
-翻译目标语种，可选值：[支持的语种](https://help.aliyun.com/zh/model-studio/qwen3-5-livetranslate-flash-realtime#4ffd192226f0s)。默认值为`en`。
+翻译目标语种，可选值：[支持的语种](../../../model-user-guide/model-experience/omni-modal/qwen3-5-livetranslate-flash-realtime.md#4ffd192226f0s)。默认值为`en`。
 
 `same_language_skip_options`object（可选）
 
 `qwen3.8-livetranslate-flash-realtime` 不支持此参数。
 
 同语种输出配置。当源语种与目标语种相同时，可跳过文本输出、音频输出或两者。仅当翻译目标语种为`zh`或`en`时生效。
+
+<a id="accordion-属性-11"></a>
 
 属性
 
@@ -239,6 +267,8 @@ VAD 检测灵敏度。值越低，越容易将微弱声音（包括背景噪音�
 
 热词配置，用于提升特定词汇的翻译准确性。
 
+<a id="accordion-属性-12"></a>
+
 属性
 
 `phrases`object（可选）
@@ -247,9 +277,17 @@ VAD 检测灵敏度。值越低，越容易将微弱声音（包括背景噪音�
 
 示例：`{"人工智能": "Artificial Intelligence"}`
 
+<a id="sec-tabs"></a>
+
+<a id="qwen3-8-livetranslate-flash-realtime"></a>
+
+<a id="qwen3-8-livetranslate-flash-realtime-h4"></a>
+
 #### qwen3.8-livetranslate-flash-realtime
 
-```
+<a id="code-block"></a>
+
+```json
 {
   "type": "session.update",
   "session": {
@@ -293,9 +331,15 @@ VAD 检测灵敏度。值越低，越容易将微弱声音（包括背景噪音�
 }
 ```
 
+<a id="qwen3-5-livetranslate-flash-realtime"></a>
+
+<a id="qwen3-5-livetranslate-flash-realtime-h4"></a>
+
 #### qwen3.5-livetranslate-flash-realtime
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "event_id": "event_ToPZqeobitzUJnt3QqtWg",
   "type": "session.update",
@@ -338,6 +382,10 @@ VAD 检测灵敏度。值越低，越容易将微弱声音（包括背景噪音�
 }
 ```
 
+<a id="input-audio-buffer-append"></a>
+
+<a id="8d11313f2198k"></a>
+
 ## input\_audio\_buffer.append
 
 WebSocket 接入时，向输入音频缓冲区追加音频字节。服务端使用此缓冲区检测并决定语音提交时机。
@@ -350,13 +398,19 @@ WebSocket 接入时，向输入音频缓冲区追加音频字节。服务端使�
 
 Base64 编码的音频数据。
 
-```
+<a id="code-block-3"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "input_audio_buffer.append",
     "audio": "xxx"
 }
 ```
+
+<a id="input-audio-buffer-commit"></a>
+
+<a id="ltcommit001h2"></a>
 
 ## input\_audio\_buffer.commit
 
@@ -368,12 +422,18 @@ Base64 编码的音频数据。
 
 事件类型，固定为`input_audio_buffer.commit`。
 
-```
+<a id="code-block-4"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "input_audio_buffer.commit"
 }
 ```
+
+<a id="input-audio-buffer-clear"></a>
+
+<a id="ltclear001h2"></a>
 
 ## input\_audio\_buffer.clear
 
@@ -383,12 +443,18 @@ Base64 编码的音频数据。
 
 事件类型，固定为`input_audio_buffer.clear`。
 
-```
+<a id="code-block-5"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "input_audio_buffer.clear"
 }
 ```
+
+<a id="input-image-buffer-append"></a>
+
+<a id="e27908854eaht"></a>
 
 ## input\_image\_buffer.append
 
@@ -412,7 +478,9 @@ WebSocket 接入时，将图像数据添加到图像缓冲区。图像可来自�
 
 Base64 编码的图像数据。
 
-```
+<a id="code-block-6"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "input_image_buffer.append",
@@ -420,11 +488,15 @@ Base64 编码的图像数据。
 }
 ```
 
+<a id="session-finish"></a>
+
+<a id="f8075550b26jf"></a>
+
 ## session.finish
 
 用于结束当前会话。发送此事件后，服务端响应流程：
 
--   已检测到语音：服务端完成剩余翻译；启用原文识别时，通过 [conversation.item.input\_audio\_transcription.completed](https://help.aliyun.com/zh/model-studio/live-translator-server-events#asr003comph2) 事件返回完整原文。所有音频翻译完成后，发送 [session.finished](https://help.aliyun.com/zh/model-studio/live-translator-server-events#5369266402pgb) 事件作为会话结束标识。
+-   已检测到语音：服务端完成剩余翻译；启用原文识别时，通过 [conversation.item.input\_audio\_transcription.completed](live-translator-server-events.md#asr003comph2) 事件返回完整原文。所有音频翻译完成后，发送 [session.finished](live-translator-server-events.md#5369266402pgb) 事件作为会话结束标识。
 -   未检测到语音：服务端直接发送`session.finished`事件。
 
 客户端监听到 `session.finished` 事件后，如需播放剩余译音，应先完成本地播放，再主动断开连接。
@@ -433,7 +505,9 @@ Base64 编码的图像数据。
 
 事件类型，固定为`session.finish`。
 
-```
+<a id="code-block-7"></a>
+
+```json
 {
     "event_id": "event_xxx",
     "type": "session.finish"

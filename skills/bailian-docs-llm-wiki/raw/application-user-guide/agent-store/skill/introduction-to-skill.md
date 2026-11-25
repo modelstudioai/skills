@@ -2,6 +2,10 @@
 
 Skill 是可添加到智能体应用的能力包，用于让智能体在对话中自动处理特定类型的任务。通过 Skill，智能体无需额外编码即可获得文件处理、数据分析等专业能力。
 
+<a id="什么是-skill"></a>
+
+<a id="de3976f1d9a1m"></a>
+
 ## 什么是 Skill
 
 添加 Skill 后，智能体可以在对话中自动识别匹配的任务并调用对应 Skill 进行处理，无需额外编写代码或接入外部工具。
@@ -11,7 +15,11 @@ Skill 是可添加到智能体应用的能力包，用于让智能体在对话�
 -   **官方 Skill**：平台预置的通用 Skill，覆盖常见文件处理场景。无需配置，添加后即可使用。
 -   **自定义 Skill**：通过上传 ZIP 技能包创建。适用于官方 Skill 未覆盖的业务场景，如特定行业的数据处理、自定义文件格式解析等。
 
-也可在终端用阿里云百炼 CLI 安装、查看、更新与移除本地 Skill。详见[使用 CLI](raw/cli/capabilities/agent-infrastructure/mcp-skill.md)。
+也可在终端用阿里云百炼 CLI 安装、查看、更新与移除本地 Skill。详见[使用 CLI](../../../cli/capabilities/agent-infrastructure/mcp-skill.md)。
+
+<a id="官方-skill"></a>
+
+<a id="724c5d4925yp9"></a>
 
 ## 官方 Skill
 
@@ -19,55 +27,43 @@ Skill 是可添加到智能体应用的能力包，用于让智能体在对话�
 
 官方 Skill 持续更新中，可在 [Skill 管理](https://bailian.console.aliyun.com/?tab=app#/skill) 页面查看最新列表。
 
+<a id="创建自定义-skill"></a>
+
+<a id="db56c1bfa4m5t"></a>
+
 ## 创建自定义 Skill
 
 当官方 Skill 无法满足业务需求时，可通过上传 ZIP 技能包创建自定义 Skill。ZIP 技能包需满足以下要求：
 
-**要求**
+| 要求 | 说明 |
+| --- | --- |
+| 必须包含 SKILL.md | ZIP 包根目录下必须有 `SKILL.md` 文件，用于定义 Skill 元信息。 |
+| 大小限制 | 整个 ZIP 包不超过 10 MB。 |
+| 名称唯一 | SKILL.md 中的 `name` 字段不可与当前账号下已有 Skill 重名。 |
 
-**说明**
+<a id="skill-md-编写规范"></a>
 
-必须包含 SKILL.md
-
-ZIP 包根目录下必须有 `SKILL.md` 文件，用于定义 Skill 元信息。
-
-大小限制
-
-整个 ZIP 包不超过 10 MB。
-
-名称唯一
-
-SKILL.md 中的 `name` 字段不可与当前账号下已有 Skill 重名。
+<a id="5d61e185b5wss"></a>
 
 ### SKILL.md 编写规范
 
 `SKILL.md` 使用 YAML frontmatter 定义 Skill 的名称和描述。文件内容必须以 `---` 开始和结束，包裹 YAML 字段。格式如下：
 
-```
+<a id="code-block"></a>
+
+```yaml
 ---
 name: my-custom-skill
 description: "Skill 的功能描述，包含触发条件、适用场景和不适用场景。"
 ---
 ```
+
 **字段说明**
 
-**字段**
-
-**必填**
-
-**说明**
-
-name
-
-是
-
-Skill 的唯一标识名称。建议使用小写英文和连字符，如 `data-cleaner`、`invoice-parser`。
-
-description
-
-是
-
-描述 Skill 的触发条件和处理能力。智能体根据此描述判断是否调用该 Skill，因此描述的质量直接影响 Skill 的调用准确率。
+| 字段 | 必填 | 说明 |
+| --- | --- | --- |
+| name | 是 | Skill 的唯一标识名称。建议使用小写英文和连字符，如 `data-cleaner`、`invoice-parser`。 |
+| description | 是 | 描述 Skill 的触发条件和处理能力。智能体根据此描述判断是否调用该 Skill，因此描述的质量直接影响 Skill 的调用准确率。 |
 
 **description 编写建议**
 
@@ -82,7 +78,9 @@ description 的质量决定了智能体调用 Skill 的准确性。建议包含�
 
 以下是官方 xlsx Skill 的 SKILL.md 示例：
 
-```
+<a id="code-block-2"></a>
+
+```yaml
 ---
 name: xlsx
 description: "Use this skill any time a spreadsheet file is the primary input or output. This means any task where the user wants to: open, read, edit, or fix an existing .xlsx, .xlsm, .csv, or .tsv file (e.g., adding columns, computing formulas, formatting, charting, cleaning messy data); create a new spreadsheet from scratch or from other data sources; or convert between tabular file formats. Trigger especially when the user references a spreadsheet file by name or path — even casually (like \"the xlsx in my downloads\") — and wants something done to it or produced from it. Also trigger for cleaning or restructuring messy tabular data files (malformed rows, misplaced headers, junk data) into proper spreadsheets. The deliverable must be a spreadsheet file. Do NOT trigger when the primary deliverable is a Word document, HTML report, standalone Python script, database pipeline, or Google Sheets API integration, even if tabular data is involved."
@@ -96,6 +94,10 @@ description: "Use this skill any time a spreadsheet file is the primary input or
 -   包含了触发场景描述（用户提到文件名或路径时也应触发）。
 -   标注了不适用的场景（产出物为 Word、HTML、Python 脚本等情况）。
 
+<a id="上传并创建"></a>
+
+<a id="fa5e570b8aoks"></a>
+
 ### 上传并创建
 
 1.  在控制台左侧导航栏，选择**Skill 管理**。
@@ -108,6 +110,10 @@ description: "Use this skill any time a spreadsheet file is the primary input or
 -   **审查通过**：Skill 出现在**自定义 Skill** 标签页中，可添加到智能体应用。
 -   **审查未通过**：请根据提示修改 SKILL.md 内容后重新上传。
 
+<a id="更新自定义-skill"></a>
+
+<a id="22e7d6a9c4awv"></a>
+
 ### 更新自定义 Skill
 
 重新上传同名 Skill 的 ZIP 包时，系统会创建新版本。更新流程与首次创建一致：
@@ -116,9 +122,17 @@ description: "Use this skill any time a spreadsheet file is the primary input or
 2.  在**自定义 Skill** 标签页中，重新上传 ZIP 包。
 3.  审查通过后，已添加该 Skill 的智能体会自动使用最新版本。
 
+<a id="添加-skill-到智能体"></a>
+
+<a id="0abe3b3ba3tmt"></a>
+
 ## 添加 Skill 到智能体
 
 可通过以下两种方式将 Skill（官方或自定义）添加到智能体应用。添加后，智能体在对话中遇到匹配 Skill 描述的任务时，会自动调用该 Skill 执行处理。
+
+<a id="方式一-从-skill-详情页添加"></a>
+
+<a id="92d65d63359d9"></a>
 
 ### 方式一：从 Skill 详情页添加
 
@@ -126,11 +140,19 @@ description: "Use this skill any time a spreadsheet file is the primary input or
 2.  点击右上角**添加到智能体**。
 3.  在弹出的应用列表中选择目标应用，确认添加。
 
+<a id="方式二-在应用配置中添加"></a>
+
+<a id="65dda6964fk5s"></a>
+
 ### 方式二：在应用配置中添加
 
 1.  进入目标智能体应用的**应用配置**页面。
 2.  在左侧配置面板中找到**技能**区域，点击 Skill 右侧的加号。
 3.  从 Skill 列表中选择需要的 Skill，确认添加。
+
+<a id="查看-skill-详情"></a>
+
+<a id="16bb1c62ffi4j"></a>
 
 ## 查看 Skill 详情
 
@@ -144,6 +166,10 @@ description: "Use this skill any time a spreadsheet file is the primary input or
 
 官方 Skill 由平台统一维护和更新，已添加到智能体的官方 Skill 会自动使用最新版本。自定义 Skill 通过重新上传同名 ZIP 包来更新版本。
 
+<a id="测试-skill-效果"></a>
+
+<a id="1a9664e3c8zv5"></a>
+
 ## 测试 Skill 效果
 
 添加 Skill 后，可在应用配置页面右侧的对话窗格中测试效果。
@@ -152,12 +178,20 @@ description: "Use this skill any time a spreadsheet file is the primary input or
 
 智能体将调用 xlsx Skill，生成包含分列统计的 .xlsx 文件并提供下载。
 
+<a id="常见问题"></a>
+
+<a id="5c8e2f7a91b3n"></a>
+
 ## 常见问题
+
+<a id="accordion-skill-管理是否收费"></a>
 
 Skill 管理是否收费？
 
 上传、存储和管理 Skill 不产生独立计费项。智能体调用 Skill 时，按实际发生的会话运行时费、模型调用费和工具及 MCP 调用费计费。
 
+<a id="accordion-是否支持将自定义-skill-共享给其他阿里云账号"></a>
+
 是否支持将自定义 Skill 共享给其他阿里云账号？
 
-自定义 Skill 仅在当前阿里云账号的当前业务空间内可见，暂不支持公开发布或跨账号共享。如需在其他阿里云账号使用，可通过[下载 Skill 包](raw/application-api-reference/managed-agents-api/skills-api/skill-version-download.md)接口导出 ZIP 文件，由其他阿里云账号上传创建。
+自定义 Skill 仅在当前阿里云账号的当前业务空间内可见，暂不支持公开发布或跨账号共享。如需在其他阿里云账号使用，可通过[下载 Skill 包](../../../application-api-reference/managed-agents-api/skills-api/skill-version-download.md)接口导出 ZIP 文件，由其他阿里云账号上传创建。

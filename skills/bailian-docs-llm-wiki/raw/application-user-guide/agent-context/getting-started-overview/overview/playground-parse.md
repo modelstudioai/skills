@@ -8,21 +8,11 @@
     
     打开 [ParseX](https://bailian.console.aliyun.com/cn-beijing/parsex/document-parse)，登录后选择左侧“文档解析”。工作区包含输入、配置和结果等区域，您可以在同一页面完成一次体验。
     
-    **工作区部分**
-    
-    **用途**
-    
-    输入文件
-    
-    选择材料，确认文件名并查看原始内容
-    
-    解析配置
-    
-    调整本次处理要求
-    
-    结果区域
-    
-    解析完成后阅读和检查结果
+    | 工作区部分 | 用途 |
+    | --- | --- |
+    | 输入文件 | 选择材料，确认文件名并查看原始内容 |
+    | 解析配置 | 调整本次处理要求 |
+    | 结果区域 | 解析完成后阅读和检查结果 |
     
 2.  **选择材料**
     
@@ -31,16 +21,16 @@
 3.  **设置解析要求**
     
     1.  在**字段结构**中填写需要字段抽取的信息。
-    2.  按[配置信息抽取](raw/application-user-guide/agent-context/getting-started-overview/extract-overview/extract-configuration.md)检查字段名称、类型和说明。
+    2.  按[配置信息抽取](../extract-overview/extract-configuration.md)检查字段名称、类型和说明。
     3.  检查抽取设置与补充要求。
     
-    已有合适配置时，按[保存与复用配置](raw/application-user-guide/agent-context/getting-started-overview/settings-configurations.md)中的方法进入测试并复用。
+    已有合适配置时，按[保存与复用配置](../settings-configurations.md)中的方法进入测试并复用。
     
 4.  **提交解析**
     
     1.  确认选定文件与本次设置。
     2.  点击“运行文档解析”。
-    3.  等待任务完成；需要查看处理进度时，进入[任务记录](raw/application-user-guide/agent-context/getting-started-overview/settings-configurations/tasks.md)。
+    3.  等待任务完成；需要查看处理进度时，进入[任务记录](../settings-configurations/tasks.md)。
     
     已提交的任务使用提交时的设置。后续修改页面设置，需要再次运行才会得到新的结果。
     
@@ -59,4 +49,4 @@
     
 6.  **返回历史结果**
     
-    进入[任务记录](raw/application-user-guide/agent-context/getting-started-overview/settings-configurations/tasks.md)，找到对应解析任务，查看详情并从结果入口返回查看。
+    进入[任务记录](../settings-configurations/tasks.md)，找到对应解析任务，查看详情并从结果入口返回查看。

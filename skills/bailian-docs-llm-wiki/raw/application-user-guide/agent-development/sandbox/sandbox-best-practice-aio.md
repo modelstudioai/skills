@@ -4,35 +4,32 @@
 
 AIO Sandbox 面向“浏览器自动化 + 代码执行 + 文件处理”连续发生的 Agent 任务。推荐基于全能型镜像（`all-in-one`）创建模版：3000 端口提供 browser 服务，5000 端口提供 Code Interpreter/envd 服务。Agent 可以在同一个隔离环境中完成网页访问、截图、下载、数据清洗、代码计算和结果导出。
 
-如果任务只需要访问网页、点击按钮、截图或下载文件，优先使用 [Browser Use Sandbox](raw/application-user-guide/agent-development/sandbox/sandbox-best-practice-browser-use.md)；只有浏览器产物需要立即交给 Python/Node.js 继续处理时，才选择 AIO Sandbox。
+如果任务只需要访问网页、点击按钮、截图或下载文件，优先使用 [Browser Use Sandbox](sandbox-best-practice-browser-use.md)；只有浏览器产物需要立即交给 Python/Node.js 继续处理时，才选择 AIO Sandbox。
 
-**警告**沙箱公网 URL 应视为访问凭证：未设置应用层鉴权时，持有 URL 的人可完全控制沙箱内浏览器（含已登录态与 Cookie）。请勿公开分享，也不要写入日志或前端代码。
+> **警告**
+>
+> 沙箱公网 URL 应视为访问凭证：未设置应用层鉴权时，持有 URL 的人可完全控制沙箱内浏览器（含已登录态与 Cookie）。请勿公开分享，也不要写入日志或前端代码。
+
+<a id="适用场景"></a>
+
+<a id="h-sandbox-bp-aio-scenarios"></a>
 
 ## 适用场景
 
-**场景**
+| 场景 | 说明 |
+| --- | --- |
+| 网页采集后分析 | 通过浏览器访问动态页面，保存 HTML、截图或下载文件，再用 Python 清洗、汇总和导出 |
+| 自动化测试报告 | 运行浏览器 E2E 测试后，在同一沙箱中分析日志、截图和测试结果 |
+| 内容生产 Agent | 生成网页截图、PDF、表格、JSON 和归档文件 |
+| 多工具 Agent | 在同一会话中组合浏览器、终端命令、Code Interpreter 和文件 API |
 
-**说明**
+<a id="推荐流程"></a>
 
-网页采集后分析
-
-通过浏览器访问动态页面，保存 HTML、截图或下载文件，再用 Python 清洗、汇总和导出
-
-自动化测试报告
-
-运行浏览器 E2E 测试后，在同一沙箱中分析日志、截图和测试结果
-
-内容生产 Agent
-
-生成网页截图、PDF、表格、JSON 和归档文件
-
-多工具 Agent
-
-在同一会话中组合浏览器、终端命令、Code Interpreter 和文件 API
+<a id="h-sandbox-bp-aio-flow"></a>
 
 ## 推荐流程
 
-1.  基于全能型镜像（`all-in-one`）创建模版并获取 `templateCode`，详见[模版管理](raw/application-user-guide/agent-development/sandbox/sandbox-templates.md)。
+1.  基于全能型镜像（`all-in-one`）创建模版并获取 `templateCode`，详见[模版管理](sandbox-templates.md)。
 2.  使用模版创建沙箱，并设置足够的超时时间。浏览器冷启动、页面加载和代码执行会共同消耗时间。
 3.  通过 `sandbox.getHost(3000)` 获取 browser 服务公网 host。
 4.  轮询 `/health`，确认 browser 服务已经就绪。
@@ -41,11 +38,17 @@ AIO Sandbox 面向“浏览器自动化 + 代码执行 + 文件处理”连续�
 7.  下载结果文件，记录 URL、动作摘要、截图路径、脚本版本和输出结果。
 8.  任务结束后销毁沙箱，清理临时凭证和中间文件。
 
+<a id="准备本地环境"></a>
+
+<a id="h-sandbox-bp-aio-env"></a>
+
 ## 准备本地环境
 
 以下示例使用 Node.js 连接沙箱中的浏览器，并在同一沙箱中执行 Python 代码。业务侧只需要安装 SDK 和 Playwright Core，浏览器运行在沙箱内。
 
-```
+<a id="code-block"></a>
+
+```json
 {
   "name": "aio-sandbox-demo",
   "version": "1.0.0",
@@ -62,7 +65,13 @@ AIO Sandbox 面向“浏览器自动化 + 代码执行 + 文件处理”连续�
 }
 ```
 
-**说明**`e2b` 与 `@e2b/code-interpreter` 固定为示例验证版本（2.31.0 / 2.6.1），更高版本的 SDK 创建实例时返回 405。
+> **说明**
+>
+> `e2b` 与 `@e2b/code-interpreter` 固定为示例验证版本（2.31.0 / 2.6.1），更高版本的 SDK 创建实例时返回 405。
+
+<a id="示例代码"></a>
+
+<a id="h-sandbox-bp-aio-example"></a>
 
 ## 示例代码
 
@@ -73,7 +82,9 @@ AIO Sandbox 面向“浏览器自动化 + 代码执行 + 文件处理”连续�
 3.  通过 CDP 连接云端浏览器，访问 `https://example.com`，并将截图写入沙箱任务目录。
 4.  使用 Code Interpreter 读取浏览器产物，生成结构化摘要。
 
-```
+<a id="code-block-2"></a>
+
+```javascript
 import { Sandbox } from "@e2b/code-interpreter";
 import { chromium } from "playwright-core";
 
@@ -189,6 +200,10 @@ print(json.dumps(summary, ensure_ascii=False))
 }
 ```
 
+<a id="接入建议"></a>
+
+<a id="h-sandbox-bp-aio-integration"></a>
+
 ## 接入建议
 
 -   使用固定的任务目录，例如 `/tmp/aio-task/<task-id>`，把截图、HTML、下载文件、脚本和结果文件放在同一目录。
@@ -199,8 +214,12 @@ print(json.dumps(summary, ensure_ascii=False))
 -   设置最大页面数、最大下载文件大小、命令超时和沙箱生命周期，避免 Agent 无限制爬取或计算。
 -   需要实时观察浏览器时，使用镜像内置的 noVNC 页面：`https://<sandbox-host>/static/vnc.html?path=/ws/livestream&autoconnect=true`。`path` 不能省略且必须以 `/` 开头，写成相对路径会解析到 `/static/ws/livestream` 并连接失败；根路径 `/vnc.html` 为 404。WebSocket 可直接连接 `wss://<sandbox-host>/ws/livestream`（等价别名 `/ws/liveview`）。
 
+<a id="下一步"></a>
+
+<a id="h-sandbox-bp-aio-next"></a>
+
 ## 下一步
 
--   [使用 Browser Use Sandbox](raw/application-user-guide/agent-development/sandbox/sandbox-best-practice-browser-use.md)：纯网页自动化类任务的最佳实践
--   [模版管理](raw/application-user-guide/agent-development/sandbox/sandbox-templates.md)：基于全能型镜像创建模版
--   [实例管理与使用](raw/application-user-guide/agent-development/sandbox/sandbox-sdk.md)：实例生命周期与数据面操作
+-   [使用 Browser Use Sandbox](sandbox-best-practice-browser-use.md)：纯网页自动化类任务的最佳实践
+-   [模版管理](sandbox-templates.md)：基于全能型镜像创建模版
+-   [实例管理与使用](sandbox-sdk.md)：实例生命周期与数据面操作

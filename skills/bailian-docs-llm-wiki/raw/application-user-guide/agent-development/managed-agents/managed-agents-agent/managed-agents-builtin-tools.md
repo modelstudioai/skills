@@ -2,93 +2,58 @@
 
 Managed Agents 提供内置工具，覆盖任务规划、命令执行、文件操作、网络访问、知识检索与产出物标记。除知识检索调用平台服务外，其余工具在会话绑定的运行环境中执行。
 
+<a id="工具列表"></a>
+
+<a id="h-bt-overview"></a>
+
 ## 工具列表
 
 在智能体编辑页的**工具**区按需勾选。勾选的工具对该智能体的全部会话生效。
 
-**工具**
+| 工具 | 作用 | 典型用途 |
+| --- | --- | --- |
+| `bash` | 在沙箱中执行 shell 命令 | 运行脚本、安装包、调用 CLI |
+| `write` | 写入文件 | 生成报告、保存中间结果 |
+| `read` | 读取文件内容 | 查看挂载的 CSV、日志、配置文件 |
+| `edit` | 按字符串替换修改文件 | 小范围改动比全量写入更安全 |
+| `glob` | 按模式查找文件 | 定位目标文件，例如 `*.csv` |
+| `grep` | 在文件中搜索文本 | 日志排查、关键词定位 |
+| `web_search` | 搜索互联网信息，返回相关网页的标题、链接和内容摘要 | 查询实时资讯与时效性信息（如天气、新闻）、检索外部资料 |
+| `web_fetch` | 读取指定网页地址的正文内容，转换为文本 | 结合搜索结果深入阅读网页、提取页面正文 |
+| `todo_write` | 维护结构化的待办列表，记录任务步骤与状态 | 拆解长任务、跟踪多步骤任务的执行进度 |
+| `mark_artifacts` | 标记智能体产出的结果文件，返回其 `file_id` | 供业务侧按需下载或展示最终交付物 |
 
-**作用**
+> **说明**
+>
+> `search_knowledgebases` 不在**工具**列表中展示，通过**知识库-检索策略**配置，详见[知识检索](#h-bt-knowledge)。
 
-**典型用途**
+> **说明**
+>
+> `web_search` 与 `web_fetch` 单独计费：`web_search` 按调用次数计费（0.03 元/次）；`web_fetch` 限时免费，后续收费计划以控制台展示为准。计费口径详见[计费说明](../../../agent-billing/managed-agents-billing.md)。
 
-`bash`
+<a id="执行机制"></a>
 
-在沙箱中执行 shell 命令
-
-运行脚本、安装包、调用 CLI
-
-`write`
-
-写入文件
-
-生成报告、保存中间结果
-
-`read`
-
-读取文件内容
-
-查看挂载的 CSV、日志、配置文件
-
-`edit`
-
-按字符串替换修改文件
-
-小范围改动比全量写入更安全
-
-`glob`
-
-按模式查找文件
-
-定位目标文件，例如 `*.csv`
-
-`grep`
-
-在文件中搜索文本
-
-日志排查、关键词定位
-
-`web_search`
-
-搜索互联网信息，返回相关网页的标题、链接和内容摘要
-
-查询实时资讯与时效性信息（如天气、新闻）、检索外部资料
-
-`web_fetch`
-
-读取指定网页地址的正文内容，转换为文本
-
-结合搜索结果深入阅读网页、提取页面正文
-
-`todo_write`
-
-维护结构化的待办列表，记录任务步骤与状态
-
-拆解长任务、跟踪多步骤任务的执行进度
-
-`mark_artifacts`
-
-标记智能体产出的结果文件，返回其 `file_id`
-
-供业务侧按需下载或展示最终交付物
-
-**说明**`search_knowledgebases` 不在**工具**列表中展示，通过**知识库-检索策略**配置，详见[知识检索](#h-bt-knowledge)。
-
-**说明**`web_search` 与 `web_fetch` 单独计费：`web_search` 按调用次数计费（0.03 元/次）；`web_fetch` 限时免费，后续收费计划以控制台展示为准。计费口径详见[计费说明](raw/application-user-guide/agent-billing/managed-agents-billing.md)。
+<a id="h-bt-exec"></a>
 
 ## 执行机制
 
-`search_knowledgebases` 调用平台知识检索服务，其余内置工具在会话绑定的[运行环境](raw/application-user-guide/agent-development/managed-agents/managed-agents-environment.md)中执行。工具产生的文件、安装的依赖在该会话生命周期内持久保留。
+`search_knowledgebases` 调用平台知识检索服务，其余内置工具在会话绑定的[运行环境](../managed-agents-environment.md)中执行。工具产生的文件、安装的依赖在该会话生命周期内持久保留。
 
 智能体根据系统提示词和当前消息自主决定调用哪个工具，调用过程通过事件面板实时可见。
 
+<a id="知识检索"></a>
+
+<a id="h-bt-knowledge"></a>
+
 ## 知识检索
 
-`search_knowledgebases` 用于检索[知识检索服务](raw/application-user-guide/agent-context/knowledge-base/service/rag-knowledge-retrieval.md)中的知识库。启用后，模型按需调用，并结合多轮对话生成检索问题；未启用时不进行检索。一个智能体最多配置一个该工具。
+`search_knowledgebases` 用于检索[知识检索服务](../../../knowledge-base/rag-knowledge-retrieval.md)中的知识库。启用后，模型按需调用，并结合多轮对话生成检索问题；未启用时不进行检索。一个智能体最多配置一个该工具。
 
 在智能体编辑页的**知识库-检索策略**区域点击**配置**或**立即配置**，在**配置检索服务**面板中选择检索服务并点击**关联**，然后保存智能体。通过 API 配置时，在 `builtin_toolkit.configs[]` 中启用 `search_knowledgebases`，并通过 `params.knowledge_application_id` 指定知识检索服务：
 
-```
+<a id="code-block"></a>
+
+```json
 {
   "tools": [
     {
@@ -113,37 +78,42 @@ Managed Agents 提供内置工具，覆盖任务规划、命令执行、文件�
 
 更新已有智能体时，保留其他仍在使用的工具配置。
 
+<a id="审批策略"></a>
+
+<a id="h-bt-approval"></a>
+
 ## 审批策略
 
 在智能体编辑页的**工具**区展开某个工具，可单独设置该工具的**审批策略**，控制其被调用前是否需要人工确认：
 
-**策略**
+| 策略 | 行为 |
+| --- | --- |
+| 总是允许 | 默认值。智能体调用该工具时直接执行，不打断流程 |
+| 每次询问 | 每次调用前暂停，等待用户在会话中确认后才继续执行 |
 
-**行为**
+对高风险工具（如 `bash`）设为**每次询问**，可在保留自动化能力的同时，对敏感操作保留人工闸门。当工具被设为每次询问时，智能体在会话中调用它会先暂停并等待确认。通过 API 集成时，如何在事件流中接收审批请求并回应，详见[会话事件流](../managed-agents-session/managed-agents-event-stream.md#%E5%B7%A5%E5%85%B7%E5%AE%A1%E6%89%B9)。
 
-总是允许
-
-默认值。智能体调用该工具时直接执行，不打断流程
-
-每次询问
-
-每次调用前暂停，等待用户在会话中确认后才继续执行
-
-对高风险工具（如 `bash`）设为**每次询问**，可在保留自动化能力的同时，对敏感操作保留人工闸门。当工具被设为每次询问时，智能体在会话中调用它会先暂停并等待确认。通过 API 集成时，如何在事件流中接收审批请求并回应，详见[会话事件流](https://help.aliyun.com/zh/model-studio/managed-agents-event-stream#%E5%B7%A5%E5%85%B7%E5%AE%A1%E6%89%B9)。
+<a id="审批的适用范围"></a>
 
 ### 审批的适用范围
 
 工具审批仅支持主智能体，不支持在子智能体中使用。
 
-**警告****客户端工具**（`function` / `custom` 等）不参与这套审批机制，其执行由客户端自行控制。
+> **警告**
+>
+> **客户端工具**（`function` / `custom` 等）不参与这套审批机制，其执行由客户端自行控制。
 
 此外，**会话在创建时锁定当时的 Agent 版本**。修改 Agent 的审批策略不会追溯影响已存在的会话，需**新建会话**才会使用新配置。
+
+<a id="通过-api-配置审批策略"></a>
 
 ### 通过 API 配置审批策略
 
 除控制台外，审批策略也可在创建 / 更新 Agent 时通过 `tools` 字段声明。在 `builtin_toolkit` 项的 `default_config` 中设置工具包默认策略，并可在 `configs[]` 中对单个工具单独覆盖：
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "tools": [
     {
@@ -171,10 +141,12 @@ Managed Agents 提供内置工具，覆盖任务规划、命令执行、文件�
 -   MCP 工具的审批策略配置在 `tools[]` 中 `type` 为 `mcp_toolkit` 的项的 `default_config` / `configs` 字段，**不在** `mcp_servers[]` 中设置。
 -   全部省略时，默认策略为 `always_allow`。
 
-字段完整定义详见 [Agent API](raw/application-api-reference/managed-agents-api/agent-api.md)。
+字段完整定义详见 [Agent API](../../../../application-api-reference/managed-agents-api/agent-api.md)。
+
+<a id="下一步"></a>
 
 ## 下一步
 
--   [定义 Agent](raw/application-user-guide/agent-development/managed-agents/managed-agents-agent/managed-agents-agent-definition.md)：在智能体编辑页勾选需要的工具。
--   [Agent MCP](raw/application-user-guide/agent-development/managed-agents/managed-agents-agent/managed-agents-mcp.md)：通过 MCP 协议接入更多外部工具。
--   [发起会话](raw/application-user-guide/agent-development/managed-agents/managed-agents-session/managed-agents-session-event.md)：在会话中观察工具调用过程。
+-   [定义 Agent](managed-agents-agent-definition.md)：在智能体编辑页勾选需要的工具。
+-   [Agent MCP](managed-agents-mcp.md)：通过 MCP 协议接入更多外部工具。
+-   [发起会话](../managed-agents-session/managed-agents-session-event.md)：在会话中观察工具调用过程。

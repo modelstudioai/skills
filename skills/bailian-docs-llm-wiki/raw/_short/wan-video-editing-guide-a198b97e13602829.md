@@ -5,29 +5,40 @@
 -   **指令编辑**：通过文字指令修改视频内容，如替换人物服饰、更改场景元素、调整画面风格等。
 -   **指令+参考图编辑**：除指令外，还支持传入参考图像，将图像中的元素（如人物、服饰、道具）应用到视频中。
 
-**说明**视频编辑（尤其是复刻指定视频的动作/运镜/特效）推荐使用**视频编辑 2.7**。若需视频续写能力，推荐使用[万相2.7-图生视频](raw/model-api-reference/video-generation-api/wan-api-reference/image-to-video-general-api-reference.md)。
+> **说明**
+>
+> 视频编辑（尤其是复刻指定视频的动作/运镜/特效）推荐使用**视频编辑 2.7**。若需视频续写能力，推荐使用[万相2.7-图生视频](../model-api-reference/video-generation-api/wan-api-reference/image-to-video-general-api-reference.md)。
+
+<a id="快速开始"></a>
+
+<a id="ve01quickstarth"></a>
 
 ## 快速开始
 
-**输入提示词和参考图**
+|  |  |  |
+| --- | --- | --- |
+| **输入提示词和参考图** | **输入视频（特效视频）** | **输出视频** |
+| 参考视频的特效，将这个特效应用到图片中的这个长发的女人身上，场景为晚会。<br><br>![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2257046771/p1065994.png) |  |  |
 
-**输入视频（特效视频）**
+在调用前，先[获取与配置 API Key](../model-api-reference/preparations/get-api-key.md)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。通过SDK进行调用，请[安装DashScope SDK](../model-api-reference/preparations/install-sdk.md)。
 
-**输出视频**
+<a id="sec-tabs"></a>
 
-参考视频的特效，将这个特效应用到图片中的这个长发的女人身上，场景为晚会。
+<a id="python-sdk"></a>
 
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2257046771/p1065994.png)
-
-在调用前，先[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。通过SDK进行调用，请[安装DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
+<a id="python-sdk-h4"></a>
 
 #### Python SDK
 
-**重要**请确保 DashScope Python SDK 版本**不低于**`1.25.16`，再运行以下代码。
+> **重要**
+>
+> 请确保 DashScope Python SDK 版本**不低于**`1.25.16`，再运行以下代码。
+>
+> 若版本过低，可能会触发 "url error, please check url!" 等错误。请参考[安装SDK](../model-api-reference/preparations/install-sdk.md)进行更新。
 
-若版本过低，可能会触发 "url error, please check url!" 等错误。请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
+<a id="code-block"></a>
 
-```
+```python
 # -*- coding: utf-8 -*-
 from http import HTTPStatus
 from dashscope import VideoSynthesis
@@ -74,13 +85,21 @@ if __name__ == '__main__':
     sample_sync_call()
 ```
 
+<a id="java-sdk"></a>
+
+<a id="java-sdk-h4"></a>
+
 #### Java SDK
 
-**重要**请确保 DashScope Java SDK 版本**不低于**`2.22.14`，再运行以下代码。
+> **重要**
+>
+> 请确保 DashScope Java SDK 版本**不低于**`2.22.14`，再运行以下代码。
+>
+> 若版本过低，可能会触发 "url error, please check url!" 等错误。请参考[安装SDK](../model-api-reference/preparations/install-sdk.md)进行更新。
 
-若版本过低，可能会触发 "url error, please check url!" 等错误。请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
+<a id="code-block-2"></a>
 
-```
+```java
 // Copyright (c) Alibaba, Inc. and its affiliates.
 
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesis;
@@ -147,10 +166,17 @@ public class VideoEdit {
 }
 ```
 
+<a id="curl"></a>
+
+<a id="curl-h4"></a>
+
 #### curl
 
 **步骤1：创建任务获取任务ID**
-```
+
+<a id="code-block-3"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
     -H 'X-DashScope-Async: enable' \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -177,11 +203,14 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     }
 }'
 ```
+
 **步骤2：根据任务ID获取结果**
 
-将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
 
-```
+<a id="code-block-4"></a>
+
+```bash
 curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id} \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
@@ -190,7 +219,9 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 
 > `video_url` 有效期24小时，请及时下载视频。
 
-```
+<a id="code-block-5"></a>
+
+```json
 {
     "request_id": "c1209113-8437-424f-a386-xxxxxx",
     "output": {
@@ -203,14 +234,28 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 }
 ```
 
+<a id="适用范围"></a>
+
+<a id="ve01scopeh"></a>
+
 ## 适用范围
 
 -   各地域支持的模型有所差异，且资源相互独立。各地域支持的模型请参见[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)。
 -   调用时，确保**模型、Endpoint URL 和 API Key 均属于同一地域**，跨地域调用将会失败。
 
-**说明**本文的示例代码适用于**华北2（北京）地域**。
+> **说明**
+>
+> 本文的示例代码适用于**华北2（北京）地域**。
+
+<a id="核心能力"></a>
+
+<a id="5f864b42b7oml"></a>
 
 ## 核心能力
+
+<a id="纯指令编辑"></a>
+
+<a id="ccad5b8fb3qlr"></a>
 
 ### 纯指令编辑
 
@@ -223,21 +268,28 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 -   `media`：传入一个待编辑的视频（`type=video`），无需传入参考图像。
 -   `prompt`：描述编辑意图，如“视频改为8bit像素风格”。
 
-**输入提示词**
+|  |  |  |
+| --- | --- | --- |
+| **输入提示词** | **输入视频** | **输出视频** |
+| 视频改为8bit像素风格 |  |  |
 
-**输入视频**
+<a id="sec-tabs-2"></a>
 
-**输出视频**
+<a id="python-sdk-2"></a>
 
-视频改为8bit像素风格
+<a id="python-sdk-2-h4"></a>
 
 #### Python SDK
 
-**重要**请确保 DashScope Python SDK 版本**不低于**`1.25.16`，再运行以下代码。
+> **重要**
+>
+> 请确保 DashScope Python SDK 版本**不低于**`1.25.16`，再运行以下代码。
+>
+> 若版本过低，可能会触发 "url error, please check url!" 等错误。请参考[安装SDK](../model-api-reference/preparations/install-sdk.md)进行更新。
 
-若版本过低，可能会触发 "url error, please check url!" 等错误。请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
+<a id="code-block-6"></a>
 
-```
+```python
 # -*- coding: utf-8 -*-
 from http import HTTPStatus
 from dashscope import VideoSynthesis
@@ -279,13 +331,21 @@ if __name__ == '__main__':
     sample_sync_call()
 ```
 
+<a id="java-sdk-2"></a>
+
+<a id="java-sdk-2-h4"></a>
+
 #### Java SDK
 
-**重要**请确保 DashScope Java SDK 版本**不低于**`2.22.14`，再运行以下代码。
+> **重要**
+>
+> 请确保 DashScope Java SDK 版本**不低于**`2.22.14`，再运行以下代码。
+>
+> 若版本过低，可能会触发 "url error, please check url!" 等错误。请参考[安装SDK](../model-api-reference/preparations/install-sdk.md)进行更新。
 
-若版本过低，可能会触发 "url error, please check url!" 等错误。请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
+<a id="code-block-7"></a>
 
-```
+```java
 // Copyright (c) Alibaba, Inc. and its affiliates.
 
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesis;
@@ -348,10 +408,17 @@ public class VideoEdit {
 }
 ```
 
+<a id="curl-2"></a>
+
+<a id="curl-2-h4"></a>
+
 #### curl
 
 **步骤1：创建任务获取任务ID**
-```
+
+<a id="code-block-8"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
     -H 'X-DashScope-Async: enable' \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -374,14 +441,21 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     }
 }'
 ```
+
 **步骤2：根据任务ID获取结果**
 
-将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
 
-```
+<a id="code-block-9"></a>
+
+```bash
 curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id} \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
+
+<a id="指令-参考图编辑"></a>
+
+<a id="28b422be39w34"></a>
 
 ### 指令+参考图编辑
 
@@ -394,23 +468,28 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 -   `media`：传入一个待编辑的视频（`type=video`）和参考图像（`type=reference_image`）。最多支持4张参考图像。
 -   `prompt`：描述编辑意图，如“让视频中的马头人身角色穿上图片中的条纹毛衣”。
 
-**输入提示词和参考图**
+|  |  |  |
+| --- | --- | --- |
+| **输入提示词和参考图** | **输入视频** | **输出视频** |
+| 让视频中的马头人身角色穿上图片中的条纹毛衣<br><br>![2560154123\_RF-jpeg](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2257046771/p1066250.webp) |  |  |
 
-**输入视频**
+<a id="sec-tabs-3"></a>
 
-**输出视频**
+<a id="python-sdk-3"></a>
 
-让视频中的马头人身角色穿上图片中的条纹毛衣
-
-![2560154123\_RF-jpeg](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2257046771/p1066250.webp)
+<a id="python-sdk-3-h4"></a>
 
 #### Python SDK
 
-**重要**请确保 DashScope Python SDK 版本**不低于**`1.25.16`，再运行以下代码。
+> **重要**
+>
+> 请确保 DashScope Python SDK 版本**不低于**`1.25.16`，再运行以下代码。
+>
+> 若版本过低，可能会触发 "url error, please check url!" 等错误。请参考[安装SDK](../model-api-reference/preparations/install-sdk.md)进行更新。
 
-若版本过低，可能会触发 "url error, please check url!" 等错误。请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
+<a id="code-block-10"></a>
 
-```
+```python
 # -*- coding: utf-8 -*-
 from http import HTTPStatus
 from dashscope import VideoSynthesis
@@ -456,13 +535,21 @@ if __name__ == '__main__':
     sample_sync_call()
 ```
 
+<a id="java-sdk-3"></a>
+
+<a id="java-sdk-3-h4"></a>
+
 #### Java SDK
 
-**重要**请确保 DashScope Java SDK 版本**不低于**`2.22.14`，再运行以下代码。
+> **重要**
+>
+> 请确保 DashScope Java SDK 版本**不低于**`2.22.14`，再运行以下代码。
+>
+> 若版本过低，可能会触发 "url error, please check url!" 等错误。请参考[安装SDK](../model-api-reference/preparations/install-sdk.md)进行更新。
 
-若版本过低，可能会触发 "url error, please check url!" 等错误。请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
+<a id="code-block-11"></a>
 
-```
+```java
 // Copyright (c) Alibaba, Inc. and its affiliates.
 
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesis;
@@ -529,10 +616,17 @@ public class VideoEdit {
 }
 ```
 
+<a id="curl-3"></a>
+
+<a id="curl-3-h4"></a>
+
 #### curl
 
 **步骤1：创建任务获取任务ID**
-```
+
+<a id="code-block-12"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
     -H 'X-DashScope-Async: enable' \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -559,176 +653,115 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     }
 }'
 ```
+
 **步骤2：根据任务ID获取结果**
 
-将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
 
-```
+<a id="code-block-13"></a>
+
+```bash
 curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id} \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
+<a id="使用场景及效果示例"></a>
+
+<a id="d47c211bf1829"></a>
+
 ## 使用场景及效果示例
+
+<a id="添加-删除-修改元素"></a>
+
+<a id="d15e8c1e080uc"></a>
 
 ### 添加/删除/修改元素
 
 对视频内特定元素进行添加、删除或替换。
 
-**类型**
+|  |  |  |  |
+| --- | --- | --- | --- |
+| **类型** | **输入提示词和参考图** | **输入视频** | **输出视频** |
+| 添加 | 杯子里加一块黑色正方形巧克力 |  |  |
+| 删除 | 将视频中的火车删除，其他保持不变。 |  |  |
+| 修改 | 将视频中的胶片替换为图片中的盘子<br><br>![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2257046771/p1065812.png) |  |  |
+| 修改 | 让视频中的马男穿上图片中的条纹毛衣<br><br>![2560154123\_RF-jpeg](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2257046771/p1066250.webp) |  |  |
+| 修改 | 把猫换成狗 |  |  |
+| 修改 | 将画面唱歌的女生替换为一只可爱的拟人猫咪在唱歌，其他保持不变。 |  |  |
 
-**输入提示词和参考图**
+<a id="修改环境或背景"></a>
 
-**输入视频**
-
-**输出视频**
-
-添加
-
-杯子里加一块黑色正方形巧克力
-
-删除
-
-将视频中的火车删除，其他保持不变。
-
-修改
-
-将视频中的胶片替换为图片中的盘子
-
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2257046771/p1065812.png)
-
-修改
-
-让视频中的马男穿上图片中的条纹毛衣
-
-![2560154123\_RF-jpeg](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2257046771/p1066250.webp)
-
-修改
-
-把猫换成狗
-
-修改
-
-将画面唱歌的女生替换为一只可爱的拟人猫咪在唱歌，其他保持不变。
+<a id="4344b9e4af6ws"></a>
 
 ### 修改环境或背景
 
 通过指令变换视频的光照条件、季节色彩，修改地理空间，也支持变换视频背景，让物体穿越到任意空间。
 
-**类型**
+|  |  |  |  |
+| --- | --- | --- | --- |
+| **类型** | **输入提示词** | **输入视频** | **输出视频** |
+| 修改季节 | 背景修改季节为白雪皑皑的冬天，树上全是积雪，河流保持不变。 |  |  |
+| 修改天气 | 人物动作不变，整个场景由现在的阴天改为晴天，其他保持不变 |  |  |
+| 修改光影 | 其他保持不变，画面整体的光的颜色和滤镜由白色变为暖色调，保持人物肤色细节，使人物与背景统一和谐。 |  |  |
+| 修改背景 | 主体女人动作不变，将视频背景修改为健身房。 |  |  |
 
-**输入提示词**
+<a id="修改视频风格"></a>
 
-**输入视频**
-
-**输出视频**
-
-修改季节
-
-背景修改季节为白雪皑皑的冬天，树上全是积雪，河流保持不变。
-
-修改天气
-
-人物动作不变，整个场景由现在的阴天改为晴天，其他保持不变
-
-修改光影
-
-其他保持不变，画面整体的光的颜色和滤镜由白色变为暖色调，保持人物肤色细节，使人物与背景统一和谐。
-
-修改背景
-
-主体女人动作不变，将视频背景修改为健身房。
+<a id="75c59040062kt"></a>
 
 ### 修改视频风格
 
 将既有视频快速转化为多种艺术风格，如动画、3D、黏土、毛线等。
 
-**类型**
+|  |  |  |  |
+| --- | --- | --- | --- |
+| **类型** | **输入提示词** | **输入视频** | **输出视频** |
+| 修改风格 | 视频改为图片的C4D卡通风格![2402534429\_RF](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2257046771/p1066256.webp) |  |  |
+| 修改风格 | 将整个画面转变为真人电影风格 |  |  |
+| 修改风格 | 将整个画面转换为水彩画风格 |  |  |
 
-**输入提示词**
+<a id="修改角色行为-台词-拍摄方式"></a>
 
-**输入视频**
-
-**输出视频**
-
-修改风格
-
-视频改为图片的C4D卡通风格![2402534429\_RF](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2257046771/p1066256.webp)
-
-修改风格
-
-将整个画面转变为真人电影风格
-
-修改风格
-
-将整个画面转换为水彩画风格
+<a id="67ea4d211538l"></a>
 
 ### 修改角色行为/台词/拍摄方式
 
 对已经拍摄或生成的视频内容，通过指令修改剧情内容（如角色行为或台词）和拍摄方法，实现二次创作。
 
-**类型**
+|  |  |  |  |
+| --- | --- | --- | --- |
+| **类型** | **输入提示词** | **输入视频** | **输出视频** |
+| 修改角色行为 | 让视频里的男人盛一勺汤并喝下，其他保持不变。 |  |  |
+| 修改角色情绪 | 画面中的女孩表情变得悲伤并开始流泪，其他保持不变。 |  |  |
+| 修改角色台词 | 保持人物音色和语气，将 左边女生的说话内容改为：“Mom, what color is this?”，将右边女生说话内容改为：“It's green, baby” |  |  |
+| 修改拍摄方式 | 将相机运镜改为顺时针环绕人物拍摄，人物跟随镜头移动。 |  |  |
+| 修改拍摄方式 | 将视频运镜改为向上抬高并同时向下俯视。 |  |  |
 
-**输入提示词**
+<a id="复刻动作-运镜-特效"></a>
 
-**输入视频**
-
-**输出视频**
-
-修改角色行为
-
-让视频里的男人盛一勺汤并喝下，其他保持不变。
-
-修改角色情绪
-
-画面中的女孩表情变得悲伤并开始流泪，其他保持不变。
-
-修改角色台词
-
-保持人物音色和语气，将 左边女生的说话内容改为：“Mom, what color is this?”，将右边女生说话内容改为：“It's green, baby”
-
-修改拍摄方式
-
-将相机运镜改为顺时针环绕人物拍摄，人物跟随镜头移动。
-
-修改拍摄方式
-
-将视频运镜改为向上抬高并同时向下俯视。
+<a id="c8d1012acaitt"></a>
 
 ### 复刻动作/运镜/特效
 
 复刻参考视频的动作序列、运镜轨迹与视觉特效，生成动态特征一致的视频。
 
-**类型**
+|  |  |  |  |
+| --- | --- | --- | --- |
+| **类型** | **输入提示词或参考图** | **输入视频** | **输出视频** |
+| 复刻单人动作 | 让图片中的人物模仿视频中的人的动作。<br><br>![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2257046771/p1065453.png) |  |  |
+| 复刻多人动作 | 参考视频五个人物动作，改为五个人在城市街道的路边摊上唱歌弹琴。 |  |  |
+| 复刻运镜 | 参考原视频运镜方式，镜头快速移动，场景更改为在颁奖典礼上，参考图片中的女人在走红毯。<br><br>![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2257046771/p1065445.png) |  |  |
+| 复刻特效 | 参考视频的特效，将这个特效应用到图片中女人身上，场景为街边。<br><br>![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2257046771/p1065444.png) |  |  |
 
-**输入提示词或参考图**
+<a id="如何输入视频和图像"></a>
 
-**输入视频**
-
-**输出视频**
-
-复刻单人动作
-
-让图片中的人物模仿视频中的人的动作。
-
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2257046771/p1065453.png)
-
-复刻多人动作
-
-参考视频五个人物动作，改为五个人在城市街道的路边摊上唱歌弹琴。
-
-复刻运镜
-
-参考原视频运镜方式，镜头快速移动，场景更改为在颁奖典礼上，参考图片中的女人在走红毯。
-
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2257046771/p1065445.png)
-
-复刻特效
-
-参考视频的特效，将这个特效应用到图片中女人身上，场景为街边。
-
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2257046771/p1065444.png)
+<a id="ve01inputreqh"></a>
 
 ## 如何输入视频和图像
+
+<a id="输入视频"></a>
+
+<a id="300251c90afeb"></a>
 
 ### 输入视频
 
@@ -737,7 +770,11 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 -   **输入方式**：
     
     -   **公网URL**：支持 HTTP 或 HTTPS 协议。示例：[](https://xxxx/xxx.mp4)[https://xxxx/xxx.mp4](https://xxxx/xxx.mp4)。
-    -   **临时URL**：支持OSS协议，必须通过[上传文件获取临时 URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。示例：oss://dashscope-instant/xxx/xxx.mp4。
+    -   **临时URL**：支持OSS协议，必须通过[上传文件获取临时 URL](../model-api-reference/more-about-models/get-temporary-file-url.md)。示例：oss://dashscope-instant/xxx/xxx.mp4。
+
+<a id="输入参考图像"></a>
+
+<a id="49ebf8e19cg0q"></a>
 
 ### 输入参考图像
 
@@ -747,7 +784,7 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
     
     -   **公网URL**：支持 HTTP 或 HTTPS 协议。示例：[](https://xxxx/xxx.png)[https://xxxx/xxx.png](https://xxxx/xxx.png)。
         
-    -   **临时URL**：支持OSS协议，必须通过[上传文件获取临时 URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。示例：oss://dashscope-instant/xxx/xxx.png。
+    -   **临时URL**：支持OSS协议，必须通过[上传文件获取临时 URL](../model-api-reference/more-about-models/get-temporary-file-url.md)。示例：oss://dashscope-instant/xxx/xxx.png。
         
     -   **Base64 编码字符串**：示例：data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABDg......（示例已截断，仅做演示）**。**
         
@@ -756,33 +793,22 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
             -   {base64\_data}：图像文件经过 Base64 编码后的字符串。
             -   {MIME\_type}：图像的媒体类型，需与文件格式对应。
             
-            图像格式
+            |  |  |
+            | --- | --- |
+            | 图像格式 | MIME Type |
+            | JPEG | image/jpeg |
+            | JPG | image/jpeg |
+            | PNG | image/png |
+            | BMP | image/bmp |
+            | WEBP | image/webp |
             
-            MIME Type
-            
-            JPEG
-            
-            image/jpeg
-            
-            JPG
-            
-            image/jpeg
-            
-            PNG
-            
-            image/png
-            
-            BMP
-            
-            image/bmp
-            
-            WEBP
-            
-            image/webp
+            <a id="accordion-示例代码"></a>
             
             示例代码
             
-            ```
+            <a id="code-block-14"></a>
+            
+            ```python
             import base64
             import mimetypes
             
@@ -801,39 +827,65 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
             ```
             
 
+<a id="输出视频"></a>
+
+<a id="80761d0d13me6"></a>
+
 ## 输出视频
 
 -   **视频数量**：1个。
--   **视频规格**：格式为MP4。具体请参见[视频规格范围](https://help.aliyun.com/zh/model-studio/wan-video-editing-guide#ve01scopeh)。
+-   **视频规格**：格式为MP4。具体请参见[视频规格范围](wan-video-editing-guide-a198b97e13602829.md#ve01scopeh)。
 -   **视频URL有效期**：**24小时**。
--   **视频尺寸**：由[参数resolution](raw/model-api-reference/video-generation-api/wan-api-reference/wan-video-editing-api-reference.md)指定视频分辨率，[参数ratio](raw/model-api-reference/video-generation-api/wan-api-reference/wan-video-editing-api-reference.md)指定视频宽高比。
+-   **视频尺寸**：由[参数resolution](../model-api-reference/video-generation-api/wan-api-reference/wan-video-editing-api-reference.md)指定视频分辨率，[参数ratio](../model-api-reference/video-generation-api/wan-api-reference/wan-video-editing-api-reference.md)指定视频宽高比。
+
+<a id="计费与限流"></a>
+
+<a id="3a74eab203thq"></a>
 
 ## 计费与限流
 
--   模型免费额度和计费单价请参见[模型价格](https://help.aliyun.com/zh/model-studio/model-pricing#5c3d28ad8a4x8)。
+-   模型免费额度和计费单价请参见[模型价格](../model-user-guide/test-1/model-pricing.md#5c3d28ad8a4x8)。
     
--   模型限流请参见[万相系列](raw/model-user-guide/get-started-with-models/rate-limit.md)。
+-   模型限流请参见[万相系列](../model-user-guide/get-started-with-models/rate-limit.md)。
     
 -   计费说明：
     
     -   输入图像不计费，输入视频和输出视频计费，按视频秒数计费。即：`总计费时长（秒）= 输入视频时长（秒）+ 输出视频时长（秒）`。
-    -   模型调用失败或处理错误不产生任何费用，也不消耗[新人免费额度](raw/model-user-guide/test-1/new-free-quota.md)。
+    -   模型调用失败或处理错误不产生任何费用，也不消耗[新人免费额度](../model-user-guide/test-1/new-free-quota.md)。
+
+<a id="api文档"></a>
+
+<a id="a847ef6c2ecvj"></a>
 
 ## API文档
 
-[万相2.7-视频编辑](raw/model-api-reference/video-generation-api/wan-api-reference/wan-video-editing-api-reference.md)
+[万相2.7-视频编辑](../model-api-reference/video-generation-api/wan-api-reference/wan-video-editing-api-reference.md)
+
+<a id="常见问题"></a>
+
+<a id="ve01faqh"></a>
 
 ## 常见问题
 
+<a id="q-视频编辑2-7-wan2-7-videoedit-与视频编辑2-1-wanx2-1-vace-plus-有什么区别"></a>
+
+<a id="ve01faq1h"></a>
+
 #### Q：视频编辑2.7（wan2.7-videoedit）与视频编辑2.1（wanx2.1-vace-plus）有什么区别？
 
-A：视频编辑2.7通过指令直接编辑视频，使用简单，能力全面升级。[视频编辑2.1](raw/model-user-guide/use-cases/legacy-resources/legacy-video-generation/wan-vace-guide.md)需指定`function`参数，侧重掩码局部编辑、画面扩展等功能。推荐优先选用**视频编辑 2.7**。
+A：视频编辑2.7通过指令直接编辑视频，使用简单，能力全面升级。[视频编辑2.1](../model-user-guide/use-cases/legacy-resources/legacy-video-generation/wan-vace-guide.md)需指定`function`参数，侧重掩码局部编辑、画面扩展等功能。推荐优先选用**视频编辑 2.7**。
+
+<a id="q-如何传入多张参考图像"></a>
+
+<a id="ve01faq6h"></a>
 
 #### Q：如何传入多张参考图像？
 
 A：在`media`数组中添加多个`type=reference_image`的对象即可，最多4张。示例：
 
-```
+<a id="code-block-15"></a>
+
+```json
 {
     "media": [
         {"type": "video", "url": "<输入视频URL>"},

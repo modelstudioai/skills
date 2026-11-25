@@ -2,96 +2,58 @@
 
 GUI-Plus 可基于屏幕截图和自然语言指令来解析用户意图，并转换为标准化的图像用户界面（GUI）操作（如点击、输入、滚动等），供外部系统决策或执行。相较于千问VL系列模型，提升了GUI操作的准确性。
 
-**重要**GUI-Plus模型仅支持华北2（北京）地域，如需使用模型，请使用北京地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)。
+> **重要**
+>
+> GUI-Plus模型仅支持华北2（北京）地域，如需使用模型，请使用北京地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)。
+
+<a id="支持的模型"></a>
+
+<a id="94f9b5d699fbi"></a>
 
 ## 支持的模型
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th><strong>模式</strong></th><th><strong>上下文长度</strong></th><th><strong>最大输入</strong></th><th><strong>最大思维链长度</strong></th><th><strong>最大回复长度</strong></th><th><strong>输入成本</strong></th><th><strong>输出成本</strong></th><th rowspan="2"><strong>免费额度</strong><p><a href="../../../test-1/new-free-quota.md#a1473492d2jwj">查看剩余额度</a></p></th></tr><tr><th></th><th colspan="4"><strong>（Token数）</strong></th><th colspan="2"><strong>（每百万Token）</strong></th></tr></thead><tbody><tr><td><strong>gui-plus</strong></td><td><p>非思考模式</p></td><td><p>256,000</p></td><td><p>254,976</p><blockquote><p>单图最大16384</p></blockquote></td><td><ul><li></li></ul></td><td><p>32,768</p></td><td rowspan="3"><p>1.5元</p></td><td rowspan="3"><p>4.5元</p></td><td rowspan="3"><p>各100万Token</p><p>有效期：百炼开通后90天内</p></td></tr><tr><td rowspan="2"><p>gui-plus-2026-02-26</p></td><td><p>思考模式</p></td><td rowspan="2"><p>262,144</p></td><td><p>258,048</p><blockquote><p>单图最大16384</p></blockquote></td><td><p>81,920</p></td><td><p>32,768</p></td></tr><tr><td><p>非思考模式</p></td><td><p>260,096</p><blockquote><p>单图最大16384</p></blockquote></td><td><ul><li></li></ul></td><td><p>32,768</p></td></tr></tbody></table>
 
-**模式**
+> **说明**
+>
+> `gui-plus-2026-02-26`模型能力全面升级，支持思考与非思考模式，相较于`gui-plus`模型，`gui-plus-2026-02-26`模型在处理跨平台、多 APP 任务的效果得到大幅提升。**推荐优先使用该模型。**
 
-**上下文长度**
+<a id="快速开始"></a>
 
-**最大输入**
-
-**最大思维链长度**
-
-**最大回复长度**
-
-**输入成本**
-
-**输出成本**
-
-**免费额度**
-
-[查看剩余额度](https://help.aliyun.com/zh/model-studio/new-free-quota#a1473492d2jwj)
-
-**（Token数）**
-
-**（每百万Token）**
-
-**gui-plus**
-
-非思考模式
-
-256,000
-
-254,976
-
-> 单图最大16384
-
-32,768
-
-1.5元
-
-4.5元
-
-各100万Token
-
-有效期：百炼开通后90天内
-
-gui-plus-2026-02-26
-
-思考模式
-
-262,144
-
-258,048
-
-> 单图最大16384
-
-81,920
-
-32,768
-
-非思考模式
-
-260,096
-
-> 单图最大16384
-
-32,768
-
-**说明**`gui-plus-2026-02-26`模型能力全面升级，支持思考与非思考模式，相较于`gui-plus`模型，`gui-plus-2026-02-26`模型在处理跨平台、多 APP 任务的效果得到大幅提升。**推荐优先使用该模型。**
+<a id="419f5a3dc599n"></a>
 
 ## 快速开始
 
-本节将演示如何快速发起 GUI-Plus 模型调用，获取执行 GUI 任务的指令。关于如何将指令转换为实际的 GUI 操作并执行，请参阅后文的[如何使用](https://help.aliyun.com/zh/model-studio/gui-automation#35a376921315u)章节。**如需快速体验模型效果，可进行**[**在线试用**](https://modelscope.cn/studios/MobileAgentTest/computer_use)**。**
+本节将演示如何快速发起 GUI-Plus 模型调用，获取执行 GUI 任务的指令。关于如何将指令转换为实际的 GUI 操作并执行，请参阅后文的[如何使用](gui-automation.md#35a376921315u)章节。**如需快速体验模型效果，可进行**[**在线试用**](https://modelscope.cn/studios/MobileAgentTest/computer_use)**。**
+
+<a id="前提条件"></a>
+
+<a id="dada26f80av01"></a>
 
 ### 前提条件
 
--   需要已[配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
--   如果通过 SDK 进行调用，需安装[最新版SDK](raw/model-api-reference/preparations/install-sdk.md)。
+-   需要已[配置 API Key](../../../../model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
+-   如果通过 SDK 进行调用，需安装[最新版SDK](../../../../model-api-reference/preparations/install-sdk.md)。
+
+<a id="推荐-system-prompt"></a>
+
+<a id="2552db60d5zrf"></a>
 
 ### 推荐 System Prompt
 
 `System Prompt` 可定义模型角色、能力和输出规范等，推荐`gui-plus-2026-02-26`模型使用以下系统提示词，否则会影响模型输出结果。
 
-> `gui-plus`和`gui-plus-2026-02-26`的系统提示词不可共用，`gui-plus`的系统提示词请参见[GUI-Plus模型推荐提示词](raw/model-user-guide/model-experience/text-generation-model/specialized-models/gui-automation.md)。
+> `gui-plus`和`gui-plus-2026-02-26`的系统提示词不可共用，`gui-plus`的系统提示词请参见[GUI-Plus模型推荐提示词](gui-automation.md)。
+
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-电脑端-system-prompt-tab"></a>
 
 电脑端 System Prompt
 
-```
+<a id="code-code-group-电脑端-system-prompt"></a>
+
+```python
 """# Tools
 
 You may call one or more functions to assist with the user query.
@@ -119,9 +81,13 @@ Rules:
 - If finishing, use action=terminate in the tool call."""
 ```
 
+<a id="fig-code-group-手机端-system-prompt-tab"></a>
+
 手机端 System Prompt
 
-```
+<a id="code-code-group-手机端-system-prompt"></a>
+
+```python
 '''# Tools
 You may call one or more functions to assist with the user query.
 
@@ -165,11 +131,25 @@ Rules:
 - If finishing, use action=terminate in the tool call.'''
 ```
 
+<a id="sec-tabs"></a>
+
+<a id="openai兼容"></a>
+
+<a id="openai兼容-h4"></a>
+
 #### OpenAI兼容
+
+<a id="sec-tabs-2"></a>
+
+<a id="python"></a>
+
+<a id="python-h4"></a>
 
 #### Python
 
-```
+<a id="code-block"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -229,17 +209,27 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content)
 ```
 
+<a id="accordion-返回结果"></a>
+
 返回结果
 
-```
+<a id="code-block-2"></a>
+
+```json
 <tool_call>
 {"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [2530, 314]}}
 </tool_call>
 ```
 
+<a id="node-js"></a>
+
+<a id="node-js-h4"></a>
+
 #### Node.js
 
-```
+<a id="code-block-3"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const systemPrompt = `# Tools
@@ -302,17 +292,27 @@ const completion = await client.chat.completions.create({
 console.log(completion.choices[0].message.content);
 ```
 
+<a id="accordion-返回结果-2"></a>
+
 返回结果
 
-```
+<a id="code-block-4"></a>
+
+```json
 <tool_call>
 {"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [2530, 314]}}
 </tool_call>
 ```
 
+<a id="curl"></a>
+
+<a id="curl-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-5"></a>
+
+```bash
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
@@ -343,9 +343,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
   }'
 ```
 
+<a id="accordion-返回结果-3"></a>
+
 返回结果
 
-```
+<a id="code-block-6"></a>
+
+```json
 {
   "choices": [
     {
@@ -378,11 +382,23 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }
 ```
 
+<a id="dashscope"></a>
+
+<a id="dashscope-h4"></a>
+
 #### DashScope
+
+<a id="sec-tabs-3"></a>
+
+<a id="python-2"></a>
+
+<a id="python-2-h4"></a>
 
 #### Python
 
-```
+<a id="code-block-7"></a>
+
+```python
 import os
 import dashscope
 
@@ -441,17 +457,27 @@ response = client.multimodal.chat.create(
 print(response.output_text)
 ```
 
+<a id="accordion-返回结果-4"></a>
+
 返回结果
 
-```
+<a id="code-block-8"></a>
+
+```json
 <tool_call>
 {"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [2530, 314]}}
 </tool_call>
 ```
 
+<a id="java"></a>
+
+<a id="java-h4"></a>
+
 #### Java
 
-```
+<a id="code-block-9"></a>
+
+```java
 import java.util.Arrays;
 import java.util.Collections;
 import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;
@@ -517,17 +543,27 @@ public class Main {
 }
 ```
 
+<a id="accordion-返回结果-5"></a>
+
 返回结果
 
-```
+<a id="code-block-10"></a>
+
+```json
 <tool_call>
 {"name": "computer_use", "arguments": {"action": "left_click", "coordinate": [2530, 314]}}
 </tool_call>
 ```
 
+<a id="curl-2"></a>
+
+<a id="curl-2-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-11"></a>
+
+```bash
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
@@ -562,9 +598,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
   }'
 ```
 
+<a id="accordion-返回结果-6"></a>
+
 返回结果
 
-```
+<a id="code-block-12"></a>
+
+```json
 {
   "output": {
     "choices": [
@@ -598,15 +638,29 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }
 ```
 
+<a id="如何使用"></a>
+
+<a id="35a376921315u"></a>
+
 ## 如何使用
+
+<a id="电脑-gui-任务"></a>
+
+<a id="a5617348a518r"></a>
 
 ### 电脑 GUI 任务
 
-**说明**本示例适用于`Windows`操作系统，若在`Mac/Linux` 环境下，需修改[ComputerTools](raw/model-user-guide/model-experience/text-generation-model/specialized-models/gui-automation.md)类中的系统命令。如返回桌面操作，Windows 系统使用`Win+D`，Mac 系统使用`Command+F3`。
+> **说明**
+>
+> 本示例适用于`Windows`操作系统，若在`Mac/Linux` 环境下，需修改[ComputerTools](gui-automation.md)类中的系统命令。如返回桌面操作，Windows 系统使用`Win+D`，Mac 系统使用`Command+F3`。
+
+<a id="步骤1-构造-system-prompt"></a>
 
 #### 步骤1. 构造 System Prompt
 
-```
+<a id="code-block-13"></a>
+
+```python
 system_prompt = """# Tools
 
 You may call one or more functions to assist with the user query.
@@ -640,6 +694,10 @@ Rules:
 -   输出格式严格：先输出动作（`Action`）的描述，然后输出 `<tool_call>` 块
 -   支持的操作类型：点击、拖拽、输入、滚动、按键等
 
+<a id="步骤2-构造多轮对话消息"></a>
+
+<a id="6339dea95ehjg"></a>
+
 #### 步骤2. 构造多轮对话消息
 
 在 GUI 自动化任务中，模型需要基于历史操作上下文做出决策。为了让模型理解当前任务进度并生成合理的下一步操作，模型采用以下策略构造多轮对话消息：
@@ -647,7 +705,9 @@ Rules:
 -   仅保留最近 N 轮（默认 4 轮）的完整对话（截图 + 模型输出），避免模型上下文过长导致的性能下降
 -   对更早的历史操作，仅保留文本摘要（模型输出的动作（`Action`）部分），不包含截图，节省 `token` 消耗
 
-```
+<a id="code-block-14"></a>
+
+```python
 def get_messages(image, instruction, history_output, model_name, system_prompt):
     """
     构造多轮对话消息
@@ -732,7 +792,9 @@ def get_messages(image, instruction, history_output, model_name, system_prompt):
 
 GUI模型的多轮对话的`message`数组示例如下（以7轮对话为例）
 
-```
+<a id="code-block-15"></a>
+
+```json
 model_input
   [{
     "role": "system",
@@ -789,6 +851,10 @@ model_input
   }]
 ```
 
+<a id="步骤3-解析模型输出"></a>
+
+<a id="dc08cb1330oce"></a>
+
 #### 步骤3. 解析模型输出
 
 由于模型在处理图像时会进行内部缩放，其返回的坐标是基于缩放后图像的归一化坐标。为在原图上准确执行`GUI`操作，需要进行坐标映射。
@@ -798,7 +864,9 @@ model_input
     首先从模型返回的字符串中提取Tool Call：
     
 
-```
+<a id="code-block-16"></a>
+
+```python
 import re
 import json
 
@@ -831,7 +899,9 @@ def extract_tool_calls(text):
     模型处理图像时会进行内部缩放，以下函数用于计算缩放后的尺寸：
     
 
-```
+<a id="code-block-17"></a>
+
+```python
 import math
 from PIL import Image
 
@@ -885,11 +955,17 @@ def smart_resize(height, width, factor=32, min_pixels=32*32*4, max_pixels=32*32*
     return h_bar, w_bar
 ```
 
+<a id="步骤4-执行gui操作"></a>
+
+<a id="08495e2b6d7ki"></a>
+
 #### 步骤4. 执行GUI操作
 
 解析动作指令后，接下来演示如何使用`pyautogui`库模拟用户的鼠标点击、键盘输入、滚动等物理 GUI 操作。
 
-```
+<a id="code-block-18"></a>
+
+```python
 import pyautogui
 import pyperclip
 import time
@@ -1017,11 +1093,17 @@ class ComputerTools:
         pyautogui.scroll(pixels)
 ```
 
+<a id="步骤5-完整自动化流程"></a>
+
+<a id="b7e527f1945qt"></a>
+
 #### 步骤5. 完整自动化流程
 
 将以上所有步骤整合到一个完整的自动化流程中，循环执行截图 → 模型推理 → 执行GUI操作，直到任务完成。
 
-```
+<a id="code-block-19"></a>
+
+```python
 import os
 import uuid
 import httpx
@@ -1220,9 +1302,13 @@ if __name__ == '__main__':
     )
 ```
 
+<a id="accordion-电脑端完整示例代码"></a>
+
 电脑端完整示例代码
 
-```
+<a id="code-block-20"></a>
+
+```python
 import os
 import re
 import json
@@ -1594,6 +1680,10 @@ if __name__ == '__main__':
     )
 ```
 
+<a id="手机端-gui-任务"></a>
+
+<a id="b6e79701f3vv2"></a>
+
 ### 手机端 GUI 任务
 
 手机端通过 ADB（Android Debug Bridge）工具实现自动化操作。
@@ -1611,11 +1701,15 @@ if __name__ == '__main__':
 
 手机端GUI示例与电脑端大致相同，完整示例代码如下：
 
+<a id="accordion-手机端完整示例代码"></a>
+
 手机端完整示例代码
 
 1.  **构造手机端**`System Prompt`
 
-```
+<a id="code-block-21"></a>
+
+```python
 import json, os, subprocess
 import dashscope, time, math
 from PIL import Image, ImageDraw
@@ -1667,7 +1761,9 @@ mobile_system_prompt = '''# Tools
 
 2.  **构造多轮对话消息**
 
-```
+<a id="code-block-22"></a>
+
+```python
 from datetime import datetime
 
 def get_messages(image, instruction, history_output, system_prompt):
@@ -1761,14 +1857,16 @@ def get_messages(image, instruction, history_output, system_prompt):
 
 3.  **计算缩放后的图像大小**
     
-    手机端与电脑端共用一套 `smart_resize` 函数。详情请参见[坐标映射函数](raw/model-user-guide/model-experience/text-generation-model/specialized-models/gui-automation.md)。
+    手机端与电脑端共用一套 `smart_resize` 函数。详情请参见[坐标映射函数](gui-automation.md)。
     
 4.  **执行GUI操作**
     
     使用 ADB 命令执行实际的手机操作。
     
 
-```
+<a id="code-block-23"></a>
+
+```python
 import subprocess
 import os
 import time
@@ -1885,7 +1983,9 @@ class AdbTools:
     为了支持通过应用名称打开应用（`action=open`），需要维护应用名称到包名的映射。
     
 
-```
+<a id="code-block-24"></a>
+
+```python
 # 常见应用包名映射（示例，可根据需要扩展）
 package_str_list = '''com.tencent.mm	微信	wechat
 com.tencent.mobileqq	qq	腾讯qq
@@ -2056,7 +2156,9 @@ for package_str in package_str_list.split("\n"):
 
 6.  **完整自动化流程**
 
-```
+<a id="code-block-25"></a>
+
+```python
 import os
 import uuid
 import dashscope
@@ -2230,9 +2332,13 @@ if __name__ == '__main__':
         time.sleep(2)
 ```
 
+<a id="accordion-手机端完整示例代码-2"></a>
+
 手机端完整示例代码
 
-```
+<a id="code-block-26"></a>
+
+```python
 import os
 import re
 import json
@@ -2678,6 +2784,10 @@ if __name__ == '__main__':
     print(f"[完成] 共执行 {len(history)} 步")
 ```
 
+<a id="浏览器-gui-任务"></a>
+
+<a id="browser_gui_task_title"></a>
+
 ### 浏览器 GUI 任务
 
 浏览器端通过 Playwright 控制浏览器实现自动化操作，并结合 SoM（Set-of-Mark）技术为页面元素自动添加数字标签，模型通过标签编号来精确操作网页元素。
@@ -2689,11 +2799,15 @@ if __name__ == '__main__':
 
 完整示例代码包含以下核心流程：构造多轮对话消息、解析模型输出的工具调用、执行浏览器 GUI 操作。完整示例代码如下：
 
+<a id="accordion-浏览器端完整示例代码"></a>
+
 浏览器端完整示例代码
 
 1.  **构造 System Prompt**
 
-```
+<a id="code-block-27"></a>
+
+```python
 import json, os, base64
 import dashscope, time, math
 import uuid
@@ -2864,7 +2978,9 @@ def extract_tool_calls(text: str):
 
 2.  **浏览器控制**
 
-```
+<a id="code-block-28"></a>
+
+```python
 PLAYWRIGHT_KEY_MAP = {
     "backspace": "Backspace", "tab": "Tab", "return": "Enter", "enter": "Enter",
     "shift": "Shift", "control": "ControlOrMeta", "alt": "Alt", "escape": "Escape",
@@ -3099,7 +3215,9 @@ class PlaywrightComputer:
 
 3.  **SoM 标注模块**
 
-```
+<a id="code-block-29"></a>
+
+```python
 import asyncio
 import base64
 import io
@@ -3623,7 +3741,9 @@ async def get_som(page, img_path, img_path_no_box, selector="*", max_depth=16,
 
 4.  **主链路运行**
 
-```
+<a id="code-block-30"></a>
+
+```python
 async def main():
     instruction = '搜一下今天NBA火箭队比赛结果'
     history = []
@@ -3741,9 +3861,13 @@ if __name__ == '__main__':
     asyncio.run(main())
 ```
 
+<a id="accordion-浏览器完整示例代码"></a>
+
 浏览器完整示例代码
 
-```
+<a id="code-block-31"></a>
+
+```python
 """
 浏览器 GUI 自动化完整示例代码
 将 browser_local.py 和 som.py 合并为单文件，可直接运行
@@ -4447,13 +4571,27 @@ if __name__ == '__main__':
     asyncio.run(main())
 ```
 
+<a id="工具调用"></a>
+
+<a id="002a5415d2f56"></a>
+
 ### 工具调用
+
+<a id="步骤1-构造-system-prompt-2"></a>
+
+<a id="3378da36cbrlp"></a>
 
 #### 步骤1. 构造 System Prompt
 
+<a id="fig-code-group-2"></a>
+
+<a id="fig-code-group-2-电脑-gui-任务-tab"></a>
+
 电脑 GUI 任务
 
-```
+<a id="code-code-group-2-电脑-gui-任务"></a>
+
+```python
 # 定义自定义工具列表（根据需求传入，可选）
 tool_list = [
     {
@@ -4533,9 +4671,13 @@ Rules:
 - If finishing, use 'terminate' function in the tool call."""
 ```
 
+<a id="fig-code-group-2-手机-gui-任务-tab"></a>
+
 手机 GUI 任务
 
-```
+<a id="code-code-group-2-手机-gui-任务"></a>
+
+```python
 # 定义自定义工具列表（根据需求传入，可选）
 tool_list = [
     {
@@ -4647,13 +4789,23 @@ Rules:
 - If finishing, use 'terminate' function in the tool call."""
 ```
 
+<a id="步骤2-构造多轮对话消息-2"></a>
+
+<a id="tool_call_step2_title"></a>
+
 #### 步骤2. 构造多轮对话消息
 
 在工具调用场景下，需要正确构造多轮对话消息，包括历史消息管理和工具调用结果的传递。关键点是：**最后一个user消息需要使用<tool\_response>标记包裹工具执行结果**。
 
+<a id="fig-code-group-3"></a>
+
+<a id="fig-code-group-3-电脑-gui-任务-tab"></a>
+
 电脑 GUI 任务
 
-```
+<a id="code-code-group-3-电脑-gui-任务"></a>
+
+```python
 def get_messages(image, instruction, history_output, system_prompt):
     """
     构造多轮对话消息
@@ -4733,9 +4885,13 @@ Previous actions:
     return messages
 ```
 
+<a id="fig-code-group-3-手机-gui-任务-tab"></a>
+
 手机 GUI 任务
 
-```
+<a id="code-code-group-3-手机-gui-任务"></a>
+
+```python
 def get_messages(image, instruction, history_output, system_prompt):
     """
     构造多轮对话消息（手机端）
@@ -4821,21 +4977,37 @@ Previous actions:
     return messages
 ```
 
+<a id="步骤3-解析模型输出-2"></a>
+
+<a id="tool_call_step3_title"></a>
+
 #### 步骤3. 解析模型输出
 
-从模型输出中提取 `<tool_call>` 块并解析为 JSON，然后根据图像缩放比例进行坐标映射。详情请参见[解析模型输出与坐标映射](raw/model-user-guide/model-experience/text-generation-model/specialized-models/gui-automation.md)。
+从模型输出中提取 `<tool_call>` 块并解析为 JSON，然后根据图像缩放比例进行坐标映射。详情请参见[解析模型输出与坐标映射](gui-automation.md)。
+
+<a id="步骤4-执行gui操作-2"></a>
+
+<a id="tool_call_step4_title"></a>
 
 #### 步骤4. 执行GUI操作
 
-实现 GUI 操作工具类，用于执行实际的界面操作（点击、输入、滚动等）。详情请参见[电脑端 GUI 操作工具类](https://help.aliyun.com/zh/model-studio/gui-automation#08495e2b6d7ki)和[手机端 GUI 操作工具类](raw/model-user-guide/model-experience/text-generation-model/specialized-models/gui-automation.md)。
+实现 GUI 操作工具类，用于执行实际的界面操作（点击、输入、滚动等）。详情请参见[电脑端 GUI 操作工具类](gui-automation.md#08495e2b6d7ki)和[手机端 GUI 操作工具类](gui-automation.md)。
+
+<a id="步骤5-完整自动化流程-2"></a>
+
+<a id="tool_call_step5_title"></a>
 
 #### 步骤5. 完整自动化流程
 
 将以上步骤整合到完整的自动化流程中，循环执行截图 → 模型推理 → 执行GUI操作，直到任务完成。详情请参见下方完整示例代码。
 
+<a id="accordion-电脑端工具调用完整代码"></a>
+
 电脑端工具调用完整代码
 
-```
+<a id="code-block-32"></a>
+
+```python
 import os
 import re
 import json
@@ -5249,9 +5421,13 @@ if __name__ == '__main__':
     )
 ```
 
+<a id="accordion-手机端工具调用完整代码"></a>
+
 手机端工具调用完整代码
 
-```
+<a id="code-block-33"></a>
+
+```python
 import json, os, subprocess
 import dashscope, time, math, re
 import uuid
@@ -5623,14 +5799,26 @@ if __name__ == '__main__':
     )
 ```
 
+<a id="更多用法"></a>
+
+<a id="e2ea89f675ci6"></a>
+
 ## 更多用法
 
--   [开启/关闭思考模式](raw/model-user-guide/model-experience/text-generation-model/vision.md)
--   [流式输出](https://help.aliyun.com/zh/model-studio/stream#e98db795e87q9)
--   [多轮对话](https://help.aliyun.com/zh/model-studio/multi-round-conversation#36eaa79f55dz7)
--   [传入本地文件](raw/model-user-guide/model-experience/text-generation-model/vision.md)
+-   [开启/关闭思考模式](../vision.md)
+-   [流式输出](../stream.md#e98db795e87q9)
+-   [多轮对话](../multi-round-conversation.md#36eaa79f55dz7)
+-   [传入本地文件](../vision.md)
+
+<a id="使用说明"></a>
+
+<a id="d367a877b0qaq"></a>
 
 ## 使用说明
+
+<a id="图像限制"></a>
+
+<a id="ac8c2d675fn1w"></a>
 
 ### 图像限制
 
@@ -5638,79 +5826,58 @@ if __name__ == '__main__':
 
 -   **支持的图像格式：**
     
-    **图像格式**
+    | 图像格式 | 常见扩展名 | MIME Type |
+    | --- | --- | --- |
+    | BMP | .bmp | image/bmp |
+    | JPEG | .jpe, .jpeg, .jpg | image/jpeg |
+    | PNG | .png | image/png |
+    | TIFF | .tif, .tiff | image/tiff |
+    | WEBP | .webp | image/webp |
+    | HEIC | .heic | image/heic |
     
-    **常见扩展名**
-    
-    **MIME Type**
-    
-    BMP
-    
-    .bmp
-    
-    image/bmp
-    
-    JPEG
-    
-    .jpe, .jpeg, .jpg
-    
-    image/jpeg
-    
-    PNG
-    
-    .png
-    
-    image/png
-    
-    TIFF
-    
-    .tif, .tiff
-    
-    image/tiff
-    
-    WEBP
-    
-    .webp
-    
-    image/webp
-    
-    HEIC
-    
-    .heic
-    
-    image/heic
-    
--   **图像大小：**单个图像的大小不超过10 MB。如果传入 Base64编码的图像，需保证编码后的字符串小于10MB，详情请参见[传入本地文件](https://help.aliyun.com/zh/model-studio/vision#d987f8de5395x)。如需压缩文件体积请参见[图像或视频压缩方法](raw/model-user-guide/model-experience/text-generation-model/vision.md)。
+-   **图像大小：**单个图像的大小不超过10 MB。如果传入 Base64编码的图像，需保证编码后的字符串小于10MB，详情请参见[传入本地文件](../vision.md#d987f8de5395x)。如需压缩文件体积请参见[图像或视频压缩方法](../vision.md)。
     
 -   **尺寸与比例：**图像的宽度和高度均需大于 10 像素，图像的宽高比（长边与短边的比值）不得超过 200。
     
 -   **像素总量：**模型接受任意像素总量的图像输入，但会在内部将其缩放至特定处理上限，超过此上限的图像会损失细节。
     
 
+<a id="图像输入方式"></a>
+
+<a id="531707ed76i06"></a>
+
 ### 图像输入方式
 
--   **公网URL：**提供一个公网可访问的图像地址，支持 HTTP 或 HTTPS 协议。可将本地图像[上传至OSS](https://help.aliyun.com/zh/oss/user-guide/console-quick-start)或[上传文件获取临时URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)，获取公网 URL。
+-   **公网URL：**提供一个公网可访问的图像地址，支持 HTTP 或 HTTPS 协议。可将本地图像[上传至OSS](https://help.aliyun.com/zh/oss/user-guide/console-quick-start)或[上传文件获取临时URL](../../../../model-api-reference/more-about-models/get-temporary-file-url.md)，获取公网 URL。
 -   **Base64编码传入：**将图像转换为 Base64 编码字符串。
 -   **本地文件路径传入：**直接传入本地图像的路径。
 
+<a id="计费与限流"></a>
+
+<a id="dabab9c6413c9"></a>
+
 ## 计费与限流
 
--   **限流：**千问GUI-Plus模型的限流条件参见[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)。
+-   **限流：**千问GUI-Plus模型的限流条件参见[限流](../../../get-started-with-models/rate-limit.md)。
     
 -   **免费额度**：从开通百炼或模型申请通过之日起计算有效期，有效期90天内，模型提供100万Token的免费额度。
     
--   **计费：**总费用 = 输入 Token 数 × 模型输入单价 + 模型输出 Token 数 × 模型输出单价；输入/输出价格可参见[选择模型](raw/model-user-guide/get-started-with-models/models.md)。
+-   **计费：**总费用 = 输入 Token 数 × 模型输入单价 + 模型输出 Token 数 × 模型输出单价；输入/输出价格可参见[选择模型](../../../get-started-with-models/models.md)。
+    
+    <a id="accordion-图像转换为token的规则"></a>
     
     图像转换为Token的规则
     
     图像 Token 数 = `(h_bar * w_bar) / token_pixels + 2`。
     
-    -   `h_bar、w_bar`：缩放后的图像长宽，模型在处理图像前会进行预处理，会将图像缩小至特定像素上限内，像素上限与`max_pixels`和`vl_high_resolution_images`参数的取值有关。详情请参见[GUI-Plus API参考](raw/model-api-reference/more-models/gui-plus-interface-interaction-model.md)。
+    -   `h_bar、w_bar`：缩放后的图像长宽，模型在处理图像前会进行预处理，会将图像缩小至特定像素上限内，像素上限与`max_pixels`和`vl_high_resolution_images`参数的取值有关。详情请参见[GUI-Plus API参考](../../../../model-api-reference/more-models/gui-plus-interface-interaction-model.md)。
     -   `token_pixels`表示每视觉`Token`对应的像素值，目前固定为`28 * 28`（即`784`）。
     
     以下代码演示了模型内部对图像的大致缩放逻辑，可用于估算一张图像的Token，实际计费请以 API 响应为准。
     
-    ```
+    <a id="code-block-34"></a>
+    
+    ```python
     # 使用以下命令安装Pillow库：pip install Pillow
     import math
     from PIL import Image
@@ -5763,19 +5930,35 @@ if __name__ == '__main__':
 -   **查看账单：**您可以在阿里云控制台的[费用与成本](https://usercenter2.aliyun.com/finance/expense-report/expense-detail)页面查看账单或进行充值。
     
 
+<a id="api参考"></a>
+
+<a id="bd096d877f19f"></a>
+
 ## API参考
 
-关于千问GUI-Plus模型的输入输出参数，请参见[GUI-Plus API参考](raw/model-api-reference/more-models/gui-plus-interface-interaction-model.md)。
+关于千问GUI-Plus模型的输入输出参数，请参见[GUI-Plus API参考](../../../../model-api-reference/more-models/gui-plus-interface-interaction-model.md)。
+
+<a id="错误码"></a>
+
+<a id="efc117f59a2gm"></a>
 
 ## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](../../../../model-api-reference/preparations/error-code.md)进行解决。
+
+<a id="accordion-gui-plus模型推荐提示词"></a>
 
 GUI-Plus模型推荐提示词
 
+<a id="fig-code-group-4"></a>
+
+<a id="fig-code-group-4-电脑端-system-prompt-tab"></a>
+
 电脑端 System Prompt
 
-```
+<a id="code-code-group-4-电脑端-system-prompt"></a>
+
+```json
 # Tools
 
 You may call one or more functions to assist with the user query.
@@ -5865,9 +6048,13 @@ For each function call, return a json object with function name and arguments wi
 </tool_call>
 ```
 
+<a id="fig-code-group-4-手机端-system-prompt-tab"></a>
+
 手机端 System Prompt
 
-```
+<a id="code-code-group-4-手机端-system-prompt"></a>
+
+```python
 # Tools
 
 You may call one or more functions to assist with the user query.

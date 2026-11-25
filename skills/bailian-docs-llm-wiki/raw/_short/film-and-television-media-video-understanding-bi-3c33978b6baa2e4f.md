@@ -2,6 +2,10 @@
 
 全妙产品矩阵包含4个SaaS产品妙笔/妙策/妙搜/妙读和若干个AI Agent（场景化能力），本文档主要介绍AI Agent中影视传媒视频理解应用的计费。
 
+<a id="计费说明"></a>
+
+<a id="681f8eba46jdi"></a>
+
 ## 计费说明
 
 我们提供**实时**和**异步**两种模式，推荐优先使用**异步模式**离线调用：
@@ -15,144 +19,31 @@
     -   每个阿里云主账号提供2个免费并发，且支持增加并发配额，最多支持扩展到30并发；
     -   支持处理的单个视频时长最多不超过1小时，且单个视频大小小于450MB，分辨率不超过1080P，队列中的任务不超过10万个视频文件。
 
-**说明**千问系列模型的[免费额度](raw/model-user-guide/test-1/new-free-quota.md)不适用于影视传媒视频理解功能。
+> **说明**
+>
+> 千问系列模型的[免费额度](../model-user-guide/test-1/new-free-quota.md)不适用于影视传媒视频理解功能。
+
+<a id="计费详情"></a>
+
+<a id="4a7eb881d0yty"></a>
 
 ## 计费详情
 
-**模式**
+<table><thead><tr><th><p><strong>模式</strong></p></th><th><p><strong>套餐组合</strong></p></th><th><p><strong>计费</strong></p></th></tr></thead><tbody><tr><td rowspan="3"><p>实时模式</p></td><td><p>大模型推理（必选）</p></td><td><ul><li><p>Qwen-VL-Post</p><ul><li><p>输入：0.0015元/千Token</p></li><li><p>输出：0.0045元/千Token</p></li></ul></li><li><p>全妙VL-turbo</p><ul><li><p>输入：0.0008元/千Token</p></li><li><p>输出：0.002元/千Token</p></li></ul></li><li><p>全妙VL-plus</p><ul><li><p>输入：0.0016元/千Token</p></li><li><p>输出：0.004元/千Token</p></li></ul></li><li><p>全妙VL-max（思考与非思考模式）</p><ul><li><p>输入：0.004元/千Token</p></li><li><p>输出：0.01元/千Token</p></li></ul></li><li><p>全妙LLM-turbo</p><ul><li><p>输入：0.0008元/千Token</p></li><li><p>输出：0.002元/千Token</p></li></ul></li><li><p>全妙LLM-plus</p><ul><li><p>输入：0.0024元/千Token</p></li><li><p>输出：0.0096元/千Token</p></li></ul></li><li><p>全妙LLM-max（思考与非思考模式）</p><ul><li><p>输入：0.0048元/千Token</p></li><li><p>输出：0.0192元/千Token</p></li></ul></li></ul></td></tr><tr><td><p>多模态信息处理（必选）</p></td><td><p>2.8元/小时（按照实际成功处理的视频总时长计费）</p></td></tr><tr><td><p>角色识别（可选）</p></td><td><p>0.03元/分钟视频</p></td></tr><tr><td rowspan="4"><p>异步模式</p></td><td><p>大模型推理（必选）</p></td><td><ul><li><p>Qwen-VL-Post</p><ul><li><p>输入：0.0015元/千Token</p></li><li><p>输出：0.0045元/千Token</p></li></ul></li><li><p>全妙VL-turbo</p><ul><li><p>输入：0.0008元/千Token</p></li><li><p>输出：0.002元/千Token</p></li></ul></li><li><p>全妙VL-plus</p><ul><li><p>输入：0.0016元/千Token</p></li><li><p>输出：0.004元/千Token</p></li></ul></li><li><p>全妙VL-max（思考与非思考模式）</p><ul><li><p>输入：0.004元/千Token</p></li><li><p>输出：0.01元/千Token</p></li></ul></li><li><p>全妙LLM-turbo</p><ul><li><p>输入：0.0008元/千Token</p></li><li><p>输出：0.002元/千Token</p></li></ul></li><li><p>全妙LLM-plus</p><ul><li><p>输入：0.0024元/千Token</p></li><li><p>输出：0.0096元/千Token</p></li></ul></li><li><p>全妙LLM-max（思考与非思考模式）</p><ul><li><p>输入：0.0048元/千Token</p></li><li><p>输出：0.0192元/千Token</p></li></ul></li></ul></td></tr><tr><td><p>多模态信息处理（必选）</p></td><td><p>2.8元/小时（按照实际成功处理的视频总时长计费）</p></td></tr><tr><td><p>角色识别（可选）</p></td><td><p>0.03元/分钟视频</p><p>（按照实际成功处理的视频总时长计费）</p></td></tr><tr><td><p>增加并发配额（可选）</p></td><td><p>1元/小时*并发数</p><p>（例如用10并发处理共30小时视频，那就是1*30*10=300元）</p><ul><li><p>上传任务优先使用免费并发，如果免费并发已全部占用，则使用付费并发，并按照当前任务实际处理时长计费。</p></li><li><p>可以通过GetVideoAnalysisConfig、UpdateVideoAnalysisConfig这两个接口查看和扩缩并发</p></li></ul></td></tr></tbody></table>
 
-**套餐组合**
+<a id="开通与账单地址"></a>
 
-**计费**
-
-实时模式
-
-大模型推理（必选）
-
--   Qwen-VL-Post
-    
-    -   输入：0.0015元/千Token
-        
-    -   输出：0.0045元/千Token
-        
--   全妙VL-turbo
-    
-    -   输入：0.0008元/千Token
-        
-    -   输出：0.002元/千Token
-        
--   全妙VL-plus
-    
-    -   输入：0.0016元/千Token
-        
-    -   输出：0.004元/千Token
-        
--   全妙VL-max（思考与非思考模式）
-    
-    -   输入：0.004元/千Token
-        
-    -   输出：0.01元/千Token
-        
--   全妙LLM-turbo
-    
-    -   输入：0.0008元/千Token
-        
-    -   输出：0.002元/千Token
-        
--   全妙LLM-plus
-    
-    -   输入：0.0024元/千Token
-        
-    -   输出：0.0096元/千Token
-        
--   全妙LLM-max（思考与非思考模式）
-    
-    -   输入：0.0048元/千Token
-        
-    -   输出：0.0192元/千Token
-        
-
-多模态信息处理（必选）
-
-2.8元/小时（按照实际成功处理的视频总时长计费）
-
-角色识别（可选）
-
-0.03元/分钟视频
-
-异步模式
-
-大模型推理（必选）
-
--   Qwen-VL-Post
-    
-    -   输入：0.0015元/千Token
-        
-    -   输出：0.0045元/千Token
-        
--   全妙VL-turbo
-    
-    -   输入：0.0008元/千Token
-        
-    -   输出：0.002元/千Token
-        
--   全妙VL-plus
-    
-    -   输入：0.0016元/千Token
-        
-    -   输出：0.004元/千Token
-        
--   全妙VL-max（思考与非思考模式）
-    
-    -   输入：0.004元/千Token
-        
-    -   输出：0.01元/千Token
-        
--   全妙LLM-turbo
-    
-    -   输入：0.0008元/千Token
-        
-    -   输出：0.002元/千Token
-        
--   全妙LLM-plus
-    
-    -   输入：0.0024元/千Token
-        
-    -   输出：0.0096元/千Token
-        
--   全妙LLM-max（思考与非思考模式）
-    
-    -   输入：0.0048元/千Token
-        
-    -   输出：0.0192元/千Token
-        
-
-多模态信息处理（必选）
-
-2.8元/小时（按照实际成功处理的视频总时长计费）
-
-角色识别（可选）
-
-0.03元/分钟视频
-
-（按照实际成功处理的视频总时长计费）
-
-增加并发配额（可选）
-
-1元/小时\*并发数
-
-（例如用10并发处理共30小时视频，那就是1\*30\*10=300元）
-
--   上传任务优先使用免费并发，如果免费并发已全部占用，则使用付费并发，并按照当前任务实际处理时长计费。
-    
--   可以通过GetVideoAnalysisConfig、UpdateVideoAnalysisConfig这两个接口查看和扩缩并发
-    
+<a id="5002613c90d66"></a>
 
 ## 开通与账单地址
 
 开通地址：[视频理解开通地址](https://common-buy.aliyun.com/?commodityCode=sfm_videoanalysis_public_cn)；
 
 账单查询地址：[账单详情](https://usercenter2.aliyun.com/finance/expense-report/expense-detail?spm=a2c4g.11186623.0.0.619355efACwmfT)。
+
+<a id="节省计划"></a>
+
+<a id="4e94b5eabb2e6"></a>
 
 ## 节省计划
 
@@ -161,6 +52,10 @@
 您只需要承诺在一定期限内消费一定金额，即可享受影视传媒视频理解节省计划带来的优惠。对比按量付费，可降低5%到50%的费用。
 
 详情可查看阿里云[节省计划](https://help.aliyun.com/zh/user-center/savings-plan-overview/)
+
+<a id="购买方式"></a>
+
+<a id="9ed2eb75c5a3y"></a>
 
 ### 购买方式
 
@@ -172,96 +67,97 @@
 
 选择**承诺消费金额**（可选10000元、20000元、50000元、100000元或200000元），然后单击**立即购买**完成付款。
 
+<a id="折扣力度"></a>
+
+<a id="7b7d1774239us"></a>
+
 ### 折扣力度
 
 节省计划生效后，以折扣后单价抵扣按量付费账单，消费金额越高，折扣力度越大。
 
 节省计划折扣力度如下表：
 
-**承诺消费金额**
+|  |  |  |  |
+| --- | --- | --- | --- |
+| **承诺消费金额** | **多模态信息处理** | **角色识别** | **扩并发** |
+| 10000 | 0.7 | 0.85 | 0.95 |
+| 20000 | 0.65 | 0.8 | 0.9 |
+| 50000 | 0.6 | 0.75 | 0.8 |
+| 100000 | 0.5 | 0.7 | 0.7 |
+| 200000 | 0.4 | 0.6 | 0.65 |
 
-**多模态信息处理**
+<a id="产品地址"></a>
 
-**角色识别**
-
-**扩并发**
-
-10000
-
-0.7
-
-0.85
-
-0.95
-
-20000
-
-0.65
-
-0.8
-
-0.9
-
-50000
-
-0.6
-
-0.75
-
-0.8
-
-100000
-
-0.5
-
-0.7
-
-0.7
-
-200000
-
-0.4
-
-0.6
-
-0.65
+<a id="7b5539e694r56"></a>
 
 ## 产品地址
 
 可点击[产品地址](https://bailian.console.aliyun.com/#/app/app-market/quanmiao/video-comprehend)进行产品体验。
 
+<a id="产品相关文档"></a>
+
+<a id="03b3d4a1e8bu6"></a>
+
 ## 产品相关文档
 
 -   技术文档
     
-    可点击[影视传媒视频理解接口文档](raw/_short/api-quanmiaolightapp-2024-08-01-dir-film-and-tel-f33a395f20cdab57.md)进行查看；
+    可点击[影视传媒视频理解接口文档](api-quanmiaolightapp-2024-08-01-dir-film-and-tel-f33a395f20cdab57.md)进行查看；
     
 -   视频理解与内容提取的解决方案
     
     可点击[解决方案地址](https://www.aliyun.com/solution/tech-solution-deploy/2860032)进行查看体验。
     
 
+<a id="常见问题"></a>
+
+<a id="5de1f8d74fb87"></a>
+
 ## 常见问题
+
+<a id="1-离线调用怎么增加并发配额"></a>
+
+<a id="04e102e5dc3le"></a>
 
 #### 1\. 离线调用怎么增加并发配额？
 
-可以通过[视频理解-获取配置](raw/_short/api-quanmiaolightapp-2024-08-01-getvideoanalysis-f3d16ffdaca923e2.md)、[视频理解-更新配置](raw/_short/api-quanmiaolightapp-2024-08-01-updatevideoanaly-44a9b5fcf77ca530.md)接口查看和扩缩并发。
+可以通过[视频理解-获取配置](api-quanmiaolightapp-2024-08-01-getvideoanalysis-f3d16ffdaca923e2.md)、[视频理解-更新配置](api-quanmiaolightapp-2024-08-01-updatevideoanaly-44a9b5fcf77ca530.md)接口查看和扩缩并发。
+
+<a id="2-一并发收费是1元-小时-这个时间是怎么定义的"></a>
+
+<a id="6ccfc589791yn"></a>
 
 #### 2\. 一并发收费是1元/小时，这个时间是怎么定义的？
 
 收费的时间计算范围是从客户提交任务的时间点开始算到任务执行结束为止。
 
+<a id="3-任务运行到中途失败了-怎么计费"></a>
+
+<a id="5b6c37e007rt4"></a>
+
 #### 3\. 任务运行到中途失败了，怎么计费？
 
 当任务运行到中途失败时，主要是看最后一个事件消息的event，如果是task-failed，就不计费；其他运行成功部分计费，失败部分不计费。在产品客户端页面立即中断并展示状态。
+
+<a id="4-新增的预付费模式对现有业务及现有付费模式有影响吗"></a>
+
+<a id="d0fd1e220eoxz"></a>
 
 #### 4.新增的预付费模式对现有业务及现有付费模式有影响吗？
 
 节省计划对现有付费模式无影响。
 
+<a id="5-购买影视传媒视频理解api节省计划后能退订吗"></a>
+
+<a id="2494a1ef7f11a"></a>
+
 #### 5.购买影视传媒视频理解API节省计划后能退订吗？
 
 支持退订。
+
+<a id="6-上传格式为srt-subrip-字幕-的asr数据时解析错误怎么办"></a>
+
+<a id="0be5b5e9840me"></a>
 
 #### 6.上传格式为SRT（SubRip 字幕）的ASR数据时解析错误怎么办？
 

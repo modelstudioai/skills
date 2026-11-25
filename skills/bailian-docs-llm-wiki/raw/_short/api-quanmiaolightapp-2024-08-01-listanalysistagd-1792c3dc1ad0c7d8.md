@@ -2,11 +2,19 @@
 
 获取挖掘分析结果明细列表
 
+<a id="调试"></a>
+
+<a id="api-detail-23"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
 [调试](https://api.aliyun.com/api/QuanMiaoLightApp/2024-08-01/ListAnalysisTagDetailByTaskId)
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -25,227 +33,64 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-操作
+<table><thead><tr><th>操作</th><th>访问级别</th><th>资源类型</th><th>条件关键字</th><th>关联操作</th></tr></thead><tbody><tr><td>quanmiaolightapp:ListAnalysisTagDetailByTaskId</td><td>list</td><td><div><div>*全部资源</div><div><code>*</code></div></div></td><td><ul>无</ul></td><td>无</td></tr></tbody></table>
 
-访问级别
+<a id="请求语法"></a>
 
-资源类型
-
-条件关键字
-
-关联操作
-
-quanmiaolightapp:ListAnalysisTagDetailByTaskId
-
-list
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-53"></a>
 
 ## 请求语法
 
-```
+<a id="code-block"></a>
+
+```text
 GET /{workspaceId}/quanmiao/lightapp/listAnalysisTagDetailByTaskId HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="api-detail-36"></a>
+
 ## 请求参数
 
-名称
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| nextToken | string | 否 | 标记当前开始读取的位置，置空表示从头开始 | JlroP3CjgQh5PQDlH3ArzADkBTPZgVqo+64jhZRglNq0mEYoV5SlGb/Juvo8CdfYE9rlwEr2pIJQwdaYotak9g== |
+| maxResults | integer | 否 | 本次读取的最大数据记录数量 | 20 |
+| workspaceId | string | 是 | [业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-xxx |
+| taskId | string | 是 | 挖掘的任务 ID | a3d1c2ac-f086-4a21-9069-f5631542f5a2 |
 
-类型
+<a id="返回参数"></a>
 
-必填
-
-描述
-
-示例值
-
-nextToken
-
-string
-
-否
-
-标记当前开始读取的位置，置空表示从头开始
-
-JlroP3CjgQh5PQDlH3ArzADkBTPZgVqo+64jhZRglNq0mEYoV5SlGb/Juvo8CdfYE9rlwEr2pIJQwdaYotak9g==
-
-maxResults
-
-integer
-
-否
-
-本次读取的最大数据记录数量
-
-20
-
-workspaceId
-
-string
-
-是
-
-[业务空间 ID](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)
-
-llm-xxx
-
-taskId
-
-string
-
-是
-
-挖掘的任务 ID
-
-a3d1c2ac-f086-4a21-9069-f5631542f5a2
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-名称
-
-类型
-
-描述
-
-示例值
-
-object
-
-Schema of Response
-
-totalCount
-
-integer
-
-TotalCount 本次请求条件下的数据总量，此参数为可选参数，默认可不返回
-
-200
-
-nextToken
-
-string
-
-表示当前调用返回读取到的位置，空代表数据已经读取完毕
-
-xxxxx
-
-requestId
-
-string
-
-Id of the request
-
-xxxxxxx
-
-maxResults
-
-integer
-
-MaxResults 本次请求所返回的最大记录条数
-
-100
-
-code
-
-string
-
-响应 Code 码
-
-DataNotExists
-
-message
-
-string
-
-响应消息
-
-成功
-
-success
-
-boolean
-
-此次请求是否成功
-
-false
-
-data
-
-array<object>
-
-标签挖掘明细列表
-
-data
-
-object
-
-标签挖掘明细
-
-content
-
-string
-
-标签素材内容
-
-xxxx
-
-contentTags
-
-array<object>
-
-标签挖掘内容列表
-
-contentTags
-
-object
-
-tagName
-
-string
-
-标签名称
-
-标签名称
-
-tags
-
-array
-
-标签值列表
-
-tags
-
-string
-
-标签值
-
-标签值
-
-originResponse
-
-string
-
-原始挖掘响应
-
-原始响应
-
-sourceList
-
-array
-
-溯源原文列表，启用 sourceTrace 时会返回该字段
-
-sourceList
-
-string
-
-溯源原文，启用 sourceTrace 时会返回该字段
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | Schema of Response |  |
+| totalCount | integer | TotalCount 本次请求条件下的数据总量，此参数为可选参数，默认可不返回 | 200 |
+| nextToken | string | 表示当前调用返回读取到的位置，空代表数据已经读取完毕 | xxxxx |
+| requestId | string | Id of the request | xxxxxxx |
+| maxResults | integer | MaxResults 本次请求所返回的最大记录条数 | 100 |
+| code | string | 响应 Code 码 | DataNotExists |
+| message | string | 响应消息 | 成功 |
+| success | boolean | 此次请求是否成功 | false |
+| data | array<object> | 标签挖掘明细列表 |  |
+| data | object | 标签挖掘明细 |  |
+| content | string | 标签素材内容 | xxxx |
+| contentTags | array<object> | 标签挖掘内容列表 |  |
+| contentTags | object |  |  |
+| tagName | string | 标签名称 | 标签名称 |
+| tags | array | 标签值列表 |  |
+| tags | string | 标签值 | 标签值 |
+| originResponse | string | 原始挖掘响应 | 原始响应 |
+| sourceList | array | 溯源原文列表，启用 sourceTrace 时会返回该字段 |  |
+| sourceList | string | 溯源原文，启用 sourceTrace 时会返回该字段 |  |
+
+<a id="示例"></a>
+
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -253,7 +98,9 @@ string
 
 `JSON`格式
 
-```
+<a id="code-block-2"></a>
+
+```text
 {
   "totalCount": 200,
   "nextToken": "xxxxx",
@@ -282,22 +129,14 @@ string
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
+
 ## 错误码
 
-HTTP status code
-
-错误码
-
-错误信息
-
-描述
-
-403
-
-NoPermission
-
-You are not authorized to perform this action , Please check the assignment of the workspaceId.
-
-请检查workspaceId的赋值
+| HTTP status code | 错误码 | 错误信息 | 描述 |
+| --- | --- | --- | --- |
+| 403 | NoPermission | You are not authorized to perform this action , Please check the assignment of the workspaceId. | 请检查workspaceId的赋值 |
 
 访问[错误中心](https://api.aliyun.com/document/QuanMiaoLightApp/2024-08-01/errorCode)查看更多错误码。

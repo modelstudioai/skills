@@ -1,38 +1,78 @@
 # Qwen-Audio-ASR-Message Python SDK
 
+<a id="asr-sdk"></a>
+
 Streaming、Message 和 Fun-ASR-Realtime 均使用 `client.audio.asr`。用 `recognize_file` 识别本地文件，或用 `recognize` 创建双向流式识别会话。
+
+<a id="前提条件"></a>
+
+<a id="model-qwen-audio-asr-streaming-8a24f2ed09vr0"></a>
+
+<a id="model-qwen-audio-asr-message-8a24f2ed09vr0"></a>
+
+<a id="model-fun-asr-realtime-8a24f2ed09vr0"></a>
 
 ## 前提条件
 
--   已开通服务并[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。请配置API Key到环境变量，而非硬编码在代码中，防范因代码泄露导致的安全风险。
--   [安装最新版DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
+-   已开通服务并[获取与配置 API Key](../model-api-reference/preparations/get-api-key.md)。请配置API Key到环境变量，而非硬编码在代码中，防范因代码泄露导致的安全风险。
+-   [安装最新版DashScope SDK](../model-api-reference/preparations/install-sdk.md)。
+
+<a id="接口地址"></a>
+
+<a id="model-qwen-audio-asr-streaming-h2-1d8e4c7f"></a>
+
+<a id="model-qwen-audio-asr-message-h2-1d8e4c7f"></a>
+
+<a id="model-fun-asr-realtime-h2-1d8e4c7f"></a>
 
 ### 接口地址
 
 SDK的实时识别走WebSocket接口，端点由`Client`的`workspace`与`region`自动决定（包含WorkspaceId）。如需切换到其他地域，构造`Client`时设置对应地域的`region`即可。
 
+<a id="sec-tabs"></a>
+
+<a id="华北2-北京"></a>
+
+<a id="华北2-北京-h4"></a>
+
 #### 华北2（北京）
 
 `wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference`
 
-调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
+
+<a id="新加坡"></a>
+
+<a id="新加坡-h4"></a>
 
 #### 新加坡
 
 `wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/inference`
 
-调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
 
-**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
+> **重要**
+>
+> 阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
+>
+> -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+> -   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
 
--   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
--   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+<a id="快速开始"></a>
+
+<a id="model-qwen-audio-asr-streaming-841b5223db8wu"></a>
+
+<a id="model-qwen-audio-asr-message-841b5223db8wu"></a>
+
+<a id="model-fun-asr-realtime-841b5223db8wu"></a>
 
 ## 快速开始
 
 将示例中的 `{WorkspaceId}` 换成实际的业务空间 ID，`{YOUR_AUDIO_FILE}` 换成本地 16 kHz WAV 文件路径。运行后，终端输出识别结果。
 
-```
+<a id="code-block"></a>
+
+```python
 import os
 import dashscope
 
@@ -56,30 +96,40 @@ for event in client.audio.asr.recognize_file(
         print('识别结果：', sentence['text'])
 ```
 
+<a id="更多示例"></a>
+
 ### 更多示例
 
 示例使用 Qwen-Audio-ASR-Streaming。调用同组其他模型时，替换 `model`，并按对应模型的要求设置采样率。
 
-模型
-
-示例中的 `model` 值
-
-Qwen-Audio-ASR-Streaming
-
-`qwen-audio-3.1-asr-flash-streaming`。下方麦克风示例使用 `qwen-audio-3.0-asr-flash-streaming`。
-
-Qwen-Audio-ASR-Message
-
-`qwen-audio-3.1-asr-flash-message`，采样率仅支持 16000 Hz。
-
-Fun-ASR-Realtime
-
-`fun-asr-realtime`。
+| 模型 | 示例中的 `model` 值 |
+| --- | --- |
+| Qwen-Audio-ASR-Streaming | `qwen-audio-3.1-asr-flash-streaming`。下方麦克风示例使用 `qwen-audio-3.0-asr-flash-streaming`。 |
+| Qwen-Audio-ASR-Message | `qwen-audio-3.1-asr-flash-message`，采样率仅支持 16000 Hz。 |
+| Fun-ASR-Realtime | `fun-asr-realtime`。 |
 
 [核心资源（`client.audio.asr`）](#model-qwen-audio-asr-streaming-d6bc1f133f871)提供了非流式调用和双向流式调用等接口。请根据实际需求选择合适的调用方式：
 
 -   非流式调用（`recognize_file`）：针对本地文件进行识别，SDK自动分块发送音频并驱动到任务结束。适合处理录制好的音频。
 -   双向流式调用（`recognize`会话）：可直接对音频流进行识别，并实时输出结果。音频流可以来自外部设备（如麦克风）或从本地文件读取。适合需要即时反馈的场景。
+
+<a id="model-qwen-audio-asr-streaming-8341058094tc3"></a>
+
+<a id="model-qwen-audio-asr-message-8341058094tc3"></a>
+
+<a id="model-fun-asr-realtime-8341058094tc3"></a>
+
+<a id="model-qwen-audio-asr-streaming-9d1e5f6852jr8"></a>
+
+<a id="model-qwen-audio-asr-message-9d1e5f6852jr8"></a>
+
+<a id="model-fun-asr-realtime-9d1e5f6852jr8"></a>
+
+<a id="sec-tabs-2"></a>
+
+<a id="非流式调用"></a>
+
+<a id="非流式调用-h4"></a>
 
 #### 非流式调用
 
@@ -87,7 +137,9 @@ Fun-ASR-Realtime
 
 调用[核心资源（`client.audio.asr`）](#model-qwen-audio-asr-streaming-d6bc1f133f871)的`recognize_file`方法绑定请求参数并传入本地文件路径，迭代服务端事件获取识别结果。
 
-```
+<a id="code-block-2"></a>
+
+```python
 import os
 import dashscope
 
@@ -112,6 +164,10 @@ for event in client.audio.asr.recognize_file(
         print('识别结果：', sentence['text'])
 ```
 
+<a id="双向流式调用"></a>
+
+<a id="双向流式调用-h4"></a>
+
 #### 双向流式调用
 
 提交单个语音实时转写任务，通过迭代事件的方式流式输出实时识别结果。
@@ -133,9 +189,15 @@ for event in client.audio.asr.recognize_file(
     该方法只通知服务端输入结束；接收线程需继续消费`events()`直到`task-finished`事件以获得最后的识别结果和统计信息。ws层的错误会以`DashScopeError`异常抛出，可在发送/接收处使用try/except捕获。
     
 
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-识别传入麦克风的语音-tab"></a>
+
 识别传入麦克风的语音
 
-```
+<a id="code-code-group-识别传入麦克风的语音"></a>
+
+```python
 import os
 import signal  # for keyboard events handling (press "Ctrl+C" to terminate recording)
 import sys
@@ -225,9 +287,13 @@ if __name__ == '__main__':
         mic = None
 ```
 
+<a id="fig-code-group-识别本地语音文件-tab"></a>
+
 识别本地语音文件
 
-```
+<a id="code-code-group-识别本地语音文件"></a>
+
+```python
 import os
 import time
 import dashscope
@@ -316,7 +382,17 @@ print(
     ))
 ```
 
+<a id="请求参数"></a>
+
 ## 请求参数
+
+<a id="qwen-audio-asr-message"></a>
+
+<a id="model-qwen-audio-asr-message"></a>
+
+<a id="model-qwen-audio-asr-message-555007db2033f"></a>
+
+<a id="请求参数-2"></a>
 
 ### Qwen-Audio-ASR-Message
 
@@ -324,280 +400,41 @@ print(
 
 请求参数通过[核心资源（`client.audio.asr`）](#model-qwen-audio-asr-message-d6bc1f133f871)的`recognize`/`recognize_file`方法进行设置：`model`、`format`、`sample_rate`、`vocabulary_id`可直接传入。通过 `parameters` 字典传入 `language_hints`。
 
-**参数**
-
-**类型**
-
-**是否必须**
-
-**说明**
-
-`model`
-
-`str`
-
-是
-
-模型名，设置为 `qwen-audio-3.1-asr-flash-message`。
-
-`sample_rate`
-
-`int`
-
-是
-
-采样率（Hz）。
-
-仅支持 `16000` Hz。
-
-`format`
-
-`str`
-
-是
-
-音频格式。
-
-取值范围：
-
--   `pcm`
--   `wav`
--   `mp3`
--   `opus`
--   `speex`
--   `aac`
--   `amr`
-
-**重要**opus/speex：必须使用Ogg封装；
-
-wav：必须为PCM编码；
-
-amr：仅支持AMR-NB类型。
-
-`disfluency_removal_enabled`
-
-`bool`
-
-否
-
-是否过滤语气词并对输出结果进行润色，默认值为 `false`。设置为 `true` 时启用。作为同名关键字参数传入。
-
-`intermediate_result_enabled`
-
-`bool`
-
-否
-
-是否返回流式中间结果，默认值为 `false`。设置为 `true` 时返回流式中间结果。通过 `parameters` 字典传入。
-
-`keep_dialect`
-
-`bool`
-
-否
-
-默认 `false`，将方言转写为普通话；设为 `true` 时保留方言表达。通过 `parameters` 字典传入。完整参数说明请参见[客户端事件](raw/_short/qwen-asr-message-client-events-1721a061cc8750e6.md)。
-
-仅在最终结果（`sentence_end=true`）生效，中间结果（`sentence_end=false`）不支持。
-
-`vad_model`
-
-`str`
-
-否
-
-可选 `near_meeting_16k`（近场）或 `far_field_meeting_16k`（远场，默认值）。通过 `parameters` 字典传入。完整参数说明请参见[客户端事件](raw/_short/qwen-asr-message-client-events-1721a061cc8750e6.md)。
-
-`vocabulary_id`
-
-`str`
-
-否
-
-预编译热词列表 ID。
-
-需预先调用创建热词列表接口生成，识别时传入该 ID 即可使用列表中的热词。
-
-适用于词汇已知且相对稳定、需要跨请求复用同一词表的场景。
-
-使用方法请参见[预编译热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_precompiled_h3)。
-
-`vocabulary`
-
-`dict`
-
-否
-
-即时热词。
-
-以键值对形式传入，键为热词文本（`string`），值为热词权重（`integer`），无需预先创建热词列表。权重取值范围为 \[1, 5\] 或 50：取 \[1, 5\] 时值越大模型越倾向输出该词；取 50 时为超级热词，召回率大幅提升，但超级热词数量最多不超过 50 个。
-
-适用于临时性、会话级别的热词优化。
-
-与预编译热词同时配置时，系统会合并两类热词；合并后超过 2000 个时，随机选择 2000 个使用。使用方法请参见[即时热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_instant_h3)。
-
-示例：
-
-```
-import os
+<table><thead><tr><th><strong>参数</strong></th><th><strong>类型</strong></th><th><strong>是否必须</strong></th><th><strong>说明</strong></th></tr></thead><tbody><tr><td><code>model</code></td><td><code>str</code></td><td>是</td><td>模型名，设置为 <code>qwen-audio-3.1-asr-flash-message</code>。</td></tr><tr><td><code>sample_rate</code></td><td><code>int</code></td><td>是</td><td><p>采样率（Hz）。</p><p>仅支持 <code>16000</code> Hz。</p></td></tr><tr><td><code>format</code></td><td><code>str</code></td><td>是</td><td><p>音频格式。</p><p>取值范围：</p><ul><li><code>pcm</code></li><li><code>wav</code></li><li><code>mp3</code></li><li><code>opus</code></li><li><code>speex</code></li><li><code>aac</code></li><li><code>amr</code></li></ul><div><div><p><strong>重要</strong>opus/speex：必须使用Ogg封装；</p><p>wav：必须为PCM编码；</p><p>amr：仅支持AMR-NB类型。</p></div></div></td></tr><tr><td><code>disfluency_removal_enabled</code></td><td><code>bool</code></td><td>否</td><td>是否过滤语气词并对输出结果进行润色，默认值为 <code>false</code>。设置为 <code>true</code> 时启用。作为同名关键字参数传入。</td></tr><tr><td><code>intermediate_result_enabled</code></td><td><code>bool</code></td><td>否</td><td>是否返回流式中间结果，默认值为 <code>false</code>。设置为 <code>true</code> 时返回流式中间结果。通过 <code>parameters</code> 字典传入。</td></tr><tr><td><code>keep_dialect</code></td><td><code>bool</code></td><td>否</td><td>默认 <code>false</code>，将方言转写为普通话；设为 <code>true</code> 时保留方言表达。通过 <code>parameters</code> 字典传入。完整参数说明请参见<a href="qwen-asr-message-client-events-1721a061cc8750e6.md">客户端事件</a>。<p>仅在最终结果（<code>sentence_end=true</code>）生效，中间结果（<code>sentence_end=false</code>）不支持。</p></td></tr><tr><td><code>vad_model</code></td><td><code>str</code></td><td>否</td><td>可选 <code>near_meeting_16k</code>（近场）或 <code>far_field_meeting_16k</code>（远场，默认值）。通过 <code>parameters</code> 字典传入。完整参数说明请参见<a href="qwen-asr-message-client-events-1721a061cc8750e6.md">客户端事件</a>。</td></tr><tr><td><code>vocabulary_id</code></td><td><code>str</code></td><td>否</td><td><p>预编译热词列表 ID。</p><p>需预先调用创建热词列表接口生成，识别时传入该 ID 即可使用列表中的热词。</p><p>适用于词汇已知且相对稳定、需要跨请求复用同一词表的场景。</p><p>使用方法请参见<a href="../model-user-guide/model-experience/speech-and-audio/speech-recognition/improve-asr-accuracy.md#hw_precompiled_h3">预编译热词</a>。</p></td></tr><tr><td><code>vocabulary</code></td><td><code>dict</code></td><td>否</td><td><p>即时热词。</p><p>以键值对形式传入，键为热词文本（<code>string</code>），值为热词权重（<code>integer</code>），无需预先创建热词列表。权重取值范围为 [1, 5] 或 50：取 [1, 5] 时值越大模型越倾向输出该词；取 50 时为超级热词，召回率大幅提升，但超级热词数量最多不超过 50 个。</p><p>适用于临时性、会话级别的热词优化。</p><p>与预编译热词同时配置时，系统会合并两类热词；合并后超过 2000 个时，随机选择 2000 个使用。使用方法请参见<a href="../model-user-guide/model-experience/speech-and-audio/speech-recognition/improve-asr-accuracy.md#hw_instant_h3">即时热词</a>。</p><p>示例：</p><a id="code-block-3"></a><pre class="language-python"><code>import os
 import dashscope
 
-client = dashscope.Client(api_key=os.getenv("DASHSCOPE_API_KEY"))
+client = dashscope.Client(api_key=os.getenv(&quot;DASHSCOPE_API_KEY&quot;))
 
 # 即时热词通过parameters传入
-vocab = {"张三": 5, "李四": 5}
+vocab = {&quot;张三&quot;: 5, &quot;李四&quot;: 5}
 recognition = client.audio.asr.recognize(
     model='qwen-audio-3.1-asr-flash-message',
     format='wav',
     sample_rate=16000,
-    parameters={"vocabulary": vocab},
+    parameters={&quot;vocabulary&quot;: vocab},
 )
-```
-
-`language_hints`
-
-`list[str]`
-
-否
-
-待识别音频语种。无默认值，不设置时模型自动识别。
-
-最多支持设置 4 个值，超出时仅前 4 个生效。
-
-点击查看支持的语言代码
-
--   zh: 中文
--   en: 英文
--   ja: 日语
--   ko：韩语
--   vi：越南语
--   th：泰语
--   id：印尼语
--   ms：马来语
--   tl：菲律宾语
--   hi：印地语
--   ar：阿拉伯语
--   fr：法语
--   de：德语
--   es：西班牙语
--   pt：葡萄牙语
--   ru：俄语
--   it：意大利语
--   nl：荷兰语
--   sv：瑞典语
--   da：丹麦语
--   fi：芬兰语
--   no：挪威语
--   el：希腊语
--   pl：波兰语
--   cs：捷克语
--   hu：匈牙利语
--   ro：罗马尼亚语
--   bg：保加利亚语
--   hr：克罗地亚语
--   sk：斯洛伐克语
-
-通过 `parameters` 字典传入，例如 `parameters={"language_hints": ["zh"]}`。
-
-仅在最终结果（`sentence_end=true`）生效，中间结果（`sentence_end=false`）不支持。
-
-`max_sentence_silence`
-
-`int`
-
-否
-
-VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈值时，系统会判定该句子已结束。
-
-默认值：800。
-
-取值范围：\[200, 6000\]。
-
-`heartbeat`
-
-`bool`
-
-否
-
-是否启用心跳包。
-
-默认值：False。
-
--   True：在持续发送静音音频的情况下，可保持与服务端的连接不中断。
--   False（默认）：即使持续发送静音音频，连接也将在一定时间后因超时而断开。
-
-静音音频指的是在音频文件或数据流中没有声音信号的内容。静音音频可以通过多种方法生成，例如使用音频编辑软件如Audacity或Adobe Audition，或者通过命令行工具如FFmpeg。
-
-该字段自 SDK 1.23.1 引入，2.0.1 及以上版本已包含。
-
-`speech_noise_threshold`
-
-`float`
-
-否
-
-语音与噪音的判定阈值，用于调整语音活动检测（VAD）的灵敏度。
-
-取值范围：\[-1.0, 1.0\]。
-
-取值说明：
-
--   取值越接近 -1：降低噪音判定阈值，噪音被识别为语音的概率增大，可能导致更多噪音被转写
--   取值越接近 +1：提高噪音判定阈值，语音被误判为噪音的概率增大，可能导致部分语音被过滤
-
-此参数为高级配置参数，调整可能显著影响识别效果，建议：
-
--   调整前充分测试验证效果
--   根据实际音频环境小幅度调整（建议步长 0.1）
+</code></pre></td></tr><tr><td><code>language_hints</code></td><td><code>list[str]</code></td><td>否</td><td>待识别音频语种。无默认值，不设置时模型自动识别。<p>最多支持设置 4 个值，超出时仅前 4 个生效。</p><a id="accordion-点击查看支持的语言代码"></a><section><p>点击查看支持的语言代码</p><div><ul><li>zh: 中文</li><li>en: 英文</li><li>ja: 日语</li><li>ko：韩语</li><li>vi：越南语</li><li>th：泰语</li><li>id：印尼语</li><li>ms：马来语</li><li>tl：菲律宾语</li><li>hi：印地语</li><li>ar：阿拉伯语</li><li>fr：法语</li><li>de：德语</li><li>es：西班牙语</li><li>pt：葡萄牙语</li><li>ru：俄语</li><li>it：意大利语</li><li>nl：荷兰语</li><li>sv：瑞典语</li><li>da：丹麦语</li><li>fi：芬兰语</li><li>no：挪威语</li><li>el：希腊语</li><li>pl：波兰语</li><li>cs：捷克语</li><li>hu：匈牙利语</li><li>ro：罗马尼亚语</li><li>bg：保加利亚语</li><li>hr：克罗地亚语</li><li>sk：斯洛伐克语</li></ul></div></section><p>通过 <code>parameters</code> 字典传入，例如 <code>parameters={&quot;language_hints&quot;: [&quot;zh&quot;]}</code>。</p><p>仅在最终结果（<code>sentence_end=true</code>）生效，中间结果（<code>sentence_end=false</code>）不支持。</p></td></tr><tr><td><code>max_sentence_silence</code></td><td><code>int</code></td><td>否</td><td><p>VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈值时，系统会判定该句子已结束。</p><p>默认值：800。</p><p>取值范围：[200, 6000]。</p></td></tr><tr><td><code>heartbeat</code></td><td><code>bool</code></td><td>否</td><td><p>是否启用心跳包。</p><p>默认值：False。</p><ul><li>True：在持续发送静音音频的情况下，可保持与服务端的连接不中断。</li><li>False（默认）：即使持续发送静音音频，连接也将在一定时间后因超时而断开。</li></ul><p>静音音频指的是在音频文件或数据流中没有声音信号的内容。静音音频可以通过多种方法生成，例如使用音频编辑软件如Audacity或Adobe Audition，或者通过命令行工具如FFmpeg。</p><p>该字段自 SDK 1.23.1 引入，2.0.1 及以上版本已包含。</p></td></tr><tr><td><code>speech_noise_threshold</code></td><td><code>float</code></td><td>否</td><td><p>语音与噪音的判定阈值，用于调整语音活动检测（VAD）的灵敏度。</p><p>取值范围：[-1.0, 1.0]。</p><p>取值说明：</p><ul><li>取值越接近 -1：降低噪音判定阈值，噪音被识别为语音的概率增大，可能导致更多噪音被转写</li><li>取值越接近 +1：提高噪音判定阈值，语音被误判为噪音的概率增大，可能导致部分语音被过滤</li></ul><p>此参数为高级配置参数，调整可能显著影响识别效果，建议：</p><ul><li>调整前充分测试验证效果</li><li>根据实际音频环境小幅度调整（建议步长 0.1）</li></ul></td></tr></tbody></table>
 
 使用 `recognize` 创建识别会话时，通过 `input` 传入上下文。
 
-**参数**
-
-**类型**
-
-**是否必须**
-
-**说明**
-
-`input`
-
-`dict`
-
-否
-
-输入对象，用于传入对话上下文（context）。上下文用于辅助识别、提升专有词汇的识别准确率。使用方法详见[提升识别准确率](raw/model-user-guide/model-experience/speech-and-audio/speech-recognition/improve-asr-accuracy.md)。
-
-dict 中需包含 `context` 键，值为消息列表（list\[dict\]），每条消息包含以下字段：
-
--   `role`（str，必选）：消息角色。`user` 表示前几轮用户语音的识别结果或领域相关的词表；`assistant` 表示前几轮大语言模型的回复内容。
--   `content`（list\[dict\]，必选）：消息内容列表。每个元素包含 `type`（str，role 为 user 时填 `input_text`，role 为 assistant 时填 `text`）和 `text`（str，文本内容）。
-
-**重要**上下文消息（`input_text` 和 `text` 类型）各最多 5 条，超出时保留最近的 5 条。每轮上下文文本总长度不超过 400 个字符，超出部分从末尾截断。
-
-**重要**携带上下文时，`context` 中的消息顺序有要求：上下文消息必须按对话轮次排列，每轮中 `user`（`input_text` 类型）必须在对应的 `assistant`（`text` 类型）之前。
-
-**说明**该字段自 SDK 1.25.23 引入，2.0.1 及以上版本已包含。
-
-```
-# 构建 input 传入数据
+<table><thead><tr><th><strong>参数</strong></th><th><strong>类型</strong></th><th><strong>是否必须</strong></th><th><strong>说明</strong></th></tr></thead><tbody><tr><td><code>input</code></td><td><code>dict</code></td><td>否</td><td><p>输入对象，用于传入对话上下文（context）。上下文用于辅助识别、提升专有词汇的识别准确率。使用方法详见<a href="../model-user-guide/model-experience/speech-and-audio/speech-recognition/improve-asr-accuracy.md">提升识别准确率</a>。</p><p>dict 中需包含 <code>context</code> 键，值为消息列表（list[dict]），每条消息包含以下字段：</p><ul><li><code>role</code>（str，必选）：消息角色。<code>user</code> 表示前几轮用户语音的识别结果或领域相关的词表；<code>assistant</code> 表示前几轮大语言模型的回复内容。</li><li><code>content</code>（list[dict]，必选）：消息内容列表。每个元素包含 <code>type</code>（str，role 为 user 时填 <code>input_text</code>，role 为 assistant 时填 <code>text</code>）和 <code>text</code>（str，文本内容）。</li></ul><div><div><p><strong>重要</strong>上下文消息（<code>input_text</code> 和 <code>text</code> 类型）各最多 5 条，超出时保留最近的 5 条。每轮上下文文本总长度不超过 400 个字符，超出部分从末尾截断。</p></div></div><div><div><p><strong>重要</strong>携带上下文时，<code>context</code> 中的消息顺序有要求：上下文消息必须按对话轮次排列，每轮中 <code>user</code>（<code>input_text</code> 类型）必须在对应的 <code>assistant</code>（<code>text</code> 类型）之前。</p></div></div><div><div><p><strong>说明</strong>该字段自 SDK 1.25.23 引入，2.0.1 及以上版本已包含。</p></div></div><a id="code-block-4"></a><pre class="language-python"><code># 构建 input 传入数据
 input_context = {
-    "context": [
+    &quot;context&quot;: [
         {
-            "role": "user",
-            "content": [
+            &quot;role&quot;: &quot;user&quot;,
+            &quot;content&quot;: [
                 {
-                    "type": "input_text",
-                    "text": "你好啊"
+                    &quot;type&quot;: &quot;input_text&quot;,
+                    &quot;text&quot;: &quot;你好啊&quot;
                 }
             ]
         },
         {
-            "role": "assistant",
-            "content": [
+            &quot;role&quot;: &quot;assistant&quot;,
+            &quot;content&quot;: [
                 {
-                    "type": "text",
-                    "text": "你好啊，我是通义千问，有什么可以帮助你的？"
+                    &quot;type&quot;: &quot;text&quot;,
+                    &quot;text&quot;: &quot;你好啊，我是通义千问，有什么可以帮助你的？&quot;
                 }
             ]
         }
@@ -611,27 +448,36 @@ recognition = client.audio.asr.recognize(
     sample_rate=16000,
     input=input_context,
 )
-```
+</code></pre></td></tr></tbody></table>
+
+<a id="接口参考"></a>
+
+<a id="model-qwen-audio-asr-streaming-cc1002f2d5met"></a>
+
+<a id="model-qwen-audio-asr-message-cc1002f2d5met"></a>
+
+<a id="model-fun-asr-realtime-cc1002f2d5met"></a>
+
+<a id="关键接口"></a>
 
 ## 接口参考
+
+<a id="核心资源-client-audio-asr"></a>
+
+<a id="model-qwen-audio-asr-streaming-d6bc1f133f871"></a>
+
+<a id="model-qwen-audio-asr-message-d6bc1f133f871"></a>
+
+<a id="model-fun-asr-realtime-d6bc1f133f871"></a>
 
 ### 核心资源（`client.audio.asr`）
 
 实时语音识别能力挂载在`client.audio.asr`资源上：`recognize`创建双向流式识别会话（`Recognition`），`recognize_file`对本地文件一次性识别。
 
-**成员方法**
-
-**方法签名**
-
-**说明**
-
-recognize
-
-```
-def recognize(self,
+<table><thead><tr><th><strong>成员方法</strong></th><th><strong>方法签名</strong></th><th><strong>说明</strong></th></tr></thead><tbody><tr><td><p>recognize</p></td><td><a id="code-block-5"></a><pre class="language-python"><code>def recognize(self,
               *,
               model: str,
-              format: str = "pcm",
+              format: str = &quot;pcm&quot;,
               sample_rate: int = 16000,
               vocabulary_id: str = None,
               disfluency_removal_enabled: bool = None,
@@ -639,86 +485,41 @@ def recognize(self,
               parameters: Dict = None,
               input: Dict = None,
               phrase_id: str = None,
-              ...) -> Recognition
-```
-
-创建双向流式识别会话，进入`with`上下文时自动调用`start`建立连接并发送任务。
-
-发送音频与消费事件需并发进行（配合`send_audio_frame`、`events()`/`results()`和`stop`使用）。
-
-recognize\_file
-
-```
-def recognize_file(self,
+              ...) -&gt; Recognition
+</code></pre></td><td><p>创建双向流式识别会话，进入<code>with</code>上下文时自动调用<code>start</code>建立连接并发送任务。</p><p>发送音频与消费事件需并发进行（配合<code>send_audio_frame</code>、<code>events()</code>/<code>results()</code>和<code>stop</code>使用）。</p></td></tr><tr><td><p>recognize_file</p></td><td><a id="code-block-6"></a><pre class="language-python"><code>def recognize_file(self,
                    path: str,
                    *,
                    model: str,
-                   format: str = "pcm",
+                   format: str = &quot;pcm&quot;,
                    sample_rate: int = 16000,
-                   ...) -> Iterator[Dict]
-```
-
-基于本地文件的非流式调用：自动分块发送音频并驱动到任务结束，逐个产出服务端事件。该方法要求所识别文件具有可读权限。
-
-start
-
-```
-def start(self)
-```
-
-开始语音识别：建立连接、发送任务并等待`task-started`。进入`with`上下文时自动调用，启动成功后才能发送音频。
-
-send\_audio\_frame
-
-```
-def send_audio_frame(self, buffer: bytes)
-```
-
-推送音频。每次推送的音频流不宜过大或过小，建议每包音频时长为100ms左右，大小在1KB~16KB之间。
-
-识别结果通过[事件迭代（`events()`/`results()`）](#model-qwen-audio-asr-streaming-85d698b9f9g8s)获取。
-
-stop
-
-```
-def stop(self)
-```
-
-停止语音识别：只通知服务端输入结束，接收线程需继续消费`events()`直到`task-finished`事件。
-
-events / results
-
-```
-def events(self) -> Iterator[Dict]
-def results(self) -> Iterator[RecognitionResult]
-```
-
-迭代服务端事件：`events()`产出原始事件`dict`（识别文本位于`payload.output.sentence`）；`results()`只产出识别结果帧，返回[识别结果（RecognitionResult）](#asr-recognition-result)类型化对象（心跳帧已过滤）。
-
-close
-
-```
-def close(self)
-```
-
-关闭识别会话。退出`with`上下文时自动调用。
-
-request\_id / first\_package\_delay / last\_package\_delay / last\_response
-
-```
-rec.request_id
+                   ...) -&gt; Iterator[Dict]
+</code></pre></td><td><p>基于本地文件的非流式调用：自动分块发送音频并驱动到任务结束，逐个产出服务端事件。该方法要求所识别文件具有可读权限。</p></td></tr><tr><td><p>start</p></td><td><a id="code-block-7"></a><pre class="language-python"><code>def start(self)
+</code></pre></td><td><p>开始语音识别：建立连接、发送任务并等待<code>task-started</code>。进入<code>with</code>上下文时自动调用，启动成功后才能发送音频。</p></td></tr><tr><td><p>send_audio_frame</p></td><td><a id="code-block-8"></a><pre class="language-python"><code>def send_audio_frame(self, buffer: bytes)
+</code></pre></td><td><p>推送音频。每次推送的音频流不宜过大或过小，建议每包音频时长为100ms左右，大小在1KB~16KB之间。</p><p>识别结果通过<a href="#model-qwen-audio-asr-streaming-85d698b9f9g8s">事件迭代（<code>events()</code>/<code>results()</code>）</a>获取。</p></td></tr><tr><td><p>stop</p></td><td><a id="code-block-9"></a><pre class="language-python"><code>def stop(self)
+</code></pre></td><td><p>停止语音识别：只通知服务端输入结束，接收线程需继续消费<code>events()</code>直到<code>task-finished</code>事件。</p></td></tr><tr><td><p>events / results</p></td><td><a id="code-block-10"></a><pre class="language-python"><code>def events(self) -&gt; Iterator[Dict]
+def results(self) -&gt; Iterator[RecognitionResult]
+</code></pre></td><td><p>迭代服务端事件：<code>events()</code>产出原始事件<code>dict</code>（识别文本位于<code>payload.output.sentence</code>）；<code>results()</code>只产出识别结果帧，返回<a href="#asr-recognition-result">识别结果（RecognitionResult）</a>类型化对象（心跳帧已过滤）。</p></td></tr><tr><td><p>close</p></td><td><a id="code-block-11"></a><pre class="language-python"><code>def close(self)
+</code></pre></td><td><p>关闭识别会话。退出<code>with</code>上下文时自动调用。</p></td></tr><tr><td><p>request_id / first_package_delay / last_package_delay / last_response</p></td><td><a id="code-block-12"></a><pre class="language-python"><code>rec.request_id
 rec.first_package_delay
 rec.last_package_delay
 rec.last_response
-```
+</code></pre></td><td><p>获取request_id、首包延迟（从发送第一包音频到收到首包识别结果延迟）和尾包延迟（发送<code>stop</code>指令到最后一包识别结果下发耗时），在任务完成后使用；<code>last_response</code>为最近一次成功读取的原始报文，可用于获取task-failed报错。会话关闭后仍可读取。</p></td></tr></tbody></table>
 
-获取request\_id、首包延迟（从发送第一包音频到收到首包识别结果延迟）和尾包延迟（发送`stop`指令到最后一包识别结果下发耗时），在任务完成后使用；`last_response`为最近一次成功读取的原始报文，可用于获取task-failed报错。会话关闭后仍可读取。
+<a id="事件迭代-events-results"></a>
+
+<a id="model-qwen-audio-asr-streaming-85d698b9f9g8s"></a>
+
+<a id="model-qwen-audio-asr-message-85d698b9f9g8s"></a>
+
+<a id="model-fun-asr-realtime-85d698b9f9g8s"></a>
 
 ### 事件迭代（`events()`/`results()`）
 
 [双向流式调用](#model-qwen-audio-asr-streaming-9d1e5f6852jr8)时，服务端会通过事件的方式，将关键流程信息和数据返回给客户端。您需要在接收线程中迭代会话的`events()`（原始事件`dict`）或`results()`（类型化识别结果帧），处理服务端返回的信息或者数据。
 
-```
+<a id="code-block-13"></a>
+
+```python
 # 迭代原始事件：识别文本位于 payload.output.sentence
 def receive_events(rec):
     for event in rec.events():
@@ -726,6 +527,7 @@ def receive_events(rec):
         sentence = (payload.get('output') or {}).get('sentence') or {}
         if sentence.get('text') and not sentence.get('heartbeat'):
             print('识别文本：', sentence['text'])
+
 
 # 或只迭代识别结果帧（返回 RecognitionResult，心跳帧已过滤）
 def receive_results(rec):
@@ -735,84 +537,43 @@ def receive_results(rec):
             print('识别文本：', sentence['text'])
 ```
 
-**事件/迭代方法**
-
-**产出内容**
-
-**返回值**
-
-**描述**
-
-```
-event["header"]["event"] == "task-started"
-```
-
-`task-started`事件
-
-无
-
-由`start()`内部读取，启动返回时保存在`last_response`中，不会由`events()`再次产出。
-
-```
-def events(self) -> Iterator[Dict]
-```
-
-`event`：服务端事件`dict`
-
-迭代器
-
-当服务有回复时产出事件。识别结果位于`payload.output.sentence`，可能为心跳或空文本事件，应用可按需忽略。请由一个接收线程持续消费，不要并发创建多个读取者。
-
-```
-def results(self) -> Iterator[RecognitionResult]
-```
-
-`result`：识别结果（`RecognitionResult`）
-
-迭代器
-
-只产出识别结果帧（心跳帧已过滤），全部识别结果返回后迭代结束。
-
-```
-try:
+<table><thead><tr><th><strong>事件/迭代方法</strong></th><th><strong>产出内容</strong></th><th><strong>返回值</strong></th><th><strong>描述</strong></th></tr></thead><tbody><tr><td><a id="code-block-14"></a><pre class="language-python"><code>event[&quot;header&quot;][&quot;event&quot;] == &quot;task-started&quot;
+</code></pre></td><td><p><code>task-started</code>事件</p></td><td><p>无</p></td><td><p>由<code>start()</code>内部读取，启动返回时保存在<code>last_response</code>中，不会由<code>events()</code>再次产出。</p></td></tr><tr><td><a id="code-block-15"></a><pre class="language-python"><code>def events(self) -&gt; Iterator[Dict]
+</code></pre></td><td><p><code>event</code>：服务端事件<code>dict</code></p></td><td><p>迭代器</p></td><td><p>当服务有回复时产出事件。识别结果位于<code>payload.output.sentence</code>，可能为心跳或空文本事件，应用可按需忽略。请由一个接收线程持续消费，不要并发创建多个读取者。</p></td></tr><tr><td><a id="code-block-16"></a><pre class="language-python"><code>def results(self) -&gt; Iterator[RecognitionResult]
+</code></pre></td><td><p><code>result</code>：识别结果（<code>RecognitionResult</code>）</p></td><td><p>迭代器</p></td><td><p>只产出识别结果帧（心跳帧已过滤），全部识别结果返回后迭代结束。</p></td></tr><tr><td><a id="code-block-17"></a><pre class="language-python"><code>try:
     ...
 except DashScopeError as e:
     print(e.code, e.message, e.request_id)
-```
+</code></pre></td><td><p><code>DashScopeError</code>异常</p></td><td><p>无</p></td><td><p>发生异常时在发送/接收线程中抛出，可使用try/except捕获。</p></td></tr><tr><td><a id="code-block-18"></a><pre class="language-python"><code>event[&quot;header&quot;][&quot;event&quot;] == &quot;task-finished&quot;
+</code></pre></td><td><p><code>task-finished</code>事件</p></td><td><p>无</p></td><td><p>当服务已经完成全部识别后由<code>events()</code>产出，随后迭代结束；发送<code>stop()</code>后仍须读取此事件。</p></td></tr></tbody></table>
 
-`DashScopeError`异常
-
-无
-
-发生异常时在发送/接收线程中抛出，可使用try/except捕获。
-
-```
-event["header"]["event"] == "task-finished"
-```
-
-`task-finished`事件
-
-无
-
-当服务已经完成全部识别后由`events()`产出，随后迭代结束；发送`stop()`后仍须读取此事件。
+<a id="qwen-audio-asr-message-2"></a>
 
 ### Qwen-Audio-ASR-Message
+
+<a id="更新对话上下文"></a>
+
+<a id="model-qwen-audio-asr-message-update-context"></a>
 
 #### 更新对话上下文
 
 调用 `update_context` 在识别任务运行过程中更新对话上下文，用于辅助后续音频的识别。该方法要求 DashScope Python SDK 2.0.1 及以上版本。
 
-```
+<a id="code-block-19"></a>
+
+```python
 def update_context(self, context: dict)
 ```
 
 -   **调用时机：**进入`with`上下文（自动调用`start`）启动流式识别后、调用 `stop` 前。
 -   **参数：**`context` 为字典，传入 `continue-task` 事件的 `payload.input` 对象，包含 `context` 字段，不要额外包装 `payload` 或 `input` 层级。
--   **支持范围与参数约束：**请参见 [continue-task](https://help.aliyun.com/zh/model-studio/qwen-asr-message-client-events#h-continue-task)。
+-   **支持范围与参数约束：**请参见 [continue-task](qwen-asr-message-client-events-1721a061cc8750e6.md#h-continue-task)。
 
 以下示例复用已启动的 `recognition` 实例。
 
-```
+<a id="code-block-20"></a>
+
+```python
 payload_input = {
     "context": [
         {
@@ -828,114 +589,67 @@ payload_input = {
 recognition.update_context(context=payload_input)
 ```
 
+<a id="响应结果"></a>
+
+<a id="model-qwen-audio-asr-message-843fb17087zct"></a>
+
 #### 响应结果
+
+<a id="asr-recognition-result"></a>
+
+<a id="model-qwen-audio-asr-message-bc3e1a43d6hhy"></a>
+
+<a id="识别结果-recognitionresult-2"></a>
 
 ##### 识别结果（`RecognitionResult`）
 
 `RecognitionResult`代表会话`results()`迭代产出的一次识别结果帧（[双向流式调用](#model-qwen-audio-asr-message-9d1e5f6852jr8)与[非流式调用](#model-qwen-audio-asr-message-8341058094tc3)均可使用；`events()`产出的是原始事件`dict`，如需该类型化视图请改用`results()`）。
 
-**成员方法**
+<table><thead><tr><th><strong>成员方法</strong></th><th><strong>方法签名</strong></th><th><strong>说明</strong></th></tr></thead><tbody><tr><td><code>get_sentence</code></td><td><a id="code-block-21"></a><pre class="language-python"><code>def get_sentence(self) -&gt; Union[Dict[str, Any], List[Any]]
+</code></pre></td><td><p>获取当前识别的句子及时间戳信息，此方法返回类型为Dict[str, Any]（单句信息）。</p><p>详情请参见<a href="#model-qwen-audio-asr-message-f28f50b035qtn">单句信息（Sentence）</a>。</p></td></tr><tr><td><code>request_id</code></td><td><a id="code-block-22"></a><pre class="language-python"><code>result.request_id
+</code></pre></td><td>当前事件对应的请求request_id。</td></tr><tr><td><code>is_sentence_end</code></td><td><a id="code-block-23"></a><pre class="language-python"><code>def is_sentence_end(self) -&gt; bool
+</code></pre></td><td>判断当前句子是否已经结束。该方法通过检查 <code>get_sentence()</code> 返回的单句信息中 <code>end_time</code> 字段是否为 <code>None</code> 来判定——<code>end_time</code> 不为 <code>None</code> 时表示句子已结束。</td></tr></tbody></table>
 
-**方法签名**
+<a id="model-qwen-audio-asr-message-f28f50b035qtn"></a>
 
-**说明**
-
-`get_sentence`
-
-```
-def get_sentence(self) -> Union[Dict[str, Any], List[Any]]
-```
-
-获取当前识别的句子及时间戳信息，此方法返回类型为Dict\[str, Any\]（单句信息）。
-
-详情请参见[单句信息（Sentence）](#model-qwen-audio-asr-message-f28f50b035qtn)。
-
-`request_id`
-
-```
-result.request_id
-```
-
-当前事件对应的请求request\_id。
-
-`is_sentence_end`
-
-```
-def is_sentence_end(self) -> bool
-```
-
-判断当前句子是否已经结束。该方法通过检查 `get_sentence()` 返回的单句信息中 `end_time` 字段是否为 `None` 来判定——`end_time` 不为 `None` 时表示句子已结束。
+<a id="单句信息-sentence-2"></a>
 
 ##### 单句信息（`Sentence`）
 
 Sentence类成员如下：
 
-**参数**
+| 参数 | 类型 | 说明 |
+| --- | --- | --- |
+| `begin_time` | `int` | 句子开始时间，单位为ms。 |
+| `end_time` | `int` | 句子结束时间，单位为ms。 |
+| `text` | `str` | 识别文本。 |
+| `words` | [字时间戳信息（Word）](#model-qwen-audio-asr-message-b55a7391caxxe)的list集合 | 字时间戳信息。 |
 
-**类型**
+<a id="model-qwen-audio-asr-message-b55a7391caxxe"></a>
 
-**说明**
-
-`begin_time`
-
-`int`
-
-句子开始时间，单位为ms。
-
-`end_time`
-
-`int`
-
-句子结束时间，单位为ms。
-
-`text`
-
-`str`
-
-识别文本。
-
-`words`
-
-[字时间戳信息（Word）](#model-qwen-audio-asr-message-b55a7391caxxe)的list集合
-
-字时间戳信息。
+<a id="字时间戳信息-word-2"></a>
 
 ##### 字时间戳信息（`Word`）
 
 Word类成员如下：
 
-**参数**
+| 参数 | 类型 | 说明 |
+| --- | --- | --- |
+| `begin_time` | `int` | 字开始时间，单位为ms。 |
+| `end_time` | `int` | 字结束时间，单位为ms。 |
+| `text` | `str` | 字。 |
+| `punctuation` | `str` | 标点。 |
 
-**类型**
+<a id="错误码"></a>
 
-**说明**
+<a id="model-qwen-audio-asr-streaming-605d5ca873bnd"></a>
 
-`begin_time`
+<a id="model-qwen-audio-asr-message-605d5ca873bnd"></a>
 
-`int`
-
-字开始时间，单位为ms。
-
-`end_time`
-
-`int`
-
-字结束时间，单位为ms。
-
-`text`
-
-`str`
-
-字。
-
-`punctuation`
-
-`str`
-
-标点。
+<a id="model-fun-asr-realtime-605d5ca873bnd"></a>
 
 ## 错误码
 
-如遇报错问题，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行排查。
+如遇报错问题，请参见[错误码](../model-api-reference/preparations/error-code.md)进行排查。
 
 若问题仍未解决，可加入[语音 SDK 示例仓库](https://github.com/aliyun/alibabacloud-bailian-speech-demo)中列出的开发者群反馈问题，并提供Request ID，以便进一步排查问题。

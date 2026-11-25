@@ -4,190 +4,73 @@
 
 分页列出指定子用户的记忆节点，可按记忆库和项目筛选。
 
+<a id="请求方法与路径"></a>
+
 ## 请求方法与路径
 
 `GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/memory_nodes`
 
-调用时请将 `{WorkspaceId}` 替换为真实的[业务空间 ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+调用时请将 `{WorkspaceId}` 替换为真实的[业务空间 ID](../../../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
+
+<a id="请求参数"></a>
 
 ## 请求参数
 
-参数
+| 参数 | 类型 | 必填 | 位置 | 说明 |
+| --- | --- | --- | --- | --- |
+| `user_id` | string | 是 | Query | 子用户 ID，用于隔离记忆 |
+| `memory_library_id` | string | 否 | Query | 记忆库 ID |
+| `project_id` | string | 否 | Query | 项目 ID |
+| `page_num` | integer | 否 | Query | 页码，默认值为 `1` |
+| `page_size` | integer | 否 | Query | 每页数量，默认值为 `10` |
 
-类型
-
-必填
-
-位置
-
-说明
-
-`user_id`
-
-string
-
-是
-
-Query
-
-子用户 ID，用于隔离记忆
-
-`memory_library_id`
-
-string
-
-否
-
-Query
-
-记忆库 ID
-
-`project_id`
-
-string
-
-否
-
-Query
-
-项目 ID
-
-`page_num`
-
-integer
-
-否
-
-Query
-
-页码，默认值为 `1`
-
-`page_size`
-
-integer
-
-否
-
-Query
-
-每页数量，默认值为 `10`
+<a id="返回结果"></a>
 
 ## 返回结果
 
-字段
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `request_id` | string | 请求 ID |
+| `memory_nodes` | array | 记忆节点列表 |
+| `memory_nodes[].memory_node_id` | string | 记忆节点 ID |
+| `memory_nodes[].content` | string | 记忆内容 |
+| `memory_nodes[].timestamp` | integer | 消息时间戳 |
+| `memory_nodes[].created_at` | integer | 创建时间 |
+| `memory_nodes[].updated_at` | integer | 更新时间 |
+| `memory_nodes[].media_desc` | string | 多模态信息描述 |
+| `memory_nodes[].meta_data` | object | 自定义元信息 |
+| `memory_nodes[].project_id` | string | 添加或更新时指定的项目 ID，可能为空 |
+| `memory_nodes[].memory_type` | string | 记忆节点类型 |
+| `memory_nodes[].status` | string | 记忆节点状态 |
+| `memory_nodes[].multimodal_medias` | array | 多模态资源，存在时返回 |
+| `page_num` | integer | 当前页码 |
+| `page_size` | integer | 每页数量 |
+| `total` | integer | 记忆节点总数 |
 
-类型
-
-说明
-
-`request_id`
-
-string
-
-请求 ID
-
-`memory_nodes`
-
-array
-
-记忆节点列表
-
-`memory_nodes[].memory_node_id`
-
-string
-
-记忆节点 ID
-
-`memory_nodes[].content`
-
-string
-
-记忆内容
-
-`memory_nodes[].timestamp`
-
-integer
-
-消息时间戳
-
-`memory_nodes[].created_at`
-
-integer
-
-创建时间
-
-`memory_nodes[].updated_at`
-
-integer
-
-更新时间
-
-`memory_nodes[].media_desc`
-
-string
-
-多模态信息描述
-
-`memory_nodes[].meta_data`
-
-object
-
-自定义元信息
-
-`memory_nodes[].project_id`
-
-string
-
-添加或更新时指定的项目 ID，可能为空
-
-`memory_nodes[].memory_type`
-
-string
-
-记忆节点类型
-
-`memory_nodes[].status`
-
-string
-
-记忆节点状态
-
-`memory_nodes[].multimodal_medias`
-
-array
-
-多模态资源，存在时返回
-
-`page_num`
-
-integer
-
-当前页码
-
-`page_size`
-
-integer
-
-每页数量
-
-`total`
-
-integer
-
-记忆节点总数
+<a id="请求示例"></a>
 
 ## 请求示例
 
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-curl-tab"></a>
+
 cURL
 
-```
+<a id="code-code-group-curl"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/memory_nodes?user_id=user_001&memory_library_id=memory_library_001&project_id=project_001&page_size=10&page_num=1' \
   --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
+<a id="fig-code-group-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 from agentscope_runtime.tools.modelstudio_memory import (
     ListMemory, ListMemoryInput,
 )
@@ -209,9 +92,13 @@ async def main():
 asyncio.run(main())
 ```
 
+<a id="响应示例"></a>
+
 ## 响应示例
 
-```
+<a id="code-block"></a>
+
+```json
 {
   "request_id": "c04d36e2-8fe8-9aad-b7ae-be40d5852c35",
   "memory_nodes": [
@@ -235,4 +122,6 @@ asyncio.run(main())
 }
 ```
 
-**重要**修改记忆使用 [UpdateMemory](raw/application-api-reference/long-term-memory-new/fragments-overview/update-memory.md)。
+> **重要**
+>
+> 修改记忆使用 [UpdateMemory](update-memory.md)。

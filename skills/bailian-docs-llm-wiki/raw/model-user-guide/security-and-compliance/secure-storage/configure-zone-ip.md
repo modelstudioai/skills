@@ -2,13 +2,25 @@
 
 本文档以公共云为例介绍如何配置可用区IP。
 
+<a id="适用范围"></a>
+
+<a id="c892eac682ufq"></a>
+
 ## 适用范围
 
 本文档适用于已经申请开通了百炼安全存储业务空间的用户。请咨询与您对接的商务人员了解如何开通百炼安全存储业务空间。
 
+<a id="前提条件"></a>
+
+<a id="289ab2a75dm26"></a>
+
 ## 前提条件
 
-已配置终端节点并发起连接。具体操作，请参见[配置终端节点并发起连接](raw/model-user-guide/security-and-compliance/secure-storage/configure-an-endpoint-and-initiate-a-connection.md)。
+已配置终端节点并发起连接。具体操作，请参见[配置终端节点并发起连接](configure-an-endpoint-and-initiate-a-connection.md)。
+
+<a id="步骤1-创建网关"></a>
+
+<a id="18a2a3bed0hua"></a>
 
 ## 步骤1：创建网关
 
@@ -24,53 +36,19 @@
     
 5.  在云原生网关购买页面中配置以下网关信息，其他参数保持默认值即可。
     
-    **配置项**
-    
-    **说明**
-    
-    **商品类型**
-    
-    支持**包年包月**和**按量付费**方式。具体价格，请参见[普通实例计费概述](https://help.aliyun.com/zh/mse/product-overview/billing-overview-2#concept-2081040)。
-    
-    **地域**
-    
-    选择阿里云百炼服务所在地域“华北2（北京）”。
-    
-    **网关名称**
-    
-    自定义，建议规范命名，以便准确识别网关的用途。
-    
-    **网关实例规格**
-    
-    选择**2核4G**。
-    
-    ****网关节点数****
-    
-    选择**2**。
-    
-    **硬件加速**
-    
-    选中**启用 TLS 硬件加速**。
-    
-    **资源组**
-    
-    选择资源组。
-    
-    **专有网络**
-    
-    选择与反向终端节点相同的专有网络。
-    
-    **可用区位置**
-    
-    **手动选择**。
-    
-    **可用区与交换机**
-    
-    选择与专有网络一致的可用区及交换机。至少选择两个可用区。
-    
-    **网络访问类型**
-    
-    选择**私网**。
+    | 配置项 | 说明 |
+    | --- | --- |
+    | **商品类型** | 支持**包年包月**和**按量付费**方式。具体价格，请参见[普通实例计费概述](https://help.aliyun.com/zh/mse/product-overview/billing-overview-2#concept-2081040)。 |
+    | **地域** | 选择阿里云百炼服务所在地域“华北2（北京）”。 |
+    | **网关名称** | 自定义，建议规范命名，以便准确识别网关的用途。 |
+    | **网关实例规格** | 选择**2核4G**。 |
+    | ****网关节点数**** | 选择**2**。 |
+    | **硬件加速** | 选中**启用 TLS 硬件加速**。 |
+    | **资源组** | 选择资源组。 |
+    | **专有网络** | 选择与反向终端节点相同的专有网络。 |
+    | **可用区位置** | **手动选择**。 |
+    | **可用区与交换机** | 选择与专有网络一致的可用区及交换机。至少选择两个可用区。 |
+    | **网络访问类型** | 选择**私网**。 |
     
     > 关于云原生网关的更多信息，请参见[创建MSE云原生网关](https://help.aliyun.com/zh/mse/user-guide/create-a-cloud-native-gateway)。
     
@@ -78,6 +56,10 @@
     
     网关创建过程可能需要2~3分钟，请您耐心等待。当状态为**运行中**时，表示网关可用。
     
+
+<a id="步骤2-获取可用区vip及交换机网段"></a>
+
+<a id="24a6fbbdc0hkn"></a>
 
 ## 步骤2：获取可用区VIP及交换机网段
 
@@ -94,6 +76,10 @@
     在交换机详情页的基本信息区域，查看**IPv4网段**（如`192.168.0.0/24`）和**IPv6网段**字段，记录交换机的网段信息。
     
 
+<a id="步骤3-配置可用区ip"></a>
+
+<a id="7490dc2f998ol"></a>
+
 ## 步骤3：配置可用区IP
 
 1.  访问**[业务空间管理](https://bailian.console.aliyun.com/settings/workspace)**页面。
@@ -102,10 +88,14 @@
     
 3.  在**终端节点配置**页面单击**下一步**，进入**可用区IP配置**页面。
     
-    选择与[步骤1：创建网关](https://help.aliyun.com/zh/model-studio/configure-zone-ip#18a2a3bed0hua)中一致的可用区，如果仅有一个可用区一致，则只选择该可用区。可用区IP地址为[步骤2：获取可用区VIP及交换机网段](https://help.aliyun.com/zh/model-studio/configure-zone-ip#24a6fbbdc0hkn)中已获取的可用区的VIP。
+    选择与[步骤1：创建网关](configure-zone-ip.md#18a2a3bed0hua)中一致的可用区，如果仅有一个可用区一致，则只选择该可用区。可用区IP地址为[步骤2：获取可用区VIP及交换机网段](configure-zone-ip.md#24a6fbbdc0hkn)中已获取的可用区的VIP。
     
 4.  配置完成后，单击**保存**。
     
+
+<a id="步骤4-将mse的nlb的ip添加到反向终端节点的安全组中"></a>
+
+<a id="ee37d4d481mk2"></a>
 
 ## 步骤4：将MSE的NLB的IP添加到反向终端节点的安全组中
 
@@ -116,10 +106,14 @@
 3.  在**入方向**页签中，单击**手动添加**，配置以下参数。
     
     -   **端口范围 > 目的**：选择**全部（1/65535）**。
-    -   **源**：[步骤2：获取可用区VIP及交换机网段](https://help.aliyun.com/zh/model-studio/configure-zone-ip#24a6fbbdc0hkn)中已经获取的VIP，多个VIP之间用逗号分隔。
+    -   **源**：[步骤2：获取可用区VIP及交换机网段](configure-zone-ip.md#24a6fbbdc0hkn)中已经获取的VIP，多个VIP之间用逗号分隔。
 4.  单击当前行最右侧的**保存**。
     
 
+<a id="下一步"></a>
+
+<a id="1c1fad53b34vf"></a>
+
 ## 下一步
 
-进入**资源配置**页面[配置私有网络中的资源](raw/model-user-guide/security-and-compliance/secure-storage/configure-resources-in-private-network.md)（例如，ElasticSearch、ADB、OSS），便于阿里云百炼将数据存储到相应资源中。
+进入**资源配置**页面[配置私有网络中的资源](configure-resources-in-private-network.md)（例如，ElasticSearch、ADB、OSS），便于阿里云百炼将数据存储到相应资源中。

@@ -2,78 +2,71 @@
 
 本文介绍通过 WebSocket 连接访问 Qwen-Audio-3.1-ASR-Flash-Message 实时语音识别服务的接口地址、请求头和交互流程。
 
-使用 Python 调用模型时，请参见 [Qwen-Audio-ASR-Message Python SDK](https://help.aliyun.com/zh/model-studio/qwen-asr-message-websocket-sdk-python#model-qwen-audio-asr-message)。
+使用 Python 调用模型时，请参见 [Qwen-Audio-ASR-Message Python SDK](qwen-asr-message-websocket-sdk-python-06f03701cdddda13.md#model-qwen-audio-asr-message)。
+
+<a id="接口地址"></a>
+
+<a id="e9aa293c6fec4"></a>
 
 ## 接口地址
 
 WebSocket 接口地址如下，必须使用 `wss://` 协议：
 
+<a id="sec-tabs"></a>
+
+<a id="华北2-北京"></a>
+
+<a id="华北2-北京-h4"></a>
+
 #### 华北2（北京）
 
 `wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference`
 
-调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
+
+<a id="新加坡"></a>
+
+<a id="新加坡-h4"></a>
 
 #### 新加坡
 
 `wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/inference`
 
-调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
 
-**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
+> **重要**
+>
+> 阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
+>
+> -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+> -   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
 
--   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
--   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+<a id="请求头"></a>
+
+<a id="b090495fcbf8i"></a>
 
 ## 请求头
 
 请求头中需添加如下信息：
 
-**参数**
+| 参数 | 类型 | 是否必选 | 说明 |
+| --- | --- | --- | --- |
+| Authorization | string | 是 | 鉴权令牌，格式为 `Bearer <your_api_key>`，将 `<your_api_key>` 替换为实际的 API Key。 |
+| user-agent | string | 否 | 客户端标识，便于服务端追踪来源。 |
+| X-DashScope-WorkSpace | string | 否 | 阿里云百炼[业务空间ID](https://help.aliyun.com/zh/model-studio/use-workspace)。 |
+| X-DashScope-DataInspection | string | 否 | 是否启用数据合规检测功能。默认不传或设为`enable`。如非必要，请勿启用该参数。 |
 
-**类型**
+> **重要**
+>
+> Authorization 鉴权在 WebSocket 握手阶段验证。如果 API Key 无效或缺失，握手将失败并返回 HTTP 401/403 错误。
 
-**是否必选**
+<a id="交互流程"></a>
 
-**说明**
-
-Authorization
-
-string
-
-是
-
-鉴权令牌，格式为 `Bearer <your_api_key>`，将 `<your_api_key>` 替换为实际的 API Key。
-
-user-agent
-
-string
-
-否
-
-客户端标识，便于服务端追踪来源。
-
-X-DashScope-WorkSpace
-
-string
-
-否
-
-阿里云百炼[业务空间ID](https://help.aliyun.com/zh/model-studio/use-workspace)。
-
-X-DashScope-DataInspection
-
-string
-
-否
-
-是否启用数据合规检测功能。默认不传或设为`enable`。如非必要，请勿启用该参数。
-
-**重要**Authorization 鉴权在 WebSocket 握手阶段验证。如果 API Key 无效或缺失，握手将失败并返回 HTTP 401/403 错误。
+<a id="fun-asr-flow-h2"></a>
 
 ## 交互流程
 
-客户端事件和服务端事件的详细说明，请参见[客户端事件](raw/_short/qwen-asr-message-client-events-1721a061cc8750e6.md)和[服务端事件](raw/_short/qwen-asr-message-server-events-f2a670ecbf4abcc9.md)。
+客户端事件和服务端事件的详细说明，请参见[客户端事件](qwen-asr-message-client-events-1721a061cc8750e6.md)和[服务端事件](qwen-asr-message-server-events-f2a670ecbf4abcc9.md)。
 
 ![WebSocket 语音识别交互时序](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7761245871/CAEQURiBgMCczta5pxkiIGY0N2Q2YjIwZTM1MTQyNTY4ZmFkY2MwN2JmOTllODFl4709861_20241015153444.149.svg)
 
@@ -86,19 +79,35 @@ string
 5.  任务结束：客户端收到服务端返回的 task-finished 事件，标志着任务结束。
 6.  关闭连接：客户端关闭 WebSocket 连接。
 
+<a id="调用示例"></a>
+
+<a id="examples"></a>
+
 ## 调用示例
 
 以下示例使用 qwen-audio-3.1-asr-flash-message。在[控制台获取 API Key 和 Base URL](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key)，分别配置环境变量 `DASHSCOPE_API_KEY` 和 `DASHSCOPE_BASE_URL`。
 
 下载[示例音频](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/zh/audios/6a4b3c2d1e0f9093.wav)并保存为 `asr_example.wav`。音频为 16 kHz、单声道、16-bit PCM 编码的 WAV 文件。
 
+<a id="sec-tabs-2"></a>
+
+<a id="java"></a>
+
+<a id="java-h4"></a>
+
 #### Java
 
 在运行示例前，请确保已安装Java-WebSocket依赖：
 
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-maven-tab"></a>
+
 Maven
 
-```
+<a id="code-code-group-maven"></a>
+
+```xml
 <dependency>
     <groupId>org.java-websocket</groupId>
     <artifactId>Java-WebSocket</artifactId>
@@ -111,14 +120,20 @@ Maven
 </dependency>
 ```
 
+<a id="fig-code-group-gradle-tab"></a>
+
 Gradle
 
-```
+<a id="code-code-group-gradle"></a>
+
+```groovy
 implementation 'org.java-websocket:Java-WebSocket:1.5.6'
 implementation 'org.json:json:20240303'
 ```
 
-```
+<a id="code-block"></a>
+
+```java
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONObject;
@@ -254,17 +269,27 @@ public class FunASRRealtimeClient {
 }
 ```
 
+<a id="python"></a>
+
+<a id="python-h4"></a>
+
 #### Python
 
 在运行示例前，请确保已使用以下命令安装依赖：
 
-```
+<a id="code-block-2"></a>
+
+```bash
 python -m pip install websocket-client
 ```
 
-**说明**不要将示例文件命名为 `websocket.py`，以免与 `websocket` 模块重名，导致导入冲突。
+> **说明**
+>
+> 不要将示例文件命名为 `websocket.py`，以免与 `websocket` 模块重名，导致导入冲突。
 
-```
+<a id="code-block-3"></a>
+
+```python
 # pip install websocket-client
 import os
 import json
@@ -384,15 +409,24 @@ if __name__ == '__main__':
     ws.run_forever()
 ```
 
+<a id="go"></a>
+
+<a id="go-h4"></a>
+
 #### Go
 
 新建 Go 示例目录后初始化模块并安装依赖：
 
-```
+<a id="code-block-4"></a>
+
+```bash
 go mod init asr-example
 go get github.com/gorilla/websocket@v1.5.3 github.com/google/uuid@v1.6.0
 ```
-```
+
+<a id="code-block-5"></a>
+
+```go
 package main
 
 import (
@@ -681,17 +715,25 @@ func closeConnection(conn *websocket.Conn) {
 }
 ```
 
+<a id="node-js"></a>
+
+<a id="node-js-h4"></a>
+
 #### Node.js
 
 需安装相关依赖：
 
-```
+<a id="code-block-6"></a>
+
+```bash
 npm install ws@8 uuid@9
 ```
 
 示例代码如下：
 
-```
+<a id="code-block-7"></a>
+
+```javascript
 const fs = require('fs');
 const WebSocket = require('ws');
 const { v4: uuidv4 } = require('uuid'); // 用于生成UUID
@@ -828,13 +870,19 @@ ws.on('error', (error) => {
 
 将代码保存为 `asr_example.cjs`，运行 `node asr_example.cjs`。
 
+<a id="c"></a>
+
+<a id="c-h4"></a>
+
 #### C#
 
 将代码保存为 `Program.cs`，使用 .NET 控制台项目运行。
 
 示例代码如下：
 
-```
+<a id="code-block-8"></a>
+
+```csharp
 using System.Net.WebSockets;
 using System.Text;
 using System.Text.Json;
@@ -1009,6 +1057,10 @@ class Program {
 }
 ```
 
+<a id="php"></a>
+
+<a id="php-h4"></a>
+
 #### PHP
 
 将依赖配置保存为 `composer.json`，执行 `composer install` 后运行 PHP 示例。
@@ -1025,7 +1077,9 @@ my-php-project/
 
 composer.json内容如下，相关依赖的版本号请根据实际情况自行决定：
 
-```
+<a id="code-block-9"></a>
+
+```json
 {
     "require": {
         "react/event-loop": "^1.3",
@@ -1044,7 +1098,9 @@ composer.json内容如下，相关依赖的版本号请根据实际情况自行�
 
 index.php内容如下：
 
-```
+<a id="code-block-10"></a>
+
+```php
 <?php
 
 require __DIR__ . '/vendor/autoload.php';
@@ -1206,6 +1262,7 @@ function handleEvent($conn, $response, $loop, $audio_file_path, $taskId) {
     static $chunks;
     static $allChunksSent = false;
 
+
     switch ($response['header']['event']) {
         case 'task-started':
             echo "任务开始，发送音频数据...\n";
@@ -1276,11 +1333,13 @@ function handleEvent($conn, $response, $loop, $audio_file_path, $taskId) {
 }
 ```
 
+<a id="可用的-sdk"></a>
+
 ## 可用的 SDK
 
--   [Python SDK](https://help.aliyun.com/zh/model-studio/qwen-asr-message-websocket-sdk-python#model-qwen-audio-asr-message)
--   [Java SDK](https://help.aliyun.com/zh/model-studio/qwen-asr-message-websocket-sdk-java#model-qwen-audio-asr-message)
--   [Node.js SDK](https://help.aliyun.com/zh/model-studio/qwen-asr-message-websocket-sdk-nodejs#model-qwen-audio-asr-message)
--   [Android SDK](https://help.aliyun.com/zh/model-studio/qwen-asr-message-websocket-sdk-android#model-qwen-audio-asr-message)
--   [iOS SDK](https://help.aliyun.com/zh/model-studio/qwen-asr-message-websocket-sdk-ios#model-qwen-audio-asr-message)
--   [HarmonyOS SDK](https://help.aliyun.com/zh/model-studio/qwen-asr-message-websocket-sdk-harmonyos#model-qwen-audio-asr-message)
+-   [Python SDK](qwen-asr-message-websocket-sdk-python-06f03701cdddda13.md#model-qwen-audio-asr-message)
+-   [Java SDK](qwen-asr-message-websocket-sdk-java-4524c054fb74f217.md#model-qwen-audio-asr-message)
+-   [Node.js SDK](qwen-asr-message-websocket-sdk-nodejs-627576e97b262b0a.md#model-qwen-audio-asr-message)
+-   [Android SDK](qwen-asr-message-websocket-sdk-android-b9e8e19722b5d570.md#model-qwen-audio-asr-message)
+-   [iOS SDK](qwen-asr-message-websocket-sdk-ios-fb447b88c464d9d4.md#model-qwen-audio-asr-message)
+-   [HarmonyOS SDK](qwen-asr-message-websocket-sdk-harmonyos-98cb0f5731fef1cb.md#model-qwen-audio-asr-message)

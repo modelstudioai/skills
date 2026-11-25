@@ -2,9 +2,13 @@
 
 千问3-LiveTranslate-Flash 是音视频翻译模型，支持 18 种语言（包括中文、英文、俄文、法文等）互译，可结合视觉上下文提升翻译准确性，并输出文本与语音。
 
+<a id="工作方式"></a>
+
+<a id="d8b1952a69frv"></a>
+
 ## 工作方式
 
-1.  **设置语种**：参考[支持的语种](https://help.aliyun.com/zh/model-studio/qwen3-livetranslate-flash#4ffd192226f0s)，在 `translation_options` 参数中设置源语种 (`source_lang`) 和目标语种 (`target_lang`)。
+1.  **设置语种**：参考[支持的语种](qwen3-livetranslate-flash.md#4ffd192226f0s)，在 `translation_options` 参数中设置源语种 (`source_lang`) 和目标语种 (`target_lang`)。
     
     > 省略 `source_lang`将启用自动检测，但指定语种能提升翻译准确率。
     
@@ -16,12 +20,14 @@
         
     -   `["text","audio"]`：输出文本和 Base64 编码的音频。
         
-        > 若输出音频，需在`audio`参数中设置音色（`voice`）。参考[支持的音色](https://help.aliyun.com/zh/model-studio/qwen3-livetranslate-flash#0a5bde7593gdk)。
+        > 若输出音频，需在`audio`参数中设置音色（`voice`）。参考[支持的音色](qwen3-livetranslate-flash.md#0a5bde7593gdk)。
         
 
 以下为使用 OpenAI Python SDK 的核心代码：
 
-```
+<a id="code-block"></a>
+
+```python
 # 导入依赖与创建客户端...
 completion = client.chat.completions.create(
     model="qwen3-livetranslate-flash",    # 选择模型
@@ -48,6 +54,7 @@ completion = client.chat.completions.create(
     stream=True
 )
 ```
+
 **使用限制**
 
 -   **单轮翻译**：模型专为翻译任务设计，不支持多轮对话。
@@ -61,47 +68,35 @@ completion = client.chat.completions.create(
 -   **文本**：读取 `chunk.choices[0].delta.content`。
 -   **音频**：读取 `chunk.choices[0].delta.audio["data"]`，模型输出音频的采样率是 24kHz。
 
+<a id="支持的模型"></a>
+
+<a id="d93c1edca9cmi"></a>
+
 ## 支持的模型
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>版本</strong></th><th><strong>上下文长度</strong></th><th><strong>最大输入</strong></th><th><strong>最大输出</strong></th></tr><tr><th colspan="3"><strong>（Token数）</strong></th></tr></thead><tbody><tr><td><strong>qwen3-livetranslate-flash</strong><blockquote><p>当前能力等同于qwen3-livetranslate-flash-2025-12-01</p></blockquote></td><td><p>稳定版</p></td><td rowspan="2"><p>53,248</p></td><td rowspan="2"><p>49,152</p></td><td rowspan="2"><p>4,096</p></td></tr><tr><td><p>qwen3-livetranslate-flash-2025-12-01</p></td><td><p>快照版</p></td></tr></tbody></table>
 
-**版本**
+<a id="如何使用"></a>
 
-**上下文长度**
-
-**最大输入**
-
-**最大输出**
-
-**（Token数）**
-
-**qwen3-livetranslate-flash**
-
-> 当前能力等同于qwen3-livetranslate-flash-2025-12-01
-
-稳定版
-
-53,248
-
-49,152
-
-4,096
-
-qwen3-livetranslate-flash-2025-12-01
-
-快照版
+<a id="0bc4867ccfbqv"></a>
 
 ## 如何使用
 
 qwen3-livetranslate-flash 模型支持音频或视频输入，并输出文本与音频。
 
-请确保已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。若通过OpenAI SDK调用，需[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+请确保已[获取与配置 API Key](../../../model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。若通过OpenAI SDK调用，需[安装SDK](../../../model-api-reference/preparations/install-sdk.md)。
 
 以下示例使用音频输入。如需输入视频，请取消对应代码的注释。
 
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -158,9 +153,13 @@ for chunk in completion:
     print(chunk)
 ```
 
+<a id="fig-code-group-javascript-tab"></a>
+
 javascript
 
-```
+<a id="code-code-group-javascript"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const client = new OpenAI({
@@ -221,9 +220,13 @@ async function main() {
 main();
 ```
 
+<a id="fig-code-group-bash-tab"></a>
+
 bash
 
-```
+<a id="code-code-group-bash"></a>
+
+```bash
 # ======= 重要提示 =======
 # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 默认示例为华北2（北京），请填写业务空间 ID，并使用同地域的 API Key。
@@ -263,7 +266,11 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
-此示例使用公网文件 URL。若使用本地文件，请参见[输入 Base64 编码的本地文件](https://help.aliyun.com/zh/model-studio/qwen-omni#c516d1e824x03)中的音频与视频部分。
+此示例使用公网文件 URL。若使用本地文件，请参见[输入 Base64 编码的本地文件](qwen-omni.md#c516d1e824x03)中的音频与视频部分。
+
+<a id="解析-base64-音频数据"></a>
+
+<a id="b6a6667a65zvt"></a>
 
 ## 解析 Base64 音频数据
 
@@ -272,9 +279,15 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -   **拼接解码：**拼接所有返回的 Base64 片段，待生成结束后统一解码，保存为音频文件。
 -   **实时播放：**实时解码每个 Base64 片段并直接播放。
 
+<a id="fig-code-group-2"></a>
+
+<a id="fig-code-group-2-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-2-python"></a>
+
+```python
 # Installation instructions for pyaudio:
 # APPLE Mac OS X
 #   brew install portaudio
@@ -371,9 +384,13 @@ sf.write("audio_assistant_py.wav", audio_np, samplerate=24000)
 # p.terminate()
 ```
 
+<a id="fig-code-group-2-javascript-tab"></a>
+
 javascript
 
-```
+<a id="code-code-group-2-javascript"></a>
+
+```javascript
 // 运行前的准备工作:
 // Windows/Mac/Linux 通用:
 // 1. 确保已安装 Node.js (建议版本 >= 14)
@@ -506,11 +523,25 @@ convertAudio(audioString, "audio_assistant_mjs.wav");
 // speaker.end(); // 根据实际 API 流结束情况调用
 ```
 
+<a id="计费说明"></a>
+
+<a id="e02a82e668y2c"></a>
+
 ## 计费说明
+
+<a id="sec-tabs"></a>
+
+<a id="音频"></a>
+
+<a id="音频-h4"></a>
 
 #### 音频
 
 输入或输出每秒音频均消耗 12.5 Token。
+
+<a id="视频"></a>
+
+<a id="视频-h4"></a>
 
 #### 视频
 
@@ -524,7 +555,9 @@ convertAudio(audioString, "audio_assistant_mjs.wav");
     2.  **尺寸调整**：将高与宽调整为 32 的倍数。根据帧数动态缩放，适配总像素限制。
     3.  **Token 计算**：⌈帧数/2⌉ × (高/32) × (宽/32) + 2。
 
-```
+<a id="code-block-2"></a>
+
+```python
 # 使用前安装：pip install opencv-python
 import math
 import os
@@ -623,11 +656,19 @@ if __name__ == "__main__":
     每秒音频消耗 12.5 Token。若音频时长不足1秒，按 1 秒计算。
     
 
-Token 费用请参见[选择模型](raw/model-user-guide/get-started-with-models/models.md)。
+Token 费用请参见[选择模型](../../get-started-with-models/models.md)。
+
+<a id="api-参考"></a>
+
+<a id="f768813250ms7"></a>
 
 ## API 参考
 
-qwen3-livetranslate-flash 模型的输入输出参数请参见[音视频翻译-通义千问](raw/model-api-reference/audio-api-directory/qwen3-livetranslate-flash-api.md)。
+qwen3-livetranslate-flash 模型的输入输出参数请参见[音视频翻译-通义千问](../../../model-api-reference/audio-api-directory/qwen3-livetranslate-flash-api.md)。
+
+<a id="支持的语种"></a>
+
+<a id="4ffd192226f0s"></a>
 
 ## 支持的语种
 
@@ -635,197 +676,53 @@ qwen3-livetranslate-flash 模型的输入输出参数请参见[音视频翻译-�
 
 > 部分目标语种仅支持输出文本，不支持输出音频。
 
-**语种代码**
+| 语种代码 | 语种 | 支持的输出模态 |
+| --- | --- | --- |
+| en | 英语 | 音频、文本 |
+| zh | 中文 | 音频、文本 |
+| ru | 俄语 | 音频、文本 |
+| fr | 法语 | 音频、文本 |
+| de | 德语 | 音频、文本 |
+| pt | 葡萄牙语 | 音频、文本 |
+| es | 西班牙语 | 音频、文本 |
+| it | 意大利语 | 音频、文本 |
+| id | 印尼语 | 文本 |
+| ko | 韩语 | 音频、文本 |
+| ja | 日语 | 音频、文本 |
+| vi | 越南语 | 文本 |
+| th | 泰语 | 文本 |
+| ar | 阿拉伯语 | 文本 |
+| yue | 粤语 | 音频、文本 |
+| hi | 印地语 | 文本 |
+| el | 希腊语 | 文本 |
+| tr | 土耳其语 | 文本 |
 
-**语种**
+<a id="支持的音色"></a>
 
-**支持的输出模态**
-
-en
-
-英语
-
-音频、文本
-
-zh
-
-中文
-
-音频、文本
-
-ru
-
-俄语
-
-音频、文本
-
-fr
-
-法语
-
-音频、文本
-
-de
-
-德语
-
-音频、文本
-
-pt
-
-葡萄牙语
-
-音频、文本
-
-es
-
-西班牙语
-
-音频、文本
-
-it
-
-意大利语
-
-音频、文本
-
-id
-
-印尼语
-
-文本
-
-ko
-
-韩语
-
-音频、文本
-
-ja
-
-日语
-
-音频、文本
-
-vi
-
-越南语
-
-文本
-
-th
-
-泰语
-
-文本
-
-ar
-
-阿拉伯语
-
-文本
-
-yue
-
-粤语
-
-音频、文本
-
-hi
-
-印地语
-
-文本
-
-el
-
-希腊语
-
-文本
-
-tr
-
-土耳其语
-
-文本
+<a id="0a5bde7593gdk"></a>
 
 ## 支持的音色
 
-**音色名**
+| 音色名 | `voice`**参数** | 音色效果 | 描述 | 支持的语种 |
+| --- | --- | --- | --- | --- |
+| 芊悦 | Cherry |  | 阳光积极、亲切自然小姐姐。 | 中文、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语 |
+| 不吃鱼 | Nofish |  | 不会翘舌音的设计师。 | 中文、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语 |
+| 上海-阿珍 | Jada |  | 风风火火的沪上阿姐。 | 中文 |
+| 北京-晓东 | Dylan |  | 北京胡同里长大的少年。 | 中文 |
+| 四川-晴儿 | Sunny |  | 甜到你心里的川妹子。 | 中文 |
+| 天津-李彼得 | Peter |  | 天津相声，专业捧人。 | 中文 |
+| 粤语-阿清 | Kiki |  | 甜美的港妹闺蜜。 | 粤语 |
+| 四川-程川 | Eric |  | 一个跳脱市井的四川成都男子。 | 中文 |
 
-`voice`**参数**
+<a id="常见问题"></a>
 
-**音色效果**
-
-**描述**
-
-**支持的语种**
-
-芊悦
-
-Cherry
-
-阳光积极、亲切自然小姐姐。
-
-中文、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
-不吃鱼
-
-Nofish
-
-不会翘舌音的设计师。
-
-中文、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
-
-上海-阿珍
-
-Jada
-
-风风火火的沪上阿姐。
-
-中文
-
-北京-晓东
-
-Dylan
-
-北京胡同里长大的少年。
-
-中文
-
-四川-晴儿
-
-Sunny
-
-甜到你心里的川妹子。
-
-中文
-
-天津-李彼得
-
-Peter
-
-天津相声，专业捧人。
-
-中文
-
-粤语-阿清
-
-Kiki
-
-甜美的港妹闺蜜。
-
-粤语
-
-四川-程川
-
-Eric
-
-一个跳脱市井的四川成都男子。
-
-中文
+<a id="01af93d910psq"></a>
 
 ## 常见问题
+
+<a id="q-传入视频文件时-翻译的是什么内容"></a>
+
+<a id="81f32345fe0c8"></a>
 
 ### Q：传入视频文件时，翻译的是什么内容？
 
@@ -837,3 +734,5 @@ A：翻译视频中的音频内容，视觉信息用于辅助上下文理解，�
 
 -   若画面显示口罩，会翻译为“这是一个口罩”；
 -   若画面显示面具，会翻译为“这是一个面具”。
+
+![](data:image/png;base64,)

@@ -2,9 +2,17 @@
 
 获取文件上传信息
 
+<a id="调试"></a>
+
+<a id="api-doc-debug"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -23,224 +31,48 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-**操作**
+| 操作 | 访问级别 | 资源类型 | 条件关键字 | 关联操作 |
+| --- | --- | --- | --- | --- |
+| bailianvoicebot:GenerateFileUploadParams | update | \*全部资源<br><br>`*` | 无 | 无 |
 
-**访问级别**
+<a id="请求参数"></a>
 
-**资源类型**
-
-**条件关键字**
-
-**关联操作**
-
-bailianvoicebot:GenerateFileUploadParams
-
-update
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-36"></a>
 
 ## 请求参数
 
-**名称**
+<table><thead><tr><th><p><strong>名称</strong></p></th><th><p><strong>类型</strong></p></th><th><p><strong>必填</strong></p></th><th><p><strong>描述</strong></p></th><th><p><strong>示例值</strong></p></th></tr></thead><tbody><tr><td>BusinessUnitId</td><td><p>string</p></td><td><p>否</p></td><td><div><p>百炼业务空间 ID</p></div></td><td><p>llm-c11iig67g863rih8</p></td></tr><tr><td>FileName</td><td><p>string</p></td><td><p>否</p></td><td><div><p>文件名</p></div></td><td><p>test.wav</p></td></tr><tr><td>BusinessType</td><td><p>string</p></td><td><p>否</p></td><td><div><p>文件类型</p></div><div><p><strong>枚举值：</strong></p><ul><li>Vocabulary :<div><p>Vocabulary</p></div></li><li>CloneVoice :<div><p>CloneVoice</p></div></li></ul></div></td><td><p>CloneVoice</p></td></tr></tbody></table>
 
-**类型**
+<a id="返回参数"></a>
 
-**必填**
-
-**描述**
-
-**示例值**
-
-BusinessUnitId
-
-string
-
-否
-
-百炼业务空间 ID
-
-llm-c11iig67g863rih8
-
-FileName
-
-string
-
-否
-
-文件名
-
-test.wav
-
-BusinessType
-
-string
-
-否
-
-文件类型
-
-**枚举值：**
-
--   Vocabulary :
-    
-    Vocabulary
-    
--   CloneVoice :
-    
-    CloneVoice
-    
-
-CloneVoice
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-**名称**
-
-**类型**
-
-**描述**
-
-**示例值**
-
-object
-
-Schema of Response
-
-Code
-
-string
-
-内部错误码
-
-OK
-
-HttpStatusCode
-
-integer
-
-http 状态码
-
-200
-
-Message
-
-string
-
-错误信息
-
-Instance llm-xdne77rxe14ziszr does not exist.
-
-RequestId
-
-string
-
-请求 ID
-
-D771A1B6-3D5F-174A-BEE1-98CE1000D337
-
-Data
-
-object
-
-文件上传参数
-
-Signature
-
-string
-
-根据 AccessKey Secret 和 Policy 计算出的签名信息。调用 OSS API 时，OSS 验证该签名信息，从而确认 Post 请求的合法性。
-
-YOUR\_SIGNATURE
-
-Policy
-
-string
-
-OSS 通过该参数验证请求表单域的合法性
-
-eyJleHBpcmF0aW9uIjoiMjAyNi0wMy0yOVQxMzoyNDoyNi4yMDNaIiwiY29uZGl0aW9ucyI6W239
-
-AccessKeyId
-
-string
-
-签名使用的 AccessKeyId。
-
-YOUR\_ACCESS\_KEY\_ID
-
-Host
-
-string
-
-OSS 的接入域名。
-
-[http://cab.oss-cn-hangzhou.aliyuncs.com](http://cab.oss-cn-hangzhou.aliyuncs.com)
-
-FileKey
-
-string
-
-上传文件路径
-
-vocabulary/B678CA67-C8CB-150C-AD7F-6FA7F0A811BA\_热词导入模版 (7).zip
-
-ExpirationTime
-
-integer
-
-上传有效期
-
-1774794266093
-
-SecurityToken
-
-string
-
-安全 token
-
-YOUR\_SECURITY\_TOKEN
-
-AccessKeySecret
-
-string
-
-Oss 授权上传文件的 Secret。
-
-YOUR\_ACCESS\_KEY\_SECRET
-
-Bucket
-
-string
-
-OSS 文件保存桶名称。
-
-cab
-
-Region
-
-string
-
-地域
-
-cn-hangzhou
-
-Params
-
-array
-
-动态错误参数列表
-
-string
-
-动态错误参数
-
-llm-xdne77rxe14ziszr
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | Schema of Response |  |
+| Code | string | 内部错误码 | OK |
+| HttpStatusCode | integer | http 状态码 | 200 |
+| Message | string | 错误信息 | Instance llm-xdne77rxe14ziszr does not exist. |
+| RequestId | string | 请求 ID | D771A1B6-3D5F-174A-BEE1-98CE1000D337 |
+| Data | object | 文件上传参数 |  |
+| Signature | string | 根据 AccessKey Secret 和 Policy 计算出的签名信息。调用 OSS API 时，OSS 验证该签名信息，从而确认 Post 请求的合法性。 | YOUR\_SIGNATURE |
+| Policy | string | OSS 通过该参数验证请求表单域的合法性 | eyJleHBpcmF0aW9uIjoiMjAyNi0wMy0yOVQxMzoyNDoyNi4yMDNaIiwiY29uZGl0aW9ucyI6W239 |
+| AccessKeyId | string | 签名使用的 AccessKeyId。 | YOUR\_ACCESS\_KEY\_ID |
+| Host | string | OSS 的接入域名。 | [http://cab.oss-cn-hangzhou.aliyuncs.com](http://cab.oss-cn-hangzhou.aliyuncs.com) |
+| FileKey | string | 上传文件路径 | vocabulary/B678CA67-C8CB-150C-AD7F-6FA7F0A811BA\_热词导入模版 (7).zip |
+| ExpirationTime | integer | 上传有效期 | 1774794266093 |
+| SecurityToken | string | 安全 token | YOUR\_SECURITY\_TOKEN |
+| AccessKeySecret | string | Oss 授权上传文件的 Secret。 | YOUR\_ACCESS\_KEY\_SECRET |
+| Bucket | string | OSS 文件保存桶名称。 | cab |
+| Region | string | 地域 | cn-hangzhou |
+| Params | array | 动态错误参数列表 |  |
+|  | string | 动态错误参数 | llm-xdne77rxe14ziszr |
+
+<a id="示例"></a>
+
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -248,7 +80,9 @@ llm-xdne77rxe14ziszr
 
 `JSON`格式
 
-```
+<a id="code-block"></a>
+
+```json
 {
   "Code": "OK",
   "HttpStatusCode": 200,
@@ -272,9 +106,17 @@ llm-xdne77rxe14ziszr
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
+
 ## 错误码
 
 访问[错误中心](https://api.aliyun.com/document/BailianVoiceBot/2025-01-01/errorCode)查看更多错误码。
+
+<a id="变更历史"></a>
+
+<a id="workbench-doc-change-demo"></a>
 
 ## 变更历史
 

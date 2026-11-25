@@ -4,28 +4,50 @@
 
 本文适用于 Qwen-Audio-TTS、Qwen-Audio-Realtime、CosyVoice。
 
-先[获取 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置环境变量](https://help.aliyun.com/zh/model-studio/get-api-key#20b17d4430qvt)。请求示例读取 `DASHSCOPE_API_KEY`。使用不同 API 管理同一音色时，请使用同一账号。
+先[获取 API Key](../model-api-reference/preparations/get-api-key.md)并[配置环境变量](../model-api-reference/preparations/get-api-key.md#20b17d4430qvt)。请求示例读取 `DASHSCOPE_API_KEY`。使用不同 API 管理同一音色时，请使用同一账号。
 
-SDK 定义另见 [Java SDK](raw/_short/voice-clone-java-sdk-d83b31cde2e2050b.md) 和 [Python SDK](raw/_short/voice-clone-python-sdk-e1dda5eb4e730d8e.md)。
+SDK 定义另见 [Java SDK](voice-clone-java-sdk-d83b31cde2e2050b.md) 和 [Python SDK](voice-clone-python-sdk-e1dda5eb4e730d8e.md)。
+
+<a id="接口地址"></a>
+
+<a id="h2-url"></a>
 
 ## 接口地址
+
+<a id="h3-url-enrollment"></a>
+
+<a id="sec-tabs"></a>
+
+<a id="华北2-北京"></a>
+
+<a id="华北2-北京-h4"></a>
 
 #### 华北2（北京）
 
 `POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization`
 
+<a id="新加坡"></a>
+
+<a id="新加坡-h4"></a>
+
 #### 新加坡
 
 `POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audio/tts/customization`
 
-将 `{WorkspaceId}` 替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)，可在百炼控制台的**业务空间详情**页面查看。北京和新加坡的 API Key 不同。
+将 `{WorkspaceId}` 替换为真实的[Workspace ID](../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)，可在百炼控制台的**业务空间详情**页面查看。北京和新加坡的 API Key 不同。
 
-**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
+> **重要**
+>
+> 阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
+>
+> -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`。
+> -   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
+>
+> 现有域名仍可正常使用。
 
--   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`。
--   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
+<a id="请求头"></a>
 
-现有域名仍可正常使用。
+<a id="h2-headers"></a>
 
 ## 请求头
 
@@ -37,9 +59,45 @@ SDK 定义另见 [Java SDK](raw/_short/voice-clone-java-sdk-d83b31cde2e2050b.md)
 
 固定为 `application/json`。
 
+<a id="音频要求与费用"></a>
+
 ## 音频要求与费用
 
-参考音频要求见[声音复刻用户指南](https://help.aliyun.com/zh/model-studio/voice-cloning-user-guide#vc02_audio_h2)。Qwen-Audio-Realtime 的复刻流程见[实时语音对话音色复刻](https://help.aliyun.com/zh/model-studio/voice-cloning-user-guide#qar_vc_h3)。Qwen-Audio-Realtime 创建音色免费，模型调用按目标模型计费，详情见[计费说明](https://help.aliyun.com/zh/model-studio/voice-cloning-user-guide#vc07_billing_h3)，数量限制见[配额说明](https://help.aliyun.com/zh/model-studio/voice-cloning-user-guide#vc07_quota_h2)。
+参考音频要求见[声音复刻用户指南](../model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-cloning-user-guide.md#vc02_audio_h2)。Qwen-Audio-Realtime 的复刻流程见[实时语音对话音色复刻](../model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-cloning-user-guide.md#qar_vc_h3)。Qwen-Audio-Realtime 创建音色免费，模型调用按目标模型计费，详情见[计费说明](../model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-cloning-user-guide.md#vc07_billing_h3)，数量限制见[配额说明](../model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-cloning-user-guide.md#vc07_quota_h2)。
+
+<a id="请求体"></a>
+
+<a id="h2-create"></a>
+
+<a id="h3-create-enrollment"></a>
+
+<a id="1eaa57d82did9"></a>
+
+<a id="create-voice"></a>
+
+<a id="h3-cr-rq"></a>
+
+<a id="h2-list"></a>
+
+<a id="401d33226330i"></a>
+
+<a id="h3-ls-rq"></a>
+
+<a id="h2-query"></a>
+
+<a id="h3-qr-rq"></a>
+
+<a id="h2-update"></a>
+
+<a id="h3-up-rq"></a>
+
+<a id="h2-delete"></a>
+
+<a id="c2e73bd5335sz"></a>
+
+<a id="delete-voice"></a>
+
+<a id="h3-dl-rq"></a>
 
 ## 请求体
 
@@ -48,6 +106,8 @@ SDK 定义另见 [Java SDK](raw/_short/voice-clone-java-sdk-d83b31cde2e2050b.md)
 固定为 `voice-enrollment`。
 
 `input`object（必选）
+
+<a id="accordion-属性"></a>
 
 属性
 
@@ -65,13 +125,15 @@ SDK 定义另见 [Java SDK](raw/_short/voice-clone-java-sdk-d83b31cde2e2050b.md)
 
 后续使用音色的目标模型。必须与后续调用时使用的模型一致，否则调用失败。
 
-目标模型可选择支持声音复刻的 Qwen-Audio-TTS、Qwen-Audio-Realtime 或 CosyVoice 型号，具体模型与地域见[支持模型](https://help.aliyun.com/zh/model-studio/voice-cloning-user-guide#vc01_scope_h2)。
+目标模型可选择支持声音复刻的 Qwen-Audio-TTS、Qwen-Audio-Realtime 或 CosyVoice 型号，具体模型与地域见[支持模型](../model-user-guide/model-experience/speech-and-audio/speech-synthesis/voice-customization/voice-cloning-user-guide.md#vc01_scope_h2)。
 
 `audio`string（创建或更新时，未传 `url` 则必选）
 
 创建时提供参考音频，更新时提供新的参考音频。支持公网可访问的 URL 或 Base64 Data URI，例如 `data:audio/wav;base64,...`。
 
-**说明**兼容旧参数 `url`；使用 `url` 时可不传 `audio`。`url` 将逐步废弃，建议改用 `audio`。
+> **说明**
+>
+> 兼容旧参数 `url`；使用 `url` 时可不传 `audio`。`url` 将逐步废弃，建议改用 `audio`。
 
 `prefix`string（创建时必选，查询列表时可选）
 
@@ -85,7 +147,11 @@ SDK 定义另见 [Java SDK](raw/_short/voice-clone-java-sdk-d83b31cde2e2050b.md)
 
 此参数为数组，长度必须为 1。
 
-**说明**适用于 qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、qwen-audio-3.1-realtime-plus、qwen-audio-3.1-realtime-flash、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash、cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-plus、cosyvoice-v3-flash。
+> **说明**
+>
+> 适用于 qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、qwen-audio-3.1-realtime-plus、qwen-audio-3.1-realtime-flash、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash、cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-plus、cosyvoice-v3-flash。
+
+<a id="accordion-点击查看各模型支持的语言"></a>
 
 点击查看各模型支持的语言
 
@@ -138,7 +204,9 @@ SDK 定义另见 [Java SDK](raw/_short/voice-clone-java-sdk-d83b31cde2e2050b.md)
 
 默认值：10.0。
 
-**说明**适用于 qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、qwen-audio-3.1-realtime-plus、qwen-audio-3.1-realtime-flash、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash、cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash。
+> **说明**
+>
+> 适用于 qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、qwen-audio-3.1-realtime-plus、qwen-audio-3.1-realtime-flash、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash、cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash。
 
 `enable_preprocess`boolean（创建时可选）
 
@@ -146,7 +214,9 @@ SDK 定义另见 [Java SDK](raw/_short/voice-clone-java-sdk-d83b31cde2e2050b.md)
 
 默认值：false。
 
-**说明**适用于 qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、qwen-audio-3.1-realtime-plus、qwen-audio-3.1-realtime-flash、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash、cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash。
+> **说明**
+>
+> 适用于 qwen-audio-3.1-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、qwen-audio-3.1-realtime-plus、qwen-audio-3.1-realtime-flash、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash、cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash。
 
 `enable_volume_normalization`string（创建时可选）
 
@@ -171,7 +241,15 @@ SDK 定义另见 [Java SDK](raw/_short/voice-clone-java-sdk-d83b31cde2e2050b.md)
 
 要查询、更新或删除的音色 ID。
 
+<a id="请求示例"></a>
+
 ### 请求示例
+
+<a id="sec-tabs-2"></a>
+
+<a id="创建"></a>
+
+<a id="创建-h4"></a>
 
 #### 创建
 
@@ -179,7 +257,9 @@ SDK 定义另见 [Java SDK](raw/_short/voice-clone-java-sdk-d83b31cde2e2050b.md)
 
 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
 
-```
+<a id="code-block"></a>
+
+```bash
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
@@ -198,7 +278,9 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 
 使用本地 WAV 音频时，可通过以下代码生成 Base64 Data URI，并将 `audio` 的值填入创建或更新请求的 `input` 对象中的 `audio` 字段。将 `sample.wav` 替换为本地音频路径。
 
-```
+<a id="code-block-2"></a>
+
+```python
 import base64
 from pathlib import Path
 
@@ -207,11 +289,17 @@ audio = "data:audio/wav;base64," + base64.b64encode(
 ).decode("ascii")
 ```
 
+<a id="查询列表"></a>
+
+<a id="查询列表-h4"></a>
+
 #### 查询列表
 
 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
 
-```
+<a id="code-block-3"></a>
+
+```bash
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
@@ -226,11 +314,17 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }'
 ```
 
+<a id="查询详情"></a>
+
+<a id="查询详情-h4"></a>
+
 #### 查询详情
 
 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
 
-```
+<a id="code-block-4"></a>
+
+```bash
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
@@ -243,11 +337,17 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }'
 ```
 
+<a id="更新"></a>
+
+<a id="更新-h4"></a>
+
 #### 更新
 
 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
 
-```
+<a id="code-block-5"></a>
+
+```bash
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
@@ -261,11 +361,17 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }'
 ```
 
+<a id="删除"></a>
+
+<a id="删除-h4"></a>
+
 #### 删除
 
 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
 
-```
+<a id="code-block-6"></a>
+
+```bash
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
@@ -278,6 +384,18 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }'
 ```
 
+<a id="返回体"></a>
+
+<a id="h3-cr-rs"></a>
+
+<a id="h3-ls-rs"></a>
+
+<a id="h3-qr-rs"></a>
+
+<a id="h3-up-rs"></a>
+
+<a id="h3-dl-rs"></a>
+
 ## 返回体
 
 `request_id`string
@@ -288,6 +406,8 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 
 创建、查询列表或查询详情时返回相应字段；更新或删除时返回空对象。
 
+<a id="accordion-属性-2"></a>
+
 属性
 
 `voice_id`string（创建时返回）
@@ -297,6 +417,8 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 `voice_list`array\[object\]（查询列表时返回）
 
 查询到的音色列表。
+
+<a id="accordion-属性-3"></a>
 
 属性
 
@@ -344,17 +466,29 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 
 本次请求用量信息。
 
+<a id="accordion-属性-4"></a>
+
 属性
 
 `count`integer
 
 固定为 1。创建音色时，表示创建的音色数量。
 
+<a id="响应示例"></a>
+
 ### 响应示例
+
+<a id="sec-tabs-3"></a>
+
+<a id="创建-2"></a>
+
+<a id="创建-2-h4"></a>
 
 #### 创建
 
-```
+<a id="code-block-7"></a>
+
+```json
 {
     "output": {
         "voice_id": "qwen-audio-3.1-tts-plus-myvoice-xxxxxx"
@@ -366,9 +500,15 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }
 ```
 
+<a id="查询列表-2"></a>
+
+<a id="查询列表-2-h4"></a>
+
 #### 查询列表
 
-```
+<a id="code-block-8"></a>
+
+```json
 {
     "output": {
         "voice_list": [
@@ -388,9 +528,15 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }
 ```
 
+<a id="查询详情-2"></a>
+
+<a id="查询详情-2-h4"></a>
+
 #### 查询详情
 
-```
+<a id="code-block-9"></a>
+
+```json
 {
     "output": {
         "gmt_create": "2024-12-11 13:38:02",
@@ -406,9 +552,15 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }
 ```
 
+<a id="更新-2"></a>
+
+<a id="更新-2-h4"></a>
+
 #### 更新
 
-```
+<a id="code-block-10"></a>
+
+```json
 {
     "output": {},
     "usage": {
@@ -417,10 +569,16 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
     "request_id": "xxxx-xxxx-xxxx"
 }
 ```
+
+<a id="删除-2"></a>
+
+<a id="删除-2-h4"></a>
 
 #### 删除
 
-```
+<a id="code-block-11"></a>
+
+```json
 {
     "output": {},
     "usage": {
@@ -429,29 +587,35 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
     "request_id": "xxxx-xxxx-xxxx"
 }
 ```
+
+<a id="音色状态说明"></a>
+
+<a id="h2-status"></a>
 
 ## 音色状态说明
 
 音色创建后会经过审核流程。
 
-**状态**
+| 状态 | 说明 |
+| --- | --- |
+| DEPLOYING | 审核中/处理中。 |
+| OK | 审核通过，可正常使用。 |
+| UNDEPLOYED | 审核未通过，不可使用。 |
 
-**说明**
+<a id="错误信息"></a>
 
-DEPLOYING
-
-审核中/处理中。
-
-OK
-
-审核通过，可正常使用。
-
-UNDEPLOYED
-
-审核未通过，不可使用。
+<a id="72adf7921b3zg"></a>
 
 ## 错误信息
 
-如遇报错问题，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行排查。
+如遇报错问题，请参见[错误码](../model-api-reference/preparations/error-code.md)进行排查。
+
+<a id="h2-mm-endpoint"></a>
+
+<a id="h2-mm-create"></a>
+
+<a id="h3-mm-rq"></a>
+
+<a id="h3-mm-rs"></a>
 
 旧版 MiniMax 复刻接口说明已移至 [MiniMax HTTP API](https://help.aliyun.com/zh/model-studio/mini-clone-api)。

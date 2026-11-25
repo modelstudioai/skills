@@ -2,9 +2,17 @@
 
 修改组织成员的角色。
 
+<a id="前提条件"></a>
+
+<a id="tpfbcf74a20e"></a>
+
 ## 前提条件
 
 已获取阿里云账号或 RAM 用户的 AccessKey，并已为其授予调用本接口所需的 RAM 权限。建议将 AccessKey 配置为环境变量 `ALIBABA_CLOUD_ACCESS_KEY_ID` 和 `ALIBABA_CLOUD_ACCESS_KEY_SECRET`，避免明文写入代码。
+
+<a id="请求说明"></a>
+
+<a id="tp73907ff68c"></a>
 
 ## 请求说明
 
@@ -12,13 +20,9 @@
     
 -   **请求地址**
     
-    **地域**
-    
-    **Endpoint**
-    
-    华北2（北京）
-    
-    `POST [https://modelstudio.cn-beijing.aliyuncs.com/tokenplan/organization/members/update](https://modelstudio.cn-beijing.aliyuncs.com/tokenplan/organization/members/update)`
+    | 地域 | Endpoint |
+    | --- | --- |
+    | 华北2（北京） | `POST https://modelstudio.cn-beijing.aliyuncs.com/tokenplan/organization/members/update` |
     
 -   **认证方式**
     
@@ -27,77 +31,44 @@
     推荐使用阿里云 SDK 或 [OpenAPI Explorer](https://api.aliyun.com/api/ModelStudio/2026-02-10/UpdateOrganizationMember) 发起调用，可免去自行计算签名。
     
 
+<a id="请求参数"></a>
+
+<a id="tpef8e1d6354"></a>
+
 ## 请求参数
 
 所有参数均通过 Query String 传递。数组类型参数（AccountIds）使用 Flat 格式：以 `参数名.序号` 逐个传递，序号从 1 开始，例如 `AccountIds.1=acc_123456789`、`AccountIds.2=<第二个取值>`。
 
-**参数**
+| 参数 | 类型 | 必选 | 描述 |
+| --- | --- | --- | --- |
+| AccountIds | Array | 否 | 账号 ID 列表（批量操作） |
+| NewRoleCode | string | 是 | 新角色 Code（批量操作时所有账号统一变更为此角色） |
 
-**类型**
+<a id="返回参数"></a>
 
-**必选**
-
-**描述**
-
-AccountIds
-
-Array
-
-否
-
-账号 ID 列表（批量操作）
-
-NewRoleCode
-
-string
-
-是
-
-新角色 Code（批量操作时所有账号统一变更为此角色）
+<a id="tp3ee601d21f"></a>
 
 ## 返回参数
 
-**参数**
+| 参数 | 类型 | 描述 |
+| --- | --- | --- |
+| Success | boolean | 是否成功 |
+| Code | string | 错误码（成功时为空） |
+| Message | string | 错误信息（成功时为空） |
+| HttpStatusCode | integer | HTTP 状态码 |
+| RequestId | string | 请求唯一标识 |
 
-**类型**
+<a id="请求示例"></a>
 
-**描述**
-
-Success
-
-boolean
-
-是否成功
-
-Code
-
-string
-
-错误码（成功时为空）
-
-Message
-
-string
-
-错误信息（成功时为空）
-
-HttpStatusCode
-
-integer
-
-HTTP 状态码
-
-RequestId
-
-string
-
-请求唯一标识
+<a id="tp82618fddff"></a>
 
 ## 请求示例
 
 本接口使用阿里云 OpenAPI 签名，下例中 `${SIGNATURE}` 需按 `ACS3-HMAC-SHA256` 算法计算得出，`x-acs-date`、`x-acs-signature-nonce` 需替换为实际值。
 
-```
+<a id="code-block"></a>
+
+```bash
 curl -X POST "https://modelstudio.cn-beijing.aliyuncs.com/tokenplan/organization/members/update?AccountIds.1=acc_123456789&NewRoleCode=ORG_MEMBER" \
     --header "x-acs-action: UpdateOrganizationMember" \
     --header "x-acs-version: 2026-02-10" \
@@ -107,14 +78,24 @@ curl -X POST "https://modelstudio.cn-beijing.aliyuncs.com/tokenplan/organization
     --header "Authorization: ACS3-HMAC-SHA256 Credential=${ALIBABA_CLOUD_ACCESS_KEY_ID},SignedHeaders=host;x-acs-action;x-acs-content-sha256;x-acs-date;x-acs-signature-nonce;x-acs-version,Signature=${SIGNATURE}"
 ```
 
+<a id="返回示例"></a>
+
+<a id="tpac9aad323d"></a>
+
 ## 返回示例
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "Success": true
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="tp3bfcfbd624"></a>
+
 ## 错误码
 
-如果调用失败，会返回错误信息。更多错误码及解决方法，请参见[错误信息](raw/model-api-reference/preparations/error-code.md)。
+如果调用失败，会返回错误信息。更多错误码及解决方法，请参见[错误信息](../../../model-api-reference/preparations/error-code.md)。

@@ -2,9 +2,17 @@
 
 查询安全策略列表。共 11 条策略，固定返回全量，不分页。
 
+<a id="前提"></a>
+
+<a id="h-secapi-policies-prereq"></a>
+
 ## 前提
 
-已完成 Endpoint 与鉴权配置，详见[API 总览与认证](raw/application-api-reference/security-api-guide/security-api-overview.md)。
+已完成 Endpoint 与鉴权配置，详见[API 总览与认证](security-api-overview.md)。
+
+<a id="接口"></a>
+
+<a id="h-secapi-policies-endpoint"></a>
 
 ## 接口
 
@@ -12,126 +20,61 @@
 
 查询安全策略列表。共 11 条策略，固定返回全量，不分页。
 
+<a id="请求示例"></a>
+
+<a id="h-secapi-policies-eg"></a>
+
 ## 请求示例
 
-```
+<a id="code-block"></a>
+
+```bash
 curl -X GET "$BASE_URL/policies" \
   -H "Authorization: Bearer $BAILIAN_API_KEY"
 ```
 
 其中 `BASE_URL` 为 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio/security`，`BAILIAN_API_KEY` 为阿里云百炼 API Key。
 
+<a id="响应体"></a>
+
+<a id="h-secapi-policies-resp"></a>
+
 ## 响应体
 
-字段
-
-类型
-
-说明
-
-`policy_code`
-
-string
-
-策略标识，取值见下表
-
-`risk_domain`
-
-string
-
-策略分组，取值见下表
-
-`enabled`
-
-boolean
-
-`true` 已启用，`false` 未启用
-
-`free`
-
-boolean
-
-是否为免费能力。免费策略未开通高级防护时仍生效
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `policy_code` | string | 策略标识，取值见下表 |
+| `risk_domain` | string | 策略分组，取值见下表 |
+| `enabled` | boolean | `true` 已启用，`false` 未启用 |
+| `free` | boolean | 是否为免费能力。免费策略未开通高级防护时仍生效 |
 
 `policy_code` 取值：
 
-policy\_code
-
-risk\_domain
-
-名称
-
-content\_safety
-
-model\_interaction
-
-内容安全
-
-prompt\_attack
-
-model\_interaction
-
-提示词攻击
-
-sensitive\_data\_leak
-
-model\_interaction
-
-敏感数据外泄
-
-tool\_invoke
-
-runtime\_tool
-
-工具调用安全
-
-skill\_scan
-
-runtime\_tool
-
-Skills 安全检测
-
-network\_protection
-
-runtime\_tool
-
-网络防护
-
-rag\_poisoning
-
-knowledge\_memory
-
-RAG 数据投毒
-
-memory\_theft
-
-knowledge\_memory
-
-记忆窃取
-
-identity\_credential
-
-identity\_credential
-
-身份与凭证安全
-
-baseline\_check
-
-config\_component
-
-基线检查（免费）
-
-vulnerability\_scan
-
-config\_component
-
-漏洞检测（免费）
+| policy\_code | risk\_domain | 名称 |
+| --- | --- | --- |
+| content\_safety | model\_interaction | 内容安全 |
+| prompt\_attack | model\_interaction | 提示词攻击 |
+| sensitive\_data\_leak | model\_interaction | 敏感数据外泄 |
+| tool\_invoke | runtime\_tool | 工具调用安全 |
+| skill\_scan | runtime\_tool | Skills 安全检测 |
+| network\_protection | runtime\_tool | 网络防护 |
+| rag\_poisoning | knowledge\_memory | RAG 数据投毒 |
+| memory\_theft | knowledge\_memory | 记忆窃取 |
+| identity\_credential | identity\_credential | 身份与凭证安全 |
+| baseline\_check | config\_component | 基线检查（免费） |
+| vulnerability\_scan | config\_component | 漏洞检测（免费） |
 
 `risk_domain` 取值：`model_interaction`（模型交互安全）、`runtime_tool`（运行环境与工具安全）、`knowledge_memory`（知识与记忆安全）、`identity_credential`（身份与凭证安全）、`config_component`（配置与组件安全）。
 
+<a id="响应示例"></a>
+
+<a id="h-secapi-policies-resp-eg"></a>
+
 ## 响应示例
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "success": true,
   "data": [

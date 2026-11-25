@@ -2,26 +2,36 @@
 
 本文档介绍如何使用 DashScope Java SDK 调用实时音视频翻译（Qwen-LiveTranslate-Realtime）模型。
 
+<a id="前提条件"></a>
+
 ## 前提条件
 
-1.  [安装SDK](raw/model-api-reference/preparations/install-sdk.md)，确保DashScope SDK版本不低于2.22.5。
-2.  [获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
-3.  了解[实时语音/音视频翻译-千问](raw/model-user-guide/model-experience/omni-modal/qwen3-5-livetranslate-flash-realtime.md)。
+1.  [安装SDK](../model-api-reference/preparations/install-sdk.md)，确保DashScope SDK版本不低于2.22.5。
+2.  [获取与配置 API Key](../model-api-reference/preparations/get-api-key.md)。
+3.  了解[实时语音/音视频翻译-千问](../model-user-guide/model-experience/omni-modal/qwen3-5-livetranslate-flash-realtime.md)。
 
-**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+> **重要**
+>
+> 阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+>
+> -   华北2（北京）地域：从 `wss://dashscope.aliyuncs.com` 迁移至 `wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+> -   新加坡地域：从 `wss://dashscope-intl.aliyuncs.com` 迁移至 `wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+>
+> 其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
--   华北2（北京）地域：从 `wss://dashscope.aliyuncs.com` 迁移至 `wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
--   新加坡地域：从 `wss://dashscope-intl.aliyuncs.com` 迁移至 `wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
-
-其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
+<a id="快速开始"></a>
 
 ## 快速开始
 
 以下示例展示如何从麦克风实时录音并进行翻译。
 
+<a id="accordion-麦克风实时翻译示例代码"></a>
+
 麦克风实时翻译示例代码
 
-```
+<a id="code-block"></a>
+
+```java
 import com.alibaba.dashscope.audio.omni.*;
 import com.alibaba.dashscope.exception.NoApiKeyException;
 import com.google.gson.JsonObject;
@@ -183,6 +193,8 @@ public class Main {
     }
 }
 ```
+
+<a id="详细参考"></a>
 
 ## 详细参考
 

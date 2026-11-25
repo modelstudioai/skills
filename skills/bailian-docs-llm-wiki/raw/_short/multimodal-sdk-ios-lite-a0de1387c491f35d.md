@@ -4,13 +4,25 @@
 
 MultiModalDialog SDK是阿里云通义团队提供的支持音视频端到端多模实时交互的SDK。通过SDK对接千问大模型以及后端多种Agent，能够支持用户接入语音对话、天气、音乐、新闻等多种能力，并支持视频和图像的大模型对话能力。
 
+<a id="多模态实时交互服务架构"></a>
+
+<a id="f9224da564gai"></a>
+
 ## 多模态实时交互服务架构
 
 ![多模态实时交互服务接入架构-通用-流程图](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7227370571/p976841.jpg)
 
+<a id="前提条件"></a>
+
+<a id="9c59acb31bct6"></a>
+
 ## 前提条件
 
-开通阿里云百炼实时多模交互应用，获取[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)、[APP ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#2612f896detsz)和[API Key](raw/model-api-reference/preparations/get-api-key.md)。
+开通阿里云百炼实时多模交互应用，获取[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)、[APP ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#2612f896detsz)和[API Key](../model-api-reference/preparations/get-api-key.md)。
+
+<a id="交互数据链路说明"></a>
+
+<a id="b08c549c42kfr"></a>
 
 ## 交互数据链路说明
 
@@ -23,6 +35,10 @@ MultiModalDialog SDK是阿里云通义团队提供的支持音视频端到端多
         -   上行：支持 pcm 和 opus 格式音频进行语音识别。
         -   下行：支持 pcm 和 mp3 音频流。
 
+<a id="交互模式说明"></a>
+
+<a id="19d04a0a4f3yq"></a>
+
 ## 交互模式说明
 
 SDK支持 **Push2Talk**、 **Tap2Talk**和**Duplex**（全双工）三种交互模式。
@@ -33,8 +49,12 @@ SDK支持 **Push2Talk**、 **Tap2Talk**和**Duplex**（全双工）三种交互�
     
 -   Duplex: 全双工交互，连接开始后支持任意时刻开始说话，支持语音打断。
     
-    注意：全双工交互需要客户端集成回声消除算法（AEC），Lite SDK不提供此算法模块。您可以自行集成回声消除算法模块，或者使用百炼多模对话全功能[移动端iOS SDK](raw/_short/multimodal-sdk-ios-bd0f44b428b2bbe2.md)。
+    注意：全双工交互需要客户端集成回声消除算法（AEC），Lite SDK不提供此算法模块。您可以自行集成回声消除算法模块，或者使用百炼多模对话全功能[移动端iOS SDK](multimodal-sdk-ios-bd0f44b428b2bbe2.md)。
     
+
+<a id="环境和依赖"></a>
+
+<a id="8c2e4ecd92ehd"></a>
 
 ## 环境和依赖
 
@@ -47,19 +67,33 @@ SDK支持 **Push2Talk**、 **Tap2Talk**和**Duplex**（全双工）三种交互�
         -   'SocketRocket', '~> 0.7.1'
 -   百炼环境接入
     
-    -   多模对话服务基于阿里云大模型服务平台百炼，接入鉴权使用百炼[API\_KEY](raw/model-api-reference/preparations/get-api-key.md) 请您在百炼平台创建API\_KEY，移动端为了安全考虑，您也可以在服务端接入[短时Token](raw/model-api-reference/more-about-models/generate-temporary-api-key.md)，并下发给客户端使用。
+    -   多模对话服务基于阿里云大模型服务平台百炼，接入鉴权使用百炼[API\_KEY](../model-api-reference/preparations/get-api-key.md) 请您在百炼平台创建API\_KEY，移动端为了安全考虑，您也可以在服务端接入[短时Token](../model-api-reference/more-about-models/generate-temporary-api-key.md)，并下发给客户端使用。
+
+<a id="接口说明"></a>
+
+<a id="97a551c74c5k2"></a>
 
 ## 接口说明
+
+<a id="multimodaldialog"></a>
+
+<a id="407e92bb82cen"></a>
 
 ### MultimodalDialog
 
 服务入口类
 
+<a id="1-multimodaldialog"></a>
+
+<a id="314e531252it0"></a>
+
 #### 1 MultiModalDialog
 
 初始化服务对象，设置对话参数和回调。
 
-```
+<a id="code-block"></a>
+
+```swift
 /// 初始化多模态对话管理器
 /// - Parameters:
 ///   - url: 服务URL
@@ -69,11 +103,17 @@ SDK支持 **Push2Talk**、 **Tap2Talk**和**Duplex**（全双工）三种交互�
 public init(url: String?, workSpaceId: String, appId:String ,mode: DialogMode)
 ```
 
+<a id="2-start"></a>
+
+<a id="c51ae0de2bbpx"></a>
+
 #### 2 start
 
 启动对话服务. 返回onConversationStarted回调。
 
-```
+<a id="code-block-2"></a>
+
+```swift
 /// 发起对话请求,连接到对话服务
 /// - Parameters:
 ///   - apiKey: API密钥
@@ -82,20 +122,32 @@ public init(url: String?, workSpaceId: String, appId:String ,mode: DialogMode)
 public func start(apiKey: String, params: MultiModalRequestParam, completion: @escaping (Bool, TYError?) -> Void )
 ```
 
+<a id="3startspeech"></a>
+
+<a id="8e9e21e84754u"></a>
+
 #### 3startSpeech
 
 通知服务端开始上传音频，注意需要在Listening状态才可以调用。只需要在push2talk/tap2talk模式下调用。
 
-```
+<a id="code-block-3"></a>
+
+```swift
 /// 开始说话（按下说话模式）
 public func startSpeech()
 ```
+
+<a id="4sendaudiodata"></a>
+
+<a id="8b029145c8hth"></a>
 
 #### 4sendAudioData
 
 通知服务端上传音频。
 
-```
+<a id="code-block-4"></a>
+
+```swift
 /// 发送音频数据
 /// - Parameters:
 ///   - data: 音频数据指针
@@ -104,56 +156,92 @@ public func startSpeech()
 public func sendAudioData(data: UnsafeMutablePointer<UInt8>, length: Int32) -> Int32?
 ```
 
+<a id="5stopspeech"></a>
+
+<a id="692be98afavrs"></a>
+
 #### 5stopSpeech
 
 通知服务端结束上传音频。只需要在push2talk模式下调用。
 
-```
+<a id="code-block-5"></a>
+
+```swift
 /// 停止说话（按下说话模式）
 public func stopSpeech()
 ```
+
+<a id="6-interrupt"></a>
+
+<a id="383e99dd39dd5"></a>
 
 #### 6 interrupt
 
 通知服务端，客户端需要打断当前交互，开始说话。会返回RequestAccepted。
 
-```
+<a id="code-block-6"></a>
+
+```swift
 // 中断当前对话
 public func interrupt()
 ```
+
+<a id="7sendlocalrespondingstarted"></a>
+
+<a id="96c39c6a86huv"></a>
 
 #### 7sendLocalRespondingStarted
 
 通知服务端，客户端开始播放tts音频。
 
-```
+<a id="code-block-7"></a>
+
+```swift
 /// 发送响应开始信号
 public func sendLocalRespondingStarted()
 ```
+
+<a id="8sendlocalrespondingended"></a>
+
+<a id="f604a12529vwl"></a>
 
 #### 8sendLocalRespondingEnded
 
 通知服务端，客户端结束播放tts音频。
 
-```
+<a id="code-block-8"></a>
+
+```swift
 /// 发送响应结束信号
 public func sendLocalRespondingEnded()
 ```
+
+<a id="9-stop"></a>
+
+<a id="99871ecbc6z0g"></a>
 
 #### 9 stop
 
 结束当前轮次对话。断开服务端连接。
 
-```
+<a id="code-block-9"></a>
+
+```swift
 /// 断开连接
 public func stop()
 ```
+
+<a id="10requesttorespond"></a>
+
+<a id="2c60a50a3amyt"></a>
 
 #### 10requestToRespond
 
 端侧主动通过文本发起tts语音合成，或者向服务端发起图片等其他请求。
 
-```
+<a id="code-block-10"></a>
+
+```swift
 /// 请求响应
 /// - Parameters:
 ///   - type: 请求类型
@@ -162,21 +250,33 @@ public func stop()
 public func requestToRespond(type:String, text:String, params:[String : Any])
 ```
 
+<a id="11updateinfo"></a>
+
+<a id="87df938249z2p"></a>
+
 #### 11updateInfo
 
 更新参数信息等操作。
 
-```
+<a id="code-block-11"></a>
+
+```swift
 /// 更新信息
 /// - Parameter params: 更新参数
 public func updateInfo(params:[String : Any])
 ```
 
+<a id="callback"></a>
+
+<a id="c705e6bc4dd6h"></a>
+
 ### Callback
 
 提供给用户层的回调函数。
 
-```
+<a id="code-block-12"></a>
+
+```swift
 /// 服务端建联成功回调
 public var onConnected: (() -> Void)?
 
@@ -205,427 +305,110 @@ public var onSynthesizedData:  ((UnsafeMutablePointer<UInt8>, Int32) -> Void)?
 public var onWebsocketClosed:((_ code: Int,_ reason: String?) -> Void)?
 ```
 
+<a id="multimodalrequestparam"></a>
+
+<a id="63bb5723c8rmx"></a>
+
 ### MultiModalRequestParam
 
 请求参数类
 
 请求参数均支持builder模式设置参数，参数的值和说明参考如下。以下是客户端需要/可选配置的参数。
 
+<a id="start建联请求参数"></a>
+
+<a id="adc389785akco"></a>
+
 #### Start建联请求参数
 
-**一级参数**
+<table><thead><tr><th><p><strong>一级参数</strong></p></th><th><p><strong>二级参数</strong></p></th><th><p><strong>三级参数</strong></p></th><th><p><strong>四级参数</strong></p></th><th><p><strong>类型</strong></p></th><th><p><strong>是否必选</strong></p></th><th><p><strong>说明</strong></p></th></tr></thead><tbody><tr><td rowspan="3"><p>input</p></td><td><p>workspace_id</p></td><td></td><td></td><td><p>string</p></td><td><p>是</p></td><td><p><a href="https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h">用户业务空间ID</a></p></td></tr><tr><td><p>app_id</p></td><td></td><td></td><td><p>string</p></td><td><p>是</p></td><td><p>客户在管控台创建的<a href="https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#2612f896detsz">应用 ID</a>，可以根据值规律确定使用哪个对话系统</p></td></tr><tr><td><p>dialog_id</p></td><td></td><td></td><td><p>string</p></td><td><p>否</p></td><td><p>对话id，如果传入表示接着聊</p></td></tr><tr><td rowspan="16"><p>parameters</p></td><td rowspan="3"><p>upstream</p></td><td><p>type</p></td><td></td><td><p>string</p></td><td><p>是</p></td><td><p>上行类型：</p><p>AudioOnly 仅语音通话</p><p>AudioAndVideo 上传视频</p></td></tr><tr><td><p>mode</p></td><td></td><td><p>string</p></td><td><p>否</p></td><td><p>客户端使用的模式，可选项：</p><ul><li><p>push2talk</p></li><li><p>tap2talk</p></li><li><p>duplex</p></li></ul><p>默认tap2talk</p></td></tr><tr><td><p>audio_format</p></td><td></td><td><p>string</p></td><td><p>否</p></td><td><p>音频格式，支持pcm，opus，默认为pcm</p></td></tr><tr><td rowspan="4"><p>downstream</p></td><td><p>voice</p></td><td></td><td><p>string</p></td><td><p>否</p></td><td><p>合成语音的音色</p></td></tr><tr><td><p>sample_rate</p></td><td></td><td><p>int</p></td><td><p>否</p></td><td><p>合成语音的采样率，默认采样率24000Hz</p></td></tr><tr><td><p>intermediate_text</p></td><td></td><td><p>string</p></td><td><p>否</p></td><td><p>控制返回给用户那些中间文本：</p><p>transcript 返回用户语音识别结果</p><p>dialog 返回对话系统回答中间结果</p><p>可以设置多种，以逗号分割，默认为transcript</p></td></tr><tr><td><p>audio_format</p></td><td></td><td><p>string</p></td><td><p>否</p></td><td><p>音频格式，支持pcm，mp3，默认为pcm</p></td></tr><tr><td rowspan="6"><p>client_info</p></td><td><p>user_id</p></td><td></td><td><p>string</p></td><td><p>是</p></td><td><p>终端用户id，用来做用户相关的处理</p></td></tr><tr><td><p>device</p></td><td><p>uuid</p></td><td><p>string</p></td><td><p>否</p></td><td><p>客户端全局唯一的id，需要用户自己生成，传入SDK</p></td></tr><tr><td><p>network</p></td><td><p>ip</p></td><td><p>string</p></td><td><p>否</p></td><td><p>调用方公网ip</p></td></tr><tr><td rowspan="3"><p>location</p></td><td><p>latitude</p></td><td><p>string</p></td><td><p>否</p></td><td><p>调用方维度信息</p></td></tr><tr><td><p>longitude</p></td><td><p>string</p></td><td><p>否</p></td><td><p>调用方经度信息</p></td></tr><tr><td><p>city_name</p></td><td><p>string</p></td><td><p>否</p></td><td><p>调用方所在城市</p></td></tr><tr><td rowspan="3"><p>biz_params</p></td><td><p>user_defined_params</p></td><td></td><td><p>object</p></td><td><p>否</p></td><td><p>其他需要透传给agent的参数</p></td></tr><tr><td><p>user_defined_tokens</p></td><td></td><td><p>object</p></td><td><p>否</p></td><td><p>透传agent所需鉴权信息</p></td></tr><tr><td><p>tool_prompts</p></td><td></td><td><p>object</p></td><td><p>否</p></td><td><p>透传agent所需prompt</p></td></tr></tbody></table>
 
-**二级参数**
+<a id="requesttorespond-请求参数"></a>
 
-**三级参数**
-
-**四级参数**
-
-**类型**
-
-**是否必选**
-
-**说明**
-
-input
-
-workspace\_id
-
-string
-
-是
-
-[用户业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)
-
-app\_id
-
-string
-
-是
-
-客户在管控台创建的[应用 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#2612f896detsz)，可以根据值规律确定使用哪个对话系统
-
-dialog\_id
-
-string
-
-否
-
-对话id，如果传入表示接着聊
-
-parameters
-
-upstream
-
-type
-
-string
-
-是
-
-上行类型：
-
-AudioOnly 仅语音通话
-
-AudioAndVideo 上传视频
-
-mode
-
-string
-
-否
-
-客户端使用的模式，可选项：
-
--   push2talk
-    
--   tap2talk
-    
--   duplex
-    
-
-默认tap2talk
-
-audio\_format
-
-string
-
-否
-
-音频格式，支持pcm，opus，默认为pcm
-
-downstream
-
-voice
-
-string
-
-否
-
-合成语音的音色
-
-sample\_rate
-
-int
-
-否
-
-合成语音的采样率，默认采样率24000Hz
-
-intermediate\_text
-
-string
-
-否
-
-控制返回给用户那些中间文本：
-
-transcript 返回用户语音识别结果
-
-dialog 返回对话系统回答中间结果
-
-可以设置多种，以逗号分割，默认为transcript
-
-audio\_format
-
-string
-
-否
-
-音频格式，支持pcm，mp3，默认为pcm
-
-client\_info
-
-user\_id
-
-string
-
-是
-
-终端用户id，用来做用户相关的处理
-
-device
-
-uuid
-
-string
-
-否
-
-客户端全局唯一的id，需要用户自己生成，传入SDK
-
-network
-
-ip
-
-string
-
-否
-
-调用方公网ip
-
-location
-
-latitude
-
-string
-
-否
-
-调用方维度信息
-
-longitude
-
-string
-
-否
-
-调用方经度信息
-
-city\_name
-
-string
-
-否
-
-调用方所在城市
-
-biz\_params
-
-user\_defined\_params
-
-object
-
-否
-
-其他需要透传给agent的参数
-
-user\_defined\_tokens
-
-object
-
-否
-
-透传agent所需鉴权信息
-
-tool\_prompts
-
-object
-
-否
-
-透传agent所需prompt
+<a id="7b7fa04824cnp"></a>
 
 #### RequestToRespond 请求参数
 
-**一级参数**
+| 一级参数 | 二级参数 | 三级参数 | 类型 | 是否必选 | 说明 |
+| --- | --- | --- | --- | --- | --- |
+| input | type |  | string | 是 | 服务应该采取的交互类型：<br><br>transcript 表示直接把文本转语音<br><br>prompt 表示把文本送大模型回答 |
+|  | text |  | string | 是 | 要处理的文本，可以是""空字符串，非null即可 |
+| parameters | images |  | list\[\] | 否 | 需要分析的图片信息 |
+|  | biz\_params |  | object | 否 | 与Start消息中biz\_params相同，传递对话系统自定义参数。RequestToRespond的biz\_params参数只在本次请求中生效。 |
 
-**二级参数**
+<a id="updateinfo-请求参数"></a>
 
-**三级参数**
-
-**类型**
-
-**是否必选**
-
-**说明**
-
-input
-
-type
-
-string
-
-是
-
-服务应该采取的交互类型：
-
-transcript 表示直接把文本转语音
-
-prompt 表示把文本送大模型回答
-
-text
-
-string
-
-是
-
-要处理的文本，可以是""空字符串，非null即可
-
-parameters
-
-images
-
-list\[\]
-
-否
-
-需要分析的图片信息
-
-biz\_params
-
-object
-
-否
-
-与Start消息中biz\_params相同，传递对话系统自定义参数。RequestToRespond的biz\_params参数只在本次请求中生效。
+<a id="260472465cih5"></a>
 
 #### UpdateInfo 请求参数
 
-**一级参数**
+| 一级参数 | 二级参数 | 三级参数 | 类型 | 是否必选 | 说明 |
+| --- | --- | --- | --- | --- | --- |
+| parameters | images |  | list\[\] | 否 | 图片数据 |
+|  | client\_info | status | object | 否 | 客户端当前状态 |
+|  | biz\_params |  | object | 否 | 与Start消息中biz\_params相同，传递对话系统自定义参数 |
 
-**二级参数**
+<a id="对话状态说明-dialogstate"></a>
 
-**三级参数**
-
-**类型**
-
-**是否必选**
-
-**说明**
-
-parameters
-
-images
-
-list\[\]
-
-否
-
-图片数据
-
-client\_info
-
-status
-
-object
-
-否
-
-客户端当前状态
-
-biz\_params
-
-object
-
-否
-
-与Start消息中biz\_params相同，传递对话系统自定义参数
+<a id="f4f1dbdebd7o4"></a>
 
 ### 对话状态说明（DialogState）
 
 voicechat服务有LISTENING、THINKING、RESPONDING三个状态，分别代表：
 
-```
+<a id="code-block-13"></a>
+
+```text
 IDLE("Idle"), 系统尚未建立连接
 LISTENING("Listening"), 表示机器人正在监听用户输入。用户可以发送音频。
 THINKING("Thinking"),表示机器人正在思考。
 RESPONDING("Responding")表示机器人正在生成语音或语音回复中。
 ```
 
+<a id="对话llm输出结果"></a>
+
+<a id="913db2f401pjl"></a>
+
 ### 对话LLM输出结果
 
 对话结果通过`onMessageReceived` 回调，格式如下。
 
-**一级参数**
+| 一级参数 | 二级参数 | 三级参数 | 类型 | 是否必选 | 说明 |
+| --- | --- | --- | --- | --- | --- |
+| output | event |  | string | 是 | 事件名称如：RequestAccepted |
+|  | dialog\_id |  | string | 是 | 对话id |
+|  | round\_id |  | string | 是 | 本轮交互的id |
+|  | llm\_request\_id |  | string | 是 | 调用llm的request\_id |
+|  | text |  | string | 是 | 系统对外输出的文本，流式全量输出 |
+|  | spoken |  | string | 是 | 合成语音时使用的文本，流式全量输出 |
+|  | finished |  | bool | 是 | 输出是否结束 |
+|  | extra\_info |  | object | 否 | 其他扩展信息，目前支持：<br><br>commands: 命令字符串<br><br>agent\_info: 智能体信息<br><br>tool\_calls: 插件返回的信息<br><br>dialog\_debug: 对话debug信息<br><br>timestamps: 链路中各节点时间戳 |
 
-**二级参数**
+<a id="调用交互时序图"></a>
 
-**三级参数**
-
-**类型**
-
-**是否必选**
-
-**说明**
-
-output
-
-event
-
-string
-
-是
-
-事件名称如：RequestAccepted
-
-dialog\_id
-
-string
-
-是
-
-对话id
-
-round\_id
-
-string
-
-是
-
-本轮交互的id
-
-llm\_request\_id
-
-string
-
-是
-
-调用llm的request\_id
-
-text
-
-string
-
-是
-
-系统对外输出的文本，流式全量输出
-
-spoken
-
-string
-
-是
-
-合成语音时使用的文本，流式全量输出
-
-finished
-
-bool
-
-是
-
-输出是否结束
-
-extra\_info
-
-object
-
-否
-
-其他扩展信息，目前支持：
-
-commands: 命令字符串
-
-agent\_info: 智能体信息
-
-tool\_calls: 插件返回的信息
-
-dialog\_debug: 对话debug信息
-
-timestamps: 链路中各节点时间戳
+<a id="c727affae92rb"></a>
 
 ## 调用交互时序图
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8131377471/p957947.png)
 
+<a id="调用示例"></a>
+
+<a id="40c32ee64aamy"></a>
+
 ## 调用示例
+
+<a id="初始化对话参数"></a>
+
+<a id="963fb32cdau2h"></a>
 
 ### 初始化对话参数
 
 调用MultiModalRequestParam类中的各子类的builder方法构建参数。
 
-```
+<a id="code-block-14"></a>
+
+```swift
 var params = MultiModalRequestParam{ multiBuilder in
             multiBuilder.upStream = MultiModalRequestParam.UpStream(builder: { upstreamBuilder in
                 upstreamBuilder.mode = DialogMode.duplex.rawValue
@@ -643,18 +426,36 @@ var params = MultiModalRequestParam{ multiBuilder in
         }
 ```
 
+<a id="创建multimodaldialog对象"></a>
+
+<a id="be0883f4d9is1"></a>
+
 ### 创建MultiModalDialog对象
 
-```
+<a id="code-block-15"></a>
+
+```swift
 self.conversation = MultiModalDialog(url: self.HOST,  workSpaceId:self.WORKSPACE_ID ,
      appId: self.APP_ID, mode: DialogMode.duplex)
 ```
+
+<a id="完整调用示例"></a>
+
+<a id="2a535b0612xk5"></a>
 
 ### 完整调用示例
 
 参考章节**环境和依赖**下载的Demo 工程中`ChatViewController`相关调用。
 
+<a id="更多sdk接口使用说明"></a>
+
+<a id="f7fbc7bcad3si"></a>
+
 ## 更多SDK接口使用说明
+
+<a id="vqa交互"></a>
+
+<a id="10a020fe44f49"></a>
 
 ### VQA交互
 
@@ -666,7 +467,9 @@ VQA 是对话过程中通过发送图片实现图片+语音的多模交互的功
 
 建联后发起拍照请求。
 
-```
+<a id="code-block-16"></a>
+
+```swift
 //创建图片请求参数
 private func createImageParams() -> [String: Any]{
     var imageObject:[String: Any] = [
@@ -689,6 +492,10 @@ private func createImageParams() -> [String: Any]{
 self.conversation?.requestToRespond(type: "prompt", text: "", params: self.createImageParams())
 ```
 
+<a id="通过-websocket-链路请求liveai"></a>
+
+<a id="6ff2cdacc27um"></a>
+
 ### 通过 Websocket 链路请求LiveAI
 
 LiveAI （视频通话）是百炼多模交互提供的官方Agent。通过iOS Lite SDK， 您可以在Websocket链路中通过自行录制视频帧的方式来调用视频通话功能。
@@ -697,13 +504,17 @@ LiveAI （视频通话）是百炼多模交互提供的官方Agent。通过iOS L
 
 -   LiveAI调用时序
 
+<a id="e0a817e803bvl"></a>
+
 #### ![截屏2025-06-20 11](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1903140571/p975541.png)
 
 -   关键代码示例
 
 请注意参照如下的调用流程实现 通过Websocket 协议调用 LiveAI。
 
-```
+<a id="code-block-17"></a>
+
+```swift
 //1. 设置交互类型为AudioAndVideo
 multiBuilder.upStream = MultiModalRequestParam.UpStream(builder: { upstreamBuilder in
                 upstreamBuilder.mode = mode.rawValue
@@ -764,11 +575,21 @@ private func sendLocalImageBase64() {
 //完整示例请参考 Demo 中的代码。
 ```
 
+<a id="文本合成tts"></a>
+
+<a id="2ad89c9bact8f"></a>
+
 ### 文本合成TTS
 
-```
+<a id="code-block-18"></a>
+
+```swift
 self.conversation?.requestToRespond(type: "prompt", text: "幸福是一种技能，是你摒弃了外在多余欲望后的内心平和。", params:[:])
 ```
+
+<a id="自定义提示词变量和传值"></a>
+
+<a id="442af8d6f6i38"></a>
 
 ### 自定义提示词变量和传值
 
@@ -782,7 +603,9 @@ self.conversation?.requestToRespond(type: "prompt", text: "幸福是一种技能
 
 如下示例，设置`"user_name" = "大米"`。
 
-```
+<a id="code-block-19"></a>
+
+```swift
 //在请求参数构建中传入biz_params.user_prompt_params
 var promptParam = ["user_name" : "大米"]
 var params = MultiModalRequestParam{ multiBuilder in

@@ -2,6 +2,10 @@
 
 本文档介绍了音乐电台Agent的功能说明以及通过SDK接入的方法。
 
+<a id="功能说明"></a>
+
+<a id="9489088352f2w"></a>
+
 ## 功能说明
 
 开启后，随机播放推荐音乐。
@@ -10,53 +14,29 @@
 
 音乐试听：
 
-音乐名
+|  |  |  |
+| --- | --- | --- |
+| 音乐名 | 试听 | 描述 |
+| Hold on a Sec |  | Chill，放松，愉快，爵士 |
+| One Step Closer |  | 奇幻，想象、神秘 |
+| The Celebrated Minuet |  | 古典、优雅 |
+| Shining Stars |  | 情绪，治愈，平缓 |
+| Village Tarantella |  | 异域风情、独特律动 |
+| Quick Metal Riff 1 |  | 摇滚，亢奋，充满力量感 |
+| Patron Saint of Heists |  | 俏皮，节奏感 |
+| Painful Disorientation |  | 古典，细腻优雅，俏皮 |
+| Jethro on the Run |  | 乡村，欢快，节奏 |
+| Joey's Song |  | 治愈，平缓，怀旧 |
 
-试听
+<a id="通过sdk接入音乐电台agent"></a>
 
-描述
-
-Hold on a Sec
-
-Chill，放松，愉快，爵士
-
-One Step Closer
-
-奇幻，想象、神秘
-
-The Celebrated Minuet
-
-古典、优雅
-
-Shining Stars
-
-情绪，治愈，平缓
-
-Village Tarantella
-
-异域风情、独特律动
-
-Quick Metal Riff 1
-
-摇滚，亢奋，充满力量感
-
-Patron Saint of Heists
-
-俏皮，节奏感
-
-Painful Disorientation
-
-古典，细腻优雅，俏皮
-
-Jethro on the Run
-
-乡村，欢快，节奏
-
-Joey's Song
-
-治愈，平缓，怀旧
+<a id="4a31a615d2qrb"></a>
 
 ## 通过SDK接入音乐电台Agent
+
+<a id="1-通过语音或者文本进入音乐电台"></a>
+
+<a id="f551819350041"></a>
 
 ### 1\. 通过语音或者文本进入音乐电台
 
@@ -64,63 +44,36 @@ Joey's Song
 
 > 通过文本指令调用： requestToRespond("prompt", "进入音乐电台"， null)
 
+<a id="2-获取音乐"></a>
+
+<a id="8b464e6b1es00"></a>
+
 ### 2\. 获取音乐
 
 成功进入音乐电台，服务会返回一首音乐信息，包含一个可下载的 mp3 链接。 注意，由于语音应用和多模态应用的返回数据格式不同，我们需要分别进行处理。您可以根据您接入的应用类型选择使用。
+
+<a id="2-1-使用语音应用接入音乐电台"></a>
+
+<a id="2f64bfa8785o1"></a>
 
 #### 2.1 使用语音应用接入音乐电台
 
 解析服务端返回的 RespondingContent 类型结果的 payload.output.extra\_info.tool\_calls。
 
-参数
+|  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- |
+|  | 参数 |  |  | 类型 | 其他 | 说明 |
+| tool\_calls\[\] | type |  |  | String |  | 字段名一般固定为“FUNCTION”。代表 function call |
+|  | id |  |  | String |  | 音乐电台默认为music\_radio |
+|  | function |  |  |  |  |  |
+|  |  | name |  | String |  | 字段为自定义的工具函数名称，与多模态应用的 domain 类似 |
+|  |  | arguments\[\] |  | list |  | 插件或者技能下发的参数列表 |
+|  |  |  | music\_info | jsonString |  | 音乐资源信息 |
+|  |  |  | music\_keyword | String |  | 音乐类型，如“爵士布鲁斯” |
 
-类型
+<a id="code-block"></a>
 
-其他
-
-说明
-
-tool\_calls\[\]
-
-type
-
-String
-
-字段名一般固定为“FUNCTION”。代表 function call
-
-id
-
-String
-
-音乐电台默认为music\_radio
-
-function
-
-name
-
-String
-
-字段为自定义的工具函数名称，与多模态应用的 domain 类似
-
-arguments\[\]
-
-list
-
-插件或者技能下发的参数列表
-
-music\_info
-
-jsonString
-
-音乐资源信息
-
-music\_keyword
-
-String
-
-音乐类型，如“爵士布鲁斯”
-
-```
+```json
 {
     "tool_calls": [
         {
@@ -142,55 +95,28 @@ String
 }
 ```
 
+<a id="2-2-使用多模态应用接入音乐电台"></a>
+
+<a id="0444594e3cnsu"></a>
+
 #### 2.2 使用多模态应用接入音乐电台
 
 解析服务端返回的 RespondingContent 类型结果的 payload.output.extra\_info.commands。
 
-参数
+|  |  |  |  |  |
+| --- | --- | --- | --- | --- |
+|  | 参数 |  | 类型 | 说明 |
+| commands\[\] | intent\_info |  | String | 多模态意图 |
+|  |  | domain | String | 音乐电台默认为music\_radio |
+|  |  | intent | String | 意图，如open\_music\_radio打开音乐电台等 |
+|  | name |  | String | play\_music |
+|  | params\[\] |  |  |  |
+|  |  | object.music\_info | jsonString | 音乐资源信息,包含音量链接地址等 |
+|  |  | object.music\_keyword |  | 音乐类型，如“爵士布鲁斯” |
 
-类型
+<a id="code-block-2"></a>
 
-说明
-
-commands\[\]
-
-intent\_info
-
-String
-
-多模态意图
-
-domain
-
-String
-
-音乐电台默认为music\_radio
-
-intent
-
-String
-
-意图，如open\_music\_radio打开音乐电台等
-
-name
-
-String
-
-play\_music
-
-params\[\]
-
-object.music\_info
-
-jsonString
-
-音乐资源信息,包含音量链接地址等
-
-object.music\_keyword
-
-音乐类型，如“爵士布鲁斯”
-
-```
+```json
 [
     {
         "intent_info": {
@@ -212,13 +138,19 @@ object.music\_keyword
 ]
 ```
 
+<a id="3-音乐播放"></a>
+
+<a id="ff6625be3bpdf"></a>
+
 ### 3\. 音乐播放
 
 我们下发的音乐为URL形式的MP3 文件链接。您在获取URL后需要下载或使用网络播放器播放这个URL文件。
 
 -   以 Android 为例。我们提供一个URL MP3 播放器示例代码。您可以在项目中集成这个示例。
 
-```
+<a id="code-block-3"></a>
+
+```java
 package com.tongyi.multimodal_dialog.utils;
 import android.media.MediaPlayer;
 import android.util.Log;
@@ -389,11 +321,17 @@ public class NetworkMp3Player {
     集成完成后，用户发送语音指令"打开音乐电台"，应用连接成功后将显示音乐播放卡片，包含当前播放歌曲名称、播放进度条及**停止**按钮，可控制音乐播放。
 -   完整代码请参考 Android SDK demo。其他语言请通过类似的解析和播放实现相同功能。
 
+<a id="4-连续播放"></a>
+
+<a id="56020555833g5"></a>
+
 ### 4\. 连续播放：
 
 播放结束后，端上可以发指令要求继续播放，您可以监听NetworkMp3Player.OnPlayCallback()的onPlayComplete方法，在上一首音乐播放结束后，向服务端发起播放下一首请求：
 
-```
+<a id="code-block-4"></a>
+
+```java
 multiModalDialog.requestToRespond("prompt","下一首", null);
 ```
 

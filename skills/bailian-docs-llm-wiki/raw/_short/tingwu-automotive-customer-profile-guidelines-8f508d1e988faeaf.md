@@ -2,11 +2,21 @@
 
 本文介绍如何配置并使用通义听悟-购车客户画像 Agent。
 
+<a id="准备工作"></a>
+
+<a id="be88aba149g8d"></a>
+
 ## 准备工作
 
 [开通](https://common-buy.aliyun.com/?commodityCode=sfm_TingWuAgent_public_cn)通义听悟 Agent 服务。
 
-**说明**开通后即可使用阿里云百炼平台全系通义听悟 Agent 服务。
+> **说明**
+>
+> 开通后即可使用阿里云百炼平台全系通义听悟 Agent 服务。
+
+<a id="一-创建应用"></a>
+
+<a id="00458686b0nqj"></a>
 
 ## 一、创建应用
 
@@ -14,13 +24,27 @@
 
 ![1](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2979894571/p996347.webp)
 
+<a id="二-调试配置"></a>
+
+<a id="eb0ed3305exw8"></a>
+
 ## 二、调试配置
 
-完成调试配置后，您可多次[体验效果](https://help.aliyun.com/zh/model-studio/tingwu-automotive-customer-profile-guidelines#0212744c1075p)，确认效果满足预期后再[发布应用](https://help.aliyun.com/zh/model-studio/tingwu-automotive-customer-profile-guidelines#54ad18c3206oz)，并参照[API接入](https://help.aliyun.com/zh/model-studio/tingwu-automotive-customer-profile-guidelines#18067199c3nfh)进行实际开发调用。
+完成调试配置后，您可多次[体验效果](tingwu-automotive-customer-profile-guidelines-8f508d1e988faeaf.md#0212744c1075p)，确认效果满足预期后再[发布应用](tingwu-automotive-customer-profile-guidelines-8f508d1e988faeaf.md#54ad18c3206oz)，并参照[API接入](tingwu-automotive-customer-profile-guidelines-8f508d1e988faeaf.md#18067199c3nfh)进行实际开发调用。
+
+<a id="1-提供待洞察的内容"></a>
+
+<a id="0ba6feae219yg"></a>
 
 ### 1\. 提供待洞察的内容
 
 ![2](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2979894571/p996348.webp)
+
+<a id="sec-tabs"></a>
+
+<a id="内容来源"></a>
+
+<a id="内容来源-h4"></a>
 
 #### 内容来源
 
@@ -30,12 +54,16 @@
     
 -   **通义听悟任务：**填写通义听悟 Agent 历史已完成的转写任务ID（TaskID），可节省语音转文字成本。
     
-    **说明**任务创建成功后，系统将在响应中返回TaskID字段。
+    > **说明**
+    >
+    > 任务创建成功后，系统将在响应中返回TaskID字段。
     
 -   **对话内容：**按格式录入对话内容文本，也可节省语音转文字成本。
     
 
-```
+<a id="code-block"></a>
+
+```text
 示例1：
 发言人1：对话内容。
 发言人2：对话内容。
@@ -43,6 +71,10 @@
 销售：对话内容。
 客户：对话内容。
 ```
+
+<a id="转写模型"></a>
+
+<a id="转写模型-h4"></a>
 
 #### 转写模型
 
@@ -53,6 +85,10 @@
 -   **paraformer-8k-v2（中文）**
 -   **教育领域模型（中英）**
 
+<a id="音频类型"></a>
+
+<a id="音频类型-h4"></a>
+
 #### 音频类型
 
 仅限内容来源为**音频文件**时需要选择音频类型：
@@ -60,9 +96,19 @@
 -   **电话录音 或 16K及以上单声道**
 -   **16K及以上多声道（车载设备录制）**
 
+<a id="2-制定客户画像规则"></a>
+
+<a id="4c5387822cib9"></a>
+
 ### 2\. 制定客户画像规则
 
 ![3](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2979894571/p996349.webp)
+
+<a id="sec-tabs-2"></a>
+
+<a id="洞察模型"></a>
+
+<a id="洞察模型-h4"></a>
 
 #### 洞察模型
 
@@ -72,9 +118,17 @@
 -   **qwen-plus**
 -   **qwq**
 
+<a id="场景描述"></a>
+
+<a id="场景描述-h4"></a>
+
 #### 场景描述
 
 在**“请输入品牌名称”**处填写需要洞察分析的品牌名称。
+
+<a id="分析结果"></a>
+
+<a id="分析结果-h4"></a>
 
 #### 分析结果
 
@@ -85,10 +139,18 @@
 -   **一句话客户画像**
 -   **客户详细关注点分析**（必选项）
 
+<a id="关注点"></a>
+
+<a id="关注点-h4"></a>
+
 #### 关注点
 
 -   **默认分析项**：15大类62项（涵盖车辆信息、用户体验、产品配置、用车成本等）
 -   **自定义分析项**（上限100项）：添加更匹配您业务场景的洞察分析关注点，添加时需要输入分析项名称、分析标准
+
+<a id="角色设定"></a>
+
+<a id="角色设定-h4"></a>
 
 #### 角色设定
 
@@ -99,19 +161,33 @@
 -   **导航：**播报行驶路线，例如前方路口左拐，前方红绿灯直行
 -   **车机助手：**响应车内人员指令，例如已为您打开通风、空调已打开、已关闭音乐
 
-**说明**界面化的应用配置可对 API 生效，您同时也可在 API 中更新参数，覆盖界面应用配置。
+> **说明**
+>
+> 界面化的应用配置可对 API 生效，您同时也可在 API 中更新参数，覆盖界面应用配置。
 
-完成上述配置后，即可点击**立即分析**按钮进行调试（步骤[3\. API 调用配置](https://help.aliyun.com/zh/model-studio/tingwu-automotive-customer-profile-guidelines#b20c42d508vop)仅在接口调用时需要参考）。
+完成上述配置后，即可点击**立即分析**按钮进行调试（步骤[3\. API 调用配置](tingwu-automotive-customer-profile-guidelines-8f508d1e988faeaf.md#b20c42d508vop)仅在接口调用时需要参考）。
 
-如需查看**调试效果**和**测试记录**，请参见[体验效果](https://help.aliyun.com/zh/model-studio/tingwu-automotive-customer-profile-guidelines#0212744c1075p)。
+如需查看**调试效果**和**测试记录**，请参见[体验效果](tingwu-automotive-customer-profile-guidelines-8f508d1e988faeaf.md#0212744c1075p)。
+
+<a id="3-api-调用配置"></a>
+
+<a id="b20c42d508vop"></a>
 
 ### 3\. API 调用配置
 
 ![4](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2979894571/p996350.webp)
 
+<a id="sec-tabs-3"></a>
+
+<a id="回调方式"></a>
+
+<a id="回调方式-h4"></a>
+
 #### 回调方式
 
-**说明**此处回调方式设置请参考 [如何通过回调获取异步任务结果](https://help.aliyun.com/zh/tingwu/how-to-get-asynchronous-task-result-through-callback)
+> **说明**
+>
+> 此处回调方式设置请参考 [如何通过回调获取异步任务结果](https://help.aliyun.com/zh/tingwu/how-to-get-asynchronous-task-result-through-callback)
 
 -   **HTTP post 协议：**需要您输入对应 URL 地址，通义听悟会向配置的HTTP URL发送post请求，返回的HTTP status为200则检查通过。
 -   **不设置回调（主动轮询）：**如果您选择不设置回调，自行主动轮询，可使用Agent任务的轮询接口：getTask；默认每个账户轮询的 QPS 为：100
@@ -119,7 +195,9 @@
 
 当服务端接收到回调消息，并返回200的 HTTP 状态码后，该应用项目才能创建成功，消息格式如下：
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
     "output": {
         "transcriptionPath": "https://***.oss-cn-hangzhou.aliyuncs.com/***",
@@ -136,17 +214,33 @@
 }
 ```
 
+<a id="应用名称"></a>
+
+<a id="应用名称-h4"></a>
+
 #### 应用名称
 
 在此处复制或修改本应用名称。
+
+<a id="应用id"></a>
+
+<a id="应用id-h4"></a>
 
 #### 应用ID
 
 在此处查看或复制本应用ID。
 
+<a id="应用描述"></a>
+
+<a id="应用描述-h4"></a>
+
 #### 应用描述
 
 在此处添加本应用的描述信息。
+
+<a id="三-体验效果"></a>
+
+<a id="0212744c1075p"></a>
 
 ## 三、体验效果
 
@@ -154,32 +248,36 @@
 
 ![5](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2979894571/p996351.webp)
 
+<a id="sec-tabs-4"></a>
+
+<a id="对话内容"></a>
+
+<a id="对话内容-h4"></a>
+
 #### 对话内容
 
 -   若输入内容来源为**音频文件**或**通义听悟任务**，则对话内容展示框中将呈现对应的音视频文字转写结果，并标识对话人ID和对话时间戳。
 -   若输入内容来源为**对话内容**文字输入，则可能无法展示对话时间戳信息，但不会影响洞察结果分析。
 
+<a id="分析结果-2"></a>
+
+<a id="分析结果-2-h4"></a>
+
 #### 分析结果
 
 在洞察结果分析展示框中，可查看**试驾意向评分**、**销售线索评分**、**一句话客户画像**、**客户关注点分析**。其中**客户关注点分析**中会体现**有命中**和**未命中**的分析结果，以及具体命中的原文内容。
 
-分析项可在左侧进行配置，详见[调试配置](https://help.aliyun.com/zh/model-studio/tingwu-automotive-customer-profile-guidelines#eb0ed3305exw8)。
+分析项可在左侧进行配置，详见[调试配置](tingwu-automotive-customer-profile-guidelines-8f508d1e988faeaf.md#eb0ed3305exw8)。
 
-**试驾意向评分**
+| 试驾意向评分 | 销售线索评分 |
+| --- | --- |
+| AI评分结果为**2**分，评分理由：客户详细询问车辆配置与价格，虽未直接提及试驾，但有较高的购车意向，可能需要试驾以做决策。 | 评分结果等级为**A**，评分理由："客户详细询问车辆配置与价格，讨论贷款购车方案，表明有一定购车意愿"。 |
+| **一句话客户画像** | **客户关注点分析** |
+| **一句话客户画像**功能的输出示例：系统生成客户画像卡片，包含客户关注点（车型、外观、内饰、配置、续航、预计到店时间）和购车顾虑点（车辆品质、贷款审批、车辆价格波动）等维度的摘要信息，各维度自动提取对话中的关键词填充。 | **客户关注点分析**功能将话题分为**客户关注**和**客户未提及**两类标签页（各标签页后标注话题数量），每个话题以卡片形式展示，包含话题标签（如"电动脚托或脚垫"）、AI 生成的摘要（如"销售提到这款宝马X7带有原厂自带的电动脚托"）以及多段原文内容溯源，卡片右上角提供**定位至对话**按钮可跳转至对应对话位置。 |
 
-**销售线索评分**
+<a id="测试记录"></a>
 
-AI评分结果为**2**分，评分理由：客户详细询问车辆配置与价格，虽未直接提及试驾，但有较高的购车意向，可能需要试驾以做决策。
-
-评分结果等级为**A**，评分理由："客户详细询问车辆配置与价格，讨论贷款购车方案，表明有一定购车意愿"。
-
-**一句话客户画像**
-
-**客户关注点分析**
-
-**一句话客户画像**功能的输出示例：系统生成客户画像卡片，包含客户关注点（车型、外观、内饰、配置、续航、预计到店时间）和购车顾虑点（车辆品质、贷款审批、车辆价格波动）等维度的摘要信息，各维度自动提取对话中的关键词填充。
-
-**客户关注点分析**功能将话题分为**客户关注**和**客户未提及**两类标签页（各标签页后标注话题数量），每个话题以卡片形式展示，包含话题标签（如"电动脚托或脚垫"）、AI 生成的摘要（如"销售提到这款宝马X7带有原厂自带的电动脚托"）以及多段原文内容溯源，卡片右上角提供**定位至对话**按钮可跳转至对应对话位置。
+<a id="测试记录-h4"></a>
 
 #### 测试记录
 
@@ -189,11 +287,19 @@ AI评分结果为**2**分，评分理由：客户详细询问车辆配置与价�
 
 点击某条测试记录最右侧的**详情**按钮，可以查看完整详细的**对话内容**和**分析结果**。
 
+<a id="四-发布应用"></a>
+
+<a id="54ad18c3206oz"></a>
+
 ## 四、发布应用
 
 点击控制台右上角的**发布**按钮，输入版本描述信息，即可完成发布，应用发布后线上将立即生效。
 
 ![6](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2979894571/p996352.webp)
+
+<a id="版本管理"></a>
+
+<a id="0551030be1t70"></a>
 
 ### 版本管理
 
@@ -201,11 +307,19 @@ AI评分结果为**2**分，评分理由：客户详细询问车辆配置与价�
 
 ![9](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2979894571/p996355.webp)
 
+<a id="五-api接入"></a>
+
+<a id="18067199c3nfh"></a>
+
 ## 五、API接入
 
 应用发布完成后，稍等片刻，点击控制台顶部**API 接入**按钮，查看对应的 Java 和 Python 接入参考代码，然后接入到您的业务系统中。
 
 ![7](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2979894571/p996353.webp)
+
+<a id="六-删除应用"></a>
+
+<a id="6659473930ruf"></a>
 
 ## 六、删除应用
 

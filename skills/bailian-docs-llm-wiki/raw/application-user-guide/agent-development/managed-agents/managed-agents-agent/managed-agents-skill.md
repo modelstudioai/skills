@@ -4,11 +4,17 @@
 
 技能以 zip 包形式上传，zip 根目录须包含 `SKILL.md`。
 
+<a id="skill-md-编写规范"></a>
+
+<a id="skillmd-spec"></a>
+
 ## SKILL.md 编写规范
 
 `SKILL.md` 由 YAML front matter 和 Markdown 正文两部分组成。front matter 用 `---` 包裹，声明技能名称与描述，智能体据此判断何时调用；正文写执行指令，技能触发后才加载。
 
-```
+<a id="code-block"></a>
+
+```markdown
 ---
 name: my-custom-skill
 description: "技能的功能描述，包含触发条件、适用场景和不适用场景。"
@@ -17,27 +23,16 @@ description: "技能的功能描述，包含触发条件、适用场景和不适
 在此编写技能的执行指令。
 ```
 
-**说明**front matter 缺失、未用 `---` 包裹或 YAML 语法错误，审查会不通过。
+> **说明**
+>
+> front matter 缺失、未用 `---` 包裹或 YAML 语法错误，审查会不通过。
 
 **字段说明**
 
-字段
-
-必填
-
-说明
-
-name
-
-是
-
-技能的唯一标识名称。仅限小写字母、数字和连字符，不超过 64 字符，如 `data-cleaner`、`invoice-parser`。
-
-description
-
-是
-
-描述技能的触发条件和处理能力，直接影响调用准确率。不超过 1024 字符，不能包含尖括号。
+| 字段 | 必填 | 说明 |
+| --- | --- | --- |
+| name | 是 | 技能的唯一标识名称。仅限小写字母、数字和连字符，不超过 64 字符，如 `data-cleaner`、`invoice-parser`。 |
+| description | 是 | 描述技能的触发条件和处理能力，直接影响调用准确率。不超过 1024 字符，不能包含尖括号。 |
 
 **description 编写建议**
 
@@ -48,74 +43,120 @@ description 的质量决定了智能体调用技能的准确性，建议包含�
 3.  **触发关键词**：对话中可能出现的、应触发该技能的关键词或表达方式。
 4.  **不适用的场景**：不应触发该技能的场景，避免误调用。
 
+<a id="上传自定义技能"></a>
+
+<a id="8b15eefa8d1u5"></a>
+
 ## 上传自定义技能
 
 1.  点击**自定义 Skill**。
 2.  选择本地 zip 包（不超过 10 MB），提交后系统自动审查内容，进入 `checking` 状态。审查通过变为 `active`，可挂载到智能体；审查未通过变为 `rejected`，不能挂载。
 
-通过 API 上传时，需先调用文件上传接口获得 `file_id`，再传入创建接口。完整参数与响应字段详见[创建 Skill API](raw/application-api-reference/managed-agents-api/skills-api/skill-create.md)。
+通过 API 上传时，需先调用文件上传接口获得 `file_id`，再传入创建接口。完整参数与响应字段详见[创建 Skill API](../../../../application-api-reference/managed-agents-api/skills-api/skill-create.md)。
+
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-bash-tab"></a>
 
 bash
 
-```
+<a id="code-code-group-bash"></a>
+
+```bash
 curl -X POST "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio/skills" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"file_id": "file_xxx"}'
 ```
 
+<a id="fig-code-group-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 skill = client.skills.create(file_id="file_xxx")
 print(skill.id)
 ```
 
+<a id="fig-code-group-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-java"></a>
+
+```java
 Skill skill = client.skills().create(SkillCreateParam.builder()
     .fileId("file_xxx").build());
 System.out.println(skill.getId());
 ```
 
+<a id="版本管理"></a>
+
+<a id="3d0613b3c8lcg"></a>
+
 ## 版本管理
 
 在技能详情页可上传新版本。挂载到智能体时必须指定具体版本号，后续上传新版本不影响已挂载的智能体。
 
-通过 API 上传新版本时，同样需要先获得 `file_id`。版本号由服务端自动生成。完整参数与响应字段详见[上传 Skill 新版本](raw/application-api-reference/managed-agents-api/skills-api/skill-version-create.md)。
+通过 API 上传新版本时，同样需要先获得 `file_id`。版本号由服务端自动生成。完整参数与响应字段详见[上传 Skill 新版本](../../../../application-api-reference/managed-agents-api/skills-api/skill-version-create.md)。
+
+<a id="fig-code-group-2"></a>
+
+<a id="fig-code-group-2-bash-tab"></a>
 
 bash
 
-```
+<a id="code-code-group-2-bash"></a>
+
+```bash
 curl -X POST "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio/skills/skill_xxx/versions" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"file_id": "file_xxx"}'
 ```
 
+<a id="fig-code-group-2-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-2-python"></a>
+
+```python
 sv = client.skills.versions.create("skill_xxx", file_id="file_xxx")
 print(sv.version)
 ```
 
+<a id="fig-code-group-2-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-2-java"></a>
+
+```java
 SkillVersion sv = client.skills().createVersion("skill_xxx",
     SkillCreateParam.builder().fileId("file_xxx").build());
 System.out.println(sv.getVersion());
 ```
 
+<a id="挂载到智能体"></a>
+
+<a id="09adca7f42uo2"></a>
+
 ## 挂载到智能体
 
-在智能体编辑页的**技能**区点击**添加技能**，从下拉选择技能并指定版本。通过 API 创建或更新智能体时，在 `skills` 字段中指定技能 ID 与版本，详见[创建 Agent API](raw/application-api-reference/managed-agents-api/agent-api/agent-create.md)。
+在智能体编辑页的**技能**区点击**添加技能**，从下拉选择技能并指定版本。通过 API 创建或更新智能体时，在 `skills` 字段中指定技能 ID 与版本，详见[创建 Agent API](../../../../application-api-reference/managed-agents-api/agent-api/agent-create.md)。
+
+<a id="fig-code-group-3"></a>
+
+<a id="fig-code-group-3-bash-tab"></a>
 
 bash
 
-```
+<a id="code-code-group-3-bash"></a>
+
+```bash
 curl -X POST "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio/agents" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
@@ -128,9 +169,13 @@ curl -X POST "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentst
   }'
 ```
 
+<a id="fig-code-group-3-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-3-python"></a>
+
+```python
 agent = client.agents.create(
     name="my-agent",
     model="qwen3.8-max",
@@ -141,9 +186,13 @@ agent = client.agents.create(
 print(agent.id)
 ```
 
+<a id="fig-code-group-3-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-3-java"></a>
+
+```java
 Agent agent = client.agents().create(AgentCreateParam.builder()
     .name("my-agent")
     .model("qwen3.8-max")
@@ -156,32 +205,52 @@ Agent agent = client.agents().create(AgentCreateParam.builder()
 System.out.println(agent.getId());
 ```
 
+<a id="删除"></a>
+
+<a id="h-skill-delete"></a>
+
 ## 删除
 
 技能只支持删除，不支持归档。在技能详情页点击**删除**，技能将被硬删除，不可恢复。已挂载到智能体的技能引用将失效。
 
-通过 API 删除技能，不可恢复。完整参数与响应字段详见[删除 Skill](raw/application-api-reference/managed-agents-api/skills-api/skill-delete.md)。
+通过 API 删除技能，不可恢复。完整参数与响应字段详见[删除 Skill](../../../../application-api-reference/managed-agents-api/skills-api/skill-delete.md)。
+
+<a id="fig-code-group-4"></a>
+
+<a id="fig-code-group-4-bash-tab"></a>
 
 bash
 
-```
+<a id="code-code-group-4-bash"></a>
+
+```bash
 curl -X DELETE "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio/skills/skill_xxx" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
+<a id="fig-code-group-4-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-4-python"></a>
+
+```python
 client.skills.delete("skill_xxx")
 ```
 
+<a id="fig-code-group-4-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-4-java"></a>
+
+```java
 client.skills().delete("skill_xxx");
 ```
 
+<a id="下一步"></a>
+
 ## 下一步
 
--   [定义 Agent](raw/application-user-guide/agent-development/managed-agents/managed-agents-agent/managed-agents-agent-definition.md)：在智能体上挂载技能。
--   [发起会话](raw/application-user-guide/agent-development/managed-agents/managed-agents-session/managed-agents-session-event.md)：观察智能体如何调用技能。
+-   [定义 Agent](managed-agents-agent-definition.md)：在智能体上挂载技能。
+-   [发起会话](../managed-agents-session/managed-agents-session-event.md)：观察智能体如何调用技能。

@@ -1,58 +1,50 @@
 # agent legacy
 
-`agent legacy` 指百炼平台已归档的旧版智能体能力体系（即 Agent 1.0 / Flow Agent），基于提示词驱动、零代码编排，支持 RAG 知识库接入与插件调用。该体系在新版控制台中已标记为“旧版入口”，其核心能力仍稳定运行并被部分存量应用依赖，但新功能开发与长期维护建议迁移至新一代 Agent 架构。
+`agent legacy` 指百炼平台早期推出的 Flow Agent（旧版）智能体能力体系，基于固定 Prompt 工程范式构建，不支持运行时动态规划与[工具调用](../concepts/tool-calling.md)链自动编排。其核心价值在于通过结构化样例驱动的 Prompt 反馈优化，提升大模型在垂直任务上的输出一致性与准确性。该体系已逐步被新一代 Agent 2.0（支持 LLM-based planning、function calling、stateful execution）所替代，但仍在部分存量应用和 Prompt 精调场景中使用。
 
 ## 支持的模型与功能
 
-- **模型支持**：仅限旧版控制台可用模型，包括 `千问-Plus`、`千问-Max` 等千问系列模型及用户自定义部署模型；不支持新版 Agent 的多模型协同或动态路由能力。  
+- **支持模型**：仅限百炼平台托管的指定推理模型，官方明确推荐使用 `qwen-max`（见[基于大模型输入输出样例的Prompt自动优化](../../raw/application-user-guide/agent-legacy/legacy-flow-agent/prompt-feedback-optimization.md)），其他模型（如 qwen-plus、qwen-turbo）未经过完整验证，效果不可保障。
 - **核心功能**：
-  - **知识库（RAG）**：通过[检索增强生成](../concepts/rag.md)，将私有文档内容注入上下文，显著降低幻觉；检索结果占用模型上下文窗口，需主动控制切片长度与召回数量。  
-  - **插件（MCP）**：调用平台预置工具（如代码执行、文生图）或自定义插件；所有插件调用超时限制为 **5 秒**，超时即中断且不重试。  
-  > **注意**：文档 2 中称插件适用于“网络搜索”，但当前旧版 Flow Agent **不提供内置网络搜索插件**；该能力仅存在于新版 Agent 或需用户自行集成第三方 API —— 此处为过时描述，应以实际控制台可选插件列表为准。
+  - 单轮静态 Prompt 执行（无多步推理、无[工具调用](../concepts/tool-calling.md)）
+  - Prompt 反馈优化（Feedback-based Prompt Optimization）：以用户提供的输入-输出样例为监督信号，自动生成更贴合业务场景的 Prompt
+  - Prompt 模板管理与复用（通过[提示词管理](https://bailian.console.aliyun.com/flow-agent/prompt-manage)界面）
+
+> **注意**：文档 1 中列出的链接 `[智能体应用（Agent 1.0）](../llm-application/single-agent-application.md)` 指向的是通用单智能体应用入口，但该入口实际已默认路由至新版 Agent 2.0 控制台；而 `agent legacy` 功能仅在 Flow Agent 旧版控制台路径（`/flow-agent/...`）下可用，二者模型底座与能力边界不兼容。请勿将 `agent legacy` 的 Prompt 模板直接用于新版智能体应用。
 
 ## 关键参数
 
-在模型配置区域可设置以下运行时参数（详见 [智能体应用（Agent 1.0）](../../raw/application-user-guide/agent-legacy/legacy-flow-agent/single-agent-application.md)）：
+在创建 Prompt 反馈优化任务时，以下参数必须显式配置：
 
-| 参数 | 说明 | 取值范围/约束 |
-|------|------|----------------|
-| 最长回复长度 | 模型生成内容的 token 上限（不含系统提示词与历史输入） | 因模型而异，`千问-Plus` 默认 4096 |
-| 携带的上下文轮数 | 输入模型的最大历史对话轮数 | 建议 ≤ 10 轮，避免上下文溢出 |
-| 温度系数（temperature） | 控制输出随机性 | `[0, 2)`，0 表示确定性输出 |
-| 推理模式 | 启用后增强多步推理能力 | 仅部分模型支持，不可在不兼容模型上启用 |
-
-> **注意**：`携带的上下文轮数` 实际生效值受模型最大上下文长度与知识库/记忆体注入内容共同制约；若总输入 token 超限，系统将自动截断最早轮次，**不会报错提示**。
+| 参数 | 要求 | 说明 |
+|------|------|------|
+| **推理模型** | 必填 | 仅支持 `qwen-max`；其他模型可能导致优化失败或评估失真（见[基于大模型输入输出样例的Prompt自动优化](../../raw/application-user-guide/agent-legacy/legacy-flow-agent/prompt-feedback-optimization.md)） |
+| **初始 Prompt** | 必填，≤ 6000 字符 | 仅需描述任务目标（如分类意图、输出格式约束），**不可包含样例**——样例由系统自动注入 |
+| **样例数据** | 可选，但强烈建议提供 | 格式：`.xlsx`/`.xls`，≤ 20 MB，≤ 100 条；建议 5–10 条，覆盖全部类别（见[基于大模型输入输出样例的Prompt自动优化](../../raw/application-user-guide/agent-legacy/legacy-flow-agent/prompt-feedback-optimization.md)） |
+| **评测数据** | 必填，≤ 100 条 | 用于自动化评估候选 Prompt 效果；建议 ≥ 20 条，越多越准 |
 
 ## 使用方式
 
-### 创建与配置
-1. 通过新版控制台底部的 **“旧版 Agent 创建入口”** 跳转至旧版控制台，进入 [应用管理](https://bailian-legacy.console.aliyun.com/cn-beijing/?tab=app#/app-center) 页面；  
-2. 选择 **智能体应用** → **立即创建**；  
-3. 在配置页选择模型，并可直接复用 Prompt 模板：点击预置或自定义模板卡片的 `···` → **创建应用**，模板内容将自动填充至系统提示词框（参见 [Prompt模板概述](../../raw/application-user-guide/agent-legacy/legacy-flow-agent/prompt-template.md)）。
+1. 进入控制台：左侧导航栏 → **工具** → **提示词管理** → 切换至 **反馈优化** 标签页  
+2. 点击 **新增优化包**，填写上述关键参数  
+3. 提交后系统启动多轮优化流程（通常耗时 2–10 分钟，取决于评测数据量）  
+4. 优化完成后，可：
+   - 点击 **保存为 Prompt 模板**，供后续手动调用或调试  
+   - 点击 **创建智能体应用**，生成基于该 Prompt 的 Flow Agent（旧版）应用实例  
 
-### Prompt 工程支持
-- **模板化管理**：支持预置模板（开箱即用）与自定义模板（含 ICIO/CRISPE/RASCEF 框架），全部在 [提示词管理](https://bailian.console.aliyun.com/flow-agent/prompt-manage) 页面统一维护；  
-- **自动优化**：通过 [基于大模型输入输出样例的Prompt自动优化](../../raw/application-user-guide/agent-legacy/legacy-flow-agent/prompt-feedback-optimization.md)，上传输入-输出样例对（query/answer），系统基于评测数据集自动迭代生成高匹配度 Prompt。
-
-### 发布与调用
-- 应用必须 **发布后** 才能通过 API 调用；发布版本最多保留 10 个，超出则自动覆盖最旧版本；  
-- API 调用需使用独立的 `API KEY`（非百炼通用 AccessKey），密钥在 **发布渠道 → API** 页签获取；  
-- 不支持通过 Assistant API 创建的智能体应用在旧版控制台管理（参见 [智能体应用（Agent 1.0）](../../raw/application-user-guide/agent-legacy/legacy-flow-agent/single-agent-application.md)）。
+> **注意**：Flow Agent（旧版）应用不支持 API 调用中的 `tools` 字段或 `messages` 中的 `tool_calls`，仅接受标准 `messages: [{role: "user", content: "..."}]` 输入。详见 [Flow Agent（旧版）](../../raw/application-user-guide/agent-legacy/legacy-flow-agent.md)。
 
 ## 限制和注意事项
 
-- **地域限制**：Prompt 模板功能（含自定义模板、反馈优化）**仅支持华北2（北京）地域**，其他地域调用将返回错误（见 [Prompt模板概述](../../raw/application-user-guide/agent-legacy/legacy-flow-agent/prompt-template.md) 和 [自定义Prompt模板](../../raw/application-user-guide/agent-legacy/legacy-flow-agent/prompt-custom-template.md)）；  
-- **知识库计费**：检索返回的文本计入模型输入 token，**增加模型调用费用**；[长期记忆](../concepts/long-term-memory.md)体内容虽不单独计费，但同样占用输入 token；  
-- **插件超时**：所有插件调用硬性超时为 5 秒，无重试机制，超时响应为空或默认 fallback；  
-- **控制台隔离**：旧版 Agent 应用无法在新版控制台编辑或监控；反之，新版 Agent 创建的应用无法在旧版控制台查看；  
-- **模型兼容性**：`千问-Max` 是唯一明确推荐用于 Prompt 反馈优化的推理模型（见 [基于大模型输入输出样例的Prompt自动优化](../../raw/application-user-guide/agent-legacy/legacy-flow-agent/prompt-feedback-optimization.md)），其他模型可能因输出格式不稳定导致优化失败。
+- **无运行时[工具调用](../concepts/tool-calling.md)能力**：无法解析并执行[函数调用](../concepts/function-calling.md)请求，所有逻辑必须硬编码于 Prompt 中  
+- **样例注入机制固定**：系统自动选取部分样例插入 Prompt，用户无法控制插入位置或方式；因此初始 Prompt 中**严禁重复包含样例内容**，否则导致 token 冗余与逻辑冲突  
+- **评测强依赖模型稳定性**：因全程使用 `qwen-max` 推理，若该模型版本升级导致行为偏移，历史优化包效果可能退化，需重新训练  
+- **数据安全边界**：上传的样例与评测数据仅用于本次优化任务，不会进入模型训练语料，但会临时缓存在百炼服务端（保留 ≤ 7 天）  
+- **不兼容新版 Agent SDK**：`agent legacy` 应用的 `app_id` 无法被 `@alibaba/bailian-agent-sdk@v2+` 加载；如需迁移，须重写为 Agent 2.0 应用并重构 Prompt 为 system message + tool schema 形式
 
 ## 来源文档
 
 - [Flow Agent（旧版）](../../raw/application-user-guide/agent-legacy/legacy-flow-agent.md)
-- [智能体应用（Agent 1.0）](../../raw/application-user-guide/agent-legacy/legacy-flow-agent/single-agent-application.md)
-- [Prompt模板概述](../../raw/application-user-guide/agent-legacy/legacy-flow-agent/prompt-template.md)
-- [自定义Prompt模板](../../raw/application-user-guide/agent-legacy/legacy-flow-agent/prompt-custom-template.md)
 - [基于大模型输入输出样例的Prompt自动优化](../../raw/application-user-guide/agent-legacy/legacy-flow-agent/prompt-feedback-optimization.md)
 
 

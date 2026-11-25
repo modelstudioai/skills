@@ -2,19 +2,27 @@
 
 Qwen-Audio-ASR-Streaming 客户端事件参考，介绍 run-task、finish-task 的字段、发送顺序及对应服务端事件。
 
+<a id="事件交互流程"></a>
+
 ## 事件交互流程
 
-1.  发送 [run-task](https://help.aliyun.com/zh/model-studio/qwen-audio-asr-streaming-client-events#run-task)，收到 [task-started](https://help.aliyun.com/zh/model-studio/qwen-audio-asr-streaming-server-events#task-started) 后开始发送音频。
-2.  持续发送音频，同时接收 [result-generated](https://help.aliyun.com/zh/model-studio/qwen-audio-asr-streaming-server-events#result-generated)。
-3.  音频发送完毕后发送 [finish-task](https://help.aliyun.com/zh/model-studio/qwen-audio-asr-streaming-client-events#finish-task)，继续接收结果，直到收到 [task-finished](https://help.aliyun.com/zh/model-studio/qwen-audio-asr-streaming-server-events#task-finished)；任务失败时返回 [task-failed](https://help.aliyun.com/zh/model-studio/qwen-audio-asr-streaming-server-events#task-failed)。
+1.  发送 [run-task](qwen-audio-asr-streaming-client-events-3240c8efa3976e48.md#run-task)，收到 [task-started](qwen-audio-asr-streaming-server-events-4757090610f208c7.md#task-started) 后开始发送音频。
+2.  持续发送音频，同时接收 [result-generated](qwen-audio-asr-streaming-server-events-4757090610f208c7.md#result-generated)。
+3.  音频发送完毕后发送 [finish-task](qwen-audio-asr-streaming-client-events-3240c8efa3976e48.md#finish-task)，继续接收结果，直到收到 [task-finished](qwen-audio-asr-streaming-server-events-4757090610f208c7.md#task-finished)；任务失败时返回 [task-failed](qwen-audio-asr-streaming-server-events-4757090610f208c7.md#task-failed)。
 
-音频数据不通过 `run-task` 发送：WebSocket 使用二进制帧，AOQ 使用 Audio Track。连接、鉴权和音频传输方式请参见 [WebSocket API](raw/_short/qwen-audio-asr-streaming-websocket-api-779f1056a08e5525.md) 或 [AOQ 接入](raw/_short/qwen-audio-asr-streaming-aoq-access-7b2cf295190f6172.md)。
+音频数据不通过 `run-task` 发送：WebSocket 使用二进制帧，AOQ 使用 Audio Track。连接、鉴权和音频传输方式请参见 [WebSocket API](qwen-audio-asr-streaming-websocket-api-779f1056a08e5525.md) 或 [AOQ 接入](qwen-audio-asr-streaming-aoq-access-7b2cf295190f6172.md)。
+
+<a id="run-task"></a>
+
+<a id="9cae7e7b85ebm"></a>
 
 ## run-task
 
 建立连接后，客户端发送 `run-task` 事件，启动语音识别任务并设置模型、音频格式、采样率等参数。
 
-**重要****收到 `task-started` 后才能发送音频。** `run-task` 仅用于启动和配置任务，不携带音频数据。
+> **重要**
+>
+> **收到 `task-started` 后才能发送音频。** `run-task` 仅用于启动和配置任务，不携带音频数据。
 
 `header`object必填
 
@@ -66,11 +74,11 @@ Qwen-Audio-ASR-Streaming 客户端事件参考，介绍 run-task、finish-task �
 -   `aac`
 -   `amr`
 
-**说明**
-
--   `opus`/`speex`：必须使用Ogg封装
--   `wav`：必须为PCM编码
--   `amr`：仅支持AMR-NB类型。
+> **说明**
+>
+> -   `opus`/`speex`：必须使用Ogg封装
+> -   `wav`：必须为PCM编码
+> -   `amr`：仅支持AMR-NB类型。
 
 `sample_rate`integer必填
 
@@ -78,13 +86,17 @@ Qwen-Audio-ASR-Streaming 客户端事件参考，介绍 run-task、finish-task �
 
 `keep_dialect`boolean可选
 
-**说明**仅适用于 qwen-audio-3.1-asr-flash-streaming。
+> **说明**
+>
+> 仅适用于 qwen-audio-3.1-asr-flash-streaming。
 
 是否保留方言表达，默认值为 `false`。`false`：将方言转写为普通话文本；`true`：保留方言表达。
 
 `vad_model`string可选
 
-**说明**仅适用于 qwen-audio-3.1-asr-flash-streaming。
+> **说明**
+>
+> 仅适用于 qwen-audio-3.1-asr-flash-streaming。
 
 VAD 模型，默认值为 `far_field_meeting_16k`。
 
@@ -129,7 +141,7 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
 
 适用于词汇已知且相对稳定、需要跨请求复用同一词表的场景。
 
-使用方法请参见[预编译热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_precompiled_h3)。
+使用方法请参见[预编译热词](../model-user-guide/model-experience/speech-and-audio/speech-recognition/improve-asr-accuracy.md#hw_precompiled_h3)。
 
 `vocabulary`object可选
 
@@ -139,13 +151,17 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
 
 适用于临时性、会话级别的热词优化。
 
-**说明**与预编译热词同时配置时，系统会合并两类热词；合并后超过 2000 个时，随机选择 2000 个使用。使用方法请参见[即时热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_instant_h3)。
+> **说明**
+>
+> 与预编译热词同时配置时，系统会合并两类热词；合并后超过 2000 个时，随机选择 2000 个使用。使用方法请参见[即时热词](../model-user-guide/model-experience/speech-and-audio/speech-recognition/improve-asr-accuracy.md#hw_instant_h3)。
 
 `language_hints`array\[string\]可选
 
 待识别音频语种。无默认值，不设置时模型自动识别。
 
 最多支持设置 4 个值，超出时仅前 4 个生效。
+
+<a id="accordion-点击查看支持的语言代码"></a>
 
 点击查看支持的语言代码
 
@@ -193,13 +209,17 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
 
 `special_word_filter`string可选
 
+<a id="special-word-filter"></a>
+
 敏感词过滤规则，用于将识别结果中的指定词汇替换为等长的星号，或从结果中移除。值为规则对象序列化后的 JSON 字符串。最多可设置 32 个敏感词；未传入该参数时不进行过滤。
 
 -   `filter_with_signed.word_list`：字符串数组。匹配的词替换为等长的星号。
 -   `filter_with_empty.word_list`：字符串数组。匹配的词从结果中移除。
 -   `system_reserved_filter`：布尔值，默认 `false`。控制是否使用系统预置词表；自定义的替换、移除规则分别由上述两个列表配置。
 
-```
+<a id="code-block"></a>
+
+```json
 {
   "special_word_filter": "{\"filter_with_signed\":{\"word_list\":[\"项目\"]},\"filter_with_empty\":{\"word_list\":[\"报告\"]},\"system_reserved_filter\":false}"
 }
@@ -211,13 +231,13 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
 
 `context`array(object)可选
 
-对话上下文，用于辅助识别、提升专有词汇的识别准确率。使用方法详见[上下文增强](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#ctx_enhance_h2)。
+对话上下文，用于辅助识别、提升专有词汇的识别准确率。使用方法详见[上下文增强](../model-user-guide/model-experience/speech-and-audio/speech-recognition/improve-asr-accuracy.md#ctx_enhance_h2)。
 
-**说明**
-
--   消息数量：`input_text` 和 `text` 类型的上下文消息各最多 5 条，超出时保留最近的 5 条。
--   文本长度：每轮 `user` 和 `assistant` 的 `text` 字段总长度不超过 400 个字符，每个字符计为 1；超出部分从末尾截断。
--   消息顺序：按对话轮次排列，每轮中 `user`（`input_text` 类型）必须在对应的 `assistant`（`text` 类型）之前。
+> **说明**
+>
+> -   消息数量：`input_text` 和 `text` 类型的上下文消息各最多 5 条，超出时保留最近的 5 条。
+> -   文本长度：每轮 `user` 和 `assistant` 的 `text` 字段总长度不超过 400 个字符，每个字符计为 1；超出部分从末尾截断。
+> -   消息顺序：按对话轮次排列，每轮中 `user`（`input_text` 类型）必须在对应的 `assistant`（`text` 类型）之前。
 
 `role`string必填
 
@@ -241,9 +261,17 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
 
 文本内容。当 `type` 为 `input_text` 时，填入前几轮用户语音的识别结果或领域相关的词表；当 `type` 为 `text` 时，填入前几轮大语言模型的回复内容。
 
+<a id="sec-tabs"></a>
+
+<a id="基本请求"></a>
+
+<a id="基本请求-h4"></a>
+
 #### 基本请求
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "header": {
     "action": "run-task",
@@ -263,7 +291,10 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
   }
 }
 ```
-```
+
+<a id="code-block-3"></a>
+
+```json
 {
   "header": {
     "task_id": "3756efcf-8388-41c8-832a-9a70bf046f55",
@@ -275,9 +306,15 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
 }
 ```
 
+<a id="携带上下文"></a>
+
+<a id="携带上下文-h4"></a>
+
 #### 携带上下文
 
-```
+<a id="code-block-4"></a>
+
+```json
 {
   "header": {
     "action": "run-task",
@@ -318,7 +355,10 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
   }
 }
 ```
-```
+
+<a id="code-block-5"></a>
+
+```json
 {
   "header": {
     "task_id": "298e51eb-e65c-4b96-8528-e219bc39828b",
@@ -330,9 +370,15 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
 }
 ```
 
+<a id="即时热词"></a>
+
+<a id="即时热词-h4"></a>
+
 #### 即时热词
 
-```
+<a id="code-block-6"></a>
+
+```json
 {
   "header": {
     "action": "run-task",
@@ -356,7 +402,10 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
   }
 }
 ```
-```
+
+<a id="code-block-7"></a>
+
+```json
 {
   "header": {
     "task_id": "4c80fbba-c6ae-4695-b06e-d1ba97da97ad",
@@ -368,11 +417,17 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
 }
 ```
 
+<a id="finish-task"></a>
+
+<a id="85880fa44008n"></a>
+
 ## finish-task
 
 所有音频数据发送完毕后，客户端发送 `finish-task` 事件，通知服务端音频发送完毕并请求结束任务。
 
-**重要****发送 `finish-task` 后，仍需接收剩余识别结果，直到收到 `task-finished`。** `task_id` 必须与 `run-task` 中的值一致。
+> **重要**
+>
+> **发送 `finish-task` 后，仍需接收剩余识别结果，直到收到 `task-finished`。** `task_id` 必须与 `run-task` 中的值一致。
 
 `header`object必填
 
@@ -394,7 +449,9 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
 
 固定为`{}`。
 
-```
+<a id="code-block-8"></a>
+
+```json
 {
   "header": {
     "action": "finish-task",
@@ -406,7 +463,10 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
   }
 }
 ```
-```
+
+<a id="code-block-9"></a>
+
+```json
 {
   "header": {
     "task_id": "3756efcf-8388-41c8-832a-9a70bf046f55",

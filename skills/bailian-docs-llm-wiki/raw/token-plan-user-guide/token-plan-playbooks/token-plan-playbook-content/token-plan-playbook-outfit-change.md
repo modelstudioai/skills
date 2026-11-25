@@ -2,35 +2,37 @@
 
 把身份锁定写在第一句，只让模型改服装场景，批量出同一个人的不同造型。
 
-**说明**
-
-**免责声明**：本页展示内容均为 AI 模型生成，仅供参考，不构成任何效果承诺；实际产出效果与 Credits 消耗以控制台“用量详情”为准。
+> **说明**
+>
+> **免责声明**：本页展示内容均为 AI 模型生成，仅供参考，不构成任何效果承诺；实际产出效果与 Credits 消耗以控制台“用量详情”为准。
 
 本篇以一张参考人像跑通换装组照：逐套换服装、换场景，人脸始终保持一致。直接让模型重画，每张脸都不一样，正确做法是给一张参考图，把“身份锁定”写成最高优先级，只允许它改服装、场景、光线。
 
 调用链：`wan2.7-image` 文生图（出参考人像）→ `wan2.7-image` 参考图编辑（逐套换装换景，每次都把身份锁定写在最前面）。
 
+<a id="实测产出"></a>
+
+<a id="tp-pb-outfit-result"></a>
+
 ## 实测产出
 
 同一张参考人像，逐套换装换景后的组照：
 
-参考人像（米色针织衫 · 纯灰背景）
+|  |  |  |
+| --- | --- | --- |
+| 参考人像（米色针织衫 · 纯灰背景）<br><br>![参考人像](https://g-adoc.alcasset.com/media/maas_docs/sfm/zh/images/6a4b3c2d1e0f9e3a.jpg) | 藏青西装 + 办公室落地窗<br><br>![换装造型一](https://g-adoc.alcasset.com/media/maas_docs/sfm/zh/images/6a4b3c2d1e0f9e24.jpg) | 米白毛衣围巾 + 秋日街道<br><br>![换装造型二](https://g-adoc.alcasset.com/media/maas_docs/sfm/zh/images/6a4b3c2d1e0f9e3b.jpg) |
 
-![参考人像](https://g-adoc.alcasset.com/media/maas_docs/sfm/zh/images/6a4b3c2d1e0f9e3a.jpg)
+<a id="步骤-身份锁定放在第一句"></a>
 
-藏青西装 + 办公室落地窗
-
-![换装造型一](https://g-adoc.alcasset.com/media/maas_docs/sfm/zh/images/6a4b3c2d1e0f9e24.jpg)
-
-米白毛衣围巾 + 秋日街道
-
-![换装造型二](https://g-adoc.alcasset.com/media/maas_docs/sfm/zh/images/6a4b3c2d1e0f9e3b.jpg)
+<a id="tp-pb-outfit-step1"></a>
 
 ## 步骤：身份锁定放在第一句
 
 参考图出一次后，每套造型把参考图传入 `wan2.7-image` 做一次编辑，身份锁定写在提示词最前面：
 
-```
+<a id="code-block"></a>
+
+```text
 严格保持画面中这位{人物}的五官、脸型、发型、发色、肤质完全不变，是同一个人。
 只把她的服装换成{服装，例：藏青色职业西装外套配白衬衫}，
 场景换成{场景，例：明亮的现代办公室落地窗前}，
@@ -39,9 +41,13 @@
 不要改变长相、不要卡通化、不要多余肢体。
 ```
 
+<a id="accordion-查看一致性核对-让视觉模型交叉比对三张图-qwen3-7-plus"></a>
+
 查看一致性核对 · 让视觉模型交叉比对三张图（qwen3.7-plus）
 
-```
+<a id="code-block-2"></a>
+
+```text
 把参考图与两张组照一起交给 qwen3.7-plus 做交叉比对，它的判断：
 
 第二张（商务装）：是同一人
@@ -57,6 +63,10 @@
 
 （说明：这是让视觉模型做的交叉比对，不是权威人脸识别，重要用途请自己再核。）
 ```
+
+<a id="说明"></a>
+
+<a id="tp-pb-outfit-change-notes"></a>
 
 ## 说明
 

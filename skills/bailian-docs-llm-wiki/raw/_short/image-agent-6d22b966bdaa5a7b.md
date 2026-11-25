@@ -1,5 +1,9 @@
 # 通过HTTP协议接入图像生成Agent
 
+<a id="功能介绍"></a>
+
+<a id="e59424465933w"></a>
+
 ## 功能介绍
 
 通过HTTP协议接入图像生成Agent，实现文生图、图生图、涂鸦生图功能。目前仅支持直通链路。
@@ -8,13 +12,25 @@
 
 直通链路是指不经过语音识别（ASR）、意图识别、语音合成（TTS）等节点，将请求直接送入图像生成Agent，并直接返回图片生成结果。
 
+<a id="接入说明"></a>
+
+<a id="a62c98a19fedm"></a>
+
 ## 接入说明
+
+<a id="前提条件"></a>
+
+<a id="b59a750904toi"></a>
 
 ### 前提条件
 
 首先需要开通阿里云百炼模型服务，并获取API KEY。
 
-请参考[获取API Key](raw/model-api-reference/preparations/get-api-key.md)，API KEY作为百炼模型服务的鉴权凭证。
+请参考[获取API Key](../model-api-reference/preparations/get-api-key.md)，API KEY作为百炼模型服务的鉴权凭证。
+
+<a id="管控台配置"></a>
+
+<a id="35b561dcffnpo"></a>
 
 ### 管控台配置
 
@@ -40,248 +56,67 @@
 6.  配置完成后请点击右上角发布按键进行发布（必须发布后才能测试）。
     
 
+<a id="http协议接入"></a>
+
+<a id="03ca3f66073kl"></a>
+
 ## HTTP协议接入
+
+<a id="请求参数说明"></a>
+
+<a id="1f6e7ddb94j9t"></a>
 
 ### 请求参数说明
 
-**一级参数**
+<table><tbody><tr><td><p><strong>一级参数</strong></p></td><td><p><strong>二级参数</strong></p></td><td><p><strong>类型</strong></p></td><td><p><strong>是否必选</strong></p></td><td><p><strong>说明</strong></p></td></tr><tr><td><p>model</p></td><td></td><td><p>string</p></td><td><p>是</p></td><td><p>阿里云百炼模型名称，固定为&quot;multimodal-dialog&quot;，请直接复制使用</p></td></tr><tr><td rowspan="4"><p>input</p></td><td><p>directive</p></td><td><p>string</p></td><td><p>是</p></td><td><p>指令名称：<strong>Request</strong></p></td></tr><tr><td><p>app_id</p></td><td><p>string</p></td><td><p>是</p></td><td><p>客户创建的应用ID（<a href="https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#2612f896detsz">获取APP ID</a>），可在<strong>多模态交互开发套件</strong>控制台的“我的应用”页面查看</p></td></tr><tr><td><p>dialog_id</p></td><td><p>string</p></td><td><p>否</p></td><td><p>对话id，默认不填时是新对话，服务端会自动生成并在返回结果中下发，格式示例：&quot;12345678-1234-1234-1234-1234567890ab&quot;，共36个字符。当希望继续之前的对话时，把当时服务端下发的dialog_id在这里传入。生图玩法不考虑上下文，不填即可。</p></td></tr><tr><td><p>text</p></td><td><p>string</p></td><td><p>是</p></td><td><p>要处理的文本。注意，在本实践中没有文本请置为&quot;&quot;空字符串。</p></td></tr><tr><td rowspan="3"><p>parameters</p></td><td><p>client_info</p></td><td><p>object</p></td><td><p>是</p></td><td><p>参数说明参考下方 parameters.client_info的参数说明表格</p></td></tr><tr><td><p>images</p></td><td><p>list[]</p></td><td><p>否</p></td><td><p>需要参考的图片，在图生图场景需要，文生图不需要，parameters.images的参数说明表格</p></td></tr><tr><td><p>biz_params</p></td><td><p>object</p></td><td><p>否</p></td><td><p>按需配置，参数说明参考下方parameters.biz_params的参数说明表格</p></td></tr></tbody></table>
 
-**二级参数**
+<a id="parameters-client-info的参数说明"></a>
 
-**类型**
-
-**是否必选**
-
-**说明**
-
-model
-
-string
-
-是
-
-阿里云百炼模型名称，固定为"multimodal-dialog"，请直接复制使用
-
-input
-
-directive
-
-string
-
-是
-
-指令名称：**Request**
-
-app\_id
-
-string
-
-是
-
-客户创建的应用ID（[获取APP ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#2612f896detsz)），可在**多模态交互开发套件**控制台的“我的应用”页面查看
-
-dialog\_id
-
-string
-
-否
-
-对话id，默认不填时是新对话，服务端会自动生成并在返回结果中下发，格式示例："12345678-1234-1234-1234-1234567890ab"，共36个字符。当希望继续之前的对话时，把当时服务端下发的dialog\_id在这里传入。生图玩法不考虑上下文，不填即可。
-
-text
-
-string
-
-是
-
-要处理的文本。注意，在本实践中没有文本请置为""空字符串。
-
-parameters
-
-client\_info
-
-object
-
-是
-
-参数说明参考下方 parameters.client\_info的参数说明表格
-
-images
-
-list\[\]
-
-否
-
-需要参考的图片，在图生图场景需要，文生图不需要，parameters.images的参数说明表格
-
-biz\_params
-
-object
-
-否
-
-按需配置，参数说明参考下方parameters.biz\_params的参数说明表格
+<a id="c2956a4b2b284"></a>
 
 #### parameters.client\_info的参数说明
 
-**一级参数**
+| 一级参数 | 二级参数 | 类型 | 是否必选 | 说明 |
+| --- | --- | --- | --- | --- |
+| user\_id |  | string | 是 | 终端用户ID，客户根据自己业务规则生成，用来针对不同终端用户实现定制化功能。最大长度36个字符。 |
+| device | uuid | string | 否 | 客户端全局唯一的ID，需要用户自己生成并传入SDK，最大长度40个字符。一个终端用户可以有多个设备，那么每一个设备的uuid都不同，但user\_id相同。 |
 
-**二级参数**
+<a id="parameters-images的参数说明"></a>
 
-**类型**
-
-**是否必选**
-
-**说明**
-
-user\_id
-
-string
-
-是
-
-终端用户ID，客户根据自己业务规则生成，用来针对不同终端用户实现定制化功能。最大长度36个字符。
-
-device
-
-uuid
-
-string
-
-否
-
-客户端全局唯一的ID，需要用户自己生成并传入SDK，最大长度40个字符。一个终端用户可以有多个设备，那么每一个设备的uuid都不同，但user\_id相同。
+<a id="4b71e05ccfve9"></a>
 
 #### parameters.images的参数说明
 
-**一级参数**
+<table><thead><tr><th><p><strong>一级参数</strong></p></th><th><p><strong>类型</strong></p></th><th><p><strong>是否必选</strong></p></th><th><p><strong>说明</strong></p></th></tr></thead><tbody><tr><td><p>type</p></td><td><p>string</p></td><td><p>是</p></td><td><p>图片类型，支持两种：base64/url</p></td></tr><tr><td><p>value</p></td><td><p>string</p></td><td><p>是</p></td><td><p>图片内容。</p><ul><li><p>当type为base64时，这里是图片的base64字符串。</p></li><li><p>当type为url时，这里是图片的url地址。</p></li></ul></td></tr></tbody></table>
 
-**类型**
+<a id="parameters-biz-params的参数说明"></a>
 
-**是否必选**
-
-**说明**
-
-type
-
-string
-
-是
-
-图片类型，支持两种：base64/url
-
-value
-
-string
-
-是
-
-图片内容。
-
--   当type为base64时，这里是图片的base64字符串。
-    
--   当type为url时，这里是图片的url地址。
-    
+<a id="6aa1edff1c5uw"></a>
 
 #### parameters.biz\_params的参数说明
 
-**一级参数**
+<table><thead><tr><th><p><strong>一级参数</strong></p></th><th><p><strong>二级参数</strong></p></th><th><p><strong>类型</strong></p></th><th><p><strong>是否必选</strong></p></th><th><p><strong>说明</strong></p></th></tr></thead><tbody><tr><td rowspan="2"><p>commands[i]</p></td><td><p>name</p></td><td><p>string</p></td><td><p>是</p></td><td><p>表示直通到agent，本实践中固定为“agent_command”，请直接复制使用</p></td></tr><tr><td><p>exec_params</p></td><td><p>object</p></td><td><p>是</p></td><td><p>表示指定的agent，本实践固定，具体请参考commands.exec_params参数说明</p></td></tr><tr><td><p>user_defined_params</p></td><td><p>image_to_image</p></td><td><p>object</p></td><td><p>否</p></td><td><p>表示用户自定义的agent参数，image_to_image表示传递给生图agent的参数，本实践仅在当需要传递生图agent内的提示词自定义变量时需要填充</p></td></tr></tbody></table>
 
-**二级参数**
-
-**类型**
-
-**是否必选**
-
-**说明**
-
-commands\[i\]
-
-name
-
-string
-
-是
-
-表示直通到agent，本实践中固定为“agent\_command”，请直接复制使用
-
-exec\_params
-
-object
-
-是
-
-表示指定的agent，本实践固定，具体请参考commands.exec\_params参数说明
-
-user\_defined\_params
-
-image\_to\_image
-
-object
-
-否
-
-表示用户自定义的agent参数，image\_to\_image表示传递给生图agent的参数，本实践仅在当需要传递生图agent内的提示词自定义变量时需要填充
+<a id="03fadc8c9apn5"></a>
 
 ##### parameters.biz\_params.commands.exec\_params参数说明
 
-**一级参数**
+<table><thead><tr><th><p><strong>一级参数</strong></p></th><th><p><strong>二级参数</strong></p></th><th><p><strong>类型</strong></p></th><th><p><strong>是否必选</strong></p></th><th><p><strong>说明</strong></p></th></tr></thead><tbody><tr><td rowspan="3"><p>exec_params</p></td><td><p>app_id</p></td><td><p>string</p></td><td><p>是</p></td><td><p>表示指定的agent，本实践固定为&quot;image_to_image&quot;,请复制使用</p></td></tr><tr><td><p>intent</p></td><td><p>string</p></td><td><p>是</p></td><td><p>表示指定agent的动作，本实践固定为&quot;open_image_to_image&quot;,请复制使用</p></td></tr><tr><td><p>slots</p></td><td><p>list[]</p></td><td><p>是</p></td><td><p>agent需要的槽位信息</p></td></tr></tbody></table>
 
-**二级参数**
-
-**类型**
-
-**是否必选**
-
-**说明**
-
-exec\_params
-
-app\_id
-
-string
-
-是
-
-表示指定的agent，本实践固定为"image\_to\_image",请复制使用
-
-intent
-
-string
-
-是
-
-表示指定agent的动作，本实践固定为"open\_image\_to\_image",请复制使用
-
-slots
-
-list\[\]
-
-是
-
-agent需要的槽位信息
+<a id="c1d64a7bbfhef"></a>
 
 ##### parameters.biz\_params.commands.exec\_params.slots参数说明
 
-name
-
-string
-
-是
-
-表示槽位名
-
-norm\_value
-
-string
-
-是
-
-表示槽位值
+|  |  |  |  |
+| --- | --- | --- | --- |
+| name | string | 是 | 表示槽位名 |
+| norm\_value | string | 是 | 表示槽位值 |
 
 在生图agent中，需填充如下function、size两种槽位信息。
 
-```
+<a id="code-block"></a>
+
+```json
 {
       "slots": [
           {
@@ -304,75 +139,23 @@ function用来指定具体的生图功能，支持三种配置：
 
 size用来指定生成图片的分辨率，分辨率和选择的玩法及模型强相关，支持的分辨率范围见下表
 
-**生图模式**
+<table><tbody><tr><td><p><strong>生图模式</strong></p></td><td><p><strong>模型配置</strong></p></td><td><p><strong>支持分辨率</strong></p></td></tr><tr><td rowspan="3"><p>文生图</p></td><td><p>轻量版</p></td><td rowspan="2"><p>图像分辨率宽高范围在[200, 2048]，宽高比在[1:4, 4:1]。比如256x2048是不允许的，因为宽高比为1:8。</p></td></tr><tr><td><p>均衡版</p></td></tr><tr><td><p>高级版</p></td><td><p>图像分辨率：总像素在[1280*1280, 1440*1440]之间</p><p>图像宽高比：[1:4, 4:1]</p></td></tr><tr><td rowspan="3"><p>生图助手/涂鸦生图</p></td><td><p>轻量版</p></td><td><p>图像分辨率：宽高均在[512, 4096]像素之间</p></td></tr><tr><td><p>均衡版</p></td><td><p>图像分辨率：宽高均在[512*512, 2048*2048]像素之间</p></td></tr><tr><td><p>高级版</p></td><td><p>图像分辨率：总像素在 [768*768, 2048*2048]像素之间</p></td></tr></tbody></table>
 
-**模型配置**
-
-**支持分辨率**
-
-文生图
-
-轻量版
-
-图像分辨率宽高范围在\[200, 2048\]，宽高比在\[1:4, 4:1\]。比如256x2048是不允许的，因为宽高比为1:8。
-
-均衡版
-
-高级版
-
-图像分辨率：总像素在\[1280\*1280, 1440\*1440\]之间
-
-图像宽高比：\[1:4, 4:1\]
-
-生图助手/涂鸦生图
-
-轻量版
-
-图像分辨率：宽高均在\[512, 4096\]像素之间
-
-均衡版
-
-图像分辨率：宽高均在\[512\*512, 2048\*2048\]像素之间
-
-高级版
-
-图像分辨率：总像素在 \[768\*768, 2048\*2048\]像素之间
+<a id="2d08d257e0e85"></a>
 
 ##### parameters.biz\_params.user\_defined\_params.image\_to\_image.user\_prompt\_params参数说明
 
-**重要**本实践仅在当需要传递生图agent内的提示词自定义变量时需要填充。
+> **重要**
+>
+> 本实践仅在当需要传递生图agent内的提示词自定义变量时需要填充。
 
 在涂鸦生图配置面板的提示词区域，单击右上角的 **{x} 自定义变量** 按钮即可添加自定义变量，其中 `${style}` 为默认预置变量。
 
-**一级参数**
+<table><thead><tr><th><p><strong>一级参数</strong></p></th><th><p><strong>二级参数</strong></p></th><th><p><strong>类型</strong></p></th><th><p><strong>是否必选</strong></p></th><th><p><strong>说明</strong></p></th></tr></thead><tbody><tr><td rowspan="2"><p>user_prompt_params</p></td><td><p>positive</p></td><td><p>object</p></td><td><p>否</p></td><td><p>提示词中的自定义变量</p></td></tr><tr><td><p>negative</p></td><td><p>object</p></td><td><p>是</p></td><td><p>反向提示词的自定义变量</p></td></tr></tbody></table>
 
-**二级参数**
+<a id="code-block-2"></a>
 
-**类型**
-
-**是否必选**
-
-**说明**
-
-user\_prompt\_params
-
-positive
-
-object
-
-否
-
-提示词中的自定义变量
-
-negative
-
-object
-
-是
-
-反向提示词的自定义变量
-
-```
+```json
 "user_defined_params": {
     "image_to_image": {
         "user_prompt_params": {
@@ -388,9 +171,15 @@ object
 }
 ```
 
+<a id="文生图请求示例"></a>
+
+<a id="6c27b15d17wjd"></a>
+
 ### 文生图请求示例
 
-```
+<a id="code-block-3"></a>
+
+```json
 {
     "model": "multimodal-dialog",
     "input": {
@@ -443,9 +232,15 @@ object
 }
 ```
 
+<a id="文生图curl请求示例"></a>
+
+<a id="a64b7f4e725qm"></a>
+
 #### 文生图curl请求示例
 
-```
+<a id="code-block-4"></a>
+
+```bash
 curl --location "https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation" \
   --header 'Content-Type: application/json' \
   --header 'Authorization: Bearer your_api_key' \
@@ -502,15 +297,21 @@ curl --location "https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-
 }'
 ```
 
-**重要**
+> **重要**
+>
+> 1.  请替换请求中的your\_api\_key（API\_KEY）、app\_id，img\_url。
+> 2.  text字段请置为""空字符串，否则会进入意图
+> 3.  user\_defined\_params仅需在传递生图玩法中Agent提示词自定义变量时才需传递。
 
-1.  请替换请求中的your\_api\_key（API\_KEY）、app\_id，img\_url。
-2.  text字段请置为""空字符串，否则会进入意图
-3.  user\_defined\_params仅需在传递生图玩法中Agent提示词自定义变量时才需传递。
+<a id="生图助手请求示例"></a>
+
+<a id="2608f8a85d637"></a>
 
 ### 生图助手请求示例
 
-```
+<a id="code-block-5"></a>
+
+```json
 {
     "model": "multimodal-dialog",
     "input": {
@@ -569,9 +370,15 @@ curl --location "https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-
 }
 ```
 
+<a id="生图助手curl请求示例"></a>
+
+<a id="b09a2027d6qgx"></a>
+
 #### 生图助手curl请求示例
 
-```
+<a id="code-block-6"></a>
+
+```bash
 curl --location "https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation" \
   --header 'Content-Type: application/json' \
   --header 'Authorization: Bearer your_api_key' \
@@ -634,159 +441,50 @@ curl --location "https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-
 }'
 ```
 
-**重要**
+> **重要**
+>
+> 1.  请替换请求中的your\_api\_key（API\_KEY）、app\_id，img\_url。
+> 2.  text字段请置为""空字符串，否则会进入意图
+> 3.  user\_defined\_params仅需在传递生图玩法中Agent提示词自定义变量时才需传递。
 
-1.  请替换请求中的your\_api\_key（API\_KEY）、app\_id，img\_url。
-2.  text字段请置为""空字符串，否则会进入意图
-3.  user\_defined\_params仅需在传递生图玩法中Agent提示词自定义变量时才需传递。
+<a id="涂鸦生图请求示例"></a>
+
+<a id="06dffc66ebo4p"></a>
 
 ### 涂鸦生图请求示例
 
 参考生图助手请求示例，仅需将parameters.biz\_params.commands.exec\_params.slots内的function槽位从imageAssistant（表示生图助手）改为sketchToImage（表示涂鸦生图）。
 
+<a id="文本返回事件说明"></a>
+
+<a id="be6fa2917amux"></a>
+
 ### 文本返回事件说明
 
-**一级参数**
+<table><thead><tr><th><p><strong>一级参数</strong></p></th><th><p><strong>二级参数</strong></p></th><th><p><strong>类型</strong></p></th><th><p><strong>是否必选</strong></p></th><th><p><strong>说明</strong></p></th></tr></thead><tbody><tr><td><p>output</p></td><td><p>event</p></td><td><p>string</p></td><td><p>是</p></td><td><p>事件名称：<strong>RespondingContent</strong></p></td></tr><tr><td></td><td><p>dialog_id</p></td><td><p>string</p></td><td><p>是</p></td><td><p>对话ID</p></td></tr><tr><td></td><td><p>round_id</p></td><td><p>string</p></td><td><p>是</p></td><td><p>本轮交互的ID</p></td></tr><tr><td></td><td><p>llm_request_id</p></td><td><p>string</p></td><td><p>是</p></td><td><p>调用llm的request_id</p></td></tr><tr><td></td><td><p>text</p></td><td><p>string</p></td><td><p>是</p></td><td><p>生成图像的url，在生成过程内容为RUNNING，生成结束后为图片的url</p></td></tr><tr><td></td><td><p>spoken</p></td><td><p>string</p></td><td><p>是</p></td><td><p>用于TTS合成的内容，在未开启语音合成功能时不用关注。本实践内容和text字段相同。</p></td></tr><tr><td></td><td><p>finished</p></td><td><p>bool</p></td><td><p>是</p></td><td><p>输出是否结束</p></td></tr><tr><td></td><td><p>finish_reason</p></td><td><p>string</p></td><td><p>否</p></td><td><p>结束原因，目前只有一种：</p><ul><li><p>stop 表示正常结束</p></li></ul></td></tr><tr><td></td><td><p>extra_info</p></td><td><p>object</p></td><td><p>否</p></td><td><p>其他扩展信息，目前支持：</p><ul><li><p>agent_info: 智能体信息，见</p></li></ul></td></tr></tbody></table>
 
-**二级参数**
+<a id="output-extra-info-agent-info的参数说明"></a>
 
-**类型**
-
-**是否必选**
-
-**说明**
-
-output
-
-event
-
-string
-
-是
-
-事件名称：**RespondingContent**
-
-dialog\_id
-
-string
-
-是
-
-对话ID
-
-round\_id
-
-string
-
-是
-
-本轮交互的ID
-
-llm\_request\_id
-
-string
-
-是
-
-调用llm的request\_id
-
-text
-
-string
-
-是
-
-生成图像的url，在生成过程内容为RUNNING，生成结束后为图片的url
-
-spoken
-
-string
-
-是
-
-用于TTS合成的内容，在未开启语音合成功能时不用关注。本实践内容和text字段相同。
-
-finished
-
-bool
-
-是
-
-输出是否结束
-
-finish\_reason
-
-string
-
-否
-
-结束原因，目前只有一种：
-
--   stop 表示正常结束
-    
-
-extra\_info
-
-object
-
-否
-
-其他扩展信息，目前支持：
-
--   agent\_info: 智能体信息，见
-    
+<a id="5ada954f91oco"></a>
 
 #### output.extra\_info.agent\_info的参数说明
 
-**一级参数**
+| 一级参数 | 二级参数 | 类型 | 是否必选 | 说明 |
+| --- | --- | --- | --- | --- |
+| round |  | string | 是 | 对话轮次 |
+| device | device\_id | string | 是 | 请求时使用的device.uuid |
+| intent\_infos | intent | string | 是 | 使用的agent，本实践固定为"open\_image\_to\_image" |
+|  | domain | string | 是 | 使用的agent，本实践固定为"image\_to\_image" |
 
-**二级参数**
+<a id="返回示例如下"></a>
 
-**类型**
-
-**是否必选**
-
-**说明**
-
-round
-
-string
-
-是
-
-对话轮次
-
-device
-
-device\_id
-
-string
-
-是
-
-请求时使用的device.uuid
-
-intent\_infos
-
-intent
-
-string
-
-是
-
-使用的agent，本实践固定为"open\_image\_to\_image"
-
-domain
-
-string
-
-是
-
-使用的agent，本实践固定为"image\_to\_image"
+<a id="bdfde370777w9"></a>
 
 #### 返回示例如下
 
-```
+<a id="code-block-7"></a>
+
+```json
 {
     "output": {
         "round_id": "xxx",
@@ -816,12 +514,14 @@ string
 }
 ```
 
-**重要**
+> **重要**
+>
+> 1.  在图像生成过程中，每3-5秒会返回一个心跳包，output.text="RUNNING"表示合成中，此时output.finished = false
+> 2.  当图像合成结束，output.finished = true，此时output.text字段为img\_url
 
-1.  在图像生成过程中，每3-5秒会返回一个心跳包，output.text="RUNNING"表示合成中，此时output.finished = false
-2.  当图像合成结束，output.finished = true，此时output.text字段为img\_url
+<a id="code-block-8"></a>
 
-```
+```text
 id:1 合成过程中
 event:result
 :HTTP_STATUS/200

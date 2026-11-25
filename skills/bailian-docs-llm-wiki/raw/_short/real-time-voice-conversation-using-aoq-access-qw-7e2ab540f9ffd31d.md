@@ -2,28 +2,48 @@
 
 通过 AOQ 接入 qwen-audio-3.1-realtime-plus，使用服务端 VAD 自动划分轮次，实现低延迟的实时语音对话。客户端代码以 Android Java 为例。
 
+<a id="方案概述"></a>
+
+<a id="voice-overview-title"></a>
+
 ## 方案概述
 
 Qwen-Audio 是端到端实时语音交互模型，适用于语音助手、智能客服和 AI 伴侣等需要低延迟语音交互的场景。AOQ SDK 将音频与事件分轨传输：Audio 轨负责上行麦克风音频和下行模型音频，Data 轨负责 Realtime 协议事件。
 
 本教程使用 server\_vad：客户端持续上行音频，服务端自动识别用户开始和停止说话，并触发模型回复。
 
+<a id="准备工作"></a>
+
+<a id="voice-prerequisites-title"></a>
+
 ## 准备工作
 
-1.  开通阿里云百炼，并按[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。API Key 只保存在业务 AppServer，不要写入客户端代码或提交到代码仓库。
-2.  根据业务部署地域确认 AOQ Endpoint。地域和接入地址的选择方法请参见[选择地域、服务部署范围和接入域名](raw/model-user-guide/get-started-with-models/regions.md)。
-3.  从[SDK 下载](raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-sdk-download.md)获取最新版 AOQ Client SDK。
-4.  按 [Qwen-Audio-Realtime 的 AOQ 鉴权步骤](https://help.aliyun.com/zh/model-studio/audio-realtime-aoq-access#authentication)搭建业务 AppServer。每次建立新连接前，客户端都应从 AppServer 获取新的连接凭证。
+1.  开通阿里云百炼，并按[获取与配置 API Key](../model-api-reference/preparations/get-api-key.md)。API Key 只保存在业务 AppServer，不要写入客户端代码或提交到代码仓库。
+2.  根据业务部署地域确认 AOQ Endpoint。地域和接入地址的选择方法请参见[选择地域、服务部署范围和接入域名](../model-user-guide/get-started-with-models/regions.md)。
+3.  从[SDK 下载](../model-api-reference/more-about-models/realtime-api-aoq-api/realtime-sdk-download.md)获取最新版 AOQ Client SDK。
+4.  按 [Qwen-Audio-Realtime 的 AOQ 鉴权步骤](../model-api-reference/realtime-api-directory/audio-realtime-api-directory/audio-realtime-aoq-access.md#authentication)搭建业务 AppServer。每次建立新连接前，客户端都应从 AppServer 获取新的连接凭证。
+
+<a id="导入-sdk"></a>
+
+<a id="voice-import-sdk-title"></a>
 
 ### 导入 SDK
 
 根据开发平台导入对应 SDK。后续客户端代码以 Android Java 为例，其他平台使用相同的接口设计和事件流程。本文以 Opus 音频流为例，请先导入 Opus 插件。
 
+<a id="sec-tabs"></a>
+
+<a id="android"></a>
+
+<a id="android-h4"></a>
+
 #### Android
 
 1.  将 Opus 插件中的 libPluginOpus.so 按 ABI 放入 app/src/main/jniLibs/armeabi-v7a/ 和 app/src/main/jniLibs/arm64-v8a/，将 AoqClientSdk-release.aar 放入 app/libs，并在 app/build.gradle 中配置依赖和 SDK 支持的 ABI：
 
-```
+<a id="code-block"></a>
+
+```groovy
 android {
     defaultConfig {
         minSdk 21
@@ -38,7 +58,9 @@ dependencies {
 
 2.  在 AndroidManifest.xml 中声明以下权限：
 
-```
+<a id="code-block-2"></a>
+
+```xml
 <uses-permission android:name="android.permission.INTERNET" />
 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -47,17 +69,27 @@ dependencies {
 
 3.  在使用相应设备前动态申请 RECORD\_AUDIO 权限。
 
+<a id="ios"></a>
+
+<a id="ios-h4"></a>
+
 #### iOS
 
 1.  将 AoqClientSdk.framework 与 PluginOpus.framework 拖入 Xcode 工程，在 Target > General > Frameworks, Libraries, and Embedded Content 中选择 Embed & Sign。SDK 支持 iOS 13.0 及以上 arm64 设备。
 2.  在 Info.plist 中添加 NSMicrophoneUsageDescription，并在使用相应设备前请求用户授权。
 3.  Swift 工程使用 import AoqClientSdk；Objective-C 工程使用 #import <AoqClientSdk/AoqClientSdk.h>。
 
+<a id="harmonyos"></a>
+
+<a id="harmonyos-h4"></a>
+
 #### HarmonyOS
 
 1.  将 Opus 插件中的 libPluginOpus.so 放入 entry/libs/arm64-v8a/，将 AoqClientSdk.har 放入 entry/libs，并在 entry/oh-package.json5 中声明依赖。该 SDK 兼容 API 12，支持 arm64-v8a：
 
-```
+<a id="code-block-3"></a>
+
+```json
 {
   "dependencies": {
     "@aoq/client-sdk": "file:./libs/AoqClientSdk.har"
@@ -67,7 +99,9 @@ dependencies {
 
 2.  在 entry/src/main/module.json5 中声明以下权限：
 
-```
+<a id="code-block-4"></a>
+
+```json
 "requestPermissions": [
   { "name": "ohos.permission.INTERNET" },
   { "name": "ohos.permission.MICROPHONE",
@@ -78,17 +112,27 @@ dependencies {
 
 3.  在使用相应设备前调用 abilityAccessCtrl.createAtManager().requestPermissionsFromUser 申请 ohos.permission.MICROPHONE。
 
+<a id="linux-python"></a>
+
+<a id="linux-python-h4"></a>
+
 #### Linux (Python)
 
 1.  解压 SDK，并保持 aoq\_client\_sdk.py、libAoqClientSdk.so 和 libonnxruntime.so.1.16.3 位于同一目录。
 2.  将 SDK 目录加入 Python 和动态库搜索路径：
 
-```
+<a id="code-block-5"></a>
+
+```bash
 export PYTHONPATH="$PWD/AoqClientSdk:$PYTHONPATH"
 export LD_LIBRARY_PATH="$PWD/AoqClientSdk:$LD_LIBRARY_PATH"
 ```
 
 3.  在 Python 代码中使用 import aoq\_client\_sdk。也可通过 AOQ\_CLIENT\_SDK\_LIB 指定 libAoqClientSdk.so 的绝对路径。
+
+<a id="体验-demo"></a>
+
+<a id="voice-experience-demo-title"></a>
 
 ## 体验 Demo
 
@@ -97,6 +141,10 @@ export LD_LIBRARY_PATH="$PWD/AoqClientSdk:$LD_LIBRARY_PATH"
 扫描以下二维码下载 Demo：
 
 ![Demo 下载二维码](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f92cd.png)
+
+<a id="实现流程"></a>
+
+<a id="voice-flow-title"></a>
 
 ## 实现流程
 
@@ -109,11 +157,17 @@ export LD_LIBRARY_PATH="$PWD/AoqClientSdk:$LD_LIBRARY_PATH"
 
 ![AOQ 实时语音对话时序图](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9312966871/p1094861.png)
 
+<a id="appserver-获取-token"></a>
+
+<a id="voice-token-request-title"></a>
+
 ## AppServer 获取 Token
 
 在 AppServer 设置 DASHSCOPE\_API\_KEY，并使用所选地域的 Endpoint 发送请求。clientIp 为客户端的真实公网 IP；该字段可选，但建议传入，以便服务分配合适的 Relay 接入点。
 
-```
+<a id="code-block-6"></a>
+
+```bash
 curl -X POST \
   "https://{endpoint}/api/v1/webrtc/realtime?model=qwen-audio-3.1-realtime-plus" \
   -H "Content-Type: application/json" \
@@ -122,43 +176,40 @@ curl -X POST \
   -d "{\"clientIp\": \"${CLIENT_REAL_IP}\"}"
 ```
 
-**说明**如果 AppServer 无法获取客户端真实公网 IP，请删除 clientIp 字段，不要传空字符串。
+> **说明**
+>
+> 如果 AppServer 无法获取客户端真实公网 IP，请删除 clientIp 字段，不要传空字符串。
 
 AppServer 将响应中的以下字段返回客户端。AOQ Token 仅供一次连接使用，客户端每次调用 `connect` 前都必须重新请求。API Key 仅保存在 AppServer。
 
-**响应字段**
+|  |  |
+| --- | --- |
+| **响应字段** | **SDK 字段** |
+| aoqTokenForClient | AoqConnectConfig.token |
+| sid | AoqConnectConfig.sid |
+| clientRelayCertFingerprint | AoqConnectConfig.certFingerprint |
+| clientRelayEndpoints | AoqConnectConfig.relayEndpoints |
+| extraInfo.workspaceIdHash | AoqConnectConfig.workspaceIdHash |
 
-**SDK 字段**
+<a id="实现-android-客户端"></a>
 
-aoqTokenForClient
-
-AoqConnectConfig.token
-
-sid
-
-AoqConnectConfig.sid
-
-clientRelayCertFingerprint
-
-AoqConnectConfig.certFingerprint
-
-clientRelayEndpoints
-
-AoqConnectConfig.relayEndpoints
-
-extraInfo.workspaceIdHash
-
-AoqConnectConfig.workspaceIdHash
+<a id="voice-implementation-title"></a>
 
 ## 实现 Android 客户端
 
 每次建立连接前，客户端先从 AppServer 获取新的连接凭证，再创建 AoqConnectConfig：映射 Token 响应字段，并补充发布和订阅轨道等客户端连接参数。按以下步骤实现 Android 端实时语音对话。
 
+<a id="1-创建引擎并设置回调"></a>
+
+<a id="voice-step-1-title"></a>
+
 ### 1\. 创建引擎并设置回调
 
 创建 AOQ 单例引擎并注册事件回调。客户需要在连接成功时配置会话，并把服务端事件分发给 UI 和业务状态机。
 
-```
+<a id="code-block-7"></a>
+
+```java
 AoqClientListener listener = new AoqClientListener() {
     @Override
     public void onConnectionStatusChange(AoqClientEngine.AoqConnectionStatus status) {
@@ -178,11 +229,17 @@ createConfig.workDir = context.getFilesDir().getAbsolutePath();
 engine = AoqClientEngine.createEngine(context, createConfig, listener);
 ```
 
+<a id="2-配置音频编解码"></a>
+
+<a id="voice-step-2-title"></a>
+
 ### 2\. 配置音频编解码
 
 根据接入模型和业务音频格式配置 SDK 的上行编码与下行解码参数。以下数值仅为本教程的 Opus 示例配置，不限制客户的业务音频格式。
 
-```
+<a id="code-block-8"></a>
+
+```java
 AoqClientEngine.AoqAudioCodecConfig audioEncoderConfig =
         new AoqClientEngine.AoqAudioCodecConfig();
 audioEncoderConfig.trackType = AoqClientEngine.AoqTrackType.AoqTrackTypeAudio;
@@ -200,11 +257,17 @@ audioDecoderConfig.channel = 1;
 engine.setAudioDecoderConfig(audioDecoderConfig);
 ```
 
+<a id="3-配置轨道并建立连接"></a>
+
+<a id="voice-step-3-title"></a>
+
 ### 3\. 配置轨道并建立连接
 
 使用 SDK 接口启动音频采集与播放。将本次 AppServer Token 响应映射到 AoqConnectConfig 的凭证字段，并在 publishTracks 和 subscribeTracks 中分别配置 Audio 和 Data 轨。保持 Audio 轨发送关闭，调用 connect 建立连接；后续收到 session.updated 后再开启发送。
 
-```
+<a id="code-block-9"></a>
+
+```java
 AoqClientEngine.AoqAudioCaptureConfig captureConfig =
         new AoqClientEngine.AoqAudioCaptureConfig();
 captureConfig.channel = 1;
@@ -239,11 +302,17 @@ engine.enableSendMediaStream(
 engine.connect(connectConfig);
 ```
 
+<a id="4-发送-session-update"></a>
+
+<a id="voice-step-4-title"></a>
+
 ### 4\. 发送 session.update
 
-连接成功后配置输出模态、音色、音频格式、系统指令和 VAD。input\_audio\_format 与 output\_audio\_format 的值均为 pcm；实际采样率由 SDK 编解码配置确定。完整参数请参见[客户端事件](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/fun-audiochat-client-events.md)。
+连接成功后配置输出模态、音色、音频格式、系统指令和 VAD。input\_audio\_format 与 output\_audio\_format 的值均为 pcm；实际采样率由 SDK 编解码配置确定。完整参数请参见[客户端事件](../model-api-reference/realtime-api-directory/audio-realtime-api-directory/fun-audiochat-client-events.md)。
 
-```
+<a id="code-block-10"></a>
+
+```java
 JSONObject vad = new JSONObject()
         .put("type", "server_vad")
         .put("threshold", 0.5)
@@ -263,22 +332,34 @@ dataMessage.data = sessionUpdate.toString().getBytes(StandardCharsets.UTF_8);
 engine.sendDataMsg(dataMessage);
 ```
 
+<a id="5-收到-session-updated-后开启上行"></a>
+
+<a id="voice-step-5-title"></a>
+
 ### 5\. 收到 session.updated 后开启上行
 
 收到 session.updated 表示会话配置已生效，此时才开启 Audio 轨发送。客户需要保证此前采集的音频不会提前进入模型输入。
 
-```
+<a id="code-block-11"></a>
+
+```java
 if ("session.updated".equals(type)) {
     engine.enableSendMediaStream(
             AoqClientEngine.AoqTrackType.AoqTrackTypeAudio, true);
 }
 ```
 
+<a id="6-处理服务端事件"></a>
+
+<a id="voice-step-6-title"></a>
+
 ### 6\. 处理服务端事件
 
-在 onDataMsg 中按 type 展示用户和模型文本，并处理错误。完整事件字段请参见[服务端事件](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/qwen-audio-realtime-server-events.md)。
+在 onDataMsg 中按 type 展示用户和模型文本，并处理错误。完整事件字段请参见[服务端事件](../model-api-reference/realtime-api-directory/audio-realtime-api-directory/qwen-audio-realtime-server-events.md)。
 
-```
+<a id="code-block-12"></a>
+
+```java
 if ("response.audio_transcript.delta".equals(type)) {
     String delta = event.optString("delta");
     // 将模型回复的文本增量展示在 UI 中。
@@ -290,68 +371,54 @@ if ("response.audio_transcript.delta".equals(type)) {
 }
 ```
 
+<a id="7-断开连接并销毁引擎"></a>
+
+<a id="voice-step-7-title"></a>
+
 ### 7\. 断开连接并销毁引擎
 
 结束通话时断开连接并销毁单例引擎。disconnect 或 destroy 会自动关闭音频采集与播放，无需额外调用停止设备的接口。
 
-```
+<a id="code-block-13"></a>
+
+```java
 engine.disconnect();
 AoqClientEngine.destroy();
 ```
 
+<a id="主要服务端事件"></a>
+
+<a id="voice-events-title"></a>
+
 ## 主要服务端事件
 
-Data 轨事件以 type 标识，客户端需要处理以下关键事件。完整事件结构请参见[服务端事件](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/qwen-audio-realtime-server-events.md)。
+Data 轨事件以 type 标识，客户端需要处理以下关键事件。完整事件结构请参见[服务端事件](../model-api-reference/realtime-api-directory/audio-realtime-api-directory/qwen-audio-realtime-server-events.md)。
 
-**事件**
+|  |  |
+| --- | --- |
+| **事件** | **说明** |
+| session.created | 会话已创建并返回默认配置 |
+| session.updated | 客户端配置已生效，可以开启音频上行 |
+| input\_audio\_buffer.speech\_started | 检测到用户开始说话 |
+| input\_audio\_buffer.speech\_stopped | 检测到用户停止说话 |
+| input\_audio\_buffer.committed | 本轮音频已提交 |
+| response.created | 模型开始生成回复 |
+| response.audio\_transcript.delta | 模型回复文本增量 |
+| conversation.item.input\_audio\_transcription.completed | 用户语音转写完成 |
+| response.done | 本轮回复结束 |
+| error | 服务端错误 |
 
-**说明**
+<a id="完整示例"></a>
 
-session.created
-
-会话已创建并返回默认配置
-
-session.updated
-
-客户端配置已生效，可以开启音频上行
-
-input\_audio\_buffer.speech\_started
-
-检测到用户开始说话
-
-input\_audio\_buffer.speech\_stopped
-
-检测到用户停止说话
-
-input\_audio\_buffer.committed
-
-本轮音频已提交
-
-response.created
-
-模型开始生成回复
-
-response.audio\_transcript.delta
-
-模型回复文本增量
-
-conversation.item.input\_audio\_transcription.completed
-
-用户语音转写完成
-
-response.done
-
-本轮回复结束
-
-error
-
-服务端错误
+<a id="voice-complete-title"></a>
 
 ## 完整示例
 
 以下类接收已填入本次 AppServer 连接凭证的 AoqConnectConfig，并在类内补充音频设备和发布、订阅轨道配置。每次重新连接都必须获取新的凭证并创建连接配置。生产代码还需补充权限、UI 状态和连接重试。
 
-```
+<a id="code-block-14"></a>
+
+```java
 import android.content.Context;
 
 import com.alibaba.aoq.clientsdk.AoqClientEngine;
@@ -487,60 +554,87 @@ public final class RealtimeVoiceChatClient {
 }
 ```
 
+<a id="运行并验证"></a>
+
+<a id="voice-run-title"></a>
+
 ## 运行并验证
 
 1.  收到 session.updated 后才开始上行麦克风音频。
 2.  用户停止说话后，服务端自动提交音频并开始回复；文本事件与 Audio 轨音频连续返回。
 
+<a id="典型场景"></a>
+
+<a id="voice-scenarios-title"></a>
+
 ## 典型场景
+
+<a id="切换交互模式"></a>
+
+<a id="voice-scenario-1-title"></a>
 
 ### 切换交互模式
 
 server\_vad 适合按静音时长判停。smart\_turn 和 smart\_turn\_v2 结合声学与语义判断轮次，推荐使用 smart\_turn\_v2。按键模式将 turn\_detection 设为 null。turn\_detection 只能在首次发送音频前修改。切换模式时，应重新建立会话。
 
+<a id="切换音色"></a>
+
+<a id="voice-scenario-2-title"></a>
+
 ### 切换音色
 
 在首次 session.update 中设置 session.voice。不同模型支持的系统音色可能不同；支持的音色与声音复刻用法请参见[实时语音对话（Qwen-Audio-Realtime）](https://help.aliyun.com/zh/model-studio/fun-audiochat-realtime)。
 
+<a id="设置音频输出语速"></a>
+
+<a id="voice-speech-rate-title"></a>
+
 ### 设置音频输出语速
 
-在 `session.update` 的 `session` 中设置 `speech_rate`，控制模型音频输出语速。取值范围为 `[0.5, 2.0]`，默认值为 `1.0`。参数说明和配置示例见[音频输出语速](https://help.aliyun.com/zh/model-studio/qwen-audio-realtime-user-guides#fc60speechrate01)。
+在 `session.update` 的 `session` 中设置 `speech_rate`，控制模型音频输出语速。取值范围为 `[0.5, 2.0]`，默认值为 `1.0`。参数说明和配置示例见[音频输出语速](../model-user-guide/model-experience/speech-and-audio/speech-to-speech/qwen-audio-realtime-user-guides.md#fc60speechrate01)。
+
+<a id="扬声器或听筒"></a>
+
+<a id="voice-scenario-3-title"></a>
 
 ### 扬声器或听筒
 
 通过 AoqAudioPlaybackConfig.isDefaultSpeaker 设置默认输出设备，运行中可调用 enableSpeakerphone 切换。
 
+<a id="android-后台通话"></a>
+
+<a id="voice-scenario-4-title"></a>
+
 ### Android 后台通话
 
 Android 10 及以上版本如需在后台继续采集和播放，应使用 foregroundServiceType="microphone|mediaPlayback" 的前台服务，并在应用仍对用户可见时启动。
 
+<a id="常见问题"></a>
+
+<a id="voice-troubleshooting-title"></a>
+
 ## 常见问题
 
-**问题**
+|  |  |
+| --- | --- |
+| **问题** | **处理方法** |
+| 连接失败 | 确认 Token 未过期、Endpoint 与部署地域一致，并检查 AoqConnectConfig 字段映射。 |
+| 会话已建立但无回复 | 确认收到 session.updated 后已开启 Audio 轨，并检查 SDK 上行编码配置是否与模型和业务音频格式一致。 |
+| 回复没有声音 | 确认已订阅 Audio 轨并启动音频播放器，然后检查 SDK 下行解码配置是否与模型输出音频格式一致。 |
 
-**处理方法**
+<a id="相关文档"></a>
 
-连接失败
-
-确认 Token 未过期、Endpoint 与部署地域一致，并检查 AoqConnectConfig 字段映射。
-
-会话已建立但无回复
-
-确认收到 session.updated 后已开启 Audio 轨，并检查 SDK 上行编码配置是否与模型和业务音频格式一致。
-
-回复没有声音
-
-确认已订阅 Audio 轨并启动音频播放器，然后检查 SDK 下行解码配置是否与模型输出音频格式一致。
+<a id="voice-related-title"></a>
 
 ## 相关文档
 
 如需查看完整参数、事件字段或其他平台接口，请参见：
 
--   [获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)
--   [选择地域、服务部署范围和接入域名](raw/model-user-guide/get-started-with-models/regions.md)
--   [AOQ Client SDK 简介](raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-api-aoq-sdk-desc.md)
--   [SDK 下载](raw/model-api-reference/more-about-models/realtime-api-aoq-api/realtime-sdk-download.md)
--   [Qwen-Audio-Realtime AOQ 接入](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/audio-realtime-aoq-access.md)
--   [Qwen-Audio 实时语音对话用户指南](raw/model-user-guide/model-experience/speech-and-audio/speech-to-speech/qwen-audio-realtime-user-guides.md)
--   [客户端事件](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/fun-audiochat-client-events.md)
--   [服务端事件](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/qwen-audio-realtime-server-events.md)
+-   [获取与配置 API Key](../model-api-reference/preparations/get-api-key.md)
+-   [选择地域、服务部署范围和接入域名](../model-user-guide/get-started-with-models/regions.md)
+-   [AOQ Client SDK 简介](../model-api-reference/more-about-models/realtime-api-aoq-api/realtime-api-aoq-sdk-desc.md)
+-   [SDK 下载](../model-api-reference/more-about-models/realtime-api-aoq-api/realtime-sdk-download.md)
+-   [Qwen-Audio-Realtime AOQ 接入](../model-api-reference/realtime-api-directory/audio-realtime-api-directory/audio-realtime-aoq-access.md)
+-   [Qwen-Audio 实时语音对话用户指南](../model-user-guide/model-experience/speech-and-audio/speech-to-speech/qwen-audio-realtime-user-guides.md)
+-   [客户端事件](../model-api-reference/realtime-api-directory/audio-realtime-api-directory/fun-audiochat-client-events.md)
+-   [服务端事件](../model-api-reference/realtime-api-directory/audio-realtime-api-directory/qwen-audio-realtime-server-events.md)

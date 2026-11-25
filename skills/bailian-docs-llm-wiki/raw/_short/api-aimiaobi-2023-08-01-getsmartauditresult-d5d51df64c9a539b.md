@@ -2,11 +2,19 @@
 
 查询智能审核结果
 
+<a id="调试"></a>
+
+<a id="api-detail-23"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
 [调试](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/GetSmartAuditResult)
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -25,249 +33,55 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-操作
+<table><thead><tr><th>操作</th><th>访问级别</th><th>资源类型</th><th>条件关键字</th><th>关联操作</th></tr></thead><tbody><tr><td>aimiaobi:GetSmartAuditResult</td><td>get</td><td><div><div>*全部资源</div><div><code>*</code></div></div></td><td><ul>无</ul></td><td>无</td></tr></tbody></table>
 
-访问级别
+<a id="请求参数"></a>
 
-资源类型
-
-条件关键字
-
-关联操作
-
-aimiaobi:GetSmartAuditResult
-
-get
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-36"></a>
 
 ## 请求参数
 
-名称
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| WorkspaceId | string | 否 | [业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-xx |
+| TaskId | string | 否 | 任务 ID | 3f7045e099474ba28ceca1b4eb6d6e21 |
 
-类型
+<a id="返回参数"></a>
 
-必填
-
-描述
-
-示例值
-
-WorkspaceId
-
-string
-
-否
-
-[业务空间 ID](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)
-
-llm-xx
-
-TaskId
-
-string
-
-否
-
-任务 ID
-
-3f7045e099474ba28ceca1b4eb6d6e21
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-名称
-
-类型
-
-描述
-
-示例值
-
-object
-
-Schema of Response
-
-RequestId
-
-string
-
-Id of the request
-
-xxxxx
-
-Success
-
-boolean
-
-此次请求是否成功
-
-true
-
-Code
-
-string
-
-错误码
-
-DataNotExists
-
-Message
-
-string
-
-错误消息
-
-错误消息
-
-HttpStatusCode
-
-integer
-
-http 错误码
-
-400
-
-Data
-
-object
-
-审核结果
-
-Status
-
-string
-
-任务执行状态，PENDING-待执行、RUNNING-执行中、SUCCESSED-成功、SUSPENDED-暂停、FAILED-失败、CANCELLED-取消
-
-SUCCESSED
-
-ErrorItemDetails
-
-array<object>
-
-审核错误明细列表
-
-errorItemDetails
-
-object
-
-Context
-
-string
-
-原文片段
-
-原文片段
-
-MajorCodeDesc
-
-string
-
-主错误描述
-
-内容准确性
-
-ErrorWord
-
-string
-
-错误单词
-
-”xxx“
-
-MajorCode
-
-string
-
-主错误码
-
-ContentAccuracy
-
-RightWord
-
-string
-
-推荐修改的单词
-
-“xxx”
-
-Reason
-
-string
-
-错误说明
-
-中文双引号应成对正确使用，先左双引号，后右双引号
-
-Url
-
-string
-
-图片审核场景下，返回命中审核的可访问的图片的公网地址
-
-[http://www.example.com/xxxx.jpg](http://www.example.com/xxxx.jpg)
-
-Offset
-
-integer
-
-错误单词在全文的偏移索引
-
-0
-
-CheckId
-
-string
-
-审核项唯一标识。
-
-审核项唯一标识。
-
-SubClassCode
-
-string
-
-子错误码
-
-PunctuationError
-
-ErrorLevel
-
-integer
-
-错误等级（1-严重，2-警告，3-提示，4-建议）
-
-2
-
-SubClassDesc
-
-string
-
-子错误描述
-
-标点符号错误
-
-ContextOffset
-
-integer
-
-错误单词在上下文（Context）中的偏移索引。
-
-0
-
-ErrorMessage
-
-string
-
-Status 最终状态 不为 SUCCESSED 时，需要读取此错误信息，判断错误
-
-审核被取消
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | Schema of Response |  |
+| RequestId | string | Id of the request | xxxxx |
+| Success | boolean | 此次请求是否成功 | true |
+| Code | string | 错误码 | DataNotExists |
+| Message | string | 错误消息 | 错误消息 |
+| HttpStatusCode | integer | http 错误码 | 400 |
+| Data | object | 审核结果 |  |
+| Status | string | 任务执行状态，PENDING-待执行、RUNNING-执行中、SUCCESSED-成功、SUSPENDED-暂停、FAILED-失败、CANCELLED-取消 | SUCCESSED |
+| ErrorItemDetails | array<object> | 审核错误明细列表 |  |
+| errorItemDetails | object |  |  |
+| Context | string | 原文片段 | 原文片段 |
+| MajorCodeDesc | string | 主错误描述 | 内容准确性 |
+| ErrorWord | string | 错误单词 | ”xxx“ |
+| MajorCode | string | 主错误码 | ContentAccuracy |
+| RightWord | string | 推荐修改的单词 | “xxx” |
+| Reason | string | 错误说明 | 中文双引号应成对正确使用，先左双引号，后右双引号 |
+| Url | string | 图片审核场景下，返回命中审核的可访问的图片的公网地址 | [http://www.example.com/xxxx.jpg](http://www.example.com/xxxx.jpg) |
+| Offset | integer | 错误单词在全文的偏移索引 | 0 |
+| CheckId | string | 审核项唯一标识。 | 审核项唯一标识。 |
+| SubClassCode | string | 子错误码 | PunctuationError |
+| ErrorLevel | integer | 错误等级（1-严重，2-警告，3-提示，4-建议） | 2 |
+| SubClassDesc | string | 子错误描述 | 标点符号错误 |
+| ContextOffset | integer | 错误单词在上下文（Context）中的偏移索引。 | 0 |
+| ErrorMessage | string | Status 最终状态 不为 SUCCESSED 时，需要读取此错误信息，判断错误 | 审核被取消 |
+
+<a id="示例"></a>
+
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -275,7 +89,9 @@ Status 最终状态 不为 SUCCESSED 时，需要读取此错误信息，判断�
 
 `JSON`格式
 
-```
+<a id="code-block"></a>
+
+```text
 {
   "RequestId": "xxxxx",
   "Success": true,
@@ -305,6 +121,10 @@ Status 最终状态 不为 SUCCESSED 时，需要读取此错误信息，判断�
   }
 }
 ```
+
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
 
 ## 错误码
 

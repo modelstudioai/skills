@@ -2,11 +2,19 @@
 
 提交VOC异步任务。
 
+<a id="调试"></a>
+
+<a id="api-detail-23"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
 [调试](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/SubmitEnterpriseVocAnalysisTask)
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -25,329 +33,61 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-操作
+<table><thead><tr><th>操作</th><th>访问级别</th><th>资源类型</th><th>条件关键字</th><th>关联操作</th></tr></thead><tbody><tr><td>aimiaobi:SubmitEnterpriseVocAnalysisTask</td><td>get</td><td><div><div>*全部资源</div><div><code>*</code></div></div></td><td><ul>无</ul></td><td>无</td></tr></tbody></table>
 
-访问级别
+<a id="请求参数"></a>
 
-资源类型
-
-条件关键字
-
-关联操作
-
-aimiaobi:SubmitEnterpriseVocAnalysisTask
-
-get
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-36"></a>
 
 ## 请求参数
 
-名称
-
-类型
-
-必填
-
-描述
-
-示例值
-
-WorkspaceId
-
-string
-
-是
-
-阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)
-
-xxxx
-
-FileKey
-
-string
-
-否
-
-文件 FileKey
-
-oss://default/bucket-name/materialDocument/tenant\_agent/fileName
-
-MaterialType
-
-string
-
-否
-
-素材类型（shortContent：长短评论、或工单，dialogue：对话）
-
-shortContent
-
-ModelId
-
-string
-
-是
-
-模型 ID
-
-qwen-max
-
-ContentTags
-
-array<object>
-
-是
-
-内容标签
-
-object
-
-是
-
-内容标签对象
-
-TagName
-
-string
-
-否
-
-标签名称
-
-一级标签-二级标签
-
-TagValueDefinePrompt
-
-string
-
-否
-
-标签值定义（如果是标签挖掘任务，则此 Prompt 是逗号分隔的枚举值、如果是总结概括人物则是总结概括的 Prompt）
-
-是,否
-
-TagDefinePrompt
-
-string
-
-否
-
-标签定义
-
-一级标签-二级标签
-
-TagTaskType
-
-string
-
-否
-
-标签挖掘任务类型（单标签：singleTagValue，多标签：multiTagValues，总结概括：summaryAndOverview，筛选：filter）
-
-singleTagValue
-
-FilterTags
-
-array<object>
-
-否
-
-过滤标签列表
-
-object
-
-否
-
-过滤标签对象
-
-TagName
-
-string
-
-否
-
-标签名称
-
-一级标签-二级标签
-
-TagValueDefinePrompt
-
-string
-
-否
-
-标签值定义（如果是标签挖掘任务，则此 Prompt 是逗号分隔的枚举值、如果是总结概括人物则是总结概括的 Prompt）
-
-是,否
-
-TagDefinePrompt
-
-string
-
-否
-
-标签定义
-
-一级标签-二级标签
-
-TagType
-
-string
-
-否
-
-标签挖掘任务类型（单标签：singleTagValue，多标签：multiTagValues，总结概括：summaryAndOverview，筛选：filter）
-
-singleTagValue
-
-PositiveSample
-
-string
-
-否
-
-正面样本内容
-
-正面样本
-
-PositiveSampleFileKey
-
-string
-
-否
-
-正面样本文件 FileKey
-
-oss://default/bucket-name/path/xxx.xlsx
-
-TaskType
-
-string
-
-否
-
-任务类型：lightAppSass（Sass 页调用）、sdkBatchTask（SDK 批量调用任务）
-
-lightAppSass
-
-Contents
-
-array<object>
-
-否
-
-待挖掘的素材内容列表
-
-object
-
-否
-
-待挖掘的素材内容对象
-
-Text
-
-string
-
-否
-
-待挖掘的素材
-
-内容文本
-
-ExtraInfo
-
-string
-
-否
-
-额外补充信息，直接给到大模型
-
-额外信息
-
-ApiKey
-
-string
-
-否
-
-集成接入的 API 密钥。获取[API- KEY](raw/model-api-reference/preparations/get-api-key.md)
-
-sk-sdfs2-wewerwe-ere
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | xxxx |
+| FileKey | string | 否 | 文件 FileKey | oss://default/bucket-name/materialDocument/tenant\_agent/fileName |
+| MaterialType | string | 否 | 素材类型（shortContent：长短评论、或工单，dialogue：对话） | shortContent |
+| ModelId | string | 是 | 模型 ID | qwen-max |
+| ContentTags | array<object> | 是 | 内容标签 |  |
+|  | object | 是 | 内容标签对象 |  |
+| TagName | string | 否 | 标签名称 | 一级标签-二级标签 |
+| TagValueDefinePrompt | string | 否 | 标签值定义（如果是标签挖掘任务，则此 Prompt 是逗号分隔的枚举值、如果是总结概括人物则是总结概括的 Prompt） | 是,否 |
+| TagDefinePrompt | string | 否 | 标签定义 | 一级标签-二级标签 |
+| TagTaskType | string | 否 | 标签挖掘任务类型（单标签：singleTagValue，多标签：multiTagValues，总结概括：summaryAndOverview，筛选：filter） | singleTagValue |
+| FilterTags | array<object> | 否 | 过滤标签列表 |  |
+|  | object | 否 | 过滤标签对象 |  |
+| TagName | string | 否 | 标签名称 | 一级标签-二级标签 |
+| TagValueDefinePrompt | string | 否 | 标签值定义（如果是标签挖掘任务，则此 Prompt 是逗号分隔的枚举值、如果是总结概括人物则是总结概括的 Prompt） | 是,否 |
+| TagDefinePrompt | string | 否 | 标签定义 | 一级标签-二级标签 |
+| TagType | string | 否 | 标签挖掘任务类型（单标签：singleTagValue，多标签：multiTagValues，总结概括：summaryAndOverview，筛选：filter） | singleTagValue |
+| PositiveSample | string | 否 | 正面样本内容 | 正面样本 |
+| PositiveSampleFileKey | string | 否 | 正面样本文件 FileKey | oss://default/bucket-name/path/xxx.xlsx |
+| TaskType | string | 否 | 任务类型：lightAppSass（Sass 页调用）、sdkBatchTask（SDK 批量调用任务） | lightAppSass |
+| Contents | array<object> | 否 | 待挖掘的素材内容列表 |  |
+|  | object | 否 | 待挖掘的素材内容对象 |  |
+| Text | string | 否 | 待挖掘的素材 | 内容文本 |
+| ExtraInfo | string | 否 | 额外补充信息，直接给到大模型 | 额外信息 |
+| ApiKey | string | 否 | 集成接入的 API 密钥。获取[API- KEY](../model-api-reference/preparations/get-api-key.md) | sk-sdfs2-wewerwe-ere |
+
+<a id="返回参数"></a>
+
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-名称
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | PlainResult |  |
+| Code | string | 状态码 | NoData |
+| Data | object | 模板校验结果 |  |
+| TaskId | string | 任务 ID | xxxxx |
+| HttpStatusCode | integer | http 状态码 | 200 |
+| Message | string | 错误说明 | success |
+| RequestId | string | 请求唯一标识 | 1813ceee-7fe5-41b4-87e5-982a4d18cca5 |
+| Success | boolean | 是否成功：true 成功，false 失败 | true |
 
-类型
+<a id="示例"></a>
 
-描述
-
-示例值
-
-object
-
-PlainResult
-
-Code
-
-string
-
-状态码
-
-NoData
-
-Data
-
-object
-
-模板校验结果
-
-TaskId
-
-string
-
-任务 ID
-
-xxxxx
-
-HttpStatusCode
-
-integer
-
-http 状态码
-
-200
-
-Message
-
-string
-
-错误说明
-
-success
-
-RequestId
-
-string
-
-请求唯一标识
-
-1813ceee-7fe5-41b4-87e5-982a4d18cca5
-
-Success
-
-boolean
-
-是否成功：true 成功，false 失败
-
-true
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -355,7 +95,9 @@ true
 
 `JSON`格式
 
-```
+<a id="code-block"></a>
+
+```text
 {
   "Code": "NoData",
   "Data": {
@@ -367,6 +109,10 @@ true
   "Success": true
 }
 ```
+
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
 
 ## 错误码
 

@@ -1,5 +1,9 @@
 # 析言GBI反向网络访问VPC打通
 
+<a id="简介"></a>
+
+<a id="7faa0ef2bdeh5"></a>
+
 ## 简介
 
 本文针对用户使用阿里云VPC内数据库时如何使用析言GBI产品进行操作指导。析言通过反向网络访问技术与用户VPC环境打通，通过私网访问用户VPC数据库，进而为用户提供析言产品服务。
@@ -15,7 +19,15 @@
 
 关于**对等连接**的介绍和基本使用，请参见[VPC对等连接](https://help.aliyun.com/zh/vpc/vpc-peer-to-peer-connection)文档。
 
+<a id="操作流程"></a>
+
+<a id="e43fd8e0ecpd0"></a>
+
 ## 操作流程
+
+<a id="用户准备工作"></a>
+
+<a id="7a89edfde3oll"></a>
 
 ### 用户准备工作
 
@@ -25,7 +37,15 @@
 -   用户可以访问主账号下待关联的数据库，并且创建好只读账号，并对该账号的权限进行设置，后续要使用该账号在析言控制台进行数据授权配置。
 -   用户可以查询到主账号下待关联的数据库的内网域名和内网IP，后续需要提供给析言，进行NAT规则的配置。
 
+<a id="配置步骤"></a>
+
+<a id="61e739eba4799"></a>
+
 ### 配置步骤
+
+<a id="步骤一-提供用户信息-由析言添加服务白名单"></a>
+
+<a id="1e360934f98n8"></a>
 
 #### 步骤一：提供用户信息，由析言添加服务白名单
 
@@ -41,6 +61,10 @@
 -   **数据库实例内网地址**：例如，rm-xxxx.mysql.rds.aliyuncs.com。
 -   **数据库实例内网IP**：例如，172.x.x.x。
 
+<a id="步骤二-创建终端节点"></a>
+
+<a id="5339daf17ffdq"></a>
+
 #### 步骤二：创建终端节点
 
 用户需在其cn-beijing的VPC内创建[终端节点](https://vpc.console.aliyun.com/endpoint/cn-beijing/reverseEndpoints)。终端节点可以与终端节点服务相关联，以建立通过VPC私网访问外部服务的网络连接。
@@ -55,6 +79,10 @@
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5523247371/p907554.png)
 
+<a id="步骤三-用户提供待关联数据库的内网域名和ip-由析言配置nat规则"></a>
+
+<a id="937aea3cb9uqf"></a>
+
 #### 步骤三：用户提供待关联数据库的内网域名和IP，由析言配置NAT规则
 
 用户登录数据库控制台，查看内网地址，以RDS举例：
@@ -64,6 +92,10 @@
 在同VPC内的ECS上，查询数据库对应的IP，可以通过ping命令：
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5523247371/p907562.png)
+
+<a id="步骤四-开放白名单"></a>
+
+<a id="00d7762f9esxt"></a>
 
 #### 步骤四：开放白名单
 
@@ -79,13 +111,25 @@
     -   Hologres开放白名单的操作请参见[IP白名单](https://help.aliyun.com/zh/hologres/security-and-compliance/configure-an-ip-address-whitelist)、[析言GBI](https://help.aliyun.com/zh/hologres/user-guide/xiyan-gbi)。
     -   AnalyticDB PostgreSQL 版开放白名单的操作请参见[设置白名单](https://help.aliyun.com/zh/analyticdb/analyticdb-for-postgresql/user-guide/configure-an-ip-address-whitelist-user-guide)。
 
+<a id="步骤五-在析言控制台配置数据源"></a>
+
+<a id="41bf924c92p34"></a>
+
 #### 步骤五：在析言控制台配置数据源
 
 登录析言控制台，填入用户VPC内的内网域名等数据库信息。
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7702891271/p825755.png) ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7702891271/p825745.png)
 
+<a id="附录"></a>
+
+<a id="38e9f3f05a1m7"></a>
+
 ## 附录
+
+<a id="跨vpc互联"></a>
+
+<a id="d0aa4e14e7kkc"></a>
 
 ### 跨VPC互联
 

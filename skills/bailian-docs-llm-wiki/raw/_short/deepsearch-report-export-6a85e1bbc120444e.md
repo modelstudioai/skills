@@ -2,73 +2,47 @@
 
 深度搜索应用生成结果报告文件 (md、html、pdf) 的获取。
 
+<a id="请求语法"></a>
+
+<a id="15a1b40702q4w"></a>
+
 ## 请求语法
 
-```
+<a id="code-block"></a>
+
+```http
 POST /deep-search-agent/file/expose HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="2dcf0f38ba5jm"></a>
+
 ## 请求参数
 
-**参数名**
+| 参数名 | 类型 | 是否必须 | 默认值 | 说明 |
+| --- | --- | --- | --- | --- |
+| input | object | 是 |  | 输入字段 |
+| input.request\_id | str | 否 |  | 请求ID（业务自定义） |
+| input.writing\_result\_path | str | 是 | None | 文件路径 |
+| input.writing\_result\_type | str | 是 | "html\_url" | 获取类型，可选\[html, html\_url, md, md\_url, pdf\_url\] |
+| parameters | object | 是 |  | 配置参数字段，该接口下留空 {} |
 
-**类型**
+<a id="示例"></a>
 
-**是否必须**
-
-**默认值**
-
-**说明**
-
-input
-
-object
-
-是
-
-输入字段
-
-input.request\_id
-
-str
-
-否
-
-请求ID（业务自定义）
-
-input.writing\_result\_path
-
-str
-
-是
-
-None
-
-文件路径
-
-input.writing\_result\_type
-
-str
-
-是
-
-"html\_url"
-
-获取类型，可选\[html, html\_url, md, md\_url, pdf\_url\]
-
-parameters
-
-object
-
-是
-
-配置参数字段，该接口下留空 {}
+<a id="c4cf1876a25b5"></a>
 
 ## 示例
 
+<a id="请求示例"></a>
+
+<a id="89d11d75fcz5c"></a>
+
 ### 请求示例
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
     "input": {
         "request_id": "b4d140f0-07b4-90cb-b13d-b29c9ac37fda",
@@ -79,9 +53,15 @@ object
 }
 ```
 
+<a id="返回示例"></a>
+
+<a id="6862854598olq"></a>
+
 ### 返回示例
 
-```
+<a id="code-block-3"></a>
+
+```json
 {
     "code": "200",
     "message": "Success",
@@ -97,11 +77,21 @@ object
 }
 ```
 
+<a id="调用示例"></a>
+
+<a id="ab0dc25cccefs"></a>
+
 ## 调用示例
+
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-python-tab"></a>
 
 python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 # coding=utf-8
 
 import os
@@ -153,9 +143,13 @@ if __name__ == "__main__":
     print(json.dumps(export_info, indent=2, ensure_ascii=False))
 ```
 
+<a id="fig-code-group-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-java"></a>
+
+```java
 import java.io.*;
 import java.net.*;
 import java.util.*;

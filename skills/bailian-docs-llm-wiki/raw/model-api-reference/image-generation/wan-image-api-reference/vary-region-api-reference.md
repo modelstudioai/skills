@@ -2,16 +2,22 @@
 
 本文介绍万相-图像局部重绘模型的输入输出参数。
 
-**相关指南**：[图像局部重绘](raw/model-user-guide/use-cases/legacy-resources/legacy-image-generation/vary-region.md)
+**相关指南**：[图像局部重绘](../../../model-user-guide/use-cases/legacy-resources/legacy-image-generation/vary-region.md)
 
-**重要**
+> **重要**
+>
+> -   本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)。
+> -   wanx-x-painting 模型当前仅提供**免费体验**，免费额度用完后不可调用且不支持付费，推荐参考[图像编辑-千问](../../../model-user-guide/model-experience/image-and-video-generation/image-model/image-edit-guide/qwen-image-edit-guide.md)或[图像编辑-万相2.1](../../../model-user-guide/use-cases/legacy-resources/legacy-image-generation/wanx-image-edit.md)获取替代方案。
 
--   本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)。
--   wanx-x-painting 模型当前仅提供**免费体验**，免费额度用完后不可调用且不支持付费，推荐参考[图像编辑-千问](raw/model-user-guide/model-experience/image-and-video-generation/image-model/image-edit-guide/qwen-image-edit-guide.md)或[图像编辑-万相2.1](raw/model-user-guide/use-cases/legacy-resources/legacy-image-generation/wanx-image-edit.md)获取替代方案。
+> **重要**
+>
+> 阿里云百炼为华北2（北京）地域推出了业务空间专属域名 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`，**能够为推理请求提供卓越的性能和更高的稳定性**，建议从 `https://dashscope.aliyuncs.com` 迁移至新域名。
+>
+> 其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
-**重要**阿里云百炼为华北2（北京）地域推出了业务空间专属域名 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`，**能够为推理请求提供卓越的性能和更高的稳定性**，建议从 `https://dashscope.aliyuncs.com` 迁移至新域名。
+<a id="模型概览"></a>
 
-其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
+<a id="0594943e081vt"></a>
 
 ## 模型概览
 
@@ -21,49 +27,31 @@
 
 **模型简介**
 
-**模型名称**
-
-**模型简介**
-
-wanx-x-painting
-
-万相-图像局部重绘根据用户输入的原始图片、局部区域涂抹图和prompt提示词文字内容，在涂抹区域生成与文字描述相对应的内容，而涂抹区域外的部分则基本保持不变。
+| 模型名称 | 模型简介 |
+| --- | --- |
+| wanx-x-painting | 万相-图像局部重绘根据用户输入的原始图片、局部区域涂抹图和prompt提示词文字内容，在涂抹区域生成与文字描述相对应的内容，而涂抹区域外的部分则基本保持不变。 |
 
 **模型说明**
 
-**模型名称**
+<table><thead><tr><th rowspan="2"><strong>模型名称</strong></th><th rowspan="2"><strong>计费单价</strong></th><th colspan="2"><strong>限流（主账号与RAM子账号共用）</strong></th><th rowspan="2"><p><strong>免费额度</strong><a href="../../../model-user-guide/test-1/new-free-quota.md">（查看）</a></p></th></tr><tr><th><strong>任务下发接口QPS限制</strong></th><th><strong>同时处理中任务数量</strong></th></tr></thead><tbody><tr><td><p>wanx-x-painting</p></td><td><p>目前仅供免费体验。</p><blockquote><p>免费额度用完后不可调用，推荐参考<a href="../../../model-user-guide/model-experience/image-and-video-generation/image-model/image-edit-guide/qwen-image-edit-guide.md">图像编辑-千问</a>或<a href="../../../model-user-guide/use-cases/legacy-resources/legacy-image-generation/wanx-image-edit.md">图像编辑-万相2.1</a>获取替代方案。</p></blockquote></td><td><p>2</p></td><td><p>1</p></td><td><p>500张</p></td></tr></tbody></table>
 
-**计费单价**
+更多说明请参见[模型计费及限流说明](vary-region-api-reference.md#b8457b7223zhp)。
 
-**限流（主账号与RAM子账号共用）**
+<a id="前提条件"></a>
 
-**免费额度**[（查看）](raw/model-user-guide/test-1/new-free-quota.md)
-
-**任务下发接口QPS限制**
-
-**同时处理中任务数量**
-
-wanx-x-painting
-
-目前仅供免费体验。
-
-> 免费额度用完后不可调用，推荐参考[图像编辑-千问](raw/model-user-guide/model-experience/image-and-video-generation/image-model/image-edit-guide/qwen-image-edit-guide.md)或[图像编辑-万相2.1](raw/model-user-guide/use-cases/legacy-resources/legacy-image-generation/wanx-image-edit.md)获取替代方案。
-
-2
-
-1
-
-500张
-
-更多说明请参见[模型计费及限流说明](https://help.aliyun.com/zh/model-studio/vary-region-api-reference#b8457b7223zhp)。
+<a id="8e0253f790lhf"></a>
 
 ## 前提条件
 
 图像局部重绘API支持通过HTTP和DashScope SDK进行调用。
 
-在调用前，您需要[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
+在调用前，您需要[获取与配置 API Key](../../preparations/get-api-key.md)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
 
-如需通过SDK进行调用，请[安装DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。目前，该SDK已支持Python和Java。
+如需通过SDK进行调用，请[安装DashScope SDK](../../preparations/install-sdk.md)。目前，该SDK已支持Python和Java。
+
+<a id="http调用"></a>
+
+<a id="65796f7146azl"></a>
 
 ## HTTP调用
 
@@ -72,412 +60,171 @@ wanx-x-painting
 1.  **创建任务获取任务ID**：首先发起创建任务请求，该请求会返回任务ID（task\_id）。
 2.  **根据任务ID查询结果**：使用上一步获得的任务ID，查询任务状态及结果。任务成功执行时将返回图像URL，有效期24小时。
 
-**说明**创建任务后，该任务将被加入到排队队列，等待调度执行。后续需要调用“根据任务ID查询结果接口”获取任务状态及结果。
+> **说明**
+>
+> 创建任务后，该任务将被加入到排队队列，等待调度执行。后续需要调用“根据任务ID查询结果接口”获取任务状态及结果。
+
+<a id="步骤1-创建任务获取任务id"></a>
+
+<a id="f1a4f32d54adq"></a>
 
 ### 步骤1：创建任务获取任务ID
 
 `POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis`
 
-#### 请求参数
-
-##### 请求头（Headers）
-
-**Content-Type**`string`**（必选）**
-
-请求内容类型。此参数必须设置为`application/json`。
-
-**Authorization**`string`**（必选）**
-
-请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
-
-**X-DashScope-Async**`string`**（必选）**
-
-异步处理配置参数。HTTP请求只支持异步，**必须设置为**`enable`。
-
-**重要**缺少此请求头将报错：“current user api does not support synchronous calls”。
-
-##### 请求体（Request Body）
-
-**model**`string`**（必选）**
-
-模型名称。示例值：wanx-x-painting。
-
-**input**`object`**（必选）**
-
-输入的基本信息，如提示词、图像URL等。
-
-属性
-
-**prompt**`string`**（必选）**
-
-正向提示词，用来描述生成图像中期望包含的元素和视觉特点。
-
-支持中英文，长度不超过75个字符，超过部分会自动截断。
-
-**base\_image\_url**`string`**（必选）**
-
-输入图像URL地址，不支持填写图像Base64数据。
-
-URL 需为公网可访问的地址，并支持 HTTP 或 HTTPS 协议。您也可在此[获取临时公网URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。
-
-图像限制：
-
--   图像格式：JPG、JPEG、PNG、BMP。
--   图像分辨率：大于256×256像素，小于4096×4096像素。
--   图像大小：不超过10MB。
--   URL地址中不能包含中文字符。
-
-**mask\_image\_url**`string`**（必选）**
-
-用户标记涂抹区域的图像URL地址，需要和base\_image\_url图像分辨率保持一致。不支持填写图像Base64数据。
-
-URL 需为公网可访问的地址，并支持 HTTP 或 HTTPS 协议。您也可在此[获取临时公网URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。
-
-图像限制：
-
--   图像格式：JPG、JPEG、PNG、BMP。
--   图像分辨率：大于256×256像素，小于4096×4096像素。
--   图像大小：不超过10MB。
--   URL地址中不能包含中文字符。
-
-您可以使用PS或者其他图像编辑工具在原图上涂抹获得掩码图像。
-
-**parameters**`object`（可选）
-
-图像处理参数。
-
-属性
-
-**style**`string`（可选）
-
-输出图像的风格。目前支持以下风格取值：
-
--   <auto>： 默认。
--   <3d cartoon>：3D卡通。
--   <anime>：动画。
--   <oil painting>： 油画。
--   <watercolor>：水彩。
--   <sketch>：素描。
--   <chinese painting>：中国画。
--   <flat illustration>：扁平插画。
-
-**size**`string`（可选）
-
-输出图像的分辨率。目前支持3种图像分辨率：
-
--   1024\*1024：默认值。
--   720\*1280
--   1280\*720
-
-**n**`integer`（可选）
-
-生成图片的数量。取值范围为1~4张，默认为1。
-
-**mask\_color**`array`（可选）
-
-RGB颜色数值列表，用于指定掩码图片中表示涂改区域的颜色。默认值为\[\]。
-
-当该字段为空，默认对掩码图片进行二值化处理（处理后白色代表涂抹区域）。当该字段非空时，表示RGB颜色数值列表，代表一种或多种颜色。这些RGB颜色所描绘的区域即为涂改区域，如\[0,0,0\]和\[134,134,134\]，而未被指定的颜色则视为背景色。
-
-示例值：\[\[0, 0, 0\], \[134, 134, 134\]\]。
-
-#### 图像局部重绘
-
-```
-curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \
+<table><tbody><tr><td><a id="afcd41d2b57zf"></a><h4>请求参数</h4><a id="040b1c0e468bz"></a><h5>请求头（Headers）</h5><p><strong>Content-Type</strong><code>string</code><strong>（必选）</strong></p><p>请求内容类型。此参数必须设置为<code>application/json</code>。</p><p><strong>Authorization</strong><code>string</code><strong>（必选）</strong></p><p>请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。</p><p><strong>X-DashScope-Async</strong><code>string</code><strong>（必选）</strong></p><p>异步处理配置参数。HTTP请求只支持异步，<strong>必须设置为</strong><code>enable</code>。</p><div><div><p><strong>重要</strong>缺少此请求头将报错：“current user api does not support synchronous calls”。</p></div></div><a id="66a778d4fbfub"></a><h5>请求体（Request Body）</h5><p><strong>model</strong><code>string</code><strong>（必选）</strong></p><p>模型名称。示例值：wanx-x-painting。</p><p><strong>input</strong><code>object</code><strong>（必选）</strong></p><p>输入的基本信息，如提示词、图像URL等。</p><a id="accordion-属性"></a><section><p>属性</p><div><p><strong>prompt</strong><code>string</code><strong>（必选）</strong></p><p>正向提示词，用来描述生成图像中期望包含的元素和视觉特点。</p><p>支持中英文，长度不超过75个字符，超过部分会自动截断。</p><p><strong>base_image_url</strong><code>string</code><strong>（必选）</strong></p><p>输入图像URL地址，不支持填写图像Base64数据。</p><p>URL 需为公网可访问的地址，并支持 HTTP 或 HTTPS 协议。您也可在此<a href="../../more-about-models/get-temporary-file-url.md">获取临时公网URL</a>。</p><p>图像限制：</p><ul><li>图像格式：JPG、JPEG、PNG、BMP。</li><li>图像分辨率：大于256×256像素，小于4096×4096像素。</li><li>图像大小：不超过10MB。</li><li>URL地址中不能包含中文字符。</li></ul><p><strong>mask_image_url</strong><code>string</code><strong>（必选）</strong></p><p>用户标记涂抹区域的图像URL地址，需要和base_image_url图像分辨率保持一致。不支持填写图像Base64数据。</p><p>URL 需为公网可访问的地址，并支持 HTTP 或 HTTPS 协议。您也可在此<a href="../../more-about-models/get-temporary-file-url.md">获取临时公网URL</a>。</p><p>图像限制：</p><ul><li>图像格式：JPG、JPEG、PNG、BMP。</li><li>图像分辨率：大于256×256像素，小于4096×4096像素。</li><li>图像大小：不超过10MB。</li><li>URL地址中不能包含中文字符。</li></ul><p>您可以使用PS或者其他图像编辑工具在原图上涂抹获得掩码图像。</p></div></section><p><strong>parameters</strong><code>object</code>（可选）</p><p>图像处理参数。</p><a id="accordion-属性-2"></a><section><p>属性</p><div><p><strong>style</strong><code>string</code>（可选）</p><p>输出图像的风格。目前支持以下风格取值：</p><ul><li>&lt;auto&gt;： 默认。</li><li>&lt;3d cartoon&gt;：3D卡通。</li><li>&lt;anime&gt;：动画。</li><li>&lt;oil painting&gt;： 油画。</li><li>&lt;watercolor&gt;：水彩。</li><li>&lt;sketch&gt;：素描。</li><li>&lt;chinese painting&gt;：中国画。</li><li>&lt;flat illustration&gt;：扁平插画。</li></ul><p><strong>size</strong><code>string</code>（可选）</p><p>输出图像的分辨率。目前支持3种图像分辨率：</p><ul><li>1024*1024：默认值。</li><li>720*1280</li><li>1280*720</li></ul><p><strong>n</strong><code>integer</code>（可选）</p><p>生成图片的数量。取值范围为1~4张，默认为1。</p><p><strong>mask_color</strong><code>array</code>（可选）</p><p>RGB颜色数值列表，用于指定掩码图片中表示涂改区域的颜色。默认值为[]。</p><p>当该字段为空，默认对掩码图片进行二值化处理（处理后白色代表涂抹区域）。当该字段非空时，表示RGB颜色数值列表，代表一种或多种颜色。这些RGB颜色所描绘的区域即为涂改区域，如[0,0,0]和[134,134,134]，而未被指定的颜色则视为背景色。</p><p>示例值：[[0, 0, 0], [134, 134, 134]]。</p></div></section></td><td><a id="sec-tabs"></a><section><a id="图像局部重绘"></a><section><a id="图像局部重绘-h4"></a><h4>图像局部重绘</h4><a id="code-block"></a><pre class="language-bash"><code>curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \
 --header 'X-DashScope-Async: enable' \
---header "Authorization: Bearer $DASHSCOPE_API_KEY" \
+--header &quot;Authorization: Bearer $DASHSCOPE_API_KEY&quot; \
 --header 'Content-Type: application/json' \
 --data '{
-  "model": "wanx-x-painting",
-  "input": {
-    "prompt": "一只狗戴着红色眼镜",
-    "base_image_url": "http://synthesis-source.oss-accelerate.aliyuncs.com/lingji/validation/mask2img/demo/source3.jpg",
-    "mask_image_url": "http://synthesis-source.oss-accelerate.aliyuncs.com/lingji/validation/mask2img/demo/glasses.png"
+  &quot;model&quot;: &quot;wanx-x-painting&quot;,
+  &quot;input&quot;: {
+    &quot;prompt&quot;: &quot;一只狗戴着红色眼镜&quot;,
+    &quot;base_image_url&quot;: &quot;http://synthesis-source.oss-accelerate.aliyuncs.com/lingji/validation/mask2img/demo/source3.jpg&quot;,
+    &quot;mask_image_url&quot;: &quot;http://synthesis-source.oss-accelerate.aliyuncs.com/lingji/validation/mask2img/demo/glasses.png&quot;
   },
-  "parameters": {
-    "size": "1024*1024",
-    "n": 1
+  &quot;parameters&quot;: {
+    &quot;size&quot;: &quot;1024*1024&quot;,
+    &quot;n&quot;: 1
   }
 }'
-```
+</code></pre></section></section></td></tr></tbody></table>
 
-#### 响应参数
-
-**output** `object`
-
-任务输出信息。
-
-属性
-
-**task\_id** `string`
-
-任务ID。查询有效期24小时。
-
-**task\_status** `string`
-
-任务状态。
-
-枚举值
-
--   PENDING：任务排队中
--   RUNNING：任务处理中
--   SUCCEEDED：任务执行成功
--   FAILED：任务执行失败
--   CANCELED：任务已取消
--   UNKNOWN：任务不存在或状态未知
-
-**request\_id**`string`
-
-请求唯一标识。可用于请求明细溯源和问题排查。
-
-**code**`string`
-
-请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
-
-**message**`string`
-
-请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
-
-#### 成功响应
-
-请保存 task\_id，用于查询任务状态与结果。
-
-```
-{
-    "output": {
-        "task_status": "PENDING",
-        "task_id": "0385dc79-5ff8-4d82-bcb6-xxxxxx"
+<table><tbody><tr><td><a id="a69639162eu4i"></a><h4>响应参数</h4><p><strong>output</strong> <code>object</code></p><p>任务输出信息。</p><a id="accordion-属性-3"></a><section><p>属性</p><div><p><strong>task_id</strong> <code>string</code></p><p>任务ID。查询有效期24小时。</p><p><strong>task_status</strong> <code>string</code></p><p>任务状态。</p><a id="accordion-枚举值"></a><section><p>枚举值</p><div><ul><li>PENDING：任务排队中</li><li>RUNNING：任务处理中</li><li>SUCCEEDED：任务执行成功</li><li>FAILED：任务执行失败</li><li>CANCELED：任务已取消</li><li>UNKNOWN：任务不存在或状态未知</li></ul></div></section></div></section><p><strong>request_id</strong><code>string</code></p><p>请求唯一标识。可用于请求明细溯源和问题排查。</p><p><strong>code</strong><code>string</code></p><p>请求失败的错误码。请求成功时不会返回此参数，详情请参见<a href="../../preparations/error-code.md">错误码</a>。</p><p><strong>message</strong><code>string</code></p><p>请求失败的详细信息。请求成功时不会返回此参数，详情请参见<a href="../../preparations/error-code.md">错误码</a>。</p></td><td><a id="sec-tabs-2"></a><section><a id="成功响应"></a><section><a id="成功响应-h4"></a><h4>成功响应</h4><p>请保存 task_id，用于查询任务状态与结果。</p><a id="code-block-2"></a><pre class="language-json"><code>{
+    &quot;output&quot;: {
+        &quot;task_status&quot;: &quot;PENDING&quot;,
+        &quot;task_id&quot;: &quot;0385dc79-5ff8-4d82-bcb6-xxxxxx&quot;
     },
-    "request_id": "4909100c-7b5a-9f92-bfe5-xxxxxx"
+    &quot;request_id&quot;: &quot;4909100c-7b5a-9f92-bfe5-xxxxxx&quot;
 }
-```
-
-#### 异常响应
-
-创建任务失败，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
-
-```
-{
-    "code": "InvalidApiKey",
-    "message": "No API-key provided.",
-    "request_id": "7438d53d-6eb8-4596-8835-xxxxxx"
+</code></pre></section><a id="异常响应"></a><section><a id="异常响应-h4"></a><h4>异常响应</h4><p>创建任务失败，请参见<a href="../../preparations/error-code.md">错误码</a>进行解决。</p><a id="code-block-3"></a><pre class="language-json"><code>{
+    &quot;code&quot;: &quot;InvalidApiKey&quot;,
+    &quot;message&quot;: &quot;No API-key provided.&quot;,
+    &quot;request_id&quot;: &quot;7438d53d-6eb8-4596-8835-xxxxxx&quot;
 }
-```
+</code></pre></section></section></td></tr></tbody></table>
+
+<a id="步骤2-根据任务id查询结果"></a>
+
+<a id="25d6501e22xb4"></a>
 
 ### 步骤2：根据任务ID查询结果
 
 `GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}`
 
-#### 请求参数
+<table><tbody><tr><td><a id="c7a5b38b94icr"></a><h4>请求参数</h4><a id="6cbbceaeb6jyo"></a><h4>请求头（Headers）</h4><p><strong>Authorization</strong><code>string</code><strong>（必选）</strong></p><p>请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。</p><a id="aa6a7e4730pr2"></a><h4>URL路径参数（Path parameters）</h4><p><strong>task_id</strong> <code>string</code><strong>（必选）</strong></p><p>任务ID。</p></td><td><a id="sec-tabs-3"></a><section><a id="查询任务结果"></a><section><a id="查询任务结果-h4"></a><h4>查询任务结果</h4><p>请将<code>86ecf553-d340-4e21-xxxxxxxxx</code>替换为真实的task_id。</p><blockquote><p>若使用新加坡地域的模型，需将base_url替换为https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/tasks/86ecf553-d340-4e21-xxxxxxxxx，其中{WorkspaceId}需替换为真实的业务空间ID。</p></blockquote><a id="code-block-4"></a><pre class="language-bash"><code>curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/86ecf553-d340-4e21-xxxxxxxxx \
+--header &quot;Authorization: Bearer $DASHSCOPE_API_KEY&quot;
+</code></pre></section></section></td></tr></tbody></table>
 
-#### 请求头（Headers）
-
-**Authorization**`string`**（必选）**
-
-请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
-
-#### URL路径参数（Path parameters）
-
-**task\_id** `string`**（必选）**
-
-任务ID。
-
-#### 查询任务结果
-
-请将`86ecf553-d340-4e21-xxxxxxxxx`替换为真实的task\_id。
-
-> 若使用新加坡地域的模型，需将base\_url替换为https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/tasks/86ecf553-d340-4e21-xxxxxxxxx，其中{WorkspaceId}需替换为真实的业务空间ID。
-
-```
-curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/86ecf553-d340-4e21-xxxxxxxxx \
---header "Authorization: Bearer $DASHSCOPE_API_KEY"
-```
-
-#### 响应参数
-
-**output**`object`
-
-任务输出信息。
-
-属性
-
-**task\_id** `string`
-
-任务ID。查询有效期24小时。
-
-**task\_status** `string`
-
-任务状态。
-
-枚举值
-
--   PENDING：任务排队中
--   RUNNING：任务处理中
--   SUCCEEDED：任务执行成功
--   FAILED：任务执行失败
--   CANCELED：任务已取消
--   UNKNOWN：任务不存在或状态未知
-
-**task\_metrics** `object`
-
-任务结果统计。
-
-属性
-
-**TOTAL** `integer`
-
-总的任务数。
-
-**SUCCEEDED** `integer`
-
-任务状态为成功的任务数。
-
-**FAILED** `integer`
-
-任务状态为失败的任务数。
-
-**results** `array of object`
-
-任务结果列表，包括图像URL、部分任务执行失败报错信息等。
-
-数据结构
-
-```
-{
-    "results": [
+<table><tbody><tr><td><a id="3f1ae57ce6qd5"></a><h4>响应参数</h4><p><strong>output</strong><code>object</code></p><p>任务输出信息。</p><a id="accordion-属性-4"></a><section><p>属性</p><div><p><strong>task_id</strong> <code>string</code></p><p>任务ID。查询有效期24小时。</p><p><strong>task_status</strong> <code>string</code></p><p>任务状态。</p><a id="accordion-枚举值-2"></a><section><p>枚举值</p><div><ul><li>PENDING：任务排队中</li><li>RUNNING：任务处理中</li><li>SUCCEEDED：任务执行成功</li><li>FAILED：任务执行失败</li><li>CANCELED：任务已取消</li><li>UNKNOWN：任务不存在或状态未知</li></ul></div></section><p><strong>task_metrics</strong> <code>object</code></p><p>任务结果统计。</p><a id="accordion-属性-5"></a><section><p>属性</p><div><p><strong>TOTAL</strong> <code>integer</code></p><p>总的任务数。</p><p><strong>SUCCEEDED</strong> <code>integer</code></p><p>任务状态为成功的任务数。</p><p><strong>FAILED</strong> <code>integer</code></p><p>任务状态为失败的任务数。</p></div></section><p><strong>results</strong> <code>array of object</code></p><p>任务结果列表，包括图像URL、部分任务执行失败报错信息等。</p><a id="accordion-数据结构"></a><section><p>数据结构</p><div><a id="code-block-5"></a><pre class="language-json"><code>{
+    &quot;results&quot;: [
         {
-            "url": ""
+            &quot;url&quot;: &quot;&quot;
         },
         {
-            "code": "",
-            "message": ""
+            &quot;code&quot;: &quot;&quot;,
+            &quot;message&quot;: &quot;&quot;
         }
     ]
 }
-```
-
-**code**`string`
-
-请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
-
-**message**`string`
-
-请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
-
-**usage** `object`
-
-输出信息统计。只对成功的结果计数。
-
-属性
-
-**image\_count** `integer`
-
-模型成功生成图片的数量。计费公式：费用 = 图片数量 × 单价。
-
-**request\_id**`string`
-
-请求唯一标识。可用于请求明细溯源和问题排查。
-
-#### 任务执行成功
-
-任务数据（如任务状态、图像URL等）仅保留24小时，超时后会被自动清除。请您务必及时保存生成的图像。
-
-```
-{
-    "request_id": "85eaba38-0185-99d7-8d16-4d9135238846",
-    "output": {
-        "task_id": "86ecf553-d340-4e21-af6e-a0c6a421c010",
-        "task_status": "SUCCEEDED",
-        "results": [
+</code></pre></div></section><p><strong>code</strong><code>string</code></p><p>请求失败的错误码。请求成功时不会返回此参数，详情请参见<a href="../../preparations/error-code.md">错误码</a>。</p><p><strong>message</strong><code>string</code></p><p>请求失败的详细信息。请求成功时不会返回此参数，详情请参见<a href="../../preparations/error-code.md">错误码</a>。</p></div></section><p><strong>usage</strong> <code>object</code></p><p>输出信息统计。只对成功的结果计数。</p><a id="accordion-属性-6"></a><section><p>属性</p><div><p><strong>image_count</strong> <code>integer</code></p><p>模型成功生成图片的数量。计费公式：费用 = 图片数量 × 单价。</p></div></section><p><strong>request_id</strong><code>string</code></p><p>请求唯一标识。可用于请求明细溯源和问题排查。</p></td><td><a id="sec-tabs-4"></a><section><a id="任务执行成功"></a><section><a id="任务执行成功-h4"></a><h4>任务执行成功</h4><p>任务数据（如任务状态、图像URL等）仅保留24小时，超时后会被自动清除。请您务必及时保存生成的图像。</p><a id="code-block-6"></a><pre class="language-json"><code>{
+    &quot;request_id&quot;: &quot;85eaba38-0185-99d7-8d16-4d9135238846&quot;,
+    &quot;output&quot;: {
+        &quot;task_id&quot;: &quot;86ecf553-d340-4e21-af6e-a0c6a421c010&quot;,
+        &quot;task_status&quot;: &quot;SUCCEEDED&quot;,
+        &quot;results&quot;: [
             {
-                "url": "https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/123/a1.png"
+                &quot;url&quot;: &quot;https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/123/a1.png&quot;
             },
             {
-                "url": "https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/123/b2.png"
+                &quot;url&quot;: &quot;https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/123/b2.png&quot;
             }
         ],
-        "task_metrics": {
-            "TOTAL": 2,
-            "SUCCEEDED": 2,
-            "FAILED": 0
+        &quot;task_metrics&quot;: {
+            &quot;TOTAL&quot;: 2,
+            &quot;SUCCEEDED&quot;: 2,
+            &quot;FAILED&quot;: 0
         }
     },
-    "usage": {
-        "image_count": 2
+    &quot;usage&quot;: {
+        &quot;image_count&quot;: 2
     }
 }
-```
-
-#### 任务执行失败
-
-若任务执行失败，task\_status将置为 FAILED，并提供错误码和信息。请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
-
-```
-{
-    "request_id": "e5d70b02-ebd3-98ce-9fe8-759d7d7b107d",
-    "output": {
-        "task_id": "86ecf553-d340-4e21-af6e-a0c6a421c010",
-        "task_status": "FAILED",
-        "code": "InvalidParameter",
-        "message": "The size is not match the allowed size ['1024*1024', '720*1280', '1280*720']",
-        "task_metrics": {
-            "TOTAL": 4,
-            "SUCCEEDED": 0,
-            "FAILED": 4
+</code></pre></section><a id="任务执行失败"></a><section><a id="任务执行失败-h4"></a><h4>任务执行失败</h4><p>若任务执行失败，task_status将置为 FAILED，并提供错误码和信息。请参见<a href="../../preparations/error-code.md">错误码</a>进行解决。</p><a id="code-block-7"></a><pre class="language-json"><code>{
+    &quot;request_id&quot;: &quot;e5d70b02-ebd3-98ce-9fe8-759d7d7b107d&quot;,
+    &quot;output&quot;: {
+        &quot;task_id&quot;: &quot;86ecf553-d340-4e21-af6e-a0c6a421c010&quot;,
+        &quot;task_status&quot;: &quot;FAILED&quot;,
+        &quot;code&quot;: &quot;InvalidParameter&quot;,
+        &quot;message&quot;: &quot;The size is not match the allowed size ['1024*1024', '720*1280', '1280*720']&quot;,
+        &quot;task_metrics&quot;: {
+            &quot;TOTAL&quot;: 4,
+            &quot;SUCCEEDED&quot;: 0,
+            &quot;FAILED&quot;: 4
         }
     }
 }
-```
-
-#### 任务部分失败
-
-模型可以在一次任务中生成多张图片。只要有一张图片生成成功，任务状态将标记为`SUCCEEDED`，并且返回相应的图像URL。对于生成失败的图片，结果中会返回相应的失败原因。同时在usage统计中，只会对成功的结果计数。请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
-
-```
-{
-    "request_id": "85eaba38-0185-99d7-8d16-4d9135238846",
-    "output": {
-        "task_id": "86ecf553-d340-4e21-af6e-a0c6a421c010",
-        "task_status": "SUCCEEDED",
-        "results": [
+</code></pre></section><a id="任务部分失败"></a><section><a id="任务部分失败-h4"></a><h4>任务部分失败</h4><p>模型可以在一次任务中生成多张图片。只要有一张图片生成成功，任务状态将标记为<code>SUCCEEDED</code>，并且返回相应的图像URL。对于生成失败的图片，结果中会返回相应的失败原因。同时在usage统计中，只会对成功的结果计数。请参见<a href="../../preparations/error-code.md">错误码</a>进行解决。</p><a id="code-block-8"></a><pre class="language-json"><code>{
+    &quot;request_id&quot;: &quot;85eaba38-0185-99d7-8d16-4d9135238846&quot;,
+    &quot;output&quot;: {
+        &quot;task_id&quot;: &quot;86ecf553-d340-4e21-af6e-a0c6a421c010&quot;,
+        &quot;task_status&quot;: &quot;SUCCEEDED&quot;,
+        &quot;results&quot;: [
             {
-                "url": "https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/123/a1.png"
+                &quot;url&quot;: &quot;https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/123/a1.png&quot;
             },
             {
-                "code": "InternalError.Timeout",
-                "message": "An internal timeout error has occured during execution, please try again later or contact service support."
+                &quot;code&quot;: &quot;InternalError.Timeout&quot;,
+                &quot;message&quot;: &quot;An internal timeout error has occured during execution, please try again later or contact service support.&quot;
             }
         ],
-        "task_metrics": {
-            "TOTAL": 2,
-            "SUCCEEDED": 1,
-            "FAILED": 1
+        &quot;task_metrics&quot;: {
+            &quot;TOTAL&quot;: 2,
+            &quot;SUCCEEDED&quot;: 1,
+            &quot;FAILED&quot;: 1
         }
     },
-    "usage": {
-        "image_count": 1
+    &quot;usage&quot;: {
+        &quot;image_count&quot;: 1
     }
 }
-```
+</code></pre></section></section></td></tr></tbody></table>
+
+<a id="dashscope-sdk调用"></a>
+
+<a id="34914775efbhb"></a>
 
 ## DashScope SDK调用
 
-请先确认已安装最新版DashScope SDK：[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+请先确认已安装最新版DashScope SDK：[安装SDK](../../preparations/install-sdk.md)。
 
 DashScope SDK目前已支持Python和Java。
 
-SDK与HTTP接口的参数名基本一致，参数结构根据不同语言的SDK封装而定。参数说明可参考[HTTP调用](https://help.aliyun.com/zh/model-studio/text-to-image-api-reference#42703589880ts)。
+SDK与HTTP接口的参数名基本一致，参数结构根据不同语言的SDK封装而定。参数说明可参考[HTTP调用](text-to-image-api-reference.md#42703589880ts)。
 
 由于图像模型处理时间较长，底层服务采用异步方式提供。SDK在上层进行了封装，支持同步、异步两种调用方式。
 
+<a id="python-sdk调用"></a>
+
+<a id="a3ad9a3b6d9if"></a>
+
 ### Python SDK调用
+
+<a id="sec-tabs-5"></a>
+
+<a id="同步调用"></a>
+
+<a id="同步调用-h4"></a>
 
 #### 同步调用
 
+<a id="3cd4969b00193"></a>
+
 ##### 请求示例
 
-```
+<a id="code-block-9"></a>
+
+```python
 from urllib.parse import urlparse, unquote
 from pathlib import PurePosixPath
 import requests
@@ -520,9 +267,13 @@ except DashScopeError as e:
     print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
+<a id="0c0533477emwb"></a>
+
 ##### 响应示例
 
-```
+<a id="code-block-10"></a>
+
+```json
 {
 	"request_id": "4126d9dd-e037-9f32-8d56-6d29ab3f9a06",
 	"task_id": "b476bc4e-35c1-4c4e-a4d9-xxxxxxx",
@@ -541,11 +292,19 @@ except DashScopeError as e:
 }
 ```
 
+<a id="异步调用"></a>
+
+<a id="异步调用-h4"></a>
+
 #### 异步调用
+
+<a id="b994ca9918t7e"></a>
 
 ##### 请求示例
 
-```
+<a id="code-block-11"></a>
+
+```python
 from urllib.parse import urlparse, unquote
 from pathlib import PurePosixPath
 import requests
@@ -606,18 +365,27 @@ if __name__ == '__main__':
         print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
+<a id="ae28dc8f72g6i"></a>
+
 ##### 响应示例
 
 **1、创建任务的响应示例**
-```
+
+<a id="code-block-12"></a>
+
+```json
 {
 	"request_id": "31b04171-011c-96bd-ac00-f0383b669cc7",
 	"task_id": "4f90cf14-a34e-4eae-xxxxxxxx",
 	"status": "PENDING"
 }
 ```
+
 **2、查询任务结果的响应示例**
-```
+
+<a id="code-block-13"></a>
+
+```json
 {
 	"request_id": "d861d3ba-4b29-9491-abad-266ef4fb2f08",
 	"task_id": "4f90cf14-a34e-4eae-xxxxxxxx",
@@ -636,13 +404,27 @@ if __name__ == '__main__':
 }
 ```
 
+<a id="java-sdk调用"></a>
+
+<a id="589b80853e6rn"></a>
+
 ### Java SDK调用
+
+<a id="sec-tabs-6"></a>
+
+<a id="同步调用-2"></a>
+
+<a id="同步调用-2-h4"></a>
 
 #### 同步调用
 
+<a id="3e3609efb9rhl"></a>
+
 ##### 请求示例
 
-```
+<a id="code-block-14"></a>
+
+```java
 // Copyright (c) Alibaba, Inc. and its affiliates.
 
 import com.alibaba.dashscope.aigc.imagesynthesis.ImageSynthesis;
@@ -695,9 +477,13 @@ public class Main {
 }
 ```
 
+<a id="dfe6c9cc786iy"></a>
+
 ##### 响应示例
 
-```
+<a id="code-block-15"></a>
+
+```json
 {
 	"request_id": "150edcda-05d5-9ffe-8803-84626d1db623",
 	"output": {
@@ -718,11 +504,19 @@ public class Main {
 }
 ```
 
+<a id="异步调用-2"></a>
+
+<a id="异步调用-2-h4"></a>
+
 #### 异步调用
+
+<a id="2fc30f223b9py"></a>
 
 ##### 请求示例
 
-```
+<a id="code-block-16"></a>
+
+```java
 // Copyright (c) Alibaba, Inc. and its affiliates.
 
 import com.alibaba.dashscope.aigc.imagesynthesis.ImageSynthesis;
@@ -806,10 +600,15 @@ public class Main {
 }
 ```
 
+<a id="38e1e3c7303rm"></a>
+
 ##### 响应示例
 
 **1、创建任务的响应示例**
-```
+
+<a id="code-block-17"></a>
+
+```json
 {
 	"request_id": "5dbf9dc5-4f4c-9605-85ea-542f97709ba8",
 	"output": {
@@ -818,8 +617,12 @@ public class Main {
 	}
 }
 ```
+
 **2、查询任务结果的响应示例****output字段内容：**
-```
+
+<a id="code-block-18"></a>
+
+```json
 {
 	"task_id": "7277e20e-aa01-4709-xxxxxxxx",
 	"task_status": "SUCCEEDED",
@@ -833,18 +636,34 @@ public class Main {
 	}
 }
 ```
+
 **usage字段内容：**
-```
+
+<a id="code-block-19"></a>
+
+```json
 {
 	"image_count": 1
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="OajFO"></a>
+
 ## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](../../preparations/error-code.md)进行解决。
+
+<a id="常见问题"></a>
+
+<a id="45b31d4f7bk24"></a>
 
 ## 常见问题
+
+<a id="模型计费及限流说明"></a>
+
+<a id="b8457b7223zhp"></a>
 
 ### 模型计费及限流说明
 
@@ -853,7 +672,7 @@ public class Main {
 -   额度说明：免费额度是指模型成功生成的输出图片数量。输入图片及模型处理失败的情况不占用免费额度。
 -   领取方式：开通阿里云百炼大模型服务后自动发放，有效期90天。
 -   使用账号：阿里云主账号与其RAM子账号共享免费额度。
--   更多详情请参见[新人免费额度](raw/model-user-guide/test-1/new-free-quota.md)。
+-   更多详情请参见[新人免费额度](../../../model-user-guide/test-1/new-free-quota.md)。
 
 **限时免费**
 
@@ -872,6 +691,10 @@ public class Main {
 
 -   限流说明：阿里云主账号与其RAM子账号共享限流限制。
 
+<a id="图像局部重绘api通用问题"></a>
+
+<a id="6af451b0a1ykp"></a>
+
 ### 图像局部重绘API通用问题
 
 1.  **输入图像的掩码图像（mask\_image）有什么限制？**
@@ -884,4 +707,4 @@ public class Main {
     
 3.  **使用图像局部重绘功能时，若涂抹区域外的图片输出效果不理想，应如何处理？**
     
-    建议您使用[通用图像编辑](raw/model-api-reference/image-generation/wan-image-api-reference/wanx-image-edit-api-reference.md)的局部重绘功能重新生成。
+    建议您使用[通用图像编辑](wanx-image-edit-api-reference.md)的局部重绘功能重新生成。

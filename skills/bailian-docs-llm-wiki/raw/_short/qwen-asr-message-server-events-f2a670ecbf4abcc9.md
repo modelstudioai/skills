@@ -2,20 +2,28 @@
 
 Qwen-Audio-ASR-Message 服务端事件参考，介绍任务启动、识别结果、任务完成和任务失败的字段及对应请求。
 
+<a id="事件交互流程"></a>
+
 ## 事件交互流程
 
-1.  发送 [run-task](https://help.aliyun.com/zh/model-studio/qwen-asr-message-client-events#run-task)，收到 [task-started](https://help.aliyun.com/zh/model-studio/qwen-asr-message-server-events#task-started) 后开始发送音频。
-2.  持续发送音频，同时接收 [result-generated](https://help.aliyun.com/zh/model-studio/qwen-asr-message-server-events#result-generated)。
-3.  任务运行期间，可通过 [continue-task](https://help.aliyun.com/zh/model-studio/qwen-asr-message-client-events#continue-task) 更新对话上下文；音频仍通过音频通道发送。
-4.  音频发送完毕后发送 [finish-task](https://help.aliyun.com/zh/model-studio/qwen-asr-message-client-events#finish-task)，继续接收结果，直到收到 [task-finished](https://help.aliyun.com/zh/model-studio/qwen-asr-message-server-events#task-finished)；任务失败时返回 [task-failed](https://help.aliyun.com/zh/model-studio/qwen-asr-message-server-events#task-failed)。
+1.  发送 [run-task](qwen-asr-message-client-events-1721a061cc8750e6.md#run-task)，收到 [task-started](qwen-asr-message-server-events-f2a670ecbf4abcc9.md#task-started) 后开始发送音频。
+2.  持续发送音频，同时接收 [result-generated](qwen-asr-message-server-events-f2a670ecbf4abcc9.md#result-generated)。
+3.  任务运行期间，可通过 [continue-task](qwen-asr-message-client-events-1721a061cc8750e6.md#continue-task) 更新对话上下文；音频仍通过音频通道发送。
+4.  音频发送完毕后发送 [finish-task](qwen-asr-message-client-events-1721a061cc8750e6.md#finish-task)，继续接收结果，直到收到 [task-finished](qwen-asr-message-server-events-f2a670ecbf4abcc9.md#task-finished)；任务失败时返回 [task-failed](qwen-asr-message-server-events-f2a670ecbf4abcc9.md#task-failed)。
 
-音频数据不通过 `run-task` 发送：WebSocket 使用二进制帧，AOQ 使用 Audio Track。连接、鉴权和音频传输方式请参见 [WebSocket API](raw/_short/qwen-asr-message-websocket-api-8b78d8662335cafa.md) 或 [AOQ 接入](raw/_short/qwen-asr-message-aoq-access-7699c2c24f2a0149.md)。
+音频数据不通过 `run-task` 发送：WebSocket 使用二进制帧，AOQ 使用 Audio Track。连接、鉴权和音频传输方式请参见 [WebSocket API](qwen-asr-message-websocket-api-8b78d8662335cafa.md) 或 [AOQ 接入](qwen-asr-message-aoq-access-7699c2c24f2a0149.md)。
+
+<a id="task-started"></a>
+
+<a id="eac316aeacafj"></a>
 
 ## task-started
 
 任务启动成功，是客户端开始发送音频的信号。
 
-**重要****收到 `task-started` 后才能发送音频。** `run-task` 仅用于启动和配置任务，不携带音频数据。
+> **重要**
+>
+> **收到 `task-started` 后才能发送音频。** `run-task` 仅用于启动和配置任务，不携带音频数据。
 
 `header`object
 
@@ -35,7 +43,9 @@ Qwen-Audio-ASR-Message 服务端事件参考，介绍任务启动、识别结果
 
 固定为`{}`。
 
-```
+<a id="code-block"></a>
+
+```json
 {
   "header": {
     "action": "run-task",
@@ -55,7 +65,10 @@ Qwen-Audio-ASR-Message 服务端事件参考，介绍任务启动、识别结果
   }
 }
 ```
-```
+
+<a id="code-block-2"></a>
+
+```json
 {
   "header": {
     "task_id": "1a8804af-8782-4710-8771-1b4f885286bc",
@@ -67,11 +80,17 @@ Qwen-Audio-ASR-Message 服务端事件参考，介绍任务启动、识别结果
 }
 ```
 
+<a id="result-generated"></a>
+
+<a id="9cb9c5831c7cs"></a>
+
 ## result-generated
 
 返回识别结果，包括句子开始、中间结果、句子最终结果和心跳。中间结果默认关闭，设置 `intermediate_result_enabled=true` 后开启。
 
-**重要****`sentence_end=true` 仅表示当前句子结束，不表示任务结束。** 心跳结果（`heartbeat=true`）可跳过；任务是否结束以 `task-finished` 为准。
+> **重要**
+>
+> **`sentence_end=true` 仅表示当前句子结束，不表示任务结束。** 心跳结果（`heartbeat=true`）可跳过；任务是否结束以 `task-finished` 为准。
 
 `header`object
 
@@ -107,7 +126,9 @@ Qwen-Audio-ASR-Message 服务端事件参考，介绍任务启动、识别结果
 
 识别文本。
 
-**说明**中间文本可能随识别过程更新，应按 `sentence_id` 更新同一句的展示内容，不要直接拼接中间文本。
+> **说明**
+>
+> 中间文本可能随识别过程更新，应按 `sentence_id` 更新同一句的展示内容，不要直接拼接中间文本。
 
 `sentence_begin`boolean
 
@@ -145,7 +166,9 @@ Qwen-Audio-ASR-Message 服务端事件参考，介绍任务启动、识别结果
 
 当前任务截至本事件的累计用量。
 
-**说明**`usage` 表示当前任务的累计用量，**不要将各事件中的 `usage` 相加**。任务完成后，以 `task-finished` 中的最终累计用量为准。
+> **说明**
+>
+> `usage` 表示当前任务的累计用量，**不要将各事件中的 `usage` 相加**。任务完成后，以 `task-finished` 中的最终累计用量为准。
 
 `duration`integer
 
@@ -163,9 +186,17 @@ Qwen-Audio-ASR-Message 服务端事件参考，介绍任务启动、识别结果
 
 累计 Token 总数，为 `input_tokens` 与 `output_tokens` 之和。
 
+<a id="sec-tabs"></a>
+
+<a id="句子开始"></a>
+
+<a id="句子开始-h4"></a>
+
 #### 句子开始
 
-```
+<a id="code-block-3"></a>
+
+```json
 {
   "header": {
     "action": "run-task",
@@ -185,7 +216,10 @@ Qwen-Audio-ASR-Message 服务端事件参考，介绍任务启动、识别结果
   }
 }
 ```
-```
+
+<a id="code-block-4"></a>
+
+```json
 {
   "header": {
     "task_id": "1a8804af-8782-4710-8771-1b4f885286bc",
@@ -208,9 +242,15 @@ Qwen-Audio-ASR-Message 服务端事件参考，介绍任务启动、识别结果
 }
 ```
 
+<a id="中间结果"></a>
+
+<a id="中间结果-h4"></a>
+
 #### 中间结果
 
-```
+<a id="code-block-5"></a>
+
+```json
 {
   "header": {
     "action": "run-task",
@@ -231,7 +271,10 @@ Qwen-Audio-ASR-Message 服务端事件参考，介绍任务启动、识别结果
   }
 }
 ```
-```
+
+<a id="code-block-6"></a>
+
+```json
 {
   "header": {
     "task_id": "c16bd888-70e0-42db-9dc3-b96864e9624e",
@@ -261,9 +304,15 @@ Qwen-Audio-ASR-Message 服务端事件参考，介绍任务启动、识别结果
 }
 ```
 
+<a id="句子最终结果"></a>
+
+<a id="句子最终结果-h4"></a>
+
 #### 句子最终结果
 
-```
+<a id="code-block-7"></a>
+
+```json
 {
   "header": {
     "action": "run-task",
@@ -283,7 +332,10 @@ Qwen-Audio-ASR-Message 服务端事件参考，介绍任务启动、识别结果
   }
 }
 ```
-```
+
+<a id="code-block-8"></a>
+
+```json
 {
   "header": {
     "task_id": "1a8804af-8782-4710-8771-1b4f885286bc",
@@ -424,6 +476,10 @@ Qwen-Audio-ASR-Message 服务端事件参考，介绍任务启动、识别结果
 }
 ```
 
+<a id="task-finished"></a>
+
+<a id="b8aefe8e0c5fr"></a>
+
 ## task-finished
 
 任务处理完成，全部识别结果已返回。客户端可关闭连接，或复用连接开启新任务。
@@ -446,7 +502,9 @@ Qwen-Audio-ASR-Message 服务端事件参考，介绍任务启动、识别结果
 
 包含 `output`（空对象）和 `usage`（本任务最终累计用量）。`usage` 字段定义与 [result-generated](#9cb9c5831c7cs) 一致。
 
-```
+<a id="code-block-9"></a>
+
+```json
 {
   "header": {
     "action": "finish-task",
@@ -458,7 +516,10 @@ Qwen-Audio-ASR-Message 服务端事件参考，介绍任务启动、识别结果
   }
 }
 ```
-```
+
+<a id="code-block-10"></a>
+
+```json
 {
   "header": {
     "task_id": "1a8804af-8782-4710-8771-1b4f885286bc",
@@ -476,6 +537,10 @@ Qwen-Audio-ASR-Message 服务端事件参考，介绍任务启动、识别结果
   }
 }
 ```
+
+<a id="task-failed"></a>
+
+<a id="3fb17b3b199fy"></a>
 
 ## task-failed
 
@@ -509,7 +574,9 @@ Qwen-Audio-ASR-Message 服务端事件参考，介绍任务启动、识别结果
 
 以下请求使用不支持的音频格式，用于展示 `task-failed`。错误码和错误信息随失败原因而变化。
 
-```
+<a id="code-block-11"></a>
+
+```json
 {
   "header": {
     "action": "run-task",
@@ -529,7 +596,10 @@ Qwen-Audio-ASR-Message 服务端事件参考，介绍任务启动、识别结果
   }
 }
 ```
-```
+
+<a id="code-block-12"></a>
+
+```json
 {
   "header": {
     "task_id": "5927b897-6890-45cd-9b85-bc58bdaaadfb",

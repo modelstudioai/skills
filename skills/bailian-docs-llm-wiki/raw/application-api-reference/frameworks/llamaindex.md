@@ -6,9 +6,15 @@
 
 > 本方案将知识库部署在云端，使用默认的智能文档切分与官方向量模型，不支持自定义文档切分方式或自定义嵌入模型。
 
-> 如果您希望将知识库部署在本地，实现灵活地文档切分与嵌入模型选择，请参考[基于本地知识库构建RAG应用](raw/application-user-guide/application-use-cases/build-rag-application-based-on-local-retrieval.md)。
+> 如果您希望将知识库部署在本地，实现灵活地文档切分与嵌入模型选择，请参考[基于本地知识库构建RAG应用](../../application-user-guide/application-use-cases/build-rag-application-based-on-local-retrieval.md)。
 
-> 如果您希望将知识库部署在云端，实现0代码地创建RAG应用，请参考[0代码构建RAG应用](raw/_short/build-knowledge-base-qa-assistant-without-coding-117468a8b3869dc4.md)。
+> 如果您希望将知识库部署在云端，实现0代码地创建RAG应用，请参考[0代码构建RAG应用](https://help.aliyun.com/zh/model-studio/build-knowledge-base-qa-assistant-without-coding)。
+
+<a id="效果展示"></a>
+
+<a id="e0a5b2295fz8p"></a>
+
+<a id="17108a6a7cz9d"></a>
 
 ## 效果展示
 
@@ -16,22 +22,42 @@
 
 ![9月19日](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5536607271/p851327.gif)
 
+<a id="方案概览"></a>
+
+<a id="41f8cbd57bnd6"></a>
+
+<a id="387bf197bd3b8"></a>
+
 ## 方案概览
 
 1.  **读取本地文件并构建云端知识库**：仅支持读取并解析`.txt`、`.docx`、`.pdf`等非结构化数据文件，上传文件到云端，并构建云端知识库。
 2.  **构建检索引擎和RAG应用**：基于云端知识库，构建检索引擎，能够接收终端用户的提问，从云端知识库中检索相关的文本片段，再将提问和检索结果合并后输入到大模型，并生成回答。RAG应用提供与终端用户的交互界面，如果无法检索到相关的文本片段，或根据检索到的文本片段无法回答终端用户的提问，则返回适当的报错信息。
 
+<a id="前提条件"></a>
+
+<a id="01971ae2417uk"></a>
+
+<a id="8de022a754rpk"></a>
+
 ## 前提条件
 
-1.  开通阿里云百炼服务并[获取API Key](raw/model-api-reference/preparations/get-api-key.md)。
-2.  [配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)
+1.  开通阿里云百炼服务并[获取API Key](../../model-api-reference/preparations/get-api-key.md)。
+2.  [配置API Key到环境变量](../../model-api-reference/preparations/get-api-key.md)
 3.  已安装Python 3.9及以上版本。
+
+<a id="下载示例文件和代码"></a>
+
+<a id="7154284867aot"></a>
+
+<a id="53a281187btdu"></a>
 
 ## 下载示例文件和代码
 
 下载[llamaindex\_cloud\_rag.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20240917/jwyocp/llamaindex_cloud_rag.zip)并解压，目录结构如下：
 
-```
+<a id="code-block"></a>
+
+```text
 llamaindex_cloud_rag
 ├── docs
 │ ├── 阿里云百炼系列平板电脑产品介绍.pdf
@@ -44,13 +70,27 @@ llamaindex_cloud_rag
 
 其中`docs/`包含示例文件，您可以替换为实际的业务文件；`create_cloud_index.py`用于读取`docs/`中的文件并构建云端知识库；`rag.py`用于构建检索引擎和RAG应用；`requirements.txt`用于安装环境依赖。
 
+<a id="安装环境依赖"></a>
+
+<a id="9545446a3e7yd"></a>
+
+<a id="49d847f976vyr"></a>
+
 ## 安装环境依赖
 
 进入`requirements.txt`所在路径，运行如下命令：
 
-```
+<a id="code-block-2"></a>
+
+```bash
 pip install -r requirements.txt
 ```
+
+<a id="读取本地文件并构建云端知识库"></a>
+
+<a id="b56612b374ehp"></a>
+
+<a id="7639ba201fhtk"></a>
 
 ## 读取本地文件并构建云端知识库
 
@@ -64,11 +104,15 @@ pip install -r requirements.txt
 
 您可以在[知识库](https://bailian.console.aliyun.com/?tab=app#/knowledge-base)页面，查看已构建的云端知识库。
 
+<a id="accordion-代码解析"></a>
+
 代码解析
 
 `create_cloud_index.py`
 
-```
+<a id="code-block-3"></a>
+
+```python
 from llama_index.core import SimpleDirectoryReader
 from llama_index.readers.dashscope.base import DashScopeParse
 from llama_index.readers.dashscope.utils import ResultType
@@ -96,6 +140,12 @@ if __name__ == '__main__':
     index = DashScopeCloudIndex.from_documents(documents, cloud_index_name, verbose=True)  # 创建云端知识库
 ```
 
+<a id="构建检索引擎和rag应用"></a>
+
+<a id="1365ed9fedh7f"></a>
+
+<a id="b03c184396rji"></a>
+
 ## 构建检索引擎和RAG应用
 
 进入`rag.py`所在路径，运行如下命令：`python rag.py`，即可读取已创建的云端知识库，构建检索引擎，并在本地启动RAG应用。
@@ -106,13 +156,17 @@ if __name__ == '__main__':
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5536607271/p849965.png)
 
+<a id="accordion-代码解析-2"></a>
+
 代码解析
 
 `rag.py`
 
-> `Settings.llm = DashScope(model_name="qwen-max")`：model\_name参数可以传入"qwen-max"等模型名称，以设置检索引擎生成回答时调用的大模型。全部模型名称，请参考[选择模型](raw/model-user-guide/get-started-with-models/models.md)和[选择模型](raw/model-user-guide/get-started-with-models/models.md)。
+> `Settings.llm = DashScope(model_name="qwen-max")`：model\_name参数可以传入"qwen-max"等模型名称，以设置检索引擎生成回答时调用的大模型。全部模型名称，请参考[选择模型](../../model-user-guide/get-started-with-models/models.md)和[选择模型](../../model-user-guide/get-started-with-models/models.md)。
 
-```
+<a id="code-block-4"></a>
+
+```python
 from llama_index.core import Settings
 from llama_index.llms.dashscope import DashScope
 from llama_index.indices.managed.dashscope import DashScopeCloudIndex
@@ -166,6 +220,12 @@ if __name__ == '__main__':
             output = prettify_rag(resp)
         print(output)
 ```
+
+<a id="相关文档"></a>
+
+<a id="5c334fb4880r2"></a>
+
+<a id="19a7860474nox"></a>
 
 ## 相关文档
 

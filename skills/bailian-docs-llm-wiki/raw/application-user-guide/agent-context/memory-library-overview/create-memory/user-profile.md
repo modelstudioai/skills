@@ -2,23 +2,33 @@
 
 通过 API 创建画像模板、提取画像并获取用户画像
 
-用户画像用于从对话中提取结构化的用户属性（如年龄、职业、偏好），适用于需要持久化存储固定属性的场景。控制台配置方式参见[配置记忆规则](https://help.aliyun.com/zh/model-studio/memory/configure-rules#profile-rules)。
+用户画像用于从对话中提取结构化的用户属性（如年龄、职业、偏好），适用于需要持久化存储固定属性的场景。控制台配置方式参见[配置记忆规则](configure-rules.md#profile-rules)。
 
 本页介绍通过 API 完成画像模板创建、对话提取和画像获取的完整流程。
+
+<a id="前提条件"></a>
 
 ## 前提条件
 
 -   已创建记忆库或使用默认记忆库
 -   配置 `DASHSCOPE_API_KEY` 环境变量
--   将下文请求地址中的 `{WorkspaceId}` 替换为真实的[业务空间 ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)；使用 Python SDK 时设置 `MEMORY_SERVICE_ENDPOINT`，详见[服务地址](raw/application-api-reference/long-term-memory-new/api-overview.md)
+-   将下文请求地址中的 `{WorkspaceId}` 替换为真实的[业务空间 ID](../../../../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)；使用 Python SDK 时设置 `MEMORY_SERVICE_ENDPOINT`，详见[服务地址](../../../../application-api-reference/long-term-memory-new/api-overview.md)
+
+<a id="完整流程"></a>
 
 ## 完整流程
 
 创建画像模板 → 添加对话并提取 → 获取用户画像。
 
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-curl-tab"></a>
+
 cURL
 
-```
+<a id="code-code-group-curl"></a>
+
+```bash
 # 1. 创建画像模板（CreateProfileSchema）
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/profile_schemas \
   --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -53,9 +63,13 @@ curl -X GET "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memo
   --header "Content-Type: application/json"
 ```
 
+<a id="fig-code-group-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 from agentscope_runtime.tools.modelstudio_memory import (
     CreateProfileSchema, GetUserProfile, AddMemory,
     ProfileAttribute, CreateProfileSchemaInput,
@@ -108,6 +122,10 @@ async def profile_example():
 asyncio.run(profile_example())
 ```
 
-**说明**画像提取是异步过程。添加对话后，首次查询可能尚未返回属性值，请按业务重试策略再次查询。
+> **说明**
+>
+> 画像提取是异步过程。添加对话后，首次查询可能尚未返回属性值，请按业务重试策略再次查询。
 
-**重要**画像配置完成后，继续[管理记忆](raw/application-user-guide/agent-context/memory-library-overview/create-memory/manage-memory.md)查看和检索已有记忆。
+> **重要**
+>
+> 画像配置完成后，继续[管理记忆](manage-memory.md)查看和检索已有记忆。

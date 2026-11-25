@@ -2,102 +2,39 @@
 
 wan3.0系列是All-in-One视频生成模型，在有声视频生成、多模态参考和视频编辑能力上全面升级。单次生成时长最长30秒、输出帧率30fps，并原生输出台词、BGM和音效，单次支持最多20个多模态素材参考（图片、视频、音频、文档、网页），支持首帧/首尾帧控制和视频编辑与延长。
 
-提示词写作请参见[万相3.0视频生成Prompt指南](raw/model-user-guide/use-cases/wan3-video-generation-prompt-guide.md)。
+提示词写作请参见[万相3.0视频生成Prompt指南](../model-user-guide/use-cases/wan3-video-generation-prompt-guide.md)。
+
+<a id="适用范围"></a>
+
+<a id="w30g_scope_h"></a>
 
 ## 适用范围
 
 -   各地域支持的模型有所差异，且资源相互独立。各地域支持的模型请参见[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)。
--   调用前，先[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+-   调用前，先[获取与配置 API Key](../model-api-reference/preparations/get-api-key.md)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
 -   调用时，确保**模型、Endpoint URL 和 API Key 均属于同一地域**，跨地域调用将会失败。
 
-**说明**示例代码适用于**北京地域**。
+> **说明**
+>
+> 示例代码适用于**北京地域**。
+
+<a id="模型能力"></a>
+
+<a id="w30g_mustread_h"></a>
 
 ## 模型能力
 
 wan3.0-video / wan3.0-video-prime 是 All-in-One 模型，无需切换模型名称即可覆盖以下全部任务类型。模型根据 `input.media` 中的 `type` 字段和提示词意图自动路由。
 
-**说明**每种任务类型仅支持传入下表中对应的 `type` 值，不同任务类型的 `type` 不可混用。例如，首尾帧模式仅支持 `first_frame` 和 `last_frame`，不可同时传入 `reference_audio` 等其他类型。详细组合规则请参见[素材组合](https://help.aliyun.com/zh/model-studio/wan3-video-generation-api-reference#w30media_combo_t)。
+> **说明**
+>
+> 每种任务类型仅支持传入下表中对应的 `type` 值，不同任务类型的 `type` 不可混用。例如，首尾帧模式仅支持 `first_frame` 和 `last_frame`，不可同时传入 `reference_audio` 等其他类型。详细组合规则请参见[素材组合](../model-api-reference/video-generation-api/wan-api-reference/wan3-video-generation-api-reference.md#w30media_combo_t)。
 
-**任务类型**
+<table><thead><tr><th colspan="2"><p><strong>任务类型</strong></p></th><th><p><strong>触发方式</strong></p></th><th><p><strong>使用说明</strong></p></th></tr></thead><tbody><tr><td colspan="2"><p>文生视频</p></td><td><p>仅传入 <code>prompt</code>，不传 <code>media</code></p></td><td><p>支持自由设置分辨率、宽高比和时长</p></td></tr><tr><td rowspan="2"><p>图生视频</p></td><td><p>首帧生视频</p></td><td><p><code>type</code> 设为 <code>first_frame</code></p></td><td><p><code>ratio</code> 建议设为 <code>adaptive</code>，模型自动匹配首帧宽高比</p></td></tr><tr><td><p>首尾帧生视频</p></td><td><p><code>type</code> 设为 <code>first_frame</code> 和 <code>last_frame</code></p></td><td><p><code>ratio</code> 建议设为 <code>adaptive</code>，模型自动匹配首帧宽高比</p></td></tr><tr><td rowspan="5"><p>全模态参考</p></td><td><p>图片参考</p></td><td><p><code>type</code> 设为 <code>reference_image</code></p></td><td><p>最多10张，单张≤20MB</p></td></tr><tr><td><p>视频参考</p></td><td><p><code>type</code> 设为 <code>reference_video</code></p></td><td><p>最多5段，总时长≤15秒，单文件≤100MB</p></td></tr><tr><td><p>音频参考</p></td><td><p><code>type</code> 设为 <code>reference_audio</code></p></td><td><p>最多5段，总时长≤15秒，单文件≤15MB</p></td></tr><tr><td><p>组合参考</p></td><td><p><code>type</code> 设为 <code>reference_image</code>/<code>reference_video</code>/<code>reference_audio</code> 组合</p></td><td><p>参考图片/视频/音频，支持三种参考素材任意组合</p><ul><li><p>图片+视频</p></li><li><p>图片+音频</p></li><li><p>视频+音频</p></li><li><p>图片+视频+音频</p></li></ul></td></tr><tr><td><p>文件/网页生视频参考</p></td><td><p><code>type</code> 设为 <code>file</code> 或 <code>link</code>（二选一，各限1个），可与 <code>reference_image</code>/<code>reference_video</code>/<code>reference_audio</code> 组合</p></td><td><p>解析文档/网页内容生成视频</p><p>文档和网页链接仅支持无需登录的公开页面</p></td></tr><tr><td colspan="2"><p>视频编辑</p></td><td><p><code>type</code> 设为 <code>reference_video</code>（可与 <code>reference_image</code>/<code>reference_audio</code> 组合）+ 提示词含编辑意图（如&quot;编辑视频&quot;&quot;去掉&quot;&quot;替换&quot;&quot;改成&quot;等）</p></td><td><p>增删改元素、风格转换、光线编辑、台词编辑。<code>ratio</code> 建议 <code>adaptive</code>，<code>duration</code> 建议 <code>-1</code>（自动保持原视频宽高比和时长）</p></td></tr><tr><td colspan="2"><p>视频延长</p></td><td><p><code>type</code> 设为 <code>reference_video</code>（可与 <code>reference_image</code>/<code>reference_audio</code> 组合）+ 提示词含延长意图（如&quot;延长&quot;&quot;延续&quot;&quot;续写&quot;&quot;向前/向后延长&quot;等）</p></td><td><p>向前/向后/双向延长。<code>ratio</code> 建议 <code>adaptive</code>（自动保持原视频宽高比）</p></td></tr></tbody></table>
 
-**触发方式**
+<a id="提示词技巧"></a>
 
-**使用说明**
-
-文生视频
-
-仅传入 `prompt`，不传 `media`
-
-支持自由设置分辨率、宽高比和时长
-
-图生视频
-
-首帧生视频
-
-`type` 设为 `first_frame`
-
-`ratio` 建议设为 `adaptive`，模型自动匹配首帧宽高比
-
-首尾帧生视频
-
-`type` 设为 `first_frame` 和 `last_frame`
-
-`ratio` 建议设为 `adaptive`，模型自动匹配首帧宽高比
-
-全模态参考
-
-图片参考
-
-`type` 设为 `reference_image`
-
-最多10张，单张≤20MB
-
-视频参考
-
-`type` 设为 `reference_video`
-
-最多5段，总时长≤15秒，单文件≤100MB
-
-音频参考
-
-`type` 设为 `reference_audio`
-
-最多5段，总时长≤15秒，单文件≤15MB
-
-组合参考
-
-`type` 设为 `reference_image`/`reference_video`/`reference_audio` 组合
-
-参考图片/视频/音频，支持三种参考素材任意组合
-
--   图片+视频
-    
--   图片+音频
-    
--   视频+音频
-    
--   图片+视频+音频
-    
-
-文件/网页生视频参考
-
-`type` 设为 `file` 或 `link`（二选一，各限1个），可与 `reference_image`/`reference_video`/`reference_audio` 组合
-
-解析文档/网页内容生成视频
-
-文档和网页链接仅支持无需登录的公开页面
-
-视频编辑
-
-`type` 设为 `reference_video`（可与 `reference_image`/`reference_audio` 组合）+ 提示词含编辑意图（如"编辑视频""去掉""替换""改成"等）
-
-增删改元素、风格转换、光线编辑、台词编辑。`ratio` 建议 `adaptive`，`duration` 建议 `-1`（自动保持原视频宽高比和时长）
-
-视频延长
-
-`type` 设为 `reference_video`（可与 `reference_image`/`reference_audio` 组合）+ 提示词含延长意图（如"延长""延续""续写""向前/向后延长"等）
-
-向前/向后/双向延长。`ratio` 建议 `adaptive`（自动保持原视频宽高比）
+<a id="w30g_pe_h"></a>
 
 ## 提示词技巧
 
@@ -107,11 +44,21 @@ wan3.0-video / wan3.0-video-prime 是 All-in-One 模型，无需切换模型名�
 
 **使用方式**：在 AI 对话框输入 `/wan3-pe` + 您的提示词内容，开始调试提示词。例如：
 
-```
+<a id="code-block"></a>
+
+```text
 /wan3-pe 基于skill对提示词进行完善，提示词为：一只猫在草地上奔跑
 ```
 
+<a id="主要功能"></a>
+
+<a id="w30g_cap_h"></a>
+
 ## 主要功能
+
+<a id="文生视频"></a>
+
+<a id="w30g_t2v_h"></a>
 
 ### 文生视频
 
@@ -123,9 +70,17 @@ wan3.0-video / wan3.0-video-prime 是 All-in-One 模型，无需切换模型名�
 
 **参数配置**：`resolution`\=480P/720P/1080P（默认），`ratio`\=21:9/16:9/4:3/1:1/3:4/9:16，`duration`\=2~30秒或-1（智能时长）。
 
+|  |  |  |
+| --- | --- | --- |
+|  |  |  |
+
+<a id="accordion-示例1提示词"></a>
+
 示例1提示词
 
 20秒超宽银幕毛绒宇宙冒险片段，整体采用超精细毛绒材质、电影级太空尺度、可爱外形与强烈动作反差、夸张FPV运镜和真实软体物理。一艘由毛绒布、纽扣、拉链与填充棉制成的宇宙飞船，载着兔子、狐狸和乌鸦三只小型毛绒动物，在由巨大毛线行星、绒毛星云和布偶巨兽组成的宇宙中高速逃亡。一只覆盖深蓝长绒毛、眼睛像两枚玻璃纽扣的巨大星际鲸兽从星云中追赶飞船。动态包括拉链飞船弹射起航、贴着毛线行星高速绕行、巨鲸从后方冲出、穿越纽扣小行星带、被鲸兽吞入体内、沿金色拉链从背部逃出、巨鲸如泄掉填充棉般缓慢变扁、最终穿越粉紫色绒毛星云向彩色纽扣太阳飞去。
+
+<a id="accordion-示例2提示词"></a>
 
 示例2提示词
 
@@ -203,6 +158,8 @@ wan3.0-video / wan3.0-video-prime 是 All-in-One 模型，无需切换模型名�
 
 定格在他这张怀疑人生的脸上，全片在荒诞的寂静中结束，只留下一阵风吹过时，牙签在地上滚动的声音。
 
+<a id="accordion-示例3提示词"></a>
+
 示例3提示词
 
 镜头1 \[0秒-30秒\]
@@ -215,11 +172,21 @@ wan3.0-video / wan3.0-video-prime 是 All-in-One 模型，无需切换模型名�
 
 镜头手持拍摄一镜到底，近景，镜头一开始，拍摄导演，导演无所谓的表情，瞥了一眼画面右侧斜前方画外的一眼关系户小鲜肉，对他下达指令，说道：“媒体故意黑你，做个表情看看”。说完后镜头快速右摇到关系户面部近景，镜头不要切镜，关系户小鲜肉，面部朝向画面左侧斜前方画外导演方向，神色自若，眼神真挚而自信。他嘴唇微动，神情专业地向对方阐述到““就这种事情来说，情绪可以有好几种”，说话时，头部伴有极其轻微的自然晃动，说完后镜头快速左摇到导演面部近景，镜头不要切镜，导演思索了一下，一边挑衅似地歪了歪头，向关系户小鲜肉说到““狗仔爆料你深夜幽会”，导演说完台词后，镜头迅速右摇到小鲜肉面部近景，不要切镜，关系户小鲜肉，面部朝向画面左侧斜前方画外导演方向，并快速进入表演状态，他眉头紧锁，眼神慌乱、焦急地快速游移，随后他狠狠地咬紧下唇，闭上双眼，整张脸（虽带着精致妆容）因极度的焦虑而紧绷，完美呈现出面对偶像生涯毁灭时，内心惊恐、紧张交织的挣扎状态。表演完后， 镜头再次迅速左摇到导演近景，不要切镜，导演面部表情微变，语速加快，说到““媒体又帮你洗白了，说那是你亲姐！”导演说完后，镜头再次迅速右摇到小鲜肉近景，镜头不要切镜，镜头中，关系户小鲜肉，面部朝向画面左侧斜前方画外导演方向，他的表情在千分之一秒内完成神级转换。他先是面部一滞，随后双眼猛地眯起，嘴角极大程度地咧开，露出一排白皙的牙齿，展露出一个极其夸张、甚至有些变形的狂喜笑容。这种“星途尽毁的绝望”与“彻底摆脱束缚”交织的疯魔情绪在他脸上扭曲呈现。角色表演完后，镜头再次迅速左摇到导演近景，镜头不要切镜，导演说到“你亲姐向媒体透露，你是领养的”，导演说完后，镜头再次迅速右摇到小鲜肉近景。镜头不要切镜，镜头内，关系户小鲜肉面部朝向画面左侧斜前方画外导演方向，只见他双眼暴睁，眼球凸出，精心修剪的眉毛高高扬起，嘴巴震惊地张成“O”形。紧接着，他的嘴角再次无法克制地向上拉扯，露出一副不可思议、惊魂未定却的复杂神态。 角色表演完后，镜头再次快速左摇到导演近景，镜头不要切镜，紧接着导演露出有点惊讶的表情说到“其实你是千亿豪门真少爷”。导演说完，镜头再次随即迅速右摇到小鲜肉近景，镜头不要切镜，镜头内，关系户小鲜肉面部朝向画面左侧斜前方画外导演方向，他瞬间爆发出极度魔性的狂喜。他整个人激动得微微颤抖，双眼笑得眯成了一条缝，双手甚至抬起至胸前，双手小幅度快速连续鼓掌，身体前倾摇晃，将一夜暴富、无法自持的癫狂喜悦演绎得淋漓尽致。 角色表演完后，镜头再次快速左摇到导演近景，镜头不要切镜，导演说到“你姐卷款跑路”导演说完，镜头再次迅速右摇到小鲜肉近景。小鲜肉面部朝向画面左侧斜前方画外导演方向，只见他的双眼再次瞪大，瞳孔颤抖，嘴角向下耷拉，神情在一秒钟之内从天堂坠入地狱，写满了惊愕、痛苦与不知所措。画面最后定格在这个表情上。
 
+<a id="sec-tabs"></a>
+
+<a id="python-sdk"></a>
+
+<a id="python-sdk-h4"></a>
+
 #### Python SDK
 
-**重要**请先更新 DashScope Python SDK 至 **2.0.1** 或以上版本，再运行以下代码。更新方法请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+> **重要**
+>
+> 请先更新 DashScope Python SDK 至 **2.0.1** 或以上版本，再运行以下代码。更新方法请参考[安装SDK](../model-api-reference/preparations/install-sdk.md)。
 
-```
+<a id="code-block-2"></a>
+
+```python
 import os
 import dashscope
 from dashscope import DashScopeError
@@ -250,11 +217,19 @@ except DashScopeError as e:
     print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
+<a id="java-sdk"></a>
+
+<a id="java-sdk-h4"></a>
+
 #### Java SDK
 
-**重要**请先更新 DashScope Java SDK 至 **2.22.31** 或以上版本，再运行以下代码。更新方法请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+> **重要**
+>
+> 请先更新 DashScope Java SDK 至 **2.22.31** 或以上版本，再运行以下代码。更新方法请参考[安装SDK](../model-api-reference/preparations/install-sdk.md)。
 
-```
+<a id="code-block-3"></a>
+
+```java
 // Copyright (c) Alibaba, Inc. and its affiliates.
 
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesis;
@@ -304,10 +279,17 @@ public class Text2Video {
 }
 ```
 
+<a id="curl"></a>
+
+<a id="curl-h4"></a>
+
 #### curl
 
 **步骤1：创建任务获取任务ID**
-```
+
+<a id="code-block-4"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
     -H 'X-DashScope-Async: enable' \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -325,11 +307,19 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     }
 }'
 ```
+
 **步骤2：根据任务ID获取结果**
-```
+
+<a id="code-block-5"></a>
+
+```bash
 curl -X GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}' \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
+
+<a id="图生视频-首帧-首尾帧"></a>
+
+<a id="w30g_i2v_h"></a>
 
 ### 图生视频（首帧/首尾帧）
 
@@ -341,35 +331,9 @@ curl -X GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{ta
 
 **参数配置**：`ratio` 建议设为 `adaptive`（自动匹配输入图片宽高比），`duration`\=2~30秒或-1。
 
-**能力**
+<table><tbody><tr><td><strong>能力</strong></td><td><strong>输入提示词</strong></td><td><strong>输入首帧或尾帧</strong></td><td><strong>输出视频</strong></td></tr><tr><td><p>首帧生视频</p></td><td><p>(0:00 - 0:03) 运镜：中景。画面：沿用 图片1 的水墨竹林场景。头戴斗笠、身着墨色长袍的刀客，其剪影伫立在浓雾环绕、竹影婆娑的中心。动作：刀客左手轻按刀柄，竹叶随风飘落。氛围：寂静，压抑，水墨晕染的颗粒感清晰可见。</p><blockquote><p>完整提示词见表格下方折叠框。</p></blockquote></td><td><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1509667871/p1097154.png" alt="dbdaddafe0e1a8af2bcd975f61010426"></td><td></td></tr><tr><td><p>首尾帧生视频</p></td><td><p>【一镜到底，慢速唯美运镜，无剪辑，15秒长镜头，岩彩画矿物颜料质感与3D渲染碰撞，青蓝×鎏金撞色】</p><blockquote><p>完整提示词见表格下方折叠框。</p></blockquote></td><td><p>首帧</p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1509667871/p1097225.png" alt="Wan_Image_first_frame"><p>尾帧</p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1509667871/p1097158.png" alt="Wan_Image_last_frame"></td><td></td></tr></tbody></table>
 
-**输入提示词**
-
-**输入首帧或尾帧**
-
-**输出视频**
-
-首帧生视频
-
-(0:00 - 0:03) 运镜：中景。画面：沿用 图片1 的水墨竹林场景。头戴斗笠、身着墨色长袍的刀客，其剪影伫立在浓雾环绕、竹影婆娑的中心。动作：刀客左手轻按刀柄，竹叶随风飘落。氛围：寂静，压抑，水墨晕染的颗粒感清晰可见。
-
-> 完整提示词见表格下方折叠框。
-
-![dbdaddafe0e1a8af2bcd975f61010426](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1509667871/p1097154.png)
-
-首尾帧生视频
-
-【一镜到底，慢速唯美运镜，无剪辑，15秒长镜头，岩彩画矿物颜料质感与3D渲染碰撞，青蓝×鎏金撞色】
-
-> 完整提示词见表格下方折叠框。
-
-首帧
-
-![Wan\_Image\_first\_frame](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1509667871/p1097225.png)
-
-尾帧
-
-![Wan\_Image\_last\_frame](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1509667871/p1097158.png)
+<a id="accordion-提示词-首帧生视频"></a>
 
 提示词：首帧生视频
 
@@ -382,6 +346,8 @@ curl -X GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{ta
 (0:13 - 0:18) 运镜：手持感，高速捕捉。打斗：刀客猛然拔刀，刀光是一道纯白色的水墨裂痕。刺客双钩攻来。细节：一击：刀客回身一斩，刀刃与刺客双钩碰撞，迸发出无数黑白相间、带有书法感的火花和墨点。二击：刀客虚晃一枪，利用竹竿弹射，从高处劈下。刺客翻滚躲避。竹竿被打断，化作飞散的墨痕。三击：刀客刀尖直指另一刺客咽喉，刺客以短刃格挡，镜头捕捉刀刃与短刃摩擦时细微的墨迹崩裂细节。
 
 (0:18 - 0:20) 运镜：慢镜头至定格。\* **画面：** 刀客的刀停在刺客颈侧，刺客凝固。\* **细节：** 刀客的斗笠在打斗中略微倾斜。竹林归于平静，更多竹叶飞舞。\* **氛围：** 镜头慢慢拉远，回到中景，定格在刀客收刀、刺客倒地的画面。\* **文字（可选）：** 画面下方显现水墨风文字：“江湖，不过一笔勾销。”**风格说明：** 整个过程保持 `图片1` 的高度黑白、水墨画风格，动作必须有毛笔触感，速度要快，细节要足（墨滴、火花、墨痕裂口）。
+
+<a id="accordion-提示词-首尾帧生视频"></a>
 
 提示词：首尾帧生视频
 
@@ -399,11 +365,21 @@ curl -X GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{ta
 
 \[11-15秒：回眸·总相宜\]她停下脚步，回眸看向镜头，镜头缓缓推近至半身特写：晨光洒在她的脸上，湖水披帛在身侧轻轻飘动，几滴发光的水珠从发梢滴落，在空中化作细碎光点。旁白接下半句："淡妆浓抹，总相宜。"她浅浅微笑，身后是晨光中的雷峰塔与朦胧的三潭印月。最后一秒画面完全定格在她的回眸特写，定格为完美的电影海报构图。
 
+<a id="sec-tabs-2"></a>
+
+<a id="python-sdk-2"></a>
+
+<a id="python-sdk-2-h4"></a>
+
 #### Python SDK
 
-**重要**请先更新 DashScope Python SDK 至 **2.0.1** 或以上版本，再运行以下代码。更新方法请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+> **重要**
+>
+> 请先更新 DashScope Python SDK 至 **2.0.1** 或以上版本，再运行以下代码。更新方法请参考[安装SDK](../model-api-reference/preparations/install-sdk.md)。
 
-```
+<a id="code-block-6"></a>
+
+```python
 import os
 import dashscope
 from dashscope import DashScopeError
@@ -435,11 +411,19 @@ except DashScopeError as e:
     print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
+<a id="java-sdk-2"></a>
+
+<a id="java-sdk-2-h4"></a>
+
 #### Java SDK
 
-**重要**请先更新 DashScope Java SDK 至 **2.22.31** 或以上版本，再运行以下代码。更新方法请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+> **重要**
+>
+> 请先更新 DashScope Java SDK 至 **2.22.31** 或以上版本，再运行以下代码。更新方法请参考[安装SDK](../model-api-reference/preparations/install-sdk.md)。
 
-```
+<a id="code-block-7"></a>
+
+```java
 // Copyright (c) Alibaba, Inc. and its affiliates.
 
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesis;
@@ -499,10 +483,17 @@ public class FirstFrame2Video {
 }
 ```
 
+<a id="curl-2"></a>
+
+<a id="curl-2-h4"></a>
+
 #### curl
 
 **步骤1：创建任务获取任务ID**
-```
+
+<a id="code-block-8"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
     -H 'X-DashScope-Async: enable' \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -526,17 +517,27 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     }
 }'
 ```
+
 **步骤2：根据任务ID获取结果**
-```
+
+<a id="code-block-9"></a>
+
+```bash
 curl -X GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}' \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
+
+<a id="全模态参考生视频"></a>
+
+<a id="w30g_r2v_h"></a>
 
 ### 全模态参考生视频
 
 最多传入20个参考素材（图片、视频、音频、文档、网页），模型自动理解参考意图生成视频。在提示词中使用"图片1"或"图1""视频1""音频1"等指代 `input.media` 数组中对应顺序的素材。
 
-**说明****素材指代规则**：图片、视频和音频**分别计数**。`input.media` 数组中第1个 `reference_image` 对应提示词中的"图1"或"图片1"，第2个对应"图2"或"图片2"；第1个 `reference_video` 对应"视频1"，第2个对应"视频2"；第1个 `reference_audio` 对应"音频1"，第2个对应"音频2"，以此类推。三者互不冲突，可同时存在"图1""视频1""音频1"。
+> **说明**
+>
+> **素材指代规则**：图片、视频和音频**分别计数**。`input.media` 数组中第1个 `reference_image` 对应提示词中的"图1"或"图片1"，第2个对应"图2"或"图片2"；第1个 `reference_video` 对应"视频1"，第2个对应"视频2"；第1个 `reference_audio` 对应"音频1"，第2个对应"音频2"，以此类推。三者互不冲突，可同时存在"图1""视频1""音频1"。
 
 -   **角色/物品参考**：传入角色或物品图片，保持外观一致性生成视频。
 -   **运镜/动作参考**：传入参考视频，复刻其运镜方式或动作编排。
@@ -546,47 +547,31 @@ curl -X GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{ta
 
 **参数配置**：`ratio` 建议设为 `adaptive`（自适应参考素材），`duration`\=2~30秒或-1。
 
+<a id="c07dedfef1tb2"></a>
+
 ##### 1\. 参考图片/视频/音频
 
-**能力**
+|  |  |  |  |
+| --- | --- | --- | --- |
+| **能力** | **输入提示词** | **输入参考素材** | **输出视频** |
+| 参考图片 | 使用唇釉产品图1 ，生成模特试色视频，15秒，竖屏，突出唇色效果 | ![5eecdaf48460cde5fbbc2c464cec524f5d9972026d69774e75b8339e1c4c24831b75b38faadcd24bec177c308ebd5304ec45867da4df4d505ff298ada22ab8bc3b4fc6aa4c1faca825e838ced1f82ac8f6990daa07af56984fb4c8ed7016461c](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1509667871/p1097165.png) |  |
+| 参考图片+视频+音频 | 将图片 图像1 的男性角色无缝替换至 视频1 的女生。角色坐在窗边，手持手机贴耳说话。<br><br>【音色与台词】提取 音频1 中的音色特征，并让角色说出以下台词：“真的吗？听起来很棒！你什么时候回来啊。我好想你啊.”<br><br>【口型与神态】生成的语音需精准驱动角色的口型自然开合。说话时伴随自然的眨眼、轻微的头部点动和呼吸感，面部微表情需与台词中的关怀、回忆情绪完美契合。<br><br>【光影与场景】人物面部需自然接收室内暖光与窗外霓虹冷光的混合照明。背景窗外雨滴持续缓慢滑落，桌上咖啡有轻微热气升腾，人物与场景边缘融合自然，无抠图痕迹。<br><br>【镜头与画质】15秒长镜头，镜头极缓慢向前推进，画面极度稳定，电影级光影，8K分辨率，照片级真实感。 | 参考图片<br><br>![c647161f46b757a2bc7ace26bab49d5e](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1509667871/p1097184.png)<br><br>参考视频<br><br>参考音频 |  |
 
-**输入提示词**
+<a id="sec-tabs-3"></a>
 
-**输入参考素材**
+<a id="python-sdk-3"></a>
 
-**输出视频**
-
-参考图片
-
-使用唇釉产品图1 ，生成模特试色视频，15秒，竖屏，突出唇色效果
-
-![5eecdaf48460cde5fbbc2c464cec524f5d9972026d69774e75b8339e1c4c24831b75b38faadcd24bec177c308ebd5304ec45867da4df4d505ff298ada22ab8bc3b4fc6aa4c1faca825e838ced1f82ac8f6990daa07af56984fb4c8ed7016461c](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1509667871/p1097165.png)
-
-参考图片+视频+音频
-
-将图片 图像1 的男性角色无缝替换至 视频1 的女生。角色坐在窗边，手持手机贴耳说话。
-
-【音色与台词】提取 音频1 中的音色特征，并让角色说出以下台词：“真的吗？听起来很棒！你什么时候回来啊。我好想你啊.”
-
-【口型与神态】生成的语音需精准驱动角色的口型自然开合。说话时伴随自然的眨眼、轻微的头部点动和呼吸感，面部微表情需与台词中的关怀、回忆情绪完美契合。
-
-【光影与场景】人物面部需自然接收室内暖光与窗外霓虹冷光的混合照明。背景窗外雨滴持续缓慢滑落，桌上咖啡有轻微热气升腾，人物与场景边缘融合自然，无抠图痕迹。
-
-【镜头与画质】15秒长镜头，镜头极缓慢向前推进，画面极度稳定，电影级光影，8K分辨率，照片级真实感。
-
-参考图片
-
-![c647161f46b757a2bc7ace26bab49d5e](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1509667871/p1097184.png)
-
-参考视频
-
-参考音频
+<a id="python-sdk-3-h4"></a>
 
 #### Python SDK
 
-**重要**请先更新 DashScope Python SDK 至 **2.0.1** 或以上版本，再运行以下代码。更新方法请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+> **重要**
+>
+> 请先更新 DashScope Python SDK 至 **2.0.1** 或以上版本，再运行以下代码。更新方法请参考[安装SDK](../model-api-reference/preparations/install-sdk.md)。
 
-```
+<a id="code-block-10"></a>
+
+```python
 import os
 import dashscope
 from dashscope import DashScopeError
@@ -624,11 +609,19 @@ except DashScopeError as e:
     print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
+<a id="java-sdk-3"></a>
+
+<a id="java-sdk-3-h4"></a>
+
 #### Java SDK
 
-**重要**请先更新 DashScope Java SDK 至 **2.22.31** 或以上版本，再运行以下代码。更新方法请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+> **重要**
+>
+> 请先更新 DashScope Java SDK 至 **2.22.31** 或以上版本，再运行以下代码。更新方法请参考[安装SDK](../model-api-reference/preparations/install-sdk.md)。
 
-```
+<a id="code-block-11"></a>
+
+```java
 // Copyright (c) Alibaba, Inc. and its affiliates.
 
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesis;
@@ -704,10 +697,17 @@ public class Reference2Video {
 }
 ```
 
+<a id="curl-3"></a>
+
+<a id="curl-3-h4"></a>
+
 #### curl
 
 **步骤1：创建任务获取任务ID**
-```
+
+<a id="code-block-12"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
     -H 'X-DashScope-Async: enable' \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -732,47 +732,29 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     }
 }'
 ```
+
 **步骤2：根据任务ID获取结果**
-```
+
+<a id="code-block-13"></a>
+
+```bash
 curl -X GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}' \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
+<a id="2080ec412acnj"></a>
+
 ##### 2\. 参考文件或网页
 
-**能力**
+<table><tbody><tr><td><strong>能力</strong></td><td><strong>输入提示词</strong></td><td><strong>输入素材</strong></td><td><strong>输出视频</strong></td></tr><tr><td><p>参考文件-基于PPT生视频</p></td><td><p>一支高端智能眼镜产品广告，整体风格极简、未来感、时尚高级，光影克制，画面以黑色、银灰色、冰蓝色为主色调，局部点缀柔和白光与参数UI图形。</p><blockquote><p>完整提示词见表格下方折叠框。</p></blockquote></td><td><p><a href="https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260825/msmbpl/glass.pptx">glass.pptx</a></p></td><td></td></tr><tr><td><p>参考文件-基于Excel生视频</p></td><td><p>总时长22秒，4个片段顺序拼接。全片纯白底，柔色色块与简洁线条图表，Apple Keynote式极简商务风格，无衬线深灰字体。</p><blockquote><p>完整提示词见表格下方折叠框。</p></blockquote></td><td><p><a href="https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260825/lepucv/H1-2026%E8%B7%A8%E5%A2%83%E7%94%B5%E5%95%86%E6%9C%88%E5%BA%A6GMV.xlsx">H1-2026跨境电商月度GMV.xlsx</a></p></td><td></td></tr><tr><td><p>参考网页</p></td><td><p>根据该王维的百科介绍，我要给一年级的孩子们做一个“谁是王维”的动画视频</p></td><td><code><a href="https://baike.baidu.com/item/%E7%8E%8B%E7%BB%B4/37558">https://baike.baidu.com/item/%E7%8E%8B%E7%BB%B4/37558</a></code></td><td></td></tr></tbody></table>
 
-**输入提示词**
-
-**输入素材**
-
-**输出视频**
-
-参考文件-基于PPT生视频
-
-一支高端智能眼镜产品广告，整体风格极简、未来感、时尚高级，光影克制，画面以黑色、银灰色、冰蓝色为主色调，局部点缀柔和白光与参数UI图形。
-
-> 完整提示词见表格下方折叠框。
-
-[glass.pptx](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260825/msmbpl/glass.pptx)
-
-参考文件-基于Excel生视频
-
-总时长22秒，4个片段顺序拼接。全片纯白底，柔色色块与简洁线条图表，Apple Keynote式极简商务风格，无衬线深灰字体。
-
-> 完整提示词见表格下方折叠框。
-
-[H1-2026跨境电商月度GMV.xlsx](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260825/lepucv/H1-2026%E8%B7%A8%E5%A2%83%E7%94%B5%E5%95%86%E6%9C%88%E5%BA%A6GMV.xlsx)
-
-参考网页
-
-根据该王维的百科介绍，我要给一年级的孩子们做一个“谁是王维”的动画视频
-
-`[https://baike.baidu.com/item/%E7%8E%8B%E7%BB%B4/37558](https://baike.baidu.com/item/%E7%8E%8B%E7%BB%B4/37558)`
+<a id="accordion-提示词-参考文件-基于ppt生视频"></a>
 
 提示词：参考文件-基于PPT生视频
 
 一支高端智能眼镜产品广告，整体风格极简、未来感、时尚高级，光影克制，画面以黑色、银灰色、冰蓝色为主色调，局部点缀柔和白光与参数UI图形。开场在纯黑背景中，一副智能眼镜从黑暗中缓缓浮现，镜腿边缘掠过精致高光，镜框轮廓在冷冽边缘光下被勾勒出来，镜头超近距离掠过镜片、鼻托、转轴、镜腿与材质细节，展现金属与高性能复合材料的细腻质感，表面处理高级克制，线条轻薄流畅。随后产品在空中缓慢旋转，画面以极简动态图形同步展示核心参数信息。随后镜头快速收拢，所有零件精准回归组装成完整产品，切换到年轻模特佩戴展示，模特五官立体、气质自信，穿着简洁高级的都市时尚服装，在极简空间和城市光影环境中自然转头、抬手、行走、微笑，镜头从正面、侧面、斜后方展示眼镜佩戴状态，突出轻薄贴合、时尚轮廓与日常百搭属性。结尾在纯色背景中，产品悬浮定格，镜头缓慢推进到品牌logo和核心slogan，整体音乐极简电子氛围配合精准鼓点，节奏干净有力，画面质感高级、克制、纯粹，具有强烈品牌记忆点和国际化科技审美。
+
+<a id="accordion-提示词-参考文件-基于excel生视频"></a>
 
 提示词：参考文件-基于Excel生视频
 
@@ -788,11 +770,21 @@ H1-2026跨境电商月度GMV.xlsx
 
 片段4：全景，中心构图偏上，纯白底，柔光，极简商务风格，视觉参考参考图3的环形图风格。白底中央浮现一个简约环形图（甜甜圈图），只有三段弧形，分别用珊瑚色、青蓝色、琥珀色渲染三个市场的H1占比——东南亚占比由H4=5180计算、北美由H5=4260计算、欧洲由H6=4370计算，三者总和H7=13810。三段弧形之间用白色间隙分隔，环形图整体干净简洁，图表上没有任何百分比符号、没有任何数字标注、没有任何散落的标签，只有纯粹的三段色弧。环形图以约10°/s的速度缓缓旋转。环形图正中央显示一个大号深灰数字，该数字从0快速跳动至H7单元格的值$138.1M（即13810万美元），跳动时伴随连续的细碎'咔嗒'声，最终数字落定时一声清脆的'叮'。下方淡入一行浅灰副标题'Three Markets · All Growing · Zero Downturn'。旁白沉稳收尾，说完留1秒静音：'138 million in total — all markets growing, zero downturns.' BGM持续可闻，最后缓缓衰减，1秒静音后全片结束。
 
+<a id="sec-tabs-4"></a>
+
+<a id="python-sdk-4"></a>
+
+<a id="python-sdk-4-h4"></a>
+
 #### Python SDK
 
-**重要**请先更新 DashScope Python SDK 至 **2.0.1** 或以上版本，再运行以下代码。更新方法请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+> **重要**
+>
+> 请先更新 DashScope Python SDK 至 **2.0.1** 或以上版本，再运行以下代码。更新方法请参考[安装SDK](../model-api-reference/preparations/install-sdk.md)。
 
-```
+<a id="code-block-14"></a>
+
+```python
 import os
 import dashscope
 from dashscope import DashScopeError
@@ -826,11 +818,19 @@ except DashScopeError as e:
     print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
+<a id="java-sdk-4"></a>
+
+<a id="java-sdk-4-h4"></a>
+
 #### Java SDK
 
-**重要**请先更新 DashScope Java SDK 至 **2.22.31** 或以上版本，再运行以下代码。更新方法请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+> **重要**
+>
+> 请先更新 DashScope Java SDK 至 **2.22.31** 或以上版本，再运行以下代码。更新方法请参考[安装SDK](../model-api-reference/preparations/install-sdk.md)。
 
-```
+<a id="code-block-15"></a>
+
+```java
 // Copyright (c) Alibaba, Inc. and its affiliates.
 
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesis;
@@ -890,10 +890,17 @@ public class File2Video {
 }
 ```
 
+<a id="curl-4"></a>
+
+<a id="curl-4-h4"></a>
+
 #### curl
 
 **步骤1：创建任务获取任务ID**
-```
+
+<a id="code-block-16"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
     -H 'X-DashScope-Async: enable' \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -917,11 +924,19 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     }
 }'
 ```
+
 **步骤2：根据任务ID获取结果**
-```
+
+<a id="code-block-17"></a>
+
+```bash
 curl -X GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}' \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
+
+<a id="视频编辑"></a>
+
+<a id="w30g_edit_h"></a>
 
 ### 视频编辑
 
@@ -936,37 +951,28 @@ curl -X GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{ta
 
 **参数配置**：`ratio` 建议设为 `adaptive`，`duration` 建议设为 `-1`（自动保持原视频宽高比和时长）。提示词中需包含编辑意图关键词（如"编辑视频""去掉""替换""改成"等）。
 
-**能力**
+|  |  |  |  |
+| --- | --- | --- | --- |
+| **能力** | **输入提示词** | **输入参考视频** | **输出视频** |
+| 修改风格 | 将整个画面转换为黏土风格 |  |  |
+| 台词编辑 | 编辑视频，将视频中男生的台词改为：“The deal is done.Now... we disappear." |  |  |
+| 参考编辑 | 编辑视频，视频1中的女人戴上 图片1 中的帽子，自然贴合头型。 视频1 中的男人戴上中 图片2 的帽子，自然贴合头型，男人的赭棕色衬衫换成 图片3 中的蓝色水洗宽松牛仔衬衫，翻领敞开、袖子卷至前臂。两人的动作、服装和画面其余部分保持不变。 | 参考视频<br><br>参考图片（3张）<br><br>![straw\_hat](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1509667871/p1097268.png)![baseball\_cap](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1509667871/p1097267.png)![jeans\_shirt](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1509667871/p1097269.png) |  |
 
-**输入提示词**
+<a id="sec-tabs-5"></a>
 
-**输入参考视频**
+<a id="python-sdk-5"></a>
 
-**输出视频**
-
-修改风格
-
-将整个画面转换为黏土风格
-
-台词编辑
-
-编辑视频，将视频中男生的台词改为：“The deal is done.Now... we disappear."
-
-参考编辑
-
-编辑视频，视频1中的女人戴上 图片1 中的帽子，自然贴合头型。 视频1 中的男人戴上中 图片2 的帽子，自然贴合头型，男人的赭棕色衬衫换成 图片3 中的蓝色水洗宽松牛仔衬衫，翻领敞开、袖子卷至前臂。两人的动作、服装和画面其余部分保持不变。
-
-参考视频
-
-参考图片（3张）
-
-![straw\_hat](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1509667871/p1097268.png)![baseball\_cap](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1509667871/p1097267.png)![jeans\_shirt](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1509667871/p1097269.png)
+<a id="python-sdk-5-h4"></a>
 
 #### Python SDK
 
-**重要**请先更新 DashScope Python SDK 至 **2.0.1** 或以上版本，再运行以下代码。更新方法请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+> **重要**
+>
+> 请先更新 DashScope Python SDK 至 **2.0.1** 或以上版本，再运行以下代码。更新方法请参考[安装SDK](../model-api-reference/preparations/install-sdk.md)。
 
-```
+<a id="code-block-18"></a>
+
+```python
 import os
 import dashscope
 from dashscope import DashScopeError
@@ -999,11 +1005,19 @@ except DashScopeError as e:
     print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
+<a id="java-sdk-5"></a>
+
+<a id="java-sdk-5-h4"></a>
+
 #### Java SDK
 
-**重要**请先更新 DashScope Java SDK 至 **2.22.31** 或以上版本，再运行以下代码。更新方法请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+> **重要**
+>
+> 请先更新 DashScope Java SDK 至 **2.22.31** 或以上版本，再运行以下代码。更新方法请参考[安装SDK](../model-api-reference/preparations/install-sdk.md)。
 
-```
+<a id="code-block-19"></a>
+
+```java
 // Copyright (c) Alibaba, Inc. and its affiliates.
 
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesis;
@@ -1062,10 +1076,17 @@ public class VideoEdit {
 }
 ```
 
+<a id="curl-5"></a>
+
+<a id="curl-5-h4"></a>
+
 #### curl
 
 **步骤1：创建任务获取任务ID**
-```
+
+<a id="code-block-20"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
     -H 'X-DashScope-Async: enable' \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -1088,11 +1109,19 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     }
 }'
 ```
+
 **步骤2：根据任务ID获取结果**
-```
+
+<a id="code-block-21"></a>
+
+```bash
 curl -X GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}' \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
+
+<a id="视频延长"></a>
+
+<a id="7a4928faf2pja"></a>
 
 ### 视频延长
 
@@ -1109,37 +1138,29 @@ curl -X GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{ta
 -   `duration` 建议设为 `-1`（模型根据输入内容自动推荐合适时长），或指定生成视频的时长，即输入视频时长 + 预期延长的时长总和。如原始视频5秒、预期向后延长2秒，`duration` 可设为 `-1` 或 `7`。
 -   需注意输入时长 + 输出时长总计≤30秒。
 
-**能力**
+<table><tbody><tr><td><strong>能力</strong></td><td><strong>输入提示词</strong></td><td><strong>输入参考视频</strong></td><td><strong>输出视频</strong></td></tr><tr><td><p>向后延长</p></td><td><p>面包师端上刷好的面包，将刷子放到一旁，镜头跟随面包师，去斜后方的烤炉进行烤制，面包师关上烤炉门，他站在烤炉旁边，看着正在烤炉里的面包，闻了闻面包的香气，说：&quot;so good&quot;。</p></td><td></td><td></td></tr><tr><td><p>向前延长</p></td><td><p>将视频1向前延长15s。角色A为穿黑色燕尾服、白色衬衫、黑色领结及米色马甲的深棕色短发男性，角色B为穿米色泡泡袖复古长裙、裙身带黑色蕾丝花边、佩戴深色水滴耳环的棕色盘发女性。</p><blockquote><p>完整提示词见表格下方折叠框。</p></blockquote></td><td></td><td></td></tr><tr><td><p>向前向后延长</p></td><td><p>以视频为中间段向前续写两秒：镜头平滑跟随，女孩向镜头缓缓走来，停下脚步，温柔地微微抬头，在冷空气中深吸一口气，嘴唇微张；以视频为中间段向后续写三秒：女孩搓完手，直视镜头，绽放出温暖灿烂的笑容。她缓缓抬起一只戴着手套的手，去接一片轻轻飘落的雪花，镜头缓慢后拉成中远景，展现阳光雪林小路，黄金时刻逆光，镜头光晕，浅景深，温暖治愈氛围。</p></td><td></td><td></td></tr></tbody></table>
 
-**输入提示词**
-
-**输入参考视频**
-
-**输出视频**
-
-向后延长
-
-面包师端上刷好的面包，将刷子放到一旁，镜头跟随面包师，去斜后方的烤炉进行烤制，面包师关上烤炉门，他站在烤炉旁边，看着正在烤炉里的面包，闻了闻面包的香气，说："so good"。
-
-向前延长
-
-将视频1向前延长15s。角色A为穿黑色燕尾服、白色衬衫、黑色领结及米色马甲的深棕色短发男性，角色B为穿米色泡泡袖复古长裙、裙身带黑色蕾丝花边、佩戴深色水滴耳环的棕色盘发女性。
-
-> 完整提示词见表格下方折叠框。
-
-向前向后延长
-
-以视频为中间段向前续写两秒：镜头平滑跟随，女孩向镜头缓缓走来，停下脚步，温柔地微微抬头，在冷空气中深吸一口气，嘴唇微张；以视频为中间段向后续写三秒：女孩搓完手，直视镜头，绽放出温暖灿烂的笑容。她缓缓抬起一只戴着手套的手，去接一片轻轻飘落的雪花，镜头缓慢后拉成中远景，展现阳光雪林小路，黄金时刻逆光，镜头光晕，浅景深，温暖治愈氛围。
+<a id="accordion-提示词-向前延长"></a>
 
 提示词：向前延长
 
 将视频1向前延长15s。角色A为穿黑色燕尾服、白色衬衫、黑色领结及米色马甲的深棕色短发男性，角色B为穿米色泡泡袖复古长裙、裙身带黑色蕾丝花边、佩戴深色水滴耳环的棕色盘发女性。舞厅内水晶吊灯光芒映照大理石地面，宾客们三两交谈持杯低语，一段悠扬的华尔兹弦乐前奏缓缓响起，人群的谈话声逐渐安静。角色B从舞厅一侧缓步走来，裙摆轻拂过大理石地面，目光环顾四周。角色A从人群中走出，穿过宾客径直来到角色B面前，微微欠身伸出右手，目光温柔注视着她。角色B垂眸浅笑，将右手轻轻搭上角色A的掌心，两人相视一笑，角色A引领角色B步入舞池中央，周围宾客自然后退让出空间，目光齐聚二人。角色A左手握住角色B右手举起，右手轻扶她的腰后，两人摆好华尔兹舞姿，随弦乐正拍踏出第一步，开始旋转。19世纪宫廷舞会的典雅氛围，暖金色调。
 
+<a id="sec-tabs-6"></a>
+
+<a id="python-sdk-6"></a>
+
+<a id="python-sdk-6-h4"></a>
+
 #### Python SDK
 
-**重要**请先更新 DashScope Python SDK 至 **2.0.1** 或以上版本，再运行以下代码。更新方法请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+> **重要**
+>
+> 请先更新 DashScope Python SDK 至 **2.0.1** 或以上版本，再运行以下代码。更新方法请参考[安装SDK](../model-api-reference/preparations/install-sdk.md)。
 
-```
+<a id="code-block-22"></a>
+
+```python
 import os
 import dashscope
 from dashscope import DashScopeError
@@ -1173,11 +1194,19 @@ except DashScopeError as e:
     print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
+<a id="java-sdk-6"></a>
+
+<a id="java-sdk-6-h4"></a>
+
 #### Java SDK
 
-**重要**请先更新 DashScope Java SDK 至 **2.22.31** 或以上版本，再运行以下代码。更新方法请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+> **重要**
+>
+> 请先更新 DashScope Java SDK 至 **2.22.31** 或以上版本，再运行以下代码。更新方法请参考[安装SDK](../model-api-reference/preparations/install-sdk.md)。
 
-```
+<a id="code-block-23"></a>
+
+```java
 // Copyright (c) Alibaba, Inc. and its affiliates.
 
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesis;
@@ -1237,10 +1266,17 @@ public class VideoExtend {
 }
 ```
 
+<a id="curl-6"></a>
+
+<a id="curl-6-h4"></a>
+
 #### curl
 
 **步骤1：创建任务获取任务ID**
-```
+
+<a id="code-block-24"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
     -H 'X-DashScope-Async: enable' \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -1264,65 +1300,42 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     }
 }'
 ```
+
 **步骤2：根据任务ID获取结果**
-```
+
+<a id="code-block-25"></a>
+
+```bash
 curl -X GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}' \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
+
+<a id="输入素材"></a>
+
+<a id="w30g_media_h"></a>
 
 ## 输入素材
 
 `input.media` 数组中每个元素包含 `type` 和 `url` 两个字段。支持的 type 及限制如下：
 
-**type**
+|  |  |  |
+| --- | --- | --- |
+| **type** | **说明** | **限制** |
+| `first_frame` | 首帧图像，严格作为视频第一帧 | 最多1张 |
+| `last_frame` | 尾帧图像，严格作为视频最后一帧 | 最多1张 |
+| `reference_image` | 参考图像 | 最多10张 |
+| `reference_video` | 参考视频 | 最多5段，总时长不超过15秒 |
+| `reference_audio` | 参考音频 | 最多5段，总时长不超过15秒 |
+| `file` | 文件（docx、doc、xlsx、xls、pptx、ppt、pdf、txt、md） | 最多1个，不可与 link 同时输入 |
+| `link` | 网页链接（公开网页） | 最多1个，不可与 file 同时输入 |
 
-**说明**
+> **重要**
+>
+> `reference_xx`/`file`/`link` 类型和 `first_frame`/`last_frame` 类型互斥，不能在同一请求中混用。
 
-**限制**
+<a id="输出视频"></a>
 
-`first_frame`
-
-首帧图像，严格作为视频第一帧
-
-最多1张
-
-`last_frame`
-
-尾帧图像，严格作为视频最后一帧
-
-最多1张
-
-`reference_image`
-
-参考图像
-
-最多10张
-
-`reference_video`
-
-参考视频
-
-最多5段，总时长不超过15秒
-
-`reference_audio`
-
-参考音频
-
-最多5段，总时长不超过15秒
-
-`file`
-
-文件（docx、doc、xlsx、xls、pptx、ppt、pdf、txt、md）
-
-最多1个，不可与 link 同时输入
-
-`link`
-
-网页链接（公开网页）
-
-最多1个，不可与 file 同时输入
-
-**重要**`reference_xx`/`file`/`link` 类型和 `first_frame`/`last_frame` 类型互斥，不能在同一请求中混用。
+<a id="w30g_output_h"></a>
 
 ## 输出视频
 
@@ -1333,13 +1346,21 @@ curl -X GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{ta
 -   **有声视频**：默认开启，可通过 `audio`\=false 关闭。
 -   视频URL有效期24小时，请及时保存。
 
+<a id="计费与限流"></a>
+
+<a id="w30g_billing_h"></a>
+
 ## 计费与限流
 
--   计费详情请参见[模型调用计费](raw/model-user-guide/test-1/model-pricing.md)。
--   限流详情请参见[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)。
+-   计费详情请参见[模型调用计费](../model-user-guide/test-1/model-pricing.md)。
+-   限流详情请参见[限流](../model-user-guide/get-started-with-models/rate-limit.md)。
 
 > 调用万相模型时，账户需有可用余额。
 
+<a id="api文档"></a>
+
+<a id="w30g_apiref_h"></a>
+
 ## API文档
 
-[万相3.0-视频生成 API参考](raw/model-api-reference/video-generation-api/wan-api-reference/wan3-video-generation-api-reference.md)
+[万相3.0-视频生成 API参考](../model-api-reference/video-generation-api/wan-api-reference/wan3-video-generation-api-reference.md)

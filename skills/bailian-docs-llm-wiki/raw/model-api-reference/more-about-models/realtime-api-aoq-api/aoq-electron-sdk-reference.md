@@ -2,514 +2,489 @@
 
 本文介绍 AOQ Client SDK Electron 版的 TypeScript 接口、事件和数据类型。该 SDK 适用于 macOS x64/arm64 和 Windows x64，要求 Node.js 16 或更高版本。
 
-**说明**AOQ SDK 提供通用视频接口。[Qwen-Audio-Realtime](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/audio-realtime-aoq-access.md) 不支持视频输入或输出；其他模型可使用的媒体能力以对应接入文档为准。
+> **说明**
+>
+> AOQ SDK 提供通用视频接口。[Qwen-Audio-Realtime](../../realtime-api-directory/audio-realtime-api-directory/audio-realtime-aoq-access.md) 不支持视频输入或输出；其他模型可使用的媒体能力以对应接入文档为准。
 
-**说明**适用包：`aoq-electron-sdk`（npm）。支持平台：macOS（x64 / arm64）、Windows x64；Node.js >= 16。
+> **说明**
+>
+> 适用包：`aoq-electron-sdk`（npm）。支持平台：macOS（x64 / arm64）、Windows x64；Node.js >= 16。
+
+<a id="接口目录"></a>
+
+<a id="af921adf44b9"></a>
+
+<a id="eefa81fce5bc"></a>
 
 ## 接口目录
 
+<a id="引擎入口与生命周期"></a>
+
+<a id="52d608fc59de"></a>
+
+<a id="2ebc799538c3"></a>
+
 ### 引擎入口与生命周期
 
-接口
+| 接口 | 简介 |
+| --- | --- |
+| createAoqClientEngine | 获取引擎包装实例（模块级懒加载单例） |
+| createEngine | 创建 native 引擎实例 |
+| destroy | 销毁引擎实例 |
+| getVersion | 获取 SDK 版本号 |
+| connect | 连接 Relay 服务器 |
+| disconnect | 断开服务器连接 |
 
-简介
+<a id="音频设备管理"></a>
 
-createAoqClientEngine
+<a id="392a54683694"></a>
 
-获取引擎包装实例（模块级懒加载单例）
-
-createEngine
-
-创建 native 引擎实例
-
-destroy
-
-销毁引擎实例
-
-getVersion
-
-获取 SDK 版本号
-
-connect
-
-连接 Relay 服务器
-
-disconnect
-
-断开服务器连接
+<a id="b4fb44f6eb28"></a>
 
 ### 音频设备管理
 
-接口
+| 接口 | 简介 |
+| --- | --- |
+| startAudioCapture | 打开音频采集设备（麦克风） |
+| stopAudioCapture | 关闭音频采集设备 |
+| muteAudioCapture | 静音或取消静音音频采集 |
+| startAudioPlayer | 开始音频渲染（播放远端音频） |
+| stopAudioPlayer | 停止音频渲染 |
+| pauseAudioPlayer | 暂停音频渲染，支持淡出 |
+| resumeAudioPlayer | 恢复音频渲染，支持淡入 |
+| interruptAudioPlayer | 打断本轮音频通话 |
 
-简介
+<a id="音频编解码配置"></a>
 
-startAudioCapture
+<a id="8c5e740fe2f9"></a>
 
-打开音频采集设备（麦克风）
-
-stopAudioCapture
-
-关闭音频采集设备
-
-muteAudioCapture
-
-静音或取消静音音频采集
-
-startAudioPlayer
-
-开始音频渲染（播放远端音频）
-
-stopAudioPlayer
-
-停止音频渲染
-
-pauseAudioPlayer
-
-暂停音频渲染，支持淡出
-
-resumeAudioPlayer
-
-恢复音频渲染，支持淡入
-
-interruptAudioPlayer
-
-打断本轮音频通话
+<a id="6a6ad5cbb0e5"></a>
 
 ### 音频编解码配置
 
-接口
+| 接口 | 简介 |
+| --- | --- |
+| setAudioEncoderConfig | 设置音频编码参数 |
+| setAudioDecoderConfig | 设置音频解码参数 |
 
-简介
+<a id="视频设备管理"></a>
 
-setAudioEncoderConfig
+<a id="36094dfd3a90"></a>
 
-设置音频编码参数
-
-setAudioDecoderConfig
-
-设置音频解码参数
+<a id="49303f7eebef"></a>
 
 ### 视频设备管理
 
-接口
+| 接口 | 简介 |
+| --- | --- |
+| startVideoCapture | 打开视频采集设备（摄像头） |
+| stopVideoCapture | 关闭视频采集设备 |
 
-简介
+<a id="视频编解码与外部输入"></a>
 
-startVideoCapture
+<a id="2fb0c020262e"></a>
 
-打开视频采集设备（摄像头）
-
-stopVideoCapture
-
-关闭视频采集设备
+<a id="189dfcd2badb"></a>
 
 ### 视频编解码与外部输入
 
-接口
+| 接口 | 简介 |
+| --- | --- |
+| setVideoEncoderConfig | 设置视频编码参数 |
+| setVideoDecoderConfig | 设置视频解码参数 |
+| pushExternalVideoCapturedFrame | 推送外部采集视频帧 |
+| pushExternalVideoEncodedFrame | 推送外部已编码视频帧 |
 
-简介
-
-setVideoEncoderConfig
-
-设置视频编码参数
-
-setVideoDecoderConfig
-
-设置视频解码参数
-
-pushExternalVideoCapturedFrame
-
-推送外部采集视频帧
-
-pushExternalVideoEncodedFrame
-
-推送外部已编码视频帧
+<a id="屏幕采集"></a>
 
 ### 屏幕采集
 
-接口
+| 接口 | 简介 |
+| --- | --- |
+| getScreenSourceList | 获取可共享的桌面和窗口列表 |
+| startScreenCapture | 启动屏幕采集 |
+| stopScreenCapture | 停止屏幕采集 |
 
-简介
+<a id="媒体流发送控制"></a>
 
-getScreenSourceList
+<a id="081e90639255"></a>
 
-获取可共享的桌面和窗口列表
-
-startScreenCapture
-
-启动屏幕采集
-
-stopScreenCapture
-
-停止屏幕采集
+<a id="74db1f031e94"></a>
 
 ### 媒体流发送控制
 
-接口
+| 接口 | 简介 |
+| --- | --- |
+| enableSendMediaStream | 控制本地媒体流的发送开关 |
 
-简介
+<a id="音频文件播放"></a>
 
-enableSendMediaStream
+<a id="79f3b3be21f0"></a>
 
-控制本地媒体流的发送开关
+<a id="28f63a96752c"></a>
 
 ### 音频文件播放
 
-接口
+| 接口 | 简介 |
+| --- | --- |
+| startAudioFile | 开始推流播放本地音频文件 |
+| stopAudioFile | 停止音频文件播放 |
+| pauseAudioFile | 暂停音频文件播放 |
+| resumeAudioFile | 恢复音频文件播放 |
+| getAudioFileDuration | 获取音频文件总时长 |
+| getAudioFileCurrentPosition | 获取音频文件当前播放位置 |
+| setAudioFilePositionMillis | 设置音频文件播放位置（seek） |
+| setAudioFileVolume | 设置音频文件音量 |
+| getAudioFileVolume | 获取音频文件当前音量 |
 
-简介
+<a id="外部音频流"></a>
 
-startAudioFile
+<a id="9721b5097802"></a>
 
-开始推流播放本地音频文件
-
-stopAudioFile
-
-停止音频文件播放
-
-pauseAudioFile
-
-暂停音频文件播放
-
-resumeAudioFile
-
-恢复音频文件播放
-
-getAudioFileDuration
-
-获取音频文件总时长
-
-getAudioFileCurrentPosition
-
-获取音频文件当前播放位置
-
-setAudioFilePositionMillis
-
-设置音频文件播放位置（seek）
-
-setAudioFileVolume
-
-设置音频文件音量
-
-getAudioFileVolume
-
-获取音频文件当前音量
+<a id="d6b4c13dff30"></a>
 
 ### 外部音频流
 
-接口
+| 接口 | 简介 |
+| --- | --- |
+| addAudioExternalStream | 新增一条外部音频流 |
+| removeAudioExternalStream | 移除外部音频流 |
+| pushAudioExternalStreamData | 输入外部音频 PCM 数据 |
+| setAudioExternalStreamVolume | 设置外部音频流音量 |
+| getAudioExternalStreamVolume | 获取外部音频流音量 |
+| clearAudioExternalStreamBuffer | 清空外部音频流缓存 |
 
-简介
+<a id="实时消息"></a>
 
-addAudioExternalStream
+<a id="b2e513a1c2a7"></a>
 
-新增一条外部音频流
-
-removeAudioExternalStream
-
-移除外部音频流
-
-pushAudioExternalStreamData
-
-输入外部音频 PCM 数据
-
-setAudioExternalStreamVolume
-
-设置外部音频流音量
-
-getAudioExternalStreamVolume
-
-获取外部音频流音量
-
-clearAudioExternalStreamBuffer
-
-清空外部音频流缓存
+<a id="a66495101cc7"></a>
 
 ### 实时消息
 
-接口
+| 接口 | 简介 |
+| --- | --- |
+| sendDataMsg | 发送实时数据消息 |
 
-简介
+<a id="音频帧回调"></a>
 
-sendDataMsg
+<a id="867abcb0c768"></a>
 
-发送实时数据消息
+<a id="b2a326f23d00"></a>
 
 ### 音频帧回调
 
-接口
+| 接口 | 简介 |
+| --- | --- |
+| setAudioFrameObserver | 开启或关闭音频帧数据观察者 |
+| enableAudioFrameObserver | 开启或关闭指定位置的音频帧回调 |
 
-简介
+<a id="本地音量提示"></a>
 
-setAudioFrameObserver
+<a id="d75426f97623"></a>
 
-开启或关闭音频帧数据观察者
-
-enableAudioFrameObserver
-
-开启或关闭指定位置的音频帧回调
+<a id="08ef2d23bcdc"></a>
 
 ### 本地音量提示
 
-接口
+| 接口 | 简介 |
+| --- | --- |
+| enableLocalAudioVolumeIndication | 开启或关闭本地采集音量提示回调 |
 
-简介
+<a id="视频帧回调"></a>
 
-enableLocalAudioVolumeIndication
+<a id="2e2f99d002c9"></a>
 
-开启或关闭本地采集音量提示回调
+<a id="a06fb694f247"></a>
 
 ### 视频帧回调
 
-接口
+| 接口 | 简介 |
+| --- | --- |
+| setVideoFrameObserver | 开启或关闭视频帧数据观察者 |
+| enableVideoFrameObserver | 开启或关闭指定位置的视频帧回调 |
 
-简介
+<a id="视频渲染-yuvcanvasrenderer"></a>
 
-setVideoFrameObserver
+<a id="ac6be4c83546"></a>
 
-开启或关闭视频帧数据观察者
-
-enableVideoFrameObserver
-
-开启或关闭指定位置的视频帧回调
+<a id="32ad215ce594"></a>
 
 ### 视频渲染（YUVCanvasRenderer）
 
-接口
+| 接口 | 简介 |
+| --- | --- |
+| bind | 绑定 canvas 元素 |
+| unbind | 解绑并清空画面 |
+| bound | 查询当前是否已绑定 |
+| drawFrame | 绘制一帧 I420 视频数据 |
 
-简介
+<a id="引擎事件-iaoqengineevents"></a>
 
-bind
+<a id="5113b8b82a57"></a>
 
-绑定 canvas 元素
-
-unbind
-
-解绑并清空画面
-
-bound
-
-查询当前是否已绑定
-
-drawFrame
-
-绘制一帧 I420 视频数据
+<a id="6f95b434d4cb"></a>
 
 ### 引擎事件（IAoqEngineEvents）
 
-接口
+| 接口 | 简介 |
+| --- | --- |
+| onError | 引擎错误回调 |
+| onWarning | 引擎警告回调 |
+| onConnectionStatusChange | 连接状态变化回调 |
+| onStats | 引擎统计信息回调 |
+| onAudioDeviceStateChanged | 音频设备操作状态变化回调 |
+| onAudioDeviceRouteChanged | 音频输出路由变化回调 |
+| onAudioFileState | 音频文件播放状态回调 |
+| onLocalAudioVolumeIndication | 本地采集音量提示回调 |
+| onVideoDeviceStateChanged | 视频设备操作状态变化回调 |
+| onDataMsg | 收到实时数据消息回调 |
 
-简介
-
-onError
-
-引擎错误回调
-
-onWarning
-
-引擎警告回调
-
-onConnectionStatusChange
-
-连接状态变化回调
-
-onStats
-
-引擎统计信息回调
-
-onAudioDeviceStateChanged
-
-音频设备操作状态变化回调
-
-onAudioDeviceRouteChanged
-
-音频输出路由变化回调
-
-onAudioFileState
-
-音频文件播放状态回调
-
-onLocalAudioVolumeIndication
-
-本地采集音量提示回调
-
-onVideoDeviceStateChanged
-
-视频设备操作状态变化回调
-
-onDataMsg
-
-收到实时数据消息回调
+<a id="音频帧事件"></a>
 
 ### 音频帧事件
 
-接口
+| 接口 | 简介 |
+| --- | --- |
+| onCapturedAudioFrame | 采集到原始音频帧时触发。数据为采集后的原始 PCM，未经任何处理。 |
+| onProcessCapturedAudioFrame | 3A 处理后的音频帧回调。数据经过回声消除、噪声抑制、自动增益等 3A 处理。 |
+| onPublishAudioFrame | 推流前的音频帧回调。数据即将通过编码后发送到 Relay 服务器。 |
+| onPlaybackAudioFrame | 播放前的远端音频帧回调。数据为远端解码后、混音前即将播放的音频。 |
 
-简介
-
-onCapturedAudioFrame
-
-采集到原始音频帧时触发。数据为采集后的原始 PCM，未经任何处理。
-
-onProcessCapturedAudioFrame
-
-3A 处理后的音频帧回调。数据经过回声消除、噪声抑制、自动增益等 3A 处理。
-
-onPublishAudioFrame
-
-推流前的音频帧回调。数据即将通过编码后发送到 Relay 服务器。
-
-onPlaybackAudioFrame
-
-播放前的远端音频帧回调。数据为远端解码后、混音前即将播放的音频。
+<a id="视频帧事件"></a>
 
 ### 视频帧事件
 
-接口
+| 接口 | 简介 |
+| --- | --- |
+| onCapturedVideoFrame | 采集到原始视频帧时触发（前处理前）。数据为摄像头或屏幕采集后的原始帧，未经前处理。 |
+| onPreEncodeVideoFrame | 编码前的视频帧回调（前处理后）。数据经过前处理后、编码前。 |
+| onRemoteVideoFrame | 远端解码后、渲染前的视频帧回调。数据为远端接收并解码后的视频帧。 |
 
-简介
+<a id="接口详情"></a>
 
-onCapturedVideoFrame
+<a id="4b161448ff3c"></a>
 
-采集到原始视频帧时触发（前处理前）。数据为摄像头或屏幕采集后的原始帧，未经前处理。
-
-onPreEncodeVideoFrame
-
-编码前的视频帧回调（前处理后）。数据经过前处理后、编码前。
-
-onRemoteVideoFrame
-
-远端解码后、渲染前的视频帧回调。数据为远端接收并解码后的视频帧。
+<a id="dd0f0f808cdb"></a>
 
 ## 接口详情
 
+<a id="引擎入口与生命周期-2"></a>
+
+<a id="39c475b83ae0"></a>
+
+<a id="2ebc799538c3-details"></a>
+
+<a id="aoq-api-category-1"></a>
+
 ### 引擎入口与生命周期
+
+<a id="createaoqclientengine"></a>
+
+<a id="532e593a4af8"></a>
+
+<a id="5f23e6425200"></a>
 
 #### createAoqClientEngine
 
 获取引擎包装实例。模块级懒加载单例，重复调用返回同一实例，与 native 引擎单例语义对齐；也是包的 default export。
 
-```
+<a id="code-block"></a>
+
+```typescript
 import createAoqClientEngine from 'aoq-electron-sdk';
 export function createAoqClientEngine(): IAoqClientEngine
 ```
 
 返回值：`IAoqClientEngine` 引擎实例。注意本方法仅创建 JS 包装层与 native bridge，真正创建引擎需再调 `createEngine()`。
 
+<a id="createengine"></a>
+
+<a id="f39678262f0a"></a>
+
+<a id="58bfa7f6905a"></a>
+
 #### createEngine
 
 创建 native 引擎实例。引擎为全局单例，重复调用直接返回成功。
 
-```
+<a id="code-block-2"></a>
+
+```typescript
 createEngine(config: AoqCreateConfig): number
 ```
 
-**参数**
-
-**类型**
-
-**说明**
-
-config
-
-AoqCreateConfig
-
-引擎创建配置
+| 参数 | 类型 | 说明 |
+| --- | --- | --- |
+| config | AoqCreateConfig | 引擎创建配置 |
 
 返回值：`0` 成功；`-1` 表示创建失败或参数不是合法 JSON。
 
-**说明**Windows 上 `createEngine()` 会在当前 JS 线程的 libuv 循环上挂一个 16ms 的 Win32 消息泵（摄像头采集依赖），`destroy()` 时停掉；因此不要在 `createEngine()` 之后长时间同步阻塞 JS 线程。
+> **说明**
+>
+> Windows 上 `createEngine()` 会在当前 JS 线程的 libuv 循环上挂一个 16ms 的 Win32 消息泵（摄像头采集依赖），`destroy()` 时停掉；因此不要在 `createEngine()` 之后长时间同步阻塞 JS 线程。
+
+<a id="destroy"></a>
+
+<a id="cb44f1cb8d2d"></a>
+
+<a id="3729996409f6"></a>
 
 #### destroy
 
 销毁引擎实例，释放所有资源。
 
-```
+<a id="code-block-3"></a>
+
+```typescript
 destroy(): number
 ```
 
 返回值：`0` 表示成功；非 `0` 表示失败。引擎未创建时返回 `0`。
 
+<a id="getversion"></a>
+
+<a id="7efcb5d0857e"></a>
+
+<a id="d6e9e8f529b4"></a>
+
 #### getVersion
 
 获取 SDK 当前版本号，无需先调 `createEngine()`。
 
-```
+<a id="code-block-4"></a>
+
+```typescript
 getVersion(): string
 ```
 
 返回值：版本号字符串，如 "1.2.0"；取不到时返回空字符串。
 
+<a id="connect"></a>
+
+<a id="77da5e3f26d1"></a>
+
+<a id="2e7e719a0205"></a>
+
 #### connect
 
 连接 Relay 服务器。业务 AppServer 应根据所用协议获取临时 AOQ 连接参数并下发给客户端，具体操作请参见Token 鉴权。
 
-```
+<a id="code-block-5"></a>
+
+```typescript
 connect(config: AoqConnectConfig): number
 ```
 
-**参数**
-
-**类型**
-
-**说明**
-
-config
-
-AoqConnectConfig
-
-连接配置，包含 Token、SID、Relay 接入点列表、推拉流 track 列表等
+| 参数 | 类型 | 说明 |
+| --- | --- | --- |
+| config | AoqConnectConfig | 连接配置，包含 Token、SID、Relay 接入点列表、推拉流 track 列表等 |
 
 返回值：`0` 表示调用已下发（异步执行）；非 `0` 表示参数校验失败。连接结果由 `onConnectionStatusChange` 事件通知。
+
+<a id="disconnect"></a>
+
+<a id="f0356d90f89b"></a>
+
+<a id="e4878403ea4c"></a>
 
 #### disconnect
 
 断开与服务器的连接，释放连接相关资源。
 
-```
+<a id="code-block-6"></a>
+
+```typescript
 disconnect(): number
 ```
 
 返回值：`0` 表示调用已下发（异步执行）；非 `0` 表示失败。
 
+<a id="音频设备管理-2"></a>
+
+<a id="abab42704a88"></a>
+
+<a id="b4fb44f6eb28-details"></a>
+
+<a id="aoq-api-category-2"></a>
+
 ### 音频设备管理
+
+<a id="startaudiocapture"></a>
+
+<a id="5d830a377752"></a>
+
+<a id="9b12ccc07e71"></a>
 
 #### startAudioCapture
 
-```
+<a id="code-block-7"></a>
+
+```typescript
 startAudioCapture(config: AoqAudioCaptureConfig): number
 ```
 
 打开音频采集设备（麦克风）。首次采集会触发系统授权，macOS 需在应用 `Info.plist` 中声明 `NSMicrophoneUsageDescription`。
 
+<a id="stopaudiocapture"></a>
+
+<a id="048f920865a0"></a>
+
+<a id="5316db42022d"></a>
+
 #### stopAudioCapture
 
-```
+<a id="code-block-8"></a>
+
+```typescript
 stopAudioCapture(): number
 ```
 
 关闭音频采集设备。
 
+<a id="muteaudiocapture"></a>
+
+<a id="d49b32090e92"></a>
+
+<a id="a294c65932da"></a>
+
 #### muteAudioCapture
 
-```
+<a id="code-block-9"></a>
+
+```typescript
 muteAudioCapture(mute: boolean): number
 ```
 
 静音或取消静音音频采集。`mute=true` 静音，`false` 取消静音。
 
+<a id="startaudioplayer"></a>
+
+<a id="4ae655f29557"></a>
+
+<a id="2b12c6427ae8"></a>
+
 #### startAudioPlayer
 
-```
+<a id="code-block-10"></a>
+
+```typescript
 startAudioPlayer(config: AoqAudioPlaybackConfig): number
 ```
 
 开始音频渲染（播放远端音频）。
 
+<a id="stopaudioplayer-pauseaudioplayer-resumeaudioplayer"></a>
+
+<a id="dbe13454f5e1"></a>
+
+<a id="35286810f027"></a>
+
 #### stopAudioPlayer / pauseAudioPlayer / resumeAudioPlayer
 
-```
+<a id="code-block-11"></a>
+
+```typescript
 stopAudioPlayer(): number
 pauseAudioPlayer(fadeMs: number): number
 resumeAudioPlayer(fadeMs: number): number
@@ -517,89 +492,109 @@ resumeAudioPlayer(fadeMs: number): number
 
 `fadeMs`：淡出/淡入时长（毫秒）；`0` 表示立即执行。
 
+<a id="interruptaudioplayer"></a>
+
+<a id="64020c9ab7c1"></a>
+
+<a id="8148361b77f7"></a>
+
 #### interruptAudioPlayer
 
-```
+<a id="code-block-12"></a>
+
+```typescript
 interruptAudioPlayer(trackType: AoqTrackType, fadeMs: number): number
 ```
 
 打断本轮音频通话，丢弃已缓存的本轮下行数据。
 
-**参数**
+| 参数 | 类型 | 说明 |
+| --- | --- | --- |
+| trackType | AoqTrackType | 轨道类型 |
+| fadeMs | number | 淡出时长（毫秒） |
 
-**类型**
+<a id="音频编解码配置-2"></a>
 
-**说明**
+<a id="5e2c8f09eb9b"></a>
 
-trackType
+<a id="6a6ad5cbb0e5-details"></a>
 
-AoqTrackType
-
-轨道类型
-
-fadeMs
-
-number
-
-淡出时长（毫秒）
+<a id="aoq-api-category-3"></a>
 
 ### 音频编解码配置
 
-```
+<a id="code-block-13"></a>
+
+```typescript
 setAudioEncoderConfig(config: AoqAudioCodecConfig): number
 setAudioDecoderConfig(config: AoqAudioCodecConfig): number
 ```
 
 建议在 `connect()` 之前调用。使用 Opus（`AoqEncoderTypeAudioOpus`）需 SDK 内置或随包分发 PluginOpus 插件。
 
+<a id="视频设备管理-2"></a>
+
+<a id="c98b226587e0"></a>
+
+<a id="49303f7eebef-details"></a>
+
+<a id="aoq-api-category-4"></a>
+
 ### 视频设备管理
 
-```
+<a id="code-block-14"></a>
+
+```typescript
 startVideoCapture(config: AoqVideoCaptureConfig): number
 stopVideoCapture(): number
 ```
 
 打开/关闭视频采集设备。macOS 需在 `Info.plist` 中声明 `NSCameraUsageDescription`。当 `config.isExternal=true` 时不打开摄像头，由 `pushExternalVideoCapturedFrame` 送帧。
 
-**说明**Electron renderer 为 Chromium 环境，无法嵌入原生视图，因此未提供 `setLocalView / setRemoteView / switchCamera`；预览请使用“帧观察者 + YUVCanvasRenderer”（见 2.13）。
+> **说明**
+>
+> Electron renderer 为 Chromium 环境，无法嵌入原生视图，因此未提供 `setLocalView / setRemoteView / switchCamera`；预览请使用“帧观察者 + YUVCanvasRenderer”（见 2.13）。
+
+<a id="视频编解码与外部输入-2"></a>
+
+<a id="8d42875fe511"></a>
+
+<a id="189dfcd2badb-details"></a>
+
+<a id="aoq-api-category-5"></a>
 
 ### 视频编解码与外部输入
 
-```
+<a id="code-block-15"></a>
+
+```typescript
 setVideoEncoderConfig(config: AoqVideoCodecConfig): number
 setVideoDecoderConfig(config: AoqVideoCodecConfig): number
 pushExternalVideoCapturedFrame(meta: AoqExternalVideoFrameMeta, buffer: Uint8Array): number
 pushExternalVideoEncodedFrame(meta: AoqExternalVideoEncodedFrameMeta, buffer: Uint8Array): number
 ```
 
-**参数**
+| 参数 | 类型 | 说明 |
+| --- | --- | --- |
+| meta | AoqExternalVideoFrameMeta / AoqExternalVideoEncodedFrameMeta | 帧元信息（尺寸、格式、时间戳） |
+| buffer | Uint8Array | 帧数据（像素数据或已编码数据） |
 
-**类型**
+> **说明**
+>
+> -   `pushExternalVideoCapturedFrame` Video 轨道需先调用 `startVideoCapture({ isExternal: true })`，Screen 轨道需先调用 `startScreenCapture({ isExternal: true })`；未开启时返回 `211`，缓冲区满时返回 `210`。
+> -   支持 `AoqVideoPixelFormatI420` 与打包格式（NV12 / NV21 / BGRA / RGBA）；I420 时 `buffer` 必须为紧凑布局（stride = width），Y / U / V 三平面顺序拼接。
+> -   `pushExternalVideoEncodedFrame` 需先 `setVideoEncoderConfig({ isExternal: true })`；未开启时返回 `212`。当前仅支持 JPEG。
+> -   `meta.timeStamp` 为 `0` 时由 SDK 使用本地时间补齐。
 
-**说明**
+<a id="屏幕采集-2"></a>
 
-meta
-
-AoqExternalVideoFrameMeta / AoqExternalVideoEncodedFrameMeta
-
-帧元信息（尺寸、格式、时间戳）
-
-buffer
-
-Uint8Array
-
-帧数据（像素数据或已编码数据）
-
-**说明**
-
--   `pushExternalVideoCapturedFrame` Video 轨道需先调用 `startVideoCapture({ isExternal: true })`，Screen 轨道需先调用 `startScreenCapture({ isExternal: true })`；未开启时返回 `211`，缓冲区满时返回 `210`。
--   支持 `AoqVideoPixelFormatI420` 与打包格式（NV12 / NV21 / BGRA / RGBA）；I420 时 `buffer` 必须为紧凑布局（stride = width），Y / U / V 三平面顺序拼接。
--   `pushExternalVideoEncodedFrame` 需先 `setVideoEncoderConfig({ isExternal: true })`；未开启时返回 `212`。当前仅支持 JPEG。
--   `meta.timeStamp` 为 `0` 时由 SDK 使用本地时间补齐。
+<a id="aoq-api-category-6"></a>
 
 ### 屏幕采集
 
-```
+<a id="code-block-16"></a>
+
+```typescript
 startScreenCapture(config: AoqScreenCaptureConfig): number
 stopScreenCapture(): number
 ```
@@ -612,17 +607,31 @@ stopScreenCapture(): number
 
 外部原始帧：设置 `isExternal=true` 后，通过 `pushExternalVideoCapturedFrame` 输入 Screen 轨道的原始帧，由 SDK 编码。外部已编码帧：先通过 `setVideoEncoderConfig` 将 Screen 轨道设置为外部编码，再调用 `pushExternalVideoEncodedFrame`。
 
+<a id="getscreensourcelist"></a>
+
 #### getScreenSourceList
 
-```
+<a id="code-block-17"></a>
+
+```typescript
 getScreenSourceList(): AoqScreenSourceInfo[]
 ```
 
 返回屏幕源数组，仅支持 Electron macOS/Windows。
 
+<a id="媒体流发送控制-2"></a>
+
+<a id="d0021d8147cc"></a>
+
+<a id="74db1f031e94-details"></a>
+
+<a id="aoq-api-category-7"></a>
+
 ### 媒体流发送控制
 
-```
+<a id="code-block-18"></a>
+
+```typescript
 enableSendMediaStream(trackType: AoqTrackType, enable: boolean): number
 ```
 
@@ -630,9 +639,19 @@ enableSendMediaStream(trackType: AoqTrackType, enable: boolean): number
 
 控制本地某路媒体流是否发送。建议初始化后先 `enableSendMediaStream(trackType, false)`，待 `onConnectionStatusChange` 上报 `AoqConnectionStatusConnected` 后再开启。
 
+<a id="音频文件播放-2"></a>
+
+<a id="cb354040465e"></a>
+
+<a id="28f63a96752c-details"></a>
+
+<a id="aoq-api-category-8"></a>
+
 ### 音频文件播放
 
-```
+<a id="code-block-19"></a>
+
+```typescript
 startAudioFile(config: AoqAudioFileMixConfig): number
 stopAudioFile(fileId: string): number
 pauseAudioFile(fileId: string): number
@@ -644,41 +663,13 @@ setAudioFileVolume(fileId: string, type: AoqAudioStreamDirection, volume: number
 getAudioFileVolume(fileId: string, type: AoqAudioStreamDirection): number
 ```
 
-**参数**
-
-**类型**
-
-**说明**
-
-config
-
-AoqAudioFileMixConfig
-
-文件混音配置，`fileId` 作为配置字段携带
-
-fileId
-
-string
-
-文件标识，由调用方定义，后续接口以此定位
-
-positionMs
-
-number
-
-目标播放位置（毫秒）
-
-type
-
-AoqAudioStreamDirection
-
-推流音量或本地播放音量
-
-volume
-
-number
-
-音量，取值范围 0-100
+| 参数 | 类型 | 说明 |
+| --- | --- | --- |
+| config | AoqAudioFileMixConfig | 文件混音配置，`fileId` 作为配置字段携带 |
+| fileId | string | 文件标识，由调用方定义，后续接口以此定位 |
+| positionMs | number | 目标播放位置（毫秒） |
+| type | AoqAudioStreamDirection | 推流音量或本地播放音量 |
+| volume | number | 音量，取值范围 0-100 |
 
 返回值说明：
 
@@ -688,9 +679,19 @@ number
 
 播放状态变化通过 `onAudioFileState` 事件上报。
 
+<a id="外部音频流-2"></a>
+
+<a id="5329d73f4578"></a>
+
+<a id="d6b4c13dff30-details"></a>
+
+<a id="aoq-api-category-9"></a>
+
 ### 外部音频流
 
-```
+<a id="code-block-20"></a>
+
+```typescript
 addAudioExternalStream(config: AoqAudioExternalStreamConfig): number
 removeAudioExternalStream(streamId: string): number
 pushAudioExternalStreamData(meta: AoqAudioExternalFrameMeta, buffer: Uint8Array): number
@@ -699,84 +700,65 @@ getAudioExternalStreamVolume(streamId: string, type: AoqAudioStreamDirection): n
 clearAudioExternalStreamBuffer(streamId: string, fadeoutMs: number): number
 ```
 
-**参数**
+| 参数 | 类型 | 说明 |
+| --- | --- | --- |
+| config | AoqAudioExternalStreamConfig | 外部音频流配置，`streamId` 作为配置字段携带 |
+| streamId | string | 流标识，由调用方定义 |
+| meta | AoqAudioExternalFrameMeta | PCM 帧元信息，`streamId` 作为元信息字段携带 |
+| buffer | Uint8Array | PCM 数据 |
+| fadeoutMs | number | 清空缓存时的淡出时长（毫秒） |
 
-**类型**
+> **说明**
+>
+> -   `pushAudioExternalStreamData` 缓存时长超过 `maxBufferDuration` 时返回 `110`（外部音频缓冲区满）。
+> -   `getAudioExternalStreamVolume` 返回当前音量值；引擎未创建时返回 `-1`。
+> -   `clearAudioExternalStreamBuffer` native 侧无返回值，调用成功固定返回 `0`。
 
-**说明**
+<a id="实时消息-2"></a>
 
-config
+<a id="fc86175897e4"></a>
 
-AoqAudioExternalStreamConfig
+<a id="a66495101cc7-details"></a>
 
-外部音频流配置，`streamId` 作为配置字段携带
-
-streamId
-
-string
-
-流标识，由调用方定义
-
-meta
-
-AoqAudioExternalFrameMeta
-
-PCM 帧元信息，`streamId` 作为元信息字段携带
-
-buffer
-
-Uint8Array
-
-PCM 数据
-
-fadeoutMs
-
-number
-
-清空缓存时的淡出时长（毫秒）
-
-**说明**
-
--   `pushAudioExternalStreamData` 缓存时长超过 `maxBufferDuration` 时返回 `110`（外部音频缓冲区满）。
--   `getAudioExternalStreamVolume` 返回当前音量值；引擎未创建时返回 `-1`。
--   `clearAudioExternalStreamBuffer` native 侧无返回值，调用成功固定返回 `0`。
+<a id="aoq-api-category-10"></a>
 
 ### 实时消息
 
-```
+<a id="code-block-21"></a>
+
+```typescript
 sendDataMsg(data: Uint8Array | string): number
 ```
 
 发送实时数据消息。传入 `string` 时内部按 UTF-8 编码为 `Buffer` 后发送。对端消息通过 `onDataMsg` 事件回调。
 
+<a id="音频帧回调-2"></a>
+
+<a id="0f6471227758"></a>
+
+<a id="b2a326f23d00-details"></a>
+
+<a id="aoq-api-category-11"></a>
+
 ### 音频帧回调
 
-```
+<a id="code-block-22"></a>
+
+```typescript
 setAudioFrameObserver(enable: boolean): number
 enableAudioFrameObserver(params: AoqAudioObserverParams): number
 ```
 
-**参数**
-
-**类型**
-
-**说明**
-
-enable
-
-boolean
-
-`true` 注册内置音频帧观察者，`false` 注销
-
-params
-
-AoqAudioObserverParams
-
-指定回调位置、开关与回调格式
+| 参数 | 类型 | 说明 |
+| --- | --- | --- |
+| enable | boolean | `true` 注册内置音频帧观察者，`false` 注销 |
+| params | AoqAudioObserverParams | 指定回调位置、开关与回调格式 |
 
 使用步骤：先 `setAudioFrameObserver(true)` 注册观察者，再对需要的位置调 `enableAudioFrameObserver`，数据通过对应事件下发。
 
-```
+<a id="code-block-23"></a>
+
+```javascript
 engine.setAudioFrameObserver(true)
 engine.enableAudioFrameObserver({
   enabled: true,
@@ -787,48 +769,67 @@ engine.enableAudioFrameObserver({
 engine.on('onCapturedAudioFrame', (frame) => { /* frame.buffer 为 PCM 数据 */ })
 ```
 
-**说明**Electron 侧帧观察者仅支持**只读**模式，回调中不支持回写帧数据（native 内部固定 `ReadOnly`）。
+> **说明**
+>
+> Electron 侧帧观察者仅支持**只读**模式，回调中不支持回写帧数据（native 内部固定 `ReadOnly`）。
+
+<a id="本地音量提示-2"></a>
+
+<a id="245a7a88a687"></a>
+
+<a id="08ef2d23bcdc-details"></a>
+
+<a id="aoq-api-category-12"></a>
 
 ### 本地音量提示
 
-```
+<a id="code-block-24"></a>
+
+```typescript
 enableLocalAudioVolumeIndication(config: AoqAudioVolumeIndicationConfig): number
 ```
 
 开启/关闭本地采集音量提示。`config.interval <= 0` 时关闭回调；开启后按 `config.interval` 周期触发 `onLocalAudioVolumeIndication`。需在 `startAudioCapture()` 之后调用才有音量数据。
 
+<a id="视频帧回调-2"></a>
+
+<a id="5fdaab90db53"></a>
+
+<a id="a06fb694f247-details"></a>
+
+<a id="aoq-api-category-13"></a>
+
 ### 视频帧回调
 
-```
+<a id="code-block-25"></a>
+
+```typescript
 setVideoFrameObserver(enable: boolean): number
 enableVideoFrameObserver(params: AoqVideoObserverParams): number
 ```
 
-**参数**
-
-**类型**
-
-**说明**
-
-enable
-
-boolean
-
-`true` 注册内置视频帧观察者，`false` 注销
-
-params
-
-AoqVideoObserverParams
-
-指定回调位置、开关、像素格式与对齐策略
+| 参数 | 类型 | 说明 |
+| --- | --- | --- |
+| enable | boolean | `true` 注册内置视频帧观察者，`false` 注销 |
+| params | AoqVideoObserverParams | 指定回调位置、开关、像素格式与对齐策略 |
 
 回调数据以 `AoqVideoFrameEvent` 形式通过 `onCapturedVideoFrame` / `onPreEncodeVideoFrame` / `onRemoteVideoFrame` 下发；I420 时 `buffer` 为 Y / U / V 三平面按 stride 拼接，其余打包格式为原数据透传。同样仅支持只读模式。
+
+<a id="视频渲染-yuvcanvasrenderer-2"></a>
+
+<a id="1a9b2e6db456"></a>
+
+<a id="32ad215ce594-details"></a>
+
+<a id="aoq-api-category-14"></a>
 
 ### 视频渲染（YUVCanvasRenderer）
 
 SDK 内置的软渲染器。
 
-```
+<a id="code-block-26"></a>
+
+```typescript
 import { YUVCanvasRenderer } from 'aoq-electron-sdk';
 
 class YUVCanvasRenderer {
@@ -839,27 +840,16 @@ class YUVCanvasRenderer {
 }
 ```
 
-**接口**
+| 接口 | 说明 |
+| --- | --- |
+| bind | 绑定 canvas（重复绑定会替换 sink） |
+| unbind | 解绑并清空画面 |
+| bound | 是否已绑定 |
+| drawFrame | 绘制一帧；仅支持 I420，非 I420 / 尺寸或 buffer 长度不足时静默返回 |
 
-**说明**
+<a id="code-block-27"></a>
 
-bind
-
-绑定 canvas（重复绑定会替换 sink）
-
-unbind
-
-解绑并清空画面
-
-bound
-
-是否已绑定
-
-drawFrame
-
-绘制一帧；仅支持 I420，非 I420 / 尺寸或 buffer 长度不足时静默返回
-
-```
+```javascript
 const renderer = new YUVCanvasRenderer()
 renderer.bind(document.getElementById('preview'))
 
@@ -874,112 +864,204 @@ engine.on('onCapturedVideoFrame', (frame) => renderer.drawFrame(frame))
 
 渲染填充模式（拉伸 / 裁剪等）用 CSS `object-fit` 控制 canvas 即可。
 
+<a id="引擎事件-iaoqengineevents-2"></a>
+
+<a id="fc9b11f7ba1b"></a>
+
+<a id="6f95b434d4cb-details"></a>
+
+<a id="aoq-api-category-15"></a>
+
 ### 引擎事件（IAoqEngineEvents）
 
 引擎继承 `EventEmitter<IAoqEngineEvents>`，事件是 SDK 所有异步通知的统一出口，与 native `AoqEngineEventListener` 回调一一对应。不关心的事件无需注册。
 
-```
+<a id="code-block-28"></a>
+
+```typescript
 engine.on('onError', (code, message) => {})
 engine.off('onError', handler)
 engine.once('onStats', (stats) => {})
 engine.removeAllListeners()
 ```
 
+<a id="onerror"></a>
+
+<a id="667125da8f9c"></a>
+
+<a id="6dd2d02df5e3"></a>
+
 #### onError
 
-```
+<a id="code-block-29"></a>
+
+```typescript
 onError: (code: number, message: string) => void
 ```
 
 引擎错误回调。`code` 对应 AoqErrorCode 数值（见 3.3）。
 
+<a id="onwarning"></a>
+
+<a id="361e7b2716d5"></a>
+
+<a id="0cf1d215290c"></a>
+
 #### onWarning
 
-```
+<a id="code-block-30"></a>
+
+```typescript
 onWarning: (code: number, message: string) => void
 ```
 
 引擎警告回调。`code` 对应 AoqWarningCode 数值（见 3.3）。
 
+<a id="onconnectionstatuschange"></a>
+
+<a id="3457078b370b"></a>
+
+<a id="d31c06a15977"></a>
+
 #### onConnectionStatusChange
 
-```
+<a id="code-block-31"></a>
+
+```typescript
 onConnectionStatusChange: (status: AoqConnectionStatus) => void
 ```
 
 连接状态变化回调。状态流转：Disconnected -> Connecting -> Connected / Failed -> Disconnected。
 
+<a id="onstats"></a>
+
+<a id="fe490139e03d"></a>
+
+<a id="3a15e4cdc57f"></a>
+
 #### onStats
 
-```
+<a id="code-block-32"></a>
+
+```typescript
 onStats: (stats: AoqStats) => void
 ```
 
 引擎统计信息回调。SDK 周期性上报音视频推拉流及网络统计数据，可用于实时监测通话质量、网络状态、诊断音视频问题。
 
-**参数**
+| 参数 | 类型 | 说明 |
+| --- | --- | --- |
+| stats | AoqStats | 包含音频 / 视频 / 数据消息的推拉流统计及网络统计 |
 
-**类型**
+<a id="onaudiodevicestatechanged"></a>
 
-**说明**
+<a id="b9782feccd57"></a>
 
-stats
-
-AoqStats
-
-包含音频 / 视频 / 数据消息的推拉流统计及网络统计
+<a id="e0ea8bb7b4f8"></a>
 
 #### onAudioDeviceStateChanged
 
-```
+<a id="code-block-33"></a>
+
+```typescript
 onAudioDeviceStateChanged: (state: AoqAudioDeviceState) => void
 ```
 
 音频设备采集 / 播放操作状态变化回调。
 
+<a id="onaudiodeviceroutechanged"></a>
+
+<a id="d2e87e4576d5"></a>
+
+<a id="f986a28dd595"></a>
+
 #### onAudioDeviceRouteChanged
 
-```
+<a id="code-block-34"></a>
+
+```typescript
 onAudioDeviceRouteChanged: (routeType: number) => void
 ```
 
 音频输出路由变化回调。`routeType` 对应 AoqAudioDeviceRouteType 数值（见 3.4）。
 
+<a id="onaudiofilestate"></a>
+
+<a id="77a2bf348c27"></a>
+
+<a id="36a30115b5fd"></a>
+
 #### onAudioFileState
 
-```
+<a id="code-block-35"></a>
+
+```typescript
 onAudioFileState: (state: AoqAudioFileState) => void
 ```
 
 音频文件播放状态回调。
 
+<a id="onlocalaudiovolumeindication"></a>
+
+<a id="880729243f12"></a>
+
+<a id="218f72a15fc3"></a>
+
 #### onLocalAudioVolumeIndication
 
-```
+<a id="code-block-36"></a>
+
+```typescript
 onLocalAudioVolumeIndication: (volume: AoqAudioVolume) => void
 ```
 
 本地采集音量提示回调，需调用 `enableLocalAudioVolumeIndication` 开启。
 
+<a id="onvideodevicestatechanged"></a>
+
+<a id="7a5826ea3f73"></a>
+
+<a id="69889b2be495"></a>
+
 #### onVideoDeviceStateChanged
 
-```
+<a id="code-block-37"></a>
+
+```typescript
 onVideoDeviceStateChanged: (state: AoqVideoDeviceState) => void
 ```
 
 视频设备采集操作状态变化回调。
 
+<a id="ondatamsg"></a>
+
+<a id="244955cb7a6c"></a>
+
+<a id="ea0601a8ec5d"></a>
+
 #### onDataMsg
 
-```
+<a id="code-block-38"></a>
+
+```typescript
 onDataMsg: (data: Uint8Array) => void
 ```
 
 收到实时数据消息回调。`data` 为 native 侧拷贝后的 `Buffer`，可安全异步持有；文本消息用 `Buffer.from(data).toString()` 转字符串。
 
+<a id="音频帧事件-2"></a>
+
+<a id="b06814e49e7e"></a>
+
+<a id="0a6ae1268c9f"></a>
+
+<a id="aoq-api-category-16"></a>
+
 ### 音频帧事件
 
-```
+<a id="code-block-39"></a>
+
+```typescript
 onCapturedAudioFrame:        (frame: AoqAudioFrameEvent) => void  /* 采集裸数据 */
 onProcessCapturedAudioFrame: (frame: AoqAudioFrameEvent) => void  /* 3A 后数据 */
 onPublishAudioFrame:         (frame: AoqAudioFrameEvent) => void  /* 推流数据 */
@@ -988,105 +1070,107 @@ onPlaybackAudioFrame:        (frame: AoqAudioFrameEvent) => void  /* 播放数�
 
 需先调 `setAudioFrameObserver(true)` 与 `enableAudioFrameObserver` 开启。
 
+<a id="oncapturedaudioframe"></a>
+
 #### onCapturedAudioFrame
 
 采集到原始音频帧时触发。数据为采集后的原始 PCM，未经任何处理。
 
-```
+<a id="code-block-40"></a>
+
+```typescript
 engine.on('onCapturedAudioFrame', (frame: AoqAudioFrameEvent) => { ... })
 ```
 
-参数
-
-类型
-
-说明
-
-frame
-
-AoqAudioFrameEvent
-
-采集的音频帧数据，PCM 在 frame.buffer 字段
+| 参数 | 类型 | 说明 |
+| --- | --- | --- |
+| frame | AoqAudioFrameEvent | 采集的音频帧数据，PCM 在 frame.buffer 字段 |
 
 返回值：无（void）。Electron 侧为只读模式。
 
-**说明**frame.buffer 为 Uint8Array，引用 SDK 内部内存，仅在回调期间有效，异步使用需自行拷贝。
+> **说明**
+>
+> frame.buffer 为 Uint8Array，引用 SDK 内部内存，仅在回调期间有效，异步使用需自行拷贝。
+
+<a id="onprocesscapturedaudioframe"></a>
 
 #### onProcessCapturedAudioFrame
 
 3A 处理后的音频帧回调。数据经过回声消除、噪声抑制、自动增益等 3A 处理。
 
-```
+<a id="code-block-41"></a>
+
+```typescript
 engine.on('onProcessCapturedAudioFrame', (frame: AoqAudioFrameEvent) => { ... })
 ```
 
-参数
-
-类型
-
-说明
-
-frame
-
-AoqAudioFrameEvent
-
-3A 处理后的音频帧数据，PCM 在 frame.buffer 字段
+| 参数 | 类型 | 说明 |
+| --- | --- | --- |
+| frame | AoqAudioFrameEvent | 3A 处理后的音频帧数据，PCM 在 frame.buffer 字段 |
 
 返回值：无（void）。Electron 侧为只读模式。
 
-**说明**frame.buffer 为 Uint8Array，引用 SDK 内部内存，仅在回调期间有效，异步使用需自行拷贝。
+> **说明**
+>
+> frame.buffer 为 Uint8Array，引用 SDK 内部内存，仅在回调期间有效，异步使用需自行拷贝。
+
+<a id="onpublishaudioframe"></a>
 
 #### onPublishAudioFrame
 
 推流前的音频帧回调。数据即将通过编码后发送到 Relay 服务器。
 
-```
+<a id="code-block-42"></a>
+
+```typescript
 engine.on('onPublishAudioFrame', (frame: AoqAudioFrameEvent) => { ... })
 ```
 
-参数
-
-类型
-
-说明
-
-frame
-
-AoqAudioFrameEvent
-
-推流前的音频帧数据，PCM 在 frame.buffer 字段
+| 参数 | 类型 | 说明 |
+| --- | --- | --- |
+| frame | AoqAudioFrameEvent | 推流前的音频帧数据，PCM 在 frame.buffer 字段 |
 
 返回值：无（void）。Electron 侧为只读模式。
 
-**说明**frame.buffer 为 Uint8Array，引用 SDK 内部内存，仅在回调期间有效，异步使用需自行拷贝。
+> **说明**
+>
+> frame.buffer 为 Uint8Array，引用 SDK 内部内存，仅在回调期间有效，异步使用需自行拷贝。
+
+<a id="onplaybackaudioframe"></a>
 
 #### onPlaybackAudioFrame
 
 播放前的远端音频帧回调。数据为远端解码后、混音前即将播放的音频。
 
-```
+<a id="code-block-43"></a>
+
+```typescript
 engine.on('onPlaybackAudioFrame', (frame: AoqAudioFrameEvent) => { ... })
 ```
 
-参数
-
-类型
-
-说明
-
-frame
-
-AoqAudioFrameEvent
-
-播放前的远端音频帧数据，PCM 在 frame.buffer 字段
+| 参数 | 类型 | 说明 |
+| --- | --- | --- |
+| frame | AoqAudioFrameEvent | 播放前的远端音频帧数据，PCM 在 frame.buffer 字段 |
 
 返回值：无（void）。Electron 侧为只读模式。
 
-**说明**frame.buffer 为 Uint8Array，引用 SDK 内部内存，仅在回调期间有效，异步使用需自行拷贝。
+> **说明**
+>
+> frame.buffer 为 Uint8Array，引用 SDK 内部内存，仅在回调期间有效，异步使用需自行拷贝。
+
+<a id="视频帧事件-2"></a>
+
+<a id="96d22ad4b999"></a>
+
+<a id="11a6d02e3d22"></a>
+
+<a id="aoq-api-category-17"></a>
 
 ### 视频帧事件
 
-```
+<a id="code-block-44"></a>
+
+```typescript
 onCapturedVideoFrame:  (frame: AoqVideoFrameEvent) => void  /* 采集后（前处理前） */
 onPreEncodeVideoFrame: (frame: AoqVideoFrameEvent) => void  /* 编码前（前处理后） */
 onRemoteVideoFrame:    (frame: AoqVideoFrameEvent) => void  /* 远端解码后、渲染前 */
@@ -1094,725 +1178,372 @@ onRemoteVideoFrame:    (frame: AoqVideoFrameEvent) => void  /* 远端解码后�
 
 需先调 `setVideoFrameObserver(true)` 与 `enableVideoFrameObserver` 开启。帧事件为只读，回调中修改 `buffer` 不会写回 SDK。
 
-**说明**事件回调中避免重计算：native 回调经异步线程投递到 JS 主线程，高频帧事件中做耗时操作会造成堆积。
+> **说明**
+>
+> 事件回调中避免重计算：native 回调经异步线程投递到 JS 主线程，高频帧事件中做耗时操作会造成堆积。
+
+<a id="oncapturedvideoframe"></a>
 
 #### onCapturedVideoFrame
 
 采集到原始视频帧时触发（前处理前）。数据为摄像头或屏幕采集后的原始帧，未经前处理。
 
-```
+<a id="code-block-45"></a>
+
+```typescript
 engine.on('onCapturedVideoFrame', (frame: AoqVideoFrameEvent) => { ... })
 ```
 
-参数
-
-类型
-
-说明
-
-frame
-
-AoqVideoFrameEvent
-
-采集的视频帧数据
+| 参数 | 类型 | 说明 |
+| --- | --- | --- |
+| frame | AoqVideoFrameEvent | 采集的视频帧数据 |
 
 返回值：无（void）。Electron 侧为只读模式。
 
-**说明**frame.buffer 为 Uint8Array，引用 SDK 内部内存，仅在回调期间有效，异步使用需自行拷贝。
+> **说明**
+>
+> frame.buffer 为 Uint8Array，引用 SDK 内部内存，仅在回调期间有效，异步使用需自行拷贝。
+
+<a id="onpreencodevideoframe"></a>
 
 #### onPreEncodeVideoFrame
 
 编码前的视频帧回调（前处理后）。数据经过前处理后、编码前。
 
-```
+<a id="code-block-46"></a>
+
+```typescript
 engine.on('onPreEncodeVideoFrame', (frame: AoqVideoFrameEvent) => { ... })
 ```
 
-参数
-
-类型
-
-说明
-
-frame
-
-AoqVideoFrameEvent
-
-编码前的视频帧数据
+| 参数 | 类型 | 说明 |
+| --- | --- | --- |
+| frame | AoqVideoFrameEvent | 编码前的视频帧数据 |
 
 返回值：无（void）。Electron 侧为只读模式。
 
-**说明**frame.buffer 为 Uint8Array，引用 SDK 内部内存，仅在回调期间有效，异步使用需自行拷贝。
+> **说明**
+>
+> frame.buffer 为 Uint8Array，引用 SDK 内部内存，仅在回调期间有效，异步使用需自行拷贝。
+
+<a id="onremotevideoframe"></a>
 
 #### onRemoteVideoFrame
 
 远端解码后、渲染前的视频帧回调。数据为远端接收并解码后的视频帧。
 
-```
+<a id="code-block-47"></a>
+
+```typescript
 engine.on('onRemoteVideoFrame', (frame: AoqVideoFrameEvent) => { ... })
 ```
 
-参数
-
-类型
-
-说明
-
-frame
-
-AoqVideoFrameEvent
-
-远端解码后的视频帧数据
+| 参数 | 类型 | 说明 |
+| --- | --- | --- |
+| frame | AoqVideoFrameEvent | 远端解码后的视频帧数据 |
 
 返回值：无（void）。Electron 侧为只读模式。
 
-**说明**frame.buffer 为 Uint8Array，引用 SDK 内部内存，仅在回调期间有效，异步使用需自行拷贝。
+> **说明**
+>
+> frame.buffer 为 Uint8Array，引用 SDK 内部内存，仅在回调期间有效，异步使用需自行拷贝。
+
+<a id="数据类型与枚举"></a>
+
+<a id="d52bc82a0d00"></a>
+
+<a id="73575e0c13ff"></a>
 
 ## 数据类型与枚举
 
+<a id="通用类型"></a>
+
+<a id="6467ce464a50"></a>
+
+<a id="07322b5db657"></a>
+
 ### 通用类型
+
+<a id="aoqcreateconfig"></a>
+
+<a id="b576adc94b5e"></a>
+
+<a id="eed0f444e642"></a>
 
 #### AoqCreateConfig
 
-**字段**
+| 字段 | 类型 | 必填 | 默认值 | 说明 |
+| --- | --- | --- | --- | --- |
+| workDir | string | 否 | "" | SDK 工作目录（日志与临时文件） |
+| enableDumpAudio | boolean | 否 | false | 是否开启音频数据保存（调试用） |
+| extras | string | 否 | "" | 扩展参数（JSON 字符串） |
 
-**类型**
+<a id="aoqconnectconfig"></a>
 
-**必填**
+<a id="8b406928947f"></a>
 
-**默认值**
-
-**说明**
-
-workDir
-
-string
-
-否
-
-""
-
-SDK 工作目录（日志与临时文件）
-
-enableDumpAudio
-
-boolean
-
-否
-
-false
-
-是否开启音频数据保存（调试用）
-
-extras
-
-string
-
-否
-
-""
-
-扩展参数（JSON 字符串）
+<a id="3e7902dce8b5"></a>
 
 #### AoqConnectConfig
 
-**字段**
+| 字段 | 类型 | 必填 | 默认值 | 说明 |
+| --- | --- | --- | --- | --- |
+| token | string | 是 | \- | 连接鉴权 Token |
+| sid | string | 是 | \- | 会话 ID |
+| certFingerprint | string | 否 | "" | 服务器证书指纹 |
+| workspaceIdHash | string | 否 | 空 | 工作空间 ID Hash；空字符串等同不传 |
+| relayEndpoints | Array | 是 | \- | Relay 接入点列表 |
+| publishTracks | Array | 是 | \- | 本端发布轨道列表 |
+| subscribeTracks | Array | 是 | \- | 本端订阅轨道列表 |
 
-**类型**
+<a id="aoqrelayendpoint"></a>
 
-**必填**
+<a id="fe13d699aa3b"></a>
 
-**默认值**
-
-**说明**
-
-token
-
-string
-
-是
-
-\-
-
-连接鉴权 Token
-
-sid
-
-string
-
-是
-
-\-
-
-会话 ID
-
-certFingerprint
-
-string
-
-否
-
-""
-
-服务器证书指纹
-
-workspaceIdHash
-
-string
-
-否
-
-空
-
-工作空间 ID Hash；空字符串等同不传
-
-relayEndpoints
-
-Array
-
-是
-
-\-
-
-Relay 接入点列表
-
-publishTracks
-
-Array
-
-是
-
-\-
-
-本端发布轨道列表
-
-subscribeTracks
-
-Array
-
-是
-
-\-
-
-本端订阅轨道列表
+<a id="b58a1473e07b"></a>
 
 #### AoqRelayEndpoint
 
-**字段**
+| 字段 | 类型 | 必填 | 默认值 | 说明 |
+| --- | --- | --- | --- | --- |
+| routeIndex | number | 否 | \-1 | 路由序号 |
+| endpoint | string | 是 | \- | Relay 服务器域名或 IP |
+| port | number | 是 | \- | Relay 服务器端口 |
+| tcpPort | number | 否 | 0 | TCP 降级端口；0 表示使用 SDK 默认端口 443。 |
 
-**类型**
+<a id="aoqtrackparam"></a>
 
-**必填**
+<a id="65641c21df89"></a>
 
-**默认值**
-
-**说明**
-
-routeIndex
-
-number
-
-否
-
-\-1
-
-路由序号
-
-endpoint
-
-string
-
-是
-
-\-
-
-Relay 服务器域名或 IP
-
-port
-
-number
-
-是
-
-\-
-
-Relay 服务器端口
-
-tcpPort
-
-number
-
-否
-
-0
-
-TCP 降级端口；0 表示使用 SDK 默认端口 443。
+<a id="570fc294b704"></a>
 
 #### AoqTrackParam
 
-**字段**
+| 字段 | 类型 | 必填 | 默认值 | 说明 |
+| --- | --- | --- | --- | --- |
+| trackType | AoqTrackType | 是 | \- | 轨道类型 |
+| trackMode | AoqTrackMode | 否 | AoqTrackModeSegment | 流式 / 非流式模式，仅对音频下行生效 |
 
-**类型**
+<a id="统计信息类型"></a>
 
-**必填**
+<a id="b49d25339925"></a>
 
-**默认值**
-
-**说明**
-
-trackType
-
-AoqTrackType
-
-是
-
-\-
-
-轨道类型
-
-trackMode
-
-AoqTrackMode
-
-否
-
-AoqTrackModeSegment
-
-流式 / 非流式模式，仅对音频下行生效
+<a id="cc8be743dfe5"></a>
 
 ### 统计信息类型
+
+<a id="aoqstats"></a>
+
+<a id="0a9dbe80937c"></a>
+
+<a id="86a11bf11767"></a>
 
 #### AoqStats
 
 引擎统计信息汇总，通过 `onStats` 周期性上报。数组字段无数据时为空数组，`networkStats` 无数据时不下发。
 
-**字段**
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| audioPublishStats | Array | 音频推流统计 |
+| videoPublishStats | Array | 视频推流统计 |
+| dataMsgPublishStats | Array | 数据消息推流统计 |
+| audioSubscribeStats | Array | 音频拉流统计 |
+| videoSubscribeStats | Array | 视频拉流统计 |
+| dataMsgSubscribeStats | Array | 数据消息拉流统计 |
+| networkStats | AoqNetworkStats | 网络统计信息 |
 
-**类型**
+<a id="aoqaudiopublishstats"></a>
 
-**说明**
+<a id="d8d79c9e1184"></a>
 
-audioPublishStats
-
-Array
-
-音频推流统计
-
-videoPublishStats
-
-Array
-
-视频推流统计
-
-dataMsgPublishStats
-
-Array
-
-数据消息推流统计
-
-audioSubscribeStats
-
-Array
-
-音频拉流统计
-
-videoSubscribeStats
-
-Array
-
-视频拉流统计
-
-dataMsgSubscribeStats
-
-Array
-
-数据消息拉流统计
-
-networkStats
-
-AoqNetworkStats
-
-网络统计信息
+<a id="49a572d6136d"></a>
 
 #### AoqAudioPublishStats
 
-**字段**
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| trackType | AoqTrackType | 轨道类型 |
+| bitrate | number | 码率（bps） |
+| bytes | number | 累计发送字节数 |
+| encodeVolume | number | 推流编码音量 |
 
-**类型**
+<a id="aoqaudiosubscribestats"></a>
 
-**说明**
+<a id="2c85816d62c1"></a>
 
-trackType
-
-AoqTrackType
-
-轨道类型
-
-bitrate
-
-number
-
-码率（bps）
-
-bytes
-
-number
-
-累计发送字节数
-
-encodeVolume
-
-number
-
-推流编码音量
+<a id="db3288b89c28"></a>
 
 #### AoqAudioSubscribeStats
 
-**字段**
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| trackType | AoqTrackType | 轨道类型 |
+| bitrate | number | 码率（bps） |
+| bytes | number | 累计接收字节数 |
+| playVolume | number | 播放音量 |
 
-**类型**
+<a id="aoqvideopublishstats"></a>
 
-**说明**
+<a id="975b5b92c051"></a>
 
-trackType
-
-AoqTrackType
-
-轨道类型
-
-bitrate
-
-number
-
-码率（bps）
-
-bytes
-
-number
-
-累计接收字节数
-
-playVolume
-
-number
-
-播放音量
+<a id="41ad9a0276e8"></a>
 
 #### AoqVideoPublishStats
 
-**字段**
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| trackType | AoqTrackType | 轨道类型 |
+| bitrate | number | 码率（bps） |
+| bytes | number | 累计发送字节数 |
+| encodeFps | number | 编码帧率 |
 
-**类型**
+<a id="aoqvideosubscribestats"></a>
 
-**说明**
+<a id="b316d377c544"></a>
 
-trackType
-
-AoqTrackType
-
-轨道类型
-
-bitrate
-
-number
-
-码率（bps）
-
-bytes
-
-number
-
-累计发送字节数
-
-encodeFps
-
-number
-
-编码帧率
+<a id="ba67dc7745e1"></a>
 
 #### AoqVideoSubscribeStats
 
-**字段**
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| trackType | AoqTrackType | 轨道类型 |
+| bitrate | number | 码率（bps） |
+| bytes | number | 累计接收字节数 |
+| decodeFps | number | 解码帧率 |
+| renderFps | number | 渲染帧率 |
 
-**类型**
+<a id="aoqdatamsgpublishstats-aoqdatamsgsubscribestats"></a>
 
-**说明**
+<a id="cee6cfbcb04c"></a>
 
-trackType
-
-AoqTrackType
-
-轨道类型
-
-bitrate
-
-number
-
-码率（bps）
-
-bytes
-
-number
-
-累计接收字节数
-
-decodeFps
-
-number
-
-解码帧率
-
-renderFps
-
-number
-
-渲染帧率
+<a id="2cc7816af4f3"></a>
 
 #### AoqDataMsgPublishStats / AoqDataMsgSubscribeStats
 
-**字段**
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| trackType | AoqTrackType | 轨道类型 |
+| bitrate | number | 码率（bps） |
+| bytes | number | 累计发送 / 接收字节数 |
 
-**类型**
+<a id="aoqnetworkstats"></a>
 
-**说明**
+<a id="cf80d76fa29c"></a>
 
-trackType
-
-AoqTrackType
-
-轨道类型
-
-bitrate
-
-number
-
-码率（bps）
-
-bytes
-
-number
-
-累计发送 / 接收字节数
+<a id="d76371d0d4bd"></a>
 
 #### AoqNetworkStats
 
-**字段**
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| sendBitrate | number | 发送码率（bps） |
+| sendBytes | number | 累计发送字节数 |
+| recvBitrate | number | 接收码率（bps） |
+| recvBytes | number | 累计接收字节数 |
+| loss | number | 丢包率（0-100） |
+| rtt | number | 往返延迟（ms） |
 
-**类型**
+<a id="枚举类型"></a>
 
-**说明**
+<a id="19aeb774fa52"></a>
 
-sendBitrate
-
-number
-
-发送码率（bps）
-
-sendBytes
-
-number
-
-累计发送字节数
-
-recvBitrate
-
-number
-
-接收码率（bps）
-
-recvBytes
-
-number
-
-累计接收字节数
-
-loss
-
-number
-
-丢包率（0-100）
-
-rtt
-
-number
-
-往返延迟（ms）
+<a id="15c0fdfe25ae"></a>
 
 ### 枚举类型
 
+<a id="aoqtracktype"></a>
+
+<a id="cb57b5374692"></a>
+
+<a id="3fdbea5749db"></a>
+
 #### AoqTrackType
 
-**枚举值**
+| 枚举值 | 值 | 说明 |
+| --- | --- | --- |
+| AoqTrackTypeAudio | 0 | 音频轨道 |
+| AoqTrackTypeVideo | 1 | 视频轨道 |
+| AoqTrackTypeData | 2 | 数据消息轨道 |
+| AoqTrackTypeScreen | 3 | 屏幕共享轨道，仅支持上行。 |
 
-**值**
+<a id="aoqtrackmode"></a>
 
-**说明**
+<a id="4e08d20264b7"></a>
 
-AoqTrackTypeAudio
-
-0
-
-音频轨道
-
-AoqTrackTypeVideo
-
-1
-
-视频轨道
-
-AoqTrackTypeData
-
-2
-
-数据消息轨道
-
-AoqTrackTypeScreen
-
-3
-
-屏幕共享轨道，仅支持上行。
+<a id="8d076f2fd379"></a>
 
 #### AoqTrackMode
 
-**枚举值**
+| 枚举值 | 值 | 说明 |
+| --- | --- | --- |
+| AoqTrackModeSegment | 0 | 分段：数据按语义片段（如一句话）打包送达 |
+| AoqTrackModeStream | 1 | 流式：数据持续、连续地送达 |
 
-**值**
+<a id="aoqencodertype"></a>
 
-**说明**
+<a id="7facdb9619eb"></a>
 
-AoqTrackModeSegment
-
-0
-
-分段：数据按语义片段（如一句话）打包送达
-
-AoqTrackModeStream
-
-1
-
-流式：数据持续、连续地送达
+<a id="9b1a9915d442"></a>
 
 #### AoqEncoderType
 
-**枚举值**
+| 枚举值 | 值 | 说明 |
+| --- | --- | --- |
+| AoqEncoderTypeUnknown | 0 | 未知格式 |
+| AoqEncoderTypeAudioPCM | 1 | 音频 PCM |
+| AoqEncoderTypeAudioOpus | 2 | 音频 Opus（插件化，需 PluginOpus） |
+| AoqEncoderTypeVideoH264 | 3 | 视频 H.264 |
+| AoqEncoderTypeVideoJpeg | 4 | 视频 JPEG |
+| AoqEncoderTypeDataText | 5 | 数据文本 |
 
-**值**
+<a id="aoqconnectionstatus"></a>
 
-**说明**
+<a id="d7f15dcf8e29"></a>
 
-AoqEncoderTypeUnknown
-
-0
-
-未知格式
-
-AoqEncoderTypeAudioPCM
-
-1
-
-音频 PCM
-
-AoqEncoderTypeAudioOpus
-
-2
-
-音频 Opus（插件化，需 PluginOpus）
-
-AoqEncoderTypeVideoH264
-
-3
-
-视频 H.264
-
-AoqEncoderTypeVideoJpeg
-
-4
-
-视频 JPEG
-
-AoqEncoderTypeDataText
-
-5
-
-数据文本
+<a id="135d71f67043"></a>
 
 #### AoqConnectionStatus
 
-**枚举值**
+| 枚举值 | 值 | 说明 |
+| --- | --- | --- |
+| AoqConnectionStatusDisconnected | 0 | 未连接 |
+| AoqConnectionStatusConnecting | 1 | 连接中 |
+| AoqConnectionStatusConnected | 2 | 已连接 |
+| AoqConnectionStatusFailed | 3 | 连接失败 |
 
-**值**
+<a id="aoqmirrormode"></a>
 
-**说明**
+<a id="680052b6a437"></a>
 
-AoqConnectionStatusDisconnected
-
-0
-
-未连接
-
-AoqConnectionStatusConnecting
-
-1
-
-连接中
-
-AoqConnectionStatusConnected
-
-2
-
-已连接
-
-AoqConnectionStatusFailed
-
-3
-
-连接失败
+<a id="353c6d658a7b"></a>
 
 #### AoqMirrorMode
 
-**枚举值**
+| 枚举值 | 值 | 说明 |
+| --- | --- | --- |
+| AoqMirrorModeDisabled | 0 | 关闭镜像 |
+| AoqMirrorModeEnabled | 1 | 开启镜像 |
 
-**值**
+<a id="aoqorientationmode"></a>
 
-**说明**
+<a id="b6288a6adbad"></a>
 
-AoqMirrorModeDisabled
-
-0
-
-关闭镜像
-
-AoqMirrorModeEnabled
-
-1
-
-开启镜像
+<a id="2a6192140564"></a>
 
 #### AoqOrientationMode
 
-**枚举值**
+| 枚举值 | 值 | 说明 |
+| --- | --- | --- |
+| AoqOrientationModeAuto | 0 | 自动适应 |
+| AoqOrientationModePortrait | 1 | 竖屏 |
+| AoqOrientationModeLandscape | 2 | 横屏 |
 
-**值**
+<a id="aoqerrorcode"></a>
 
-**说明**
+<a id="cd3df1610de5"></a>
 
-AoqOrientationModeAuto
-
-0
-
-自动适应
-
-AoqOrientationModePortrait
-
-1
-
-竖屏
-
-AoqOrientationModeLandscape
-
-2
-
-横屏
+<a id="9da7cb788734"></a>
 
 #### AoqErrorCode
 
@@ -1820,1914 +1551,666 @@ AoqOrientationModeLandscape
 
 错误码为 native 层定义，`onError` 的 `code` 与接口返回值均使用该数值（TS 层未将其导出为 `enum`）。
 
-**枚举值**
-
-**值**
-
-**说明**
-
-AoqECOK
-
-0
-
-成功
-
-AoqECParamInvalid
-
-1
-
-参数非法
-
-AoqECStateInvalid
-
-2
-
-状态非法
-
-AoqECUnSupport
-
-3
-
-当前平台 / 模式不支持
-
-AoqECAudio
-
-100
-
-音频通用错误
-
-AoqECAudioExternalBufferFull
-
-110
-
-外部音频缓冲区满
-
-AoqECAudioDevice
-
-120
-
-音频设备通用错误
-
-AoqECAudioDeviceRecordingAuthFailed
-
-121
-
-录音权限未获取
-
-AoqECAudioDeviceRecordingOccupied
-
-122
-
-录音设备被占用
-
-AoqECAudioDeviceRecordingBackgroundStart
-
-123
-
-后台启动录音失败
-
-AoqECAudioDeviceRecordingStartFail
-
-124
-
-录音启动失败
-
-AoqECAudioDevicePlayoutOccupied
-
-125
-
-播放设备被占用
-
-AoqECAudioDevicePlayoutBackgroundStart
-
-126
-
-后台启动播放失败
-
-AoqECAudioDevicePlayoutStartFail
-
-127
-
-播放启动失败
-
-AoqECVideo
-
-200
-
-视频通用错误
-
-AoqECVideoExternalBufferFull
-
-210
-
-外部视频缓冲区满
-
-AoqECVideoExternalCaptureNotEnabled
-
-211
-
-外部视频采集未启用
-
-AoqECVideoExternalEncoderNotEnabled
-
-212
-
-外部视频编码未启用
-
-AoqECVideoDevice
-
-220
-
-视频设备通用错误
-
-AoqECVideoDeviceCameraOpenFail
-
-221
-
-摄像头打开失败
-
-AoqECVideoDeviceCameraAuthFailed
-
-222
-
-摄像头权限未获取
-
-AoqECVideoDeviceCameraOccupied
-
-223
-
-摄像头被占用
-
-AoqECVideoDeviceCameraRunningError
-
-224
-
-摄像头运行异常
-
-AoqECVideoCodec
-
-230
-
-视频编解码通用错误
-
-AoqECVideoCodecEncoderInitFail
-
-231
-
-视频编码器初始化失败
-
-AoqECVideoRender
-
-240
-
-视频渲染通用错误
-
-AoqECVideoRenderCreateFail
-
-241
-
-视频渲染创建失败
-
-AoqECVideoRenderDrawError
-
-242
-
-视频渲染绘制错误
-
-AoqECScreen
-
-300
-
-屏幕共享通用错误
-
-AoqECScreenAuthFailed
-
-310
-
-屏幕共享授权失败
-
-AoqECScreenStartFailed
-
-311
-
-屏幕共享启动失败
-
-AoqECAudioDeviceEarpieceRequiresVoipMode
-
-128
-
-听筒需要 VoIP 模式（移动端场景，Electron 一般不会触发）。
-
-**说明**除上述 native 错误码外，Electron 层还会在引擎未创建 / 已销毁、或参数不是合法 JSON 时返回 `-1`。
+| 枚举值 | 值 | 说明 |
+| --- | --- | --- |
+| AoqECOK | 0 | 成功 |
+| AoqECParamInvalid | 1 | 参数非法 |
+| AoqECStateInvalid | 2 | 状态非法 |
+| AoqECUnSupport | 3 | 当前平台 / 模式不支持 |
+| AoqECAudio | 100 | 音频通用错误 |
+| AoqECAudioExternalBufferFull | 110 | 外部音频缓冲区满 |
+| AoqECAudioDevice | 120 | 音频设备通用错误 |
+| AoqECAudioDeviceRecordingAuthFailed | 121 | 录音权限未获取 |
+| AoqECAudioDeviceRecordingOccupied | 122 | 录音设备被占用 |
+| AoqECAudioDeviceRecordingBackgroundStart | 123 | 后台启动录音失败 |
+| AoqECAudioDeviceRecordingStartFail | 124 | 录音启动失败 |
+| AoqECAudioDevicePlayoutOccupied | 125 | 播放设备被占用 |
+| AoqECAudioDevicePlayoutBackgroundStart | 126 | 后台启动播放失败 |
+| AoqECAudioDevicePlayoutStartFail | 127 | 播放启动失败 |
+| AoqECVideo | 200 | 视频通用错误 |
+| AoqECVideoExternalBufferFull | 210 | 外部视频缓冲区满 |
+| AoqECVideoExternalCaptureNotEnabled | 211 | 外部视频采集未启用 |
+| AoqECVideoExternalEncoderNotEnabled | 212 | 外部视频编码未启用 |
+| AoqECVideoDevice | 220 | 视频设备通用错误 |
+| AoqECVideoDeviceCameraOpenFail | 221 | 摄像头打开失败 |
+| AoqECVideoDeviceCameraAuthFailed | 222 | 摄像头权限未获取 |
+| AoqECVideoDeviceCameraOccupied | 223 | 摄像头被占用 |
+| AoqECVideoDeviceCameraRunningError | 224 | 摄像头运行异常 |
+| AoqECVideoCodec | 230 | 视频编解码通用错误 |
+| AoqECVideoCodecEncoderInitFail | 231 | 视频编码器初始化失败 |
+| AoqECVideoRender | 240 | 视频渲染通用错误 |
+| AoqECVideoRenderCreateFail | 241 | 视频渲染创建失败 |
+| AoqECVideoRenderDrawError | 242 | 视频渲染绘制错误 |
+| AoqECScreen | 300 | 屏幕共享通用错误 |
+| AoqECScreenAuthFailed | 310 | 屏幕共享授权失败 |
+| AoqECScreenStartFailed | 311 | 屏幕共享启动失败 |
+| AoqECAudioDeviceEarpieceRequiresVoipMode | 128 | 听筒需要 VoIP 模式（移动端场景，Electron 一般不会触发）。 |
+
+> **说明**
+>
+> 除上述 native 错误码外，Electron 层还会在引擎未创建 / 已销毁、或参数不是合法 JSON 时返回 `-1`。
+
+<a id="aoqwarningcode"></a>
+
+<a id="cd95c04e84d5"></a>
+
+<a id="71cd177dea56"></a>
 
 #### AoqWarningCode
 
-**枚举值**
+| 枚举值 | 值 | 说明 |
+| --- | --- | --- |
+| AoqWCOK | 0 | 无警告 |
+| AoqWCAudio | 100 | 音频通用警告 |
+| AoqWCAudioHowling | 101 | 音频啸叫检测 |
+| AoqWCAudioDevice | 120 | 音频设备通用警告 |
+| AoqWCAudioDeviceMicEnumerateError | 121 | 麦克风枚举错误 |
+| AoqWCAudioDeviceMicStartTimeout | 122 | 麦克风启动超时 |
+| AoqWCAudioDeviceRecordingError | 123 | 录音过程错误 |
+| AoqWCAudioDeviceSpeakerEnumerateError | 124 | 扬声器枚举错误 |
+| AoqWCAudioDeviceSpeakerStartTimeout | 125 | 扬声器启动超时 |
+| AoqWCAudioDevicePlayoutError | 126 | 播放过程错误 |
+| AoqWCVideo | 200 | 视频通用警告 |
+| AoqWCVideoCameraEnumerateError | 201 | 摄像头枚举错误 |
+| AoqWCVideoEncoderSwitched | 202 | 视频编码器已切换 |
+| AoqWCVideoRenderDowngrade | 203 | 视频渲染降级 |
 
-**值**
+<a id="音频类型"></a>
 
-**说明**
+<a id="3405b1e03c4b"></a>
 
-AoqWCOK
-
-0
-
-无警告
-
-AoqWCAudio
-
-100
-
-音频通用警告
-
-AoqWCAudioHowling
-
-101
-
-音频啸叫检测
-
-AoqWCAudioDevice
-
-120
-
-音频设备通用警告
-
-AoqWCAudioDeviceMicEnumerateError
-
-121
-
-麦克风枚举错误
-
-AoqWCAudioDeviceMicStartTimeout
-
-122
-
-麦克风启动超时
-
-AoqWCAudioDeviceRecordingError
-
-123
-
-录音过程错误
-
-AoqWCAudioDeviceSpeakerEnumerateError
-
-124
-
-扬声器枚举错误
-
-AoqWCAudioDeviceSpeakerStartTimeout
-
-125
-
-扬声器启动超时
-
-AoqWCAudioDevicePlayoutError
-
-126
-
-播放过程错误
-
-AoqWCVideo
-
-200
-
-视频通用警告
-
-AoqWCVideoCameraEnumerateError
-
-201
-
-摄像头枚举错误
-
-AoqWCVideoEncoderSwitched
-
-202
-
-视频编码器已切换
-
-AoqWCVideoRenderDowngrade
-
-203
-
-视频渲染降级
+<a id="f6812fd3ecd3"></a>
 
 ### 音频类型
 
+<a id="aoqaudiocaptureconfig"></a>
+
+<a id="ebdc4f7d7bb7"></a>
+
+<a id="55191a7475de"></a>
+
 #### AoqAudioCaptureConfig
 
-**字段**
+| 字段 | 类型 | 必填 | 默认值 | 说明 |
+| --- | --- | --- | --- | --- |
+| isExternal | boolean | 否 | false | 是否为外部采集模式 |
+| channel | number | 否 | 1 | 音频采集通道数，支持 1 / 2 |
 
-**类型**
+<a id="aoqaudioplaybackconfig"></a>
 
-**必填**
+<a id="c9fc5bf1ef21"></a>
 
-**默认值**
-
-**说明**
-
-isExternal
-
-boolean
-
-否
-
-false
-
-是否为外部采集模式
-
-channel
-
-number
-
-否
-
-1
-
-音频采集通道数，支持 1 / 2
+<a id="0b30f197ac02"></a>
 
 #### AoqAudioPlaybackConfig
 
-**字段**
+| 字段 | 类型 | 必填 | 默认值 | 说明 |
+| --- | --- | --- | --- | --- |
+| isExternal | boolean | 否 | false | 是否为外部播放模式 |
+| channel | number | 否 | 1 | 音频播放通道数，支持 1 / 2 |
 
-**类型**
+<a id="aoqaudiocodecconfig"></a>
 
-**必填**
+<a id="953a35cfea48"></a>
 
-**默认值**
-
-**说明**
-
-isExternal
-
-boolean
-
-否
-
-false
-
-是否为外部播放模式
-
-channel
-
-number
-
-否
-
-1
-
-音频播放通道数，支持 1 / 2
+<a id="87b9f458d857"></a>
 
 #### AoqAudioCodecConfig
 
-**字段**
+| 字段 | 类型 | 必填 | 默认值 | 说明 |
+| --- | --- | --- | --- | --- |
+| trackType | AoqTrackType | 否 | AoqTrackTypeAudio | 轨道类型 |
+| codecType | AoqEncoderType | 否 | AoqEncoderTypeAudioOpus | 编码格式 |
+| sampleRate | number | 否 | 48000 | 采样率（Hz）。编码支持 Opus 8/16/48K、PCM 8/16/32/48K；解码额外支持 24K（仅 Segment 模式） |
+| channel | number | 否 | 1 | 声道数，支持 1 / 2 |
+| bitrate | number | 否 | 32000 | 比特率（bps） |
 
-**类型**
+<a id="aoqaudiodeviceroutetype"></a>
 
-**必填**
+<a id="5efac56d1724"></a>
 
-**默认值**
-
-**说明**
-
-trackType
-
-AoqTrackType
-
-否
-
-AoqTrackTypeAudio
-
-轨道类型
-
-codecType
-
-AoqEncoderType
-
-否
-
-AoqEncoderTypeAudioOpus
-
-编码格式
-
-sampleRate
-
-number
-
-否
-
-48000
-
-采样率（Hz）。编码支持 Opus 8/16/48K、PCM 8/16/32/48K；解码额外支持 24K（仅 Segment 模式）
-
-channel
-
-number
-
-否
-
-1
-
-声道数，支持 1 / 2
-
-bitrate
-
-number
-
-否
-
-32000
-
-比特率（bps）
+<a id="8638ddda03f1"></a>
 
 #### AoqAudioDeviceRouteType
 
 `onAudioDeviceRouteChanged` 的 `routeType` 取值（native 定义，TS 层未导出为 `enum`）。
 
-**枚举值**
+| 枚举值 | 值 | 说明 |
+| --- | --- | --- |
+| AoqAudioDeviceRouteDefault | 0 | 默认路由 |
+| AoqAudioDeviceRouteHeadset | 1 | 有麦克风的头戴设备 |
+| AoqAudioDeviceRouteEarpiece | 2 | 听筒 |
+| AoqAudioDeviceRouteHeadsetNoMic | 3 | 无麦克风的头戴设备 |
+| AoqAudioDeviceRouteSpeakerPhone | 4 | 扬声器 |
+| AoqAudioDeviceRouteUsb | 5 | USB 音频设备 |
+| AoqAudioDeviceRouteBluetooth | 6 | 蓝牙 SCO 模式 |
+| AoqAudioDeviceRouteBluetoothA2dp | 7 | 蓝牙 A2DP 模式 |
 
-**值**
+<a id="aoqaudiodevicestatecode"></a>
 
-**说明**
+<a id="5ca673dd5700"></a>
 
-AoqAudioDeviceRouteDefault
-
-0
-
-默认路由
-
-AoqAudioDeviceRouteHeadset
-
-1
-
-有麦克风的头戴设备
-
-AoqAudioDeviceRouteEarpiece
-
-2
-
-听筒
-
-AoqAudioDeviceRouteHeadsetNoMic
-
-3
-
-无麦克风的头戴设备
-
-AoqAudioDeviceRouteSpeakerPhone
-
-4
-
-扬声器
-
-AoqAudioDeviceRouteUsb
-
-5
-
-USB 音频设备
-
-AoqAudioDeviceRouteBluetooth
-
-6
-
-蓝牙 SCO 模式
-
-AoqAudioDeviceRouteBluetoothA2dp
-
-7
-
-蓝牙 A2DP 模式
+<a id="95bf5350f070"></a>
 
 #### AoqAudioDeviceStateCode
 
-**枚举值**
+| 枚举值 | 值 | 说明 |
+| --- | --- | --- |
+| AoqAudioDeviceNone | 0 | 无状态 |
+| AoqAudioDeviceRecordStarting | 1 | 采集启动中 |
+| AoqAudioDeviceRecordStarted | 2 | 采集已启动 |
+| AoqAudioDeviceRecordStopping | 3 | 采集停止中 |
+| AoqAudioDeviceRecordStopped | 4 | 采集已停止 |
+| AoqAudioDeviceRecordFail | 5 | 采集失败 |
+| AoqAudioDevicePlayStarting | 6 | 播放启动中 |
+| AoqAudioDevicePlayStarted | 7 | 播放已启动 |
+| AoqAudioDevicePlayStopping | 8 | 播放停止中 |
+| AoqAudioDevicePlayStopped | 9 | 播放已停止 |
+| AoqAudioDevicePlayFail | 10 | 播放失败 |
 
-**值**
+<a id="aoqaudiodevicestate"></a>
 
-**说明**
+<a id="bbe69f73b3a6"></a>
 
-AoqAudioDeviceNone
-
-0
-
-无状态
-
-AoqAudioDeviceRecordStarting
-
-1
-
-采集启动中
-
-AoqAudioDeviceRecordStarted
-
-2
-
-采集已启动
-
-AoqAudioDeviceRecordStopping
-
-3
-
-采集停止中
-
-AoqAudioDeviceRecordStopped
-
-4
-
-采集已停止
-
-AoqAudioDeviceRecordFail
-
-5
-
-采集失败
-
-AoqAudioDevicePlayStarting
-
-6
-
-播放启动中
-
-AoqAudioDevicePlayStarted
-
-7
-
-播放已启动
-
-AoqAudioDevicePlayStopping
-
-8
-
-播放停止中
-
-AoqAudioDevicePlayStopped
-
-9
-
-播放已停止
-
-AoqAudioDevicePlayFail
-
-10
-
-播放失败
+<a id="1caa61af22ae"></a>
 
 #### AoqAudioDeviceState
 
-**字段**
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| state | AoqAudioDeviceStateCode | 设备操作状态 |
+| reason | number | 错误原因代码（参考 AoqErrorCode） |
 
-**类型**
+<a id="音频文件类型"></a>
 
-**说明**
+<a id="39a017c9207e"></a>
 
-state
-
-AoqAudioDeviceStateCode
-
-设备操作状态
-
-reason
-
-number
-
-错误原因代码（参考 AoqErrorCode）
+<a id="3d811b6cfafb"></a>
 
 ### 音频文件类型
 
+<a id="aoqaudiofilemixconfig"></a>
+
+<a id="504f1d058dfc"></a>
+
+<a id="6d4a7c298a96"></a>
+
 #### AoqAudioFileMixConfig
 
-**字段**
+| 字段 | 类型 | 必填 | 默认值 | 说明 |
+| --- | --- | --- | --- | --- |
+| fileId | string | 是 | \- | 文件标识符，后续接口以此定位 |
+| fileName | string | 是 | \- | 文件名（含路径） |
+| cycles | number | 否 | \-1 | 循环次数，-1 表示无限循环 |
+| startPosMs | number | 否 | 0 | 起始播放位置（毫秒） |
+| publishVolume | number | 否 | 100 | 推流音量，取值范围 0-100 |
+| playoutVolume | number | 否 | 100 | 播放音量，取值范围 0-100 |
 
-**类型**
+<a id="aoqaudiofilestatecode"></a>
 
-**必填**
+<a id="f220b533db47"></a>
 
-**默认值**
-
-**说明**
-
-fileId
-
-string
-
-是
-
-\-
-
-文件标识符，后续接口以此定位
-
-fileName
-
-string
-
-是
-
-\-
-
-文件名（含路径）
-
-cycles
-
-number
-
-否
-
-\-1
-
-循环次数，-1 表示无限循环
-
-startPosMs
-
-number
-
-否
-
-0
-
-起始播放位置（毫秒）
-
-publishVolume
-
-number
-
-否
-
-100
-
-推流音量，取值范围 0-100
-
-playoutVolume
-
-number
-
-否
-
-100
-
-播放音量，取值范围 0-100
+<a id="e49a79527418"></a>
 
 #### AoqAudioFileStateCode
 
-**枚举值**
+| 枚举值 | 值 | 说明 |
+| --- | --- | --- |
+| AoqAudioFileNone | 0 | 无状态 |
+| AoqAudioFileStarted | 1 | 播放已启动 |
+| AoqAudioFileStopped | 2 | 播放已停止 |
+| AoqAudioFilePaused | 3 | 播放已暂停 |
+| AoqAudioFileResumed | 4 | 播放已恢复 |
+| AoqAudioFileEnded | 5 | 播放已结束 |
+| AoqAudioFileBuffering | 6 | 播放缓冲中 |
+| AoqAudioFileBufferingEnd | 7 | 缓冲结束 |
+| AoqAudioFileFailed | 8 | 播放失败 |
 
-**值**
+<a id="aoqaudiofileerrorcode"></a>
 
-**说明**
+<a id="36d15bfeb832"></a>
 
-AoqAudioFileNone
-
-0
-
-无状态
-
-AoqAudioFileStarted
-
-1
-
-播放已启动
-
-AoqAudioFileStopped
-
-2
-
-播放已停止
-
-AoqAudioFilePaused
-
-3
-
-播放已暂停
-
-AoqAudioFileResumed
-
-4
-
-播放已恢复
-
-AoqAudioFileEnded
-
-5
-
-播放已结束
-
-AoqAudioFileBuffering
-
-6
-
-播放缓冲中
-
-AoqAudioFileBufferingEnd
-
-7
-
-缓冲结束
-
-AoqAudioFileFailed
-
-8
-
-播放失败
+<a id="5622cda71f66"></a>
 
 #### AoqAudioFileErrorCode
 
 `AoqAudioFileState.errorCode` 的取值（native 定义，TS 层作为 `number` 下发）。
 
-**枚举值**
+| 枚举值 | 值 | 说明 |
+| --- | --- | --- |
+| AoqAudioFileNoError | 0 | 无错误 |
+| AoqAudioFileOpenFailed | 1 | 文件打开失败 |
+| AoqAudioFileDecodeFailed | 2 | 文件解码失败 |
 
-**值**
+<a id="aoqaudiofilestate"></a>
 
-**说明**
+<a id="47d91fdf4894"></a>
 
-AoqAudioFileNoError
-
-0
-
-无错误
-
-AoqAudioFileOpenFailed
-
-1
-
-文件打开失败
-
-AoqAudioFileDecodeFailed
-
-2
-
-文件解码失败
+<a id="82b495ab4ca5"></a>
 
 #### AoqAudioFileState
 
-**字段**
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| fileId | string | 文件标识符 |
+| stateCode | AoqAudioFileStateCode | 文件播放状态码 |
+| errorCode | number | 文件错误码（参考 AoqAudioFileErrorCode） |
 
-**类型**
+<a id="外部音频流类型"></a>
 
-**说明**
+<a id="2ce07ed000c2"></a>
 
-fileId
-
-string
-
-文件标识符
-
-stateCode
-
-AoqAudioFileStateCode
-
-文件播放状态码
-
-errorCode
-
-number
-
-文件错误码（参考 AoqAudioFileErrorCode）
+<a id="9afe837fe726"></a>
 
 ### 外部音频流类型
 
+<a id="aoqaudiostreamdirection"></a>
+
+<a id="9d61d343707e"></a>
+
+<a id="58bde749f74e"></a>
+
 #### AoqAudioStreamDirection
 
-**枚举值**
+| 枚举值 | 值 | 说明 |
+| --- | --- | --- |
+| AoqAudioStreamPublish | 0 | 发布流（推流） |
+| AoqAudioStreamPlayout | 1 | 播放流（本地播放） |
 
-**值**
+<a id="aoqaudioexternalstreamconfig"></a>
 
-**说明**
+<a id="3fdb5801568b"></a>
 
-AoqAudioStreamPublish
-
-0
-
-发布流（推流）
-
-AoqAudioStreamPlayout
-
-1
-
-播放流（本地播放）
+<a id="7a407bd63e46"></a>
 
 #### AoqAudioExternalStreamConfig
 
-**字段**
+| 字段 | 类型 | 必填 | 默认值 | 说明 |
+| --- | --- | --- | --- | --- |
+| streamId | string | 是 | \- | 流标识符 |
+| trackType | AoqTrackType | 否 | AoqTrackTypeAudio | 音频轨道类型 |
+| codecType | AoqEncoderType | 否 | AoqEncoderTypeAudioPCM | 音频流格式，当前支持 PCM |
+| channels | number | 否 | 1 | 声道数，受限推流 Codec，支持 1 / 2 |
+| sampleRate | number | 否 | 48000 | 采样率（Hz），支持 8/12/16/24/32/44.1/48/64/88.2/96/176.4/192K |
+| playoutVolume | number | 否 | 100 | 播放音量，取值范围 0-100 |
+| publishVolume | number | 否 | 100 | 推流音量，取值范围 0-100 |
+| maxBufferDuration | number | 否 | 600000 | 最大缓冲时长（毫秒），取值范围 100 以上；超过时 push 失败 |
+| enable3A | boolean | 否 | false | 是否对输入 PCM 做 3A 处理 |
 
-**类型**
+<a id="aoqaudioexternalframemeta"></a>
 
-**必填**
+<a id="081976ed3272"></a>
 
-**默认值**
-
-**说明**
-
-streamId
-
-string
-
-是
-
-\-
-
-流标识符
-
-trackType
-
-AoqTrackType
-
-否
-
-AoqTrackTypeAudio
-
-音频轨道类型
-
-codecType
-
-AoqEncoderType
-
-否
-
-AoqEncoderTypeAudioPCM
-
-音频流格式，当前支持 PCM
-
-channels
-
-number
-
-否
-
-1
-
-声道数，受限推流 Codec，支持 1 / 2
-
-sampleRate
-
-number
-
-否
-
-48000
-
-采样率（Hz），支持 8/12/16/24/32/44.1/48/64/88.2/96/176.4/192K
-
-playoutVolume
-
-number
-
-否
-
-100
-
-播放音量，取值范围 0-100
-
-publishVolume
-
-number
-
-否
-
-100
-
-推流音量，取值范围 0-100
-
-maxBufferDuration
-
-number
-
-否
-
-600000
-
-最大缓冲时长（毫秒），取值范围 100 以上；超过时 push 失败
-
-enable3A
-
-boolean
-
-否
-
-false
-
-是否对输入 PCM 做 3A 处理
+<a id="6d38fc8dc77c"></a>
 
 #### AoqAudioExternalFrameMeta
 
 外部音频帧元信息，PCM 数据另走 `buffer` 参数。
 
-**字段**
+| 字段 | 类型 | 必填 | 默认值 | 说明 |
+| --- | --- | --- | --- | --- |
+| streamId | string | 是 | \- | 目标外部音频流标识 |
+| numOfSamples | number | 是 | 0 | 采样点数（单声道） |
+| bytesPerSample | number | 是 | 2 | 每个采样点的字节数 |
+| numOfChannels | number | 是 | 1 | 声道数 |
+| samplesPerSec | number | 是 | 48000 | 每秒采样点数（采样率） |
+| pushSequence | number | 否 | 0 | PCM 输入轮次 |
+| timeStamp | number | 否 | 0 | 时间戳 |
 
-**类型**
+<a id="aoqaudioframeevent"></a>
 
-**必填**
+<a id="3b76f74dd7ac"></a>
 
-**默认值**
-
-**说明**
-
-streamId
-
-string
-
-是
-
-\-
-
-目标外部音频流标识
-
-numOfSamples
-
-number
-
-是
-
-0
-
-采样点数（单声道）
-
-bytesPerSample
-
-number
-
-是
-
-2
-
-每个采样点的字节数
-
-numOfChannels
-
-number
-
-是
-
-1
-
-声道数
-
-samplesPerSec
-
-number
-
-是
-
-48000
-
-每秒采样点数（采样率）
-
-pushSequence
-
-number
-
-否
-
-0
-
-PCM 输入轮次
-
-timeStamp
-
-number
-
-否
-
-0
-
-时间戳
+<a id="fee7ceafdee2"></a>
 
 #### AoqAudioFrameEvent
 
 音频帧观察者事件数据。
 
-**字段**
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| trackType | AoqTrackType | 轨道类型 |
+| numOfSamples | number | 采样点数（单声道） |
+| bytesPerSample | number | 每个采样点的字节数 |
+| numOfChannels | number | 声道数 |
+| samplesPerSec | number | 每秒采样点数（采样率） |
+| timeStamp | number | 时间戳 |
+| autoGenMute | boolean | true 表示 SDK 生成的静音数据 |
+| buffer | Uint8Array | 音频 PCM 数据（native 侧已拷贝） |
 
-**类型**
+<a id="aoqaudiosource"></a>
 
-**说明**
+<a id="7b582e288976"></a>
 
-trackType
-
-AoqTrackType
-
-轨道类型
-
-numOfSamples
-
-number
-
-采样点数（单声道）
-
-bytesPerSample
-
-number
-
-每个采样点的字节数
-
-numOfChannels
-
-number
-
-声道数
-
-samplesPerSec
-
-number
-
-每秒采样点数（采样率）
-
-timeStamp
-
-number
-
-时间戳
-
-autoGenMute
-
-boolean
-
-true 表示 SDK 生成的静音数据
-
-buffer
-
-Uint8Array
-
-音频 PCM 数据（native 侧已拷贝）
+<a id="83700867a704"></a>
 
 #### AoqAudioSource
 
-**枚举值**
+| 枚举值 | 值 | 说明 |
+| --- | --- | --- |
+| AoqAudioSourceCaptured | 0 | 采集的音频数据 |
+| AoqAudioSourceProcessCaptured | 1 | 3A 处理后的音频数据 |
+| AoqAudioSourcePublish | 2 | 推流的音频数据（需 connect 成功） |
+| AoqAudioSourcePlayback | 3 | 播放的音频数据 |
 
-**值**
+<a id="aoqaudioobserverparams"></a>
 
-**说明**
+<a id="abee8da11a5d"></a>
 
-AoqAudioSourceCaptured
-
-0
-
-采集的音频数据
-
-AoqAudioSourceProcessCaptured
-
-1
-
-3A 处理后的音频数据
-
-AoqAudioSourcePublish
-
-2
-
-推流的音频数据（需 connect 成功）
-
-AoqAudioSourcePlayback
-
-3
-
-播放的音频数据
+<a id="609cf28c7b59"></a>
 
 #### AoqAudioObserverParams
 
-**字段**
+| 字段 | 类型 | 必填 | 默认值 | 说明 |
+| --- | --- | --- | --- | --- |
+| enabled | boolean | 是 | false | 开启或关闭该位置的回调 |
+| audioSource | AoqAudioSource | 是 | AoqAudioSourceCaptured | 回调位置 |
+| sampleRate | number | 否 | 48000 | 回调音频采样率（Hz），不一致时重采样 |
+| channels | number | 否 | 1 | 回调音频声道数，支持 1 / 2 |
 
-**类型**
+> **说明**
+>
+> 回调模式固定为只读，Electron 不开放读写模式。
 
-**必填**
+<a id="aoqaudiovolumeindicationconfig"></a>
 
-**默认值**
+<a id="822eac9caef8"></a>
 
-**说明**
-
-enabled
-
-boolean
-
-是
-
-false
-
-开启或关闭该位置的回调
-
-audioSource
-
-AoqAudioSource
-
-是
-
-AoqAudioSourceCaptured
-
-回调位置
-
-sampleRate
-
-number
-
-否
-
-48000
-
-回调音频采样率（Hz），不一致时重采样
-
-channels
-
-number
-
-否
-
-1
-
-回调音频声道数，支持 1 / 2
-
-**说明**回调模式固定为只读，Electron 不开放读写模式。
+<a id="58e9fb2cdcf5"></a>
 
 #### AoqAudioVolumeIndicationConfig
 
-**字段**
+| 字段 | 类型 | 必填 | 默认值 | 说明 |
+| --- | --- | --- | --- | --- |
+| interval | number | 否 | 0 | 回调间隔（毫秒）；小于等于 0 表示关闭回调，大于 0 且小于 10 时按 10 处理 |
+| smooth | number | 否 | 3 | 音量平滑系数，取值越大越平滑，取值范围 0-10 |
 
-**类型**
+<a id="aoqaudiovolume"></a>
 
-**必填**
+<a id="1a70d53bc7be"></a>
 
-**默认值**
-
-**说明**
-
-interval
-
-number
-
-否
-
-0
-
-回调间隔（毫秒）；小于等于 0 表示关闭回调，大于 0 且小于 10 时按 10 处理
-
-smooth
-
-number
-
-否
-
-3
-
-音量平滑系数，取值越大越平滑，取值范围 0-10
+<a id="c8adcdf038fb"></a>
 
 #### AoqAudioVolume
 
-**字段**
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| volume | number | 平滑后的瞬时音量，取值范围 0-255 |
 
-**类型**
+<a id="视频类型"></a>
 
-**说明**
+<a id="2054e527bbd9"></a>
 
-volume
-
-number
-
-平滑后的瞬时音量，取值范围 0-255
+<a id="6bb18ed93b93"></a>
 
 ### 视频类型
 
+<a id="aoqvideocaptureconfig"></a>
+
+<a id="432f016a61b8"></a>
+
+<a id="cde328a703a7"></a>
+
 #### AoqVideoCaptureConfig
 
-**字段**
+| 字段 | 类型 | 必填 | 默认值 | 说明 |
+| --- | --- | --- | --- | --- |
+| width | number | 否 | 1280 | 采集宽度（像素），isExternal=true 时无效 |
+| height | number | 否 | 720 | 采集高度（像素），isExternal=true 时无效 |
+| fps | number | 否 | 15 | 采集帧率，isExternal=true 时无效（节奏由送帧决定） |
+| isExternal | boolean | 否 | false | 是否外部采集，true 时不打开摄像头 |
 
-**类型**
+<a id="aoqvideocodecconfig"></a>
 
-**必填**
+<a id="deb124c81f3e"></a>
 
-**默认值**
-
-**说明**
-
-width
-
-number
-
-否
-
-1280
-
-采集宽度（像素），isExternal=true 时无效
-
-height
-
-number
-
-否
-
-720
-
-采集高度（像素），isExternal=true 时无效
-
-fps
-
-number
-
-否
-
-15
-
-采集帧率，isExternal=true 时无效（节奏由送帧决定）
-
-isExternal
-
-boolean
-
-否
-
-false
-
-是否外部采集，true 时不打开摄像头
+<a id="9cf96fb66801"></a>
 
 #### AoqVideoCodecConfig
 
 编码与解码共用同一结构（`setVideoEncoderConfig` / `setVideoDecoderConfig`）。
 
-**字段**
+| 字段 | 类型 | 必填 | 默认值 | 说明 |
+| --- | --- | --- | --- | --- |
+| isExternal | boolean | 否 | false | true 时 SDK 不做采集与编码，由 pushExternalVideoEncodedFrame 直推 |
+| trackType | AoqTrackType | 否 | AoqTrackTypeVideo | 轨道类型 |
+| codecType | AoqEncoderType | 否 | AoqEncoderTypeVideoH264 | 编码格式 |
+| width | number | 否 | 540 | 编码宽度（像素） |
+| height | number | 否 | 960 | 编码高度（像素） |
+| fps | number | 否 | 5 | 编码帧率 |
+| bitrate | number | 否 | 500000 | 起始比特率（bps） |
+| minBitrate | number | 否 | 128000 | 最小比特率（bps） |
+| keyframeInterval | number | 否 | 2 | 关键帧间隔（秒） |
+| mirrorMode | AoqMirrorMode | 否 | AoqMirrorModeDisabled | 镜像模式 |
+| orientationMode | AoqOrientationMode | 否 | AoqOrientationModeAuto | 视频方向模式 |
 
-**类型**
+<a id="aoqvideopixelformat"></a>
 
-**必填**
+<a id="d8224fcba44a"></a>
 
-**默认值**
-
-**说明**
-
-isExternal
-
-boolean
-
-否
-
-false
-
-true 时 SDK 不做采集与编码，由 pushExternalVideoEncodedFrame 直推
-
-trackType
-
-AoqTrackType
-
-否
-
-AoqTrackTypeVideo
-
-轨道类型
-
-codecType
-
-AoqEncoderType
-
-否
-
-AoqEncoderTypeVideoH264
-
-编码格式
-
-width
-
-number
-
-否
-
-540
-
-编码宽度（像素）
-
-height
-
-number
-
-否
-
-960
-
-编码高度（像素）
-
-fps
-
-number
-
-否
-
-5
-
-编码帧率
-
-bitrate
-
-number
-
-否
-
-500000
-
-起始比特率（bps）
-
-minBitrate
-
-number
-
-否
-
-128000
-
-最小比特率（bps）
-
-keyframeInterval
-
-number
-
-否
-
-2
-
-关键帧间隔（秒）
-
-mirrorMode
-
-AoqMirrorMode
-
-否
-
-AoqMirrorModeDisabled
-
-镜像模式
-
-orientationMode
-
-AoqOrientationMode
-
-否
-
-AoqOrientationModeAuto
-
-视频方向模式
+<a id="830c5c9b9186"></a>
 
 #### AoqVideoPixelFormat
 
 Electron 支持的像素格式。
 
-**枚举值**
+| 枚举值 | 值 | 说明 |
+| --- | --- | --- |
+| AoqVideoPixelFormatUnknown | 0 | 未知格式 |
+| AoqVideoPixelFormatI420 | 1 | I420（YUV 三平面格式） |
+| AoqVideoPixelFormatNV12 | 2 | NV12（YUV 半平面格式） |
+| AoqVideoPixelFormatNV21 | 3 | NV21（YUV 半平面格式） |
+| AoqVideoPixelFormatBGRA | 4 | BGRA（32 位） |
+| AoqVideoPixelFormatRGBA | 5 | RGBA（32 位） |
 
-**值**
+<a id="aoqexternalvideoframemeta"></a>
 
-**说明**
+<a id="e4531666b33e"></a>
 
-AoqVideoPixelFormatUnknown
-
-0
-
-未知格式
-
-AoqVideoPixelFormatI420
-
-1
-
-I420（YUV 三平面格式）
-
-AoqVideoPixelFormatNV12
-
-2
-
-NV12（YUV 半平面格式）
-
-AoqVideoPixelFormatNV21
-
-3
-
-NV21（YUV 半平面格式）
-
-AoqVideoPixelFormatBGRA
-
-4
-
-BGRA（32 位）
-
-AoqVideoPixelFormatRGBA
-
-5
-
-RGBA（32 位）
+<a id="76154817b5f6"></a>
 
 #### AoqExternalVideoFrameMeta
 
 外部视频裸帧元信息，像素数据另走 `buffer` 参数。
 
-**字段**
+| 字段 | 类型 | 必填 | 默认值 | 说明 |
+| --- | --- | --- | --- | --- |
+| trackType | AoqTrackType | 否 | AoqTrackTypeVideo | 轨道类型<br><br>；支持 Video / Screen 路由 |
+| format | AoqVideoPixelFormat | 是 | \- | 像素格式 |
+| width | number | 是 | \- | 视频宽度（像素） |
+| height | number | 是 | \- | 视频高度（像素） |
+| timeStamp | number | 否 | 0 | 时间戳（毫秒）；0 时 SDK 使用本地时间补齐 |
 
-**类型**
+> **说明**
+>
+> `format = I420` 时 `buffer` 必须为紧凑布局（stride = width），Y / U / V 三平面顺序拼接；其余打包格式直接传整帧字节。
 
-**必填**
+<a id="aoqvideocodectype"></a>
 
-**默认值**
+<a id="1557f109f88a"></a>
 
-**说明**
-
-trackType
-
-AoqTrackType
-
-否
-
-AoqTrackTypeVideo
-
-轨道类型
-
-；支持 Video / Screen 路由
-
-format
-
-AoqVideoPixelFormat
-
-是
-
-\-
-
-像素格式
-
-width
-
-number
-
-是
-
-\-
-
-视频宽度（像素）
-
-height
-
-number
-
-是
-
-\-
-
-视频高度（像素）
-
-timeStamp
-
-number
-
-否
-
-0
-
-时间戳（毫秒）；0 时 SDK 使用本地时间补齐
-
-**说明**`format = I420` 时 `buffer` 必须为紧凑布局（stride = width），Y / U / V 三平面顺序拼接；其余打包格式直接传整帧字节。
+<a id="32a54dbcc3af"></a>
 
 #### AoqVideoCodecType
 
-**枚举值**
+| 枚举值 | 值 | 说明 |
+| --- | --- | --- |
+| AoqVideoCodecTypeJPEG | 0 | JPEG 编码 |
 
-**值**
+<a id="aoqexternalvideoencodedframemeta"></a>
 
-**说明**
+<a id="7ac5ff666ba4"></a>
 
-AoqVideoCodecTypeJPEG
-
-0
-
-JPEG 编码
+<a id="8608a0c42468"></a>
 
 #### AoqExternalVideoEncodedFrameMeta
 
 外部已编码视频帧元信息，编码数据另走 `buffer` 参数。
 
-**字段**
+| 字段 | 类型 | 必填 | 默认值 | 说明 |
+| --- | --- | --- | --- | --- |
+| trackType | AoqTrackType | 否 | AoqTrackTypeVideo | 轨道类型<br><br>；支持 Video / Screen 路由 |
+| codec | AoqVideoCodecType | 否 | AoqVideoCodecTypeJPEG | 编码格式 |
+| width | number | 是 | \- | 宽度（像素） |
+| height | number | 是 | \- | 高度（像素） |
+| timeStamp | number | 否 | 0 | 时间戳（毫秒）；0 时 SDK 使用本地时间补齐 |
 
-**类型**
+<a id="aoqvideodevicestatecode"></a>
 
-**必填**
+<a id="544f4e6f907c"></a>
 
-**默认值**
-
-**说明**
-
-trackType
-
-AoqTrackType
-
-否
-
-AoqTrackTypeVideo
-
-轨道类型
-
-；支持 Video / Screen 路由
-
-codec
-
-AoqVideoCodecType
-
-否
-
-AoqVideoCodecTypeJPEG
-
-编码格式
-
-width
-
-number
-
-是
-
-\-
-
-宽度（像素）
-
-height
-
-number
-
-是
-
-\-
-
-高度（像素）
-
-timeStamp
-
-number
-
-否
-
-0
-
-时间戳（毫秒）；0 时 SDK 使用本地时间补齐
+<a id="cfe7dc56e260"></a>
 
 #### AoqVideoDeviceStateCode
 
-**枚举值**
+| 枚举值 | 值 | 说明 |
+| --- | --- | --- |
+| AoqVideoDeviceNone | 0 | 无状态 |
+| AoqVideoDeviceCaptureStarting | 1 | 采集启动中 |
+| AoqVideoDeviceCaptureStarted | 2 | 采集已启动 |
+| AoqVideoDeviceCaptureStopping | 3 | 采集停止中 |
+| AoqVideoDeviceCaptureStopped | 4 | 采集已停止 |
+| AoqVideoDeviceCaptureFail | 5 | 采集失败（权限拒绝、设备不可用等） |
 
-**值**
+<a id="aoqvideodevicestate"></a>
 
-**说明**
+<a id="16140b69de18"></a>
 
-AoqVideoDeviceNone
-
-0
-
-无状态
-
-AoqVideoDeviceCaptureStarting
-
-1
-
-采集启动中
-
-AoqVideoDeviceCaptureStarted
-
-2
-
-采集已启动
-
-AoqVideoDeviceCaptureStopping
-
-3
-
-采集停止中
-
-AoqVideoDeviceCaptureStopped
-
-4
-
-采集已停止
-
-AoqVideoDeviceCaptureFail
-
-5
-
-采集失败（权限拒绝、设备不可用等）
+<a id="53053117285e"></a>
 
 #### AoqVideoDeviceState
 
-**字段**
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| state | AoqVideoDeviceStateCode | 设备采集操作状态 |
+| reason | number | 错误原因代码（参考 AoqErrorCode） |
 
-**类型**
-
-**说明**
-
-state
-
-AoqVideoDeviceStateCode
-
-设备采集操作状态
-
-reason
-
-number
-
-错误原因代码（参考 AoqErrorCode）
+<a id="aoqscreensharesourcetype"></a>
 
 #### AoqScreenShareSourceType
 
-枚举值
+| 枚举值 | 值 | 说明 |
+| --- | --- | --- |
+| AoqScreenShareSourceTypeDesktop | 0 | 整个桌面 |
+| AoqScreenShareSourceTypeWindow | 1 | 指定窗口 |
 
-值
-
-说明
-
-AoqScreenShareSourceTypeDesktop
-
-0
-
-整个桌面
-
-AoqScreenShareSourceTypeWindow
-
-1
-
-指定窗口
+<a id="aoqscreensourceinfo"></a>
 
 #### AoqScreenSourceInfo
 
-字段
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| sourceType | AoqScreenShareSourceType | 源类型 |
+| sourceId | string | 源 ID，以字符串返回以避免 int64 精度丢失。 |
+| sourceName | string | 源名称 |
+| sourceIsSelf | boolean | 是否为自身进程窗口 |
 
-类型
-
-说明
-
-sourceType
-
-AoqScreenShareSourceType
-
-源类型
-
-sourceId
-
-string
-
-源 ID，以字符串返回以避免 int64 精度丢失。
-
-sourceName
-
-string
-
-源名称
-
-sourceIsSelf
-
-boolean
-
-是否为自身进程窗口
+<a id="aoqscreencaptureconfig"></a>
 
 #### AoqScreenCaptureConfig
 
 所有字段均可选，`isExternal` 默认 false。
 
-字段
-
-类型
-
-默认值
-
-说明
-
-isExternal
-
-boolean
-
-false
-
-是否由应用提供屏幕原始帧。
-
-sourceId
-
-string | number
-
-—
-
-屏幕源 ID。可选；推荐字符串，number 必须为安全整数。
-
-sourceType
-
-AoqScreenShareSourceType
-
-—
-
-屏幕源类型。
+| 字段 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| isExternal | boolean | false | 是否由应用提供屏幕原始帧。 |
+| sourceId | string \| number | — | 屏幕源 ID。可选；推荐字符串，number 必须为安全整数。 |
+| sourceType | AoqScreenShareSourceType | — | 屏幕源类型。 |
 
 除用于对照底层错误码、未由 TypeScript 导出的 `AoqErrorCode` 外，本节类型均从包根导出，可直接 `import { ... } from 'aoq-electron-sdk'`。已导出的枚举为 TypeScript `enum`，运行时可用；接口（`interface`）仅类型约束。标记为可选的字段缺省时取表中默认值。
 
+<a id="视频帧回调类型"></a>
+
+<a id="8de645461ca8"></a>
+
+<a id="598f9f2ce975"></a>
+
 ### 视频帧回调类型
+
+<a id="aoqvideosource"></a>
+
+<a id="396ff28c971e"></a>
+
+<a id="8dddbd812826"></a>
 
 #### AoqVideoSource
 
-**枚举值**
+| 枚举值 | 值 | 说明 |
+| --- | --- | --- |
+| AoqVideoSourceCaptured | 0 | 采集后的视频数据（前处理前） |
+| AoqVideoSourcePreEncode | 1 | 编码前的视频数据（前处理后） |
+| AoqVideoSourceRemote | 2 | 远端解码后、渲染前的视频数据 |
 
-**值**
+<a id="aoqvideoobserveralignment"></a>
 
-**说明**
+<a id="877e8f39967a"></a>
 
-AoqVideoSourceCaptured
-
-0
-
-采集后的视频数据（前处理前）
-
-AoqVideoSourcePreEncode
-
-1
-
-编码前的视频数据（前处理后）
-
-AoqVideoSourceRemote
-
-2
-
-远端解码后、渲染前的视频数据
+<a id="f14c95904ccb"></a>
 
 #### AoqVideoObserverAlignment
 
-**枚举值**
+| 枚举值 | 值 | 说明 |
+| --- | --- | --- |
+| AoqVideoObserverAlignmentDefault | 0 | 默认对齐 |
+| AoqVideoObserverAlignmentEven | 1 | 偶数对齐 |
+| AoqVideoObserverAlignment4 | 2 | 4 字节对齐 |
+| AoqVideoObserverAlignment8 | 3 | 8 字节对齐 |
+| AoqVideoObserverAlignment16 | 4 | 16 字节对齐 |
 
-**值**
+<a id="aoqvideoobserverparams"></a>
 
-**说明**
+<a id="2bb0d87b0380"></a>
 
-AoqVideoObserverAlignmentDefault
-
-0
-
-默认对齐
-
-AoqVideoObserverAlignmentEven
-
-1
-
-偶数对齐
-
-AoqVideoObserverAlignment4
-
-2
-
-4 字节对齐
-
-AoqVideoObserverAlignment8
-
-3
-
-8 字节对齐
-
-AoqVideoObserverAlignment16
-
-4
-
-16 字节对齐
+<a id="6badad8c9a01"></a>
 
 #### AoqVideoObserverParams
 
-**字段**
+| 字段 | 类型 | 必填 | 默认值 | 说明 |
+| --- | --- | --- | --- | --- |
+| enabled | boolean | 是 | false | 开启或关闭该位置的回调 |
+| videoSource | AoqVideoSource | 是 | AoqVideoSourceCaptured | 回调位置 |
+| format | AoqVideoPixelFormat | 否 | AoqVideoPixelFormatI420 | 期望回调像素格式 |
+| alignment | AoqVideoObserverAlignment | 否 | AoqVideoObserverAlignmentDefault | 宽度对齐策略 |
+| mirrorApplied | boolean | 否 | false | 是否对回调数据应用镜像 |
+| trackType | AoqTrackType | 否 | AoqTrackTypeVideo | 需要观察的视频轨道；仅支持 Video / Screen。 |
 
-**类型**
+> **说明**
+>
+> 回调模式固定为只读，Electron 不开放读写模式。使用内置 `YUVCanvasRenderer` 渲染时需选 I420。
 
-**必填**
+<a id="aoqvideoframeevent"></a>
 
-**默认值**
+<a id="0c6c0ea8a1dd"></a>
 
-**说明**
-
-enabled
-
-boolean
-
-是
-
-false
-
-开启或关闭该位置的回调
-
-videoSource
-
-AoqVideoSource
-
-是
-
-AoqVideoSourceCaptured
-
-回调位置
-
-format
-
-AoqVideoPixelFormat
-
-否
-
-AoqVideoPixelFormatI420
-
-期望回调像素格式
-
-alignment
-
-AoqVideoObserverAlignment
-
-否
-
-AoqVideoObserverAlignmentDefault
-
-宽度对齐策略
-
-mirrorApplied
-
-boolean
-
-否
-
-false
-
-是否对回调数据应用镜像
-
-trackType
-
-AoqTrackType
-
-否
-
-AoqTrackTypeVideo
-
-需要观察的视频轨道；仅支持 Video / Screen。
-
-**说明**回调模式固定为只读，Electron 不开放读写模式。使用内置 `YUVCanvasRenderer` 渲染时需选 I420。
+<a id="9ed9081cce22"></a>
 
 #### AoqVideoFrameEvent
 
 视频帧观察者事件数据。
 
-**字段**
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| trackType | AoqTrackType | 轨道类型 |
+| format | AoqVideoPixelFormat | 像素格式 |
+| width | number | 宽度（像素） |
+| height | number | 高度（像素） |
+| strideY | number | Y 平面行跨度（仅 I420 有效） |
+| strideU | number | U 平面行跨度（仅 I420 有效） |
+| strideV | number | V 平面行跨度（仅 I420 有效） |
+| timeStamp | number | 时间戳（毫秒） |
+| buffer | Uint8Array | 帧数据；I420 为 Y / U / V 三平面按 stride 拼接，其余打包格式为原数据透传 |
 
-**类型**
+<a id="数据消息类型"></a>
 
-**说明**
+<a id="b9f1734f282f"></a>
 
-trackType
-
-AoqTrackType
-
-轨道类型
-
-format
-
-AoqVideoPixelFormat
-
-像素格式
-
-width
-
-number
-
-宽度（像素）
-
-height
-
-number
-
-高度（像素）
-
-strideY
-
-number
-
-Y 平面行跨度（仅 I420 有效）
-
-strideU
-
-number
-
-U 平面行跨度（仅 I420 有效）
-
-strideV
-
-number
-
-V 平面行跨度（仅 I420 有效）
-
-timeStamp
-
-number
-
-时间戳（毫秒）
-
-buffer
-
-Uint8Array
-
-帧数据；I420 为 Y / U / V 三平面按 stride 拼接，其余打包格式为原数据透传
+<a id="5ed192aba3b1"></a>
 
 ### 数据消息类型
 
 Electron 不使用 `AoqDataMsg` 包装类型，数据消息直接以二进制收发：
 
-**方向**
-
-**类型**
-
-**说明**
-
-发送
-
-Uint8Array 或 string
-
-`sendDataMsg(data)`；字符串按 UTF-8 编码
-
-接收
-
-Uint8Array
-
-`onDataMsg(data)`；native 侧已拷贝，可异步持有
+| 方向 | 类型 | 说明 |
+| --- | --- | --- |
+| 发送 | Uint8Array 或 string | `sendDataMsg(data)`；字符串按 UTF-8 编码 |
+| 接收 | Uint8Array | `onDataMsg(data)`；native 侧已拷贝，可异步持有 |

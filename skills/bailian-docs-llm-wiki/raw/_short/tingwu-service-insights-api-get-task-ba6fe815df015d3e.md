@@ -2,258 +2,85 @@
 
 查询通用服务洞察任务的状态和结果。
 
+<a id="接入地址"></a>
+
+<a id="e8ae9f13941un"></a>
+
 ## 接入地址
 
-```
+<a id="code-block"></a>
+
+```http
 https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation
 ```
+
+<a id="请求方式"></a>
+
+<a id="58355fb966c2u"></a>
 
 ## 请求方式
 
 POST
 
+<a id="请求头"></a>
+
+<a id="24323e44bdlg5"></a>
+
 ## 请求头
 
-```
+<a id="code-block-2"></a>
+
+```http
 Authorization: Bearer {api-key} // 需将{api-key}替换为实际的API Key
 Content-Type: application/json
 ```
 
+<a id="请求参数"></a>
+
+<a id="acd1c9cba7o7h"></a>
+
 ## 请求参数
 
-**名称**
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| model | string | 是 | 定义业务类型，固定为`tingwu-service-insights` | tingwu-service-insights |
+| input | object | 是 | 传入相关业务参数 |  |
+| input.task | string | 是 | 定义任务类型，固定为`getTask`，表示获取任务结果 | getTask |
+| input.dataId | string | 是 | 需要查询的音频任务id，从createTask任务的返回参数中获取 | wkb\*\*\* |
 
-**类型**
+<a id="返回参数"></a>
 
-**必填**
-
-**描述**
-
-**示例值**
-
-model
-
-string
-
-是
-
-定义业务类型，固定为`tingwu-service-insights`
-
-tingwu-service-insights
-
-input
-
-object
-
-是
-
-传入相关业务参数
-
-input.task
-
-string
-
-是
-
-定义任务类型，固定为`getTask`，表示获取任务结果
-
-getTask
-
-input.dataId
-
-string
-
-是
-
-需要查询的音频任务id，从createTask任务的返回参数中获取
-
-wkb\*\*\*
+<a id="2979b259d8rjq"></a>
 
 ## 返回参数
 
-**名称**
+<table><thead><tr><th><p><strong>名称</strong></p></th><th><p><strong>类型</strong></p></th><th><p><strong>描述</strong></p></th><th><p><strong>示例值/解析协议</strong></p></th></tr></thead><tbody><tr><td><p>code</p></td><td><p>string</p></td><td><p>错误码</p></td><td></td></tr><tr><td><p>message</p></td><td><p>string</p></td><td><p>错误信息</p></td><td></td></tr><tr><td><p>request_id</p></td><td><p>string</p></td><td><p>请求id</p></td><td><p>f97ee37d-0f9c-9b93-b6bf-bd263a232bf9</p></td></tr><tr><td><p>usage</p></td><td><p>object</p></td><td><p>用量</p></td><td></td></tr><tr><td><p>output</p></td><td><p>object</p></td><td><p>业务返回体</p></td><td></td></tr><tr><td><p>output.status</p></td><td><p>string</p></td><td><p>任务状态：</p><ul><li><p>0：成功</p></li><li><p>1：进行中</p></li><li><p>2：失败</p></li></ul></td><td><p>0</p></td></tr><tr><td><p>output.errorCode</p></td><td><p>string</p></td><td><p>任务成功提交，但是执行失败（<code>status</code>为2时）的错误码</p></td><td><p>TSC.FileError</p></td></tr><tr><td><p>output.errorMessage</p></td><td><p>string</p></td><td><p>任务成功提交，但是任务执行失败（<code>status</code>为2时）的错误信息</p></td><td><p>&quot;File cannot be read.&quot;</p></td></tr><tr><td><p>output.transcriptionPath</p></td><td><p>string</p></td><td><p>语音转文字结果的ossUrl，参见<a href="tingwu-service-insights-api-get-task-ba6fe815df015d3e.md#760913439awmi">output.transcriptionPath 的解析协议</a></p></td><td rowspan="3"><p>ossUrl对应的文件内容解析协议参见：</p><ul><li><p><a href="tingwu-service-insights-api-get-task-ba6fe815df015d3e.md#760913439awmi">output.transcriptionPath 的解析协议</a></p></li><li><p><a href="tingwu-service-insights-api-get-task-ba6fe815df015d3e.md#20d08cc597wbf">output.generalServiceInsightsPath的解析协议</a></p></li><li><p><a href="tingwu-service-insights-api-get-task-ba6fe815df015d3e.md#23631e2d69zrj">output.generalSaleInsightsPath的解析协议</a></p></li></ul></td></tr><tr><td><p>output.generalServiceInsightsPath</p></td><td><p>string</p></td><td><p>洞察结果的ossUrl，参见<a href="tingwu-service-insights-api-get-task-ba6fe815df015d3e.md#20d08cc597wbf">output.generalServiceInsightsPath的解析协议</a></p></td></tr><tr><td><p>output.generalSaleInsightsPath</p></td><td><p>string</p></td><td><p>返回分析结果的ossUrl，参见</p><p><a href="tingwu-service-insights-api-get-task-ba6fe815df015d3e.md#23631e2d69zrj">output.generalSaleInsightsPath的解析协议</a></p></td></tr></tbody></table>
 
-**类型**
+<a id="output-transcriptionpath-的解析协议"></a>
 
-**描述**
-
-**示例值/解析协议**
-
-code
-
-string
-
-错误码
-
-message
-
-string
-
-错误信息
-
-request\_id
-
-string
-
-请求id
-
-f97ee37d-0f9c-9b93-b6bf-bd263a232bf9
-
-usage
-
-object
-
-用量
-
-output
-
-object
-
-业务返回体
-
-output.status
-
-string
-
-任务状态：
-
--   0：成功
-    
--   1：进行中
-    
--   2：失败
-    
-
-0
-
-output.errorCode
-
-string
-
-任务成功提交，但是执行失败（`status`为2时）的错误码
-
-TSC.FileError
-
-output.errorMessage
-
-string
-
-任务成功提交，但是任务执行失败（`status`为2时）的错误信息
-
-"File cannot be read."
-
-output.transcriptionPath
-
-string
-
-语音转文字结果的ossUrl，参见[output.transcriptionPath 的解析协议](https://help.aliyun.com/zh/model-studio/tingwu-service-insights-api-get-task#760913439awmi)
-
-ossUrl对应的文件内容解析协议参见：
-
--   [output.transcriptionPath 的解析协议](https://help.aliyun.com/zh/model-studio/tingwu-service-insights-api-get-task#760913439awmi)
-    
--   [output.generalServiceInsightsPath的解析协议](https://help.aliyun.com/zh/model-studio/tingwu-service-insights-api-get-task#20d08cc597wbf)
-    
--   [output.generalSaleInsightsPath的解析协议](https://help.aliyun.com/zh/model-studio/tingwu-service-insights-api-get-task#23631e2d69zrj)
-    
-
-output.generalServiceInsightsPath
-
-string
-
-洞察结果的ossUrl，参见[output.generalServiceInsightsPath的解析协议](https://help.aliyun.com/zh/model-studio/tingwu-service-insights-api-get-task#20d08cc597wbf)
-
-output.generalSaleInsightsPath
-
-string
-
-返回分析结果的ossUrl，参见
-
-[output.generalSaleInsightsPath的解析协议](https://help.aliyun.com/zh/model-studio/tingwu-service-insights-api-get-task#23631e2d69zrj)
+<a id="760913439awmi"></a>
 
 ### output.transcriptionPath 的解析协议
 
 最外层是一个Object，具体字段如下：
 
-**名称**
-
-**类型**
-
-**描述**
-
-**示例值**
-
-paragraphs
-
-Array
-
-段落列表
-
-paragraphs\[i\].paragraphId
-
-String
-
-段落ID
-
-16987422100275\*\*\*\*\*
-
-paragraphs\[i\].speakerId
-
-String
-
-说话者ID
-
-1
-
-paragraphs\[i\].words
-
-Array
-
-字词列表
-
-paragraphs\[i\].words\[i\].id
-
-Integer
-
-字词编号
-
-10
-
-paragraphs\[i\].words\[i\].sentenceId
-
-Integer
-
-句子ID
-
-1
-
-paragraphs\[i\].words\[i\].start
-
-Integer
-
-开始时间（毫秒）
-
-4970
-
-paragraphs\[i\].words\[i\].end
-
-Integer
-
-结束时间（毫秒）
-
-5560
-
-paragraphs\[i\].words\[i\].text
-
-String
-
-字词文本
-
-我是
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+| paragraphs | Array | 段落列表 |  |
+| paragraphs\[i\].paragraphId | String | 段落ID | 16987422100275\*\*\*\*\* |
+| paragraphs\[i\].speakerId | String | 说话者ID | 1 |
+| paragraphs\[i\].words | Array | 字词列表 |  |
+| paragraphs\[i\].words\[i\].id | Integer | 字词编号 | 10 |
+| paragraphs\[i\].words\[i\].sentenceId | Integer | 句子ID | 1 |
+| paragraphs\[i\].words\[i\].start | Integer | 开始时间（毫秒） | 4970 |
+| paragraphs\[i\].words\[i\].end | Integer | 结束时间（毫秒） | 5560 |
+| paragraphs\[i\].words\[i\].text | String | 字词文本 | 我是 |
 
 示例json如下：
 
-```
+<a id="code-block-3"></a>
+
+```json
 {
   "paragraphs": [
     {
@@ -280,66 +107,21 @@ String
 }
 ```
 
+<a id="output-generalserviceinsightspath的解析协议"></a>
+
+<a id="20d08cc597wbf"></a>
+
 ### output.generalServiceInsightsPath的解析协议
 
 最外层是一个Object，具体字段如下：
 
-**名称**
-
-**类型**
-
-**描述**
-
-**示例值**
-
-generalServiceInsights\[i\].title
-
-string
-
-服务质检结果的名称，和[入参](raw/_short/tingwu-service-insights-api-create-task-c2fe53a618e63bf0.md)的serviceInsights.InsightsContents\[i\].title对应
-
-到店迎接-欢迎语
-
-generalServiceInsights\[i\].matched
-
-boolean
-
-本条服务质检项是否命中
-
-true
-
-generalServiceInsights\[i\].remarks
-
-string
-
-大模型对本条质检项的分析
-
-销售人员通过询问开启对话，表现出一定的迎接意图。
-
-generalServiceInsights\[i\].score
-
-string
-
-本条洞察项的最终得分：
-
--   匹配：置为用户设置的分值
-    
--   不匹配：置为零分
-    
-
-20
-
-generalServiceInsights\[i\].matchedSentenceIds
-
-list\[\]
-
-命中该质检项的原始对话，在原文中的句子id
-
-\[1, 2, 3\]
+<table><thead><tr><th><p><strong>名称</strong></p></th><th><p><strong>类型</strong></p></th><th><p><strong>描述</strong></p></th><th><p><strong>示例值</strong></p></th></tr></thead><tbody><tr><td><p>generalServiceInsights[i].title</p></td><td><p>string</p></td><td><p>服务质检结果的名称，和<a href="tingwu-service-insights-api-create-task-c2fe53a618e63bf0.md">入参</a>的serviceInsights.InsightsContents[i].title对应</p></td><td><p>到店迎接-欢迎语</p></td></tr><tr><td><p>generalServiceInsights[i].matched</p></td><td><p>boolean</p></td><td><p>本条服务质检项是否命中</p></td><td><p>true</p></td></tr><tr><td><p>generalServiceInsights[i].remarks</p></td><td><p>string</p></td><td><p>大模型对本条质检项的分析</p></td><td><p>销售人员通过询问开启对话，表现出一定的迎接意图。</p></td></tr><tr><td><p>generalServiceInsights[i].score</p></td><td><p>string</p></td><td><p>本条洞察项的最终得分：</p><ul><li><p>匹配：置为用户设置的分值</p></li><li><p>不匹配：置为零分</p></li></ul></td><td><p>20</p></td></tr><tr><td><p>generalServiceInsights[i].matchedSentenceIds</p></td><td><p>list[]</p></td><td><p>命中该质检项的原始对话，在原文中的句子id</p></td><td><p>[1, 2, 3]</p></td></tr></tbody></table>
 
 示例json如下：
 
-```
+<a id="code-block-4"></a>
+
+```json
 "generalServiceInsights": [
     {
         "title": "到店迎接-欢迎语",
@@ -362,48 +144,41 @@ list\[\]
 ]
 ```
 
+<a id="output-generalsaleinsightspath的解析协议"></a>
+
+<a id="23631e2d69zrj"></a>
+
 ### output.generalSaleInsightsPath的解析协议
 
 最外层是一个Object，具体字段如下：
 
-**名称**
-
-**类型**
-
-**描述**
-
-**示例值**
-
-missedSum
-
-int
-
-洞察项未命中个数
-
-5
-
-matchedSum
-
-int
-
-洞察项命中数
-
-10
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+| missedSum | int | 洞察项未命中个数 | 5 |
+| matchedSum | int | 洞察项命中数 | 10 |
 
 示例json如下：
 
-```
+<a id="code-block-5"></a>
+
+```json
 "generalSaleInsights": {
   "missedSum": 20,
   "matchedSum": 2
 }
 ```
 
+<a id="请求示例"></a>
+
+<a id="9fe8014497l62"></a>
+
 ## 请求示例
 
 请求头Authorization中的"sk-\*\*\*"需要替换为真实的阿里云百炼[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)。
 
-```
+<a id="code-block-6"></a>
+
+```bash
 curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
 --header 'Authorization: Bearer sk-***' \
 --header 'Content-Type: application/json' \
@@ -416,9 +191,15 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-
 }'
 ```
 
+<a id="返回示例"></a>
+
+<a id="795cede31apwo"></a>
+
 ## 返回示例
 
-```
+<a id="code-block-7"></a>
+
+```json
 {
     "output": {
         "generalServiceInsightsPath": "https://***.oss-cn-hangzhou.aliyuncs.com/agentic/prepub/CommonDataField/servInspec/1627865205776705/llm-3cx2a3o4n8y45iee/2025/07/11/***?Expires=1752299850&OSSAccessKeyId=YOUR_ACCESS_KEY_ID&Signature=YOUR_SIGNATURE",

@@ -2,11 +2,19 @@
 
 输入一个query，返回几个相关query。
 
+<a id="调试"></a>
+
+<a id="api-detail-23"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
 [调试](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/RunGenerateQuestions)
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -25,229 +33,63 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-操作
+<table><thead><tr><th>操作</th><th>访问级别</th><th>资源类型</th><th>条件关键字</th><th>关联操作</th></tr></thead><tbody><tr><td>aimiaobi:RunGenerateQuestions</td><td>get</td><td><div><div>*全部资源</div><div><code>*</code></div></div></td><td><ul>无</ul></td><td>无</td></tr></tbody></table>
 
-访问级别
+<a id="请求语法"></a>
 
-资源类型
-
-条件关键字
-
-关联操作
-
-aimiaobi:RunGenerateQuestions
-
-get
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-53"></a>
 
 ## 请求语法
 
-```
+<a id="code-block"></a>
+
+```text
 POST /miaodu/stream/runGenerateQuestions HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="api-detail-36"></a>
+
 ## 请求参数
 
-名称
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-w335gauzlbba2vze |
+| SessionId | string | 否 | 对话 ID | f486c4e2-b773-4d65-88f8-2ba540610456 |
+| DocId | string | 否 | 文档 ID | oOgIwodFANW1u5MnqxysOh1rtld3xn |
+| ReferenceContent | string | 否 | 要从中提取问题的文档内容，如果不为空则以此文本为准，为空则以 docId 为准 | 关联内容 |
+| ModelName | string | 否 | 用户自定义模型名称 | quanmiao-max、quanmiao-plus |
 
-类型
+<a id="返回参数"></a>
 
-必填
-
-描述
-
-示例值
-
-WorkspaceId
-
-string
-
-是
-
-阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)
-
-llm-w335gauzlbba2vze
-
-SessionId
-
-string
-
-否
-
-对话 ID
-
-f486c4e2-b773-4d65-88f8-2ba540610456
-
-DocId
-
-string
-
-否
-
-文档 ID
-
-oOgIwodFANW1u5MnqxysOh1rtld3xn
-
-ReferenceContent
-
-string
-
-否
-
-要从中提取问题的文档内容，如果不为空则以此文本为准，为空则以 docId 为准
-
-关联内容
-
-ModelName
-
-string
-
-否
-
-用户自定义模型名称
-
-quanmiao-max、quanmiao-plus
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-名称
-
-类型
-
-描述
-
-示例值
-
-object
-
-Schema of Response
-
-RequestId
-
-string
-
-Id of the request
-
-1813ceee-7fe5-41b4-87e5-982a4d18cca5
-
-Header
-
-object
-
-响应头
-
-ErrorCode
-
-string
-
-错误码
-
-RateLimit
-
-ErrorMessage
-
-string
-
-调用失败时，返回的出错信息。
-
-success
-
-Event
-
-string
-
-event 名称
-
-finished
-
-EventInfo
-
-string
-
-事件描述
-
-模型生成事件
-
-SessionId
-
-string
-
-会话 ID
-
-3cd10828-0e42-471c-8f1a-931cde20b035
-
-TaskId
-
-string
-
-任务 ID
-
-d3be9981-ca2d-4e17-bf31-1c0a628e9f99
-
-TraceId
-
-string
-
-全链路 ID
-
-0bc3b4b417362160345997589e5f6e
-
-Payload
-
-object
-
-响应体
-
-Output
-
-object
-
-输出
-
-Content
-
-string
-
-问题内容
-
-问题1\\n问题2\\n问题3\\n
-
-Usage
-
-object
-
-token 用量
-
-InputTokens
-
-long
-
-输入使用的 Token 数量
-
-100
-
-OutputTokens
-
-long
-
-输出 Token 数量
-
-100
-
-TotalTokens
-
-long
-
-总 oken 数量
-
-200
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | Schema of Response |  |
+| RequestId | string | Id of the request | 1813ceee-7fe5-41b4-87e5-982a4d18cca5 |
+| Header | object | 响应头 |  |
+| ErrorCode | string | 错误码 | RateLimit |
+| ErrorMessage | string | 调用失败时，返回的出错信息。 | success |
+| Event | string | event 名称 | finished |
+| EventInfo | string | 事件描述 | 模型生成事件 |
+| SessionId | string | 会话 ID | 3cd10828-0e42-471c-8f1a-931cde20b035 |
+| TaskId | string | 任务 ID | d3be9981-ca2d-4e17-bf31-1c0a628e9f99 |
+| TraceId | string | 全链路 ID | 0bc3b4b417362160345997589e5f6e |
+| Payload | object | 响应体 |  |
+| Output | object | 输出 |  |
+| Content | string | 问题内容 | 问题1\\n问题2\\n问题3\\n |
+| Usage | object | token 用量 |  |
+| InputTokens | long | 输入使用的 Token 数量 | 100 |
+| OutputTokens | long | 输出 Token 数量 | 100 |
+| TotalTokens | long | 总 oken 数量 | 200 |
+
+<a id="示例"></a>
+
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -255,7 +97,9 @@ long
 
 `JSON`格式
 
-```
+<a id="code-block-2"></a>
+
+```text
 {
   "RequestId": "1813ceee-7fe5-41b4-87e5-982a4d18cca5",
   "Header": {
@@ -280,22 +124,14 @@ long
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
+
 ## 错误码
 
-HTTP status code
-
-错误码
-
-错误信息
-
-描述
-
-403
-
-NoPermission
-
-You are not authorized to perform this action.
-
-请检查workspaceId的赋值
+| HTTP status code | 错误码 | 错误信息 | 描述 |
+| --- | --- | --- | --- |
+| 403 | NoPermission | You are not authorized to perform this action. | 请检查workspaceId的赋值 |
 
 访问[错误中心](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/errorCode)查看更多错误码。

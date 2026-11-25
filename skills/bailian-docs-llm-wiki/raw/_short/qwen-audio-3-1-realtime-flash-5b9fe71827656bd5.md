@@ -2,87 +2,47 @@
 
 实时双工语音对话模型，支持文本和音频输入输出、工具调用、联网搜索及声音复刻。
 
+<a id="推理服务供应商"></a>
+
 ## 推理服务供应商
 
 阿里云百炼。
 
+<a id="模型能力"></a>
+
 ## 模型能力
 
-能力项
-
-说明
-
-输入模态
-
-文本、音频
-
-输出模态
-
-文本、音频
-
-Function Calling
-
-支持
-
-联网搜索
-
-支持
-
-声音复刻
-
-支持
-
-接入协议
-
-WebSocket、WebRTC、AOQ
-
-默认音色
-
-`longanqian_v3.1`
-
-思考模式
-
-不支持 `enable_thinking`
-
-交互模式
-
-`server_vad`、`smart_turn`、`smart_turn_v2`（推荐）、push-to-talk
-
-说话人增强
-
-支持（`smart_turn`、`smart_turn_v2` 模式）
+| 能力项 | 说明 |
+| --- | --- |
+| 输入模态 | 文本、音频 |
+| 输出模态 | 文本、音频 |
+| Function Calling | 支持 |
+| 联网搜索 | 支持 |
+| 声音复刻 | 支持 |
+| 接入协议 | WebSocket、WebRTC、AOQ |
+| 默认音色 | `longanqian_v3.1` |
+| 思考模式 | 不支持 `enable_thinking` |
+| 交互模式 | `server_vad`、`smart_turn`、`smart_turn_v2`（推荐）、push-to-talk |
+| 说话人增强 | 支持（`smart_turn`、`smart_turn_v2` 模式） |
 
 联网搜索通过 `enable_search` 开启，可与 Function Calling 同时启用。
 
+<a id="上下文限制"></a>
+
 ## 上下文限制
 
-参数
+| 参数 | 上限（Token） |
+| --- | --- |
+| 上下文长度 | 262,144 |
+| 最大输入长度 | 245,760 |
+| 最大输出长度 | 16,384 |
 
-上限（Token）
+| 音频历史上下文限制 | 上限 |
+| --- | --- |
+| 最大轮次 | 50 |
+| 累计音频时长 | 300 秒 |
 
-上下文长度
-
-262,144
-
-最大输入长度
-
-245,760
-
-最大输出长度
-
-16,384
-
-音频历史上下文限制
-
-上限
-
-最大轮次
-
-50
-
-累计音频时长
-
-300 秒
+<a id="价格"></a>
 
 ## 价格
 
@@ -90,92 +50,60 @@ WebSocket、WebRTC、AOQ
 
 价格单位：元/百万 Token。
 
+<a id="sec-tabs"></a>
+
+<a id="华北2-北京"></a>
+
+<a id="华北2-北京-h4"></a>
+
 #### 华北2（北京）
 
-模型 ID
+| 模型 ID | 文本输入 | 音频输入 | 文本输出 | 音频输出 |
+| --- | --- | --- | --- | --- |
+| `qwen-audio-3.1-realtime-flash` | 1.5元 | 6元 | 4.5元 | 12元 |
 
-文本输入
+<a id="新加坡"></a>
 
-音频输入
-
-文本输出
-
-音频输出
-
-`qwen-audio-3.1-realtime-flash`
-
-1.5元
-
-6元
-
-4.5元
-
-12元
+<a id="新加坡-h4"></a>
 
 #### 新加坡
 
-模型 ID
+| 模型 ID | 文本输入 | 音频输入 | 文本输出 | 音频输出 |
+| --- | --- | --- | --- | --- |
+| `qwen-audio-3.1-realtime-flash` | 1.677元 | 6.781元 | 5.104元 | 13.636元 |
 
-文本输入
-
-音频输入
-
-文本输出
-
-音频输出
-
-`qwen-audio-3.1-realtime-flash`
-
-1.677元
-
-6.781元
-
-5.104元
-
-13.636元
+<a id="限流"></a>
 
 ## 限流
 
 WebSocket 的 RPM 按连接请求次数统计，与模型响应次数无关；没有单独的并发连接数限制。
 
+<a id="sec-tabs-2"></a>
+
+<a id="华北2-北京-2"></a>
+
+<a id="华北2-北京-2-h4"></a>
+
 #### 华北2（北京）
 
-模型 ID
+| 模型 ID | RPM | TPM | WebSocket 并发连接数 |
+| --- | --- | --- | --- |
+| `qwen-audio-3.1-realtime-flash` | 60 | 100,000 | 无单独限制 |
 
-RPM
+<a id="新加坡-2"></a>
 
-TPM
-
-WebSocket 并发连接数
-
-`qwen-audio-3.1-realtime-flash`
-
-60
-
-100,000
-
-无单独限制
+<a id="新加坡-2-h4"></a>
 
 #### 新加坡
 
-模型 ID
+| 模型 ID | RPM | TPM | WebSocket 并发连接数 |
+| --- | --- | --- | --- |
+| `qwen-audio-3.1-realtime-flash` | 60 | 100,000 | 无单独限制 |
 
-RPM
-
-TPM
-
-WebSocket 并发连接数
-
-`qwen-audio-3.1-realtime-flash`
-
-60
-
-100,000
-
-无单独限制
+<a id="调用方式"></a>
 
 ## 调用方式
 
--   [实时语音对话指南](raw/model-user-guide/model-experience/speech-and-audio/speech-to-speech/qwen-audio-realtime-user-guides.md)
--   [模型接入方式](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/voice-conversation-api-references.md)
--   [客户端事件](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/fun-audiochat-client-events.md)
+-   [实时语音对话指南](../model-user-guide/model-experience/speech-and-audio/speech-to-speech/qwen-audio-realtime-user-guides.md)
+-   [模型接入方式](../model-api-reference/realtime-api-directory/audio-realtime-api-directory/voice-conversation-api-references.md)
+-   [客户端事件](../model-api-reference/realtime-api-directory/audio-realtime-api-directory/fun-audiochat-client-events.md)

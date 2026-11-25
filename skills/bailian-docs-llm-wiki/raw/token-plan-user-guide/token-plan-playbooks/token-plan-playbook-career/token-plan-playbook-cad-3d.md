@@ -2,20 +2,27 @@
 
 一句话描述零件，模型生成建模脚本，本地 CAD 内核执行后产出 STEP/STL 文件。
 
-**说明**
-
-**免责声明**：本页展示内容均为 AI 模型生成，仅供参考，不构成任何效果承诺；实际产出效果与 Credits 消耗以控制台“用量详情”为准。
+> **说明**
+>
+> **免责声明**：本页展示内容均为 AI 模型生成，仅供参考，不构成任何效果承诺；实际产出效果与 Credits 消耗以控制台“用量详情”为准。
 
 本篇以“40×30×8 mm 底板 + 中心 Ø10 mm 通孔”跑通：`qwen3.8-max` 把一句话需求写成 cadquery 建模脚本，本地内核执行后导出 STEP/STL，并打印体积校验，模型体积与解析值零误差——把建模从点鼠标变成写需求。
 
 调用链：`qwen3.8-max`（需求 → cadquery 参数化建模脚本）→ 本地开源 CAD 内核（cadquery）执行 → 导出 STEP/STL（本地执行不耗 Credits）。
+
+<a id="实测产出"></a>
+
+<a id="tp-pb-cad-result"></a>
 
 ## 实测产出
 
 以“40×30×8 mm 底板 + 中心 Ø10 mm 通孔”跑通，cadquery 导出的三维投影与体积校验：
 
 ![底板+通孔三维投影](https://g-adoc.alcasset.com/media/maas_docs/sfm/zh/images/6a4b3c2d1e0f9e12.svg)
-```
+
+<a id="code-block"></a>
+
+```text
 模型体积(mm³): 8971.681469
 解析体积(mm³): 8971.681469
 差值(mm³): 0.000000
@@ -23,15 +30,25 @@
 （导出文件：bracket.step 20KB · bracket.stl 26KB）
 ```
 
+<a id="步骤-一句话建模"></a>
+
+<a id="tp-pb-cad-step1"></a>
+
 ## 步骤：一句话建模
 
 把下面的指令发给 `qwen3.8-max`：
 
-```
+<a id="code-block-2"></a>
+
+```text
 用 Python cadquery 写脚本：建一块 40×30×8 mm 底板，正中心钻 Ø10 mm 通孔；
 导出 bracket.step 与 bracket.stl；并打印模型体积与解析体积(40*30*8 − π*5²*8)对比。
 只输出可直接运行的完整 Python 代码。
 ```
+
+<a id="说明"></a>
+
+<a id="tp-pb-cad-notes"></a>
 
 ## 说明
 

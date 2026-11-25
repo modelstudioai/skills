@@ -2,9 +2,21 @@
 
 在 Qoder 中使用阿里云百炼模型。
 
+<a id="connection-reference"></a>
+
+<a id="add-model"></a>
+
+<a id="快速接入"></a>
+
 ## 快速接入
 
 选择你使用的客户端，完成配置。
+
+<a id="sec-tabs"></a>
+
+<a id="桌面端"></a>
+
+<a id="桌面端-h4"></a>
 
 #### 桌面端
 
@@ -26,14 +38,28 @@
     
     选择类型和模型，按计费方案获取对应的 **API Key** 并填写：
     
+    <a id="sec-tabs-2"></a>
+    
+    <a id="token-plan"></a>
+    
+    <a id="token-plan-h4"></a>
+    
     #### Token Plan
     
     -   Token Plan 个人版：[创建或查看 API Key](https://bailian.console.aliyun.com/cn-beijing/subscription/token-plan/personal)
     -   Token Plan 团队版：[分配坐席并获取 API Key](https://bailian.console.aliyun.com/cn-beijing/subscription/uac-admin/organization/members/list)
     
+    <a id="按量计费"></a>
+    
+    <a id="按量计费-h4"></a>
+    
     #### 按量计费
     
     [阿里云百炼 API Key](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key?spm=5176.28197581.0.0.307f29a4lC7Vbh)
+    
+    <a id="coding-plan"></a>
+    
+    <a id="coding-plan-h4"></a>
     
     #### Coding Plan
     
@@ -52,7 +78,15 @@
     返回对话，在模型选择器的 **自定义** 分组中选择已添加的模型。
     
 
+<a id="ide"></a>
+
+<a id="ide-h4"></a>
+
 #### IDE
+
+<a id="qd-ide-h"></a>
+
+<a id="qd-ide-config-h"></a>
 
 1.  1
     
@@ -72,14 +106,28 @@
     
     选择类型和模型，按计费方案获取对应的 **API 密钥** 并填写：
     
+    <a id="sec-tabs-3"></a>
+    
+    <a id="token-plan-2"></a>
+    
+    <a id="token-plan-2-h4"></a>
+    
     #### Token Plan
     
     -   Token Plan 个人版：[创建或查看 API Key](https://bailian.console.aliyun.com/cn-beijing/subscription/token-plan/personal)
     -   Token Plan 团队版：[分配坐席并获取 API Key](https://bailian.console.aliyun.com/cn-beijing/subscription/uac-admin/organization/members/list)
     
+    <a id="按量计费-2"></a>
+    
+    <a id="按量计费-2-h4"></a>
+    
     #### 按量计费
     
     [阿里云百炼 API Key](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key?spm=5176.28197581.0.0.307f29a4lC7Vbh)
+    
+    <a id="coding-plan-2"></a>
+    
+    <a id="coding-plan-2-h4"></a>
     
     #### Coding Plan
     
@@ -94,7 +142,17 @@
     校验通过后，在对话模型选择器的 **自定义** 分组中选择该模型。
     
 
+<a id="cli"></a>
+
+<a id="cli-h4"></a>
+
 #### CLI
+
+<a id="qd-cli-h"></a>
+
+<a id="qd-cli-config-h"></a>
+
+<a id="qd-cli-use-h"></a>
 
 1.  1
     
@@ -120,14 +178,28 @@
     
     确认 **Context Window** 和 **Thinking Effort** 设置，按计费方案获取对应的 **API Key** 并填写：
     
+    <a id="sec-tabs-4"></a>
+    
+    <a id="token-plan-3"></a>
+    
+    <a id="token-plan-3-h4"></a>
+    
     #### Token Plan
     
     -   Token Plan 个人版：[创建或查看 API Key](https://bailian.console.aliyun.com/cn-beijing/subscription/token-plan/personal)
     -   Token Plan 团队版：[分配坐席并获取 API Key](https://bailian.console.aliyun.com/cn-beijing/subscription/uac-admin/organization/members/list)
     
+    <a id="按量计费-3"></a>
+    
+    <a id="按量计费-3-h4"></a>
+    
     #### 按量计费
     
     [阿里云百炼 API Key](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key?spm=5176.28197581.0.0.307f29a4lC7Vbh)
+    
+    <a id="coding-plan-3"></a>
+    
+    <a id="coding-plan-3-h4"></a>
     
     #### Coding Plan
     
@@ -140,7 +212,13 @@
     校验成功后，在模型列表中选择该模型。无需重启 CLI。
     
 
+<a id="jetbrains-插件"></a>
+
+<a id="jetbrains-插件-h4"></a>
+
 #### JetBrains 插件
+
+<a id="qd-jb-h"></a>
 
 1.  1
     
@@ -160,14 +238,28 @@
     
     选择类型和模型，按计费方案获取对应的 **API 密钥** 并填写：
     
+    <a id="sec-tabs-5"></a>
+    
+    <a id="token-plan-4"></a>
+    
+    <a id="token-plan-4-h4"></a>
+    
     #### Token Plan
     
     -   Token Plan 个人版：[创建或查看 API Key](https://bailian.console.aliyun.com/cn-beijing/subscription/token-plan/personal)
     -   Token Plan 团队版：[分配坐席并获取 API Key](https://bailian.console.aliyun.com/cn-beijing/subscription/uac-admin/organization/members/list)
     
+    <a id="按量计费-4"></a>
+    
+    <a id="按量计费-4-h4"></a>
+    
     #### 按量计费
     
     [阿里云百炼 API Key](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key?spm=5176.28197581.0.0.307f29a4lC7Vbh)
+    
+    <a id="coding-plan-4"></a>
+    
+    <a id="coding-plan-4-h4"></a>
     
     #### Coding Plan
     
@@ -182,19 +274,31 @@
     校验通过后，返回会话，在输入框下方的模型选择器中选择已添加的模型。
     
 
+<a id="常见问题"></a>
+
 ## 常见问题
+
+<a id="qd-faq-h"></a>
+
+<a id="accordion-如何按量计费接入节省计划与资源包"></a>
 
 如何按量计费接入节省计划与资源包？
 
-按量计费接入方式不变，使用百炼通用 API Key 和 Base URL。购买节省计划或资源包后自动生效，调用费用按抵扣顺序自动抵扣。详情参见[节省计划与资源包](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package#h2-usage)。
+按量计费接入方式不变，使用百炼通用 API Key 和 Base URL。购买节省计划或资源包后自动生效，调用费用按抵扣顺序自动抵扣。详情参见[节省计划与资源包](../../model-user-guide/test-1/savings-plan-and-resource-package.md#h2-usage)。
+
+<a id="accordion-错误码"></a>
 
 错误码
 
+<a id="faq_error_h3"></a>
+
 配置过程中遇到报错，请参考对应计费方案的常见问题文档：
 
--   Token Plan：[Token Plan 常见问题](https://help.aliyun.com/zh/model-studio/token-plan-faq#tpt-h-errors)
--   按量计费：[错误码](raw/model-api-reference/preparations/error-code.md)
--   Coding Plan：[Coding Plan 常见问题](https://help.aliyun.com/zh/model-studio/coding-plan-faq#e07ad90b4f3l0)
+-   Token Plan：[Token Plan 常见问题](../token-plan-guide/token-plan-faq.md#tpt-h-errors)
+-   按量计费：[错误码](../../model-api-reference/preparations/error-code.md)
+-   Coding Plan：[Coding Plan 常见问题](../coding-plan-guide/coding-plan-faq.md#e07ad90b4f3l0)
+
+<a id="accordion-为什么在-qoder-设置中找不到模型选项"></a>
 
 为什么在 Qoder 设置中找不到模型选项？
 

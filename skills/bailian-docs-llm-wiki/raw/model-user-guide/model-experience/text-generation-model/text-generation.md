@@ -12,6 +12,10 @@
 
 更多示例可以参考[文本生成样例](https://bailian.console.aliyun.com/flow-agent/plugin-market/prompt)。
 
+<a id="核心概念"></a>
+
+<a id="054c92cd93389"></a>
+
 ## 核心概念
 
 文本生成模型的输入为提示词（Prompt），它由一个或多个消息（Message）对象构成。每条消息由角色（Role）和内容（Content）组成，具体为：
@@ -24,7 +28,9 @@
 
 > `system` 消息是可选的，但建议设定。明确模型的角色定位和行为约束，有助于获得更一致、可预测的输出。
 
-```
+<a id="code-block"></a>
+
+```json
 [
     {"role": "system", "content": "你是一个有帮助的助手，需要提供精准、高效且富有洞察力的回应，随时准备协助用户处理各种任务与问题。"},
     {"role": "user", "content": "你是谁？"}
@@ -33,22 +39,42 @@
 
 输出的响应对象中会包含模型回复的`assistant`消息。
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
     "role": "assistant",
     "content": "你好！我是Qwen，是阿里巴巴集团旗下的通义实验室自主研发的超大规模语言模型。我可以帮助你回答问题、创作文字、进行逻辑推理、编程等。我能够理解并生成多种语言，支持多轮对话和复杂任务处理。如果你有任何需要帮助的地方，尽管告诉我！"
 }
 ```
 
+<a id="快速开始"></a>
+
+<a id="bfae0adf88aa2"></a>
+
 ## 快速开始
 
-API 使用前提：已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/get-api-key#20b17d4430qvt)。如果通过SDK调用，需要[安装 OpenAI 或 DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。示例接入地址中的 `{WorkspaceId}` 为业务空间 ID，获取方式请参见[选择地域、服务部署范围和接入域名](raw/model-user-guide/get-started-with-models/regions.md)。
+API 使用前提：已[获取与配置 API Key](../../../model-api-reference/preparations/get-api-key.md)并完成[配置API Key到环境变量](../../../model-api-reference/preparations/get-api-key.md#20b17d4430qvt)。如果通过SDK调用，需要[安装 OpenAI 或 DashScope SDK](../../../model-api-reference/preparations/install-sdk.md)。示例接入地址中的 `{WorkspaceId}` 为业务空间 ID，获取方式请参见[选择地域、服务部署范围和接入域名](../../get-started-with-models/regions.md)。
+
+<a id="sec-tabs"></a>
+
+<a id="openai兼容-chat-completions-api"></a>
+
+<a id="openai兼容-chat-completions-api-h4"></a>
 
 #### OpenAI兼容-Chat Completions API
 
+<a id="sec-tabs-2"></a>
+
+<a id="python"></a>
+
+<a id="python-h4"></a>
+
 #### Python
 
-```
+<a id="code-block-3"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -76,15 +102,25 @@ except Exception as e:
     print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
+<a id="5fa4b3d7ef0ow"></a>
+
 #### 返回结果
 
-```
+<a id="code-block-4"></a>
+
+```text
 我是千问，阿里巴巴集团旗下的通义实验室自主研发的超大规模语言模型。我可以帮助你回答问题、创作文字，比如写故事、写公文、写邮件、写剧本、逻辑推理、编程等等，还能表达观点，玩游戏等。如果你有任何问题或需要帮助，欢迎随时告诉我！
 ```
 
+<a id="java"></a>
+
+<a id="java-h4"></a>
+
 #### Java
 
-```
+<a id="code-block-5"></a>
+
+```java
 // 建议 OpenAI Java SDK版本 >= 3.5.0
 import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
@@ -124,15 +160,25 @@ public class Main {
 }
 ```
 
+<a id="91c9e63343hr4"></a>
+
 #### 返回结果
 
-```
+<a id="code-block-6"></a>
+
+```text
 我是千问，阿里巴巴集团旗下的通义实验室自主研发的超大规模语言模型。我可以帮助你回答问题、创作文字，比如写故事、写公文、写邮件、写剧本、逻辑推理、编程等等，还能表达观点，玩游戏等。如果你有任何问题或需要帮助，欢迎随时告诉我！
 ```
 
+<a id="node-js"></a>
+
+<a id="node-js-h4"></a>
+
 #### Node.js
 
-```
+<a id="code-block-7"></a>
+
+```javascript
 // 需要 Node.js v18+，需在 ES Module 环境下运行
 import OpenAI from "openai";
 
@@ -157,15 +203,25 @@ console.log(completion.choices[0].message.content);
 // console.log(JSON.stringify(completion, null, 4));
 ```
 
+<a id="7961764bcb91l"></a>
+
 #### 返回结果
 
-```
+<a id="code-block-8"></a>
+
+```text
 我是千问，阿里巴巴集团旗下的通义实验室自主研发的超大规模语言模型。我可以帮助你回答问题、创作文字，比如写故事、写公文、写邮件、写剧本、逻辑推理、编程等等，还能表达观点，玩游戏等。如果你有任何问题或需要帮助，欢迎随时告诉我！
 ```
 
+<a id="go"></a>
+
+<a id="go-h4"></a>
+
 #### Go
 
-```
+<a id="code-block-9"></a>
+
+```go
 // OpenAI Go SDK版本不低于 v2.4.0
 package main
 
@@ -215,15 +271,25 @@ func main() {
 }
 ```
 
+<a id="ff0861c14ex1w"></a>
+
 #### 返回结果
 
-```
+<a id="code-block-10"></a>
+
+```text
 我是千问，阿里巴巴集团旗下的通义实验室自主研发的超大规模语言模型。我可以帮助你回答问题、创作文字，比如写故事、写公文、写邮件、写剧本、逻辑推理、编程等等，还能表达观点，玩游戏等。如果你有任何问题或需要帮助，欢迎随时告诉我！
 ```
 
+<a id="c-http"></a>
+
+<a id="c-http-h4"></a>
+
 #### C#（HTTP）
 
-```
+<a id="code-block-11"></a>
+
+```csharp
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
@@ -295,15 +361,25 @@ class Program
 }
 ```
 
+<a id="09d0656a4eezt"></a>
+
 #### 返回结果
 
-```
+<a id="code-block-12"></a>
+
+```text
 我是千问，阿里巴巴集团旗下的通义实验室自主研发的超大规模语言模型。我可以帮助你回答问题、创作文字，比如写故事、写公文、写邮件、写剧本、逻辑推理、编程等等，还能表达观点，玩游戏等。如果你有任何问题或需要帮助，欢迎随时告诉我！
 ```
 
+<a id="php-http"></a>
+
+<a id="php-http-h4"></a>
+
 #### PHP（HTTP）
 
-```
+<a id="code-block-13"></a>
+
+```php
 <?php
 // 设置请求的URL
 // 各地域配置不同，请根据实际地域修改
@@ -356,17 +432,27 @@ echo $content;
 ?>
 ```
 
+<a id="cf710264f1l64"></a>
+
 #### 返回结果
 
-```
+<a id="code-block-14"></a>
+
+```text
 我是千问，阿里巴巴集团旗下的通义实验室自主研发的超大规模语言模型。我可以帮助你回答问题、创作文字，比如写故事、写公文、写邮件、写剧本、逻辑推理、编程等等，还能表达观点，玩游戏等。如果你有任何问题或需要帮助，欢迎随时告诉我！
 ```
 
+<a id="curl"></a>
+
+<a id="curl-h4"></a>
+
 #### curl
 
-各地域的base\_url和API Key不同，详情请参见[OpenAI兼容-Chat](raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)和 [获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
+各地域的base\_url和API Key不同，详情请参见[OpenAI兼容-Chat](../../../model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)和 [获取与配置 API Key](../../../model-api-reference/preparations/get-api-key.md)。
 
-```
+<a id="code-block-15"></a>
+
+```bash
 # 各地域配置不同，请根据实际地域修改
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -386,11 +472,15 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="717ed54c81gm3"></a>
+
 #### 返回结果
 
 以下为 `qwen3.8-max` 的返回示例，用于说明响应字段。
 
-```
+<a id="code-block-16"></a>
+
+```json
 {
     "choices": [
         {
@@ -416,13 +506,25 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }
 ```
 
+<a id="openai兼容-responses-api"></a>
+
+<a id="openai兼容-responses-api-h4"></a>
+
 #### OpenAI兼容-Responses API
 
-Responses API是 Chat Completions API的演进版本，关于使用说明、代码示例和迁移指南，请参见 [OpenAI兼容-Responses](raw/model-api-reference/toolkits-and-frameworks/compatibility-with-openai-responses-api.md)。
+Responses API是 Chat Completions API的演进版本，关于使用说明、代码示例和迁移指南，请参见 [OpenAI兼容-Responses](../../../model-api-reference/toolkits-and-frameworks/compatibility-with-openai-responses-api.md)。
+
+<a id="sec-tabs-3"></a>
+
+<a id="python-2"></a>
+
+<a id="python-2-h4"></a>
 
 #### Python
 
-```
+<a id="code-block-17"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -446,6 +548,8 @@ except Exception as e:
     print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
+<a id="responses-api-python-result-h4"></a>
+
 #### 返回结果
 
 返回结果主要包含以下字段：
@@ -454,14 +558,16 @@ except Exception as e:
     
 -   `output`：输出列表。包含 `reasoning`（思考过程）和 `message`（回复内容）。
     
-    > `reasoning` 仅在开启 [深度思考](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md) 时返回（如 Qwen3.6 系列默认开启）。
+    > `reasoning` 仅在开启 [深度思考](deep-thinking.md) 时返回（如 Qwen3.6 系列默认开启）。
     
 -   `usage`：Token 用量统计。
     
 
-回复内容示例如下，完整响应请参考[curl](raw/model-user-guide/model-experience/text-generation-model/text-generation.md)。
+回复内容示例如下，完整响应请参考[curl](text-generation.md)。
 
-```
+<a id="code-block-18"></a>
+
+```text
 你好！我是人工智能助手，基于截至 2026 年的知识库训练。以下是我能为你做的主要事情：
 
 1.  **文字创作**：撰写文章、邮件、报告、故事、诗歌等。
@@ -474,9 +580,15 @@ except Exception as e:
 有什么具体任务需要我帮忙吗？随时告诉我！
 ```
 
+<a id="node-js-2"></a>
+
+<a id="node-js-2-h4"></a>
+
 #### Node.js
 
-```
+<a id="code-block-19"></a>
+
+```javascript
 // 需要 Node.js v18+，需在 ES Module 环境下运行
 import OpenAI from "openai";
 
@@ -513,14 +625,16 @@ main();
     
 -   `output`：输出列表。包含 `reasoning`（思考过程）和 `message`（回复内容）。
     
-    > `reasoning` 仅在开启 [深度思考](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md) 时返回（如 Qwen3.6 系列默认开启）。
+    > `reasoning` 仅在开启 [深度思考](deep-thinking.md) 时返回（如 Qwen3.6 系列默认开启）。
     
 -   `usage`：Token 用量统计。
     
 
-回复内容示例如下，完整响应请参考[curl](raw/model-user-guide/model-experience/text-generation-model/text-generation.md)。
+回复内容示例如下，完整响应请参考[curl](text-generation.md)。
 
-```
+<a id="code-block-20"></a>
+
+```text
 你好！我是人工智能助手，基于截至 2026 年的知识库训练。以下是我能为你做的主要事情：
 
 1.  **文字创作**：撰写文章、邮件、报告、故事、诗歌等。
@@ -533,9 +647,15 @@ main();
 有什么具体任务需要我帮忙吗？随时告诉我！
 ```
 
+<a id="curl-2"></a>
+
+<a id="curl-2-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-21"></a>
+
+```bash
 # 各地域配置不同，请根据实际地域修改
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -546,11 +666,15 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="responses-api-curl-result-h4"></a>
+
 #### 返回结果
 
 以下为 `qwen3.8-max` 的返回示例，用于说明响应字段。
 
-```
+<a id="code-block-22"></a>
+
+```json
 {
     "created_at": 1772249644,
     "id": "56ec1cc7-f246-448e-bdf9-b13838bc6xxx",
@@ -610,15 +734,35 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }
 ```
 
+<a id="dashscope-api"></a>
+
+<a id="dashscope-api-h4"></a>
+
 #### DashScope API
 
-**重要**在 DashScope API 中，模型的接口类型由输入模态决定：输入模态仅含文本的模型使用文本接口，输入模态包含图片或视频的模型使用多模态接口，即使只传入文本也需要使用多模态接口。请以[文本生成模型列表](raw/model-user-guide/get-started-with-models/model-studio-model-list/model-list-text-generation.md)中各模型页的“输入模态”为准；用错接口会提示 `url error` 错误。如需传入图片或视频，请参见[图像与视频理解](raw/model-user-guide/model-experience/text-generation-model/vision.md)。
+> **重要**
+>
+> 在 DashScope API 中，模型的接口类型由输入模态决定：输入模态仅含文本的模型使用文本接口，输入模态包含图片或视频的模型使用多模态接口，即使只传入文本也需要使用多模态接口。请以[文本生成模型列表](../../get-started-with-models/model-studio-model-list/model-list-text-generation.md)中各模型页的“输入模态”为准；用错接口会提示 `url error` 错误。如需传入图片或视频，请参见[图像与视频理解](vision.md)。
+
+<a id="sec-tabs-4"></a>
+
+<a id="文本接口"></a>
+
+<a id="文本接口-h4"></a>
 
 #### 文本接口
 
+<a id="sec-tabs-5"></a>
+
+<a id="python-3"></a>
+
+<a id="python-3-h4"></a>
+
 #### Python
 
-```
+<a id="code-block-23"></a>
+
+```python
 import os
 import dashscope
 from dashscope import DashScopeError
@@ -651,15 +795,25 @@ except DashScopeError as e:
     print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
+<a id="6e58a015a7wn3"></a>
+
 #### 返回结果
 
-```
+<a id="code-block-24"></a>
+
+```text
 我是千问，阿里巴巴集团旗下的通义实验室自主研发的超大规模语言模型。我可以帮助你回答问题、创作文字，比如写故事、写公文、写邮件、写剧本、逻辑推理、编程等等，还能表达观点，玩游戏等。如果你有任何问题或需要帮助，欢迎随时告诉我！
 ```
 
+<a id="java-2"></a>
+
+<a id="java-2-h4"></a>
+
 #### Java
 
-```
+<a id="code-block-25"></a>
+
+```java
 import java.util.Arrays;
 import java.lang.System;
 import com.alibaba.dashscope.aigc.generation.Generation;
@@ -710,15 +864,25 @@ public class Main {
 }
 ```
 
+<a id="62b2a6d74bgpy"></a>
+
 #### 返回结果
 
-```
+<a id="code-block-26"></a>
+
+```text
 我是千问，阿里巴巴集团旗下的通义实验室自主研发的超大规模语言模型。我可以帮助你回答问题、创作文字，比如写故事、写公文、写邮件、写剧本、逻辑推理、编程等等，还能表达观点，玩游戏等。如果你有任何问题或需要帮助，欢迎随时告诉我！
 ```
 
+<a id="node-js-http"></a>
+
+<a id="node-js-http-h4"></a>
+
 #### Node.js（HTTP）
 
-```
+<a id="code-block-27"></a>
+
+```javascript
 // 需要 Node.js v18+
 // 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：const apiKey = "sk-xxx";
@@ -769,15 +933,25 @@ async function callApi() {
 callApi();
 ```
 
+<a id="f672f3ddf6y7r"></a>
+
 #### 返回结果
 
-```
+<a id="code-block-28"></a>
+
+```text
 我是千问，阿里巴巴集团旗下的通义实验室自主研发的超大规模语言模型。我可以帮助你回答问题、创作文字，比如写故事、写公文、写邮件、写剧本、逻辑推理、编程等等，还能表达观点，玩游戏等。如果你有任何问题或需要帮助，欢迎随时告诉我！
 ```
 
+<a id="go-http"></a>
+
+<a id="go-http-h4"></a>
+
 #### Go（HTTP）
 
-```
+<a id="code-block-29"></a>
+
+```go
 package main
 
 import (
@@ -845,15 +1019,25 @@ func main() {
 }
 ```
 
+<a id="932e4104d0rq5"></a>
+
 #### 返回结果
 
-```
+<a id="code-block-30"></a>
+
+```text
 我是千问，阿里巴巴集团旗下的通义实验室自主研发的超大规模语言模型。我可以帮助你回答问题、创作文字，比如写故事、写公文、写邮件、写剧本、逻辑推理、编程等等，还能表达观点，玩游戏等。如果你有任何问题或需要帮助，欢迎随时告诉我！
 ```
 
+<a id="c-http-2"></a>
+
+<a id="c-http-2-h4"></a>
+
 #### C#（HTTP）
 
-```
+<a id="code-block-31"></a>
+
+```csharp
 using System.Net.Http.Headers;
 using System.Text;
 
@@ -923,9 +1107,13 @@ class Program
 }
 ```
 
+<a id="7c8036ae0b1l1"></a>
+
 #### 返回结果
 
-```
+<a id="code-block-32"></a>
+
+```json
 {
     "output": {
         "choices": [
@@ -947,9 +1135,15 @@ class Program
 }
 ```
 
+<a id="php-http-2"></a>
+
+<a id="php-http-2-h4"></a>
+
 #### PHP（HTTP）
 
-```
+<a id="code-block-33"></a>
+
+```php
 <?php
 // 各地域配置不同，请根据实际地域修改
 $url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation";
@@ -1005,17 +1199,27 @@ curl_close($ch);
 ?>
 ```
 
+<a id="030a391a3a9m7"></a>
+
 #### 返回结果
 
-```
+<a id="code-block-34"></a>
+
+```text
 我是千问，阿里巴巴集团旗下的通义实验室自主研发的超大规模语言模型。我可以帮助你回答问题、创作文字，比如写故事、写公文、写邮件、写剧本、逻辑推理、编程等等，还能表达观点，玩游戏等。如果你有任何问题或需要帮助，欢迎随时告诉我！
 ```
 
+<a id="curl-3"></a>
+
+<a id="curl-3-h4"></a>
+
 #### curl
 
-各地域的base\_url和API Key不同，详情请参见[DashScope](raw/model-api-reference/qwen-api-reference/qwen-api-via-dashscope.md)和 [获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
+各地域的base\_url和API Key不同，详情请参见[DashScope](../../../model-api-reference/qwen-api-reference/qwen-api-via-dashscope.md)和 [获取与配置 API Key](../../../model-api-reference/preparations/get-api-key.md)。
 
-```
+<a id="code-block-35"></a>
+
+```bash
 # 各地域配置不同，请根据实际地域修改
 curl --location "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation" \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -1040,9 +1244,13 @@ curl --location "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
+<a id="5da441467988h"></a>
+
 #### 返回结果
 
-```
+<a id="code-block-36"></a>
+
+```json
 {
     "output": {
         "choices": [
@@ -1064,28 +1272,48 @@ curl --location "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }
 ```
 
+<a id="dashscope-cli"></a>
+
+<a id="dashscope-cli-h4"></a>
+
 #### dashscope CLI
 
 通过 dashscope 命令行调用。
 
-```
+<a id="code-block-37"></a>
+
+```bash
 export DASHSCOPE_API_KEY="your-api-key"
 # 将 {WorkspaceId} 替换为业务空间ID，cn-beijing 替换为对应地域（新加坡: ap-southeast-1, 美东: us-east-1）
 export DASHSCOPE_HTTP_BASE_URL="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 dashscope generation create -m qwen-plus -p "你好"
 ```
 
-**重要**SDK Expert 交互式助手可按自然语言完成同样的开发与排障，见
+> **重要**
+>
+> SDK Expert 交互式助手可按自然语言完成同样的开发与排障，见
+>
+> [DashScope SDK Expert](../../../model-api-reference/preparations/dashscope-sdk-expert.md)。
 
-[DashScope SDK Expert](raw/model-api-reference/preparations/dashscope-sdk-expert.md)。
+完整地域表见 [Base URL 总览](../../../model-api-reference/preparations/base-url.md)。
 
-完整地域表见 [Base URL 总览](raw/model-api-reference/preparations/base-url.md)。
+<a id="多模态接口"></a>
+
+<a id="多模态接口-h4"></a>
 
 #### 多模态接口
 
+<a id="sec-tabs-6"></a>
+
+<a id="python-4"></a>
+
+<a id="python-4-h4"></a>
+
 #### Python
 
-```
+<a id="code-block-38"></a>
+
+```python
 import os
 import dashscope
 from dashscope import DashScopeError
@@ -1117,15 +1345,25 @@ except DashScopeError as e:
     print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
+<a id="dashscope-multimodal-python-result"></a>
+
 #### 返回结果
 
-```
+<a id="code-block-39"></a>
+
+```text
 我是千问，阿里巴巴集团旗下的通义实验室自主研发的超大规模语言模型。我可以帮助你回答问题、创作文字，比如写故事、写公文、写邮件、写剧本、逻辑推理、编程等等，还能表达观点，玩游戏等。如果你有任何问题或需要帮助，欢迎随时告诉我！
 ```
 
+<a id="java-3"></a>
+
+<a id="java-3-h4"></a>
+
 #### Java
 
-```
+<a id="code-block-40"></a>
+
+```java
 import java.util.Arrays;
 import java.util.Collections;
 import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;
@@ -1170,15 +1408,25 @@ public class Main {
 }
 ```
 
+<a id="dashscope-multimodal-java-result"></a>
+
 #### 返回结果
 
-```
+<a id="code-block-41"></a>
+
+```text
 我是千问，阿里巴巴集团旗下的通义实验室自主研发的超大规模语言模型。我可以帮助你回答问题、创作文字，比如写故事、写公文、写邮件、写剧本、逻辑推理、编程等等，还能表达观点，玩游戏等。如果你有任何问题或需要帮助，欢迎随时告诉我！
 ```
 
+<a id="curl-4"></a>
+
+<a id="curl-4-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-42"></a>
+
+```bash
 # 以下为华北2（北京）地域的URL，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的URL不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -1200,9 +1448,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }'
 ```
 
+<a id="dashscope-multimodal-curl-result"></a>
+
 #### 返回结果
 
-```
+<a id="code-block-43"></a>
+
+```json
 {
     "output": {
         "choices": [
@@ -1224,15 +1476,31 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }
 ```
 
+<a id="异步调用模型"></a>
+
+<a id="46c284865db9b"></a>
+
 ## 异步调用模型
 
 调用异步接口，可有效提升高并发请求的处理效率。
 
+<a id="sec-tabs-7"></a>
+
+<a id="openai兼容-chat-completions-api-2"></a>
+
+<a id="openai兼容-chat-completions-api-2-h4"></a>
+
 #### OpenAI兼容-Chat Completions API
+
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-python-tab"></a>
 
 Python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 import os
 import asyncio
 from openai import AsyncOpenAI
@@ -1273,9 +1541,13 @@ if __name__ == '__main__':
     asyncio.run(main(), debug=False)
 ```
 
+<a id="fig-code-group-java-tab"></a>
+
 Java
 
-```
+<a id="code-code-group-java"></a>
+
+```java
 import com.openai.client.OpenAIClientAsync;
 import com.openai.client.okhttp.OpenAIOkHttpClientAsync;
 import com.openai.models.chat.completions.ChatCompletionCreateParams;
@@ -1329,11 +1601,17 @@ public class Main {
 }
 ```
 
+<a id="dashscope"></a>
+
+<a id="dashscope-h4"></a>
+
 #### DashScope
 
 DashScope SDK的文本生成异步调用，目前仅支持Python。
 
-```
+<a id="code-block-44"></a>
+
+```python
 # 需要 dashscope 2.0.1 及以上版本
 import asyncio
 import platform
@@ -1376,7 +1654,9 @@ if __name__ == '__main__':
 
 > 由于调用是异步的，响应的返回顺序可能与示例不同。
 
-```
+<a id="code-block-45"></a>
+
+```text
 发送问题: 你是谁？
 发送问题: 你会什么？
 发送问题: 天气怎么样？
@@ -1395,18 +1675,30 @@ if __name__ == '__main__':
 如果你有任何具体的需求或问题，欢迎告诉我，我会尽力帮助你！
 ```
 
+<a id="应用于生产环境"></a>
+
+<a id="75259aaa2eoen"></a>
+
 ## 应用于生产环境
+
+<a id="构建高质量的上下文"></a>
+
+<a id="72579a7b09f99"></a>
 
 ### 构建高质量的上下文
 
 向大模型直接输入大量原始数据，会因上下文容量的限制导致成本增加与效果下降。上下文工程（Context Engineering）通过动态加载精准知识，显著提升生成质量与效率。核心技术包括：
 
--   **提示词工程（Prompt Engineering）**：通过设计和优化文本指令（Prompt），可以更精确地引导模型，使其输出更符合预期的结果。若想了解更多，可参考[文生文Prompt指南](raw/model-user-guide/use-cases/prompt-engineering-guide.md)、阿里云百炼 [提示词模板](https://bailian.console.aliyun.com/flow-agent/plugin-market/prompt)页面。
--   [检索增强生成（RAG）](raw/application-user-guide/agent-context/knowledge-base/data-connection-overview/rag-knowledge-base.md)：适用于需要模型依据外部知识库（例如产品文档或技术手册）来回答问题的场景。
--   [工具调用（Tool）](raw/model-user-guide/model-experience/text-generation-model/tool-calls.md)：允许模型获取实时信息（如查询天气、路况）或完成特定操作（如调用API、发送邮件）。
+-   **提示词工程（Prompt Engineering）**：通过设计和优化文本指令（Prompt），可以更精确地引导模型，使其输出更符合预期的结果。若想了解更多，可参考[文生文Prompt指南](../../use-cases/prompt-engineering-guide.md)、阿里云百炼 [提示词模板](https://bailian.console.aliyun.com/flow-agent/plugin-market/prompt)页面。
+-   [检索增强生成（RAG）](../../../application-user-guide/knowledge-base/rag-knowledge-base.md)：适用于需要模型依据外部知识库（例如产品文档或技术手册）来回答问题的场景。
+-   [工具调用（Tool）](tool-calls.md)：允许模型获取实时信息（如查询天气、路况）或完成特定操作（如调用API、发送邮件）。
 -   **记忆机制（Memory）**：为模型建立长短期记忆，使其能够理解连续对话的历史信息。
 
 若想系统了解，可参考[阿里云大模型高级工程师ACP认证课程](https://atomgit.com/alibabaclouddocs/aliyun_acp_learning/blob/main/%E5%A4%A7%E6%A8%A1%E5%9E%8BACP%E8%AE%A4%E8%AF%81%E6%95%99%E7%A8%8B/p2_%E6%9E%84%E9%80%A0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E9%97%AE%E7%AD%94%E7%B3%BB%E7%BB%9F/2_1_%E7%94%A8%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9E%84%E5%BB%BA%E6%96%B0%E4%BA%BA%E7%AD%94%E7%96%91%E6%9C%BA%E5%99%A8%E4%BA%BA.ipynb)。
+
+<a id="控制回复多样性"></a>
+
+<a id="eace7c731fac4"></a>
 
 ### 控制回复多样性
 
@@ -1419,7 +1711,9 @@ if __name__ == '__main__':
 
 -   **高多样性**（示例`temperature`\=0.9）：适用于需要创意、想象力和新颖表达的场景，如创意写作、头脑风暴或市场营销文案。
 
-```
+<a id="code-block-46"></a>
+
+```text
 阳光斜斜地切进窗台，橘猫蹑手蹑脚走近那块发光的方砖，绒毛瞬间被染成熔化的蜜糖。
 它伸出前爪轻拍光斑，却像踩进温热的池水般陷了进去，整片阳光顺着肉垫汩汩漫上脊背。
 午后忽然变得很重——猫儿蜷在流动的金砂里，听见时光在呼噜声中轻轻融化。
@@ -1427,11 +1721,15 @@ if __name__ == '__main__':
 
 -   **高确定性**（示例`temperature`\=0.1）：适用于要求内容准确、严谨和可预测的场景，如事实问答、代码生成或法律文本。
 
-```
+<a id="code-block-47"></a>
+
+```text
 午后，一只老猫蜷在窗台，数着光斑打盹。
 阳光轻轻跃过它斑驳的脊背，像在翻阅一本旧相册。
 尘埃浮起又落下，仿佛时光低语：你曾年轻，我也炽热。
 ```
+
+<a id="accordion-原理介绍"></a>
 
 原理介绍
 
@@ -1447,21 +1745,37 @@ top\_p 采样是指从最高概率（最核心）的 Token 集合中进行采样
 -   top\_p 越高，考虑的 Token 越多，因此生成的文本更多样。
 -   top\_p 越低，考虑的 Token 越少，因此生成的文本更集中和确定。
 
+<a id="更多功能"></a>
+
+<a id="a909c8077fkxl"></a>
+
 ### 更多功能
 
 上文介绍了基础的交互方式。针对更复杂的场景，可参考：
 
--   [多轮对话](raw/model-user-guide/model-experience/text-generation-model/multi-round-conversation.md)：适用于追问、信息采集等需要连续交流的场景。
--   [流式输出](raw/model-user-guide/model-experience/text-generation-model/stream.md)：适用于聊天机器人、实时代码生成等需要即时响应的场景，可以提升用户体验，并避免因响应时间过长导致的超时。
--   [深度思考](raw/model-user-guide/model-experience/text-generation-model/deep-thinking.md)：适用于复杂推理、策略分析等需要更高质量、更具条理的深度回答的场景。
--   [结构化输出](raw/model-user-guide/model-experience/text-generation-model/qwen-structured-output.md)：当需要模型按稳定的JSON格式回复，以便于程序调用或数据解析时使用。
--   [前缀续写](raw/model-user-guide/model-experience/text-generation-model/partial-mode.md)：适用于代码补全、长文写作等需要模型接续已有文本的场景。
+-   [多轮对话](multi-round-conversation.md)：适用于追问、信息采集等需要连续交流的场景。
+-   [流式输出](stream.md)：适用于聊天机器人、实时代码生成等需要即时响应的场景，可以提升用户体验，并避免因响应时间过长导致的超时。
+-   [深度思考](deep-thinking.md)：适用于复杂推理、策略分析等需要更高质量、更具条理的深度回答的场景。
+-   [结构化输出](qwen-structured-output.md)：当需要模型按稳定的JSON格式回复，以便于程序调用或数据解析时使用。
+-   [前缀续写](partial-mode.md)：适用于代码补全、长文写作等需要模型接续已有文本的场景。
+
+<a id="api-参考"></a>
+
+<a id="8202e9793agxx"></a>
 
 ## API 参考
 
-模型调用的完整参数列表，请参考 [OpenAI 兼容API参考](raw/model-api-reference/qwen-api-reference.md)和[DashScope API参考](raw/model-api-reference/qwen-api-reference.md)。
+模型调用的完整参数列表，请参考 [OpenAI 兼容API参考](../../../model-api-reference/qwen-api-reference.md)和[DashScope API参考](../../../model-api-reference/qwen-api-reference.md)。
+
+<a id="常见问题"></a>
+
+<a id="1fbcd10284jea"></a>
 
 ## 常见问题
+
+<a id="q-为什么输入token数比我发送的文本token数多"></a>
+
+<a id="e710782c79xqy"></a>
 
 ### Q：为什么输入Token数比我发送的文本Token数多？
 
@@ -1469,25 +1783,41 @@ A：在处理对话时，系统会使用对话模板（Chat Template）对输入
 
 例如，向qwen3.8-max发送消息`{"role": "user", "content": "你好"}`，“你好” 在分词（Tokenize）后仅对应 1 个 Token，但系统处理时，实际输入完整文本为`<|im_start|>user\n你好<|im_end|>\n<|im_start|>assistant\n<think>`，分词后总Token数会增加到11个。
 
+<a id="q-千问api为何无法分析网页链接"></a>
+
+<a id="69c3316db6mbe"></a>
+
 ### Q：千问API为何无法分析网页链接？
 
-A：千问API本身不具备直接访问网页链接的能力。您可以通过[Function Calling](raw/model-user-guide/model-experience/text-generation-model/tool-calls/qwen-function-calling.md)、[MCP](raw/model-user-guide/model-experience/text-generation-model/tool-calls/mcp.md)等功能，或结合 Python 的 Beautiful Soup 等网页抓取工具提取网页内容后传入模型。
+A：千问API本身不具备直接访问网页链接的能力。您可以通过[Function Calling](tool-calls/qwen-function-calling.md)、[MCP](tool-calls/mcp.md)等功能，或结合 Python 的 Beautiful Soup 等网页抓取工具提取网页内容后传入模型。
+
+<a id="q-网页端千问和千问api的回复为什么不一致"></a>
+
+<a id="af2746d51bexg"></a>
 
 ### Q：[网页端千问](https://tongyi.aliyun.com/qianwen/)和千问API的回复为什么不一致？
 
-A：网页端千问在千问API的基础上做了额外的工程优化，因此可以达到解析网页、联网搜索、画图、制作 PPT等功能，这些本身并不属于大模型API的能力，可以通过[联网搜索](raw/model-user-guide/model-experience/text-generation-model/tool-calls/web-search.md)、[Function Calling](raw/model-user-guide/model-experience/text-generation-model/tool-calls/qwen-function-calling.md)、[MCP](raw/model-user-guide/model-experience/text-generation-model/tool-calls/mcp.md)等功能优化模型的效果。
+A：网页端千问在千问API的基础上做了额外的工程优化，因此可以达到解析网页、联网搜索、画图、制作 PPT等功能，这些本身并不属于大模型API的能力，可以通过[联网搜索](tool-calls/web-search.md)、[Function Calling](tool-calls/qwen-function-calling.md)、[MCP](tool-calls/mcp.md)等功能优化模型的效果。
+
+<a id="q-如何处理模型超时的情况"></a>
+
+<a id="11241147efwpm"></a>
 
 ### Q：如何处理模型超时的情况？
 
-A：使用[流式输出](raw/model-user-guide/model-experience/text-generation-model/stream.md)可避免超时。流式输出在生成过程中逐步返回 token，无需等待完整响应。
+A：使用[流式输出](stream.md)可避免超时。流式输出在生成过程中逐步返回 token，无需等待完整响应。
 
 非流式调用的最大超时时间不少于300秒，实际时长因部署区域与选用模型存在差异。若超时未完成，服务将中断请求，但返回已生成的内容，且不再报超时错误。此时响应头将包含`x-dashscope-partialresponse: true`，表示返回的是超时前的部分结果。
 
 > 若无法获取响应头参数（例如通过SDK调用），可通过 `finish_reason` 字段辅助判断，若为 `null` ，表示生成内容不完整（但不一定是触发了超时）。
 
-大模型可续写不完整的内容，详情请参见：[基于不完整输出进行续写](https://help.aliyun.com/zh/model-studio/partial-mode#8cc28acfd7a91)。
+大模型可续写不完整的内容，详情请参见：[基于不完整输出进行续写](partial-mode.md#8cc28acfd7a91)。
 
 > Java SDK暂不支持前缀续写功能。
+
+<a id="q-模型能直接生成-word-excel-pdf-或-ppt-格式的文件吗"></a>
+
+<a id="b7120d94fcvrp"></a>
 
 ### Q：模型能直接生成 Word、Excel、PDF 或 PPT 格式的文件吗？
 

@@ -2,199 +2,66 @@
 
 获得导入任务列表。
 
+<a id="调试"></a>
+
+<a id="api-detail-23"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
 [调试](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/ListInterveneImportTasks)
 
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
+
 ## 授权信息
 
 当前API暂无授权信息透出。
 
+<a id="请求参数"></a>
+
+<a id="api-detail-36"></a>
+
 ## 请求参数
 
-名称
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| AgentKey | string | 是 | 业务空间唯一标识： [AgentKey](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey) | xxxxx\_p\_efm |
+| PageIndex | integer | 否 | 页号 | 1 |
+| PageSize | integer | 否 | 每页尺寸 | 20 |
 
-类型
+<a id="返回参数"></a>
 
-必填
-
-描述
-
-示例值
-
-AgentKey
-
-string
-
-是
-
-业务空间唯一标识： [AgentKey](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)
-
-xxxxx\_p\_efm
-
-PageIndex
-
-integer
-
-否
-
-页号
-
-1
-
-PageSize
-
-integer
-
-否
-
-每页尺寸
-
-20
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-名称
-
-类型
-
-描述
-
-示例值
-
-object
-
-PlainResult
-
-Code
-
-string
-
-状态码
-
-success
-
-Data
-
-object
-
-业务数据
-
-PageIndex
-
-integer
-
-页号
-
-1
-
-PageSize
-
-integer
-
-页尺寸
-
-10
-
-StatusList
-
-array<object>
-
-任务状态信息
-
-StatusList
-
-object
-
-Msg
-
-string
-
-任务信息
-
-Success
-
-Percentage
-
-integer
-
-完成百分比
-
-5
-
-Status
-
-integer
-
-任务状态
-
-Success
-
-TaskId
-
-string
-
-任务 Id
-
-4854
-
-TaskName
-
-string
-
-任务名字
-
-12344454
-
-TotalSize
-
-integer
-
-总页数
-
-0
-
-Code
-
-integer
-
-干预服务返回的状态码
-
-200
-
-HttpStatusCode
-
-integer
-
-http 状态码
-
-200
-
-Message
-
-string
-
-错误说明
-
-success
-
-RequestId
-
-string
-
-请求唯一标识
-
-3f7045e099474ba28ceca1b4eb6d6e21
-
-Success
-
-boolean
-
-是否成功：true 成功，false 失败
-
-true
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | PlainResult |  |
+| Code | string | 状态码 | success |
+| Data | object | 业务数据 |  |
+| PageIndex | integer | 页号 | 1 |
+| PageSize | integer | 页尺寸 | 10 |
+| StatusList | array<object> | 任务状态信息 |  |
+| StatusList | object |  |  |
+| Msg | string | 任务信息 | Success |
+| Percentage | integer | 完成百分比 | 5 |
+| Status | integer | 任务状态 | Success |
+| TaskId | string | 任务 Id | 4854 |
+| TaskName | string | 任务名字 | 12344454 |
+| TotalSize | integer | 总页数 | 0 |
+| Code | integer | 干预服务返回的状态码 | 200 |
+| HttpStatusCode | integer | http 状态码 | 200 |
+| Message | string | 错误说明 | success |
+| RequestId | string | 请求唯一标识 | 3f7045e099474ba28ceca1b4eb6d6e21 |
+| Success | boolean | 是否成功：true 成功，false 失败 | true |
+
+<a id="示例"></a>
+
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -202,7 +69,9 @@ true
 
 `JSON`格式
 
-```
+<a id="code-block"></a>
+
+```text
 {
   "Code": "success",
   "Data": {
@@ -226,6 +95,10 @@ true
   "Success": true
 }
 ```
+
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
 
 ## 错误码
 

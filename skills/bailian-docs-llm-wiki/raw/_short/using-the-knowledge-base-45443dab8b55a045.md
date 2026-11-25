@@ -2,9 +2,17 @@
 
 采用检索增强生成（RAG）技术，根据用户上传的外部信息源检索相关信息，然后将检索到的内容整合到用户输入中，从而帮助大模型生成更准确的回答。
 
+<a id="知识库"></a>
+
+<a id="e4b90e94f1ux9"></a>
+
 ## 知识库
 
 知识库仅对自定义指令的专业模式或者自定义创建的应用中的纯文本和语音对象分析场景生效，用于提升大模型生成回答的准确性。
+
+<a id="1-知识库配置"></a>
+
+<a id="8d2afe4678xiu"></a>
 
 ### 1.知识库配置
 
@@ -50,10 +58,16 @@
         
 7.  **知识库的创建**
     
-    点击**创建新知识库**按钮，跳转到知识库创建的页面中，具体操作可参考[创建和使用知识库](raw/application-user-guide/agent-context/knowledge-base/data-connection-overview/rag-knowledge-base.md)。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0461133771/p1059090.png)![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0461133771/p1059088.png)
+    点击**创建新知识库**按钮，跳转到知识库创建的页面中，具体操作可参考[创建和使用知识库](../application-user-guide/knowledge-base/rag-knowledge-base.md)。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0461133771/p1059090.png)![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0461133771/p1059088.png)
     
-    **说明**目前伶鹊CCAI-AIO产品所绑定的知识库仅支持文档搜索、数据查询、图片问答，不支持音视频搜索。
+    > **说明**
+    >
+    > 目前伶鹊CCAI-AIO产品所绑定的知识库仅支持文档搜索、数据查询、图片问答，不支持音视频搜索。
     
+
+<a id="2-知识库在应用中的使用"></a>
+
+<a id="85789faa12uc3"></a>
 
 ### 2.知识库在应用中的使用
 

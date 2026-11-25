@@ -2,6 +2,10 @@
 
 本文介绍如何通过开源的JS SDK，快速搭建智能纪要前端应用示例（Demo）。
 
+<a id="重要提示"></a>
+
+<a id="4c8776c804cde"></a>
+
 ## 重要提示
 
 1.  **API 密钥安全**: 切勿将 API Key 硬编码或提交到代码仓库，建议使用环境变量进行管理。
@@ -9,25 +13,19 @@
 3.  **网络要求**: 项目运行需要访问阿里云百炼服务，请确保网络通畅。
 4.  **重要说明**: **本项目中的依赖包均未发布到公共 npm 仓库。如需二次开发或发布，请自行重命名包名。**
 
+<a id="功能特性"></a>
+
+<a id="059f88cc60ww4"></a>
+
 ## 功能特性
 
 该 SDK 包含构建智能纪要应用的以下核心功能：
 
-**功能**
-
-**说明**
-
-音视频文件处理
-
-持上传音视频文件，进行语音转写、说话人分离，并生成摘要、章节速览等智能纪要。
-
-实时录音
-
-支持从麦克风实时采集音频，进行实时语音识别、翻译，并在结束后生成完整智能纪要。
-
-纪要整理
-
-支持对已完成的任务进行二次AI分析，如摘要优化、问答提取等。
+| 功能 | 说明 |
+| --- | --- |
+| 音视频文件处理 | 持上传音视频文件，进行语音转写、说话人分离，并生成摘要、章节速览等智能纪要。 |
+| 实时录音 | 支持从麦克风实时采集音频，进行实时语音识别、翻译，并在结束后生成完整智能纪要。 |
+| 纪要整理 | 支持对已完成的任务进行二次AI分析，如摘要优化、问答提取等。 |
 
 [**在线体验 Live Demo**](https://www.aliyun.com/exp/tingwu-agent)
 
@@ -37,41 +35,27 @@
 
 ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8859485671/p1031107.png)
 
+<a id="快速入门"></a>
+
+<a id="e4e1a01e5a2eo"></a>
+
 ## 快速入门
+
+<a id="1-前提条件"></a>
+
+<a id="69c47f5160deo"></a>
 
 ### 1\. 前提条件
 
 在开始之前，请确保您已完成以下准备工作：
 
-步骤
-
-操作说明
-
-获取地址
-
-1
-
-**注册阿里云账号**
-
-[阿里云官网](https://www.aliyun.com/)
-
-2
-
-**开通百炼模型服务**
-
-[百炼控制台](https://bailian.console.aliyun.com/?tab=model#/model-market)
-
-3
-
-**获取 API Key**
-
-[API Key 管理](https://bailian.console.aliyun.com/?tab=model#/api-key)
-
-4
-
-**创建应用并获取 App ID**
-
-[应用管理](https://bailian.console.aliyun.com/?tab=app#/app/app-market/tingwu/tingwu-meeting-summary)
+|  |  |  |
+| --- | --- | --- |
+| 步骤 | 操作说明 | 获取地址 |
+| 1 | **注册阿里云账号** | [阿里云官网](https://www.aliyun.com/) |
+| 2 | **开通百炼模型服务** | [百炼控制台](https://bailian.console.aliyun.com/?tab=model#/model-market) |
+| 3 | **获取 API Key** | [API Key 管理](https://bailian.console.aliyun.com/?tab=model#/api-key) |
+| 4 | **创建应用并获取 App ID** | [应用管理](https://bailian.console.aliyun.com/?tab=app#/app/app-market/tingwu/tingwu-meeting-summary) |
 
 **详细获取步骤** **API Key 获取步骤：**
 
@@ -90,14 +74,26 @@
     
     1.  ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8859485671/p1034158.png)
 
+<a id="2-项目配置与启动"></a>
+
+<a id="ed0ef3c2a2z4f"></a>
+
 ### 2\. 项目配置与启动
 
 请按照以下步骤启动项目：
+
+<a id="环境要求"></a>
+
+<a id="d5125e92aa0or"></a>
 
 #### 环境要求
 
 -   **Node.js**: 版本 ≥ 18.0.0
 -   **包管理器**: npm
+
+<a id="启动步骤"></a>
+
+<a id="ca33596563zv4"></a>
 
 #### 启动步骤
 
@@ -107,7 +103,9 @@
 
 1.  **安装依赖**
 
-```
+<a id="code-block"></a>
+
+```bash
 cd tingwu-web
 npm install
 ```
@@ -117,7 +115,9 @@ npm install
     编辑 `.env` 文件，将以下占位符（xxxxx）替换为您的实际值，请务必将 `.env` 文件添加到项目的 `.gitignore` 文件中，以防密钥泄露。：
     
 
-```
+<a id="code-block-2"></a>
+
+```text
 #TODO 修改成自己的API_KEY和APP_ID
 REACT_APP_API_KEY=xxxxx
 REACT_APP_APP_ID=xxxxx
@@ -125,7 +125,9 @@ REACT_APP_APP_ID=xxxxx
 
 3.  **启动开发服务器**
 
-```
+<a id="code-block-3"></a>
+
+```bash
 npm run start
 ```
 
@@ -136,11 +138,23 @@ npm run start
     项目将自动在浏览器中打开并显示前端界面。
     
 
+<a id="api-使用指南"></a>
+
+<a id="cb4373c146dmy"></a>
+
 ## API 使用指南
+
+<a id="功能使用示例"></a>
+
+<a id="bda0a61f23ycm"></a>
 
 ### 功能使用示例
 
 **注意：**本SDK不负责文件上传，您需要自行将文件上传至您的服务器或对象存储（OSS），然后将文件的公开访问URL提供给SDK。
+
+<a id="音视频文件上传"></a>
+
+<a id="0a4e601c8feag"></a>
 
 #### 音视频文件上传
 
@@ -162,7 +176,9 @@ npm run start
 
 **代码示例**:
 
-```
+<a id="code-block-4"></a>
+
+```javascript
 const { output, code } = await createTaskAPI({
 input: {
  task: "createTask",
@@ -180,6 +196,10 @@ parameters: {
 },
 });
 ```
+
+<a id="实时录音"></a>
+
+<a id="f69186f62bmge"></a>
 
 #### 实时录音
 
@@ -200,7 +220,9 @@ parameters: {
     **代码示例**:
     
 
-```
+<a id="code-block-5"></a>
+
+```javascript
 const requestParams = {
 input: {
  task: "createTask",
@@ -228,7 +250,15 @@ parameters: {
 
 5.调用 `getTask` 接口查询任务解析状态。参数中的 `dataId` 来自 `createTask` 接口的返回值。
 
+<a id="获取与展示结果"></a>
+
+<a id="4568e4c5f1zct"></a>
+
 ### 获取与展示结果
+
+<a id="智能纪要内容"></a>
+
+<a id="579e4e789devz"></a>
 
 #### 智能纪要内容
 
@@ -243,7 +273,15 @@ parameters: {
 -   **章节速览**: 按时间或内容分段浏览纪要。
 -   **翻译功能**: 支持多语言翻译（需在任务创建时开启）。
 
+<a id="开发者参考"></a>
+
+<a id="73e16a23edlpp"></a>
+
 ## 开发者参考
+
+<a id="系统架构图"></a>
+
+<a id="0f2a7e8491t67"></a>
 
 ### 系统架构图
 
@@ -251,9 +289,15 @@ parameters: {
 
 -   详细内容可以查看项目文件，其路径为“./tingwu-web/docs/ARCHITECTURE.md”
 
+<a id="项目结构"></a>
+
+<a id="ea6f990865wck"></a>
+
 ### 项目结构
 
-```
+<a id="code-block-6"></a>
+
+```text
 tingwu-web/
 ├── packages/
 │   ├── tingwu-example/     # 示例应用（主要启动入口）
@@ -265,12 +309,20 @@ tingwu-web/
 │   └── ...                # 其他包
 ```
 
+<a id="主要命令"></a>
+
+<a id="cafbc71c0cvq3"></a>
+
 ### 主要命令
 
 -   `npm run start`: 启动开发服务器
 -   `npm run build`: 构建生产版本
 -   `npm run lint`: 运行代码检查
 -   `npm run test`: 运行测试
+
+<a id="重要提示-2"></a>
+
+<a id="2b9dc27837qkz"></a>
 
 ## 重要提示
 

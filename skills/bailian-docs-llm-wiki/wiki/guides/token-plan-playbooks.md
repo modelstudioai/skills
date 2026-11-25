@@ -1,46 +1,43 @@
 # token plan playbooks
 
-`token plan playbooks` 是一套面向开发者、基于具体任务场景的端到端实践指南集合，覆盖 AI Coding、内容创作、数据处理、生活娱乐、求职职场等 5 大类共 47 个可复用的“玩法”（playbook）。每个 playbook 明确定义输入（如截图、diff、合同全文）、调用模型、关键参数、输出格式及典型消耗模式，强调“不塞全量数据、只喂必要信息”的高效 token 使用原则。所有 playbook 均经实测验证，产出可直接运行或上线。
+`token plan playbooks` 是一套面向开发者、开箱即用的 AI 应用实践模式集合，覆盖编码、内容创作、数据处理、生活娱乐、求职职场等场景。每个 playbook 提供明确的目标、可复现的步骤、对应模型与关键参数，并经过实测验证。它不替代工程规范，而是聚焦“如何用最少的上下文、最稳的模型组合，把一个具体任务一次跑通”。
 
 ## 支持的模型/功能
 
-`token plan playbooks` 适配多模态与多能力模型，按任务类型严格选型：
+Playbook 覆盖多模态能力，按任务类型匹配专用模型：
 
-- **文本生成与深度推理**：`qwen3.8-max`（用于文档驱动开发、合同体检、三维 CAD 建模等需长上下文与强逻辑的任务）；`qwen3.7-plus`（用于表格分析、网页提数、RAG 查询改写等中等复杂度任务）；`qwen3.8-flash`（用于命令预检、提交信息、PR 评审等低延迟、高吞吐场景，[原文标题](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-coding/token-plan-playbook-cmd-guard.md) 明确要求 `enable_thinking: false`）。
-- **视觉理解**：`qwen3.7-plus`（用于界面体检、票据 OCR、居家安全排查等需图文联合分析的场景）；`qwen3.8-flash`（用于促销图字段抽取、视频摘要等对结构化输出稳定性要求高的视觉任务，[原文标题](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-data/token-plan-playbook-poster-audit.md) 要求关闭思考以保障 JSON 字段准确率）。
-- **文生图与图生图**：`wan2.7-image`（用于 IP 头像生成、证件照换装、商品图生成等，[原文标题](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-content/token-plan-playbook-ip-avatar-sticker.md) 强调参考图编辑时“身份锁定”必须置于提示词首句）。
-- **文生视频与图生视频**：`wan3.0-video`（用于电影级空镜、虚拟代言人等长视频生成）；`happyhorse-1.1-i2v`（用于商品图变视频、人物走位控制等需精准运动约束的场景）。
-- **语音合成**：`qwen-audio-3.0-tts-plus`（用于睡前故事配音、影像信语音等，需先创建音色 ID）。
+- **文本生成与推理**：`qwen3.7-plus`（通用、高性价比）、`qwen3.8-max`（深度思考、长上下文、复杂逻辑）、`qwen3.8-flash`（低延迟、高吞吐，适合预检/汇总类任务）  
+- **视觉理解**：`qwen3.7-plus`（图文混合理解，如界面体检、票据 OCR）、`qwen3.8-flash`（高速视觉解析，如促销图抽字段、视频摘要）  
+- **文生图**：`wan2.7-image`（高质量、强可控性，支持参考图编辑）  
+- **文生视频 / 图生视频**：`wan3.0-video`（电影级长片）、`happyhorse-1.1-t2v`（儿童动画）、`happyhorse-1.1-i2v`（商品光影/人物走位）  
+- **语音合成**：`qwen-audio-3.0-tts-plus`（情感化人声）、`cosyvoice-v3-flash`（系统音色直出）  
+- **代码与结构化输出**：所有文本模型均支持 JSON Schema 输出，但需在指令中**显式声明结构**并关闭思考（如 `enable_thinking: false`）以保障字段稳定性，详见 [命令预检 · 执行前先过一道风险检查](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-coding/token-plan-playbook-cmd-guard.md)。
 
-> **注意**：文档 14 中提及 `wan3.0-video`，但文档 33 的虚拟代言人流程实际调用的是 `wan3.0-video`（first_frame 模式），而文档 34 的儿童动画使用的是 `happyhorse-1.1-t2v`。三者模型名、形态与适用场景不同，不可混用。
+> **注意**：文档 13 中提及 `wan3.0-video` 用于电影级空镜，但文档 34 中同一模型被用于品牌口播成片（first_frame 模式）。二者调用方式与参数差异显著：前者为纯文生视频（无首帧），后者依赖首帧图驱动。实际使用时必须严格区分输入形态，不可混用提示词模板。
 
 ## 关键参数
 
-Playbook 的有效性高度依赖参数配置，核心参数如下：
+Playbook 的稳定性高度依赖参数控制，核心参数如下：
 
-- **`enable_thinking`**：对 `qwen3.8-flash` 类低延迟模型，**必须显式设为 `false`**（如 [原文标题](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-coding/token-plan-playbook-cmd-guard.md) 所示），否则响应时间显著增加，破坏预检环节的实时性。
-- **分辨率与尺寸**：图像/视频任务中，**优先使用最小必要尺寸**。例如界面体检用常规网页截图（非超大图），商品图变视频推荐 720P/5 秒起步，避免无谓 token 消耗。
-- **输出格式约束**：所有结构化输出（JSON）必须严格限定字段。例如命令预检要求固定 5 字段（`cmd`, `level`, `action`, `reason`, `safer`），PR 评审要求 `blocking/suggestion/nit` 三级 severity，任何偏差将导致下游自动化流程失败。
-- **水印控制**：视频与图像生成默认带“AI 生成”水印，生产环境必须添加 `--watermark false` 参数（见 [原文标题](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-content/token-plan-playbook-cinematic-broll.md) 和 [原文标题](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-life/token-plan-playbook-brand-spokesperson.md)）。
+- `enable_thinking: false`：对预检、命令审核、PR 评审等需确定性输出的场景**必须关闭思考**，否则 JSON 字段可能缺失或错乱。该参数在 OpenAI 兼容模式下置于请求体顶层，见 [命令预检 · 执行前先过一道风险检查](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-coding/token-plan-playbook-cmd-guard.md) 示例。  
+- `--watermark false`：对 `wan2.7-image` 和 `wan3.0-video` 等图像/视频模型，**必须显式关闭水印**，否则首帧图带水印将导致视频成片叠加双水印，见 [品牌虚拟代言人 · 一张形象图出 15 秒口播成片](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-life/token-plan-playbook-brand-spokesperson.md)。  
+- `duration` 与 `resolution`：视频类任务（如 `wan3.0-video`, `happyhorse-1.1-t2v`）必须明确指定 `duration`（秒）和 `resolution`（如 `1080P`, `720P`），未指定时默认值可能导致成本激增或产出不符预期。  
+- `web_extractor` 与 `code_interpreter`：多步 Agent 类任务（如 [一句话规划周末出游 · 多步 Agent](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-life/token-plan-playbook-weekend-planner.md)）需在工具链中**显式启用对应插件**，否则联网或计算能力不可用。
 
 ## 使用方式
 
-所有 playbook 遵循统一的三步法，强调“最小输入、最大产出”：
+Playbook 遵循“最小可行输入”原则，典型流程为三步：
 
-1. **准备最小必要输入**：绝不上传原始敏感数据。代码审计前需脱敏密钥；合同评审前应移除真实客户名称；票据 OCR 应遮挡税号等字段。对于大文件（如 1.5 万行代码），采用骨架法（仅传函数签名与 docstring）先行定位关键文件，再补全文（见 [原文标题](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-coding/token-plan-playbook-code-survey.md)）。
-2. **构造精确指令**：指令需包含明确的输出格式（如 JSON Schema）、行为边界（如“主体全静，只让光影动”、“身份锁定写在第一句”）和禁止项（如“不要编造数字”、“不要臆造类名”）。模糊描述（如“优化一下”）会导致不可控输出。
-3. **本地后处理与验证**：Playbook 输出常需本地校验。例如 RAG 脚本需 `assert` 自检召回正确性；CAD 建模脚本需本地执行并比对体积；视频摘要的时间戳仅适用于粗略定位，不可替代专业剪辑点。
+1. **准备输入素材**：仅提供必要信息。例如代码调研只需签名骨架而非全量代码；合同体检直接传入全文而非摘要；促销图分析上传原始 base64 图片而非截图描述。  
+2. **构建结构化指令**：明确指定输出格式（如 JSON Schema）、约束条件（如“只输出最终版”、“不要解释”）和关键要求（如“身份锁定写在第一句”、“主体全静、只让光影动”）。指令质量直接决定产出稳定性。  
+3. **执行与验证**：优先用小规格试跑（如 5 秒视频、720P 分辨率、单文件代码），确认逻辑成立后再扩展。对关键输出（如 CAD 体积、JSON 字段）应进行本地校验，见 [三维 CAD 建模 · 出 STEP/STL 文件](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-career/token-plan-playbook-cad-3d.md) 中的体积零误差验证。
 
 ## 限制和注意事项
 
-- **[Token](../concepts/token.md) 消耗主因**：输入侧消耗远高于输出侧。图片/视频转为 `image_tokens` 占比最高；长文本（如 6,800 字合同）进上下文是主要成本来源；而纯文本生成（如 commit 信息）消耗相对可控。
-- **模型能力边界**：
-  - 视觉模型在精确计数（如“画面中有几种颜色”）和文字识别（尤其带 logo 的包装）上易出错，其输出应作为线索而非结论（见 [原文标题](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-coding/token-plan-playbook-ui-review.md)）。
-  - `qwen3.8-flash` 在需要深度推理的任务（如合同组合风险分析）上表现弱于 `qwen3.8-max`，应按任务复杂度分级选用（见 [原文标题](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-data/token-plan-playbook-contract-review.md)）。
-- **安全与合规**：
-  - **绝不上传生产密钥、内网地址、客户 PII 数据**。所有示例均强调“脱敏后再提交”，真实密钥请替换为占位符（如 `API_KEY=sk-xxx` → `API_KEY=<REDACTED>`）。
-  - 人物一致性换装、老照片修复等涉及真人图像的场景，**必须获得本人明确授权**，且不得用于伪造身份或误导性宣传（见 [原文标题](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-content/token-plan-playbook-outfit-change.md)）。
-- **效果免责**：所有 playbook 文档均含标准免责声明——“本页展示内容均为 AI 模型生成，仅供参考，不构成任何效果承诺；实际产出效果与 Credits 消耗以控制台‘用量详情’为准”。
+- **输入侧消耗主导成本**：视觉（图片/视频 base64）、长文本（论文/合同）、大代码库（全量 diff）会显著增加输入 tokens，是主要计费来源。推荐策略：代码调研用 AST 骨架（文档 7）、数据处理只传样本（文档 22）、视频任务先用 5 秒验证。  
+- **模型能力边界明确**：`qwen3.7-plus` 可完成 OCR 与基础视觉理解，但复杂运动控制（如人物走位）必须用 `happyhorse-1.1-i2v` 并配合数字约束（文档 20）；`qwen3.8-flash` 不适合需要深度推理的任务（如文档驱动开发需 `qwen3.8-max`，见文档 6）。  
+- **隐私与合规红线**：真实密钥、内网地址、客户数据**严禁直接提交**，须替换为占位符（文档 5）；真人照片换装需获本人授权（文档 21）；医疗/金融等专业领域产出**仅作提醒，不替代专业判断**（文档 37、38）。  
+- **输出非绝对可靠**：所有 playbook 均标注“免责声明”，产出效果与 Credits 消耗以控制台“用量详情”为准。例如合同条款分析需法务复核（文档 24），CAD 模型需本地导出后做几何校验（文档 42）。
 
 ## 来源文档
 
@@ -54,10 +51,10 @@ Playbook 的有效性高度依赖参数配置，核心参数如下：
 - [界面体检 · 截图挑毛病与定位报错](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-coding/token-plan-playbook-ui-review.md)
 - [截图变代码 · 数据看板照结构还原](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-coding/token-plan-playbook-screenshot-to-code.md)
 - [命令预检 · 执行前先过一道风险检查](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-coding/token-plan-playbook-cmd-guard.md)
-- [提交信息 · 一上午的改动自动拆 commit](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-coding/token-plan-playbook-commit-writer.md)
 - [代码评审 · PR 合并前先过一遍 diff](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-coding/token-plan-playbook-code-review.md)
 - [自媒体 / 内容创作](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-content.md)
 - [电影级空镜短片 · 一条提示词出 30 秒 1080P 素材](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-content/token-plan-playbook-cinematic-broll.md)
+- [儿童趣味动物视频生成](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-content/token-plan-playbook-kids-animal-video.md)
 - [睡前故事配音](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-content/token-plan-playbook-bedtime-story-tts.md)
 - [个人 IP 头像 / 表情包](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-content/token-plan-playbook-ip-avatar-sticker.md)
 - [小红书封面图 / 文案一次出](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-content/token-plan-playbook-redbook-cover.md)
@@ -65,31 +62,31 @@ Playbook 的有效性高度依赖参数配置，核心参数如下：
 - [商品图变展示视频 · 静图秒变主图短视频](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-content/token-plan-playbook-product-video.md)
 - [让人物动起来 · 图生视频精准控运动](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-content/token-plan-playbook-motion-control.md)
 - [人物一致性换装组照 · 锁住这张脸，只换衣服和场景](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-content/token-plan-playbook-outfit-change.md)
-- [资料与数据处理](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-data.md)
 - [表格分析 · 脏数据出结论](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-data/token-plan-playbook-sheet-analysis.md)
-- [网页提数 · 指定字段抓成表](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-data/token-plan-playbook-web-extract.md)
-- [票据 / 文档识别归档](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-data/token-plan-playbook-invoice-ocr.md)
+- [资料与数据处理](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-data.md)
 - [合同体检 · 挑出对我不利的条款](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-data/token-plan-playbook-contract-review.md)
+- [网页提数 · 指定字段抓成表](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-data/token-plan-playbook-web-extract.md)
 - [跨境选品 · 识图定价](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-data/token-plan-playbook-cross-border.md)
-- [长文 / 论文 / 合同秒读问答](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-data/token-plan-playbook-doc-qa.md)
+- [票据 / 文档识别归档](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-data/token-plan-playbook-invoice-ocr.md)
 - [个人知识库问答 · RAG 三段式](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-data/token-plan-playbook-knowledge-rag.md)
+- [长文 / 论文 / 合同秒读问答](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-data/token-plan-playbook-doc-qa.md)
+- [周报汇总 · 五封邮件汇成四列进度表](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-data/token-plan-playbook-weekly-report.md)
 - [长图变数据 · 促销图抽字段 + 文案风险初筛](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-data/token-plan-playbook-poster-audit.md)
 - [视频摘要 · 按时间线拆片段](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-data/token-plan-playbook-video-digest.md)
 - [生活娱乐](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-life.md)
 - [品牌虚拟代言人 · 一张形象图出 15 秒口播成片](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-life/token-plan-playbook-brand-spokesperson.md)
-- [儿童趣味动物视频生成](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-content/token-plan-playbook-kids-animal-video.md)
-- [老照片修复上色 / 证件照换装](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-life/token-plan-playbook-old-photo.md)
-- [OpenClaw 个人任务管家](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-life/token-plan-playbook-openclaw-agent.md)
 - [一句话规划周末出游 · 多步 Agent](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-life/token-plan-playbook-weekend-planner.md)
+- [老照片修复上色 / 证件照换装](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-life/token-plan-playbook-old-photo.md)
 - [父母用药管家 · 服药 / 开药双提醒](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-life/token-plan-playbook-med-reminder.md)
-- [时光影像信 · 把想说的话做成会动、能听的一封信](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-life/token-plan-playbook-photo-letter.md)
+- [居家安全 · 拍张照排查隐患](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-life/token-plan-playbook-home-hazard.md)
 - [求职职场](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-career.md)
-- [周报汇总 · 五封邮件汇成四列进度表](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-data/token-plan-playbook-weekly-report.md)
 - [简历诊断 · 按 JD 改写](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-career/token-plan-playbook-resume-doctor.md)
 - [AI 面试教练 · 出题追问打分](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-career/token-plan-playbook-interview-coach.md)
 - [三维 CAD 建模 · 出 STEP/STL 文件](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-career/token-plan-playbook-cad-3d.md)
 - [教育社群故事化群日报](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-career/token-plan-playbook-group-daily-report.md)
-- [居家安全 · 拍张照排查隐患](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-life/token-plan-playbook-home-hazard.md)
+- [OpenClaw 个人任务管家](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-life/token-plan-playbook-openclaw-agent.md)
+- [时光影像信 · 把想说的话做成会动、能听的一封信](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-life/token-plan-playbook-photo-letter.md)
 - [交互式教育解题 · 一题变讲解网页](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-career/token-plan-playbook-edu-solver.md)
+- [提交信息 · 一上午的改动自动拆 commit](../../raw/token-plan-user-guide/token-plan-playbooks/token-plan-playbook-coding/token-plan-playbook-commit-writer.md)
 
 

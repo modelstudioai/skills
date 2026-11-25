@@ -2,9 +2,17 @@
 
 软删除 Agent，标记状态为 deleted，接口幂等。
 
+<a id="前提"></a>
+
+<a id="h-ragapi-delete-prereq"></a>
+
 ## 前提
 
-已获取阿里云百炼 API Key 与业务空间 ID，鉴权方式见[API 认证](raw/application-api-reference/rag-api/rag-api-authentication.md)。删除 Agent 需要知识库-删除权限，由[业务空间成员管理](https://bailian.console.aliyun.com/?tab=globalset#/efm/business_management)中的角色决定，详见[权限要求](raw/application-api-reference/rag-api/rag-api-agents/rag-api-agent-overview.md)。
+已获取阿里云百炼 API Key 与业务空间 ID，鉴权方式见[API 认证](../rag-api-authentication.md)。删除 Agent 需要知识库-删除权限，由[业务空间成员管理](https://bailian.console.aliyun.com/?tab=globalset#/efm/business_management)中的角色决定，详见[权限要求](rag-api-agent-overview.md)。
+
+<a id="接口"></a>
+
+<a id="h-ragapi-delete-endpoint"></a>
 
 ## 接口
 
@@ -12,29 +20,29 @@
 
 删除指定的 Agent。删除后 Agent 状态变为 `deleted`，无法再用于问答或检索。接口幂等：重复删除不会返回错误。
 
-**警告**删除操作不可逆，删除后 Agent 无法恢复，关联的 `agent_id` 将无法用于 [`knowledge/search`](raw/application-api-reference/rag-api/knowledge/knowledgesearch.md) 和 [`knowledge/chat`](raw/application-api-reference/rag-api/knowledge/knowledgechat.md) 调用。
+> **警告**
+>
+> 删除操作不可逆，删除后 Agent 无法恢复，关联的 `agent_id` 将无法用于 [`knowledge/search`](../knowledge/knowledgesearch.md) 和 [`knowledge/chat`](../knowledge/knowledgechat.md) 调用。
+
+<a id="请求体"></a>
+
+<a id="h-ragapi-delete-req"></a>
 
 ## 请求体
 
-字段
+| 字段 | 必填 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| `agent_id` | 是 | string | Agent ID。 |
 
-必填
+<a id="请求示例"></a>
 
-类型
-
-说明
-
-`agent_id`
-
-是
-
-string
-
-Agent ID。
+<a id="h-ragapi-delete-eg"></a>
 
 ## 请求示例
 
-```
+<a id="code-block"></a>
+
+```bash
 curl -X POST "$BASE_URL/api/v1/indices/rag/app/delete" \
   -H "Authorization: Bearer $BAILIAN_API_KEY" \
   -H "Content-Type: application/json" \
@@ -45,11 +53,17 @@ curl -X POST "$BASE_URL/api/v1/indices/rag/app/delete" \
 
 其中 `BASE_URL` 为 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com`（`{workspace_id}` 为业务空间 ID），`BAILIAN_API_KEY` 为阿里云百炼 API Key。
 
+<a id="响应示例"></a>
+
+<a id="h-ragapi-delete-resp"></a>
+
 ## 响应示例
 
 操作成功返回 200。
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "request_id": "d4e5f6a7-b8c9-0123-defa-234567890123",
   "status_code": 200,
@@ -64,79 +78,38 @@ curl -X POST "$BASE_URL/api/v1/indices/rag/app/delete" \
 }
 ```
 
+<a id="响应字段"></a>
+
+<a id="h-ragapi-delete-dto"></a>
+
 ## 响应字段
 
-字段
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `request_id` | string | 请求唯一标识，排查问题时请提供此 ID。 |
+| `status_code` | integer | HTTP 状态码。 |
+| `code` | string | 响应码，成功时为 `Success`。 |
+| `message` | string | 提示信息。 |
+| `status` | string | 请求状态：`SUCCESS` 或 `FAILED`。 |
+| `success` | boolean | 请求是否成功。 |
+| `data.agent_id` | string | Agent ID。 |
+| `data.agent_status` | string | Agent 状态，删除后为 `deleted`。 |
 
-类型
+<a id="错误码"></a>
 
-说明
-
-`request_id`
-
-string
-
-请求唯一标识，排查问题时请提供此 ID。
-
-`status_code`
-
-integer
-
-HTTP 状态码。
-
-`code`
-
-string
-
-响应码，成功时为 `Success`。
-
-`message`
-
-string
-
-提示信息。
-
-`status`
-
-string
-
-请求状态：`SUCCESS` 或 `FAILED`。
-
-`success`
-
-boolean
-
-请求是否成功。
-
-`data.agent_id`
-
-string
-
-Agent ID。
-
-`data.agent_status`
-
-string
-
-Agent 状态，删除后为 `deleted`。
+<a id="h-ragapi-delete-err"></a>
 
 ## 错误码
 
-HTTP 状态码
-
-错误码
-
-说明
-
-400
-
-`Index.InvalidParameter`
-
-请求参数不合法，请检查参数是否完整且类型正确。
+| HTTP 状态码 | 错误码 | 说明 |
+| --- | --- | --- |
+| 400 | `Index.InvalidParameter` | 请求参数不合法，请检查参数是否完整且类型正确。 |
 
 失败响应示例：
 
-```
+<a id="code-block-3"></a>
+
+```json
 {
   "request_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
   "status_code": 400,

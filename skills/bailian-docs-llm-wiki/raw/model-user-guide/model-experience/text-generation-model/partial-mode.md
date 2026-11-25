@@ -2,11 +2,17 @@
 
 在代码补全、文本续写等场景中，需要模型从已有的文本片段（前缀）开始继续生成。Partial Mode 可提供精确控制能力，确保模型输出的内容紧密衔接提供的前缀，提升生成结果的准确性与可控性。
 
+<a id="使用方式"></a>
+
+<a id="58ebaacdab084"></a>
+
 ## 使用方式
 
 需在`messages` 数组中将最后一条消息的 `role` 设置为 `assistant`，并在其 `content` 中提供前缀，在此消息中设置参数 `"partial": true`。`messages`格式如下：
 
-```
+<a id="code-block"></a>
+
+```json
 [
     {
         "role": "user",
@@ -21,6 +27,10 @@
 ```
 
 模型会以前缀内容为起点开始生成。
+
+<a id="支持的模型"></a>
+
+<a id="328f4c1bcblbq"></a>
 
 ## 支持的模型
 
@@ -44,23 +54,51 @@
     -   Qwen3-VL 开源系列（非思考模式）
     -   Kimi（月之暗面部署）：kimi/kimi-k3.1-pro、kimi/kimi-k3.1-pro-highspeed、kimi/kimi-k3、kimi/kimi-k2.6、kimi/kimi-k2.5
 
+<a id="快速开始"></a>
+
+<a id="60fff25d07fxh"></a>
+
 ## 快速开始
+
+<a id="前提条件"></a>
+
+<a id="c2bea40642i3t"></a>
 
 ### 前提条件
 
-已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并 [配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过 OpenAI SDK 或 DashScope SDK 进行调用，需要[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。如果您是子业务空间的成员，请确保超级管理员已为该业务空间进行 [模型授权操作](https://help.aliyun.com/zh/model-studio/model-authentication-instructions)。
+已[获取与配置 API Key](../../../model-api-reference/preparations/get-api-key.md)并 [配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过 OpenAI SDK 或 DashScope SDK 进行调用，需要[安装SDK](../../../model-api-reference/preparations/install-sdk.md)。如果您是子业务空间的成员，请确保超级管理员已为该业务空间进行 [模型授权操作](https://help.aliyun.com/zh/model-studio/model-authentication-instructions)。
 
-**说明**暂不支持 DashScope Java SDK。
+> **说明**
+>
+> 暂不支持 DashScope Java SDK。
+
+<a id="示例代码"></a>
+
+<a id="a541527c04net"></a>
 
 ### 示例代码
 
 代码补全是 Partial Mode 的核心应用场景。以下示例演示如何补全一个 Python 函数。
 
+<a id="sec-tabs"></a>
+
+<a id="openai兼容"></a>
+
+<a id="openai兼容-h4"></a>
+
 #### OpenAI兼容
+
+<a id="sec-tabs-2"></a>
+
+<a id="python"></a>
+
+<a id="python-h4"></a>
 
 #### Python
 
-```
+<a id="code-block-2"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -97,9 +135,13 @@ complete_code = prefix + generated_code
 print(complete_code)
 ```
 
+<a id="6ed0327d83m2l"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-3"></a>
+
+```text
 def calculate_fibonacci(n):
     if n <= 1:
         return n
@@ -107,9 +149,15 @@ def calculate_fibonacci(n):
         return calculate_fibonacci(n-1) + calculate_fibonacci(n-2)
 ```
 
+<a id="node-js"></a>
+
+<a id="node-js-h4"></a>
+
 #### Node.js
 
-```
+<a id="code-block-4"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const openai = new OpenAI({
@@ -142,9 +190,15 @@ const completeCode = prefix + generatedCode;
 console.log(completeCode);
 ```
 
+<a id="curl"></a>
+
+<a id="curl-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-5"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
@@ -168,11 +222,15 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+<a id="ab26bb18419lu"></a>
+
 ### 返回结果
 
 以下为 `qwen3.8-max` 的返回示例，用于说明响应字段。
 
-```
+<a id="code-block-6"></a>
+
+```json
 {
     "choices": [
         {
@@ -202,11 +260,23 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }
 ```
 
+<a id="dashscope"></a>
+
+<a id="dashscope-h4"></a>
+
 #### DashScope
+
+<a id="sec-tabs-3"></a>
+
+<a id="python-2"></a>
+
+<a id="python-2-h4"></a>
 
 #### Python
 
-```
+<a id="code-block-7"></a>
+
+```python
 import os
 import dashscope
 
@@ -241,9 +311,13 @@ complete_code = prefix + generated_code
 print(complete_code)
 ```
 
+<a id="f33d94def6wpi"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-8"></a>
+
+```text
 def calculate_fibonacci(n):
     if n <= 1:
         return n
@@ -251,9 +325,15 @@ def calculate_fibonacci(n):
         return calculate_fibonacci(n-1) + calculate_fibonacci(n-2)
 ```
 
+<a id="curl-2"></a>
+
+<a id="curl-2-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-9"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
@@ -282,9 +362,13 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 }'
 ```
 
+<a id="a1861c4e9fbnf"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-10"></a>
+
+```json
 {
     "output": {
         "choices": [
@@ -309,17 +393,39 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 }
 ```
 
+<a id="使用示例"></a>
+
+<a id="f14bb4bec2zrb"></a>
+
 ## 使用示例
+
+<a id="传入图片或视频"></a>
+
+<a id="e536774f1fifw"></a>
 
 ### 传入图片或视频
 
 千问VL模型支持在输入图像、视频数据时进行前缀续写，可应用于产品介绍、社交媒体内容创作、新闻稿生成、创意文案等场景。
 
+<a id="sec-tabs-4"></a>
+
+<a id="openai兼容-2"></a>
+
+<a id="openai兼容-2-h4"></a>
+
 #### OpenAI兼容
+
+<a id="sec-tabs-5"></a>
+
+<a id="python-3"></a>
+
+<a id="python-3-h4"></a>
 
 #### Python
 
-```
+<a id="code-block-11"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -356,17 +462,27 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content)
 ```
 
+<a id="45f0f80297qx0"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-12"></a>
+
+```text
 ，这款提拉米苏简直是味蕾的享受！每一口都能感受到咖啡与奶油的完美融合，幸福感爆棚～ #美食分享 #提拉米苏 #咖啡时光
 
 希望你喜欢这个文案！如果有任何修改需求，请随时告诉我。
 ```
 
+<a id="node-js-2"></a>
+
+<a id="node-js-2-h4"></a>
+
 #### Node.js
 
-```
+<a id="code-block-13"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const openai = new OpenAI({
@@ -409,9 +525,15 @@ async function main() {
 main();
 ```
 
+<a id="curl-3"></a>
+
+<a id="curl-3-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-14"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
@@ -446,9 +568,13 @@ curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode
 }'
 ```
 
+<a id="fd4d32e17fm9x"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-15"></a>
+
+```json
 {
     "choices": [
         {
@@ -477,11 +603,23 @@ curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode
 }
 ```
 
+<a id="dashscope-2"></a>
+
+<a id="dashscope-2-h4"></a>
+
 #### DashScope
+
+<a id="sec-tabs-6"></a>
+
+<a id="python-4"></a>
+
+<a id="python-4-h4"></a>
 
 #### Python
 
-```
+<a id="code-block-16"></a>
+
+```python
 import os
 import dashscope
 
@@ -514,17 +652,27 @@ response = client.multimodal.chat.create(
 print(response.choices[0].message.content)
 ```
 
+<a id="dd04b869f5evu"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-17"></a>
+
+```text
 ，这款提拉米苏简直是味蕾的享受！每一口都能感受到咖啡与奶油的完美融合，幸福感爆棚～ #美食分享 #提拉米苏 #咖啡时光
 
 希望你喜欢这个文案！如果有任何修改需求，请随时告诉我。
 ```
 
+<a id="curl-4"></a>
+
+<a id="curl-4-h4"></a>
+
 #### curl
 
-```
+<a id="code-block-18"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
@@ -550,9 +698,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }'
 ```
 
+<a id="ca2efa6dc0p3t"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-19"></a>
+
+```json
 {
     "output": {
         "choices": [
@@ -586,6 +738,10 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }
 ```
 
+<a id="基于不完整输出进行续写"></a>
+
+<a id="8cc28acfd7a91"></a>
+
 ### 基于不完整输出进行续写
 
 如果大模型返回不完整的内容，可使用 Partial Mode 对不完整的内容续写，使其语义完整。大模型可能返回不完整内容的情况：
@@ -594,14 +750,28 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
     
 -   非流式输出触发超时，已生成的内容不完整。
     
-    > 超时不再报错，而是将已生成内容返回，详情参见[如何处理模型超时的情况](https://help.aliyun.com/zh/model-studio/text-generation#11241147efwpm)。
+    > 超时不再报错，而是将已生成内容返回，详情参见[如何处理模型超时的情况](text-generation.md#11241147efwpm)。
     
+
+<a id="sec-tabs-7"></a>
+
+<a id="openai兼容-3"></a>
+
+<a id="openai兼容-3-h4"></a>
 
 #### OpenAI兼容
 
+<a id="sec-tabs-8"></a>
+
+<a id="python-5"></a>
+
+<a id="python-5-h4"></a>
+
 #### Python
 
-```
+<a id="code-block-20"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -639,11 +809,15 @@ print("###完整内容：")
 print(first_content+second_content)
 ```
 
+<a id="90746617c1jlw"></a>
+
 ### 返回结果
 
 停止生成原因为`length`表示触发了`max_tokens`的限制；停止生成原因为`stop`表示大模型生成自然结束，或触发了`stop`参数。
 
-```
+<a id="code-block-21"></a>
+
+```text
 ###停止生成原因：length
 **《记忆的尽头》**
 
@@ -663,9 +837,15 @@ print(first_content+second_content)
 ——完——
 ```
 
+<a id="node-js-3"></a>
+
+<a id="node-js-3-h4"></a>
+
 #### Node.js
 
-```
+<a id="code-block-22"></a>
+
+```javascript
 import OpenAI from "openai";
 
 const openai = new OpenAI({
@@ -713,13 +893,27 @@ async function main() {
 main();
 ```
 
+<a id="dashscope-3"></a>
+
+<a id="dashscope-3-h4"></a>
+
 #### DashScope
+
+<a id="sec-tabs-9"></a>
+
+<a id="python-6"></a>
+
+<a id="python-6-h4"></a>
 
 #### Python
 
+<a id="e18d14fdf27jh"></a>
+
 ### 示例代码
 
-```
+<a id="code-block-23"></a>
+
+```python
 import os
 import dashscope
 
@@ -758,9 +952,13 @@ print("###完整内容：")
 print(first_content + second_content)
 ```
 
+<a id="b5c72ffd2538t"></a>
+
 ### 返回结果
 
-```
+<a id="code-block-24"></a>
+
+```text
 ###停止生成原因：length
 标题：**《时间折纸》**
 
@@ -790,10 +988,18 @@ print(first_content + second_content)
 **（完）**
 ```
 
+<a id="计费说明"></a>
+
+<a id="cb47a9c60265k"></a>
+
 ## 计费说明
 
 根据请求的输入 Token 和输出 Token 计费。前缀部分作为输入 Token。
 
+<a id="错误码"></a>
+
+<a id="e592dd2ca4qfl"></a>
+
 ## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](../../../model-api-reference/preparations/error-code.md)进行解决。

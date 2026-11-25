@@ -2,42 +2,56 @@
 
 Token Plan 支持的部分模型（qwen3.8-max、qwen3.7-plus 等）原生支持视觉理解，可直接处理图片输入。对于 glm-5.2、deepseek-v4-pro 等纯文本模型，可通过添加本地 Skill 使其获得视觉能力。
 
-**说明**运行图片理解 Skill 会消耗 Token Plan Credits，无其他收费项。
+> **说明**
+>
+> 运行图片理解 Skill 会消耗 Token Plan Credits，无其他收费项。
+
+<a id="前提条件"></a>
+
+<a id="6571295485s9e"></a>
 
 ## 前提条件
 
 1.  已订阅 Token Plan（[个人版](https://bailian.console.aliyun.com/cn-beijing/subscription/token-plan/personal) 或 [团队版](https://bailian.console.aliyun.com/cn-beijing/subscription/token-plan)）。
-2.  已在 AI 工具中完成接入配置，且能正常对话，详情请参见[接入客户端/开发工具](raw/token-plan-user-guide/use-chat-client-or-development-tool.md)。
+2.  已在 AI 工具中完成接入配置，且能正常对话，详情请参见[接入客户端/开发工具](../use-chat-client-or-development-tool.md)。
+
+<a id="视觉支持情况"></a>
+
+<a id="8d1fa58680ml2"></a>
 
 ## 视觉支持情况
 
-套餐内各模型是否支持视觉理解，请参见[个人版](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview#tppo-h-models)和[团队版](https://help.aliyun.com/zh/model-studio/token-plan-team-overview#tpto-h-models)支持的模型的模型表格。
+套餐内各模型是否支持视觉理解，请参见[个人版](../token-plan-personal/token-plan-personal-overview.md#tppo-h-models)和[团队版](../token-plan-team-edition/token-plan-team-overview.md#tpto-h-models)支持的模型的模型表格。
+
+<a id="方法-1-直接使用视觉模型-推荐"></a>
+
+<a id="b71656a042ru3"></a>
 
 ## 方法 1：直接使用视觉模型（推荐）
 
 qwen3.8-max、qwen3.7-plus 等模型具备视觉理解能力。如果经常需要处理图片，直接切换到这些模型是最简单、推荐的做法。
 
-**工具**
+| 工具 | 模型切换方式 |
+| --- | --- |
+| Claude Code | `/model qwen3.8-max`或`/model qwen3.8-flash`或`/model qwen3.7-plus` |
+| OpenCode | `/models`→ 搜索并选择`qwen3.8-max`或`qwen3.8-flash`或`qwen3.7-plus` |
+| Qwen Code | `/model`→ 选择`qwen3.8-max`或`qwen3.8-flash`或`qwen3.7-plus` |
 
-**模型切换方式**
+更多编程工具中的模型切换方式请参考[接入客户端/开发工具](../use-chat-client-or-development-tool.md)。切换后可直接在对话中引用图片路径，或拖拽/粘贴图片。
 
-Claude Code
+<a id="方法-2-通过-skill-或-agent-添加视觉能力"></a>
 
-`/model qwen3.8-max`或`/model qwen3.8-flash`或`/model qwen3.7-plus`
-
-OpenCode
-
-`/models`→ 搜索并选择`qwen3.8-max`或`qwen3.8-flash`或`qwen3.7-plus`
-
-Qwen Code
-
-`/model`→ 选择`qwen3.8-max`或`qwen3.8-flash`或`qwen3.7-plus`
-
-更多编程工具中的模型切换方式请参考[接入客户端/开发工具](raw/token-plan-user-guide/use-chat-client-or-development-tool.md)。切换后可直接在对话中引用图片路径，或拖拽/粘贴图片。
+<a id="a320cc88aavav"></a>
 
 ## 方法 2：通过 Skill 或 Agent 添加视觉能力
 
 如需使用 glm-5.2、deepseek-v4-pro 等不支持视觉的模型处理图片，可通过配置 Skill 或 Agent 实现。
+
+<a id="sec-tabs"></a>
+
+<a id="claude-code"></a>
+
+<a id="claude-code-h4"></a>
 
 #### Claude Code
 
@@ -46,13 +60,17 @@ Qwen Code
     在项目目录下的 `.claude` 文件夹中新建 `skills/image-analyzer` 目录：
     
 
-```
+<a id="code-block"></a>
+
+```bash
 mkdir -p .claude/skills/image-analyzer
 ```
 
 在该目录下创建 `SKILL.md` 文件，并写入以下内容：
 
-```
+<a id="code-block-2"></a>
+
+```markdown
 ---
 name: image-analyzer
 description: 帮助没有视觉能力的模型进行图像理解。当需要分析图像内容、提取图片中的信息、文字、界面元素，或理解截图、图表、架构图等任何视觉内容时，使用此技能，传入图片路径即可获得描述信息。
@@ -63,7 +81,9 @@ qwen3.7-plus具有视觉理解能力，请直接使用qwen3.7-plus模型进行�
 
 创建完成后的目录结构如下：
 
-```
+<a id="code-block-3"></a>
+
+```text
 .claude/
 └── skills/
     └── image-analyzer/
@@ -78,6 +98,10 @@ qwen3.7-plus具有视觉理解能力，请直接使用qwen3.7-plus模型进行�
         aliyun.png 为阿里云官网首页截图，banner 区域标题为 **Coding Plan 已支持 Qwen3.5**，正文介绍阿里云百炼支持 Qwen3.5、Kimi-k2.5、GLM-4.7 等模型，新客首月仅 7.9 元，页面提供**立即订阅**和**在线咨询**入口。
         
 
+<a id="opencode"></a>
+
+<a id="opencode-h4"></a>
+
 #### OpenCode
 
 1.  **添加 Agent**
@@ -85,15 +109,21 @@ qwen3.7-plus具有视觉理解能力，请直接使用qwen3.7-plus模型进行�
     在项目目录下的 `.opencode` 文件夹中新建 `agents` 目录：
     
 
-```
+<a id="code-block-4"></a>
+
+```bash
 mkdir -p .opencode/agents
 ```
 
 在该目录下创建`image-analyzer.md`文件，并写入以下内容：
 
-**说明**model 字段必须使用 OpenCode 配置文件中定义的 provider 和模型名称。参考 [OpenCode](raw/token-plan-user-guide/use-chat-client-or-development-tool/opencode.md) 文档的配置示例，应为`bailian-token-plan/qwen3.7-plus`。
+> **说明**
+>
+> model 字段必须使用 OpenCode 配置文件中定义的 provider 和模型名称。参考 [OpenCode](../use-chat-client-or-development-tool/opencode.md) 文档的配置示例，应为`bailian-token-plan/qwen3.7-plus`。
 
-```
+<a id="code-block-5"></a>
+
+```markdown
 ---
 description: Analyzes images using a vision-capable model. Use this agent when the user needs to understand image content, extract information from screenshots, diagrams, UI mockups, or any visual content. Invoke with @image-analyzer followed by the image path and your question.
 mode: subagent
@@ -107,7 +137,9 @@ You have vision capabilities. Analyze the provided image and return a clear, str
 
 创建完成后的目录结构如下：
 
-```
+<a id="code-block-6"></a>
+
+```text
 .opencode/
 └── agents/
     └── image-analyzer.md
@@ -117,7 +149,9 @@ You have vision capabilities. Analyze the provided image and return a clear, str
     1.  在项目目录下运行`opencode`启动 OpenCode，并切换到`deepseek-v4-pro`模型。
     2.  下载[aliyun.png](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260225/hxwnny/aliyun.png)到项目目录下，通过`@`唤起`image-analyzer`并提问：`@image-analyzer，描述一下 aliyun.png banner位置是什么信息。`可收到如下回复：
 
-```
+<a id="code-block-7"></a>
+
+```text
 Banner位置包含：
 左侧：
 - 汉堡菜单图标
@@ -130,7 +164,13 @@ Banner位置包含：
 Build · deepseek-v4-pro · 37.0s
 ```
 
+<a id="常见问题"></a>
+
+<a id="bc659dbe44lts"></a>
+
 ## 常见问题
+
+<a id="accordion-opencode-视觉理解模型为什么无法理解图片"></a>
 
 OpenCode + 视觉理解模型为什么无法理解图片？
 
@@ -140,7 +180,9 @@ OpenCode + 视觉理解模型为什么无法理解图片？
 
 > 将sk-sp-xxx替换为Token Plan API Key。
 
-```
+<a id="code-block-8"></a>
+
+```json
 {
   "$schema": "https://opencode.ai/config.json",
   "provider": {
@@ -212,6 +254,8 @@ OpenCode + 视觉理解模型为什么无法理解图片？
 }
 ```
 
+<a id="accordion-openclaw-视觉理解模型为什么无法理解图片"></a>
+
 OpenClaw + 视觉理解模型为什么无法理解图片？
 
 **原因**：OpenClaw 需要通过配置文件中的 input 字段来判断模型是否支持视觉能力。
@@ -220,7 +264,9 @@ OpenClaw + 视觉理解模型为什么无法理解图片？
 
 1.  在`~/.openclaw/openclaw.json`配置文件中，确保模型定义包含`"input": ["text", "image"]`字段。
 
-```
+<a id="code-block-9"></a>
+
+```json
 {
   "models": {
     "mode": "merge",
@@ -281,7 +327,9 @@ OpenClaw + 视觉理解模型为什么无法理解图片？
 
 2.  修改配置后，需要清除 OpenClaw 的模型缓存并重启，否则旧的配置仍会生效。
 
-```
+<a id="code-block-10"></a>
+
+```bash
 rm ~/.openclaw/agents/main/agent/models.json
 openclaw gateway restart
 ```

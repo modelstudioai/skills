@@ -2,6 +2,10 @@
 
 介绍如何使用 AOQ Client SDK 实现自定义音频采集功能，包括外部音频流的添加、PCM 数据推送和管理。
 
+<a id="功能介绍"></a>
+
+<a id="custaud-h2-intro"></a>
+
 ## 功能介绍
 
 AOQ Client SDK 内部音频模块可满足应用中对基本音频功能的需求，但在特定场景中，SDK 内部的音频采集模块可能无法满足开发需求，需要实现自定义音频采集功能，例如：
@@ -12,18 +16,36 @@ AOQ Client SDK 内部音频模块可满足应用中对基本音频功能的需�
 
 AOQ Client SDK 支持灵活的自定义采集功能，允许用户根据业务场景自行管理音频设备与音频源。外部音频流的数据会与内部采集的音频数据混音后一起推流发送。
 
+<a id="custaud-h2-sample"></a>
+
+<a id="示例代码"></a>
+
+<a id="前提条件"></a>
+
+<a id="custaud-h2-prereq"></a>
+
 ## 前提条件
 
 -   已创建引擎实例（调用 `createEngine`）。
 -   已成功连接服务器（`onConnectionStatusChange` 回调状态为 `AoqConnectionStatusConnected`）。
 
+<a id="功能实现"></a>
+
+<a id="custaud-h2-impl"></a>
+
 ## 功能实现
+
+<a id="1-打开或关闭音频采集"></a>
+
+<a id="custaud-h2-step1"></a>
 
 ### 1\. 打开或关闭音频采集
 
 需要先开启音频采集，外部音频流输入的数据会与内部采集数据混音后一起推流。如果不需要内部麦克风采集，可以设置 `isExternal=true` 关闭内部采集设备。
 
-```
+<a id="code-block"></a>
+
+```java
 // 方式一：开启内部采集，外部音频流数据会与麦克风数据混音推流
 AoqClientEngine.AoqAudioCaptureConfig config = new AoqClientEngine.AoqAudioCaptureConfig();
 config.isExternal = false; // 使用内部麦克风采集
@@ -36,13 +58,19 @@ config.isExternal = true; // 不打开麦克风，由外部音频流提供数据
 engine.startAudioCapture(config);
 ```
 
+<a id="2-连接成功后-添加外部音频流"></a>
+
+<a id="custaud-h2-step2"></a>
+
 ### 2\. 连接成功后，添加外部音频流
 
 在 `onConnectionStatusChange` 回调状态变为 `AoqConnectionStatusConnected` 后，调用 `addAudioExternalStream` 添加外部音频流。需要指定一个唯一的 `streamId` 用于后续推送数据和管理。
 
 如果需要音频 3A 处理（回声消除、噪声抑制、自动增益），请配置 `AoqAudioExternalStreamConfig` 中的 `enable3A` 参数。
 
-```
+<a id="code-block-2"></a>
+
+```java
 // 在 onConnectionStatusChange 回调中确认连接成功后添加
 @Override
 public void onConnectionStatusChange(AoqClientEngine.AoqConnectionStatus status) {
@@ -67,79 +95,23 @@ private void addExternalAudioStream() {
     }
 }
 ```
+
 **参数说明：**
 
-**参数**
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| trackType | AoqTrackType | AoqTrackTypeAudio | 音频轨道类型 |
+| codecType | AoqEncoderType | AoqEncoderTypeAudioPCM | 音频流格式 |
+| channels | int | 1 | 声道数 |
+| sampleRate | int | 48000 | 采样率（Hz） |
+| playoutVolume | int | 100 | 播放音量 \[0-100\] |
+| publishVolume | int | 100 | 推流音量 \[0-100\] |
+| maxBufferDuration | int | 1000 | 最大缓冲时长（毫秒） |
+| enable3A | boolean | false | 是否对输入 PCM 进行 3A 处理 |
 
-**类型**
+<a id="3-实现自采集模块或从文件获取-pcm-数据"></a>
 
-**默认值**
-
-**说明**
-
-trackType
-
-AoqTrackType
-
-AoqTrackTypeAudio
-
-音频轨道类型
-
-codecType
-
-AoqEncoderType
-
-AoqEncoderTypeAudioPCM
-
-音频流格式
-
-channels
-
-int
-
-1
-
-声道数
-
-sampleRate
-
-int
-
-48000
-
-采样率（Hz）
-
-playoutVolume
-
-int
-
-100
-
-播放音量 \[0-100\]
-
-publishVolume
-
-int
-
-100
-
-推流音量 \[0-100\]
-
-maxBufferDuration
-
-int
-
-1000
-
-最大缓冲时长（毫秒）
-
-enable3A
-
-boolean
-
-false
-
-是否对输入 PCM 进行 3A 处理
+<a id="custaud-h2-step3"></a>
 
 ### 3\. 实现自采集模块或从文件获取 PCM 数据
 
@@ -152,6 +124,10 @@ false
 
 音频数据需要为 PCM 格式，并记录对应的采样率、声道数等参数，用于构造 `AoqAudioFrameData` 对象。
 
+<a id="4-通过外部音频流-id-推送音频数据到-sdk"></a>
+
+<a id="custaud-h2-step4"></a>
+
 ### 4\. 通过外部音频流 ID 推送音频数据到 SDK
 
 调用 `pushAudioExternalStreamData` 接口，将采集到的 PCM 音频数据传入 SDK。
@@ -160,7 +136,9 @@ false
 -   从文件解析：建议 40ms 为一帧数据，每 push 一帧 Sleep 30ms 后 push 下一帧。
 -   需要维护一个 `running` 标记，当引擎退出或 stream ID 被删除时退出推送循环。
 
-```
+<a id="code-block-3"></a>
+
+```java
 // 成员变量：控制推送循环的运行标记
 private volatile boolean mPushRunning = false;
 
@@ -207,6 +185,7 @@ private void pushAudioData(byte[] audioData, int bytesRead) {
     } while (true);
 }
 ```
+
 **注意事项：**
 
 -   需要在连接成功且添加外部音频流之后再开始推送数据。
@@ -216,11 +195,17 @@ private void pushAudioData(byte[] audioData, int bytesRead) {
 -   从文件解析建议 40ms 一帧数据，间隔 30ms 调用 push，注意处理内部缓冲区满（错误码 110）。
 -   引擎退出（`destroy`）或 stream ID 被移除前，必须先设置 `mPushRunning = false` 停止推送循环，避免在已释放的资源上操作。
 
+<a id="5-移除外部音频流"></a>
+
+<a id="custaud-h2-step5"></a>
+
 ### 5\. 移除外部音频流
 
 当不再需要发布自定义采集的音频时，先停止推送循环，再调用 `removeAudioExternalStream` 接口移除外部音频流。
 
-```
+<a id="code-block-4"></a>
+
+```java
 // 先停止推送
 stopPushAudio();
 // 再移除外部音频流

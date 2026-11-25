@@ -2,7 +2,11 @@
 
 本文档介绍在与 Qwen-ASR Realtime API 的 WebSocket 会话中，客户端向服务端发送的事件。
 
-**用户指南：**模型介绍、功能特性和完整示例代码请参见[实时语音识别](raw/model-user-guide/model-experience/speech-and-audio/speech-recognition/real-time-speech-recognition-user-guide.md)
+**用户指南：**模型介绍、功能特性和完整示例代码请参见[实时语音识别](../model-user-guide/model-experience/speech-and-audio/speech-recognition/real-time-speech-recognition-user-guide.md)
+
+<a id="session-update"></a>
+
+<a id="af43722339yva"></a>
 
 ## session.update
 
@@ -10,195 +14,27 @@
 
 服务端成功处理此事件后，会发送`服务端事件`事件作为确认。
 
-**参数**
-
-**类型**
-
-**是否必须**
-
-**说明**
-
-type
-
-string
-
-是
-
-事件类型。固定为`session.update`。
-
-event\_id
-
-string
-
-是
-
-事件ID。
-
-session
-
-object
-
-是
-
-包含会话配置的对象。
-
-session.input\_audio\_format
-
-string
-
-否
-
-音频格式。支持`pcm`和`opus`。
-
-默认值：`pcm`。
-
-session.sample\_rate
-
-integer
-
-否
-
-音频采样率（Hz）。支持`16000`和`8000`。
-
-默认值：`16000`。
-
-设置为 `8000` 时，服务端会先升采样到16000Hz再进行识别，可能引入微小延迟。建议仅在源音频为8000Hz（如电话线路）时使用。
-
-session.input\_audio\_transcription
-
-object
-
-否
-
-语音识别相关配置。
-
-session.input\_audio\_transcription.language
-
-string
-
-否
-
-音频源语言。
-
--   zh：中文（普通话、四川话、闽南语、吴语）
-    
--   yue：粤语
-    
--   en：英文
-    
--   ja：日语
-    
--   de：德语
-    
--   ko：韩语
-    
--   ru：俄语
-    
--   fr：法语
-    
--   pt：葡萄牙语
-    
--   ar：阿拉伯语
-    
--   it：意大利语
-    
--   es：西班牙语
-    
--   hi：印地语
-    
--   id：印尼语
-    
--   th：泰语
-    
--   tr：土耳其语
-    
--   uk：乌克兰语
-    
--   vi：越南语
-    
--   cs：捷克语
-    
--   da：丹麦语
-    
--   fil：菲律宾语
-    
--   fi：芬兰语
-    
--   is：冰岛语
-    
--   ms：马来语
-    
--   no：挪威语
-    
--   pl：波兰语
-    
--   sv：瑞典语
-    
-
-session.turn\_detection
-
-object
-
-否
-
-VAD（Voice Activity Detection，语音活动检测）配置。
-
-它是启用/关闭VAD模式的开关：若将它设为null，则将关闭[VAD 模式](https://help.aliyun.com/zh/model-studio/qwen-asr-realtime-interaction-process#9b49887720jcw)，启用[Manual 模式](https://help.aliyun.com/zh/model-studio/qwen-asr-realtime-interaction-process#ee09a3493fsuc)；反之则相反。
-
-session.turn\_detection.type
-
-string
-
-否，`turn_dection`存在时必须
-
-固定为 `server_vad`。
-
-session.turn\_detection.threshold
-
-float
-
-否
-
-VAD检测阈值。推荐将该值设为`0.0`。
-
-默认值：`0.2`。
-
-取值范围：`[-1, 1]`。
-
-较低的阈值会提高 VAD 的灵敏度，可能将背景噪音误判为语音。较高的阈值则降低灵敏度，有助于在嘈杂环境中减少误触发。
-
-session.turn\_detection.silence\_duration\_ms
-
-integer
-
-否
-
-VAD断句检测阈值（ms）。静音持续时长超过该阈值将被认为是语句结束。推荐将该值设为`400`。
-
-默认值：`800`。
-
-取值范围：`[200, 6000]`。
-
-较低的值（如 300ms）可使模型更快响应，但可能导致在自然停顿处发生不合理的断句。较高的值（如 1200ms）可更好地处理长句内的停顿，但会增加整体响应延迟。
-
-```
-{
-    "event_id": "event_123",
-    "type": "session.update",
-    "session": {
-        "input_audio_format": "pcm",
-        "sample_rate": 16000,
-        "input_audio_transcription": {
-            "language": "zh"
+<table><tbody><tr><td><table><thead><tr><th><p><strong>参数</strong></p></th><th><p><strong>类型</strong></p></th><th><p><strong>是否必须</strong></p></th><th><p><strong>说明</strong></p></th></tr></thead><tbody><tr><td><p>type</p></td><td><p>string</p></td><td><p>是</p></td><td><p>事件类型。固定为<code>session.update</code>。</p></td></tr><tr><td><p>event_id</p></td><td><p>string</p></td><td><p>是</p></td><td><p>事件ID。</p></td></tr><tr><td><p>session</p></td><td><p>object</p></td><td><p>是</p></td><td><p>包含会话配置的对象。</p></td></tr><tr><td><p>session.input_audio_format</p></td><td><p>string</p></td><td><p>否</p></td><td><div><p>音频格式。支持<code>pcm</code>和<code>opus</code>。</p><p>默认值：<code>pcm</code>。</p></div></td></tr><tr><td><p>session.sample_rate</p></td><td><p>integer</p></td><td><p>否</p></td><td><div><p>音频采样率（Hz）。支持<code>16000</code>和<code>8000</code>。</p><p>默认值：<code>16000</code>。</p><p>设置为 <code>8000</code> 时，服务端会先升采样到16000Hz再进行识别，可能引入微小延迟。建议仅在源音频为8000Hz（如电话线路）时使用。</p></div></td></tr><tr><td><p>session.input_audio_transcription</p></td><td><p>object</p></td><td><p>否</p></td><td><p>语音识别相关配置。</p></td></tr><tr><td><p>session.input_audio_transcription.language</p></td><td><p>string</p></td><td><p>否</p></td><td><div><p>音频源语言。</p><ul><li><p>zh：中文（普通话、四川话、闽南语、吴语）</p></li><li><p>yue：粤语</p></li><li><p>en：英文</p></li><li><p>ja：日语</p></li><li><p>de：德语</p></li><li><p>ko：韩语</p></li><li><p>ru：俄语</p></li><li><p>fr：法语</p></li><li><p>pt：葡萄牙语</p></li><li><p>ar：阿拉伯语</p></li><li><p>it：意大利语</p></li><li><p>es：西班牙语</p></li><li><p>hi：印地语</p></li><li><p>id：印尼语</p></li><li><p>th：泰语</p></li><li><p>tr：土耳其语</p></li><li><p>uk：乌克兰语</p></li><li><p>vi：越南语</p></li><li><p>cs：捷克语</p></li><li><p>da：丹麦语</p></li><li><p>fil：菲律宾语</p></li><li><p>fi：芬兰语</p></li><li><p>is：冰岛语</p></li><li><p>ms：马来语</p></li><li><p>no：挪威语</p></li><li><p>pl：波兰语</p></li><li><p>sv：瑞典语</p></li></ul></div></td></tr><tr><td><p>session.turn_detection</p></td><td><p>object</p></td><td><p>否</p></td><td><p>VAD（Voice Activity Detection，语音活动检测）配置。</p><p>它是启用/关闭VAD模式的开关：若将它设为null，则将关闭<a href="qwen-asr-realtime-interaction-process-31afcd7f0ef186a0.md#9b49887720jcw">VAD 模式</a>，启用<a href="qwen-asr-realtime-interaction-process-31afcd7f0ef186a0.md#ee09a3493fsuc">Manual 模式</a>；反之则相反。</p></td></tr><tr><td><p>session.turn_detection.type</p></td><td><p>string</p></td><td><p>否，<code>turn_dection</code>存在时必须</p></td><td><p>固定为 <code>server_vad</code>。</p></td></tr><tr><td><p>session.turn_detection.threshold</p></td><td><p>float</p></td><td><p>否</p></td><td><div><p>VAD检测阈值。推荐将该值设为<code>0.0</code>。</p><p>默认值：<code>0.2</code>。</p><p>取值范围：<code>[-1, 1]</code>。</p><p>较低的阈值会提高 VAD 的灵敏度，可能将背景噪音误判为语音。较高的阈值则降低灵敏度，有助于在嘈杂环境中减少误触发。</p></div></td></tr><tr><td><p>session.turn_detection.silence_duration_ms</p></td><td><p>integer</p></td><td><p>否</p></td><td><div><p>VAD断句检测阈值（ms）。静音持续时长超过该阈值将被认为是语句结束。推荐将该值设为<code>400</code>。</p><p>默认值：<code>800</code>。</p><p>取值范围：<code>[200, 6000]</code>。</p><p>较低的值（如 300ms）可使模型更快响应，但可能导致在自然停顿处发生不合理的断句。较高的值（如 1200ms）可更好地处理长句内的停顿，但会增加整体响应延迟。</p></div></td></tr></tbody></table></td><td><div><a id="code-block"></a><pre class="language-json"><code>{
+    &quot;event_id&quot;: &quot;event_123&quot;,
+    &quot;type&quot;: &quot;session.update&quot;,
+    &quot;session&quot;: {
+        &quot;input_audio_format&quot;: &quot;pcm&quot;,
+        &quot;sample_rate&quot;: 16000,
+        &quot;input_audio_transcription&quot;: {
+            &quot;language&quot;: &quot;zh&quot;
         },
-        "turn_detection": {
-            "type": "server_vad",
-            "threshold": 0.0,
-            "silence_duration_ms": 400
+        &quot;turn_detection&quot;: {
+            &quot;type&quot;: &quot;server_vad&quot;,
+            &quot;threshold&quot;: 0.0,
+            &quot;silence_duration_ms&quot;: 400
         }
     }
 }
-```
+</code></pre></div></td></tr></tbody></table>
+
+<a id="input-audio-buffer-append"></a>
+
+<a id="a42f8e9111n72"></a>
 
 ## input\_audio\_buffer.append
 
@@ -211,45 +47,16 @@ VAD断句检测阈值（ms）。静音持续时长超过该阈值将被认为是
 
 **重要提示**：服务端不会对`input_audio_buffer.append`事件发送任何确认响应。
 
-**参数**
-
-**类型**
-
-**是否必须**
-
-**说明**
-
-type
-
-string
-
-是
-
-事件类型。固定为`input_audio_buffer.append`。
-
-event\_id
-
-string
-
-是
-
-事件ID。
-
-audio
-
-string
-
-是
-
-Base64编码的音频数据。
-
-```
-{
-  "event_id": "event_2728",
-  "type": "input_audio_buffer.append",
-  "audio": "<audio> by base64"
+<table><tbody><tr><td><table><thead><tr><th><p><strong>参数</strong></p></th><th><p><strong>类型</strong></p></th><th><p><strong>是否必须</strong></p></th><th><p><strong>说明</strong></p></th></tr></thead><tbody><tr><td><p>type</p></td><td><p>string</p></td><td><p>是</p></td><td><p>事件类型。固定为<code>input_audio_buffer.append</code>。</p></td></tr><tr><td><p>event_id</p></td><td><p>string</p></td><td><p>是</p></td><td><p>事件ID。</p></td></tr><tr><td><p>audio</p></td><td><p>string</p></td><td><p>是</p></td><td><p>Base64编码的音频数据。</p></td></tr></tbody></table></td><td><div><a id="code-block-2"></a><pre class="language-json"><code>{
+  &quot;event_id&quot;: &quot;event_2728&quot;,
+  &quot;type&quot;: &quot;input_audio_buffer.append&quot;,
+  &quot;audio&quot;: &quot;&lt;audio&gt; by base64&quot;
 }
-```
+</code></pre></div></td></tr></tbody></table>
+
+<a id="input-audio-buffer-commit"></a>
+
+<a id="d6d5cd90f3q4c"></a>
 
 ## input\_audio\_buffer.commit
 
@@ -259,36 +66,15 @@ Base64编码的音频数据。
 
 服务端成功处理后，会发送`input_audio_buffer.committed`事件作为确认响应。
 
-**参数**
-
-**类型**
-
-**是否必须**
-
-**说明**
-
-type
-
-string
-
-是
-
-事件类型。固定为`input_audio_buffer.commit`。
-
-event\_id
-
-string
-
-是
-
-事件ID。
-
-```
-{
-  "event_id": "event_789",
-   "type": "input_audio_buffer.commit"
+<table><tbody><tr><td><table><thead><tr><th><p><strong>参数</strong></p></th><th><p><strong>类型</strong></p></th><th><p><strong>是否必须</strong></p></th><th><p><strong>说明</strong></p></th></tr></thead><tbody><tr><td><p>type</p></td><td><p>string</p></td><td><p>是</p></td><td><p>事件类型。固定为<code>input_audio_buffer.commit</code>。</p></td></tr><tr><td><p>event_id</p></td><td><p>string</p></td><td><p>是</p></td><td><p>事件ID。</p></td></tr></tbody></table></td><td><div><a id="code-block-3"></a><pre class="language-json"><code>{
+  &quot;event_id&quot;: &quot;event_789&quot;,
+   &quot;type&quot;: &quot;input_audio_buffer.commit&quot;
 }
-```
+</code></pre></div></td></tr></tbody></table>
+
+<a id="session-finish"></a>
+
+<a id="147ce70052d4z"></a>
 
 ## session.finish
 
@@ -296,38 +82,13 @@ string
 
 服务端响应流程：
 
--   已检测到语音：服务端完成最后的语音识别后，发送包含识别结果的`conversation.item.input_audio_transcription.completed`事件，随后发送[session.finished](https://help.aliyun.com/zh/model-studio/qwen-asr-realtime-server-events#6eaa77339djdv)事件作为会话结束标识。
+-   已检测到语音：服务端完成最后的语音识别后，发送包含识别结果的`conversation.item.input_audio_transcription.completed`事件，随后发送[session.finished](qwen-asr-realtime-server-events-5dc40b9e8a313c98.md#6eaa77339djdv)事件作为会话结束标识。
 -   未检测到语音：服务端直接发送`session.finished`事件。
 
 客户端监听到`session.finished`事件后，需主动断开连接。
 
-**参数**
-
-**类型**
-
-**是否必须**
-
-**说明**
-
-type
-
-string
-
-是
-
-事件类型。固定为`session.finish`。
-
-event\_id
-
-string
-
-是
-
-事件ID。
-
-```
-{
-  "event_id": "event_341",
-  "type": "session.finish",
+<table><tbody><tr><td><table><thead><tr><th><p><strong>参数</strong></p></th><th><p><strong>类型</strong></p></th><th><p><strong>是否必须</strong></p></th><th><p><strong>说明</strong></p></th></tr></thead><tbody><tr><td><p>type</p></td><td><p>string</p></td><td><p>是</p></td><td><p>事件类型。固定为<code>session.finish</code>。</p></td></tr><tr><td><p>event_id</p></td><td><p>string</p></td><td><p>是</p></td><td><p>事件ID。</p></td></tr></tbody></table></td><td><div><a id="code-block-4"></a><pre class="language-json"><code>{
+  &quot;event_id&quot;: &quot;event_341&quot;,
+  &quot;type&quot;: &quot;session.finish&quot;,
 }
-```
+</code></pre></div></td></tr></tbody></table>

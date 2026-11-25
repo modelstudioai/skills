@@ -2,7 +2,9 @@
 
 通过全球加速域名接入多模态交互开发套件，可降低网络延迟和模型 API 调用失败率，提升用户体验。
 
-计费详情请参见[产品计费](raw/application-user-guide/agent-development/application-gallery/multimodal-products/product-billing.md)。
+计费详情请参见[产品计费](../application-user-guide/agent-development/application-gallery/multimodal-products/product-billing.md)。
+
+<a id="通过-api-接入"></a>
 
 ## 通过 API 接入
 
@@ -11,25 +13,37 @@
 -   WebSocket：`wss://multimodal-dialog-esa.aliyuncs.com/api-ws/v1/inference`
 -   HTTP：`https://multimodal-dialog-esa.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
+<a id="通过-sdk-接入"></a>
+
 ## 通过 SDK 接入
+
+<a id="java-sdk"></a>
 
 ### Java SDK
 
-```
+<a id="code-block"></a>
+
+```java
 Constants.baseWebsocketApiUrl = "wss://multimodal-dialog-esa.aliyuncs.com/api-ws/v1/inference";
 ```
+
+<a id="python-sdk"></a>
 
 ### Python SDK
 
 如需全局修改调用地址，请在初始化 SDK 前设置：
 
-```
+<a id="code-block-2"></a>
+
+```python
 dashscope.base_websocket_api_url = "wss://multimodal-dialog-esa.aliyuncs.com/api-ws/v1/inference"
 ```
 
 如需仅对本次调用修改调用地址，请在创建 `MultiModalDialog` 对象时传入 `url`：
 
-```
+<a id="code-block-3"></a>
+
+```python
 conversation = MultiModalDialog(
     app_id=your_app_id,
     workspace_id=your_workspace_id,
@@ -40,11 +54,15 @@ conversation = MultiModalDialog(
 )
 ```
 
+<a id="android-sdk"></a>
+
 ### Android SDK
 
 创建 `MultiModalDialog` 对象时，将全球加速地址传入 `url` 参数：
 
-```
+<a id="code-block-4"></a>
+
+```java
 multiModalDialog = new MultiModalDialog(
     this,
     "wss://multimodal-dialog-esa.aliyuncs.com/api-ws/v1/inference",
@@ -55,11 +73,15 @@ multiModalDialog = new MultiModalDialog(
 );
 ```
 
+<a id="ios-sdk"></a>
+
 ### iOS SDK
 
 创建 `MultiModalDialog` 对象时，将全球加速地址传入 `url` 参数：
 
-```
+<a id="code-block-5"></a>
+
+```swift
 self.conversation = MultiModalDialog(
     url: "wss://multimodal-dialog-esa.aliyuncs.com/api-ws/v1/inference",
     chainMode: self.chain,
@@ -69,11 +91,15 @@ self.conversation = MultiModalDialog(
 )
 ```
 
+<a id="rtos-sdk"></a>
+
 ### RTOS SDK
 
 请将 RTOS SDK 升级到 1.1.0 或更高版本，然后调用以下接口获取建立连接所需的参数：
 
-```
+<a id="code-block-6"></a>
+
+```c
 #include "c_mmi.h"
 
 char *wss_host = c_mmi_get_wss_host_global();

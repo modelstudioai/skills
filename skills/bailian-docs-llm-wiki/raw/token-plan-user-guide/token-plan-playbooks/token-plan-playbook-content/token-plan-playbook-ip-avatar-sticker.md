@@ -2,45 +2,67 @@
 
 一句话描述形象，文生图出头像，再用参考图编辑出角色一致的表情包。
 
-**说明**
-
-**免责声明**：本页展示内容均为 AI 模型生成，仅供参考，不构成任何效果承诺；实际产出效果与 Credits 消耗以控制台“用量详情”为准。
+> **说明**
+>
+> **免责声明**：本页展示内容均为 AI 模型生成，仅供参考，不构成任何效果承诺；实际产出效果与 Credits 消耗以控制台“用量详情”为准。
 
 本篇以“圆脸橘猫”形象跑通两步：先文生图出一张统一风格的 IP 头像，再把这张头像当参考图编辑，产出一组角色保持一致的四宫格微信表情包。
 
 调用链：`wan2.7-image` 文生图（头像）→ `wan2.7-image` 参考图编辑（表情包，保持角色一致）。
 
+<a id="实测产出"></a>
+
+<a id="tp-pb-avatar-result"></a>
+
 ## 实测产出
 
 以“圆脸橘猫”形象设定跑通全链路，输出的 IP 头像与四宫格表情包：
 
-![IP 头像](https://g-adoc.alcasset.com/media/maas_docs/sfm/zh/images/6a4b3c2d1e0f9e29.png)
+|  |  |
+| --- | --- |
+| ![IP 头像](https://g-adoc.alcasset.com/media/maas_docs/sfm/zh/images/6a4b3c2d1e0f9e29.png) | ![四宫格表情包](https://g-adoc.alcasset.com/media/maas_docs/sfm/zh/images/6a4b3c2d1e0f9e28.png) |
 
-![四宫格表情包](https://g-adoc.alcasset.com/media/maas_docs/sfm/zh/images/6a4b3c2d1e0f9e28.png)
+<a id="步骤一-文生图出头像"></a>
+
+<a id="tp-pb-avatar-step1"></a>
 
 ## 步骤一：文生图出头像
 
 先用一句话定下形象（模板：物种 + 性格 + 配色 + 画风）：
 
-```
+<a id="code-block"></a>
+
+```text
 一只圆脸橘猫，戴圆框眼镜，慵懒治愈，扁平矢量插画风，暖橘+奶白配色
 ```
 
 再把提示词发给 `wan2.7-image`，尺寸 1024\*1024：
 
-```
+<a id="code-block-2"></a>
+
+```text
 一只圆脸橘猫IP形象，戴圆框眼镜，慵懒治愈表情，扁平矢量插画风格，
 暖橘与奶白配色，纯色背景，居中构图，微信头像1:1
 ```
+
+<a id="步骤二-参考图编辑出表情包"></a>
+
+<a id="tp-pb-avatar-step2"></a>
 
 ## 步骤二：参考图编辑出表情包
 
 把上一步的头像作为参考图传入 `wan2.7-image`，生成四宫格表情包：
 
-```
+<a id="code-block-3"></a>
+
+```text
 保持这只橘猫角色一致，生成一张四宫格微信表情包：
 开心比心、大哭流泪、疑惑歪头、睡觉打呼，每格配简短中文手写字，白底
 ```
+
+<a id="说明"></a>
+
+<a id="tp-pb-avatar-notes"></a>
 
 ## 说明
 

@@ -2,13 +2,21 @@
 
 部分客户基于数据安全性考虑，不允许云服务访问其数据库。因此，析言GBI提出了虚拟数据源形式的无数据库托管连接方案，该方案能够在将数据库执行的操作保留在本地的同时，使客户享受到云端生成SQL的能力。
 
+<a id="前提条件"></a>
+
+<a id="83068ed6e1vgu"></a>
+
 ## 前提条件
 
 -   已开通阿里云百炼。
 -   已获取WorkspaceID：[获取Workspace ID](https://help.aliyun.com/zh/model-studio/developer-reference/obtain-api-key-app-id-and-workspace-id#732535cfc959h)。
 -   已获取AccessKey ID和AccessKey Secret：[获取 AccessKey 与 AgentKey](https://help.aliyun.com/zh/model-studio/developer-reference/get-accesskey-appid-and-agentkey)。
 -   RAM用户已添加`AliyunDataAnalysisGBIFullAccess`权限策略：[通过RAM控制台授权](https://help.aliyun.com/zh/model-studio/developer-reference/use-and-authorize-ram-user#8976a2506dqx4)。
--   已安装析言GBI的Java SDK，具体操作请参见[安装析言GBI的Java SDK](raw/application-user-guide/agent-development/application-gallery/xiyan-gbi/gbi-best-practices.md)。
+-   已安装析言GBI的Java SDK，具体操作请参见[安装析言GBI的Java SDK](../application-user-guide/agent-development/application-gallery/xiyan-gbi/gbi-best-practices.md)。
+
+<a id="数据库连接方式介绍"></a>
+
+<a id="98971225a1i4u"></a>
 
 ## 数据库连接方式介绍
 
@@ -17,21 +25,39 @@
 -   常规的**数据库托管连接方式**接入析言GBI云服务，具有集成便利的特点。用户只需在产品页面上进行数据源的授权关联，析言GBI便能直接访问您的业务数据库，以获取SQL查询结果。
 -   **无数据库托管连接方式**接入析言GBI云服务，具有较高的数据安全性，但用户需要在客户端本地自行执行SQL并获取查询结果。**虚拟数据源**是析言GBI云服务为降低用户使用成本和开发难度而提供的官方解决方案，旨在实现无数据库托管连接方式的接入。
 
+<a id="虚拟数据源方案简介"></a>
+
+<a id="d53a92f0d5wl0"></a>
+
 ## 虚拟数据源方案简介
 
 为了解决用户因数据安全考虑，而无法直接采用数据库托管连接方式的问题，析言GBI推出了**虚拟数据源**解决方案。用户可以利用析言GBI云服务提供的SDK，构建与其业务数据库属性相同的虚拟数据源，并将该虚拟数据源与析言GBI云服务中的业务空间进行关联，从而在不直接访问用户真实业务数据库的情况下，仍能够生成SQL查询。
 
 ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5627337371/p907169.png)
 
+<a id="创建-关联和授权虚拟数据源"></a>
+
+<a id="06c966b399snn"></a>
+
 ## 创建、关联和授权虚拟数据源
+
+<a id="步骤一-创建虚拟数据源实例"></a>
+
+<a id="9e586d8307t50"></a>
 
 ### 步骤一：创建虚拟数据源实例
 
 您可以通过析言GBI云服务提供的创建虚拟数据源实例接口（createVirtualDatasourceInstance）创建最多十个虚拟数据源实例（每个业务空间下）。当前实例可以视为一个空的数据库实例（RDS实例）。
 
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-java"></a>
+
+```java
 /**
      * 创建虚拟数据源实例
      *
@@ -54,9 +80,13 @@ java
     }
 ```
 
+<a id="fig-code-group-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 def create_virtual_datasource_instance(
     args: List[str],
 ) -> None:
@@ -76,14 +106,24 @@ def create_virtual_datasource_instance(
         UtilClient.assert_as_string(error.message)
 ```
 
+<a id="步骤二-查看虚拟数据源实例列表"></a>
+
+<a id="d154d510a4nxr"></a>
+
 ### 步骤二：查看虚拟数据源实例列表
 
 您可以通过析言GBI云服务提供的查看虚拟数据源实例列表接口（listVirtualDatasourceInstanceRequest）查看当前业务空间下的全部虚拟数据源实例（以业务空间为维度），以获取关键的虚拟数据源唯一标识符（vdbId）。
 
+<a id="fig-code-group-2"></a>
+
+<a id="fig-code-group-2-java-tab"></a>
+
 java
 
-```
-/**
+<a id="code-code-group-2-java"></a>
+
+```java
+    /**
      * 获取虚拟数据源实例的列表
      *
      * @param client
@@ -100,9 +140,13 @@ java
     }
 ```
 
+<a id="fig-code-group-2-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-2-python"></a>
+
+```python
 def list_virtual_datasource_instance(
     args: List[str],
 ) -> None:
@@ -122,13 +166,23 @@ def list_virtual_datasource_instance(
         UtilClient.assert_as_string(error.message)
 ```
 
+<a id="步骤三-向虚拟数据源实例中添加ddl语句"></a>
+
+<a id="3001d03accl6m"></a>
+
 ### 步骤三：向虚拟数据源实例中添加ddl语句
 
 您可以通过析言GBI云服务提供的向虚拟数据源中添加ddl语句接口（saveVirtualDatasourceDdl），将ddl语句添加到您指定的虚拟数据源实例（vdbId）中。析言GBI云服务将对您的ddl语句进行解析，生成相应的数据表和数据列的结构化信息，并予以维护。
 
+<a id="fig-code-group-3"></a>
+
+<a id="fig-code-group-3-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-3-java"></a>
+
+```java
 /**
      * 向虚拟数据源添加ddl语句
      * @param client
@@ -147,9 +201,13 @@ java
     }
 ```
 
+<a id="fig-code-group-3-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-3-python"></a>
+
+```python
 def save_virtual_datasource_ddl(self):
     save_virtual_datasource_ddl_request = data_analysis_gbi20240823_models.SaveVirtualDatasourceDdlRequest(
         workspace_id= workspace_id,
@@ -172,13 +230,23 @@ def save_virtual_datasource_ddl(self):
         UtilClient.assert_as_string(error.message)
 ```
 
+<a id="步骤四-将虚拟数据源实例与您的业务空间进行绑定"></a>
+
+<a id="cc23b9afedq3h"></a>
+
 ### 步骤四：将虚拟数据源实例与您的业务空间进行绑定
 
 您可以通过析言GBI云服务提供的关联虚拟数据源实例接口（createDatasourceAuthorization）将指定的虚拟数据源实例（vdbId）与业务空间进行关联。
 
+<a id="fig-code-group-4"></a>
+
+<a id="fig-code-group-4-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-4-java"></a>
+
+```java
 /**
      * 授权关联数据源实例，将数据源与业务空间进行关联
      * @param client
@@ -200,9 +268,13 @@ java
     }
 ```
 
+<a id="fig-code-group-4-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-4-python"></a>
+
+```python
 def create_datasource_authorization(
     args: List[str],
 ) -> None:
@@ -222,13 +294,23 @@ def create_datasource_authorization(
         UtilClient.assert_as_string(error.message)
 ```
 
+<a id="步骤五-在您的虚拟数据源中选择您需要的数据表"></a>
+
+<a id="929b02eec316l"></a>
+
 ### 步骤五：在您的虚拟数据源中选择您需要的数据表
 
 您可以通过析言GBI云服务提供的关联数据表到析言GBI云服务接口（syncRemoteTables）将指定的数据表信息关联到析言GBI云服务，后续的智能问数和SQL生成将依赖于您所选择的数据表。
 
+<a id="fig-code-group-5"></a>
+
+<a id="fig-code-group-5-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-5-java"></a>
+
+```java
 /**
      * 关联数据源中的数据表到所指定的业务空间，智能问数将基于所关联的数据表来进行问答
      * @param client
@@ -247,9 +329,13 @@ java
     }
 ```
 
+<a id="fig-code-group-5-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-5-python"></a>
+
+```python
 def sync_remote_tables(
     args: List[str],
 ) -> None:
@@ -269,15 +355,25 @@ def sync_remote_tables(
         UtilClient.assert_as_string(error.message)
 ```
 
+<a id="使用虚拟数据源实例代码示例"></a>
+
+<a id="87b4ec4a04uhk"></a>
+
 ## 使用虚拟数据源实例代码示例
 
 基于析言GBI云服务所提供的SDK，以下示例代码将通过创建、关联和授权虚拟数据源等全链路场景，帮助您熟悉API的使用。在使用之前，请将代码示例中的`accessKeyId`、`accessKeySecret`及`workspaceId`替换为实际值，以确保代码能够正常运行并返回正确的结果。
 
 以下示例代码中，从创建、修改、删除和查看四个角度对虚拟数据源实例进行管理。并给出如何授权虚拟数据源实例关联到您所指定的业务空间，以及如何将虚拟数据源实例中您所指定的表与析言GBI建立关联关系。
 
+<a id="fig-code-group-6"></a>
+
+<a id="fig-code-group-6-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-6-java"></a>
+
+```java
 package com.alibaba.iic.llmsolution.gbi.util;
 
 import com.aliyun.auth.credentials.Credential;
@@ -443,9 +539,13 @@ public class VirtualDatasourceTest {
 }
 ```
 
+<a id="fig-code-group-6-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-6-python"></a>
+
+```python
 # -*- coding: utf-8 -*-
 # This file is auto-generated, don't edit it. Thanks.
 import os

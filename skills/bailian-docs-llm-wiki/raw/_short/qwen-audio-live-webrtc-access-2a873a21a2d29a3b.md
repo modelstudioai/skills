@@ -4,31 +4,24 @@
 
 通过 WebRTC 媒体轨道收发音频。会话初始化和 SDP 协商通过控制 WebSocket 完成，会话期间保持该连接。
 
+<a id="接入前准备"></a>
+
 ## 接入前准备
 
-按 [WebSocket 接入](raw/model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-websocket-access.md) 选择地域和 URL。浏览器连接应用服务端的 WebSocket 代理，由代理携带 API Key 连接百炼，并在两条连接之间转发 JSON 事件。长期 API Key 存在应用服务端。浏览器页面通过 HTTPS 或本机 `localhost` 提供，并获取麦克风权限。
+按 [WebSocket 接入](../model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-websocket-access.md) 选择地域和 URL。浏览器连接应用服务端的 WebSocket 代理，由代理携带 API Key 连接百炼，并在两条连接之间转发 JSON 事件。长期 API Key 存在应用服务端。浏览器页面通过 HTTPS 或本机 `localhost` 提供，并获取麦克风权限。
+
+<a id="建连流程"></a>
 
 ## 建连流程
 
-阶段
+| 阶段 | 操作和检查点 |
+| --- | --- |
+| 打开控制连接 | 浏览器连到应用服务端代理。代理携带 API Key 连接百炼。 |
+| 提交 Offer SDP | 浏览器收集 ICE 候选，通过控制 WebSocket 发送 `session.update`。 |
+| 应用 Answer SDP | 从 `session.updated` 的 `session.transport.sdp` 读取 Answer，再设置远端描述。 |
+| 收发音频 | 媒体连接就绪后挂载麦克风轨道。收到远端音轨后检查播放器能否播放语音。 |
 
-操作和检查点
-
-打开控制连接
-
-浏览器连到应用服务端代理。代理携带 API Key 连接百炼。
-
-提交 Offer SDP
-
-浏览器收集 ICE 候选，通过控制 WebSocket 发送 `session.update`。
-
-应用 Answer SDP
-
-从 `session.updated` 的 `session.transport.sdp` 读取 Answer，再设置远端描述。
-
-收发音频
-
-媒体连接就绪后挂载麦克风轨道。收到远端音轨后检查播放器能否播放语音。
+<a id="生成并提交-offer-sdp"></a>
 
 ### 生成并提交 Offer SDP
 
@@ -36,19 +29,27 @@
 
 1.  创建 `RTCPeerConnection`，添加音频收发器并将其方向设为 `sendrecv`。再添加视频收发器并创建 DataChannel。本例将视频收发器的方向设为 `recvonly`，DataChannel 命名为 `oai-events`。
 2.  调用 `createOffer()` 和 `setLocalDescription()`。等 `iceGatheringState` 变为 `complete` 后，从 `localDescription.sdp` 读取包含 ICE 候选的完整 Offer。
-3.  通过控制 WebSocket 发送 [session.update](https://help.aliyun.com/zh/model-studio/qwen-audio-live-client-events#live-session-update)。将 `session.transport.type` 设为 `rtc`，将 Offer SDP 写入 `session.transport.sdp`。
+3.  通过控制 WebSocket 发送 [session.update](../model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-client-events.md#live-session-update)。将 `session.transport.type` 设为 `rtc`，将 Offer SDP 写入 `session.transport.sdp`。
 
 示例用 `iceServers: []` 收集本机候选地址。如果部署环境需要 STUN 或 TURN，在 `iceServers` 中填入相应的服务器配置。
 
+<a id="读取-answer-sdp-并收发音频"></a>
+
 ### 读取 Answer SDP 并收发音频
 
-浏览器通过控制 WebSocket 收到 [session.updated](https://help.aliyun.com/zh/model-studio/qwen-audio-live-server-events#live-session-updated) 后，从 `session.transport.sdp` 读取 Answer SDP。调用 `setRemoteDescription({ type: "answer", sdp })` 应用 Answer。等媒体连接建立后，挂载麦克风轨道，并将收到的远端音轨交给播放器。
+浏览器通过控制 WebSocket 收到 [session.updated](../model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-server-events.md#live-session-updated) 后，从 `session.transport.sdp` 读取 Answer SDP。调用 `setRemoteDescription({ type: "answer", sdp })` 应用 Answer。等媒体连接建立后，挂载麦克风轨道，并将收到的远端音轨交给播放器。
 
 媒体连接就绪后，可从控制 WebSocket 或 WebRTC DataChannel 接收服务端事件。如果两路收到相同 `event_id` 的事件，只处理一次。例如，输入转写 `session.input_transcript.delta` 和输出字幕 `session.output_transcript.delta` 可能同时从两路到达。
 
+<a id="运行浏览器示例"></a>
+
+<a id="live-webrtc-browser-demo"></a>
+
 ## 运行浏览器示例
 
-示例使用 Responses 模式。准备 Node.js 20 或以上版本，在一个空目录下执行 `npm install ws`，并将百炼 API Key 配置到 `DASHSCOPE_API_KEY`。将 [WebSocket 接入](raw/model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-websocket-access.md) 中填写业务空间 ID 后的请求地址复制到下面的 `UPSTREAM_URL`。
+示例使用 Responses 模式。准备 Node.js 20 或以上版本，在一个空目录下执行 `npm install ws`，并将百炼 API Key 配置到 `DASHSCOPE_API_KEY`。将 [WebSocket 接入](../model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-websocket-access.md) 中填写业务空间 ID 后的请求地址复制到下面的 `UPSTREAM_URL`。
+
+<a id="创建应用服务端"></a>
 
 ### 创建应用服务端
 
@@ -56,7 +57,9 @@
 
 示例代理在上游 WebSocket 握手时额外发送 `X-Session-Id`，值以 `sess_` 开头，后接 32 个随机十六进制字符。
 
-```
+<a id="code-block"></a>
+
+```javascript
 import { createServer } from "node:http";
 import { randomBytes } from "node:crypto";
 import { readFile } from "node:fs/promises";
@@ -139,11 +142,15 @@ proxy.on("connection", browser => {
 server.listen(8000, "127.0.0.1", () => console.log(localOrigin));
 ```
 
+<a id="创建浏览器页面"></a>
+
 ### 创建浏览器页面
 
 将以下 HTML 保存为 `index.html`。
 
-```
+<a id="code-block-2"></a>
+
+```html
 <!doctype html>
 <html lang="zh-CN">
 <meta charset="utf-8">
@@ -160,7 +167,9 @@ server.listen(8000, "127.0.0.1", () => console.log(localOrigin));
 
 在同一目录下创建 `live.js`，保存下面的 JavaScript。浏览器收到本地代理发来的 `proxy.ready` 后，开始 SDP 协商。应用通过 `onTranscript` 接收字幕，按 `type` 区分用户和模型。
 
-```
+<a id="code-block-3"></a>
+
+```javascript
 async function startWebRTC(control, audio, onTranscript, onConnected, onError) {
   if (control.readyState !== WebSocket.OPEN) throw new Error("控制连接尚未打开");
 
@@ -355,12 +364,16 @@ startButton.onclick = () => {
 };
 ```
 
+<a id="验证连接"></a>
+
 ## 验证连接
 
 运行 `node server.mjs`，打开 `http://localhost:8000`，点击**开始**并允许使用麦克风。页面显示「媒体连接已建立，可以说话」后说一句话，确认播放器能播出模型的语音回复。结束后刷新页面可以发起新会话。若有字幕但没有声音，检查 `track` 回调是否收到远端音轨，然后检查浏览器是否阻止自动播放。若未收到 Answer，先确认 Offer 包含 `m=video` 和 `m=application`，再检查服务端错误。若已收到 Answer 但媒体连接未建立，检查是否已应用 Answer，以及 Offer 是否含有当前网络可用的 ICE 候选。
 
+<a id="处理任务和结束会话"></a>
+
 ## 处理任务和结束会话
 
-业务接入见[任务委派与工具](https://help.aliyun.com/zh/model-studio/qwen-audio-live-delegation)。请求和返回字段见[客户端事件](raw/model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-client-events.md)与[服务端事件](raw/model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-server-events.md)。
+业务接入见[任务委派与工具](https://help.aliyun.com/zh/model-studio/qwen-audio-live-delegation)。请求和返回字段见[客户端事件](../model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-client-events.md)与[服务端事件](../model-api-reference/realtime-api-directory/qwen-audio-live-api-directory/qwen-audio-live-server-events.md)。
 
 点击**结束**，示例调用 `closeSession()` 发送 `session.close`。收到 `session.closed` 后停止音频采集并关闭连接。

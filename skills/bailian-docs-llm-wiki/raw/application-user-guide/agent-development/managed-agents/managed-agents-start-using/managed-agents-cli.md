@@ -4,9 +4,17 @@
 
 [阿里云百炼 CLI](https://help.aliyun.com/zh/model-studio/cli) 支持以基础设施即代码的方式管理智能体，从声明配置到运行会话一气呵成。
 
-**说明**Managed Agent 相关 CLI 能力目前仅对中国站（aliyun.com）账号开放。
+> **说明**
+>
+> Managed Agent 相关 CLI 能力目前仅对中国站（aliyun.com）账号开放。
+
+<a id="agent-一键创建-部署"></a>
+
+<a id="h-cli-deploy"></a>
 
 ## Agent 一键创建&部署
+
+<a id="生命周期"></a>
 
 ### 生命周期
 
@@ -16,6 +24,8 @@
 -   `bl managed-agent apply`：读取 YAML 中的资源配置，默认先刷新已管理资源的云端状态，再计算变更计划；按依赖关系创建或更新资源，删除已从配置中移除且由当前项目管理的云端资源，并同步本地状态记录。可通过 --file 指定配置文件；执行前可用 `plan` 预览变更，确认后添加 --yes 执行
 -   `bl managed-agent destroy`：销毁本地状态跟踪的全部云端资源
 
+<a id="本地资源状态"></a>
+
 ### 本地资源状态
 
 -   `bl managed-agent state list`：列出本地资源状态记录
@@ -23,31 +33,49 @@
 -   `bl managed-agent state import`：将已有云端资源导入本地状态
 -   `bl managed-agent state rm`：移除本地资源状态记录，不删除云端资源
 
+<a id="会话预览"></a>
+
 ### 会话预览
 
 -   `bl managed-agent playground`：在浏览器启动会话的在线调试预览
 
+<a id="本地项目管理"></a>
+
+<a id="h-cli-project"></a>
+
 ## 本地项目管理
+
+<a id="项目初始化"></a>
 
 ### 项目初始化
 
 -   `bl managed-agent project init`：创建目录式项目；通过 `--project .` 可在当前目录初始化
 
+<a id="项目校验"></a>
+
 ### 项目校验
 
 -   `bl managed-agent project validate`：校验项目的目录结构及资源配置是否符合规范
+
+<a id="项目构建"></a>
 
 ### 项目构建
 
 -   `bl managed-agent project build`：整理并写回本地目录源文件，生成不可变的发布 Build；可用 `--dry-run` 预览
 
+<a id="项目发布"></a>
+
 ### 项目发布
 
 -   `bl managed-agent project publish`：发布当前 Build、并记录版本；确认发布后使用 `--yes` 执行
 
+<a id="项目工作台"></a>
+
 ### 项目工作台
 
 -   `bl managed-agent project workbench`：启动目录式项目的 Config UI Workbench，可视化编辑和调试项目
+
+<a id="项目版本"></a>
 
 ### 项目版本
 
@@ -58,9 +86,15 @@
 -   `bl managed-agent project version preview`：预览本地项目历史版本
 -   `bl managed-agent project version restore`：将历史版本恢复到项目工作目录
 
+<a id="资源操作"></a>
+
+<a id="h-cli-resources"></a>
+
 ## 资源操作
 
 按资源提供查询、创建和运行等操作。Agent、Environment、Skill、Vault 和 Deployment 等创建命令支持通过参数生成资源声明，通过 `--yes` 确认后写入配置并创建资源。
+
+<a id="agent"></a>
 
 ### Agent
 
@@ -70,12 +104,16 @@
 -   `bl managed-agent agent search`：按 ID、名称或描述搜索 Agent
 -   `bl managed-agent agent versions`：列出 Agent 的版本
 
+<a id="environment"></a>
+
 ### Environment
 
 -   `bl managed-agent environment list`：列出远端环境
 -   `bl managed-agent environment get`：获取环境详情
 -   `bl managed-agent environment search`：按 ID、名称或描述搜索环境
 -   `bl managed-agent environment create`：创建云端环境
+
+<a id="skill"></a>
 
 ### Skill
 
@@ -86,6 +124,8 @@
 -   `bl managed-agent skill versions`：列出 Skill 的版本
 -   `bl managed-agent skill download`：下载 Skill 到本地，可指定版本
 
+<a id="vault"></a>
+
 ### Vault
 
 -   `bl managed-agent vault list`：列出远端凭据仓库
@@ -93,6 +133,8 @@
 -   `bl managed-agent vault search`：按 ID、名称或元数据搜索凭据仓库
 -   `bl managed-agent vault create`：创建空凭据仓库
 -   `bl managed-agent vault credential create`：向已跟踪的 Vault 创建环境变量凭据
+
+<a id="deployment"></a>
 
 ### Deployment
 
@@ -105,6 +147,8 @@
 -   `bl managed-agent deployment unpause`：恢复部署及其定时执行
 -   `bl managed-agent deployment runs list`：列出指定部署的运行记录
 -   `bl managed-agent deployment runs get`：获取单次部署运行的详情
+
+<a id="session"></a>
 
 ### Session
 
@@ -123,6 +167,8 @@
 -   `bl managed-agent session debug`：汇总会话、事件及文件元数据等诊断信息
 -   `bl managed-agent session export`：将脱敏后的会话诊断信息导出为 ZIP，不含文件正文
 
+<a id="file"></a>
+
 ### File
 
 -   `bl managed-agent file list`：列出远端文件
@@ -132,9 +178,13 @@
 -   `bl managed-agent file download`：下载远端文件正文到本地
 -   `bl managed-agent file delete`：删除指定远端文件
 
+<a id="示例"></a>
+
 ## 示例
 
-```
+<a id="code-block"></a>
+
+```bash
 bl managed-agent plan                                    # 预览将要创建/变更的资源
 bl managed-agent apply                                   # 应用配置，创建智能体与环境
 bl managed-agent session run --prompt "分析 sales.csv 的 Q3 销售趋势"

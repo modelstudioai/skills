@@ -2,6 +2,10 @@
 
 用 curl 走通 Managed Agents REST API 全链路：创建 Agent 与 Environment、上传并挂载数据集、驱动 Session 完成数据体检、清洗与出结论，取回产物并归档资源。
 
+<a id="概述"></a>
+
+<a id="h-da-intro"></a>
+
 ## 概述
 
 本教程用 curl 走通 Managed Agents 的 REST API：创建 Agent 与 Environment、上传并挂载一份掺了脏数据的订单流水、开启 Session 让 Agent 自主完成“体检 → 清洗 → 算指标 → 写报告”，最后取回产物并归档资源。
@@ -12,14 +16,20 @@
 
 开始前先约定环境变量，后续所有 curl 示例都会用到：
 
-```
+<a id="code-block"></a>
+
+```bash
 # 工作空间专属 Base URL（当前仅 cn-beijing 地域），获取方式见 API 总览
 export AGENTSTUDIO_URL="https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio"
 # DashScope API Key，一把 Key 覆盖工作空间内全部资源
 export DASHSCOPE_API_KEY="sk-xxxxxxxx"
 ```
 
-鉴权方式与 Base URL 的获取详见 [概览](raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md)。随着流程推进，还会陆续导出 `AGENT_ID`、`ENV_ID`、`SESSION_ID`、`FILE_ID`。
+鉴权方式与 Base URL 的获取详见 [概览](../application-api-reference/managed-agents-api/managed-agents-api-overview.md)。随着流程推进，还会陆续导出 `AGENT_ID`、`ENV_ID`、`SESSION_ID`、`FILE_ID`。
+
+<a id="三个资源概念"></a>
+
+<a id="h-da-concepts"></a>
 
 ## 三个资源概念
 
@@ -31,19 +41,27 @@ Managed Agents 有三个核心资源：
 
 Agent 和 Environment 创建一次，可以在多个 Session 里复用。每个 Session 是一次自包含的运行。
 
+<a id="步骤-1-创建-agent"></a>
+
+<a id="h-da-step1"></a>
+
 ## 步骤 1：创建 Agent
 
 数据分析 Agent 的产出质量，关键在 system prompt 上。这里不写“怎么做”的流程，而是写**工作纪律**——先验数据再下结论、清洗要保守、结论必须带数字。剩下的让 Agent 自己摸索。
 
 工具用内置工具集，`type` 为 `builtin_toolkit`（一个 Agent 最多挂 1 个内置工具集）。本例开启 6 个核心工具：`bash`、`write`、`read`、`edit`、`glob`、`grep`，足以覆盖全程离线分析；内置工具集还提供 `web_search` 与 `web_fetch` 两个联网工具，本例不需要。`mark_artifacts` 由平台运行时自动注入，用于登记产物文件，无需声明（显式列出也不影响调用）；`download_file` 已下线，不要再配置，取产物走 Files API（见 步骤 6）。
 
-**警告****最常见的配置错误**：`default_config.enabled: true` 并不会把工具真的发给模型。必须在 `configs[ ]` 里把每个要用的工具**逐个显式列出**并置 `enabled: true`。只写 `default_config.enabled: true` 而不列 `configs`，Agent 拿到的工具列表只有平台自动注入的 `mark_artifacts`，随后任何 `bash` 调用都会回 `TOOL_NOT_FOUND: Tool 'bash' not found. Available tools: ['mark_artifacts']`，回合以“没有工具可用”结束。
+> **警告**
+>
+> **最常见的配置错误**：`default_config.enabled: true` 并不会把工具真的发给模型。必须在 `configs[ ]` 里把每个要用的工具**逐个显式列出**并置 `enabled: true`。只写 `default_config.enabled: true` 而不列 `configs`，Agent 拿到的工具列表只有平台自动注入的 `mark_artifacts`，随后任何 `bash` 调用都会回 `TOOL_NOT_FOUND: Tool 'bash' not found. Available tools: ['mark_artifacts']`，回合以“没有工具可用”结束。
 
 模型选 `qwen3.8-max`。Managed Agents 接受的模型 ID 是 `qwen3.8-max` / `qwen3.7-max` / `qwen3.7-plus` / `qwen3.6-plus` / `qwen3.6-flash` 这一代命名；`qwen3-max` 这类 DashScope 旧版常规 ID 会被直接拒绝（`400 AGENT_010 模型不存在`）。具体可用列表以控制台下拉为准。
 
 system prompt 里有换行，直接塞进 shell 单引号里容易出错，建议先落成文件再用 `-d @`：
 
-```
+<a id="code-block-2"></a>
+
+```bash
 cat > agent.json <<'EOF'
 {
   "name": "data-analyst-intro",
@@ -78,7 +96,9 @@ curl -X POST "$AGENTSTUDIO_URL/agents" \
 
 从响应里取出 `id`（形如 `agent_<ULID>`），响应还会回显 `version: 1`：
 
-```
+<a id="code-block-3"></a>
+
+```bash
 export AGENT_ID="agent_xxxxxxxx"
 ```
 
@@ -87,26 +107,40 @@ export AGENT_ID="agent_xxxxxxxx"
 -   **“先做一次数据质量体检”**：缺少这句时，模型容易直接读取数据并开始计算，脏数据会被静默带入结论。
 -   **“看起来极端但内部自洽的数据……不要删掉”**：这是防**过度清洗**的护栏。数据里埋了一笔金额畸大但完全合规的批发订单，占总营收一半以上。少了这句，模型很可能把它当异常值剔掉，报出一个“更漂亮”但错误的大盘。
 
-**说明**`builtin_toolkit` 有两级开关——`default_config.{enabled, permission_policy}` 与 `configs[ ].{name, enabled, permission_policy}`。`permission_policy` 接受 `{"type": "always_allow"}`（直接执行）或 `{"type": "always_ask"}`（每次调用前等待确认）。如果某次工具调用需要人工批准，SSE 流会出现 `stop_reason.type == "requires_action"`（带 `pending_batch_id` 与 `pending_call_ids`），此时按 `batch_id` + `call_id` 回填一条 `tool_approval_response` 事件即可，详见[会话事件流](raw/application-user-guide/agent-development/managed-agents/managed-agents-session/managed-agents-event-stream.md)。本例全程 `always_allow`。
+> **说明**
+>
+> `builtin_toolkit` 有两级开关——`default_config.{enabled, permission_policy}` 与 `configs[ ].{name, enabled, permission_policy}`。`permission_policy` 接受 `{"type": "always_allow"}`（直接执行）或 `{"type": "always_ask"}`（每次调用前等待确认）。如果某次工具调用需要人工批准，SSE 流会出现 `stop_reason.type == "requires_action"`（带 `pending_batch_id` 与 `pending_call_ids`），此时按 `batch_id` + `call_id` 回填一条 `tool_approval_response` 事件即可，详见[会话事件流](../application-user-guide/agent-development/managed-agents/managed-agents-session/managed-agents-event-stream.md)。本例全程 `always_allow`。
+
+<a id="改配置要用-post-version"></a>
+
+<a id="h-da-update"></a>
 
 ### 改配置要用 POST + version
 
 后续调整工具或 prompt 时，更新接口是 `POST /agents/{agent_id}`（`PATCH` 返回 `405` 请求方法不支持），并且 body 里必须带当前的 `version` 做乐观锁，否则报 `400 AGENT_010 智能体参数不合法 - version: version 不能为空`。更新成功后 `version` 自动 +1：
 
-```
+<a id="code-block-4"></a>
+
+```bash
 curl -X POST "$AGENTSTUDIO_URL/agents/$AGENT_ID" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{ "version": 1, "name": "data-analyst-intro", "model": { "id": "qwen3.8-max" }, "system": "...", "tools": [ ... ] }'
 ```
 
-Session 在创建时锁定 Agent 版本快照，**已存在的 Session 不会捡到新版本**，改完 Agent 需要新建 Session 才生效。版本机制的完整用法（评测、灰度、回滚）见[进阶：提示词版本管理与回滚](raw/_short/managed-agents-prompt-versioning-b2a756840e400199.md)。
+Session 在创建时锁定 Agent 版本快照，**已存在的 Session 不会捡到新版本**，改完 Agent 需要新建 Session 才生效。版本机制的完整用法（评测、灰度、回滚）见[进阶：提示词版本管理与回滚](managed-agents-prompt-versioning-b2a756840e400199.md)。
+
+<a id="步骤-2-创建-environment"></a>
+
+<a id="h-da-step2"></a>
 
 ## 步骤 2：创建 Environment
 
 `config.type` 选 `cloud`，使用托管沙箱（创建后不可变）。数据分析要用 pandas，在 `config.packages.pip` 里声明即可——**Session 起容器时就已经装好了**，Agent 不需要在回合里花时间跑 `pip install`：
 
-```
+<a id="code-block-5"></a>
+
+```bash
 curl -X POST "$AGENTSTUDIO_URL/environments" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
@@ -123,19 +157,29 @@ curl -X POST "$AGENTSTUDIO_URL/environments" \
 
 取出 `id`（形如 `env_<...>`）：
 
-```
+<a id="code-block-6"></a>
+
+```bash
 export ENV_ID="env_xxxxxxxx"
 ```
 
-响应会把 `config.packages` 原样回显（并额外加一个 `"type": "packages"` 字段）。预装是否生效，可以在 步骤 5 的任务里让 Agent 打印版本号确认——沙箱里 pandas 就绪，且全程没有执行过任何 `pip install`。Environment 的完整字段说明见[云端托管环境](raw/application-user-guide/agent-development/managed-agents/managed-agents-environment/managed-agents-cloud-hosting.md)；带预装包的环境创建后可能需要预热时间，未完成前创建会话会被拒绝，详见该页“环境预热”。
+响应会把 `config.packages` 原样回显（并额外加一个 `"type": "packages"` 字段）。预装是否生效，可以在 步骤 5 的任务里让 Agent 打印版本号确认——沙箱里 pandas 就绪，且全程没有执行过任何 `pip install`。Environment 的完整字段说明见[云端托管环境](../application-user-guide/agent-development/managed-agents/managed-agents-environment/managed-agents-cloud-hosting.md)；带预装包的环境创建后可能需要预热时间，未完成前创建会话会被拒绝，详见该页“环境预热”。
 
-**说明**Environment 的网络策略当前取值为 `{"type": "unrestricted"}`（全部出网放行）。本例逻辑上不需要网络——包已预装好，分析全程离线。出网链路的行为细节（网关 MITM、TLS 校验）见[进阶：密钥库安全注入与出网网关](raw/_short/managed-agents-credential-security-b5df5e4f8be278e5.md)。
+> **说明**
+>
+> Environment 的网络策略当前取值为 `{"type": "unrestricted"}`（全部出网放行）。本例逻辑上不需要网络——包已预装好，分析全程离线。出网链路的行为细节（网关 MITM、TLS 校验）见[进阶：密钥库安全注入与出网网关](managed-agents-credential-security-b5df5e4f8be278e5.md)。
+
+<a id="步骤-3-上传数据集"></a>
+
+<a id="h-da-step3"></a>
 
 ## 步骤 3：上传数据集
 
 准备一份 26 行的订单流水，里面埋了三类脏数据和一个“陷阱”：
 
-```
+<a id="code-block-7"></a>
+
+```csv
 order_id,order_date,region,category,unit_price,quantity,amount
 1001,2026-07-01,East,Electronics,1200,2,2400
 1002,2026-07-01,North,Home,150,4,600
@@ -167,45 +211,12 @@ order_id,order_date,region,category,unit_price,quantity,amount
 
 预置的脏数据：
 
-#
-
-问题
-
-位置
-
-正确处理
-
-1
-
-整行重复
-
-`1014` 出现两次
-
-删掉副本，26 行 → 25 行
-
-2
-
-`amount` 缺失
-
-`1006`、`1019`
-
-用 `unit_price × quantity` 回填（160、480）
-
-3
-
-`region` 写法不一致
-
-`east`、`north`、`East`（带前导空格）
-
-`strip` + 统一大小写，6 种写法归并为 3 个区
-
-4
-
-**陷阱**：极端值
-
-`1025`（1200 × 20 = 24000）
-
-**保留**。金额与单价×数量自洽，是真实的大宗订单
+| # | 问题 | 位置 | 正确处理 |
+| --- | --- | --- | --- |
+| 1 | 整行重复 | `1014` 出现两次 | 删掉副本，26 行 → 25 行 |
+| 2 | `amount` 缺失 | `1006`、`1019` | 用 `unit_price × quantity` 回填（160、480） |
+| 3 | `region` 写法不一致 | `east`、`north`、`East`（带前导空格） | `strip` + 统一大小写，6 种写法归并为 3 个区 |
+| 4 | **陷阱**：极端值 | `1025`（1200 × 20 = 24000） | **保留**。金额与单价×数量自洽，是真实的大宗订单 |
 
 问题 3 是问题 1、2 的下游：只要 region 没归一，`east` 和 `East` 就会被当成两个地区，营收被拆散，区域排名直接算错。问题 4 专门用来看 Agent 会不会过度清洗——它占总营收 52.68%，删掉它大盘就完全变样了。
 
@@ -217,11 +228,17 @@ order_id,order_date,region,category,unit_price,quantity,amount
 -   各 category：Electronics `38,700` > Home `3,900` > Apparel `2,960`；
 -   最大单笔：订单 `1025`，`24,000`，占总营收 **52.68%**。
 
+<a id="上传"></a>
+
+<a id="h-da-upload"></a>
+
 ### 上传
 
 保存为 `orders.txt` 后上传（文件最大 10 MB）。**注意后缀**：当前文件类型校验不接受 `.csv`（返回 `11900014 文件类型不被允许`），同内容改用 `.txt` 后缀即可正常上传；挂载时 `mount_path` 决定沙箱内的文件名，Agent 照常按逗号分隔解析：
 
-```
+<a id="code-block-8"></a>
+
+```bash
 curl -X POST "$AGENTSTUDIO_URL/files" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -F "file=@orders.txt"
@@ -229,19 +246,27 @@ curl -X POST "$AGENTSTUDIO_URL/files" \
 
 取出 `id`：
 
-```
+<a id="code-block-9"></a>
+
+```bash
 export FILE_ID="file_xxxxxxxx"
 ```
 
 上传后不能立刻挂载。响应里的 `status` 初始是 `checking`，需要轮询 `GET /files/{id}` 直到变成 `available`（其他取值有 `rejected` / `type_rejected`）：
 
-```
+<a id="code-block-10"></a>
+
+```bash
 curl -X GET "$AGENTSTUDIO_URL/files/$FILE_ID" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 # 关注返回体里的 "status" 字段，等它变成 "available"
 ```
 
-这份 1.1 KB 的文本文件从 `checking` 到 `available` 通常在 10 秒内。上传后要过一遍安全扫描，别上传完就直接建 Session。文件类型、大小限制与控制台操作详见[文件上传与挂载](raw/application-user-guide/agent-development/managed-agents/managed-agents-context/managed-agents-file.md)。
+这份 1.1 KB 的文本文件从 `checking` 到 `available` 通常在 10 秒内。上传后要过一遍安全扫描，别上传完就直接建 Session。文件类型、大小限制与控制台操作详见[文件上传与挂载](../application-user-guide/agent-development/managed-agents/managed-agents-context/managed-agents-file.md)。
+
+<a id="步骤-4-创建-session"></a>
+
+<a id="h-da-step4"></a>
 
 ## 步骤 4：创建 Session
 
@@ -256,7 +281,9 @@ Session 绑定 Agent 和 Environment，挂载文件，并起一个新容器。`r
 
 `agent` 字段直接传 Agent ID 字符串（Session 会自动锁定该 Agent 最新版本的完整快照，无需显式传 version；首条输入在 Session 创建之后通过 `message` 事件下发，见 步骤 5）：
 
-```
+<a id="code-block-11"></a>
+
+```bash
 curl -X POST "$AGENTSTUDIO_URL/sessions" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
@@ -272,28 +299,42 @@ curl -X POST "$AGENTSTUDIO_URL/sessions" \
 
 取出 `id`（形如 `sesn_<ULID>`），响应里还有 `status`（`idle` / `running` / `terminated`）：
 
-```
+<a id="code-block-12"></a>
+
+```bash
 export SESSION_ID="sesn_xxxxxxxx"
 ```
 
-**说明**响应里 `resources[ ].file_id` 会变成一个**新的 ID**——平台把上传的文件复制了一份到 session 作用域下，原文件不动。
+> **说明**
+>
+> 响应里 `resources[ ].file_id` 会变成一个**新的 ID**——平台把上传的文件复制了一份到 session 作用域下，原文件不动。
+
+<a id="步骤-5-驱动-agent-并观察"></a>
+
+<a id="h-da-step5"></a>
 
 ## 步骤 5：驱动 Agent 并观察
 
 这一步分两步走：先发一个 `message` 事件带上任务，然后读事件流直到回合结束。
 
-Session 创建时不携带初始输入，因此驱动 Agent 需要两步——先创建 Session，再单独 POST 一条 `message` 事件。（如果希望“触发即带首条消息”，用 [部署](raw/application-user-guide/agent-development/managed-agents/managed-agents-session/managed-agents-deployment.md)，它支持 `initial_events`，会在触发时下发。）
+Session 创建时不携带初始输入，因此驱动 Agent 需要两步——先创建 Session，再单独 POST 一条 `message` 事件。（如果希望“触发即带首条消息”，用 [部署](../application-user-guide/agent-development/managed-agents/managed-agents-session/managed-agents-deployment.md)，它支持 `initial_events`，会在触发时下发。）
 
 事件流是一条 SSE 连接（比轮询更适合实时观察 Agent 迭代，本例约 2~3 分钟）。有两个要点：
 
 1.  **先开流，再发消息。**先建立 SSE 连接、再发送 `message`，才能保证事件可观测；先发后开会有丢事件的竞态。
 2.  **在 Session `idle` 且 `stop_reason.type == end_turn` 时退出。**Session 在等待输入时都会 `idle`（回合结束、或需要回填工具结果时都会 idle），要用 `stop_reason` 区分，只有 `end_turn` 才是真正的退出信号。
 
+<a id="先开-sse-流"></a>
+
+<a id="h-da-sse"></a>
+
 ### 先开 SSE 流
 
 SSE 端点需要请求头 `Accept: text/event-stream`。先建立连接：
 
-```
+<a id="code-block-13"></a>
+
+```bash
 # 在一个终端里保持这条连接
 curl -N -X GET "$AGENTSTUDIO_URL/sessions/$SESSION_ID/events/stream" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -302,7 +343,9 @@ curl -N -X GET "$AGENTSTUDIO_URL/sessions/$SESSION_ID/events/stream" \
 
 连上后先收到一行注释 `:connected`，随后每个事件是一组四行（注意冒号后**没有空格**）：
 
-```
+<a id="code-block-14"></a>
+
+```text
 id:1
 event:message
 :HTTP_STATUS/200
@@ -313,13 +356,21 @@ data:{"object":"message","status":"completed","id":"sevt_...","type":"session_st
 
 除了 `:connected`，流里还会穿插两种注释行：每个事件前的 `:HTTP_STATUS/200`，以及空闲时每 30 秒一条 `:keepalive`。解析时直接跳过所有以 `:` 开头的行。
 
-**说明**`GET /sessions/{id}/events/stream` 才是流式端点。带 `Accept: text/event-stream` 去请求 `GET /sessions/{id}/events`（不带 `/stream`）不会升级成流，它会照常返回一次性的历史事件 JSON。
+> **说明**
+>
+> `GET /sessions/{id}/events/stream` 才是流式端点。带 `Accept: text/event-stream` 去请求 `GET /sessions/{id}/events`（不带 `/stream`）不会升级成流，它会照常返回一次性的历史事件 JSON。
+
+<a id="再发任务消息"></a>
+
+<a id="h-da-message"></a>
 
 ### 再发任务消息
 
 在另一个终端发送 `message` 事件。任务文本里的路径要写**实际沙箱路径** `/mnt/session/uploads/...`：
 
-```
+<a id="code-block-15"></a>
+
+```bash
 cat > msg.json <<'EOF'
 {
   "input": [
@@ -345,6 +396,10 @@ curl -X POST "$AGENTSTUDIO_URL/sessions/$SESSION_ID/events" \
 
 任务里只说了要什么，没说怎么清洗——发现问题和决定处理方式是 Agent 的活。发送时 body 里的 `type` 用 `message`，服务端回显与流里的事件 `type` 同样是 `message`，用 `role` 区分是谁说的（`user` 是回显、`assistant` 是 Agent 输出）。
 
+<a id="如何解读事件流"></a>
+
+<a id="h-da-events"></a>
+
 ### 如何解读事件流
 
 `data:` 里的 Message 对象常用字段：`type`、`status`、`id`、`created_at`、`sequence_number`、`role`、`thread_id`、`content[ ]`。
@@ -356,33 +411,14 @@ curl -X POST "$AGENTSTUDIO_URL/sessions/$SESSION_ID/events" \
 
 实际会出现的事件 `type`：
 
-`type`
-
-含义
-
-`message`
-
-消息文本。`role: user` 是发送的回显，`role: assistant` 是 Agent 输出，文本在 `content[ ].text`
-
-`reasoning`
-
-思考占位事件，**不带** `content` 字段（解析时要容错，别直接取 `d["content"]`）
-
-`tool_call`
-
-Agent 调用工具，`content[0].data` = `{ name, arguments, call_id }`
-
-`tool_call_output`
-
-工具返回，`content[0].data` = `{ name, call_id, output }`，`output` 是一个 JSON **字符串**
-
-`model_request_start` / `model_request_end`
-
-每次模型请求的起止，`_end` 的 `content[0].data` 带 `input_tokens` / `output_tokens` / 缓存命中，适合算成本
-
-`session_status`
-
-会话状态变化，见下
+| `type` | 含义 |
+| --- | --- |
+| `message` | 消息文本。`role: user` 是发送的回显，`role: assistant` 是 Agent 输出，文本在 `content[ ].text` |
+| `reasoning` | 思考占位事件，**不带** `content` 字段（解析时要容错，别直接取 `d["content"]`） |
+| `tool_call` | Agent 调用工具，`content[0].data` = `{ name, arguments, call_id }` |
+| `tool_call_output` | 工具返回，`content[0].data` = `{ name, call_id, output }`，`output` 是一个 JSON **字符串** |
+| `model_request_start` / `model_request_end` | 每次模型请求的起止，`_end` 的 `content[0].data` 带 `input_tokens` / `output_tokens` / 缓存命中，适合算成本 |
+| `session_status` | 会话状态变化，见下 |
 
 `session_status` 的载荷在 `content[0].data`：
 
@@ -393,7 +429,9 @@ Agent 调用工具，`content[0].data` = `{ name, arguments, call_id }`
 
 所以退出判断是：
 
-```
+<a id="code-block-16"></a>
+
+```python
 if d["type"] == "session_status":
     data = d["content"][0]["data"]
     if data["session_status"] == "terminated":
@@ -401,6 +439,10 @@ if d["type"] == "session_status":
     if data["session_status"] == "idle" and data.get("stop_reason", {}).get("type") == "end_turn":
         break
 ```
+
+<a id="一个回合的典型轨迹"></a>
+
+<a id="h-da-trace"></a>
 
 ### 一个回合的典型轨迹
 
@@ -419,13 +461,21 @@ if d["type"] == "session_status":
 
 第 4 步和第 8 步集中体现了 Agent 的自主迭代：两次都没有提示 `inspect.py` 会与标准库同名、也没有提示 pandas API 的用法，是 Agent 自己从报错中发现问题、修改后重新运行。这两处正是“迭代”发生的位置。具体问题每次不同，但“运行 → 查看结果 → 修改后重跑”的循环是稳定的，最终数字多次运行完全一致。
 
-**说明**去重与重组：SSE 流当前不提供游标 / 续传 token，断连后重新建流时，按事件 `id` 去重。流式 assistant 文本理论上按 `sequence_number` 累积，但该字段常为 `null`、文本以整条 `completed` 消息下发，解析时按“有 `sequence_number` 就累积、没有就当整条”处理。
+> **说明**
+>
+> 去重与重组：SSE 流当前不提供游标 / 续传 token，断连后重新建流时，按事件 `id` 去重。流式 assistant 文本理论上按 `sequence_number` 累积，但该字段常为 `null`、文本以整条 `completed` 消息下发，解析时按“有 `sequence_number` 就累积、没有就当整条”处理。
+
+<a id="步骤-6-取回产物并核对"></a>
+
+<a id="h-da-step6"></a>
 
 ## 步骤 6：取回产物并核对
 
 Agent 调 `mark_artifacts` 时，返回值里就带了每个产物的 `file_id`：
 
-```
+<a id="code-block-17"></a>
+
+```json
 {
   "marked": [
     { "path": "/mnt/session/outputs/orders_clean.csv", "description": "...", "file_id": "file_0qwg..." },
@@ -437,7 +487,9 @@ Agent 调 `mark_artifacts` 时，返回值里就带了每个产物的 `file_id`�
 
 如果没记下这些 ID，就按 session 作用域列文件（用 `scope_type` + `scope_id` 两个 query 参数，注意**不是** `scope[type]` 这种嵌套写法，那样写过滤会被忽略、返回整个工作空间的文件）：
 
-```
+<a id="code-block-18"></a>
+
+```bash
 curl -X GET "$AGENTSTUDIO_URL/files?scope_type=session&scope_id=$SESSION_ID&limit=100" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
@@ -446,7 +498,9 @@ curl -X GET "$AGENTSTUDIO_URL/files?scope_type=session&scope_id=$SESSION_ID&limi
 
 下载用 `/content` 子路径（没有 `/download` 这个端点，它会 404）：
 
-```
+<a id="code-block-19"></a>
+
+```bash
 curl -X GET "$AGENTSTUDIO_URL/files/$CLEAN_FILE_ID/content" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" -o orders_clean.csv
 
@@ -456,7 +510,9 @@ curl -X GET "$AGENTSTUDIO_URL/files/$FINDINGS_FILE_ID/content" \
 
 拿回来先跟 步骤 3 的正确答案对一遍。这一步是最该养成的习惯——**Agent 说它算对了不算，自己核**：
 
-```
+<a id="code-block-20"></a>
+
+```bash
 python3 - <<'EOF'
 import csv
 from collections import defaultdict
@@ -475,7 +531,9 @@ print("清洗结果与预期一致")
 EOF
 ```
 
-**说明**注意：Agent 常用 `to_csv(..., encoding="utf-8-sig")`，取回的 CSV 带 BOM，`csv.DictReader` 拿到的第一个列名会是 `\ufefforder_id` 而不是 `order_id`。要按 `order_id` 取值就用 `open(..., encoding="utf-8-sig")`。
+> **说明**
+>
+> 注意：Agent 常用 `to_csv(..., encoding="utf-8-sig")`，取回的 CSV 带 BOM，`csv.DictReader` 拿到的第一个列名会是 `\ufefforder_id` 而不是 `order_id`。要按 `order_id` 取值就用 `open(..., encoding="utf-8-sig")`。
 
 最值得看的是报告里多出来的一节——Agent 没有删掉那笔畸大的订单 `1025`，而是把它单独拎出来说明，还补了一段稳健性分析（措辞每次不同，但“保留 + 单独标注”这个处理稳定出现）：
 
@@ -483,22 +541,34 @@ EOF
 
 这正是 步骤 1 里那条“极端但自洽的数据不要删”起的作用。
 
+<a id="查看本次运行的用量"></a>
+
+<a id="h-da-usage"></a>
+
 ### 查看本次运行的用量
 
 `GET /sessions/{id}` 的响应里有 `stats` 和 `usage`，运行结束后可用于核对成本：
 
-```
+<a id="code-block-21"></a>
+
+```bash
 curl -X GET "$AGENTSTUDIO_URL/sessions/$SESSION_ID" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
-一轮典型运行的 `stats` 为 `{ "active_seconds": 113.7, "duration_seconds": 139.6 }`，`usage` 为 `{ "input_tokens": 118011, "output_tokens": 4431, "cache_read_input_tokens": 104152, "cache_creation_input_tokens": 13793 }`。多次运行落在 110~185 秒 / 115k~171k input tokens 区间，取决于 Agent 中间返工了几次。input 里 82%~88% 是缓存命中——多轮工具调用会把同一段上下文反复带上，缓存命中率对成本影响很大。计费口径见[计费说明](raw/application-user-guide/agent-billing/managed-agents-billing.md)。
+一轮典型运行的 `stats` 为 `{ "active_seconds": 113.7, "duration_seconds": 139.6 }`，`usage` 为 `{ "input_tokens": 118011, "output_tokens": 4431, "cache_read_input_tokens": 104152, "cache_creation_input_tokens": 13793 }`。多次运行落在 110~185 秒 / 115k~171k input tokens 区间，取决于 Agent 中间返工了几次。input 里 82%~88% 是缓存命中——多轮工具调用会把同一段上下文反复带上，缓存命中率对成本影响很大。计费口径见[计费说明](../application-user-guide/agent-billing/managed-agents-billing.md)。
+
+<a id="步骤-7-清理-归档"></a>
+
+<a id="h-da-step7"></a>
 
 ## 步骤 7：清理（归档）
 
 用 archive 标记 Session / Environment / Agent 结束——它会拆掉容器、停止计量、并从默认列表里隐藏，但保留记录、配置和事件历史供审计。按 Session → Environment → Agent 的顺序归档：
 
-```
+<a id="code-block-22"></a>
+
+```bash
 curl -X POST "$AGENTSTUDIO_URL/sessions/$SESSION_ID/archive" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 
@@ -513,6 +583,10 @@ curl -X POST "$AGENTSTUDIO_URL/agents/$AGENT_ID/archive" \
 
 实际用起来，Agent 和 Environment 值得留着长期复用——下次来一份新数据，只要 `POST /sessions` 起一个新 Session 挂上去就行，不必重建。
 
+<a id="原理小结"></a>
+
+<a id="h-da-summary"></a>
+
 ## 原理小结
 
 -   **Agent / Environment / Session 三层解耦**：Agent 是可版本化的“人设+工具”，Environment 是可复用的“沙箱模板”，Session 是一次自包含运行。前两者建一次、多次复用。
@@ -524,18 +598,26 @@ curl -X POST "$AGENTSTUDIO_URL/agents/$AGENT_ID/archive" \
 -   **idle 需要消歧**：会话状态 `idle` 在“回合结束（`end_turn`）”和“需要回填工具结果（`requires_action`）”两种情况下都会触发，务必用 `stop_reason.type` 区分，只有 `end_turn` 才退出。
 -   **护栏写在 system prompt 里**：“先体检再下结论”“极端但自洽的数据不要删”这两条决定了本例的成败——它们比任何流程描述都管用。
 
+<a id="附-用轮询替代流式"></a>
+
+<a id="h-da-polling"></a>
+
 ## 附：用轮询替代流式
 
 对更短的任务、或不想维持长连接的生产代码，可以改用轮询历史事件端点 `GET /sessions/{session_id}/events`。发完消息后，每 2 秒拉一次事件，取最后一条判断是否结束：
 
-```
+<a id="code-block-23"></a>
+
+```bash
 curl -X GET "$AGENTSTUDIO_URL/sessions/$SESSION_ID/events?order=desc&limit=1" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
 返回的 `data[0]` 结构和 SSE 里的 Message 一致，所以判断条件也一样——看 `type == "session_status"` 的那条的 `content[0].data`：
 
-```
+<a id="code-block-24"></a>
+
+```json
 {
   "data": [
     {
@@ -559,7 +641,11 @@ curl -X GET "$AGENTSTUDIO_URL/sessions/$SESSION_ID/events?order=desc&limit=1" \
 -   **流式（SSE）**：适合实时看 Agent 工作，代价是要维持长连接（进程必须一直活着，断网即掉流）。
 -   **轮询**：无状态、能扛进程重启、和队列/定时任务组合得很好，代价是有延迟、进度不可见。
 
-生产环境里，当 Agent 要跑几分钟、而 handler 不能维持长连接时，用轮询。生产里“等待人工审批（HITL）”的场景也不依赖事件推送——用“轮询历史事件 + `requires_action` stop\_reason”，或“部署（cron / 手动 `/run`）+ 事后查询 runs”组合即可，见[进阶：生产化定时晨报机器人](raw/application-user-guide/agent-development/managed-agents/managed-agents-best-practices/managed-agents-production.md)。平台侧的事件推送（Webhook）见[进阶：Webhook 事件通知](raw/_short/managed-agents-webhook-notifications-508b7232092b6608.md)。
+生产环境里，当 Agent 要跑几分钟、而 handler 不能维持长连接时，用轮询。生产里“等待人工审批（HITL）”的场景也不依赖事件推送——用“轮询历史事件 + `requires_action` stop\_reason”，或“部署（cron / 手动 `/run`）+ 事后查询 runs”组合即可，见[进阶：生产化定时晨报机器人](../application-user-guide/agent-development/managed-agents/managed-agents-best-practices/managed-agents-production.md)。平台侧的事件推送（Webhook）见[进阶：Webhook 事件通知](managed-agents-webhook-notifications-508b7232092b6608.md)。
+
+<a id="速查表"></a>
+
+<a id="h-da-cheatsheet"></a>
 
 ## 速查表
 
@@ -577,42 +663,24 @@ curl -X GET "$AGENTSTUDIO_URL/sessions/$SESSION_ID/events?order=desc&limit=1" \
 
 **易错的接口细节**：
 
-事项
-
-正确写法
-
-更新 Agent
-
-`POST /agents/{id}`（不是 PATCH），body 必带当前 `version` 和 `name`
-
-SSE 流
-
-`GET /sessions/{id}/events/stream`（不带 `/stream` 不会升级成流）
-
-事件里的消息类型
-
-`message`（`role` 区分 user 回显 / assistant 输出）；思考事件是 `reasoning`。SSE 帧的 `event:` 行恒为 `message`，别拿它当事件类型
-
-会话状态位置
-
-`content[0].data.session_status`（顶层 `status` 是消息状态，恒为 `completed`）
-
-线程 ID 位置
-
-顶层 `thread_id`（不在 `metadata` 里）
-
-按会话列文件
-
-`?scope_type=session&scope_id=sesn_...`（嵌套写法 `scope[type]` 会被忽略）
-
-下载文件
-
-`GET /files/{id}/content`（`/download` 是 404）
+| 事项 | 正确写法 |
+| --- | --- |
+| 更新 Agent | `POST /agents/{id}`（不是 PATCH），body 必带当前 `version` 和 `name` |
+| SSE 流 | `GET /sessions/{id}/events/stream`（不带 `/stream` 不会升级成流） |
+| 事件里的消息类型 | `message`（`role` 区分 user 回显 / assistant 输出）；思考事件是 `reasoning`。SSE 帧的 `event:` 行恒为 `message`，别拿它当事件类型 |
+| 会话状态位置 | `content[0].data.session_status`（顶层 `status` 是消息状态，恒为 `completed`） |
+| 线程 ID 位置 | 顶层 `thread_id`（不在 `metadata` 里） |
+| 按会话列文件 | `?scope_type=session&scope_id=sesn_...`（嵌套写法 `scope[type]` 会被忽略） |
+| 下载文件 | `GET /files/{id}/content`（`/download` 是 404） |
 
 `idle` **消歧**：会话状态 `idle` 在 `end_turn` 与需要回填工具结果（`requires_action`）时都会触发，用 `stop_reason.type` 区分。
 
+<a id="下一步"></a>
+
+<a id="h-da-next"></a>
+
 ## 下一步
 
--   [进阶：生产化定时晨报机器人](raw/application-user-guide/agent-development/managed-agents/managed-agents-best-practices/managed-agents-production.md)：MCP 工具、密钥库与部署定时触发。
--   [进阶：提示词版本管理与回滚](raw/_short/managed-agents-prompt-versioning-b2a756840e400199.md)：把本篇的 Agent 纳入评测与灰度流程。
--   [进阶：多智能体定制复杂提案](raw/_short/managed-agents-multiagent-proposal-c42cf9fd6aca491d.md)：用协调者编排多个专家 Agent。
+-   [进阶：生产化定时晨报机器人](../application-user-guide/agent-development/managed-agents/managed-agents-best-practices/managed-agents-production.md)：MCP 工具、密钥库与部署定时触发。
+-   [进阶：提示词版本管理与回滚](managed-agents-prompt-versioning-b2a756840e400199.md)：把本篇的 Agent 纳入评测与灰度流程。
+-   [进阶：多智能体定制复杂提案](managed-agents-multiagent-proposal-c42cf9fd6aca491d.md)：用协调者编排多个专家 Agent。

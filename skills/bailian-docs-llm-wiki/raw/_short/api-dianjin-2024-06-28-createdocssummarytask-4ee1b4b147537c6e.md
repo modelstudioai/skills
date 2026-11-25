@@ -2,6 +2,10 @@
 
 创建多文档总结任务。
 
+<a id="接口说明"></a>
+
+<a id="api-detail-51"></a>
+
 ## 接口说明
 
 请确保在使用该接口前，已充分了解通义点金产品的收费方式和价格。
@@ -12,11 +16,19 @@
 
 获取到 workspaceId：获取 [workspace 标识](https://help.aliyun.com/zh/model-studio/developer-reference/get-app-id-and-workspace?spm=openapi-amp.newDocPublishment.0.0.2eb8281foUVd15#2612f896detsz:~:text=%E6%9F%A5%E7%9C%8BAPI%2DKEY%E3%80%82-,%E8%8E%B7%E5%8F%96APP%2DID%E5%92%8CWORKSPACE,-%E8%BF%9B%E5%85%A5%E6%88%91%E7%9A%84%E5%BA%94%E7%94%A8)。
 
+<a id="调试"></a>
+
+<a id="api-detail-23"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
 [调试](https://api.aliyun.com/api/DianJin/2024-06-28/CreateDocsSummaryTask)
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -35,227 +47,61 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-操作
+<table><thead><tr><th>操作</th><th>访问级别</th><th>资源类型</th><th>条件关键字</th><th>关联操作</th></tr></thead><tbody><tr><td>dianjin:CreateDocsSummaryTask</td><td>create</td><td><div><div>*全部资源</div><div><code>*</code></div></div></td><td><ul>无</ul></td><td>无</td></tr></tbody></table>
 
-访问级别
+<a id="请求语法"></a>
 
-资源类型
-
-条件关键字
-
-关联操作
-
-dianjin:CreateDocsSummaryTask
-
-create
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-53"></a>
 
 ## 请求语法
 
-```
+<a id="code-block"></a>
+
+```text
 POST /{workspaceId}/api/task/summary/docs HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="api-detail-36"></a>
+
 ## 请求参数
 
-名称
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| workspaceId | string | 是 | 业务空间 Id | llm-xxxxx |
+| body | object | 否 | 请求体。 |  |
+| docInfos | array<object> | 是 | 文档信息列表 |  |
+| docInfo | object | 否 | 文档信息 |  |
+| docId | string | 是 | 文档 id | 198386463432 |
+| endPage | integer | 否 | 结束页 | 2 |
+| libraryId | string | 是 | 文档库 id | rdxrmo6amk |
+| startPage | integer | 否 | 起始页 | 1 |
+| enableTable | boolean | 否 | 是否启用表格。默认为 true，为启用表格。 | true |
+| instruction | string | 否 | 指令 | 你是资深的证券研究员，对xx年上市公司进行业绩分析。根据参考信息从如下方面详细分析： 1. 整体业绩变化情况，包括营收，利润等详细指标变化情况 2. 业绩变化情况具体原因，包括各个业务变化情况 严格只输出xx年情况。 |
+| modelId | string | 是 | 模型 id | qwen-plus |
 
-类型
+<a id="返回参数"></a>
 
-必填
-
-描述
-
-示例值
-
-workspaceId
-
-string
-
-是
-
-业务空间 Id
-
-llm-xxxxx
-
-body
-
-object
-
-否
-
-请求体。
-
-docInfos
-
-array<object>
-
-是
-
-文档信息列表
-
-docInfo
-
-object
-
-否
-
-文档信息
-
-docId
-
-string
-
-是
-
-文档 id
-
-198386463432
-
-endPage
-
-integer
-
-否
-
-结束页
-
-2
-
-libraryId
-
-string
-
-是
-
-文档库 id
-
-rdxrmo6amk
-
-startPage
-
-integer
-
-否
-
-起始页
-
-1
-
-enableTable
-
-boolean
-
-否
-
-是否启用表格。默认为 true，为启用表格。
-
-true
-
-instruction
-
-string
-
-否
-
-指令
-
-你是资深的证券研究员，对xx年上市公司进行业绩分析。根据参考信息从如下方面详细分析： 1. 整体业绩变化情况，包括营收，利润等详细指标变化情况 2. 业绩变化情况具体原因，包括各个业务变化情况 严格只输出xx年情况。
-
-modelId
-
-string
-
-是
-
-模型 id
-
-qwen-plus
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-名称
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | ResultCode |  |
+| cost | long | 耗时 | null |
+| data | string | 响应数据。任务 ID。 | 765675376 |
+| dataType | string | 数据类型 | null |
+| errCode | string | 错误码 | 0 |
+| message | string | 错误信息 | ok |
+| requestId | string | 请求 id | 32FFC91D-0A9F-585A-B84F-8A54C5187035 |
+| success | boolean | 是否成功 | true |
+| time | string | 时间戳 | 2024-01-01 00:00:00 |
 
-类型
+<a id="示例"></a>
 
-描述
-
-示例值
-
-object
-
-ResultCode
-
-cost
-
-long
-
-耗时
-
-null
-
-data
-
-string
-
-响应数据。任务 ID。
-
-765675376
-
-dataType
-
-string
-
-数据类型
-
-null
-
-errCode
-
-string
-
-错误码
-
-0
-
-message
-
-string
-
-错误信息
-
-ok
-
-requestId
-
-string
-
-请求 id
-
-32FFC91D-0A9F-585A-B84F-8A54C5187035
-
-success
-
-boolean
-
-是否成功
-
-true
-
-time
-
-string
-
-时间戳
-
-2024-01-01 00:00:00
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -263,7 +109,9 @@ string
 
 `JSON`格式
 
-```
+<a id="code-block-2"></a>
+
+```text
 {
   "cost": 0,
   "data": 765675376,
@@ -275,6 +123,10 @@ string
   "time": "2024-01-01 00:00:00"
 }
 ```
+
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
 
 ## 错误码
 

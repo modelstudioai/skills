@@ -8,13 +8,25 @@
 
 基于三方语音模型自身的能力特性，可能增加语音对话的延迟，以实际测试效果为准。
 
+<a id="调用流程"></a>
+
+<a id="83fd381cf49mr"></a>
+
 ## 调用流程
+
+<a id="调用三方语音流程图"></a>
+
+<a id="e3f6527cefask"></a>
 
 ### 调用三方语音流程图
 
 您可以使用三方语音识别结果调用多模交互服务；并使用服务返回的文本响应通过三方语音合成服务合成音频回复。
 
 ![截屏2025-07-09 20](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5856452571/p983815.png)
+
+<a id="使用三方语音识别-asr-结果请求对话"></a>
+
+<a id="b8ccc5da4bb3b"></a>
 
 ### 使用三方语音识别（ASR）结果请求对话
 
@@ -29,23 +41,37 @@
 
 若当前状态非Listening，需要先调用`Interrupt` 接口打断当前播报。
 
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-java"></a>
+
+```java
 // 创建UpdateParams对象（第三个参数不能为null）
 UpdateParams params = new UpdateParams();
 dialog.requestToRespond("prompt", "今天天气怎么样？", params);
 ```
 
+<a id="fig-code-group-python-tab"></a>
+
 python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 dialog.request_to_respond("prompt", "今天天气怎么样？", parameters=None)
 ```
 
+<a id="fig-code-group-cpp-tab"></a>
+
 cpp
 
-```
+<a id="code-code-group-cpp"></a>
+
+```cpp
 Json::Value root;
 root["text"] = "今天天气怎么样？";
 root["type"] = "prompt";
@@ -56,10 +82,16 @@ writer["indentation"] = "";
 ConvRetCode ret = conversation->SendResponseData(Json::writeString(writer, root).c_str());
 ```
 
+<a id="使用文本请求三方语音合成-tts"></a>
+
+<a id="2b0012a822f1a"></a>
+
 ### 使用文本请求三方语音合成（TTS）
 
 使用百炼多模交互服务，您可以设置输出对话结果的格式为仅输出【文本】。使用输出文本您可以调用三方的语音合成服务进行语音合成。
 
-**说明**百炼多模交互输出的对话结果文本支持“流式输出”，推荐您调用的三方 TTS服务也支持“流式合成”。即将多模态对话输出的多个文本片段流式发送给语音合成服务，语音合成服务流式返回合成音频。这种调用方式可以显著的提升系统的交互速度。
-
-参考接口：百炼CosyVoice 语音合成 [Java SDK](raw/_short/cosyvoice-websocket-sdk-java-a4920147be4869ef.md)。
+> **说明**
+>
+> 百炼多模交互输出的对话结果文本支持“流式输出”，推荐您调用的三方 TTS服务也支持“流式合成”。即将多模态对话输出的多个文本片段流式发送给语音合成服务，语音合成服务流式返回合成音频。这种调用方式可以显著的提升系统的交互速度。
+>
+> 参考接口：百炼CosyVoice 语音合成 [Java SDK](cosyvoice-websocket-sdk-java-a4920147be4869ef.md)。

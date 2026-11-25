@@ -2,9 +2,17 @@
 
 查询PPT作品列表
 
+<a id="调试"></a>
+
+<a id="api-doc-debug"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -23,275 +31,71 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-**操作**
+| 操作 | 访问级别 | 资源类型 | 条件关键字 | 关联操作 |
+| --- | --- | --- | --- | --- |
+| aimiaobi:ListPptArtifacts | list | \*全部资源<br><br>`*` | 无 | 无 |
 
-**访问级别**
+<a id="请求语法"></a>
 
-**资源类型**
-
-**条件关键字**
-
-**关联操作**
-
-aimiaobi:ListPptArtifacts
-
-list
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-53"></a>
 
 ## 请求语法
 
-```
+<a id="code-block"></a>
+
+```text
 POST  HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="api-detail-36"></a>
+
 ## 请求参数
 
-**名称**
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| WorkspaceId | string | 否 | 业务空间 ID | llm-az2xxxx |
+| NextToken | string | 否 | 下一页的 token | cEoBWREAXdxaOyjq/cqAbg== |
+| Query | string | 否 | 搜索关键词：作品名称 | 数字时代的营销策划与文案创作 |
+| MaxResults | integer | 否 | 本次请求期望查询的数据条目（废弃） | 0 |
+| ExternalUserId | string | 否 |  | abc |
 
-**类型**
+<a id="返回参数"></a>
 
-**必填**
-
-**描述**
-
-**示例值**
-
-WorkspaceId
-
-string
-
-否
-
-业务空间 ID
-
-llm-az2xxxx
-
-NextToken
-
-string
-
-否
-
-下一页的 token
-
-cEoBWREAXdxaOyjq/cqAbg==
-
-Query
-
-string
-
-否
-
-搜索关键词：作品名称
-
-数字时代的营销策划与文案创作
-
-MaxResults
-
-integer
-
-否
-
-本次请求期望查询的数据条目（废弃）
-
-0
-
-ExternalUserId
-
-string
-
-否
-
-abc
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-**名称**
-
-**类型**
-
-**描述**
-
-**示例值**
-
-object
-
-响应结果
-
-Code
-
-string
-
-状态码
-
-NoData
-
-Current
-
-integer
-
-当前页。
-
-1
-
-Data
-
-array<object>
-
-是否删除成功
-
-array<object>
-
-业务数据
-
-CreateTime
-
-string
-
-更新日期
-
-2024-01-04 11:46:07
-
-Id
-
-integer
-
-文档唯一标识
-
-10
-
-Title
-
-string
-
-标题
-
-作品标题
-
-UpdateTime
-
-string
-
-更新日期
-
-2025-04-14 19:59:53
-
-FileKey
-
-string
-
-作品文件预览图
-
-[http://www.example.com/xxx.jpg](http://www.example.com/xxx.jpg)
-
-FileAttr
-
-object
-
-作品文件属性
-
-FileName
-
-string
-
-文件名
-
-数字时代的营销策划与文案创作
-
-Width
-
-integer
-
-视频宽度
-
-100
-
-TmpUrl
-
-string
-
-作品文件预览图
-
-[http://www.example.com/xxx.jpg](http://www.example.com/xxx.jpg)
-
-Height
-
-integer
-
-高度
-
-500
-
-HttpStatusCode
-
-integer
-
-http 状态码
-
-200
-
-Message
-
-string
-
-错误说明
-
-success
-
-RequestId
-
-string
-
-请求唯一标识
-
-1813ceee-7fe5-41b4-87e5-982a4d18cca5
-
-Size
-
-integer
-
-每页条数：默认 10
-
-10
-
-Success
-
-boolean
-
-是否成功：true 成功，false 失败
-
-true
-
-Total
-
-integer
-
-总记录数
-
-100
-
-NextToken
-
-string
-
-下一页的 Token
-
-cEoBWREAXdxaOyjq/cqAbg==
-
-MaxResults
-
-integer
-
-本次返回的数据条目
-
-10
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | 响应结果 |  |
+| Code | string | 状态码 | NoData |
+| Current | integer | 当前页。 | 1 |
+| Data | array<object> | 是否删除成功 |  |
+|  | array<object> | 业务数据 |  |
+| CreateTime | string | 更新日期 | 2024-01-04 11:46:07 |
+| Id | integer | 文档唯一标识 | 10 |
+| Title | string | 标题 | 作品标题 |
+| UpdateTime | string | 更新日期 | 2025-04-14 19:59:53 |
+| FileKey | string | 作品文件预览图 | [http://www.example.com/xxx.jpg](http://www.example.com/xxx.jpg) |
+| FileAttr | object | 作品文件属性 |  |
+| FileName | string | 文件名 | 数字时代的营销策划与文案创作 |
+| Width | integer | 视频宽度 | 100 |
+| TmpUrl | string | 作品文件预览图 | [http://www.example.com/xxx.jpg](http://www.example.com/xxx.jpg) |
+| Height | integer | 高度 | 500 |
+| HttpStatusCode | integer | http 状态码 | 200 |
+| Message | string | 错误说明 | success |
+| RequestId | string | 请求唯一标识 | 1813ceee-7fe5-41b4-87e5-982a4d18cca5 |
+| Size | integer | 每页条数：默认 10 | 10 |
+| Success | boolean | 是否成功：true 成功，false 失败 | true |
+| Total | integer | 总记录数 | 100 |
+| NextToken | string | 下一页的 Token | cEoBWREAXdxaOyjq/cqAbg== |
+| MaxResults | integer | 本次返回的数据条目 | 10 |
+
+<a id="示例"></a>
+
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -299,7 +103,9 @@ integer
 
 `JSON`格式
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "Code": "NoData",
   "Current": 1,
@@ -329,9 +135,17 @@ integer
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
+
 ## 错误码
 
 访问[错误中心](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/errorCode)查看更多错误码。
+
+<a id="变更历史"></a>
+
+<a id="workbench-doc-change-demo"></a>
 
 ## 变更历史
 

@@ -4,13 +4,19 @@
 
 多模态评测用于评估 Agent 对图片、音频、视频及其混排内容的理解与生成效果。准备好多模态评测集后，可以选择多模态评估器，并创建针对多模态数据的评测任务，覆盖视觉问答、票据识别、语音客服、视频内容理解等场景。
 
+<a id="什么是多模态数据"></a>
+
+<a id="h-agenteval-mm-what"></a>
+
 ## 什么是多模态数据
 
 多模态数据可以是图片、音频或视频，也可以是文字、图片、音频与视频的组合。
 
 多模态字段在服务端统一存储为 `Array<Object>`。数组中的每个 Object 通过 `type` 声明元素类型，通过对应的载荷字段承载内容；图片、音频和视频的载荷均为 URL。数组顺序即内容顺序，支持同类内容重复出现，也支持文字与媒体混排。
 
-```
+<a id="code-block"></a>
+
+```json
 [
   {
     "type": "text",
@@ -39,37 +45,26 @@
 
 一条多模态数据不要求同时包含四种元素，可以只包含一种模态，也可以自由混排。例如，纯图片、图文、语音加文字、视频加文字都是有效的多模态数据。
 
+<a id="创建多模态评测集"></a>
+
+<a id="h-agenteval-mm-create"></a>
+
 ## 创建多模态评测集
 
 创建评测集时，编辑评测集表结构，将列类型设置为**多模态**。例如：
 
-列名
-
-数据类型
-
-必填
-
-描述
-
-input
-
-多模态或 String
-
-是
-
-输入内容
-
-reference\_output
-
-多模态或 String
-
-否
-
-理想输出
+| 列名 | 数据类型 | 必填 | 描述 |
+| --- | --- | --- | --- |
+| input | 多模态或 String | 是 | 输入内容 |
+| reference\_output | 多模态或 String | 否 | 理想输出 |
 
 输入字段定义为多模态类型，常用于评测多模态内容理解效果；输出字段定义为多模态类型，常用于评测生成多模态内容的效果。
 
-评测集创建与发布的详细步骤，参考[创建与管理](raw/_short/agenteval-evaluation-set-946c810bda606877.md)。
+评测集创建与发布的详细步骤，参考[创建与管理](agenteval-evaluation-set-946c810bda606877.md)。
+
+<a id="添加多模态评测数据"></a>
+
+<a id="h-agenteval-mm-add"></a>
 
 ## 添加多模态评测数据
 
@@ -79,13 +74,19 @@ reference\_output
 -   元素按添加顺序组成数组，可以调整顺序、删除单项或继续追加。
 -   填写完成后保存。系统会校验必填字段，校验通过后添加成功。
 
-**说明****多模态数据校验**：
+> **说明**
+>
+> **多模态数据校验**：
+>
+> -   文本：非空，最多 10000 字符。
+> -   图片：JPG、JPEG、PNG，单文件不超过 20 MB。
+> -   音频：MP3，单文件不超过 100 MB。
+> -   视频：MP4、MOV，单文件不超过 100 MB。
 
--   文本：非空，最多 10000 字符。
--   图片：JPG、JPEG、PNG，单文件不超过 20 MB。
--   音频：MP3，单文件不超过 100 MB。
--   视频：MP4、MOV，单文件不超过 100 MB。
+<a id="通过-trace-回流评测数据"></a>
+
+<a id="h-agenteval-mm-backfill"></a>
 
 ## 通过 Trace 回流评测数据
 
-应用观测中的 Trace 可回流到多模态评测集：在应用观测的 Trace 列表批量选择 Trace，配置 Trace 中输入、输出字段（包含多模态图片内容）与评测集字段的映射关系，导入评测集。操作步骤参考[应用观测](raw/application-user-guide/agent-governance/agenteval/agenteval-observability/agenteval-observation.md)中的添加到评测集。
+应用观测中的 Trace 可回流到多模态评测集：在应用观测的 Trace 列表批量选择 Trace，配置 Trace 中输入、输出字段（包含多模态图片内容）与评测集字段的映射关系，导入评测集。操作步骤参考[应用观测](../application-user-guide/agent-governance/agenteval/agenteval-observability/agenteval-observation.md)中的添加到评测集。

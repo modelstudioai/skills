@@ -4,11 +4,17 @@
 
 本文为您介绍大模型服务平台百炼（BailianVoiceBot）为RAM权限策略定义的操作（Action）、资源（Resource）和条件（Condition）。大模型服务平台百炼（BailianVoiceBot）的RAM代码（RamCode）为 bailianvoicebot，支持的授权粒度为操作级。
 
+<a id="权限策略通用结构"></a>
+
+<a id="auth-detail-51"></a>
+
 ## 权限策略通用结构
 
 权限策略支持JSON格式，其通用结构如下：
 
-```
+<a id="code-block"></a>
+
+```text
 {
   "Version": "1",
   "Statement": [
@@ -42,6 +48,10 @@
     -   Condition\_key：条件关键字。
     -   Condition\_value：条件关键字对应的值。
 
+<a id="操作-action"></a>
+
+<a id="title-auth-detail-2"></a>
+
 ## 操作（Action）
 
 下表是大模型服务平台百炼（BailianVoiceBot）定义的操作，这些操作可以在RAM权限策略语句的`Action`元素中使用，用来授予执行该操作的权限。下面对表中的具体项提供说明：
@@ -61,571 +71,67 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-操作
-
-API
-
-访问级别
-
-资源类型
-
-条件关键字
-
-关联操作
-
-bailianvoicebot:BridgeWebCall
-
-BridgeWebCall
-
-create
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-bailianvoicebot:CreateApplication
-
-CreateApplication
-
-create
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-bailianvoicebot:CreateApplicationVersion
-
-CreateApplicationVersion
-
-create
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-bailianvoicebot:CreateCloneVoice
-
-CreateCloneVoice
-
-create
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-bailianvoicebot:CreateVariable
-
-CreateVariable
-
-create
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-bailianvoicebot:CreateVocabulary
-
-CreateVocabulary
-
-create
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-bailianvoicebot:CreateVoiceAccessProfile
-
-CreateVoiceAccessProfile
-
-create
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-bailianvoicebot:DeleteApplication
-
-DeleteApplication
-
-delete
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-bailianvoicebot:DeleteCloneVoice
-
-DeleteCloneVoice
-
-delete
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-bailianvoicebot:DeleteVariable
-
-DeleteVariable
-
-delete
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-bailianvoicebot:DeleteVocabulary
-
-DeleteVocabulary
-
-delete
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-bailianvoicebot:DeleteVoiceAccessProfile
-
-DeleteVoiceAccessProfile
-
-delete
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-bailianvoicebot:DisableSubscription
-
-DisableSubscription
-
-update
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-bailianvoicebot:ExportVocabulary
-
-ExportVocabulary
-
-get
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-bailianvoicebot:GenerateFileUploadParams
-
-GenerateFileUploadParams
-
-update
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-bailianvoicebot:GetApplication
-
-GetApplication
-
-get
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-bailianvoicebot:GetDataChannelCredential
-
-GetDataChannelCredential
-
-get
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-bailianvoicebot:GetSubscription
-
-GetSubscription
-
-get
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-bailianvoicebot:GetVocabulary
-
-GetVocabulary
-
-get
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-bailianvoicebot:ImportVocabulary
-
-ImportVocabulary
-
-create
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-bailianvoicebot:ListApplications
-
-ListApplications
-
-none
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-bailianvoicebot:ListBackgroundMusics
-
-ListBackgroundMusics
-
-list
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-bailianvoicebot:ListCloneVoice
-
-ListCloneVoice
-
-list
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-bailianvoicebot:ListCloneVoiceModels
-
-ListCloneVoiceModels
-
-list
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-bailianvoicebot:ListNluModels
-
-ListNluModels
-
-list
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-bailianvoicebot:ListVariable
-
-ListVariable
-
-list
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-bailianvoicebot:ListVocabulary
-
-ListVocabulary
-
-list
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-bailianvoicebot:ListVoiceAccessProfile
-
-ListVoiceAccessProfile
-
-list
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-bailianvoicebot:ListVoiceEngines
-
-ListVoiceEngines
-
-list
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-bailianvoicebot:ListVoices
-
-ListVoices
-
-list
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-bailianvoicebot:PreviewVoice
-
-PreviewVoice
-
-create
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-bailianvoicebot:PublishApplicationVersion
-
-PublishApplicationVersion
-
-update
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-bailianvoicebot:UpdateApplication
-
-UpdateApplication
-
-update
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-bailianvoicebot:UpdateApplicationVersion
-
-UpdateApplicationVersion
-
-update
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-bailianvoicebot:UpdateCloneVoice
-
-UpdateCloneVoice
-
-update
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-bailianvoicebot:UpdateSubscription
-
-UpdateSubscription
-
-update
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-bailianvoicebot:UpdateVariable
-
-UpdateVariable
-
-update
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-bailianvoicebot:UpdateVocabulary
-
-UpdateVocabulary
-
-update
-
-\*全部资源
-
-`*`
-
-无
-
-无
-
-bailianvoicebot:UpdateVoiceAccessProfile
-
-UpdateVoiceAccessProfile
-
-update
-
-\*全部资源
-
-`*`
-
-无
-
-无
+| 操作 | API | 访问级别 | 资源类型 | 条件关键字 | 关联操作 |
+| --- | --- | --- | --- | --- | --- |
+| bailianvoicebot:BridgeWebCall | BridgeWebCall | create | \*全部资源<br><br>`*` | 无 | 无 |
+| bailianvoicebot:CreateApplication | CreateApplication | create | \*全部资源<br><br>`*` | 无 | 无 |
+| bailianvoicebot:CreateApplicationVersion | CreateApplicationVersion | create | \*全部资源<br><br>`*` | 无 | 无 |
+| bailianvoicebot:CreateCloneVoice | CreateCloneVoice | create | \*全部资源<br><br>`*` | 无 | 无 |
+| bailianvoicebot:CreateVariable | CreateVariable | create | \*全部资源<br><br>`*` | 无 | 无 |
+| bailianvoicebot:CreateVocabulary | CreateVocabulary | create | \*全部资源<br><br>`*` | 无 | 无 |
+| bailianvoicebot:CreateVoiceAccessProfile | CreateVoiceAccessProfile | create | \*全部资源<br><br>`*` | 无 | 无 |
+| bailianvoicebot:DeleteApplication | DeleteApplication | delete | \*全部资源<br><br>`*` | 无 | 无 |
+| bailianvoicebot:DeleteCloneVoice | DeleteCloneVoice | delete | \*全部资源<br><br>`*` | 无 | 无 |
+| bailianvoicebot:DeleteVariable | DeleteVariable | delete | \*全部资源<br><br>`*` | 无 | 无 |
+| bailianvoicebot:DeleteVocabulary | DeleteVocabulary | delete | \*全部资源<br><br>`*` | 无 | 无 |
+| bailianvoicebot:DeleteVoiceAccessProfile | DeleteVoiceAccessProfile | delete | \*全部资源<br><br>`*` | 无 | 无 |
+| bailianvoicebot:DisableSubscription | DisableSubscription | update | \*全部资源<br><br>`*` | 无 | 无 |
+| bailianvoicebot:ExportVocabulary | ExportVocabulary | get | \*全部资源<br><br>`*` | 无 | 无 |
+| bailianvoicebot:GenerateFileUploadParams | GenerateFileUploadParams | update | \*全部资源<br><br>`*` | 无 | 无 |
+| bailianvoicebot:GetApplication | GetApplication | get | \*全部资源<br><br>`*` | 无 | 无 |
+| bailianvoicebot:GetDataChannelCredential | GetDataChannelCredential | get | \*全部资源<br><br>`*` | 无 | 无 |
+| bailianvoicebot:GetSubscription | GetSubscription | get | \*全部资源<br><br>`*` | 无 | 无 |
+| bailianvoicebot:GetVocabulary | GetVocabulary | get | \*全部资源<br><br>`*` | 无 | 无 |
+| bailianvoicebot:ImportVocabulary | ImportVocabulary | create | \*全部资源<br><br>`*` | 无 | 无 |
+| bailianvoicebot:ListApplications | ListApplications | none | \*全部资源<br><br>`*` | 无 | 无 |
+| bailianvoicebot:ListBackgroundMusics | ListBackgroundMusics | list | \*全部资源<br><br>`*` | 无 | 无 |
+| bailianvoicebot:ListCloneVoice | ListCloneVoice | list | \*全部资源<br><br>`*` | 无 | 无 |
+| bailianvoicebot:ListCloneVoiceModels | ListCloneVoiceModels | list | \*全部资源<br><br>`*` | 无 | 无 |
+| bailianvoicebot:ListNluModels | ListNluModels | list | \*全部资源<br><br>`*` | 无 | 无 |
+| bailianvoicebot:ListVariable | ListVariable | list | \*全部资源<br><br>`*` | 无 | 无 |
+| bailianvoicebot:ListVocabulary | ListVocabulary | list | \*全部资源<br><br>`*` | 无 | 无 |
+| bailianvoicebot:ListVoiceAccessProfile | ListVoiceAccessProfile | list | \*全部资源<br><br>`*` | 无 | 无 |
+| bailianvoicebot:ListVoiceEngines | ListVoiceEngines | list | \*全部资源<br><br>`*` | 无 | 无 |
+| bailianvoicebot:ListVoices | ListVoices | list | \*全部资源<br><br>`*` | 无 | 无 |
+| bailianvoicebot:PreviewVoice | PreviewVoice | create | \*全部资源<br><br>`*` | 无 | 无 |
+| bailianvoicebot:PublishApplicationVersion | PublishApplicationVersion | update | \*全部资源<br><br>`*` | 无 | 无 |
+| bailianvoicebot:UpdateApplication | UpdateApplication | update | \*全部资源<br><br>`*` | 无 | 无 |
+| bailianvoicebot:UpdateApplicationVersion | UpdateApplicationVersion | update | \*全部资源<br><br>`*` | 无 | 无 |
+| bailianvoicebot:UpdateCloneVoice | UpdateCloneVoice | update | \*全部资源<br><br>`*` | 无 | 无 |
+| bailianvoicebot:UpdateSubscription | UpdateSubscription | update | \*全部资源<br><br>`*` | 无 | 无 |
+| bailianvoicebot:UpdateVariable | UpdateVariable | update | \*全部资源<br><br>`*` | 无 | 无 |
+| bailianvoicebot:UpdateVocabulary | UpdateVocabulary | update | \*全部资源<br><br>`*` | 无 | 无 |
+| bailianvoicebot:UpdateVoiceAccessProfile | UpdateVoiceAccessProfile | update | \*全部资源<br><br>`*` | 无 | 无 |
+
+<a id="资源-resource"></a>
+
+<a id="title-auth-detail-3"></a>
 
 ## 资源（Resource）
 
 大模型服务平台百炼（BailianVoiceBot）不支持在RAM权限策略语句的`Resource`中指定资源ARN。如果要允许对大模型服务平台百炼（BailianVoiceBot）的访问权限，请在策略语句中指定`"Resource": "*"`。
 
+<a id="条件-condition"></a>
+
+<a id="title-auth-detail-4"></a>
+
 ## 条件（Condition）
 
 大模型服务平台百炼（BailianVoiceBot）未定义产品级别的条件关键字。如需查看适用于所有云产品的通用条件关键字，请参见[通用条件关键字](https://help.aliyun.com/zh/ram/policy-elements)。
+
+<a id="相关操作"></a>
+
+<a id="auth-detail-71"></a>
 
 ## 相关操作
 

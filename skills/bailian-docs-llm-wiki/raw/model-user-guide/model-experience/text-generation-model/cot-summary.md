@@ -4,6 +4,10 @@ Qwen4-Max 返回可展示的思维链摘要和完整思维链的密文，用于�
 
 适用模型：`qwen4-max`。
 
+<a id="工作原理"></a>
+
+<a id="how-it-works"></a>
+
 ## 工作原理
 
 默认返回完整思维链。开启本功能后，原始思维链不再以明文返回，改为返回摘要与完整密文。摘要用于展示，密文用于恢复历史思考。
@@ -16,53 +20,34 @@ Qwen4-Max 返回可展示的思维链摘要和完整思维链的密文，用于�
 
 Chat Completions 和 DashScope 需开启 `enable_thinking=true`；回传密文续推时设置 `preserve_thinking=true`。Responses 和 Anthropic Messages 使用各自的思考参数。
 
+<a id="开启方式"></a>
+
+<a id="enable"></a>
+
 ## 开启方式
 
 以下示例使用北京地域。将 `WorkspaceId` 替换为真实业务空间 ID，并配置 `DASHSCOPE_API_KEY`。
 
-接口
+| 接口 | 开启参数 | 摘要字段 | 密文字段 |
+| --- | --- | --- | --- |
+| Chat Completions | `thinking_display="summarized"` | `choices[i].message.reasoning_content` | `choices[i].message.encrypted_content` |
+| Responses | `reasoning.summary="auto"` | `summary[].text` | `encrypted_content` |
+| Anthropic Messages | `thinking.display="summarized"` | `thinking` | `signature` |
+| DashScope | `parameters.thinking_display="summarized"` | `output.choices[i].message.reasoning_content` | `output.choices[i].message.encrypted_content` |
 
-开启参数
+<a id="sec-tabs"></a>
 
-摘要字段
+<a id="chat-completions"></a>
 
-密文字段
-
-Chat Completions
-
-`thinking_display="summarized"`
-
-`choices[i].message.reasoning_content`
-
-`choices[i].message.encrypted_content`
-
-Responses
-
-`reasoning.summary="auto"`
-
-`summary[].text`
-
-`encrypted_content`
-
-Anthropic Messages
-
-`thinking.display="summarized"`
-
-`thinking`
-
-`signature`
-
-DashScope
-
-`parameters.thinking_display="summarized"`
-
-`output.choices[i].message.reasoning_content`
-
-`output.choices[i].message.encrypted_content`
+<a id="chat-completions-h4"></a>
 
 #### Chat Completions
 
-```
+<a id="chat"></a>
+
+<a id="code-block"></a>
+
+```bash
 curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
@@ -80,9 +65,17 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode
 }'
 ```
 
+<a id="responses"></a>
+
+<a id="responses-h4"></a>
+
 #### Responses
 
-```
+<a id="responses-2"></a>
+
+<a id="code-block-2"></a>
+
+```bash
 curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
@@ -95,9 +88,17 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode
 }'
 ```
 
+<a id="anthropic-messages"></a>
+
+<a id="anthropic-messages-h4"></a>
+
 #### Anthropic Messages
 
-```
+<a id="anthropic"></a>
+
+<a id="code-block-3"></a>
+
+```bash
 curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/v1/messages" \
   -H "x-api-key: $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
@@ -118,9 +119,17 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/
 }'
 ```
 
+<a id="dashscope"></a>
+
+<a id="dashscope-h4"></a>
+
 #### DashScope
 
-```
+<a id="dashscope-2"></a>
+
+<a id="code-block-4"></a>
+
+```bash
 curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation" \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
@@ -148,6 +157,10 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 }'
 ```
 
+<a id="返回与流式处理"></a>
+
+<a id="streaming"></a>
+
 ## 返回与流式处理
 
 Chat Completions 流式顺序：`choices[i].delta.reasoning_content` 摘要增量 → 独立 `encrypted_content` 密文帧 → 正文或工具调用 → 结束。非流式字段位于 `choices[i].message`。密文一次返回，不要因文本为空而过滤密文帧，也不要为密文单独创建 assistant 消息。
@@ -158,17 +171,33 @@ Anthropic Messages 的 thinking block 包含 `thinking` 摘要和 `signature` �
 
 DashScope 字段位于 `output.choices[i].message`，流式顺序与 Chat Completions 一致。密文放在 `encrypted_content`，不能放进 `content[].text`。中间帧的 `finish_reason` 为字符串 `"null"`，最终为 `"stop"`；usage 为累计值，不要重复累加。
 
+<a id="多轮对话"></a>
+
+<a id="multi-turn"></a>
+
 ## 多轮对话
 
 回传历史时保留完整密文；摘要可省略，Responses 的 `summary` 可设为空数组。
+
+<a id="sec-tabs-2"></a>
+
+<a id="chat-completions-2"></a>
+
+<a id="chat-completions-2-h4"></a>
 
 #### Chat Completions
 
 OpenAI Python SDK 的非标准参数 `enable_thinking`、`thinking_display`、`preserve_thinking` 通过 `extra_body` 传入。
 
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -202,9 +231,13 @@ for turn, question in enumerate(questions, start=1):
     print("Answer:", assistant_message["content"])
 ```
 
+<a id="fig-code-group-node-js-tab"></a>
+
 Node.js
 
-```
+<a id="code-code-group-node-js"></a>
+
+```javascript
 const questions = [
     "请计算 17×23。",
     "再加 9。"
@@ -229,9 +262,13 @@ for (const [index, question] of questions.entries()) {
 }
 ```
 
+<a id="fig-code-group-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-curl"></a>
+
+```bash
 set -euo pipefail
 
 history='[]'
@@ -253,13 +290,23 @@ for question in "${questions[@]}"; do
 done
 ```
 
+<a id="responses-3"></a>
+
+<a id="responses-3-h4"></a>
+
 #### Responses
 
 设置 `reasoning.summary="auto"` 开启摘要与加密。下例使用 `store=false`，由客户端保存历史。
 
+<a id="fig-code-group-2"></a>
+
+<a id="fig-code-group-2-python-tab"></a>
+
 Python
 
-```
+<a id="code-code-group-2-python"></a>
+
+```python
 import os
 from openai import OpenAI
 
@@ -292,9 +339,13 @@ for turn, question in enumerate(questions, start=1):
     print("Answer:", response.output_text)
 ```
 
+<a id="fig-code-group-2-node-js-tab"></a>
+
 Node.js
 
-```
+<a id="code-code-group-2-node-js"></a>
+
+```javascript
 const questions = [
     "请计算 17×23。",
     "再加 9。"
@@ -320,9 +371,13 @@ for (const [index, question] of questions.entries()) {
 }
 ```
 
+<a id="fig-code-group-2-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-2-curl"></a>
+
+```bash
 set -euo pipefail
 
 history='[]'
@@ -344,11 +399,21 @@ for question in "${questions[@]}"; do
 done
 ```
 
+<a id="anthropic-messages-2"></a>
+
+<a id="anthropic-messages-2-h4"></a>
+
 #### Anthropic Messages
+
+<a id="fig-code-group-3"></a>
+
+<a id="fig-code-group-3-python-tab"></a>
 
 Python
 
-```
+<a id="code-code-group-3-python"></a>
+
+```python
 import os
 import anthropic
 
@@ -381,9 +446,13 @@ for turn, question in enumerate(questions, start=1):
             print("Answer:", block["text"])
 ```
 
+<a id="fig-code-group-3-node-js-tab"></a>
+
 Node.js
 
-```
+<a id="code-code-group-3-node-js"></a>
+
+```javascript
 const questions = [
     "请计算 17×23。",
     "再加 9。"
@@ -409,9 +478,13 @@ for (const [index, question] of questions.entries()) {
 }
 ```
 
+<a id="fig-code-group-3-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-3-curl"></a>
+
+```bash
 set -euo pipefail
 
 history='[]'
@@ -433,11 +506,21 @@ for question in "${questions[@]}"; do
 done
 ```
 
+<a id="dashscope-3"></a>
+
+<a id="dashscope-3-h4"></a>
+
 #### DashScope
+
+<a id="fig-code-group-4"></a>
+
+<a id="fig-code-group-4-python-tab"></a>
 
 Python
 
-```
+<a id="code-code-group-4-python"></a>
+
+```python
 import json
 import os
 from urllib.request import Request, urlopen
@@ -480,9 +563,13 @@ for turn, question in enumerate(questions, start=1):
     print("Answer:", "".join(part.get("text", "") for part in assistant_message["content"]))
 ```
 
+<a id="fig-code-group-4-node-js-tab"></a>
+
 Node.js
 
-```
+<a id="code-code-group-4-node-js"></a>
+
+```javascript
 const questions = [
     "请计算 17×23。",
     "再加 9。"
@@ -507,9 +594,13 @@ for (const [index, question] of questions.entries()) {
 }
 ```
 
+<a id="fig-code-group-4-curl-tab"></a>
+
 curl
 
-```
+<a id="code-code-group-4-curl"></a>
+
+```bash
 set -euo pipefail
 
 history='[]'
@@ -530,6 +621,10 @@ for question in "${questions[@]}"; do
   printf '%s\n' "$response" | jq '.output.choices[0].message | {summary: .reasoning_content, answer: [.content[].text]}'
 done
 ```
+
+<a id="计费说明"></a>
+
+<a id="billing"></a>
 
 ## 计费说明
 

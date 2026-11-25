@@ -2,42 +2,32 @@
 
 本文介绍图像擦除补全模型的输入输出参数。图像擦除补全通过指定图像mask中要删除的人体、宠物、物品、文字、水印等图像区域，在保留背景的同时移除图像中的一个或多个人物、物体、文字等元素。
 
-**相关指南**：[图像擦除补全](raw/model-user-guide/use-cases/legacy-resources/legacy-image-generation/image-erasure-and-completion.md)
+**相关指南**：[图像擦除补全](../../../model-user-guide/use-cases/legacy-resources/legacy-image-generation/image-erasure-and-completion.md)
 
-**重要**
+> **重要**
+>
+> -   本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)。
+> -   image-erase-completion 模型当前仅提供**免费体验**，免费额度用完后不可调用且不支持付费，推荐参考[图像编辑-千问](../../../model-user-guide/model-experience/image-and-video-generation/image-model/image-edit-guide/qwen-image-edit-guide.md)或[图像编辑-万相2.1](../../../model-user-guide/use-cases/legacy-resources/legacy-image-generation/wanx-image-edit.md)获取替代方案。
 
--   本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)。
--   image-erase-completion 模型当前仅提供**免费体验**，免费额度用完后不可调用且不支持付费，推荐参考[图像编辑-千问](raw/model-user-guide/model-experience/image-and-video-generation/image-model/image-edit-guide/qwen-image-edit-guide.md)或[图像编辑-万相2.1](raw/model-user-guide/use-cases/legacy-resources/legacy-image-generation/wanx-image-edit.md)获取替代方案。
+<a id="模型概览"></a>
+
+<a id="a0c22dbf96vss"></a>
 
 ## 模型概览
 
-**模型名**
+<table><tbody><tr><td rowspan="2"><strong>模型名</strong></td><td rowspan="2"><p><strong>免费额度</strong><a href="../../../model-user-guide/test-1/new-free-quota.md">（查看）</a></p></td><td rowspan="2"><strong>计费单价</strong></td><td colspan="2"><strong>限流（含主账号与RAM子账号）</strong></td></tr><tr><td><strong>任务下发接口QPS限制</strong></td><td><strong>同时处理中任务数量</strong></td></tr><tr><td><p>image-erase-completion</p></td><td><p>500张</p></td><td><p>目前仅供免费体验。</p><blockquote><p>免费额度用完后不可调用，推荐参考<a href="../../../model-user-guide/model-experience/image-and-video-generation/image-model/image-edit-guide/qwen-image-edit-guide.md">图像编辑-千问</a>或<a href="../../../model-user-guide/use-cases/legacy-resources/legacy-image-generation/wanx-image-edit.md">图像编辑-万相2.1</a>获取替代方案。</p></blockquote></td><td><p>2</p></td><td><p>1</p></td></tr></tbody></table>
 
-**免费额度**[（查看）](raw/model-user-guide/test-1/new-free-quota.md)
+<a id="前提条件"></a>
 
-**计费单价**
-
-**限流（含主账号与RAM子账号）**
-
-**任务下发接口QPS限制**
-
-**同时处理中任务数量**
-
-image-erase-completion
-
-500张
-
-目前仅供免费体验。
-
-> 免费额度用完后不可调用，推荐参考[图像编辑-千问](raw/model-user-guide/model-experience/image-and-video-generation/image-model/image-edit-guide/qwen-image-edit-guide.md)或[图像编辑-万相2.1](raw/model-user-guide/use-cases/legacy-resources/legacy-image-generation/wanx-image-edit.md)获取替代方案。
-
-2
-
-1
+<a id="0e41425c577u4"></a>
 
 ## 前提条件
 
-您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
+您需要已[获取与配置 API Key](../../preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
+
+<a id="http调用"></a>
+
+<a id="42703589880ts"></a>
 
 ## HTTP调用
 
@@ -46,405 +36,115 @@ image-erase-completion
 -   **创建任务**：首先发送一个请求创建文生图任务，该请求会返回任务ID。
 -   **根据任务ID查询结果**：使用上一步获得的任务ID，查询模型生成的结果。
 
+<a id="步骤1-创建任务获取任务id"></a>
+
+<a id="63a6f712191qa"></a>
+
 ### 步骤1：创建任务获取任务ID
 
 `POST https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis`
 
-#### 请求头（Headers）
-
-**Content-Type**_string_**必选**
-
-请求内容类型。固定为`application/json`。
-
-**Authorization**_string_**必选**
-
-推荐您使用阿里云百炼API-Key，也可填DashScope API-Key。例如：Bearer d1xxx2a。
-
-**X-DashScope-Async**_string_**必选**
-
-是否开启异步处理。必须开启异步处理，设置为`enable`。
-
-#### 请求体（Request Body）
-
-**model**_string_**必选**
-
-调用模型。
-
-**input**_object_**必选**
-
-输入图像的基本信息，比如图像URL。
-
-属性
-
-**image\_url**_string_**必选**
-
-输入图像URL地址或者图像base64数据。
-
-URL 需为公网可访问的地址，并支持 HTTP 或 HTTPS 协议。您也可在此[获取临时公网URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。
-
-图像限制：
-
--   图片格式：JPEG、PNG，JPG，BMP，WEBP。
--   图像分辨率：不低于512×512像素且不超过4096×4096像素。
--   图像单边长度范围：\[512, 4096\]，单位像素。
--   图片大小：不超过10MB。
--   URL地址中不能包含中文字符。
-
-**mask\_url**_string_**必选**
-
-输入擦除区域掩码图像URL地址或者图像base64数据。
-
-URL 需为公网可访问的地址，并支持 HTTP 或 HTTPS 协议。您也可在此[获取临时公网URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。
-
-图像限制：
-
--   图片格式：JPG、JPEG、PNG、HEIF、WEBP。
--   图像分辨率：不低于512×512像素且不超过4096×4096像素。
--   图像单边长度范围：\[512, 4096\]，单位像素。
--   图片大小：不超过10MB。
-
-在与图像相同大小的空白画布进行涂抹，非0值区域为擦除掩码区域；也可选用[人物实例分割](raw/model-api-reference/image-generation/image-creative-tools-api-reference/image-instance-segmentation-api-reference.md)直接产生人物的分割结果作为擦除掩码区域。
-
-**foreground\_url**_string_ 可选
-
-输入保留区域掩码图像URL地址或者图像base64数据。
-
-URL 需为公网可访问的地址，并支持 HTTP 或 HTTPS 协议。您也可在此[获取临时公网URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。
-
-图像限制：
-
--   图片格式：JPG、JPEG、PNG、HEIF、WEBP。
--   图像分辨率：不低于512×512像素且不超过4096×4096像素。
--   图像单边长度范围：\[512, 4096\]，单位像素。
--   图片大小：不超过10MB。
-
-在与图像相同大小的空白画布进行涂抹，非0值区域为保留掩码区域；也可选用[人物实例分割](raw/model-api-reference/image-generation/image-creative-tools-api-reference/image-instance-segmentation-api-reference.md)，通过指定人物ID的方式分离该人物的掩码区域，保留该人物不被擦除。
-
-**parameters**_object_ 可选
-
-图像处理参数。
-
-属性
-
-**fast\_mode**_bool_**可选**
-
-是否为快速模式，默认为false，快速模式推理耗时约为非快速模式的四分之一，适合不需要生成大量细节的场景。
-
-**dilate\_flag**_bool_**可选**
-
-默认为true，建议若擦除mask为算法分割结果，设置为true；若擦除mask为涂抹结果，设置为false。
-
-**add\_watermark** _boolean_**可选**
-
-添加`Generated by AI`水印。默认值为true，在输出图像左下角处添加水印。
-
-#### 图像擦除补全
-
-```
-curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \
+<table><tbody><tr><td><a id="afcd41d2b57zf"></a><h4>请求头（Headers）</h4><p><strong>Content-Type</strong><em>string</em><strong>必选</strong></p><p>请求内容类型。固定为<code>application/json</code>。</p><p><strong>Authorization</strong><em>string</em><strong>必选</strong></p><p>推荐您使用阿里云百炼API-Key，也可填DashScope API-Key。例如：Bearer d1xxx2a。</p><p><strong>X-DashScope-Async</strong><em>string</em><strong>必选</strong></p><p>是否开启异步处理。必须开启异步处理，设置为<code>enable</code>。</p><a id="66a778d4fbfub"></a><h4>请求体（Request Body）</h4><p><strong>model</strong><em>string</em><strong>必选</strong></p><p>调用模型。</p><p><strong>input</strong><em>object</em><strong>必选</strong></p><p>输入图像的基本信息，比如图像URL。</p><a id="accordion-属性"></a><section><p>属性</p><div><p><strong>image_url</strong><em>string</em><strong>必选</strong></p><p>输入图像URL地址或者图像base64数据。</p><p>URL 需为公网可访问的地址，并支持 HTTP 或 HTTPS 协议。您也可在此<a href="../../more-about-models/get-temporary-file-url.md">获取临时公网URL</a>。</p><p>图像限制：</p><ul><li>图片格式：JPEG、PNG，JPG，BMP，WEBP。</li><li>图像分辨率：不低于512×512像素且不超过4096×4096像素。</li><li>图像单边长度范围：[512, 4096]，单位像素。</li><li>图片大小：不超过10MB。</li><li>URL地址中不能包含中文字符。</li></ul><p><strong>mask_url</strong><em>string</em><strong>必选</strong></p><p>输入擦除区域掩码图像URL地址或者图像base64数据。</p><p>URL 需为公网可访问的地址，并支持 HTTP 或 HTTPS 协议。您也可在此<a href="../../more-about-models/get-temporary-file-url.md">获取临时公网URL</a>。</p><p>图像限制：</p><ul><li>图片格式：JPG、JPEG、PNG、HEIF、WEBP。</li><li>图像分辨率：不低于512×512像素且不超过4096×4096像素。</li><li>图像单边长度范围：[512, 4096]，单位像素。</li><li>图片大小：不超过10MB。</li></ul><p>在与图像相同大小的空白画布进行涂抹，非0值区域为擦除掩码区域；也可选用<a href="image-instance-segmentation-api-reference.md">人物实例分割</a>直接产生人物的分割结果作为擦除掩码区域。</p><p><strong>foreground_url</strong><em>string</em> 可选</p><p>输入保留区域掩码图像URL地址或者图像base64数据。</p><p>URL 需为公网可访问的地址，并支持 HTTP 或 HTTPS 协议。您也可在此<a href="../../more-about-models/get-temporary-file-url.md">获取临时公网URL</a>。</p><p>图像限制：</p><ul><li>图片格式：JPG、JPEG、PNG、HEIF、WEBP。</li><li>图像分辨率：不低于512×512像素且不超过4096×4096像素。</li><li>图像单边长度范围：[512, 4096]，单位像素。</li><li>图片大小：不超过10MB。</li></ul><p>在与图像相同大小的空白画布进行涂抹，非0值区域为保留掩码区域；也可选用<a href="image-instance-segmentation-api-reference.md">人物实例分割</a>，通过指定人物ID的方式分离该人物的掩码区域，保留该人物不被擦除。</p></div></section><p><strong>parameters</strong><em>object</em> 可选</p><p>图像处理参数。</p><a id="accordion-属性-2"></a><section><p>属性</p><div><p><strong>fast_mode</strong><em>bool</em><strong>可选</strong></p><p>是否为快速模式，默认为false，快速模式推理耗时约为非快速模式的四分之一，适合不需要生成大量细节的场景。</p><p><strong>dilate_flag</strong><em>bool</em><strong>可选</strong></p><p>默认为true，建议若擦除mask为算法分割结果，设置为true；若擦除mask为涂抹结果，设置为false。</p><p><strong>add_watermark</strong> <em>boolean</em><strong>可选</strong></p><p>添加<code>Generated by AI</code>水印。默认值为true，在输出图像左下角处添加水印。</p></div></section></td><td><a id="sec-tabs"></a><section><a id="图像擦除补全"></a><section><a id="图像擦除补全-h4"></a><h4>图像擦除补全</h4><a id="code-block"></a><pre class="language-bash"><code>curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \
 --header 'X-DashScope-Async: enable' \
---header "Authorization: Bearer $DASHSCOPE_API_KEY" \
+--header &quot;Authorization: Bearer $DASHSCOPE_API_KEY&quot; \
 --header 'Content-Type: application/json' \
 --data-raw '{
-    "model": "image-erase-completion",
-    "input": {
-            "image_url": "http://xxx/input.png",
-            "mask_url": "http://xxx/mask.png",
-            "foreground_url": "http://xxx/foreground.png"
+    &quot;model&quot;: &quot;image-erase-completion&quot;,
+    &quot;input&quot;: {
+            &quot;image_url&quot;: &quot;http://xxx/input.png&quot;,
+            &quot;mask_url&quot;: &quot;http://xxx/mask.png&quot;,
+            &quot;foreground_url&quot;: &quot;http://xxx/foreground.png&quot;
         },
-    "parameters":{
-        "dilate_flag":true
+    &quot;parameters&quot;:{
+        &quot;dilate_flag&quot;:true
     }
 }'
-```
+</code></pre></section></section></td></tr></tbody></table>
 
-#### 响应
-
-**output**_object_
-
-任务输出信息。
-
-属性
-
-**task\_id**_string_
-
-任务id，任务唯一标识。
-
-**task\_status**_string_
-
-任务状态。
-
--   PENDING：排队中
--   RUNNING：处理中
--   SUSPENDED：挂起
--   SUCCEEDED：执行成功
--   FAILED：执行失败
-
-**code**_string_
-
-接口错误码。接口成功请求不会返回该参数。
-
-**message**_string_
-
-接口错误信息。接口成功请求不会返回该参数。
-
-**request\_id**_string_
-
-请求唯一标识。可用于请求明细溯源和问题排查。
-
-成功响应
-
-```
-{
-    "output": {
-        "task_status": "PENDING",
-        "task_id": "53950fb7-281a-4e60-b543-xxxxxxxxxxxx"
+<table><tbody><tr><td><a id="9ea3a66e2a0uv"></a><h4>响应</h4><p><strong>output</strong><em>object</em></p><p>任务输出信息。</p><a id="accordion-属性-3"></a><section><p>属性</p><div><p><strong>task_id</strong><em>string</em></p><p>任务id，任务唯一标识。</p><p><strong>task_status</strong><em>string</em></p><p>任务状态。</p><ul><li>PENDING：排队中</li><li>RUNNING：处理中</li><li>SUSPENDED：挂起</li><li>SUCCEEDED：执行成功</li><li>FAILED：执行失败</li></ul></div></section><p><strong>code</strong><em>string</em></p><p>接口错误码。接口成功请求不会返回该参数。</p><p><strong>message</strong><em>string</em></p><p>接口错误信息。接口成功请求不会返回该参数。</p><p><strong>request_id</strong><em>string</em></p><p>请求唯一标识。可用于请求明细溯源和问题排查。</p></td><td><a id="fig-code-group"></a><div><a id="fig-code-group-成功响应-tab"></a>成功响应<div><a id="code-code-group-成功响应"></a><pre class="language-json"><code>{
+    &quot;output&quot;: {
+        &quot;task_status&quot;: &quot;PENDING&quot;,
+        &quot;task_id&quot;: &quot;53950fb7-281a-4e60-b543-xxxxxxxxxxxx&quot;
     },
-    "request_id": "1027557e-8c3f-9db5-8cd2-xxxxxxxxxxxx"
+    &quot;request_id&quot;: &quot;1027557e-8c3f-9db5-8cd2-xxxxxxxxxxxx&quot;
 }
-```
-
-异常响应
-
-```
-{
-    "code":"InvalidApiKey",
-    "message":"Invalid API-key provided.",
-    "request_id":"fb53c4ec-1c12-4fc4-a580-xxxxxxxxxxxx"
+</code></pre></div><a id="fig-code-group-异常响应-tab"></a>异常响应<div><a id="code-code-group-异常响应"></a><pre class="language-json"><code>{
+    &quot;code&quot;:&quot;InvalidApiKey&quot;,
+    &quot;message&quot;:&quot;Invalid API-key provided.&quot;,
+    &quot;request_id&quot;:&quot;fb53c4ec-1c12-4fc4-a580-xxxxxxxxxxxx&quot;
 }
-```
+</code></pre></div></div></td></tr></tbody></table>
+
+<a id="步骤2-根据任务id查询结果"></a>
+
+<a id="481754a27e8sb"></a>
 
 ### 步骤2：根据任务ID查询结果
 
 `GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}`
 
-#### 请求头（Headers）
-
-**Authorization**_string_**必选**
-
-API-Key，例如：Bearer d1\*\*2a。
-
-#### URL路径参数（Path parameters）
-
-**task\_id**_string_**必选**
-
-任务id。
-
-#### 获取任务结果
-
-```
-curl -X GET \
---header "Authorization: Bearer $DASHSCOPE_API_KEY" \
+<table><tbody><tr><td><a id="5043fa882c26r"></a><h4>请求头（Headers）</h4><p><strong>Authorization</strong><em>string</em><strong>必选</strong></p><p>API-Key，例如：Bearer d1**2a。</p><a id="aa6a7e4730pr2"></a><h4>URL路径参数（Path parameters）</h4><p><strong>task_id</strong><em>string</em><strong>必选</strong></p><p>任务id。</p></td><td><a id="sec-tabs-2"></a><section><a id="获取任务结果"></a><section><a id="获取任务结果-h4"></a><h4>获取任务结果</h4><a id="code-block-2"></a><pre class="language-bash"><code>curl -X GET \
+--header &quot;Authorization: Bearer $DASHSCOPE_API_KEY&quot; \
 https://dashscope.aliyuncs.com/api/v1/tasks/53950fb7-281a-4e60-b543-xxxxxxxxxxxx
-```
+</code></pre></section></section></td></tr></tbody></table>
 
-#### 响应
-
-**output**_object_
-
-输出的任务信息。
-
-属性
-
-**task\_id** _string_
-
-任务id。
-
-**task\_status** _string_
-
-任务状态。
-
--   PENDING：排队中
--   RUNNING：处理中
--   SUSPENDED：挂起
--   SUCCEEDED：执行成功
--   FAILED：执行失败
-
-**task\_metrics** _object_
-
-任务统计信息。
-
-属性
-
-**TOTAL** _integer_
-
-总的任务数。
-
-**SUCCEEDED** _integer_
-
-任务状态为成功的任务数。
-
-**FAILED** _integer_
-
-任务状态为失败的任务数。
-
-**submit\_time** _string_
-
-任务提交时间。
-
-**scheduled\_time** _string_
-
-任务执行时间。
-
-**end\_time** _string_
-
-任务完成时间。
-
-**output\_image\_url** _string_
-
-输出图像URL地址。
-
-**code**_string_
-
-接口错误码。接口成功请求不会返回该参数。
-
-**message**_string_
-
-接口错误信息。接口成功请求不会返回该参数。
-
-**usage**_object_
-
-输出信息统计。
-
-属性
-
-**image\_count**integer
-
-生成图像的数量。
-
-**request\_id**_string_
-
-请求唯一标识。可用于请求明细溯源和问题排查。
-
-#### 任务执行成功
-
-对于本模型，任务在结束之后的状态会持续保留24小时以备客户随时查询，24小时之后，任务将从系统中清除，相关的结果也将一并清除；对应的，任务生成的结果为图像的URL地址，出于安全考虑，该URL的下载有效期也是24小时，需要用户在获取任务结果后根据需要及时使用或者转存。
-
-```
-{
-    "request_id": "b67df059-ca6a-9d51-afcd-9b3c4456b1e2",
-    "output": {
-        "task_id": "53950fb7-281a-4e60-b543-xxxxxxxxxxxx",
-        "task_status": "SUCCEEDED",
-        "submit_time": "2024-05-16 13:50:01.247",
-        "scheduled_time": "2024-05-16 13:50:01.354",
-        "end_time": "2024-05-16 13:50:27.795",
-        "output_image_url": "http://xxx/result.png"
+<table><tbody><tr><td><a id="b14ec019d4k6f"></a><h4>响应</h4><p><strong>output</strong><em>object</em></p><p>输出的任务信息。</p><a id="accordion-属性-4"></a><section><p>属性</p><div><p><strong>task_id</strong> <em>string</em></p><p>任务id。</p><p><strong>task_status</strong> <em>string</em></p><p>任务状态。</p><ul><li>PENDING：排队中</li><li>RUNNING：处理中</li><li>SUSPENDED：挂起</li><li>SUCCEEDED：执行成功</li><li>FAILED：执行失败</li></ul><p><strong>task_metrics</strong> <em>object</em></p><p>任务统计信息。</p><a id="accordion-属性-5"></a><section><p>属性</p><div><p><strong>TOTAL</strong> <em>integer</em></p><p>总的任务数。</p><p><strong>SUCCEEDED</strong> <em>integer</em></p><p>任务状态为成功的任务数。</p><p><strong>FAILED</strong> <em>integer</em></p><p>任务状态为失败的任务数。</p></div></section><p><strong>submit_time</strong> <em>string</em></p><p>任务提交时间。</p><p><strong>scheduled_time</strong> <em>string</em></p><p>任务执行时间。</p><p><strong>end_time</strong> <em>string</em></p><p>任务完成时间。</p><p><strong>output_image_url</strong> <em>string</em></p><p>输出图像URL地址。</p><p><strong>code</strong><em>string</em></p><p>接口错误码。接口成功请求不会返回该参数。</p><p><strong>message</strong><em>string</em></p><p>接口错误信息。接口成功请求不会返回该参数。</p></div></section><p><strong>usage</strong><em>object</em></p><p>输出信息统计。</p><a id="accordion-属性-6"></a><section><p>属性</p><div><p><strong>image_count</strong>integer</p><p>生成图像的数量。</p></div></section><p><strong>request_id</strong><em>string</em></p><p>请求唯一标识。可用于请求明细溯源和问题排查。</p></td><td><a id="sec-tabs-3"></a><section><a id="任务执行成功"></a><section><a id="任务执行成功-h4"></a><h4>任务执行成功</h4><p>对于本模型，任务在结束之后的状态会持续保留24小时以备客户随时查询，24小时之后，任务将从系统中清除，相关的结果也将一并清除；对应的，任务生成的结果为图像的URL地址，出于安全考虑，该URL的下载有效期也是24小时，需要用户在获取任务结果后根据需要及时使用或者转存。</p><a id="code-block-3"></a><pre class="language-json"><code>{
+    &quot;request_id&quot;: &quot;b67df059-ca6a-9d51-afcd-9b3c4456b1e2&quot;,
+    &quot;output&quot;: {
+        &quot;task_id&quot;: &quot;53950fb7-281a-4e60-b543-xxxxxxxxxxxx&quot;,
+        &quot;task_status&quot;: &quot;SUCCEEDED&quot;,
+        &quot;submit_time&quot;: &quot;2024-05-16 13:50:01.247&quot;,
+        &quot;scheduled_time&quot;: &quot;2024-05-16 13:50:01.354&quot;,
+        &quot;end_time&quot;: &quot;2024-05-16 13:50:27.795&quot;,
+        &quot;output_image_url&quot;: &quot;http://xxx/result.png&quot;
     },
-    "usage": {
-        "image_count": 1
+    &quot;usage&quot;: {
+        &quot;image_count&quot;: 1
     }
 }
-```
-
-#### 任务执行中
-
-```
-{
-    "request_id":"7574ee8f-38a3-4b1e-9280-11c33ab46e51",
-    "output":{
-        "task_id":"53950fb7-281a-4e60-b543-xxxxxxxxxxxx",
-        "task_status":"RUNNING",
-        "task_metrics":{
-            "TOTAL":1,
-            "SUCCEEDED":1,
-            "FAILED":0
+</code></pre></section><a id="任务执行中"></a><section><a id="任务执行中-h4"></a><h4>任务执行中</h4><a id="code-block-4"></a><pre class="language-json"><code>{
+    &quot;request_id&quot;:&quot;7574ee8f-38a3-4b1e-9280-11c33ab46e51&quot;,
+    &quot;output&quot;:{
+        &quot;task_id&quot;:&quot;53950fb7-281a-4e60-b543-xxxxxxxxxxxx&quot;,
+        &quot;task_status&quot;:&quot;RUNNING&quot;,
+        &quot;task_metrics&quot;:{
+            &quot;TOTAL&quot;:1,
+            &quot;SUCCEEDED&quot;:1,
+            &quot;FAILED&quot;:0
         }
     }
 }
-```
-
-#### 任务执行失败
-
-```
-{
-   "request_id":"4246a1de-2aab-9b49-ba87-e0d12e221a06",
-   "output":{
-      "task_id":"53950fb7-281a-4e60-b543-xxxxxxxxxxxx",
-      "task_status":"FAILED",
-      "submit_time":"2024-03-22 12:07:07.183",
-      "scheduled_time":"2024-03-22 12:07:07.253",
-      "end_time":"2024-03-22 12:07:07.604",
-      "code":"InternalError.Algo",
-      "message":"video generation error"
+</code></pre></section><a id="任务执行失败"></a><section><a id="任务执行失败-h4"></a><h4>任务执行失败</h4><a id="code-block-5"></a><pre class="language-json"><code>{
+   &quot;request_id&quot;:&quot;4246a1de-2aab-9b49-ba87-e0d12e221a06&quot;,
+   &quot;output&quot;:{
+      &quot;task_id&quot;:&quot;53950fb7-281a-4e60-b543-xxxxxxxxxxxx&quot;,
+      &quot;task_status&quot;:&quot;FAILED&quot;,
+      &quot;submit_time&quot;:&quot;2024-03-22 12:07:07.183&quot;,
+      &quot;scheduled_time&quot;:&quot;2024-03-22 12:07:07.253&quot;,
+      &quot;end_time&quot;:&quot;2024-03-22 12:07:07.604&quot;,
+      &quot;code&quot;:&quot;InternalError.Algo&quot;,
+      &quot;message&quot;:&quot;video generation error&quot;
    }
 }
-```
+</code></pre></section></section></td></tr></tbody></table>
+
+<a id="状态码说明"></a>
+
+<a id="eYRtD"></a>
 
 ## 状态码说明
 
-DashScope阿里云百炼模型服务通用状态码请查阅：[错误码](raw/model-api-reference/preparations/error-code.md)。
+DashScope阿里云百炼模型服务通用状态码请查阅：[错误码](../../preparations/error-code.md)。
 
 此API还有特定状态码，具体如下所示：
 
-**HTTP状态码**
-
-**接口错误码（code）**
-
-**接口错误信息（message）**
-
-**含义说明**
-
-400
-
-InvalidParameter.JsonPhrase
-
-input json error
-
-输入JSON错误
-
-400
-
-InvalidParameter.FileDownload
-
-oss download error
-
-输入图像下载失败
-
-400
-
-InvalidParameter.ImageFormat
-
-read image error
-
-读取图像失败
-
-400
-
-InvalidParameter.ImageContent
-
-The image content does not comply with green network verification
-
-图像内容不合规
-
-400
-
-InvalidParameter
-
-the parameters must conform to the specification: xxx
-
-输入参数值超出范围
-
-400
-
-InvalidParameter.ImageResolution
-
-the size of input image is too small or too large
-
-输入图像的尺寸过小或者过大
-
-500
-
-InternalError.Algo
-
-algorithm process error
-
-算法错误
-
-500
-
-InternalError.FileUpload
-
-oss upload error
-
-文件上传失败
+| HTTP状态码 | 接口错误码（code） | 接口错误信息（message） | 含义说明 |
+| --- | --- | --- | --- |
+| 400 | InvalidParameter.JsonPhrase | input json error | 输入JSON错误 |
+| 400 | InvalidParameter.FileDownload | oss download error | 输入图像下载失败 |
+| 400 | InvalidParameter.ImageFormat | read image error | 读取图像失败 |
+| 400 | InvalidParameter.ImageContent | The image content does not comply with green network verification | 图像内容不合规 |
+| 400 | InvalidParameter | the parameters must conform to the specification: xxx | 输入参数值超出范围 |
+| 400 | InvalidParameter.ImageResolution | the size of input image is too small or too large | 输入图像的尺寸过小或者过大 |
+| 500 | InternalError.Algo | algorithm process error | 算法错误 |
+| 500 | InternalError.FileUpload | oss upload error | 文件上传失败 |

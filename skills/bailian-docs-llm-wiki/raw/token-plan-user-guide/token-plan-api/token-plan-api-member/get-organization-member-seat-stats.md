@@ -2,9 +2,17 @@
 
 查询组织成员统计信息，包含成员总数、管理员数、普通成员数、已分配席位成员数、未分配席位成员数。
 
+<a id="前提条件"></a>
+
+<a id="tpbb6827e85a"></a>
+
 ## 前提条件
 
 已获取阿里云账号或 RAM 用户的 AccessKey，并已为其授予调用本接口所需的 RAM 权限。建议将 AccessKey 配置为环境变量 `ALIBABA_CLOUD_ACCESS_KEY_ID` 和 `ALIBABA_CLOUD_ACCESS_KEY_SECRET`，避免明文写入代码。
+
+<a id="请求说明"></a>
+
+<a id="tpddac43fea6"></a>
 
 ## 请求说明
 
@@ -12,13 +20,9 @@
     
 -   **请求地址**
     
-    **地域**
-    
-    **Endpoint**
-    
-    华北2（北京）
-    
-    `GET [https://modelstudio.cn-beijing.aliyuncs.com/tokenplan/organization/member-seat-stats](https://modelstudio.cn-beijing.aliyuncs.com/tokenplan/organization/member-seat-stats)`
+    | 地域 | Endpoint |
+    | --- | --- |
+    | 华北2（北京） | `GET https://modelstudio.cn-beijing.aliyuncs.com/tokenplan/organization/member-seat-stats` |
     
 -   **认证方式**
     
@@ -27,65 +31,41 @@
     推荐使用阿里云 SDK 或 [OpenAPI Explorer](https://api.aliyun.com/api/ModelStudio/2026-02-10/GetOrganizationMemberSeatStats) 发起调用，可免去自行计算签名。
     
 
+<a id="请求参数"></a>
+
+<a id="tpf56162fb67"></a>
+
 ## 请求参数
 
 该接口无请求参数。
 
+<a id="返回参数"></a>
+
+<a id="tp8df6d1e902"></a>
+
 ## 返回参数
 
-**参数**
+| 参数 | 类型 | 描述 |
+| --- | --- | --- |
+| OrgId | string | 组织 ID |
+| TotalMemberCount | integer | 成员总数 |
+| OwnerRoleUserCount | integer | 主账号数（ORG\_OWNER 角色） |
+| AdminRoleUserCount | integer | 管理员数（ORG\_ADMIN 角色） |
+| MemberRoleUserCount | integer | 普通成员数（ORG\_MEMBER 角色） |
+| SeatedMemberCount | integer | 已分配席位成员数 |
+| UnseatedMemberCount | integer | 未分配席位成员数 |
 
-**类型**
+<a id="请求示例"></a>
 
-**描述**
-
-OrgId
-
-string
-
-组织 ID
-
-TotalMemberCount
-
-integer
-
-成员总数
-
-OwnerRoleUserCount
-
-integer
-
-主账号数（ORG\_OWNER 角色）
-
-AdminRoleUserCount
-
-integer
-
-管理员数（ORG\_ADMIN 角色）
-
-MemberRoleUserCount
-
-integer
-
-普通成员数（ORG\_MEMBER 角色）
-
-SeatedMemberCount
-
-integer
-
-已分配席位成员数
-
-UnseatedMemberCount
-
-integer
-
-未分配席位成员数
+<a id="tp6aedeab040"></a>
 
 ## 请求示例
 
 本接口使用阿里云 OpenAPI 签名，下例中 `${SIGNATURE}` 需按 `ACS3-HMAC-SHA256` 算法计算得出，`x-acs-date`、`x-acs-signature-nonce` 需替换为实际值。
 
-```
+<a id="code-block"></a>
+
+```bash
 curl -X GET "https://modelstudio.cn-beijing.aliyuncs.com/tokenplan/organization/member-seat-stats" \
     --header "x-acs-action: GetOrganizationMemberSeatStats" \
     --header "x-acs-version: 2026-02-10" \
@@ -95,9 +75,15 @@ curl -X GET "https://modelstudio.cn-beijing.aliyuncs.com/tokenplan/organization/
     --header "Authorization: ACS3-HMAC-SHA256 Credential=${ALIBABA_CLOUD_ACCESS_KEY_ID},SignedHeaders=host;x-acs-action;x-acs-content-sha256;x-acs-date;x-acs-signature-nonce;x-acs-version,Signature=${SIGNATURE}"
 ```
 
+<a id="返回示例"></a>
+
+<a id="tp856445eea3"></a>
+
 ## 返回示例
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "OrgId": "5ffd468b1e45db3c1cc26ad6",
   "TotalMemberCount": 12,
@@ -109,6 +95,10 @@ curl -X GET "https://modelstudio.cn-beijing.aliyuncs.com/tokenplan/organization/
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="tpdc99b51a5f"></a>
+
 ## 错误码
 
-如果调用失败，会返回错误信息。更多错误码及解决方法，请参见[错误信息](raw/model-api-reference/preparations/error-code.md)。
+如果调用失败，会返回错误信息。更多错误码及解决方法，请参见[错误信息](../../../model-api-reference/preparations/error-code.md)。

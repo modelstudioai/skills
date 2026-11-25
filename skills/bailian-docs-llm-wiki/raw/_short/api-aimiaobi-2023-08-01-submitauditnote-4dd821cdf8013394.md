@@ -2,13 +2,25 @@
 
 妙笔为您提供了与公有云“智能审校”模块中相同的上传自定义规则库的功能。由于鉴权限制，用户需要使用自定义规则库文件的 fileKey 作为入参才能顺利调用本接口。该接口在被调用后，会对用户的自定义规则库进行结构化处理，并生成一个 xlsx 格式的结构化解析结果。您可以调用 GetAuditNoteProcessingStatus 接口查询结构化处理状态，也可以调用 DownloadAuditNote 接口获取结构化之后的规则库。接口功能正在迭代中，预计会在未来使用可访问的文件 URL 作为入参。
 
+<a id="接口说明"></a>
+
+<a id="api-detail-51"></a>
+
 ## 接口说明
 
-全妙产品支持 iframe 嵌入 具体请参考文档： [客户对接\_全妙公有云 iframe 定制方案](raw/_short/iframe-embedding-scheme-6f73b86f9f7bdf41.md)
+全妙产品支持 iframe 嵌入 具体请参考文档： [客户对接\_全妙公有云 iframe 定制方案](iframe-embedding-scheme-6f73b86f9f7bdf41.md)
+
+<a id="调试"></a>
+
+<a id="api-doc-debug"></a>
 
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -27,137 +39,53 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-**操作**
+| 操作 | 访问级别 | 资源类型 | 条件关键字 | 关联操作 |
+| --- | --- | --- | --- | --- |
+| aimiaobi:SubmitAuditNote | none | \*全部资源<br><br>`*` | 无 | 无 |
 
-**访问级别**
+<a id="请求语法"></a>
 
-**资源类型**
-
-**条件关键字**
-
-**关联操作**
-
-aimiaobi:SubmitAuditNote
-
-none
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-53"></a>
 
 ## 请求语法
 
-```
+<a id="code-block"></a>
+
+```text
 POST  HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="api-detail-36"></a>
+
 ## 请求参数
 
-**名称**
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| WorkspaceId | string | 是 | 阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-xx |
+| FileKey | string | 是 | 阿里云 OSS 存储中，用户上传的规则库文件对应的 FileKey（注意：FileKey 生成方式见 [通用接口-文件上传下载 GenerateUploadConfig - 生成上传配置](https://next.api.aliyun.com/document/AiMiaoBi/2023-08-01/GenerateUploadConfig?spm=openapi-amp.newDocPublishment.0.0.18fc281fOiiBil)）。规则库文件只允许使用 docx, xlsx, pdf 格式，其中 xlsx 格式限制两列，且表头必须为“审校依据”和“依据出处”。上传 xlsx 格式能有更好的解析效果，但 docx 和 pdf 也会由系统自动解析。 | oss://default/your/file/key |
+| NoteId | string | 否 | 规则库 ID（不填默认是 Default ） | note\_id\_unique |
 
-**类型**
+<a id="返回参数"></a>
 
-**必填**
-
-**描述**
-
-**示例值**
-
-WorkspaceId
-
-string
-
-是
-
-阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)
-
-llm-xx
-
-FileKey
-
-string
-
-是
-
-阿里云 OSS 存储中，用户上传的规则库文件对应的 FileKey（注意：FileKey 生成方式见 [通用接口-文件上传下载 GenerateUploadConfig - 生成上传配置](https://next.api.aliyun.com/document/AiMiaoBi/2023-08-01/GenerateUploadConfig?spm=openapi-amp.newDocPublishment.0.0.18fc281fOiiBil)）。规则库文件只允许使用 docx, xlsx, pdf 格式，其中 xlsx 格式限制两列，且表头必须为“审校依据”和“依据出处”。上传 xlsx 格式能有更好的解析效果，但 docx 和 pdf 也会由系统自动解析。
-
-oss://default/your/file/key
-
-NoteId
-
-string
-
-否
-
-规则库 ID（不填默认是 Default ）
-
-note\_id\_unique
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-**名称**
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | Schema of Response |  |
+| RequestId | string | Id of the request | F2F366D6-E9FE-1006-BB70-2C650896AAB5 |
+| Success | boolean | 此次请求是否成功 | true |
+| Code | string | 状态码 | DataNotExists |
+| Message | string | 错误说明 | success |
+| HttpStatusCode | integer | http 状态码 | 200 |
+| Data | string | 本次提交规则库的任务 ID（taskId / TaskId），供之后的接口调用使用。 | xxx\_Default\_89123748917 |
 
-**类型**
+<a id="示例"></a>
 
-**描述**
-
-**示例值**
-
-object
-
-Schema of Response
-
-RequestId
-
-string
-
-Id of the request
-
-F2F366D6-E9FE-1006-BB70-2C650896AAB5
-
-Success
-
-boolean
-
-此次请求是否成功
-
-true
-
-Code
-
-string
-
-状态码
-
-DataNotExists
-
-Message
-
-string
-
-错误说明
-
-success
-
-HttpStatusCode
-
-integer
-
-http 状态码
-
-200
-
-Data
-
-string
-
-本次提交规则库的任务 ID（taskId / TaskId），供之后的接口调用使用。
-
-xxx\_Default\_89123748917
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -165,7 +93,9 @@ xxx\_Default\_89123748917
 
 `JSON`格式
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "RequestId": "F2F366D6-E9FE-1006-BB70-2C650896AAB5",
   "Success": true,
@@ -176,9 +106,17 @@ xxx\_Default\_89123748917
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
+
 ## 错误码
 
 访问[错误中心](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/errorCode)查看更多错误码。
+
+<a id="变更历史"></a>
+
+<a id="workbench-doc-change-demo"></a>
 
 ## 变更历史
 

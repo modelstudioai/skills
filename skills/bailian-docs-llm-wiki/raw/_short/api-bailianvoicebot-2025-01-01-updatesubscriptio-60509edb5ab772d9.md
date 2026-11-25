@@ -1,10 +1,18 @@
 # UpdateSubscription - 更新订阅信息
 
+<a id="调试"></a>
+
+<a id="api-detail-23"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
 [调试](https://api.aliyun.com/api/BailianVoiceBot/2025-01-01/UpdateSubscription)
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -23,208 +31,47 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-操作
+<table><thead><tr><th>操作</th><th>访问级别</th><th>资源类型</th><th>条件关键字</th><th>关联操作</th></tr></thead><tbody><tr><td>bailianvoicebot:UpdateSubscription</td><td>update</td><td><div><div>*全部资源</div><div><code>*</code></div></div></td><td><ul>无</ul></td><td>无</td></tr></tbody></table>
 
-访问级别
+<a id="请求参数"></a>
 
-资源类型
-
-条件关键字
-
-关联操作
-
-bailianvoicebot:UpdateSubscription
-
-update
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-36"></a>
 
 ## 请求参数
 
-名称
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| BusinessUnitId | string | 是 | 百炼业务空间 ID | llm-c11iig67g863rih8 |
+| MqType | string | 是 | 消息推送类型 | ROCKET\_MQ\_4 |
+| EventSubscriptions | array | 是 | 订阅事件列表 |  |
+|  | string | 是 | 订阅事件<br>Established - 接通<br>Released - 通话结束<br>RecordingReady - 录音就绪<br>CdrReady - 话单生成<br>LabelReady - 标签生成 | Released |
+| Endpoint | string | 否 | 接入点(使用 ROCKET\_MQ\_4、ROCKET\_MQ\_5 时必填) | rmq-cn-l4p89zajz67.cn-hangzhou.rmq.aliyuncs.com:8080 |
+| Topic | string | 否 | 队列 topic(使用 ROCKET\_MQ\_4、ROCKET\_MQ\_5 时必填) | test |
+| UserName | string | 否 | 用户名(使用 ROCKET\_MQ\_5 时必填) | username |
+| Password | string | 否 | 密码(使用 ROCKET\_MQ\_5 时必填) | pwd |
+| MqInstanceId | string | 否 | MQ 实例 ID(使用 ROCKET\_MQ\_5 时必填) | rmq-cn-l4p89zajz67.cn |
+| ProducerId | string | 否 | 生产者标识(使用 ROCKET\_MQ\_4 时必填) | user1 |
 
-类型
+<a id="返回参数"></a>
 
-必填
-
-描述
-
-示例值
-
-BusinessUnitId
-
-string
-
-是
-
-百炼业务空间 ID
-
-llm-c11iig67g863rih8
-
-MqType
-
-string
-
-是
-
-消息推送类型
-
-ROCKET\_MQ\_4
-
-EventSubscriptions
-
-array
-
-是
-
-订阅事件列表
-
-string
-
-是
-
-订阅事件  
-Established - 接通  
-Released - 通话结束  
-RecordingReady - 录音就绪  
-CdrReady - 话单生成  
-LabelReady - 标签生成
-
-Released
-
-Endpoint
-
-string
-
-否
-
-接入点(使用 ROCKET\_MQ\_4、ROCKET\_MQ\_5 时必填)
-
-rmq-cn-l4p89zajz67.cn-hangzhou.rmq.aliyuncs.com:8080
-
-Topic
-
-string
-
-否
-
-队列 topic(使用 ROCKET\_MQ\_4、ROCKET\_MQ\_5 时必填)
-
-test
-
-UserName
-
-string
-
-否
-
-用户名(使用 ROCKET\_MQ\_5 时必填)
-
-username
-
-Password
-
-string
-
-否
-
-密码(使用 ROCKET\_MQ\_5 时必填)
-
-pwd
-
-MqInstanceId
-
-string
-
-否
-
-MQ 实例 ID(使用 ROCKET\_MQ\_5 时必填)
-
-rmq-cn-l4p89zajz67.cn
-
-ProducerId
-
-string
-
-否
-
-生产者标识(使用 ROCKET\_MQ\_4 时必填)
-
-user1
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-名称
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | Schema of Response |  |
+| RequestId | string | Id of the request | D771A1B6-3D5F-174A-BEE1-98CE1000D337 |
+| HttpStatusCode | integer | http 状态码 | 200 |
+| Message | string | 信息。 | Instance llm-rj6aqmctjcit4acy does not exist. |
+| Code | string | 接口状态或 POP 错误码。 | OK |
+| Data | string | 返回结果（应用 ID） | a395011f-a247-400f-bc69-28796749fd52 |
+| Params | array | 动态错误参数 |  |
+| param | string | 动态错误参数 | llm-xdne77rxe14ziszr |
 
-类型
+<a id="示例"></a>
 
-描述
-
-示例值
-
-object
-
-Schema of Response
-
-RequestId
-
-string
-
-Id of the request
-
-D771A1B6-3D5F-174A-BEE1-98CE1000D337
-
-HttpStatusCode
-
-integer
-
-http 状态码
-
-200
-
-Message
-
-string
-
-信息。
-
-Instance llm-rj6aqmctjcit4acy does not exist.
-
-Code
-
-string
-
-接口状态或 POP 错误码。
-
-OK
-
-Data
-
-string
-
-返回结果（应用 ID）
-
-a395011f-a247-400f-bc69-28796749fd52
-
-Params
-
-array
-
-动态错误参数
-
-param
-
-string
-
-动态错误参数
-
-llm-xdne77rxe14ziszr
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -232,7 +79,9 @@ llm-xdne77rxe14ziszr
 
 `JSON`格式
 
-```
+<a id="code-block"></a>
+
+```text
 {
   "RequestId": "D771A1B6-3D5F-174A-BEE1-98CE1000D337",
   "HttpStatusCode": 200,
@@ -245,20 +94,20 @@ llm-xdne77rxe14ziszr
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
+
 ## 错误码
 
 访问[错误中心](https://api.aliyun.com/document/BailianVoiceBot/2025-01-01/errorCode)查看更多错误码。
 
+<a id="变更历史"></a>
+
+<a id="workbench-doc-change-demo"></a>
+
 ## 变更历史
 
-变更时间
-
-变更内容概要
-
-操作
-
-2026-04-22
-
-新增 OpenAPI
-
-[查看变更详情](https://api.aliyun.com/document/BailianVoiceBot/2025-01-01/UpdateSubscription?updateTime=2026-04-22#workbench-doc-change-demo)
+| 变更时间 | 变更内容概要 | 操作 |
+| --- | --- | --- |
+| 2026-04-22 | 新增 OpenAPI | [查看变更详情](https://api.aliyun.com/document/BailianVoiceBot/2025-01-01/UpdateSubscription?updateTime=2026-04-22#workbench-doc-change-demo) |

@@ -6,31 +6,38 @@
 -   **音频能力**：支持自动配音或上传音频，实现声画同步。
 -   **多镜头叙事**：可生成包含多个镜头的视频，镜头切换时保持主体一致。
 
-**快速入口：**在线体验（[北京](https://bailian.console.aliyun.com/cn-beijing/model/experience/vision)｜[新加坡](https://bailian.console.aliyun.com/ap-southeast-1/model/experience/vision)｜[弗吉尼亚](https://bailian.console.aliyun.com/us-east-1/model/experience/vision)）**｜**[API参考](raw/model-api-reference/video-generation-api/wan-api-reference/image-to-video-general-api-reference.md)
+**快速入口：**在线体验（[北京](https://bailian.console.aliyun.com/cn-beijing/model/experience/vision)｜[新加坡](https://bailian.console.aliyun.com/ap-southeast-1/model/experience/vision)｜[弗吉尼亚](https://bailian.console.aliyun.com/us-east-1/model/experience/vision)）**｜**[API参考](../model-api-reference/video-generation-api/wan-api-reference/image-to-video-general-api-reference.md)
+
+<a id="快速开始"></a>
+
+<a id="50d2617eabkrl"></a>
 
 ## 快速开始
 
-**输入提示词**
+|  |  |  |  |
+| --- | --- | --- | --- |
+| **输入提示词** | **输入首视频片段（2秒）** | **输入尾帧图像** | **输出视频（12秒，续写10秒）** |
+| 男人低头向下看到地上的木箱，他弯下腰，小心翼翼打开箱盖，他紧盯着箱内的东西，嘴唇颤抖的微微张开，皱着眉头，眼睛微微张大，露出惊恐的表情。 |  | ![wan2](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9000146771/p1067170.webp) |  |
 
-**输入首视频片段（2秒）**
+调用前，先[获取与配置 API Key](../model-api-reference/preparations/get-api-key.md)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。通过SDK调用，请[安装DashScope SDK](../model-api-reference/preparations/install-sdk.md)。
 
-**输入尾帧图像**
+<a id="sec-tabs"></a>
 
-**输出视频（12秒，续写10秒）**
+<a id="python-sdk"></a>
 
-男人低头向下看到地上的木箱，他弯下腰，小心翼翼打开箱盖，他紧盯着箱内的东西，嘴唇颤抖的微微张开，皱着眉头，眼睛微微张大，露出惊恐的表情。
-
-![wan2](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9000146771/p1067170.webp)
-
-调用前，先[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。通过SDK调用，请[安装DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
+<a id="python-sdk-h4"></a>
 
 #### Python SDK
 
-**重要**请确保 DashScope Python SDK版本**不低于 1.25.16**，再运行以下代码。
+> **重要**
+>
+> 请确保 DashScope Python SDK版本**不低于 1.25.16**，再运行以下代码。
+>
+> 若版本过低，可能会触发 "url error, please check url!" 等错误。请参考[安装SDK](../model-api-reference/preparations/install-sdk.md)进行更新。
 
-若版本过低，可能会触发 "url error, please check url!" 等错误。请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
+<a id="code-block"></a>
 
-```
+```python
 # -*- coding: utf-8 -*-
 from http import HTTPStatus
 from dashscope import VideoSynthesis
@@ -76,13 +83,21 @@ if __name__ == '__main__':
     sample_sync_call()
 ```
 
+<a id="java-sdk"></a>
+
+<a id="java-sdk-h4"></a>
+
 #### Java SDK
 
-**重要**请确保 DashScope Java SDK版本**不低于 2.22.14**，再运行以下代码。
+> **重要**
+>
+> 请确保 DashScope Java SDK版本**不低于 2.22.14**，再运行以下代码。
+>
+> 若版本过低，可能会触发 "url error, please check url!" 等错误。请参考[安装SDK](../model-api-reference/preparations/install-sdk.md)进行更新。
 
-若版本过低，可能会触发 "url error, please check url!" 等错误。请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
+<a id="code-block-2"></a>
 
-```
+```java
 // Copyright (c) Alibaba, Inc. and its affiliates.
 
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesis;
@@ -149,10 +164,17 @@ public class Image2Video {
 }
 ```
 
+<a id="curl"></a>
+
+<a id="curl-h4"></a>
+
 #### curl
 
 **步骤1：创建任务获取任务ID**
-```
+
+<a id="code-block-3"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
     -H 'X-DashScope-Async: enable' \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -181,11 +203,14 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     }
 }'
 ```
+
 **步骤2：根据任务ID获取结果**
 
-将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
 
-```
+<a id="code-block-4"></a>
+
+```bash
 curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id} \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
@@ -194,7 +219,9 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 
 > `video_url` 有效期24小时，请及时下载视频。
 
-```
+<a id="code-block-5"></a>
+
+```json
 {
     "request_id": "c1209113-8437-424f-a386-xxxxxx",
     "output": {
@@ -207,41 +234,56 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 }
 ```
 
+<a id="适用范围"></a>
+
+<a id="06f39eafa2dwt"></a>
+
 ## 适用范围
 
 -   各地域支持的模型有所差异，且资源相互独立。各地域支持的模型请参见[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)。
 -   调用时，确保**模型、Endpoint URL 和 API Key 均属于同一地域**，跨地域调用将会失败。
 
-**说明**示例代码适用于**北京地域**。
+> **说明**
+>
+> 示例代码适用于**北京地域**。
+
+<a id="核心能力"></a>
+
+<a id="dbdc7e40e2alh"></a>
 
 ## 核心能力
+
+<a id="首帧生视频"></a>
+
+<a id="749d152fe2ule"></a>
 
 ### 首帧生视频
 
 **支持模型**：`wan2.7系列模型`。
 
-**参数设置**：`media` 数组中的 `type` 字段支持以下两种组合，素材组合详见[如何输入素材](https://help.aliyun.com/zh/model-studio/wan-image-to-video-guide#69308edfbebnx)。
+**参数设置**：`media` 数组中的 `type` 字段支持以下两种组合，素材组合详见[如何输入素材](wan-image-to-video-guide-5ad4d6cc1d9411ab.md#69308edfbebnx)。
 
 -   **首帧**：设置`type`为`first_frame`，模型自动为视频配音。
 -   **首帧+音频**：设置`type`为`first_frame`和 `driving_audio`，模型依据音频驱动视频生成（如口型同步、动作卡点）。
 
-**输入提示词**
+|  |  |  |
+| --- | --- | --- |
+| **输入提示词** | **输入首帧图像** | **输出视频** |
+| 一幅都市奇幻艺术的场景。一个充满动感的涂鸦艺术角色。一个由喷漆所画成的少年，正从一面混凝土墙上活过来。他一边用极快的语速演唱一首英文rap，一边摆着一个经典的、充满活力的说唱歌手姿势。场景设定在夜晚一个充满都市感的铁路桥下。灯光来自一盏孤零零的街灯，营造出电影般的氛围，充满高能量和惊人的细节。视频的音频部分完全由rap构成，没有其他对话或杂音。 | ![rap](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9000146771/p1067184.png)<br><br>**输入音频**： |  |
 
-**输入首帧图像**
+<a id="sec-tabs-2"></a>
 
-**输出视频**
+<a id="python-sdk-2"></a>
 
-一幅都市奇幻艺术的场景。一个充满动感的涂鸦艺术角色。一个由喷漆所画成的少年，正从一面混凝土墙上活过来。他一边用极快的语速演唱一首英文rap，一边摆着一个经典的、充满活力的说唱歌手姿势。场景设定在夜晚一个充满都市感的铁路桥下。灯光来自一盏孤零零的街灯，营造出电影般的氛围，充满高能量和惊人的细节。视频的音频部分完全由rap构成，没有其他对话或杂音。
-
-![rap](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9000146771/p1067184.png)
-
-**输入音频**：
+<a id="python-sdk-2-h4"></a>
 
 #### Python SDK
 
-> 请确保 DashScope Python SDK版本不低于 `1.25.16` ，可参考 [安装SDK](raw/model-api-reference/preparations/install-sdk.md) 进行更新。
+> 请确保 DashScope Python SDK版本不低于 `1.25.16` ，可参考 [安装SDK](../model-api-reference/preparations/install-sdk.md) 进行更新。
 
-```
+<a id="code-block-6"></a>
+
+```python
 # -*- coding: utf-8 -*-
 from http import HTTPStatus
 from dashscope import VideoSynthesis
@@ -287,11 +329,17 @@ if __name__ == '__main__':
     sample_sync_call()
 ```
 
+<a id="java-sdk-2"></a>
+
+<a id="java-sdk-2-h4"></a>
+
 #### Java SDK
 
-> 请确保 DashScope Java SDK版本不低于 `2.22.14` ，可参考 [安装SDK](raw/model-api-reference/preparations/install-sdk.md) 进行更新。
+> 请确保 DashScope Java SDK版本不低于 `2.22.14` ，可参考 [安装SDK](../model-api-reference/preparations/install-sdk.md) 进行更新。
 
-```
+<a id="code-block-7"></a>
+
+```java
 // Copyright (c) Alibaba, Inc. and its affiliates.
 
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesis;
@@ -358,10 +406,17 @@ public class Image2Video {
 }
 ```
 
+<a id="curl-2"></a>
+
+<a id="curl-2-h4"></a>
+
 #### curl
 
 **步骤1：创建任务获取任务ID**
-```
+
+<a id="code-block-8"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
     -H 'X-DashScope-Async: enable' \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -390,11 +445,14 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     }
 }'
 ```
+
 **步骤2：根据任务ID获取结果**
 
-将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
 
-```
+<a id="code-block-9"></a>
+
+```bash
 curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id} \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
@@ -403,7 +461,9 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 
 > `video_url` 有效期24小时，请及时下载视频。
 
-```
+<a id="code-block-10"></a>
+
+```json
 {
     "request_id": "c1209113-8437-424f-a386-xxxxxx",
     "output": {
@@ -416,34 +476,37 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 }
 ```
 
+<a id="首尾帧生视频"></a>
+
+<a id="e6474e88a33a2"></a>
+
 ### 首尾帧生视频
 
 **支持模型**：`wan2.7系列模型`。
 
-**参数设置**：`media` 数组中的 `type` 字段支持以下两种组合，素材组合详见[如何输入素材](https://help.aliyun.com/zh/model-studio/wan-image-to-video-guide#69308edfbebnx)。
+**参数设置**：`media` 数组中的 `type` 字段支持以下两种组合，素材组合详见[如何输入素材](wan-image-to-video-guide-5ad4d6cc1d9411ab.md#69308edfbebnx)。
 
 -   **首帧+尾帧**：设置`type`为`first_frame`和`last_frame`，模型自动为视频配音。
 -   **首帧+尾帧+音频**：设置`type`为`first_frame`、`last_frame`和 `driving_audio`，模型依据音频驱动视频生成。
 
-**输入提示词**
+|  |  |  |  |
+| --- | --- | --- | --- |
+| **输入提示词** | **输入首帧图像** | **输入尾帧图像** | **输出视频** |
+| 清晨太阳刚刚升起，在南瓜地里面，有一颗小南瓜上面挂着露珠，突然小南瓜"咔擦"一声，出现了裂缝，从裂缝中透出金光，小南瓜伴随着金光裂开，出现一团白雾，一只小兔子在南瓜裂开的南瓜中央出现。 | ![wan2](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9000146771/p1067182.webp) | ![wan2](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9000146771/p1067183.webp) |  |
 
-**输入首帧图像**
+<a id="sec-tabs-3"></a>
 
-**输入尾帧图像**
+<a id="python-sdk-3"></a>
 
-**输出视频**
-
-清晨太阳刚刚升起，在南瓜地里面，有一颗小南瓜上面挂着露珠，突然小南瓜"咔擦"一声，出现了裂缝，从裂缝中透出金光，小南瓜伴随着金光裂开，出现一团白雾，一只小兔子在南瓜裂开的南瓜中央出现。
-
-![wan2](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9000146771/p1067182.webp)
-
-![wan2](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9000146771/p1067183.webp)
+<a id="python-sdk-3-h4"></a>
 
 #### Python SDK
 
-> 请确保 DashScope Python SDK版本不低于 `1.25.16` ，可参考 [安装SDK](raw/model-api-reference/preparations/install-sdk.md) 进行更新。
+> 请确保 DashScope Python SDK版本不低于 `1.25.16` ，可参考 [安装SDK](../model-api-reference/preparations/install-sdk.md) 进行更新。
 
-```
+<a id="code-block-11"></a>
+
+```python
 # -*- coding: utf-8 -*-
 from http import HTTPStatus
 from dashscope import VideoSynthesis
@@ -489,11 +552,17 @@ if __name__ == '__main__':
     sample_sync_call()
 ```
 
+<a id="java-sdk-3"></a>
+
+<a id="java-sdk-3-h4"></a>
+
 #### Java SDK
 
-> 请确保 DashScope Java SDK版本不低于 `2.22.14` ，可参考 [安装SDK](raw/model-api-reference/preparations/install-sdk.md) 进行更新。
+> 请确保 DashScope Java SDK版本不低于 `2.22.14` ，可参考 [安装SDK](../model-api-reference/preparations/install-sdk.md) 进行更新。
 
-```
+<a id="code-block-12"></a>
+
+```java
 // Copyright (c) Alibaba, Inc. and its affiliates.
 
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesis;
@@ -560,10 +629,17 @@ public class Image2Video {
 }
 ```
 
+<a id="curl-3"></a>
+
+<a id="curl-3-h4"></a>
+
 #### curl
 
 **步骤1：创建任务获取任务ID**
-```
+
+<a id="code-block-13"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
     -H 'X-DashScope-Async: enable' \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -591,14 +667,21 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     }
 }'
 ```
+
 **步骤2：根据任务ID获取结果**
 
-将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
 
-```
+<a id="code-block-14"></a>
+
+```bash
 curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id} \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
+
+<a id="视频续写"></a>
+
+<a id="c8f7bf1cbb7o2"></a>
 
 ### 视频续写
 
@@ -606,40 +689,48 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 
 对输入的首段视频进行内容续写。生成结果包含原始输入片段，其时长计入总生成时长。例如：输入2秒视频，输出设为 12 秒，则最终生成 12 秒视频（原始 2 秒 + 续写 10 秒）。
 
-**参数设置**：`media` 数组中的 `type` 字段支持以下两种组合，素材组合详见[如何输入素材](https://help.aliyun.com/zh/model-studio/wan-image-to-video-guide#69308edfbebnx)。
+**参数设置**：`media` 数组中的 `type` 字段支持以下两种组合，素材组合详见[如何输入素材](wan-image-to-video-guide-5ad4d6cc1d9411ab.md#69308edfbebnx)。
 
 -   **首视频片段**：设置`type`为`first_clip`，续写视频。
 -   **首视频片段+尾帧续写**：设置`type`为`first_clip`和`last_frame`，在续写首视频的同时控制视频结束状态与尾帧一致。
 
+<a id="sec-tabs-4"></a>
+
+<a id="首视频片段续写"></a>
+
+<a id="首视频片段续写-h4"></a>
+
 #### 首视频片段续写
 
-**输入提示词**
+|  |  |  |
+| --- | --- | --- |
+| **输入提示词** | **输入首视频片段（2秒）** | **输出视频（12秒，续写10秒）** |
+| 面包师端上刷好的面包，将刷子放到一旁，镜头跟随面包师，去斜后方的烤炉进行烤制，面包师关上烤炉门，他站在烤炉旁边，看着正在烤炉里的面包，闻了闻面包的香气，说："so good"。 |  |  |
 
-**输入首视频片段（2秒）**
+<a id="首视频片段-尾帧续写"></a>
 
-**输出视频（12秒，续写10秒）**
-
-面包师端上刷好的面包，将刷子放到一旁，镜头跟随面包师，去斜后方的烤炉进行烤制，面包师关上烤炉门，他站在烤炉旁边，看着正在烤炉里的面包，闻了闻面包的香气，说："so good"。
+<a id="首视频片段-尾帧续写-h4"></a>
 
 #### 首视频片段+尾帧续写
 
-**输入提示词**
+|  |  |  |  |
+| --- | --- | --- | --- |
+| **输入提示词** | **输入首视频片段（2秒）** | **输入尾帧图像** | **输出视频（12秒，续写10秒）** |
+| 男人低头向下看到地上的木箱，他弯下腰，小心翼翼打开箱盖，他紧盯着箱内的东西，嘴唇颤抖的微微张开，皱着眉头，眼睛微微张大，露出惊恐的表情。 |  | ![wan2](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9000146771/p1067170.webp) |  |
 
-**输入首视频片段（2秒）**
+<a id="sec-tabs-5"></a>
 
-**输入尾帧图像**
+<a id="python-sdk-4"></a>
 
-**输出视频（12秒，续写10秒）**
-
-男人低头向下看到地上的木箱，他弯下腰，小心翼翼打开箱盖，他紧盯着箱内的东西，嘴唇颤抖的微微张开，皱着眉头，眼睛微微张大，露出惊恐的表情。
-
-![wan2](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9000146771/p1067170.webp)
+<a id="python-sdk-4-h4"></a>
 
 #### Python SDK
 
-> 请确保 DashScope Python SDK版本不低于 `1.25.16` ，可参考 [安装SDK](raw/model-api-reference/preparations/install-sdk.md) 进行更新。
+> 请确保 DashScope Python SDK版本不低于 `1.25.16` ，可参考 [安装SDK](../model-api-reference/preparations/install-sdk.md) 进行更新。
 
-```
+<a id="code-block-15"></a>
+
+```python
 # -*- coding: utf-8 -*-
 from http import HTTPStatus
 from dashscope import VideoSynthesis
@@ -681,11 +772,17 @@ if __name__ == '__main__':
     sample_sync_call()
 ```
 
+<a id="java-sdk-4"></a>
+
+<a id="java-sdk-4-h4"></a>
+
 #### Java SDK
 
-> 请确保 DashScope Java SDK版本不低于 `2.22.14` ，可参考 [安装SDK](raw/model-api-reference/preparations/install-sdk.md) 进行更新。
+> 请确保 DashScope Java SDK版本不低于 `2.22.14` ，可参考 [安装SDK](../model-api-reference/preparations/install-sdk.md) 进行更新。
 
-```
+<a id="code-block-16"></a>
+
+```java
 // Copyright (c) Alibaba, Inc. and its affiliates.
 
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesis;
@@ -745,10 +842,17 @@ public class Image2Video {
 }
 ```
 
+<a id="curl-4"></a>
+
+<a id="curl-4-h4"></a>
+
 #### curl
 
 **步骤1：创建任务获取任务ID**
-```
+
+<a id="code-block-17"></a>
+
+```bash
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
     -H 'X-DashScope-Async: enable' \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -772,24 +876,39 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     }
 }'
 ```
+
 **步骤2：根据任务ID获取结果**
 
-将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
 
-```
+<a id="code-block-18"></a>
+
+```bash
 curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id} \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
+
+<a id="如何输入素材"></a>
+
+<a id="69308edfbebnx"></a>
 
 ## 如何输入素材
 
 通过 **media** 数组传入素材，每个元素需指定 `type`和 `url`，每种 `type` 在 `media` 数组中最多出现一次。
 
-**说明**仅支持以下特定的素材组合，传入其他组合将报错。
+> **说明**
+>
+> 仅支持以下特定的素材组合，传入其他组合将报错。
+
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-首帧生视频-tab"></a>
 
 首帧生视频
 
-```
+<a id="code-code-group-首帧生视频"></a>
+
+```json
 // 组合一：首帧，自动配音
 {
   "media": [
@@ -806,9 +925,13 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 }
 ```
 
+<a id="fig-code-group-首尾帧生视频-tab"></a>
+
 首尾帧生视频
 
-```
+<a id="code-code-group-首尾帧生视频"></a>
+
+```json
 // 组合一：首帧+尾帧，自动配音
 {
   "media": [
@@ -827,9 +950,13 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 }
 ```
 
+<a id="fig-code-group-视频续写-tab"></a>
+
 视频续写
 
-```
+<a id="code-code-group-视频续写"></a>
+
+```json
 // 组合一：首视频片段
 {
   "media": [
@@ -846,6 +973,10 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 }
 ```
 
+<a id="输入图像"></a>
+
+<a id="32d9db99f1fk0"></a>
+
 #### 输入图像
 
 -   **图像数量**：首帧 (`type=first_frame`)最多传入 1 张；尾帧 (`type=last_frame`)最多传入 1 张。
@@ -854,7 +985,7 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
     
     -   **公网URL**：支持HTTP或HTTPS协议。示例：[](https://xxxx/xxx.png)[https://xxxx/xxx.png](https://xxxx/xxx.png)。
         
-    -   **临时URL**：支持OSS协议，必须通过[上传文件获取临时 URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。示例：oss://dashscope-instant/xxx/xxx.png。
+    -   **临时URL**：支持OSS协议，必须通过[上传文件获取临时 URL](../model-api-reference/more-about-models/get-temporary-file-url.md)。示例：oss://dashscope-instant/xxx/xxx.png。
         
     -   **Base64 编码字符串**：遵循 `data:{MIME_type};base64,{base64_data}` 的格式，其中：
         
@@ -862,30 +993,18 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
             
         -   {MIME\_type}：图像的媒体类型，需与文件格式对应。
             
-            **图像格式**
+            | 图像格式 | MIME Type |
+            | --- | --- |
+            | JPEG | image/jpeg |
+            | JPG | image/jpeg |
+            | PNG | image/png |
+            | BMP | image/bmp |
+            | WEBP | image/webp |
             
-            **MIME Type**
-            
-            JPEG
-            
-            image/jpeg
-            
-            JPG
-            
-            image/jpeg
-            
-            PNG
-            
-            image/png
-            
-            BMP
-            
-            image/bmp
-            
-            WEBP
-            
-            image/webp
-            
+
+<a id="输入音频"></a>
+
+<a id="17c6080c55s2p"></a>
 
 #### 输入音频
 
@@ -894,7 +1013,11 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 -   **输入方式**：
     
     -   **公网URL**：支持HTTP或HTTPS协议。示例：[](https://xxxx/xxx.mp3)[https://xxxx/xxx.mp3](https://xxxx/xxx.mp3)。
-    -   **临时URL**：支持OSS协议，必须通过[上传文件获取临时 URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。示例：oss://dashscope-instant/xxx/xxx.mp3。
+    -   **临时URL**：支持OSS协议，必须通过[上传文件获取临时 URL](../model-api-reference/more-about-models/get-temporary-file-url.md)。示例：oss://dashscope-instant/xxx/xxx.mp3。
+
+<a id="输入视频"></a>
+
+<a id="ef929fa88eo3j"></a>
 
 #### 输入视频
 
@@ -903,13 +1026,17 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 -   **输入方式**：
     
     -   **公网URL**：支持HTTP或HTTPS协议。示例：[](https://xxxx/xxx.mp4)[https://xxxx/xxx.mp4](https://xxxx/xxx.mp4)。
-    -   **临时URL**：支持OSS协议，必须通过[上传文件获取临时 URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。示例：oss://dashscope-instant/xxx/xxx.mp4。
+    -   **临时URL**：支持OSS协议，必须通过[上传文件获取临时 URL](../model-api-reference/more-about-models/get-temporary-file-url.md)。示例：oss://dashscope-instant/xxx/xxx.mp4。
+
+<a id="输出视频"></a>
+
+<a id="80761d0d13me6"></a>
 
 ## 输出视频
 
 -   **视频数量**：1个。
     
--   **输出视频规格**：不同模型支持的输出规格有所差异，详见[适用范围](https://help.aliyun.com/zh/model-studio/image-to-video-guide#06f39eafa2dwt)。
+-   **输出视频规格**：不同模型支持的输出规格有所差异，详见[适用范围](../model-user-guide/use-cases/legacy-resources/legacy-video-generation/image-to-video-guide.md#06f39eafa2dwt)。
     
 -   **输出视频URL有效期**：**24小时**。
     
@@ -918,23 +1045,39 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
     模型会保持输入素材（首帧图像或首视频片段）的原始宽高比，在该比例下将总像素数缩放至 `resolution` 对应的目标值附近，并自动微调宽高为 16 的整数倍。
     
 
+<a id="计费与限流"></a>
+
+<a id="6f5774ce5fqie"></a>
+
 ## 计费与限流
 
--   免费额度和计费单价详见[模型价格](https://help.aliyun.com/zh/model-studio/model-pricing#27fb5ee25b6gv)。
+-   免费额度和计费单价详见[模型价格](../model-user-guide/test-1/model-pricing.md#27fb5ee25b6gv)。
     
--   限流详见[万相系列](raw/model-user-guide/get-started-with-models/rate-limit.md)。
+-   限流详见[万相系列](../model-user-guide/get-started-with-models/rate-limit.md)。
     
 -   计费说明：
     
     -   输入不计费，输出按成功生成的**视频秒数**计费。
-    -   调用失败或处理错误不产生费用，也不消耗[新人免费额度](raw/model-user-guide/test-1/new-free-quota.md)。
+    -   调用失败或处理错误不产生费用，也不消耗[新人免费额度](../model-user-guide/test-1/new-free-quota.md)。
     -   图生视频还支持[节省计划](https://help.aliyun.com/zh/model-studio/billing-for-model-studio)。
+
+<a id="api文档"></a>
+
+<a id="a847ef6c2ecvj"></a>
 
 ## API文档
 
-[万相-图生视频2.7 API参考](raw/model-api-reference/video-generation-api/wan-api-reference/image-to-video-general-api-reference.md)
+[万相-图生视频2.7 API参考](../model-api-reference/video-generation-api/wan-api-reference/image-to-video-general-api-reference.md)
+
+<a id="常见问题"></a>
+
+<a id="01dd2cf1ff8ql"></a>
 
 ## 常见问题
+
+<a id="q-wan2-7-i2v与wan2-6-i2v及早期系列模型有什么区别"></a>
+
+<a id="955be72511vvt"></a>
 
 #### Q: wan2.7-i2v与wan2.6-i2v及早期系列模型有什么区别？
 
@@ -943,6 +1086,10 @@ A：相比wan2.6-i2v及早期系列模型，wan2.7-i2v 新增了以下能力：
 -   支持首帧生视频、首尾帧生视频、视频续写三大任务（早期模型仅支持首帧生视频）。
 -   通过 media 数组统一传入图像、音频、视频等多模态素材（早期模型仅支持通过 img\_url 传入图像）。
 
+<a id="q-wan2-7模型如何制作多镜头视频"></a>
+
+<a id="556cf15871rin"></a>
+
 #### Q：wan2.7模型如何制作多镜头视频？
 
 A：在 prompt 中指定镜头结构即可，支持以下方式：
@@ -950,6 +1097,10 @@ A：在 prompt 中指定镜头结构即可，支持以下方式：
 -   直接指定：在 prompt 中写明"生成多镜头视频"。
 -   分镜或时间戳：按时间段描述每个镜头，例如"第1个镜头全景，男孩边唱rap边跳舞"、"第1个镜头全景\[1-5秒\] 男孩边唱rap边跳舞，第2个镜头全景\[6-10秒\] 镜头切换至观众欢呼"。
 -   如未明确指定镜头类型，模型将根据 prompt 内容自行判断。
+
+<a id="q-为什么不能直接设置视频宽高比-如-16-9"></a>
+
+<a id="d4c9286243gjf"></a>
 
 #### Q：为什么不能直接设置视频宽高比（如 16:9）？
 

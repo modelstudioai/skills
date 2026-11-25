@@ -4,7 +4,11 @@
 
 如果您希望将知识库部署在本地，实现灵活的文档切分与嵌入模型选择，请参考本文档进行操作。
 
-> 如果您希望将知识库部署在云端，直观、快速地创建RAG应用，请使用阿里云百炼提供的[0代码构建RAG应用](raw/_short/build-knowledge-base-qa-assistant-without-coding-117468a8b3869dc4.md)功能。
+> 如果您希望将知识库部署在云端，直观、快速地创建RAG应用，请使用阿里云百炼提供的[0代码构建RAG应用](https://help.aliyun.com/zh/model-studio/build-knowledge-base-qa-assistant-without-coding)功能。
+
+<a id="方案概览"></a>
+
+<a id="e4656b7d9bf1o"></a>
 
 ## 方案概览
 
@@ -20,15 +24,27 @@ RAG应用能够根据用户提供的文档生成回复，有效缓解大模型�
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3766150671/CAEQTxiBgIDQpsfajhkiIDdjMTcxOGI0YjE5MTQ5ZTliMjExM2ZkMTc2MmM3ZDNk4654209_20240908222357.501.svg)
 
+<a id="搭建示例应用"></a>
+
+<a id="49e77d74548ym"></a>
+
 ## 搭建示例应用
 
 您仅需3步就可以搭建示例应用：
+
+<a id="1-解压文件"></a>
+
+<a id="b91232e354cb4"></a>
 
 ### 1\. 解压文件
 
 下载[local\_rag.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9010.zip)并解压，您可以看到如下图所示的目录结构：![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4139126271/p845330.png)
 
 其中`File/Structured`用于存放用户上传的结构化数据，`File/Unstructured`用于存放用户上传的非结构化数据；`images`中的两张图片用于设置对话角色的头像；`VectorStore`用于存放用户创建的知识库。
+
+<a id="2-配置计算环境"></a>
+
+<a id="46dee420d0179"></a>
 
 ### 2.配置计算环境
 
@@ -42,33 +58,51 @@ RAG应用能够根据用户提供的文档生成回复，有效缓解大模型�
 
 本应用默认使用阿里云百炼提供的嵌入模型API。如果您计划使用本地部署的嵌入模型，可以参考以下内容：
 
+<a id="accordion-使用本地部署的嵌入模型"></a>
+
 使用本地部署的嵌入模型
 
 1.  请在`local_rag`目录下运行以下命令（以下载通义实验室提供的**GTE文本向量-中文-通用领域-large**模型为例），将嵌入模型下载到`local_rag/modelscope`文件夹中：
     
     > 如果您使用Windows系统，且系统中缺少Microsoft Visual C++ Redistributable包，请前往[Microsoft Visual C++ Redistributable 下载链接](https://aka.ms/vs/16/release/vc_redist.x64.exe)进行下载。
     
+    <a id="fig-code-group"></a>
+    
+    <a id="fig-code-group-macos-linux-tab"></a>
+    
     macOS/Linux
     
-    ```
+    <a id="code-code-group-macos-linux"></a>
+    
+    ```bash
     modelscope download --model 'iic/nlp_gte_sentence-embedding_chinese-large' --local_dir 'modelscope/iic/nlp_gte_sentence-embedding_chinese-large'
     ```
     
+    <a id="fig-code-group-windows-tab"></a>
+    
     Windows
     
-    ```
+    <a id="code-code-group-windows"></a>
+    
+    ```powershell
     modelscope download --model iic/nlp_gte_sentence-embedding_chinese-large --local_dir modelscope/iic/nlp_gte_sentence-embedding_chinese-large
     ```
     
 2.  更改`chat.py`与`create_kb.py`中的嵌入模型配置部分，将以下部分取消注释：
     
 
-```
+<a id="code-block"></a>
+
+```python
 # from langchain_community.embeddings import ModelScopeEmbeddings
 # from llama_index.embeddings.langchain import LangchainEmbedding
 # embeddings = ModelScopeEmbeddings(model_id="modelscope/iic/nlp_gte_sentence-embedding_chinese-large")
 # EMBED_MODEL = LangchainEmbedding(embeddings)
 ```
+
+<a id="3-运行应用"></a>
+
+<a id="cfba259ff4m1r"></a>
 
 ### 3.运行应用
 
@@ -78,11 +112,19 @@ RAG应用能够根据用户提供的文档生成回复，有效缓解大模型�
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4139126271/p845412.png)
 
+<a id="传入知识文件"></a>
+
+<a id="683e3409ad6wm"></a>
+
 ## 传入知识文件
 
 您可以通过以下两种方法之一向RAG应用传入知识文件：
 
 > 若同时使用两种方法，RAG应用会优先参考临时性文件。
+
+<a id="传入临时性文件"></a>
+
+<a id="f8c294fe16tvw"></a>
 
 ### 传入临时性文件
 
@@ -91,6 +133,10 @@ RAG应用能够根据用户提供的文档生成回复，有效缓解大模型�
 > 支持传入的文件类型有：pdf、docx、txt、xlsx、csv。
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4139126271/p845422.png)
+
+<a id="上传数据并创建知识库"></a>
+
+<a id="be19b21ba6q8e"></a>
 
 ### 上传数据并创建知识库
 
@@ -112,9 +158,17 @@ RAG应用能够根据用户提供的文档生成回复，有效缓解大模型�
     
     ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4139126271/p845429.png)
 
+<a id="优化回复效果"></a>
+
+<a id="c02330be9eqk6"></a>
+
 ## 优化回复效果
 
 您可以参考以下方法，来优化RAG应用的回复效果。
+
+<a id="修改模型参数与rag参数"></a>
+
+<a id="37efbb41d2n4h"></a>
 
 ### 修改模型参数与RAG参数
 
@@ -148,21 +202,41 @@ RAG应用能够根据用户提供的文档生成回复，有效缓解大模型�
     该参数会剔除已被选择的相关文本段中，相似度低于该值的文本段。该值越大，模型可获得的参考信息越少，但无用信息可能减少。该值为0时，表示不对**召回片段**进行剔除**。**
     
 
+<a id="优化切分方法"></a>
+
+<a id="70ddf1c72a0j6"></a>
+
 ### 优化切分方法
 
 RAG应用会对文档进行切分，不同文档有不同的最佳切分策略。在创建知识库的过程中，本应用针对结构化数据的切分进行了优化；对于非结构化数据，本应用采用了LlamaIndex默认的切分策略。您可以根据您的文档内容，进行定制化的切分。
+
+<a id="更换嵌入模型"></a>
+
+<a id="31d3056152sil"></a>
 
 ### 更换嵌入模型
 
 嵌入模型对于检索过程十分重要，对于同一个知识文件，不同的嵌入模型可能有不同的表现。您可以尝试更换嵌入模型，查看召回的效果，以选出最符合您业务场景的嵌入模型。
 
+<a id="优化提示词"></a>
+
+<a id="9884806071e9y"></a>
+
 ### 优化提示词
 
 您可以在`chat.py`中找到`prompt_template`参数，并根据您的使用场景进行改写，使得大模型的回复更符合业务预期。
 
+<a id="通过-api-调用"></a>
+
+<a id="86aa4764bd8ey"></a>
+
 ## 通过 API 调用
 
 如果您需要通过 API 调用，请单击 Gradio 界面下方的**通过 API 使用**，通过 Gradio 自动生成的 API 文档将本地 RAG 应用集成到您的业务场景中。
+
+<a id="总结"></a>
+
+<a id="a9088c4d4bu98"></a>
 
 ## 总结
 

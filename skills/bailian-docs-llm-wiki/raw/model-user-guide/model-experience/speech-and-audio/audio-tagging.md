@@ -2,6 +2,8 @@
 
 对录制好的音频或视频文件进行异步打标，获取带时间信息的语音、音效、背景声及整段录音的场景描述。
 
+<a id="功能介绍"></a>
+
 ## 功能介绍
 
 -   **全信息音频转写与摘要**：支持对输入音频中的语音内容、说话人信息，时间戳，环境声、音效、背景音乐等多维信息进行全要素提取与语义转写，并能自动生成结构化的音频内容摘要。
@@ -9,13 +11,17 @@
 -   **复杂场景音轨分离**：专为多人对话及重叠声学环境优化，能够精准提取并分离不同说话人语音以及背景音频要素，显著提升复杂音频场景下的解析质量。
 -   **高效音频剪辑与标注**：能够输出毫秒级的时间戳与多轨标记，方便后续音频自动化剪辑、轴线对齐以及大规模数据集的自动化标注与处理。
 
+<a id="开始使用"></a>
+
 ## 开始使用
 
 以下示例以华北2（北京）为例。在百炼控制台[获取 API Key](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key)，将其设为环境变量 `DASHSCOPE_API_KEY` 的值，并将示例中的 `{WorkspaceId}` 替换为同一地域的[业务空间 ID](https://bailian.console.aliyun.com/cn-beijing/settings/workspace)。
 
 以下 Python 示例提交一段普通话录音，等待任务完成后，下载并解析各声道的标注结果。
 
-```
+<a id="code-block"></a>
+
+```python
 import json
 import os
 import time
@@ -54,6 +60,8 @@ for channel in result["transcripts"]:
 
 示例按声道输出标注结果，包括语音及其时间位置、音效和背景声，以及整段录音的场景描述。
 
+<a id="输入要求"></a>
+
 ## 输入要求
 
 -   输入方式：每次提交一个公网可直接下载的音频或视频文件 URL。
@@ -62,12 +70,22 @@ for channel in result["transcripts"]:
 -   采样率：不低于 8 kHz。
 -   语种：中文、英语、日语、韩语、法语、德语、西班牙语。
 
+<a id="支持的模型"></a>
+
 ## 支持的模型
+
+<a id="sec-tabs"></a>
+
+<a id="华北2-北京"></a>
+
+<a id="华北2-北京-h4"></a>
 
 #### 华北2（北京）
 
 -   **Qwen-Audio-3.1-Captioner：**qwen-audio-3.1-captioner
 
+<a id="api-参考"></a>
+
 ## API 参考
 
--   [音频打标 HTTP API](raw/model-api-reference/audio-api-directory/qwen-audio-asr-captioner-http-api.md)
+-   [音频打标 HTTP API](../../../model-api-reference/audio-api-directory/qwen-audio-asr-captioner-http-api.md)

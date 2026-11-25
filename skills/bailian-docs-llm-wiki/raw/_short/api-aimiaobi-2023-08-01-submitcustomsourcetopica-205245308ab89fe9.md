@@ -2,9 +2,17 @@
 
 从自定义数据源提交选题热点分析
 
+<a id="调试"></a>
+
+<a id="api-doc-debug"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -23,251 +31,42 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-**操作**
+| 操作 | 访问级别 | 资源类型 | 条件关键字 | 关联操作 |
+| --- | --- | --- | --- | --- |
+| aimiaobi:SubmitCustomSourceTopicAnalysis | create | \*全部资源<br><br>`*` | 无 | 无 |
 
-**访问级别**
+<a id="请求参数"></a>
 
-**资源类型**
-
-**条件关键字**
-
-**关联操作**
-
-aimiaobi:SubmitCustomSourceTopicAnalysis
-
-create
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-36"></a>
 
 ## 请求参数
 
-**名称**
-
-**类型**
-
-**必填**
-
-**描述**
-
-**示例值**
-
-FileUrl
-
-string
-
-否
-
-文件 URL（FileUrl 与 News 二选一）（文件的结构请参考 News 字段）
-
-[http://www.example.com/xxx.json](http://www.example.com/xxx.json)
-
-FileType
-
-string
-
-否
-
-文件类型（json: json 数组格式，jsonLine：json 行格式）
-
-json
-
-MaxTopicSize
-
-integer
-
-否
-
-最大分析的话题数量（默认情况下 会按照聚类后的新闻数量倒排，取 TOP50 进行话题分析，最大 200 条 ）
-
-50
-
-News
-
-array<object>
-
-否
-
-新闻列表（FileUrl 与 News 二选一）
-
-array<object>
-
-否
-
-新闻对象
-
-Title
-
-string
-
-否
-
-新闻标题
-
-新闻标题
-
-Content
-
-string
-
-否
-
-新闻正文
-
-新闻正文
-
-Url
-
-string
-
-否
-
-新闻 URL
-
-[http://www.example.com/xxx.html](http://www.example.com/xxx.html)
-
-Comments
-
-array<object>
-
-否
-
-评论列表
-
-object
-
-否
-
-评论对象
-
-Text
-
-string
-
-否
-
-评论内容
-
-评论内容
-
-PubTime
-
-string
-
-否
-
-发布时间(格式为： YYYY-MM-dd HH:mm:ss)
-
-2024-01-22 10:29:00
-
-Source
-
-string
-
-否
-
-新闻来源
-
-百度
-
-WorkspaceId
-
-string
-
-是
-
-[百炼业务空间 ID](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)
-
-llm-xx
-
-AnalysisTypes
-
-array
-
-否
-
-选题热点要分析的类型（多选，不传默认分析全部。 传空数组，默认不做选题热点分析，仅聚类。） HotViewPoints： 热门选题视角分析 WebReviewPoints： 网友选题视角分析（需要有评论） TimedViewPoints：时效性选题视角分析 FreshViewPoints：新颖视角分析 TopicSummary：新闻摘要分析
-
-string
-
-否
-
-选题热点要分析的类型
-
-TimedViewPoints
-
-Topics
-
-array<object>
-
-否
-
-话题列表
-
-object
-
-否
-
-话题对象
-
-Topic
-
-string
-
-否
-
-话题名称
-
-话题名称
-
-News
-
-array
-
-否
-
-新闻列表
-
-[HottopicNews](raw/_short/api-aimiaobi-2023-08-01-hottopicnews-779e2b5c8de53e3e.md)
-
-否
-
-新闻对象
-
-CustomField
-
-string
-
-否
-
-自定义字段，后续可以根据 ListHotTopics 接口使用该字段筛选。
-
-xxx
-
-TopicUrl
-
-string
-
-否
-
-话题 URL，无其他作用，仅供 ListHotTopics 透传作用
-
-[https://www.example.com/topic/123](https://www.example.com/topic/123)
-
-TopicsFileUrl
-
-string
-
-否
-
-话题列表 URL(使用 json line 格式，每行是一个 json)
-
-[http://www.example.com/xxx.jsonline](http://www.example.com/xxx.jsonline)
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| FileUrl | string | 否 | 文件 URL（FileUrl 与 News 二选一）（文件的结构请参考 News 字段） | [http://www.example.com/xxx.json](http://www.example.com/xxx.json) |
+| FileType | string | 否 | 文件类型（json: json 数组格式，jsonLine：json 行格式） | json |
+| MaxTopicSize | integer | 否 | 最大分析的话题数量（默认情况下 会按照聚类后的新闻数量倒排，取 TOP50 进行话题分析，最大 200 条 ） | 50 |
+| News | array<object> | 否 | 新闻列表（FileUrl 与 News 二选一） |  |
+|  | array<object> | 否 | 新闻对象 |  |
+| Title | string | 否 | 新闻标题 | 新闻标题 |
+| Content | string | 否 | 新闻正文 | 新闻正文 |
+| Url | string | 否 | 新闻 URL | [http://www.example.com/xxx.html](http://www.example.com/xxx.html) |
+| Comments | array<object> | 否 | 评论列表 |  |
+|  | object | 否 | 评论对象 |  |
+| Text | string | 否 | 评论内容 | 评论内容 |
+| PubTime | string | 否 | 发布时间(格式为： YYYY-MM-dd HH:mm:ss) | 2024-01-22 10:29:00 |
+| Source | string | 否 | 新闻来源 | 百度 |
+| WorkspaceId | string | 是 | [百炼业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-xx |
+| AnalysisTypes | array | 否 | 选题热点要分析的类型（多选，不传默认分析全部。 传空数组，默认不做选题热点分析，仅聚类。） HotViewPoints： 热门选题视角分析 WebReviewPoints： 网友选题视角分析（需要有评论） TimedViewPoints：时效性选题视角分析 FreshViewPoints：新颖视角分析 TopicSummary：新闻摘要分析 |  |
+|  | string | 否 | 选题热点要分析的类型 | TimedViewPoints |
+| Topics | array<object> | 否 | 话题列表 |  |
+|  | object | 否 | 话题对象 |  |
+| Topic | string | 否 | 话题名称 | 话题名称 |
+| News | array | 否 | 新闻列表 |  |
+|  | [HottopicNews](api-aimiaobi-2023-08-01-hottopicnews-779e2b5c8de53e3e.md) | 否 | 新闻对象 |  |
+| CustomField | string | 否 | 自定义字段，后续可以根据 ListHotTopics 接口使用该字段筛选。 | xxx |
+| TopicUrl | string | 否 | 话题 URL，无其他作用，仅供 ListHotTopics 透传作用 | [https://www.example.com/topic/123](https://www.example.com/topic/123) |
+| TopicsFileUrl | string | 否 | 话题列表 URL(使用 json line 格式，每行是一个 json) | [http://www.example.com/xxx.jsonline](http://www.example.com/xxx.jsonline) |
 
 支持两种分析模式
 
@@ -281,14 +80,16 @@ string
     
     1.  待分析的内容为 话题列表 对象 具体结构 请参考：Topics 字段
     2.  Topics 字段与 TopicsFileUrl 字段二选一
-3.  支持将分析结果导出为 json 或者 excel。参考[导出接口](raw/_short/api-aimiaobi-2023-08-01-exportcustomsourceanalys-dde5bfb67e895c5b.md)的 ExportType 字段
+3.  支持将分析结果导出为 json 或者 excel。参考[导出接口](api-aimiaobi-2023-08-01-exportcustomsourceanalys-dde5bfb67e895c5b.md)的 ExportType 字段
     
-4.  最佳实践请参考：[妙策自定义数据源最佳实践](https://help.aliyun.com/zh/model-studio/best-practices-for-miaoce-api#42209ec83blza)
+4.  最佳实践请参考：[妙策自定义数据源最佳实践](best-practices-for-miaoce-api-0c799d74212f1c13.md#42209ec83blza)
     
 
 fileUrl 示例格式为：
 
-```
+<a id="code-block"></a>
+
+```json
 [
   {
     "Content": "这是一篇关于人工智能技术的示例文章。人工智能正在快速发展，在各个领域都有广泛应用。从自动驾驶到医疗诊断，AI 技术正在改变我们的生活方式。",
@@ -318,81 +119,27 @@ fileUrl 示例格式为：
 ]
 ```
 
+<a id="返回参数"></a>
+
+<a id="api-detail-41"></a>
+
 ## 返回参数
 
-**名称**
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | PlainResult |  |
+| Code | string | 状态码 | NoData |
+| Data | object | 业务数据 |  |
+| TaskId | string | 任务唯一 ID | 3f7045e099474ba28ceca1b4eb6d6e21 |
+| TaskName | string | 任务名称 | 任务名称 |
+| HttpStatusCode | integer | http 状态码 | 200 |
+| Message | string | 错误说明 | success |
+| RequestId | string | 请求唯一标识 | 1813ceee-7fe5-41b4-87e5-982a4d18cca5 |
+| Success | boolean | 是否成功：true 成功，false 失败 | true |
 
-**类型**
+<a id="示例"></a>
 
-**描述**
-
-**示例值**
-
-object
-
-PlainResult
-
-Code
-
-string
-
-状态码
-
-NoData
-
-Data
-
-object
-
-业务数据
-
-TaskId
-
-string
-
-任务唯一 ID
-
-3f7045e099474ba28ceca1b4eb6d6e21
-
-TaskName
-
-string
-
-任务名称
-
-任务名称
-
-HttpStatusCode
-
-integer
-
-http 状态码
-
-200
-
-Message
-
-string
-
-错误说明
-
-success
-
-RequestId
-
-string
-
-请求唯一标识
-
-1813ceee-7fe5-41b4-87e5-982a4d18cca5
-
-Success
-
-boolean
-
-是否成功：true 成功，false 失败
-
-true
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -400,7 +147,9 @@ true
 
 `JSON`格式
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "Code": "NoData",
   "Data": {
@@ -414,25 +163,21 @@ true
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
+
 ## 错误码
 
-**HTTP status code**
-
-**错误码**
-
-**错误信息**
-
-**描述**
-
-403
-
-NoPermission
-
-You are not authorized to perform this action.
-
-请检查workspaceId的赋值
+| HTTP status code | 错误码 | 错误信息 | 描述 |
+| --- | --- | --- | --- |
+| 403 | NoPermission | You are not authorized to perform this action. | 请检查workspaceId的赋值 |
 
 访问[错误中心](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/errorCode)查看更多错误码。
+
+<a id="变更历史"></a>
+
+<a id="workbench-doc-change-demo"></a>
 
 ## 变更历史
 

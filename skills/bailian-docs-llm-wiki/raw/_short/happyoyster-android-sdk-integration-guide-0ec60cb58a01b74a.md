@@ -4,7 +4,11 @@
 
 HappyOyster 是一个 AI 世界探索产品。通过集成 HappyOyster Android SDK，你的 App 可以进入由 AI 实时生成的“世界”，以**世界探索（adventure）**、**实时导演（directing）**或**角色演绎（acting）**三种模式进行实时互动视频体验。
 
-本文面向集成方 Android 开发者，覆盖安装、鉴权、完整接入流程、事件处理与最佳实践，说明如何稳定接入。具体 API（签名、参数、返回、错误码、数据模型）请参考 [HappyOyster Android SDK API Reference](raw/_short/happyoyster-android-sdk-api-reference-2e55bd454caa0124.md)。
+本文面向集成方 Android 开发者，覆盖安装、鉴权、完整接入流程、事件处理与最佳实践，说明如何稳定接入。具体 API（签名、参数、返回、错误码、数据模型）请参考 [HappyOyster Android SDK API Reference](happyoyster-android-sdk-api-reference-2e55bd454caa0124.md)。
+
+<a id="能做什么"></a>
+
+<a id="ho-android-bp-s1h"></a>
 
 ## 能做什么
 
@@ -17,45 +21,38 @@ HappyOyster 是一个 AI 世界探索产品。通过集成 HappyOyster Android S
 -   **过程控制**：暂停 / 恢复（实时导演与角色演绎）、回溯（仅实时导演）、结束（三种模式均可）。
 -   **状态与错误回调**：通过事件监听实时感知体验状态与异常。
 
-**说明**SDK 不负责世界的创建与管理，也不直接暴露底层实时通信细节——这些由你的服务端或 SDK 内部处理。你只需聚焦“开始体验 → 播放 → 互动 → 结束”。
+> **说明**
+>
+> SDK 不负责世界的创建与管理，也不直接暴露底层实时通信细节——这些由你的服务端或 SDK 内部处理。你只需聚焦“开始体验 → 播放 → 互动 → 结束”。
+
+<a id="安装"></a>
+
+<a id="ho-android-bp-s2h"></a>
 
 ## 安装
 
 HappyOyster SDK（`cn.happyoyster:opensdk`）发布在 **Maven Central**；其底层实时通信引擎（阿里云 ARTC）发布在**阿里云 Maven**。两个仓库都需要声明。
 
+<a id="环境要求"></a>
+
+<a id="ho-android-bp-s2ah"></a>
+
 ### 环境要求
 
-**项**
-
-**要求**
-
-minSdk
-
-24（Android 7.0）及以上
-
-compileSdk
-
-36
-
-JDK
-
-11 字节码目标（宿主工具链建议 JDK 11 及以上）
-
-语言
-
-Kotlin（协程 `suspend` API）
-
-ABI
-
-`arm64-v8a` / `armeabi-v7a`（实时通信引擎含 native 库）
-
-网络
-
-需要可访问公网
+| 项 | 要求 |
+| --- | --- |
+| minSdk | 24（Android 7.0）及以上 |
+| compileSdk | 36 |
+| JDK | 11 字节码目标（宿主工具链建议 JDK 11 及以上） |
+| 语言 | Kotlin（协程 `suspend` API） |
+| ABI | `arm64-v8a` / `armeabi-v7a`（实时通信引擎含 native 库） |
+| 网络 | 需要可访问公网 |
 
 在工程根 `settings.gradle.kts` 中加入仓库：
 
-```
+<a id="code-block"></a>
+
+```kotlin
 dependencyResolutionManagement {
     repositories {
         google()
@@ -67,7 +64,9 @@ dependencyResolutionManagement {
 
 在 [Maven Central](https://central.sonatype.com/artifact/cn.happyoyster/opensdk) 查看最新正式发布的 Release，将下方 `<version>` 替换为该具体版本号，在模块 `build.gradle.kts` 中添加依赖：
 
-```
+<a id="code-block-2"></a>
+
+```kotlin
 dependencies {
     implementation("cn.happyoyster:opensdk:<version>")
 }
@@ -75,7 +74,13 @@ dependencies {
 
 使用具体版本号锁定依赖；升级前请阅读发布说明，升级后重新编译宿主代码。
 
-**说明**SDK 以瘦 AAR 形式发布，不内嵌任何第三方依赖；实时通信引擎等传递依赖在解析时自动从上述仓库拉取，因此**阿里云 Maven 仓库必不可少**，缺失会导致 `com.aliyun.aio:AliVCSDK_ARTC` 解析失败。
+> **说明**
+>
+> SDK 以瘦 AAR 形式发布，不内嵌任何第三方依赖；实时通信引擎等传递依赖在解析时自动从上述仓库拉取，因此**阿里云 Maven 仓库必不可少**，缺失会导致 `com.aliyun.aio:AliVCSDK_ARTC` 解析失败。
+
+<a id="权限"></a>
+
+<a id="ho-android-bp-s2dh"></a>
 
 ### 权限
 
@@ -83,19 +88,27 @@ SDK 库自身仅声明 `INTERNET`。实时通信引擎会自动合并少量网�
 
 **宿主必须自行声明**：当你的 `targetSdk` 为 33 及以上时，需在宿主 `AndroidManifest.xml` 声明通知权限（实时通信引擎包含前台服务）：
 
-```
+<a id="code-block-3"></a>
+
+```xml
 <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 ```
 
 **世界探索模式（`sendCommand`）建议声明录音权限**：世界探索模式的实时控制指令通过一路**静音音频流**建立“推流者身份”并承载上行通道，SDK **不会录制或上传你的真实音频**。`RECORD_AUDIO` **并非 DataChannel 的硬前置**——即使未授予，静音流仍以推流者身份存在、上行通道通常可用。但为兼顾各机型的稳定性，仍**建议**：如果你的 App 会用到 `sendCommand`，在宿主 `AndroidManifest.xml` 声明该权限，并在调用前于运行时申请。
 
-```
+<a id="code-block-4"></a>
+
+```xml
 <uses-permission android:name="android.permission.RECORD_AUDIO" />
 ```
 
 **关于错误码 `105004`**：`105004` 表示实时通道未就绪 / 发送失败（如 DataChannel 连接中断或实时通道异常），**并非缺少权限的必然结果**——它不由未授予 `RECORD_AUDIO` 直接触发。实时导演模式（`sendInstruct`）与视频播放不受影响。若你的 App 不使用世界探索模式，则无需该权限。
 
 如需裁剪合并进来的权限，可用 `tools:node="remove"`。
+
+<a id="鉴权模型"></a>
+
+<a id="ho-android-bp-s3h"></a>
 
 ## 鉴权模型
 
@@ -108,16 +121,22 @@ SDK **不获取、不刷新** token，保持轻量。鉴权分两层：
 
 构造 `SDKConfig` 时遗漏 `model` 会编译失败；传入空白 `model` 时，`initialize` 同步抛出 `SDKError(100002)`（`raw = "SDKConfig.model must not be blank"`），不会创建或替换 runtime，也不会发起网络请求。**API Host、model 与注入的 API Key 必须匹配所需的账号、区域和模型授权**，否则网关通常返回 AccessDenied（运行期以 `SDKError(106003)` 抛出，`AccessDenied` 原文见 `SDKError.raw`；排查清单见 API Reference 错误码表 `106003` 行）。出于安全，强烈建议客户端注入**服务端签发的短期 token**作为 Bearer，而非把长期 API Key 打包进 App 或写入代码仓库。
 
-**说明**
+> **说明**
+>
+> **地域合规提示：**
+>
+> -   为支持适用法律法规及数据合规要求的落实，如您的目标用户包括美国用户，您必须在 SDK 初始化时为面向该等用户的服务配置美国地区 API Host。
+> -   开发者应确保配置正确，并依法承担因未按上述要求配置所产生的相应责任。
 
-**地域合规提示：**
+<a id="快速开始"></a>
 
--   为支持适用法律法规及数据合规要求的落实，如您的目标用户包括美国用户，您必须在 SDK 初始化时为面向该等用户的服务配置美国地区 API Host。
--   开发者应确保配置正确，并依法承担因未按上述要求配置所产生的相应责任。
+<a id="ho-android-bp-s4h"></a>
 
 ## 快速开始
 
-```
+<a id="code-block-5"></a>
+
+```kotlin
 import cn.happyoyster.opensdk.*   // 入口类均在此包下：HappyOyster、SDKConfig、TravelStatusValue、ModeValue、SDKError 等
 
 // 跟踪当前体验状态与本次 Travel 元数据，互动前据此判断是否可发送。
@@ -213,9 +232,13 @@ lifecycleScope.launch {
 lifecycleScope.launch { HappyOyster.endTravel() }
 ```
 
+<a id="事件订阅与错误处理"></a>
+
+<a id="ho-android-bp-s5h"></a>
+
 ## 事件订阅与错误处理
 
-用 `onStatusChanged` 驱动宿主状态机与互动能力门控；用 `onError` 统一接收运行时错误。事件接口与完整错误码见 [HappyOyster Android SDK API Reference](raw/_short/happyoyster-android-sdk-api-reference-2e55bd454caa0124.md)。
+用 `onStatusChanged` 驱动宿主状态机与互动能力门控；用 `onError` 统一接收运行时错误。事件接口与完整错误码见 [HappyOyster Android SDK API Reference](happyoyster-android-sdk-api-reference-2e55bd454caa0124.md)。
 
 **必须**
 
@@ -231,17 +254,33 @@ lifecycleScope.launch { HappyOyster.endTravel() }
 
 -   重复注册监听但不 removeListener。
 
+<a id="指令发送-sendinstruct-与-sendcommand"></a>
+
+<a id="ho-android-bp-s6h"></a>
+
 ## 指令发送：sendInstruct 与 sendCommand
+
+<a id="sendinstruct-实时导演-角色演绎"></a>
+
+<a id="ho-android-bp-s6ah"></a>
 
 ### sendInstruct（实时导演 / 角色演绎）
 
-`sendInstruct` 用于实时导演（directing）与角色演绎下发送文本指令驱动画面，在 `running` 或 `paused` 状态均可调用。paused 态下 SDK 不会自动 resume——由宿主决定是否先调用 `resumeTravel` 再发 instruct（节流、状态校验等契约细节见 [API Reference](raw/_short/happyoyster-android-sdk-api-reference-2e55bd454caa0124.md)）。角色演绎世界的 `creationModel` 恒为 `Simple`，因此 ScriptList 限制只作用于实时导演。
+`sendInstruct` 用于实时导演（directing）与角色演绎下发送文本指令驱动画面，在 `running` 或 `paused` 状态均可调用。paused 态下 SDK 不会自动 resume——由宿主决定是否先调用 `resumeTravel` 再发 instruct（节流、状态校验等契约细节见 [API Reference](happyoyster-android-sdk-api-reference-2e55bd454caa0124.md)）。角色演绎世界的 `creationModel` 恒为 `Simple`，因此 ScriptList 限制只作用于实时导演。
+
+<a id="sendcommand-世界探索模式"></a>
+
+<a id="ho-android-bp-s6bh"></a>
 
 ### sendCommand（世界探索模式）
 
-`sendCommand` 用于世界探索模式（adventure）下发送方向 / 视角 / 动作控制指令，仅 `running` 有效。SDK 内置 42 ms（24fps）latest-wins 节流，宿主可按游戏帧率高频调用，SDK 自动合并；无需宿主手动限速。**单次动作调用一次即可；持续动作需按帧续调、松手时显式发一次 `None` 复位**（单次 / 持续最佳实践、节流 / 失败透出等契约细节见 [API Reference](raw/_short/happyoyster-android-sdk-api-reference-2e55bd454caa0124.md)）。
+`sendCommand` 用于世界探索模式（adventure）下发送方向 / 视角 / 动作控制指令，仅 `running` 有效。SDK 内置 42 ms（24fps）latest-wins 节流，宿主可按游戏帧率高频调用，SDK 自动合并；无需宿主手动限速。**单次动作调用一次即可；持续动作需按帧续调、松手时显式发一次 `None` 复位**（单次 / 持续最佳实践、节流 / 失败透出等契约细节见 [API Reference](happyoyster-android-sdk-api-reference-2e55bd454caa0124.md)）。
 
 推荐做法：在宿主的世界探索模式互动界面提供三组独立指令入口（移动方向 + 视角方向 + 动作交互），维护三组当前按下状态，并在每次调用时发送完整的三字段快照。未按下的维度填 `"None"`；如果不同维度同时按下，必须保留并发送各维度当前值，不能因为更新一个维度就把其他维度重置为 `"None"`。
+
+<a id="暂停-恢复-回溯"></a>
+
+<a id="ho-android-bp-s7h"></a>
 
 ## 暂停 / 恢复 / 回溯
 
@@ -255,7 +294,11 @@ lifecycleScope.launch { HappyOyster.endTravel() }
 
 **回溯**：`rewindTravel` 仅在 `paused` 状态可用；回溯后服务端自动 resume，SDK 自动重连 RTC，无需宿主干预。典型序列：`pause` → `wait:paused` → `rewindTravel(sec)`。回溯秒数 `rewindToSec` 应取 4 的整数倍（如 4、8、12），非整数倍由服务端向下取整（如 7→4），实际生效秒数以返回的 `resumedAtSec` 为准。**仅实时导演支持回溯**：在角色演绎与世界探索模式下调用 `rewindTravel`，会被 SDK **在本地**以 `103003` 拒绝，不会发出任何 HTTP 请求；宿主应**隐藏**回溯入口，而不是只把按钮置灰。
 
-异步语义、3× 重试退避（resumeTravel 退避 1 s / 2 s / 3 s）等契约细节见 [HappyOyster Android SDK API Reference](raw/_short/happyoyster-android-sdk-api-reference-2e55bd454caa0124.md)。
+异步语义、3× 重试退避（resumeTravel 退避 1 s / 2 s / 3 s）等契约细节见 [HappyOyster Android SDK API Reference](happyoyster-android-sdk-api-reference-2e55bd454caa0124.md)。
+
+<a id="日志"></a>
+
+<a id="ho-android-bp-s8h"></a>
 
 ## 日志
 
@@ -264,7 +307,9 @@ SDK Logcat tag：`HappyOysterSDK`。SDK 提供两路互不影响的日志输出�
 -   **内置 Logcat（默认关闭）**：仅当 `SDKConfig.logcatEnabled = true` 时 SDK 才写 Logcat（默认 `false`，完全静默）。`SDKConfig.logLevel` 过滤其最低等级，默认 `INFO` 已含重建会话所需的生命周期锚点（初始化、Travel 起止 / 状态迁移、RTC 入会 / 首帧）；仅看报错可降为 `WARN`，深入排障可升到 `DEBUG` / `VERBOSE`。`logLevel` 不影响 `logHandler`。
 -   **宿主回调 `logHandler`（推荐）**：接收 SDK 每一条 `LogRecord`（全量 firehose），与 `logLevel` / `logcatEnabled` 完全独立，可转发到宿主自有日志系统（Logcat、文件、崩溃平台等）。回调须**快速、非阻塞**且禁止在回调内回调 SDK；回调抛出的异常被静默捕获；`LogRecord.message` 已脱敏，不含 Bearer token、`ticket`、RTC token 等明文。
 
-```
+<a id="code-block-6"></a>
+
+```kotlin
 HappyOyster.initialize(
     context,
     SDKConfig(
@@ -278,12 +323,19 @@ HappyOyster.initialize(
     ),
 )
 ```
-```
+
+<a id="code-block-7"></a>
+
+```bash
 adb logcat -s HappyOysterSDK          # 仅内置 Logcat 开启时有输出
 adb logcat -s HappyOysterSDK MyApp    # 同时查看宿主 App 日志（MyApp 换成你的 tag）
 ```
 
 **会话与请求对账**：日志中的 `travelId`（即 `encryptedTravelId`）以**全值**输出，是发往服务端的会话键——排查某次会话或提工单时附上它，即可对齐客户端与服务端日志。每条 HTTP 响应日志还带服务端 `requestId`（`reqId=` 字段，缺失时为 `-`）用于定位单次请求；该 ID 仅出现在日志中，不进入任何公开返回值。
+
+<a id="生命周期与内存"></a>
+
+<a id="ho-android-bp-s9h"></a>
 
 ## 生命周期与内存
 
@@ -293,15 +345,27 @@ adb logcat -s HappyOysterSDK MyApp    # 同时查看宿主 App 日志（MyApp �
 -   `attachVideo()` 返回的 View 在结束时从布局移除（`container.removeAllViews()`），并 `removeListener`。
 -   SDK 只持有 application context，你也不要把 Activity 传给 SDK。
 
+<a id="协程与线程"></a>
+
+<a id="ho-android-bp-s10h"></a>
+
 ## 协程与线程
 
 -   业务方法是 `suspend`，可在任意 coroutine context 的 `lifecycleScope` / `viewModelScope` 中调用；SDK 会在内部主 dispatcher 协调状态与 RTC 操作，HTTP 仍不阻塞主线程。
 -   调用方取消 coroutine 时，SDK 会取消该调用仍在途的 HTTP 请求（如有），并原样传播 `CancellationException`，不会转换为 `SDKError`；不要把它当成业务错误捕获或吞掉。取消不代表服务端已经受理的请求会被回滚。
 -   `attachVideo()`、`sendCommand()` 在主线程调用；离主线程调用会同步抛出 `IllegalStateException`。
 
+<a id="token-管理"></a>
+
+<a id="ho-android-bp-s11h"></a>
+
 ## token 管理
 
 -   Bearer API Key 有效期有限，建议在进入体验前确保 token 新鲜；收到 `onError(101002)`（token 过期）时重新获取 Bearer Key 并 `updateToken`，无需重新换取 ticket。
+
+<a id="错误恢复"></a>
+
+<a id="ho-android-bp-s12h"></a>
 
 ## 错误恢复
 
@@ -309,12 +373,20 @@ adb logcat -s HappyOysterSDK MyApp    # 同时查看宿主 App 日志（MyApp �
 -   对网络抖动（`106001`）和上游服务临时异常（`106003`）：可做有限次重试。
 -   初始化同步抛出 `100002` 时，为 `model` 空白；填写完整模型名称及版本后重新初始化。非空 `model` 的名称 / 版本错误、模型已下线、尚未发布或未授权时，网关通常返回 AccessDenied 并映射为 `106003`；结合 `SDKError.raw` 检查 `model`、API Host、API Key 的账号与区域是否匹配。
 
-（致命 / 非致命分类见 [HappyOyster Android SDK API Reference](raw/_short/happyoyster-android-sdk-api-reference-2e55bd454caa0124.md) 错误码节。）
+（致命 / 非致命分类见 [HappyOyster Android SDK API Reference](happyoyster-android-sdk-api-reference-2e55bd454caa0124.md) 错误码节。）
+
+<a id="模式适配"></a>
+
+<a id="ho-android-bp-s13h"></a>
 
 ## 模式适配
 
 -   用 `startTravel` 返回的 `mode` 决定可开放的交互能力：实时导演与角色演绎使用文本指令 `sendInstruct`（角色演绎额外用 `aspectRatio` 定播放器方向，隐藏回溯），世界探索模式使用控制指令 `sendCommand`。
--   世界探索模式（adventure）可选用重载 `startTravel(ticket, maxExperienceTimeSec)` 限制本次体验最大时长（秒，到时自动结束）；合法档位由服务端配置（当前 `60` / `90` / `120`，默认 `60`），实时导演与角色演绎 忽略该值（服务端忽略并回显 `null`）。传入不支持的值时服务端返回 `400000` 且本次启动失败。参数细节见 [API Reference](raw/_short/happyoyster-android-sdk-api-reference-2e55bd454caa0124.md)。
+-   世界探索模式（adventure）可选用重载 `startTravel(ticket, maxExperienceTimeSec)` 限制本次体验最大时长（秒，到时自动结束）；合法档位由服务端配置（当前 `60` / `90` / `120`，默认 `60`），实时导演与角色演绎 忽略该值（服务端忽略并回显 `null`）。传入不支持的值时服务端返回 `400000` 且本次启动失败。参数细节见 [API Reference](happyoyster-android-sdk-api-reference-2e55bd454caa0124.md)。
+
+<a id="角色演绎-按-aspectratio-定播放器方向"></a>
+
+<a id="ho-android-bp-s13ah"></a>
 
 ### 角色演绎：按 `aspectRatio` 定播放器方向
 
@@ -324,7 +396,9 @@ adb logcat -s HappyOysterSDK MyApp    # 同时查看宿主 App 日志（MyApp �
 
 **后果**：远端视图以**裁剪填充（clip-to-fill）**方式绑定——容器方向与 `aspectRatio` 不一致会**裁掉画面**（例如把 `9:16` 竖屏流放进 16:9 容器，上下会被切掉大半），而不是留黑边。
 
-```
+<a id="code-block-8"></a>
+
+```kotlin
 // startTravel() 返回之后、attachVideo() 之前：先按 aspectRatio 定好容器方向
 val ratio: Float = when (travel.aspectRatio) {   // 宽 / 高
     "9:16" -> 9f / 16f                           // 竖屏（角色演绎的服务端默认值）
@@ -343,11 +417,19 @@ val videoView = HappyOyster.attachVideo()
 binding.videoContainer.addView(videoView)
 ```
 
-**说明**账号未开通角色演绎（acting）规格（或该规格总闸关闭）时，创建世界与进房都会被服务端拒绝：`startTravel` 以 `403007` 失败（进房前拒绝，不创建 Travel），SDK 原样透传。该码**不可**按容量不足重试，应提示联系开通。
+> **说明**
+>
+> 账号未开通角色演绎（acting）规格（或该规格总闸关闭）时，创建世界与进房都会被服务端拒绝：`startTravel` 以 `403007` 失败（进房前拒绝，不创建 Travel），SDK 原样透传。该码**不可**按容量不足重试，应提示联系开通。
+
+<a id="完整示例-viewmodel-activity-片段"></a>
+
+<a id="ho-android-bp-s14h"></a>
 
 ## 完整示例（ViewModel + Activity 片段）
 
-```
+<a id="code-block-9"></a>
+
+```kotlin
 class TravelViewModel : ViewModel() {
 
     private val listener = object : HappyOysterListener {
@@ -389,23 +471,41 @@ binding.videoContainer.addView(videoView)
 binding.videoContainer.removeAllViews()
 ```
 
+<a id="devops-排障指南"></a>
+
+<a id="ho-android-bp-s15h"></a>
+
 ## DevOps 排障指南
 
 当集成过程中出现问题（无法进入 Travel、黑屏无画面、中途断流、暂停 / 恢复异常等），开放 SDK 日志是最快的定位手段。本章给出一套标准排障流程，便于你自查，也便于向我们反馈时一次性提供足够信息。
+
+<a id="开启日志"></a>
+
+<a id="ho-android-bp-s15ah"></a>
 
 ### 开启日志
 
 排障时按需选择日志输出（详见[日志](#ho-android-bp-s8h)）：快速自查用 `logcatEnabled = true` 配合 `adb logcat`，排障建议把 `logLevel` 升到 `DEBUG` 或 `VERBOSE`（默认 `INFO` 已含完整生命周期时间线，仅关心报错可降到 `WARN`）；接入自有系统则用 `logHandler` 接收全量 `LogRecord`（不受 `logLevel` 影响），写入你的文件或崩溃平台。
 
+<a id="会话相关-id-travelid"></a>
+
+<a id="ho-android-bp-s15a2h"></a>
+
 ### 会话相关 ID：`travelId`
 
 SDK 日志中的 `travelId`（即 `StartTravelData.encryptedTravelId`）以**全值**输出，是贯穿一次会话的唯一标识，也是发往服务端的会话键。它是把**客户端日志**与**服务端会话记录**对齐的关键——反馈问题时请务必带上出问题会话的 `travelId`。
+
+<a id="采集日志"></a>
+
+<a id="ho-android-bp-s15bh"></a>
 
 ### 采集日志
 
 复现问题时，把 SDK 日志落盘：
 
-```
+<a id="code-block-10"></a>
+
+```bash
 # 清空历史，复现问题，然后抓取 SDK 日志到文件
 adb logcat -c
 adb logcat -s HappyOysterSDK > happyoyster-sdk.log
@@ -413,41 +513,27 @@ adb logcat -s HappyOysterSDK > happyoyster-sdk.log
 adb logcat -s HappyOysterSDK MyApp > happyoyster-sdk.log
 ```
 
+<a id="反馈问题时请提供"></a>
+
+<a id="ho-android-bp-s15ch"></a>
+
 ### 反馈问题时请提供
 
 为避免多轮往返，提交问题时请一并附上：
 
-**项**
+| 项 | 说明 |
+| --- | --- |
+| SDK 版本 | `HappyOyster.VERSION` |
+| 会话 `travelId` | 出问题会话的 `encryptedTravelId`（见“会话相关 ID”） |
+| 发生时间 | 出问题的大致时间点（精确到分钟即可） |
+| 错误码 | 捕获到的 `SDKError.code`（错误码含义见 [API Reference](happyoyster-android-sdk-api-reference-2e55bd454caa0124.md) 错误码表） |
+| 复现步骤 | 操作路径 + 期望结果 + 实际结果 |
+| 运行环境 | 设备型号、Android 版本、网络环境（WiFi/蜂窝） |
+| 日志文件 | “采集日志”步骤采集的 `HappyOysterSDK` 日志（建议 `DEBUG`/`VERBOSE`） |
 
-**说明**
+<a id="关于脱敏与日志可分享性"></a>
 
-SDK 版本
-
-`HappyOyster.VERSION`
-
-会话 `travelId`
-
-出问题会话的 `encryptedTravelId`（见“会话相关 ID”）
-
-发生时间
-
-出问题的大致时间点（精确到分钟即可）
-
-错误码
-
-捕获到的 `SDKError.code`（错误码含义见 [API Reference](raw/_short/happyoyster-android-sdk-api-reference-2e55bd454caa0124.md) 错误码表）
-
-复现步骤
-
-操作路径 + 期望结果 + 实际结果
-
-运行环境
-
-设备型号、Android 版本、网络环境（WiFi/蜂窝）
-
-日志文件
-
-“采集日志”步骤采集的 `HappyOysterSDK` 日志（建议 `DEBUG`/`VERBOSE`）
+<a id="ho-android-bp-s15dh"></a>
 
 ### 关于脱敏与日志可分享性
 

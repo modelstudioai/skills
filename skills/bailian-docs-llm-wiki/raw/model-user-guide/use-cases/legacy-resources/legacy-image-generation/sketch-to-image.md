@@ -2,11 +2,21 @@
 
 根据手绘图加上任意文字描述，使用万相-涂鸦作画模型，即可轻松完成涂鸦作画。
 
-**重要**本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)。
+> **重要**
+>
+> 本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)。
+
+<a id="基本介绍"></a>
+
+<a id="e4b6e0df6d2vm"></a>
 
 ## 基本介绍
 
 万相-涂鸦作画通过手绘任意内容加文字描述，即可生成精美的涂鸦绘画作品，作品中的内容在参考手绘线条的同时，兼顾创意性和趣味性。涂鸦作画支持扁平插画、油画、二次元、3D卡通和水彩5种风格，可用于创意娱乐、辅助设计、儿童教学等场景。
+
+<a id="使用场景"></a>
+
+<a id="5745bcbe728r4"></a>
 
 ### 使用场景
 
@@ -16,6 +26,10 @@
 -   社交媒体内容创作：博主和内容创作者可利用涂鸦作画创作与主题内容相符的原创涂鸦插图，提高内容的视觉吸引力，帮助建立独特的个人品牌形象，吸引并保持粉丝的关注。
 -   室内装饰设计：室内设计师可以为客户定制个性化的墙面艺术画或装饰图案，如根据房间风格创作相应风格涂的鸦画作，实现空间的个性化定制，提升居住或办公环境的艺术氛围。
 
+<a id="特色优势"></a>
+
+<a id="sjUBW"></a>
+
 ### 特色优势
 
 -   知识重组&可变维扩散模型：基于自研的Composer组合生成框架的AI局部绘画创作大模型，通过知识重组与可变维度扩散模型，生成符合语义描述的多样化风格的图像。
@@ -23,33 +37,17 @@
 -   涂鸦风格多样化：支持扁平插画、油画、二次元、3D卡通和水彩五种风格。
 -   稳定、易用平台服务：提供在高并发、大流量下的稳定图片生成响应和99.99%的可靠性保障，可直接调用的简单训练和推理API 接口，服务简单易用，易于集成，兼容性强。
 
+<a id="模型概览"></a>
+
+<a id="22fe128776mgr"></a>
+
 ### 模型概览
 
-**模型名**
+<table><tbody><tr><td rowspan="2"><p><strong>模型名</strong></p></td><td rowspan="2"><p><strong>模型简介</strong></p></td><td rowspan="2"><p><strong>免费额度</strong><a href="../../../test-1/new-free-quota.md">（查看）</a></p></td><td rowspan="2"><p><strong>计费单价</strong></p></td><td colspan="2"><p><strong>限流（含主账号与RAM子账号）</strong></p></td></tr><tr><td><p><strong>任务下发接口QPS限制</strong></p></td><td><p><strong>同时处理中任务数量</strong></p></td></tr><tr><td><p>wanx-sketch-to-image-lite</p></td><td><p>万相-涂鸦作画通过手绘任意内容加文字描述，即可生成精美的涂鸦绘画作品。作品中的内容在参考手绘线条的同时，兼顾创意性和趣味性。</p></td><td><p>500张</p></td><td><p>0.06元/张</p></td><td><p>2</p></td><td><p>1</p></td></tr></tbody></table>
 
-**模型简介**
+<a id="快速开始"></a>
 
-**免费额度**[（查看）](raw/model-user-guide/test-1/new-free-quota.md)
-
-**计费单价**
-
-**限流（含主账号与RAM子账号）**
-
-**任务下发接口QPS限制**
-
-**同时处理中任务数量**
-
-wanx-sketch-to-image-lite
-
-万相-涂鸦作画通过手绘任意内容加文字描述，即可生成精美的涂鸦绘画作品。作品中的内容在参考手绘线条的同时，兼顾创意性和趣味性。
-
-500张
-
-0.06元/张
-
-2
-
-1
+<a id="01af6c7123mla"></a>
 
 ## 快速开始
 
@@ -64,7 +62,13 @@ wanx-sketch-to-image-lite
 
 由于模型计算耗时较长，示例代码均展示异步处理的调用方式，以避免请求超时。
 
-您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，还需要[安装DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
+您需要已[获取与配置 API Key](../../../../model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，还需要[安装DashScope SDK](../../../../model-api-reference/preparations/install-sdk.md)。
+
+<a id="sec-tabs"></a>
+
+<a id="curl"></a>
+
+<a id="curl-h4"></a>
 
 #### curl
 
@@ -72,7 +76,9 @@ wanx-sketch-to-image-lite
 
 接口返回任务ID，可根据任务ID查询图像生成的结果。
 
-```
+<a id="code-block"></a>
+
+```bash
 curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \
 --header 'X-DashScope-Async: enable' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -91,16 +97,26 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image
     }
 }'
 ```
+
 **2、根据任务ID查询结果**
-```
+
+<a id="code-block-2"></a>
+
+```bash
 curl -X GET \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 https://dashscope.aliyuncs.com/api/v1/tasks/{your_task_id}
 ```
 
+<a id="python"></a>
+
+<a id="python-h4"></a>
+
 #### Python
 
-```
+<a id="code-block-3"></a>
+
+```python
 from urllib.parse import urlparse, unquote
 from pathlib import PurePosixPath
 import requests
@@ -156,9 +172,15 @@ if __name__ == '__main__':
         print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
 
+<a id="java"></a>
+
+<a id="java-h4"></a>
+
 #### Java
 
-```
+<a id="code-block-4"></a>
+
+```java
 import com.alibaba.dashscope.aigc.imagesynthesis.ImageSynthesis;
 import com.alibaba.dashscope.aigc.imagesynthesis.ImageSynthesisParam;
 import com.alibaba.dashscope.aigc.imagesynthesis.ImageSynthesisResult;
@@ -231,6 +253,10 @@ public class Main {
 }
 ```
 
+<a id="api参考"></a>
+
+<a id="8db33ec4b87vm"></a>
+
 ## API参考
 
-API的输入输出参数，请参见[万相-涂鸦作画](raw/model-api-reference/image-generation/wan-image-api-reference/wanx-sketch-to-image-api-reference.md)。
+API的输入输出参数，请参见[万相-涂鸦作画](../../../../model-api-reference/image-generation/wan-image-api-reference/wanx-sketch-to-image-api-reference.md)。

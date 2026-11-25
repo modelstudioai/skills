@@ -2,6 +2,10 @@
 
 阿里云百炼-轻应用-车机/内容平台新闻热榜互动-查询完整播报单（热榜）：通过这个接口可以获取播报单所有内容。
 
+<a id="接口说明"></a>
+
+<a id="api-detail-51"></a>
+
 ## 接口说明
 
 通过这个接口可以获取“完整播报单（热榜）”下所有内容，包括频道、热点、热度、播报摘要等，默认获取当前最近版本的播报单，通过制定版本可以获取指定时间段系统版本或自定义版本的播报单内容。
@@ -12,11 +16,19 @@
 
 通过 SDK 方式调用 API 可参考控制台“API”页签下的 java、python 示例。
 
+<a id="调试"></a>
+
+<a id="api-detail-23"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
 [调试](https://api.aliyun.com/api/QuanMiaoLightApp/2024-08-01/ListHotTopicSummaries)
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -35,343 +47,78 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-操作
+<table><thead><tr><th>操作</th><th>访问级别</th><th>资源类型</th><th>条件关键字</th><th>关联操作</th></tr></thead><tbody><tr><td>quanmiaolightapp:ListHotTopicSummaries</td><td>list</td><td><div><div>*全部资源</div><div><code>*</code></div></div></td><td><ul>无</ul></td><td>无</td></tr></tbody></table>
 
-访问级别
+<a id="请求语法"></a>
 
-资源类型
-
-条件关键字
-
-关联操作
-
-quanmiaolightapp:ListHotTopicSummaries
-
-list
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-53"></a>
 
 ## 请求语法
 
-```
+<a id="code-block"></a>
+
+```text
 POST /{workspaceId}/quanmiao/lightapp/listHotTopicSummaries HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="api-detail-36"></a>
+
 ## 请求参数
 
-名称
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| workspaceId | string | 是 | 百炼业务空间唯一标识，百炼首页左上角获取 | llm-xxx |
+| category | string | 否 | 分类 | xx |
+| hotTopic | string | 否 | 热点话题 | xx |
+| hotTopicVersion | string | 否 | 热点话题版本 | 2024-09-13\_12 |
+| nextToken | string | 否 | 下一页的 token | JlroP3CjgQh5PQDlH3ArzADkBTPZgVqo+64jhZRglNq0mEYoV5SlGb/Juvo8CdfYE9rlwEr2pIJQwdaYotak9g== |
+| maxResults | integer | 否 | 每页返回最大数量。<br><br>**说明** 默认 100，最大 1000。 | 20 |
 
-类型
+<a id="返回参数"></a>
 
-必填
-
-描述
-
-示例值
-
-workspaceId
-
-string
-
-是
-
-百炼业务空间唯一标识，百炼首页左上角获取
-
-llm-xxx
-
-category
-
-string
-
-否
-
-分类
-
-xx
-
-hotTopic
-
-string
-
-否
-
-热点话题
-
-xx
-
-hotTopicVersion
-
-string
-
-否
-
-热点话题版本
-
-2024-09-13\_12
-
-nextToken
-
-string
-
-否
-
-下一页的 token
-
-JlroP3CjgQh5PQDlH3ArzADkBTPZgVqo+64jhZRglNq0mEYoV5SlGb/Juvo8CdfYE9rlwEr2pIJQwdaYotak9g==
-
-maxResults
-
-integer
-
-否
-
-每页返回最大数量。
-
-**说明** 默认 100，最大 1000。
-
-20
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-名称
-
-类型
-
-描述
-
-示例值
-
-object
-
-Schema of Response
-
-code
-
-string
-
-状态码
-
-xx
-
-data
-
-array<object>
-
-热点信息列表
-
-data
-
-object
-
-热点信息
-
-category
-
-string
-
-热点话题分类
-
-财经
-
-hotTopic
-
-string
-
-热点话题名称
-
-xx
-
-hotTopicVersion
-
-string
-
-热点话题摘要版本
-
-2024-09-13\_12
-
-hotValue
-
-double
-
-热度
-
-1000000
-
-id
-
-string
-
-热点话题 ID
-
-db5dc5b3d8954a30b65ba700c9dda3bb
-
-news
-
-array<object>
-
-文章列表
-
-news
-
-object
-
-文章
-
-comments
-
-array<object>
-
-结构化摘要列表
-
-comments
-
-object
-
-结构化摘要
-
-text
-
-string
-
-内容
-
-xx
-
-content
-
-string
-
-正文
-
-xx
-
-pubTime
-
-string
-
-发布时间
-
-2024-09-10 15:32:00
-
-title
-
-string
-
-标题
-
-xx
-
-url
-
-string
-
-url
-
-http://xxx
-
-summary
-
-object
-
-热点话题结构化摘要
-
-summaries
-
-array<object>
-
-结构化摘要列表
-
-summaries
-
-object
-
-结构化摘要
-
-summary
-
-string
-
-摘要
-
-xx
-
-title
-
-string
-
-标题
-
-xx
-
-textSummary
-
-string
-
-热点话题文本摘要
-
-xx
-
-httpStatusCode
-
-integer
-
-http 状态码
-
-200
-
-maxResults
-
-integer
-
-最大返回结果数
-
-20
-
-message
-
-string
-
-错误说明
-
-success
-
-nextToken
-
-string
-
-下一页的 token
-
-JlroP3CjgQh5PQDlH3ArzADkBTPZgVqo+64jhZRglNq0mEYoV5SlGb/Juvo8CdfYE9rlwEr2pIJQwdaYotak9g==
-
-requestId
-
-string
-
-请求唯一标识
-
-117F5ABE-CF02-5502-9A3F-E56BC9081A64
-
-success
-
-boolean
-
-是否成功：true 成功，false 失败
-
-True
-
-totalCount
-
-integer
-
-总数
-
-200
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | Schema of Response |  |
+| code | string | 状态码 | xx |
+| data | array<object> | 热点信息列表 |  |
+| data | object | 热点信息 |  |
+| category | string | 热点话题分类 | 财经 |
+| hotTopic | string | 热点话题名称 | xx |
+| hotTopicVersion | string | 热点话题摘要版本 | 2024-09-13\_12 |
+| hotValue | double | 热度 | 1000000 |
+| id | string | 热点话题 ID | db5dc5b3d8954a30b65ba700c9dda3bb |
+| news | array<object> | 文章列表 |  |
+| news | object | 文章 |  |
+| comments | array<object> | 结构化摘要列表 |  |
+| comments | object | 结构化摘要 |  |
+| text | string | 内容 | xx |
+| content | string | 正文 | xx |
+| pubTime | string | 发布时间 | 2024-09-10 15:32:00 |
+| title | string | 标题 | xx |
+| url | string | url | http://xxx |
+| summary | object | 热点话题结构化摘要 |  |
+| summaries | array<object> | 结构化摘要列表 |  |
+| summaries | object | 结构化摘要 |  |
+| summary | string | 摘要 | xx |
+| title | string | 标题 | xx |
+| textSummary | string | 热点话题文本摘要 | xx |
+| httpStatusCode | integer | http 状态码 | 200 |
+| maxResults | integer | 最大返回结果数 | 20 |
+| message | string | 错误说明 | success |
+| nextToken | string | 下一页的 token | JlroP3CjgQh5PQDlH3ArzADkBTPZgVqo+64jhZRglNq0mEYoV5SlGb/Juvo8CdfYE9rlwEr2pIJQwdaYotak9g== |
+| requestId | string | 请求唯一标识 | 117F5ABE-CF02-5502-9A3F-E56BC9081A64 |
+| success | boolean | 是否成功：true 成功，false 失败 | True |
+| totalCount | integer | 总数 | 200 |
+
+<a id="示例"></a>
+
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -379,7 +126,9 @@ integer
 
 `JSON`格式
 
-```
+<a id="code-block-2"></a>
+
+```text
 {
   "code": "xx",
   "data": [
@@ -422,6 +171,10 @@ integer
   "totalCount": 200
 }
 ```
+
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
 
 ## 错误码
 

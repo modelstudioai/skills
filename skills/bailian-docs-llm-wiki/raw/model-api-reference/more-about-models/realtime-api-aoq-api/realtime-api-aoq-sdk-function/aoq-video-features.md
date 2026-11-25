@@ -2,9 +2,19 @@
 
 AOQ Client SDK 提供了完整的视频能力，覆盖视频采集、渲染显示、编码配置、帧数据回调、外部视频输入等核心场景。本文档基于 Android（Java）、iOS（Objective-C）、Ohos（ArkTS）三个平台的公开 API，对视频常用功能进行统一介绍。
 
-**说明**AOQ SDK 提供通用视频接口。[Qwen-Audio-Realtime](raw/model-api-reference/realtime-api-directory/audio-realtime-api-directory/audio-realtime-aoq-access.md) 不支持视频输入或输出；其他模型可使用的媒体能力以对应接入文档为准。
+> **说明**
+>
+> AOQ SDK 提供通用视频接口。[Qwen-Audio-Realtime](../../../realtime-api-directory/audio-realtime-api-directory/audio-realtime-aoq-access.md) 不支持视频输入或输出；其他模型可使用的媒体能力以对应接入文档为准。
+
+<a id="1-视频采集"></a>
+
+<a id="videofeat-s1h2"></a>
 
 ## 1\. 视频采集
+
+<a id="1-1-功能说明"></a>
+
+<a id="videofeat-s1s1h3"></a>
 
 ### 1.1 功能说明
 
@@ -13,114 +23,54 @@ AOQ Client SDK 提供了完整的视频能力，覆盖视频采集、渲染显�
 -   **内部采集（默认）**：SDK 自动管理摄像头设备的打开、帧采集和关闭，支持前后置摄像头切换。
 -   **外部采集**：由应用自行管理摄像头或其他视频源，采集到的帧数据通过 `pushExternalVideoCapturedFrame` 接口输入 SDK。
 
+<a id="1-2-采集配置参数"></a>
+
+<a id="videofeat-s1s2h3"></a>
+
 ### 1.2 采集配置参数
 
-**参数**
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| width | int | 1280 | 采集宽度（像素），外部采集时无效 |
+| height | int | 720 | 采集高度（像素），外部采集时无效 |
+| fps | int | 15 | 采集帧率，外部采集时由送帧节奏决定 |
+| isExternal | bool | false | 是否使用外部采集模式 |
+| cameraDirection | AoqCameraDirection | Front(0) | 摄像头方向，外部采集时无效 |
 
-**类型**
+<a id="1-3-摄像头方向枚举"></a>
 
-**默认值**
-
-**说明**
-
-width
-
-int
-
-1280
-
-采集宽度（像素），外部采集时无效
-
-height
-
-int
-
-720
-
-采集高度（像素），外部采集时无效
-
-fps
-
-int
-
-15
-
-采集帧率，外部采集时由送帧节奏决定
-
-isExternal
-
-bool
-
-false
-
-是否使用外部采集模式
-
-cameraDirection
-
-AoqCameraDirection
-
-Front(0)
-
-摄像头方向，外部采集时无效
+<a id="videofeat-s1s3h3"></a>
 
 ### 1.3 摄像头方向枚举
 
-**枚举值**
+| 枚举值 | 数值 | 说明 |
+| --- | --- | --- |
+| AoqCameraDirectionFront | 0 | 前置摄像头 |
+| AoqCameraDirectionBack | 1 | 后置摄像头 |
 
-**数值**
+<a id="1-4-api-对照"></a>
 
-**说明**
-
-AoqCameraDirectionFront
-
-0
-
-前置摄像头
-
-AoqCameraDirectionBack
-
-1
-
-后置摄像头
+<a id="videofeat-s1s4h3"></a>
 
 ### 1.4 API 对照
 
-**功能**
+| 功能 | Android | iOS | Ohos |
+| --- | --- | --- | --- |
+| 开启采集 | startVideoCapture(config) | startVideoCapture:config: | startVideoCapture(config) |
+| 关闭采集 | stopVideoCapture() | stopVideoCapture | stopVideoCapture() |
+| 切换摄像头 | switchCamera(direction) | switchCamera: | switchCamera(direction) |
 
-**Android**
+<a id="1-5-使用示例"></a>
 
-**iOS**
-
-**Ohos**
-
-开启采集
-
-startVideoCapture(config)
-
-startVideoCapture:config:
-
-startVideoCapture(config)
-
-关闭采集
-
-stopVideoCapture()
-
-stopVideoCapture
-
-stopVideoCapture()
-
-切换摄像头
-
-switchCamera(direction)
-
-switchCamera:
-
-switchCamera(direction)
+<a id="videofeat-s1s5h3"></a>
 
 ### 1.5 使用示例
 
 **Android**
-```
+
+<a id="code-block"></a>
+
+```java
 AoqVideoCaptureConfig config = new AoqVideoCaptureConfig();
 config.width = 1280;
 config.height = 720;
@@ -128,8 +78,12 @@ config.fps = 15;
 config.cameraDirection = AoqCameraDirection.AoqCameraDirectionFront;
 engine.startVideoCapture(config);
 ```
+
 **iOS**
-```
+
+<a id="code-block-2"></a>
+
+```text
 AoqVideoCaptureConfig *config = [[AoqVideoCaptureConfig alloc] init];
 config.width = 1280;
 config.height = 720;
@@ -137,8 +91,12 @@ config.fps = 15;
 config.cameraDirection = AoqCameraDirectionFront;
 [engine startVideoCapture:config];
 ```
+
 **Ohos**
-```
+
+<a id="code-block-3"></a>
+
+```javascript
 let config: AoqVideoCaptureConfig = {
   width: 1280,
   height: 720,
@@ -148,287 +106,146 @@ let config: AoqVideoCaptureConfig = {
 engine.startVideoCapture(config);
 ```
 
+<a id="2-视频渲染"></a>
+
+<a id="videofeat-s2h2"></a>
+
 ## 2\. 视频渲染
+
+<a id="2-1-功能说明"></a>
+
+<a id="videofeat-s2s1h3"></a>
 
 ### 2.1 功能说明
 
 视频渲染用于将本地采集或远端接收的视频帧数据显示到屏幕上。SDK 支持设置本地预览窗口和远端渲染窗口，通过 `trackType` 区分视频流（Video）和屏幕共享流（Screen）。
 
+<a id="2-2-渲染模式"></a>
+
+<a id="videofeat-s2s2h3"></a>
+
 ### 2.2 渲染模式
 
-**枚举值**
+| 枚举值 | 数值 | 说明 |
+| --- | --- | --- |
+| AoqRenderModeAuto | 0 | 自动模式 |
+| AoqRenderModeStretch | 1 | 拉伸平铺，画面可能变形 |
+| AoqRenderModeFill | 2 | 填充黑边，画面完整显示 |
+| AoqRenderModeCrop | 3 | 裁剪模式，画面内容可能丢失 |
 
-**数值**
+<a id="2-3-画布配置"></a>
 
-**说明**
-
-AoqRenderModeAuto
-
-0
-
-自动模式
-
-AoqRenderModeStretch
-
-1
-
-拉伸平铺，画面可能变形
-
-AoqRenderModeFill
-
-2
-
-填充黑边，画面完整显示
-
-AoqRenderModeCrop
-
-3
-
-裁剪模式，画面内容可能丢失
+<a id="videofeat-s2s3h3"></a>
 
 ### 2.3 画布配置
 
-**参数**
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| view | 平台视图 | null | 渲染视图（Android: SurfaceView/TextureView, iOS: UIView, Ohos: XComponent） |
+| renderMode | AoqRenderMode | Auto(0) | 渲染显示模式 |
 
-**类型**
+<a id="2-4-api-对照"></a>
 
-**默认值**
-
-**说明**
-
-view
-
-平台视图
-
-null
-
-渲染视图（Android: SurfaceView/TextureView, iOS: UIView, Ohos: XComponent）
-
-renderMode
-
-AoqRenderMode
-
-Auto(0)
-
-渲染显示模式
+<a id="videofeat-s2s4h3"></a>
 
 ### 2.4 API 对照
 
-**功能**
+| 功能 | Android | iOS | Ohos |
+| --- | --- | --- | --- |
+| 设置本地预览 | setLocalView(trackType, canvas) | setLocalView:trackType:canvas: | setLocalView(trackType, canvas) |
+| 设置远端渲染 | setRemoteView(trackType, canvas) | setRemoteView:trackType:canvas: | setRemoteView(trackType, canvas) |
 
-**Android**
+> **说明**
+>
+> **平台差异**：Android 使用 SurfaceView 或 TextureView 作为渲染容器；iOS 使用 UIView（内部通过 AoqRenderView 封装，支持 Metal 加速）；Ohos 使用 XComponent（通过 AoqXComponentController 管理 native 渲染视图）。
 
-**iOS**
+<a id="3-视频编码配置"></a>
 
-**Ohos**
-
-设置本地预览
-
-setLocalView(trackType, canvas)
-
-setLocalView:trackType:canvas:
-
-setLocalView(trackType, canvas)
-
-设置远端渲染
-
-setRemoteView(trackType, canvas)
-
-setRemoteView:trackType:canvas:
-
-setRemoteView(trackType, canvas)
-
-**说明****平台差异**：Android 使用 SurfaceView 或 TextureView 作为渲染容器；iOS 使用 UIView（内部通过 AoqRenderView 封装，支持 Metal 加速）；Ohos 使用 XComponent（通过 AoqXComponentController 管理 native 渲染视图）。
+<a id="videofeat-s3h2"></a>
 
 ## 3\. 视频编码配置
+
+<a id="3-1-功能说明"></a>
+
+<a id="videofeat-s3s1h3"></a>
 
 ### 3.1 功能说明
 
 设置视频编码参数，包括编码格式、分辨率、帧率、码率、关键帧间隔、镜像和方向等。通过 `trackType` 区分视频轨道和屏幕共享轨道的编码配置。
 
+<a id="3-2-编码配置参数"></a>
+
+<a id="videofeat-s3s2h3"></a>
+
 ### 3.2 编码配置参数
 
-**参数**
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| trackType | AoqTrackType | Video(1) | 轨道类型：Video |
+| codecType | AoqEncoderType | VideoH264(3) | 编码格式 |
+| width | int | 720 | 编码宽度 |
+| height | int | 1280 | 编码高度 |
+| fps | int | 5 | 编码帧率 |
+| bitrate | int | 500000 | 目标码率（bps） |
+| minBitrate | int | 128000 | 最小码率（bps） |
+| keyframeInterval | int | 2 | 关键帧间隔（秒） |
+| mirrorMode | AoqMirrorMode | Disabled(0) | 镜像模式 |
+| orientationMode | AoqOrientationMode | Auto(0) | 方向模式 |
+| isExternal | bool | false | 外部编码模式（true 时由应用推送已编码帧） |
 
-**类型**
+<a id="3-3-编码格式枚举"></a>
 
-**默认值**
-
-**说明**
-
-trackType
-
-AoqTrackType
-
-Video(1)
-
-轨道类型：Video
-
-codecType
-
-AoqEncoderType
-
-VideoH264(3)
-
-编码格式
-
-width
-
-int
-
-720
-
-编码宽度
-
-height
-
-int
-
-1280
-
-编码高度
-
-fps
-
-int
-
-5
-
-编码帧率
-
-bitrate
-
-int
-
-500000
-
-目标码率（bps）
-
-minBitrate
-
-int
-
-128000
-
-最小码率（bps）
-
-keyframeInterval
-
-int
-
-2
-
-关键帧间隔（秒）
-
-mirrorMode
-
-AoqMirrorMode
-
-Disabled(0)
-
-镜像模式
-
-orientationMode
-
-AoqOrientationMode
-
-Auto(0)
-
-方向模式
-
-isExternal
-
-bool
-
-false
-
-外部编码模式（true 时由应用推送已编码帧）
+<a id="videofeat-s3s3h3"></a>
 
 ### 3.3 编码格式枚举
 
-**枚举值**
+| 枚举值 | 数值 | 说明 |
+| --- | --- | --- |
+| AoqEncoderTypeVideoH264 | 3 | H.264 编码 |
+| AoqEncoderTypeVideoJpeg | 4 | JPEG 编码（用于外部编码帧） |
 
-**数值**
+<a id="3-4-镜像模式"></a>
 
-**说明**
-
-AoqEncoderTypeVideoH264
-
-3
-
-H.264 编码
-
-AoqEncoderTypeVideoJpeg
-
-4
-
-JPEG 编码（用于外部编码帧）
+<a id="videofeat-s3s4h3"></a>
 
 ### 3.4 镜像模式
 
-**枚举值**
+| 枚举值 | 数值 | 说明 |
+| --- | --- | --- |
+| AoqMirrorModeDisabled | 0 | 禁用镜像 |
+| AoqMirrorModeEnabled | 1 | 启用镜像 |
 
-**数值**
+<a id="3-5-方向模式"></a>
 
-**说明**
-
-AoqMirrorModeDisabled
-
-0
-
-禁用镜像
-
-AoqMirrorModeEnabled
-
-1
-
-启用镜像
+<a id="videofeat-s3s5h3"></a>
 
 ### 3.5 方向模式
 
-**枚举值**
+| 枚举值 | 数值 | 说明 |
+| --- | --- | --- |
+| AoqOrientationModeAuto | 0 | 自动方向 |
+| AoqOrientationModePortrait | 1 | 竖屏方向 |
+| AoqOrientationModeLandscape | 2 | 横屏方向 |
 
-**数值**
+<a id="3-6-api-对照"></a>
 
-**说明**
-
-AoqOrientationModeAuto
-
-0
-
-自动方向
-
-AoqOrientationModePortrait
-
-1
-
-竖屏方向
-
-AoqOrientationModeLandscape
-
-2
-
-横屏方向
+<a id="videofeat-s3s6h3"></a>
 
 ### 3.6 API 对照
 
-**功能**
+| 功能 | Android | iOS | Ohos |
+| --- | --- | --- | --- |
+| 设置编码参数 | setVideoEncoderConfig(config) | setVideoEncoderConfig: | setVideoEncoderConfig(config) |
 
-**Android**
+<a id="4-外部视频帧输入"></a>
 
-**iOS**
-
-**Ohos**
-
-设置编码参数
-
-setVideoEncoderConfig(config)
-
-setVideoEncoderConfig:
-
-setVideoEncoderConfig(config)
+<a id="videofeat-s4h2"></a>
 
 ## 4\. 外部视频帧输入
+
+<a id="4-1-功能说明"></a>
+
+<a id="videofeat-s4s1h3"></a>
 
 ### 4.1 功能说明
 
@@ -439,341 +256,124 @@ setVideoEncoderConfig(config)
 
 通过 `trackType` 路由，`AoqTrackTypeVideo` 对应视频采集的外部帧，`AoqTrackTypeScreen` 对应屏幕共享的外部帧。
 
+<a id="4-2-像素格式枚举"></a>
+
+<a id="videofeat-s4s2h3"></a>
+
 ### 4.2 像素格式枚举
 
-**枚举值**
+| 枚举值 | 数值 | 说明 | 平台支持 |
+| --- | --- | --- | --- |
+| AoqVideoPixelFormatI420 | 1 | I420 三平面 | 全平台 |
+| AoqVideoPixelFormatNV12 | 2 | NV12 双平面 | 全平台 |
+| AoqVideoPixelFormatNV21 | 3 | NV21 双平面 | 全平台 |
+| AoqVideoPixelFormatBGRA | 4 | BGRA 打包 | 全平台 |
+| AoqVideoPixelFormatRGBA | 5 | RGBA 打包 | 全平台 |
+| AoqVideoPixelFormatCVPixelBuffer | 6 | Apple 零拷贝 | 仅 iOS |
+| AoqVideoPixelFormatTextureOES | 7 | OES 纹理 | 仅 Android |
+| AoqVideoPixelFormatTexture2D | 8 | 2D 纹理 | 仅 Android |
 
-**数值**
+<a id="4-3-原始视频帧数据结构-aoqvideoframe"></a>
 
-**说明**
-
-**平台支持**
-
-AoqVideoPixelFormatI420
-
-1
-
-I420 三平面
-
-全平台
-
-AoqVideoPixelFormatNV12
-
-2
-
-NV12 双平面
-
-全平台
-
-AoqVideoPixelFormatNV21
-
-3
-
-NV21 双平面
-
-全平台
-
-AoqVideoPixelFormatBGRA
-
-4
-
-BGRA 打包
-
-全平台
-
-AoqVideoPixelFormatRGBA
-
-5
-
-RGBA 打包
-
-全平台
-
-AoqVideoPixelFormatCVPixelBuffer
-
-6
-
-Apple 零拷贝
-
-仅 iOS
-
-AoqVideoPixelFormatTextureOES
-
-7
-
-OES 纹理
-
-仅 Android
-
-AoqVideoPixelFormatTexture2D
-
-8
-
-2D 纹理
-
-仅 Android
+<a id="videofeat-s4s3h3"></a>
 
 ### 4.3 原始视频帧数据结构 (AoqVideoFrame)
 
-**字段**
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| format | AoqVideoPixelFormat | 像素格式 |
+| width | int | 宽度（像素） |
+| height | int | 高度（像素） |
+| data | byte\[\] / ArrayBuffer | 打包格式数据（NV12/NV21/BGRA/RGBA） |
+| dataY / dataU / dataV | byte\[\] / ArrayBuffer | I420 三平面数据 |
+| strideY / strideU / strideV | int | I420 三平面步长 |
+| textureId | int | 纹理 ID（Android TextureOES/Texture2D 时有效） |
+| transformMatrix | float\[16\] | 4x4 纹理变换矩阵（Android） |
+| eglContext | EGLContext | 共享 EGL 上下文（Android） |
+| pixelBuffer | CVPixelBufferRef | Apple 零拷贝（iOS） |
+| timeStamp | long | 时间戳（ms），0 时 SDK 用本地时钟补 |
 
-**类型**
+<a id="4-4-已编码视频帧数据结构-aoqvideoencodedframe"></a>
 
-**说明**
-
-format
-
-AoqVideoPixelFormat
-
-像素格式
-
-width
-
-int
-
-宽度（像素）
-
-height
-
-int
-
-高度（像素）
-
-data
-
-byte\[\] / ArrayBuffer
-
-打包格式数据（NV12/NV21/BGRA/RGBA）
-
-dataY / dataU / dataV
-
-byte\[\] / ArrayBuffer
-
-I420 三平面数据
-
-strideY / strideU / strideV
-
-int
-
-I420 三平面步长
-
-textureId
-
-int
-
-纹理 ID（Android TextureOES/Texture2D 时有效）
-
-transformMatrix
-
-float\[16\]
-
-4x4 纹理变换矩阵（Android）
-
-eglContext
-
-EGLContext
-
-共享 EGL 上下文（Android）
-
-pixelBuffer
-
-CVPixelBufferRef
-
-Apple 零拷贝（iOS）
-
-timeStamp
-
-long
-
-时间戳（ms），0 时 SDK 用本地时钟补
+<a id="videofeat-s4s4h3"></a>
 
 ### 4.4 已编码视频帧数据结构 (AoqVideoEncodedFrame)
 
-**字段**
+| 字段 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| codec | AoqVideoCodecType | JPEG(0) | 编码格式 |
+| data | byte\[\] / ArrayBuffer | \- | 编码后数据 |
+| width | int | \- | 宽度（像素） |
+| height | int | \- | 高度（像素） |
+| timeStamp | long | 0 | 时间戳（ms） |
 
-**类型**
+<a id="4-5-api-对照"></a>
 
-**默认值**
-
-**说明**
-
-codec
-
-AoqVideoCodecType
-
-JPEG(0)
-
-编码格式
-
-data
-
-byte\[\] / ArrayBuffer
-
-\-
-
-编码后数据
-
-width
-
-int
-
-\-
-
-宽度（像素）
-
-height
-
-int
-
-\-
-
-高度（像素）
-
-timeStamp
-
-long
-
-0
-
-时间戳（ms）
+<a id="videofeat-s4s5h3"></a>
 
 ### 4.5 API 对照
 
-**功能**
+| 功能 | Android | iOS | Ohos |
+| --- | --- | --- | --- |
+| 推送原始帧 | pushExternalVideoCapturedFrame(trackType, frame) | pushExternalVideoCapturedFrame:frame: | pushExternalVideoCapturedFrame(trackType, frame) |
+| 推送已编码帧 | pushExternalVideoEncodedFrame(trackType, frame) | pushExternalVideoEncodedFrame:frame: | pushExternalVideoEncodedFrame(trackType, frame) |
 
-**Android**
+<a id="5-视频帧数据回调"></a>
 
-**iOS**
-
-**Ohos**
-
-推送原始帧
-
-pushExternalVideoCapturedFrame(trackType, frame)
-
-pushExternalVideoCapturedFrame:frame:
-
-pushExternalVideoCapturedFrame(trackType, frame)
-
-推送已编码帧
-
-pushExternalVideoEncodedFrame(trackType, frame)
-
-pushExternalVideoEncodedFrame:frame:
-
-pushExternalVideoEncodedFrame(trackType, frame)
+<a id="videofeat-s5h2"></a>
 
 ## 5\. 视频帧数据回调
+
+<a id="5-1-功能说明"></a>
+
+<a id="videofeat-s5s1h3"></a>
 
 ### 5.1 功能说明
 
 视频帧回调允许开发者在视频管线的不同位置获取原始帧数据，用于视频分析、自定义处理、录制等场景。支持只读和读写两种模式，读写模式下可修改帧数据并写回 SDK。
 
+<a id="5-2-支持的数据源位置"></a>
+
+<a id="videofeat-s5s2h3"></a>
+
 ### 5.2 支持的数据源位置
 
-**数据源**
+| 数据源 | 枚举值 | 说明 |
+| --- | --- | --- |
+| Captured | 0 | 采集后的视频数据（前处理前） |
+| PreEncode | 1 | 编码前的视频数据（前处理后） |
+| Remote | 2 | 远端解码后、渲染前的视频数据 |
 
-**枚举值**
+<a id="5-3-回调配置参数"></a>
 
-**说明**
-
-Captured
-
-0
-
-采集后的视频数据（前处理前）
-
-PreEncode
-
-1
-
-编码前的视频数据（前处理后）
-
-Remote
-
-2
-
-远端解码后、渲染前的视频数据
+<a id="videofeat-s5s3h3"></a>
 
 ### 5.3 回调配置参数
 
-**参数**
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| format | AoqVideoPixelFormat | I420(1) | 期望回调的像素格式 |
+| alignment | AoqVideoObserverAlignment | Default(0) | 宽度对齐策略 |
+| mode | AoqVideoObserverMode | ReadOnly(0) | 只读(0)/读写(1) 模式 |
+| mirrorApplied | bool | false | 是否对回调数据应用镜像 |
 
-**类型**
+<a id="5-4-宽度对齐枚举"></a>
 
-**默认值**
-
-**说明**
-
-format
-
-AoqVideoPixelFormat
-
-I420(1)
-
-期望回调的像素格式
-
-alignment
-
-AoqVideoObserverAlignment
-
-Default(0)
-
-宽度对齐策略
-
-mode
-
-AoqVideoObserverMode
-
-ReadOnly(0)
-
-只读(0)/读写(1) 模式
-
-mirrorApplied
-
-bool
-
-false
-
-是否对回调数据应用镜像
+<a id="videofeat-s5s4h3"></a>
 
 ### 5.4 宽度对齐枚举
 
-**枚举值**
+| 枚举值 | 数值 | 说明 |
+| --- | --- | --- |
+| AoqVideoObserverAlignmentDefault | 0 | 默认对齐 |
+| AoqVideoObserverAlignmentEven | 1 | 2 字节对齐 |
+| AoqVideoObserverAlignment4 | 2 | 4 字节对齐 |
+| AoqVideoObserverAlignment8 | 3 | 8 字节对齐 |
+| AoqVideoObserverAlignment16 | 4 | 16 字节对齐 |
 
-**数值**
+<a id="5-5-使用步骤"></a>
 
-**说明**
-
-AoqVideoObserverAlignmentDefault
-
-0
-
-默认对齐
-
-AoqVideoObserverAlignmentEven
-
-1
-
-2 字节对齐
-
-AoqVideoObserverAlignment4
-
-2
-
-4 字节对齐
-
-AoqVideoObserverAlignment8
-
-3
-
-8 字节对齐
-
-AoqVideoObserverAlignment16
-
-4
-
-16 字节对齐
+<a id="videofeat-s5s5h3"></a>
 
 ### 5.5 使用步骤
 
@@ -781,390 +381,171 @@ AoqVideoObserverAlignment16
 2.  **启用数据源**：调用 `enableVideoFrameObserver` 选择需要监听的数据源位置，开启回调
 3.  **处理回调数据**：在回调函数中获取帧数据（仅回调期间有效，异步使用需自行拷贝）
 
+<a id="5-6-api-对照"></a>
+
+<a id="videofeat-s5s6h3"></a>
+
 ### 5.6 API 对照
 
-**功能**
+| 功能 | Android | iOS | Ohos |
+| --- | --- | --- | --- |
+| 注册观察者 | setVideoFrameObserver(listener) | setVideoFrameObserver: | setVideoFrameObserver(observer) |
+| 启用回调 | enableVideoFrameObserver(enabled, source, config) | enableVideoFrameObserver:videoSource:config: | enableVideoFrameObserver(enabled, source, config) |
 
-**Android**
+<a id="5-7-回调方法"></a>
 
-**iOS**
-
-**Ohos**
-
-注册观察者
-
-setVideoFrameObserver(listener)
-
-setVideoFrameObserver:
-
-setVideoFrameObserver(observer)
-
-启用回调
-
-enableVideoFrameObserver(enabled, source, config)
-
-enableVideoFrameObserver:videoSource:config:
-
-enableVideoFrameObserver(enabled, source, config)
+<a id="videofeat-s5s7h3"></a>
 
 ### 5.7 回调方法
 
-**回调**
+| 回调 | Android | iOS | Ohos |
+| --- | --- | --- | --- |
+| 采集后数据 | onCapturedVideoFrame(frame) | onCapturedVideoFrame: | onCapturedVideoFrame(frame) |
+| 编码前数据 | onPreEncodeVideoFrame(trackType, frame) | onPreEncodeVideoFrame:frame: | onPreEncodeVideoFrame(trackType, frame) |
+| 远端数据 | onRemoteVideoFrame(trackType, frame) | onRemoteVideoFrame:frame: | onRemoteVideoFrame(trackType, frame) |
 
-**Android**
+> **说明**
+>
+> 回调方法返回 `true`/`YES` 表示数据已修改、需写回 SDK（仅 ReadWrite 模式且 I420 格式时生效）。
 
-**iOS**
+<a id="7-媒体流发送控制"></a>
 
-**Ohos**
-
-采集后数据
-
-onCapturedVideoFrame(frame)
-
-onCapturedVideoFrame:
-
-onCapturedVideoFrame(frame)
-
-编码前数据
-
-onPreEncodeVideoFrame(trackType, frame)
-
-onPreEncodeVideoFrame:frame:
-
-onPreEncodeVideoFrame(trackType, frame)
-
-远端数据
-
-onRemoteVideoFrame(trackType, frame)
-
-onRemoteVideoFrame:frame:
-
-onRemoteVideoFrame(trackType, frame)
-
-**说明**回调方法返回 `true`/`YES` 表示数据已修改、需写回 SDK（仅 ReadWrite 模式且 I420 格式时生效）。
+<a id="videofeat-s7h2"></a>
 
 ## 7\. 媒体流发送控制
+
+<a id="7-1-功能说明"></a>
+
+<a id="videofeat-s7s1h3"></a>
 
 ### 7.1 功能说明
 
 控制本地媒体流的发送开关，通过 `trackType` 路由到不同轨道（Audio/Video/Screen）。停用发送后，采集和编码继续运行，但数据不会发送到远端。
 
+<a id="7-2-api-对照"></a>
+
+<a id="videofeat-s7s2h3"></a>
+
 ### 7.2 API 对照
 
-**功能**
+| 功能 | Android | iOS | Ohos |
+| --- | --- | --- | --- |
+| 控制流发送 | enableSendMediaStream(trackType, enable) | enableSendMediaStream:enable: | enableSendMediaStream(trackType, enable) |
 
-**Android**
+<a id="7-3-轨道类型枚举"></a>
 
-**iOS**
-
-**Ohos**
-
-控制流发送
-
-enableSendMediaStream(trackType, enable)
-
-enableSendMediaStream:enable:
-
-enableSendMediaStream(trackType, enable)
+<a id="videofeat-s7s3h3"></a>
 
 ### 7.3 轨道类型枚举
 
-**枚举值**
+| 枚举值 | 数值 | 说明 |
+| --- | --- | --- |
+| AoqTrackTypeAudio | 0 | 音频轨道 |
+| AoqTrackTypeVideo | 1 | 视频轨道 |
+| AoqTrackTypeData | 2 | 数据轨道 |
 
-**数值**
+<a id="8-视频设备状态监控"></a>
 
-**说明**
-
-AoqTrackTypeAudio
-
-0
-
-音频轨道
-
-AoqTrackTypeVideo
-
-1
-
-视频轨道
-
-AoqTrackTypeData
-
-2
-
-数据轨道
+<a id="videofeat-s8h2"></a>
 
 ## 8\. 视频设备状态监控
+
+<a id="8-1-功能说明"></a>
+
+<a id="videofeat-s8s1h3"></a>
 
 ### 8.1 功能说明
 
 SDK 自动监测视频采集设备（摄像头）的状态变化，并通过 `onVideoDeviceStateChanged` 回调通知应用层。
 
+<a id="8-2-设备状态码"></a>
+
+<a id="videofeat-s8s2h3"></a>
+
 ### 8.2 设备状态码
 
-**状态码**
+| 状态码 | 值 | 说明 |
+| --- | --- | --- |
+| AoqVideoDeviceNone | 0 | 初始状态 |
+| AoqVideoDeviceCaptureStarting | 1 | 采集启动中 |
+| AoqVideoDeviceCaptureStarted | 2 | 采集已启动 |
+| AoqVideoDeviceCaptureStopping | 3 | 采集停止中 |
+| AoqVideoDeviceCaptureStopped | 4 | 采集已停止 |
+| AoqVideoDeviceCaptureFail | 5 | 采集失败 |
 
-**值**
+<a id="8-3-回调对照"></a>
 
-**说明**
-
-AoqVideoDeviceNone
-
-0
-
-初始状态
-
-AoqVideoDeviceCaptureStarting
-
-1
-
-采集启动中
-
-AoqVideoDeviceCaptureStarted
-
-2
-
-采集已启动
-
-AoqVideoDeviceCaptureStopping
-
-3
-
-采集停止中
-
-AoqVideoDeviceCaptureStopped
-
-4
-
-采集已停止
-
-AoqVideoDeviceCaptureFail
-
-5
-
-采集失败
+<a id="videofeat-s8s3h3"></a>
 
 ### 8.3 回调对照
 
-**回调**
+| 回调 | Android | iOS | Ohos |
+| --- | --- | --- | --- |
+| 设备状态变化 | onVideoDeviceStateChanged(state) | onVideoDeviceStateChanged: | onVideoDeviceStateChanged(state) |
 
-**Android**
+<a id="9-视频错误码与警告码"></a>
 
-**iOS**
-
-**Ohos**
-
-设备状态变化
-
-onVideoDeviceStateChanged(state)
-
-onVideoDeviceStateChanged:
-
-onVideoDeviceStateChanged(state)
+<a id="videofeat-s9h2"></a>
 
 ## 9\. 视频错误码与警告码
 
+<a id="9-1-视频错误码"></a>
+
+<a id="videofeat-s9s1h3"></a>
+
 ### 9.1 视频错误码
 
-**错误码**
+| 错误码 | 值 | 说明 |
+| --- | --- | --- |
+| AoqErrorCodeVideo | 200 | 通用视频错误 |
+| VideoExternalBufferFull | 210 | 视频外部缓冲区已满 |
+| VideoDevice | 220 | 视频设备通用错误 |
+| CameraOpenFail | 221 | 摄像头打开失败 |
+| CameraAuthFailed | 222 | 摄像头权限被拒绝 |
+| CameraOccupied | 223 | 摄像头被占用 |
+| CameraRunningError | 224 | 摄像头运行错误 |
+| VideoCodec | 230 | 视频编解码通用错误 |
+| EncoderInitFail | 231 | 编码器初始化失败 |
+| VideoRender | 240 | 视频渲染通用错误 |
+| RenderCreateFail | 241 | 渲染器创建失败 |
+| RenderDrawError | 242 | 渲染绘制错误 |
+| Screen | 300 | 屏幕共享通用错误 |
 
-**值**
+> **说明**
+>
+> Android 额外错误码：ScreenPermissionDenied(310) 屏幕共享权限被拒绝、ScreenForegroundServiceFailed(311) 前台服务启动失败。
 
-**说明**
+<a id="9-2-视频警告码"></a>
 
-AoqErrorCodeVideo
-
-200
-
-通用视频错误
-
-VideoExternalBufferFull
-
-210
-
-视频外部缓冲区已满
-
-VideoDevice
-
-220
-
-视频设备通用错误
-
-CameraOpenFail
-
-221
-
-摄像头打开失败
-
-CameraAuthFailed
-
-222
-
-摄像头权限被拒绝
-
-CameraOccupied
-
-223
-
-摄像头被占用
-
-CameraRunningError
-
-224
-
-摄像头运行错误
-
-VideoCodec
-
-230
-
-视频编解码通用错误
-
-EncoderInitFail
-
-231
-
-编码器初始化失败
-
-VideoRender
-
-240
-
-视频渲染通用错误
-
-RenderCreateFail
-
-241
-
-渲染器创建失败
-
-RenderDrawError
-
-242
-
-渲染绘制错误
-
-Screen
-
-300
-
-屏幕共享通用错误
-
-**说明**Android 额外错误码：ScreenPermissionDenied(310) 屏幕共享权限被拒绝、ScreenForegroundServiceFailed(311) 前台服务启动失败。
+<a id="videofeat-s9s2h3"></a>
 
 ### 9.2 视频警告码
 
-**警告码**
+| 警告码 | 值 | 说明 |
+| --- | --- | --- |
+| AoqWCVideo | 200 | 通用视频警告 |
+| CameraEnumerateError | 201 | 摄像头枚举错误 |
+| EncoderSwitched | 202 | 编码器切换警告 |
+| RenderDowngrade | 203 | 渲染降级警告 |
 
-**值**
+<a id="附录-完整视频-api-方法列表"></a>
 
-**说明**
-
-AoqWCVideo
-
-200
-
-通用视频警告
-
-CameraEnumerateError
-
-201
-
-摄像头枚举错误
-
-EncoderSwitched
-
-202
-
-编码器切换警告
-
-RenderDowngrade
-
-203
-
-渲染降级警告
+<a id="videofeat-sappendixh2"></a>
 
 ## 附录：完整视频 API 方法列表
 
-**分类**
-
-**方法名**
-
-**说明**
-
-采集控制
-
-startVideoCapture
-
-打开视频采集设备
-
-采集控制
-
-stopVideoCapture
-
-关闭视频采集设备
-
-采集控制
-
-switchCamera
-
-切换前后置摄像头
-
-渲染控制
-
-setLocalView
-
-设置本地预览窗口
-
-渲染控制
-
-setRemoteView
-
-设置远端渲染窗口
-
-编解码
-
-setVideoEncoderConfig
-
-设置视频编码参数
-
-外部输入
-
-pushExternalVideoCapturedFrame
-
-推送原始视频帧
-
-外部输入
-
-pushExternalVideoEncodedFrame
-
-推送已编码视频帧
-
-屏幕共享
-
-startScreenCapture
-
-启动屏幕采集
-
-屏幕共享
-
-stopScreenCapture
-
-停止屏幕采集
-
-流控制
-
-enableSendMediaStream
-
-控制媒体流发送
-
-帧回调
-
-setVideoFrameObserver
-
-注册视频帧观察者
-
-帧回调
-
-enableVideoFrameObserver
-
-启用/禁用视频帧回调
+| 分类 | 方法名 | 说明 |
+| --- | --- | --- |
+| 采集控制 | startVideoCapture | 打开视频采集设备 |
+| 采集控制 | stopVideoCapture | 关闭视频采集设备 |
+| 采集控制 | switchCamera | 切换前后置摄像头 |
+| 渲染控制 | setLocalView | 设置本地预览窗口 |
+| 渲染控制 | setRemoteView | 设置远端渲染窗口 |
+| 编解码 | setVideoEncoderConfig | 设置视频编码参数 |
+| 外部输入 | pushExternalVideoCapturedFrame | 推送原始视频帧 |
+| 外部输入 | pushExternalVideoEncodedFrame | 推送已编码视频帧 |
+| 屏幕共享 | startScreenCapture | 启动屏幕采集 |
+| 屏幕共享 | stopScreenCapture | 停止屏幕采集 |
+| 流控制 | enableSendMediaStream | 控制媒体流发送 |
+| 帧回调 | setVideoFrameObserver | 注册视频帧观察者 |
+| 帧回调 | enableVideoFrameObserver | 启用/禁用视频帧回调 |

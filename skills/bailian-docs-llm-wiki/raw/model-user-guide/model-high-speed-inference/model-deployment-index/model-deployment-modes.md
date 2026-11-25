@@ -4,5 +4,5 @@
 
 百炼提供多种部署模式，满足不同性能与成本需求。
 
--   [独占算力部署](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-modes/dtu-model-deployment.md)
--   [Token 按量部署](raw/model-user-guide/model-high-speed-inference/model-deployment-index/model-deployment-modes/model-deployment-token.md)
+-   [独占算力部署](model-deployment-modes/dtu-model-deployment.md)
+-   [Token 按量部署](model-deployment-modes/model-deployment-token.md)

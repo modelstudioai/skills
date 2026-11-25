@@ -2,13 +2,25 @@
 
 本文介绍如何基于设备端C SDK实现视觉相关能力，如视频对话、拍照问答。
 
+<a id="1-开发准备"></a>
+
+<a id="7e4f5c9822yar"></a>
+
 ## 1\. 开发准备
+
+<a id="1-1-前置说明"></a>
+
+<a id="45375c150fq4y"></a>
 
 ### 1.1. 前置说明
 
--   本文依赖前置文档 “[基于设备端C SDK实现聊天能力](raw/_short/chat-capability-based-on-rtos-sdk-019f5c7ac38b3d0b.md)” ，请在阅读本文前先完成相关内容的学习与环境准备。
+-   本文依赖前置文档 “[基于设备端C SDK实现聊天能力](chat-capability-based-on-rtos-sdk-019f5c7ac38b3d0b.md)” ，请在阅读本文前先完成相关内容的学习与环境准备。
 -   默认开发者已完成SDK接入，并可正常运行语音交互流程。
--   此最佳实践将会使用[基于设备端C SDK实现聊天能力](raw/_short/chat-capability-based-on-rtos-sdk-019f5c7ac38b3d0b.md)中的部分伪代码和交互流程。
+-   此最佳实践将会使用[基于设备端C SDK实现聊天能力](chat-capability-based-on-rtos-sdk-019f5c7ac38b3d0b.md)中的部分伪代码和交互流程。
+
+<a id="1-2-配置启用视觉模块"></a>
+
+<a id="086f9b03fduv7"></a>
 
 ### 1.2. 配置启用视觉模块
 
@@ -21,6 +33,10 @@
     操作位置为**技能**页签下**Agent**区域的**百炼应用**列表。
     
 
+<a id="2-端侧视觉模块功能开发"></a>
+
+<a id="fceb26e9c95km"></a>
+
 ## 2\. 端侧视觉模块功能开发
 
 视觉模块功能包括拍照问答、视频通话、拍照翻译、极速视频通话。
@@ -31,13 +47,19 @@
 
 一旦进入视频通话或进入极速视频通话，所有图片问答逻辑由视频通话或极速视频通话处理。
 
+<a id="2-1-sdk目录及文件结构说明"></a>
+
+<a id="da35882bfb69c"></a>
+
 ### 2.1. SDK目录及文件结构说明
 
 获取的SDK包解压后，与本文相关的文件及目录结构如下
 
-获取SDK包可以参考文档：[设备端C SDK](raw/_short/mmi-rtos-sdk-dbfd414713bc31c9.md)
+获取SDK包可以参考文档：[设备端C SDK](mmi-rtos-sdk-dbfd414713bc31c9.md)
 
-```
+<a id="code-block"></a>
+
+```c
 qwen_sdk/
 ├── include
 │   ├── c_utils
@@ -53,11 +75,17 @@ qwen_sdk/
 
 启用视觉模块功能的时候需要加载`c_visual.h`头文件和`libc_visual.a`静态库文件。
 
+<a id="2-2-c-visual初始化"></a>
+
+<a id="367adb38e3514"></a>
+
 ### 2.2. c\_visual初始化
 
 示例代码
 
-```
+<a id="code-block-2"></a>
+
+```c
 int32_t app_visual_init(void)
 {
     c_visual_config_t config = {
@@ -85,7 +113,9 @@ int32_t app_visual_init(void)
 
 初始化参考日志如下：
 
-```
+<a id="code-block-3"></a>
+
+```c
 [UT][D][c_visual_config]mode 14
 [UT][D][c_visual_config]VISUAL set params success
 [UT][D][c_mmi_set_upstream_type]upstream_type[AudioAndVideo]
@@ -105,9 +135,15 @@ int32_t app_visual_init(void)
 
 `c_visual_config` 仅保存配置并注册指令回调，不分配图像缓冲区；PSRAM 图像缓冲区由 SDK 在收到云端视觉启动指令时自动分配，也可在会话前调用 `c_visual_malloc` 显式预分配。分配完成前，`c_visual_task_handle`、`c_visual_image_get_buffer` 等接口返回 `UTIL_ERR_NO_INIT` 或 `NULL`。此外，`c_visual_config` 必须在 `c_mmi_init` 之前调用，否则返回错误。
 
+<a id="2-3-c-visual事件说明"></a>
+
+<a id="d534a020243ri"></a>
+
 ### 2.3. c\_visual事件说明
 
-```
+<a id="code-block-4"></a>
+
+```c
 enum {
     C_VISUAL_EVENT_MALLOC_PREPARE,  // 分配 PSRAM 资源前触发，可在回调中腾挪资源；返回非 0 则中止本次分配（回调在模块锁内执行，禁止调用本模块锁相关接口）
     C_VISUAL_EVENT_VQA_START,       // 开启拍照问答时触发，可在该事件回调中激活摄像头并开始拍照
@@ -120,11 +156,17 @@ enum {
 };
 ```
 
+<a id="2-3-1-拍照问答-拍照翻译"></a>
+
+<a id="7564846cd95c8"></a>
+
 #### 2.3.1. 拍照问答 & 拍照翻译
 
 拍照问答 & 拍照翻译事件响应示例如下：
 
-```
+<a id="code-block-5"></a>
+
+```c
 static int32_t _visual_callback(uint32_t event, char *req_id, void *params)
 {
     (void)req_id;
@@ -146,11 +188,17 @@ static int32_t _visual_callback(uint32_t event, char *req_id, void *params)
 }
 ```
 
+<a id="2-3-2-视频通话-极速视频通话"></a>
+
+<a id="f9580cf50599o"></a>
+
 #### 2.3.2. 视频通话 & 极速视频通话
 
 视频通话 & 极速视频通话事件响应示例如下：
 
-```
+<a id="code-block-6"></a>
+
+```c
 static int32_t _visual_callback(uint32_t event, char *req_id, void *params)
 {
     (void)req_id;
@@ -175,7 +223,15 @@ static int32_t _visual_callback(uint32_t event, char *req_id, void *params)
 }
 ```
 
+<a id="2-4-摄像头实现"></a>
+
+<a id="ed519da65d8tn"></a>
+
 ### 2.4. 摄像头实现
+
+<a id="2-4-1-图像采集逻辑"></a>
+
+<a id="4a4800ee12ncg"></a>
 
 #### 2.4.1. 图像采集逻辑
 
@@ -185,7 +241,9 @@ static int32_t _visual_callback(uint32_t event, char *req_id, void *params)
 
 示例代码1，通过摄像头回调将采集数据送入c\_visual
 
-```
+<a id="code-block-7"></a>
+
+```c
 // 将摄像头采集的image数据传递给c_visual
 int32_t hal_camera_capture_callback(uint8_t *image, uint32_t image_size)
 {
@@ -208,7 +266,9 @@ int32_t hal_camera_capture_callback(uint8_t *image, uint32_t image_size)
 
 示例代码2，通过创建线程，周期性调用摄像头采集数据送入c\_visual
 
-```
+<a id="code-block-8"></a>
+
+```c
 void hal_camera_task_handle(void *param)
 {
   (void)param;
@@ -235,11 +295,17 @@ void hal_camera_task_handle(void *param)
 }
 ```
 
+<a id="2-4-2-实现示例"></a>
+
+<a id="a4710ab50amir"></a>
+
 #### 2.4.2. 实现示例
 
 下述示例代码通过创建线程周期性采集摄像头图像方案实现，开发者可根据硬件特性选择合适的实现方式。
 
-```
+<a id="code-block-9"></a>
+
+```c
 #include "hal_camera.h"
 #include "c_visual.h"
 #define CAMERA_DROP_NUM         (4)

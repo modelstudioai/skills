@@ -2,18 +2,34 @@
 
 本文档介绍了如何在析言GBI中进行权限管理，以控制用户对数据表、列与值的查询权限。
 
+<a id="流程简介"></a>
+
+<a id="e9d23481bdbdx"></a>
+
 ## 流程简介
 
-1.  [新增权限](https://help.aliyun.com/zh/model-studio/xiyan-gbi-permission-management#42843e554bygi)：为数据表或数据表的列与值设置权限，通过权限来约束用户可查询的数据表、列和值的范围。
-2.  [为角色关联权限](https://help.aliyun.com/zh/model-studio/xiyan-gbi-permission-management#a7b50faed0zk8)：您可以通过设置角色并为其关联权限，来约束使用析言的用户可访问的数据范围。
-3.  [验证权限是否生效](https://help.aliyun.com/zh/model-studio/xiyan-gbi-permission-management#c3dbec64a9ky5)：析言GBI会根据角色权限验证并处理提交的问题，确保只有符合权限范围的查询才能被执行并展示查询结果。
-4.  [实现权限隔离](https://help.aliyun.com/zh/model-studio/xiyan-gbi-permission-management#e4be989fbas4c)：通过[API](raw/_short/api-dataanalysisgbi-2024-08-23-rundataanalysis-97f97004241a36ec.md)进行问答和数据分析时，可以为不同用户分配业务空间和角色，以实现权限隔离。请注意，控制台上不支持此功能。
+1.  [新增权限](xiyan-gbi-permission-management.md#42843e554bygi)：为数据表或数据表的列与值设置权限，通过权限来约束用户可查询的数据表、列和值的范围。
+2.  [为角色关联权限](xiyan-gbi-permission-management.md#a7b50faed0zk8)：您可以通过设置角色并为其关联权限，来约束使用析言的用户可访问的数据范围。
+3.  [验证权限是否生效](xiyan-gbi-permission-management.md#c3dbec64a9ky5)：析言GBI会根据角色权限验证并处理提交的问题，确保只有符合权限范围的查询才能被执行并展示查询结果。
+4.  [实现权限隔离](xiyan-gbi-permission-management.md#e4be989fbas4c)：通过[API](../../../../_short/api-dataanalysisgbi-2024-08-23-rundataanalysis-97f97004241a36ec.md)进行问答和数据分析时，可以为不同用户分配业务空间和角色，以实现权限隔离。请注意，控制台上不支持此功能。
+
+<a id="前提条件"></a>
+
+<a id="608d29c6eac4k"></a>
 
 ## 前提条件
 
-已在[数据表管理](https://bailian.console.aliyun.com/xiyan#/dataManagement/dataSourceM)授权联接数据库。具体操作请参见[数据库连接](https://help.aliyun.com/zh/model-studio/xiyan-gbi-user-guide#8e5d17697392b)。
+已在[数据表管理](https://bailian.console.aliyun.com/xiyan#/dataManagement/dataSourceM)授权联接数据库。具体操作请参见[数据库连接](xiyan-gbi-user-guide.md#8e5d17697392b)。
+
+<a id="授权操作"></a>
+
+<a id="b28f6f4554mdb"></a>
 
 ## 授权操作
+
+<a id="步骤一-新增权限"></a>
+
+<a id="42843e554bygi"></a>
 
 ### 步骤一：新增权限
 
@@ -21,43 +37,11 @@
 
 如果您需要对特定的数据表或数据表的列与值设置查询权限，请在[权限管理](https://bailian.console.aliyun.com/xiyan#/systemSettings/authority)页面点击**新增权限**，配置以下信息：
 
-**参数名称**
+<table><thead><tr><th><strong>参数名称</strong></th><th><strong>参数说明</strong></th></tr></thead><tbody><tr><td><strong>权限名称</strong></td><td><p>自定义。建议对权限名称进行规范，以便准确识别权限的用途。</p></td></tr><tr><td><strong>权限使用状态</strong></td><td><ul><li>开启：权限生效。</li><li>关闭：权限不生效。</li></ul></td></tr><tr><td><strong>授权数据范围</strong></td><td><ul><li><strong>表级别：</strong>表示对选中的数据表设置查询权限，拥有该权限的角色方能查询该数据表的内容。</li><li><strong>列与值级别：</strong>表示对选中的列与值设置查询权限，拥有该权限的角色方能查询该列与值的内容。</li></ul></td></tr><tr><td><strong>选择数据表</strong></td><td><p><strong>授权数据范围</strong>选择<strong>表级别</strong>时显示该参数。候选范围为在数据表管理时授权访问的表范围。</p><blockquote><p>同一权限内可设置多张数据表，多张数据表间是“或”关系。</p></blockquote></td></tr><tr><td><strong>选择列与值</strong></td><td><p><strong>授权数据范围</strong>选择<strong>列与值级别</strong>时显示该参数。</p><p>点击<strong>新增一组列与值</strong>，先选择数据表，再选择该表内的列与值。</p><blockquote><p>一个权限内可设置多组列与值，每组列与值仅能选择单张数据表，数据表候选范围为在数据表管理时授权访问的表范围。</p></blockquote><p>析言可添加应用场景：</p><ul><li><strong>全部值：</strong>表示可查询该列的全部值。</li><li><strong>固定值：</strong>表示可查询该列在已设置的固定值范围内的值。</li><li><strong>变量值：</strong>表示该列的值为动态参数，可在每次问答时动态传入，此处仅需填写该变量的自定义变量名称。通过API使用本功能时，请确保传入的变量名称与此处填写的名称保持一致。</li></ul></td></tr></tbody></table>
 
-**参数说明**
+<a id="步骤二-为角色关联权限"></a>
 
-**权限名称**
-
-自定义。建议对权限名称进行规范，以便准确识别权限的用途。
-
-**权限使用状态**
-
--   开启：权限生效。
--   关闭：权限不生效。
-
-**授权数据范围**
-
--   **表级别：**表示对选中的数据表设置查询权限，拥有该权限的角色方能查询该数据表的内容。
--   **列与值级别：**表示对选中的列与值设置查询权限，拥有该权限的角色方能查询该列与值的内容。
-
-**选择数据表**
-
-**授权数据范围**选择**表级别**时显示该参数。候选范围为在数据表管理时授权访问的表范围。
-
-> 同一权限内可设置多张数据表，多张数据表间是“或”关系。
-
-**选择列与值**
-
-**授权数据范围**选择**列与值级别**时显示该参数。
-
-点击**新增一组列与值**，先选择数据表，再选择该表内的列与值。
-
-> 一个权限内可设置多组列与值，每组列与值仅能选择单张数据表，数据表候选范围为在数据表管理时授权访问的表范围。
-
-析言可添加应用场景：
-
--   **全部值：**表示可查询该列的全部值。
--   **固定值：**表示可查询该列在已设置的固定值范围内的值。
--   **变量值：**表示该列的值为动态参数，可在每次问答时动态传入，此处仅需填写该变量的自定义变量名称。通过API使用本功能时，请确保传入的变量名称与此处填写的名称保持一致。
+<a id="a7b50faed0zk8"></a>
 
 ### 步骤二：为角色关联权限
 
@@ -65,19 +49,11 @@
 
 如果您需要自定义角色并关联权限，请在[角色管理](https://bailian.console.aliyun.com/xiyan#/systemSettings/authority)页面点击**新增角色**，配置以下信息：
 
-**参数名称**
+<table><thead><tr><th><strong>参数名称</strong></th><th><strong>参数说明</strong></th></tr></thead><tbody><tr><td><strong>角色名称</strong></td><td><p>自定义。建议对角色名称进行规范，以便准确识别角色的用途。</p></td></tr><tr><td><strong>关联权限</strong></td><td><p>选择需要关联的权限。</p><blockquote><p>一个角色至多可拥有20个权限。</p></blockquote></td></tr></tbody></table>
 
-**参数说明**
+<a id="步骤三-验证权限是否生效"></a>
 
-**角色名称**
-
-自定义。建议对角色名称进行规范，以便准确识别角色的用途。
-
-**关联权限**
-
-选择需要关联的权限。
-
-> 一个角色至多可拥有20个权限。
+<a id="c3dbec64a9ky5"></a>
 
 ### 步骤三：验证权限是否生效
 
@@ -99,9 +75,15 @@
         
     -   若本次SQL生成**不符合**数据权限的查询范围：则不执行SQL查询，同时提示信息“很抱歉，您没有对该问题的查询权限，table.col1、table.col2不在您的可查询范围内”。
         
-        **重要**不论本次SQL生成是否符合数据权限的查询范围，都会消耗析言调用额度。
+        > **重要**
+        >
+        > 不论本次SQL生成是否符合数据权限的查询范围，都会消耗析言调用额度。
         
+
+<a id="步骤四-实现权限隔离"></a>
+
+<a id="e4be989fbas4c"></a>
 
 ### 步骤四：实现权限隔离
 
-目前仅支持通过[Chat对话接口](raw/_short/api-dataanalysisgbi-2024-08-23-rundataanalysis-97f97004241a36ec.md)调用析言GBI时实现权限隔离。
+目前仅支持通过[Chat对话接口](../../../../_short/api-dataanalysisgbi-2024-08-23-rundataanalysis-97f97004241a36ec.md)调用析言GBI时实现权限隔离。

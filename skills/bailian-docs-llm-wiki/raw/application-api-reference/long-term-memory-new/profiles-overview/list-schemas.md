@@ -4,121 +4,58 @@
 
 分页查询当前用户的全部画像模板。
 
+<a id="请求方法与路径"></a>
+
 ## 请求方法与路径
 
 `GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/profile_schemas`
 
-调用时请将 `{WorkspaceId}` 替换为真实的[业务空间 ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+调用时请将 `{WorkspaceId}` 替换为真实的[业务空间 ID](../../../model-user-guide/get-started-with-models/regions.md#h2_migrate_domain)。
+
+<a id="请求参数"></a>
 
 ## 请求参数
 
-参数
+| 参数 | 类型 | 必填 | 位置 | 说明 |
+| --- | --- | --- | --- | --- |
+| `page_num` | integer | 否 | Query | 页码，默认 1 |
+| `page_size` | integer | 否 | Query | 每页数量，默认 10 |
+| `memory_library_id` | string | 否 | Query | 记忆库 ID |
 
-类型
-
-必填
-
-位置
-
-说明
-
-`page_num`
-
-integer
-
-否
-
-Query
-
-页码，默认 1
-
-`page_size`
-
-integer
-
-否
-
-Query
-
-每页数量，默认 10
-
-`memory_library_id`
-
-string
-
-否
-
-Query
-
-记忆库 ID
+<a id="返回结果"></a>
 
 ## 返回结果
 
-字段
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `profile_schemas` | array | 画像模板列表 |
+| `profile_schemas[].profile_schema_id` | string | 画像模板 ID |
+| `profile_schemas[].name` | string | 画像模板名称 |
+| `profile_schemas[].description` | string | 画像模板描述 |
+| `profile_schemas[].plan_version` | string | 收费计划 |
+| `profile_schemas[].extract_scene` | string | 提取场景 |
+| `request_id` | string | 请求 ID |
+| `total` | integer | 画像模板总数 |
 
-类型
-
-说明
-
-`profile_schemas`
-
-array
-
-画像模板列表
-
-`profile_schemas[].profile_schema_id`
-
-string
-
-画像模板 ID
-
-`profile_schemas[].name`
-
-string
-
-画像模板名称
-
-`profile_schemas[].description`
-
-string
-
-画像模板描述
-
-`profile_schemas[].plan_version`
-
-string
-
-收费计划
-
-`profile_schemas[].extract_scene`
-
-string
-
-提取场景
-
-`request_id`
-
-string
-
-请求 ID
-
-`total`
-
-integer
-
-画像模板总数
+<a id="代码示例"></a>
 
 ## 代码示例
 
-```
+<a id="code-block"></a>
+
+```bash
 curl -X GET "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memory/profile_schemas?page_size=10&page_num=1" \
   --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
   --header "Content-Type: application/json"
 ```
 
+<a id="响应示例"></a>
+
 ## 响应示例
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "profile_schemas": [
     {
@@ -141,4 +78,6 @@ curl -X GET "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/memo
 }
 ```
 
-**重要**查看单个模板详情使用 [GetProfileSchema](raw/application-api-reference/long-term-memory-new/profiles-overview/get-schema.md)。
+> **重要**
+>
+> 查看单个模板详情使用 [GetProfileSchema](get-schema.md)。

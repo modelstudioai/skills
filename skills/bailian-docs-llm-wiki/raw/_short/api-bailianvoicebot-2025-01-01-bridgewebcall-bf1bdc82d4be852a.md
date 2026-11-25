@@ -2,9 +2,17 @@
 
 创建软电话测试通话。
 
+<a id="调试"></a>
+
+<a id="api-doc-debug"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -23,261 +31,55 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-**操作**
+| 操作 | 访问级别 | 资源类型 | 条件关键字 | 关联操作 |
+| --- | --- | --- | --- | --- |
+| bailianvoicebot:BridgeWebCall | create | \*全部资源<br><br>`*` | 无 | 无 |
 
-**访问级别**
+<a id="请求语法"></a>
 
-**资源类型**
-
-**条件关键字**
-
-**关联操作**
-
-bailianvoicebot:BridgeWebCall
-
-create
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-53"></a>
 
 ## 请求语法
 
-```
+<a id="code-block"></a>
+
+```text
 POST  HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="api-detail-36"></a>
+
 ## 请求参数
 
-**名称**
+<table><thead><tr><th><p><strong>名称</strong></p></th><th><p><strong>类型</strong></p></th><th><p><strong>必填</strong></p></th><th><p><strong>描述</strong></p></th><th><p><strong>示例值</strong></p></th></tr></thead><tbody><tr><td>BusinessUnitId</td><td><p>string</p></td><td><p>是</p></td><td><div><p>百炼业务空间 ID</p></div></td><td><p>llm-c11iig67g863rih8</p></td></tr><tr><td>ApplicationId</td><td><p>string</p></td><td><p>是</p></td><td><div><p>百炼应用 ID</p></div></td><td><p>a395011f-a247-400f-bc69-28796749fd52</p></td></tr><tr><td>Caller</td><td><p>string</p></td><td><p>否</p></td><td><div><p>呼入主叫号码(用于展示)。</p></div></td><td><p>13052253537</p></td></tr><tr><td>DeviceId</td><td><p>string</p></td><td><p>是</p></td><td><div><p>设备 ID</p></div></td><td><p>467539456766097392-cn-shenzhen</p></td></tr><tr><td>TimeoutSeconds</td><td><p>integer</p></td><td><p>否</p></td><td><div><p>超时时间，呼叫在经过该参数指定的时间仍然未接通的情况下，则主动挂断，单位秒</p></div></td><td><p>3</p></td></tr><tr><td>Tags</td><td><p>string</p></td><td><p>否</p></td><td><div><p>随路数据</p></div></td><td><p>{'ENV': 'production'}</p></td></tr><tr><td>SampleRate</td><td><p>integer</p></td><td><p>否</p></td><td><div><p>采样率</p></div></td><td><p>8000</p></td></tr><tr><td>Sandbox</td><td><p>boolean</p></td><td><p>否</p></td><td><div><p>是否测试环境</p></div></td><td><p>true</p></td></tr><tr><td>AudioCodec</td><td><p>string</p></td><td><p>否</p></td><td><div><p>编码类型，不传默认 PCM 编码。</p><ul><li><p>PCM</p></li><li><p>OPUS</p></li></ul></div><div><p><strong>枚举值：</strong></p><ul><li>OPUS :<div><p>OPUS</p></div></li><li>PCM :<div><p>PCM</p></div></li></ul></div></td><td><p>PCM</p></td></tr></tbody></table>
 
-**类型**
+<a id="返回参数"></a>
 
-**必填**
-
-**描述**
-
-**示例值**
-
-BusinessUnitId
-
-string
-
-是
-
-百炼业务空间 ID
-
-llm-c11iig67g863rih8
-
-ApplicationId
-
-string
-
-是
-
-百炼应用 ID
-
-a395011f-a247-400f-bc69-28796749fd52
-
-Caller
-
-string
-
-否
-
-呼入主叫号码(用于展示)。
-
-13052253537
-
-DeviceId
-
-string
-
-是
-
-设备 ID
-
-467539456766097392-cn-shenzhen
-
-TimeoutSeconds
-
-integer
-
-否
-
-超时时间，呼叫在经过该参数指定的时间仍然未接通的情况下，则主动挂断，单位秒
-
-3
-
-Tags
-
-string
-
-否
-
-随路数据
-
-{'ENV': 'production'}
-
-SampleRate
-
-integer
-
-否
-
-采样率
-
-8000
-
-Sandbox
-
-boolean
-
-否
-
-是否测试环境
-
-true
-
-AudioCodec
-
-string
-
-否
-
-编码类型，不传默认 PCM 编码。
-
--   PCM
-    
--   OPUS
-    
-
-**枚举值：**
-
--   OPUS :
-    
-    OPUS
-    
--   PCM :
-    
-    PCM
-    
-
-PCM
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-**名称**
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | 返回结果 |  |
+| RequestId | string | 请求 ID | CF6D3484-19A1-5C77-863B-AC8B5754D37C |
+| Success | boolean | 是否成功 | True |
+| HttpStatusCode | string | http 状态码 | 200 |
+| Code | string | 状态码，200 表示正常 | OK |
+| ErrorMsg | string | 错误信息 | connect timed out |
+| Data | object | 返回数据 |  |
+| InstanceId | string | 实例 ID。 | i-uf6abxo1tuuwarrtffpp |
+| SessionId | string | 会话 ID | ws-4b7c263f-9b4c-4b28-baae-a65e9155e380 |
+| ChannelId | string | 通道 ID。 | 894526715106764802 |
+| ExpirationTime | string | Token 有效期。<br><br>返回值为时间戳形式。 | 1744964682422 |
+| ServerUrl | string | 服务地址 | wss://sh-voicebot.aliyuncs.com:443/audio |
+| Token | string | 认证签名。 | 83480f806b48f022313de37b691e167e |
 
-**类型**
+<a id="示例"></a>
 
-**描述**
-
-**示例值**
-
-object
-
-返回结果
-
-RequestId
-
-string
-
-请求 ID
-
-CF6D3484-19A1-5C77-863B-AC8B5754D37C
-
-Success
-
-boolean
-
-是否成功
-
-True
-
-HttpStatusCode
-
-string
-
-http 状态码
-
-200
-
-Code
-
-string
-
-状态码，200 表示正常
-
-OK
-
-ErrorMsg
-
-string
-
-错误信息
-
-connect timed out
-
-Data
-
-object
-
-返回数据
-
-InstanceId
-
-string
-
-实例 ID。
-
-i-uf6abxo1tuuwarrtffpp
-
-SessionId
-
-string
-
-会话 ID
-
-ws-4b7c263f-9b4c-4b28-baae-a65e9155e380
-
-ChannelId
-
-string
-
-通道 ID。
-
-894526715106764802
-
-ExpirationTime
-
-string
-
-Token 有效期。
-
-返回值为时间戳形式。
-
-1744964682422
-
-ServerUrl
-
-string
-
-服务地址
-
-wss://sh-voicebot.aliyuncs.com:443/audio
-
-Token
-
-string
-
-认证签名。
-
-83480f806b48f022313de37b691e167e
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -285,7 +87,9 @@ string
 
 `JSON`格式
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "RequestId": "CF6D3484-19A1-5C77-863B-AC8B5754D37C",
   "Success": true,
@@ -303,9 +107,17 @@ string
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
+
 ## 错误码
 
 访问[错误中心](https://api.aliyun.com/document/BailianVoiceBot/2025-01-01/errorCode)查看更多错误码。
+
+<a id="变更历史"></a>
+
+<a id="workbench-doc-change-demo"></a>
 
 ## 变更历史
 

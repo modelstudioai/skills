@@ -2,11 +2,19 @@
 
 长剧本创作。
 
+<a id="调试"></a>
+
+<a id="api-detail-23"></a>
+
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
 [调试](https://api.aliyun.com/api/QuanMiaoLightApp/2024-08-01/RunScriptChat)
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -25,220 +33,62 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-操作
+<table><thead><tr><th>操作</th><th>访问级别</th><th>资源类型</th><th>条件关键字</th><th>关联操作</th></tr></thead><tbody><tr><td>quanmiaolightapp:RunScriptChat</td><td>none</td><td><div><div>*全部资源</div><div><code>*</code></div></div></td><td><ul>无</ul></td><td>无</td></tr></tbody></table>
 
-访问级别
+<a id="请求语法"></a>
 
-资源类型
-
-条件关键字
-
-关联操作
-
-quanmiaolightapp:RunScriptChat
-
-none
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-53"></a>
 
 ## 请求语法
 
-```
+<a id="code-block"></a>
+
+```text
 POST /{workspaceId}/quanmiao/lightapp/runScriptChat HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="api-detail-36"></a>
+
 ## 请求参数
 
-名称
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| workspaceId | string | 是 | 阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id) | llm-rz8db8d00rcn2p0xc |
+| prompt | string | 是 | 用户输入的剧本指令 | 创建角色：林晓晓 |
+| taskId | string | 否 | 任务唯一标识<br><br>**说明**-   taskId 默认无需填写，系统将自动生成。当后续任务填写的 taskId 相同时，表示这些任务属于同一组对话。<br>-   建议手动赋值 taskId，以便关联上下文。 | a3d1c2ac-f086-4a21-9069-f5631542f5a2 |
 
-类型
+<a id="返回参数"></a>
 
-必填
-
-描述
-
-示例值
-
-workspaceId
-
-string
-
-是
-
-阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](raw/application-api-reference/flow-agent-api/application-call/obtain-the-app-id-and-workspace-id.md)
-
-llm-rz8db8d00rcn2p0xc
-
-prompt
-
-string
-
-是
-
-用户输入的剧本指令
-
-创建角色：林晓晓
-
-taskId
-
-string
-
-否
-
-任务唯一标识
-
-**说明**-   taskId 默认无需填写，系统将自动生成。当后续任务填写的 taskId 相同时，表示这些任务属于同一组对话。
--   建议手动赋值 taskId，以便关联上下文。
-
-a3d1c2ac-f086-4a21-9069-f5631542f5a2
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-名称
-
-类型
-
-描述
-
-示例值
-
-object
-
-Schema of Response
-
-end
-
-boolean
-
-输出是否完成，true 表示完成
-
-true
-
-header
-
-object
-
-流式输出 header 头，包含返回通用信息
-
-errorCode
-
-string
-
-异常错误码
-
-403
-
-errorMessage
-
-string
-
-异常错误信息
-
-Pop sign mismatch, please check log.
-
-event
-
-string
-
-事件类型
-
-result-generated
-
-eventInfo
-
-string
-
-事件描述
-
-模型生成事件描述
-
-requestId
-
-string
-
-请求 ID
-
-F8A35034-EDCF-5C50-95A5-1044316F36E3
-
-sessionId
-
-string
-
-一次会话 ID
-
-147648697127\_914847410985\_1730600302167
-
-taskId
-
-string
-
-一次生成任务 ID
-
-d3be9981-ca2d-4e17-bf31-1c0a628e9f99
-
-traceId
-
-string
-
-链路 traceid
-
-2150432017236011824686132ecdbc
-
-payload
-
-object
-
-返回结果的 payload，json 结构
-
-output
-
-object
-
-输出内容对象
-
-text
-
-string
-
-输出内容
-
-以下是角色信息
-
-usage
-
-object
-
-大模型 Token 用量信息
-
-inputTokens
-
-long
-
-输入 Token 数量
-
-100
-
-outputTokens
-
-long
-
-输出 Token 数量
-
-100
-
-totalTokens
-
-long
-
-总 Token 数量
-
-200
+| 名称 | 类型 | 描述 | 示例值 |
+| --- | --- | --- | --- |
+|  | object | Schema of Response |  |
+| end | boolean | 输出是否完成，true 表示完成 | true |
+| header | object | 流式输出 header 头，包含返回通用信息 |  |
+| errorCode | string | 异常错误码 | 403 |
+| errorMessage | string | 异常错误信息 | Pop sign mismatch, please check log. |
+| event | string | 事件类型 | result-generated |
+| eventInfo | string | 事件描述 | 模型生成事件描述 |
+| requestId | string | 请求 ID | F8A35034-EDCF-5C50-95A5-1044316F36E3 |
+| sessionId | string | 一次会话 ID | 147648697127\_914847410985\_1730600302167 |
+| taskId | string | 一次生成任务 ID | d3be9981-ca2d-4e17-bf31-1c0a628e9f99 |
+| traceId | string | 链路 traceid | 2150432017236011824686132ecdbc |
+| payload | object | 返回结果的 payload，json 结构 |  |
+| output | object | 输出内容对象 |  |
+| text | string | 输出内容 | 以下是角色信息 |
+| usage | object | 大模型 Token 用量信息 |  |
+| inputTokens | long | 输入 Token 数量 | 100 |
+| outputTokens | long | 输出 Token 数量 | 100 |
+| totalTokens | long | 总 Token 数量 | 200 |
+
+<a id="示例"></a>
+
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -246,7 +96,9 @@ long
 
 `JSON`格式
 
-```
+<a id="code-block-2"></a>
+
+```text
 {
   "end": true,
   "header": {
@@ -272,22 +124,14 @@ long
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
+
 ## 错误码
 
-HTTP status code
-
-错误码
-
-错误信息
-
-描述
-
-403
-
-NoPermission
-
-You are not authorized to perform this action , Please check the assignment of the workspaceId.
-
-请检查workspaceId的赋值
+| HTTP status code | 错误码 | 错误信息 | 描述 |
+| --- | --- | --- | --- |
+| 403 | NoPermission | You are not authorized to perform this action , Please check the assignment of the workspaceId. | 请检查workspaceId的赋值 |
 
 访问[错误中心](https://api.aliyun.com/document/QuanMiaoLightApp/2024-08-01/errorCode)查看更多错误码。

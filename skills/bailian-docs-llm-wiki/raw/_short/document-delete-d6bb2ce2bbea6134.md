@@ -2,73 +2,62 @@
 
 本文为您介绍通义数据挖掘文档删除API的语法及示例。
 
+<a id="请求语法"></a>
+
+<a id="fc7e5abcedu3y"></a>
+
 ## 请求语法
 
-```
+<a id="code-block"></a>
+
+```bash
 POST /zhiwen-file/delete_file HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="7ee89e9538w3k"></a>
+
 ## 请求参数
 
-**名称**
+| 名称 | 类型 | 必填 | 描述 | 示例值 |
+| --- | --- | --- | --- | --- |
+| fileId | string | 是 | 要删除的文档ID | file\_zhiwen\_XXX |
 
-**类型**
+<a id="返回参数"></a>
 
-**必填**
-
-**描述**
-
-**示例值**
-
-fileId
-
-string
-
-是
-
-要删除的文档ID
-
-file\_zhiwen\_XXX
+<a id="e4d7abfd02lfi"></a>
 
 ## 返回参数
 
-**名称**
+| 名称 | 类型 | 描述 |
+| --- | --- | --- |
+| code | int | 状态码 |
+| request\_id | string | 请求ID |
+| success | boolean | 是否成功 |
+| message | string | 响应消息 |
 
-**类型**
+<a id="示例"></a>
 
-**描述**
-
-code
-
-int
-
-状态码
-
-request\_id
-
-string
-
-请求ID
-
-success
-
-boolean
-
-是否成功
-
-message
-
-string
-
-响应消息
+<a id="f3d8cb046admd"></a>
 
 ## 示例
 
+<a id="调用示例"></a>
+
+<a id="e0307ee207vh3"></a>
+
 ### 调用示例
+
+<a id="fig-code-group"></a>
+
+<a id="fig-code-group-python-tab"></a>
 
 python
 
-```
+<a id="code-code-group-python"></a>
+
+```python
 import os
 import requests
 from http import HTTPStatus
@@ -98,9 +87,13 @@ else:
     print(f'code={response.status_code}')
 ```
 
+<a id="fig-code-group-java-tab"></a>
+
 java
 
-```
+<a id="code-code-group-java"></a>
+
+```java
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
@@ -172,11 +165,17 @@ public class FileDeleteDemo {
 }
 ```
 
+<a id="正常返回示例"></a>
+
+<a id="fb70f84389k08"></a>
+
 ### 正常返回示例
 
 `JSON`格式
 
-```
+<a id="code-block-2"></a>
+
+```json
 {
   "code": 200,
   "request_id": "1a022107-2b41-979f-a730-59b43d3ada2c",
@@ -185,6 +184,10 @@ public class FileDeleteDemo {
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="90bc3eb804i3l"></a>
+
 ## 错误码
 
-请参见[错误码-通义数据挖掘](raw/_short/docmining-error-code-d4361ce416c8ad2d.md)。
+请参见[错误码-通义数据挖掘](docmining-error-code-d4361ce416c8ad2d.md)。

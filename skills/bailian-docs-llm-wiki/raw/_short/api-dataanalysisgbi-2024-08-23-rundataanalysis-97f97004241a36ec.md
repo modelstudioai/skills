@@ -2,15 +2,27 @@
 
 析言为您提供了与官方页面对话效果相同的OpenAPI接口，只需传入workspaceId以及query等相关信息，即可对您已经创建好的业务空间进行问答和数据分析。 该接口适合以下场景： 您在析言控制台关联了数据源，即析言可以通过公网或者VPC的方式访问您的数据库并执行SQL。 具体的使用，可以参考以下最佳实践文档： https://help.aliyun.com/zh/model-studio/gbi-best-practices
 
+<a id="接口说明"></a>
+
+<a id="api-detail-51"></a>
+
 ## 接口说明
 
 请确保在使用该接口前，已充分了解析言产品的收费方式和[价格](https://common-buy.aliyun.com/?&msctype=email&mscareaid=cn&mscsiteid=cn&mscmsgid=3800124102101018568&yunge_info=email___3800124102101018568&commodityCode=sfm_DataAnalysisGBI_public_cn)。
+
+<a id="调试"></a>
+
+<a id="api-detail-23"></a>
 
 ## 调试
 
 您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
 [调试](https://api.aliyun.com/api/DataAnalysisGBI/2024-08-23/RunDataAnalysis)
+
+<a id="授权信息"></a>
+
+<a id="api-detail-32"></a>
 
 ## 授权信息
 
@@ -29,430 +41,39 @@
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
 
-操作
+<table><thead><tr><th>操作</th><th>访问级别</th><th>资源类型</th><th>条件关键字</th><th>关联操作</th></tr></thead><tbody><tr><td>dataanalysisgbi:RunDataAnalysis</td><td>none</td><td><div><div>*全部资源</div><div><code>*</code></div></div></td><td><ul>无</ul></td><td>无</td></tr></tbody></table>
 
-访问级别
+<a id="请求语法"></a>
 
-资源类型
-
-条件关键字
-
-关联操作
-
-dataanalysisgbi:RunDataAnalysis
-
-none
-
-\*全部资源
-
-`*`
-
-无
-
-无
+<a id="api-detail-53"></a>
 
 ## 请求语法
 
-```
+<a id="code-block"></a>
+
+```text
 POST /{workspaceId}/gbi/runDataAnalysis HTTP/1.1
 ```
 
+<a id="请求参数"></a>
+
+<a id="api-detail-36"></a>
+
 ## 请求参数
 
-名称
+<table><thead><tr><th>名称</th><th>类型</th><th>必填</th><th>描述</th><th>示例值</th></tr></thead><tbody><tr><td>workspaceId</td><td>string</td><td>是</td><td><div><p>当前请求所使用的阿里云百炼业务空间 id</p></div></td><td>llm-2v3934xtp49esw64</td></tr><tr><td>body</td><td>object</td><td>否</td><td><div><p>请求体参数</p></div></td><td></td></tr><tr><td>specificationType</td><td>string</td><td>否</td><td><div><p>当前请求指定使用的版本信息，不填时使用默认业务空间版本</p></div><div><div>枚举值：</div><ul><li>STANDARD_TURBO：标准版turbo。</li><li>STANDARD_MIX：标准版mix。</li><li>CUSTOMIZATION：定制版turbo。</li></ul></div></td><td>STANDARD_MIX</td></tr><tr><td>generateSqlOnly</td><td>boolean</td><td>否</td><td><div><p>当前请求只生成并返回 sql，不会执行</p></div></td><td>true</td></tr><tr><td>query</td><td>string</td><td>是</td><td><div><p>用户输入的 query</p></div></td><td>请问销量前十的产品有哪些</td></tr><tr><td>sessionId</td><td>string</td><td>否</td><td><div><p>消息会话 ID，服务窗回调消息返回的会话 ID。</p></div></td><td>sessionID</td></tr><tr><td>dataRole</td><td>array</td><td>否</td><td><div><p>数据权限-角色名称的列表</p><div><div><strong>说明</strong> 数据权限的相关配置内容需要在产品页面进行配置后，方可获取参数在 api 中调用</div></div></div></td><td></td></tr><tr><td></td><td>string</td><td>否</td><td><div><p>数据权限-角色名称的具体名字</p></div></td><td>管理员</td></tr><tr><td>userParams</td><td>any</td><td>否</td><td><div><p>数据角色依赖的自定义参数，当该角色配置了外部参数，必须传入</p><div><div><strong>说明</strong> 数据权限的相关配置内容需要在产品页面进行配置后，方可获取参数在 api 中调用</div></div></div></td><td>{ &quot;shopId&quot;:[ &quot;1&quot;, &quot;2&quot; ], &quot;userId&quot;:&quot;10001&quot; }</td></tr><tr><td>agentCtrlParams</td><td>any</td><td>否</td><td><div><p>当前对话接口所透传的自定义参数，现仅支持：跳过改写、跳过可视化模块、开启对话问题澄清</p></div></td><td>{ &quot;withoutRewrite&quot;: true, &quot;withoutVisualization&quot;: true, &quot;enableChatMode&quot;: true }</td></tr></tbody></table>
 
-类型
+<a id="返回参数"></a>
 
-必填
-
-描述
-
-示例值
-
-workspaceId
-
-string
-
-是
-
-当前请求所使用的阿里云百炼业务空间 id
-
-llm-2v3934xtp49esw64
-
-body
-
-object
-
-否
-
-请求体参数
-
-specificationType
-
-string
-
-否
-
-当前请求指定使用的版本信息，不填时使用默认业务空间版本
-
-枚举值：
-
--   STANDARD\_TURBO：标准版turbo。
--   STANDARD\_MIX：标准版mix。
--   CUSTOMIZATION：定制版turbo。
-
-STANDARD\_MIX
-
-generateSqlOnly
-
-boolean
-
-否
-
-当前请求只生成并返回 sql，不会执行
-
-true
-
-query
-
-string
-
-是
-
-用户输入的 query
-
-请问销量前十的产品有哪些
-
-sessionId
-
-string
-
-否
-
-消息会话 ID，服务窗回调消息返回的会话 ID。
-
-sessionID
-
-dataRole
-
-array
-
-否
-
-数据权限-角色名称的列表
-
-**说明** 数据权限的相关配置内容需要在产品页面进行配置后，方可获取参数在 api 中调用
-
-string
-
-否
-
-数据权限-角色名称的具体名字
-
-管理员
-
-userParams
-
-any
-
-否
-
-数据角色依赖的自定义参数，当该角色配置了外部参数，必须传入
-
-**说明** 数据权限的相关配置内容需要在产品页面进行配置后，方可获取参数在 api 中调用
-
-{ "shopId":\[ "1", "2" \], "userId":"10001" }
-
-agentCtrlParams
-
-any
-
-否
-
-当前对话接口所透传的自定义参数，现仅支持：跳过改写、跳过可视化模块、开启对话问题澄清
-
-{ "withoutRewrite": true, "withoutVisualization": true, "enableChatMode": true }
+<a id="api-detail-41"></a>
 
 ## 返回参数
 
-名称
+<table><thead><tr><th>名称</th><th>类型</th><th>描述</th><th>示例值</th></tr></thead><tbody><tr><td></td><td>object</td><td><div><p>Schema of Response</p></div></td><td></td></tr><tr><td>data</td><td>object</td><td><div><p>返回信息</p></div></td><td></td></tr><tr><td>errorMessage</td><td>string</td><td><div><p>错误信息</p></div></td><td>Access was denied, message: No such namespace namespaces/tech-scp-chain7.</td></tr><tr><td>event</td><td>string</td><td><div><p>事件类型</p></div><div><div>枚举值：</div><ul><li>result：最终结果事件。</li><li>evidence：所用到的辅助模型推理的信息。</li><li>sql_part：流式生成sql的中间事件。</li><li>sql_data：sql执行获取到结果的事件。</li><li>selector：选表事件。</li><li>refine：开启重试时的重试事件。</li><li>rewrite：改写事件。</li><li>sql：生成sql的最终事件。</li></ul></div></td><td>rewrite</td></tr><tr><td>evidence</td><td>string</td><td><div><p>所用到的辅助模型推理的信息</p></div></td><td>今年是2024年</td></tr><tr><td>requestId</td><td>string</td><td><div><p>当前本次请求的 id</p></div></td><td>DA2578F7-88A5-5D6E-9305-33E724E97D60</td></tr><tr><td>rewrite</td><td>string</td><td><div><p>改写后的用户输入</p></div></td><td>查询全部关键字数据，并以饼图形式展示</td></tr><tr><td>selector</td><td>array</td><td><div><p>这次对话，召回了哪些表以用于 sql 的生成</p></div></td><td></td></tr><tr><td>selector</td><td>string</td><td><div><p>召回的具体的表的名字</p></div></td><td>table_name1</td></tr><tr><td>sessionId</td><td>string</td><td><div><p>对话 ID</p></div></td><td>sessionid1</td></tr><tr><td>sql</td><td>string</td><td><div><p>当前对话生成的 SQL 语句</p></div></td><td>select p.product_id, p.product_name, sum(o.quantity) as total_sales from products p join orders o on p.product_id = o.product_id where o.order_date between '2022-10-22' and '2024-10-22' group by p.product_id, p.product_name having total_sales &gt; 5</td></tr><tr><td>sqlData</td><td>object</td><td><div><p>sql 执行所返回的结构化内容</p></div></td><td></td></tr><tr><td>column</td><td>array</td><td><div><p>sql 执行结果中，查询的具体的字段名字</p></div></td><td></td></tr><tr><td>column</td><td>string</td><td><div><p>具体的字段名字内容</p></div></td><td>product</td></tr><tr><td>data</td><td>array&lt;object&gt;</td><td><div><p>sql 执行后获取的结构化数据，可能是多条</p></div></td><td></td></tr><tr><td>value</td><td>object</td><td><div><p>sql 执行后所查询到的结构化数据的一条内容</p></div></td><td>{ &quot;product_id&quot;: &quot;29&quot;, &quot;total_sales&quot;: &quot;63&quot;, &quot;product_name&quot;: &quot;1L迷你电热水壶&quot; }</td></tr><tr><td>sqlError</td><td>string</td><td><div><p>当任务执行失败时，此字段会报错导致任务失败的原因</p></div></td><td>Can not issue data manipulation statements with executeQuery()</td></tr><tr><td>visualization</td><td>object</td><td><div><p>用于可视化模块展示所需要的信息</p></div></td><td></td></tr><tr><td>data</td><td>object</td><td><div><p>用于可视化模块展示的结构化信息</p></div></td><td></td></tr><tr><td>plotType</td><td>string</td><td><div><p>可视化图表展示的类型</p></div><div><div>枚举值：</div><ul><li>bar：柱状图。</li><li>line：折线图。</li><li>pie：饼状图。</li></ul></div></td><td>bar</td></tr><tr><td>xAxis</td><td>array</td><td><div><p>可视化图表中 x 轴的内容</p></div></td><td></td></tr><tr><td>xAxis</td><td>string</td><td><div><p>具体某一个 x 轴所展示的字段</p></div></td><td>product_name</td></tr><tr><td>yAxis</td><td>array</td><td><div><p>可视化图表中 y 轴的内容</p></div></td><td></td></tr><tr><td>yAxis</td><td>string</td><td><div><p>具体某一个 y 轴所展示的字段</p></div></td><td>total_sales</td></tr><tr><td>stack</td><td>boolean</td><td><div><p>是否以堆叠的方式展示柱状图。仅当图表类型是柱状图的情况下，该参数才有效</p></div></td><td>false</td></tr><tr><td>option</td><td>string</td><td><div><p>初始化前端组件所需要的配置信息。仅当入参 agentCtrlParams 中 chartsFramework=echarts 时，该字段才有效</p></div></td><td>{ xAxis: { type: 'category', data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] }, yAxis: { type: 'value' }, series: [ { data: [150, 230, 224, 218, 135, 147, 260], type: 'line' } ] }</td></tr><tr><td>text</td><td>string</td><td><div><p>对于 sql 执行结果的分析总结</p></div></td><td>查询结果显示，在过去两年中销量超过5的所有产品包括：2L大容量空气炸锅销售了109件，青春版运动手环销售了119件，2L大容量全自动豆浆机销售了106件，无线蓝牙耳机快充版销售了84件，2L大容量便携式榨汁机销售了136件，青春版智能手表销售了104件，挂壁式护眼台灯销售了102件，P30手机8+256G销售了83件，2L大容量电热水壶销售了84件，男士电动化妆刷套装销售了197件，旅行箱销售了82件，手链销售了101件，项链销售了84件，头饰发链销售了89件，腕表销售了98件，戒指销售了157件，真皮皮包销售了136件，风衣大衣销售了76件，运动旅行包销售了91件，丝巾销售了265件，1L迷你空气炸锅销售了85件，豪华款运动手环销售了132件，1L迷你全自动豆浆机销售了81件，豪华版无线蓝牙耳机（绿色）销售了122件，1L迷你便携式榨汁机销售了76件，豪华款智能手表销售了76件，粘贴式护眼台灯销售了109件，M60手机16+512G销售了109件，1L迷你电热水壶销售了63件，女士电动化妆刷套装销售了158件。</td></tr><tr><td>httpStatusCode</td><td>long</td><td><div><p>当前某一轮事件透出的 http 状态码，正常情况下不会额外透出，无需处理</p></div></td><td>200</td></tr><tr><td>attempts</td><td>array</td><td><div><p>开启 sql 校验时会输出的事件类型字段，包含每轮重试生成的 sql 以及报错原因</p></div></td><td></td></tr><tr><td>attempts</td><td>any</td><td><div><p>每伦重试生成的具体 sql、具体的报错信息</p></div></td><td>[{&quot;sql&quot;:&quot;SHOW TABLES&quot;,&quot;sqlError&quot;:&quot;sql is invalid&quot;},{&quot;sql&quot;:&quot;SHOW TABLES;&quot;,&quot;sqlError&quot;:&quot;sql is invalid&quot;}]</td></tr><tr><td>chat</td><td>object</td><td><div><p>澄清事件，当用户问题较模糊并开启了需要澄清的开关时产生的事件</p></div></td><td></td></tr><tr><td>text</td><td>string</td><td><div><p>澄清话术，模型判断当前用户问题与当前关联数据内容信息不匹配时所产生的反问话术，帮助用户确认问题内容</p></div></td><td>您想查询的是订单表的创建时间字段嘛？</td></tr><tr><td>message</td><td>string</td><td><div><p>系统错误透出的报错信息，用于报错排查，无需用户处理</p></div></td><td>org.springframework.core.task.TaskRejectedException: ExecutorService in active state did not accept task: java.util.concurrent.CompletableFuture$AsyncSupply@25653b3b</td></tr><tr><td>code</td><td>string</td><td><div><p>系统错误透出的错误码，用于报错排查，无需用户处理</p></div></td><td>NoAuth</td></tr><tr><td>httpStatusCode</td><td>long</td><td><div><p>当前本次请求透出的 http 状态码，正常情况下不会额外透出，无需处理</p></div></td><td>200</td></tr></tbody></table>
 
-类型
+<a id="示例"></a>
 
-描述
-
-示例值
-
-object
-
-Schema of Response
-
-data
-
-object
-
-返回信息
-
-errorMessage
-
-string
-
-错误信息
-
-Access was denied, message: No such namespace namespaces/tech-scp-chain7.
-
-event
-
-string
-
-事件类型
-
-枚举值：
-
--   result：最终结果事件。
--   evidence：所用到的辅助模型推理的信息。
--   sql\_part：流式生成sql的中间事件。
--   sql\_data：sql执行获取到结果的事件。
--   selector：选表事件。
--   refine：开启重试时的重试事件。
--   rewrite：改写事件。
--   sql：生成sql的最终事件。
-
-rewrite
-
-evidence
-
-string
-
-所用到的辅助模型推理的信息
-
-今年是2024年
-
-requestId
-
-string
-
-当前本次请求的 id
-
-DA2578F7-88A5-5D6E-9305-33E724E97D60
-
-rewrite
-
-string
-
-改写后的用户输入
-
-查询全部关键字数据，并以饼图形式展示
-
-selector
-
-array
-
-这次对话，召回了哪些表以用于 sql 的生成
-
-selector
-
-string
-
-召回的具体的表的名字
-
-table\_name1
-
-sessionId
-
-string
-
-对话 ID
-
-sessionid1
-
-sql
-
-string
-
-当前对话生成的 SQL 语句
-
-select p.product\_id, p.product\_name, sum(o.quantity) as total\_sales from products p join orders o on p.product\_id = o.product\_id where o.order\_date between '2022-10-22' and '2024-10-22' group by p.product\_id, p.product\_name having total\_sales > 5
-
-sqlData
-
-object
-
-sql 执行所返回的结构化内容
-
-column
-
-array
-
-sql 执行结果中，查询的具体的字段名字
-
-column
-
-string
-
-具体的字段名字内容
-
-product
-
-data
-
-array<object>
-
-sql 执行后获取的结构化数据，可能是多条
-
-value
-
-object
-
-sql 执行后所查询到的结构化数据的一条内容
-
-{ "product\_id": "29", "total\_sales": "63", "product\_name": "1L迷你电热水壶" }
-
-sqlError
-
-string
-
-当任务执行失败时，此字段会报错导致任务失败的原因
-
-Can not issue data manipulation statements with executeQuery()
-
-visualization
-
-object
-
-用于可视化模块展示所需要的信息
-
-data
-
-object
-
-用于可视化模块展示的结构化信息
-
-plotType
-
-string
-
-可视化图表展示的类型
-
-枚举值：
-
--   bar：柱状图。
--   line：折线图。
--   pie：饼状图。
-
-bar
-
-xAxis
-
-array
-
-可视化图表中 x 轴的内容
-
-xAxis
-
-string
-
-具体某一个 x 轴所展示的字段
-
-product\_name
-
-yAxis
-
-array
-
-可视化图表中 y 轴的内容
-
-yAxis
-
-string
-
-具体某一个 y 轴所展示的字段
-
-total\_sales
-
-stack
-
-boolean
-
-是否以堆叠的方式展示柱状图。仅当图表类型是柱状图的情况下，该参数才有效
-
-false
-
-option
-
-string
-
-初始化前端组件所需要的配置信息。仅当入参 agentCtrlParams 中 chartsFramework=echarts 时，该字段才有效
-
-{ xAxis: { type: 'category', data: \['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'\] }, yAxis: { type: 'value' }, series: \[ { data: \[150, 230, 224, 218, 135, 147, 260\], type: 'line' } \] }
-
-text
-
-string
-
-对于 sql 执行结果的分析总结
-
-查询结果显示，在过去两年中销量超过5的所有产品包括：2L大容量空气炸锅销售了109件，青春版运动手环销售了119件，2L大容量全自动豆浆机销售了106件，无线蓝牙耳机快充版销售了84件，2L大容量便携式榨汁机销售了136件，青春版智能手表销售了104件，挂壁式护眼台灯销售了102件，P30手机8+256G销售了83件，2L大容量电热水壶销售了84件，男士电动化妆刷套装销售了197件，旅行箱销售了82件，手链销售了101件，项链销售了84件，头饰发链销售了89件，腕表销售了98件，戒指销售了157件，真皮皮包销售了136件，风衣大衣销售了76件，运动旅行包销售了91件，丝巾销售了265件，1L迷你空气炸锅销售了85件，豪华款运动手环销售了132件，1L迷你全自动豆浆机销售了81件，豪华版无线蓝牙耳机（绿色）销售了122件，1L迷你便携式榨汁机销售了76件，豪华款智能手表销售了76件，粘贴式护眼台灯销售了109件，M60手机16+512G销售了109件，1L迷你电热水壶销售了63件，女士电动化妆刷套装销售了158件。
-
-httpStatusCode
-
-long
-
-当前某一轮事件透出的 http 状态码，正常情况下不会额外透出，无需处理
-
-200
-
-attempts
-
-array
-
-开启 sql 校验时会输出的事件类型字段，包含每轮重试生成的 sql 以及报错原因
-
-attempts
-
-any
-
-每伦重试生成的具体 sql、具体的报错信息
-
-\[{"sql":"SHOW TABLES","sqlError":"sql is invalid"},{"sql":"SHOW TABLES;","sqlError":"sql is invalid"}\]
-
-chat
-
-object
-
-澄清事件，当用户问题较模糊并开启了需要澄清的开关时产生的事件
-
-text
-
-string
-
-澄清话术，模型判断当前用户问题与当前关联数据内容信息不匹配时所产生的反问话术，帮助用户确认问题内容
-
-您想查询的是订单表的创建时间字段嘛？
-
-message
-
-string
-
-系统错误透出的报错信息，用于报错排查，无需用户处理
-
-org.springframework.core.task.TaskRejectedException: ExecutorService in active state did not accept task: java.util.concurrent.CompletableFuture$AsyncSupply@25653b3b
-
-code
-
-string
-
-系统错误透出的错误码，用于报错排查，无需用户处理
-
-NoAuth
-
-httpStatusCode
-
-long
-
-当前本次请求透出的 http 状态码，正常情况下不会额外透出，无需处理
-
-200
+<a id="api-detail-1"></a>
 
 ## 示例
 
@@ -460,7 +81,9 @@ long
 
 `JSON`格式
 
-```
+<a id="code-block-2"></a>
+
+```text
 {
   "data": {
     "errorMessage": "Access was denied, message: No such namespace namespaces/tech-scp-chain7.",
@@ -523,30 +146,15 @@ long
 }
 ```
 
+<a id="错误码"></a>
+
+<a id="h2-url-6"></a>
+
 ## 错误码
 
-HTTP status code
-
-错误码
-
-错误信息
-
-描述
-
-401
-
-NoAuth
-
-Bad Request: Workspace.Illegal.Auth.
-
-当前所使用的账号无所指定业务空间的权限
-
-401
-
-Internal.Error
-
-Bad Request: Internal Error.
-
-内部错误，请联系客服人员排查
+| HTTP status code | 错误码 | 错误信息 | 描述 |
+| --- | --- | --- | --- |
+| 401 | NoAuth | Bad Request: Workspace.Illegal.Auth. | 当前所使用的账号无所指定业务空间的权限 |
+| 401 | Internal.Error | Bad Request: Internal Error. | 内部错误，请联系客服人员排查 |
 
 访问[错误中心](https://api.aliyun.com/document/DataAnalysisGBI/2024-08-23/errorCode)查看更多错误码。

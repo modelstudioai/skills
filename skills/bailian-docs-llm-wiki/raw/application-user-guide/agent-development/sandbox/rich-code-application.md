@@ -9,6 +9,10 @@
 -   支持**自定义前端体验**，提供直接体验、自定义交互卡片和自定义前端 WebUI 三种方式，基于 [Spark Design](https://github.com/agentscope-ai/agentscope-spark-design) 框架构建丰富的交互界面。
 -   支持**自动化运维、可观测、日志服务、API网关等**企业级能力。
 
+<a id="快速开始"></a>
+
+<a id="a58c79de190a7"></a>
+
 ## 快速开始
 
 1.  前往[阿里云百炼-应用中心](https://bailian.console.aliyun.com/flow-agent/app-center)，单击**创建应用**。在弹出的创建应用对话框左侧，选择**高代码应用**。
@@ -16,7 +20,7 @@
     选择创建类型：
     
     -   **控制台创建**：在控制台直接选择模板、配置资源并一键部署，推荐初次使用。
-    -   **命令行创建**：在控制台创建空白应用后，通过 AgentScope-AI 命令行工具上传本地代码包部署。适合已有项目代码的开发者，详细流程请参考[API 开发指南](raw/application-user-guide/agent-development/sandbox/rich-code-application/rich-code-app-develop-guide.md)。
+    -   **命令行创建**：在控制台创建空白应用后，通过 AgentScope-AI 命令行工具上传本地代码包部署。适合已有项目代码的开发者，详细流程请参考[API 开发指南](rich-code-application/rich-code-app-develop-guide.md)。
     
     填写**应用名称**后，单击**立即创建**。
     
@@ -32,25 +36,15 @@
     **提交代码**
     
     -   **使用模版代码**（默认）：选择一个预置的应用模版快速开始。
-    -   **上传代码包**：上传本地开发的 .whl 格式代码包。代码包制作方式请参考[API 开发指南](raw/application-user-guide/agent-development/sandbox/rich-code-application/rich-code-app-develop-guide.md)。
+    -   **上传代码包**：上传本地开发的 .whl 格式代码包。代码包制作方式请参考[API 开发指南](rich-code-application/rich-code-app-develop-guide.md)。
     
     平台提供以下应用模版：
     
-    **模版**
-    
-    **说明**
-    
-    基础对话 Agent
-    
-    以 LLM 对话为主的基础示例 Agent，适合快速体验和二次开发。
-    
-    工具调用 Agent
-    
-    内置多种 MCP 工具（联网搜索、计算器等），展示工具调用能力。
-    
-    深度研究 Agent
-    
-    基于 AgentScope 组件搭建的深度研究 Agent，可进行互联网调研并生成研究报告。
+    | 模版 | 说明 |
+    | --- | --- |
+    | 基础对话 Agent | 以 LLM 对话为主的基础示例 Agent，适合快速体验和二次开发。 |
+    | 工具调用 Agent | 内置多种 MCP 工具（联网搜索、计算器等），展示工具调用能力。 |
+    | 深度研究 Agent | 基于 AgentScope 组件搭建的深度研究 Agent，可进行互联网调研并生成研究报告。 |
     
     **选择部署资源**
     
@@ -68,14 +62,22 @@
     
 3.  等待几分钟完成应用的构建和部署。页面会显示构建和部署的实时进度和耗时，可单击进度条旁的**日志**链接查看详细的构建日志和部署日志。
     
-4.  待部署完成后，配置阿里云百炼的 API Key 后，即可使用页面右侧的测试面板进行体验和调试。API Key 获取方式请参考：[获取 API Key](raw/model-api-reference/preparations/get-api-key.md)。
+4.  待部署完成后，配置阿里云百炼的 API Key 后，即可使用页面右侧的测试面板进行体验和调试。API Key 获取方式请参考：[获取 API Key](../../../model-api-reference/preparations/get-api-key.md)。
     
     -   **文本对话体验**：直接与应用进行对话交互，快速验证应用功能。
-    -   **API测试**：手动调用应用的 API 接口（如 `GET /health`、`/process`），适合开发调试。接口协议详情请参考[API 开发指南](raw/application-user-guide/agent-development/sandbox/rich-code-application/rich-code-app-develop-guide.md)。
+    -   **API测试**：手动调用应用的 API 接口（如 `GET /health`、`/process`），适合开发调试。接口协议详情请参考[API 开发指南](rich-code-application/rich-code-app-develop-guide.md)。
+
+<a id="应用管理"></a>
+
+<a id="app_mgmt_h2"></a>
 
 ## 应用管理
 
 部署完成后，应用详情页左侧提供**部署**、**工具**、**网关**、**前端**四个功能 Tab，覆盖已部署应用的完整管理和体验流程。页面右侧面板提供**API测试**和**文本对话体验**两种测试模式，可随时验证应用功能。
+
+<a id="部署"></a>
+
+<a id="deploy_mgmt_h3"></a>
 
 ### 部署
 
@@ -92,9 +94,17 @@
 -   **停止服务**：当应用不再需要运行时，单击页面顶部的**停止服务**按钮停止应用以节省费用。
     
 
+<a id="工具"></a>
+
+<a id="tools_mgmt_h3"></a>
+
 ### 工具
 
-高代码应用支持一站式**MCP** 工具接入，可在工具 Tab 中为应用关联知识库、工作流、插件等 MCP 服务。详细配置方式请参考[工具接入](raw/application-user-guide/agent-development/sandbox/rich-code-application/rich-code-application-mcp.md)。
+高代码应用支持一站式**MCP** 工具接入，可在工具 Tab 中为应用关联知识库、工作流、插件等 MCP 服务。详细配置方式请参考[工具接入](rich-code-application/rich-code-application-mcp.md)。
+
+<a id="网关"></a>
+
+<a id="gateway_mgmt_h3"></a>
 
 ### 网关
 
@@ -111,7 +121,9 @@
 4.  调用示例：
     
 
-```
+<a id="code-block"></a>
+
+```bash
 curl -i -X POST "http://{your-domain}/{your-agentCode}/process" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer 替换为应用网关鉴权token" \
@@ -129,6 +141,10 @@ curl -i -X POST "http://{your-domain}/{your-agentCode}/process" \
   }'
 ```
 
+<a id="前端"></a>
+
+<a id="frontend_mgmt_h3"></a>
+
 ### 前端
 
 前端 Tab 提供三种前端体验方式，方便开发者为高代码应用构建丰富的交互界面：
@@ -137,7 +153,11 @@ curl -i -X POST "http://{your-domain}/{your-agentCode}/process" \
 -   **自定义交互卡片**：在应用代码中自定义交互卡片样式，实现富文本、按钮、表单等交互元素。
 -   **自定义前端 WebUI**：基于 [AgentScope Spark Design](https://github.com/agentscope-ai/agentscope-spark-design) 框架，构建完整的前端交互界面。Spark Design 提供 `@agentscope-ai/design`（UI 组件库）和 `@agentscope-ai/chat`（对话组件库）两个核心包，支持 Markdown 渲染、流式响应、语音输入等能力。详情请参考[Spark Design 在线文档](https://sparkdesign.agentscope.io/)。
 
+<a id="后续阅读"></a>
+
+<a id="next_reading_h2"></a>
+
 ## 后续阅读
 
--   [工具接入](raw/application-user-guide/agent-development/sandbox/rich-code-application/rich-code-application-mcp.md)：了解如何通过 MCP 协议接入知识库和外部工具服务。
--   [API 开发指南](raw/application-user-guide/agent-development/sandbox/rich-code-application/rich-code-app-develop-guide.md)：了解如何使用 AgentScope-AI 开发、上传和部署高代码应用。
+-   [工具接入](rich-code-application/rich-code-application-mcp.md)：了解如何通过 MCP 协议接入知识库和外部工具服务。
+-   [API 开发指南](rich-code-application/rich-code-app-develop-guide.md)：了解如何使用 AgentScope-AI 开发、上传和部署高代码应用。

@@ -2,46 +2,57 @@
 
 enableSendMediaStream 用于控制客户端是否向 AI 服务发送音频/视频媒体流，在 AOQ 协议接入场景中精确控制发送时机。
 
+<a id="概述"></a>
+
+<a id="mstream-h2-overview"></a>
+
 ## 概述
 
 `enableSendMediaStream` 用于控制客户端是否向 AI 服务发送音频/视频媒体流。在 AOQ 协议接入场景中，部分模型要求在收到 `session.updated` 确认后才能接收媒体数据，因此需要通过此接口精确控制发送时机。
 
+<a id="api-定义"></a>
+
+<a id="mstream-h2-api"></a>
+
 ## API 定义
 
 **iOS / Mac**
-```
+
+<a id="code-block"></a>
+
+```swift
 // iOS / Mac
 func enableSendMediaStream(_ trackType: AoqTrackType, enable: Bool)
 ```
+
 **Android**
-```
+
+<a id="code-block-2"></a>
+
+```java
 // Android
 void enableSendMediaStream(AoqTrackType trackType, boolean enable)
 ```
+
 **OHOS (ArkTS)**
-```
+
+<a id="code-block-3"></a>
+
+```javascript
 // OHOS (ArkTS)
 enableSendMediaStream(trackType: AoqTrackType, enable: boolean): void
 ```
+
 **参数说明：**
 
-**参数**
+| 参数 | 类型 | 说明 |
+| --- | --- | --- |
+| trackType | AoqTrackType | 媒体轨道类型：`.audio` 或 `.video` |
+| enable | Bool | `true` = 开启发送，`false` = 暂停发送 |
 
-**类型**
+<a id="控制流程"></a>
 
-**说明**
-
-trackType
-
-AoqTrackType
-
-媒体轨道类型：`.audio` 或 `.video`
-
-enable
-
-Bool
-
-`true` = 开启发送，`false` = 暂停发送
+<a id="mstream-h2-flow"></a>
 
 ## 控制流程
 
@@ -49,11 +60,21 @@ Bool
 
 ![111](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0575914871/p1088082.svg)
 
+<a id="使用示例-ios-swift"></a>
+
+<a id="mstream-h2-example"></a>
+
 ## 使用示例（iOS Swift）
+
+<a id="connect-前禁用发送"></a>
+
+<a id="mstream-h2-example-before"></a>
 
 ### connect 前禁用发送
 
-```
+<a id="code-block-4"></a>
+
+```swift
 // 连接前关闭音视频发送，避免模型未就绪时收到数据
 engine.enableSendMediaStream(.audio, enable: false)
 engine.enableSendMediaStream(.video, enable: false)
@@ -62,9 +83,15 @@ engine.enableSendMediaStream(.video, enable: false)
 engine.connect(config)
 ```
 
+<a id="收到-session-updated-后开启"></a>
+
+<a id="mstream-h2-example-after"></a>
+
 ### 收到 session.updated 后开启
 
-```
+<a id="code-block-5"></a>
+
+```swift
 func onDataMsg(_ msg: AoqDataMsg) {
     guard let obj = try? JSONSerialization.jsonObject(with: msg.data) as? [String: Any],
           let type = obj["type"] as? String else { return }
@@ -77,6 +104,10 @@ func onDataMsg(_ msg: AoqDataMsg) {
 }
 ```
 
+<a id="注意事项"></a>
+
+<a id="mstream-h2-notes"></a>
+
 ## 注意事项
 
 -   **调用时机**：必须在 `createEngine` 之后调用，引擎未创建时调用无效。
@@ -84,22 +115,13 @@ func onDataMsg(_ msg: AoqDataMsg) {
 -   **模型兼容性**：部分模型要求先收到 `session.updated` 再接收媒体数据，建议统一采用"先禁用、后开启"模式。
 -   **独立控制**：音频和视频可独立控制，例如仅发送音频不发送视频。
 
+<a id="常见场景"></a>
+
+<a id="mstream-h2-scenarios"></a>
+
 ## 常见场景
 
-**场景**
-
-**操作**
-
-**说明**
-
-连接模型前
-
-`enable(.audio, false)`
-
-等待 session.updated 再发送
-
-收到 session.updated
-
-`enable(.audio, true)`
-
-AI 已就绪，开始发送
+| 场景 | 操作 | 说明 |
+| --- | --- | --- |
+| 连接模型前 | `enable(.audio, false)` | 等待 session.updated 再发送 |
+| 收到 session.updated | `enable(.audio, true)` | AI 已就绪，开始发送 |

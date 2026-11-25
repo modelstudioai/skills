@@ -2,7 +2,19 @@
 
 阿里云百炼的千问模型支持 OpenAI 兼容接口，您只需调整 API Key、BASE\_URL 和模型名称，即可将原有 OpenAI 代码迁移至阿里云百炼服务使用。
 
+<a id="兼容openai需要信息"></a>
+
+<a id="54e1cc7a9bq65"></a>
+
+<a id="56e9761e923mg"></a>
+
 ## 兼容OpenAI需要信息
+
+<a id="base-url"></a>
+
+<a id="21d628d5f82z7"></a>
+
+<a id="ed282cb8338lp"></a>
 
 ### BASE\_URL
 
@@ -10,7 +22,9 @@ BASE\_URL表示模型服务的网络访问点或地址。通过该地址，您�
 
 -   当您通过OpenAI SDK或其他OpenAI兼容的SDK调用时，需要配置的BASE\_URL如下：
 
-```
+<a id="code-block"></a>
+
+```http
 北京：https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1
 弗吉尼亚：https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/compatible-mode/v1
 新加坡：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
@@ -19,21 +33,31 @@ BASE\_URL表示模型服务的网络访问点或地址。通过该地址，您�
 
 -   当您通过HTTP请求调用时，需要配置的完整访问endpoint如下：
 
-```
+<a id="code-block-2"></a>
+
+```http
 北京：POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions
 弗吉尼亚：POST https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions
 新加坡：POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions
 日本（东京）：POST https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions
 ```
 
-**重要**阿里云百炼为华北2（北京）、新加坡、中国香港地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
-
--   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
--   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
-
-其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
+> **重要**
+>
+> 阿里云百炼为华北2（北京）、新加坡、中国香港地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+>
+> -   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+> -   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+>
+> 其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
 > **调用失败排查**：通过 OpenAI 兼容接口调用时，如遇到 404、401、403 或连接失败等错误，请依次检查以下配置：
+
+<a id="跨地域调用"></a>
+
+<a id="h4-cross-region-calling"></a>
+
+<a id="cross-region-calling"></a>
 
 #### 跨地域调用
 
@@ -43,6 +67,12 @@ BASE\_URL表示模型服务的网络访问点或地址。通过该地址，您�
 
 使用北京地域 API Key 调用弗吉尼亚地域 endpoint 时，返回 HTTP 401，错误信息为 `Incorrect API key provided`，错误码为 `invalid_api_key`。该错误表示 API Key 与 endpoint 所属地域不匹配，而非 API Key 失效或权限不足。
 
+<a id="支持的模型列表"></a>
+
+<a id="eadfc13038jd5"></a>
+
+<a id="7f9c78ae99pwz"></a>
+
 ### 支持的模型列表
 
 支持的模型：Qwen 大语言模型（商业版、开源版）、Qwen-VL、Qwen-Coder、Qwen-Omni、Qwen-Math、DeepSeek（阿里云直供、硅基流动直供、快手万擎直供）、Kimi（阿里云直供、月之暗面直供）、GLM（阿里云直供）、MiniMax（阿里云直供、稀宇科技直供）。
@@ -51,7 +81,17 @@ BASE\_URL表示模型服务的网络访问点或地址。通过该地址，您�
 
 > Qwen-Audio不支持OpenAI兼容协议，仅支持DashScope协议。
 
+<a id="通过openai-sdk调用"></a>
+
+<a id="aad9ffd00arml"></a>
+
+<a id="43f870c0cfvsy"></a>
+
 ## 通过OpenAI SDK调用
+
+<a id="前提条件"></a>
+
+<a id="o6ecl"></a>
 
 ### 前提条件
 
@@ -60,7 +100,9 @@ BASE\_URL表示模型服务的网络访问点或地址。通过该地址，您�
 -   请安装最新版OpenAI SDK。
     
 
-```
+<a id="code-block-3"></a>
+
+```bash
 # 如果下述命令报错，请将pip替换为pip3
 pip install -U openai
 ```
@@ -69,16 +111,26 @@ pip install -U openai
     
 -   我们推荐您将API-KEY配置到环境变量中以降低API-KEY的泄露风险，配置方法可参考配置API Key到环境变量。您也可以在代码中配置API-KEY，**但是泄露风险会提高**。
     
--   请选择您需要使用的模型：[支持的模型列表](https://help.aliyun.com/zh/model-studio/compatibility-of-openai-with-dashscope#eadfc13038jd5)。
+-   请选择您需要使用的模型：[支持的模型列表](compatibility-of-openai-with-dashscope.md#eadfc13038jd5)。
     
+
+<a id="使用方式"></a>
+
+<a id="t4GMg"></a>
 
 ### 使用方式
 
 您可以参考以下示例来使用OpenAI SDK访问百炼服务上的千问模型。
 
+<a id="非流式调用示例"></a>
+
+<a id="d80da2d585741"></a>
+
 #### 非流式调用示例
 
-```
+<a id="code-block-4"></a>
+
+```python
 from openai import OpenAI
 import os
 
@@ -105,7 +157,9 @@ if __name__ == '__main__':
 
 以下为 `qwen3.8-max` 的历史响应示例，用于说明字段。
 
-```
+<a id="code-block-5"></a>
+
+```json
 {
     "id": "chatcmpl-xxx",
     "choices": [
@@ -133,9 +187,15 @@ if __name__ == '__main__':
 }
 ```
 
+<a id="流式调用示例"></a>
+
+<a id="fece922d5boc1"></a>
+
 #### 流式调用示例
 
-```
+<a id="code-block-6"></a>
+
+```python
 from openai import OpenAI
 import os
 
@@ -166,7 +226,9 @@ if __name__ == '__main__':
 
 以下为 `qwen3.8-max` 的历史响应示例，用于说明字段。
 
-```
+<a id="code-block-7"></a>
+
+```json
 {"id":"chatcmpl-xxx","choices":[{"delta":{"content":"","function_call":null,"role":"assistant","tool_calls":null},"finish_reason":null,"index":0,"logprobs":null}],"created":1719286190,"model":"qwen3.8-max","object":"chat.completion.chunk","system_fingerprint":null,"usage":null}
 {"id":"chatcmpl-xxx","choices":[{"delta":{"content":"我是","function_call":null,"role":null,"tool_calls":null},"finish_reason":null,"index":0,"logprobs":null}],"created":1719286190,"model":"qwen3.8-max","object":"chat.completion.chunk","system_fingerprint":null,"usage":null}
 {"id":"chatcmpl-xxx","choices":[{"delta":{"content":"来自","function_call":null,"role":null,"tool_calls":null},"finish_reason":null,"index":0,"logprobs":null}],"created":1719286190,"model":"qwen3.8-max","object":"chat.completion.chunk","system_fingerprint":null,"usage":null}
@@ -177,11 +239,17 @@ if __name__ == '__main__':
 {"id":"chatcmpl-xxx","choices":[],"created":1719286190,"model":"qwen3.8-max","object":"chat.completion.chunk","system_fingerprint":null,"usage":{"completion_tokens":16,"prompt_tokens":22,"total_tokens":38}}
 ```
 
+<a id="function-call示例"></a>
+
+<a id="97e2b45391x08"></a>
+
 #### function call示例
 
 此处以天气查询工具与时间查询工具为例，向您展示通过OpenAI接口兼容实现function call的功能。示例代码可以实现多轮工具调用。
 
-```
+<a id="code-block-8"></a>
+
+```python
 from openai import OpenAI
 from datetime import datetime
 import json
@@ -300,307 +368,48 @@ if __name__ == '__main__':
     call_with_messages()
 ```
 
+<a id="输入参数配置"></a>
+
+<a id="d553cbbee6mxk"></a>
+
 ### 输入参数配置
 
 输入参数与OpenAI的接口参数对齐，当前已支持的参数如下：
 
-**参数**
-
-**类型**
-
-**默认值**
-
-**说明**
-
-model
-
-_string_
-
-用户使用model参数指明对应的模型，可选的模型请见[支持的模型列表](https://help.aliyun.com/zh/model-studio/compatibility-of-openai-with-dashscope#eadfc13038jd5)。
-
-messages
-
-_array_
-
-用户与模型的对话历史。array中的每个元素形式为`{"role":角色, "content": 内容}`。角色当前可选值：system、user、assistant，其中，仅`messages[0]`中支持role为system，一般情况下，user和assistant需要交替出现，且messages中最后一个元素的role必须为user。
-
-top\_p（可选）
-
-_float_
-
-生成过程中的核采样方法概率阈值，例如，取值为0.8时，仅保留概率加起来大于等于0.8的最可能token的最小集合作为候选集。取值范围为（0,1.0)，取值越大，生成的随机性越高；取值越小，生成的确定性越高。
-
-temperature（可选）
-
-_float_
-
-用于控制模型回复的随机性和多样性。具体来说，temperature值控制了生成文本时对每个候选词的概率分布进行平滑的程度。较高的temperature值会降低概率分布的峰值，使得更多的低概率词被选择，生成结果更加多样化；而较低的temperature值则会增强概率分布的峰值，使得高概率词更容易被选择，生成结果更加确定。
-
-取值范围： \[0, 2)，不建议取值为0，无意义。
-
-presence\_penalty
-
-（可选）
-
-_float_
-
-用户控制模型生成时整个序列中的重复度。提高presence\_penalty时可以降低模型生成的重复度，取值范围\[-2.0, 2.0\]。
-
-**说明**目前仅在千问商业模型和qwen1.5及以后的开源模型上支持该参数。
-
-n（可选）
-
-_integer_
-
-1
-
-生成响应的个数，取值范围是`1-4`。对于需要生成多个响应的场景（如创意写作、广告文案等），可以设置较大的 n 值。
-
-> 设置较大的 n 值不会增加输入 Token 消耗，会增加输出 Token 的消耗。
-
-> 当前仅支持 qwen-plus 模型，且在传入 tools 参数时固定为1。
-
-max\_tokens（可选）
-
-_integer_
-
-指定模型可生成的最大token个数。例如模型最大输出长度为2k，您可以设置为1k，防止模型输出过长的内容。
-
-不同的模型有不同的输出上限，具体请参见模型列表。
-
-seed（可选）
-
-_integer_
-
-生成时使用的随机数种子，用于控制模型生成内容的随机性。seed支持无符号64位整数。
-
-stream（可选）
-
-_boolean_
-
-False
-
-用于控制是否使用流式输出。当以stream模式输出结果时，接口返回结果为generator，需要通过迭代获取结果，每次输出为当前生成的增量序列。
-
-stop（可选）
-
-_string or array_
-
-None
-
-stop参数用于实现内容生成过程的精确控制，在模型生成的内容即将包含指定的字符串或token\_id时自动停止。stop可以为string类型或array类型。
-
--   string类型
-    
-    当模型将要生成指定的stop词语时停止。
-    
-    例如将stop指定为"你好"，则模型将要生成“你好”时停止。
-    
--   array类型
-    
-    array中的元素可以为token\_id或者字符串，或者元素为token\_id的array。当模型将要生成的token或其对应的token\_id在stop中时，模型生成将会停止。以下为stop为array时的示例（tokenizer对应模型为qwen3.5-flash）：
-    
-    1.元素为token\_id：
-    
-    token\_id为108386和104307分别对应token为“你好”和“天气”，设定stop为`[108386,104307]`，则模型将要生成“你好”或者“天气”时停止。
-    
-    2.元素为字符串：
-    
-    设定stop为`["你好","天气"]`，则模型将要生成“你好”或者“天气”时停止。
-    
-    3.元素为array：
-    
-    token\_id为108386和103924分别对应token为“你好”和“啊”，token\_id为35946和101243分别对应token为“我”和“很好”。设定stop为`[[108386, 103924],[35946, 101243]]`，则模型将要生成“你好啊”或者“我很好”时停止。
-    
-    **说明**stop为array类型时，不可以将token\_id和字符串同时作为元素输入，比如不可以指定stop为`["你好",104307]`。
-    
-
-tools（可选）
-
-_array_
-
-None
-
-用于指定可供模型调用的工具库，一次function call流程模型会从中选择其中一个工具。tools中每一个tool的结构如下：
-
--   type，类型为string，表示tools的类型，当前仅支持function。
-    
--   function，类型为object，键值包括name，description和parameters：
-    
-    -   name：类型为string，表示工具函数的名称，必须是字母、数字，可以包含下划线和短划线，最大长度为64。
-        
-    -   description：类型为string，表示工具函数的描述，供模型选择何时以及如何调用工具函数。
-        
-    -   parameters：类型为object，表示工具的参数描述，需要是一个合法的JSON Schema。JSON Schema的描述可以见[链接](https://json-schema.org/understanding-json-schema)。如果parameters参数为空，表示function没有入参。
-        
-        parameters中各属性的`type`支持JSON Schema定义的常见类型，包括`string`、`number`、`integer`、`boolean`、`array`和`object`等。当属性类型为`array`时，需要通过`items`字段指定数组元素的类型。示例如下：
-        
-
-```
-{
-    "type": "object",
-    "properties": {
-        "command": {
-            "type": "array",
-            "items": {"type": "string"},
-            "description": "要执行的命令，例如['ls', '-l']"
+<table><thead><tr><th><strong>参数</strong></th><th><strong>类型</strong></th><th><strong>默认值</strong></th><th><strong>说明</strong></th></tr></thead><tbody><tr><td><p>model</p></td><td><p><em>string</em></p></td><td><ul><li></li></ul></td><td><p>用户使用model参数指明对应的模型，可选的模型请见<a href="compatibility-of-openai-with-dashscope.md#eadfc13038jd5">支持的模型列表</a>。</p></td></tr><tr><td><p>messages</p></td><td><p><em>array</em></p></td><td><ul><li></li></ul></td><td><p>用户与模型的对话历史。array中的每个元素形式为<code>{&quot;role&quot;:角色, &quot;content&quot;: 内容}</code>。角色当前可选值：system、user、assistant，其中，仅<code>messages[0]</code>中支持role为system，一般情况下，user和assistant需要交替出现，且messages中最后一个元素的role必须为user。</p></td></tr><tr><td><p>top_p（可选）</p></td><td><p><em>float</em></p></td><td><ul><li></li></ul></td><td><p>生成过程中的核采样方法概率阈值，例如，取值为0.8时，仅保留概率加起来大于等于0.8的最可能token的最小集合作为候选集。取值范围为（0,1.0)，取值越大，生成的随机性越高；取值越小，生成的确定性越高。</p></td></tr><tr><td><p>temperature（可选）</p></td><td><p><em>float</em></p></td><td><ul><li></li></ul></td><td><p>用于控制模型回复的随机性和多样性。具体来说，temperature值控制了生成文本时对每个候选词的概率分布进行平滑的程度。较高的temperature值会降低概率分布的峰值，使得更多的低概率词被选择，生成结果更加多样化；而较低的temperature值则会增强概率分布的峰值，使得高概率词更容易被选择，生成结果更加确定。</p><p>取值范围： [0, 2)，不建议取值为0，无意义。</p></td></tr><tr><td><p>presence_penalty</p><p>（可选）</p></td><td><p><em>float</em></p></td><td><ul><li></li></ul></td><td><p>用户控制模型生成时整个序列中的重复度。提高presence_penalty时可以降低模型生成的重复度，取值范围[-2.0, 2.0]。</p><div><div><p><strong>说明</strong>目前仅在千问商业模型和qwen1.5及以后的开源模型上支持该参数。</p></div></div></td></tr><tr><td><p>n（可选）</p></td><td><p><em>integer</em></p></td><td><p>1</p></td><td><p>生成响应的个数，取值范围是<code>1-4</code>。对于需要生成多个响应的场景（如创意写作、广告文案等），可以设置较大的 n 值。</p><blockquote><p>设置较大的 n 值不会增加输入 Token 消耗，会增加输出 Token 的消耗。</p></blockquote><blockquote><p>当前仅支持 qwen-plus 模型，且在传入 tools 参数时固定为1。</p></blockquote></td></tr><tr><td><p>max_tokens（可选）</p></td><td><p><em>integer</em></p></td><td><ul><li></li></ul></td><td><p>指定模型可生成的最大token个数。例如模型最大输出长度为2k，您可以设置为1k，防止模型输出过长的内容。</p><p>不同的模型有不同的输出上限，具体请参见模型列表。</p></td></tr><tr><td><p>seed（可选）</p></td><td><p><em>integer</em></p></td><td><ul><li></li></ul></td><td><p>生成时使用的随机数种子，用于控制模型生成内容的随机性。seed支持无符号64位整数。</p></td></tr><tr><td><p>stream（可选）</p></td><td><p><em>boolean</em></p></td><td><p>False</p></td><td><p>用于控制是否使用流式输出。当以stream模式输出结果时，接口返回结果为generator，需要通过迭代获取结果，每次输出为当前生成的增量序列。</p></td></tr><tr><td><p>stop（可选）</p></td><td><p><em>string or array</em></p></td><td><p>None</p></td><td><p>stop参数用于实现内容生成过程的精确控制，在模型生成的内容即将包含指定的字符串或token_id时自动停止。stop可以为string类型或array类型。</p><ul><li><p>string类型</p><p>当模型将要生成指定的stop词语时停止。</p><p>例如将stop指定为&quot;你好&quot;，则模型将要生成“你好”时停止。</p></li><li><p>array类型</p><p>array中的元素可以为token_id或者字符串，或者元素为token_id的array。当模型将要生成的token或其对应的token_id在stop中时，模型生成将会停止。以下为stop为array时的示例（tokenizer对应模型为qwen3.5-flash）：</p><p>1.元素为token_id：</p><p>token_id为108386和104307分别对应token为“你好”和“天气”，设定stop为<code>[108386,104307]</code>，则模型将要生成“你好”或者“天气”时停止。</p><p>2.元素为字符串：</p><p>设定stop为<code>[&quot;你好&quot;,&quot;天气&quot;]</code>，则模型将要生成“你好”或者“天气”时停止。</p><p>3.元素为array：</p><p>token_id为108386和103924分别对应token为“你好”和“啊”，token_id为35946和101243分别对应token为“我”和“很好”。设定stop为<code>[[108386, 103924],[35946, 101243]]</code>，则模型将要生成“你好啊”或者“我很好”时停止。</p><div><div><p><strong>说明</strong>stop为array类型时，不可以将token_id和字符串同时作为元素输入，比如不可以指定stop为<code>[&quot;你好&quot;,104307]</code>。</p></div></div></li></ul></td></tr><tr><td><p>tools（可选）</p></td><td><p><em>array</em></p></td><td><p>None</p></td><td><p>用于指定可供模型调用的工具库，一次function call流程模型会从中选择其中一个工具。tools中每一个tool的结构如下：</p><ul><li><p>type，类型为string，表示tools的类型，当前仅支持function。</p></li><li><p>function，类型为object，键值包括name，description和parameters：</p><ul><li><p>name：类型为string，表示工具函数的名称，必须是字母、数字，可以包含下划线和短划线，最大长度为64。</p></li><li><p>description：类型为string，表示工具函数的描述，供模型选择何时以及如何调用工具函数。</p></li><li><p>parameters：类型为object，表示工具的参数描述，需要是一个合法的JSON Schema。JSON Schema的描述可以见<a href="https://json-schema.org/understanding-json-schema">链接</a>。如果parameters参数为空，表示function没有入参。</p><p>parameters中各属性的<code>type</code>支持JSON Schema定义的常见类型，包括<code>string</code>、<code>number</code>、<code>integer</code>、<code>boolean</code>、<code>array</code>和<code>object</code>等。当属性类型为<code>array</code>时，需要通过<code>items</code>字段指定数组元素的类型。示例如下：</p></li></ul></li></ul><a id="code-block-9"></a><pre class="language-json"><code>{
+    &quot;type&quot;: &quot;object&quot;,
+    &quot;properties&quot;: {
+        &quot;command&quot;: {
+            &quot;type&quot;: &quot;array&quot;,
+            &quot;items&quot;: {&quot;type&quot;: &quot;string&quot;},
+            &quot;description&quot;: &quot;要执行的命令，例如['ls', '-l']&quot;
         }
     },
-    "required": ["command"]
+    &quot;required&quot;: [&quot;command&quot;]
 }
-```
+</code></pre><p>在function call流程中，无论是发起function call的轮次，还是向模型提交工具函数的执行结果，均需设置tools参数。当前支持的模型包括qwen-plus和qwen-max。</p><div><div><p><strong>说明</strong>tools暂时无法与stream=True同时使用。</p></div></div></td></tr><tr><td><p>stream_options（可选）</p></td><td><p><em>object</em></p></td><td><p>None</p></td><td><p>该参数用于配置在流式输出时是否展示使用的token数目。只有当stream为True的时候该参数才会激活生效。若您需要统计流式输出模式下的token数目，可将该参数配置为<code>stream_options={&quot;include_usage&quot;:True}</code>。</p></td></tr><tr><td><p>enable_search</p></td><td><p><em>boolean</em></p></td><td><p>False</p></td><td><p>用于控制模型在生成文本时是否使用互联网搜索结果进行参考。取值如下：</p><ul><li><p>True：启用互联网搜索，模型会将搜索结果作为文本生成过程中的参考信息，但模型会基于其内部逻辑判断是否使用互联网搜索结果。</p><blockquote><p>若开启后未联网搜索，可优化提示词，或设置<code>search_options</code>中的<code>forced_search</code>参数开启强制搜索。</p></blockquote></li><li><p>False（默认）：关闭互联网搜索。</p></li></ul><blockquote><p>qwen-long暂不支持此参数。</p></blockquote><p>配置方式为：<code>extra_body={&quot;enable_search&quot;: True}</code>。</p></td></tr></tbody></table>
 
-在function call流程中，无论是发起function call的轮次，还是向模型提交工具函数的执行结果，均需设置tools参数。当前支持的模型包括qwen-plus和qwen-max。
+<a id="返回参数说明"></a>
 
-**说明**tools暂时无法与stream=True同时使用。
+<a id="f667afe46e3c1"></a>
 
-stream\_options（可选）
-
-_object_
-
-None
-
-该参数用于配置在流式输出时是否展示使用的token数目。只有当stream为True的时候该参数才会激活生效。若您需要统计流式输出模式下的token数目，可将该参数配置为`stream_options={"include_usage":True}`。
-
-enable\_search
-
-_boolean_
-
-False
-
-用于控制模型在生成文本时是否使用互联网搜索结果进行参考。取值如下：
-
--   True：启用互联网搜索，模型会将搜索结果作为文本生成过程中的参考信息，但模型会基于其内部逻辑判断是否使用互联网搜索结果。
-    
-    > 若开启后未联网搜索，可优化提示词，或设置`search_options`中的`forced_search`参数开启强制搜索。
-    
--   False（默认）：关闭互联网搜索。
-    
-
-> qwen-long暂不支持此参数。
-
-配置方式为：`extra_body={"enable_search": True}`。
+<a id="dcea7e40cf8ve"></a>
 
 ### 返回参数说明
 
-**返回参数**
+<table><thead><tr><th><p><strong>返回参数</strong></p></th><th><p><strong>数据类型</strong></p></th><th><p><strong>说明</strong></p></th><th><p><strong>备注</strong></p></th></tr></thead><tbody><tr><td><p>id</p></td><td><p><em>string</em></p></td><td><p>系统生成的标识本次调用的id。</p></td><td><p>无</p></td></tr><tr><td><p>model</p></td><td><p><em>string</em></p></td><td><p>本次调用的模型名。</p></td><td><p>无</p></td></tr><tr><td><p>system_fingerprint</p></td><td><p><em>string</em></p></td><td><p>模型运行时使用的配置版本，当前暂时不支持，返回为空字符串“”。</p></td><td><p>无</p></td></tr><tr><td><p>choices</p></td><td><p><em>array</em></p></td><td><p>模型生成内容的详情。</p></td><td rowspan="6"><p>无</p></td></tr><tr><td><p>choices[i].finish_reason</p></td><td><p><em>string</em></p></td><td><p>有三种情况：</p><ul><li><p>正在生成时为null；</p></li><li><p>因触发输入参数中的stop条件而结束为stop；</p></li><li><p>因生成长度过长而结束为length。</p></li></ul></td></tr><tr><td><p>choices[i].message</p></td><td><p><em>object</em></p></td><td><p>模型输出的消息。</p></td></tr><tr><td><p>choices[i].message.role</p></td><td><p><em>string</em></p></td><td><p>模型的角色，固定为assistant。</p></td></tr><tr><td><p>choices[i].message.content</p></td><td><p><em>string</em></p></td><td><p>模型生成的文本。</p></td></tr><tr><td><p>choices[i].index</p></td><td><p><em>integer</em></p></td><td><p>生成的结果序列编号，默认为0。</p></td></tr><tr><td><p>created</p></td><td><p><em>integer</em></p></td><td><p>当前生成结果的时间戳（s）。</p></td><td><p>无</p></td></tr><tr><td><p>usage</p></td><td><p><em>object</em></p></td><td><p>计量信息，表示本次请求所消耗的token数据。</p></td><td><p>无</p></td></tr><tr><td><p>usage.prompt_tokens</p></td><td><p><em>integer</em></p></td><td><p>用户输入文本转换成token后的长度。</p></td><td><p>无</p></td></tr><tr><td><p>usage.completion_tokens</p></td><td><p><em>integer</em></p></td><td><p>模型生成回复转换为token后的长度。</p></td><td><p>无</p></td></tr><tr><td><p>usage.total_tokens</p></td><td><p><em>integer</em></p></td><td><p>usage.prompt_tokens与usage.completion_tokens的总和。</p></td><td><p>无</p></td></tr></tbody></table>
 
-**数据类型**
+<a id="通过langchain-openai-sdk调用"></a>
 
-**说明**
+<a id="2197f744f0d2j"></a>
 
-**备注**
-
-id
-
-_string_
-
-系统生成的标识本次调用的id。
-
-无
-
-model
-
-_string_
-
-本次调用的模型名。
-
-无
-
-system\_fingerprint
-
-_string_
-
-模型运行时使用的配置版本，当前暂时不支持，返回为空字符串“”。
-
-无
-
-choices
-
-_array_
-
-模型生成内容的详情。
-
-无
-
-choices\[i\].finish\_reason
-
-_string_
-
-有三种情况：
-
--   正在生成时为null；
-    
--   因触发输入参数中的stop条件而结束为stop；
-    
--   因生成长度过长而结束为length。
-    
-
-choices\[i\].message
-
-_object_
-
-模型输出的消息。
-
-choices\[i\].message.role
-
-_string_
-
-模型的角色，固定为assistant。
-
-choices\[i\].message.content
-
-_string_
-
-模型生成的文本。
-
-choices\[i\].index
-
-_integer_
-
-生成的结果序列编号，默认为0。
-
-created
-
-_integer_
-
-当前生成结果的时间戳（s）。
-
-无
-
-usage
-
-_object_
-
-计量信息，表示本次请求所消耗的token数据。
-
-无
-
-usage.prompt\_tokens
-
-_integer_
-
-用户输入文本转换成token后的长度。
-
-无
-
-usage.completion\_tokens
-
-_integer_
-
-模型生成回复转换为token后的长度。
-
-无
-
-usage.total\_tokens
-
-_integer_
-
-usage.prompt\_tokens与usage.completion\_tokens的总和。
-
-无
+<a id="414defd168byq"></a>
 
 ## 通过langchain\_openai SDK调用
+
+<a id="前提条件-2"></a>
+
+<a id="39560b807bss9"></a>
 
 ### 前提条件
 
@@ -609,24 +418,36 @@ usage.prompt\_tokens与usage.completion\_tokens的总和。
 -   通过运行以下命令安装langchain\_openai SDK。
     
 
-```
+<a id="code-block-10"></a>
+
+```bash
 # 如果下述命令报错，请将pip替换为pip3
 pip install -U langchain_openai
 ```
 
 -   您需要开通阿里云百炼模型服务并获得API-KEY，详情请参考：获取与配置 API Key。
 -   我们推荐您将API-KEY配置到环境变量中以降低API-KEY的泄露风险，详情可参考配置API Key到环境变量。您也可以在代码中配置API-KEY，**但是泄露风险会提高**。
--   请选择您需要使用的模型：[支持的模型列表](https://help.aliyun.com/zh/model-studio/compatibility-of-openai-with-dashscope#eadfc13038jd5)。
+-   请选择您需要使用的模型：[支持的模型列表](compatibility-of-openai-with-dashscope.md#eadfc13038jd5)。
+
+<a id="使用方式-2"></a>
+
+<a id="c946143631li6"></a>
 
 ### 使用方式
 
 您可以参考以下示例来通过langchain\_openai SDK使用阿里云百炼的千问模型。
 
+<a id="非流式输出"></a>
+
+<a id="337e4fa5a6b89"></a>
+
 #### 非流式输出
 
 非流式输出使用invoke方法实现，请参考以下示例代码：
 
-```
+<a id="code-block-11"></a>
+
+```python
 from langchain_openai import ChatOpenAI
 import os
 
@@ -652,7 +473,9 @@ if __name__ == "__main__":
 
 运行代码，可以得到以下结果：
 
-```
+<a id="code-block-12"></a>
+
+```json
 {
     "content": "我是来自阿里云的大规模语言模型，我叫千问。",
     "additional_kwargs": {},
@@ -676,11 +499,17 @@ if __name__ == "__main__":
 }
 ```
 
+<a id="流式输出"></a>
+
+<a id="b1fd57317ba60"></a>
+
 #### 流式输出
 
 流式输出使用stream方法实现，无需在参数中配置stream参数。
 
-```
+<a id="code-block-13"></a>
+
+```python
 from langchain_openai import ChatOpenAI
 import os
 
@@ -708,7 +537,9 @@ if __name__ == "__main__":
 
 运行代码，可以得到以下结果：
 
-```
+<a id="code-block-14"></a>
+
+```json
 {"content": "", "additional_kwargs": {}, "response_metadata": {}, "type": "AIMessageChunk", "name": null, "id": "run-xxx", "example": false, "tool_calls": [], "invalid_tool_calls": [], "usage_metadata": null, "tool_call_chunks": []}
 {"content": "我是", "additional_kwargs": {}, "response_metadata": {}, "type": "AIMessageChunk", "name": null, "id": "run-xxx", "example": false, "tool_calls": [], "invalid_tool_calls": [], "usage_metadata": null, "tool_call_chunks": []}
 {"content": "来自", "additional_kwargs": {}, "response_metadata": {}, "type": "AIMessageChunk", "name": null, "id": "run-xxx", "example": false, "tool_calls": [], "invalid_tool_calls": [], "usage_metadata": null, "tool_call_chunks": []}
@@ -721,34 +552,62 @@ if __name__ == "__main__":
 {"content": "", "additional_kwargs": {}, "response_metadata": {}, "type": "AIMessageChunk", "name": null, "id": "run-xxx", "example": false, "tool_calls": [], "invalid_tool_calls": [], "usage_metadata": {"input_tokens": 22, "output_tokens": 16, "total_tokens": 38}, "tool_call_chunks": []}
 ```
 
-关于输入参数的配置，可以参考[输入参数配置](https://help.aliyun.com/zh/model-studio/compatibility-of-openai-with-dashscope#d553cbbee6mxk)，相关参数在ChatOpenAI对象中定义。
+关于输入参数的配置，可以参考[输入参数配置](compatibility-of-openai-with-dashscope.md#d553cbbee6mxk)，相关参数在ChatOpenAI对象中定义。
+
+<a id="通过http接口调用"></a>
+
+<a id="341800c1f8h93"></a>
+
+<a id="19d25ff026ru9"></a>
 
 ## 通过HTTP接口调用
 
 您可以通过HTTP接口来调用阿里云百炼服务，获得与通过HTTP接口调用OpenAI服务相同结构的返回结果。
+
+<a id="前提条件-3"></a>
+
+<a id="a762f3cf04wue"></a>
 
 ### 前提条件
 
 -   您需要开通阿里云百炼模型服务并获得API-KEY，详情请参考：获取与配置 API Key。
 -   我们推荐您将API-KEY配置到环境变量中以降低API-KEY的泄露风险，配置方法可参考配置API Key到环境变量。您也可以在代码中配置API-KEY，**但是泄露风险会提高**。
 
+<a id="提交接口调用"></a>
+
+<a id="cd5c7c20fb74b"></a>
+
 ### 提交接口调用
 
-```
+<a id="code-block-15"></a>
+
+```http
 北京：POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions
 美国（弗吉尼亚）：POST https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions
 新加坡：POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions
 ```
 
+<a id="请求示例"></a>
+
+<a id="3cf917d126qar"></a>
+
 ### 请求示例
 
 以下示例展示通过`cURL`命令来调用API的脚本。
 
-**说明**如果您没有配置API-KEY为环境变量，需将$DASHSCOPE\_API\_KEY更改为您的API-KEY\*。\*
+> **说明**
+>
+> 如果您没有配置API-KEY为环境变量，需将$DASHSCOPE\_API\_KEY更改为您的API-KEY\*。\*
+
+<a id="非流式输出-2"></a>
+
+<a id="4ce0604d0104l"></a>
 
 #### 非流式输出
 
-```
+<a id="code-block-16"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下是北京地域base_url
@@ -775,7 +634,9 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 
 以下为 `qwen3.8-max` 的历史响应示例，用于说明字段。
 
-```
+<a id="code-block-17"></a>
+
+```json
 {
     "choices": [
         {
@@ -801,11 +662,17 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 }
 ```
 
+<a id="流式输出-2"></a>
+
+<a id="c304107315suc"></a>
+
 #### 流式输出
 
 如果您需要使用流式输出，请在请求体中指定stream参数为true。
 
-```
+<a id="code-block-18"></a>
+
+```bash
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下是北京地域base_url
@@ -833,7 +700,9 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 
 以下为 `qwen3.8-max` 的历史响应示例，用于说明字段。
 
-```
+<a id="code-block-19"></a>
+
+```json
 data: {"choices":[{"delta":{"content":"","role":"assistant"},"index":0,"logprobs":null,"finish_reason":null}],"object":"chat.completion.chunk","usage":null,"created":1715931028,"system_fingerprint":null,"model":"qwen3.8-max","id":"chatcmpl-3bb05cf5cd819fbca5f0b8d67a025022"}
 
 data: {"choices":[{"finish_reason":null,"delta":{"content":"我是"},"index":0,"logprobs":null}],"object":"chat.completion.chunk","usage":null,"created":1715931028,"system_fingerprint":null,"model":"qwen3.8-max","id":"chatcmpl-3bb05cf5cd819fbca5f0b8d67a025022"}
@@ -851,13 +720,19 @@ data: {"choices":[{"delta":{"content":""},"finish_reason":"stop","index":0,"logp
 data: [DONE]
 ```
 
-输入参数的详情请参考[输入参数配置](https://help.aliyun.com/zh/model-studio/compatibility-of-openai-with-dashscope#d553cbbee6mxk)。
+输入参数的详情请参考[输入参数配置](compatibility-of-openai-with-dashscope.md#d553cbbee6mxk)。
+
+<a id="异常响应示例"></a>
+
+<a id="0ea417000ckjs"></a>
 
 ### 异常响应示例
 
 在访问请求出错的情况下，输出的结果中会通过 code 和 message 指明出错原因。
 
-```
+<a id="code-block-20"></a>
+
+```json
 {
     "error": {
         "message": "Invalid API-key provided.",
@@ -868,51 +743,42 @@ data: [DONE]
 }
 ```
 
+<a id="第三方客户端配置"></a>
+
+<a id="h2-third-party-client-config"></a>
+
+<a id="third-party-client-config"></a>
+
 ## 第三方客户端配置
 
 除 SDK 与 HTTP 直接调用外，您还可以在支持 OpenAI 兼容协议的第三方大模型客户端中接入阿里云百炼。以智谱客户端为例，按以下步骤填写配置后即可发起模型调用：
 
 1.  在客户端的服务商设置中选择**自定义服务商**。
     
-2.  **Base URL**：填写本文“兼容OpenAI需要信息”中 [BASE\_URL](https://help.aliyun.com/zh/model-studio/compatibility-of-openai-with-dashscope#21d628d5f82z7) 部分所在地域对应的 OpenAI SDK 形式地址，即以 `/compatible-mode/v1` 结尾、不含 `/chat/completions` 的地址。各地域的 Base URL 不同，需与 API Key 所属地域保持一致。
+2.  **Base URL**：填写本文“兼容OpenAI需要信息”中 [BASE\_URL](compatibility-of-openai-with-dashscope.md#21d628d5f82z7) 部分所在地域对应的 OpenAI SDK 形式地址，即以 `/compatible-mode/v1` 结尾、不含 `/chat/completions` 的地址。各地域的 Base URL 不同，需与 API Key 所属地域保持一致。
     
     例如，华北2（北京）地域填写 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`。其中，`{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的业务空间详情页面查看。原 `https://dashscope.aliyuncs.com` 域名仍可正常使用，但建议优先使用业务空间专属域名。
     
 3.  **API Key**：填写对应地域的百炼 API Key。您可以在百炼控制台[API Key管理页面](https://bailian.console.aliyun.com/model/settings/api-key)创建并获取 API Key。
     
-4.  **模型名称**：填写支持 OpenAI 兼容协议的大语言模型名称。可选模型以本文“兼容OpenAI需要信息”中[支持的模型列表](https://help.aliyun.com/zh/model-studio/compatibility-of-openai-with-dashscope#eadfc13038jd5)部分为准；例如 `qwen3.7-plus` 仅作为模型名称示例，不表示免费额度承诺。
+4.  **模型名称**：填写支持 OpenAI 兼容协议的大语言模型名称。可选模型以本文“兼容OpenAI需要信息”中[支持的模型列表](compatibility-of-openai-with-dashscope.md#eadfc13038jd5)部分为准；例如 `qwen3.7-plus` 仅作为模型名称示例，不表示免费额度承诺。
     
 5.  保存配置后发起一次对话，验证第三方客户端是否可以正常调用模型。
     
 
-如果调用返回 HTTP 400，且 `error.message` 为 `current user api does not support http call`、`error.type` 为 `invalid_request_error`，说明当前填写的模型不支持通过 OpenAI 兼容接口进行 HTTP 调用。请更换为[支持的模型列表](https://help.aliyun.com/zh/model-studio/compatibility-of-openai-with-dashscope#eadfc13038jd5)中的模型后重试。
+如果调用返回 HTTP 400，且 `error.message` 为 `current user api does not support http call`、`error.type` 为 `invalid_request_error`，说明当前填写的模型不支持通过 OpenAI 兼容接口进行 HTTP 调用。请更换为[支持的模型列表](compatibility-of-openai-with-dashscope.md#eadfc13038jd5)中的模型后重试。
+
+<a id="状态码说明"></a>
+
+<a id="8dd39ae94bygm"></a>
 
 ## 状态码说明
 
-**错误码**
-
-**说明**
-
-400 - Invalid Request Error
-
-输入请求错误，细节请参见具体报错信息。
-
-401 - Invalid API-key provided
-
-API key不正确。
-
-429 - Rate limit reached for requests
-
-QPS、QPM等超限。
-
-429 - You exceeded your current quota, please check your plan and billing details
-
-额度超限或者欠费。
-
-500 - The server had an error while processing your request
-
-服务端错误。
-
-503 - The engine is currently overloaded, please try again later
-
-服务端负载过高，可重试。
+| 错误码 | 说明 |
+| --- | --- |
+| 400 - Invalid Request Error | 输入请求错误，细节请参见具体报错信息。 |
+| 401 - Invalid API-key provided | API key不正确。 |
+| 429 - Rate limit reached for requests | QPS、QPM等超限。 |
+| 429 - You exceeded your current quota, please check your plan and billing details | 额度超限或者欠费。 |
+| 500 - The server had an error while processing your request | 服务端错误。 |
+| 503 - The engine is currently overloaded, please try again later | 服务端负载过高，可重试。 |
